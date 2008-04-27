@@ -37,11 +37,6 @@ int main (int argc, char *argv[])
         struct Option *input, *from, *output, *to, *title;
     } parm;
 
-    /* please, remove before GRASS 7 released */
-    struct
-        {
-        struct Flag *quiet;
-    } flag;
     struct GModule *module;
 
     G_gisinit (argv[0]);
@@ -90,22 +85,9 @@ int main (int argc, char *argv[])
     parm.title->required   = NO;
     parm.title->description= _("Title for new raster map") ;
 
-    /* please, remove before GRASS 7 released */
-    flag.quiet = G_define_flag();
-    flag.quiet->key = 'q';
-    flag.quiet->description = _("Quiet");
-
     G_disable_interactive();
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(flag.quiet->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     old_name = parm.input->answer;
     new_name = parm.output->answer;

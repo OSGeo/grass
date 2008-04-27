@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     int fp;
     struct GModule *module;
     struct {
-	struct Flag *r, *w, *l, *g, *e, *i, *q, *n;
+	struct Flag *r, *w, *l, *g, *e, *i, *n;
     } flag;
     struct {
 	struct Option *map, *colr, *rast, *rules;
@@ -215,22 +215,8 @@ int main(int argc, char **argv)
     flag.i->key = 'i';  
     flag.i->description = _("Enter rules interactively");
 
-    /* please, remove before GRASS 7 released */
-    flag.q = G_define_flag();
-    flag.q->key = 'q';
-    flag.q->description = _("Run quietly");
-
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if (flag.q->answer)
-    {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
     if (flag.l->answer)
     {

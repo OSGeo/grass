@@ -54,15 +54,12 @@ main (int argc, char *argv[])
 	struct Flag *z;
     } flag;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag;
-
     G_gisinit (argv[0]);
 
 /* Define the different options */
 
-	module = G_define_module();
-	module->keywords = _("raster");
+    module = G_define_module();
+    module->keywords = _("raster");
     module->description =
 		_("Creates a cross product of the category values from "
 		"multiple raster map layers.");
@@ -84,27 +81,13 @@ main (int argc, char *argv[])
     flag.z->key         = 'z' ;
     flag.z->description = _("Non-zero data only") ;
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-
     if (G_parser(argc, argv))
 	exit (EXIT_FAILURE);
-
-    if(q_flag->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
     nrows = G_window_rows();
     ncols = G_window_cols();
 
     nfiles = 0;
-    non_zero = 0;
-  
-
     non_zero = flag.z->answer;
 
     for (nfiles = 0; (name = parm.input->answers[nfiles]); nfiles++)

@@ -45,7 +45,6 @@ int main(int argc, char *argv[])
 	{
 	  struct Option *input, *output;
 	} option ;
-	struct Flag *flag1 ;
 
 	G_gisinit(argv[0]);
 
@@ -72,24 +71,11 @@ int main(int argc, char *argv[])
 
 	/* Define the different flags */
 
-        /* please, remove before GRASS 7 released */
-	flag1 = G_define_flag() ;
-	flag1->key         = 'q' ;
-	flag1->description = _("Quiet");
-
 	if (G_parser(argc, argv))
 		exit (EXIT_FAILURE);
 
 	strcpy (name, option.input->answer);
 	strcpy (result, option.output->answer);
-
-        /* please, remove before GRASS 7 released */
-        if(flag1->answer) {
-            putenv("GRASS_VERBOSE=0");
-            G_warning(_("The '-q' flag is superseded and will be removed "
-                "in future. Please use '--quiet' instead."));
-        }
-
 
         mapset = G_find_cell2 (name, "");
         if (mapset == NULL)

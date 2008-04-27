@@ -142,8 +142,6 @@ int main (int argc, char *argv[])
     struct
     {
 	struct Flag *a;
-    /* please, remove before GRASS 7 released */
-	struct Flag *q;
     } flag;
 
     G_gisinit (argv[0]);
@@ -275,11 +273,6 @@ int main (int argc, char *argv[])
     parm.min_slp_allowed->answer      = "0.0";
     parm.min_slp_allowed->guisection  = _("Settings");
 
-    /* please, remove before GRASS 7 released */
-    flag.q = G_define_flag() ;
-    flag.q->key         = 'q' ;
-    flag.q->description = _("Quiet") ;
-
     flag.a = G_define_flag() ;
     flag.a->key         = 'a' ;
     flag.a->description = _("Do not align the current region to the elevation layer") ;
@@ -312,15 +305,6 @@ int main (int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(flag.q->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
-
 
     elev_name = parm.elevation->answer;
     slope_name = parm.slope->answer;

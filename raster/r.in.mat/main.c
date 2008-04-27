@@ -77,12 +77,10 @@ int main(int argc, char *argv[]) {
     struct History history;
 
     struct Option *inputfile, *outputfile;
-    struct Flag *verbose; /* remove for GRASS 7 */
     struct GModule *module;
 
     int cf;
     FILE *fp1;
-
 
     G_gisinit(argv[0]);
 
@@ -107,22 +105,8 @@ int main(int argc, char *argv[]) {
     outputfile->gisprompt  = "new,cell,raster" ;
     outputfile->description= _("Name for the output raster map (override)");
 
-    /* please, remove before GRASS 7 released */
-    verbose = G_define_flag();
-    verbose->key = 'v';
-    verbose->description = _("Verbose mode");
-
-
     if (G_parser(argc,argv))
 	exit(EXIT_FAILURE);
-
-
-    /* remove for GRASS 7  */
-    if(verbose->answer) {
-	putenv("GRASS_VERBOSE=3");
-	G_warning(_("The '-v' flag is superseded and will be removed "
-		    "in future. Please use '--verbose' instead."));
-    }
 
   /******  SETUP  ****************************************************/
     /* Check Endian State of Host Computer*/

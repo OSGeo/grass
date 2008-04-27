@@ -90,8 +90,7 @@ int main (int argc, char *argv[])
 	} parm;
 	struct
 	{
-                /* please, remove before GRASS 7 released */
-		struct Flag *quiet, *align, *circle;
+		struct Flag *align, *circle;
 	} flag;
 
 	DCELL *values;   /* list of neighborhood values */
@@ -151,11 +150,6 @@ int main (int argc, char *argv[])
 	flag.align = G_define_flag();
 	flag.align->key = 'a';
 	flag.align->description = _("Do not align output with the input");
-
-        /* please, remove before GRASS 7 released */
-	flag.quiet = G_define_flag();
-	flag.quiet->key = 'q';
-	flag.quiet->description = _("Run quietly");
 
 	flag.circle = G_define_flag();
 	flag.circle->key = 'c';
@@ -269,13 +263,6 @@ int main (int argc, char *argv[])
 	out_fd = G_open_raster_new (ncb.newcell.name, map_type);
 	if (out_fd < 0)
 		exit(EXIT_FAILURE);
-
-        /* please, remove before GRASS 7 released */
-        if(flag.quiet->answer) {
-            putenv("GRASS_VERBOSE=0");
-            G_warning(_("The '-q' flag is superseded and will be removed "
-                "in future. Please use '--quiet' instead."));
-        }
 
 	if (flag.circle->answer)
 	    circle_mask();

@@ -43,7 +43,6 @@ int main (int argc, char *argv[])
     char **ptr; 
 
     struct GModule *module;
-    struct Flag *flag1 ;
     struct Flag *zeroflag;
     struct Option *opt1, *opt2 ;
 
@@ -66,11 +65,6 @@ int main (int argc, char *argv[])
 
     /* Define the different flags */
 
-    /* please, remove before GRASS 7 released */
-    flag1 = G_define_flag() ;
-    flag1->key         = 'q' ;
-    flag1->description = _("Quiet") ;
-
     zeroflag = G_define_flag() ;
     zeroflag->key         = 'z' ;
     zeroflag->description = _("Use zero (0) for transparency instead of NULL") ;
@@ -79,14 +73,6 @@ int main (int argc, char *argv[])
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(flag1->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     ZEROFLAG= (zeroflag->answer);
     

@@ -35,9 +35,6 @@ command_version (int argc, char *argv[])
 	struct Flag *w;
     } flag;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag;
-
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
@@ -72,22 +69,8 @@ command_version (int argc, char *argv[])
     flag.w->key = 'w';
     flag.w->description = _("Wide report, 132 columns (default: 80)");
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q_flag->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     strcpy (map1name, parm.map1->answer);
     strcpy (map2name, parm.map2->answer);

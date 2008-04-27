@@ -40,7 +40,7 @@ int main (int argc, char **argv)
  } parms;
 
  struct { 
-   struct Flag *n, *w, *q, *h;
+   struct Flag *n, *w, *h;
  } flags;
 
  G_gisinit(argv[0]);
@@ -76,11 +76,6 @@ int main (int argc, char **argv)
  flags.w->label = _("Wide report");
  flags.w->description = _("132 columns (default: 80)");
 
-/* please, remove before GRASS 7 released */
- flags.q = G_define_flag();
- flags.q->key	= 'q';
- flags.q->description = _("Quiet");
-
  flags.h = G_define_flag();
  flags.h->key = 'h';
  flags.h->description = _("No header in the report");
@@ -107,13 +102,6 @@ int main (int argc, char **argv)
 
  title = parms.titles->answer;
 
-/* please, remove before GRASS 7 released */
- if(flags.q->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead"));
-    }
-
 /* run r.stats to obtain statistics of map layers */
  stats();
 
@@ -127,7 +115,7 @@ int main (int argc, char **argv)
 /* generate the error matrix, kappa and variance */
  calc_kappa();
  
- return 0;
+ return EXIT_SUCCESS;
 }
 
 

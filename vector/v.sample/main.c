@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     } parm;
     struct
     {
-        struct Flag *B, *C, *q;
+        struct Flag *B, *C;
     } flag;
 
     int line, nlines;
@@ -121,11 +121,6 @@ int main(int argc, char **argv)
     flag.C->key = 'c';
     flag.C->description =
         _("Cubic convolution interpolation (default is nearest neighbor)");
-
-    /* please, remove before GRASS 7 released */
-    flag.q = G_define_flag();
-    flag.q->key = 'q';
-    flag.q->description = _("Quiet");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -215,9 +210,7 @@ int main(int argc, char **argv)
     if (db_grant_on_table(Driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
-    if (flag.q->answer)
-        G_message(_("Checking vector points..."));
-
+    G_message(_("Checking vector points..."));
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 

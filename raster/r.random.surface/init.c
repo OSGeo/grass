@@ -93,21 +93,8 @@ void Init(int argc, char **argv)
     Uniform->key         	= 'u' ;
     Uniform->description 	= "Uniformly distributed cell values" ;
 
-    /* please, remove before GRASS 7 released */
-    Verbose 			= G_define_flag() ;
-    Verbose->key         	= 'q' ;
-    Verbose->description 	= "No (quiet) description during run" ;
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(Verbose->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     Rs = G_window_rows();
     Cs = G_window_cols();

@@ -41,8 +41,6 @@ int main(int argc, char **argv)
     char temp[300];
     int i;
     struct GModule *module;
-    /* please, remove before GRASS 7 released */
-    struct Flag *flag1 ;
     struct Flag *flag2 ;
     struct Option *opt1 ;
     struct Option *opt2 ;
@@ -83,11 +81,6 @@ int main(int argc, char **argv)
 
     /* Define the different flags */
 
-    /* please, remove before GRASS 7 released */
-    flag1 = G_define_flag() ;
-    flag1->key         = 'q' ;
-    flag1->description = _("Quiet") ;
-
     /* this isn't implemented at all 
     flag3 = G_define_flag() ;
     flag3->key         = 'p' ;
@@ -100,13 +93,6 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(flag1->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead"));
-    }
 
     /*
     preserve_edges = flag3->answer;

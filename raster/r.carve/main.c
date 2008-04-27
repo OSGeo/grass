@@ -65,10 +65,6 @@ int main(int argc, char **argv)
     struct Map_info outMap;
     struct Cell_head win;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag;
-
-
     /* start GIS engine */
     G_gisinit(argv[0]);
 
@@ -107,22 +103,9 @@ int main(int argc, char **argv)
     noflat->key         = 'n';
     noflat->description = _("No flat areas allowed in flow direction");
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-
-
     /* parse options */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q_flag->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
     G_check_input_output_name(parm.inrast->answer, parm.outrast->answer, GR_FATAL_EXIT);
     if (parm.outvect->answer)

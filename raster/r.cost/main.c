@@ -114,9 +114,6 @@ int main(int argc, char *argv[])
     double peak = 0.0;
     int dsize;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *v_flag;
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -210,34 +207,19 @@ int main(int argc, char *argv[])
     flag4->key = 'r';
     flag4->description = _("Start with values in raster map");
 
-    /* please, remove before GRASS 7 released */
-    v_flag = G_define_flag() ;
-    v_flag->key         = 'v' ;  
-    v_flag->description = _("Run verbosely") ;
-
     /*   Parse command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* please, remove before GRASS 7 released */
-    if(v_flag->answer) {
-        G_putenv("GRASS_VERBOSE","2");
-        G_warning(_("The '-v' flag is superseded and will be removed "
-            "in future. Please use '--verbose' instead."));
-    }
-
     /* Initalize access to database and create temporary files */
-
     in_file = G_tempfile();
     out_file = G_tempfile();
 
     /*  Get database window parameters      */
-
     if (G_get_window(&window) < 0)
 	G_fatal_error(_("Unable to read current window parameters"));
 
     /*  Find north-south, east_west and diagonal factors */
-
     EW_fac = 1.0;
     NS_fac = window.ns_res / window.ew_res;
     DIAG_fac = (double)sqrt((double)(NS_fac * NS_fac + EW_fac * EW_fac));

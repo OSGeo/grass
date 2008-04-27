@@ -32,8 +32,7 @@ int main( int argc, char *argv[])
 {
     struct GModule      *module;
     struct Option 	*rast, *ppm_file;
-    /* please, remove before GRASS 7 released */
-    struct Flag 	*bequiet, *gscale;
+    struct Flag 	*gscale;
     char 		*cellmap, *map, *p, ofile[1000];
     unsigned char 	*set, *ored, *ogrn, *oblu;
     CELL		*cell_buf;
@@ -62,25 +61,12 @@ int main( int argc, char *argv[])
     ppm_file->description            
 	= _("Name for new PPM file (use '-' for stdout)");
 
-    /* please, remove before GRASS 7 released */
-    bequiet = G_define_flag ();
-    bequiet->key = 'q';
-    bequiet->description = _("Run quietly");
-
     gscale = G_define_flag ();
     gscale->key = 'G';
     gscale->description = _("Output greyscale instead of color");
 
     if (G_parser (argc, argv))
 	exit (EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(bequiet->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead"));
-    }
-
 
     /* kludge to work with r.out.mpeg */
     if(rast->answer[0] == '/')

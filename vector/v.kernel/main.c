@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 {
   struct Option *in_opt, *net_opt, *out_opt;
   struct Option *stddev_opt, *dsize_opt, *segmax_opt, *netmax_opt, *multip_opt;
-  struct Flag *flag_o, *flag_v, *flag_q;
+  struct Flag *flag_o, *flag_q;
 
   char   *mapset;
   struct Map_info In, Net, Out;
@@ -150,11 +150,6 @@ int main(int argc, char **argv)
   flag_q->key         = 'q';
   flag_q->description = _("Only calculate optimal standard deviation and exit (no map is written)");
 
-  /* please, remove before GRASS 7 released */
-  flag_v = G_define_flag();
-  flag_v->key = 'v';
-  flag_v->description = _("Run verbosely");
-
   if (G_parser(argc, argv))
     exit(EXIT_FAILURE);
 
@@ -164,14 +159,6 @@ int main(int argc, char **argv)
   segmax = atof(segmax_opt->answer);
   netmax = atof(netmax_opt->answer);
   multip = atof(multip_opt->answer);
-
-    /* please, remove before GRASS 7 released */
-    if(flag_v->answer) {
-        putenv("GRASS_VERBOSE=3");
-        G_warning(_("The '-v' flag is superseded and will be removed "
-            "in future. Please use '--verbose' instead."));
-    }
-
 
   if( flag_q->answer ) {
     flag_o->answer=1;

@@ -62,7 +62,7 @@ main(int argc, char *argv[])
     RASTER_MAP_TYPE data_type, out_data_type;
     struct GModule *module;
     struct Option *input, *output, *size_O, *dist_O;
-    struct Flag *flag1, *flag2, *flag3, *flag4, *flag5, 
+    struct Flag *flag2, *flag3, *flag4, *flag5, 
 	*flag6, *flag7, *flag8, *flag9, *flag10, *flag11, 
 	*flag12, *flag13, *flag14, *flag15;
     G_gisinit(argv[0]);
@@ -102,10 +102,6 @@ main(int argc, char *argv[])
     dist_O->answer     = "1";
 
     /* Define the different flags */
-    /* please remove before GRASS 7 */
-    flag1 = G_define_flag() ;
-    flag1->key         = 'q' ;
-    flag1->description = _("Quiet") ;
 
     /* "Normalized" unused in the code ??? 
     flag0 = G_define_flag() ;
@@ -190,7 +186,6 @@ main(int argc, char *argv[])
 		
     name    = input->answer;
     result  = output->answer;
-    verbose = (! flag1->answer);
     a = (! flag2->answer);	
     c = (! flag3->answer);
     corr = (! flag4->answer);
@@ -210,13 +205,6 @@ main(int argc, char *argv[])
 
     if (a && c && corr && v && idm && sa && sv && se && e && dv && de && moc1 && moc2 && mcc)
 	G_fatal_error(_("Nothing to compute. Use at least one of the flags."));
-
-    /* please, remove before GRASS 7 released */
-    if(flag1->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-		    "in future. Please use '--quiet' instead."));
-    }
 
     /* find map in mapset */
     mapset = G_find_cell2 (name, "");

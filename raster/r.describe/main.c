@@ -49,9 +49,6 @@ int main (int argc, char *argv[])
 	  struct Option *nsteps;
 	} option;
 
-        /* please, remove before GRASS 7 released */
-        struct Flag *q_flag;
-
 	G_gisinit (argv[0]);
 
 	module = G_define_module();
@@ -100,20 +97,8 @@ int main (int argc, char *argv[])
 	flag.i->key        = 'i';
 	flag.i->description = _("Read fp map as integer");
 
-        /* please, remove before GRASS 7 released */
-        q_flag = G_define_flag() ;
-        q_flag->key         = 'q' ;  
-        q_flag->description = _("Run quietly") ;
-
 	if (0 > G_parser(argc,argv))
 		exit(EXIT_FAILURE);
-
-        /* please, remove before GRASS 7 released */
-        if(q_flag->answer) {
-            G_putenv("GRASS_VERBOSE","0");
-            G_warning(_("The '-q' flag is superseded and will be removed "
-                "in future. Please use '--quiet' instead."));
-        }
 
 	compact = (! flag.one->answer);
 	range =  flag.r->answer;

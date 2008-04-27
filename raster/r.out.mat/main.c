@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
     RASTER_MAP_TYPE map_type;
 
     struct Option *inputfile, *outputfile;
-    /* please, remove before GRASS 7 released */
-    struct Flag *verbose;
     struct GModule *module;
 
     int fd;
@@ -73,24 +71,10 @@ int main(int argc, char *argv[]) {
     outputfile->gisprompt  = "new_file,file,output";
     outputfile->description= _("Name for the output binary MAT-File");
 
-    /* please, remove before GRASS 7 released */
-    verbose = G_define_flag();
-    verbose->key = 'v';
-    verbose->description = _("Verbose mode");
-
     if (G_parser(argc,argv))
 	exit(EXIT_FAILURE);
 
-
-    /* please, remove before GRASS 7 released */
-    if(verbose->answer) {
-        putenv("GRASS_VERBOSE=3");
-        G_warning(_("The '-v' flag is superseded and will be removed "
-            "in future. Please use '--verbose' instead."));
-    }
-
     infile = inputfile->answer;
-
     basename = G_store(outputfile->answer);
     G_basename(basename, "mat");
     outfile = G_malloc(strlen(basename) + 5);

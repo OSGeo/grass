@@ -49,8 +49,6 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *rast, *png_file;
-    /* please, remove before GRASS 7 released */
-    struct Flag *bequiet;
     char *cellmap, *map, *p, *basename = NULL, *ofile;
     char rastermap[1024];
     unsigned char *set, *ored, *ogrn, *oblu;
@@ -120,11 +118,6 @@ int main(int argc, char *argv[])
     png_file->answer = "<rasterfilename>.png";
     png_file->description = "Name for new PNG file. (use out=- for stdout)";
 
-    /* please, remove before GRASS 7 released */
-    bequiet = G_define_flag();
-    bequiet->key = 'q';
-    bequiet->description = "Run quietly";
-
     /* see what can be done to convert'em -A.Sh.
      * gscale = G_define_flag ();
      * gscale->key = 'G';
@@ -138,14 +131,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(bequiet->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     strncpy(rastermap, rast->answer, 1024 * sizeof(char));
 

@@ -82,8 +82,6 @@ int main (int argc, char *argv[])
 		struct Option *input, *output, *method;
 	} parm;
 	struct {
-    /* please, remove before GRASS 7 released */
-		struct Flag *quiet;
 		struct Flag *nulls;
 	} flag;
 	int method;
@@ -119,24 +117,12 @@ int main (int argc, char *argv[])
 	parm.method->options    = build_method_list();
 	parm.method->description= _("Aggregate operation") ;
 
-	/* please, remove before GRASS 7 released */
-	flag.quiet = G_define_flag();
-	flag.quiet->key = 'q';
-	flag.quiet->description = _("Run quietly");
-
 	flag.nulls = G_define_flag();
 	flag.nulls->key = 'n';
 	flag.nulls->description = _("Propagate NULLs");
 
 	if (G_parser(argc,argv))
 	    exit(EXIT_FAILURE);
-
-        /* please, remove before GRASS 7 released */
-        if(flag.quiet->answer) {
-            putenv("GRASS_VERBOSE=0");
-            G_warning(_("The '-q' flag is superseded and will be removed "
-                "in future. Please use '--quiet' instead."));
-        }
 
 	/* get the method */
 	method = -1;

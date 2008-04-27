@@ -55,7 +55,6 @@ int main ( int argc, char **argv)
   } parm;
   struct
   {
-    struct Flag *q;
     struct Flag *g;
   } flag;
   COOR *quads;
@@ -100,21 +99,8 @@ int main ( int argc, char **argv)
   flag.g->key = 'g';
   flag.g->description = _("Print results in shell script style");
 
-
-  /* please, remove before GRASS 7 released */
-  flag.q = G_define_flag ();
-  flag.q->key = 'q';
-  flag.q->description = "Quiet";
-
   if (G_parser (argc, argv))
     exit (EXIT_FAILURE);
-
-  /* please, remove before GRASS 7 released */
-  if (flag.q->answer) {
-        G_set_verbose(G_verbose_min());
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
   sscanf(parm.n->answer,"%d",&nquads);
   sscanf(parm.r->answer,"%lf",&radius);

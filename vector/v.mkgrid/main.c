@@ -44,7 +44,6 @@ main (int argc, char *argv[])
   struct Cell_head window;
   struct Map_info Map;
   struct Option *vectname, *grid, *coord, *box, *angle, *position_opt;
-  struct Flag *q;
   struct GModule *module;
 
   struct line_pnts *Points;
@@ -107,22 +106,8 @@ main (int argc, char *argv[])
   angle->description = _("Angle of rotation (in degrees counter-clockwise)");
   angle->answer = "0";
 
-  /* please, remove before GRASS 7 released */
-  q = G_define_flag ();
-  q->key = 'q';
-  q->description = _("Quiet; No chatter");
-  q->answer = 0;
-
   if (G_parser (argc, argv))
     exit (EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-		    "in future. Please use '--quiet' instead."));
-    }
-
 
   /* get the current window  */
   G_get_window (&window);

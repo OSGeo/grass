@@ -38,7 +38,7 @@ int main (int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *in_opt, *out_opt, *feature_opt;
-    struct Flag *smooth_flg, *value_flg, *z_flg,*quiet, *no_topol;
+    struct Flag *smooth_flg, *value_flg, *z_flg, *no_topol;
     char *mapset;
     int feature;
 
@@ -81,21 +81,8 @@ int main (int argc, char *argv[])
     no_topol->description =
 	_("Do not build vector topology (use with care for massive point export)");
 
-    /* please, remove before GRASS 7 released */
-    quiet = G_define_flag();
-    quiet->key = 'q';
-    quiet->description = _("Quiet - Do not show progress");
-
     if (G_parser (argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(quiet->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
-
 
     feature = Vect_option_to_types ( feature_opt );
     smooth_flag = (smooth_flg->answer) ? SMOOTH : NO_SMOOTH;

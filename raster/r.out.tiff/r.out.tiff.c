@@ -83,12 +83,11 @@ main (int argc, char *argv[])
 	int in;
 	struct rasterfile h;
 	struct Option *inopt, *outopt, *compopt;
-	struct Flag *pflag, *vflag, *lflag, *tflag;
+	struct Flag *pflag, *lflag, *tflag;
 	CELL *cell, *cellptr, *cells[MAX_TILE_LENGTH];
 	struct Cell_head cellhd;
 	struct GModule *module;
-        /* please, remove before GRASS 7 released */
-	int col,verbose, tfw, palette, tiled;
+	int col, tfw, palette, tiled;
 	char *mapset, *basename, *filename;
 	struct Colors colors;
 	int red, grn, blu, mapsize, isfp;
@@ -131,21 +130,8 @@ main (int argc, char *argv[])
 	lflag->key		= 'l';
 	lflag->description      = _("Output Tiled TIFF");
 
-        /* please, remove before GRASS 7 released */
-	vflag = G_define_flag();
-	vflag->key		= 'v';
-	vflag->description	= _("Verbose mode");
-
 	if (G_parser (argc, argv))
 		exit (EXIT_FAILURE);
-
-        /* please, remove before GRASS 7 released */
-        if(vflag->answer) {
-            putenv("GRASS_VERBOSE=3");
-            G_warning(_("The '-v' flag is superseded and will be removed "
-                "in future. Please use '--verbose' instead."));
-        }
-
 
 	if (strncmp(compopt->answer, "packbit", 7) == 0)
 		compression = COMPRESSION_PACKBITS;
@@ -156,8 +142,6 @@ main (int argc, char *argv[])
 	else
 		compression = COMPRESSION_NONE;
 	
-        /* please, remove before GRASS 7 released */
-	verbose = vflag->answer;
 	tiled = lflag->answer;
 	palette = pflag->answer;
 	tfw = tflag->answer;

@@ -79,11 +79,6 @@ int main ( int argc, char *argv[])
     char buf[2000];
     dbString sql;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag;
-    struct Flag *n_flag;
-
-
     G_gisinit (argv[0]);
 
     module = G_define_module();
@@ -92,7 +87,6 @@ int main ( int argc, char *argv[])
 			    "contours from a raster map layer.");
 
     map = G_define_standard_option(G_OPT_R_INPUT);
-
     vect = G_define_standard_option(G_OPT_V_OUTPUT);
 
     levels=G_define_option () ;
@@ -127,24 +121,8 @@ int main ( int argc, char *argv[])
     cut->answer = "0";
     cut->description= _("Minimum number of points for a contour line (0 -> no limit)") ;
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-    n_flag = G_define_flag() ;
-    n_flag->key         = 'n' ;  
-    n_flag->description = _("Suppress single crossing error messages") ;
-
-
     if (G_parser(argc, argv))
         exit (EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q_flag->answer || n_flag->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' and '-n' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
     if (!levels->answers && !step->answer) {
 	G_fatal_error(_("Neither \"levels\" nor \"step\" parameter specified."));

@@ -39,15 +39,12 @@ main (int argc, char *argv[])
     struct Option *opt2 ;
     struct Option *opt3 ;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag ;
-
     G_gisinit (argv[0]);
 
 /* Define the different options */
 
-	module = G_define_module();
-	module->keywords = _("raster");
+    module = G_define_module();
+    module->keywords = _("raster");
     module->description =
 		_("Recategorizes data in a raster map layer by grouping cells " 
 		"that form physically discrete areas into unique categories.");
@@ -63,21 +60,9 @@ main (int argc, char *argv[])
     opt3->required   = NO;
     opt3->description= _("Title, in quotes");
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-
     /* parse options */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q_flag->answer) {
-        putenv("GRASS_VERBOSE=0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
     INPUT  = opt1->answer;
     OUTPUT = opt2->answer;

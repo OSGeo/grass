@@ -43,13 +43,10 @@ int main(int argc, char *argv[])
 	struct Flag *r;
     } flag;
 
-    /* please, remove before GRASS 7 released */
-    struct Flag *q_flag;
-
     G_gisinit (argv[0]);
 
-	module = G_define_module();
-	module->keywords = _("raster");
+    module = G_define_module();
+    module->keywords = _("raster");
     module->description =
 		_("Outputs a covariance/correlation matrix "
 		"for user-specified raster map layer(s).");
@@ -60,20 +57,8 @@ int main(int argc, char *argv[])
     flag.r->key = 'r';
     flag.r->description = _("Print correlation matrix");
 
-    /* please, remove before GRASS 7 released */
-    q_flag = G_define_flag() ;
-    q_flag->key         = 'q' ;  
-    q_flag->description = _("Run quietly") ;
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    /* please, remove before GRASS 7 released */
-    if(q_flag->answer) {
-        G_putenv("GRASS_VERBOSE","0");
-        G_warning(_("The '-q' flag is superseded and will be removed "
-            "in future. Please use '--quiet' instead."));
-    }
 
 /* flags */
     correlation = flag.r->answer;
