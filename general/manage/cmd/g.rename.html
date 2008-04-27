@@ -1,0 +1,73 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.rename</em> allows the user to rename data base
+element files in the user's current mapset.  The user can
+specify all necessary information to <em>g.rename</em> on
+the command line, by specifying:  the type of data base
+element to be renamed (one or more of:  <b>rast</b>,
+<b>vect</b>, <b>icon</b>, <b>labels</b>, <b>sites</b>,
+
+<b>region</b>, and <b>group</b>); the specific file element
+in the current mapset to be renamed (<em>old</em>); and the
+new name to be assigned to this file element (<em>new</em>)
+in the current mapset.  The file element <em>old</em> is
+then renamed to <em>new</em>.
+
+
+<p>
+
+Users can also simply type <em>g.rename -help</em> without
+arguments on the command line, to receive a menu of
+existing data base element types and files from which to
+choose for possible renaming:
+
+<div class="code">
+<pre>
+     rast   rast file(s) to be renamed
+  oldvect   oldvect file(s) to be renamed (GRASS 5.0)
+     vect   vect file(s) to be renamed	  (GRASS >5.1)
+     icon   icon file(s) to be renamed
+   labels   labels file(s) to be renamed
+    sites   sites file(s) to be renamed
+   region   region file(s) to be renamed
+    group   group file(s) to be renamed
+   3dview   3dview file(s) to be renamed
+</pre></div>
+
+
+<h2>NOTES</h2>
+
+If a data base element has support files (e.g., as is
+commonly the case with raster maps), these support files
+also are renamed.
+
+<p>
+
+If the user attempts to rename a file to itself by setting
+the <em>new</em> file name equal to the <em>old</em> file
+name (e.g., <b>g.rename rast=soils,soils</b>),
+<em>g.rename</em> will not execute the rename, but instead
+state that no rename is needed.  However, <em>g.rename</em>
+
+will allow the user to overwrite other existing files in
+the current mapset by making the <em>new</em> file name
+that of an already existing file.
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+g.rename rast=oldrast,newrast vect=oldvect51,newvect51 oldvect=oldvect50,newvect50
+</pre></div>
+<h2>SEE ALSO</h2>
+
+<em><a HREF="g.copy.html">g.copy</a></em><br>
+<em><a HREF="g.list.html">g.list</a></em><br>
+<em><a HREF="g.remove.html">g.remove</a></em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i><p>

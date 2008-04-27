@@ -1,0 +1,69 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.buffer</em> creates a buffer around features of given <b>type</b>, which
+have a category in the given <b>layer</b>. The <b>tolerance</b> controls
+the number of vector segments being generated (the smaller the value, the more
+vector segments are generated).
+
+<h2>NOTES</h2>
+
+Attributes are not transferred due to potential buffer overlap, which
+cannot be resolved automatically.
+
+<h2>EXAMPLES</h2>
+
+<h3>Buffer around input lines</h3>
+
+<div class="code"><pre>
+v.buffer input=map output=buffer type=line buffer=100
+</pre></div>
+
+<h3>Circles around input points</h3>
+
+<div class="code"><pre>
+v.buffer input=pointsmap output=circles type=point buffer=1000 
+</pre></div>
+
+<h3>Non-overlapping circles around input points with attribute transfer</h3>
+
+<div class="code"><pre>
+v.buffer input=archsites output=circles type=point buffer=200 
+# change original points to centroids: 
+v.type in=archsites out=archcentroids type=point,centroid 
+# patch circles and centroids: 
+v.patch in=archcentroids,circles out=circles_db 
+# attach attributes, either use 
+# db.copy ... 
+# or link to the original table: 
+v.db.connect map=circles_db table=archsites field=1 key=cat driver=dbf \
+database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf'
+</pre></div>
+
+<h2>BUGS</h2>
+
+For some data <em>v.buffer</em> can produce strange results, especially if
+the buffer size is bigger than input features. Usually you can solve the
+problem if you run <em>v.buffer</em> more times with smaller buffer.
+<P>
+The <b>bufcol</b> dynamic buffer distance parameter has problems cleaning
+complex features (holes left filled, etc.). If you experience problems, try
+running <em>v.buffer</em> multiple times with a single buffer distance, patch
+the results with <em>v.patch</em> and remove any overlaps with 
+<em>v.extract -d</em>.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="r.buffer.html">r.buffer</a>,
+<a HREF="v.extract.html">v.extract</a>,
+<a HREF="v.type.html">v.type</a>,
+<a HREF="v.patch.html">v.patch</a>,
+<a HREF="v.db.connect.html">v.db.connect</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<p>
+<i>Last changed: $Date$</i>

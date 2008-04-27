@@ -1,0 +1,15 @@
+echo \
+"SELECT c1,c3 FROM pok where c3 <> 34 and c5 = 2.3; 
+INSERT INTO pok  VALUES ( 'abc', 32, 56.7 );
+INSERT INTO pok ( c1, c2,c3) VALUES ( 'abc', 32, 56.7 );
+INSERT INTO pok ( c1, c2,c3) VALUES ( 'abc', +32, +56.7 );
+INSERT INTO pok ( c1, c2,c3) VALUES ( 'abc', -32, -56.7 );
+upDAte pok SET c2 = '5', c3 = 1  WHERE c1 = '1' AND c5 = 6;
+delete FROM pok WHERE c1 = '1' and c2=3 AND c5 <= 4.35;
+CREATE TABLE pok ( c1 INT, c2 VARCHAR (5), c3 DOUBLE );
+DROP TABLE pok; 
+ALTER TABLE pok ADD COLUMN id int; 
+ALTER TABLE pok ADD popis varchar(10);
+UPDATE pok SET c2 = NULL, c1=c2, c3=(-c3+12)/c1 where c1 NOT NULL;
+update pok set c1=c2,c2=c1,c3=NULL where c1+2>1/cat+0.5 and not (c1=1 or c2=2);" \
+| ./sqlptest

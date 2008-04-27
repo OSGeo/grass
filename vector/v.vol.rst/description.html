@@ -1,0 +1,294 @@
+<h2>DESCRIPTION</h2>
+
+<p><i>v.vol.rst</i> interpolates values to a 3-dimensional raster map from
+3-dimensional point data (e.g. temperature, rainfall data from climatic
+stations, concentrations from drill holes etc.) given in a 3-D vector
+point file named <i>input</i>.&nbsp; The size of the output 
+3d raster map <i>elev</i> is given by the current 3D region. Sometimes, the
+user
+may want to get a 2-D map showing a modelled phenomenon at a
+crossection surface. In that case, <i>cellinp</i> and <i>cellout</i>
+options must be specified and then the output 2D raster map <i>cellout</i>
+contains crossection of the interpolated volume with a surface 
+defined by <i>cellinp</i>
+2D raster map. As an option, simultaneously with interpolation, 
+geometric parameters of the interpolated
+phenomenon can be computed (magnitude of gradient, direction of
+gradient defined by horizontal and vertical angles), change of gradient,
+Gauss-Kronecker curvature, or mean curvature). These geometric
+parameteres are saved as
+3d raster maps <i>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</i>,
+respectively.
+</p>
+<p>At first, data points are checked for identical points and points
+that are closer to each other than given <i>dmin</i> are removed.
+Parameters <i>wmult</i> and <i>zmult</i> allow user to re-scale 
+the w-values and z-coordinates of the point data (useful e.g. for 
+transformation of elevations given in feet to meters, so that the 
+proper values of gradient and curvatures can be computed).
+Rescaling of z-coordinates is also needed when the distances
+in vertical direction are much smaller than the horizontal
+distances, if that is the case, the value of <i>zmult</i>
+should be selected so that the vertical and horizontal distances
+have about the same magnitude.
+</p>
+<p>Regularized spline with tension method is used in the interpolation.
+The <i>tension</i> parameter controls the distance over which 
+each given point influences the resulting volume (with very high tension, 
+each point influences only its close neighborhood and the volume goes
+rapidly to trend between the points).
+Higher values of tension parameter reduce the overshoots that
+can appear in volumes with rapid change of gradient. For noisy data, it
+is possible to define a global smoothing parameter, <i>smooth</i>.
+With the
+smoothing parameter set to zero (<i>smooth=0</i>) the resulting volume
+passes exactly through the data points. 
+When smoothing is used, it is possible to output a vector map <i>devi</i>
+containing deviations of the resulting volume from the given data. </p>
+<p>User can define a 2D raster map named <i>maskmap</i>, which will
+be used as a mask. The interpolation is skipped for 3-dimensional cells
+whose 2-dimensional projection has zero value in mask. Zero values will
+be assigned to these cells in all output 3d raster maps. </p>
+<p>If the number of given points is greater than 700, segmented
+processing is used. The region is split into 3-dimensional "box"
+segments, each having less than <i>segmax</i> points and interpolation
+is performed on each segment of the region. To ensure the smooth
+connection of segments the interpolation function for each segment is
+computed using the points in given segment
+and the points in its neighborhood. The minimum number of points taken
+for interpolation is controlled by <i>npmin</i> , the value of which
+must
+be larger than <i>segmax</i> and less than 700. This limit of 700 was
+selected to ensure the numerical stability and efficiency of the
+algorithm. </p>
+
+<h3>EXAMPLE</h3>
+
+<!-- TODO: find better data -->
+Spearfish example (we simulate 3D soil range data):
+
+<div class="code"><pre>
+g.region -dp
+# define volume
+g.region res=50 tbres=50 b=0 t=1500 -ap3
+
+# random elevation extraction (2D)
+r.random elevation.10m vector_output=elevrand n=200
+
+# conversion to 3D
+v.db.addcol elevrand col="x double precision, y double precision"
+v.to.db elevrand option=coor col=x,y
+v.db.select elevrand
+
+# create new 3D map
+v.in.db elevrand out=elevrand_3d x=x y=y z=value key=cat
+v.info -c elevrand_3d
+v.info -t elevrand_3d
+
+# remove the now superfluous 'x', 'y' and 'value' (z) columns
+v.db.dropcol elevrand_3d col=x
+v.db.dropcol elevrand_3d col=y
+v.db.dropcol elevrand_3d col=value
+
+# add attribute to interpolate
+# (Soil range types taken from the USDA Soil Survey)
+d.rast soils.range
+d.vect elevrand_3d
+v.db.addcol elevrand_3d col="soilrange integer"
+v.what.rast elevrand_3d col=soilrange rast=soils.range
+
+# fix 0 (no data in raster map) to NULL:
+v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
+v.db.select elevrand_3d
+
+# interpolate volume
+v.vol.rst elevrand_3d wcol=soilrange elev=soilrange zmult=100
+
+# visualize
+nviz elevation.10m vol=soilrange
+
+# export to Paraview
+r.out.vtk elevation.10m out=elev.vtk
+r3.out.vtk elevrand_3d out=volume.vtk
+paraview
+</pre></div>
+
+
+<h3>SQL support</h3>
+
+Using the <em>where</em> parameter, the interpolation can be limited to use
+only a subset of the input vectors.
+
+<div class="code"><pre>
+# preparation as in above example
+v.vol.rst elevrand_3d wcol=soilrange elev=soilrange zmult=100 where="soilrange > 3"
+</pre></div>
+
+
+<h3>Cross validation procedure</h3>
+
+Sometimes it can be difficult to figure out the proper values of
+interpolation parameters. In this case, the user can use a
+crossvalidation procedure using <i>-c</i> flag (a.k.a. "jack-knife"
+method) to find optimal parameters for given data. In this method,
+every point in the input point file is temporarily excluded from the
+computation and interpolation error for this point location is
+computed.  During this procedure no output grid files can be
+simultanuously computed.  The procedure for larger datasets may take a
+very long time, so it might be worth to use just a sample data
+representing the whole dataset.
+
+<P>
+<i>Example 
+ (<based on <a href="http://mpa.itc.it/grasstutor/data_menu2nd.phtml">Slovakia3d dataset</a>):</i>
+<P>
+<div class="code"><pre>
+v.info -c precip3d
+v.vol.rst -c input=precip3d wcolumn=precip zmult=50 segmax=700 cvdev=cvdevmap tension=10
+v.db.select cvdevmap
+v.univar cvdevmap col=flt1 type=point
+</pre></div>
+
+From the results, parameters have to be optimized. It is
+recommended to plot the CV error as curve while modifying
+the parameters.
+<P>
+The best approach is to start with <em>tension</em>, <em>smooth</em>
+and <em>zmult</em> with rough steps, or to set <em>zmult</em> to a
+constant somewhere between 30-60. This helps to find minimal RMSE
+values while then finer steps can be used in all parameters. The
+reasonable range is <em>tension</em>=10...100,
+<em>smooth</em>=0.1...1.0, <em>zmult</em>=10...100.
+<p>
+In <em>v.vol.rst</em> the tension parameter is much more sensitive to
+changes than in <em>v.surf.rst</em>, 
+therefore the user should always check the
+result by visual inspection. Minimizing CV does not always provide the best
+result, especially when the density of data are insufficient. Then
+the optimal result found by CV is an oversmoothed surface.
+
+
+<h3>Further notes</h3>
+<p><em>v.vol.rst</em> uses regularized spline with tension for
+interpolation from point data (as described in Mitasova and Mitas,
+1993). The implementation has an improved segmentation procedure based
+on Oct-trees which enhances
+the efficiency for large data sets. </p>
+<p>Geometric parameters - magnitude of gradient (<i>gradient</i>),
+horizontal (<i>aspect1</i>) and vertical (<i>aspect2) </i>aspects,
+change of gradient (<i>ncurv</i>), Gauss-Kronecker (<i>gcurv</i>) and
+mean curvatures (<i>mcurv</i>) are computed directly from the
+interpolation function so that the important relationships between
+these parameters are preserved. More information on these parameters
+can be found in Mitasova et al., 1995 or Thorpe, 1979.</p>
+
+<p>The program gives warning when significant overshoots appear and
+higher tension should be used. However, with tension too high the
+resulting volume will have local maximum in each given point
+and everywhere else the volume goes rapidly to trend. With smoothing
+parameter greater than zero the volume
+will not pass through the data points and the higher the parameter the
+closer
+the volume will be to the trend. For theory on smoothing with splines
+see Talmi and Gilat, 1977 or Wahba, 1990. </p>
+<p>If a visible connection of segments appears, the program should be
+rerun with higher <i>npmin</i> to get more points from the
+neighborhood of given segment. </p>
+<p>If the number of points in a vector map is less then 400, <i>segmax</i>
+should be set to 400 so that segmentation is not performed when it is
+not necessary. </p>
+<p>The program gives warning when user wants to interpolate outside the
+"box" given by minimum and maximum coordinates in vector map, zoom into
+the area where the points are is suggested in this case. </p>
+<p>For large data sets (thousands of data points) it is suggested to
+zoom into a smaller representative area and test whether the parameters
+chosen (e.g. defaults) are appropriate. </p>
+<p>The user must run <i>g.region</i> before the program to set the
+3D region for interpolation. </p>
+
+<h2>NOTES</h2>
+The vector points map must be a 3D vector map (x, y, z as geometry).
+The module <a href="v.in.db.html">v.in.db</a> can be used to generate
+a 3D vector map from a table containing x,y,z columns.
+
+<h2>BUGS</h2>
+<b>devi</b> file is written as 2D and deviations are not written as attributes.
+
+<h2>SEE ALSO</h2>
+<a href="g.region.html">g.region</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="r3.mask.html">r3.mask</a>,
+<a href="v.in.db.html">v.in.db</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.univar.html">v.univar</a>
+
+<h2>AUTHOR</h2>
+<p>Original version of program (in FORTRAN) and GRASS enhancements: <br>
+Lubos Mitas, NCSA, University of Illinois at Urbana-Champaign,
+Illinois, USA, since 2000 at Department of Physics, 
+North Carolina State University, Raleigh, USA
+<a href="mailto:lubos_mitas@ncsu.edu">lubos_mitas@ncsu.edu</a><br>
+Helena Mitasova, Department of Marine, Earth and Atmospheric Sciences,
+North Carolina State University, Raleigh, USA, <a
+ href="mailto:hmitaso@unity.ncsu.edu">hmitaso@unity.ncsu.edu</a></p>
+<p>Modified program (translated to C, adapted for GRASS, new
+segmentation procedure): <br>
+Irina Kosinovsky, US Army CERL, Champaign, Illinois, USA <br>
+Dave Gerdes, US Army CERL, Champaign, Illinois, USA </p>
+<p>Modifications for g3d library, geometric parameters,
+cross-validation, deviations: <br>
+Jaro Hofierka, Department of Geography and Regional Development,
+University of Presov, Presov, Slovakia, <a
+ href="MAILTO:hofierka@fhpv.unipo.sk">hofierka@fhpv.unipo.sk</a>, <a
+ href="http://www.geomodel.sk">http://www.geomodel.sk</a> <br>
+&nbsp; </p>
+
+<h2>REFERENCES</h2>
+<p>Hofierka J., Parajka J., Mitasova H., Mitas L., 2002, Multivariate
+Interpolation of Precipitation Using Regularized Spline with Tension.
+Transactions in
+GIS&nbsp; 6, pp. 135-150. </p>
+<p><a href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/">Mitas, L.,
+Mitasova, H.</a>, 1999, Spatial Interpolation. In: P.Longley, M.F.
+Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
+Systems: Principles, Techniques, Management and Applications, Wiley,
+pp.481-492 </p>
+<p>Mitas L., Brown W. M., Mitasova H., 1997, <a
+ href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/lcgfin/cg-mitas.html">Role
+of dynamic cartography in simulations of landscape processes based on
+multi-variate fields.</a> Computers and Geosciences, Vol. 23, No. 4,
+pp. 437-446 (includes CDROM and WWW: www.elsevier.nl/locate/cgvis) </p>
+<p>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
+Kosinovsky, Baker, T.1995, Modeling spatially and temporally
+distributed phenomena:
+New methods and tools for GRASS GIS. International Journal of GIS, 9
+(4),
+special issue on Integrating GIS and Environmental modeling, 433-446. </p>
+<p> Mitasova, H., Mitas, L., Brown, B., Kosinovsky, I., Baker, T.,
+Gerdes, D. (1994): <a
+ href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/viz/ches.html">Multidimensional
+interpolation and visualization in GRASS GIS</a> </p>
+<p><a
+ href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/papers/lmg.rev1.ps">Mitasova
+H. and Mitas L. 1993</a>: Interpolation by Regularized Spline with
+Tension: I. Theory and Implementation, <i>Mathematical Geology</i> 25,
+641-655. </p>
+<p><a
+ href="http://skagit.meas.ncsu.edu/%7Ehelena/gmslab/papers/hmg.rev1.ps">Mitasova
+H. and Hofierka J. 1993</a>: Interpolation by Regularized Spline with
+Tension: II. Application to Terrain Modeling and Surface Geometry
+Analysis, <i>Mathematical Geology</i> 25, 657-667. </p>
+<p>Mitasova, H., 1992 : New capabilities for interpolation and
+topographic analysis in GRASS, GRASSclippings 6, No.2 (summer), p.13. </p>
+<p>Wahba, G., 1990 : Spline Models for Observational Data, CNMS-NSF
+Regional Conference series in applied mathematics, 59, SIAM,
+Philadelphia, Pennsylvania. </p>
+<p>Mitas, L., Mitasova H., 1988 : General variational approach to the
+interpolation problem, Computers and Mathematics with Applications 16,
+p. 983 </p>
+<p>Talmi, A. and Gilat, G., 1977 : Method for Smooth Approximation of
+Data, Journal of Computational Physics, 23, p.93-123. </p>
+<p>Thorpe, J. A. (1979): Elementary Topics in Differential Geometry.
+Springer-Verlag, New York, pp. 6-94.</p>
+
+<p><i>Last changed: $Date$</i> </p>

@@ -1,0 +1,53 @@
+<h2>DESCRIPTION</h2>
+<em>r.li.simpson</em> 
+calculates the "simpson's diversity index" as:<br>
+<img src="rliSimpson_formula.png"> <br>
+with: <br>
+<ul>
+  <li><b>i</b>: patch type<br> </li>
+  <li><b>m</b>: number of patch type<br>  </li>
+  <li><b>p<small><small>i</small></small></b>: proportion of the landscape occupied by patch type i<br> </li>
+</ul>
+
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351.
+
+<h2>EXAMPLES</h2>
+To calculate simpson's diversity index on map my_map, using
+my_conf configuration file and saving results in my_out file run:<br>
+<div class="code"><pre>
+r.li.simpson map=my_map conf=my_conf output=my_out
+</pre></div>
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder. <br>
+
+If input raster is full of null values r.li.simpson returns -1.<br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=-1 map=my_map
+</pre></div>
+after index calculation.
+
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+<h2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><br>
+
+<p><i>Last changed: $Date$</i>
+

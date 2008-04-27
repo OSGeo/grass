@@ -1,0 +1,28 @@
+List of tags supported by g.html2man
+
+<TITLE>
+<HEADER>
+<HEAD>
+<BODY>
+<BLINK>
+<A HREF="#toc"></A>
+<PRE>
+<IMG SRC=>
+<A NAME="toc">
+<HR>
+<H2>
+<H3>
+<BR>
+<BR>
+<DT>
+<DD>
+<LI>
+<UL>
+<OL>
+<B>
+<I>
+<P>
+&nbsp;
+
+Hackish:
+<table>

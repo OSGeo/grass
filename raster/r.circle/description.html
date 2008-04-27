@@ -1,0 +1,56 @@
+<H2>DESCRIPTION</H2>
+
+This module creates an output raster map centered on the <EM>x,y</EM> values specified
+with the <EM>coordinate</EM> parameter, out to the edge of the current region.
+The output cell values increase linearly from the specified center. The <EM>min</EM> 
+and <EM>max</EM> parameters control the inner and outer output raster map radii, respectively. 
+
+<p>
+The <EM>mult</EM> parameter can be used to multiply the output raster cells by a common factor.
+Note that this parameter does not affect the output raster position or size; only the z-values
+are changed with this parameter. 
+<P>
+Binary-output raster maps (solid circles of one value) can be created
+with the <B>-b</B> flag. Raster maps so created can be used to create
+binary filters for use in <EM>i.ifft</EM> (inverse Fourier transformations;
+apply filter with <EM>r.mask</EM>).
+
+
+<H2>EXAMPLES</H2>
+
+Generate a raster circle at current map center with a radius of 300m and outwardly
+increasing raster values:
+
+<PRE>
+EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
+NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
+r.circle output=circle coordinate=${EASTCENTER},${NORTHCENTER} max=300
+</PRE>
+
+Generate a binary raster ring around current map center with an inner radius 
+of 500m and an outer radius of 1000m:
+
+<PRE>
+EASTCENTER=`g.region -c |  awk ' /center easting:/ { print $3 }'`
+NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
+r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
+</PRE>	
+
+
+<H2>SEE ALSO</H2>
+<EM>
+<A HREF="g.region.html">g.region</A>,
+<A HREF="g.remove.html">g.remove</A>, 
+<A HREF="g.rename.html">g.rename</A>, 
+<A HREF="i.fft.html">i.fft</A>, 
+<A HREF="i.ifft.html">i.ifft</A>,
+<A HREF="r.mask">r.mask</A>
+</EM>
+
+
+<H2>AUTHOR</H2>
+Bill Brown, U.S. Army Construction Engineering Research Laboratory<br>
+Additional flag/min/max parameter by Markus Neteler, University of Hannover
+
+<p>
+<i>Last changed: $Date$</i>

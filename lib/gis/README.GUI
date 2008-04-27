@@ -1,0 +1,183 @@
+
+gui.tcl has gone through a few major changes
+
+
+Migrating from version 1 to version 2:
+
+If you overloaded any of the following you will need to make changes. See their descriptions below.
+
+add_buttons
+module_description
+
+Also if you overloaded begin_dialog or end_dialog (which may have been necessary but messy) you should now refactor your code.
+
+
+Fonts:
+
+Fonts are currently unmanaged, using TCL defaults. Fonts listed here will change the appearance of the created dialog.
+
+balloon-help
+Font to be displayed for balloon help
+
+
+Globals:
+
+dlg
+This is the key to refer to a created dialog. It starts at 0. When begin_dialog is called this goes up by one, become the key for the created dialog.  A program using gui.tcl needs to get this value for a created dialog in order to refer to it again in the future. In version 2 begin_dialog returns the new value of dlg for convenience. 
+
+path
+This specifies the tk object path in which the dialog will be created. Before version 2 this was always the path to a toplevel, such as {} when run from G_gui() or something like .moduleX when running from d.m or gis.m. This must be set before calling begin_dialog.
+
+imagepath
+Version 1 only, the folder to find bwidgets 1.2.1 images in. $env(GISBASE)/bwidget/images/
+
+iconpath
+Introduced in version 2, the path to search for icons. $env(GISBASE)/etc/gui/icons/
+
+opt
+An associative array used for dialogs to store their attributes, options, current answers, etc. Starts off unset.
+
+opt parts:
+$dlg,layout_*	Reserved for use fo the layout system (V2)
+
+
+
+Procedures:
+
+Miscellaneous:
+
+icon {class member}
+Searches icons for an icon, returns either a photo command or 0 on failure. See gui/icons/README for more information
+
+handle_scroll
+Callback that makes mouse wheel scrolling work for frames
+
+
+Command and selection dialog:
+
+mkcmd
+Makes the argv style list command from the current options.
+
+mkcmd_string
+Late version 1 and version 2: Makes a string verion of the current command.
+
+show_cmd
+Late version 1 and version 2: Updates the current command label
+
+prnout
+Version 1, early version 2: File callback that prints output to the text widget in opt($dlg,outtext). Could be overloaded to capture command output, probably a better idea not to. Removed now, this is handled by the gronsole made in make_output.
+
+get_file
+Opens a file selection dialog
+
+get_map
+Opens a database element selection dialog using $env(GISBASE)/etc/gtcltk/select.tcl
+
+run_cmd
+Runs the current command. Could be overloaded to get the event from clicking the run button. It's probably a better idea to overload add_buttons in version 1 or make_dialog_end or make_buttons in version 2 and later
+
+help_cmd, close_cmd, clear_cmd
+Could be overloaded to get the events from clicking the help, clear, and close buttons. See note above about run_cmd.
+
+progress {dlg percent}
+Used to set the filledness of the progress bar. -1 empties it.
+
+
+Layout rules:
+All of these exist only in version 2.
+
+Layout rules are prime candidates for overloading, and can drastically change the appearance of the dialog.
+
+layout_* Reserved for layout rules.
+layout_make_frame is part of the default strategy, not the interface
+
+layout_get_frame {dlg guisection optn}
+Must return text for a frame that option widgets can be packed into
+
+layout_get_special_frame {dlg guisection optn}
+Must return text for a frame that some special widget can be packed into. Used for, for example, output.
+
+layout_raise_frame {dlg guisection optn}
+The named option or guisection should be displayed on the screen
+
+layout_raise_special_frame {dlg guisection optn}
+The named option or guisection should be displayed on the screen
+
+make_layout {dlg path root}
+The default make_dialog calls this to make the layout. A layout should overload it.
+
+
+Stuff that makes the gui:
+
+All of make_* are good candidated for overloading. Appearance and behaviour can be greatly changed just by overloading make_dialog and make_dialog_end
+
+make_module_description:
+Version 2 only, should make a description of the module. It could be overloaded to turn off the description or to provide a different one. Overloading make_dialog could also turn offf the description. Related to module_description (version 1 only).
+
+make_command_label:
+Version 2 only, makes a little command label withtextvar opt($dlg,cmd_string). See also show_cmd. Packs against the bottom side.
+
+make_output:
+Version 2 only, Makes a text box for displaying output. Required for make_buttons unless run_cmd is overloaded, since they contain a run button.
+
+make_progress:
+Version 2 only, makes a progress bar, see also progress. No longer used as progress is displayed by the gronsole.
+
+make_buttons:
+Version 2 only, adds buttons to the dialog. Replaces version 1's add_buttons. Packs against the bottom.
+
+make_dialog
+In version 2 this sets up everything that gets set up before the program is run. By default it does make_module_description, make_command_label, make_layout, and make_buttons and is a prime candidate for overloading.
+
+In version one this set up the windows for options, output, progress, and their associated opt variables opt($dlg, outtext), opt($dlg, progress). It also initialized opt($dlg, path), opt($dlg, root), and opt($dlg, suf). It would have been difficult to overload.
+
+A user interface wanting a special to be displayed before options should put a layout_get_special_frame here to get its frame at the top of the order.
+
+make_dialog_end
+Version 2 only, like make_dialog but run from end_dialog instead of from begin_dialog.
+
+module_description
+Version 1 only. In version 1 this added labels to the dialog for the description of the module. It was called from begin_dialog. If you overloaded it you should move those changes to an overloaded version of make_module_description
+
+add_buttons
+Only in version 1, adds the buttons to the window. Migrating: change proc definition from
+proc add_buttons {dlg} {
+to
+proc make_buttons {dlg path root} {
+
+do_*
+Make various widgets
+Decent candidates for overloading. Most layouts will want to overload do_label.
+
+
+Cleanup Procedures:
+
+These are shared between add_option and add_flag for polishing their input into a normal form. Notfor overriding:
+normalize_guisection
+choose_help_text
+
+
+Command interface:
+Gets and sets the command in tcl argv style list for exec:
+dialog_get_command {dlg}
+dialog_set_command {dlg cmd}
+
+
+Interface for making the dialog:
+
+Calling convention changed in late version 1. These are terrible candidates for overloading. parser.c is the only agent that should be using these.
+
+begin_dialog
+Must be called before add_option or add_flag.
+Must not be called again until after end_dialog is called
+In version 2 this does some of the things that version 1 did in make_dialog.
+
+add_option
+Must be called between begin_dialog and end_dialog to add an option
+
+add_flag
+Like option, but for flags
+
+end_dialog
+In version 1 this called add_buttons. Now it calls make_dialog_end to add more to the ui and layout_raise_frame to bring up the first option section.
+

@@ -1,0 +1,135 @@
+/* updated by Mitasova Nov. 96 */
+
+DATA STRUCTURES:
+----------------
+
+#define NW   1
+#define NE   2
+#define SW   3
+#define SE   4
+
+/* added sm for spatially variable smoothing by Mitasova  10.96 */
+struct triple   {
+  double x;
+  double y;
+  double z;
+  double sm; 
+};
+
+struct quaddata {
+  double x_orig;
+  double y_orig;
+  double xmax;
+  double ymax;
+  int    n_rows;
+  int    n_cols;
+  int    n_points;
+  struct triple  *points;
+};
+
+
+
+
+FUNCTIONS:
+----------
+
+struct triple  *
+quad_point_new (x, y, z, sm)
+    double          x;
+    double          y;
+    double          z;
+    double          sm;
+/* Initializes POINT structure with given arguments,
+s was added for variable smoothing 10.96 helena */
+
+
+
+
+struct quaddata *
+quad_data_new(x_or,y_or,xmax,ymax,rows,cols,n_points,kmax)
+    double          x_or;
+    double          y_or;
+    double          xmax;
+    double          ymax;
+    int             rows;
+    int             cols;
+    int             n_points;
+/* Initializes QUADDATA structure with given arguments*/
+
+
+
+
+
+
+int 
+quad_compare (point, data)
+    struct triple  *point;
+    struct quaddata *data;
+/* returns the quadrant the point should be inserted in */
+/* called by divide() */
+
+
+
+
+
+
+int 
+quad_add_data (point, data, dmin)
+    struct triple  *point;
+    struct quaddata *data;
+    double           dmin;
+/* Adds POINT to a given DATA . Called by tree function insert_quad() */
+/* and by data function quad_divide_data() */
+
+
+
+
+
+
+int 
+quad_intersect (data_inter, data)
+    struct quaddata *data_inter;
+    struct quaddata *data;
+/* Checks if region defined by DATA intersects the region defined
+  by data_inter. Called by tree function MT_region_data() */
+
+
+
+
+
+int quad_division_check(data,kmax)
+ struct quaddata *data;
+ int              kmax;
+/* Checks if DATA needs to be divided. If data->points is empty,
+  returns -1; if its not empty but there aren't enough points
+  in DATA for division returns 0. Othervise (if its not empty and
+  there are too many points) returns 1. Called by MT_insert() */
+
+
+
+
+
+
+struct quaddata **quad_divide_data(data,kmax,dmin)
+ struct quaddata *data;
+ int              kmax;
+ double           dmin;
+/* Divides DATA into 4 new datas reinserting data->points in
+ them by calling data function quad_compare() to detrmine
+ were to insert. Called by MT_divide(). Returns array of 4 new datas */
+
+
+
+
+
+
+
+int quad_get_points(data_inter,data,MAX)
+ struct quaddata *data_inter;
+ struct quaddata *data;
+ int    MAX;
+/* Gets such points from DATA that lie within region determined by
+ data_inter. Called by tree function region_data(). */
+
+
+

@@ -1,0 +1,85 @@
+<H2>DESCRIPTION</H2>
+
+<H3>
+This module is deprecated and scheduled for demolition.
+<BR>
+Please use "<em><a href="r.resamp.interp.html">r.resamp.interp</a></em>"
+instead.</H3>
+
+
+<EM>r.bilinear</EM> fills a grid cell (raster) matrix with interpolated values
+generated from a set of input layer data points.  It uses the bilinear
+interpolation method, a simple algorithm usually applied only to
+completely defined raster areas (input data void of null data values). 
+Here the values of 4 input cells are used to define an
+interpolation function of constant gradient within each rectangular area
+defined by the cell centers.  
+User should be aware that the gradient of the interpolation functions changes
+discontinuously across lines intersecting the cell centers of the input raster.
+
+
+<P>
+
+If there is a current working mask, it applies to the output
+raster map.  Only those cells falling within the mask will be
+assigned interpolated values.  The procedure for 
+selection of input data will consider all 
+input data relevant to interpolating values at the cell centers of the
+current geographic region, ignoring the curent mask.  Note that
+cells of the output raster that cannot be bounded by 4 input cell centers are
+set to null.
+
+
+<H2>NOTES</H2>
+
+The <B>north</B> and <B>south</B> parameters have been included to allow
+for specific input values to be assigned to the north and/or south poles for
+longitude-latitude grids.  These data, if included, are used to interpolate
+values for cells that are north or south of a line intersecting the cell 
+centers of the first or last row of input, respectively.  When utilized, the
+interpolation procedure will be continuous from the north and/or south 
+boundary of the current geographic region.  This option is necessary, since
+the data structure defining a raster will not allow for data to be assigned
+to a cell centered at 90N or 90S.  By including the option, the user can
+create output surfaces that are continuous between the poles.  The
+interpolation will be "wrap-around" from west to east (across latitude)
+only if the input raster has an east edge identical to its west edge.
+
+
+<P>
+
+For longitude-latitude databases, the interpolation algorithm is based on
+degree fractions, not on the absolute distances between cell centers.  Any
+attempt to implement the latter would violate the integrity of the
+interpolation method.
+
+
+<P>
+
+</B><EM>r.bilinear</EM> may be used in some instances as an alternative to the
+nearest neighbor approach inherent to <EM>r.resample</EM>.  Note, however, that
+the extent of non-null data area of the output raster must be less than that
+of the input raster.  The only exception to this occurs in the case where the
+<B>north</B> and <B>south</B> parameters are utilized for longitude-latitude
+rasters.
+
+<P>
+
+<H2>SEE ALSO</H2>
+
+<EM><a href="r.surf.idw.html">r.surf.idw</a></EM>,
+<EM><a href="r.surf.idw2.html">r.surf.idw2</a></EM>,
+<EM><a href="g.region.html">g.region</a></EM>,
+<EM><a href="r.resample.html">r.resample</a></EM>,
+<EM><a href="r.resamp.interp.html">r.resamp.interp</a></EM>,
+<EM><a href="r.resamp.stats.html">r.resamp.stats</a></EM>
+
+<H2>AUTHOR</H2>
+
+Greg Koerper <br>
+ManTech Environmental Technology, Inc.<br>
+Global Climate Research Project<br>
+U.S. EPA Environmental Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

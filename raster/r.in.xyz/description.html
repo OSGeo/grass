@@ -1,0 +1,234 @@
+<H2>DESCRIPTION</H2>
+
+The <EM>r.in.xyz</EM> module will load and bin ungridded x,y,z ASCII data
+into a new raster map. The user may choose from a variety of statistical
+methods in creating the new raster.
+<P>
+<EM>r.in.xyz</EM> is designed for processing massive point cloud datasets,
+for example raw LIDAR or sidescan sonar swath data. 
+<P>
+Available statistics for populating the raster are:<BR>
+<ul>
+<table>
+<tr><td><em>n</em></td>        <td>number of points in cell</td></tr>
+<tr><td><em>min</em></td>      <td>minimum value of points in cell</td></tr>
+<tr><td><em>max</em></td>      <td>maximum value of points in cell</td></tr>
+<tr><td><em>range</em></td>    <td>range of points in cell</td></tr>
+<tr><td><em>sum</em></td>      <td>sum of points in cell</td></tr>
+<tr><td><em>mean</em></td>     <td>average value of points in cell</td></tr>
+<tr><td><em>stddev</em></td>   <td>standard deviation of points in cell</td></tr>
+<tr><td><em>variance</em></td> <td>variance of points in cell</td></tr>
+<tr><td><em>coeff_var</em></td><td>coefficient of variance of points in cell</td></tr>
+<tr><td><em>median</em></td>   <td>median value of points in cell</td></tr>
+<tr valign="baseline"><td><em>percentile</em>&nbsp;</td>
+   <td>p<sup><i>th</i></sup> percentile of points in cell</td></tr>
+<tr><td><em>skewness</em></td> <td>skewness of points in cell</td></tr>
+<tr><td><em>trimmean</em></td> <td>trimmed mean of points in cell</td></tr>
+</table><BR>
+
+<li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]
+<li><em>Coefficient of variance</em> is given in percentage and defined as
+<tt>(stddev/mean)*100</tt>.
+</ul>
+<BR>
+
+
+<H2>NOTES</H2>
+
+<h4>Memory use</h4>
+
+While the <B>input</B> file can be arbitrarily large, <EM>r.in.xyz</EM>
+will use a large amount of system memory for large raster regions (10000x10000).
+If the module refuses to start complaining that there isn't enough memory,
+use the <b>percent</b> parameter to run the module in several passes.
+In addition using a less precise map format (<tt>CELL</tt> [integer] or
+<tt>FCELL</tt> [floating point]) will use less memory than a <tt>DCELL</tt>
+[double precision floating point] <b>output</b> map. Methods such as <em>n,
+min, max, sum</em> will also use less memory, while <em>stddev, variance,
+and coeff_var</em> will use more.
+
+The aggregate functions <em>median, percentile, skewness</em> and
+<em>trimmed mean</em> will also use more memory.
+<P>
+The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
+preserving data precision and limiting system resource consumption.
+If reading data from a <tt>stdin</tt> stream, the program can only run using
+a single pass.
+
+<h4>Setting region bounds and resolution</h4>
+
+You can use the <b>-s</b> scan flag to find the extent of the input data
+(and thus point density) before performing the full import. Use
+<em>g.region</em> to adjust the region bounds to match. The <b>-g</b> shell
+style flag prints the extent suitable as parameters for <em>g.region</em>.
+A suitable resolution can be found by dividing the number of input points
+by the area covered. e.g.
+
+<div class="code"><pre>
+  wc -l inputfile.txt
+  g.region -p
+  # points_per_cell = n_points / (rows * cols)
+
+  g.region -e
+  # UTM location:
+  # points_per_sq_m = n_points / (ns_extent * ew_extent)
+
+  # Lat/Lon location:
+  # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
+</pre></div>
+<P>
+If you only intend to interpolate the data with <em>r.to.vect</em> and
+<em>v.surf.rst</em>, then there is little point to setting the region
+resolution so fine that you only catch one data point per cell -- you might
+as well use "<tt>v.in.ascii&nbsp;-zbt</tt>" directly.
+
+
+<h4>Filtering</h4>
+
+Points falling outside the current region will be skipped. This includes
+points falling <em>exactly</em> on the southern region bound.
+(to capture those adjust the region with "<tt>g.region s=s-0.000001</tt>";
+see <em>g.region</em>)
+<P>
+Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
+will be skipped.
+<P>
+The <b>zrange</b> parameter may be used for filtering the input data by
+vertical extent. Example uses might include preparing multiple raster
+sections to be combined into a 3D raster array with <em>r.to.rast3</em>, or
+for filtering outliers on relatively flat terrain.
+<P>
+In varied terrain the user may find that <em>min</em> maps make for a good
+noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
+may also be useful to find the underlying topography in a forested or urban
+environment if the cells are over sampled.
+<P>
+The user can use a combination of <EM>r.in.xyz</EM> <B>output</b> maps to create
+custom filters. e.g. use <em>r.mapcalc</em> to create a <tt>mean-(2*stddev)</tt>
+map. [In this example the user may want to include a lower bound filter in
+<em>r.mapcalc</em> to remove highly variable points (small <em>n</em>) or run
+<EM>r.neighbors</EM> to smooth the stddev map before further use.]
+
+
+<h4>Reprojection</h4>
+
+If the raster map is to be reprojected, it may be more appropriate to reproject
+the input points with <em>m.proj</em> or <em>cs2cs</em> before running
+<EM>r.in.xyz</EM>.
+
+
+<h4>Interpolation into a DEM</h4>
+
+The vector engine's topographic abilities introduce a finite memory overhead
+per vector point which will typically limit a vector map to approximately
+3 million points (~ 1750^2 cells). If you want more, use the <em>r.to.vect</em>
+<b>-b</b> flag to skip building topology. Without topology, however, all
+you'll be able to do with the vector map is display with <em>d.vect</em> and
+interpolate with <em>v.surf.rst</em>.
+Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
+and adjust bounds and/or resolution as needed before proceeding.
+
+<P>
+Typical commands to create a DEM using a regularized spline fit:
+<div class="code"><pre>
+  r.univar lidar_min
+  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
+  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
+</pre></div>
+<BR>
+
+<H2>EXAMPLE</H2>
+
+Import the <a href="http://mpa.itc.it/grasstutor/data_menu2nd.phtml">Jockey's
+Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
+
+<div class="code"><pre>
+    # scan and set region bounds
+  r.in.xyz -s fs=, in=lidaratm2.txt out=test
+  g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
+  g.region res=0:00:00.075 -a
+    # create "n" map containing count of points per cell for checking density
+  r.in.xyz in=lidaratm2.txt out=lidar_n fs=, method=n zrange=-2,50
+    # check point density [rho = n_sum / (rows*cols)]
+  r.univar lidar_n | grep sum
+    # create "min" map (elevation filtered for premature hits)
+  r.in.xyz in=lidaratm2.txt out=lidar_min fs=, method=min zrange=-2,50
+    # zoom to area of interest
+  g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
+    # check number of non-null cells (try and keep under a few million)
+  r.univar lidar_min | grep '^n:'
+    # convert to points 
+  r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
+    # interpolate using a regularized spline fit
+  v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
+    # set color scale to something interesting
+  r.colors lidar_min.rst rule=bcyr -n -e
+    # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
+  r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
+  r.colors lidar_min.rst_scaled rule=bcyr -n -e
+</pre></div>
+<BR>
+
+
+<H2>TODO</H2>
+
+<ul>
+<li> Support for multiple map output from a single run.<BR>
+     <tt>method=string[,string,...] output=name[,name,...]</tt>
+</ul>
+
+
+<H2>BUGS</H2>
+
+<ul>
+<li> <em>n</em> map sum can be ever-so-slightly more than `<tt>wc -l</tt>`
+  with e.g. <tt>percent=10</tt> or less.
+  <BR>Cause unknown.
+
+<li> <em>n</em> map <tt>percent=100</tt> and <tt>percent=xx</tt> maps
+  differ slightly (point will fall above/below the segmentation line)
+  <BR>Investigate with "<tt>r.mapcalc diff=bin_n.100 - bin_n.33</tt>" etc.
+  <BR>Cause unknown.
+
+<li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
+  <BR>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
+<!-- HB: "possible" when someone fixes r.null to allow it ;) -->
+<!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
+</ul>
+
+If you encounter any problems (or solutions!) please contact the GRASS
+Development Team.
+
+<H2>SEE ALSO</H2>
+
+<i>
+<a href="g.region.html">g.region</a><BR>
+<a href="m.proj.html">m.proj</a><BR>
+<a href="r.fillnulls.html">r.fillnulls</a><BR>
+<a href="r.in.ascii.html">r.in.ascii</a><BR>
+<a href="r.mapcalc.html">r.mapcalc</a><BR>
+<a href="r.neighbors.html">r.neighbors</a><BR>
+<a href="r.out.xyz.html">r.out.xyz</a><BR>
+<a href="r.to.rast3.html">r.to.rast3</a><BR>
+<a href="r.to.vect.html">r.to.vect</a><BR>
+<a href="r.univar.html">r.univar</a><BR>
+<a href="r.univar.sh.html">r.univar.sh</a><BR>
+<a href="v.in.ascii.html">v.in.ascii</a><BR>
+<a href="v.out.ascii.html">v.out.ascii</a><BR>
+<a href="v.surf.rst.html">v.surf.rst</a>
+</i>
+
+
+<H2>AUTHORS</H2>
+
+Hamish Bowman<BR> <i>
+Department of Marine Science<BR>
+University of Otago<BR>
+New Zealand</i><BR>
+<BR>
+Extended by Volker Wichmann to support the aggregate functions
+<i>median, percentile, skewness</i> and <i>trimmed mean</i>.
+
+<BR>
+<p>
+<i>Last changed: $Date$</i></p>

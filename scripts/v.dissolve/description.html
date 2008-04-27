@@ -1,0 +1,75 @@
+<H2>DESCRIPTION</H2>
+
+The <EM>v.dissolve</EM> module is used to merge adjacent areas in a vector
+map which share the same category value. The resulting merged area(s) retains
+this category value. Optionally, a column can be defined which is used
+to find adjacent polygons with identical attribute for common boundary
+dissolving.
+
+GRASS defines a vector area as composite entity consisting of a set of
+closed boundaries and a centroid. The centroids must contain a
+category number
+(see <em><a href="v.centroids.html">v.centroids</a></em>), this number
+is linked to area attributes and database links.
+
+Multiple attributes may be linked to a single vector entity through
+numbered fields referred to as layers. Refer
+to <em><a href="v.category.html">v.category</a></em> for more details.
+
+<P>
+Merging of areas can also be accomplished using
+"<em>v.extract <b>-d</b></em>" which provides some additional options.
+In fact, <a href="v.dissolve.html">v.dissolve</a> is simply a
+front-end to that module. The use of the <EM>column</EM> parameter
+adds a call to <em><a href="v.reclass.html">v.reclass</a></em> before.
+
+<h2>EXAMPLES</h2>
+
+<h3>Basic use</h3>
+<div class="code"><pre>
+v.dissolve input=undissolved output=dissolved
+</pre></div>
+
+<h3>Dissolving based on column attributes</h3>
+<div class="code"><pre>
+# check column names:
+v.info -c polbnda_italy
+
+# dissolve based on column attributes:
+v.dissolve input=polbnda_italy output=pol_italy_regions col=vmap_nam
+</pre></div>
+
+<h3>Dissolving adjacent SHAPE files to remove tile boundaries</h3>
+
+If tile boundaries of adjacent maps (e.g. CORINE Landcover SHAPE files)
+have to be removed, an extra step is required to remove duplicated
+boundaries:
+
+<div class="code"><pre>
+# patch tiles after import:
+v.patch -e `g.mlist type=vect pat="clc2000_*" sep=,` out=clc2000_patched
+
+# remove duplicated tile boundaries:
+v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
+
+# dissolve based on column attributes:
+v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="v.category.html">v.category</A>,
+<A HREF="v.centroids.html">v.centroids</A>,
+<A HREF="v.extract.html">v.extract</A>,
+<A HREF="v.reclass.html">v.reclass</A>
+</EM>
+
+<H2>AUTHORS</H2>
+
+module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
+Markus Neteler for column support<BR>
+help page: Trevor Wiens
+
+<P>
+<i>Last changed: $Date$</i>

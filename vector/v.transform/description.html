@@ -1,0 +1,115 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.transform</em> performs an affine transformation (translate and rotate) of a
+vector map. An affine transform includes one or several linear transformations
+(scaling, rotation) and translation (shifting). Several linear transformations
+can be combined in a single operation. The command can be used to georeference
+unreferenced vector maps or to modify existing geocoded maps.
+
+<h2>NOTES</h2>
+
+When using an ASCII table containing source and target coordinate pairs,
+in each row four coordinate values separated by white space have to be specified.
+Comments are permitted and have to be indicated by a '#' character.
+<p>
+Example for a points file of a linear transformation from XY to UTM coordinates
+(L: left, R: right, U: upper, L: lower, N, S, W, E):
+
+<div class="code"><pre>
+# Linear transformation from XY to UTM coordinates:
+# 4 maps corners defined
+# UL NW
+# UR NE
+# LR SW
+# LL SE
+-584  585  598000 4920770
+ 580  585  598020 4920770
+ 580 -600  598020 4920750
+-584 -600  598000 4920750
+</pre></div>
+
+<p>The ground control points may be also (ir)regularly distributed
+and can be more than four points.</p>
+
+<p>Transformation parameters (i.e. <em>xshift</em>, <em>yshift</em>,
+etc.) can be fetched from attribute table connected to the vector
+map. In this case vector objects can be transformed with different
+parameters based on their category number. If the parameter cannot be
+fetched from the table, default value is used instead.<p>
+
+<h3>Affine Transformation Matrix</h3>
+The affine transfomation matrix can optionally be printed with the '-m'
+flag. The format of the matrix is:
+<div class="code" style="width:30%;"><pre>
+| x_offset a b |
+| y_offset d e |
+</pre></div>
+
+This format can be used in the <a href="http://postgis.refractions.net/docs/ch06.html#id2904406">Affine() function of PostGIS</a>
+[Affine(geom, a, b, d, e, xoff, yoff)], or directly compared to the
+output of a similar operation performed in R.
+
+<h2>EXAMPLE</h2>
+
+<h3>DXF/DWG drawings</h3>
+
+<p>Most DXF/DWG drawings are done within XY coordinate space. To transform 
+them to a national grid, we can use 'v.transform' with a 4 point 
+transformation.</p>
+
+<div class="code"><pre>
+v.transform -t in=watertowerXY out=watertowerUTM points=wt.points zscale=0.04 zshift=1320
+</pre></div>
+
+<h3>Extrude 2D vector points to 3D based on attribute column values</h3>
+
+Spearfish example with manual table editing for vertical shift:
+
+<div class="code"><pre>
+# create table containing transformation parameters:
+echo "create table archsites_t (cat int, zs double)" | db.execute
+# insert transformation parameters for category 1:
+echo "insert into archsites_t values (1, 1000)" | db.execute
+# insert transformation parameters for category 2 (and so forth):
+echo "insert into archsites_t values (2, 2000)" | db.execute
+
+# perform z transformation:
+v.transform -t input=archsites output=myarchsites3d column="zshift:zs" table="archsites_t"
+# drop table containing transformation parameters:
+echo "drop table archsites_t" | db.execute
+</pre></div>
+The resulting map is a 3D vector map.
+
+<h3>Extrude 2D vector points to 3D based on attribute column values</h3>
+
+Spearfish example with automated elevation extraction for vertical shift:
+
+<div class="code"><pre>
+# work on own map copy:
+g.copy vect=archsites@PERMANENT,myarchsites
+# add new 'zs' column to later store height of each site:
+v.db.addcol myarchsites col="zs double precision"
+
+# set region to elevation map and fetch individual heights:
+g.region rast=elevation.10m -p
+v.what.rast myarchsites rast=elevation.10m col=zs
+# verify:
+v.db.select myarchsites
+
+# perform transformation to 3D
+v.transform -t myarchsites output=myarchsites3d column="zshift:zs" table=myarchsites
+# drop table containing transformation parameters
+v.db.dropcol myarchsites3d col=zs
+</pre></div>
+The resulting map is a 3D vector map.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="v.in.ogr.html">v.in.ogr</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-irst, Trento, Italy,<br>
+Column support added by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy (2007/09)
+
+<p><i>Last changed: $Date$</i>

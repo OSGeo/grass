@@ -1,0 +1,43 @@
+Radim Blazek blazek at itc.it 
+ Tue, 23 Sep 2003 12:11:27 +0200 
+ [updated MN Oct 25 2003]
+
+I have modified G_site* functions to use vectors. It is temporary solution
+how to update s.* modules to 5.1/7 v.* without a lot of work. Attributes are
+supported by G_site_get() but G_site_put() writes CELL category only
+(attributes may be added later if needed). Old G_site* functions used by
+v.in.sites are renamed to G_oldsites*. There are only 2 s.* modules in 5.1/7
+(s.in.ascii,s.out.ascii; to be removed later) for tests of new SITESLIB. I
+updated 2 other modules, v.random and v.surf.idw. It is not my intention to
+update all other s.* modules as mostly I don't know too much about them and
+don't need them.
+
+To updated s.* to v.*, it is typically necessary:
+1) ->key = "sites"			=>  "input" / "output" / "vector"
+2) ->description="... sites ..."	=> "... vector points ..."
+3) ->gisprompt="old,site_lists,sites"	=> "old,vector,vector"
+   ->gisprompt="any,site_lists,sites"	=> "any,vector,vector"
+   ->gisprompt="new,site_lists,sites"	=> "new,vector,vector"
+4) new function name and less parameters:
+    G_find_file ("site_lists",,) 	=> G_find_sites (,)
+5) fclose() 				=> G_sites_close()
+   (Hint: to find close(), search for related G_fopen_sites_old())
+6) add
+    #include <grass/site.h>
+7) The Makefile needs a reference to $(SITESLIB).
+
+New version is slower (dbf driver, 10000 points): 
+                 time(200x200cells)   time(667x667cells)
+s.surf.idw              0.43                10.71
+v.surf.idw              1.76                11.35
+
+Radim
+
+##################
+
+G_site_put() currently only writes 2D sites files.
+
+##################
+This modified sites lib reads *vector* maps. Any old sites files
+have to be imported with v.in.sites first.
+

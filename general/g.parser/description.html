@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>g.parser</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h2>NAME</h2>
+<em><b>g.parser</b></em>
+
+<H2>DESCRIPTION</H2>
+
+The <em>g.parser</em> module provides full parser support for GRASS scripts,
+including an auto-generated GUI interface, help page template, and command
+line option checking. In this way a simple script can very quickly be made
+into a full-fledged GRASS module.
+<P>
+
+<H2>OPTIONS</H2>
+
+After parsing the arguments are stored in environment variables for use in your
+scripts. These variables are named "GIS_FLAG_&lt;NAME&gt;" for flags and
+"GIS_OPT_&lt;NAME&gt;" for options.
+The names of variables are converted to upper case. For example if an option 
+with key <b>input</b> was defined in the script header, the value will be
+available in variable <b>GIS_OPT_INPUT</b> and the value of flag with key <b>f</b>
+will be available in variable <b>GIS_FLAG_F</b>.
+<P>
+For flags, the value will be "1" if the flag was given, and "0" otherwise.
+<P>
+Typical header definitions are as follows:
+<div class="code"><pre>
+#%Module
+#%  description: g.parser test script   
+#%End
+#%flag
+#%  key: f
+#%  description: A flag
+#%end
+#%option
+#%  key: raster
+#%  type: string
+#%  gisprompt: old,cell,raster
+#%  description: Raster input map
+#%  required : yes
+#%end
+</pre></div>
+
+<H2>NOTES</H2>
+
+An option can be instructed to allow multiple inputs by adding the following line:
+<pre>#% multiple : yes</pre>
+While this will only directly change the <i>Usage</i> section of the help
+screen, the option's environmental string may be easily parsed from within
+a script. For example, individual comma separated identities for an option 
+named "input" can be parsed with the following Bash shell code:
+
+<div class="code"><pre>IFS=,
+for opt in $GIS_OPT_INPUT ; do
+    ... "$opt"
+done
+</pre></div>
+
+<P>
+A "<tt>guisection</tt>" field may be added to each option and flag to specify
+that the options should appear in multiple tabs in the auto-generated GUI.
+Any options without a <tt>guisection</tt> field go into the "Options" tab.
+For example:
+<pre>#% guisection: tabname</pre>
+would put that option in a tab named <i>tabname</i>.
+
+<P>
+A "<tt>key_desc</tt>" field may be added to each option to specify the text that
+appears in the module's usage help section. For example:
+<pre>#% key_desc: filename</pre>
+added to an <b>input</b> option would create the usage summary
+<tt>[input=filename]</tt>.
+
+<P>
+If a script is run with --o, G_parser() will set <tt>GRASS_OVERWRITE=1</tt>,
+which has the same effect as passing --o to every module which is run
+from the script.
+Similarly, passing --q or --v will set <tt>GRASS_VERBOSE</tt> to 0 or 3
+respectively, which has the same effect as passing --q or --v to every
+module which is run from the script.
+Rather than checking whether --o, --q or --v were used, you should be
+checking $GRASS_OVERWRITE and/or $GRASS_VERBOSE instead. If those
+variables are set, the script should behave the same way regardless of
+whether they were set by --o, --q or --v being passed to the script or
+set by other means.
+
+<H2>AUTOMATED SCRIPT CREATION</H2>
+
+The flag <em>--script</em> added to a GRASS command, generates shell output.
+To write out a <em>g.parser</em> boilerplate for easy prototyping of shell
+scripts, the flag <em>--script</em> can be added to any GRASS command. Example:
+
+<div class="code"><pre>
+v.in.db --script
+</pre></div>
+
+<H2>Help page template (HTML)</H2>
+
+The flag <em>--html-description</em> added to a GRASS command, generates a 
+related help page template in HTML. Example:
+
+<div class="code"><pre>
+v.in.db --html-description
+</pre></div>
+
+<H2>GUI window parser (XML)</H2>
+
+The flag <em>--interface-description</em> added to a GRASS command, generates a
+related help page template in XML. Example:
+
+<div class="code"><pre>
+v.in.db --interface-description
+</pre></div>
+
+<H2>GUI window parser (TclTk)</H2>
+
+The flag <em>--tcltk</em> added to a GRASS command, generates a
+a XML description of the GUI interface. Example
+
+<div class="code"><pre>
+v.in.db --tcltk
+</pre></div>
+
+
+<H2>TRANSLATION</h2>
+
+<em>g.parser</em> provides some support for translating the options of scripts.
+If called with the -t switch before the script filename like this
+
+<div class="code"><pre>
+g.parser -t somescriptfile
+</pre></div>
+
+<em>g.parser</em> will print the text of the translatable options to
+<tt>stdout</tt>, one per line, and exit. This is for internal use within
+the build system to prepare GRASS scripts for translation.
+
+
+<H2>EXAMPLES</H2>
+
+<h3>Example code for SHELL</h3>
+
+<div class="code"><pre>
+#!/bin/sh
+
+# g.parser demo script for shell programing
+
+#%Module
+#%  description: g.parser test script   
+#%End
+#%flag
+#%  key: f
+#%  description: A flag
+#%END
+#%option
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required : yes
+#%end
+#%option
+#% key: vector
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector input map
+#% required : yes
+#%end
+#%option
+#% key: option1
+#% type: string
+#% description: An option
+#% required : no
+#%end
+
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1&gt;&amp;2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+#### add your code below ####
+echo ""
+
+if [ $GIS_FLAG_F -eq 1 ] ; then
+    echo "Flag -f set"
+else
+    echo "Flag -f not set"
+fi
+
+# test if parameter present:
+if [ -n "$GIS_OPT_OPTION1" ] ; then
+    echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
+fi
+
+echo "Value of GIS_OPT_RASTER: '$GIS_OPT_RASTER'"
+echo "Value of GIS_OPT_VECTOR: '$GIS_OPT_VECTOR'"
+
+</pre></div>
+
+
+<h3>Example code for Python</h3>
+
+<div class="code"><pre>
+#!/usr/bin/python
+
+# g.parser demo script for python programing
+
+#%Module
+#%  description: g.parser test script (python)
+#%End
+#%flag
+#%  key: f
+#%  description: A flag
+#%END
+#%option
+#%  key: raster
+#%  type: string
+#%  gisprompt: old,cell,raster
+#%  description: Raster input map
+#%  required : yes
+#%end
+#%option
+#%  key: vector
+#%  type: string
+#%  gisprompt: old,vector,vector
+#%  description: Vector input map
+#%  required : yes
+#%end
+#%option
+#%  key: option1
+#%  type: string
+#%  description: An option
+#%  required : no
+#%end
+
+import os
+import sys
+
+def main():
+
+    #### add your code here ####
+
+    print ""
+
+    if ( os.getenv('GIS_FLAG_F') == "1" ):
+        print "Flag -f set"
+    else:
+        print "Flag -f not set"
+
+    # test if parameter present:
+    if ( os.getenv("GIS_OPT_OPTION1") != "" ):
+        print "Value of GIS_OPT_OPTION1: '%s'" % os.getenv('GIS_OPT_OPTION1')
+
+    print "Value of GIS_OPT_RASTER: '%s'" % os.getenv('GIS_OPT_RASTER')
+    print "Value of GIS_OPT_VECTOR: '%s'" % os.getenv('GIS_OPT_VECTOR')
+
+    #### end of your code ####
+    return
+
+if __name__ == "__main__":
+
+    if !os.getenv("GISBASE"):
+        print &gt;&gt; sys.stderr, "You must be in GRASS GIS to run this program."
+        sys.exit(0)
+
+    if ( len(sys.argv) <= 1 or sys.argv[1] != "@ARGS_PARSED@" ):
+        os.execvp("g.parser", [sys.argv[0]] + sys.argv)
+    else:
+        main();
+
+</pre></div>
+
+<P>
+The <tt>test.py</tt> script will provide following help text:
+<P>
+<div class="code"><pre>
+./test.py --help
+
+Description:
+ g.parser test script (python)
+ 
+Usage:
+ test.sh [-f] option=name
+ 
+Flags:
+  -f   a flag
+ 
+Parameters:
+  option   an option
+</pre></div>
+
+
+<h3>Example code for Perl</h3>
+
+<div class="code"><pre>
+#!/usr/bin/perl -w
+use strict;
+
+# g.parser demo script
+
+#%Module
+#%  description: g.parser test script (perl) 
+#%  keywords: keyword1, keyword2
+#%End
+#%flag
+#%  key: f
+#%  description: A flag
+#%END
+#%option
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required : yes
+#%end
+#%option
+#% key: vector
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector input map
+#% required : yes
+#%end
+#%option
+#% key: option1
+#% type: string
+#% description: An option
+#% required : no
+#%end
+
+if ( !$ENV{'GISBASE'} ) {
+    printf(STDERR  "You must be in GRASS GIS to run this program.\n");
+    exit 1;
+}
+
+ 
+if( $ARGV[0] ne '@ARGS_PARSED@' ){
+    my $arg = "";
+    for (my $i=0; $i < @ARGV;$i++) {
+        $arg .= " $ARGV[$i] ";
+    }
+    system("$ENV{GISBASE}/bin/g.parser $0 $arg");
+    exit;
+}
+
+#### add your code here ####
+print  "\n";
+if ( $ENV{'GIS_FLAG_F'} eq "1" ){
+   print "Flag -f set\n"
+}
+else {
+   print "Flag -f not set\n"
+}
+
+printf ("Value of GIS_OPT_option1: '%s'\n", $ENV{'GIS_OPT_OPTION1'});
+printf ("Value of GIS_OPT_raster: '%s'\n", $ENV{'GIS_OPT_RASTER'});
+printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
+
+#### end of your code ####
+
+</pre></div>
+
+
+<P>
+The <tt>test.pl</tt> script will provide following help text:
+<P>
+<div class="code"><pre>
+./test.pl --help
+
+Description:
+ g.parser test script (perl)
+ 
+Usage:
+ test.sh [-f] option=name
+ 
+Flags:
+  -f   a flag
+ 
+Parameters:
+  option   an option
+</pre></div>
+
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="d.ask.html">d.ask</A>,
+<A HREF="d.menu.html">d.menu</A>,
+<A HREF="g.ask.html">g.ask</A>,
+<A HREF="g.filename.html">g.filename</A>,
+<A HREF="g.findfile.html">g.findfile</A>,
+<A HREF="g.tempfile.html">g.tempfile</A>,
+</EM>
+and the <tt>SUBMITTING_SCRIPTS</tt> file in the GRASS source code.
+
+
+<H2>AUTHOR</H2>
+
+Glynn Clements
+<p>
+<i>Last changed: $Date$</i>
+</p>
+</body>
+</html>

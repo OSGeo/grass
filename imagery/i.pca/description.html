@@ -1,0 +1,85 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>i.pca</EM> is an image processing program based on the
+algorithm provided by Vali (1990), that processes n (2
+&gt;= n) input raster map layers and produces n output
+raster map layers containing the principal components of
+the input data in decreasing order of variance
+("contrast").  The output raster map layers are assigned
+names with .1, .2, ... .n suffixes.  The current geographic
+region definition and mask settings are respected when
+reading the input raster map layers. When the rescale
+option is used, the output files are rescaled to fit the
+min,max range.
+
+<H2>OPTIONS</H2>
+
+<H3>Parameters:</H3>
+
+<DL>
+
+<DT><B>input=</B><EM>name,name</EM>[<EM>,name,name</EM>,...] 
+
+<DD>Name of two or more input raster map layers.
+
+<DT><B>output=</B><EM>name</EM> 
+
+<DD>The output raster map layer name to which suffixes are
+added.  Each output raster map layer is assigned this
+user-specified <EM>name</EM> with a numerical (.1, .2, ...
+.n) suffix.
+
+<DT><B>rescale=</B><EM>min,max</EM> 
+
+<DD>The optional output category range. (Default: 0,255) If
+rescale=0,0,  no rescaling is performed on output files.
+
+<DD>If output is rescaled, the output raster will be of type CELL. If 
+the output is not rescaled, the output raster will be of type DCELL.
+
+</DL>
+
+<H2>NOTES</H2>
+
+Richards (1986) gives a good example of the application of principal
+components analysis (pca) to a time series of LANDSAT images of a burned
+region in Australia.
+
+<H2>SEE ALSO</H2>
+
+Richards, John A.,
+<B>Remote Sensing Digital Image Analysis</B>,
+Springer-Verlag, 1986.
+
+<P>
+
+Vali, Ali R.,
+Personal communication,
+Space Research Center, 
+University of Texas, Austin, 1990.
+
+<P>
+
+<EM><A HREF="i.cca.html">i.cca</A></EM><br>
+<EM><A HREF="i.class.html">i.class</A></EM><br>
+<EM><A HREF="i.fft.html">i.fft</A></EM><br>
+<EM><A HREF="i.ifft.html">i.ifft</A></EM><br>
+<EM><A HREF="m.eigensystem.html">m.eigensystem</A></EM><br>
+<EM><A HREF="r.covar.html">r.covar</A></EM><br>
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>
+
+<H2>AUTHOR</H2>
+
+David Satnik, GIS Laboratory
+<p>
+Major modifications for GRASS 4.1 were made by <br>
+Olga Waupotitsch and
+Michael Shapiro,
+U.S.Army Construction Engineering 
+Research Laboratory
+<p>
+Rewritten for GRASS 6.x and major modifications by <br>
+Brad Douglas
+
+<p><i>Last changed: $Date$</i>

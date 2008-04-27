@@ -1,0 +1,557 @@
+#!/bin/bash
+
+############################################################################
+#
+# MODULE:       r.tileset for GRASS 6
+# AUTHOR(S):    Cedric Shock
+# PURPOSE:      To produce tilings of regions in other projections.
+# COPYRIGHT:    (C) 2006 by Cedric Shoc
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+# Requires:
+#  bc
+#  cs2cs
+#  grep
+#  sed
+
+# Bugs:
+#  Does not know about meridians in projections. However, unlike the usual
+#   hack used to find meridians, this code is perfectly happy with arbitrary
+#   rotations and flips
+#  The following are planned to be fixed in a future version, if it turns out
+#   to be necessary for someone:
+#   Does not generate optimal tilings. This means that between an appropriate
+#    projection for a region and latitude longitude projection, in the
+#    degenerate case, it may create tiles demanding up to twice the necessary
+#    information. Requesting data from cylindrical projections near their poles
+#    results in divergence. You really don't want to use source data from
+#    someone who put it in a cylindrical projection near a pole, do you?
+#   Not generating "optimal" tilings has another side effect; the sanity
+#    of the destination region will not carry over to generating tiles of
+#    realistic aspect ratio. This might be a problem for some WMS servers
+#    presenting data in a highly inappropriate projection. Do you really
+#    want their data?
+
+# Usage example
+#  r.tileset -w sourceproj="+init=epsg:4326" maxcols=4096 maxrows=4096
+
+# Changes:
+# Version 2:
+#   Added destination projection options
+#   Added extra cells for overlap
+
+#%Module
+#% description: Produces tilings of the source projection for use in the destination region and projection.
+#% keywords: raster, tiling
+#%End
+#%flag
+#% key: g
+#% description: Produces shell script output
+#%end
+#%flag
+#% key: w
+#% description: Produces web map server query string output
+#%end
+#%option
+#% key: region
+#% type: string
+#% description: Name of region to use instead of current region for bounds and resolution
+#%end
+#%option
+#% key: sourceproj
+#% type: string
+#% description: Source projection
+#% required : yes
+#%end
+#%option
+#% key: sourcescale
+#% type: string
+#% description: Conversion factor from units to meters in source projection
+#% answer : 1
+#%end
+#%option
+#% key: destproj
+#% type: string
+#% description: Destination projection, defaults to this location's projection
+#% required : no
+#%end
+#%option
+#% key: destscale
+#% type: string
+#% description: Conversion factor from units to meters in source projection
+#% required : no
+#%end
+#%option
+#% key: maxcols
+#% type: integer
+#% description: Maximum number of columns for a tile in the source projection
+#% answer: 1024
+#%end
+#%option
+#% key: maxrows
+#% type: integer
+#% description: Maximum number of rows for a tile in the source projection
+#% answer: 1024
+#%end
+#%option
+#% key: overlap
+#% type: integer
+#% description: Number of cells tiles should overlap in each direction
+#% answer: 0
+#%end
+#%option
+#% key: fs
+#% type: string
+#% description: Output field seperator
+#% answer:|
+#%end
+#%option
+#% key: v
+#% type: integer
+#% description: Verbosity level
+#% answer: 0
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+# Program locations:
+BC="bc"
+BCARGS="-l"
+SED="sed"
+GREP="grep"
+CS2CS="cs2cs"
+
+
+# check if we have bc
+if [ ! -x "`which $BC`" ] ; then
+    g.message -e "$BC is required, please install it first"
+    exit 1
+fi
+
+# check if we have sed
+if [ ! -x "`which $SED`" ] ; then
+    g.message -e "$SED is required, please install it first"
+    exit 1
+fi
+
+# check if we have grep
+if [ ! -x "`which $GREP`" ] ; then
+    g.message -e "$GREP is required, please install it first"
+    exit 1
+fi
+
+# check if we have cs2cs
+if [ ! -x "`which $CS2CS`" ] ; then
+    g.message -e "$CS2CS is required, please install it first"
+    exit 1
+fi
+
+
+# Default IFS
+defaultIFS=$IFS
+
+# Data structures used in this program:
+# A bounding box:
+# 0 -> left, 1-> bottom, 2->right, 3-> top
+# A border:
+# An array of points indexed by 0 for "x" and 4 for "y" + by number 0, 1, 2, and 3
+# A reprojector [0] is name of source projection, [1] is name of destination
+# A projection - [0] is proj.4 text, [1] is scale
+
+#####################
+# name:     message
+# purpose:  displays messages to the user
+# usage: message level text
+
+message () {
+	if [ $1 -lt $GIS_OPT_V ] ; then
+		shift
+		echo "$@"  
+	fi
+}
+
+#########################
+# name: lookup
+# purpose: lookup values in passed by reference arrays
+
+Lookup_Mac() {
+# Assignment Command Statement Builder
+# "$1" is Source name, "$3" is Destination name
+    echo "eval $3"'=${'"$1[$2]}"
+}
+
+# Lookup_Mac
+
+declare -f LookupP               # Function "Pointer"
+LookupP=Lookup_Mac               # Statement Builder
+
+lookup () {
+	$($LookupP $1 $2 $3)
+}
+
+#####################3
+# name: calculate
+# purpose: perform calculations
+# usage: varname "expr"
+
+calculate() {
+	message 3 "$2"
+	c_tmp=`echo "$2" | $BC $BCARGS`
+	eval $1=$c_tmp
+}
+
+#########################
+# name: makeProjector
+# purpose: bundle up reprojection information
+#          and provide enough abstraction to use pipes
+# usage: makeReprojector source source-scale destination destination-scale name
+
+makeProjector() {
+	eval $5[0]=$1
+	eval $5[1]=$2
+	eval $5[2]=$3
+	eval $5[3]=$4
+}
+
+#######################################################################
+# name:     project
+# purpose:  projects x1 y1 using projector
+# usage: project -12 36 x2 y2 source-to-dest
+project() {
+	# echo "$5"
+	# Pick apart the projector
+	lookup $5 0 p_source_proj_p
+	lookup $5 1 p_source_units
+	lookup $5 2 p_dest_proj_p
+	lookup $5 3 p_dest_units
+
+	eval "p_source_proj=\$$p_source_proj_p"
+	eval "p_dest_proj=\$$p_dest_proj_p"
+
+	calculate p_x1 "$1 * $p_source_units"
+	calculate p_y1 "$2 * $p_source_units"
+
+	message 3 "echo \"$p_x1 $p_y1\" | $CS2CS -f \"%f\" $p_source_proj +to $p_dest_proj"
+
+	answer=`echo "$p_x1 $p_y1" | $CS2CS -f "%f" $p_source_proj +to $p_dest_proj`
+	message 3 "$answer"
+	eval `echo $answer | $SED "s/^/p_x2=/" | $SED "s/ /;p_y2=/" | $SED "s/ /;p_z2=/"`
+	
+	calculate p_x2 "$p_x2 / $p_dest_units"
+	calculate p_y2 "$p_y2 / $p_dest_units"
+	
+	eval $3=$p_x2
+	eval $4=$p_y2
+}
+
+min() {
+	lookup "#$1" @ min_n
+	lookup $1 0 min_a
+	for ((min_i=0;min_i<min_n;min_i+=1)) ; do
+		lookup $1 $min_i min_b
+		calculate min_a "($min_b < $min_a) * $min_b + ($min_a <= $min_b) * $min_a" 
+	done
+	eval "$2=$min_a"
+}
+
+max() {
+	lookup "#$1" @ max_n
+	lookup $1 0 max_a
+	for ((max_i=0;max_i<max_n;max_i+=1)) ; do
+		lookup $1 $max_i max_b
+		calculate max_a "($max_b > $max_a) * $max_b + ($max_a >= $max_b) * $max_a" 
+	done
+	eval "$2=$max_a"
+}
+
+########################
+# name:    bboxToPoints
+# purpose: make points that are the corners of a bounding box
+
+
+bboxToPoints() {
+	lookup $1 0 $2[0]
+	lookup $1 1 $2[1]
+	lookup $1 0 $2[2]
+	lookup $1 3 $2[3]
+	lookup $1 2 $2[4]
+	lookup $1 3 $2[5]
+	lookup $1 2 $2[6]
+	lookup $1 1 $2[7]
+}
+
+pointsToBbox() {
+	lookup $1 0 ptb_xs[0]
+	lookup $1 2 ptb_xs[1]
+	lookup $1 4 ptb_xs[2]
+	lookup $1 6 ptb_xs[3]
+	lookup $1 1 ptb_ys[0]
+	lookup $1 3 ptb_ys[1]
+	lookup $1 5 ptb_ys[2]
+	lookup $1 7 ptb_ys[3]
+	min ptb_xs $2[0] 
+	min ptb_ys $2[1]
+	max ptb_xs $2[2]
+	max ptb_ys $2[3]
+}
+
+#######################################################################
+# name:     projectPoints
+# purpose:  projects a list of points
+#
+projectPoints() {
+	lookup "#$1" @ pp_max
+	for ((pp_i=0;pp_i<pp_max;pp_i+=2)) ; do
+		calculate pp_i2 "$pp_i + 1"
+		lookup $1 $pp_i pp_x1
+		lookup $1 $pp_i2 pp_y1
+		# echo "project $pp_x1 $pp_y1 $2[$pp_i] $2[$pp_i2] $3" 1>&2
+		project $pp_x1 $pp_y1 $2[$pp_i] $2[$pp_i2] $3
+	done
+}
+
+######################
+# name:     Side Length
+# purpose:  Find the length of sides of a set of points from one to the next
+# usage: sideLengths points xmetric ymetric answer
+
+sideLengths() {
+	lookup "#$1" @ sl_max
+	for ((sl_i=0;sl_i<sl_max;sl_i+=2)) ; do
+		calculate sl_i2 "$sl_i + 1"
+		calculate sl_j "scale=0; ($sl_i + 2) % $sl_max"
+		calculate sl_j2 "$sl_j + 1"
+		calculate sl_k "scale=0; $sl_i / 2"
+		# echo "$sl_i, $sl_i2, $sl_j, $sl_j2"
+		lookup $1 $sl_i sl_x1
+		lookup $1 $sl_i2 sl_y1
+		lookup $1 $sl_j sl_x2
+		lookup $1 $sl_j2 sl_y2
+		sl_x="(($sl_x2 - $sl_x1) * $2)"
+		sl_y="(($sl_y2 - $sl_y1) * $3)"
+		# echo "$sl_x, $sl_y"
+		calculate sl_d "sqrt ( $sl_x * $sl_x + $sl_y * $sl_y )"
+		# echo "$sl_i ($sl_k): $sl_d"
+		eval "$4[$sl_k]=$sl_d"
+	done
+}
+
+
+#######################################################################
+# name:     bboxesIntersect
+# purpose:  determine if two bounding boxes intersect
+# usage: bboxesIntersect box1 box2 returnvar
+
+bboxesIntersect() {
+	lookup $1 0 bi_A1[0]
+	lookup $1 1 bi_A1[1]
+	lookup $1 2 bi_A2[0]
+	lookup $1 3 bi_A2[1]
+	lookup $2 0 bi_B1[0]
+	lookup $2 1 bi_B1[1]
+	lookup $2 2 bi_B2[0]
+	lookup $2 3 bi_B2[1]
+
+	# Fails at meridians
+	# I have no way to have general knowledge of meridians
+	# This means rewrite in C I imagine
+	for bi_i in 0 1 ; do
+		calculate IN[$bi_i] \
+		"(${bi_A1[$bi_i]} <= ${bi_B1[$bi_i]} && ${bi_A2[$bi_i]} >= ${bi_B2[$bi_i]}) || \
+		 (${bi_A1[$bi_i]} >= ${bi_B1[$bi_i]} && ${bi_A2[$bi_i]} <= ${bi_B2[$bi_i]}) || \
+		 (${bi_A1[$bi_i]} >= ${bi_B1[$bi_i]} && ${bi_A1[$bi_i]} <= ${bi_B2[$bi_i]}) || \
+		 (${bi_A2[$bi_i]} >= ${bi_B1[$bi_i]} && ${bi_A2[$bi_i]} <= ${bi_B2[$bi_i]})"
+	done
+
+	calculate $3 "${IN[0]} && ${IN[1]}"
+}
+
+### Fetch destination projection and region
+
+SOURCE_PROJ=$GIS_OPT_SOURCEPROJ
+SOURCE_SCALE=$GIS_OPT_SOURCESCALE
+
+# Take into account those extra pixels we'll be a addin'
+#MAX_COLS=$GIS_OPT_MAXCOLS
+#MAX_ROWS=$GIS_OPT_MAXROWS
+OVERLAP=$GIS_OPT_OVERLAP
+calculate MAX_COLS "$GIS_OPT_MAXCOLS - $OVERLAP"
+calculate MAX_ROWS "$GIS_OPT_MAXROWS - $OVERLAP"
+
+g.message "Getting destination projection"
+
+if [ -z "$GIS_OPT_DESTPROJ" ] ; then
+	DEST_PROJ=`g.proj -j`
+else
+	DEST_PROJ=`echo $GIS_OPT_DESTPROJ`
+fi
+
+	g.message "Getting projection scale"
+
+if [ -z "$GIS_OPT_DESTSCALE" ] ; then
+	eval `g.proj -p | $GREP '^meters' | $SED -e "s/:/=/" -e "s/ //g"`
+	DEST_SCALE=$meters;
+else
+	DEST_SCALE=$GIS_OPT_DESTSCALE
+fi
+
+# Strip newlines from both the source and destination projections
+DEST_PROJ=`echo $DEST_PROJ`
+SOURCE_PROJ=`echo $SOURCE_PROJ`
+
+# Set up the projections
+makeProjector SOURCE_PROJ $SOURCE_SCALE DEST_PROJ $DEST_SCALE SOURCE_TO_DEST
+makeProjector DEST_PROJ $DEST_SCALE SOURCE_PROJ $SOURCE_SCALE DEST_TO_SOURCE
+
+g.message "Getting destination region"
+if [ -z $GIS_OPT_REGION ] ; then
+	eval `g.region -g`
+else
+	eval `g.region region=$GIS_OPT_REGION -g`
+fi
+
+
+DEST_BBOX[0]=$w
+DEST_BBOX[1]=$s
+DEST_BBOX[2]=$e
+DEST_BBOX[3]=$n
+DEST_NSRES=$nsres
+DEST_EWRES=$ewres
+calculate DEST_ROWS "($n - $s) / $nsres"
+calculate DEST_COLS "($e - $w) / $ewres"
+
+message 1 "Rows: $DEST_ROWS, Cols: $DEST_COLS"
+
+### Project the destination region into the source:
+g.message "Projecting destination region into source"
+
+bboxToPoints DEST_BBOX DEST_BBOX_POINTS
+
+message 1 "${DEST_BBOX_POINTS[@]}"
+
+# echo "${DEST_TO_SOURCE[@]}"
+# echo "${DEST_TO_SOURCE[0]}"
+# echo "${DEST_TO_SOURCE[1]}"
+# echo "${DEST_TO_SOURCE[2]}"
+# echo "${DEST_TO_SOURCE[3]}"
+
+# exit 1
+
+projectPoints DEST_BBOX_POINTS DEST_BBOX_SOURCE_POINTS DEST_TO_SOURCE 
+
+message 1 "${DEST_BBOX_SOURCE_POINTS[@]}"
+
+pointsToBbox DEST_BBOX_SOURCE_POINTS SOURCE_BBOX
+
+message 1 "${SOURCE_BBOX[@]}"
+
+g.message "Projecting source bounding box into destination"
+
+bboxToPoints SOURCE_BBOX SOURCE_BBOX_POINTS
+
+message 1 "${SOURCE_BBOX_POINTS[@]}"
+
+projectPoints SOURCE_BBOX_POINTS SOURCE_BBOX_DEST_POINTS SOURCE_TO_DEST 
+
+message 1 "${SOURCE_BBOX_DEST_POINTS[@]}"
+
+calculate X_METRIC "1 / $DEST_EWRES"
+calculate Y_METRIC "1 / $DEST_NSRES"
+
+g.message "Computing length of sides of source bounding box"
+
+sideLengths  SOURCE_BBOX_DEST_POINTS $X_METRIC $Y_METRIC SOURCE_BBOX_DEST_LENGTHS
+
+message 1 "${SOURCE_BBOX_DEST_LENGTHS[@]}"
+
+# Find the skewedness of the two directions.
+# Define it to be greater than one
+# In the direction (x or y) in which the world is least skewed (ie north south in lat long)
+# Divide the world into strips. These strips are as big as possible contrained by max_
+# In the other direction do the same thing.
+# Theres some recomputation of the size of the world that's got to come in here somewhere.
+
+# For now, however, we are going to go ahead and request more data than is necessary.
+# For small regions far from the critical areas of projections this makes very little difference
+# in the amount of data gotten.
+# We can make this efficient for big regions or regions near critical points later.
+
+HORIZONTALS=( ${SOURCE_BBOX_DEST_LENGTHS[1]} ${SOURCE_BBOX_DEST_LENGTHS[3]} )
+VERTICALS=( ${SOURCE_BBOX_DEST_LENGTHS[0]} ${SOURCE_BBOX_DEST_LENGTHS[2]} )
+
+max HORIZONTALS BIGGER[0]
+max VERTICALS BIGGER[1]
+
+MAX[0]=$MAX_COLS
+MAX[1]=$MAX_ROWS
+
+# Compute the number and size of tiles to use in each direction
+# I'm making fairly even sized tiles
+# They differer from each other in height and width only by one cell
+# I'm going to make the numbers all simpler and add this extra cell to
+# every tile.
+
+g.message "Computing tiling"
+
+for i in 0 1 ; do
+	# Make these into integers.
+	# Round up
+	calculate BIGGER[$i] "scale=0; (${BIGGER[$i]} + 1) / 1"
+	calculate TILES[$i] "scale=0; (${BIGGER[$i]} / ${MAX[$i]}) + 1"
+	# BC truncates and doesn't round, which is perfect here:
+	calculate TILE_BASE_SIZE[$i] "scale=0; (${BIGGER[$i]} / ${TILES[$i]})"
+	calculate TILES_EXTRA_1[$i] "scale=0; (${BIGGER[$i]} % ${TILES[$i]})"
+	# This is adding the extra pixel (remainder) to all of the tiles:
+	calculate TILE_SIZE[$i] "scale=0; ${TILE_BASE_SIZE[$i]} + (${TILES_EXTRA_1[$i]} > 0)" 
+	calculate TILESET_SIZE[$i] "scale=0; ${TILE_SIZE[$i]} * ${TILES[$i]}"
+	# Add overlap to tiles (doesn't effect tileset_size
+	calculate TILE_SIZE_OVERLAP[$i] "${TILE_SIZE[$i]} + $OVERLAP"
+done;
+
+g.message "There will be ${TILES[0]} by ${TILES[1]} tiles each ${TILE_SIZE[0]} by ${TILE_SIZE[1]} cells."
+
+ximax=${TILES[0]}
+yimax=${TILES[1]}
+
+MIN_X=${SOURCE_BBOX[0]}
+MIN_Y=${SOURCE_BBOX[1]}
+MAX_X=${SOURCE_BBOX[2]}
+MAX_Y=${SOURCE_BBOX[3]}
+SPAN_X="($MAX_X - $MIN_X)"
+SPAN_Y="($MAX_Y - $MIN_Y)"
+
+
+for ((xi=0;xi<ximax;xi+=1)); do
+	calculate TILE_BBOX[0] "$MIN_X + ( $xi * ${TILE_SIZE[0]} / ${TILESET_SIZE[0]} ) * $SPAN_X"
+	calculate TILE_BBOX[2] "$MIN_X + ( ($xi + 1) * ${TILE_SIZE_OVERLAP[0]} / ${TILESET_SIZE[0]} ) * $SPAN_X"
+	for ((yi=0;yi<yimax;yi+=1)); do
+		calculate TILE_BBOX[1] "$MIN_Y + ( $yi * ${TILE_SIZE[1]} / ${TILESET_SIZE[1]} ) * $SPAN_Y"
+		calculate TILE_BBOX[3] "$MIN_Y + ( ($yi + 1) * ${TILE_SIZE_OVERLAP[1]} / ${TILESET_SIZE[1]} ) * $SPAN_Y"
+		bboxToPoints TILE_BBOX TILE_BBOX_POINTS
+		projectPoints TILE_BBOX_POINTS TILE_DEST_BBOX_POINTS SOURCE_TO_DEST
+		pointsToBbox TILE_DEST_BBOX_POINTS TILE_DEST_BBOX
+		bboxesIntersect TILE_DEST_BBOX DEST_BBOX intersect
+		if [ $intersect ] ; then
+			if [ $GIS_FLAG_W -eq 1 ] ; then
+				echo "bbox=${TILE_BBOX[0]},${TILE_BBOX[1]},${TILE_BBOX[2]},${TILE_BBOX[3]}&width=${TILE_SIZE_OVERLAP[0]}&height=${TILE_SIZE_OVERLAP[1]}"
+			elif [ $GIS_FLAG_G -eq 1 ] ; then
+				echo "w=${TILE_BBOX[0]};s=${TILE_BBOX[1]};e=${TILE_BBOX[2]};n=${TILE_BBOX[3]};cols=${TILE_SIZE_OVERLAP[0]};rows=${TILE_SIZE_OVERLAP[1]};"
+			else
+				echo "${TILE_BBOX[0]}$GIS_OPT_FS${TILE_BBOX[1]}$GIS_OPT_FS${TILE_BBOX[2]}$GIS_OPT_FS${TILE_BBOX[3]}$GIS_OPT_FS${TILE_SIZE_OVERLAP[0]}$GIS_OPT_FS${TILE_SIZE_OVERLAP[1]}"
+			fi
+		fi 
+	done
+done
+

@@ -1,0 +1,162 @@
+wxPython GRASS Graphical User Interface
+=======================================
+
+$Date$
+
+1 - REQUIREMENTS
+
+ GRASS GIS >= 6.3
+ Python >= 2.4
+ wxPython >= 2.8.1.1
+ 
+ Get wxPython 2.8.x packages from:
+ * Source: http://www.wxpython.org/download.php
+ * Debian GNU/Linux: http://wiki.wxpython.org/InstallingOnUbuntuOrDebian
+		     [ deb http://apt.wxwidgets.org/ etch-wx main ]
+	             http://www.bitpim.org/developer.html -> "Install wxPython"
+ * Fedora: http://www.wxpython.org/download.php
+           http://mpa.itc.it/markus/wxpython_rpms/fedora/
+ * Mandriva 2007.0: http://mpa.itc.it/markus/wxpython_rpms/mandriva2007.0/
+ * Mandriva 2007.1 (spring): available from main/backports (see
+        http://club.mandriva.com/xwiki/bin/view/Downloads/MirrorFinder2 )
+      	Also http://www.wxpython.org/download.php
+ * MS-Windows: http://www.wxpython.org/download.php
+ * OS X: http://www.wxpython.org/download.php
+ * OpenSuSe: http://download.opensuse.org/repositories/Application:/Geo/
+ * Ubuntu: deb http://wxpython.wxcommunity.com/apt/ubuntu/dapper /
+           deb http://wxpython.wxcommunity.com/apt/ubuntu/feisty /
+
+ Get Python from:
+ * Python.org for Source, MS-Windows, OS X: http://www.python.org/download/
+ * ActiveStates for AIX, HP-UX, Linux (x86), Linux 64-bit (x86_64 AMD64), Mac OS X,
+     Solaris (SPARC), Windows:
+     http://www.activestate.com/store/download.aspx?prdGUID=b08b04e0-6872-4d9d-a722-7a0c2dea2758
+     
+ E.g. On Debian GNU/Linux install these packages:
+ apt-get install libwxbase2.8-0 libwxbase2.8-dbg libwxbase2.8-dev \
+ 	 libwxgtk2.8-0 libwxgtk2.8-dbg libwxgtk2.8-dev \
+	 python-wxgtk2.8 wx2.8-doc wx2.8-examples \
+	 wx2.8-headers wx2.8-i18n
+	 
+ MS-WINDOWS ONLY REQUIREMENTS
+ 
+ Python Extensions for MS-Windows >= Build 210
+ NumPy >= 1.0.4
+ 
+ Get Python Extensions for MS-Windows from: http://sourceforge.net/project/platformdownload.php?group_id=78018 
+ Get NumPy from: http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103  
+
+2 - STARTUP WITH GRASS INITIALIZATION
+
+If you want to launch wxPython GUI automatically when you start
+GRASS, edit your .grassrc6 file to replace
+
+GRASS_GUI: tcktk (or whatever you have here)
+
+with
+
+GRASS_GUI: wxpython
+
+or easier start new GRASS session with -wxpython switch.
+
+$ grass63 -wxpython
+
+3 - STARTUP FROM GRASS TERMINAL
+
+Simply run
+
+$ g.gui wxpython
+
+from the GRASS terminal.
+
+You can also specify workspace file to load on startup.
+
+$ g.gui gui=wxpython workspace=myworkspace.gxw
+
+4 - CLI Display scripts
+
+Note: This section is out-dated!
+
+This is going to be replacement for command line tools like d.rast and
+d.vect.
+
+Now add directory "scripts" in gui directory to your $PATH. These
+little programs should later go to GRASS Scripts directory or became
+Python scripts or C programs. Now they are only small BASH wrappers
+which can be easily and fast customized.
+
+$~ export PATH=scripts/:$PATH
+
+Start GRASS:
+
+$~ grass63 ~/grassdata/spearfish60/user1
+
+Use command p.mon (shell script in gui/scripts directory) to start map
+display:
+
+GRASS> p.mon anything
+
+After a while, new window should appear.  If this is your case, add some
+raster layer to the map display:
+
+GRASS> p.rast aspect
+
+What about a bit transparency?
+
+GRASS> p.rast elevation.dem opacity=0.5
+
+And try the vector layer too
+
+GRASS> p.vect roads
+
+NOTE: only map name is currently supported. No other option will influence
+      the map layout
+
+Alternatively you can use more universal p.cmd:
+
+GRASS> p.cmd "d.rast map=elevation.dem@PERMANENT catlist=1300-1400 -i"
+
+You should be able to zoom && pan through the map, once the layers are
+displayed. You should be also able to store the display content as well as
+clear the display and start from scratch.
+
+5 - DEBUGGING
+
+To enable GUI debug messages on given level set GRASS_DEBUG_WX
+environment variable, e.g.
+
+$ export GRASS_WX_DEBUG=3
+
+6 - ICON THEMES
+
+Currently two icon themes are available:
+
+    * original GRASS (based on TCL/TK GUI prototype)
+    * Silk-based (default)
+
+User can change icon theme in Preferences dialog
+('Config->Preferences').
+
+7 - DIGITIZATION TOOL
+
+To enable digitizer you need to compile 'vdigit'
+component. Note that you must configure GRASS with C++ (--with-cxx),
+Python (--with-python) and wxWidgets (--with-wxwidgets) support.
+
+First, create a symlink to _gdi_.so shared library
+
+$ sudo ln -s `locate _gdi_.so` /usr/local/lib/libgdi.so
+
+e.g.
+
+$ sudo ln -s /usr/lib/python2.4/site-packages/wx-2.8-gtk2-unicode/wx/_gdi_.so /usr/local/lib/libgdi.so
+
+Then update LD_LIBRARY_PATH or add '/usr/local/lib' to /etc/ld.so.conf
+(in this case run 'sudo ldconfig').
+
+TODO: Don't use direct linking here.
+
+Then you can compile the driver
+
+$ cd gui/wxpython/vdigit
+$ make

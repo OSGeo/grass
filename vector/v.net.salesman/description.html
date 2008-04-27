@@ -1,0 +1,83 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.salesman</em> calculates the optimal route to visit nodes on a
+vector network.
+
+<h2>EXAMPLE</h2>
+
+Traveling salesman for 6 digitized nodes (Spearfish):
+
+<div class="code"><pre>
+g.copy vect=roads,myroads
+v.db.addcol myroads col="cost double precision"
+
+# define traveling costs as inverse of speed limit:
+v.db.update myroads col=cost val=1/50
+v.db.update myroads col=cost val=1/75 where="label='interstate'"
+v.db.update myroads col=cost val=1/5 where="label='unimproved road'"
+v.db.update myroads col=cost val=1/25 where="label='light-duty road, improved surface'"
+v.db.select myroads
+
+# we have 6 locations to visit on our trip
+echo "1|601653.5|4922869.2|a
+2|608284|4923776.6|b
+3|601845|4914981.9|c
+4|596270|4917456.3|d
+5|593330.8|4924096.6|e
+6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
+                         east double precision, north double precision, label varchar(43)"
+
+v.db.select centers
+v.category centers op=report
+# type       count        min        max
+# point          6          1          6
+
+
+#create lines map connecting points to network (on layer 2)
+v.net myroads points=centers out=myroads_net op=connect thresh=500
+v.category myroads_net op=report
+# Layer / table: 1 / myroads_net
+# type       count        min        max
+# line         837          1          5
+#
+# Layer: 2
+# type       count        min        max
+# point          6          1          5
+
+# The network is now prepared.
+g.region vect=myroads_net
+d.mon x0
+d.vect myroads_net
+d.vect -c centers icon=basic/triangle
+d.font verdana
+d.vect centers col=red disp=attr attrcol=label lsize=12
+
+# due to the costs (?, TODO), the result looks like a Steiner tree:
+# v.net.salesman myroads_net acol=cost ccats=1-6 out=mysalesman
+
+# run without traveling costs
+v.net.salesman myroads_net ccats=1-6 out=mysalesman
+d.vect mysalesman col=green width=2
+d.vect centers col=red disp=attr attrcol=label lsize=12
+</pre></div>
+
+
+<img src="vnetsalesman.png" alt="v.net.salesman example" border="1">
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.path.html">d.path</a></em>,
+<em><a HREF="v.net.html">v.net</a></em>,
+<em><a HREF="v.net.alloc.html">v.net.alloc</a></em>,
+<em><a HREF="v.net.iso.html">v.net.iso</a></em>,
+<em><a HREF="v.net.path.html">v.net.path</a></em>,
+<em><a HREF="v.net.steiner.html">v.net.steiner</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Documentation: Markus Neteler
+
+
+<p><i>Last changed: $Date$</i>

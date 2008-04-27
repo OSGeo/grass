@@ -1,0 +1,16 @@
+MODULE_TOPDIR = ../..
+
+PGM = g.region
+
+LIBES     = $(VECTLIB) $(G3DLIB) $(GPROJLIB) $(GISLIB) $(DATETIMELIB)
+DEPENDENCIES = $(VECTDEP) $(G3DDEP) $(GPROJDEP) $(GISDEP) $(DATETIMEDEP)
+EXTRA_INC = $(VECT_INC) $(PROJINC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+
+
+
+

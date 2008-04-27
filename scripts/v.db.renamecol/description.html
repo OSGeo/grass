@@ -1,0 +1,50 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.renamecol</em> renames a column in the attribute table connected
+to a given vector map. It automatically checks the connection for the specified
+layer.
+
+<h2>NOTES</h2>
+
+If the map table is connected through the DBF or SQLite drivers, the renaming
+is internally done by adding a new column with new name, transferring the contents
+of the old column to the new column and dropping the old column. This is needed
+as DBF or SQLite do not support "ALTER TABLE" command to rename columns. Due to
+this the renamed column is found as last column of the table, it's original position
+cannot be maintained.
+
+<p>
+The SQLite driver will exit with an error if the column rename involves only a change of 
+case, i.e., upper-to-lowercase, or lower-to-uppercase. The SQLite protocol considers "NAME"
+and "name" to be identical column names. In cases like these, the user should rename the original
+column to an intermediary name, then rename the intermediary to the final name.
+
+<p>
+
+
+<h2>EXAMPLES</h2>
+
+Renaming a column:<br>
+<div class="code"><pre>
+v.info -c myroads
+v.db.renamecol myroads column=label,roadtype
+v.info -c myroads
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
+<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.db.dropcol.html">v.db.dropcol</a></em>,
+<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
+<em><a HREF="v.db.select.html">v.db.select</a></em>,
+<em><a HREF="v.db.update.html">v.db.update</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

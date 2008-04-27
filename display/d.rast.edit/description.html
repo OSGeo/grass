@@ -1,0 +1,216 @@
+<H2>DESCRIPTION</H2>
+
+The <EM>d.rast.edit</EM> program allows users to interactively
+edit cell category values in a raster map layer displayed to the
+graphics monitor using a mouse cursor.
+This program determines the name of the raster map layer
+currently displayed in the active frame on the selected graphics monitor
+(if none, program will abort).
+The user is then prompted for the name of a new raster layer
+to be created in his mapset.
+<EM>d.rast.edit</EM> does not modify the user's original raster map layer.
+
+<H2>Geographic Region Concerns</H2>
+
+<EM>d.rast.edit</EM> reads the region definition for the raster map layer
+being edited from its cell header file.
+The new, edited copy of the raster layer will be created with the
+same resolution and region dimensions.  If the current region resolution
+does not match the raster map layer's resolution, the program will abort.
+The north, south, east, and west geographic region settings
+of the current region can be set to any view, as long as they fall within
+the boundaries of the raster map layer described in its cell header.
+This is important, since the current view must be such that
+individual cell locations are easily visible and sufficiently large 
+on the graphics monitor to be pointed at with the mouse cursor.
+Any mask in place will be ignored when writing the new raster map layer.
+
+<H2>Mouse Menus</H2>
+
+Cell editing is done using a mouse cursor to choose menu selections
+and indicate areas on the displayed raster map that are to be edited.
+
+<P>
+Selections available via the <EM>Main Menu</EM> and the
+subsequent functions or sub-menus are described below:
+<DL>
+<DD>
+1. Edit
+<BR>
+
+<B>invokes edit mode</B>, during which no graphic menus are used,
+so that none of the displayed map is hidden. 
+At the start of the edit mode, a grid is drawn over displayed
+cells to help distinguish cell boundaries.  
+Interaction with the program during edit mode
+is done by using the three mouse buttons as follows:
+
+<DL>
+<DD> Left Button
+<BR>
+<B>what's here</B>.  Identify the category value of the
+cell under the mouse cursor when the button is pressed.
+The category value of this cell is printed in the text frame.
+<P>
+<DD> Middle Button
+<BR>
+<B>edit</B>.  The current category value of the cell under the mouse
+cursor is iterated and a prompt for a new cell value
+appears on the textual command frame.  (Remember to
+move the mouse to the text frame).  Enter a new cell category
+value which is within the range of current category
+values for the map layer.  Note:  the edited cell
+is displayed in the color of the newly-assigned category value,
+but is hatched with lines of the grid color to indicate
+it has been edited, since, if the value of the cell
+is polled (before leaving edit mode), the old category value
+will be reported.
+<P>
+<DD> Right Button
+<BR>
+<B>exit edit mode</B>.  Command is returned to the <EM>Main Menu</EM>
+on the graphics monitor.  If cell value changes were made
+during edit mode, they will be saved upon exit.
+</DL>
+
+<P>
+2. Redraw
+<BR>
+<B>redisplays</B> the raster map layer on the graphics monitor.
+<P>
+3. Zoom
+
+<BR>
+calls the <EM><A HREF="d.zoom.html">d.zoom</A>
+</EM> program, to allow changing the view of the
+raster layer.
+<B>Zoom's</B> instructions will appear on the text command window.
+Interaction is conducted using mouse keys.
+
+<P>
+4. Arrow
+<BR>
+This function is available for users editing aspect maps.  The
+<EM><A HREF="d.rast.arrow.html">d.rast.arrow</A></EM> program is called, which draws arrows over the displayed
+cells to indicate the downslope direction of the cell.
+After selecting the <EM>arrow</EM> selection from the main menu, sub-menus
+will appear, allowing input options to be set for the <EM>
+<A HREF="d.rast.arrow.html">d.rast.arrow</A></EM>
+program.  The first sub-menu selects the type of aspect data displayed.
+(regular "GRASS" format, as produced by <EM>
+<A HREF="r.slope.aspect.html">r.slope.aspect</A>
+</EM>;
+a format prepared as input to the "AGNPS" program; and a format prepared
+for the "ANSWERS" program. The <EM>
+<A HREF="d.rast.arrow.html">d.rast.arrow</A></EM> program can accept the
+name of a layer not drawn on the display for use as input, and 
+an option is given to input the name of that layer, if desired.
+Otherwise, the currently displayed map layer will be used.
+Next, the color options of <EM>
+<A HREF="d.rast.arrow.html">d.rast.arrow</A></EM> may be set via separate menus,
+or a choice for using default settings may be used.
+
+<P>
+5. Number
+<BR>
+calls the <EM>
+<A HREF="d.rast.num.html">d.rast.num</A></EM> program, which will print the cell category values
+over the displayed cells on the graphic monitor.
+
+<P>
+6. Exit
+<BR>
+<B>quit</B> the <EM>d.rast.edit</EM> program.  If edits have been made,
+the new raster map layer will be created.  Support files are constructed.
+Category labels and color maps (if any) are copied from the original layer.
+<EM>d.rast.edit</EM> redisplays the original raster map file on the monitor
+as it exits.
+</DL>
+
+<H2>NOTES</H2>
+
+<EM>d.rast.edit</EM> will not create a new raster map layer if
+the user makes no cell edits while running the program.
+
+<P>
+Be careful not to cover the graphics monitor window with another
+frame during the editing process.  In some cases, the <EM>redraw</EM> option
+will be able to remove traces of other frames;  otherwise, the graphics monitor
+will not be refreshed until after <EM>d.rast.edit</EM> exits.  Further note,
+however, that this has only been tested on <EM>SUN</EM> workstations, using a
+modified <EM>SUNVIEW</EM> graphics monitor driver.
+
+<P>
+The primary bane of the <EM>d.rast.edit</EM> program involves large map layers
+(with lots of rows and columns) and/or slow computers,
+since the program must read and write raster map layers row by row for the full
+size of the map layer as dictated by its region size and resolution.
+(The current region settings of north, south, east, and west
+will not limit the size of the edited copy of the map layer,
+since by use of the <EM><A HREF="d.zoom.html">d.zoom</A></EM> program, these values
+may change several times during the editing session). 
+Their effects could be lessened if the program
+were to create a table of changes that it could incorporate into
+the new raster map on a forked process started when the user exits, or 
+otherwise allow the user to issue a "save" command when he has
+made all desired edits to the raster map.  Currently, for instance, if
+the user needs to use <EM> <A HREF="d.zoom.html">d.zoom</A></EM> to access a different area of the 
+map, he must wait for a read and write for each entrance
+and egress of the edit mode.
+
+<P>
+There is no "undo" command or way to exit edit mode without saving
+changes.
+
+<P>
+It would be nice to incorporate a scrollable version of <EM>
+<A HREF="d.legend.html">d.legend</A>
+</EM>
+(such that one could see a legend for files with many categories on
+a standard size sub-frame).  It would be even nicer to be able
+to select the category values from a graphical legend when editing
+cell values (thereby saving a trip to the text frame to type in the
+new value).
+
+<P>
+Perhaps method(s) for multiple  or mass cell edits would be useful.
+This could be done by providing modes in which the user may:
+1) edit a block of cells to a given value by drawing a box;
+2) be able to choose a given value which is automatically used as
+the new value on each cell chosen until a different value is desired.
+
+<P>
+There is no interrupt handling.  This could leave files in .tmp
+or (rarely) result in half-baked raster maps.  The original file
+would survive unscathed by an interrupt at most any point in execution,
+but the graphics monitor may be left in an indeterminate state
+(try <EM>
+<A HREF="d.erase.html">d.erase</A>
+</EM> or <EM>
+<A HREF="d.mon.html">d.mon</A>
+ select=monitor_name</EM>
+to bring it back into shape).  Beware of exiting the program
+by means other than using <EM>exit</EM> on the <EM>Main Menu</EM>.
+
+<P>
+The program has no method to enter new values beyond the current range of
+categories, but additional programming could make it so.
+
+<H2>SEE ALSO</H2>
+
+<em><a href="d.erase.html">d.erase</a></em>,
+<em><a href="d.frame.html">d.frame</a></em>,
+<em><a href="d.mon.html">d.mon</a></em>,
+<em><a href="d.rast.html">d.rast</a></em>,
+<em><a href="d.rast.arrow.html">d.rast.arrow</a></em>,
+<em><a href="d.rast.num.html">d.rast.num</a></em>,
+<em><a href="d.zoom.html">d.zoom</a></em>,
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
+
+<H2>AUTHOR</H2>
+
+Chris Rewerts, Agricultural Engineering, 
+Purdue University
+<p>
+<i>Last changed: $Date$</i>

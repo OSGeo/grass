@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>Cairo driver</TITLE>
+ <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</HEAD>
+<BODY bgColor=white>
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+<EM><B>Cairo driver</B></EM> - driver for bitmap or vector output using
+the Cairo graphics library.
+<BR>
+<EM>(drivers)</EM> 
+
+<H2>DESCRIPTION</H2>
+
+The Cairo driver generates PNG, BMP, PPM, PS, PDF or SVG images from GRASS
+display commands, using the
+<A HREF="http://www.cairographics.org/">Cairo graphics library</A>.
+The image format is selected from the extension of the output file.
+
+<P>
+It is started as 'pseudo' monitor (output to an image file) and when
+stopped, all output from previously used display commands are written to
+the output file.
+
+<H2>USAGE</H2>
+
+<H3>Environment variables</H3>
+
+Several environment variables affect the operation of the Cairo driver:
+
+<UL>
+  <LI><B>GRASS_WIDTH=xxx</B><BR>
+     the width of the image.
+  </LI><BR>
+  <LI><B>GRASS_HEIGHT=yyy</B><BR>
+    the height of the image.
+  </LI><BR>
+  <LI><B>GRASS_CAIROFILE=filename</B><BR>
+     the name and format of the resulting image file, default is
+     <tt>map.png</tt>.<BR>
+     The image format is determined from the file extension.<BR>
+     Supported bitmap formats:
+     <UL>
+       <LI><B>.png</B> - Portable Network Graphics (PNG)</LI>
+       <LI><B>.bmp</B> - Windows Bitmap (BMP)</LI>
+       <LI><B>.ppm</B> - Portable Pixmap (PPM)</LI>
+     </UL>
+     Supported vector formats:
+     <UL>
+       <LI><B>.pdf</B> - Portable Document Format (PDF)</LI>
+       <LI><B>.ps</B> - PostScript (PS)</LI>
+       <LI><B>.svg</B> - Scalable Vector Graphics (SVG)</LI>
+     </UL>
+     (Note: Some formats may not be available, depending on your platform and
+     the Cairo library that GRASS was built with.)
+  </LI><BR> 
+  <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
+     specifies the background color to use in RGB
+    notation (hex values). Default is <b>FFFFFF</b> (white).
+  </LI><BR>
+  <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
+    sets transparent background on (TRUE) or off (FALSE, default).
+  </LI><BR>
+  <LI><B>GRASS_AUTO_WRITE=[TRUE|FALSE]</B><BR>
+    if set to <tt>TRUE</tt>, the image file will be written after each 
+    operation (i.e. whenever a client disconnects), rather than
+    only being written out when the driver terminates.<BR>
+    (Note: This only applies to bitmap formats - vector formats
+    are always written directly to file).
+  </LI><BR>
+  <LI><B>GRASS_CAIRO_READ</B><BR>
+     if <tt>TRUE</tt>, the Cairo driver will initialize the image from
+    the contents of GRASS_CAIROFILE.<BR>
+    (Note: This is only supported for bitmap formats)
+  </LI><BR>
+  <LI><B>GRASS_CAIRO_MAPPED</B><BR>
+    if <tt>TRUE</tt>, the Cairo driver will map GRASS_CAIROFILE as its framebuffer,
+    rather than using memory. This only works with BMP files.
+  </LI>
+</UL>
+
+<H3>Examples</H3>
+
+Example using the driver directly (bash-syntax):
+<div class="code"><PRE>
+export GRASS_CAIROFILE=spearfish.png
+export GRASS_WIDTH=800
+export GRASS_HEIGHT=800
+
+d.mon start=cairo
+d.rast map=elevation.10m
+d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
+d.vect map=roads width=2
+d.mon stop=cairo
+</PRE></div>
+
+Example using <em><a href="d.out.file.html">d.out.file</a></em>:
+<div class="code"><PRE>
+d.mon x0
+d.rast map=elevation.10m
+d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
+d.vect map=roads width=2
+
+d.out.file -c sf_cairo format=png size=800,800
+</PRE></div>
+
+<P>
+A more complicated example using <em><a href="d.out.file.html">d.out.file</a></em>:
+<div class="code"><PRE>
+r.shaded.relief map=elevation.dem
+r.watershed elev=elevation.dem basin=watershed.basin thresh=10000
+
+d.mon x1
+d.shadedmap rel=elevation.dem.shade drape=watershed.basin bright=30
+d.vect streams color=aqua fcolor=aqua type=area,line
+d.vect roads where="label ~ 'light-duty road'" color=grey
+d.vect roads where="label ~ 'unimproved'" color=orange
+d.vect roads where="label ~ 'secondary highway'" color=100:100:100 width=2
+d.vect roads where="label ~ 'primary highway'" color=50:50:50 width=2
+d.vect railroads col=red width=2
+d.vect roads where="label = 'interstate'" color=black width=3
+
+d.vect archsites icon=basic/star size=25 fcolor=yellow
+
+d.font Andale_Mono
+echo "Spearfish, SD" | d.text color=black at=28,53 -b
+
+d.out.file -c sf_cairo2 format=png
+</PRE></div>
+
+
+<H2>NOTES</H2> 
+
+The driver is still in development. Enable it by specifying
+<CODE>--with-cairo</CODE> when configuring GRASS. This
+requires a reasonably recent version of the Cairo libraries
+and a working pkg-config.
+
+<P>
+Antialiasing is enabled by default for bitmap formats. There is
+currently no way of disabling this.
+
+<P>
+Cairo supports true vector format output whenever possible. However,
+if the selected format doesn't support a necessary feature, Cairo may
+fall back on rendering a bitmap representation of the image wrapped in
+the selected vector format.
+
+<P>
+Cairo driver output via <em><A HREF="d.out.file.html">d.out.file</A></em>
+is supported via the -c flag.</P>
+
+<h2>SEE ALSO</h2>
+<EM>
+<A HREF="htmlmapdriver.html">HTMLMAP driver</A>,
+<A HREF="pngdriver.html">PNG driver</A>,
+<A HREF="psdriver.html">PostScript driver</A>,
+<A href="xdriver.html">XDRIVER</A>
+<BR>
+<A HREF="d.frame.html">d.frame</A>,
+<A href="d.mon.html">d.mon</A>,
+<A href="d.rast.html">d.rast</A>,
+<A href="d.vect.html">d.vect</A>
+<A href="d.out.file.html">d.out.file</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Lars Ahlzen &lt;<I>lars (at) ahlzen.com</I>&gt;<BR>
+and the GRASS Development Team.

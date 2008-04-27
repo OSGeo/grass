@@ -1,0 +1,4 @@
+This binary format is trivial. The file starts with an array containing
+the offset of each character's definition. Each character is a 32-bit
+integer count followed two arrays of <count> bytes; the first is the X
+coordinates, the second is the Y coordinates.

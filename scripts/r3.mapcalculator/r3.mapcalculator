@@ -1,0 +1,187 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	r3.mapcalculator v.1.0 for GRASS 5.7 (2004/08/16)
+#		based on r.mapcalculator for GRASS 5.7
+# AUTHOR(S):	R. Brunzema (r.brunzema@web.de)
+#		Michael Barton (michael.barton@asu.edu)
+# PURPOSE:	Provides GUI front-end to r3.mapcalc
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Calculates new grid3D volume from r3.mapcalc expression.
+#%End
+#%option
+#% key: agrid
+#% type: string
+#% description: A (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: bgrid
+#% type: string
+#% description: B (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: cgrid
+#% type: string
+#% description: C (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: dgrid
+#% type: string
+#% description: D (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: egrid
+#% type: string
+#% description: E (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: fgrid
+#% type: string
+#% description: F (grid3D file)
+#% required : no
+#%end
+#%option
+#% key: formula
+#% type: string
+#% description: Formula (e.g. A-B or A*C+B)
+#% required : yes
+#%end
+#%option
+#% key: outfile
+#% type: string
+#% description: Name for output grid3D volume
+#% required : yes
+#%end
+#%option
+#% key: help
+#% type: string
+#% description: Show help
+#% options: -,help,man
+#% answer: -
+#% required : no
+#%end
+#%flag
+#% key: e
+#% description: Expert mode (enter a set of r3.mapcalc expressions)
+#%end
+#%flag
+#% key: o
+#% description: Do not overwrite existing map
+#%end
+
+
+display_help(){
+	echo "" >&2
+	echo "BRIEF HELP" >&2
+	echo "" >&2
+	echo "Enter an r3.mapcalc expression in the" >&2
+	echo "formula field using this format:" >&2
+	echo "A+C or (more complex:) exp(A+C)+(B-2)*7" >&2
+	echo "Where A, B, C are grid3D volumes entered" >&2
+	echo "in the A field, B field, and C field." >&2
+	echo "" >&2
+	echo "Do not enter output file in the formula field:" >&2
+	echo "Correct: A+B" >&2
+	echo "Incorrect: newfile = A+B" >&2
+	echo "Use no blanks!" >&2
+	echo "" >&2
+	echo "For details on creating an r3.mapcalc expression," >&2
+	echo "select 'man' in the help field to see the r3.mapcalc manual page" >&2
+	echo "(or type g.manual r3.mapcalc from the command line)." >&2
+}
+
+if  [ -z "$GISBASE" ]
+then
+	echo "You must be in GRASS GIS to run this program" >&2
+	exit 1
+fi
+
+if   [ "$1" != "@ARGS_PARSED@" ]
+then
+	exec g.parser "$0" "$@"
+fi
+
+case $GIS_OPT_HELP in
+	help)
+	display_help
+	exit 0
+	;;
+	man)
+	g.manual r3.mapcalc
+	exit 0
+	;;
+esac
+
+# use old style mapcalc
+
+if [ "$GIS_FLAG_E" = 1 ] ; then
+	exec "$GISBASE/etc/grass-xterm-wrapper" -e r3.mapcalc &
+	exit 0
+fi
+
+
+# Check for required arguments
+if [ -z "$GIS_OPT_FORMULA" ]; then
+	g.message -e "Missing formula."
+	g.message -e "Please enter a formula in the field formula"
+	exit 1
+fi
+
+if [ -z "$GIS_OPT_OUTFILE" ]; then
+	g.message -e "Missing name of outputfile."
+	g.message -e "Please enter a name for the resulting map and try again."
+	exit 1
+elif [ "$GIS_FLAG_O" = 1 ]; then
+	echo `g.list type=rast | grep -w "$GIS_OPT_OUTFILE" `
+	outtest=`g.list type=rast | grep -w $GIS_OPT_OUTFILE`
+	if [ -n "$outtest" ]; then
+		g.message -e "File $GIS_OPT_OUTFILE exists. Exiting."
+		exit 0
+	fi
+fi
+
+# replace grid names: two passes are needed to make sure that sed parses all
+# grid names. e.g., A+B => agrid+B => agrid+bgrid
+command=`
+echo "(${GIS_OPT_FORMULA})" | sed \
+	-e "s/\([^a-zA-Z0-9]\)A\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_AGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)A\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_AGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)B\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_BGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)B\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_BGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)C\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_CGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)C\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_CGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)D\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_DGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)D\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_DGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)E\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_EGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)E\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_EGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)F\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_FGRID\" \2/g" \
+	-e "s/\([^a-zA-Z0-9]\)F\([^a-zA-Z0-9]\)/\1 \"$GIS_OPT_FGRID\" \2/g"
+`
+
+# Show the resulting commandline
+g.message message="r3.mapcalc \"$GIS_OPT_OUTFILE\" = \"$command\""
+
+r3.mapcalc "$GIS_OPT_OUTFILE" = "$command" # Start the command
+
+# Check for errors
+if [ $? -ne 0 ]; then
+	g.message -e  "Calculating $GIS_OPT_OUTFILE. Try expert mode."
+	exit 1
+fi
+
+g.message "Done."
+
+exit 0

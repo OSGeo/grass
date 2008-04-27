@@ -1,0 +1,238 @@
+#############################################################################
+#
+# MODULE:   	Grass Compilation
+# AUTHOR(S):	Original author unknown - probably CERL
+#		Markus Neteler - Germany/Italy - neteler@itc.it
+#   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
+#   	    	Huidae Cho - Korea - grass4u@gmail.com
+#   	    	Eric G. Miller - egm2@jps.net
+# PURPOSE:  	The source file for this Makefile is in src/CMD/head/head.in.
+#		It is the top part of a file called make.rules which is used
+#		for compiling all GRASS modules. This part of the file provides
+#		make variables that are dependent on the results of the
+#		configure script.
+# COPYRIGHT:    (C) 2000 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#   	    	License (>=v2). Read the file COPYING that comes with GRASS
+#   	    	for details.
+#
+#############################################################################
+
+############################## Make Variables ###############################
+
+CC                  = @CC@
+#FC                  = @F77@
+CXX                 = @CXX@
+LEX                 = @LEX@
+YACC                = @YACC@
+PERL                = @PERL@
+AR                  = @AR@
+RANLIB              = @RANLIB@
+MKDIR               = mkdir -p
+CHMOD               = chmod
+INSTALL             = @INSTALL@ 
+INSTALL_DATA        = @INSTALL_DATA@
+
+prefix              = @prefix@
+exec_prefix         = @exec_prefix@
+ARCH                = @host@
+UNIX_BIN            = @BINDIR@
+INST_DIR            = @INSTDIR@
+
+PLAT_OBJS           = @PLAT_OBJS@
+STRIPFLAG           = @STRIPFLAG@
+CC_SEARCH_FLAGS     = @CC_SEARCH_FLAGS@
+LD_SEARCH_FLAGS     = @LD_SEARCH_FLAGS@
+LD_LIBRARY_PATH_VAR = @LD_LIBRARY_PATH_VAR@
+LIB_RUNTIME_DIR     = $(ARCH_LIBDIR)
+
+#static libs:
+STLIB_LD            = @STLIB_LD@
+STLIB_PREFIX        = lib
+STLIB_SUFFIX        = .a
+
+#shared libs
+SHLIB_PREFIX        = lib
+SHLIB_LD            = @SHLIB_LD@
+SHLIB_LD_EXTRAS     = @GRASS_SHLIB_LD_EXTRAS@
+SHLIB_LD_FLAGS      = @SHLIB_LD_FLAGS@
+SHLIB_LD_LIBS       = @SHLIB_LD_LIBS@
+SHLIB_CFLAGS        = @SHLIB_CFLAGS@
+SHLIB_SUFFIX        = @SHLIB_SUFFIX@
+EXE                 = @EXEEXT@
+
+
+# GRASS dirs
+GRASS_HOME          = @GRASS_HOME@
+RUN_GISBASE         = @GISBASE@
+RUN_GISRC           = ${ARCH_DISTDIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}
+
+DEFAULT_DATABASE    =
+DEFAULT_LOCATION    =
+
+CPPFLAGS            = @CPPFLAGS@
+CFLAGS1             = @CFLAGS@
+CXXFLAGS1           = @CXXFLAGS@
+INCLUDE_DIRS        = @INCLUDE_DIRS@
+
+COMPILE_FLAGS       = $(CPPFLAGS) $(CFLAGS1) $(INCLUDE_DIRS)
+COMPILE_FLAGS_CXX   = $(CPPFLAGS) $(CXXFLAGS1) $(INCLUDE_DIRS)
+LINK_FLAGS          = @LDFLAGS@
+
+DLLIB               = @DLLIB@
+XCFLAGS             = @X_CFLAGS@
+XMINC               = @XMINC@
+XLIBPATH            = @X_LIBS@
+XLIB                = @X_PRE_LIBS@ @XLIB@
+XTLIB               = @XTLIB@
+XMLIB               = @XMLIB@
+XEXTRALIBS          = @X_EXTRA_LIBS@
+USE_X11             = @USE_X11@
+
+COMPATLIB           = @COMPATLIB@
+CURSES              = @CURSESLIB@ $(COMPATLIB)
+USE_CURSES          = @USE_CURSES@
+MATHLIB             = @MATHLIB@ 
+XDRLIB              = @XDRLIB@ @ZLIBINCPATH@ @ZLIBLIBPATH@ @ZLIB@
+ICONVLIB            = @ICONVLIB@
+INTLLIB             = @INTLLIB@
+SOCKLIB             = @SOCKLIB@
+
+#ZLIB:
+ZLIB                = @ZLIBINCPATH@ @ZLIBLIBPATH@ @ZLIB@
+ZLIBINCPATH         = @ZLIBINCPATH@
+ZLIBLIBPATH         = @ZLIBLIBPATH@
+
+#DBM:
+#DBMINCPATH          = @DBMINCPATH@
+#DBMLIBPATH          = @DBMLIBPATH@
+#DBMLIB              = @DBMLIB@
+DBMIEXTRALIB        = @DBMIEXTRALIB@
+
+#readline
+READLINEINCPATH     = @READLINEINCPATH@
+READLINELIBPATH     = @READLINELIBPATH@
+READLINELIB         = @READLINELIB@
+HISTORYLIB          = @HISTORYLIB@
+
+#PostgreSQL:
+PQINCPATH           = @PQINCPATH@
+PQLIBPATH           = @PQLIBPATH@
+PQLIB               = @PQLIB@
+
+#MySQL:
+MYSQLINCPATH        = @MYSQLINCPATH@
+MYSQLLIBPATH        = @MYSQLLIBPATH@
+MYSQLLIB            = @MYSQLLIB@
+MYSQLDLIB            = @MYSQLDLIB@
+
+#SQLite:
+SQLITEINCPATH        = @SQLITEINCPATH@
+SQLITELIBPATH        = @SQLITELIBPATH@
+SQLITELIB            = @SQLITELIB@
+
+#FFMPEG
+FFMPEGINCPATH        = @FFMPEGINCPATH@
+FFMPEGLIBPATH        = @FFMPEGLIBPATH@
+FFMPEGLIB            = @FFMPEGLIB@
+
+#ODBC:
+ODBCINC             = @ODBCINC@
+ODBCLIB             = @ODBCLIB@
+
+#Image formats:
+PNGINC              = @PNGINC@
+PNGLIB              = @PNGLIB@
+USE_PNG             = @USE_PNG@
+
+JPEGINCPATH         = @JPEGINCPATH@
+JPEGLIBPATH         = @JPEGLIBPATH@
+JPEGLIB             = @JPEGLIB@
+
+TIFFINCPATH         = @TIFF_INCLUDE_DIRS@
+TIFFLIBPATH         = @TIFF_LIBRARY_DIRS@
+TIFFLIB             = @TIFFLIB@
+
+#openGL files for NVIZ/r3.showdspf
+OPENGLINC           = @OPENGLINC@
+OPENGLWINC          = @OPENGLWINC@
+OPENGLLIB           = @OPENGLLIB@
+OPENGLULIB          = @OPENGLULIB@
+OPENGLWM            = @OPENGLWM@
+#USE_GLWM            = @USE_GLWM@
+OPENGL_X11          = @OPENGL_X11@
+OPENGL_AQUA         = @OPENGL_AQUA@
+OPENGL_WINDOWS      = @OPENGL_WINDOWS@
+
+#tcl/tk stuff
+TCLINCDIR           = @TCLINCDIR@
+TKINCDIR            = @TKINCDIR@
+TCLTKLIBPATH        = @TCLTKLIBPATH@
+TCLTKLIBS           = @TCLTKLIBS@
+
+#FFTW:
+FFTWINC             = @FFTWINC@
+FFTWLIB             = @FFTWLIB@
+
+#LAPACK/BLAS stuff for gmath lib:
+BLASLIB             = @BLASLIB@
+BLASINC				= @BLASINC@
+LAPACKLIB           = @LAPACKLIB@
+LAPACKINC			= @LAPACKINC@
+
+#GDAL/OGR
+GDALLIBS            = @GDAL_LIBS@
+GDALCFLAGS          = @GDAL_CFLAGS@
+USE_GDAL            = @USE_GDAL@
+USE_OGR             = @USE_OGR@
+
+#FreeType:
+FTINC               = @FTINC@
+FTLIB               = @FTLIB@
+
+#PROJ.4:
+PROJINC             = @PROJINC@ $(GDALCFLAGS)
+PROJLIB             = @PROJLIB@
+NAD2BIN             = @NAD2BIN@
+PROJSHARE           = @PROJSHARE@
+
+#OPENDWG:
+OPENDWGINCPATH      = @OPENDWGINCPATH@
+OPENDWGLIBPATH      = @OPENDWGLIBPATH@
+OPENDWGLIB          = @OPENDWGLIB@
+USE_OPENDWG         = @USE_OPENDWG@
+
+#cairo
+CAIROINC            = @CAIROINC@
+CAIROLIB            = @CAIROLIB@
+USE_CAIRO           = @USE_CAIRO@
+
+#Python
+PYTHONINC           = @PYTHONINC@
+PYTHONCFLAGS        = @PYTHONCFLAGS@
+PYTHONLDFLAGS       = @PYTHONLDFLAGS@
+SWIG                = @SWIG@
+USE_PYTHON          = @USE_PYTHON@
+
+#wxWidgets
+WXVERSION           = @WXVERSION@
+WXWIDGETSCXXFLAGS   = @WXWIDGETSCXXFLAGS@
+WXWIDGETSCPPFLAGS   = @WXWIDGETSCPPFLAGS@
+WXWIDGETSLIB        = @WXWIDGETSLIB@
+USE_WXWIDGETS       = @USE_WXWIDGETS@
+
+#i18N
+HAVE_NLS            = @HAVE_NLS@
+
+#Large File Support (LFS)
+USE_LARGEFILES      = @USE_LARGEFILES@
+
+#BSD sockets
+HAVE_SOCKET         = @HAVE_SOCKET@
+
+MINGW		    = @MINGW32@
+MACOSX_APP	    = @MACOSX_APP@
+
+# Cross compilation
+CROSS_COMPILING = @CROSS_COMPILING@ 

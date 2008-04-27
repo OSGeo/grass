@@ -1,0 +1,1009 @@
+/*! \page gpdelib GRASS partial differential equations Library (GPDE)
+
+<h2>GRASS Partial Differential Equations Library (GPDE)</h2>
+
+<P>
+Author: Soeren Gebbert
+
+<b>Overview</b>
+
+The GRASS partial differential equation library is designed to support the
+solution of PDE's within GRASS.
+Therefore it provides functions to create and solve linear equation systems.
+The library design is thread safe and supports threaded parallelism with OpenMP. 
+Most of the available solvers (expect the gauss seidel and jacobi solver)
+and the assembling of the linear equation systems are parallelized with OpenMP. 
+The creation of a linear equation system can be done by using quadratic or sparse matrices.
+Sparse and quadratic matrices are supported by the iterative equation solvers, 
+the direct equation solvers only support regular quadratic matrices.
+<p>
+To enable parallel computing, you will need a compiler with OpenMP capabilities
+and a computer with at least two cores or cpu's.
+Most proprietary compilers support OpenMP. 
+The free gnu-C compiler supports OpenMP since version 4.2.
+More informations about OpenMP are available at http://www.openmp.org .
+<br>
+<br>
+Based on the finite volume discretization for structured grids, 
+groundwater flow and solute transport in 2d and 3d are implemented. 
+It is IMHO easy to add any partial differential equation which can be 
+solved with the finite volume or the finite differences method based on structured grids.
+The basis for the discretisation is the geometrical structure of raster and volume maps.
+<br>
+<br>
+There are plans to implement heat flow in two and three dimensions.
+<br>
+<br>
+Currently only planimetric projections are supported for numerical calculations.
+<br>
+<br>
+The gpde library provides an easy to handle interface for reading raster and volume data into
+specific data arrays (in memory) and for writing data arrays to raster and volume maps. 
+These data arrays supports all raster and volume datatypes, overlapping boundaries 
+and provide a sophisticated null value support and array access functions. 
+Basic mathematical operations are available for the arrays.
+
+\section PDE The Creation of a lineare equation systems
+
+The principle to create and solve a linear equation systems with this library:
+\verbatim
+1.) Read all needed raster/volume data into the memory
+    - use the the two and three dimensional data arrays N_array_2d and N_array_3d
+      to manage the data
+2.) Assemble the linear equation system
+    - use the sparse matrix structure to save lots of memory and cpu time
+3.) Solve the linear equation system with the gauss, lu, jacobi, sor, cg or bicgstab method
+    - always prefer the iterative krylov-space methods for solving
+    - if the linear equation systems are in a bad condition try the jacobian solver
+    - the available direct solvers dont support sparse matrices
+4.) Write the result back as raster/volume map
+\endverbatim
+
+The following code shows how to implement this principle with the GRASS PDE lib:
+
+\verbatim
+/* *************************************************************** */
+/* ****** calculate 2d dimensional groundwater flow ************** */
+/* *************************************************************** */
+int main()
+{
+    int i, j;
+    N_gwflow_data2d *data = NULL; 	/* data structure with the groundwater data		*/
+    N_geom_data *geom = NULL; 		/* geometry of the calculation area (region)		*/
+    N_les *les = NULL; 		/* the linear equation system structure			*/
+    N_les_callback_2d *call = NULL;	/* the callback for the groundwater flow calulation	*/
+
+    /* allocate the callback structure */
+    call = N_alloc_les_callback_2d();
+
+    /* set the callback to groundwater flow calculation */
+    N_set_les_callback_2d_func(call, (*N_callback_gwflow_2d));
+
+   /* allocate the groundwater data structure with one million cells */
+    data = N_alloc_gwflow_data2d(1000, 1000);
+
+    /* get the current region */
+    G_get_set_window(&region);
+
+    /* allocate and initiate the geometry structure  for geometry and area calculation
+       needed by the groundwater calculation callback */
+    geom = N_init_geom_data_2d(&region, geom);
+
+ 
+    /*fill the data arrays with raster maps*/
+    N_read_rast_to_array_2d("phead_map_name", data->phead);      
+    N_read_rast_to_array_2d("phead_map_name", data->phead_start);
+    N_read_rast_to_array_2d("status_map_name", data->status);
+    N_read_rast_to_array_2d("hc_x_map_name", data->hc_x);
+    N_read_rast_to_array_2d("hc_y_map_name", data->hc_y);
+    N_read_rast_to_array_2d("q_map_name", data->q);
+    N_read_rast_to_array_2d("s_map_name", data->s);
+    N_read_rast_to_array_2d("top_map_name", data->top);
+    N_read_rast_to_array_2d("bottom_map_name", data->bottom);
+    N_read_rast_to_array_2d("r_map_name", data->r);
+
+    /* Set the inactive cells to zero, to assure a no flow boundary */
+    /* notice: the data arrays are of type DCELL, so the put_*_d_value functions are used */
+    for (y = 0; y < geom->rows; y++) {
+	for (x = 0; x < geom->cols; x++) {
+	    stat = (int)N_get_array_2d_d_value(data->status, x, y);
+	    if (stat == N_CELL_INACTIVE) {	/*only inactive cells */
+		N_put_array_2d_d_value(data->hc_x, x, y, 0);
+		N_put_array_2d_d_value(data->hc_y, x, y, 0);
+		N_put_array_2d_d_value(data->s, x, y, 0);
+		N_put_array_2d_d_value(data->q, x, y, 0);
+	    }
+	}
+    }
+ 
+    /*Assemble the sparse matrix */
+    les = N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start, (void *)data, call);
+
+    /*Solve the linear equation system with the cg method*/
+    N_solver_cg(les, 100000, 0.1e-8);
+
+    /* now copy the result from the x vector of the linear equation system
+       into a data array, this function is not provided by the gpde lib, 
+       you have to write your own: take a look at r.gwflow 
+    */
+    copy_x_vect_to_data_array(les->x, data->phead, geom);
+
+    /*write the x vector of the les back into a raster map*/
+    N_write_array_2d_to_rast(data->phead, "output_map_name");
+
+    /*free the memory*/
+    N_free_les(les);
+    N_free_gwflow_data2d(data);
+    N_free_geom_data(geom);
+    G_free(call);
+
+    return 0;
+}
+
+\endverbatim
+
+The assembling of lineare equation systems is based on a 5 point star for raster maps and a
+7 point star for volume maps, implemented as finite volume/differences discretization. 
+
+<p>
+All raster and volume maps which are used to create a linear equation system
+must be loaded completely into the memory.<br>
+Therefore 2d and 3d data structures are implemented to support this principle:
+
+\subsection rastermaps Raster maps
+
+\verbatim
+
+This structure manages two dimensional data 
+
+typedef struct
+{
+    int type;                   /* which raster type CELL_TYPE, FCELL_TYPE, DCELL_TYPE */
+    int rows, cols;
+    int rows_intern, cols_intern;
+    int offset;                 /*number of cols/rows offset at each boundary */
+    CELL *cell_array;
+    FCELL *fcell_array;
+    DCELL *dcell_array;
+} N_array_2d;
+\endverbatim
+
+For performance reasons the data arrays are stored as a one dimensional array internally.<br>
+Use the following functions for memory allocation and value handling:
+<p>
+Memory allocation<br>
+N_array_2d *#N_alloc_array_2d(int rows, int cols, int offset, int type);
+<p>
+void #N_free_array_2d(N_array_2d * data_array);
+<p>
+Get the type of the array<br>
+int #N_get_array_2d_type(N_array_2d * array2d);
+<p>
+To access the 2d arrays use the following functions for reading and writing of data values
+<p>
+void #N_get_array_2d_value(N_array_2d * array2d, int row, int col, void *value);
+<p>
+CELL #N_get_array_2d_c_value(N_array_2d * array2d, int row, int col);
+<p>
+FCELL #N_get_array_2d_f_value(N_array_2d * array2d, int row, int col);
+<p>
+DCELL #N_get_array_2d_d_value(N_array_2d * array2d, int row, int col);
+<p>
+void #N_put_array_2d_value(N_array_2d * array2d, int row, int col, char *value);
+<p>
+void #N_put_array_2d_c_value(N_array_2d * array2d, int row, int col, CELL value);
+<p>
+void #N_put_array_2d_f_value(N_array_2d * array2d, int row, int col, FCELL value);
+<p>
+void #N_put_array_2d_d_value(N_array_2d * array2d, int row, int col, DCELL value);
+<p>
+\subsubsection highlevel Higher level array functions
+
+To copy one array to another use this function<br>
+
+void #N_copy_array_2d(N_array_2d * source, N_array_2d * target);
+<p>
+Print the content of the array to stdout<br>
+void #N_print_array_2d (N_array_2d * data);
+<p>
+Compute the norm of two arrays<br>
+double #N_norm_array_2d (N_array_2d * array1, N_array_2d * array2, int type);
+<p>
+Performe some basic mathematical operations with two arrays<br>
+N_array_2d * #N_math_array_2d (N_array_2d * array1, N_array_2d * array2, N_array_2d * result, int type);
+<p>
+Convert all null values to zero<br>
+int #N_convert_array_2d_null_to_zero (N_array_2d * a);
+<p>
+Read a raster map into the memory<br>
+N_array_2d * #N_read_rast_to_array_2d (char *name, N_array_2d * array);
+<p>
+Write a raster map to the disk<br>
+void #N_write_array_2d_to_rast (N_array_2d * array, char *name);
+
+<P>
+<b>Example implementation:</b><br>
+The GRASS module <a href="http://grass.itc.it/grass63/manuals/html63_user/r.gwflow.html">r.gwflow</a>
+implements numerical calculation program for transient,
+confined and unconfined groundwater flow in two dimensions.
+
+\subsection g3dmaps Volume maps
+\verbatim
+typedef struct
+{
+
+This structure manages three dimensional data 
+
+    int type;                   /* which raster type FCELL_TYPE, DCELL_TYPE */
+    int rows, cols, depths;
+    int rows_intern, cols_intern, depths_intern;
+    int offset;                 /*number of cols/rows/depths offset at each boundary */
+    float *fcell_array;
+    double *dcell_array;
+} N_array_3d;
+\endverbatim
+For performance reasons the data arrays are stored as a one dimensional array internally.
+
+<br><br>
+The following functions should be used for memory allocation and value handling:
+<p>
+N_array_3d *#N_alloc_array_3d(int depths, int rows, int cols, int offset, int type);
+<p>
+void #N_free_array_3d(N_array_3d * data_array);
+<p>
+int #N_get_array_3d_type(N_array_3d * array);
+<p>
+To access the 3d arrays use the following functions for reading and writing of data values
+<p>
+void #N_get_array_3d_value(N_array_3d * array3d, int depth, int row, int col, void *value);
+<p>
+float #N_get_array_3d_f_value(N_array_3d * array3d, int depth, int row, int col);
+<p>
+double #N_get_array_3d_d_value(N_array_3d * array3d, int depth, int row, int col);
+<p>
+void #N_put_array_3d_value(N_array_3d * array3d, int depth, int row, int col, char *value);
+<p>
+void #N_put_array_3d_f_value(N_array_3d * array3d, int depth, int row, int col, float value);
+<p>
+void #N_put_array_3d_d_value(N_array_3d * array3d, int depth, int row, int col, double value);
+<p>
+\subsubsection highlevel Higher level array functions
+
+To copy one array to another use this function
+<br>
+void #N_copy_array_3d(N_array_3d * source, N_array_3d * target);
+<p>
+Print the content of the array to stdout<br>
+void #N_print_array_3d (N_array_3d * data);
+<p>
+Compute the norm of two arrays<br>
+double #N_norm_array_3d (N_array_3d * array1, N_array_3d * array2, int type);
+<p>
+Performe some basic mathematical operations with two arrays<br>
+N_array_3d * #N_math_array_3d (N_array_3d * array1, N_array_3d * array2, N_array_3d * result, int type);
+<p>
+Convert all null values to zero<br>
+int #N_convert_array_3d_null_to_zero (N_array_3d * a);
+<p>
+Read a volume map into the memory<br>
+N_array_3d * #N_read_rast3d_to_array_3d (char *name, N_array_3d * array, int mask);
+<p>
+Write a volume map to the disk<br>
+void #N_write_array_3d_to_rast3d (N_array_3d * array, char *name, int mask);
+<p>
+
+<P>
+<b>Example implementation:</b><br>
+The GRASS module <a href="http://grass.itc.it/grass63/manuals/html63_user/r3.gwflow.html">r3.gwflow</a>
+implements numerical calculation program for transient, confined
+groundwater flow in three dimensions.
+
+
+\subsection les Entries in the linear equation system
+
+To make entries in the linear equation system, a special structure must be provided.
+Currently implemented structures includes the 5 point and 7 point star scheme:
+
+\verbatim
+Matrix entries for the mass balance of a 5 star system
+
+The entries are center, east, west, north, south and the
+right side vector b of Ax = b. This system is typical used in 2d.
+
+     N
+     |
+ W-- C --E
+     |
+     S
+
+Matrix entries for the mass balance of a 7 star system
+
+The entries are center, east, west, north, south, top, bottom and the
+right side vector b of Ax = b. This system is typical used in 3d.
+
+     T N
+     |/
+ W-- C --E
+    /|
+   S B
+
+Matrix entries for the mass balance of a 9 star system
+
+The entries are center, east, west, north, south, north-east, south-east,
+north-wast, south-west and the
+right side vector b of Ax = b. This system is typical used in 2d.
+
+ NW  N  NE
+   \ | /
+ W-- C --E
+   / | \
+ SW  S  SE
+
+
+typedef struct
+{
+    int type;
+    int count;
+    double W, E, N, S, C, T, B, NE, NW, SE, SW, V;
+} N_data_star;
+\endverbatim
+
+The following functions should be used to create and handle the N_data_star structures:
+
+<p>
+Memory allocation<br>
+N_data_star *#N_alloc_5star(void);
+<p>
+N_data_star *#N_alloc_7star(void);
+<p>
+N_data_star *#N_alloc_9star(void);
+<p>
+Memory allocation with initialisation<br>
+N_data_star *#N_create_5star(double C, double W, double E, double N, double S, double V);
+<p>
+N_data_star *#N_create_7star(double C, double W, double E, double N, double S, double T, double B, double V);
+<p>
+N_data_star *#N_create_9star(double C, double W, double E, double N, double S, double NW, double SW, double NE, double SE, double V);
+<p>
+
+<p>
+\subsection les functions to assemble the lineare equation system
+
+<p>
+Setting the callback function which fills the 5 or 7 point structure for every row of the linear equation system (eg: for each cell of the raster or volume map)
+<p>
+void #N_set_les_callback_3d_func(N_les_callback_3d * data, N_data_star * (*callback_func_3d) ());
+<p>
+void #N_set_les_callback_2d_func(N_les_callback_2d * data, N_data_star * (*callback_func_2d) ());
+<p>
+Allocation the callback structure for 2d and 3d
+<p>
+N_les_callback_3d *#N_alloc_les_callback_3d(void);
+<p>
+N_les_callback_2d *#N_alloc_les_callback_2d(void);
+
+<p>
+Assemble the linear equation system in 2d or 3d
+
+<p>
+N_les *#N_assemble_les_3d(int les_type, N_geom_data * geom, N_array_3d * status, N_array_3d * start_val, void *data, N_les_callback_3d * callback);
+<p>
+N_les *#N_assemble_les_2d(int les_type, N_geom_data * geom, N_array_2d * status, N_array_2d * start_val, void *data, N_les_callback_2d * callback);
+
+<p>
+templates for callback functions
+<p>
+N_data_star *#N_callback_template_3d(void *data, N_geom_data * geom, int depth, int row, int col);
+<p>
+N_data_star *#N_callback_template_2d(void *data, N_geom_data * geom, int row, int col);
+
+
+\section solvers Available solvers
+
+\subsection direct_solvers Direct solvers
+
+Two direct solvers are implemented, the gauss elimination solver and the lu decomposition solver.
+The direct solvers only work with regular quadratic matrices, not with sparse matrices.
+
+<p>
+int #N_solver_gauss (N_les * les);
+
+<p>
+int #N_solver_lu (N_les * les);
+
+
+\subsection iterative_solvers Iterative solvers 
+
+The iterative solvers work with regular quadartic and sparse matrices.
+<p>
+To solve symmetric and positive definite linear equation systems the iterative 
+conjugated gradient method with additional diagonal preconditioning are implemented.
+
+int #N_solver_cg(N_les * les, int maxit, double error);
+<p>
+int #N_solver_pcg(N_les * les, int maxit, double error);
+
+<p>
+To solve unsymmetric non definite linear equation system the iterative BiCGSatb method is implemented
+
+<p>
+int #N_solver_bicgstab(N_les * les, int maxit, double error);
+
+<p>
+Additionally jacobi and Gauss-Seidel iterative solvers with relaxation are implemented
+<p>
+int #N_solver_jacobi (N_les * L, int maxit, double sor, double error);
+<p>
+int #N_solver_SOR (N_les * L, int maxit, double sor, double error);
+
+\section available_pdes Implemented PDE's
+
+Groundwater flow in 2 and 3 dimensions are implemented.
+
+
+This data structure contains all data needed to compute the 
+groundwater mass balance in three dimension 
+
+\verbatim
+typedef struct
+{
+  N_array_3d *phead;		/*!piezometric head */
+  N_array_3d *phead_start;	/*!start conditions */
+  N_array_3d *hc_x;		/*!x part of the hydraulic conductivity tensor */
+  N_array_3d *hc_y;		/*!y part of the hydraulic conductivity tensor */
+  N_array_3d *hc_z;		/*!z part of the hydraulic conductivity tensor */
+  N_array_3d *q;		/*!sources and sinks */
+  N_array_2d *r;		/*!recharge at the top of the gw leayer */
+  N_array_3d *s;		/*!specific yield */
+  N_array_3d *nf;		/*!effective porosity */
+
+  N_array_3d *status;		/*!active/inactive/dirichlet cell status */
+
+  double dt;			/*!calculation time */
+
+} N_gwflow_data3d;
+\endverbatim
+
+
+This data structure contains all data needed to compute the 
+groundwater mass balance in two dimension 
+
+ \verbatim
+typedef struct
+{
+  N_array_2d *phead;		/*!piezometric head */
+  N_array_2d *phead_start;	/*!start conditions */
+  N_array_2d *hc_x;		/*!x part of the hydraulic conductivity tensor */
+  N_array_2d *hc_y;		/*!y part of the hydraulic conductivity tensor */
+  N_array_2d *q;		/*!sources and sinks */
+  N_array_2d *r;		/*!recharge at the top of the gw leayer */
+  N_array_2d *s;		/*!specific yield */
+  N_array_2d *nf;		/*!effective porosity */
+
+  N_array_2d *top;		/*!top surface of the quifer */
+  N_array_2d *bottom;		/*!bottom of the aquifer */
+
+  N_array_2d *status;		/*!active/inactive/dirichlet cell status */
+
+  double dt;			/*!calculation time */
+  int gwtype;			/*!Which type of groundwater, N_GW_CONFINED or N_GW_UNCONFIED */
+
+} N_gwflow_data2d;
+\endverbatim
+
+<p>
+The callback to compute a les row entry in 3d dimesnions<br>
+N_data_star *#N_callback_gwflow_3d (void *gwdata, N_geom_data * geom, int col, int row, int depth);
+<p>
+The callback to compute a les row entry in 2d dimesnions<br>
+N_data_star *#N_callback_gwflow_2d (void *gwdata, N_geom_data * geom, int col, int row);
+<p>
+Allocation the 3d groundwater flow data structure<br>
+N_gwflow_data3d *#N_alloc_gwflow_data3d (int cols, int rows, int depths);
+<p>
+Allocation the 2d groundwater flow data structure<br>
+N_gwflow_data2d *#N_alloc_gwflow_data2d (int cols, int rows);
+<p>
+Releasing memory<br>
+void #N_free_gwflow_data3d (N_gwflow_data3d * data);
+<p>
+Releasing memory<br>
+void #N_free_gwflow_data2d (N_gwflow_data2d * data);
+<p>
+
+\section geom_data Handling geometrical data
+
+To handle geometrical data a special data structure was implemented.<br>
+
+
+\verbatim
+Geometric informations about the structured grid is stored in this structure
+
+typedef struct
+{
+  int planimetric; /*If the projection is not planimetric (0), the array calculation is different for each row*/
+  double *area; /* the vector of area values for non-planimetric projection for each row*/
+  int dim; /* 2 or 3*/
+
+  double dx;
+  double dy;
+  double dz;
+
+  double Az;
+
+  int depths;
+  int rows;
+  int cols;
+
+} N_geom_data;
+\endverbatim
+
+Use the follwoing functions to handle the geometric data structures:
+
+<p>
+Creating a N_geom_data structure<br>
+N_geom_data *#N_alloc_geom_data (void);
+<p>
+Releasing memory<br>
+void #N_free_geom_data (N_geom_data *geodata);
+<p>
+Initialize the N_geom_data structure with a G3D_Region<br>
+N_geom_data *#N_init_geom_data_3d(G3D_Region * region3d, N_geom_data * geodata);
+<p>
+Initialize the N_geom_data structure with a 2d region<br>
+N_geom_data *#N_init_geom_data_2d(struct Cell_head * region, N_geom_data * geodata);
+<p>
+Get the area of a cell in row<br>
+double #N_get_geom_data_area_of_cell(N_geom_data * geom, int row);
+
+\section mathtools Mathematical tools
+
+Several mean calculation algorithms are implemented.
+Two versions of each algorithm are available working 
+with two values or a vector of values.
+
+<p>
+double #N_calc_arith_mean(double a, double b)
+<p>
+double #N_calc_arith_mean_n(double *a, int size)
+<p>
+double #N_calc_geom_mean(double a, double b)
+<p>
+double #N_calc_geom_mean_n(double *a, int size)
+<p>
+double #N_calc_harmonic_mean(double a, double b)
+<p>
+double #N_calc_harmonic_mean_n(double *a, int size)
+<p>
+double #N_calc_quad_mean(double a, double b)
+<p>
+double #N_calc_quad_mean_n(double *a, int size)
+<p>
+
+Two methods for upwinding stabilization are implemented.
+
+double #N_full_upwinding(double vector, double distance, double D)
+<p>
+double #N_exp_upwinding(double vector, double distance, double D)
+
+
+
+\section gradient Calculating and managing gradient and vector field data
+
+To compute and manage gradient and vector field data, specific data structures with access and management functions
+are implemented. Gradient and vector field data is often needed in transport calculation like solute/heat transport
+or navier stokes equations. The following  structures and functions provide a concient way to performe 
+gradient and vector field calculations.
+<p>
+
+The gradient of one cell to there neighbours in each direction has the following components:
+
+\verbatim
+
+The two dimensional gradient consits of 4 values between the neighbour cells
+ ______________ 
+|    |    |    |
+|    |    |    |
+|----|-NC-|----|
+|    |    |    |
+|   WC    EC   |
+|    |    |    |
+|----|-SC-|----|
+|    |    |    |
+|____|____|____|
+
+The three dimensional gradient consits of 6 values between the neighbour cells
+
+      |  /
+     TC NC
+      |/
+--WC-----EC--
+     /|
+   SC BC
+   /  |
+
+\endverbatim
+
+Gradient between the cells in X and Y direction 
+
+\verbatim
+typedef struct {
+
+  double NC, SC, WC, EC;
+
+} N_gradient_2d;
+\endverbatim
+
+Gradient between the cells in X, Y and Z direction
+\verbatim
+typedef struct {
+
+  double NC, SC, WC, EC, TC, BC;
+
+} N_gradient_3d;
+\endverbatim
+
+The gradients between the neighbours of the center cell is needed for tensor 
+calculation in the discretization of several partial differential equations.
+
+\verbatim
+
+Gradient in X direction between the cell neighbours
+ ____ ____ ____
+|    |    |    |
+|   NWN  NEN   |
+|____|____|____|
+|    |    |    |
+|   WN    EN   |
+|____|____|____|
+|    |    |    |
+|   SWS  SES   |
+|____|____|____|
+
+Gradient in Y direction between the cell neighbours
+ ______________ 
+|    |    |    |
+|    |    |    |
+|NWW-|-NC-|-NEE|
+|    |    |    |
+|    |    |    |
+|SWW-|-SC-|-SEE|
+|    |    |    |
+|____|____|____|
+
+Gradient in Z direction between the cell neighbours
+ /______________/
+/|    |    |    |
+ | NWZ| NZ | NEZ|
+ |____|____|____|
+/|    |    |    |
+ | WZ | CZ | EZ |
+ |____|____|____|
+/|    |    |    |
+ | SWZ| SZ | SEZ|
+ |____|____|____|
+/____/____/____/
+
+
+\endverbatim
+
+Gradient between the cell neighbours in X direction 
+
+\verbatim
+typedef struct {
+
+  double NWN, NEN, WC, EC, SWS, SES;
+
+} N_gradient_neighbours_x;
+\endverbatim
+
+Gradient between the cell neighbours in Y direction
+
+\verbatim
+typedef struct {
+
+  double NWW, NEE, NC, SC, SWW, SEE;
+
+} N_gradient_neighbours_y;
+\endverbatim
+
+Gradient between the cell neighbours in Z direction
+
+\verbatim
+typedef struct {
+
+  double NWZ, NZ, NEZ, WZ, CZ, EZ, SWZ, SZ, SEZ;
+
+} N_gradient_neighbours_z;
+\endverbatim
+
+
+Gradient between the cell neighbours in X and Y direction
+
+\verbatim
+typedef struct {
+
+  N_gradient_neighbours_x *x;
+  N_gradient_neighbours_y *y;
+
+} N_gradient_neighbours_2d;
+\endverbatim
+
+
+Gradient between the cell neighbours in X, Y and Z direction
+
+\verbatim
+typedef struct {
+
+  N_gradient_neighbours_x *xt; /*top values*/
+  N_gradient_neighbours_x *xc; /*center values*/
+  N_gradient_neighbours_x *xb; /*bottom values*/
+
+  N_gradient_neighbours_y *yt; /*top values*/
+  N_gradient_neighbours_y *yc; /*center values*/
+  N_gradient_neighbours_y *yb; /*bottom values*/
+
+  N_gradient_neighbours_z *zt; /*top-center values*/
+  N_gradient_neighbours_z *zb; /*bottom-center values*/
+
+} N_gradient_neighbours_3d;
+\endverbatim
+
+
+Two dimensional gradient field
+
+\verbatim
+typedef struct {
+
+  N_array_2d *x_array;
+  N_array_2d *y_array;
+
+} N_gradient_field_2d;
+\endverbatim
+
+Three dimensional gradient field
+
+\verbatim
+typedef struct {
+
+  N_array_3d *x_array;
+  N_array_3d *y_array;
+  N_array_3d *z_array;
+
+} N_gradient_field_3d;
+
+\endverbatim
+
+Use the following functions for allocation and data handling:
+<p>
+Functions to handle a 2d gradient
+<p>
+N_gradient_2d * #N_alloc_gradient_2d(void);
+<p>
+void #N_free_gradient_2d(N_gradient_2d * grad);
+<p>
+N_gradient_2d * #N_create_gradient_2d(double NC, double SC, double WC, double EC);
+<p>
+int #N_copy_gradient_2d(N_gradient_2d * source, N_gradient_2d *target);
+<p>
+N_gradient_2d * #N_get_gradient_2d(N_gradient_field_2d *field, N_gradient_2d * gradient, int col, int row);
+<p>
+<p>
+Functions to handle a 2d gradient
+<p>
+
+N_gradient_3d * #N_alloc_gradient_3d(void);
+<p>
+void #N_free_gradient_3d(N_gradient_3d * grad);
+<p>
+N_gradient_3d * #N_create_gradient_3d(double NC, double SC, double WC, double EC, double TC, double BC);
+<p>
+int #N_copy_gradient_3d(N_gradient_3d * source, N_gradient_3d *target);
+<p>
+N_gradient_3d * #N_get_gradient_3d(N_gradient_field_3d *field, N_gradient_3d * gradient, int col, int row, int depth);
+<p>
+<p>
+Functions to handle gradient neighbours in x direction of the center cell
+<p>
+
+N_gradient_neighbours_x  * #N_alloc_gradient_neighbours_x(void);
+<p>
+void #N_free_gradient_neighbours_x(N_gradient_neighbours_x  *grad);
+<p>
+N_gradient_neighbours_x  * #N_create_gradient_neighbours_x(double NWN, double NEN, double WC, double EC, double SWS, double SES);
+<p>
+int #N_copy_gradient_neighbours_x(N_gradient_neighbours_x * source, N_gradient_neighbours_x *target);
+<p>
+<p>
+Functions to handle gradient neighbours in y direction of the center cell
+<p>
+
+N_gradient_neighbours_y  * #N_alloc_gradient_neighbours_y(void);
+<p>
+void #N_free_gradient_neighbours_y(N_gradient_neighbours_y *grad);
+<p>
+N_gradient_neighbours_y  * #N_create_gradient_neighbours_y(double NWW, double NEE, double NC, double SC, double SWW, double SEE);
+<p>
+int #N_copy_gradient_neighbours_y(N_gradient_neighbours_y * source, N_gradient_neighbours_y *target);
+<p>
+<p>
+Functions to handle gradient neighbours in z direction of the center cell
+<p>
+
+N_gradient_neighbours_z  * #N_alloc_gradient_neighbours_z(void);
+<p>
+void #N_free_gradient_neighbours_z(N_gradient_neighbours_z  *grad);
+<p>
+N_gradient_neighbours_z  * #N_create_gradient_neighbours_z(double NWZ, double NZ, double NEZ, double WZ, double CZ, double EZ, 
+ 						  double SWZ, double SZ, double SEZ);
+<p>
+int #N_copy_gradient_neighbours_z(N_gradient_neighbours_z * source, N_gradient_neighbours_z *target);
+<p>
+<p>
+Functions to handle a 2d gradient neighbour structure of the center cell
+<p>
+
+N_gradient_neighbours_2d * #N_alloc_gradient_neighbours_2d(void);
+<p>
+void #N_free_gradient_neighbours_2d(N_gradient_neighbours_2d *grad);
+<p>
+N_gradient_neighbours_2d * #N_create_gradient_neighbours_2d(N_gradient_neighbours_x *x, N_gradient_neighbours_y *y);
+<p>
+int #N_copy_gradient_neighbours_2d(N_gradient_neighbours_2d *source, N_gradient_neighbours_2d *target);
+<p>
+
+<p>
+Functions to handle a 2d gradient neighbour structure of the center cell
+<p>
+N_gradient_neighbours_3d * #N_alloc_gradient_neighbours_3d(void);
+<p>
+void #N_free_gradient_neighbours_3d(N_gradient_neighbours_3d *grad);
+<p>
+int #N_copy_gradient_neighbours_3d(N_gradient_neighbours_3d *source, N_gradient_neighbours_3d *target);
+<p>
+
+<p>
+
+<p>
+To compute and handle a 2d gradient field the following functions are implemented:
+<p>
+N_gradient_field_2d * #N_alloc_gradient_field_2d(int cols, int rows);
+<p>
+void #N_free_gradient_field_2d(N_gradient_field_2d *field);
+<p>
+int #N_copy_gradient_field_2d(N_gradient_field_2d *source, N_gradient_field_2d *target);
+<p>
+
+The gradient is calculated between cells for each cell and direction.
+The creation of a 2d gradient field is based on the following scheme:
+
+\verbatim
+  ______________ 
+ |    |    |    |
+ |    |    |    |
+ |----|-NC-|----|
+ |    |    |    |
+ |   WC    EC   |
+ |    |    |    |
+ |----|-SC-|----|
+ |    |    |    |
+ |____|____|____|
+ 
+ 
+ x - direction:
+ 
+ r = 2 * weight[row][col]*weight[row][col + 1] / (weight[row][col]*weight[row][col + 1])
+ EC = r * (pot[row][col] - pot[row][col + 1])/dx
+ 
+ y - direction:
+ 
+ r = 2 * weight[row][col]*weight[row + 1][col] / (weight[row][col]*weight[row + 1][col])
+ SC = r * (pot[row][col] - pot[row + 1][col])/dy
+ 
+ the values SC and EC are the values of the next row/col
+\endverbatim
+ 
+
+<p>
+N_gradient_field_2d * #N_compute_gradient_field_2d(N_array_2d *pot, N_array_2d *weight_x, N_array_2d *weight_y, N_geom_data *geom, N_gradient_field_2d *gradfield);
+<p>
+The computation of the gradient vectors for each cell is based on this scheme
+ \verbatim
+  ______________ 
+ |    |    |    |
+ |    |    |    |
+ |----|-NC-|----|
+ |    |    |    |
+ |   WC    EC   |
+ |    |    |    |
+ |----|-SC-|----|
+ |    |    |    |
+ |____|____|____|
+ 
+ x vector component:
+ 
+ x = (WC + EC) / 2
+ 
+ y vector component:
+ 
+ y = (NC + SC) / 2
+ 
+ \endverbatim
+<p>
+void #N_compute_gradient_field_components_2d(N_gradient_field_2d *field, N_array_2d *x_comp, N_array_2d *y_comp);
+<p>
+
+<p>
+N_gradient_field_3d * #N_alloc_gradient_field_3d(int cols, int rows, int depths);
+<p>
+void #N_free_gradient_field_3d(N_gradient_field_3d *field);
+<p>
+int #N_copy_gradient_field_3d(N_gradient_field_3d *source, N_gradient_field_3d *target);
+<p>
+
+The gradient is calculated between cells for each cell and direction.
+The creation of a 2d gradient field is based on the following scheme:
+ \verbatim
+
+      |  /
+     TC NC
+      |/
+--WC-----EC--
+     /|
+   SC BC
+   /  |
+
+
+ x - direction:
+ 
+ r = 2 * weight_x[depth][row][col]*weight_x[depth][row][col + 1] / (weight_X[depth][row][col]*weight_x[depth][row][col + 1])
+ EC = r * (pot[depth][row][col] - pot[depth][row][col + 1])/dx
+ 
+ y - direction:
+ 
+ r = 2 * weight_y[depth][row][col]*weight_y[depth][row + 1][col] / (weight_y[depth][row][col]*weight_y[depth][row + 1][col])
+ SC = r * (pot[depth][row][col] - pot[depth][row + 1][col])/dy
+ 
+ z - direction:
+ 
+ r = 2 * weight_z[depth][row][col]*weight_z[depth + 1][row][col] / (weight_z[depth][row][col]*weight_z[depth + 1][row][col])
+ TC = r * (pot[depth][row][col] - pot[depth + 1][row][col])/dy
+ 
+ the values BC, NC, WC are the values of the next depth/row/col
+ 
+ 
+ \endverbatim
+
+<p>
+N_gradient_field_3d *#N_compute_gradient_field_3d(N_array_3d * pot, N_array_3d * weight_x, N_array_3d * weight_y, N_array_3d * weight_z, N_geom_data * geom, N_gradient_field_3d *gradfield)
+<p>
+Based on this storages scheme the gradient vector for each cell is 
+ calculated and stored in the provided  N_array_3d structures
+ \verbatim
+ 
+      |  /
+     TC NC
+      |/
+--WC-----EC--
+     /|
+   SC BC
+   /  | 
+ 
+ x vector component:
+ 
+ x = (WC + EC) / 2
+ 
+ y vector component:
+ 
+ y = (NC + SC) / 2
+ 
+ z vector component:
+ 
+ z = (TC + BC) / 2
+ 
+ \endverbatim
+
+<p>
+N_compute_gradient_field_components_3d(N_gradient_field_3d * field, N_array_3d * x_comp, N_array_3d * y_comp, N_array_3d * z_comp)
+
+*/

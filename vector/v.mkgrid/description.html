@@ -1,0 +1,30 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.mkgrid</EM> will create a vector map representation of a regular coordinate grid.
+
+<H2>NOTES</H2>
+
+This is NOT to be used to generate a vector map of USGS quadrangles,
+because USGS quads are not exact rectangles.
+
+<H2>EXAMPLE</H2>
+
+Make a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
+<div class="code"><pre>
+v.mkgrid map=coro_grid grid=4,3 position=coor coor=2716500,6447000 box=20000,20000
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<A HREF="v.patch.html">v.patch</A>,
+<A HREF="d.grid.html">d.grid</A>
+
+<H2>AUTHOR</H2>
+
+Michael Higgins,
+U.S.Army Construction Engineering 
+Research Laboratory
+<P>
+Update for new vectors Radim Blazek 10/2004 
+
+<p><i>Last changed: $Date$</i>

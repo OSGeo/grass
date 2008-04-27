@@ -1,0 +1,74 @@
+<H2>DESCRIPTION</H2>
+
+<em>r.sunmask</em> creates an output map layer based on an input elevation
+raster map layer and the sun position. The output map layer contains the
+cast shadow areas arising from sun shine and elevations. The user can define
+the sun position either directly or the module calculates it from given
+location and date/time parameters using the
+<a href=http://rredc.nrel.gov/>NREL</a> sun position algorithm. So either
+"A:"-parameters to specify the exact known sun position or "B:-parameters"
+to specify date/time for sun position calculation by r.sunmask itself have
+to be used.
+
+<P>
+The module performs sunset/sunrise checks and refraction correction for sun
+position calculation. Local coordinate systems are internally transformed to
+latitude/longitude for the SOLPOS algorithm. The elevation is not considered
+in the sunset/sunrise calculations.
+
+<h2>Notes</h2>
+
+r.sunmask and daylight savings: Rather than convert time to GMT, the solpos
+algorithm uses what is called Local Standard Time, which is generally
+defined politically as an offset from GMT.  So the key is the offset from
+GMT, which the solpos Time Zone parameter.  If the user specifies clock time
+(different for winter and summer), he/she would have to change the Time Zone
+parameter seasonally in r.sunmask (timezone parameter).
+<p>
+
+Note: In latitude/longitude locations the position coordinates pair
+(east/west) has to be specified in decimal degree (not D:M:S). If
+not specified, the map center's coordinates will be used.
+Also <em>g.region -l</em> displays the map center's coordinates.
+
+<P>
+Note for module usage with <em>-g</em> flag and calculations
+close to sunset/sunrise:
+
+<pre>
+ [...]
+ sunangleabovehorizont=0.434240
+ sunrise=07:59:19
+ sunset=16:25:17
+ Time (07:59:02) is before sunrise (07:59:19)!
+ WARNING: Nothing to calculate. Please verify settings.
+ No map calculation requested. Finished.
+</pre>
+
+In above calculation appears to be a mistake as
+the program indicates that we are before sunrise while
+the <i>sun angle above horizon</i> is already positive.
+The reason is that <i>sun angle above horizon</i> is
+calculated with correction for atmosphere refraction while
+<i>sunrise</i> and <i>sunset</i> are calculated <b>without</b>
+correction for atmosphere refraction. The output without 
+<em>-g</em> flag contains related indications.
+
+
+<h2>Acknowledgements</h2>
+Acknowledgements: National Renewable Energy Laboratory for their <a href=http://rredc.nrel.gov/solar/codes_algs/solpos/>SOLPOS 2.0</a> sun position
+algorithm.
+
+<H2>SEE ALSO</H2>
+<EM>
+<a href="g.region.html">g.region</a>,
+<a href="r.sun.html">r.sun</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</EM>
+
+<H2>AUTHOR</H2>
+Janne Soimasuo, Finland 1994<br>
+update to FP by Huidae Cho 2001<br>
+added solpos algorithm feature by Markus Neteler 2001
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,42 @@
+<h2>DESCRIPTION</h2>
+
+<b>r.support</b> allows the user to create and/or edit raster map support 
+information. Editing of raster map color tables, category labels, header, 
+history, and title is supported. Category labels can also be copied from
+another raster map.
+
+<h2>NOTES</h2>
+
+If metadata options such as <b>title</b> or <b>history</b> are given the
+module will run  non-interactively. If only the map name is given
+<em>r.support</em> will run interactively within a terminal shell and the
+user with be prompted for input.
+<P>
+Freeform metadata information is stored in a "<tt>hist</tt>" file which may be
+appended to by using the <b>history</b> option. Currently this is limited to
+50 lines of text with a maximum line length of 78 characters. Any input
+larger than this will be wrapped to the next line.
+All other metadata strings available as standard options are limited to
+79 characters.
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.category.html">r.category</a>,
+<a href="r.describe.html">r.describe</a>,
+<a href="r.info.html">r.info</a>,
+<a href="r.null.html">r.null</a>,
+<a href="r.region.html">r.region</a>,
+<a href="r.report.html">r.report</a>,
+<a href="r.timestamp.html">r.timestamp</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+Micharl Shapiro, CERL: Original author<BR>
+<a href="MAILTO:rez@touchofmadness.com">Brad Douglas</a>: GRASS 6 Port<BR>
+M. Hamish Bowman: command line enhancements<br>
+Markus Neteler: category copy from other map
+
+<p>
+<i>Last changed: $Date$</i>
+</p>

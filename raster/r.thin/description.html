@@ -1,0 +1,84 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.thin</EM> scans the named <EM>input</EM> raster map
+layer and thins non-zero cells that denote linear features
+into linear features having a single cell width.
+
+<P>
+
+<EM>r.thin</EM> will thin only the non-zero cells of the
+named <EM>input</EM> raster map layer within the current
+geographic region settings.  The cell width of the thinned
+<EM>output</EM> raster map layer will be equal to the cell
+resolution of the currently set geographic region.  All of
+the thinned linear features will have the width of a single
+cell.
+
+<P>
+
+<EM>r.thin</EM> will create a new <EM>output</EM> raster
+data file containing the thinned linear features.
+<EM>r.thin</EM> assumes that linear features are encoded
+with positive values on a background of 0's in the
+<EM>input</EM> raster data file.
+
+<H2>NOTE</H2>
+
+<EM>r.thin</EM> only creates raster map layers.  You will need to run 
+<EM><A HREF="r.to.vect.html">r.to.vect</A></EM>
+on the resultant raster map to create a vector 
+(<EM><A HREF="v.digit.html">v.digit</A></EM>) map layer.
+
+<P>
+<EM>r.thin</EM> may create small spurs or "dangling lines"
+during the thinning process.  These spurs may be removed
+(after creating a vector map layer) by
+<EM><A HREF="v.clean.html">v.clean</A></EM>.
+
+<P>
+
+<EM>r.thin</EM> creates a 0/1 output map.
+
+<H2>NOTE</H2>
+
+This code implements the thinning algorithm described in
+"Analysis of Thinning Algorithms Using Mathematical
+Morphology" by Ben-Kwei Jang and Ronlad T. Chin in
+<EM>Transactions on Pattern Analysis and Machine
+Intelligence</EM>, vol. 12, No. 6, June 1990.  The
+definition Jang and Chin give of the thinning process is
+"successive removal of outer layers of pixels from an
+object while retaining any pixels whose removal would alter
+the connectivity or shorten the legs of the sceleton."
+
+
+<P>
+
+The sceleton is finally thinned when the thinning process
+converges; i.e., "no further pixels can be removed without
+altering the connectivity or shortening the sceleton legs"
+(p. 541).  The authors prove that the thinning process
+described always converges and produces one-pixel thick
+sceletons.  The number of iterations depends on the
+original thickness of the object.  Each iteration peels off
+the outside pixels from the object.  Therefore, if the
+object is &lt;= n pixels thick, the algorithm should
+converge in &lt;= iterations.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<EM><A HREF="r.to.vect.html">r.to.vect</A></EM>,
+<EM><A HREF="v.clean.html">v.clean</A></EM>,
+<EM><A HREF="v.digit.html">v.digit</A></EM>,
+<EM><A HREF="v.build.html">v.build</A></EM>
+
+<H2>AUTHOR</H2>
+
+Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
+
+<P>
+The code for finding the bounding box as well as input/output code
+was written by Mike Baba (DBA Systems, 1990) and Jean Ezell (USACERL, 1988).
+
+<p><i>Last changed: $Date$</i>

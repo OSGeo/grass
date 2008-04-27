@@ -1,0 +1,63 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.out.ascii</EM> converts a user-specified raster map layer
+(<B>input=</B><EM>name</EM>) into an ASCII grid in a text file
+(<B>output=</B><EM>name</EM>) suitable for export to
+other computer systems.
+
+<P>
+
+The GRASS program <EM><A HREF="r.in.ascii.html">r.in.ascii</A></EM> can be
+used to perform the reverse function, converting an ASCII file in suitable
+format to GRASS raster map format.
+<P>
+<!--With <B>-s</B> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
+written (with reverted row order, different header).
+<P>
+With <B>-m</B> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
+GRID is written.-->
+
+<P>
+To write a SURFER .grd ASCII GRID file (with reverted row order and different
+header) use the <em>-s</em> flag:
+
+<div class="code"><pre>
+r.out.ascii -s input=inname output=outname.grd [dp=value]
+</pre></div>
+
+NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files (ignoring
+the <em>null=</em> parameter).
+
+<H2>NOTES</H2>
+
+The output from <EM>r.out.ascii</EM> may be placed into a file by using the
+UNIX redirection mechanism; e.g.:
+
+<div class="code"><pre>
+r.out.ascii input=soils output=- &gt; out.file
+</pre></div>
+
+The output file out.file can then be printed or copied onto a CDROM
+or floppy disk for export purposes.
+<P>
+To export the raster values as x,y,z values of cell centers (one per line)
+use the <em><A HREF="r.out.xyz.html">r.out.xyz</A></em> module.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="r.in.ascii.html">r.in.ascii</A>,
+<A HREF="r.in.arc.html">r.in.arc</A>,
+<A HREF="r.out.bin.html">r.out.bin</A>,
+<A HREF="r.out.gdal.html">r.out.gdal</A>,
+<A HREF="r.out.xyz.html">r.out.xyz</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Michael Shapiro,
+U.S. Army Construction Engineering Research Laboratory
+<p>
+Surfer support by Markus Neteler
+
+<p>
+<i>Last changed: $Date$</i>

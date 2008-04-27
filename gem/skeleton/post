@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# post script. This will be called after any action has been completed
+# SUCCESSFULLY (i.e. w/o an error, warnings are ok).
+# This script will not be run if the user has
+# chosen to do only a test install (no actual installation).
+
+# ATTENTION!
+# This script is run with UID set to the owner of the GRASS system
+# installation. In many cases, this will be root.
+# So be careful, as the actions in this script might be carried out
+# with superuser privileges !!!
+
+# Several variables will be made available by the GRASS extension manager,
+# so that this script can take any action depending on what the user has
+# done.
+
+# GEM_ACTION can be "INSTALL", "QUERY", "DETAILS", "LICENSE", "CLEAN"
+
+# INSTALL_BASE is the path to the GRASS binary files installed on the
+# user's system (e.g. /usr/local/grass-6.x.y).
+# For some actions, INSTALL_BASE is not required and will be set to
+# "UNDEFINED".
+
+# INSTALL_TYPE will be either "src" or the name of the binary set the
+# user has chosen to install. 
+
+# GEM_FORCE will be "1" if the user has passed the --force option, "0" otherwise
+
+# GEM_VERBOSE will be "1" if the user has passed --verbose, "0" otherwise
+
+# GEM_GUI will be "1" if the user has started GEM in GUI mode, "0" otherwise
+
+if [ -z "$INSTALL_BASE" ] && [ -z "$GEM_ACTION" ] ; then \
+	echo "Please do not run this script manually!" ; \
+	exit ; \
+fi
+
+# Add anything that needs to be done after specific actions here
+if [ $GEM_ACTION = "INSTALL" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "QUERY" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "DETAILS" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "LICENSE" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "DETAILS" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "LICENSE" ] ; then \
+	exit ; \
+fi
+
+if [ $GEM_ACTION = "CLEAN" ] ; then \
+	exit ; \
+fi

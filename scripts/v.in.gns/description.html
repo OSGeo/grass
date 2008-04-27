@@ -1,0 +1,40 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.in.gns</em> imports US-NGA GEOnet Names Server (GNS) country 
+files (Gazetteer data) into a GRASS vector points map. The country files
+can be downloaded from the NGA GNS Web Server (see below). The script
+generates a vector point map. Only original files can be processed
+(unzip compressed file first). These GNS files are encoded in UTF-8 which
+is maintained in the GRASS database.
+
+<h2>NOTES</h2>
+
+The current DB connection is used to write the database table.
+<P>
+Generally, column names longer that 10 characters are shortened to
+10 characters to meet the DBF column name restrictions. If this is a
+problem consider choosing another database driver with <em>db.connect</em>.
+<P>
+To filter outliers (points outside of a country), the <em>v.select</em>
+module can be used to perform point-in-polygon tests. <em>v.select</em>
+saves only the GNS points falling into a country polygon into the new
+points map.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="v.select.html">v.select</a>
+</em>
+
+<H2>REFERENCES</H2>
+
+<a href="http://earth-info.nga.mil/gns/html/">GEOnet Names Server files for countries and territories</a><br>
+<a href="http://earth-info.nga.mil/gns/html/help.htm">Column names explanations</a>
+
+<h2>AUTHOR</h2>
+
+Markus Neteler, <a href=http://mpa.itc.it>MPBA Group, ITC-irst</a>
+
+<p>
+<i>Last changed: $Date$</i>

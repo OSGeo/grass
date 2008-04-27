@@ -1,0 +1,63 @@
+<H2>DESCRIPTION</H2>
+
+The function of <EM>r.null</EM> is to explicitly create the NULL-value
+bitmap file. The intended usage is to fix "old" maps that don't have a
+NULL-value bitmap file (i.e. to indicate if zero is valid value or is to be
+converted to NULL). The module does not work with reclassified maps.
+
+<P>
+
+The design is flexible. Ranges of values can be set to NULL and/or the NULL
+value can be eliminated and replace with a specified value.
+<p>
+
+The <b>setnull</b> parameter is used to specify values in the ranges to
+be set to NULL.  A range is either a single value (e.g., 5.3), or a pair of
+values (e.g., 4.76-34.56).  Existing NULL-values are left NULL, unless the
+null argument is requested.
+<P>
+
+The <b>null</b> parameter eliminates the NULL value and replaces it with
+value. This argument is applied only to existing NULL values, and not to the
+NULLs created by the setnull argument.
+
+<h2>EXAMPLES</h2>
+Set specific values of a classified map to NULL:<br>
+<div class="code"><pre>
+r.null map=landcover.30m setnull=21,22
+</pre></div>
+
+Set NULL-values of a map to a specific value:<br>
+<div class="code"><pre>
+r.null map=fields null=99
+</pre></div>
+
+
+<H2>NOTES</H2>
+
+Note that value is restricted to integer if the map is an integer map. 
+<p>
+<em>r.null</em> and reclassified maps:<br>
+The problem is, if r.null was run on the reclass raster it would alter the
+original and any other reclass rasters of the original.  Therefore r.null 
+doesn't allow to recode reclassified maps (products of r.reclass).
+<br>
+So, the way to recode such a map is: The user makes a raster out of the
+reclass that isn't a reclass by copying it:<br>
+
+<div class="code"><pre>
+r.mapcalc newmap = reclass
+</pre></div>
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.support.html">r.support</A></EM>
+and
+<EM><A HREF="r.quant.html">r.quant</A></EM>
+
+<H2>AUTHOR</H2>
+
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

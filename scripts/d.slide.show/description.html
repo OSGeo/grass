@@ -1,0 +1,55 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>d.slide.show</EM> is a UNIX Bourne shell macro which
+clears the entire screen, creates a series of display
+frames on the graphics monitor, and displays in slideshow
+format each of the raster/vector map layers listed in the
+user-specified <EM>mapsets</EM>.  This is a shell script
+example which makes extensive use of GRASS and UNIX
+commands.  Users are encouraged to examine this macro and
+develop similar on-line demos using their own data files.
+
+<H2>EXAMPLE</H2>
+
+The following command sequence shows the available raster
+maps, saves the view to a PNG file and then converts it
+into a PDF file:
+
+<div class="code"><pre>
+# reset region:
+g.region -dp
+
+# open GRASS monitor with defined size:
+GRASS_WIDTH=800 GRASS_HEIGHT=1000 d.mon x0
+
+# we have around 40 maps in the Spearfish PERMANENT mapset:
+d.slide.show across=5 down=8 mapsets=PERMANENT
+
+# From Monitor to PNG to PDF:
+d.out.png out=spearfish_maps.png res=2
+
+convert spearfish_maps.png spearfish_maps.pdf
+xpdf spearfish_maps.pdf
+</pre></div>
+
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="d.erase.html">d.erase</A><BR>
+<A HREF="d.frame.html">d.frame</A><BR>
+<A HREF="d.text.html">d.text</A><BR>
+<A HREF="g.mapsets.html">g.mapsets</A><BR>
+<A HREF="xganim.html">xganim</A><BR>
+</EM>
+<BR>
+
+<H2>AUTHOR</H2>
+James Westervelt, U.S.Army Construction Engineering 
+Research Laboratory
+<br>
+Vector update, fixes: Markus Neteler
+
+<p>
+<i>Last changed: $Date$</i>

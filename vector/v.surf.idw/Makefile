@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = v.surf.idw
+
+LIBES = $(VECTLIB) $(GISLIB) $(DATETIMELIB)
+DEPENDENCIES= $(VECTDEP) $(GISDEP) $(DATETIMEDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

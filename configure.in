@@ -1,0 +1,1814 @@
+#############################################################################
+#
+# MODULE:   	Grass Compilation
+# AUTHOR(S):	Original author unknown - probably CERL
+#   	    	Eric G. Miller - egm2 jps.net
+#   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th
+#		Markus Neteler - Germany/Italy - neteler itc.it
+# PURPOSE:  	This configure runs all the tests to determine what components
+#   	    	are installed on the current system. It also defines certain
+#   	    	configuration variables for compilation and installation.
+# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#   	    	License (>=v2). Read the file COPYING that comes with GRASS
+#   	    	for details.
+#
+# MANUAL:       http://www.gnu.org/software/autoconf/manual/autoconf.html
+# Website for   config.guess, config.sub:
+#               http://savannah.gnu.org/cgi-bin/viewcvs/config/config/
+#               Note: use autoconf-2.13
+#############################################################################
+
+define([AC_CACHE_LOAD], )
+define([AC_CACHE_SAVE], )
+define([AC_CACHE_VAL], [
+$2
+])
+
+AC_INIT(configure.in)
+AC_PREREQ(2.13)
+AC_PREFIX_DEFAULT(/usr/local)
+AC_CONFIG_HEADER(include/config.h)
+AC_CANONICAL_HOST
+AC_PROG_CC
+AC_EXEEXT
+AC_SUBST(MINGW32)
+
+# Check for full floating-point support, including Infinity and NaN
+IEEEFLAG=
+LOC_CHECK_FP_INF_NAN([],
+[],
+[ ac_save_cflags=${CFLAGS}
+  CFLAGS=-mieee
+  LOC_CHECK_FP_INF_NAN([ with -mieee],
+    [IEEEFLAG="-mieee"],
+    [AC_MSG_WARN([*** Incomplete floating-point support.])],
+    [AC_MSG_ERROR([*** INTERNAL CONFIGURE ERROR])])
+  CFLAGS=${ac_save_cflags}],
+[ LOC_CHECK_CC_MIEEE ])
+CFLAGS="$CFLAGS $IEEEFLAG"
+
+# Set BINDIR
+
+if test -n "${bindir}"; then
+BINDIR="${bindir}"
+else
+BINDIR=/usr/local/bin
+fi
+AC_SUBST(BINDIR)
+
+# Set SRCDIR and DSTDIR
+
+AC_PATH_PROG(pwd, pwd, pwd)
+
+if test "$MINGW32" = yes ; then
+  winpwd="$pwd -W"
+else
+  winpwd="$pwd"
+fi
+
+AC_MSG_CHECKING(for source directory)
+
+if test -z "$srcdir" ; then
+  SRCDIR=`$pwd`
+else
+  SRCDIR=`(cd "$srcdir" ; $pwd)`
+fi
+
+AC_MSG_RESULT("$SRCDIR")
+
+AC_MSG_CHECKING(for build directory)
+
+DSTDIR=`$pwd`
+WINDSTDIR=`$winpwd`
+
+AC_MSG_RESULT("$DSTDIR")
+
+AC_SUBST(SRCDIR)
+AC_SUBST(DSTDIR)
+
+# Set ARCH
+
+ARCH=
+if test -z "${host}"; then
+ARCH="unknown"
+else
+ARCH="${host}"
+fi
+
+AC_SUBST(ARCH)
+
+# Set GISBASE and GRASS_BIN
+
+GISBASE=${WINDSTDIR}/dist.${ARCH}
+GRASS_BIN=${DSTDIR}/bin.${ARCH}
+
+AC_SUBST(GISBASE)
+AC_SUBST(GRASS_BIN)
+
+# Set GRASS_VERSION_*
+
+GRASS_VERSION_FILE=include/VERSION
+GRASS_VERSION_MAJOR=`sed -n 1p ${GRASS_VERSION_FILE}`
+GRASS_VERSION_MINOR=`sed -n 2p ${GRASS_VERSION_FILE}`
+GRASS_VERSION_RELEASE=`sed -n 3p ${GRASS_VERSION_FILE}`
+GRASS_VERSION_DATE=`sed -n 4p ${GRASS_VERSION_FILE}`
+GRASS_VERSION_NUMBER=`echo ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}`
+NAME_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/\..*//'`
+changequote(,)
+LIB_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/^\([0-9.]*\).*$/\1/'`
+changequote([,])
+
+AC_SUBST(GRASS_VERSION_FILE)
+AC_SUBST(GRASS_VERSION_MAJOR)
+AC_SUBST(GRASS_VERSION_MINOR)
+AC_SUBST(GRASS_VERSION_RELEASE)
+AC_SUBST(GRASS_VERSION_NUMBER)
+AC_SUBST(GRASS_VERSION_DATE)
+AC_SUBST(NAME_VER)
+AC_SUBST(LIB_VER)
+
+# Check for MacOSX App
+
+AC_ARG_ENABLE(macosx-app,
+[  --enable-macosx-app     create a MacOSX application],,
+[enable_macosx_app=no])
+
+AC_MSG_CHECKING(for MacOSX App)
+case "$enable_macosx_app" in
+	yes)	MACOSX_APP=1	;;
+	no)	MACOSX_APP=	;;
+	*)	AC_MSG_ERROR([*** You must answer yes or no.])	;;
+esac
+AC_MSG_RESULT("$enable_macosx_app")
+AC_SUBST(MACOSX_APP)
+
+# Set INST_DIR
+
+if test -n "$MACOSX_APP" ; then
+    INSTDIR='${prefix}'"/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app/Contents/MacOS"
+else
+    INSTDIR='${prefix}'"/grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}"
+fi
+
+AC_SUBST(INSTDIR)
+
+# Get flags for building shared libraries
+
+SC_ENABLE_SHARED
+
+ac_save_ldflags="$LDFLAGS"
+SC_CONFIG_CFLAGS
+LDFLAGS="${ac_save_ldflags} $LDFLAGS"
+
+# Enable options
+
+AC_ARG_ENABLE(w11,
+[  --enable-w11            use W11 library for Windows X11 emulation],,
+[enable_w11=no])
+
+# With options
+
+LOC_ARG_WITH(cxx, C++, no)
+#LOC_ARG_WITH(g77, GNU Fortran 77, no)
+LOC_ARG_WITH(jpeg, JPEG)
+LOC_ARG_WITH(tiff, TIFF)
+LOC_ARG_WITH(png, PNG)
+LOC_ARG_WITH(tcltk, Tcl/Tk)
+LOC_ARG_WITH(postgres, PostgreSQL, no)
+LOC_ARG_WITH(mysql, MySQL, no)
+LOC_ARG_WITH(sqlite, SQLite, no)
+LOC_ARG_WITH(ffmpeg, FFMPEG, no)
+LOC_ARG_WITH(opengl, OpenGL)
+LOC_ARG_WITH(odbc, ODBC, no)
+LOC_ARG_WITH(fftw, FFTW)
+LOC_ARG_WITH(blas, BLAS, no)
+LOC_ARG_WITH(lapack, LAPACK, no)
+LOC_ARG_WITH(motif, Motif, no)
+LOC_ARG_WITH(cairo, Cairo, no)
+LOC_ARG_WITH(freetype, FreeType, no)
+LOC_ARG_WITH(glw, GLw, no)
+LOC_ARG_WITH(nls, NLS, no)
+LOC_ARG_WITH(readline, Readline, no)
+LOC_ARG_WITH(opendwg, openDWG, no)
+LOC_ARG_WITH(curses, Curses, yes)
+AC_ARG_WITH(python,
+[  --with-python[=path/python-config] enable support for Python SWIG bindings (python-config with path, \
+e.g. '--with-python=/usr/bin/python2.5-config', default: no)],, with_python="no")
+AC_ARG_WITH(wxwidgets,
+[  --with-wxwidgets[=path/wx-config] enable wxWidgets support (wx-config with path, \
+e.g. '--with-wxwidgets=/usr/local/bin/wx-config', default: no)],, with_wxwidgets="no")
+
+# With includes and libs options
+
+AC_ARG_WITH(gdal,
+[  --with-gdal[=path/gdal-config] enable GDAL/OGR support (gdal-config with path, \
+e.g. '--with-gdal=/usr/local/bin/gdal-config')])
+
+AC_ARG_WITH(includes,
+[  --with-includes=DIRS    site include files are in DIRS])
+
+AC_ARG_WITH(libs,
+[  --with-libs=DIRS        site library files are in DIRS])
+
+LOC_ARG_WITH_INC(zlib, zlib)
+LOC_ARG_WITH_LIB(zlib, zlib)
+
+LOC_ARG_WITH_INC(readline, Readline)
+LOC_ARG_WITH_LIB(readline, Readline)
+
+LOC_ARG_WITH_INC(jpeg, JPEG)
+LOC_ARG_WITH_LIB(jpeg, JPEG)
+
+LOC_ARG_WITH_INC(tiff, TIFF)
+LOC_ARG_WITH_LIB(tiff, TIFF)
+
+LOC_ARG_WITH_INC(png, PNG)
+LOC_ARG_WITH_LIB(png, PNG)
+
+LOC_ARG_WITH_INC(tcltk, Tcl/Tk)
+LOC_ARG_WITH_LIB(tcltk, Tcl/Tk)
+
+LOC_ARG_WITH_INC(postgres, PostgreSQL)
+LOC_ARG_WITH_LIB(postgres, PostgreSQL)
+
+LOC_ARG_WITH_INC(mysql, MySQL)
+LOC_ARG_WITH_LIB(mysql, MySQL)
+
+LOC_ARG_WITH_INC(sqlite, SQLite)
+LOC_ARG_WITH_LIB(sqlite, SQLite)
+
+LOC_ARG_WITH_INC(ffmpeg, FFMPEG)
+LOC_ARG_WITH_LIB(ffmpeg, FFMPEG)
+
+LOC_ARG_WITH_INC(opengl, OpenGL)
+LOC_ARG_WITH_LIB(opengl, OpenGL)
+
+LOC_ARG_WITH_INC(odbc, ODBC)
+LOC_ARG_WITH_LIB(odbc, ODBC)
+
+LOC_ARG_WITH_INC(fftw, FFTW)
+LOC_ARG_WITH_LIB(fftw, FFTW)
+
+LOC_ARG_WITH_INC(blas, BLAS)
+LOC_ARG_WITH_LIB(blas, BLAS)
+
+LOC_ARG_WITH_INC(lapack, LAPACK)
+LOC_ARG_WITH_LIB(lapack, LAPACK)
+
+LOC_ARG_WITH_INC(motif, Motif)
+LOC_ARG_WITH_LIB(motif, Motif)
+
+LOC_ARG_WITH_INC(freetype, FreeType)
+LOC_ARG_WITH_LIB(freetype, FreeType)
+
+LOC_ARG_WITH_INC(glw, GLw)
+LOC_ARG_WITH_LIB(glw, GLw)
+
+LOC_ARG_WITH_INC(proj, External PROJ.4)
+LOC_ARG_WITH_LIB(proj, External PROJ.4)
+LOC_ARG_WITH_SHARE(proj, External PROJ.4)
+
+LOC_ARG_WITH_INC(opendwg, openDWG)
+LOC_ARG_WITH_LIB(opendwg, openDWG)
+
+# Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
+
+# With includes option
+
+# Handle Fortran compiler choice
+#LOC_CHECK_USE(g77, GNU Fortran 77, USE_G77)
+# Done checking fortran
+
+AC_MSG_CHECKING(for additional include dirs)
+case "$with_includes" in
+y | ye | yes | n | no)
+	AC_MSG_ERROR([*** You must supply a directory to list --with-includes.])
+	;;
+esac
+AC_MSG_RESULT($with_includes)
+
+if test -n "$with_includes"; then
+    for dir in $with_includes; do
+        if test -d "$dir"; then
+            INCLUDE_DIRS="$INCLUDE_DIRS -I$dir"
+        else
+            AC_MSG_ERROR([*** Include directory $dir does not exist.])
+        fi
+    done
+    CPPFLAGS="$CPPFLAGS $INCLUDE_DIRS"
+fi
+AC_SUBST(INCLUDE_DIRS)
+
+# With libs option
+
+AC_MSG_CHECKING(for additional library dirs)
+case "$with_libs" in
+y | ye | yes | n | no)
+	AC_MSG_ERROR([*** You must supply a directory list to --with-libs.])
+	;;
+esac
+AC_MSG_RESULT($LIBRARY_DIRS)
+
+if test -n "$with_libs"; then
+    for dir in $with_libs; do
+        if test -d "$dir"; then
+            LIBRARY_DIRS="$LIBRARY_DIRS -L$dir"
+        else
+            AC_MSG_ERROR([*** Library directory $dir does not exist.])
+        fi
+    done
+    LDFLAGS="$LDFLAGS $LIBRARY_DIRS"
+fi
+AC_SUBST(LIBRARY_DIRS)
+
+# Programs and standard headers, libraries, functions
+
+AC_PROG_INSTALL
+
+AC_PROG_LEX
+if test "$LEX" = "lex"; then
+    AC_PATH_PROG(LEXPATH, lex, no)
+    if test "$LEXPATH" = "no"; then
+	AC_MSG_ERROR([*** Unable to locate lex.])
+    fi
+fi
+
+AC_PROG_YACC
+if test "$YACC" = "yacc"; then
+    AC_PATH_PROG(YACCPATH, yacc, no)
+    if test "$YACCPATH" = "no"; then
+	AC_MSG_ERROR([*** Unable to locate yacc.])
+    fi
+fi
+
+AC_PROG_RANLIB
+AC_CHECK_PROGS(AR, ar)
+AC_CHECK_PROGS(ENV, env)
+AC_PATH_PROG(PERL, perl, no)  
+AC_HEADER_STDC
+#AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
+AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
+AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
+AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
+AC_CHECK_HEADERS(libintl.h iconv.h)
+AC_CHECK_HEADERS(langinfo.h)
+AC_HEADER_TIME
+AC_TYPE_OFF_T
+AC_TYPE_UID_T
+AC_TYPE_SIGNAL
+AC_CYGWIN
+AC_CHECK_FUNCS(ftime gethostname gettimeofday lseek nice time uname)
+AC_CHECK_FUNCS(seteuid setpriority setreuid setruid)
+AC_CHECK_FUNCS(drand48)
+AC_CHECK_FUNCS(putenv setenv)
+AC_CHECK_FUNCS(nanosleep)
+if test "$cross_compiling" != "yes" ; then
+AC_FUNC_SETPGRP
+else
+CROSS_COMPILING=1
+AC_SUBST(CROSS_COMPILING)
+fi
+
+AC_MSG_CHECKING(for long long int)
+AC_TRY_COMPILE(,[long long int x;],[
+AC_MSG_RESULT(yes)
+AC_DEFINE(HAVE_LONG_LONG_INT)
+],[
+AC_MSG_RESULT(no)
+])
+
+AC_MSG_CHECKING(for W11)
+case "$enable_w11" in
+	yes|no)	AC_MSG_RESULT("$enable_w11")	;;
+	*)	AC_MSG_ERROR([*** You must answer yes or no.])	;;
+esac
+
+USE_X11=
+USE_W11=
+XLIB=
+XTLIB=
+
+if test "$enable_w11" = "yes" ; then
+    X_CFLAGS=-I${SRCDIR}/display/drivers/windows/libW11
+    X_LIBS='-L$(LIBDIR)'
+    AC_SUBST(X_CFLAGS)
+    AC_SUBST(X_LIBS)
+
+    USE_W11="1"
+    USE_X11="1"
+    XLIB=-lX11
+
+    CFLAGS="$CFLAGS -D__W98__"
+else
+    AC_PATH_XTRA
+    if test "$no_x" != "yes"; then
+        USE_X11="1"
+        XLIB=-lX11
+        XTLIB=-lXt
+    fi
+fi
+
+AC_SUBST(XLIB)
+AC_SUBST(XTLIB)
+AC_SUBST(USE_X11)
+
+# Enable Curses option
+
+LOC_CHECK_USE(curses,Curses,USE_CURSES)
+
+if test -n "$USE_CURSES"; then
+
+LOC_CHECK_INCLUDES(curses.h,curses,)
+
+AC_MSG_CHECKING(curses.h WINDOW structure component)
+CURSES_MAXY=NONE
+AC_TRY_COMPILE([
+#include <curses.h>
+  ],[WINDOW w; w.maxy = 0;],
+  CURSES_MAXY=maxy)
+AC_TRY_COMPILE([
+#include <curses.h>
+  ],[WINDOW w; w._maxy = 0;],
+  CURSES_MAXY=_maxy)
+AC_DEFINE_UNQUOTED(CURSES_MAXY,$CURSES_MAXY)
+AC_SUBST(CURSES_MAXY)
+AC_MSG_RESULT($CURSES_MAXY)
+
+AC_CHECK_LIB(ncurses, initscr, CURSESLIB=-lncurses, [
+AC_CHECK_LIB(curses, initscr, CURSESLIB=-lcurses, [
+    AC_MSG_ERROR([*** Unable to locate curses library.])
+    CURSESLIB=
+])])
+AC_SUBST(CURSESLIB)
+AC_SUBST(USE_CURSES)
+
+AC_CHECK_LIB(ncurses, keypad, [AC_DEFINE(HAVE_KEYPAD)], [
+AC_CHECK_LIB(curses, keypad, [AC_DEFINE(HAVE_KEYPAD)], [
+])])
+
+fi # $USE_CURSES
+
+AC_CHECK_LIB(compat, gtty, COMPATLIB=-lcompat, [
+AC_CHECK_LIB(bsd-compat, gtty, COMPATLIB=-lbsd-compat, [
+AC_CHECK_LIB(bsd, gtty, COMPATLIB=-lbsd, [
+    COMPATLIB=
+])])])
+AC_SUBST(COMPATLIB)
+
+# Note that some systems (FreeBSD for example) need an extra library for
+# cuserid
+ac_save_libs="$LIBS"
+LIBS=""
+AC_SEARCH_LIBS(cuserid,[compat])
+DBMIEXTRALIB=$LIBS
+LIBS=$ac_save_libs
+AC_SUBST(DBMIEXTRALIB)
+
+# Note: -lxdr -liberty -lws2_32 is for MinGW
+
+AC_CHECK_FUNC(xdrmem_create, XDRLIB=, [
+AC_CHECK_LIB(sun, xdrmem_create, XDRLIB=-lsun, [
+AC_CHECK_LIB(nsl, xdrmem_create, XDRLIB=-lnsl, [
+AC_CHECK_LIB(rpclib, xdrmem_create, XDRLIB=-lrpclib, [
+AC_CHECK_LIB(xdr, xdrmem_create, XDRLIB="-lxdr -liberty -lws2_32" , 
+   [ AC_MSG_ERROR([*** Unable to locate XDR functions.]) ], -liberty -lws2_32 )
+])])])])
+AC_SUBST(XDRLIB)
+
+AC_CHECK_FUNCS(asprintf)
+AC_SUBST(HAVE_ASPRINTF)
+
+# Test if mathlib needs -lm flag or is included with libc
+AC_CHECK_FUNC(atan, MATHLIB=, [
+AC_CHECK_LIB(m, atan, MATHLIB=-lm, [
+    AC_MSG_ERROR([*** Failed check for math library.])
+])])
+AC_SUBST(MATHLIB)
+
+AC_CHECK_FUNC(dlsym, DLLIB=, [
+AC_CHECK_LIB(dl, dlsym, DLLIB=-ldl, [
+    DLLIB=
+])])
+AC_SUBST(DLLIB)
+
+AC_CHECK_FUNC(iconv, ICONVLIB=, [
+AC_CHECK_LIB(iconv, iconv, ICONVLIB=-liconv, [
+AC_CHECK_LIB(giconv, iconv, ICONVLIB=-lgiconv, [
+AC_CHECK_FUNC(libiconv, ICONVLIB=, [
+AC_CHECK_LIB(iconv, libiconv, ICONVLIB=-liconv, [
+AC_CHECK_LIB(giconv, libiconv, ICONVLIB=-lgiconv, [
+    AC_MSG_WARN([*** Unable to locate iconv() function.])
+    ICONVLIB=
+])])])])])])
+AC_SUBST(ICONVLIB)
+
+have_socket=1
+AC_CHECK_FUNC(socket, SOCKLIB=, [
+AC_CHECK_LIB(socket, socket, SOCKLIB=-lsocket, [
+    have_socket=0
+    AC_MSG_WARN([*** Unable to locate socket() function.])
+])])
+AC_SUBST(SOCKLIB)
+if test "$have_socket" = 1 ; then
+  HAVE_SOCKET=1
+  AC_DEFINE(HAVE_SOCKET)
+else
+  HAVE_SOCKET=
+fi
+AC_SUBST(HAVE_SOCKET)
+
+
+# Mandatory zlib dependency
+
+ZLIBLIBPATH=
+ZLIBINCPATH=
+ZLIB=
+
+# With zlib includes directory
+
+LOC_CHECK_INC_PATH(zlib,zlib,ZLIBINCPATH)
+
+LOC_CHECK_INCLUDES(zlib.h,zlib,$ZLIBINCPATH)
+
+# With zlib library directory
+
+LOC_CHECK_LIB_PATH(zlib,zlib,ZLIBLIBPATH)
+
+LOC_CHECK_LIBS(z,deflate,zlib,$ZLIBLIBPATH,ZLIB,,,)
+
+#
+
+AC_SUBST(ZLIBINCPATH)
+AC_SUBST(ZLIBLIBPATH)
+AC_SUBST(ZLIB)
+
+# Done checking zlib
+
+# Mandatory PROJ dependency
+
+PROJINC=
+PROJLIB=
+PROJSHARE=
+
+# With PROJ includes directory
+
+LOC_CHECK_INC_PATH(proj,External PROJ.4,PROJINC)
+
+LOC_CHECK_INCLUDES(proj_api.h,External PROJ.4,$PROJINC)
+
+# PROJ version check
+
+if test "$cross_compiling" = yes; then
+    AC_MSG_WARN([*** Cannot check PROJ.4 version (cross-compiling).])
+else
+    LOC_CHECK_VERSION_INT(proj_api.h,PJ_VERSION,External PROJ.4,proj_ver,$PROJINC,0)
+
+    if test `expr "$proj_ver" \< 446` = 1 ; then
+        AC_MSG_ERROR([*** PROJ.4.4.6 or later is required.])
+    fi
+fi
+
+# With PROJ library directory
+
+LOC_CHECK_LIB_PATH(proj,External PROJ.4,PROJLIB)
+
+LOC_CHECK_LIBS(proj,pj_get_def,External PROJ.4,$PROJLIB,PROJLIB,,,)
+
+# With PROJ share directory
+
+LOC_CHECK_SHARE_PATH(proj,External PROJ.4,PROJSHARE)
+if test -z "$PROJSHARE" ; then
+    AC_MSG_WARN([*** External PROJ.4 directory not specified; default will be used])
+    PROJSHARE=/usr/local/share/proj
+fi
+
+# LOC_CHECK_SHARE does not work when cross compiling
+if test "$cross_compiling" = "yes" ; then
+    AC_MSG_CHECKING([for epsg])
+    AC_MSG_RESULT([unknown (cross-compiling)])
+else
+    LOC_CHECK_SHARE(epsg,External PROJ.4,$PROJSHARE,[
+    AC_MSG_WARN([*** Unable to locate PROJ data files.])
+    ])
+fi
+
+AC_SUBST(PROJINC)
+AC_SUBST(PROJLIB)
+AC_SUBST(PROJSHARE)
+
+# nad2bin needs to be in path for installing datum gridshift files
+
+AC_PATH_PROG(NAD2BIN, nad2bin, no)
+if test "$NAD2BIN" = "no"; then
+    AC_MSG_ERROR([*** Unable to locate nad2bin (needs to be in PATH).])
+fi
+
+# Done checking PROJ
+
+# Enable Readline option
+
+LOC_CHECK_USE(readline,Readline,USE_READLINE)
+
+READLINEINCPATH=
+READLINELIBPATH=
+READLINELIB=
+HISTORYLIB=
+
+if test -n "$USE_READLINE"; then
+
+# With Readline includes directory
+
+LOC_CHECK_INC_PATH(readline,Readline,READLINEINCPATH)
+
+LOC_CHECK_INCLUDES(readline/readline.h,Readline,$READLINEINCPATH)
+LOC_CHECK_INCLUDES(readline/history.h,Readline,$READLINEINCPATH)
+
+# With Readline library directory
+
+LOC_CHECK_LIB_PATH(readline,Readline,READLINELIBPATH)
+
+LOC_CHECK_LIBS(readline,readline,Readline,$READLINELIBPATH,READLINELIB,,,)
+LOC_CHECK_LIBS(history,add_history,History,$READLINELIBPATH,HISTORYLIB,,,)
+
+fi # $USE_READLINE
+
+AC_SUBST(READLINEINCPATH)
+AC_SUBST(READLINELIBPATH)
+AC_SUBST(READLINELIB)
+AC_SUBST(HISTORYLIB)
+
+# Done checking Readline
+
+# Enable JPEG option
+
+LOC_CHECK_USE(jpeg,JPEG,USE_JPEG)
+
+JPEGINCPATH=
+JPEGLIBPATH=
+JPEGLIB=
+
+if test -n "$USE_JPEG"; then
+
+# With JPEG includes directory
+
+LOC_CHECK_INC_PATH(jpeg,JPEG,JPEGINCPATH)
+
+LOC_CHECK_INCLUDES(jpeglib.h,JPEG,$JPEGINCPATH)
+
+# With JPEG library directory
+
+LOC_CHECK_LIB_PATH(jpeg,JPEG,JPEGLIBPATH)
+
+LOC_CHECK_LIBS(jpeg,jpeg_start_compress,JPEG,$JPEGLIBPATH,JPEGLIB,,,,$ZLIB)
+
+fi # $USE_JPEG
+
+AC_SUBST(JPEGINCPATH)
+AC_SUBST(JPEGLIBPATH)
+AC_SUBST(JPEGLIB)
+
+# Done checking JPEG
+
+# GDAL option
+
+AC_MSG_CHECKING(whether to use GDAL)
+
+if test "`basename xx/$with_gdal`" = "gdal-config" ; then
+  GDAL_CONFIG="$with_gdal"
+fi
+
+if test "$with_gdal" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(GDAL_CONFIG, gdal-config, no)
+
+  if test "$GDAL_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find gdal-config])
+  fi
+
+  GDAL_LIBS=
+  GDAL_CFLAGS=
+  USE_GDAL=
+  USE_OGR=
+
+  if test "$GDAL_CONFIG" != "" ; then
+    GDAL_LIBS=`"$GDAL_CONFIG" --libs`
+    GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
+    GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
+    USE_GDAL=1
+    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
+      AC_DEFINE(HAVE_OGR)
+      USE_OGR=1
+    fi
+  fi
+
+  GDAL=
+  ac_save_libs="$LIBS"
+  LIBS="$LIBS $GDAL_LIBS"
+  AC_CHECK_FUNC(GDALOpen, , [
+  LIBS="$LIBS $GDAL_DEP_LIBS"
+  AC_CHECK_FUNC(GDALOpen, GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS", [
+  AC_MSG_ERROR([*** couldn't find GDAL])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+
+  AC_SUBST(GDAL_LIBS)
+  AC_SUBST(GDAL_CFLAGS)
+  AC_SUBST(USE_GDAL)
+  AC_SUBST(USE_OGR)
+fi
+
+# Enable TIFF option
+
+LOC_CHECK_USE(tiff,TIFF,USE_TIFF)
+
+TIFF_INCLUDE_DIRS=
+TIFF_LIBRARY_DIRS=
+TIFFLIB=
+
+if test -n "$USE_TIFF"; then
+
+# With TIFF includes directory
+
+LOC_CHECK_INC_PATH(tiff,TIFF,TIFF_INCLUDE_DIRS)
+
+LOC_CHECK_INCLUDES(tiffio.h,TIFF,$TIFF_INCLUDE_DIRS)
+
+# With TIFF library directory
+
+LOC_CHECK_LIB_PATH(tiff,TIFF,TIFF_LIBRARY_DIRS)
+
+LOC_CHECK_LIBS(tiff,TIFFOpen,TIFF,$TIFF_LIBRARY_DIRS,TIFFLIB,,,,$JPEGLIBPATH $JPEGLIB,$ZLIB,$MATHLIB)
+
+fi # $USE_TIFF
+
+AC_SUBST(TIFF_INCLUDE_DIRS)
+AC_SUBST(TIFF_LIBRARY_DIRS)
+AC_SUBST(TIFFLIB)
+
+# Done checking TIFF
+
+# Enable PNG option
+
+LOC_CHECK_USE(png,PNG,USE_PNG)
+
+PNGINC=
+PNGLIB=
+
+if test -n "$USE_PNG"; then
+
+# With PNG includes directory
+
+LOC_CHECK_INC_PATH(png,PNG,PNGINC)
+
+LOC_CHECK_INCLUDES(png.h,PNG,$PNGINC)
+
+# With PNG library directory
+
+LOC_CHECK_LIB_PATH(png,PNG,PNGLIB)
+
+LOC_CHECK_LIBS(png,png_read_image,PNG,$PNGLIB,PNGLIB,,$ZLIB $MATHLIB,)
+
+fi # $USE_PNG
+
+AC_SUBST(PNGINC)
+AC_SUBST(PNGLIB)
+AC_SUBST(USE_PNG)
+
+# Done checking PNG
+
+# Enable TCLTK option
+
+LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
+
+TCLINCDIR=
+TCLTKLIBPATH=
+TCLTKLIBS=
+
+if test -n "$USE_TCLTK"; then
+
+# With Tcl/Tk includes directory
+
+LOC_CHECK_INC_PATH(tcltk,Tcl/Tk,TCLINCDIR)
+
+LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
+
+LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR $X_CFLAGS)
+
+# Tcl/Tk version checks
+
+LOC_CHECK_VERSION_STRING(tcl.h,TCL_VERSION,Tcl,tcl_ver,$TCLINCDIR,UNKNOWN)
+
+LOC_CHECK_VERSION_STRING(tk.h,TK_VERSION,Tk,tk_ver,$TCLINCDIR $X_CFLAGS,UNKNOWN)
+
+if test "$tcl_ver" = "$tk_ver" ; then
+    tcltk_ver=$tcl_ver
+else
+    AC_MSG_ERROR([*** Tcl/Tk version mismatch.])
+fi
+
+# FreeBSD and CygWin don't have a "dot" between major/minor version number
+tcltk_ver2=`echo $tcltk_ver | sed 's/\.//g'`
+
+# With Tcl/Tk library directory
+
+LOC_CHECK_LIB_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
+
+TCLLIB=
+TKLIB=
+
+LOC_CHECK_LIBS(tcl,           Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(tcl$tcltk_ver, Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(tcl$tcltk_ver2,Tcl_Init,Tcl,$TCLTKLIBPATH,TCLLIB,,$MATHLIB,[
+],$DLLIB)
+],$DLLIB)
+],$DLLIB)
+
+LOC_CHECK_LIBS(tk,           Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+LOC_CHECK_LIBS(tk$tcltk_ver, Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHLIB,[
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
+
+
+TCLTKLIBS="$TKLIB $TCLLIB"
+AC_DEFINE(HAVE_TCLTK)
+
+fi # $USE_TCLTK
+
+TKINCDIR=$TCLINCDIR
+
+AC_SUBST(TCLINCDIR)
+AC_SUBST(TKINCDIR)
+AC_SUBST(TCLTKLIBPATH)
+AC_SUBST(TCLTKLIBS)
+
+# Done checking Tcl/Tk
+
+# Enable PostgreSQL option
+
+LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
+
+if test -n "$USE_POSTGRES"; then
+AC_DEFINE(HAVE_POSTGRES)
+fi # $USE_POSTGRES
+
+PQINCPATH=
+PQLIBPATH=
+PQLIB=
+
+if test -n "$USE_POSTGRES"; then
+
+# With PostgreSQL includes directory
+
+LOC_CHECK_INC_PATH(postgres,PostgreSQL,PQINCPATH)
+
+LOC_CHECK_INCLUDES(libpq-fe.h,PostgreSQL,$PQINCPATH)
+
+fi # $USE_POSTGRES
+
+if test -n "$USE_POSTGRES"; then
+
+# With PostgreSQL library directory
+
+LOC_CHECK_LIB_PATH(postgres,PostgreSQL,PQLIBPATH)
+
+LOC_CHECK_LIBS(pq,PQsetdbLogin,PostgreSQL,$PQLIBPATH,PQLIB,,,,-lcrypt,-lssl -lcrypto)
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$LDFLAGS $PQLIBPATH"
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES)], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES)], [
+], -lcrypt)
+])
+LDFLAGS=${ac_save_ldflags}
+
+fi # $USE_POSTGRES
+
+AC_SUBST(USE_POSTGRES)
+
+AC_SUBST(PQINCPATH)
+AC_SUBST(PQLIBPATH)
+AC_SUBST(PQLIB)
+
+# Done checking PostgreSQL
+
+# Enable MySQL option
+
+LOC_CHECK_USE(mysql,MySQL,USE_MYSQL)
+
+MYSQLINCPATH=
+MYSQLLIBPATH=
+MYSQLLIB=
+
+if test -n "$USE_MYSQL"; then
+
+# With MySQL includes directory
+
+LOC_CHECK_INC_PATH(mysql,MySQL,MYSQLINCPATH)
+
+LOC_CHECK_INCLUDES(mysql.h,MySQL,$MYSQLINCPATH)
+
+fi # $USE_MYSQL
+
+if test -n "$USE_MYSQL"; then
+  # With MySQL library directory
+
+  LOC_CHECK_LIB_PATH(mysql,MySQL,MYSQLLIBPATH)
+
+  LOC_CHECK_LIBS(mysqlclient,mysql_query,MySQL,$MYSQLLIBPATH,MYSQLLIB,,,,$ZLIB,$SOCKLIB,$MATHLIB)
+
+  # Check for libmysqld (for embeded version of the driver)
+  AC_PATH_PROG(MYSQLD_CONFIG, mysql_config, no)
+
+  if test "$MYSQLD_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find mysql_config])
+  fi
+
+  if test "$MYSQLD_CONFIG" != "" ; then
+    ac_save_libs="$LIBS"
+    MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
+
+    LIBS="$MYSQLDLIB $LIBS"
+    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
+                  AC_MSG_WARN([libmysqld not found])] )
+    LIBS=$ac_save_libs
+  fi
+
+fi # $USE_MYSQL
+
+AC_SUBST(USE_MYSQL)
+
+AC_SUBST(MYSQLINCPATH)
+AC_SUBST(MYSQLLIBPATH)
+AC_SUBST(MYSQLLIB)
+AC_SUBST(MYSQLDLIB)
+
+# Done checking MySQL
+
+# Enable SQLite option
+
+LOC_CHECK_USE(sqlite,SQLite,USE_SQLITE)
+
+SQLITEINCPATH=
+SQLITELIBPATH=
+SQLITELIB=
+
+if test -n "$USE_SQLITE"; then
+
+# With SQLite includes directory
+
+LOC_CHECK_INC_PATH(sqlite,SQLite,SQLITEINCPATH)
+
+LOC_CHECK_INCLUDES(sqlite3.h,SQLite,$SQLITEINCPATH)
+
+AC_DEFINE(HAVE_SQLITE)
+
+fi # $USE_SQLITE
+
+if test -n "$USE_SQLITE"; then
+
+# With SQLite library directory
+
+LOC_CHECK_LIB_PATH(sqlite,SQLite,SQLITELIBPATH)
+
+LOC_CHECK_LIBS(sqlite3,sqlite3_open,SQLite,$SQLITELIBPATH,SQLITELIB,,,,$MATHLIB)
+
+fi # $USE_SQLITE
+
+AC_SUBST(USE_SQLITE)
+
+AC_SUBST(SQLITEINCPATH)
+AC_SUBST(SQLITELIBPATH)
+AC_SUBST(SQLITELIB)
+
+# Done checking SQLite
+
+
+# Enable FFMPEG option
+
+LOC_CHECK_USE(ffmpeg, FFMPEG, USE_FFMPEG)
+
+FFMPEGINCPATH=
+FFMPEGLIBPATH=
+FFMPEGLIB=
+
+if test -n "$USE_FFMPEG"; then
+
+# With FFMPEG includes directory
+
+LOC_CHECK_INC_PATH(ffmpeg, FFMPEG, FFMPEGINCPATH)
+
+LOC_CHECK_INCLUDES(avcodec.h,FFMPEG,$FFMPEGINCPATH)
+LOC_CHECK_INCLUDES(avformat.h,FFMPEG,$FFMPEGINCPATH)
+LOC_CHECK_INCLUDES(swscale.h,FFMPEG,$FFMPEGINCPATH)
+
+AC_DEFINE(HAVE_FFMPEG)
+
+fi # $USE_FFMPEG
+
+if test -n "$USE_FFMPEG"; then
+
+# With FFMPEG library directory
+
+LOC_CHECK_LIB_PATH(ffmpeg, FFMPEG, FFMPEGLIBPATH)
+
+LOC_CHECK_LIBS(avcodec, avcodec_init, FFMPEG, $FFMPEGLIBPATH, FFMPEGLIB,,,,-lavutil $MATHLIB)
+LOC_CHECK_LIBS(avformat, av_set_parameters, FFMPEG, $FFMPEGLIBPATH, FFMPEGLIB,,,,-lavutil $MATHLIB)
+
+fi # $USE_FFMPEG
+
+AC_SUBST(USE_FFMPEG)
+
+AC_SUBST(FFMPEGINCPATH)
+AC_SUBST(FFMPEGLIBPATH)
+AC_SUBST(FFMPEGLIB)
+
+# Done checking FFMPEG
+
+
+# Enable OpenGL option
+
+OPENGLINC=
+OPENGLLIB=
+OPENGLULIB=
+USE_OPENGL=
+OPENGL_X11=
+OPENGL_AQUA=
+OPENGL_WINDOWS=
+
+AC_MSG_CHECKING(whether to use OpenGL)
+AC_MSG_RESULT("$with_opengl")
+case "$with_opengl" in
+	n|no)
+		OPENGL_TYPE=none
+		;;
+	y|yes|x|x11|glx)
+		OPENGL_TYPE=X11
+		USE_OPENGL=1
+		OPENGL_X11=1
+		;;
+	aqua|mac|osx|macosx|agl)
+		OPENGL_TYPE=Aqua
+		USE_OPENGL=1
+		OPENGL_AQUA=1
+		;;
+	win|windows|mswin|wgl)
+		OPENGL_TYPE=Windows
+		USE_OPENGL=1
+		OPENGL_WINDOWS=1
+		;;
+	*)
+		AC_MSG_ERROR([*** Valid arguments for --with-opengl= are yes,no,x11,aqua,windows.])
+		;;
+esac
+
+if test -n "$USE_OPENGL" ; then
+
+if test "$OPENGL_X11" = 1 ; then
+
+# With OpenGL includes directory
+
+LOC_CHECK_INC_PATH(opengl,OpenGL,OPENGLINC)
+
+LOC_CHECK_INCLUDES(GL/gl.h GL/glu.h,OpenGL,$OPENGLINC $X_CFLAGS)
+
+# With OpenGL library directory
+
+LOC_CHECK_LIB_PATH(opengl,OpenGL,OPENGL_LIB_PATH)
+
+LOC_CHECK_LIBS(GL,glBegin,OpenGL,$OPENGL_LIB_PATH,OPENGLLIB,$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,,-lpthread,-lXext)
+
+LOC_CHECK_LIBS(GLU,gluBeginCurve,GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB $X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,,-lstdc++)
+
+OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
+OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$LDFLAGS $OPENGLLIB"
+AC_CHECK_FUNC(glXCreatePbuffer, [AC_DEFINE(HAVE_PBUFFERS)])
+AC_CHECK_FUNC(glXCreateGLXPixmap, [AC_DEFINE(HAVE_PIXMAPS)])
+LDFLAGS=${ac_save_ldflags}
+
+AC_DEFINE(OPENGL_X11)
+
+fi # $OPENGL_X11
+
+if test "$OPENGL_AQUA" = 1 ; then
+
+with_opengl_includes=/System/Library/Frameworks/OpenGL.framework/Headers
+with_opengl_libs="-framework OpenGL -framework AGL -framework ApplicationServices"
+
+# With OpenGL includes directory
+
+LOC_CHECK_INC_PATH(opengl,OpenGL,OPENGLINC)
+
+LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLINC)
+
+# With OpenGL library directory
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$with_opengl_libs $LDFLAGS"
+AC_CHECK_FUNC(glBegin,[
+AC_CHECK_FUNC(gluBeginCurve,[
+OPENGLLIB="$with_opengl_libs"
+USE_OPENGL=1
+OPENGL_AQUA=1
+],[AC_MSG_ERROR([*** Unable to locate GLU library.])])
+],[AC_MSG_ERROR([*** Unable to locate OpenGL library.])])
+LDFLAGS=${ac_save_ldflags}
+
+AC_DEFINE(OPENGL_AQUA)
+
+fi # $OPENGL_AQUA
+
+if test "$OPENGL_WINDOWS" = 1 ; then
+
+AC_MSG_WARN([*** --with-opengl=windows is untested.])
+
+# With OpenGL includes directory
+
+LOC_CHECK_INC_PATH(opengl,OpenGL,OPENGLINC)
+
+LOC_CHECK_INCLUDES(GL/gl.h GL/glu.h,OpenGL,$OPENGLINC)
+
+# With OpenGL library directory
+
+LOC_CHECK_LIB_PATH(opengl,OpenGL,OPENGL_LIB_PATH)
+
+ac_save_ldflags="$LDFLAGS"
+ac_save_libs="$LIBS"
+LDFLAGS="$OPENGL_LIB_PATH $LDFLAGS"
+AC_MSG_CHECKING(for OpenGL library)
+LIBS="-lopengl32"
+AC_TRY_LINK([#include <GL/gl.h>],[glEnd();],[
+AC_MSG_RESULT(found)
+OPENGLLIB=-lopengl32
+AC_MSG_CHECKING(for GLU library)
+LIBS="-lglu32 $OPENGLLIB"
+AC_TRY_LINK([#include <GL/glu.h>],[gluNewQuadric();],[
+AC_MSG_RESULT(found)
+OPENGLULIB=-lglu32
+],[AC_MSG_ERROR([*** Unable to locate GLU library.])])
+],[AC_MSG_ERROR([*** Unable to locate OpenGL library.])])
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+
+OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
+OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
+
+AC_DEFINE(OPENGL_WINDOWS)
+
+fi # $OPENGL_WINDOWS
+
+fi # $USE_OPENGL
+
+AC_SUBST(USE_OPENGL)
+AC_SUBST(OPENGL_X11)
+AC_SUBST(OPENGL_AQUA)
+AC_SUBST(OPENGL_WINDOWS)
+
+AC_SUBST(OPENGLINC)
+AC_SUBST(OPENGLLIB)
+AC_SUBST(OPENGLULIB)
+
+# Done checking OpenGL
+
+# Enable ODBC option
+
+LOC_CHECK_USE(odbc,ODBC,USE_ODBC)
+
+ODBCINC=
+ODBCLIB=
+
+if test -n "$USE_ODBC"; then
+
+# With ODBC includes directory
+
+LOC_CHECK_INC_PATH(odbc,ODBC,ODBCINC)
+
+LOC_CHECK_INCLUDES(sql.h,ODBC,$ODBCINC)
+
+# With ODBC library directory
+
+LOC_CHECK_LIB_PATH(odbc,ODBC,ODBCLIB)
+
+LOC_CHECK_LIBS(odbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,$ICONVLIB,,[
+LOC_CHECK_LIBS(iodbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,,,)
+])
+
+fi # $USE_ODBC
+
+AC_SUBST(ODBCINC)
+AC_SUBST(ODBCLIB)
+
+# Done checking ODBC
+
+# Enable FFTW option
+
+LOC_CHECK_USE(fftw,FFTW,USE_FFTW)
+
+FFTWINC=
+FFTWLIB=
+
+if test -n "$USE_FFTW"; then
+
+# With FFTW includes directory
+
+LOC_CHECK_INC_PATH(fftw,FFTW,FFTWINC)
+
+LOC_CHECK_INCLUDES(fftw3.h,FFTW,$FFTWINC,[
+LOC_CHECK_INCLUDES(fftw.h,FFTW,,[
+LOC_CHECK_INCLUDES(dfftw.h,FFTW,,)
+])
+])
+
+# With FFTW library directory
+
+LOC_CHECK_LIB_PATH(fftw,FFTW,FFTWLIB)
+
+LOC_CHECK_LIBS(fftw3, fftw_execute,FFTW,$FFTWLIB,FFTWLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(fftw, fftwnd_one,FFTW,$FFTWLIB,FFTWLIB,,$MATHLIB,[
+LOC_CHECK_LIBS(dfftw,fftwnd_one,FFTW,$FFTWLIB,FFTWLIB,,$MATHLIB,)
+])
+])
+
+fi # $USE_FFTW
+
+AC_SUBST(FFTWINC)
+AC_SUBST(FFTWLIB)
+
+# Done checking FFTW
+
+# Enable BLAS option
+
+LOC_CHECK_USE(blas,BLAS,USE_BLAS)
+
+BLASLIB=
+BLASINC=
+
+if test -n "$USE_BLAS"; then
+
+# With BLAS includes directory
+# BLAS doesn't have includes (FORTRAN library)
+# With BLAS library directory
+
+LOC_CHECK_INC_PATH(blas, BLAS, BLASINC)
+LOC_CHECK_LIB_PATH(blas, BLAS, BLASLIB)
+
+# See if cblas.h exists (CBLAS,ATLAS,others)
+save_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$BLASINC $CPPFLAGS"
+AC_CHECK_HEADERS(cblas.h)
+CPPFLAGS=$save_CPPFLAGS
+
+LOC_CHECK_LIBS(blas,dnrm2_,BLAS,$BLASLIB,BLASLIB,$MATHLIB,,,-lg2c)
+
+blas_ok=no
+
+# Check for ATLAS
+save_LDFLAGS="$LDFLAGS"
+LDFLAGS="$BLASLIB $LDFLAGS"
+AC_CHECK_LIB(atlas, ATL_xerbla,
+		[AC_CHECK_LIB(f77blas, sgemm_,
+		[AC_CHECK_LIB(cblas, cblas_dgemm, 
+			[blas_ok=yes; BLASLIB="-lcblas -lf77blas -latlas"],
+			[],[-lf77blas -latlas])],
+		[],[-latlas])]
+)
+LDFLAGS="$save_LDFLAGS"
+
+# Do we have ATLAS?
+if test $blas_ok = yes; then
+	AC_DEFINE(HAVE_LIBATLAS)
+fi
+
+# BLAS in Apple vecLib framework? (Mac OS-X)
+if test -n "$MACOSX_APP"; then
+if test $blas_ok = no; then
+	vlib_flags="-framework vecLib"
+	save_LIBS="$LIBS"
+	LIBS="$vlib_flags $LIBS"
+	AC_MSG_CHECKING([for sgemm in $vlib_flags])
+	AC_TRY_LINK([], [sgemm], [blas_ok=yes; BLASLIB="$vlib_flags"], [BLASLIB=""])
+	AC_MSG_RESULT($blas_ok)
+	LIBS="$save_LIBS"
+fi
+fi # $MACOSX_APP
+
+# BLAS in PhiPACK libraries? (requires generic BLAS, too)
+if test $blas_ok = no; then
+	AC_CHECK_LIB(blas, sgemm_,
+		[AC_CHECK_LIB(dgemm, dgemm_,
+		[AC_CHECK_LIB(sgemm, sgemm_,
+			[blas_ok=yes; BLASLIB="-lsgemm -ldgemm -lblas"],
+			[], [-lblas])],
+			[], [-lblas])]
+	)
+fi
+
+# BLAS in Sun Performance library?
+if test $blas_ok = no; then
+	if test "x$GCC" != xyes; then # only works with Sun CC
+		AC_CHECK_LIB(sunmath, acosp,
+			[AC_CHECK_LIB(sunperf, sgemm_,
+				[blas_ok=yes; BLASLIB="-xlic_lib=sunperf -lsunmath"],
+			[], [-lsunmath])]
+		)
+	fi
+fi
+
+# Generic BLAS library
+if test $blas_ok = no; then
+	AC_CHECK_LIB(blas, sgemm_, [blas_ok=yes; BLASLIB="-lblas"])
+fi
+
+if test $blas_ok = yes; then
+AC_DEFINE(HAVE_LIBBLAS)
+fi
+
+fi # $USE_BLAS
+
+AC_SUBST(BLASLIB)
+AC_SUBST(BLASINC)
+
+# Done checking BLAS
+
+# Enable LAPACK option
+
+LOC_CHECK_USE(lapack,LAPACK,USE_LAPACK)
+
+LAPACKLIB=
+LAPACKINC=
+
+# LAPACK is useless without BLAS
+if test -n "$USE_BLAS"; then
+if test -n "$USE_LAPACK"; then
+
+# With LAPACK includes directory
+# LAPACK doesn't have includes (FORTRAN library)
+# With LAPACK library directory
+
+lapack_ok=no
+
+LOC_CHECK_INC_PATH(lapack, LAPACK, LAPACKINC)
+LOC_CHECK_LIB_PATH(lapack, LAPACK, LAPACKLIB)
+
+# See if clapack.h exists (ATLAS)
+save_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$LAPACKINC $CPPFLAGS"
+AC_CHECK_HEADERS(clapack.h)
+CPPFLAGS=$save_CPPFLAGS
+
+# LAPACK linked to by default?
+if test lapack_ok=no; then
+	save_LIBS="$LIBS"; LIBS="$LIBS $BLASLIB $MATHLIB $FLIBS"
+	save_LDFLAGS="$LDFLAGS"; LDFLAGS="$LAPACKLIB $LDFLAGS"
+	AC_CHECK_FUNC(dsegv_, [lapack_ok=yes])
+	LIBS="$save_LIBS"
+	LDFLAGS="$save_LDFLAGS"
+fi
+
+# Generic LAPACK library?
+if test $lapack_ok = no; then
+	save_libs="$LIBS"; LIBS="$BLASLIB $MATHLIB $LIBS"
+	save_LDFLAGS="$LDFLAGS"; LDFLAGS="$LAPACKLIB $LDFLAGS"
+	AC_CHECK_LIB(lapack, desgv_,
+		[lapack_ok=yes; LAPACKLIB="-llapack"], [], [$FLIBS])
+	LIBS="$save_LIBS"
+	LDFLAGS="$save_LDFLAGS"
+fi
+
+if test $lapack_ok = no; then
+	LOC_CHECK_LIBS(lapack,dgesv_,LAPACK,$LAPACKLIB,LAPACKLIB,$BLASLIB $MATHLIB,,,-lg2c)
+fi
+
+AC_DEFINE(HAVE_LIBLAPACK)
+
+fi # $USE_LAPACK
+fi # $USE_BLAS
+
+AC_SUBST(LAPACKLIB)
+AC_SUBST(LAPACKINC)
+
+# Done checking LAPACK
+
+# Enable Motif option
+
+LOC_CHECK_USE(motif,Motif,USE_MOTIF)
+
+XMINC=
+XMLIB=
+
+if test -n "$USE_MOTIF"; then
+
+# With Motif includes directory
+
+LOC_CHECK_INC_PATH(motif,Motif,XMINC)
+
+LOC_CHECK_INCLUDES(Xm/Xm.h,Motif,$XMINC $X_CFLAGS)
+
+# With Motif library directory
+
+LOC_CHECK_LIB_PATH(motif,Motif,XMLIB)
+
+LOC_CHECK_LIBS(Xm,XmStringCreate,Motif,$XMLIB,XMLIB,$X_LIBS -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS,,)
+
+fi # $USE_MOTIF
+
+AC_SUBST(XMINC)
+AC_SUBST(XMLIB)
+
+# Done checking Motif
+
+# Enable Cairo display driver option
+
+LOC_CHECK_USE(cairo,Cairo,USE_CAIRO)
+
+CAIROINC=
+CAIROLIB=
+
+if test -n "$USE_CAIRO"; then
+
+# With Cairo includes directory
+
+CAIROINC=`pkg-config --cflags cairo`
+
+LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
+
+# With Cairo library directory
+
+CAIROLIB=`pkg-config --libs cairo`
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$LDFLAGS $CAIROLIB"
+AC_CHECK_FUNC(cairo_create,,[
+AC_MSG_ERROR([*** Unable to locate cairo_create() function.])
+])
+LDFLAGS=${ac_save_ldflags}
+
+fi # $USE_CAIRO
+
+AC_SUBST(CAIROINC)
+AC_SUBST(CAIROLIB)
+AC_SUBST(USE_CAIRO)
+
+# Done checking Cairo
+
+# Enable GLw option
+
+LOC_CHECK_USE(glw,GLw,USE_GLW)
+
+OPENGLWINC=
+OPENGLWM=
+
+if test -n "$USE_GLW"; then
+
+# With GLw includes directory
+
+LOC_CHECK_INC_PATH(glw,GLw,OPENGLWINC)
+
+LOC_CHECK_INCLUDES(GL/GLwMDrawA.h,GLwM,$OPENGLWINC $XMINC $X_CFLAGS $OPENGLINC,[
+LOC_CHECK_INCLUDES(X11/GLw/GLwMDrawA.h,GLwM,,)
+])
+
+# With GLw library directory
+
+LOC_CHECK_LIB_PATH(glw,GLw,OPENGLWM)
+
+LOC_CHECK_LIBS(GLw,     GLwCreateMDrawingArea, GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(GLw,     GLwCreateM1DrawingArea,GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(GLw,     GLwCreateM2DrawingArea,GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(GLwM,    GLwCreateMDrawingArea, GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(GLwM,    GLwCreateM1DrawingArea,GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(GLwM,    GLwCreateM2DrawingArea,GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(MesaGLw, GLwCreateMDrawingArea, GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+LOC_CHECK_LIBS(MesaGLwM,GLwCreateMDrawingArea, GLwM,$OPENGLWM $XMLIB $OPENGL_LIB_PATH,OPENGLWM,$X_LIBS $OPENGLLIB -lXm -lXt $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $MATHLIB,,[
+], $OPENGLULIB)
+], $OPENGLULIB)
+])
+])
+])
+])
+])
+])
+
+fi # $USE_OPENGL && $USE_MOTIF
+
+AC_SUBST(OPENGLWINC)
+AC_SUBST(OPENGLWM)
+
+# Done checking GLw
+
+# Enable FreeType option
+
+LOC_CHECK_USE(freetype,FreeType,USE_FREETYPE)
+
+FTINC=
+FTLIB=
+
+if test -n "$USE_FREETYPE"; then
+
+# With FreeType includes directory
+
+LOC_CHECK_INC_PATH(freetype,FreeType,FTINC)
+
+LOC_CHECK_INCLUDES(ft2build.h,FreeType,$FTINC)
+
+# With FreeType library directory
+
+LOC_CHECK_LIB_PATH(freetype,FreeType,FTLIB)
+
+LOC_CHECK_LIBS(freetype,FT_Init_FreeType,FreeType,$FTLIB,FTLIB,,,)
+
+fi # $USE_FREETYPE
+
+AC_SUBST(FTINC)
+AC_SUBST(FTLIB)
+
+# Done checking FreeType
+
+# Enable NLS option
+
+LOC_CHECK_USE(nls,NLS,USE_NLS)
+
+INTLLIB=
+HAVE_NLS=
+
+if test -n "${USE_NLS}" ; then
+    AC_DEFINE(USE_NLS)
+
+AC_CHECK_FUNC(gettext, INTLLIB=, [
+AC_CHECK_LIB(intl, gettext, INTLLIB=-lintl, [
+    AC_MSG_ERROR([*** Unable to locate gettext() function.])
+])])
+
+    HAVE_NLS=1
+fi
+
+AC_SUBST(INTLLIB)
+AC_SUBST(HAVE_NLS)
+
+# Enable C++ option
+ 
+LOC_CHECK_USE(cxx,C++,USE_CXX)
+
+if test -n "$USE_CXX"; then
+	AC_PROG_CXX
+else
+	CXX=
+	CXXFLAGS=
+	AC_SUBST(CXX)
+	AC_SUBST(CXXFLAGS)
+fi
+
+# Done checking C++
+
+# Enable openDWG option
+
+LOC_CHECK_USE(opendwg,openDWG,USE_OPENDWG)
+
+OPENDWGINCPATH=
+OPENDWGLIBPATH=
+OPENDWGLIB=
+
+if test -n "${USE_OPENDWG}"; then
+
+# With OPENDWG includes directory
+
+LOC_CHECK_INC_PATH(opendwg,openDGW,OPENDWGINCPATH)
+
+LOC_CHECK_INCLUDES(ad2.h,openDWG,$OPENDWGINCPATH)
+
+# With OPENDWG library directory
+
+LOC_CHECK_LIB_PATH(opendwg,openDWG,OPENDWGLIBPATH)
+
+#search for ad2.a, ad3.a ... in openDWG toolkit directory:
+#FIX ME  how to program this test??
+#LOC_CHECK_LIBS(ad?.a,adSeekLayer,openDWG,$OPENDWGLIBPATH,OPENDWGLIB,,)
+#
+#for now hack (but working):
+TRUEOPENDWGLIBPATH=`echo $OPENDWGLIBPATH | cut -b3-`
+adlib=`ls -1 $TRUEOPENDWGLIBPATH/ad?.a | tail -1`
+OPENDWGLIB=$adlib
+
+fi # $USE_OPENDWG
+
+AC_SUBST(OPENDWGINCPATH)
+AC_SUBST(OPENDWGLIBPATH)
+AC_SUBST(OPENDWGLIB)
+AC_SUBST(USE_OPENDWG)
+
+# Done checking OPENDWG
+
+# Enable LFS (from cdr-tools)
+dnl Check for large file support
+dnl Do this last to make sure that no large file definition
+dnl in confdefs.h will modify our results
+AC_SYS_LARGEFILE
+dnl Warning do not run this test. it interferes with the test
+dnl AC_CHECK_FUNCS(fseeko ftello) from above.
+dnl The test AC_HAVE_LARGEFILES will check whether ftello/fseeko
+dnl are available in Large File mode
+dnl AC_FUNC_FSEEKO
+AC_HAVE_LARGEFILES
+
+USE_LARGEFILES=
+if test $ac_cv_largefiles = yes; then
+	USE_LARGEFILES=1
+fi
+AC_SUBST(USE_LARGEFILES)
+# Done large file support
+
+# Python check
+
+AC_MSG_CHECKING(whether to use Python)
+
+PYTHONINC=
+PYTHONCFLAGS=
+PYTHONLDFLAGS=
+SWIG=
+USE_PYTHON=
+
+if test "$with_python" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  USE_PYTHON="1"
+  if test "$with_python" != "yes" ; then
+    PY_CONFIG="$with_python"
+  fi
+
+  AC_PATH_PROG(PY_CONFIG, python-config, no)
+
+  if test "$PY_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find python-config])
+  fi
+
+  # With Python includes directory 
+
+  PYTHONINC=`"$PY_CONFIG" --includes`
+  LOC_CHECK_INCLUDES(Python.h,Python,$PYTHONINC)
+
+  PYTHONCFLAGS=`"$PY_CONFIG" --cflags`
+
+  # With Python library directory
+
+  PYTHONLDFLAGS=`"$PY_CONFIG" --ldflags`
+
+  # look for the swig program
+  AC_PATH_PROG(SWIG, swig, no)
+
+  if test "$SWIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find swig])
+  fi
+
+fi # Done checking Python
+
+AC_SUBST(PYTHONINC)
+AC_SUBST(PYTHONCFLAGS)
+AC_SUBST(PYTHONLDFLAGS)
+AC_SUBST(SWIG)
+AC_SUBST(USE_PYTHON)
+
+# Enable wxWidgets support (for wxGUI)
+
+AC_MSG_CHECKING(whether to use wxWidgets)
+
+WXVERSION=
+WXWIDGETSCXXFLAGS= 
+WXWIDGETSCPPFLAGS=  
+WXWIDGETSLIB=  
+USE_WXWIDGETS=
+
+if test "$with_wxwidgets" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  USE_WXWIDGETS="1"
+  if test "`basename $with_wxwidgets`" = "wx-config" ; then
+    WX_CONFIG="$with_wxwidgets"
+  fi
+
+  AC_PATH_PROG(WX_CONFIG, wx-config, no)
+
+  if test "$WX_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** couldn't find wx-config
+
+  	  	  wxWidgets must be installed on your system.
+  
+                  Please check that wx-config is in path, the directory
+                  where wxWidgets libraries are installed (returned by
+                  'wx-config --libs' or 'wx-config --static --libs' command)
+                  is in LD_LIBRARY_PATH or equivalent variable and
+                  wxWidgets version is 2.8.1 or above.])
+ fi
+
+ # Check wxWidgets version
+
+ REQWX="2.8.1"
+
+ AC_MSG_CHECKING([wxWidgets version])
+ if WXVERSION=`"$WX_CONFIG" --version`; then
+   AC_MSG_RESULT([$WXVERSION])
+ else
+   AC_MSG_RESULT([not found])
+   AC_MSG_ERROR([wxWidgets is required.])
+ fi
+ if test `expr "$WXVERSION" \< "$REQWX"` = 1 ; then
+   AC_MSG_ERROR([*** wxWidgets "$REQWX" or later is required.])
+ fi
+
+ # With wxWidgets includes directory 
+
+ WXWIDGETSCXXFLAGS=`"$WX_CONFIG" --cxxflags`
+ WXWIDGETSCPPFLAGS=`"$WX_CONFIG" --cppflags`
+
+ LOC_CHECK_INCLUDES(wx/wxprec.h,wxWidgets,$WXWIDGETSCPPFLAGS) 
+ LOC_CHECK_INCLUDES(wx/wxPython/pseudodc.h,wxWidgets,$WXWIDGETSCPPFLAGS) 
+
+ # With wxWidgets library directory 
+
+ WXWIDGETSLIB=`"$WX_CONFIG" --libs`
+fi # $USE_WXWIDGETS
+
+AC_SUBST(WXVERSION) 
+AC_SUBST(WXWIDGETSCXXFLAGS)
+AC_SUBST(WXWIDGETSCPPFLAGS) 
+AC_SUBST(WXWIDGETSLIB) 
+AC_SUBST(USE_WXWIDGETS) 
+
+# Done checking wxWidgets
+
+USE_TERMIO=
+AC_SUBST(USE_TERMIO)
+
+STRIPFLAG=
+AC_SUBST(STRIPFLAG)
+
+GRASS_HOME=${DSTDIR}
+AC_SUBST(GRASS_HOME)
+
+AC_OUTPUT(include/Make/Grass.make include/Make/Platform.make include/version.h include/winname.h swig/perl/Makefile.PL swig/perl2/make.pl swig/python/Makefile grass.pc)
+
+LOC_MSG([Copying config.status to config.status.${ARCH}])
+cp -f config.status config.status.${ARCH}
+
+# Display configuration status
+
+USE_TOGL=
+if test -n "${USE_TCLTK}" -a -n "${USE_OPENGL}" ; then
+    USE_TOGL="1"
+fi
+
+LOC_MSG()
+LOC_MSG([GRASS is now configured for:  ${host}])
+LOC_MSG()
+LOC_MSG([  Source directory:            ${SRCDIR}])
+LOC_MSG([  Build directory:             ${DSTDIR}])
+LOC_MSG([  Installation directory:      ${INSTDIR}])
+LOC_MSG([  Startup script in directory: ${bindir}])
+LOC_MSG([  C compiler:                  ${CC} ${CFLAGS}])
+LOC_MSG([  C++ compiler:                ${CXX} ${CXXFLAGS}])
+#LOC_MSG([  FORTRAN compiler:            ${F77} ${FFLAGS}])
+LOC_MSG([  Building shared libraries:   ${shared_ok}])
+LOC_MSG([  64bit support:               ${do64bit}])
+LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
+LOC_MSG_USE(MacOSX application,MACOSX_APP)
+LOC_MSG()
+LOC_MSG_USE(NVIZ,USE_TOGL)
+LOC_MSG()
+LOC_MSG_USE(BLAS support,USE_BLAS)
+LOC_MSG_USE(C++ support,USE_CXX)
+LOC_MSG_USE(Cairo support,USE_CAIRO)
+LOC_MSG_USE(DWG support,USE_OPENDWG)
+LOC_MSG_USE(FFMPEG support,USE_FFMPEG)
+LOC_MSG_USE(FFTW support,USE_FFTW)
+LOC_MSG_USE(FreeType support,USE_FREETYPE)
+LOC_MSG_USE(GDAL support,USE_GDAL)
+LOC_MSG_USE(GLw support,USE_GLW)
+LOC_MSG_USE(JPEG support,USE_JPEG)
+LOC_MSG_USE(LAPACK support,USE_LAPACK)
+LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
+LOC_MSG_USE(Motif support,USE_MOTIF)
+LOC_MSG_USE(MySQL support,USE_MYSQL)
+LOC_MSG_USE(NLS support,USE_NLS)
+LOC_MSG_USE(ODBC support,USE_ODBC)
+LOC_MSG_USE(OGR support,USE_OGR)
+LOC_MSG_USE(OpenGL support,USE_OPENGL)
+LOC_MSG_USE(PNG support,USE_PNG)
+LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)
+LOC_MSG_USE(Python support,USE_PYTHON)
+LOC_MSG_USE(Readline support,USE_READLINE)
+LOC_MSG_USE(SQLite support,USE_SQLITE)
+LOC_MSG_USE(Tcl/Tk support,USE_TCLTK)
+LOC_MSG_USE(wxWidgets support,USE_WXWIDGETS)
+LOC_MSG_USE(TIFF support,USE_TIFF)
+LOC_MSG_USE(X11 support,USE_X11)
+LOC_MSG()

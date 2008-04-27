@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "-----------------------------------------------------------------------------"
+echo "------------------------------   WARNING  -----------------------------------"  
+echo "v.in.dwg is linked to proprietary library 'OpenDWG toolkit' (www.opendwg.org)"
+echo "and to GRASS libraries released under GPL. As a consequence, it is not allowed"
+echo "to distribute binary version of v.in.dwg."
+echo "If you really want to build the binaries for v.in.dwg and lose the possibility"
+echo "of distributing GRASS binary package, type 'yes'<Enter>."
+
+read IN ; if [ -z $IN ] || [ $IN != "yes" ]; then exit 1; fi
+

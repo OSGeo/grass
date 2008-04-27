@@ -1,0 +1,140 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.out.gdal</EM> allows a user to export a GRASS raster map layer
+into any GDAL supported raster map format.
+
+For possible <em>metaopt</em> parameters see the 'supported formats' pages
+of GDAL.
+The <em>createopt</em> may be used to create TFW or World files ("TFW=YES",
+"WORLDFILE=ON").
+<P>
+<EM>r.out.gdal</EM> also supports the export of multiband rasters through
+a group (created e.g. with <EM>i.group</EM>), when the group's name is entered
+as input.
+
+<H2>SUPPORTED RASTER FORMATS</H2>
+
+The set of <a href="http://www.gdal.org/formats_list.html">supported
+raster formats</a> written by <EM>r.out.gdal</EM> depends on the
+local GDAL installation. Available may be (incomplete list):<P>
+
+<pre>
+  AAIGrid: Arc/Info ASCII Grid
+  BMP: MS Windows Device Independent Bitmap
+  BSB: Maptech BSB Nautical Charts
+  DTED: DTED Elevation Raster
+  ELAS: ELAS
+  ENVI: ENVI .hdr Labelled
+  FIT: FIT Image
+  GIF: Graphics Interchange Format (.gif)
+  GTiff: GeoTIFF
+  HDF4Image: HDF4 Dataset
+  HFA: Erdas Imagine Images (.img)
+  JPEG2000: JPEG-2000 part 1 (ISO/IEC 15444-1)
+  JPEG: JPEG JFIF
+  MEM: In Memory Raster
+  MFF2: Atlantis MFF2 (HKV) Raster
+  MFF: Atlantis MFF Raster
+  NITF: National Imagery Transmission Format
+  PAux: PCI .aux Labelled
+  PCIDSK: PCIDSK Database File
+  PNG: Portable Network Graphics
+  PNM: Portable Pixmap Format (netpbm)
+  VRT: Virtual Raster
+  XPM: X11 PixMap Format
+</pre>
+
+<H2>NOTES</H2>
+
+When writing out GeoTIFF format for users of ESRI software or ImageMagick,
+the band interleaving should be switched to pixel interleaving using
+<em>createopt="INTERLEAVE=PIXEL"</em>.
+<P>
+To specify multiple options use a comma separated list
+(<em>createopt="TFW=YES,COMPRESS=DEFLATE"</em>).
+<p>
+Out of the GDAL data types, the closest match for GRASS CELL, FCELL and DCELL
+rasters are respectively Int32, Float32 and Float64. These are not exact
+equivalents, but they will preserve the max possible data range and number of
+decimal places for each respective GRASS raster data type. Please keep in mind, that
+not all CELL rasters will require Int32 - e.g., 0-255 CELL raster are covered
+by the Byte <em>type</em> as well. Moreover, some GDAL-supported formats do not
+support all the data types possible in GDAL and GRASS. Use
+<em><a href="r.info">r.info</a></em> to check the data type and range for your
+GRASS raster, refer to specific format documentation
+(<a href="http://www.gdal.org/">GDAL website</a>, format vendor's docs) and
+e.g. the Wikipedia article
+<em><a href="http://en.wikipedia.org/wiki/C_syntax#Typical_boundaries_of_primitive_integral_types">Typical boundaries of primitive integral types</a></em>
+for details.
+
+<H2>EXAMPLES</H2>
+
+<h4>Export the integer raster roads map to GeoTIFF format:</h4>
+<div class="code"><pre>
+r.out.gdal input=roads output=roads.tif type=UInt16
+</pre></div>
+<p>
+
+<h4>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h4>
+<div class="code"><pre>
+r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="INTERLEAVE=PIXEL,TFW=YES"
+</pre></div>
+<p>
+
+<h4>Export the floating point raster elevation map to ERDAS/IMG format:</h4>
+<div class="code"><pre>
+r.out.gdal input=elevation.10m output=elev_dem10.img format=HFA type=Float32
+</pre></div>
+
+<h4>Export group of image maps as multi-band file</h4>
+<div class="code"><pre>
+g.list group
+i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
+i.group -l tm7
+r.out.gdal tm7 type=UInt16 out=lsat_multiband.tif
+gdalinfo lsat_multiband.tif
+</pre></div>
+
+
+<H2>GDAL RELATED ERROR MESSAGES</H2>
+
+<ul>
+<li> "ERROR 6: SetColorInterpretation() not supported for this dataset.": This <i>may</i>
+ indicate that the color table was not written properly. But usually it will be
+ correct and the message can be ignored.</li>
+<li> "ERROR 6: SetNoDataValue() not supported for this dataset.": The selected output format
+ does not support "no data". It is recommended to use a different output format.</li>
+<li> "Warning 1: Lost metadata writing to GeoTIFF ... too large to fit in tag.": The color table metadata
+  are too large. It is recommended to use a different output format.</li>
+</ul>
+
+
+<H2>SEE ALSO</H2>
+
+The <a href="http://www.gdal.org/formats_list.html">GDAL supported formats</a>
+page.
+<BR>
+<EM>
+<A HREF="r.out.ascii.html">r.out.ascii</A>,
+<A HREF="r.out.arc.html">r.out.arc</A>,
+<A HREF="r.out.bin.html">r.out.bin</A>,
+<A HREF="r.out.mat.html">r.out.mat</A>,
+<A HREF="r.out.png.html">r.out.png</A>,
+<A HREF="r.out.ppm.html">r.out.ppm</A>,
+<A HREF="r.out.tiff.html">r.out.tiff</A>
+<BR>
+<A HREF="r.out.gdal.sh.html">r.out.gdal.sh</A></EM>
+ (old shell script version using <tt>gdal_translate</tt>)
+
+
+<H2>REFERENCES</H2>
+
+GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org</a>
+
+
+<H2>AUTHOR</H2>
+
+Vytautas Vebra (oliver4grass at gmail.com)
+
+<p>
+<i>Last changed: $Date$</i>

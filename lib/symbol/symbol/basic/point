@@ -1,0 +1,7 @@
+VERSION 1.0
+BOX -2 -2 2 2
+POLYGON
+  RING
+    ARC 0 0 1 360 0 C
+  END
+END

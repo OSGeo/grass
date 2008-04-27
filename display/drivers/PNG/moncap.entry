@@ -1,0 +1,27 @@
+PNG:driver/PNG:Create PNG file: \
+     dev/fifo.8a dev/fifo.8b \
+     ::any terminal
+png1:driver/PNG:Create PNG file: \
+     dev/fifo.9a dev/fifo.9b \
+     ::any terminal
+png2:driver/PNG:Create PNG file: \
+     dev/fifo.10a dev/fifo.10b \
+     ::any terminal
+png3:driver/PNG:Create PNG file: \
+     dev/fifo.11a dev/fifo.11b \
+     ::any terminal
+png4:driver/PNG:Create PNG file: \
+     dev/fifo.12a dev/fifo.12b \
+     ::any terminal
+png5:driver/PNG:Create PNG file: \
+     dev/fifo.13a dev/fifo.13b \
+     ::any terminal
+png6:driver/PNG:Create PNG file: \
+     dev/fifo.14a dev/fifo.14b \
+     ::any terminal
+png7:driver/PNG:Create PNG file: \
+     dev/fifo.15a dev/fifo.15b \
+     ::any terminal
+gism:driver/PNG:Create PNG file for gis.m: \
+     dev/fifo.16a dev/fifo.16b \
+     ::any terminal

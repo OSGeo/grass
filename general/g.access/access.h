@@ -1,0 +1,7 @@
+#define OWNER_BITS  0700
+#define GROUP_BITS  0070
+#define OTHER_BITS  0007
+
+#define OWNER_PERMS 0700
+#define GROUP_PERMS 0050
+#define OTHER_PERMS 0005

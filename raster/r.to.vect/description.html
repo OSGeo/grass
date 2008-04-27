@@ -1,0 +1,103 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.to.vect</EM> scans the named <B>input</B> raster map
+layer, extracts points, lines or area edge features from it, converts data
+to GRASS vector format.
+
+<H3>Points</H3>
+
+The <EM>r.to.vect</EM> program extracts data from a GRASS raster map layer and stores output 
+in a new GRASS <EM>vector</EM> file.  
+
+<H3>Lines</H3>
+<EM>r.to.vect</EM> assumes that the <EM>input</EM> map has been thinned
+using <EM><A HREF="r.thin.html">r.thin</A></EM>.
+
+<P>
+
+<EM>r.to.vect</EM> extracts vectors (aka, "arcs") from a
+raster map.  These arcs may represent linear features
+(like roads or streams), or may represent area edge
+features (like political boundaries, or soil mapping
+units).  
+
+<P>
+
+<EM><A HREF="r.thin.html">r.thin</A></EM> and <EM>r.to.vect</EM>
+may create excessive nodes at every junction, and may create small spurs
+or "dangling lines" during the thinning and vectorization process.
+These excessive nodes and spurs may be removed using
+<EM><A HREF="v.clean.html">v.clean</A></EM>.
+
+
+<H3>Areas</H3>
+
+<EM>r.to.vect</EM> first traces the perimeter of each unique
+area in the raster map layer and creates vector data to
+represent it.  The cell category values for the raster map
+layer will be used to create attribute information for the
+resultant vector area edge data.
+
+<P>
+
+A true vector tracing of the area edges might appear
+blocky, since the vectors outline the edges of raster data
+that are stored in rectangular cells.  To produce a
+better-looking vector map, <EM>r.to.vect</EM> smoothes the
+corners of the vector data as they are being extracted. At
+each change in direction (i.e., each corner), the two
+midpoints of the corner cell (half the cell's height and
+width) are taken, and the line segment connecting them is
+used to outline this corner in the resultant vector map.
+(The cell's cornermost node is ignored.) Because vectors
+are smoothed by this program, the resulting vector map will
+not be "true" to the raster map from which it was created.
+The user should check the resolution of the geographic
+region (and the original data) to estimate the possible
+error introduced by smoothing.
+
+<P>
+
+<EM>r.to.vect</EM> extracts only area edges from the named raster input file. 
+If the raster map contains other data (i.e., line edges, or point data) the
+output may be wrong. 
+
+<H2>BUGS</H2>
+
+For feature=line the input raster map MUST be thinned by
+<EM><A HREF="r.thin.html">r.thin</A></EM>;
+if not, <EM>r.to.vect</EM> may crash.
+
+<H2>AUTHOR</H2>
+<B>Points</B><BR>
+Bill Brown<BR>
+<BR>
+
+<B>Lines</B><BR>
+Mike Baba<BR>
+DBA Systems, Inc.<BR>
+10560 Arrowhead Drive<BR>
+Fairfax, Virginia 22030<BR>
+<BR>
+
+<B>Areas</B><BR>
+<EM>Original</EM> version of <EM>r.poly</EM>: 
+<BR>
+Jean Ezell and Andrew Heekin, 
+<br>
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<P>
+<EM>Modified</EM> program for smoothed lines: 
+<BR>
+David Satnik, 
+Central Washington University
+<br>
+Updated 2001 by Andrea Aime, Modena, Italy<BR>
+<BR>
+
+<B>Update</B><BR>
+Original r.to.sites, r.line and r.poly merged and updated to 5.7 by Radim Blazek
+
+<p><i>Last changed: $Date$</i>

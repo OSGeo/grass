@@ -1,0 +1,291 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.reclass</EM> creates an <EM>output</EM> map layer
+based on an <EM>input</EM> raster map layer.  The output
+map layer will be a reclassification of the input map layer
+based on reclass rules input to <EM>r.reclass</EM>, and can
+be treated in much the same way that raster maps are
+treated.  A <EM>TITLE</EM> for the output map layer may be
+(optionally) specified by the user.
+
+<P>
+The reclass rules are read from standard input (i.e., from
+the keyboard, redirected from a file, or piped through
+another program).
+
+<P>
+Before using <EM>r.reclass</EM> the user must know the following:
+
+<OL>
+<LI>The new categories desired;  and, which old categories fit into 
+which new categories.
+<LI>The names of the new categories.
+</OL>
+
+<H2>INTERACTIVE PROGRAM USE: EXAMPLE</H2>
+
+Suppose we want to reclassify the raster map layer
+<EM>roads</EM>, consisting of five categories, into the
+three new categories:  paved roads, unpaved roads, and
+railroad tracks.  The user is asked whether the reclass
+table is to be established with each category value
+initially set to 0, or with each category value initially
+set to its own value.  A screen like that shown below then
+appears, listing the categories of the <EM>roads</EM>
+raster map layer to be reclassified and prompting the user
+for the new category values to be assigned them.
+<P>
+<PRE>
+     ENTER NEW CATEGORY NUMBERS FOR THESE CATEGORIES
+
+     OLD CATEGORY NAME       OLD     NEW	 
+                             NUM     NUM
+     no data	              0      0___
+     Hard Surface, 2 lanes    1      0___
+     Loose Surface, 1 lane    2      0___
+     Improved Dirt            3      0___
+     Unimproved Dirt Trail    4      0___
+     Railroad, single track   5      0___
+
+     AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
+                  (OR &lt;Ctrl-C&gt; TO CANCEL)
+</PRE>
+
+In the following screen the new category values have been
+entered beside the appropriate old category names.  Cells
+assigned category values 2, 3, and 4 in the old raster map
+layer are now assigned the new category value 2 in the
+reclassed map; cell data formerly assigned to category
+value 5 in the old raster map map are now assigned the new
+category value 3 in the reclassed map.
+<PRE>
+     ENTER NEW CATEGORY NUMBERS FOR THESE CATEGORIES
+
+
+     OLD CATEGORY NAME	      OLD     NEW	 
+                              NUM     NUM
+     no data                   0      0___
+     Hard Surface, 2 lanes     1      1___
+     Loose Surface, 1 lane     2      2___
+     Improved Dirt	       3      2___
+     Unimproved Dirt Trail     4      2___
+     Railroad, single track    5      3___
+
+     AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
+                  (OR &lt;Ctrl-C&gt; TO CANCEL)
+</PRE>
+
+Hitting the escape key &lt;ESC&gt; will bring up the
+following screen, which prompts the user to enter a new
+TITLE and category label for the newly <B>reclassed</B>
+categories.
+<PRE>
+     ENTER NEW CATEGORY NAMES FOR THESE CATEGORIES
+
+     TITLE:  Roads Reclassified
+            CAT         NEW CATEGORY NAME
+            NUM
+             0          no data
+             1          Paved Roads
+             2          Unpaved Roads
+             3          Railroad, single track
+
+       AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
+                     (OR &lt;Ctrl-C&gt; TO CANCEL)
+</PRE>
+Based upon the information supplied by the user in the above sample screens,
+the new output map, supporting category, color, history, and header files
+are created.
+
+<H2>NON-INTERACTIVE PROGRAM USE: RECLASS RULES</H2>
+
+In non-interactive program use, the names of an input map, output map,
+and output map TITLE are given on the command line.
+However, the reclass rules are still read from standard input
+(i.e., from the keyboard, redirected
+from a file, or piped through another program).
+
+<P>
+
+Once the user has specified an input raster map layer,
+output map layer name, and (optionally) output map layer
+TITLE by typing
+
+<DL>
+<DD>
+<B>r.reclass input=</B><EM>name </EM><B>output=</B><EM>name </EM>[<B>TITLE=</B><EM>name</EM>]
+</DL>
+
+Each line of input must have the following format:
+
+<DL>
+<DD><B>input_categories=</B><EM>output_category  </EM>[<EM>label</EM>]
+</DL>
+
+<P>
+where the input lines specify the category values in the
+input raster map layer to be reclassified to the new
+<EM>output_category</EM> category value.  Specification of
+a <EM>label</EM> to be associated with the new output map
+layer category is optional.  If specified, it is recorded
+as the category label for the new category value.  The
+equal sign = is required.  The <EM>input_category(ies)</EM>
+may consist of single category values or a range of such
+values in the format "<EM>low</EM> thru <EM>high</EM>." The
+word "thru" must be present.
+<p>
+To include all (remaining) values the asterix "*" can be used. This
+rule has to be set as last rule. No further rules are accepted after
+setting this rule.
+<p>
+No data have to be spcified with NULL.
+<P>
+
+A line containing only the word <B>end</B> terminates the
+input.
+
+<H2>NON-INTERACTIVE PROGRAM USE: EXAMPLES</H2>
+
+The following examples may help clarify the reclass rules.
+<P>
+<DT> 
+<DD>1. This example reclassifies categories 1, 2 and 3 in the input raster
+map layer "roads" to category 1 with category label "good quality" in the output map
+layer, and reclassifies input raster map layer categories 4 and 5 to
+category 2 with the label "poor quality" in the output map layer.
+
+<PRE>
+    1 2 3   = 1    good quality
+    4 5     = 2    poor quality
+</PRE>
+<P>
+<DD>2. This example reclassifies input raster map layer categories 1 thru 10 to output 
+map layer category 1, input map layer categories 11 thru 20 to output map layer
+category 2, and input map layer categories 21 thru 30 to output map layer
+category 3, all without labels. The range from 30 to 40 is reclassified as
+NULL.
+<PRE>
+     1 thru 10	= 1
+    11 thru 20	= 2
+    21 thru 30	= 3
+    30 thru 40  = NULL
+</PRE>
+
+<DD>3. Subsequent rules override previous rules.  Therefore, the below example
+reclassifies input raster map layer categories 1 thru 19 and 51 thru 100
+to category 1 in the output map layer,
+input raster map layer categories 20 thru 24 and 26 thru 50 to
+the output map layer category 2, and input raster map layer category 25
+to the output category 3.
+<PRE>
+     1 thru 100	= 1    poor quality
+    20 thru 50	= 2    medium quality
+    25	        = 3    good quality
+</PRE>
+
+<DD>4. This example reclassifies categories 1, 3 and 5 in the input raster map layer to category 1 with category label "poor quality" in the output map layer,
+and reclassifies input raster map layer categories 2, 4, and 6
+to category 2 with the label "good quality" in the output map layer.
+All other values are reclassified to NULL.
+<PRE>
+    1 3 5   = 1    poor quality
+    2 4 6   = 2    good quality
+    *       = NULL
+</PRE>
+<P>
+
+<DD>5. The previous example could also have been entered as:
+<PRE>
+     1 thru 19  51 thru 100	= 1    poor quality
+    20 thru 24  26 thru 50	= 2    medium quality
+    25				= 3    good quality
+</PRE>
+or as:
+<PRE>
+     1 thru 19	 = 1    poor quality
+    51 thru 100	 = 1
+    20 thru 24	 = 2
+    26 thru 50	 = 2    medium quality
+    25		 = 3    good quality
+</PRE>
+</DD>
+<P>
+
+The final example was given to show how the labels are handled.  If a new
+category value appears in more than one rule (as is the case with new 
+category values 1 and 2),
+the last label which was specified becomes the label for that category.
+In this case the labels are assigned exactly as in the two previous examples.
+
+<H2>NOTES</H2>
+
+In fact, the <EM>r.reclass</EM> program does <EM>not</EM> generate any new
+raster map layers (in the interests of disk space conservation).  Instead, a
+<B>reclass table</B> is stored which will be used to reclassify the
+original raster map layer each time the new (reclassed) map name
+is requested.  As far as the user (and programmer) is concerned, that
+raster map has been created.
+Also note that although the user can generate a <EM>r.reclass</EM> map
+which is based on another <EM>r.reclass</EM> map,
+the new <EM>r.reclass</EM> map map will be stored in GRASS as a reclass
+of the <EM>original</EM> raster map on which the first reclassed map was
+based.  Therefore, while GRASS allows the user to provide <EM>r.reclass</EM> 
+map layer information which is based on an already reclassified map
+(for the user's convenience), no <EM>r.reclass</EM> map layer
+(i.e., <EM>reclass table</EM>) will ever be <EM>stored</EM>
+as a <EM>r.reclass</EM> of a <EM>r.reclass</EM>.
+
+<P>
+To convert a reclass map to a regular raster map layer, set your
+geographic region settings to match the settings in the header for the
+reclass map (an ASCII file found under the <EM>cellhd</EM> directory, or
+viewable by running <EM><A HREF="r.support.html">r.support</A></EM>) and then run <EM><A HREF="r.resample.html">r.resample</A></EM>.
+
+<P>
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM> can be used to convert
+a reclass map to a regular raster map layer:
+
+<div class="code"><pre>
+  r.mapcalc raster_map=reclass_map
+</pre></div>
+
+
+<P>
+where <EM>raster_map</EM> is the name to be given to the new raster map,
+and <EM>reclass_map</EM> is an existing reclass map.
+
+<H2>BEWARE</H2>
+
+Because <EM>r.reclass</EM> generates a table referencing some original
+raster map layer rather than creating a reclassed raster map layer,
+a <EM>r.reclass</EM> map layer will no longer be accessible if
+the original raster map layer upon which it was based is later removed.
+
+<P>
+A <EM>r.reclass</EM> map is not a true raster map layer.
+Rather, it is a table of reclassification values which reference the
+input raster map layer.  Therefore, users who wish to retain reclassified
+map layers must also save the original input raster map layers
+from which they were generated. Alternatively r.recode can be used.
+
+<P>
+Category values which are not explicitly reclassified to a new value
+by the user will be reclassified to NULL.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.resample.html">r.resample</A></EM>,
+<EM><A HREF="r.rescale.html">r.rescale</A></EM>,
+<EM><A HREF="r.recode.html">r.recode</A></EM>
+
+<H2>AUTHORS</H2>
+
+James Westervelt,
+<BR>
+
+Michael Shapiro, 
+<br>
+U.S.Army Construction Engineering Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

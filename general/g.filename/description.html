@@ -1,0 +1,93 @@
+<H2>DESCRIPTION</H2>
+
+<em>g.filename</em> is designed for Bourne shell scripts that need to know 
+the full file name, including it's path, for mapset elements, like raster,
+vector and site maps, region definitions and imagery groups.
+<p>
+The list of element names to search for is not fixed; any subdirectory of the
+mapset directory is a valid element name.
+<p>
+However, the user can find the list of standard GRASS element names in
+the file $GISBASE/etc/element_list. This is the file which
+g.remove/g.rename/g.copy use to determine which files need to be
+deleted/renamed/copied for a given entity type.
+
+<!-- unused
+<H2>OPTIONS</H2>
+
+<H3>Parameters:</H3>
+
+<DL>
+<DT><B>element=</B><EM>name</EM> 
+
+<DD>The name of a GRASS data base element (i.e., directory
+within the GRASS mapset location).
+
+<DT><B>mapset=</B><EM>name</EM> 
+
+<DD>The name of a GRASS data base mapset.  As a
+convenience, a single dot (.) can be used to designate the
+current mapset.
+
+<DT><B>file=</B><EM>name</EM> 
+
+<DD>The name of a GRASS data base file.
+</DL>
+-->
+<H2>OUTPUT</H2>
+
+<EM>g.filename</EM>
+writes one line to standard output:
+
+<DL>
+<DD>
+file='<EM>full_file_pathname'</EM>
+</DL>
+
+The output is a <EM>/bin/sh</EM> command to set the
+variable specified by the file <EM>name</EM> to the full
+UNIX path name for the data base file.  This variable may
+be set in the <EM>/bin/sh</EM> as follows:
+
+<DL>
+<DD>
+<div class="code"><pre>
+eval `g.filename element=<em>name</em> mapset=<em>name</em> file=<em>name</em>`
+</pre></div>
+</DL>
+
+
+<H2>NOTES</H2>
+
+This routine generates the filename, but does not care if the file (or mapset
+or element) exists or not. This feature allows shell scripts to create new data
+base files as well as use existing ones.
+
+<P>
+
+If the mapset is the current mapset, <EM>g.filename</EM>
+automatically creates the <EM>element</EM> specified if it
+doesn't already exist.  This makes it easy to add new files
+to the data base without having to worry about the
+existence of the required data base directories.  (This
+program will not create a new mapset, however, if that
+specified does not currently exist.)
+
+<P>
+The program exits with a 0 if everything is ok;  it exits
+with a non-zero value if there is an error, in which case
+file=<EM>'full_file_pathname'</EM> is not output.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.ask.html">g.ask</A></EM><br>
+<EM><A HREF="g.findfile.html">g.findfile</A></EM><br>
+<EM><A HREF="g.gisenv.html">g.gisenv</A></EM><br>
+<EM><A HREF="parser.html">parser</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

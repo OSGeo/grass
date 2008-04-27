@@ -1,0 +1,56 @@
+<H2>DESCRIPTION</H2>
+
+Converts 2D raster map(s) into one G3D raster map. 
+If the 2d and 3d region settings are different,
+the 2d resolution will be adjust to the 3d resolution.
+
+<center>
+<img src=r.to.rast3.png border=0><BR>
+<table border=0 width=700>
+<tr><td><center>
+<i>How r.to.rast3 works</i>
+</center></td></tr>
+</table>
+</center>
+
+
+<H2>NOTES</H2>
+Every 2D raster map is copied as one slice to the G3D raster map. Slices
+are counted from bottom to the top, so the bottom slice has to be number 1. 
+<br><br>
+If fewer 2D raster maps are provided than depths, the last give 2D map is
+used to fill up the  G3D slices to the top.
+
+<h2>EXAMPLES</h2>
+
+<h3>EXAMPLE 1</h3>
+
+This example shows how to convert 6 maps into one 3d map with 6 layers.
+<br>
+
+<div class="code"><pre>
+# Mapset data in Location slovakia3d
+r.to.rast3 input=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 output=new_3dmap
+</pre></div>
+
+<h3>EXAMPLE 2</h3>
+This example shows how to convert 3 maps into one 3d map with 6 layers.
+<br>
+
+<div class="code"><pre>
+# Mapset data in Location slovakia3d
+r.to.rast3 input=prec_1,prec_2,prec_3 output=new_3dmap
+</pre></div>                                                                           
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="g.region.html">g.region</A>,
+<A HREF="r3.to.rast.html">r3.to.rast</A>,
+<A HREF="r.to.rast3elev.html">r.to.rast3elev</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Soeren Gebbert
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,66 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.kappa</EM> tabulates the error matrix of classification result by
+crossing classified map layer with respect to reference map layer.  Both
+overall <EM>kappa</EM> (accompanied by its <EM>variance</EM>) and
+conditional <EM>kappa</EM> values are calculated.  This analysis program
+respects the current geographic region and mask settings.
+<P>
+<EM>r.kappa</EM> calculates the error matrix of the
+two map layers and prepares the table from which the report
+is to be created.  <EM>kappa</EM> values for overall and
+each classes are computed along with their variances. Also
+percent of commission and ommission error, total correct
+classified result by pixel counts, total area in pixel
+counts and percentage of overall correctly classified
+pixels are tabulated.
+
+<P>
+The report will be write to an output file which is in
+plain text format and named by user at prompt of running
+the program.
+
+
+<P>
+The body of the report is arranged in panels.  The
+classified result map layer categories is arranged along
+the vertical axis of the table, while the reference map
+layer categories along the horizontal axis.  Each panel has
+a maximum of 5 categories (9 if wide format) across the
+top.  In addition, the last column of the last panel
+reflects a cross total of each column for each row.  All of
+the categories of the map layer arranged along the vertical
+axis, i.e., the reference map layer,  are included in each
+panel.  There is a total at the bottom of each column
+representing the sum of all the rows in that column.
+
+
+<H2>NOTES</H2>
+
+It is recommended to reclassify categories of classified
+result map layer into a more manageable number before
+running <EM>r.kappa</EM> on the classified raster map
+layer. Because <EM>r.kappa</EM> calculates and then reports
+information for each and every category.
+
+<P>
+
+<EM>NA</EM>'s in output file mean non-applicable in case
+<EM>MASK</EM> exists.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<!--<EM><A HREF="m.ipf.html">m.ipf</A></EM>,-->
+<EM><A HREF="r.category.html">r.category</A></EM>,
+<EM><A HREF="r.mask.html">r.mask</A></EM>,
+<EM><A HREF="r.reclass.html">r.reclass</A></EM>,
+<EM><A HREF="r.report.html">r.report</A></EM>,
+<EM><A HREF="r.stats.html">r.stats</A></EM>
+
+<H2>AUTHOR</H2>
+
+Tao Wen, University of Illinois at Urbana-Champaign, Illinois
+
+<p><i>Last changed: $Date$</i>

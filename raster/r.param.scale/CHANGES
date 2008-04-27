@@ -1,0 +1,8 @@
+1/2002 Stefano Menegon/Lorenzo Potrich: curvatures fixed
+
+1/2002: Lorenzo Potrich & Markus Neteler (ITC-irst):
+        - update to FP (increased precision), kept CELL for features
+        - changed features numbers from 0..5 -> 1..6
+
+Potential problem: cats for features have to start with 1, as
+                   0 is not accepted from G_set_cats() in write_cats.c

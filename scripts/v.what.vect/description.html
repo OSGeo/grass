@@ -1,0 +1,52 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.what.vect</em> transfers attributes from the <b>qvector</b>'s map
+attribute table into the attribute table of <u>points</u> present in the
+<b>vector</b> map. The script is based on <em>v.distance</em>.
+
+<h2>NOTES</h2>
+
+The upload <b>column</b>, into which the query results are stored, must be
+present in the <b>vector</b> map. Use <em>v.db.addcol</em> to add one if needed.
+<p>
+This module only uploads attributes which exist at the exact positions of
+the input's <b>vector</b> points. For a "nearest feature" fit, use
+<em>v.distance</em> instead.
+<P>
+In case of a multipoint input <b>vector</b> map, with several points having the
+same category number, it can happen, that the query result is NULL, if the same
+category number falls into different <b>qvector</b> polygons.
+
+<h2>EXAMPLE</h2>
+
+In this example, the 'archsites' point map in the Spearfish location is copied
+to the current mapset, a new attribute column is added and the owner
+names from the 'fields' polygon map are transferred to the 'myarchsites'
+map at points' locations:
+
+<div class="code"><pre>
+g.copy vect=archsites,myarchsites
+v.db.addcol myarchsites col="owner varchar(25)"
+v.what.vect myarchsites qvect=fields column=owner qcolumn=label
+# verification:
+v.db.select myarchsites
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="v.db.addcol.html">v.db.addcol</a>,
+<a HREF="v.db.select.html">v.db.select</a>,
+<a HREF="v.distance.html">v.distance</a>,
+<a HREF="v.rast.stats.html">v.rast.stats</a>,
+<a HREF="v.what.rast.html">v.what.rast</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p>
+<i>Last changed: $Date$</i></p>

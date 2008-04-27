@@ -1,0 +1,43 @@
+CFLAGS = -g -Wall -I../include -DDGL_STATS
+LNFLAGS = -L.. -ldgl -lm
+PROGRAMS = cr_from_a view shortest_path cr_large_graph unflatten span components parse minspan delnode
+OBJECTS = opt.o cr_from_a.o view.o shortest_path.o cr_large_graph.o unflatten.o span.o components.o parse.o minspan.o delnode.o
+
+
+all: $(PROGRAMS)
+
+cr_from_a: cr_from_a.o opt.o
+	cc -o $@ cr_from_a.o opt.o $(LNFLAGS)
+
+cr_large_graph: cr_large_graph.o opt.o
+	cc -o $@ cr_large_graph.o opt.o $(LNFLAGS)
+
+unflatten: unflatten.o opt.o
+	cc -o $@ unflatten.o opt.o $(LNFLAGS)
+
+span: span.o opt.o
+	cc -o $@ span.o opt.o $(LNFLAGS)
+
+minspan: minspan.o opt.o
+	cc -o $@ minspan.o opt.o $(LNFLAGS)
+
+components: components.o opt.o
+	cc -o $@ components.o opt.o $(LNFLAGS)
+
+view: view.o opt.o
+	cc -o $@ view.o opt.o $(LNFLAGS)
+
+parse: parse.o opt.o
+	cc -o $@ parse.o opt.o $(LNFLAGS)
+
+shortest_path: shortest_path.o opt.o
+	cc -o $@ shortest_path.o opt.o $(LNFLAGS)
+
+delnode: delnode.o opt.o
+	cc -o $@ delnode.o opt.o $(LNFLAGS)
+
+.c.o:
+	cc -c $(CFLAGS) $< -o $@
+
+clean:
+	rm -f $(PROGRAMS) $(OBJECTS)

@@ -1,0 +1,273 @@
+<HEAD>
+<TITLE>GRASS 5.1/7 Vector - Modules Status</TITLE>
+</HEAD>
+<BODY>
+<P>
+<H1>GRASS 5.1/7 Vector - Modules Status</H1>
+
+This document describes the status of update from vector 4.0 (GRASS 4.0 and 5.0) to vector 5.0 (GRASS 5.1/7) format 
+and sites (GRASS 5.0) to vector 5.0 (GRASS 5.1/7) format.
+
+<P>
+You are welcome to upgrade some modules. To avoid duplicate work please send
+information to <A href=mailto:blazek@itc.it>blazek@itc.it</A>
+before you start.
+
+<HR>
+<TABLE border=2>
+<TR>
+<TD>Module name</TD>
+<TD>Location in grass5 (file containing Vect_open_*())</TD>
+<TD>Updated to 5.1/7 (all functionality from 5.0)</TD>
+<TD>Multicategory </TD>
+<TD>3D support</TD>
+<TD>Notes</TD>
+<TD>Working on</TD>
+</TR>
+
+
+
+<TR><TD>d.area</TD><TD>src/display/d.area/plot.c</TD>							<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect</TD><TD>src/display/d.vect/cmd/plot1.c, plot2.c, use_plot1.c</TD>			<TD>Y</TD><TD>Y</TD><TD>-</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.area</TD>										<TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.cats</TD><TD>src/display/d.vect.cats/plotCat.c</TD>					<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.inf</TD><TD>src.garden/grass.informix/d.vect.inf/buildInfxQry.c, runInfxFile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.labels</TD>										<TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.line</TD>										<TD>-</TD><TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.ora</TD><TD>src.garden/grass.oracle/d.vect.ora/buildInfxQry.c, runInfxFile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.pg</TD><TD>src.garden/grass.postgresql/d.vect.pg/runInfxFile.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.vect.zoom</TD><TD>src/display/d.vect.zoom/cmd/main.c</TD>					<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.what.vect</TD><TD>src/display/d.what.vect/cmd/main.c</TD>					<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.what.v.inf</TD><TD>src.garden/grass.informix/d.what.v.inf/getAllOpts.c, getSopts.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.what.v.ora</TD><TD>src.garden/grass.oracle/d.what.v.ora/getAllOpts.c, getSopts.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+<TR><TD>d.what.v.pg</TD><TD>src.garden/grass.postgresql/d.what.v.pg/getAllOpts.c, getSopts.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to d.vect</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>f.detail</TD><TD>src.contrib/CORPS/FLOOD/fdetail.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.detail</TD><TD>src.contrib/CORPS/FLOOD2/fdetail.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.econ</TD><TD>src.contrib/CORPS/FLOOD/fecon.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.econ</TD><TD>src.contrib/CORPS/FLOOD2/fecon.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.input</TD><TD>src.contrib/CORPS/FLOOD/finput.c, mkreach.c, sort.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.input</TD><TD>src.contrib/CORPS/FLOOD2/finput.c, mkreach.c, sort.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.reach</TD><TD>src.contrib/CORPS/FLOOD/freach.c, sort.c, mkreach.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.reach</TD><TD>src.contrib/CORPS/FLOOD2/freach.c, sort.c, mkreach.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.xsection</TD><TD>src.contrib/CORPS/FLOOD/fxsect.c, sort.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>f.xsection</TD><TD>src.contrib/CORPS/FLOOD2/fxsect.c, sort.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not working in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>g.region</TD><TD>src/general/g.region/cmd/main.c, inter/from_vect.c</TD>	<TD>Y</TD><TD>-</TD><TD>-</TD><TD>&nbsp</TD><TD></TD></TR>
+<TR><TD>g3.region</TD><TD>src.contrib/GMSL/g3d/src3d/general/g3.region/from_vect.c</TD>	<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>color.map</TD><TD>src.contrib/SCS/paint/Programs/color.map/cmd/do_vectors.c, vectfile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0 (SCS paint modules need to be integrated with the src/paint)</TD><TD>&nbsp</TD></TR>
+<TR><TD>grey.map</TD><TD>src.contrib/SCS/paint/Programs/grey.map/cmd/do_vectors.c, vectfile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0 (SCS paint modules need to be integrated with the src/paint)</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>ISMann2dig</TD><TD>src.contrib/CERL/SGI/ISM/ann2dig/ann2dig.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>ISMcont2dig</TD><TD>src.contrib/CERL/SGI/ISM/contour/cont2dig.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>ISMdig2ann</TD><TD>src.contrib/CERL/SGI/ISM/dig2ann/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>i.points3</TD><TD>src/imagery/i.points3/inter/draw_vect.c, plot_vect.c</TD>	<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>there are bugs in 5.0 version</TD><TD>&nbsp</TD></TR>
+<TR><TD>i.vpoints</TD><TD>src/imagery/i.vpoints/plot1.c, plot2.c, use_plot1.c</TD>	<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>java</TD><TD>src.garden/grass.java/GRASS_libvect.c</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>Andrea Antonello ?</TD></TR>
+
+<TR><TD>libgsf</TD><TD>src.contrib/GMSL/ogl3d_linux/gsf/Gv2.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used</TD><TD>&nbsp</TD></TR>
+<TR><TD>libgsf</TD><TD>src/libes/ogsf/Gv3.c</TD>					<TD>Y</TD><TD>-</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>m.clump</TD><TD>src/misc/m.clump/vect.c</TD>					<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>m.in.e00</TD><TD>src/misc/m.in.e00/vector.c</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>E00 Should be added to OGR library: http://remotesensing.org/pipermail/gdal-dev/2003-April/000547.html <BR> http://grass.itc.it/pipermail/grass5/2002-February/001918.html</TD><TD>&nbsp</TD></TR>
+<TR><TD>m.in.ntf</TD><TD>src/misc/m.in.ntf/cmd/open_vector.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>NVIZ2.2</TD><TD>src.contrib/GMSL/NVIZ2.2/src/query_postgr_orig.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD>		<TD>use DBMI instead of Postgres</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>p.map</TD><TD>src/paint/Programs/p.map/cmd/do_vectors.c, vectfile.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>p.mapcmd7</TD><TD>src.contrib/SCS/paint/Programs/newp.map/cmd/do_vectors.c, vectfile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>p.map.new</TD><TD>src/paint/Programs/p.map.new/cmd/do_vectors.c, vectfile.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>ps.map</TD><TD>src/ps.map/ps.map/cmd/do_vectors.c, vectfile.c</TD>						<TD>Y</TD><TD>Y</TD><TD>-</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>ps.map</TD><TD>src.contrib/SCS/paint/Programs/ps.map/do_vectors.c, outl_io.c, ps_outline.c, vectfile.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>r.contour</TD><TD>src/raster/r.contour/main.c</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>r.flow</TD><TD>src/raster/r.flow/io.13.c</TD>				<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>r.flowmd</TD><TD>src/raster/r.flowmd/rflow5f_1.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>this is old, use r.flow</TD><TD>&nbsp</TD></TR>
+<TR><TD>r.line</TD><TD>src/raster/r.line/cmd/io.c</TD>				<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>r.poly</TD><TD>src/raster/r.poly/cmd/io.c</TD>				<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>SG3d</TD><TD>src.contrib/GMSL/SG3d/Dcell.c, path.c, vector.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>runs only on old SGI</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>s.buffer</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.buffer</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.delaunay</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.geom</TD><TD>src/sites/s.geom/s.geom/main.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>non GPL</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.hull</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.ascii</TD><TD>sites module</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>temporary for debugging</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.atkisdgm</TD><TD>sites module</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.atkisktb</TD><TD>sites module</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.dbf</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.in.db</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.mif</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>Mapinfo supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.in.shape</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.info</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>v.info</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.kcv</TD><TD>sites module</TD>				<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.label</TD><TD>sites module</TD>						<TD>-</TD><TD>-</TD><TD>-</TD><TD>v.label</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.makedots</TD><TD>src.contrib/SCS/sites/s.dotmap.new/cmd/do_dot.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.medp</TD><TD>src.contrib/PURDUE/s.medp/main.c</TD>	<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>The old version (GRASS 5.3) is buggy and cannot be simply updated, more work needed.</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>s.normal</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.out.ascii</TD><TD>sites module</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>temporary for debugging</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.out.e00</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>sites not used in 5.1/7</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.perturb</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.probplt</TD><TD>sites module</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>Requires Gnuplot</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.proj</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>sites not used in 5.1/7, v.proj</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.qcount</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.random</TD><TD>sites module</TD>			<TD>Y</TD><TD>-</TD><TD>-</TD><TD>v.random</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.sample</TD><TD>sites module</TD>			<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.surf.idw</TD><TD>sites module</TD>			<TD>Y</TD><TD>Y</TD><TD>N</TD><TD>v.surf.idw</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.surf.rst</TD><TD>src/sites/s.surf.rst/main.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to v.surf.rst</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>s.sv</TD><TD>sites module</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.territory</TD><TD>sites module</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.to.rast</TD><TD>sites module</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>v.to.rast</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.to.vect</TD><TD>src/sites/s.to.vect/cmd/main.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>sites not used in 5.1/7</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>s.univar</TD><TD>sites module</TD>						<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.vol.rst</TD><TD>sites module</TD>						<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.voronoi</TD><TD>src.contrib/PURDUE/s.voronoi/dt_main.c, vo_main.c</TD>	<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>s.what</TD><TD>sites module</TD>					<TD>-</TD><TD>-</TD><TD>-</TD><TD>sites not used in 5.1/7; v.distance</TD><TD>&nbsp</TD></TR>
+<TR><TD>s.windavg</TD><TD>sites module</TD>					<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>tcltkgrass</TD><TD>src/tcltkgrass/src/view.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.alabel</TD><TD>src/mapdev/v.alabel/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>will be merged by v.category</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.area</TD><TD>src/mapdev/v.area/do_v_stats.c, where_am_i.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>the same functionality in d.what.vect</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.autocorr</TD><TD>src/mapdev/v.autocorr/main.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.bubble</TD><TD>src/mapdev/v.bubble/v.bubble.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.buffer</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.build</TD><TD>src/mapdev/v.build/b_a_plus.c</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.build.polylines</TD><TD>src/mapdev/v.build.polylines/cmd/main.c</TD>	<TD>Y</TD><TD>N</TD><TD>?</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.cadlabel</TD><TD>src/mapdev/v.cadlabel/v.cadlabel.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>can be done by v.distance</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.category</TD><TD>&nbsp</TD>						<TD>Y</TD><TD>Y</TD><TD>-</TD><TD>Create, delete, print category. TODO: place centroids</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.circle</TD><TD>src.contrib/NPS/v.circle/cmd/main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.buffer</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.clean</TD><TD>src/mapdev/v.clean/Vclean.c</TD>			<TD>Y</TD><TD>N,?</TD><TD>N,?</TD><TD>Break lines at intersections, remove duplicates, snap vertices</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.convert</TD><TD>&nbsp</TD><TD>Y</TD>					<TD>-</TD><TD>-</TD><TD>conversion from version 4.0 to 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.cutter</TD><TD>src/mapdev/v.cutter/parse.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.overlay</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.db.reclass</TD><TD>src/mapdev/v.db.reclass/reclass.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>Move to v.reclass</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.db.rim</TD><TD>src.garden/grass.rim/v.db.rim/cmd/vect_map.c, vect_seq_map.c, vect_map.c, vect_seq_map.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not supported in 5.1/7</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.digit</TD><TD>src/mapdev/v.digit/overlay.c</TD>			<TD>Y</TD><TD>Y</TD><TD>N</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.dig</TD><TD>src/mapdev/v.dig/main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.distance</TD><TD>src/mapdev/v.distance/main.c</TD>			<TD>Y</TD><TD>Y</TD><TD>N</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.dlg.to.digit</TD><TD>src/libes/vect32/dlg_to_dig/main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.dump</TD><TD>src.contrib/SCS/vector/v.dump/cmd/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>the same functionality in v.to.db</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.extract</TD><TD>src/mapdev/v.extract/cmd/xtract_area.c, xtract_line.c</TD>	<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.from.3</TD><TD>src/mapdev/v.from.3/324.c</TD>					<TD>-</TD><TD>-</TD><TD>-</TD><TD>moved to v.convert</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.geom</TD><TD>src/mapdev/v.geom/cmd/main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>non GPL</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.arc</TD><TD>src/mapdev/v.in.arc/main_cmd.c, main_inter.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>http://grass.itc.it/pipermail/grass5/2002-February/001918.html</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.arc.pg</TD><TD>src.garden/grass.postgresql/v.in.arc.pg/main_inter.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not supported in 5.1/7</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.ascii</TD><TD>src/mapdev/v.in.ascii/v.a_b_dig.c</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.atlas</TD><TD>src/mapdev/v.in.atlas/a2dig2.c, atl2dig2.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>atl2dig2.c is not used</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.dlg</TD><TD>src/mapdev/v.in.dlg/doit.c</TD><TD>&nbsp</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.dlg.scs</TD><TD>src.contrib/SCS/mapdev/dlg_to_dig/main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.dlg2(v.a.b.dlg)</TD><TD>src/mapdev/v.in.dlg2/new/a_b_main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.dlg2(v.dlg.to.digit)</TD><TD>src/mapdev/v.in.dlg2/bdlg_dig/main.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.dxf</TD><TD>src/mapdev/v.in.dxf/open_layer.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.in.dwg</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.dxf2</TD><TD>src/mapdev/v.in.dxf2/open_layer.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.in.dwg</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.info</TD><TD>src/mapdev/v.info/main.c</TD>					<TD>Y</TD><TD>-</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.minmaxer</TD><TD>src/sites/s.geom/v.in.minmaxer/main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.poly</TD><TD>src.contrib/OTHER/v.in.poly/cmd/main.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.sdts</TD><TD>src.contrib/SDTS/mapdev/v.in.sdts/v.in.sdts.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>SDTS supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.shape</TD><TD>src/mapdev/v.in.shape/main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.shape.pg</TD><TD>src.garden/grass.postgresql/v.in.shape.pg/main.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.tig.basic</TD><TD>src/mapdev/v.in.tig.basic/v.in.tig.bas.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.tiger.scs</TD><TD>src.contrib/SCS/imp_exp/tig_dig/imp_main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.in.tig.rim(c12.to.v)</TD><TD>src.garden/grass.tig.rim/v.in.tig.rim/pgms/c12.to.v.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile supported by v.in.ogr</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.in.transects</TD><TD>src/mapdev/v.in.transects/vect.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.llabel</TD><TD>src/mapdev/v.llabel/main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.category</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.mkgrid</TD><TD>src/mapdev/v.mkgrid/mkgrid_cmd.c, mkgrid_inter.c</TD>		<TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.mkquads</TD><TD>src/mapdev/v.mkquads/mkquads_cmd.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.mkquads</TD><TD>src.contrib/SCS/vector/v.mkquads/mkquads_cm.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.mkquads.scs</TD><TD>src.contrib/SCS/vector/v.mkquads.scs/mkquads_cm.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.mk_stats</TD><TD>src.contrib/SCS/vector/v.mk_stats/do_stats.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.arc</TD><TD>src/mapdev/v.out.arc/Vexport_arc.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.ascii</TD><TD>src/mapdev/v.in.ascii/v.b_a_dig.c</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.atlas</TD><TD>src/mapdev/v.out.atlas/write.c</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.DI</TD><TD>src.contrib/eurogis/v.out.DI/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.dlg</TD><TD>src/mapdev/v.out.dlg/v.export_dlg.c</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.dlg.scs</TD><TD>src.contrib/SCS/imp_exp/dig_dlg/v.exp_dlg.c, v.export_dlg.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.e00</TD><TD>src/mapdev/v.out.e00/v.out.e00.c</TD>					<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>http://grass.itc.it/pipermail/grass5/2002-February/001918.html</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.gef</TD><TD>src.contrib/SCS/imp_exp/dig_gef/v.exp_gef.c, v.export_gef.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.idrisi</TD><TD>src/mapdev/v.out.idrisi/main.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.mapinfo</TD><TD>src/mapdev/v.out.mapinfo/main.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>Mapinfo is supported by v.out.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.mif</TD><TD>src/mapdev/v.out.mif/plot.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>Mapinfo is supported by v.out.ogr</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.moss</TD><TD>src/mapdev/v.out.moss/v.out.moss.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.out.sdts</TD><TD>src.contrib/SDTS/mapdev/v.out.sdts/v.out.sdts.c</TD>	<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>SDTS is NOT supported by v.out.ogr</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.out.shape</TD><TD>src/mapdev/v.out.shape/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>Shapefile is supported by v.out.ogr</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.patch</TD><TD>src/mapdev/v.patch/patch.c</TD>				<TD>Y</TD><TD>Y</TD><TD>N</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.proj</TD><TD>src/mapdev/v.proj/main.c, proj.c</TD>			<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.proj</TD><TD>src.contrib/SCS/vector/v.proj/cmd/proj.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.prune</TD><TD>src/mapdev/v.prune/v.prune.c</TD>			<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>this functionality should go to v.clean</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.psu</TD><TD>src.contrib/SCS/psu/psu.vect.c, vtoc.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.random</TD><TD>src/mapdev/v.random/do_dot.c</TD><TD>&nbsp</TD>		<TD>N</TD><TD>&nbsp</TD><TD>current v.random in 5.1/7 is updated s.random!</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.random</TD><TD>src.contrib/SCS/sites/s.dotmap.new/v.random/do_dot.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.reclass</TD><TD>src/mapdev/v.reclass/cmd/rclas_area.c, rclas_lines.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.reclass</TD><TD>src.contrib/SCS/vector/v.reclass/cmd/rclas_area.c, rclas_lines.c</TD>	<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.reclass.ora</TD><TD>src.garden/grass.oracle/v.reclass.ora/infxQry.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>moved to v.reclass</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.report</TD><TD>src.contrib/SCS/vector/v.report/cmd/do_v_stats.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>replaced by v.to.db</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.rm.dangles</TD><TD>src/mapdev/v.rm.dangles/main.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to v.clean</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.rmdup</TD><TD>src/mapdev/v.rmdup/cmd/rmdup.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to v.clean</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.rmedge</TD><TD>src.contrib/SCS/vector/v.rmedge/cmd/rmedge.c</TD>		<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.spag</TD><TD>src/mapdev/v.spag/new_line.c, main2.c,spag2.c</TD>		<TD>-</TD><TD>-</TD><TD>-</TD><TD>merged to v.clean</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.stats</TD><TD>src/mapdev/v.stats/v.stats.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>the same functionality in v.info</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.surf.rst</TD><TD>src/mapdev/v.surf.rst/main.c</TD>				<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+
+<TR><TD>v.timestamp</TD><TD>src/mapdev/v.timestamp/main.c</TD>				<TD>X</TD><TD>&nbsp</TD><TD>&nbsp</TD><TD>move to v.info ?</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.to.db</TD><TD>src/mapdev/v.to.db/main.c</TD>					<TD>Y</TD><TD>Y</TD><TD>Y</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.to.rast</TD><TD>src/mapdev/v.to.rast/vect2rast.c</TD>				<TD>Y</TD><TD>Y</TD><TD>N</TD><TD>&nbsp</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.to.sites</TD><TD>src/mapdev/v.to.sites/v.to_sites.c</TD>			<TD>-</TD><TD>-</TD><TD>-</TD><TD>Sites replaced by vector points</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.trim</TD><TD>src/mapdev/v.trim/main.c</TD>					<TD>-</TD><TD>-</TD><TD>-</TD><TD>not used in 5.0; moved to v.clean</TD><TD>&nbsp</TD></TR>
+<TR><TD>v.what</TD><TD>src/mapdev/v.what/cmd/main.c</TD>				<TD>-</TD><TD>-</TD><TD>-</TD><TD>this functionality is available in v.distance</TD><TD>&nbsp</TD></TR>
+</TABLE>
+
+<BR>
+<B>Y</B> : yes, updated <BR>
+<B>N</B> : no, not updated but necessary for 6.0.0 release <BR>
+<B>-</B> : no, not updated, irrelevant <BR>
+<B>X</B> : no, not updated and not expected to be updated for 6.0.0 release <BR>
+<B>?</B> : not sure if necessary for 6.0.0 release <BR>
+
+</TABLE>
+
+</BODY>
+</HTML>
+

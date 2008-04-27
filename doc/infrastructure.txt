@@ -1,0 +1,204 @@
+How the GRASS Webserver and related infrastructure works
+
+written by M. Neteler, $Date$
+
+
+Related Wiki documents:
+* http://grass.gdf-hannover.de/wiki/GRASS_Migration_to_OSGeo
+
+== GRASS Web server ==
+
+Maintainer: M. Neteler
+
+* http://grass.osgeo.org
+** X Ghz X CPU, sponsored by Telascience.org at San Diego Supercomputer Center (USA).
+** Hardware: Blade xblade14-2
+   (http://wiki.osgeo.org/wiki/SAC_Service_Status#Telascience_Blades
+    http://wiki.osgeo.org/index.php/SAC)
+** Software:
+*** OS: Fedora Core release 4 (Stentz)
+*** Apache Server with PHP
+** Further addresses: http://www.grass-gis.org
+*** Apache rewrite engine to http://grass.osgeo.org
+** Notes: Since OSGeo-SAC doesn't want to hand out too many ssh accesses to the osgeo1 and osgeo2 machines, we moved grass.osgeo.org as
+virtual host onto Telascience.org infrastructure (sharing with other OSGeo services there)
+
+* Web pages:
+** hosted in SVN server (developers can modify, see
+   http://trac.osgeo.org/grass/wiki/WebPagesManagement),
+   downloaded to Web server via cronjob hourly
+** written in simple PHP/HTML (just include() statement for menus)
+** mirrored to selected tier-1 sites via rsync (hardcoded IPs to avoid
+   that too many sites connect at grass.osgeo.org)
+** tier-1 sites are mirrored via rsync to tier-2 mirrors (no hardcoded IPs)
+** RSS feed: rss.xml file stored in SVN-Web
+** TODO: To be migrated to OSGeo Drupal (http://grass-dev.osgeo.net)
+
+* Weekly snapshots (generated Saturday morning California time):
+** Source code tarball of SVN HEAD
+** Linux binary snapshot is compiled
+*** GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
+*** binary tar.gz is moved into Web space
+
+* GRASS user manual HTML:
+** generated during compilation of weekly Linux binary snapshot
+
+* GRASS programmer's manual (http://download.osgeo.org/grass/grass6_progman/):
+** HTML: cronjob run Saturday morning California time
+** PDF: cronjob run Saturday morning California time
+
+* i18N translation statistics:
+** generated during compilation of Linux binary snapshot, stats of
+   (cd locale; make) are extracted into text file
+** text file parsed by PHP page and shown as table
+
+* GRASS user map
+** GDF server is creating PNG output via Mapserver
+** fetched every three hours via cronjob from http://mapserver.gdf-hannover.de/tmp/
+
+* GRASS-Mapserver demo
+** currently broken after grass.osgeo.org update
+
+* Search engine (TODO!!)
+** htdig runs once a week
+** searchgrass.inc contains selective entries (SVN-Web)
+** TODO: To be migrated to OSGeo server 12/2007
+
+* FTP server
+** no longer available due to security risk
+
+* Mailman mailing lists + greylisting (at lists.osgeo.org since 11/2007)
+** Mailman is doing the job, only registered users can post
+** messages from unsubscribed people is auto-discarded without notification
+** the open "weblist" operates instead like this:
+    User -> grass-web at lists osgeo.org -> greylisting -> Mailman
+
+* Backup of mailing lists (mbox files) (TODO!!)
+** manually done by MN and Intevation (into freegis.org FTP space)
+** nightly backup at OSGeo.org
+** TODO: Establish solution via local cp on lists.osgeo.org (SAC ticket todo)
+
+* Web statistics
+** See URL at http://wiki.osgeo.org/wiki/Project_Stats
+** OSGeo: awstats (http://download.osgeo.org/logs-bin/awstats.pl?config=grass.osgeo.org)
+*** configuration at: /etc/awstats/awstats.grass.osgeo.org.conf
+*** httpd logs: /var/log/httpd/grass_*
+*** awstats processed log files: /osgeo/download/logs
+*** cronjob script: /osgeo/scripts/update_logs.sh
+** FBK Mirror: Webalizer (http://grass.fbk.eu/webalizer/) runs daily as cronjob
+** Sitemeter: http://www.sitemeter.com/?a=stats&s=s24grassgis
+
+Summary: The system should run almost autonomously.
+
+== GRASS Mailing lists ==
+
+Maintainer: Markus Neteler
+
+
+Available lists:
+
+* at OSGeo.org (http://lists.osgeo.org/mailman/listinfo):
+   grass-abm 	 	Integration of GRASS with JAVA based agent based modeling (ABM)
+   grass-announce 	GRASS announcements
+   grass-commit 	Mailing list to distribute GRASS-CVS commits
+   grass-dev 		GRASS GIS Development mailing list
+   grass-es 		La lista de correo de GRASS GIS en español
+   grass-gui 		GRASSGUI mailing list
+   grass-psc 		GRASS-PSC: GRASS Project Steering Committee
+   grass-qa 		GRASS Quality Assessment and monitoring list
+   grass-stats 		GRASS and statistical software
+   grass-translations 	Translation of GRASS (i18N)
+   grass-user 		GRASS user list
+   grass-web 		GRASS website mailing list
+   grass-windows 	winGRASS - Using GRASS on MS-Windows systems mailing list
+
+* UNUSED: at FBK-irst (http://grass.fbk.eu/mailman/admin/):
+   grass-commit-addons          Mailing list to distribute GRASS Addons-SVN commits
+
+Notes:
+* grass-announce:
+  * moderated by M. Neteler
+  * has monthly password reminder disabled to avoid leakage into publicly archived lists
+* grass-qa is receiving posts from the GRASS Quality Control System at
+  Ecole Polytechnique de Montreal, Canada. Not open for other postings.
+* grass-commit is receiving posts from the GRASS SVN at osgeo.org.
+  Not open for other postings.
+* grass-web is an open list (posting without subscription possible) with (Google) spam filter
+
+
+== GRASS Wiki ==
+
+Maintainer: Markus Neteler
+
+* http://grass.gdf-hannover.de
+* Mediawiki, sponsored by GDF Hannover, Germany
+* requires registration to keep spammers out
+
+Summary: The system should run almost autonomous. An eye must be
+         be kept on people trying to spam the site
+
+TODO: migrate to OSGeo
+
+== GRASS IRC ==
+
+Channel: irc://irc.freenode.net/grass
+Web based client: http://irc.telascience.org/
+
+* channel owner: Alessandro Frigeri <afrigeri unipg.it> ("geoalf")
+* quasi guru: Markus Neteler ("markusN")
+* further operators:
+   - Jachym ("jachym")
+   - Luca ("doktoreas")
+   - Soeren ("huhabla")
+   - Brad ("bdouglas")
+
+
+== GRASS Source code repository ==
+
+Maintainer: OSGeo-SAC, http://wiki.osgeo.org/wiki/SAC
+
+* http://trac.osgeo.org/grass/browser
+* SVN
+
+
+== GRASS Bugtracker ==
+
+Maintainer: Bernhard Reiter, Jan-Oliver Wagner (gforce)
+            Maciej Sieczka (bugs generally), with help from
+             - Jachym Cepicky - code patches,
+             - Scott Mitchell - website patches,
+             - Martin Landa   - doc patches
+
+Very old bugtracker (Dec 2000 - Dec 2006):
+  * https://intevation.de/rt/webrt?q_queue=grass
+  * webRT, sponsored by Intevation GmbH, Germany
+  * spamassasin spamfilter locally, bogofilter at grass-dev list
+  * reports are directly sent to GRASS Developers mailing list for notification
+  * TODO: migrate to trac
+
+Old bugtracker (Jan 2007 - Dec 2008):
+  * http://wald.intevation.org/tracker/?group_id=21
+  * gforce, sponsored by Intevation GmbH, Germany
+  * spamassasin spamfilter locally, bogofilter at grass-dev list
+  * needs 'noreply*wald.intevation.org' to be enabled as alias in Mailman
+  * TODO: migrate to trac
+
+New bugtracker (Jan 2008 - today):
+  * http://trac.osgeo.org/grass/report
+  * Trac
+  * posts new bugs and comments to grass-dev list
+
+== GRASS Quality Control ==
+
+Maintainer: Prof. Giulio Antoniol
+
+* http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
+  implemented and sponsored by Ecole Polytechnique de Montreal, Canada
+* Realtime analysis is sent to: http://grass.fbk.eu/mailman/listinfo/grass-qa
+
+Further notification/functionality test systems:
+* http://cia.vc/stats/project/GRASS
+** posts into #grass IRC channel
+** posts into #osgeo-commits IRC channel
+* http://www-pool.math.tu-berlin.de/~soeren/grass/GRASS_TestSuite/?C=M;O=D
+

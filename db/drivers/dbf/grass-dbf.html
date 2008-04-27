@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GRASS-DBF driver</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h1>DBF driver in GRASS</h1>
+
+<H2>Defining the DBF driver</H2>
+
+The DBF driver is the default driver, in theory no user interaction is
+required. However, if the settings should be set back from a different
+to the DBF driver, the following step is required:
+
+<div class="code"><pre>
+# keep single quotes:
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.connect -p
+</pre></div>
+
+The dbf/ subdirectory in the mapset must exist or must be created by the user.
+
+<H2>Creating a DBF table</H2>
+
+Usually DBF tables are created by GRASS when generating a vector map
+with attributes (and using DBF as default attribute driver).
+<p>
+If a DBF table has to be created manually, <a href="db.execute.html">db.execute</a>
+can be used or a spreadsheet application. Also <a href="db.copy.html">db.copy</a>
+is sometimes useful as well as <a href="db.in.ogr.html">db.in.ogr</a> to import external
+tables.
+
+<H2>Supported SQL commands by DBF driver</H2>
+<div class="code"><pre>
+  ALTER TABLE table ADD [COLUMN] columndef
+  ALTER TABLE table DROP COLUMN colname
+  CREATE TABLE table ( columndefs )
+  DROP TABLE table
+  SELECT columns FROM table
+  SELECT columns FROM table WHERE condition
+  DELETE FROM table
+  DELETE FROM table WHERE condition
+  INSERT INTO table VALUES (value1[,value2,...])
+  INSERT INTO table ( column1[,column2,...] ) VALUES (value1[,value2,...])
+  UPDATE table SET assignment1[,assignment2,...]
+  UPDATE table SET assignment1[,assignment2,...] WHERE condition
+</pre></div>
+
+<H2>Operators available in conditions</H2>
+<div class="code"><pre>
+  "="  : equal
+  "&lt;"  : smaller than
+  "&lt;=" : smaller/equal than
+  "&gt;"  : larger than
+  "&gt;=" : larger/equal than
+  "&lt;&gt;" : not equal
+  "~"  : Substring matching  (non-standard SQL)
+  "%"  : Substring matching  (limited functionality)
+</pre></div>
+
+<p> Arithmetic expressions using constants and field values are allowed 
+in condition clauses and in the RHS of assignments. 
+Usual precedence rules and bracketing (using '(' and ')') are supported. 
+Type conversion is performed if necessary (experimental). </p>
+
+<p> Aggregate functions (sum, count, min, max,...) are NOT currently supported 
+    in SELECT clauses. </p>
+
+<p> Mathematic functions (sin, cos, exp, log,...) are NOT currently supported 
+    in expressions. </p>
+
+<p> Conditions allow boolean expressions using the AND, OR and NOT operators, 
+    with the usual precedence rules. </p>
+
+<p> NULLs can be tested by 'colname IS NULL' in conditions. The negation is 'colname NOT NULL'.</p>
+
+<h2>ERROR MESSAGES</h2>
+
+An error message such as:
+
+<div class="code"><pre>
+DBMI-DBF driver error:
+SQL parser error: syntax error, unexpected DESC, expecting NAME processing 'DESC'
+</pre></div>
+
+indicates that a column name corresponds to a reserved SQL word (here: 'DESC').
+A different column name should be used. If this happens during import with
+<em>v.in.ogr</em>, the <em>cnames</em> parameter can be used to assign different
+column names on the fly.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="sql.html">SQL support in GRASS GIS</a><br>
+<a href="http://shapelib.maptools.org/dbf_api.html">DBF Specifications</a> (Shapelib)
+</em>
+
+<p><i>Last changed: $Date$</i>
+<HR>
+<BR><a href=index.html>Help Index</a>
+</body>
+</html>

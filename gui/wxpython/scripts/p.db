@@ -1,0 +1,32 @@
+#!/bin/sh
+
+#%Module
+#% description: Start stand-alone attribute table manager
+#% keywords: database
+#%End
+#%Option
+#% key: table
+#% type: string
+#% required: yes
+#% multiple: no
+#% description: Table name
+#%End
+
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+# CODE GOES HERE
+
+PYTHONPATH="$GISBASE/etc/wx"
+
+export PYTHONPATH
+
+python $PYTHONPATH/gui_modules/dbm.py $GIS_OPT_TABLE
+
+exit 0

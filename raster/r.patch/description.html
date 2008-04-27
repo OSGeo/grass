@@ -1,0 +1,115 @@
+<H2>DESCRIPTION</H2>
+
+The GRASS program <EM>r.patch</EM> allows the user to build a new
+raster map the size and resolution of the current region by assigning
+known data values from input raster maps to the cells in this region.
+This is done by filling in "no data" cells, those that do not yet
+contain data, contain NULL data, or, optionally contain 0 data,
+with the data from the first input map.
+Once this is done the remaining holes are filled in by the next input map,
+and so on.
+This program
+is useful for making a composite raster map layer from two or more adjacent
+map layers, for filling in "holes" in a raster map layer's data (e.g., in
+digital elevation data), or for updating an older map layer with more recent
+data. The current geographic region definition and mask settings are
+respected.
+<P>
+The first <EM>name</EM> listed in the string
+<B>input=</B><EM>name</EM>,<EM>name</EM>,<EM>name</EM>, ... is the name of
+the first map whose data values will be used to fill in "no data" cells
+in the current region. The second through 200 (max) input <EM>name</EM>
+maps will be used, in order, to supply data values for for the remaining
+"no data" cells.
+
+<H2>EXAMPLE</H2>
+
+Below, the raster map layer on the far left is <B>patched</B> 
+with the middle (<EM>patching</EM>) raster map layer, 
+to produce the <EM>composite</EM> raster map layer on the right. 
+
+<PRE>
+  1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
+  1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
+  3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
+  3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 3 4 4 4 4
+  3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 4 4 4 4 4
+  0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
+</PRE>
+
+Switching the <EM>patched</EM> and the <EM>patching</EM> raster map layers 
+produces the following results: 
+
+<PRE>
+  0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
+  0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
+  0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
+  4 4 4 4 4 4 4 4    3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4
+  4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
+  4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
+</PRE>
+
+<H2>NOTES</H2>
+
+Frequently, this program is used to patch together adjacent map layers which
+have been digitized separately.  The program 
+<EM><A HREF="v.mkgrid.html">v.mkgrid</A></EM> can be used to make adjacent
+maps align neatly.
+
+<P>
+The user should check the current geographic region settings before running 
+<EM>r.patch</EM>, to ensure that the region boundaries encompass all 
+of the data desired to be included in the composite map and to ensure that the
+region resolution is the resolution of the desired data. To set the
+geographic region settings to one or several raster maps, the <EM>g.region</EM>
+program can be used:
+
+<div class="code"><pre>
+g.region rast=map1[,map2[,...]]
+</pre></div>
+
+<P>
+
+Use of <EM>r.patch</EM> is generally followed by use of the GRASS programs 
+<EM><A HREF="g.remove.html">g.remove</A></EM> and 
+<EM><A HREF="g.rename.html">g.rename</A></EM>;
+<EM>g.remove</EM> is used to remove the original (un-patched) raster map
+layers, while <EM>g.rename</EM> is used to then assign to the newly-created
+composite (patched) raster map layer the name of the original raster map
+layer.
+
+<P>
+<EM>r.patch</EM> creates support files for the patched, composite output map. 
+
+
+<H2>EXAMPLE</H2>
+
+Create a list of maps matching a pattern, extend the region to include them
+all, and patch them together to create a mosaic. Overlapping maps will be 
+used in the order listed.
+
+<div class="code"><pre>
+MAPS=`g.mlist type=rast sep=, pat="map_*"`
+g.region rast=$MAPS
+r.patch in=$MAPS out=mosaic
+</pre></div>
+<BR>
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<EM><A HREF="g.remove.html">g.remove</A></EM>,
+<EM><A HREF="g.rename.html">g.rename</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.support.html">r.support</A></EM>,
+<EM><A HREF="v.mkgrid.html">v.mkgrid</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, 
+U.S. Army Construction Engineering Research Laboratory
+<br>
+-z flag by Huidae Cho
+
+<p><i>Last changed: $Date$</i></p>

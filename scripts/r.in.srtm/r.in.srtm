@@ -1,0 +1,268 @@
+#!/bin/sh
+
+#import of SRTM hgt files into GRASS
+# written by Markus Neteler 11/2003 neteler AT itc it
+#
+# COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+# Dec 2004: merged with srtm_generate_hdr.sh (M. Neteler)
+#           corrections and refinement (W. Kyngesburye)
+# Aug 2004: modified to accept files from other directories
+#           (by H. Bowman)
+# June 2005: added flag to read in US 1-arcsec tiles (H. Bowman)
+# April 2006: links updated from ftp://e0dps01u.ecs.nasa.gov/srtm/             
+#             to current links below
+#########################
+#Derived from:
+# ftp://e0srp01u.ecs.nasa.gov/srtm/version1/Documentation/Notes_for_ARCInfo_users.txt
+#     (note: document was updated silently end of 2003)
+#
+# ftp://e0srp01u.ecs.nasa.gov/srtm/version1/Documentation/SRTM_Topo.txt
+#  "3.0 Data Formats
+#  [...]
+#  To be more exact, these coordinates refer to the geometric center of 
+#  the lower left pixel, which in the case of SRTM-1 data will be about
+#  30 meters in extent."
+#
+#- SRTM 90 Tiles are 1 degree by 1 degree
+#- SRTM filename coordinates are said to be the *center* of the LL pixel.
+#       N51E10 -> lower left cell center
+#
+#- BIL uses *center* of the UL (!) pixel:
+#      http://downloads.esri.com/support/whitepapers/other_/eximgav.pdf
+#  
+#- GDAL uses *corners* of pixels for its coordinates.
+#
+# NOTE: Even, if small difference: SRTM is referenced to EGM96, not WGS84 ellps
+# http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/intpt.html
+#
+#########################
+
+#%Module
+#%  description: Import SRTM HGT files into GRASS
+#%  keywords: raster, import
+#%End
+#%option
+#% key: input
+#% gisprompt: old_file,file,input
+#% type: string
+#% description: SRTM input tile (file without .hgt.zip extension)
+#% required : yes
+#%end
+#%option
+#% key: output
+#% gisprompt: new,cell,raster
+#% type: string
+#% description: Output raster map (default: input tile)
+#% required : no
+#%end
+#%flag
+#%  key: 1
+#%  description: Input is a 1-arcsec tile (default: 3-arcsec)
+#%end
+
+
+# what to do in case of user break:
+exitprocedure()
+{
+    g.message -e 'User break!'
+    exit 1
+}
+trap "exitprocedure" 2 3 15
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "\"awk\" is required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE/$LOCATION_NAME/$MAPSET"
+PERM="$GISDBASE/$LOCATION_NAME/PERMANENT"
+
+grep -i 'proj: ll' "$PERM/PROJ_INFO" > /dev/null
+if [ $? -ne 0 ] ; then
+    g.message -e "SRTM data are in Latitude/Longitude. The current\
+      location's projection differs. STOP."
+    exit 1
+fi
+
+# use these from now on:
+FILE=`echo "$GIS_OPT_INPUT" | sed 's+.hgt++'| sed 's+.zip++'`
+TILE=`echo "$FILE" | sed 's+^.*/++'`
+FDIR=`echo "$FILE" | sed 's+[^/]*$++'`
+
+if [ -z "$GIS_OPT_OUTPUT" ] ; then
+  TILEOUT="$TILE"
+else
+  TILEOUT="$GIS_OPT_OUTPUT"
+fi
+
+
+if [ -f "$FILE.hgt.zip" ] ; then
+    #### check if we have unzip
+    if [ ! -x "`which unzip`" ] ; then
+	g.message -e "The \"unzip\" program is required, please install it first"
+	exit 1
+    fi
+
+    # really a ZIP file?
+    # make it quiet in a safe way (just in case -qq isn't portable)
+    UNZIP=-qq
+    export UNZIP
+    unzip -t "$FILE.hgt.zip" 
+    if [ $? -ne 0 ] ; then
+	g.message -e "'$FILE.hgt.zip' does not appear to be a valid zip file."
+	exit 1
+    fi
+    IS_ZIP=1
+elif [ -f "$FILE.hgt" ] ; then
+    # try and see if it's already unzipped
+    IS_ZIP=0
+else
+    g.message -e "File '$FILE.hgt.zip' not found"
+    exit 1
+fi
+
+
+#make a temporary directory
+TMPDIR="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMPDIR" ] ; then
+    g.message "Unable to create temporary files"
+    exit 1
+fi
+rm -f "$TMPDIR"
+mkdir "$TMPDIR"
+
+if [ $IS_ZIP -eq 1 ] ; then
+    install -m 644 "$FILE.hgt.zip" "$TMPDIR"
+else
+    install -m 644 "$FILE.hgt" "$TMPDIR"
+fi
+
+
+#change to temporary directory
+cd "$TMPDIR"
+
+
+if [ $IS_ZIP -eq 1 ] ; then
+    #unzip & rename data file:
+    g.message  "Extracting '$FILE'..."
+    unzip "$FILE.hgt.zip"
+    if [ $? -gt 0 ] ; then
+	g.message -e "Unable to unzip file."
+	exit 1
+    fi
+fi
+
+g.message "Converting input file to BIL..."
+mv "$TILE.hgt" "${TMPDIR}/$TILE.bil"
+
+LL_LATITUDE=`echo $TILE  | cut -b2-3`
+LL_LONGITUDE=`echo $TILE | cut -b5-7`
+
+#are we on the southern hemisphere? If yes, make LATITUDE negative.
+NORTH=`echo $TILE  | sed 's+.hgt++g' | cut -b1`
+if [ "$NORTH" = "S" ] ; then
+   LL_LATITUDE=`echo $LL_LATITUDE | awk '{printf "%.10f", $1 * -1 }'`
+fi
+
+#are we west of Greenwich? If yes, make LONGITUDE negative.
+EAST=`echo $TILE  | sed 's+.hgt++g' | cut -b4`
+if [ "$EAST" = "W" ] ; then
+   LL_LONGITUDE=`echo $LL_LONGITUDE | awk '{printf "%.10f", $1 * -1 }'`
+fi
+
+# Calculate Upper Left from Lower Left
+ULXMAP=`echo $LL_LONGITUDE | awk '{printf "%.1f", $1}'`
+# SRTM90 tile size is 1 deg:
+ULYMAP=`echo $LL_LATITUDE  | awk '{printf "%.1f", $1 + 1.0}'`
+
+
+if [ $GIS_FLAG_1 -ne 1 ] ; then
+  echo "BYTEORDER M
+LAYOUT BIL
+NROWS 1201
+NCOLS 1201
+NBANDS 1
+NBITS 16
+BANDROWBYTES 2402
+TOTALROWBYTES 2402
+BANDGAPBYTES 0
+PIXELTYPE SIGNEDINT
+NODATA -32768
+ULXMAP $ULXMAP
+ULYMAP $ULYMAP
+XDIM 0.000833333333333
+YDIM 0.000833333333333"> "$TILE.hdr"
+else
+  g.message "Attempting to import 1-arcsec data."
+  echo "BYTEORDER M
+LAYOUT BIL
+NROWS 3601
+NCOLS 3601
+NBANDS 1
+NBITS 16
+BANDROWBYTES 7202
+TOTALROWBYTES 7202
+BANDGAPBYTES 0
+PIXELTYPE SIGNEDINT
+NODATA -32768
+ULXMAP $ULXMAP
+ULYMAP $ULYMAP
+XDIM 0.000277777777777778
+YDIM 0.000277777777777778"> "$TILE.hdr"
+fi
+
+#create prj file: To be precise, we would need EGS96! But who really cares...
+echo "GEOGCS["wgs84",DATUM["WGS_1984",SPHEROID["wgs84",6378137,298.257223563],TOWGS84[0.000000,0.000000,0.000000]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433]]" > "$TILE.prj"
+
+r.in.gdal in="$TILE.bil" out="$TILEOUT"
+EXITCODE=$?
+
+\rm -f "$TILE.bil" "$TILE.hdr" "$TILE.prj" "$TILE.hgt.zip"
+cd ..
+rmdir "$TMPDIR"
+
+if [ "$EXITCODE" -ne 0 ] ; then
+   g.message -e "Unable to import data"
+   exit 1
+fi
+
+
+#nice color table #and zoom to tile
+r.colors color=srtm map="$TILEOUT"
+#g.region rast=$TILEOUT
+
+# write cmd history:
+r.support $TILEOUT history="${CMDLINE}"
+
+g.message "Done: generated map $TILEOUT"
+g.message "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"

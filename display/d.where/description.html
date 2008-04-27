@@ -1,0 +1,61 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>d.where</EM> is an <EM>interactive</EM> program that
+allows the user, using the pointing device (mouse), to
+identify the geographic coordinates associated with point
+locations within the current geographic region in the
+active display frame on the graphics monitor.
+
+<P>
+Each mouse click will output the easting and northing of the point
+currently located beneath the mouse pointer. 
+A mouse-button menu is presented so the user knows which
+mouse buttons to use. The output is always printed to the
+terminal screen; if the output is redirected into a file,
+it will be written to the file as well.
+
+<P>
+Mouse buttons:
+
+<pre>
+     Left:   where am i
+     Middle: draw to/from here
+     Right:  quit this
+</pre>
+
+The left mouse button prints the coordinates at the selected point,
+the middle mouse button allows to query two points (they are connected by a
+line for convenience). By using the right mouse button the module is left.
+
+
+<H2>NOTES</H2>
+
+This program uses the current geographic region setting and active frame. 
+It is not necessary, although useful, to have displayed a map in the current 
+frame before running <EM>d.where</EM>. The <b>-d</b> flag allows the user to
+optionally output latitude/longitude coordinates pair(s) in decimal degree
+rather than DD:MM:SS format. The <b>-w</b> flag is only valid
+if a datum is defined for the current location.
+
+If the <b>-f</b> flag is given the x,y frame coordinates of the active display 
+monitor will be returned (as a percentage, 0,0 is bottom left).
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.what.rast.html">d.what.rast</A></EM><br>
+<EM><A HREF="d.what.vect.html">d.what.vect</A></EM><br>
+<EM><A HREF="g.region.html">g.region</A></EM><br>
+<EM><A HREF="v.what.rast.html">v.what.rast</A></EM><br>
+<EM><A HREF="v.what.vect.html">v.what.vect</A></EM>
+
+
+<H2>AUTHORS</H2>
+
+James Westervelt, <br>
+Michael Shapiro, <BR>
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i>

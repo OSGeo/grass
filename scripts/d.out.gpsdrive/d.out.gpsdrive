@@ -1,0 +1,208 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       d.out.gpsdrive
+#
+# AUTHOR(S):    M. Hamish Bowman
+#		Dept. Marine Science, University of Otago, New Zealand
+#
+# PURPOSE:      Export display monitor to a gpsdrive compatible image
+#
+# COPYRIGHT:    (c) 2005 The GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+#
+# GpsDrive: http://www.gpsdrive.de
+#
+# REQUIREMENTS:
+#	- awk
+#	- d.info newer than 30 June 2006
+#	- pngtopnm and pnmtojpeg from NetPBM  http://netpbm.sourceforge.net
+#
+#############################################################################
+#
+# NOTES:
+#
+#  Output must be 1280x1024,  use PNG or JPEG
+#  You can figure out the "scale" factor by meters/pixel * 2817.947378
+#    2817 is maybe someones screen dpi converted to pixels/meter??
+#
+#  At scales wider than say 1:250,000 the curvatute of the Earth really starts
+#   to play havoc with gpsDrive's simple projection system if you are using
+#   a UTM or other non-lat/lon projection. Best to use output from a lat/lon
+#   location in that case.
+#
+# A series of 1:50,000 maps may not be so bad.
+#   This translates to approx a 22.7km x 18.2km image window in the GIS.
+#     x_ext=scale*(1280/2817.9)
+#  1:75,000 uses a region 34.1km x 27.3km.
+#  1:100,000 uses a region  45.4km x 36.3km.
+#  1:175,000 uses a region  80km across.
+#
+# HINTS:
+#  first get things ready in a 640x512 window (1/2 scale, same aspect ratio)
+#   export GRASS_WIDTH=640
+#   export GRASS_HEIGHT=512
+#   d.mon x0
+#
+
+#%Module
+#%  description: Export display monitor to a GpsDrive compatible backdrop image
+#%  keywords: display, export, GPS
+#%End
+#%option
+#% key: output
+#% type: string
+#% gisprompt: new_file,file,output
+#% description: name for new map image (lives in ~/.gpsdrive)
+#% required : yes
+#%end
+#%flag
+#%  key: j
+#%  description: Make JPEG instead of PNG image
+#%end
+
+if [ -z "$GISBASE" ] ; then
+        echo "You must be in GRASS GIS to run this program."
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk/gawk first" 
+    exit 1
+fi
+
+#### check if we have NetPBM
+if [ "$GIS_FLAG_J" -eq 1 ] ; then
+  if [ ! -x "`which pngtopnm`" ] || [ ! -x "`which pnmtojpeg`" ] ; then
+    g.message -e "NetPBM tools are required for JPEG output"
+    exit 1
+  fi
+fi
+
+# set environment so awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+
+if [ ! -d "$HOME/.gpsdrive" ] ; then
+    mkdir "$HOME/.gpsdrive"
+fi
+
+# GpsDrive scales maps named top_* as lat/lon (1:1) on-screen
+# GpsDrive scales maps named map_* as UTM-like (1:cos(lat) ?) on-screen
+PROJ=`g.region -p | grep ^proj | cut -f2 -d' '`
+if [ "$PROJ" -eq 3 ] ; then
+   IS_LATLON=1
+   TYPE="top"
+else
+   IS_LATLON=0
+   TYPE="map"
+   if [ "$PROJ" -ne 1 ] ; then
+      g.message "GpsDrive assumes northings are not rotated compared to true-geographic north."
+      g.message "If you are using a projection with significant curvature away from the central"
+      g.message 'meridian, then you will likely end up with a distorted background map!'
+      g.message "Keeping the area small will lessen the error, but not eliminate it."
+      g.message "Consider output from a Lat/Lon location."
+   fi
+fi
+
+GRASS_TRUECOLOR=TRUE
+export GRASS_TRUECOLOR
+GRASS_WIDTH=1280
+export GRASS_WIDTH
+GRASS_HEIGHT=1024
+export GRASS_HEIGHT
+
+# get rid of no or double extension
+output="${TYPE}_`basename $GIS_OPT_OUTPUT .png`.png"
+
+GRASS_PNGFILE="$HOME/.gpsdrive/$output"
+export GRASS_PNGFILE
+
+# As .jpg output will overwrite .png of the same name, we check,
+if [ -e "$GRASS_PNGFILE" ] ; then
+    g.message -e "Output image of that name (or base name) already exists."
+    exit 1
+fi
+
+
+# Check the current status of the monitor
+monitorcheck="`d.mon -p | grep 'No monitor'`"
+if  [ -n "$monitorcheck" ] ; then
+  g.message "No display monitor selected."
+  exit 1
+fi
+
+# check to see we have a new enough version of d.info
+d.info -b  1> /dev/null 2> /dev/null
+if [ $? -ne 0 ] ; then
+  g.message -e "Need a newer version of GRASS."
+  exit 1
+fi
+
+curr_mon=`d.mon -p | awk '{printf "%s", $4}'`
+
+#export display to PNG driver
+dsave=`d.save -a`
+d.mon start=PNG
+  FRAME_DIMS="`d.info -b | cut -f2- -d' '`"
+  eval "$dsave"
+d.mon stop=PNG
+#reset
+sleep 1
+d.mon select="$curr_mon"
+
+if [ "$GIS_FLAG_J" -eq 1 ] ; then
+   out_jpeg="`basename $output .png`.jpg"
+   cd "$HOME/.gpsdrive"
+   sync  # sleep 1
+   pngtopnm "$output" | pnmtojpeg > "$out_jpeg"
+   rm -f "$output"
+   output="$out_jpeg"
+fi
+
+eval `g.region -g`
+
+FRAME_WIDTH="`echo $FRAME_DIMS | awk '{printf("%f", $2 - $1)}'`"
+FRAME_HEIGHT="`echo $FRAME_DIMS | awk '{printf("%f", $4 - $3)}'`"
+
+if [ $IS_LATLON -eq 0 ] ; then
+   LAT=`g.region -l | grep 'Center lat' | cut -f2 -d'[' | sed -e 's/]$//'`
+   LON=`g.region -l | grep 'Center lon' | cut -f2 -d'[' | sed -e 's/]$//'`
+
+   M_PER_PIXEL=`echo $e $w $FRAME_WIDTH | awk '{printf("%f", ($1 - $2) / $3)}'`
+else
+   LAT=`g.region -c | grep 'northing' | cut -f2 -d':' | awk '{print $1}'`
+   LON=`g.region -c | grep 'easting' | cut -f2 -d':' | awk '{print $1}'`
+
+   EXTENT=`g.region -e | grep 'north-south extent' | cut -f2 -d':' | awk '{print $1}'`
+   M_PER_PIXEL=`echo $EXTENT $FRAME_HEIGHT | awk '{printf("%f", ($1 * 1852*60.) / $2)}'`
+fi
+
+SCALE=`echo $M_PER_PIXEL | awk '{printf("%d", 0.5 + ($1 * 2817.947378) )}'`
+
+if [ $IS_LATLON -eq 0 ] && [ "$SCALE" -ge 125000 ] ; then
+   g.message -w "Projected input maps may be somewhat inaccurate at this scale."
+fi
+
+echo "$output $LAT $LON $SCALE" >> "$HOME/.gpsdrive/map_koord.txt"
+
+g.message "Center lat,lon is [$LAT,$LON]"
+g.message "Scale is [1:${SCALE}]"
+
+g.message "Done."
+

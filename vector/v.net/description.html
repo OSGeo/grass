@@ -1,0 +1,52 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net</em> is used for vector network maps maintenance.
+It reports about the current network graph status.
+It also permits to globally insert missing nodes and to connect
+unconnected nodes to the graph within a given distance threshold.
+
+<h3>NOTES</h3>
+
+If vector editing is required to modify the graph, <em>v.digit</em>
+or <em>v.edit</em> can be used. Separately, 
+<a HREF="lrs.html">Linear Referencing System</a> is available
+in GRASS.
+
+<h3>EXAMPLES</h3>
+
+Spearfish based examples:<P>
+
+Create nodes globally for all line ends and intersections:
+<br>
+<div class="code"><pre>
+v.net in=streams out=streams_node
+</pre></div>
+
+<P>
+Merge in nodes from a separate map within given threshold:
+<br>
+<div class="code"><pre>
+echo "1|601653.5|4922869.2|start
+2|593330.8|4924096.6|end" | v.in.ascii cat=1 x=2 y=3 out=startend col="cat integer, \
+                         east double precision, north double precision, label varchar(43)"
+
+#create lines map connecting points to network (on layer 2)
+v.net myroads points=startend out=myroads_net op=connect thresh=200
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="v.digit.html">v.digit</a></em>,
+<em><a HREF="v.edit.html">v.edit</a></em>,
+<em><a HREF="v.net.iso.html">v.net.iso</a></em>,
+<em><a HREF="v.net.path.html">v.net.path</a></em>,
+<em><a HREF="v.net.steiner.html">v.net.steiner</a></em>,
+<em><a HREF="v.net.salesman.html">v.net.salesman</a></em>
+
+<h2>AUTHORS</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy<BR>
+Martin Landa, FBK-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>

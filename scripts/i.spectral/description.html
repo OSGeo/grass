@@ -1,0 +1,38 @@
+<h2>DESCRIPTION</h2>
+
+<em>i.spectral</em> displays spectral response at user specified 
+locations in images.
+
+<h2>NOTES</h2>
+
+This script needs gnuplot to be installed.
+
+
+<H2>EXAMPLE</H2>
+
+To analyze a time series of maps, run:
+
+<div class="code"><pre>
+d.rast map_1
+LIST=`g.mlist type=rast mapset=timeseries pat="map_*" | sort -t '_' -k 2 -n | tr '\n' ','| sed 's+,$++g'`
+i.spectral -i rast=$LIST
+</pre></div>
+
+This will search all maps in the mapset 'timeseries' which match have
+the 'map_' prefix and order by a number following this prefix (day of the
+year etc). The user is then asked to click into a map position and the
+resulting pixel values of all matching maps are drawn in the gnuplot
+output.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.what.rast.html">d.what.rast</a></em><br>
+<em><a HREF="d.where.html">d.where</a></em><br>
+<em><a HREF="r.what.html">r.what</a></em><br>
+
+<h2>AUTHOR</h2>
+
+Markus Neteler<br>
+Francesco Pirotti
+
+<p><i>Last changed: $Date$</i>

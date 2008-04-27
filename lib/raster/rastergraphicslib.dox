@@ -1,0 +1,206 @@
+/*! \page rastergraphicslib GRASS Raster Graphics Library
+
+\section intro Introduction
+
+The <i>Raster Graphics Library</i> provides the programmer with access to 
+the GRASS graphics devices. <b>All video graphics calls are made 
+through this library (directly or indirectly)</b>. No 
+standard/portable GRASS video graphics module drives any video display 
+directly. This library provides a powerful, but limited number of graphics 
+capabilities to the programmer. The tremendous benefit of this approach is 
+seen in the ease with which GRASS graphics applications modules port to new 
+machines or devices. Because no device-dependent code exists in application 
+programs, virtually all GRASS graphics modules port without modification. 
+Each graphics device must be provided a driver (or translator program). At 
+run-time, GRASS graphics modules rendezvous with a user-selected driver 
+module. Two significant prices are paid in this approach to graphics: 1) 
+graphics displays run significantly slower, and 2) the programmer does not 
+have access to fancy (and sometimes more efficient) resident library 
+routines that have been specially created for the device.
+
+This library uses a couple of simple concepts. First, there is the idea of a 
+current screen location. There is nothing which appears on the graphics 
+monitor to indicate the current location, but many graphic commands begin 
+their graphics at this location. It can, of course, be set explicitly. 
+Second, there is always a current color. Many graphic commands will do their 
+work in the currently chosen color. The programmer always works in the 
+screen coordinate system. Unlike many graphics libraries developed to 
+support CAD, there is no concept of a world coordinate system. The 
+programmer must address graphics requests to explicit screen locations. This 
+is necessary, especially in the interest of fast raster graphics.
+
+The upper left hand corner of the screen is the origin. The actual pixel 
+rows and columns which define the edge of the video surface are returned 
+with calls to <i>R_screen_left()</i>, <i>R_screen_rite(), 
+R_screen_bot(), and R_screen_top().</i>
+
+<b>Note.</b> All routines and global variables in this library, documented 
+or undocumented, start with the prefix <b>R_.</b> To avoid name 
+conflicts, programmers should not create variables or routines in their own 
+modules which use this prefix.
+
+
+\section conn Connecting to the Driver
+
+Before any other graphics calls can be made, a successful connection to a 
+running and selected graphics driver must be made.
+
+\verbatim
+R_open_driver()
+R_close_driver()
+\endverbatim
+
+\section col Colors
+
+GRASS is highly dependent on color for distinguishing between different 
+categories. No graphic patterning is supported in any automatic way. There 
+are two color modes. Fixed color refers to set and immutable color look-up 
+tables on the hardware device. In some cases this is necessary because the 
+graphics device does not contain programmer definable color look-up tables 
+(LUT). Floating colors use the LUTs of the graphics device often in an 
+interactive mode with the user. The basic impact on the user is that under 
+the fixed mode, multiple maps can be displayed on the device with apparently 
+no color interference between maps. Under float mode, the user may 
+interactively manipulate the hardware color tables (using modules such as 
+<i>d.colors</i>). Other than the fact that in float mode no more colors 
+may be used than color registers available on the user's chosen driver, 
+there are no other programming repercussions.
+
+\verbatim
+R_color_table_fixed()
+R_color_table_float()
+\endverbatim
+
+Colors are set using integer values in the range of 0-255 to set the
+<b>red, green</b>, and <b>blue</b> intensities. In float mode, these values
+are used to directly modify the hardware color look-up tables and
+instantaneously modify the appearance of colors on the monitor. In fixed mode,
+these values modify secondary look-up tables in the devices driver module so
+that the colors involved point to the closest available color on the device.
+
+\verbatim
+R_reset_color()
+R_reset_colors()
+R_color()
+R_standard_color()
+R_RGB_color()
+\endverbatim
+
+\section basic Basic Graphics
+
+\verbatim
+R_screen_bot()
+R_screen_top()
+R_screen_left()
+R_screen_rite()
+R_move_abs()
+R_move_rel()
+R_cont_abs()
+R_cont_rel()
+R_box_abs()
+R_box_rel()
+R_erase()
+R_flush()
+R_stabilize()
+\endverbatim
+
+\section poly Poly Calls
+
+In many cases strings of points are used to describe a complex line, a series of
+dots, or a solid polygon. Absolute and relative calls are provided for each of
+these operations.
+
+\verbatim
+R_polydots_abs()
+R_polydots_rel()
+R_polygon_abs()
+R_polygon_rel()
+R_polyline_abs()
+R_polyline_rel()
+\endverbatim
+
+\section raster Raster Calls
+
+GRASS requires efficient drawing of raster information to the display device.
+These calls provide that capability.
+
+\verbatim
+R_raster()
+R_raster_char()
+R_set_RGB_color()
+R_RGB_raster()
+\endverbatim
+
+\section text Text
+
+These calls provide access to built-in vector fonts which may be sized and
+clipped to the programmer's specifications.
+
+\verbatim
+R_set_window()
+R_font()
+R_text_size()
+R_text()
+R_get_text_box()
+\endverbatim
+
+\section font GRASS font support
+
+The current mechanism of GRASS font support is this (all files are in the
+directory display/drivers/lib unless stated otherwise):
+
+<ul>
+<li> A client calls R_font(), which sends the filename
+  ($GISBASE/fonts/font_name) to the display driver using the FONT command. See
+  lib/raster/Font.c.
+  
+<li> The display driver receives the FONT command and the filename. See
+  command.c.
+  
+<li> It passes the filename to Font_get() (Font_get.c), which passes it to
+  init_font() (font.c), which reads the file into memory.
+  
+<li> A client draws text by calling R_text (lib/raster/Text.c), which
+  sends the string to the display driver using the TEXT command.
+  
+<li> The display driver receives the TEXT command and the string. See command.c
+  (again).
+  
+<li> It passes the string to Text() (Text.c) which calls soft_text() with the
+  string and several stored parameters.
+  
+<li> soft_text() (Text2.c) calls drawchar() (same file), to draw each
+  character.
+  
+<li> drawchar() calls get_char_vects() (font.c) to retrieve the actual vector
+  definitions. It then draws the character using text_move() and text_draw()
+  (same file), which use the Move_abs() and Cont_abs() functions (these are
+  implemented separately by each display driver, e.g. XDRIVER).
+</ul>
+
+\section user User Input
+
+The raster library provides mouse (or other pointing device) input from the
+user. This can be accomplished with a pointer, a rubber-band line or a
+rubber-band box. Upon pressing one of three mouse buttons, the current mouse
+location and the button pressed are returned.
+
+\verbatim
+R_get_location_with_pointer()
+R_get_location_with_line()
+R_get_location_with_box()
+\endverbatim
+
+\section load Loading the Raster Graphics Library
+
+The library is loaded by specifying $ (RASTERLIB) in the Makefile.
+
+<b>Note.</b> This library must be loaded with $(GISLIB) since it uses 
+routines from that library. See \ref GIS_Library for details on that 
+library. This library is usually loaded with the $(DISPLAYLIB). See 
+\ref Display_Graphics_Library for details on that library.
+
+See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+discussion of Makefiles.
+
+*/

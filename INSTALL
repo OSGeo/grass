@@ -1,0 +1,309 @@
+                   INSTALL GRASS from source code
+		   ------------------------------
+
+Please read *all* text below.
+
+Note: During the development stages, this version of GRASS was
+      previously called GRASS 5.1 and 5.7.
+
+
+Table of contents
+PREREQUISITES
+(A) SOURCE CODE DISTRIBUTION
+(B) COMPILATION
+(C) COMPILATION NOTES for 64bit platforms
+(D) INSTALLATION (first time)
+(E) INSTALLATION ON MACOSX
+(F) RUNNING GRASS
+(G) UPDATE OF SOURCE CODE (CVS or CVS snapshot only)
+(H) COMPILING INDIVIDUAL MODULES - OWN MODULES
+(I) CODE OPTIMIZATION
+(J) DEBUGGING OPTIONS
+(K) LARGE FILE SUPPORT (for raster maps)
+(L) SUPPORT
+(M) GRASS PROGRAMMER'S MANUAL
+(N) CONTRIBUTING CODE AND PATCHES
+(O) DRAFT TUTORIAL
+
+
+PREREQUISITES
+
+The install order matters. GRASS needs at least two libraries
+which have to be installed before installing/compiling GRASS:
+For links to the software, see ./REQUIREMENTS.html in this
+directory:
+
+Installation order:
+	1. PROJ4
+	2. GDAL-OGR  (compiled without GRASS support)
+        3. optionally: databases such as PostgreSQL, MySQL, sqlite
+	4. GRASS
+        5. optionally: GDAL-OGR-GRASS plugin
+
+(A) SOURCE CODE DISTRIBUTION
+
+GRASS source code is currently distributed in 2 forms:
+
+1) Officially released source code (e.g. grass-6.0.0.tar.gz or later)
+
+  The Full source code version contains all the GRASS source code
+  required for compilation. It is distributed as one file (*.tar.gz
+  package) and the version is composed of 3 numbers, e.g. 6.0.0, 6.0.1
+  etc.
+
+2) SVN or SVN Snapshots of source code (SVN or SVN snapshot)
+
+  This version of the source code can be acquired either from the SVN
+  repository (http://svn.osgeo.org/grass/) or as a snapshot
+  (*.tar.gz package) of that SVN repository. The SVN snapshot name
+  contains the date when the snapshot was created (checked out from
+  the SVN repository), e.g. grass-6.3.svn_src_snapshot_2008_01_19.tar.gz
+
+
+(B) COMPILATION
+
+IMPORTANT: All unix distributions are different.
+           For Solaris, see hint below.
+
+The command,
+
+   ./configure --help 
+
+explains the options used to disable the compilation of non-mandatory
+GRASS modules. See REQUIREMENTS.html for details.
+  
+First step of the compilation:
+
+    CFLAGS="-g -Wall" ./configure
+
+
+Explanation of make targets: 
+
+    make install       - installs the binary
+
+    make bindist       - make a binary package with install script
+
+    make srcdist       - make a source package for distribution
+    make srclibsdist   - make a source package for library distribution
+
+    make libs          - make libraries only
+
+    make clean         - delete all files created by 'make' 
+    make distclean     - 'make clean' + delete all files created by './configure'
+    make libsclean     - clean libraries compiled by 'make libs'
+
+    make htmldocs      - generate programmer's documentation in HTML
+    make packagehtmldocs - package programmer's documentation in HTML
+    make pdfdocs       - generate programmer's documentation as PDF files
+
+
+Next step is the compilation itself:
+
+    make       
+
+
+Note for Solaris users:
+
+To configure GRASS correctly on a system which doesn't have a suitable
+install program (AC_PROG_INSTALL ignores versions which are known to
+have problems), you need to ensure that $srcdir is an absolute path,
+by using e.g.:
+
+	`pwd`/configure ...
+or:
+	./configure --srcdir=`pwd` ...
+
+Then proceed as described above.
+
+
+Note for using a different compiler:
+
+By setting environment variables, the compiler
+names can be defined (C and C++):
+
+	CC=cc CPP=cpp ./configure ...
+
+
+(C) COMPILATION NOTES for 64bit platforms
+
+To successfully compile GRASS on 64bit platforms, the required
+FFTW2 library has to be compiled with -fPIC flag:
+
+    #this applies to FFTW2, not GRASS:
+    cd fftw-2.1.5/
+    CFLAGS="-fPIC" ./configure
+    make
+    make install
+
+To fully enable 64bit library usage for GRASS on 64bit platforms, 
+the following additional parameters are recommended/required:
+
+    ./configure \
+       --enable-64bit \
+       --with-libs=/usr/lib64 \
+       ...
+
+See also CODE OPTIMIZATION below.
+
+
+(D) INSTALLATION (first time)
+
+After compilation, the resulting code is stored in the directory
+    ./dist.$ARCH
+and the scripts (grass6, ...) in
+    ./bin.$ARCH
+
+To run GRASS, simply start
+    ./bin.$ARCH/grass6
+
+or run
+
+    make install
+    grass6
+
+
+(E) INSTALLATION ON MACOSX
+
+See the ReadMe.rtf in the ./macosx/ folder.
+
+
+(F) RUNNING GRASS
+
+Download a sample data package from the GRASS web site, for example the
+Spearfish60 data set. Extract the data set and point "database" in the
+GRASS startup menu to the directory.
+
+Enjoy.
+
+
+(G) UPDATE OF SOURCE CODE (SVN or SVN snapshot only)
+
+Assuming that you want to update your current installation from
+SVN, you have to perform a few steps. In general:
+
+- update from SVN
+- configure, compile
+
+In detail:
+
+    cd /where/your/grass6sourcecode/lives/
+    svn update
+    ./configure ...
+    make
+    make install
+
+
+(H) COMPILING INDIVIDUAL MODULES - OWN MODULES
+
+To compile (self-made) GRASS modules or to compile modified modules
+at least the GRASS libraries have to be compiled locally. This is
+done by launching:
+
+    make libs
+
+Then change into the module's directory and launch the "make" 
+command. The installation can be either done with "make install" from
+the main source code directory or locally with 
+    "INST_NOW=y make"
+
+You may want to define an alias for this:
+    alias gmake6='INST_NOW=y make'
+Then simply compile/install the current module with
+    gmake6
+
+Note: If you keep your module source code outside the standard GRASS
+source code directory structure, you will have to change the relative
+path(s) in the Makefile to absolute path(s).
+
+
+(I) CODE OPTIMIZATION
+
+If you would like to set compiler optimisations, for a possibly faster
+binary, type (don't enter a ";" anywhere):
+
+	CFLAGS=-O ./configure
+or,
+	setenv CFLAGS -O
+	./configure
+
+whichever works on your shell. Use -O2 instead of -O if your compiler
+supports this (note: O is the letter, not zero). Using the "gcc" compiler,
+you can also specify processor specific flags (examples, please suggest
+better settings to us):
+
+  CFLAGS="-mcpu=athlon -O2" # AMD Athlon processor with code optimisations
+  CFLAGS="-mcpu=pentium"    # Intel Pentium processor
+  CFLAGS="-mcpu=pentium4"   # Intel Pentium4 processor
+  CFLAGS="-O2 -msse -msse2 -mfpmath=sse -minline-all-stringops" # Intel XEON 64bit processor
+  CFLAGS="-mtune=nocona -m64 -minline-all-stringops"            # Intel Pentium 64bit processor
+
+To find out optional CFLAGS for your platform, enter:
+  gcc -dumpspecs
+
+See also: http://gcc.gnu.org/
+
+A real fast GRASS version (and small binaries) will be created with
+LDFLAGS set to "stripping" (but this disables debugging):
+
+  CFLAGS="-O2 -mcpu=<cpu_see_above> -Wall" LDFLAGS="-s" ./configure
+
+
+(J) DEBUGGING OPTIONS
+
+The LDFLAGS="" part must be undefined as "-s" will strip the debugging 
+information.
+
+Don't use -O for CFLAGS if you want to be able to step through function
+bodies. When optimisation is enabled, the compiler will re-order statements
+and re-arrange expressions, resulting in object code which barely resembles
+the source code.
+
+The -g and -Wall compiler flags are often useful for assisting debugging:
+
+  CFLAGS="-g -Wall" ./configure
+
+See also the file
+./doc/debugging.txt
+
+
+(K) LARGE FILE SUPPORT (for raster maps)
+
+GRASS >= 6.0 includes experimental support for reading and writing large files
+(> 2GB) if it is possible in your operating system. If you compile with
+  configure [...] --enable-largefile
+you should be able to have raster maps which are larger than 2GB.
+
+Note that the support currently only applies to the core raster I/O code.
+Individual programs may or may not work with large files - please report.
+
+
+(L) SUPPORT
+
+Note that this code is still actively being developed and errors inevitably
+turn up. If you find a bug, please report it to the GRASS bug tracking system
+so we can fix it. See http://grass.osgeo.org/bugtracking/index.php
+
+If you are interested in helping to develop GRASS, please join the GRASS
+developers mailing list. See http://grass.osgeo.org/devel/index.php
+
+
+(M) GRASS PROGRAMMER'S MANUAL
+
+The Programmer's manual is generated with doxygen from the source code.
+Please see the README file and the files at:
+http://grass.osgeo.org/devel/index.php#prog
+
+
+(N) CONTRIBUTING CODE AND PATCHES
+
+Please see ./SUBMITTING, ./SUBMITTING_DOCS, ./SUBMITTING_TCLTK
+./SUBMITTING_PYTHON and ./SUBMITTING_SCRIPTS in this directory.
+
+
+(O) DRAFT TUTORIAL
+
+http://grass.gdf-hannover.de/twiki/bin/view/GRASS/GrassSixTutorial
+
+------------------
+(C) 1999-2008 by The GRASS Development Team
+$Date$

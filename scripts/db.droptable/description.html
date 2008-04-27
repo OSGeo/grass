@@ -1,0 +1,38 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.droptable</em> drops an attribute table.
+If the <b>-f</b> force flag is not given then nothing is removed, instead
+a preview of the action to be taken is printed.
+
+<h2>NOTES</h2>
+
+<em>db.droptable</em> is a front-end to <em>db.execute</em> to allow easier
+usage. To some extent it is verified if the table is connected to a vector map.
+
+<h2>EXAMPLES</h2>
+
+Dropping a table (Spearfish):
+<p>
+<div class="code"><pre>
+# work on own copy
+g.copy vect=roads,myroads
+
+# only shows what would happen
+db.droptable myroads
+
+# actually drop the table
+db.droptable -f myroads
+
+db.tables -p
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date: 2007-07-14 12:59:51 +0200 (Sat, 14 Jul 2007) $</i>

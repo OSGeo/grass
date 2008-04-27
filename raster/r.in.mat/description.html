@@ -1,0 +1,136 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.in.mat</EM> will import a GRASS raster map from a Version 4 MAT-File 
+which was created with Matlab or Octave.
+Attributes such as map title and bounds will also be imported if they exist.
+<BR>
+<BR>
+Specifically, the following array variables will be read:<BR>
+<ul>
+  <li><b> map_data</b>
+  <li><b> map_name</b>
+  <li><b> map_title</b>
+  <li><b> map_northern_edge</b>
+  <li><b> map_southern_edge</b>
+  <li><b> map_eastern_edge</b>
+  <li><b> map_western_edge</b>
+</ul>
+
+Any other variables in the MAT-file will be simply skipped over.<BR>
+<BR>
+The '<b>map_name</b>' variable is optional, if it exists, and is valid, the 
+new map will be thus named. If it doesn't exist or a name is specified with
+the <b>output=</b> option, the raster map's name will be set to 
+"<tt>MatFile</tt>" or the name specified respectively.
+(maximum 64 characters; normal GRASS naming rules apply)
+<BR>
+<BR>
+The '<b>map_title</b>' variable is optional, the map's title is set if it 
+exists.
+<BR>
+<BR>
+The '<b>map_northern_edge</b>' and like variables are mandatory unless the 
+user is importing to a "XY" non-georeferenced location
+(e.g. imagery data). Latitude and longitude values should be in decimal form.
+
+
+<H2>NOTES</H2>
+
+<EM>r.in.mat</EM> imports a Version 4 MAT-File. These files can be 
+successfully created with more modern versions of Matlab and Octave
+(see "EXAMPLES" below).<BR><BR>
+
+Everything should be Endian safe, so the file to be imported can be simply 
+copied between different system architectures without binary translation
+(caveat: see "TODO" below).<BR><BR>
+
+As there is no IEEE value for <tt>NaN</tt> in integer arrays, GRASS's null 
+value may be used to represent it within these maps. Usually Matlab will save 
+any integer based matrix with <tt>NaN</tt> values as a double-precision 
+floating point array, so this usually isn't an issue. To save space, once the 
+map is loaded into GRASS you can convert it back to an integer map with the 
+following command:
+<div class="code"><pre>
+r.mapcalc int_map="int(MATFile_map)"
+</pre></div>
+
+<tt>NaN</tt> values in either floating point or double-precision floating point
+matrices should translate into null values as expected.<BR><BR>
+
+
+<EM>r.in.mat</EM> must load the entire map array into memory before writing,
+therefore it might have problems with <i>huge</i> arrays.
+(a 3000x4000 DCELL map uses about 100mb RAM)<BR><BR>
+
+GRASS defines its map bounds at the outer-edge of the bounding cells, not at
+the coordinates of their centroids. Thus, the following Matlab commands may 
+be used to determine and check the map's resolution information will be correct:
+<div class="code"><pre>
+    [rows cols] = size(map_data)
+    x_range = map_eastern_edge - map_western_edge
+    y_range = map_northern_edge - map_southern_edge
+    ns_res = y_range/rows
+    ew_res = x_range/cols
+</pre></div>
+
+<BR>
+Remember Matlab arrays are referenced as <tt>(row,column)</tt>,
+i.e. <tt>(y,x)</tt>.
+<BR><BR>
+In addition, <EM>r.in.mat</EM> and <EM>r.out.mat</EM> make for a nice 
+binary container format for transferring georeferenced maps around, 
+even if you don't use Matlab or Octave. 
+
+<H2>EXAMPLES</H2>
+
+In Matlab, save with:
+<div class="code"><pre>
+save filename.mat map_* -v4
+</pre></div>
+
+In Octave, save with:
+<div class="code"><pre>
+save -mat4-binary filename.mat map_*
+</pre></div>
+
+<BR>
+
+<H2>TODO</H2>
+
+Robust support for mixed-Endian importation.
+<i>(This is a work in progress, please help by reporting any failures to the
+<a href="http://grass.itc.it/bugtracking/bugreport.html">
+GRASS bug tracking system</a>)</i>
+<BR>
+Add support for importing map history, category information, color map, etc.
+if they exist.
+<BR>
+Option to import a version 5 MAT-File, with map and support information 
+stored in a single structured array.
+
+
+<H2>BUGS</H2>
+
+If you encounter any problems, please contact the GRASS Development Team.
+
+<H2>SEE ALSO</H2>
+
+<i>
+<a href="r.out.mat.html">r.out.mat</a>,
+<a href="r.in.ascii.html">r.in.ascii</a>, 
+<a href="r.in.bin.html">r.in.bin</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.null.html">r.null</a>.<P>
+The <a href="http://www.octave.org">Octave</a> project
+</i>
+
+
+<H2>AUTHOR</H2>
+
+Hamish Bowman<BR> <i>
+Department of Marine Science<BR>
+University of Otago<BR>
+New Zealand</i><BR>
+
+<BR>
+<p><i>Last changed: $Date$</i>

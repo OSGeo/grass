@@ -1,0 +1,32 @@
+Known BUGS
+$Date: 2004-11-09 12:57:26 $
+
+- menu 6: photo.init
+          it's unclear at time if these values are used in case the user
+          selects 0
+               Use these values at run time? (1=yes, 0=no)            0_
+           
+           -> should be explained in manual
+  
+- menu 7: photo.2target
+          after selecting (click) the second control point in the right
+          window, this GCP isn't shown, should be drawn in orange color
+          before asking for confirmation.
+
+- problem in alpine regions with steep slope (or poor DEM):
+
+         NOTES: the size of target window is defined in photo.rectify/global.h
+          #define TIE_ROW_DIST 128
+          #define TIE_COL_DIST 128
+          #define NROWS 128
+          #define NCOLS 128
+          -> 128 is too large for alpine regions! MN 2003
+              32 works better, but slows down the processing. A dynamic selection
+              based on local slope were best.
+
+---------------------
+TODOs
+
+- menu 8: photo.rectify
+          should work without (7) photo.2target if (6) photo.init is used.
+          (see ERDAS)

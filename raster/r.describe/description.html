@@ -1,0 +1,109 @@
+<H2>DESCRIPTION</H2>
+
+<EM><B>r.describe</B></EM> prints a terse listing of category values found in
+a user-specified raster map layer.
+
+<P>
+
+<EM><B>r.describe</B></EM> ignores the current geographic region and mask, and
+reads the full extent of the input raster map.  This functionality is useful if the
+user intends to <EM>reclassify</EM> or <EM>rescale</EM> the data, 
+since these functions (<EM><A HREF="r.reclass.html">r.reclass</A></EM> and
+<EM><A HREF="r.rescale.html">r.rescale</A></EM>) 
+also ignore the current <EM>geographic region</EM>
+and <EM>mask</EM>.
+
+<p>
+The <EM><B>nv</B></EM> parameter sets the string to be used to represent <tt>NULL</tt> 
+values in the module output; the default is '*'.
+
+<p>
+The <EM><B>nsteps</B></EM> parameter sets the number of quantisation steps to divide into 
+the input raster map.
+
+<H2>NOTES</H2>
+
+<H3>FLAGS</H3>
+
+If the user selects the <b>-r</b> flag, a range of category values found in 
+the raster map layer will be printed. The range is divided into three groups: 
+negative, positive, and zero. If negative values occur, the minimum and maximum 
+negative values will be printed. If positive values occur, the minimum and maximum 
+positive values will be printed. If zero occurs, this will be indicated. The range 
+report will generally run faster than the full list (the default output).
+
+<p>
+
+The <B>-d</B> flag can be used to force <em>r.describe</em> to respect the current region
+extents when repoting raster map categories. The default behavior is to read the full 
+extent of the input raster map.
+
+<p>
+If the <B>-1</B> flag is specified, the output appears with one category value/range per line.
+
+<p>
+The <B>-n</B> flag suppresses the reporting of <tt>NULL</tt> values.
+
+<H2>EXAMPLES</H2>
+
+The following examples are from the Spearfish60 sample Location:
+
+<p>
+
+# Print the full list of raster map categories:
+<div class="code"><PRE>
+r.describe landcover.30m 
+* 11 21-23 31 32 41-43 51 71 81-83 85 91 92
+</PRE></div>
+<p>
+
+# Print the raster range only:
+<div class="code"><PRE>
+r.describe -r landcover.30m
+11 thru 92
+*
+</PRE></div>
+
+# Print raster map category range, suppressing nulls:
+<div class="code"><PRE>
+r.describe -n landcover.30m 
+11 21-23 31 32 41-43 51 71 81-83 85 91 92
+</PRE></div>
+<p>
+
+# Print raster map categories, one category per line:
+<div class="code"><PRE>
+r.describe -1 geology 
+
+*
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</PRE></div>
+<p>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="g.region.html">g.region</A>,
+<A HREF="r.mask.html">r.mask</A>,
+<A HREF="r.reclass.html">r.reclass</A>,
+<A HREF="r.report.html">r.report</A>,
+<A HREF="r.rescale.html">r.rescale</A>,
+<A HREF="r.stats.html">r.stats</A>,
+<A HREF="r.univar.html">r.univar</A>
+
+</EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

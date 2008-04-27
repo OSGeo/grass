@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>gis.m: PROFILE TOOL</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<h2>PROFILE TOOL (gis.m)</h2>
+
+The Profile Tool will draw a 2-dimensional profile of the surface of
+any raster map. The profile will be calculated along a transect line, drawn
+with  a mouse on a map display. The transect line can be a
+simple line (i.e., with only a beginning and ending node) or a complex
+polyline (i.e., with multiple segments, delineated by multiple nodes).
+<br>
+
+<h3>Using the Profile Tool</h3>
+
+The Profile Tool is started from profile button
+ <img alt="" src="icons/gui-profile.gif"> on the toolbar of an active
+map display.
+<br>
+<br>
+<div align="center"><img src="gm_profile1.png" alt="" align="top" height="264" width="400">
+<BR><BR>
+<img src="gm_profile2.png" alt="" height="422" width="480">
+</div>
+
+<ol>
+<li>Click the map button on the Profile Tool toolbar to select a raster map
+to profile. The map to profile can be different from the one displayed.
+</li>
+<li>
+Click the transect button to begin drawing a transect to profile with a mouse
+the current map display (i.e., the map display from which you launched the
+Profile Tool). Draw by holding down the left button to make a
+"rubber-band" line for each segment of the transect. A transect can
+have a single, straight segment or multiple segment. There is no need
+to "end" the drawing. The Profile Tool will profile the drawn transect
+at any time. You can also  extend an existing transect and
+draw a profile of the new transect.
+</li>
+<li>Click the profile button to create the profile.
+</li>
+</ol>
+
+<div align="center"><img src="gm_profile3.png" alt="" height="264" width="400">
+<br>
+</div>
+<br>
+The profile extends from left to right in the profile display. The
+horizontal (x-axis) scale represents the total distance along the
+transect to be profiled. Vertical lines mark each node on a
+multi-segment transect and show the total distance along the transect
+to the node. The vertical (y-axis) scale is in units of the map that is
+being profiled. All scaling and axis labels are created automatically,
+and cannot be changed by the user.<br><br>The erase button will erase the
+current transect and profile.
+<br>
+<br>
+The save button will save the profile to an EPS format file
+<br>
+
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="gis.m.html">gis.m</a><br>
+<a href="r.transect.html">r.transect</a><br>
+<a href="i.rectify.html"><br></a><a href="v.proj.html"></a>
+</em>
+
+<h2>AUTHORS</h2>
+Michael Barton, Arizona State University, Tempe, Arizona, USA<br>
+Hamish Bowman, University of Otago, Dunedin, New Zealand
+
+<p><i>Last changed: $Date$</i></p>
+<hr>
+<p><a href="index.html">Main index</a> - <a href="full_index.html">Full index</a></p>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.dropcol</em> drops a column from an attribute table.
+If the <b>-f</b> force flag is not given then nothing is removed, instead
+a preview of the action to be taken is printed.
+
+<h2>NOTES</h2>
+
+<em>db.dropcol</em> is a front-end to <em>db.execute</em> to allow easier
+usage with a special workaround for the SQLite driver to support column
+drop.
+
+<h2>EXAMPLES</h2>
+
+Dropping a column (Spearfish):
+<p>
+<div class="code"><pre>
+# work on own copy
+g.copy vect=roads,myroads
+db.describe -c myroads
+
+# only shows what would happen:
+db.dropcol myroads column=label
+
+# actually drops the column
+db.dropcol -f myroads column=label
+
+db.describe -c myroads
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.droptable.html">db.droptable</a></em>,
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.dropcol.html">v.db.dropcol</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

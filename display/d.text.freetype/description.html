@@ -1,0 +1,159 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>d.text.freetype</EM>
+draws text in the graphics monitor's active display frame using TrueType
+fonts already installed on the user's system.
+<BR>
+
+
+<H3>Parameter Notes:</H3>
+
+<DL>
+
+<DT><B>at=</B><EM>x,y</EM>
+<DD>Locates the text at this screen position (percentage, [0,0] is bottom
+    left). If this option is omitted, 
+    the user will be prompted to use the mouse to specify the location.
+<DT><B>font=</B><EM>name</EM>
+<DD>Specifies a font listed in the GRASS 'freetypecap' definition file.
+
+<DT><B>charset=</B><EM>name</EM>
+<DD>Sets character encoding for input <B>text</B>. (e.g. <TT>ISO-8859-1</TT>)
+
+<DT><B>color=</B><EM>name</EM>
+<DD>Sets text color to <EM>name</EM> or <EM>R:G:B triplet</EM>.
+	It can also be a hexadecimal value of <TT>0xRRGGBB</TT>
+	(deprecated).<BR>
+    Options: red, orange, yellow, green, blue, indigo, 
+    violet, gray, white, and black<BR>
+    Default: <EM>gray</EM><BR>
+
+<DT><B>size=</B><EM>value</EM>
+<DD>Sets text height in percent of available frame height.<BR>
+    Default: 10
+
+<DT><B>align=</B><EM>name</EM>
+<DD>Aligns text in this way.<BR>
+    Options: ll, lc, lr, cl, cc, cr, ul, uc, ur<BR>
+    l?: Lower, c?: Vertically Centered, u?: Upper,<BR>
+    ?l: Left, ?c: Horizontally Centered, ?r: Right<BR>
+    Default: <EM>ll</EM> (Lower Left)<BR>
+
+</DL>
+
+
+<H3>Command mode:</H3>
+
+<H4>Key</H4>
+<DL>
+<DT>{REQUIRED}
+<DD>
+<DT>[OPTIONAL]
+<DD>
+<DT>THIS|orTHAT
+<DD>
+<DT>+, - 
+<DD>Relative value
+<DT>r, %, p
+<DD>Radian, Percentage, and Pixels respectively
+</DL>
+
+<H4>Commands</H4>
+
+<DL>
+<DT><DD>.F {font|path}[:charset] <EM>font</EM>
+<DD>
+<DT><DD>.C {color_name|R:G:B} <EM>color</EM> (default: gray)
+<DD>
+<DT><DD>.S [+|-]size[p] <EM>size</EM> (default: 5)
+<DD>
+<DT><DD>.B {0|1} <EM>bold</EM> (default: 0)
+<DD>
+<DT><DD>.A {ll|lc|lr|cl|cc|cr|ul|uc|ur} <EM>align</EM> (default: ll)
+<DD>
+<DT><DD>.R [+|-]rotation[r] <EM>rotation</EM> (default: 0)
+<DD>
+<DT><DD>.I linespacing <EM>linespacing</EM> (default: 1.1)
+<DD>
+<DT><DD>.X [+|-]x[%|p] <EM>x-coord</EM>
+<DD>
+<DT><DD>.Y [+|-]y[%|p] <EM>y-coord</EM>
+<DD>
+<DT><DD>.L {0|1} <EM>linefeed</EM> (default: 1)
+<DD>
+<DT><DD>.E [+|-]east[%|p] <EM>x-origin</EM>
+<DD>
+<DT><DD>.N [+|-]north[%|p] <EM>y-origin</EM>
+<DD>
+<DT><DD>.. <EM>dot</EM>
+<DD>
+</DL>
+
+To end input, press Ctrl-d on a blank line.
+<BR><BR>
+
+<H2>EXAMPLES</H2>
+
+<H4>Standard mode:</H4>
+
+<TT><B>d.text.freetype</B> text="GRASS GIS" -g at=2107055,5603133 \<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size=7 path=/usr/X11R6/lib/X11/fonts/TTF/luximb.ttf</TT>
+<P>
+
+<H4>Command mode:</H4>
+The following example prints three lines: "<TT><font color=gray>GRASS</font>
+ <font color=red>d.text.freetype</font> <font color=gray>output</font></TT>",
+"<TT><font color=gray>See test.input file</font></TT>", and 
+"<TT><font color=gray>for more details.</font></TT>".
+
+<DL>
+<DT><TT><B>d.text.freetype -c</B>
+<dd>.F /usr/X11R6/lib/X11/fonts/TTF/luximb.ttf:ISO-8859-1
+<dd>.S 20p
+<dd>.L 0
+<dd>GRASS 
+<dd>.C red
+<dd> d.text.freetype
+<dd>.C gray
+<dd> output
+<dd>.L 1
+<dd>See test.input file
+<dd>for more details.</TT>
+</DL>
+<BR>
+
+Command mode instructions may also be read directly from a text file:<BR><BR>
+<TT><B>d.text.freetype</B> -c &lt; test.input</TT>
+<BR><BR>
+
+<H2>DEFINITION FILE</H2>
+
+To help users select fonts conveniently, the definition file,
+<TT>$(GISBASE)/etc/freetypecap</TT>, is provided.  Its format is as follows:
+
+<PRE>
+	font:fontpath:charset:description
+	*default_font:fontpath:charset:description
+</PRE>
+
+See the file for examples.
+<BR><BR>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.text.html">d.text</A></EM><br>
+<EM><A HREF="d.font.freetype.html">d.font.freetype</A></EM><br>
+<EM><A HREF="d.font.html">d.font</A></EM><br>
+<EM><A HREF="d.title.html">d.title</A></EM><br>
+<EM><A HREF="d.where.html">d.where</A></EM><br>
+<BR><BR>
+
+<H2>AUTHOR</H2>
+
+Huidae Cho
+&lt;<a href=mailto:grass4u@gmail.com>grass4u@gmail.com</a>&gt;
+<P>
+Updates by Hamish Bowman, NZ
+
+<p><i>Last changed: $Date$</i>

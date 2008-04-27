@@ -1,0 +1,61 @@
+<H2>DESCRIPTION</H2>
+
+<em>v.what.rast</em> reads raster value for each point in the vector and updates <b>col</b> 
+column in vector attribute table by this value. The column should be type
+number (integer, float, double, ... ).
+<br>
+If more points have the same category, attribute value is set to NULL.
+If raster values is NULL, attribute value is set to NULL.
+
+<H2>NOTES</H2>
+
+<em>v.what.rast</em> operates on the attribute table. To modify the vector
+geometry instead, use <em>v.drape</em>.
+
+<H2>EXAMPLES</H2>
+
+A) Reading values from raster map at position of vector points, writing these values
+   into column of vector map:
+<br>
+<div class="code"><pre>
+v.what.rast vect=pnts rast=elevation col=heights
+</pre></div>
+
+<P>
+B) In case of a vector map without attached attribute table, first add
+a new attribute table. This table is then populated with values
+queried from the raster map:
+<br>
+<div class="code"><pre>
+v.db.connect -p vectpoints
+# .. no table yet.
+
+# add new table, link to map:
+v.db.addtable vectpoints col="cat integer, myvalue integer, otherval double precision"
+
+# query raster map and upload values to vector table into specified column:
+v.what.rast vect=vectpoints rast=rastmap col=myvalue
+
+# verify new attribute table:
+v.db.select vectpoints
+
+# verify statistics of uploaded values:
+v.univar map=vectpoints col=myvalue type=point
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a HREF="v.db.select.html">v.db.select</a>,
+<A HREF="v.drape.html">v.drape</a>,
+<A HREF="v.univar.html">v.univar</a>,
+<a HREF="v.rast.stats.html">v.rast.stats</a>,
+<a href="v.what.vect.html">v.what.vect</a>
+</EM>
+
+<H2>AUTHOR</H2>
+Radim Blazek
+
+<p>
+<i>Last changed: $Date$</i>

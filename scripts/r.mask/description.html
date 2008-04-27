@@ -1,0 +1,106 @@
+<h2>DESCRIPTION</h2>
+
+<em><b>r.mask</b></em> - Facilitates creation of a raster "MASK" map to
+control raster operations.
+
+<p>
+The MASK is only applied when <em>reading</em> an existing GRASS raster map,
+for example when used in a module as an input map.
+
+The MASK will block out certain areas of a raster map from analysis and/or display, by
+"hiding" them from sight of other GRASS modules. Data falling within the bounaries of the MASK 
+can be modified and operated upon by other GRASS raster modules; data
+falling outside the MASK is treated as if it were NULL.
+<p>
+Because the MASK is actually only a reclass map named "MASK", it can be
+copied, renamed, removed, and used in analyses, just like other GRASS
+raster map layers.  The user should be aware that a MASK remains in
+place until a user renames it to something other than "MASK", or removes
+it using "<tt>r.mask -r</tt>" or <em><a HREF="g.remove.html">g.remove</a></em>.
+
+<p>
+Grid cells in the MASK map containing <tt>0</tt> or <tt>NULL</tt>
+will replace data with NULL, while cells containing other values will allow
+data to pass through unaltered.
+
+<p>
+To restore raster operations to normal (i.e., all cells of the current region),
+remove the MASK file by setting the <b>-r</b> remove MASK flag. In this case, a
+dummy value must also be given for the input parameter.
+A MASK also can&nbsp;be removed by using <em><a href="g.remove.html">g.remove</a></em>
+or by renaming it to any other name with <em><a href="g.rename.html">g.rename</a></em>.
+
+
+<h2>NOTES</h2>
+
+The above method for specifying a "mask" may seem
+counterintuitive.  Areas inside the MASK are not hidden;
+areas outside the MASK will be ignored until the MASK file
+is removed.
+<p>
+
+The mask is read as an integer map. If MASK is actually a
+floating-point map, the values will be converted to integers using the
+map's quantisation rules (this defaults to round-to-nearest, but can
+be changed with r.quant).
+<p>
+
+<em>r.mask</em> uses <em>r.reclass</em> to create a reclassification of an
+existing raster map and name it MASK. A reclass map takes up less space, but
+is affected by any changes to the underlying map from which it was created. The user 
+can select category values from the input raster to use in the MASK with the <em>maskcats</em> parameter; 
+if <em>r.mask</em> is run from the command line, the category values listed in <em>maskcats</em> 
+must be quoted (see example below).
+<p>
+
+Somewhat similar program functions to those performed by
+<em>r.mask</em> can be done using
+<em><a HREF="r.mapcalc.html">r.mapcalc</a></em>, 
+<em><a HREF="g.region.html">g.region</a></em>,
+and other programs.
+
+<p>
+<em>(GRASS Shell Script)</em>
+
+<h2>EXAMPLES</h2>
+Creating a raster mask:
+<div class="code"><pre>
+<b>r.mask input=</b>geology
+MASK created. All subsequent raster operations
+will be limited to MASK area
+Removing or renaming raster file named MASK will
+restore raster operations to normal
+[Raster MASK present]
+</pre></div>
+
+Removing a raster mask with the -r flag:
+<div class="code"><pre>
+<b>r.mask -r input=</b>anything_you_wish
+Removing raster <MASK>
+Raster MASK removed
+</pre></div>
+
+Creating a mask from categories 3 through 6 in the spearfish 'geology' raster map:
+<div class="code"><pre>
+<b>r.mask input=</b>geology <b>maskcats=</b>"3 thru 6"
+MASK created. All subsequent raster operations
+will be limited to MASK area
+Removing or renaming raster file named MASK will
+restore raster operations to normal
+[Raster MASK present]
+
+<h2>SEE ALSO</h2>
+<em>
+<a HREF="g.region.html">g.region</a>,
+<a HREF="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.reclass.html">r.reclass</a>
+<a href="g.remove.html">g.remove</a>
+<a href="g.rename.html">g.rename</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Michael Barton, Arizona State University
+
+<p>
+<i>Last changed: $Date$</i></p>

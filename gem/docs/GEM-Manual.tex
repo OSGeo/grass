@@ -1,0 +1,1337 @@
+%% LyX 1.4.0 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[11pt,english]{article}
+\usepackage{pslatex}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,a4paper,tmargin=2.5cm,bmargin=2.5cm,lmargin=2cm,rmargin=2cm}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+\usepackage{calc}
+\usepackage{color}
+\usepackage{setspace}
+\onehalfspacing
+\IfFileExists{url.sty}{\usepackage{url}}
+                      {\newcommand{\url}{\texttt}}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\newenvironment{lyxcode}
+{\begin{list}{}{
+\setlength{\rightmargin}{\leftmargin}
+\setlength{\listparindent}{0pt}% needed for AMS classes
+\raggedright
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
+\normalfont\ttfamily}%
+ \item[]}
+{\end{list}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+
+
+\usepackage{babel}
+\makeatother
+\begin{document}
+
+\title{GRASS Extensions Manager (GEM), Version 1.0\\
+Manual}
+
+
+\author{Benjamin Ducke (benducke@compuserve.de)}
+
+\maketitle
+\begin{abstract}
+GRASS 6 Extensions Manager (GEM) is a small stand-alone program intended
+to make it easy for GRASS GIS users to download, compile and install
+additional GRASS modules. GEM manages source code, scripts and pre-compiled
+binaries in a simple file layout called an \emph{extension}. Extensions
+are accompanied by a set of ASCII files that store all relevant information
+including dependencies on other extensions or specific GRASS versions.
+Extensions can be stored conveniently in a single compressed archive
+file, a so-called \emph{extension package} using external programs
+such as tar and gzip. An extension (package) can be created easily
+by copying existing source codes into the right places of a skeleton
+file layout and filling in some information in simple, commented ASCII
+files. Makefiles written for GRASS 6 should work with minimal changes
+as GEM uses a simplified version of the orginal GRASS make system.
+
+This Document provides instructions for using GEM and for writing
+portable GRASS extensions to be installed with GEM.
+
+\newpage{}
+\end{abstract}
+\tableofcontents{}
+
+\newpage{}
+
+
+\section{Why Do I Need GEM?}
+
+GRASS GIS (\url{www.grass.itc.it}) is a powerful, modularized open
+source Geographic Information System. The base distribution comes
+with hundreds of useful modules. However, there are a few flaws in
+the design:
+
+\begin{enumerate}
+\item Installation of add-on modules that are not part of the main distribution
+(\url{http://grass.gdf-hannover.de/twiki/bin/view/GRASS/GrassAddOns})
+is tedious. It requires a full copy of the GRASS source codes. Add-on
+sources must be copied to the right locations, compilation and installation
+must then be started as though one was to install the whole system
+from scratch.
+\item Users willing to install add-on functionality must have at least a
+basic knowledge of how to compile and install modules from C source
+code.
+\item The sheer number of modules makes it hard to find the one that has
+exactly the functionality needed. There is no thematic grouping of
+modules. This becomes worse as more add-on modules are installed.
+\item Developers of add-on functionality currently have no way to make this
+process more user-friendly. Add-on developers as a rule write modules
+that are functionaly closely related. These should be grouped and
+distributed as a package along with some over-arching documentation
+to bind them together and make them more accessible from a user's
+perspective.
+\item Some add-ons modules exist in the official CVS and in another place
+such as the developer's homepage. For a user, it is hard to know which
+version is more current. In fact, GRASS has no versioning scheme except
+for the base distribution itself.
+\end{enumerate}
+GEM, the GRASS Extensions Manager, was developed as an open source
+solution to address all of these issues. It is a tool that simplifies
+development, distribution and installation of additional modules (extensions)
+for GRASS GIS (version 6.0 and above).
+
+From the GRASS user's perspective GEM can be used to:
+
+\begin{itemize}
+\item Conveniently download and install add-on GRASS modules (extensions)
+that are not part of the CVS.
+\item Avoid having to keep a complete GRASS source tree on the disk for
+installing new functionality.
+\item Install add-on modules from provided binaries without the need to
+have any development tools installed.
+\item Manage installed extensions: query, update, uninstall them.
+\end{itemize}
+Form the GRASS developer's perspective GEM allows for:
+
+\begin{enumerate}
+\item Development of GRASS modules completely outside the CVS tree. In a
+dedicated directory that is much easier to maintain and sync.
+\item Packaging of module source code, documentation and pre-compiled binaries
+and deployment as a single file (extension package).
+\item Simple outsourcing of sets of GRASS functionality from the base distribution
+into extension packages.
+\end{enumerate}
+GEM works on Linux/Unix, MacOS X and cygwin systems. There are some
+OS specific issues which are discussed in the appendix.
+
+
+\section{How Does GEM Work?}
+
+The GEM program itself is a relatively simple frontend written in
+ANSI C that interacts with more complex installation scripts (make
+system) contained in each individual extension package. These scripts
+are a scaled-down and slightly modified version of the original GRASS
+6 make system. Files in an extension package correspond 1:1 with the
+layout of the original GRASS source tree, the only difference being
+that an extension package only contains source code for the add-on
+modules plus a few things that are needed to setup the source code,
+parse HTML documentation etc.
+
+A GRASS extension is essentially a minimal replication of the GRASS
+source tree including all necessary makefiles. It contains only the
+source code for a few modules that constitute the extensions. On the
+top level, you will find a number of ASCII files that contain the
+information gem needs to manage the extension. All information is
+managed in plain ASCII format. 
+
+Installed extensions will be registered in \emph{\$(PATH\_TO\_GRASS)/etc/extensions.db}.
+This registry file also contains version and dependencies information.
+Each extension should also provide an uninstall script to be run when
+the user wants to get rid of that extension. 
+
+They are stored in \emph{\$(PATH\_TO\_GRASS)/etc/uninstall.<extension\_name>}. 
+
+Extension may add a submenu to the GIS Manager. The first extension
+installed creates an additional \char`\"{}Xtns\char`\"{} top level
+menu under which each extension can register a nested submenu. 
+
+Gem modifies \$\emph{(PATH\_TO\_GRASS)/etc/d.m/menu.tcl} for this. 
+
+The extension source code is in the \emph{src} directory, along with
+all the necessary makefiles. Other directories may hold pre-compiled
+binaries and should be named appropriately (\emph{win32}, \emph{macosx},
+...). 
+
+Extensions may provide code for C language modules and libraries,
+scripts and HTML documentation. 
+
+GEM compiles and install add-on modules using the sources and makefiles
+contained in the extension.
+
+For the user, GEM is really simple to use. All that is required is
+a download of the extension package to install and knowledge of where
+the local GRASS installation resides. If the user does not have permission
+to install new files in the GRASS installation directory, a password
+for a user with sufficient permissions will be required (see next
+section).
+
+Developers of add-on modules will (hopefully) also find the process
+of migrating their work to a GEM extension package a matter of minutes
+and well worth the effort. More information for developers can be
+found in section \ref{sec:Developing-Extensions-for} of this document.
+
+
+\section{Installation and Usage}
+
+Note: in addition to GEM itself, you will probably want to install
+GNU C compiler and maketools for compilation. Tar, gzip, unzip, bunzip2
+for handling various archive formats. Wget for fetching extensions
+from the internet. 
+
+
+\subsection{Program Installation\label{sub:Program-Installation}}
+
+You can download GEM source code and binaries for several different
+platforms from the author's homepage (\url{http://www.uni-kiel.de/ufg/index1.htm}).
+Check the links at the bottom of the page. You will also find several
+extension packages for installation with GEM.
+
+Download the file \emph{gem-someversion.tar.gz} to a convenient location,
+unpack it and change into the newly created directory:
+
+\begin{lyxcode}
+tar~-xzvf~gem-\emph{someversion}.tar.gz
+
+cd~gem-\emph{someversion}
+\end{lyxcode}
+In this directory, you will find a folder \emph{bin} that contains
+binaries for different platforms. Change into it and list its contents:
+
+\begin{lyxcode}
+cd~bin
+
+ls
+\end{lyxcode}
+You will see a number of programs. Pick the one that corresponds to
+your OS and start it. E.g., if you are working in a cygwin environment
+under Windows, do:
+
+\begin{lyxcode}
+./gem-cygwin.exe
+\end{lyxcode}
+You should get a text explaining the program's options on your screeen.
+
+If you want (and have the required permissions), you can copy the
+file to a directory for system-wide binaries so you can call GEM from
+anywhere without having to prefix a directory path (./ in the example
+above) by typing just \texttt{gem}:
+
+\begin{lyxcode}
+cp~gem-cygwin.exe~/usr/local/bin/gem
+\end{lyxcode}
+Once GEM has reached a stable release version (1.0), it will also
+become part of the GRASS CVS version. If you download and install
+such a version on your computer, you will automatically have GEM available
+system-wide (usually \emph{/usr/local/bin}) and can just start it
+with:
+
+\begin{lyxcode}
+gem
+\end{lyxcode}
+Instructions on how to user GEM to install an actual extension are
+given in section \ref{sub:Basic-Usage}.
+
+
+\subsection{Installation from Source Code}
+
+%
+\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: please make sure that you system-wide linker path includes the
+location of the GRASS dynamic libraries (e.g. \emph{/usr/local/grass-6.3.cvs/libs}).
+This is usually done by adding an appropriate entry to \emph{/etc/ld.so.conf}
+and running \emph{ldconfig}. You may have to consult your system's
+administrator.%
+\end{minipage}%
+
+
+You must have a C compiler, preferably GNU C, and the corresponding
+make tools installed. Most Linux/Unix systems should come with these
+installed. If not, use your distributions package manager to install
+them (look for something like {}``Development tools''). Mac OS X
+and Cygwin users: see OS specific notes in section \ref{sec:OS-Specific-Issues}.
+
+Download the file \emph{gem-someversion.tar.gz} to a convenient location,
+unpack it and change into the newly created directory:
+
+\begin{lyxcode}
+tar~-xzvf~gem-\emph{someversion}.tar.gz
+
+cd~gem-\emph{someversion}
+\end{lyxcode}
+In this directory, start the compilation process:
+
+\begin{lyxcode}
+make
+\end{lyxcode}
+Afer a few seconds, the compilation is done and you have an executable
+file that you can start from the current directory:
+
+\begin{lyxcode}
+./gem
+\end{lyxcode}
+\ldots{} or copy the executable to a system-wide directory, such
+as \emph{/usr/local/bin}.
+
+
+\subsection{Quickstart}
+
+%
+\framebox{\parbox[t][1\totalheight]{1\columnwidth}{%
+Note: please be aware that GEM can only install modules in a specially
+prepared package. See section 4 for how to do this.%
+}}%
+
+
+For the impatient. To install an extension into your running version
+of GRASS: start a GRASS session, download an extension and install
+it from inside the GRASS session using:
+
+\begin{lyxcode}
+gem~-{}-install=\emph{ExtensionName}.tar.gz
+\end{lyxcode}
+Provide the superuser password if needed. Restart GIS Manager and
+look in the {}``Xtns'' menu for new modules (some modules may not
+provide such entries). If anything goes wrong or confuses you: read
+the rest of this section!
+
+
+\subsection{Basic Usage\label{sub:Basic-Usage}}
+
+%
+\framebox{\parbox[t][1\totalheight]{1\columnwidth}{%
+Note: Operation of GEM under Cygwin is only possible in verbose mode
+(option {}``-v'' or {}``--verbose'')! Please read section A.2
+on Windows specific issues.%
+}}%
+
+
+This section will show you how to use GEM to perform basic things:
+installing, querying and removing (un-installing) extensions for GRASS
+GIS. For the sake of simplicity, I will assume that your GRASS installation
+resides in \emph{/usr/local/grass-6.x.y} and you may have to adjust
+this path in the examples below, so that it reflects your individual
+setup (Mac OS X users: see notes on system specific issues in section
+\ref{sub:Mac-OS-X} for how to find the path to your installation).
+Also, the extension package used in the following examples is called
+\emph{RasterTools.tar.gz} and is in {}``tar'd gzip'' format. Replace
+this with the name of the extension you wish to install as needed.
+
+I will further assume that you (or your system's administrator) have
+copied the executable \emph{gem} into a directory from where it can
+be started system-wide (such as \emph{/usr/local/bin}) without having
+to prefix the path to the executable (see instructions in \ref{sub:Program-Installation}).
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: in order to install extensions that do not provide binaries,
+you need to have a C compiler (preferably GNU CC) and make tools installed.
+Please refer to the OS specific section A for more details.
+
+For unpacking extension packages you need the appropriate software.
+Depending on the format of the archive, this could be \emph{tar},
+\emph{gzip}, \emph{bunzip2} and \emph{unzip}.
+
+If you want to get extensions from an internet source (http or ftp),
+you also need \emph{wget}. These programs will very likely already
+be installed on your system. If not, you will find it easy to locate
+a copy for your OS using an internet search engine.%
+\end{minipage}}%
+
+
+GEM understands short and long options. Long options are just a more
+legible version of the short options, which is why I will use them
+in this document. E.g. {}``-i'' is a short option that does exactly
+the same as {}``--install=''. To see all options, short and long,
+simply call GEM without any options or {}``--help'':
+
+\begin{lyxcode}
+gem
+\end{lyxcode}
+The {}``--version'' action shows information about the GEM version
+you are using.
+
+You will notice that GEM knows a special sort of options called {}``actions''
+this are options that cause GEM to operate in some way on the extension.
+The regular {}``options'' are just used to modify the way GEM works.
+
+To install a module into your GRASS installation (in this example
+\emph{/usr/local/grass-6.x.y}), simply pass the name of the archive
+containing the extension or the directory with the unpacked files
+to the {}``--install='' action and supply the path to the GRASS
+installation for which you wish to install the extension (using the
+{}``--grass='' option): 
+
+\begin{lyxcode}
+gem~-{}-grass=/usr/local/grass-6.x.y~-{}-install=RasterTools.tar.gz
+\end{lyxcode}
+If everything goes well, you will see a few messages on the screen
+and after a short while the program will inform you that it is done.
+If you do not have permission to write into the system-wide GRASS
+installation directory, you will be asked for the password of the
+user owning the GRASS binary files. 
+
+If any errors occur, use option {}``-v'' ({}``--verbose'') to
+see what is going on. 
+
+By default, the {}``--install='' action performs an installation
+from source code. This will first configure the sources for your system's
+individual setup, then compile the source code into binaries, finally
+install them in the appropriate locations.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: an extension may also provide shell scripts that do not need
+to be compiled. Installation does, however, by default work in the
+same way. Look for the keyword {}``scripts'' in the extension details
+(under {}``Binary installation files'') by querying it as discussed
+in section 3.5 on installation of binaries. If it exists, you can
+perform a binary install (again, see section 3.5) for {}``scripts'',
+skipping configuration and compilation steps and avoiding the need
+to have C development tools installed. %
+\end{minipage}}%
+
+
+If you invoke GEM from inside a running GRASS session, you can ommit
+the {}``--grass='' option. GEM will then automatically install the
+extension into the GRASS installation that is currently running. We
+will assume this to be true for the following usage examples, as it
+saves me some typing work (\ldots{}). 
+
+The new modules provided by the extension should be available to you
+immediately from within a GRASS session. The extension will be registered
+as {}``RasterTools''. To get a list of newly installed GRASS modules:
+
+\begin{lyxcode}
+gem~-{}-query=RasterTools
+\end{lyxcode}
+This will display all sorts of information about your freshly installed
+extension, including the installed modules (under {}``Commands provided'').
+If it is too much information to display on your terminal, pipe it
+through \emph{more} and press space to see one page after another:
+
+\begin{lyxcode}
+gem~-{}-query=RasterTools~|~more
+\end{lyxcode}
+Alternatively, you can browse the GRASS HTML offline help which should
+now contain a link to the extension and its modules from its main
+page \emph{index.html}. 
+
+Some extensions may provide menu entries for a GRASS GUI. Currently,
+\emph{d.m} and \emph{gis.m} are supported by GEM. Both of these GUIs
+need to be restarted. If the extension provides menu entries, you
+will find them under {}``Xtns'' in the main menu bar.
+
+If you want to know details about an extension before you install
+it, you can also query the extension package itself:
+
+\begin{lyxcode}
+gem~-{}-query=RasterTools.tar.gz
+\end{lyxcode}
+Actions {}``--details='' and {}``--license='' will give additional
+information if needed. To list all installed extensions (shows name,
+version and type of installation, i.e. binaries or compiled from source)
+in the current GRASS installation, just query without any extension
+name: 
+
+\begin{lyxcode}
+gem~-q
+\end{lyxcode}
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: Awful detail: you must use the short action name {}``-q''
+in this case, not {}``--query='' and it has to be at the end of
+the GEM command line!%
+\end{minipage}}%
+
+
+You can also un-install an extension to remove it from the system-wide
+GRASS installation (take name from list produced by above command).
+Again, you need write-access to the GRASS installation dir.
+
+\begin{lyxcode}
+gem~-{}-uninstall=AdvancedViewshedAnalysis~
+\end{lyxcode}
+This should clean your system of all installed modules, HTML pages
+and GUI menu entires. Quit and restart the GIS-Manager (\emph{d.m})
+to see the effects of these actions. If something goes wrong or you
+overwrite GIS Manager's menu config file (\emph{\$(PATH\_TO\_GRASS)/\-etc/\-dm/\-menu.tcl}),
+or you have installed a new version of GRASS (e.g. from CVS) and are
+now missing GUI menu entries and HTML pages for your extensions:
+
+\begin{lyxcode}
+gem~-{}-restore~
+\end{lyxcode}
+\ldots{} will try to put everything back in order. The program will
+also create a backup copy \emph{menu.tcl.gem.bak} before it alters
+\emph{menu.tcl}. The \char`\"{}--restore\char`\"{} action is also
+useful if you update or re-install GIS-Manager or the GRASS HTML-Documentation
+in which case both menu entries and HTML references have to be restored
+for all extensions installed. 
+
+
+\subsection{Installation of Pre-compiled Binary Extension Files\label{sub:Installation-of-Pre-compiled}}
+
+Some extensions may provide pre-compiled binary files for one or more
+operating systems. A user wishing to install an extension that provides
+binaries for his OS does not need to have C development tools installed.
+This may frequently be the case for users of Mac OS X and Cygwin (but
+see OS specific issues in section \ref{sec:OS-Specific-Issues}).
+
+It is recommended for all users of GRASS and GEM to install C development
+tools and install extensions from sources (the regular way as described
+in section \ref{sub:Basic-Usage}). This will compile the source code
+into custom binaries that are optimally tailored to your system. However,
+there may be circumstances that make using pre-compiled binaries appear
+more convenient or even unavoidable.
+
+You can check whether an extension provides such pre-compiled binary
+files for your OS by querying the extension package:
+
+\begin{lyxcode}
+gem~-{}-query=RasterTools.tar.gz
+\end{lyxcode}
+If any binaries are provided, they will be listed under \char`\"{}Binary
+installation files\char`\"{}. You should be able to see whether they
+are suitable for your system from the names. E.g. {}``cygwin'' would
+provide binaries for Cygwin users (see section \ref{sub:Developers'-Guidelines}
+for conventional names of binaries for different OS).
+
+Use the option \char`\"{}--binary=\char`\"{} in conjunction with the
+\char`\"{}--install=\char`\"{} action to install the binaries you
+deem right:
+
+\begin{lyxcode}
+gem~-{}-binary=cygwin~-{}-install=RasterTools.tar.gz
+\end{lyxcode}
+This process should finish quicker than regular installation from
+source code as it will skip source code configuration and compilation.
+
+If you have chosen a wrong set of binaries, new commandes will simply
+fail to start when you try to use them.
+
+
+\subsection{Additional Options}
+
+Option {}``-f'' ({}``--force'') can be used to force GEM to re-install
+an existing extension, over-writing anything that was installed previously.
+This is not a recommended thing to do! There is currently no clean
+updating mechanism for GEM, so you are advised to first de-install
+the existing extension (which might involve de-installing all dependent
+extensions first), then install freshly.
+
+You can also download and install, query etc. an extension packages
+directly from an internet source (http or ftp), provided that \emph{wget}
+is installed (\url{http://www.gnu.org/software/wget/wget.html}):
+
+\begin{lyxcode}
+gem~-{}-install=http://www.uni-kiel.de/ufg/dateienDucke/RasterTools.tar.gz
+\end{lyxcode}
+
+\subsection{Module Versions and Dependencies}
+
+Information about all installed extensions is stored in the file \emph{etc/extensions.db}
+in your system-wide GRASS installation directory. This file contains
+the names, versions and \emph{dependencies} of all installed extensions.
+Some extensions may need another extension or a particular GRASS version
+to be installed before it can function properly. If an extension's
+dependencies are not met, GEM will abort the installation and you
+need to first install all required software.
+
+Querying an extension package will let you see the dependencies it
+has before you attempt to install (under {}``Dependencies''):
+
+\begin{lyxcode}
+gem~-{}-query=RasterTools.tar.gz
+\end{lyxcode}
+Compare this with the output of
+
+\begin{lyxcode}
+gem~-q
+\end{lyxcode}
+... and you will know if you need to install something else first.
+
+You can force installation of extensions with unmatched dependencies
+by using the \char`\"{}--force\char`\"{} option. This is not a recommended
+thing to do! 
+
+GEM also guards against de-installation of extensions that are still
+needed by other extensions still present on the system. You need to
+un-install all dependent extension in reverse order of installation
+first.
+
+There is currently no clean updating mechanism for GEM, so you are
+advised to first un-install an existing extension (which might involve
+de-installing all dependent extensions first) before you install a
+newer version.
+
+Do not edit \emph{extensions.db} manually, unless you now \emph{exactly}
+what you are doing!
+
+
+\section{Developing Extensions for Use with GEM\label{sec:Developing-Extensions-for}}
+
+Converting existing GRASS add-on modules to a GEM extension package
+is easy. Extensions may provide C program code and headers for modules
+and libraries, shell scripts and tcl code. Basically anything that
+you find a directory for in the skeleton package.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: if your extension needs to install {}``unusual'' things (additional
+fonts, tcl widgets, ...) you may need to adapt the top-level Makefile
+in your extension package.%
+\end{minipage}}%
+
+
+
+\subsection{GEM Developers' Support\label{sub:GEM-Developers'-Support}}
+
+The skeleton package (see section \ref{sub:The-Skeleton-Package})
+is an almost complete GRASS extension. Use this as a template for
+starting new extensions or migrating existing source code from the
+GRASS source tree. All you need to do is copy your source files, scripts
+etc. into the appropriate places in the \emph{src} directory (you
+will find that everything mirrors the way GRASS sources are organized)
+and fill necessary information into the toplevel ASCII files.
+
+GEM can configure, compile and install extensions from a plain directory.
+Just provide the name of the directory for all actions. This allows
+you to conveniently keep all your sources and documentations in a
+small, portable directory outside the GRASS source tree and maintain
+everything in there.
+
+You can test whether an extension compiles and installs on your system
+by using the {}``--test='' action. This will perform all steps except
+for actually copying the files to their destinations.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: the {}``--test='' action simulates the entire installation
+process, including checks for dependencies and already installed extensions.
+This means that testing may result in an error message after successful
+compilation. If this annoys, you, use the {}``--force'' option.%
+\end{minipage}}%
+
+
+The {}``--clean='' action merely exists for the convenience of the
+developer: it performs a make clean in the extensions \emph{src} directory.
+
+Two more options exist to make life easier for developers: {}``--skip-config''
+to skip source code configuration for speeding up the testing. and
+{}``--options='' (sorry about the awful name). Everything you specify
+here will be passed through to the C compiler upon compilation of
+your extension.
+
+
+\subsection{The Skeleton Package\label{sub:The-Skeleton-Package}}
+
+The skeleton package is an almost complete GRASS extension. Use this
+as a template for starting new extensions or migrating existing source
+code from the GRASS source tree. All you need to do is copy your source
+files, scripts etc. into the appropriate places in the \emph{src}
+directory (you will find that everything mirrors the way GRASS sources
+are organized) and fill necessary information into the toplevel ASCII
+files (see following sections).
+
+Look into the skeleton extension directory and open the ASCII files
+with a texteditor of your choice. You will find lots of comments that
+help you make sense of their contents. You can put comments starting
+with \char`\"{}\#\char`\"{} at the beginning of a line or at the end
+in any file. These will be filtered out upon parsing of the file by
+GEM.
+
+The skeleton contains a copy of the GPL as the default license. Creators
+of new extensions need to be aware of this! Either insert the name
+of your extension at the end of that license or provide your own custom
+licensing information.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: please always provide licensing information!%
+\end{minipage}}%
+
+
+
+\subsection{Arranging the Source Code\label{sub:Arranging-the-Source}}
+
+You will find that your makefiles for individual moduls and libs can
+stay largely the way they are. One thing that may need to be adjusted
+is the \texttt{MODULE\_TOPDIR = ..} statement that points to the location
+of the global GRASS makefile \emph{include} directory. Also be aware
+that references to other include files libraries etc. that you reference
+in a makefile may have to be adjusted depending on how you decide
+to structure the source for your extension.
+
+Take a look at the example module in \emph{src/raster/r.example}.
+
+
+\subsection{Documenting Extension Files}
+
+It is extremely important to provide sufficient documentation about
+your extension's intended use, functionality, dependencies and shortcomings!
+
+A number of ASCII files in the toplevel extension directory store
+all this information about an extension. They must be edited appropriately.
+GEM's {}``--query='', {}``--license='' and {}``--details=''
+actions will dump their contents to the screen. These are:
+
+\emph{authors}, \emph{bugs}, \emph{commands}, \emph{depends}, \emph{description},
+\emph{entries-gisman}, \emph{entries-gisman2}, \emph{headers}, \emph{id},
+\emph{info}, \emph{libs}, \emph{license} and \emph{name} and \emph{version}.
+
+Files \emph{authors}, \emph{bugs}, \emph{commands}, \emph{description},
+\emph{headers}, \emph{id}, \emph{info}, \emph{libs}: These files are
+merely for the user's information. Their contents will be dumped by
+the {}``--query='' action. Much of this information will also go
+into the system-wide GRASS HTML help. Each extension registers its
+own section in \emph{\$GISBASE/docs/html/index.html} which links to
+an individual index page for that extension. This allows the user
+convenient access to inidividual modules' help pages as well as the
+contents of files \emph{description} and \emph{info}.
+
+Because of this, some description files can contain HTML tags. These
+will be ignored when the user queries the extension on a console but
+will be interpreted when the same information is accessed from the
+GRASS HTML offline help. There are two important exceptions: \texttt{<p>}
+and \texttt{<br>} will produce paragraph and line breaks for console
+output, as well. 
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: all other things inside {}``<'' and {}``>'' will be filtered
+out as HTML tags, even if they are not!%
+\end{minipage}}%
+
+
+Take a look at the files in the skeleton package for their individual
+meanings and format. Files that will be parsed for HTML tags are:
+\emph{authors}, \emph{bugs}, \emph{description} and \emph{info}.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: your modules' individual HTML manual pages have to be slightly
+adapted: please prefix \texttt{<a href=>} style references to GRASS
+modules that are not part of the extension with \texttt{../../html/}. %
+\end{minipage}}%
+
+
+File \emph{license}: this will be display by the {}``--license=''
+action.
+
+File \emph{info}: this will be displayed by the {}``--details=''
+action and also integrated in the HTML index page for the extension.
+
+Files \emph{depends}, \emph{name} and \emph{version}: see section
+\ref{sub:Version-Information}.
+
+Files \emph{entries-gisman} and \emph{entries-gisman2}: see section
+\ref{sub:Providing-GUI-Hooks}.
+
+
+\subsection{Version Information\label{sub:Version-Information}}
+
+The file \emph{name} is a very crucial one! It contains the name under
+which GEM will register your extension. Please see \ref{sub:Developers'-Guidelines}
+about naming conventions!
+
+The file \emph{version} stores the current version number of your
+extension. Make sure to keep this up-to-date prior to new releases.
+
+If your extension depends on other extensions or a specific GRASS
+version, you can state this in the \emph{depends} file. See the example
+in the skeleton extension for details. GEM will respect this information
+when a user tries to install or uninstall any extension.
+
+
+\subsection{Un-install and Post-install Actions}
+
+Two files remain that have not been discussed yet: \emph{uninstall}
+and \emph{post}.
+
+The \emph{uninstall} file is a shell script that contains all commands
+necessary to clean up the GRASS installation after the user invoked
+GEM with the {}``--uninstall='' action to un-install an extension.
+It takes care of deleting module binaries, HTML manpages, C include
+files and libraries provided by that extension from \emph{\$GISBASE}.
+In the most simple case, all you need to do is provide the list of
+your extension's user commands in \texttt{EXT\_MODULES=''''}. For
+more complex extensions, you may have to provide additional files
+to delete or even customize \emph{uninstall}. Take a look at the file
+in the skeleton extension to see what it does in detail.
+
+GEM will copy your extension's uninstall script to \emph{\$GISBASE/etc/uninstall.ExtensionName}
+and it will be run from there by the {}``--uninstall='' action.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: be very careful when adapting the \emph{uninstall} script! It
+is run with superuser privileges (or those of whatever user owns the
+GRASS installation directory). If you provide wrong paths there is
+no limit to the damage it can do to the user's system! Try to keep
+your changes to a minimum if you have to make any.%
+\end{minipage}}%
+
+
+The \emph{post} script can be used to customise many actions in case
+your extension needs anything not provided by the regular make system
+or GEM description files. GEM exports a number of environment variables
+depending on what options and actions the user chose to run it with.
+The \emph{post} script is automatically run after many actions and
+can be used to carry out custom tasks depending on the type of action.
+Take a look at the file provided by the skeletion extension to see
+what can be done.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: be very careful when adapting the \emph{post} script! It is
+run with superuser privileges (or those of whatever user owns the
+GRASS installation directory). If you add flawed commands there is
+no limit to the damage it can do to the user's system!%
+\end{minipage}}%
+
+
+
+\subsection{Providing GUI Hooks\label{sub:Providing-GUI-Hooks}}
+
+GEM currently supports the installation of menu items for GIS Manager:
+the old version (\emph{d.m}) and the new one (\emph{gis.m}) are both
+support. Support for \emph{d.m} menus is quite limited. You can only
+create one submenu and any number of menu items and separators inside
+of it. Menus for \emph{gis.m} can contain any tk menu code. You can
+have as many levels of menu hierarchy as you like. See the examples
+in the skeleton extension to learn how they are organized.
+
+The file responsible for creating \emph{d.m} menu entries is \emph{entries-gisman}.
+For \emph{gis.m} it is \emph{entries-gisman2}. For \emph{d.m} menus,
+\emph{entries-gisman} is directly merged into \emph{\$GISBASE/etc/dm/menu.tcl}.
+GEM will also place a copy of the original \emph{entries-gisman} file
+into \emph{\$GISBASE/etc/dm/gem-entries}. This is used by the {}``--restore''
+action to restore \emph{d.m} menus in case the user updates the GRASS
+installation and menu.tcl gets overwritten. For the purpose of un-installation,
+markers are stored as comments at the end of \emph{menu.tcl}. This
+allows the {}``--uninstall='' action to find an extensions menu
+entries and delete them. The file \emph{menu.tcl} will be backed up
+as \emph{menu.tcl.gem.bak} so a user can restore it if anything should
+wrong.
+
+Things work much simpler for \emph{gis.m}. In this case, \emph{\$GISBASE/etc/gm/gmmenu.tcl}
+dynamically re-builds the {}``Xtns'' menu upon start-up. If \emph{entries-gisman2}
+exists in an extension package, GEM will make sure to create an directory
+\emph{Xtns} in \emph{\$GISBASE/etc/gm/} and copies \emph{entries-gisman2}
+into it, renaming it to the extension's name. From these files, \emph{gis.m}
+will automatically build the {}``Xtns'' menu via some parsing code
+in \emph{gmmenu.tcl}.
+
+Your submenu will be sorted in under the \char`\"{}Xtns\char`\"{}
+menu in alphabetical position according to either the name of the
+top level menu item (\emph{d.m}) or the extension name (\emph{gis.m})
+it is smart to keep both the same (see guidelines in section \ref{sub:Developers'-Guidelines}). 
+
+Both \emph{d.m} and \emph{gis.m} need to be restarted to see the effects
+of installing new menu entries.
+
+
+\subsection{Providing Binary Distributions}
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: due to great heterogenity of installed system libraries, it
+is probably not worth the effort trying to create generic linux binaries.
+Binaries will work better for homogeneous platforms such as Cygwin
+and Lorenzo Moretti's GRASS for Mac OS X.%
+\end{minipage}}%
+
+
+It is possible to create an extension package that will
+
+If not done yet, unpack the extension files into a directory:
+
+\begin{lyxcode}
+tar~-xzvf~extensionname.tar.gz
+\end{lyxcode}
+Compile the extension under the OS that you wish to prepare binaries
+for (see OS specific issues in section \ref{sec:OS-Specific-Issues}
+about the additional software you may need to do this). You do not
+need to install, compilation will suffice (don't worry if you get
+an error message about the extension being already installed):
+
+\begin{lyxcode}
+./gem~-{}-grass=pathToGRASS~-t~extensionName
+\end{lyxcode}
+If the compilation was successful, you will find two new folders in
+the \emph{src} directory of the extension directory: \emph{bin.architecture-osname}
+and \emph{dist.architecture-osname}. E.g. for a Windows/Cygwin compilation
+the {}``dist'' directory will frequently be
+
+\begin{lyxcode}
+dist.i686-pc-cygwin
+\end{lyxcode}
+(or similar). 
+
+Create a new directory on the same level as the \emph{src} directory.
+For an appropriate name, follow the guidelines in section \ref{sub:Developers'-Guidelines}.
+In our Cygwin example, this would be \emph{cygwin}. In this directory:
+
+\begin{enumerate}
+\item move the \emph{dist.architecture-osname} directory here
+\item copy \emph{src/Makefile} here
+\item copy \emph{src/include} (with all subdirectories) here
+\end{enumerate}
+Make a slight modification to the copy of Makefile: at the top of
+the file following the definitions for install directories (BINDIR=,
+INST\_DIR=). Add another line that reads:
+
+\begin{lyxcode}
+GISBASE~=~\emph{dist.architecture-osname}
+\end{lyxcode}
+For our example, this might be:
+
+\begin{lyxcode}
+GISBASE~=~dist.i686-pc-cygwin
+\end{lyxcode}
+(or similar). This makes sure that the install command will install
+binaries from the right directory.
+
+Now, since we are preparing a binary distribution for the sake of
+people who do not have any development tools installed, we need to
+supply them with a copy of the GNU make tools, since this is the tool
+that will take care of the actual installation. What we need is really
+just the program \emph{make}. We will copy it into a folder \emph{bin}
+under our new directory. In our example, then the copy would go into
+\emph{cygwin/bin}.
+
+The skeleton extension package already has copies of \emph{make} for
+Cygwin and Mac OS X in place. If you need them for another architecture,
+download sources from \url{http://www.gnu.org/software/make/} and
+compile the appropriate binaries.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: if your extension consists of only platform independent things
+that need not be compiled (shell script, tcl code, ...), you can create
+a set of binaries on any system in the same way as described above
+and call the binary set \char`\"{}scripts\char`\"{} this will allow
+the user to install those scripts without having developer tools installed!%
+\end{minipage}}%
+
+
+
+\subsection{Preparing an Extension for Release}
+
+1. make sure all ASCII files in the top-level extension directory
+have the necessary information (licensing!).
+
+2. Compile binaries that you may wish to provide for those poor people
+who cannot afford C development tools
+
+3. Clean the sources of compiled binaries (this will not affect binaries
+that you wish to provide and copied into their individual directories).
+
+4. If not done yet, delete the example module directory \emph{src/raster/r.example}.
+And remove it from the list of subdirs in \emph{src/raster/Makefile}.
+
+5. Pack everything into an archive using GNU tar and gzip.
+
+6. Announce your shiny new extension on the appropriate GRASS mailling
+list!
+
+SHORTCOMINGS:
+
+GEM is not very well-suited to install add-ons consisting of just
+a single module. This would need an entire extension with the whole
+shebang for a single module! I is assumed, that people who program
+for a GIS as a rule produce more than just one module for a certain
+purose and that these can well be grouped into extensions. 
+
+
+\subsection{Developers' Guidelines\label{sub:Developers'-Guidelines}}
+
+
+\subsubsection{Naming Extensions}
+
+Please do not use anything fancy for your extension's name (as stored
+in the \emph{name} file in the toplevel directory of your extension):
+no special characters, no whitespaces (including simple {}``space'').
+Use the same restrictions any sane programmer would use for file naming.
+This ensures that GEM can always correctly parse your extension's
+name.
+
+
+\subsubsection{Packaging Extensions}
+
+The recommended way to package an extension is to use GNU \emph{tar}
+and \emph{gzip} utilities as these will normally be available on any
+OS running GRASS. I recommend you use \emph{.tar.gz} as file extension:
+
+\begin{lyxcode}
+tar~-czvf~ExtensionName.tar.gz~DirectoryWithExtensionFiles
+\end{lyxcode}
+Make sure that you do not tar up the files from inside the extension
+directory! This will result in a non-functioning package and also
+gets users annoyed because the files will get decompressed directly
+into whatever directory the extension was compiled and it will be
+hard to clean up the mess. Also, do not use an absolute path to the
+files. Rather, build the archive from the directory that contains
+your extension directory, as shown in the example above.
+
+
+\subsubsection{HTML-Documentation}
+
+Check the GRASS HTML documentation and follow its style! Please provide
+good documentation for your individual modules as well as some brief
+and detailed information about the intended use, functionality and
+shortcomings of your extension (files \emph{description} and \emph{info},
+respectively).
+
+
+\subsubsection{Binaries}
+
+Suggested folder names for binary distributions:
+
+Mac OS X: \emph{macosx}
+
+Cygwin: \emph{cygwin}
+
+Linux (glibc 2.2): \emph{linux22}
+
+Linux (glibc 2.3): \emph{linux23}
+
+Shell scripts: \emph{scripts}
+
+
+\subsubsection{Menu Entries}
+
+Name the Toplevel menu item in your menu files (\emph{entries-gisman}
+and \emph{entries-gisman2}) the same as the Extension. This will make
+things much clearer for the user!
+
+\appendix
+
+\section{OS Specific Issues\label{sec:OS-Specific-Issues}}
+
+
+\subsection{Mac OS X\label{sub:Mac-OS-X}}
+
+If you want to run GRASS under Mac OS X you can install Lorenzo Moretti's
+binaries. They are frequently updated and easy to install. GEM has
+been tested for this version of GRASS and works well with it. 
+
+In order to get this working, you need to install some additinal software
+from the Mac OS X install media. Just download from \url{http://wwwamb.bologna.enea.it/forgrass/}
+and follow the instructions in the documentation that comes with the
+program files.
+
+%
+\framebox{\begin{minipage}[t][1\totalheight]{1\columnwidth}%
+Note: if you want to be able to use any extension package, not only
+those that provide binaries for Mac OS X, you need to install the
+complete GNU C development tools from the Mac OS X installation media.%
+\end{minipage}}%
+
+
+If you are using Lorenzo's binaries, the path to GRASS for any GEM
+operation will be:
+
+\emph{/Applications/Grass/grass6x.app/Contents/Resources/grass-6.x.y}
+
+or
+
+\emph{/Applications/Grass/grass63cvs.app/Contents/Resources/grass-6.3.cvs}
+
+if you decided to also install Lorenzo's copy of the CVS version.
+
+I cannot provide any information about compiling GRASS from sources
+for Mac OS X as I do not have access to such a machine.
+
+
+\subsection{GRASS under Windows with Cygwin\label{sub:GRASS-under-Windows}}
+
+%
+\framebox{\parbox[t][1\totalheight]{1\columnwidth}{%
+Note: Operation of GEM under Cygwin is only possible in verbose mode
+(option {}``-v'' or {}``--verbose'')! The problem is that Windows
+cannot redirect output to stderr. This interferes with GEM's message
+hiding.%
+}}%
+
+
+Although there is now work underway to create a native Win32 version
+of GRASS, for now the only way to get it running is to use the Cygwin
+emulation layer. For instructions on how to do this, see \url{http://geni.ath.cx/grass.html}.
+
+Some additional hints about setting up Cygwin:
+
+\begin{itemize}
+\item Make sure you set the {}``Default Text File Type'' to {}``Unix''
+during Setup.
+\item If you want to be able to use any extension package, not only those
+that provide binaries for Cygwin, jsut install everything in the {}``Devel''
+category and you will have a complete development system.
+\item If you want to be able install extension packages directly from the
+internet (http or ftp sources) using GEM, make sure to install wget,
+located the {}``Network'' category.
+\item If you want to use an installation in a network environment with NT
+domain authentication, you may need to update \emph{cygwin1.dll} to
+a newer version. Download from \url{http://cygwin.com/snapshots/}
+and replace the old version in your system search path.
+\end{itemize}
+Under Cygwin, there is no support for the Unix \emph{su} command.
+This means that installation of extensions has to be done by someone
+with appropriate access rights to the GRASS installation directory
+inside the Cygwin installation directory (e.g. if you installed cygwin
+to \emph{C:\textbackslash{}cygwin}, this would be something like \emph{C:\textbackslash{}cygwin\textbackslash{}usr\textbackslash{}local\textbackslash{}grass-someversion}).
+
+
+\subsubsection{CygwinGRASS}
+
+CygwinGRASS (\url{https://www.geographie.uni-freiburg.de/~mlechner/CygwinGRASS/})
+is nice because it has all you need to install and use GRASS under
+Windows on one CD. Unfortunately, it has not been updated for a while
+and now contains fairly outdated versions of GRASS. See the document
+on the CD for installation instructions. 
+
+Some hints regarding the setup:
+
+\begin{itemize}
+\item The CygwinGRASS setup has a little flaw in that it assumes the wrong
+location for the local package directory. Click on {}``Browse''
+and select the folder repository on the setup medium.
+\item If you want to be able to use any extension package, not only those
+that provide binaries for Cygwin, jsut install everything in the {}``Devel''
+category and you will have a complete development system.
+\item If you want to be able install extension packages directly from the
+internet (http or ftp sources) using GEM, make sure to install wget,
+located the {}``Network'' category.
+\item If you want to use a CygwinGRASS installation in a network environment
+with NT domain authentication, you will need to update \emph{cygwin1.dll}
+to a newer version. Download from \url{http://cygwin.com/snapshots/}
+and replace the old version in your system search path.
+\end{itemize}
+Browsing HTML helpfiles with the default command {}``iexplore''
+seems to fail. However, you can install a different browser and change
+the environment variable \texttt{GRASS\_HTML\_BROWSER} accordingly.
+
+
+\section{Technical Information}
+
+
+\subsection{File Layout of a GRASS Extension}
+
+Blue items are \texttt{\textcolor{blue}{directories}}, green ones
+are \texttt{\textcolor{green}{files}}.
+
+
+\subsubsection{Toplevel}
+
+\texttt{\textcolor{green}{README}}
+
+\texttt{\textcolor{green}{authors, bugs, commands, depends, description,
+entries-gisman, entries-gisman2, headers, id, info, libs, license,
+name, post, uninstall, version}}
+
+\texttt{\textcolor{blue}{src {[}, cygwin, macosx, other-architecture,
+\ldots{}]}}
+
+
+\subsubsection{In Directory \emph{src}}
+
+\texttt{\textcolor{green}{COPYING}}
+
+\texttt{\textcolor{green}{README}}
+
+\texttt{\textcolor{green}{REQUIREMENTS.HTML}}
+
+\texttt{\textcolor{green}{Makefile, config.guess, config.sub, onfigure,
+configure.in, install-sh}}
+
+\texttt{\textcolor{blue}{db, demolocation, display, general, imagery,
+include, lib, man, paint, ps, raster, raster3d, scripts, sites, tools,
+vector, visualization}}
+
+
+\subsection{Changes to the GRASS Make System Files}
+
+GEM exports three environment variables that point to the directories
+storing GRASS 6 headers and libs and to the install location (e.g.
+\emph{/usr/local/grass-6.3.cvs}):
+
+\texttt{GINSTALL\_INC}
+
+\texttt{GINSTALL\_LIB}
+
+\texttt{GINSTALL\_DST }
+
+These have been added to the makefiles so that externally compiled
+modules are able to see those GRASS headers and libs they need. Thus,
+the following files were slightly altered:
+
+
+\subsubsection{configure script}
+
+Everything that checks for optional system libraries and could cause
+configure to fail went out. This means that extensions that have to
+check for optional system libraries will have to re-add these checks.
+
+In summary print-out section at end of script: got rid of: \texttt{echo
+\char`\"{} Startup script in directory: \$\{bindir\}\char`\"{}}. And
+added some custom text that refers to the extension having been configured.
+
+
+\subsubsection{main Makefile}
+
+L28: \texttt{INST\_DIR} is set according to \texttt{GINSTALL\_DST}
+which is exported by GEM.
+
+L168: install target \texttt{real-install}: commented out everything
+that seems not strictly necessary for a module installation and might
+interfere with the user's GRASS installation. Now exits with error
+code {}``1'' on write permission problems. This can be caught by
+GEM and dealt with. Only creates \emph{error.log} if a module did
+not compile. This is used to check for compilation errors and abort,
+if necessary.
+
+L171: commented out stuff for creating GRASS startup script
+
+
+\subsubsection{include/Make/Grass.make.in}
+
+L32: added \texttt{-I\$(GINSTALL\_INC)} to \texttt{GRASS\_INC} 
+
+L53: added \texttt{-L\$(GINSTALL\_LIB)} to \texttt{ARCH\_LIBPATH} 
+
+L81: added \texttt{\$(GEM\_C\_OPTS)} to \texttt{CFLAGS} 
+
+
+\subsubsection{include/Make/Rules.make}
+
+L37: the path to the HTML docs is now expanded with \emph{/extensions/<extensionName>.}
+The name for the extension is read from \texttt{GEM\_EXT\_NAME} which
+is exported by GEM 
+
+L55: added \texttt{\$(GINSTALL\_LIB)} to definition of \texttt{LD\_LIBRARY\_PATH\_VAR}
+.
+
+L49: this now makes two different copies: one to go into the extension's
+HTML folder \emph{docs/\-extensions/\-\$(GEM\_EXT\_NAME)} and one
+-- with adjusted relative links -- to go into \emph{docs/html}. \texttt{GEM\_EXT\_NAME}
+is exported by the GEM installer tool 
+
+
+\subsubsection{include/Shlib.make}
+
+L3: \texttt{SHLIB = \$(ARCH\_LIBDIR)/\$(SHLIB\_PREFIX)\$(SHLIB\_NAME).\$(GEM\_EXT\_VERSION)\$(SHLIB\_SUFFIX)} 
+
+L14: \texttt{\$(SHLIB): \$(SHLIB\_OBJS) \$(SHLIB\_LD) -o \$@ \$(LDFLAGS)
+\$\textasciicircum{} \$(EXTRA\_LIBS) \&\& ln -sf \$(notdir \$@) \$(patsubst
+\%.\$(GEM\_EXT\_VERSION)\$(SHLIB\_SUFFIX),\%\$(SHLIB\_SUFFIX),\$@)} 
+
+\texttt{GEM\_EXT\_VERSION} installs lib with version number as given
+in \emph{version} file in extension package.
+
+
+\subsubsection{lib/init/Makefile}
+
+L32: commented out everything that seems not strictly necessary for
+a module installation and might interfere with the user's GRASS installation.
+
+
+\subsubsection{build\_html\_index.sh }
+
+L16: expand HTML with \emph{/extensions/\$GEM\_EXT\_NAME} (exported
+by GEM). The HTML default text has been altered in many places to
+reflect its new function for describing extensions. GEM also exports
+the following variables to enrich the HTML default text: \texttt{GEM\_EXT\_VERSION}
+(extension's version number).
+
+\newpage{}
+
+
+\subsection{GEM Synopsis}
+
+\begin{lyxcode}
+Usage:~gem~{[}OPTION]~{[}ACTION]~{[}FILE|DIR]
+
+
+
+Possible~ACTIONs~are:
+
+~~-i,~-{}-install~~~~~~~~~install~a~GRASS~extension
+
+~~-u,~-{}-uninstall~~~~~~~remove~an~extension~from~GRASS
+
+~~-q,~-{}-query~~~~~~~~~~~display~information~about~extension/list~installed
+
+~~-d,~-{}-details~~~~~~~~~display~additional~details~about~an~extension
+
+~~-c,~-{}-clean~~~~~~~~~~~clean~extension's~source~code~directories
+
+~~-t,~-{}-test~~~~~~~~~~~~configure~and~compile~extension,~but~don't~install
+
+~~-l,~-{}-license~~~~~~~~~show~copyright~information~for~an~extension
+
+~~-r,~-{}-restore~~~~~~~~~recreate~HTML~links~and~GIS~Manager~entries
+
+~~-h,~-{}-help~~~~~~~~~~~~display~this~help~and~exit
+
+~~-V,~-{}-version~~~~~~~~~output~version~information~and~exit
+
+
+
+Possible~OPTIONs~are:
+
+~~-g,~-{}-grass=PATH~~~~~~path~to~GRASS~installation~dir
+
+~~-b,~-{}-binary=NAME~~~~~no~compilation:~use~binary~files~for~system~NAME
+
+~~-f,~-{}-force~~~~~~~~~~~force~action,~regardless~of~dependencies
+
+~~-v,~-{}-verbose~~~~~~~~~display~detailed~status~information
+
+~~-s,~-{}-skip-config~~~~~skip~configure~script
+
+~~-o,~-{}-options~~~~~~~~~options~to~pass~to~the~C~compiler/linker
+
+\newpage{}
+\end{lyxcode}
+
+\subsection{Current Bugs and Shortcomings}
+
+\begin{itemize}
+\item Operation under Cygwin only works in verbose mode (option -v)!
+\item querying installed extensions or trying to uninstall an extension
+on a system that never had an extension installed will simply segfault
+(missing extensions.db is not handled gracefully)
+\item Installation from an internet source currently quits with {}``shell-init:
+error retrieving current directory: getcwd: cannot access parent directories:
+No such file or directory'' (may leave some temp files around?)
+\item Binary installation mode is not exhaustively tested.
+\item The installation of menu items for the old \emph{d.m} GUI is very
+sensitive to the precise syntax of \emph{menu.tcl}. If the user has
+altered this file substantially it is likely that registering the
+extension submenu entries will fail.
+\item There is no clean way to upgrade an existing extension and respecting
+dependencies \emph{automatically}. You can use option {}``-f'' or
+{}``--force'' to force over-writing of an extension, but it is safer
+to uninstall first, then install the new version. 
+\item GEM can only manage system-wide installations of extension. There
+is no support for location or mapset-wide management.
+\item path to GRASS dynamic libraries needs to be present in system-wider
+linker paths.
+\end{itemize}
+
+\end{document}

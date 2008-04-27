@@ -1,0 +1,26 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.mremove</em> applies regular expressions and wildcards to <em>g.remove</em>.
+If the <b>-f</b> force flag is not given then nothing is removed, instead
+a functional <em>g.remove</em> command string is printed to <tt>stdout</tt>
+as a preview of the action to be taken.
+
+<h2>EXAMPLE</h2>
+
+Delete all raster maps starting with "<tt>tmp_</tt>" in the current mapset:
+
+<div class="code"><pre>
+  g.mremove -f "tmp_*"
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="g.remove.html">g.remove</a></em><br>
+
+<h2>AUTHOR</h2>
+
+Huidae Cho <br>
+grass4u@gmail.com
+
+<p>
+<i>Last changed: $Date$</i>

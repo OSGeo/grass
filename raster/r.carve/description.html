@@ -1,0 +1,48 @@
+<H2>DESCRIPTION</H2>
+
+<em>r.carve</em> accepts vector stream data as input, transforms them to
+raster, and subtracts a defaultdepth+additionaldepth from a DEM. If
+the given width is more than 1 cell, it will carve the stream with the
+given width. With the -n flag it should eliminate all flat cells within
+the stream, so when and if the water gets into the stream it will
+flow. The <em>points</em> option generates x,y,z for points which define the stream
+with the z-value of the bottom of the carved-in stream. These points
+can then be combined with contours to interpolate a new DEM with
+better representation of valleys.
+
+<H2>NOTE</H2>
+
+<em>r.carve</em> does not create a depressionless DEM because many
+depressions are in flat areas and not in the streams.
+
+
+<H2>EXAMPLE</H2>
+
+<div class="code"><pre>
+g.region rast=elevation.10m -p
+r.carve rast=elevation.10m vect=streams out=carve_dem width=20 depth=5
+</pre></div>
+
+<H2>BUGS</H2>
+<!-- Is this still the case as of Jan 11, 2008? - EP -->
+The module does not operate yet in latitude-longitude locations.  It
+has not been thoroughly tested, so not all options may work properly -
+but this was the intention.
+
+<H2>REFERENCES</H2>
+
+<a href="http://skagit.meas.ncsu.edu/~helena/gmslab/reports/cerl99/rep99.html">Terrain
+modeling and Soil Erosion Simulations for Fort Hood and Fort Polk test
+areas</a>, by Helena Mitasova, Lubos Mitas, William M. Brown, Douglas
+M.  Johnston, GMSL (Report for CERL 1999)
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="r.flow.html">r.flow</A></EM>,
+<EM><A HREF="r.fill.dir.html">r.fill.dir</A></EM>,
+<EM><A HREF="r.watershed.html">r.watershed</A></EM> 
+
+<H2>AUTHOR</H2>
+Bill Brown (GMSL)<br>
+GRASS 6 update: Brad Douglas
+
+<p><i>Last changed: $Date$</i>

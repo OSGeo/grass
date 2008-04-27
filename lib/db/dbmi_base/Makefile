@@ -1,0 +1,14 @@
+MODULE_TOPDIR = ../../..
+
+EXTRA_LIBS=$(GISLIB) $(XDRLIB)
+EXTRA_CFLAGS = $(USE_DIRECT) $(USE_BUFFERED_IO)
+
+LIB_NAME = $(DBMIBASE_LIBNAME)
+
+include $(MODULE_TOPDIR)/include/Make/Lib.make
+
+default: lib
+
+
+
+

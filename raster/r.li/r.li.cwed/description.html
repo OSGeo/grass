@@ -1,0 +1,70 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.li.cwed</EM> (contrast weighted edge density) calculates the edge density
+between patch types specified:
+<P><img src="rlicwed_formula.png"> </P>
+<P>with:
+
+<ul>
+<li> <B>k</B>: attribute<BR>
+<li> <B>m</B>: number of non-null attributes in the sampling area<BR>
+<li> <B>e<small><small>ik</small></small></B>: total length of edge in landscape between patch types i and k<BR>
+<li><B> d<small><small>ik</small></small></B>: dissimilarity (edge contrast weight) between patch types i and k<BR>
+<li> <B>Area</B>: total landscape area<BR>
+</ul><BR>
+
+The input file have a row for each couple of patch type that we want to
+consider in the calculation. Each row must to have this syntax:<BR>
+<small>patchType1,patchType2,dissimilarityBetweenPatchType1andPatchType2</small><BR>
+
+
+<H2>EXAMPLES</H2>
+To calculate mean pixel attribute index on map my_map, using
+my_conf configuration file and saving results in
+my_out file run:<BR>
+<div class="code"><pre>
+r.li.cwed map=my_map conf=my_conf path=my_file output=my_out
+</pre></div>
+
+<BR>Example of input file:<BR>
+12,16,0.65<BR>
+44,123,0.32<BR>
+56,12,0.54<BR>
+23,66,0.99<BR>
+
+<H2>NOTES</H2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder.
+<BR>
+If the raster is full of null value it is considered to have 0 patch and CWED=0.
+If Area is 0 r.li.cwed returns -1. This is possible
+only if the map is masked.<BR>
+If you want to have null values instead run <BR>
+<div class="code"><pre>
+r.null setnull=-1 map=my_map
+</pre></div>
+after index calculation.<BR>
+<BR>
+
+<H2>REFERENCES</H2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
+<EM><A HREF="r.li.daemon.html">r.li.daemon</A></EM><BR>
+<EM><A HREF="r.li.setup.html">r.li.setup</A></EM>
+
+<H2>AUTHORS</H2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<BR>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+<H2>BUGS</H2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><BR>
+
+<p><i>Last changed: $Date$</i></p>
+

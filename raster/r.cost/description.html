@@ -1,0 +1,260 @@
+<H2>DESCRIPTION</H2>
+
+
+<P><EM>r.cost</EM> determines the cumulative cost of moving to each
+cell on a <EM>cost surface</EM> (the <B>input</B> raster map) from
+other user-specified cell(s) whose locations are specified by their
+geographic coordinate(s). Each cell in the original cost surface map
+will contain a category value which represents the cost of traversing
+that cell. <EM>r.cost</EM> will produce an <B>output</B> raster map in
+which each cell contains the lowest total cost of traversing the
+space between each cell and the user-specified points. (Diagonal
+costs are multiplied by a factor that depends on the dimensions of
+the cell.) This program uses the current geographic region settings.
+The <B>output</B> map will be of the same data format as the <B>input</B>
+map, integer or floating point.</P>
+
+<H2>OPTIONS</H2>
+
+The <B>input</B> <EM>name</EM> is the name of a raster map whose category values
+represent the surface cost. The <B>output</B> <EM>name</EM> is the name of the
+resultant raster map of cumulative cost.
+
+<P>
+<EM>r.cost</EM> can be run with three different methods of identifying the
+starting point(s). One or more points (geographic coordinate pairs) can be
+provided as specified <B>coordinate</B>s on the command line, from a vector
+points file, or from a raster map.
+All non-NULL cells are considered to be starting points.
+
+Each <EM>x,y</EM> <B>coordinate</B> pair gives the geographic location of a
+point from which the transportation cost should be figured. As many points as
+desired can be entered by the user. These starting points can also be read
+from a vector points file through the <B>start_sites</B> option or from a
+raster map through the <B>start_rast</B> option.
+<P>
+<em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
+or one of the stop points given with <B>stop_coordinates</B> is reached.
+Alternatively, the stop points can be read from a vector points file with the
+<B>stop_sites</B> option. During execution, once the cumulative cost to all 
+stopping points has been determined, processing stops.
+
+Both sites read from a vector points file and those given on the command line
+will be processed.
+
+
+<P>
+The null cells in the <b>input</b> map can be assigned a (positive floating
+point) cost with the <b>null_cost</b> option.
+<br>
+When input map null cells are given a cost with the <B>null_cost</B>
+option, the corresponding cells in the output map are no longer null
+cells. By using the <b>-n</b> flag, the null cells of the input map are
+retained as null cells in the output map.</P>
+
+<P>
+As <em>r.cost</em> can run for a very long time, it can be useful to 
+use the <b>-v</b> verbose flag to track progress.
+
+<P>
+The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
+the output. In the diagram below, the center location (<tt>O</tt>) represents a
+grid cell from which cumulative distances are calculated. Those
+neighbors marked with an <tt>X</tt> are always considered for cumulative cost
+updates. With the <B>-k</B> option, the neighbors marked with a <tt>K</tt> are
+also considered. 
+</P>
+<div class="code"><pre>
+ . . . . . . . . . . . . . . .
+ .   .   . K .   . K .   .   .
+ . . . . . . . . . . . . . . .
+ .   . K . X . X . X . K .   .
+ . . . . . . . . . . . . . . .
+ .   .   . X . O . X .   .   .
+ . . . . . . . . . . . . . . .
+ .   . K . X . X . X . K .   .
+ . . . . . . . . . . . . . . .
+ .   .   . K .   . K .   .   .
+ . . . . . . . . . . . . . . .
+</pre></div>
+<BR>
+Knight's move example:
+<center>
+<img src=rcost_knightsmove.png border=1><BR>
+<table border=0 width=590>
+<tr><td><center>
+<i>Flat cost surface without (left pane) and with the knight's move (right pane).
+The default is to grow the cost outwards in 8 directions.
+Using the knight's move grows it outwards in 16 directions.</i>
+</center></td></tr>
+</table>
+</center>
+
+
+<H2>NULL CELLS</H2>
+
+<P>By default null cells in the input raster map are excluded from
+the algorithm, and thus retained in the output map.
+<P>
+If one wants <B>r.cost</B> to transparently cross any region of null cells,
+the <B>null_cost</B>=<tt>0.0</tt> option should be used. Then null cells just
+propagate the adjacent costs. These cells can be retained as null cells in the
+output map by using the <B>-n</B> flag.
+
+<H2>NOTES</H2>
+
+<P>Sometimes, when the differences among integer cell category values in the
+<EM>r.cost</EM> cumulative cost surface output are small, this
+cumulative cost output cannot accurately be used as input to <EM><A HREF="r.drain.html">r.drain</A></EM>
+(<EM><A HREF="r.drain.html">r.drain</A></EM> will output bad
+results). This problem can be circumvented by making the differences
+between cell category values in the cumulative cost output bigger. It
+is recommended that, if the output from <EM>r.cost</EM> is to be used
+as input to <EM><A HREF="r.drain.html">r.drain</A></EM>, the user
+multiply the input cost surface map to <EM>r.cost</EM> by the value
+of the map's cell resolution, before running <EM>r.cost</EM>. This
+can be done using <EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>. The map 
+resolution can be found using <EM><A HREF="g.region.html">g.region</A></EM>.
+This problem doesn't arise with floating point maps.
+
+
+<H4>Algorithm notes</H4>
+
+The fundamental approach to calculating minimum travel cost is as
+follows:<P> The user generates a raster map indicating the cost of
+traversing each cell in the north-south and east-west directions.
+This map, along with a set of starting points are submitted to
+<em>r.cost</em>. The starting points are put into a list cells from which
+costs to the adjacent cells are to be calculated. The cell on the
+list with the lowest cumulative cost is selected for computing costs to
+the neighboring cells. Costs are computed and those cells are put
+on the list and the originating cell is finalized. This process
+of selecting the lowest cumulative cost cell, computing costs to the
+neighbors, putting the neighbors on the list and removing the
+originating cell from the list continues until the list is empty.
+<P>
+The most time consuming aspect of this algorithm is the management of
+the list of cells for which cumulative costs have been at least
+initially computed. <em>r.cost</em> uses a binary tree with an linked list
+at each node in the tree for efficiently holding cells with identical
+cumulative costs.
+<P>
+<em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
+maps larger that can fit in available computer memory. As the
+algorithm works through the dynamic list of cells it can move almost
+randomly around the entire area. <em>r.cost</em> divides the entire area
+into a number of pieces and swaps these pieces in and out of memory (to
+and from disk) as needed. This provides a virtual memory approach
+optimally designed for 2-D raster maps.
+The amount of map to hold in memory at one time can be controlled with the
+<B>percent_memory</B> option. For large maps this value will have to be set
+to a lower value.
+
+
+<H2>EXAMPLES</H2>
+
+<P>Consider the following example: 
+</P>
+<div class="code"><pre>
+       Input:
+         COST SURFACE
+       . . . . . . . . . . . . . . .
+       . 2 . 2 . 1 . 1 . 5 . 5 . 5 .
+       . . . . . . . . . . . . . . .
+       . 2 . 2 . 8 . 8 . 5 . 2 . 1 .
+       . . . . . . . . . . . . . . .
+       . 7 . 1 . 1 . 8 . 2 . 2 . 2 .
+       . . . . . . . . . . . . . . .
+       . 8 . 7 . 8 . 8 . 8 . 8 . 5 .
+       . . . . . . . . . . _____ . .
+       . 8 . 8 . 1 . 1 . 5 | <B>3</B> | 9 .
+       . . . . . . . . . . |___| . .
+       . 8 . 1 . 1 . 2 . 5 . 3 . 9 .
+       . . . . . . . . . . . . . . .
+
+
+Output (using -k):                Output (not using -k):
+   CUMULATIVE COST SURFACE           CUMULATIVE COST SURFACE
+ . . . . . . . . . . . . . . .     . . . . <B>* * * * *</B> . . . . . .
+ . 21. 21. 20. 19. 17. 15. 14.     . 22. 21<B>* 21* 20*</B> 17. 15. 14.
+ . . . . . . . . . . . . . . .     . . . . <B>* * * * *</B> . . . . . .
+ . 20. 19. 22. 19. 15. 12. 11.     . 20. 19. 22<B>* 20*</B> 15. 12. 11.
+ . . . . . . . . . . . . . . .     . . . . . . <B>* * * * *</B> . . . .
+ . 22. 18. 17. 17. 12. 11.  9.     . 22. 18. 17<B>* 18* 13*</B> 11.  9.
+ . . . . . . . . . . . . . . .     . . . . . . <B>* * * * *</B> . . . .
+ . 21. 14. 13. 12.  8.  6.  6.     . 21. 14. 13. 12.  8.  6.  6.
+ . . . . . . . . . .  _____. .     . . . . . . . . . . . . . . .
+ . 16. 13.  8.  7.  4 | <B>0</B> | 6.     . 16. 13.  8. 7 .  4.  0.  6.
+ . . . . . . . . . .  |___|. .     . . . . . . . . . . . . . . .
+ . 14.  9.  8.  9.  6.  3.  8.     . 14.  9.  8. 9 .  6.  3.  8.
+ . . . . . . . . . . . . . . .     . . . . . . . . . . . . . . .
+</pre></div>
+
+<P>
+<!-- ??? are "starting" and "ending" swapped in the following text ??? -->
+The user-provided ending location in the above example is the boxed <B>3</B>
+in the above input map. The costs in the output map represent the total
+cost of moving from each box (&quot;cell&quot;) to one or more (here,
+only one) starting location(s). Cells surrounded by asterisks are
+those that are different between operations using and not using the
+Knight's move (<B>-k</B>) option.
+
+<H4>Output analysis</H4>
+
+The output map can be viewed, for example, as an elevation model in which
+the starting location(s) is/are the lowest point(s). Outputs from  <EM>r.cost</EM>
+can be used as inputs to <EM><A HREF="r.drain.html">r.drain</A></EM>, in order
+to trace the least-cost path given by this model between any given cell
+and the <EM>r.cost</EM> starting location(s). The two programs, when
+used together, generate least-cost paths or corridors between any two
+map locations (cells). 
+
+<H4>Shortest distance surfaces</H4>
+The <em>r.cost</em> module allows for computing the shortest distance 
+of each pixel from raster lines, such as determining the shortest distances
+of households to the nearby road. For this cost surfaces with cost value 1 are
+used. The calculation is done with <em>r.cost</em> as follows
+(example for Spearfish region):
+
+<div class="code"><pre>
+  g.region rast=roads -p
+  r.mapcalc "area.one=1"
+  r.cost -k input=area.one output=distance start_rast=roads
+  d.rast distance
+  d.rast.num distance
+
+  #transform to metric distance from cell distance using the raster resolution:
+  r.mapcalc "dist_meters=distance * (ewres()+nsres())/2."
+  d.rast dist_meters
+</pre></div>
+
+
+<H2>BUGS</H2>
+
+The percentage done calculation reported in verbose mode is often not linear
+and ends well before 100%. This does not affect output.
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.drain.html">r.drain</A></EM>,
+<EM><A HREF="r.walk.html">r.walk</A></EM>,
+<EM><A HREF="r.in.ascii.html">r.in.ascii</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.out.ascii.html">r.out.ascii</A></EM>
+
+<H2>AUTHOR</H2>
+
+Antony Awaida,<BR>
+Intelligent Engineering<BR>
+Systems Laboratory,<BR>
+M.I.T.<BR>
+<BR>
+James Westervelt,<BR>
+U.S.Army Construction Engineering Research Laboratory
+
+<P>Updated for Grass 5<BR>
+Pierre de Mouveaux (pmx@audiovu.com) 
+</P>
+
+<p><i>Last changed: $Date$</i>

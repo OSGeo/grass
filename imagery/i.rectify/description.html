@@ -1,0 +1,232 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>i.rectify</EM> uses the control
+points identified in 
+<EM><A HREF="i.points.html">i.points</A></EM>
+or
+<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
+
+to calculate a transformation matrix based on a  first,
+second, or third order polynomial and then converts x,y
+cell coordinates to standard map coordinates for each pixel
+in the image.  The result is a planimetric image with a
+transformed coordinate system (i.e., a different coordinate
+system than before it was rectified).
+
+<P>
+
+<EM><A HREF="i.points.html">i.points</A></EM>
+or
+<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
+
+must be run before <EM>i.rectify</EM>, and both programs
+are required to rectify an image.  An image must be
+rectified before it can reside in a standard coordinate
+LOCATION, and therefore be analyzed with the other map
+layers in the standard coordinate LOCATION.  Upon
+completion of <EM>i.rectify</EM>, the rectified image is
+deposited in the target standard coordinate LOCATION.  This
+LOCATION is selected using
+
+<EM><A HREF="i.target.html">i.target</A></EM>.
+
+<H2>Program Prompts</H2>
+
+The first prompt in the program asks for the name of
+the group containing the files to be rectified.
+
+
+<PRE>
+     Enter the group containing files to be rectified
+     Enter 'list' for a list of existing imagery groups
+     Enter 'list -f' for a verbose listing
+     Hit RETURN to cancel request
+     &gt;
+</PRE>
+
+ This is the same imagery group that was selected in 
+
+<EM><A HREF="i.points.html">i.points</A></EM>
+or
+<EM><A HREF="i.vpoints.html">i.vpoints</A></EM>
+
+and the group that contains the raster maps with the marked
+points and their associated map  coordinates.  You are then
+asked to select the raster map(s) within the group to be
+rectified:
+
+
+<PRE>
+Please select the file(s) to rectify by naming an output file
+
+       spot1.1 in mapsetname      .............
+       spot1.2 in mapsetname      .............
+       spot1.3 in mapsetname      .............
+       spotclass1 in mapsetname   spotrectify1.
+    
+       spotreject1 in mapsetname  .............
+
+(enter list by any name to get a list of existing raster maps)
+
+AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
+           (OR&lt;Ctrl-C&gt; TO CANCEL)
+</PRE>
+
+More than one raster map may be rectified at a time.  Each
+cell file should be given a unique output file name.
+
+
+<P>
+
+Next, you are asked to select one of two windows regions:
+
+
+<PRE>
+  Please select one of the following options
+  1.  Use the current window in the target location
+  2.  Determine the smallest window which covers the image
+  &gt;
+</PRE>
+
+The <EM>i.rectify</EM> program will only rectify that
+portion of the image or raster map that occurs within the
+chosen window region, and only that portion of the cell
+file will be relocated in the target database.  It is
+important therefore, to check the current mapset window in
+the target LOCATION if choice number one is selected.
+
+<P>
+
+If you are rectifying a file with plans to patch it to
+another file using the GRASS program <em>r.patch</em>,
+choose option number one, the current window in the target
+location.  This window, however, must be the default window
+for the target LOCATION.  When a file being rectified is
+smaller than the default window in which it is being
+rectified, zeros are added to the rectified file.  Patching
+files of the same size that contain 0/non-zero data,
+eliminates the possibility of a no-data line the patched
+result.  This is because, when the images are patched, the
+zeros in the image are "covered" with non-zero pixel
+values.  When rectifying files that are going to be
+patched, rectify all of the files using the same default
+window.
+
+
+<P>
+
+Select the order of transformation desired with the <b>order</b> option:
+
+<PRE>
+Select order of transformation --&gt;   1st Order   2nd Order  3rd Order
+</PRE>
+
+The program will immediately recalculate the RMSE and the
+number of points required.
+
+<h3>Linear affine transformation (1st order transformation)</h3>
+
+<DL>
+	<DD> x' = ax + by +c
+	<DD> y' = Ax + Bt +C
+</DL>
+
+The a,b,c,A,B,C are determined by least squares regression
+based on the control points entered.  This transformation
+applies scaling, translation and rotation.  It is NOT a
+general purpose rubber-sheeting, nor is it ortho-photo
+rectification using a DEM, not second order polynomial,
+etc.  It can be used if (1) you have geometrically correct
+images, and (2) the terrain or camera distortion effect can
+be ignored.
+
+
+<H3>Polynomial Transformation Matrix (2nd, 3d order transformation)</H3>
+
+The ANALYZE function has been changed to support
+calculating the registration coefficients using a first,
+second, or third order transformation matrix.  The number
+of control points required for a selected order of
+transformation (represented by n) is
+
+<DL>
+<DD>((n + 1) * (n + 2) / 2) 
+</DL>
+
+or 3, 6, and 10 respectively. It is strongly recommended
+that one or more additional points be identified to allow
+for an overly- determined transformation calculation which
+will generate the Root Mean Square (RMS) error values for
+each included point.  The RMS error values for all the
+included control points are immediately recalculated when
+the user selects a different transformation order from the
+menu bar.  The polynomial equations are performed using a 
+modified Gaussian elimination method.
+
+<H3>Program Execution</H3>
+
+Note:  The rectified image or rectified raster maps will be
+located in the target LOCATION when the program is
+completed.  The original unrectified files are not modified
+or removed.
+
+<P>
+<!--
+Note: In interactive mode it is possible to define a new file name
+for the target images. This is (currently) not provided in command line
+mode.
+-->
+
+<h2>NOTES</h2>
+
+<EM>i.rectify</EM> uses nearest neighbor resampling during
+the transformation choosing the actual pixel that has its centre nearest to
+the point location in the image. Advantage of this method is that the pixel
+brightness of the image is kept as <EM>i.rectify</EM> rearranges the
+geometry of the image pixels.
+<P>
+
+If <em>i.rectify</em> starts normally but after some time the following text is seen:
+<br><tt>
+GIS ERROR: error while writing to temp file
+</tt><br>
+the user may try the flag <EM>-c</EM> (or the module needs more free space
+on the hard drive).
+
+
+<H2>SEE ALSO</H2>
+
+The GRASS 4 <em>
+<A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</A></EM>
+
+<P>
+<EM>
+<A HREF="g.transform.html">g.transform</A>,
+<A HREF="r.proj.html">r.proj</A>,
+<A HREF="v.proj.html">v.proj</A>,
+<A HREF="i.group.html">i.group</A>,
+<A HREF="i.points.html">i.points</A>,
+<A HREF="i.vpoints.html">i.vpoints</A>,
+<A HREF="i.target.html">i.target</A>
+</EM><br>
+<em><a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
+
+
+<H2>AUTHORS</H2>
+
+William R. Enslin, 
+Michigan State University,
+Center for Remote Sensing
+
+<p>
+Modified for GRASS 5.0 by:<BR>
+Luca Palmeri (palmeri@ux1.unipd.it)<BR>
+Bill Hughes<BR>
+Pierre de Mouveaux (pmx@audiovu.com)
+<BR>
+CMD mode by Bob Covill
+
+<p>
+<i>Last changed: $Date$</i>

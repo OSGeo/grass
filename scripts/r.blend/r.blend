@@ -1,0 +1,102 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:	r.blend for GRASS 5.7; based on blend.sh for GRASS 5
+# AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
+# PURPOSE:	To redraw current displayed maps to 24 bit PNG output
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Blends color components of two raster maps by a given ratio.
+#%  keywords: raster
+#%End
+#%option
+#% key: first
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Name of first raster map for blending
+#% key_desc : name
+#% required : yes
+#%end
+#%option
+#% key: second
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Name of second raster map for blending
+#% key_desc : name
+#% required : yes
+#%end
+#%option
+#% key: output
+#% type: string
+#% description: Base name for red, green and blue output maps containing the blend
+#% key_desc : name
+#% required : yes
+#%end
+#%option
+#% key: percent
+#% type: integer
+#% answer: 2
+#% options : 0-99
+#% description: Percentage weight of first map for color blending
+#% required : no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+   echo "You must be in GRASS GIS to run this program." 1>&2
+   exit 1
+fi   
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+if [ "$GRASS_OVERWRITE" != 1 ] ; then
+   for MAP in r g b ; do
+      g.findfile elem=cell file=${GIS_OPT_OUTPUT}.$MAP > /dev/null
+      if [ $? -eq 0 ] ; then
+         g.message -e "Raster map <${GIS_OPT_OUTPUT}.$MAP> already exists."
+         exit 1
+      fi
+   done
+fi
+
+PERC_INV=`expr 100 - $GIS_OPT_PERCENT`
+
+g.message "Calculating the three component maps..."
+r.mapcalc "$GIS_OPT_OUTPUT.r = r#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * r#$GIS_OPT_SECOND"
+r.mapcalc "$GIS_OPT_OUTPUT.g = g#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * g#$GIS_OPT_SECOND"
+r.mapcalc "$GIS_OPT_OUTPUT.b = b#$GIS_OPT_FIRST * .$GIS_OPT_PERCENT + (1.0 - .$GIS_OPT_PERCENT) * b#$GIS_OPT_SECOND"
+
+g.message "Setting color tables to grey..."
+# should this be "0 black \n 255 white"?
+for MAP in r g b ; do
+   r.colors map=${GIS_OPT_OUTPUT}.$MAP col=grey
+   r.support map=${GIS_OPT_OUTPUT}.$MAP title="Color blend of $GIS_OPT_FIRST and $GIS_OPT_SECOND" \
+      history=""
+   r.support map=${GIS_OPT_OUTPUT}.$MAP history="r.blend \"$MAP\" channel."
+   r.support map=${GIS_OPT_OUTPUT}.$MAP history="  ${GIS_OPT_PERCENT}% of $GIS_OPT_FIRST, ${PERC_INV}% of $GIS_OPT_SECOND"
+done
+
+# write cmd history:
+r.support ${GIS_OPT_OUTPUT}.r history="${CMDLINE}"
+r.support ${GIS_OPT_OUTPUT}.g history="${CMDLINE}"
+r.support ${GIS_OPT_OUTPUT}.b history="${CMDLINE}"
+
+g.message "Done. Use the following command to visualize the result:"
+g.message message="d.rgb r=${GIS_OPT_OUTPUT}.r g=${GIS_OPT_OUTPUT}.g b=${GIS_OPT_OUTPUT}.b"
+
+exit 0

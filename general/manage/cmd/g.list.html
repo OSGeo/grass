@@ -1,0 +1,59 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.list</em> allows the user to list user-specified, available
+and accessible files from <em>mapsets</em> under the user's current location.
+
+<!--
+<h2>OPTIONS</h2>
+
+When invoked simply as <b>g.list</b>, the program prompts
+the user for the type of data to be listed from all
+<em>mapsets</em> in the user's current mapset search path.
+The user can list files from a mapset not listed in the
+current mapset search path by running the program
+non-interactively, specifying the (optional) flag setting
+and parameter values on the command line.  Program flag and
+parameters are described below.
+-->
+
+<h2>EXAMPLES</h2>
+
+List all raster maps:
+<br>
+<tt>g.list type=rast</tt>
+<p>
+
+List all raster and vector maps from mapset &quot;user&quot;:
+<br>
+<tt>g.list type=rast,vect mapset=user</tt>
+<p>
+
+<h2>NOTES</h2>
+
+If unspecified, files of the specified <em>type</em> from all mapsets 
+in the user's current search path will be listed to standard output. To 
+find out which mapsets are in the cuurent search path, use 
+<em><a HREF="g.mapsets.html">'g.mapsets</a> -p'</em>.
+
+<p>
+
+If the user requests that files from a mapset to which
+access has been restricted (see
+
+<em><a HREF="g.access.html">g.access</a></em>)
+
+be listed, no files from this mapset will be listed.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="g.access.html">g.access</a></em><br>
+<em><a HREF="g.mapsets.html">g.mapsets</a></em><br>
+<em><a HREF="g.mlist.html">g.mlist</a></em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i><p>

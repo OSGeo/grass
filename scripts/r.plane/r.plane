@@ -1,0 +1,267 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	r.plane for GRASS 5.7; based on r.plane for GRASS 5
+# AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
+#               Dec 2004: Alessandro Frigeri & Ivan Marchesini
+#               Modified to produce floating and double values maps
+# PURPOSE:	Creates a raster plane map from user specified inclination and azimuth
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
+#%  keywords: raster, elevation
+#%End
+#%option
+#% key: name
+#% type: string
+#% gisprompt: new,cell,raster
+#% description: Name of raster plane to be created
+#% required : yes
+#%end
+#%option
+#% key: dip
+#% type: double
+#% gisprompt: -90-90
+#% answer: 0.0
+#% description: Dip of plane. Value must be between -90 and 90 degrees
+#% required : yes
+#%end
+#%option
+#% key: azimuth
+#% type: double
+#% gisprompt: 0-360
+#% answer: 0.0
+#% description: Azimuth of the plane. Value must be between 0 and 360 degrees
+#% required : yes
+#%end
+#%option
+#% key: easting
+#% type: double
+#% description: Easting coordinate of a point on the plane
+#% required : yes
+#%end
+#%option
+#% key: northing
+#% type: double
+#% description: Northing coordinate of a point on the plane
+#% required : yes
+#%end
+#%option
+#% key: elevation
+#% type: double
+#% description: Elevation coordinate of a point on the plane
+#% required : yes
+#%end
+#%option
+#% key: type
+#% type: string 
+#% options: int,float,double
+#% description: Type of the raster map to be created
+#% required : yes
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi   
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+#### setup temporary file
+TMP="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+    g.message -e "unable to create temporary files" 
+    exit 1
+fi
+
+#### trap ctrl-c so that we can clean up tmp
+trap 'rm -f "$TMP"*' 2 3 15
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+### setup enviro vars ###
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+
+dip=$GIS_OPT_DIP
+az=$GIS_OPT_AZIMUTH
+ea=$GIS_OPT_EASTING
+no=$GIS_OPT_NORTHING
+el=$GIS_OPT_ELEVATION
+name="$GIS_OPT_NAME"
+type=$GIS_OPT_TYPE
+
+eval `g.region -g`
+
+
+### test input values ###
+diptest=`echo $dip | awk '{ printf("%8d", int($1 + 0.5))'}`
+if [ $diptest -lt -90 -o $diptest -gt 90 ]
+then
+	g.message -e "Sorry, dip must be greater than -90 and less than 90.\
+	  Please enter a valid value."
+	exit 1
+fi
+
+aztest=`echo $az | awk '{ printf("%8d", int($1 + 0.5))'}`
+if  [ $aztest -lt 0 -o $aztest -ge 360 ]
+then
+	g.message -e "Sorry, azimuth must be no less than 0 and less than 360"
+	exit 1
+fi
+
+if  [ $type = "int" ]
+then
+        g.message "Preparing to produce a CELL map.."
+	typeflag=''
+	ctype=cell
+fi
+
+if  [ $type = "float" ]
+then
+        g.message "Preparing to produce an FCELL map.."
+        typeflag=-f
+        ctype=fcell
+fi
+
+if  [ $type = "double" ]
+then
+        g.message "Preparing to produce a DCELL map.."
+        typeflag=-d
+        ctype=dcell
+fi
+
+# these tests will fail for negative lat/lon?
+eaint=`echo $ea | awk '{ printf "%d",int($1 + 0.5) }'`
+if test $eaint -le `echo $e | cut -d. -f1` -a $eaint -ge `echo $w | cut -d. -f1`
+then
+	gotit=1
+#	echo "east: $ea"
+else
+	g.message -e "Sorry, point must be within current region"
+	g.message -e "Current region:"
+	g.message -e "west: $w   east: $e"
+	exit 1
+fi
+
+noint=`echo $no | awk '{ printf "%d", int($1 + 0.5) }'`
+if test $noint -gt `echo $s | cut -d. -f1` -a $noint -lt `echo $n | cut -d. -f1`
+then
+	gotit=1
+#	echo "north: $no"
+else
+	g.message -e "Sorry, point must be within current region"
+	g.message -e "Current region:"
+	g.message -e "south: $s   north: $n"
+	exit 1
+fi
+
+
+### now the actual algorithm in awk (stored in a temporary file) ###
+cat > "$TMP" << EOF
+
+{
+if (NR==1) {
+# print file header
+  rows = (north-south) / nsres
+  cols = (east-west) / ewres
+    printf("east:     %d\n",east)
+    printf("west:     %d\n",west)
+    printf("south:    %d\n",south)
+    printf("north:    %d\n",north)
+    printf("cols:     %d\n",cols)
+    printf("rows:     %d\n",rows)
+    cells=rows*cols
+    z=1
+    }
+
+if (NR==2) {
+    pi=3.14159265358979323846
+    a2=(az*pi)/180
+    dip2=(dip*pi)/180 
+    tandip=(sin(dip2)/cos(dip2))
+    northc=north-(0.5*nsres)
+    southc=south+(0.5*nsres)
+    eastc=east-(0.5*ewres)
+    westc=west+(0.5*ewres)
+   
+    for (y=northc; y >= southc; y=y-nsres) {
+       for (x=westc; x <= eastc; x=x+ewres) {
+	 dx=(ea-x)
+	 dy=(y-no)
+ 	 dist = sqrt((dx*dx) + (dy*dy))
+	 if (dist==0) {
+	   new_elev[z]=el
+	   }
+	 else {
+	   gamma = atan2((dx/dist),(dy/dist))
+	   epsilon=a2-gamma
+	   d=dist*cos(epsilon)
+	   h=(d*sin(dip2)/cos(dip2))	
+	   #print h
+	   new_elev[z]=el-h
+	   z++
+	   }
+         }
+     }
+}
+if (NR>=2) {
+}
+}
+END {  
+      for (z=1; z <= cells; z++) {
+        if (typeflag==""){
+ 	  printf " %d",new_elev[z]
+	  }
+	else {
+	  printf " %f",new_elev[z]
+	  }
+ 	}
+}
+
+EOF
+
+
+### execute awk and remove temporary file ###
+
+awk  -f "$TMP" -v east=$e west=$w north=$n south=$s ea=$ea no=$no typeflag=$typeflag \
+  nsres=$nsres ewres=$ewres  dip=$dip az=$az el=$el "$TMP" > "$TMP".2
+
+rm -f "$TMP"
+
+g.message "Running r.in.ascii, please stand by.."
+r.in.ascii `echo $typeflag` i="$TMP".2 o=$name
+
+r.support $name hist="$PROG name=$name dip=$dip azimuth=$az easting=$ea \\"
+r.support $name hist="northing=$no elevation=$el type=$type"
+
+g.message "Done."
+g.message message="Raster map <$name@$MAPSET> generated by r.plane \
+  at point $ea E, $no N, elevation $el with dip=$dip degrees and \
+  aspect=$az degrees ccw from north."
+#echo "$dat, user: $user"
+
+rm -f "$TMP".2
+

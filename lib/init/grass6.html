@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+ <TITLE>GRASS 6</TITLE>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+
+<EM><B>grass63</B></EM>  - The GRASS startup program<BR>
+
+<H2>SYNOPSIS</H2>
+
+<B>grass63</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
+    [<B>-text | -gui | -tcltk | -wx]</B>]
+    [[[<B>&lt;GISDBASE&gt;/</B>]<B>&lt;LOCATION_NAME&gt;/</B>]
+    	<B>&lt;MAPSET&gt;</B>]
+
+<BR>
+
+<H2>DESCRIPTION</H2>
+
+<P>
+This program is used to start GRASS. It will parse the command line arguments
+and then initialize GRASS for the user. Since GRASS programs require a
+specific environment, this program must be called before any other GRASS
+program can run. The command line arguments are optional and provide the user
+with a method to indicate the desired user interface, as well as the desired
+mapset to work on.
+
+<H2>FEATURES</H2>
+
+<P>
+The GRASS program will save both the desired user interface and mapset.
+Thus, the next time the user runs GRASS, typing <EM>grass63</EM> (without any
+options) will start grass with the previous settings for the user interface
+and mapset.
+
+<P>
+If you specify a graphical user interface (Tcl/Tk or wxPython), the <EM>grass63</EM>
+program will try to verify that the system you specified exists and that you
+can access it successfully. If any of these checks fail, then <EM>grass63</EM>
+will automatically switch back to the text user interface mode.
+
+<H2>OPTIONS</H2>
+
+<P>
+All command line options are optional.
+
+<H3>Flags:</H3>
+
+<DL>
+
+<DT><B>-</B>
+<DD> Tries to start GRASS using location environment variables (see below)
+
+<DT><B>-h</B> <B>-help</B> <B>--help</B>
+<DD> Prints a brief usage message
+
+<DT><B>-text</B>
+<DD> Indicates that the text based user interface should be used
+
+<DT><B>-gui</B> (or <B>-tcltk</B>)
+<DD> Indicates that the Tcl/Tk based graphical user interface should be used
+
+<DT><B>-wx</B>
+<DD> Indicates that the new Python based graphical user interface should be used (wxgrass)
+
+<DT><B>-v</B> <B>--version</B>
+<DD> Prints the version for GRASS
+
+</DL>
+
+<H3>Parameters:</H3>
+
+<DL>
+<DT><B>GISDBASE</B>
+<DD> Initial database directory which should be a fully qualified path
+    (e.g., /usr/local/share/grassdata)
+
+<DT><B>LOCATION_NAME</B>
+<DD> Initial location directory which is a subdirectory of GISDBASE
+
+<DT><B>MAPSET</B>
+<DD> Initial mapset directory which is a subdirectory of LOCATION_NAME
+
+<DT><B>Note</B>
+<DD> You must specify one of the following<BR><BR>
+    MAPSET<BR>
+    LOCATION_NAME/MAPSET<BR>
+    GISDBASE/LOCATION_NAME/MAPSET<BR>
+    
+</DL>
+
+<H2>ENVIRONMENT VARIABLES</H2>
+
+<H3>User Interface Environment Variable</H3>
+
+<P>
+The <EM>grass63</EM> program will check for the existence of an environment
+variable called GRASS_GUI which indicates the type of user interface for
+GRASS to use. If this variable is not set when <EM>grass63</EM> is run, then
+it will be created and then saved in the $HOME/.grassrc6 file for the next
+time GRASS is run. In addition to "text", "tcltk" or "wx", the GRASS_GUI variable
+can be set to the name of the GUI to use, for example "gis.m" or "wxgrass".
+
+<P>
+There is an order of precedence in the way <EM>grass63</EM> determines the user
+interface to use. The following is the hierarchy from highest precedence to
+lowest.
+
+<P>
+The user may add own environment variable settings to $HOME/.grassrc6 file
+which are used during next startup of GRASS (list of 
+<a href=variables.html>implemented environment variables</a>). 
+
+<DL>
+
+<DT><B>Interface precedence</B>
+<DD>Command line argument<BR>
+    Environment variable GRASS_GUI<BR>
+    Value set in $HOME/.grassrc6<BR>
+    Default value - currently gis.m
+
+</DL>
+
+<H3>Tcl/Tk Environment Variables</H3>
+
+<P>
+If you choose to use the Tcl/Tk graphical user interface, then the following
+environment variables can be used to override your system default tclsh and
+wish commands. See the section immediately following the variable descriptions
+for an example.
+
+<DL>
+
+<DT><B>GRASS_TCLSH</B>
+<DD> Command to use to override tclsh
+
+<DT><B>GRASS_WISH</B>
+<DD> Command to use to override wish
+
+<DT><B>GRASS_PYTHON</B>
+<DD> Command to use to override python
+
+</DL>
+
+<H4>Example Use of GRASS Tcl/Tk Environment Variables</H4>
+
+<P>
+Suppose your system has Tcl/Tk 8.0 installed and you install your personal
+version of Tcl/Tk 8.3 binaries installed under $HOME/bin. You can use the
+above variables to have GRASS use the Tcl/Tk 8.3 binaries instead.
+
+<P>
+GRASS_TCLSH = $HOME/bin/tclsh8.3<BR>
+GRASS_WISH  = $HOME/bin/wish8.3
+
+<H3>Addon path to extra local GRASS modules</H3>
+
+This environment variables allows to extend the GRASS paths to locally
+developed/installed modules which are not distributes through the standard
+release of GRASS.
+<P>
+GRASS_ADDON_PATH=/usr/mytools<BR>
+GRASS_ADDON_PATH=/usr/mytools:/usr/local/othertools
+
+<P>
+In this example above path(s) would be added to the standard GRASS path
+environment.
+
+
+<H3>Location Environment Variables</H3>
+
+<P>
+The Synopsis and Options sections above describe options that can be used to
+set the location and mapset that GRASS will use. These values can also be set
+with environment variables. However, specifying the location and mapset
+variables on the command line will override these environment variables. The
+available variables are as follows:
+
+<DL>
+
+<DT><B>LOCATION</B>
+<DD> A fully qualified path to a mapset 
+    (eg /usr/local/share/grassdata/spearfish60/PERMANENT). This environment variable
+    overrides the GISDBASE, LOCATION_NAME, and MAPSET variables.
+
+<DT><B>GISDBASE</B>
+<DD> Initial database directory which should be a fully qualified path
+    (eg /usr/local/share/grassdata)
+
+<DT><B>LOCATION_NAME</B>
+<DD> Initial location directory which is a subdirectory of GISDBASE
+
+<DT><B>MAPSET</B>
+<DD> Initial mapset directory which is a subdirectory of LOCATION_NAME
+
+</DL>
+
+<P>
+There are a variety of ways in which these variables can be used to specify
+the mapset to use. The following are some possible examples.
+
+<DL>
+
+<DT><B>Example 1</B>
+<DD> The environment variables are defined as follows:<BR><BR>
+    
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
+    GISDBASE = /usr/local/share/grassdata<BR>
+    LOCATION_NAME = spearfish60<BR>
+    MAPSET = PERMANENT<BR><BR>
+    
+    Start GRASS with the following command:<BR><BR>
+    
+    grass63 -<BR><BR>
+    
+    GRASS will start with the mapset defined by LOCATION since the LOCATION
+    variable overrides the other variables.<BR><BR>
+
+<DT><B>Example 2</B>
+<DD> The environment variables are defined as follows:<BR><BR>
+    
+    GISDBASE = /usr/local/share/grassdata<BR>
+    LOCATION_NAME = spearfish60<BR>
+    MAPSET = PERMANENT<BR><BR>
+    
+    Start GRASS with the following command:<BR><BR>
+    
+    grass63 -<BR><BR>
+    
+    GRASS will start with the mapset defined by
+    GISDBASE/LOCATION_NAME/MAPSET.<BR><BR>
+
+<DT><B>Example 3</B>
+<DD> The environment variables are defined as follows:<BR><BR>
+    
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
+    GISDBASE = /usr/local/share/grassdata<BR>
+    LOCATION_NAME = spearfish60<BR>
+    MAPSET = PERMANENT<BR><BR>
+    
+    Start GRASS with the following command:<BR><BR>
+    
+    grass63 /usr/home/grass/data/thailand/forests<BR><BR>
+    
+    GRASS will start with the mapset /home/grass/data/thailand/forests which
+    overrides the environment variables.<BR><BR>
+
+<DT><B>Example 4</B>
+<DD> The environment variables are defined as follows:<BR><BR>
+    
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
+    GISDBASE = /usr/local/share/grassdata<BR>
+    LOCATION_NAME = spearfish60<BR>
+    MAPSET = PERMANENT<BR><BR>
+    
+    Start GRASS with the following command:<BR><BR>
+    
+    grass63 swamps<BR><BR>
+    
+    GRASS will start with the mapset defined by GISDBASE/LOCATION_NAME/swamps
+    since the command line argument for the mapset overrides the environment
+    variable MAPSET.<BR><BR>
+
+<DT><B>Example 5</B>
+<DD> The environment variables are defined as follows:<BR><BR>
+    
+    LOCATION = /usr/local/share/grassdata/spearfish60/PERMANENT<BR>
+    GISDBASE = /usr/local/share/grassdata<BR>
+    LOCATION_NAME = spearfish60<BR>
+    MAPSET = PERMANENT<BR><BR>
+    
+    Start GRASS with the following command:<BR><BR>
+    
+    grass63 thailand/forests<BR><BR>
+    
+    GRASS will start with the mapset defined by GISDBASE/thailand/forests
+    since the command line arguments for the location and mapset overrides
+    the environment variables LOCATION_NAME and MAPSET.<BR><BR>
+
+</DL>
+
+<H3>Note</H3>
+
+<P>
+Note that you will need to set these variables using the appropriate method
+required for the UNIX shell that you use.
+
+<H2>EXAMPLES</H2>
+
+<P>
+The following are some examples of how you could start GRASS
+
+<DL>
+
+<DT><B>grass63</B>
+<DD> Start GRASS using the default user interface. The user will be prompted
+    to choose the appropriate location and mapset.
+
+<DT><B>grass63 -gui</B>
+<DD> Start GRASS using the Tcl/Tk based user interface. The user will be
+    prompted to choose the appropriate location and mapset.
+
+<DT><B>grass63 -text</B>
+<DD> Start GRASS using the text based user interface. The user will be
+    prompted to choose the appropriate location and mapset.
+
+<DT><B>grass63 -gui -</B>
+<DD> Start GRASS using the Tcl/Tk based user interface and try to obtain
+    the location and mapset from environment variables.
+
+<DT><B>Other examples</B>
+<DD> See the <B>Location Environment Variables</B> section for further
+    examples.
+
+</DL>
+
+<H2>BUGS AND CAVEAT</H2>
+
+<P>
+If you start GRASS using the Tcl/Tk interface you must have a <EM>wish</EM>
+command in your $PATH variable. That is, the command must be named
+<EM>wish</EM> and not something like <EM>wish8.3</EM>. By default, a Tcl/Tk
+installation does not create a <EM>wish</EM> command. Thus, the system
+administrator must create an appropriate link to the actual wish program.
+
+<P>
+For example, suppose Tcl/Tk 8.3 programs are installed in /usr/local/bin. Then
+the system administrator should go to the /usr/local/bin directory and run the
+commands <EM>ln -s wish8.3 wish</EM> and <EM>ln -s tclsh8.3 tclsh</EM> to
+properly install Tcl/Tk for use with GRASS.
+
+<P>
+Furthermore, if you have more than one version of Tcl/Tk installed, make sure
+that the version you want to use with GRASS is the first version found in
+your $PATH variable. GRASS searches your $PATH variable until it finds the 
+first version of <EM>wish</EM>.
+
+<H2>FILES</H2>
+
+<EM>$UNIX_BIN/grass63</EM> - GRASS startup program (Linux, MacOSX etc.)<BR><BR>
+<EM>$WINDOWS_BIN/grass63.bat</EM> - GRASS startup program (MS-Windows)<BR><BR>
+<EM>$GISBASE/etc/Init.sh</EM> - GRASS initialization script called by
+    <EM>grass63</EM><BR><BR>
+<EM>$GISBASE/etc/gis_set.tcl</EM> - Tcl/Tk script to set the
+    location and mapset to use. Called by <EM>Init.sh</EM><BR><BR>
+
+<H2>SEE ALSO</H2>
+
+List of <a href=variables.html>implemented GRASS environment variables</a>.
+<p>
+<a href="http://grass.osgeo.org">GRASS Web site</a>
+<p>
+<a href="http://download.osgeo.org/grass/grass6_progman/">GRASS 6 Programmer's Manual</a>
+
+<H2>AUTHORS (of this page)</H2>
+
+Justin Hickey<br>
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>
+<HR>
+<P><a href=index.html>Help Index</a>
+
+</body>
+</html>

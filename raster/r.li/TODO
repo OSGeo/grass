@@ -1,0 +1,34 @@
+TODO list
+
+A few remaining things should be done soon:
+- add relevant references
+- use english variable names in C code
+
+Please change the examples to Spearfish wherever possible:
+
+# Spearfish
+g.region rast=landcover.30m -p
+r.mapcalc "forests=if(landcover.30m >= 41 && landcover.30m <=43,1,null())"
+r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
+d.rast.leg forests_p_dens7
+
+r.to.vect forests out=forests feature=area
+d.vect forests type=boundary
+
+
+# MASK test
+g.copy rast=fields,MASK
+r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7mask --o
+d.rast.leg forests_p_dens7mask
+# -> no negative values! but MASK is respected
+
+# zero data test
+r.mapcalc forests=0
+r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7 --o
+d.rast.leg forests_p_dens7mask
+r.info -r forests_p_dens7
+min=19.841270
+max=19.841270
+# -> all cells are 19.841270 ?!
+
+

@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Raster data processing in GRASS GIS</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="Markus Neteler/GRASS Development Team">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h2>Raster data processing in GRASS GIS</h2>
+
+<h3>Raster maps in general</h3>
+
+The geographic boundaries of the raster map are described by the north,
+south, east, and west fields. These values describe the lines which bound
+the map at its edges. These lines do NOT pass through the center of the
+grid cells at the edge of the map, but along the edge of the map itself.
+
+<P>
+As a general rule in GRASS:
+<ol>
+<li> Raster output maps have their bounds and resolution equal to those
+of the current region.
+<li> Raster input maps are automatically cropped/padded and rescaled
+(using nearest-neighbour resampling) to match the current region.
+<li> Raster input maps are automatically masked if a raster map named
+     MASK exists.
+</ol>
+
+There are a few exceptions to this:
+
+<tt>r.in.*</tt> programs read the data cell-for-cell, with no resampling. When
+reading non-georeferenced data, the imported map will usually have its
+lower-left corner at (0,0) in the location's coordinate system; the user
+needs to use <a href="r.region.html">r.region</a> to "place" the imported map.
+<P>
+Some programs which need to perform specific types of resampling (e.g.
+<a href="r.resamp.rst.html">r.resamp.rst</a>) read the input maps at
+their original resolution then do the resampling themselves.
+<P>
+<a href="r.proj.html">r.proj</a> has to deal with two regions (source
+and destination) simultaneously; both will have an impact upon the
+final result.
+
+<h3>Raster import and export</h3>
+
+The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
+interface for many different raster formats. Additionally, it also
+offers options such as on-the-fly location creation or extension of
+the default region to match the extent of the imported raster map.
+For special cases, other import modules are available. Always the full
+map is imported.
+<P>
+For importing scanned maps, the user will need to create a
+x,y-location, scan the map in the desired resolution and save it into
+an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
+<a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
+reference points the scanned map can be recified to obtain geocoded
+data.
+<P>
+Raster maps are exported with <a href="r.out.gdal.html">r.out.gdal</a>
+into common formats. Also <a href="r.out.bin.html">r.out.bin</a>,
+<a href="r.out.vtk.html">r.out.vtk</a> and other export modules are
+available.
+
+
+<h3>Metadata</h3>
+
+The <a href="r.info.html">r.info</a> module displays general information
+about a map such as region extent, data range, data type, creation history,
+and other metadata.
+Metadata such as map title, units, vertical datum etc. can be updated
+with <a href="r.support.html">r.support</a>. Timestamps are managed
+with <a href="r.timestamp.html">r.timestamp</a>. Region extent and
+resolution are mangaged with <a href="r.region.html">r.region</a>.
+
+
+<h3>Raster map operations</h3>
+
+GRASS raster map processing is always performed in the current region
+settings (see <a href="g.region.html">g.region</a>), i.e. the current
+region extent and current raster resolution is used. If the resolution
+differs from that of the input raster map(s), on-the-fly resampling is
+performed (nearest neighbor resampling). If this is not desired, the
+input map(s) has/have to be resampled beforehand with one of the dedicated
+modules.
+
+<h4>Raster MASKs</h4>
+If a raster map named "MASK" exists, most GRASS raster modules will operate
+only on data falling inside the masked area, and treat any data falling
+outside of the mask as if its value were NULL. The mask is only applied
+when <em>reading</em> an existing GRASS raster map, for example when used
+in a module as an input map.
+<P>
+The mask is read as an integer map. If MASK is actually a
+floating-point map, the values will be converted to integers using the
+map's quantisation rules (this defaults to round-to-nearest, but can
+be changed with r.quant).
+<P>
+(see <a href="r.mask.html">r.mask</a>)
+
+<h3>Raster map statistics</h3>
+
+A couple of commands are available to calculate local statistics
+(<a href="r.neighbors.html">r.neighbors</a>), and global statistics
+(<a href="r.statistics.html">r.statistics</a>, <a href="r.surf.area.html">r.surf.area</a>,
+<a href="r.sum.html">r.sum</a>).  Profiles and transects can be generated
+(<a href="d.profile.html">d.profile</a>, <a href="r.profile.html">r.profile</a>,
+<a href="r.transect.html">r.transect</a>) as well as histograms
+(<a href="d.histogram.html">d.histogram</a>) and polar diagrams
+(<a href="d.polar.html">d.polar</a>).
+
+Univariate statistics (<a href="r.univar.html">r.univar</a>) and
+reports are also available (<a href="r.report.html">r.report</a>,<a
+href="r.stats.html">r.stats</a>, <a href="r.volume.html">r.volume</a>).
+
+<h3>Raster map algebra and aggregation</h3>
+
+The <a href="r.mapcalc.html">r.mapcalc</a> command provides raster map
+algebra methods.
+The <a href="r.resamp.stats.html">r.resamp.stats</a> command resamples raster
+map layers using various aggregation methods, the <a href="r.average.html">r.average</a>
+command aggregates one map based on a second map. 
+<a href="r.resamp.interp.html">r.resamp.interp</a> resamples raster map layers using interpolation.
+
+
+
+<h3>Raster map resampling and interpolation methods</h3>
+
+GRASS offers various raster resampling and interpolation methods. There are
+available modules for reinterpolation of "filled" raster maps (continuous data)
+to a different resolution:
+
+<ul>
+<li> Resampling with nearest neighbor, bilinear, and bicubic method
+ (<a href="r.resamp.interp.html">r.resamp.interp</a>)</li>
+<li> Regularized spline with tension (RST) interpolation 2D
+ (<a href="r.resamp.rst.html">r.resamp.rst</a>)</li>
+<li> Regularized spline with tension (RST) interpolation 2D for hole filling (e.g., SRTM DEM)
+ (<a href="r.fillnulls.html">r.fillnulls</a>)</li>
+</ul>
+
+Furthermore, there are modules available for reinterpolation of "sparse"
+(scattered points or lines) maps:
+
+<ul>
+<li> Inverse distance weighted average (IDW) interpolation
+ (<a href="r.surf.idw.html">r.surf.idw</a> and <a href="r.surf.idw2.html">r.surf.idw2</a>)</li>
+<li> Interpolating from contour lines (<a href="r.contour.html">r.contour</a>)</li>
+</ul>
+
+For Lidar and similar data, <a href="r.in.xyz.html">r.in.xyz</a> supports loading
+and binning of ungridded x,y,z ASCII data into a new raster map. The user may choose from
+a variety of statistical methods in creating the new raster.
+<P>
+
+Otherwise, for interpolation of scattered data, use the <EM>v.surf.*</EM> set of
+modules.
+
+
+<h3>Hydrologic modeling toolbox</h3>
+
+Watershed modeling related modules are
+<a href="r.basins.fill.html">r.basins.fill</a>,
+<a href="r.water.outlet.html">r.water.outlet</a>,
+<a href="r.watershed.html">r.watershed</a>, and
+<a href="r.terraflow.html">r.terraflow</a>.
+
+Water flow related modules are
+<a href="r.carve.html">r.carve</a>,
+<a href="r.drain.html">r.drain</a>,
+<a href="r.fill.dir.html">r.fill.dir</a>,
+<a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.flow.html">r.flow</a>, and
+<a href="r.topidx.html">r.topidx</a>.
+
+Flooding can be simulated with <a href="r.lake.html">r.lake</a>.
+
+Hydrologic simulation model are available as
+<a href="r.sim.sediment.html">r.sim.sediment</a>,
+<a href="r.sim.water.html">r.sim.water</a>, and
+<a href="r.topmodel.html">r.topmodel</a>.
+
+<h3>Raster format</h3>
+
+Raster data can be stored in GRASS as 2D or 3D grids. 2D rasters
+support 3 data types: 32bit signed integer, single- and double-precision
+floating-point. 3D rasters support only single- and double-precision
+floating-point. In most GRASS resources, 2D raster maps are usually
+called "raster", their integer data type "CELL", single-precision
+floating-point data type "FCELL" and double-precision floating-point
+"DCELL". The 3D raster map type is usually called "3D raster" but other
+names like "G3D", "voxel", "volume", "GRID3D" or "3d cell" are common.
+3D raster's single-precision data type is most often called "float", and the
+double-precision one "double".
+
+<p>
+GRASS raster format is architecture independent and portable between
+32bit and 64bit machines.
+
+<p>
+GRASS distinguishes NULL and zero. When working with NULL data, it is
+important to know that operations on NULL cells lead to NULL cells.
+
+<h3>See also</h3>
+
+<ul>
+<li><a href=vectorintro.html>Introduction to GRASS vector map processing</a></li>
+<li><a href=raster3dintro.html>Introduction to GRASS 3D raster map (voxel) processing</a></li>
+</ul>
+
+<HR>
+<P>
+<a href="index.html">Main index</a> - <a href="raster.html">raster index</a>
+ - <a href="full_index.html">full index</a>
+</P>
+<P>&copy; 2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></P>
+</body>
+</html>

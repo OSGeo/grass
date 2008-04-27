@@ -1,0 +1,138 @@
+<h2>DESCRIPTION</h2>
+
+For basic information about Grass <em>mapset</em>, <em>location</em>
+and <em>data base</em> refer to <a HREF="helptext.html">GRASS Quickstart</a>.
+
+<p>
+A <em>mapset</em> holds a distinct set of data layers,
+each relevant to the same (or a subset of the same) geographic region,
+and each drawn in the same map coordinate system.
+At the outset of every GRASS session, the user identifies a
+GRASS data base, location, and mapset that are to be the
+user's <em>current data base</em>, <em>current location</em>,
+and <em>current mapset</em> for the duration of the session;
+any maps created by the user during the session
+will be stored under the <em>current mapset</em> set at the session's outset.
+(see <em><a href="g.mapset.html">g.mapset</a></em> [without an "s"] and
+ <em><a href="g.gisenv.html">g.gisenv</a></em> for changing the mapset
+ with a session)
+
+<p>
+The user can add, modify, and delete data layers that exist
+under his <em>current mapset</em>.  Although the user can
+also <em>access</em> (i.e., use) data that are stored under
+<em>other</em> mapsets in the same GRASS location using the
+<tt>mapname@mapsetname</tt> notation or mapset search path, the user
+can only make permanent changes (create or modify data)
+located in the <em>current mapset</em>.  The user's
+<em>mapset search path</em> lists the order in which other
+mapsets in the same GRASS location can be searched and
+their data accessed by the user.  The user can modify the
+listing and order in which these mapsets are accessed by
+modifying the mapset search path; this can be done using
+the <em>g.mapsets</em> command. This program allows the
+user to use other's relevant map data without altering the
+original data layer, and without taking up disk space with
+a copy of the original map. The <tt>mapname@mapsetname</tt>
+notation may be used irrespective of the mapset search path,
+i.e., any map found in another mapset with sufficient
+<em><a href="g.access.html">g.access</a></em> privileges may
+be called in such a manner.
+
+
+<p>
+<em>g.mapsets</em> shows the user available mapsets under
+the current GRASS location, lists mapsets to which the user
+currently has access, and lists the order in which
+accessible mapsets will be accessed by GRASS programs
+searching for data files.  The user is then given the
+opportunity to add or delete mapset names from his search
+path, or modify the order in which mapsets will be
+accessed.
+
+<p>
+When the user specifies the name of a data base element file
+(e.g., a particular vector map, raster map, 
+<a HREF="i.group.html">imagery</a> group file, etc.)
+to a GRASS program, the program searches for the named file
+under each of the mapsets listed in the user's mapset search path
+in the order listed there until the program finds a file
+of the given name.  (Users can also specify a file by
+its mapset, to make explicit the mapset from which the file is to be
+drawn;  e.g., the command:
+
+
+<div class="code"><pre>
+<b><a HREF="g.copy.html">g.copy</a> rast=</b><em>'soils.file@PERMANENT',my.soils</em>
+</pre></div>
+
+
+ensures that a new file named <em>my.soils</em> is to be a copy of
+the file <em>soils.file</em> from the mapset PERMANENT.)
+
+<p>
+It is common for a user to have the special mapset
+<b>PERMANENT</b> included in his mapset search path, as
+this mapset typically contains finished base maps relevant
+to many applications.  Often, other mapsets which contain
+sets of interpreted map layers will be likewise included in
+the user's mapset search path.  Suppose, for example, that
+the mapset <em>Soil_Maps</em> contains interpreted soils
+map layers to which the user wants access.  The mapset
+
+<em>Soil_Maps</em> should then be included in the user's
+<em>search path</em> variable.
+
+<p>
+The <em>mapset search path</em> is saved as part of the
+current mapset.  When the user works with that mapset in
+subsequent GRASS sessions, the previously saved mapset
+search path will be used (and will continue to be used
+until it is modified by the user with <em>g.mapsets</em>).
+
+
+<h2>NOTES</h2>
+
+<em>g.mapsets</em> sets the current <em>mapset search
+path</em> to the <em>mapsets</em> named on the command
+line. If <em>g.mapsets</em> is typed but no <em>mapset</em>
+names are specified by the user on the command line, the
+program will print the user's current mapset search path,
+list available mapsets, and prompt the user for a new
+mapset search path listing.
+
+<p>
+The <em>addmapset</em> parameter allows for extending an existing
+<em>mapset search path</em>.
+
+<p>
+Users can restrict others' access to their mapset files
+through use of the GRASS program
+
+<em><a HREF="g.access.html">g.access</a></em>.  
+
+Mapsets to which access is restricted can still be listed
+in another's mapset search path; however, access to these
+mapsets will remain restricted.
+
+<h2>SEE ALSO</h2>
+
+<em>
+  <a HREF="g.access.html">g.access</a>,
+  <a HREF="g.copy.html">g.copy</a>,
+  <a HREF="g.gisenv.html">g.gisenv</a>,
+  <a HREF="g.list.html">g.list</a>,
+  <a HREF="g.mapset.html">g.mapset</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering 
+Research Laboratory
+<p>
+Greg Koerper, 
+ManTech Environmental Technology, Inc.
+
+<p>
+<i>Last changed: $Date$</i>

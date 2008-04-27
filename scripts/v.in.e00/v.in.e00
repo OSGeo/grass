@@ -1,0 +1,245 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       v.in.e00
+#
+# AUTHOR(S):    Markus Neteler, Otto Dassau
+#
+# PURPOSE:      Import E00 data into a GRASS vector map
+#		Imports single and split E00 files (.e00, .e01, .e02 ...)
+#
+# COPYRIGHT:    (c) 2004, 2005 GDF Hannover bR, http://www.gdf-hannover.de
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+#
+# REQUIREMENTS:
+#      -  avcimport: http://avce00.maptools.org
+
+#%Module
+#%  description: Import E00 file into a vector map.
+#%  keywords: vector, import
+#%End
+#%flag
+#%  key: v
+#%  description: Verbose mode
+#%end
+#%option
+#% key: file
+#% type: string
+#% description: E00 file
+#% gisprompt: old_file,file,input
+#% required : yes
+#%end
+#%option
+#% key: type
+#% type: string
+#% options: point,line,area
+#% description: Input type point, line or area
+#% required : yes
+#%end
+#%option
+#% key: vect
+#% type: string
+#% gisprompt: new,vector,vector
+#% description: Name for output vector map
+#% required : no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi   
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE"/"$LOCATION_NAME"/"$MAPSET"
+
+E00TMP=$$
+
+#### check for avcimport 
+if [ ! -x "`which avcimport`" ] ; then
+    g.message -e  "'avcimport' program not found, install it first" 
+    g.message -e "http://avce00.maptools.org" 
+    exit 1
+fi
+
+#### check for e00conv
+if [ ! -x "`which e00conv`" ] ; then
+    g.message -e "'e00conv' program not found, install it first"
+    g.message -e "http://avce00.maptools.org" 
+    exit 1
+fi
+
+#### trap ctrl-c so that we can clean up tmp
+#### take care to define ${TMP}:
+#trap 'rm -f "${TMP}"' 2 3 15
+
+# check that the user didn't use all three, which gets past the parser.
+if [ "$GIS_OPT_TYPE" != "point" ] && \
+   [ "$GIS_OPT_TYPE" != "line" ] && \
+   [ "$GIS_OPT_TYPE" != "area" ] ; then
+    g.message -e "Must specify one of \"point\", \"line\", or \"area\"." 
+    exit 1
+fi
+
+if [ -n "$GIS_OPT_FILE" ] ; then
+    E00NAME=`basename $GIS_OPT_FILE .e00`
+    # to avoid CAPs problem:
+    E00NAME=`basename $E00NAME .E00`
+    # avcimport only accepts 13 chars:
+    E00SHORTNAME="`echo $E00NAME | cut -b1-13`"
+fi
+
+#check if this is a split E00 file (.e01, .e02 ...):
+MERGING=0
+if test -f "$E00NAME.e01" ; then
+  g.message "Found that E00 file is split into pieces (.e01, ...). Merging..."
+  MERGING=1
+  EXTENSION="NOCAPS" # .e00 .e01 ...
+fi
+if test -f "$E00NAME.E01" ; then
+  g.message "Found that E00 file is split into pieces (.e01, ...). Merging..."
+  MERGING=1
+  EXTENSION="CAPS" # .E00 .E01 ...
+fi
+
+
+if [ -z "$GIS_OPT_TYPE" ] ; then
+    g.message -e "Input type is missing - choose point, line or area"
+    exit 1
+fi
+
+if [ -n "$GIS_OPT_VECT" ] ; then
+    NAME="$GIS_OPT_VECT"
+else
+    NAME="$E00NAME"
+fi
+
+### do import
+
+#make a temporary directory
+TMPDIR="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMPDIR" ] ; then
+    g.message "Unable to create temporary files" 
+    exit 1
+fi
+
+rm -f "$TMPDIR"
+mkdir "$TMPDIR"
+
+install -m 644 $E00NAME.e* $E00NAME.E* "$TMPDIR" 2>/dev/null
+
+#change to temporary directory to later avoid removal problems (rm -r ...)
+cd "$TMPDIR"
+
+#check for binay E00 file (we can just check if import fails):
+#avcimport doesn't set exist status :-(
+
+if [ $MERGING -eq 1 ] ; then
+  if  [ "$EXTENSION" = "CAPS" ] ; then
+     cat `ls -1 "$E00NAME.E"* | sort` > "$E00NAME.cat.$E00TMP.e00"
+     GIS_OPT_FILE="$E00NAME.cat.$E00TMP.e00"
+  fi
+  if  [ "$EXTENSION" = "NOCAPS" ] ; then
+     cat `ls -1 "$E00NAME.e"* | sort` > "$E00NAME.cat.$E00TMP.e00"
+     GIS_OPT_FILE="$E00NAME.cat.$E00TMP.e00"
+  fi
+fi
+
+g.message "An error may appear next which will be ignored..."
+avcimport "$GIS_OPT_FILE" "$E00SHORTNAME" 2>/dev/null >/dev/null
+if [ $? -eq 1 ] ; then
+   g.message "E00 ASCII found and converted to Arc Coverage in current directory"
+else
+   g.message "E00 Compressed ASCII found. Will uncompress first..."
+   rm -rf "$E00SHORTNAME" info
+   e00conv "$GIS_OPT_FILE" "$E00TMP.e00"
+   g.message "...converted to Arc Coverage in current directory"
+   avcimport "$E00TMP.e00" "$E00SHORTNAME" 2>/dev/null
+fi
+
+## let's import...
+## point
+
+#SQL name fix:
+NAME=`echo $NAME | sed 's+-+_+g'`
+
+if [ "$GIS_OPT_TYPE" = "point" ] ; then
+        g.message "Importing points..."
+        v.in.ogr -o dsn="$E00SHORTNAME" layer=LAB type=point output="$NAME"
+	if [ $? -eq 1 ] ; then
+   	g.message -e "An error occurred while running v.in.ogr"
+   	rm -rf "$E00TMP.e00" "$E00SHORTNAME" info 2>&1 > /dev/null
+   	exit 1
+	fi
+fi
+
+## line
+
+if [ "$GIS_OPT_TYPE" = "line" ] ; then
+        g.message "Importing lines..."
+        v.in.ogr -o dsn="$E00SHORTNAME" layer=ARC type=line output="$NAME"
+	if [ $? -eq 1 ] ; then
+   	g.message -e "An error occurred while running v.in.ogr"
+   	rm -rf "$E00TMP.e00" "$E00SHORTNAME" info 2>&1 > /dev/null
+   	exit 1
+	fi
+fi
+
+## area
+
+
+if [ "$GIS_OPT_TYPE" = "area" ] ; then
+        g.message "Importing areas..."
+        # we must reconstruct topology and cleanup polygons:
+        v.in.ogr -o dsn="$E00SHORTNAME" layer=LAB,ARC type=centroid,boundary output="$NAME"
+	if [ $? -eq 1 ] ; then
+   	g.message -e "An error occurred. Stop."
+   	rm -rf "$E00TMP.e00" "$E00SHORTNAME" info 2>&1 > /dev/null
+   	exit 1
+	fi
+fi
+
+g.message "Imported <$GIS_OPT_TYPE> vector map <$NAME>."
+
+#### clean up the mess
+rm -f "${TMPDIR}/$E00NAME.e"* "${TMPDIR}/$E00NAME.E"*
+rm -rf "$E00TMP.e00" "$E00SHORTNAME" info "$E00NAME.cat.$E00TMP.e00" 2>&1 > /dev/null
+cd ..
+rmdir "$TMPDIR"
+
+#### end
+g.message "Done."
+
+# write cmd history:
+v.support "$NAME" cmdhist="${CMDLINE}"
+
+exit 0

@@ -1,0 +1,76 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>i.fft</EM> is an image processing program based on the FFT algorithm
+given by Frigo et al. (1998), that processes a single input raster map layer
+(<B>input_image</B>) and constructs the real and imaginary Fourier
+components in frequency space.
+
+<H2>NOTES</H2>
+
+The real and imaginary components are stored as arrays of
+doubles in the <EM>cell_misc</EM> directory (for use in the
+inverse transform program,
+
+<EM><A HREF="i.ifft.html">i.ifft</A></EM>),
+
+and are also scaled and formatted into the
+<B>real_image</B> and <B>imaginary_image</B> raster map
+layers for inspection, masking, etc.  In these raster map
+layers the low frequency components are in the center and
+the high frequency components are toward the edges.  The
+<B>input_image</B> need not be square;  before
+processing, the X and Y dimensions of the
+<B>input_image</B> are padded with zeroes to the next
+highest power of two in extent (i.e., 256 x 256 is
+processed at that size, but 200 x 400 is padded to 256 x
+512).  The cell category values for viewing, etc., are
+calculated by taking the natural log of the actual values
+then rescaling to 255, or whatever optional range is given
+on the command line, as suggested by Richards (1986).  A
+color table is assigned to the resultant map layer.
+
+
+<P>
+
+The current geographic region and mask settings are
+respected when reading the input file.  The presence of a
+mask will, in general, make the resulting fast Fourier
+transform invalid, or at least difficult to interpret.
+
+<H2>SEE ALSO</H2>
+
+M. Frigo and S. G. Johnson (1998): "FFTW: An Adaptive Software Architecture
+for the FFT". See <a href=>www.FFTW.org</a>: FFTW is a C subroutine library
+for computing the Discrete Fourier Transform (DFT) in one or more
+dimensions, of both real and complex data, and of arbitrary input size.
+
+<P>
+
+<B>Remote Sensing Digital Image Analysis</B>,
+by John A. Richards,
+Springer-Verlag, 1986.
+
+
+<P>
+
+Personal communication,
+between progam author and Ali R. Vali,
+Space Research Center, 
+<A HREF="http://www.utexas.edu">University of Texas</A>, Austin, 1990.
+
+<P>
+
+<EM><A HREF="i.cca.html">i.cca</A></EM><br>
+<EM><A HREF="i.class.html">i.class</A></EM><br>
+<EM><A HREF="i.ifft.html">i.ifft</A></EM><br>
+<EM><A HREF="i.pca.html">i.pca</A></EM>
+
+<H2>AUTHOR</H2>
+
+David Satnik, GIS Laboratory, 
+Central Washington University
+<br>
+Glynn Clements (FFTW support)
+
+<p><i>Last changed: $Date$</i>

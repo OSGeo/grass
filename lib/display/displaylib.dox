@@ -1,0 +1,25 @@
+/*! \page displaylib GRASS Display Library
+
+<title>GRASS Display Library</title>
+
+\section displayintro Display Library
+
+<P>
+Author: CERL<br>
+Major rewrite: Glynn Clements
+
+<P>
+This library provides a wide assortment of higher level graphics commands which in turn use
+the graphics raster library primitives. It is highly recommended that this section be used to
+understand how some of the GRASS graphics commands operate. Such modules like d.vect,
+d.graph, and d.rast demonstrate how these routines work together. The routines fall into four
+basic sets: 1) frame creation and management, 2) coordinate conversion routines, 3) specialized
+efficient raster display routines, and 4) assorted miscellaneous routines like pop-up menus
+and line clipping.
+
+Note. All routines and global variables in this library, documented or undocumented, start with
+the prex D_. To avoid name conflicts, programmers should not create variables or routines in
+their own modules which use this prefix.
+
+TODO: insert ordered function list (see GRASS 5 progman)
+*/

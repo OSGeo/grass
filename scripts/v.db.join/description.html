@@ -1,0 +1,78 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.join</em> joins the content of another table into the connected
+attribute table of a vector map.
+
+<h2>NOTES</h2>
+
+<em>v.db.join</em> is a front-end to <em>db.execute</em> to allow easier usage.
+
+The vector attribute table must be stored in a SQL database (SQLite, PostgreSQL,
+MySQL, ODBC, ...). The DBF backend is not supported. Tables can be
+imported with <em>db.in.ogr</em>.
+<p>
+The vector map-database connection(s) can be verified with <em>v.db.connect</em>.
+
+<h2>EXAMPLE</h2>
+
+Joining the soil type explanations from table <em>soils_legend</em>
+into the Spearfish soils map (<a href="http://www.grassbook.org/examples_menu.php">download legend)</a>:
+
+<div class="code"><pre>
+g.copy vect=soils,mysoils
+
+# import legend table
+db.in.ogr soils_legend.csv out=soils_legend
+
+# get join column names
+v.info -c mysoils
+db.describe -c soils_legend
+
+# look at original table
+v.db.select mysoils
+cat|label
+1|Aab
+2|Ba
+3|Bb
+4|BcB
+5|BcC
+...
+
+# look at legend
+db.select soils_legend
+db.select soils_legend | head -7
+id|shortname|longname
+0|no data|no data
+0|AaB|Alice fine sandy loam, 0 to 6
+0|Ba|Barnum silt loam
+0|Bb|Barnum silt loam, channeled
+0|BcB|Boneek silt loam, 2 to 6
+0|BcC|Boneek silt loam, 6 to 9
+...
+
+# join soils_legend into mysoils attribute table
+v.db.join mysoils col=label otable=soils_legend ocol=shortname
+
+# verification of join
+v.db.select mysoils
+cat|label|id|shortname|longname
+1|Aab|||
+2|Ba|2|Ba|Barnum silt loam
+3|Bb|3|Bb|Barnum silt loam, channeled
+4|BcB|4|BcB|Boneek silt loam, 2 to 6
+5|BcC|5|BcC|Boneek silt loam, 6 to 9
+...
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="db.in.ogr.html">db.in.ogr</a></em>,
+<em><a HREF="v.db.update.html">v.db.update</a></em><br>
+<em><a href="sql.html">GRASS SQL interface</a></em>
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

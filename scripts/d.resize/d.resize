@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       d.resize for GRASS 5.7, based on d.resize for GRASS 5
+# AUTHOR(S):    CERL?; updated for GRASS 5.7 by Michael Barton
+# PURPOSE:      Resizes active display
+# COPYRIGHT:    (C) 2004 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#% Module
+#% description: Resizes active display monitor
+#% keywords: display, setup
+#% End
+#% option
+#% key: width
+#% type: integer
+#% description: New width for window
+#% required : yes
+#% end
+#% option
+#% key: height
+#% type: integer
+#% description: New height for window
+#% required : yes
+#% end
+
+if  [ -z "$GISBASE" ]
+then
+	echo "You must be in GRASS GIS to run this program" >&2
+	exit 1
+fi
+
+if   [ "$1" != "@ARGS_PARSED@" ]
+then
+	exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+# Check the current status of the monitor
+monitorcheck=`d.mon -p|sed s/'No monitor currently selected for output'//`
+
+if  [ -z "$monitorcheck" ]
+then
+	g.message -e "You must select a display monitor"
+	exit 1
+fi
+
+#save current display
+dsave=`d.save -a`
+
+#reset monitor to new size
+mon=`d.mon -p | awk '{printf "%s", $4}'`
+d.mon stop=$mon
+ 
+g.message "Display set to $GIS_OPT_WIDTH x $GIS_OPT_HEIGHT"
+
+GRASS_WIDTH=$GIS_OPT_WIDTH
+export GRASS_WIDTH
+GRASS_HEIGHT=$GIS_OPT_HEIGHT
+export GRASS_HEIGHT
+d.mon start=$mon
+
+#redisplay map
+eval "$dsave"

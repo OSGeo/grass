@@ -1,0 +1,177 @@
+Date: Mon, 12 Mar 2001 17:35:54 +0700
+From: Justin Hickey <jhickey@hpcc.nectec.or.th>
+Organization: HPCC, NECTEC
+
+Hi Andrea & Markus
+
+> Justin, any description of the current algorithm would be welcomed.
+
+OK, I'll try and I hope I don't confuse anyone. Terry uses the term cell
+in her code, but it does not refer to a single raster cell. It is a 2x2
+cell "window" of the raster map. She defines the upper left cell as the
+"origin" and goes clockwise around the four cells to define their order.
+That is, the order would be as follows:
+
+*---*---*
+| 0 | 1 |
+*---*---*
+| 3 | 2 |
+*---*---*
+
+She also defines an "edge" which are the edges of this 2x2 cell. She uses
+this window to scan the file for a contour line using sub-cell 0 as an
+index reference. Once she finds one, she follows the line until it goes
+outside the map edge or comes back to the starting point, keeping track
+of which edge the contour line enters and leaves the window (thus
+following the line). The line can be followed in either clockwise or
+counter-clockwise direction. I assume this is determined by the current
+"edge" but I didn't check it.
+
+The scanning order for the map is top, bottom, left, right (at this
+point all contour lines that go past the edge of the map are defined
+leveing only complete loops inside), and then the inside of the map.
+
+One problem is that she keeps track of a "hit" array which indicates
+which raster cell indices (row and column coordinates) have been used to
+define a contour point for this particular level. She mainly uses this to
+find the starting point of a contour. The problem is that she does not
+use the hit array while calculating the contour points. Thus, we get
+duplicate points causing the problems we see. In trying to use this hit
+array to detect duplicate points, I found that although the hit array is
+indexed on sub-cell 0, the calculated contour point can be indexed on
+any of the four sub-cells or even fractions of the cells due to the
+interpolation of the contour point. Basically, the calculated contour
+point in raster cell coordinates (before the conversion to UTM
+coordinates) does not necessarily match the coordinates used for the hit
+array. I have come up with a way to still use the hit array to detect
+duplicates, but haven't tested it yet.
+
+As she calculates points for the contour line, she appends them to a
+line_pnts structure and then writes the new vector line to the vector
+file. One thing I fixed was that her algorithm could sometimes create
+consecutive duplicate points. I changed this so that only points
+different from the previous point are appended to the line.
+
+That's it in a nutshell, the only other thing to add is that she finds
+all contour lines for a level, then cleans the hit array and goes to the
+next level.
+
+As I said, I still don't understand all of the algorithm but at least I
+have a general idea of how it works. Please let me know if either of you
+have questions or comments.
+
+-- 
+Sincerely,
+
+Jazzman (a.k.a. Justin Hickey)  e-mail: jhickey@hpcc.nectec.or.th
+High Performance Computing Center
+National Electronics and Computer Technology Center (NECTEC)
+Bangkok, Thailand
+==================================================================
+People who think they know everything are very irritating to those
+of us who do.  ---Anonymous
+
+Jazz and Trek Rule!!!
+==================================================================
+
+
+Date: Mon, 12 Mar 2001 19:46:06 -0600
+From: Helena <hmitaso@unity.ncsu.edu>
+Organization: NCSU
+
+Markus,
+
+this is what Bill says, including the description of the algorithm.
+The original r.contour worked pretty well, so I assume that most
+problems may be due to the floating point and NULL (which would
+change the handling of special cases and which probably wasn't taken
+care of.)
+I don't remeber who ported r.contour to FP - it might have been Olga
+Waupotitsch (she did most of the FP port).  Bill is right, I don't believe
+that Terry (she is a woman, BTW) could help too much here. I use r.contour
+occasionally and I don't remember any problems, although I usually run it
+without mask, so NULLs may be the most problematic issue (Terry left before
+those were introduced.) I hope that Bill's description of the algorithm will
+be helpfull,
+
+Helena
+--------------------------------------------------
+
+Helena,
+
+I don't know if Terry is still at the same place in Texas or not.
+I looked at her code - the algorithm is fairly straight forward, it's
+the NULL and special cases that might be a little tricky.  I'm sure
+she wouldn't remember much about it after 7 years, and I don't think
+she made the changes for NULL anyway.
+
+Here's the general algorithm for the type of grid contouring Terry used:
+
+- Bill
+
+for each contour level{
+    /* scan borders */
+    for each edge on perimeter{
+      check edge for crossing with check_edge;
+      if crossing{
+        start line at crossing;
+        while not done{
+          mark crossing;
+          find exit crossing and record segment with findcrossing;
+          crossing=exit_crossing;
+          if exit_crossing on perimeter
+            {
+             mark exit_crossing;
+             done=true;
+             write line;
+            }
+          move into next cell;
+        }
+      }
+    }
+    /* scan interior */
+    for each vertical interior edge {
+      check edge for crossing with check_edge;
+      if crossing and not marked {
+        start line at crossing;
+        while not done {
+          mark crossing;
+          find exit crossing and record segment with findcrossing;
+          crossing = exit_crossing;
+          if exit_crossing == start_crossing{
+            done=true
+            write line;
+          }
+        }
+      }
+    }
+}
+
+
+findcrossing()
+{
+
+  check remaining 3 cell edges for crossings using check_edge
+
+  if ONE other edge crossed (total crossings == 2)
+        return edge crossing point;
+  else if crossings = 4{
+      evaluate middle point as mean of 4 surrounding values;
+      use an "X" through the "cell" (actually corners are 4 surrounding
+      cell center points) to determine saddle configuration by
+      checking edges of 4 triangles with check_edge;
+      return edge crossing point;
+  }
+}
+
+check_edge()
+{
+
+  if left endpoint < threshold <= right endpoint
+  or left endpoint >= threshold > right endpoint{
+      crossing = linear interpolate;
+      return crossing;
+  }
+  else
+      return no crossing;
+}

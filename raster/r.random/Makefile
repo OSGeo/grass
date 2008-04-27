@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = r.random
+
+LIBES = $(VECTLIB) $(GISLIB) $(SEGMENTLIB) $(DATETIMELIB)
+DEPENDENCIES = $(VECTDEP) $(GISDEP) $(SEGMENTDEP) $(DATETIMEDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

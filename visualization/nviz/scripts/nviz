@@ -1,0 +1,91 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       nviz
+# PURPOSE:      3D visualization and query of GRASS data
+# COPYRIGHT:    (C) 2003,2005 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#############################################################################
+
+#% Module
+#%  description: nviz - Visualization and animation tool for GRASS data
+#%  keywords: raster, vector, visualization
+#% End
+#%flag
+#%  key: q
+#%  description: Quickstart - Do not load any data
+#% End
+#%  key: k
+#%  description: Script kill option
+#% End
+#%  key: x
+#%  description: Start in Demo mode
+#% End
+#%  key: v
+#%  description: Output more comments (default=quiet)
+#% End
+#%option
+#% key: elevation
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster file(s) for elevation
+#% required : no
+#%End
+#%option
+#% key: color
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster file(s) for color
+#% required : no
+#%End
+#%option
+#% key: vector
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector lines/areas overlay file(s)
+#% required : no
+#%End
+#%option
+#% key: points
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector points overlay file(s)
+#% required : no
+#%End
+#%option
+#% key: volume
+#% type: string
+#% description: Name of existing 3d raster map
+#% required : no
+#%End
+#%option
+#% key: path
+#% type: string
+#% description: Set alternative panel path
+#% required : no
+#%End
+#%option
+#% key: script
+#% type: string
+#% description: Execute script file at startup
+#% required : no
+#%End
+#%option
+#% key: state
+#% type: string
+#% description: Load previosly saved state file
+#% required : no
+#%End
+
+
+if [ $# -eq 0 ] ; then
+  ##nviz is opened in GUI
+  exec $GISBASE/etc/nviz2.2/nviz -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script
+  exit 0
+fi
+
+exec $GISBASE/etc/nviz2.2/nviz -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script ${1+"$@"}

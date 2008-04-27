@@ -1,0 +1,137 @@
+#!/bin/sh
+
+##############################################################################
+# d.rast.leg	(GRASS Shell Script)
+#
+# displays a raster map and its legend on a graphics window. 
+#
+# Usage: 	d.rast.leg
+#	or	d.rast.leg help
+#	or	d.rast.leg rast_map [num_of_lines]
+#
+# Description:	d.rast.leg clears the entire screen, divides it into a main
+#		(left) and a minor (right) frames, and then display a raster 
+#		map in the main frame and the map legend in the minor frame.
+#		The user can run the program interactively or 
+#		non-interactively.
+#
+# Parameters: 	rast_map 	A raster map to be displayed.
+#
+#	 	num_of_lines 	Number of lines to appear in the legend. 
+#				If this number is not given, the legend frame 
+#				will display as many lines as number of 
+#				categories in the map, otherwise, it will
+#				display the first num_of_lines minus 1  
+#				categories with the rest being truncated. 
+# 
+# Note:		The user may adjust the num_of_lines parameter or the size of 
+#		graphics window to get an appropriate result.
+#
+# See also:	d.rast, d.legend.
+#
+# Markus Neteler 8/2002: added simple d.legend logic
+# Jianping Xu and Scott Madry, Rutgers University. October 19, 1993
+# Markus Neteler 10/2003: added g.parser
+# Michael Barton 12/2004: remove reference to (null)
+##############################################################################
+
+#%Module
+#%  description: Displays a raster map and its legend on a graphics window
+#%  keywords: display
+#%End
+#%flag
+#%  key: n
+#%  description: omit entries with missing label
+#%END
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map
+#% required : yes
+#%end
+#%option
+#% key: num_of_lines
+#% type: integer
+#% description: Number of lines to appear in the legend
+#% required : no
+#%end
+
+if test "$GISBASE" = ""; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+if [ $GIS_FLAG_N -eq 1 ] ; then
+  OMIT="-n"
+fi
+
+#for -n flag of d.legend
+eval `g.findfile el=cell file=$GIS_OPT_MAP`
+if [ ! "$file" ] ; then
+   g.message -e "Raster map '$GIS_OPT_MAP' not found in mapset search path"
+   exit 1
+fi
+filemapset="${mapset}"
+HISTFILEDIR=$GISDBASE/$LOCATION_NAME/$filemapset/cell_misc/
+
+d.frame -e
+
+#at=bottom,top,left,right
+
+if [ -z "$GIS_OPT_NUM_OF_LINES" ]
+then
+
+       #draw title
+        d.frame -s at=90,100,65,100  frame=title
+#	if test -f $GISBASE/bin/d.text.freetype ; then
+#          d.text.freetype -sp text=$GIS_OPT_MAP col=black size=18 \
+#	         east_north=20,20 path=/usr/X11R6/lib/X11/fonts/TTF/luximb.ttf
+#	else
+          echo "$GIS_OPT_MAP" | d.text col=black size=30
+#	fi
+
+       #draw legend
+    	d.frame -s at=0,90,65,100 frame=right
+        if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
+    	     d.legend -n map=$GIS_OPT_MAP
+        else
+             d.legend $OMIT map=$GIS_OPT_MAP
+        fi
+
+       #draw map
+	d.frame -s at=0,100,0,65 frame=left
+    	d.rast map=$GIS_OPT_MAP
+
+else
+
+       #draw title
+        d.frame -s at=90,100,65,100 frame=title
+#	if test -f $GISBASE/bin/d.text.freetype ; then
+#          d.text.freetype -sp text=$GIS_OPT_MAP col=black size=18 \
+#	         east_north=20,20 path=/usr/X11R6/lib/X11/fonts/TTF/luximb.ttf
+#	else
+          echo "$GIS_OPT_MAP" | d.text col=black size=30
+#	fi
+
+       #draw legend
+    	d.frame -s at=0,90,65,100 frame=right
+        if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
+             d.legend -n map=$GIS_OPT_MAP lines=$GIS_OPT_NUM_OF_LINES
+        else
+             d.legend $OMIT map=$GIS_OPT_MAP
+        fi
+
+       #draw map
+	d.frame -s at=0,100,0,65 frame=left
+    	d.rast map=$GIS_OPT_MAP
+fi
+
+
+#d.frame -s frame=full_screen
+g.message "Clear screen with:"
+g.message "d.erase -f"

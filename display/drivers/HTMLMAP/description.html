@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>HTMLMAP driver</TITLE>
+ <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</HEAD>
+<BODY bgColor=white>
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+
+<EM><B>HTMLMAP driver</B></EM> - driver to create HTML image maps.
+<BR><EM>(drivers)</EM>
+
+<H2>DESCRIPTION</H2>
+
+The HTMLMAP driver allows the generation of HTML image maps
+for area vector data. HTML image maps are used in conjunction with images to 
+provide unique URL targets for different portions of an image. The HTMLMAP 
+driver can create both client-side image maps embedded into HTML files, or 
+server-side image maps used by web server software. 
+<P>
+Note that GRASS display commands that require the MOUSE will not work 
+correctly (or at all!) 
+<P>
+Polygons can at most have 100 vertices (this limit imposed by HTML image map 
+formats, see <B>GRASS_HTMLMAXPOINTS</B> below.) The driver will attempt to 
+trim polygons that have more that 100 
+vertices by removing vertices with the least amount of angle to the next 
+vertice. Also, any polygon that is entirely bounded by another polygon will be 
+discarded. 
+<P>
+Text written to the driver before polygons are used as the HREF tag for all 
+subsequent polygons written. All polygons that exist in a vector map will have 
+the same HREF tag. 
+<P>
+The only GRASS display commands that should be used with this driver are: 
+<UL>
+  <LI><a href="d.text.html">d.text</A> 
+  - pass href information for resulting image maps.</LI>
+  <LI><a href="d.vect.html">d.vect</A> 
+  - draw polygons from a vector map.</LI>
+</UL>
+
+<H2>USAGE</H2>
+
+<H3>Environment variables</H3>Several environment variables effect the operation 
+of HTMLMAP. 
+
+<UL>
+  <LI><B>GRASS_WIDTH=xxx</B><BR>the width of the image map (default is 
+    640).
+  </LI><BR>
+  <LI><B>GRASS_HEIGHT=yyy</B><BR>the height of the image map (default is 
+    480).
+  </LI><BR>
+  <LI><B>GRASS_HTMLTYPE=type</B><BR>the type of image mape to create (default is 
+    CLIENT): 
+    <UL>
+      <DD><TT><B>CLIENT</B></TT> &nbsp;&nbsp; Netscape/IE client-side image map. 
+	(NAME="map")<BR>
+      <DD><TT><B>APACHE</B></TT> &nbsp;&nbsp; Apache/NCSA server-side image 
+	map.<BR>
+      <DD><TT><B>RAW</B></TT> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Raw url 
+	and polygon vertices ( <I>url&nbsp; x1&nbsp; y1&nbsp; x2&nbsp; y2&nbsp; 
+	  ..... </I>), suitable for conversion to CERN server format, or any other 
+	format with user supplied conversion program.</DD>
+    </UL>
+  </LI><BR>
+  <LI><B>GRASS_HTMLFILE=filename</B><BR>
+    specifies the resulting file to store 
+    the html image map, default is <tt>htmlmap</tt>. Files without absolute path 
+    names are written in the current directory where the driver was started. 
+    <BR>
+    <em>Any existing file of the same name is overwritten without 
+      warning.</em>
+  </LI><BR>
+  <LI><B>GRASS_HTMLMINDIST=n</B><BR>specifies the minimum distance in pixels
+  that a point must change from the previous point to keep in the list of
+  vertices for a polygon.  The default is <tt>2</tt>, which means that a
+  point's x and y difference from the previous point must change by a number
+  of pixels greater than this value.  This parameter helps to eliminate
+  closely spaced points.
+  </LI><BR>
+  <LI><B>GRASS_HTMLMINBBOX=n</B><BR>specifies the minimum bounding box
+  dimensions to record a polygon as a clickable area.
+  The default is <tt>2</tt>, which means that a polygon with a bounding box
+  of less than this value is not included. This parameter helps to eliminate
+  polygons than are a point or line.
+  </LI><BR>
+  <LI><B>GRASS_HTMLMAXPOINTS=n</B><BR>specifies the maximum number of
+  vertices included in a polygon's clickable area.
+  The default is <tt>99</tt>.  Some browsers can only accomodate polygons of
+  100 vertices or less.  The HTMLMAP driver automatically ensures that a
+  polygon is closed by making the last point the same as the first
+  point.</LI><BR>
+</UL>
+
+<H3>Typical usage</H3>
+<UL>
+  <LI>Start up the driver
+<DIV class="code"><PRE>
+d.mon start=HTMLMAP
+</PRE></DIV>
+  </LI>
+  <LI>Display text strings (HREF's) and polygons
+<DIV class="code"><PRE>
+echo "http://www.no-such-place.net/area51/" | d.text
+d.vect map=area51
+echo "http://www.roswell-nm.net/little/green/men.html" | d.text
+d.vect map=roswell
+</PRE></div>
+  <LI>Stop the driver when all polygon have been displayed. This will cause a file 
+    named 'htmlmap' to be created in your current directory.
+<DIV class="code"><PRE>
+d.mon stop=HTMLMAP
+</PRE></DIV>
+  <LI>You will also want to create an image for your image map. Use the PNG 
+    driver and other utilities to create .gif or .jpg files.
+    <i>The following example is somewhat out of date and refers to options
+      available in GRASS 5.</i>
+<DIV class="code"><PRE>
+# using previous GRASS_WIDTH &amp; GRASS_HEIGHT
+d.mon start=PNG
+d.mon select=PNG
+d.rast map=terrain
+d.vect map=area51  fillcolor=white  linecolor=blue
+d.vect map=roswell fillcolor=yellow linecolor=blue
+d.vect map=states  color=green
+d.vect map=roads   color=black
+d.mon stop=PNG
+<!-- ????  FIXME -->
+# make the region the same as the newly created cell for ppm export
+g.region save=saved.reg
+g.region raster=D_cell
+r.out.ppm -q input=D_cell output=alien.ppm
+
+# use the netpbm utilities to create a gif (quantize if needed)
+ppmquant 128 &lt;alien.ppm |  ppmtogif &gt;alien.gif 
+
+# assemble some html with the image and the image map
+echo '&lt;html&gt;&lt;body&gt;&lt;img src="alien.gif" usemap="#map"&gt;' &gt;alien.html
+cat htmlmap                                           &gt;&gt;alien.html
+echo '&lt;/body&gt;&lt;/html&gt;'                                 &gt;&gt;alien.html
+	
+# don't forget to reset your region
+g.region region=saved.reg
+
+# take a look and test it out
+netscape file:`pwd`/alien.html &amp;
+</PRE></DIV>
+  </LI>
+</UL>
+
+<H2>NOTES</H2>
+
+HTMLMAP was adapted from the CELL driver in GRASS 4.3. 
+Point-in-polygon test code was lifted from Randolph Franklin's web page, see 
+<UL>
+  <LI><a href="http://www.ecse.rpi.edu/Homepages/wrf/">http://www.ecse.rpi.edu/Homepages/wrf/</A></LI>
+  <LI><a href="http://www.ecse.rpi.edu/Homepages/wrf/research/geom/pnpoly.html">http://www.ecse.rpi.edu/Homepages/wrf/research/geom/pnpoly.html</A></LI>
+</UL>
+
+<P>
+If you create an HTML file with two or more images and image maps, you will 
+need to edit the map names. The HTMLMAP driver creates its map with the name 
+<tt>map</tt>. A small sed script can easily change the map name:
+
+<PRE>
+  sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
+</PRE>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+  <a href="displaydrivers.html">Display drivers</a>
+  <br>
+  <a href="pngdriver.html">PNG driver</A>,
+  <a href="psdriver.html">PostScript driver</A>,
+  <a href="xdriver.html">XDRIVER</A>
+  <BR>
+  <A href="d.mon.html">d.mon</A>,
+  <a href="d.text.html">d.text</A>, 
+  <a href="d.vect.html">d.vect</A>
+</EM> 
+
+<p>
+<i>Last changed: $Date$</i>

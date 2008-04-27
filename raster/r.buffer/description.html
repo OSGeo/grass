@@ -1,0 +1,117 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.buffer</EM> creates a new raster map layer showing
+buffer (a.k.a. "distance" or "proximity") zones around all
+cells that contain non-NULL category values in an existing
+raster map layer.  The distances of buffer zones from cells
+with non-zero category values are user-chosen.  Suppose,
+for example, that you want to place buffer zones around
+roads.  This program could create the raster map layer
+shown below on the right based on road information
+contained in the raster map layer shown on the left.
+
+<div class="code"><pre>
+      000000000000000000000000 222233333333333333444444 
+      111000000000000000000000 111222222222223333333333 
+      000111111111100000000000 222111111111122223333333 
+      000000001000011100000000 332222221222211122222222 
+      000000001000000011111111 333333321233222211111111 
+      000000001000000000000000 433333321233333222222222 
+      000000001000000000000000 444443321233333333333333 
+      000000001000000000000000 444443321233443333333333 
+      000000001000000000000000 444443321233444444444444 
+
+      Category 0: No roads
+      Category 1: Road location 
+      Category 2: Buffer Zone 1 around roads 
+      Category 3: Buffer Zone 2 around roads 
+      Category 4: Buffer Zone 3 around roads 
+</pre></div>
+<BR>
+
+<H2>NOTES</H2>
+
+The user has the option of identifying up to 250 continuous zones.
+The zones are identified by specifying the upper limit of each desired zone
+(<EM>r.buffer</EM> assumes that <tt>0</tt> is the starting point).
+("Continuous" is used in the sense that each category
+zone's lower value is the previous zone's upper value. The
+first buffer zone always has distance <tt>0</tt> as its lower
+bound.) Buffer distances can be specified using one of five units with the <EM>
+units</EM> parameter: <EM>meters, kilometers, feet, miles</EM>, and <EM>nautmiles</EM>
+(nautical miles).
+<P>
+
+<!-- ??? is this the real method used or some ancient option ??? -->
+Distances from cells containing the user-specified category values
+are calculated using the "fromcell" method. This method locates each
+cell that contains a category value from which distances are to be
+calculated, and draws the requested distance rings around
+them. This method works very fast when there are few cells
+containing the category values of interest, but works
+slowly when there are numerous cells containing the
+category values of interest spread throughout the area.
+<P>
+
+<EM>r.buffer</EM> measures distances from center of cell to
+center of cell using Euclidean distance measure for
+planimetric locations (like UTM) and using ellipsoidal
+geodesic distance measure for latitude/longitude locations.
+<P>
+
+<EM>r.buffer</EM> calculates distance zones from all cells having non-NULL 
+category values in the <EM>input</EM> map. If the user wishes to calculate
+distances from only selected <EM>input</EM> map layer 
+category values, the user should run (for example) 
+<EM><A HREF="r.reclass.html">r.reclass</A></EM> prior to 
+<EM>r.buffer</EM>, to reclass all categories from which distance zones 
+are not desired to be calculated into category NULL. 
+<P>
+
+The <B>-z</B> flag can be used to ignore raster values of zero instead of NULL
+values in the input raster map.
+<P>
+
+<H2>EXAMPLE</H2>
+
+In the following example, the buffer zones would be (in the default units
+of meters):  0-100, 101-200, 201-300, 301-400 and 401-500.
+<BR>
+<div class="code"><pre>
+<B>r.buffer input=</B>roads <B>output=</B>roads.buf <B>distances=</B>100,200,300,400,500
+</pre></div>
+
+Result:
+
+<div class="code"><pre>
+<B>r.category input=</B>roads.buf
+
+      1       distances calculated from these locations
+      2       0-100 meters
+      3       100-200 meters
+      4       200-300 meters
+      5       300-400 meters
+      6       400-500 meters
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="g.region.html">g.region</A><br>
+<A HREF="r.cost.html">r.cost</A><br>
+<A HREF="r.mapcalc.html">r.mapcalc</A><br>
+<A HREF="r.reclass.html">r.reclass</A><br>
+<A HREF="v.buffer.html">v.buffer</A>
+</EM>
+
+
+<H2>AUTHORS</H2>
+
+Michael Shapiro, U.S. Army Construction Engineering 
+Research Laboratory
+<BR>
+James Westervelt, U.S. Army Construction Engineering 
+Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

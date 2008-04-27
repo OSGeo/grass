@@ -1,0 +1,198 @@
+<H2>DESCRIPTION</H2>
+
+
+The <EM>i.smap</EM> program is used to segment
+multispectral images using a spectral class model known as
+a Gaussian mixture distribution.  Since Gaussian mixture
+distributions include conventional multivariate Gaussian
+distributions, this program may also be used to segment
+multispectral images based on simple spectral mean and
+covariance parameters.
+
+<P>
+
+<EM>i.smap</EM> has two modes of operation.  The first mode
+is the sequential maximum a posteriori (SMAP) mode
+[<A HREF="#ref1">1</A>,<A HREF="#ref2">2</A>].  The SMAP
+segmentation algorithm attempts to improve segmentation
+accuracy by segmenting the image into regions rather than
+segmenting each pixel separately 
+(see <A HREF="#notes">NOTES</A>).
+
+
+<P>
+
+The second mode is the more conventional maximum likelihood (ML)
+classification which classifies each pixel separately,
+but requires somewhat less computation. This mode is selected with
+the <B>-m</B> flag (see <A HREF="#mflag.html">below</A>).
+
+<H2>OPTIONS</H2>
+
+<H3>Flags:</H3>
+
+<DL>
+
+<DT><B>-m</B></A>
+
+<DD>Use maximum likelihood estimation (instead of smap).
+Normal operation is to use SMAP estimation (see
+<A HREF="#notes">NOTES</A>).
+
+<DT><B>-q</B> 
+
+<DD>Run quietly, without printing messages about program
+progress.  Without this flag, messages will be printed (to
+stderr) as the program progresses.
+
+</DL>
+
+
+<H3>Parameters:</H3>
+
+<DL>
+<DT><B>group=</B><EM>name</EM> 
+
+<DD>imagery group<BR>
+The imagery group that defines the image to be classified.
+
+<DT><B>subgroup=</B><EM>name</EM> 
+
+<DD>imagery subgroup<BR>
+The subgroup within the group specified that specifies the
+subset of the band files that are to be used as image data
+to be classified.
+
+<DT><B>signaturefile=</B><EM>name</EM> 
+
+<DD>imagery signaturefile<BR>
+The signature file that contains the spectral signatures (i.e., the
+statistics) for the classes to be identified in the image.
+This signature file is produced by the program
+<EM><A HREF="i.gensigset.html">i.gensigset</A></EM>
+(see <A HREF="#notes">NOTES</A>).
+
+<DT><B>blocksize=</B><EM>value</EM> 
+
+<DD>size of submatrix to process at one time<BR>
+default: 128<BR>
+This option specifies the size of the "window" to be used when
+reading the image data. 
+
+<P>
+
+This program was written to be nice about memory usage
+without influencing the resultant classification. This
+option allows the user to control how much memory is used.
+More memory may mean faster (or slower) operation depending
+on how much real memory your machine has and how much
+virtual memory the program uses.
+
+<P>
+
+The size of the submatrix used in segmenting the image has
+a principle function of controlling memory usage; however,
+it also can have a subtle effect on the quality of the
+segmentation in the smap mode.  The smoothing parameters
+for the smap segmentation are estimated separately for each
+submatrix.  Therefore, if the image has regions with
+qualitatively different behavior, (e.g., natural woodlands
+and man-made agricultural fields) it may be useful to use a
+submatrix small enough so that different smoothing
+parameters may be used for each distinctive region of the
+image.
+
+<P>
+
+The submatrix size has no effect on the performance of the
+ML segmentation method.
+
+<DT><B>output=</B><EM>name</EM>
+
+<DD>output raster map.<BR>
+The name of a raster map that will contain the
+classification results.  This new raster map layer will
+contain categories that can be related to landcover
+categories on the ground.
+
+</DL>
+
+<H2>INTERACTIVE MODE</H2>
+
+If none of the arguments are specified on the command line,
+<EM>i.smap</EM> will interactively prompt for the names of
+the maps and files.
+
+<A NAME="notes"><H2>NOTES</H2></A>
+
+The SMAP algorithm exploits the fact that nearby pixels in
+an image are likely to have the same class.  It works by
+segmenting the image at various scales or resolutions and
+using the coarse scale segmentations to guide the finer
+scale segmentations.  In addition to reducing the number of
+misclassifications, the SMAP algorithm generally produces
+segmentations with larger connected regions of a fixed
+class which may be useful in some applications.
+
+<P>
+
+The amount of smoothing that is performed in the
+segmentation is dependent of the behavior of the data in
+the image.  If the data suggests that the nearby pixels
+often change class, then the algorithm will adaptively
+reduce the amount of smoothing.  This ensures that
+excessively large regions are not formed.
+
+<P>
+
+The module i.smap does not support MASKed or NULL cells. Therefore 
+it might be necessary to create a copy of the classification results 
+using e.g. r.mapcalc. 
+<p>
+r.mapcalc  MASKed_map=classification results 
+
+<H2>REFERENCES</H2>
+
+<OL>
+<LI>C. Bouman and M. Shapiro,
+"Multispectral Image Segmentation using a Multiscale Image Model", 
+<EM>Proc. of IEEE Int'l Conf. on Acoust., Speech and Sig. Proc.,</EM>
+pp. III-565 - III-568, San Francisco, California, March
+23-26, 1992.
+
+<LI>C. Bouman and M. Shapiro 1994,
+"A Multiscale Random Field
+Model for Bayesian Image Segmentation",
+<EM>IEEE Trans. on Image Processing., 3(2), 162-177"</EM>
+
+<LI>McCauley, J.D. and B.A. Engel 1995,
+"Comparison of Scene Segmentations: SMAP, ECHO and Maximum Likelyhood",
+<EM>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</EM>
+</OL>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="i.group.html">i.group</A></EM>
+for creating groups and subgroups
+
+<P>
+
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>
+to copy classification result in order to cut out MASKed subareas
+
+<P>
+
+<EM><A HREF="i.gensigset.html">i.gensigset</A></EM>
+to generate the signature file required by this program
+
+<H2>AUTHORS</H2>
+
+<a href=http://dynamo.ecn.purdue.edu/~bouman/software/segmentation/>Charles Bouman, 
+School of Electrical Engineering, Purdue University</a>
+
+<BR>
+Michael Shapiro,
+U.S.Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i>

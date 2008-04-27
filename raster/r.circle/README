@@ -1,0 +1,4 @@
+This module creates a raster map containing
+concentric rings around a given point.
+The cell values are increasing linear from
+the center point to outer rings.

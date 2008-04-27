@@ -1,0 +1,8 @@
+  8                            (Landsat ETM+ geometrical conditions)
+  2 19 13.00  -47.410 -20.234  (month,day,hh.ddd,long.,lat.) (hh.ddd=the decimal hour in universal time)
+  1                            (tropical atmospheric mode)
+  1                            (continental aerosols model)
+  15                           (visibility in km (aerosol model concentration)
+  -.600                        (target at 600 m above sea level)
+  -1000                        (sensor on board of satellite)
+  64                           (fourth band of ETM+ Landsat 7)

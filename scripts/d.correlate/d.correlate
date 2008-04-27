@@ -1,0 +1,129 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       d.correlate for GRASS 6; based on dcorrelate.sh for GRASS 4,5
+# AUTHOR(S):    CERL - Michael Shapiro; updated to GRASS 6 by Markus Neteler 5/2005
+# PURPOSE:      prints a graph of the correlation between data layers (in pairs)
+#               derived from <grass5>/src.local/d.correlate.sh
+# COPYRIGHT:    (C) 2005 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+# TODO GRASS 7: rename parameters to map1, map2 or better multiple map=map1[,map2[...]]
+#############################################################################
+
+#%Module
+#%  description: Prints a graph of the correlation between data layers (in pairs).
+#%  keywords: display, diagram
+#%End
+#%option
+#% key: layer1
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map
+#% required : yes
+#%end
+#%option
+#% key: layer2
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map
+#% required : yes
+#%end
+#%option
+#% key: layer3
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map
+#% required : no
+#%end
+#%option
+#% key: layer4
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map
+#% required : no
+#%end
+
+if [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+if [ $# -gt 4 ] ; then
+        g.message -e "max 4 layers allowed"
+	exit 1
+fi
+
+TMP1="`g.tempfile pid=$$`"
+
+ok=yes
+for f in $GIS_OPT_LAYER1 $GIS_OPT_LAYER2 $GIS_OPT_LAYER3 $GIS_OPT_LAYER4
+do
+  eval `g.findfile element=cell file=$f`
+  if [ -z "$name" ] ; then
+        g.message -e "$f not found"
+	ok=no
+  fi
+done
+
+if [ "$ok" = "no" ] ; then
+ exit 1
+fi
+
+d.erase
+if [ $? != 0 ] ; then
+ exit 1
+fi
+
+echo "CORRELATION" | d.text color=white size=4 line=1
+colors="red black blue green gray violet"
+line=2
+iloop=0
+jloop=0
+for i in $GIS_OPT_LAYER1 $GIS_OPT_LAYER2 $GIS_OPT_LAYER3 $GIS_OPT_LAYER4
+do
+   iloop=`expr $iloop + 1`
+   for j in $GIS_OPT_LAYER1 $GIS_OPT_LAYER2 $GIS_OPT_LAYER3 $GIS_OPT_LAYER4 ; do
+    jloop=`expr $jloop + 1`
+    if [ "$i" != "$j" -a $iloop -le $jloop ] ; then
+     colorstmp1=`echo $colors | cut -d' ' -f1`
+     colorstmp2=`echo $colors | cut -d' ' -f2-`
+     colors=`echo $colorstmp2 $colorstmp1`
+
+     echo $i $j | d.text color=`echo $colors | cut -d' ' -f1` size=4 line=$line
+     line=`expr $line + 1`
+     r.stats -cnA input=$i,$j > "$TMP1"
+     m="`awk '$1>max1{max1=$1} $2>max2{max2=$2} min1==0||$1<min1{min1=$1} min2==0||$2<min2{min2=$2} END {print min1,max1,min2,max2}' $TMP1`"
+     m1=`echo $m | cut -d' ' -f1`
+     m2=`echo $m | cut -d' ' -f2`
+     m3=`echo $m | cut -d' ' -f3`
+     m4=`echo $m | cut -d' ' -f4`
+     awk '{print "move",($1-min1+1)*100.0/(max1-min1+1),($2-min2+1)*100.0/(max2-min2+1);print "draw",($1-min1+1)*100.0/(max1-min1+1),($2-min2+1)*100.0/(max2-min2+1) }' min1=$m1 max1=$m2 min2=$m3 max2=$m4 "$TMP1" | d.graph color=`echo $colors | cut -d' ' -f1`
+
+    fi
+   done
+   jloop=0
+done
+
+rm -f "$TMP1"

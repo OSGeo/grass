@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>gis.m: GEORECTIFY TOOL</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<h2>GEORECTIFY TOOL (gis.m)</h2>
+
+In order to use and overlay different forms of geospatial data in a
+GIS, they must use the same coordinate systems and be projected
+identically. The Georectify Tool uses multiple GRASS modules to
+<i>georectify</i> spatial data (map or image) that is not originally
+coded in an earth-based coordinate system (e.g., latitude/longitude
+or UTM). The Georectify Tool can transform the simple x/y coordinates
+of the original data by shifting, rotating, and warping them as needed
+for the original data to match other georectified data from the same
+location on earth.
+<br>
+<br>
+The basic procedure is to identify a set of <i>ground control points</i>
+(GCPs) in the ungeorectified data. The georectified coordinates for the
+points are identified. A mathematical transformation is calculated by
+regressing the original x/y coordinates against the georectified
+coordinates for the same points. This transformation is then applied to
+all the data.
+<br>
+<br>
+The Georectify Tool can georectify both raster and vector maps. Raster
+maps can be transformed using 1st, 2nd, and 3rd order polynomial
+transformations; vector maps are transformed only with a 1st order
+polynomial transformation. The georectified coordinates of GCPs can be
+entered by typing or can be extracted by clicking the equivalent
+locations with a mouse in a displayed georectified map.
+<br>
+
+
+<h3>Using the Georectify Tool</h3>
+
+<h4>Map Preparation</h4>
+
+The unrectified map or image (e.g., scanned image or CAD drawing) must
+be imported into a GRASS XY location. <br>
+<br>
+In order to be georectified, the unrectified map or image must be added
+to a <i>imagery group</i>.
+An <i>imagery group</i> holds a single map/image or a set of maps/images
+that represent different views of exactly the same locale.
+All maps or images in a single <i>imagery group</i>
+must be exactly aligned (e.g., as in the different spectral bands of a
+multi-channel satellite image or layers of a single CAD drawing). You
+can create an <i>imagery group</i> from within the Georectify Tool if
+desired.
+<br>
+<br>
+
+<h4>Setup</h4>
+
+Restart GRASS, selecting the location/mapset where you want the map you
+will georectify to END UP (i.e., the projected TARGET location).
+Open any map display (or displays) that you want to use for extracting
+geographic coordinates by clicking with a mouse. Make sure that the
+computational region extents and resolution are set to the values you
+want for the newly georectified map.
+<p>
+Select <i><b>Georectify</b></i> from the <i><b>File</b></i> menu.
+</p>
+<p>
+The Georectify Tool startup lets you select the type of map to
+georectify, the location/mapset of the map to georectify, the
+<i>image group</i> of the map to georectify, and a map to use for marking
+GCPs.</p>
+<BR>
+<center>
+<img src="gm_georectstart.jpg" alt="Georectify workflow menu" height="214" width="350">
+</center>
+<BR>
+<ol>
+<li> click the radio button to georectify either raster or
+vector maps (you can only georectify raster <b>OR</b> vector
+maps in a single georectification session),
+</li>
+<li> select the source (XY) location/mapset of the map to be
+georectified,
+</li>
+<li>if needed, create an <i>imagery group</i> for
+the map to georectify. (the <i>imagery group</i> <i><b>target</b></i>
+is automatically set
+to the current location and mapset),
+</li>
+<li> select the <i>imagery group</i> containing
+the map to georectify,
+</li>
+<li> select the map/image to display for marking GCPs
+interactively (a raster or vector in the group you want to
+georectify),
+</li>
+<li> click the "<b>Start Georectifying</b>" button
+to begin marking GCPs.</li>
+</ol>
+
+
+<h4>GCP Marking</h4>
+
+This opens a special map display with an ungeorectified map to use for
+marking GCPs, and a GCP manager window.
+The GCP map display can be zoomed and panned like a normal map display.
+<br>
+<center>
+<img src="gm_georectdisp.jpg" alt="Georectifier Display window" height="439" width="500">
+</center>
+<br>
+<br>
+The GCP manager window holds the x/y coordinates and geographic
+coordinates of each GCP, and displays the <i>error</i> for each
+GCP (i.e., the distance that the actual GCP marked deviates from
+its expected placement using a transformation equation).
+<br>
+<br>
+<center>
+<img src="gm_gcpmgr.jpg" alt="Georectify GCP window" height="253" width="650">
+</center>
+<BR>
+<ol>
+<li> Click in an empty x/y entry box in the GCP manager to begin marking a
+new GCP,
+</li>
+<li> Click on the ungeorectified map to mark a GCP and automatically enter
+its x/y coordinates in the entry box. (Your cursor will automatically jump
+to the corresponding geographic coordinate entry box for the same GCP),
+</li>
+
+<li>Enter the corresponding geographic coordinates for the GCP
+<b>OR</b> click on the same place in a georectified map (in a normal map
+display) to automatically extract the geographic coordinates and enter them
+into the geographic coordinate entry box in the GCP manager window
+(Note: use the <b>pointer tool</b> in the map display window)
+</li>
+</ol>
+
+<h4><b>GCP Management</b></h4>Continue marking GCPs until you
+have enough for an accurate georectification. At least 3 GCPs are
+needed for a simple 1st order (affine) transformation that can shift
+and rotate a map; at least 6 GCPs are needed for a 2nd order
+(polynomial) transformation that will do simple warping in addition to
+shifting and rotating; at least 10 GCPs are needed for a 3rd order
+(polynomial) transformation that will do complex warping.<br><br>Any
+GCP can be edited by typing new values or by selecting the appropriate
+entry box and clicking on the GCP-marking display or georectified map
+display.<br><br>GCPs can be excluded and not used for calculating the
+transformation equation or the total RMS error by unchecking the box in
+the "use" column at the left of each GCP entry line. Only active GCPs
+(i.e., with the "use" box checked) will be used for computing the
+georectification and total error.<br><br>You can delete all inactive GCPs
+(i.e., with unchecked "use" boxes) by clicking the <b>eraser tool</b> in
+the GCP manager tool bar.<br><br>Total <i>RMS (</i>root mean square) error
+is calculated from all active GCPs. Click the <b>RMS tool</b>
+in the GCP manager tool bar to update the total RMS error after
+changing or including/excluding a GCP. Excluding a GCP with an
+especially high individual error can reduce overall RMS error, but will
+also change the individual errors of all other GCPs. The lower the RMS
+error, the more accurate the final georectification will be.
+<br>
+<br>
+All active GCPs can be saved to a <i>POINTS</i> file, associated with the
+<i>imagery group</i> for the map(s) to be georectified. If a saved
+<i>POINTS</i> file exists, prior to a georectification session the GCP
+values in the <i>POINTS</i> file will automatically be entered into the
+GCP manager window when a georectification session is started.
+<br>
+
+
+<h4>Georectification</h4>
+
+When you are satisfied with your selection of GCPs and RMS error...
+<br>
+<ol>
+<li>Select the type of georectification you want to perform (1st, 2nd, or 3rd
+order for rasters; 1st order only for vectors). Remember, at least 3
+points are needed for 1st order georectification, 6 points for 2nd
+order, and 10 points for 3rd order.</li>
+<li>Press the <b>Georectification button</b> on the GCP manager tool bar.
+Depending on the number of cells in a raster map or nodes in a vector map,
+georectification may take some time.</li>
+</ol>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="gis.m.html">gis.m</a> manual<br>
+<a href="gm_animate.html">gis.m: ANIMATION TOOL</a><br>
+<a href="gm_profile.html">gis.m: PROFILE TOOL</a><BR>
+<BR>
+<a href="i.points.html">i.points</a><br>
+<a href="i.vpoints.html">i.vpoints</a><br>
+<a href="i.rectify.html">i.rectify</a><br>
+<a href="g.proj.html">g.proj</a><br>
+<a href="g.setproj.html">g.setproj</a><br>
+<a href="m.proj.html">m.proj</a><br>
+<a href="r.proj.html">r.proj</a><br>
+<a href="v.proj.html">v.proj</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+Michael Barton, Arizona State University, Tempe, Arizona, USA
+
+<p>
+<i>Last changed: $Date$</i></p>
+
+<hr>
+<p>
+<a href="index.html">Main index</a> - <a href="full_index.html">Full index</a></p>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	d.split for GRASS 5.7, based on split.sh for GRASS 5
+# AUTHOR(S):	split.sh by the GRASS team 1989. 
+#		Updated to GRASS 5.7 by Michael Barton 2004/04/06
+#              
+# PURPOSE:	Divides active display into 2 frames and draws maps 
+#			(or runs GRASS commands) in each frame
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Divides active display into two frames & displays maps/executes commands in each frame.
+#%  keywords: display, setup
+#%End
+#%option
+#% key: map1
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Enter raster map to display in 1st frame
+#% required : no
+#%end
+#%option
+#% key: cmd1
+#% type: string
+#% answer: d.rast
+#% description: Enter command to execute in 1st frame
+#% required : no
+#%end
+#%option
+#% key: map2
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Enter raster map to display in 2nd frame
+#% required : no
+#%end
+#%option
+#% key: cmd2
+#% type: string
+#% answer: d.rast
+#% description: Enter command to execute in 2nd frame
+#% required : no
+#%end
+#%option
+#% key: view
+#% type: string
+#% answer: vert
+#% description: How to split display
+#% options: vert,horiz
+#% required : yes
+#%end
+
+
+if  [ -z "$GISBASE" ] ; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi   
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi	
+
+
+#  Set up the two windows
+if [ "$GIS_OPT_VIEW" = "vert" ]
+then
+#  split it: left (win1) and right (win2)
+	d.frame -e
+	d.frame -c frame=win1  at=0,100,0,49.5
+	d.frame -c frame=win2  at=0,100,50.5,100
+fi
+
+if [ "$GIS_OPT_VIEW" = "horiz" ]
+then
+#  split it: top (win1) and bottom (win2)
+	d.frame -e
+	d.frame -c frame=win1  at=50.5,100,0,100
+	d.frame -c frame=win2  at=0,49.5,0,100
+fi
+
+
+g.message "View displayed: $GIS_OPT_VIEW"
+
+if [ "$GIS_OPT_MAP1" != "" ]
+then
+	d.frame -s frame=win1
+	g.message "Window 1: $GIS_OPT_CMD1 $GIS_OPT_MAP1"
+	d.rast $GIS_OPT_MAP1
+else
+	d.frame -s frame=win1
+	g.message "Window 1: $GIS_OPT_CMD1 $GIS_OPT_MAP1"
+	$GIS_OPT_CMD1
+fi
+
+
+if [ "$GIS_OPT_MAP2" != "" ]
+then
+	d.frame -s frame=win2
+	g.message "Window 2: $GIS_OPT_CMD2 $GIS_OPT_MAP2"
+	d.rast $GIS_OPT_MAP2
+else
+	d.frame -s frame=win2
+	g.message "Window 2: $GIS_OPT_CMD2 $GIS_OPT_MAP2"
+	$GIS_OPT_CMD2
+fi
+
+g.message "Done."
+g.message "Use 'd.erase -f' to clear frames from display monitor."

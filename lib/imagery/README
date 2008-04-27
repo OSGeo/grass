@@ -1,0 +1,20 @@
+To merge 2 signatures
+
+n1     number of points in sig 1
+n2     number of points in sig 2
+
+mean1[nbands]  means per band for sig 1
+mean2[nbands]  means per band for sig 2
+
+var1[b1][b2]   covariance band 1 with band 2 for sig 1
+var2[b1][b2]   covariance band 1 with band 2 for sig 2
+
+the meger is
+
+n = n1+n2
+mean[b] = (mean1[b]*n1 + mean2[b]*n2)/n
+
+sum1 = var1[b1][b2] * (n1-1) + n1 * mean[b1] * mean[b2];
+sum2 = var2[b1][b2] * (n2-1) + n2 * mean[b1] * mean[b2];
+
+var[b1][b2] = (sum1+sum2 - n*mean[b1]*mean[b2) / (n-1)

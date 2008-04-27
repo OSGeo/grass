@@ -1,0 +1,15 @@
+# For preparing GRASS Debian package run
+
+svn co svn://svn.debian.org/pkg-grass/packages/grass/branches/6.3/debian .
+
+# in this directory. It will download latest debian configuration files
+# from debian Subversion server (http://svn.debian.org).
+
+# After that, you can build current version of GRASS with
+
+dpkg-buildpackage -rfakeroot
+
+# in main GRASS source directory. After the packages are generated, you can
+# install them with
+
+dpkg -i ../*grass*deb

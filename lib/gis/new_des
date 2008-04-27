@@ -1,0 +1,85 @@
+G_get_map_row()
+  If the map is floating-point, quantize the floating-point values to integer
+  using the quantization rules established for the map when the map was opened
+  for reading. 
+
+  NULL values are converted to zeros. 
+  (This routine is deprecated)
+
+G_put_map_row() 
+   Zero values are converted to NULLs. Write a row of the NULL value bit map.
+   (This routine is deprecated) 
+               ------------------------------------------------------------
+	       G_get_map_row()          G_get_raster_row()
+
+	       MAP w/NULLs    NULL and 0 -> 0          NULL->NULL, 0->0
+	       MAP w/o NULLs  NULL and 0 -> 0          NULL and 0 -> NULL
+	       ------------------------------------------------------------
+	       w/NULLS   means with NULL bit map
+	       w/o NULLS means without NULL bit map
+
+
+New routines:
+
+G_get_f/d_raster_row (int fd, FCELL fcell, int row) 
+   Read a row from the raster map open on fd into the float array fcell
+ performing type conversions as necessary based on the actual storage type of
+   the map. Masking, resampling into the current region. NULL-values are
+   always embedded in fcell (never converted to a value). 
+
+G_put_f_raster_row (int fd, FCELL *fcell) 
+   Write the next row of the raster map open on fd from the float array fcell,
+   performing type conversion to the actual storage type of the resultant map.
+   Keep track of the range of floating-point values. Also writes the NULL-value
+   bitmap from the NULL-values embedded in the fcell array. 
+
+
+G_get_raster_row (int fd, CELL buf, int row) 
+   Reads a row from NULL value bitmap file for the raster map open for read on
+   fd. If there is no bitmap file, then this routine simulates the read 
+   as follows:
+      non-zero values in the raster map correspond to non-NULL; zero values
+      correspond to NULL. 
+   (as opposed to the deprecated function G_get_map_row() which converts NULL 
+   values to zero.)
+
+G_put_raster_row (int fd, CELL buf) 
+   Writes a row of raster data and a row of the null-value bitmap, only treating
+   NULL as NULL. (As opposed to the deprecated function 
+   G_put_map_row() which treats zero values also as NULL.) 
+
+G_insert_[d/f_]null_values (cell, flags, count) 
+
+   CELL *cell; 
+   char *flags; 
+   int count; 
+
+   For each of the count flags which is true(!=0), set the corresponding cell 
+   to the NULL value. 
+
+Held 13 messages in /usr/spool/mail/olga
+amber olga> mail shapiro
+Subject: G_put_map_row() updating range file.
+The way put_row is implemented right now, the updating of range happens
+after writing the row by calling G_update_range(range,row,ncols)
+
+Since you want all 0's to go to NULL, it is really hard to implement,
+because I can't modify the row buffer. So I have 2 options:
+1. make a new update_range() low level function which takes
+ignore_zeros flag as argument.
+
+2. to call update with each cell idividually and check for 0's
+what should I do?
+
+
+pen_cell_new_random() should cause the NULL-value bit map to NOT be created.
+
+Yes, give an error - unless you think you can implement random writing of the NULL bit map.
+|
+|so I should give an error when G_put_map_row_random() is called
+|for floating or double maps?
+|Right now I convert it to float or double and do the random writes
+|which I implemented for float and double.
+|Olga
+|
+

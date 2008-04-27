@@ -1,0 +1,89 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.stats</EM> calculates the area present in each of the categories of
+user-selected raster map layer(s). Area statistics are given in units of
+square meters and/or cell counts. This analysis uses the current geographic
+region and mask settings. Output can be sent to a file in the user's current
+working directory.
+
+If a single map layer is specified on the command line, a list of areas in
+square meters (assuming the map's coordinate system is in meters) for each
+category in the raster map layer will be printed. (If the <EM>-c</EM> option
+is chosen, areas will be stated in number of cells.) If multiple raster map
+layers are specified on the command line, a cross-tabulation table of areas
+for each combination of categories in the map layers will be printed.
+
+<P>
+For example, if one raster map layer were specified, the output would look like:
+<PRE>
+          1:1350000.00
+          2:4940000.00
+          3:8870000.00
+</PRE>
+If three raster map layers <EM>a, b</EM>, and <EM>c</EM>, were specified,
+the output would look like:
+<PRE>
+          0:0:0:8027500.00
+          0:1:0:1152500.00
+          1:0:0:164227500.00
+          1:0:1:2177500.00
+          1:1:0:140092500.00
+          1:1:1:3355000.00
+          2:0:0:31277500.00
+          2:0:1:2490000.00
+          2:1:0:24207500.00
+          2:1:1:1752500.00
+          3:0:0:17140000.00
+          3:1:0:11270000.00
+          3:1:1:2500.00
+</PRE>
+Within each grouping, the first field represents the category  value of map
+layer <EM>a</EM>, the second represents the category values associated with
+map layer <EM>b</EM>, the third represents category values for map layer
+<EM>c</EM>, and the last field gives the area in square meters for the
+particular combination of these three map layers' categories. For example,
+above, combination 3,1,1 covered 2500 square meters. Fields are separated by
+colons.
+
+<H2>NOTES</H2>
+<EM>r.stats</EM> works in the current geographic region with the current mask.
+
+<P>
+If a nicely formatted output is desired, pipe the output into a command
+which can create columnar output.  For example, the command:
+
+<P>
+    <B>r.stats input=</B>a,b,c | pr -3 | cat -s
+
+<P>
+will create a three-column output 
+<PRE>
+1:4:4:10000.00       2:1:5:290000.00      2:4:5:2090000.00
+1:4:5:1340000.00     2:2:5:350000.00      3:1:2:450000.00
+2:1:1:1090000.00     2:4:1:700000.00      3:1:3:5280000.00
+2:1:3:410000.00      2:4:3:10000.00       3:1:5:3140000.00
+</PRE>
+
+The output from <EM>r.stats</EM> on more than one map layer is sorted.
+
+<P>
+Note that the user has only the option of printing out cell statistics in
+terms of cell counts and/or area totals. Users wishing to use different
+units than are available here should use the GRASS program 
+<EM><A HREF="r.report.html">r.report</A></EM>.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="g.region.html">g.region</A>,
+<A HREF="r.coin.html">r.coin</A>,
+<A HREF="r.describe.html">r.describe</A>,
+<A HREF="r.report.html">r.report</A>,
+<A HREF="r.statistics.html">r.statistics</A>,
+<A HREF="r.univar.html">r.univar</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,24 @@
+This is s.sample, version 0.6B <02 Jan 1995> 
+Copyright (C) 1994, 1995. James Darrell McCauley
+
+The man page should have installed automagically. Please check.
+Don't forget to run your MAKELINKS script.
+
+A tutorial is available in s.sample-tutorial.ps.gz, a compressed
+PostScript file. A LaTeX version is in s.sample-tutorial.tex.
+No other formats are available.
+
+The subdirectory validation/ contains some sample data and output.
+
+This is Beta software - so please be sure to keep in touch
+with me if you have problems. I've only been able to do limited
+testing. Regarding lat-long data, I'm not sure if this will work
+correctly. The way it was written, we're doing interpolation
+over data in a plane (see figure 1 in the tutorial). If this
+changes from a plane to a curved surface, I'm not sure what
+happens.
+
+--Darrell
+
+James Darrell McCauley (darrell@mccauley-usa.com)
+http://mccauley-usa.com/

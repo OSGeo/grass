@@ -1,0 +1,73 @@
+#!/bin/sh
+# script to emulate an xterm in OSX Terminal.app
+# 
+# -William Kyngesburye
+
+# just in case accidentally called on another system
+SYSTEMOSX=`uname -s | grep "Darwin"`
+
+if [ "$SYSTEMOSX" ] ; then
+    # manually transfer the necessary env vars
+    TMPSCRIPT="/tmp/grassxterm_$$"
+    touch "$TMPSCRIPT.sh"
+    chmod +x "$TMPSCRIPT.sh"
+    echo "#!/bin/sh" > "$TMPSCRIPT.sh"
+    
+    echo "DISPLAY=$DISPLAY" >> "$TMPSCRIPT.sh"
+    echo "PATH=\"$PATH\"" >> "$TMPSCRIPT.sh"
+    echo "GIS_LOCK=\"$GIS_LOCK\"" >> "$TMPSCRIPT.sh"
+    echo "GISRC=\"$GISRC\"" >> "$TMPSCRIPT.sh"
+    echo "GISBASE=\"$GISBASE\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_VERSION=\"$GRASS_VERSION\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_PAGER=$GRASS_PAGER" >> "$TMPSCRIPT.sh"
+    echo "DYLD_LIBRARY_PATH=\"$DYLD_LIBRARY_PATH\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_LD_LIBRARY_PATH=\"$GRASS_LD_LIBRARY_PATH\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_WISH=\"$GRASS_WISH\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_TCLSH=\"$GRASS_TCLSH\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_HTML_BROWSER=\"$GRASS_HTML_BROWSER\"" >> "$TMPSCRIPT.sh"
+    echo "GRASS_HTML_BROWSER_MACOSX=\"$GRASS_HTML_BROWSER_MACOSX\"" >> "$TMPSCRIPT.sh"
+    echo "export DISPLAY PATH GIS_LOCK GISRC GISBASE GRASS_VERSION GRASS_PAGER DYLD_LIBRARY_PATH GRASS_LD_LIBRARY_PATH GRASS_WISH GRASS_TCLSH GRASS_HTML_BROWSER GRASS_HTML_BROWSER_MACOSX" >> "$TMPSCRIPT.sh"
+    if [ "$GRASS_ADDON_PATH" ] ; then
+        echo "GRASS_ADDON_PATH=\"$GRASS_ADDON_PATH\"" >> "$TMPSCRIPT.sh"
+        echo "export GRASS_ADDON_PATH" >> "$TMPSCRIPT.sh"
+    fi
+    if [ "$TCL_LIBRARY" ] ; then
+        echo "TCL_LIBRARY=\"$TCL_LIBRARY\"" >> "$TMPSCRIPT.sh"
+        echo "export TCL_LIBRARY" >> "$TMPSCRIPT.sh"
+    fi
+    if [ "$TK_LIBRARY" ] ; then
+        echo "TK_LIBRARY=\"$TK_LIBRARY\"" >> "$TMPSCRIPT.sh"
+        echo "export TK_LIBRARY" >> "$TMPSCRIPT.sh"
+    fi
+
+    # get command, ignore all other xterm flags
+    while true ; do
+        if [ "$1" = "-e" ] ; then break ; fi
+        shift
+    done
+    shift
+    # and add it to end of script
+    echo "$@" >> "$TMPSCRIPT.sh"
+
+    # execute
+    # save current active app/window, return to it when script finishes.
+    osascript - <<EOF
+--tell application "System Events"
+--	set save_app to item 1 of (get name of processes whose frontmost is true)
+--end tell
+tell application "Terminal"
+	activate
+	-- start new window with env/cmd script
+	do script "$TMPSCRIPT.sh; exit"
+	tell window 1
+		-- wait for it to finish
+		repeat while (processes is not equal to {})
+			delay 1
+		end repeat
+		close
+	end tell
+end tell
+--tell application save_app to activate
+EOF
+    rm -f "$TMPSCRIPT.sh"
+fi

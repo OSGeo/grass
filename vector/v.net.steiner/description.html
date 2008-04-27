@@ -1,0 +1,85 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.steiner</em> calculates the optimal connection of nodes on a
+vector network.
+
+<P>
+A Steiner tree is used to calculate the minimum-cost vector network
+connecting some number of end nodes in a network framework.
+For example it could be used to find the path following a road system
+which will minimize the amount of fibre optic cable needed to connect
+a series of satellite offices.
+
+
+<h2>EXAMPLE</h2>
+
+Steiner tree for for 6 digitized nodes (Spearfish):
+
+<div class="code"><pre>
+g.copy vect=roads,myroads
+v.db.addcol myroads col="cost double precision"
+
+# define traveling costs as inverse of speed limit:
+v.db.update myroads col=cost val=1/50
+v.db.update myroads col=cost val=1/75 where="label='interstate'"
+v.db.update myroads col=cost val=1/5 where="label='unimproved road'"
+v.db.update myroads col=cost val=1/25 where="label='light-duty road, improved surface'"
+v.db.select myroads
+
+# we have 6 locations to allocate
+echo "1|601653.5|4922869.2|a
+2|608284|4923776.6|b
+3|601845|4914981.9|c
+4|596270|4917456.3|d
+5|593330.8|4924096.6|e
+6|598005.5|4921439.2|f" | v.in.ascii cat=1 x=2 y=3 out=centers col="cat integer, \
+                         east double precision, north double precision, label varchar(43)"
+
+v.db.select centers
+v.category centers op=report
+# type       count        min        max
+# point          6          1          6
+
+
+#create lines map connecting points to network (on layer 2)
+v.net myroads points=centers out=myroads_net op=connect thresh=500
+v.category myroads_net op=report
+# Layer / table: 1 / myroads_net
+# type       count        min        max
+# line         837          1          5
+#
+# Layer: 2
+# type       count        min        max
+# point          6          1          5
+
+# The network is now prepared.
+g.region vect=myroads_net
+d.mon x0
+d.vect myroads_net
+d.vect -c centers icon=basic/triangle
+d.font verdana
+d.vect centers col=red disp=attr attrcol=label lsize=12
+
+v.net.steiner myroads_net acol=cost tcats=1-6 out=mysteiner
+d.vect mysteiner col=blue width=2
+</pre></div>
+
+<img src="vnetsteiner.png" alt="v.net.steiner example" border="1">
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.path.html">d.path</a></em>,
+<em><a HREF="v.net.html">v.net</a></em>,
+<em><a HREF="v.net.alloc.html">v.net.alloc</a></em>,
+<em><a HREF="v.net.iso.html">v.net.iso</a></em>,
+<em><a HREF="v.net.path.html">v.net.path</a></em>,
+<em><a HREF="v.net.salesman.html">v.net.salesman</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Documentation: Markus Neteler
+
+
+<p><i>Last changed: $Date$</i>

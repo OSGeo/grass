@@ -1,0 +1,28 @@
+r.surf.fractal
+
+	GRASS module to create a fractal surface of a given fractal dimension.
+	Uses spectral synthesis method. Can create intermediate layers showing
+	the build up of different spectral coefficients (see Saupe, pp.106-107
+	for an example of this).
+
+	Reference:
+
+	Saupe, D. (1988) Algorithms for random fractals, in Barnsley M., 
+		Devaney R., Mandelbrot B., Peitgen, H-O., Saupe D., and Voss R.
+		(1988) The Science of Fractal Images, Ch. 2, pp.71-136. London:
+		Springer-Verlag.
+
+Jo Wood, 19th October, 1994
+
+-------
+
+Usage:
+ r.surf.fractal out=name [d=value] [n=value]
+
+Parameters:
+  out   Name of fractal surface raster layer
+    d   Fractal dimension of surface (2 < D < 3)
+        default: 2.05
+    n   Number of intermediate images to produce
+        default: 0
+

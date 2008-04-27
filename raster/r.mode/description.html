@@ -1,0 +1,67 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.mode</EM> calculates the most frequently occurring value (i. e., mode)
+of data contained in a <EM>cover</EM> raster map layer for areas assigned
+the same category value in the user-specified <EM>base</EM> raster map
+layer. These modes are stored in the new <EM>output</EM> map layer.
+
+<P>
+The <EM>output</EM> map is actually a <EM>reclass</EM> of the <EM>base</EM>
+map.
+
+<P>
+The <B>base</B> parameter defines an existing raster map layer in the user's
+current mapset search path. For each group of cells assigned the same
+category value in the <EM>base</EM> map, the mode of the values assigned
+these cells in the <EM>cover</EM> map will be computed.
+
+<P>
+The <B>cover</B> parameter defines an existing raster map layer containing
+the values to be used to compute the mode within each category of the
+<EM>base</EM> map.
+
+<H2>NOTES</H2>
+
+The user should use the results of <EM>r.mode</EM> with care.
+Since this utility assigns a value to each
+cell which is based on global information (i.e., information at spatial 
+locations other than just the location of the cell itself), the resultant 
+map layer is only valid if the geographic region and mask settings are
+the same as they were at the time that the result map was created.
+
+<P>
+Results are affected by the current region settings and mask.
+
+<H2>EXAMPLE</H2>
+
+Mode of K-factor (erosion) for Spearfish fields:
+
+<div class="code"><pre>
+g.region rast=fields -p
+r.mode base=fields cover=soils.Kfactor output=K.by.farm.mode
+r.univar K.by.farm.mode
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="r.average.html">r.average</a></em>,
+<em><a href="r.category.html">r.category</a></em>,
+<em><a href="r.clump.html">r.clump</a></em>,
+<em><a href="r.describe.html">r.describe</a></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.median.html">r.median</a></em>,
+<em><a href="r.mfilter.html">r.mfilter</a></em>,
+<em><a href="r.neighbors.html">r.neighbors</a></em>,
+<em><a href="r.reclass.html">r.reclass</a></em>,
+<em><a href="r.stats.html">r.stats</a></em>,
+<em><A HREF="r.statistics.html">r.statistics</a></em>,
+<em><A HREF="r.univar.html">r.univar</a></em>
+
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

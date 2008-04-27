@@ -1,0 +1,48 @@
+<H2>DESCRIPTION</H2>
+       <I>v.kcv</I>  randomly  divides  a  points  lists  into  <I>k</I> sets of
+       test/train data (for <B>k</B>-fold <B>c</B>ross <B>v</B>alidation).
+       Test  partitions  are  mutually  exclusive.  That  is,  a point will
+       appear in only one test partition and <I>k-1</I> training  partitions.
+
+       The  program  generates  a random point using the selected
+       random number generator and then finds the closest point to
+       it.  This site is removed from the candidate list (meaning
+       that it will not be selected for any other test  set)  and
+       saved  in the first test partition file.  This is repeated
+       until enough points have been selected for the test partition.
+       The  number  of  points  chosen for test partitions
+       depends upon the number of sites available and the  number
+       of partitions chosen (this number is made as consistent as
+       possible while ensuring that all sites will be chosen  for
+       testing).  This  process of filling up a test partition is
+       done <I>k</I> times.
+
+<H2>NOTES</H2>
+       An ideal random sites generator will follow a Poisson dis
+      <!-- BUG: missing text -->
+       only be as random as the  original  points.   This  program
+       simply divides points up in a random manner.<p>
+
+       Be  warned  that  random number generation occurs over the
+       intervals defined by the region of the map.<p>
+
+       This program may not work properly with Lat-long data.
+
+<H2>SEE ALSO</H2>
+<I><a href=v.random.html>v.random</a></I> and 
+<I><a href=g.region.html>g.region</a></I>
+
+
+<H2>AUTHOR</H2>
+
+<A HREF="http://mccauley-usa.com/">James Darrell McCauley</A>
+<A HREF="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</A>,
+<br>when he was at: 
+<A HREF="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural
+Engineering</A>
+<A HREF="http://www.purdue.edu/">Purdue University</A>
+
+<P>
+Update to 5.7 Radim Blazek 10 / 2004
+
+<p><i>Last changed: $Date$</i>

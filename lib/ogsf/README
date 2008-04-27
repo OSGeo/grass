@@ -1,0 +1,27 @@
+The openGL gsurf library (ogsf), consisting of approximately 20,000 lines 
+of C code, contains some 180 public functions and about twice as many 
+internal functions for run-time data storage, manipulation, querying, 
+and visualization using OpenGL.
+The library handles all drawing and lighting operations, including use of
+user-defined clipping planes and drawing various style "fences" on clipping
+planes when drawing multiple surfaces, and treats datasets as objects which
+can be used for various attributes of the rendering.  It allows data 
+sharing (e.g., same data for more than one attribute of same or different 
+surfaces), separate masking for each surface, multiple surfaces, vector sets, 
+or point sets, and will also allow multiple volumes.  The library provides 
+all query features such as 3D "point on surface", keyframe animation routines, 
+and full state saving functionality.  Database-specific routines for 
+interfacing with the GRASS GISlib are kept isolated for easier library reuse 
+with other databases.  The gsurf library is not dependent upon any particular 
+interface library, and has been used successfully with both Motif and Tcl/Tk. 
+It is used for NVIZ visualization tool.
+
+
+moved from src.contrib/GMSL/NVIZ2.2/lobes/ogsf/ 
+      to   src/libes/ogsf/
+
+Updated src.contrib/GMSL/NVIZ2.2/Gmakefile for that.
+10/1999 Markus Neteler
+
+10/99   - changed gsd_img.c to uncompressed IRIS RGB
+2/26/96 - some minor cleanup (mca)

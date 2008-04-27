@@ -1,0 +1,36 @@
+<H2>DESCRIPTION</H2>
+
+<em>v.univar</em> calculates univariate statistics of vector map features.
+This includes the number of features counted, minimum and maximum values,
+and range. 
+Variance and standard deviation is calculated only for points if
+<tt>type=point</tt> is defined.
+
+<P>
+
+Extended statistics adds median, 1st and 3rd quartiles, and 90th
+percentile.
+
+<H2>EXAMPLE</H2>
+
+<div class="code"><pre>
+g.region rast=elevation.10m -p
+v.random out=samples n=100
+v.db.addtable samples col="heights double precision"
+v.what.rast samples rast=elevation.10m col=heights
+v.db.select samples
+
+v.univar samples col=heights type=point
+</pre></div>
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="v.neighbors.html">v.neighbors</A></EM>
+
+
+<H2>AUTHOR</H2>
+
+Radim Blazek, ITC-irst
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,34 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.select</em> allows the user to select features from a vector 
+by features from another one.
+
+<h2>NOTES</h2>
+
+<h2>EXAMPLES</h2>
+
+Extract forest fire points from larger fire map:
+
+<div class="code"><pre>
+v.select ainput=fire binput=forest output=forest_fire
+</pre></div>
+<P>
+
+Extract Italian rivers from VMAP0 watercourses map:
+
+<div class="code"><pre>
+v.select ain=watrcrsl_eurnasia_wgs84 bin=italy_area \
+         out=watrcrsl_italy op=overlap
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="v.overlay.html">v.overlay</a>,
+<a HREF="sql.html">GRASS SQL interface</a></em>
+
+<h2>AUTHORS</h2>
+
+Radim Blazek
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,121 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.clean</em> allows the user to automatically fix topology of vector maps.
+
+<h2>NOTES</h2>
+
+The user does <b>not</b> have to run <em><a HREF="v.build.html">v.build</a></em>
+on the <em>output</em> vector, unless the <em>-b</em> flag was used. The
+<em>-b</em> flag affects <b>only</b> the <em>output</em> vector - topology is
+always built for <em>error</em> vector.
+
+<h3>Removing small angles between lines at nodes</h3>
+
+The <em>rmsa</em> tool only concerns angles which are so small that the calculated angle
+is 0. The user cannot change this threshold. The following figure should help 
+demonstrate what the tool does.
+<P>
+<ul>
+<table><tr><td>
+<img src="v_clean_rmsa.png" border=1>
+</td></tr>
+<tr><td align=center>
+<font size=-1><em>tool=rmsa</em></font>
+</td></tr>
+</table>
+</ul>
+
+<h3>What is a bridge?</h3>
+A bridge is an area type connection of an island (polygon in a polygon) to the outer
+polygon. This is topologically incorrect (but OGC Simple Features allow it). <em>v.clean</em>
+can be used to optionally change the line type to fulfill the topology rules or to
+remove the bridge from the map:
+
+<div class="code"><pre>
+    +-------------+             +-------------+   +-------------+
+    |            P|  P: polygon |            P|   |            P|
+    |    +---+    |  I: island  |    +---+    |   |    +---+    |
+    |    | I |    |  B: bridge  |    | I |    |   |    | I |    |
+    |    |   |    |  L: line    |    |   |    |   |    |   |    |
+    |    +-+-+    |             |    +---+    |   |    +-.-+    |
+    |      |      |             |             |   |      .      |
+    |      | B    |             |             |   |      . L    |
+    |      |      |             |             |   |      .      |
+    +------+------+             +-------------+   +-------------+
+</pre></div>
+
+<h2>EXAMPLES</h2>
+
+<h3>Snap lines to vertex in threshold</h3>
+<div class="code"><pre>
+v.clean input=testmap output=cleanmap tool=snap thresh=1
+</pre></div>
+
+
+<h3>Cleaning OGR imported data (Simple Feature data)</h3>
+
+The import of areas with <em><a HREF="v.in.ogr.html">v.in.ogr</a></em>
+requires a subsequent run of <em>v.clean</em> to update the map to a
+topologically valid structure (removal of duplicate collinear lines etc). The
+tools used for that are 'rmdupl' and 'bpol':
+<div class="code"><pre>
+v.clean input=areamap output=areamap_clean tool=rmdupl,bpol 
+</pre></div>
+
+
+<h3>Extracting intersection points of vector lines</h3>
+<div class="code"><pre>
+v.clean input=lines1 output=lines2 err=points tool=break 
+</pre></div>
+
+Intersection points are written to 'points' map.
+
+<h3>Break lines</h3>
+
+<em>v.clean</em> will break the lines where they cross, 
+creating new node if needed. Example:
+
+<div class="code"><pre>
+v.in.ascii -n out=crossed_lines format=standard << EOF
+L 2
+ 0 5
+ 10 5
+L 2
+ 5 0
+ 5 10
+EOF
+
+v.clean in=crossed_lines out=crossed_lines_brk \
+        error=intersection tool=break
+</pre></div>
+
+<h3>Remove all lines of zero length</h3>
+
+<div class="code"><pre>
+v.out.ascii zero format=standard 
+L  2 1
+ -819832.09065589 -987825.2187231
+ -806227.28362601 -971104.80702988
+ 1     1         
+L  2 1
+ -799165.24638913 -972974.16982788
+ -799165.24638913 -972974.16982788
+ 1     2         
+
+v.clean input=zero output=zero_clean tool=rmline type=line
+
+v.out.ascii zero_clean format=standard 
+L  2 1
+ -819832.09065589 -987825.2187231
+ -806227.28362601 -971104.80702988
+ 1     1         
+</pre></div>
+
+
+<h2>AUTHORS</h2>
+
+David Gerdes, U.S. Army Construction Engineering Research Laboratory<br>
+Radim Blazek, ITC-irst, Trento, Italy<br>
+Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy<br>
+
+<p><i>Last changed: $Date$</i></p>

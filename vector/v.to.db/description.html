@@ -1,0 +1,178 @@
+<H2>DESCRIPTION</H2>
+
+<em>v.to.db</em> loads vector map features or metrics into a database
+table, or prints them (or the SQL queries used to obtain them) in a
+form of a human-readable report. For uploaded/printed category values
+'-1' is used for 'no category' and 'null'/'-' if category cannot be
+found or multiple categories were found.
+
+<H2>NOTES</H2>
+The units <em>miles</em>, <em>feet</em>, <em>meters</em> and
+<em>kilometers</em> are square for <em>option=area</em>.
+<P>
+Feet and acre units are always reported in their common versions
+(i.e. the International Foot, exactly 5280 feet in a mile), even
+when the location's standard map unit is the US Survey foot.
+<p>
+When calculating perimeters in Latitude-Longitude locations, the geodesic
+distance between the vertices is used.
+<p>
+When using <em>option=coor</em> on a vector area map, 
+only coordinates of centroids with unique category will be reported.
+<p>
+If the module is apparently slow <em>and</em> the map attributes are
+stored in an external DBMS such as PostgreSQL, it is highly recommended
+to create an index on the key (category) column.
+<p>
+Uploading the vector map attributes to a database requires a table attached to
+a given input vector <em>layer</em>. The <b>print only</b> (<b>-p</b>) mode
+doesn't require a table. Use <em><a href=db.execute.html>db.execute</a></em>
+or <em><a href=v.db.addtable.html>v.db.addtable</a></em> to create a table if
+needed.
+<p>
+Updating the table has to be done column-wise. The <em>column</em> must be
+present in the table, except when using the <b>print only</b> (<b>-p</b>)
+mode. Use <em><a href=db.execute.html>db.execute</a></em> or
+<em><a href=v.db.addcol.html>v.db.addcol</a></em> to add new columns if
+needed.
+
+<H2>EXAMPLES</H2>
+
+<h3>Updating attribute tables</h3>
+
+Upload category numbers to attribute table (used for new map):<br>
+<div class="code"><pre>
+v.to.db map=soils type=area option=cat
+</pre></div>
+
+<p>
+Upload area sizes of each polygon to attribute table:<br>
+<div class="code"><pre>
+v.to.db map=soils type=area option=area col=area_size unit=h
+</pre></div>
+
+<p>
+Upload line lengths (in meters) of each vector line to attribute table
+(use <em>v.category</em> in case of missing categories):<br>
+<div class="code"><pre>
+v.to.db map=roads option=length type=line col=linelength units=me
+</pre></div>
+
+<p>
+Upload x and y coordinates from vector geometry to attribute table:<br>
+<div class="code"><pre>
+v.to.db map=pointsmap option=coor col=x,y
+</pre></div>
+
+<p>
+Upload x, y and z coordinates from vector geometry to attribute table:<br>
+<div class="code"><pre>
+v.to.db map=pointsmap option=coor col=x,y,z
+</pre></div>
+
+<p>
+Transfer attributes from a character column (with numeric contents) to a new
+integer column:<br>
+<div class="code"><pre>
+v.db.addcol usa_income_employment2002 col="FIPS_NUM integer"
+v.to.db usa_income_employment2002 option=query col=FIPS_NUM qcol=STATE_FIPS
+</pre></div>
+
+<P>
+Upload category numbers of left and right area, to an attribute table of
+boundaries common for the areas:<br>
+<div class="code"><pre>
+# add categories for boundaries of the input vector map, in layer 2:
+v.category soils out=mysoils layer=2 type=boundary option=add
+# add a table with columns named "left" and "right" to layer 2 of the input
+# vector map:
+v.db.addtable mysoils layer=2 col="left integer,right integer"
+# upload categories of left and right areas:
+v.to.db mysoils option=sides col=left,right layer=2
+# display the result:
+v.db.select mysoils layer=2
+</pre></div>
+
+<p>
+Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the boundary defining a polygon based on the formula:
+<br><tt>
+D = 2 * (log perimeter) / (log area):<br>
+</tt>
+<div class="code"><pre>
+g.copy vect=soils,mysoils
+v.db.addcol mysoils col="d double precision"
+v.to.db mysoils option=fd column="d"
+
+g.region vect=mysoils res=50
+v.to.rast in=mysoils out=soils_fd type=area use=attr column=d
+r.colors map=soils_fd color=gyr
+
+d.mon x0
+d.rast.leg soils_fd
+d.vect mysoils type=boundary
+</pre></div>
+
+<h3>Printing reports</h3>
+
+Report x,y,z coordinates of points in the input vector map:<br>
+<div class="code"><pre>
+v.to.db -p bugsites option=coor type=point
+</pre></div>
+
+Report all area sizes of the input vector map:<br>
+<div class="code"><pre>
+v.to.db -p soils option=area type=boundary units=h
+</pre></div>
+
+<p>
+Report all area sizes of the input vector map, in hectares, sorted by category
+number (requires GNU <em>sort</em> utility installed):<br>
+<div class="code"><pre>
+v.to.db -p soils option=area type=boundary units=h | sort -n
+</pre></div>
+
+<p>
+Report all line lengths of the input vector map, in kilometers:<br>
+<div class="code"><pre>
+v.to.db -p roads option=length type=line units=k
+</pre></div>
+
+<p>
+Report number of features for each category in the input vector map:<br>
+<div class="code"><pre>
+v.to.db -p roads option=count type=line
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.what.vect.html">d.what.vect</a>,
+<a href="db.execute.html">db.execute</a>,
+<a href="v.category.html">v.category</a>,
+<a href="v.db.connect">v.db.connect</a>,
+<a href="v.db.addtable.html">v.db.addtable</a>,
+<a href="v.db.addcol.html">v.db.addcol</a>,
+<a href="v.db.connect">v.db.connect</a>,
+<a href="v.distance.html">v.distance</a>,
+<a href="v.report.html">v.report</a>,
+<a href="v.univar.html">v.univar</a>,
+<a href="v.what.html">v.what</a>
+</em>
+
+
+<h2>REFERENCES</h2>
+
+<ul>
+  <li>Mandelbrot, B. B. (1982). The fractal geometry of nature. New York: W. H. Freeman.</li>
+  <li>Xu, Y. F. &amp; Sun, D. A. (2005). Geotechnique 55, No. 9, 691-695</li>
+</ul>
+
+
+<H2>AUTHOR</H2>
+
+Radim Blazek, ITC-irst, Trento, Italy<br>
+Line sinuousity implemented by Wolf Bergenheim
+
+<p>
+<i>Last changed: $Date$</i>

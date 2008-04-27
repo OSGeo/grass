@@ -1,0 +1,193 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       v.db.addtable
+# AUTHOR(S):   	Markus Neteler 
+# PURPOSE:      interface to db.execute to creates and add a new table to given vector map
+# COPYRIGHT:    (C) 2005, 2007  by Markus Neteler & the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Creates and adds a new attribute table to a given layer of an existing vector map.
+#%  keywords: vector, database, attribute table
+#%End
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector map for which to add new attribute table
+#% required : yes
+#% key_desc : name
+#%end
+#%option
+#% key: table
+#% type: string
+#% description: Name of new attribute table (default: vector map name)
+#% required : no
+#%end
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer where to add new attribute table
+#% answer: 1
+#% required : no
+#%end
+#%option
+#% key: columns
+#% type: string
+#% description: Name and type of the new column(s) (types depend on database backend, but all support VARCHAR(), INT, DOUBLE and DATE)
+#% answer: cat integer
+#% required : no
+#% multiple : yes
+#% key_desc : name type
+#%end
+
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+### setup enviro vars ###
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE/$LOCATION_NAME/$MAPSET"
+
+# does map exist in CURRENT mapset?
+eval `g.findfile element=vector file="$GIS_OPT_MAP" mapset="$MAPSET"`
+MAP_MAPSET=`echo "$GIS_OPT_MAP" | grep '@' | cut -f2 -d'@'`
+if [ -z "$MAP_MAPSET" ] ; then
+   MAP_MAPSET="$MAPSET"
+fi
+if [ ! "$file" ] || [ "$MAP_MAPSET" != "$MAPSET" ] ; then
+   g.message -e  "Vector map <$GIS_OPT_MAP> not found in current mapset"
+   exit 1
+else
+   MAP_NAME=`echo "$GIS_OPT_MAP" | cut -f1 -d'@'` 
+fi
+
+
+if [ -z "$GIS_OPT_TABLE" ] ; then
+    if [ $GIS_OPT_LAYER -eq 1 ] ; then
+       g.message "Using vector map name as table name: $MAP_NAME" 
+       table="$MAP_NAME"
+    else
+       # two avoid tables with identical names on higher layers
+       g.message "Using vector map name extended by layer number as table name: ${MAP_NAME}_$GIS_OPT_LAYER" 
+       table="${MAP_NAME}_$GIS_OPT_LAYER"
+    fi
+else
+    g.message "Using user specified table name: $GIS_OPT_TABLE"
+    table="$GIS_OPT_TABLE"
+fi
+
+# we use the DB settings of layer 1 to find out default connection
+QUERYLAYER=1
+
+# check if DB parameters are set, and if not set them.
+db.connect -c
+
+#check if anything is connected:
+v.db.connect map="$GIS_OPT_MAP" -g  2> /dev/null | grep '^1 ' > /dev/null
+if [ $? -ne 0 ] ; then
+   # nothing defined for layer 1
+   g.message "Creating new DB connection based on default mapset settings..."
+   database=`db.connect -p | grep '^database' | cut -d':' -f2`
+   driver=`db.connect -p | grep '^driver' | cut -d':' -f2`
+else
+   # there is a definition for layer 1, so we check for the user defined layer
+   database=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$QUERYLAYER" | awk '{print $4}'`
+   if [ -z "database" ] ; then
+      #nothing on user defined layer, so we use the default mapset settings in this case:
+      database=`db.connect -p | grep '^database' | cut -d':' -f2`
+      driver=`db.connect -p | grep '^driver' | cut -d':' -f2`
+   else
+      driver=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$QUERYLAYER" | awk '{print $5}'`
+   fi
+fi
+
+#maybe there is already a table linked to the selected layer?
+if [ "$GIS_OPT_LAYER" -eq 1 ] ; then
+  v.db.connect "$GIS_OPT_MAP" -g 2> /dev/null | grep -w "$GIS_OPT_LAYER" > /dev/null
+  if [ $? -eq 0 ] ; then
+     g.message -e "There is already a table linked to layer <$GIS_OPT_LAYER>" 
+     exit 1
+  fi
+fi
+
+#maybe there is already a table with that name?
+db.tables database="$database" driver="$driver" 2> /dev/null | grep "^$table$"
+if [ $? -ne 0 ] ; then
+   #if not existing, create it:
+
+   if [ "$GIS_OPT_COLUMNS" = "cat integer" ] ; then
+      COLUMN_DEF="cat integer"
+   else
+      COLUMN_DEF=`echo "cat integer, $GIS_OPT_COLUMNS" | sed \
+	-e 's/cat integer, cat integer,/cat integer, /' \
+	-e 's/cat integer, cat INTEGER,/cat integer, /' \
+	-e 's/cat integer, cat int,/cat integer, /' \
+	-e 's/cat integer, cat INT,/cat integer, /'`
+   fi
+   g.message "Creating table with columns ($COLUMN_DEF)"
+
+   # take care if the DBF directory is missing (heck, the DBF driver should take care!)
+   if [ "$driver" = "dbf" ] ; then
+       if test ! -d "${LOCATION}/dbf" ; then
+          g.message "Creating missing DBF directory in MAPSET <$MAPSET>"
+          mkdir -p "${LOCATION}/dbf"
+          db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+       fi
+   fi
+
+   echo "CREATE TABLE $table ($COLUMN_DEF)" | db.execute database="$database" driver="$driver"
+   if [ $? -ne 0 ] ; then
+     g.message -e "Cannot continue."
+     exit 1
+   fi
+fi
+
+# connect the map to the DB:
+v.db.connect map="$GIS_OPT_MAP" database="$database" driver="$driver" \
+   layer="$GIS_OPT_LAYER" table="$table" key=cat
+
+# finally we have to add cats into the attribute DB to make modules such as v.what.rast happy:
+# (creates new row for each vector line):
+v.to.db "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" option=cat col=cat
+
+g.message "Current attribute table links:"
+v.db.connect -p "$GIS_OPT_MAP"
+
+# write cmd history:
+v.support map="$GIS_OPT_MAP" cmdhist="${CMDLINE}"
+
+exit 0

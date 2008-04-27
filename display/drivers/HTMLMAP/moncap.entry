@@ -1,0 +1,3 @@
+HTMLMAP:driver/HTMLMAP:Create HTML Image Map: \
+     dev/fifo.15a dev/fifo.15b \
+     ::any terminal

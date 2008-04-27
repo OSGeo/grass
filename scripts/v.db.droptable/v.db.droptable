@@ -1,0 +1,141 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:       v.db.droptable
+# AUTHOR(S):   	Markus Neteler 
+# PURPOSE:      interface to db.execute to drop an existing table of given vector map
+# COPYRIGHT:    (C) 2005 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Removes existing attribute table of a vector map.
+#%  keywords: vector, database, attribute table
+#%End
+#%flag
+#%  key: f
+#%  description: Force removal (required for actual deletion of table)
+#%end
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector map from which to remove attribute table
+#% required : yes
+#%end
+#%option
+#% key: table
+#% type: string
+#% description: Name of existing attribute table (default: vector map name)
+#% required : no
+#%end
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer from which to drop linked attribute table
+#% answer: 1
+#% required : no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk/gawk first" 
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+# do some paranoia tests as well:
+if [ -z "$GIS_OPT_TABLE" ] ; then
+    table=`v.db.connect map="$GIS_OPT_MAP" -g`
+    if [ $? -ne 0 ] ; then
+       g.message -e "An error occured while running v.db.connect"
+       exit 1
+    fi
+    table=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $2}'`
+    if [ -z $table ] ; then
+       g.message -e "No table assigned to layer <$GIS_OPT_LAYER>"
+       exit 1
+    fi
+    # Removing table name connected to selected layer
+else
+    # Removing user specified table
+    existingtable=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $2}'`
+    table=$GIS_OPT_TABLE
+    if [ "$existingtable" != "$table" ] ; then
+       g.message -e "User selected table <$table> but the table <$existingtable> is linked to layer <$GIS_OPT_LAYER>" 
+       exit 1
+    fi		  
+fi
+
+# we use the DB settings selected layer 
+database=`v.db.connect map="$GIS_OPT_MAP" -g`
+if [ $? -ne 0 ] ; then
+   g.message -e "An error occured while running v.db.connect" 
+   exit 1
+fi
+database=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $4}'`
+driver=`v.db.connect map="$GIS_OPT_MAP" -g | grep -w "$GIS_OPT_LAYER" | awk '{print $5}'`
+
+g.message "Removing table <$table> linked to layer <$GIS_OPT_LAYER> of vector map <$GIS_OPT_MAP>" 
+
+if [ $GIS_FLAG_f -eq 0 ] ; then
+   g.message "You must use the force flag to actually remove the table. Exiting."
+   exit 0
+else
+   ans="y"
+fi
+
+if [ "$ans" = "y" -o "$ans" = "Y" ] ; then
+   g.message "Dropping table <$table>..."
+   echo "DROP TABLE $table" | db.execute
+   if [ $? -ne 0 ] ; then
+      g.message -e "An error occured while running db.execute"
+      exit 1
+   fi
+
+   v.db.connect -d map="$GIS_OPT_MAP" layer="$GIS_OPT_LAYER"
+
+   g.message "Current attribute table link(s):" 
+   # silently test first to avoid confusing error messages
+   v.db.connect --quiet -p map="$GIS_OPT_MAP" > /dev/null 2> /dev/null
+   if [ $? -ne 0 ] ; then
+      g.message "(No database links remaining)"
+   else
+     v.db.connect -p map="$GIS_OPT_MAP"
+   fi
+
+   # write cmd history:
+   v.support "${GIS_OPT_MAP}" cmdhist="${CMDLINE}"
+
+else
+   g.message "Leaving map/table unchanged." 
+fi
+
+exit 0

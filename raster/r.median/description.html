@@ -1,0 +1,68 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.median</EM> calculates the median category of data
+contained in a <B>cover</B> raster map layer for areas
+assigned the same category value in the user-specified
+<B>base</B> raster map layer.  These median values are
+stored in the new <B>output</B> map layer.
+
+<P>
+The <B>output</B> map is actually a <EM>reclass</EM> of the <B>base</B> map.
+
+The <B>base</B>  map is an existing raster map layer in the user's current
+mapset search path.  For each group of cells assigned the
+same category value in the <B>base</B> map, the median of
+the values assigned these cells in the <B>cover</B> map
+will be computed.
+
+<P>
+The <B>cover</B> map is an existing raster map layer containing the values
+to be used to compute the median within each category of the <B>base</B> map.
+
+
+<H2>NOTES</H2>
+
+The user should use the results of <EM>r.median</EM> with
+care.  Since this utility assigns a value to each cell
+which is based on global information (i.e., information at
+spatial locations other than just the location of the cell
+itself), the resultant map layer is only valid if the
+geographic region and mask settings are the same as they
+were at the time that the result map was created.
+
+<P>
+Results are affected by the current region settings and mask.
+
+<H2>EXAMPLE</H2>
+
+Median K-factor (erosion) for Spearfish fields:
+
+<div class="code"><pre>
+g.region rast=fields -p
+r.median base=fields cover=soils.Kfactor output=K.by.farm.median
+r.univar K.by.farm.median
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<EM><A HREF="r.average.html">r.average</A></EM>,
+<EM><A HREF="r.category.html">r.category</A></EM>,
+<EM><A HREF="r.clump.html">r.clump</A></EM>,
+<EM><A HREF="r.describe.html">r.describe</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.mfilter.html">r.mfilter</A></EM>,
+<EM><A HREF="r.mode.html">r.mode</A></EM>,
+<EM><A HREF="r.neighbors.html">r.neighbors</A></EM>,
+<EM><A HREF="r.reclass.html">r.reclass</A></EM>,
+<EM><A HREF="r.statistics.html">r.statistics</A></EM>,
+<EM><A HREF="r.stats.html">r.stats</A></EM>,
+<EM><A HREF="r.univar.html">r.univar</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

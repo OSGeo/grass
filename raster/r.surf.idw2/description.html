@@ -1,0 +1,68 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.surf.idw2</EM> fills a raster matrix with
+interpolated values generated from a set of irregularly
+spaced data points using numerical approximation (weighted
+averaging) techniques.  The interpolated value of a cell is
+determined by values of nearby data points and the distance
+of the cell from those input points.  In comparison with
+other methods, numerical approximation allows
+representation of more complex surfaces (particularly those
+with anomalous features), restricts the spatial influence
+of any errors, and generates the interpolated surface from
+the data points.  It is the most appropriate method to
+apply to most spatial data.
+
+
+The <B>npoints</B> parameter defines the number of points to use for
+interpolation.  The default is to use the 12 nearest points when
+interpolating the value for a particular cell.
+
+<H2>NOTES</H2>
+
+The amount of memory used by this program is related to the
+number of non-zero data values in the input map layer.  If
+the input raster map layer is very dense (i.e., contains
+many non-zero data points), the program may not be able to
+get all the memory it needs from the system.  The time
+required to execute increases with the number of input data
+points.
+
+<P>
+
+If the user has a mask set, then interpolation is only done
+for those cells that fall within the mask.  However, all
+non-zero data points in the input layer are used even if
+they fall outside the mask.
+
+<P>
+
+This program does not work with latitude/longitude data
+bases.  Another surface generation program, named
+<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM>, 
+should be used with latitude/longitude data bases.
+
+
+<P>
+
+The user should refer to the manual entries for <br>
+<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM><br>
+<EM><A HREF="r.surf.contour.html">r.surf.contour</A></EM><br>
+<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM> <br>to
+compare this surface generation program with others available in GRASS.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.surf.contour.html">r.surf.contour</A></EM>,
+<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM>,
+<EM><A HREF="r.surf.gauss.html">r.surf.gauss</A></EM>,
+<EM><A HREF="r.surf.fractal.html">r.surf.fractal</A></EM>,
+<EM><A HREF="r.surf.random.html">r.surf.random</A></EM>,
+<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM>,
+<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

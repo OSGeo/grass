@@ -1,0 +1,67 @@
+What is this?
+-------------
+	 This is SWIG based python wrapping for GRASS API
+which allows to call GRASS functions from python programs.
+Currently only a limited set of functions (those needed for
+me) are wrapped.
+
+
+How to INSTALL?
+---------------
+1. Install SWIG, the Simplified Wrapper and Interface Generator
+     http://www.swig.org
+
+2. Be sure you configured GRASS with support for Python:
+     ./configure --with-python=/usr/bin/python2.5-config
+
+3. Run make in the swig/python/ directory
+
+It will create two files, python_grass6.py and _python_grass6.so.
+
+4. From within GRASS (or a fake grass session) run "python test.py" to
+   test and to automatically create a byte-compiled version of the module
+   (python_grass6.pyc). The .pyc file is platform independent and may be
+   safely shared among systems. Even so, it doesn't hurt to rebuild it
+   ourselves while we still have write permissions and to make sure we
+   are using an up to date copy. (out of date copies will be ignored)
+
+5. It is useful to build the NumPtr module as well.
+   - see README.GRASS in that directory for instructions
+
+How to use it?
+--------------
+
+import python_grass6
+GRASS functions will be available in this module.
+Eg: 
+	import python_grass6
+	mapset=python_grass6.G_mapset()
+	print mapset
+
+See examples/m.distance for an example of a working SWIG-Python module.
+
+More examples can be found on the GRASS Wiki site's Python page:
+  http://grass.gdf-hannover.de/wiki/GRASS_and_Python#Python-SWIG-GRASS_interface
+
+
+DEBUGGING
+----------
+
+gdb --args python <script.py>
+
+e.g. 
+    gdb --args python rasteraccess.py
+
+
+TODO
+-----
+See TODO in this directory.
+
+
+AUTHOR
+-----
+
+Sajith VK  sajithvk at gmail.com
+Thu, 9 Mar 2006 16:02:50 +0530
+http://grass.itc.it/pipermail/grass-dev/2006-March/021651.html
+http://freegis.gnu.org.in/temporary/python_grass6.tar.bz2

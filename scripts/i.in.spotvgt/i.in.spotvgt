@@ -1,0 +1,294 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       i.in.spot
+#
+# AUTHOR(S):    Markus Neteler
+#
+# PURPOSE:      Import SPOT VEGETATION data into a GRASS raster map
+#               SPOT Vegetation (1km, global) data:
+#               http://free.vgt.vito.be/
+#
+# COPYRIGHT:    (c) 2004,2007 GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+#
+# REQUIREMENTS:
+#      -  gdal: http://www.gdal.org
+#
+# Notes:
+# * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation 
+#   coordinates refer to the center of a pixel.
+# * GDAL coordinates refer to the corner of a pixel
+#   -> correction of 0001/0001_LOG.TXT coordinates by 0.5 pixel
+#############################################################################
+
+#%Module
+#%  description: Import of SPOT VGT NDVI file into a raster map
+#%  keywords: raster, imagery, import
+#%End
+#%flag
+#% key: a
+#% description: also import quality map (SM status map layer) and filter NDVI map
+#%end
+#%option
+#% key: file
+#% type: string
+#% description: existing SPOT VGT NDVI HDF file (0001_NDV.HDF)
+#% gisprompt: old_file,file,input
+#% required : yes
+#%end
+#%option
+#% key: rast
+#% type: string
+#% gisprompt: new,cell,raster
+#% description: Name for output raster map
+#% required : no
+#%end
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE"/"$LOCATION_NAME"/"$MAPSET"
+
+
+#### check for gdalinfo (just to check if installation is complete)
+if [ ! -x "`which gdalinfo`" ] ; then
+    g.message -e "'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"
+    exit 1
+fi
+
+#### trap ctrl-c
+trap 2 3 15
+
+#### a function for writing VRT files
+
+create_VRT_file(){
+ WESTCENTER=`cat $PROJFILE  | grep CARTO_UPPER_LEFT_X  | tr -s ' ' ' ' | cut -d' ' -f2`
+ NORTHCENTER=`cat $PROJFILE | grep CARTO_UPPER_LEFT_Y  | tr -s ' ' ' ' | cut -d' ' -f2`
+ EASTCENTER=`cat $PROJFILE  | grep CARTO_UPPER_RIGHT_X | tr -s ' ' ' ' | cut -d' ' -f2`
+ SOUTHCENTER=`cat $PROJFILE | grep CARTO_LOWER_LEFT_Y  | tr -s ' ' ' ' | cut -d' ' -f2`
+ MAP_PROJ_RESOLUTION=`cat $PROJFILE | grep MAP_PROJ_RESOLUTION  | tr -s ' ' ' ' | cut -d' ' -f2`
+ XSIZE=`cat $PROJFILE  | grep IMAGE_UPPER_RIGHT_COL  | tr -s ' ' ' ' | cut -d' ' -f2`
+ YSIZE=`cat $PROJFILE  | grep IMAGE_LOWER_RIGHT_ROW  | tr -s ' ' ' ' | cut -d' ' -f2`
+
+ # DEBUG (in terminal WEST is not printed?!?!?!)
+ #echo "     $NORTHCENTER"
+ #echo "       |"
+ #echo -n "$WESTCENTER"
+ #echo " -+- $EASTCENTER"
+ #echo "       |"
+ #echo "     $SOUTHCENTER"
+ #echo " RES: $MAP_PROJ_RESOLUTION"
+
+ WESTCORNER=`echo $WESTCENTER $MAP_PROJ_RESOLUTION | awk '{printf "%.12e", $1 - $2/2.}'`
+ NORTHCORNER=`echo $NORTHCENTER $MAP_PROJ_RESOLUTION | awk '{printf "%.12e", $1 + $2/2.}'`
+ EASTCORNER=`echo $EASTCENTER $MAP_PROJ_RESOLUTION | awk '{printf "%.12e", $1 + $2/2.}'`
+ SOUTHCORNER=`echo $SOUTHCENTER $MAP_PROJ_RESOLUTION | awk '{printf "%.12e", $1 - $2/2.}'`
+ RESOLUTION=`echo $MAP_PROJ_RESOLUTION | awk '{printf "%.12e", $1}'`
+ XSIZE=`echo $XSIZE | awk '{printf "%d", $1}'`
+ YSIZE=`echo $YSIZE | awk '{printf "%d", $1}'`
+
+ # DEBUG 
+ #echo $WESTCORNER
+ #echo $NORTHCORNER
+ #echo $EASTCORNER
+ #echo $SOUTHCORNER
+ #echo $RESOLUTION
+
+ echo "<VRTDataset rasterXSize=\"$XSIZE\" rasterYSize=\"$YSIZE\">" >> "$1"
+ echo " <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>" >> $1
+ echo "   <GeoTransform>$WESTCORNER, $RESOLUTION, 0.0000000000000000e+00, $NORTHCORNER, 0.0000000000000e+00, -$RESOLUTION</GeoTransform>" >> $1
+ echo "   <VRTRasterBand dataType=\"Byte\" band=\"1\">" >> $1
+ echo "    <NoDataValue>0.00000000000000E+00</NoDataValue>" >> $1
+ echo "    <ColorInterp>Gray</ColorInterp>" >> $1
+ echo "    <SimpleSource>" >> $1
+ echo "     <SourceFilename>$2</SourceFilename>" >> $1
+ echo "      <SourceBand>1</SourceBand>" >> $1
+ echo "      <SrcRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> $1
+ echo "      <DstRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> $1
+ echo "    </SimpleSource>" >> $1
+ echo " </VRTRasterBand>" >> $1
+ echo "</VRTDataset>" >> $1
+}
+
+################### let's go
+
+PID=$$
+TMPFILE="`g.tempfile $PID`"
+
+if [ ! -z "$GIS_OPT_FILE" ] ; then
+    SPOTDIR="`dirname $GIS_OPT_FILE`"
+    SPOTNAME=`basename $GIS_OPT_FILE .HDF`
+fi
+
+if [ ! -z "$GIS_OPT_RAST" ] ; then
+    NAME="$GIS_OPT_RAST"
+else
+    NAME=$SPOTNAME
+fi
+
+if [ ! -z `g.findfile elem=cell file="$NAME" | grep ^file | cut -f2 -d=` ] ; then
+	g.message -e message="<$NAME> already exists. Aborting."
+	exit 1
+fi
+
+# still a ZIP file?
+if [ "`file -ib $GIS_OPT_FILE`" = "application/x-zip" ] ; then
+  g.message -e message="Please extract $GIS_OPT_FILE before import."
+  exit 1
+fi
+
+
+### create VRT header for NDVI
+
+PROJFILE="${SPOTDIR}/0001_LOG.TXT"
+VRTFILE="$TMPFILE.vrt"
+
+# first process the NDVI:
+rm -f "$VRTFILE"
+create_VRT_file "$VRTFILE" "$GIS_OPT_FILE"
+
+## let's import the NDVI map...
+g.message "Importing SPOT VGT NDVI map..."
+r.in.gdal "$VRTFILE" output="$NAME"
+if [ $? -eq 1 ] ; then
+   g.message -e "An error occurred. Stop."
+   exit 1
+fi
+
+g.message message="Imported SPOT VEGETATION NDVI map <$NAME>."
+
+#################
+## http://www.vgt.vito.be/faq/FAQS/faq19.html
+# What is the relation between the digital number and the real NDVI ?
+# Real NDVI =coefficient a * Digital Number + coefficient b
+#           = a * DN +b
+#
+# Coefficient a = 0.004
+# Coefficient b = -0.1
+
+# switch to a temporary region
+WIND_OVERRIDE=spot_$PID
+export WIND_OVERRIDE
+g.region -d --quiet
+g.region rast="$NAME" --quiet
+
+g.message "Remapping digital numbers to NDVI..."
+r.mapcalc "${NAME}_$PID = 0.004 * $NAME - 0.1"
+g.remove rast="$NAME" --quiet
+g.rename rast="${NAME}_$PID","$NAME" --quiet
+
+#apply color table:
+r.colors "$NAME" color=ndvi --quiet
+
+##########################
+# second, optionally process the SM quality map:
+
+#SM Status Map
+# http://www.vgt.vito.be/faq/FAQS/faq15.html
+#Data about
+# Bit NR 7: Radiometric quality for B0 coded as 0 if bad and 1 if good
+# Bit NR 6: Radiometric quality for B2 coded as 0 if bad and 1 if good
+# Bit NR 5: Radiometric quality for B3 coded as 0 if bad and 1 if good
+# Bit NR 4: Radiometric quality for MIR coded as 0 if bad and 1 if good
+# Bit NR 3: land code 1 or water code 0
+# Bit NR 2: ice/snow code 1 , code 0 if there is no ice/snow
+# Bit NR 1:	0	0	1		1
+# Bit NR 0:	0	1	0		1
+# 		clear	shadow	uncertain	cloud
+#
+#Note:
+# pos 7     6    5    4    3    2   1   0 (bit position)
+#   128    64   32   16    8    4   2   1 (values for 8 bit)
+#
+#
+# Bit 4-7 should be 1: their sum is 240
+# Bit 3   land code, should be 1, sum up to 248 along with higher bits
+# Bit 2   ice/snow code
+# Bit 0-1 should be 0
+#
+# A good map threshold: >= 248
+
+if [ $GIS_FLAG_A -eq 1 ] ; then
+  g.message "Importing SPOT VGT NDVI quality map..."
+  rm -f "$VRTFILE"
+  create_VRT_file "$VRTFILE" `echo ${GIS_OPT_FILE} | sed 's+NDV+SM+g'`
+
+  ## let's import the SM quality map...
+  r.in.gdal "$VRTFILE" output="$NAME.sm"
+  if [ $? -eq 1 ] ; then
+     g.message -e "An error occurred. Stop."
+     exit 1
+  fi
+
+# some of the possible values:
+r.colors "$NAME.sm" col=rules << EOF
+8 50 50 50
+11 70 70 70
+12 90 90 90
+60 grey
+155 blue
+232 violet
+235 red
+236 brown
+248 orange
+251 yellow
+252 green
+EOF
+
+  g.message message="Imported SPOT VEGETATION SM quality map <$NAME.sm>."
+  g.message message="Note: A snow map can be extracted by category 252 (d.rast $NAME.sm cat=252)"
+  g.message ""
+  g.message message="Filtering NDVI map by Status Map quality layer..."
+  r.mapcalc "${NAME}_filt=if($NAME.sm >= 248, $NAME, null() )"
+  r.colors "${NAME}_filt" color=ndvi --quiet
+  g.message message="Filtered SPOT VEGETATION NDVI map <${NAME}_filt>."
+fi
+
+# remove the temporary region
+g.remove region="spot_$PID" --quiet
+
+#### clean up the mess
+rm -f "$VRTFILE" "$TMPFILE"
+
+#### end
+# write cmd history:
+r.support "$NAME" history="${CMDLINE}"
+
+g.message "Done."
+
+exit 0
+

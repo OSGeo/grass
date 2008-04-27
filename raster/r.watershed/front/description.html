@@ -1,0 +1,426 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.watershed</EM> generates a set of maps indicating:
+1) the location of watershed basins, and
+2) the LS and S factors of the Revised Universal Soil Loss Equation (RUSLE).
+
+<P>
+<!-- Interactive mode not activated in GRASS 6.
+<EM>r.watershed</EM> can be run either interactively or non-interactively.
+If the user types <tt>r.watershed</tt>
+on the command line without program arguments, the program will prompt the user
+with a verbose description of the input maps.  The interactive version of
+<EM>r.watershed</EM> can prepare inputs to lumped-parameter hydrologic models.
+After a verbose interactive session, <EM>r.watershed</EM> will query the user
+for a number of
+map layers.  Each map layer's values will be tabulated by watershed basin and sent
+to an output file.  This output file is organized to ease data entry into a
+lumped-parameter hydrologic model program.  The non-interactive version of
+<EM>r.watershed</EM> cannot create this file.
+
+<P>
+The user can run the program non-interactively, by specifying input map names
+on the command line. Parameter names may be specified by their
+full names, or by any initial string that distinguish them from other parameter names.
+In <EM>r.watershed</EM>'s case, the first two letters of each name sufficiently
+distinguishes parameter names.
+For example, the two expressions below are equivalent inputs to <EM>r.watershed</EM>:
+<P>
+<PRE>
+ el=elev.map th=100 st=stream.map ba=basin.map
+
+ elevation=elev.map threshold=100 stream=stream.map basin=basin.map
+</PRE>
+-->
+<H2>OPTIONS</H2>
+
+<dl>
+<DT><EM>-m</EM> 
+
+<DD>Without this flag set, the entire analysis is run in memory
+maintained by the operating system.  This can be limiting, but is
+relatively fast.  Setting the flag causes the program to manage memory
+on disk which allows larger maps to be processes but is considerably
+slower.
+
+<DT><EM>-4</EM> 
+
+<DD>Allow only horizontal and vertical flow of water.
+Stream and slope lengths are approximately the same as outputs from default surface
+flow (allows horizontal, vertical, and diagonal flow of water).
+This flag will also make the drainage basins look more homogeneous.
+
+<DT><EM>elevation</EM> 
+
+<DD>Input map: Elevation on which entire analysis is based.
+
+<DT><EM>depression</EM> 
+
+<DD>Input map:  Map layer of actual depressions or sinkholes in the
+landscape that are large enough to slow and store surface runoff from 
+a storm event.  Any non-zero values indicate depressions.
+
+<DT><EM>flow</EM> 
+
+<DD>Input map: amount of overland flow per cell.  This map indicates the
+amount of overland flow units that each cell will contribute to the
+watershed basin model.  Overland flow units represent the amount of
+overland flow each cell contributes to surface flow.  If omitted, a
+value of one (1) is assumed. The algorithm is D8 flow accumulation.
+
+<DT><EM>disturbed.land</EM> 
+
+<DD>Raster map input layer or value containing the percent of disturbed
+land (i.e., croplands, and construction sites) where the raster or input
+value of 17 equals 17%.  If no map or value is given, <EM>r.watershed</EM>
+assumes no disturbed land.  This input is used for the RUSLE calculations.
+
+<DT><EM>blocking</EM> 
+
+<DD>Input map: terrain that will block overland surface flow.  Terrain
+that will block overland surface flow and restart the slope length
+for the RUSLE.  Any non-zero values indicate blocking terrain.
+
+<DT><EM>threshold</EM> 
+
+<DD>The minimum size of an exterior watershed basin in cells, if no flow
+map is input, or overland flow units when a flow map is given.
+Warning: low threshold values will dramactically increase run time and
+generate difficult too read basin and half.basin results.
+This parameter also controls the level of detail in the <em>stream</em>
+segments map.
+
+<DT><EM>max.slope.length</EM> 
+
+<DD>Input value indicating the maximum length of overland surface flow
+in meters.  If overland flow travels greater than the maximum length,
+the program assumes the maximum length (it assumes that landscape
+characteristics not discernible in the digital elevation model exist
+that maximize the slope length).  This input is used for the RUSLE calculations
+and is a sensitive parameter.
+
+<DT><EM>accumulation</EM> 
+
+<DD>Output map: The absolute value of each cell in this output map layer is
+the amount of overland flow that traverses the cell. This value will be
+the number of upland cells plus one if no overland flow map is given. If
+the overland flow map is given, the value will be in overland flow units.
+Negative numbers indicate that those cells possibly have surface runoff
+from outside of the current geographic region. Thus, any cells with
+negative values cannot have their surface runoff and sedimentation yields
+calculated accurately.
+
+<DT><EM>drainage</EM> 
+
+<DD>Output map: drainage direction.  Provides the "aspect" for each
+cell.  Multiplying positive values by 45 will give the direction in
+degrees that the surface runoff will travel from that cell.  The
+value -1 indicates that the cell is a depression area (defined by
+the depression input map).  Other negative values indicate that
+surface runoff is leaving the boundaries of the current geographic
+region.  The absolute value of these negative cells indicates the
+direction of flow.
+
+<DT><EM>basin</EM> 
+
+<DD>Output map: Unique label for each watershed basin.  Each basin will
+be given a unique positive even integer.  Areas along edges may not
+be large enough to create an exterior watershed basin.  0 values
+indicate that the cell is not part of a complete watershed basin
+in the current geographic region.
+
+<DT><EM>stream</EM> 
+
+<DD>Output map: stream segments.  Values correspond to the watershed
+basin values.
+
+<DT><EM>half.basin</EM> 
+
+<DD>Output map: each half-basin is given a unique value.  Watershed
+basins are divided into left and right sides.  The right-hand side
+cell of the watershed basin (looking upstream) are given even values
+corresponding to the values in basin.  The left-hand side
+cells of the watershed basin are given odd values which are one less
+than the value of the watershed basin.
+
+<DT><EM>visual</EM> 
+
+<DD>Output map: useful for visual display of results.
+Surface runoff accumulation with the values
+modified to provide for easy display.  All negative accumulation values
+are changed to zero.  All positive values above the basin threshold
+are given the value of the <em>threshold</em> parameter.
+
+<DT><EM>length.slope</EM> 
+
+<DD>Output map: slope length and steepness (LS) factor.  Contains the LS
+factor for the Revised Universal Soil Loss Equation.  Equations taken
+from <EM>Revised Universal Soil Loss Equation for Western Rangelands</EM>
+(Weltz et al. 1987).
+Since the LS factor is a small number, it is multiplied by 100 for the
+GRASS output map.
+
+<DT><EM>slope.steepness</EM> 
+
+<DD>Output map: slope steepness (S) factor for RUSLE.
+Contains the revised S factor for the Universal Soil
+Loss Equation.  Equations taken from article entitled
+<EM>Revised Slope Steepness Factor for the Universal Soil
+Loss Equation</EM> (McCool et al. 1987).  Since the S factor
+is a small number (usually less than one), it is multiplied
+by 100 for the GRASS output map layer.
+</dd>
+</dl>
+
+
+<H2>NOTES</H2>
+
+<EM>r.watershed</EM> uses an algorithm designed to minimize the impact of
+DEM data errors. This algorithm works slower than <EM>r.terraflow</EM> but
+provides more accurate results in areas of low slope as well as DEMs
+constructed with techniques that mistake canopy tops as the ground elevation.
+Kinner et al. (2005), for example, used SRTM and IFSAR DEMs to compare
+<EM>r.watershed</EM> against <EM>r.terraflow</EM> results in Panama.
+<EM>r.terraflow</EM> was unable to replicate stream locations in the larger
+valleys while  <EM>r.watershed</EM> performed much better. Thus, if forest
+canopy exists in valleys, SRTM, IFSAR, and similar data products will cause
+major errors in <EM>r.terraflow</EM> stream output. Under similar conditions,
+<EM>r.watershed</EM> will generate better <b>stream</b> and <b>half.basin</b>
+results. If watershed divides contain flat to low slope, <EM>r.watershed</EM>
+will generate better basin results than <EM>r.terraflow</EM>.
+(<EM>r.terraflow</EM> uses the same type of algorithm as ESRI's ArcGIS
+watershed software which fails under these conditions.) Also, if watershed
+divides contain forest canopy mixed with uncanopied areas using SRTM, IFSAR,
+and similar data products, <EM>r.watershed</EM> will generate better basin
+results than <EM>r.terraflow</EM>.
+
+<P>
+There are two versions of this program: <EM>ram</EM> and <EM>seg</EM>.
+Which is version is run depends on whether the <EM>-m</EM> flag is set.
+<BR>
+The <EM>ram</EM> version uses virtual memory managed by the operating
+system to store all the data structures and is faster than the <EM>seg</EM>
+version;
+<EM>seg</EM> uses the GRASS segmentation library which manages data in disk
+files. Thus <EM>seg</EM> uses much less system memory (RAM) allowing other
+processes to operate on the same CPU, even when the current geographic
+region is huge.
+<BR>
+Due to memory requirements of both programs, it is quite easy to run out of
+memory when working with huge map regions. If the <EM>ram</EM> version runs
+out of memory and the resolution size of the current geographic region
+cannot be increased, either more memory  needs to be added to the computer,
+or the swap space size needs to be increased.  If <EM>seg</EM> runs out of
+memory, additional disk space needs to be freed up for the program to run.
+
+<P>
+Both versions use the A<sup>T</sup> least-cost search algorithm to determine
+the flow of water over the landscape (see <a href="#seealso">SEE ALSO</a>
+section).
+The algorithm produces results similar to those obtained when running
+<EM><A HREF="r.cost.html">r.cost</A></EM> and
+<EM><A HREF="r.drain.html">r.drain</A></EM> on every cell on the map.
+
+<P>
+In many situations, the elevation data will be too finely detailed for
+the amount of time or memory available.  Running <EM>r.watershed</EM> may
+require use of a coarser resolution.  To make the results more closely
+resemble the finer terrain data, create a map layer containing the
+lowest elevation values at the coarser resolution.  This is done by:
+1) Setting the current geographic region equal to the elevation map
+layer with <EM>g.region</EM>, and 2) Use the <EM>r.neighbors</EM> or
+<EM>r.resamp.stats</EM> command to find the lowest value for an area
+equal in size to the desired resolution.  For example, if the resolution
+of the elevation data is 30 meters and the resolution of the geographic
+region for <EM>r.watershed</EM> will be 90 meters:  use the minimum 
+function for a 3 by 3 neighborhood.  After changing to the resolution at
+which <EM>r.watershed</EM> will be run, <EM>r.watershed</EM> should be run
+using the values from the <EM>neighborhood</EM> output map layer that
+represents the minimum elevation within the region of the coarser cell.
+
+<P>
+The minimum size of drainage basins, defined by the <em>threshold</em>
+parameter, is only relevant for those watersheds with a single stream
+having at least the <em>threshold</em> of cells flowing into it.
+(These watersheds are called exterior basins.)
+Interior drainage basins contain stream segments below multiple tributaries.
+Interior drainage basins can be of any size because the length of
+an interior stream segment is determined by the distance between the
+tributaries flowing into it.
+
+<P>
+The <EM>r.watershed</EM> program does not require the user to have the
+current geographic region filled with elevation values.  Areas without
+elevation data MUST be masked out, by creating a raster map (or raster
+reclassification) named <tt>MASK</tt>.  Areas
+masked out will be treated as if they are off the edge of the region.
+MASKs will reduce the memory necessary to run the program.  Masking out 
+unimportant areas can significantly reduce processing time if the watersheds 
+of interest occupy a small percentage of the overall area.
+
+<P>
+Zero data values will be treated as elevation data (not no_data).
+
+<P>
+To isolate an individual river network using the output of this module,
+a number of approaches may be considered.
+<OL>
+<LI>Use a resample of the basins catchment raster map as a MASK.<BR>
+  The equivalent vector map method is similar using <em>v.select</em> or
+  <em>v.overlay</em>.
+<LI>Use the <em>r.cost</em> module with a point in the river as a starting
+  point.
+<LI>Use the <em>v.net.iso</em> module with a node in the river as a
+  starting point.
+</OL>
+
+
+<P>
+To create <i>river mile</i> segmentation from a vectorized streams map,
+try the <em>v.net.iso</em> or <em>v.lrs.segment</em> modules.
+
+
+<H2>EXAMPLES</H2>
+<i>These examples use the Spearfish sample dataset.</i>
+<P>
+Convert <em>r.watershed</em> streams map output to a vector layer.
+<P>
+If you want a detailed stream network, set the threshold option
+small to create lots of catchment basins, as only one stream is
+presented per catchment. The r.to.vect -v flag preserves the
+catchment ID as the vector category number.
+
+<div class="code"><pre>
+  r.watershed elev=elevation.dem stream=rwater.stream
+  r.to.vect -v in=rwater.stream out=rwater_stream
+</pre></div>
+<BR>
+
+<P>
+Set a nice color table for the accumulation map:
+<div class="code"><pre>
+  MAP=rwater.accum
+  r.watershed elev=elevation.dem accum=$MAP
+
+  eval `r.univar -g "$MAP"`
+  stddev_x_2=`echo $stddev | awk '{print $1 * 2}'`
+  stddev_div_2=`echo $stddev | awk '{print $1 / 2}'`
+
+  r.colors $MAP col=rules << EOF
+    0% red
+    -$stddev_x_2 red
+    -$stddev yellow
+    -$stddev_div_2 cyan
+    -$mean_of_abs blue
+    0 white
+    $mean_of_abs blue
+    $stddev_div_2 cyan
+    $stddev yellow
+    $stddev_x_2 red
+    100% red
+  EOF
+</pre></div>
+<BR>
+
+
+<P>
+Create a more detailed stream map using the accumulation map and convert
+it to a vector output map. The accumulation cut-off, and therefore fractal
+dimension, is arbitrary; in this example we use the map's mean number of
+upstream catchment cells (calculated in the above example by <em>r.univar</em>)
+as the cut-off value.
+<div class="code"><pre>
+  r.watershed elev=elevation.dem accum=rwater.accum
+
+  r.mapcalc 'MASK = if(!isnull(elevation.dem))'
+  r.mapcalc "rwater.course = \
+   if( abs(rwater.accum) > $mean_of_abs, \
+       abs(rwater.accum), \
+       null() )"
+  r.colors -g rwater.course col=bcyr
+  g.remove MASK
+
+  # <i>Thinning is required before converting raster lines to vector</i>
+  r.thin in=rwater.course out=rwater.course.Thin
+  r.colors -gn rwater.course.Thin color=grey
+  r.to.vect in=rwater.course.Thin out=rwater_course feature=line
+  v.db.dropcol map=rwater_course column=label
+</pre></div>
+<!-- can't set line attribute to catchment it is in as v.what.rast and 
+  v.distance only work for point features. Could create endpoint node
+  points map and upload to that ?? -->
+<!-- Note value column containing accumulation cells in output vector
+  may not necessarily reference the downstream end of the line! drop it? -->
+<BR>
+
+<P>
+Create watershed basins map and convert to a vector polygon map
+<div class="code"><pre>
+  r.watershed elev=elevation.dem basin=rwater.basin thresh=15000
+  r.to.vect -s in=rwater.basin out=rwater_basins feature=area
+  v.db.dropcol map=rwater_basins column=label
+  v.db.renamecol map=rwater_basins column=value,catchment
+</pre></div>
+<BR>
+
+<P>
+Display output in a nice way
+<div class="code"><pre>
+  r.shaded.relief map=elevation.dem
+  d.shadedmap rel=elevation.dem.shade drape=rwater.basin bright=40
+  d.vect rwater_course color=orange
+</pre></div>
+<BR>
+
+<a name="references"></a>
+<H2>REFERENCES</H2>
+
+
+Ehlschlaeger, C. (1989). <i>Using the A<sup>T</sup> Search Algorithm
+to Develop Hydrologic Models from Digital Elevation Data</i>,
+<b>Proceedings of International Geographic Information Systems (IGIS)
+Symposium '89</b>, pp 275-281 (Baltimore, MD, 18-19 March 1989).<BR>
+URL: <a href="http://faculty.wiu.edu/CR-Ehlschlaeger2/older/IGIS/paper.html">
+http://faculty.wiu.edu/CR-Ehlschlaeger2/older/IGIS/paper.html</a>
+
+<P>
+Kinner D., H. Mitasova, R. Harmon, L. Toma, R., Stallard. (2005).
+<i>GIS-based Stream Network Analysis for The Chagres River Basin,
+Republic of Panama</i>. <b>The Rio Chagres: A Multidisciplinary Profile of
+a Tropical Watershed</b>, R. Harmon (Ed.), Springer/Kluwer, p.83-95.<BR>
+URL: <a href="http://skagit.meas.ncsu.edu/%7Ehelena/measwork/panama/panama.html">
+http://skagit.meas.ncsu.edu/~helena/measwork/panama/panama.html</a>
+
+<P>
+McCool et al. (1987). <i>Revised Slope Steepness Factor for the Universal
+Soil Loss Equation</i>, <b>Transactions of the ASAE</b> Vol 30(5).
+
+<P>
+Weltz M. A., K. G. Renard, J. R. Simanton (1987). <i>Revised Universal Soil
+Loss Equation for Western Rangelands</i>, <b>U.S.A./Mexico Symposium of
+Strategies for Classification and Management of Native Vegetation for
+Food Production In Arid Zones</b> (Tucson, AZ, 12-16 Oct. 1987).
+
+<a name="seealso"></a>
+<H2>SEE ALSO</H2>
+
+<EM>
+<a href="g.region.html">g.region</a>,
+<a href="r.cost.html">r.cost</a>,
+<a href="r.drain.html">r.drain</a>,
+<a href="r.flow.html">r.flow</a>,
+<!-- <a href="r.flowmd.html">r.flowmd</a>, -->
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="r.param.scale.html">r.param.scale</a>,
+<a href="r.resamp.interp.html">r.resamp.interp</a>,
+<a href="r.terraflow.html">r.terraflow</a>,
+<a href="r.topidx.html">r.topidx</a>,
+<a href="r.water.outlet.html">r.water.outlet</a>
+</EM>
+
+
+<H2>AUTHOR</H2>
+
+Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
+<p>
+<i>Last changed: $Date$</i>

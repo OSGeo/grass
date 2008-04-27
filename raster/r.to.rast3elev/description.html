@@ -1,0 +1,58 @@
+<H2>DESCRIPTION</H2>
+
+Creates a 3D volume map based on 2D elevation and value raster maps.
+If the 2d and 3d region settings are different,
+the 2d resolution will be adjust to the 3d resolution.
+
+<center>
+<img src=r.to.rast3elev.png border=0><BR>
+<table border=0 width=700>
+<tr><td><center>
+<i>How r.to.rast3elev works</i>
+</center></td></tr>
+</table>
+</center>
+
+
+<H2>NOTES</H2>
+The hight of the 2D elevation maps will be used to verify the position 
+within the 3D region. If the cell value of the elevation raster maps is located within the 3d region, the 
+cell value of the appropriate 2D input raster maps will be written to the associated 3d cell.
+There are flags and options to fill the upper and lower 3D cells with a specific value, or the
+input raster maps values.
+
+<h2>Example</h2>
+Simple Spearfish example
+
+<div class="code"><pre>
+g.region -d
+g.region res=200 res3=200 t=5000 b=0 tbres=100
+
+# Write the values of raster map soils based on the elevation of elevation.10m
+# to the 3D map volev
+
+r.elev.to.rast3 in=soils elev=elevation.10m out=volev
+
+# Write the values of map soils based on the elevation of elevation.10m
+# to the 3D map volev_l and fill the lower cells with the soils map values
+
+r.elev.to.rast3 in=soils elev=elevation.10m out=volev_l -l
+
+# Write the values of map soils based on the elevation of elevation.10m
+# to the 3D map volev_u and fill the upper cells with the soils map values
+
+r.elev.to.rast3 in=soils elev=elevation.10m out=volev_u -u
+
+
+</pre></div>                                                                           
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.to.rast3.html">r.to.rast3</A></EM><br>
+<EM><A HREF="r3.cross.rast.html">r3.cross.rast</A></EM><br>
+<EM><A HREF="g.region.html">g.region</A></EM><br>
+
+<H2>AUTHOR</H2>
+Soeren Gebbert
+
+<p><i>Last changed: $Date$</i>

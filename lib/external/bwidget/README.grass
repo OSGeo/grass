@@ -1,0 +1,38 @@
+README.grass - written by Justin Hickey - jhickey@hpcc.nectec.or.th
+
+This directory contains an extension to Tcl/Tk (called BWidget) that provides
+new and enhanced widgets. It is not a new interpreter but simply Tcl/Tk files
+that provide the functionality. Therefore, there is nothing to compile and it
+only requires 2 lines of code in your Tcl/Tk script to use the new widgets.
+Some of the new widgets include
+
+    On mouse over help balloons
+    Tabbed notebook panes - like worksheets in Excel
+    Directory tree listing
+    Combination box or drop down option list
+    Progress bar
+    Many others
+
+For a demonstration of the new widgets available perform the following
+
+    cd demo
+    wish demo.tcl
+    
+It may take some time to load, but it demonstrates all or most of the new
+features.
+
+To use these widgets with GRASS Tcl/Tk scripts (including tcltkgrass) then add
+the following two lines to your main Tcl/Tk script
+
+    lappend auto_path $env(GISBASE)/bwidget
+    package require BWidget
+
+Then simply use the new widgets as if they were already part of Tcl/Tk. To find
+out more information on using the new widgets see the manual pages in
+./BWman/index.html
+
+For more information on BWidget see their home page at
+
+http://www.unifix-online.com/BWidget/
+
+or read the README file in this directory.

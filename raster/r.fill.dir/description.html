@@ -1,0 +1,108 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM><b>r.fill.dir</b></EM> filters and generates a depressionless
+elevation map and a flow direction map from a given elevation layer.
+
+<H2>EXAMPLE</H2>
+
+<div class="code"><pre>
+r.fill.dir input=ansi.elev elevation=ansi.fill.elev direction=ansi.asp
+</pre></div>
+
+<P>
+will create a depressionless (sinkless) elevation map ansi.fill.elev and a flow
+direction map ansi.asp for the type "grass".
+
+<H2>ATTENTION</H2>
+
+<EM>The type</EM> is the type of format at which the user wishes to create
+the flow direction map. The <EM>agnps</EM> format gives category values from
+1-8, with 1 facing north and increasing values in the clockwise direction.
+The <EM>answers</EM> format gives category values from 0-360 degrees, with 0
+(360) facing east and values increasing in the counter clockwise direction
+at 45 degree increments. The <EM>grass</EM> format gives the same category
+values as the <EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
+program.<P>
+
+<EM>The method</EM> adopted to filter the elevation map and rectify it is
+based on the paper titled "Software Tools to Extract Structure from Digital
+Elevation Data for Geographic Information System Analysis" by S.K. Jenson
+and J.O. Domingue (1988).
+
+<P>
+
+The procedure takes an elevation layer as input and initially fills all the
+depressions with one pass across the layer. Next the flow direction
+algorithm tries to find a unique direction for each cell. If the watershed
+program detects areas with pothholes, it delineates this area from the rest
+of the area and once again the depressions are filled using the neighborhood
+technique used by the flow direction routine. The final output will be a
+depressionless elevation layer and a unique flow direction layer.
+<p>
+
+This (D8) flow algorithm performs as follows: At each raster cell the code
+determines the slope to each of the 8 surrounding cells and assigns the flow
+direction to the highest slope out of the cell.  If there is more than one
+equal, non-zero slope then the code picks one direction based on preferences
+that are hard-coded into the program.  If the highest slope is flat and in
+more than one direction then the code first tries to select an alternative
+based on flow directions in the adjacent cells.  It iteratives that process,
+effectively propagating flow directions from areas where the directions are
+known into the area where the flow direction can't otherwise be resolved.
+
+<P>
+The flow direction map can be encoded in either ANSWERS (Beasley et.al,
+1982) or AGNPS (Young et.al, 1985) form, so that it can be readily used as
+input to these hydrologic models. The resulting depressionless elevation
+layer can further be manipulated for deriving slopes and other attributes
+required by the hydrologic models.
+<P>
+
+In case of local problems, those unfilled areas can be stored optionally.
+Each unfilled area in this maps is numbered. The flag <EM>"-f"</EM>
+instructs the program to fill single-cell pits but otherwise to just find
+the undrained areas and exit. With the <EM>"-f"</EM> flag set the program
+writes an elevation map with just single-cell pits filled, a direction map
+with unresolved problems and a map of the undrained areas that were found
+but not filled. This option was included because filling DEMs was often not
+the best way to solve a drainage problem. These options let the user get a
+partially-fixed elevation map, identify the remaining problems and fix the
+problems appropriately.
+
+<H2>NOTE</H2>
+
+<EM>The r.fill.dir</EM> program is sensitive to the <B>current window
+setting</B>. Thus the program can be used to generate a flow direction map
+for any sub-area within the full map layer. Also, <EM>r.fill.dir</EM> is
+sensitive to any <EM>mask</EM> in effect.
+<p>
+
+In some cases it may be necessary to run r.fill.dir repeatedly (using output
+from one run as input to the next run) before all of problem areas are
+filled.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="r.fillnulls.html">r.fillnulls</A>,
+<A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
+
+<P>
+Jenson, S.K., and J.O. Domingue. 1988. Extracting topographic structure from
+digital elevation model data for geographic information system analysis. Photogram. Engr. and Remote Sens. 54: 1593-1600.
+<P>
+Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental response simulation): User's manual. U.S. EPA-905/9-82-001, Chicago, IL, 54 p.
+<P>
+Young, R.A., C.A. Onstad, D.D. Bosch and W.P. Anderson. 1985. Agricultural nonpoint surface pollution models (AGNPS) I and II model documentation. St. Paul: Minn. Pollution control Agency and Washington D.C., USDA-Agricultural Research
+Service.
+
+
+<H2>AUTHOR</H2>
+Fortran version:
+Raghavan Srinivasan, Agricultural Engineering Department, Purdue
+University<br>
+Rewrite to C with enhancements:
+Roger S. Miller
+
+<p><i>Last changed: $Date$</i>

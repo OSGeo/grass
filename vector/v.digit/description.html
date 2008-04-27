@@ -1,0 +1,87 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.digit</em> is a vector map digitizer with graphical user interface.
+Attribute tables can be directly generated while digitizing (define in
+"Settings" first).
+
+<h2>NOTES</h2>
+
+The <b>bgcmd</b> option is intended to be used with display (d.*) commands.
+If several display commands are to be used to render the background
+they should be separated with the semi-colon ';' character.
+When run from the command line, these display commands will generally
+need to be "quoted" as they will contain spaces (see examples).
+<P>
+<b>Dead (deleted) lines</b>: If a user deletes a line in <em>v.digit</em>,
+it is internally only marked in the geometry file as 'dead' but it remains
+there and occupies space. Any vector module used afterwards on this map
+which really reads and writes vector geometry (so not <em>g.copy</em>) will
+writes only lines which are 'alive'.
+
+<h2>EXAMPLES</h2>
+
+<h4>Start a monitor and display a raster to help setup and zoom to area of interest</h4>
+<div class="code"><pre>
+d.mon x0
+d.rast name_of_raster
+</pre></div>
+
+<p>
+
+<h4>Digitizing an area based on a existing raster map; creating a new vector map</h4>
+<div class="code"><pre>
+v.digit -n map=name_of_new_vector_map bgcmd="d.rast map=name_of_raster"
+</pre></div>
+<p>
+The "<b>-n</b>" flag specifies that your vector map does not yet exist and
+thus will be created with the name given by "<b>map=</b>". "<b>bgcmd=</b>"
+specifies a display (d.*) command and is set in "quotes" as it contains a space.
+<p>
+The <em>v.digit</em> GUI appears -- after exiting <em>v.digit</em> GUI the 
+vector map "name_of_new_vector_map" is created.
+<P>
+After leaving <em>v.digit</em>, run:
+<div class="code"><pre>
+d.erase
+d.vect "name_of_new_vector_map" 
+</pre></div>
+The display should be cleared and the newly created vector should appear in 
+the monitor.
+<p>
+
+<h4>Digitizing a second vector, using your first vector and the raster image
+as background</h4>
+<p>
+<div class="code"><pre>
+v.digit -n map=name_of_second_vector \
+bgcmd="d.rast map=name_of_your_raster; d.vect map=name_of_new_vector_map"
+</pre></div>
+<p>
+The <em>v.digit</em> GUI appears and the layers defined with <b>bgcmd</b>
+are displayed in the background. As the <b>bgcmd</b> commands are executed 
+as a series of commands (separated by a ";"), the last command (d.vect)
+displays over the top of the earlier raster image.<br>
+<p>
+
+<h4> Combining <b>bgcmd</b> with <em>d.save</em> to use the existing
+display as a backdrop</h4>
+<P>
+<div class="code"><pre>
+v.digit map=name bgcmd="`d.save -o | cut -f1 -d'#' | tr '\n' ';'`"
+</pre></div>
+
+<a href="d.save.html"><em>d.save</em></a> will list the commands used to draw
+the current display; <em>cut</em> and <em>tr</em> are UNIX commands which are
+used to remove comments and trade newlines for semi-colons, respectively.
+
+<h2>SEE ALSO</h2>
+<a href="r.digit.html">r.digit</a><BR>
+<a href="v.clean.html">v.clean</a><BR>
+<a href="v.edit.html">v.edit</a>
+
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>

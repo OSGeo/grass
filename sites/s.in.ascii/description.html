@@ -1,0 +1,148 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>s.in.ascii</EM> converts an ASCII listing of site
+locations and category labels into GRASS vector format.
+
+<P>
+
+Input can be entered via standard input or from the file
+<B>input=</B><EM>name</EM>. Each line of input should
+contain the easting, northing, and either the category value
+or category label associated with a site.  The
+<B>fs=</B><EM>name</EM> option (where <EM>name</EM> is
+either a character, a space, or a tab) can be used to
+specify the use of a particular field separator between
+these three input fields. This is useful when input is
+obtained from other programs (see NOTES, below).  Output is
+stored in the vector map <B>output=</B><EM>name</EM>.
+
+<P>
+
+The GRASS program <EM><a href="s.out.ascii.html">s.out.ascii</a></EM>
+can be used to perform the reverse function, converting a file in GRASS
+vector sites format into an ASCII listing of eastings, northings, and 
+category labels associated with site locations.
+
+
+<H3>Parameters:</H3>
+
+<DL>
+<DT><B>output=</B><EM>name</EM>
+<DD>Name of the new GRASS site list file to be output. 
+<DT><B>input=</B><EM>name</EM>
+<DD>Name of an existing ASCII file containing site locations and labels. 
+<DT><B>d=</B><EM>value</EM>
+<DD>number of dimensions (default=2)
+<DT><B>fs=</B><EM>character|space|tab</EM>
+<DD>The field separator separating the easting, northing, and category label 
+    in each line of the <EM>input</EM> file. 
+    The field separator can be a character, a space, or a tab. 
+<BR>
+    Default: space 
+<DT><B>date=</B><EM>timestamp</EM>[/<EM>timestamp</EM>]
+<DD>String specifying timestamp or timestamp range.
+</DL>
+
+<P>
+
+<EM>s.in.ascii</EM> can be run either non-interactively or
+interactively.  The program will be run non-interactively
+if the user specifies a name to be assigned to the
+<B>sites</B> file output, the name of an existing ASCII
+file containing <B>input</B>, and (optionally) a field
+separator <B>fs</B> appearing in the <B>input</B> file.
+
+<P>
+
+Alternately, the user can simply type <B>s.in.ascii</B> on
+the command line, without program arguments. In this case,
+the user will be prompted for parameter values using the
+standard GRASS parser interface described in the manual
+entry for <EM><a href="parser.html">parser</a></EM>. If 
+the user does not specify the name of an <B>input</B> 
+file containing site locations and category attributes,
+these should be entered to the program via standard input. 
+The <B>d</B> parameter allows the user to specify that more 
+than 2 dimensions will be imported. Otherwise the third (or 
+further) column in the <B>input</B> file will be treated as an attribute.
+
+<P>To define a <B>date</B> (timestamp), several date strings are accepted.
+Please see <EM><A HREF="r.timestamp.html">r.timestamp</A></EM> for details.
+
+<p>
+<H2>NOTES</H2>
+
+<B>Importing from other GRASS programs</B>
+<p>
+Other GRASS programs can be used to produce output in a
+format suitable for input to <EM>s.in.ascii</EM>. For
+example, the user might pipe output produced by
+<EM><a href="d.where.html">d.where</a></EM> into 
+<EM>s.in.ascii</EM> to create a site
+list file called <EM>my.sites</EM> containing site
+locations pointed to with the mouse, as illustrated below.
+In this example it is unnecessary to specify the field
+separator used in the input, since <EM>d.where</EM> output
+separates the easting and northing values with spaces, and
+spaces are the default field separator assumed by
+<EM>s.in.ascii</EM>.
+<P>
+<DL>
+<DD><B>d.where</B> | <B>s.in.ascii output=</B>my.sites
+</DL>
+<p>
+<B>Importing from a spreadsheet</B>
+<p>
+Data may be imported from many spreadsheet programs by saving the spreadsheet
+as a comma separated variable (.csv) text file, and then using 
+the "<b>fs=</b><EM>,</EM>" command line parameter with <EM>s.in.ascii</EM>.
+<p>
+<b>Importing latitude/longitude data</b>
+<p>
+Latitude/longitude data may be imported either in decimal degree format:<br>
+
+<pre>
+    8.314824 54.921730 site1
+    8.897605 54.872353 site2
+    9.549371 54.834080 site3
+</pre>
+
+or in DMS (degree, minutes, seconds) format:<br>
+
+<pre>
+    8:18:53.3664E 54:55:18.228N site1
+    8:53:51.378E  54:52:20.4708N site2
+    9:32:57.7356E 54:50:02.688N site3
+</pre>
+
+<p>
+<b>Time as String Attributes</b>
+<p>
+
+In this example, we will work with the following site list:
+
+<pre>
+    10.8 0 9.8 Fri Sep 13 10:00:00 1986 31.4
+    11 5.5 9.9 Fri Sep 14 00:20:00 1985 36.4
+    5.1 3.9 10 Fri Sep 15 00:00:30 1984 28.4
+</pre>
+
+This data has three dimensions (assume easting, northing, and
+elevation),  five string attributes, and one decimal attribute.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.vect.html">d.sites</A></EM>,
+<EM><A HREF="d.what.vect.html">d.what.vect</A></EM>,
+<EM><A HREF="d.where.html">d.where</A></EM>,
+<EM><A HREF="r.timestamp.html">r.timestamp</A></EM>,
+<EM><A HREF="s.out.ascii.html">s.out.ascii</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,  
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i>

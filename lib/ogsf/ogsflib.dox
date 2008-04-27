@@ -1,0 +1,902 @@
+/*! \page ogsflib GRASS openGL gsurf OGSF Library
+<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+     by M. Neteler 2/2004
+  -->
+<title>GRASS openGL gsurf OGSF Library</title>
+
+\section ogsfintro OGSF Library for OpenGL programming (gsurf) 
+
+
+<P>
+Author: Bill Brown GMSL/University of Illinois
+
+<b>Overview</b>
+
+<P>
+The OGSF (gsurf)  library, consisting of approximately 20,000 lines of
+C code, contains some 180 public functions and about twice as many
+internal functions for run-time data storage, manipulation, querying,
+and visualization using OpenGL.  The library handles all drawing and
+lighting operations, including use of user-defined clipping planes and
+drawing various style "fences" on clipping planes when drawing
+multiple surfaces, and treats datasets as objects which can be used
+for various attributes of the rendering.  It allows data sharing
+(e.g., same data for more than one attribute of same or different
+surfaces) , separate masking for each surface, multiple surfaces,
+vector sets, or point sets, and will also allow multiple volumes.  The
+library provides all query features such as 3D "point on surface",
+keyframe animation routines, and full state saving functionality.
+Database-specific routines for interfacing with the GRASS GISlib are
+kept isolated for easier library reuse with other databases.  The
+gsurf library is not dependent upon any particular interface library,
+and has been used successfully with both Motif and Tcl/Tk. It is used
+for NVIZ visualization tool.
+
+<P>
+The library is designed to provide a unique "handle" or identifier
+number to the calling program for each new geographic object added to
+the model.  The object could be a surface, vector set, or point set,
+which could each be defined by one or more database files.  Once
+created, the application only needs to keep track of the "handles" to
+the objects (which are returned by the creation routines) ; for
+example, to draw a surface the application would make the call:
+<BR>
+<P>
+GS_draw_surf(id) 
+<BR>
+<P>
+where <I>id</I> is the handle number.  To associate a vector set with
+a surface and then draw all surfaces with the vector set draped over
+the one selected, the application would use the calls:
+<BR>
+<P>
+GV_select_surf(vid, sid) 
+<BR>
+<P>
+GS_alldraw_surf()  
+<BR>
+<P>
+GV_draw_vect(vid) 
+<BR>
+<P>
+where <I>vid</I> and <I>sid</I> are the handles for the vector set and
+surface.  Similarly, to query or change attributes of the object, the
+handle is used in conjunction with the new attribute, as in:
+
+GV_set_vectmode(id, mem, color, width)
+
+
+\subsection Naming_Conventions Naming Conventions
+
+<P>
+The following naming conventions for function prefixes are used:
+
+<UL>
+<LI><B>GS_</B>
+        Functions which have to do with loading &amp; manipulating
+        surfaces.  Also functions for library initialization,
+        setting global variables, viewer positioning, and lighting.
+</LI>
+<LI><B>GSU_</B>
+        Utility functions for distance calculations, common 2D &amp; 3D
+        unit vector operations such as cross product or vector arithmetic.
+</LI>
+<LI><B>GV_</B>
+        Functions which have to do with loading &amp; manipulating
+        vector sets. 
+</LI>
+<LI><B>GP_</B>
+        Functions which have to do with loading &amp; manipulating
+        point sets. 
+</LI>
+<LI><B>GVL_</B>
+        Functions which have to do with loading &amp; manipulating 3D
+        volumes.
+</LI>
+<LI><B>GK_</B>
+        Functions which have to do with setting &amp; manipulating 
+        keyframes for viewer position animation (fly-bys) .
+</LI>
+</UL>
+
+<P>
+Programmers' documentation is currently incomplete, but see the
+following for more details of the library design and capabilities in
+the appendix (PLEASE ADD EXPLANATIONS!!):
+
+<P>
+
+<UL>
+<LI>public function prototypes
+</LI>
+<LI>public include file gsurf.h
+</LI>
+<LI>public include file keyframe.h
+</LI>
+<LI>public color packing utility macros rgbpack.h
+</LI>
+<LI>private types and defines gstypes.h
+</LI>
+<LI>private utilities gsget.h
+</LI>
+</UL>
+
+<P>
+
+\section Public_function_prototypes Public function prototypes
+
+\subsection Function_Prototypes_for_gsurf_Library Function Prototypes
+      for gsurf Library 
+
+\subsection gs_init Initialization and positioning (GS)
+
+Functions which have to do with loading &amp; manipulating surfaces.
+Also functions for library initialization, setting global variables,
+viewer positioning, and lighting.
+
+<P>
+void *GS_Get_ClientData(int id) 
+
+<P>
+float GS_P2distance (float *from, float *to) 
+
+<P>
+GS_Set_ClientData(int id, void *clientd) 
+
+<P>
+GS_alldraw_cplane_fences() 
+
+<P>
+GS_alldraw_surf() 
+
+<P>
+GS_alldraw_wire() 
+
+<P>
+GS_background_color() 
+
+<P>
+int GS_check_cancel() 
+
+<P>
+GS_clear(int col) 
+
+<P>
+GS_default_draw_color() 
+
+<P>
+GS_delete_surface(int id) 
+
+<P>
+GS_distance (float *from, *to) 
+
+<P>
+GS_done_draw() 
+
+<P>
+int GS_draw_X(int id, float *pt) pt only has to have an X &amp; Y value
+  in true world coordinates
+
+<P>
+GS_draw_cplane(int num) 
+
+<P>
+GS_draw_cplane_fence(int hs1, int hs2, int num) 
+
+<P>
+GS_draw_lighting_model() 
+
+<P>
+GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2) 
+
+<P>
+GS_draw_surf(int id) 
+
+<P>
+GS_draw_wire(int id) 
+
+<P>
+int GS_dv3norm(double dv1[3]) 
+
+Changes dv1 so that it is a unit vector
+
+<P>
+double GS_geodistance(double *from, double *to, char
+  *units) distance between 2 coordinates
+
+Returns distance between two geographic coordinates in current
+projection.
+
+<P>
+Units is one of:
+    "meters",
+    "miles",
+    "kilometers",
+    "feet",
+    "yards",
+    "nmiles" (nautical miles),
+    "rods",
+    "inches",
+    "centimeters",
+    "millimeters",
+    "micron",
+    "nanometers",
+    "cubits",
+    "hands",
+    "furlongs",
+    "chains".
+
+<P>
+Default is meters.
+
+<P>
+GS_get_SDscale(float *scale) 
+
+<P>
+GS_get_SDsurf(int id) 
+
+<P>
+double GS_get_aspect() 
+
+<P>
+GS_get_att(int id, int att, int *set, float *constant, char *mapname) 
+
+<P>
+GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y) 
+
+<P>
+GS_get_dims(int id, int *rows, int *cols) 
+
+<P>
+int GS_get_distance_alongsurf(int hs, int use_exag, float x1, float
+  y1, float x2, float y2, float *dist) Returns distance following terrain.
+
+<P>
+GS_get_drawmode(int id, int mode) 
+
+<P>
+GS_get_drawres(int id, int *xres, int *yres, int *xwire, int *ywire) 
+
+<P>
+GS_get_exag_guess(int id, float *exag) 
+
+<P>
+int GS_get_fencecolor() 
+
+<P>
+GS_get_focus(float *realto) 
+
+<P>
+int GS_get_fov() Returns field of view, in 10ths of degrees.
+
+<P>
+GS_get_from(float *fr) 
+
+<P>
+GS_get_from_real(float *fr) 
+
+<P>
+GS_get_longdim(float *dim) 
+
+<P>
+GS_get_maskmode(int id, int mode) 
+
+<P>
+int GS_get_modelposition(float *siz, float pos[3]) 
+
+Retrieves coordinates for lighting model position, at center of view,
+(nearclip * 2) from eye.
+
+<P>
+GS_get_nozero(int id, int att, int *mode) 
+
+<P>
+GS_get_region(float *n, float *s, float *w, float *e) 
+
+<P>
+GS_get_scale(float *sx, float *sy, float *sz, int doexag) 
+
+<P>
+int GS_get_selected_point_on_surface(int sx, int sy, int *id, float
+  *x, float *y, float *z) 
+
+Given screen coordinates sx &amp; sy, find closest intersection of
+view ray with surfaces and return coordinates of intersection in x, y,
+z, and identifier of surface in id.
+
+<P>
+Returns 0 if no intersections found, otherwise number of intersections.
+
+<P>
+GS_get_surf_list(int *numsurfs) 
+
+<P>
+GS_get_to(float *to) 
+
+<P>
+GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans) 
+
+<P>
+int GS_get_twist() 
+
+<P>
+int GS_get_val_at_xy(int id, char *att, char *valstr, float x, float
+  y) Prints "NULL" or the value (i.e., "921.5")  to valstr.
+
+<P>
+Colors are translated to rgb and returned as Rxxx Gxxx Bxxx
+
+<P>
+Usually call after GS_get_selected_point_on_surface
+
+<P>
+Returns -1 if point outside of window or masked, otherwise 1
+
+<P>
+GS_get_viewdir(float dir[3]) 
+
+<P>
+GS_get_wire_color(int id, int *colr) 
+
+<P>
+int GS_get_zextents(int id, float *min, float *max, float
+  *mid) Returns Z extents for a single surface.
+
+<P>
+int GS_get_zrange(float *min, float *max, int doexag) Returns Z
+  extents for all loaded surfaces.
+
+<P>
+int GS_get_zrange_nz(float *min, float *max) Returns Z extents for
+    all loaded surfaces, treating zeros as "no data".
+
+<P>
+float GS_global_exag() 
+
+<P>
+int GS_has_transparency() 
+
+<P>
+GS_init_view() 
+
+<P>
+GS_is_masked(int id, float *pt) 
+
+<P>
+GS_libinit() 
+
+<P>
+GS_lights_off() 
+
+<P>
+GS_lights_on() 
+
+<P>
+GS_load_3dview(char *vname, int surfid) 
+
+<P>
+GS_load_att_map(int id, char *filename, int att)  
+
+<P>
+int GS_look_here(int sx, int sy) Reset center of view to screen
+coordinates sx, sy.
+
+<P>
+Send screen coords sx &amp; sy, lib traces through surfaces &amp; sets
+new center to point of nearest intersection.  If no intersection, uses
+line of sight with length of current view ray (eye to center) to set
+new center.
+
+<P>
+GS_moveto(float *pt) 
+
+<P>
+GS_moveto_real(float *pt) 
+
+<P>
+int GS_new_light() 
+
+<P>
+GS_new_surface() 
+
+<P>
+int GS_num_surfs() 
+
+<P>
+GS_ready_draw() 
+
+<P>
+GS_save_3dview(char *vname, int surfid) 
+
+<P>
+GS_set_SDscale(float scale) 
+
+<P>
+GS_set_SDsurf(int id) 
+
+<P>
+GS_set_att_const(int id, int  att, float constant) 
+
+<P>
+GS_set_att_defaults(float defs[MAX_ATTS], null_defs[MAX_ATTS]) 
+
+<P>
+GS_set_cancel(int c) 
+
+<P>
+GS_set_cplane(int num) 
+
+<P>
+GS_set_cplane_rot(int num, float dx, float dy, float dz) 
+
+<P>
+GS_set_cplane_trans(int num, float dx, float dy, float dz) 
+
+<P>
+GS_set_cxl_func(void (*f) () ) 
+
+<P>
+int GS_set_draw(int where) Sets which buffer to draw to.
+
+<P>
+where should be one of: GSD_BOTH, GSD_FRONT, GSD_BACK
+
+<P>
+GS_set_drawmode(int id, int mode) 
+
+<P>
+GS_set_drawres(int id, int xres, int yres, int xwire, int ywire) 
+
+<P>
+GS_set_exag(int id, float exag) 
+
+<P>
+GS_set_fencecolor(int mode) 
+
+<P>
+GS_set_focus(float *realto) 
+
+<P>
+GS_set_focus_center_map(int id) 
+
+<P>
+GS_set_fov(int fov) 
+
+<P>
+GS_set_global_exag(float exag) 
+
+<P>
+GS_set_maskmode(int id, int mode) 
+
+<P>
+GS_set_nofocus() 
+
+<P>
+GS_set_nozero(int id, int att, int mode) 
+
+<P>
+GS_set_swap_func(void (*f) () ) 
+
+<P>
+GS_set_trans(int id, float xtrans, float ytrans, float ztrans) 
+
+<P>
+int GS_set_twist(int t) t is tenths of degrees clockwise from 12:00.
+
+<P>
+GS_set_viewdir(float dir[3]) 
+
+<P>
+GS_set_viewport(int left, int right, int bottom, int top) 
+
+<P>
+GS_set_wire_color(int id, int colr) 
+
+<P>
+GS_setall_drawmode(int mode) 
+
+<P>
+GS_setall_drawres(int xres, int yres, int xwire, int ywire) 
+
+<P>
+int GS_setlight_ambient(int num, float red, float green, float
+  blue) Red, green, blue from 0.0 to 1.0
+
+<P>
+int GS_setlight_color(int num, float red, float green, float
+  blue) Red, green, blue from 0.0 to 1.0
+
+<P>
+GS_setlight_position(int num, float xpos, float ypos, float zpos, int
+local) 
+
+<P>
+GS_surf_exists(int id) 
+
+<P>
+GS_switchlight(int num, int on) 
+
+<P>
+GS_transp_is_set() 
+
+<P>
+GS_unset_SDsurf() 
+
+<P>
+GS_unset_att(int id, int att) 
+
+<P>
+GS_unset_cplane(int num) 
+
+<P>
+GS_update_curmask(int id) 
+
+<P>
+GS_update_normals(int id) 
+
+<P>
+GS_v2dir(float v1[2], float v2[2], float v3[2]) 
+
+<P>
+GS_v3add(float v1[3], float v2[3]) 
+
+<P>
+int GS_v3cross(float v1[3], float v2[3], float v3[3]) returns the
+  cross product v3 = v1 cross v2
+
+<P>
+GS_v3dir(float v1[3], float v2[3], float v3[3) 
+
+<P>
+GS_v3eq(float v1[3], float v2[3]) 
+
+<P>
+GS_v3mag(float v1[3], float *mag) 
+
+<P>
+int GS_v3mult(float v1[3], float k) v1 *= k
+
+<P>
+int GS_v3norm(float v1[3]) Changes v1 so that it is a unit vector
+
+<P>
+int GS_v3normalize(float v1[3], float v2[3]) Changes v2 so that v1v2 is a
+unit vector
+
+<P>
+int GS_v3sub(float v1[3], float v2[3]) v1 -= v2
+
+
+\subsection gv_vect Loading and manipulation of vector maps (GV)
+
+Functions which have to do with loading &amp; manipulating vector
+sets.
+<P>
+void *GV_Get_ClientData(int id) 
+
+<P>
+GV_Set_ClientData(int id, int clientd) 
+
+<P>
+GV_alldraw_vect() 
+
+<P>
+GV_delete_vector(int id) 
+
+<P>
+GV_draw_fastvect(int vid) 
+
+<P>
+GV_draw_vect(int vid) 
+
+<P>
+GV_get_trans(int  id, float *xtrans, float *ytrans, float *ztrans) 
+
+<P>
+int *GV_get_vect_list(int *numvects) USER must free when no longer needed!
+
+<P>
+GV_get_vectmode(int id, int *mem, int *color, int *width) 
+
+<P>
+GV_get_vectname(int id, char *filename) 
+
+<P>
+GV_load_vector(int id, char *filename) 
+
+<P>
+int GV_new_vector() 
+
+<P>
+int GV_num_vects() 
+
+<P>
+int GV_select_surf(int hv, int hs) Select surface identified by hs
+  to have vector identified by hv draped over it.
+
+<P>
+GV_set_trans(int id, float xtrans, float ytrans, float ztrans) 
+
+<P>
+GV_set_vectmode(int id, int mem, int color, int width) 
+
+<P>
+GV_surf_is_selected(int hv, int hs) 
+
+<P>
+GV_unselect_surf(int hv, int hs) 
+
+<P>
+GV_vect_exists(int id) 
+
+
+\subsection gp_points Loading and manipulation of point maps (GP)
+
+Functions which have to do with loading &amp; manipulating point sets.
+
+<P>
+void *GP_Get_ClientData(int id) 
+
+<P>
+GP_Set_ClientData(int id, void *clientd) 
+
+<P>
+GP_alldraw_site() 
+
+<P>
+GP_attmode_color(int id, char *filename) 
+
+<P>
+GP_attmode_none(int id) 
+
+<P>
+GP_delete_site(int id) 
+
+<P>
+GP_draw_site(int id) 
+
+<P>
+int *GP_get_site_list(int *numsites) USER must free when no
+  longer needed!
+
+<P>
+GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
+int *marker) 
+
+<P>
+GP_get_sitename(int id, char *filename) 
+
+<P>
+GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans) 
+
+<P>
+GP_get_zmode(int id, int *use_z) 
+
+<P>
+GP_load_site(int id, char *filename) 
+
+<P>
+int GP_new_site() 
+
+<P>
+int GP_num_sites() 
+
+<P>
+GP_select_surf(int hp, int hs) 
+
+<P>
+GP_set_sitemode(int id, int atmod, int color, int width, float size, int
+marker) 
+
+<P>
+GP_set_trans(int id, float *xtrans, float *ytrans, float *ztrans) 
+
+<P>
+GP_set_zmode(int id, int use_z) 
+
+<P>
+GP_site_exists(int id) 
+
+<P>
+GP_surf_is_selected(int hp, int hs) 
+
+<P>
+GP_unselect_surf(int hp, int hs) 
+
+
+\subsection gk_keyframes Keyframe animation
+
+Functions which have to do with setting &amp; manipulating keyframes
+for viewer position animation (fly-bys).
+
+<P>
+int GK_add_key(float pos, unsigned long fmask, int force_replace,
+float precis) 
+
+The pos value is the relative position in the animation for this
+particular keyframe - used to compare relative distance to neighboring
+keyframes, it can be any floating point value.
+
+<P>
+The fmask value can be any of the following or'd together:    
+    KF_FROMX_MASK    
+    KF_FROMY_MASK    
+    KF_FROMZ_MASK    
+    KF_FROM_MASK (KF_FROMX_MASK | KF_FROMY_MASK | KF_FROMZ_MASK) 
+
+<P>
+KF_DIRX_MASK    
+    KF_DIRY_MASK    
+    KF_DIRZ_MASK    
+    KF_DIR_MASK (KF_DIRX_MASK | KF_DIRY_MASK | KF_DIRZ_MASK) 
+
+<P>
+KF_FOV_MASK    
+    KF_TWIST_MASK    
+<P>
+KF_ALL_MASK (KF_FROM_MASK | KF_DIR_MASK | KF_FOV_MASK | KF_TWIST_MASK) 
+
+<P>
+Other fields will be added later.
+
+<P>
+The value precis and the boolean force_replace are used to determine
+if a keyframe should be considered to be at the same position as a
+pre-existing keyframe. e.g., if anykey.pos - newkey.pos &lt;= precis,
+GK_add_key() will fail unless force_replace is TRUE.
+
+<P>
+Returns 1 if key is added, otherwise -1.
+
+
+<P>
+void GK_clear_keys() Deletes all keyframes, resets field masks.
+  Doesn't change number of frames requested.
+
+<P>
+int GK_delete_key(float pos, float precis, int justone) 
+
+The values pos &amp; precis are used to determine which keyframes to
+delete.  Any keyframes with their position within precis of pos will
+be deleted if justone is zero.  If justone is non-zero, only the first
+(lowest pos) keyframe in the range will be deleted.
+
+<P>
+Returns number of keys deleted.
+
+
+<P>
+int GK_do_framestep(int step, int render) 
+
+Moves the animation to frame number "step".  Step should be a value
+between 1 and the number of frames.  If render is non-zero, calls
+draw_all.
+
+<P>
+int GK_move_key(float oldpos, float precis, float newpos) 
+
+Precis works as in other functions - to identify keyframe to move.
+Only the first keyframe in the precis range will be moved.
+
+<P>
+Returns number of keys moved (1 or 0) .
+
+
+<P>
+int GK_set_interpmode(int mode) Sets interpolation mode to
+  KF_LINEAR or KF_SPLINE
+
+<P>
+void GK_set_numsteps(int newsteps) Sets the number of frames to be
+  interpolated from keyframes.
+
+<P>
+int GK_set_tension(float tens) Sets value for tension when interpmode
+is KF_SPLINE.  The value tens should be between 0.0 &amp; 1.0.
+
+<P>
+void GK_show_path(int flag) Draws the current path.
+
+<P>
+GK_show_site(int flag) 
+
+<P>
+GK_show_vect(int flag) 
+
+<P>
+void GK_showtension_start() 
+
+<P>
+void GK_showtension_stop() Use
+GK_showtension_start/GK_update_tension/GK_showtension_stop to
+initialize &amp; stop multi-view display of path when changing
+tension.
+
+<P>
+void GK_update_frames() Recalculates path using the current number of
+frames requested.  Call after changing number of frames or when
+Keyframes change.
+
+<P>
+void GK_update_tension() 
+
+\subsection gvl_volume  Loading and manipulation of volume maps (GVL)
+
+Functions which have to do with loading &amp; manipulating 3D volumes.
+
+<P>
+void *GVL_Get_ClientData(int id) 
+
+<P>
+GVL_Set_ClientData(int id, void *clientd) 
+
+<P>
+GVL_alldraw_vol() 
+
+<P>
+GVL_delete_volume(int id) 
+
+<P>
+GVL_draw_fastvol(int vid) 
+
+<P>
+GVL_draw_vol(int vid) 
+
+<P>
+GVL_get_trans(int id, float *xtrans, float *ytrans, float *ztrans) 
+
+<P>
+int *GVL_get_vol_list(int *numvols) 
+
+<P>
+GVL_get_volmode(int id, int *viztype) 
+
+<P>
+GVL_get_volname(int id, char *filename) 
+
+<P>
+GVL_load_volume(int id, char *filename) 
+
+<P>
+int GVL_new_vol() 
+
+<P>
+int GVL_num_vol() 
+
+<P>
+GVL_set_trans(int id, float xtrans, float ytrans, float ztrans) 
+
+<P>
+GVL_set_volmode(int id, int viztype) 
+
+<P>
+int GVL_vol_exists(int id) 
+
+<P>
+
+
+\subsection gsurf_h Public include file gsurf.h
+
+See lib/ogsf/gsurf.h
+
+
+\subsection keyframe_h Public include file keyframe.h
+
+See lib/ogsf/keyframe.h
+
+
+\subsection rgbpack_h Public color packing utility macros rgbpack.h
+
+See lib/ogsf/rgbpack.h
+
+
+\subsection gstypes_h Private types and defines gstypes.h
+
+See lib/ogsf/gstypes.h
+
+
+\subsection gsget_h Private utilities gsget.h
+
+See lib/ogsf/gsget.h
+
+*/

@@ -1,0 +1,3777 @@
+/*! \page gislib GRASS GIS Library
+<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+     by M. Neteler 2/2004, 2005, 2006
+  -->
+<title>GRASS GIS Library</title>
+
+
+This chapter is divided in the following pages:
+- \subpage \ref gislibintro 
+- \subpage \ref gisrasterlib
+- \subpage \ref gisvectorlib
+
+\section gislibintro Introduction
+
+This sections is divided as follows:
+- \subpage \ref gislibintro
+- \subpage \ref Raster_File_Processing
+- \subpage \ref Vector_File_Processing
+- \subpage \ref General_Plotting_Routines
+- \subpage \ref Temporary_Files
+- \subpage \ref Command_Line_Parsing
+- \subpage \ref Full_Module_Example
+- \subpage \ref Compiling_and_Installing_GRASS_Modules
+- \subpage \ref Multiple_Architecture_Conventions
+- \subpage \ref Full_Structure_Members_Description
+- \subpage \ref Complete_Structure_Members_Table
+- \subpage \ref Description_of_Complex_Structure_Members
+- \subpage \ref String_Manipulation_Functions
+- \subpage \ref Enhanced_UNIX_Routines
+- \subpage \ref GIS_Library_Data_Structures
+- \subpage \ref Loading_the_GIS_Library
+- \subpage \ref TimeStamp_functions
+- \subpage \ref GRASS_GIS_Library_Overview
+
+The <i>GIS Library</i> is the primary programming library provided
+with the GRASS system. <b>Programs must use this libary to access the
+database.</b> It contains the routines which locate, create, open,
+rename, and remove GRASS database files. It contains the routines
+which read and write raster files. It contains routines which
+interface the user to the database, including prompting the user,
+listing available files, validating user access, etc.  It also has
+some general purpose routines (string manipulation, user information,
+etc.) which are not tied directly to database processing.
+
+
+It is assumed that the reader has read Database_Structure for a
+general description of GRASS databases, Raster_Maps for details about
+raster map layers in GRASS, and Region_and_Mask which discusses
+regions and masks. The routines in the <i>GIS Library</i> are
+presented in functional groupings, rather than in alphabetical
+order. The order of presentation will, it is hoped, provide a better
+understanding of how the library is to be used, as well as show the
+interrelationships among the various routines. Note that a good way to
+understand how to use these routines is to look at the source code for
+GRASS modules which use them. Most routines in this library require
+that the header file "gis.h" be included in any code using these
+routines. Therefore, programmers should always include this file when
+writing code using routines from this library:
+
+\verbatim
+#include "gis.h"
+\endverbatim
+
+<b>Note</b>. All routines and global variables in this library,
+documented or undocumented, start with the prefix <b>G_</b>. To avoid
+name conflicts, programmers should not create variables or routines in
+their own modules which use this prefix.
+
+\subsection init Library Initialization
+
+
+<P>
+It is <B>mandatory</B> that the system be initialized before any other 
+library routines are called.
+
+<P>
+int G_gisinit(char *program_name) initialize gis library
+
+This routine reads the user's GRASS environment file into memory and
+makes sure that the user has selected a valid database and mapset. It
+also initializes hidden variables used by other routines. If the
+user's database information is invalid, an error message is printed
+and the module exits.  The <B>program_name</B> is stored for later
+recall by <I>G_program_name.</I> It is recommended that argv[0] be
+used for the <B>program_name:</B>
+
+\verbatim
+int main (int argc, char **argv)
+{
+  G_gisinit(argv[0]);
+}
+\endverbatim
+
+\subsection diag Diagnostic Messages
+
+The following routines are used by other routines in the library to
+report warning and error messages. They may also be used directly by
+GRASS programs.
+
+<P> int G_fatal_error(char *message, ...) print error message and exit
+
+<P> int G_debug(level, char *message, ...) print debug message
+
+<P> int G_warning(char *message, ...) print warning message and continue
+
+These routines report errors to the user. The normal mode is to write
+the <B>message</B> to the screen (on the standard error output) and
+wait a few seconds.  G_warning() will return and
+G_fatal_error() will exit.
+
+<P>
+If the standard error output is not a tty device, then the message is
+mailed to the user instead.
+
+<P> If the file GIS_ERROR_LOG exists (with write permission), in
+either the user's home directory or in the $GISBASE directory, the
+messages will also be logged to this file.
+
+<P> While most applications will find the normal error reporting quite
+adequate, there will be times when different handling is needed. For
+example, graphics modules may want the messages displayed graphically
+instead of on the standard error output. If the programmer wants to
+handle the error messages differently, the following routines can be
+used to modify the error handling:
+
+<P>
+int G_set_error_routine(int (*handler)()) change error handling
+
+This routine provides a different error handler for G_fatal_error()
+and G_warning(). The <B>handler</B> routine must be defined as follows:
+
+\verbatim
+int handler (char *message, int fatal)
+\endverbatim
+
+<P>
+where <B>message</B> is the message to be handled and <B>fatal</B>
+indicates the type of error: 1 (fatal error) or 0 (warning).
+
+<P> <B>Note.</B> The handler only provides a way to send the message
+somewhere other than to the error output. If the error is fatal, the
+module will exit after the handler returns.
+
+<P>
+int G_unset_error_routine() reset normal error handling
+
+This routine resets the error handling for <I>G_fatal_error()</I> and
+<I>G_warning()</I> back to the default action.
+
+<P>
+int G_sleep_on_error(int flag) sleep on error? 
+
+If <B>flag</B> is 0, then no pause will occur after printing an error
+or warning message. Otherwise the pause will occur.
+
+<P>
+int G_suppress_warnings(int flag) suppress warnings?
+
+If <B>flag</B> is 0, then <I>G_warning()</I> will no longer print
+warning messages. If <B>flag</B> is 1, then G_warning() will print
+warning messages.
+
+<P>
+<B>Note.</B> This routine has no effect on <I>G_fatal_error().</I>
+
+
+\subsection envir Environment and Database Information
+
+<P> The following routines return information about the current
+database selected by the user. Some of this information is retrieved
+from the user's GRASS environment file. Some of it comes from files in
+the database itself.  See \ref Environment_Variables for a discussion of
+the GRASS environment.
+
+<P>
+The following four routines can be used freely by the programmer:
+
+<P> char * G_location() current location name
+
+Returns the name of the current database location. This routine should
+be used by modules that need to display the current location to the
+user. See \ref Locations for an explanation of locations.
+
+<P>
+char * G_mapset() current mapset name 
+
+Returns the name of the current mapset in the current location. This
+routine is often used when accessing files in the current mapset. See
+Mapsets for an explanation of mapsets.
+
+<P>
+char * G_myname() location title
+
+Returns a one line title for the database location. This title is read
+from the file MYNAME in the PERMANENT mapset. See also
+\ref Permanent_Mapset for a discussion of the PERMANENT mapset.
+
+<P>
+char * G_gisbase() top level module directory 
+
+Returns the full path name of the top level directory for GRASS
+programs.  This directory will have subdirectories which will contain
+modules and files required for the running of the system. Some of
+these directories are:
+
+\verbatim
+bin  commands run by the user
+etc  modules and data files used by GRASS commands
+html help files
+\endverbatim
+
+
+<P>
+The use of G_gisbase() to find these subdirectories enables GRASS modules 
+to be written independently of where the GRASS system is actually installed 
+on the machine. For example, to run the module <I>sroff</I> in the GRASS 
+<I>etc</I> directory: 
+
+\verbatim
+char command[200];
+sprintf (command, "%s/etc/sroff", G_gisbase() );
+system (command);
+\endverbatim
+
+<P>
+The following two routines return full path UNIX directory names. They
+should be used only in special cases. They are used by other routines
+in the library to build full UNIX file names for database
+files. <B>The programmer should not use the next two routines to
+bypass the normal database access routines.</B>
+
+<P>
+char * G_gisdbase() top level database directory
+
+Returns the full UNIX path name of the directory which holds the database
+locations. See \ref GISDBASE for a full explanation of this directory.
+
+<P>
+char * G_location_path() current location directory
+
+Returns the full UNIX path name of the current database location. For
+example, if the user is working in location <I>spearfish</I> in the
+<I>/home/user/grassdata</I> database directory, this routine will
+return a string which looks like
+
+<P>
+<I>/home/user/grassdata/spearfish</I>.
+
+<BR>
+
+<P>
+These next routines provide the low-level management of the
+information in the user's GRASS environment file. <B>They should not
+be used in place of the higher level interface routines described
+above.</B>
+
+<P>
+int G_getenv(char *name) query GRASS environment variable
+
+<P>
+int G__getenv(char *name) query GRASS environment variable
+
+These routines look up the variable <B>name</B> in the GRASS
+environment and return its value (which is a character string). If
+<B>name</B> is not set, G_getenv() issues an error message and calls
+exit(). G__setenv() just returns the NULL pointer.
+
+<P>
+int G_setenv (char *name, char *value) set GRASS environment
+  variable
+
+<P>
+int G__setenv(char *name, char *value) set GRASS environment variable 
+  
+These routines set the the GRASS environment variable <B>name</B>
+to <B>value.</B> If <B>value</B> is NULL, the <B>name</B> is unset.
+
+<P>
+Both routines set the value in module memory, but only G_setenv() writes the
+new value to the user's GRASS environment file.
+
+
+\subsection dbaseaccess Fundamental Database Access Routines
+
+
+<P>
+The routines described in this section provide the low-level interface
+to the GRASS database. They search the database for files, prompt the
+user for file names, open files for reading or writing, etc. The
+programmer should never bypass this level of database interface. These
+routines must be used to access the GRASS database unless there <B>are
+other higher level library routines which perform the same
+function.</B> For example, routines to process raster files
+(Raster_File_Processing), vector files (Vector_File_Processing),
+etc., should be used instead.
+
+<P>
+In the descriptions below, the term database <I>element</I> is used.
+Elements are subdirectories within a mapset and are associated with a
+specific GRASS data type. For example, raster files live in the "cell"
+and "fcell" element. See \ref Elements for more details.
+
+
+\subsection prompt Prompting for Database Files
+
+<P>
+The following routines interactively prompt the user for a file name
+from a specific database <B>element.</B> (See \ref Elements for an
+explanation of elements.) In each, the <B>prompt</B> string will be
+printed as the first line of the full prompt which asks the user to
+enter a file name. If <B>prompt</B> is the empty string "" then an
+appropriate prompt will be substituted. The name that the user enters
+is copied into the <B>name</B> buffer. The size of name should be
+large enough to hold any GRASS file name.  Most systems allow file
+names to be quite long. It is recommended that name be declared char
+name[GNAME_MAX].
+ 
+The short (one or two word) <B>label</B> describing the <B>element</B>
+is used as part of a title when listing the files <B>in element.</B>
+
+<P>
+The user is required to enter a valid file name, or else hit the
+RETURN key to cancel the request. If the user enters an invalid
+response, a message is printed, and the user is prompted again. If the
+user cancels the request, the NULL pointer is returned. Otherwise the
+mapset where the file lives or is to be created is returned. Both the
+name and the mapset are used in other routines to refer to the file.
+
+<P>
+An example will be given here. The G_ask_old() routine used in the
+example is described a bit later. The user is asked to enter a file
+from the "paint/labels" element:
+
+\verbatim
+char name[GNAME_MAX];
+char *mapset;
+
+mapset = G_ask_old("", name, "paint/labels", "labels");
+if (mapset == NULL)
+    exit(EXIT_SUCCESS); /* user canceled the request */
+\endverbatim
+
+<P>
+The user will see the following:
+
+\verbatim
+Enter the name of an existing labels file
+Enter 'list' for a list of existing labels files
+Hit RETURN to cancel request
+\endverbatim
+
+The last line of the prompt can be modified using G_set_ask_return_msg().
+
+<P>
+char * G_ask_old(char *prompt, char *name, char *element, char *label)
+prompt for existing database file
+  
+The user is asked to enter the name of an existing database file.
+
+<P>
+<B>Note.</B> This routine looks for the file in the current mapset as
+well as other mapsets. The mapsets that are searched are determined
+from the user's mapset search path. See \ref Mapset_Search_Path for some
+more details about the search path.
+
+<P>
+char * G_ask_new(char *prompt, char *name, char *element, char
+  *label) prompt for new database file
+The user is asked to enter the name of a new file which does not exist 
+in the current mapset.
+
+<P>
+<B>Note.</B> The file chosen by the user may exist in other
+mapsets. This routine does not look in other mapsets, since the
+assumption is that <B>name</B> will be used to create a new file. New
+files are always created in the current mapset.
+
+<P>
+char * G_ask_in_mapset(char *prompt, char *name, char *element, char
+  *label) prompt for existing database file
+  
+The user is asked to enter the name of an file which exists in the
+current mapset.
+
+<P>
+<B>Note.</B> The file chosen by the user may or may not exist in other
+mapsets. This routine does not look in other mapsets, since the
+assumption is that <B>name</B> will be used to modify a file. GRASS
+only permits users to modify files in the current mapset.
+
+<P>
+char * G_ask_any(char *prompt, char *name, char *element, char
+  *label, int warn) prompt for any valid file name
+  
+The user is asked to enter any legal file name. If <B>warn</B> is 1
+and the file chosen exists in the current mapset, then the user is
+asked if it is ok to overwrite the file. If <B>warn</B> is 0, then any
+leg al name is accepted and no warning is issued to the user if the
+file exists.
+
+<P>
+int G_set_ask_return_msg(char *msg) set Hit RETURN msg
+
+The "Hit RETURN to cancel request" part of the prompt in the prompting
+routines described above, is modified to "Hit RETURN <B>msg.</B>"
+
+<P>
+char * G_get_ask_return_msg() get Hit RETURN msg 
+
+The current <I>msg</I> (as set by <I>G_set_ask_return_msg()</I>) is
+returned.
+
+
+\subsection Fully_Qualified_File_Names Fully Qualified File Names
+
+All GRASS routines which access database files must be given both the
+file name and the mapset where the file resides. Often the name and
+the mapset are 2 distinct character strings. However, there is a need
+for a single character string which contains both the name and the
+mapset (e.g., for interactive interfacing to command-line
+programs). This form of the name is known as the <I>fully qualified
+file name</I> and is built by the following routine:
+
+<P>
+char * G_fully_qualified_name(char *name, char *mapset) fully
+  qualified file name
+  
+Returns a fully qualified name for the file <B>name</B> in
+<B>mapset.</B> Currently this string is in the form
+<I>name@mapset</I>, but the programmer should pretend not to know this
+and always call this routine to get the fully qualified name.
+
+<P>
+The following example shows how an interactive version of <I>d.rast</I>
+interfaces with the command-line version of <I>d.rast</I>:
+
+\verbatim
+#include "gis.h"
+int main(char *argc, char **argv)
+{
+ char name[GNAME_MAX], *mapset, *fqn;
+ char command[1024];
+
+ G_gisinit(argv[0]);
+ mapset = G_ask_cell_old("", name, "");
+
+ if (mapset == NULL) exit(EXIT_SUCCESS);
+
+ fqn = G_fully_qualified_name(name, mapset);
+ sprintf(command, "d.rast map='%s'", fqn);
+ system(command);
+}
+\endverbatim
+
+
+\subsection  finding Finding Files in the Database
+
+Noninteractive modules cannot make use of the interactive prompting
+routines described above. For example, a command line driven module
+may require a database file name as one of the command arguments. In
+this case, the programmer must search the database to find the mapset
+where the file resides.
+
+<P>
+The following routines search the database for files:
+
+<P>
+char * G_find_file(char *element, char *name, char *mapset) find a
+  database file 
+  
+Look for the file <B>name</B> under the specified <B>element</B> in
+the database. The <B>mapset</B> parameter can either be the empty
+string "", which means search all the mapsets in the user's current
+mapset search path, or it can be a specific mapset, which means
+<I>.</I> look for the file only in this one mapset (for example, in
+the current mapset).
+
+<P>
+If found, the mapset where the file lives is returned. If not found,
+the NULL pointer is returned.
+
+<P>
+If the user specifies a fully qualified file name, (i.e, a name that also
+contains the mapset; see \ref Fully_Qualified_File_Names) then
+<I>G_find_file()</I> modifies <B>name</B> by eliminating the mapset
+from the <B>name</B>
+
+<P>
+For example, to find a "paint/labels" file anywhere in the database:
+
+\verbatim
+char name[GNAME_MAX];
+char *mapset;
+
+if ((mapset = G_find_file("paint/labels",name,"")) == NULL)
+
+/* not found */
+\endverbatim
+
+<P>
+To check that the file exists in the current mapset:
+
+\verbatim
+char name[GNAME_MAX];
+
+if (G_find_file("paint/labels",name,G_mapset()) == NULL)
+
+/* not found */
+\endverbatim
+
+<P>
+
+\subsection Legal_File_Names Legal File Names
+
+<P>
+Not all names that a user may enter will be legal files for the GRASS
+databases.  The routines which create new files require that the new
+file have a legal name. The routines which prompt the user for file
+names (e.g., <I>G_ask_new()</I>) guarantee that the name entered by
+the user will be legal.  If the name is obtained from the command
+line, for example, the programmer must check that the name is
+legal. The following routine checks for legal file names:
+
+<P>
+int G_legal_filename(char *name) check for legal database file
+  names
+  
+Returns 1 if <B>name</B> is ok, -1 otherwise.
+
+<P>
+
+\subsection Opening_an_Existing_Database_File_for_Reading Opening an Existing Database File for Reading
+
+<P>
+The following routines open the file <B>name</B> in <B>mapset</B> from
+the specified database <B>element</B> for reading (but not for
+writing).  The file <B>name</B> and <B>mapset</B> can be obtained
+interactively <I>using G_ask_old(), and noninteractively using
+G_find_file().</I>
+
+<P>
+int G_open_old(char *element, char *name, char *mapset) open a
+database file for reading
+
+The database file <B>name</B> under the
+<B>element</B> in the specified <B>mapset</B> is opened for reading (but
+not for writing).
+
+<P>
+The UNIX open() routine is used to open the file. If the file does not exist,
+-1 is returned. Otherwise the file descriptor from the open() is returned.
+
+<P>
+FILE * G_fopen_old(char *element, char *name, char *mapset) open a
+  database file for reading
+
+The database file <B>name</B> under the
+<B>element</B> in the specified <B>mapset</B> is opened for reading (but
+not for writing).
+
+<P>
+The UNIX fopen() routine, with "r" read mode, is used to open the
+file.  If the file does not exist, the NULL pointer is
+returned. Otherwise the file descriptor from the fopen() is returned.
+
+<P>
+
+\subsection Opening_an_Existing_Database_File_for_Update Opening an Existing Database File for Update
+
+<P>
+The following routines open the file <B>name</B> in the current mapset
+from the specified database <B>element</B> for writing. The file must
+exist. Its <B>name</B> can be obtained interactively <I>using
+G_ask_in_mapset(), and noninteractively using G_find_file().</I>
+
+<P>
+int G_open_update(char *element, char *name) open a database file
+  for update
+
+The database file <B>name</B> under the <B>element</B> in the
+  current mapset is opened for reading and writing.
+
+<P>
+The UNIX open() routine is used to open the file. If the file does not exist,
+  -1 is returned. Otherwise the file is positioned at the end of the file and
+  the file descriptor from the open() is returned.
+
+<P>
+int G_fopen_append(char *element, char *name) open a database file for
+update
+
+The database file <B>name</B> under the <B>element</B> in the current
+mapset is opened for appending (but not for reading).
+
+<P>
+The UNIX fopen() routine, with "a" append mode, is used to open the
+file.  If the file does not exist, the NULL pointer is
+returned. Otherwise the file is positioned at the end of the file and
+the file descriptor from the fopen() is returned.
+
+
+\subsection Creating_and_Opening_a_New_Database_File Creating and Opening a New Database File
+
+<P>
+The following routines create the new file <B>name</B> in the current
+mapset (GRASS does not allow files to be created outside the current
+mapset; see \ref Database_Access_Rules) under the specified database
+<B>element</B> and open it for writing. The database <B>element</B> is
+created, if it does not already exist.
+
+<P>
+The file <B>name</B> should be obtained interactively using
+<I>G_ask_new()</I>. If obtained noninteractively (e.g., from the
+command line), <I>G_legal_filename()</I> should be called first to
+make sure that <B>name</B> is a valid GRASS file name. <B>Warning.</B>
+It is not an error for <B>name</B> to already exist. However, the file
+will be removed and recreated empty. The interactive routine
+<I>G_ask_new()</I> guarantees that <B>name</B> will not exist, but if
+<B>name</B> is obtained from the command line, <B>name</B> may
+exist. In this case <I>G_find_file()</I> could be used to see if
+<B>name</B> exists.
+
+<P>
+int G_open_new(char *element, char *name) open a new database file
+  
+The database file <B>name</B> under the <B>element</B> in the current
+mapset is created and opened for writing (but not reading).
+
+<P>
+The UNIX open() routine is used to open the file. If the file does not
+exist, -1 is returned. Otherwise the file is positioned at the end of
+the file and the file descriptor from the open() is returned.
+
+<P>
+FILE * G_fopen_new(char *element, char *name) open a new database file
+  
+The database file <B>name</B> under the <B>element</B> in the current
+mapset is created and opened for writing (but not reading).
+
+<P>
+The UNIX fopen() routine, with "w" write mode, is used to open the
+file.  If the file does not exist, the NULL pointer is
+returned. Otherwise the file is positioned at the end of the file and
+the file descriptor from the fopen() is returned.
+
+<P>
+
+\subsection Database_File_Management Database File Management
+
+<P>
+The following routines allow the renaming and removal of database
+files in the current mapset (These functions only apply to the current
+mapset since GRASS does permit users to modify things in mapsets other
+than the current mapset; see \ref Database_Access_Rules).
+
+int G_rename(char *element, char *old, char *new) rename a database
+file
+  
+The file or directory <B>old</B> under the database <B>element</B>
+directory in the current mapset is renamed to <B>new.</B>
+
+<P>
+Returns 1 if successful, 0 if <B>old</B> does not exist, and -1 if
+there was an error.
+
+<P>
+<B>Bug.</B> This routine does not check to see if the <B>new</B> name is a
+  valid database file name.
+
+<P>
+int G_remove(char *element, char *name) remove a database file
+
+The file or directory <B>name</B> under the database <B>element</B> directory
+  in the current mapset is removed.
+
+<P>
+Returns 1 if successful, 0 if <B>name</B> does not exist, and -1 if
+there was an error.
+
+<P>
+<B>Note.</B> If <B>name</B> is a directory, everything within the
+  directory is removed as well.
+
+<P>
+<B>Note.</B> These functions only apply to the specific <B>element</B>
+and not to other "related" elements. For example, if <B>element</B> is
+"cell", then the specified raster file will be removed (or renamed),
+but the other support files, such as "cellhd" or "cats", will not. To
+remove these other files as well, specific calls must be made for each
+related <B>element.</B>
+
+
+\subsection Memory_Allocation Memory Allocation
+
+<P>
+The following routines provide memory allocation capability. They are
+simply calls to the UNIX suite of memory allocation routines malloc(),
+realloc() and calloc(), except that if there is not enough memory,
+they print a diagnostic message to that effect and then call exit().
+
+<P>
+<B>Note.</B> Use the G_free() routine to release memory allocated by these
+routines.
+
+<P>
+int G_free(void *buf) free the memory allocated 
+
+Free the memory allocated by the GRASS malloc routines.
+
+<P>
+void * G_malloc (int size) memory allocation
+
+Allocates a block of memory at least <B>size</B> bytes which is
+aligned properly for all data types. A pointer to the aligned block is
+returned.
+
+<P>
+void * G_realloc(void *ptr, int size) memory allocation
+
+Changes the <B>size</B> of a previously allocated block of memory at
+<B>ptr</B> and returns a pointer to the new block of memory. The
+<B>size</B> may be larger or smaller than the original size. If the
+original block cannot be extended "in place", then a new block is
+allocated and the original block copied to the new block.
+
+<P>
+<B>Note.</B> If <B>ptr</B> is NULL, then this routine simply allocates
+a block of <B>size</B> bytes. This routine works around broken
+realloc() routines, which do not handle a NULL <B>ptr.</B>
+
+<P>
+void * G_calloc(int n, int size) memory allocation
+
+Allocates a properly aligned block of memory <B>n</B>*<B>size</B>
+bytes in length, initializes the allocated memory to zero, and returns
+a pointer to the allocated block of memory.
+
+<P>
+<B>Note.</B> Allocating memory for reading and writing raster files is
+discussed in Allocating_Raster_I_O_Buffers.
+
+<P>
+double * G_alloc_vector(int n) memory allocation
+
+Allocate a vector (array) of <B>n</B> doubles initialized to zero.
+
+<P>
+float * G_alloc_fvector(int n) memory allocation 
+
+Allocate a vector (array) of <B>n</B> floats initialized to zero.
+
+<P>
+double ** G_alloc_matrix(int rows, int cols) memory allocation
+
+Allocate a matrix of <B>rows</B> by <B>cols</B> doubles initialized to
+zero.
+
+<P>
+float ** G_alloc_fmatrix(int rows, int cols) memory allocation
+
+Allocate a matrix of <B>rows</B> by <B>cols</B> floats initialized to
+zero.
+
+<P>
+int G_free_vector(double *v) memory deallocation
+
+Deallocate a vector (array) of doubles or floats.
+
+<P>
+int G_free_matrix(double **m) memory deallocation
+
+Deallocate a matrix of doubles.
+
+<P>
+int G_free_fmatrix(float **m) memory deallocation
+
+Deallocate a matrix of floats.
+
+
+\subsection The_Region The Region
+
+The region concept is explained in Region. It can be thought of as a
+two-dimensional matrix with known boundaries and rectangular cells.
+<P>
+There are logically two different regions. The first is the database
+region that the user has set in the current mapset. The other is the
+region that is active in the module. This active module region is what
+controls reading and writing of raster file data. The
+vector map export does not take care for the active region settings.
+
+<P>
+The routines described below use a GRASS data structure
+<I>Cell_head</I> to hold region information. This structure is defined
+in the "gis.h" header file.  It is discussed in detail under
+GIS_Library_Data_Structures .
+
+
+
+\subsection The_Database_Region The Database Region
+
+
+Reading and writing the user's database region are done by the
+following routines:
+
+[Note: Previous versions of GRASS called this the "window". Due to
+overuse of this term (database window, graphics window, etc.), the
+term was changed to "region". However, to maintain compatibility with
+existing programs, library routine names were not changed - hence the
+term "window" is used in the routine name (where "region" should
+probably be used instead.)]
+
+<P>
+int G_get_window(struct Cell_head *region) read the database region
+
+Reads the database region as stored in the WIND file in the user's
+current mapset <B>into region.</B>
+
+<P>
+An error message is printed and exit() is called if there is a problem
+reading the region.
+
+<P>
+<B>Note.</B> GRASS applications that read or write raster files should
+not use this routine since its use implies that the active module
+region will not be used. Programs that read or write raster file data
+(or vector data) can query the active module region <I>using
+G_window_rows() and G_window_cols().</I>
+
+<P>
+int G_put_window(struct Cell_head *region) write the database region
+Writes the database region file (WIND) in the user's current mapset
+from <B>region.</B> Returns 1 if the region is written ok. Returns -1
+if not (no diagnostic message is printed).
+
+<P>
+<B>Warning.</B> Since this routine actually changes the database
+region, it should only be called by modules which the user knows will
+change the region.  It is probably fair to say that under GRASS 3.0
+only the <I>g.region</I>, and <I>d.zoom</I> modules should call this
+routine.
+
+<P>
+There is another database region. This region is the default region
+for the location. The default region provides the user with a
+"starting" region, i.e., a region to begin with and return to as a
+reference point. The GRASS modules <I>g.region</I> allow the user to
+set their database region from the default region. (See
+Permanent_Mapset for a discussion of the default region.)  The
+following routine reads this region:
+
+<P>
+int G_get_default_window(struct Cell_head *region) read the default
+region
+
+Reads the default region for the location into <B>region.</B>
+
+<P>
+An error message is printed and exit() is called if there is a problem
+reading the default region.
+
+\subsection The_Active_Module_Region The Active Module Region
+
+<P>
+The active module region is the one that is used when reading and
+writing raster file data. This region determines the resampling when
+reading raster data. It also determines the extent and resolution of
+new raster files.
+
+<P>
+Initially the active module region and the user's database region are
+the same, but the programmer can make them different. The following
+routines manage the active module region.
+
+<P>
+int G_window_rows() number of rows in active region
+
+<P>
+int G_window_cols() number of columns in active region 
+
+These routines return the number of rows and columns (respectively) in
+the active module region. Before raster files can be read or written,
+it is necessary to known how many rows and columns are in the active
+region. For example:
+
+\verbatim
+int nrows, cols;
+int row, col;
+
+nrows = G_window_rows();
+ncols = G_window_cols();
+for (row = 0; row < nrows; row++){
+    read row ...
+    for (col = 0; col < ncols; col++){
+        process col ...
+    }
+}
+\endverbatim
+
+<P>
+int G_set_window(struct Cell_head *region) set the active region 
+
+This routine sets the active region from <B>region.</B> Setting the
+active region does not change the WIND file in the database. It simply
+changes the region for the duration of the module.
+
+However, the new region setting is not retained across the UNIX exec()
+call. This implies that G_set_window() cannot be used to set the
+region for a module to be executed using the system() or popen()
+routines.
+
+A warning message is printed and -1 returned if <B>region</B> is not
+valid. Otherwise 1 is returned.
+
+<P>
+<B>Note.</B> This routine overrides the region as set by the user. Its
+use should be very limited since it changes what the user normally
+expects to happen. If this routine is not called, then the active
+region will be the same as what is in the user's WIND file.
+
+<P>
+<B>Warning.</B> Calling this routine with already opened raster files
+has some side effects. If there are raster files which are open for
+reading, they will be read into the newly set region, not the region
+that was active when they were opened. However, CELL buffers allocated
+for reading the raster files are not automatically reallocated. The
+module must reallocate them explicitly.  Also, this routine does not
+change the region for raster files which are open for writing. The
+region that was active when the open occurred still applies to these
+files.
+
+<P>
+int G_get_set_window(struct Cell_head *region) get the active
+  region
+
+Gets the values of the currently active region into <B>region.</B> If
+<I>G_set_window()</I> has been called, then the values set by that call
+are retrieved. Otherwise the user's database region is retrieved.
+
+<P>
+<B>Note.</B> For modules that read or write raster data, and really
+need the full region information, this routine is preferred over
+<I>G_get_window().</I> However, since <I>G_window_rows() and G_window_cols()
+return the number of rows and</I> columns in the active region, the
+programmer should consider whether or not the full region information
+is really needed before using this routine.
+
+<P>
+char * G_align_window(struct Cell_head *region, struct Cell_head *ref)
+align two regions
+
+Modifies the input <B>region</B> to align to the <B>ref</B>
+region. The resolutions in <B>region</B> are set to match those in
+<B>ref</B> and the <B>region</B> edges (north, south, east, west) are
+modified to align with the grid of the <B>ref</B> region.
+
+<P>
+The <B>region</B> may be enlarged if necessary to achieve the
+alignment.  The north is rounded northward, the south southward, the
+east eastward and the west westward.
+
+<P>
+This routine returns NULL if ok, otherwise it returns an error message.
+
+<P>
+double G_col_to_easting(double col, struct Cell_head *region) column
+to easting
+
+Converts a <B>col</B>umn relative to a <B>region</B> to an easting;
+
+<P>
+<B>Note.</B> col is a double: col+0.5 will return the easting for the
+center of the column; col+0.0 will return the easting for the western
+edge of the column; and col+1.0 will return the easting for the
+eastern edge of the column.
+
+<P>
+double G_row_to_northing(double row, struct Cell_head *region) row to
+northing
+
+Converts a <B>row</B> relative to a <B>region</B> to a northing;
+
+<P>
+<B>Note.</B> row is a double: row+0.5 will return the northing for the
+center of the row; row+0.0 will return the northing for the northern
+edge of the row; and row+1.0 will return the northing for the southern
+edge of the row.
+
+double G_easting_to_col(double east, struct Cell_head *region) easting
+to column
+
+<P>
+Converts an <B>east</B>ing relative to a <B>region</B> to a column.
+
+<P>
+<B>Note.</B> The result is a double. Casting it to an integer will
+give the column number.
+
+<P>
+double G_northing_to_row(double north, struct Cell_head *region)
+northing to row
+
+Converts a <B>north</B>ing relative to a <B>region</B> to a row.
+
+<P>
+<B>Note.</B> the result is a double. Casting it to an integer will
+give the row number.
+
+\subsection Projection_Information Projection Information
+
+
+<P>
+The following routines return information about the cartographic
+projection and zone. See \ref Region for more information about these
+values.
+
+<P>
+int G_projection() query cartographic projection
+
+This routine returns a code indicating the projection for the active
+region. The current values are:
+
+<P>
+0 unreferenced x,y (imagery data)
+<br>
+1 UTM
+<br>
+2 State Plane
+<br>
+3 Latitude-Longitude
+<br>
+99 Other (more than 121 projections are supported)
+
+<P>
+char * G_database_projection_name(int proj) query cartographic
+projection
+
+Returns a pointer to a string which is a printable name for projection
+code <B>proj</B> (as returned by <I>G_projection()</I>). Returns NULL if
+<B>proj</B> is not a valid projection.
+
+<P>
+char * G_database_unit_name(int plural) database units
+
+Returns a string describing the database grid units. It returns a
+plural form (eg. feet) if <B>plural</B> is true. Otherwise it returns
+a singular form (eg. foot).
+
+<P>
+double G_database_units_to_meters_factor() conversion to
+  meters
+
+Returns a factor which converts the grid unit to meters (by
+multiplication).  If the database is not metric (eg. imagery) then 0.0
+is returned.
+
+<P>
+int G_zone() query cartographic zone
+
+This routine returns the zone for the active region. The meaning for
+the zone depends on the projection. For example zone 18 for projection
+type 1 would be UTM zone 18.
+
+
+\subsection Latitude_Longitude_Databases Latitude-Longitude Databases
+
+<P>
+GRASS supports databases in a longitude-latitude grid using a
+projection where the x coordinate is the longitude and the y
+coordinate is the latitude. This projection is called the Equidistant
+Cylindrical Projection (also known as Plate Carree). ECP has the
+property that <I>where am I</I> and <I>row-column</I> calculations are
+identical to those in planimetric grids (like UTM, Universal
+Transverse Mercator Projection). This implies that normal GRASS
+registration and overlay functions will work without any special
+considerations or modifications to existing code. However, the
+projection is not planimetric. This means that distance and area
+calculations are no longed Euclidean.
+
+<P>
+Also, since the world is round, maps may not have edges in the
+east-west direction, especially for global databases. Maps may have
+the same longitude at both the east and west edges of the
+display. This feature, called global wraparound, must be accounted for
+by GRASS modules (particularly vector based functions, like plotting.)
+What follows is a description of the GISLIB library routines that are
+available to support latitude-longitude databases.
+
+\subsection Coordinates Coordinates
+
+<P>
+Latitudes and longitudes are specified in degrees. Northern latitudes
+range from 0 to 90 degrees, and southern latitudes from 0 to
+-90. Longitudes have no limits since longitudes ±360 degrees are
+equivalent.
+
+<P>
+Coordinates are represented in ASCII using the format <B>dd:mm:ssN</B>
+or <B>dd:mm:ssS</B> for latitudes, <B>ddd:mm:ssE</B> or
+<B>ddd.mm.ssW</B> for longitudes, and <B>dd.mm.ss</B> for grid
+resolution. For example, 80:30:24N represents a northern latitude of
+80 degrees, 30 minutes, and 24 seconds.  120:15W represents a
+longitude 120 degrees and 15 minutes west of the prime meridian. 30:15
+represents a resolution of 30 degrees and 15 minutes. These next
+routines convert between ASCII representations and the machine
+representation for a coordinate. They work both with
+latitude-longitude projections and planimetric projections.
+
+<P>
+<B>Note.</B> In each subroutine, the programmer must specify the
+projection number. If the projection number is PROJECTION_LL (defined
+in "gis.h"), then latitude-longitude ASCII format is invoked.
+Otherwise, a standard floating-point to ASCII conversion is made.
+
+<P>
+int G_format_easting(double east, char *buf, int projection) easting
+to ASCII
+
+Converts the double representation of the <B>east</B> coordinate to
+its ASCII representation (into <B>buf</B>).
+
+<P>
+int G_format_northing(double north, char *buf, int projection)
+northing to ASCII
+
+Converts the double representation of the <B>north</B> coordinate to
+its ASCII representation (into <B>buf</B>).
+
+<P>
+int G_format_resolution(double resolution, char *buf, int projection)
+resolution to ASCII
+
+Converts the double representation of the <B>resolution</B> to its
+ASCII representation (into <B>buf</B>).
+
+<P>
+int G_scan_easting(char *buf, double *easting, int projection) ASCII
+easting to double
+
+Converts the ASCII "easting" coordinate string in <B>buf</B> to its
+double representation (into <B>easting</B>).
+
+<P>
+int G_scan_northing(char *buf, double *northing, int projection) ASCII
+northing to double
+
+Converts the ASCII "northing" coordinate string in <B>buf</B> to its
+double representation (into <B>northing</B>).
+
+<P>
+int G_scan_resolution(char *buf, double *resolution, int projection)
+ASCII resolution to double
+
+Converts the ASCII "resolution" string in <B>buf</B> to its double
+representation (into resolution).
+
+<P>
+The following are examples of how these routines are used.
+
+\verbatim
+double north;
+char buf[50];
+
+G_scan_northing(buf, north, G_projection()); /* ASCII to double */
+
+G_format_northing(north, buf, G_projection()); /* double to ASCII */
+
+G_format_northing(north, buf, -1); /* double to ASCII */
+
+/* This last example forces floating-point ASCII format */
+\endverbatim
+
+
+\subsection Raster_Area_Calculations Raster Area Calculations
+
+
+The following routines perform area calculations for raster maps.,
+They are based on the fact that while the latitude-longitude grid is
+not planimetric, the size of the grid cell at a given latitude is
+constant. The first routines work in any projection.
+
+<P>
+int G_begin_cell_area_calculations() begin cell area calculations
+
+This routine must be called once before any call to
+<I>G_area_of_cell_at_row().</I> It can be used in either planimetric
+projections or the latitude-longitude projection. It returns 2 if the
+projection is latitude-longitude, 1 if the projection is planimetric,
+and 0 of the projection doesn't hav e a metric (e.g. imagery.) If the
+return value is 1 or 0, all the grid cells in the map have the same
+area. Otherwise the area of a grid cell varies with the row.
+
+<P>
+double G_area_of_cell_at_row(int row) cell area in specified row
+
+This routine returns the area in square meters of a cell in the
+specified <B>row.</B> This value is constant for planimetric grids and
+varies with the row if the projection is latitude-longitude.
+
+<P>
+int G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
+begin area calculations for ellipsoid
+
+Initializes raster area calculations for an ellipsoid, where <B>a</B>
+is the semi-major axis of the ellipse (in meters), <B>e2</B> is the
+ellipsoid eccentricity squared, and <B>s</B> is a scale factor to
+allow for calculations of part of the zone (<B>s</B>=1.0 is full zone,
+<B>s</B>=0.5 is half the zone, and <B>s</B>=360/ew_res is for a single
+grid cell).
+
+<P>
+<B>Note.</B> e2 must be positive. A negative value makes no sense, and
+zero implies a sphere.
+
+<P>
+double G_area_for_zone_on_ellipsoid(double north, double south) area
+between latitudes
+
+Returns the area between latitudes <B>north</B> and <B>south</B>
+scaled by the factor <B>s</B> passed to
+<I>G_begin_zone_area_on_ellipsoid().</I>
+
+<P>
+int G_begin_zone_area_on_sphere(double r, double s) initialize
+calculations for sphere
+
+Initializes raster area calculations for a sphere.  The radius of the
+sphere is <B>r</B> and <B>s</B> is a scale factor to allow for
+calculations of a part of the zone (see
+<I>G_begin_zone_area_on_ellipsoid()</I>).
+
+<P>
+double G_area_for_zone_on_sphere(double north, double south) area
+between latitudes
+
+Returns the area between latitudes <B>north</B> and <B>south</B>
+scaled by the factor <B>s</B> passed to
+<I>G_begin_zone_area_on_sphere()</I>
+
+
+\subsection Polygonal_Area_Calculations Polygonal Area Calculations
+
+
+<P>
+These next routines provide area calculations for polygons. Some of
+the routines are specifically for latitude-longitude, while others
+will function for all projections.
+
+<P>
+However, there is an issue for latitude-longitude that does not occur
+with planimetric grids. Vector/polygon data is described as a series
+of x,y coordinates. The lines connecting the points are not stored but
+are inferred.  This is a simple, straight-forward process for
+planimetric grids, but it is not simple for latitude-longitude. What
+is the shape of the line that connects two points on the surface of a
+globe?
+
+<P>
+One choice (among many) is the shortest path from <B>x1,y1</B> to
+<B>x2,y2</B>, known as the geodesic. Another is a straight line on the
+grid.  The area routines described below assume the latter. Routines
+to work with the former have not yet been developed.
+
+<P>
+int G_begin_polygon_area_calculations() begin polygon area
+calculations
+
+This initializes the polygon area calculation routines. It is used
+both for planimetric and latitude-longitude projections.
+
+<P>
+It returns 2 if the projection is latitude-longitude, 1 if the
+projection is planimetric, and 0 if the projection doesn't have a
+metric (e.g. imagery.)
+
+<P>
+double G_area_of_polygon(double *x, double *y, int n) area in square
+meters of polygon
+
+Returns the area in square meters of the polygon described by the
+<B>n</B> pairs of <B>x,y</B> coordinate vertices. It is used both for
+planimetric and latitude-longitude projections.
+
+<P>
+<B>Note.</B> If the database is planimetric with the non-meter grid,
+this routine performs the required unit conversion to produce square
+meters.  double <B>G_planimetric_polygon_area()</B> (x, y, n) <I>area in
+coordinate units</I> double *x, *y ; int n ;
+
+<P>
+Returns the area in coordinate units of the polygon described by the
+<B>n</B> pairs of <B>x,y</B> coordinate vertices for planimetric
+grids.  If the units for <B>x,y</B> are meters, then the area is in
+square meters.  If the units are feet, then the area is in square
+feet, and so on.
+
+<P>
+int G_begin_ellipsoid_polygon_area (double a, double e2) begin area
+calculations
+
+This initializes the polygon area calculations for the ellipsoid with
+semi-major axis <B>a</B> (in meters) and ellipsoid eccentricity
+squared <B>e2.</B>
+
+<P>
+double G_ellipsoid_polygon_area(double *lon, double *lat, int n) area
+of lat-long polygon
+
+Returns the area in square meters of the polygon described by the
+<B>n</B> pairs of <B>lat,long</B> vertices for latitude-longitude
+grids.
+
+<P>
+<B>Note.</B> This routine assumes grid lines on the connecting the
+vertices (as opposed to geodesics).
+
+
+\subsection  Distance Calculations Distance Calculations
+
+
+Two routines perform distance calculations for any projection.
+
+<P>
+int G_begin_distance_calculations() begin distance calculations
+
+Initializes the distance calculations. It is used both for the
+planimetric and latitude-longitude projections.
+
+<P>
+It returns 2 if the projection is latitude-longitude, 1 if the
+projection is planimetric, and 0 if the projection doesn't hav e a
+metric (e.g. imagery).
+
+<P>
+double G_distance(double x1, y1, x2, y2) distance in meters
+
+This routine computes the distance, in meters, from <B>x1,y1</B> to
+<B>x2,y2.</B> If the projection is latitude-longitude, this distance
+is measured along the geodesic. Two routines perform geodesic distance
+calculations.
+
+<P>
+int G_begin_geodesic_distance(double a, double e2) begin geodesic
+distance
+
+Initializes the distance calculations for the ellipsoid with
+semi-major axis <B>a</B> (in meters) and ellipsoid eccentricity
+squared <B>e2.</B> It is used only for the latitude-longitude
+projection.
+
+<P>
+double G_geodesic_distance(double lon1, double lat1, double lon2,
+double lat2) geodesic distance
+
+Calculates the geodesic distance from <B>lon1,lat1</B> to
+<B>lon2,lat2</B> in meters.
+
+<P>
+The calculation of the geodesic distance is fairly costly. These next
+three routines provide a mechanism for calculating distance with two
+fixed latitudes and varying longitude separation.
+
+<P>
+int G_set_geodesic_distance_lat1(double lat1) set geodesic
+  distance lat1
+
+Set the first latitude.
+
+<P>
+int G_set_geodesic_distance_lat2(double lat2) set geodesic
+  distance lat2
+
+Set the second latitude.
+
+<P>
+double G_geodesic_distance_lon_to_lon(double lon1, double lon2)
+geodesic distance
+
+Calculates the geodesic distance from <B>lon1,lat1</B> to
+<B>lon2,lat2</B> in meters, where <B>lat1</B> was the latitude passed
+to <I>G_set_geodesic_distance_latl()</I> and <B>lat2</B> was the
+<I>latitude passed to G_set_geodesic_distance_lat2().</I>
+
+
+\subsection Global_Wraparound Global Wraparound
+
+
+<P>
+These next routines provide a mechanism for determining the relative
+position of a pair of longitudes. Since longitudes of ±360 are
+equivalent, but GRASS requires the east to be bigger than the west,
+some adjustment of coordinates is necessary.
+
+<P>
+double G_adjust_easting(double east, struct Cell_head *region) returns
+east larger than west
+
+If the region projection is PROJECTION_LL, then this routine returns
+an equivalent <B>east</B> that is larger, but no more than 360 degrees
+larger, than the coordinate for the western edge of the
+region. Otherwise no adjustment is made and the original <B>east</B>
+is returned.
+
+<P>
+double G_adjust_east_longitude(double east, double west) adjust east
+longitude
+
+This routine returns an equivalent <B>east</B> that is larger, but no
+more than 360 larger than the <B>west</B> coordinate.
+
+<P>
+This routine should be used only with latitude-longitude coordinates.
+
+<P>
+int G_shortest_way(double *east1, double *east2) shortest way between
+eastings
+
+If the database projection is PROJECTION_LL, then <B>east1,east2</B>
+are changed so that they are no more than 180 degrees apart. Their
+true locations are not changed. If the database projection is not
+PROJECTION_LL, then <B>east1,east2</B> are not changed.
+
+
+\subsection Miscellaneous Miscellaneous
+
+
+char * G_ellipsoid_name(int n) return ellipsoid name
+
+This routine returns a pointer to a string containing the name for the
+<B>n</B><I>th</I> ellipsoid in the GRASS ellipsoid table; NULL when
+<B>n</B> is too large. It can be used as follows:
+
+\verbatim
+int n;
+char *name;
+
+for (n=0; name=G_ellipsoid_name(n); n++)
+    fprintf(stdout, "%s\n", name);
+\endverbatim
+
+<P>
+int G_get_ellipsoid_by_name(char *name, double *a, double *e2) get
+ellipsoid by name
+
+This routine returns the semi-major axis <B>a</B> (in meters) and
+eccentricity squared <B>e2</B> for the named ellipsoid.  Returns 1 if
+<B>name</B> is a known ellipsoid, 0 otherwise.
+
+<P>
+int G_get_ellipsoid_parameters(double *a, double *e2) get ellipsoid
+parameters
+
+This routine returns the semi-major axis <B>a</B> (in meters) and the
+eccentricity squared <B>e2</B> for the ellipsoid associated with the
+database. If there is no ellipsoid explicitly associated with the
+database, it returns the values for the WGS 84 ellipsoid.
+
+<P>
+double G_meridional_radius_of_curvature(double lon, double a, double
+e2) meridional radius of curvature
+
+Returns the meridional radius of curvature at a given longitude:
+
+\f$
+\rho = \frac{a (1-e^2)}{(1-e^2\sin^2 lon)^{3/2}}
+\f$
+
+
+<P>
+double G_transverse_radius_of_curvature(double lon, double a, double
+e2) transverse radius of curvature
+
+Returns the transverse radius of curvature at a given longitude:
+
+\f$
+\nu = \frac{a}{(1-e^2\sin^2 lon)^{1/2}}
+\f$
+
+<P>
+double G_radius_of_conformal_tangent_sphere(double lon, double a,
+double e2) radius of conformal tangent sphere
+
+Returns the radius of the conformal sphere tangent to ellipsoid at a
+given longitude:
+
+\f$
+r = \frac{a (1-e^2)^{1/2}}{(1-e^2\sin^2 lon)}
+\f$
+
+<P>
+int G_pole_in_polygon(double *x, double *y, int n) pole in polygon
+
+For latitude-longitude coordinates, this routine determines if the
+polygon defined by the <B>n</B> coordinate vertices <B>x,y</B>
+contains one of the poles.
+
+<P>
+Returns -1 if it contains the south pole; 1 if it contains the north
+pole; 0 if it contains neither pole.
+
+<P>
+<B>Note.</B> Use this routine only if the projection is PROJECTION_LL.
+
+<P>
+
+
+\section Raster_File_Processing GRASS Raster File Processing
+
+ Please refer to GRASS Raster File Processing in Chapter \ref gisrastintro .
+
+
+\section Vector_File_Processing GRASS Vector File Processing
+
+ Please refer to GRASS Vector File Processing in Chapter \ref gisvectintro .
+ Note, that the old "sites" are stored as vector points in GRASS 6.
+
+\section General_Plotting_Routines General Plotting Routines
+
+
+The following routines form the foundation of a general purpose line
+and polygon plotting capability.
+
+<P>
+int G_bresenham_line(int x1, int y1, int x2, int y2, int (*point)())
+Bresenham line algorithm
+
+Draws a line from <B>x1,y1</B> to <B>x2,y2</B> using Bresenham's
+algorithm. A routine to plot points must be provided, as is defined
+as:
+
+<P>
+point(x, y) plot a point at x,y
+
+<P>
+This routine does not require a previous call to <I>G_setup_plot()</I> to 
+function correctly, and is independent of all following routines.
+
+<P>
+int G_setup_plot(double t, double b, double l, double r, nt (*Move)(),
+      int (*Cont)()) initialize plotting routines
+
+Initializes the plotting capability. This routine must be called once
+before calling the <B>G_plot_*()</B> routines described below.
+
+<P>
+The parameters <B>t, b, l, r</B> are the top, bottom, left, and right
+of the output x,y coordinate space. They are not integers, but doubles
+to allow for subpixel registration of the input and output coordinate
+spaces. The input coordinate space is assumed to be the current GRASS
+region, and the routines supports both planimetric and
+latitude-longitude coordinate systems.
+
+<P>
+<B>Move</B> and <B>Cont</B> are subroutines that will draw lines in
+x,y space. They will be called as follows:
+
+<P>
+Move(x, y) move to x,y (no draw)
+
+<P>
+Cont(x, y) draw from previous position
+
+<P>
+to x,y. Cont() is responsible for clipping
+
+<P>
+int G_plot_line(double east1, double north1, double east2, double
+north2) plot line between latlon coordinates 
+
+A line from <B>east1,north1</B> to <B>east2,north2</B> is plotted in
+output x,y coordinates (e.g. pixels for graphics.) This routine
+handles global wrap-around for latitude-longitude databases.
+
+<P>
+See <B>G_setup_plot()</B> for the required coordinate initialization
+procedure.
+
+<P>
+int G_plot_polygon(double *east, double *north, int n) plot filled
+polygon with n vertices
+
+The polygon, described by the <B>n</B> vertices <B>east,north</B>, is
+plotted in the output x,y space as a filled polygon.
+
+<P>
+See <B>G_setup_plot()</B> for the required coordinate initialization
+procedure.
+
+<P>
+int G_plot_area(double **xs, double **ys, int *npts, int rings) plot
+multiple polygons
+
+Like G_plot_polygon(), except it takes a set of polygons, each with
+<B>npts[<I>i</I>]</B> vertices, where the number of polygons is
+specified with the <B>rings</B> argument.  It is especially useful for
+plotting vector areas with interior islands.
+
+<P>
+int G_plot_where_en(int x, int y, double *east, double *north) x,y
+to east,north
+
+The pixel coordinates <B>x,y</B> are converted to map coordinates
+<B>east,north.</B>
+
+<P>
+See <B>G_setup_plot()</B> for the required coordinate initialization
+procedure.
+
+<P>
+int G_plot_where_xy(double *east, double *north, int *x, int *y)
+east,north to x,y
+
+The map coordinates <B>east,north</B> are converted to pixel
+coordinates <B>x,y.</B>
+
+<P>
+See <B>G_setup_plot()</B> for the required coordinate initialization
+procedure.
+
+<P>
+int G_plot_fx(double (*f)(), double east1, double east2) plot
+  f(east1) to f(east2)
+
+The function <B>f(east)</B> is plotted from <B>east1</B> to
+<B>east2.</B> The function <B>f(east)</B> must return the map northing
+coordinate associated with east.
+
+<P>
+See <B>G_setup_plot()</B> for the required coordinate initialization
+procedure.
+
+
+\section Temporary_Files Temporary Files
+
+Often it is necessary for modules to use temporary files to store
+information that is only useful during the module run. After the
+module finishes, the information in the temporary file is no longer
+needed and the file is removed.  Commonly it is required that
+temporary file names be unique from invocation to invocation of the
+module. It would not be good for a fixed name like "/tmp/mytempfile"
+to be used. If the module were run by two users at the same time, they
+would use the same temporary file. In addition systematic use of the
+/tmp directory could leave the system vulnerable to symlink attacks.
+The following routine generates temporary file names which are unique
+within the module and across all GRASS programs.
+
+<P>
+char * G_tempfile() returns a temporary file name
+
+This routine returns a pointer to a string containing a unique file
+name that can be used as a temporary file within the
+module. Successive calls to G_tempfile() will generate new names.
+
+<P>
+Only the file name is generated. The file itself is not created. To
+create the file, the module must use standard UNIX functions which
+create and open files, e.g., creat() or fopen().
+
+<P>
+The programmer should take reasonable care to remove (unlink) the file
+before the module exits. However, GRASS database management will
+eventually remove all temporary files created by G_tempfile() that
+have been left behind by the modules which created them.
+
+<P>
+<B>Note.</B> The temporary files are created in the GRASS database
+rather than under /tmp. This is done for two reasons. The first is to
+increase the likelihood that enough disk is available for large
+temporary files since /tmp may be a very small file system. The second
+is so that abandoned temporary files can be automatically removed (but
+see the warning below).
+
+<P>
+<B>Warning.</B> The temporary files are named, in part, using the
+process id of the module. GRASS database management will remove these
+files only if the module which created them is no longer
+running. However, this feature has a subtle trap. Programs which
+create child processes (using the UNIX fork(), see also G_fork()
+routine) should let the child call G_tempfile(). If the parent does it
+and then exits, the child may find that GRASS has removed the
+temporary file since the process which created it is no longer
+running.
+
+\section Command_Line_Parsing Command Line Parsing
+
+The following routines provide a standard mechanism for command line
+parsing.  Use of the provided set of routines will standardize GRASS
+commands that expect command line arguments, creating a family of
+GRASS modules that is easy for users to learn. As soon as a GRASS user
+familiarizes himself with the general form of command line input as
+defined by the parser, it will greatly simplify the necessity of
+remembering or at least guessing the required command line arguments
+for any GRASS command. It is strongly recommended that GRASS
+programmers use this set of routines for all command line
+parsing. With their use, the programmer is freed from the burden of
+generating user interface code for every command. The parser will
+limit the programmer to a pre-defined look and feel, but limiting the
+interface is well worth the shortened user learning curve.
+
+
+\subsection Description Description
+
+The GRASS parser is a collection of five subroutines which use two
+structures that are defined in the GRASS "gis.h" header file. These
+structures allow the programmer to define the options and flags that
+make up the valid command line input of a GRASS command.
+
+<P>
+The parser routines behave in one of three ways:
+
+<P>
+(1) If no command line arguments are entered by the user, the parser
+searches for a completely interactive version of the command. If the
+interactive version is found, control is passed over to this
+version. If not, the parser will prompt the user for all
+programmer-defined options and flags. This prompting conforms to the
+same standard for every GRASS command that uses the parser routines.
+
+<P>
+(2) If command line arguments are entered but they are a subset of the
+options and flags that the programmer has defined as required
+arguments, three things happen. The parser will pass an error message
+to the user indicating which required options and/or flags were
+missing from the command line, the parser will then display a complete
+usage message for that command, and finally the parser cancels
+execution of the command.
+
+<P>
+(3) If all necessary options and flags are entered on the command line
+by the user, the parser executes the command with the given options
+and flags.
+
+\subsection Structures Structures
+
+<P>
+The parser routines described below use two structures as defined in
+the GRASS "gis.h" header file.
+
+<P>
+This is a basic list of members of the Option and Flag structures. A
+comprehensive description of all elements of these two structures and
+their possible values can be found in
+Full_Structure_Members_Description.
+
+
+\subsection Option_structure Option structure
+
+
+These are the basic members of the Option structure.
+
+\verbatim
+struct Option *opt; /* to declare a command line option */
+\endverbatim
+
+<P>
+<B>Structure Member Description of Member</B>
+
+\verbatim
+opt->key Option name that user will use
+opt->description Option description that is shown to the user
+opt->type Variable type of the user's answer to the option
+opt->required Is this option required on the command line? (Boolean)
+\endverbatim
+
+
+\subsection Flag_structure Flag structure
+
+<P>
+These are the basic members of the Flag structure.
+
+\verbatim
+struct Flag *flag; /* to declare a command line flag */
+\endverbatim
+
+<B>Structure Member Description of Member</B>
+
+\verbatim
+flag->key Single letter used for flag name
+flag->description Flag description that is shown to the user
+\endverbatim
+
+
+\subsection Parser_Routines Parser Routines
+
+<P>
+Associated with the parser are five routines that are automatically
+included in the GRASS Makefile process. The Makefile process is
+documented in \ref Compiling_and_Installing_GRASS_Modules.
+
+<P>
+struct Option * G_define_option() returns Option structure
+
+Allocates memory for the Option structure and returns a pointer to
+this memory (of <I>type struct Option *).</I>
+
+<P>
+struct Flag * G_define_flag() return Flag structure
+
+Allocates memory for the Flag structure and returns a pointer to this
+memory (of <I>type struct Flag *).</I>
+
+<P>
+int G_parser(int argc, char *argv[]) parse command line
+
+The command line parameters <B>argv</B> and the number of parameters
+<B>argc</B> from the main() routine are passed directly to
+<I>G_parser()</I>.  <I>G_parser()</I> accepts the command line input
+entered by the user, and parses this input according to the input
+options and/or flags that were defined by the programmer.
+
+<P>
+<I>G_parser()</I> returns 0 if successful. If not successful, a usage
+statement is displayed that describes the expected and/or required
+options and flags and a non-zero value is returned.
+
+<P>
+int G_usage() command line help/usage message
+
+Calls to <I>G_usage()</I> allow the programmer to print the usage
+message at any time. This will explain the allowed and required
+command line input to the user. This description is given according to
+the programmer's definitions for options and flags. This function
+becomes useful when the user enters options and/or flags on the
+command line that are syntactically valid to the parser, but
+functionally invalid for the command (e.g. an invalid file name.)
+
+<P>
+For example, the parser logic doesn't directly support grouping
+options. If two options be specified together or not at all, the
+parser must be told that these options are not required and the
+programmer must check that if one is specified the other must be as
+well. If this additional check fails, then <I>G_parser()</I> will
+succeed, but the programmer can then call <I>G_usage()</I> to print
+the standard usage message and print additional information about how
+the two options work together.
+
+<P>
+int G_disable_interactive() turns off interactive capability
+
+When a user calls a command with no arguments on the command line, the
+parser will enter its own standardized interactive session in which
+all flags and options are presented to the user for input. A call to
+<I>G_disable_interactive()</I> disables the parser's interactive
+prompting.
+
+<P>
+<B>Note:</B> Displaying multiple answers default values (new in GRASS
+5, see d.zoom for example).
+
+\verbatim
+char *def[] = {"One", "Two", "Last", NULL};
+
+opt->multiple = YES;
+opt->answers  = def;
+if (G_parser(argc, argv))
+    exit(EXIT_FAILURE);
+\endverbatim
+
+<P>
+The programmer may not forget last NULL value. 
+
+
+\subsection Parser_Programming_Examples Parser Programming Examples
+
+<P>
+The use of the parser in the programming process is demonstrated
+here. Both a basic step by step example and full code example are
+presented.
+
+
+\subsection Step_by_Step_Use_of_the_Parser Step by Step Use of the Parser
+
+These are the four basic steps to follow to implement the use of the
+GRASS parser in a GRASS command:
+
+<P>
+(1) Allocate memory for Flags and Options:
+
+<P>
+Flags and Options are pointers to structures allocated through the
+parser routines <I>G_define_option()</I> and <I>G_define_flag()</I> as
+defined in Parser_Routines.
+
+\verbatim
+#include "gis.h" ; /* The standard GRASS include file */
+
+struct Option *opt ; /* Establish an Option pointer for each option */
+struct Flag *flag ; /* Establish a Flag pointer for each option */
+
+opt = G_define_option() ; /* Request a pointer to memory for each option */
+
+flag = G_define_flag() ; /* Request a pointer to memory for each flag */
+\endverbatim
+
+<P>
+(2) Define members of Flag and Option structures:
+
+<P>
+The programmer should define the characteristics of each option and
+flag desired as outlined by the following example:
+
+\verbatim
+opt->key = "option";                 /* The name of this option is "option". */
+opt->description = _("Option test"); /* The option description is "Option test" */
+opt->type = TYPE_STRING;             /* The data type of the answer to the option */
+opt->required = YES;                 /* This option *is* required from the user */
+
+flag->key = "t";                     /* Single letter name for flag */
+flag->description = _("Flag test");  /* The flag description is "Flag test" */
+\endverbatim
+
+
+<B>Note.</B>There are more options defined later in
+Complete_Structure_Members_Table.
+
+<P>
+(3) Call the parser:
+
+\verbatim
+int
+main(int argc, char *argv[]); /* command line args passed into main() */
+
+if (G_parser(argc, argv))   /* Returns 0 if successful, non-zero otherwise */
+      exit(EXIT_FAILURE);
+\endverbatim
+
+
+(4) Extracting information from the parser structures:
+
+\verbatim
+fprintf(stdout, "For the option "%s" you chose: <%s>\n", opt->description, opt->answer );
+fprintf(stdout, "The flag "-%s" is %s set.\n", flag->key, flag->answer ? "" : "not" );
+\endverbatim
+
+
+<P>
+(5) Running the example program
+
+<P>
+Once such a module has been compiled (for example to the default
+executable file <I>a.out</I> , execution will result in the following
+user interface scenarios. Lines that begin with # imply user entered
+commands on the command line.
+
+\verbatim
+# a.out help
+\endverbatim
+
+<P>
+This is a standard user call for basic help information on the
+module. The command line options (in this case, "help") are sent to
+the parser via <I>G_parser().</I> The parser recognizes the "help"
+command line option and returns a list of options and/or flags that
+are applicable for the specific command. Note how the programmer
+provided option and flag information is captured in the output.
+
+\verbatim
+a.out [-t] option=name
+
+Flags:
+-t Flag test
+
+Parameters:
+option Option test
+\endverbatim
+
+Now the following command is executed:
+
+\verbatim
+# a.out -t
+\endverbatim
+
+<P>
+This command line does not contain the required option. Note that the
+output provides this information along with the standard usage message
+(as already shown above):
+
+\verbatim
+Required parameter <option> not set (Option test).
+
+Usage:
+
+a.out[-t] option=name
+
+
+Flags:
+-t Flag test
+
+Parameters:
+option Option test
+\endverbatim
+
+<P>
+The following commands are correct and equivalent. The parser provides no 
+error messages and the module executes normally:
+
+\verbatim
+# a.out option=Hello -t
+
+# a.out -t option=Hello
+
+For the option "Option test" you chose: Hello
+The flag "-t" is set.
+\endverbatim
+
+<P>
+If this specific command has no fully interactive version (a user
+interface that does not use the parser), the parser will prompt for
+all programmer-defined options and/or flags.
+
+<P>
+User input is in <I>italics</I>, default answers are displayed in
+square brackets [ ].
+
+\verbatim
+# a.out
+
+OPTION: Option test
+
+key: option
+required: YES
+enter option> <I>Hello</I>
+
+You have chosen:
+option=Hello
+Is this correct? (y/n) [y] <I>y</I>
+FLAG: Set the following flag?
+Flag test? (y/n) [n] <I>n</I>
+You chose: <Hello>
+The flag is not set
+\endverbatim
+
+
+\section Full_Module_Example Full Module Example
+
+
+<P>
+The following code demonstrates some of the basic capabilities of the
+parser. To compile this code, create this Makefile and run the
+<I>make</I> command (see \ref Compiling_and_Installing_GRASS_Modules.
+
+\verbatim
+MODULE_TOPDIR = ../..
+
+PGM = r.mysample
+
+LIBES = $(GISLIB)
+DEPENDENCIES = $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+\endverbatim
+
+
+<P>
+The sample.c code follows. You might experiment with this code to 
+familiarize yourself with the parser.
+
+<P>
+<B>Note.</B> This example includes some of the advanced structure members 
+described in Complete_Structure_Members_Table.
+
+\verbatim
+#include <stdlib.h>
+#include <string.h>
+#include "gis.h"
+#include "glocale.h"
+
+int
+main(int argc , char *argv[] )
+{
+
+ struct Option *opt ;
+ struct Option *coor ;
+ struct Flag *flag ;
+ double X , Y ;
+ int n ;
+
+ opt = G_define_option() ;
+ opt->key = "debug" ;
+ opt->type = TYPE_STRING ;
+ opt->required = NO ;
+ opt->answer = "0" ;
+ opt->description = _("Debug level") ;
+
+ coor = G_define_option() ;
+ coor->key = "coordinate" ;
+ coor->key_desc = "x,y" ;
+ coor->type = TYPE_STRING ;
+ coor->required = YES ;
+ coor->multiple = YES ;
+ coor->description = _("One or more coordinates") ;
+
+ /* Note that coor->answer is not given a default value. */
+ flag = G_define_flag() ;
+ flag->key = 'v' ;
+ flag->description = _("Verbose execution") ;
+
+ /* Note that flag->answer is not given a default value. */
+
+ if (G_parser( argc , argv ))
+    exit (EXIT_FAILURE);
+
+  G_message("For the option <%s> you chose: <%s>\n", opt->description, opt->answer );
+  G_message("The flag <%s> is: %s set \n", flag->key, flag->answer ? "" : "not");
+  G_message("You specified the following coordinates:\n");
+
+ for ( n=0 ; coor->answers[n] != NULL ; n+=2 ) {
+   G_scan_easting ( coor->answers[n ] , &X , G_projection() );
+   G_scan_northing ( coor->answers[n+1] , &Y , G_projection() );
+    G_message( "%.31f,%.21f\n", X , Y );
+ }
+}
+\endverbatim
+
+
+\section Compiling_and_Installing_GRASS_Modules Compiling and Installing GRASS Modules
+
+GRASS modules are compiled and installed using the UNIX <i>make</i> command:
+<i>make</i> reads a file named <i>Makefile</i> (see
+Multiple_Architecture_Conventions for more information,) and then runs
+the compiler. The GRASS compilation process allows for multiple-architecture
+compilation from a single copy of the source code (for instance, if the source
+code is NFS mounted to various machines with differing architectures.) This
+chapter assumes that the programmer is familiar with <i>make</i> and its
+accompanying <i>Makefile</i>.
+
+<b>TODO: Explain ''auto-conf''....</b>
+
+<b>TODO: Include contents of SUBMITTING and INSTALL files from source code</b>
+
+To compile enter following:
+
+\verbatim
+./configure
+make
+make install
+\endverbatim
+
+Then the code will be compiled into "/usr/local/grass-6.x.y" directory. The start
+script "grass6x" will be placed into "/usr/local/bin/".\\
+
+Optionally other target directories can be specified while "configuring":
+
+\verbatim
+./configure --prefix=/opt/grass-6.x.y --with-bindir=/usr/bin
+make
+make install
+\endverbatim
+
+This will store the GRASS binaries into the directory "/opt/grass-6.x.y" and
+the  script mentioned above into "/usr/bin".
+
+The script "make" is required to compile single modules. The
+compilation process and requirements are discussed in more detail now.
+
+\subsection Makefile_Variables Makefile Variables
+
+<b>GRASS Libraries</b>. The following variables name the various GRASS 
+libraries:
+
+<i>GISLIB</i> This names the <i>GIS Library</i>, which is the principal GRASS 
+library. See \ref GIS_Library  for details about this library, and
+\ref Loading_the_GIS_Library for a sample Makefile which 
+loads this library.
+
+<i>VASKLIB</i> This names the <i>Vask Library</i>, which does full screen user 
+input.
+
+<i>VASK</i> This specifies the <i>Vask Library</i> plus the UNIX [n]curses and 
+termcap libraries needed to use the <i>Vask Library</i> routines. See 
+\ref Vask_Library for details about this library, and \ref Loading_the_Vask_Library
+for a sample Makefile which loads this library.
+
+<i>SEGMENTLIB</i> This names the <i>Segment Library</i>, which manages large 
+matrix data. See \ref Segment_Library for details about this library, 
+and \ref Loading_the_Vask_Library for a sample <i>Makefile</i> which loads
+this library.
+
+<i>RASTERLIB</i> This names the <i>Raster Graphics Library</i>, which 
+communicates with GRASS graphics drivers. See \ref Raster_Graphics_Library
+ for details about this library, and \ref Loading_the_Raster_Graphics_Library
+for a sample <i>Makefile</i> which loads this library.
+
+<i>DISPLAYLIB</i> This names the <i>Display Graphics Library</i>, which provides a
+higher level graphics interface to <i>RASTERLIB</i>. See
+Display_Graphics_Library for details about this library, and
+Loading_the_Display_Graphics_Library for a sample <i>Makefile</i>
+which loads this library.\\
+
+
+
+<b>UNIX Libraries:</b> The following variables name some useful UNIX 
+system libraries:
+
+<i>MATHLIB</i> This names the math library. It should be used instead of the -lm 
+loader option.
+
+<i>CURSES</i> This names both the curses and termcap libraries. It should be used 
+instead of the \newline
+-lcurses/-lncurses and -ltermcap loader options. Do not use <tt>$CURSES</tt> if 
+you use <tt>$VASK</tt>.
+
+<i>TERMLIB</i> This names the termcap library. It should be used instead of the 
+-ltermcap or -ltermlib loader options. Do not use <tt>$TERMLIB</tt> if you use 
+<tt>$VASK</tt> or <tt>$CURSES</tt>.\\
+
+
+<b>Compiler and loader variables.</b> The following variables are related 
+to compiling and loading C programs:
+
+<i>EXTRA\_CFLAGS</i> This variable can be used to add additional options 
+to <tt>$CFLAGS</tt>. It has no predefined values. It is usually used to specify 
+additional -I include directories, or -D preprocessor defines.
+
+
+\subsection Constructing_a_Makefile Constructing a Makefile
+
+The complete syntax for a <i>Makefile</i> is discussed in the UNIX
+documentation for <i>make</i> and will not be repeated here. The essential
+idea is that a target (e.g. a GRASS module) is to be built from a list of
+dependencies (e.g. object files, libraries, etc.). The relationship between
+the target, its dependencies, and the rules for constructing the target is
+expressed according to the following syntax:
+
+\verbatim
+target: dependencies
+
+actions
+
+more actions
+\endverbatim
+
+If the target does not exist, or if any of the dependencies have a newer 
+date than the target (i.e., have changed), the actions will be executed to 
+build the target. The actions must be indented using a TAB. <i>make</i> is 
+picky about this. It does not like spaces in place of the TAB.
+
+
+\section Multiple_Architecture_Conventions Multiple-Architecture Conventions
+
+The following conventions allow for multiple architecture compilation on a 
+machine that uses a common or networked GRASS source code directory tree.
+
+<P>
+Object files and library archives are compiled into subdirectories that 
+represent the architecture that they were compiled on. These subdirectories 
+are created in the $SRC directory as OBJ.<I>arch</I> and 
+LIB.<I>arch</I>, where <I>arch</I> represents the architecture of the 
+compiling machine. Thus, for example, $SRC/OBJ.sun4 would contain the 
+object files for Sun/4 and SPARC architectures, and $SRC/LIB.686-pc-linux-gnu would 
+contain library archives for Linux architectures. Likewise, 
+$SRC/OBJ.686-pc-linux-gnu would contain the object files for Linux architectures, 
+and $SRC/LIB.686-pc-linux-gnu would contain library archives for Linux 
+architectures.
+
+<P>
+Note that 'arch' is defined for a specific architecture during setup and 
+compilation of GRASS, it is not limited to sun4 or any specific string.
+
+
+\section Full_Structure_Members_Description Full Structure Members Description
+
+
+<P>
+There are many members to the Option and Flag structures. The following 
+tables and descriptions summarize all defined members of both the Option and 
+Flag structures.
+
+<P>
+An in-depth summary of the more complex structure members is presented in 
+Description_of_Complex_Structure_Members.
+
+
+\section Complete_Structure_Members_Table Complete Structure Members Table
+
+<B>struct Flag</B>
+<table border=1>
+<tr>
+ <td>structure member</td>
+ <td>C type</td>
+ <td>required</td>
+ <td>default</td>
+ <td> description and example</td>
+</tr><tr>
+ <td>key</td>
+ <td> char</td>
+ <td> YES</td>
+ <td> none</td>
+ <td> Key char used on command line<br>
+      flag->key = 'f' ;</td>
+</tr><tr>
+ <td>Description</td>
+ <td> char *</td>
+ <td> YES</td>
+ <td> none</td>
+ <td> String describing flag meaning<br>
+      flag->description = _("run in fast mode") ;</td>
+</tr><tr>
+ <td>answer</td>
+ <td> char</td>
+ <td> NO</td>
+ <td> NULL</td>
+ <td> Default and parser-returned
+     flag states.</td>
+</tr>
+</table>
+
+<P>
+<B>struct Option</B>
+<table border=1>
+<tr>
+ <td>structure member</td>
+ <td>C type </td>
+ <td>required </td>
+ <td>default </td>
+ <td>description and example</td>
+</tr>
+<tr>
+ <td>key </td>
+ <td>char * </td>
+ <td>YES </td>
+ <td>none </td>
+ <td>Key word used on command line.<br>
+ opt->key = "map" ;</td>
+</tr>
+<tr>
+ <td>type </td>
+ <td>int </td>
+ <td>YES </td>
+ <td>none </td>
+ <td>Option type: <br>
+ TYPE_STRING <br>
+ TYPE_INTEGER <br>
+ TYPE_DOUBLE <br>
+ opt->type = TYPE_STRING ;</td>
+</tr>
+<tr>
+ <td>Description </td>
+ <td>char * </td>
+ <td>YES </td>
+ <td>none </td>
+ <td>String describing option along with gettext macro for internationalization
+ opt->description = _("Map name") ;</td>
+</tr>
+<tr>
+ <td>answer </td>
+ <td>char * </td>
+ <td>NO </td>
+ <td>NULL </td>
+ <td>Default and parser-returned answer to an option.<br>
+ opt->answer = "defaultmap" ;</td>
+</tr>
+<tr>
+ <td>key_desc </td>
+ <td>char * </td>
+ <td>NO </td>
+ <td>NULL </td>
+ <td>Single word describing the key. Commas in this string denote 
+ to the parser that several comma-separated arguments are expected 
+ from the user as one answer. For example, if a pair of coordinates 
+ is desired, this element might be defined as follows.<br>
+  opt->key_desc = "x,y" ; </td>
+</tr>
+<tr>
+ <td>structure member</td>
+ <td>C type </td>
+ <td>required </td>
+ <td>default </td>
+ <td>description and example</td>
+</tr>
+<tr>
+ <td>multiple </td>
+ <td>int </td>
+ <td>NO </td>
+ <td>NO </td>
+ <td>Indicates whether the user can provide multiple answers or not. 
+ YES and NO are defined in "gis.h" and should be used (NO is 
+ the default.) Multiple is used in conjunction with the answers 
+ structure member below. opt->multiple = NO ;</td>
+</tr>
+<tr>
+ <td>answers </td>
+ <td>  </td>
+ <td>NO </td>
+ <td>NULL </td>
+ <td>Multiple parser-returned answers to an option. N/A</td>
+</tr>
+<tr>
+ <td>required </td>
+ <td>int </td>
+ <td>NO </td>
+ <td>NO </td>
+ <td>Indicates whether user MUST provide the option on the command 
+ line. YES and NO are defined in "gis.h" and should be used (NO 
+ is the default.) opt->required = YES ;</td>
+</tr>
+<tr>
+ <td>options </td>
+ <td>char * </td>
+ <td>NO </td>
+ <td>NULL </td>
+ <td>Approved values or range of values. <br>
+  opt->options = "red,blue,white" ;<br>
+  For integers and doubles, the following format is available: <br>
+ opt->options = "0-1000" ;</td>
+</tr>
+<tr>
+ <td>gisprompt</td>
+ <td>char *</td>
+ <td>NO</td>
+ <td>NULL</td>
+ <td>Interactive prompt guidance. There are three comma separated 
+ parts to this argument which guide the use of the standard GRASS 
+ file name prompting routines.<br>
+ opt->gisprompt = "old,cell,raster" ;</td>
+</tr>
+<tr>
+ <td>checker</td>
+ <td>char *()</td>
+ <td>NO</td>
+ <td>NULL</td>
+ <td>Routine to check the answer to an option<br>
+   m opt->checker = my_routine() ;</td>
+</tr>
+</table>
+
+\section Description_of_Complex_Structure_Members Description of Complex Structure Members 
+
+What follows are explanations of possibly confusing structure
+members. It is intended to clarify and supplement the structures table
+above.
+
+
+\subsection Answer_member_of_the_Flag_and_Option_structures Answer member of the Flag and Option structures
+
+The answer structure member serves two functions for GRASS commands
+that use the parser.
+
+<P>
+<B><I>(1) To set the default answer to an option:</I></B>
+
+<P>
+If a default state is desired for a programmer-defined option, the
+programmer may define the Option structure member "answer" before
+calling <I>G_parser()</I> in his module. After the <I>G_parser()</I> call,
+the answer member will hold this preset default value if the user did
+<I>not</I> enter an option that has the default answer member value.
+
+<P>
+<B><I>(2) To obtain the command-line answer to an option or flag:
+After a call to</I> </B><B>G_parser()</B><B><I>, the answer member will
+contain one of two values:</I></B>
+
+<P>
+(a) If the user provided an option, and answered this option on the command 
+line, the default value of the answer member (as described above) is 
+replaced by the user's input.
+
+<P>
+(b) If the user provided an option, but did <I>not</I> answer this option 
+on the command line, the default is not used. The user may use the default 
+answer to an option by withholding mention of the option on the command 
+line. But if the user enters an option without an answer, the default answer 
+member value will be replaced and set to a NULL value by <I>G_parser().</I>
+
+<P>
+As an example, please review the use of answer members in the structures 
+implemented in Full_Module_Example.
+
+
+\subsection Multiple_and_Answers_Members Multiple and Answers Members
+
+
+<P>
+The functionality of the answers structure member is reliant on the 
+programmer's definition of the multiple structure member. If the multiple 
+member is set to NO, the answer member is used to obtain the answer to an 
+option as described above.
+
+<P>
+If the multiple structure member is set to YES, the programmer has told 
+<I>G_parser()</I> to capture multiple answers. Multiple answers are 
+separated by commas on the command line after an option.
+
+<P>
+<B>Note.</B> <I>G_parser()</I> does not recognize any character other 
+than a comma to delimit multiple answers.
+
+<P>
+After the programmer has set up an option to receive multiple answers,
+these the answers are stored in the answers member of the Option
+structure. The answers member is an array that contains each
+individual user-entered answer. The elements of this array are the
+type specified by the programmer using the type member. The answers
+array contains however many comma-delimited answers the user entered,
+followed (terminated) by a NULL array element.
+
+<P>
+For example, here is a sample definition of an Option using multiple and 
+answers structure members:
+
+\verbatim
+opt->key ="option" ;
+opt->description = _("option example") ;
+opt->type = TYPE_INTEGER ;
+opt->required = NO ;
+opt->multiple = YES ;
+\endverbatim
+
+<P>
+The above definition would ask the user for multiple integer answers
+to the option. If in response to a routine that contained the above
+code, the user entered "option=1,3,8,15" on the command line, the
+answers array would contain the following values:
+
+\verbatim
+answers[0] == 1
+answers[1] == 3
+answers[2] == 8
+answers[3] == 15
+answers[4] == NULL
+\endverbatim
+
+\subsection key_desc_Member key_desc Member
+
+<P>
+The key_desc structure member is used to define the format of a single 
+command line answer to an option. A programmer may wish to ask for one 
+answer to an option, but this answer may not be a single argument of a type 
+set by the type structure member. If the programmer wants the user to enter 
+a coordinate, for example, the programmer might define an Option as follows:
+
+\verbatim
+opt->key ="coordinate" ;
+opt->description = _("Specified Coordinate") ;
+opt->type = TYPE_INTEGER ;
+opt->required = NO ;
+opt->key_desc = "x,y"
+opt->multiple = NO ;
+\endverbatim
+
+<P>
+The answer to this option would <I>not</I> be stored in the answer member, 
+but in the answers member. If the user entered "coordinate=112,225" on the 
+command line in response to a routine that contains the above option 
+definition, the answers array would have the following values after the call 
+to <I>G_parser()</I>:
+
+\verbatim
+answers[0] == 112
+answers[1] == 225
+answers[2] == NULL
+\endverbatim
+
+<P>
+Note that "coordinate=112" would not be valid, as it does not contain both 
+components of an answer as defined by the key_desc structure member.
+
+<P>
+If the multiple structure member were set to YES instead of NO in the 
+example above, the answers are stored sequentially in the answers member. 
+For example, if the user wanted to enter the coordinates (112,225), 
+(142,155), and (43,201), his response on the command line would be 
+"coordinate=112,225,142,155,43,201". Note that <I>G_parser()</I> 
+recognizes only a comma for both the key_desc member, and for multiple 
+answers.
+
+<P>
+The answers array would have the following values after a call to 
+<I>G_parser()</I>:
+
+\verbatim
+answers[0] == 112 answers[1] == 225
+answers[2] == 142 answers[3] == 155
+answers[4] == 43 answers[5] == 201
+answers[6] == NULL
+\endverbatim
+
+
+<P>
+<B>Note.</B> In this case as well, neither "coordinate=112" nor
+"coordinate=112,225,142" would be valid command line arguments, as
+they do not contain even pairs of coordinates. Each answer's format
+(as described by the key_desc member) must be fulfilled completely.
+
+<P>
+The overall function of the key_desc and multiple structure members is
+very similar. The key_desc member is used to specify the number of
+<I>required</I> components of a single option answer (e.g. a
+multi-valued coordinate.) The multiple member tells <I>G_parser()</I> to
+ask the user for multiple instances of the compound answer as defined
+by the format in the key_desc structure member.
+
+<P>
+Another function of the key_desc structure member is to explain to the
+user the type of information expected as an answer. The coordinate
+example is explained above.
+
+<P>
+The usage message that is displayed by <I>G_parser()</I> in case of an
+error, or by
+
+<P>
+<I>G_usage()</I> on programmer demand, is shown below. The Option
+"option" for the command <I>a.out</I> does not have its key_desc
+structure member defined.
+
+\verbatim
+Usage:
+
+a.out option=name
+\endverbatim
+
+
+<P>
+The use of "name" is a <I>G_parser()</I> standard. If the programmer 
+defines the key_desc structure member before a call to <I>G_parser()</I>, 
+the value of the key_desc member replaces "name". Thus, if the key_desc 
+member is set to "x,y" as was used in an example above, the following 
+usage message would be displayed:
+
+\verbatim
+Usage:
+
+a.out option=x,y
+\endverbatim
+
+<P>
+The key_desc structure member can be used by the programmer to clarify the 
+usage message as well as specify single or multiple required components of a 
+single option answer.
+
+
+\subsection gisprompt_Member gisprompt Member
+
+
+<P>
+The gisprompt Option structure item requires a bit more
+description. The three comma-separated (no spaces allowed)
+sub-arguments are defined as follows:
+
+<P>
+First argument:
+
+<P>
+"old" results in a call to the GRASS library subroutine 
+<I>G_ask_old()</I>, "new" to <I>G_ask_new(), "any" to 
+G_ask_any(), and "mapset" to G_ask_in_mapset().</I>
+
+<P>
+Second argument:
+
+<P>
+This is identical to the "element" argument in the above subroutine calls. 
+It specifies a directory inside the mapset that may contain the user's 
+response.
+
+<P>
+Third argument:
+
+<P>
+Identical to the "prompt" argument in the above subroutine calls. This is 
+a string presented to the user that describes the type of data element being 
+requested.
+
+<P>
+Here are two examples:
+
+<P>
+<B>gisprompt arguments Resulting call</B>
+
+<P>
+"new,cell,raster" G_ask_new("", buffer, "cell", "raster")
+
+<P>
+"old,dig,vector" G_ask_old("", buffer, "dig", "vector")
+
+<P>
+
+\subsection Common_Questions Common Questions
+
+
+<P>
+"How is automatic prompting turned off?"
+
+<P>
+GRASS 4.0 introduced a new method for driving GRASS interactive and 
+non-interactive modules as described in \ref Compiling_and_Installing_GRASS_Programs.
+Here is a short overview.
+
+<P>
+For most modules a user runs a front-end module out of the GRASS bin
+directory which in turn looks for the existence of interactive and
+non-interactive versions of the module. If an interactive version
+exists and the user provided no command line arguments, then that
+version is executed.
+
+<P>
+In such a situation, the parser's default interaction will never be seen by 
+the user. A programmer using the parser is able to avoid the front-end's 
+default search for a fully interactive version of the command by placing a 
+call to <I>G_disable_interactive()</I> before calling <I>G_parser()</I>  
+(see \ref Parser_Routines for details.)
+
+<P>
+"Can the user mix options and flags?"
+
+<P>
+Yes. Options and flags can be given in any order.
+
+<P>
+"In what order does the parser present options and flags?"
+
+<P>
+Flags and options are presented by the usage message in the order that the 
+programmer defines them using calls to <I>G_define_option()</I> and 
+<I>G_define_flag().</I>
+
+<P>
+"How does a programmer query for coordinates?"
+
+<P>
+For any user input that requires a set of arguments (like a pair of map 
+coordinates,) the programmer specifies the number of arguments in the 
+key_desc member of the Option structure. For example, if opt-&gt;key_desc was 
+set to "x,y", the parser will require that the user enter a pair of 
+arguments separated only by a comma. See the source code for the GRASS 
+commands r.drain or r.cost for examples.
+
+<P>
+"Is a user required to use full option names?"
+
+<P>
+No! Users are required to type in only as many characters of an option name 
+as is necessary to make the option choice unambiguous. If, for example, 
+there are two options, "input=" and "output=", the following would be 
+valid command line arguments:
+
+<P>
+# command i=map1 o=map2
+
+<P>
+# command in=map1 out=map2
+
+<P>
+"Are options standardized at all?"
+
+<P>
+Yes. There are a few conventions. Options which identify a single input map 
+are usually "map=", not "raster=" or "vector=". In the case of an 
+input and output map the convention is: "input=xx output=yy". By passing 
+the 'help' option to existing GRASS commands, it is likely that you will 
+find other conventions. The desire is to make it as easy as possible for the 
+user to remember (or guess correctly) what the command line syntax is for a 
+given command.
+
+<P>
+
+
+\section String_Manipulation_Functions String Manipulation Functions
+
+<P>
+This section describes some routines which perform string manipulation. 
+Strings have the usual C meaning: a NULL terminated array of characters.
+
+<P>
+These next 3 routines copy characters from one string to another.
+
+<P>
+char * G_strcpy(char *dst, char *src)copy strings
+
+Copies the <B>src</B> string to <B>dst</B> up to and including the
+NULL which terminates the <B>src</B> string. Returns <B>dst.</B>
+
+<P>
+char * G_strncpy(char *dst, char *src, int n) copy strings
+
+Copies at most <B>n</B> characters from the <B>src</B> string to
+<B>dst.</B> If <B>src</B> contains less than <B>n</B> characters, then
+only those characters are copied. A NULL byte is added at the end of
+<B>dst.</B> This implies that <B>dst</B> should be at least <B>n</B>+1
+bytes long. Returns <B>dst. Note.</B> This routine varies from the
+UNIX strncpy() in that G_strncpy() ensures that <B>dst</B> is NULL
+terminated, while strncpy() does not.
+
+<P>
+char * G_strcat(char *dst, char *src) concatenate strings 
+
+Appends the <B>src</B> string to the end of the <B>dst</B> string,
+which is then NULL terminated. Returns <B>dst.</B>
+
+<P>
+These next 3 routines remove unwanted white space from a single string.
+
+<P>
+char * G_squeeze(char *s) remove unnecessary white space 
+
+Leading and trailing white space is removed from the string <B>s</B>
+and internal white space which is more than one character is reduced
+to a single space character. White space here means spaces, tabs,
+linefeeds, newlines, and formfeeds. Returns <B>s.</B>
+
+<P>
+void G_strip(char *s) remove leading/training white space
+
+Leading and trailing white space is removed from the string <B>s.</B>
+White space here means only spaces and tabs. There is no return value.
+
+<P>
+char * G_chop(char *s) Chop leading and trailing white spaces:
+  space, &#92;f, &#92;n, &#92;r, &#92;t, &#92;v - returns pointer to string
+
+<P>
+The next routines replaces character(s) from string.
+
+<P>
+char * G_strchg(char *bug, char character, char new) replace
+character(s)
+
+Replace all occurencies of character in string bug with new.  Returns
+changed string
+
+<P>
+This next routine copies a string to allocated memory.
+
+<P>
+char * G_store(char *s) copy string to allocated memory
+
+This routine allocates enough memory to hold the string <B>s</B>,
+copies <B>s</B> to the allocated memory, and returns a pointer to the
+allocated memory.
+
+<P>
+The next 2 routines convert between upper and lower case.
+
+<P>
+char * G_tolcase(char *s) convert string to lower case
+
+Upper case letters in the string <B>s</B> are converted to their lower
+case equivalent.  Returns <B>s.</B>
+
+<P>
+char * G_toucase(char *s) convert string to upper case
+
+Lower case letters in the string <B>s</B> are converted to their upper
+case equivalent.  Returns <B>s.</B>
+
+<P>
+And finally a routine which gives a printable version of control characters.
+
+<P>
+char * G_unctrl(unsigned char c) printable version of control
+  character
+
+This routine returns a pointer to a string which contains an
+English-like representation for the character <B>c.</B> This is useful
+for nonprinting characters, such as control characters. Control
+characters are represented by ctrl-C, e.g., control A is represented
+by ctrl-A. 0177 is represented by DEL/RUB. Normal characters remain
+unchanged.
+
+
+<P>
+This routine is useful in combination with <I>G_intr_char()</I> for printing
+the user's interrupt character:
+
+\verbatim
+char G_intr_char();
+char * G_unctrl();
+
+fprintf(stdout, "Your interrupt character is %s\n",
+  G_unctrl(G_intr_char()));
+\endverbatim
+
+<P>
+<B>Note.</B> G_unctrl() uses a hidden static buffer which is
+overwritten from call to call.
+
+<P>
+<I>FOLLOWING new FUNCTIONS need to be merged into the flow of this text:</I>
+
+<P>
+int G_trim_decimal(char *buf) trim
+
+This routine remove trailing zeros from decimal number for example:
+23.45000 would come back as 23.45
+
+<P>
+char * G_index(str, delim) delimiter
+
+Position of delimiter
+
+<P>
+char * G_rindex (str, delim) ??????
+
+<P>
+int G_strcasecmp(char *a, char *b) string compare ignoring case (upper or lower)
+   returns: -1 if a&lt;b
+<br>
+0 if a==b
+<br>
+1 if a&gt;b
+
+<P>
+char * G_strstr(char *mainString, char *subString)Return a pointer
+  to the first occurrence of subString in mainString, or NULL if no occurrences
+  are found
+
+<P>
+char * G_strdup(char *string) Return a pointer to a string that is a
+duplicate of the string given to G_strdup.  The duplicate is created
+using malloc.  If unable to allocate the required space, NULL is
+returned.
+
+
+
+\section Enhanced_UNIX_Routines Enhanced UNIX Routines
+
+
+<P>
+A number of useful UNIX library routines have side effects which are 
+sometimes undesirable. The routines here provide the same functions as their 
+corresponding UNIX routine, but with different side effects.
+
+<P>
+
+\subsection Running in the Background Running in the Background
+
+
+<P>
+The standard UNIX fork() routine creates a child process which is a
+copy of the parent process. The fork() routine is useful for placing a
+module into the background. For example, a module that gathers input
+from the user interactively, but knows that the processing will take a
+long time, might want to run in the background after gathering all the
+input. It would fork() to create a child process, the parent would
+exit() allowing the child to continue in the background, and the user
+could then do other processing.
+
+<P>
+However, there is a subtle problem with this logic. The fork() routine does not
+protect child processes from keyboard interrupts even if the parent is no longer
+running. Keyboard interrupts will also kill background processes that do not
+protect themselves.
+<br>
+Note: Programmers who use /bin/sh know that programs run in the
+background (using & on the command line) are not automatically
+protected from keyboard interrupts. To protect a command that is run
+in the background, /bin/sh users must do nohup command &. Programmers
+who use the /bin/csh (or other variants) do not know, or forget that
+the C-shell automatically protects background processes from keyboard
+interrupts.
+<br>
+
+Thus a module which puts itself in the background may never finish if
+the user interrupts another module which is running at the keyboard.
+
+<P>
+The solution is to fork() but also put the child process in a process group
+which is different from the keyboard process group. G_fork() does this.
+
+<P>
+pid_t G_fork() create a protected child process
+
+This routine creates a child process by calling the UNIX fork()
+routine. It also changes the process group for the child so that
+interrupts from the keyboard do not reach the child. It does not cause
+the parent to exit().
+
+<P>
+G_fork() returns what fork() returns: -1 if fork() failed; otherwise 0
+to the child, and the process id of the new child to the parent.
+
+<P>
+<B>Note.</B> Interrupts are still active for the child. Interrupts
+sent using the <I>kill</I> command, for example, will interrupt the
+child. It is simply that keyboard-generated interrupts are not sent to
+the child.
+
+<P>
+
+\subsection Partially_Interruptible_System_Call Partially Interruptible System Call
+
+
+The UNIX system() call allows one program, the parent, to execute
+another UNIX command or module as a child process, wait for that
+process to complete, and then continue. The problem addressed here
+concerns interrupts.  During the standard system() call, the child
+process inherits its responses to interrupts from the parent. This
+means that if the parent is ignoring interrupts, the child will ignore
+them as well. If the parent is terminated by an interrupt, the child
+will be also.
+
+<P>
+However, in some cases, this may not be the desired effect. In a menu 
+environment where the parent activates menu choices by running commands 
+using the system() call, it would be nice if the user could interrupt the 
+command, but not terminate the menu module itself. The G_system() call 
+allows this.
+
+<P>
+int G_system(command) run a shell level command
+
+The shell level <B>command</B> is executed. Interrupt signals for the
+parent module are ignored during the call. Interrupt signals for the
+<B>command</B> are enabled. The interrupt signals for the parent are
+restored to their previous settings upon return.
+
+<P>
+G_system() returns the same value as system(), which is essentially
+the exit status of the <B>command.</B> See UNIX manual system(1) for
+details.
+
+<P>
+\subsection ENDIAN_test ENDIAN test
+
+
+<P>
+To test if the user's machine is little or big ENDIAN, the following
+function is provided:
+
+<P>
+int G_is_little_endian() test little ENDIAN 
+
+Test if machine is little or big endian.
+
+<P>
+Returns:
+
+<br>
+1 little endian
+<br>
+0 big endian
+
+
+<P>
+
+\subsection Unix_Socket_Functions Unix Socket Functions
+
+
+<P>
+The following provide a simplified interface for interprocess
+communication via Unix sockets.  The caller need only be concerned
+with the path to the socket file and the various file descriptors for
+socket connections.  The caller does not need to worry about handling
+socket structures - which, unlike internet sockets, have little
+utility once a file descriptor has been opened on a connection.  All
+socket functions in the GIS library have a <B>G_sock()</B> prefix.
+One should keep in mind that unix sockets connections can both be read
+from and written to.  Also, it is possible for calls to <B>read()</B>
+and <B>write()</B> to read or write fewer bytes than specified.
+Hence, looping calls may be required to read or write all of the data.
+The <B>read()</B> will still normally block if there is nothing to
+read, so a zero byte return value typically means the connection has
+been closed.  The <B>write()</B> function typically returns
+immediately (see W. Richard Stevens. 1997. UNIX network programming:
+Volume 1, 2nd edition. Prentice Hall).
+
+<P>
+char * G_sock_get_fname(char *name) makes full socket path
+
+Takes a simple <B>name</B> for a communication channel and builds the
+full path for a sockets file with that <B>name</B>.  The path as of
+this writing (2000-02-18) is located in the temporary directory for
+the user's current mapset (although this will likely change).  A
+<B>NULL</B> pointer is returned if the function fails for some reason.
+The caller is responsible for freeing the memory of the returned
+string when it is no longer needed.
+
+<P>
+int G_sock_exists(char *name) does the socket exist
+
+Takes the full path to a unix socket; determines if the file exists;
+and if the file exists whether it is a socket file or not.  Returns a
+non-zero value if the file exists and is a socket file.  Otherwise it
+returns zero.
+
+<P>
+int G_sock_bind(char *name) binds the socket
+
+Takes the full path to a unix socket and attempts to bind a file
+descriptor to the path <B>name</B>.  If successful it will return the
+file descriptor.  Otherwise, it returns -1.  The socket file must not
+already exist.  If it does, this function will fail and set the global
+<B>errno</B> to <B>EADDRINUSE</B>.  Other error numbers may be set if
+the call to <B>bind()</B> fails.  Server programs wishing to bind a
+socket should test if the socket file they wish to use already exists.
+And, if so, they may try to connect to the socket to see if it is in
+use.  If it is not in use, such programs may then call <B>unlink()</B>
+or <B>remove()</B> to delete the file before calling
+<B>G_sock_bind()</B>.  It is important that server processes do not
+just delete existing socket files without testing the connection.
+Doing so may make another server process unreachable (i.e. you will
+have hijacked the other server's communication channel).  Server
+processes must call <B>G_sock_bind()</B> prior to calling
+<B>G_sock_listen()</B> and <B>G_sock_accept()</B>.
+
+<P>
+int G_sock_listen(int fd, unsigned int queue) listen on a
+socket
+
+Takes the file descriptor returned by a successful call to
+<B>G_sock_bind()</B> and the length of the the listen queue.  A
+successful call will return 0, while a failed call will return -1.
+The global <B>errno</B> will contain the error number corresponding to
+the reason for the failure.  The queue length should never be zero.
+Some systems may interpret this to mean that no connections should be
+queued.  Other systems may add a fudge factor to the queue length that
+the caller specifies.  Servers that don't want additional connections
+queued should <B>close()</B> the listening file descriptor after a
+successful call to <B>G_sock_accept()</B>.  This function is a simple
+wrapper around the system <B>listen()</B> function.
+
+<P>
+int G_sock_accept(int fd) accept a connection on the listening
+socket
+
+Takes the file descriptor returned by a successful call to
+<B>G_sock_bind()</B>, for which a successful call to
+<B>G_sock_listen()</B> has also been made, and waits for an incoming
+connection.  When a connection arrives, the file descriptor for the
+connection is returned.  This function normally blocks indefinitely.
+However, an interrupt like <B>SIGINT</B> may cause this function to
+return without a valid connection.  In this case, the return value
+will be -1 and the global error number will be set to <B>EINTR</B>.
+Servers should handle this possibility by calling
+<B>G_sock_accept()</B> again.  A typical server might have a call to
+<B>fork()</B> after a successful return from <B>G_sock_accept()</B>.
+A server might also use <B>select()</B> to see if an a connection is
+ready prior to calling <B>G_sock_accept()</B>. This function is a
+simple wrapper around the system's <B>accept()</B> function, with the
+second and third arguments being <B>NULL</B>.
+
+<P>
+int G_sock_connect(char *name) make a connection to a
+server process
+
+Takes the full path to a socket file and attempts to make a connection
+to a server listening for connections.  If successful, the file
+descriptor for the socket connection is returned.  Otherwise, -1 is
+returned and the global <B>errno</B> may be set.  This function and
+<B>G_sock_get_fname()</B> are the only functions a client program
+really needs to worry about.  If the caller wants to be sure that the
+global error number was set from an unsuccessful call to this
+function, she should zero <B>errno</B> prior to the call.  Failures
+due to a non-existent socket file or a path name that exceeds system
+limits, will not change the global error number.
+
+\subsection Trivial_Socket_Server_Example Trivial Socket Server
+Example
+
+\verbatim
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "gis.h"
+
+int main (int argc, char *argv[])
+{
+    int listenfd, rwfd;
+    char *path;
+    pid_t pid;
+    
+    /* Path is built using server's name */
+    if (NULL == (path = G_sock_get_fname (argv[0])))
+        exit (EXIT_FAILURE);
+        
+    /* Make sure another instance isn't running */
+    if (G_sock_exists (path))
+    {
+        if ((listenfd = G_sock_connect (path)) != -1)
+        {
+            close (listenfd);
+            exit (EXIT_FAILURE);
+        }
+        remove (path);
+    }
+    
+    /* Bind the socket */
+    if ((listenfd = G_sock_bind (path)) < 0)
+        exit (EXIT_FAILURE);
+    
+    /* Begin listening on the socket */
+    if (G_sock_listen (listenfd, 1) != 0)
+        exit (EXIT_FAILURE);
+    
+    /* Loop forever waiting for connections */
+    for (;;)
+    {
+        if ((rwfd = G_sock_accept (listenfd)) < 0)
+        {
+            if (errno == EINTR)
+                continue;
+        }
+        else
+            exit (EXIT_FAILURE);
+
+        /* Fork connection */
+        if ((pid = fork()) == 0)
+        {
+            char c;
+            /* child closes listenfd */
+            close (listenfd);
+            while (read (rwfd, &amp;c, 1) > 0)
+                write (rwfd, &amp;c, 1);
+            close (rwfd);
+            return 0;
+        }
+        else if (pid > 0)
+        {
+            /* parent closes rwfd
+             * a well behaved server would limit
+             * the number of forks.
+             */
+            close (rwfd);
+        }
+        else
+            exit (EXIT_FAILURE);
+                   
+    }
+    G_free (path);
+    return 0;
+}
+\endverbatim
+
+\subsection Miscellaneous Miscellaneous
+
+
+<P>
+A number of general purpose routines have been provided.
+
+<P>
+char * G_date() current date and time
+
+Returns a pointer to a string which is the current date and time. The
+format is the same as that produced by the UNIX <I>date</I> command.
+
+<P>
+char * G_gets(char *buf) get a line of input (detect ctrl-z)
+
+This routine does a <I>gets()</I> from stdin into <B>buf.</B> It exits
+if end-of-file is detected. If stdin is a tty (i.e., not a pipe or
+redirected) then ctrl-z is detected. Returns 1 if the read was
+successful, or 0 if ctrl-z was entered.
+
+<P>
+<B>Note.</B> This is very useful for allowing a module to reprompt when a
+module is restarted after being stopped with a ctrl-z. If this routine returns
+0, then the calling module should reprint a prompt and call <I>G_gets()</I>
+again. For example:
+
+\verbatim
+char buf[1024];
+
+do{
+  fprintf(stdout, "Enter some input: ") ;
+} while ( ! G_gets(buf) ) ;
+\endverbatim
+
+
+<P>
+char * G_home() user's home directory
+
+Returns a pointer to a string which is the full path name of the
+user's home directory.
+
+<P>
+char G_intr_char() return interrupt char
+
+This routine returns the user's keyboard interrupt character. This is
+the character that generates the SIGINT signal from the keyboard.
+
+<P>
+See also <I>G_unctr()</I> for converting this character to a printable format.
+
+<P>
+int G_percent(int n, int total, int incr) print percent complete
+  messages
+
+This routine prints a percentage complete message to stderr. The
+percentage complete is (<B>n</B>/ <B>total</B>)*100, and these are
+printed only for each <B>incr</B> percentage. This is perhaps best
+explained by example:
+
+\verbatim
+# include <stdio.h>
+
+int row;
+int nrows;
+
+nrows = 1352; /* 1352 is not a special value - example only */
+
+fprintf (stderr, "Percent complete: ");
+
+for (row = 0; row < nrows; row++)
+  G_percent (row, nrows, 10);
+\endverbatim
+
+
+<P>
+This will print completion messages at 10% increments; i.e., 10%, 20%, 30%,
+etc., up to 100%. Each message does not appear on a new line, but rather erases
+the previous message. After 100%, a new line is printed.
+
+<P>
+char * G_program_name() return module name
+
+Routine returns the name of the module as set by the call to
+<I>G_gisinit().</I>
+
+<P>
+char * G_whoami() user's name
+
+Returns a pointer to a string which is the user's login name.
+
+<P>
+int G_yes(char *question, int default) ask a yes/no question
+
+This routine prints a <B>question</B> to the user, and expects the
+user to respond either yes or no. (Invalid responses are rejected and
+the process is repeated until the user answers yes or no.)
+
+<P>
+The <B>default</B> indicates what the RETURN key alone should mean. A
+<B>default</B> of 1 indicates that RETURN means yes, 0 indicates that
+RETURN means no, and -1 indicates that RETURN alone is not a valid
+response.
+
+<P>
+The <B>question</B> will be appended with "(y/n) ", and, if
+<B>default</B> is not -1, with "[y] " or "[n] ", depending on the
+<B>default.</B>
+
+<P>
+<I>G_yes()</I> returns 1 if the user said yes, and 0 if the user said no.
+
+<P>
+
+\section GIS_Library_Data_Structures GIS Library Data Structures
+
+
+<P>
+Some of the data structures, defined in the "gis.h" header file and used 
+by routines in this library, are described in the sections below.
+
+<P>
+
+\subsection struct_Cell_head struct Cell_head
+
+
+<P>
+The raster header data structure is used for two purposes. It is used
+for raster header information for map layers. It also used to hold
+region values. The structure is:
+
+\verbatim
+struct Cell_head
+{
+ int format; /* number of bytes per cell */
+ int compressed; /* compressed(1) or not compressed(0) */
+ int rows, cols; /* number of rows and columns */
+ int proj; /* projection */
+ int zone; /* zone */
+ double ew_res; /* east-west resolution */
+ double ns_res; /* north-south resolution */
+ double north; /* northern edge */
+ double south; /* southern edge */
+ double east; /* eastern edge */
+ double west; /* western edge */
+};
+\endverbatim
+
+
+<P>
+The <I>format</I> and <I>compressed</I> fields apply only to raster
+headers.  The <I>format</I> field describes the number of bytes per
+raster data value and the <I>compressed</I> field indicates if the
+raster file is compressed or not. The other fields apply both to
+raster headers and regions. The geographic boundaries are described by
+<I>north, south, east</I> and <I>west.</I> The grid resolution is
+described by <I>ew_res</I> and <I>ns_res.</I> The cartographic
+projection is described by <I>proj</I> and the related zone for the
+projection by <I>zone.</I> The <I>rows</I> and <I>cols</I> indicate
+the number of rows and columns in the raster file, or in the
+region. See \ref Raster_Header_Format for more information about raster
+headers, and \ref Region for more information about regions.
+
+<P>
+The routines described in \ref Raster_Header_File use this structure.
+
+<P>
+
+\subsection struct_Categories struct Categories
+
+<P>
+The <I>Categories</I> structure contains a title for the map layer,
+the largest category in the map layer, an automatic label generation
+rule for missing labels, and a list of category labels.
+
+<P>
+The structure is declared: <I>struct Categories</I> .
+
+<P>
+This structure should be accessed using the routines described in
+Raster_Category_File.
+
+<P>
+
+\subsection struct_Colors struct Colors
+
+
+<P>
+The color data structure holds red, green, and blue color intensities
+for raster categories. The structure has become so complicated that it
+will not be described in this manual.
+
+<P>
+The structure is declared: <I>struct Colors</I> .
+
+<P>
+The routines described in Raster_Color_Table must be used 
+to store and retrieve color information using this structure.
+
+<P>
+
+\subsection struct_History struct History
+
+<P>
+The <I>History</I> structure is used to document raster files. The 
+information contained here is for the user. It is not used in any 
+operational way by GRASS. The structure is:
+
+\verbatim
+# define MAXEDLINES 50
+# define RECORD_LEN 80
+
+struct History
+{
+ char mapid[RECORD_LEN];
+ char title[RECORD_LEN];
+ char mapset[RECORD_LEN];
+ char creator[RECORD_LEN];
+ char maptype[RECORD_LEN];
+ char datsrc_1[RECORD_LEN];
+ char datsrc_2[RECORD_LEN];
+ char keywrd[RECORD_LEN];
+ int edlinecnt;
+ char edhist[MAXEDLINES][RECORD_LEN];
+};
+\endverbatim
+
+
+<P>
+The <I>mapid</I> and <I>mapset</I> are the raster file name and
+mapset, <I>title</I> is the raster file title, <I>creator</I> is the
+user who created the file, <I>maptype</I> is the map type (which
+should always be "raster"), <I>datasrc_1</I> and <I>datasrc_2</I>
+describe the original data source, <I>keywrd</I> is a one-line data
+description and <I>edhist</I> contains <I>edlinecnt</I> lines of user
+comments.
+
+<P>
+The routines described in Raster_History_File use this structure.
+However, there is very little support for manipulating the contents of this
+structure. The programmer must manipulate the contents directly.
+
+<P>
+<B>Note.</B> Some of the information in this structure is not meaningful.  For
+example, if the raster file is renamed, or copied into another mapset, the
+<I>mapid</I> and <I>mapset</I> will no longer be correct. Also the
+<I>title</I> does not reflect the true raster file title. The true title is
+maintained in the category file.
+
+<P>
+<B>Warning.</B> This structure has remained unchanged since the inception of
+GRASS. There is a good possibility that it will be changed or eliminated in
+future releases.
+
+<P>
+
+\subsection struct_Range struct Range
+
+
+<P>
+The <I>Range</I> structure contains the minimum and maximum values which occur
+in a raster file.
+
+<P>
+The structure is declared: <I>struct Range</I> .
+
+<P>
+The routines described in Raster_Range_File should be used 
+to access this structure.
+
+<P>
+
+\section Loading_the_GIS_Library Loading the GIS Library
+
+
+<P>
+The library is loaded by specifying $(GISLIB) in the Makefile. The following
+example is a complete Makefile which compiles code that uses this library:
+<br>
+<B>Makefile for $(GISLIB)}</B>
+
+\verbatim
+MODULE_TOPDIR = ../..
+
+PGM = r.info
+
+LIBES = $(GISLIB)
+DEPENDENCIES = $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+\endverbatim
+
+<P>
+See \ref Compiling_and_Installing_GRASS_Modules for a complete discussion
+of Makefiles.
+
+<P>
+
+\section TimeStamp_functions Timestamp functions
+
+\verbatim
+ #include "gis.h"
+\endverbatim
+
+
+<P>
+This structure is defined in gis.h, but there should be no reason to access its
+elements directly:
+
+\verbatim
+struct TimeStamp {
+ DateTime dt[2];   /* two datetimes */
+ int count;
+};
+\endverbatim
+
+
+<P>
+Using the G_*_timestamp() routines reads/writes a timestamp file in 
+the cell_misc/rastername or dig_misc/vectorname mapset element.
+
+<P>
+A TimeStamp can be one DateTime, or two DateTimes representing a 
+range.  When preparing to write a TimeStamp, the programmer should
+use one of:
+
+<P>
+<B>G_set_timestamp()</B> to set a single DateTime
+
+<P>
+<B>G_set_timestamp_range()</B> to set two DateTimes.
+
+<P>
+int G_read_raster_timestamp(char *name, char *mapset, struct TimeStamp
+  *ts) Read raster timestamp<br>
+Returns 1 on success.  0 or negative on error.
+
+<P>
+int G_read_vector_timestamp(char *name, char *mapset, struct TimeStamp
+  *ts) Read vector timestamp<br>
+Returns 1 on success.  0 or negative on error.
+
+<P>
+int G_get_timestamps(struct TimeStamp *ts, DateTime *dt1, DateTime
+  *dt2, int *count) copy TimeStamp into Datetimes
+
+Use to copy the TimeStamp information into Datetimes, so the members
+of struct TimeStamp shouldn't be accessed directly.
+
+<br>
+count=0  means no datetimes were copied
+
+<br>
+count=1  means 1 datetime was copied into dt1
+
+<br>
+count=2  means 2 datetimes were copied
+
+
+<P>
+int G_init_timestamp(struct TimeStamp *ts)
+Sets ts-&gt;count = 0, to indicate no valid DateTimes are in TimeStamp.
+
+<P>
+int G_set_timestamp(struct TimeStamp *ts, DateTime *dt) Copies a
+  single DateTime to a TimeStamp in preparation for writing.  (overwrites any
+  existing information in TimeStamp)
+
+<P>
+int G_set_timestamp_range(struct TimeStamp *ts, DateTime *dt1, DateTime *dt2)
+Copies two DateTimes (a range) to a TimeStamp in preparation for writing.
+(overwrites any existing information in TimeStamp)
+
+<P>
+int G_write_raster_timestamp(char *name, struct TimeStamp *ts)
+Returns:
+
+<br>
+1 on success.  
+
+<br>
+-1 error - can't create timestamp file
+
+<br>
+-2 error - invalid datetime in ts
+
+
+<P>
+int G_write_vector_timestamp(char *name, struct TimeStamp *ts)
+Returns:
+
+<br>
+1 on success.  
+
+<br>
+-1 error - can't create timestamp file
+
+<br>
+-2 error - invalid datetime in ts
+
+
+<P>
+int G_format_timestamp(struct TimeStamp *ts, char *buf)
+Returns:
+
+<br>
+1 on success
+
+<br>
+-1 error 
+
+
+<P>
+int G_scan_timestamp(struct TimeStamp *ts, char *buf)
+Returns:
+
+<br>
+1 on success
+
+<br>
+-1 error 
+
+
+<P>
+int G_remove_raster_timestamp(char *name)
+Only timestamp files in current mapset can be removed
+
+<P>
+Returns:
+
+<br>
+0  if no file
+
+<br>
+1  if successful
+
+<br>
+-1  on fail
+
+
+<P>
+int G_remove_vector_timestamp(char *name)
+Only timestamp files in current mapset can be removed
+
+<P>
+Returns:
+
+<br>
+0  if no file
+
+<br>
+1  if successful
+
+<br>
+-1  on fail
+
+
+<P>
+int G_read_grid3_timestamp(char *name,char *mapset, struct
+    TimeStamp *ts) read grid3 timestamp
+
+Returns 1 on success. 0 or negative on error.
+
+<P>
+int G_remove_grid3_timestamp(char *name) remove grid3
+timestamp
+
+Only timestamp files in current mapset can be removed
+
+<P>
+Returns:
+
+<br>
+0  if no file
+
+<br>
+1  if successful
+
+<br>
+-1  on fail
+
+
+<P>
+int G_write_grid3_timestamp(char *name,
+    struct TimeStamp *ts) write grid3 timestamp
+
+Returns:
+
+<br>
+1 on success.
+
+<br>
+-1 error - can't create timestamp file
+
+<br>
+-2 error - invalid datetime in ts
+
+
+<P>
+See \ref DateTime_Library for a complete discussion of GRASS datetime
+routines.
+
+<P>
+
+\section GRASS_GIS_Library_Overview GRASS GIS Library Overview
+
+
+<P>
+Contents of  directory lib/:
+
+<P>
+<PRE>
+bitmap     : bitmap library for X Window Bitmaps
+btree      : binary tree library
+bwidget    : tcl/tk extra library
+cdhc       : library for testing normality and exponentiality
+D          : display library
+datetime   : DateTime library
+db         : database management interface database drivers + SQL parser
+display    : library for CELL driver
+dspf       : G3D display files library
+edit       : edit library
+external   : external libraries from other projects (shapelib)
+fonts      : Hershey fonts
+form       : forms library
+front.end  : interface for interactive modules
+g3d        : G3D raster volume library
+gis        : main GRASS library
+gmath      : generic mathematical functions (matrix, fft etc.)
+             (later to be extended, BLAS/LAPACK library wrapper)
+gpde       : partial differential equations library
+gtcltk     : Tcl/Tk stuff	     
+image      : extra imagery library (image3)
+imagery    : imagery library
+init       : GRASS initialization code + scripts
+linkm      : linked list memory manager
+ogsf       : openGL library (required for NVIZ)
+proj       : PROJ4 projection library wrapper
+raster     : GRASS raster display library (raster map functions are in gis/)
+rowio      : row in/out library
+rst        : library for interpolation with regularized splines with tension 
+segment    : segment library
+sites      : old sites library (deprecated), now interfaced to vect library
+symbol     : drawing symbols for point vector data
+vask       : Curses management library
+vect       : GRASS vector and Direct Graph library
+</PRE>
+
+
+*/

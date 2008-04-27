@@ -1,0 +1,45 @@
+
+r.sunmask can be used in two ways:
+
+a) define sun position:
+r.sunmask elev=dgm25 output=dgm25.shadow alt=47.394203 azim=138.604904
+
+b) define location, date, time
+r.sunmask -v el=dgm5 out=shadow year=1997 month=9 day=25 hour=11 minute=15 \
+          sec=0 timezone=1 east=3570720 north=5766095
+
+or (using map center coordinates)
+r.sunmask -v el=dgm5 out=shadow year=1997 month=9 day=25 hour=11 minute=15 \
+          sec=0 timezone=1
+
+Calculating sun position... (using solpos (V. 11 April 2001) from NREL)
+ 1997.09.25, daynum 268, time: 11:15:00
+ long: 10.030458, lat: 52.025555, timezone: 2.000000
+ Solar position: sun azimuth 145.121445,
+   sun angle above horz.(refraction corrected) 31.662413
+ Sunrise time (without refraction): 07:16
+ Sunset time  (without refraction): 19:07
+Calculating shadows from DEM...   
+
+--------------------------
+
+Since the solpos algorithm expects lat/long coordinates, the module
+transforms the local coordinates to lat/long on-the-fly
+
+--------------------------
+daylight savings: Rather than convert time to GMT, the solpos
+algorithm uses what is called Local Standard Time, which is generally
+defined politically as an offset from GMT.  So the key is the offset from
+GMT, which the solpos Time Zone parameter.  If the user specifies clock time
+(different for winter and summer), he/she would have to change the Time Zone
+parameter seasonally in r.sunmask (timezone parameter).
+
+
+--------------------------
+
+solpos questions can be directed to
+> Steve Wilcox (Stephen_Wilcox@nrel.gov)
+> National Renewable Energy Laboratory  
+> 1617 Cole Boulevard, Golden, CO 80401-3393
+> voice: 1-303-275-4061; fax: 1-303-275-4675
+  http://rredc.nrel.gov/solar/codes_algs/solpos/

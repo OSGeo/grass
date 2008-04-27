@@ -1,0 +1,22 @@
+# List all extensions here on which your own extension depends.
+# The install routine will check if these are installed before
+# installing yours.
+# Each line should have <extension name> and <major.minor.revision>
+# tokens, separated by tabs.
+# E.g.:
+#
+# myExtension	1.0.2
+#
+# If extension name is "GRASS", the install routine will check that
+# the correct GRASS version is present:
+#
+# GRASS	6.0.1
+#
+# You can put in commented and empty lines if you wish, as well as
+# end-of-line comments, e.g.:
+#
+# GRASS	6.0.1	# due to some bugs in 6.0.0
+#
+# If you leave out the version number, or parts of it, every missing
+# part will be interpreted as "0" by the install routine.
+#

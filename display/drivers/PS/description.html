@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>PS driver</TITLE>
+ <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</HEAD>
+<BODY bgColor=white>
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+<EM><B> PS driver</B></EM> - driver to create PostScript files.
+<BR><EM>(drivers)</EM> 
+
+<H2>DESCRIPTION</H2>
+
+The PS driver generates a PostScript file from GRASS display commands.
+The driver is started as 'pseudo' monitor (PS file instead) and when
+stopped, all output from previously used display commands are written
+to the PostScript file.
+
+<H2>USAGE</H2>
+<H3>Environment variables</H3>
+Several environment variables effect the operation 
+of the PS driver:
+
+<UL>
+  <LI><B>GRASS_PSFILE</B><BR>
+    name of output file. If it ends with ".eps" an EPS file
+    will be created.</LI><BR>
+  <LI><B>GRASS_PAPER</B><BR>
+    sets the screen dimensions and margins to
+    fit a standard paper size, see also GRASS_WIDTH, GRASS_HEIGHT.</LI><BR>
+  <LI><B>GRASS_WIDTH</B><BR>
+    defines the width of the screen, see also GRASS_HEIGHT</LI><BR>
+  <LI><B>GRASS_HEIGHT</B><BR>
+    defines the height of the screen, see also GRASS_WIDTH</LI><BR>
+  <LI><B>GRASS_TRUECOLOR</B><BR>
+    if <tt>TRUE</tt>, the PS driver generates color output, otherwise
+    monochrome.</LI><BR>
+  <LI><B>GRASS_LANDSCAPE</B><BR>
+    if <tt>TRUE</tt>, the screen is rotated 90 degrees
+    counter-clockwise so that a "landscape" screen fits better on
+    "portrait" paper.</LI><BR>
+  <LI><B>GRASS_PS_HEADER</B><BR>
+    if <tt>FALSE</tt>, the output is appended to any existing file,
+    and no prolog or setup sections are generated.</LI><BR>
+  <LI><B>GRASS_PS_TRAILER</B><BR>
+    if <tt>FALSE</tt>, no trailer section is generated.</LI>
+</UL>
+
+<H3>Example</H3>
+<OL>
+  <LI>Start up the driver
+<DIV class="code"><PRE>
+d.mon start=PS
+</PRE></DIV>
+  </LI>
+  <LI>Display raster map and vector polygons
+<DIV class="code"><PRE>
+d.rast <i>somerastermap</i>
+d.vect map=<i>somevectormap</i> color=red
+</PRE></DIV>
+  </LI>
+  <LI> Stop the driver subsequently. This will write a 
+    file named <tt>map.ps</tt> to be created in your current directory:
+<DIV class="code"><PRE>
+d.mon stop=PS
+</PRE></DIV>
+  </LI>
+</OL>
+
+<H2>NOTES</H2> 
+
+The resolution of the <i>PS</i> raster map is defined by the map
+extents. Use <em>g.region -p</em> to get the number of rows and cols and
+use the environment variables to set the PS size. If you would like a
+larger image, multiply both rows and cols by the same whole number to
+preserve the aspect ratio.
+<P>
+GRASS_TRUECOLOR requires either PostScript level 2 or level 1 plus the
+colorimage and setrgbcolor operators (this is the case for colour printers
+which pre-date level 2 PostScript).
+<p>
+Only masked images (<tt>d.rast -o</tt>, <tt>d.rgb -o</tt>, <tt>d.his
+-n</tt>) require PostScript level 3.
+
+<h2>SEE ALSO</h2>
+<EM>
+  <a href="displaydrivers.html">Display drivers</a>
+  <br>
+  <A HREF="htmlmapdriver.html">HTMLMAP driver</A>,
+  <A HREF="pngdriver.html">PNG driver</A>,
+  <A href="xdriver.html">XDRIVER</A>
+  <BR>
+  <A HREF="d.frame.html">d.frame</A>,
+  <A href="d.out.file.html">d.out.file</A>,
+  <A href="d.mon.html">d.mon</A>,
+  <A href="d.rast.html">d.rast</A>,
+  <A href="d.vect.html">d.vect</A>
+</EM>
+
+<H2>AUTHOR</H2>
+
+Glynn Clements, 2007
+
+<p>
+<i>Last changed: $Date$</i>

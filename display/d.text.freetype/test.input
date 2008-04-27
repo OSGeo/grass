@@ -1,0 +1,57 @@
+. COMMANDS: .F .C .S .A .R .X .Y .L .E .N ..
+. Other .* except COMMANDS can be used for comments.
+.
+. .F {font|path}[:charset]		font
+. .C {color_name|0xRRGGBB}		color
+. .S [+|-]size[p]			size		p means pixel size
+. .B {0|1}				bold
+. .A {ll|lc|lr|cl|cc|cr|ul|uc|ur}	align
+. .R [+|-]rotation[r]			rotation	r means radian rotation
+. .I linespacing			linespacing
+. .X [+|-]x[%|p]			x-coord		+|- means relative dx
+. .Y [+|-]y[%|p]			y-coord		% means percentage
+. .L {0|1}				linefeed
+. .E [+|-]east[%|p]			x-origin
+. .N [+|-]north[%|p]			y-origin
+. ..					draw one .
+.
+.c ALSO COMMENT
+.a ALSO COMMENT
+.
+.
+.E 100p
+.N 100p
+.F luximr
+.S 10
+.R 5
+line 1
+.F luxirbi
+.L 0
+line 2-1
+line 2-2
+.L 1
+.C 0xff00ff
+line 3
+
+line 5
+.X 0
+.Y 0
+line 1 again
+.X +3
+.F /usr/X11R6/lib/X11/fonts/TTF/gulim.ttc:euc-kr
+.S 50p
+.R -10
+한글입니다.
+line 2 again
+line 3 again
+line 4
+.L 0
+line 5-1
+line 5-2
+.A cc
+.X 50%
+.Y 70%
+.C red
+.R 3.14r
+(100,200)
+

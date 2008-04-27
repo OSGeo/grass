@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="49cm" height="110cm" viewBox="4 15 49 110">
+  <rect style="fill: #ffffff" x="5" y="67" width="28" height="13"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="67" width="28" height="13"/>
+  <rect style="fill: #ffffff" x="5" y="66" width="3.35" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="66" width="3.35" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.1" y="66.75">gismutils</text>
+  <rect style="fill: #ffffff" x="5" y="17" width="48" height="47"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="17" width="48" height="47"/>
+  <rect style="fill: #ffffff" x="5" y="16" width="2.3" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="16" width="2.3" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.1" y="16.75">render</text>
+  <rect style="fill: #ffffff" x="33" y="21" width="18.8" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="33" y="21" width="18.8" height="1.4"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="42.4" y="22">MapLayer</text>
+  <rect style="fill: #ffffff" x="33" y="22.4" width="18.8" height="7.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="33" y="22.4" width="18.8" height="7.4"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="23.1">+cmd: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="23.9">+name: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="24.7">+mapset: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="25.5">+type: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="26.3">+active: boolean</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="27.1">+hidden: boolean</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="27.9">+opacity: integer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="28.7">+mapfile: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="29.5">+maskfile: string</text>
+  <rect style="fill: #ffffff" x="33" y="29.8" width="18.8" height="5"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="33" y="29.8" width="18.8" height="5"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="30.5">-init(type:string,name:string,mapset:string,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="31.1">      active:boolean,hidden:boolean,opacity:boolean,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="31.7">      parameters:dictionary)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="32.5">-renderRasterLayer()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="33.3">-renderVectorLayer()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="33.15" y="34.1">+Render(): name of rendered image or None</text>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="42.4,20.7764 42.4,18 17.9,18 17.9,21 "/>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="42,20.0882 42.4,20.8882 42.8,20.0882 "/>
+  <polygon style="fill: #ffffff" points="17.9,21 17.66,20.3 17.9,19.6 18.14,20.3 "/>
+  <polygon style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="17.9,21 17.66,20.3 17.9,19.6 18.14,20.3 "/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="30.15" y="17.85"></text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="42.75" y="20">layer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="42.75" y="20.8">0..*</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="18.25" y="20.2">1</text>
+  <rect style="fill: #ffffff" x="5" y="68" width="14.6" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="68" width="14.6" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="12.3" y="68.7">&lt;&lt;wx.lib.customtreectrl.CustomTreeCtrl&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="12.3" y="69.7">LayerTree</text>
+  <rect style="fill: #ffffff" x="5" y="70.2" width="14.6" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="70.2" width="14.6" height="0.4"/>
+  <rect style="fill: #ffffff" x="5" y="70.6" width="14.6" height="5"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="70.6" width="14.6" height="5"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="71.3">-init(...)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="72.1">+AddLayer(idx:integer,layertype:string)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="72.9">+onCollapseNode()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="73.7">+onExpandNone()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="74.5">+onActiveLayer()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="75.3">+onChangeSel()</text>
+  <rect style="fill: #ffffff" x="5" y="21" width="25.8" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="21" width="25.8" height="1.4"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="17.9" y="22">Map</text>
+  <rect style="fill: #ffffff" x="5" y="22.4" width="25.8" height="7.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="22.4" width="25.8" height="7.4"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="23.1">+env: dictionary</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="23.9">+verbosity: integer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="24.7">+width: integer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="25.5">+height: integer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="26.3">+windfile: string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="27.1">+region: dictionary</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="27.9">+layer: list</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="28.7">+renderRegion: dictionary</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="29.5">+mapfile: string</text>
+  <rect style="fill: #ffffff" x="5" y="29.8" width="25.8" height="33"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="29.8" width="25.8" height="33"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="30.5">-init()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="31.3">-initRegion()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="32.1">-initMonSize()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="32.9">-initEnv()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="33.7">-adjustRegion()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="34.5">+GetRegion(): region</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="35.3">+SetRegion(): GRASS_REGION or string</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="36.1">+GetListOfLayers(type:string=None,active:boolean=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="36.7">                 hidden:boolean=None): list of layers</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="37.5">+Render(force:boolean=None): rendered image filename</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="38.3">+AddRasterLayer(name:string,mapset:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="38.9">                catlist:string=None,vallist:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="39.5">                l_active:boolean=True,l_hidden:boolean=False,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="40.1">                l_opacity:integer=1,l_render:boolean=False): added layer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="40.9">+AddGraphLayer(name:string,graph:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="41.5">               color:string=255:0:0,coordsinmapunits:boolean=False,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="42.1">               l_active:boolean=True,l_hidden:boolean=False,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="42.7">               l_opacity:integer=1,l_render:boolean=False): added layer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="43.5">+AddVectorLayer(name:string,mapset:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="44.1">                type:string,display:string=shape,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="44.7">                attrcol:string=None,icon:string=basic/circle,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="45.3">                size:integer=8,layer:integer=1,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="45.9">                cats:string=None,where:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="46.5">                width:integer=1,wcolumn:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="47.1">                wscale:inreger=1,color:string=000:000:000,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="47.7">                fcolor:string=200:200:200,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="48.3">                rgb_column:string=GRASSRBG,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="48.9">                llayer:integer=1,lcolor:string=256:000:000,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="49.5">                bgcolor:string=None,bcolor:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="50.1">                lsize:integer=8,font:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="50.7">                xref:string=left,yref:string=center,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="51.3">                minreg:string=None,maxreg:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="51.9">                colorfromtable:boolean=False,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="52.5">                randomcolor:boolean=False,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="53.1">                catasid:boolean=False,l_active:boolean=True,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="53.7">                l_hidden:boolean=False,l_opacity:boolean=1,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="54.3">                l_render:boolean=False): added layer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="55.1">+PopLayer(name:string=None,mapset:string=None,</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="55.7">          id:integer=None): Layer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="56.5">+GetLayerIndex(name:string,mapset:string=None): index or None</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.15" y="57.3">+Clean()</text>
+  <rect style="fill: #ffffff" x="21" y="68" width="7.6" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="21" y="68" width="7.6" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="24.8" y="68.7">&lt;&lt;wx.Panel&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="24.8" y="69.7">GMConsole</text>
+  <rect style="fill: #ffffff" x="21" y="70.2" width="7.6" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="21" y="70.2" width="7.6" height="0.4"/>
+  <rect style="fill: #ffffff" x="21" y="70.6" width="7.6" height="4.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="21" y="70.6" width="7.6" height="4.2"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="21.15" y="71.3">-init()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="21.15" y="72.1">+getGRASSCmd()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="21.15" y="72.9">+runCmd(event)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="21.15" y="73.7">+clearHistory(event)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="21.15" y="74.5">+saveHistory(event)</text>
+  <rect style="fill: #ffffff" x="6" y="78" width="8.65" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="78" width="8.65" height="1.4"/>
+  <rect style="fill: #ffffff" x="6" y="77.1" width="1.5" height="0.9"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="77.1" width="1.5" height="0.9"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.3" y="78.9">GetTempFile (pref=None)</text>
+  <rect style="fill: #ffffff" x="5" y="83" width="19" height="13"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="83" width="19" height="13"/>
+  <rect style="fill: #ffffff" x="5" y="82" width="3" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="82" width="3" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.1" y="82.75">toolbars</text>
+  <rect style="fill: #ffffff" x="6" y="84" width="7.95" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="84" width="7.95" height="1.4"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="9.975" y="85">MapToolBar</text>
+  <rect style="fill: #ffffff" x="6" y="85.4" width="7.95" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="85.4" width="7.95" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="85.8" width="7.95" height="1.8"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="85.8" width="7.95" height="1.8"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="86.5">-init(mapdisplay,map)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="87.3">+onSelect(event)</text>
+  <rect style="fill: #ffffff" x="6" y="89" width="6.9" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="89" width="6.9" height="1.4"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="9.45" y="90">DigitToolbar</text>
+  <rect style="fill: #ffffff" x="6" y="90.4" width="6.9" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="90.4" width="6.9" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="90.8" width="6.9" height="4.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="90.8" width="6.9" height="4.2"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="91.5">-init(parent,map)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="92.3">+initToolbar()</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="93.1">+onPoint(event)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="93.9">+AddPoint(x,y)</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.15" y="94.7">+getListOfLayers()</text>
+  <rect style="fill: #ffffff" x="5" y="99" width="14.7" height="26.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="99" width="14.7" height="26.4"/>
+  <rect style="fill: #ffffff" x="5" y="98" width="3" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="5" y="98" width="3" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="5.1" y="98.75">grassenv</text>
+  <rect style="fill: #ffffff" x="6" y="100" width="7.95" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="100" width="7.95" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="9.975" y="100.7">&lt;&lt;Exception&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="9.975" y="101.7">NotInGRASSSession</text>
+  <rect style="fill: #ffffff" x="6" y="102.2" width="7.95" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="102.2" width="7.95" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="102.6" width="7.95" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="102.6" width="7.95" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="104" width="8.35" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="104" width="8.35" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="10.175" y="104.7">&lt;&lt;Exception&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="10.175" y="105.7">CouldNotStartMonitor</text>
+  <rect style="fill: #ffffff" x="6" y="106.2" width="8.35" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="106.2" width="8.35" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="106.6" width="8.35" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="106.6" width="8.35" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="112" width="6.75" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="112" width="6.75" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="9.375" y="112.7">&lt;&lt;Exception&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="9.375" y="113.7">CouldNotExecute</text>
+  <rect style="fill: #ffffff" x="6" y="114.2" width="6.75" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="114.2" width="6.75" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="114.6" width="6.75" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="114.6" width="6.75" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="108" width="8.3" height="2.2"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="108" width="8.3" height="2.2"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="10.15" y="108.7">&lt;&lt;Exception&gt;&gt;</text>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="10.15" y="109.7">CouldNotStopMonitor</text>
+  <rect style="fill: #ffffff" x="6" y="110.2" width="8.3" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="110.2" width="8.3" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="110.6" width="8.3" height="0.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="110.6" width="8.3" height="0.4"/>
+  <rect style="fill: #ffffff" x="6" y="117" width="2.5" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="117" width="2.5" height="1.4"/>
+  <rect style="fill: #ffffff" x="6" y="116.1" width="1.5" height="0.9"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="6" y="116.1" width="1.5" height="0.9"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="6.3" y="117.9">env</text>
+  <rect style="fill: #ffffff" x="34" y="39" width="10.4" height="1.4"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="34" y="39" width="10.4" height="1.4"/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 1; font-family: sans; font-style: normal; font-weight: 700" x="39.2" y="40">GRASSLayer</text>
+  <rect style="fill: #ffffff" x="34" y="40.4" width="10.4" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="34" y="40.4" width="10.4" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="34.15" y="41.1">+params: dictionary</text>
+  <rect style="fill: #ffffff" x="34" y="41.4" width="10.4" height="1"/>
+  <rect style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" x="34" y="41.4" width="10.4" height="1"/>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="34.15" y="42.1">-init(parameters:dictionary)</text>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="39.2,38.7764 39.2,36.9 42.4,36.9 42.4,34.8 "/>
+  <polyline style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="38.8,38.0882 39.2,38.8882 39.6,38.0882 "/>
+  <polygon style="fill: #ffffff" points="42.4,34.8 42.64,35.5 42.4,36.2 42.16,35.5 "/>
+  <polygon style="fill: none; fill-opacity:0; stroke-width: 0.1; stroke: #000000" points="42.4,34.8 42.64,35.5 42.4,36.2 42.16,35.5 "/>
+  <text style="fill: #000000; text-anchor:middle; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="40.8" y="36.75"></text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="39.55" y="38.8">1</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="42.75" y="37.6">grassLayer</text>
+  <text style="fill: #000000; text-anchor:start; font-size: 0.8; font-family: monospace; font-style: normal; font-weight: normal" x="42.75" y="38.4">1</text>
+</svg>

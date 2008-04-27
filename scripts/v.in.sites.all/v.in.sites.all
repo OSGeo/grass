@@ -1,0 +1,65 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	v.in.sites.all
+# AUTHOR(S):	Markus Neteler
+# PURPOSE:	converts all old GRASS < V5.7 sites maps to vector maps
+#		in current mapset
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#% description: Converts all old GRASS < Ver5.7 sites maps in current mapset to vector maps.
+#% keywords: sites, vector, import
+#%End
+#%flag
+#% key: r
+#% description: Run non-interactively
+#%end
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+# the -r flag is a noop, just there to stop the gui coming up.
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+
+CONVERTEDMAPS=0
+for i in `g.mlist type=sites`
+do
+
+  # polish map names to be SQL compliant
+  INPUT=$i
+  OUTPUT=`echo $INPUT | sed 's+\.+_+g'`_points
+
+  #do it:
+  g.message "Processing $INPUT -> $OUTPUT" 
+  v.in.sites in=$INPUT out=$OUTPUT
+  if [ $? -ne 0 ] ; then
+    g.message -w "Error converting map $INPUT to $OUTPUT" 
+  else
+    CONVERTEDMAPS=`expr $CONVERTEDMAPS + 1`
+  fi
+done
+
+if [ $CONVERTEDMAPS -lt 1 ] ; then
+  g.message -e "No sites maps converted as no old sites maps present in current mapset <$MAPSET>." 
+else
+  g.message "Total $CONVERTEDMAPS number of sites maps in current mapset converted to vector" 
+  g.message "maps (original names extended by '_points'). Please verify new vector map(s)" 
+  g.message "before deleting old sites map(s)." 
+fi
+
+exit 0

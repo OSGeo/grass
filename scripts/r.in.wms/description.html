@@ -1,0 +1,144 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.in.wms</EM>  handles all of downloading and importing raster data from
+an <a href="http://www.opengeospatial.org/specs/?page=specs">OpenGIS</a>
+"WMS" web mapping server. It need only be told the desired data to collect
+(bounds and resolution) via a region, the server to get the data from, and
+the layer or layers to get. It downloads the data in tiles, reprojects it,
+imports it, and patches it back together.
+
+<H2>NOTES</H2>
+
+By default data is downloaded to $GISDBASE/wms_download. This can be changed
+by setting the <EM>folder=</EM> option when using <EM>r.in.wms</EM>.
+<P>
+To understand the data you are getting it is necessary to look at the
+capabilities of the WMS server. This should be available via a capabilities
+request. This is an
+<a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">example
+capabilities request to NASA's OnEarth server</a>.
+<P>
+Some brain-dead servers will only talk to certain web browsers. You can
+fool these by adding "<tt>--user-agent=MSIE5.5</tt>" to <b>wgetoptions</b>
+or for curl adding "<tt>-A "MSIE5.5</tt>" to <b>curloptions</b>.
+
+
+<H2>EXAMPLES</H2>
+
+<H3>General Get Capabilities Request</H3>
+
+A capabilities request like
+<a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities</a>
+is where you should start. It tells you what data is offered, the projections
+it is in,  where to find meta data, resolutions, scales, and bounds for
+data, etc.
+
+<H3>NASA OnEarth server: Get Capabilities Request</H3>
+
+<div class="code"><pre>
+r.in.wms mapserver=http://wms.jpl.nasa.gov/wms.cgi -l
+</pre></div>
+
+Lists the layers available from the NASA OnEarth server. The output is
+more reliable if <a href="http://ofb.net/~egnor/xml2/">xml2</a> is installed.
+
+
+<H3>US NED Elevation from OnEarth server download (metric units)</H3>
+
+Set the resolution to 30 (assuming you're in metric units):
+<div class="code"><pre>
+g.region res=30 -ap
+r.in.wms output=elevation_meters mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         layers=us_ned styles=real -o
+</pre></div>
+
+Downloads real number meter elevation from OnEarth to cover the current
+region. Uses -o for opaque to get smaller download.
+
+<H3>US NED Elevation from OnEarth server download (feet units)</H3>
+
+Set the resolution to 90 (assuming you're in feet units) a save this
+region with a name; this makes resuming downloads possible or rather
+easier:
+
+<div class="code"><pre>
+g.region res=90 -ap
+g.region save=panhandle-90ft
+
+r.in.wms output=elevation_feet mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         layers=us_ned styles=feet_real -o region=panhandle-90ft
+</pre></div>
+
+Downloads real number feet elevation from OnEarth to cover the current
+region. Uses <B>-o</B> for opaque to get smaller download. Using a named
+region lets us resume later easily.
+
+<div class="code"><pre>
+r.in.wms output=elevation_feet mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         layers=us_ned styles=feet_real -o region=panhandle-90ft -d method=cubic
+</pre></div>
+
+<dd><b>-d</b> skips ahead to downloading. This could be used to try
+downloading again (if some files failed last time) or to import the data
+differently. Since downloaded files are remembered those already received
+successfully are not re-requested. In this case we are reimporting the
+data using the cubic interpolation method instead of nearest neighbor.
+</dd>
+
+<H3>LANDSAT from OnEarth server download</H3>
+
+Set the resolution to 30 meters for LANDSAT:
+<div class="code"><pre>
+g.region res=30 -ap
+r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
+         output=wms_global_mosaic
+</pre></div>
+Downloads LANDSAT color scene.
+
+
+<H3>DRG from Terraserver server download</H3>
+
+Set the resolution to 1.2 meters for DRGs. Their native resolution is
+2.4 meters, so this is some pretty hefty oversampling:
+
+<div class="code"><pre>
+g.region res=1.2 -ap
+g.region save=drg-resolution
+
+r.in.wms output=terraserver-drg mapserver=http://terraserver.microsoft.com/ogcmap6.ashx \
+         layers=DRG region=drg-resolution format=jpeg srs=EPSG:26910
+</pre></div>
+
+Downloads digital raster graphics from Microsoft TerraServer. Note that
+srs will need to be changed to a projection that is appropriate for your
+region.
+
+
+<H2>REQUIRED PROGRAMS</H2>
+
+<EM>r.in.wms</EM> requires the following programs to work:
+
+<ul>
+<li>wget: An http download program, or
+<li>curl: Alternate http download program
+<li>bc: A calculator program
+<li>sed, grep: Unix string processing and search programs
+<li><a href="http://www.gdal.org">gdalwarp</a>: A reprojection tool,
+    needed only if data is projected into this location.
+<li><a href="http://ofb.net/~egnor/xml2/">xml2</a>: An xml parser.
+    Enables more accurate listing of layers on the server.
+</ul>
+
+
+<H2>SEE ALSO</H2>
+<a href="r.tileset.html">r.tileset</a>,
+<a href="r.in.gdal.html">r.in.gdal</a>,
+<a href="r.patch.html">r.patch</a>
+
+
+<H2>AUTHORS</H2>
+
+Soeren Gebbert, Jachym Cepicky, and Cedric Shock
+
+<p>
+<i>Last changed: $Date$</i>

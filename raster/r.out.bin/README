@@ -1,0 +1,34 @@
+Usage:
+ r.out.bin [-i] input=name output=name [null=value]
+
+Flags:
+  -i   Output integer category values, not cell values
+
+Parameters:
+   input   Name of an existing raster map
+  output   Name of an output binary map (use out=- for stdout)
+    null   Value to write out for null
+           default: 0
+
+This program is derived from r.out.ascii with a few modifications.
+Author: Bob Covill <bcovill@tekmap.ns.ca>
+
+
+If exported data is moved between platforms byte swapping 
+may be required.
+
+The exported data can be converted to netCDF GMT format with 
+xyz2grd .... -ZTLf -F
+
+TODO:
+- Add optional fixed size header (1024) with region specs.
+- Add byte swapping export routine.
+
+--------------------
+The source for r.out.bin which writes a binary array to            
+standard output. The source is taken from r.out.ascii with a few minor          
+changes. Depending on the data type the program will output a integer,          
+float, or double array, unless "-i" is specified, then it will be forced        
+to integer. The region parameters are printed to stderr. This file is           
+compatible with the generic mapping tools (GMT) program xyz2grd if the   
+user wants to convert to netCDF. 

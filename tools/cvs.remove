@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# cvs remove directory
+#
+# written by Markus Neteler 3/2000
+# $Id$
+
+if [ "$#" -lt 2 -o "$1" = "" -o "$1" = "help" -o "$1" = "-h" -o "$1" = "-help" ]
+    then
+     echo "USAGE: cvs.remove comment directory"
+     echo ""
+     echo "use command in parent directory and specify name and comment." 
+    else
+      dir=$2
+      comment=$1
+fi
+if [ ! "$dir" ]
+then
+   exit
+fi
+if [ ! "$comment" ]
+then
+   exit
+fi
+
+cd $dir
+if [ $? != 0 ]; then
+  echo ""
+  echo "ERROR! You mixed the parameter order or $dir does not exist!"
+  exit
+fi
+
+rm -f *
+cd ..
+cvs remove -R $dir
+cvs ci -m "$comment" $dir
+cvs update -P
+
+echo "Finish."

@@ -1,0 +1,45 @@
+cvs_id,name,email,osgeo_id,rfc2_agreed
+-,Ivan Shmakov,<ivan theory.asu.ru>,1gray,yes
+-,Eric Patton,<epatton nrcan.gc.ca>,epatton,yes
+-,Maris Nartiss,<maris.gis@gmail.com>,marisn,yes
+alex,Alex Shevlakov,<sixote yahoo.com>,,-
+andreas,Andreas Lange,<andreas.c.lange gmx.de>,,-
+benjamin,Benjamin Ducke,<benjamin.ducke ufg.uni-kiel.de>,benducke,yes
+bernhard,Bernhard Reiter,<bernhard intevation.de>,,-
+bob,Bob Covill,<bcovill tekmap.ns.ca>,,-
+brad,Brad Douglas,<rez touchofmadness.com>,bdouglas,yes
+carlos,Carlos Davila,<cdavilam jemila.jazztel.es>,cdavilam,yes
+cedric,Cedric Shock,<cedricgrass shockfamily.net>,,-
+cho,Huidae Cho,<grass4u gmail.com>,hcho,yes
+danielc,Daniel Calvelo Aros,<dca.gis gmail.com>,dcalvelo,yes
+david,David D. Gray,<ddgray armadce.demon.co.uk>,,-
+eric,Eric G. Miller,<egm2 jps.net>,,-
+florian,Florian Goessmann,<florian wallweg39.de>,,-
+frankw,Frank Warmerdam,<warmerdam pobox.com>,warmerdam,-
+glynn,Glynn Clements,<glynn gclements.plus.com>,glynn,yes
+hamish,Hamish Bowman,<hamish_b yahoo.com>,hamish,yes
+helena,Helena Mitasova,<hmitaso unity.ncsu.edu>,helena,yes
+jachym,Jachym Cepicky,<jachym.cepicky gmail.com>,jachym,yes
+jan,Jan-Oliver Wagner,<jan intevation.de>,,-
+john,John Huddleston,<jhudd.lamar colostate.edu>,,-
+justin,Justin Hickey,<jhickey hpcc.nectec.or.th>,,-
+markus,Markus Neteler,<neteler cealp.it>,neteler,yes
+martin,Martin Wegmann,<wegmann biozentrum.uni-wuerzburg.de>,wegmann,-
+martinl,Martin Landa,<landa.martin gmail.com>,martinl,yes
+massimo,Massimo Cuomo,<m.cuomo acsys.it>,,-
+michael,Michael Barton,<michael.barton asu.edu>,cmbarton,yes
+mike,Mike Thomas,<miketh brisbane.paradigmgeo.com>,,-
+moritz,Moritz Lennert,<mlennert club.worldonline.be>,mlennert,yes
+msieczka,Maciek Sieczka,<tutey o2.pl>,msieczka,yes
+paul,Paul Kelly,<paul-grass stjohnspoint.co.uk>,pkelly,yes
+paulo,Paulo Marcondes,<pmarc.debian gmail.com>,pmarcondes,-
+pallech,Serena Pallecchi,<pallecch cli.di.unipi.it>,,-
+radim,Radim Blazek,<radim.blazek gmail.com>,rblazek,-
+roberto,Roberto Micarelli,<miro iol.it>,,-
+robertoa,Roberto Antolin,<roberto geomatica.como.polimi.it>,rantolin,yes
+roger,Roger S. Miller,<rgrmill rt66.com>,,-
+scott,Scott Mitchell,<smitch mac.com>,smitch,yes
+soeren,Soeren Gebbert,<soerengebbert googlemail.com>,,-
+stephan,Stephan Holl,<stephan.holl intevation.de>,sholl,yes
+william,William Kyngesburye,<kyngchaos kyngchaos.com>,kyngchaos,yes
+wolf,Wolf Bergenheim,<wolf+grass bergenheim.net>,wolf,yes

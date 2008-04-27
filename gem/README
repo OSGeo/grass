@@ -1,0 +1,239 @@
+August 18th 2005
+
+GRASS Extensions Manager (GEM)
+Version 0.97
+
+This software is licensed under the GNU public license.
+
+!!! WARNING !!!
+
+This is beta software that may still contain serious bugs.
+I particularly recommend you backup your GIS Manager menu file
+$(PATH_TO_GRASS)/etc/dm/menu.tcl in case d.m ceases working
+after installation/deinstallation of extensions using GEM. 
+
+!!! WARNING !!!
+
+
+Author: Benjamin Ducke
+	benducke@compuserve.de
+
+
+
+Purpose: 
+	this software configures, compiles and installs additional modules
+	for use with GRASS GIS version 6.0.0 and up.
+	An additional menu entry "Xtns" will show up in the GIS Manager's
+	main menu bar and the extension's modules will be registered in a
+	nested submenu.
+	HTML documentation will also integrate seamlessly into the GRASS
+	HTML doc tree. There will be a new section "Extensions" accessible
+	from the main HTML page $(PATH_TO_GRASS)/docs/html/index.html.
+	
+Compiling: 
+	just type 'make'
+
+Installing: 
+	if you want, copy the executable 'gem' into an appropriate
+	directory, e.g. /usr/local/bin
+
+Requirements: 
+	GNU C compiler and maketools for compilation.
+	Tar, gzip, unzip, bunzip2 for handling various archive formats.
+	Wget for fetching extensions from the internet.
+
+Usage: start 'gem' w/o parameters for information
+
+	To install a module into your GRASS installation, in this example
+	/usr/local/grass-6.0.0, simply pass the name of the archive containing
+	the extension or the directory with the unpacked files (e.g. 'cva.tgz'):
+	
+	$ gem --grass=/usr/local/grass-6.0.0 -i cva.tgz
+
+	You will be asked for the password of the user owning the GRASS
+	binary files, if required.
+	
+	If you invoke gem from inside a running GRASS session, you can
+	ommit the "--grass=" option. We will assume this for the following
+	usage examples. If any errors occur, use option "-v" (verbose) to see 
+	what is going on.
+	
+	Get info about an extension:
+	
+	$ gem -q cva.tgz
+	
+	List installed extensions (shows name, version and type of installation, 
+	i.e. binaries or compiled from source):
+	
+	$ gem -q
+	
+	Uninstall an extension (take name from list produced by above command):
+	
+	$ gem -u AdvancedViewshedAnalysis
+	
+	Quit and restart the GIS-Manager (d.m) to see the effects of these actions.
+	
+	If something goes wrong unexpectedly or you accidentally overwrite
+	GIS Manager's menu config file ($(PATH_TO_GRASS)/etc/dm/menu.tcl):
+	
+	$ gem --restore
+	
+	will try to put everything back in order. The program will also create
+	a backup copy menu.tcl.gem.bak before it alters menu.tcl. The "restore"
+	action is also useful if you update or re-install GIS-Manager or the
+	GRASS HTML-Documentation in which case both menu entries and HTML references
+	have to be restored for all extensions installed.
+	
+Background:		
+	A GRASS extension is essentially a minimal replication of the GRASS source
+	tree including all necessary makefiles. It contains only the source code
+	for a few modules that constitute the extensions. On the top level, you
+	will find a number of ASCII files that contain the information gem needs
+	to manage the extension. All information is managed in plain ASCII format.
+	Installed extensions will be registered in $(PATH_TO_GRASS)/etc/extensions.db.
+	This registry file also contains version and dependencies information.
+	Each extension should also provide an uninstall script to be run when the
+	user wants to get rid of that extension. They are stored in
+	$(PATH_TO_GRASS)/etc/uninstall.<extension_name>.
+	
+	Extension may add a submenu to the GIS Manager. The first extension installed
+	creates an additional "Xtns" top level menu under which each extension
+	can register a nested submenu. Gem modifies $(PATH_TO_GRASS)/etc/d.m/menu.tcl
+	for this.
+	
+	The extension source code is in the 'src' directory, along with all the
+	necessary makefiles. Other directories may hold pre-compiled binaries
+	and should be named appropriately ('win32', 'macosx', ...).
+	
+	Extensions may provide code for C language modules and libraries, scripts
+	and HTML documentation.
+	
+Caveats:
+	
+	The installation is sensitive to the precise syntax of menu.tcl.
+	If the user has altered this file substantially it is likely that
+	registering the extension submenu entries will fail.
+		
+	There is no clean way to upgrade an existing extension and
+	respecting dependencies _automatically_. You can use '-f' to force 
+	over-write of an extension, but it is safer to uninstall, 
+	then install the new version.
+	
+	
+	
+==================================
+
+
+An extension package provides a nearly complete GRASS 6 source compilation
+environment. Thus, changes to module makefiles can be kept to a minimum.
+
+The g.install program exports three environmental variables that point
+to the directories holding GRASS 6 headers and libs and to the
+install location:
+
+	GINSTALL_INC
+	GINSTALL_LIB
+	GINSTALL_DST
+	
+These are added to the makefiles so that externally compiled modules
+are able to see those GRASS headers and libs they need. To achieve this, the following files were slightly altered for the external installation scheme:
+
+include/Make
+	/Grass.make.in
+		L32: added  -I$(GINSTALL_INC) to GRASS_INC
+		L53: added  -L$(GINSTALL_LIB) to ARCH_LIBPATH
+		L81: added  $(GEM_C_OPTS) to CFLAGS
+		
+	/Rules.make
+		L37: the path to the HTML docs is now expanded with /extensions/<extension>
+		     the name for the extension is read from GEM_EXT_NAME which is
+		     exported by gem
+	
+		L55: added :$(GINSTALL_LIB) to definition of LD_LIBRARY_PATH_VAR
+		
+		L49: this now make two different copies: one to go into the extension's HTML folder
+		     (docs/extensions/$(GEM_EXT_NAME) and one -- with adjusted relative links -- to
+		     go into docs/html !
+		     GEM_EXT_NAME is exported by the GEM installer tool
+		     
+include/Shlib.make
+			
+		L3: SHLIB = $(ARCH_LIBDIR)/$(SHLIB_PREFIX)$(SHLIB_NAME).$(GEM_EXT_VERSION)$(SHLIB_SUFFIX)	
+		L14 $(SHLIB): $(SHLIB_OBJS)
+			$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS) && ln -sf $(notdir $@) $(patsubst 			
+			%.$(GEM_EXT_VERSION)$(SHLIB_SUFFIX),%$(SHLIB_SUFFIX),$@)
+			
+			(GEM_EXT_VERSION installs lib with version number from 'version' file in Extension package)
+
+main Makefile
+		L168: target real-install:
+		     commented out everything that seems not strictly necessary 
+		     for a module installation and might interfere with the
+		     user's GRASS installation
+		     
+		     exit with error code 1 on write permission problems
+		     this can be caught by 'gem' and dealt with
+		     
+		     only create 'error.log' if a module did not compile. Use
+		     this to check for compilation errors and abort, if necessary.
+		     
+		L171: comment out stuff for creating GRASS startup script
+
+lib/init/Makefile
+		L32: commented out everything that seems not strictly necessary 
+		     for a module installation and might interfere with the
+		     user's GRASS installation
+		     
+build_html_index.sh		     
+		L16: expand HTML with /extensions/$GEM_EXT_NAME (exported by gem)				
+		
+		the HTML default text has been altered in many places to reflect its new function
+		for describing extensions.
+		
+		gem also exports the following variables to enrich the HTML default text:
+			GEM_EXT_VERSION	(extension's version)
+			...
+
+The module's makefile itself can stay largely the way it is. The only thing
+that may need to be adjusted is the MODULE_TOPDIR = .. statement that points
+to the location of the makefile include directory.
+
+The version file include/VERSION should contain four lines that specify the
+release version of the extension in the same manner GRASS would:
+major
+minor
+release
+date
+
+e.g:
+
+1
+0
+0
+2005
+
+For version 1.0.0 release 2005.
+
+
+main Makefile:
+l28: INST_DIR is set according to GINSTALL_DST which has to be exported by g.install
+
+lib Makefile:
+	cut out the part that wants to install header files (not needed)
+
+configure script:
+
+In summary print-out section at end of script:
+got rid of:
+	echo " Startup script in directory: ${bindir}"
+
+
+A script that creates an extension package would have to:
+	- copy the build environment into the tar file
+	- copy source code for modules into the cmd dir
+	- copy source code for libs into the RIGHT lib dir
+	- set include/VERSION
+
+
+	
+	

@@ -1,0 +1,205 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       wms.download for GRASS 6
+# AUTHOR(S):    Cedric Shock (cedric AT shockfamily.net)
+#               Based on r.in.onearth by Soeren Gebbert and Markus Neteler
+#               And on r.in.wms by Jachym Cepicky
+# PURPOSE:      Downloads data from servers
+# COPYRIGHT:    (C) 2005, 2006 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Downloads data from servers.
+#%  keywords: wms
+#%End
+#%option
+#% key: requestfile
+#% type: string
+#% description: File that lists the tiles to download
+#% required : yes
+#%end
+#%option
+#% key: wgetoptions
+#% type: string
+#% description: Additional options for wget
+#% answer: -c -t 5
+#% required : no
+#%end
+#%option
+#% key: curloptions
+#% type: string
+#% description: Additional options for curl
+#% answer: -C - --retry 5
+#% required : no
+#%end
+#%option
+# FIXME: Remove before GRASS 7 is released
+#% key: v
+#% type: integer
+#% description: Verbosity level
+#% answer: 1
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+#### setup temporary file
+TMP="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+    g.message -e "Unable to create temporary files"
+    exit 1
+fi
+
+# check if we have wget or curl
+if [ ! -x "`which wget`" ] ; then
+    if [ ! -x "`which curl`" ] ; then
+        g.message -e "one of wget or curl is required, please install either first" 
+        exit 1
+    else
+        USE_CURL=1
+    fi
+else
+    USE_WGET=1
+fi
+
+# Remember the intial field seperator
+defaultIFS=$IFS
+
+#######################################################################
+# name:     exitprocedure
+# purpose:  removes all temporary files
+#
+exitprocedure()
+{
+	g.message -e 'User break!'
+	rm -f "${TMP}"*
+	exit 1
+}
+trap "exitprocedure" 2 3 15
+
+BC="bc"
+BCARGS="-l"
+
+#####################
+# name: calculate
+# purpose: perform calculations
+# usage: varname "expr"
+
+calculate() {
+	g.message message="$2"
+	c_tmp=`echo "$2" | $BC $BCARGS`
+	eval $1=$c_tmp
+}
+
+################################################################
+# Download the tiles!!
+GetTiles() {
+  g.message "Downloading tiles"
+
+  # init POST-data vs. GET URL method variable
+  POST_DATA_OK=1
+
+  CONTENTS=`cat "${REQUESTFILE}"`
+
+  NUMBER_OF_TILES=0
+  for line in $CONTENTS ; do
+	g.message -d message="wget command: [$line]"
+	eval "$line"
+
+	emptyness=`file "$OUTPUT_FILE" | grep empty$`
+
+	if [ -f "$OUTPUT_FILE" ] && [ -z "$emptyness" ] ; then
+	   g.message "Tile already downloaded"
+	else
+	   GetData
+	   if [ $? -ne 0 ] ; then
+              NUMBER_OF_TILES=`expr $NUMBER_OF_TILES + 1`
+           fi
+	fi
+  done
+
+  if [ $NUMBER_OF_TILES -ne 0 ] ; then
+    g.message -w "$NUMBER_OF_TILES failed to download"
+    return 1
+  else
+    g.message "All tiles downloaded successfully"
+    return 0
+  fi
+}
+
+##################################
+#Get the data from the WMS server
+GetData() {
+   g.message "Downloading data"
+   g.message -v message="Requesting Data from ${SERVER}:"
+   g.message -v message="$STRING"
+
+   if [ "$POST_DATA_OK" -eq 1 ] ; then
+      #download the File from the Server
+      if [ "$USE_WGET" ] ; then
+         wget ${WGET_OPTIONS} --post-data="${STRING}" "${SERVER}" -O "${OUTPUT_FILE}"
+      else
+         curl ${CURL_OPTIONS} -o "${OUTPUT_FILE}" -d "${STRING}" "${SERVER}"
+      fi
+      if [ $? -ne 0 ] ; then
+         g.message -e "Failed while downloading the data"
+         return 1
+      fi
+      if [ ! -f "$OUTPUT_FILE" ] ; then 
+         g.message -e "Not able to download the data"
+         return 1
+      fi
+
+       # work-around for brain-dead ArcIMS servers which want POST-data as part of the GET URL
+       #   (this is technically allowed by OGC WMS def v1.3.0 Sec6.3.4)
+      if [ `wc -c < "$OUTPUT_FILE"` -eq 0 ] ; then
+         g.message -w "Downloaded image file was empty -- trying another method"
+         POST_DATA_OK=0
+      fi
+   fi  # no else!
+
+   if [ "$POST_DATA_OK" -eq 0 ] ; then
+      g.message -v message=""
+      if [ "$USE_WGET" ] ; then
+	 wget ${WGET_OPTIONS} "${SERVER}${STRING}" -O "${OUTPUT_FILE}"
+      else
+	 curl ${CURL_OPTIONS} -o "${OUTPUT_FILE}" "${SERVER}${STRING}"
+      fi
+      if [ $? -ne 0 ] ; then
+         g.message -e "Failed while downloading the data"
+         return 1
+      fi
+      if [ ! -f "$OUTPUT_FILE" ] || [ `wc -c < "$OUTPUT_FILE"` -eq 0 ] ; then 
+         g.message -e "Not able to download the data"
+         return 1
+      fi
+   fi
+
+   return 0
+}
+
+# Initialize variables:
+#wget has many options
+WGET_OPTIONS="${GIS_OPT_WGETOPTIONS}"
+CURL_OPTIONS="${GIS_OPT_CURLOPTIONS}"
+REQUESTFILE="${GIS_OPT_REQUESTFILE}"
+
+#Get all the data
+GetTiles
+
+# Clean up:
+rm -f "${TMP}"*
+

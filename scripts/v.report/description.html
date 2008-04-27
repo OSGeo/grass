@@ -1,0 +1,42 @@
+<H2>DESCRIPTION</H2>
+
+<em>v.report</em> generates a table showing the area present in 
+each of the categories of a user-selected data layer.
+<P>
+Area is given in hectares, square meters, and square kilometers.
+If the units option is used, area is given in acres, square feet,
+and square miles.
+<P>
+Feet and acre units are always reported in their common versions
+(i.e. the International Foot, exactly 5280 feet in a mile), even
+when the location's standard map unit is the US Survey foot.
+<P>
+<EM>v.report</EM> works on the full map data; therefore, the current
+region is ignored. If you wish to spatially limit the statistics,
+a map subset must be created with <EM>v.in.region</EM> and 
+<EM>v.overlay</EM>, and then run <EM>v.report</EM> on the new map.
+
+
+<h2>EXAMPLE</h2>
+
+Spearfish example:
+<div class="code"><pre>
+v.report fields option=area units=hectares
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="v.in.region.html">v.in.region</a>,
+<a HREF="v.to.db.html">v.to.db</a>,
+<a HREF="v.overlay.html">v.overlay</a>
+</em>
+
+
+<H2>AUTHOR</H2>
+
+Markus Neteler, GDF Hannover
+
+<p>
+<i>Last changed: $Date$</i>

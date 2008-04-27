@@ -1,0 +1,28 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.mvmon</em> moves current displayed maps to another monitor.
+
+<h2>EXPORTING TO PNG</h2>
+
+<em>d.mvmon</em> can be used to export drawings on a current window to a png image file (map.png) with the PNG driver. For example,
+<pre>
+g.region rast=dem
+d.mon x0
+d.rast dem
+d.vect big_streams width=10 color=blue
+d.vect small_streams width=5 color=blue
+d.mvmon PNG
+d.mon stop=PNG
+# now you have map.png.
+</pre>
+
+<H2>SEE ALSO</H2>
+ 
+<EM><a href="d.save.html">d.save</a></EM>,
+<EM><a href="d.redraw.html">d.redraw</a></EM>
+
+<h2>AUTHOR</h2>
+
+Huidae Cho
+
+<p><i>Last changed: $Date$</i>

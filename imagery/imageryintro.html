@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Image processing in GRASS GIS</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="Markus Neteler/GRASS Development Team">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h2>Image processing in GRASS GIS</h2>
+
+
+<h3>Image data in general</h3>
+
+In GRASS, image data are identical to <a href="rasterintro.html">raster data</a>.
+However, a couple of commands are explicitly dedicated to image
+processing.  The geographic boundaries of the raster/imagery file are
+described by the north, south, east, and west fields. These values
+describe the lines which bound the map at its edges. These lines do
+NOT pass through the center of the grid cells at the edge of the map,
+but along the edge of the map itself.
+
+<P>
+As a general rule in GRASS:
+<ol>
+<li> Raster/imagery output maps have their bounds and resolution equal
+ to those of the current region.
+<li> Raster/imagery input maps are automatically cropped/padded and
+ rescaled (using nearest-neighbor resampling) to match the current
+ region.
+</ol>
+
+
+<h3>Raster import</h3>
+
+The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
+interface for many different raster and satellite image
+formats. Additionally, it also offers options such as on-the-fly
+location creation or extension of the default region to match the
+extent of the imported raster map.  For special cases, other import
+modules are available. Always the full map is imported. Imagery data
+can be group (e.g. channel-wise) with <a href="i.group.html">i.group</a>.
+
+<P>
+For importing scanned maps, the user will need to create a
+x,y-location, scan the map in the desired resolution and save it into
+an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
+<a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
+reference points the scanned map can be rectified to obtain geocoded
+data.
+
+<h3>Image processing operations</h3>
+
+GRASS raster/imagery map processing is always performed in the current
+region settings (see <a href="g.region.html">g.region</a>), i.e. the
+current region extent and current raster resolution is used. If the
+resolution differs from that of the input raster map(s), on-the-fly
+resampling is performed (nearest neighbor resampling). If this is not
+desired, the input map(s) has/have to be resampled beforehand with one
+of the dedicated modules.
+
+<h3>Geocoding of imagery data</h3>
+
+GRASS is able to geocode raster and image data of various types:
+
+<ul>
+<li>unreferenced scanned maps by defining four corner points
+ (<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
+ <a href="i.points.html">i.points</a>, <a href="i.rectify.html">i.rectify</a>)</li>
+<li>unreferenced satellite data from optical and Radar sensors by
+ defining a certain number of ground control points 
+ (<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
+ <a href="i.points.html">i.points</a>, <a href="i.rectify.html">i.rectify</a>)</li>
+<li>orthophoto based on DEM: <a href="i.ortho.photo.html">i.ortho.photo</a></li>
+<li>digital handheld camera geocoding: modified procedure for
+    <a href="i.ortho.photo.html">i.ortho.photo</a></li>
+</ul>
+
+
+<h3>Visualizing (true) color composites</h3>
+
+To quickly combine the first three channels to a near natural color
+image, the GRASS command <a href="d.rgb.html">d.rgb</a> can be used or
+the graphical GIS manager (<a href="gis.m.html">gis.m</a>). It assigns
+each channel to a color which is then mixed while displayed. With a
+bit more work of tuning the grey scales of the channels, nearly
+perfect colors can be achieved. Channel histograms can be shown with
+<a href="d.histogram.html">d.histogram</a>.
+
+<h3>Calculation of vegetation indices</h3>
+
+An example for indices derived from multispectral data is the NDVI
+(normalized difference vegetation index). To study the vegetation
+status with NDVI, the Red and the Near Infrared channels (NIR) are
+taken as used as input for simple map algebra in the GRASS command
+<a href="r.mapcalc.html">r.mapcalc</a>
+(<tt>ndvi = 1.0 * (nir - red)/(nir + red)</tt>). With
+<a href="r.colors.html">r.colors</a> an optimized "ndvi" color table
+can be assigned afterward. Also other vegetation indices can be
+generated likewise.
+
+
+<h3>Calibration of thermal channel</h3>
+
+The encoded digital numbers of a thermal infrared channel can be
+transformed to degree Celsius (or other temperature units) which
+represent the temperature of the observed land surface. This requires
+a few algebraic steps with <a href="r.mapcalc.html">r.mapcalc</a>
+which are outlined in the literature to apply gain and bias values
+from the image metadata.
+
+<h3>Image classification</h3>
+
+Single and multispectral data can be classified to user defined land
+use/land cover classes. In case of a single channel, segmentation will
+be used.
+
+GRASS supports the following methods:
+
+<ul>
+<li> Radiometric classification:
+  <ul>
+  <li> Unsupervised classification (<a href="i.cluster.html">i.cluster</A>,
+   <a href="i.maxlik.html">i.maxlik</A>) using the Maximum Likelihood
+    classification method</li>
+  <li> Supervised classification (<a href="i.gensig.html">i.gensig</A>
+    or <a href="i.class.html">i.class</A>, <a href="i.maxlik.html">i.maxlik</A>)
+   using the Maximum Likelihood classification method</li>
+  </ul>
+<li> Combined radiometric/geometric (segmentation based) supervised
+   classification (<A HREF="i.gensigset.html">i.gensigset</A>,
+   <a href="i.smap.html">i.smap</a>)
+
+</ul>
+
+Kappa statistic can be calculated to validate the results
+(<a href="r.kappa.html">r.kappa</a>).
+
+<h3>Image fusion</h3>
+
+In case of using multispectral data, improvements of the resolution
+can be gained by merging the panchromatic channel with color
+channels. GRASS provides the HIS (<a href="i.rgb.his.html">i.rgb.his</a>,
+<a href="i.his.rgb.html">i.his.rgb</a>) and the Brovey transform
+(<a href="i.fusion.brovey.html">i.fusion.brovey</a>) methods.
+
+<h3>Time series processing</h3>
+
+GRASS also offers support for time series processing (<a
+href="r.series.html">r.series</a>). Statistics can be derived from a
+set of coregistered input maps such as multitemporal satellite
+data. The common univariate statistics and also linear regression can
+be calculated.
+
+<h3>See also</h3>
+
+<ul>
+<li>The GRASS 4 
+    <em><A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+     Processing manual</A></EM>
+<li><a href=rasterintro.html>Introduction to GRASS 2D raster map processing</a></li>
+<li><a href=raster3dintro.html>Introduction to GRASS 3D raster map (voxel) processing</a></li>
+<li><a href=vectorintro.html>Introduction to GRASS vector map processing</a></li>
+</ul>
+
+<HR>
+
+<P>
+<a href="index.html">Main index</a> - <a href="imagery.html">imagery index</a> - 
+<a href="full_index.html">full index</a>
+</p>
+<P>&copy; 2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></P>
+
+</body>
+</html>

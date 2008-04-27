@@ -1,0 +1,215 @@
+How to release GRASS binaries and source code
+
+$Date$
+
+Note: This text contains *some* rules only applicable to the
+      development coordinators at CEA (currently Markus Neteler).
+
+
+###########################################
+Contents
+  (A) HOWTO create a release
+  (B) HOWTO create a branch
+
+###########################################
+(A) HOWTO create a release
+
+1. Local work (basically at CEA)
+
+   - check if
+        ( cd doc/raster/r.example/ ; make )
+        ( cd doc/vector/v.example/ ; make )
+      still compile; fix otherwise
+
+   - cleanup rubbish:
+       find . -name '*~'     | xargs rm
+       find . -name '*.bak'  | xargs rm
+       find . -name '.#*'    | xargs rm
+       find . -name '*.orig' | xargs rm
+       find . -name '*.rej'  | xargs rm
+       find . -name '*.o'    | xargs rm
+       chmod -R a+r *
+
+   - Create release branch (only if not yet existing)
+
+   - Update VERSION file to release version:
+      vim include/VERSION
+
+#example:
+6
+3
+0RC1
+2008
+      rm -f include/VERSION~
+
+     #version:
+     MAJOR=`cat include/VERSION | head -1 | tail -1`
+     MINOR=`cat include/VERSION | head -2 | tail -1`
+     RELEASE=`cat include/VERSION | head -3 | tail -1`
+     VERSION=${MAJOR}.${MINOR}.${RELEASE}
+     echo $VERSION
+
+     svn ci -m"GRASS $VERSION" include/VERSION
+     svn up
+
+ o Create Changelog file on release branch:
+     # http://ch.tudelft.nl/~arthur/svn2cl/
+     svn2cl
+     mv ChangeLog ChangeLog_$VERSION
+     head ChangeLog_$VERSION
+     gzip ChangeLog_$VERSION
+
+ o   Tag release (http://trac.osgeo.org/grass/browser/grass/tags):
+     http://svnbook.red-bean.com/en/1.4/svn.branchmerge.tags.html
+
+          TODAY=`date +"%Y%m%d"`
+          RELEASETAG=release_${TODAY}_grass_${MAJOR}_${MINOR}_${RELEASE}
+          echo $RELEASETAG
+
+          URL=https://svn.osgeo.org/grass
+          svn copy $URL/grass/branches/releasebranch_6_3 \
+	       $URL/grass/tags/$RELEASETAG \
+	       -m "Tagging release grass_${MAJOR}_${MINOR}_${RELEASE}"
+      
+      
+ o create source package (in the source directory):
+     echo grass-${VERSION}
+
+     mkdir grass-${VERSION}
+     mv * grass-${VERSION}/
+     # do not include the debian control files:
+     mv grass-${VERSION}/debian .
+     # create the package:
+     tar cvfzh grass-${VERSION}.tar.gz grass-${VERSION}/* --exclude=.svn
+     # restore src code location:
+     mv ./grass-${VERSION}/* .
+     rmdir ./grass-${VERSION}
+     # Calculating MD5 sum:
+     md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
+
+ o reset include/VERSION file to SVN version:
+    vim include/VERSION
+
+#example
+6
+3
+0svn
+2008
+
+    rm -f include/VERSION~
+    svn ci -m"back to SVN" include/VERSION
+
+
+ o Store the source tarball (twice) in (use scp -p FILES grass:):
+    SERVER1=download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
+    SERVER2=grass.osgeo.org:/osgeo/grass/rsync/grass$MAJOR$MINOR/source/
+    echo $SERVER1
+    echo $SERVER2
+
+   along with associated files:
+     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
+         SUBMITTING_TCLTK SUBMITTING_SCRIPTS neteler@$SERVER1
+     scp -p grass-$VERSION.* AUTHORS COPYING ChangeLog_$VERSION.gz INSTALL REQUIREMENTS.html SUBMITTING SUBMITTING_DOCS \
+         SUBMITTING_TCLTK SUBMITTING_SCRIPTS neteler@$SERVER2
+     
+
+ o update web site to new version (http://trac.osgeo.org/grass/browser/grass-web)
+      - rss.xml (for news section)
+      - download/software.inc
+      - grass$MAJOR$MINOR/main.inc
+      - devel/grasshist.html
+      - devel/grassreleases.html
+      - bugtracking/bugreport.html (not always)
+      - devel/cvstags.inc (add tag)
+
+     write announcement
+      - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html
+
+ o upload user HTML manual in case of *final release* from compiled English
+   version at (warning: needs stuff to be compiled).
+      - download new source code package, compile with most settings
+      -  cd dist.$ARCH/docs/html
+         echo www/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+         scp -r * neteler@download.osgeo.org:/osgeo/download/grass$MAJOR$MINOR/manuals/html$MAJOR${MINOR}_user/
+
+ o stable release: update cronjob 'cron_grass63_release_src_snapshot.sh' to next but one
+                   release tag for the differences
+
+2. Tell others about it:
+
+ * If release candidate:
+    - <grass-announce@lists.osgeo.org>
+    - <grass-dev@lists.osgeo.org>
+
+ * If official release:
+   - publish related announcement press release at:
+   
+   Our GRASS web site: /announces/
+                       Note: DON'T use relative links there
+
+   Our main mailing lists:
+                       http://lists.osgeo.org/mailman/listinfo/grass-announce
+                         <grass-announce@lists.osgeo.org>
+                       http://lists.osgeo.org/mailman/listinfo/grass-dev
+                         <grass-dev@lists.osgeo.org>
+                       http://lists.osgeo.org/mailman/listinfo/grassuser
+                         <grass-user@lists.osgeo.org>
+                       http://lists.osgeo.org/mailman/listinfo/wingrass
+                         <wingrass@lists.osgeo.org>
+
+   DebianGIS:          <pkg-grass-general@lists.alioth.debian.org>
+   FreeGIS:            <freegis-list@intevation.de>
+   Geowanking:         <geowanking@lists.burri.to>
+   OSGeo.org:          <news_item@osgeo.org>
+
+ Email:
+   http://www.gismonitor.com/news/submit_news.php (matteo@gismonitor.com)
+   http://www.gis-news.de/  (franz-josef.behr@gismngt.de)
+   http://www.gisdevelopment.net (news@gisdevelopment.net)
+   http://spatialnews.geocomm.com/submitnews.html (not free any more, convince editor@geocomm.com)
+   admin@cartographyonline.com
+   redazionenews@mondogis.net
+   mfeilner@linuxnewmedia.de
+   info@harzer.de
+
+ Web:
+   http://slashgeo.org/submit.pl
+   http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
+   http://linuxtoday.com/contribute.php3
+   http://www.newsforge.com/submit.pl
+   http://osx.macnn.com/    (email to "contact" -> news tips)
+   http://www.giscafe.com/submit_material/submit_options.php#Press (MN)
+   http://www.freegis.org   (update, MN)
+   http://www.blinkgeo.com (markusN)
+   http://www.directionsmag.com/pressreleases.php (News -> Post Press Release)
+   http://www.gnu.org/directory/science/geography/grass.html
+   http://www.kde-apps.org/content/show.php?content=19776
+   http://news.eoportal.org/share_news.html (MN) 
+            -> Share your news with the EO community
+   http://www.osdir.com/Downloads+index-req-viewsdownload-sid-206.phtml
+   http://www.foss4g.org/FOSS4G/modules.php?name=Submit_News
+   http://groups.google.com/group/Remote-Sensing-GIS-for-a-New-World
+   http://groups.google.com/group/comp.infosystems.gis
+
+   ... anywhere else? Please add here.
+
+###########################################
+(B) HOWTO create a branch
+
+1. see SVN book:
+   http://svnbook.red-bean.com/en/1.1/ch04s07.html
+
+   GRASS 6.4 development branch:
+          BRANCH=develbranch_6
+          URL=https://svn.osgeo.org/grass
+          svn copy $URL/grass/trunk \
+                   $URL/grass/branches/$BRANCH \
+                   -m "Development branch for GRASS 6.4.x"
+
+
+   Switching current local copy to above development branch:
+   (http://svnbook.red-bean.com/en/1.1/ch04s05.html)
+           cd /path/to/your/local/copy/trunk
+           svn switch https://svn.osgeo.org/grass/grass/branches/develbranch_6 .
+
+

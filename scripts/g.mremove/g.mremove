@@ -1,0 +1,218 @@
+#!/bin/sh
+#
+# $Id$
+#
+############################################################################
+#
+# MODULE:	g.mremove
+# AUTHOR(S):	Huidae Cho - grass4u@gmail.com
+# PURPOSE:	applied wildcard to g.remove
+# COPYRIGHT:	(C) 2000 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Apply regular expressions and wildcards to g.remove
+#%  keywords: general, map management
+#%End
+
+#%flag
+#%  key: r
+#%  description: Use regular expression instead of wildcard
+#%end
+
+#%flag
+#%  key: f
+#%  description: Force removal (required for actual deletion of files)
+#%end
+
+#%option
+#% key: rast
+#% type: string
+#% description: Raster to remove
+#% gisprompt: old,cell,raster
+#% required : no
+#%end
+
+#%option
+#% key: rast3d
+#% type: string
+#% description: 3d raster to remove
+#% gisprompt: old,grid3,3d-raster
+#% required : no
+#%end
+
+#%option
+#% key: vect
+#% type: string
+#% description: Vector to remove
+#% gisprompt: old,vector,vector
+#% required : no
+#%end
+
+#%option
+#% key: region
+#% type: string
+#% description: Region to remove
+#% required : no
+#%end
+
+#%option
+#% key: icon
+#% type: string
+#% description: Icon to remove
+#% required : no
+#%end
+
+#%option
+#% key: label
+#% type: string
+#% description: Label to remove
+#% required : no
+#%end
+
+#%option
+#% key: dview
+#% type: string
+#% description: 3dview to remove
+#% required : no
+#%end
+
+#%option
+#% key: group
+#% type: string
+#% description: Group to remove
+#% required : no
+#%end
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+if test "$GISBASE" = ""; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi   
+     
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+
+program=`basename $0`
+
+g.message "Collecting map names for current mapset <$MAPSET>..."
+
+if [ $GIS_FLAG_R -eq 1 ] ; then
+   regex="-r"
+else
+   regex=""
+fi
+
+force=$GIS_FLAG_F
+
+if [ $force -eq 1 ] ; then
+   g.message "Forcing ..."
+fi
+
+r=$GIS_OPT_RAST
+r3=$GIS_OPT_RAST3D
+v=$GIS_OPT_VECT
+i=$GIS_OPT_ICON
+l=$GIS_OPT_LABEL
+rg=$GIS_OPT_REGION
+g=$GIS_OPT_GROUP
+d=$GIS_OPT_DVIEW
+
+if [ -n "$r" ] ; then
+    rast=`g.mlist $regex type=rast sep=, mapset=$MAPSET pattern="$r"`
+fi
+
+if [ -n "$r3" ] ; then
+    rast3d=`g.mlist $regex type=rast3d sep=, mapset=$MAPSET pattern="$r3"`
+fi
+
+if [ -n "$v" ] ; then
+    vect=`g.mlist $regex type=vect sep=, mapset=$MAPSET pattern="$v"`
+fi
+
+if [ -n "$i" ] ; then
+    icon=`g.mlist $regex type=icon sep=, mapset=$MAPSET pattern="$i"`
+fi
+
+if [ -n "$l" ] ; then
+    labels=`g.mlist $regex type=labels sep=, mapset=$MAPSET pattern="$l"`
+fi
+
+if [ -n "$rg" ] ; then
+    region=`g.mlist $regex type=region sep=, mapset=$MAPSET pattern="$rg"`
+fi
+
+if [ -n "$g" ] ; then
+    group=`g.mlist $regex type=group sep=, mapset=$MAPSET pattern="$g"`
+fi
+
+if [ -n "$d" ] ; then
+    dview=`g.mlist $regex type=3dview sep=, mapset=$MAPSET pattern="$d"`
+fi
+
+found=
+if [ "$rast" ] ; then
+	found=1
+	rast="rast=$rast"
+fi
+
+if [ "$rast3d" ] ; then
+	found=1
+	rast3d="rast3d=$rast3d"
+fi
+
+if [ "$vect" ] ; then
+	found=1
+	vect="vect=$vect"
+fi
+
+if [ "$icon" ] ; then
+	found=1
+	icon="icon=$icon"
+fi
+
+if [ "$labels" ] ; then
+	found=1
+	labels="labels=$labels"
+fi
+
+if [ "$region" ] ; then
+	found=1
+	region="region=$region"
+fi
+
+if [ "$group" ] ; then
+	found=1
+	group="group=$group"
+fi
+
+if [ "$dview" ] ; then
+	found=1
+	dview="3dview=$dview"
+fi
+
+if [ ! "$found" ] ; then
+	g.message -e "No data found."
+	exit 1
+fi
+
+if [ $force -eq 0 ] ; then
+    g.message "The following files would be deleted:"
+    echo "g.remove $rast $rast3d $vect $icon $labels $region $group $dview"
+    g.message message=""
+    g.message "You must use the force flag to actually remove them. Exiting."
+    exit 0
+fi
+
+
+exec g.remove $rast $rast3d $vect $icon $labels $region $group $dview

@@ -1,0 +1,174 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	r.in.aster
+# AUTHOR(S):	Michael Barton (michael.barton@asu.edu) and Paul Kelly
+# PURPOSE:	Rectifies, georeferences, & imports Terra-ASTER imagery 
+#			using gdalwarp
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+# Requires:
+#   gdalwarp
+
+#%Module
+#%  description: Georeference, rectify and import Terra-ASTER imagery and relative DEM's using gdalwarp.
+#%  keywords: raster, imagery, import
+#%End
+#%option
+#% key: input
+#% type: string
+#% gisprompt: old_file,file,input
+#% description: Input ASTER image to be georeferenced & rectified
+#% required : yes
+#%end
+#%option
+#% key: proctype
+#% type: string
+#% description: ASTER imagery processing type (Level 1A, Level 1B, or relative DEM)
+#% options: L1A,L1B,DEM
+#% required : yes
+#%end
+#%option
+#% key: band
+#% type: string
+#% description: L1A or L1B band to translate (1, 2, 3n, 3b, 4-14). Can only translate a single band
+#% answer: 1
+#% required : yes
+#%end
+#%option
+#% key: output
+#% type: string
+#% description: Name for output raster map
+#% gisprompt: old,cell,raster
+#% required : yes
+#%end
+
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+#initialize datasets for L1A and L1B
+
+if [ "$GIS_OPT_PROCTYPE" = "L1A" ]
+then
+	case $GIS_OPT_BAND in
+		1)
+		dataset="VNIR_Band1:ImageData" ;;
+		2)
+		dataset="VNIR_Band2:ImageData" ;;
+		3n)
+		dataset="VNIR_Band3N:ImageData" ;;
+		3b)
+		dataset="VNIR_Band3B:ImageData" ;;
+		4)
+		dataset="SWIR_Band4:ImageData" ;;
+		5)
+		dataset="SWIR_Band5:ImageData" ;;
+		6)
+		dataset="SWIR_Band6:ImageData" ;;
+		7)
+		dataset="SWIR_Band7:ImageData" ;;
+		8)
+		dataset="SWIR_Band8:ImageData" ;;
+		9)
+		dataset="SWIR_Band9:ImageData" ;;
+		10)
+		dataset="TIR_Band10:ImageData" ;;
+		11)
+		dataset="TIR_Band11:ImageData" ;;
+		12)
+		dataset="TIR_Band12:ImageData" ;;
+		13)
+		dataset="TIR_Band13:ImageData" ;;
+		14)
+		dataset="TIR_Band14:ImageData" ;;
+	esac
+	srcfile="HDF4_EOS:EOS_SWATH:"\"$GIS_OPT_INPUT\"":"$dataset
+elif [ "$GIS_OPT_PROCTYPE" = "L1B" ] 
+then
+	case $GIS_OPT_BAND in
+		1)
+		dataset="VNIR_Swath:ImageData1" ;;
+		2)
+		dataset="VNIR_Swath:ImageData2" ;;
+		3n)
+		dataset="VNIR_Swath:ImageData3N" ;;
+		3b)
+		dataset="VNIR_Swath:ImageData3B" ;;
+		4)
+		dataset="SWIR_Swath:ImageData4" ;;
+		5)
+		dataset="SWIR_Swath:ImageData5" ;;
+		6)
+		dataset="SWIR_Swath:ImageData6" ;;
+		7)
+		dataset="SWIR_Swath:ImageData7" ;;
+		8)
+		dataset="SWIR_Swath:ImageData8" ;;
+		9)
+		dataset="SWIR_Swath:ImageData9" ;;
+		10)
+		dataset="TIR_Swath:ImageData10" ;;
+		11)
+		dataset="TIR_Swath:ImageData11" ;;
+		12)
+		dataset="TIR_Swath:ImageData12" ;;
+		13)
+		dataset="TIR_Swath:ImageData13" ;;
+		14)
+		dataset="TIR_Swath:ImageData14" ;;
+	esac
+	srcfile="HDF4_EOS:EOS_SWATH:"\"$GIS_OPT_INPUT\"":"$dataset
+elif [ "$GIS_OPT_PROCTYPE" = "DEM" ] 
+then
+	srcfile="$GIS_OPT_INPUT"
+fi
+
+tempfile=`g.tempfile $$`.tif
+
+#run gdalwarp with selected options (must be in $PATH)
+#to translate aster image to geotiff
+g.message "Georeferencing aster image ..."
+proj=`g.proj -jf`
+echo $proj | grep 'XY location' > /dev/null
+if [ $? -eq 0 ] ; then
+  g.message -e "This module needs to be run in a projected location (found: $proj)"
+  exit 1
+fi
+
+g.message -d message="gdalwarp -t srs $proj $srcfile $tempfile"
+
+gdalwarp -t_srs "`g.proj -jf`" $srcfile $tempfile
+
+#import geotiff to GRASS
+g.message "Importing into GRASS ..."
+
+r.in.gdal input="$tempfile" output="$GIS_OPT_OUTPUT"
+
+#cleanup
+g.message "Cleaning up ..."
+rm -f "$tempfile"
+
+# write cmd history:
+r.support "$GIS_OPT_OUTPUT" history="${CMDLINE}"
+
+g.message "Done."
+

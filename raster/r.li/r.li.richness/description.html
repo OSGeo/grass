@@ -1,0 +1,45 @@
+<h2>DESCRIPTION</h2>
+<em>r.li.richness</em> calculates the "richness's diversity index" as:<br>
+<img src="rliRichness_formula.png"> <br>
+with: <br>
+<ul>
+  <li><b>m</b>: number of different patch type<br>  </li>
+</ul>
+
+<h2>EXAMPLES</h2>
+To calculate richness's diversity index on map my_map, using
+my_conf configuration file and saving results in my_out file run:<br>
+<div class="code"><pre>
+r.li.richness map=my_map conf=my_conf output=my_out
+</pre></div>
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder. <br>
+
+If input raster is full of null values r.li.richness returns -1.<br>
+If you want to have null values instead run <br>
+after index calculation.
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351.
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+<h2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><br>
+
+<p><i>Last changed: $Date$</i></p>
+

@@ -1,0 +1,110 @@
+<h2>DESCRIPTION</h2>
+
+<b>r.slope.aspect </b>generates raster maps of slope, aspect, curvatures and
+first and second order partial derivatives from a raster map of true
+elevation values. The user must specify the input <i>elevation</i> file name
+and at least one output file name. The user can also specify the
+<i>format</i> for slope (degrees, percent; default=degrees), and the 
+<i>zfactor</i>: multiplicative factor to convert elevation units to meters;
+(default 1.0).
+<p>
+The <i>elevation</i> input raster map specified by the user must contain true
+elevation values, <b>not</b> rescaled or categorized data. If the elevation
+values are in feet or other units than meters (with a conversion factor
+<i>meters:</i>, defined in PROJ_UNITS), they must be converted to meters using
+the parameter <i>zfactor</i>.
+<p>
+The <i>aspect</i> output raster map indicates the direction that slopes are
+facing. The aspect categories represent the number degrees of east. Category
+and color table files are also generated for the aspect map layer. The aspect
+categories represent the number degrees of east and they increase
+counterclockwise: 90deg is North, 180 is West, 270 is South 360 is East. The
+aspect value 0 is used to indicate undefined aspect in flat areas with slope=0.
+<p>
+The <i>slope</i> output raster map contains slope values, stated in degrees of
+inclination from the horizontal if <i>format</i>=degrees option (the default)
+is chosen, and in percent rise if <i>format</i>=percent option is chosen.
+Category and color table files are generated.
+<p>
+Profile and tangential curvatures are the curvatures in the direction of
+steepest slope and in the direction of the contour tangent respectively. The
+curvatures are expressed as 1/metres, e.g. a curvature of 0.05 corresponds to a
+radius of curvature of 20m.
+<p>
+For some applications, the user will wish to use a reclassified raster map
+of slope that groups slope values into ranges of slope. This can be done using
+<i><a href="r.reclass.html">r.reclass</a></i>. An example of a useful
+reclassification is given below:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; category&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; range&nbsp;&nbsp; category labels
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in degrees)&nbsp;&nbsp;&nbsp; (in percent)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0-&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0-&nbsp; 2%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2-&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3-&nbsp; 5%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4-&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6- 10%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6-&nbsp; 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11- 15%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9- 11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16- 20%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12- 14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21- 25%
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15- 90&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 26% and higher
+
+&nbsp;&nbsp;&nbsp;&nbsp; The following color table works well with the above
+&nbsp;&nbsp;&nbsp;&nbsp; reclassification.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; category&nbsp;&nbsp; red&nbsp;&nbsp; green&nbsp;&nbsp; blue
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp;&nbsp; 179
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 153&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128&nbsp;&nbsp;&nbsp; 153&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 204&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128&nbsp;&nbsp;&nbsp;&nbsp; 51&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 51
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</pre>
+
+<h2>NOTES</h2>
+
+To ensure that the raster elevation map layer is not inappropriately resampled,
+the settings for the current region are modified slightly (for the execution
+of the program only): the resolution is set to match the resolution of
+the elevation map and the edges of the region (i.e. the north, south, east
+and west) are shifted, if necessary, to line up along edges of the nearest
+cells in the elevation map. If the user really wants the elevation map
+resampled to the current region resolution, the -a flag should be specified.
+
+<p>The current mask is ignored.
+
+<p>The algorithm used to determine slope and aspect uses a 3x3 neighborhood
+around each cell in the elevation file. Thus, it is not possible to determine
+slope and aspect for the cells adjacent to the edges in the elevation map
+layer. These cells are assigned a "zero slope" value (category 0) in both
+the slope and aspect raster map layers.
+
+<p>Horn's formula is used to find the derivatives in x and y directions.
+
+<p>Only when using integer elevation models, the aspect is biased in 0,
+45, 90, 180, 225, 270, 315, and 360 directions; i.e., the distribution
+of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
+When working with floating point elevation models, no such aspect bias occurs.
+
+<p>Because most cells with a very small slope end up having category 0,
+45, ..., 360, it is sometimes possible to reduce the bias in these directions
+by filtering out the aspect in areas where the terrain is almost flat. A new
+option <i>min_slp_allowed</i> was added to specify the minimum slope for which
+aspect is computed. The aspect for all cells with slope &lt;
+<i>min_slp_allowed</i> is set to <b>null</b>.
+
+
+<h2>REFERENCE</h2>
+Horn, B. K. P. (1981). Hill Shading and the Reflectance Map, Proceedings
+of the IEEE, 69(1):14-47.
+
+<h2>SEE ALSO</h2>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.neighbors.html">r.neighbors</a></em>,
+<em><a href="r.reclass.html">r.reclass</a></em>,
+<em><a href="r.rescale.html">r.rescale</a></em>
+
+<h2>AUTHORS</h2>
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
+<p>Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

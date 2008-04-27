@@ -1,0 +1,35 @@
+MODULE_TOPDIR = ../..
+
+include $(MODULE_TOPDIR)/include/Make/Lib.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+
+CFLAGS=-c -fpic -I./ -I$(ARCH_DISTDIR)/include $(GDALCFLAGS) $(PYTHONCFLAGS)
+
+LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) -lgrass_I -lgrass_Iortho -lgrass_bitmap -lgrass_btree -lgrass_cdhc -lgrass_datetime -lgrass_dbmibase -lgrass_dbmiclient -lgrass_dbmidriver -lgrass_dbstubs -lgrass_dgl -lgrass_display -lgrass_dspf -lgrass_edit -lgrass_form -lgrass_g3d -lgrass_gis -lgrass_gmath -lgrass_gproj -lgrass_interpdata -lgrass_interpfl -lgrass_linkm -lgrass_qtree -lgrass_raster -lgrass_rowio -lgrass_rtree -lgrass_segment -lgrass_shape -lgrass_sites -lgrass_symb -lgrass_trans -lgrass_vask -lgrass_vect -lgrass_psdriver
+
+# TODO: build the NumPtr module. See NumPtr/README.GRASS
+#SUBDIRS = NumPtr
+#include $(MODULE_TOPDIR)/include/Make/Dir.make
+
+default: python_grass6.so
+
+clean:
+	-rm -f *.o *.so python_grass6_wrap.c python_grass6.pyc python_grass6.py
+
+distclean: clean
+	-rm -f Makefile
+
+python_grass6_wrap.c: python_grass6.i
+	$(MAKE) -C interfaces
+	$(SWIG) -python -shadow $<
+
+
+python_grass6_wrap.o: python_grass6_wrap.c
+	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $<
+
+python_grass6.so: python_grass6_wrap.o
+	$(LD) $(LDFLAGS) $< -o _python_grass6.so
+
+# doxygen:
+DOXNAME=
+DOXINPUT=grasspython.dox

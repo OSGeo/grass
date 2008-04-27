@@ -1,0 +1,50 @@
+<H2>DESCRIPTION</H2>
+
+<EM>i.oif</EM> calculates the Optimum Index Factor for LANDSAT TM bands 1,2,3,4,5 and 7.
+<P>
+The Optimum Index Factor is calculated to determine the band combination which
+shows the maximum information when combined into a composite image. The bands
+comprising the highest scoring combination from <EM>i.oif</EM> are used as the 
+three color channels required for <EM><A HREF="d.rgb.html">d.rgb</A></EM> or
+<EM><A HREF="r.composite.html">r.composite</A></EM>.
+<P>
+The analysis is saved to a file in the current directory called "i.oif.result".
+
+<H2>NOTES</H2>
+
+Colour Composits in BGR order: important band combinations (example: 
+234 in BGR order means: B=2, G=3, R=4):
+
+<ul>
+<li> 123: near natural ("true") colour; however, because of correlation of the 3 bands in visible 
+      spectrum, this combination contains not much more info than is contained in single band.
+<li> 234: sensitive to green vegetation (portrayed as red), coniferous as distinctly darker
+      red than deciduous forests. Roads and water bodies are clear.
+<li> 243: green vegetation is green but coniferous forests aren't as clear as in the 234 combination
+<li> 247: one of the best for info pertaining to forestry. Good for operation scale mapping of
+      recent harvest areas and road construction.
+<li> 345: contains one band from each of the main reflective units (vis, nir, shortwave infra).
+      Green vegetation is green and the shortwave band shows vegetational stress and mortality.
+      Roads are less evident as band 3 is blue.
+<li> 347: similar to 345 but depicts burned areas better.
+<li> 354: appears more like a colour infrared photo.
+<li> 374: similar to 354.
+<li> 457: shows soil texture classes (clay, loam, sandy).
+</ul>
+
+
+<H2>REFERENCES</H2>
+
+Jensen, 1996. Introductory digital image processing, p.98. ISBN 0-13-205840-5
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="d.rgb.html">d.rgb</A></EM><BR>
+<EM><A HREF="r.composite.html">r.composite</A></EM><BR>
+<EM><A HREF="r.covar.html">r.covar</A></EM><BR>
+<EM><A HREF="r.univar.html">r.univar</A></EM><BR>
+<BR>
+<H2>AUTHOR</H2>
+
+Markus Neteler, ITC-Irst, Trento, Italy<br>
+Updated to GRASS 5.7 by Michael Barton, Arizona State University
+<p><i>Last changed: $Date$</i>

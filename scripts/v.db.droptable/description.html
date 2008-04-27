@@ -1,0 +1,37 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.droptable</em> removes an existing attribute table from a 
+given vector map linked at given layer. If the <b>-f</b> force flag is not
+given then nothing is removed.
+
+<h2>NOTES</h2>
+
+<em>v.db.droptable</em> is a front-end to <em>db.execute</em> to allow easier usage.
+
+The existing database connection(s) can be verified with <em>v.db.connect</em>.
+
+<h2>EXAMPLE</h2>
+
+Removing attribute table connected to layer 2:<br>
+<div class="code"><pre>
+v.db.droptable sentiero_brenta_points layer=2
+v.db.connect -p sentiero_brenta_points
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.droptable.html">db.droptable</a></em>,
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
+<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.db.dropcol.html">v.db.dropcol</a></em>,
+<em><a HREF="v.db.select.html">v.db.select</a></em>,
+<em><a HREF="v.db.update.html">v.db.update</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

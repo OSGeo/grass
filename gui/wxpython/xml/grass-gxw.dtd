@@ -1,0 +1,77 @@
+<!--	grass-gxw.dtd
+
+	Copyright (C) 2007 by the GRASS Development Team
+	Author: Martin Landa <landa.martin gmail.com>
+	
+	This program is free software under the GPL (>=v2)
+	Read the file COPYING coming with GRASS for details.
+-->
+
+
+<!--
+        a grass-gxw defines workspace file content
+-->
+
+<!ELEMENT grass-gxw (gxw)>
+
+<!ELEMENT gxw (layer_manager?, display*)>
+
+<!--    a layer_manager defines properties of Layer Manager
+	GUI component
+
+	element added 2008/04
+-->
+<!ELEMENT layer_manager ANY>
+<!-- window dimenstion (x, y (ur), width, heigth -->
+<!ATTLIST layer_manager  dim       CDATA   #IMPLIED>
+
+<!--    a display element defines map layer connected to given
+	map display widnow
+
+        render, mode and showCompExtent (added 2004/08)
+-->
+<!ELEMENT display ((group|layer)*)>
+<!ATTLIST display  render	   (0 | 1) #IMPLIED>
+<!ATTLIST display  mode            (0 | 1 | 2 | 3 | 4 | 5 | 6) #IMPLIED>
+<!ATTLIST display  showCompExtent  (0 | 1) #IMPLIED>
+<!-- window dimenstion (x, y (ur), width, heigth -->
+<!ATTLIST display  dim             CDATA   #IMPLIED>
+
+<!--    group of map layers
+-->
+<!ELEMENT group (layer*)>
+<!ATTLIST group	name	CDATA   #REQUIRED>
+<!ATTLIST group	checked (0 | 1) #REQUIRED>
+
+<!--    map layer
+-->
+<!ELEMENT layer (selected?, task?)>
+<!ATTLIST layer	type	CDATA   #REQUIRED>
+<!ATTLIST layer	name	CDATA   #REQUIRED>
+<!ATTLIST layer	checked (0 | 1) #REQUIRED>
+<!ATTLIST layer	opacity	CDATA   #IMPLIED>
+
+<!--	task describes the interface of a single
+	GRASS command. 
+-->
+<!ELEMENT task	        (flag*, parameter*)>
+<!ATTLIST task	name	CDATA #REQUIRED>
+
+<!--	layer selected (added 2008/04)
+-->
+<!ELEMENT selected      EMPTY>
+
+<!--	a parameter must have a name and a value
+-->
+<!ELEMENT parameter     (value)>
+<!ATTLIST parameter	name		CDATA #REQUIRED>
+
+<!--    value of parameter
+-->
+<!ELEMENT value         (#PCDATA)>
+
+
+<!--    enabled flag
+-->
+<!ELEMENT flag          EMPTY>
+<!ATTLIST flag          name            CDATA #REQUIRED>

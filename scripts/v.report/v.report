@@ -1,0 +1,211 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	v.report
+# AUTHOR(S):	Markus Neteler
+# PURPOSE:	Reports geometry statistics for vector maps
+# COPYRIGHT:	(C) 2005, 2007 by MN and the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Reports geometry statistics for vectors.
+#%  keywords: vector, report, statistics
+#%End
+#%Flag
+#% key: r
+#% description: Reverse sort the result
+#%End
+#%Flag
+#% key: s
+#% description: Sort the result
+#%End
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Name of input vector map
+#% required: yes
+#%end
+#%option
+#% key: layer
+#% type: integer
+#% answer: 1
+#% description: Layer number
+#% required: no
+#%end
+#%option
+#% key: option
+#% type: string
+#% description: Value to calculate
+#% options: area,length,coor
+#% required: yes
+#%end
+#%option
+#% key: units
+#% type: string
+#% description: mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares),p(ercent)
+#% options: mi,miles,f,feet,me,meters,k,kilometers,a,acres,h,hectares,p,percent
+#% required: no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi   
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+# check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    echo "ERROR: awk required. Please install awk or gawk first." 1>&2
+    exit 1
+fi
+
+### setup enviro vars ###
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+
+### trap <ctrl>-<c> so that we can clean up tmp and exit
+trap 'rm -f "$TMP1" "$TMP2" "$TMP3" "$TMP4"; exit 1' 2 3 15
+
+# setting environment, so that sort works properly in all languages
+LC_ALL=C         # according to 'man sort'
+export LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+if [ $GIS_FLAG_R -eq 1 -a $GIS_FLAG_S -eq 1 ] ; then
+	g.message -e "Either -r or -s flag"
+	exit 1
+fi
+
+### secure temporary files:
+TMP1="`g.tempfile pid=$$`"
+TMP2="`g.tempfile pid=$$`"
+TMP3="`g.tempfile pid=$$`"
+TMP4="`g.tempfile pid=$$`"
+
+MAP=$GIS_OPT_MAP
+OPTION=$GIS_OPT_OPTION
+LAYER=$GIS_OPT_LAYER
+
+# does the input vector map exist?
+eval `g.findfile element=vector file=$GIS_OPT_MAP`
+if [ ! "$file" ] ; then
+   g.message -e "Vector map '$MAP' not found in mapset search path."
+   exit 1
+fi
+
+#test if the input vector has a table attached in the given layer
+v.info -c map=$MAP layer=$LAYER >/dev/null 2>&1
+if [ $? -eq 0 ] ; then
+ TABLEEXISTS=1
+else
+ TABLEEXISTS=0
+fi
+
+#fetch column names
+if [ $TABLEEXISTS -eq 1 ] ; then
+ COLNAMES="`v.info -c map=$MAP layer=$LAYER | grep -v '^Displaying column type' | cut -d '|' -f2 | tr '\n' '|'`" >/dev/null 2>&1
+else
+ COLNAMES="cat|"
+fi
+
+#special treatment for opt=coor parameter:
+if [ "$GIS_OPT_OPTION" = "coor" ] ; then
+  COLUMS="dummy1,dummy2,dummy3"
+  EXTRACOLNAMES="x|y|z"
+else
+  COLUMS="dummy1"
+  EXTRACOLNAMES="$OPTION"
+fi
+
+#check for optional units parameter:
+if [ -n "$GIS_OPT_UNITS" ] ; then
+   UNITSPARAM="units=$GIS_OPT_UNITS"
+   # reset to meters since percent are unsupported in v.to.db
+   if [ "$GIS_OPT_UNITS" = "p" -o "$GIS_OPT_UNITS" = "percent" ] ; then
+      UNITSPARAM="units=meters"
+   fi
+fi   
+
+## NOTE: we suppress -1 cat and 0 cat
+
+if [ $TABLEEXISTS -eq 1 ] ; then
+   v.db.select -c map="$MAP" layer="$LAYER" | sort -n -t'|' -k 1 | grep -v '^0' > "$TMP1"
+   if [ `wc -l "$TMP1" | awk '{print $1}'` -eq 0 ] ; then
+      KEY=`v.db.connect -g map="$GIS_OPT_MAP" | grep -w "$LAYER" | cut -f3 -d" "`
+      g.message -e "There is a table connected to input vector map '$MAP', but\
+      there are no categories present in the key column '$KEY'. Consider using\
+      v.to.db to correct this."
+      exit 1
+   fi
+   #fetch the requested attribute sorted by cat:
+   v.to.db -p map="$MAP" opt="$OPTION" col="$COLUMS" $UNITSPARAM \
+	   layer="$LAYER" 2> /dev/null | grep -v '^cat' | grep -v '^-1' | grep -v '^0'\
+	   | sort -n -t'|' -k 1 | cut -d'|' -f2-4 > "$TMP2"
+   #make pre-table
+   paste -d'|' "$TMP1" "$TMP2" > "$TMP3"
+else
+    v.category input="$MAP" layer="$LAYER" option=print | sort -n | uniq | \
+        grep -v '^-1' | grep -v '^0' > "$TMP1"
+    #make pre-table
+    v.to.db -p map="$MAP" opt="$OPTION" col="$COLUMS" $UNITSPARAM \
+	   layer="$LAYER" 2> /dev/null | grep -v '^cat' | grep -v '^-1' | grep -v '^0'\
+	   | sort -n -t'|' -k 1 > "$TMP3"
+
+fi
+
+# print table header
+echo "$COLNAMES$EXTRACOLNAMES"
+
+#make and print the table:
+NUMCOLS=`echo "$COLNAMES$EXTRACOLNAMES" | tr -s '|' ' ' | wc -w | awk '{print $1}'`
+
+# calculate percents if requested
+if  [ -n "$GIS_OPT_UNITS" ] ; then
+    if [ "$GIS_OPT_UNITS" = "p" -o "$GIS_OPT_UNITS" = "percent" ] ; then
+    
+       # calculate total area value
+       AREATOT=`cat "$TMP3" | cut -d'|' -f$NUMCOLS | awk  -F '|' 'BEGIN {sum = 0.0}
+       NR == 1{}
+               {sum += $1}
+       END{
+       print sum
+       }'`
+
+       # calculate area percentages
+       cat "$TMP3" | cut -d'|' -f$NUMCOLS | awk '{printf "%f\n", $1/'$AREATOT' * 100.}'  > "$TMP4"
+       paste -d'|' "$TMP1" "$TMP4" > "$TMP3"
+    fi
+fi
+
+if [ $GIS_FLAG_S -eq 1 ] ; then
+	# sort
+	cat "$TMP3" | sort -n -t'|' -k${NUMCOLS} -k1
+else
+	if [ $GIS_FLAG_R -eq 1 ] ; then
+	# reverse sort
+	cat "$TMP3" | sort -n -r -t'|' -k${NUMCOLS} -k1
+        else
+	   # no sort (order by cat)
+	   cat "$TMP3"
+        fi
+fi
+
+#cleanup:
+rm -f "$TMP1"
+rm -f "$TMP2"
+rm -f "$TMP3"
+rm -f "$TMP4"
+
+exit 0

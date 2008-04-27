@@ -1,0 +1,63 @@
+
+<h2>DESCRIPTION</h2>
+<em>r.li.edgedensity </em>calculates:<br>
+<br>
+<ul>
+   <li> the density of all the edge of patch i<br></li>
+	<img alt="" src="rliEdgeDensity_formula1.png"><br>
+	or<br><br>
+   <li> the density of all the edge in the sampling area if i isn't specified<br></li>
+	<img alt="" src="rliEdgeDensity_formula2.png"><br></ul>
+<p>with:</p>
+<ul>
+  <li><b>k</b>: patch type<br></li>
+  <li><b>m</b>: number of patch type<br> </li>
+  <li><b>n</b>: number of edge segment of patch type k</li>
+  <li><b>e<small><small>ik </small></small></b>:total length of edge in landscape involving patch type k</li>
+  <li> <B>Area</B>: total landscape area<BR>
+</ul>
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351.
+
+<h2>EXAMPLES</h2>
+To calculate edge density index on map my_map, using
+my_conf configuration file and saving results in
+my_out file run:<br>
+<B>r.li.edgedensity map=</B>my_map <B>conf=</B>my_conf <B>output=</B>my_out <br><br>
+To calculate edge density index of patch_type 34, using
+my_conf configuration file and on map my_map, saving results in my_out
+file run:<br>
+<B>r.li.edgedensity map=</B>my_map <B>conf=</B>my_conf <B>output=</B>my_out <B>patch_type=</B>34
+<br>
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder.
+<br>
+If input raster is full of null values r.li.edgedensity consider to have 0
+patch.<br>
+If area is 0 r.li.edgedensity returns -1; this is possible only if input
+raster is masked.
+If you want to have null values instead run <br>
+<B>r.null setnull=-1 map=</B>my_map <br>
+after index calculation.
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>
+</em>
+
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+<h2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><br>
+
+<p><i>Last changed: $Date$</i>
+

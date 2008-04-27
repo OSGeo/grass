@@ -1,0 +1,127 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.mon</em> allows the user to start,
+select, list, query the status of, release control of,
+stop, and unlock control of, available graphics monitors.
+The user can run this program either interactively (through
+a series of menus), or non-interactively by typing the name
+of the monitor to start, stop, select, or unlock, and any
+desired flags on the command line.
+
+<p>
+
+<b>These parameters perform the following functions:</b> 
+
+<ol>
+<li><b>Start a Monitor.</b> 
+<br>
+
+In order to display on-screen GRASS graphics, the user must
+<em>start</em> and <em>select</em> a graphics monitor.  By
+default, the <em>start</em> command actually runs two
+commands, to both start and select whatever monitor is
+named by the user. (The user can get a list of available
+monitors by setting the -l or -L flag on the command line.)
+Note that some monitor drivers use environment 
+<a href=variables.html>variables</a> or the specific
+<a href=displaydrivers.html>driver documentation</a>.
+<p>
+
+When a monitor is <em>started</em>, it is therefore also
+(automatically) <em>selected</em> for output, unless the
+
+<em>-s</em> flag is set by the user; the user can also
+explictly <em>select</em> a monitor that has been started
+(see (3) below).  After a monitor is started, a blank
+graphics frame should appear on whatever terminal the user
+is using to display graphics.
+
+<p>
+
+The desired monitor should be started once and need not be restarted unless 
+it is stopped (option <em>2</b>)</em> for some reason. A monitor may continue 
+to run for any length of time, even when no GRASS session is being run. 
+The monitor program runs in the background. 
+
+<li><b>Stop a Monitor.</b> 
+<br>
+Sometimes the monitor program needs to be stopped
+(terminated).  Choosing option 2 will terminate a
+user-specified monitor program.  A graphics monitor has two
+different types of status:  monitor program <em>not
+running</em>, and monitor <em>running</em>.  A monitor that
+has been started and/or selected will be listed as running;
+a monitor that has been stopped (or not started) will be
+listed as not running.  The -L (list status) flag will list
+the status of each monitor connected to the system.
+
+<p>
+
+<li><b>Select a Monitor.</b> 
+<br>
+
+When the user <em>starts</em> a monitor, it is also
+(automatically) <em>selected</em> for graphics output
+unless the user sets the <em>-s</em> flag.  In order to use
+(direct graphics output to) a monitor, the user must
+<em>select</em> that monitor for use, either by simply
+starting the monitor without the -s flag or by explictly
+selecting the monitor for output using option 3. Only
+running monitors can be selected for graphics output.  Once
+the user has <em>selected</em> a monitor for output, no
+other user can use this monitor for graphics output until
+the monitor driver is either <em>released</em> (by the
+user) or <em>unlocked</em> (by any user on the system).
+
+
+<p> 
+
+The user can run multiple graphics monitors by simply
+starting each of the graphics monitors drivers he wishes to
+direct output to.  
+
+<li><b>Release a Monitor.</b>
+<br> Once a user has <em>selected</em> a monitor for
+graphics output, it is locked for use by that user until
+either: (1) the user voluntarily releases control of the
+monitor for use by another (option 4), or (2) another GRASS
+user <em>unlocks</em> the user's control of the monitor.
+Menu option 4 appears only to the person who has selected
+the monitor (since only that user can release control of
+his selected graphics monitor.) If another user wishes to
+<em>unlock</em> the user's control of the monitor, that
+user must run <em>d.mon</em> from the command line and set
+the <b>unlock=</b><em>name</em> parameter.
+
+
+</ol>
+
+You may choose multiple options within the <em>d.mon</em>
+program.  
+
+<h2>NOTES</h2>
+
+The <em>d.mon</em> program can regulate control of graphics
+monitors both in systems using multiple monitors and in
+systems using a single graphics monitor. To increase the number
+of monitors available to each user, the ASCII file
+<em>$GISBASE/etc/monitorcap</em> needs to be modified.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.erase.html">d.erase</a></em><br>
+<em><a href="pngdriver.html">pngdriver</a></em><br>
+<em><a href="xdriver.html">xdriver</a></em><br>
+<em><a href=variables.html>variables</a> list</em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, 
+U.S. Army Construction Engineering 
+Research Laboratory,
+<br>
+Full 24bit support by Roberto Flor, ITC-Irst, Trento, Italy
+<br>
+Code cleanup by Glynn Clements
+
+<p><i>Last changed: $Date$</i>

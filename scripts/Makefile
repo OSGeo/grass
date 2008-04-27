@@ -1,0 +1,85 @@
+MODULE_TOPDIR = ..
+
+SUBDIRS = \
+	d.correlate \
+	d.font.freetype \
+	d.monsize \
+	d.mvmon \
+	d.out.gpsdrive \
+	d.out.png \
+	d.out.file \
+	d.paint.labels \
+	d.polar \
+	d.rast.edit \
+	d.rast.leg \
+	d.redraw \
+	d.resize \
+	d.shadedmap \
+	d.slide.show \
+	d.split \
+	d.text.freetype \
+	d.vect.thematic \
+	db.dropcol \
+	db.droptable \
+	db.in.ogr \
+	db.out.ogr \
+	db.test \
+	g.manual \
+	g.mlist \
+	g.mremove \
+	i.fusion.brovey \
+	i.image.mosaic \
+	i.in.spotvgt \
+	i.landsat.rgb \
+	i.oif \
+	i.spectral \
+	i.tasscap \
+	m.proj \
+	p.out.vrml \
+	r.blend \
+	r.cats \
+	r.fillnulls \
+	r.in.aster \
+	r.in.srtm \
+	r.in.wms \
+	r.mapcalculator \
+	r.mask \
+	r.out.gdal \
+	r.out.xyz \
+	r.plane \
+	r.reclass.area \
+	r.regression.line \
+	r.shaded.relief \
+	r.tileset \
+	r.univar.sh \
+	r3.mapcalculator \
+	v.build.all \
+	v.centroids \
+	v.convert.all \
+	v.db.addcol \
+	v.db.addtable \
+	v.db.join \
+	v.db.dropcol \
+	v.db.droptable \
+	v.db.renamecol \
+	v.db.reconnect.all \
+	v.db.univar \
+	v.db.update \
+	v.dissolve \
+	v.in.garmin \
+	v.in.e00 \
+	v.in.gns \
+	v.in.gpsbabel \
+	v.in.mapgen \
+	v.in.sites.all \
+	v.in.wfs \
+	v.rast.stats \
+	v.report \
+	v.univar.sh \
+	v.what.vect
+
+include $(MODULE_TOPDIR)/include/Make/Dir.make
+
+default: parsubdirs
+
+clean: cleansubdirs

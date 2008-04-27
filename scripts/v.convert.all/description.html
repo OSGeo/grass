@@ -1,0 +1,44 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.convert.all</em> converts all GRASS 5.0/5.3/5.4 vectors in the current
+mapset into GRASS 6.0 vectors.
+
+<h2>NOTES</h2>
+
+Vector maps from 5.0/5.3/5.4 and 6.0 do not interfere. They are stored in different 
+directories, so you can use the same names. Old vector maps can be listed with
+<em>g.list oldvect</em>.
+
+<P>
+If you need to convert back from 6.0 into the 5.0/5.3/5.4 vector format,
+use <em>v.out.ogr</em> (to SHAPE format) and then <em>v.in.shape</em>
+in the old GRASS program.
+Alternatively use "<em>v.out.ascii -o</em>" and <em>v.in.ascii</em>.
+<P>
+As this GRASS version uses SQL for attribute management, there are
+some <a href=sql.html>SQL restrictings concerning the file names</a>.
+This script changes dots (e.g. "foo.bar") in old vector map names into
+underline(s) (e.g. "foo_bar").
+
+<h2>EXAMPLE</h2>
+
+To convert all old vector maps in the current mapset to the new vector format:
+<br>
+<tt>
+v.convert.all -r
+</tt>
+
+<h2>SEE ALSO</h2>
+
+<em><A HREF="g.list.html">g.list</A>,
+<A HREF="v.convert.html">v.convert</A>,
+<A HREF="v.out.ascii.html">v.out.ascii</A>,
+<A HREF="v.out.ogr.html">v.out.ogr</A></em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler, ITC-Irst, Trento, Italy
+
+<p>
+<i>Last changed: $Date$</i>

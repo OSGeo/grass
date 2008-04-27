@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GRASS-MySQL driver</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+    
+<h1>MySQL driver in GRASS</h1>
+
+MySQL database driver in GRASS enables GRASS to store vector
+attributes in MySQL server.
+<p>
+Because vector attribute tables 
+are created automaticaly when a new vector is written and the 
+name of the table is the same as the name of the vector it is 
+good practice to create a new database for each GRASS mapset.
+
+<H2>Creating a MySQL database</H2>
+
+A new database is created within MySQL:
+
+<div class="code"><pre>
+mysql> CREATE DATABASE mydb;
+</pre></div>
+
+See the MySQL manual for details.
+
+<h2>Driver and database name</h2>
+GRASS modules require 2 parameters to connect to a database.
+Those parameters are 'driver' and 'database'. For MySQL driver 
+the parameter 'driver' should be set to value 'mysql'.
+The parameter 'database' can be given in two formats:
+
+<ul>
+    <li> Database name - in case of connection from localhost
+    <li> String of comma separated list of kye=value options. 
+         Supported options are:
+	 <ul>
+	     <li> dbname - database name
+	     <li> host - host name or IP address
+	     <li> port - server port number 
+	 </ul>
+</ul>
+Examples of connection parameters:
+<pre>
+  db.connect driver=mysql database=mytest
+  db.connect driver=mysql database='dbname=mytest,host=test.grass.org'
+</pre>
+
+<h2>Data types</h2>
+GRASS supports almost all MySQL data types with following limitations:
+<ul>
+    <li> Binary columns (BINARY, VARBINARY, TINYBLOB, MEDIUMBLOB,
+    BLOB, LONGBLOB) are not not supported. 
+    If a table with binary column(s) is used in GRASS
+    a warning is printed and only the supported columns are 
+    returned in query results.
+
+    <li> Columns of type SET and ENUM are represented as string (VARCHAR). 
+
+    <li> Very large integers in columns of type BIGINT can be lost 
+    or corrupted because GRASS does not support 64 bin integeres
+    on most platforms. 
+
+    <li> GRASS does not currently distinguish types TIMESTAMP and 
+    DATETIME. Both types are in GRASS interpreted as TIMESTAMP.
+</ul>
+
+<h2>Indexes</h2>
+GRASS modules automaticaly create index on key column of vector
+attributes table. The index on key column is important 
+for performance of modules which update the attribute table,
+for example v.to.db, v.distance and v.what.rast.
+
+<h2>Privileges</h2>
+Because MySQL does not support groups of users and because 
+only MySQL 'root' can grant privileges to other users
+GRASS cannot automaticaly grant select privileges on created
+tables to group of users.
+<p>
+If you want to give privilege to read data from your mapset 
+to other users you have to ask your MySQL server administrator
+to grant select privilege to them on the MySQL database used 
+for that mapset. For example, to allow  everybody to read data 
+in from your database 'mydb':<br>
+<pre>
+shell&gt; mysql --user=root mysql
+mysql&gt; GRANT SELECT ON mydb.* TO ''@'%';
+</pre>
+
+<h2>Schemas</h2>
+Because MySQL does not support database schemas the parameter 
+'schema' of module db.connect should never be set to any
+value. If you set that parameter for MySQL driver GRASS will 
+try to write tables to the specified schema which will result 
+in errors.
+
+<h2>Groups</h2>
+MySQL does not support user groups. Any settings specified 
+by 'group' parameter of module db.connect are ignored by
+GRASS for MySQL driver.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="sql.html">SQL support in GRASS GIS</a></em>
+	
+<h2>Credits</h2>
+Development of the driver was sponsored by 
+<a href="http://www.faunalia.it">Faunalia</a> (Italy)
+as part of a project for <a href="http://www.atac.roma.it/">ATAC</a>.
+
+<H2>AUTHOR</H2>
+Radim Blazek
+
+<p><i>Last changed: $Date$</i>
+<HR>
+<BR><a href=index.html>Help Index</a>
+</body>
+</html>

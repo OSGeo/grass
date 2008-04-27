@@ -1,0 +1,85 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.vect</em> displays GRASS vector data in the active frame on the graphics 
+monitor.
+
+<h2>NOTES</h2>
+
+<em>d.vect</em> can simply be used typing <tt><b>d.vect map=</b>vector_map</tt>. 
+There are a large variety of optional parameters which allow the user to
+specify vector type, colors, data fields, SQL queries, label size and 
+justification, etc.
+<P>
+By default <em>d.vect</em> fills in holes in polygons (islands).
+If you only want to show active areas limit the features with, e.g.,
+"<tt>d.vect&nbsp;cats=1-999999</tt>".
+<P>
+In order to display attributes in the map, <em>display=attr</em> must be
+specified in addition to the column name (<em>attrcol</em> parameter).
+
+<P>
+Colors may be specified in an attribute table column
+named 'GRASSRGB' (which is a <tt>varchar(11)</tt> column containing <tt>RRR:GGG:BBB</tt> values),
+see the flag <em>-a</em>.
+<P>
+A table for a vector map might look like this:
+
+<div class="code"><pre>
+echo "select * from testisola" | db.select
+cat|label|GRASSRGB
+0|no data|255:255:255
+90|FRASSILONGO|23:245:67
+104|LEVICO|23:145:67
+139|PERGINE VALSUGANA|223:45:237
+168|SANT'ORSOLA|223:45:67
+190|TENNA|123:45:67
+</pre></div>
+<P>
+To add the GRASSRGB color column, use <em>v.db.addcol</em>:
+<div class="code"><pre>
+v.db.addcol testisola col="GRASSRGB varchar(11)"
+</pre></div>
+<P>
+To add/change a color, use <em>v.db.update</em>:
+<div class="code"><pre>
+v.db.update testisola col=GRASSRGB val="123:45:237" where="cat=139"
+</pre></div>
+<P>
+A much simpler method of color coding is by using the <em>-c</em> flag which 
+displays vector elements of like category number with a random color.
+<P>
+This module can use FreeType/TrueType fonts if they have already been selected with
+<em>d.font.freetype</em>.
+
+<h2>EXAMPLES</h2>
+
+Spearfish examples:
+
+<div class="code"><pre>
+# display roads with category numbers:
+d.vect roads display=shape,cat lcolor=green
+
+# display randomly colorized soils map with attributes
+d.vect -c soils disp=attr attrcol=label
+
+# display randomly colorized selected vectors from soils map
+d.vect -c soils where="label='VBF'" display=shape,attr attrcol=label
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="d.erase.html">d.erase</a>,
+<a HREF="d.what.vect.html">d.what.vect</a>,
+<a HREF="d.rast.html">d.rast</a>,
+<a HREF="d.font.freetype.html">d.font.freetype</a>
+<a HREF="v.db.addcol.html">v.db.addcol</a>
+<a HREF="v.db.update.html">v.db.update</a><br>
+<a HREF="sql.html">GRASS SQL interface</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i><p>

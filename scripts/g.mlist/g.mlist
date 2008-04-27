@@ -1,0 +1,142 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	g.mlist
+# AUTHOR(S):	Huidae Cho - grass4u@gmail.com
+# PURPOSE:	applied regular expression and wildcard to g.list
+# COPYRIGHT:	(C) 2000 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Apply regular expressions and wildcards to g.list
+#%  keywords: general, map management 
+#%End
+#%flag
+#%  key: r
+#%  description: Use regular expression instead of wildcard
+#%end
+#%flag
+#%  key: m
+#%  description: Print mapset name
+#%end
+#%option
+#% key: type
+#% type: string
+#% description: Data type
+#% answer: rast
+#% options: rast,rast3d,oldvect,vect,asciivect,icon,labels,sites,region,region3d,group,3dview,all
+#% required : yes
+#% multiple: yes
+#%end
+#%option
+#% key: mapset
+#% type: string
+#% multiple : yes
+#% description: Mapset(s) to list (default: current mapset search path)
+#% required : no
+#%end
+#%option
+#% key: sep
+#% type: string
+#% description: Output separator (default: newline)
+#% required : no
+#%end
+#%option
+#% key: pattern
+#% type: string
+#% description: Map name search pattern (default: all)
+#% answer: *
+#% required : no
+#%end
+
+do_list() {
+    if [ ! "$search" ] ; then
+	search="."
+    fi
+
+    if [ $GIS_FLAG_M -eq 1 ] ; then
+	MAPSET="@$mapset"
+    else
+	MAPSET=""
+    fi
+
+    LC_ALL=C g.list type="$type" mapset="$mapset" \
+	| grep -vE '^-+$|files available' \
+	| grep -vi "mapset" \
+	| sed 's/  */\
+/g' \
+	| grep . \
+	| grep -- "$search" \
+	| sort \
+	| sed -e "s/$/$MAPSET/"
+}
+
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+#echo "Note:"
+#echo "  Do not forget to enclose expression with '...' to avoid being expanded"
+#echo "  by the shell first."
+
+type="$GIS_OPT_TYPE"
+mapset="$GIS_OPT_MAPSET"
+sep="$GIS_OPT_SEP"
+search="$GIS_OPT_PATTERN"
+
+#list all datatypes
+types=`echo $type | sed 's/,/ /g'`
+for itype in $types
+do
+  if [ "$itype" = "all" ] ; then
+      type="rast,rast3d,oldvect,vect,asciivect,icon,labels,sites,region,region3d,group,3dview"
+  fi
+done 
+
+if [ -z "$sep" ] ; then
+#    echo using "\n" as separator
+    sep=""
+fi
+
+
+if [ $GIS_FLAG_R -ne 1 ] ; then
+#    echo wildcard
+    search="^`echo \"$search\" | sed 's/\./\\\\./g; s/?/./g; s/*/.*/g; s/|/$|^/g'`$"
+#else
+#    echo regex, as is
+fi
+
+start=""
+if [ -z "$mapset" ] ; then
+#    echo using current mapset
+    mapsets=`g.mapsets -p`
+else
+    mapsets=`echo $mapset | sed 's/,/ /g'`
+fi
+
+for mapset in $mapsets
+do
+    do_list
+done | (
+	    if [ "$sep" != "" ] ; then
+		tr '\n' "$sep" | sed 's/.$//'
+		echo ""
+	    else
+		cat
+	    fi
+	)
+
+exit 0
+

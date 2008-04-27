@@ -1,0 +1,192 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <title>REQUIREMENTS to compile GRASS GIS 6</title>
+</head>
+<body bgcolor="#FFFFFF">
+
+<h2>REQUIREMENTS to compile GRASS GIS 6</h2>
+
+A workstation running some flavor of UNIX like Solaris, IRIX, Linux, BSD,
+Mac OS X or cygwin (on Win32). Ideally, you should have at least 500 Mb for data
+and 32 Mb RAM. The source code package needs around 50 MB uncompressed.
+The resulting binaries may need between 20 MB and 180 MB depending on your
+platform. During a full compilation you may need temporarily up to 550MB including
+the source code.
+<p>
+To disable features please read the <a href="INSTALL">INSTALL</a> file.
+
+<h3>General requirements:</h3>
+
+(most tools are standard tools on Linux, for other platforms you may have
+to install some of them.)
+
+<ul>
+<li><B>C-compiler</B> (cc, gcc, egcs, ...)
+<br>gcc: <a href="http://www.gnu.org/software/gcc/gcc.html">http://www.gnu.org/software/gcc/gcc.html</a>
+<br>
+
+<li><B>GNU make</B> is recommended
+<br><a href="http://www.gnu.org/software/make/make.html">http://www.gnu.org/software/make/make.html</a>
+<br>
+
+<li><B>zlib</B> compression library (already installed on most modern systems)
+<br>It is used to internally compress GRASS raster maps:
+<br>libz: <a href="http://www.gzip.org/zlib/">http://www.gzip.org/zlib</a>
+<!-- freesoftware.com is broken! <br><a href="ftp://ftp.freesoftware.com/pub/infozip/zlib/">ftp://ftp.freesoftware.com/pub/infozip/zlib</a> -->
+<br>
+
+<li><B>flex</B> lexical analyzer generator (flex) - note: lex is no longer supported, please use flex instead:
+<br>flex: <a href="http://www.gnu.org/software/flex/flex.html">http://www.gnu.org/software/flex/flex.html</a>
+<br>
+
+<li><B>parser generator</B> (yacc, bison)
+<br>bison: <a href="http://www.gnu.org/software/bison/bison.html">http://www.gnu.org/software/bison/bison.html</a>
+<br>
+
+<li><B>libncurses4.x/5.x</B> (already installed on modern systems)
+<br><a href="http://www.gnu.org/software/ncurses/ncurses.html">http://www.gnu.org/software/ncurses/ncurses.html</a>
+<br><a href="ftp://ftp.gnu.org/pub/gnu/ncurses/">ftp://ftp.gnu.org/pub/gnu/ncurses</a>
+<br>
+
+<li><B>X Window</B>  system for graphical output, development libraries (X development
+libraries, in some linux distributions they are separate packages, e.g. xlibs-dev)
+<br><a href="http://www.xfree.org">http://www.xfree.org</a>
+<br><a href="http://www.x.org">http://www.x.org</a>
+<br>winGRASS note: As alternative a generic MS-Windows driver is under
+construction which does not require X11
+<br>
+
+<li><B>PROJ4</B> - Projection Library<br>
+<a href="http://proj.maptools.org">http://proj.maptools.org</a>
+<br>
+
+<li><B>GDAL and OGR</B> for import and export of most external raster and vector
+map formats<br>
+<a href="http://www.gdal.org">http://www.gdal.org</a>
+
+</ul>
+
+<h3>
+Optional requirements:</h3>
+
+<ul>
+<li><B>Tcl/Tk 8.x libraries</B> (including the 'wish' program) to use the GRASS GUI
+menu system and the NVIZ visualization suite<br>
+Some features of the new <em>gis.m</em> GIS manager may depend on version 8.4 or newer.
+<br>
+<!--
+On some platforms (e.g. Debian) GRASS 6.0.2 and earlier needed to be compiled
+against the Tcl/Tk 8.3 development packages in order to get NVIZ working correctly.
+This has been fixed in newer versions of GRASS.<br>
+-->
+see <a href="http://tcl.sourceforge.net">http://tcl.sourceforge.net</a>
+
+
+<li>If hardware openGL support is missing in the X Server, <B>Mesa-3.x</B>
+(openGL clone) may be required for NVIZ<br>
+<a href="http://mesa3d.sourceforge.net">http://mesa3d.sourceforge.net</a>
+
+
+<li><B>C++ Compiler</B> (required for the r.terraflow module)<br>
+gcc: <a href="http://www.gnu.org/software/gcc/gcc.html">http://www.gnu.org/software/gcc/gcc.html</a>
+
+
+<li><B>FFTW 2.x or 3.x</B> (library for computing the Discrete Fourier Transform), required
+for i.fft and i.ifft and other modules<br>
+<a href="http://www.fftw.org">http://www.fftw.org</a>
+
+
+<li><B>LAPACK / BLAS</B> (libraries for numerical computing) for GMATH library (GRASS numerical lib)<br>
+[<a href="http://www.netlib.org/lapack/">http://www.netlib.org/lapack</a>] (usually available on Linux distros)
+<br>
+<I>Note: LAPACK/BLAS support is intended for future module implementations, no need to
+use it at time!</I>
+
+
+<li><B>libpng</B> (for r.out.png and the PNG driver), usually already installed.<br>
+<a href="http://www.libpng.org/pub/png/libpng.html">http://www.libpng.org/pub/png/libpng.html</a>
+
+
+<li><B>libjpeg</B> (for r.out.tiff), usually already installed.<br>
+<a href="http://www.ijg.org">http://www.ijg.org</a><br>
+<a href="ftp://ftp.uu.net/graphics/jpeg/">ftp://ftp.uu.net/graphics/jpeg</a>
+
+
+<li><B>libtiff</B> (for r.out.tiff), usually already installed.<br>
+<a href="http://www.libtiff.org">http://www.libtiff.org</a>
+
+<li><B>readline</B> for extra command prompt functionality
+<br><a href="http://tiswww.case.edu/~chet/readline/rltop.html">http://tiswww.case.edu/~chet/readline/rltop.html</a>
+<br><a href="ftp://ftp.gnu.org/gnu/readline/">ftp://ftp.gnu.org/gnu/readline/</a>
+
+<li><B>PostgreSQL libraries</B> (for the PostgreSQL database interface)<br>
+<a href="http://www.postgresql.org">http://www.postgresql.org</a>
+
+
+<li><B>mySQL libraries</B> (for the mySQL database interface)<br>
+<a href="http://www.mysql.org">http://www.mysql.org</a>
+
+
+<li><B>sqlite libraries</B> (for the sqlite database interface)<br>
+<a href="http://www.sqlite.org">http://www.sqlite.org</a>
+
+
+<li><B>unixODBC</B> (for the ODBC database interface)<br>
+<a href="http://www.unixodbc.org">http://www.unixodbc.org</a>
+
+
+<li><B>Motif or Lesstif libraries</B> (for the "xanim" <!-- and ogl3d -->
+module)<br>
+<a href="http://www.lesstif.org">http://www.lesstif.org</a>
+
+
+<li><B>R language</B> (for the R statistical language interface)<br>
+<a href="http://cran.r-project.org">http://cran.r-project.org</a>
+
+
+<li><B>FreeType2</B> (for TrueType font support and d.text.freetype)<br>
+<a href="http://www.freetype.org">http://www.freetype.org</a>
+
+<li><B>Python</B> (for new wxPython GUI and SWIG interface)<br>
+<a href="http://www.python.org">http://www.python.org</a>
+
+<li><B>wxPython >= 2.8.1.1</B> for wxPython-based GUI (see file
+gui/wxpython/README)<br>
+<a href="http://www.wxpython.org">http://www.wxpython.org</a>
+
+<li><B>FFMPEG</B> (for direct rendering of animations from NVIZ),
+    including libavcodec, libavformat, libswscale <BR>
+<a href="http://ffmpeg.mplayerhq.hu/">http://ffmpeg.mplayerhq.hu</a><BR>
+
+<li><B>Cairo</B> (Cairo graphics library, Version &gt;= XX)<BR>
+<a href="http://cairographics.org">http://cairographics.org</a><BR>
+</ul>
+
+
+<h3>Note:</h3>
+
+SUN Solaris users may go here to download precompiled libraries etc.:
+<br><a href="http://www.sunfreeware.com">http://www.sunfreeware.com</a>
+
+<p>
+SGI IRIX users may go here to download precompiled libraries etc.:
+<br><a href="http://freeware.sgi.com">http://freeware.sgi.com</a>
+
+<p>
+MacOSX users may go here to download precompiled libraries etc.:
+<br><a href="http://fink.sourceforge.net">http://fink.sourceforge.net</a>
+
+<p>
+
+<hr WIDTH="100%">
+<br><i>&copy; GRASS Development Team 2001-2006</i>
+<p>Please report bugs here:
+<br><a href="http://www.grass-gis.org/bugtracking/bugreport.html">http://www.grass-gis.org/bugtracking/bugreport.html</a>
+
+<p>
+<i>$Id$</i>
+</p>
+</body>
+</html>

@@ -1,0 +1,11 @@
+ Test file format
+ ----------------
+
+Test file is composed of sections, each section for one SQL statement.
+There are 2 types of statements, select and execute.
+Each section start by type: X (execute) 
+                            S (select)
+and ends by empty row.
+Select statement is followed by expected result printed by db.select -c
+
+See existing test files as example.

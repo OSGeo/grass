@@ -1,0 +1,108 @@
+<H2>DESCRIPTION</H2>
+
+<EM>g.findfile</EM> is designed for Bourne shell scripts that need to search
+for mapset <em>elements</em>, including: raster, vector maps, region
+definitions and <em><a HREF="i.group.html">imagery</a></em> groups.
+<p>
+The list of <em>element</em> names to search for is not fixed; any
+subdirectory of the mapset directory is a valid <em>element</em> name.
+<p>
+However, the user can find the list of standard GRASS <em>element</em> names in
+the file $GISBASE/etc/element_list. This is the file which
+g.remove/g.rename/g.copy use to determine which files need to be
+deleted/renamed/copied for a given entity type.
+
+<!-- unused
+<H2>OPTIONS</H2>
+
+<H3>Parameters:</H3>
+
+<DL>
+
+<DT><B>element=</B><EM>name</EM> 
+
+<DD>The data base element (i.e., directory within a GRASS
+mapset) to be searched.
+
+<DT><B>mapset=</B><EM>name</EM> 
+
+<DD>The mapset in which to search for the specified file
+<EM>name</EM>.  If not specified, all mapsets in the user's
+GRASS search path are searched.  Otherwise, the specified
+mapset is searched.  As a convenience, if specified as a
+single dot (.) only the current mapset is searched.
+
+<DT><B>file=</B><EM>name</EM> 
+
+<DD>The name of a GRASS data file (of the stated
+<EM>element</EM> type) for which to search.
+
+</DL>
+-->
+
+<H2>OUTPUT</H2>
+
+<EM>g.findfile</EM> writes four lines to standard output:
+
+<div class="code"><pre>
+name='<EM>file_name</EM>'
+mapset='<EM>mapset_name</EM>'
+file='<EM>unix_filename</EM>'
+fullname='<EM>grass_fullname</EM>'
+</pre></div>
+
+
+The output is <EM>/bin/sh</EM> commands to set the variable
+<EM>name</EM> to the GRASS data base file name,
+<EM>mapset</EM> to the mapset in which the file resides,
+and <EM>file</EM> to the full UNIX path name for the named
+file.  These variables may be set in the <EM>/bin/sh</EM>
+as follows:
+
+<div class="code"><pre>
+eval `g.findfile element=name mapset=name file=name`
+</pre></div>
+<P>
+For example (raster map):
+<div class="code"><pre>
+eval `g.findfile element=cell file=mymap`
+</pre></div>
+
+<H2>NOTES</H2>
+
+If the specified file does not exist, the variables will be set as follows:
+
+<div class="code"><pre>
+name=
+mapset=
+fullname=
+file=
+</pre></div>
+
+
+The following is a way to test for this case:
+<div class="code">
+<PRE>
+if [ ! "$file" ]
+then
+	exit
+fi
+</PRE>
+</DIV>
+
+Note that region files are searched as <em>element=windows</em>.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.ask.html">g.ask</A></EM><br>
+<EM><A HREF="g.filename.html">g.filename</A></EM><br>
+<EM><A HREF="g.gisenv.html">g.gisenv</A></EM><br>
+<EM><A HREF="g.mapsets.html">g.mapsets</A></EM><br>
+<EM><A HREF="parser.html">parser</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

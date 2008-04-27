@@ -1,0 +1,6075 @@
+# translation of grasstcl_th.po to Thai
+# This file is distributed under the same license as the GRASS package.
+# Copyright (C) 2007, GRASS Development Team
+# Sarawut Ninsawat <sarawut.map@gmail.com>, 2007.
+# man <mansv68@yahoo.co.th>, 2007.
+msgid ""
+msgstr ""
+"Project-Id-Version: grasstcl_th\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-01-24 17:42+0100\n"
+"PO-Revision-Date: 2008-01-05 15:05+0700\n"
+"Last-Translator: man <mansv68@yahoo.co.th>\n"
+"Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"X-Poedit-Language: Thai\n"
+"X-Poedit-Country: THAILAND\n"
+
+#: ../vector/v.digit/settings.tcl:63
+msgid "Add new column"
+msgstr "เพิ่มคอลัมน์ใหม่"
+
+#: ../vector/v.digit/settings.tcl:66
+msgid "Create table"
+msgstr "สร้างตาราง"
+
+#: ../vector/v.digit/settings.tcl:99
+msgid "Add command"
+msgstr "เพิ่มคำสั่ง"
+
+#: ../vector/v.digit/settings.tcl:135
+msgid "Table successfully created"
+msgstr "ตารางได้สร้างสำเร็จแล้ว"
+
+#: ../vector/v.digit/settings.tcl:151
+msgid "Settings already opened"
+msgstr "การตั้งค่าได้เปิดไว้แล้ว"
+
+#: ../vector/v.digit/settings.tcl:160 ../lib/init/epsg_option.tcl:311
+#: ../gui/tcltk/gis.m/gm.tcl:430 ../gui/tcltk/gis.m/animate.tcl:536
+#: ../gui/tcltk/gis.m/dnviz.tcl:228 ../gui/tcltk/gis.m/rules.tcl:170
+msgid "OK"
+msgstr "ตกลง"
+
+#: ../vector/v.digit/settings.tcl:169
+msgid "Symbology"
+msgstr "สัญลักษณ์"
+
+#: ../vector/v.digit/settings.tcl:173 ../vector/v.digit/settings.tcl:326
+msgid "Background"
+msgstr "พื้นหลัง"
+
+#: ../vector/v.digit/settings.tcl:180
+msgid "Highlight"
+msgstr "เน้น"
+
+#: ../vector/v.digit/settings.tcl:187
+msgid "Point"
+msgstr "จุด"
+
+#: ../vector/v.digit/settings.tcl:196
+msgid "Line"
+msgstr "เส้น"
+
+#: ../vector/v.digit/settings.tcl:205
+msgid "Boundary (no area)"
+msgstr "ขอบเขต (ไม่มีพื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:213
+msgid "Boundary (1 area)"
+msgstr "ขอบเขต (1 พื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:221
+msgid "Boundary (2 areas)"
+msgstr "ขอบเขต (2 พื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:230
+msgid "Centroid (in area)"
+msgstr "จุดกึ่งกลาง (ในพื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:238
+msgid "Centroid (outside area)"
+msgstr "จุดกึ่งกลาง (นอกพื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:246
+msgid "Centroid (duplicate in area)"
+msgstr "จุดกึ่งกลาง (ซ้ำในพื้นที่)"
+
+#: ../vector/v.digit/settings.tcl:255
+msgid "Node (1 line)"
+msgstr "Node (1 เส้น)"
+
+#: ../vector/v.digit/settings.tcl:263
+msgid "Node (2 lines)"
+msgstr "Node (2 เส้น)"
+
+#: ../vector/v.digit/settings.tcl:273
+msgid "Settings"
+msgstr "ตั้งค่า"
+
+#: ../vector/v.digit/settings.tcl:278
+msgid "Snapping threshold in screen pixels"
+msgstr "Snapping threshold ในหน่วย pixel ของจอภาพ"
+
+#: ../vector/v.digit/settings.tcl:288
+msgid "Snapping threshold in map units"
+msgstr "Snapping threshold ในหน่วย แผนที่"
+
+#: ../vector/v.digit/settings.tcl:305
+msgid "Line width in screen pixels"
+msgstr "ความกว้างเส้น ในหน่วย pixel ของจอภาพ"
+
+#: ../vector/v.digit/settings.tcl:307
+msgid "Set line width in pixels"
+msgstr "กำหนด ความกว้างเส้น ในหน่วย pixel ของจอภาพ"
+
+#: ../vector/v.digit/settings.tcl:315
+msgid "Table"
+msgstr "ตาราง"
+
+#: ../vector/v.digit/toolbox.tcl:19
+msgid "Welcome to v.digit"
+msgstr "ยินดีต้อนรับสู่ v.digit"
+
+#: ../vector/v.digit/toolbox.tcl:20
+msgid "Left button"
+msgstr "ปุ่มซ้าย"
+
+#: ../vector/v.digit/toolbox.tcl:21
+msgid "Middle button"
+msgstr "ปุ่มกลาง"
+
+#: ../vector/v.digit/toolbox.tcl:22
+msgid "Right button"
+msgstr "ปุ่มขวา"
+
+#: ../vector/v.digit/toolbox.tcl:75
+msgid "  Layer"
+msgstr "ชั้นข้อมูล"
+
+#: ../vector/v.digit/toolbox.tcl:79
+msgid "  Category"
+msgstr "หมวด"
+
+#: ../vector/v.digit/toolbox.tcl:83
+msgid "  Mode "
+msgstr "โหมด "
+
+#: ../vector/v.digit/toolbox.tcl:95
+msgid "Insert new record into table"
+msgstr "แทรกเรคคอร์ดใหม่เข้าสู่ตาราง"
+
+#: ../vector/v.digit/toolbox.tcl:112
+msgid "Digitize new point"
+msgstr "ดิจิไทซ์จุดใหม่"
+
+#: ../vector/v.digit/toolbox.tcl:117
+msgid "Digitize new line"
+msgstr "ดิจิไทซ์เส้นใหม่"
+
+#: ../vector/v.digit/toolbox.tcl:122
+msgid "Digitize new boundary"
+msgstr "ดิจิไทซ์ขอบเขตใหม่"
+
+#: ../vector/v.digit/toolbox.tcl:127
+msgid "Digitize new centroid"
+msgstr "ดิจิไทซ์จุดกึ่งกลางใหม่"
+
+#: ../vector/v.digit/toolbox.tcl:133
+msgid "Move vertex"
+msgstr "ย้าย vertex"
+
+#: ../vector/v.digit/toolbox.tcl:138
+msgid "Add vertex"
+msgstr "เพิ่ม vertex"
+
+#: ../vector/v.digit/toolbox.tcl:143
+msgid "Remove vertex"
+msgstr "ลบ vertex"
+
+#: ../vector/v.digit/toolbox.tcl:148
+msgid "Split line"
+msgstr "แบ่งเส้น"
+
+#: ../vector/v.digit/toolbox.tcl:153
+msgid "Edit line/boundary"
+msgstr "แก้ไข เส้น/ขอบเขต"
+
+#: ../vector/v.digit/toolbox.tcl:158
+msgid "Move point, line, boundary, or centroid"
+msgstr "ย้าย จุด, เส้น, ขอบเขต หรือจุดกึ่งกลาง"
+
+#: ../vector/v.digit/toolbox.tcl:163
+msgid "Delete point, line, boundary, or centroid"
+msgstr "ลบ จุด, เส้น, ขอบเขต หรือจุดกึ่งกลาง"
+
+#: ../vector/v.digit/toolbox.tcl:174
+msgid "Redraw"
+msgstr "วาดใหม่"
+
+#: ../vector/v.digit/toolbox.tcl:179
+msgid "Zoom in by window"
+msgstr "ขยายเข้า โดยกำหนด หน้าต่าง"
+
+#: ../vector/v.digit/toolbox.tcl:184
+msgid "Zoom out"
+msgstr "ย่อ"
+
+#: ../vector/v.digit/toolbox.tcl:189 ../gui/tcltk/gis.m/maptool.tcl:151
+#: ../gui/tcltk/gis.m/georecttool.tcl:130
+msgid "Pan"
+msgstr "เลื่อน"
+
+#: ../vector/v.digit/toolbox.tcl:194 ../gui/tcltk/gis.m/maptool.tcl:196
+msgid "Zoom to default region"
+msgstr "ย่อ/ขยาย ไปที่ขอบเขตหลัก"
+
+#: ../vector/v.digit/toolbox.tcl:207 ../gui/tcltk/gis.m/maptool.tcl:187
+msgid "Zoom to saved region"
+msgstr "ย่อ/ขยาย ไปที่ขอบเขตที่บันทึกไว้"
+
+#: ../vector/v.digit/toolbox.tcl:213
+msgid "Display categories"
+msgstr "แสดงหมวดหมู่"
+
+#: ../vector/v.digit/toolbox.tcl:218
+msgid "Copy categories"
+msgstr "คัดลอกหมวดหมู่"
+
+#: ../vector/v.digit/toolbox.tcl:223
+msgid "Display attributes"
+msgstr "แสดงข้อมูลลักษณะ"
+
+#: ../vector/v.digit/toolbox.tcl:235
+msgid "Open settings"
+msgstr "เปิดการตั้งค่า"
+
+#: ../vector/v.digit/toolbox.tcl:241
+msgid "Save and exit"
+msgstr "บันทึก และออก"
+
+#: ../vector/v.digit/toolbox.tcl:252
+msgid "mouse button actions (left, middle, right)"
+msgstr "การทำงานของปุ่มเม้าส์ (ซ้าย, กลาง, ขวา)"
+
+#: ../vector/v.digit/cats.tcl:20 ../gui/tcltk/gis.m/gmmenu.tcl:172
+msgid "Delete"
+msgstr "ลบ"
+
+#: ../vector/v.digit/cats.tcl:34
+msgid "Categories already opened"
+msgstr "หมวดหมู่ได้เปิดแล้ว"
+
+#: ../vector/v.digit/cats.tcl:42
+msgid "Categories"
+msgstr "หมวดหมู่"
+
+#: ../vector/v.digit/cats.tcl:53
+msgid "Layer:"
+msgstr "ชั้นข้อมูล:"
+
+#: ../vector/v.digit/cats.tcl:55
+msgid "   Category:"
+msgstr "หมวดหมู่:"
+
+#: ../vector/v.digit/cats.tcl:62
+msgid "Insert new record to table"
+msgstr "แทรกเรคคอร์ดใหม่เข้าสู่ตาราง"
+
+#: ../vector/v.digit/cats.tcl:63
+msgid "Add new"
+msgstr "เพิ่มใหม่"
+
+#: ../lib/gtcltk/select.tcl:103
+msgid "Select item"
+msgstr "เลือก"
+
+#: ../lib/gtcltk/select.tcl:208
+msgid "Ok"
+msgstr "ตกลง"
+
+#: ../lib/gtcltk/select.tcl:209 ../lib/init/epsg_option.tcl:167
+#: ../lib/init/epsg_option.tcl:314 ../lib/init/file_option.tcl:114
+#: ../gui/tcltk/gis.m/gm.tcl:433 ../gui/tcltk/gis.m/animate.tcl:538
+#: ../gui/tcltk/gis.m/dnviz.tcl:230 ../gui/tcltk/gis.m/mapcanvas.tcl:855
+#: ../gui/tcltk/gis.m/georect.tcl:700 ../gui/tcltk/gis.m/rules.tcl:172
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
+#: ../lib/gis/gui.tcl:310 ../gui/tcltk/gis.m/runandoutput.tcl:258
+#: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:131
+msgid "Error"
+msgstr "ผิดพลาด"
+
+#: ../lib/gis/gui.tcl:229 ../gui/tcltk/gis.m/gmlib.tcl:113
+msgid "Save File"
+msgstr "บันทึกแฟ้ม"
+
+#: ../lib/gis/gui.tcl:231
+msgid "Load File"
+msgstr "โหลดแฟ้ม"
+
+#: ../lib/gis/gui.tcl:295 ../lib/gis/gui.tcl:480
+#: ../gui/tcltk/gis.m/gmmenu.tcl:326
+msgid "Output"
+msgstr "ส่งออก"
+
+#: ../lib/gis/gui.tcl:355
+msgid "Options"
+msgstr "ตัวเลือก"
+
+#: ../lib/gis/gui.tcl:464 ../gui/tcltk/gis.m/gmmenu.tcl:165
+msgid "Copy"
+msgstr "คัดลอก"
+
+#: ../lib/gis/gui.tcl:503 ../gui/tcltk/gis.m/runandoutput.tcl:44
+#: ../gui/tcltk/gis.m/runandoutput.tcl:116
+msgid "Run"
+msgstr "ดำเนินการ"
+
+#: ../lib/gis/gui.tcl:504 ../lib/init/gis_set.tcl:506
+#: ../gui/tcltk/gis.m/thematic.tcl:241 ../gui/tcltk/gis.m/thematic.tcl:245
+#: ../gui/tcltk/gis.m/profile.tcl:131 ../gui/tcltk/gis.m/profile.tcl:135
+#: ../gui/tcltk/gis.m/labels.tcl:136 ../gui/tcltk/gis.m/labels.tcl:140
+#: ../gui/tcltk/gis.m/rastarrows.tcl:164 ../gui/tcltk/gis.m/rastarrows.tcl:167
+#: ../gui/tcltk/gis.m/runandoutput.tcl:47 ../gui/tcltk/gis.m/rastnums.tcl:163
+#: ../gui/tcltk/gis.m/rastnums.tcl:166 ../gui/tcltk/gis.m/frames.tcl:118
+#: ../gui/tcltk/gis.m/frames.tcl:122 ../gui/tcltk/gis.m/animate.tcl:408
+#: ../gui/tcltk/gis.m/animate.tcl:412 ../gui/tcltk/gis.m/animate.tcl:481
+#: ../gui/tcltk/gis.m/animate.tcl:484 ../gui/tcltk/gis.m/dnviz.tcl:208
+#: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
+#: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
+#: ../gui/tcltk/gis.m/legend.tcl:189 ../gui/tcltk/gis.m/legend.tcl:192
+#: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
+#: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
+#: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
+#: ../gui/tcltk/gis.m/barscale.tcl:180 ../gui/tcltk/gis.m/barscale.tcl:184
+#: ../gui/tcltk/gis.m/rgbhis.tcl:156 ../gui/tcltk/gis.m/rgbhis.tcl:165
+#: ../gui/tcltk/gis.m/dtext.tcl:177 ../gui/tcltk/gis.m/dtext.tcl:181
+#: ../gui/tcltk/gis.m/georect.tcl:705 ../gui/tcltk/gis.m/georect.tcl:709
+#: ../gui/tcltk/gis.m/georect.tcl:1132 ../gui/tcltk/gis.m/georect.tcl:1136
+#: ../gui/tcltk/gis.m/rules.tcl:139 ../gui/tcltk/gis.m/rules.tcl:143
+#: ../gui/tcltk/gis.m/histogram.tcl:162 ../gui/tcltk/gis.m/histogram.tcl:165
+#: ../gui/tcltk/d.m/thematic.tcl:121 ../gui/tcltk/d.m/thematic.tcl:125
+#: ../gui/tcltk/d.m/labels.tcl:70 ../gui/tcltk/d.m/labels.tcl:74
+#: ../gui/tcltk/d.m/frames.tcl:66 ../gui/tcltk/d.m/frames.tcl:70
+#: ../gui/tcltk/d.m/gridline.tcl:81 ../gui/tcltk/d.m/gridline.tcl:120
+#: ../gui/tcltk/d.m/gridline.tcl:150 ../gui/tcltk/d.m/legend.tcl:86
+#: ../gui/tcltk/d.m/legend.tcl:90 ../gui/tcltk/d.m/raster.tcl:90
+#: ../gui/tcltk/d.m/raster.tcl:94 ../gui/tcltk/d.m/chart.tcl:96
+#: ../gui/tcltk/d.m/chart.tcl:100 ../gui/tcltk/d.m/rgbhis.tcl:130
+#: ../gui/tcltk/d.m/rgbhis.tcl:137 ../gui/tcltk/d.m/fttext.tcl:83
+#: ../gui/tcltk/d.m/fttext.tcl:87 ../gui/tcltk/d.m/vector.tcl:202
+#: ../gui/tcltk/d.m/vector.tcl:206 ../gui/tcltk/d.m/barscale.tcl:74
+#: ../gui/tcltk/d.m/barscale.tcl:78 ../gui/tcltk/d.m/dtext.tcl:75
+#: ../gui/tcltk/d.m/dtext.tcl:79
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+#: ../lib/gis/gui.tcl:505 ../gui/tcltk/gis.m/runandoutput.tcl:127
+msgid "Clear"
+msgstr "ล้าง"
+
+#: ../lib/gis/gui.tcl:506 ../lib/init/epsg_option.tcl:394
+#: ../lib/init/epsg_option.tcl:438 ../gui/tcltk/gis.m/runandoutput.tcl:48
+#: ../gui/tcltk/gis.m/gmmenu.tcl:90 ../gui/tcltk/gis.m/mapprint.tcl:366
+#: ../gui/tcltk/d.m/menu.tcl:174 ../gui/tcltk/d.m/print.tcl:281
+msgid "Close"
+msgstr "ปิด"
+
+#: ../lib/gis/gui.tcl:577
+msgid "required"
+msgstr "ต้องการ"
+
+#: ../lib/gis/gui.tcl:577
+msgid "optional"
+msgstr "ทางเลือก"
+
+#: ../lib/gis/gui.tcl:578
+msgid "multiple"
+msgstr "หลายอย่าง"
+
+#: ../lib/init/epsg_option.tcl:93
+msgid "WARNING: cant get enviromental variable"
+msgstr "คำเตือน: ไม่สามารถอ่านตัวแปรสภาวะแวดล้อม"
+
+#: ../lib/init/epsg_option.tcl:94
+msgid ""
+"Warning: Unable to get enviromental variable GRASS_PROJSHARE. \n"
+"This is a GRASS installation error. \n"
+"Set enviromental variable GRASS_PROJSHARE to point to directory with Proj4 "
+"EPSG file. "
+msgstr ""
+"คำเตือน: ไม่สามารถอ่านตัวแปรสภาวะแวดล้อม GRASS_PROJSHARE. \n"
+"แสดงว่าการติดตั้ง GRASS ผิดพลาด. \n"
+"กำหนด ตัวแปรสภาวะแวดล้อม GRASS_PROJSHARE ชี้ไปที่ directory ที่มี Proj4 EPSG ไฟล์. "
+
+#: ../lib/init/epsg_option.tcl:103
+msgid "Define location using EPSG projection codes"
+msgstr "กำหนดตำแหน่งโดยใช้  รหัส EPSG projection"
+
+#: ../lib/init/epsg_option.tcl:122 ../lib/init/file_option.tcl:92
+msgid "Name of new location"
+msgstr "ชื่อ location ใหม่"
+
+#: ../lib/init/epsg_option.tcl:125
+msgid "Enter name for location to be created"
+msgstr "ระบุชื่อสำหรับ location เพื่อทำการสร้าง"
+
+#: ../lib/init/epsg_option.tcl:129 ../lib/init/epsg_option.tcl:132
+msgid "Path to the EPSG-codes file"
+msgstr "ที่อยู่ของแฟ้ม EPSG-codes"
+
+#: ../lib/init/epsg_option.tcl:135 ../lib/init/epsg_option.tcl:148
+#: ../lib/init/gis_set.tcl:241 ../lib/init/file_option.tcl:105
+msgid "Browse..."
+msgstr "เรียกดู..."
+
+#: ../lib/init/epsg_option.tcl:136
+msgid "Browse to locate EPSG file"
+msgstr "เรียกดูเพื่อค้นหาแฟ้ม EPSG-codes"
+
+#: ../lib/init/epsg_option.tcl:143
+msgid "EPSG code number of projection"
+msgstr "รหัส EPSG ของ projection"
+
+#: ../lib/init/epsg_option.tcl:146
+msgid "Enter EPSG code for selected projection"
+msgstr "ระบุรหัส EPSG และ projection"
+
+#: ../lib/init/epsg_option.tcl:149
+msgid "View EPSG codes and projection information."
+msgstr "ดูรหัส EPSG และข้อมูล projection"
+
+#: ../lib/init/epsg_option.tcl:155
+msgid "WARNING: epsg-codes file not found"
+msgstr "คำเตือน: ไม่พบแฟ้ม epsg-codes"
+
+#: ../lib/init/epsg_option.tcl:156
+msgid "WARNING: The epsg-codes file was not found!"
+msgstr "คำเตือน: ไม่พบแฟ้ม epsg-codes"
+
+#: ../lib/init/epsg_option.tcl:164 ../lib/init/file_option.tcl:111
+msgid "Define location"
+msgstr "กำหนดตำแหน่ง"
+
+#: ../lib/init/epsg_option.tcl:187
+msgid "Invalid EPSG Code!"
+msgstr "รหัสEPSG ไม่ถูกต้อง"
+
+#: ../lib/init/epsg_option.tcl:188
+#, tcl-format
+msgid "ERROR: Invalid EPSG code %s: should be an integer."
+msgstr "ผิดพลาด รหัส EPSG ผิดพลาด %s:  ต้องเป็นตัวเลขจำนวนเต็ม"
+
+#: ../lib/init/epsg_option.tcl:198
+msgid "Location Exists!"
+msgstr "พบ Location อยู่แล้ว!"
+
+#: ../lib/init/epsg_option.tcl:199
+#, tcl-format
+msgid "WARNING: Location '%s' already exists: please try another name."
+msgstr "คำเตือน: พบ Location '%s' อยู่แล้ว: โปรดใช้ชื่ออื่น"
+
+#: ../lib/init/epsg_option.tcl:236 ../lib/init/epsg_option.tcl:263
+msgid "Error creating location!"
+msgstr "เกิดการผิดพลาด ในการสร้าง location !"
+
+#: ../lib/init/epsg_option.tcl:237 ../lib/init/epsg_option.tcl:264
+#, tcl-format
+msgid ""
+"g.proj returned the following message:\n"
+"%s"
+msgstr ""
+"g.proj แสดงข้อความข้างล่าง:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:244 ../lib/init/epsg_option.tcl:268
+msgid "Informational output from g.proj"
+msgstr "ข้อมูลจาก g.proj"
+
+#: ../lib/init/epsg_option.tcl:245 ../lib/init/epsg_option.tcl:269
+#, tcl-format
+msgid ""
+"g.proj returned the following informational message:\n"
+"%s"
+msgstr ""
+"g.proj แสดงข้อความข้างล่าง:\n"
+"%s"
+
+#: ../lib/init/epsg_option.tcl:288
+msgid "Select datum transformation parameters:"
+msgstr "เลือกตัวแปร Datum Transformation:"
+
+#: ../lib/init/epsg_option.tcl:292
+msgid ""
+"Continue without specifying parameters - if used when creating a location, "
+"other GRASS modules will use the \"default\" (likely non-optimum) parameters "
+"for this datum if necessary in the future."
+msgstr ""
+"ทำต่อโดยไม่ต้องระบุตัวแปร - ถ้าใช้เมื่อสร้างตำแหน่ง, คำสั่ง GRASS อื่นจะถูกใช้  \"default"
+"\" (เหมือนกับ non-optimum) ตัวแปรสำหรับ Datum นี้ ถ้าจำเป็นในอนาคต."
+
+#: ../lib/init/epsg_option.tcl:344
+msgid "You can select EPSG code (in <braces>) and copy it for later use."
+msgstr "คุณสามารถเลือกรหัส EPSG (ใน <braces>) และคัดลอกมันเพื่อใช้ครั้งต่อไป"
+
+#: ../lib/init/epsg_option.tcl:381
+msgid "GUESS THAT IS NOT THE EPSG FILE"
+msgstr "คาดว่านี้ไม่ใช่แฟ้ม EPSG"
+
+#: ../lib/init/epsg_option.tcl:387 ../lib/init/epsg_option.tcl:416
+#: ../lib/init/epsg_option.tcl:435
+msgid "Search"
+msgstr "ค้นหา"
+
+#: ../lib/init/epsg_option.tcl:389
+msgid "Grab code"
+msgstr "รหัส Grab"
+
+#: ../lib/init/epsg_option.tcl:422
+msgid "Search text: "
+msgstr "ค้นหาข้อความ"
+
+#: ../lib/init/epsg_option.tcl:423
+msgid "Search for entered text in EPSG file"
+msgstr "ค้นหา ตัวอักษรที่กำหนดใน EPSG ไฟล์"
+
+#: ../lib/init/epsg_option.tcl:428
+msgid "forward search"
+msgstr "เดินหน้าการค้นหา"
+
+#: ../lib/init/epsg_option.tcl:429
+msgid "backward search"
+msgstr "ย้อนหลังการค้นหา"
+
+#: ../lib/init/gis_set.tcl:109
+msgid "WARNING: can not save"
+msgstr "คำเตือน: ไม่สามารถบันทึก "
+
+#: ../lib/init/gis_set.tcl:110
+#, tcl-format
+msgid ""
+"Warning: unable to save data to <%s> file.\n"
+"Error message: %s"
+msgstr ""
+"คำเตือน: ไม่สามารถบันทึกข้อมูลแฟ้ม <%s> \n"
+"ข้อความผิดพลาด: %s"
+
+#: ../lib/init/gis_set.tcl:131 ../lib/init/gis_set.tcl:377
+#: ../lib/init/gis_set.tcl:483 ../lib/init/gis_set.tcl:608
+#: ../lib/init/gis_set.tcl:629 ../lib/init/gis_set.tcl:647
+#: ../lib/init/gis_set.tcl:676
+msgid "WARNING: invalid location"
+msgstr "คำเตือน: location ไม่ถูกต้อง"
+
+#: ../lib/init/gis_set.tcl:132
+#, tcl-format
+msgid ""
+"Warning: location <%s> at GISDBASE <%s> is not a directory or does not exist."
+msgstr "คำเตือน: ตำแหน่ง <%s> ที่ GISDBASE <%s> ไม่ใช่ directory หรือไม่มีอยู่."
+
+#: ../lib/init/gis_set.tcl:177
+#, tcl-format
+msgid "GRASS %s Startup"
+msgstr "GRASS %s เริ่มทำงาน"
+
+#: ../lib/init/gis_set.tcl:200
+msgid "Welcome to GRASS GIS Version"
+msgstr "ยินดีต้อนรับสู่ GRASS GIS รุ่น"
+
+#: ../lib/init/gis_set.tcl:202
+msgid ""
+"The world's leading open source GIS\n"
+"\n"
+msgstr ""
+"    ผู้นำ GIS โอเพนซอร์สของโลก\n"
+"แปลภาษาไทย โดย แมน โชติรัตนพิทักษ์\n"
+
+#: ../lib/init/gis_set.tcl:203
+msgid "Select an existing project location and mapset\n"
+msgstr "เลือก location และ  mapset ที่มีอยู่\n"
+
+#: ../lib/init/gis_set.tcl:204
+msgid "or define a new location\n"
+msgstr "หรือระบุ location ใหม่\n"
+
+#: ../lib/init/gis_set.tcl:227
+msgid "GIS Data Directory: "
+msgstr "ไดเรคโทรี GIS Data:"
+
+#: ../lib/init/gis_set.tcl:243
+msgid "New GIS data directory"
+msgstr "ไดเรคโทรี GIS Data ใหม่ "
+
+#: ../lib/init/gis_set.tcl:266
+#, fuzzy
+msgid "Project Location (projection/coordinate system)"
+msgstr ""
+"ตำแหน่งของโครงการ\n"
+"(ระบบ projection/ค่าพิกัด)"
+
+#: ../lib/init/gis_set.tcl:299
+#, fuzzy
+msgid "Accessible Mapsets (directories of GIS files)"
+msgstr ""
+"การเข้าถึง ชุดแผนที่\n"
+"(directories ของ GIS ไฟล์)"
+
+#: ../lib/init/gis_set.tcl:356
+#, fuzzy
+msgid "Create new mapset in selected location"
+msgstr ""
+"สร้าง mapset ใหม่\n"
+" ใน location ที่เลือก"
+
+#: ../lib/init/gis_set.tcl:364
+msgid "Create new mapset"
+msgstr "สร้าง mapset ใหม่"
+
+#: ../lib/init/gis_set.tcl:369
+msgid "WARNING: invalid mapset name"
+msgstr "คำเตือน: ชื่อ mapset ไม่ถูกต้อง"
+
+#: ../lib/init/gis_set.tcl:370
+#, tcl-format
+msgid ""
+"Warning: Mapset with name <%s> already exists. \n"
+"New mapset is NOT created. \n"
+"Choose different mapset name and try again."
+msgstr ""
+"คำเตือน: พบ Mapset ชื่อ<%s> อยู่แล้ว \n"
+"ไม่ได้ทำการสร้าง mapset ใหม่ \n"
+"โปรดระบุชื่อ mapset ที่ต่างไปและลองอีกครั้ง"
+
+#: ../lib/init/gis_set.tcl:378
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" New mapset is NOT created. \n"
+" Select valid location and try again."
+msgstr ""
+"คำเตือน: ไม่พบ location <%s> ที่เลือก \n"
+"ไม่ได้ทำการสร้าง mapset ใหม่ \n"
+"เลือก location ให้ถูกต้องและลองอีักครั้ง"
+
+#: ../lib/init/gis_set.tcl:385
+msgid "WARNING: unable to mkdir"
+msgstr "คำเตือน: ไม่สามารถสร้างไดเรคโทรีด้วย mkdir"
+
+#: ../lib/init/gis_set.tcl:386
+#, tcl-format
+msgid ""
+"Warning: Unable to create directory for new mapset. \n"
+"Error message: %s"
+msgstr ""
+"คำเตือน: ไม่สามารถสร้างไดเรคโทรีสำหรับ mapset ใหม่\n"
+"ข้้อความผิดพลาด: %sr"
+
+#: ../lib/init/gis_set.tcl:411
+msgid "Define new location with..."
+msgstr "ระบุ location ใหม่ด้วย ..."
+
+#: ../lib/init/gis_set.tcl:415
+msgid "Georeferenced file"
+msgstr "Georeferenced ไฟล์"
+
+#: ../lib/init/gis_set.tcl:428
+msgid "EPSG codes"
+msgstr "รหัส EPSG "
+
+#: ../lib/init/gis_set.tcl:441
+msgid "Projection values"
+msgstr "ค่า Projection"
+
+#: ../lib/init/gis_set.tcl:479
+msgid "Enter GRASS"
+msgstr "เข้าสู่ GRASS"
+
+#: ../lib/init/gis_set.tcl:484
+#, tcl-format
+msgid ""
+"Warning: selected location <%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"คำเตือน: location <%s> ที่เลือกไม่ถูกต้อง \n"
+"เลือก location ให้ถูกต้องและลองอีักครั้ง"
+
+#: ../lib/init/gis_set.tcl:489 ../lib/init/gis_set.tcl:653
+msgid "WARNING: invalid mapset"
+msgstr "คำเตือน: mapset ผิดพลาด"
+
+#: ../lib/init/gis_set.tcl:490
+#, tcl-format
+msgid "Warning: <%s> is not a valid mapset"
+msgstr "คำเตือน: <%s> mapset ผิดพลาด "
+
+#: ../lib/init/gis_set.tcl:511
+msgid "Help already opened"
+msgstr "การช่วยเหลือได้เปิดไว้แล้ว"
+
+#: ../lib/init/gis_set.tcl:524
+msgid "Exit"
+msgstr "ออก"
+
+#: ../lib/init/gis_set.tcl:560
+msgid "WARNING: Invalid Database"
+msgstr "คำเตือน: ฐานข้อมูลผิดพลาด"
+
+#: ../lib/init/gis_set.tcl:561
+msgid "WARNING: Invalid database. Finding first valid directory in parent tree"
+msgstr "คำเตือน: ฐานข้อมูลไม่ถูกต้อง. ค้นหา directory ใน Parent tree ก่อน"
+
+#: ../lib/init/gis_set.tcl:609 ../lib/init/gis_set.tcl:630
+#: ../lib/init/gis_set.tcl:648 ../lib/init/gis_set.tcl:677
+#, tcl-format
+msgid ""
+"Warning: selected location <%%s> is not valid. \n"
+" Select valid location and try again."
+msgstr ""
+"คำเตือน:  location <%%s> ที่เลือกผิดพลาด \n"
+"เลือก location ให้ถูกต้องและลองอีักครั้ง"
+
+#: ../lib/init/gis_set.tcl:654
+#, tcl-format
+msgid "Warning: <%%s> is not a valid mapset"
+msgstr "คำเตือน: <%%s> mapset ผิดพลาด"
+
+#: ../lib/init/gis_set.tcl:747
+msgid "WARNING: change directory failed"
+msgstr "คำเตือน: การเปลี่ยนแปลงไดเรคโทรีผิดพลาด"
+
+#: ../lib/init/gis_set.tcl:748
+#, tcl-format
+msgid ""
+"Warning: could not change directory to <%s>.\n"
+"Check directory permissions."
+msgstr ""
+"คำเตือน: ไม่สามารถย้ายไดเรคโทรีไป <%s>.\n"
+"โปรดตรวจสอบข้อกำหนด"
+
+#: ../lib/init/file_option.tcl:72
+msgid "Define location using projection information in georeferenced file"
+msgstr "กำหนดตำแหน่งโดยใช้ ข้อมูล Projection ใน Georeferenced ไฟล์"
+
+#: ../lib/init/file_option.tcl:95
+msgid "Enter name of location to be created"
+msgstr "ระบุชื่อ location เพื่อทำการสร้าง"
+
+#: ../lib/init/file_option.tcl:99
+msgid "Path to georeferenced file"
+msgstr "Path ถึง Georeferenced ไฟล์"
+
+#: ../lib/init/file_option.tcl:102
+msgid "Path to georeferenced file (format must be readable by GDAL/OGR)"
+msgstr "Path ถึง Georeferenced ไฟล์(รูปแบบจะต้องอ่านได้ด้วย GDAL/OGR)"
+
+#: ../lib/init/file_option.tcl:106
+msgid "Browse to locate georeferenced file"
+msgstr "แสดงตำแหน่งของ  Georeferenced ไฟล์"
+
+#: ../lib/init/file_option.tcl:131 ../lib/init/file_option.tcl:134
+msgid "Choose georeferenced file"
+msgstr "เลือก Georeferenced ไฟล์"
+
+#: ../lib/init/file_option.tcl:152
+msgid ""
+"WARNING: Please supply a\n"
+"valid georeferenced file"
+msgstr ""
+"คำเตือน: โปรดให้ a\n"
+"Georeferenced ไฟล์ที่ใช้ได้"
+
+#: ../lib/init/file_option.tcl:184
+msgid "WARNING: Error creating new location"
+msgstr "คำเตือน: ข้อผิดพลาดในการสร้างตำแหน่งใหม่"
+
+#: ../lib/init/file_option.tcl:185
+#, tcl-format
+msgid ""
+"Error creating new location from georeferenced file.  g.proj returned "
+"following message:\n"
+"\n"
+"%s"
+msgstr ""
+"ข้อผิดพลาดในการสร้างตำแหน่งใหม่จาก Georeferenced ไฟล์.  g.proj ส่งข้อความกลับตามนี้:\n"
+"\n"
+"%s"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:107 ../gui/tcltk/gis.m/thematic.tcl:607
+#: ../gui/tcltk/gis.m/thematic.tcl:680 ../gui/tcltk/gis.m/labels.tcl:78
+#: ../gui/tcltk/gis.m/labels.tcl:279 ../gui/tcltk/gis.m/rastarrows.tcl:83
+#: ../gui/tcltk/gis.m/rastarrows.tcl:357 ../gui/tcltk/gis.m/rastnums.tcl:79
+#: ../gui/tcltk/gis.m/rastnums.tcl:360 ../gui/tcltk/gis.m/frames.tcl:78
+#: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:91
+#: ../gui/tcltk/gis.m/mapprint.tcl:194 ../gui/tcltk/gis.m/mapprint.tcl:201
+#: ../gui/tcltk/gis.m/gridline.tcl:99 ../gui/tcltk/gis.m/gridline.tcl:406
+#: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:476
+#: ../gui/tcltk/gis.m/raster.tcl:86 ../gui/tcltk/gis.m/raster.tcl:463
+#: ../gui/tcltk/gis.m/chart.tcl:89 ../gui/tcltk/gis.m/chart.tcl:441
+#: ../gui/tcltk/gis.m/vector.tcl:194 ../gui/tcltk/gis.m/vector.tcl:819
+#: ../gui/tcltk/gis.m/cmd.tcl:75 ../gui/tcltk/gis.m/cmd.tcl:206
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:212 ../gui/tcltk/gis.m/mapcanvas.tcl:221
+#: ../gui/tcltk/gis.m/barscale.tcl:91 ../gui/tcltk/gis.m/barscale.tcl:401
+#: ../gui/tcltk/gis.m/rgbhis.tcl:83 ../gui/tcltk/gis.m/rgbhis.tcl:362
+#: ../gui/tcltk/gis.m/dtext.tcl:92 ../gui/tcltk/gis.m/dtext.tcl:401
+#: ../gui/tcltk/gis.m/georect.tcl:406 ../gui/tcltk/gis.m/rules.tcl:207
+#: ../gui/tcltk/gis.m/histogram.tcl:84 ../gui/tcltk/gis.m/histogram.tcl:368
+msgid "Error creating tempfile"
+msgstr "มผิดพลาดระหว่างสร้างแฟ้มชั่วคราว"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:129 ../gui/tcltk/gis.m/vector.tcl:220
+#: ../gui/tcltk/d.m/menu.tcl:94 ../gui/tcltk/d.m/menu.tcl:134
+msgid "Vector map"
+msgstr "แผนที่เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:132
+#, tcl-format
+msgid "thematic map for %s"
+msgstr "แผนที่  Thematic สำหรับ %s"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:141 ../gui/tcltk/gis.m/thematic.tcl:148
+#: ../gui/tcltk/gis.m/thematic.tcl:154 ../gui/tcltk/gis.m/maplabels.tcl:135
+#: ../gui/tcltk/gis.m/maptext.tcl:80
+msgid "This is font sample text."
+msgstr "นี้คือข้อความทดสอบแบบอักษร"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:141 ../gui/tcltk/gis.m/thematic.tcl:148
+#: ../gui/tcltk/gis.m/thematic.tcl:154
+msgid "Select font"
+msgstr "เลือกแบบอักษร"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:194 ../gui/tcltk/gis.m/vector.tcl:281
+msgid "Vector point symbol"
+msgstr "สัญลักษณ์ จุด เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:210
+msgid "Display vector maps thematically by graduate colors (all types)"
+msgstr "แสดงแผนที่เชิงเส้น Thematically โดย แบ่งตามลำดับ สี (ทุกชนิด)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:216
+msgid "  or by graduated sizes (points and lines)"
+msgstr "   หรือ โดย แบ่งตามลำดับ ของขนาด (จุด และ เส้น)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:223 ../gui/tcltk/gis.m/labels.tcl:118
+#: ../gui/tcltk/gis.m/rastarrows.tcl:147 ../gui/tcltk/gis.m/rastnums.tcl:146
+#: ../gui/tcltk/gis.m/gridline.tcl:147 ../gui/tcltk/gis.m/legend.tcl:172
+#: ../gui/tcltk/gis.m/raster.tcl:168 ../gui/tcltk/gis.m/chart.tcl:166
+#: ../gui/tcltk/gis.m/vector.tcl:306 ../gui/tcltk/gis.m/cmd.tcl:105
+#: ../gui/tcltk/gis.m/barscale.tcl:160 ../gui/tcltk/gis.m/rgbhis.tcl:143
+#: ../gui/tcltk/gis.m/dtext.tcl:166 ../gui/tcltk/gis.m/histogram.tcl:145
+msgid "Opaque "
+msgstr "ทึบแสง "
+
+#: ../gui/tcltk/gis.m/thematic.tcl:227 ../gui/tcltk/gis.m/labels.tcl:122
+#: ../gui/tcltk/gis.m/rastarrows.tcl:151 ../gui/tcltk/gis.m/rastnums.tcl:150
+#: ../gui/tcltk/gis.m/gridline.tcl:151 ../gui/tcltk/gis.m/legend.tcl:176
+#: ../gui/tcltk/gis.m/raster.tcl:172 ../gui/tcltk/gis.m/chart.tcl:170
+#: ../gui/tcltk/gis.m/cmd.tcl:109 ../gui/tcltk/gis.m/barscale.tcl:164
+#: ../gui/tcltk/gis.m/rgbhis.tcl:147 ../gui/tcltk/gis.m/dtext.tcl:170
+#: ../gui/tcltk/gis.m/histogram.tcl:149
+msgid " Transparent"
+msgstr "โปร่งแสง"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:233 ../gui/tcltk/gis.m/vector.tcl:316
+#: ../gui/tcltk/d.m/thematic.tcl:116
+msgid "Vector map:"
+msgstr "แผนที่เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:236
+msgid "vector for thematic mapping"
+msgstr "แผนที่เชิงเส้น สำหรับ Thematic mapping"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:251 ../gui/tcltk/d.m/thematic.tcl:131
+msgid "    vector type"
+msgstr "ชนิดเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:254
+msgid " attribute layer"
+msgstr "ชั้นข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:261
+msgid "    NUMERIC attribute column to use for thematic map"
+msgstr "    Column รายละเอียดแบบ NUMERIC  ใช้สำหรับ แผนที่ Thematic"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:268 ../gui/tcltk/d.m/thematic.tcl:150
+#: ../gui/tcltk/d.m/vector.tcl:348
+msgid "    show attribute columns"
+msgstr "แสดงคอลัมน์ข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:269 ../gui/tcltk/gis.m/chart.tcl:213
+#: ../gui/tcltk/gis.m/vector.tcl:484 ../gui/tcltk/d.m/thematic.tcl:151
+#: ../gui/tcltk/d.m/chart.tcl:121 ../gui/tcltk/d.m/vector.tcl:349
+msgid "columns"
+msgstr "columns"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:273 ../gui/tcltk/gis.m/chart.tcl:217
+#: ../gui/tcltk/gis.m/vector.tcl:488 ../gui/tcltk/d.m/thematic.tcl:155
+#: ../gui/tcltk/d.m/chart.tcl:125 ../gui/tcltk/d.m/vector.tcl:353
+msgid "Show columns"
+msgstr "แสดง columns"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:274
+msgid "   show data"
+msgstr "แสดงข้อมูล"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:275 ../gui/tcltk/gis.m/chart.tcl:219
+#: ../gui/tcltk/gis.m/vector.tcl:490 ../gui/tcltk/d.m/thematic.tcl:157
+#: ../gui/tcltk/d.m/vector.tcl:355
+msgid "data"
+msgstr "ข้อมูล"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:279 ../gui/tcltk/gis.m/chart.tcl:223
+#: ../gui/tcltk/gis.m/vector.tcl:494 ../gui/tcltk/d.m/thematic.tcl:161
+#: ../gui/tcltk/d.m/vector.tcl:359
+msgid "Show data"
+msgstr "แสดง ข้อมูล"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:285 ../gui/tcltk/d.m/thematic.tcl:168
+msgid "Thematic map: type"
+msgstr "Thematic map: ชนิด"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:288 ../gui/tcltk/d.m/thematic.tcl:171
+msgid " map by"
+msgstr "แผนที่โดย"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:297
+msgid "    number of intervals to map (interval themes):"
+msgstr "    จำนวนของช่วง แผนที่ (interval themes):"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:305
+msgid "    custom breakpoints (val val ...)  "
+msgstr "    Breakpoints กำหนดเอง (val val ...)  "
+
+#: ../gui/tcltk/gis.m/thematic.tcl:312
+msgid "    query with SQL where clause   "
+msgstr "    ค้นหาด้วย ประโยค SQL where clause   "
+
+#: ../gui/tcltk/gis.m/thematic.tcl:319
+msgid "Graduated points & lines: "
+msgstr "แบ่งตามลำดับ จุด & เส้น: "
+
+#: ../gui/tcltk/gis.m/thematic.tcl:320 ../gui/tcltk/d.m/thematic.tcl:205
+#: ../gui/tcltk/d.m/vector.tcl:245
+msgid "icon"
+msgstr "ไอคอน"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:324 ../gui/tcltk/d.m/thematic.tcl:210
+msgid "point color"
+msgstr "สีจุด"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:326 ../gui/tcltk/d.m/thematic.tcl:212
+msgid "line color"
+msgstr "สีเส้น"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:333
+msgid "    size/min size (graduated pts/lines)"
+msgstr "    ขนาด/เล็กสุด ขนาด (แบ่งตามลำดับ จุด/เส้น)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:335
+msgid "icon size/min size (graduated pts/lines)"
+msgstr "ขนาด icon /เล็กสุด ขนาด (แบ่งตามลำดับ จุด/เส้น)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:336
+msgid "max size (graduated pts)"
+msgstr "ขนาดใหญ่สุด (แบ่งตามลำดับ จุด)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:338
+msgid " max size (graduated pts/lines)"
+msgstr "ขนาดใหญ่สุด  (แบ่งตามลำดับ จุด/เส้น)"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:344
+msgid "Graduated colors: preset color schemes"
+msgstr "แบ่งตามลำดับ สี: กำหนดแบบสีไว้ก่อน"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:354
+msgid "    custom color scheme - start color"
+msgstr "    แบบสีกำหนดเอง - สีเริ่มต้น"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:356
+msgid " end color"
+msgstr " สี สุดท้าย"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:358 ../gui/tcltk/d.m/thematic.tcl:243
+msgid "draw border"
+msgstr "วาดเส้นขอบ"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:365 ../gui/tcltk/d.m/thematic.tcl:250
+msgid "save thematic colors to GRASSRGB column of vector file"
+msgstr "บันทึก thematic colors ไปที่ GRASSRGB column ไฟล์ข้อมูลเชิงเส้น"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:372
+msgid "Legend: title font "
+msgstr "สัญลักษณ์: แบบตัวอักษร ชื่อเรื่อง"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:375
+msgid "title font for legend"
+msgstr "แบบตัวอักษร ชื่อเรื่อง สำหรับ สัญลักษณ์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:379 ../gui/tcltk/gis.m/thematic.tcl:405
+msgid " font color"
+msgstr "สีอักษร"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:386
+msgid "    subtitle font    "
+msgstr "    แบบตัวอักษร subtitle"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:389
+msgid "subtitle font for legend"
+msgstr "แบบตัวอักษร subtitle สำหรับ สัญลักษณ์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:398
+msgid "    label font       "
+msgstr "แบบอักษร แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:401
+msgid "label font for legend"
+msgstr "แบบอักษรสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:413 ../gui/tcltk/d.m/thematic.tcl:260
+msgid "use math notation in legend"
+msgstr "ใช้ Math notation ใน สัญลักษณ์"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:420
+msgid "Name for ps.map instruction files"
+msgstr "ชื่อสำหรับ ไฟล์ ps.map instruction"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:630
+#, tcl-format
+msgid "Legend for Map %d, %s"
+msgstr "ตัวบรรยายสำหรับแผนที่ %d, %s"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:653
+msgid "clear"
+msgstr "ล้าง"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:655
+msgid "Clear legend"
+msgstr "ล้างตัวบรรยาย"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:656
+msgid "save"
+msgstr "บันทึก"
+
+#: ../gui/tcltk/gis.m/thematic.tcl:658
+msgid "Save legend to EPS file"
+msgstr "บันทึกตัวบรรยายเป็นแฟ้ม EPS"
+
+#: ../gui/tcltk/gis.m/profile.tcl:110
+msgid ""
+"Select raster map to profile.\n"
+"Currently selected raster is default."
+msgstr ""
+"เลือกแผนที่เชิงภาพที่จะทำ รูปตัดตามยาว.\n"
+"ค่าตั้งต้นจะใช้แผนที่เชิงภาพที่ถูกเลือกอยู่แล้ว."
+
+#: ../gui/tcltk/gis.m/profile.tcl:115
+msgid "Draw profile transect in map display"
+msgstr "วาด รูปตัดตามยาว transect ในแผนที่ที่แสดงผล"
+
+#: ../gui/tcltk/gis.m/profile.tcl:120
+msgid "Draw profile"
+msgstr "วาด รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:125
+msgid "Clear profile"
+msgstr "ล้าง รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:130
+msgid "Save profile to EPS file"
+msgstr "บันทึก รูปตัดตามยาว ไปที่ไฟล์ EPS"
+
+#: ../gui/tcltk/gis.m/profile.tcl:177
+msgid "r.univar error"
+msgstr "r.univar  ผิดพลาด"
+
+#: ../gui/tcltk/gis.m/profile.tcl:415 ../gui/tcltk/gis.m/mapcanvas.tcl:433
+msgid "g.proj or projection error"
+msgstr "g.proj หรือ projection ผิดพลาด"
+
+#: ../gui/tcltk/gis.m/profile.tcl:436
+msgid "You must select a raster to profile"
+msgstr "คุณต้องเลือก แผนที่เชิงภาพที่จะทำ รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:437
+msgid "No raster map selected"
+msgstr "ไม่มีแผนที่แรสเตอร์ถูกเลือก"
+
+#: ../gui/tcltk/gis.m/profile.tcl:443
+msgid "You must draw a transect to profile"
+msgstr "คุณต้องวาด Transect ที่จะทำ รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:444
+msgid "No transect drawn"
+msgstr "ไม่มีการวาด Transect"
+
+#: ../gui/tcltk/gis.m/profile.tcl:449
+msgid "Please wait while profile elevations are calculated"
+msgstr "โปรดรอสักครู่ กำลังคำนวน ค่าระดับของ รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:454
+msgid ""
+"Elevation range for selected raster is zero.\n"
+"No profile can be created."
+msgstr ""
+"ช่วงค่าระดับ สำหรับแผนที่เชิงภาพที่เลือก คือ 0.\n"
+"ไม่สามารถสร้าง รูปตัดตามยาว"
+
+#: ../gui/tcltk/gis.m/profile.tcl:455
+msgid "Zero elevation range"
+msgstr "ช่วงค่าระดับ 0"
+
+#: ../gui/tcltk/gis.m/profile.tcl:534 ../gui/tcltk/gis.m/profile.tcl:619
+msgid "r.profile error"
+msgstr "r.profile ผิดพลาด"
+
+#: ../gui/tcltk/gis.m/labels.tcl:96
+msgid "Labels for vectors"
+msgstr "แถบข้อความ สำหรับเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/labels.tcl:111
+msgid "Display labels for vector objects (created with v.label)"
+msgstr "แสดง แถบข้อความ สำหรับวัตถุเวคเตอร์ (สร้างด้วย v.label )"
+
+#: ../gui/tcltk/gis.m/labels.tcl:128 ../gui/tcltk/gis.m/maplabels.tcl:172
+msgid "Labels file:"
+msgstr "แฟ้ม แถบข้อความ:"
+
+#: ../gui/tcltk/gis.m/labels.tcl:131 ../gui/tcltk/gis.m/maplabels.tcl:175
+msgid "labels file to display"
+msgstr "ไฟล์ แถบข้อความ ที่จะแสดง"
+
+#: ../gui/tcltk/gis.m/labels.tcl:146 ../gui/tcltk/d.m/labels.tcl:80
+msgid "Display constraints:"
+msgstr "แสดงข้อกำจัด:"
+
+#: ../gui/tcltk/gis.m/labels.tcl:147
+msgid "min"
+msgstr "น้อยสุด"
+
+#: ../gui/tcltk/gis.m/labels.tcl:149
+msgid "max"
+msgstr "มากสุด"
+
+#: ../gui/tcltk/gis.m/labels.tcl:151 ../gui/tcltk/d.m/labels.tcl:85
+msgid "region size"
+msgstr "ขนาดขอบเขต"
+
+#: ../gui/tcltk/gis.m/labels.tcl:157 ../gui/tcltk/d.m/labels.tcl:91
+msgid " ignore rotation setting and draw horizontally"
+msgstr "ยกเลิก การหมุนที่กำหนด และ วาดตามแนวราบ"
+
+#: ../gui/tcltk/gis.m/labels.tcl:164 ../gui/tcltk/gis.m/maplabels.tcl:279
+msgid "Launch v.label to create labels file"
+msgstr "เริ่ม v.label เพื่อสร้างแฟ้ม แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/labels.tcl:165 ../gui/tcltk/gis.m/maplabels.tcl:280
+msgid "v.label"
+msgstr "v.label"
+
+#: ../gui/tcltk/gis.m/gm.tcl:197 ../gui/tcltk/d.m/d.m.tcl:314
+msgid "Loading GIS Manager"
+msgstr "กำลังโหลด ตัวจัดการ GIS"
+
+#: ../gui/tcltk/gis.m/gm.tcl:204
+msgid "Creating MainFrame..."
+msgstr "กำลังสร้าง กรอบหลัก ..."
+
+#: ../gui/tcltk/gis.m/gm.tcl:244 ../gui/tcltk/d.m/d.m.tcl:404
+msgid "Done"
+msgstr "เรียบร้อย"
+
+#: ../gui/tcltk/gis.m/gm.tcl:246
+msgid "Welcome to GRASS GIS"
+msgstr "ยินดีต้อนรับสู่ GRASS GIS"
+
+#: ../gui/tcltk/gis.m/gm.tcl:279
+#, tcl-format
+msgid "Map Display %d"
+msgstr "แสดงผลแผนที่ %d"
+
+#: ../gui/tcltk/gis.m/gm.tcl:304
+#, tcl-format
+msgid "GRASS%s GIS Manager - %s"
+msgstr "GRASS%s ตัวจัดการ GIS  - %s"
+
+#: ../gui/tcltk/gis.m/gm.tcl:378
+msgid "Select GRASS display font"
+msgstr "เลือกแบบอักษรการแสดงผลของ GRASS "
+
+#: ../gui/tcltk/gis.m/gm.tcl:388
+msgid "Font: "
+msgstr "แบบอักษร: "
+
+#: ../gui/tcltk/gis.m/gm.tcl:423
+msgid "Character encoding: "
+msgstr "การเข้ารหัสอักขระ:  "
+
+#: ../gui/tcltk/gis.m/gm.tcl:504
+#, tcl-format
+msgid "GRASS%s GIS Manager - %s %s"
+msgstr "GRASS%s ตัวจัดการ GIS - %s %s"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:106
+msgid "Aspect map"
+msgstr "แผนที่ Aspect"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:109 ../gui/tcltk/gis.m/rastarrows.tcl:121
+#, tcl-format
+msgid "arrows for %s"
+msgstr "ลูกศร สำหรับ %s"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:118
+msgid "Slope/intensity map"
+msgstr "แผนที่ Slope/intensity"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:134
+msgid "Display arrows whose orientations are based on raster aspect map"
+msgstr "แสดงลูกศร ที่การหมุนขึ้นอยู่กับ แผนที่เชิงภาพ Aspect"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:140
+msgid "  (optionally, arrow lengths are based on slope or intensity map)"
+msgstr "  (อาจใช้, ความยาวลูกศร ขึ้นอยู่กับ แผนที่ Slope หรือ Intensity)"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:157
+msgid "Aspect map: "
+msgstr "แผนที่ Aspect: "
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:173
+msgid "    aspect value type"
+msgstr "    ชนิดของค่า Aspect"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:181
+msgid "    draw arrows every Nth grid cell"
+msgstr "    วาดลูกศรทุกๆ  Nth กริด cell"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:189
+msgid "    arrow color      "
+msgstr "สึลูกษร"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:194
+msgid "     cell grid color"
+msgstr "สีกริดเซลล์"
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:204
+msgid "    null value color"
+msgstr "สีค่า null "
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:219
+msgid "Slope/intensity map: "
+msgstr "แผนที่ Slope/Intensity: "
+
+#: ../gui/tcltk/gis.m/rastarrows.tcl:230
+msgid "    scale factor for computing arrow length"
+msgstr "    ตัวคูณมาตราส่วนสำหรับคำนวนความยาวลูกศร"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:118
+msgid "Run (background)"
+msgstr "ดำเนินการ (แบบเบื้องหลัง)"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:120
+msgid "Run (GUI)"
+msgstr "เริ่ม (GUI)"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:122
+msgid "Run (in Xterm)"
+msgstr "เริ่ม (in Xterm)"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:125 ../gui/tcltk/gis.m/gmmenu.tcl:88
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:859 ../gui/tcltk/d.m/menu.tcl:172
+msgid "Save"
+msgstr "บันทึก"
+
+#: ../gui/tcltk/gis.m/runandoutput.tcl:148
+msgid "Output - GIS.m"
+msgstr "ส่งออก - GIS.m"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:41 ../gui/tcltk/gis.m/georecttool.tcl:40
+msgid "Display active layers"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:48
+msgid "Redraw all layers"
+msgstr "วาดทุกชั้นข้อมูลใหม่"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:55
+msgid "Start NVIZ using active layers in current region"
+msgstr "เริ่มต้น NVIZ โดยใช้ชั้นข้อมูลที่กำลังทำงานใน Region ปัจจุบัน"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:61
+msgid "Create flythough path for NVIZ"
+msgstr "สร้าง เส้นทางการบินผ่าน สำหรับ NVIZ"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:68 ../gui/tcltk/gis.m/georecttool.tcl:47
+#: ../gui/tcltk/d.m/tool1.tcl:40
+msgid "Erase to white"
+msgstr "ลบเป็นสีขาว"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:94
+msgid "Pointer"
+msgstr "Pointer"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:113 ../gui/tcltk/gis.m/georecttool.tcl:92
+msgid "Zoom In"
+msgstr "ขยายเข้า"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:132 ../gui/tcltk/gis.m/georecttool.tcl:111
+msgid "Zoom Out"
+msgstr "ขยายออก"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:165 ../gui/tcltk/gis.m/georecttool.tcl:144
+#: ../gui/tcltk/d.m/tool1.tcl:87
+msgid "Return to previous zoom"
+msgstr "กลับสู่การขยาย ก่อนหน้า"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:172
+msgid "Zoom to..."
+msgstr "ย่อ/ขยาย ไปที่ ..."
+
+#: ../gui/tcltk/gis.m/maptool.tcl:184
+msgid "Zoom to selected map"
+msgstr "ย่อ/ขยาย ไปที่แผนที่ที่เลือก"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:190
+msgid "Save display geometry to named region"
+msgstr "บันทึก Geometry ที่แสดง ไปที่ Region ชื่อ"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:193
+msgid "Zoom to current region (set with g.region)"
+msgstr "ย่อ/ขยาย ไปที่ขอบเขตปัจจุบัน (ตั้งค่าด้วย g.region)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:199
+msgid "Set current region (WIND file) to match display"
+msgstr "ตั้งขอบเขตปัจจุบัน (แฟ้ม WIND) เพื่อเข้ากันกับจอแสดง"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:615
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1829 ../gui/tcltk/d.m/menu.tcl:554
+msgid "Query"
+msgstr "ค้นหาข้อมูล"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:247
+msgid "Measure"
+msgstr "วัดขนาด"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:254
+msgid "Create profile of raster map"
+msgstr "สร้าง รูปตัดตามยาว สำหรับแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:271
+msgid "Print raster & vector maps to eps file"
+msgstr "พิมพ์แผนที่แรสเตอร์ และเวคเตอร์ไปเป็นแฟ้ม eps"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:278
+msgid "Export display to graphics file"
+msgstr "ส่งออกจอแสดงเป้นแฟ้มข้อมูลภาพ"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:289
+msgid "low quality (50)"
+msgstr "คุณภาพต่ำ  (50)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:291
+msgid "mid quality (75)"
+msgstr "คุณภาพปานกลาง (75)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:293
+msgid "high quality (95)"
+msgstr "คุณภาพดี (95)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:295
+msgid "very high resolution (300% your current resolution)"
+msgstr "คุณภาพดีมาก  (300% ของความละเอียดปัจจุบัน)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:300
+msgid "(* requires gdal)"
+msgstr "(* ต้องการ gdal)"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:325
+msgid "Constrain map to region geometry"
+msgstr "แผนที่ Constrain ไปเป็น Region Geometry"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:344
+msgid "Map fills display window"
+msgstr "Map fills display window"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:394
+msgid "Could not create BMP"
+msgstr "ไม่สามารถสร้างแฟ้ม BMP"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:401 ../gui/tcltk/gis.m/maptool.tcl:406
+msgid "Could not create JPG"
+msgstr "ไม่สามารถสร้างแฟ้ม JPG"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:414
+msgid "Could not create PNG"
+msgstr "ไม่สามารถสร้างแฟ้ม PNG"
+
+#: ../gui/tcltk/gis.m/maptool.tcl:424
+msgid "Could not create TIF"
+msgstr "ไม่สามารถสร้างแฟ้ม TIF"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:103 ../gui/tcltk/gis.m/raster.tcl:114
+#: ../gui/tcltk/d.m/menu.tcl:77 ../gui/tcltk/d.m/menu.tcl:113
+msgid "Raster map"
+msgstr "แผนที่แรสเตอร์"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:106
+#, tcl-format
+msgid "cell values for %s"
+msgstr "ค่าเซลล์สำหรับ %s"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:134
+msgid "Display cell values from raster map or image"
+msgstr "แสดงค่าเซลล์จากแผนที่แรสเตอร์หรือภาพ"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:140
+msgid "  (resolution must be 100x100 or less)"
+msgstr "(ความละเอียดต้องเป็น 100x100 หรือน้อยกว่า)"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:156
+msgid "Raster to display: "
+msgstr "แสดงแผนที่เชิงภาพ: "
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:172
+msgid "Color for cell grid:       "
+msgstr "สีสำหรับกริดเซลล์:"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:177
+msgid "  cell values font "
+msgstr "แบบอักษรของค่าเซลล์"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:180 ../gui/tcltk/gis.m/gridline.tcl:187
+#: ../gui/tcltk/gis.m/legend.tcl:234 ../gui/tcltk/gis.m/barscale.tcl:204
+#: ../gui/tcltk/gis.m/maptext.tcl:180 ../gui/tcltk/gis.m/dtext.tcl:226
+#: ../gui/tcltk/gis.m/histogram.tcl:177
+msgid "select font for text"
+msgstr "เลือกแบบอักษรสำหรับข้อความ"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:187
+msgid "Color for cell values:   "
+msgstr "สีสำหรับค่าเซลล์ :"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:192
+msgid "use raster colors for cell values"
+msgstr "ใช้ สีของแผนที่เชิงภาพสำหรับ ค่า cell"
+
+#: ../gui/tcltk/gis.m/rastnums.tcl:273
+msgid ""
+"Cell values can only be displayed\n"
+"for regions of < 10,000 cells"
+msgstr ""
+"ค่า Cell ใช้แสดงเท่านั้น\n"
+"สำหรับ Regions ของ < 10,000 cells"
+
+#: ../gui/tcltk/gis.m/frames.tcl:105
+msgid "Divide map display into frames for displaying multiple maps"
+msgstr "แบ่งจอแผนที่ไปเป็น กรอบ สำหรับ แสดงหลายแผนที่"
+
+#: ../gui/tcltk/gis.m/frames.tcl:112 ../gui/tcltk/d.m/frames.tcl:60
+msgid "create and select frame"
+msgstr "สร้างและเลือกกรอบ"
+
+#: ../gui/tcltk/gis.m/frames.tcl:114 ../gui/tcltk/d.m/frames.tcl:62
+msgid "select frame"
+msgstr "เลือกกรอบ"
+
+#: ../gui/tcltk/gis.m/frames.tcl:116
+msgid "remove all frames   "
+msgstr "เอากรอบ ออกทั้งหมด"
+
+#: ../gui/tcltk/gis.m/frames.tcl:128
+msgid "Frame name (optional): "
+msgstr " ชื่อเฟรม (optional): "
+
+#: ../gui/tcltk/gis.m/frames.tcl:135
+#, tcl-format
+msgid "Set frame borders at 0-100% from lower left corner of display "
+msgstr "กำหนดขอบ ของกรอบ ที่ 0-100% จากมุมซ้ายล่างของจอแสดงผล"
+
+#: ../gui/tcltk/gis.m/frames.tcl:141
+msgid "     set borders (bottom,top,left,right): "
+msgstr "     กำหนดขอบ (ล่าง,บน,ซ้าย,ขวา): "
+
+#: ../gui/tcltk/gis.m/tksys.tcl:57
+msgid ""
+"\n"
+"***** Please wait *****"
+msgstr ""
+"\n"
+"***** โปรดรอ *****"
+
+#: ../gui/tcltk/gis.m/tksys.tcl:58
+msgid "Gathering information about your system"
+msgstr "ได้รับข้อมูลเกี่ยวกับระบบของท่าน"
+
+#: ../gui/tcltk/gis.m/tksys.tcl:230
+msgid "***** Done *****"
+msgstr "*****เรียบร้อย*****"
+
+#: ../gui/tcltk/gis.m/animate.tcl:299
+msgid "Select maps to animate"
+msgstr "เลือกแผนที่เพื่อเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:313
+msgid "Rewind animation"
+msgstr "ย้อนกลับภาพเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:319
+msgid "Replay animation"
+msgstr "แสดงภาพเคลื่อนไหวอีกครั้ง"
+
+#: ../gui/tcltk/gis.m/animate.tcl:325
+msgid "Step backwards through animation"
+msgstr "ย้อนกลับการเคลื่อนไหวทีละขั้น"
+
+#: ../gui/tcltk/gis.m/animate.tcl:331
+msgid "Stop animation"
+msgstr "หยุดการเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:337
+msgid "Step forwards through animation"
+msgstr "ไปข้างหน้าการเคลื่อนไหวทีละขั้น"
+
+#: ../gui/tcltk/gis.m/animate.tcl:343
+msgid "Play animation"
+msgstr "เล่นภาพเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:356
+msgid "Slower animation"
+msgstr "เคลื่อนไหวช้า"
+
+#: ../gui/tcltk/gis.m/animate.tcl:362
+msgid "Faster animation"
+msgstr "เคลื่อนไหวเร็ว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:372
+msgid "Continuously loop through animation"
+msgstr "Animation แบบ วนซ้ำอย่างต่อเนื่อง"
+
+#: ../gui/tcltk/gis.m/animate.tcl:380
+msgid "Run animation alternately forward and backward"
+msgstr "ทำงาน Animation เลือกแบบ ไปข้างหน้า และ ย้อนกลับ"
+
+#: ../gui/tcltk/gis.m/animate.tcl:391
+msgid "Show map names in animation window"
+msgstr "แสดงชื่อแผนที่ในหน้าต่าง Animation"
+
+#: ../gui/tcltk/gis.m/animate.tcl:404
+msgid "Quit animation"
+msgstr "ออก"
+
+#: ../gui/tcltk/gis.m/animate.tcl:435
+msgid "Select maps"
+msgstr "เลือกแผนที่"
+
+#: ../gui/tcltk/gis.m/animate.tcl:463
+msgid "Maps for Animation"
+msgstr "แผนที่สำหรับการเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/animate.tcl:479
+msgid "Select maps to animate in one or more frames (1 frame required)"
+msgstr "เลือกแผนที่ที่จะทำ Animation ใน 1 กรอบ หรือมากกว่า (ต้องการอย่างน้อย 1 กรอบ)"
+
+#: ../gui/tcltk/gis.m/animate.tcl:492
+msgid "Maps for frame 1 (required): "
+msgstr "แผนที่สำหรับแฟรม 1 (required): "
+
+#: ../gui/tcltk/gis.m/animate.tcl:503
+msgid "Maps for frame 2 (optional): "
+msgstr "แผนที่สำหรับแฟรม 2 (optional):"
+
+#: ../gui/tcltk/gis.m/animate.tcl:514
+msgid "Maps for frame 3 (optional): "
+msgstr "แผนที่สำหรับแฟรม 3 (optional):"
+
+#: ../gui/tcltk/gis.m/animate.tcl:525
+msgid "Maps for frame 4 (optional): "
+msgstr "แผนที่สำหรับแฟรม 4 (optional):"
+
+#: ../gui/tcltk/gis.m/animate.tcl:540 ../gui/tcltk/gis.m/dnviz.tcl:232
+#: ../gui/tcltk/gis.m/rules.tcl:174
+msgid "Apply"
+msgstr "มีผลทันที"
+
+#: ../gui/tcltk/gis.m/animate.tcl:563
+msgid "You must select maps to animate for frame 1"
+msgstr "คุณต้องการทำการเลือกแผนที่เพื่อแสดงการเคลื่อนไหวสำหรับแฟรม 1"
+
+#: ../gui/tcltk/gis.m/animate.tcl:564
+msgid "No maps selected"
+msgstr "ไม่มีแผนที่ถูกเลือก"
+
+#: ../gui/tcltk/gis.m/animate.tcl:1031
+msgid "Animation Window"
+msgstr "หน้าต่างภาพเคลื่อนไหว"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:28
+msgid "Start new map display monitor"
+msgstr "เริ่ม หน้าจอแสดงแผนที่"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:42 ../gui/tcltk/d.m/tool2.tcl:22
+msgid "Add raster layer"
+msgstr "เพิ่มชั้นข้อมูลแรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:49 ../gui/tcltk/d.m/tool2.tcl:28
+msgid "Add RGB or HIS layer"
+msgstr "เพิ่มชั้นข้อมูล RGB หรือ HIS "
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:56
+msgid "Add histogram layer"
+msgstr "เพิ่มชั้นข้อมูล Histogram"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:63
+msgid "Add cell values layer"
+msgstr "เพิ่มชั้นข้อมูล ค่า cell"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:70
+msgid "Add directional arrows layer"
+msgstr "เพิ่มชั้นข้อมูล ทิศทางลูกศร"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:76
+msgid "Add raster legend layer"
+msgstr "เพิ่มชั้นข้อมูล สัญลักษณ์แผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:92 ../gui/tcltk/d.m/tool2.tcl:48
+msgid "Add vector layer"
+msgstr "เพิ่มชั้นข้อมูลเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:99 ../gui/tcltk/d.m/tool2.tcl:62
+msgid "Add thematic map layer"
+msgstr "เพิ่ม ชั้นข้อมูลแผนที่ Thematic"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:108 ../gui/tcltk/d.m/tool2.tcl:54
+msgid "Add thematic charts layer"
+msgstr "เพิ่ม ชั้นข้อมูล Thematic charts"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:121
+msgid "Add raster labels layer (using v.labels file)"
+msgstr "เพิ่มชั้นข้อมูล สัญลักษณ์แผนที่เชิงภาพ (โดยใช้ไฟล์ v.labels )"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:128 ../gui/tcltk/d.m/tool2.tcl:88
+msgid "Add text layer"
+msgstr "เพิ่มชั้นข้อมูลข้อความ"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:135
+msgid "Add postscript labels layer (using v.labels file)"
+msgstr "เพิ่มชั้นข้อมูล แถบข้อความ Postscript (โดยใช้ไฟล์ v.labels )"
+
+#: ../gui/tcltk/gis.m/gmtool1.tcl:142
+msgid "Add postscript text layer"
+msgstr "เพิ่มชั้นข้อมูล ตัวอักษร Postscript"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:69
+#, tcl-format
+msgid "Map Layers for Display %s"
+msgstr "ชั้นข้อมูลแผนที่สำหรับแสดงผล  %s"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:308
+msgid "You must open a display before adding map layers"
+msgstr "คุณต้องเปิด จอแสดงผลก่อน เพิ่มชั้นข้อมูลแผนที่"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:483 ../gui/tcltk/gis.m/gmtree.tcl:631
+#: ../gui/tcltk/gis.m/gmtree.tcl:1150 ../gui/tcltk/gis.m/gmtree.tcl:1156
+msgid "No layer selected"
+msgstr "ไม่มีชั้นข้อมูลถูกเลือก"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:865
+msgid "Loading layers..."
+msgstr "กำลังโหลดชั้นข้อมูล."
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1050
+msgid "Layers loaded"
+msgstr "ชั้นข้อมูลโหลด"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1171
+msgid "You can digitize raster or vector maps only"
+msgstr "คุณสามารถดิจิไทซ์แผนที่แรสเตอร์หรือเวคเตอร์เท่านั้น"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:26 ../gui/tcltk/d.m/tool2.tcl:100
+msgid "Scalebar and north arrow"
+msgstr "มาตราส่วนแบบแท่ง และ ทิศเหนือลูกศร"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:32 ../gui/tcltk/d.m/tool2.tcl:105
+msgid "Overlay grids and lines"
+msgstr "ซ้อนทับกริดและเส้น"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:39 ../gui/tcltk/d.m/tool2.tcl:116
+msgid "Add command layer"
+msgstr "เพิ่มชั้นข้อมูลคำสั่ง"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:59 ../gui/tcltk/d.m/tool2.tcl:130
+msgid "Add group"
+msgstr "เพิ่มกลุ่ม"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:65 ../gui/tcltk/d.m/tool2.tcl:135
+msgid "Duplicate Layer"
+msgstr "ทำซ้ำชั้นข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:70 ../gui/tcltk/d.m/tool2.tcl:139
+msgid "Delete layer"
+msgstr "ลบชั้นข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:84 ../gui/tcltk/d.m/tool1.tcl:121
+msgid "Create new workspace file (erase current workspace settings first)"
+msgstr "สร้างแฟ้มพื้นที่ทำงาน (ลบค่าพื้นที่ทำงานปัจจุบันก่อน)"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:90 ../gui/tcltk/d.m/tool1.tcl:124
+msgid "Open existing workspace file"
+msgstr "เปิดพื้นที่ทำงานที่มีอยู่"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:96 ../gui/tcltk/d.m/tool1.tcl:127
+msgid "Save workspace file"
+msgstr "บันทึกพื้นที่ทำงาน"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:111 ../gui/tcltk/d.m/tool1.tcl:66
+msgid "Animate raster map series"
+msgstr "แผนที่เชิงภาพ Animate series"
+
+#: ../gui/tcltk/gis.m/gmtool2.tcl:127 ../gui/tcltk/d.m/tool2.tcl:153
+msgid "Digitize map (select or create new map first)"
+msgstr "ลอกลายแผนที่ (เลือก หรือ สร้าง แผนที่ใหม่ก่อน)"
+
+#: ../gui/tcltk/gis.m/georecttool.tcl:73
+msgid "Set ground control points"
+msgstr "เลือกจุดตรึงภาพ GCPs"
+
+#: ../gui/tcltk/gis.m/georecttool.tcl:151
+msgid "Zoom to map"
+msgstr "ขยายไปที่แผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:85 ../gui/tcltk/d.m/menu.tcl:75
+msgid "&File"
+msgstr "แฟ้&ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:86
+msgid "Workspace"
+msgstr "พื้นที่ทำงาน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:87 ../gui/tcltk/d.m/menu.tcl:171
+msgid "Open..."
+msgstr "เปิด..."
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:89 ../gui/tcltk/d.m/menu.tcl:173
+msgid "Save as..."
+msgstr "บันทึกเป็น."
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:93
+msgid "Import raster map"
+msgstr "นำเข้าแผนที่แรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:94 ../gui/tcltk/gis.m/gmmenu.tcl:129
+#: ../gui/tcltk/d.m/menu.tcl:78 ../gui/tcltk/d.m/menu.tcl:114
+msgid "Multiple formats using GDAL"
+msgstr "ชนิดอื่นด้วย GDAL"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:96
+msgid "Aggregate ASCII xyz"
+msgstr "Aggregate ASCII xyz"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:97 ../gui/tcltk/gis.m/gmmenu.tcl:131
+msgid "ASCII grid"
+msgstr "กริด ASCII"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:98
+msgid "ASCII polygons and lines"
+msgstr "พื้นที่หลายเหลี่ยมและเส้น ASCII"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:100 ../gui/tcltk/gis.m/gmmenu.tcl:138
+msgid "Binary"
+msgstr "ไบนารี"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:101
+msgid "ESRI grid"
+msgstr "กริด ESRI"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:102 ../gui/tcltk/gis.m/gmmenu.tcl:135
+msgid "GRIDATB.FOR"
+msgstr "GRIDATB.FOR"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:103 ../gui/tcltk/gis.m/gmmenu.tcl:136
+msgid "MAT-File (v.4)"
+msgstr "MAT-File (v.4)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:104
+msgid "SPOT NDVI"
+msgstr "SPOT NDVI"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:105
+msgid "SRTM hgt"
+msgstr "SRTM hgt"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:106
+msgid "Terra ASTER"
+msgstr "Terra ASTER"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:108 ../gui/tcltk/d.m/menu.tcl:92
+msgid "Web Mapping Server"
+msgstr "Web Mapping Server"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:110
+msgid "Import vector map"
+msgstr "นำเข้าแผนทีีเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:111 ../gui/tcltk/gis.m/gmmenu.tcl:150
+msgid "Multiple formats using OGR"
+msgstr "หลายรูปแบบด้วย OGR"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:113 ../gui/tcltk/gis.m/gmmenu.tcl:152
+msgid "ASCII points or GRASS ASCII vector"
+msgstr "จุด ASCII หรือ เวคเตอร์ GRASS ASCII"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:114
+msgid "Old GRASS vector"
+msgstr "เวคเตอร์ GRASS เก่า"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:116 ../gui/tcltk/gis.m/gmmenu.tcl:153
+msgid "DXF"
+msgstr "DXF"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:117
+msgid "ESRI e00"
+msgstr "ESRI e00"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:118
+msgid "Garmin GPS"
+msgstr "Garmin GPS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:119
+msgid "GPSBabel GPS"
+msgstr "GPSBabel GPS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:120
+msgid "GEOnet"
+msgstr "GEOnet"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:121
+msgid "Matlab and MapGen"
+msgstr "Matlab และ MapGen"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:123
+msgid "Import grid 3D volume"
+msgstr "นำเข้ากริด 3D volume"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:124 ../gui/tcltk/gis.m/gmmenu.tcl:159
+msgid "ASCII 3D"
+msgstr "ASCII 3D"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:125 ../gui/tcltk/gis.m/gmmenu.tcl:160
+msgid "Vis5D"
+msgstr "Vis5D"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:128
+msgid "Export raster map"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:132
+msgid "ASCII x,y,z"
+msgstr "ASCII x,y,z"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:134
+msgid "ESRI ASCII grid"
+msgstr "กริด ESRI ASCII"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:140
+msgid "MPEG-1"
+msgstr "MPEG-1"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:141
+msgid "PNG"
+msgstr "PNG"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:142
+msgid "PPM"
+msgstr "PPM"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:143
+msgid "PPM from RGB"
+msgstr "PPM จาก RGB"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:144 ../gui/tcltk/gis.m/gmmenu.tcl:154
+msgid "POV-Ray"
+msgstr "POV-Ray"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:145
+msgid "TIFF"
+msgstr "TIFF"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:146
+msgid "VRML"
+msgstr "VRML"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:147 ../gui/tcltk/gis.m/gmmenu.tcl:156
+#: ../gui/tcltk/gis.m/gmmenu.tcl:161
+msgid "VTK"
+msgstr "VTK"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:149
+msgid "Export vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:155
+msgid "SVG"
+msgstr "SVG"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:158
+msgid "Export grid 3D volume"
+msgstr "ส่งออกกริด 3D volume"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:164 ../gui/tcltk/d.m/menu.tcl:149
+msgid "Manage maps and volumes"
+msgstr "จัดการแผนที่และปริมาณ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:167
+msgid "List"
+msgstr "รายการ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:168
+msgid "List filtered"
+msgstr "ลิสต์ filtered"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:170
+msgid "Rename"
+msgstr "เปลี่ยนชื่อ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:173
+msgid "Delete filtered"
+msgstr "ลบ filtered"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:175 ../gui/tcltk/d.m/menu.tcl:157
+msgid "Map type conversions"
+msgstr "แปลงชนิดแผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:176
+msgid "Raster to vector"
+msgstr "แรสเตอร์ เป็น เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:177
+msgid "Raster series to volume"
+msgstr "แผนที่เชิงภาพ  Series ไปเป็น ปริมาตร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:178
+msgid "Raster 2.5D to volume"
+msgstr "แผนที่เชิงภาพ  2.5มิติ  ไปเป็น ปริมาตร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:180 ../gui/tcltk/d.m/menu.tcl:161
+msgid "Vector to raster"
+msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:181
+msgid "Vector to volume"
+msgstr "แผนที่เชิงเส้น ไปเป็น ปริมาตร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:182
+msgid "Sites to vector"
+msgstr "Sites ไปเป็น แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:184
+msgid "Volume to raster series"
+msgstr "ปริมาตร ไปเป็น แผนที่เชิงภาพ series"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:187
+msgid "Georectify"
+msgstr "Georectify"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:189
+msgid "Animate raster maps"
+msgstr "แผนที่เชิงภาพ Animate"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:191
+msgid "Bearing/distance to coordinates"
+msgstr "มุม/ระยะทาง ไปเป็น ค่าพิกัด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:193
+msgid "3D rendering"
+msgstr "การสร้าง 3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:194
+msgid "NVIZ"
+msgstr "NVIZ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:195
+msgid "NVIZ fly through path"
+msgstr "เส้นทางการบินผ่าน ของ NVIZ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:197
+msgid "PostScript plot"
+msgstr "พิมพ์ PostScript"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:199 ../gui/tcltk/d.m/menu.tcl:184
+msgid "E&xit"
+msgstr "&ออก"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:201 ../gui/tcltk/d.m/menu.tcl:186
+msgid "&Config"
+msgstr "&ตั้งค่า"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:202 ../gui/tcltk/d.m/menu.tcl:187
+msgid "Region"
+msgstr "ขอบเขต"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:203 ../gui/tcltk/d.m/menu.tcl:188
+msgid "Display region settings"
+msgstr "ตั้งค่าขอบเขตการแสดงผล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:204 ../gui/tcltk/d.m/menu.tcl:189
+msgid "Change region settings"
+msgstr "เปลี่ยนแปลง้งค่าขอบเขต"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:206 ../gui/tcltk/d.m/menu.tcl:192
+msgid "GRASS working environment"
+msgstr "GRASS working environment"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:207
+msgid "Mapset access"
+msgstr "เข้าถึง Mapset"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:208
+msgid "Change working environment"
+msgstr "เปลี่ยน สภาวะแวดล้อม การทำงาน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:209
+msgid "User access"
+msgstr "การเข้าถ฿ง ของผู้ใช้"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:210
+msgid "Show settings"
+msgstr "แสดงค่าติดตั้ง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:211
+msgid "Change settings"
+msgstr "เปลี่ยนค่าติดตั้ง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:212 ../gui/tcltk/d.m/menu.tcl:198
+msgid "Show current GRASS version"
+msgstr "แสดง รุ่น GRASS ปัจจุบัน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:214 ../gui/tcltk/gis.m/gmmenu.tcl:215
+#: ../gui/tcltk/d.m/menu.tcl:200
+msgid "Manage projections"
+msgstr "จัดการ projections"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:216
+msgid "Projection for current location"
+msgstr "Projection สำหรับ ตำแหน่งปัจจุบัน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:218
+msgid "Convert coordinates"
+msgstr "แปลงพิกัด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:220
+msgid "Display font"
+msgstr "แบบอักษร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:222 ../gui/tcltk/d.m/menu.tcl:218
+msgid "&Raster"
+msgstr "แ&รสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:223 ../gui/tcltk/gis.m/gmmenu.tcl:419
+#: ../gui/tcltk/d.m/menu.tcl:219 ../gui/tcltk/d.m/menu.tcl:376
+msgid "Develop map"
+msgstr "สร้างแผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:224 ../gui/tcltk/d.m/menu.tcl:220
+msgid "Digitize raster"
+msgstr "ลอกลาย แผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:230
+msgid "Compress/decompress"
+msgstr "บีบอัด/ขยาย"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:232
+msgid "Boundaries"
+msgstr "ขอบเขต"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:233
+msgid "Null values"
+msgstr "ค่า Null"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:234
+msgid "Quantization"
+msgstr "Quantization"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:235
+msgid "Timestamps"
+msgstr "Timestamps"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:237 ../gui/tcltk/d.m/menu.tcl:231
+msgid "Resample using aggregate statistics"
+msgstr "Resample ใช้วิธ๊ Aggregate statistics"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:238
+msgid "Resample using multiple methods"
+msgstr "การใช้หลายๆวิธีในการ Resample"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:239
+msgid "Resample using nearest neighbor"
+msgstr "Resample ใช้ วิธ๊ Nearest Neighbor"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:240
+msgid "Resample using spline tension"
+msgstr "Resample ใช้ วิธ๊ Spline Tension"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:242
+msgid "Support file maintenance"
+msgstr "การบำรุงรักษา Support ไฟล์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:243
+msgid "Update map statistics"
+msgstr "ปรับปรุง Map Statistics"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:245
+msgid "Reproject"
+msgstr "Reproject"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:246
+msgid "Tiling"
+msgstr "Tiling"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:248 ../gui/tcltk/d.m/menu.tcl:240
+msgid "Manage map colors"
+msgstr "จัดการ สีของแผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:249
+msgid "Color tables"
+msgstr "ตารางสี"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:250
+msgid "Color rules"
+msgstr "กฎของสี"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:252
+msgid "Blend"
+msgstr "Blend"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:253
+msgid "Create RGB"
+msgstr "สร้าง RGB"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:254 ../gui/tcltk/gis.m/gmmenu.tcl:538
+msgid "HIS to RGB"
+msgstr "HIS ไปเป็น RGB"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:257 ../gui/tcltk/d.m/menu.tcl:249
+#: ../gui/tcltk/d.m/menu.tcl:403
+msgid "Query by coordinate(s)"
+msgstr "ร้องขอด้วยพิกัด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:259
+msgid "Buffers"
+msgstr "พื้นที่กันชน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:260
+msgid "Closest points"
+msgstr "จุดใกล้สุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:261
+msgid "MASK"
+msgstr "MASK"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:262 ../gui/tcltk/d.m/menu.tcl:254
+msgid "Map calculator"
+msgstr "ตัวคำนวนแผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:263 ../gui/tcltk/d.m/menu.tcl:255
+#: ../gui/tcltk/d.m/menu.tcl:413
+msgid "Neighborhood analysis"
+msgstr "การวิเคราะห์พื้นที่ข้างเคียง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:264
+msgid "Moving window"
+msgstr "ย้ายหน้าต่าง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:265
+msgid "Neighborhood points"
+msgstr "จุดรอบข้าง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:267 ../gui/tcltk/gis.m/gmmenu.tcl:482
+#: ../gui/tcltk/d.m/menu.tcl:259 ../gui/tcltk/d.m/menu.tcl:427
+msgid "Overlay maps"
+msgstr "ซ้อนทับแผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:268 ../gui/tcltk/d.m/menu.tcl:260
+msgid "Cross product"
+msgstr "Cross product"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:269
+msgid "Map series"
+msgstr "แผนที่ series"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:270 ../gui/tcltk/d.m/menu.tcl:262
+msgid "Patch maps"
+msgstr "ปรับปรุง แผนที่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:272
+msgid "Statistical overlay"
+msgstr "Statistical ของการซ้อนทับ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:274 ../gui/tcltk/d.m/menu.tcl:266
+msgid "Solar radiance and shadows"
+msgstr "Solar radiance และ shadows"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:275
+msgid "Solar irradiance irradiation"
+msgstr "Solar irradiance irradiation"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:276
+msgid "Shadows map"
+msgstr "แผนที่ Shadow"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:278 ../gui/tcltk/d.m/menu.tcl:270
+msgid "Terrain analysis"
+msgstr "Terrain analysis"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:279
+msgid "Cumulative movement costs"
+msgstr "Cumulative movement costs"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:280 ../gui/tcltk/d.m/menu.tcl:272
+msgid "Cost surface"
+msgstr "Cost surface"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:281 ../gui/tcltk/d.m/menu.tcl:273
+msgid "Least cost route or flow"
+msgstr "Least cost route หรือ flow"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:283
+msgid "Shaded relief"
+msgstr "Shaded relief"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:285 ../gui/tcltk/d.m/menu.tcl:276
+msgid "Slope and aspect"
+msgstr "Slope และ aspect"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:286 ../gui/tcltk/d.m/menu.tcl:277
+msgid "Terrain parameters"
+msgstr "ตัวแปร Terrain"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:287 ../gui/tcltk/d.m/menu.tcl:278
+msgid "Textural features"
+msgstr "ข้อมูล Textural"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:289
+msgid "Visibility"
+msgstr "การมองเห็น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:291 ../gui/tcltk/d.m/menu.tcl:281
+msgid "Transform features"
+msgstr "ข้อมูล Transform"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:292
+msgid "Clump"
+msgstr "Clump"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:293
+msgid "Grow"
+msgstr "Grow"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:294
+msgid "Thin"
+msgstr "บาง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:297 ../gui/tcltk/d.m/menu.tcl:287
+msgid "Hydrologic modeling"
+msgstr "แบบจำลอง Hydrologic"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:298
+msgid "Carve stream channels"
+msgstr "Carve stream channels"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:299
+msgid "Fill lake"
+msgstr "Fill lake"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:301
+msgid "Depressionless map and flowlines"
+msgstr "แผนที่ Depressionless และ  flowlines"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:302
+msgid "Flow accumulation"
+msgstr "Flow accumulation"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:303
+msgid "Flow lines"
+msgstr "Flow lines"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:305 ../gui/tcltk/gis.m/gmmenu.tcl:585
+msgid "Groundwater flow model"
+msgstr "แบบจำลอง น้ำใต้ดิน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:307 ../gui/tcltk/d.m/menu.tcl:293
+msgid "SIMWE overland flow modeling"
+msgstr "แบบจำลอง SIMWE overland flow"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:308
+msgid "SIMWE sediment flux modeling"
+msgstr "แบบจำลอง SIMWE sediment flux"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:310 ../gui/tcltk/d.m/menu.tcl:295
+msgid "Topographic index map"
+msgstr "แผนที่ดัชนี Topographic"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:311 ../gui/tcltk/d.m/menu.tcl:296
+msgid "TOPMODEL simulation"
+msgstr "การจำลอง TOPMODEL"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:313 ../gui/tcltk/d.m/menu.tcl:297
+msgid "Watershed subbasins"
+msgstr "Watershed subbasins"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:314 ../gui/tcltk/d.m/menu.tcl:298
+msgid "Watershed analysis"
+msgstr "Watershed analysis"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:315 ../gui/tcltk/d.m/menu.tcl:299
+msgid "Watershed basin creation"
+msgstr "การสร้าง Watershed basin"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:317 ../gui/tcltk/d.m/menu.tcl:301
+msgid "Landscape structure modeling"
+msgstr "แบบจำลอง Landscape structure"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:318
+msgid "Set up"
+msgstr "ติดตั้ง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:324
+msgid "Analyze landscape"
+msgstr "การวิเคราะห์ Landscape"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:325
+msgid "Analyze patches"
+msgstr "การวิเคราะห์  Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:328
+msgid "Landscape patch analysis"
+msgstr "การวิเคราะห์ Landscape patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:329 ../gui/tcltk/d.m/menu.tcl:302
+msgid "Set up sampling and analysis framework"
+msgstr "กำหนด Sampling และ analysis framework"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:331
+msgid "Edge density"
+msgstr "ความหนาแน่นของขอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:332
+msgid "Contrast weighted edge density"
+msgstr "ผสมสีให้ตัดกัน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:334
+msgid "Patch size mean"
+msgstr "ค่าเฉลี่ย Patch size"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:335
+msgid "Patch area range"
+msgstr "ช่วง ของพื้นที่ Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:336
+msgid "Patch area Std Dev"
+msgstr "Std Dev ของพื้นที่ Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:337
+msgid "Patch area Coeff Var"
+msgstr "Coeff Var ของพื้นที่ Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:338
+msgid "Patch density"
+msgstr "ความหนาแน่นของ Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:339
+msgid "Patch number"
+msgstr "จำนวนของ Patch"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:341
+msgid "Dominance's diversity"
+msgstr "ความหลากหลาย Dominance"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:342
+msgid "Shannon's diversity"
+msgstr "ความหลากหลาย Shannon"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:343
+msgid "Simpson's diversity"
+msgstr "ความหลากหลาย Simpson"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:345
+msgid "Ricness"
+msgstr "Ricness"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:346
+msgid "Shape index"
+msgstr "ดัชนี Shape"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:348 ../gui/tcltk/d.m/menu.tcl:308
+msgid "Wildfire modeling"
+msgstr "แบบจำลองไฟป่า"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:349
+msgid "Rate of spread"
+msgstr "อัตราการขยาย"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:350
+msgid "Least-cost spread paths"
+msgstr "Least-cost เส้นทางการกระจาย"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:351
+msgid "Anisotropic spread simulation"
+msgstr "แบบจำลองการกระจาย Anisotropic"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:354 ../gui/tcltk/d.m/menu.tcl:314
+msgid "Change category values and labels"
+msgstr "เปลี่ยน ค่า หมวดหมู่ และ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:355
+msgid "Interactively edit category values"
+msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:357
+msgid "Reclassify by size"
+msgstr "Reclassify โดย ขนาด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:358
+msgid "Reclassify interactively"
+msgstr "Reclassify แบบโต้ตอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:359 ../gui/tcltk/gis.m/gmmenu.tcl:490
+msgid "Reclassify using rules file"
+msgstr "Reclassify แบบ ไฟล์กฎเกณท์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:361
+msgid "Recode interactively"
+msgstr "Recode แบบโต้ตอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:362
+msgid "Recode using rules file"
+msgstr "Recode แบบ ไฟล์กฎเกณท์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:364
+msgid "Rescale"
+msgstr "Rescale"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:365
+msgid "Rescale with histogram"
+msgstr "Rescale โดย histogram"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:368
+msgid "Concentric circles"
+msgstr "Concentric circles"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:369 ../gui/tcltk/d.m/menu.tcl:331
+msgid "Generate random cells"
+msgstr "สร้างเซลล์สุ่ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:370
+msgid "Random cells"
+msgstr "เซลล์สุ่ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:371
+msgid "Random cells and vector points"
+msgstr "เซลล์สุ่มและจุดเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:373 ../gui/tcltk/d.m/menu.tcl:334
+msgid "Generate surfaces"
+msgstr "สร้างพื้นผิว"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:374
+msgid "Fractal surface"
+msgstr "พื้นผิว Fractal"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:376
+msgid "Gausian kernal density surface"
+msgstr "พื้นผิวหนาแน่น Gausian kernal "
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:377
+msgid "Gaussian deviates surface"
+msgstr "พื้นผิว Gaussian deviates"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:379
+msgid "Plane"
+msgstr "ระนาบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:381
+msgid "Random deviates surface"
+msgstr "Random deviates surface"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:382
+msgid "Random surface with spatial dependence"
+msgstr "Random surface ด้วย spatial dependence"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:384
+msgid "Contour lines"
+msgstr "เส้นชั้นความสูง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:385 ../gui/tcltk/d.m/menu.tcl:343
+msgid "Interpolate surfaces"
+msgstr "Interpolate surfaces"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:386
+msgid "Bilinear from raster points"
+msgstr "Bilinear จากจุดแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:387
+msgid "Bilinear and bicubic from vector points"
+msgstr "Bilinear และ  bicubic จากจุดแผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:389
+msgid "IDW from raster points"
+msgstr "IDW จากจุดแรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:390
+msgid "IDW from vector points"
+msgstr "IDW จากจุดเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:392
+msgid "Raster contours"
+msgstr "เส้นชั้นความสูงเชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:393
+msgid "Regularized spline tension"
+msgstr "Regularized spline tension"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:395
+msgid "Fill NULL cells"
+msgstr "เติม NULL cells"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:398 ../gui/tcltk/gis.m/gmmenu.tcl:517
+#: ../gui/tcltk/gis.m/gmmenu.tcl:571 ../gui/tcltk/d.m/menu.tcl:354
+#: ../gui/tcltk/d.m/menu.tcl:459 ../gui/tcltk/d.m/menu.tcl:515
+msgid "Reports and statistics"
+msgstr "รายงานและสถิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:399 ../gui/tcltk/d.m/menu.tcl:355
+#: ../gui/tcltk/d.m/menu.tcl:516
+msgid "Report basic file information"
+msgstr "รายงานรายละเอียดทั่วไปของแฟ้มข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:400
+msgid "Report category information"
+msgstr "ข้อมูล รายงานหมวดหมู่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:402 ../gui/tcltk/d.m/menu.tcl:358
+msgid "General statistics"
+msgstr "สถิติทั่วไป"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:403
+msgid "Range of category values"
+msgstr "ช่วงของ ค่าหมวดหมู่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:404
+msgid "Sum cell category values"
+msgstr "ค่าผลรวม หมวดหมู่ cell"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:405 ../gui/tcltk/d.m/menu.tcl:361
+msgid "Sum area by map and category"
+msgstr "รวมพื้นที่โดยแผนที่และหมวด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:406
+msgid "Statistics for clumped cells (works with r.clump)"
+msgstr "Statistics สำหรับ clumped cells (ทำงานกับ r.clump)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:407 ../gui/tcltk/d.m/menu.tcl:363
+msgid "Total surface area corrected for topography"
+msgstr "Surface area corrected สำหรับ topography ทั้งหมด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:408 ../gui/tcltk/d.m/menu.tcl:364
+#: ../gui/tcltk/d.m/menu.tcl:463
+msgid "Univariate statistics"
+msgstr "Univariate statistics"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:410
+msgid "Sample transects"
+msgstr "Sample transects"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:411
+msgid "Sample transects (bearing/distance)"
+msgstr "Sample transects (ทิศทาง/ระยะทาง)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:413 ../gui/tcltk/d.m/menu.tcl:370
+msgid "Covariance/correlation"
+msgstr "Covariance/correlation"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:414
+msgid "Linear regression"
+msgstr "การเสื่อมถอย เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:415
+msgid "Mutual category occurences"
+msgstr "Mutual category occurences"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:418 ../gui/tcltk/d.m/menu.tcl:375
+msgid "&Vector"
+msgstr "เ&วคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:420 ../gui/tcltk/d.m/menu.tcl:377
+msgid "Digitize"
+msgstr "ดิจิไทซ์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:421
+msgid "Edit features"
+msgstr "แก้ไขข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:423
+msgid "Create/rebuild topology: "
+msgstr "สร้าง/สร้างใหม่ topology: "
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:424
+msgid "Clean vector"
+msgstr "Clean แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:426
+msgid "Convert object types"
+msgstr "แปลง ชนิดวัตถุ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:428
+msgid "Add centroids"
+msgstr "เพิ่มจุดศูนย์ถ่วง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:430
+msgid "Build polylines"
+msgstr "สร้าง polyline"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:431
+msgid "Split polylines"
+msgstr "ตัด polyline"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:432
+msgid "Parallel lines"
+msgstr "เส้นขนาน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:434
+msgid "Dissolve boundaries"
+msgstr "ละลาย ขอบเขต"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:436
+msgid "Create 3D vector over raster"
+msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:437
+msgid "Extrude 3D vector"
+msgstr "Extrude แผนที่เชิงเส้น 3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:439
+msgid "Link to OGR"
+msgstr "เชื่อมโยงไป OGR"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:441
+msgid "Create labels"
+msgstr "สร้าง แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:443
+msgid "Reposition vector"
+msgstr "Reposition แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:444
+msgid "Reproject vector"
+msgstr " Reproject แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:446
+msgid "Metadata support"
+msgstr "รองรับ Metadata"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:448
+msgid "Generalization"
+msgstr "สร้าง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:451
+msgid "Query with attributes"
+msgstr "ค้นหาด้วยรายละเอียด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:452
+msgid "Query with coordinate(s)"
+msgstr "ค้นหาด้วยค่าพิกัด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:453
+msgid "Query with another map"
+msgstr "ค้นหาด้วย แผนที่อื่น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:455
+msgid "Buffer vectors"
+msgstr "แผนที่ Buffer"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:456
+msgid "Lidar analysis"
+msgstr "การวิเคราะห์ Lidar"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:457
+msgid "Detect edges"
+msgstr "ค้นหา ขอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:458
+msgid "Detect interiors"
+msgstr "ตรวจจับ ภายใน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:459
+msgid "Correct and reclassify objects"
+msgstr "แก้ไข และ  reclassify วัตถุ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:461
+msgid "Linear referencing"
+msgstr "การอ้างอิงตำแหน่งเชิงเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:462
+msgid "Create LRS"
+msgstr "สร้าง LRS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:463
+msgid "Create stationing"
+msgstr "สร้าง Stationing"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:464
+msgid "Create points/segments"
+msgstr "สร้าง จุด/ชิ้นส่วน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:465
+msgid "Find ID and offset"
+msgstr "ค้นหา  ID และ offset"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:467
+msgid "Nearest features"
+msgstr "ข้อมูลที่ใกล้ที่สุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:468 ../gui/tcltk/d.m/menu.tcl:418
+msgid "Network analysis"
+msgstr "วิเคราะห์โครงข่าย"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:469 ../gui/tcltk/d.m/menu.tcl:419
+msgid "Allocate subnets"
+msgstr "กำหนด subnets"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:470 ../gui/tcltk/d.m/menu.tcl:420
+msgid "Network maintenance"
+msgstr "การบำรุงรักษา Network"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:471
+msgid "Visibility network"
+msgstr "Network ที่มองเห็น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:472 ../gui/tcltk/d.m/menu.tcl:421
+msgid "Shortest route"
+msgstr "เส้นทางสั้นสุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:473
+msgid "Display shortest route"
+msgstr "การแสดง เส้นทาง ที่สั้นที่สุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:478
+msgid "Split net"
+msgstr "ตัด net"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:479 ../gui/tcltk/d.m/menu.tcl:424
+msgid "Steiner tree"
+msgstr "Steiner tree"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:480 ../gui/tcltk/d.m/menu.tcl:425
+msgid "Traveling salesman analysis"
+msgstr "การวิเคราะห์การเดินทางของ Salesman"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:483
+msgid "Overlay"
+msgstr "ซ้อนทับ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:484
+msgid "Patch (combine)"
+msgstr "Patch (รวม)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:487 ../gui/tcltk/d.m/menu.tcl:434
+msgid "Change attributes"
+msgstr "เปลี่ยนข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:488
+msgid "Manage or report categories"
+msgstr "จัดการ หรือ รายงาน หมวดหมู่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:489
+msgid "Reclassify objects interactively"
+msgstr "Reclassify วัตถุ แบบโต้ตอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:493
+msgid "Generate area for current region"
+msgstr "สร้าง Area สำหรับ ขอบเขต ปัจจุบัน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:494 ../gui/tcltk/d.m/menu.tcl:445
+msgid "Generate areas from points"
+msgstr "สร้างพื้นที่จากจุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:495
+msgid "Convex hull"
+msgstr "Convex hull"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:496
+msgid "Delaunay triangles"
+msgstr "Delaunay triangles"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:497
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "Voronoi diagram/Thiessen polygons"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:499
+msgid "Generate grid"
+msgstr "สร้าง กริด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:500 ../gui/tcltk/d.m/menu.tcl:440
+msgid "Generate points"
+msgstr "สร้างจุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:501
+msgid "Generate points from database"
+msgstr "สร้างจุด จากฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:502
+msgid "Generate points along lines"
+msgstr "สร้างจุดตามเส้น"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:503 ../gui/tcltk/d.m/menu.tcl:442
+msgid "Generate random points"
+msgstr "สร้างจุดสุ่ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:504
+msgid "Perturb points"
+msgstr "จุด Perturb"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:507
+msgid "Remove outliers in point sets"
+msgstr "เอา  outliers ใน ชุดของจุด ออก"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:508
+msgid "Test/training sets"
+msgstr "ชุด Test/training"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:510
+msgid "Update area attributes from raster"
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:511
+msgid "Update point attributes from areas"
+msgstr "ปรับปรุง รายละเอียด จุด จาก Areas"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:512
+msgid "Update point attributes from raster"
+msgstr "ปรับปรุง รายละเอียด จุด จากแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:513 ../gui/tcltk/d.m/menu.tcl:452
+msgid "Sample raster map at point locations"
+msgstr "แผนที่เชิงภาพ Sample ที่ตำแหน่งจุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:514 ../gui/tcltk/d.m/menu.tcl:453
+msgid "Sample raster neighborhood around points"
+msgstr "แผนที่เชิงภาพ Sample neighborhood ที่ตำแหน่งรอบๆจุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:518 ../gui/tcltk/gis.m/gmmenu.tcl:588
+#: ../gui/tcltk/d.m/menu.tcl:460
+msgid "Basic information"
+msgstr "ข้อมูลพื้นฐาน"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:520
+msgid "Report topology by category"
+msgstr "รายงาน topology โดยหมวดหมู่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:521
+msgid "Upload or report topology"
+msgstr "อัพโหลด หรือ รายงาน topology"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:523
+msgid "Univariate attribute statistics"
+msgstr "Univariate attribute statistics"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:525
+msgid "Quadrat indices"
+msgstr "ดัชนี Quadrat"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:526
+msgid "Test normality"
+msgstr "ทดสอบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:529 ../gui/tcltk/d.m/menu.tcl:470
+msgid "&Imagery"
+msgstr "&ภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:530 ../gui/tcltk/d.m/menu.tcl:471
+msgid "Develop images and groups"
+msgstr "ปรับปรุง ภาพและกลุ่ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:531
+msgid "Create/edit group"
+msgstr "สร้าง/แก้ไข กลุ่ม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:532
+msgid "Target group"
+msgstr "กลุ่ม เป้าหมาย"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:534
+msgid "Mosaic images"
+msgstr "ต่อภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:536 ../gui/tcltk/d.m/menu.tcl:477
+msgid "Manage image colors"
+msgstr "จัดการสีของภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:537
+msgid "Color balance for RGB"
+msgstr "สี RGB"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:539
+msgid "RGB to HIS"
+msgstr "RGB ถึง HIS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:541 ../gui/tcltk/d.m/menu.tcl:488
+msgid "Ortho photo rectification"
+msgstr "Ortho photo rectification"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:547
+msgid "Brovey sharpening"
+msgstr "Brovey sharpening"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:548 ../gui/tcltk/d.m/menu.tcl:492
+msgid "Classify image"
+msgstr "การจำแนก ภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:549 ../gui/tcltk/d.m/menu.tcl:493
+msgid "Clustering input for unsupervised classification"
+msgstr "Clustering input สำหรับ unsupervised classification"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:551 ../gui/tcltk/d.m/menu.tcl:495
+msgid "Maximum likelyhood classification (MLC)"
+msgstr "Maximum likelyhood classification (MLC)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:552 ../gui/tcltk/d.m/menu.tcl:496
+msgid "Sequential maximum a posteriory classification (SMAP)"
+msgstr "Sequential maximum a posteriory classification (SMAP)"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:554 ../gui/tcltk/d.m/menu.tcl:498
+msgid "Interactive input for supervised classification"
+msgstr "นำเข้าแบบโต้ตอบ สำหรับ  supervised classification"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:555
+msgid "Input for supervised MLC"
+msgstr "นำเข้า supervised MLC"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:556
+msgid "Input for supervised SMAP"
+msgstr "นำเข้า supervised SMAP"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:558 ../gui/tcltk/d.m/menu.tcl:502
+msgid "Filter image"
+msgstr "การกรอง ภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:559
+msgid "Edge detection"
+msgstr "ค้นหาขอบมุม"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:560
+msgid "Matrix/convolving filter"
+msgstr "ตัวกรอง Matrix/convolving"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:562 ../gui/tcltk/d.m/menu.tcl:506
+msgid "Spectral response"
+msgstr "Spectral ที่ตอบสนอง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:563 ../gui/tcltk/d.m/menu.tcl:507
+msgid "Tassled cap vegetation index"
+msgstr "ดัชนี Tassled cap vegetation"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:564 ../gui/tcltk/d.m/menu.tcl:508
+msgid "Transform image"
+msgstr "การแปลง  ภาพ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:565
+msgid "Canonical correlation"
+msgstr "Canonical correlation"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:566
+msgid "Principal components"
+msgstr "ส่วนประกอบหลัก"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:567
+msgid "Fast Fourier"
+msgstr "Fast Fourier"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:568
+msgid "Inverse Fast Fourier"
+msgstr "ส่วนกลับของ  Fast Fourier"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:572
+msgid "Bit pattern comparison"
+msgstr "การเปลี่ยบเทียน รูปแบบ Bit"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:573
+msgid "Kappa analysis"
+msgstr "การวิเคราะห์ Kappa"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:574
+msgid "OIF for LandSat TM"
+msgstr "OIF สำหรับ LandSat TM"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:577
+msgid "&Volumes"
+msgstr "&ปริมาตร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:578 ../gui/tcltk/d.m/menu.tcl:525
+msgid "Develop grid3D volumes"
+msgstr "ปรับปรุง ปริมาตร กริด3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:579 ../gui/tcltk/d.m/menu.tcl:526
+msgid "Manage nulls for grid3D volume"
+msgstr "จัดการ nulls สำหรับ ปริมาตร กริด3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:580 ../gui/tcltk/d.m/menu.tcl:527
+msgid "Manage timestamp for grid3D volume"
+msgstr "จัดการ Timestamp สำหรับ ปริมาตร กริด3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:582
+msgid "3D MASK"
+msgstr "MASK 3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:583
+msgid "3D Map calculator"
+msgstr "ตัวคำนวน แผนที่ 3มิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:584
+msgid "Cross section from volume"
+msgstr "รูปตัดตามขวาง จากปริมาตร"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:586
+msgid "Interpolate volume from vector points"
+msgstr "ค่า Interpolate จากแผนที่เชิงเส้น จุด"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:587 ../gui/tcltk/d.m/menu.tcl:533
+msgid "Report and Statistics"
+msgstr "รายงานและสถิติ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:591 ../gui/tcltk/d.m/menu.tcl:537
+msgid "&Databases"
+msgstr "&ฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:592 ../gui/tcltk/d.m/menu.tcl:547
+msgid "Database information"
+msgstr "ข้อมูลฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:593 ../gui/tcltk/d.m/menu.tcl:548
+msgid "Describe table"
+msgstr "อธิบาย ตาราง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:594 ../gui/tcltk/d.m/menu.tcl:549
+msgid "List columns"
+msgstr "ลิสต์คอลัมน์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:595 ../gui/tcltk/d.m/menu.tcl:550
+msgid "List drivers"
+msgstr "ลิสต์ไดร์เวอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:596 ../gui/tcltk/d.m/menu.tcl:551
+msgid "List tables"
+msgstr "ลิสต์ตาราง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:599 ../gui/tcltk/d.m/menu.tcl:538
+msgid "Manage database"
+msgstr "จัดการ ฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:600 ../gui/tcltk/d.m/menu.tcl:539
+msgid "Connect to database"
+msgstr "เชื่อมต่อฐานช้อมูลง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:601 ../gui/tcltk/d.m/menu.tcl:540
+msgid "Login to database"
+msgstr "ล็อกอินฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:603 ../gui/tcltk/d.m/menu.tcl:542
+msgid "Copy table"
+msgstr "คัดลอกตาราง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:604
+msgid "New table"
+msgstr "ตารางใหม่"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:605
+msgid "Remove table"
+msgstr "เอาตารางออก"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:607
+msgid "Add columns"
+msgstr "เพิ่มตาราง"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:608
+msgid "Change values"
+msgstr "เปลี่ยนค่า"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:609
+msgid "Drop column"
+msgstr "ลบคอลัมน์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:610
+msgid "Rename a column"
+msgstr "เปลี่ยนชื่อคอลัมน์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:612 ../gui/tcltk/d.m/menu.tcl:545
+msgid "Test database"
+msgstr "ทดสอบฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:616
+msgid "Query any table"
+msgstr "ร้องขอข้อมูลจากตารางใดๆ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:617
+msgid "Query vector attribute table"
+msgstr "ร้องขอข้อมูลจากตารางข้อมูลลักษณะของเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:618
+msgid "SQL statement"
+msgstr "ข้อความ SQL"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:620 ../gui/tcltk/d.m/menu.tcl:396
+msgid "Vector<->database connections"
+msgstr "แผนที่เชิงเส้น <-> การเชื่อมต่อฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:621
+msgid "Reconnect vector to database"
+msgstr "พยายามเชื่อมต่อแผนที่เชิงเส้น กับ ฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:622
+msgid "Set vector - database connection"
+msgstr "กำหนด แผนที่เชิงเส้น - การเชื่อมต่อฐานข้อมูล"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:625 ../gui/tcltk/d.m/menu.tcl:559
+msgid "&Help"
+msgstr "&ช่วยเหลือ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:626 ../gui/tcltk/d.m/menu.tcl:560
+msgid "GRASS help"
+msgstr "ช่วยเหลือ GRASS "
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:627 ../gui/tcltk/d.m/menu.tcl:561
+msgid "GIS Manager &help"
+msgstr "ตัวจัดการ GIS ช่วยเหลือ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:627 ../gui/tcltk/d.m/menu.tcl:561
+msgid "GIS Manager help"
+msgstr "ตัวจัดการ GIS ช่วยเหลือ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:628 ../gui/tcltk/d.m/menu.tcl:562
+msgid "About &GRASS"
+msgstr "เกี่ยวกับ &GRASS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:628 ../gui/tcltk/d.m/menu.tcl:562
+msgid "About GRASS"
+msgstr "เกี่ยวกับ GRASS"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:629 ../gui/tcltk/d.m/menu.tcl:563
+msgid "About &System"
+msgstr "เกี่ยวกับ ระบบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:629 ../gui/tcltk/d.m/menu.tcl:563
+msgid "About System"
+msgstr "เกี่ยวกับ ระบบ"
+
+#: ../gui/tcltk/gis.m/gmmenu.tcl:637 ../gui/tcltk/d.m/menu.tcl:571
+msgid "&Xtns"
+msgstr "&Xtns"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:109
+msgid "Ghostscript not available"
+msgstr "ไม่พบ Ghostscript"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:250
+msgid "Postscript and LPR printing of map display"
+msgstr "Postscript และ LPR การพิมพ์ของแผนที่ที่แสดงผล"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:264
+msgid "Preset paper type"
+msgstr "ชนิดขนาดกระดาษที่ตั้งไว้"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:275
+msgid "Custom paper size"
+msgstr "กำหนดขนาดกระดาษเอง"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:276 ../gui/tcltk/d.m/print.tcl:181
+msgid "width:"
+msgstr "กว้าง:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:278
+msgid "  height:"
+msgstr "สูง:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:285
+msgid "Margins  left:"
+msgstr "ขอบซ้าย:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:287
+msgid " right:"
+msgstr "ขวา:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:289
+msgid " top:"
+msgstr "บน:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:291
+msgid " bottom:"
+msgstr "ล่าง:"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:299
+msgid "Resolution (dpi) for printing and PDF "
+msgstr "ความละเอียด (จุดต่อนิ้ว) สำหรับพิมพ์และ PDF"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:317
+msgid "Print on LPR printer"
+msgstr "พิมพ์ด้วยเครื่องพิมพ์ LPR"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:325
+msgid "Print on postscript device* "
+msgstr "พิมพ์ด้วยเครื่องพิมพ์ postscript"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:336
+msgid "Save to PDF file*              "
+msgstr "บันทึกเป็นแฟ้ม PDF"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:339 ../gui/tcltk/gis.m/mapprint.tcl:351
+#: ../gui/tcltk/d.m/print.tcl:212 ../gui/tcltk/d.m/print.tcl:223
+#: ../gui/tcltk/d.m/print.tcl:234 ../gui/tcltk/d.m/print.tcl:261
+msgid "Browse"
+msgstr "แสดง"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:349
+msgid "Save to EPS file               "
+msgstr "บันทึกเป็นแฟ้ม EPS"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:357
+msgid "*requires ghostscript to be installed and in path"
+msgstr "*ต้องการ Ghostscript ที่จะติดตั้งและอยู่ใน Path"
+
+#: ../gui/tcltk/gis.m/mapprint.tcl:365 ../gui/tcltk/d.m/print.tcl:279
+msgid "Print"
+msgstr "พิมพ์"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:49 ../gui/tcltk/gis.m/rules.tcl:35
+msgid "Select input map"
+msgstr "เลือกแผนที่"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:106
+msgid "NVIZ flythrough path"
+msgstr "เส้นทางการบินผ่าน NVIZ"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:122
+msgid "Create flythough path for NVIZ display"
+msgstr "สร้าง เส้นทางการบินผ่าน สำหรับ NVIZ เพื่อแสดง"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:129
+msgid "Raster surface map "
+msgstr "ผิวของ แผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:140
+msgid "Output script file "
+msgstr "Script ไฟล์ ผลลัพธ์"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:151
+msgid "Flythrough path "
+msgstr "เส้นทางการบินผ่าน"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:157
+msgid "Create path with mouse in map display"
+msgstr "สร้าง เส้นทางด้วย เม้าส์ ในแผนที่ที่แสดง"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:160
+msgid "Coordinate pairs for flythrough path (x1,y1,x2,y2,...)"
+msgstr "ค่าพิกัดคู่ สำหรับ เส้นทางการบินผ่าน (x1,y1,x2,y2,...)"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:169
+msgid "Flythrough images prefix "
+msgstr "คำนำหน้า ภาพการบินผ่าน"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:170
+msgid "Prefix for image series created by flythough"
+msgstr "คำนำหน้า สำหรับลำดับของภาพ สร้างโดย การบินผ่าน"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:177
+msgid "Camera layback "
+msgstr "Camera layback "
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:178
+msgid "Camera layback distance (in map units)"
+msgstr "ระยะ Camera layback (ในหน่วยแผนที่)"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:180
+msgid "Camera height "
+msgstr "กล้องสูง"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:181
+msgid "Camera height above terrain"
+msgstr "กล้องสูงเหนือพื้นผิว"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:188
+msgid "Number of frames "
+msgstr "จำนวนแฟรม"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:189
+msgid "Number of frames to create for flythrough"
+msgstr "จำนวนกรอบที่จะสร้างสำหรับ การบินผ่าน"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:191
+msgid "Start frame "
+msgstr "เริ่มแฟรม"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:192
+msgid "Starting frame number..."
+msgstr "เริ่มต้นกรอบที่ ..."
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:199
+msgid "Enable vector rendering"
+msgstr "เปิดการสร้างภาพแผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:201
+msgid "Full render (save images)"
+msgstr "สร้างภาพแบบเต็มรูปแบบ (บันทึกภาพ)"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:203
+msgid "Render images offscreen"
+msgstr "สร้างภาพแบบไม่ต้องแสดงบนหน้าจอ"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:215
+msgid "Height value is elevation"
+msgstr "ค่าสูงคือค่าความสูง"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:217
+msgid "Output keyframe file"
+msgstr "keyframe ไฟล์ผลลัพธ์"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:219 ../gui/tcltk/gis.m/rules.tcl:147
+msgid "Overwrite existing file"
+msgstr "เขียนทับแฟ้มที่มีอยู่"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:224
+msgid "Reset"
+msgstr "ตั้งค่าใหม่"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:226
+msgid "Clear all path coordinates"
+msgstr "ล้างเส้นทางค่าพิกัดทั้งหมด"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:359 ../gui/tcltk/gis.m/rules.tcl:194
+msgid "You must select an input map"
+msgstr "คุณต้องทำการเลือกแผนที่ก่อน"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:360 ../gui/tcltk/gis.m/rules.tcl:194
+msgid "No input map selected"
+msgstr "ไม่มีแผนที่ใดถูกเลือก"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:365
+msgid "You must specify an output file"
+msgstr "คุณต้องทำการระบุแฟ้มส่งออก"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:366
+msgid "No output file specified"
+msgstr "ไม่พบการระบุแฟ้มส่งออก"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:374
+msgid "You must specify at least 4 points (x,y coordinate pairs)"
+msgstr "คุณต้องระบุอย่างน้อย 4 จุด (x,y คู่ค่าพิกัด)"
+
+#: ../gui/tcltk/gis.m/dnviz.tcl:375
+msgid "Insufficient coordinates specified"
+msgstr "ระบุค่าพิกัดไม่พอ"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:140
+msgid "Display grid lines, and geodesic lines or rhumblines"
+msgstr "แสดงเส้น กริด, และ เส้น Geodesic หรือ Rhumblines"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:157
+msgid "Grid options: "
+msgstr "ตัวเลือกกริด "
+
+#: ../gui/tcltk/gis.m/gridline.tcl:158 ../gui/tcltk/d.m/gridline.tcl:77
+msgid "draw grid"
+msgstr "วาดกริด"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:159
+msgid "geodetic grid  "
+msgstr "กริด Geodetic"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:161
+msgid "grid color "
+msgstr "สีกริด"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:166 ../gui/tcltk/d.m/gridline.tcl:85
+msgid "Help for grids"
+msgstr "ช่วยเหลือสำหรับกริด"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:172
+msgid "    grid size (map units)"
+msgstr "ขนาดกริด (หน่วยแผนที่)"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:174
+msgid " grid origin (east, north)"
+msgstr "จุดกำเนิดกริด (ตะวันออก, เหนือ)"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:182
+msgid "draw border text "
+msgstr "วาดขอบข้อความ"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:184
+msgid "text color "
+msgstr "สีข้อความ"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:189
+msgid "text font "
+msgstr "สีอักษร"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:190
+msgid "  text size"
+msgstr "ขนาดอักษร"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:192
+msgid "Grid text size in points"
+msgstr "ขนาด ตัวอักษร กริด ในหน่วย จุด"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:199
+msgid "draw grid border "
+msgstr "วาดขอบกริด"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:201
+msgid "border color "
+msgstr "สีขอบ"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:206
+msgid "Geodesic and rhumblines for latlong locations only"
+msgstr "Geodesic และ Rhumblines สำหรับตำแหน่ง แลต/ลอง เท่านั้น"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:213 ../gui/tcltk/d.m/gridline.tcl:119
+msgid "draw geodesic line"
+msgstr "วาด เส้น Geodesic"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:218 ../gui/tcltk/d.m/gridline.tcl:124
+msgid "Help for geodesic lines"
+msgstr "ช่วยเหลือ geodesic lines"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:219 ../gui/tcltk/gis.m/gridline.tcl:246
+msgid " line color"
+msgstr "สีเส้น"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:223
+msgid " text color"
+msgstr "สีอักษร"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:232 ../gui/tcltk/gis.m/gridline.tcl:255
+msgid "     line endpoints (x1,y1,x2,y2)"
+msgstr "จุดจบเส้น (x1,y1,x2,y2)"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:240 ../gui/tcltk/d.m/gridline.tcl:149
+msgid "draw rhumbline"
+msgstr "วาด Rhumbline"
+
+#: ../gui/tcltk/gis.m/gridline.tcl:245 ../gui/tcltk/d.m/gridline.tcl:154
+msgid "Help for rhumblines"
+msgstr "ช่วยเหลือ rhumblines"
+
+#: ../gui/tcltk/gis.m/legend.tcl:149
+msgid "Raster map for legend"
+msgstr "แผนที่เชิงภาพ สำหรับป้าย"
+
+#: ../gui/tcltk/gis.m/legend.tcl:152
+#, tcl-format
+msgid "legend for %s"
+msgstr "ตัวบรรยายสำหรับ %s"
+
+#: ../gui/tcltk/gis.m/legend.tcl:165
+msgid "Display legend for raster map using cat values and labels"
+msgstr "แสดงป้ายสำหรับ แผนที่เชิงภาพโดยใช้ ค่าcat และ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/legend.tcl:182
+msgid "Raster map: "
+msgstr "แผนที่แรสเตอร์: "
+
+#: ../gui/tcltk/gis.m/legend.tcl:199
+#, tcl-format
+msgid "Legend placement and size as 0-100% of display"
+msgstr "ตำแหน่งป้ายและขนาด แบบ 0-100% สำหรับแสดงผล"
+
+#: ../gui/tcltk/gis.m/legend.tcl:205
+#, tcl-format
+msgid "    x,y of lower left corner (in % from display top left)"
+msgstr "    x,y ของมุมซ้ายล่าง (ใน % จากซ้ายบนของจอ)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:208 ../gui/tcltk/gis.m/barscale.tcl:191
+#: ../gui/tcltk/gis.m/maptext.tcl:150 ../gui/tcltk/gis.m/dtext.tcl:197
+msgid "place with mouse"
+msgstr "กำหนดด้วย เม้าส์"
+
+#: ../gui/tcltk/gis.m/legend.tcl:216
+msgid "    legend height "
+msgstr "ความสูงตัวบรรยาย"
+
+#: ../gui/tcltk/gis.m/legend.tcl:218
+#, tcl-format
+msgid "Legend height (% of display)"
+msgstr "ความสูง สัญลักษณ์ (%  ของจอแสดง)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:219
+msgid "%  width"
+msgstr "%  กว้าง"
+
+#: ../gui/tcltk/gis.m/legend.tcl:221
+#, tcl-format
+msgid "Legend width (% of display)"
+msgstr "ความกว้างตัวบรรยาย (% ชองจอแสดง)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:228
+msgid "Legend appearance: text color"
+msgstr "รูปแบบตัวบรรยาย: สีอักษร "
+
+#: ../gui/tcltk/gis.m/legend.tcl:232
+msgid "  legend text font "
+msgstr "สีอักษรตัวบรรยาย"
+
+#: ../gui/tcltk/gis.m/legend.tcl:243
+msgid "do not display labels"
+msgstr "ไม่แสดงแสดง แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/legend.tcl:245
+msgid "do not display values"
+msgstr "ไม่แสดงแสดงยค่าข้อมูล"
+
+#: ../gui/tcltk/gis.m/legend.tcl:252
+msgid "    number of lines (0=display all):"
+msgstr "จำนวนบรรทัด (0=แสดงทั้งหมด)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:254
+msgid "Lines to display"
+msgstr "จำนวนบรรทัดที่แสดง"
+
+#: ../gui/tcltk/gis.m/legend.tcl:256
+msgid "invert legend"
+msgstr "สลับ ป้าย"
+
+#: ../gui/tcltk/gis.m/legend.tcl:263
+msgid "    interval between categories (integer maps)"
+msgstr "    ช่วงระหว่างหมวดหมู่ (แผนที่ integer)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:265
+msgid "Thinning interval"
+msgstr "ช่วงของการ Thinning"
+
+#: ../gui/tcltk/gis.m/legend.tcl:272
+msgid "draw smooth gradient (fp maps)"
+msgstr "วาด Smooth Gradient (แผนที่ fp)"
+
+#: ../gui/tcltk/gis.m/legend.tcl:274
+msgid "with maximum of"
+msgstr "ด้วยค่ามากสุดของ"
+
+#: ../gui/tcltk/gis.m/legend.tcl:276
+msgid "Maximum lines to display for gradient"
+msgstr "จำนวนเส้นมากสุดที่จะแสดง สำหรับ Gradient"
+
+#: ../gui/tcltk/gis.m/legend.tcl:277 ../gui/tcltk/gis.m/chart.tcl:196
+#: ../gui/tcltk/d.m/chart.tcl:108 ../gui/tcltk/d.m/vector.tcl:229
+msgid "lines"
+msgstr "เส้น"
+
+#: ../gui/tcltk/gis.m/legend.tcl:283
+msgid "Display legend for subset of raster values"
+msgstr "แสดง ป้าย สำหรับ subset ของ ค่าแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/legend.tcl:290
+msgid "skip categories with no labels"
+msgstr "ข้ามหมวดหมู่ที่ไม่ม่ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/legend.tcl:297
+msgid "    legend for only these categories     "
+msgstr "    ป้ายสำหรับ หมวดหมู่เหล่านั้น"
+
+#: ../gui/tcltk/gis.m/legend.tcl:304
+msgid "    legend for only this range of values"
+msgstr "    ป้ายสำหรับ ช่วงของค่า"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:135 ../gui/tcltk/gis.m/maptext.tcl:80
+msgid "Select label font"
+msgstr "เลือกแบบอักษร แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:158
+msgid "Create postscript labels for vector objects from v.labels file"
+msgstr "สร้าง แถบข้อความ Postscript สำหรับ ไฟล์ v.labels"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:165
+msgid "  (for postscript eps, pdf, and print output only)"
+msgstr "  (สำหรับ postscript eps, pdf, และพิมพ์ผลลัพธ์เท่านั้น)"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:184
+msgid "Override offset, alignment, and color settings in v.labels file: "
+msgstr "ยกเลิก ระยะร่น, การวางตัว, และสี ที่กำหนดใน ไฟล์ v.labels: "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:191
+msgid "Align label with vector object: "
+msgstr "วางตัว แถบข้อความ กับ วัตถุเชิงเส้น"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:200
+msgid "Offset label from vector object: "
+msgstr "ระยะร่น แถบข้อความ จากวัตถุเชิงเส้น"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:201
+msgid "x offset"
+msgstr "x ออฟเซต "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:204
+msgid "y offset"
+msgstr "y ออฟเซต "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:212
+msgid "Justification: "
+msgstr "Justification: "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:215
+msgid " Label line max length: "
+msgstr "ความยาวมากสุดของบรรทัดใน แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:222
+msgid "Enclose label in box: "
+msgstr "ติด แถบข้อความ ในกรอบ"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:225
+msgid "Draw label background: "
+msgstr "วาด พื้นหลังของ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:229
+msgid "Background color:"
+msgstr "สีพื้นหลัง:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:236
+msgid "Draw box outline: "
+msgstr "วาดเส้นขอบกล่อง: "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:240
+msgid "Border width:"
+msgstr "ขอบ กว้าง:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:243
+msgid "Border color:"
+msgstr "สีขอบ:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:250
+msgid "Distance between label and enclosing box. Horizontal: "
+msgstr "ระยะห่างระหว่าง แถบข้อความ และกรอบกล่อง แนวนอน:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:253
+msgid " Vertical: "
+msgstr "แนวตั้ง "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:261
+msgid "Font"
+msgstr "แบบอักษร"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:264
+msgid "select font for label"
+msgstr "เลือกแบบอักษรสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:266
+msgid "family:"
+msgstr "family:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:269
+msgid "size:"
+msgstr "ขนาด:"
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:272 ../gui/tcltk/gis.m/maptext.tcl:184
+#: ../gui/tcltk/gis.m/dtext.tcl:228 ../gui/tcltk/d.m/fttext.tcl:149
+msgid "  color"
+msgstr "  สี"
+
+#: ../gui/tcltk/gis.m/raster.tcl:127
+msgid "Raster drape map"
+msgstr "แผนที่เชิงภาพสำหรับ Drape"
+
+#: ../gui/tcltk/gis.m/raster.tcl:161
+msgid "Display raster maps"
+msgstr "แสดงแผนที่แรสเตอร์"
+
+#: ../gui/tcltk/gis.m/raster.tcl:178
+msgid "Base map:\t"
+msgstr "แผนที่ฐาน:\t"
+
+#: ../gui/tcltk/gis.m/raster.tcl:181
+msgid "base raster map to display"
+msgstr "แผนที่ฐานเชิงเส้นที่จะแสดง"
+
+#: ../gui/tcltk/gis.m/raster.tcl:186 ../gui/tcltk/gis.m/raster.tcl:190
+msgid "base map info"
+msgstr "ข้อมูล แผนที่ฐาน"
+
+#: ../gui/tcltk/gis.m/raster.tcl:202
+msgid "\tvalues to display"
+msgstr "\tค่าที่จะแสดง"
+
+#: ../gui/tcltk/gis.m/raster.tcl:209
+msgid "\tOptional color draping. Use base map for shading,"
+msgstr "\tทางเลือก สี ที่จะใช้ Draping. ใช้แผนที่ฐานสำหรับ Shading,,"
+
+#: ../gui/tcltk/gis.m/raster.tcl:214
+msgid "\tdrape map for color in color relief map or data fusion"
+msgstr "\tแผนที่ Drape สำหรับ สี ใน แผนที่ Relief สี หรือ ข้อมูล fusion"
+
+#: ../gui/tcltk/gis.m/raster.tcl:219
+msgid "\tdrape map:  "
+msgstr "\tdrape แผนที่:  "
+
+#: ../gui/tcltk/gis.m/raster.tcl:222
+msgid "raster map to drape over base map"
+msgstr "แผนที่เชิงภาพ ที่จะ Drape บน แผนที่ฐาน"
+
+#: ../gui/tcltk/gis.m/raster.tcl:227 ../gui/tcltk/gis.m/raster.tcl:231
+msgid "drape map info"
+msgstr "ข้อมูล แผนที่ Drape"
+
+#: ../gui/tcltk/gis.m/raster.tcl:237
+msgid "\tdrape map brightness adjustment\t "
+msgstr "\tการปรับความสว่างของ แผนที่ Drape\t "
+
+#: ../gui/tcltk/gis.m/raster.tcl:239
+msgid "Adjust brightness of drape map"
+msgstr "การปรับความสว่างของ แผนที่ Drape"
+
+#: ../gui/tcltk/gis.m/raster.tcl:246 ../gui/tcltk/gis.m/rgbhis.tcl:220
+#: ../gui/tcltk/d.m/raster.tcl:143 ../gui/tcltk/d.m/rgbhis.tcl:147
+msgid "overlay maps from other layers (transparent null value cells)"
+msgstr "ซ้อนทับแผนที่จาก ชั้นข้อมูลอื่น (null value cells กำหนดเป็นแบบโปร่งใส)"
+
+#: ../gui/tcltk/gis.m/raster.tcl:253
+msgid " Set background color (colored null value cells)"
+msgstr "กำหนดสีพื้นหลัง (ให้สีกับ cell ที่มีค่า null)"
+
+#: ../gui/tcltk/gis.m/chart.tcl:111
+msgid "Vector map for chart"
+msgstr "แผนที่เวคเตอร์สำหรับแผนภูมิ:"
+
+#: ../gui/tcltk/gis.m/chart.tcl:114
+#, tcl-format
+msgid "chart for %s"
+msgstr "แผนภูมิสำหรับ %s"
+
+#: ../gui/tcltk/gis.m/chart.tcl:159
+msgid ""
+"Display pie and bar charts of attribute values at vector object locations"
+msgstr "แสดง  pie และ bar charts ของค่ารายละเอียดที่ตำแหน่งวัตถุเชิงเส้น"
+
+#: ../gui/tcltk/gis.m/chart.tcl:176 ../gui/tcltk/d.m/chart.tcl:91
+msgid "Vector map to chart:"
+msgstr "แผนที่เวคเตอร์ เป็นแผนภูมิ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:179
+msgid "vector map to chart"
+msgstr "แผนที่เชิงเส้น ไปเป็น แผนภูมิ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:194 ../gui/tcltk/d.m/chart.tcl:106
+msgid "Vector type:"
+msgstr "ชนิดเวคเตอร์:"
+
+#: ../gui/tcltk/gis.m/chart.tcl:195 ../gui/tcltk/d.m/chart.tcl:107
+#: ../gui/tcltk/d.m/vector.tcl:227
+msgid "points"
+msgstr "จุด"
+
+#: ../gui/tcltk/gis.m/chart.tcl:197 ../gui/tcltk/d.m/chart.tcl:109
+#: ../gui/tcltk/d.m/vector.tcl:231
+msgid "boundaries"
+msgstr "ขอบเขต"
+
+#: ../gui/tcltk/gis.m/chart.tcl:198 ../gui/tcltk/d.m/chart.tcl:110
+#: ../gui/tcltk/d.m/vector.tcl:233
+msgid "centroids"
+msgstr "จุดศูนย์ถ่วง"
+
+#: ../gui/tcltk/gis.m/chart.tcl:199 ../gui/tcltk/d.m/chart.tcl:111
+#: ../gui/tcltk/d.m/vector.tcl:235
+msgid "areas"
+msgstr "อาณาบริเวณ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:205
+msgid "Attributes to chart: attribute layer"
+msgstr "รายละเอียดของ แผนภูมิ: รายละเอียดของ ชั้นข้อมูล"
+
+#: ../gui/tcltk/gis.m/chart.tcl:212
+msgid "     show attribute columns"
+msgstr "แสดงคอลัมน์ข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:218
+msgid "   show attribute data"
+msgstr "แสดงข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:229
+msgid "\tcolumns to chart (col1,col2,...)  "
+msgstr "\tcolumns ที่จะใช้สร้าง แผนภูมิ (col1,col2,...)  "
+
+#: ../gui/tcltk/gis.m/chart.tcl:236
+msgid "\tcolors for columns (clr1,clr2,...)"
+msgstr "\tสีสำหรับ columns (clr1,clr2,...)"
+
+#: ../gui/tcltk/gis.m/chart.tcl:243
+msgid "\tcolumn for variable chart size"
+msgstr "\tcolumn สำหรับตัวแปรขนาดของแผนภูมิ"
+
+#: ../gui/tcltk/gis.m/chart.tcl:245
+msgid "  scale factor"
+msgstr "  ตัวคูณมาตราส่วน"
+
+#: ../gui/tcltk/gis.m/chart.tcl:252 ../gui/tcltk/d.m/chart.tcl:158
+msgid "Chart type:"
+msgstr "ชนิดแผนภูมิ:"
+
+#: ../gui/tcltk/gis.m/chart.tcl:255
+msgid "\tfixed chart size (if size column not used)"
+msgstr "\tกำหนดขนาดแผนภูมิ (ถ้าไม่ใช้ column ขนาด)"
+
+#: ../gui/tcltk/gis.m/chart.tcl:262
+msgid "\tchart outline color:"
+msgstr "\tสี แผนภูมิแบบ outline:"
+
+#: ../gui/tcltk/gis.m/vector.tcl:229
+msgid "Vector output map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/vector.tcl:299
+msgid "Display vector maps"
+msgstr "แสดงแผนที่เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/vector.tcl:310
+msgid "Transparent"
+msgstr "โปร่งแสง"
+
+#: ../gui/tcltk/gis.m/vector.tcl:319
+msgid "vector map to display"
+msgstr "แผนที่เชิงเส้นที่จะแสดง"
+
+#: ../gui/tcltk/gis.m/vector.tcl:324 ../gui/tcltk/gis.m/vector.tcl:328
+msgid "Vector Info"
+msgstr "ข้อมูลเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/vector.tcl:340
+msgid "Display: "
+msgstr "จอแสดง: "
+
+#: ../gui/tcltk/gis.m/vector.tcl:341
+msgid "Shapes "
+msgstr "Shapes "
+
+#: ../gui/tcltk/gis.m/vector.tcl:343
+msgid "Categories "
+msgstr "หมวดหมู่"
+
+#: ../gui/tcltk/gis.m/vector.tcl:345
+msgid "Topology "
+msgstr "Shapes "
+
+#: ../gui/tcltk/gis.m/vector.tcl:347
+msgid "Line directions "
+msgstr "ทิศทางของเส้น"
+
+#: ../gui/tcltk/gis.m/vector.tcl:355
+msgid "Points "
+msgstr "จุด"
+
+#: ../gui/tcltk/gis.m/vector.tcl:357
+msgid "Lines "
+msgstr "เส้น"
+
+#: ../gui/tcltk/gis.m/vector.tcl:359
+msgid "Boundaries "
+msgstr "ขอบเขต"
+
+#: ../gui/tcltk/gis.m/vector.tcl:361
+msgid "Areas "
+msgstr "อาณาบริเวณ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:363
+msgid "Centroids "
+msgstr "จุดกึ่งกลาง (ในพื้นที่)"
+
+#: ../gui/tcltk/gis.m/vector.tcl:365
+msgid "Faces "
+msgstr "Faces "
+
+#: ../gui/tcltk/gis.m/vector.tcl:372
+msgid "Point symbols:"
+msgstr "สัญลักษณ์จุด:"
+
+#: ../gui/tcltk/gis.m/vector.tcl:373
+msgid "Icon"
+msgstr "ไอคอน"
+
+#: ../gui/tcltk/gis.m/vector.tcl:377
+msgid "   Size"
+msgstr "ขนาด"
+
+#: ../gui/tcltk/gis.m/vector.tcl:379
+msgid "Icon size"
+msgstr "ขนาดไอคอน "
+
+#: ../gui/tcltk/gis.m/vector.tcl:385 ../gui/tcltk/d.m/vector.tcl:259
+msgid "Draw lines:"
+msgstr "เขียนเส้น:"
+
+#: ../gui/tcltk/gis.m/vector.tcl:388 ../gui/tcltk/gis.m/vector.tcl:404
+msgid "Color"
+msgstr "สี"
+
+#: ../gui/tcltk/gis.m/vector.tcl:391
+msgid "   Width"
+msgstr "  กว้าง"
+
+#: ../gui/tcltk/gis.m/vector.tcl:393
+msgid "Line width"
+msgstr "เส้นกว้าง"
+
+#: ../gui/tcltk/gis.m/vector.tcl:395
+msgid "(pixels) "
+msgstr "พิกเซล "
+
+#: ../gui/tcltk/gis.m/vector.tcl:401 ../gui/tcltk/d.m/vector.tcl:275
+msgid "Fill areas:"
+msgstr "เติม Areas:"
+
+#: ../gui/tcltk/gis.m/vector.tcl:408
+msgid "Random colors "
+msgstr "สีสุ่ม"
+
+#: ../gui/tcltk/gis.m/vector.tcl:410 ../gui/tcltk/d.m/vector.tcl:284
+msgid "GRASSRGB column colors"
+msgstr "GRASSRGB Column สี"
+
+#: ../gui/tcltk/gis.m/vector.tcl:417 ../gui/tcltk/d.m/vector.tcl:291
+msgid "Label vectors:"
+msgstr "แถบข้อความ เวคเตอร์:"
+
+#: ../gui/tcltk/gis.m/vector.tcl:418 ../gui/tcltk/d.m/vector.tcl:292
+msgid "label"
+msgstr "แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:420
+msgid " Text color"
+msgstr "สีอักษร"
+
+#: ../gui/tcltk/gis.m/vector.tcl:423
+msgid "   Text size"
+msgstr "ขนาดอักษร"
+
+#: ../gui/tcltk/gis.m/vector.tcl:425 ../gui/tcltk/d.m/vector.tcl:299
+msgid "text size"
+msgstr "ขนาดข้อความ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:433
+msgid "Label part to align with vector point"
+msgstr "จัดตำแหน่ง แถบข้อความ ด้วยจุดพิกัด"
+
+#: ../gui/tcltk/gis.m/vector.tcl:437
+msgid "   Justification"
+msgstr "   Justification"
+
+#: ../gui/tcltk/gis.m/vector.tcl:446
+msgid "     Layer for labels"
+msgstr "ชั้นข้อมูลสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:448
+msgid "   Attribute col for labels"
+msgstr "คอลัมน์ข้อมูลลักษณะสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:455
+msgid "Query vectors for display: "
+msgstr "ข้อมูลเชิงเส้นที่ค้นหา สำหรับแสดง: "
+
+#: ../gui/tcltk/gis.m/vector.tcl:456 ../gui/tcltk/d.m/vector.tcl:327
+msgid "layer for query"
+msgstr "ชั้นข้อมูลสำหรับการร้องขอ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:464
+msgid "Query cat values"
+msgstr "ร้องขอข้อมูลจากตารางใดๆ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:475
+msgid "Use SQL query"
+msgstr "การร้องขอ SQL"
+
+#: ../gui/tcltk/gis.m/vector.tcl:483
+msgid "    Show attribute columns"
+msgstr "แสดงคอลัมน์ข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:489
+msgid "      Show attribute data"
+msgstr "แสดงข้อมูลลักษณะ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:501
+msgid "Save displayed objects to new vector file "
+msgstr "ถึง "
+
+#: ../gui/tcltk/gis.m/vector.tcl:503
+msgid "Overwrite existing"
+msgstr "เขียนทับที่มีอยู่"
+
+#: ../gui/tcltk/gis.m/vector.tcl:510
+msgid "     New vector"
+msgstr "เวคเตอร์ใหม่"
+
+#: ../gui/tcltk/gis.m/vector.tcl:514
+msgid "Select existing vector for saving queried objects"
+msgstr "เลือกกลุ่มเวคเตอร์ที่มีอยู่ หรือ สร้างกลุ่มเวคเตอร์ใหม่"
+
+#: ../gui/tcltk/gis.m/vector.tcl:522 ../gui/tcltk/d.m/vector.tcl:376
+msgid "Display when avg. region dimension is"
+msgstr "แสดงเมื่อ มิติของ avg. region คือ"
+
+#: ../gui/tcltk/gis.m/vector.tcl:525
+msgid " or <"
+msgstr "หรือ<"
+
+#: ../gui/tcltk/gis.m/cmd.tcl:115 ../gui/tcltk/d.m/cmd.tcl:52
+msgid "Command:"
+msgstr "คำสั่ง:"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:523
+#, fuzzy
+msgid "Maximum zoom-in reached"
+msgstr "ถึงขนาดการขยายสูงสุด"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:593 ../gui/tcltk/gis.m/mapcanvas.tcl:1136
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1189 ../gui/tcltk/gis.m/georect.tcl:1576
+msgid "Error setting region"
+msgstr "การตั้งค่าขอบเขตผิดพลาด"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:601
+msgid "please wait..."
+msgstr "โปรดรอ..."
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:760 ../gui/tcltk/gis.m/mapcanvas.tcl:1783
+msgid "You have to select map layer first"
+msgstr "คุณต้องทำการเลือกขั้นข้อมูลก่อน"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:761 ../gui/tcltk/gis.m/mapcanvas.tcl:1784
+msgid "No map layer selected"
+msgstr "ไม่มีชั้นข้อมูลถูกเลือก"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:833
+msgid "Save Region"
+msgstr "บันทึก ขอบเขต"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:836
+msgid "Save current display geometry to named region"
+msgstr "บันทึก การแสดงผล Geometry ไปที่ Region ชื่อ"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:842
+msgid "Enter region name"
+msgstr "ใส่ชื่อขอบเขต"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:877
+#, tcl-format
+msgid ""
+"Region file %s already exists. \n"
+"Do you want to overwrite it?"
+msgstr ""
+"พบแฟ้มขอบเขต %s มีอยู่แล้ว\n"
+" คุณต้องการเขียนทับหรือไม่ "
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1061
+#, fuzzy, tcl-format
+msgid "Display: rows=%d columns=%d  resolution=%g %s"
+msgstr "clf'z]: rows=%d cols=%d  N-S res=%g  E-W res=%g"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1064
+#, tcl-format
+msgid "Display: rows=%d cols=%d  N-S res=%g  E-W res=%g"
+msgstr "clf'z]: rows=%d cols=%d  N-S res=%g  E-W res=%g"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1214 ../gui/tcltk/gis.m/georect.tcl:2018
+msgid "Drag or click mouse to zoom"
+msgstr "ลาก หรือ กด เม้าส์ เพิ่อขยาย"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1216 ../gui/tcltk/gis.m/georect.tcl:2020
+msgid "Drag or click mouse to unzoom"
+msgstr "ลาก หรือ กด เม้าส์ เพิ่อไม่ขยาย"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1451 ../gui/tcltk/gis.m/georect.tcl:2218
+msgid "Drag with mouse to pan"
+msgstr "ลาก เม้าส์ เพิ่อเลื่อน"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1578
+msgid "Measurement"
+msgstr "วัดระยะ"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1597
+msgid "Draw measure line with mouse"
+msgstr "วาดเส้นวัดระยะ ด้วย เม้าส์"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1687
+#, tcl-format
+msgid " --segment length = %s\n"
+msgstr ""
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1689
+#, fuzzy, tcl-format
+msgid "cumulative length = %s\n"
+msgstr "Cumulative movement costs"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1754
+msgid "Click to query feature"
+msgstr "กดเพื่อค้นหาข้อมูล"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1822
+msgid "This layer type does not support queries"
+msgstr "ชั้นข้อมูลชนิดนี้ ไม่รองรับการค้นหา"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1823
+msgid "Query not supported"
+msgstr "การร้องขอข้อมูลไม่สนับสนุน"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1830
+msgid "You must select a map to query\n"
+msgstr "คุณต้องทำการเลือกชั้นข้อมูลเพื่อร้องขอข้อมูล\n"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:153
+msgid "Display scale and north arrow"
+msgstr "แสดง มาตราส่วนและ ทิศเหนือลูกศร"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:170
+#, tcl-format
+msgid "Scale placement: 0-100% from top left of display"
+msgstr "ตำแหน่งมาตราส่วน: 0-100% จาก ซ้ายบน ของจอแสดงผล"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:176
+msgid "\t enter x,y of scale/arrow upper left corner"
+msgstr "\t ใส่ x,y ของ มาตราส่วน/ลูกศร มุมซ้ายบน"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:179
+msgid "    "
+msgstr "    "
+
+#: ../gui/tcltk/gis.m/barscale.tcl:190
+msgid "\t "
+msgstr "\t "
+
+#: ../gui/tcltk/gis.m/barscale.tcl:199
+msgid "Scale appearance:  text color"
+msgstr "การปรากฎของมาตราส่วน:  สีของตัวอักษร"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:201
+msgid "  font "
+msgstr "แบบอักษร"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:211
+msgid "\tbackground color "
+msgstr "สีพื้นหลัง"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:214 ../gui/tcltk/gis.m/histogram.tcl:189
+msgid "transparent background"
+msgstr "พื้นหลังโปร่งแสง"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:222
+msgid "display N. arrow only"
+msgstr "แสดงลูกศรบอกทิศเท่านั้น"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:224 ../gui/tcltk/d.m/barscale.tcl:94
+msgid "display scale only"
+msgstr "แสดง มาตราส่วน เท่านั้น"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:232 ../gui/tcltk/d.m/barscale.tcl:103
+msgid "text on top of scale, instead of to right"
+msgstr "วางตัวหนังสือข้างบนมาตราส่วน,แทนที่จะวางด้านขวา"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:240
+msgid "line scale instead of bar"
+msgstr "มาตราส่วนแบบเส้น แทนแบบแท่ง"
+
+#: ../gui/tcltk/gis.m/barscale.tcl:242 ../gui/tcltk/d.m/barscale.tcl:110
+msgid "use feet/miles instead of meters"
+msgstr "ใช้หน่วย ฟุต/ไมล์ แทนหน่วย เมตร"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:104
+msgid "Raster map for red or hue channel"
+msgstr "แผนที่เชิงภาพสำหรับ Red หรือ Hue channel"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:107
+#, tcl-format
+msgid "RGB-HIS %s"
+msgstr "RGB-HIS %s"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:114
+msgid "Raster map for green or intensity channel"
+msgstr "แผนที่เชิงภาพสำหรับ Green หรือ Intensity channel"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:122
+msgid "Raster map for blue or saturation channel"
+msgstr "แผนที่เชิงภาพสำหรับ Blue หรือ Saturation channel"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:136
+msgid ""
+"Display 3 raster maps as Red/Green/Blue or Hue/Intensity/Saturation channels"
+msgstr ""
+"แสดง 3 แผนที่เชิงภาพ แบบ Red/Green/Blue หรือ Hue/Intensity/Saturation channels"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:155 ../gui/tcltk/d.m/rgbhis.tcl:128
+msgid "display maps as RGB"
+msgstr "แสดงแผนที่ในแบบ RGB"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:160 ../gui/tcltk/d.m/rgbhis.tcl:134
+msgid "Help for RGB"
+msgstr "ช่วยเหลือ สำหรับ RGB"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:164 ../gui/tcltk/d.m/rgbhis.tcl:135
+msgid "display maps as HIS"
+msgstr "แสดงแผนที่ในแบบ HIS"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:169 ../gui/tcltk/d.m/rgbhis.tcl:141
+msgid "Help for HIS"
+msgstr "ช่วยเหลือ HIS"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:175
+msgid "red (RGB) or hue (HIS): "
+msgstr "red (RGB) หรือ hue (HIS): "
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:178
+msgid "raster map for red or hue channel (HIS drape)"
+msgstr "แผนที่แรสเตอร์สำหรับ red หรือ hue channel (HIS drape)"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:187
+msgid "green (RGB) or intensity (HIS): "
+msgstr "green (RGB) หรือ intensity (HIS):  "
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:190
+msgid "raster map for green or intensity channel (HIS relief)"
+msgstr "แผนที่แรสเตอร์สำหรับ green or intensity channel (HIS relief)"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:199
+msgid "blue (RGB) or saturation (HIS): "
+msgstr "blue (RGB) หรือ saturation (HIS): "
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:202
+msgid "raster map for blue or saturation channel"
+msgstr "แผนที่แรสเตอร์สำหรับ blue or saturation channel"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:211
+msgid "HIS brightness adjustment\t "
+msgstr "ปรับแต่งค่าความสว่าง HIS"
+
+#: ../gui/tcltk/gis.m/rgbhis.tcl:213
+msgid "Adjusts the HIS intensity channel brightness"
+msgstr "ปรับความสว่าง  HIS intensity channel"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:126
+msgid ""
+"Create postscript text object (for postscript eps, pdf, and print output "
+"only)"
+msgstr "สร้างวัตถุข้อความ postscript (สำหรับ postscript eps, pdf และพิมพ์ส่งออกเท่านั้น)"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:133
+msgid "Text to display:"
+msgstr "ตัวอักษรที่จะแสดง:"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:140 ../gui/tcltk/gis.m/dtext.tcl:188
+msgid "Text placement: x,y coordinates (from upper left) "
+msgstr "ตำแหน่งข้อความ: x,y พิกัด (จาก บนซ้าย)"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:147 ../gui/tcltk/gis.m/dtext.tcl:194
+msgid "     coordinate type for text placement "
+msgstr "ชนิดพิกัดสำหรับตำแหน่งข้อความ"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:158 ../gui/tcltk/gis.m/dtext.tcl:205
+msgid "     align text with coordinate point  "
+msgstr "จัดวางข้อความด้วยจุดพิกัด"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:167
+msgid "     justification"
+msgstr "     justification"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:170
+msgid "  line width"
+msgstr "ความกว้างเส้น"
+
+#: ../gui/tcltk/gis.m/maptext.tcl:177 ../gui/tcltk/d.m/fttext.tcl:144
+msgid "Font:"
+msgstr "แบบอักษร:"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:159
+msgid "Display text"
+msgstr "แสดงข้อความ"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:176
+msgid "Text to display: "
+msgstr "ตัวหนังสือที่จะแสดง: "
+
+#: ../gui/tcltk/gis.m/dtext.tcl:214
+msgid "     text rotation (degrees)"
+msgstr "หมุนข้อความ (องศา)"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:223
+msgid "Text options: font "
+msgstr "ตัวเลือกข้อความ: สี"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:230 ../gui/tcltk/d.m/fttext.tcl:151
+#: ../gui/tcltk/d.m/dtext.tcl:106
+msgid "bold text"
+msgstr "ตัวหนา"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:237
+msgid "     text height in pixels "
+msgstr "ความสูงข้อความในหน่วยจุดภาพ"
+
+#: ../gui/tcltk/gis.m/dtext.tcl:239
+msgid "  line spacing"
+msgstr "  ช่องว่างระหว่างบรรทัด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:282
+msgid ""
+"There is no raster group file (REF). You must select the 'create/edit group' "
+"option to create a group file."
+msgstr ""
+"ไม่มีกลุ่มของไฟล์ แผนที่เชิงภาพ(REF). คุณต้องเลือกเงื่อนไข  'สร้าง/แก้ไข กลุ่ม' เพื่อสร้าง "
+"กลุ่มไฟล์."
+
+#: ../gui/tcltk/gis.m/georect.tcl:304
+msgid ""
+"There is no vector group file (VREF). You must select the 'create/edit "
+"group' option to create a group file."
+msgstr ""
+"ไม่มีกลุ่มของไฟล์ แผนที่เชิงเส้น(VREF). คุณต้องเลือกเงื่อนไข  'สร้าง/แก้ไข กลุ่ม' เพื่อสร้าง "
+"กลุ่มไฟล์."
+
+#: ../gui/tcltk/gis.m/georect.tcl:385
+msgid "Select mapset of raster to georectify"
+msgstr "เลือก ชุดแผนที่เชิงภาพ เพื่อ ทำ georectify"
+
+#: ../gui/tcltk/gis.m/georect.tcl:433
+msgid "Create a group REF file and directory for vectors"
+msgstr "สร้างกลุ่ม REF ไฟล์ และ directory สำหรับ แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/georect.tcl:446
+msgid "Create/replace vector group"
+msgstr "สร้าง/แทนที่กลุ่มเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/georect.tcl:472
+msgid "group name"
+msgstr "ชื่อกลุ่ม "
+
+#: ../gui/tcltk/gis.m/georect.tcl:474
+msgid "Select existing vector group or name new group"
+msgstr "เลือกกลุ่มเวคเตอร์ที่มีอยู่ หรือ สร้างกลุ่มเวคเตอร์ใหม่"
+
+#: ../gui/tcltk/gis.m/georect.tcl:484
+msgid "vector"
+msgstr "เวคเตอร์"
+
+#: ../gui/tcltk/gis.m/georect.tcl:486
+msgid "Select xy vector(s) for group"
+msgstr "เลือก  xy เชิงเส้น  สำหรับกลุ่ม"
+
+#: ../gui/tcltk/gis.m/georect.tcl:496
+msgid "Vector group"
+msgstr "กลุ่มเวคเตอร์"
+
+#: ../gui/tcltk/gis.m/georect.tcl:613
+msgid "GRASS Georectifier"
+msgstr "GRASS Georectifier"
+
+#: ../gui/tcltk/gis.m/georect.tcl:624
+msgid "Set up environment for georectifying rasters or vectors"
+msgstr "กำหนดสภาวะแวดล้อม สำหรับ แผนที่เชิงภาพ  georectifying หรือ แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/gis.m/georect.tcl:633
+msgid "Georeference raster"
+msgstr "ข้อมูลแรสเตอร์อ้างอิงพิกัด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:637
+msgid "Georeference vector"
+msgstr "ข้อมูลเวคเตอร์อ้างอิงพิกัด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:644
+msgid "1. Select mapset"
+msgstr "1. เลือก mapset"
+
+#: ../gui/tcltk/gis.m/georect.tcl:646
+msgid "Mapset of xy raster group"
+msgstr "Mapset ของ xy กลุ่มแรสเตอร์"
+
+#: ../gui/tcltk/gis.m/georect.tcl:656
+msgid "2. Create/edit group"
+msgstr "2.สร้าง/แก้ไขกลุ่ม"
+
+#: ../gui/tcltk/gis.m/georect.tcl:658
+msgid "Create/edit group (rasters or vectors to georectify)"
+msgstr "สร้าง/แก้ไข กลุ่ม (เชิงภาพ หรือ เชิงเส้น ไปเป็น georectify)"
+
+#: ../gui/tcltk/gis.m/georect.tcl:666
+msgid "3. Select group"
+msgstr "3. เลือกกลุ่ม"
+
+#: ../gui/tcltk/gis.m/georect.tcl:668
+msgid "Select existing group to georectify"
+msgstr "เลือกกลุ่มที่มีอยู่แล้ว ที่จะทำ georectify"
+
+#: ../gui/tcltk/gis.m/georect.tcl:678
+msgid "4. Select map"
+msgstr "4. เลือกแผนที่"
+
+#: ../gui/tcltk/gis.m/georect.tcl:680
+msgid ""
+"Select non-georectified raster or vector to display for marking ground "
+"control points"
+msgstr ""
+"เลือก  non-georectified เชิงภาพ หรือ เชิงเส้น เพื่อแสดง สำหรับ หมาย จุดควบคุมภาคพื้นดิน"
+
+#: ../gui/tcltk/gis.m/georect.tcl:690
+msgid "5. Start georectifying"
+msgstr "5. เริ่ม georectifying"
+
+#: ../gui/tcltk/gis.m/georect.tcl:692
+msgid "Start georectifying"
+msgstr "เริ่ม georectifying"
+
+#: ../gui/tcltk/gis.m/georect.tcl:702
+msgid "Cancel georectification"
+msgstr "ยกเลิก  georectification"
+
+#: ../gui/tcltk/gis.m/georect.tcl:799
+msgid "Displaying xy map to be georectified"
+msgstr "กำลังแสดงแผนที่ xy ที่จะ georectified"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1006
+msgid "Select rectification method for rasters"
+msgstr "เลือกวิธี rectification สำหรับแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1009
+msgid "1st order"
+msgstr "ลำดับที่ 1"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1010
+msgid "affine transformation  (rasters & vectors). Requires 3+ GCPs."
+msgstr "Affine Transformation  (เชิงภาพ & เชิงเส้น). ต้องการ GCP 3 จุดขึ้นไป."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1015
+msgid "2nd order"
+msgstr "ลำดับที่ 2"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1016
+msgid "polynomial transformation  (rasters only). Requires 6+ GCPs."
+msgstr "Polynomial Transformation  (เชิงภาพเท่านั้น). ต้องการ GCP 6 จุดขึ้นไป."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1020
+msgid "3rd order"
+msgstr "ลำดับที่ 3"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1021
+msgid "polynomial transformation  (rasters only). Requires 10+ GCPs."
+msgstr "Polynomial Transformation  (เชิงภาพเท่านั้น). ต้องการ GCP 10 จุดขึ้นไป."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1028
+msgid "Use"
+msgstr "ใช้"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1030
+msgid "xy coordinates"
+msgstr " พิกัด xy"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1032
+msgid "geographic coordinates"
+msgstr " ค่าพิกัด Geographic"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1034
+msgid "forward error"
+msgstr "ไปข้างหน้า ผิดพลาด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1036
+msgid "backward error"
+msgstr "ไปข้างหลัง ผิดพลาด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1077
+msgid "Manage ground control points (GCPs)"
+msgstr "จัดการ จุดควบคุมภาคพื้นดิน (GCPs)"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1102
+msgid "Save GCPs to POINTS file"
+msgstr "บันทึก GCPs เป็นแฟ้มข้อมูลจุด"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1109
+msgid "Clear all unchecked GCP entries"
+msgstr "ลบ GCP ทั้งหมดที่ไม่ได้เลือก"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1116
+msgid "Calculate RMS error"
+msgstr "คำนวณค่าความผิดพลาด RMS"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1123
+msgid "Rectify maps in group"
+msgstr "Rectify แผนที่ในกลุ่ม"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1126
+msgid "Quit"
+msgstr "ออก"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1130
+msgid "Exit georectifier"
+msgstr "ออกจาก Georectifier"
+
+#: ../gui/tcltk/gis.m/georect.tcl:1313
+msgid ""
+"There is no POINTS file of ground control points for group. You must create "
+"ground control points before georectifying map."
+msgstr ""
+"ไม่มีไฟล์ POINTS ของ จุดควบคุมภาคพื้นดิน สำหรับ กลุ่ม. คุณต้องสร้าง จุดควบคุมภาคพื้นดิน "
+"ก่อนที่จะทำ  georectifying แผนที่."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1343
+msgid ""
+"Insufficient ground control points for georectification method. You need at "
+"least 3 points for 1st order, 6 points for 2nd order and 10 points for 3rd "
+"order."
+msgstr ""
+"จุดควบคุมภาคพื้นดิน ไม่พอสำหรับวิธี georectification. ต้องการ 3 จุดสำหรับ 1st order, 6 "
+"จุดสำหรับ  2nd orderและ 10 สำหรับ 3rd order."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1373
+msgid ""
+"No valid ground control points in GCP file. You must create valid ground "
+"control points before georectifying map."
+msgstr ""
+"ไม่มี จุดควบคุมภาคพื้นดิน ใน GCP ไฟล์. คุณต้องสร้าง จุดควบคุมภาคพื้นดิน ก่อน georectifying "
+"แผนที่."
+
+#: ../gui/tcltk/gis.m/georect.tcl:1585
+msgid "Please wait..."
+msgstr "โปรดรอ..."
+
+#: ../gui/tcltk/gis.m/rules.tcl:97
+msgid "Interactive rules entry"
+msgstr "ใส่  rules แบบโต้ตอบ"
+
+#: ../gui/tcltk/gis.m/rules.tcl:199
+msgid "You must specify an output map"
+msgstr "คุณต้องทำการระบุแผนที่ปลายทาง"
+
+#: ../gui/tcltk/gis.m/rules.tcl:199
+msgid "No output map specified"
+msgstr "ไม่พบการระบุแผนที่ปลายทาง"
+
+#: ../gui/tcltk/gis.m/rules.tcl:221
+msgid "Error creating rules file"
+msgstr "ผิดพลาดการสร้างแฟ้มข้อกำหนด"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:107
+msgid "Raster map for histogram"
+msgstr "แผนที่เชิงภาพสำหรับ  Histogram"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:110
+#, tcl-format
+msgid "histogram of %s"
+msgstr "Histogram ของ  %s"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:138
+msgid "Draw histogram of values from raster map or image"
+msgstr "วาด Histogram ของ ค่าจากแผนที่เชิงภาพ หรือภาพ"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:155
+msgid "Raster to histogram: "
+msgstr "แผนที่เชิงภาพ ไปเป็น Histogram: "
+
+#: ../gui/tcltk/gis.m/histogram.tcl:171
+msgid "Graph style"
+msgstr "รูปแบบแผนภุมิ"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:174
+msgid "\ttext font "
+msgstr "สีอักษร"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:184
+msgid "Histogram color: text & frame"
+msgstr "สี Histogram: ตัวอักษร & กรอบ"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:186
+msgid "  background"
+msgstr "พื้นหลัง"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:196
+msgid "Steps/bins for values (fp maps only)"
+msgstr "ขั้น/bins สำหรับค่า (แผนที่  fp เท่านั้น)"
+
+#: ../gui/tcltk/gis.m/histogram.tcl:200
+msgid "include null values"
+msgstr "รวมค่า null "
+
+#: ../gui/tcltk/gis.m/histogram.tcl:263
+msgid "r.info error"
+msgstr "ข้อผิดพลาด r.info "
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:79 ../gui/tcltk/gis.m/gmlib.tcl:108
+msgid "Map Resource File"
+msgstr "แผนที่ Resource ไฟล์"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:80 ../gui/tcltk/gis.m/gmlib.tcl:110
+msgid "All Files"
+msgstr "ทุกแฟ้ม"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:84
+msgid "Open File"
+msgstr "เปิดแฟ้ม"
+
+#: ../gui/tcltk/gis.m/gmlib.tcl:109
+msgid "DM Resource File"
+msgstr "DM ทรัพยากร แฟ้ม"
+
+#: ../gui/tcltk/d.m/thematic.tcl:156 ../gui/tcltk/d.m/vector.tcl:354
+msgid "     show data"
+msgstr "     แสดงข้อมูล"
+
+#: ../gui/tcltk/d.m/thematic.tcl:230
+msgid "Graduate colors: preset color schemes"
+msgstr "Graduate colors: กำหนดแบบสีไว้ก่อน"
+
+#: ../gui/tcltk/d.m/thematic.tcl:258
+msgid "create graphic legend"
+msgstr "สร้างสัญลักษณ์ แบบ graphic"
+
+#: ../gui/tcltk/d.m/thematic.tcl:267
+msgid "    select monitor for legend"
+msgstr "    เลือกจอแสดงผล สำหรับ สัญลักษณ์"
+
+#: ../gui/tcltk/d.m/labels.tcl:65
+msgid "Labels name:"
+msgstr " ชื่อ แถบข้อความ:"
+
+#: ../gui/tcltk/d.m/frames.tcl:64
+msgid "remove all frames"
+msgstr "ลบกรอบทั้งหมด"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:33
+msgid "x0"
+msgstr "x0"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:35
+msgid "Start/select display monitor x0"
+msgstr "เริ่ม/เลือกหน้าจอ x0"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:38
+msgid "x1"
+msgstr "x1"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:40
+msgid "Start/select display monitor x1"
+msgstr "เริ่ม/เลือกหน้าจอ x1"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:43
+msgid "x2"
+msgstr "x2"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:45
+msgid "Start/select display monitor x2"
+msgstr "เริ่ม/เลือกหน้าจอ x2"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:48
+msgid "x3"
+msgstr "x3"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:50
+msgid "Start/select display monitor x3"
+msgstr "เริ่ม/เลือกหน้าจอ x3"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:53
+msgid "x4"
+msgstr "x4"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:55
+msgid "Start/select display monitor x4"
+msgstr "เริ่ม/เลือกหน้าจอ x4"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:58
+msgid "x5"
+msgstr "x5"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:60
+msgid "Start/select display monitor x5"
+msgstr "เริ่ม/เลือกหน้าจอ x5"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:63
+msgid "x6"
+msgstr "x6"
+
+#: ../gui/tcltk/d.m/monitorsel.tcl:65
+msgid "Start/select display monitor x6"
+msgstr "เริ่ม/เลือกหน้าจอ x6"
+
+#: ../gui/tcltk/d.m/gridline.tcl:78
+msgid "geodetic grid"
+msgstr "Geodetic กริด"
+
+#: ../gui/tcltk/d.m/gridline.tcl:80
+msgid " grid color "
+msgstr "สีกริด"
+
+#: ../gui/tcltk/d.m/gridline.tcl:86
+msgid " grid color"
+msgstr "สีกริด"
+
+#: ../gui/tcltk/d.m/gridline.tcl:92
+msgid "     "
+msgstr "   "
+
+#: ../gui/tcltk/d.m/gridline.tcl:93
+msgid "draw grid border"
+msgstr "วาดขอบกริด"
+
+#: ../gui/tcltk/d.m/gridline.tcl:94
+msgid "draw border text"
+msgstr "วาดกรอบข้อความ"
+
+#: ../gui/tcltk/d.m/gridline.tcl:95
+msgid " border & text color"
+msgstr "สีขอบและข้อความ"
+
+#: ../gui/tcltk/d.m/legend.tcl:81
+msgid "Raster map for legend:"
+msgstr "แผนที่แรสเตอร์สำหรับตัวบรรยาย:"
+
+#: ../gui/tcltk/d.m/legend.tcl:96
+msgid "Display legend in monitor: "
+msgstr "แสดงตัวบรรยายในหน้าจอ "
+
+#: ../gui/tcltk/d.m/legend.tcl:99
+msgid " erase monitor before drawing legend"
+msgstr "ลบหน้าจอก่อนวาดตัวบรรยาย"
+
+#: ../gui/tcltk/d.m/legend.tcl:106 ../gui/tcltk/d.m/barscale.tcl:67
+msgid "Text color: "
+msgstr "สีตัวอักษร"
+
+#: ../gui/tcltk/d.m/legend.tcl:164
+msgid "do not show cat labels"
+msgstr "ไม่ได้แสดง แถบข้อความ cat"
+
+#: ../gui/tcltk/d.m/legend.tcl:166
+msgid "do not show cat numbers"
+msgstr "ไม่ได้แสดง ตัวเลข cat"
+
+#: ../gui/tcltk/d.m/legend.tcl:173
+msgid "skip cats with no labels"
+msgstr "ข้าม cat และไม่มีแสดง แถบข้อความ"
+
+#: ../gui/tcltk/d.m/legend.tcl:175
+msgid "draw smooth gradient"
+msgstr "วาด smooth gradient"
+
+#: ../gui/tcltk/d.m/legend.tcl:177
+msgid "flip legend"
+msgstr "หมุนตัวบรรยาย"
+
+#: ../gui/tcltk/d.m/legend.tcl:185 ../gui/tcltk/d.m/barscale.tcl:118
+msgid "place with mouse (cannot save placement with group)"
+msgstr "ระบุตำแหน่งด้วย เม้าส์  (ไม่สามารถบันทึกตำแหน่งกับกลุ่ม)"
+
+#: ../gui/tcltk/d.m/raster.tcl:85
+msgid "Raster name:"
+msgstr "ชื่อแรสเตอร์:"
+
+#: ../gui/tcltk/d.m/raster.tcl:108
+msgid "show legend in selected display monitor"
+msgstr "แสดงป้ายใน จอแสดงผลที่เลือก"
+
+#: ../gui/tcltk/d.m/raster.tcl:111 ../gui/tcltk/d.m/raster.tcl:136
+msgid " thin legend by "
+msgstr "ทำให้ ป้าย บางลง ด้วย"
+
+#: ../gui/tcltk/d.m/raster.tcl:118
+msgid "Raster to drape over 1st map:"
+msgstr "แผนที่เชิงภาพ ที่จะ  drape เหนือแผนที่แรก:"
+
+#: ../gui/tcltk/d.m/raster.tcl:132
+msgid "show legend for drape map in monitor"
+msgstr "แสดง ป้ายสำหรับ drape แผนที่ในจอแสดงผล"
+
+#: ../gui/tcltk/d.m/chart.tcl:120
+msgid "  show attribute columns"
+msgstr "แสดงคอลัมน์ข้อมูลรายละเอียด"
+
+#: ../gui/tcltk/d.m/chart.tcl:169
+msgid "    chart outline color:"
+msgstr "สีเส้นขอบแผนภูมิ:"
+
+#: ../gui/tcltk/d.m/menu.tcl:76
+msgid "Import"
+msgstr "นำเข้า"
+
+#: ../gui/tcltk/d.m/menu.tcl:80
+msgid "Aggregate ASCII xyz data into raster grid"
+msgstr "แปลงข้อมูล ASCII xyz เป็นกริดแรสเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:81
+msgid "ASCII GRID (includes GRASS ASCII)"
+msgstr "กริด ASCII (รวมทั้ง GRASS ASCII)"
+
+#: ../gui/tcltk/d.m/menu.tcl:82
+msgid "Polygons and lines from ASCII file"
+msgstr "รูปหลายเหลี่ยม และเส้นจากแฟ้ม ASCII"
+
+#: ../gui/tcltk/d.m/menu.tcl:84
+msgid "Binary file (includes GTOPO30 format)"
+msgstr "แฟ้ม Binary file (รวมทั้งช้อมูล GTOPO30 )"
+
+#: ../gui/tcltk/d.m/menu.tcl:85
+msgid "ESRI Arc/Info ASCII grid"
+msgstr "ข้อมูลกริด ESRI Arc/Info ASCII"
+
+#: ../gui/tcltk/d.m/menu.tcl:86 ../gui/tcltk/d.m/menu.tcl:120
+msgid "GRIDATB.FOR map file (TOPMODEL)"
+msgstr "GRIDATB สำหรับไฟล์แผนที่ (TOPMODEL)"
+
+#: ../gui/tcltk/d.m/menu.tcl:87 ../gui/tcltk/d.m/menu.tcl:121
+msgid "MAT-File (v.4) array (Matlab or Octave)"
+msgstr "MAT-File (v.4) array (Matlab or Octave)"
+
+#: ../gui/tcltk/d.m/menu.tcl:88
+msgid "SPOT vegetation NDVI data sets"
+msgstr "ข้อมูล SPOT vegetation NDVI"
+
+#: ../gui/tcltk/d.m/menu.tcl:89
+msgid "SRTM hgt files"
+msgstr "แฟ้มข้อมูล SRTM hgt"
+
+#: ../gui/tcltk/d.m/menu.tcl:90
+msgid "Terra ASTER HDF files"
+msgstr "แฟ้มข้อมูลTerra ASTER HDF"
+
+#: ../gui/tcltk/d.m/menu.tcl:95
+msgid "Various formats using OGR"
+msgstr "ชนิดอื่นด้วย OGR"
+
+#: ../gui/tcltk/d.m/menu.tcl:97
+msgid "ASCII points file or GRASS ASCII vector file"
+msgstr "แฟ้มข้อมูลจุด ASCII หรือแฟ้มข้อมูลเวคเตอร์ GRASS ASCII"
+
+#: ../gui/tcltk/d.m/menu.tcl:98
+msgid "Import old GRASS vector format"
+msgstr "นำเข้าข้อมูลเวคเตอร์เก่าของ GRASS "
+
+#: ../gui/tcltk/d.m/menu.tcl:100
+msgid "DXF file"
+msgstr "แฟ้มข้อมูล DXF:"
+
+#: ../gui/tcltk/d.m/menu.tcl:101
+msgid "ESRI e00 format"
+msgstr "ข้อมูลชนิด ESRI e00"
+
+#: ../gui/tcltk/d.m/menu.tcl:102
+msgid "Garmin GPS Waypoints/Routes/Tracks"
+msgstr "Garmin GPS Waypoints/Routes/Tracks"
+
+#: ../gui/tcltk/d.m/menu.tcl:103
+msgid "GPS Waypoints/Routes/Tracks using GPSBabel"
+msgstr "GPS Waypoints/Routes/Tracks ใช้ GPSBabel"
+
+#: ../gui/tcltk/d.m/menu.tcl:104
+msgid "GEOnet Name server country files (US-NGA GNS)"
+msgstr "ชื่อของ GEOnet server country ไฟล์ (US-NGA GNS)"
+
+#: ../gui/tcltk/d.m/menu.tcl:105
+msgid "Matlab and MapGen files"
+msgstr "Matlab และ MapGen ไฟล์"
+
+#: ../gui/tcltk/d.m/menu.tcl:107 ../gui/tcltk/d.m/menu.tcl:142
+msgid "Grid 3D"
+msgstr "กริด 3D"
+
+#: ../gui/tcltk/d.m/menu.tcl:108 ../gui/tcltk/d.m/menu.tcl:143
+msgid "ASCII 3D file"
+msgstr "แฟ้มข้อมูล ASCII 3D"
+
+#: ../gui/tcltk/d.m/menu.tcl:109 ../gui/tcltk/d.m/menu.tcl:144
+msgid "Vis5D file"
+msgstr "แฟ้มข้อมูล Vis5D"
+
+#: ../gui/tcltk/d.m/menu.tcl:112
+msgid "Export"
+msgstr "ส่งออก"
+
+#: ../gui/tcltk/d.m/menu.tcl:116
+msgid "ASCII grid (for GRASS, Surfer, Modflow, etc)"
+msgstr "กริด ASCII (สำหรับ GRASS, Surfer, Modflow,อื่นๆ )"
+
+#: ../gui/tcltk/d.m/menu.tcl:117
+msgid "ASCII x,y,z values of cell centers"
+msgstr "ASCII x,y,z ค่าของ cell centers"
+
+#: ../gui/tcltk/d.m/menu.tcl:119
+msgid "ESRI ARC/INFO ASCII grid"
+msgstr "กริด ESRI ARC/INFO ASCII"
+
+#: ../gui/tcltk/d.m/menu.tcl:123
+msgid "Binary file"
+msgstr "แฟ้มไบนารี"
+
+#: ../gui/tcltk/d.m/menu.tcl:125
+msgid "MPEG-1 animations"
+msgstr "ภาพเคลื่อนไหว MPEG-1"
+
+#: ../gui/tcltk/d.m/menu.tcl:126
+msgid "PNG image (not georeferenced)"
+msgstr "แฟ้มภาพ PNG (not georeferenced)"
+
+#: ../gui/tcltk/d.m/menu.tcl:127
+msgid "PPM image (24bit)"
+msgstr "แฟ้มภาพ PPM (24bit)"
+
+#: ../gui/tcltk/d.m/menu.tcl:128
+msgid "PPM image from red, green, blue raster maps"
+msgstr "แฟ้มภาพ PPM จากแผนที่แรสเตอร์ red, green, blue"
+
+#: ../gui/tcltk/d.m/menu.tcl:129
+msgid "POVray height-field"
+msgstr "POVray height-field"
+
+#: ../gui/tcltk/d.m/menu.tcl:130
+msgid "TIFF image (8/24bit)"
+msgstr "แฟ้มภาพ TIFF (8/24bit)"
+
+#: ../gui/tcltk/d.m/menu.tcl:131
+msgid "VRML file"
+msgstr "แฟ้มข้อมูล VRML "
+
+#: ../gui/tcltk/d.m/menu.tcl:132 ../gui/tcltk/d.m/menu.tcl:140
+#: ../gui/tcltk/d.m/menu.tcl:145
+msgid "VTK ASCII file"
+msgstr "แฟ้มข้อมูล VTK ASCII"
+
+#: ../gui/tcltk/d.m/menu.tcl:135
+msgid "Various formats using OGR (SHAPE, MapInfo etc)"
+msgstr "หลายชนิดด้วย OGR (SHAPE, MapInfo etc)"
+
+#: ../gui/tcltk/d.m/menu.tcl:137
+msgid "DXF file (ASCII)"
+msgstr "แฟ้มข้อมูล DXF (ASCII)"
+
+#: ../gui/tcltk/d.m/menu.tcl:138
+msgid "ASCII vector or point file/old GRASS ASCII vector file"
+msgstr "เวคเตอร์ ASCII หรือแฟ้มข้อมูลจุด/แฟ้มข้อมูลเวคเตอร์เก่า GRASS ASCII "
+
+#: ../gui/tcltk/d.m/menu.tcl:139
+msgid "POV-Ray format"
+msgstr "ชนิด POV-Ray"
+
+#: ../gui/tcltk/d.m/menu.tcl:150
+msgid "Copy maps"
+msgstr "คัดลอกแผนที่"
+
+#: ../gui/tcltk/d.m/menu.tcl:151
+msgid "List maps"
+msgstr "ลิสต์แผนที่"
+
+#: ../gui/tcltk/d.m/menu.tcl:152
+msgid "List maps using expressions and 'wildcards'"
+msgstr "ลิสต์แผนที่ด้วยเงื่อนไข และ'wildcards'"
+
+#: ../gui/tcltk/d.m/menu.tcl:153
+msgid "Rename maps"
+msgstr "เปลี่ยนชื่อแผนที่"
+
+#: ../gui/tcltk/d.m/menu.tcl:154
+msgid "Remove maps"
+msgstr "เอาแผนที่ออก"
+
+#: ../gui/tcltk/d.m/menu.tcl:155
+msgid "Remove maps using expressions and 'wildcards'"
+msgstr "เอาแผนที่ออกด้วยเงื่อนไขและ 'wildcards'"
+
+#: ../gui/tcltk/d.m/menu.tcl:158
+msgid "Raster to vector map"
+msgstr "จาก แรสเตอร์ เป็น เวคเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:159
+msgid "Raster map series to volume"
+msgstr " "
+
+#: ../gui/tcltk/d.m/menu.tcl:160
+msgid "Raster 2.5D map to volume"
+msgstr "แผนที่เชิงภาพ 2.5มิติ ไปเป็น ปริมาตร"
+
+#: ../gui/tcltk/d.m/menu.tcl:162
+msgid "Vector to vector"
+msgstr "จากเวคเตอร์เป็นเวคเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:163
+msgid "Vector lines to points"
+msgstr "จากเส้นเวคเตอร์เป็นจุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:164
+msgid "Vector 3D points to volume voxels"
+msgstr "แผนที่เชิงเส้น 3มิติ ไปเป็น ปริมาตร Voxel"
+
+#: ../gui/tcltk/d.m/menu.tcl:165
+msgid "Sites (GRASS 5.x) to vector"
+msgstr "จาก Sites (GRASS 5.x) เป็นเวคเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:166
+msgid "Volumes to raster map series"
+msgstr "ปริมาตร ไปเป็น ชุอแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:169
+msgid "Groups"
+msgstr "กลุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:170
+msgid "New"
+msgstr "ใหม่"
+
+#: ../gui/tcltk/d.m/menu.tcl:170
+msgid "Create new group file"
+msgstr "สร้างแฟ้มข้อมูลกลุ่มใหม่"
+
+#: ../gui/tcltk/d.m/menu.tcl:171
+msgid "Open group file"
+msgstr "เปิดแฟ้มข้อมูลกลุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:172
+msgid "Save group file"
+msgstr "บันทึกแฟ้มข้อมูลกลุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:173
+msgid "Save group file as name"
+msgstr "บันทึกแฟ้มข้อมูลกลุ่มเป็น"
+
+#: ../gui/tcltk/d.m/menu.tcl:174
+msgid "Close group"
+msgstr "ปิด กลุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:177
+msgid "Save display to image file"
+msgstr "บันทึกหน้าจอเป็นแฟ้มข้อมูลภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:178
+msgid "XWD (Save display, selected with mouse, to map.xwd in home directory )"
+msgstr "XWD (บันทึกการแสดงผล, เลือกด้วยเม้าส์, ไปที่ map.xwd ใน home directory )"
+
+#: ../gui/tcltk/d.m/menu.tcl:179
+msgid "Save displays to multiple graphic file formats"
+msgstr "บันทึกหลายหน้าจอเป็นหลายแฟ้มข้อมูลภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:181
+msgid "Save map to Postscript file"
+msgstr "บันทึกแผนที่เป็นแฟ้มข้อมูล Postscript"
+
+#: ../gui/tcltk/d.m/menu.tcl:182
+msgid "Print to default printer"
+msgstr "พิมพ์ด้วยเครื่องพิมพ์หลัก"
+
+#: ../gui/tcltk/d.m/menu.tcl:182
+msgid "print"
+msgstr "พิมพ์"
+
+#: ../gui/tcltk/d.m/menu.tcl:184
+msgid "Exit Display Manager"
+msgstr "ออกจากตัวจัดการแสดงผล "
+
+#: ../gui/tcltk/d.m/menu.tcl:190
+msgid "Zoom to maximum extent of all displayed maps"
+msgstr "ขยายไปจนถึงขอบเขตมากสุดของแผนที่ที่แสดงอยู่"
+
+#: ../gui/tcltk/d.m/menu.tcl:193
+msgid "Access other mapsets in current location"
+msgstr "เข้า mapsets อื่นใน location ปัจจุบัน "
+
+#: ../gui/tcltk/d.m/menu.tcl:194
+msgid "Change current working session to new mapset, location, or GISDBASE"
+msgstr "เปลี่ยน session ปัจจุบันที่ใช้งานอยู่ไป mapset, location, หรือ GISDBASE ใหม่ือ"
+
+#: ../gui/tcltk/d.m/menu.tcl:195
+msgid "Modify access by other users to current mapset"
+msgstr "แก้ไขการเข้าถึงโดยผู้ใช้อื่นสำหรับmapset ปัจจุบัน"
+
+#: ../gui/tcltk/d.m/menu.tcl:196
+msgid "Show current GRASS environment settings"
+msgstr "แสดงค่า GRASS environment ปัจจุบัน"
+
+#: ../gui/tcltk/d.m/menu.tcl:197
+msgid "Set GRASS environment settings"
+msgstr "ตั้งค่า GRASS environment"
+
+#: ../gui/tcltk/d.m/menu.tcl:201
+msgid "Create/edit projection information for current location"
+msgstr "สร้าง/แก้ไข projection สำหรับ location ปัจจุบัน "
+
+#: ../gui/tcltk/d.m/menu.tcl:202
+msgid "Show projection information and create projection files"
+msgstr "แสดง projection และสร้างแฟ้มข้อมูล projection "
+
+#: ../gui/tcltk/d.m/menu.tcl:204
+msgid "Convert coordinates from one projection to another"
+msgstr "แปลงพิกัดไป projection อื่นง"
+
+#: ../gui/tcltk/d.m/menu.tcl:206
+msgid "Text"
+msgstr "ข้อความ"
+
+#: ../gui/tcltk/d.m/menu.tcl:207
+msgid "Select default text font"
+msgstr "เลือกแบบอักษรหลัก"
+
+#: ../gui/tcltk/d.m/menu.tcl:208
+msgid "Select default freetype text font"
+msgstr "เลือกแบบอักษร freetype หลัก"
+
+#: ../gui/tcltk/d.m/menu.tcl:210
+msgid "X-monitor displays"
+msgstr "หน้าจอแสดงผล X"
+
+#: ../gui/tcltk/d.m/menu.tcl:211
+msgid "Configure xmonitor displays"
+msgstr "ปรับแต่งค่าหน้าจอแสดงผล X"
+
+#: ../gui/tcltk/d.m/menu.tcl:212
+msgid "Configure frames for xmonitors"
+msgstr "ปรับแต่งค่า frames หน้าจอแสดงผล X"
+
+#: ../gui/tcltk/d.m/menu.tcl:213
+msgid "Start/restart xmonitor at specified window size"
+msgstr "เริ่มต้น/เริ่มใหม่ xmonitor ตามขนาดหน้าต่างที่กำหนด"
+
+#: ../gui/tcltk/d.m/menu.tcl:214
+msgid "Set active xmonitor to specified size"
+msgstr "กำหนดขนาด xmonitor ที่ทำงาน ตามที่ได้ระบุ"
+
+#: ../gui/tcltk/d.m/menu.tcl:215
+msgid "Display information about active xmonitor"
+msgstr "แสดงข้อมูลของหน้าจอแสดงผล X ที่้ใช้งานอยู่"
+
+#: ../gui/tcltk/d.m/menu.tcl:222
+msgid "Compress/decompress raster file"
+msgstr "ย่อ/ขยายแฟ้มข้อมูลแรสเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:223
+msgid "Manage boundary definitions"
+msgstr "จัดการข้อกำหนด ของ  boundary"
+
+#: ../gui/tcltk/d.m/menu.tcl:224
+msgid "Manage null values"
+msgstr "จัดการค่า null "
+
+#: ../gui/tcltk/d.m/menu.tcl:225
+msgid "Manage timestamps for files"
+msgstr "จัดการ  timestamps สำหรับไฟล์"
+
+#: ../gui/tcltk/d.m/menu.tcl:226
+msgid "Quantization for floating-point maps"
+msgstr "Quantization สำหรับ แผนที่ floating-point"
+
+#: ../gui/tcltk/d.m/menu.tcl:228
+msgid "Resample (change resolution)"
+msgstr "Resample (เปลี่ยนความละเอียด)"
+
+#: ../gui/tcltk/d.m/menu.tcl:229
+msgid "Resample using nearest neighbor method"
+msgstr "Resample ใช้วิธ๊ Nearest neighbor"
+
+#: ../gui/tcltk/d.m/menu.tcl:230
+msgid "Resample using various interpolation methods"
+msgstr "Resample ใช้วิธ๊ Various interpolation"
+
+#: ../gui/tcltk/d.m/menu.tcl:232
+msgid "Resample using regularized spline with tension method"
+msgstr "Resample ใช้วิธ๊  Regularized spline ร่วมกับ Tension"
+
+#: ../gui/tcltk/d.m/menu.tcl:235
+msgid "Support file creation and maintenance"
+msgstr "สร้าง และ บำรุงรักษา Support ไฟล์"
+
+#: ../gui/tcltk/d.m/menu.tcl:237
+msgid "Reproject raster from other location"
+msgstr "Reproject แผนที่เชิงภาพจาก ตำแหน่งอื่น"
+
+#: ../gui/tcltk/d.m/menu.tcl:238
+msgid "Generate tiling for other projection"
+msgstr "สร้าง Tiling สำหรับ Projection อื่น"
+
+#: ../gui/tcltk/d.m/menu.tcl:241
+msgid "Set colors to predefined color tables"
+msgstr "กำหนดสีตั้งต้น ของ ตารางสี"
+
+#: ../gui/tcltk/d.m/menu.tcl:242
+msgid "Set colors using color rules"
+msgstr "กำหนดสีโดยใช้ กฎของสี"
+
+#: ../gui/tcltk/d.m/menu.tcl:244
+msgid "Blend 2 color maps to produce 3 RGB files"
+msgstr "ผสม 2 แผนที่สี เพื่อสร้าง 3 RGB ไฟล์"
+
+#: ../gui/tcltk/d.m/menu.tcl:245
+msgid "Create color image from RGB files"
+msgstr "สร้างแฟ้มข้อมูลภาพสีจากแฟ้มข้อมูล RGB "
+
+#: ../gui/tcltk/d.m/menu.tcl:246
+msgid ""
+"Create 3 RGB (red, green, blue) maps from 3 HIS (hue, intensity, saturation) "
+"maps"
+msgstr ""
+"สร้างแผนที่ 3 RGB (red, green, blue) จากแผนที่ 3 HIS (hue, intensity, saturation)"
+
+#: ../gui/tcltk/d.m/menu.tcl:251
+msgid "Create raster buffers"
+msgstr "สร้างพื้นที่กันชนแรสเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:252
+msgid "Create raster MASK"
+msgstr "สร้างแรสเตอร์ MASK"
+
+#: ../gui/tcltk/d.m/menu.tcl:253
+msgid "Locate closest points between areas in 2 raster maps"
+msgstr "หาจุดใกล้สุดระหว่างพื้นที่ใน 2 แผนที่แรสเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:256
+msgid "Moving window analysis of raster cells"
+msgstr "กำลังย้าย หน้าต่างวิเคราะห์ ของ cell แผนที่เชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:257
+msgid "Analyze vector points in neighborhood of raster cells"
+msgstr "วิเคราะห์ แผนที่เชิงเส้น จุด ใน  neighborhood ของ cell "
+
+#: ../gui/tcltk/d.m/menu.tcl:261
+msgid "Function of map series (time series)"
+msgstr "ฟังก์ชันของชุดข้อมูลแผนที่ (time series)"
+
+#: ../gui/tcltk/d.m/menu.tcl:264
+msgid "Statistical calculations for cover map over base map"
+msgstr "คำนวน Statistical สำหรับ แผนที่ Cover ทั่วทั้งแผนที่ฐาน"
+
+#: ../gui/tcltk/d.m/menu.tcl:267
+msgid "Solar irradiance and daily irradiation"
+msgstr "Solar irradiance และ daily irradiation"
+
+#: ../gui/tcltk/d.m/menu.tcl:268
+msgid "Shadows map for sun position or date/time"
+msgstr "แผนที่ Shadows สำหรับตำแหน่ง Sun หรือ วัน/เวลา"
+
+#: ../gui/tcltk/d.m/menu.tcl:271
+msgid "Calculate cumulative movement costs between locales"
+msgstr "คำนวน Cumulative movement costs ระหว่าง locales"
+
+#: ../gui/tcltk/d.m/menu.tcl:274
+msgid "Profile analysis"
+msgstr "Profile analysis"
+
+#: ../gui/tcltk/d.m/menu.tcl:275
+msgid "Shaded relief map"
+msgstr "แผนที่ Shaded relief"
+
+#: ../gui/tcltk/d.m/menu.tcl:279
+msgid "Visibility/line of sight"
+msgstr "Visibility/line of sight"
+
+#: ../gui/tcltk/d.m/menu.tcl:282
+msgid "Clump small areas (statistics calculated by r.volume)"
+msgstr "Clump พื้นที่เล็กๆ (statistics คำนวนโดย r.volume)"
+
+#: ../gui/tcltk/d.m/menu.tcl:283
+msgid "Grow areas"
+msgstr "Grow areas"
+
+#: ../gui/tcltk/d.m/menu.tcl:284
+msgid "Thin linear features"
+msgstr "การ ทำให้ข้อมูลเชิงเส้น บางลง"
+
+#: ../gui/tcltk/d.m/menu.tcl:288
+msgid "Carve stream channels into elevation map using vector streams map"
+msgstr "Carve stream channels ไปเป็น Elevation map โดยใช้แผนที่เชิงเส้น Streams"
+
+#: ../gui/tcltk/d.m/menu.tcl:289
+msgid "Depressionless elevation map and flowline map"
+msgstr "แผนที่ Depressionless elevation และ แผนที่ flowline"
+
+#: ../gui/tcltk/d.m/menu.tcl:290
+msgid "Fill lake from seed point to specified level"
+msgstr "เติม lake จาก จุด seed point ไปที่ ระดับที่กำหนด"
+
+#: ../gui/tcltk/d.m/menu.tcl:291
+msgid "Flow accumulation for massive grids"
+msgstr "Flow accumulation สำหรับ massive grids"
+
+#: ../gui/tcltk/d.m/menu.tcl:292
+msgid "Generate flow lines for raster map"
+msgstr "สร้าง flow lines สำหรับแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:294
+msgid "SIMWE sediment erosion, transport, & deposition modeling"
+msgstr "SIMWE sediment erosion, transport, & แบบจำลอง deposition"
+
+#: ../gui/tcltk/d.m/menu.tcl:304
+msgid "Analyze landscape characteristics"
+msgstr "วิเคราะห์  landscape characteristics"
+
+#: ../gui/tcltk/d.m/menu.tcl:305
+msgid "Analyze landscape patch characteristics"
+msgstr "วิเคราะห์  landscape patch characteristics"
+
+#: ../gui/tcltk/d.m/menu.tcl:306
+msgid "Output landscape patch information"
+msgstr "ผลลัพธ์ Landscape patch information"
+
+#: ../gui/tcltk/d.m/menu.tcl:309
+msgid "Generate rate of spread (ROS) maps"
+msgstr "สร้างแผนที่อัตราการขยาย (ROS)"
+
+#: ../gui/tcltk/d.m/menu.tcl:310
+msgid "Generate least-cost spread paths"
+msgstr "สร้าง  least-cost spread paths"
+
+#: ../gui/tcltk/d.m/menu.tcl:311
+msgid "Simulate anisotropic spread phenomena"
+msgstr "การจำลอง Anisotropic spread phenomena"
+
+#: ../gui/tcltk/d.m/menu.tcl:315
+msgid "Edit category values of individual cells for displayed raster map"
+msgstr "แก้ไขค่าหมวดหมู่ของ  individual cells สำหรับแสดงแผนที่เชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:318
+msgid "Reclassify categories for areas of specified sizes"
+msgstr "Reclassify หมวดหมู่ สำหรับ Areas ของขนาดที่กำหนด"
+
+#: ../gui/tcltk/d.m/menu.tcl:319
+msgid "Reclassify categories using rules"
+msgstr "Reclassify หมวดหมู่ โดยใช้กฎเกณท์"
+
+#: ../gui/tcltk/d.m/menu.tcl:320
+msgid "Reclassify categories using rules file"
+msgstr "Reclassify หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์"
+
+#: ../gui/tcltk/d.m/menu.tcl:322
+msgid "Recode categories using rules (create new map)"
+msgstr "Recode หมวดหมู่ โดยใช้ กฎเกณท์ (สร้างแผนที่ใหม่)"
+
+#: ../gui/tcltk/d.m/menu.tcl:323
+msgid "Recode categories using rules file (create new map)"
+msgstr "Recode หมวดหมู่ โดยใช้ ไฟล์ กฎเกณท์ (สร้างแผนที่ใหม่)"
+
+#: ../gui/tcltk/d.m/menu.tcl:325
+msgid "Rescale categories (create new map)"
+msgstr "Rescale หมวดหมู่ (สร้างแผนที่ใหม่)"
+
+#: ../gui/tcltk/d.m/menu.tcl:326
+msgid "Rescale categories with equalized histogram (create new map)"
+msgstr "Rescale หมวดหมู่ โดยใช้ Equalized histogram (สร้างแผนที่ใหม่)"
+
+#: ../gui/tcltk/d.m/menu.tcl:329
+msgid "Generate concentric circles around points"
+msgstr "สร้าง Concentric circles รอบๆ จุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:330
+msgid "Generate random raster cells"
+msgstr "สร้างแรสเตอร์เซลล์สุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:332
+msgid "Generate random cells and vector points from raster map"
+msgstr "สร้างแรสเตอร์เซลล์สุ่มและจุดเวคเตอร์จากแผนที่แรสเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:335
+msgid "Generate density surface using moving Gausian kernal"
+msgstr "สร้าง density พื้นผิวด้วย Gausian kernal"
+
+#: ../gui/tcltk/d.m/menu.tcl:336
+msgid "Generate fractal surface"
+msgstr "สร้างพื้นผิว fractal"
+
+#: ../gui/tcltk/d.m/menu.tcl:337
+msgid "Generate gaussian deviates surface"
+msgstr "สร้างพื้นผิว gaussian deviates"
+
+#: ../gui/tcltk/d.m/menu.tcl:338
+msgid "Generate plane"
+msgstr "สร้าง ระนาบ"
+
+#: ../gui/tcltk/d.m/menu.tcl:339
+msgid "Generate random deviates surface"
+msgstr "สร้างพื้นผิวเบี่ยงเบนแบบสุ่ม"
+
+#: ../gui/tcltk/d.m/menu.tcl:340
+msgid "Generate random surface with spatial dependence"
+msgstr "สร้าง Random surface โดยใช้ Spatial dependence"
+
+#: ../gui/tcltk/d.m/menu.tcl:342
+msgid "Generate vector contour lines"
+msgstr "สร้าง เส้นชั้นความสูง"
+
+#: ../gui/tcltk/d.m/menu.tcl:344
+msgid "Bilinear interpolation from raster points"
+msgstr "Bilinear interpolation จาก จุดเชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:345
+msgid "Inverse distance weighted interpolation from raster points"
+msgstr "Inverse distance weighted interpolation จาก จุดเชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:346
+msgid "Interpolation from raster contours"
+msgstr "Interpolation จาก แผนที่เส้นชั้นความสูงเชิงภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:348
+msgid "Inverse distance weighted interpolation from vector points"
+msgstr "Inverse distance weighted interpolation จากแผนที่เชิงเส้น จุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:349
+msgid "Regularized spline tension interpolation from vector points or contours"
+msgstr ""
+"Regularized spline tension interpolation จากแผนที่เชิงเส้น จุด หรือ เส้นชั้นความสูง"
+
+#: ../gui/tcltk/d.m/menu.tcl:351
+msgid "Fill NULL cells by interpolation using regularized spline tension"
+msgstr "เติม NULL cells โดย interpolation ใช้ Regularized spline tension"
+
+#: ../gui/tcltk/d.m/menu.tcl:356
+msgid "Report category labels and values"
+msgstr "แสดงรายงาน แถบข้อความ หมวดหมู่ และ ค่า"
+
+#: ../gui/tcltk/d.m/menu.tcl:359
+msgid "Range of all category values"
+msgstr "ช่วงของค่าในหมวดทั้งหมด"
+
+#: ../gui/tcltk/d.m/menu.tcl:360
+msgid "Sum all cell category values"
+msgstr "รวม ค่า cell category ทั้งหมด"
+
+#: ../gui/tcltk/d.m/menu.tcl:362
+msgid "Summary statistics for clumped cells (works with r.clump)"
+msgstr "Summary statistics สำหรับ clumped cells (ใช้คำสั่ง r.clump)"
+
+#: ../gui/tcltk/d.m/menu.tcl:365
+msgid "Univariate statistics (script version)"
+msgstr "Univariate statistics (แบบ script)"
+
+#: ../gui/tcltk/d.m/menu.tcl:367
+msgid "Sample values along transects"
+msgstr "ค่าตัวอย่าง ตาม Transect"
+
+#: ../gui/tcltk/d.m/menu.tcl:368
+msgid "Sample values along transects (use azimuth, distance)"
+msgstr "ค่าตัวอย่าง ตาม Transect (ใช้ azimuth, และ ระยะทาง)"
+
+#: ../gui/tcltk/d.m/menu.tcl:371
+msgid "Linear regression between 2 maps"
+msgstr "Linear regression ระหว่าง 2 แผนที่"
+
+#: ../gui/tcltk/d.m/menu.tcl:372
+msgid "Mutual category occurences (coincidence)"
+msgstr "Mutual category occurences (สอดคล้องต้องกัน)"
+
+#: ../gui/tcltk/d.m/menu.tcl:379
+msgid "Create/rebuild topology"
+msgstr "สร้าง/ทำอีกครั้ง topology"
+
+#: ../gui/tcltk/d.m/menu.tcl:380
+msgid "Clean vector files"
+msgstr "Clean ไฟล์เชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:381
+msgid "Add missing centroids"
+msgstr "เพิ่ม จุดศูนย์ถ่วง ที่ขาด"
+
+#: ../gui/tcltk/d.m/menu.tcl:383
+msgid "Build polylines from adjacent segments"
+msgstr "สร้าง Polylines จาก ชิ้นส่วนที่ติดกัน"
+
+#: ../gui/tcltk/d.m/menu.tcl:384
+msgid "Split polylines into segments"
+msgstr "ตัด  Polylines ไปเป็น ชิ้นส่วน"
+
+#: ../gui/tcltk/d.m/menu.tcl:385
+msgid "Create lines parallel to existing lines"
+msgstr "สร้างเส้นขนาน จากเส้นที่มีอยู่แล้ว"
+
+#: ../gui/tcltk/d.m/menu.tcl:386
+msgid "Dissolve common boundaries"
+msgstr "Dissolve common boundaries"
+
+#: ../gui/tcltk/d.m/menu.tcl:388
+msgid "Convert vector feature types"
+msgstr "แปลง ชนิดข้อมูลเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:389
+msgid "Convert 2D vector to 3D by sampling raster"
+msgstr "แปลง ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ โดย sampling raster"
+
+#: ../gui/tcltk/d.m/menu.tcl:390
+msgid "Extrude 2D vector into 3D vector"
+msgstr "Extrude ข้อมูลเชิงเส้น 2มิติ ไปเป็น 3มิติ"
+
+#: ../gui/tcltk/d.m/menu.tcl:392
+msgid "Create text label file for vector features"
+msgstr "สร้าง ไฟล์ แถบข้อความ สำหรับ ข้อมูลเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:394
+msgid "Reproject vector from other location"
+msgstr "Reproject แผนที่เชิงเส้น จาก ตำแหน่งอื่น"
+
+#: ../gui/tcltk/d.m/menu.tcl:397
+msgid "Create new vector as link to external OGR layer"
+msgstr "สร้างแผนที่เชิงเส้นใหม่ ที่เชื่อมกับ ชั้นข้อมูล OGR"
+
+#: ../gui/tcltk/d.m/menu.tcl:398
+msgid "Set database connection for vector attributes"
+msgstr "กำหนด การเชื่อมต่อฐานข้อมูล สำหรับรายละเอียดของแผนที่เชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:400
+msgid "Rectify and georeference vector map"
+msgstr "Rectify และ Georeference แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:402
+msgid "Query by attributes"
+msgstr "ร้องขอโดยข้อมูลลักษณะ"
+
+#: ../gui/tcltk/d.m/menu.tcl:404
+msgid "Query by map features"
+msgstr "ค้นหา โดยใข้ ข้อมูลแผนที่"
+
+#: ../gui/tcltk/d.m/menu.tcl:406
+msgid "Create vector buffers"
+msgstr "สร้างพื้นที่กันชนเวคเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:407
+msgid "Linear referencing for vectors"
+msgstr "การอ้างอิงเชิงเส้น สำหรับแผนที่เชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:408
+msgid "Create linear reference system"
+msgstr "สร้าง ระบบอ้างอิงตำแหน่งเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:409
+msgid "Create stationing from imput lines, and linear reference system"
+msgstr "สร้าง  Stationing จากเส้นที่นำเข้า, และระบบอ้างอิงตำแหน่งเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:410
+msgid ""
+"Create points/segments from input lines, linear reference system and "
+"positions read from stdin"
+msgstr ""
+"สร้าง จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงตำแหน่งเชิงเส้น และ ตำแหน่ง โดยอ่านจาก stdin"
+
+#: ../gui/tcltk/d.m/menu.tcl:411
+msgid ""
+"Find line id and real km+offset for given points in vector map using linear "
+"reference system"
+msgstr "ค้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:414
+msgid "Locate nearest features to points or centroids"
+msgstr "ระบุข้อมูลที่ใกล้ที่สุด ถึงจุด หรือ จุดศูนย์ถ่วง"
+
+#: ../gui/tcltk/d.m/menu.tcl:415
+msgid "Generate Thiessen polygons around points (Voronoi diagram)"
+msgstr "สร้าง Thiessen polygons รอบๆจุด (Voronoi diagram)"
+
+#: ../gui/tcltk/d.m/menu.tcl:416
+msgid "Connect points to create Delaunay triangles"
+msgstr "เชื่อมจุดเพื่อสร้าง Delaunay triangles"
+
+#: ../gui/tcltk/d.m/menu.tcl:422
+msgid "Shortest route (visualization only)"
+msgstr "เส้นทางสั้นสุด (แสดงผลเท่านั้น)"
+
+#: ../gui/tcltk/d.m/menu.tcl:423
+msgid "Split net to bands between cost isolines"
+msgstr "ตัด net ไปเป็น bands ระหว่าง Cost isolines"
+
+#: ../gui/tcltk/d.m/menu.tcl:428
+msgid "Overlay/combine 2 vector maps"
+msgstr "ซ้อนทับ/รวม 2 แผนที่เวคเตอร์"
+
+#: ../gui/tcltk/d.m/menu.tcl:429
+msgid "Patch multiple maps (combine)"
+msgstr "ปรับปรุงหลายแผนที่  (รวมเข้าด้วยกัน)"
+
+#: ../gui/tcltk/d.m/menu.tcl:431
+msgid "Generate area feature for extent of current region"
+msgstr "สร้างข้อมูล Area สำหรับ ขอบเขต ของ ขอบเขตปัจจุบัน"
+
+#: ../gui/tcltk/d.m/menu.tcl:432
+msgid "Generate rectangular vector grid"
+msgstr "ง"
+
+#: ../gui/tcltk/d.m/menu.tcl:435
+msgid "Attach, delete, or report categories"
+msgstr "แนบ, ลบ, หรือรายงานหมวดหมู่"
+
+#: ../gui/tcltk/d.m/menu.tcl:436
+msgid "Reclassify features using rules file"
+msgstr "Reclassify ข้อมูล โดยใช้ไฟล์กฎเกณท์"
+
+#: ../gui/tcltk/d.m/menu.tcl:439
+msgid "Work with vector points"
+msgstr "ทำงานกับแผนที่เชิงเส้น จุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:441
+msgid "Generate points from database with x/y coordinates"
+msgstr "สร้างจุดจากฐานข้อมูลด้วย พิกัด x/y"
+
+#: ../gui/tcltk/d.m/menu.tcl:443
+msgid "Random location perturbations of points"
+msgstr "Random location perturbations ของ จุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:446
+msgid "Generate convex hull for point set"
+msgstr "สร้าง Convex Hull สำหรับ ชุดของจุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:447
+msgid "Generate Delaunay triangles for point set"
+msgstr "สร้าง Delaunay triangles จากชุดข้อมูลจุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:448
+msgid "Generate Voronoi diagram/Thiessen polygons for point set"
+msgstr "สร้าง Voronoi diagram/Thiessen ข้อมูลหลายเหลี่ยมจากชุดข้อมูลจุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:450
+msgid "Sample raster maps"
+msgstr "ตัวอย่างแผนที่แรสเตอร์ "
+
+#: ../gui/tcltk/d.m/menu.tcl:451
+msgid "Calculate statistics for raster map overlain by vector map"
+msgstr "คำนวน Statistics สำหรับ แผนที่เชิงภาพ ซ้อนทับโดย แผนที่เชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:455
+msgid "Partition points into test/training sets for k-fold cross validatation"
+msgstr ""
+"แบ่งส่วน ชุดของจุด ไปเป็น  ชุดของ test/training สำหรับ k-fold cross validatation"
+
+#: ../gui/tcltk/d.m/menu.tcl:456
+msgid "Transfer attribute data from queried vector map to points"
+msgstr "ถ่ายทอด ข้อมูลรายละเอียด จาก แผนที่เชิงเส้นที่เลือก ไปเป็น จุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:461
+msgid "Load vector attributes to database or create reports"
+msgstr "อ่านข้อมูลรายละเอียด ข้อมูลเชิงเส้น ไปที่ ฐานข้อมูล หรือ สร้างรายงาน"
+
+#: ../gui/tcltk/d.m/menu.tcl:462
+msgid "Report areas for vector attribute categories"
+msgstr "รายงาน Areas สำหรับ รายละเอียด หมวดหมู่ ของข้อมูลเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:465
+msgid "Test normality of point distribution"
+msgstr "ทดสอบความปกติ การกระจายของจุด"
+
+#: ../gui/tcltk/d.m/menu.tcl:466
+msgid "Calculate stats for raster map underlying vector objects"
+msgstr "คำนวน stats สำหรับแผนที่เชิงภาพ ที่อยู่ใต้ วัตถุเชิงเส้น"
+
+#: ../gui/tcltk/d.m/menu.tcl:467
+msgid "Indices of point counts in quadrats"
+msgstr "ดัชนี ของการนับจุด ใน กรอบ"
+
+#: ../gui/tcltk/d.m/menu.tcl:472
+msgid "Create/edit imagery group"
+msgstr "สร้าง/แก้ไข กลุ่มภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:473
+msgid "Target imagery group"
+msgstr "กลุ่มภาพ เป้าหมาย"
+
+#: ../gui/tcltk/d.m/menu.tcl:475
+msgid "Mosaic up to 4 adjacent images"
+msgstr "ต่อภาพ 4 ภาพที่อยู่ติดกัน"
+
+#: ../gui/tcltk/d.m/menu.tcl:478
+msgid ""
+"Color balance and enhance color tables of multiband imagery for rgb display"
+msgstr "การปรับสี และ  ตาราง Enhance สี ของ ภาพ Multiband สำหรับแสดงแบบ RGB"
+
+#: ../gui/tcltk/d.m/menu.tcl:479
+msgid ""
+"Transform HIS (Hue/Intensity/Saturation) color image to RGB (Red/Green/Blue)"
+msgstr ""
+"แปลงข้อมูลแบบผสมสีแบบความอิ่มสี HIS (Hue/Intensity/Saturation) เป็น RGB (Red/Green/"
+"Blue)"
+
+#: ../gui/tcltk/d.m/menu.tcl:480
+msgid ""
+"Transform RGB (Red/Green/Blue) color image to HIS (Hue/Intensity/Saturation)"
+msgstr ""
+"แปลงข้อมูลแบบผสมสีRGB (Red/Green/Blue) เป็น นแบบความอิ่มสี HIS (Hue/Intensity/"
+"Saturation)"
+
+#: ../gui/tcltk/d.m/menu.tcl:482
+msgid "Rectify and georeference image group"
+msgstr "Rectify และ georeference กลุ่มภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:483
+msgid "Set ground control points (GCP's) from raster map or keyboard entry"
+msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงภาพ หรือ จาก คีย์บอร์ด"
+
+#: ../gui/tcltk/d.m/menu.tcl:485
+msgid "Set ground control points (GCP's) from vector map or keyboard entry"
+msgstr "กำหนด จุดควบคุมภาคพื้นดิน (GCP) จาก แผนที่เชิงเส้น หรือ จาก คีย์บอร์ด"
+
+#: ../gui/tcltk/d.m/menu.tcl:487
+msgid "Affine and Polynomial rectification (rubber sheet)"
+msgstr "Affine และ  Polynomial rectification (rubber sheet)"
+
+#: ../gui/tcltk/d.m/menu.tcl:491
+msgid "Brovey transformation and pan sharpening"
+msgstr "Brovey transformation และ Pan sharpening"
+
+#: ../gui/tcltk/d.m/menu.tcl:499
+msgid "Non-interactive input for supervised classification (MLC)"
+msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (MLC)"
+
+#: ../gui/tcltk/d.m/menu.tcl:500
+msgid "Non-interactive input for supervised classification (SMAP)"
+msgstr "นำเข้าแบบไม่โต้ตอบ สำหรับ  supervised classification  (SMAP)"
+
+#: ../gui/tcltk/d.m/menu.tcl:503
+msgid "Zero edge crossing detection"
+msgstr "พบ Zero edge crossing"
+
+#: ../gui/tcltk/d.m/menu.tcl:504
+msgid "User defined matrix/convolving filter"
+msgstr "ใช้การกำหนด การกรอง matrix/convolving"
+
+#: ../gui/tcltk/d.m/menu.tcl:509
+msgid "Canonical component"
+msgstr "ส่วนประกอบ ซึ่งเป็นที่ยอมรับ"
+
+#: ../gui/tcltk/d.m/menu.tcl:510
+msgid "Principal component"
+msgstr "ส่วนประกอบ หลัก"
+
+#: ../gui/tcltk/d.m/menu.tcl:511
+msgid "Fast Fourier Transform"
+msgstr "การแปลง แบบ Fast Fourier"
+
+#: ../gui/tcltk/d.m/menu.tcl:512
+msgid "Inverse Fast Fourier Transform"
+msgstr "การแปลง แบบ Inverse Fast Fourier"
+
+#: ../gui/tcltk/d.m/menu.tcl:517
+msgid "Range of image values"
+msgstr "ช่วงของ ค่าภาพ"
+
+#: ../gui/tcltk/d.m/menu.tcl:519
+msgid "Bit pattern comparison for ID of low quality pixels"
+msgstr "แบบการเปรียบเทียบ Bit สำหรับ ID ของ pixel คุณภาพต่ำ"
+
+#: ../gui/tcltk/d.m/menu.tcl:520
+msgid "Kappa classification accuracy assessment"
+msgstr "การประเมินความน่าเชื่อถือของ Kappa classification"
+
+#: ../gui/tcltk/d.m/menu.tcl:521
+msgid "Optimum index factor for LandSat TM"
+msgstr "ดัชนีตัวคูณ ที่ดีทีสุด สำหรับ LandSat TM"
+
+#: ../gui/tcltk/d.m/menu.tcl:524
+msgid "&Grid3D"
+msgstr "&กริด3มิติ"
+
+#: ../gui/tcltk/d.m/menu.tcl:529
+msgid "Create 3D mask for grid3D operations"
+msgstr "สร้าง mask 3มิติ สำหรับ การทำงาน กริด3มิติ"
+
+#: ../gui/tcltk/d.m/menu.tcl:530
+msgid "Create 2D raster cross section from grid3d volume"
+msgstr "สร้างแผนที่รูปตัดตามขวาง เชิงภาพ 2มิติ จาก กริด3มิติ ปริมาตร"
+
+#: ../gui/tcltk/d.m/menu.tcl:531
+msgid "Map calculator for grid3D operations"
+msgstr "Map calculator สำหรับ  การทำงาน กริด3มิติ"
+
+#: ../gui/tcltk/d.m/menu.tcl:532
+msgid "Interpolate volume from vector points using splines"
+msgstr "ตีความ ปริมาตร จาก แผนที่เชิงเส้น จุด โดยใช้ spline"
+
+#: ../gui/tcltk/d.m/menu.tcl:534
+msgid "Display information about grid3D volume"
+msgstr "แสดงข้อมูลเกี่ยวกับ กริด3มิติ ปริมาตร"
+
+#: ../gui/tcltk/d.m/menu.tcl:543
+msgid "Add columns to table"
+msgstr "เพิ่มคอลัมน์ตาราง"
+
+#: ../gui/tcltk/d.m/menu.tcl:544
+msgid "Change values in a column"
+msgstr "เปลี่ยนค่าในคอลัมน์"
+
+#: ../gui/tcltk/d.m/menu.tcl:555
+msgid "Query data (SQL select)"
+msgstr "ร้องขอข้อมูล (SQL select)"
+
+#: ../gui/tcltk/d.m/menu.tcl:556
+msgid "Execute SQL statement"
+msgstr "ประมวลผลคำสั่ง SQL"
+
+#: ../gui/tcltk/d.m/rgbhis.tcl:96
+msgid "red (RGB) or hue (HIS):"
+msgstr "red (RGB) หรือ hue (HIS):"
+
+#: ../gui/tcltk/d.m/rgbhis.tcl:107
+msgid "green (RGB) or intensity (HIS):"
+msgstr "green (RGB) หรือ intensity (HIS):"
+
+#: ../gui/tcltk/d.m/rgbhis.tcl:118
+msgid "blue (RGB) or saturation (HIS):"
+msgstr "blue (RGB) หรือ saturation (HIS):"
+
+#: ../gui/tcltk/d.m/fttext.tcl:102
+msgid "     (leave blank to place with mouse; position will not save)"
+msgstr "     (leave blank to place with mouse; position will not save)"
+
+#: ../gui/tcltk/d.m/fttext.tcl:108
+msgid "     coordinate type"
+msgstr "ชนิดพิกัด"
+
+#: ../gui/tcltk/d.m/fttext.tcl:111
+msgid "  align text with coordinate point"
+msgstr "  จัดตำแหน่งข้อความด้วยจุดพิกัด"
+
+#: ../gui/tcltk/d.m/fttext.tcl:120
+#, tcl-format
+msgid ""
+"     (for coordinates, % is from bottom left of display, pixels from top "
+"left)"
+msgstr "     (สำหรับพิกัด, % จากงซ้ายล่างของจอ, พิกเซล จากซ้ายบน)"
+
+#: ../gui/tcltk/d.m/fttext.tcl:126
+msgid "     text rotation (degrees counterclockwise)"
+msgstr "    หมุนข้อความ (องศา ทวนเข็มนาฬิกา)"
+
+#: ../gui/tcltk/d.m/fttext.tcl:129
+msgid "rotation in radians"
+msgstr "rotation in radians"
+
+#: ../gui/tcltk/d.m/fttext.tcl:164
+msgid "height in pixels instead of %"
+msgstr "ความสูงในหน่วยว พิกเแทนที่ %ซล"
+
+#: ../gui/tcltk/d.m/d.m.tcl:406
+msgid "Welcome to the GRASS GIS manager"
+msgstr "ยินดีต้อนรับเข้าสู่ตัวจัดการ GRASS GIS "
+
+#: ../gui/tcltk/d.m/tool1.tcl:22
+msgid "Display active layers in current region"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตปัจจุบัน"
+
+#: ../gui/tcltk/d.m/tool1.tcl:28
+msgid "Display active layers in default region"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตหลัก"
+
+#: ../gui/tcltk/d.m/tool1.tcl:34
+msgid "Display active layers in saved region setting"
+msgstr "แสดงชั้นข้อมูลที่ใช้งานอยู่ในขอบเขตที่บันทึกค่าไว้"
+
+#: ../gui/tcltk/d.m/tool1.tcl:54
+msgid "NVIZ - n dimensional visualization"
+msgstr "NVIZ - การแสดงผลแบบหลายมิติ"
+
+#: ../gui/tcltk/d.m/tool1.tcl:60
+msgid "Fly through path for NVIZ"
+msgstr "เส้นทางบินผ่าน สำหรับ NVIZ"
+
+#: ../gui/tcltk/d.m/tool1.tcl:81
+msgid "Zoom"
+msgstr "ย่อ/ขยาย"
+
+#: ../gui/tcltk/d.m/tool1.tcl:93
+msgid "Pan and recenter"
+msgstr "เลื่อน และ เปลี่ยน จุดศูนย์กลาง"
+
+#: ../gui/tcltk/d.m/tool1.tcl:99
+msgid "Query map (select map first)"
+msgstr "ค้นหาแผนที่ (เลือกแผนที่ก่อน)"
+
+#: ../gui/tcltk/d.m/tool1.tcl:104
+msgid "Measure lengths and areas"
+msgstr "วัดความยาวและพื้นที่"
+
+#: ../gui/tcltk/d.m/tool1.tcl:109
+msgid "Geographical position"
+msgstr "ตำแหน่งทางภูมิศาสตร์"
+
+#: ../gui/tcltk/d.m/tool1.tcl:130
+msgid "Print raster & vector maps using ps.map"
+msgstr "พิมพ์แรสเตอร์ และเวคเตอร์ โดย ps.map"
+
+#: ../gui/tcltk/d.m/tool2.tcl:33
+msgid "Add legend"
+msgstr "เพิ่ม legend"
+
+#: ../gui/tcltk/d.m/tool2.tcl:76
+msgid "Add paint labels layer (from directory paint/labels)"
+msgstr "เพิ่ม ชั้นข้อมูล แถบข้อความ (จาก directory paint/labels)"
+
+#: ../gui/tcltk/d.m/tool2.tcl:82
+msgid "Add freetype text layer"
+msgstr "เพิ่มชั้นข้อมูลข้อความ freetype"
+
+#: ../gui/tcltk/d.m/tool2.tcl:110
+msgid "Create or select display frame"
+msgstr "สร้าง หรือ เลือกเฟรม"
+
+#: ../gui/tcltk/d.m/vector.tcl:197
+msgid "Vector name:"
+msgstr "ชื่อเวคเตอร์:"
+
+#: ../gui/tcltk/d.m/vector.tcl:212
+msgid "Display:"
+msgstr "แสดงผล:"
+
+#: ../gui/tcltk/d.m/vector.tcl:213
+msgid "shapes"
+msgstr "รูปร่าง"
+
+#: ../gui/tcltk/d.m/vector.tcl:215
+msgid "categories"
+msgstr "หลายหมวดหมู่"
+
+#: ../gui/tcltk/d.m/vector.tcl:217
+msgid "topology"
+msgstr "topology"
+
+#: ../gui/tcltk/d.m/vector.tcl:219
+msgid "line directions"
+msgstr "ทิศทางของเส้น"
+
+#: ../gui/tcltk/d.m/vector.tcl:226
+msgid "            "
+msgstr "            "
+
+#: ../gui/tcltk/d.m/vector.tcl:237
+msgid "faces"
+msgstr "faces"
+
+#: ../gui/tcltk/d.m/vector.tcl:262 ../gui/tcltk/d.m/vector.tcl:278
+#: ../gui/tcltk/d.m/vector.tcl:294
+msgid "color"
+msgstr "สี"
+
+#: ../gui/tcltk/d.m/vector.tcl:281
+msgid "  "
+msgstr "  "
+
+#: ../gui/tcltk/d.m/vector.tcl:282
+msgid "random colors"
+msgstr "สีสุ่ม"
+
+#: ../gui/tcltk/d.m/vector.tcl:297
+msgid " size"
+msgstr "ขนาด"
+
+#: ../gui/tcltk/d.m/vector.tcl:301
+msgid " align with pt"
+msgstr "วางตัว ด้วย pt"
+
+#: ../gui/tcltk/d.m/vector.tcl:315
+msgid "     layer for labels"
+msgstr "ชั้นข้อมูลสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/d.m/vector.tcl:318
+msgid " attribute col for labels"
+msgstr "คอลัมน์ข้อมูลลักษณะสำหรับ แถบข้อความ"
+
+#: ../gui/tcltk/d.m/vector.tcl:326
+msgid "Query vectors: "
+msgstr "ร้องขอข้อมูลเวคเตอร์ "
+
+#: ../gui/tcltk/d.m/vector.tcl:330
+msgid " query cat values"
+msgstr "ค้นหาค่า cat"
+
+#: ../gui/tcltk/d.m/vector.tcl:333
+msgid "SQL query"
+msgstr "การร้องขอ SQL"
+
+#: ../gui/tcltk/d.m/vector.tcl:340
+msgid "     SQL where statement"
+msgstr "     ประโยค SQL where "
+
+#: ../gui/tcltk/d.m/vector.tcl:366
+msgid "Mouse query setup:"
+msgstr "กำหนดการค้นหาด้วย เม้าส์"
+
+#: ../gui/tcltk/d.m/vector.tcl:367
+msgid "edit attributes (form mode)"
+msgstr "แก้ไขข้อมูลลักษณธ (ในแบบฟอร์ม)"
+
+#: ../gui/tcltk/d.m/vector.tcl:369
+msgid "results as text in terminal"
+msgstr "ผลลัพธ์แบบตัวอักษร ในหน้าจอ"
+
+#: ../gui/tcltk/d.m/vector.tcl:386
+msgid "Line width for ps.map print output:"
+msgstr "ความกว้างเส้นสำหรับ พิมพ์ ผลลัพธ์ จาก ps.map:"
+
+#: ../gui/tcltk/d.m/vector.tcl:388
+msgid "Line width used for printing"
+msgstr "ความกว้างเส้นสำหรับการพิมพ์"
+
+#: ../gui/tcltk/d.m/barscale.tcl:69
+msgid " Background color: "
+msgstr "สีพื้นหลัง "
+
+#: ../gui/tcltk/d.m/barscale.tcl:71
+msgid "no background color"
+msgstr "ไม่มีสีพื้นหลัง"
+
+#: ../gui/tcltk/d.m/barscale.tcl:73
+msgid " "
+msgstr "   "
+
+#: ../gui/tcltk/d.m/barscale.tcl:92
+msgid "display N. arrow only "
+msgstr "แสดง ทิศเหนือลูกศร เท่านั้น"
+
+#: ../gui/tcltk/d.m/barscale.tcl:101
+msgid "line scale instead of bar scale "
+msgstr "มาตราส่วนแบบเส้น แทน มาตราส่วนแบบแท่ง"
+
+#: ../gui/tcltk/d.m/dtext.tcl:101
+msgid "Text options: color"
+msgstr "ตัวเลือกข้อความ: สี"
+
+#: ../gui/tcltk/d.m/print.tcl:169
+msgid "Paper format"
+msgstr "ชนิดกระดาษ"
+
+#: ../gui/tcltk/d.m/print.tcl:180
+msgid "Custom"
+msgstr "กำหนดเอง"
+
+#: ../gui/tcltk/d.m/print.tcl:184
+msgid "height:"
+msgstr "สูง:"
+
+#: ../gui/tcltk/d.m/print.tcl:191
+msgid "left:"
+msgstr "ซ้าย:"
+
+#: ../gui/tcltk/d.m/print.tcl:193
+msgid "right:"
+msgstr "ขวา:"
+
+#: ../gui/tcltk/d.m/print.tcl:195
+msgid "top:"
+msgstr "บน:"
+
+#: ../gui/tcltk/d.m/print.tcl:197
+msgid "bottom:"
+msgstr "ล่าง:"
+
+#: ../gui/tcltk/d.m/print.tcl:210
+msgid "PS file:"
+msgstr "แฟ้มข้อมูลPS  :"
+
+#: ../gui/tcltk/d.m/print.tcl:221
+msgid "PDF file:"
+msgstr "แฟ้มข้อมูล PDF:"
+
+#: ../gui/tcltk/d.m/print.tcl:232
+msgid "PNG file:"
+msgstr "แฟ้มข้อมูล PNG:"
+
+#: ../gui/tcltk/d.m/print.tcl:241
+msgid "PNG file resolution (points/inch):"
+msgstr "แฟ้มข้อมูล PNG ความละเอียด (จุด/นิ้ว):"
+
+#: ../gui/tcltk/d.m/print.tcl:250
+msgid "Printer:"
+msgstr "เครื่องพิมพ์:"
+
+#: ../gui/tcltk/d.m/print.tcl:259
+msgid "Script file:"
+msgstr "Script ไฟล์:"
+
+#: ../gui/tcltk/d.m/print.tcl:280
+msgid "Preview"
+msgstr "แสดงตัวอย่าง"
+
+#: ../visualization/nviz/scripts/panel_animation.tcl:275
+msgid "Test"
+msgstr "ทดสอบ"
+
+#, fuzzy
+#~ msgid " width"
+#~ msgstr "กว้าง"
+
+#~ msgid "text color"
+#~ msgstr "สีข้อความ"
+
+#~ msgid " text size"
+#~ msgstr "ขนาดข้อความ"

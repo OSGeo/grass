@@ -1,0 +1,64 @@
+r.param.scale
+
+GRASS module that extracts terrain parameters from a DEM.
+Uses a multi-scale approach by taking fitting quadratic
+parameters to any size window (via least squares).
+
+Jo Wood, 27th November, 1994.
+
+-------
+
+Modified to include constrained fitting. 
+
+Jo Wood, April, 1995 
+
+-------
+
+Modified to include weighting matrix and double precision arithmetic.
+
+Jo Wood, 9th May, 1995.
+
+-------
+
+Modified to include two separate tolerance values for feature detection.
+
+Jo Wood, 23rd May, 1995.
+
+
+-------
+Still to do:
+	Fix bug when `constrain through central cell' option selected.
+	Create colour tables for all output files (presently only on features).
+
+-------
+
+See also Java Code in 'LandSerf' that implements the same procedure
+(http://www.geog.le.ac.uk/jwo/research/LandSerf).
+
+-------
+
+Usage:
+ r.param.scale [-c] in=name out=name [s_tol=value] [c_tol=value]
+   [size=value] [param=name] [exp=value] [zscale=value]
+
+Flags:
+  -c   Constrain model through central window cell
+
+Parameters:
+      in   Raster surface layer to process
+     out   Output raster layer containing morphometric parameter
+   s_tol   Slope tolerance that defines a `flat' surface (degrees)
+           default: 1.0
+   c_tol   Curvature tolerance that defines `planar' surface
+           default: 1.0
+    size   Size of processing window (odd number only)
+           default: 3
+   param   Morphometric parameter to calculate
+           options: elev,slope,aspect,profc,planc,longc,crosc,minic,maxic,
+                    feature
+           default: elev
+     exp   Exponent for distance weighting (0.0-4.0)
+           default: 0.0
+  zscale   Vertical scaling factor
+           default: 1.0
+

@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# ATTENTION!
+# This script is run with UID set to the owner of the GRASS system
+# installations. In many cases, this will be root.
+# So be careful, as the actions in this script might be carried out
+# with superuser privileges !!!
+
+# UNINSTALL_BASE will be exported by the GRASS extension managing tool
+# it contains the path to the GRASS binary files installed on the
+# user's system (e.g. /usr/local/grass-6.x.y).
+# By prefixing every file name with $UNINSTALL_BASE, we make sure
+# that deletions do not occur outside the GRASS installation dir.
+
+if [ -z "$UNINSTALL_BASE" ] ; then \
+	echo "Please do not run this script manually!" ; \
+	exit ; \
+fi
+
+# add names of all modules to this list
+# e.g. EXT_MODULES="r.cva v.isovist"
+EXT_MODULES=""
+
+# add names of include files (*.h) to this list
+EXT_INCLUDES=""
+
+# add names of library files (*.so) to this list
+EXT_LIBS=""
+
+# add names of subdirectories that have to be deleted recursively (be careful!)
+EXT_SUBDIRS="" 
+
+# This takes care of the actual deletion
+for i in $EXT_MODULES; do
+	# remove modules
+	rm -f $UNINSTALL_BASE/bin/$i
+	# remove HTML pages and images from docs/html
+	rm -f $UNINSTALL_BASE/docs/html/$i.*
+	# remove man pages
+	rm -f $UNINSTALL_BASE/man/man1/$i.1
+done
+
+for i in $EXT_INCLUDES; do
+	rm -f $UNINSTALL_BASE/include/grass/$i
+done
+
+for i in $EXT_LIBS; do
+	rm -f $UNINSTALL_BASE/lib/$i
+done
+
+for i in $EXT_SUBDIRS; do
+	rm -rf $UNINSTALL_BASE/$i
+done
+
+# You can add delete commands for additional files or any other commands that
+# need to be run in order to clean up here

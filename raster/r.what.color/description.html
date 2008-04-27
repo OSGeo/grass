@@ -1,0 +1,76 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.what.color</EM> outputs the color associated with user-specified
+category values in a raster input map.
+<p>
+Values may be specified either using the <b>values=</b> option, or by
+specifying the <b>-i</b> flag and passing the values on
+<tt>stdin</tt>, one per line.
+<p>
+For each value which is specified, a line of output will be generated
+consisting of the category value followed by the color, e.g.:
+
+<div class="code"><pre>
+r.what.color input=elevation.dem value=1500
+1500: 223:127:31
+</pre></div>
+
+<p>
+If the input map is an integer (CELL) map, the category will be
+written as an integer (no decimal point), otherwise it will be written
+in floating point format (<i>printf("%f")</i> format).
+
+<p>
+If the lookup fails for a value, the color will be output as an
+asterisk, e.g.:
+
+<div class="code"><pre>
+r.what.color input=elevation.dem value=9999
+9999: *
+</pre></div>
+
+<p>
+If a value cannot be parsed, both the value and the color will be
+output as an asterisk, e.g.:
+
+<div class="code"><pre>
+r.what.color input=elevation.dem value=bogus
+*: *
+</pre></div>
+
+<p>
+The format can be changed using the <b>format=</b> option. The value
+should be a <i>printf()</i>-style format string containing three
+conversion specifiers for the red, green and blue values respectively,
+e.g.:
+
+<div class="code"><pre>
+r.what.color input=elevation.dem value=1500 format='%02x:%02x:%02x'
+1500: df:7f:1f
+</pre></div>
+
+<p>
+If your system supports the <i>%m$</i> syntax, you can change the
+ordering of the components, e.g.:
+
+<div class="code"><pre>
+r.what.color input=elevation.dem value=1500 format='%3$02x:%2$02x:%1$02x'
+1500: 1f:7f:df
+</pre></div>
+
+<P>
+Common formats:<BR>
+<ul>
+<li>Tcl/Tk: <tt>format="#%02x%02x%02x"</tt>
+<li>WxPython: <tt>format='"#%02x%02x%02x"'</tt>  or  <tt>format='"(%d,%d,%d)"'</tt>
+</ul>
+
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="r.what.html">r.what</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Glynn Clements

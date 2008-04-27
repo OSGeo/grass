@@ -1,0 +1,63 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.lrs.segment</em> creates points/segments from input lines,
+linear reference system and positions read from <tt>standard in</tt>
+or a file.
+<P>
+The format is as follows:<BR>
+
+<div class="code"><pre>
+P &lt;point_id&gt; &lt;line_id&gt; &lt;milepost&gt;+&lt;offset&gt; [&lt;side offset&gt;]
+L &lt;segment_id&gt; &lt;line_id&gt; &lt;milepost&gt;+&lt;offset&gt; &lt;milepost&gt;+&lt;offset&gt; [&lt;side offset&gt;]
+</pre></div>
+
+<h2>NOTES</h2>
+
+For more information and examples see the help page for <em>v.lrs.segment</em>'s
+sister module, <em><a href="v.segment.html">v.segment</a></em>.
+
+<h2>EXAMPLE</h2>
+
+This example is written for the Spearfish dataset (it continues the example
+from <em>v.lrs.create</em>).
+<p>
+In this example, the 'route_lrs' shall be extended for a new
+position (point) along the LRS after bus stop 4:
+
+<div class="code"><pre>
+# new point on LRS
+echo "P 7 22 4+180" | v.lrs.segment route_lrs out=route_lrs_new rstable=route_lrs
+
+g.region vect=route_lrs n=n+100 s=s-100 -p
+d.erase
+# existing LRS
+d.vect route_lrs
+d.vect busstops disp=attr attr=cat size=10 bg=white lcol=blue yref=bottom
+d.vect busstops icon=basic/circle fcol=blue
+db.select route_lrs
+
+# show modified map
+d.vect route_lrs_new col=red
+</pre></div>
+
+<h2>TODO</h2>
+
+Figure out how to merge result into existing LRS map and table.
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="lrs.html">LRS tutorial</a>,<br>
+<a HREF="http://gisws.media.osaka-cu.ac.jp/grass04/viewpaper.php?id=50">Introducing the Linear Reference System in GRASS</a>,<br>
+<a HREF="v.lrs.create.html">v.lrs.create</a>,
+<a HREF="v.lrs.where.html">v.lrs.where</a>,
+<a HREF="v.lrs.label.html">v.lrs.label</a>,
+<a HREF="v.segment.html">v.segment</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<p>
+<i>Last changed: $Date$</i>

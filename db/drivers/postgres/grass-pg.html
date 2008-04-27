@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>GRASS-PostgreSQL driver</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h1>PostgreSQL driver in GRASS</h1>
+
+The driver name is 'pg'.
+
+<H2>Creating a PostgreSQL database</H2>
+
+A new database is created with 'createdb', see the PostgreSQL manual
+for details.
+
+<H2>Connecting GRASS to PostgreSQL</H2>
+
+<div class="code"><pre>
+# example for connecting to a PostgreSQL server:
+db.connect driver=pg database="host=myserver.itc.it,dbname=mydb"
+db.login user=myname pass=secret
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<H2>Supported SQL commands</H2>
+
+All SQL commands supported by PostgreSQL.
+
+
+<H2>Operators available in conditions</H2>
+
+All SQL operators supported by PostgreSQL.
+
+
+<H2>Adding an unique ID column</H2>
+
+Import vector module require an unique ID column which can
+be generated as follows in a PostgreSQL table:
+
+<div class="code"><pre>
+echo "
+ ALTER TABLE mytable ADD ID integer;
+ CREATE SEQUENCE mytable_seq;
+ UPDATE mytabe SET ID = nextval('mytable_seq');
+ DROP SEQUENCE mytable_seq;
+" | db.execute
+</pre></div>
+
+
+<h2>Attribute Converters</h2>
+
+CSV import into PostgreSQL:
+<div class="code"><pre>
+\h copy
+COPY t1 FROM 'filename' USING DELIMITERS ',';
+</pre></div>
+
+<a href=http://www.klaban.torun.pl/prog/pg2xbase/>pg2xbase</a>: 
+DBF to PostgreSQL converter.
+<BR>
+
+<h2>PostGIS: PostgreSQL with vector geometry</h2>
+
+<a href=http://postgis.refractions.net/>PostGIS</a>: 
+adds geographic object support to PostgreSQL.
+
+<h3>Example: Import from PostGIS</h3>
+
+In an existing PostGIS database, create the following table:
+
+<div class="code"><pre>
+CREATE TABLE test
+(
+ id serial NOT NULL,
+ mytime timestamp DEFAULT now(),
+ text varchar,
+ wkb_geometry geometry,
+ CONSTRAINT test_pkey PRIMARY KEY (id)
+) WITHOUT OIDS;
+
+# insert value
+INSERT INTO test (text, wkb_geometry)
+ VALUES ('Name',geometryFromText('POLYGON((600000 200000,650000
+ 200000,650000 250000,600000 250000,600000 200000))',-1));
+
+# register geometry column
+select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
+</pre></div>
+
+GRASS can import this PostGIS polygon map as follows:
+
+<div class="code"><pre>
+v.in.ogr dsn="PG:host=localhost dbname=postgis user=neteler" layer=test \
+         output=test type=boundary,centroid
+v.db.select test
+v.info -t test
+</pre></div>
+
+
+<h4>Geometry Converters</h4>
+<ul>
+<li><a href=http://postgis.refractions.net/download/>PostGIS with shp2pgsql</a>:<br>
+ <tt>shp2pgsql -D lakespy2 lakespy2 test > lakespy2.sql</tt>
+<BR><BR>
+<li><a href=http://e00pg.sourceforge.net/>e00pg</a>: E00 to PostGIS filter,
+see also <em><a href="v.in.e00.html">v.in.e00</a></em>.
+<BR><BR>
+<li>GDAL/OGR <a href=http://www.gdal.org/ogr/>ogrinfo and ogr2ogr</a>:
+GIS vector format converter and library, e.g. ArcInfo or SHAPE to PostGIS.<br>
+  <tt>ogr2ogr -f "PostgreSQL" shapefile ??</tt>
+<BR><BR>
+</ul>
+
+
+<H2>SEE ALSO</H2>
+
+<em>
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="db.execute.html">db.execute</a>,<BR>
+<a HREF="databaseintro.html">Database management in GRASS GIS</a>,<BR>
+<a HREF="database.html">Help pages for database modules</a>,<BR>
+<a HREF="sql.html">SQL support in GRASS GIS</a>
+</em>
+<BR><BR>
+<em>
+<a href="http://www.PostgreSQL.org">PostgreSQL web site</a>,<BR>
+<a href="http://www.pgadmin.org/">pgAdmin graphical user interface</a>
+<p>
+Book: <a href="http://www.postgresql.org/docs/books/awbook.html">PostgreSQL:
+  Introduction and Concepts</a> by Bruce Momjian<BR>
+<a href="http://www.postgresql.org/docs/">PostgreSQL Documentation</a><BR>
+<a href="http://techdocs.postgresql.org/">PostgreSQL Technical Documentation</a><BR>
+<a href="http://www.gdal.org/ogr/drv_pg.html">GDAL/OGR PostgreSQL driver documentation</a><BR>
+<a href="http://mapserver.gis.umn.edu/cgi-bin/wiki.pl?MapServerWiki">MapServer Wiki</a>
+</em>
+
+<p><i>Last changed: $Date$</i></p>
+<HR>
+<BR><a href=index.html>Help Index</a>
+</body>
+</html>

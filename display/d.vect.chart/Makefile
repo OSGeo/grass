@@ -1,0 +1,13 @@
+
+MODULE_TOPDIR = ../..
+
+PGM = d.vect.chart
+
+LIBES        = $(DISPLAYLIB) $(RASTERLIB) $(VECTLIB) $(DBMILIB) $(GISLIB)
+DEPENDENCIES = $(DISPLAYDEP) $(RASTERDEP) $(VECTDEP) $(DBMIDEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

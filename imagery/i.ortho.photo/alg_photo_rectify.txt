@@ -1,0 +1,236 @@
+This file contains commented 'ortho_rectify.rst' debug output
+(appears when compiling i.ortho.photo with DEBUG3 option) to
+explain the algorithm of ortho rectificaton.
+
+
+After launching photo.rectify following procedure is performed:
+
+main.c
+          Looking for elevation file in group: DSCN0542
+          Block elevation: dtm.10meters in dtm.10meters
+          Starting exec_rectify...
+          Looking for elevation file in group: DSCN0542
+          Block elevation: dtm.10meters in dtm.10meters
+          Starting exec_rectify...
+
+----------------------------------------------------------------------
+exec.c
+          I look for files to ortho rectify 
+          ORTHO RECTIFYING: 
+          NAME DSCN0542b 
+          MAPSET michelazzi 
+          RESULT 542nikon02 
+----------------------------------------------------------------------
+target.c
+          select_current_env...
+----------------------------------------------------------------------
+exec.c
+          reading was fine...
+          Starting the rectification...
+----------------------------------------------------------------------
+rectify.c
+          Open temp elevation file: 
+          target window: rs=723 cs=884 n=5102422.000000 s=5101699.000000 w=1651900.000000 e=1652784.000000
+	  
+	  NOTES: the size of target window is defined in photo.rectify/global.h
+	  #define TIE_ROW_DIST 128
+	  #define TIE_COL_DIST 128
+	  #define NROWS 128
+	  #define NCOLS 128
+	  -> 128 is too large for alpine regions! MN 2003
+
+----------------------------------------------------------------------
+aver_z.c
+          In ortho meanz = 245.609802 
+	  [...]
+          In ortho meanz = 6101.599517 
+          In ortho meanz = 6351.202117 
+          In ortho aver_z = 254.048085 
+	  
+	  NOTES: calculates average height of all ground control points,
+	  in case no ground control point available, the average height is used in 'rectify.c' (z2)
+	  -> this may lead to problems ? MN 2003
+----------------------------------------------------------------------
+rectify.c
+          elev layer = dtm.10meters  mapset elev = dtm.10meters elevfd = 5 
+          Number Tie_Points: y_ties 24 	x_ties 29 
+          Tie_Point 	 row 0 	col 0 
+          	 east 1651901.000000	 north 5102421.000000 
+          		 row2 = 1.000000 	 col2 =  1.000000 
+          		   r2 = 1 	   c2 =  1 
+          		 elevbuf[c2] = 406.303589        
+          		 e2 = 1651901.000000 	 n2 =  5102421.000000 	 z2 = 406.303589 
+          		 XC = 1652204.875702 	 YC =  5101789.573258 	 ZC = 102.602297 
+          		 omega = 0.062981 	 phi =  0.268649 	 kappa = 0.280221 
+
+	  NOTES: the rectification is done with tiles
+   ----------------------------------------------------------------------
+   ../libes/orthoref.c
+          		After ortho ref (photo cords): ex = 11.520612 	 nx =  -49.332506 
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          		After geo ref: ex = -942.577786 	 nx =  -1679.150555 
+   ----------------------------------------------------------------------
+   rectify.c
+          Tie_Point 	 row 0 	col 1 
+          	 east 1651933.000000	 north 5102421.000000 
+          		 row2 = 1.000000 	 col2 =  33.000000 
+          		   r2 = 1 	   c2 =  33 
+          		 elevbuf[c2] = 393.022095        
+          		 e2 = 1651933.000000 	 n2 =  5102421.000000 	 z2 = 393.022095 
+          		 XC = 1652204.875702 	 YC =  5101789.573258 	 ZC = 102.602297 
+          		 omega = 0.062981 	 phi =  0.268649 	 kappa = 0.280221 
+   ----------------------------------------------------------------------
+   ../libes/orthoref.c
+          		After ortho ref (photo cords): ex = 9.522318 	 nx =  -49.863916 
+			
+	  NOTES: using the XC, YC, ZC, omega, phi, kappa, photo coordinates (in pixel) are
+	         calculated
+		 
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          		After geo ref: ex = -976.095185 	 nx =  -1688.082343 
+			
+	  NOTES: using ex, nx from orthoref and calculates the position according to
+	         the tie points grid
+
+   ----------------------------------------------------------------------
+   rectify.c
+[...]
+          Tie_Point 	 row 23 	col 28 
+          	 east 1652783.000000	 north 5101700.000000 
+          		 row2 = 722.000000 	 col2 =  883.000000 
+          		   r2 = 722 	   c2 =  883 
+          		 elevbuf[c2] = 318.217010        
+          		 e2 = 1652783.000000 	 n2 =  5101700.000000 	 z2 = 318.217010 
+          		 XC = 1652204.875702 	 YC =  5101789.573258 	 ZC = 102.602297 
+          		 omega = 0.062981 	 phi =  0.268649 	 kappa = 0.280221 
+   ----------------------------------------------------------------------
+   ../libes/orthoref.c
+          		After ortho ref (photo cords): ex = -14.763034 	 nx =  6.790096 
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          		After geo ref: ex = -1383.557478 	 nx =  -739.400496 
+   ----------------------------------------------------------------------
+   rectify.c
+   ----------------------------------------------------------------------
+   ps_cp.c
+          Patching column 884: 
+          Patching 723 row: 
+          In ps_cp 
+          ps_cp allocated 
+          	 k = 0	 i = 0	 j = 0 
+          		 e1[k] = -942.577786 
+          		 n1[k] = -1679.150555 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 0.000000 
+          	 k = 1	 i = 0	 j = 1 
+          		 e1[k] = -976.095185 
+          		 n1[k] = -1688.082343 
+          		 e2[k] = 32.000000 
+          		 n2[k] = 0.000000 
+          	 k = 2	 i = 1	 j = 0 
+          		 e1[k] = -927.097096 
+          		 n1[k] = -1670.419345 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 32.000000 
+          	 k = 3	 i = 1	 j = 1 
+          		 e1[k] = -956.976064 
+          		 n1[k] = -1707.546288 
+          		 e2[k] = 32.000000 
+          		 n2[k] = 32.000000 
+          ps_cp initialized 
+
+	  NOTES: calculation of pixel positions and transfer of pixels to new location
+
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          	ref equ: case good
+          		E21 = -943.487394	 -0.990568	 0.540622 
+          		N21 = -1672.101767	 -0.719668	 -0.167699 
+          	 got psuedo pts: row 0 	 col 0 
+          		compute geo matrix
+          		perform georef 
+          		write matrix 
+   ----------------------------------------------------------------------
+   ps_cp.c
+          Patching 691 row: 
+          In ps_cp 
+          ps_cp allocated 
+     [...]
+          Patching 51 row: 
+          In ps_cp 
+          ps_cp allocated 
+          	 k = 0	 i = 0	 j = 0 
+          		 e1[k] = -1388.556052 
+          		 n1[k] = -765.005604 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 0.000000 
+          	 k = 1	 i = 0	 j = 1 
+          		 e1[k] = -1392.213733 
+          		 n1[k] = -764.361388 
+          		 e2[k] = 18.000000 
+          		 n2[k] = 0.000000 
+          	 k = 2	 i = 1	 j = 0 
+          		 e1[k] = -1382.484111 
+          		 n1[k] = -748.482320 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 32.000000 
+          	 k = 3	 i = 1	 j = 1 
+          		 e1[k] = -1387.020336 
+          		 n1[k] = -747.828931 
+          		 e2[k] = 18.000000 
+          		 n2[k] = 32.000000 
+          ps_cp initialized 
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          	ref equ: case good
+          		E21 = -1388.336416	 -0.227609	 0.176021 
+          		N21 = -765.007897	 0.036045	 0.516496 
+          	 got psuedo pts: row 21 	 col 27 
+          		compute geo matrix
+          		perform georef 
+          		write matrix 
+			
+	  NOTES: calculation of coefficients of geocoding
+
+   ----------------------------------------------------------------------
+   ps_cp.c
+          Patching 19 row: 
+          In ps_cp 
+          ps_cp allocated 
+          	 k = 0	 i = 0	 j = 0 
+          		 e1[k] = -1382.484111 
+          		 n1[k] = -748.482320 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 0.000000 
+          	 k = 1	 i = 0	 j = 1 
+          		 e1[k] = -1387.020336 
+          		 n1[k] = -747.828931 
+          		 e2[k] = 18.000000 
+          		 n2[k] = 0.000000 
+          	 k = 2	 i = 1	 j = 0 
+          		 e1[k] = -1379.325854 
+          		 n1[k] = -739.733821 
+          		 e2[k] = 0.000000 
+          		 n2[k] = 17.000000 
+          	 k = 3	 i = 1	 j = 1 
+          		 e1[k] = -1383.557478 
+          		 n1[k] = -739.400496 
+          		 e2[k] = 18.000000 
+          		 n2[k] = 17.000000 
+          ps_cp initialized 
+   ----------------------------------------------------------------------
+   ../libes/georef.c
+          	ref equ: case good
+          		E21 = -1382.560261	 -0.243551	 0.194739 
+          		N21 = -748.402304	 0.027409	 0.505204 
+          	 got psuedo pts: row 22 	 col 27 
+          		compute geo matrix
+          		perform georef 
+          		write matrix 
+   ----------------------------------------------------------------------
+   exec.c
+          Done. Writing results...
+
+End of show.

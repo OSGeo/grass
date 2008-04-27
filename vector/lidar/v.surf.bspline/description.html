@@ -1,0 +1,166 @@
+<h2>DESCRIPTION</h2>
+<em>v.surf.bspline</em> makes a bilinear/bicubic spline interpolation 
+with Tykhonov regularization. The required input is an only 3d points 
+vector map that will be used to interpolate a reference surface. 
+<br>
+<br>
+Interpolation is carried out by adjusting a Least-Squares (LS) system 
+in which the parameters to estime are spline functions. The number of 
+splines doesn't depend on the resolution region, but it depends on the 
+spline steps values in the north-south and west-east directions. These 
+spline steps are set by "<b><i>sin=</i></b>" and "<b><i>sie=</i></b>", 
+respectively. If the number of splines is bigger than the number of 
+points, the LS system is bad conditioned because there are more unkowns 
+than observations. In that case the LS normal matrix can't be inverted. 
+To allow the inversion of the normal matrix a Tykhonov regularization 
+is done. The minimizing function is the gradient in the case of a bilinear 
+interpolation, and the curvature in the bicubic interpolation. The 
+lambda_i parameter associated with the regularization smooths the 
+interpolation. The higher the lambda_i parameter, the smoother the 
+interpolation.
+<br>
+<br>
+The number of splines has a great influence on two things, mainly. The
+first thing is the module's execution time. The second is the RAM use. 
+The higher the number of splines, the longer the time of execution and 
+the higher RAM use. A numerical example: 100 splines in each direction 
+imply 10e4 splines in total, that is, a square LS normal matrix of 10e4 
+size. Inverting this matrix means inverting 100 millions elements! 
+To improve this problems a Tcholebsky method with triangulars matrixes 
+is used in the normal matrix inversion. It has also fixed a maximum number 
+of splines for each direction. However, it is also possible running the 
+module with a higher number of splines. For a number of spline higher than 
+the fixed maximum, the whole region is divided into smaller regions. Each 
+subregion is 150x150 splines wide. To avoid contour problems, the subregions 
+are overlaped one to each other. To estimate a single value within the 
+overlaped zones, a weighted mean considering the point positions into each
+subregion is carried out.
+<br>
+<br>
+The required input is a 3d points vector. If nothing is specified z-coordinates
+will be used in the interpolation. It could be also possible to consider 
+an attribute value by specifying "<b><i>layer=</i></b>" and "<b><i>column=</i></b>" 
+parameters. If a vector map with another type of features is used, only 
+points will be considered. If the "<b><i>sparse=</i></b>" vector is 
+used, the "<b><i>input=</i></b>" vector map will be used to create a 
+reference surface. This surface will be used to make an estimation on the 
+points within the "<b><i>sparse=</i></b>". In this case a vector output 
+("<b><i>output=</i></b>") must be specify. If the "<b><i>sparse=</i></b>" 
+is not supplied, the final interpolation output will be the interpolated 
+reference surface from the "<b><i>input=</i></b>" vector map. In this case, 
+one of both the raster or vector output format can be choosen. For raster 
+format ("<b><i>raster=</i></b>"), the point estimation will be done 
+on a regular grid with a resolution equal to the GRASS region. For vector 
+format, the estimation will be done on the sparse points of the 
+"<b><i>input=</i></b>" vector supplied. Both, vector and raster output, 
+are not allowed simultaneously.
+<br>
+<br>
+A cross validation method has been implemented. It helps to find the optimal 
+lambda_i value that fits the data. It shows the <i>mean</i> and <i>rms</i> 
+of the residuals from the true point value and the estimated from the 
+interpolation made with all the data without the point itself. This procedure 
+is done for fixed lambda_i values. The results of the cross validation will 
+appear in the stdout and no vector nor raster output will be created. The 
+external input ("<b><i>sparse=</i></b>") will be not considered. Due to 
+the nature of the algorithm, it is advised the user no to try the cross-
+validation with more than 100 points at a time because it will take too long. 
+The execution time could be reduced by considering a lower number of splines.
+Although, as seen, it is possible to use a high number of splines, more than 
+150x150 splines is not recommended.
+<br>
+<br>
+In a raster map output ("<b><i>raster=</i></b>"), region resolution implying 
+more than 2000x2000 (4 mill) cells are not allowed. If the user tries with a 
+more than those cells an error message will ask for a lower region resolution.
+
+<h2>EXAMPLES</h2>
+
+<h4>Basic interpolation</h4>
+
+<div class="code"><pre>
+v.surf.bspline input=point_vector output=interpolate_surface type=bicubic
+</pre></div>
+
+In this case, a bicubic spline interpolation will be done and an
+estimation on the points of point_vector will be the output.
+
+<h4>Basic interpolation and raster output with a long spline step</h4>
+
+<div class="code"><pre>
+v.surf.bspline input=point_vector raster=interpolate_surface sie=25 sin=25
+</pre></div>
+
+Now, a bilinear spline interpolation will be done on a grid. The spline steps
+are set to 25. It doesn't mean that the grid will have a resolution equal to 25, 
+but that each 25 units there will be a spline. 
+
+<h4> Estimation of lambda_i parameter with a cross validation proccess</h4>
+
+<div class="code"><pre>
+v.surf.bspline -c input=point_vector 
+</pre></div>
+
+
+<h4>Estimation on sparse points</h4>
+
+<div class="code"><pre>
+v.surf.bspline input=point_vector sparse=sparse_points output=interpolate_surface
+</pre></div>
+
+In this last case, an estimation on the points of the sparse_points vector
+will be done. The reference surface used for this estimation will be that
+interpolated using the point_vector vector.
+
+<h4>Using attribute values instead Z-coordinates</h4>
+<div class="code"><pre>
+v.surf.bspline input=point_vector raster=interpolate_surface layer=1 column=attrib_column
+</pre></div>
+
+This last case, the module uses the attribute values in attrib_column 
+in the table associated to layer 1.
+
+<h2>BUGS</h2>
+Known issues:
+<br>
+<br>
+In order to avoid RAM memory problems, an auxiliar table will be needed for 
+recording some intermediate calculi. Since the "<b>GROUP BY</b>" SQL function is used, 
+which is not supported by the "<b>dbf</b>" driver, this driver is not 
+allowed with the vector map output "<b><i>output=</i></b>". There is no problem
+with the raster map output.
+<br>
+<br>
+At this time, using the external vector input ("<b><i>sparse=</i></b>") implies 
+interpoling with Z-coordinates. Updates to allow using attribute values
+will be done in a near future (I hope).
+<br>
+<br>
+
+
+<h2>SEE ALSO</h2>
+<em><a HREF="v.surf.rst.html">v.surf.rst</a></em>
+
+<h2>AUTHORS</h2>
+Original version in GRASS 5.4: (s.bspline.reg)
+<BR>
+Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni, Mirko Reguzzoni
+<BR><BR>
+Update for GRASS 6.X and improvements:
+<BR>
+Roberto Antolin
+
+<h2>REFERENCES</h2>
+Brovelli M. A., Cannata M., and Longoni U.M., 2004, LIDAR Data Filtering and DTM Interpolation Within GRASS, Transactions in GIS, April 2004, vol. 8, iss. 2, pp. 155-174(20), Blackwell Publishing Ltd
+<br>
+<br>
+Brovelli M. A. and Cannata M., 2004, Digital Terrain model reconstruction  in urban areas from airborne laser scanning data: the method and an  example for Pavia (Northern Italy). Computers and Geosciences 30, pp.325-331
+<br>
+<br>
+Brovelli M. A e Longoni U.M., 2003, Software per il filtraggio di dati LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22 (ISSN 1593-2192)
+<br>
+<br>
+Brovelli M. A., Cannata M. and Longoni U.M., 2002, DTM LIDAR in  area urbana, Bollettino SIFET N.2, 2002, pp. 7-26
+<br>
+
+<p><i>Last changed: $Date$</i>

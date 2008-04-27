@@ -1,0 +1,45 @@
+<H2>DESCRIPTION</H2>
+
+<EM>d.labels</EM> displays a <EM>paint</EM> label file in the 
+active display frame on the graphics monitor. Each label has components 
+which determine the text, the location of the text on the image, its 
+size, and the background for the text. This file can be generated with 
+the <EM><A HREF="v.label.html">v.label</A></EM> program or simply created 
+by the user as an ASCII file (using a text editor) and placed in the 
+appropriate directory under the user's current mapset and location 
+(i.e. <tt>$MAPSET/paint/labels/</tt>).
+
+<H2>NOTES</H2>
+
+Some of the information stored in the label file is unused by 
+<EM>d.labels</EM>.
+<!-- The unused information found in a label file is printed to standard 
+output. -->
+This extra information is used by such programs as 
+<EM><A HREF="ps.map.html">ps.map</A></EM>.
+
+<P>
+This module was formerly known as <em>d.paint.labels</em>.
+The the old version of <em>d.labels</em> from GRASS 5, which provided
+interactive placement and modification of paint labels, still needs to 
+have its functionality merged into this module.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.font.html">d.font</A></EM><br>
+<EM><A HREF="d.text.html">d.text</A></EM><br>
+<EM><A HREF="d.font.freetype.html">d.font.freetype</A></EM><br>
+<EM><A HREF="d.text.freetype.html">d.text.freetype</A></EM><br>
+<EM><A HREF="d.title.html">d.title</A></EM><br>
+<EM><A HREF="ps.map.html">ps.map</A></EM><br>
+<EM><A HREF="v.label.html">v.label</A></EM>
+<BR>
+
+<H2>AUTHOR</H2>
+
+James Westervelt, 
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

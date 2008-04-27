@@ -1,0 +1,163 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:	i.landsat.rgb
+#
+# AUTHOR(S):	Markus Neteler. <neteler itc it>
+#		Hamish Bowman, scripting enhancements
+#
+# PURPOSE:      create pretty LANDSAT RGBs: the trick is to remove outliers 
+#               using percentiles (area under the histogram curve)
+#
+# COPYRIGHT:	(C) 2006 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+# TODO: implement better brightness control
+#############################################################################
+
+#%Module
+#%  description: Auto-balancing of colors for LANDSAT images
+#%  keywords: raster, imagery, colors
+#%End
+#%option
+#% key: red
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: LANDSAT red channel
+#% required : yes
+#%end
+#%option
+#% key: green
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: LANDSAT green channel
+#% required : yes
+#%end
+#%option
+#% key: blue
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: LANDSAT blue channel
+#% required : yes
+#%end
+#%option
+#% key: strength
+#% type: integer
+#% description: Cropping intensity (upper brightness level)
+#% options: 0-100
+#% answer : 98
+#% required : no
+#%end
+#%flag
+#% key: f
+#% description: Extend colors to full range of data on each channel
+#%end
+#%flag
+#% key: p
+#% description: Preserve relative colors, adjust brightness only
+#%end
+#%flag
+#% key: r
+#% description: Reset to standard color range
+#%end
+
+
+if [ -z "$GISBASE" ] ; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+# check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first"
+    exit 1
+fi 
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+PROG=`basename $0`
+
+BLUE="$GIS_OPT_BLUE"
+GREEN="$GIS_OPT_GREEN"
+RED="$GIS_OPT_RED"
+
+# 90 or 98? MAX value controls brightness
+# think of percent (0-100), must be positive or 0
+# must be more than "2" ?
+BRIGHTNESS="$GIS_OPT_STRENGTH"
+
+
+if [ 1 -eq $GIS_FLAG_F ] ; then
+   for i in $RED $GREEN $BLUE ; do
+      r.colors $i col=grey
+   done
+   exit 0
+fi
+if [ 1 -eq $GIS_FLAG_R ] ; then
+   for i in $RED $GREEN $BLUE ; do
+      r.colors $i col=rules << EOF
+	0 black
+	255 white
+EOF
+   done
+   exit 0
+fi
+
+if [ 0 -eq $GIS_FLAG_P ] ; then
+   for i in $RED $GREEN $BLUE ; do
+      g.message "Processing <$i> ..."
+      MIN=`r.univar -ge $i perc=2 | grep "^percentile_" | cut -d'=' -f2`
+      MAX=`r.univar -ge $i perc=$BRIGHTNESS | grep "^percentile_" | cut -d'=' -f2`
+      g.message -d message="<$i>:  min=$MIN   max=$MAX"
+      r.colors $i col=rules << EOF
+	0% black
+	$MIN black
+	$MAX white
+	100% white
+EOF
+      done
+else
+   ALL_MAX=0
+   ALL_MIN=255
+   for i in $RED $GREEN $BLUE ; do
+      g.message "Processing <$i> ..."
+      MIN=`r.univar -ge $i perc=2  | grep "^percentile_" | cut -d'=' -f2`
+      MAX=`r.univar -ge $i perc=$BRIGHTNESS | grep "^percentile_" | cut -d'=' -f2`
+      g.message -d message="<$i>:  min=$MIN   max=$MAX"
+      ALL_MAX=`echo "$MAX $ALL_MAX" | awk '{if ($1 > $2) print $1; else print $2}'`
+      ALL_MIN=`echo "$MIN $ALL_MIN" | awk '{if ($1 < $2) print $1; else print $2}'` 
+   done
+   g.message -d message="all_min=$ALL_MIN   all_max=$ALL_MAX"
+   for i in $RED $GREEN $BLUE ; do
+      r.colors $i col=rules << EOF
+	0% black
+	$ALL_MIN black
+	$ALL_MAX white
+	100% white
+EOF
+   done
+fi
+
+# write cmd history:
+r.support ${GIS_OPT_BLUE} history="${CMDLINE}"
+r.support ${GIS_OPT_GREEN} history="${CMDLINE}"
+r.support ${GIS_OPT_RED} history="${CMDLINE}"
+
+exit 0

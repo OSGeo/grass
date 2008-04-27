@@ -1,0 +1,116 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.in.poly</EM> allows the creation of GRASS binary
+raster maps from ASCII files in the current directory
+containing polygon, linear, and point features.
+
+<P>
+The <B>input</B> file is an ASCII text file containing the
+polygon, linear, and point feature definitions.
+The format of this file is described in the
+<A HREF="#format.html"><B>INPUT FORMAT</B></A> section below.
+
+<P>
+The number of raster <b>rows</b> to hold in memory is per default 4096.
+This parameter allows users with less memory (or more) on their
+system to control how much memory <EM>r.in.poly</EM> uses.
+Usually the default value is fine.
+
+
+<H2>NOTES</H2>
+
+<P>
+The data will be imported using the current region settings to set the
+new raster map's bounds and resolution. Any features falling outside
+the current region will be cropped. The region settings are contolled
+with the <em>g.region</em> module.
+
+<P>
+The format is a simplified version of the standard GRASS vector ASCII
+format used by <EM>v.in.ascii</EM>.
+
+<P>
+Polygons are filled, i.e. they define an area.
+
+<A NAME="format.html"></A>
+<H2>INPUT FORMAT</H2>
+
+The input format for the <B>input</B> file consists of
+sections describing either polygonal areas, linear features, or
+point features. The basic format is:
+
+<div class="code"><pre>
+A                      &lt;for polygonal areas&gt;
+    easting northing
+    .
+    .
+    .
+=   cat# label
+L                      &lt;for linear features&gt;
+    easting northing
+    .
+    .
+    .
+=   cat# label
+P                      &lt;for single cell point features&gt;
+    easting northing
+=   cat# label
+</pre></div>
+
+
+The <tt>A</tt> signals the beginning of a filled polygon.
+It must appear in the first column.
+
+The <tt>L</tt> signals the beginning of a linear feature.
+It also must appear in the first column.
+
+The <tt>P</tt> signals the beginning of a single cell point feature.
+Again, it must appear in the first column.
+
+The coordinates of the vertices of the polygon, or the coordinates defining
+the linear or point feature follow and must have a space in the first
+column and at least one space between the <EM>easting</EM> and the
+<EM>northing.</EM> To give meaning to the features, the
+"<tt>=</tt>" indicates that the feature currently being
+processed has category value <EM>cat#</EM> (which must be
+an integer) and a <EM>label</EM> (which may be more than
+one word, or which may be omitted).
+
+
+<H2>EXAMPLE</H2>
+
+An area described by four points:
+
+<div class="code"><pre>
+A
+  591316.80   4926455.50
+  591410.25   4926482.40
+  591434.60   4926393.60
+  591341.20   4926368.70
+= 42 stadium
+</pre></div>
+
+<H2>SEE ALSO</H2>
+
+<A HREF="r.digit.html">r.digit</A> for
+interactive on-screen polygon/line digitizing for raster maps
+<P>
+<A HREF="r.colors.html">r.colors</A>
+for creates color tables for raster maps
+<P>
+
+<A HREF="d.rast.edit.html">d.rast.edit</A>,
+<A HREF="g.region.html">g.region</A>,
+<A HREF="r.in.xyz.html">r.in.xyz</A>,
+<A HREF="r.patch.html">r.patch</A>,
+<A HREF="v.in.ascii.html">v.in.ascii</A>,
+<A HREF="v.digit.html">v.digit</A>
+
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

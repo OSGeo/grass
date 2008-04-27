@@ -1,0 +1,161 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	i.tasscap
+# AUTHOR(S):	Markus Neteler. neteler itc.it
+# PURPOSE:	At-satellite reflectance based tasseled cap transformation.
+# COPYRIGHT:	(C) 1997-2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+# TODO: Check if MODIS Tasseled Cap makes sense to be added
+#       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
+#############################################################################
+# References:
+# LANDSAT-4/LANDSAT-5:
+#  script based on i.tasscap.tm4 from Dr. Agustin Lobo - alobo@ija.csic.es
+#  TC-factor changed to CRIST et al. 1986, p.1467 (Markus Neteler 1/99)
+#                       Proc. IGARSS 1986
+#
+# LANDSAT-7:
+#  TASSCAP factors cited from:
+#   DERIVATION OF A TASSELED CAP TRANSFORMATION BASED ON LANDSAT 7 AT-SATELLITE REFLECTANCE
+#   Chengquan Huang, Bruce Wylie, Limin Yang, Collin Homer and Gregory Zylstra Raytheon ITSS, 
+#   USGS EROS Data Center Sioux Falls, SD 57198, USA
+#   http://landcover.usgs.gov/pdf/tasseled.pdf
+#
+#  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
+#  Compare discussion:
+#  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
+#############################################################################
+#
+#%Module
+#%  description: Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data
+#%  keywords: raster, imagery
+#%End
+#%flag
+#%  key: 4
+#%  description: use transformation rules for LANDSAT-4
+#%END
+#%flag
+#%  key: 5
+#%  description: use transformation rules for LANDSAT-5
+#%END
+#%flag
+#%  key: 7
+#%  description: use transformation rules for LANDSAT-7
+#%END
+#%option
+#% key: band1
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 1)
+#% required : yes
+#%end
+#%option
+#% key: band2
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 2)
+#% required : yes
+#%end
+#%option
+#% key: band3
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 3)
+#% required : yes
+#%end
+#%option
+#% key: band4
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 4)
+#% required : yes
+#%end
+#%option
+#% key: band5
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 5)
+#% required : yes
+#%end
+#%option
+#% key: band7
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: raster input map (LANDSAT channel 7)
+#% required : yes
+#%end
+#%option
+#% key: outprefix
+#% type: string
+#% gisprompt: new,cell,raster
+#% description: raster output TC maps prefix
+#% required : yes
+#%end
+
+if test "$GISBASE" = ""; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+if [ $GIS_FLAG_4 -eq 1 ] ; then
+  g.message "LANDSAT-4..."
+  g.message "Calculating first TC component $GIS_OPT_OUTPREFIX.1 ..."
+  r.mapcalc "$GIS_OPT_OUTPREFIX.1 =  0.3037 * $GIS_OPT_BAND1 + 0.2793 * $GIS_OPT_BAND2 + 0.4743 * $GIS_OPT_BAND3 + 0.5585 * $GIS_OPT_BAND4 + 0.5082 * $GIS_OPT_BAND5 + 0.1863 * $GIS_OPT_BAND7"
+  
+  g.message "Calculating second TC component $GIS_OPT_OUTPREFIX.2 ..."
+  r.mapcalc "$GIS_OPT_OUTPREFIX.2 = -0.2848 * $GIS_OPT_BAND1 - 0.2435 * $GIS_OPT_BAND2 - 0.5435 * $GIS_OPT_BAND3 + 0.7243 * $GIS_OPT_BAND4 + 0.0840 * $GIS_OPT_BAND5 - 0.1800 * $GIS_OPT_BAND7"
+  
+  g.message "Calculating third TC component $GIS_OPT_OUTPREFIX.3 ..."
+  r.mapcalc "$GIS_OPT_OUTPREFIX.3 =  0.1509 * $GIS_OPT_BAND1 + 0.1973 * $GIS_OPT_BAND2 + 0.3279 * $GIS_OPT_BAND3 + 0.3406 * $GIS_OPT_BAND4 - 0.7112 * $GIS_OPT_BAND5 - 0.4572 * $GIS_OPT_BAND7"
+else
+ if [ $GIS_FLAG_5 -eq 1 ] ; then
+  g.message "LANDSAT-5..."
+  g.message "Calculating first TC component $GIS_OPT_OUTPREFIX.1 (Brightness) ..."
+  r.mapcalc $GIS_OPT_OUTPREFIX.1 = "0.2909 * $GIS_OPT_BAND1 + 0.2493 * $GIS_OPT_BAND2 + 0.4806 * $GIS_OPT_BAND3 + 0.5568 * $GIS_OPT_BAND4 + 0.4438 * $GIS_OPT_BAND5 + 0.1706 * $GIS_OPT_BAND7 + 10.3695"
+  
+  g.message "Calculating second TC component $GIS_OPT_OUTPREFIX.2 (Greenness) ..."
+  r.mapcalc $GIS_OPT_OUTPREFIX.2 ="-0.2728 * $GIS_OPT_BAND1 - 0.2174 * $GIS_OPT_BAND2 - 0.5508 * $GIS_OPT_BAND3 + 0.7221 * $GIS_OPT_BAND4 + 0.0733 * $GIS_OPT_BAND5 - 0.1648 * $GIS_OPT_BAND7 - 0.7310"
+  
+  g.message "Calculating third TC component $GIS_OPT_OUTPREFIX.3 (Wetness) ..."
+  r.mapcalc $GIS_OPT_OUTPREFIX.3 = "0.1446 * $GIS_OPT_BAND1 + 0.1761 * $GIS_OPT_BAND2 + 0.3322 * $GIS_OPT_BAND3 + 0.3396 * $GIS_OPT_BAND4 - 0.6210 * $GIS_OPT_BAND5 - 0.4186 * $GIS_OPT_BAND7 - 3.3828"
+  
+  g.message "Calculating fourth TC component $GIS_OPT_OUTPREFIX.4. (Haze) ..."
+  r.mapcalc $GIS_OPT_OUTPREFIX.4 = "0.8461 * $GIS_OPT_BAND1 - 0.0731 * $GIS_OPT_BAND2 - 0.4640 * $GIS_OPT_BAND3 - 0.0032 * $GIS_OPT_BAND4 - 0.0492 * $GIS_OPT_BAND5 - 0.0119 * $GIS_OPT_BAND7 + 0.7879"
+ else
+  if [ $GIS_FLAG_7 -eq 1 ] ; then
+   g.message "LANDSAT-7..."
+   g.message "Calculating first TC component $GIS_OPT_OUTPREFIX.1 (Brightness) ..."
+   r.mapcalc $GIS_OPT_OUTPREFIX.1 = "0.3561 * $GIS_OPT_BAND1 + 0.3972 * $GIS_OPT_BAND2 + 0.3904 * $GIS_OPT_BAND3 + 0.6966 * $GIS_OPT_BAND4 + 0.2286 * $GIS_OPT_BAND5 + 0.1596 * $GIS_OPT_BAND7"
+   
+   g.message "Calculating second TC component $GIS_OPT_OUTPREFIX.2 (Greenness) ..."
+   r.mapcalc $GIS_OPT_OUTPREFIX.2 ="-0.3344 * $GIS_OPT_BAND1 - 0.3544 * $GIS_OPT_BAND2 - 0.4556 * $GIS_OPT_BAND3 + 0.6966 * $GIS_OPT_BAND4 - 0.0242 * $GIS_OPT_BAND5 - 0.2630 *  $GIS_OPT_BAND7"
+   
+   g.message "Calculating third TC component $GIS_OPT_OUTPREFIX.3 (Wetness) ..."
+   r.mapcalc $GIS_OPT_OUTPREFIX.3 = "0.2626 * $GIS_OPT_BAND1 + 0.2141 * $GIS_OPT_BAND2 + 0.0926 * $GIS_OPT_BAND3 + 0.0656 * $GIS_OPT_BAND4 - 0.7629 * $GIS_OPT_BAND5 - 0.5388 * $GIS_OPT_BAND7"
+   
+   g.message "Calculating fourth TC component $GIS_OPT_OUTPREFIX.4. (Haze) ..."
+   r.mapcalc $GIS_OPT_OUTPREFIX.4 = "0.0805 * $GIS_OPT_BAND1 - 0.0498 * $GIS_OPT_BAND2 + 0.1950 * $GIS_OPT_BAND3 - 0.1327 * $GIS_OPT_BAND4 + 0.5752 * $GIS_OPT_BAND5 - 0.7775 * $GIS_OPT_BAND7"
+  else
+   g.message -e 'Select LANDSAT satellite by flag!'
+   exit 1
+  fi
+ fi
+fi
+
+r.colors map=$GIS_OPT_OUTPREFIX.1 color=grey
+r.colors map=$GIS_OPT_OUTPREFIX.2 color=grey
+r.colors map=$GIS_OPT_OUTPREFIX.3 color=grey
+if [ $GIS_FLAG_4 -ne 1 ] ; then
+ r.colors map=$GIS_OPT_OUTPREFIX.4 color=grey
+fi
+
+g.message "Tasseled Cap components calculated."

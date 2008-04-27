@@ -1,0 +1,36 @@
+<H2>DESCRIPTION</H2>
+
+<em>r.quant</em> produces the quantization file for a floating-point map.
+<P>
+
+The <em>map</em> parameter defines the map for which the rules be to be
+created. If more than one map is specified, then this implies that the
+floating-point range is the miniumum and maximum of all the maps together,
+unless either basemap=map or fprange=min,max is specified.
+
+<H2> Quant rules </H2> 
+
+The quant rules have to be entered interactively.
+<p>
+If rules is specified, the input has the form: <p>
+
+              value1:value2:cat1:[cat2] <p>
+
+where value1 and value2 are floating point values and cat1 cand cat2 are
+integers. If cat2 is missing, it is taken to be equal to cat1. All values
+can be "*" which means infinity.
+
+<H2>NOTE</H2>
+It is an error for both basemap and fprange to be specified.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.support.html">r.support</A></EM>,
+<EM><A HREF="r.null.html">r.null</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, Olga Waupotitsch,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

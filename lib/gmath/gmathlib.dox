@@ -1,0 +1,356 @@
+/*! \page gmathlib GRASS Numerical math interface
+<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+     by M. Neteler 8/2005
+  -->
+<title>GRASS Numerical math interface</title>
+
+\section gmathintro Numerical math interface with optional support of LAPACK/BLAS
+
+<P>
+Author: David D. Gray<br>
+Additions: Brad Douglas
+
+<P>
+(under development) 
+<BR>
+<P>
+This chapter provides an explanation of how numerical algebra routines from
+LAPACK/BLAS can be accessed through the GRASS GIS library "gmath". Most of
+the functions are wrapper modules for linear algebra problems, a few are locally
+implemented.
+<BR>
+<P>
+Getting BLAS/LAPACK (one package) if not already provided by the system:
+<BR><TT><A HREF="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</A></TT>
+<BR><TT><A HREF="http://netlib.bell-labs.com/netlib/master/readme.html">http://netlib.bell-labs.com/netlib/master/readme.html</A></TT>
+<BR>
+<P>
+Pre-compiled binaries of LAPACK/BLAS are provided on many Linux
+distributions.
+
+<P>
+
+\section Implementation Implementation
+
+<P>
+The function name convention is as follows:
+
+<P>
+
+<OL>
+<LI>G_matrix_*() : corresponding to Level3 BLAS (matrix -matrix) ,
+</LI>
+<LI>G_matvect_*() : corresponding to Level2 BLAS (vector-matrix) and
+</LI>
+<LI>G_vector_*() : corresponding to Level1 BLAS (vector-vector) 
+</LI>
+</OL>
+
+<P>
+
+\section matrix_matrix_functions matrix -matrix functions
+
+<P>
+mat_struct *G_matrix_init (int rows, int cols, int ldim)<br>
+  Initialise a matrix  structure Initialise a matrix structure. Set 
+  the number of rows with
+  the first parameter and columns with the second. The third parameter, lead
+  dimension (>= no. of rows) needs attention by the programmer as it is
+  related to the Fortran workspace:
+
+<P>
+A 3x3 matrix would be stored as
+
+<P>
+&nbsp;&nbsp;[ x x x _ ][ x x x _ ][ x x x _ ]
+<BR>
+<P>
+This work space corresponds to the sequence:
+
+<P>
+(1,1) (2,1) (3,1) and unused are (1,2) (2,2) ... and so on, ie. it is column major.
+So although the programmer uses the normal parameter sequence of (row, col) 
+the entries traverse the data column by column instead of row by row. Each
+block in the workspace must be large enough (here 4) to hold a whole column
+(3) , and trailing spaces are unused. The number of rows (ie. size of a
+column) is therefore not necessarily the same size as the block size
+allocated to hold them (called the "lead dimension") . Some operations may
+produce matrices a different size from the inputs, but still write to the
+same workspace. This may seem awkward, but it does make for efficient code.
+Unfortunately, this creates a responsibility on the programmer to specify the
+lead dimension (>= no. of rows). In most cases the programmer can just use
+the rows. So for 3 rows/2 cols it would be called:
+
+<P>
+G_matrix_init (3, 2, 3);
+
+<P>
+mat_struct *G_matrix_set (mat_struct *A, int rows, int cols, int ldim)<br>
+  Set parameters for a matrix  structureSet parameters for a matrix 
+  structure that is allocated but not yet initialised fully.
+
+<P>
+<B>Note:</B>
+<BR>
+<P>
+G_matrix_set() is an alternative to G_matrix_init() . G_matrix_init() 
+ initialises and returns a pointer to a dynamically allocated matrix 
+ structure (ie. in the process heap) . G_matrix_set() sets the parameters for
+ an already created matrix  structure. In both cases the data workspace still
+ has to be allocated dynamically.
+
+<P>
+Example 1:
+
+<P>
+\verbatim
+mat_struct *A;
+
+G_matrix_set (A, 4, 3, 4);
+\endverbatim
+<BR>
+
+<P>
+Example 2:
+
+<P>
+
+\verbatim
+mat_struct A; /* Allocated on the local stack */
+
+G_matrix_set (&A, 4, 3, 4) ;
+\endverbatim
+<BR>
+
+<P>
+mat_struct *G_matrix_add (mat_struct *mt1, mat_struct *mt2)<br>
+  Add two matrices. Add two matrices and return the result.  The receiving structure
+  should not be initialised, as the matrix  is created by the routine.
+
+<P>
+mat_struct *G_matrix_product (mat_struct *mt1, mat_struct *mt2)<br>
+  Multiply two matricesMultiply two matrices and return the result.
+  The receiving structure should not be initialised, as the matrix  is created 
+  by the routine.
+
+<P>
+mat_struct *G_matrix_scale (mat_struct *mt1, const double c)<br>
+  Scale matrix Scale the matrix  by a given scalar value and return the
+  result. The receiving structure should not be initialised, as the matrix  is
+  created by the routine.
+
+<P>
+mat_struct *G_matrix_subtract (mat_struct *mt1, mat_struct *mt2)<br>
+  Subtract two matrices. Subtract two matrices and return the result.
+  The receiving structure should not be initialised, as the matrix  is created
+  by the routine.
+
+<P>
+mat_struct *G_matrix_copy (const mat_struct *A)<br>
+  Copy a matrix. Copy a matrix  by exactly duplicating its structure.
+
+<P>
+mat_struct *G_matrix_transpose (mat_struct *mt)<br>
+  Transpose a matrix. Transpose a matrix  by creating a new one and 
+  populating with transposed element s.
+
+<P>
+void G_matrix_print (mat_struct *mt)<br>
+  Print out a matrix. Print out a  representation of the matrix  to 
+  standard output.
+
+<P>
+int G_matrix_LU_solve (const mat_struct *mt1, mat_struct **xmat0, const
+  mat_struct *bmat, mat_type mtype)<br>
+  Solve a general system A.X=B. Solve a general
+  system A.X=B, where A is a NxN matrix, X and B are NxC matrices, and we are to
+  solve for C  arrays in X given B. Uses LU decomposition.
+<BR>
+<P>
+Links to LAPACK function dgesv_() and similar to perform the core routine.
+  (By default solves for a general non-symmetric matrix .) 
+
+<P>
+mtype is a flag to indicate what kind of matrix  (real/complex, Hermitian,
+  symmetric, general etc.) is used (NONSYM, SYM, HERMITIAN) .
+
+<P>
+<B>Warning:</B> NOT YET COMPLETE: only some solutions' options
+  available. Now, only general real matrix  is supported.
+
+<P>
+mat_struct *G_matrix_inverse (mat_struct *mt)<br>
+  Matrix inversion using
+  LU decomposition Calls G_matrix_LU_solve() to obtain matrix  inverse using
+  LU decomposition. Returns NULL on failure.
+
+<P>
+void G_matrix_free (mat_struct *mt)<br> Free up allocated matrix Free up
+  allocated matrix.
+
+<P>
+int G_matrix_set_element (mat_struct *mt, int rowval, int colval, double val)<br>
+  Set the value of the (i,j) th element Set the value of the
+  (i,j) th element to a double value. Index values are C-like ie. zero-based.
+  The row number is given first as is conventional. Returns -1 if the
+  accessed cell is outside the bounds.
+
+<P>
+double G_matrix_get_element (mat_struct *mt, int rowval, int colval)<br>
+  Retrieve value of the (i,j) th element Retrieve the value of the
+  (i,j) th element to a double value. Index values are C-like ie. zero-based.
+
+<P>
+<B>Note:</B> Does currently not set an error flag for bounds checking.
+
+<P>
+
+\section matrix_Vector_functions Matrix-Vector functions
+
+<P>
+vec_struct *G_matvect_get_column (mat_struct *mt, int
+  col) Retrieve a column of matrix Retrieve a column of the matrix  to a vector
+  structure. The receiving structure should not be initialised, as the
+  vector is created by the routine. Col 0 is the first column.
+
+<P>
+vec_struct *G_matvect_get_row (mat_struct *mt, int
+  row) Retrieve a row of matrix Retrieve a row of the matrix  to a vector
+  structure. The receiving structure should not be initialised, as the
+  vector is created by the routine. Row 0 is the first number.
+
+<P>
+int G_matvect_extract_vector (mat_struct *mt, vtype vt, int
+  indx) Convert matrix  to vectorConvert the current matrix  structure to
+  a vector structure. The vtype is RVEC or CVEC which specifies a row vector or
+  column vector. The indx indicates the row/column number (zero based) .
+
+<P>
+int G_matvect_retrieve_matrix  (vec_struct *vc) Revert a
+  vector to matrix Revert a vector structure to a matrix .
+
+<P>
+
+\section Vector_Vector_functions Vector-Vector functions
+
+vec_struct *G_vector_init (int cells, int ldim, vtype vt) Initialise
+  a vector structure Initialise a vector structure. The vtype is RVEC or
+  CVEC which specifies a row vector or column vector.
+
+<P>
+int G_vector_set (vec_struct *A, int cells, int ldim, vtype vt, int vindx) Set
+  parameters for vector structureSet parameters for a vector structure that is
+  allocated but not yet initialised fully. The vtype is RVEC or
+  CVEC which specifies a row vector or column vector.
+
+<P>
+vec_struct *G_vector_copy (const vec_struct *vc1, int
+  comp_flag) Copy a vectorCopy a vector to a new vector structure. This preserves
+  the underlying structure unless you specify DO_COMPACT comp_flag:
+
+<P>
+0   Eliminate unnecessary rows (cols) in matrix  
+<BR>
+1   ... or not  
+
+<P>
+double G_vector_norm_euclid (vec_struct *vc) Calculates euclidean
+  norm Calculates the euclidean norm of a row or column vector, using BLAS
+  routine dnrm2_() 
+
+<P>
+double G_vector_norm_maxval (vec_struct *vc, int vflag) Calculates
+  maximum value Calculates the maximum value of a row or column vector.
+ The vflag setting defines which value to be calculated:
+
+<P>
+vflag:
+
+<P>
+1 Indicates maximum value
+<BR> -1  Indicates minimum value
+<BR>
+0 Indicates absolute value [???]
+
+<P>
+<B>Note:</B> More functions and wrappers will be implemented soon (11/2000) .
+
+<P>
+
+\section Notes Notes
+
+The numbers of rows and columns is stored in the matrix  structure:
+
+<P>
+\verbatim
+  G_message ("    M1 rows: %d, M1 cols: %d", m1->rows, m1->cols);
+\endverbatim
+
+<P>
+Draft Notes:
+
+<P>
+* G_vector_free() can be done by G_matrix_free() .
+
+<P>
+\verbatim
+#define G_vector_free(x) G_matrix_free( (x) ) 
+\endverbatim
+
+<P>
+* Ax calculations can be done with G_matrix_multiply() 
+
+<P>
+* Vector print can be done by G_matrix_print() .
+
+<P>
+\verbatim
+#define G_vector_print(x) G_matrix_print( (x) ) 
+\endverbatim
+
+<P>
+
+\section Example Example
+
+The Makefile needs a reference to $(GMATHLIB) in LIBES line.
+
+
+<P>
+Example module:
+
+<P>
+\verbatim
+#include <grass/config.h>
+#include <grass/gis.h>
+#include <grass/gmath.h>
+
+int
+main (int argc, char *argv[]) 
+{
+    mat_struct *matrix;
+    double val;
+
+    /* init a 3x2 matrix  */
+    matrix = G_matrix_init (3, 2, 3);
+
+    /* set cell element 0,0 in matrix  to 2.2: */
+    G_matrix_set_element (matrix, 0, 0, 2.2);
+
+    /* retrieve this value */
+    val = G_matrix_get_element (matrix, 0, 0);
+
+    /* print it */
+    G_message ( "Value: %g", val);
+  
+    /* Free the memory */
+    G_matrix_free (matrix);
+
+    return 0;
+}
+\endverbatim
+
+<P>
+See \ref Compiling_and_Installing_GRASS_Modules for a complete 
+discussion of Makefiles.
+
+*/

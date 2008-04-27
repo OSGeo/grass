@@ -1,0 +1,50 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.lrs.where</em> identifies line id and real milepost+offset for
+points in vector map using linear reference system.
+
+<h2>EXAMPLE</h2>
+
+This example is written for the Spearfish dataset (it continues the example
+from <em>v.lrs.create</em>).
+<p>
+In this example, the 'route_lrs' shall be queried for unknown
+positions (points, stored in the map <em>newpoints</em>) along the LRS:
+
+<div class="code"><pre>
+# generate query points
+echo "590866.15|4926737.0
+590933|4927133" | v.in.ascii out=newpoints
+
+v.lrs.where lines=route_lrs points=newpoints rstable=route_lrs
+pcat|lid|mpost|offset
+pcat|lid|mpost|offset
+1|22|4.000000+212.091461
+2|22|6.000000+188.112093
+
+# verification
+g.region vect=route_lrs n=n+100 s=s-100 -p
+d.erase
+d.vect route_lrs
+d.vect busstops disp=attr attr=cat size=10 bg=white lcol=blue yref=bottom
+d.vect busstops icon=basic/circle fcol=blue
+d.vect newpoints col=red
+
+# measure distance to previous bus stop
+d.measure
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="lrs.html">LRS tutorial</a></em>,<br>
+<em><a HREF="http://gisws.media.osaka-cu.ac.jp/grass04/viewpaper.php?id=50">Introducing the Linear Reference System in GRASS</a></em>,<br>
+<em><a HREF="v.lrs.create.html">v.lrs.where</a></em>,
+<em><a HREF="v.lrs.segment.html">v.lrs.segment</a></em>,
+<em><a HREF="v.lrs.label.html">v.lrs.label</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-irst/MPA Solutions<br>
+Documentation update (based on above journal article and available fragments): Markus Neteler
+
+<p><i>Last changed: $Date$</i>

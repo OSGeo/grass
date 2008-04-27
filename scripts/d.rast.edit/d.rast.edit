@@ -1,0 +1,102 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       d.rast.edit
+# AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
+# COPYRIGHT:    (C) 2007 Glynn Clements
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#############################################################################/
+
+#%Module
+#% description: Interactively edit cell values in a raster map.
+#% keywords: display, raster
+#%End
+#%Option
+#% key: input
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name of input raster map
+#% gisprompt: old,cell,raster
+#%End
+#%Option
+#% key: output
+#% type: string
+#% required: yes
+#% multiple: no
+#% key_desc: name
+#% description: Name for output raster map
+#% gisprompt: new,cell,raster
+#%End
+#%Option
+#% key: aspect
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: name
+#% description: Name of aspect raster map
+#% gisprompt: old,cell,raster
+#%End
+#%Option
+#% key: width
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Width of display canvas
+#% answer: 640
+#%End
+#%Option
+#% key: height
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Height of display canvas
+#% answer: 480
+#%End
+#%Option
+#% key: size
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Minimum size of each cell
+#% answer: 12
+#%End
+#%Option
+#% key: rows
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Maximum number of rows to load
+#% answer: 100
+#%End
+#%Option
+#% key: cols
+#% type: integer
+#% required: no
+#% multiple: no
+#% description: Maximum number of columns to load
+#% answer: 100
+#%End
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+exec "$GRASS_WISH" "$GISBASE/etc/d.rast.edit.tcl"

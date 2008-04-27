@@ -1,0 +1,74 @@
+<H2>DESCRIPTION</H2>
+
+<EM>d.font.freetype</EM>
+selects the freetype font in which text will be displayed on the user's 
+graphics monitor.
+<BR>
+
+The text (character strings) displayed on the GRASS monitor was 
+internationalized. Internationalization does not use vector (Hershey) fonts
+as the old version, but it uses instead TrueType fonts which
+enables the display of Double Byte characters such as Japanese character set.
+To set up TrueType fonts, <em>d.font.freetype</em> performs font and character encodings.
+This internationalization can now display Japanese and other (asian) language
+texts from vector labels, legends, etc.
+
+<H2>USAGE</H2>
+
+To enable displaying of a TrueType font on the GRASS monitor, run:
+
+<div class="code"><pre>
+d.mon x0
+d.font.freetype [font=TrueTypefontname] [charset=encoding]
+
+#with:
+# [font]:    TrueType font path (full path including font file name)
+# [charset]: character encoding (EUC-JP, UTF-8, SJIS)
+
+# Examples on Redhat Linux 9.x:
+d.font.freetype font=/usr/share/fonts/ja/TrueType/kochi-gothic.ttf charset=EUC-JP
+
+d.font.freetype font=/usr/X11R6/lib/X11/fonts/TTF/luximb.ttf
+
+
+# Example on Mandrake 10:
+d.font.freetype font=/usr/X11R6/lib/X11/fonts/TTF/ipag.ttf charset=EUC-JP
+   
+d.font.freetype font=/usr/share/fonts/openoffice/Vera.ttf
+
+d.font.freetype font=/usr/share/fonts/ttf/vera/Vera.ttf
+
+# Example using the freetypecap file:
+d.font.freetype -l
+d.font.freetype font=batang
+</pre></div>
+<BR>
+
+
+<H2>DEFINITION FILE</H2>
+
+To help users select fonts conveniently, the definition file,
+<TT>$(GISBASE)/etc/freetypecap</TT>, is provided.  Its format is as follows:
+
+<div class="code"><pre>
+font:fontpath:charset:description
+*default_font:fontpath:charset:description
+</pre></div>
+
+See the file for examples.
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.text.html">d.text</A></EM><br>
+<EM><A HREF="d.text.freetype.html">d.text.freetype</A></EM><br>
+<EM><A HREF="d.font.html">d.font</A></EM><br>
+<EM><A HREF="d.vect.html">d.vect</A></EM><br>
+
+<H2>AUTHOR</H2>
+
+<A HREF="http://www.foss4g.org">FOSS4G</A> members.<br>
+Project sponsored by IPA (Information-technology Promotion Agency, Japan)
+
+<p>
+<i>Last changed: $Date$</i>

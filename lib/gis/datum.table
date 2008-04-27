@@ -1,0 +1,87 @@
+# this file contains datum shift parameters,
+# it supplies a datum database table for GRASS
+# format:
+# shortname "Full EPSG-style name" ellipsoid dx= dy= dz=
+#
+# where short name is a single word datum specifier,
+# Full EPSG-style name is the exact name used in the European 
+# Petroleum Survey Group (EPSG) database (enclosed in double quotes),
+# ellipsoid is the acronym of the ellipsoid used with this map datum, 
+# dx, dy and dz are the datum shift parameters.
+# no spaces allowed before or after the =.
+#
+# In general the 3-parameter transformation given in this file should
+# be a mean solution for the countries or area the datum is used in.
+# Specific transformations applying to a smaller region should be 
+# specified in the datumtransform.table file.
+#
+# If 99999 or above is given for all 3 parameters, then the parameters
+# listed in this file will not be offered to the user and there
+# must be at least one set of parameters for the corrseponding datum
+# in the datumtransform.table file
+#
+# Please comment and cite the source if you add new parameters 
+# to this list. 
+# cited from NIMA document TR8350.2
+#
+# Datum parameters for/from European Terrestrial Reference System ETRS89
+# are here: http://crs.ifag.de/crs_national.php
+#           http://crs.bkg.bund.de/crs-eu
+
+# World Geodetic System 1984
+wgs84  "WGS_1984"	  wgs84		dx=0.0	    dy=0.0      dz=0.0
+# World Geodetic System 1972
+wgs72  "WGS_1972"       wgs72         dx=0.0      dy=0.0      dz=5.0
+# North American 1927
+nad27  "North_American_Datum_1927"              clark66       dx=-22.0    dy=157.0    dz=176.0
+# North American 1983
+nad83	"North_American_Datum_1983"		  grs80		dx=0.0	    dy=0.0	dz=0.0
+# Tokyo datum mean
+tokyo  "Tokyo"                       bessel        dx=-148   dy=507    dz=685
+# Ordnance Survey of Great Britain (1936)
+osgb36 "OSGB_1936" airy          dx=368.0    dy=-120.0   dz=425.0
+# South American 1969 
+sam69 "South_American_Datum_1969"               sam69         dx=-57      dy=1        dz=-41
+SAD-69  "Please_use_sam69_instead"	  sam69         dx=-60.0    dy=-2.0     dz=-41.0
+# European 1950 mean
+eur50	"European_Datum_1950"	  	  international dx=-87.0    dy=-98      dz=-121
+# European 1979 mean
+eur79	"European_1979"		  international dx=-86      dy=-98      dz=-119
+# AGD66 Australian Geodetic 1966 [from NIMA TR8350.2]
+agd66	"Australian_Geodetic_Datum_1966"	  australian    dx=-133     dy=-48      dz=148
+# AGD84 Australian Geodetic 1984 [from NIMA TR8350.2]
+agd84	"Australian_Geodetic_Datum_1984"	  australian    dx=-134     dy=-48      dz=149
+# Rome 1940 (Sardinia Parameters)
+rome40	"Monte_Mario"			  international	dx=-225     dy=-65      dz=9
+# from Geodetic Datum List, Peter H. Dana, 07/12/97, dlist.html
+# South Asia (used in Singapore perhaps?)
+Sasia	"South_Asia"			  fschr60m	dx=7.0 	    dy=-10.0    dz=-26.0
+# S-42 Pulkovo 1942
+S-42	"Pulkovo_1942"		  krassovsky    dx=28.0     dy=-130.0   dz=-95.0
+# Potsdam Rauenberg 1950 DHDN
+potsdam "Deutsches_Hauptdreiecksnetz"	  bessel	dx=606.0    dy=23.0     dz=413.0
+# Carthage 1934 Tunisia
+carthage "Carthage"	  	  clark80	dx=-263.0	dy=6.0	dz=431.0
+# Hermannskogel
+hermannskogel "Militar_Geographische_Institut"	  bessel	dx=653	    dy=-212     dz=449
+# From NIMA document
+ire65    "TM65"                   modif_airy    dx=506      dy=-122     dz=611
+# http://www.asprs.org/asprs/resources/grids/07-2001-swiss.pdf
+ch1903   "CH1903"     bessel        dx=674.253  dy=15.053   dz=405.324
+# http://www.asprs.org/asprs/resources/grids/01-2001-france.pdf and http://crs.ifag.de/
+ntf      "Nouvelle_Triangulation_Francaise"                    clark80IGN       dx=-168     dy=-60      dz=320
+etrs89   "European_Terrestrial_Reference_System_1989"   grs80       dx=0        dy=0       dz=0
+# http://crs.ifag.de/
+rd18     "Amersfoort" bessel dx=99999  dy=99999    dz=99999
+bel72    "Reseau_National_Belge_1972"             international dx=99999    dy=99999    dz=99999
+por73    "Datum_73"          international dx=99999    dy=99999    dz=99999
+hjors55  "Hjorsey_1955"         international dx=-73      dy=46       dz=-86
+lis37    "Lisbon_1937"    international dx=99999    dy=99999    dz=99999
+ngo48    "NGO_1948"	  modif_bessel  dx=99999    dy=99999    dz=99999
+# http://www.linz.govt.nz/rcs/linz/pub/web/root/core/SurveySystem/GeodeticInfo/GeodeticDatums/nzgd49tonzgd2000/index.jsp
+nzgd49   "New_Zealand_Geodetic_Datum_1949"       international dx=54.4  dy=-20.1  dz=183.1
+nzgd2k   "New_Zealand_Geodetic_Datum_2000"       grs80    dx=0   dy=0    dz=0
+# http://earth-info.nga.mil/GandG/coordsys/onlinedatum/CountrySouthAmericanTable.html (accuracy +/-5m), also: EPSG SQL DB V6.4/V6.8
+cai      "Campo_Inchauspe_1969" international dx=-148 dy=136 dz=90
+# http://earth-info.nga.mil/GandG/coordsys/onlinedatum/CountryAfricaTable.html#NSD
+nsd      "North_Sahara_1959"       clark80 dx=-186 dy=-93 dz=310

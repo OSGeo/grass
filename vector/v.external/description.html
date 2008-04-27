@@ -1,0 +1,88 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.external</em> creates new vector as a link to external  
+<a href="http://www.gdal.org/ogr/">OGR</a> layer (read only). 
+OGR (Simple Features Library) is part of the 
+<a href="http://www.gdal.org">GDAL</a> library, so you need to
+install GDAL to use <em>v.external</em> and external OGR layers.
+<P>
+
+<h3>Supported OGR Vector Formats</h3>
+
+<a href="http://www.gdal.org/ogr/drv_shapefile.html">ESRI
+Shapefile</a><br>
+<a href="http://www.gdal.org/ogr/drv_mitab.html">Mapinfo File</a>
+
+<p>
+Further available drivers such as UK .NTF, SDTS, TIGER, IHO S-57 (ENC),
+DGN, GML, AVCBin, REC, Memory, OGDI, and PostgreSQL depend on the local
+installation (OGR library), for details see
+<a href="http://www.gdal.org/ogr/ogr_formats.html">OGR web site</a>.
+
+<h2>EXAMPLES</h2>
+
+<B>SHAPE files</B><BR>
+<div class="code"><pre>
+v.external dsn=/home/user/shape_data layer=test_shape output=grass_map 
+</pre></div>
+
+<P>
+<B>MapInfo files</B><BR>
+<div class="code"><pre>
+v.external dsn=./ layer=mapinfo_test output=grass_map
+</pre></div>
+<P>
+<B>SDTS files</B> (you have to select the CATD file)<BR>
+<div class="code"><pre>
+v.external dsn=CITXCATD.DDF output=cities
+</pre></div>
+
+<P>
+<B>TIGER files</B><BR>
+<div class="code"><pre>
+v.external dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all
+</pre></div>
+
+<P>
+<B>PostGIS maps (area example)</B><BR>
+<div class="code"><pre>
+v.external dsn="PG:host=localhost user=postgres dbname=postgis" layer=polymap \
+output=polygons
+</pre></div>
+
+<P>
+
+<H2>NOTES</H2>
+
+The simple feature data model used by OGR is very different from 
+the topological format used by GRASS. Instead of true topology, 
+so called 'pseudo topology' is created for data linked by v.external.
+User should learn the difference between those to formats, because 
+some modules working correctly with GRASS native data, 
+can produce wrong results with input layers created by <em>v.external</em>. 
+<p>
+
+See <a HREF="v.db.connect.html">v.db.connect</a> for an example of
+maintaining attributes in external DBMS in also writeable mode.
+
+<H2>REFERENCES</H2>
+
+<a href="http://www.gdal.org/ogr/">OGR vector library</a>
+<br>
+<a href="http://www.gdal.org/ogr/ogr__api_8h.html">OGR vector library C API</a>
+documentation
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="v.clean.html">v.clean</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.in.db.html">v.in.db</a></em>,
+<em><a HREF="v.in.ogr.html">v.in.ogr</a></em>,
+<em><a HREF="v.out.ogr.html">v.out.ogr</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>

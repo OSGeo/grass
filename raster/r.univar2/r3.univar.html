@@ -1,0 +1,57 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r3.univar</EM> calculates the univariate statistics for raster3d maps.
+This includes the number of cells counted, minimum and maximum cell values,
+range, arithmetic mean, population variance, standard deviation, and 
+coefficient of variation.
+If the <b>-e</b> extended statistics flag is given the 1st quartile, median,
+3rd quartile, and given <b>percentile</b> are calculated.
+If the <b>-g</b> flag is given the results are presented in a format suitable
+for use in a shell script.
+
+<H2>NOTES</H2>
+
+As with most GRASS raster3d modules, <EM>r3.univar</EM> operates on the cell
+array defined by the current 3d region settings, not the original extent and
+resolution of the input map. See <em><A HREF="g.region.html">g.region</A></em>.
+<P>
+This module can use large amounts of system memory when the <b>-e</b>
+extended statistics flag is used with a very large region setting. If the
+region is too large the module should exit gracefully with a memory allocation
+error. Basic statistics can be calculated using any size input region.
+
+
+<H2>TODO</H2>
+
+<i>mode, skewness, kurtosis</i>
+
+
+
+<H2>SEE ALSO</H2>
+
+<em>
+<A HREF="g.region.html">g.region</A><br>
+<A HREF="r.univar.html">r.univar</A><br>
+<A HREF="r.univar.sh.html">r.univar.sh</A><br>
+<A HREF="r.average.html">r.average</A><br>
+<A HREF="r.median.html">r.median</A><br>
+<A HREF="r.mode.html">r.mode</A><br>
+<A HREF="r.sum.html">r.sum</A><br>
+<A HREF="r.series.html">r.series</A><br>
+<A HREF="r.stats.html">r.stats</A><br>
+<A HREF="r.statistics.html">r.statistics</A><br>
+<A HREF="v.univar.html">v.univar</A><br>
+<A HREF="v.univar.sh.html">v.univar.sh</A><br>
+</em>
+
+
+<H2>AUTHORS</H2>
+
+Soeren Gebbert<br>
+Code is based on r.univar from<br>
+Hamish Bowman, Otago University, New Zealand<BR>
+and Martin Landa
+
+
+<p>
+<i>Last changed: $Date$</i>

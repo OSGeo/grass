@@ -1,0 +1,10 @@
+MODULE_TOPDIR = ../..
+
+PGM = i.class
+
+LIBES     = $(IMAGERYLIB) $(DISPLAYLIB) $(RASTERLIB) $(GISLIB) $(VASKLIB) $(CURSES) $(GMATHLIB)
+DEPENDENCIES= $(IMAGERYDEP) $(DISPLAYDEP) $(RASTERDEP) $(GISDEP) $(VASKDEP) $(GMATHDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

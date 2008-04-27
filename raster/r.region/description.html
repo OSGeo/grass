@@ -1,0 +1,35 @@
+<H2>DESCRIPTION</H2>
+
+The <EM>r.region</EM> program allows the user to manage the boundaries
+of a raster map. These boundaries can be set by the user directly
+and/or set from a region definition file (stored under the
+<KBD>windows</KBD> directory in the user's current mapset), a raster
+or vector map, or a 3dview file.
+<P>
+
+The <B>align</B> parameter allows to set the current resolution equal to
+that of the named raster map, and align the boundaries to a row and column
+edge in the named map.  Alignment only moves the existing boundaries outward
+to the edges of the next nearest cell in the named raster map -- not to the
+named map's edges.  To perform the latter function, use the
+<B>raster=</B><EM>name</EM> option.
+
+<H2>NOTE</H2>
+
+After all updates have been applied, the raster map's resolution
+settings are recomputed from the boundaries and the number of rows and
+columns in the raster map.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.support.html">r.support</A></EM><br>
+<EM><A HREF="g.region.html">g.region</A></EM>
+
+<H2>AUTHOR</H2>
+
+Glynn Clements
+
+<BR>
+Based upon g.region
+
+<p><i>Last changed: $Date$</i>

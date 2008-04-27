@@ -1,0 +1,60 @@
+<H2>DESCRIPTION</H2>
+
+Locates the closest points between "objects" in two raster maps.  An
+"object" is defined as all the grid cells that have the same category
+number, and closest means having the shortest "straight-line" distance.
+The cell centers are considered for the distance calculation (two
+adjacent grid cells have the distance between their cell centers).
+
+<P>
+
+The output is an ascii list, one line per pair of objects
+<PRE>
+           cat1:cat2:distance:east1:north1:east2:north2
+</PRE>
+
+<H3>Explanation:</H3>
+<DL>
+<DT><B>cat1</B>
+<DD>Category number from map1
+
+<DT><B>cat2</B>
+<DD>Category number from map2
+
+<DT><B>distance</B>
+<DD>The distance in meters between "cat1" and "cat2"
+
+<DT><B>east1,north1</B>
+<DD>The coordinates of the grid cell "cat1" which is closest to "cat2"
+
+<DT><B>east2,north2</B>
+<DD>The coordinates of the grid cell "cat2" which is closest to "cat1"
+</DL>
+
+<H2>NOTES</H2>
+The output format lends itself to filtering.  For example, to "see" lines
+connecting each of the category pairs in two maps, filter the output using
+awk and then into <EM>d.map</EM> graph:
+<P>
+
+<EM>r.distance maps=map1,map2 | \
+<br>awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m</EM>
+
+<P>
+To create a site list of all the "map1" coordinates, filter the output into
+awk and then into <EM>s.in.ascii</EM>:
+<P>
+
+<EM>r.distance maps=map1,map2 | \
+<br>awk -F: '{print $4,$5}' | s.in.ascii sites=name</EM>
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="r.buffer.html">r.buffer</A></EM>,
+<EM><A HREF="r.cost.html">r.cost</A></EM>,
+<EM><A HREF="r.drain.html">r.drain</A></EM>,
+<EM><a href="v.distance.html">v.distance</a></EM>
+
+<H2>AUTHOR</H2>
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i></p>

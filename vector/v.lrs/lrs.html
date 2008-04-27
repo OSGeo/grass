@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>LRS (Linear Referencing System)</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="Radim Blazek">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="_\|/_ GRASS logo"><hr align=center size=6 noshade>
+
+<h2>LRS (Linear Referencing System)</h2>
+A Linear Referencing System (LRS) is a system
+where features (points or segments) are localized by a measure along a linear element.
+The LRS can be used to reference events for any network of linear
+features, for example roads, railways, rivers, pipelines, electric and
+telephone lines, water and sewer networks. An event is defined in LRS
+by a route ID and a measure. A route is a path on the network, usually
+composed from more features in the input map.  Events can be either
+points or lines (segments).
+<p>
+
+LRS is created from input lines and points in vector map. 
+Points - MP (mileposts) must have attached attributes specifying 
+line and distance. 
+The distances from the beginning of the linear feature in real world
+are specified by MP+offset. 
+Typically, MP is in kilometers and offset in meters.
+
+<p>
+The implementation of LRS in GRASS has some particularities.
+
+<h3>Double referenced system</h3>
+This feature gives a possibility to continue to use most of 
+old mileposts if only small part of linear object in real world
+has changed. Example:
+<div class="code"><pre>
+--- road (linear feature)
+ +   MP (milepost, point, distance from the beginning in km)
+</pre></div>
+
+Old situation:
+
+<div class="code"><pre>
++----+----+----+----+----+ 
+0    2    3    4    5    6
+</pre></div>
+
+New situation (for example a new bypass around the village)
+
+<div class="code"><pre>
+          ?    ?
+          +----+
+          |    |
+          |    |
++----+----+    +----+----+ 
+0    2    3    4    5    6
+</pre></div>
+
+The segment between km 3 and 4 is now longer, it is now 3 km 
+not 1 km as in old version. It would be expensive to change also 
+all MP &gt;= 4, but we cannot use km 4 twice.
+It is possible to use another notation for the new segment, 
+we reference the segment from the kilometer 3, using only offset.
+
+<div class="code"><pre>
+      3+1000  3+2000
+          +----+
+          |    |
+          |    |
++----+----+    +----+----+ 
+0    2    3  3+3000 5    6
+               4
+</pre></div>
+
+This way, there is no ambiguity and minimal changes are needed. 
+But the MP 4 is no more the end of segment 3 - 4 but 
+the end of segment 3+2000 - 3+3000. This information
+must be entered to the system and it is done by optional MP attributes:
+
+<ul>
+<li>end_mp - end MP
+<li>end_off - end offset
+</ul>
+In this case original MP on km 4 will have these attributes:
+<div class="code"><pre>
+start_mp:  4
+start_off: 0
+end_mp:    3
+end_off:   3000
+</pre></div>
+
+Because each MP can keep 2 values (start, end) it is called 'double' referenced LRS.
+<p>
+To avoid potential confusion, MP values are limited to integers only. 
+It would be ambiguous to have for example segments 3.500 - 3.500+200 
+and 3.600 - 3.600+200. The position 3+650 would fall into 2 segments, 
+correct would be 3.600+50. 
+That means, that MP must be the beginning of antonomous segment 
+and all parts which becomes longer then before must be referenced 
+from the last not changed MP.
+<p>
+The MP <em>start_mp</em> and <em>end_mp</em> columns must be decimal, but 
+<em>v.lrs.create</em> takes only the decimal part, and adds its value to
+offset and prints a warning.
+<p>
+It is highly recommended to work with polylines instead of segmented vector
+lines. The command <em>v.build.polylines</em> creates this map structure.
+
+<h3>LRS table structure</h3>
+
+<table border=1>
+<tr><td><b>Attribute</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
+<tr><td>rsid</td><td> integer</td><td> reference segment ID, unique in the table</td></tr>
+<tr><td>lcat</td><td> integer</td><td> category of the line in the LRS map</td></tr>
+<tr><td>lid</td><td> integer</td><td> route ID (LID)</td></tr>
+<tr><td>start_map</td><td> double precision</td><td> distance measured along the line in LRS map from the beginning of the line to the beginning of the segment (absolute milepost distance)</td></tr>
+<tr><td>end_map</td><td> double precision</td><td> distance measured along the line in LRS map from the beginning of the line to the end of the segment  (absolute distance of subsequent milepost)</td></tr>
+<tr><td>start_mp</td><td> double precision</td><td> milepost number assigned to the start of the segment</td></tr>
+<tr><td>start_off</td><td> double precision</td><td> distance from start_mp to the start of the segment measured along the physical object</td></tr>
+<tr><td>end_mp</td><td> double precision</td><td> milepost number assigned to the end of the segment</td></tr>
+<tr><td>end_off</td><td> double precision</td><td> distance from end_mp to end of the segment measured along the physical object</td></tr>
+<tr><td>end_type</td><td> integer</td><td>1: the same as specified for from_ ; 2: calculated from map along the line from previous MP; 3: defined by user </td></tr>
+</table>
+
+<h3>Available commands</h3>
+<ul>
+<li><a href="v.lrs.create.html">v.lrs.create</a> to create a linear referencing system,
+<li><a href="v.lrs.label.html">v.lrs.label</a> to create stationing on the LRS,
+<li><a href="v.lrs.segment.html">v.lrs.segment</a> to create points/segments on LRS,
+ and
+<li><a href="v.lrs.where.html">v.lrs.where</a> to find line id and real km+offset
+for given points in vector map using linear referencing system.
+</ul>
+
+<h3>Input lines for v.lrs.segment and v.lrs.label</h3>
+<em>v.lrs.create</em> joins all connected lines of the same line ID into one line, 
+the LRS library and other modules using LRS expect this!
+LR_get_nearest_offset in the LRS library checks duplicate segments only
+by line_cat and map_offset, not by coordinates in map.
+
+<h3>Duplicate positions</h3>
+It can happen that one offset appears on 2 different lines:
+<div class="code"><pre>
+------1-------     --------2------
++0.0            +1.0              +2.0
+</pre></div>
+In this case, the module gives error because the position
+results in 2 points.
+
+<p>
+It can be also intended, for example a part of the road is shared
+with another one, but MP are used only for one:
+<div class="code"><pre>
+ + road1/km15         + road1/km22
+  \                  /
+   \ road1/km17     / road1/km20
+    +--------------+ 
+   / road2/km52     \ road2/km52
+  /                  \
+ + road2/km50         + road2/km54 
+</pre></div>
+
+<h2>NOTES</h2>
+
+Explanations of selected options:
+<ul>
+<li>llayer: vector layer in line map (usually 1; see <a HREF="vectorintro.html">vectorintro</a>
+    for "layer" concept)
+<li>player: vector layer in point map (usually 1; see <a HREF="vectorintro.html">vectorintro</a>
+    for "layer" concept)
+<li>rsdriver: Driver name for LRS table - DBMI SQL driver (dbf, pg, mysql, sqlite, etc)
+<li>rsdatabase: Database name for LRS table - DBMI SQL database name (e.g., "lrsdb")
+<li>rstable: Name of the LRS table - DBMI SQL table name (e.g., "streamslrs")
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>R. Blazek, 2004, <a HREF="http://gisws.media.osaka-cu.ac.jp/grass04/viewpaper.php?id=50">Introducing the Linear Reference System in GRASS</a>, Bangkok, GRASS User Conf. Proc.</em><br>
+<em>R. Blazek, 2005, <a HREF="http://www.j-geoinfo.net/Content/fulmar05/IJG_095-100.pdf">Introducing the Linear Reference System in GRASS</a>, International Journal of Geoinformatics, Vol. 1(3), pp. 95-100</em><br>
+<p>
+<em><a HREF="v.build.polylines.html">v.build.polylines</a></em>,
+<em><a HREF="v.lrs.create.html">v.lrs.create</a></em>,
+<em><a HREF="v.lrs.segment.html">v.lrs.segment</a></em>,
+<em><a HREF="v.lrs.where.html">v.lrs.where</a></em>,
+<em><a HREF="v.lrs.label.html">v.lrs.label</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-irst/MPA Solutions Trento<br>
+Documentation update (based on above journal article and available fragments): Markus Neteler
+
+<p><i>Last changed: $Date$</i>
+
+</body>
+</html> 

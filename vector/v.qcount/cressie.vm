@@ -1,0 +1,57 @@
+From mccauley  Tue Jan 11 01:59:17 1994
+X-VM-Attributes: [nil nil nil nil nil]
+Status: RO
+Received: from brier.ecn.purdue.edu by pasture.ecn.purdue.edu (5.65/1.32jrs)
+	id AA25792; Tue, 11 Jan 94 01:59:17 -0500
+Received: by brier.ecn.purdue.edu (5.65/1.32jrs)
+	id AA00570; Tue, 11 Jan 94 01:59:13 -0500
+Message-Id: <9401110659.AA00570@brier.ecn.purdue.edu>
+From: Darrell McCauley <mccauley>
+Sender: mccauley
+To: ncressie@iastate.edu
+Subject: Morista's I in 1st ed of text
+Date: Tue, 11 Jan 94 01:59:13 -0500
+
+
+Hello Sir,
+ Recall I am using your book to code programs for the GRASS GIS. I
+recently finished a program for quadrat counts. In calculating
+Morista's I, my answers, relative to other indices in Table 8.3
+(pg. 590), were on the order n off. Checking Ripley's _Spatial
+Statistics_, he has an additional factor of n before the summation
+symbol. Can you confirm or deny that there is a typo in the
+equation for Morista's I (Table 8.3)?
+
+I have really enjoy learning from material that you've written, both
+the text and many journal articles. Hopefully I'll be able to get the
+second edition after graduation (my apologies if this has already been
+corrected or if Ripley is the one who erred).  Many thanks.
+
+--Darrell
+James Darrell McCauley, Purdue Univ, West Lafayette, IN 47907-1146, USA
+mccauley@ecn.purdue.edu, mccauley%ecn@purccvm.bitnet, pur-ee!mccauley
+
+From ncressie@iastate.edu  Sun Jan 23 12:31:44 1994
+Received: from bank.ecn.purdue.edu by pasture.ecn.purdue.edu (5.65/1.32jrs)
+	id AA18477; Sun, 23 Jan 94 12:31:44 -0500
+Received: from pv660d.vincent.iastate.edu by bank.ecn.purdue.edu (5.65/1.32jrs)
+	id AA14645; Sun, 23 Jan 94 12:31:42 -0500
+Received: by pv660d.vincent.iastate.edu with sendmail-5.65 
+	id <AA09115@pv660d.vincent.iastate.edu>; Sun, 23 Jan 1994 11:31:39 -0600
+Message-Id: <9401231731.AA09115@pv660d.vincent.iastate.edu>
+From: ncressie@iastate.edu
+To: mccauley@ecn.purdue.edu
+Subject: Morisita's I
+Date: Sun, 23 Jan 1994 11:31:39 -0600
+
+
+Mr McCauley,
+            Thank you for your recent e-mail and for alerting me to a possible
+typo on p.590. You are correct - and I am happy to say I caught it for the 
+revised edition. There should be an 'n' before the summation symbol in the 
+numerator of Morisita's I. The correct formula does appear in the revised edition.
+            Sincerely,
+             Noel Cressie
+
+
+

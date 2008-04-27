@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Test v.clean by generating random polygons and checking if result is clean
+
+echo "Opening monitor"
+d.mon start=x0 2> /dev/null > /dev/null
+sleep 1 
+d.mon select=x0
+
+d.erase color=black
+NSEG=50
+NPOLY=100
+SIZE=0.1
+I=1
+while true 
+do 
+    echo "================== TEST $I ======================================" 
+    echo "Number of polygons: $NPOLY Number of segments: $NSEG"
+    # Generate random polygons
+    v.rand.poly npoly=$NPOLY nseg=$NSEG size=$SIZE
+    v.in.ascii input=clean.test output=clean.test 2> /dev/null > /dev/null
+
+    d.erase; d.vect map=clean.test color=red type=boundary
+    
+    # Clean 1 
+    echo "-- Clean 1 --"
+    v.clean input=clean.test output=clean.test1 tool=break,rmdupl 
+    d.erase; d.vect map=clean.test1 color=blue 
+    sleep 2 
+
+    # Check topology
+    echo "-- Check 1 --"
+    v.topo.check input=clean.test1 output=clean.test2   
+
+    if ( test $? -ne 0 ) 
+    then    
+        echo "ERROR: Cleaning process was not successful. Please send vector: 'clean.test' to blazek@itc.it"
+        exit
+    else
+        d.erase; d.vect map=clean.test2 color=green 
+        sleep 2 
+    fi
+
+    # Write areas as polygons
+    v.topo.check -p input=clean.test1 output=clean.test3 2> /dev/null > /dev/null
+
+    d.erase; d.vect map=clean.test3 color=orange type=boundary 
+
+    # Clean 2 
+    echo "-- Clean 2 --"
+    v.clean input=clean.test3 output=clean.test4 tool=break,rmdupl 
+    d.erase; d.vect map=clean.test1 color=yellow
+    sleep 2 
+
+    # Check topology
+    echo "-- Check 2 --"
+    v.topo.check input=clean.test4 output=clean.test5
+
+    if ( test $? -ne 0 ) 
+    then    
+        echo "ERROR: Cleaning process was not successful. Please send vector: 'clean.test' to blazek@itc.it"
+        exit
+    else
+        echo "OK"
+        let TNSEG=$I*$NPOLY*$NSEG 
+        echo "Total number of successfully tested segments: $TNSEG"
+        d.erase; d.vect map=clean.test5 color=aqua 
+        sleep 2 
+    fi
+
+    let I=$I+1
+done
+

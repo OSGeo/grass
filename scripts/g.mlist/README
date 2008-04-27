@@ -1,0 +1,34 @@
+g.mlist prints out only mapnames with separator, if any, without garbage 
+outputs. In addition, map search is also available.
+
+	g.mlist [type=datatype] [map=mapname] [mapset=mapsetname]
+		[sep=separator]
+
+
+examples)
+wildcards:
+	g.mlist type=vect "r*"
+		lists all vector maps starting with letter "r"
+
+regular expressions:
+	g.mlist -r type=rast '^soils'
+		prints out all soils map with "soils" in their name
+
+	g.mlist -r map='^tmp$'
+		prints out "tmp" if "tmp" raster map exists.
+
+	g.mlist -r map='^tmp[0-9]$' type=vect
+
+		tmp0
+		tmp5
+		tmp6
+
+		prints out "tmp0" ~ "tmp9" if corresponding vector map exists.
+
+	g.mlist -r map='^tmp[0-9]$' type=vect sep=,
+
+		tmp0,tmp5,tmp6
+
+		with separator ','.
+		This may be useful for other programs' parameter input.
+

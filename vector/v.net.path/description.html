@@ -1,0 +1,120 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.path</em> can find shortest path(s) on the vector network.
+Costs may be either line lengths, or attributes saved in a database 
+table. These attributes values are taken as costs of whole segments. If read 
+from the table, arcs' costs may be different in both directions.
+Shortest paths are written to output vector map and attached attribute table.
+<P>
+
+Nodes can be piped into the program from file or from stdin. The
+syntax is as follows:
+<div class="code"><pre>
+id start_point_category end_point_category
+</pre></div>
+
+or
+
+<div class="code"><pre>
+id start_point_x start_point_y end_point_x end_point_y
+</pre></div>
+
+<p>
+Points specified by category must be exactly on network nodes,
+while, when specifying coordinates, the next node to a given
+coordinate pair is used.
+</p>
+<p>
+Attribute table will contain following attributes:
+</p>
+<ul>
+    <li>cat  - path unique category assigned by module</li>
+    <li>id   - path id (read from input)</li>
+    <li>fcat - from point category</li>
+    <li>tcat - to point category</li>
+    <li>sp - result status:
+    <ul>
+        <li>     0 - OK, path found</li>
+        <li>     1 - node is not reachable</li>
+        <li>     2 - point of given category does not exist</li>
+    </ul></li>
+    <li>cost - travelling costs (on the network, not to/from network)</li>
+    <li>fdist - the distance from first point to the network</li>
+    <li>tdist - the distance from the network to second point</li>
+</ul>
+
+<h2>NOTE</h2>
+
+If the columns 'afcol', 'abcol' and 'ncol' costs are not
+specified, the length of network segments is measured and 
+zero costs are assumed for nodes.
+<P>
+When using attributes, the length of segments is not used. To get
+more precise results, length should be taken indirectly into account
+by attributes. For example, to get the <b>fastest path</b> the columns 
+'max_speed' and 'length' are required. The correct fastest path can then 
+be found by specifying <tt>afcol=length/max_speed</tt> (pg driver). If needed,
+the line length can be calculated and written to the attributes table 
+by <em>v.to.db</em>.
+
+<h2>EXAMPLE</h2>
+
+Shortest path from two digitized nodes (Spearfish):
+
+<div class="code"><pre>
+g.copy vect=roads,myroads
+v.db.addcol myroads col="forward double precision, backward double precision"
+
+# define traveling costs as inverse of speed limit:
+v.db.update myroads col=forward val=1/50
+v.db.update myroads col=backward val=1/50
+v.db.update myroads col=forward val=1/75 where="label='interstate'"
+v.db.update myroads col=backward val=1/75 where="label='interstate'"
+v.db.update myroads col=forward val=1/5 where="label='unimproved road'"
+v.db.update myroads col=backward val=1/5 where="label='unimproved road'"
+v.db.update myroads col=forward val=1/25 where="label='light-duty road, improved surface'"
+v.db.update myroads col=backward val=1/25 where="label='light-duty road, improved surface'"
+v.db.select myroads
+echo "1|601653.5|4922869.2|start
+2|593330.8|4924096.6|end" | v.in.ascii cat=1 x=2 y=3 out=startend col="cat integer, \
+                         east double precision, north double precision, label varchar(43)"
+
+v.db.select startend
+
+#create lines map connecting points to network (on layer 2)
+v.net myroads points=startend out=myroads_net op=connect thresh=200
+g.region vect=myroads_net
+d.mon x0
+d.vect myroads_net
+d.vect startend col=red
+
+v.db.select myroads_net
+
+d.vect myroads_net icon=basic/triangle fcol=green size=12 layer=2
+d.vect myroads_net disp=cat type=point lsize=14 layer=2
+# ... the 'start' and 'end' nodes have category number 1 and 2
+
+# ID as first number, then cat1 and cat2
+echo "1 1 2" | v.net.path myroads_net afcol=forward abcol=backward out=mypath
+d.vect mypath col=red width=2
+</pre></div>
+
+<img src="vnetpath.png" alt="v.net.path example" border="1">
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.path.html">d.path</a></em>,
+<em><a HREF="v.net.html">v.net</a></em>,
+<em><a HREF="v.net.alloc.html">v.net.alloc</a></em>,
+<em><a HREF="v.net.iso.html">v.net.iso</a></em>,
+<em><a HREF="v.net.salesman.html">v.net.salesman</a></em>,
+<em><a HREF="v.net.steiner.html">v.net.steiner</a></em>,
+<em><a HREF="v.to.db.html">v.to.db</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Documentation: Markus Neteler
+
+<p><i>Last changed: $Date$</i>

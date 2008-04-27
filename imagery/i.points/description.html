@@ -1,0 +1,424 @@
+<H2>DESCRIPTION</H2>
+
+<EM>i.points</EM> is an
+<A HREF="imagery.html">imagery</A> function that enables
+the user to mark points on a (raster) image to be rectified
+and then input the geographic coordinates of each point for
+calculation of a coordinate transformation matrix.
+<EM>i.points</EM> must be followed by use of the GRASS
+program <EM><A HREF="i.rectify.html">i.rectify</A></EM>, which
+rectifies the image using the transformation matrix
+coefficients calculated by <EM>i.points</EM>.
+
+<P>
+
+<EM>Rectification</EM> is the mapping (transformation) of
+an image from one coordinate system to another.  The
+geometry of an image extracted into a GRASS LOCATION having
+an x,y coordinate system is not planimetric.  To create a
+planimetric image, that is, to convert the x,y coordinate
+system into a standard coordinate system (for example, the
+UTM coordinate system or the State Plane coordinate
+system), points from a map having the standard coordinates
+must be associated with the same points on the image to be
+rectified.  <EM>i.points</EM> enables the user to mark
+points on an image and input the standard coordinates for
+that point.  <EM>i.points</EM> then calculates a least
+squares regression using the two coordinate systems (x,y
+and standard) for the marked points.  A matrix containing
+transformation coefficients is the output file for
+<EM>i.points</EM>.
+
+<P>
+During the process of marking points and entering map
+coordinates, the user can compute the RMS (root mean
+square) error for each point entered.  <EM>i.points</EM>
+does this by calculating the transformation equation (the
+same one that is calculated in the GRASS program <EM>
+<A HREF="i.rectify.html">i.rectify</A></EM>), and then
+plugging these results into an equation for RMS error.
+
+<P>
+<EM>i.points</EM> offers a zoom option to locate precisely
+the point to be marked on an image.  This program also
+offers the user the option of acquiring standard
+coordinates for a marked point from a map layer in the
+target data base.
+
+<P>
+<EM><A HREF="i.target.html">i.target</A></EM> must be
+run before running <EM>i.points</EM> to enable the PLOT
+RASTER option to be used and to identify a target data base
+LOCATION_NAME and MAPSET for the rectified image.  To run
+<EM>i.points</EM>, a graphics monitor is required.
+
+<P>
+The procedure for marking points, entering coordinates, and
+calculating RMS error is described below.
+
+<P>
+The first prompt in the program asks the user for the 
+<A HREF="i.group.html">imagery group</A> to be
+registered.  Note that if 
+<EM><A HREF="i.target.html">i.target</A></EM> is not run
+before <EM>i.points</EM>, the <EM>i.points</EM> program
+will display the following error message:
+
+<PRE>
+ERROR: Target information for group [spot] missing
+       Please run i.target for group [spot]
+</PRE>
+
+After entering the group to be registered the terminal screen
+displays the message: 
+
+<PRE>
+      Use mouse now...
+</PRE>
+
+The graphics monitor displays the following screen:
+
+<PRE>
+ ______________________________________________________________
+| imagery  filename  (mag)        |  target  filename  (mag)  |
+|_________________________________|___________________________|
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|_________________________________|___________________________|
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|                                 |                           |
+|_________________________________|___________________________|
+| QUIT  ZOOM  PLOT RASTER  ANALYZE|                           |
+|_________________________________|___________________________|
+</PRE>
+
+A pop-down menu like that shown below will be superimposed on the
+left half of the screen:
+
+
+<PRE>
+        __________________________________
+       | Double click on raster map layer|
+       |          to be plotted          |
+       |   Double click here to cancel   |
+       |_________________________________|
+
+               ____________________
+              |    Mapset demo    |
+              |___________________|
+              | spotclass|  spot.1|
+              |__________|________|
+              | composite|  spot.2|
+              |__________|________|
+              | spot.3   |        |
+              |__________|________|
+</PRE>
+
+Any single raster map layer in the 
+
+<A HREF="i.group.html">imagery group</A> may be used on
+
+which to mark points, and the user can mark points on more
+than one raster map layer in the 
+
+<A HREF="i.group.html">imagery group</A> to accumulate the
+
+suggested minimum number of 12 points.  Any raster map
+layer in the <A HREF="i.group.html">imagery group</A>
+can be rectified (using 
+
+<EM><A HREF="i.rectify.html">i.rectify</A></EM>) based on the
+transformation matrix computed from these points.
+
+
+<P>
+
+The imagery file chosen by
+the user is displayed in the upper left quadrant of the
+screen.
+
+<H3>ZOOM</H3>
+
+To magnify the displayed file, the user must
+place the mouse cross hairs on the word ZOOM.  The following menu
+will then be displayed at the bottom of the screen:
+
+<PRE>
+   ____________________________________________
+  | Cancel|  Box|  Point|  Select type of ZOOM|
+  |_______|_____|_______|_____________________|
+</PRE>
+ 
+
+The user has the option of identifying the zoom region
+either by using the mouse to make a box, or by using the
+mouse to mark the two diagonal points of the desired
+region.  The terminal screen will display a mouse button
+menu to guide the user in identifying the corner points of
+the region.
+
+<H3>MARKING POINTS</H3>
+
+To mark the points on the image that correspond to the
+points on a standard coordinate system map, the user must
+place the mouse cross hairs on the corresponding location
+on the image to be marked and press the left hand button on
+the mouse.  A diamond shaped symbol will be marked on the
+image.  The user's terminal will display the following
+menu:
+
+
+<PRE>
+ ___________________________________________________________
+| Point 1 marked on the image at|                          |
+| East: 1023.77                 |                          |
+| North: -164.41                |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|__________________________________________________________|
+| Enter coordinates as east north:                         |
+|__________________________________________________________|
+</PRE>
+
+The user then enters the easting and northing (separated by
+a space) for the point marked on the image.  If the user
+wishes not to enter a coordinate, he or she may simply hit
+RETURN to return control to the mouse;  the marked point
+then disappears.
+
+<H3>PLOT RASTER</H3>
+
+In addition to acquiring reference points from a standard
+map, the user has the option of acquiring the reference
+points from a raster map layer in the target data base
+LOCATION_NAME.  The data base raster map layer is displayed
+by placing the mouse cross hairs on the words PLOT RASTER.
+The following line is then displayed at the bottom of the
+graphics monitor:
+
+
+<PRE>
+       ________________________________________________
+      | Cancel|  Indicate which side should be plotted|
+      |_______|_______________________________________|
+</PRE>
+
+Which side of the graphics monitor is to be plotted
+is indicated by placing the mouse cross hairs on the 
+half of the graphics monitor screen that the user would like to use,
+and pressing the left mouse button.  The following pop-down
+menu will be superimposed on the half of the screen that was chosen:
+
+
+<PRE>
+    _________________________________________
+   | Double click on raster (cell) map layer|
+   |              to be plotted             |
+   |       Double click here to cancel      |
+   |________________________________________|
+
+          ______________________________
+         |         Mapset demo         |
+         |_____________________________|
+         | tm.rectified |              |
+         |______________|______________|
+         | tm.classified|              |
+         |_____________________________|
+         |       Mapset PERMANENT      |
+         |_____________________________|
+         | elevation    |  geology     |
+         |______________|______________|
+         | slope        |  soils       |
+         |______________|______________|
+         | aspect       |              |
+         |______________|______________|
+         | roads        |              |
+         |______________|______________|
+</PRE>
+
+After the raster map layer is displayed the following message appears
+at the bottom of the graphics monitor:
+
+
+<PRE>
+     ______________________________________
+     | input method --&gt;|  keyboard|  screen|
+     |_________________|__________|________|
+</PRE>
+
+If the user wishes to use the plotted raster map layer only
+as a comparative reference, then the keyboard can be chosen
+as the means to input coordinates corresponding to the
+marked points on the image.  This is done by placing the
+mouse cross hairs on the word KEYBOARD and pressing the
+left button on the mouse.
+
+
+<P>
+
+If the user selects the SCREEN option, then points marked
+on the image will automatically be associated with the
+coordinates from the corresponding points on the target
+data base map layer.  In this option, when the user marks a
+point on the image, the following menu is displayed at the
+terminal:
+
+
+<PRE>
+___________________________________________________________
+| Point 5 marked on the image at|                          |
+| East: 1023.77                 |                          |
+| North: -164.41                |                          |
+|                               |                          |
+|                               |                          |
+| Point located at              |                          |
+| East: 679132.57               |                          |
+| North: 4351080.67             |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|                               |                          |
+|__________________________________________________________|
+| use mouse now...                                         |
+|__________________________________________________________|
+</PRE>
+
+
+The user then uses the mouse to mark a corresponding point
+on the displayed image from the target data base.  The
+coordinates for the target data base map layer are
+automatically saved as the coordinates corresponding to the
+marked point on the image.
+
+<H3>ANALYZE</H3>
+
+After a number of points have been marked (4 to 7), the
+user can check the RMS error of the points marked on the
+image.  This is done by placing the mouse cross hairs on
+the word ANALYZE at the bottom of the graphics monitor.  An
+error report resembling that shown below is superimposed on
+the graphics monitor:
+
+
+<PRE>
+______________________________________________________________________
+|         error                 image                 target         |
+|#     row     col    target    east    north      east       north  |
+|____________________________________________________________________|
+|1     0.0     -0.9    1.0     1048.5   -144.8   679132.5   4351080.6|
+|2     0.4     1.0     1.3     2153.1   -567.2   684314.7   4399001.4|
+|3    -1.2     -0.5     .6     1452.8   -476.5   567841.4   3457682.8|
+|4     1.1     0.5     1.3     1034.0   -109.2   677573.8   4352626.4|
+|5    -2.7     14.0    14.2    1048.6   -144.9   679132.6   4351080.7|
+|                                                                    |
+|____________________________________________________________________|
+|    overall   rms    error:   4.46                                  |
+|____________________________________________________________________|
+</PRE>
+ 
+The following menu then appears at the bottom of the graphics monitor:
+
+<PRE>
+ ____________________________________________________________________
+| DONE|  PRINT FILE|   Double click on point to be included/excluded|
+|_____|____________|________________________________________________|
+</PRE>
+
+The RMS error for the image is given under the column
+TITLEd "error" and subTITLEd "row" and "col".  In the above
+report, point number 1 is 0.0 rows and -0.9 columns from
+the predicted location calculated from the transformation
+equation.  The RMS error for the target raster map layer is
+listed under the heading "target".  This is the RMS error
+for the east and north coordinates of the target map layer,
+but it is presented in the table using one general value.
+The overall RMS error is displayed at the bottom of the
+screen in meters.  Points that create high RMS error are
+displayed in red on the graphics monitor (represented here
+in italics).
+
+<P>
+The location of the point marked on the 
+<A HREF="i.group.html">imagery group</A> file is given
+under the heading "image" and the subheadings "east" and
+"north".  The location of the point in the target data base
+is given under the heading "target" and the subheadings
+"east" and "north".  If the user would like to exclude or
+include a point, this can be accomplished by placing the
+mouse cross hairs on the point number to be included (if
+the point is absent) or excluded (if the point is
+displayed) and pressing the left button on the mouse
+twice.  When a point is excluded, it is not afterwards
+included in the calculation of the RMS error, or included
+in the final transformation matrix.  However, it can be
+retrieved within <EM>i.points</EM> at any time by double
+clicking with the mouse as described above.
+
+<H3>QUIT</H3>
+
+To end the <EM>i.points</EM> program place the mouse cross
+hairs on the word QUIT;  the marked points (including
+coordinates) will be saved.
+
+
+<H2>NOTES</H2>
+
+A good rule of thumb is to mark at least 12 to 15 points
+which are evenly distributed over the entire 
+<A HREF="i.group.html">imagery group</A> file in order to
+obtain an accurate transformation equation for the
+rectification process.  The RMS error may increase with
+more points added, but the transformation equation will be
+more accurate.
+
+<P>
+An RMS error of less than or equal to approximately one
+resolution unit (pixel or cell) for the image being
+rectified is generally considered acceptable.
+
+<P>
+In order to use a digitizer with <EM>i.points</EM>, at
+least one digitizer driver besides "none" (the on-screen
+digitizer) must be available in the digitcap file.
+
+<P>
+This program is interactive.
+
+
+<H2>SEE ALSO</H2>
+
+The GRASS 4 <em>
+<A HREF="http://grass.itc.it/gdp/imagery/grass4_image_processing.pdf">Image
+Processing manual</A></EM>
+
+<P>
+<EM>
+<A HREF="g.mapsets.html">g.mapsets</A><br>
+<A HREF="i.group.html">i.group</A><br>
+<A HREF="i.rectify.html">i.rectify</A><br>
+<A HREF="i.target.html">i.target</A><br>
+<A HREF="i.vpoints.html">i.vpoints</A>
+</EM><br>
+<em><a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a></em>
+
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+<p>
+<i>Last changed: $Date$</i></p>

@@ -1,0 +1,64 @@
+<H2>DESCRIPTION</H2>
+<EM>r.li.patchdensity</EM> is a patch index for <em>r.li</em> suite.
+It calculates the function:
+
+<div class="code"><pre>
+f(sample_area) = (Patch_Number/Area) * 1000000
+</pre></div>
+
+that is 1000000 by number of patch for area unit.
+This index is calculated using a 4 neighbour algorithm.
+
+<H2>EXAMPLES</H2>
+To calculate patch density index on map <em>my_map</em>, using <em>my_conf</em>
+configuration file (previously defined with <em>r.li.setup</em>) and saving
+results in the raster map <em>my_out</em>, run:
+
+<div class="code"><pre>
+r.li.patchdensity map=my_map conf=my_conf out=my_out
+</pre></div>
+
+<p>
+Example for Spearfish forest areas:
+<div class="code"><pre>
+g.region rast=landcover.30m -p
+# extract forested areas:
+r.category landcover.30m
+r.mapcalc "forests=if(landcover.30m >= 41 && landcover.30m <=43,1,null())"
+
+# patch density (7x7 moving window defined in r.li.setup):
+r.li.patchdensity forests conf=movwindow7 out=forests_p_dens7
+d.rast.leg forests_p_dens7
+
+r.to.vect forests out=forests feature=area
+d.vect forests type=boundary
+</pre></div>
+
+<H2>NOTES</H2>
+
+A map of NULL values is considered to have zero patches. <br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=0 map=my_out
+<pre></div>
+after index calculation.<br>
+<!-- next ??????: -->
+If raster area is 0, <em>r.li.patchdensity</em> returns -1. This is only possible
+if the raster is masked.
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
+<EM><A HREF="r.li.daemon.html">r.li.daemon</A></EM><BR>
+<EM><A HREF="r.li.setup.html">r.li.setup</A></EM>
+
+<H2>AUTHORS</H2>
+Claudio Porta and Lucio Davide Spano, students of Computer Science 
+University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI) (www.faunalia.it)<br>
+
+<H2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:spano@cli.di.unipi.it">spano@cli.di.unipi.it</a>,
+<a href="mailto:porta@cli.di.unipi.it">porta@cli.di.unipi.it</a><BR>
+
+<p><i>Last changed: $Date$</i<pre>

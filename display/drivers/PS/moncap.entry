@@ -1,0 +1,24 @@
+PS:driver/PS:Create PS file: \
+     dev/fifo.8a dev/fifo.8b \
+     ::any terminal
+ps1:driver/PS:Create PS file: \
+     dev/fifo.9a dev/fifo.9b \
+     ::any terminal
+ps2:driver/PS:Create PS file: \
+     dev/fifo.10a dev/fifo.10b \
+     ::any terminal
+ps3:driver/PS:Create PS file: \
+     dev/fifo.11a dev/fifo.11b \
+     ::any terminal
+ps4:driver/PS:Create PS file: \
+     dev/fifo.12a dev/fifo.12b \
+     ::any terminal
+ps5:driver/PS:Create PS file: \
+     dev/fifo.13a dev/fifo.13b \
+     ::any terminal
+ps6:driver/PS:Create PS file: \
+     dev/fifo.14a dev/fifo.14b \
+     ::any terminal
+ps7:driver/PS:Create PS file: \
+     dev/fifo.15a dev/fifo.15b \
+     ::any terminal

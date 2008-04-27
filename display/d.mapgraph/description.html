@@ -1,0 +1,191 @@
+<H3>
+This module is superseded and scheduled for demolition.
+<BR>Please use "<em><a href="d.graph.html">d.graph</a>
+<b>-m</b></em>" instead.</H3>
+
+<H2>DESCRIPTION</H2>
+
+<EM>d.mapgraph</EM> draws graphics that are described in
+standard input (default) or the UNIX input file
+<EM>name</EM>. If commands are entered via standard
+input, a <EM>ctrl-d</EM> is used to signal the end of input
+to <EM>d.mapgraph</EM>. This program performs
+essentially the same function as 
+<EM><A HREF="d.graph.html">d.graph</A></EM>; however,
+point locations are specified to <EM>d.mapgraph</EM> in the
+geographic coordinate system of the user's current mapset
+and location (i.e., in map coordinates), rather than in
+graphics display screen coordinates.
+
+<P>
+
+The program can be run interactively or non-interactively.
+The user can run the program completely non-interactively
+by specifying the name of a file containing
+<EM>d.mapgraph</EM> graphics commands and the values of all
+needed parameters on the command line.  The user can
+instead elect to run the program partially interactively,
+by specifying any/all of the parameters <EM>except</EM> the
+graphics <B>input=</B><EM>name</EM> parameter on the
+command line.  In this case, <EM>d.mapgraph</EM> will
+expect the user to input <EM>d.mapgraph</EM> graphics
+commands from standard input (i.e., the keyboard) and will
+(silently) prompt the user for these graphics commands.
+Alternately, the user can simply type <B>d.mapgraph</B> on
+the command line, and be prompted for the values of all
+parameters (the user can still input graphics commands from
+an input file using this form.) In this case, the user is
+presented with the standard GRASS 
+<EM><A HREF="parser.html">parser</A></EM> interface.
+
+<P>
+<EM>d.mapgraph</EM> is used for drawing simple graphics on
+top of map layers.  The coordinate system used by
+<EM>d.mapgraph</EM> is the same as that of the map layer
+displayed in the active display frame on the graphics
+monitor (or that of the user's current region, if no map is
+displayed).
+
+<P>
+The graphics language is simple and uses the following commands: 
+
+<DL>
+
+<DT><B>#</B> <EM>comment</EM> 
+
+<DD>A line of comment which is ignored in the processing. 
+
+<DT><B>move</B> <EM>xpos ypos</EM> 
+
+<DD>The current location is updated to <EM>xpos ypos</EM>
+(where these, respectively, are the easting and northing of
+geographic coordinates stated in the map coordinate system
+of the user's current GRASS location, falling within the
+current region and active frame).  If unspecified by the
+user, the current location becomes (0,0).  If, as most
+likely, the point (0,0) falls outside of the user's current
+region, graphics drawn there will not appear in the
+graphics frame.
+
+<P>
+
+Note: use <EM><A HREF="g.region.html">g.region</A></EM>
+to obtain the coordinates of current location.  Use <EM>
+<A HREF="d.where.html">d.where</A></EM> to obtain specific
+map coordinates of various points on the raster map
+displayed in the active frame.
+
+<BR>
+
+Note: there must be a space between <EM>xpos</EM> and <EM>ypos</EM>.
+
+<DT><B>draw</B> <EM>xpos ypos</EM> 
+
+<DD>A line is drawn in the current color from the current
+location to the new location <EM>xpos ypos</EM>, which then
+becomes the current location.  <EM>xpos</EM> and
+<EM>ypos</EM> are (respectively) an easting and northing
+stated in the map coordinate system of the user's current
+GRASS location, and located within the user's current
+geographic region and active frame.
+
+<P>
+
+Note: there must be a space between <EM>xpos</EM> and <EM>ypos</EM>.
+
+<DT><B>color</B> <EM>color</EM> 
+
+<DD>Sets the current color to that stated. 
+Color options are: <EM>red</EM>, 
+<EM>orange</EM>, 
+<EM>yellow</EM>, 
+<EM>green</EM>, 
+<EM>blue</EM>, 
+<EM>indigo</EM>, 
+<EM>violet</EM>,
+<EM>magenta,</EM> 
+<EM>brown</EM>, 
+<EM>gray</EM>,
+<EM>white</EM>, 
+<EM>black</EM>,
+an R:G:B triplet (separated by colons),
+or the word "none" (draws in the default background color).
+
+<DT><B>size</B> <EM>xper yper</EM>
+
+<DD>Subsequent text will be drawn such that the text is
+<EM>xper</EM> percent of the display frame's width and
+<EM>yper</EM> percent of the display frame height.  If not
+specified by the user, the text size becomes 5 percent of
+the active frame's width and 5 percent of the frame's
+height.  This is equivalent to entering <B>size 5 5</B>.
+
+<DT><B>text</B> <EM>line-of-text</EM> 
+
+<DD>The stated text is drawn at the current location using
+the current color and the current size.
+
+<DT><B>icon</B> <EM>type size x y</EM> 
+
+<DD>Draws an icon of types o, x, or + with specified size
+at location x,y.  Note: type o designates a square.
+
+<DT><B>polygon</B> <BR>
+<EM> xpos ypos</EM> <BR>
+<EM> xpos ypos</EM> <BR>
+. <BR>
+. <BR>
+. <BR>
+
+<DD>The map coordinates appearing on lines beneath the word
+<EM>polygon</EM>, one pair per line, circumscribe a
+polygon which is to be filled with the current color.
+
+</DL>
+
+<H2>NOTES</H2>
+
+<EM>d.mapgraph</EM> is identical to the 
+<EM><A HREF="d.graph.html">d.graph</A></EM> command, except for the 
+difference in coordinate systems used. In the future functionality will
+be merged into <em>d.graph</em> and <em>d.mapgraph</em> will be removed.
+
+<P>
+
+<EM>d.mapgraph</EM> will complain if the user enters
+something to standard input that it does not understand.
+Blank lines in the input file will result in this error
+message.
+
+<H2>EXAMPLE</H2>
+
+Draw some text in the center of the display:
+<pre>
+   EAST=`g.region -c | grep east | cut -f2 -d:`
+   NORTH=`g.region -c | grep north | cut -f2 -d:`
+
+   d.mapgraph << EOF
+     move $EAST $NORTH
+     text GRASS
+   EOF
+</pre>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.frame.html">d.frame</A></EM><BR>
+<EM><A HREF="d.graph.html">d.graph</A></EM><BR>
+<EM><A HREF="d.rast.html">d.rast</A></EM><BR>
+<EM><A HREF="d.zoom.html">d.zoom</A></EM><BR>
+<EM><A HREF="g.region.html">g.region</A></EM><BR>
+<!--
+<EM><A HREF="grass.logo.sh.html">grass.logo.sh</A></EM><BR>
+<EM><A HREF="parser.html">parser</A></EM>
+-->
+
+<H2>AUTHOR</H2>
+
+James Westervelt, 
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i>

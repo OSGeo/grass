@@ -1,0 +1,133 @@
+<H2>DESCRIPTION</H2>
+
+<em>r.walk</em> outputs a raster map layer showing the lowest
+cumulative cost of moving between each cell and the user-specified
+starting points. It uses an input elevation raster map layer whose
+cell category values represent elevation, combined with a second input
+raster map layer whose cell values represent friction costs.
+
+This function is similar to <em>r.cost</em>, but in addiction to a
+friction map, it considers an anisotropic travel time due to the
+different walking speed associated with downhill and uphill movements.
+<p>
+
+The formula from Aitken 1977/Langmuir 1984 (based on Naismith's rule
+for walking times) has been used to estimate the cost parameters of
+specific slope intervals:
+
+<p>
+T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
+<p>
+where:<br>
+T is time of movement in seconds,<br>
+Delta S is the distance covered in meters,<br>
+Delta H is the altitude difference in meter.
+<p> 
+
+The a, b, c, d parameters take in account movement speed in the different
+conditions and are linked to:
+
+<ul>
+  <li>a: underfoot condition (a=1/walking_speed)</li>
+  <li>b: underfoot condition and cost associated to movement uphill</li>
+  <li>c: underfoot condition and cost associated to movement moderate downhill</li>
+  <li>d: underfoot condition and cost associated to movement steep downhill</li>
+</ul>
+
+It has been proved that moving downhill is favourable up to a specific
+slope value threshold, after that it becomes unfavourable. The default
+slope value threshold (slope factor) is -0.2125, corresponding to
+tan(-12), calibrated on human behaviour (&gt;5 and &lt;12
+degrees: moderate downhill; &gt;12 degrees: steep downhill). The
+default values for a, b, c, d are those proposed by Langmuir (0.72, 6.0,
+1.9998, -1.9998), based on man walking effort in standard
+conditions.<p>
+
+The lambda parameter of the linear equation combining movement and
+friction costs:<br>
+
+total cost = movement time cost + (lambda) * friction costs<br>
+must be set in the option section of <em>r.walk</em>.
+<p>
+
+For a more accurate result, the "knight's move" option can be used
+(although it is more time consuming). In the diagram below, the center
+location (O) represents a grid cell from which cumulative distances
+are calculated. Those neighbours marked with an x are always
+considered for cumulative cost updates. With the "knight's move"
+option, the neighbours marked with a K are also considered.
+
+<div class="code"><pre>
+  K   K 
+K x x x K
+  x O x
+K x x x K
+  K   K
+</pre></div>
+
+<p>
+The minimum cumulative costs are computed using Dijkstra's
+algorithm, that find an optimum solution (for more details see
+<EM>r.cost</EM>, that uses the same algorithm).
+<p>
+Once <em>r.walk</em> computes the cumulative cost map as a linear
+combination of friction cost (from friction map) and the altitude and
+distance covered (from the digital elevation model), <em>r.drain</em>
+can be used to find the minimum cost path.
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.cost.html">r.cost</A></EM>,
+<EM><A HREF="r.drain.html">r.drain</A></EM>,
+<EM><A HREF="r.in.ascii.html">r.in.ascii</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.out.ascii.html">r.out.ascii</A></EM>
+
+
+<H2>REFERENCES</H2>
+
+<ul>
+<li>Aitken, R. 1977. Wilderness areas in Scotland. Unpublished Ph.D. thesis.
+ University of Aberdeen.
+<li> Steno Fontanari, University of Trento, Italy, Ingegneria per l'Ambiente e
+ il Territorio, 2000-2001.
+ Svilluppo di metodologie GIS per la determinazione dell'accessibilit&agrave;
+ territoriale come supporto alle decisioni nella gestione ambientale.
+<li>Langmuir, E. 1984. Mountaincraft and leadership. The Scottish
+ Sports Council/MLTB. Cordee, Leicester.
+</ul>
+
+<H2>AUTHORS</H2>
+
+<B>Based on r.cost written by :</B>
+<P>
+Antony Awaida,<BR>
+Intelligent Engineering<BR>
+Systems Laboratory,<BR>
+M.I.T.<BR>
+<BR>
+James Westervelt,<BR>
+U.S.Army Construction Engineering Research Laboratory
+
+<P>Updated for Grass 5<BR>
+Pierre de Mouveaux (pmx@audiovu.com)
+
+<P>
+<B>Initial version of r.walk:</B>
+<P>
+Steno Fontanari, 2002
+
+<P>
+<B>Current version of r.walk:</B>
+<P>
+Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
+Correction by: Fontanari Steno, Napolitano Maurizio and  Flor Roberto<br>
+In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Valentina and Tolotti Mathias, 2004
+
+<P>
+<B>Updated for Grass 6.1</B>
+<P>
+Roberto Flor and Markus Neteler
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,20 @@
+/****************************************************************************
+ *
+ * MODULE:       lister utility for database maintenance routines 
+ *               
+ * AUTHOR(S):    Michael Shapiro (original contributor),
+ *               U.S. Army Construction Engineering Research Laboratory
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Glynn Clements <glynn gclements.plus.com>, 
+ *               
+ * PURPOSE:      Maintenance operations on GRASS data base files - lists
+ *               available vector and raster maps
+ *
+ * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/

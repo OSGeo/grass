@@ -1,0 +1,100 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	d.monsize, v 1.6 for GRASS 6.0 (2004/12/07)
+#		based on d.monsize for GRASS 5
+# AUTHOR(S):	Unknown;
+#		updated to GRASS 5.7 by Michael Barton (michael.barton@asu.edu)
+# PURPOSE:	selects/starts specified monitor at specified window size
+# COPYRIGHT:	(C) 2004-2007 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+# NOTE: This is based on the output pattern of d.mon -p
+# Anantha Prasad <aprasad/ne_de@fs.fed.us>
+#
+# Version 1: Author?. Tue, 25 Jan 2000 10:31:37
+
+
+#### PLEASE REMOVE "SET" FROM OPTION NAMES FOR GRASS 7
+####  (if this module is even used there; if so merge with d.resize)
+
+#%Module
+#%  description: Selects/starts specified monitor at specified size
+#%  keywords: display, setup
+#%End
+#%option
+#% key: setmonitor
+#% type: string
+#% description: Display monitor to start
+#% options: x0,x1,x2,x3,x4,x5,x6
+#% required : yes
+#%end
+#%option
+#% key: setwidth
+#% type: integer
+#% description: Width in pixels of new display monitor
+#% required : yes
+#%end
+#%option
+#% key: setheight
+#% type: integer
+#% description: Height in pixels of new display monitor
+#% required : yes
+#%end
+
+
+if test -z "$GISBASE"; then
+ echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk/gawk first" 
+    exit 1
+fi
+
+GRASS_WIDTH=$GIS_OPT_SETWIDTH
+export GRASS_WIDTH
+GRASS_HEIGHT=$GIS_OPT_SETHEIGHT
+export GRASS_HEIGHT
+
+
+# Check the current status of the monitor
+OPEN_MON=`d.mon -p | grep ':' | cut -d':' -f2  | awk '{print $1}'`
+
+
+if [ -z "$OPEN_MON" ] ; then
+  # No monitor running so start a new one....
+    g.message -v "No monitor selected"
+    g.message "Starting monitor $GIS_OPT_SETMONITOR at ${GIS_OPT_SETWIDTH}X${GIS_OPT_SETHEIGHT} ..."
+    d.mon start=$GIS_OPT_SETMONITOR
+else
+  if [ "$GIS_OPT_SETMONITOR" = "$OPEN_MON" ] ; then
+    # Monitor is already running...stop it and start new one
+    g.message -v "Monitor already running and selected"
+    g.message "Restarting monitor $GIS_OPT_SETMONITORAT at ${GIS_OPT_SETWIDTH}X${GIS_OPT_SETHEIGHT} ..."
+# d.save > tmp file then source the tmp file to restore after the new mon is opened?
+# (just use d.resize instead)
+    d.mon stop=$GIS_OPT_SETMONITOR
+# why the sleep?
+    sleep 4
+    d.mon start=$GIS_OPT_SETMONITOR
+  else
+    g.message -v "A different monitor is selected"
+    g.message "Selecting and restarting monitor at ${GIS_OPT_SETWIDTH}X${GIS_OPT_SETHEIGHT} ..."
+    #d.mon select=$GIS_OPT_SETMONITOR
+    d.mon stop=$GIS_OPT_SETMONITOR
+# why the sleep?
+    sleep 4
+    d.mon start=$GIS_OPT_SETMONITOR
+  fi
+fi

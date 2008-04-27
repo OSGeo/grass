@@ -1,0 +1,35 @@
+<H2>DESCRIPTION</H2>
+
+<EM>d.rast.leg</EM>
+is a GRASS script which clears the entire screen, divides it 
+into a main (left) and a minor (right) frames, and then displays a raster 
+map in the main frame and the map legend in the minor frame. The main
+frame remains active when the program finishs.
+
+
+<H2>NOTES</H2>
+
+
+If the <B>num_of_lines</B> parameter is not given then the legend frame will 
+display as many lines as number of categories in the map, otherwise, it 
+will display the first <B>num_of_lines</B> minus 1 categories with the
+rest being truncated.
+<P>
+The user may adjust the <B>num_of_lines</B> parameter or
+the size of graphics window to get an appropriate result.
+<P>
+To remove all frames when clearing the display, use
+"<em><tt>d.erase -f</tt></em>".
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.legend.html">d.legend</A></EM><BR>
+<EM><A HREF="d.erase.html">d.erase</A></EM><BR>
+<EM><A HREF="d.rast.html">d.rast</A></EM>
+
+<H2>AUTHORS</H2>
+
+Jianping Xu, Scott Madry, Rutgers University<BR>
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

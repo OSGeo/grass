@@ -1,0 +1,158 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.li.setup</EM>  creates and shows configuration files for the 
+others r.li programs. For a general introduction, see 
+<a href="r.li.html">r.li</a>.
+<br>
+The configurations are raster map independent, 
+it means that you can use a file created on a raster map for analyze any 
+other you have. <br>
+The program is completly interactive and uses a GUI to help you 
+in your choices.
+
+<h3>Analysis methods</h3>
+
+Definition of region for analysis:
+<ul>
+<li> Whole maplayer: entire map (current region),
+<li> Keyboard setting: based on keyboard selection for region definition,
+<li> Draw the sampling frame: based on interactive region selection via mouse.
+</ul>
+
+Definition of creation of sampling area:
+<ul>
+<li> Whole maplayer: use entire area selected above,
+<li> Regions: select one to many subareas via mouse,
+<li> Sample units: automated selection of sampling area (for details see below)
+<ul>
+  <li> Random nonoverlapping,
+  <li> Systematic contiguous,
+  <li> Systematic noncontiguous,
+  <li> Stratified random,
+  <li> Centered over sites (vector points).
+</ul>
+<li> Moving window: rectagular or circular with size
+<li> Select areas from the overlayed vector map (for details see below)
+</ul>
+
+<img src="sampleAreas.jpg" alt="Sampling area definition">
+
+
+<h3>Usage details</h3>
+
+The startup window shows your configuration files, you can: 
+<ol>
+<li><em><b>Load a file</b></em>: the configuration is printed using 
+rectangles with differents colors (green for the raster map, 
+red for the sample 
+frame and blue for the sample areas), and other notes (disposition of 
+sample areas etc).
+The configuration file is saved in <tt>~/.r.li/history/my_conf</tt>.
+<!-- NOT REALLY CLEAR: -->
+Configuration output files are raster if moving window disposition was
+selected, otherwise they are in ~/.r.li/output folder.
+<br> 
+All dimension are percentage of raster rows or columns.
+<li><em><b>Create a new file:</b></em> this create a new configuration 
+file in an interactive way, in three steps
+     <ol> 
+     <li> Choose file name and maps to use for setting:
+          <ul>
+	  <li> <em>Configuration file name </em>(required): the name
+	  of new configuration file
+	  <li> <em>Raster map name</em> (required): the name of raster
+	  map to use for setting
+	  <li> <em>Vector map to overlay</em> (optional): name of a vector 
+	  map to overlay in setting
+	  <li> <em>Site file to overlay</em> (optional): name of vector map 
+	  of points type to overlay in setting
+	  </ul>
+     <li> Set the sampling frame. The sample frame is a rectangular area 
+     which contains all the areas to analyze. It can be defined in three 
+     ways: 
+          <ul>
+	  <li><em>Whole map layer</em>: the sample frame is the whole map
+	  <li><em>Keyboard setting</em>: the user enters the coordinates in
+	  cells of upper left corner of sampling frame and its length in
+	  rows and columns</em>
+	  <li><em>Draw the sample frame</em>: the user draws the sample frame
+	  on map using mouse.
+	  </ul>
+     <li> Set the sample areas. The sample areas are simply the areas to 
+     analyze. They can be defined in five ways (see the picture below):
+          <ul>
+	  <li><em>Whole map layer</em>: the sample area is the whole sample 
+	  frame
+	  <li><em>Regions</em>: the user enters the number of areas and then 
+	  draws them using mouse. 
+	  <li><em>Sample units</em>: they are areas of rectangular or circular 
+	  shape. The user can define them using keyboard or mouse.
+	      <ul>
+	      <li>keyboard: the user define the shape of sample unists and 
+	      their disposition: 
+	          <ul>
+		  <li><em>Random non overlapping</em>: the user specifies 
+		  the number of sample units and they are placed in a 
+		  random way at runtime. It is guaranted that the 
+		  areas do not intersect themselfs.
+		  <li><em>Systematic contiguous</em>: the defined sample
+		  is placed covering the sample frame, side by side 
+		  across rows.
+		  <li><em>Systematic non contiguous</em>: the same as above, 
+		  but here ever rectangle is spaced from another by
+		  a specified number of cells
+		  <li><em>Stratified random</em>: the sample frame is
+		  divided in n strats of rows and m strats of columns 
+		  (n and m are given by user), then the specified 
+		  number of sample areas are placed in a random way, 
+		  one for every m*n areas defined by strats.
+		  <li><em>Centered over sites</em>: the sample areas
+		  are placed into sample frame centering them on points 
+		  in site file. 
+		  </ul>
+	      <li>mouse: the user chooses the shape and then draws the 
+	      specified number of sample areas on map.
+	      </ul>
+	 <li><em>Moving Window:</em> the user defines a rectangular or 
+	 circular area, it is moved over all the raster increasing only
+	 of a cell for every move(in columns if possible, if not in rows). 
+	 It produces a new raster containing the result of all analysis.
+	 <li><em>Select areas from the overlayed vector map</em>: 
+	 the sample areas are defined by the vector map selected above.
+	 For every cat in vector map, the procedure prompts the 
+	 user if he wants to include it as sample area.
+	 The resulting configuration file can be used only with the 
+	 specified raster map, and the procedure can be used only if
+	 whole map layer is selected as sampling frame.
+   </ol>
+<li><em><b>Remove a file</b></em> the selected file is deleted from the
+available configuration files.
+<li><em><b>Help</b></em>: open this help text.
+<li><em><b>Close</b></em> module window.
+</ol>
+
+<H2>NOTES</H2>
+Configuration files are raster map independent because areas are saved using 
+relative coordinates.
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="http://grass.itc.it/gdp/landscape/r_le_manual5.pdf">
+old r.le manual</A></EM><BR>
+<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
+<EM><A HREF="r.li.daemon.html">r.li.daemon</A></EM>,
+<EM><A HREF="r.li.patchdensity.html">r.li.patchdensity</A></EM>
+
+<H2>AUTHORS</H2>
+Claudio Porta & Lucio Davide Spano, students of Computer Science 
+University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI)<br>
+Rebuild of r.le.setup from William L. Baker
+
+<H2>BUGS</h2>
+Pleas send bugs reports to 
+<a href="mailto:spano@cli.di.unipi.it">spano@cli.di.unipi.it</a>, 
+<a href="mailto:porta@cli.di.unipi.it">porta@cli.di.unipi.it</a><BR>
+<a href="mailto:cavallini@faunalia.it">cavallini@faunalia.it</a>
+
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,76 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>d.font</EM> allows the user to select use of a specific text font for 
+display of text on the graphics monitor. 
+The GRASS program 
+<EM><A HREF="../html/show.fonts.sh.html">show.fonts.sh</A></EM>
+is a UNIX Bourne shell macro which 
+names and displays the fonts that can be selected using <EM>d.font</EM>.
+If the user does not specify a font when using other GRASS programs 
+that display text, the font type <EM>romans</EM> is used by default. 
+
+<P>
+The user can run this program either non-interactively or interactively. 
+If the user specifies a font type name on the command line the program will 
+run non-interactively. 
+Alternately, the user can simply type <B>d.font</B> on the command line; 
+in this case, the program will prompt the user for a display 
+text font type using the standard GRASS interface described in the 
+manual entry for <EM><A HREF="parser.html">parser</A></EM>.
+
+<P>
+<B>Parameter:</B> 
+<DL>
+<DT><B>font=</B><EM>name</EM>
+<DD>Name of a font type, from among the font types italicized below. 
+<BR>
+Default: <EM>romans</EM> 
+<BR>
+Options: (italized) 
+<BR><EM>cyrilc</EM> Cyrillic 
+<BR><EM>gothgbt</EM> Gothic Great Britain triplex 
+<BR><EM>gothgrt</EM> Gothic German triplex 
+<BR><EM>gothitt</EM> Gothic Italian triplex 
+<BR><EM>greekc</EM> Greek complex 
+<BR><EM>greekcs</EM> Greek complex script 
+<BR><EM>greekp</EM> Greek plain 
+<BR><EM>greeks</EM> Greek simplex 
+<BR><EM>italicc</EM> Italian complex 
+<BR><EM>italiccs</EM> Italian complex small 
+<BR><EM>italict</EM> Italian triplex 
+<BR><EM>romanc</EM> Roman complex 
+<BR><EM>romancs</EM> Roman complex small 
+<BR><EM>romand</EM> Roman duplex 
+<BR><EM>romanp</EM> Roman plain 
+<BR><EM>romans</EM> Roman simplex 
+<BR><EM>romant</EM> Roman triplex 
+<BR><EM>scriptc</EM> Script complex 
+<BR><EM>scripts</EM> Script simplex 
+</DL>
+
+<H2>NOTES</H2>
+
+The font type 
+<EM>romans</EM>
+is the fastest font type to display to the graphics monitor. 
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.text.html">d.text</A></EM><br>
+<EM><A HREF="d.text.freetype.html">d.text.freetype</A></EM><br>
+<EM><A HREF="d.font.freetype.html">d.font.freetype</A></EM><br>
+<EM><A HREF="d.title.html">d.title</A></EM><br>
+<EM><A HREF="parser.html">parser</A></EM>
+
+<H2>AUTHOR</H2>
+
+James Westervelt, U.S. Army Construction Engineering 
+Research Laboratory
+
+<P>
+<EM>d.font</EM> uses the public domain version of the Hershey Fonts created 
+by Dr. A.V. Hershey while working at the U.S. National Bureau of 
+Standards.
+
+<p><i>Last changed: $Date$</i>

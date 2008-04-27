@@ -1,0 +1,54 @@
+Item: r.proj
+
+I've done some hacking on r.proj:
+       - aborts if the input map is outside current region   
+       - trims the output map to the current region or smaller 
+       - does not allocate more memory than necessary for projecting the 
+          overlapping parts of the input map and output region          
+       - aligns cell edges and centers of the output map exactly to those
+          of output region 
+       - matches (unless changed explicitly) resolution exactly to that     
+           of output region  
+       - during overlap checks, passes cell centers to PROJ instead of   
+         edges (which are invalid in many projections, causing 
+         'Error in do_proj' aborts)                                
+       - allows projecting azimuthal, conical etc maps even if north is   
+          not upward or east is not rightward (no more 'north must be 
+          greater than south' or 'east must be greater than west' errors) 
+
+The question about overlapping cells in projections from adjacent maps that
+have no overlaps (e.g. DEM30 slices): They can't be avoided. E.g.  some of
+the right (east) column cells of one DEM30 map and some of the left (west)
+column cells of the afjacent DEM30 map will eventually be projected into the
+same cell of a conical or azimuthal region. Simply because meridians get
+closer to each other when you approach the poles.  But what is worse is that
+these overlapping cells will probably have different values, because these
+values were resampled from nearest neighbours in different input maps. So
+it's better to r.patch the input maps first, and then do the projection (if
+you have the memory necessary to read in a large input map.)
+                                            
+Most of Martin Schroeder's original code is left untouched. Basically I just
+added a function, boardwalk(), that makes the checks for overlapping parts
+of input map and output region. Plus I moved the memory allocation routine
+forward in the main code, and made some other smaller changes. There are
+some comments in boardwalk.c, and under Changes in main.c
+
+----------------------
+Error message comments:
+
+'Error in pj_do_proj' can happen in any module that uses the proj routines,
+for a variety of reasons:
+
+        -user is trying to project something where source and destination       
+are in the same projection already (like LL->LL). Perhaps the error message
+could be more descriptive in this case, or the module should abort earlier
+(i.e. immediately after checking the PROJ_INFO of source and destination. I
+think m.proj does this, exits with 'No projection needed' message)
+
+        -stepping on a no-no point. This cannot be prevented because in         
+both raster and vector maps there is always a small chance that a node/cell
+falls on a co-ordinate that is a reference point for the projection in
+question, resulting in a division by zero error. (we had an earlier
+discussion on this).
+
+Morten Hulden <morten@ngb.se>

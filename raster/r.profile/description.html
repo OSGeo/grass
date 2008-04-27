@@ -1,0 +1,146 @@
+<H2>DESCRIPTION</H2>
+
+This program outputs two or four column (with <b>-g</b>) data to stdout or 
+an ASCII file. The default two column output consists of cumulative profile 
+length (in meters) and raster value. The optional four column output consists 
+of easting, northing, cumlative profile length (m), and raster value. Profile
+end or "turning" points can be set manually with the <b>profile</b>
+argument or selected interactively from the GRASS monitor by setting the
+<b>-i</b> flag. The profile resolution, or distance between profile
+points, is obtained from the current region resolution, or can be manually
+set with the <b>res</b> argument.
+<P>
+The <B>-i</B> flag allows the user for selecting the profile from the GRASS
+monitor by clicking the left mouse button along the profile; clicking the
+right mouse button ends the profile.
+<P>
+The <B>profile</B> parameter can be set to comma separated geographic
+coordinates for profile line endpoints. The interactive flag (<b>-i</b>)
+overrides this option. Alternatively the coordinate pairs can be piped
+from stdin, one comma separated pair per line.
+<P>
+The <B>res</B> parameter sets the distance between each profile point
+(resolution). The resolution must be provided in GRASS database units (i.e.
+decimal degrees for Lat Long databases and meters for UTM). By default
+<EM>r.profile</EM> uses the resolution of the current GRASS region.
+<P>
+The <B>null</B> parameter can optionally be set to change the character
+string representing null values.
+
+<H2>OUTPUT FORMAT</H2>
+
+The multi column output from <EM>r.profile</EM> is intended for easy use in
+other programs.  The output can be piped (|) directly into other programs or
+saved to a file for later use. Output with geographic coordinates (<EM>-g</EM>)
+is compatible with <EM><a href="v.in.ascii.html">v.in.ascii</a></EM> and can 
+be piped direcly into this program.
+
+<div class="code"><PRE>
+r.profile -ig input=elev.rast | v.in.ascii output=elev.profile fs=space
+</PRE></div>
+
+The 2 column output is compatible with most plotting programs.
+<P>
+The optional RGB output provides the associated GRASS colour value for
+each profile point.
+
+<H2>EXAMPLES</H2>
+
+<B>Example 1</B><BR>
+Extract a profile with coordinates provided on the command line:
+
+<div class="code"><PRE>
+r.profile input=elev.rast output=profile.pts profile=562517,7779433,562984,7779533,563875,7779800
+</PRE></div>
+This will extract a profile along the track defined by the three coordinate
+pairs.
+<P><BR>
+
+
+<B>Example 2</B><BR>
+Extract a profile by interactively selecting the profile route from the GRASS
+monitor:
+
+<div class="code"><PRE>
+r.profile -i input=elev.rast output=profile.pts
+</PRE></div>
+Use the left mouse button to select the profile route in the GRASS monitor. Use the 
+right mouse button to end the profile.
+<P><BR>
+
+
+<B>Example 3</B><BR>
+Extract a profile with coordinates provided from standard input or an external file:
+<p>
+First create a points file with <EM><a href="d.where.html">d.where</a></EM>
+
+<div class="code"><PRE>
+d.where > saved.points
+</PRE></div>
+
+Then pipe the points file into r.profile
+
+<div class="code"><PRE>
+cat saved.points | r.profile input=elev.rast output=profile.pts
+</PRE></div>
+
+The advantage of this method is that the same profile points can be piped into
+different GRASS rasters by changing the input parameter. 
+<p>
+With this method the coordinates must be given as space or tab seperated easting
+and northing. Labels after these values are ignored.
+<P>
+Another example using d.where:
+
+<div class="code"><PRE>
+d.where | r.profile elevation.dem
+</PRE></div>
+
+<P><BR>
+
+
+<B>Example 4</B><BR>
+Pipe coordinates into r.profile
+<div class="code"><PRE>
+r.profile elevation.dem res=1000 << EOF
+ 591243,4926344
+ 592509,4922156
+ 594100,4920793
+ 599910,4919365
+ 602929,4919235
+ 604844,4918391
+ 606468,4917190
+ 607766,4915664
+EOF
+</PRE></div>
+
+
+<H2>NOTES</H2>
+
+The profile resolution is measured exactly from the supplied end or
+"turning" point along the profile. The end of a profile segment will be an
+exact multiple of the profile resolution and will therefore not always match
+the end point coordinates entered for the segmanet.
+
+<p>
+To extract the numbers in scripts, following parameters can be used:
+<div class="code"><pre>
+r.profile input=dgm12.5 profile=3570631,5763556 2>/dev/null
+</pre></div>
+
+This filters out the everything except the numbers.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="v.in.ascii.html">v.in.ascii</A></EM>,
+<EM><A HREF="d.where.html">d.where</A></EM>,
+<EM><A HREF="d.profile.html">d.profile</A></EM>,
+<EM><A HREF="r.what.html">r.what</A></EM>,
+<EM><A HREF="r.transect.html">r.transect</A></EM>,
+<em><a href="gm_profile.html">gis.m: PROFILE TOOL</a></em> 
+
+<H2>AUTHOR</H2>
+<A HREF=mailto:bcovill@tekmap.ns.ca>Bob Covill</A>
+
+<p>
+<i>Last changed: $Date$</i>

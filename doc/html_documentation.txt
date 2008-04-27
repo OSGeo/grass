@@ -1,0 +1,23 @@
+HOWTO document in this GRASS version?
+
+- source code docs: use doxygen style 
+  example: lib/proj/
+           other libs
+
+- modules:
+   - write a file 'description.html' (see other modules for how to do that)
+   - you can add figures (PNG format), the figure name prefix
+     should be the module name
+
+- header information: auto-generated
+   The header information is automatically added during the build
+   process. You can generate the header HTML to stdout by running 
+   the module with the --html-description qualifier:
+     g.module --html-description
+
+- see also this script:  tools/build_html_index.html
+
+- The Programmers' manual can by created from the inline Doxygen comments with:
+     make htmldocs (or)
+     make pdfdocs
+

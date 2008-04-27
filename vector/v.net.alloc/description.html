@@ -1,0 +1,55 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.net.alloc</em> allocates subnets for nearest centres (direction from 
+centre). Centre node must be opened (costs >= 0). Costs of centre node are 
+used in calculation. Supported are cost assignments for both arcs and nodes, 
+and also different in both directions of a vector line. For areas cost will 
+be calculated along boundary lines.
+
+<h2>NOTES</h2>
+
+Center nodes have to be assigned to vector nodes using <em>v.digit</em>. 
+Nodes and arcs can be closed using cost = -1. 
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+# nlayer=1 if no extra table for nodes:
+v.net.alloc network out=network_alloc ccats=0-13 nlayer=1
+
+# the result has to be selected by category number of the relevant node:
+d.vect network_alloc cat=9 col=red
+d.vect network_alloc cat=11 col=green
+d.vect network_alloc cat=2492 col=yellow
+</pre></div>
+<p>
+
+<em>Calculating subnets for 7 centre nodes using cost assigned to vector length
+</em><br>
+<div class="code"><pre>
+v.net.alloc in=vectmap out=vectmap.alloc ccats=1-7
+</pre></div>
+
+<p>
+
+<em>Calculating subnets for 7 centre nodes using cost assignments in both 
+directions</em><br>
+<div class="code"><pre>
+v.net.alloc in=vectmap afcol=INDEX abcol=INDEXBACK out=vectmap.alloc ccats=1-7
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.path.html">d.path</a></em>,
+<em><a HREF="v.net.html">v.net</a></em>,
+<em><a HREF="v.net.iso.html">v.net.iso</a></em>,
+<em><a HREF="v.net.path.html">v.net.path</a></em>,
+<em><a HREF="v.net.steiner.html">v.net.steiner</a></em>,
+<em><a HREF="v.net.salesman.html">v.net.salesman</a></em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy
+
+
+<p><i>Last changed: $Date$</i>

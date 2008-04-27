@@ -1,0 +1,136 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	d.out.png for GRASS 6.0; based on d.out.png for GRASS 5 (2004/12/07)
+# AUTHOR(S):	Michael Barton
+#		 Routine to read current display geometry written by
+#		 Hamish Bowman & Glynn Clements
+# PURPOSE:	To redraw current displayed maps to 24 bit PNG output
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Saves active display monitor to PNG file in home directory
+#%  keywords: display, export
+#%End
+#%option
+#% key: output
+#% type: string
+#% gisprompt: new_file,file,output
+#% description: Name of PNG file
+#% required : yes
+#%end
+#%option
+#% key: res
+#% type: integer
+#% answer: 2
+#% description: Resolution of output file (single=1, double=2, quad=4)
+#% required : no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+ echo "You must be in GRASS GIS to run this program."
+ exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+g.message -w "This module has been superseded. Please use d.out.file instead."
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first" 
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+# Check the current status of the monitor
+monitorcheck=`d.mon -p|sed s/'No monitor currently selected for output'//`
+
+if  [ "$monitorcheck" = "" ]
+then
+        g.message -e "You must select a display monitor"
+	exit 1
+fi
+
+
+# Save old settings
+old_GRASSW=`eval g.gisenv get=GRASS_WIDTH`
+old_GRASSH=`eval g.gisenv get=GRASS_HEIGHT`
+old_TRUECOLOR=`eval g.gisenv get=GRASS_TRUECOLOR`
+curr_mon=`d.mon -p | awk '{printf "%s", $4}'`
+
+#setting variables (get rid of extra png)
+dirname="`dirname $GIS_OPT_OUTPUT`"
+output="`basename $GIS_OPT_OUTPUT .png`"
+output="$dirname/$output"
+res="$GIS_OPT_RES"
+
+#get GRASS version for display monitor name
+GRASS_VER=`g.version | awk '{printf "%s", $1 " " $2}'`
+
+#capture current display monitor geometry
+curr_width=`d.frame -D | sed -n -e '1,/^FRAME: full_screen/d' -e 's/d_win://p' | awk '{printf $4}'`
+curr_height=`d.frame -D | sed -n -e '1,/^FRAME: full_screen/d' -e 's/d_win://p' | awk '{printf $2}'`
+
+g.message -d message="width = $curr_width  height = $curr_height"
+
+#set resolution for PNG output
+out_width=`expr $res \* $curr_width`
+out_height=`expr $res \* $curr_height`
+
+#set window geometry for PNG output
+unset GRASS_WIDTH
+unset GRASS_HEIGHT
+GRASS_WIDTH=$out_width
+export GRASS_WIDTH
+GRASS_HEIGHT=$out_height
+export GRASS_HEIGHT
+
+#make sure that output is 24 bit color
+GRASS_TRUECOLOR=TRUE
+export GRASS_TRUECOLOR
+
+g.message "Saving display to <$output.png> from [$GRASS_VER- Monitor: $curr_mon] \
+    at $out_width x $out_height resolution"
+
+#set PNG output file name
+GRASS_PNGFILE="$output".png
+export GRASS_PNGFILE
+
+#export display to PNG driver
+dsave=`d.save -a`
+d.mon start=PNG
+eval "$dsave"
+d.mon stop=PNG
+
+#returning old settings
+d.mon select=$curr_mon
+GRASS_WIDTH=$old_GRASSW
+export GRASS_WIDTH
+GRASS_HEIGHT=$old_GRASSH
+export GRASS_HEIGHT
+GRASS_TRUECOLOR=$old_TRUECOLOR
+export GRASS_TRUECOLOR
+GRASS_PNGFILE=map.png
+export GRASS_PNGFILE
+
+g.message "Done. (writing the file may take a small amount of time)"
+
+exit 0
+

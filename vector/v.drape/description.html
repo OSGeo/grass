@@ -1,0 +1,107 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.drape</em> converts 2D/3D vector data into 3D vector format via
+sampling of an elevation surface. Three sampling algorithms adapted
+from <a href="v.sample.html">v.sample</a> were incorporated into this
+module: nearest neighbor, bilinear, and cubic convultion.
+
+<h2>NOTES</h2>
+
+Please run beforehand
+
+<div class="code"><pre>
+g.region vect=2D_vector
+</pre></div>
+
+and make sure that the extent of the elevation raster is at least as
+big as the vector to convert.
+
+<P>
+Additional vertices can be added to the input 2D vector map
+with <a href="v.split.html">v.split</a>.
+
+<P>
+The module can be used in conjunction
+with <a href="v.out.pov.html">v.out.pov</a> and
+<a href="r.out.pov.html">r.out.pov</a> to export a complete set of
+vector and raster data for display in POVRAY.
+
+<h2>EXAMPLE</h2>
+
+Spearfish example:
+
+<div class="code"><pre>
+g.region -p vect=roads align=elevation.10m
+v.drape in=roads rast=elevation.10m method=bilinear out=roads3d
+v.info roads3d
+</pre></div>
+
+<h2>POVRAY EXAMPLE</h2>
+
+<div class="code"><pre>
+#setup the region
+g.region vect=roads align=elevation.10m -p
+#export the vector data
+v.drape in=roads out=roads3d rast=elevation.10m
+v.out.pov roads3d out=roads3d.pov
+#export the raster data
+r.out.pov elevation.10m tga=elevation.tga
+r.out.png landcover.30m out=landcover30m.png
+
+# now write a complete povray-script and launch povray
+</pre></div>
+
+<h2>ERROR MESSAGES</h2>
+
+If the following error message appears
+
+<div class="code"><pre>
+WARNING: Current region does not include the entire input vector map
+WARNING: Reading raster map request for row 466 is outside region
+ERROR: Problem reading raster map
+</pre></div>
+
+it indicates that the vector map is spatially larger than the current
+region settings. To avoid this problem, set region from the input
+vector map and re-run <em>v.drape</em>.
+
+<div class="code"><pre>
+g.region vect=vectmap
+</pre></div>
+
+If the following error message appears
+
+<div class="code"><pre>
+WARNING: Elevation raster map does not cover the entire area of the input vector map.
+</pre></div>
+
+it indicates that the vector map is spatially larger than the raster map.
+To avoid this problem, the vector map needs to be clipped to the raster
+map extent, for example:
+
+<div class="code"><pre>
+g.region rast=demname
+v.in.region clipbox
+v.overlay ain=clipbox bin=vectmap out=vectmap_clipped op=and
+v.drape vectmap_clipped out=vectdrape rast=demname
+</pre></div>
+
+Then <em>v.drape</em> should perform the draping.
+
+<h2>SEE ALSO</h2>
+
+<EM>
+<A HREF="r.out.pov.html">r.out.pov</A>,
+<A HREF="v.in.region.html">v.in.region</A>,
+<A HREF="v.out.pov.html">v.out.pov</A>,
+<A HREF="v.overlay.html">v.overlay</A>,
+<A HREF="v.split.html">v.split</A>,
+<A HREF="v.what.rast.html">v.what.rast</A>,
+<A HREF="v.extrude.html">v.extrude</A>
+</EM>
+
+<h2>AUTHOR</h2>
+
+Dylan Beaudette, University of California at Davis.
+
+<p><i>Last changed: $Date$</i>

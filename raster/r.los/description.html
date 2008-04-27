@@ -1,0 +1,95 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.los</EM> generates a raster output map in which the cells that are
+visible from a user-specified observer position are marked with the
+vertical angle (in degrees) required to see those cells (viewshed).
+A value of 0 is directly below the specified viewing position,
+90 is due horizontal, and 180 is directly above the observer.
+The angle to the cell containing the viewing position is undefined
+and set to 180.
+
+<P>
+To run <EM>r.los</EM>, the user must specify at least 
+an <B>input</B> map name, <B>output</B> map name, and the geographic 
+<B>coordinate</B>s of the user's viewing location; 
+any remaining parameters whose values are unspecified 
+will be set to their default values (see below). 
+
+<P>
+The <B>patt_map</B> is the name of a binary (1/0) raster map layer in which
+cells within the areas of interest are assigned the category value '1', and
+all other cells are assigned the category value '0' or NULL. If this parameter is
+omitted, the analysis will be performed for the whole area within a certain
+distance of the viewing point inside the geographic region boundaries.
+<BR>
+Default: assign all cells that are within the <B>max_dist</B> and within
+the user's current geographic region boundaries a value of 1.
+
+<P>
+The <B>obs_elev</B> parameter defines the height of the observer (in
+meters) above the viewing point's elevation.
+<P>
+
+The <B>max_dist</B> parameter is the maximum distance (in meters) from the
+viewing point inside of which the line of sight analysis will be performed.
+The cells outside this distance range are assigned a NULL value.
+
+
+<H2>NOTES</H2>
+
+For accurate results, the program must be run with the resolution of the 
+geographic region set equal to the resolution of the data 
+(see <EM><A HREF="g.region.html">g.region</A></EM>).
+
+<P>
+The time to complete the calculation increases dramatically with the region size.
+Try to keep the columns and rows under 1000.
+
+<P>
+It is advisable to use a 'pattern layer' which identifies
+the areas of interest in which the line of sight analysis
+is required.  Such a measure will reduce the time taken by
+the program to run.
+
+<P>
+The curvature of the Earth is not taken into account for these calculations.
+However, for interest's sake, a handy calculation for distance to the true horizon
+is approximated by <i>d = sqrt(13*h)</i> where <i>h</i> is the height of the observer
+in meters (above sea level) and <i>d</i> is the distance to the horizon in km.
+This may be useful for setting the <B>max_dist</B> value.
+
+
+<H2>EXAMPLE</H2>
+
+Spearfish example - calculation of viewshed from 50m tower
+on top of a mountain:
+
+<div class="code"><pre>
+r.los elevation.dem out=los coord=598869,4916642 obs_elev=50 max_dist=10000
+r.colors -e los color=bgyr
+d.shadedmap relief=aspect drape=los bright=10
+echo "symbol extra/target 25 598869 4916642 red" | d.graph -m
+</pre></div>
+
+<H2>TODO</H2>
+
+Rewrite using ideas from <em>r.cva</em> and a method which scales better
+to large regions.<BR>A suggested method is detailed in:<BR>
+Izraelevitz, David (USACE).<BR>
+'A Fast Algorithm for Approximate Viewshed Computation'<BR>
+<i>Photogrammetric Engineering & Remote Sensing</i>, July 2003
+<!-- http://article.gmane.org/gmane.comp.gis.grass.devel/1781
+  Post by Paul Kelly 2003-08-13 to grass-dev, 
+  "Re: [bug #2061] (grass) r.los needs FP update" -->
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>
+
+<H2>AUTHOR</H2>
+
+Kewan Q. Khawaja, Intelligent Engineering Systems Laboratory, M.I.T.
+
+<p>
+<i>Last changed: $Date$</i>

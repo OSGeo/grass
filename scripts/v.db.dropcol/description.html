@@ -1,0 +1,38 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.dropcol</em> drops a column from the attribute table connected
+to a given vector map. It automatically checks the connection for the specified
+layer. <em>v.db.dropcol</em> omits to delete the 'cat' column which is
+relevant to keep the connection between vector map and table.
+
+<h2>NOTES</h2>
+
+v.db.dropcol is a front-end to <em>db.execute</em> to allow easier usage.
+
+The existing database connection(s) can be verified with <em>v.db.connect</em>.
+
+<h2>EXAMPLES</h2>
+
+Dropping a column:<br>
+<div class="code"><pre>
+v.db.dropcol sentiero_brenta_points column=slope
+v.info -c sentiero_brenta_points
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.droptable.html">db.droptable</a></em>,
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
+<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
+<em><a HREF="v.db.select.html">v.db.select</a></em>,
+<em><a HREF="v.db.update.html">v.db.update</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

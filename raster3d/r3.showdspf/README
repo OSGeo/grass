@@ -1,0 +1,19 @@
+For information on the port of r3.showdspf from IrisGL to OpenGL browse the 
+document r3.showdspf_opengl_mods.html
+
+Ken Sakai
+Lockheed Martin
+4-3-00
+
+---------------------------------------------------------------------------
+
+r3.showdspf is not built by default in GRASS 6.2. If you want to build it you
+need to ./configure GRASS --with-glw support and run 'make' manually from the
+raster3d/r3.showdspf/ source directory.
+
+AFAIK it is the only thing in GRASS 6.2 which uses GLw:
+  http://article.gmane.org/gmane.comp.gis.grass.devel/19079
+
+
+Hamish Bowman
+15 Aug 2007

@@ -1,0 +1,55 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.update</em> allows to assign a new value to a column in the
+attribute table connected to a given map. Alternatively, values can
+be copied from another column in the table.
+
+<h2>NOTES</h2>
+
+<em>v.db.update</em> is just a front-end to <em>db.execute</em> to allow easier usage.
+For complex SQL UPDATE statements, <em>db.execute</em> should be used.
+
+<h2>EXAMPLES</h2>
+
+Spearfish: adding new column, inserting selectively a specified value:
+<div class="code"><pre>
+g.copy vect=fields,myfields
+v.db.addcol myfields col="polynum integer"
+v.db.update myfields col=polynum val=42 where="label='V. White#1'"
+v.db.select myfields
+</pre></div>
+
+<p>
+Spearfish: adding new column, copying values from other table column with
+on the fly calculation:
+<div class="code"><pre>
+g.copy vect=fields,myfields
+v.db.addcol myfields col="polynum integer"
+v.db.update myfields col=polynum qcol="cat*2"
+v.db.select myfields
+</pre></div>
+
+<p>
+Type cast (type conversion) of strings to double precision (unsupported by DBF driver):
+<div class="code"><pre>
+v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
+            where="z_value <> 'N/A'"
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.addcol.html">v.db.addcol</a></em>,
+<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
+<em><a HREF="v.db.join.html">v.db.join</a></em>,
+<em><a HREF="v.db.select.html">v.db.select</a></em><br>
+<em><a href="sql.html">GRASS SQL interface</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Moritz Lennert (mlennert@club.worldonline.be)
+
+<p><i>Last changed: $Date$</i></p>

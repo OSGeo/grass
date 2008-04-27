@@ -1,0 +1,111 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.lidar.edgedetection</em> is the first of three steps to filter
+LiDAR data. The filter aims to recognize and extract attached and 
+detached object (such as buildings, bridges, power lines,  trees, etc.) 
+in order to create a Digital Terrain Model. 
+<br>
+<br>
+In particular, this module detects the edge of each single feature over 
+the terrain surface of a LIDAR point surface. First of all, a bilinear 
+spline interpolation with a Tychonov regularization parameter is 
+performed. The gradient is minimized and the low Tychonov regularization 
+parameter brings the interpolated functions as close as possible to the 
+observations. Bicubic spline interpolation with Tychonov regularization 
+is then performed. However, now the curvature is minimized and the 
+regularization parameter is set to a high value. For each point, an 
+interpolated value is computed from the bicubic surface and an interpolated 
+gradient is computed from the bilinear surface. At each point the gradient 
+magnitude and the direction of the edge vector are calculated, and the 
+residual between interpolated and observed values is computed. Two thresholds 
+are defined on the gradient, a high threshold <b>tgh</b> and a low one 
+<b>tgl</b>. For each point, if the gradient magnitude is greater than or 
+equal to the high threshold and its residual is greater than or equal to 
+zero, it is labeled as an EDGE point. Similarly a point is labeled as 
+being an EDGE point if the gradient magnitude is greater than or equal to 
+the low threshold, its residual is greater than or equal to zero, and the 
+gradient to two of eight neighboring points is greater than the high 
+threshold. Other points are classified as TERRAIN.
+<br>
+<br>
+The output eill be a vector map in which points has been classified as 
+TERRAIN, EDGE or UNKNOWN. This vector map should be the input of 
+<em>v.lidar.growing</em> module.
+
+<h2>NOTES</h2>
+
+In this module, an external table will be created which will be useful for 
+the next module of the procedure of LiDAR data filtering. In this table 
+the interpolated height values of each point will be recorded. Also points 
+in the output vector map will be classified as:
+<br>
+<br>
+EDGE (cat = 1, layer = 1)
+<br>
+TERRAIN (cat = 2, layer = 1)
+<br>
+<br>
+The final result of the whole procedure (v.lidar.edgedetection,
+v.lidar.growing, v.lidar.correction) will be a point classification in
+four categories:
+<br>
+<br>
+TERRAIN SINGLE PULSE (cat = 1, layer = 2)
+<br>
+TERRAIN DOUBLE PULSE (cat = 2, layer = 2)
+<br>
+OBJECT SINGLE PULSE (cat = 3, layer = 2)
+<br>
+OBJECT DOUBLE PULSE (cat = 4, layer = 2)
+
+<h2>EXAMPLES</h2>
+
+<h4>Basic edge detection</h4>
+<div class="code"><pre>
+v.lidar.edgedetection input=vector_last output=edge see=8 sen=8 lambda_g=0.5
+</pre></div>
+
+<h2>SEE ALSO</h2>
+<em><a HREF="v.lidar.growing.html">v.lidar.growing</a></em>,
+<em><a HREF="v.lidar.correction.html">v.lidar.correction</a></em>,
+<em><a HREF="v.surf.bspline.html">v.surf.bspline</a></em>
+
+<h2>AUTHORS</h2>
+Original version of program in GRASS 5.4:
+<BR>
+Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni and Mirko Reguzzoni
+<BR><BR>
+Update for GRASS 6.X:
+<BR>
+Roberto Antolin and Gonzalo Moreno
+
+<h2>REFERENCES</h2>
+
+Antolin, R. et al., 2006. Digital terrain models determination by LiDAR 
+technology: Po basin experimentation. Bolletino di Geodesia e Scienze 
+Affini, anno LXV, n. 2, pp. 69-89.
+<br>
+<br>
+Brovelli M. A., Cannata M., Longoni U.M., 2004. LIDAR Data Filtering and 
+DTM Interpolation Within GRASS, Transactions in GIS, April 2004,  vol. 8, 
+iss. 2, pp. 155-174(20), Blackwell Publishing Ltd.
+<br>
+<br>
+Brovelli M. A., Cannata M., 2004. Digital Terrain model reconstruction in 
+urban areas from airborne laser scanning data: the method and an  example 
+for Pavia (Northern Italy). Computers and Geosciences 30 (2004) pp.325-331
+<br>
+<br>
+Brovelli M. A. and Longoni U.M., 2003. Software per il filtraggio di dati 
+LIDAR, Rivista dell?Agenzia del Territorio, n. 3-2003, pp. 11-22 (ISSN 1593-2192).
+<br>
+<br>
+Brovelli M. A., Cannata M. and Longoni U.M., 2002. DTM LIDAR in area urbana, 
+Bollettino SIFET N.2, pp. 7-26.
+<br>
+<br>
+Performances of the filter can be seen in the
+<a HREF="http://www.itc.nl/isprswgIII-3/filtertest/MainDoc.htm">ISPRS WG III/3 Comparison of Filters</a> 
+report by Sithole, G. and Vosselman, G., 2003. 
+<br>
+<p><i>Last changed: $Date$</i>

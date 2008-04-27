@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+ <title>XDRIVER</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="GRASS Development Team">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="#FFFFFF">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+
+<EM><B>XDRIVER - GRASS Monitor</B></EM>  - driver to display GRASS maps in
+X11 environment.<BR> 
+<EM>(drivers)</EM>
+
+<H2>DESCRIPTION</H2>
+
+The GRASS XDRIVER can be used to display GRASS maps in X11 environment.
+
+<h2>Usage in details</h2>
+
+Variables:
+<ul>
+  <li><b>GRASS_WIDTH</b><br>
+    set the x size in pixel for the XDRIVER (default: 640)</li><br>
+  <li><b>GRASS_HEIGHT</b><br>
+    set the y size in pixel for the XDRIVER (default: 480)</li></br>
+  <!-- ??? -->
+  <li><b>XDRIVER_TRUECOLOR=[TRUE|FALSE]</b><br>
+    Look for a TrueColor visual (?)</li><br>
+  <li><b>XDRIVER_WINDOW</b><br>
+    ?</li><br>
+  <li><b>XDRIVER_PRIVATE_CMAP</b><br>
+    Private color map (?)</li><br>
+  <!-- removed? -->
+  <li><b>XDRIVER_LEFT</b><br>
+    defines the left position of GRASS monitor (<i>removed?</i>)</li><br>
+  <li><b>XDRIVER_TOP</b><br>
+    define the upper position of GRASS monitor (<i>removed?</i>)</li><br>
+</ul>
+
+<h3>Set the XDRIVER size</h3>
+
+<div class="code"><pre>
+# bash shell syntax:
+export GRASS_WIDTH=xxx
+export GRASS_HEIGHT=yyy
+</pre></div>
+
+<div class="code"><pre>
+# c shell syntax:
+setenv GRASS_WIDTH xxx
+setenv GRASS_HEIGHT yyy
+</pre></div>
+
+To control the XDRIVER, use the <em><A HREF="d.mon.html">d.mon</A></em> module.
+<p>
+The maximum color depth depends on the current X Server settings.
+
+<H2>SEE ALSO</H2>
+<EM>
+  <a href="displaydrivers.html">Display drivers</a>
+  <br>
+  <A HREF="htmlmapdriver.html">HTMLMAP driver</A>,
+  <A HREF="pngdriver.html">PNG driver</A>,
+  <A HREF="psdriver.html">PostScript driver</A>
+  <BR>
+  <A HREF="d.frame.html">d.frame</A>,
+  <A HREF="d.mon.html">d.mon</A>,
+  <A HREF="g.region.html">g.region</A>
+  <a href="d.rast.html">d.rast</A>, 
+  <a href="d.vect.html">d.vect</A>
+</EM>
+
+<H2>AUTHORS</H2>
+CERL<br>
+various improvements from several authors.<br>
+Rewritten 2001 by Glynn Clements
+
+<p>
+<i>Last changed: $Date$</i>

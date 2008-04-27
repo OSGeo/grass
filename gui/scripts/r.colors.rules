@@ -1,0 +1,54 @@
+#!/bin/sh
+#
+############################################################################
+#
+# MODULE:	r.colors.rules
+# AUTHOR(S):	Michael Barton, Glynn Clements, Hamish Bowman
+# PURPOSE:	Permit use of color rules in r.colors from GUI
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Use rules to set colors for raster map
+#%End
+#%option
+#% key: input
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Name of raster map for color management
+#% required : yes
+#%end
+#%Option
+#% key: file
+#% type: string
+#% required: no
+#% multiple: no
+#% key_desc: name
+#% description: Name of rules file (if not given user is prompted for interactive entry)
+#% gisprompt: old_file,file,input
+#%End
+
+
+if  [ -z "$GISBASE" ] ; then
+   echo "You must be in GRASS GIS to run this program." 1>&2
+   exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+   exec g.parser "$0" "$@"
+fi
+
+if [ -n "$GIS_OPT_FILE" ] ; then
+   # get from file
+   exec r.colors "map=$GIS_OPT_MAP" color=rules < "$GIS_OPT_FILE"
+else
+   # manually entered from a xterm
+   exec "$GISBASE/etc/grass-xterm-wrapper" -e "$GISBASE/etc/grass-run.sh" \
+     r.colors "map=$GIS_OPT_INPUT" color=rules
+fi

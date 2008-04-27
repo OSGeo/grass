@@ -1,0 +1,13 @@
+# Write down the version of your extension here.
+# Extension version consists of three parts (major, minor, revison),e.g.:
+#
+# 1.2.0
+#
+# If you leave out the version number, or parts of it, every missing
+# part will be interpreted as "0" by the install routine, thus
+#
+# 1
+#
+# will become
+#
+# 1.0.0

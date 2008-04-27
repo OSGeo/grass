@@ -1,0 +1,104 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.out.mpeg</EM> is a tool for combining a series of GRASS raster maps
+into a single MPEG-1 (Motion Pictures Expert Group) format file.  MPEG-1 is
+a "lossy" video compression format, so the quality of each resulting frame
+of the animation will be much diminished from the original raster image. 
+The resulting output file may then be viewed using your favorite mpeg-format
+viewing program.
+MPEG-2 and MPEG-4 provide much better quality animations.
+
+<P>
+The user may define up to four "views", or sub-windows, to animate
+simultaneously.  e.g., View 1 could be rainfall, View 2 flooded areas, View
+3 damage to bridges or levees, View 4 other economic damage, all animated as
+a time series. A black border 2 pixels wide is drawn around each view. There
+is an arbitrary limit of 400 files per view (400 animation frames). 
+Temporary files are created in the conversion process, so lack of adequate
+tmp space could also limit the number of frames you are able to convert.
+<!-- flag to keep these to feed into another more modern encoder? -->
+
+<P>
+The environment variable GMPEG_SIZE is checked for a value to use as the
+dimension, in pixels, of the longest dimension of the animation image.  If
+GMPEG_SIZE is not set, the animation size defaults to the rows &amp; columns
+in the current GRASS region, scaling if necessary to a default minimum size
+of 200 and maximum of 500.  These size defaults are overridden when using
+the -c flag (see below).  The resolution of the current GRASS region is
+maintained, independent of image size.  Playback programs have to decode the
+compressed data "on-the-fly", therefore smaller dimensioned animations will
+provide higher frame rates and smoother animations.
+
+<P>
+UNIX - style wild cards may be used with the command line version in place
+of a raster map name, but wild cards must be quoted.
+
+<h2>Example:</h2>
+<div class="code"><pre>
+r.out.mpeg view1="rain[1-9]","rain1[0-2]" view2="temp*"
+</pre></div>
+
+<P>
+If the number of files differs for each view, the view with the fewest files
+will determine the number of frames in the animation.
+
+<P>
+With <B>-c</B> flag the module converts "on the fly", uses less disk space
+by using <EM>r.out.ppm</EM> with stdout option to convert frames as needed
+instead of converting all frames to ppm before encoding.  Only use when
+encoding a single view.  Use of this option also overrides any size
+defaults, using the <B>CURRENTLY DEFINED GRASS REGION for the output size</B>.
+So be careful to set region to a reasonable size prior to encoding.
+
+<P>
+A quality value of <EM>qual=1</EM> will yield higher quality images, but
+with less compression (larger MPEG file size).  Compression ratios will vary
+depending on the number of frames in the animation, but an MPEG produced
+using <EM>qual=5</EM> will usually be about 60% the size of the MPEG
+produced using <EM>qual=1</EM>.
+
+<H2>BUGS</H2>
+MPEG images must be 16-pixel aligned for successful compression, so if the
+rows &amp; columns of the calculated image size (scaled, with borders added)
+are not evenly divisible by 16, a few rows/columns will be cut off the
+bottom &amp; right sides of the image. The MPEG format is optimized to
+recognize image MOTION, so abrupt changes from one frame to another will
+cause a "noisy" encoding.
+
+<H2>NOTES</H2>
+This program requires the program <EM>mpeg_encode</EM> (aka <EM>ppmtompeg</EM>):
+<P>
+MPEG-1 Video Software Encoder<BR>
+(Version 1.3; March 14, 1994)
+<P>
+Lawrence A. Rowe, Kevin Gong, Ketan Patel, and Dan Wallach Computer Science 
+Division-EECS, <DD>Univ. of Calif. at Berkeley</DD>
+<P>
+Available from Berkeley: 
+<a href="http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html">http://bmrc.berkeley.edu/frame/research/mpeg/mpeg_encode.html</a>
+<BR>or as part of the netpbm package (<em>ppmtompeg</em>):
+<a href="http://netpbm.sourceforge.net">http://netpbm.sourceforge.net</a>
+
+<P>
+Playback may be done with many viewers; <em>mpeg_encode</em>'s official companion 
+is <em>mpeg_play</em> available from Berkeley at 
+<a href="ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/">ftp://mm-ftp.cs.berkeley.edu/pub/multimedia/mpeg/play/</a>
+or a precompiled Debian package from 
+<a href="http://packages.debian.org/ucbmpeg-play">http://packages.debian.org/ucbmpeg-play</a>
+(includes maintained source code).
+
+<P>
+Use of the <EM>-c</EM> flag requires the <EM>r.out.ppm</EM> GRASS module 
+with the <EM>stdout</EM> option.
+
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="r.out.ppm.html">r.out.ppm</A></EM>
+<br>
+
+
+<H2>AUTHOR</H2>
+Bill Brown,
+U.S. Army Construction Engineering Research Laboratories
+
+<p><i>Last changed: $Date$</i>

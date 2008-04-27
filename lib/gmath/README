@@ -1,0 +1,85 @@
+Date: Wed, 27 Sep 2000 15:41:24 +0000
+From: David D Gray <ddgray@armadce.demon.co.uk>
+
+I have checked in the gmath stuff to CVS. This directory might later            
+contain other kinds of generic routine (fft is one that comes to mind in        
+view of the investigations into NR). But for now there is only the              
+BLAS/LAPACK wrappers and supporting structure in la.c.                          
+                                                                                
+I thought to follow the libc in separating maths stuff to a separate            
+directory, even though they are G_*() functions.        
+
+I believe it is fairly intuitive to use - developers should use               
+G_matrix_init() to create a matrix. A vector can be built with setting        
+cols (or rows as appropriate) to 1. A G_vector_init() might be useful,       
+but it would have to distinguish between a row and column vector, (is it     
+needed?). Then use G_[set,get]_matrix_element() to set or retrieve            
+elements. No-one should need to ever worry about Fortran peculiarities        
+(like declaring doublereal variables, or calling a foo_() ).                  
+                                                                              
+Currently there are: add matrices A+B (doesn't use BLAS), multiply A.B,       
+invert A^-1, solve simple linear system A.X=B for X given B. Others are      
+easy to add as required.
+
+David
+-----------------------------------
+
+Getting BLAS/LAPACK (one package):
+
+http://netlib.bell-labs.com/netlib/master/readme.html
+http://www.netlib.org
+
+http://www.netlib.org/lapack/
+
+Compiling of LAPACK (be sure to have "." in PATH):
+
+Linux: 
+  cd LAPACK
+  cp INSTALL/make.inc.LINUX make.inc 
+  #now edit Makefile and
+  #comment line 11 and uncomment line 12 (to include "blaslib" compilation)
+  #compile with
+  make
+
+Solaris:
+  cd LAPACK
+  cp INSTALL/make.inc.SUN4SOL2 make.inc
+  #now edit Makefile and
+  #comment line 11 and uncomment line 12 (to include "blaslib" compilation)
+  #compile with
+  make
+
+etc.
+
+See INSTALL/ for further platforms.
+
+--------------------------------------------------------------------
+Usage:
+
+Sample Makefile:
+
+MODULE_TOPDIR = /path/to/grass
+
+PGM = test
+
+LIBES = $(GMATHLIB) $(GISLIB)
+DEPENDENCIES = $(GMATHLIB) $(GISLIB)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+
+Sample module source:
+
+#include <grass/config.h>
+#include <grass/gis.h>
+#include <grass/gmath.h>
+
+int main (int argc, char *argv[])
+{
+    mat_struct *matrix;
+
+    matrix = G_matrix_init (3, 3, 1);
+    G_matrix_free (matrix);
+
+    return 0;
+}

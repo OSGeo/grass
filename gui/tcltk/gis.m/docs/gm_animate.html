@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>gis.m: ANIMATION TOOL</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<body bgcolor="white">
+
+<h2>ANIMATION TOOL (gis.m)</h2>
+
+The Animation Tool is an interactive interface to display a series of
+raster maps as an animation. Rasters can be added individually or as a
+prefix followed by a sequential number suffix.
+<br>
+
+<h3>Using the Animation Tool</h3>
+
+The Animation Tool is started from the <i>File</i> menu or
+from the animation button (<img src="icons/module-xganim.gif" alt="icon">)
+on the GIS Manager toolbar.
+
+<P>
+The main animation window has a toolbar for selecting maps to display
+and controling the animation, and a display area. The display area can
+show a single, full-screen animation, or two to four simultaneous
+quarter-screen animations.
+<br><br><br>
+
+<center>
+<img src="gm_animate2.jpg" alt="Animation display window">
+</center>
+
+<br><br>
+
+<h3>Selecting Maps to Animate</h3>
+
+Click the maps button (<img src="icons/element-cell.gif" alt="icon">)
+on the main animation window toolbar to open a map selection window.
+<br><br>
+
+<div align="center">
+<img src="gm_animate1.png" alt="Animation map selection window" height="206" width="446">
+</div>
+
+<br>
+A map or map series must be entered in the entry for frame 1. If a map
+series is only entered for frame 1, a single, full-frame animation will be
+displayed. If map series are entered for other frames, two to four
+quarter-frame animations will be displayed (see example image above).
+Raster maps can be added individually or as a prefix followed by a sequential
+number suffix. <br><ul><li>To enter maps individually, enter
+each map name separated by a comma (no space) from the previous map
+name (see the entry for frame 3 in the example image above).</li>
+<li>For a map series entered in the prefix/suffix format, the suffix can be
+specified as a range of numbers in side parentheses. In the example image
+above, "map(1-4)" will specified raster maps map1 through map4. </li>
+
+<li>
+The suffix for a map series also can be specified using Unix-style wildcard
+matching. In the examle above "rdbuffer[0-1][1-9]" specifies raster
+maps rdbuffer01 through rdbuffer19.</li><li>Multiple specification
+forms can be mixed on a single entry line. For example, you could specify
+"rast-a,rast-b,rast-(1-50),rast[0-9][0-9]". This will specify rast-a,
+rast-b, rast-1 through rast-50, and rast00 through rast99.
+<br>
+</li>
+</ul>
+
+<h3>Controlling the Animation</h3>
+
+The animation can be controlled in various ways by using the buttons on the
+main animation window toobar.
+<P>
+<img src="gm_animatetool.png" alt="Animation Toolbar">
+<P>
+<img src="icons/gui-rewind.gif">
+The rewind button will set the display to the first animation frame.
+<P>
+<img src="icons/gui-rplay.gif">
+The reverse button will play the animation in reverse order.
+<P>
+<img src="icons/gui-stepb.gif"> The reverse step button will step
+through the animation frame by frame in reverse order.
+<P>
+<img src="icons/gui-stop.gif"> The pause button will stop the
+animation at whatever frame is visible when the animation is stopped.
+The animation will be continued from this frame when a forward or reverse
+button is pressed.
+<P>
+<img src="icons/gui-stepf.gif"> The forward step button will step
+through the animation frame by frame.
+<P>
+<img src="icons/gui-play.gif"> The play button will display the maps
+of the animation in the order they are listed in the map selection window.
+<P>
+<img src="icons/gui-snail.gif"> The slow button will increase the
+time between the display of each consecutive frame in the animation,
+causing it to to slow down.
+<P>
+<img src="icons/gui-rabbit.gif"> The fast button will decrease the
+time between the display of each consecutive frame in the animation,
+causing it to to speed up.
+<P>
+<img src="icons/gui-loop.gif"> The repeat switch will cause the
+animation to repeatedly cycle from first to last frame if the play button
+is pressed, or cycle from last to first if the reverse button is pressed.
+<P>
+<img src="icons/gui-swing.gif"> The alternating switch will cause the
+animation to alternately play from first frame to last frame, and from last
+to first.
+<P>
+<tt>[Names]</tt> The names switch will cause the file names of the maps used for the
+animation to display in the lower left corner of each animation frame.
+<P>
+<img src="icons/gui-exit.gif"> The Exit button will quit the Animation Tool.
+<br>
+
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="gis.m.html">gis.m</a> manual<br>
+<a href="gm_georect.html">gis.m: GEORECTIFY TOOL</a><br>
+<a href="gm_profile.html">gis.m: PROFILE TOOL</a><BR>
+<BR>
+<a href="xganim.html">xganim</a><br>
+<a href="r.out.mpeg.html">r.out.mpeg</a><br>
+</em>
+
+<h2>AUTHORS</h2>
+
+Michael Barton, Arizona State University, Tempe, Arizona, USA<br>
+Glynn Clements
+
+<p>
+<i>Last changed: $Date$</i></p>
+
+<hr>
+<p><a href="index.html">Main index</a> - <a href="full_index.html">Full index</a></p>
+
+</body>
+</html>

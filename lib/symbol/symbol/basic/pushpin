@@ -1,0 +1,16 @@
+VERSION 1.0
+BOX 0 0 10 10
+STRING
+  COLOR 0 0 0
+  LINE
+    0 0 
+    9 8
+    8 9
+    0 0
+  END
+END
+POLYGON
+ RING
+   ARC 7 7 3 360 0 C
+ END
+END

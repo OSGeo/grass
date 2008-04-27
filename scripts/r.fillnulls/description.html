@@ -1,0 +1,80 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM><b>r.fillnulls</b></EM>  - Fills NULL (no data areas) in input map and
+stores filled map to a new output map. The fill data are interpolated 
+from the no data area boundaries buffer using <EM>v.surf.rst</EM>
+spline interpolation.<br>
+
+<EM>(GRASS Shell Script)</EM>
+
+<H2>NOTES</H2>
+
+Each area boundary buffer is set to three times the map resolution to get nominally
+three points around the edge. This way the algorithm interpolates into the hole with
+a trained slope and curvature at the edges, in order to avoid that such a flat plane
+is generated in a hole.
+<P>
+During the interpolation following warning may occur:<p>
+
+<tt>
+Warning: strip exists with insufficient data<br>
+Warning: taking too long to find points for interpolation--please change
+the region to area where your points are</tt>
+<p>
+
+This warning is generated if large data holes exist within the surface.
+As the idea of <em>r.fillnulls</em> is to fill such holes, the user may
+ignore the warning. The interpolation will be continued. However, the user
+may pay attention to below notes.
+
+<H2>ATTENTION</H2>
+
+The algorithm is based on <EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+regularized splines with tension interpolation module which interpolates the
+raster cell values for NULL data areas from the boundary values of the NULL
+data area. An eventual raster MASK is respected during the NULL data area(s)
+filling. The interpolated values are patched into the NULL data area(s) of
+the input map and saved into a new raster map.
+
+<H2>WARNING</H2>
+
+Depending on the shape of the NULL data area(s) problems may occur due to an
+insufficient number of input cell values for the interpolation process. Most
+problems will occur if a NULL data area reaches a large amount of the map
+boundary. The user will have to carefully check the result using
+<EM><a href="r.mapcalc.html">r.mapcalc</A></EM> (generating a difference map to the
+input map) and/or <EM><A HREF="d.what.rast.html">d.what.rast</A></EM> to
+query individual cell values.<p>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.fill.dir.html">r.fill.dir</A>, 
+<A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+
+<P> Mitas, L., Mitasova, H., 1999, Spatial Interpolation. In: P.Longley,
+M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.), Geographical Information
+Systems: Principles, Techniques, Management and Applications, Wiley,
+pp.481-492
+
+<p>Mitasova H., Mitas L.,&nbsp; Brown W.M.,&nbsp; D.P. Gerdes, I.
+Kosinovsky, Baker, T.1995, Modeling spatially and temporally distributed
+phenomena: New methods and tools for GRASS GIS. <i>International Journal of
+GIS</i>, 9 (4), special issue on Integrating GIS and Environmental modeling,
+433-446.
+
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/lmg.rev1.ps">Mitasova H.
+and Mitas L. 1993</a>: Interpolation by Regularized Spline with Tension: I.
+Theory and Implementation, <i>Mathematical Geology</i> 25, 641-655.
+
+<p><a href="http://skagit.meas.ncsu.edu/~helena/gmslab/papers/hmg.rev1.ps">Mitasova H.
+and Hofierka L. 1993</a>: Interpolation by Regularized Spline with Tension:
+II. Application to Terrain Modeling and Surface Geometry Analysis,
+<i>Mathematical Geology</i> 25, 657-667.
+
+<H2>AUTHORS</H2>
+r.fillnulls: Markus Neteler, University of Hannover<p>
+and authors of v.surf.rst<br>
+Improvement by Hamish Bowman, NZ
+
+<p><i>Last changed: $Date$</i>

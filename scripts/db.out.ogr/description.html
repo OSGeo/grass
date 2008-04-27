@@ -1,0 +1,39 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.out.ogr</em> exports GRASS attribute tables into various formats as
+supported by the OGR driver on the local system (CSV, DBF,
+PostgreSQL, SQLite, MySQL, ODBC, etc.).
+
+<h2>EXAMPLES</h2>
+
+Export of GRASS table to a DBF table (default format):
+<p>
+<div class="code"><pre>
+db.out.ogr points_tab dsn=/tmp/points_tab.dbf
+</pre></div>
+
+<p>
+Export of GRASS table to a CSV table file:<br>
+<p>
+<div class="code"><pre>
+db.out.ogr points_tab dsn=points.csv format=CSV
+</pre></div>
+
+<p>
+Export of GRASS table into a PostgreSQL table:
+<p>
+<div class="code"><pre>
+db.out.ogr points_tab dsn="PG:host=localhost dbname=postgres user=neteler" format=PostgreSQL
+echo "SELECT * FROM points_tab" | psql postgres
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em><a href="sql.html">GRASS SQL interface</a></em>
+
+<h2>AUTHOR</h2>
+
+Markus Neteler
+
+<p><i>Last changed: $Date$</i>

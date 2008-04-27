@@ -1,0 +1,426 @@
+<h2>DESCRIPTION</h2>
+
+To start the wxPython-based GUI automatically with each session run
+GRASS with 'wxpython' switch
+
+<div class="code"><pre>
+    grass -wxpython
+</pre></div>
+
+or define in your <tt>.grassrc6</tt> file 'GRASS_GUI' variable
+
+<div class="code"><pre>
+    GRASS_GUI: wxpython
+</pre></div>
+
+The GUI can be quit by selecting the 'File->Exit' menu item. The GUI
+can be restarted from the GRASS command line prompt by
+typing
+
+<div class="code"><pre>
+    g.gui wxpython
+</pre></div>
+
+or 
+
+<div class="code"><pre>
+    g.gui wxpython workspace=file.gxw
+</pre></div>
+
+to launch wxGUI and load workspace file on start-up.
+
+<p>
+The GUI is composed by <em>two</em> main components:
+
+<ul>
+  <li><b>Layer Manager</b> which allows users to run different GRASS
+  modules from menu, includes map layer management, integrated
+  command-line prompt, and command output window frame.</li>
+  <li><b>Map Display Window</b> which integrates basic tools for
+  zooming, panning, data querying, decorations (north arrows,
+  barscale, etc.). The user is allowed to start various map display
+  instances during one session. The Layer Manager registers Map
+  Display Windows using different tabs.</li>
+</ul>
+
+<h3>Layer Manager</h3>
+
+The <em>Layer Manager</em> provides an interactive graphical interface to GRASS
+commands. It includes a set of pull-down menus for all GRASS GIS
+functions (analysis, file I/O, GIS configuration and management), the
+toolbar to manage display map layers, a layer tree frame in which map layers
+to display are organized, command output window frame, and interactive
+command line prompt.
+
+<center>
+<br><img src="wxGUI_layer_manager.jpg" border="1"><br><br>
+</center>
+
+The top left button of the toolbar opens a new <em>Map Display
+Window</em>. Each map display has a unique set of layers to display
+and region setting. Other toolbar buttons add layers of different
+types for display in the selected map display window. There are
+additional buttons for saving or opening workspace file, and others.
+
+<p>
+Map layers are listed in the window frame below the toolbar. Layers can
+include raster and vector maps, text, map decorations (scale and
+north arrow, and grids), and commands (where any GRASS command can be
+written). Layers are displayed in as arranged in the layer tree: the
+bottom layer is displayed first and the top is displayed last, as if
+layers are a series of stacked overlays. Any layer can be renamed by
+double clicking on its name and typing a new name.
+
+<p>
+The check box to the left of each layer makes it active or inactive
+for display. Only active layers are displayed/redisplayed when the
+display button is pressed. Layers can be organized into groups; entire
+groups can be activated or deactivated for display. Layer tree
+composition can be saved to a workspace file and opened in subsequent
+sessions, restoring all layers and their display options.
+
+<h4>Layer Manager Toolbar</h4>
+
+<dl>
+
+<dt><img src="icons/silk/application_add.png">&nbsp;
+  <img src="icons/gui-startmon.gif"> Open new Map Display Window</dt>
+<dd>Opens a new map display and creates empty layer tree tab in Layer Manager.</dd>
+
+<dt><img src="icons/silk/page_white.png">&nbsp;
+  <img src="icons/file-new.gif">Creates new workspace file</dt>
+<dd>Removes all layers in the layer tree and creates a new, empty tree
+where new layers can be added.</dd>
+
+<dt><img src="icons/silk/page_white_get.png">&nbsp;
+  <img src="icons/file-new.gif">Load map layers (raster, vector) into workspace</dt>
+<dd>Loads selected raster or vector maps into current layer tree.</dd>
+
+<dt><img src="icons/silk/folder.png">&nbsp;
+  <img src="icons/file-open.gif">Open an existing workspace file</dt>
+<dd>Opens an previously saved workspace file, containing a set of display
+layers and their option settings.</dd>
+
+<dt><img src="icons/silk/page_save.png">&nbsp;
+  <img src="icons/file-save.gif"> Save layers composition to workspace
+  file</dt>
+<dd>Saves current set of layers and their options to a workspace
+  file.</dd>
+
+<dt><img src="icons/silk/image_add.png">&nbsp;
+  <img src="icons/element-cell.gif"> Add raster-based map layer</dt>
+<dd>Adds raster map to layer tree, see <em><a href="d.rast.html">d.rast</a></em>. Includes also shaded relief map, RGB or HIS map or raster flow arrows map.</dd>
+
+<dt><img src="icons/silk/picture_empty.png">&nbsp;
+  <img src="icons/module-d.shadedmap.gif"> Add shaded relief map layer</dt>
+<dd>Adds shaded relief raster map layer,
+see <em><a href="d.shadedmap.html">d.shadedmap</a></em>.</dd>
+
+<dt><img src="icons/silk/rgb.png">&nbsp;
+  <img src="icons/channel-rgb.gif"> Add RGB raster layer</dt>
+<dd>Combines and displays three raster maps defined as red, green, and blue
+channels, see <em><a href="d.rgb.html">d.rgb</a></em>.</dd>
+
+<dt><img src="icons/silk/his.png">&nbsp;
+  <img src="icons/channel-his.gif"> Add HIS raster layer</dt>
+<dd>Combines and displays two or three raster maps defined as hue,
+intensity, and (optionally) saturation channels,
+see <em><a href="d.his.html">d.his</a></em>.</dd>
+
+<dt><img src="icons/silk/arrow_out.png">&nbsp;
+  <img src="icons/module-d.rast.arrow.gif"> Add raster arrows layer</dt>
+<dd>Adds map of raster cells with directional arrows drawn.  Arrow
+direction and length are determined by separate aspect/directional map
+and (optional) slope/intensity map,
+see <em><a href="d.rast.arrow.html">d.rast.arrow</a></em>.</dd>
+
+<dt><img src="icons/silk/map_add.png">&nbsp;
+  <img src="icons/element-vector.gif"> Add vector-based map layer</dt>
+<dd>Adds a vector map layer, see <em><a href="d.vect.html">d.vect</a></em>. Includes also thematic vector map or thematic charts layer.</dd>
+
+<dt><img src="icons/silk/thematic.png">&nbsp;
+  <img src="icons/module-d.vect.thematic.gif"> Add thematic map layer
+  (for all vector types)</dt>
+<dd>Adds layer for thematic display values from a numeric attribute
+column associated with a vector map. Options include: thematic display
+type (graduated colors or point sizes), methods for creating display
+intervals, SQL query of attribute column to limit vector objects to
+display, control of point icon types and sizes, control of thematic
+color schemes, creation of legend for thematic map, and saving the
+results of thematic mapping to a ps.map instructions file for later
+printing,
+see <em><a href="d.vect.thematic.html">d.vect.thematic</a></em>.</dd>
+
+<dt><img src="icons/silk/chart_bar.png">&nbsp;
+  <img src="icons/module-d.vect.chart.gif"> Add thematic charts layer
+(for vector points)</dt>
+<dd>Adds layer in which pie or bar charts can be automatically created
+at vector point locations. Charts display values from selected columns
+in the associated attribute table. Options include: chart type, layer
+and attributes to chart, chart colors, and chart size (fixed or based
+on attribute column),
+see <em><a href="d.vect.chart.html">d.vect.chart</a></em>.</dd>
+
+<dt><img src="icons/silk/cog_add.png">&nbsp;
+  <img src="icons/gui-cmd.gif"> Add command layer</dt>
+<dd>Adds a layer in which a GRASS GIS command or command list can be entered.
+For a command list use the pipe symbol as ";" as separator.
+For example:
+
+<div class="code"><pre>
+d.rast soils;d.rast -o roads;d.vect streams col=blue
+</pre></div>
+
+Note that when an option of the command contains spaces, you need to
+escape them with the backslash ('\') character, for example:
+<div class="code"><pre>
+d.text.freetype text=Population\ density</tt>
+</pre></div>
+</dd>
+
+<dt><img src="icons/silk/folder_add.png">&nbsp;
+  <img src="icons/gui-group.gif"> Add layer group</dt>
+<dd>Adds an empty layer group. Layers can then be added to the group.</dd>
+
+<dt><img src="icons/silk/images.png">&nbsp;
+  <img src="icons/module-d.grid.gif"> Add overlay grids and lines</dt>
+<dd>Adds layer to display regular grid (for all locations), or geodesic and
+rhumblines (for latitude/longitude locations only), see <em><a href="d.grid.html">d.grid</a>, <a href="d.geodesic.html">d.geodesic</a>, <a href="d.rhumbline.html">d.rhumbline</a></em>.</dd>
+
+<dt><img src="icons/silk/tag_blue_add.png">&nbsp;
+  <img src="icons/module-d.labels.gif"> Add labels layer for vector
+objects (from existing labels file)</dt>
+<dd>Add raster text layer from a labels file for vector objects
+created with the <em><a href="v.label.html">v.label</a></em> module
+(accessed from button in options panel). A labels file can also be
+created with a text editor,
+see <em><a href="d.labels.html">d.labels</a></em>.</dd>
+
+<dt><img src="icons/silk/bin_closed.png">&nbsp;
+  <img src="icons/edit-cut.gif"> Remove layer for layer tree</dt>
+<dd>Removes selected layer or layer group from layer tree.</dd>
+
+<dt><img src="icons/silk/application_view_columns.png">&nbsp;
+  <img src="icons/db-values.gif"> Open <a href="wxGUI.Attribute_Table_Manager.html">Attribute Table Manager</a> for selected vector map</dt>
+<dd>Displays attribute data of selected vector map.</dd>
+
+</dl>
+
+<h3>Map Display Window</h3>
+
+This component includes toolbar area (set of toolbars), map canvas
+where a map composition is displayed, and the statusbar.
+
+<center>
+  <br><img src="wxGUI_map_display.jpg" alt="Map Display Window"/><br><br>
+</center>
+
+Each Map Display Window has a unique layer tree and region
+setting. The window contains a toolbar with buttons to manage the map
+in the display (zoom and pan), providing tools for query and distance
+measurement, and exporting or printing the display.
+
+<p>
+In the statusbar can be displayed the geographic coordinates under the
+cursor, current geographical region extent, computational region
+(including graphical visualization in map display), map display
+geometry (number of rows, columns, resolution) and map scale.
+
+<p>
+It is important to note that zooming in any display will
+have <em>no</em> effect on the 'computational region' setting (set
+with <em><a href="g.region.html">g.region</a></em>). Only by selecting
+the 'Set current region to match display' item in the zoom menu (in
+the map display toolbar) will the current display extents be copied to
+the computational region extents.
+
+<h4>Map Display Toolbar</h4>
+
+<dl>
+
+<dt><img src="icons/silk/map_go.png">&nbsp;
+  <img src="icons/gui-display.gif"> Display active layers (current region)</dt>
+<dd>Displays all active layers from layer tree at current resolution
+and region extents for that map display window.</dd>
+
+<dt><img src="icons/silk/arrow_refresh.png">&nbsp;
+  <img src="icons/gui-redraw.gif"> Re-render and display all active
+layers and zoom to current region</dt>
+<dd>Resets the region to the display resolution and extents and forces
+re-display and re-rendering all active layers.</dd>
+
+<dt><img src="icons/silk/cross.png">&nbsp;
+  <img src="icons/gui-erase.gif"> Erase display content</dt>
+<dd>Erases the currently selected map display to a white background;
+also removes all frames,
+see <em><a href="d.erase.html">d.erase</a>, <a href="d.frame.html">d.frame
+-e</a></em>.</dd>
+
+<dt><img src="icons/silk/cursor.png">&nbsp;
+  <img src="icons/gui-pointer.gif"> Arrow cursor</dt>
+<dd>Select arrow cursor for map display.</dd>
+
+<dt><img src="icons/silk/information.png">&nbsp;
+  <img src="icons/gui-query.gif"> Query tool (select a map first)</dt>
+<dd>Query selected raster, RGB raster (all three map channels will be
+queried), or vector map(s) using the mouse. Map(s) must be selected
+before query.  Vector charts and thematic vector maps cannot be
+queried. The results of the query will be displayed in the console
+window,
+see <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.</dd>
+
+<dt><img src="icons/silk/arrow_out.png">&nbsp;
+  <img src="icons/gui-pan.gif"> Pan</dt>
+<dd>Interactive selection of a new center of view in the active
+display monitor. Drag the pan cursor while pressing the left mouse
+button to pan.  Panning changes the location of the region displayed
+but not the size of the area displayed or the resolution. Panning
+does <em>not</em> affect the computational region for other GIS
+processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
+
+<dt><img src="icons/silk/zoom_in.png">&nbsp;
+  <img src="icons/gui-zoom_in.gif"> Zoom in</dt>
+<dd>Interactive zooming with the mouse in the active display monitor.
+Drawing a box or just click with the mouse (left button) and zoom-in
+cursor causes the display to zoom in so that the area defined by the
+box fills the display. The map resolution is not changed. Clicking
+with the zoom-in cursor causes the display to zoom in by 30%, centered
+on the point where the mouse is clicked. Zooming resets the display
+region extents (both size and location of area displayed). It
+does <em>not</em> affect the computational region for other GIS
+processes, see <em><a href="g.region.html">g.region</a></em>.</dd>
+
+<dt><img src="icons/silk/zoom_out.png">&nbsp;
+  <img src="icons/gui-zoom_out.gif"> Zoom out</dt>
+<dd>Interactive zooming with the mouse in the active display monitor.
+Drawing a box or just click with the mouse (left button) and zoom-out
+cursor causes the display to zoom in so that the area displayed
+shrinks to fill the area defined by the box. The map resolution is not
+changed. Clicking with the zoom-out cursor causes the display to zoom
+out by 30%, centered on the point where the mouse is clicked. Zooming
+resets the display region extents (both size and location of area
+displayed). It does <em>not</em> affect the computational region for
+other GIS processes,
+see <em><a href="g.region.html">g.region</a></em>.</dd>
+
+<dt><img src="icons/silk/zoom_back.png">&nbsp;
+  <img src="icons/gui-zoom_back.gif"> Revert zoom</dt>
+<dd>Returns to the previous zoom. Up to 10 levels of zoom back are
+maintained, see <em><a href="g.region.html">g.region</a></em>.</dd>
+
+<dt><img src="icons/silk/zoom.png">&nbsp;
+  <img src="icons/gui-mapzoom.gif"> Zoom menu</dt>
+<dd>Automatic zoom settings menu. Zoom to match the extents of a selected
+map, zoom to match the computational region (set with
+<em>g.region</em>), zoom to match the extents of a saved region or
+save the current extents to a named region file, or to set
+computational region (the mapset's <tt>WIND</tt> file) to match the
+current display extents (does not change the resolution).
+See <em><a href="g.region.html">g.region</a></em>.</dd>
+
+<dt><img src="icons/silk/application_lightning.png">&nbsp;
+  <img src="icons/gui-rastanalyze.gif"> Analyze menu</dt>
+<dd>Contains functions for distance measurement, creating histogram or
+profile tool.</dd>
+
+<dt><img src="icons/silk/sum.png">&nbsp;
+  <img src="icons/gui-measure.gif"> Distance measurement tool</dt>
+<dd>Interactive measurement of lengths defined with the mouse. The
+length of each segment and the cumulative length of all segments
+measuered is displayed in the command output window frame. Lengths are
+measured in the current measurement unit,
+see <em><a href="d.measure.html">d.measure</a></em>.</dd>
+
+<dt><img src="icons/silk/wand.png">&nbsp;
+  <img src="icons/gui-profile.gif"> Profile tool</dt>
+<dd>Interactively create profile of a raster map. Profile transect is
+drawn with the mouse in map display. The profile may be of the
+displayed map or a different map,
+see <em><a href="gm_profile.html">Profile Tool help
+page</a></em>.</dd>
+
+<dt><img src="icons/silk/chart_bar.png">&nbsp;
+  <img src="icons/module-d.histogram.gif"> Display histogram of selected raster map</td>
+<dd>Displays histogram of selected raster map or image in new window,
+see <em><a href="d.histogram.html">d.histogram</a</em>.</dd>
+
+<dt><img src="icons/silk/overlays.png">&nbsp;
+  <img src="icons/gui-rastanalyze.gif"> Add overlay</dt>
+<dd>Adds overlay to map display like barscale, north arrow, text.</dd>
+
+<dt><img src="icons/silk/page_white_picture.png">&nbsp;
+  <img src="icons/module-d.barscale.gif"> Add scalebar and north arrow</dt>
+<dd>Adds layer to display a combined scalebar and north arrow. Options
+include scalebar placement (using screen coordinates or a mouse),
+scalebar format, and scalebar colors,
+see <em><a href="d.barscale.html">d.barscale</a></em>.</dd>
+
+<dt><img src="icons/silk/page_green.png">&nbsp;
+  <img src="icons/module-d.legend.gif"> Add legend of raster map</dt>
+<dd>Adds layer to display with legend of selected raster map,
+see <a href="d.legend.html">d.legend</a></em>.</dd>
+
+<dt><img src="icons/silk/textfield_add.png">&nbsp;
+  <img src="icons/module-d.text.gif"> Add text layer</dt>
+<dd>Adds layer to display a line of text using default GRASS font
+(selected with <em><a href="d.font.html">d.font</a></em>).  Options
+include: text placement (screen coordinates); and text size, bolding,
+and color, see <em><a href="d.text.html">d.text</a></em>.</dd>
+
+<dt><img src="icons/silk/picture_save.png">&nbsp;
+  <img src="icons/file-save.gif"> Export map display</dt>
+<dd>Exports visible map display to different raster graphic formats.</dd>
+
+<dt><img src="icons/silk/printer.png">&nbsp;
+  <img src="icons/file-print.gif"> Print map</dt>
+<dd>Prints map on the UNIX <i>lpr</i> printer or PostScript device;
+saves visible map display (including PostScript text and labels) to PDF
+or EPS file. Requires <tt>ghostscript</tt> for all output except EPS.</dd>
+
+</dl>
+
+<h2>CONFIGURATION</h2>
+
+User preferences dialog ('Config->Preferences') enables configuration
+of various options.
+
+<h3>Icon Theme</h3>
+
+Currently are supported two icon theme sets:
+
+<ul>
+  <li>original <em>GRASS theme</em></li>
+  <li><em>Silk theme</em> based
+  on <a href="http://www.famfamfam.com/lab/icons/silk/">Silk icon
+  set</a>, v1.3</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="wxGUI.Digitization_Tool.html">Digitization tool</a>,
+<a href="wxGUI.Attribute_Table_Manager.html">Attribute Table Manager</a>
+</em>
+
+<p>
+<em>
+<a href="http://grass.osgeo.org/wiki/WxPython-based_GUI_for_GRASS">Wiki page</a>
+</em>
+
+<p>
+<em>
+<a href="gis.m.html">TCL/TK-based GIS Manager</a>,
+<a href="d.m.html">TCL/TK-based Display Manager</a>
+</em>
+
+<h2>AUTHORS</h2>
+
+(Alphabetically ordered)<br><br>
+
+Michael Barton,<br>
+Daniel Calvelo Aros,<br>
+Jachym Cepicky,<br>
+Martin Landa, FBK-irst, Trento, Italy
+
+<p>
+<i>$Date$</i>

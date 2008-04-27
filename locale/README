@@ -1,0 +1,286 @@
+HOWTO translate GRASS messages
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+$Date$
+
+[ Web page: http://grass.osgeo.org/devel/i18n.php ]
+
+Updating the message catalogs currently only works on 
+unix-like systems and requires xgettext.
+
+------------------------------------------------------
+
+REQUIRED SOURCE CODE CHANGES (programming required)
+
+Generally, to support i18N multiple languages,
+message strings in GRASS must be modified from
+
+ fprintf ( ..., "...\n", ...);
+to either
+ fprintf ( ..., _("...\n"), ...);
+or (omit \n)
+ G_message ( _("..."), ...);
+
+Careful:
+  G_message should be used for messages - informations about
+  the process for user while fprintf(stdout...) for data output.
+  G_message output is not expected to be send to pipe or file.
+  fprintf(stdout...) output is usually send to pipe or file.
+
+
+Three steps:
+1) check if fprintf is to be replaced (see above)
+
+2) to add (see example above):
+     the macro _( ) which encapulates the message
+
+3) to be added to file.c header:
+     #include "glocale.h"
+
+   This line has to be added to each C file which contains
+   user messages, preferably as last #include statement.
+   Only, if missing, also add
+     #include "gis.h"
+
+NOTE: Also G_warning() and G_fatal_error() need the message
+      encapsulation with macro _() but no further changes.
+
+NOTE2: Also the parameters/flags of each module needs the
+       macro _().
+
+All these messages strings will be then automatically 
+extracted into the message files.
+
+See for example ./vector/v.what.rast/main.c
+
+NOTE3: Such lines
+        fprintf (stdout,"\n");
+  do not need a change as no translation is needed.
+
+
+------------------------------------------------------
+
+GENERAL TRANSLATION PROCEDURE (no programming required)
+
+ POT files ----> PO files      ----> MO files
+ (original       (translated        (final message file,
+  messages)       messages)          used by GRASS programs)
+
+
+Semi-automated procedure:
+
+  1. In the main GRASS source code directory, run:
+     
+        ./configured --with-nls [...further options...]
+        make
+
+  2. In the locale/ directory, run:
+
+        make pot        creates grass.pot (containing original messages)
+
+        make update-po  merges new messages into existing *.po files
+
+  3. Now translate the messages in the po/*.po files (using kbabel or 
+     other editor). Just open the .po file(s) in your preferred translation
+     software.
+
+  4. In the locale/ directory, run:
+      
+        make mo         creates the mo files (containing translated messages as
+                        binary file)
+
+If you have any difficulty with these instructions please ask for help
+on the GRASS development mailing list <grass-dev lists.osgeo.org>
+(subscribe at http://lists.osgeo.org/mailman/listinfo/grass-dev). Your
+willingness, time, and effort translating are valuable. If necessary,
+all of these steps except for the actual translation can be done by
+someone else on a different computer.
+
+A convenient software package to translate messages is 'kbabel'.
+It permits to enhance it's message database by loading existing
+.po files to semi-automate the translation.
+
+Note that GRASS must be configured with '--with-nls' and (re)compiled
+to make use of the translated messages.
+
+There is a file for all library messages and another for all
+module messages (this might be split in future).
+
+------------------------------------------------------
+DETAILED PROCEDURE :
+
+1. Define/check language settings
+
+   echo $LANG
+   echo $LANGUAGE
+   echo $LC_ALL
+
+   Maybe you have to change it (example for Japanese):
+   - for bash shell:
+       export LANG=ja_JP
+       export LANGUAGE=ja_JP
+       export LC_ALL=ja_JP
+
+   - for (t)csh shell:
+       setenv LANG ja_JP
+       setenv LANGUAGE ja_JP
+       setenv LC_ALL ja_JP
+
+2. CREATE POT FILES
+   run
+    make pot
+    
+   This will create
+    ./templates/grasslibs.pot
+    ./templates/grassmods.pot
+    ./templates/grasstcl.pot
+       
+    
+3. CREATE LANGUAGE FILES
+
+   Two cases have to be distinguished:
+    a) Messages have not yet been translated to your language.
+    b) Some messages have already been translated to your language,
+       so you want to merge your efforts into the existing translation.
+       
+  3.a) First CASE: Messages have not yet been translated to your language.
+       No .po file is present for your language in the ./po/ directory.
+      
+       Run:
+        make pot
+        make update-po
+ 
+       Move the generated file from the ./template/ directory
+       to the ./po/ directory (for example German language):
+        mv ./template/grasslibs.pot ./po/grasslibs_de.po
+        mv ./template/grassmods.pot ./po/grassmods_de.po
+        mv ./template/grasstcl.pot ./po/grasstcl_de.po
+
+       Get the two characters indicating the language from this
+       list: http://www.loc.gov/standards/iso639-2/englangn.html
+       The code to use is ISO 639-1 (two characters).
+
+       Then continue with 4. below.
+
+  3.b) Second CASE: Some messages have already been translated to 
+       your language (files present in ./po/ directory), and
+       you want to continue with translating new and still
+       untranslated messages.
+
+       First we have to merge new messages into existing .po files 
+       (which contain already translated messages) as new messages
+       might have been added into the GRASS system. 
+       To do so, run:
+    
+       make pot
+       make update-po
+    
+       This will update the messages in all existing files in 
+       the .po/ directory.
+    
+
+
+4. TRANSLATE MESSAGES
+
+   In the links section at bottom of this page you find references to the
+   'kbabel' and 'poEdit' software to easily translate the message files.
+   
+   Run 'kbabel' or equivalent program
+    kbabel ./po/grasslibs_<LANGUAGE>.po
+    kbabel ./po/grassmods_<LANGUAGE>.po
+    kbabel ./po/grasstcl_<LANGUAGE>.po
+
+   For example (German):
+    kbabel ./po/grasslibs_de.po
+    kbabel ./po/grassmods_de.po
+    kbabel ./po/grasstcl_de.po
+
+   KBABEL: You may load .po files from other projects [see footnote 1].
+           Then use TOOLS -> ROUGH TRANSLATION to auto-translate messages.
+           For Asian, Indian and other keymaps, see [footnote 3].
+
+   NOTES:
+   * Pay attention to keep '%s', '\n' and other stuff also 
+     in the translated messages!
+   
+   * Please use 'ISO-8859-1' or 'ISO-8859-15' for western languages.
+     See http://en.wikipedia.org/wiki/ISO_8859 for details.
+   
+   After finishing the translation, save the files.
+
+     
+5. CREATE MO FILES
+
+   run
+    make mo
+
+   READY.
+
+
+6. Now recompile, install and run GRASS.
+   It should work :-)
+
+   If you don't have this possibility, just skip this step.
+
+7. Send the updated .po files to a GRASS Development Team member.
+   If possible, please send diffs against CVS:
+   svn diff grasslibs_LANG.po > grasslibs_LANG_po.diff
+   svn diff grassmods_LANG.po > grassmods_LANG_po.diff
+   svn diff grasstcl_LANG.po > grasstcl_LANG_po.diff
+
+   If you updated .c files with _() macros as explained
+   above, please send C file diffs against SVN:
+   
+   svn diff file.c > file.diff
+   
+   Thanks for submitting.
+
+   
+PLEASE HELP TO TRANSLATE GRASS MESSAGES!
+
+----------------------------------------------
+
+LINKS
+
+- KBabel: http://i18n.kde.org/tools/kbabel/
+- poEdit: http://poedit.sourceforge.net/
+- *.po files for many languages: KDE translator center, http://i18n.kde.org/teams/
+
+NOTES
+
+[1] To load existing .po files (eg from older GRASS versions or
+    KDE translator center, http://i18n.kde.org/teams/) into
+    Kbabel, use
+    KBABEL -> SETTINGS -> CONFIGURE DIRECTORY -> PO AUXILIARY
+
+[2] To use QGIS' TS files, you have to convert them to PO format.
+    TS files -> PO files converter:
+    To translate the .ts files e.g. from QGIS to .po files, 
+    use
+      http://oss.erdfunkstelle.de/ts2msg/index.shtml
+
+    cd qgis/i18n
+    ts2msg utf8 qgis_de.ts
+    -> qgis_de.po
+
+[3] To change/add the keymap under KDE, you have to:
+    1. Open "(KDE) Control Center = kcontrol"
+    2. Go to Regional & Accessibility -> Keyboard Layout
+    3. Check "Enable Keyboard Layout".
+    4. Select Layout (e.g. Hindi) from the Additional Layouts list
+    5. Press "Add >>"
+    6. Press "Apply".
+
+    Note!: You can change between the new and the original layouts by
+    pressing Alt+Ctrl+k or by clicking the keyboad icon in the system
+    tray.
+
+    Command line alternative:
+      # hindi layout (Devanagari)
+      setxkbmap -model  -layout dev -variant basic
+      # back to US layout:
+      setxkbmap -model  -layout us -variant basic
+
+    How to use the keyboard
+
+    http://indlinux.org/keymap/keymaps.php

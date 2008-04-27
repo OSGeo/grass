@@ -1,0 +1,360 @@
+#!/bin/sh
+
+##########################################################################
+#
+# IMPORTANT: The binaryInstall.src file is a source file, NOT an
+# executable shell script!! Used to generate grass-MAJ.MIN.VER-ARCH-DD_MM_YYYY-install.sh by
+# make bindist
+#  
+# GRASS binary package installation tool
+# platform independent
+#
+# $Id$
+# 1999-2000 by Markus Neteler, neteler@itc.it
+#
+##########################################################################
+
+# Set a zero size variable for testing if this file is a source file. Note
+# that the make bindist command will change this line to TEST_STR = executable
+# without the spaces surrounding the equal sign
+TEST_STR=
+
+# Use a text string for sed to recognize to insert the proper version
+NAME_VER=BIN_DIST_VERSION
+TAR_FILE_SIZE=SIZE_TAR_FILE
+ARCH=ARCHITECTURE
+
+GRASSPRG=GRASSPRG_NAME
+
+# Set the default BINDIR and DESTDIR directories
+BINDIR=/usr/local/bin
+DESTDIR=/usr/local/grass$NAME_VER
+UNINSTALL=grass${NAME_VER}uninstall.sh
+
+# Check if this is a source file or not
+if [ -z "$TEST_STR" ] ; then
+    echo "This is a source script, not an executable script which can be run."
+    exit
+fi
+
+# Check for first parameter:
+if [ $# -lt 1 -o "$1" = "-h" -o "$1" = "-help" -o "$1" = "--help"  ] ; then
+    echo "
+
+GRASS GIS $NAME_VER binary package installation tool
+
+Usage:	grass-$NAME_VER-install.sh grass-$NAME_VER.tar.gz [dest_dir] [bin_dir]
+
+      with:
+        [dest_dir] - optional: FULL path name to the installation directory
+                     (default: /usr/local/grass$NAME_VER/)
+        [bin_dir] - optional: FULL path name to the grass binary directory
+                     (default: /usr/local/bin/)
+		     Notes: 1) Only the grass executable file is stored here
+		     	    2) If you want to change the binary directory only
+			       then you need to specify the destination
+			       directory as well
+
+You may need login as root for installation.
+"
+    exit
+fi
+
+# Check for second parameter:
+if [ "$2" ] ; then
+    DESTDIR=$2
+fi
+
+# Check for third parameter:
+if [ "$3" ] ; then
+    BINDIR=$3
+fi
+
+# Print out script identification message
+echo ""
+echo "GRASS GIS $NAME_VER binary package installation tool"
+echo ""
+
+# Check for correct package name:
+if [ ! -f $1 ] ; then 
+    echo "ERROR: Wrong package name $1. File does not exists."
+    echo ""
+    exit
+fi
+
+# Obtain the package name and path
+CURR_DIR=`pwd`
+PACKAGE_NAME=`basename $1`
+PACKAGE_DIR=`dirname $1`
+
+# the dirname command uses . and .. if found so we need the absolute path
+cd $PACKAGE_DIR
+PACKAGE_DIR=`pwd`
+
+# Check if package is first parameter and in gz or bz2 compression:
+# is package in .tar.gz format?
+echo $PACKAGE_NAME | grep "\.tar\.gz" > /dev/null
+if [ $? -eq 0 ] ; then
+    UNPACK=gunzip
+    	
+    # Is gunzip there?
+    IFSSAVE="$IFS"
+    IFS=":"
+    GUNZIP=""
+    for TEST in $PATH ; do
+        if [ -x $TEST/gunzip ] ; then
+	    GUNZIP="$TEST/gunzip"
+	fi
+    done
+    # which gunzip | grep -v no > /dev/null
+    IFS="$IFSSAVE"
+    if [ ! "$GUNZIP" ] ; then
+        echo "No gunzip installed. Please get from:"
+        echo "   http://www.gnu.org/software/gzip/gzip.html"
+        exit
+    fi
+else
+    # not in .tar.gz format, perhaps in .tar.bz2 format?
+    echo $PACKAGE_NAME | grep "\.tar\.bz2" > /dev/null
+    if [ $? -eq 0 ] ; then
+        UNPACK=bunzip2
+    
+        # Is bunzip2 there?
+        IFSSAVE="$IFS"
+        IFS=":"
+        BUNZIP2=""
+        for TEST in $PATH ; do
+            if [ -x $TEST/bunzip2 ] ; then
+	        BUNZIP2="$TEST/bunzip2"
+	    fi
+        done
+        IFS="$IFSSAVE"
+        # which bunzip2 | grep -v no > /dev/null
+        if [ ! "$BUNZIP2" ] ; then
+    	    echo "No bunzip2 installed. Please get from:"
+    	    echo "   http://sources.redhat.com/bzip2/index.html"
+    	    exit
+        fi
+    else
+        # not in .tar.gz or .tar.bz2 format, completely wrong!
+        echo "ERROR: You need the GRASS binary package in .tar.gz compression "
+        echo "or .tar.bz2."
+        echo ""
+        exit
+    fi
+fi
+
+# Check if the size of the tar gzip file is the same as what was on the server
+SIZE=`ls -l $PACKAGE_NAME | tr -s " " | cut -d" " -f5`
+if [ $? -ne 0 ] ; then
+    echo "ERROR while installing binaries!"
+    echo "Exiting."
+    exit
+fi
+
+if [ $SIZE -ne $TAR_FILE_SIZE ] ; then
+    echo "ERROR: The size of the binary package is not correct."
+    echo "  Perhaps there was a transmission error. Please download"
+    echo "  the package again"
+    echo ""
+    exit
+fi
+
+echo "Using $UNPACK decompressor..."
+
+echo "The package $PACKAGE_NAME seems to be o.k."
+echo " Proceeding..."
+echo ""
+
+# Check if the paths for the binary and the destination are the same
+BIN_PATH1=$BINDIR/grass-$NAME_VER
+BIN_PATH2=$BIN_PATH1/
+
+if [ $BIN_PATH1 = $DESTDIR -o $BIN_PATH2 = $DESTDIR ] ; then
+    echo "ERROR:"
+    echo "It appears that the destination directory path is the same as the"
+    echo "path for the grass binary executable. This results in a name"
+    echo "conflict between the destination directory and the executable."
+    echo "Please run this script again with a different path name for the"
+    echo "destination directory."
+    exit
+fi
+
+# Check if BINDIR is a directory
+if [ ! -d "$BINDIR" ] ; then
+    
+    # Check if BINDIR is a file
+    if [ -f "$BINDIR" ] ; then
+    	echo ""
+	echo "ERROR: $BINDIR is a file not a directory."
+	echo "Please specify a directory for the binary executable directory."
+	exit
+    fi
+   
+    mkdir -p $BINDIR
+    
+    if [ $? -ne 0 ] ; then
+	echo "An error occured trying to create $BINDIR ! Exiting."
+	exit
+    fi
+fi
+
+# Check if DESTDIR is appropriate
+echo "Checking and creating installation directory..."
+
+if [ ! -d "$DESTDIR" ] ; then
+
+    # Check if a word "grass" is in string $DESTDIR
+    echo $DESTDIR | grep "grass" > /dev/null
+    
+    if [ $? -eq 1 ] ; then
+    	echo "WARNING: Your destination path $DESTDIR does not contain the word 'grass'"
+        echo "Continue (y/n)?"
+        read ans         
+        
+	if [ "$ans" = "n" -o "$ans" = "N" ] ; then
+            exit
+        fi
+    fi
+    
+    # Check if DESTDIR is a file
+    if [ -f "$DESTDIR" ] ; then
+    	echo ""
+	echo "ERROR: $DESTDIR is a file not a directory."
+	echo "Please specify a directory for the destination directory"
+	exit
+    fi
+
+    mkdir -p $DESTDIR
+    
+    if [ $? -ne 0 ] ; then
+    	echo "An error occured trying to create $DESTDIR! Exiting."
+    	exit
+    fi
+else
+    if [ -d $DESTDIR/bin ] ; then
+    	echo ""
+        echo "ERROR: Old GRASS distribution existing in $DESTDIR!"
+        echo "Remove first!"
+        exit
+    else
+
+    	# Check if a word "grass" is in string $DESTDIR
+        echo $DESTDIR | grep "grass" > /dev/null
+        
+	if [ $? -eq 1 ] ; then
+            echo "WARNING: Your destination path $DESTDIR does not contain the word 'grass'"
+            echo "Continue (y/n)?"
+            read ans         
+            
+	    if [ "$ans" = "n" -o "$ans" = "N" ] ; then
+            	exit
+            fi
+        fi
+
+	# Check if DESTDIR is writable
+	touch $DESTDIR/test$$ > /dev/null
+	if [ $? -ne 0 ] ; then
+	    echo "ERROR: Destination directory $DESTDIR is not"
+	    echo "writable, try installing as root!"
+	    echo "Exiting."    
+	    exit 1
+        fi
+	rm -f $DESTDIR/test$$ > /dev/null
+
+    fi        
+fi
+
+
+# Start the installation job...
+echo "Installing GRASS binaries into $DESTDIR"
+echo ""
+
+echo "Uncompressing the package and extracting to target directory..."
+PACK_FILE=`echo $PACKAGE_DIR/$PACKAGE_NAME | sed 's+^//+/+g'`
+cd $DESTDIR; $UNPACK -c $PACK_FILE | tar -xf -
+if [ $? -eq 1 ] ; then
+    echo "An error occured or user break while installing binaries! Exiting."
+    exit
+fi
+
+# Get rid of any CVS directories
+find . -name CVS -exec rm -rf {} \; 2>/dev/null ; true
+cd $CURR_DIR
+
+# Creating start script
+echo "Creating start script:"
+echo "$BINDIR/$GRASSPRG -> $BINDIR/grass-$NAME_VER"
+
+STRING="s|^GISBASE.*|GISBASE\=\'$DESTDIR\'|g"
+
+sed -e $STRING $DESTDIR/$GRASSPRG.tmp > $BINDIR/grass-$NAME_VER
+if [ $? -eq 1 ] ; then
+  echo "An error occured trying to create the grass start script! Exiting."
+  echo "You probably do not have permission to install into $BINDIR."
+  echo "You may need to be the root user to install in that directory."
+  exit
+fi
+
+ln -sf $BINDIR/grass-$NAME_VER $BINDIR/$GRASSPRG
+chmod ugo+x $BINDIR/grass-$NAME_VER
+
+if [ $? -eq 1 ] ; then
+    echo "An error occured trying to create the grass start script! Exiting."
+    echo "You probably do not have permission to install into $BINDIR."
+    echo "You may need to be the root user to install in that directory."
+    exit
+fi
+
+echo "Creating the locks directory for monitors..."
+SERVERNAME=`uname -n | sed -e "s/\..*//"`
+
+if [ ! -d $DESTDIR/locks ] ; then
+    mkdir $DESTDIR/locks
+fi
+
+rm -rf $DESTDIR/locks/*
+mkdir $DESTDIR/locks/$SERVERNAME
+chmod -R 1777 $DESTDIR/locks
+
+echo""
+
+echo "Creating datum transformation gridshift files..."
+
+if test -x "${DESTDIR}/etc/nad2bin" ; then
+    NAD2BIN="${DESTDIR}/etc/nad2bin"
+else
+    # Use version installed with PROJ.4 (should be in path)
+    NAD2BIN=nad2bin
+fi
+
+for i in "${DESTDIR}"/etc/nad/src/*.lla
+do 
+    "${NAD2BIN}" < $i \
+    "${DESTDIR}"/etc/nad/`echo \`basename "$i"\` | sed 's/.lla//'` && rm -f "$i"
+done
+
+if test -z "`ls \"${DESTDIR}/etc/nad/src\"`" ; then
+    rmdir "${DESTDIR}/etc/nad/src"
+fi
+
+echo""
+
+echo "Generating display font configuration file..."
+
+GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" -o
+
+echo""
+
+# Print out some messages
+echo "Installation finished. Start GRASS $NAME_VER with"
+echo "    $BINDIR/$GRASSPRG"
+echo ""
+#echo "The graphical user interface can be started within GRASS GIS."
+#echo ""
+#echo "You can uninstall grass by typing"
+#echo "    sh $UNINSTALL"
+#echo "in the directory $BINDIR"
+echo ""
+echo "Welcome to GRASS GIS. Enjoy this open source GRASS GIS!"
+echo ""

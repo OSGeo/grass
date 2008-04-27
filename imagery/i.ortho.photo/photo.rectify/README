@@ -1,0 +1,17 @@
+1/2002: Markus Neteler
+
+ - have updated write routines to GRASS 5 functions (taken from i.rectify2)
+ - have changed elev reading from CELL to raster_type to support
+   also FP elevations
+
+ 
+Bugs:
+ - somewhere the map_type is undefined in an underlying function (can't 
+   identify), so I added G_suppress_warnings(1) at top of rectify.c
+   -> the module works well
+
+ - when DEBUG3 is activated, the module silently stops in exec.c at
+   select_current_env() (line 87). Why???
+   However, not a real bug. Seems to be a problem of exit status or
+   whatever.
+

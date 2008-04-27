@@ -1,0 +1,42 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.topidx</EM> creates topographic index (wetness index), ln(a/tan(beta)), map from
+elevation map
+<P>
+where
+<DL>
+<DD>a: the area of the hillslope per unit contour length that drains through any point,
+<P>
+<DD>tan(beta): the local surface topographic slope (delta vertical) / (delta horizontal).
+</DL>
+<P>
+Input maps may have NULL values.  For example, if you have a MASK for
+a watershed (basin map from <EM>r.water.outlet</EM>), the
+following command will create a masked elevation map (belev):
+<div class="code"><pre>
+r.mapcalc "belev = if(isnull(basin), basin, elev)"
+</pre></div>
+<P>
+
+<EM>r.stats -Anc</EM> prints out averaged statistics for topographic index.
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="r.topmodel.html">r.topmodel</A></EM>,
+<EM><A HREF="r.water.outlet.html">r.water.outlet</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>
+
+<h2>REFERENCE</h2>
+
+Moore, I.D., R.B. Grayson, and A.R. Ladson, 1991. Digital terrain
+modeling: A review of hydrological, geomorphological, and biological
+applications. Hydrol. Processes 5:3-30.
+
+<H2>AUTHORS</H2>
+Main algorithm sources are rewritten from GRIDATB.FOR.
+<BR>
+Thanks to Keith Beven.
+<P>
+GRASS port by <A HREF=mailto:grass4u gmail com>Huidae Cho</A><BR>
+Hydro Laboratory, Kyungpook National University, South Korea
+
+<p><i>Last changed: $Date$</i></p>

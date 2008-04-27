@@ -1,0 +1,69 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.select</em> prints result of selection from database 
+based on SQL statement read from input file or from standard input 
+to standard output.
+
+<h2>NOTE</h2>
+
+If parameters for database connection are already set with 
+<a HREF="db.connect.html">db.connect</a>, they are taken as default values and
+do not need to be spcified each time. Output will be displayed to stdout or can
+be directed to a file.
+
+<h2>EXAMPLES</h2>
+
+<div class="code"><pre>
+echo "select * from roads" | db.select 
+or
+ cat file.sql | db.select 
+or
+ db.select input=file.sql
+</pre></div>
+
+<p>
+
+<em>Select all from table roads</em><br>
+<div class="code"><pre>
+db.select -c driver=odbc database=g51test table=roads input=file.sql > result.csv
+</pre></div>
+
+<P>
+
+<em>Select some string attribute, exclude others:</em><br>
+<div class="code"><pre>
+echo "SELECT * FROM archsites WHERE str1 <> 'No Name'" | db.select
+</pre></div>
+
+<P>
+
+<em>Select some string attribute with ZERO length:</em><br>
+<div class="code"><pre>
+echo "SELECT * FROM archsites WHERE str1 IS NULL" | db.select
+</pre></div>
+
+<P>
+
+<em>Select coordinates from PostGIS table:</em><br>
+<div class="code"><pre>
+echo "SELECT x(geo),y(geo) FROM localizzazione" | db.select
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="sql.html">GRASS SQL interface</a>,
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="db.describe.html">db.describe</a>,
+<a HREF="db.drivers.html">db.drivers</a>,
+<a HREF="db.droptable.html">db.droptable</a>,
+<a HREF="db.execute.html">db.execute</a>,
+<a HREF="db.login.html">db.login</a>,
+<a HREF="db.tables.html">db.tables</a></em>
+
+
+<h2>AUTHOR</h2>
+?<br>
+Modifications: Radim Blazek, ITC-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>
+

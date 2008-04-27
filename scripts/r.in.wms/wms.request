@@ -1,0 +1,316 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       wms.request for GRASS 6
+# AUTHOR(S):    Cedric Shock (cedric AT shockfamily.net)
+#               Based on r.in.onearth by Soeren Gebbert and Markus Neteler
+#               And on r.in.wms by Jachym Cepicky
+# PURPOSE:      Builds requests for downloading data from web mapping servers
+# COPYRIGHT:    (C) 2005, 2006 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Builds download requests for WMS servers.
+#%  keywords: wms
+#%End
+#%flag
+#% key: o
+#% description: Don't request transparent data
+#%end
+#%flag
+#% key: c
+#% description: Clean out existing data
+#%end
+#%flag
+#% key: t
+#% description: Use 
+#%end
+#%flag
+#% key: p
+#% description: This projection is the srs projection.
+#%end
+#%option
+#% key: folder
+#% type: string
+#% description: Folder in which to save downloaded files
+#% required : yes
+#%end
+#%option
+#% key: prefix
+#% type: string
+#% description: Prefix file names with this
+#% required : yes
+#%end
+#%option
+#% key: region
+#% type: string
+#% description: Named region that defines the tileset.
+#% required : no
+#%end
+#%option
+#% key: mapserver
+#% type: string
+#% description: Mapserver to request data from
+#% required: yes
+#%end
+#%option
+#% key: layers
+#% type: string
+#% description: Layers to request from map server
+#% multiple: yes
+#% required: yes
+#%end
+#%option
+#% key: styles
+#% type: string
+#% description: Styles to request from map server
+#% multiple: yes
+#% required: no
+#%end
+#%option
+#% key: srs
+#% type: string
+#% description: Source projection to request from server
+#% answer:EPSG:4326
+#%end
+#%option
+#% key: format
+#% type: string
+#% description: Image format requested from the server
+#% options: geotiff,tiff,jpeg,gif,png
+#% answer: geotiff
+#% required: no
+#%end
+#%option
+#% key: maxcols
+#% type: integer
+#% description: Maximum columns to request at a time. 
+#% answer: 1024
+#% required : no
+#%end
+#%option
+#% key: maxrows
+#% type: integer
+#% description: Maximum rows to request at a time
+#% answer: 1024
+#% required : no
+#%end
+#%option
+#% key: tileoptions
+#% type: string
+#% description: Additional options for r.tileset
+#% required : no
+#%end
+#%option
+#% key: wmsquery
+#% type:string
+#% description: Addition query options for server
+#% answer: version=1.1.1
+#%end
+# FIXME: Remove before GRASS 7 is released
+#%option
+#% key: v
+#% type: integer
+#% description: Verbosity level
+#% answer: 1
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+  exec g.parser "$0" "$@"
+fi
+
+SED="sed"
+GREP="grep"
+# check if we have sed
+if [ ! -x "`which $SED`" ] ; then
+    g.message "$SED is required, please install it first"
+    exit 1
+fi
+
+# check if we have grep
+if [ ! -x "`which $GREP`" ] ; then
+    g.message "$GREP is required, please install it first"
+    exit 1
+fi
+
+# Remember the intial field seperator
+defaultIFS="$IFS"
+
+
+#####################
+# name:     message
+# purpose:  displays messages to the user
+# usage: message level text
+
+message () {
+	if [ $1 -lt $GIS_OPT_V ] ; then
+		shift
+		echo "$@"  
+	fi
+}
+
+
+BC="bc"
+BCARGS="-l"
+
+#####################3
+# name: calculate
+# purpose: perform calculations
+# usage: varname "expr"
+
+calculate() {
+	message 3 "$2"
+	c_tmp=`echo "$2" | $BC $BCARGS`
+	eval $1=$c_tmp
+}
+
+################################################################
+# Calculate the number of tiles!!
+# Download and them
+GetTiles() {
+  g.message "Calculating tiles"
+
+  #################################################
+  # ############## TILE SETTINGS ################ #
+  #################################################
+  MAXCOLS=${GIS_OPT_MAXCOLS} #The maximum cols of the biggest tile 
+  MAXROWS=${GIS_OPT_MAXROWS} #The maximum rows of the biggest tile 
+
+
+  #Calculate the number of tiles and set up the arrays
+  message 1 "r.tileset -g sourceproj=\"$PROJ4_SRS\" sourcescale=\"$SRS_SCALE\" overlap=2 maxcols=${MAXCOLS} maxrows=${MAXROWS} $TILESET_OPTIONS"
+  TILES=`eval "GRASS_VERBOSE=1 r.tileset -g sourceproj=\"$PROJ4_SRS\" sourcescale=\"$SRS_SCALE\" overlap=2 maxcols=${MAXCOLS} maxrows=${MAXROWS} $TILESET_OPTIONS"`
+  if [ $? -ne 0 ] ; then
+     g.message -e "r.tileset failure"
+     exit 1
+  fi
+
+  NUMBER_OF_TILES=0 #The number of the tiles 
+  #Calculate the number of tiles
+  for i in $TILES ; do
+	NUMBER_OF_TILES=`expr $NUMBER_OF_TILES + 1`
+  done
+
+  g.message "Requesting ${NUMBER_OF_TILES} tiles."
+  
+  NUMBER_OF_TILES=0 #The number of the tiles 
+
+  mkdir -p "${GIS_OPT_FOLDER}"
+
+  FOLDERPLUS="${GIS_OPT_FOLDER}/${GIS_OPT_PREFIX}_${GIS_OPT_REGION}"
+
+  if [ $GIS_FLAG_C -eq 1 ] ; then
+    g.message -v message="Removing files <${FOLDERPLUS}*>"
+    rm -f "$FOLDERPLUS"*
+  fi
+
+  if [ -x "`which wget`" ] ; then
+    REQUESTFILE="${FOLDERPLUS}.wget"
+  else
+    REQUESTFILE="${FOLDERPLUS}.curl"
+  fi
+
+  #reset the requestfile
+  echo > "${REQUESTFILE}"
+
+  echo "$PROJ4_SRS" > "${FOLDERPLUS}.proj4"
+
+  for i in $TILES ; do
+	eval "$i"
+	SIZE="bbox=$w,$s,$e,$n&width=$cols&height=$rows"
+	message 1 "$SIZE"
+	IMAGEFILE="${FOLDERPLUS}_${NUMBER_OF_TILES}"
+	OUTPUT_FILE="${IMAGEFILE}${FILE_EXTENT}"
+	# We could add world files here to help out gdalwarp.
+	# And here it is:
+	# Displacement from top left cell to the one to the right of it and to the one below it:
+	calculate xres "($e - $w) / $cols"
+	calculate nyres "($s - $n) / $rows"
+	# Center of top left cell:
+	calculate top_left_cell_center_x "$w + $xres / 2"
+	calculate top_left_cell_center_y "$n + $nyres / 2"
+	#Write the world file:
+	echo "$xres" > "${IMAGEFILE}${WORLDFILE}"
+	echo "0.0" >> "${IMAGEFILE}${WORLDFILE}"
+	echo "0.0" >> "${IMAGEFILE}${WORLDFILE}"
+	echo "$nyres" >> "${IMAGEFILE}${WORLDFILE}"
+	echo "$top_left_cell_center_x" >> "${IMAGEFILE}${WORLDFILE}"
+	echo "$top_left_cell_center_y" >> "${IMAGEFILE}${WORLDFILE}"
+	#Make the requestt for data:
+	STRING="request=GetMap&layers=${GIS_OPT_LAYERS}&styles=${GIS_OPT_STYLES}&srs=${SRS}&${SIZE}&format=${FORMAT}&${TRANSPARENCY}&${WMS_QUERY}"
+	echo "OUTPUT_FILE=\"${OUTPUT_FILE}\";SERVER=\"${SERVER}\";STRING=\"${STRING}\"" >> "${REQUESTFILE}"
+
+	NUMBER_OF_TILES=`expr $NUMBER_OF_TILES + 1`
+  done
+}
+
+
+# Initialize variables:
+
+SERVER="${GIS_OPT_MAPSERVER}"
+SRS="${GIS_OPT_SRS}"
+SRS_lower=`echo $SRS | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"`
+
+
+# If the user asserts that this projection is the same as the source
+# use this projection as the source to get a trivial tiling from r.tileset
+if [ $GIS_FLAG_P -eq 1 ] ; then
+	PROJ4_SRS=`g.proj -j`
+	eval `g.proj -p | $GREP meters | $SED "s/\\s*:\\s*/=/"`
+	SRS_SCALE=$meters;
+else
+	PROJ4_SRS="+init=$SRS_lower"
+	SRS_SCALE=1
+fi
+
+WMS_QUERY="${GIS_OPT_WMSQUERY}"
+
+if [ -z "$GIS_OPT_REGION" ] ; then
+	TILESET_OPTIONS="$GIS_OPT_TILEOPTIONS"
+else
+	TILESET_OPTIONS="region=$GIS_OPT_REGION $GIS_OPT_TILEOPTIONS"
+fi
+
+if [ $GIS_FLAG_O -eq 1 ] ; then
+	TRANSPARENCY="transparent=FALSE"
+else
+	TRANSPARENCY="transparent=TRUE"
+fi
+
+case "${GIS_OPT_FORMAT}" in
+    "geotiff") FORMAT="image/geotiff"
+               WORLDFILE=".tfw"
+               FILE_EXTENT=".geotiff"
+               ;;
+    "tiff") FORMAT="image/tiff"
+               WORLDFILE=".tfw"
+               FILE_EXTENT=".tiff"
+               ;;
+    "png") FORMAT="image/png"
+               WORLDFILE=".pgw"
+               FILE_EXTENT=".png"
+               ;;
+    "jpeg") FORMAT="image/jpeg"
+               WORLDFILE=".jgw"
+               FILE_EXTENT=".jpeg"
+               ;;
+    "gif") FORMAT="image/gif"
+               WORLDFILE=".gfw"
+               FILE_EXTENT=".gif"
+               ;;
+esac
+
+GetTiles
+
+exit

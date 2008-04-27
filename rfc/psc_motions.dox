@@ -1,0 +1,34 @@
+/*!
+\page psc_motions Motions of the GRASS Project Steering Committee
+
+See also: <a href="http://grass.gdf-hannover.de/wiki/PSC_Agenda">PSC Agenda</a>.
+
+\section motions2008 Motions of 2008
+
+<ul>
+<li> SVN write access to Ivan Shmakov (granted, 6 Feb 2008)
+<!--
+<li> \link rfc3_psc RFC 3: PSC Voting Procedures
+-->
+</ul>
+
+\section motions2007 Motions of 2007
+
+<ul>
+<li> SVN write access to Eric Patton as documentation manager (granted, 24 Nov 2007)
+<li> Motion to migrate CVS/bugtracker to OSGeo (passed, 22 Oct 2007)
+<li> CVS write access to P. Marcondes for PT translations (granted, 2 June 2007)
+<li> \link rfc1_psc RFC 1: Project Steering Committee Guidelines\endlink (adopted 6 April 2007)
+</ul>
+
+\section motions2006 Motions of 2006
+
+<ul>
+<li> CVS write access to S. Pallecchi (granted, 12 Dec 2006)
+<li> PSC Chair motion (chair: M Neteler, 9 Dec 2006, see related 
+     <a href="http://grass.osgeo.org/pipermail/grass-psc/2006-December/000143.html">email message</a>)
+<li> CVS write access to R. Antolin (granted, 8 Dec 2006)
+<li> \link rfc2_psc RFC 2: Legal aspects of code contributions\endlink (adopted 8 Dec 2006)
+</ul>
+
+*/

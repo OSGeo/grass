@@ -1,0 +1,39 @@
+To install GRASS, you will likely also need to install the following
+RPMS:
+
+- fftw-2.1.5-5.i386.rpm (version >= 2.1) available at
+http://www.rpmfind.net (I believe it is also part of Fedora 3 Extras
+for i386).
+
+and the following, all available at
+http://mappinghacks.com/rpm/fedora/3/
+
+- gdal-1.2.5-mh3.i686.rpm
+- proj-4.4.9-mh2.i686.rpm
+- geos-2.1.1-mh2.i686.rpm
+- ogdi-3.1.1-mh1.i686.rpm
+
+
+The gdal package does require a number of libraries included with
+PostreSQL.  Perhaps the easiest way to satisfy these requirements is
+to add the application PostgreSQL via Add/Remove Applications under
+the Applications->System Settings menu. The GRASS RPM is compiled with
+full database support for ODBC, MYSQL and PostgreSQL; however, to use
+these databases with GRASS they will need to be installed on your
+system. MySQL can be installed using Add/Remove Applications as well.
+Note that fully installing PostgreSQL requires further setup beyond
+that done by via the automated Add/Removing Applications. See the
+PostgreSQL website for instructions. This is only necessary if you
+want to use PostgreSQL with GRASS. 
+
+
+
+
+
+
+
+
+
+
+
+

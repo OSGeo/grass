@@ -1,0 +1,163 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       v.db.dropcolumn
+# AUTHOR(S):    Markus Neteler
+# PURPOSE:      interface to db.execute to drop a column from the 
+#               attribute table connected to a given vector map
+#               - Based on v.db.addcol
+#               - with special trick for SQLite
+# COPYRIGHT:    (C) 2007 by the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+
+#%Module
+#%  description: Drops a column from the attribute table connected to a given vector map.
+#%  keywords: vector, database, attribute table
+#%End
+
+#%option
+#% key: map
+#% type: string
+#% gisprompt: old,vector,vector
+#% key_desc : name
+#% description: Vector map for which to drop attribute column
+#% required : yes
+#%end
+
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer where to drop column
+#% answer: 1
+#% required : no
+#%end
+
+#%option
+#% key: column
+#% type: string
+#% description: Name of the column
+#% required : yes
+#%end
+
+
+if  [ -z "$GISBASE" ] ; then
+    echo 'You must be in GRASS GIS to run this program' >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### setup temporary file
+TMP="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+    g.message -e 'Unable to create temporary files'
+    exit 1
+fi
+
+cleanup()
+{
+ \rm -f "$TMP" "$TMP.coltypes" "$TMP.colnames" "$TMP.coldesc"
+}
+
+# what to do in case of user break:
+exitprocedure()
+{
+ g.message -e 'User break!'
+ cleanup
+ exit 1
+}
+# shell check for user break (signal list: trap -l)
+trap "exitprocedure" 2 3 15
+
+### setup enviro vars ###
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+
+# does map exist in CURRENT mapset?
+eval `g.findfile element=vector file=$GIS_OPT_MAP mapset=$MAPSET`
+if [ ! "$file" ] ; then
+   g.message -e "Vector map <$GIS_OPT_MAP> not found in current mapset"
+   exit 1
+fi
+
+table=`v.db.connect map=$GIS_OPT_MAP -g | grep -w $GIS_OPT_LAYER | cut -f2 -d" "`
+if [ -z "$table" ] ; then
+   g.message -e 'There is no table connected to the input vector map! Cannot delete any column'
+   cleanup
+   exit 1
+fi
+keycol=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f3 -d' '`
+database=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f4 -d' '`
+driver=`v.db.connect -g map=$GIS_OPT_MAP | grep -w $GIS_OPT_LAYER | cut -f5 -d' '`
+col="$GIS_OPT_COLUMN"
+
+if [ "$col" = "$keycol" ] ; then
+   g.message -e "Cannot delete <$col> column as it is needed to keep table\
+      <$table> connected to the input vector map <$GIS_OPT_MAP>"
+   cleanup
+   exit 1
+fi
+
+v.info --q -c map=$GIS_OPT_MAP layer=$GIS_OPT_LAYER | cut -d'|' -f1,2 | grep "|${col}$" 2>&1 >/dev/null
+if [ $? -ne 0 ] ; then
+	g.message -e "Column <$col> not found in table <$table>"
+	cleanup
+	exit 1
+fi
+
+if [ "$driver" = "sqlite" ] ; then
+	#echo "Using special trick for SQLite"
+	# http://www.sqlite.org/faq.html#q13
+	v.info --q -c map=$table | cut -d'|' -f1,2 | grep -v "|${col}$" > "$TMP.coldesc"
+	# need to revert order:
+	cat "$TMP.coldesc" | cut -d'|' -f1 > "$TMP.coltypes"
+	cat "$TMP.coldesc" | cut -d'|' -f2 > "$TMP.colnames"
+	COLDEF=`paste -d' ' "$TMP.colnames" "$TMP.coltypes" | tr '\n' ',' | sed 's+,$++g'`
+	COLNAMES=`cat "$TMP.colnames" | tr '\n' ',' | sed 's+,$++g'`
+echo "BEGIN TRANSACTION;
+CREATE TEMPORARY TABLE ${table}_backup(${COLDEF});
+INSERT INTO ${table}_backup SELECT ${COLNAMES} FROM ${table};
+DROP TABLE ${table};
+CREATE TABLE ${table}(${COLDEF});
+INSERT INTO ${table} SELECT ${COLNAMES} FROM ${table}_backup;
+DROP TABLE ${table}_backup;
+COMMIT;" > "$TMP"
+	db.execute input="$TMP"
+	if [ $? -eq 1 ] ; then
+	    	g.message -e 'Cannot continue (problem deleting column)'
+	    	cleanup
+	    	exit 1
+	fi
+else
+	echo "ALTER TABLE $table DROP COLUMN $col" | db.execute database=$database driver=$driver
+	if [ $? -eq 1 ] ; then
+	    	g.message -e 'Cannot continue (problem deleting column)'
+	    	cleanup
+	    	exit 1
+	fi
+fi
+
+# cleanup
+cleanup
+
+# write cmd history:
+v.support map=${GIS_OPT_MAP} cmdhist="${CMDLINE}"
+
+exit 0

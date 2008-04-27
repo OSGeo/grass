@@ -1,0 +1,139 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       v.in.gns
+#
+# AUTHOR(S):    Markus Neteler, neteler itc it
+#
+# PURPOSE:      Import GEOnet Names Server (GNS) country files into a GRASS vector map
+#               http://earth-info.nga.mil/gns/html/
+#                -> Download Names Files for Countries and Territories (FTP)
+#
+#               Column names: http://earth-info.nga.mil/gns/html/help.htm
+#
+# COPYRIGHT:    (c) 2005 GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+# TODO:         - see below in the code
+#               - add extra columns explaining some column acronyms, 
+#                 e.g. FC (Feature Classification)
+#############################################################################
+
+#%Module
+#%  description: Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map.
+#%  keywords: vector, import, gazetteer
+#%End
+#%option
+#% key: file
+#% type: string
+#% description: Uncompressed GNS file from NGA (with .txt extension)
+#% gisprompt: old_file,file,input
+#% required : yes
+#%end
+#%option
+#% key: vect
+#% type: string
+#% gisprompt: new,vector,vector
+#% description: Name for output vector map
+#% required : no
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk/gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE"/"$LOCATION_NAME"/"$MAPSET"
+
+
+if [ -n "$GIS_OPT_FILE" ] ; then
+    FILEORIG="$GIS_OPT_FILE"
+    if [ -n "$GIS_OPT_VECT" ] ; then
+       FILE="$GIS_OPT_VECT"
+    else
+       FILE=`basename $FILEORIG .txt`
+    fi
+fi
+
+#### setup temporary file
+TMPFILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMPFILE" ] ; then
+    g.message -e "Unable to create temporary files"
+    exit 1
+fi
+#### trap ctrl-c so that we can clean up tmp
+trap 'rm -f "${TMPFILE}" "${TMPFILE}_ascii.csv"' 2 3 15
+
+#are we in LatLong location?
+g.proj -p | grep -i name | grep -i Lon  > /dev/null
+if [ $? -eq 1 ] ; then
+  g.message -e "This module only operates in LatLong/WGS84 locations"
+  exit 1
+fi
+
+#let's go
+#change TAB to semicolon
+TAB=`awk 'BEGIN{printf "\t";}'`
+cat "${FILEORIG}" | sed  "s+$TAB+;+g"  > "${TMPFILE}"
+
+#header elimination:
+HEADER="RC;UFI;UNI;LAT;LONG;DMS_LAT;DMS_LONG;UTM;JOG;FC;DSG;PC;CC1;ADM1;ADM2;DIM;CC2;NT;LC;SHORT_FORM;GENERIC;SORT_NAME;FULL_NAME;FULL_NAME_ND;MODIFY_DATE"
+cat "${TMPFILE}" | grep -v "^${HEADER}" > "${TMPFILE}_ascii.csv"
+rm -f "${TMPFILE}"
+
+NUM_PLACES=`wc -l "${TMPFILE}_ascii.csv" | awk '{print $1}'`
+g.message "Converted $NUM_PLACES place names."
+
+#TODO: fix dms_lat,dms_long DDMMSS -> DD:MM:SS
+# Solution:
+# IN=DDMMSS
+# DEG=`echo $IN | cut -b1,2`
+# MIN=`echo $IN | cut -b3,4`
+# SEC=`echo $IN | cut -b5,6`
+# DEG_STR="$DEG:$MIN:$SEC"
+
+#modifications (to match DBF 10 char column name limit):
+# short_form   -> shortform
+# sort_name    -> sortname
+# full_name    -> fullname
+# full_name_sd -> funamesd
+#
+# pump data into GRASS:
+v.in.ascii cat=0 x=5 y=4 fs=';' in="${TMPFILE}_ascii.csv" out="$FILE" \
+   columns='rc integer,uf1 integer,uni integer,lat double precision,lon double precision,dms_lat varchar(6),dms_long varchar(7),utm varchar(4),jog varchar(7),fc varchar(1),dsg varchar(5),pc integer,cci varchar(2),adm1 varchar(2),adm2 varchar(200),dim integer,cc2 varchar(2),nt varchar(1),lc varchar(3),shortform varchar(128),generic varchar(128),sortname varchar(200),fullname varchar(200),funamesd varchar(200),mod_date date' 
+
+rm -f "${TMPFILE}_ascii.csv"
+
+# write cmd history:
+v.support "$FILE" cmdhist="${CMDLINE}"
+
+exit 0

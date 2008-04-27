@@ -1,0 +1,63 @@
+#!/bin/sh
+# Parameters: 1, 2, 3 - number of LANDSAT band
+# written by Markus Neteler 21. Jul. 1998, 5. Jan. 1999
+#            neteler geog.uni-hannover.de | neteler itc.it
+
+
+# submodule of i.oif
+if [ $# -ne 3 ] ; then
+    g.message -e "You must use i.oif instead of i.oifcalc (this is a submodule)"
+    exit 1
+fi
+
+if [ $1 -lt 1 ] || [ $1 -gt 7 ] || [ $2 -lt 1 ] || [ $2 -gt 7 ] || [ $3 -lt 1 ] || [ $3 -gt 7 ] ; then
+    g.message -e "Invalid channel combination ($1 $2 $3)"
+    exit 1
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk or gawk first" 
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+# calculate SUM of Stddeviations:
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_stddev" 1 $1 >  "$temp_sum"
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_stddev" 1 $2 >> "$temp_sum"
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_stddev" 1 $3 >> "$temp_sum"
+
+cat "$temp_sum" | awk -v temp_file="$temp_calc" \
+'BEGIN {sum = 0.0} 
+NR == 1{}
+	{sum += $1 ; N++}
+END{
+print sum > temp_file
+}'
+
+# calculate SUM of absolute(Correlation values):
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_correlation" $1 $2 >  "$temp_sum"
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_correlation" $1 $3 >> "$temp_sum"
+"$GISBASE"/etc/i.oif/m.cutmatrix "$temp_correlation" $2 $3 >> "$temp_sum"
+
+cat "$temp_sum" | awk -v temp_file="$temp_calc" \
+'BEGIN {sum = 0.0}
+NR == 1{}
+        {sum += sqrt($1*$1) ; N++}  # sqrt(x^2) is my ABS-function
+END{
+print sum >> temp_file
+}'
+
+# Calculate OIF index:
+#     Divide (SUM of Stddeviations) and (SUM of Correlation)
+cat "$temp_calc" | awk 'BEGIN {}
+{count = divisor; divisor = $1;}      # value shift - no better idea ;-)
+END{
+print count / divisor
+}'

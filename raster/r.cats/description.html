@@ -1,0 +1,178 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.category</EM> prints the category values and labels for the raster map
+layer specified by <B>map=</B><EM>name</EM> to standard output.
+
+<P>
+
+The user can specify all needed parameters on the command line, and run the
+program non-interactively. If the user does not specify any categories
+(e.g., using the optional <B>cats=</B><EM>range</EM>[,<EM>range</EM>,...]
+argument), then all the category values and labels for the named raster map
+layer that occur in the map are printed.  The entire <EM>map</EM> is read
+using <EM><A HREF="r.describe.html">r.describe</A></EM>, to determine which
+categories occur in the <EM>map</EM>. If a listing of categories is
+specified, then the labels for those categories only are printed. The
+<EM>cats</EM> may be specified as single category values, or as ranges of
+values. The user may also (optionally) specify that a field separator other
+than a space or tab be used to separate the category value from its
+corresponding category label in the output, by using the
+<B>fs=</B><EM>character</EM>|<EM>space</EM>|<EM>tab</EM> option (see example
+below). If no field separator is specified by the user, a tab is used to
+separate these fields in the output, by default.
+
+<P>
+
+The output is sent to standard output in the form of one category per line,
+with the category value first on the line, then an ASCII TAB character (or
+whatever single character or space is specified using the <B>fs</B>
+parameter), then the label for the category.
+
+
+<H2>NOTES</H2>
+
+Any ASCII TAB characters which may be in the label are replaced by spaces. 
+<P>
+The output from <EM>r.category</EM> can be redirected into a file, or piped into
+another program.
+
+<H3>Input from a file</H3>
+
+The <b>rules</b> option allows the user to assign category labels from values
+found in a file. The label can refer to a single category, range of
+categories, floating point value, or a range of floating point values.
+The format is given as follows.
+<div class="code"><pre>
+cat:Label
+val1:val2:Label
+</pre></div>
+
+If the filename is given as "-", the category labels are read from <tt>stdin</tt>
+
+
+<H3>Default and dynamic category labels</H3>
+
+Default and dynamic category labels can be created for categories that
+are not explicitly labeled.
+
+The coefficient line can be followed by explicit category labels
+which override the format label generation.
+<pre>
+   0:no data
+   2:	.
+   5:	.		      ## explicit category labels
+   7:	.
+</pre>
+explicit labels can be also of the form:
+<pre>
+   5.5:5:9 label description
+   or
+   15:30  label description
+</pre>
+<P>
+In the format line
+<ul>
+<li>$1 refers to the value num*5.0+1000 (ie, using the first 2 coefficients)
+<li>$2 refers to the value num*5.0+1005 (ie, using the last 2 coefficients)
+</ul>
+  $1.2 will print $1 with 2 decimal places.
+<P>
+Also, the form $?xxx$yyy$ translates into yyy if the category is 1, xxx 
+otherwise. The $yyy$ is optional. Thus
+<P>
+  $1 meter$?s
+<p>
+will become: 1 meter (for category 1)<BR>
+	     2 meters (for category 2), etc.
+
+<P>
+format='Elevation: $1.2 to $2.2 feet'   ## Format Statement
+coefficients="5.0,1000,5.0,1005"	## Coefficients
+<P>
+The format and coefficients above would be used to generate the
+following statement in creation of the format appropriate category
+string for category "num":
+<P>
+  sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)
+
+<P>
+Note: while both the format and coefficent lines must be present
+      a blank line for the format string will effectively suppress
+      automatic label generation.
+<!--
+Note: quant rules of Categories structures are heavily dependant
+on the fact that rules are stored in the same order they are entered.
+since i-th rule and i-th label are entered at the same time, we
+know that i-th rule maps fp range to i, thus we know for sure
+that cats.labels[i] corresponds to i-th quant rule
+-->
+<P>
+To use a "<tt>$</tt>" in the label without triggering the plural test,
+put "<tt>$$</tt>" in the format string.
+<P>
+Use 'single quotes' when using a "<tt>$</tt>" on the command line to
+avoid unwanted shell substitution.
+
+
+<H2>EXAMPLES</H2>
+
+<P>
+<DL>
+<DT><div class="code"><pre>
+r.category map=soils
+</pre></div>
+<DD>
+prints the values and labels associated with all of the categories in the
+<EM>soils</EM> raster map layer;
+
+<DT><div class="code"><pre>
+r.category map=soils cats=10,12,15-20 
+</pre></div>
+<DD>
+prints only the category values and labels for <EM>soils</EM> map layer
+categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>; and
+
+<DT><div class="code"><pre>
+r.category map=soils cats=10,20 fs=':'
+</pre></div>
+<DD>
+prints the values and labels for <EM>soils</EM> map layer categories
+<tt>10</tt> and <tt>20</tt>, but uses "<tt>:</tt>" (instead of a tab)
+as the character separating the category values from the category
+values in the output.
+</DL>
+
+<DL>
+<DT>Example output: 
+<DD>
+<P>
+<div class="code"><pre>
+10:Dumps, mine, Cc 
+20:Kyle clay, KaA 
+</pre></div>
+</DL>
+
+
+<H2>TODO</H2>
+
+Respect the <B>fs=</B> field separator setting for input rules.
+
+
+<H2>SEE ALSO</H2>
+
+UNIX Manual entries for <i>awk</i> and <i>sort</i>
+
+<P>
+<EM><A HREF="r.coin.html">r.coin</A></EM>,
+<EM><A HREF="r.describe.html">r.describe</A></EM>,
+<EM><A HREF="d.what.rast.html">d.what.rast</A></EM>,
+<EM><A HREF="r.support.html">r.support</A></EM>
+
+<H2>AUTHORS</H2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<BR>
+Hamish Bowman, University of Otago, New Zealand (label creation options)
+
+<p>
+<i>Last changed: $Date$</i>

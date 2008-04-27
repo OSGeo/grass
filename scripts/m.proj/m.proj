@@ -1,0 +1,251 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:	m.proj
+# AUTHOR:	M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+#		  New Zealand
+# PURPOSE:      cs2cs reprojection frontend for a list of coordinates.
+#		Replacement for m.proj2 from GRASS 5
+# COPYRIGHT:	(c) 2006 Hamish Bowman, and the GRASS Development Team
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+# notes:
+#  - cs2cs expects "x y" data so be sure to send it "lon lat" not "lat lon"
+#  - if you send cs2cs a third data column, beware it might be treated as "z"
+
+#%Module
+#%  description: Convert coordinates from one projection to another (cs2cs frontend).
+#%  keywords: miscellaneous, projection
+#%End
+#%option
+#% key: input
+#% type: string
+#% gisprompt: old_file,file,file
+#% description: Input coordinate file (omit to read from stdin)
+#% required : no
+#% key_desc : filename
+#%end
+#%option
+#% key: output
+#% type: string
+#% gisprompt: new_file,file,file
+#% description: Output coordinate file (omit to send to stdout)
+#% required : no
+#% key_desc : filename
+#%end
+#%option
+#% key: fs
+#% type: string
+#% description: Field separator
+#% required : no
+#% key_desc : character
+#% answer : |
+#%end
+#%option
+#% key: proj_in
+#% type: string
+#% description: Input projection parameters (PROJ.4 style)
+#% required : no
+#%end
+#%option
+#% key: proj_out
+#% type: string
+#% description: Output projection parameters (PROJ.4 style)
+#% required : no
+#%end
+#%flag
+#% key: i
+#% description: Use LL WGS84 as input and current location as output projection
+#%end
+#%flag
+#% key: o
+#% description: Use current location as input and LL WGS84 as output projection
+#%end
+#%flag
+#% key: d
+#% description: Output long/lat in decimal degrees or other projections with many decimal places
+#%end
+#%flag
+#% key: v
+#% description: Verbose mode (print projection parameters and filenames to stderr)
+#%end
+
+
+
+if [ -z "$GISBASE" ] ; then
+   echo "You must be in GRASS GIS to run this program." 1>&2
+   exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+   exec g.parser "$0" "$@"
+fi
+
+# setting environment, so that awk works properly in all languages (needed?)
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+#### check for cs2cs
+if [ ! -x "`which cs2cs`" ] ; then
+   g.message -e "cs2cs program not found, install PROJ.4 first"
+   g.message "http://proj.maptools.org"
+   exit 1
+fi
+
+#### check for overenthusiasm
+if [ -n "$GIS_OPT_PROJ_IN" ] && [ $GIS_FLAG_I -eq 1 ] ; then
+   g.message -e "Chose only one input parameter method"
+   exit 1
+fi
+if [ -n "$GIS_OPT_PROJ_OUT" ] && [ $GIS_FLAG_O -eq 1 ] ; then
+   g.message -e "Chose only one output parameter method" 
+   exit 1
+fi
+if [ $GIS_FLAG_I -eq 1 ] && [ $GIS_FLAG_O -eq 1 ] ; then
+   g.message -e "Chose only one auto-projection parameter method"
+   exit 1
+fi
+if [ -n "$GIS_OPT_OUTPUT" ] && [ -e "$GIS_OPT_OUTPUT" ] ; then
+   g.message -e "Output file already exists" 
+   exit 1
+fi
+
+#### parse field separator
+if [ "$GIS_OPT_FS" = "space" ] || [ "$GIS_OPT_FS" = "tab" ] ; then
+   fs=" "
+else
+   fs="`echo "$GIS_OPT_FS" | cut -c1`"
+fi
+
+#### setup projection params
+PROJ_TYPE=`g.region -p | grep '^proj' | cut -f2 -d" "`
+if [ $PROJ_TYPE -eq 0 ] && ( [ $GIS_FLAG_I -eq 1 ] || [ $GIS_FLAG_O -eq 1 ] ) ; then
+    g.message -e "Cannot project to or from a XY location." 
+    exit 1
+fi
+
+unset IN_PROJ
+if [ $GIS_FLAG_I -eq 1 ] ; then
+   IN_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+   if [ $GIS_FLAG_V -eq 1 ] ; then
+     g.message "Assuming LL WGS84 as input, current projection as output."
+   fi
+fi
+if [ $GIS_FLAG_O -eq 1 ] ; then
+   IN_PROJ="`g.proj -jf`"
+fi
+if [ -n "$GIS_OPT_PROJ_IN" ] ; then
+   IN_PROJ="$GIS_OPT_PROJ_IN"
+fi
+if [ -z "$IN_PROJ" ] ; then
+   g.message -e "Missing input projection parameters."
+   rm -f "$TMP"
+   exit 1
+fi
+
+unset OUT_PROJ
+if [ $GIS_FLAG_O -eq 1 ] ; then
+   OUT_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+   if [ $GIS_FLAG_V -eq 1 ] ; then
+     g.message "Assuming current projection as input, LL WGS84 as output."
+   fi
+fi
+if [ $GIS_FLAG_I -eq 1 ] ; then
+   OUT_PROJ="`g.proj -jf`"
+fi
+if [ -n "$GIS_OPT_PROJ_OUT" ] ; then
+   OUT_PROJ="$GIS_OPT_PROJ_OUT"
+fi
+if [ -z "$OUT_PROJ" ] ; then
+   g.message -e "Missing output projection parameters."
+   exit 1
+fi
+
+g.message message="input parameters=[$IN_PROJ]"
+g.message message="output parameters=[$OUT_PROJ]"
+
+#### setup temporary file
+TMP="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+   g.message -e "Unable to create temporary file" 
+   exit 1
+fi
+
+#### setup input file
+if [ -z "$GIS_OPT_INPUT" ] || [ "$GIS_OPT_INPUT" = "-" ] ; then
+   # read from stdin to temp file
+   EXITCODE=0
+   while [ $EXITCODE -eq 0 ] ; do
+      unset REPLY
+      read -n 256 -t 2 REPLY
+      EXITCODE=$?
+      if [ -n "$REPLY" ] ; then
+	 echo "$REPLY" >> "$TMP"
+      fi
+   done
+
+   # make sure we have at least one line of data
+   if [ "`wc -l "$TMP" | cut -f1 -d' '`" -eq 0 ] ; then
+      g.message -e "ERROR reading data from stdin"
+      exit 1
+   fi
+   infile="$TMP"
+else
+   infile="$GIS_OPT_INPUT"
+fi
+
+if [ ! -f "$infile" ] ; then
+   g.message -e "Couldn't read input data." 
+   exit 1
+fi
+
+#### setup output file
+outfile="$GIS_OPT_OUTPUT"
+
+if [ -n "$infile" ] ; then
+    g.message message="input file=[$infile]"
+fi
+if [ -n "$outfile" ] ; then
+    g.message message="output file=[$outfile]" 
+fi
+
+#### setup output style
+if [ $GIS_FLAG_D -eq 0 ] ; then
+   OUTFMT=""
+else
+   OUTFMT="-f %.8f"
+fi
+
+#### do the conversion
+# Convert cs2cs DMS format to GRASS DMS format:
+#   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
+
+if [ -z "$outfile" ] ; then
+   cat "$infile" | tr "$fs" ' ' | cs2cs $OUTFMT $IN_PROJ +to $OUT_PROJ
+   EXITCODE=$?
+else
+   cat "$infile" | tr "$fs" ' ' | cs2cs $OUTFMT $IN_PROJ +to $OUT_PROJ > "$outfile"
+   EXITCODE=$?
+
+   #### check if transform REALLY worked (e.g. bogus output if grid file not found)
+   if [ -n "`head -n 1 "$outfile" | grep '^\*'`" ] ; then
+      EXITCODE=1
+   fi
+fi
+
+if [ $EXITCODE -ne 0 ] ; then
+   g.message -w "Projection transform probably failed, please investigate."
+fi
+
+#### cleanup
+if [ -e "$TMP" ] ; then
+   rm -f "$TMP"
+fi
+
+exit 0

@@ -1,0 +1,249 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.generalize</EM>
+is module for generalization of GRASS vector maps. This module
+comprises a bunch of algortihms for line simplification, line smoothing,
+network generalization and displacemet. (New methods may be added later)
+Also, this document contains only the descriptions of module and implemented
+methods. For more examples and nice pictures, check 
+<EM><A HREF="http://users.ox.ac.uk/~orie1848/tutorial.html">tutorial</A><BR></EM> 
+
+<H2>NOTES</H2>
+(Line) simplification is a process of reducing the compexity of vector features.
+It transforms a line into another line which consists of fewer vertices but
+still approximates the original line. The most of the algorithms described below
+selects a subset of points of the original line.
+
+<P>
+On the other hand, (line) smoothing is a "reverse" process which takes as an
+input a line and produces smoother line which approximates the original line.
+In some cases, this is achieved by inserting new vertices into the line. 
+Sometimes, the increase of the number of vertices is dramatical (4000%).
+When this situation occurs, it is always a good idea to simplify the line after
+smoothing.
+</P>
+
+<P>
+Smoothing and simplification algorithms implemented in this module work line by 
+line. i.e simplification/smoothing of one line does not affect the other lines.
+They are treated separately.  Also, the first and the last point of each line is
+never translated and/or deleted. 
+</P>
+
+<H2>SIMPLIFICATION</H2>
+<P>
+<EM>v.generalize</EM> contains following line simplification algorithms
+<UL>
+<LI>Douglas-Peucker Algorithm</LI>
+<LI>"Douglas-Peucker Reduction Algorithm"</LI>
+<LI>Lang Algorithm</LI>
+<LI>Vertex Reduction</LI>
+<LI>Reumann-Witkam Algorithm</LI>
+<LI>Remove Small Lines/Areas</LI>
+</UL>
+
+Different algorithms require different parameters, but all the algorithms have
+one parameter in common. It is <B>threshold</B> parameter. In general, the degree
+of simplification increases with the increasing value of <B>threshold</B>.<BR>
+
+The following happens if <B>r</B> flag is presented.
+If some line is simplified and hence becomes shorter than <B>threshold</B> then it is
+removed. Also, if <B>type</B> contains <B>area</B> and a simplification algorithm is selected,
+the areas of area less than <B>threshold</B> are also removed.
+
+<H2>DETAIL DESCRIPTION</H2>
+<UL>
+<LI> <I>Douglas-Peucker</I> - "Quicksort" of line simplification, the most widely used
+     algorithm. Input parameters: <B>input</B>, <B>threshold</B>. For more
+     information, please check: <A href="http://geometryalgorithms.com/Archive/algorithm_0205/algorithm_0205.htm">http://geometryalgorithms.com/Archive/algorithm_0205/algorithm_0205.htm</A>.</LI>
+<LI> <I>Douglas-Peucker Reduction Algorithm</I> is essentially the same algorithm as the
+     algorithm above. The difference is that it takes additional parameter <B>reduction</B> 
+     which denotes the percentage of the number of points on the new line with respect 
+     to the number of points on the original line. Input parameters: <B>input</B>, 
+     <B>threshold</B>, <B>reduction</B>.</LI>     
+<LI> <I>Lang</I> - Another standard algorithm. Input parameters: <B>input</B>, <B>threshold</B>, <B>look_ahead</B>. 
+     For an excellent description, check: <A href="http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm">http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm</A>.</LI>
+<LI> <I>Vertex Reduction</I> - Simplest among the algorithms. Input parameters: <B>input</B>, <B>threshold</B>.
+     Given line, this algorithm removes the points of this line which are closer to each other than <B>threshold</B>.
+     Precisely, if p1 and p2 are two consecutive points and distance between p2 and p1 is less
+     than <B>threshold</B>, it removes p2 and repeats the same
+     process on the remaining points.</LI>
+<LI> <I>Reuman-Witkam</I> - Input parameters: <B>input</B>, <B>threshold</B>. This algorithm quite
+     reasonably preserves the global characteristics of the lines. For more information
+     check <A href="http://www.ifp.uni-stuttgart.de/lehre/vorlesungen/GIS1/Lernmodule/Lg/LG_de_6.html">http://www.ifp.uni-stuttgart.de/lehre/vorlesungen/GIS1/Lernmodule/Lg/LG_de_6.html</A>(german)</LI>
+<LI> <I>Remove Small Lines/Areas</I> - removes the lines (strictly) shorter than threshold and areas of area (strictly)less than threshold.
+     Other lines/areas/boundaries are left unchanged. Input parameters: <B>input</B>, <B>threshold</B>             
+</UL>
+
+<P>
+<I>Douglas-Peucker</I> and <I>Douglas-Peucker Reduction Algorithm</I> use the same method
+to simplify the lines. Note that 
+<DIV class="code"><PRE>
+v.generalize input=in output=out method=douglas threshold=eps
+</PRE></DIV>
+is equivalent to
+<DIV class="code"><PRE>
+v.generalize input=in output=out method=douglas_reduction threshold=eps reduction=100
+</PRE></DIV>
+However, in this case, the first method is faster. Also observe that
+<I>douglas_reduction</I> never outputs more vertices than <I>douglas</I>. And that,
+in general, <I>douglas</I> is more efficient than <I>douglas_reduction</I>.
+More importantly, the effect of
+<DIV class="code"><PRE>
+v.generalize input=in output=out method=douglas_reduction threshold=0 reduction=X
+</PRE></DIV>
+is that 'out' contains approximately only X% of points of 'in'.
+</P>
+
+<H2>SMOOTHING</H2>
+<P>
+The following smoothing algorithms are implemented in <EM>v.generalize</EM>
+</P>
+<UL>
+<LI><I>Boyle's Forward-Looking Algorithm</I> - The position of each point depends on the
+    position of the previous points and the point <B>look_ahead</B> ahead. 
+    <B>look_ahead</B> consecutive points. Input parameters: <B>input</B>, <B>look_ahead</B>.</LI>
+<LI><I>McMaster's Sliding Averaging Algorithm</I> - Input Parameters: <B>input</B>, <B>slide</B>, <B>look_ahead</B>.
+    The new position of each point is the average of the <B>look_ahead</B> points around. Paremeter <B>slide</B>
+    is used for linear interpolation between old and new position (see below).</LI>     
+<LI><I>McMaster's Distance-Weighting Algorithm</I> - Works by taking the weighted average of <B>look_ahead</B> consecutive points
+    where the weight is the reciprocal of the distance from the point to the currently smoothed point. And parameter <B>slide</B> is used
+    for linear interpolation between the original position of the point and newly computed position where value 0 means the original position.
+    Input parameters: <B>input</B>, <B>slide</B>, <B>look_ahead</B>.
+    </LI>
+<LI><I>Chaiken's Algorithm</I> - "Inscribes" a line touching the original line such that the points on this new line
+    are at least <I>threshold</I> apart. Input parameters: <B>input</B>, <B>threshold</B>. This algorithm
+    approximates given line very well.</LI>
+<LI> <I>Hermite Interpolation</I> - This algorithm takes the points of the given line as the control
+     points of hermite cubic spline and approximates this spline by the points approximatelly <B>threshold</B> apart.
+     This method has excellent results for the small values of <B>threshold</B>, but in this case it produces
+     a huge number of new points and some simplification is usually needed. Input parameters: <B>input</B>, <B>threshold</B>, <B>angle_thresh</B>.
+     <B>Angle_thresh</B> is used for reducing the number of the outputed points. It denotes the minimal
+     angle (in degrees) between two consecutive segements of line.</LI>     
+<LI> <I>Snakes</I> is the method of minimization of the "energy" of the line. This method preserves the
+     general characteristcs of the lines but smooths the "sharp corners" of the line. Input parameters <B>input</B>, <B>alpha</B>, <B>beta</B>.
+     This algorithm works very well for small values of <B>alpha</B> and <B>beta</B> (between 0 and 5). These
+     parameters affects the "sharpness" and the curvature of the computed line.</LI>                          
+</UL>
+<P>
+One of the key advantages of <I>Hermite Interpolation</I> is the fact that the computed line
+always passes throught the points of the original line whereas the lines produced by the 
+remaining algorithms never pass through these points. In some sense, this algorithm outputs
+the line which "circumsrcibes" given line. On the other hand, <I>Chaiken's Algorithm</I> outputs
+the line which "inscribes" given line. Moreover this line always touches/intersects the centre
+of the line segment between two consecutive points. For more iterations, the property above does
+not hold, but the computed lines are very similar to the Bezier Splines. The disadvantage of these
+two algorithm is that they increase the number of points. However, <I>Hermite Interpolation</I> can be used
+as another simplification algorithm. To achieve this, it is necessary to set <I>angle_thresh</I> to higher values (15 or so). 
+</P>
+<P>
+One restriction on both McMasters' Algorithms is that <I>look_ahead</I> parameter must be odd. Also
+note that these algorithms have no effect if <I>look_ahead = 1</I>. 
+</P>
+<P>
+Note that <I>Boyle's</I>, <I>McMasters'</I> and <I>Snakes</I> algorithm are sometime used in the signal processing to smooth the signals.
+More importantly, these algorithms never change the number of points on the lines. i.e they only
+translate the points, they do not insert any new points. 
+</P>
+<P>
+<I>Snakes</I> Algorithm is (asymptotically) the slowest among the algorithms presented above. Also,
+it requires quite a lot of memory. This means, that it is not very efficient
+for maps with the lines consisting of many segments.
+</P>
+
+<H2>DISPLACEMENT</H2>
+<P>
+The displacement is used when the lines (linear
+features) interact (overlap and/or are close to each other) at the current
+level of detail. In general, displacement methods, as name suggests, move the
+conflicting features apart so that they do not interact and can be distinguished.   
+</P>
+<P>
+This module implements algorithm for displacement of linear features based on
+the <I>Snakes</I> approach. This method has very good results. However, it
+requires a lot of memory and is not very efficient.
+</P>
+<P>
+Displacement is selected by method=displacement. It uses following parameters:
+</P>
+<UL>
+<LI>
+<B>threshold</B> - specifies critical distance. Two features interact iff they are
+closer than <B>threshold</B> appart.
+</LI>
+<LI>
+<B>alpha</B>, <B>beta</B> - These parameters define the rigidity of lines. For greater
+values of <B>alpha</B>, <B>beta</B> (&gt;=1), the algorithm better preserves the original
+shape of the lines. On the other hand, the lines may not
+be move enough.  If the values of <B>alpha</B>, <B>beta</B> are too small (&lt;=0.001)
+then the lines are moved sufficiently, but the geometry and topology of lines can
+be destroyed. Probably, the best way to find the good values of <B>alpha</B>, <B>beta</B>
+is by trial and error.
+</LI>
+<LI>
+<B>iterations</B> - denotes the number of iterations the interactions between
+the lines are resolved. Mostly, good values of <B>iterations</B> lies
+between 10 and 100.
+</LI>
+</UL>
+<P>
+The lines affected by the algorithm can be specified by the <B>layer</B>,
+<B>cats</B> and <B>where</B> parameters.
+</P>
+<!-- TODO: example(s) -->
+
+<H2>NETWORK GENERALIZATION</H2>
+<P>
+Is used for selecting "the most important" part of the network. This is based
+on the graph algorithms. Network generalization is applied if method=network.
+The algorithm calculates three centrality measures for each line in the
+network and only the lines with the values greater than thresholds are selected.
+The behaviour of algorithm can be altered by the following parameters:
+</P>
+
+<UL>
+<LI>
+<B>degree_thresh</B> - algorithm selects only the lines which share a point
+with at least <B>degree_thresh</B> different lines.
+</LI>
+<LI>
+<B>closeness_thresh</B> - is always in the range (0, 1]. Only the lines with
+the closeness centrality measure at least <B>closeness_thresh</B> are selcted. 
+The lines in the centre of a network have greater values of this measure then
+the lines near the border of a network. This means,
+that this parameters can be used for selecting the centre(s) of a network. Note that
+if closeness_thresh=0 then everything is selected.
+</LI>
+<LI>
+<B>betweeness_thresh</B> - Again, only the lines with betweeness centrality
+measure at least <B>betweeness_thresh</B> are selected. This value is always
+positive and is larger for large networks. It denotes to what extent a line
+is in between the other lines in the network. This value is great for the lines
+which lie between other lines and lie on the paths between two parts of a network.
+In the terminology of the road neworks, these are highways, bypasses, main roads/streets.... 
+</LI>
+</UL>
+<P>
+All three parameters above can be presented at the same time. In that case,
+the algorithm selects only the lines which meet each criterion. 
+</P>
+<P>
+Also, the outputed network may not be connected if the value of <B>betweeness_thresh</B>
+is too large.
+</P>
+<!-- TODO: example(s) -->
+<H2>SEE ALSO</H2>
+<EM><A HREF="http://users.ox.ac.uk/~orie1848/tutorial.html">v.generalize Tutorial</A><BR></EM>
+<EM><A HREF="v.clean.html">v.clean</A><BR></EM>
+<EM><A HREF="v.dissolve.html">v.dissolve</A><BR></EM>
+<BR><BR>
+
+
+<H2>AUTHORS</H2>
+Daniel Bundala, Google Summer of Code 2007, Student 
+<BR>
+Wolf Bergenheim, Mentor
+
+<!-- TODO: references -->
+
+<P><I>Last changed: $Date$</I>

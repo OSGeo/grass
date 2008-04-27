@@ -1,0 +1,64 @@
+
+                TODO
+               ------
+
+6.0.0 (can be done, but cannot stop 6.0.0 release)
+-----------------------------------------------------------------
+- Cygwin/Windows and other (Non-Linux) platform specific problems
+- i18n translations
+
+
+> 6.1.0 
+-------
+
+Vector TODO: see doc/vector/TODO
+
+Missing modules:
+- write Vect_map_exists() and implement in g.remove and v.digit -n (radim)
+
+- add '-d' dissolve to v.reclass
+- add 'where=' to v.to.rast
+- add '-3' for 3D distance calculation in v.distance
+
+- change default color white to black:
+   (better define DEFAULT_FG_COLOR, DEFAULT_BG_COLOR in gis.h, update in 5.0 and 5.7)
+display/d.erase/main.c:	color->answer = "white";	/* set default color! */
+display/d.path/main.c:    bgcolor_opt->answer     = "white" ;
+display/d.barscale/main.c:	opt2->answer     = "white" ;
+display/d.legend/main.c:	opt2->answer     = "white" ;
+display/d.colortable/main.c:	opt2->answer     = "white" ;
+display/d.geodesic/main.c:    parm.lcolor->answer     = "white";
+display/d.geodesic/main.c:	line_color = D_translate_color (parm.lcolor->answer = "white");
+display/d.geodesic/main.c:    if(strcmp (parm.lcolor->answer, "white") == 0)
+display/d.graph/main.c:	opt2->answer     = "white" ;
+display/d.histogram/main.c:	opt2->answer     = "white" ;
+display/d.mapgraph/main.c:	opt2->answer     = "white" ;
+display/d.measure/main.c:	parm.c2->answer = "white";
+display/d.rast.arrow/arrow.c:    opt5->answer     = "white" ;
+display/d.rhumbline/main.c:	parm.lcolor->answer     = "white";
+display/d.rhumbline/main.c:		line_color = D_translate_color (parm.lcolor->answer = "white");
+display/d.rhumbline/main.c:	if(strcmp (parm.lcolor->answer, "white") == 0)
+display/d.scale/main.c:	opt2->answer     = "white" ;
+display/d.title/main.c:	opt2->answer     = "white" ;
+display/d.linegraph/linegraph.c:    t_color_opt->answer     = "white" ;
+
+- merge of image libraries:
+  A)
+    - lib/imagery/: standard lib, in use (i.* except for i.points3, i.rectify3)
+    - imagery/i.ortho.photo/libes/: standard lib, in use (i.ortho.photo, photo.*)
+  B)
+    - lib/image3/: never finished improvement which integrated the standard lib and
+                   the ortho lib. Seems to provide also ortho rectification for
+                   satellite data (i.points3, i.rectify3)
+  C) 
+    - merge of i.points, i.vpoints, i.points3
+    - merge of i.rectify and i.rectify3
+    - addition of new resampling algorithms such as bilinear, cubic convolution
+      (take from r.proj?)
+    - add other warping methods (maybe thin splines from GDAL?)
+    - implement/finish linewise ortho-rectification of satellite data
+    - Add support for > 8bit colors (only 0-255 supported currently)
+
+- Depreciate tape functions in next major revision of GRASS and create a
+  tape module that accomplishes tape access.
+

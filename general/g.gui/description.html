@@ -1,0 +1,53 @@
+<h2>DESCRIPTION</h2>
+
+<p>
+This program allows user to start a selected graphical user interface (GUI)
+from the command line prompt.
+
+<p>
+Currently three different GUIs are supported:
+
+<ul>
+<li><b>tcltk</b> - Current Tcl/Tk based GUI aka the <em>gis.m</em>
+    <a href="gis.m.html">GIS Manager</a></li>
+<li><b>oldtcltk</b> - Old Tcl/Tk based GUI aka the <em>d.m</em>
+    <a href="d.m.html">Display Manager</a></li>
+<li><b>wxpython</b> - New wxPython based GUI aka
+    <a href="wxGUI.html">wxGUI</a></li>
+</ul>
+
+If the <b>-u</b> update flag is given or the <em>g.gisenv</em>
+<tt>GRASS_GUI</tt> variable is missing, then the <tt>GRASS_GUI</tt>
+variable is permanently changed and the selected GUI will be used
+as the default UI from then on.
+
+
+<h2>NOTES</h2>
+
+Valid values for GRASS_GUI are <tt>text</tt>, <tt>tcltk</tt>,
+<tt>oldtcltk</tt>, and <tt>wxpython</tt>.
+
+<em>g.gisenv</em> variables are stored in the user's home directory
+in a hidden file called "<TT>.grassrc6</TT>". They are not shell environment
+variables and the "rc" file is not a classic UNIX run command file,
+it just contains persistent GRASS variables and is not executed.
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="wxGUI.html">wxPython based new generation GUI</a>,
+<a href="http://grass.gdf-hannover.de/wiki/WxPython-based_GUI_for_GRASS">wxGUI wiki-page</a><br>
+<a href="gis.m.html">Tcl/Tk based GIS Manager (gis.m)</a>,<br>
+<a href="d.m.html">Tcl/Tk based Display Manager (d.m)</a>,<br><br>
+<a href="g.gisenv.html">g.gisenv</a>, <a href="variables.html">GRASS variables list</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+
+Martin Landa, FBK-irst, Trento, Italy<BR>
+Hamish Bowman, Otago University, Dunedin, New Zealand (fine tuning)
+
+<p>
+<i>$Date$</i>

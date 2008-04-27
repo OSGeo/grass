@@ -1,0 +1,125 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.77 [en] (Win95; U) [Netscape]">
+   <meta name="Author" content="Daniel Green">
+   <meta name="resource-type" content="document">
+   <meta name="distribution" content="global">
+   <meta name="Description" content="Random useful source code">
+   <meta name="KeyWords" content="free source code, R-Tree, skiplist, quaternion, intersection test, C++, class library">
+   <title>Free Source Code</title>
+</head>
+<body text="#000000" bgcolor="#D8D0C8" link="#0000EE" vlink="#551A8B" alink="#FF0000" background="../slssmall.jpg" nosave>
+
+<center><b><font size=+3>Free Source Code</font></b></center>
+
+<p><font size=+1>Here are a few useful bits of free source code. You're
+completely free to use them for any purpose whatsoever. All I ask is that
+if you find one to be particularly valuable, then consider sending a brief
+thank you note to the email address in the code comments. Enjoy.</font>
+<ul>
+<li>
+<font size=+1><a href="#Java Code">Java Code</a></font></li>
+
+<li>
+<font size=+1><a href="#C & C++ Code">C &amp; C++</a></font></li>
+</ul>
+
+<hr WIDTH="100%">
+<center><a NAME="Java Code"></a><b><font size=+2>Java Code</font></b></center>
+
+<p><font color="#000000"><font size=+1>The links following each Java implementation
+show HTML versions of the code with syntax highlighting which were generated
+using the <a href="#java2html">Java to HTML</a> utility below. The simpliest
+way to download one as a .java file is to view the page and copy &amp;
+paste the text from your browser into a .java file.</font></font>
+<p><font color="#CC0000"><font size=+1>JarLoader</font></font>
+<p><font size=+1>Java class able to load all the jar files in a given directory
+containing classes of a given type. It can also be set to continuously
+track that directory for new jar files that are added later.</font>
+<p><font size=+1>&nbsp;&nbsp;&nbsp; </font><a href="JarLoader.java.html">View
+the code</a>
+<p><font color="#CC0000"><font size=+1>Component Dependency Handler</font></font>
+<p><font size=+1>A small Java GUI utility class. Ever pull your hair out
+tracking down why some GUI component is not enabled or disabled when it
+should be? Or visible or invisible, etc? Sometimes the rules for knowing
+under exactly which combinations of application state should affect a given
+component can get quite complicated, and creating listeners with complex
+if/else blocks often result which need constant fixing. Well, there's a
+better way to manage all those state changing rules. Rather than trying
+to figure out all the possible components that might be affected by a given
+component state change and trying to set their states directly, you can
+create dependency graphs that describe which components are dependent on
+which others and then enforce those dependencies through the use of the
+ComponentDependencyHandler class. An object of this class represents all
+the dependencies of one component's particular state upon one or more other
+components. See the description and example code in the source file for
+details.</font>
+<blockquote><a href="ComponentDependencyHandler.java.html">View the code</a></blockquote>
+<font color="#CC0000"><font size=+1>Infinite Binary Tree</font></font>
+<p><font size=+1>Here is a good Java example of one important way to create
+JTrees. This a tiny Java test program has some surprizingly interesting
+behavior. It creates a JTree with an infinite number of internal nodes
+and no leaf nodes! Each internal node is labeled with a unique positive
+integer such that every positive number can be found if you know where
+to look. The basic concept demonstrated is use of the TreeModel class to
+display hierarchically structured information that may be huge or expensive
+to access--for example, data in a database.</font>
+<blockquote><a href="InfiniteBinaryTree.java.html">View the code</a></blockquote>
+<a NAME="java2html"></a><font color="#CC0000"><font size=+1>java2html</font></font>
+<p><font size=+1>You can find lots of converters by the same name with
+a quick Google search on the term "java2html" but most are way more complex
+than needed. I weeded through dozens and found this lettle gem which was
+small but effective. I did expand on it a bit and think it's quite useful.
+Click the following link to see the result of running java2hml.java on
+itself.</font>
+<blockquote><a href="java2html.java.html">View the code</a></blockquote>
+<font color="#CC0000"><font size=+1>Stack Method Extractor</font></font>
+<p><font size=+1>This simple yet clever utility contains a static method
+which returns the full name of the method a given number of stack frames
+above the calling method Click following link to see the code. It's magic.</font>
+<blockquote><a href="StackMethodExtractor.java.html">View the code</a></blockquote>
+
+<hr WIDTH="100%">
+<center><a NAME="C & C++ Code"></a><b><font size=+2>C &amp; C++ Code</font></b></center>
+
+<p><font color="#CC0000"><font size=+1>R-Trees</font></font>
+<p><font size=+1>Straight "C" implementation of Tony Gutman's R-Tree method,
+R-Trees provide Log(n) speed rectangular indexing into multi-dimensional
+data. Based on his original implementation, I've brought it up to date
+with ANCI specifications and added a nice improvment based on sphere volumes.</font>
+<p><font size=+1>&nbsp;&nbsp;&nbsp; </font><a href="RTree.zip">Download
+R-Tree code</a>
+<p><font color="#CC0000"><font size=+1>Skiplists</font></font>
+<p><font color="#000000"><font size=+1>Skiplists are fast associative collections
+invented by William Pugh. Key/Value pairs are added to skiplist containers
+and can then values looked up extremely quickly by key. The implementation
+is based on a fairly generic one originally in "C" by Bruno Grossniklaus
+which I converted into a C++ class library.</font></font>
+<p><font color="#000000"><font size=+1>&nbsp;&nbsp;&nbsp; </font><a href="SkipList.zip">Download
+SkipList code</a></font>
+<p><font color="#CC0000"><font size=+1>Quaternions</font></font>
+<p><font size=+1>Implementation of a simple C++ quaternion class called
+"Squat". Popularized by a seminal paper by Ken Shoemake, a quaternion represents
+a rotation about an axis.&nbsp; Squats can be concatenated together via
+the </font><b><tt><font size=+2>*</font></tt></b><font size=+1> and </font><b><tt><font size=+2>*=</font></tt></b><font size=+1>
+operators and converted back and forth between transformation matrices.
+Implementation also includes a wonderful 3D vector macro library by Don
+Hatch.</font>
+<p>&nbsp;&nbsp;&nbsp; <a href="squat.zip">Download Squat code</a>
+<p><font color="#CC0000"><font size=+1>Polygon-Cube Intersection Testing</font></font>
+<p><font size=+1>"C" implementation of an extremely fast and robust polygon-cube
+intersection test by Don Hatch and myself as published in Graphics Gems
+V. Very useful for collision detection and view frustum visibility checking.</font>
+<p>&nbsp;&nbsp;&nbsp; <a href="README.TXT">View the readme file</a>
+<br>&nbsp;&nbsp;&nbsp; <a href="pcube.zip">Download PCube code</a>
+<br>&nbsp;
+<br>&nbsp;
+<br>
+<br>
+<center>
+<p><a href="../index.htm">Back to the Superliminal home page.</a></center>
+
+</body>
+</html>

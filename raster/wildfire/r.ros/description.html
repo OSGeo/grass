@@ -1,0 +1,161 @@
+<H2>DESCRIPTION</H2>
+
+<P><I>r.ros</I> generates the base ROS value, maximum ROS value, direction
+of the maximum ROS, and optionally the maximum potential spotting distance
+of a wildfire for each raster cell in the current geographic region. The
+calculation of the two ROS values for each raster cell is based on the
+Fortran code by Pat Andrews (1983) of the Northern Forest Fire Laboratory,
+USDA Forest Service. The direction of the maximum ROS results from the
+vector addition of the forward ROS in wind direction and that in upslope
+direction. The spotting distance, if required, will be calculated by a
+separate function, spot_dist(), which is based on Lathrop and Xu (in preparation),
+Chase (1984) and Rothermel (1991). These three or four raster map layers
+serve as inputs for another GRASS raster program r.spread. More information
+on r.ros and r.spread can be found in Xu (1994).
+
+<H2>Parameters:</H2>
+<DL>
+<DT><B>model=</B>name
+<DD> Name of an
+existing raster map layer in the user's current mapset search path containing
+the standard fuel models defined by the USDA Forest Service. Valid values
+are 1-13; other numbers are recognized as barriers by r.ros.
+
+<DT><B>moisture_1h=</B>name
+<DD> Name of an existing raster map layer in
+the user's current mapset search path containing the 1-hour (&lt;.25")
+fuel moisture (percentage content multiplied by 100).
+
+<DT><B>moisture_10h=</B>name 
+<DD>Name of an existing raster map layer in the
+user's current mapset search path containing the 10-hour (.25-1") fuel
+moisture (percentage content multiplied by 100).
+
+<DT><B>moisture_100h=</B>name
+<DD>Name of an existing raster map layer in the
+user's current mapset search path containing the 100-hour (1-3") fuel moisture
+(percentage content multiplied by 100).
+
+<DT><B>moisture_live=</B>name
+<DD>Name of an existing raster map layer in the
+user's current mapset search path containing live (herbaceous) fuel fuel
+moisture (percentage content multiplied by 100).
+
+<DT><B>velocity=</B>name
+<DD>Name of an existing raster map layer in the user's
+current mapset search path containing wind velocities at half of the average
+flame height (feet/minute).
+
+<DT><B>direction=</B>name
+<DD>Name of an existing raster map
+layer in the user's current mapset search path containing wind direction,
+clockwise from north (degree).
+
+<DT><B>slope=</B>name
+<DD>Name of
+an existing raster map layer in the user's current mapset search path containing
+topographic slope (degree).
+
+<DT><B>aspect=</B>name
+<DD>Name of an existing
+raster map layer in the user's current mapset search path containing
+topographic aspect, counter-clockwise from east (GRASS convention)
+(degree).
+
+<DT><B>elevation=</B>name
+<DD>Name of an existing raster map
+layer in the user's current mapset search path containing elevation (meters).
+
+<DT><B>output=</B>name Prefix of new
+raster map layers in the user's current mapset to contain
+<BR> 1) the base (perpendicular) ROS
+(cm/minute);
+<BR> 2) the maximum (forward) ROS (cm/minute),
+<BR> 3) the direction of the maximum
+ROS, clockwise from north (degree), and optionally
+<BR> 4) the maximum potential
+spotting distance (meters).
+<BR>If 'my_ros' is given as the output name, then r.ros automatically
+assigns 'my_ros.base', 'my_ros.max', 'my_ros.maxdir', and optionally,
+'my_ros.spotdist' as the names for the actual output map layers.
+</DL>
+
+<H2>OPTIONS</H2>
+
+r.ros can be run either non-interactively or interactively. The program
+is run interactively if the user types r.ros without specifying flag settings
+and parameter values on the command line. In this case, the user will be
+prompted for input. The program will be run non-interactively if the user
+specifies the names of raster map layers and any desired options on the
+command line, using the form:
+<BR> r.ros [-vs] model=name [moisture_1h=name]
+[moisture_10h=name] [moisture_100h=name]
+moisture_live=name [velocity=name] [direction=name]
+[slope=name] [aspect=name] [elevation=name] output=name
+
+<P>If the options <B>moisture_1h=</B>name, <B>moisture_10h=</B>name, and
+<B>moisture_100h=</B>name are partially given, the program will assign
+values to the missing option using the formula:
+
+<P>
+moisture_100h = moisture_10h + 1 = moisture_1h + 2.
+
+<P>However at least one of them should be given. Options <B>velocity=</B>name
+and <B>direction=</B>name must be in pair, whether given or not. If none
+is given, the program will assume a no-wind condition. Options <B>slope=</B>name
+and <B>aspect=</B>name must be in pair, whether given or not. If none is
+given, the program will assume a topographically flat condition. Option
+<B>elevation=</B>name must be given if -s option is used.
+
+<H2>EXAMPLE</H2>
+Assume we have inputs, the following generates ROSes and spotting distances:
+
+<P>r.ros -vs model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
+velocity=wind_speed direction=wind_direction
+slope=slope aspect=aspect elevation=elevation output=my_ros
+
+<H2>NOTES</H2>
+1. r.ros is supposed to be run before running another GRASS program r.spread.
+The combination of the two forms a simulation of the spread of wildfires.
+<BR>2. The inputs to r.ros should be in proper units.
+<BR>3. The output units for the base and maximum ROSes are in cm/minute
+rather than ft/minute, which is due to that a possible zero ft/minute base
+ROS value and a positive integer ft/minute maximum ROS would result in
+calculation failure in the r.spread program.
+<BR>4. The user needs to provide only ONE output name even the program
+actually generates THREE or FOUR map layers.
+<BR>5. The rules for optional parameters must be followed.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A>,
+<!-- <A HREF="r.mask.html"> r.mask,</A> -->
+<A HREF="r.slope.aspect.html">r.slope.aspect</A>,
+ <A HREF="r.spread.html">r.spread</A></EM>
+
+<H2>REFERENCES</H2>
+<B>Albini,</B> F. A., 1976, Computer-based models of wildland fire behavior:
+a user's manual, USDA Forest Service, Intermountain Forest and Range Experiment
+Station, Ogden, Utah.
+<BR><B>Andrews</B>, P. L., 1986, BEHAVE: fire behavior prediction and fuel
+modeling system -- BURN subsystem, Part 1, USDA Forest Service, Intermountain
+Research Station, Gen. Tech. Rep. INT-194, Ogden, Utah.
+<BR><B>Chase</B>, Carolyn, H., 1984, Spotting distance from wind-driven
+surface fires -- extensions of equations for pocket calculators, US Forest
+Service, Res. Note INT-346, Ogden, Utah.
+<BR><B>Lathrop</B>, Richard G. and Jianping Xu, A geographic information
+system-based approach for calculating spotting distance. (in preparation)
+<BR><B>Rothermel</B>, R. E., 1972, A mathematical model for predicting
+fire spread in wildland fuels, USDA Forest Service, Intermountain Forest
+and Range Experiment Station, Res. Pap. INT-115, Ogden, Utah.
+<BR><B>Rothermel</B>, Richard, 1991, Predicting behavior and size of crown
+fires in the northern Rocky Mountains, US Forest Service, Res. Paper INT-438,
+Ogden, Utah.
+<BR><B>Xu</B>, Jianping, 1994, Simulating the spread of wildfires using
+a geographic information system and remote sensing, Ph. D. Dissertation,
+Rutgers University, New Brunswick, New Jersey.
+
+<H2> AUTHOR</H2>
+Jianping Xu, Center for Remote Sensing and Spatial Analysis, Rutgers University.
+
+<p><i>Last changed: $Date$</i>

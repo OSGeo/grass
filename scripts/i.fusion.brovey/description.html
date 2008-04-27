@@ -1,0 +1,56 @@
+<H2>DESCRIPTION</H2>
+
+<EM>i.fusion.brovey</EM> performs a Brovey transformation using
+three multispectral and the panchromatic satellite image scene 
+channels. Three new channels are calculated according to the
+formula:
+
+<pre>
+                            DN_b1 
+    DN_fused = ------------------------------- * DN_pan
+                    DN_b1 + DN_b2 + DN_b3
+</pre>
+
+The assignment of the channels depends on the satellite.
+The module's help text (above) suggests for LANDSAT-7, QuickBird and SPOT.
+
+<H2>NOTES</H2>
+The command changes temporarily to the high resolution of the
+panchromatic channels for creating the three output channels,
+then restores the previous region settings. The current
+region coordinates are respected. The three pan-sharpened output
+channels may be combined with <em>d.rgb</em> or <em>r.composite</em>.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="i.his.rgb.html">i.his.rgb</A>,
+<A HREF="i.rgb.his.html">i.rgb.his</A>,
+<A HREF="d.rgb.html">d.rgb</A>,
+<A HREF="r.composite.html">r.composite</A>
+</EM>
+
+<H2>REFERENCES</H2>
+
+<ul>
+<li>Original Brovey formula reference unknown, probably <br>
+   Roller, N.E.G. and Cox, S., 1980. Comparison of Landsat MSS
+   and merged MSS/RBV data for analysis of natural vegetation.
+   Proc. of the 14th International Symposium on Remote Sensing
+   of Environment, San Jose, Costa Rica, 23-30 April, pp. 1001-1007
+
+<li>Pohl, C., and J.L. van Genderen, 1998. 
+    Multisensor image fusion in remote sensing: concepts, methods and
+    application. Int. J. of Rem. Sens., 19, 823-854.
+
+<li>M. Neteler, D. Grasso, I. Michelazzi, L. Miori, S. Merler, and C.
+   Furlanello, 2005.
+   An integrated toolbox for image registration, fusion and classification.
+   International Journal of Geoinformatics, Special Issue
+   on <a href="http://gisws.media.osaka-cu.ac.jp/grass04/viewabstract.php?id=37">FOSS/GRASS 2004 & GIS-IDEAS 2004</a> (in press)
+</ul>
+
+<H2>AUTHOR</H2>
+
+Markus Neteler, ITC-irst
+<p><i>Last changed: $Date$</i>

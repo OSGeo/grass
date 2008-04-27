@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>r.li</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>DESCRIPTION</H2>
+
+<EM>r.li.daemon</EM> provides a support for landscape index calculation on raster
+maps. It hides the managment of areas, defined using <a href="r.li.setup.html">r.li.setup</a>
+command. It do not have to be used like a standalone program, but its functions are 
+a library used by all <em>r.li.[index]</em> commands.<br>
+This description is a tutorial for new index definition. <br><br>
+The developer has only to focus on a unique area, like in mathematical definitions, and
+has to write a C implementation of it.<br>
+The areas are defined using a <em>struct</em> called <b>area_des</b> and it members are
+explained in the source code (doxygen) documentation.
+<p>
+To write a new index only two steps are needed: 
+<ol>
+	<li>
+	Define a function and insert its declaration on file <b>index.h</b> in <em>r.li.daemon</em>
+	folder, which contains all index declarations. This function must be of this kind:
+	<br><div class="code"><pre>
+        int index(int fd, char ** par, area_des ad, double * result)
+	</pre></div><br>
+	where: <ul>
+			<li><i>fd</i> is the raster map descriptor
+			<li><i>par</i> is a matrix for special parameter (like argv in main)
+			<li><i>ad</i> is the area descriptor 
+			<li><i>result</i> is where to put the index calculation result
+		</ul>
+	This function has to return 1 on success and 0 otherwise. <br><br>
+	<li>
+	Create a main for command line arguments parsing, and call the function
+	<br><div class="code"><pre>
+        int calculateIndex(char * file, int f(int, char** area_des, double *), char **parameters, char *raster, char *output);
+	</pre></div><br>
+	from the <i>r.li</i> library, for starting raster analysis.<br>
+	It follows the meaning of parameters:
+	<ul>
+	<li><i>file</i> name of configuration file created using <a href="r.li.setup.html">r.li.setup</a>
+	<li><i>f</i> pointer to index function defined above
+	<li><i>parameters</i> pointer to index special parameters
+	<li><i>raster</i> name of raster to use
+	<li><i>output</i> output file name
+	</ul>
+</ol>
+Compile it using a changed Makefile based on the file for <em>r.li.patchdensity</em>.
+
+<H2>NOTES</H2>
+Using GRASS library function to access raster rows can slow down moving windows 
+execution. It is recommended to use 
+<br><div class="code"><pre>
+RLI_get_cell_row(int, int, area_des)
+RLI_get_fcell_row(int, int, area_des)
+RLI_get_dcell_row(int, int, area_des)
+</pre></div><br>
+to use an ad hoc build memory managment developed to speed up the system.
+The documentation is in doxygen files.
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="http://grass.itc.it/gdp/landscape/r_le_manual5.pdf">old r.le manual</A></EM><BR>
+<EM><A HREF="r.li.html">r.li</A></EM> package overview <BR>
+<EM><A HREF="r.li.patchdensity.html">r.li.patchdensity</A></EM>,
+<EM><A HREF="r.li.setup.html">r.li.setup</A></EM>
+
+<H2>AUTHORS</H2>
+Claudio Porta and Lucio Davide Spano, students of Computer Science 
+University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI)<br>
+Rebuild of r.le.setup from William L. Baker
+This program is free software under the GPL (>=v2)
+Read the COPYING file that comes with GRASS for details.
+
+
+<H2>BUGS</h2>
+Pleas send bugs reports to 
+<a href="mailto:spano@cli.di.unipi.it">spano@cli.di.unipi.it</a>,
+<a href="mailto:porta@cli.di.unipi.it">porta@cli.di.unipi.it</a><br>
+<BR>
+
+<p><i>Last changed: $Date$</i>
+
+<HR>
+<P><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<h2>DESCRIPTION</h2>
+
+<em><b>r.neighbors</b></em> looks at each cell in a raster input
+file, and examines the values assigned to the
+cells in some user-defined "neighborhood" around it.  It
+outputs a new raster map layer in which each cell is
+assigned a value that is some (user-specified)
+function of the values in that cell's neighborhood.  For
+example, each cell in the output layer might be assigned a
+value equal to the average of the values
+appearing in its 3 x 3 cell "neighborhood" in the input
+layer.
+
+
+<p>
+
+The program will be run non-interactively if the user
+specifies program arguments (see OPTIONS) on the command
+line.  Alternately, the user can simply type
+<em><b>r.neighbors</b></em> on the command line, without program
+arguments.  In this case, the user will be prompted for
+flag settings and parameter values.
+
+<h3>OPTIONS</h3>
+
+The user must specify the names of the raster map layers to
+be used for <b>input</b> and <b>output</b>, the
+<b>method</b> used to analyze neighborhood
+values (i.e., the neighborhood function or operation to be
+performed), and the <b>size</b> of the neighborhood.
+Optionally, the user can also specify the <b>TITLE</b> to
+be assigned to the raster map layer <b>output</b>, elect
+to not align the resolution of the output with that of the
+input (the <b>-a</b> option), run <em><b>r.neighbors</b></em> with
+a custom matrix weights with the <em>weight</em> option, and
+elect to run <em><b>r.neighbors</b></em> quietly (the <b>-q</b> option).
+These options are described further below.
+
+
+<p>
+
+<em>Neighborhood Operation Methods:</em>
+The <b>neighborhood</b> operators determine what new 
+value a center cell in a neighborhood will have after examining
+values inside its neighboring cells.
+Each cell in a raster map layer becomes the center cell of a neighborhood 
+as the neighborhood window moves from cell to cell throughout the map layer.
+<em><b>r.neighbors</b></em> can perform the following operations:
+
+<p>
+<dl>
+
+<dt><b>average</b> 
+
+<dd>The average value within the neighborhood.
+In the following example, the result would be:
+
+<br>
+
+(7*4 + 6 + 5 + 4*3)/9 = 5.66
+
+<br>
+
+The result is rounded to the nearest integer (in this case 6).
+
+<dt><b>median</b> 
+
+<dd>The value found half-way through a list of the
+neighborhood's values,
+when these are ranged in numerical order.
+
+<dt><b>mode</b> 
+
+<dd>The most frequently occurring value in the neighborhood.
+
+<dt><b>minimum</b> 
+
+<dd>The minimum value within the neighborhood.
+
+<dt><b>maximum</b> 
+
+<dd>The maximum value within the neighborhood.
+<pre>
+       Raw Data     Operation     New Data
+   ----------------          ----------------
+   | 7  | 7  |  5 |          |    |    |    |
+   |----|----|----| average  |----|----|----|
+   | 4  | 7  |  4 |---------&gt;|    |  6 |    |
+   |----|----|----|          |----|----|----|
+   | 7  | 6  |  4 |          |    |    |    |
+   |----|----|----|          |----|----|----|
+</pre>
+
+<dt><b>stddev</b> 
+
+<dd>The statistical standard deviation of values
+within the neighborhood (rounded to the nearest integer).
+
+<dt><b>sum</b> 
+
+<dd>The sum of values within the neighborhood.
+
+<dt><b>variance</b> 
+
+<dd>The statistical variance of values
+within the neighborhood (rounded to the nearest integer).
+
+<dt><b>diversity</b> 
+
+<dd>The number of different values within the neighborhood.
+In the above example, the diversity is 4.
+
+<dt><b>interspersion</b> 
+
+<dd>The percentage of cells containing values which differ from the values
+assigned to the center cell in the neighborhood, plus 1.
+In the above example, the interspersion is:
+
+<br>
+
+5/8 * 100 + 1 = 63.5
+
+<br>
+
+The result is rounded to the nearest integer (in this case 64).
+
+</dl>
+<p>
+<br>
+
+<em>Neighborhood Size:</em>
+<dd>The neighborhood <b>size</b> specifies which cells surrounding any given
+cell fall into the neighborhood for that cell.
+The <b>size</b> must be an odd integer.
+For example,
+<pre>
+                              _ _ _
+                             |_|_|_| 
+    3 x 3 neighborhood ---&gt;  |_|_|_|
+                             |_|_|_|
+
+</pre>
+</dd>
+<p>
+
+<em>Matrix weights:</em>
+<dd>A custom matrix can be used if none of the neighborhood operation
+methods are desirable by using the <b>weight</b>.  This option must
+be used in conjunction with the <b>size</b> option to specify the
+matrix size.  The weights desired are to be entered into a text file.
+For example, to calculate the focal mean with a matrix <b>size</b> of
+3,
+<pre>
+r.neigbors in=input.map out=output.map size=3 weight=weights.txt
+</pre>
+
+The contents of the weight.txt file:
+<pre>
+3 3 3
+1 4 8
+9 5 3
+</pre>
+
+This corresponds to the following 3x3 matrix:
+<pre>
+    -------
+    |3|3|3|
+    -------
+    |1|4|8|
+    -------
+    |9|5|3|
+    -------
+</pre>
+
+<p>
+
+<h3>FLAGS</h3>
+
+<dt><b>-a</b> 
+
+<dd>If specified, <em><b>r.neighbors</b></em> will not align the output
+raster map layer with that of the input raster map layer.
+The <em><b>r.neighbors</b></em> program works in the current geographic region.
+It is recommended, but not required, that the resolution
+of the geographic region be the same as that of the raster map layer.
+By default, if unspecified,
+<em><b>r.neighbors</b></em> will align these geographic region settings.
+<p>
+
+<dt><b>-c</b>
+<dd>
+This flag will use a circular neighborhood for the moving analysis window,
+centered on the current cell. 
+
+<p>
+The exact masks for the first few neighborhood sizes are as follows:
+<div class="code"><pre>
+3x3     . X .		5x5	. . X . .	7x7	. . . X . . . 
+        X O X			. X X X .		. X X X X X .
+        . X .			X X O X X		. X X X X X .
+				. X X X .		X X X O X X X
+ 				. . X . .		. X X X X X .
+							. X X X X X .
+        						. . . X . . .							
+
+9x9	. . . . X . . . .		11x11   . . . . . X . . . . .
+	. . X X X X X . .			. . X X X X X X X . .
+        . X X X X X X X .			. X X X X X X X X X .
+        . X X X X X X X .			. X X X X X X X X X .
+        X X X X O X X X X			. X X X X X X X X X .
+        . X X X X X X X .			X X X X X O X X X X X
+        . X X X X X X X .			. X X X X X X X X X .	
+        . . X X X X X . .			. X X X X X X X X X .
+        . . . . X . . . .			. X X X X X X X X X .
+				        	. . X X X X X X X . .
+				        	. . . . . X . . . . .	
+</pre></div>
+
+
+        
+<p>
+
+<dt><b>-q</b> 
+
+<dd>If specified, <em><b>r.neighbors</b></em> will run relatively quietly
+(i.e., without printing to standard output notes on the program's progress).
+If unspecified, the program will print messages to standard output by default.
+</dd>
+
+
+<h2>NOTES</h2>
+
+The <em><b>r.neighbors</b></em> program works in the current geographic region
+with the current mask, if any.  It is recommended, but not required,
+that the resolution of the geographic region be the same as that
+of the raster map layer.  By default, <em><b>r.neighbors</b></em> will align
+these geographic region settings.  However, the user can elect to keep
+original input and output resolutions which are not aligned by specifying
+this (e.g., using the <b>-a</b> option).
+
+<p>
+The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive. 
+Any use of the two together will produce an error. Differently-shaped neighborhood 
+analysis windows may be achieved by using the <b>weight=</b> parameter to specify 
+a weights file where all values are equal (for <b>method</b>=sum, the sum of the 
+weights should be 1). The user can also vary the weights at the edge of the 
+neighborhood according to the proportion of the cell that lies inside the neighborhood circle, 
+effectively anti-aliasing the analysis mask.
+<p>
+
+For aggregates where a weighted calculation isn't meaningful
+(specifically: minimum, maximum, diversity and interspersion), the
+weights are used to create a binary mask, where zero causes the cell
+to be ignored and any non-zero value causes the cell to be used.
+<p>
+
+<em><b>r.neighbors</b></em> copies the GRASS <em>color</em> files associated with
+the input raster map layer for those output map layers that are based
+on the neighborhood average, median, mode, minimum, and maximum.
+Because standard deviation, variance, diversity, and interspersion are indices,
+rather than direct correspondents to input values,
+no <em>color</em> files are copied for these map layers.
+(The user should note that although the <em>color</em> file is copied
+for <em>average</em> neighborhood function output,
+whether or not the color file makes sense for the output
+will be dependent on the input data values.)
+
+<h2>SEE ALSO</h2>
+
+<em><a href="g.region.html">g.region</a></em><br>
+<em><a href="r.clump.html">r.clump</a></em><br>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em><br>
+<em><a href="r.mfilter.html">r.mfilter</a></em><br>
+<em><a href="r.statistics.html">r.statistics</a></em><br>
+<em><a href="r.support.html">r.support</a></em>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory 
+
+<p><i>Last changed: $Date$</i>  
+				        
+				        
+				        
+				        
+
+
+
+
+

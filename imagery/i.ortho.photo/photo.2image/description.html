@@ -1,0 +1,377 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>photo.2image</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<h2>NAME</h2>
+<em><b>photo.2image</b></em>
+
+<H2>DESCRIPTION</H2>
+
+<EM>photo.2image</EM> is an imagery function that enables
+you to mark fiducial or reseau points on an image to be
+ortho-rectified and then computes the image-to-photo
+coordinate transformation parameters.  The coordinates of
+the fiducials or reseau marks can be choosen for a camera
+reference file.
+
+<P>
+
+During the process of marking reference points with known
+photo coordinates, you may compute the RMS (root mean
+square) error for each reference point entered.
+<EM>photo.2image</EM> does this by calculating the
+transformation equation (the same one that is calculated by
+<EM><A HREF="i.points.html">i.points</A> </EM>),
+and then plugging these results into an equation for RMS
+error.
+
+
+<P>
+
+<EM>photo.2image</EM> offers a zoom option to locate
+precisely the fiducial or reseau point to be marked on an
+image.
+
+
+<P>
+
+To run <EM>photo.2image</EM>, a graphics monitor is
+required.
+
+<P>
+
+The procedure for marking fiducial or reseau  points,
+entering known photo-coordinates, and analyzing the RMS
+error is described below.
+
+
+<P>
+
+The terminal screen displays this message: 
+
+
+<P>
+
+<B>use mouse now...</B>
+
+
+<P>
+
+The graphics monitor displays the following screen:
+
+<PRE>
+    +---------------------------+---------------------------------+
+    |imagery                    |                                 |
+    +---------------------------+---------------------------------+
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    +---------------------------+---------------------------------+
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    |                           |                                 |
+    +---------------------------+---------------------------------+
+    |                           |                                 |
+    +---------------------------+---------------------------------+
+</PRE>
+
+<P>
+
+A pop-down menu like that shown below will be superimposed on the
+left half of the screen:
+
+<P>
+<PRE>
+              +------------------------------------------+
+              | Double click on raster map to be plotted |
+              | Double click here to cancel              |
+              +------------------------------------------+
+                          +----------------+
+                          |Mapset imagery  |
+                          +-------+--------+
+                          |gs13.1 | gs21.1 |
+                          +-------+--------+
+                          |gs14.1 | gs22.2 |
+                          +-------+--------+
+</PRE>
+Any single file in the imagery group may be used on which to mark 
+points, and you may mark points on more than one file
+in the imagery group to accumulate the suggested minimum number of
+4-8 fiducial or ressue points.
+The imagery file selected is displayed in the upper 
+left quadrant of the screen. 
+<P>
+
+<H2>CAMERA FILE</H2>
+
+The camera reference file may be viewed by placing the mouse
+cross hairs on the words CAMERA.  The camera reference file 
+will be displayed in the lower left quadrant of the display:
+
+
+<P>
+<PRE>
+
+|---------------------------------------------------------------|
+|Camera Reference File                                          |
+|---------------------------------------------------------------|
+|  CAMERA NAME :        camera name                             |
+|  CAMERA ID   :        L1234                                   |
+|  CAMERA CFL  :        153.021 mm.                             |
+|  CAMERA XP   :        0.050 mm.                               |
+|  CAMERA XP   :        0.056 mm.                               |
+|  number of fid.       4                                       |
+|---------------------------------------------------------------|
+|                                                               |
+|ID        (X PHOTO) mm.                 (Y PHOTO) mm.          |
+|_______________________________________________________________|
+|1         -105.023                        110.123              |
+|2          107.987                        109.834              |
+|3          110.965                       -104.329              |
+|4         -103.932                       -110.352              |
+|_______________________________________________________________|
+</PRE>
+<P>
+The following menu is displayed at the bottom 
+of the graphics display:
+<P>
+<B>
+<PRE>
++-----+------+-----------+--------+---------+-------------------+-------------+
+|Quit | Zoom | Plot Cell | Camera | Analyze |   Input-&gt;KEYBOARD | CAMERA FILE |
++-----+------+-----------+--------+---------+-------------------+-------------+
+</PRE>
+</B>
+<P>
+<H2>ZOOM</H2>
+
+To magnify the displayed file, you must 
+place the mouse cross hairs on the word ZOOM. The following menu
+will then be displayed at the bottom of the screen:
+<P>
+<B>
+<PRE>
++-------+-----+-------++--------------------+
+|Cancel | Box | Point ||Select type of ZOOM |
++-------+-----+-------++--------------------+
+</PRE>
+</B>
+<P>
+You have the option of identifying the zoom window either by using
+the mouse to make a box, or by using the mouse to mark the center 
+of the desired window, and adjusting the magnification factor.
+The terminal screen will display a mouse button menu to guide you in
+identifying the window.  The section of the image within the zoom window 
+will be displayed in the upper right hand quadrant.
+<P>
+<H2>MARKING REFERENCE POINTS</H2>
+
+To mark the known reference points (fiducial marks, reseau marks, etc.)
+on the image, you must place the mouse cross hairs
+on the corresponding location on the image to be marked and press
+the left hand button on the mouse.  A diamond shaped symbol will be marked
+on the image. 
+<P>
+If you wish to use the  camera reference file only as a
+comparative reference,  then the keyboard can be chosen as
+the means to input photo coordinates corresponding to the marked
+reference points on the image.  This is done by placing the mouse
+cross hairs on the word KEYBOARD and pressing the left
+button on the mouse.
+<P>
+The following menu is displayed on the graphics terminal:
+<P>
+<PRE>
++------------------------------------+--------------------------+
+|Point 1 marked at IMAGE COORDINATES |                          |
+|east:  1023.77                      |                          |
+|north:  506.56                      |                          |
+|                                    |                          |
+|                                    |                          |
+|                                    |                          |
+|                                    |                          |
+|                                    |                          |
++------------------------------------+--------------------------+
+|Enter PHOTO COORDINATES as x and y:                            |
++---------------------------------------------------------------+
+</PRE>
+</B>
+<P>
+You then enter the known (x,y) photo coordinates, relative
+to the perspective center, for the  reference
+point marked on the image.  If you
+do not wish to enter a coordinate, simply hit RETURN to continue;
+the marked reference point will disappear.
+<P>
+If you select the CAMERA FILE option, then reference points
+marked on the image will be associated with selected photo
+coordinates from the displayed camera reference file.  In this option,
+when you mark a point on the image, the following menu is
+displayed on the graphics terminal:
+<P>
+<PRE>
+-------------------------------------------------------------
+CANCEL   Double click on the fiducial mark to be referenced
+------------------------------------------------------------- 
+</PRE>
+<P>
+
+If you would like to select the photo coordinates of a displayed
+reference mark, this can be accomplished by placing the mouse
+cross hairs on the reference point to be selected and pressing
+the left button on the mouse twice.  After a reference point is selected
+from the display, you are prompted with "Look ok? (Y/N)".
+If you respond with no, the reference point is ignored.
+If you respond with yes, the following is displayed on the terminal:
+<P>
+<P>
+<PRE>
++----------------------------------------+--------------------------+
+|Point 1 marked at IMAGE COORDINATES     |                          |
+|east: 1023.77                           |                          |
+|north: 1065.41                          |                          |
+|                                        |                          |
+|                                        |                          |
+|Point 1 referenced at PHOTO COORDINATES |                          |
+|X: -105.023                             |                          |
+|Y:  110.122                             |                          |
+|                                        |                          |
+|                                        |                          |
+|                                        |                          |
+|                                        |                          |
+|                                        |                          |
++----------------------------------------+--------------------------+
+| use mouse now...                                                  |
++----------------------------------------+--------------------------+
+</PRE>
+</B>
+<P>
+The photo coordinates and the corresponding image coordinates are 
+automatically saved in the photo_points file associated with the imagery
+group. 
+<P>
+<P>
+<H2>ANALYZE</H2>
+
+After a number of points have been marked (4 to 8), you can
+check the RMS error of the points marked on the image.  This is done
+by placing the mouse cross hairs on the word ANALYZE at the bottom
+of the monitor.  An error report resembling the one shown below
+is superimposed on the monitor:
+<P>
+<PRE>
++--------------------------------------------------------------------+
+|       error           image           photo                        |
+|                                                                    |
+|#     row      col   photo    east    north   x               y     |
+|1     0.0     -0.9    1.0     1048.5  -144.8  -105.023    110.122   |
+|2     0.4      1.0    1.3     2153.1  -567.2   107.987    109.834   |
+|3    -1.2     -0.5    0.6     1452.8  -476.5   110.965   -104.329   |
+|4     1.1      0.5    1.3     1034.0  -109.2  -103.932   -110.352   |
+|                                                                    |
++--------------------------------------------------------------------+
+|    overall   rms    error:   4.46                                  |
++--------------------------------------------------------------------+
+</PRE>
+<P>
+ The following menu then appears at the bottom of the monitor:
+<P>
+<PRE>
++-----+-------+------+-----------------------------------------------+
+|DONE | PRINT | FILE | Double click on point to be included/excluded |
++-----+-------+------+-----------------------------------------------+
+</PRE>
+</B>
+<P>
+
+The RMS error for the image is given under the column
+TITLEd "error" and subTITLEd "row" and "col".  In the above
+report, point number 1 is 0.0 rows and -0.9 columns from
+the predicted location calculated from the transformation
+equation.  The RMS error for the photo coordinates is
+listed under the heading "photo".  This is the RMS error
+for the x and y coordinates of the photo coordinates but it
+is presented in the table using one general value.  The
+overall RMS error is displayed at the bottom of the screen
+in milimeters.  Points that create high RMS error are
+displayed in red on the monitor (represented here in
+italics).
+
+
+<P>
+
+The location of the point marked on the imagery group file
+is given under the heading "image" and the subheadings
+"east" and "north".  The location of the point in the photo
+coordinates is given under the heading "photo" and the
+subheadings "x" and "y".  If you would like to exclude or
+include a point, this can be accomplished by placing the
+mouse cross hairs on the point number to be included (if
+the point is absent) or excluded (if the point is
+displayed) and pressing the left button on the mouse
+twice.  When a point is excluded, it is not afterwards
+included in the calculation of the RMS error, or included
+in the final transformation matrix.  However, it can be
+retrieved within <EM>photo.2image</EM> at any time by
+double clicking with the mouse as described above.
+
+
+<P>
+
+
+<H2>QUIT</H2>
+
+To end the <EM>photo.2image</EM> program place the mouse cross hairs
+on the word QUIT;  the marked reference points (including coordinates)
+will be saved.
+
+
+<P>
+
+
+<H2>NOTES</H2>
+
+A good rule of thumb is to mark at least 4 to 8 points which are
+evenly distributed over the perimeter of the imagery 
+group file in order to obtain 
+an accurate transformation equation for the rectification process.
+The RMS error may increase with more points added, but the 
+transformation equation will be more accurate.  
+
+
+<P>
+
+An RMS error of less than or equal to approximately one resolution
+unit (pixel) for the image being rectified is generally considered 
+acceptable.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="i.ortho.photo.html">i.ortho.photo</A></EM>,
+<EM><A HREF="photo.camera.html">photo.camera</A></EM>,
+<EM><A HREF="photo.2target.html">photo.2target</A></EM>,
+<EM><A HREF="photo.init.html">photo.init</A></EM>,
+<EM><A HREF="photo.rectify.html">photo.rectify</A></EM>
+
+<H2>AUTHOR</H2>
+
+Mike Baba,  DBA Systems, Inc.
+
+<p><i>Last changed: $Date$</i>
+</body>
+</html>

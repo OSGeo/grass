@@ -1,0 +1,157 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.mfilter.fp</EM> filters the raster <EM>input</EM> to produce the
+raster <EM>output</EM> according to the matrix <EM>filter</EM> designed
+by the user (see <EM>FILTERS</EM> below).
+The filter is applied <EM>repeat</EM> times (default <EM>value</EM> is 1).
+The <EM>output</EM> raster map layer can be given a <EM>TITLE</EM> if desired.
+(This TITLE should be put in quotes if it contains more than one word.)
+
+With <B>-z</B> flag the filter is applied only to null values in
+the input raster map layer.  The non-null category values are not changed.
+Note that if there is more than one filter step, this rule is applied to the
+intermediate raster map layer -- only null category values which result from
+the first filter will be changed.  In most cases this will NOT be the
+desired result. Hence -z should be used only with single step filters.
+<P>
+
+The <B>filter</B> parameter defines the name of an existing, user-created
+UNIX ASCII file whose contents is a matrix defining the way in which the
+<EM>input</EM> file will be filtered. The format of this file is described
+below, under FILTERS.
+<P>
+
+The <B>repeat</B> parameter defines the number of times the <EM>filter</EM>
+is to be applied to the <EM>input</EM> data.
+
+<H2>FILTERS</H2>
+
+The <EM>filter</EM> file is a normal UNIX ASCII file designed by the user.
+It has the following format:
+<PRE>
+     TITLE      TITLE
+     MATRIX     n
+                  .
+     n lines of n values
+                  .
+     DIVISOR    d
+     TYPE        S/P
+</PRE>
+
+
+<DT>TITLE 
+
+<DD>A one-line TITLE for the filter.
+If a TITLE was not specified on the command line, it can be specified here.
+This TITLE would be used to construct a TITLE for the resulting raster map
+layer.  It should be a one-line description of the filter.
+
+<DT>MATRIX 
+
+<DD>The matrix (n x n) follows on the next n lines.  <EM>n</EM> must be
+an odd integer greater than or equal to 3.
+The matrix itself consists of n rows of n values.
+The values must be separated from each other by at least 1 blank.
+
+<DT>DIVISOR 
+
+<DD>The filter divisor is <EM>d</EM>.  If not specified, the default is 1.
+If the divisor is zero (0), then the divisor is dependent on the
+category values in the neighborhood
+(see HOW THE FILTER WORKS below).
+
+<DT>TYPE 
+
+<DD>The filter type.  <EM>S</EM> means sequential, while <EM>P</EM> mean parallel.
+If not specified, the default is S.
+
+
+<P>
+
+Sequential filtering happens in place.  As the filter is applied to the
+raster map layer, the category values that were changed in neighboring
+cells affect the resulting category value of the current
+cell being filtered.
+
+
+<P>
+Parallel filtering happens in such a way that the original raster
+map layer category values are used to produce the new category value.
+
+
+<P>
+More than one filter may be specified in the filter file.
+The additional filter(s) are described just like the first.
+For example, the following describes two filters:
+</P>
+
+</DD>
+
+
+<H2>EXAMPLE FILTER FILE</H2>
+
+<PRE>
+      TITLE     3x3 average, non-null data only, followed by 5x5 average
+     MATRIX    3
+     1 1 1
+     1 1 1
+     1 1 1
+     DIVISOR   0
+     TYPE      P
+
+     MATRIX    5
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     1 1 1 1 1
+     DIVISOR   25
+     TYPE      P
+</PRE>
+
+<H2>HOW THE FILTER WORKS</H2>
+
+The filter process produces a new category value for each cell
+in the input raster map layer by multiplying the category values of the
+cells in the n x n neighborhood around the center cell
+by the corresponding matrix value and adding them together.
+If a divisor is specified, the sum is divided by this divisor.
+(If a zero divisor was specified, then
+the divisor is computed for each cell as the sum of the MATRIX
+values where the corresponding input cell is non-null.)
+
+
+<P>
+
+If more than one filter step is specified, either because the
+repeat value was greater than one or because the filter file
+contained more than one matrix, these steps are performed
+sequentially. This means that first one filter is applied to
+the entire input raster map layer to produce an intermediate result;
+then the next filter is applied to the intermediate result to
+produce another intermediate result;  and so on, until the
+final filter is applied.  Then the output cell is written.
+
+<H2>NOTES</H2>
+
+If the resolution of the geographic region does not agree with the
+resolution of the raster map layer, unintended resampling of the original
+data may occur.  The user should be sure that the geographic region
+is set properly.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<EM><A HREF="r.clump.html">r.clump</A></EM>,
+<EM><A HREF="r.neighbors.html">r.neighbors</A></EM>
+<EM><A HREF="r.mfilter.html">r.mfilter</A></EM>
+
+<H2>AUTHOR</H2>
+
+Glynn Clements.
+Based upon r.mfilter, by Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p>
+<i>Last changed: $Date$</i>

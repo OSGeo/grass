@@ -1,0 +1,75 @@
+<H2>DESCRIPTION</H2>
+
+<p>
+<EM>v.surf.idw</EM> fills a raster matrix with interpolated
+values generated from a set of irregularly spaced data
+points using numerical approximation (weighted averaging)
+techniques. The interpolated value of a cell is determined
+by values of nearby data points and the distance of the
+cell from those input points.  In comparison with other
+methods, numerical approximation allows representation of
+more complex surfaces (particularly those with anomalous
+features), restricts the spatial influence of any errors,
+and generates the interpolated surface from the data
+points.</p>
+
+<P>
+This program allows the user to use a GRASS vector point map file,
+rather than a raster map layer, as input.</p>
+
+
+<H2>NOTES</H2>
+
+<p>
+The amount of memory used by this program is related to the
+number of sites in the current region.  If the vector point map is 
+very dense (i.e., contains many data points), the program may
+not be able to get all the memory it needs from the
+system.  The time required to execute is related to the 
+resolution of the current region, after an initial delay 
+determined by the time taken to read the input sites file.<p>
+
+<P>
+If the user has a mask set, then interpolation is only done
+for those cells that fall within the mask. However, all
+sites in the current region are used even
+if they fall outside the mask. Sites outside the current
+region are not used in the interpolation. A larger region may
+be set and a mask used to limit interpolation to a smaller area
+if it is desired to use sites from outside the region in the
+interpolation. The <em>-n</em> flag may also be used to
+achieve a similar result.</p>
+
+<p>
+If more than <EM>count</EM> sites fall into one target raster cell, 
+the mean of all the site values will determine the cell value (unless
+the -n flag is specifed, in which case only the <EM>count</EM> 
+sites closest to the centre of the cell will be interpolated).</p>
+
+<P>
+By setting <EM>npoints=1</EM>, the module can be used 
+to calculate raster Voronoi diagrams (Thiessen polygons).</p>
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.vect.html">d.vect</A></EM><br>
+<EM><A HREF="g.region.html">g.region</A></EM><br>
+<EM><A HREF="r.surf.contour.html">r.surf.contour</A></EM><br>
+<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM><br>
+<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM><br>
+<EM><A HREF="r.surf.gauss.html">r.surf.gauss</A></EM><br>
+<EM><A HREF="r.surf.fractal.html">r.surf.fractal</A></EM><br>
+<EM><A HREF="r.surf.random.html">r.surf.random</A></EM><br>
+<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,  
+U.S. Army Construction Engineering 
+Research Laboratory
+<BR>
+Improved algorithm (indexes points according to cell and ignores
+points outside current region) by Paul Kelly
+
+<p><i>Last changed: $Date$</i>

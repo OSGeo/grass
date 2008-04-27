@@ -1,0 +1,160 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.what.rast</em> outputs the category values and labels
+associated with cell(s) at user-specified location(s) on
+user-named raster map layer(s).
+
+<p>
+
+The program will query the contents of raster map layer(s)
+named by the user on the command line. These map layers
+must exist in the user's current mapset search path.  If
+the user does not name any raster map layers on the command
+line, <em>d.what.rast</em> will query the category contents
+of whatever raster map layer is already displayed in the
+active frame on the graphics monitor.
+
+<p>
+
+The program activates the mouse, and expects the user to
+indicate the cell location(s) to be queried by depressing a
+mouse button over desired location(s) within the current
+geographic region in the active display frame on the
+graphic monitor.
+
+<h2>EXAMPLE</h2>
+
+It is helpful, but not necessary, to first display a map to
+be used for reference in the active display frame before
+running <em>d.what.rast</em>.  For example, the user might
+type the following series of commands and receive the
+output below.
+
+<p>
+
+<dl>
+<dt><b>d.rast map=</b><em>soils</em>
+<p>
+<dd>To first display the <em>soils</em> map in the active frame.</dd>
+</dl>
+
+<p>
+<dl>
+<dt><b>d.what.rast map=</b><em>soils,aspect</em><br>
+<p>
+<dd>User then moves the mouse to desired location on the
+displayed <em>soils</em> map layer, and presses the left
+mouse button to query the category contents of the
+<em>soils</em> and <em>aspect</em> maps at this geographic
+location.  The program then outputs the below information
+to the user's terminal.</dd>
+</dl>
+
+<pre>
+617112(E) 3732014(N) 
+soils in PERMANENT (44)Nunn clay loam, NdC 
+aspect in PERMANENT (20)15 degrees north of west 
+</pre>
+
+<p>
+The first line of output gives the easting (E) and northing (N) coordinates 
+of the geographic location at which the user clicked the mouse. 
+Subsequent lines give the selected map(s) name and mapset, map category value 
+(within parentheses), and map category label corresponding to this 
+user-selected map location. 
+
+<p>
+
+The query may be repeated as often as desired using the
+left mouse button.  The right button on the mouse is used
+to quit the <em>d.what.rast</em> session.
+
+<p>
+
+Users can set the <b>-t</b> flag to obtain a terse output
+from <em>d.what.rast</em>.  This is useful when the user
+wishes output to be parsed by another program (like
+<em>awk</em>). If the <b>-t</b> flag is set, users can also
+select the field separator used (with the
+<b>fs=</b><em>name</em> option), or elect to use the
+default <b>:</b> field separator.  In this case, the
+command
+
+<p>
+
+<dl>
+<dt><b>d.what.rast -t map=</b><em>soils,aspect</em>
+<p>
+<dd> produces output in the form shown below. The first line of
+output gives the easting, northing, and the mouse button
+return value (see NOTES below).  Each
+subsequent line gives the map name and its mapset, the
+category value, and category label of the point specified
+on the user-named raster map layers.  The default output
+field separator, a colon, is used since none was specified
+on the command line.</dd>
+</dl>
+
+<pre>
+617112:3732014:1 
+soils@PERMANENT:44:Nunn clay loam, NdC 
+aspect@PERMANENT:20:15 degrees north of west 
+</pre>
+
+<p>
+
+Users can also use this program inside of shell scripts
+that require as input a map category value and a mouse
+button depressed.  Users can choose an option to run
+<em>d.what.rast</em> only once, and return only the map
+category value found and the number of the mouse button
+depressed.
+
+<h2>NOTES</h2></a>
+
+Mouse button return values are as follows: 0 indicates no
+button was pressed, 1 indicates that the left mouse button
+was pressed, 2 indicates the middle button was pressed, and
+3 indicates that the right mouse button was pressed.
+
+<p>
+
+<em>d.what.rast</em> will always print its output to the
+terminal screen.  <em>d.what.rast</em> output can be
+redirected into a file; however, if it is, the output will
+go both to the screen and to the file.  For example:
+
+<p>
+
+<dl>
+<dt><b>d.what.rast map=</b><em>soils,aspect</em><b> &gt; what.out</b> 
+<p>
+<dd>will both send <em>d.what.rast</em> output to the screen
+and capture its output in the file named
+<em>what.out</em>.</dd>
+</dl>
+
+<p>
+
+The maximum number of raster map layers that can be queried at one time is 15.
+
+<p>
+
+<em><a HREF="d.what.vect.html">d.what.vect</a></em>
+allows the user to interactively query the category
+contents of multiple vector map layers at user-specified
+locations.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="d.rast.html">d.rast</a></em><br>
+<em><a HREF="d.what.vect.html">d.what.vect</a></em><br>
+<em><a HREF="g.region.html">g.region</a></em><br>
+
+<h2>AUTHOR</h2>
+
+Michael Shapiro, 
+U.S. Army Construction Engineering 
+Research Laboratory
+
+<p><i>Last changed: $Date$</i>

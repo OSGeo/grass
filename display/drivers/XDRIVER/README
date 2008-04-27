@@ -1,0 +1,80 @@
+To get information about your X11 color depth
+use:
+
+ xdpyinfo
+---------------------------------------------------------------
+Date: Tue, 11 Apr 2000 23:06:16 -0400               
+From: Carl Anderson <candrsn@mindspring.com>
+This seems good enough to rollout ...               
+                        
+The problem you were experiencing was from a bug in 
+XFree86. I have coded around that and not been able to                          
+reproduce the dead looping behaviour.               
+                        
+I appreciate your desire to maintain backward compatibility.                    
+                        
+As much as possible I have coded this to be generic and to maintain             
+the previous behaviour. 
+                        
+Of course where I have converted reliance on DefaultXXX to                      
+parameters, I may have introduced errors.           
+                        
+I tested this code as much as possible for me       
+                        
+under Linux - i386 (using an ATI Mach64 card, and an S3 Virge Card)             
+  startx -bpp 8  (after editing /etc/X11/XF86config)                          
+        I changed the desired visual in Graph_Set.c to each of                  
+        TrueColor, DirectColor, PseudoColor, StaticColor,                       
+        GrayColor, and StaticGray      
+  startx -bpp 16 (after editing /etc/X11/XF86config)
+        my visual is TrueColor Only                 
+  startx -bpp 24 (after editing /etc/X11/XF86config)
+        TrueColor only  
+                        
+under Linux - sparc (using a cgsix card)          
+  startx -bpp 8  (after editing /etc/X11/XF86config)                          
+        I changed the desired visual in Graph_Set.c to each of                  
+        TrueColor, DirectColor, PseudoColor, StaticColor,                       
+        GrayColor, and StaticGray                   
+                        
+under Solaris 2.7 - sparc and utlrasparc            
+  /usr/openwin/bin/openwin  (using a cgsix card in 8bit mode)                 
+        I changed the desired visual in Graph_Set.c to each of                  
+        TrueColor, DirectColor, PseudoColor, StaticColor,                       
+        GrayColor, and StaticGray                 
+                      
+  /usr/openwin/bin/openwin (using a pgx24 card in 8 bit mode)                   
+        I changed the desired visual in Graph_Set.c to each of                  
+        TrueColor, DirectColor, PseudoColor, StaticColor,    
+        GrayColor, and StaticGray                 
+                        
+  /usr/openwin/bin/openwin (using a ffb card in 8/24 bit mode)                  
+        I changed the desired visual in Graph_Set.c to each of                  
+        TrueColor, DirectColor, PseudoColor, StaticColor,                       
+        GrayColor, and StaticGray                 
+                        
+under each test the driver ran,                     
+        Truecolor and PsuedoColor ran correctly (with correct colors)           
+        DirectColor,StaticColor,StaticGray ran correctly (with alien colors)    
+                        
+I have not seen a Display which was limited to StaticColor or StaticGray        
+or DirectColor without either PsuedoColor or TrueColor available.          
+                        
+As this patch fixes a deficiency in GRASS for XFree86                           
+and the limitations of teh patch don't seem likely to be exposed (IMHO), 
+BTW  without this patch I cannot run GRASS  under        
+        startx -bpp 8 on the XFree86 Linux Machines 
+I additionally have trouble with Solaris            
+        when running 8 bit visuals.                 
+                        
+should you reqiure a dump of xdpyinfo for each of these card i tested           
+it on I can provide them.                           
+                        
+The differences between this patch and the one I posted to Grass-List           
+is better error trapping and better informational messages.                     
+                        
+of course the new parameter                         
+   nlev=-1   to force TrueColor, if possible        
+needs to be advertised.      
+
+Carl Anderson

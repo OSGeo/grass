@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>SQL support in GRASS GIS</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+
+<!-- This file is lib/db/sqlp/description.html -->
+
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>SQL support in GRASS GIS</H2>
+
+GRASS can use various RDBMS and embedded databases. 
+SQL queries are directly passed to the underlying 
+database system. 
+The set of supported SQL commands depends on the RDMBS 
+and driver selected.  
+
+<H2>Drivers</H2>  
+The list of available drivers can vary in various binary 
+distributions of GRASS. 
+<p>
+
+<table border=1 >
+<tr><td><a href="grass-dbf.html">dbf</a></td><td>DBF files. Data are stored in DBF files.</td>
+<td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
+
+<tr><td><a href="grass-sqlite.html">sqlite</a></td><td>SQLite embedded database.</td>
+<td><a href="http://sqlite.org/">http://sqlite.org/</a></td></tr>
+
+<tr><td><a href="grass-pg.html">pg</a></td><td>PostgreSQL RDBMS.</td>
+<td><a href="http://postgresql.org/">http://postgresql.org/</a></td></tr>
+
+<tr><td><a href="grass-mysql.html">mysql</a></td><td>MySQL RDBMS.</td>
+<td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
+
+<tr><td><a href="grass-mesql.html">mesql</a></td><td>MySQL embedded database.</td>
+<td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
+
+<tr><td><a href="grass-odbc.html">odbc</a></td><td>UnixODBC. (PostgreSQL, Oracle, etc.)</td>
+<td><a href="http://www.unixodbc.org/">http://www.unixodbc.org/</a></td></tr>
+
+</table>
+
+
+<H2>NOTES</H2>
+
+<ul>
+<li> SQL does not support '.' (dots) in table names.
+<li> Supported table name characters are only:<br>
+    [A-Za-z][A-Za-z0-9_]*
+<li> A table name must start with a character, not a number.
+<li> Text-string matching requires the text part to be 'single quoted'.
+When run from the command line multiple queries should be contained 
+in "double quotes". e.g.<br>
+<div class="code"><pre>
+d.vect map where="individual='juvenile' and area='beach'"
+</pre></div>
+<li> An error message such as "dbmi: Protocol error" either indicates an invalid column name
+     or an unsupported column type (then the GRASS SQL parser needs to be extended).
+<li> DBF column names are limited to 10 characters (DBF API definition)
+</ul>
+
+
+<h2>EXAMPLES</h2>
+
+Display all vector points except for LAMAR valley and <i>extensive trapping</i> (brackets are superfluous in this example):
+<div class="code"><pre>
+d.vect trapping_sites_points fcol=black icon=basic/diamond col=white size=13 \
+    where="valley <> 'LAMAR' OR (valley = 'LAMAR' AND description = 'extensive trapping')"
+</pre></div>
+
+<p>
+Select all attributes from table where str1 column values are not 'No Name':
+<div class="code"><pre>
+echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
+</pre></div>
+<p>
+
+
+<p>Example of subquery expressions from a list (does not work for DBF driver):
+<div class="code"><pre>
+v.db.select mysites where="id IN ('P04', 'P05')"
+</pre></div>
+
+
+<p>Example of pattern matching:
+<div class="code"><pre>
+# match exactly number of characters (here: 2), does not work for DBF driver:
+v.db.select mysites where="id LIKE 'P__'"
+
+#define wildcard:
+v.db.select mysites where="id LIKE 'P%'"
+</pre></div>
+
+<p>Example of null handling:
+<div class="code"><pre>
+v.db.addcol map=roads col="nulltest int"
+v.db.update map=roads col=nulltest value=1 where="cat &gt; 2"
+d.vect roads where="nulltest is null"
+v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
+</pre></div>
+
+
+<p>Examples of complex expressions in updates (using v.db.* modules):
+<div class="code"><pre>
+v.db.addcol map=roads col="exprtest double precision"
+v.db.update map=roads col=exprtest value=cat/nulltest
+v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
+</pre></div>
+
+
+<p>Examples of complex expressions in updates (using db.* modules):
+<div class="code"><pre>
+echo "UPDATE roads SET exprtest=null"
+echo "UPDATE roads SET exprtest=cat/2" | db.execute
+echo "UPDATE roads SET exprtest=cat/2+cat/3" | db.execute
+echo "UPDATE roads SET exprtest=NULL WHERE cat&gt;2" | db.execute
+echo "UPDATE roads SET exprtest=cat/3*(cat+1) WHERE exprtest IS NULL" | db.execute"
+</pre></div>
+
+
+<p>
+Instead of creating and updating new columns with an expression,
+you can use the expression directly in a command:
+<div class="code"><pre>
+d.vect roads where="(cat/3*(cat+1))&gt;8"
+d.vect roads where="cat&gt;exprtest"
+</pre></div>
+
+
+
+<h2>SEE ALSO</h2>
+
+<a href="databaseintro.html">Database management in GRASS GIS</a>,<BR>
+<a href="database.html">Help pages for database modules</a>,<BR>
+<a href=http://www.redhat.com/docs/manuals/database/RHDB-2.1-Manual/sql/sqlreference.html>SQL
+    Guide and Reference</a> (Red Hat)
+
+
+<p><i>Last changed: $Date$</i></p>
+<HR>
+<BR><a href=index.html>Help Index</a>
+<P>&copy; 2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></P>
+</body>
+</html>

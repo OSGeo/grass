@@ -1,0 +1,60 @@
+<H2>DESCRIPTION</H2>
+
+The <EM>r.rescale</EM> program rescales the range of
+category values appearing in a raster map layer.  A new
+raster map layer, and an appropriate category file and
+color table based upon the original raster map layer, are
+generated with category labels that reflect the original
+category values that produced each category.  This command
+is useful for producing representations with a reduced
+number of categories from a raster map layer with a large
+range of category values (e.g., elevation).
+<EM>Rescaled</EM> map layers are appropriate for use in
+such GRASS programs as
+
+<EM><A HREF="r.stats.html">r.stats</A></EM>,
+<EM><A HREF="r.report.html">r.report</A></EM>, and 
+<EM><A HREF="r.coin.html">r.coin</A></EM>.
+
+<H2>EXAMPLE</H2>
+
+To rescale an elevation raster map layer with category
+values ranging from 1090 meters to 1800 meters into the
+range 0-255, the following command line could be used:
+
+<DL>
+<DD>
+<B>r.rescale input=</B>elevation <B>from=</B>1090,1800 <B>output=</B>elevation.255 <B>to=</B>0,255
+</DL>
+
+<H2>NOTES</H2>
+
+Category values that fall beyond the input range will
+become NULL.  This allows the user to select a subset of
+the full category value range for rescaling if desired.
+This also means that the user should know the category
+value range for the input raster map layer.  The user can
+request the </B><EM>r.rescale</EM> program to determine
+this range, or can obtain it using the
+<EM><A HREF="r.describe.html">r.describe</A></EM> or <EM><a href="r.info.html">r.info</A></EM> 
+command.  If the category value range is determined using
+<EM>r.rescale</EM>, the input raster map layer is examined,
+and the minimum and maximum non-NULL category values are
+selected as the input range.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.coin.html">r.coin</A></EM>,
+<EM><A HREF="r.describe.html">r.describe</A></EM>,
+<EM><A HREF="r.info.html">r.info</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.reclass.html">r.reclass</A></EM>,
+<EM><A HREF="r.report.html">r.report</A></EM>,
+<EM><A HREF="r.resample.html">r.resample</A></EM>,
+<EM><A HREF="r.stats.html">r.stats</A></EM>
+
+<H2>AUTHOR</H2>
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

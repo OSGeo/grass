@@ -1,0 +1,47 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.db.addcol</em> adds one or more column(s) to the attribute table connected
+to a given vector map. It automatically checks the connection for the specified
+layer.
+
+<h2>NOTES</h2>
+
+v.db.addcol is a front-end to <em>db.execute</em> to allow easier usage.
+
+The supported types of columns depend on the database backend. However, 
+all backends should support VARCHAR, INT, DOUBLE/REAL and DATE. The default dbf backend
+supports only these types.
+
+The existing database connection(s) can be verified with <em>v.db.connect</em>.
+
+<h2>EXAMPLES</h2>
+
+Adding a single column:<br>
+<div class="code"><pre>
+v.db.addcol sentiero_brenta_points columns="slope double precision"
+v.info -c sentiero_brenta_points
+</pre></div>
+
+<p>
+Adding two columns:<br>
+<div class="code"><pre>
+v.db.addcol sentiero_brenta_points columns="slope double precision,myname varchar(15)"
+v.info -c sentiero_brenta_points
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="db.execute.html">db.execute</a></em>,
+<em><a HREF="v.db.addtable.html">v.db.addtable</a></em>,
+<em><a HREF="v.db.connect.html">v.db.connect</a></em>,
+<em><a HREF="v.db.dropcol.html">v.db.dropcol</a></em>,
+<em><a HREF="v.db.droptable.html">v.db.droptable</a></em>,
+<em><a HREF="v.db.select.html">v.db.select</a></em>,
+<em><a HREF="v.db.update.html">v.db.update</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Moritz Lennert (mlennert@club.worldonline.be)
+
+<p><i>Last changed: $Date$</i>

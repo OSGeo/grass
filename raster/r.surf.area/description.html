@@ -1,0 +1,66 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.surf.area</EM> Calculates area of regular 3D triangulated points 
+(centers of cells) in current region by adding areas of triangles.  
+Therefore, area of a flat surface will be reported as 
+(rows + cols -1)*(area of cell) less than area of 
+flat region due to a half row and half column missing around the 
+perimeter.
+
+<H2>NOTE</H2>
+
+This calculation is heavily dependent on
+data resolution (think of it as a fractal shoreline problem, the more
+resolution the more detail, the more area, etc).  This program uses the
+<EM>CURRENT GRASS REGION</EM>, not the resolution of the map.  This is
+especially important for surfaces with <TT>NULL</TT> values and highly
+irregular edges.  The program does not [currently] attempt to correct for
+the error introduced by this <EM>edge effect</EM>.
+
+<P>
+
+This version actually calculates area twice for each triangle pair,
+keeping a running minimum and maximum area depending on the
+direction of the diagonal used.
+
+<P>
+
+<OL>
+<LH>Reported totals are:
+<LI>"Plan" area of <TT>NULL</TT> values within the current GRASS region 
+<LI>"Plan" area within calculation region (rows-1 * cols-1 * cellarea)
+<LI>Average of the minimum and maximum calculated 3d triangle area 
+within this region
+<LI>"Plan" area within current GRASS region (rows * cols * cellarea)
+<LI>Scaling of calculated area to current GRASS region (see 
+<A HREF="#note">NOTE</A>)
+</OL> 
+
+<H2>NOTES</H2>
+
+<EM>r.surf.area</EM> works best when the surface being evaluated extends
+to the edges of the current GRASS region and the cell resolution is small.
+Surfaces which are especially long and thin and have highly irregular
+boudaries will tend to have underestimated surface areas.  Setting a
+high cell resolution (small area) will greatly reduce this impact, but will
+cause longer processing times.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.sum.html">r.sum</A></EM>,
+<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM>,
+<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM>,
+<EM><A HREF="r.surf.fractal.html">r.surf.fractal</A></EM>,
+<EM><A HREF="r.surf.gauss.html">r.surf.gauss</A></EM>,
+<EM><A HREF="r.volume.html">r.volume</A></EM>,
+<EM><A HREF="v.to.rast.html">v.to.rast</A></EM>,
+<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>,
+<EM><A HREF="g.region.html">g.region</A></EM>
+
+<H2>AUTHOR</H2>
+Bill Brown, USACERL December 21, 1994
+<P>
+Modified for floating point rasters and <tt>NULL</tt> values by 
+Eric G. Miller (October 17, 2000)
+
+<p><i>Last changed: $Date$</i>

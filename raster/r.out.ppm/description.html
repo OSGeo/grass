@@ -1,0 +1,61 @@
+<H2>DESCRIPTION</H2>
+
+<em>r.out.ppm</em> converts a GRASS raster map into a PPM image 
+at the pixel resolution of the CURRENTLY DEFINED REGION. 
+To get the resolution and region settings of the raster map, run:<p>
+
+<div class="code"><pre>
+g.region -p rast=[mapname]
+</pre></div>
+
+<p>
+
+before running <em>r.out.ppm</em>.<p>
+
+By default the PPM file created is 24-bit color, rawbits storage.
+You can use the <B>-G</B> flag to force <em>r.out.ppm</em> to 
+output an 8-bit greyscale instead.
+The greyscale conversion uses the NTSC conversion:<p>
+
+<div class="code"><pre>
+Y = .30*Red + .59*Green + .11*Blue
+</pre></div>
+
+<p>
+One pixel is written for each cell value, so if <tt>ew_res</tt> and 
+<tt>ns_res</tt> differ, the aspect ratio of the resulting image will be off.
+
+
+<H2>NOTES</H2>
+A few ppm file comments are written: the name of the GRASS
+raster map, resolution, etc.  Although these are perfectly legal,
+I've found one PD image utility that chokes on them, so if you need 
+a commentless PPM file, use '<TT>out=-&nbsp;&gt;&nbsp;outfile.ppm</TT>'. (When sending 
+output to stdout, no comments are written.)
+
+<H2>HINTS</H2>
+
+You can create a PNG image with NULL values represented by a transparent 
+background by using the <a href="pngdriver.html">PNG driver</A> with 
+<a href="variables.html">GRASS_TRANSPARENT</a> set to TRUE.
+Alternatively, you can use the <em>pnmtopng</em> program from 
+<a href="http://netpbm.sourceforge.net">netpbm</a> to do this:
+
+<div class="code"><pre>
+r.out.ppm raster
+pnmtopng -transparent white raster.ppm > raster.png
+</pre></div>
+
+<H2>SEE ALSO</H2>
+<EM><A HREF="d.out.png.html">d.out.png</A></EM><BR>
+<EM><A HREF="r.out.ascii.html">r.out.ascii</A></EM><BR>
+<EM><A HREF="r.out.mpeg.html">r.out.mpeg</A></EM><BR>
+<EM><A HREF="r.out.png.html">r.out.png</A></EM><BR>
+<EM><A HREF="r.out.ppm3.html">r.out.ppm3</A></EM><BR>
+<EM><A HREF="r.out.tiff.html">r.out.tiff</A></EM>
+ 
+<H2>AUTHOR</H2>
+
+Bill Brown, UIUC
+
+<p><i>Last changed: $Date$</i>

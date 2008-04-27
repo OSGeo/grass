@@ -1,0 +1,55 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.outlier</em> removes outlier points. By default, the outlier
+identification is done by a bicubic spline interpolation of the
+observation with a high regularization parameter and a low resolution
+in south-north and east-west directions. Those points that differ in
+an absolute value more than the given threshold from a fixed value,
+reckoned from its surroundings by the interpolation, are considered as
+an outlier, and hence are removed.
+
+There is a flag to create a vector that can be visualizated by
+qgis. That means that topology is build and the z coordinate is
+considered as a category.
+
+<h2>EXAMPLES</h2>
+
+<h4>Basic outlier removal</h4>
+
+<div class="code"><pre>
+v.outlier input=vector_map output=vector_output outlier=vector_outlier thres_O=25
+</pre></div>
+
+In this case, a basic outlier removal is done with a threshold of 25 m.
+
+<h4>Basic outlier removal</h4>
+
+<div class="code"><pre>
+v.outlier -q input=vector_map output=vector_output outlier=vector_outlier qgis=vector_qgis
+</pre></div>
+
+Now, the outlier removal uses the default threshold and there is also
+an output vector available for visualizaton in QGIS
+ (<a href="http://www.qgis.org">http://www.qgis.org</a>).
+
+<h2>NOTES</h2>
+
+This module is designed to work with LIDAR data, so not topology is
+built but in the QGIS output.
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="v.surf.bspline.html">v.surf.bspline</a></em>
+
+<h2>AUTHORS</h2>
+
+Original version of the program in GRASS 5.4:
+<BR>
+Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni and Mirko Reguzzoni
+<BR><BR>
+Updates for GRASS 6:
+<BR>
+Roberto Antolin
+
+<p>
+<i>Last changed: $Date$</i>

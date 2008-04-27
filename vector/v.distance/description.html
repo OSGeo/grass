@@ -1,0 +1,146 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.distance</EM> finds the nearest element in vector map
+(<em>to</em>) for elements in vector map (<em>from</em>). Various
+information about the vectors' relationships (distance, category, etc.) may be uploaded
+to the attribute table attached to the first vector map, or printed to
+'stdout'.  A new vector map may be created where lines connecting
+nearest points on features are written.
+
+<H2>NOTES</H2>
+
+If a nearest feature does not have a category, the attribute column is updated
+to <em>null</em>.  This is true also for areas, which means for example,
+that if a point is in an island (area WITHOUT category), <EM>v.distance</EM> 
+does not search for the nearest area WITH category; the island is identified 
+as the nearest and category updated to null.
+<p>
+The upload <em>column</em>(s) must already exist. Create one with <em>v.db.addcol</em>.
+<p>
+In lat-long locations <em>v.distance</em> gives distances (<em>dist</em>
+and <em>to_along</em>) in meters not in degrees calculated as geodesic
+distances on a sphere.
+
+<h2>EXAMPLES</H2>
+
+<H3>Find nearest lines</H3>
+
+Find <EM>nearest lines</EM> in vector map <B>ln</B> for points from
+vector map <B>pnt</B> within the given threshold and write related
+line categories to column <B>linecat</B> in an attribute table attached
+to vector map <B>pnt</B>:
+
+<div class="code"><pre>
+v.distance from=pnt to=ln upload=cat column=linecat
+</pre></div>
+
+<H3>Find nearest area</H3>
+
+For each point from vector map <B>pnt</B>, find <EM>nearest area</EM>
+from map <B>ar</B> within the given threshold and write the related
+area categories to column <B>areacat</B> in an attribute table attached
+to vector map <B>pnt</B> (in the case that a point falls into a polygon area,
+the distance is zero):
+
+<div class="code"><pre>
+v.distance from=pnt to=ar upload=cat column=areacat
+</pre></div>
+
+<H3>Create a new vector map</H3>
+
+Create a new vector map which contains <EM>lines connecting nearest
+features</EM> of maps <B>pnt</B> and map <B>ln</B>. The resulting
+vector map can be used for example to connect points to a network as
+needed for network analysis:
+
+<div class="code"><pre>
+v.distance -p from=pnt to=ln out=connections upload=dist column=dist
+</pre></div>
+
+<H3>Query information</H3>
+
+Query information from selected point(s). <EM>v.distance</EM> takes
+points from a vector map as input instead of stdin. A new vector map
+with query points has to be created before the map can be analysed.
+<p>
+
+Create query map (if not present):
+
+<div class="code"><pre>
+echo "123456|654321|1" | v.in.ascii output=pnt
+</pre></div>
+
+Find nearest features:
+
+<div class="code"><pre>
+v.distance from=pnt to=map_to_query upload=cat col=somecol -p
+</pre></div>
+
+<H3>Point-in-polygon</H3>
+
+Find <EM>area</EM> from vector map <B>ar</B> for each point from
+vector map <B>pnt</B> in which the individual point falls, and
+write the related area categories to column <B>areacat</B> into
+the attribute table attached to vector map <B>pnt</B>:
+
+<div class="code"><pre>
+v.distance from=pnt to=ar dmax=0 upload=cat column=areacat
+</pre></div>
+
+<H3>Univariate statistics on results</H3>
+
+Create a vector map containing connecting lines and investigate mean
+distance to targets. An alternative solution is to use
+the <tt>v.distance upload=dist</tt> option to upload distances into
+the <i>bugs</i> vector directly, then run v.univar on that. Also note
+you can upload two columns at a time, e.g. <tt>v.distance
+upload=cat,dist column=nearest_id,dist_to_nr</tt>.
+
+<div class="code"><pre>
+# create working copy
+g.copy vect=bugsites,bugs
+
+# add new attribute column to hold nearest archsite category number
+v.db.addcol map=bugs column="nrst_arch INTEGER"
+
+v.distance from=bugs to=archsites to_type=point upload=to_attr \
+  to_column=cat column=nrst_arch out=vdistance_vectors_raw
+
+# we need to give the lines category numbers, create a table, and create
+#  a column in that table to hold the distance data.
+v.category vdistance_vectors_raw out=vdistance_vectors type=line op=add
+g.remove v=vdistance_vectors_raw
+
+v.db.addtable map=vdistance_vectors column="length DOUBLE"
+v.to.db map=vdistance_vectors option=length column=length
+
+# calculcate statistics. Use v.univar.sh for extended statistics.
+v.univar vdistance_vectors column=length
+</pre></div>
+
+<H3>Print distance matrix</H3>
+
+<div class="code"><pre>
+v.distance -pa from=archsites to=archsites upload=dist col=dist
+</pre></div>
+
+Note: Matrix-like output is enabled only for flag <EM>-a</EM> and one
+given upload option.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<a href="r.distance.html">r.distance</a>,
+<a href="v.db.addcol.html">v.db.addcol</a>,
+<a href="v.what.vect.html">v.what.vect</a>
+</EM>
+
+
+<H2>AUTHOR</H2>
+
+Janne Soimasuo 1994, University of Joensuu, Faculty of Forestry, Finland<BR>
+Cmd line coordinates support: Markus Neteler, ITC-irst, Trento, Italy<BR>
+Updated for 5.1: Radim Blazek, ITC-irst, Trento, Italy<BR>
+Martix-like output by Martin Landa, FBK-irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,25 @@
+Main algorithm sources are rewritten from GRIDATB.FOR.
+GRIDATB.FOR is available from http://www.es.lancs.ac.uk/hfdg/topmodel.html.
+
+Thanks to Keith Beven.
+
+
+
+[r.topidx]
+creates topographic index, ln(a/tan(beta)), map from elevation map.
+
+	where
+		a: the area of the hillslope per unit contour length that drains
+		   through any point
+
+	tan(beta): the local surface topographic slope
+		   (delta vertical) / (delta horizontal)
+
+
+Elevation map need not to be rectangular if study basin was already determined.
+Non-interesting region may have NULL values.  Study basin map can be taken
+from r.water.outlet then the following r.mapcalc statements will create
+study basin extracted elevation map.
+
+	r.mapcalc "belev = if(isnull(basin), basin, elev)"
+

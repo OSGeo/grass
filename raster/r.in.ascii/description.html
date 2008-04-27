@@ -1,0 +1,111 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.in.ascii</EM> allows a user to create a (binary) GRASS raster map
+layer from an ASCII raster input file with (optional) TITLE.
+
+<P>
+The GRASS ASCII <B>input</B> file has a header section which describes
+the location and size of the data, followed by the data itself.
+
+<P>
+The header has 6 lines: 
+
+<div class="code"><pre>
+north:   xxxxxx.xx
+south:   xxxxxx.xx
+east:    xxxxxx.xx
+west:    xxxxxx.xx
+rows:    r 
+cols:    c 
+</pre></div>
+
+The north, south, east, and west field values entered 
+are the coordinates of the edges of the geographic region. 
+The rows and cols field values entered describe the dimensions 
+of the matrix of data to follow. 
+The data which follows is <EM>r</EM> rows of <EM>c</EM> integers. 
+<p>
+Optionally the following parameters can be defined in the header section:
+
+<div class="code"><pre>
+null: nn
+type: float
+multiplier: 2.
+</pre></div>
+
+<p>
+"null" defines a string or number to be converted to NULL value (no
+data).<br>
+"type" defines the data type (int, float double) and is not required.<br>
+"multiplier" is an optional parameter to multiply each cell value.
+
+<H2>EXAMPLE</H2>
+
+The following is a sample <b>input</b> file to <EM>r.in.ascii</EM>: 
+
+<div class="code"><pre>
+north:                   4299000.00
+south:                   4247000.00
+east:                     528000.00
+west:                     500000.00
+rows:                         10   
+cols:                         15   
+null:                      -9999   
+
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+</pre></div>
+
+<H2>NOTES</H2>
+
+The geographic coordinates north, south, east, and west
+describe the outer edges of the geographic region.  They
+run along the edges of the cells at the edge of the
+geographic region and <EM>not</EM> through the center of the cells
+at the edges.
+The NW value occurs at the beginning of the first line of data, and the
+SW value occurs at the beginning of the last line of data.
+<P>
+The data (which follows the header section) must contain
+<tt>r</tt> <em>x</em> <tt>c</tt> values, but it is not necessary 
+that all the data for a row be on one line. A row may be 
+split over many lines. 
+
+<P>
+
+<EM>r.in.ascii</EM> handles floating point cell values.
+
+<P>
+The header information in ESRI Raster ASCII files differs from GRASS.  
+To convert an Arc/Info (ArcView) ASCII grid file into GRASS, click 
+<A HREF="http://grass.itc.it/faq/arcgrid.header.html">here</A>.  
+Also, see <EM><A HREF="r.in.arc.html">r.in.arc</A></EM> to import 
+ESRI Raster ASCII files.
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="r.out.ascii.html">r.out.ascii</A>,
+<A HREF="r.in.arc.html">r.in.arc</A>, 
+<A HREF="r.in.gdal.html">r.in.gdal</A>, 
+<A HREF="r.out.arc.html">r.out.arc</A>,
+<A HREF="r.in.bin.html">r.in.bin</A>,
+<A HREF="r3.in.ascii.html">r3.in.ascii</A></em>,
+<A HREF="http://grass.itc.it/gdp/html_grass5/ascii_formats.html">GRASS ASCII formats</A>
+</EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
+Surfer support by Roger Miller
+
+<p><i>Last changed: $Date$</i>

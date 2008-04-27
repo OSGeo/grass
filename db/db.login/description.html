@@ -1,0 +1,46 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.login</em> sets user/password for driver/database.
+
+<h2>NOTE</h2>
+
+This is only related to SQL database backends (PostgreSQL, MySQL etc).
+The passwords are stored in a hidden file in the user account ('home' 
+directory) called <em>.grasslogin6</em>. Only the file owner
+can access this file.
+
+<h2>EXAMPLES</h2>
+
+Example 1: Username specified, password will be invisibly queried interactively:
+
+<div class="code"><pre>
+db.login user=bacava
+</pre></div>
+
+<P>
+Example 2: Username and password specified (note that the command
+lines history will store the password in this way):
+
+<div class="code"><pre>
+db.login user=bacava pass=secret
+</pre></div>
+
+<P>
+Example 3: Username and empty password specified (note that the command
+lines history will store the password in this way):
+
+<div class="code"><pre>
+db.login user=bacava pass=""
+</pre></div>
+
+<h2>SEE ALSO</h2>
+<em>
+<a HREF="db.connect.html">db.connect</a>,
+<a HREF="db.test.html">db.test</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Radim Blazek
+
+<p><i>Last changed: $Date$</i>

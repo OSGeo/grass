@@ -1,0 +1,54 @@
+<h2>DESCRIPTION</h2>
+<em>r.li.mps</em> 
+(mean patch size) calculates the mean size of the patches in the sampling area as:<br>
+<img src="rlimps_formula.png"><br>
+
+with:
+<ul>
+  <li><b>A</b>:sampling area size without null cells</li>
+  <li><b>Npatch</b>: number of patches<br>
+  </li>
+</ul>
+
+
+<h2>EXAMPLES</h2>
+To calculate mean path size index on map my_map, using
+my_conf configuration file and saving results in
+my_out file run:<br>
+<div class="code"><pre>
+r.li.mps map=my_map conf=my_conf output=my_out
+</pre></div>
+
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder.
+<br>
+If input raster is full of null values r.li.mps returns 0.<br>
+If you want to have null values instead run <br>
+<div class="code"><pre>
+r.null setnull=0 map=my_map
+</pre></div>
+
+after index calculation.
+
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>
+<a href="r.le.html">r.le</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+
+<h2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><br>
+
+<p><i>Last changed: $Date$</i>
+

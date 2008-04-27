@@ -1,0 +1,68 @@
+/*! \mainpage projlib GRASS and the PROJ4 projection library
+<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+     by M. Neteler 11/2005
+  -->
+
+\section projintro GRASS and the PROJ4 projection library
+
+GRASS utilizes the PROJ4 library originally developed by Gerald
+Evenden/USGS (Cartographic Projection Procedures for the UNIX
+Environment -- A User's Manual, Evenden, 1990, Open-file report
+90-284). The PROJ4 (<a
+href="http://proj.maptools.org">http://proj.maptools.org</a>)
+functions are used through wrapper functions in a GRASS environment.
+
+Internally to the PROJ.4 library, projection may involve transformation to
+and from geodetic co-ordinates (latitude and longitude), and numerical
+corrections to account for different datums.
+
+This is transparent for the user as input and output parameters are either
+read from PROJ_INFO and PROJ_UNITS files (g.proj, v.proj, r.proj) or read from
+user prompts (g.proj and g.setproj).
+
+In GRASS the wrapper functions in lib/proj/get_proj.c makes the
+preparations to set up the parameter strings and init the info-structures,
+while do_proj.c contains the actual projection calls.
+
+ellipse.c and datum.c contain functions for querying GRASS locations
+and users for ellipsoid and datum information (some of these functions
+were included in the GIS library in earlier versions of GRASS).
+
+convert.c contains functions for converting GRASS co-ordinate system
+descriptions to and from the formats used by other GIS. Heavy use is
+made of the OGR library, part of GDAL (http://www.gdal.org/ogr/).
+
+\subsection datum_transformation Datum transformation
+
+GRASS generally supports datum transformation (3 parameters, 7 parameters
+and grid).
+<P>
+
+If a warning appears that a certain datum is not recognised by GRASS and
+no parameters found, the datum transformation parameters have to be
+added to $GISBASE/etc/datum.table (and also $GISBASE/etc/datumtransform.table
+if you have 7-parameter transformation parameters). No need to re-compile
+though. When adding to SVN, currently these files are still in lib/gis/. 
+
+
+\subsection Makefile_Example Makefile Example
+
+<P>
+The following code demonstrates the Makefile.
+
+\verbatim
+MODULE_TOPDIR = ../..
+
+PGM = r.myproj
+
+EXTRA_INC = $(PROJINC)
+LIBES     = $(GPROJLIB) $(GISLIB)
+DEPENDENCIES= $(GPROJDEP) $(GISDEP)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd
+\endverbatim
+
+*/
+

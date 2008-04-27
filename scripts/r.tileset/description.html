@@ -1,0 +1,103 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.tileset</EM> generates sets of tiles in another projection that cover a region in this projection with adequate resolution. By default the current region and its resolution are used, the bounds and resolution of another region can be used via the region option.
+
+<H2>NOTES</H2>
+
+<EM>r.tileset</EM> does not make "optimal" tilings (as few tiles of the largest size less than the maximums). This means that from latitude longitude projection to an appropriate projection for a region, in the degenerate case, it may create tiles demanding up to twice the necessary information. Furthermore, generating a tiling near a divergant point of a source projection, such as the poles of a cylindrical source projections, results in divergence of the tile set.
+
+<p>Not generating "optimal" tilings may have another consequence; the aspect ratio of cells in the destination region will not necessarily carry over to the source region and generated tiles may have cells of strange aspect ratios. This might be a problem for some map request services presenting data in an inappropriate projection or with strict constraints on cell aspect ratio.
+
+<H2>OUTPUT FORMAT</H2>
+
+Each tile is listed on a seperate line in the output. The lines are formatted as follows:
+
+<dl>
+<dt>
+<div class="code"><pre>
+5|125|45|175|80|100
+</pre></div>
+
+<dd>
+This is the default output format. It is the tile's minimum x coordinate, minimum y coordinate, maximum x coordinate, maximum y coordinate, width in cells, and height in cells seperated by the "|" character. The fields can be seperated by a different character by changing the fs option.
+
+<p>
+
+<dt>
+<div class="code"><pre>
+w=5;s=125;e=45;n=175;cols=80;rows=100;
+</pre></div>
+
+<dd>
+This is output in a format convinent for setting variables in a shell script.
+
+<p>
+
+<dt>
+<div class="code"><pre>
+bbox=5,125,45,175&width=80&height=100
+</pre></div>
+
+<dd>
+This is output in a format convinent for requesting data from some http services.
+
+<p>
+</dl>
+
+
+<H2>EXAMPLES</H2>
+
+<dl>
+<dt>
+<div class="code"><pre>
+r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
+</pre></div>
+<dd> Generates tiles in latitude longitude that cover the current region, each tile will be less than 1024 cells high and 2048 cells across. The bounds and sizes of tiles in the output are seperated by |
+
+<p>
+
+<dt>
+<div class="code"><pre>
+r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
+</pre></div>
+<dd>Generates tiles in latitude longitude projection that cover the named region "ne-rio". The tiles will have 2 cells of overlap. The output format will be strings like the bbox requests for WMS servers.
+
+<p>
+
+<dt>
+<div class="code"><pre>
+r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 overlap=3 -g
+</pre></div>
+<dd>Generates tiles in the projection of the location "IrishGrid". Each tile will be less than 300x400 cells in size, with 3 cells of overlap in the top and right sides of each tile. The output is in a format where each line is in shell script style. The substitution <code>`g.proj -j location=IrishGrid`</code> will only work in a unix style shell.
+
+</dl>
+
+<H2>REQUIRED PROGRAMS</H2>
+
+<EM>r.tileset</EM> requires the following programs to work:
+
+<dl>
+<dt>cs2cs
+<dd>The coordinate system transformation program from Proj4.
+
+<dt>bc
+<dd>A calculator program
+
+<dt>sed, grep
+<dd>Unix string processing and search programs
+
+</dl>
+
+
+<H2>BUGS</H2>
+
+<ul>
+<li><EM>r.tileset</EM> does not know about meridians that "wrap-around" in projections.
+</ul>
+
+
+<H2>AUTHORS</H2>
+
+Cedric Shock
+
+<p><i>Last changed: $Date$</i>

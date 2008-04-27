@@ -1,0 +1,69 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:       r.out.xyz
+# AUTHOR:       M. Hamish Bowman, Dept. Marine Science, Otago Univeristy,
+#                 New Zealand
+# PURPOSE:      Export a raster map as x,y,z values based on cell centers
+#               This is a simple wrapper script for "r.stats -1ng"
+#
+# COPYRIGHT:    (c) 2006 Hamish Bowman, and the GRASS Development Team
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Export a raster map to a text file as x,y,z values based on cell centers.
+#% keywords: raster, export
+#%End
+#%option
+#% key: input
+#% type: string
+#% gisprompt: old,cell,raster
+#% key_desc: name
+#% description: Name of input raster map 
+#% required: yes
+#%end
+#%option
+#% key: output
+#% type: string
+#% gisprompt: new_file,file,output
+#% key_desc: name
+#% description: Name for output file (if omitted or "-" output to stdout)
+#% required: no
+#%end
+#%option
+#% key: fs
+#% type: string
+#% key_desc: character
+#% description: Field separator
+#% answer: |
+#% required: no
+#%end
+
+
+# add a flag to include null values (! r.stats -n)?
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." 1>&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+GRASS_VERBOSE=0
+export GRASS_VERBOSE
+
+# if no output filename, output to stdout
+if  [ -z "$GIS_OPT_OUTPUT" ] || [ "$GIS_OPT_OUTPUT" = "-" ]; then
+    r.stats -1gn "$GIS_OPT_INPUT" fs="$GIS_OPT_FS"
+else
+    r.stats -1gn "$GIS_OPT_INPUT" fs="$GIS_OPT_FS" > "$GIS_OPT_OUTPUT"
+fi
+
+
+exit $?

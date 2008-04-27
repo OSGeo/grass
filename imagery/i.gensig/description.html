@@ -1,0 +1,139 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>i.gensig</EM>
+is a non-interactive method for generating input into 
+<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+It can be used as the first pass in the GRASS two-pass 
+classification process (instead of 
+<EM><A HREF="i.cluster.html">i.cluster</A></EM>
+ or 
+<EM><A HREF="i.class.html">i.class</A></EM>).
+
+It reads a raster map layer, called the training map, which
+has some of the pixels or regions already classified.
+<EM>i.gensig</EM> will then extract spectral signatures
+from an image based on the classification of the pixels in
+the training map and make these signatures available to
+
+<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+
+
+<P>
+
+The user would then execute the GRASS program 
+<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>
+to actually create the final classified map.
+
+
+<H2>OPTIONS</H2>
+
+<H3>Parameters</H3>
+
+<DL>
+
+<DT><B>trainingmap=</B><EM>name</EM>
+
+<DD>ground truth training map
+
+<P>
+
+This map must be prepared by the user in advance. Programs like
+<EM><A HREF="v.digit.html">v.digit</A></EM> or <EM>
+<A HREF="r.digit.html">r.digit</A></EM> can be 
+used to define representative
+areas of the classes the user defines to be in the image. 
+Of course other methods could be devised by the user for creating
+this training map - <EM>i.gensig</EM> makes no assumption about the origin
+of this map layer. It simply creates signatures for the classes defined
+in the training map for the image to be classified (the image is
+specified in other options - see below).
+
+<DT><B>group=</B><EM>name</EM> 
+
+<DD>imagery group
+
+<P>
+
+This is the name of the group that contains the band files
+which comprise the image to be analyzed. The <EM>
+<A HREF="i.group.html">i.group</A> </EM> command is
+used to construct groups of raster layers which comprise an
+image.
+
+
+<P>
+
+<A NAME="subgroup"><DT><B>subgroup=</B><EM>name</EM></A>
+
+<DD>subgroup containing image files
+
+<P>
+
+This names the subgroup within the group that selects a
+subset of the bands to be analyzed. The <EM>
+<A HREF="i.group.html">i.group</A> </EM> command is
+also used to prepare this subgroup.  The subgroup mechanism
+allows the user to select a subset of all the band files
+that form an image.
+
+
+<DT><B>signaturefile=</B><EM>name</EM> 
+
+<DD>resultant signature file
+
+<P>
+
+This is the resultant signature file (containing the means
+and covariance matrices) for each class in the training map
+that is associated with the band files in the subgroup
+select (see <A HREF="#subgroup">above</A>).
+
+</DL>
+
+<H2>INTERACTIVE MODE</H2>
+
+If none of the arguments are specified on the command line, 
+<EM>i.gensig</EM>
+will interactively prompt for the names of these maps and files.
+
+
+<P>
+
+It should be noted that interactive mode here only means
+interactive prompting for maps and files.
+It does not mean visualization of the signatures that
+result from the process.
+
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="i.group.html">i.group</A></EM>
+for creating groups and subgroups.
+
+<P>
+
+<EM><A HREF="v.digit.html">v.digit</A></EM>
+and
+<EM><A HREF="r.digit.html">r.digit</A></EM>
+for interactively  creating the training map.
+
+<P>
+
+<EM><A HREF="i.cluster.html">i.cluster</A></EM>
+for unsupervised clustering as an alternative to 
+<EM>i.gensig</EM> to create signatures.
+
+
+<P>
+
+<EM><A HREF="i.class.html">i.class</A></EM>
+for a graphic/interactive as an alternative to 
+<EM>i.gensig</EM> to create signatures.
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

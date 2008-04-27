@@ -1,0 +1,126 @@
+<h2>DESCRIPTION</h2>
+
+<em>db.connect</em> allows the user to set database connection parameters.
+These parameters are then taken as default values by modules so that the
+user does not need to enter the parameters each time.
+
+
+<H2>NOTES</H2>
+
+Values are stored in the mapset's <tt>VAR</tt> file;
+the connection is not tested for validity.
+<P>
+The <b>-p</b> flag will display the current connection parameters. 
+<P>
+The <b>-c</b> flag will silently check if the connection parameters have
+been set, and if not will set them to use GRASS's default values.
+(useful in scripts before you attempt to create a new database table)
+<P>
+To connect a vector map to a database table, use <em>v.db.connect</em>
+or <em>v.db.addtable</em>.
+
+
+<h2>EXAMPLES</h2>
+
+<h3>DBF</h3>
+
+Local storage (the dbf/ subdirectory in the mapset must exist or must be
+created by the user):
+<br>
+<div class="code"><pre>
+db.connect driver=dbf database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'
+db.tables -p
+</pre></div>
+
+
+<h3>SQLite</h3>
+
+Local storage:
+<br>
+<div class="code"><pre>
+db.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db'
+db.connect -p
+db.tables -p
+</pre></div>
+<P>
+The SQLite database is created automatically when used the first time.
+
+
+<h3>ODBC</h3>
+
+Network storage: (may require the use of <a href=db.login.html>db.login</a>):
+<br> 
+<div class="code"><pre>
+db.connect driver=odbc database=gtest
+db.login user=myname [pass=secret]
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<h3>PostgreSQL</h3>
+
+Network storage: (may require the use of <a href=db.login.html>db.login</a>):
+<br>
+<div class="code"><pre>
+db.connect driver=pg database="host=myserver.itc.it,dbname=mydb"
+db.login user=myname [pass=secret]
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<h3>PostgreSQL with different port</h3>
+
+Network storage: (may require the use of <a href=db.login.html>db.login</a>):
+<br>
+<div class="code"><pre>
+db.connect driver=pg database="host=myserver.itc.it,dbname=mydb,port=6666"
+db.login user=myname [pass=secret]
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<h3>MySQL (local)</h3>
+
+Local storage (<a href=db.login.html>db.login</a> may not be needed):
+<br>
+<div class="code"><pre>
+db.connect driver=mysql database=mydb
+db.login user=myname [pass=secret]
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<h3>MySQL (external server)</h3>
+
+Network storage: (may require the use of <a href=db.login.html>db.login</a>):
+<br>
+<div class="code"><pre>
+db.connect driver=mysql database="host=myserver.itc.it,dbname=mydb"
+db.login user=myname [pass=secret]
+db.connect -p
+db.tables -p
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="db.columns.html">db.columns</a>,
+<a HREF="db.drivers.html">db.drivers</a>,
+<a HREF="db.login.html">db.login</a>,
+<a HREF="db.tables.html">db.tables</a>,
+<a HREF="v.db.addtable.html">v.db.addtable</a>,
+<a HREF="v.db.connect.html">v.db.connect</a>,
+<a HREF="sql.html">GRASS SQL interface</a></em>
+
+
+<h2>AUTHOR</h2>
+
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p>
+<i>Last changed: $Date$</i>

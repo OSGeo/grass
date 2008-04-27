@@ -1,0 +1,103 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	v.db.reconnect.all
+# AUTHOR(S):	Radim Blazek
+# PURPOSE:	Reconnect vectors
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#% description: Reconnects vectors to a new database.
+#% keywords: vector, database, attribute table
+#%End
+#%option
+#% key: old_database
+#% type: string
+#% description: Name of old database. The database must be in form printed by v.db.connect -g, i.e. with substituted variables
+#% required : yes
+#%END
+#%option
+#% key: new_database
+#% type: string
+#% description: Name of new database
+#% required : yes
+#%END
+#%option
+#% key: old_schema
+#% type: string
+#% description: Old schema
+#% required : no
+#%END
+#%option
+#% key: new_schema
+#% type: string
+#% description: New schema
+#% required : no
+#%END
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION=$GISDBASE/$LOCATION_NAME/$MAPSET
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+   exec g.parser "$0" "$@"
+fi
+
+OLD_DATABASE=$GIS_OPT_OLD_DATABASE
+NEW_DATABASE=$GIS_OPT_NEW_DATABASE
+OLD_SCHEMA=$GIS_OPT_OLD_SCHEMA
+NEW_SCHEMA=$GIS_OPT_NEW_SCHEMA
+
+if [ -z "$OLD_DATABASE" ] ; then
+  g.message -e "Old database not specified"
+  exit 1
+fi
+
+if [ -z "$NEW_DATABASE" ] ; then
+  g.message -e "New database not specified"
+  exit 1
+fi
+
+for VECT in `g.list type=vect mapset=${MAPSET} | sed 1,2d | grep -v '^-*$'`
+do
+    g.message message="Reconnecting vector '${VECT}@${MAPSET}'"
+    for LINK in `v.db.connect -g map=${VECT}@${MAPSET} | tr ' ' '|'`
+    do
+        eval `echo $LINK | sed 's$\([^\|]*\)|\([^\|]*\)|\([^\|]*\)|\([^\|]*\)|\([^\|]*\)$LAYER=\1 SCHEMA_TABLE=\2 KEY=\3 DATABASE=\4 DRIVER=\5$'`
+
+        SCHEMA=`echo $SCHEMA_TABLE | grep '\.' | sed 's/\([^.]*\)\..*/\1/'`
+        TABLE=`echo $SCHEMA_TABLE | sed 's/.*\.//'`
+
+        if [ -n "$NEW_SCHEMA" ] ; then
+            NEW_SCHEMA_TABLE="${NEW_SCHEMA}.${TABLE}"
+        else
+            NEW_SCHEMA_TABLE="${TABLE}"
+        fi
+
+        g.message message="SCHEMA = $SCHEMA TABLE = $TABLE NEW_SCHEMA_TABLE=$NEW_SCHEMA_TABLE"
+
+        if [ "$DATABASE" = "$OLD_DATABASE" -a "$SCHEMA" = "$OLD_SCHEMA" ]
+	then
+	   g.message "    Reconnecting layer $LAYER"
+	   CMD="v.db.connect -o map=${VECT}@${MAPSET} layer=$LAYER driver=$DRIVER database=$NEW_DATABASE table=$NEW_SCHEMA_TABLE key=$KEY"
+	   g.message message="$CMD"
+	   $CMD
+	else 
+	   g.message "Layer $LAYER will not be reconnected, database or schema do not match."
+	fi
+    done
+done
+
+exit 0
+

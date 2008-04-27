@@ -1,0 +1,57 @@
+<h2>DESCRIPTION</h2>
+<em>r.li.padrange</em>
+ (patch area distribution range) calculates
+as:<br>
+<img src="rlipadrange_formula.png"> <br>
+with:<br>
+<ul>
+  <li><b>a<small><small>max</small></small></b>: max patch area size<br></li>
+  <li><b>a<small><small>min</small></small></b>: min patch area size<br></li>
+  </li>
+</ul>
+
+<h2>EXAMPLES</h2>
+To calculate range of patch area size, using
+my_conf configuration file and saving results in
+my_out file run:<br>
+<div class="code"><pre>
+r.li.padrange map=my_map conf=my_conf output=my_out
+</pre></div>
+
+
+<h2>NOTES</h2>
+Do not use absolute path names for output files. They are raster if
+moving window disposition was selected, otherwise they are in
+~/.r.li/output folder.<br>
+If input raster is not full of null values r.li.padrange returns a
+value &gt;=0 that is PADcv. <br>
+If input raster is full of null values r.li.padrange returns -1. <br>
+If you want to have null values instead run <br>
+
+<div class="code"><pre>
+r.null setnull=-1 map=my_map
+</pre></div>
+
+after index calculation.
+
+<h2>REFERENCES</h2>
+McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
+analysis program for quantifying landscape structure. USDA For. Serv.
+Gen. Tech. Rep. PNW-351.
+
+<h2>SEE ALSO</h2>
+<em>
+<a href="r.li.html">r.li</a>
+</em>
+
+
+<h2>AUTHORS</h2>
+Serena Pallecchi student of Computer Science University of Pisa (Italy).<br>
+Commission from Faunalia Pontedera (PI), Italy (www.faunalia.it)
+
+<h2>BUGS</h2>
+Please send bugs reports to 
+<a href="mailto:pallecch@cli.di.unipi.it">pallecch@cli.di.unipi.it</a><br>
+
+<p><i>Last changed: $Date$</i></p>
+

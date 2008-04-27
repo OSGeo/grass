@@ -1,0 +1,109 @@
+$Date$
+
+NOTE: Please improve this list!
+
+Dear (new) GRASS Developer,
+
+When submitting Python code to GRASS SVN repository, please take
+care of following rules:
+
+[ see SUBMITTING for C hints ]
+[ see SUBMITTING_SCRIPTS for shell script hints ]
+[ see SUBMITTING_TCLTK for tcl and tk hints ]
+[ see SUBMITTING_DOCS for documentation ]
+
+
+1.  Indentation
+
+    As Python determines nesting based upon indentation, it
+    isn't just a stylistic issue.
+
+    Please use 4-space indentation (GNU Emacs python-mode default).
+
+    See also "Python Style Guide" by Guido van Rossum
+    http://www.python.org/doc/essays/styleguide.html
+
+
+2.  Add a header section to the script you submit and make sure you
+    include the copyright. The purpose section is meant to contain a
+    general over view of the code in the file to assist other
+    programmers that will need to make changes to your code. For this
+    purpose use Python Docstring, see
+    http://epydoc.sourceforge.net/docstrings.html
+
+    Example (fictitious header for a script called r.myscript):
+
+"""
+MODULE:    r.myscript
+
+AUTHOR(S): Me <email AT some domain>
+
+PURPOSE:   Calculates univariate statistics from a GRASS raster map
+
+COPYRIGHT: (C) 2007 by the GRASS Development Team
+
+           This program is free software under the GNU General Public
+           License (>=v2). Read the file COPYING that comes with GRASS
+           for details.
+"""
+
+   The copyright protects your rights according to GNU General Public
+   License (www.gnu.org).
+
+
+3.  - deleted.
+    We don't want the $ ID $ in source code any more as it causes problems
+    for the branches.
+
+
+4. PLEASE take the time to add comments throughout your code explaining what
+    the code is doing. It will save a HUGE amount of time and frustration for
+    other programmers that may have to change your code in the future.
+
+
+5. Make sure a new line is at the end of each file.
+
+
+6. For consistency, use README rather than README.txt for any README files.
+
+
+7. Be sure to develop on top of the LATEST GRASS code (which is in SVN repository).
+   You can re-check before submission with 'svn diff':
+
+   Be sure to create unified ("diff -u") format. "Plain" diffs (the default
+   format) are risky, because they will apply without warning to code which
+   has been substantially changed; they are also harder to read than unified.
+
+   Such diffs should be made from the top-level directory, e.g.
+   "svn diff gui/wxpython/wxgui.py"; that way, the diff will
+   include the pathname rather than just "wxgui.py".
+
+
+8. When submitting new files to the repository set SVN properties,
+   usually for directory
+
+      svn:ignore : *.pyc
+
+   or e.g. for Python file
+    
+      svn:mime-type : text/python
+      svn:keywords : Author Date Id
+      svn:eol-style : native
+
+   See
+   http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
+
+
+8. Tell the other developers about the new code using the following e-mail:
+   grass-dev@lists.osgeo.org
+ 
+   To subscribe to this mailing list, see
+   http://lists.osgeo.org/mailman/listinfo/grass-dev
+
+
+9. In case of questions feel free to contact the developers at the above
+   mailing list.
+   http://www.grass-gis.org/devel/index.php#submission
+
+...
+[please add further hints if required]

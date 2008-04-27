@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# configured
+
+INST_DIR="@INST_DIR@"
+MACOSX_SUPPDIR="@MACOSX_SUPPDIR@"
+GRASS_VER="@GRASS_VER@"
+
+# support folder
+
+mkdir -p "$MACOSX_SUPPDIR"
+mkdir -p "$MACOSX_SUPPDIR/Modules/bin"
+mkdir -p "$MACOSX_SUPPDIR/Modules/lib"
+mkdir -p "$MACOSX_SUPPDIR/Modules/etc"
+mkdir -p "$MACOSX_SUPPDIR/Modules/docs/html"
+
+# help
+
+/bin/ln -sfh "$INST_DIR/docs/html" "/Library/Documentation/Help/GRASS-$GRASS_VER"
+
+# modbuild
+
+cp -Rf "$PACKAGE_PATH/Contents/Resources/modbuild" "$MACOSX_SUPPDIR"
+
+# readme
+# needs a better home?
+
+cp -f "$PACKAGE_PATH/Contents/Resources/ReadMe.rtf" "/Users/Shared/GRASS-$GRASS_VER-ReadMe.rtf"
+
+exit 0

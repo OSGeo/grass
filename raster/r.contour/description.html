@@ -1,0 +1,36 @@
+<h2>DESCRIPTION</h2>
+
+<em>r.contour</em> produces a GRASS binary vector map of specified contours from a GRASS raster map.
+
+Contours can be produced using a comma-separated list of values in <b>levels</b>, or at some regular increment using the <b>step</b> parameter, using <b>minlevel</b> and <b>maxlevel</b> as minimum and maximum contour values, respectively. If no <b>minlevel</b> or <b>maxlevel</b> is specified, the minimum and maximum cell values in the <b>input</b> raster map will be used.
+
+<H2>NOTES</H2>
+<em>r.contour</em> will either step through incremental contours or produce
+contours from a list of levels, not both. If both a list of levels and
+a step are specified, the list will be produced and the step will be ignored.
+
+<p>Zero is treated as a valid data value by <em>r.contour</em>.
+
+<p>If a contour level exactly matches a category value in the raster map,
+the contour line may backtrack on itself, causing illegal arcs to be produced
+in the output GRASS vector map.
+
+<p>The optional <b>cut</b> parameter allows the user to specify a minimum number of
+raster cells eligilble to be included in a contour line written to the <b>output</b> 
+vector map. It acts like a filter, omitting spurs, single points, etc., making the output more generalized.
+
+<h2>EXAMPLE</h2>
+In the Spearfish location, produce a vector contour map from input raster <i>elevation.dem</i> 
+with contour levels from 1000m to 2000m, 100m contour step, and a minimum of 200 input raster
+points contributing to the contour line:
+
+<div><pre class="code">
+r.contour input=elevation.dem output=elevation_dem_contours minlevel=1000 maxlevel=2000 step=100 cut=200
+</pre></div>
+
+<h2>AUTHORS</h2>
+Terry Baker, U.S. Army Construction Engineering Research Laboratory<br>
+3/2001: cut parameter and fixes by Andrea Aime (aaime@libero.it)
+
+<p><i>Last changed: $Date$</i>
+

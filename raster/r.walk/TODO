@@ -1,0 +1,44 @@
+TODO/PROPOSAL
+(proposed by Ferdinando Urbano 15-Dec-2005)
+
+r.walk was born to compute the minimum cumulative "travel time" (in
+seconds) between each cell and the user-specified starting points.  as
+it is implemented now, combining the "travel time" (in seconds) and a
+"friction" map, the output value has no physical meaning and it is
+useful just to calculate the minimum "generic, undimensioned cost"
+path, because "cost" right now is ("time travel in seconds" + Lamba *
+"friction cost").
+
+it would be interesting to model all the aspects that influence the
+speed movement "inside" the a,b,c,d (see the r.walk documentation)
+parameters going back to a phisical meaning (speed in a specific
+condition) of the formula (the real time in second that the subject
+nedd to move between two points).
+
+For man walking on a marked path, a,b,c,d can be considered constant
+in space, but they can be very different for man walking in wilderness
+or animals moving in their home range, where so many different
+environments and condition can be found (swamp, grassland, dense
+forest, lakes, rivers, ...). The walking speed in a lake is very slow,
+and in a dense forest is slower than in a grassland. To consider these
+spatial differences, a,b,c,d should be passed as 4 grids, with a
+specific value of each parameters in each cell of the grid depending
+on the environmental attribute of each cell.  Instead, right now,
+r.walk do not consider spatial variation in walking speed in different
+conditions (except for slope).
+
+To consider the "friction" map, another function based on this more
+complete version of r.walk could be developed.  The "friction" map
+should be viewed as "suitability" or "environmental preference" of the
+subject for each cell, not linked to time travel.  For example, a wild
+bear could prefer to move inside a forest rather than in an open
+grassland because it is more protected, even if the movement can be
+quicker in the latter case; or a man could prefer to walk a little bit
+more along a river to reach a bridge instead of crossing the water,
+not because it is more time consuming but just because it is more
+comfortable.  In this case a function combining time travel and
+"environmental preference" together, would find an optimized "minimum
+cumulative cost" that optimize the difference between the
+"environmental preference" gain and the time to get it.  This is very
+interesting but it is different from the original philosophy of
+r.walk, that have a specific application.

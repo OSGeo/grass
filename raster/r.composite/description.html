@@ -1,0 +1,45 @@
+<h2>DESCRIPTION</h2>
+
+This program combines three raster maps to form a
+composite RGB map. For each input map layer, the corresponding
+component from the map's color table is used (e.g. for
+the red map, the red component is used, and so on). In
+general, the maps should use a gray-scale color table.
+
+<h2>NOTES</h2>
+
+The default number of intensity levels for each component is 32,
+resulting in a total of 32768 possible colors (equivalent to 15 bits
+per pixel). If significantly more levels than this are used, not only
+will <em>r.composite</em> take longer to run, but displaying the
+resulting layer with <em><a href="d.rast.html">d.rast</a></em> will
+also be significantly slower.
+
+<p>
+Floyd-Steinberg dithering is optionally used with the <b>-d</b> flag.
+
+<h2>EXAMPLE</h2>
+Creating a composite RGB raster using 32 color levels per layer, with dithering:
+
+<div class="code"><pre>
+r.composite -d red=elevation.r green=elevation.g blue=elevation.b output=elev.composite
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.rast.html">d.rast</a>,
+<a href="d.rgb.html">d.rgb</a>,
+<a href="r.blend.html">r.blend</a>,
+<a href="r.colors.html">r.colors</a>
+</em>
+<p>
+<em>
+<a href="http://en.wikipedia.org/wiki/Floyd-Steinberg_dithering">Wikipedia Entry: Floyd-Steinberg dithering</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Glynn Clements
+
+<p><i>Last changed: $Date$</i>

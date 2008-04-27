@@ -1,0 +1,1 @@
+- rewrite v.class so that it only classifies data linked to a certain type (area, line, point)

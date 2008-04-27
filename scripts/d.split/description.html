@@ -1,0 +1,27 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>d.split</EM> Divides active display into two equal frames horizontally or vertically, and displays raster maps or runs GRASS commands in each frame.
+<br>
+
+<H2>NOTES</H2>
+
+Commands such as <em>d.rast.leg</em> will interfere with the frame creation
+and cannot be used.
+
+<H2>EXAMPLE</H2>
+
+<tt>
+d.split view=horiz cmd1="d.rast slope" cmd2="d.histogram slope"
+</tt>
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="d.frame.html">d.frame</A></EM>
+
+
+<H2>AUTHOR</H2>
+
+GRASS team 1989
+Update to GRASS 5.7 by Michael Barton, Arizona State University
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,74 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.build.polylines</em> builds polylines from the lines or
+boundaries in a vector map.  <!-- ???? and copies the attribute
+and category files from the original file. -->
+<P>
+A line is a single straight line segment defined by one start node, one end 
+node and no other nodes. A polyline is also defined by one start node, one end 
+node and no other nodes, but is made of two or more consecutive straight line 
+segments. The connections between the constituent line segments of a polyline 
+do not appear as nodes in the vector map.
+<P>
+Polylines provide the most appropriate representation of curved lines when it 
+is important that nodes serve to define topology rather than geometry. Curved 
+lines are usually digitized as polylines, but these are sometimes broken into 
+their constituent straight line segments during conversion from one data 
+format to another. <em>v.build.polylines</em> can be used to rebuild such broken 
+polylines. 
+
+<h2>NOTES</h2>
+<p>
+
+If the lines that make up a polyline are of different types, then 
+<i>v.build.polylines</i> will set the type from the first constituent line.  
+<!--
+<i>v.build.polylines </i> will issue a warning unless the flag <b>-q</b> has 
+been set. It is possible to keep a list of all such warnings by redirecting 
+standard output to a file. 
+-->
+<p>
+
+Category number(s) are assigned to a polyline based on <b>cats</b> parameter.
+
+<ul>
+  <li>cats=no - No category number is assigned to a polyline. Also
+  attributes tables linked to the input vector map are not copied to
+  the output vector map.</li>
+  <li>cats=first - Assign to a polyline category number of the first
+line. All linked attributes tables are copied to the output vector map.</li>
+  <li>cats=multi - If the lines that make up a polyline have different category numbers
+    then <em>v.build.polylines</em> will set the multiple catetory numbers to a polyline.
+    Also all linked attributes tables are copied to the output vector map.</li>
+</ul>
+
+<p>
+<em>v.build.polylines</em> correctly handles <b>input</b> vector maps
+containing lines, boundaries, centroids and points. Lines and
+boundaries will be converted to polylines of the desired type.  Areas
+are only guaranteed to be preserved if the constituent lines of the
+polylines that define them are all boundaries in the input vector map.
+
+<!-- Points will remain points provided that <b>type</b> has been set to `source'.
+It is possible to convert lines and area edges to points or vice versa, but this 
+is rarely useful.   [type no longer exists, other behaviour still true??] -->
+
+
+<h2>ACKNOWLEDGEMENTS</h2>
+This program was originally written during Mark Lake's tenure of a 
+Leverhulme Special Research Fellowship at University College London. 
+
+<h2>SEE ALSO</h2> 
+<em>
+<a href=v.build.html>v.build</a>,
+<a href=v.in.ascii.html>v.in.ascii</a>,
+<a href="v.split.html">v.split</a>,
+<a href="v.edit.html">v.edit</a>
+</em>
+
+<h2>AUTHORS</h2>
+Mark Lake, Institute of Archaeology, University College London.<br> 
+Major rewrite by Radim Blazek, October 2002<br>
+Category mode added by Martin Landa, FBK-irst, Trento, Italy, October 2007
+
+<p><i>Last changed: $Date$</i>

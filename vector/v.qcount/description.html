@@ -1,0 +1,105 @@
+<H2>DESCRIPTION</H2>
+
+<EM>v.qcount</EM> chooses <B>n</B> circular quadrats of
+radius <B>r</B> such that they are completely within the
+bounds of the current region and no two quadrats overlap.
+The number of points falling within each quadrat are counted
+and indices are calculated to estimate the departure of
+point locations from complete spatial randomness.
+
+<H2>NOTES</H2>
+
+This program may not work properly with lat-long data. It uses 
+<EM>hypot()</EM>
+in two files: <EM>count.c</EM> and <EM>findquads.c</EM>.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="v.random.html">v.random</A></EM> 
+
+<P>
+
+<EM>Complete Spatial Randomness and Quadrat Methods</EM>  - 
+GRASS Tutorial on <EM>v.qcount</EM>
+(only available as older file s.qcount-tutorial.ps),
+
+<P>
+
+General references include:
+
+<BR>
+
+Noel A. C. Cressie.
+<EM>Statistics for Spatial Data</EM>.
+Wiley Series in Probability and Mathematical Statistics. John Wiley
+&amp; Sons, New York, NY, 1st edition, 1991.
+
+<BR>
+
+Brian D. Ripley.
+<EM>Spatial Statistics</EM>.
+John Wiley \&amp; Sons, New York, NY, 1981.
+
+
+<P>
+
+References to the indices include:
+
+<BR>
+
+F. N. David and P. G. Moore.
+Notes on contagious distributions in plant populations.
+<EM>Annals of Botany</EM>, 
+18:47-53, 1954.
+
+<BR>
+
+J. B. Douglas.  Clustering and aggregation.
+<EM>Sankhya B</EM>, 
+37:398-417, 1975.
+
+<BR>
+
+R. A. Fisher, H. G. Thornton, and W. A. Mackenzie.
+The accuracy of the plating method of estimating the density of
+bacterial populations.
+<EM>Annals of Applied Biology</EM>, 
+9:325-359, 1922.
+
+<BR>
+
+M. Lloyd.
+Mean crowding.
+<EM>Journal of Animal Ecology</EM>, 
+36:1-30, 1967.
+
+<BR>
+
+M. Morista.
+Measuring the dispersion and analysis of distribution patterns.
+<EM>Memoires of the Faculty of Science, Kyushu University, Series E.
+Biology</EM>, 2:215-235, 1959.
+
+<H2>BUGS</H2>
+<P>
+Timestamp not working for header part of counts output. (2000-10-28)
+<P>
+Please send all bug fixes and comments to the author
+or the grass development team. <br>
+<a href="http://grass.itc.it"><tt>http://grass.itc.it</tt></a>.
+
+<H2>AUTHOR</H2>
+
+<A HREF="http://mccauley-usa.com/">James Darrell McCauley</A>
+<A HREF="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</A>,
+<br>when he was at: 
+<A HREF="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</A>
+<A HREF="http://www.purdue.edu/">Purdue University</A>
+
+<P>
+Modified for GRASS 5.0 by Eric G. Miller (2000-10-28)
+<BR>
+Modified for GRASS 5.7 by R. Blazek (2004-10-14)
+
+
+<p><i>Last changed: $Date$</i>

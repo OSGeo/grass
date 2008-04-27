@@ -1,0 +1,49 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.resample</EM> resamples the data values in a user-specified raster
+input map layer <EM>name</EM> (bounded by the current geographic region
+and masked by the current mask), and produces a new raster output map layer
+<EM>name</EM> containing the results of the resampling.
+The category values in the new raster output map layer will be the same
+as those in the original, except that the resolution and extent of the
+new raster output map layer will match those of the current geographic region
+settings (see <EM><A HREF="g.region.html">g.region</A></EM>).
+<EM>r.resample</EM> is intended for reinterpolation of continuous data
+to a different resolution rather than for interpolation from scattered data
+(use the <EM>v.surf.*</EM> modules for that purpose).
+
+<H2>NOTES</H2>
+
+The method by which resampling is conducted is "nearest neighbor"
+(see <EM><A HREF="r.neighbors.html">r.neighbors</A></EM>).  
+The resulting raster map layer will have the same
+resolution as the resolution of the current geographic region
+(set using <EM><A HREF="g.region.html">g.region</A></EM>).
+
+<P>
+The resulting raster map layer may be identical to the original raster
+map layer.  The <EM>r.resample</EM> program will copy the color table
+and history file associated with the original raster map
+layer for the resulting raster map layer and will create a modified
+category file which contains description of only those categories
+which appear in resampled file.
+
+<P>
+
+When the user resamples a GRASS <EM>reclass</EM> file, a true raster map
+is created by <EM>r.resample</EM>.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.region.html">g.region</A></EM>,
+<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<EM><A HREF="r.mfilter.html">r.mfilter</A></EM>,
+<EM><A HREF="r.neighbors.html">r.neighbors</A></EM>,
+<EM><A HREF="r.rescale.html">r.rescale</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro,
+U.S.Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

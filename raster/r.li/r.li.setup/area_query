@@ -1,0 +1,37 @@
+#!/bin/sh
+# the next line restarts using wish \
+ exec $GRASS_WISH "$0" "$@"
+
+
+#Simply ask if the selected area is ok or not and save the answer in the 
+#environment variable env(name)
+    wm title . "Select this area"
+    wm minsize . 250 100
+    label .label -text "Is this area ok?"
+    pack .label 
+    frame .buttons
+    pack .buttons
+    set val ""
+    button .buttons.ok -text "Ok" -command {
+	frame .name
+	pack .name
+	frame .name.e
+	pack .name.e
+	label .name.e.n -text "Insert area name"
+	entry .name.e.val -textvariable val -width 20
+	grid .name.e.n .name.e.val
+	frame .name.buttons
+	pack .name.buttons
+	button .name.buttons.b -text "Ok" -command {
+	    if {$val != ""} then {
+		    exec echo 1 $val > $env(name)
+		    destroy .
+		}
+	}
+	pack  .name.buttons.b
+    }
+    button .buttons.no -text "No" -command {
+	exec echo 0 > $env(name)
+	destroy .
+    }
+    grid .buttons.ok .buttons.no

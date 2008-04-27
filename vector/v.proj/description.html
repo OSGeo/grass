@@ -1,0 +1,67 @@
+<H2>DESCRIPTION</H2>
+
+<em>v.proj</em> allows a user to convert a vector map in a specified mapset
+of a specified location (different from current) with projection of input
+location to the vector map in a current mapset of current location with
+projection of current location (both projections are defined by
+corresponding PROJ_INFO files).
+
+
+<H2>NOTES</H2>
+
+If <B>out</B> is not specified it is set to be the same as input map name.
+
+<BR>
+If <B>dbase</B> is not specified it is assumed to be the current database.
+The user only has to specify <B>dbase</B> if the source location is stored
+in another separate GRASS database.
+
+<BR>
+If <B>set</B> is not specified, its name is assumed to be the same as the current
+ mapset's name. 
+
+<P>
+<EM>v.proj</EM> supports general datum transformations, making use of the
+<EM>PROJ.4</EM> co-ordinate system translation library.
+</P>
+
+<H2>EXAMPLES</H2>
+
+<div class="code"><pre>
+v.proj in=mymap location=latlong mapset=user1
+</pre></div>
+
+<H2>REFERENCES</H2>
+
+<a href=http://proj.maptools.org/>PROJ 4</a>: Projection/datum support library.
+
+<P>
+<B>Further reading</B>
+<ul>
+<li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
+<li> <a href="http://www.mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a>
+<li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
+</ul>
+
+<H2>SEE ALSO</H2>
+
+<EM>
+<A HREF="r.proj.html">r.proj</A>,
+<A HREF="g.proj.html">g.proj</A>,
+<A HREF="g.setproj.html">g.setproj</A>,
+<A HREF="i.rectify.html">i.rectify</A>,  
+<A HREF="r.stats.html">r.stats</A>,  
+<A HREF="v.sample.html">v.sample</A>,
+<A HREF="v.surf.idw.html">v.surf.idw</A>,
+<A HREF="v.surf.rst.html">v.surf.rst</A>
+</EM>
+
+<H2>AUTHORS</H2>
+
+Irina Kosinovsky, US ARMY CERL
+<BR>
+M.L. Holko, USDA, SCS, NHQ-CGIS
+<BR>
+R.L. Glenn, USDA, SCS, NHQ-CGIS
+
+<p><i>Last changed: $Date$</i>

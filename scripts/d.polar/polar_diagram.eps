@@ -1,0 +1,989 @@
+%!PS-Adobe-2.0 EPSF-2.0
+%%BoundingBox: 0 0 600 600
+%% 
+%% This file is divided in 4 parts:
+%%
+%% 0. Preamble: here;
+%% 
+%% 1. Documentation: how to compute the values of various variables;  
+%%    
+%% 2. Definition of auxiliary functions and data (e.g., colors);
+%% 
+%% 3. Drawing data.
+%% 
+%% 
+%% 1. DOCUMENTATION
+%%
+%% In the following, names of variables are UPPER-CASE, while
+%% 2d points are denoted between squared ([,]) parentheses
+%%
+%% We need to set the values of only 3 variables:
+%%
+%% 1. OUTER-RADIUS <--- from ``outercircle'' file
+%% 2. FRAME-ALLOWANCE (to put some space between the bounding box and
+%%                     the diagram. Suggested value 1.1)
+%% 3. HALF-FRAME (size of half the bounding box, in postscript
+%%                points. Suggested value 3000)
+%%
+%% Now all the other auxiliary variables are set as it follows:
+%%
+%% EPS-SCALE = 300.0 / HALF-FRAME
+%% 
+%% CENTER = [HALF-FRAME,HALF-FRAME]
+%% 
+%% SCALE = HALF-FRAME / (OUTER-RADIUS * FRAME-ALLOWANCE)
+%% DIAGRAM-LINEWIDTH = CEILING (HALF-FRAME / 1500)
+%% AXES-LINEWIDTH = CEILING (HALF-FRAME / 3000)
+%%   
+%% AXES-FONTSIZE = CEILING (HALF-FRAME / 15)
+%% DIAGRAM-FONTSIZE = CEILING (HALF-FRAME / 20)
+%%   
+%% AVERAGE-DIRECTION-COLOR = 1 (blue)
+%% DIAGRAM-COLOR           = 4 (red)
+%% CIRCLE-COLOR            = 2 (green)
+%% AXES-COLOR              = 0 (black)
+%%   
+%% NORTH-JUSTIFICATION = 2
+%% EAST-JUSTIFICATION  = 6
+%% SOUTH-JUSTIFICATION = 8
+%% WEST-JUSTIFICATION  = 8
+%%   
+%% NORTH-X-SHIFT = 1.02 * HALF-FRAME
+%% NORTH-Y-SHIFT = 1.98 * HALF-FRAME
+%% EAST-X-SHIFT  = 1.98 * HALF-FRAME
+%% EAST-Y-SHIFT  = 1.02 * HALF-FRAME
+%% SOUTH-X-SHIFT = 1.02 * HALF-FRAME
+%% SOUTH-Y-SHIFT = 0.02 * HALF-FRAME
+%% WEST-X-SHIFT  = 0.01 * HALF-FRAME
+%% WEST-Y-SHIFT  = 1.02 * HALF-FRAME
+%%   
+%% ALL-DATA-STRING          = "All Data (NULL included)"
+%% REAL-DATA-STRING         = "Real Data Angles"
+%% AVERAGE-DIRECTION-STRING = "Avg. Direction"
+%%   
+%% LEGENDS-X                   = 1.95 * HALF-FRAME
+%% ALL-DATA-LEGEND-Y           = 1.95 * HALF-FRAME
+%% REAL-DATA-LEGEND-Y          = 1.90 * HALF-FRAME
+%% AVERAGE-DIRECTION-LEGEND-Y  = 1.85 * HALF-FRAME
+%%
+%%EndComments
+
+% 2. AUXILIARY FUNCTIONS AND DATA
+%
+% Font Handling Functions
+%
+% Function giving y-offset to center of font
+% Assumes font is set and uses numbers to gauge center
+%
+/choose-font	% stack: fontsize fontname => ---
+{
+   findfont 
+   exch scalefont 
+   setfont
+   newpath
+   0 0 moveto (0) true charpath flattenpath pathbbox
+   /top exch def pop
+   /bottom exch def pop
+   bottom top bottom top add 2 div
+   /center-font-val exch def 
+   /upper-font-val exch def 
+   /lower-font-val exch def
+} def
+%
+% Justfication offset routines
+%
+/center-x-just	% stack: (string) x y => (string) newx y
+{
+   exch 2 index stringwidth pop 2 div sub exch
+} def
+%
+/left-x-just	% stack: (string) x y => (string) newx y
+{ 
+} def
+%
+/right-x-just	% stack: (string) x y => (string) newx y
+{
+   exch 2 index stringwidth pop sub exch
+} def
+%
+/center-y-just	% stack: (string) x y => (string) x newy
+{
+   center-font-val sub
+} def
+%
+/lower-y-just	% stack: (string) x y => (string) x newy
+{
+   lower-font-val sub
+} def
+%
+/upper-y-just	% stack: (string) x y => (string) x newy
+{
+   upper-font-val sub
+} def
+%
+% Shows a string on the page subject to justification
+%   
+/just-string	% stack: (string) x y just => ---
+{
+   dup 0 eq { pop center-x-just center-y-just 		} if
+   dup 1 eq { pop left-x-just center-y-just		} if
+   dup 2 eq { pop left-x-just upper-y-just	 	} if
+   dup 3 eq { pop center-x-just upper-y-just 		} if
+   dup 4 eq { pop right-x-just upper-y-just	 	} if
+   dup 5 eq { pop right-x-just center-y-just 		} if
+   dup 6 eq { pop right-x-just lower-y-just	 	} if
+   dup 7 eq { pop center-x-just lower-y-just  		} if
+   dup 8 eq { pop left-x-just lower-y-just	 	} if
+   moveto show
+} def
+%
+
+%
+% RGB colors definitions 
+% 
+% begin colors definitions block
+%
+
+/srgb {setrgbcolor} bind def
+
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+/col1 {0.000 0.000 1.000 srgb} bind def
+/col2 {0.000 1.000 0.000 srgb} bind def
+/col3 {0.000 1.000 1.000 srgb} bind def
+/col4 {1.000 0.000 0.000 srgb} bind def
+/col5 {1.000 0.000 1.000 srgb} bind def
+/col6 {1.000 1.000 0.000 srgb} bind def
+/col7 {1.000 1.000 1.000 srgb} bind def
+/col8 {0.000 0.000 0.560 srgb} bind def
+/col9 {0.000 0.000 0.690 srgb} bind def
+/col10 {0.000 0.000 0.820 srgb} bind def
+/col11 {0.530 0.810 1.000 srgb} bind def
+/col12 {0.000 0.560 0.000 srgb} bind def
+/col13 {0.000 0.690 0.000 srgb} bind def
+/col14 {0.000 0.820 0.000 srgb} bind def
+/col15 {0.000 0.560 0.560 srgb} bind def
+/col16 {0.000 0.690 0.690 srgb} bind def
+/col17 {0.000 0.820 0.820 srgb} bind def
+/col18 {0.560 0.000 0.000 srgb} bind def
+/col19 {0.690 0.000 0.000 srgb} bind def
+/col20 {0.820 0.000 0.000 srgb} bind def
+/col21 {0.560 0.000 0.560 srgb} bind def
+/col22 {0.690 0.000 0.690 srgb} bind def
+/col23 {0.820 0.000 0.820 srgb} bind def
+/col24 {0.500 0.190 0.000 srgb} bind def
+/col25 {0.630 0.250 0.000 srgb} bind def
+/col26 {0.750 0.380 0.000 srgb} bind def
+/col27 {1.000 0.500 0.500 srgb} bind def
+/col28 {1.000 0.630 0.630 srgb} bind def
+/col29 {1.000 0.750 0.750 srgb} bind def
+/col30 {1.000 0.880 0.880 srgb} bind def
+/col31 {1.000 0.840 0.000 srgb} bind def
+
+%
+% end colors definitions block
+%
+%
+
+%
+% 3. DRAWING DATA
+%
+
+
+0.1 0.1 scale                           %% EPS-SCALE EPS-SCALE scale
+%%
+%% drawing axes
+%%
+
+col0                                    %% colAXES-COLOR
+1 setlinewidth                          %% AXES-LINEWIDTH setlinewidth
+[] 0 setdash
+newpath
+ 3000.0     0.0 moveto                  %% HALF-FRAME 0.0 moveto
+ 3000.0  6000.0 lineto                  %% HALF-FRAME (2 * HALF-FRAME) lineto
+    0.0  3000.0 moveto                  %% 0.0 HALF-FRAME moveto
+ 6000.0  3000.0 lineto                  %% (2 * HALF-FRAME) HALF-FRAME lineto
+stroke
+
+200 /Times-Roman choose-font            %% AXES-FONTSIZE /Times-Roman choose-font
+(N) 3060.0 5940.0 2 just-string         %% NORTH-X-SHIFT NORTH-Y-SHIFT NORTH-JUSTIFICATION just-string
+(E) 5940.0 3060.0 6 just-string         %% EAST-X-SHIFT EAST-Y-SHIFT EAST-JUSTIFICATION just-string
+(S) 3060.0 60.0 8 just-string           %% SOUTH-X-SHIFT SOUTH-Y-SHIFT SOUTH-JUSTIFICATION just-string
+(W) 30.0 3060.0 8 just-string           %% WEST-X-SHIFT WEST-Y-SHIFT WEST-JUSTIFICATION just-string
+
+%%
+%% drawing outer circle
+%%
+
+col2                                    %% colCIRCLE-COLOR
+150 /Times-Roman choose-font            %% DIAGRAM-FONTSIZE /Times-Roman choose-font
+2 setlinewidth                          %% DIAGRAM-LINEWIDTH setlinewidth
+[] 0 setdash
+newpath
+                                        %% coordinates of rescaled, translated outer circle follow
+                                        %% first point moveto, then lineto
+5727.27  3000.0 moveto
+5726.86  3047.6 lineto
+5725.61 3095.18 lineto
+5723.54 3142.73 lineto
+5720.63 3190.24 lineto
+5716.89  3237.7 lineto
+5712.33 3285.08 lineto
+5706.94 3332.37 lineto
+5700.73 3379.56 lineto
+ 5693.7 3426.64 lineto
+5685.84 3473.59 lineto
+5677.17 3520.39 lineto
+5667.67 3567.03 lineto
+5657.37  3613.5 lineto
+5646.26 3659.79 lineto
+5634.34 3705.87 lineto
+5621.62 3751.74 lineto
+ 5608.1 3797.38 lineto
+5593.79 3842.77 lineto
+5578.69 3887.91 lineto
+ 5562.8 3932.78 lineto
+5546.13 3977.37 lineto
+5528.68 4021.65 lineto
+5510.47 4065.63 lineto
+5491.49 4109.28 lineto
+5471.75  4152.6 lineto
+5451.26 4195.56 lineto
+5430.02 4238.16 lineto
+5408.04 4280.38 lineto
+5385.33 4322.21 lineto
+5361.89 4363.64 lineto
+5337.73 4404.65 lineto
+5312.86 4445.23 lineto
+5287.28 4485.38 lineto
+5261.01 4525.07 lineto
+5234.05  4564.3 lineto
+5206.41 4603.05 lineto
+ 5178.1 4641.31 lineto
+5149.12 4679.08 lineto
+5119.49 4716.33 lineto
+5089.21 4753.06 lineto
+ 5058.3 4789.25 lineto
+5026.76  4824.9 lineto
+ 4994.6  4860.0 lineto
+4961.84 4894.52 lineto
+4928.47 4928.47 lineto
+4894.52 4961.84 lineto
+ 4860.0  4994.6 lineto
+ 4824.9 5026.76 lineto
+4789.25  5058.3 lineto
+4753.06 5089.21 lineto
+4716.33 5119.49 lineto
+4679.08 5149.12 lineto
+4641.31  5178.1 lineto
+4603.05 5206.41 lineto
+ 4564.3 5234.05 lineto
+4525.07 5261.01 lineto
+4485.38 5287.28 lineto
+4445.23 5312.86 lineto
+4404.65 5337.73 lineto
+4363.64 5361.89 lineto
+4322.21 5385.33 lineto
+4280.38 5408.04 lineto
+4238.16 5430.02 lineto
+4195.56 5451.26 lineto
+ 4152.6 5471.75 lineto
+4109.28 5491.49 lineto
+4065.63 5510.47 lineto
+4021.65 5528.68 lineto
+3977.37 5546.13 lineto
+3932.78  5562.8 lineto
+3887.91 5578.69 lineto
+3842.77 5593.79 lineto
+3797.38  5608.1 lineto
+3751.74 5621.62 lineto
+3705.87 5634.34 lineto
+3659.79 5646.26 lineto
+ 3613.5 5657.37 lineto
+3567.03 5667.67 lineto
+3520.39 5677.17 lineto
+3473.59 5685.84 lineto
+3426.64  5693.7 lineto
+3379.56 5700.73 lineto
+3332.37 5706.94 lineto
+3285.08 5712.33 lineto
+ 3237.7 5716.89 lineto
+3190.24 5720.63 lineto
+3142.73 5723.54 lineto
+3095.18 5725.61 lineto
+ 3047.6 5726.86 lineto
+ 3000.0 5727.27 lineto
+ 2952.4 5726.86 lineto
+2904.82 5725.61 lineto
+2857.27 5723.54 lineto
+2809.76 5720.63 lineto
+ 2762.3 5716.89 lineto
+2714.92 5712.33 lineto
+2667.63 5706.94 lineto
+2620.44 5700.73 lineto
+2573.36  5693.7 lineto
+2526.41 5685.84 lineto
+2479.61 5677.17 lineto
+2432.97 5667.67 lineto
+ 2386.5 5657.37 lineto
+2340.21 5646.26 lineto
+2294.13 5634.34 lineto
+2248.26 5621.62 lineto
+2202.62  5608.1 lineto
+2157.23 5593.79 lineto
+2112.09 5578.69 lineto
+2067.22  5562.8 lineto
+2022.63 5546.13 lineto
+1978.35 5528.68 lineto
+1934.37 5510.47 lineto
+1890.72 5491.49 lineto
+ 1847.4 5471.75 lineto
+1804.44 5451.26 lineto
+1761.84 5430.02 lineto
+1719.62 5408.04 lineto
+1677.79 5385.33 lineto
+1636.36 5361.89 lineto
+1595.35 5337.73 lineto
+1554.77 5312.86 lineto
+1514.62 5287.28 lineto
+1474.93 5261.01 lineto
+ 1435.7 5234.05 lineto
+1396.95 5206.41 lineto
+1358.69  5178.1 lineto
+1320.92 5149.12 lineto
+1283.67 5119.49 lineto
+1246.94 5089.21 lineto
+1210.75  5058.3 lineto
+ 1175.1 5026.76 lineto
+ 1140.0  4994.6 lineto
+1105.48 4961.84 lineto
+1071.53 4928.47 lineto
+1038.16 4894.52 lineto
+ 1005.4  4860.0 lineto
+973.241  4824.9 lineto
+941.701 4789.25 lineto
+910.788 4753.06 lineto
+880.511 4716.33 lineto
+ 850.88 4679.08 lineto
+821.903 4641.31 lineto
+ 793.59 4603.05 lineto
+765.949  4564.3 lineto
+738.989 4525.07 lineto
+712.717 4485.38 lineto
+687.142 4445.23 lineto
+662.271 4404.65 lineto
+638.113 4363.64 lineto
+614.674 4322.21 lineto
+591.961 4280.38 lineto
+569.982 4238.16 lineto
+548.744 4195.56 lineto
+528.252  4152.6 lineto
+508.512 4109.28 lineto
+489.532 4065.63 lineto
+471.317 4021.65 lineto
+453.872 3977.37 lineto
+437.202 3932.78 lineto
+421.313 3887.91 lineto
+ 406.21 3842.77 lineto
+391.896 3797.38 lineto
+378.377 3751.74 lineto
+365.657 3705.87 lineto
+353.739 3659.79 lineto
+342.627  3613.5 lineto
+332.325 3567.03 lineto
+322.835 3520.39 lineto
+314.161 3473.59 lineto
+306.305 3426.64 lineto
+299.269 3379.56 lineto
+293.056 3332.37 lineto
+287.668 3285.08 lineto
+283.105  3237.7 lineto
+279.371 3190.24 lineto
+276.465 3142.73 lineto
+274.389 3095.18 lineto
+273.143  3047.6 lineto
+272.728  3000.0 lineto
+273.143  2952.4 lineto
+274.389 2904.82 lineto
+276.465 2857.27 lineto
+279.371 2809.76 lineto
+283.105  2762.3 lineto
+287.668 2714.92 lineto
+293.056 2667.63 lineto
+299.269 2620.44 lineto
+306.305 2573.36 lineto
+314.161 2526.41 lineto
+322.835 2479.61 lineto
+332.325 2432.97 lineto
+342.627  2386.5 lineto
+353.739 2340.21 lineto
+365.657 2294.13 lineto
+378.377 2248.26 lineto
+391.896 2202.62 lineto
+ 406.21 2157.23 lineto
+421.313 2112.09 lineto
+437.202 2067.22 lineto
+453.872 2022.63 lineto
+471.317 1978.35 lineto
+489.532 1934.37 lineto
+508.512 1890.72 lineto
+528.252  1847.4 lineto
+548.744 1804.44 lineto
+569.982 1761.84 lineto
+591.961 1719.62 lineto
+614.674 1677.79 lineto
+638.113 1636.36 lineto
+662.271 1595.35 lineto
+687.142 1554.77 lineto
+712.717 1514.62 lineto
+738.989 1474.93 lineto
+765.949  1435.7 lineto
+ 793.59 1396.95 lineto
+821.903 1358.69 lineto
+ 850.88 1320.92 lineto
+880.511 1283.67 lineto
+910.788 1246.94 lineto
+941.701 1210.75 lineto
+973.241  1175.1 lineto
+ 1005.4  1140.0 lineto
+1038.16 1105.48 lineto
+1071.53 1071.53 lineto
+1105.48 1038.16 lineto
+ 1140.0  1005.4 lineto
+ 1175.1 973.241 lineto
+1210.75 941.701 lineto
+1246.94 910.788 lineto
+1283.67 880.511 lineto
+1320.92  850.88 lineto
+1358.69 821.903 lineto
+1396.95  793.59 lineto
+ 1435.7 765.949 lineto
+1474.93 738.989 lineto
+1514.62 712.717 lineto
+1554.77 687.142 lineto
+1595.35 662.271 lineto
+1636.36 638.113 lineto
+1677.79 614.674 lineto
+1719.62 591.961 lineto
+1761.84 569.982 lineto
+1804.44 548.744 lineto
+ 1847.4 528.252 lineto
+1890.72 508.512 lineto
+1934.37 489.532 lineto
+1978.35 471.317 lineto
+2022.63 453.872 lineto
+2067.22 437.202 lineto
+2112.09 421.313 lineto
+2157.23  406.21 lineto
+2202.62 391.896 lineto
+2248.26 378.377 lineto
+2294.13 365.657 lineto
+2340.21 353.739 lineto
+ 2386.5 342.627 lineto
+2432.97 332.325 lineto
+2479.61 322.835 lineto
+2526.41 314.161 lineto
+2573.36 306.305 lineto
+2620.44 299.269 lineto
+2667.63 293.056 lineto
+2714.92 287.668 lineto
+ 2762.3 283.105 lineto
+2809.76 279.371 lineto
+2857.27 276.465 lineto
+2904.82 274.389 lineto
+ 2952.4 273.143 lineto
+ 3000.0 272.728 lineto
+ 3047.6 273.143 lineto
+3095.18 274.389 lineto
+3142.73 276.465 lineto
+3190.24 279.371 lineto
+ 3237.7 283.105 lineto
+3285.08 287.668 lineto
+3332.37 293.056 lineto
+3379.56 299.269 lineto
+3426.64 306.305 lineto
+3473.59 314.161 lineto
+3520.39 322.835 lineto
+3567.03 332.325 lineto
+ 3613.5 342.627 lineto
+3659.79 353.739 lineto
+3705.87 365.657 lineto
+3751.74 378.377 lineto
+3797.38 391.896 lineto
+3842.77  406.21 lineto
+3887.91 421.313 lineto
+3932.78 437.202 lineto
+3977.37 453.872 lineto
+4021.65 471.317 lineto
+4065.63 489.532 lineto
+4109.28 508.512 lineto
+ 4152.6 528.252 lineto
+4195.56 548.744 lineto
+4238.16 569.982 lineto
+4280.38 591.961 lineto
+4322.21 614.674 lineto
+4363.64 638.113 lineto
+4404.65 662.271 lineto
+4445.23 687.142 lineto
+4485.38 712.717 lineto
+4525.07 738.989 lineto
+ 4564.3 765.949 lineto
+4603.05  793.59 lineto
+4641.31 821.903 lineto
+4679.08  850.88 lineto
+4716.33 880.511 lineto
+4753.06 910.788 lineto
+4789.25 941.701 lineto
+ 4824.9 973.241 lineto
+ 4860.0  1005.4 lineto
+4894.52 1038.16 lineto
+4928.47 1071.53 lineto
+4961.84 1105.48 lineto
+ 4994.6  1140.0 lineto
+5026.76  1175.1 lineto
+ 5058.3 1210.75 lineto
+5089.21 1246.94 lineto
+5119.49 1283.67 lineto
+5149.12 1320.92 lineto
+ 5178.1 1358.69 lineto
+5206.41 1396.95 lineto
+5234.05  1435.7 lineto
+5261.01 1474.93 lineto
+5287.28 1514.62 lineto
+5312.86 1554.77 lineto
+5337.73 1595.35 lineto
+5361.89 1636.36 lineto
+5385.33 1677.79 lineto
+5408.04 1719.62 lineto
+5430.02 1761.84 lineto
+5451.26 1804.44 lineto
+5471.75  1847.4 lineto
+5491.49 1890.72 lineto
+5510.47 1934.37 lineto
+5528.68 1978.35 lineto
+5546.13 2022.63 lineto
+ 5562.8 2067.22 lineto
+5578.69 2112.09 lineto
+5593.79 2157.23 lineto
+ 5608.1 2202.62 lineto
+5621.62 2248.26 lineto
+5634.34 2294.13 lineto
+5646.26 2340.21 lineto
+5657.37  2386.5 lineto
+5667.67 2432.97 lineto
+5677.17 2479.61 lineto
+5685.84 2526.41 lineto
+ 5693.7 2573.36 lineto
+5700.73 2620.44 lineto
+5706.94 2667.63 lineto
+5712.33 2714.92 lineto
+5716.89  2762.3 lineto
+5720.63 2809.76 lineto
+5723.54 2857.27 lineto
+5725.61 2904.82 lineto
+5726.86  2952.4 lineto
+5727.27  3000.0 lineto
+stroke
+
+%%
+%% drawing real data diagram
+%%
+
+col4                                    %% colDIAGRAM-COLOR
+2 setlinewidth                          %% DIAGRAM-LINEWIDTH setlinewidth
+[] 0 setdash
+newpath
+                                        %% coordinates of rescaled, translated diagram follow
+                                        %% first point moveto, then lineto
+5654.06  3000.0 moveto
+ 3699.6 3012.21 lineto
+3735.45 3025.68 lineto
+3879.46 3046.09 lineto
+3589.69 3041.24 lineto
+3997.49 3087.27 lineto
+3683.87 3071.88 lineto
+3634.62 3077.92 lineto
+3860.15 3120.89 lineto
+3905.57 3143.43 lineto
+3712.84 3125.69 lineto
+3769.75 3149.62 lineto
+3920.42 3195.64 lineto
+3869.85 3200.82 lineto
+3948.15  3236.4 lineto
+4060.41 3284.14 lineto
+3823.36 3236.09 lineto
+3819.11 3250.43 lineto
+4021.14 3331.79 lineto
+3741.43  3255.3 lineto
+3861.56 3313.58 lineto
+3946.06 3363.16 lineto
+3917.21 3370.58 lineto
+3888.39  3377.1 lineto
+3694.32 3309.13 lineto
+3732.55 3341.59 lineto
+3791.54 3386.06 lineto
+3902.92 3460.06 lineto
+ 3884.1 3470.08 lineto
+3833.55 3462.05 lineto
+3846.26 3488.59 lineto
+ 3837.6 3503.28 lineto
+3624.08 3389.97 lineto
+3799.29 3519.07 lineto
+3630.09  3425.0 lineto
+3494.11 3345.98 lineto
+3624.63 3453.82 lineto
+3655.16  3493.7 lineto
+3693.97 3542.19 lineto
+3553.15 3447.93 lineto
+3536.01 3449.76 lineto
+3518.97 3451.13 lineto
+3600.67 3540.85 lineto
+3582.32 3543.02 lineto
+3477.29 3460.92 lineto
+3938.35 3938.35 lineto
+3419.01  3433.9 lineto
+3468.97 3502.91 lineto
+3419.76 3466.19 lineto
+3522.37 3600.91 lineto
+3480.78 3572.97 lineto
+3334.05 3412.52 lineto
+3497.63 3636.93 lineto
+3355.75  3472.1 lineto
+ 3468.0 3644.15 lineto
+3373.66 3533.64 lineto
+3472.22  3700.1 lineto
+3308.81 3475.53 lineto
+3370.79 3593.38 lineto
+3341.74 3568.74 lineto
+3325.72 3564.17 lineto
+3263.19 3474.81 lineto
+3237.87 3447.37 lineto
+3350.52 3687.94 lineto
+ 3227.4 3466.25 lineto
+3265.12 3568.55 lineto
+3210.99  3473.9 lineto
+3259.26 3610.77 lineto
+3216.92  3536.9 lineto
+3164.29 3427.98 lineto
+3165.04 3453.45 lineto
+3117.83  3342.2 lineto
+3283.32 3871.98 lineto
+3148.14 3484.54 lineto
+3172.91 3603.02 lineto
+3121.77 3454.46 lineto
+ 3125.5 3503.34 lineto
+3113.98  3493.7 lineto
+ 3090.3 3424.81 lineto
+3128.91 3663.17 lineto
+3075.42  3427.7 lineto
+ 3073.6  3464.7 lineto
+3077.23 3549.54 lineto
+3058.81 3478.96 lineto
+3050.44 3479.91 lineto
+ 3036.8 3420.63 lineto
+3037.03 3529.52 lineto
+3023.36 3445.75 lineto
+3015.16 3434.04 lineto
+ 3005.9 3337.74 lineto
+ 3000.0 3953.05 lineto
+2994.32 3325.68 lineto
+2984.84 3434.04 lineto
+ 2979.8 3385.52 lineto
+ 2965.5 3493.41 lineto
+2970.56  3336.5 lineto
+2958.39 3395.93 lineto
+2955.89 3359.22 lineto
+2916.05 3597.32 lineto
+2932.06 3428.95 lineto
+2937.15 3356.42 lineto
+2907.92 3473.69 lineto
+2917.23 3389.41 lineto
+2894.16 3458.43 lineto
+2894.93  3421.4 lineto
+2878.23 3454.46 lineto
+2893.59 3371.09 lineto
+ 2869.5 3426.86 lineto
+2835.97 3504.83 lineto
+2878.24 3353.61 lineto
+2822.58 3487.46 lineto
+2835.71 3427.98 lineto
+2846.35 3380.31 lineto
+2764.31 3555.24 lineto
+2749.75 3562.07 lineto
+2831.75 3360.81 lineto
+2793.75 3422.88 lineto
+2704.25 3580.45 lineto
+2796.11 3383.46 lineto
+ 2760.2  3432.6 lineto
+2692.37 3532.83 lineto
+2664.48  3558.4 lineto
+2712.32 3460.38 lineto
+2678.05 3495.76 lineto
+2669.44 3490.07 lineto
+2550.23 3642.34 lineto
+2567.45 3595.35 lineto
+2477.26  3693.7 lineto
+2606.35 3503.84 lineto
+2612.81 3478.15 lineto
+2457.18  3646.9 lineto
+2533.04 3537.18 lineto
+2451.08 3609.63 lineto
+2498.12  3538.2 lineto
+2555.84 3459.94 lineto
+1763.08 4236.92 lineto
+2340.47  3636.9 lineto
+2417.68 3543.02 lineto
+2390.37 3548.92 lineto
+2344.46 3569.85 lineto
+2390.06  3511.8 lineto
+2287.47  3577.0 lineto
+2134.91 3675.88 lineto
+2103.98  3675.2 lineto
+2268.01 3531.82 lineto
+2239.07 3532.81 lineto
+2219.89 3526.19 lineto
+2352.47 3420.51 lineto
+2283.85  3447.5 lineto
+ 2214.1 3472.22 lineto
+2080.61 3530.81 lineto
+2071.48 3514.69 lineto
+2126.55 3464.42 lineto
+2011.09 3503.87 lineto
+2121.72 3428.37 lineto
+2169.05 3387.48 lineto
+2074.24 3412.17 lineto
+2367.02 3268.68 lineto
+2116.35 3357.02 lineto
+1952.58 3402.07 lineto
+1968.39 3375.47 lineto
+2258.57  3255.3 lineto
+1841.18 3376.52 lineto
+2007.84 3303.33 lineto
+2049.08 3272.67 lineto
+1881.33 3299.75 lineto
+ 2157.2 3210.13 lineto
+2024.36 3225.24 lineto
+2185.78 3173.07 lineto
+ 1934.2 3207.17 lineto
+ 1835.7  3205.3 lineto
+1748.89 3198.16 lineto
+1673.94 3186.37 lineto
+1766.68 3151.43 lineto
+1788.22 3127.36 lineto
+1942.42 3092.53 lineto
+1772.48 3085.84 lineto
+1903.69 3057.45 lineto
+1842.57 3040.42 lineto
+ 2047.1 3016.63 lineto
+1648.84  3000.0 lineto
+2191.84 2985.89 lineto
+1939.02 2962.95 lineto
+1963.93  2945.7 lineto
+1844.69 2919.21 lineto
+2158.74  2926.4 lineto
+1848.21 2878.94 lineto
+2006.16 2877.97 lineto
+2068.17 2869.04 lineto
+2022.94 2845.25 lineto
+2061.43  2834.5 lineto
+2147.36 2834.26 lineto
+1937.98 2774.26 lineto
+2141.91 2801.89 lineto
+2051.85  2763.6 lineto
+ 2184.3 2781.43 lineto
+2257.82 2787.18 lineto
+2169.35 2746.05 lineto
+2070.65 2698.04 lineto
+2212.94 2728.99 lineto
+2478.53  2810.2 lineto
+2403.08 2770.86 lineto
+2351.24 2737.89 lineto
+2300.39 2703.03 lineto
+2559.16 2803.73 lineto
+2409.59 2724.69 lineto
+2555.44 2783.17 lineto
+ 2430.3 2709.72 lineto
+2520.67 2745.14 lineto
+2577.95 2766.05 lineto
+2477.62  2698.4 lineto
+2451.94 2670.69 lineto
+2570.31  2731.5 lineto
+2534.59 2697.76 lineto
+2529.93 2682.94 lineto
+2565.18 2695.54 lineto
+2599.84 2709.27 lineto
+2508.63 2629.73 lineto
+2439.12 2561.79 lineto
+2559.36 2643.17 lineto
+2519.44 2596.76 lineto
+2635.81 2683.41 lineto
+2686.22 2717.47 lineto
+2602.97 2629.76 lineto
+2574.78 2589.37 lineto
+2351.69 2351.68 lineto
+2597.75 2583.45 lineto
+ 2613.3 2585.32 lineto
+ 2620.6 2578.63 lineto
+2659.67  2608.5 lineto
+2627.78 2556.41 lineto
+2696.32 2624.98 lineto
+2643.49 2543.69 lineto
+2593.43 2460.46 lineto
+2617.09 2472.97 lineto
+ 2647.1 2496.01 lineto
+2689.68 2539.93 lineto
+ 2710.9 2554.82 lineto
+2661.18 2457.77 lineto
+2577.49 2296.83 lineto
+2758.72 2582.09 lineto
+2608.14 2293.06 lineto
+2711.15 2456.76 lineto
+2726.16 2462.55 lineto
+2756.73 2501.22 lineto
+2796.06 2562.66 lineto
+2730.12 2393.85 lineto
+2736.03 2378.13 lineto
+2733.37 2340.06 lineto
+2757.89 2369.29 lineto
+2814.33 2489.86 lineto
+2858.61 2589.36 lineto
+2731.59 2173.91 lineto
+2784.84 2296.26 lineto
+2823.76 2385.38 lineto
+2828.27 2359.09 lineto
+2862.83 2449.84 lineto
+2875.17 2459.28 lineto
+2887.13 2468.99 lineto
+ 2875.7 2360.52 lineto
+2901.54 2441.61 lineto
+2905.64 2404.23 lineto
+2941.24 2581.87 lineto
+2939.72 2509.07 lineto
+2944.51  2472.1 lineto
+2968.46 2639.46 lineto
+2964.66 2494.55 lineto
+2966.54 2361.49 lineto
+2980.21 2433.34 lineto
+2990.32 2445.15 lineto
+ 3000.0 2300.29 lineto
+3009.05 2481.33 lineto
+ 3016.0 2541.85 lineto
+3023.36 2554.25 lineto
+3019.36 2723.21 lineto
+3043.11 2507.26 lineto
+3050.44 2520.09 lineto
+3044.11 2640.78 lineto
+3090.66 2354.89 lineto
+ 3088.7 2439.98 lineto
+3067.04 2619.82 lineto
+ 3124.3 2360.52 lineto
+3095.31 2551.59 lineto
+3122.12 2471.04 lineto
+ 3157.6  2367.9 lineto
+3121.77 2545.54 lineto
+3133.01 2536.14 lineto
+3144.61 2526.99 lineto
+3201.31 2380.43 lineto
+3153.18 2555.14 lineto
+3235.19 2353.83 lineto
+ 3185.9 2515.71 lineto
+3162.69 2597.32 lineto
+3221.55 2478.07 lineto
+3181.55 2592.23 lineto
+3244.72 2475.19 lineto
+3206.25 2577.12 lineto
+3290.28  2430.3 lineto
+ 3249.2 2531.32 lineto
+3251.49 2546.29 lineto
+3271.44 2529.86 lineto
+3254.75 2576.03 lineto
+3287.68 2539.62 lineto
+3387.66 2403.06 lineto
+3404.76 2399.91 lineto
+3463.61 2337.89 lineto
+3404.19 2443.69 lineto
+3363.01 2518.27 lineto
+3289.66 2629.25 lineto
+3493.48  2390.6 lineto
+3403.24 2519.44 lineto
+3474.88 2453.72 lineto
+3314.82 2650.36 lineto
+3452.52 2514.74 lineto
+3385.49 2600.81 lineto
+3912.76 2087.24 lineto
+3390.51 2622.89 lineto
+3476.44 2555.71 lineto
+3546.88 2507.59 lineto
+3482.55 2580.52 lineto
+3526.76 2557.99 lineto
+3478.15 2612.81 lineto
+3703.48 2450.38 lineto
+ 3751.5  2433.7 lineto
+3595.35 2567.45 lineto
+3503.99  2647.1 lineto
+3580.08 2608.73 lineto
+3576.71 2625.48 lineto
+3654.77 2590.85 lineto
+3692.83  2583.7 lineto
+3731.33 2577.76 lineto
+3907.41 2497.01 lineto
+3649.76 2654.52 lineto
+3859.92 2561.85 lineto
+3628.89 2693.27 lineto
+3809.09 2622.72 lineto
+3760.44 2661.43 lineto
+3755.13 2679.47 lineto
+3827.72 2665.58 lineto
+ 3754.6 2710.34 lineto
+3736.86  2731.8 lineto
+3581.74 2799.69 lineto
+4032.61 2664.48 lineto
+3622.99 2809.53 lineto
+3637.81 2817.11 lineto
+3710.82 2809.54 lineto
+3667.22 2833.64 lineto
+3681.77  2842.6 lineto
+3637.21 2864.56 lineto
+3769.75 2850.38 lineto
+3748.48 2868.02 lineto
+3643.43 2898.09 lineto
+3704.84 2900.94 lineto
+3658.57 2919.14 lineto
+3779.86 2918.03 lineto
+3685.03 2940.07 lineto
+3613.76 2957.08 lineto
+3734.89 2961.49 lineto
+3602.83 2978.95 lineto
+3566.92  2990.1 lineto
+5654.06  3000.0 lineto
+stroke
+
+%%
+%% drawing average direction
+%%
+
+col1                                    %% colAVERAGE-DIRECTION-COLOR
+2 setlinewidth                          %% DIAGRAM-LINEWIDTH setlinewidth
+[] 0 setdash
+newpath
+                                        %% coordinates of rescaled, translated average direction follow
+                                        %% first point moveto, second lineto
+ 3000.0  3000.0 moveto
+2941.43 3060.55 lineto
+stroke
+
+%%
+%% drawing legends
+%%
+
+col2                                    %% colCIRCLE-COLOR
+%% Line below: (ALL-DATA-STRING) LEGENDS-X ALL-DATA-LEGEND-Y 4 just-string
+(All Data (NULL included)) 5850.0 5850.0 4 just-string
+
+col4                                    %% colDIAGRAM-COLOR
+%% Line below: (REAL-DATA-STRING) LEGENDS-X REAL-DATA-LEGEND-Y 4 just-string
+(Real Data Angles) 5850.0 5700.0 4 just-string
+
+col1                                    %% colAVERAGE-DIRECTION-COLOR
+%% Line below: (AVERAGE-DIRECTION-STRING) LEGENDS-X AVERAGE-DIRECTION-LEGEND-Y 4 just-string
+(Avg. Direction) 5850.0 5550.0 4 just-string

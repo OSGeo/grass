@@ -1,0 +1,136 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	g.manual
+# AUTHOR(S):	Markus Neteler
+# PURPOSE:	Display the HTML/MAN pages
+# COPYRIGHT:	(C) 2003 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (>=v2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#%Module
+#%  description: Display the HTML man pages of GRASS
+#%  keywords: general, manual, help
+#%End
+#%flag
+#%  key: i
+#%  description: Display index
+#%End
+#%flag
+#%  key: m
+#%  description: Display as MAN text page instead of HTML page in browser
+#%End
+#%option
+#% key: entry
+#% type: string
+#% description: Manual entry to be displayed
+#% required : no
+#%End
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    exec g.parser "$0" "$@"
+fi
+
+check_docbase()
+{
+    #hack for cygwin:
+    if [ "$OSTYPE" = "cygwin" ] ; then
+        if  [ -z "$CYGWIN_ROOT" ] ; then
+            CYGWIN_ROOT="\cygwin"
+        fi
+        for i in C D E F G H I J K L M N O P Q R S T U V W X Y Z NOT_FOUND
+        do
+            j="$i:$CYGWIN_ROOT$1"
+            if [ -f "$j"/docs/html/index.html ] ; then
+                break
+            fi
+        done
+        if [ "$i" = "NOT_FOUND" ] ; then
+            g.message -e "Cannot find GRASS document base."
+            exit 1
+        fi
+        echo "$j"
+    else
+        if [ -f "$1"/docs/html/index.html ] ; then
+            echo "$1"
+        fi
+    fi
+    echo ""
+}
+
+start_browser()
+{
+  if test ! -f "$GRASS_DOC_BASE"/docs/html/$1.html -a -n $1 ; then
+    g.message -e "No HTML manual page entry for <$1>."
+    exit 1
+  else
+    if [ -z "$GRASS_VERBOSE" ] || [ "$GRASS_VERBOSE" -gt 1 ] ; then
+	g.message "Starting browser <$BROWSERNAME> for module $1..."
+    fi
+    "$GRASS_HTML_BROWSER" file://"$GRASS_DOC_BASE"/docs/html/$1.html
+  fi
+}
+
+start_man()
+{
+  if test ! -f "$GRASS_DOC_BASE"/man/man1/$1.1 -a -n $1 ; then
+    if test ! -f "$GRASS_DOC_BASE"/man/man1/$1.1.gz -a -n $1 ; then
+       echo "ERROR: no MAN page entry for <$1>." 1>&2
+       exit 1
+    else
+       man "$GRASS_DOC_BASE"/man/man1/$1.1.gz
+    fi
+    g.message -e "No MAN page entry for <$1>."
+    exit 1
+  else
+    man "$GRASS_DOC_BASE"/man/man1/$1.1
+  fi
+}
+
+GRASS_DOC_BASE=`check_docbase "$GISBASE"`
+
+#hack for MacOSX:
+ISMAC=`echo "$GRASS_HTML_BROWSER" | grep "html_browser_mac.sh"`
+if [ ! -z "$ISMAC" ] ; then
+    BROWSERNAME=`echo "$GRASS_HTML_BROWSER_MACOSX" | cut -d . -f 3`
+#hack for Cygwin:
+elif [ "$OSTYPE" = "cygwin" ] ; then
+    BROWSERNAME=`basename "$GRASS_HTML_BROWSER" | sed 's/\.exe$//i'`
+else
+    BROWSERNAME="$GRASS_HTML_BROWSER"
+fi
+
+#keep order!
+#first test for index...
+if [ $GIS_FLAG_I -eq 1 ] ; then
+  if [ $GIS_FLAG_M -eq 1 ] ; then
+    start_man index
+    exit 0
+  else
+    start_browser index
+    exit 0
+  fi
+fi
+
+#... then for help parameter:
+if [ -z "$GIS_OPT_ENTRY" ] ; then
+ g.manual help
+ exit 0
+fi
+
+if [ $GIS_FLAG_M -eq 1 ] ; then
+  start_man "$GIS_OPT_ENTRY"
+else
+  start_browser "$GIS_OPT_ENTRY"
+fi
+
+exit 0

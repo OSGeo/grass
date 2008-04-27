@@ -1,0 +1,49 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.patch</em> allows the user to combine any number of
+vector map layers together to create one composite vector
+map layer.
+If the table structures are identical, attributes are
+transferred to the new table.
+
+<h2>NOTES</h2>
+
+Any vectors that are duplicated among the maps being
+patched together (e.g., border lines) will have to be
+edited or removed after <em>v.patch</em> is run.  Such
+editing can be done automatically using
+<em><a HREF="v.clean.html">v.clean</a></em> (tool=snap,break,rmdupl).
+
+
+<h2>EXAMPLES</h2>
+
+Patch together two maps with mixed feature types:
+<div class="code"><pre>
+   v.patch input=geology,streams out=geol_streams
+</pre></div>
+
+<BR>
+Append one map to another:
+<div class="code"><pre>
+   g.copy vect=roads,transport
+   v.patch -a input=railroads output=transport --overwrite
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="v.clean.html">v.clean</a></em>,
+<em><a HREF="v.build.html">v.build</a></em>,
+<em><a HREF="v.select.html">v.select</a></em>,
+<em><a HREF="v.overlay.html">v.overlay</a></em>
+
+
+<h2>AUTHORS</h2>
+
+Dave Gerdes, U.S.Army Construction Engineering 
+Research Laboratory
+<br>
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p>
+<i>Last changed: $Date$</i>

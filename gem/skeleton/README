@@ -1,0 +1,29 @@
+<NameOfExtension>
+Version <0.0.0>
+<Date>
+
+Author: <Author's name>
+	<Affiliation>
+	<Email>
+
+License: <GNU General Public License (GPL) or other>
+
+
+Installation:
+
+This is an extension for the open source Geographic Information System
+GRASS GIS version 6.0.0 and above (see http://grass.itc.it).
+It can be installed using the GRASS Extension Manager (GEM) tool, downloadable from:
+
+	http://www.uni-kiel.de/ufg/ufg_BerDucke.htm
+	
+See the README file for GEM for instructions on how to install and use the
+software.
+
+
+Description:
+
+<Short introductory text>
+
+	<r.foo>		- <short info on what r.foo does>
+	<..>		- <..>

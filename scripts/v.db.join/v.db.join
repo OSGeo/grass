@@ -1,0 +1,119 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       v.db.join
+# AUTHOR(S):    Markus Neteler
+# PURPOSE:      Join a table to a map table
+# COPYRIGHT:    (C) 2007 by Markus Neteler and the GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+#############################################################################
+
+#%Module
+#% description: Allows to join a table to a vector map table.
+#% keywords: vector, database, attribute table
+#%End
+
+#%option
+#% key: map
+#% type: string
+#% key_desc : name
+#% gisprompt: old,vector,vector
+#% description: Vector map to which to join other table
+#% required : yes
+#%end
+
+#%option
+#% key: layer
+#% type: integer
+#% description: Layer where to join
+#% answer: 1
+#% required : no
+#%end
+
+#%option
+#% key: column
+#% type: string
+#% description: Join column in map table
+#% required : yes
+#%end
+
+#%option
+#% key: otable
+#% type: string
+#% description: Other table name
+#% required : yes
+#%end
+
+#%option
+#% key: ocolumn
+#% type: string
+#% description: Join column in other table
+#% required : yes
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+ exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+driver=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f5`
+database=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f4`
+
+if [ "$driver" = "dbf" ] ; then
+   g.message -e "JOIN is not supported for tables stored in DBF format."
+   exit 1
+fi
+
+maptable=`v.db.connect -g map="$GIS_OPT_MAP" | grep "^$GIS_OPT_LAYER " | cut -d' ' -f2`
+if [ -z "$maptable" ] ; then
+   g.message 'There is no table connected to this map! Cannot join any column.'
+   cleanup
+   exit 1
+fi
+
+v.info --quiet -c "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | \
+   cut -d'|' -f1,2 | grep "|${GIS_OPT_column}$" 2>&1 >/dev/null
+
+if [ $? -ne 0 ] ; then
+    g.message -e "Column <$GIS_OPT_column> not found in table <$GIS_OPT_MAP> at layer $GIS_OPT_LAYER"
+    exit 1
+fi
+
+# we use map DBMI settings
+COLLIST=`db.describe  -c driver="$driver" database="$database" table="$GIS_OPT_otable" | grep '^Column ' | cut -d':' -f2`
+# heck, types may have white space
+COLTYPES=`db.describe -c driver="$driver" database="$database" table="$GIS_OPT_otable" | grep '^Column ' | cut -d':' -f3 | tr -s ' ' '_'`
+
+i=1
+for col in $COLLIST ; do
+  v.db.addcol "$GIS_OPT_MAP" col="$col `echo $COLTYPES | cut -d' ' -f$i | tr -s '_' ' '`"
+  if [ $? -ne 0 ] ; then
+	g.message -e "Cannot continue."
+	exit 1
+  fi
+  echo "UPDATE $maptable SET $col=(SELECT $col
+        FROM $GIS_OPT_otable WHERE $GIS_OPT_otable.$GIS_OPT_ocolumn=$maptable.$GIS_OPT_column);" | db.execute
+  i=`expr $i + 1`
+done
+
+# write cmd history:
+v.support "${GIS_OPT_MAP}" cmdhist="${CMDLINE}"
+
+exit 0

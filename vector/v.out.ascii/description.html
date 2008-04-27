@@ -1,0 +1,144 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.out.ascii</em> 
+converts a GRASS vector map in binary format to a GRASS vector map in ASCII 
+format. Using flag <b>-o</b> <em>v.out.ascii</em> output will be in old 
+(version 4) ASCII format.
+<P>
+If the <b>output</b> parameter is not given then the coordinates of any 
+<em>point</em> data within the vector map is sent to stdout.
+
+<h2>NOTES</h2>
+
+The GRASS program  <em><a HREF="v.in.ascii.html">v.in.ascii</a></em> 
+performs the function of <em>v.out.ascii</em> in reverse; i.e., it
+converts vector maps in ASCII format to their binary format. 
+These two companion programs are useful both for importing and exporting 
+vector maps between GRASS and other software, and for transferring data 
+between machines.
+
+<P>
+If the <b>format</b> parameter is set to <b>standard</b>, A GRASS ASCII vector map will be exported,
+which may contain a mix of primitives including points, lines, boundaries, centroids, areas, faces, 
+and kernels. The beginning of the output ascii file will contain a header listing any metadata for the
+input vector, if such metadata exists. An example of the <b>standard</b> format is given below.
+<P>
+The primitive codes are as follows:
+<UL>
+<LI>'P': point</LI>
+<LI>'L': line</LI>
+<LI>'B': boundary</LI>
+<LI>'C': centroid</LI>
+<LI>'F': face (3D boundary)</LI>
+<LI>'K': kernel (3D centroid)</LI>
+<LI>'A': area (boundary) - better use 'B'; kept only for backward compatibility</LI>
+
+</UL>
+
+The coordinates are listed following the initial line containing the
+primitive code, the total number of vectors in the series, and the number
+of categories (1 for a single layer, higher for multiple layers).
+Below that 1 or several lines follow to indicate the layer number and
+the category number (ID).
+<BR>
+<p> 
+The order of coordinates for new (standard) version of ASCII file is <BR><BR>
+X Y [Z]
+<BR><BR> 
+the order of coordinates for old version of ASCII file is <BR><BR>
+Y X
+
+<p>
+If old version is requested, the <B>output</B> files from <em>v.out.ascii</em> will be placed 
+in the <tt>$LOCATION/$MAPSET/dig_ascii/</tt> and <tt>$LOCATION/$MAPSET/dig_att</tt> directory.
+
+<p>
+Only features with a category number will be exported. Use <em>v.category</em>
+to add them if needed.
+
+<p>
+<em>v.out.ascii</em> does not copy the <em>dig_cats</em>
+file associated with the binary vector <em>input</em> map
+to the new <em>output</em> file name.  The user must copy
+the <em>dig_cats</em> file to the new <em>output</em> name
+if this is desired (e.g., using the UNIX <em>cp</em>
+command).
+
+<p>
+It is possible to output the coordinates of vertices in a non-points vector
+feature by first converting the vector feature to a points map with 
+<em>v.to.points</em> and then exporting with <em>v.out.ascii</em> in 
+<em>points</em> mode.
+
+<h2>EXAMPLES</h2>
+
+<h3>Example 1a) - standard mode - using the 'quads' vector from Spearfish dataset:</h3>
+
+<p>
+<div class="code"><pre>
+v.out.ascii input=quads format=standard
+
+ORGANIZATION: US Army Const. Eng. Rsch. Lab
+DIGIT DATE:   May 1987
+DIGIT NAME:   grass
+MAP NAME:     Quads
+MAP DATE:     May 1987
+MAP SCALE:    24000
+OTHER INFO:
+ZONE:         13
+MAP THRESH:   18.288000
+VERTI:
+B  4
+ 599587.1820962 4914067.53414294
+ 589639.15126831 4913922.5687301
+ 589440.96838162 4927803.62500018
+ 599375.87959179 4927959.83330436
+B  2
+ 599375.87959179 4927959.83330436
+ 599587.1820962 4914067.53414294
+B  4
+ 599587.1820962 4914067.53414294
+ 609541.5508239 4914236.0597482
+ 609316.10665227 4928116.8490555
+ 599375.87959179 4927959.83330436
+C  1 1
+ 594125.63    4921115.58
+ 1     1
+C  1 1
+ 604433.84    4921087.1
+ 1     2
+</pre></div>
+
+<h3>Example 1b) - point mode</h3>
+
+<p>
+<div class="code"><pre>
+v.out.ascii input=quads format=point
+
+594125.63|4921115.58|1
+604433.84|4921087.1|2
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a HREF="v.category.html">v.category</a><BR>
+<a HREF="v.in.ascii.html">v.in.ascii</a><BR>
+<a HREF="v.to.points.html">v.to.points</a></em><BR>
+<a HREF="http://freegis.org/cgi-bin/viewcvs.cgi/~checkout~/grass6/doc/vector/vector.html#ascii">Vector ASCII Format Specification</a>
+<BR><BR>
+
+
+<h2>AUTHORS</h2>
+
+Michael Higgins, 
+U.S. Army Construction Engineering 
+Research Laboratory
+<br>
+James Westervelt, 
+U.S. Army Construction Engineering 
+Research Laboratory
+<br>
+Radim Blazek, ITC-Irst, Trento, Italy
+
+<p><i>Last changed: $Date$</i>

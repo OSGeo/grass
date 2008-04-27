@@ -1,0 +1,15 @@
+/*! \page GRASS_SWIG_PYTHON GRASS SWIG/PYTHON interface
+
+<h2>GRASS SWIG/PYTHON interface</h2>
+
+At the moment a prototype is implemented. It permits to use
+some GRASS library functions directly from the PYTHON programming language.
+
+<h3>Status of GRASS SWIG/PYTHON implementation</h3>
+
+At the moment a prototype is implemented.
+<P>
+See: gisdefs.i
+
+*/
+

@@ -1,0 +1,108 @@
+<H2>DESCRIPTION</H2>
+
+<EM>r.cross</EM> creates an <EM>output</EM> raster map layer representing
+all unique combinations of category values in the raster input layers
+(input=</B><EM>name,name,name</EM>, ...).  At least two, but not more than
+ten, <EM>input</EM> map layers must be specified.  The user must also
+specify a name to be assigned to the <EM>output</EM> raster map layer
+created by <EM>r.cross</EM>.
+
+<H2>OPTIONS</H2>
+
+The program will be run non-interactively if the user specifies 
+the names of between 2-10 raster map layers be used as <EM>input</EM>,
+and the name of a raster map layer to hold program <EM>output</EM>.
+
+<P>
+
+With the <B>-z</B> flag zero data values are not crossed. 
+This means that if a zero category value occurs in any input data layer, 
+the combination is assigned to category zero in the resulting map layer, 
+even if other data layers contain non-zero data. 
+In the example given above, use of the <B>-z</B> option 
+would cause 3 categories to be generated instead of 5. 
+
+<P>
+
+If the <B>-z</B> flag is not specified, then map layer combinations 
+in which not all category values are zero will be assigned 
+a unique category value in the resulting map layer. 
+
+<P>
+
+Category values in the new <EM>output</EM> map layer will be the
+cross-product of the category values from these existing <EM>input</EM> map
+layers.
+
+<H2>EXAMPLE</H2>
+
+For example, suppose that, using two raster map layers, 
+the following combinations occur: 
+
+<PRE>
+          map1   map2
+          ___________
+           0      1
+           0      2
+           1      1
+           1      2
+           2      4
+</PRE>
+
+
+<EM>r.cross</EM> would produce a new raster map layer with 5 categories: 
+
+<PRE>
+          map1   map2   output
+          ____________________
+           0      1       1
+           0      2       2
+           1      1       3
+           1      2       4
+           2      4       5
+</PRE>
+
+Note: The actual category value assigned to a particular combination 
+in the <EM>result</EM> map layer is 
+dependent on the order in which the combinations occur in the input map 
+layer data and can be considered essentially random. 
+The example given here is illustrative only. 
+
+<H2>SUPPORT FILES</H2>
+
+The category file created for the <EM>output</EM> raster map 
+layer describes the 
+combinations of input map layer category values which generated 
+each category. 
+In the above example, the category labels would be: 
+
+<PRE>
+          category   category
+          value      label
+          ______________________________
+             1       layer1(0) layer2(1)
+             2       layer1(0) layer2(2)
+             3       layer1(1) layer2(1)
+             4       layer1(1) layer2(2)
+             5       layer1(2) layer2(4)
+</PRE>
+
+A random color table is also generated for the <EM>output</EM> map layer. 
+
+<H2>NOTES</H2>
+
+When run non-interactively, <EM>r.cross</EM> will not protect existing 
+files in the user's mapset. If the user specifies an <EM>output</EM> 
+file name that already exists in his mapset, the existing file will 
+be overwritten by the new <EM>r.cross</EM> output. 
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="r.covar.html">r.covar</A></EM>,
+<EM><A HREF="r.stats.html">r.stats</A></EM>
+
+<H2>AUTHOR</H2>
+
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
+
+<p><i>Last changed: $Date$</i>

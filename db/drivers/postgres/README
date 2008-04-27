@@ -1,0 +1,34 @@
+Postgres driver.
+
+This driver was originaly written by Alex Shevlakov using dbf driver
+(PostgreSQL driver forked from DBF driver by Radim Blazek).
+DBF driver was not good starting point, so I (R. Blazek) have rewritten it again
+using ODBC, postgres driver and adding new code.
+
+Driver supports only some field types, other types are ignored and warning is printed 
+by G_warning().
+
+FIELD TYPES:
+Field type code may change. See for example
+http://developer.postgresql.org/cvsweb.cgi/pgsql-server/src/include/catalog/pg_type.h
+
+Because of this, type codes must be read from server when database is opened.
+
+Check also for PostgreSQL data types for defining them in GRASS:
+ /usr/include/pgsql/server/catalog/pg_type.h
+
+
+Supported types in ./globals.h:
+(http://www.postgresql.org/docs/8.2/interactive/datatype.html)
+DB_C_TYPE_INT:
+bit, int2, smallint, int4, int, integer, int8, bigint, serial, oid
+
+DB_C_TYPE_DOUBLE:
+float4, real, float8, double precision, numeric, decimal
+
+DB_C_TYPE_STRING:
+character, char, character varying, varchar,  text, bool, boolean
+
+DB_C_TYPE_DATETIME:
+date, time, timestamp
+

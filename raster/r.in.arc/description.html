@@ -1,0 +1,42 @@
+<H2>DESCRIPTION</H2>
+
+<i>r.in.arc</i> allows a user to create a (binary) GRASS raster map layer
+from an ESRI ARC/INFO ascii GRID file with (optional) title.
+
+<p>
+The ARC/INFO ascii GRID file header has 6 lines:
+<div class="code"><pre>
+     ncols:
+     nrows:
+     xllcorner:
+     yllcorner:
+     cellsize:
+</pre></div>
+
+or alternatively (not supported by r.in.arc, but by
+<a href=r.in.gdal.html>r.in.gdal</a>):
+
+<div class="code"><pre>
+     ncols:
+     nrows:
+     xllcenter:
+     yllcenter:
+     cellsize:
+</pre></div>
+
+<h2>NOTES</h2>
+
+<i>r.in.arc</i> handles floating point cell values. The <b>mult</b>
+option allows the number of significant figures of a floating point cell
+to be increased before importing. Multiples of ten are the most functional
+multipliers.
+
+<h2>SEE ALSO</h2>
+
+<i><a href="r.in.gdal.html">r.in.gdal</a></i>
+<i><a href="r.out.arc.html">r.out.arc</a></i>
+
+<h2>AUTHOR</h2>
+Unknown German author, updated by Bill Brown to floating point support.
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,32 @@
+<H2>DESCRIPTION</H2>
+
+<p>
+<EM>r.resamp.stats</EM> fills a grid cell (raster) matrix with
+aggregated values generated from a set of input layer data points.
+</p>
+
+<P>
+Without the <EM>-w</EM> switch, the aggregate is computed over all of
+the input cells whose centers lie within the output cell.
+</P>
+<P>
+With the <EM>-w</EM> switch, the aggregate uses the values from all
+input cells which intersect the output cell, weighted according to the
+proportion of the source cell which lies inside the output cell. This
+is slower, but produces a more accurate result.
+</p>
+
+<H2>NOTES</H2>
+
+<H2>SEE ALSO</H2>
+
+<EM><a href="g.region.html">g.region</a></EM>,
+<EM><a href="r.resample.html">r.resample</a></EM>,
+<EM><a href="r.resamp.rst.html">r.resamp.rst</a></EM>
+<EM><a href="r.resamp.interp.html">r.resamp.interp</a></EM>
+
+<H2>AUTHOR</H2>
+
+Glynn Clements
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>PNG driver</TITLE>
+ <META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</HEAD>
+<BODY bgColor=white>
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<H2>NAME</H2>
+<EM><B> PNG driver</B></EM> - driver to create PNG and PPM images.
+<BR><EM>(drivers)</EM> 
+
+<H2>DESCRIPTION</H2>
+
+The PNG driver generates PNG and PPM images from GRASS display commands.
+Per default PNG files are written with this driver. It is started as 'pseudo' monitor
+(image file instead) and when stopped, all output from previously used
+display commands are written to the PNG image file.
+
+<H2>USAGE</H2>
+
+<H3>Environment variables</H3>
+Several environment variables effect the operation 
+of the PNG driver. 
+<UL>
+  <LI><B>GRASS_WIDTH=xxx</B><BR>
+     the width of the image map (default is 640).</LI><BR>
+  <LI><B>GRASS_HEIGHT=yyy</B><BR>
+    the height of the image map (default is 480).</LI><BR>
+  <LI><B>GRASS_PNGFILE=filename</B><BR>
+     the filename to put the resulting image in, default is <tt>map.png</tt>.
+     If you set GRASS_PNGFILE to a filename which ends in ".ppm", a PPM 
+     file will be created.<br><br> 
+  <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
+     specifies the background color to use in RGB
+     notation (hex values). Default is <b>000000</b> (black).<br><br>
+  <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
+    sets transparent background on (TRUE) or off (FALSE, default).</LI><BR>
+  <LI><B>GRASS_TRUECOLOR=[TRUE|FALSE]</B><BR>
+    sets true-color support</LI><BR>
+  <LI><B>GRASS_PNG_COMPRESSION=[0|1|9]</B><BR>
+    compression level of PNG files (0 = none, 1 = fastest, 9 = best, default is 6)</LI><BR>
+  <LI><B>GRASS_PNG_AUTO_WRITE=[TRUE|FALSE]</B><BR>
+     if set to <tt>TRUE</tt>, the image file will be written after each 
+     operation (i.e. whenever a client disconnects), rather than
+     only being written out when the driver terminates.</LI><BR>
+  <LI><B>GRASS_PNG_READ</B><BR>
+     if <tt>TRUE</tt>, the PNG driver will initialize the image from
+     the contents of GRASS_PNGFILE.</LI><BR>
+  <LI><B>GRASS_PNG_MAPPED</B><BR>
+     if <tt>TRUE</tt>, the PNG driver will map GRASS_PNGFILE as its framebuffer,
+     rather than using memory. This only works with BMP files.</LI><BR>
+  <LI><B>GRASS_RENDER_IMMEDIATE=[TRUE|FALSE]</B><BR>
+     tells the raster library to use its built-in PNG driver rather
+     than connecting to an external monitor process using sockets. If
+     <tt>TRUE</tt>, there is no need to run <tt>d.mon start=PNG</tt>.
+</UL>
+
+<H3>Example</H3>
+<OL>
+  <LI>Define driver settings (here: bash shell syntax)
+<DIV class="code"><PRE>
+export GRASS_RENDER_IMMEDIATE=TRUE
+export GRASS_TRUECOLOR=TRUE
+</PRE></DIV>
+  </LI>
+  <LI>Start up the driver
+<DIV class="code"><PRE>
+d.mon start=PNG
+</PRE></DIV>
+  </LI>
+  <LI>Display raster map and vector polygons
+<DIV class="code"><PRE>
+d.rast <i>somerastermap</i>
+d.vect <i>somevectormap</i> color=red
+</PRE></DIV>
+  </LI>
+  <LI> Stop the driver subsequently. This will write a 
+    file named <tt>map.png</tt> to be created in your current directory:
+<DIV class="code"><PRE>
+d.mon stop=PNG
+</PRE></DIV>
+  </LI>
+</OL>
+
+<H2>NOTES</H2> 
+
+The PNG driver uses the libpng (see the <a href="http://www.libpng.org/pub/png/">libpng</a>
+home page) and zlib (see the 
+<a href="http://www.zlib.net">zlib</a> home page), all which needs to
+be installed for the PNG driver to work (it's worth it).
+<p>
+The resolution of the <i>PNG</i> raster map is defined by the map
+extents. Use <em>g.region -p</em> to get the number of rows and cols and
+use the environment variables to set the PNG size. If you would like a
+larger image, multiply both rows and cols by the same whole number to
+preserve the aspect ratio.
+<p>
+Further PNG file processing (e.g. quantization to 1 bit for monochrome images)
+can be done with 'pnmquant' of the <a href="http://netpbm.sourceforge.net/">netpbm</a> tools.
+
+<h2>SEE ALSO</h2>
+<EM>
+  <a href="displaydrivers.html">Display drivers</a>
+  <br>
+  <A HREF="htmlmapdriver.html">HTMLMAP driver</A>,
+  <A HREF="psdriver.html">PostScript driver</A>,
+  <A href="xdriver.html">XDRIVER</A>
+  <BR>
+  <A HREF="d.frame.html">d.frame</A>,
+  <A href="d.mon.html">d.mon</A>,
+  <A href="d.rast.html">d.rast</A>,
+  <A href="d.vect.html">d.vect</A>
+</EM>
+
+<H2>AUTHOR</H2>
+Original version: Per Henrik Johansen &lt;<I>phj (at) norgit.no</I>&gt; <I><a href="http://www.norgit.no">NORGIT AS</a></I>
+<BR>
+Rewritten by: Glynn Clements, 2003
+
+<p>
+<i>Last changed: $Date$</i>

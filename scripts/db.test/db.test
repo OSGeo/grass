@@ -1,0 +1,90 @@
+#!/bin/sh
+############################################################################
+#
+# MODULE:	db.test
+# AUTHOR(S):	Radim Blazek
+# PURPOSE:	Test database driver
+# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+#
+#		This program is free software under the GNU General Public
+#		License (version 2). Read the file COPYING that comes with GRASS
+#		for details.
+#
+#############################################################################
+
+#% Module
+#%  description: Test database driver, database must exist and set by db.connect.
+#%  keywords: database, attribute table
+#% End
+#% option
+#%  key: test
+#%  type: string
+#%  description: Test name
+#%  required : yes
+#%  options : test1
+#% end
+
+if test "$GISBASE" = ""; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+if   [ "$1" != "@ARGS_PARSED@" ]
+then
+        exec g.parser "$0" "$@"
+fi
+
+test_file="$GIS_OPT_TEST"
+
+expected=`g.tempfile pid=$$`
+result=`g.tempfile pid=$$`
+
+while read TYPE
+do
+    read SQL
+    echo "$SQL"
+
+    # Copy expected result to temp file
+
+    cat /dev/null > "$expected"
+
+    if [ $TYPE = "X" ]
+    then
+        echo "$SQL" | db.execute
+    else
+        echo "$SQL" | db.select -c > "$result"
+    fi
+
+    if [ $? -ne 0 ]
+    then
+        g.message -e "EXECUTE: ******** ERROR ********" 
+    else
+        g.message "EXECUTE: OK" 
+    fi
+
+    while read RES
+    do
+	if [ -z "$RES" ]
+        then
+	    break
+        fi
+	echo $RES >> "$expected"
+    done
+
+    if [ $TYPE = "S" ]
+    then
+	diff "$result" "$expected"
+
+	if [ $? -ne 0 ]
+	then
+            g.message -e "RESULT: ******** ERROR ********" 
+	else
+            g.message "RESULT: OK" 
+	fi
+    fi
+
+done < "$GISBASE/etc/db.test/$test_file"
+
+
+exit 0
+

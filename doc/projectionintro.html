@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <title>Projections in GRASS GIS</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta name="Author" content="Markus Neteler/GRASS Development Team">
+ <link rel="stylesheet" href="grassdocs.css" type="text/css">
+</head>
+<body bgcolor="white">
+
+<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
+
+<!-- file source:
+     ./doc/projectionintro.html
+-->
+
+
+<h2>Projections and spatial transformations in GRASS GIS</h2>
+
+<h3>Introduction</h3>
+
+A GRASS location is referenced with a single projection and coordinate system
+(or unreferenced as XY location). When creating a new location from an existing
+raster or vector map using the tools available from the startup screen or
+the map import commands, projection and coordinate system are defined.
+To change the projection of maps, a new location has to be created and
+the desired maps have to be reprojected into it from the source location
+as explained below.
+
+<h3>Raster map projections</h3>
+
+Raster maps are backward projected in GRASS. This means that the
+user has to run the raster projection command (<a href=r.proj.html>r.proj</a>)
+in the target location and "pull" the map from the source location.
+Both locations need to have a projection defined.
+
+<h3>Raster map transformation</h3>
+
+To transform an unprojected map from a XY location into a projected
+location (or another XY location), a forward transformation is performed.
+The unreferenced map is geocoded within the XY location by defining 
+four corner points or by seeking several ground control points
+(<a href="i.group.html">i.group</a>, <a href="i.target.html">i.target</a>,
+ <a href="i.points.html">i.points</a>) and then transformed into the
+target location (<a href="i.rectify.html">i.rectify</a>). Polynomial
+transformation of 1st, 2nd and 3rd order are supported.
+<P>
+A graphical user interface is provided by <a href="gis.m.html">gis.m</a>.
+<P>
+To simply translate a raster map (without stretching or rotation), the
+<a href="r.region.html">r.region</a> command can be used.
+
+
+<h3>Vector map projections</h3>
+
+Vector maps are backward projected in GRASS. This means that the
+user has to run the vector projection command (<a href=v.proj.html>v.proj</a>)
+in the target location and "pull" the map from the source location.
+Both locations need to have a projection defined.
+
+<h3>Vector map transformation</h3>
+
+To transform an unprojected map (e.g. CAD map) into projected coordinates,
+a forward transformation is performed. The unreferenced map is imported
+into the location with projection and geocoded within this location by 
+defining  four corner points or by seeking several ground control points.
+These points are stored into an ASCII file and then transformed within 
+the same location (<a href="v.transform.html">v.transform</a>).
+<P>
+A graphical user interface is provided by <a href="gis.m.html">gis.m</a>.
+
+<h3>References</h3>
+
+<ul>
+<li> <a href="http://www.asprs.org/resources/grids/">ASPRS Grids and Datum</a>
+<li> <a href="http://www.remotesensing.org/geotiff/proj_list/">Projections Transform List</a> (PROJ4)
+<li> <a href="http://www.mapref.org">MapRef - The Collection of Map Projections and Reference Systems for Europe</a>
+<li> <a href="http://crs.bkg.bund.de/crs-eu/">Information and Service System for European Coordinate Reference Systems - CRS</a>
+</ul>
+
+
+<h3>See also</h3>
+
+<ul>
+<li><a href=rasterintro.html>Introduction to GRASS raster map processing</a></li>
+<li><a href=imageryintro.html>Introduction to GRASS image processing</a></li>
+<li><a href=vectorintro.html>Introduction to GRASS vector map processing</a></li>
+</ul>
+
+<HR>
+<P><a href="index.html">Main index</a> - <a href="full_index.html">full index</a>
+<P>&copy; 2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></P>
+</body>
+</html>

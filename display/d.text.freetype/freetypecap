@@ -1,0 +1,26 @@
+# FreeType2 definition file for d.text.freetype
+#
+# FORMAT:
+#	font:fontpath:charset:description
+#	*default_font:fontpath:charset:description
+#
+# NOTE:
+#	It does not allow spaces, tabs, and multiple lines in one font.
+#	description is never used.
+#	DO NOT ADD A DEFAULT FONT IN THE CVS VERSION. :-)
+#
+luximr:/usr/X11R6/lib/X11/fonts/TTF/luximr.ttf:iso-8859-1:
+luxirr:/usr/X11R6/lib/X11/fonts/TTF/luxirr.ttf:iso-8859-1:
+luxisr:/usr/X11R6/lib/X11/fonts/TTF/luxisr.ttf:iso-8859-1:
+luximb:/usr/X11R6/lib/X11/fonts/TTF/luximb.ttf:iso-8859-1:
+luxirb:/usr/X11R6/lib/X11/fonts/TTF/luxirb.ttf:iso-8859-1:
+luxisb:/usr/X11R6/lib/X11/fonts/TTF/luxisb.ttf:iso-8859-1:
+luximri:/usr/X11R6/lib/X11/fonts/TTF/luximri.ttf:iso-8859-1:
+luxirri:/usr/X11R6/lib/X11/fonts/TTF/luxirri.ttf:iso-8859-1:
+luxisri:/usr/X11R6/lib/X11/fonts/TTF/luxisri.ttf:iso-8859-1:
+luximbi:/usr/X11R6/lib/X11/fonts/TTF/luximbi.ttf:iso-8859-1:
+luxirbi:/usr/X11R6/lib/X11/fonts/TTF/luxirbi.ttf:iso-8859-1:
+luxisbi:/usr/X11R6/lib/X11/fonts/TTF/luxisbi.ttf:iso-8859-1:
+batang:/usr/X11R6/lib/X11/fonts/TTF/batang.ttc:euc-kr:
+dotum:/usr/X11R6/lib/X11/fonts/TTF/dotum.ttc:euc-kr:
+gulim:/usr/X11R6/lib/X11/fonts/TTF/gulim.ttc:euc-kr:

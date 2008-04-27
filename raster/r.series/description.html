@@ -1,0 +1,66 @@
+<H2>DESCRIPTION</H2>
+
+
+<EM>r.series</EM> makes each output cell value a function of the values
+assigned to the corresponding cells in the input raster map layers.
+Following methods are available:
+
+<ul> 
+ <li>average: average value
+ <li>count: count of non-NULL cells
+ <li>median: median value
+ <li>mode: most frequently occuring value
+ <li>minimum: lowest value
+ <li>maximum: highest value
+ <li>range: range of values (max - min)
+ <li>stddev: standard deviation
+ <li>sum: sum of values
+ <li>variance: statistical variance
+ <li>diversity: number of different values
+ <li>slope: linear regression slope
+ <li>offset: linear regression offset
+ <li>detcoeff: linear regression coefficient of determination
+ <li>min_raster: raster map number with the minimum time-series value
+ <li>max_raster: raster map number with the maximum time-series value
+ </ul> 
+
+<H2>NOTES</H2>
+
+With <EM>-n</EM> flag, any cell for which any of the corresponding input cells are
+NULL is automatically set to NULL (NULL propagation). The aggregate function is not
+called, so all methods behave this way with respect to the <EM>-n</EM> flag.
+<P>
+Without <EM>-n</EM> flag, the complete list of inputs for each cell (including
+NULLs) is passed to the aggregate function. Individual aggregates can
+handle data as they choose. Mostly, they just compute the aggregate
+over the non-NULL values, producing a NULL result only if all inputs
+are NULL.
+<p>
+The <EM>min_raster</EM> and <EM>max_raster</EM> methods generate a map with the
+number of the raster map that holds the minimum/maximum value of the
+time-series. The numbering starts at <EM>0</EM> up to <EM>n</EM> for the
+first and the last raster listed in <EM>input=</EM>, respectively. 
+
+
+
+<H2>EXAMPLE</H2>
+
+Using <EM>r.series</EM> with wildcards:
+<br>
+<tt>r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
+    output=insitu_data.stddev method=stddev</tt>
+<P>
+
+Note the <EM>g.mlist</EM> script also supports regular expressions for 
+selecting map names.
+
+<H2>SEE ALSO</H2>
+
+<EM><A HREF="g.mlist.html">g.mlist</A></EM>,
+<EM><A HREF="g.region.html">g.region</A></EM>
+
+<H2>AUTHOR</H2>
+
+Glynn Clements
+
+<p><i>Last changed: $Date$</i>

@@ -1,0 +1,56 @@
+<H2>DESCRIPTION</H2>
+
+v.hull computes the convex hull of a vector points map and outputs the
+convex hull polygon as a vector area map. The convex hull, or convex envelope,
+for an object or a set of objects is the minimal convex set containing the
+given objects. This module creates a vector polygon containing all vector
+points of the input map.
+<P>
+In the case of 3D input points, the hull will be a 3D hull as well, unless the
+user specifies the <b>-f</b> flag. The 3D hull will be composed of triangular
+faces.
+<P>
+
+<BR>
+Example of <em>v.hull</em> output:
+<center>
+<img src=v_hull.png border=1><BR>
+<table border=0 width=590>
+<tr><td><center>
+<i>Convex hull polygon created with v.hull</i>
+</center></td></tr>
+</table>
+</center>
+
+<H2>EXAMPLE</H2>
+
+Example of <em>v.hull</em> 3D output (using two random 3D point clouds):
+<div class="code"><pre>
+g.region rural_1m -p
+r.mapcalc zero=0
+v.random -z out=random3d_a n=10 zmin=0 zmax=200
+v.random -z out=random3d_b n=15 zmin=400 zmax=600
+v.hull random3d_a out=random3d_a_hull
+v.hull random3d_b out=random3d_b_hull
+nviz zero vect=random3d_a_hull,random3d_b_hull
+</pre></div>
+
+<H2>REFERENCES</H2>
+<EM>M. de Berg, M. van Kreveld, M. Overmars, O. Schwarzkopf,  (2000). 
+ Computational geometry, chapter 1.1, 2-8.</EM>
+
+<BR>
+
+<EM>J. O'Rourke, (1998). 
+ Computational Geometry in C (Second Edition), chapter 4.</EM>
+
+<H2>SEE ALSO</H2>
+<EM>
+<A HREF="v.delaunay.html">v.delaunay</A></EM>
+
+<H2>AUTHOR</H2>
+Andrea Aime, Modena, Italy<br>
+Markus Neteler, ITC-irst (update to 5.7)<br>
+Benjamin Ducke, CAU Kiel (3D hull support)
+
+<p><i>Last changed: $Date$</i></p>
