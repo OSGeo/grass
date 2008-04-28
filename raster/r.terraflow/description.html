@@ -1,38 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<title>r.terraflow</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body bgcolor="white">
-
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-
-<H2>NAME</H2> <B><I>r.terraflow </I></B>- computation of <i>flow
-direction</i>, <i>flow accumulation</i> and other basic topographic terrain
-indices from a raster digital elevation model (DEM).
-
-<P><I>(GRASS Raster Program)</I>
-
-<H2>SYNOPSIS</H2>
-<B>r.terraflow</B>
-<BR>
-<B>r.terraflow</B> help</br>
-<BR>
-<B>r.terraflow</b> <b>[ -sq ]</b>
-<b>elev</b>=name
-<b>filled</b>=name
-<b>direction</b>=name
-<b>swatershed</b>=name
-<b>accumulation</b>=name
-<b>tci</b>=name
-[<b>d8cut</b>=value]
-[<b>memory</b>=value]
-[<b>STREAM_DIR</b>=name]
-[<b>stats</b>=name]
-
-
 <H2>DESCRIPTION</H2>
 
 <p><EM>r.terraflow</EM> takes as input a raster digital elevation
@@ -61,13 +26,15 @@ neighbor. The MFD method assigns multiple flow directions towards all
 downslope neighbors.
 
 <p>
-<table width=80%>
-<tr>
-<th><img src="rterraflow_dir2.png" alt="[SFD]" border=0></td>
-<th><img src="rterraflow_dir3.png" alt="[SFD]" border=0></td>
-<tr>
-<th>Flow direction to steepest<br> downslope neighbor (SFD).</th>
-<th>Flow direction to all<br> downslope neighbors (MFD).</th>
+<table width=80% align=center>
+ <tr>
+  <th><img src="rterraflow_dir2.png" alt="[SFD]" border=0></th>
+  <th><img src="rterraflow_dir3.png" alt="[SFD]" border=0></th>
+ </tr>
+ <tr>
+  <th>Flow direction to steepest<br> downslope neighbor (SFD).</th>
+  <th>Flow direction to all<br> downslope neighbors (MFD).</th>
+ </tr>
 </table>
 
 
@@ -86,7 +53,8 @@ terrain.
 
 </ul>
 
-<p>In order to flood the terrain, <EM>r.terraflow</EM> identifies all
+<p>
+In order to flood the terrain, <EM>r.terraflow</EM> identifies all
 sinks and partitions the terrain into sink-watersheds (a
 sink-watershed contains all the cells that flow into that sink),
 builds a graph representing the adjacency information of the
@@ -97,115 +65,34 @@ a sink-less terrain in which every cell has a downslope flow path
 leading outside the terrain and therefore every cell in the terrain
 can be assigned SFD/MFD flow directions as above.
 
-<p>Once flow directions are computed for every cell in the terrain,
+<p>
+Once flow directions are computed for every cell in the terrain,
 <EM>r.terraflow</EM> computes flow accumulation by routing water using
 the flow directions and keeping track of how much water flows through
 each cell.
 
-<EM>r.terraflow</EM> also computes the tci raster (topographic convergence
-index, defined as the logarithm of the ratio of flow accumulation and
-local slope).
-
-<p>For more details on the algorithms see [1,2,3].
-
-
-<H2>OPTIONS</H2>
-
-The program will run non-interactively if the user specifies program
-arguments and flag settings on the command line using the following
-form:
-
-<P><B>r.terraflow</b> <b>[ -sq ]</b>
-<b>elev</b>=name
-<b>filled</b>=name
-<b>direction</b>=name
-<b>swatershed</b>=name
-<b>accumulation</b>=name
-<b>tci</b>=name
-[<b>d8cut</b>=value]
-[<b>memory</b>=value]
-[<b>STREAM_DIR</b>=name]
-[<b>stats</b>=name]
-
-
-
-<P>Alternatively, the user can simply type <EM>r.terraflow</EM> on the
-command line and the program will ask for parameter values and flag
-settings interactively, using the standard GRASS parser interface.
-
-
-<H3>Flags:</H3>
-<dl>
-  <dt><B>-s</B>
-  <dd>Use SFD (D8) flow. By default MFD flow is used. 
-  <dt><B>-q</B>
-  <dd>Run quietly (do not display status messages). By default
-<EM>r.terraflow</EM> is run verbosely.  </dl>
-
-
-<H3>Parameters:</H3>
-<dl>
- <dt><B>elev</B>=<I>name</I>
- <dd>Input elevation raster. Required.</dd>
-
- <dt><b>filled</b>=<I>name</I>
- <dd> Output filled (flooded) elevation raster. Required.</dd>
-
- <dt><b>direction</b> =<I>name</I>
- <dd> Output flow direction raster. Required.</dd>
-
- <dt><b>swatershed</b> =<I>name</I>
- <dd> Output sink-watershed raster. Required.</dd>
-
- <dt><b>accumulation </b> =<I>name</I>
- <dd>Output flow accumulation raster. Required.</dd>
-
- <dt><b>tci</b> =<I>name</I>
- <dd> Output topographic convergence index (tci) raster. Required.</dd>
-
- <dt>[<b>d8cut</b> =<I>value</I>]
- <dd> If flow accumulation of a cell is larger than this value, then
+<P>
+If flow accumulation of a cell is larger than the value given by the
+<b>d8cut</b> option, then
 the flow of this cell is routed to its neighbors using the SFD (D8)
 model. This option affects only the flow accumulation raster and is
 meaningfull only for MFD flow (i.e. if the -s flag is not used); If
 this option is used for SFD flow it is ignored. The default value of
-<b>d8cut</b> is <i>infinity</i>. </dd>
+<b>d8cut</b> is <i>infinity</i>.
 
- <dt>[<b>memory</b> =<I>value (in MB)</I>]
- <dd> The main memory size (in MB) to be used by
-<EM>r.terraflow</EM>. In practice <I>value</I> should be an
-underestimate of the amount of available (free) main memory on the
-machine. <EM>r.terraflow</EM> will use at all times at most this much
-memory, and the virtual memory system will never be in use. The
-default value is 300 MB. </dd>
+<P>
+<EM>r.terraflow</EM> also computes the tci raster (topographic convergence
+index, defined as the logarithm of the ratio of flow accumulation and
+local slope).
 
- <dt>[<b>STREAM_DIR</b> =<I>path name</I>]
- <dd> Location of the intermediate files generated by
-<EM>r.terraflow</EM>.  The default location is <i>/var/tmp</i>. </dd>
+<p>
+For more details on the algorithms see [1,2,3] below.
 
- <dt>[<b>stats</b> =<I>name</I>]
- <dd> The name of the file that contains the statistics (stats) of the
-run. The default name is <i>stats.out</i> (in the current
-directory). </dd>
 
-</dl>
-      
-
-<H3>Examples</H3>
-
-<ul>
-  <li> <B>r.terraflow</b> elev=spearfish filled=spearfish-filled
-       dir=spearfish-mfdir swatershed=spearfish-watershed
-       accumulation=spearfish-accu tci=spearfish-tci
-  <li> <B>r.terraflow</b> elev=spearfish filled=spearfish-filled
-       dir=spearfish-mfdir swatershed=spearfish-watershed
-       accumulation=spearfish-accu tci=spearfish-tci d8cut=500 memory=800
-       STREAM-DIR=/var/tmp/ stats=spearfish-stats.txt 
-</ul>
 
 <H2>NOTES</H2>
 
-<p>One of the techniques used by <EM>r.terraflow</EM> is the
+One of the techniques used by <EM>r.terraflow</EM> is the
 space-time trade-off. In particular, in order to avoid searches, which
 are I/O-expensive, <EM>r.terraflow</EM> computes and works with an
 augmented elevation raster in which each cell stores relevant
@@ -213,22 +100,31 @@ information about its 8 neighbors, in total up to 80B per cell.  As a
 result <EM>r.terraflow</EM> works with intermediate temporary files
 that may be up to 80N bytes, where N is the number of cells (rows x
 columns) in the elevation raster (more precisely, 80K bytes, where K
-is the number of valid (not nodata) cells in the input elevation
+is the number of valid (not no-data) cells in the input elevation
 raster).
+<P>
+All these intermediate temporary files are stored in the path specified
+by the <b>STREAM_DIR</b> option. Note: <b>STREAM_DIR</b> must contain
+enough free disk space in order to store up to 2 x 80N bytes.
 
-All this intermediate temporary files are stored in the path specified
-by <b>STREAM_DIR</b>. Note: <b>STREAM_DIR</b> must contain enough free
-disk space in order to store up to 2 x 80N bytes.
+<P>
+The <b>memory</b> option can be used to set the maximum amount of main
+memory (RAM) the module will use during processing. In practice its
+<I>value</I> should be an underestimate of the amount of available
+(free) main memory on the machine. <EM>r.terraflow</EM> will use at
+all times at most this much memory, and the virtual memory system
+(swap space) will never be used. The default value is 300 MB.
 
-
-<p>The internal type used by <EM>r.terraflow</EM> to store elevations
+<p>
+The internal type used by <EM>r.terraflow</EM> to store elevations
 can be defined at compile-time.  By default, <EM>r.terraflow</EM> is
 compiled to store elevations internally as floats.
 A version which is compiled to store elevations internally as
 shorts is available as <EM>r.terraflow.short</EM>. Other versions can
 be created by the user if needed. 
 
-<p><EM>r.terraflow.short</EM> uses less space (up to 60B per cell, up
+<p>
+<EM>r.terraflow.short</EM> uses less space (up to 60B per cell, up
 to 60N intermediate file) and therefore is more space and time
 efficient.  <EM>r.terraflow</EM> is intended for use with floating
 point raster data (FCELL), and <EM>r.terraflow.short</EM> with integer
@@ -236,7 +132,8 @@ raster data (CELL) in which the maximum elevation does not exceed the
 value of a short SHRT_MAX=32767 (this is not a constraint for any
 terrain data of the Earth, if elevation is stored in meters).
 
-<p>Both <EM>r.terraflow</EM> and <EM>r.terraflow.short</EM> work with
+<p>
+Both <EM>r.terraflow</EM> and <EM>r.terraflow.short</EM> work with
 input elevation rasters which can be either integer, floating point or
 double (CELL, FCELL, DCELL). If the input raster contains a value that
 exceeds the allowed internal range (short for
@@ -247,14 +144,36 @@ input elevation raster are in range, they will be converted
 <EM>r.terraflow.short</EM>, float for <EM>r.terraflow</EM>). In this
 case precision may be lost and artificial flat areas may be created.
 
-<p>For instance, if <EM>r.terraflow.short</EM> is used with floating
+<p>
+For instance, if <EM>r.terraflow.short</EM> is used with floating
 point raster data (FCELL or DCELL), the values of the elevation will
 be truncated as shorts. This may create artificial flat areas, and the
 outpus of <EM>r.terraflow.short</EM> may be less realistic than those
 of <EM>r.terraflow</EM> on floating point raster data.
 
 The outputs of <EM>r.terraflow.short</EM> and <EM>r.terraflow</EM> are
-identical on integer raster data (CELL).
+identical for integer raster data (CELL maps).
+
+<P>
+The <b>stats</b> option defines the name of the file that contains the
+statistics (stats) of the run. The default name is <tt>stats.out</tt>
+(in the current directory).
+
+
+<H2>EXAMPLES</H2>
+
+<div class="code"><pre>
+ r.terraflow elev=spearfish filled=spearfish-filled \
+    dir=spearfish-mfdir swatershed=spearfish-watershed \
+    accumulation=spearfish-accu tci=spearfish-tci
+</pre></div>
+
+<div class="code"><pre>
+ r.terraflow elev=spearfish filled=spearfish-filled \
+    dir=spearfish-mfdir swatershed=spearfish-watershed \
+    accumulation=spearfish-accu tci=spearfish-tci d8cut=500 memory=800 \
+    STREAM-DIR=/var/tmp/ stats=spearfish-stats.txt 
+</pre></div>
 
 
 
@@ -266,8 +185,8 @@ href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke Univ
   <li><a href=r.flow.html>r.flow</a>,
        <A HREF="r.basins.fill.html">r.basins.fill</A>,
        <A HREF="r.drain.html">r.drain</A>,
-       <a href="r.topidx.html>r.topidx</a>,
-       <a href="r.topmodel.html>r.topmodel</a>,
+       <a href="r.topidx.html">r.topidx</a>,
+       <a href="r.topmodel.html">r.topmodel</a>,
        <A HREF="r.water.outlet.html">r.water.outlet</A>,
        <A HREF="r.watershed.html">r.watershed</A>
 </ul>
@@ -326,6 +245,5 @@ href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke Univ
        
 </ol>
 
-<p><i>Last changed: $Date$</i>
-</body>
-</html>
+<p>
+<i>Last changed: $Date$</i>
