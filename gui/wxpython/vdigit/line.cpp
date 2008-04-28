@@ -26,7 +26,7 @@ extern "C" {
 
    \param type   feature type
    \param coords pairs of coordinates list (2D or 3D map)
-   \param layer  layer number
+   \param layer  layer number (layer < 1 -> no category)
    \param cat    category number
    \param bgmap  map of background map or NULL
    \param snap   snapping mode (see vedit.h)
@@ -66,10 +66,6 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	return -1;
     }
 
-    if (layer < -1) {
-	return -1;
-    }
-
     BgMap = NULL;
     nbgmaps = 0;
     if (bgmap && strlen(bgmap) > 0) {
@@ -85,10 +81,12 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_cat_set(Cats, layer, cat);
+    if (layer > 0) {
+      Vect_cat_set(Cats, layer, cat);
 
-    if (cat > GetCategory(layer)) {
-	SetCategory(layer, cat); /* set up max category for layer */
+      if (cat > GetCategory(layer)) {
+	  SetCategory(layer, cat); /* set up max category for layer */
+      }
     }
 
     i = 0;

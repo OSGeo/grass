@@ -5,7 +5,7 @@ CLASSES:
     * AbstractToolbar
     * MapToolbar
     * GRToolbar
-    * DigitToolbar
+    * VDigitToolbar
     * ProfileToolbar
     
 PURPOSE: Toolbars for Map Display window
@@ -25,9 +25,9 @@ import os, sys
 import globalvar
 import gcmd
 import grassenv
-import digit
 import gdialogs
-from digit import DigitSettingsDialog as DigitSettingsDialog
+import vdigit
+from vdigit import VDigitSettingsDialog as VDigitSettingsDialog
 from debug import Debug as Debug
 from icon import Icons as Icons
 from preferences import globalSettings as UserSettings
@@ -255,7 +255,7 @@ class GRToolbar(AbstractToolbar):
         if tool == "Digitize" and not self.mapdisplay.digittoolbar:
             self.mapdisplay.AddToolbar("digit")
 
-class DigitToolbar(AbstractToolbar):
+class VDigitToolbar(AbstractToolbar):
     """
     Toolbar for digitization
     """
@@ -408,14 +408,14 @@ class DigitToolbar(AbstractToolbar):
         
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
-        Debug.msg (2, "DigitToolbar.OnAddPoint()")
+        Debug.msg (2, "VDigitToolbar.OnAddPoint()")
         self.action = "addLine"
         self.type   = "point"
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnAddLine(self, event):
         """Add line to the vector map layer"""
-        Debug.msg (2, "DigitToolbar.OnAddLine()")
+        Debug.msg (2, "VDigitToolbar.OnAddLine()")
         self.action = "addLine"
         self.type   = "line"
         self.parent.MapWindow.mouse['box'] = 'line'
@@ -423,7 +423,7 @@ class DigitToolbar(AbstractToolbar):
 
     def OnAddBoundary(self, event):
         """Add boundary to the vector map layer"""
-        Debug.msg (2, "DigitToolbar.OnAddBoundary()")
+        Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
         self.action = "addLine"
         self.type   = "boundary"
         self.parent.MapWindow.mouse['box'] = 'line'
@@ -431,7 +431,7 @@ class DigitToolbar(AbstractToolbar):
 
     def OnAddCentroid(self, event):
         """Add centroid to the vector map layer"""
-        Debug.msg (2, "DigitToolbar.OnAddCentroid()")
+        Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
         self.action = "addLine"
         self.type   = "centroid"
         self.parent.MapWindow.mouse['box'] = 'point'
@@ -541,13 +541,13 @@ class DigitToolbar(AbstractToolbar):
         """Show settings dialog"""
 
         if self.parent.digit is None:
-            reload(digit)
-            from digit import Digit as Digit
+            reload(vdigit)
+            from vdigit import Digit as Digit
             self.parent.digit = Digit(mapwindow=self.parent.MapWindow)
             
         if not self.settingsDialog:
-            self.settingsDialog = DigitSettingsDialog(parent=self.parent, title=_("Digitization settings"),
-                                                      style=wx.DEFAULT_DIALOG_STYLE)
+            self.settingsDialog = VDigitSettingsDialog(parent=self.parent, title=_("Digitization settings"),
+                                                       style=wx.DEFAULT_DIALOG_STYLE)
             self.settingsDialog.Show()
 
     def OnAdditionalToolMenu(self, event):
@@ -712,8 +712,8 @@ class DigitToolbar(AbstractToolbar):
         @return True on success
         @return False on error
         """
-        reload(digit)
-        from digit import Digit as Digit
+        reload(vdigit)
+        from vdigit import Digit as Digit
         self.parent.digit = Digit(mapwindow=self.parent.MapWindow)
         try:
             self.layerSelectedID = self.layers.index(layerSelected)
@@ -733,7 +733,7 @@ class DigitToolbar(AbstractToolbar):
         self.parent.maptoolbar.combo.SetValue ('Digitize')
         # set initial category number for new features (layer=1), etc.
 
-        Debug.msg (4, "DigitToolbar.StartEditing(): layerSelectedID=%d layer=%s" % \
+        Debug.msg (4, "VDigitToolbar.StartEditing(): layerSelectedID=%d layer=%s" % \
                    (self.layerSelectedID, mapLayer.name))
 
 
@@ -760,7 +760,7 @@ class DigitToolbar(AbstractToolbar):
 
         if self.layers[self.layerSelectedID] == layerSelected:
             self.layerSelectedID = None
-            Debug.msg (4, "DigitToolbar.StopEditing(): layer=%s" % \
+            Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % \
                        (layerSelected.name))
             self.combo.SetValue (_('Select vector map'))
 
@@ -768,7 +768,7 @@ class DigitToolbar(AbstractToolbar):
             if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
                 if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
                     dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
-                                                                         "to vector map <%s>?") % layerSelected.name,
+                                                                         "in vector map <%s>?") % layerSelected.name,
                                            caption=_("Save changes?"),
                                            style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
                     if dlg.ShowModal() == wx.ID_NO:
@@ -806,7 +806,7 @@ class DigitToolbar(AbstractToolbar):
         Optionaly also update toolbar
         """
 
-        Debug.msg (4, "DigitToolbar.UpdateListOfLayers(): updateTool=%d" % \
+        Debug.msg (4, "VDigitToolbar.UpdateListOfLayers(): updateTool=%d" % \
                    updateTool)
 
         layerNameSelected = None

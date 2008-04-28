@@ -226,7 +226,7 @@ class ProfileFrame(wx.Frame):
                 self.raster[r]['name'] = dlg.raster[r]['name']
 
             # plot profile
-            if self.raster[0]['name']:
+            if self.raster[0]['name'] and len(self.mapwin.polycoords) > 0:
                 self.OnCreateProfile(event=None)
 
         dlg.Destroy()
@@ -728,15 +728,15 @@ class SetRasterDialog(wx.Dialog):
         self.parent = parent
         self.coordstr = self.parent.coordstr
 
-        if self.coordstr == '':
-            dlg = wx.MessageDialog(parent=self,
-                                   message=_('You must draw a transect to profile in the map display window.'),
-                                   caption=_('Nothing to profile'),
-                                   style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
-            dlg.ShowModal()
-            dlg.Destroy()
-            self.Close(True)
-            return
+        #         if self.coordstr == '':
+        #             dlg = wx.MessageDialog(parent=self,
+        #                                    message=_('You must draw a transect to profile in the map display window.'),
+        #                                    caption=_('Nothing to profile'),
+        #                                    style=wx.OK | wx.ICON_INFORMATION | wx.CENTRE)
+        #             dlg.ShowModal()
+        #             dlg.Destroy()
+        #             self.Close(True)
+        #             return
 
         self.raster = { 0 : { 'name' : self.parent.raster[0]['name'],
                               'id' : None },

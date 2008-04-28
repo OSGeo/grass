@@ -132,13 +132,13 @@ class Settings:
                 'addRecord' : { 'enabled' : True },
                 'layer' : {'value' : 1 },
                 'category' : {'value' : 1 },
-                'categoryMode' : {'value' : 'Next to use' },
+                'categoryMode' : {'selection' : 0 },
                 # delete existing feature(s)
                 'delRecord' : { 'enabled' : True },
                 # query tool
-                'query'       : { 'type' : 'length', 'box' : True },
-                'queryLength' : { 'than' : 'shorter than', 'thresh' : 0 },
-                'queryDangle' : { 'than' : 'shorter than', 'thresh' : 0 },
+                'query'       : { 'selection' : 0, 'box' : True },
+                'queryLength' : { 'than-selection' : 0, 'thresh' : 0 },
+                'queryDangle' : { 'than-selection' : 0, 'thresh' : 0 },
                 # select feature (point, line, centroid, boundary)
                 'selectFeaturePoint'    : { 'enabled' : True },
                 'selectFeatureLine'     : { 'enabled' : True },
