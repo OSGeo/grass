@@ -60,9 +60,9 @@ import profile
 import globalvar
 import utils
 import gdialogs
-from digit import DigitCategoryDialog as DigitCategoryDialog
-from digit import DigitZBulkDialog    as DigitZBulkDialog
-from digit import GV_LINES            as Digit_Lines_Type
+from vdigit import VDigitCategoryDialog as VDigitCategoryDialog
+from vdigit import VDigitZBulkDialog    as VDigitZBulkDialog
+from vdigit import GV_LINES            as VDigit_Lines_Type
 from debug import Debug               as Debug
 from icon  import Icons               as Icons
 from preferences import globalSettings as UserSettings
@@ -1094,20 +1094,20 @@ class BufferedWindow(wx.Window):
                     if self.parent.dialogs['category'] is None:
                         # open new dialog
                         if digitClass.type == 'vedit':
-                            self.parent.dialogs['category'] = DigitCategoryDialog(parent=self,
-                                                                             map=map,
-                                                                             query=(coords, qdist),
-                                                                             pos=posWindow,
-                                                                             title=_("Update categories"))
+                            self.parent.dialogs['category'] = VDigitCategoryDialog(parent=self,
+                                                                                   map=map,
+                                                                                   query=(coords, qdist),
+                                                                                   pos=posWindow,
+                                                                                   title=_("Update categories"))
                         else:
                             if digitClass.driver.SelectLineByPoint(coords,
                                                                    digitClass.GetSelectType()) is not None:
-                                self.parent.dialogs['category'] = DigitCategoryDialog(parent=self,
-                                                                                 map=map,
-                                                                                 cats=digitClass.GetLineCats(),
-                                                                                 line=digitClass.driver.GetSelected()[0],
-                                                                                 pos=posWindow,
-                                                                                 title=_("Update categories"))
+                                self.parent.dialogs['category'] = VDigitCategoryDialog(parent=self,
+                                                                                       map=map,
+                                                                                       cats=digitClass.GetLineCats(),
+                                                                                       line=digitClass.driver.GetSelected()[0],
+                                                                                       pos=posWindow,
+                                                                                       title=_("Update categories"))
                             
                     else:
                         # update currently open dialog
@@ -1267,7 +1267,7 @@ class BufferedWindow(wx.Window):
                 # -> delete line || move line || move vertex
                 if digitToolbar.action in ["moveVertex", "editLine"]:
                     if len(digitClass.driver.GetSelected()) == 0:
-                        nselected = digitClass.driver.SelectLineByPoint(pos1, type=Digit_Lines_Type)
+                        nselected = digitClass.driver.SelectLineByPoint(pos1, type=VDigit_Lines_Type)
                         if digitToolbar.action == "editLine":
                             self.UpdateMap(render=False)
                             selVertex = digitClass.driver.GetSelectedVertex(pos1)[0]
@@ -1290,7 +1290,7 @@ class BufferedWindow(wx.Window):
                 elif digitToolbar.action == "copyCats":
                     if not hasattr(self, "copyCatsIds"):
                         # collect categories
-                        nselected = digitClass.driver.SelectLineByPoint(pos1, type=Digit_Lines_Type)
+                        nselected = digitClass.driver.SelectLineByPoint(pos1, type=VDigit_Lines_Type)
                         if nselected:
                             qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / \
                                                 self.Map.width)
@@ -1360,7 +1360,7 @@ class BufferedWindow(wx.Window):
 
             elif digitToolbar.action in ["splitLine", "addVertex", "removeVertex"]:
                 pointOnLine = digitClass.driver.SelectLineByPoint(pos1,
-                                                                  type=Digit_Lines_Type)
+                                                                  type=VDigit_Lines_Type)
                 if pointOnLine:
                     self.UpdateMap(render=False) # highlight object
                     if digitToolbar.action in ["splitLine", "addVertex"]:
@@ -1643,8 +1643,8 @@ class BufferedWindow(wx.Window):
                 pos2 = self.polycoords[1]
 
                 selected = digitClass.driver.GetSelected()
-                dlg = DigitZBulkDialog(parent=self, title=_("Z bulk-labeling dialog"),
-                                       nselected=len(selected))
+                dlg = VDigitZBulkDialog(parent=self, title=_("Z bulk-labeling dialog"),
+                                        nselected=len(selected))
                 if dlg.ShowModal() == wx.ID_OK:
                     digitClass.ZBulkLine(pos1, pos2, dlg.value.GetValue(), dlg.step.GetValue())
 
@@ -2396,7 +2396,7 @@ class MapFrame(wx.Frame):
                               CloseButton(False).Layer(2))
 
         elif name == "digit":
-            self.digittoolbar = toolbars.DigitToolbar(self, self.Map, self.tree)
+            self.digittoolbar = toolbars.VDigitToolbar(self, self.Map, self.tree)
 
             for toolRow in range(0, self.digittoolbar.numOfRows):
                 self._mgr.AddPane(self.digittoolbar.toolbar[toolRow],

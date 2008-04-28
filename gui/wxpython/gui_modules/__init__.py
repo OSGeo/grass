@@ -1,6 +1,5 @@
 all = [ "dbm",
         "debug",
-        "digit",
         "disp_print",
         "gcmd",
         "georect",
@@ -22,5 +21,6 @@ all = [ "dbm",
         "toolbox",
         "track",
         "utils",
+        "vdigit",
         "workspace",
         "wxgui_utils" ]
