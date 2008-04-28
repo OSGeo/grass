@@ -64,57 +64,38 @@ parse_args(int argc, char *argv[]) {
 
   /* input elevation grid  */
   struct Option *input_elev;
-  input_elev = G_define_option() ;
-  input_elev->key        = "elev";
-  input_elev->type       = TYPE_STRING;
-  input_elev->required   = YES;
-  input_elev->gisprompt  = "old,cell,raster" ;
-  input_elev->description= _("Input elevation grid");
+  input_elev = G_define_standard_option(G_OPT_R_ELEV);
 
   /* output filled elevation grid */
   struct Option *output_elev;
-  output_elev = G_define_option() ;
+  output_elev = G_define_standard_option(G_OPT_R_OUTPUT);
   output_elev->key        = "filled";
-  output_elev->type       = TYPE_STRING;
-  output_elev->required   = YES;
-  output_elev->gisprompt  = "new,cell,raster" ;
-  output_elev->description= _("Output (filled) elevation grid");
+  output_elev->description= _("Output filled (flooded) elevation raster map");
   
  /* output direction  grid */
   struct Option *output_dir;
-  output_dir = G_define_option() ;
+  output_dir = G_define_standard_option(G_OPT_R_OUTPUT);
   output_dir->key        = "direction";
-  output_dir->type       = TYPE_STRING;
-  output_dir->required   = YES;
-  output_dir->gisprompt  = "new,cell,raster" ;
-  output_dir->description= _("Output direction grid");
+  output_dir->description= _("Output flow direction raster map");
 
   /* output sinkwatershed  grid */
   struct Option *output_watershed;
-  output_watershed = G_define_option() ;
+  output_watershed = G_define_standard_option(G_OPT_R_OUTPUT);
   output_watershed->key        = "swatershed";
-  output_watershed->type       = TYPE_STRING;
-  output_watershed->required   = YES;
-  output_watershed->gisprompt  = "new,cell,raster" ;
-  output_watershed->description= _("Output sink-watershed grid");
+  output_watershed->description= _("Output sink-watershed raster map");
 
   /* output flow accumulation grid */
   struct Option *output_accu;
-  output_accu = G_define_option() ;
+  output_accu = G_define_standard_option(G_OPT_R_OUTPUT);
   output_accu->key        = "accumulation";
-  output_accu->type       = TYPE_STRING;
-  output_accu->required   = YES;
-  output_accu->gisprompt  = "new,cell,raster" ;
-  output_accu->description= _("Output accumulation grid");
+  output_accu->description= _("Output flow accumulation raster map");
 
 #ifdef OUTPUT_TCI
   struct Option *output_tci;
-  output_tci = G_define_option() ;
+  output_tci = G_define_standard_option(G_OPT_R_OUTPUT);
   output_tci->key        = "tci";
-  output_tci->type       = TYPE_STRING;
-  output_tci->required   = YES;
-  output_tci->gisprompt  = "new,cell,raster" ;
-  output_tci->description= _("Output tci grid");
+  output_tci->description=
+    _("Output topographic convergence index (tci) raster map");
 #endif
 
   /* MFD/SFD flag */
@@ -142,7 +123,7 @@ parse_args(int argc, char *argv[]) {
   mem->type        = TYPE_INTEGER;
   mem->required    = NO;
   mem->answer      = "300"; /* 300MB default value */
-  mem->description = _("Main memory size (in MB)");
+  mem->description = _("Maximum runtime memory size (in MB)");
 
   /* temporary STREAM path */
   struct Option *streamdir;
@@ -151,7 +132,8 @@ parse_args(int argc, char *argv[]) {
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
   streamdir->answer     = "/var/tmp"; 
-  streamdir->description= _("Location of intermediate STREAMs");
+  streamdir->description=
+     _("Directory to hold temporary files (they can be large)");
 
   /* verbose flag */
   /* please, remove before GRASS 7 released */
@@ -164,15 +146,13 @@ parse_args(int argc, char *argv[]) {
  /* stats file */
   struct Option *stats_opt;
   stats_opt = G_define_option() ;
-  stats_opt->key = "stats";
+  stats_opt->key        = "stats";
   stats_opt->type       = TYPE_STRING;
   stats_opt->required   = NO;
-  stats_opt->description= _("Stats file");
+  stats_opt->description= _("Name of file containing runtime statistics");
   stats_opt->answer     = "stats.out";
 
 
-
-  /* ************************* */
   if (G_parser(argc, argv)) {
     exit (EXIT_FAILURE);
   }
