@@ -17,7 +17,7 @@ helptext.html \
 r.watershed.ram \
 r.watershed.seg \
 gis.m \
-wxGUI.*html \
+wxGUI.* \
 d.paint.labels \
 p.out.vrml \
 r.cats"
