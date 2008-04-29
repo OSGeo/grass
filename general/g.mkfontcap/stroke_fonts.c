@@ -67,8 +67,7 @@ void find_stroke_fonts(void)
     	if (totalfonts >= maxfonts)
     	{
     	    maxfonts += 20;   
-            fontcap = (struct GFONT_CAP *) G_realloc(fontcap, 
-		                         maxfonts * sizeof(struct GFONT_CAP));
+            fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
     	}        
        
         /* Path */
@@ -137,8 +136,8 @@ static int load_font_descriptions(const char *descfile)
         if( num_descriptions >= memsize )
 	{
 	    memsize += 20;
-	    font_descriptions = (struct font_desc *) G_realloc( 
-		      font_descriptions, memsize * sizeof(struct font_desc) );
+	    font_descriptions = G_realloc(font_descriptions,
+					  memsize * sizeof(struct font_desc) );
 	}
        
         font_descriptions[num_descriptions].filename = G_store(name);
