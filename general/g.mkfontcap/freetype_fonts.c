@@ -115,8 +115,7 @@ static void find_fonts(const char *dirpath)
                 if (totalfonts >= maxfonts)
                 {
 	            maxfonts += 20;
-		    fontcap = (struct GFONT_CAP *) G_realloc(fontcap, 
-		                         maxfonts * sizeof(struct GFONT_CAP));
+		    fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
                 }
 
 	        if (FT_New_Face(ftlibrary, filepath, index, &face) == 0)
