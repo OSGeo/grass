@@ -35,7 +35,7 @@ class GMConsole(wx.Panel):
     Create and manage output console for commands entered on the
     GIS Manager command line.
     """
-    def __init__(self, parent, id=wx.ID_ANY, margin=False,
+    def __init__(self, parent, id=wx.ID_ANY, margin=False, pageid=0,
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE):
         wx.Panel.__init__(self, parent, id, pos, size, style)
@@ -45,7 +45,8 @@ class GMConsole(wx.Panel):
         self.parent          = parent # GMFrame
         self.cmdThreads      = {}     # cmdThread : cmdPID
         self.lineWidth       = 80
-        
+        self.pageid          = pageid
+
         # progress bar
         self.console_progressbar = wx.Gauge(parent=self, id=wx.ID_ANY,
                                             range=100, pos=(110, 50), size=(-1, 25),
@@ -60,11 +61,13 @@ class GMConsole(wx.Panel):
         ### sys.stdout = self.cmd_stdout
         self.cmd_stderr = GMStderr(self.cmd_output,
                                    self.console_progressbar,
-                                   self.parent.notebook)
+                                   self.parent.notebook,
+                                   pageid)
+
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
             sys.stderr = self.cmd_stderr
-        
+
         # buttons
         self.console_clear = wx.Button(parent=self, id=wx.ID_CLEAR)
         self.console_save  = wx.Button(parent=self, id=wx.ID_SAVE)
@@ -194,10 +197,11 @@ class GMConsole(wx.Panel):
                                                        lcmd=cmdlist)
 
             else: # other GRASS commands (r|v|g|...)
-                if self.parent.notebook.GetSelection() != 1:
-                    # select 'Command output' tab
-                    self.parent.notebook.SetSelection(1)
-                
+                if hasattr(self.parent, "curr_page"):
+                    # change notebook page only for Layer Manager
+                    if self.parent.notebook.GetSelection() != 1:
+                        self.parent.notebook.SetSelection(1)
+
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 tmpreg = os.getenv("GRASS_REGION")
@@ -224,9 +228,10 @@ class GMConsole(wx.Panel):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-            if self.parent.notebook.GetSelection() != 1:
-                # select 'Command output' tab
-                self.parent.notebook.SetSelection(1)
+            if hasattr(self.parent, "curr_page"):
+                # change notebook page only for Layer Manager
+                if self.parent.notebook.GetSelection() != 1:
+                    self.parent.notebook.SetSelection(1)
 
             print "$ " + ' '.join(cmdlist)
             
@@ -287,8 +292,10 @@ class GMConsole(wx.Panel):
     def OnResult(self, event):
         """Show result status"""
         
-        if event.cmdThread is None:
+        if event.cmdThread.aborted:
             # Thread aborted (using our convention of None return)
+            self.WriteLog(_('Please note that the data are left in incosistent stage '
+                            'and can be corrupted'), self.cmd_output.StyleWarning)
             self.WriteCmdLog(_('Command aborted'),
                              pid=self.cmdThreads[event.cmdThread]['cmdPID'])
         else:
@@ -297,8 +304,14 @@ class GMConsole(wx.Panel):
                              pid=self.cmdThreads[event.cmdThread]['cmdPID'])
 
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
-        if hasattr(self.parent.parent, "btn_run"): # menuform.mainFrame
+
+        # updated command dialog
+        if hasattr(self.parent.parent, "btn_run"):
             dialog = self.parent.parent
+
+            if hasattr(self.parent.parent, "btn_abort"):
+                dialog.btn_abort.Enable(False)
+
             dialog.btn_run.Enable(True)
             if dialog.get_dcmd is None and \
                    dialog.closebox.IsChecked():
@@ -342,14 +355,17 @@ class GMStderr:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
-    def __init__(self, gmstc, gmgauge, notebook):
+    def __init__(self, gmstc, gmgauge, notebook, pageid):
         self.gmstc    = gmstc
         self.gmgauge  = gmgauge
         self.notebook = notebook
+        self.pageid   = pageid
 
     def write(self, s):
-        if self.notebook.GetSelection() != 1: # command output
-            self.notebook.SetSelection(1)
+        if self.pageid > -1:
+            # swith notebook page to 'command output'
+            if self.notebook.GetSelection() != self.pageid: 
+                self.notebook.SetSelection(self.pageid)
 
         s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
@@ -434,7 +450,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         wx.stc.StyledTextCtrl.__init__(self, parent, id)
         self.parent = parent
         self.wrap = wrap
-        
+
         #
         # styles
         #

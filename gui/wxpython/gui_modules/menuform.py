@@ -643,13 +643,13 @@ class mainFrame(wx.Frame):
             self.btn_run.SetToolTipString(_("Run the command"))
             self.btn_run.SetDefault()
             # abort
-            btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
-            btn_abort.SetToolTipString(_("Abort the running command"))
+            self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
+            self.btn_abort.SetToolTipString(_("Abort the running command"))
             # copy
             btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
             btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
 
-            btnsizer.Add(item=btn_abort, proportion=0,
+            btnsizer.Add(item=self.btn_abort, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
 
@@ -662,7 +662,7 @@ class mainFrame(wx.Frame):
                          border=10)
 
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-            btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
+            self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
             btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
 
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER)
@@ -741,6 +741,10 @@ class mainFrame(wx.Frame):
         if cmd == [] or cmd == None:
             return
 
+        # change page if needed
+        if self.notebookpanel.notebook.GetSelection() != self.notebookpanel.goutput.pageid:
+            self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutput.pageid)
+
         if cmd[0][0:2] != "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents
@@ -753,19 +757,19 @@ class mainFrame(wx.Frame):
         else:
             gcmd.Command(cmd)
 
-        # if self.standalone:
-        # change page if needed
-        if self.notebookpanel.notebook.GetSelection() != self.notebookpanel.outpageid:
-            self.notebookpanel.notebook.SetSelection(self.notebookpanel.outpageid)
-
+        # update buttons status
         self.btn_run.Enable(False)
-        
+        self.btn_abort.Enable(True)
+
     def OnAbort(self, event):
         """Abort running command"""
         try:
             self.goutput.GetListOfCmdThreads()[0].abort()
         except IndexError:
             pass
+
+        self.btn_run.Enable(True)
+        self.btn_abort.Enable(False)
 
     def OnCopy(self, event):
         """Copy the command"""
@@ -872,9 +876,9 @@ class cmdPanel(wx.Panel):
         # are we running from command line?
         ### add 'command output' tab regardless standalone dialog
         if self.parent.get_dcmd is None:
-            self.goutput = goutput.GMConsole(parent=self, margin=False)
+            self.goutput = goutput.GMConsole(parent=self, margin=False,
+                                             pageid=self.notebook.GetPageCount())
             self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output") )
-            self.outpageid = self.notebook.GetPageCount() - 1
         else:
             self.goutput = None
 
@@ -883,7 +887,7 @@ class cmdPanel(wx.Panel):
         self.notebook.AddPage(self.manual_tab, text=_("Manual"))
         self.manual_tab_id = self.notebook.GetPageCount() - 1
 
-        self.notebook.SetSelection(0)
+        wx.CallAfter(self.notebook.SetSelection, 0)
         panelsizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND )
 
         #

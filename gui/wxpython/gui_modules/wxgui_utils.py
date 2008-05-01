@@ -48,9 +48,6 @@ except:
 
 TREE_ITEM_HEIGHT = 25
 
-# define event for GRASS console (running GRASS command in separate thread)
-(UpdateGMConsoleEvent, EVT_UPDATE_GMCONSOLE) = wx.lib.newevent.NewEvent()
-
 class LayerTree(CT.CustomTreeCtrl):
     """
     Creates layer tree structure
@@ -89,7 +86,8 @@ class LayerTree(CT.CustomTreeCtrl):
 
         # init associated map display
         self.mapdisplay = mapdisp.MapFrame(self,
-                                           id=wx.ID_ANY, pos=wx.DefaultPosition, size=(680, 520),
+                                           id=wx.ID_ANY, pos=wx.DefaultPosition,
+                                           size=globalvar.MAP_WINDOW_SIZE,
                                            style=wx.DEFAULT_FRAME_STYLE,
                                            tree=self, notebook=self.notebook,
                                            gismgr=self.gismgr, page=self.treepg,
@@ -1096,9 +1094,6 @@ class LayerTree(CT.CustomTreeCtrl):
             self.mapdisplay.OnRender(None)
 
         # item.SetHeight(TREE_ITEM_HEIGHT)
-
-    def setNotebookPage(self,pg):
-        self.parent.notebook.SetSelection(pg)
 
     def OnCloseWindow(self, event):
         pass
