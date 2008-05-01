@@ -494,6 +494,8 @@ class CommandThread(Thread):
         self.rerr   = ''
 
         self._want_abort = False
+        self.aborted = False
+
         self.startTime = None
 
         self.setDaemon(True)
@@ -502,7 +504,7 @@ class CommandThread(Thread):
         """Run command"""
         if len(self.cmd) == 0:
             return
-
+        
         self.startTime = time.time()
         # TODO: wx.Exectute/wx.Process (?)
         try:
@@ -558,10 +560,11 @@ class CommandThread(Thread):
         while self.module.poll() is None:
             time.sleep(.1)
             if self._want_abort: # abort running process
+                self.module.kill()
+                self.aborted = True
                 if hasattr(self.stderr, "gmstc"):
-                    self.module.kill()
                     # -> GMConsole
-                    wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(None))
+                    wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
                 return 
             if self.stdout:
                 # line = self.__read_all(self.module.stdout)
@@ -587,10 +590,7 @@ class CommandThread(Thread):
 
         if hasattr(self.stderr, "gmstc"):
             # -> GMConsole
-            if self._want_abort: # abort running process
-                wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(None))
-            else:
-                wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
+            wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
 
     def abort(self):
         """Abort running process, used by main thread to signal an abort"""

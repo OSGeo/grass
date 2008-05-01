@@ -117,9 +117,8 @@ class GMFrame(wx.Frame):
         self.encoding      = 'ISO-8859-1' # default encoding for display fonts
         self.workspaceFile = workspace    # workspace file
         self.menucmd       = {}           # menuId / cmd
-        self.georectifying = False        # says whether we're running the georectifier
-        self.gr            = ""           # ID of georectify instance
-
+        self.georectifying = None         # reference to GCP class or None
+        
         # creating widgets
         # -> self.notebook, self.goutput, self.outpage
         self.notebook  = self.__createNoteBook()
@@ -294,7 +293,7 @@ class GMFrame(wx.Frame):
         self.notebook.AddPage(self.gm_cb, text=_("Map layers for each display"))
 
         # create command output text area and add it to main notebook page
-        self.goutput = goutput.GMConsole(self)
+        self.goutput = goutput.GMConsole(self, pageid=1)
         self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output"))
 
         # bingings
@@ -341,8 +340,7 @@ class GMFrame(wx.Frame):
         """
         Launch georectifier module
         """
-        self.gr = georect.GeorectWizard(self)
-        self.georectifying = True
+        georect.GeorectWizard(self)
         
     def OnMapsets(self, event):
         """
@@ -1424,9 +1422,6 @@ class GMFrame(wx.Frame):
 
         # show map display
         self.curr_page.maptree.mapdisplay.Show()
-
-    def GetSelectedDisplay(self):
-        return self.notebook.GetSelection()
 
     def OnDeleteLayer(self, event):
         """
