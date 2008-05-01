@@ -1,23 +1,23 @@
 """
-MODULE:    gis_set.py
+@package gis_set.py
 
-CLASSES:
-    * GRASSStartup
-    * HelpWindow
-    * StartUp
+GRASS start-up screen.
 
-PURPOSE:   Initialization module for wxPython GRASS GUI.
-           Location/mapset management (selection, creation, etc.).
+Initialization module for wxPython GRASS GUI.
+Location/mapset management (selection, creation, etc.).
 
-AUTHORS:   The GRASS Development Team
-           Michael Barton
-           Jachym Cepicky
-           Martin Landa <landa.martin gmail.com>
+Classes:
+ - GRASSStartup
+ - HelpWindow
+ - StartUp
 
 COPYRIGHT: (C) 2006-2008 by the GRASS Development Team
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
+
+@author Michael Barton and Jachym Cepicky (original author)
+Martin Landa <landa.martin gmail.com> (various updates)
 """
 
 import os
@@ -644,7 +644,7 @@ class GRASSStartup(wx.Frame):
 
         dlg = wx.TextEntryDialog(parent=self,
                                  message=_('Enter name for new mapset:'),
-                                 caption='Rename selected mapset')
+                                 caption=_('Create new mapset'))
 
         if dlg.ShowModal() == wx.ID_OK:
             mapset = dlg.GetValue()
