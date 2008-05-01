@@ -483,6 +483,7 @@ int main (int argc, char *argv[])
 	        sprintf( szBandName, "%s.%d", output, nBand);
 
             ImportBand( hBand, szBandName, &ref );
+
             if (title)
                 G_put_cell_title (szBandName, title);
         }
@@ -936,7 +937,7 @@ static void ImportBand( GDALRasterBandH hBand, const char *output,
            /* found 0..255 data: we set to grey scale: */
            struct Colors    colors;
         
-           G_debug (1, "Setting grey color table for %s (8bit, full range)", output );
+           G_verbose_message (_("Setting grey color table for <%s> (8bit, full range)"), output);
 
            G_init_colors (&colors);
            G_make_grey_scale_colors (&colors, 0, 255); /* full range */
@@ -949,7 +950,7 @@ static void ImportBand( GDALRasterBandH hBand, const char *output,
            struct Range     range;
            CELL             min, max;
         
-           G_debug (1, "Setting grey color table for %s (16bit, image range)", output );
+           G_verbose_message (_("Setting grey color table for <%s> (16bit, image range)"), output );
            G_read_range( (char *) output, G_mapset(), &range) ;
            G_get_range_min_max (&range, &min, &max);
 
@@ -958,5 +959,9 @@ static void ImportBand( GDALRasterBandH hBand, const char *output,
            G_write_colors( (char *) output, G_mapset(), &colors);
         }
     }
+
+    G_message(_("<%s> created"), output);
+
+    return;
 }
 
