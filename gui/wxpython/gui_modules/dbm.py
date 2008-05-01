@@ -3030,16 +3030,22 @@ class VectorDBInfo:
         # list of available layers & (table, database, driver)
         for line in layerCommand.ReadStdOutput():
             lineList = line.split(' ')
-            if '/' in lineList[0]:
-                lineList[0], layer_name = lineList[0].split('/')
+            layer = lineList[0]
+            if '/' in layer:
+                layer, layer_name = lineList[0].split('/')
             else:
                 layer_name = None
-            self.layers[int(lineList[0])] = {
+            # database can contain ' ' in it's path
+            if len(lineList) > 5:
+                database = ''.join(lineList[3:-1])
+            else:
+                database = lineList[3]
+            self.layers[int(layer)] = {
                 "name"     : layer_name,
                 "table"    : lineList[1],
                 "key"      : lineList[2],
-                "database" : lineList[3],
-                "driver"   : lineList[4]
+                "database" : database,
+                "driver"   : lineList[-1]
                 }
             
         if (len(self.layers.keys()) == 0):
