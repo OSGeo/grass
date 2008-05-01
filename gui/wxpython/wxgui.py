@@ -580,8 +580,11 @@ class GMFrame(wx.Frame):
             file = open(filename, "r")
 
             fileStream = ''.join(file.readlines())
-            p = re.compile( '(grass-gxw.dtd)')
+            p = re.compile('(grass-gxw.dtd)')
             p.search(fileStream)
+            if subprocess.mswindows:
+                # FIXME mixing '\' and '/' causes error in p.sub
+                dtdFilename = dtdFilename.replace("\\", "/") 
             fileStream = p.sub(dtdFilename, fileStream)
 
             # sax
