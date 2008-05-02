@@ -89,7 +89,7 @@ class GMConsole(wx.Panel):
                       flag=wx.EXPAND | wx.ALIGN_CENTRE_VERTICAL | wx.TOP | wx.BOTTOM,
                       border=5)
         boxsizer1.Add(item=self.console_progressbar, proportion=0,
-                      flag=wx.EXPAND | wx.ADJUST_MINSIZE, border=0)
+                      flag=wx.EXPAND | wx.ADJUST_MINSIZE | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         boxsizer1.Fit(self)
         boxsizer1.SetSizeHints(self)
