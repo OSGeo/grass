@@ -68,10 +68,10 @@ int main(int argc, char **argv)
 	G_gisinit(argv[0]);
 
 	module = G_define_module();
-	module->keywords = _("raster");
-    module->description =
-		_("Combines red, green and blue map layers into "
-		"a single composite map layer.");
+	module->keywords = _("raster, composite");
+	module->description =
+	  _("Combines red, green and blue map layers into "
+	    "a single composite raster map.");
 
 	for (i = 0; i < 3; i++)
 	{
@@ -120,11 +120,7 @@ int main(int argc, char **argv)
 		opt->description= G_store(buff);
 	}
 
-	opt_out = G_define_option();
-	opt_out->key        = "output";
-	opt_out->type       = TYPE_STRING;
-	opt_out->required   = YES;
-	opt_out->gisprompt  = "new,cell,raster";
+	opt_out = G_define_standard_option(G_OPT_R_OUTPUT);
 	opt_out->description= _("Name of raster map to contain results");
 
 	flg_d = G_define_flag();
@@ -204,6 +200,8 @@ int main(int argc, char **argv)
 	/* Make color table */
 	make_color_cube(&out_colors);
 
+	G_message(_("Writing raster map <%s>..."), out_name);
+
 	for (atrow = 0; atrow < window.rows; atrow++)
 	{
 		G_percent(atrow, window.rows, 2);
@@ -218,7 +216,7 @@ int main(int argc, char **argv)
 				    b->array[1],
 				    b->array[2],
 				    nulls) < 0)
-				G_fatal_error(_("Error reading '%s' map"), color_names[i]);
+				G_fatal_error(_("Error reading raster map <%s>"), color_names[i]);
 
 			if (dither)
 			{
@@ -272,7 +270,7 @@ int main(int argc, char **argv)
 		}
 
 		if(G_put_raster_row(out_file, out_array, CELL_TYPE) < 0)
-			G_fatal_error(_("G_put_raster_row failed (file system full?)"));
+		        G_fatal_error(_("Failed writing raster map <%s>"), out_name);
 	}
 
 	G_percent(window.rows, window.rows, 5);
@@ -288,6 +286,7 @@ int main(int argc, char **argv)
 	G_command_history(&history);
 	G_write_history(out_name, &history);
 
+	G_done_msg(" ");
 
 	exit(EXIT_SUCCESS);
 }
@@ -311,6 +310,8 @@ static void make_color_cube(struct Colors *colors)
 	int i = 0;
 
 	G_init_colors(colors);
+
+	G_message(_("Creating color table for output raster map..."));
 
 	for (b = 0; b < nb; b++)
 	{
