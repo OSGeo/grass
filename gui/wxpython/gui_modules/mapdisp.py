@@ -231,7 +231,7 @@ class BufferedWindow(wx.Window):
         self.dragid   = -1
         self.lastpos  = (0, 0)
 
-    def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0,0,0,0]):
+    def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0, 0, 0, 0]):
         """
         Draws map and overlay decorations
         """
@@ -632,10 +632,19 @@ class BufferedWindow(wx.Window):
 
         self.DrawCompRegionExtent()
 
+        #
         # redraw pdcTmp if needed
+        #
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
-
+        if self.parent.gismanager.georectifying:
+            # -> georectifier (redraw GCPs)
+            if self.parent.grtoolbar:
+                coordtype = 'gcpcoord'
+            else:
+                coordtype = 'mapcoord'
+            self.parent.gismanager.georectifying.DrawGCP(coordtype)
+            
         stop = time.clock()
 
         #
@@ -831,10 +840,18 @@ class BufferedWindow(wx.Window):
 
         return -1
 
-    def DrawCross(self, pdc, coords, size, rotation=0):
+    def DrawCross(self, pdc, coords, size, rotation=0,
+                  text=None, textAlign='lr', textOffset=(5, 5)):
         """Draw cross in PseudoDC
 
-           TODO: implement rotation
+        @todo implement rotation
+
+        @param pdc PseudoDC
+        @param coord center coordinates
+        @param rotation rotate symbol
+        @param text draw also text (text, font, color, rotation)
+        @param textAlign alignment (default 'lower-right')
+        @textOffset offset for text (from center point)
         """
         Debug.msg(4, "BufferedWindow.DrawCross(): pdc=%s, coords=%s, size=%d" % \
                   (pdc, coords, size))
@@ -844,6 +861,21 @@ class BufferedWindow(wx.Window):
         self.lineid = wx.NewId()
         for lineCoords in coordsCross:
             self.Draw(pdc, drawid=self.lineid, pdctype='line', coords=lineCoords)
+
+        if not text:
+            return self.lineid
+
+        if textAlign == 'ul':
+            coord = [coords[0] - textOffset[0], coords[1] - textOffset[1], 0, 0]
+        elif textAlign == 'ur':
+            coord = [coords[0] + textOffset[0], coords[1] - textOffset[1], 0, 0]
+        elif textAlign == 'lr':
+            coord = [coords[0] + textOffset[0], coords[1] + textOffset[1], 0, 0]
+        else:
+            coord = [coords[0] - textOffset[0], coords[1] + textOffset[1], 0, 0]
+        
+        self.Draw(pdc, img=text,
+                  pdctype='text', coords=coord)
 
         return self.lineid
 
@@ -1229,16 +1261,17 @@ class BufferedWindow(wx.Window):
                 self.DrawLines(pdc=self.pdcTmp)
             except:
                 pass
+
         elif self.mouse["use"] == "pointer" and self.parent.gismanager.georectifying:
-            self.SetCursor(self.parent.cursors["cross"])
+            # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
-            if self.parent.georect:
+            if self.parent.grtoolbar:
                 coordtype = 'gcpcoord'
             else:
                 coordtype = 'mapcoord'
-            self.gismanager.gr.gcpmgr.SetGCPData(coordtype, coord, self)
-            self.DrawCross(pdc=self.pdcTmp, coords=self.mouse['end'],
-                                       size=5)
+
+            self.parent.gismanager.georectifying.SetGCPData(coordtype, coord, self)
+            self.UpdateMap(render=False, renderVector=False)
 
         elif self.mouse["use"] == "pointer" and self.parent.digittoolbar:
             # digitization tool active
@@ -1985,7 +2018,7 @@ class BufferedWindow(wx.Window):
         zoomreg = {}
 
         # find selected map
-        if not self.tree.GetSelection():
+        if not self.tree or not self.tree.GetSelection():
             return
 
         item  = self.tree.GetSelection()
@@ -2187,26 +2220,17 @@ class MapFrame(wx.Frame):
                  pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_FRAME_STYLE, toolbars=["map"],
                  tree=None, notebook=None, gismgr=None, page=None,
-                 Map=None, auimgr=None, georect=False):
+                 Map=None, auimgr=None):
         """
-            Main map display window with toolbars, statusbar and
-            DrawWindow
+        Main map display window with toolbars, statusbar and
+        DrawWindow
 
-            Parameters:
-                parent  -- parent window, None, wx.Window()
-                id      -- window ID, int, wx.ID_ANY
-                title   -- window title, string
-                pos     -- where to place it, tupple, wx.Position
-                size    -- window size, tupple, wx.Size
-                style   -- window style
-                toolbars-- array of default toolbars, which should appear,
-                           currently: ['map', 'digit']
-                notebook-- control book ID in GIS Manager
-                tree    -- associated layer tree
-                gismgr  -- GIS Manager panel
-                page    -- notebook page with layer tree
-                Map     -- instance of render.Map
-                georect -- is window used by georectifier
+        @param toolbars array of activated toolbars, e.g. ['map', 'digit']
+        @param tree reference to layer tree
+        @param notebook control book ID in Layer Manager
+        @param gismgr Layer Manager panel
+        @param page notebook page with layer tree
+        @param Map instance of render.Map
         """
 
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
@@ -2216,7 +2240,6 @@ class MapFrame(wx.Frame):
         self.tree       = tree      # GIS Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # GIS Manager layer tree notebook
-        self.georect    = georect   # Map display used for setting GCPs for georectifier
         self.parent     = parent
 
         #
@@ -2380,28 +2403,28 @@ class MapFrame(wx.Frame):
         Add defined toolbar to the window
 
         Currently known toolbars are:
-            * map
-            * digit
-            * georect
-        """
+         - map basic map toolbar
+         - digit vector digitizer
+         - georect georectifier
+         """
         if name == "map":
             self.maptoolbar = toolbars.MapToolbar(self, self.Map)
 
             self._mgr.AddPane(self.maptoolbar.toolbar,
                               wx.aui.AuiPaneInfo().
-                              Name("maptoolbar").Caption("Map Toolbar").
+                              Name("maptoolbar").Caption(_("Map Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
 
-        elif name == "digit":
+        if name == "digit":
             self.digittoolbar = toolbars.VDigitToolbar(self, self.Map, self.tree)
 
             for toolRow in range(0, self.digittoolbar.numOfRows):
                 self._mgr.AddPane(self.digittoolbar.toolbar[toolRow],
                                   wx.aui.AuiPaneInfo().
-                                  Name("digittoolbar" + str(toolRow)).Caption("Digit Toolbar").
+                                  Name("digittoolbar" + str(toolRow)).Caption(_("Digit Toolbar")).
                                   ToolbarPane().Top().Row(toolRow + 1).
                                   LeftDockable(False).RightDockable(False).
                                   BottomDockable(False).TopDockable(True).
@@ -2413,12 +2436,12 @@ class MapFrame(wx.Frame):
             self.MapWindow.pen     = wx.Pen(colour='red',   width=2, style=wx.SOLID)
             self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SOLID)
 
-        elif name == "georect":
+        if name == "georect":
             self.grtoolbar = toolbars.GRToolbar(self, self.Map)
 
             self._mgr.AddPane(self.grtoolbar.toolbar,
                               wx.aui.AuiPaneInfo().
-                              Name("grtoolbar").Caption("Georectification Toolbar").
+                              Name("grtoolbar").Caption(_("Georectification Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
@@ -2462,27 +2485,17 @@ class MapFrame(wx.Frame):
         Change choicebook page to match display.
         Or set display for georectifying
         """
-        if self.georect:
-            # display used to set GCPs in map to georectify
-            try:
-                if event.GetActive():
-                    self.gismanager.gr.SwitchEnv('new')
-                else:
-                    self.gismanager.gr.SwitchEnv('original')
-            except:
-                pass
-            
-        elif self.gismanager.georectifying:
+        if self.gismanager.georectifying:
             # in georectifying session; display used to get get geographic
             # coordinates for GCPs
-            self.MapWindow.pen = wx.Pen(colour='black', width=2, style=wx.SOLID)
-            self.MapWindow.SetCursor(self.cursors["cross"])
+            self.OnPointer(event)
         else:
             # change bookcontrol page to page associated with display
-            if self.page :
+            if self.page:
                 pgnum = self.layerbook.GetPageIndex(self.page)
                 if pgnum > -1:
                     self.layerbook.SetSelection(pgnum)
+        
         event.Skip()
 
     def OnMotion(self, event):
@@ -2687,16 +2700,16 @@ class MapFrame(wx.Frame):
                                          (self.Map.region["w"], self.Map.region["e"],
                                           self.Map.region["s"], self.Map.region["n"]), 0)
 
-        elif self.toggleStatus.GetSelection() == 2: # Show comp. extent
-            self.statusbar.SetStatusText("", 0)
-            self.showRegion.Show()
-
-        elif self.toggleStatus.GetSelection() == 3: # Comp. region
+        elif self.toggleStatus.GetSelection() == 2: # Comp. region
             compregion = self.Map.GetRegion()
             self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f (%.2f, %.2f)" %
                                          (compregion["w"], compregion["e"],
                                           compregion["s"], compregion["n"],
                                           compregion["ewres"], compregion["nsres"]), 0)
+
+        elif self.toggleStatus.GetSelection() == 3: # Show comp. extent
+            self.statusbar.SetStatusText("", 0)
+            self.showRegion.Show()
 
         elif self.toggleStatus.GetSelection() == 4: # Display mode
             self.statusbar.SetStatusText("", 0)
