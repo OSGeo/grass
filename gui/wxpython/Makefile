@@ -6,7 +6,9 @@ include $(MODULE_TOPDIR)/include/Make/Platform.make
 
 ifneq ($(USE_WXWIDGETS),)
   ifneq ($(USE_PYTHON),)
-    SUBDIRS += vdigit
+    ifneq ($(strip $(CXX)),)
+       SUBDIRS += vdigit
+    endif
   endif
 endif
 
