@@ -80,6 +80,8 @@ DIALOG_COMBOBOX_SIZE = (300, -1)
 DIALOG_GSELECT_SIZE = (400, -1)
 DIALOG_TEXTCTRL_SIZE = (400, -1)
 
+MAP_WINDOW_SIZE = (680, 520)
+
 """File name extension binaries/scripts"""
 if subprocess.mswindows:
     EXT_BIN = '.exe'

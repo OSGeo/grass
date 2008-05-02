@@ -24,7 +24,6 @@ import os
 import sys
 import glob
 import math
-# import time
 try:
     import subprocess
 except:
@@ -262,7 +261,7 @@ class Map(object):
     """
     Map composition (stack of map layers and overlays)
     """
-    def __init__(self):
+    def __init__(self, gisrc=None):
         # 
         # region/extent settigns
         #
@@ -282,8 +281,11 @@ class Map(object):
         #
         # environment settings
         #
-        self.env       = {}  # enviroment variables, like MAPSET, LOCATION_NAME, etc.
-
+        # enviroment variables, like MAPSET, LOCATION_NAME, etc.
+        self.env         = {}
+        # path to external gisrc
+        self.gisrc = gisrc
+        
         # 
         # generated file for rendering the map
         #
@@ -334,6 +336,11 @@ class Map(object):
         if not os.getenv("GISBASE"):
             print >> sys.stderr, _("GISBASE not set. You must be in GRASS GIS to run this program.")
             sys.exit(1)
+            
+        # use external gisrc if defined
+        gisrc_orig = os.getenv("GISRC")
+        if self.gisrc:
+            os.environ["GISRC"] = self.gisrc
 
         gisenvCmd = gcmd.Command(["g.gisenv"])
 
@@ -343,6 +350,10 @@ class Map(object):
             val = val.replace(";","")
             val = val.replace("'","")
             self.env[key] = val
+
+        # back to original gisrc
+        if self.gisrc:
+            os.environ["GISRC"] = gisrc_orig
 
     def GetWindow(self):
         """Read WIND file and set up self.wind dictionary"""
@@ -484,6 +495,11 @@ class Map(object):
         tmpreg = os.getenv("GRASS_REGION")
         os.unsetenv("GRASS_REGION")
 
+        # use external gisrc if defined
+        gisrc_orig = os.getenv("GISRC")
+        if self.gisrc:
+            os.environ["GISRC"] = self.gisrc
+
         # do not update & shell style output
         cmdList = ["g.region", "-u", "-g", "-p", "-c"]
 
@@ -523,6 +539,10 @@ class Map(object):
                 region[key] = float(val)
             except ValueError:
                 region[key] = val
+
+        # back to original gisrc
+        if self.gisrc:
+            os.environ["GISRC"] = gisrc_orig
 
         # restore region
         if tmpreg:
@@ -701,11 +721,14 @@ class Map(object):
         @return name of file with rendered image or None
         """
 
-        # startTime = time.time()
-
         maps = []
         masks =[]
         opacities = []
+
+        # use external gisrc if defined
+        gisrc_orig = os.getenv("GISRC")
+        if self.gisrc:
+            os.environ["GISRC"] = self.gisrc
 
         tmp_region = os.getenv("GRASS_REGION")
         os.environ["GRASS_REGION"] = self.SetRegion(windres)
@@ -789,9 +812,11 @@ class Map(object):
             print >> sys.stderr, e
             return None
 
-        Debug.msg (2, "Map.Render() force=%s file=%s" % (force, self.mapfile))
+        # back to original gisrc
+        if self.gisrc:
+            os.environ["GISRC"] = gisrc_orig
 
-        # print time.time() - startTime
+        Debug.msg (2, "Map.Render() force=%s file=%s" % (force, self.mapfile))
 
         return self.mapfile
 

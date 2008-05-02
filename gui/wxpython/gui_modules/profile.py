@@ -38,8 +38,6 @@ except:
     downloading source or binaries."""
     print >> sys.stderr, "profile.py: " + msg
 
-from threading import Thread
-
 import globalvar
 try:
     import subprocess
