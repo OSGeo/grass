@@ -213,7 +213,8 @@ class LayerTree(CT.CustomTreeCtrl):
             self.popupID7 = wx.NewId()
             self.popupID8 = wx.NewId()
             self.popupID9 = wx.NewId()
-                        
+            self.popupID10 = wx.NewId()
+
         self.popupMenu = wx.Menu()
         # general item
         self.popupMenu.Append(self.popupID1, text=_("Remove"))
@@ -238,6 +239,8 @@ class LayerTree(CT.CustomTreeCtrl):
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
             self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map"))
             self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.ZoomToMap, id=self.popupID9)
+            self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map"))
+            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
 
         # specific items
         try:
@@ -306,6 +309,23 @@ class LayerTree(CT.CustomTreeCtrl):
         # print output to command log area
         self.gismgr.goutput.RunCmd(cmd)
 
+    def OnSetCompRegFromMap(self, event):
+        """Set computational region from selected map"""
+        mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+        mltype = self.GetPyData(self.layer_selected)[0]['type']
+
+        cmd = ['g.region',
+               '-p'] # print by default
+
+        # TODO: other elements
+        if mltype == 'raster':
+            cmd.append('rast=%s' % mapLayer.name)
+        elif mltype == 'vector':
+            cmd.append('vect=%s' % mapLayer.name)
+
+        # print output to command log area
+        self.gismgr.goutput.RunCmd(cmd)
+        
     def OnProfile(self, event):
         """Plot profile of given raster map layer"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
