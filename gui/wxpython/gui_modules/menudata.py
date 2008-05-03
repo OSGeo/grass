@@ -455,7 +455,7 @@ class Data:
                                 (_("Set region"),
                                  _("Manages the boundary definitions for the geographic region."),
                                  "self.OnMenuCmd",
-                                 "g.region"),
+                                 "g.region -p"),
                                 )
                          ),
                         (_("GRASS working environment"), (
