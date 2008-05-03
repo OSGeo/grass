@@ -147,18 +147,13 @@ int main (int argc, char *argv[])
     G_gisinit (argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    module->keywords = _("raster, terrain analysis");
     module->description =
 	_("Generates raster map layers of slope, aspect, curvatures and "
 	  "partial derivatives from a raster map layer of true elevation "
 	  "values. Aspect is calculated counterclockwise from east.");
 
-    parm.elevation = G_define_option() ;
-    parm.elevation->key        = "elevation" ;
-    parm.elevation->type       = TYPE_STRING ;
-    parm.elevation->required   = YES ;
-    parm.elevation->gisprompt  = "old,cell,raster" ;
-    parm.elevation->description= _("Raster elevation file name");
+    parm.elevation = G_define_standard_option(G_OPT_R_ELEV) ;
 
     parm.slope = G_define_option() ;
     parm.slope->key        = "slope" ;
@@ -166,7 +161,7 @@ int main (int argc, char *argv[])
     parm.slope->required   = NO ;
     parm.slope->answer     = NULL ;
     parm.slope->gisprompt  = "new,cell,raster" ;
-    parm.slope->description= _("Output slope filename") ;
+    parm.slope->description= _("Name for output slope raster map") ;
 
     parm.aspect = G_define_option() ;
     parm.aspect->key        = "aspect" ;
@@ -174,7 +169,7 @@ int main (int argc, char *argv[])
     parm.aspect->required   = NO ;
     parm.aspect->answer     = NULL ;
     parm.aspect->gisprompt  = "new,cell,raster" ;
-    parm.aspect->description= _("Output aspect filename") ;
+    parm.aspect->description= _("Name for output aspect raster map") ;
 
     parm.slope_fmt = G_define_option() ;
     parm.slope_fmt->key        = "format" ;
@@ -200,7 +195,7 @@ int main (int argc, char *argv[])
     parm.pcurv->required   = NO ;
     parm.pcurv->answer     = NULL ;
     parm.pcurv->gisprompt  = "new,cell,raster" ;
-    parm.pcurv->description= _("Output profile curvature filename" );
+    parm.pcurv->description= _("Name for output profile curvature raster map" );
     parm.pcurv->guisection = _("Advanced");
 
     parm.tcurv = G_define_option() ;
@@ -209,7 +204,7 @@ int main (int argc, char *argv[])
     parm.tcurv->required   = NO ;
     parm.tcurv->answer     = NULL ;
     parm.tcurv->gisprompt  = "new,cell,raster" ;
-    parm.tcurv->description= _("Output tangential curvature filename") ;
+    parm.tcurv->description= _("Name for output tangential curvature raster map") ;
     parm.tcurv->guisection = _("Advanced");
 
     parm.dx = G_define_option() ;
@@ -218,7 +213,7 @@ int main (int argc, char *argv[])
     parm.dx->required   = NO ;
     parm.dx->answer     = NULL ;
     parm.dx->gisprompt  = "new,cell,raster" ;
-    parm.dx->description= _("Output first order partial derivative dx (E-W slope) filename") ;
+    parm.dx->description= _("Name for output first order partial derivative dx (E-W slope) raster map") ;
     parm.dx->guisection = _("Advanced");
 
     parm.dy = G_define_option() ;
@@ -227,7 +222,7 @@ int main (int argc, char *argv[])
     parm.dy->required   = NO ;
     parm.dy->answer     = NULL ;
     parm.dy->gisprompt  = "new,cell,raster" ;
-    parm.dy->description= _("Output first order partial derivative dy (N-S slope) filename") ;
+    parm.dy->description= _("Name for output first order partial derivative dy (N-S slope) raster map") ;
     parm.dy->guisection = _("Advanced");
 
     parm.dxx = G_define_option() ;
@@ -236,7 +231,7 @@ int main (int argc, char *argv[])
     parm.dxx->required   = NO ;
     parm.dxx->answer     = NULL ;
     parm.dxx->gisprompt  = "new,cell,raster" ;
-    parm.dxx->description= _("Output second order partial derivative dxx filename") ;
+    parm.dxx->description= _("Name for output second order partial derivative dxx raster map") ;
     parm.dxx->guisection = _("Advanced");
 
     parm.dyy = G_define_option() ;
@@ -245,7 +240,7 @@ int main (int argc, char *argv[])
     parm.dyy->required   = NO ;
     parm.dyy->answer     = NULL ;
     parm.dyy->gisprompt  = "new,cell,raster" ;
-    parm.dyy->description= _("Output second order partial derivative dyy filename") ;
+    parm.dyy->description= _("Name for output second order partial derivative dyy raster map") ;
     parm.dyy->guisection = _("Advanced");
 
     parm.dxy = G_define_option() ;
@@ -254,7 +249,7 @@ int main (int argc, char *argv[])
     parm.dxy->required   = NO ;
     parm.dxy->answer     = NULL ;
     parm.dxy->gisprompt  = "new,cell,raster" ;
-    parm.dxy->description= _("Output second order partial derivative dxy filename") ;
+    parm.dxy->description= _("Name for output second order partial derivative dxy raster map") ;
     parm.dxy->guisection = _("Advanced");
 
     parm.zfactor = G_define_option();
@@ -329,18 +324,14 @@ int main (int argc, char *argv[])
 
     if (sscanf (parm.zfactor->answer, "%lf", &zfactor) != 1 || zfactor <= 0.0)
     {
-        G_warning("%s=%s - must be a postive number", parm.zfactor->key,
-                       parm.zfactor->answer);
-        G_usage();
-        exit(EXIT_FAILURE);
+	G_fatal_error(_("%s=%s - must be a positive number"), parm.zfactor->key,
+		      parm.zfactor->answer);
     }
 
     if (sscanf (parm.min_slp_allowed->answer, "%lf", &min_slp_allowed) != 1 || min_slp_allowed < 0.0)
     {
-        G_warning("%s=%s - must be a non-negative number", parm.min_slp_allowed->key,
-                       parm.min_slp_allowed->answer);
-        G_usage();
-        exit(EXIT_FAILURE);
+        G_fatal_error(_("%s=%s - must be a non-negative number"), parm.min_slp_allowed->key,
+		      parm.min_slp_allowed->answer);
     }
 
     slope_fmt = parm.slope_fmt->answer;
@@ -352,13 +343,11 @@ int main (int argc, char *argv[])
 	&& dx_name == NULL && dy_name == NULL 
 	&& dxx_name == NULL && dyy_name == NULL && dxy_name == NULL)
     {
-	G_warning("You must specify at least one of the parameters:"
-		"\n<%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>.\n", 
-		parm.slope->key, parm.aspect->key, parm.pcurv->key, 
-		parm.tcurv->key, parm.dx->key, parm.dy->key, 
-		parm.dxx->key, parm.dyy->key, parm.dxy->key);
-	G_usage();
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("You must specify at least one of the parameters: "
+			"<%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s>, <%s> or <%s>"), 
+		      parm.slope->key, parm.aspect->key, parm.pcurv->key, 
+		      parm.tcurv->key, parm.dx->key, parm.dy->key, 
+		      parm.dxx->key, parm.dyy->key, parm.dxy->key);
     }
 
     /* check elevation file existence */
@@ -386,7 +375,7 @@ int main (int argc, char *argv[])
    else if(strcmp(parm.out_precision->answer, "default") == 0)
        out_type = -1;
    else
-        G_fatal_error(_("wrong type: %s"), parm.out_precision->answer);
+        G_fatal_error(_("Wrong raster type: %s"), parm.out_precision->answer);
 
    data_type = out_type;
    if(data_type < 0) data_type = DCELL_TYPE;
@@ -415,7 +404,7 @@ int main (int argc, char *argv[])
    /* give warning if location units are different from meters and zfactor=1*/
     factor = G_database_units_to_meters_factor();
     if (factor != 1.0)
-        G_warning("Converting units to meters, factor=%.6f", factor);
+        G_warning(_("Converting units to meters, factor=%.6f"), factor);
 
     G_begin_distance_calculations();
     north = G_row_to_northing(0.5, &window);
@@ -590,7 +579,8 @@ int main (int argc, char *argv[])
     }
     else G_get_d_raster_row_nomask (elevation_fd, elev_cell[2],1);
 
-    G_message (_("Percent complete: "));
+    G_verbose_message (_("Percent complete..."));
+
     for (row = 2; row < nrows; row++)
     {
         /*  if projection is Lat/Lon, recalculate  V and H   */
@@ -1016,10 +1006,10 @@ int main (int argc, char *argv[])
     G_percent (row, nrows, 2);
 
     G_close_cell (elevation_fd);
-    G_message(_("Creating support files..."));
+    G_debug(1, "Creating support files...");
 
-    G_message(_("Elevation products for mapset [%s] in [%s]"),
-        G_mapset(), G_location());
+    G_verbose_message(_("Elevation products for mapset <%s> in <%s>"),
+		       G_mapset(), G_location());
 
     if (aspect_fd >= 0)
     {
@@ -1036,7 +1026,7 @@ int main (int argc, char *argv[])
         G_read_raster_cats (aspect_name, G_mapset(), &cats);
         G_set_raster_cats_title ("Aspect counterclockwise in degrees from east", &cats);
 
-	G_message(_("Min computed aspect %.4f, max computed aspect %.4f"), min_asp, max_asp);
+	G_verbose_message(_("Min computed aspect %.4f, max computed aspect %.4f"), min_asp, max_asp);
 	/* the categries quant intervals are 1.0 long, plus
 	   we are using reverse order so that the label looked up
 	   for i-.5 is not the one defined for i-.5, i+.5 interval, but
@@ -1089,7 +1079,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (aspect_name, &hist);
 
-        G_message(_("ASPECT [%s] COMPLETE"), aspect_name);
+        G_message(_("Aspect raster map <%s> complete"), aspect_name);
     }
 
     if (slope_fd >= 0)
@@ -1129,7 +1119,7 @@ int main (int argc, char *argv[])
         if(deg) G_set_raster_cats_title ("slope in degrees", &cats);
         else if(perc) G_set_raster_cats_title ("percent slope", &cats);
 
-	G_message(_("Min computed slope %.4f, max computed slope %.4f"), min_slp, max_slp);
+	G_verbose_message(_("Min computed slope %.4f, max computed slope %.4f"), min_slp, max_slp);
 	/* the categries quant intervals are 1.0 long, plus
 	   we are using reverse order so that the label looked up
 	   for i-.5 is not the one defined for i-.5, i+.5 interval, but
@@ -1179,7 +1169,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (slope_name, &hist);
 
-        G_message(_("SLOPE [%s] COMPLETE"), slope_name);
+        G_message(_("Slope raster map <%s> complete"), slope_name);
     }
 
     /* colortable for curvatures */
@@ -1248,7 +1238,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (pcurv_name, &hist);
 
-        G_message(_("PROFILE CURVE [%s] COMPLETE"), pcurv_name);
+        G_message(_("Profile curve raster map <%s> complete"), pcurv_name);
     }
 
     if (tcurv_fd >= 0)
@@ -1275,7 +1265,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (tcurv_name, &hist);
 
-        G_message(_("TANGENTIAL CURVE [%s] COMPLETE"), tcurv_name);
+        G_message(_("Tangential curve raster map <%s> complete"), tcurv_name);
     }   
 
     if (dx_fd >= 0)
@@ -1300,7 +1290,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (dx_name, &hist);
 
-        G_message(_("E-W SLOPE [%s] COMPLETE"), dx_name);
+        G_message(_("E-W slope raster map <%s> complete"), dx_name);
     }   
 
     if (dy_fd >= 0)
@@ -1325,7 +1315,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (dy_name, &hist);
 
-        G_message(_("N-S SLOPE [%s] COMPLETE"), dy_name);
+        G_message(_("N-S slope raster map <%s> complete"), dy_name);
     }   
 
     if (dxx_fd >= 0)
@@ -1350,7 +1340,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (dxx_name, &hist);
 
-        G_message(_("DXX [%s] COMPLETE"), dxx_name);
+        G_message(_("Dxx raster map <%s> complete"), dxx_name);
     }   
 
     if (dyy_fd >= 0)
@@ -1375,7 +1365,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (dyy_name, &hist);
 
-        G_message(_("DYY [%s] COMPLETE"), dyy_name);
+        G_message(_("Dyy raster map <%s> complete"), dyy_name);
     }   
 
     if (dxy_fd >= 0)
@@ -1400,7 +1390,7 @@ int main (int argc, char *argv[])
         hist.edlinecnt = 3;
         G_write_history (dxy_name, &hist);
 
-        G_message(_("DXY [%s] COMPLETE"), dxy_name);
+        G_message(_("Dxy raster map <%s> complete"), dxy_name);
     }   
 
     exit(EXIT_SUCCESS);
