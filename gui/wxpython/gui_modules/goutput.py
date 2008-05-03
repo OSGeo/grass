@@ -161,7 +161,7 @@ class GMConsole(wx.Panel):
             wx.Yield()
             time.sleep(3)
             busy.Destroy()
-            return 
+            return  None
 
         # command given as a string ?
         try:
@@ -172,7 +172,10 @@ class GMConsole(wx.Panel):
         if cmdlist[0] in globalvar.grassCmd['all']:
             # send GRASS command without arguments to GUI command interface
             # except display commands (they are handled differently)
-            if cmdlist[0][0:2] == "d.": # display GRASS commands
+            if cmdlist[0][0:2] == "d.":
+                #
+                # display GRASS commands
+                #
                 try:
                     layertype = {'d.rast'         : 'raster',
                                  'd.rgb'          : 'rgb',
@@ -190,13 +193,16 @@ class GMConsole(wx.Panel):
                                  'd.labels'       : 'labels'}[cmdlist[0]]
                 except KeyError:
                     wx.MessageBox(message=_("Command '%s' not yet implemented.") % cmdlist[0])
-                    return False
+                    return None
 
                 # add layer into layer tree
                 self.parent.curr_page.maptree.AddLayer(ltype=layertype,
                                                        lcmd=cmdlist)
 
-            else: # other GRASS commands (r|v|g|...)
+            else:
+                #
+                # other GRASS commands (r|v|g|...)
+                #
                 if hasattr(self.parent, "curr_page"):
                     # change notebook page only for Layer Manager
                     if self.parent.notebook.GetSelection() != 1:
@@ -233,17 +239,15 @@ class GMConsole(wx.Panel):
                 if self.parent.notebook.GetSelection() != 1:
                     self.parent.notebook.SetSelection(1)
 
-            print "$ " + ' '.join(cmdlist)
-            
             # if command is not a GRASS command, treat it like a shell command
-            generalCmd = subprocess.Popen(cmdlist,
-                                          stdout=subprocess.PIPE,
-                                          stderr=subprocess.PIPE)
-            
-            for outline in generalCmd.stdout:
-                print outline
-                   
-            return None
+            try:
+                generalCmd = gcmd.Command(cmdlist,
+                                          stdout=self.cmd_stdout,
+                                          stderr=self.cmd_stderr)
+            except gcmd.CmdError, e:
+                print >> sys.stderr, e
+
+        return None
 
     def ClearHistory(self, event):
         """Clear history of commands"""
@@ -299,10 +303,14 @@ class GMConsole(wx.Panel):
             self.WriteCmdLog(_('Command aborted'),
                              pid=self.cmdThreads[event.cmdThread]['cmdPID'])
         else:
-            # Process results here
-            self.WriteCmdLog(_('Command finished (%d sec)') % (time.time() - event.cmdThread.startTime),
-                             pid=self.cmdThreads[event.cmdThread]['cmdPID'])
-
+            try:
+                # Process results here
+                self.WriteCmdLog(_('Command finished (%d sec)') % (time.time() - event.cmdThread.startTime),
+                                 pid=self.cmdThreads[event.cmdThread]['cmdPID'])
+            except KeyError:
+                # stopped deamon
+                pass
+                
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
 
         # updated command dialog

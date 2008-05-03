@@ -62,7 +62,8 @@ class GException(Exception):
                       message=self.message,
                       style=wx.ICON_ERROR | wx.CENTRE)
 
-        return 'GException: %s' % self.message
+        # return 'GException: %s' % self.message
+        return ''
 
 class GStdError(GException):
     """Generic exception"""
@@ -337,11 +338,14 @@ class Command:
         # start thread
         #
         self.cmdThread.start()
-
+            
         if wait:
             self.cmdThread.join()
-            self.cmdThread.module.wait()
-            self.returncode = self.cmdThread.module.returncode
+            if self.cmdThread.module:
+                self.cmdThread.module.wait()
+                self.returncode = self.cmdThread.module.returncode
+            else:
+                self.returncode = 1
         else:
             self.cmdThread.join(0.5)
             self.returncode = None
@@ -513,8 +517,10 @@ class CommandThread(Thread):
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         except OSError, e:
-            raise CmdError(self.cmd[0], str(e))
-        
+            self.rerr = str(e)
+            return
+            # raise CmdError(self.cmd[0], str(e))
+
         if self.stdin: # read stdin if requested ...
             self.module.stdin.write(self.stdin)
             self.module.stdin.close()
