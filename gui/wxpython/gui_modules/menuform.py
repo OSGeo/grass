@@ -887,7 +887,8 @@ class cmdPanel(wx.Panel):
         self.notebook.AddPage(self.manual_tab, text=_("Manual"))
         self.manual_tab_id = self.notebook.GetPageCount() - 1
 
-        wx.CallAfter(self.notebook.SetSelection, 0)
+        self.notebook.SetSelection(0)
+
         panelsizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND )
 
         #
