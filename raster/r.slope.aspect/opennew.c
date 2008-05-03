@@ -16,7 +16,7 @@ int opennew (char *name, RASTER_MAP_TYPE wr_type)
        fd = G_open_raster_new (name, wr_type);
 
     if (fd < 0)
-	G_fatal_error (_("Failed in attempt to open %s"), name);
+	G_fatal_error (_("Unable to create raster map <%s>"), name);
 
     return fd;
 }
