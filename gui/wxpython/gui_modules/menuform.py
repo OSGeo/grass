@@ -850,7 +850,7 @@ class cmdPanel(wx.Panel):
                 is_section[ task['guisection'] ] += 1
         del is_section
 
-        # Main goes first, Options goes second
+        # 'Required' tab goes first, 'Optional' as the last one
         for (newidx,content) in [ (0,_( 'Required' )), (len(sections)-1,_('Optional')) ]:
             if content in sections:
                 idx = sections.index( content )
