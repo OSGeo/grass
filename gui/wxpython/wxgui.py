@@ -838,7 +838,7 @@ class GMFrame(wx.Frame):
                         file.write('%s<flag name="%s" />\n' %
                                    (' ' * self.indent, option[1]))
                     else: # parameter
-                        key, value = option.split('=')
+                        key, value = option.split('=', 1)
                         file.write('%s<parameter name="%s">\n' %
                                    (' ' * self.indent, key))
                         self.indent += 4
@@ -917,8 +917,10 @@ class GMFrame(wx.Frame):
             del self.indent
         except StandardError, e:
             file.close()
-            wx.MessageBox(parent=self, message=_("Writing current settings to workspace file failed (%s)." % e),
-                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            wx.MessageBox(parent=self,
+                          message=_("Writing current settings to workspace file failed (%s)." % e),
+                          caption=_("Error"),
+                          style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             return False
 
         file.close()
