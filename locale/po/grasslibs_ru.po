@@ -1,17 +1,17 @@
 # translation of grasslibs_ru.po to Russian
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2006, GRASS Development Team
-# Alex Shevlakov <sixote@yahoo.com>, 2002.
+# Alex Shevlakov <sixote@yahoo.com>, Maxim Dubinin <sim@gis-lab.info>.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-24 17:42+0100\n"
-"PO-Revision-Date: 2006-07-07 11:52+0200\n"
-"Last-Translator: Markus Neteler <neteler@itc.it>\n"
+"POT-Creation-Date: 2008-05-06 20:31+0200\n"
+"PO-Revision-Date: 2008-05-05 19:03-0600\n"
+"Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=KOI8-R\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.9.1\n"
 
@@ -38,26 +38,32 @@ msgid ""
 "\n"
 "++ Running array unit tests ++"
 msgstr ""
+"\n"
+"++ п≤п╢я┐я┌ я┌п╣я│я┌я▀ п╪п╟я│я│п╦п╡п╟ ++"
 
 #: ../lib/gpde/test/test_arrays.c:50
 msgid "\t 1. testing 2d arrays"
-msgstr ""
+msgstr "\t 1. я┌п╣я│я┌п╦я─п╬п╡п╟п╫п╦п╣ 2d п╪п╟я│я│п╦п╡п╬п╡"
 
 #: ../lib/gpde/test/test_arrays.c:53
 msgid "\t 2. testing 3d arrays"
-msgstr ""
+msgstr "\t 2. я┌п╣я│я┌п╦я─п╬п╡п╟п╫п╦п╣ 3d п╪п╟я│я│п╦п╡п╬п╡"
 
 #: ../lib/gpde/test/test_arrays.c:57
 msgid ""
 "\n"
 "-- Array unit tests failure --"
 msgstr ""
+"\n"
+"-- п╒п╣я│я┌ п╣п╢п╦п╫п╦я├ п╪п╟я│я│п╦п╡п╟ п╫п╣ п©я─п╬п╧п╢п╣п╫ --"
 
 #: ../lib/gpde/test/test_arrays.c:59
 msgid ""
 "\n"
 "-- Array unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- п╒п╣я│я┌ п╣п╢п╦п╫п╦я├ п╪п╟я│я│п╦п╡п╟ я┐я│п©п╣я┬п╫п╬ п©я─п╬п╧п╢п╣п╫ --"
 
 #: ../lib/gpde/test/test_heat.c:33
 msgid ""
@@ -210,10 +216,13 @@ msgid ""
 msgstr ""
 
 #: ../lib/gpde/test/test_assemble.c:42
+#, fuzzy
 msgid ""
 "\n"
 "++ Running assembling unit tests ++"
 msgstr ""
+"\n"
+"++ п≤п╢я┐я┌ я┌п╣я│я┌я▀ п╣п╢п╦п╫п╦я├ я│п╠п╬я─п╨п╦ ++"
 
 #: ../lib/gpde/test/test_assemble.c:44
 msgid "\t 1. testing 2d assembling"
@@ -338,7 +347,7 @@ msgstr ""
 #: ../lib/gpde/N_arrays_io.c:55
 #, fuzzy, c-format
 msgid "Raster map <%s> not found"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/gpde/N_arrays_io.c:67
 #, fuzzy, c-format
@@ -348,7 +357,7 @@ msgstr " "
 #: ../lib/gpde/N_arrays_io.c:96
 #, fuzzy, c-format
 msgid "Reading raster map <%s> into memory"
-msgstr " Растровая карта %s@%s пуста"
+msgstr " п═п╟я│я┌я─п╬п╡п╟я▐ п╨п╟я─я┌п╟ %s@%s п©я┐я│я┌п╟"
 
 #: ../lib/gpde/N_arrays_io.c:103
 #, fuzzy
@@ -358,7 +367,7 @@ msgstr " "
 #: ../lib/gpde/N_arrays_io.c:149 ../lib/gpde/N_arrays_io.c:231
 #, fuzzy
 msgid "Unable to close input map"
-msgstr "Не могу открыть [%s]"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ [%s]"
 
 #: ../lib/gpde/N_arrays_io.c:178
 msgid "N_array_2d * array is empty"
@@ -378,7 +387,7 @@ msgstr ""
 #: ../lib/gpde/N_arrays_io.c:225
 #, fuzzy, c-format
 msgid "Unable to write rast row %i"
-msgstr "карта [%s] - невозможно записать строку %d"
+msgstr "п╨п╟я─я┌п╟ [%s] - п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я│я┌я─п╬п╨я┐ %d"
 
 #: ../lib/gpde/N_arrays_io.c:282
 #, c-format
@@ -472,96 +481,98 @@ msgstr ""
 #: ../lib/db/dbmi_base/legal_dbname.c:24
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"
-msgstr " "
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╦п╪я▐ я┌п╟п╠п╩п╦я├я▀ <%s>. п²п╣ п╢п╬п╩п╤п╫п╬ я│п╬п╢п╣я─п╤п╟я┌я▄ '.' п╦п╩п╦ 'NULL'"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:30
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. Must start with a letter.\n"
-msgstr " "
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╦п╪я▐ я┌п╟п╠п╩п╦я├я▀ <%s>. п■п╬п╩п╤п╫п╬ п╫п╟я┤п╦п╫п╟я┌я▄я│я▐ я│ п╠я┐п╨п╡я▀"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:36
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. Character <%c> not allowed.\n"
-msgstr " "
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╦п╪я▐ я┌п╟п╠п╩п╦я├я▀ <%s>. п║п╦п╪п╡п╬п╩ <%c> п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄ п╫п╣п╩я▄п╥я▐"
 
 #: ../lib/db/dbmi_client/column.c:106
 #, fuzzy, c-format
 msgid "Cannot describe table <%s>"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬п©п╦я│п╟я┌я▄ я┌п╟п╠п╩п╦я├я┐ <%s>"
 
 #: ../lib/driver/parse_ftcap.c:33
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
 msgstr ""
+"%s: п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╦я┌п╟я┌я▄ я└п╟п╧п╩ п╬п©п╦я│п╟п╫п╦я▐ я┬я─п╦я└я┌п╟; п╦я│п©п╬п╩я▄п╥я┐п╣я┌я│я▐ п╬п©п╦я│п╟п╫п╦п╣ п©п╬ "
+"я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: ../lib/driver/parse_ftcap.c:39
 #, c-format
 msgid "%s: No font definition file"
-msgstr ""
+msgstr "%s: п·я┌я│я┐я┌я│я┌п╡я┐п╣я┌ я└п╟п╧п╩ п╬п©п╦я│п╟п╫п╦я▐ я┬я─п╦я└я┌п╟"
 
 #: ../lib/driver/command.c:517
 #, c-format
 msgid "Unknown command: %d last: %d"
-msgstr ""
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╨п╬п╪п╟п╫п╢п╟: %d last: %d"
 
 #: ../lib/driver/command.c:559
 msgid "Monitor: get_command: Premature EOF"
-msgstr ""
+msgstr "Monitor: get_command: Premature EOF"
 
 #: ../lib/driver/main.c:89
 #, c-format
 msgid "Graphics driver [%s] started"
-msgstr ""
+msgstr "п⌠я─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢я─п╟п╧п╡п╣я─ [%s] п╥п╟п©я┐я┴п╣п╫"
 
 #: ../lib/raster/rem_io.c:43
 #, fuzzy, c-format
 msgid "ERROR %s from graphics driver.\n"
-msgstr "ОШИБКА %s графического драйвера.\n"
+msgstr "п·п╗п≤п▒п п░ %s пЁя─п╟я└п╦я┤п╣я│п╨п╬пЁп╬ п╢я─п╟п╧п╡п╣я─п╟.\n"
 
 #: ../lib/raster/rem_io.c:172
 #, fuzzy, c-format
 msgid "Unable to allocate memory\n"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/raster/rem_io.c:225
 #, fuzzy, c-format
 msgid "ERROR - eof from graphics monitor.\n"
-msgstr "ОШИБКА - eof from graphics monitor.\n"
+msgstr "п·п╗п≤п▒п п░ - eof from graphics monitor.\n"
 
 #: ../lib/raster/rem_io.c:244
 #, fuzzy, c-format
 msgid "Warning - no response from graphics monitor <%s>.\n"
-msgstr "Предупреждение - графический дисплей <%s> не отвечает.\n"
+msgstr "п÷я─п╣п╢я┐п©я─п╣п╤п╢п╣п╫п╦п╣ - пЁя─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ <%s> п╫п╣ п╬я┌п╡п╣я┤п╟п╣я┌.\n"
 
 #: ../lib/raster/rem_io.c:246
 #, fuzzy, c-format
 msgid "Check to see if the mouse is still active.\n"
-msgstr "Проверьте, работает ли мышь.\n"
+msgstr "п÷я─п╬п╡п╣я─я▄я┌п╣, я─п╟п╠п╬я┌п╟п╣я┌ п╩п╦ п╪я▀я┬я▄.\n"
 
 #: ../lib/raster/rem_io.c:251
 #, fuzzy, c-format
 msgid "ERROR - no response from graphics monitor <%s>.\n"
-msgstr "ОШИБКА - графический дисплей <%s> не отвечает.\n"
+msgstr "п·п╗п≤п▒п п░ - пЁя─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ <%s> п╫п╣ п╬я┌п╡п╣я┤п╟п╣я┌.\n"
 
 #: ../lib/raster/io_sock.c:65
 #, fuzzy
 msgid "No graphics monitor has been selected for output."
-msgstr "Не выбран графический дисплей для вывода.\n"
+msgstr "п²п╣ п╡я▀п╠я─п╟п╫ пЁя─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ п╢п╩я▐ п╡я▀п╡п╬п╢п╟.\n"
 
 #: ../lib/raster/io_sock.c:66
 #, fuzzy
 msgid "Please run \"d.mon\" to select a graphics monitor."
-msgstr "Выполните \"d.mon\" для выбора графического дисплея.\n"
+msgstr "п▓я▀п©п╬п╩п╫п╦я┌п╣ \"d.mon\" п╢п╩я▐ п╡я▀п╠п╬я─п╟ пЁя─п╟я└п╦я┤п╣я│п╨п╬пЁп╬ п╢п╦я│п©п╩п╣я▐.\n"
 
 #: ../lib/raster/io_sock.c:75
 #, fuzzy, c-format
 msgid "Failed to get socket name for monitor <%s>."
-msgstr "Невозможно получить сокет для дисплея <%s>.\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©п╬п╩я┐я┤п╦я┌я▄ я│п╬п╨п╣я┌ п╢п╩я▐ п╢п╦я│п©п╩п╣я▐ <%s>.\n"
 
 #: ../lib/raster/io_sock.c:85
 #, fuzzy, c-format
 msgid "No socket to connect to for monitor <%s>."
-msgstr "Невозможно соединиться через сокет для дисплея <%s>.\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╣п╢п╦п╫п╦я┌я▄я│я▐ я┤п╣я─п╣п╥ я│п╬п╨п╣я┌ п╢п╩я▐ п╢п╦я│п©п╩п╣я▐ <%s>.\n"
 
 #: ../lib/raster/io_sock.c:105
 #, fuzzy
@@ -571,7 +582,7 @@ msgstr " "
 #: ../lib/raster/io_sock.c:106
 #, fuzzy
 msgid "Use d.mon to select a monitor"
-msgstr "Выполните \"d.mon\" для выбора графического дисплея.\n"
+msgstr "п▓я▀п©п╬п╩п╫п╦я┌п╣ \"d.mon\" п╢п╩я▐ п╡я▀п╠п╬я─п╟ пЁя─п╟я└п╦я┤п╣я│п╨п╬пЁп╬ п╢п╦я│п©п╩п╣я▐.\n"
 
 #: ../lib/raster/io_sock.c:113
 msgid "Trying to connect to something not a socket."
@@ -588,97 +599,146 @@ msgstr ""
 #: ../lib/raster/io_sock.c:121
 #, fuzzy
 msgid "Probably an error with the server."
-msgstr "Время для установки соединения закончилось. Вероятна ошибка сервера.\n"
+msgstr "п▓я─п╣п╪я▐ п╢п╩я▐ я┐я│я┌п╟п╫п╬п╡п╨п╦ я│п╬п╣п╢п╦п╫п╣п╫п╦я▐ п╥п╟п╨п╬п╫я┤п╦п╩п╬я│я▄. п▓п╣я─п╬я▐я┌п╫п╟ п╬я┬п╦п╠п╨п╟ я│п╣я─п╡п╣я─п╟.\n"
 
 #: ../lib/raster/io_sock.c:129
 #, fuzzy
 msgid "Connection failed."
-msgstr "Нет подключения\n"
+msgstr "п²п╣я┌ п©п╬п╢п╨п╩я▌я┤п╣п╫п╦я▐\n"
 
-#: ../lib/vector/diglib/plus_area.c:211 ../lib/vector/diglib/plus_area.c:648
-#: ../lib/vector/diglib/plus_area.c:654
-#, c-format
-msgid "Line [%d] already has area/isle [%d] to left."
+#: ../lib/vector/diglib/spindex.c:232
+#, fuzzy, c-format
+msgid "Unable to delete node %d from spatial index"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
+
+#: ../lib/vector/diglib/spindex.c:268
+#, fuzzy, c-format
+msgid "Unable to delete line %d from spatial index"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
+
+#: ../lib/vector/diglib/spindex.c:295
+msgid "Attempt to delete sidx for dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:219
+#: ../lib/vector/diglib/spindex.c:304
+#, fuzzy, c-format
+msgid "Unable to delete area %d from spatial index"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
+
+#: ../lib/vector/diglib/spindex.c:336
+#, fuzzy, c-format
+msgid "Unable to delete isle %d from spatial index"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
+
+#: ../lib/vector/diglib/plus_area.c:191 ../lib/vector/diglib/plus_area.c:615
+#: ../lib/vector/diglib/plus_area.c:621
 #, c-format
-msgid "Line [%d] already has area/isle [%d] to right."
+msgid "Line %d already has area/isle %d to left"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:302
+#: ../lib/vector/diglib/plus_area.c:199
+#, c-format
+msgid "Line %d already has area/isle %d to right"
+msgstr ""
+
+#: ../lib/vector/diglib/plus_area.c:278
 msgid "Attempt to delete isle from dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:316
+#: ../lib/vector/diglib/plus_area.c:292
 #, c-format
-msgid "Attempt to delete not registered isle [%d] from area [%d]"
+msgid "Attempt to delete not registered isle %d from area %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:354
+#: ../lib/vector/diglib/plus_area.c:328
 msgid "Attempt to delete dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:392
+#: ../lib/vector/diglib/plus_area.c:366
 #, c-format
-msgid "Dead centroid [%d] registered for area (bug in the library)."
+msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:413
+#: ../lib/vector/diglib/plus_area.c:387
 #, c-format
-msgid "Attempt to delete area [%d] info from dead isle [%d]"
+msgid "Attempt to delete area %d info from dead isle %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:741
+#: ../lib/vector/diglib/plus_area.c:704
 #, c-format
-msgid "Attempt to delete isle [%d] info from dead area [%d]"
+msgid "Attempt to delete isle %d info from dead area %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus.c:318
+#: ../lib/vector/diglib/plus.c:288
 #, fuzzy
-msgid "Cannot read topo for nodes"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable read topology for nodes"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus.c:324
+#: ../lib/vector/diglib/plus.c:294
 #, fuzzy, c-format
-msgid "Cannot read topo for node [%d]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable to read topology for node %d"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus.c:329
+#: ../lib/vector/diglib/plus.c:299
 #, fuzzy
-msgid "Cannot read topo for lines"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable read topology for lines"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus.c:335
+#: ../lib/vector/diglib/plus.c:305
 #, fuzzy, c-format
-msgid "Cannot read topo for line [%d]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable to read topology for line %d"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus.c:340
+#: ../lib/vector/diglib/plus.c:310
 #, fuzzy
-msgid "Cannot read topo for areas"
+msgid "Unable to read topo for areas"
 msgstr " "
 
-#: ../lib/vector/diglib/plus.c:346
+#: ../lib/vector/diglib/plus.c:316
 #, fuzzy, c-format
-msgid "Cannot read topo for area [%d]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable read topology for area %d"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus.c:351
+#: ../lib/vector/diglib/plus.c:321
 #, fuzzy
-msgid "Cannot read topo for isles"
-msgstr "Не могу открыть врем. файл"
+msgid "Unable to read topology for isles"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
-#: ../lib/vector/diglib/plus.c:357
+#: ../lib/vector/diglib/plus.c:327
 #, fuzzy, c-format
-msgid "Cannot read topo for isle [%d]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgid "Unable to read topology for isle %d"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/vector/diglib/plus_node.c:244
+#: ../lib/vector/diglib/plus.c:352 ../lib/vector/diglib/plus.c:383
+#, fuzzy
+msgid "Unable to write head to plus file"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
+
+#: ../lib/vector/diglib/plus.c:358
+#, fuzzy
+msgid "Unable to write nodes to plus file"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ quant я└п╟п╧п╩!"
+
+#: ../lib/vector/diglib/plus.c:364
+#, fuzzy
+msgid "Unable to write lines to plus file"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ quant я└п╟п╧п╩!"
+
+#: ../lib/vector/diglib/plus.c:370
+#, fuzzy
+msgid "Unable to write areas to plus file"
+msgstr "п╨п╟я─я┌п╟ [%s] - п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я│я┌я─п╬п╨я┐ %d"
+
+#: ../lib/vector/diglib/plus.c:376
+#, fuzzy
+msgid "Unable to write isles to plus file"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ quant я└п╟п╧п╩!"
+
+#: ../lib/vector/diglib/plus_node.c:220
 #, c-format
 msgid ""
 "Attempt to read line angle for the line which is not connected to the node: "
-"node = [%d] line = [%d]"
+"node %d, line %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/build.c:29 ../lib/vector/Vlib/open.c:34
@@ -691,7 +751,7 @@ msgstr " "
 #: ../lib/vector/Vlib/build.c:143
 #, fuzzy, c-format
 msgid "Building topology for vector map <%s>...\n"
-msgstr "вектор    "
+msgstr "п╡п╣п╨я┌п╬я─    "
 
 #: ../lib/vector/Vlib/build.c:156
 msgid "Topology was built\n"
@@ -783,7 +843,7 @@ msgstr " "
 #: ../lib/vector/Vlib/build.c:269
 #, fuzzy
 msgid "Error writing out topo file"
-msgstr "Ошибка записи в файл с плавающей точкой для карты %s"
+msgstr "п·я┬п╦п╠п╨п╟ п╥п╟п©п╦я│п╦ п╡ я└п╟п╧п╩ я│ п©п╩п╟п╡п╟я▌я┴п╣п╧ я┌п╬я┤п╨п╬п╧ п╢п╩я▐ п╨п╟я─я┌я▀ %s"
 
 #: ../lib/vector/Vlib/build.c:405
 #, fuzzy, c-format
@@ -793,7 +853,7 @@ msgstr " "
 #: ../lib/vector/Vlib/build.c:413
 #, fuzzy
 msgid "Error writing out spatial index file"
-msgstr "Ошибка записи в файл с плавающей точкой для карты %s"
+msgstr "п·я┬п╦п╠п╨п╟ п╥п╟п©п╦я│п╦ п╡ я└п╟п╧п╩ я│ п©п╩п╟п╡п╟я▌я┴п╣п╧ я┌п╬я┤п╨п╬п╧ п╢п╩я▐ п╨п╟я─я┌я▀ %s"
 
 #: ../lib/vector/Vlib/intersect.c:127
 msgid "3D not supported by Vect_segment_intersection()"
@@ -816,7 +876,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:110 ../lib/vector/Vlib/map.c:305
 #, fuzzy, c-format
 msgid "Vector map <%s> not found"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open.c:166
 #, fuzzy
@@ -833,27 +893,27 @@ msgstr " "
 #: ../lib/vector/Vlib/open.c:271
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on topology level %d"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open.c:195
 #, fuzzy
 msgid "Unable to read head file"
-msgstr "Не могу открыть врем. файл"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #: ../lib/vector/Vlib/open.c:215
 #, fuzzy, c-format
 msgid "Unable to open topology file for vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open.c:238
 #, fuzzy, c-format
 msgid "Unable to open category index file for vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open.c:319 ../lib/vector/Vlib/open.c:530
 #, fuzzy, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open.c:496 ../lib/vector/Vlib/map.c:169
 #: ../lib/vector/Vlib/map.c:293
@@ -865,7 +925,7 @@ msgstr " ."
 #: ../lib/vector/Vlib/map.c:297
 #, fuzzy, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr "вектор  ."
+msgstr "п╡п╣п╨я┌п╬я─  ."
 
 #: ../lib/vector/Vlib/open.c:507 ../lib/vector/Vlib/map.c:176
 #, fuzzy, c-format
@@ -880,7 +940,7 @@ msgstr " "
 #: ../lib/vector/Vlib/open.c:576
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/open.c:683
 msgid "Size of 'coor' file differs from value saved in topology file"
@@ -889,7 +949,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:694
 #, fuzzy, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
-msgstr "вектор    "
+msgstr "п╡п╣п╨я┌п╬я─    "
 
 #: ../lib/vector/Vlib/snap.c:119 ../lib/vector/Vlib/snap.c:159
 #: ../lib/vector/Vlib/break_polygons.c:191
@@ -933,23 +993,23 @@ msgstr " "
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, fuzzy, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/legal_vname.c:49
 #, fuzzy, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/legal_vname.c:56
 #, fuzzy, c-format
 msgid "Illegal vector map name <%s>. Character '%c' not allowed."
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/legal_vname.c:66
 #, fuzzy, c-format
 msgid ""
 "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/legal_vname.c:95 ../lib/vector/Vlib/legal_vname.c:97
 #, fuzzy, c-format
@@ -985,17 +1045,17 @@ msgstr ""
 #: ../lib/vector/Vlib/cindex.c:457
 #, fuzzy, c-format
 msgid "Unable to open cidx file <%s> for write"
-msgstr "Невозможно открыть %s для записи"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ %s п╢п╩я▐ п╥п╟п©п╦я│п╦"
 
 #: ../lib/vector/Vlib/cindex.c:465
 #, fuzzy, c-format
 msgid "Error writing out category index file <%s>"
-msgstr "Ошибка записи в файл с плавающей точкой для карты %s"
+msgstr "п·я┬п╦п╠п╨п╟ п╥п╟п©п╦я│п╦ п╡ я└п╟п╧п╩ я│ п©п╩п╟п╡п╟я▌я┴п╣п╧ я┌п╬я┤п╨п╬п╧ п╢п╩я▐ п╨п╟я─я┌я▀ %s"
 
 #: ../lib/vector/Vlib/cindex.c:508
 #, fuzzy, c-format
 msgid "Unable to open category index file for vector map <%s@%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/clean_nodes.c:52 ../lib/vector/Vlib/clean_nodes.c:216
 msgid "Modifications"
@@ -1003,8 +1063,8 @@ msgstr ""
 
 #: ../lib/vector/Vlib/read.c:99
 #, fuzzy
-msgid "Vector map is not opened"
-msgstr "вектор  "
+msgid "vector map is not opened"
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/read.c:102
 #, c-format
@@ -1012,9 +1072,9 @@ msgid ""
 "Vect_read_line(): line %d is not reasonable (max line in vector map: %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/dangles.c:122 ../lib/vector/Vlib/dangles.c:211
-#: ../lib/vector/Vlib/dangles.c:219
-msgid "Removed dangles"
+#: ../lib/vector/Vlib/dangles.c:169 ../lib/vector/Vlib/dangles.c:263
+#: ../lib/vector/Vlib/dangles.c:274
+msgid "Removed dangles:"
 msgstr ""
 
 #: ../lib/vector/Vlib/array.c:97
@@ -1049,7 +1109,18 @@ msgstr " "
 #: ../lib/vector/Vlib/array.c:280
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, where %s)"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
+
+#: ../lib/vector/Vlib/break_lines.c:116
+#, c-format
+msgid "%s %5d"
+msgstr ""
+
+#: ../lib/vector/Vlib/break_lines.c:116 ../lib/vector/Vlib/break_lines.c:323
+#: ../lib/vector/Vlib/break_lines.c:341
+#, fuzzy
+msgid "Intersections:"
+msgstr "п■я─я┐пЁп╟я▐ п©я─п╬п╣п╨я├п╦я▐"
 
 #: ../lib/vector/Vlib/break_polygons.c:200
 msgid "All points (vertices)"
@@ -1077,12 +1148,12 @@ msgstr ""
 #: ../lib/vector/Vlib/poly.c:243
 #, fuzzy
 msgid "Unable to find point in polygon"
-msgstr "не могу найти [%s] в [%s]"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╫п╟п╧я┌п╦ [%s] п╡ [%s]"
 
 #: ../lib/vector/Vlib/poly.c:661
 #, fuzzy
-msgid "Conditions failed"
-msgstr "Нет подключения\n"
+msgid "conditions failed"
+msgstr "п²п╣я┌ п©п╬п╢п╨п╩я▌я┤п╣п╫п╦я▐\n"
 
 #: ../lib/vector/Vlib/cats.c:46
 msgid "Vect_new_cats_struct(): Out of memory"
@@ -1099,13 +1170,13 @@ msgid "Unable to convert category string '%s' (from '%s') to category range"
 msgstr ""
 
 #: ../lib/vector/Vlib/sindex.c:97
-msgid "Not implemented"
+msgid "not implemented"
 msgstr ""
 
 #: ../lib/vector/Vlib/sindex.c:108
 #, fuzzy, c-format
 msgid "Unable to delete item %d from spatial index"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/sindex.c:127
 msgid ""
@@ -1148,7 +1219,7 @@ msgstr ""
 #: ../lib/vector/Vlib/level_two.c:303 ../lib/vector/Vlib/level_two.c:322
 #, fuzzy, c-format
 msgid "Vector map <%s> is not open on level >= 2"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/graph.c:107 ../lib/vector/Vlib/net.c:380
 msgid "GngFlatten error"
@@ -1190,7 +1261,7 @@ msgid "Unable to read vector map"
 msgstr " "
 
 #: ../lib/vector/Vlib/build_nat.c:526
-msgid "Primitives registered"
+msgid "primitives registered"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:536
@@ -1198,11 +1269,11 @@ msgid "Building areas: "
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:553
-msgid "Areas built"
+msgid "areas built"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:553
-msgid "Isles built"
+msgid "isles built"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_nat.c:561
@@ -1230,7 +1301,7 @@ msgstr ""
 #: ../lib/vector/Vlib/build_ogr.c:257
 #, fuzzy, c-format
 msgid "Unable to calculate centroid for area %d"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/vector/Vlib/build_ogr.c:292 ../lib/vector/Vlib/read_ogr.c:112
 #: ../lib/vector/Vlib/read_ogr.c:285
@@ -1248,8 +1319,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:336
+#, fuzzy
 msgid "Feature: "
-msgstr ""
+msgstr "п╒п╦п©(я▀) п╬п╠я┼п╣п╨я┌п╟(п╬п╡)"
 
 #: ../lib/vector/Vlib/build_ogr.c:354
 #, c-format
@@ -1261,8 +1333,9 @@ msgid "OGR feature without ID ignored"
 msgstr ""
 
 #: ../lib/vector/Vlib/level.c:39
+#, fuzzy
 msgid "Map structure was never initialized"
-msgstr ""
+msgstr "п▓п╣п╨я┌п╬я─п╫п╟я▐ я│я┌я─я┐п╨я┌я┐я─п╟ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫п╟"
 
 #: ../lib/vector/Vlib/level.c:41
 msgid "Map structure has been closed"
@@ -1275,18 +1348,18 @@ msgstr ""
 #: ../lib/vector/Vlib/area.c:131
 #, fuzzy, c-format
 msgid "Unable to read line %d"
-msgstr "Не могу открыть врем. файл"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #: ../lib/vector/Vlib/area.c:173 ../lib/vector/Vlib/area.c:205
 #: ../lib/vector/Vlib/area.c:274 ../lib/vector/Vlib/area.c:307
 #, fuzzy, c-format
 msgid "Attempt to read topo for dead area (%d)"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/vector/Vlib/area.c:335
 #, fuzzy, c-format
 msgid "Attempt to read topo for dead isle (%d)"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/vector/Vlib/open_ogr.c:54
 msgid "OGR format cannot be updated"
@@ -1300,12 +1373,12 @@ msgstr " "
 #: ../lib/vector/Vlib/open_ogr.c:84
 #, fuzzy, c-format
 msgid "Unable to open layer <%s>"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/open_ogr.c:128
 #, fuzzy, c-format
 msgid "Unable to open fidx file for vector map <%s@%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/open_ogr.c:144
 #, c-format
@@ -1329,16 +1402,16 @@ msgstr ""
 msgid "Area is composed of dead boundary"
 msgstr ""
 
-#: ../lib/vector/Vlib/remove_duplicates.c:67
-#: ../lib/vector/Vlib/remove_duplicates.c:129
+#: ../lib/vector/Vlib/remove_duplicates.c:69
+#: ../lib/vector/Vlib/remove_duplicates.c:137
 #, fuzzy
 msgid "Duplicates"
-msgstr "дважды задано поле восток"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ п╡п╬я│я┌п╬п╨"
 
 #: ../lib/vector/Vlib/map.c:55
 #, fuzzy
-msgid "Input vector map is not open"
-msgstr "вектор  "
+msgid "input vector map is not open"
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/map.c:65 ../lib/vector/Vlib/map.c:78
 #, fuzzy, c-format
@@ -1348,24 +1421,24 @@ msgstr " "
 #: ../lib/vector/Vlib/map.c:199 ../lib/vector/Vlib/map.c:308
 #, fuzzy, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
-msgstr "невозможно открыть растровую карту [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я─п╟я│я┌я─п╬п╡я┐я▌ п╨п╟я─я┌я┐ [%s п╡ %s]"
 
 #: ../lib/vector/Vlib/map.c:241 ../lib/vector/Vlib/map.c:355
 #: ../lib/vector/Vlib/map.c:572 ../lib/vector/Vlib/map.c:665
 #, fuzzy, c-format
 msgid "Unable to copy table <%s>"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/map.c:253 ../lib/vector/Vlib/map.c:380
 #: ../lib/vector/Vlib/map.c:582
 #, fuzzy, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/vector/Vlib/map.c:369 ../lib/vector/Vlib/map.c:462
 #, fuzzy, c-format
 msgid "Unable to delete table <%s>"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/map.c:417
 #, fuzzy, c-format
@@ -1375,17 +1448,17 @@ msgstr " "
 #: ../lib/vector/Vlib/map.c:433
 #, fuzzy, c-format
 msgid "Unable to open header file for vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/map.c:453
 #, fuzzy, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/map.c:467
 #, fuzzy, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/map.c:481
 #, fuzzy, c-format
@@ -1395,7 +1468,7 @@ msgstr " "
 #: ../lib/vector/Vlib/map.c:492
 #, fuzzy, c-format
 msgid "Unable to delete file '%s'"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/map.c:509
 #, fuzzy, c-format
@@ -1410,17 +1483,17 @@ msgstr " "
 #: ../lib/vector/Vlib/map.c:564 ../lib/vector/Vlib/map.c:653
 #, fuzzy, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/read_nat.c:146
 #, fuzzy
 msgid "Attempt to read dead line"
-msgstr "Не могу открыть врем. файл"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #: ../lib/vector/Vlib/overlay.c:76
 #, fuzzy
-msgid "Unknown operator"
-msgstr "Неизвестная проекция"
+msgid "unknown operator"
+msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╬я┬п╦п╠п╨п╟"
 
 #: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
@@ -1451,67 +1524,68 @@ msgstr " ."
 #: ../lib/vector/Vlib/field.c:101
 #, fuzzy
 msgid "Unable to add database link"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/field.c:107 ../lib/vector/Vlib/field.c:153
 #, fuzzy
 msgid "Unable to write database links"
-msgstr "карта [%s] - невозможно записать строку %d"
+msgstr "п╨п╟я─я┌п╟ [%s] - п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я│я┌я─п╬п╨я┐ %d"
 
 #: ../lib/vector/Vlib/field.c:221
 #, fuzzy, c-format
 msgid "Layer number %d or name <%s> already exists"
 msgstr " "
 
-#: ../lib/vector/Vlib/field.c:285
+#: ../lib/vector/Vlib/field.c:290
+#, c-format
 msgid ""
 "Default driver / database set to:\n"
-"driver: dbf\n"
-"database: $GISDBASE/$LOCATION_NAME/$MAPSET/dbf/"
+"driver: %s\n"
+"database: %s"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:295
+#: ../lib/vector/Vlib/field.c:297
 #, fuzzy
 msgid "Default driver is not set"
 msgstr " "
 
-#: ../lib/vector/Vlib/field.c:297
+#: ../lib/vector/Vlib/field.c:299
 #, fuzzy
 msgid "Default database is not set"
 msgstr " "
 
-#: ../lib/vector/Vlib/field.c:352
+#: ../lib/vector/Vlib/field.c:355
 #, c-format
 msgid "Requested dblink %d, maximum link number %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:487
+#: ../lib/vector/Vlib/field.c:490
 #, fuzzy
 msgid "Unable to open OGR DBMI driver"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ п©п╟п©п╨я┐ %s"
 
-#: ../lib/vector/Vlib/field.c:516
+#: ../lib/vector/Vlib/field.c:519
 msgid ""
 "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
 "available in OGR DB table"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:557
+#: ../lib/vector/Vlib/field.c:560
 #, c-format
 msgid "Don't know how to read links for format %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/field.c:585
+#: ../lib/vector/Vlib/field.c:588
 #, fuzzy, c-format
 msgid "Error in rule on row %d in %s"
 msgstr " "
 
-#: ../lib/vector/Vlib/field.c:636
+#: ../lib/vector/Vlib/field.c:639
 #, fuzzy, c-format
 msgid "Unable to open vector database definition file '%s'"
-msgstr "не могу открыть файл: %s"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ я┌п╟п╠п╩п╦я├я▀ п╢п╟я┌я┐п╪п╬п╡: %s"
 
-#: ../lib/vector/Vlib/field.c:721
+#: ../lib/vector/Vlib/field.c:724
 #, fuzzy
 msgid "Bug: attempt to update map which is not in current mapset"
 msgstr " ."
@@ -1523,7 +1597,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net.c:155
 #, fuzzy
 msgid "Unable to build network graph"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/net.c:161
 msgid "Forward costs column not specified"
@@ -1537,7 +1611,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net.c:318
 #, fuzzy, c-format
 msgid "Column <%s> not found in table <%s>"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬п©п╦я│п╟я┌я▄ я┌п╟п╠п╩п╦я├я┐ <%s>"
 
 #: ../lib/vector/Vlib/net.c:187 ../lib/vector/Vlib/net.c:202
 #: ../lib/vector/Vlib/net.c:324
@@ -1590,12 +1664,14 @@ msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr ""
 
 #: ../lib/vector/Vlib/line.c:61
+#, fuzzy
 msgid "Out of memory"
-msgstr ""
+msgstr "G_malloc: out of memory"
 
 #: ../lib/vector/Vlib/line.c:205 ../lib/vector/Vlib/line.c:237
+#, fuzzy
 msgid "Index out of range in"
-msgstr ""
+msgstr "п═я▐п╢/п╨п╬п╩п╬п╫п╨п╟ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/vector/Vlib/line.c:522
 msgid "Segment outside line, no segment created"
@@ -1604,7 +1680,7 @@ msgstr ""
 #: ../lib/vector/Vlib/header.c:100 ../lib/vector/Vlib/header.c:149
 #, fuzzy, c-format
 msgid "Unable to open header file of vector <%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/vector/Vlib/header.c:156
 #, c-format
@@ -1614,12 +1690,12 @@ msgstr ""
 #: ../lib/vector/Vlib/header.c:187
 #, fuzzy, c-format
 msgid "Unknown keyword %s in vector head"
-msgstr "Неизвестная проекция"
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п©я─п╬п╣п╨я├п╦я▐"
 
 #: ../lib/vector/Vlib/header.c:533 ../lib/gis/proj3.c:66
 #, fuzzy
 msgid "Unknown projection"
-msgstr "Неизвестная проекция"
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п©я─п╬п╣п╨я├п╦я▐"
 
 #: ../lib/vector/Vlib/write.c:25 ../lib/vector/Vlib/write.c:29
 #: ../lib/vector/Vlib/write.c:33
@@ -1635,7 +1711,7 @@ msgstr " "
 #: ../lib/vector/Vlib/write.c:107
 #, fuzzy
 msgid "Unable to write line (negative offset)"
-msgstr "карта [%s] - невозможно записать строку %d"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ quant я└п╟п╧п╩!"
 
 #: ../lib/vector/Vlib/write.c:143
 #, fuzzy
@@ -1645,7 +1721,7 @@ msgstr " "
 #: ../lib/vector/Vlib/write.c:154
 #, fuzzy, c-format
 msgid "Unable to rewrite line %d"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/vector/Vlib/write.c:201
 #, fuzzy, c-format
@@ -1662,10 +1738,30 @@ msgstr "   "
 msgid "Unable to delete line %d from vector map <%s>"
 msgstr " "
 
+#: ../lib/vector/vedit/select.c:230
+#, fuzzy
+msgid "Unknown query tool"
+msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╬я┬п╦п╠п╨п╟"
+
+#: ../lib/vector/vedit/break.c:245
+#, fuzzy, c-format
+msgid "Unable to connect lines %d,%d"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
+
+#: ../lib/vector/vedit/cats.c:65
+#, fuzzy, c-format
+msgid "Unable to set category %d for line %d"
+msgstr "п╡п╣п╨я┌п╬я─  "
+
+#: ../lib/vector/vedit/cats.c:74
+#, fuzzy, c-format
+msgid "Unable to delete layer/category %d/%d line %d"
+msgstr " "
+
 #: ../lib/vask/V_support.c:58
 #, fuzzy, c-format
 msgid "Unable to open file %s"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/proj/get_proj.c:149
 #, fuzzy, c-format
@@ -1688,7 +1784,7 @@ msgstr ""
 #: ../lib/proj/get_proj.c:325
 #, fuzzy, c-format
 msgid "Unable to initialize pj cause: %s"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/proj/get_proj.c:400
 msgid "Input Projection Parameters"
@@ -1709,23 +1805,23 @@ msgstr ""
 #: ../lib/proj/datum.c:252
 #, fuzzy
 msgid "Unable to open temporary file"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/proj/datum.c:337 ../lib/gis/get_ell_name.c:46
 #: ../lib/gis/get_datum_name.c:56 ../lib/gis/get_projname.c:51
 #, fuzzy, c-format
 msgid "Hit RETURN to cancel request\n"
-msgstr "Нажмите RETURN для отмены\n"
+msgstr "п²п╟п╤п╪п╦я┌п╣ RETURN п╢п╩я▐ п╬я┌п╪п╣п╫я▀\n"
 
 #: ../lib/proj/datum.c:408 ../lib/proj/datum.c:471
 #, fuzzy, c-format
 msgid "Unable to open datum table file <%s>"
-msgstr "не могу открыть файл: %s"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ я┌п╟п╠п╩п╦я├я▀ п╢п╟я┌я┐п╪п╬п╡: %s"
 
 #: ../lib/proj/datum.c:421 ../lib/proj/datum.c:485
 #, fuzzy, c-format
 msgid "Error in datum table file <%s>, line %d"
-msgstr "ошибка в файле данных, строка %d"
+msgstr "п╬я┬п╦п╠п╨п╟ п╡ я└п╟п╧п╩п╣ я┌п╟п╠п╩п╦я├я▀ п╢п╟я┌я┐п╪п╬п╡, я│я┌я─п╬п╨п╟ %d"
 
 #: ../lib/proj/convert.c:107
 msgid "Unable parse GRASS PROJ_INFO file"
@@ -1788,122 +1884,123 @@ msgstr ""
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
 msgstr " "
 
-#: ../lib/proj/ellipse.c:114
+#: ../lib/proj/ellipse.c:113
 msgid "No ellipsoid info given in file"
 msgstr ""
 
-#: ../lib/proj/ellipse.c:212 ../lib/gis/get_ellipse.c:296
+#: ../lib/proj/ellipse.c:213 ../lib/gis/get_ellipse.c:296
 #, fuzzy, c-format
 msgid "Unable to open ellipsoid table file <%s>"
-msgstr "невозможно открыть файл табл. эллипсоида: %s"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ я┌п╟п╠п╩п╦я├я▀ я█п╩п╩п╦п©я│п╬п╦п╢п╬п╡: %s"
 
 #: ../lib/g3d/g3dparam.c:54
 msgid "Data type used in the output file"
-msgstr ""
+msgstr "п╒п╦п© п╢п╟п╫п╫я▀я┘ п╦я│п©п╬п╩я▄п╥я┐п╣п╪я▀п╧ п╡ п╡я▀я┘п╬п╢п╫п╬п╪ я└п╟п╧п╩п╣"
 
 #: ../lib/g3d/g3dparam.c:63
 msgid "Precision used in the output file (default, max, or 0 to 52)"
 msgstr ""
+"п╒п╬я┤п╫п╬я│я┌я▄ п╦я│п©п╬п╩я▄п╥я┐п╣п╪п╟я▐ п╡ п╡я▀я┘п╬п╢п╫п╬п╪ я└п╟п╧п╩п╣ (п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌, п╪п╟п╨я│п╦п╪п╟п╩я▄п╫п╟я▐ п╦п╩п╦ 0-52"
 
 #: ../lib/g3d/g3dparam.c:73
 msgid "The compression method used in the output file"
-msgstr ""
+msgstr "п°п╣я┌п╬п╢ я│п╤п╟я┌п╦я▐ п╦я│п©п╬п╩я▄п╥я┐п╣п╪я▀п╧ п╡ п╡я▀я┘п╬п╢п╫п╬п╪ я└п╟п╧п╩п╣"
 
 #: ../lib/g3d/g3dparam.c:83
 msgid "The dimensions of the tiles used in the output file"
-msgstr ""
+msgstr "п═п╟п╥п╪п╣я─я▀ я┌п╟п╧п╩п╬п╡ п╦я│п©п╬п╩я▄п╥я┐п╪я▀п╣ п╡ п╡я▀я┘п╬п╢п╫п╬п╪ я└п╟п╧п╩п╣"
 
 #: ../lib/g3d/g3dparam.c:118
 msgid "G3d_getStandard3dParams: precision value invalid"
-msgstr ""
+msgstr "G3d_getStandard3dParams: п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣ я┌п╬я┤п╫п╬я│я┌п╦"
 
 #: ../lib/g3d/g3dparam.c:146
 msgid "G3d_getStandard3dParams: tile dimension value invalid"
-msgstr ""
+msgstr "G3d_getStandard3dParams: п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╣ я─п╟п╥п╪п╣я─я▀ я┌п╟п╧п╩п╬п╡"
 
 #: ../lib/g3d/g3dparam.c:171
 #, fuzzy
 msgid "Window replacing the default"
-msgstr "чтобы установить по умолчанию"
+msgstr "я┤я┌п╬п╠я▀ я┐я│я┌п╟п╫п╬п╡п╦я┌я▄ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: ../lib/g3d/g3dopen.c:22
 msgid "G3d_openCellOldNoHeader: error in G3d_maskOpenOld"
-msgstr ""
+msgstr "G3d_openCellOldNoHeader: п╬я┬п╦п╠п╨п╟ п╡ G3d_maskOpenOld"
 
 #: ../lib/g3d/g3dopen.c:28
 msgid "G3d_openCellOldNoHeader: error in G3d_malloc"
-msgstr ""
+msgstr "G3d_openCellOldNoHeader: п╬я┬п╦п╠п╨п╟ п╡ G3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:46
 msgid "G3d_openCellOldNoHeader: error in G_open_old"
-msgstr ""
+msgstr "G3d_openCellOldNoHeader: п╬я┬п╦п╠п╨п╟ п╡ G_open_old"
 
 #: ../lib/g3d/g3dopen.c:101
 msgid "G3d_openCellOld: error in G3d_openCellOldNoHeader"
-msgstr ""
+msgstr "G3d_openCellOld: п╬я┬п╦п╠п╨п╟ п╡ G3d_openCellOldNoHeader"
 
 #: ../lib/g3d/g3dopen.c:106
 msgid "G3d_openCellOld: can't rewind file"
-msgstr ""
+msgstr "G3d_openCellOld: п╫п╣ п╪п╬пЁя┐ п©п╣я─п╣п╪п╬я┌п╟я┌я▄ я└п╟п╧п╩"
 
 #: ../lib/g3d/g3dopen.c:119
 msgid "G3d_openCellOld: error in G3d_readHeader"
-msgstr ""
+msgstr "G3d_openCellOld: п╬я┬п╦п╠п╨п╟ п╡ G3d_readHeader"
 
 #: ../lib/g3d/g3dopen.c:126
 msgid "G3d_openCellOld: projection does not match window projection"
-msgstr ""
+msgstr "G3d_openCellOld: п©я─п╬п╣п╨я├п╦я▐ п╫п╣ я│п╬п╬я┌п╡п╣я┌я│я┌п╡я┐п╣я┌ п©я─п╬п╣п╨я├п╦п╦ п╬п╨п╫п╟"
 
 #: ../lib/g3d/g3dopen.c:130
 msgid "G3d_openCellOld: zone does not match window zone"
-msgstr ""
+msgstr "G3d_openCellOld: п╥п╬п╫п╟ п╫п╣ я│п╬п╡п©п╟п╢п╟п╣я┌ п╥п╬п╫п╣ п╬п╨п╫п╟"
 
 #: ../lib/g3d/g3dopen.c:142 ../lib/g3d/g3dopen.c:159
 msgid "G3d_openCellOld: can't read header"
-msgstr ""
+msgstr "G3d_openCellOld: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╦я┌п╟я┌я▄ п╥п╟пЁп╬п╩п╬п╡п╬п╨"
 
 #: ../lib/g3d/g3dopen.c:148
 msgid "G3d_openCellOld: index does not fit into long"
-msgstr ""
+msgstr "G3d_openCellOld: п╦п╫п╢п╣п╨я│ п╫п╣ п©п╬п╪п╣я┴п╟п╣я┌я│я▐ п╡ long"
 
 #: ../lib/g3d/g3dopen.c:152
 msgid "G3d_openCellOld: error in G3d_malloc"
-msgstr ""
+msgstr "G3d_openCellOld: п╬я┬п╦п╠п╨п╟ п╡ G3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:179
 msgid "G3d_openCellOld: error in G3d_fillHeader"
-msgstr ""
+msgstr "G3d_openCellOld: п╬я┬п╦п╠п╨п╟ п╡ G3d_fillHeader"
 
 #: ../lib/g3d/g3dopen.c:227
 msgid "G3d_openCellNew: error in G3d_maskOpenOld"
-msgstr ""
+msgstr "G3d_openCellNew: п╬я┬п╦п╠п╨п╟ п╡ G3d_maskOpenOld"
 
 #: ../lib/g3d/g3dopen.c:236
 msgid "G3d_openCellNew: error in G3d_malloc"
-msgstr ""
+msgstr "G3d_openCellNew: п╬я┬п╦п╠п╨п╟ п╡ G3d_malloc"
 
 #: ../lib/g3d/g3dopen.c:249
 msgid "G3d_openCellNew: could not open file"
-msgstr ""
+msgstr "G3d_openCellNew: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩"
 
 #: ../lib/g3d/g3dopen.c:291 ../lib/g3d/g3dopen.c:296
 msgid "G3d_openCellNew: can't write header"
-msgstr ""
+msgstr "G3d_openCellNew: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ п╥п╟пЁп╬п╩п╬п╡п╬п╨"
 
 #: ../lib/g3d/g3dopen.c:319
 msgid "G3d_openCellNew: error in G3d_fillHeader"
-msgstr ""
+msgstr "G3d_openCellNew: п╬я┬п╦п╠п╨п╟ п╡ G3d_fillHeader"
 
 #: ../lib/g3d/g3dhistory.c:46 ../lib/gis/history.c:134
 #, fuzzy, c-format
 msgid "can't get history information for [%s] in mapset [%s]"
-msgstr "невозможно прочитать историю для [%s] в наб. данных [%s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╦я┌п╟я┌я▄ п╦я│я┌п╬я─п╦я▌ п╢п╩я▐ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s]"
 
 #: ../lib/gis/get_ell_name.c:33 ../lib/gis/get_datum_name.c:67
 #: ../lib/gis/get_projname.c:39
 #, fuzzy
 msgid "Cannot open temp file"
-msgstr "Не могу открыть врем. файл"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪п╣п╫п╫я▀п╧ я└п╟п╧п╩"
 
 #: ../lib/gis/get_ell_name.c:44
 #, c-format
@@ -1911,11 +2008,13 @@ msgid ""
 "\n"
 "Please specify ellipsoid name\n"
 msgstr ""
+"\n"
+"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╥п╟п╢п╟п╧я┌п╣ п╦п╪я▐ я█п╩п╩п╦п©я│п╬п╦п╢п╟\n"
 
 #: ../lib/gis/get_ell_name.c:45
 #, fuzzy, c-format
 msgid "Enter 'list' for the list of available ellipsoids\n"
-msgstr "Введите 'list' для вывода списка эллипсоидов\n"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ 'list' п╢п╩я▐ п╡я▀п╡п╬п╢п╟ я│п©п╦я│п╨п╟ я█п╩п╩п╦п©я│п╬п╦п╢п╬п╡\n"
 
 #: ../lib/gis/get_ell_name.c:65
 #, c-format
@@ -1923,55 +2022,57 @@ msgid ""
 "\n"
 "invalid ellipsoid\n"
 msgstr ""
+"\n"
+"п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╧ я█п╩п╩п╦п©я│п╬п╦п╢\n"
 
 #: ../lib/gis/sample.c:81
 #, fuzzy
 msgid "Unknown interpolation type"
-msgstr "Неизвестная проекция"
+msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫я▀п╧ я┌п╦п© п╦п╫я┌п╣я─п©п╬п╩я▐я├п╦п╦"
 
 #: ../lib/gis/sample.c:467
 msgid "\"no data\" label found; setting to zero"
-msgstr ""
+msgstr "п╫п╟п╧п╢п╣п╫п╟ п╪п╣я┌п╨п╟ \"no data\"; я┐я│я┌п╟п╫п╬п╡п╩п╣п╫п╟ п╡ п╫п╬п╩я▄"
 
 #: ../lib/gis/sample.c:481
 #, fuzzy
 msgid "Problem reading raster map"
-msgstr "Слишком много растровых файлов открыты"
+msgstr "п©я─п╬п╠п╩п╣п╪п╟ я┤я┌п╣п╫п╦я▐ я─п╟я│я┌я─п╬пЁп╬ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/put_cellhd.c:26
 #, fuzzy, c-format
 msgid "Unable to create header file for [%s]"
-msgstr "Невозможно создать файл заголовка для [%s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s]"
 
 #: ../lib/gis/legal_name.c:38
 #, fuzzy, c-format
 msgid "Illegal filename.  Cannot be '.' or 'NULL'\n"
-msgstr "Неправильно задано имя файла.  Не может быть '.' или 'NULL'\n"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬ п╥п╟п╢п╟п╫п╬ п╦п╪я▐ я└п╟п╧п╩п╟.  п²п╣ п╢п╬п╩п╤п╫п╬ п╠я▀я┌я▄ '.' п╦п╩п╦ 'NULL'\n"
 
 #: ../lib/gis/legal_name.c:45
 #, fuzzy, c-format
 msgid "Illegal filename. Character <%c> not allowed.\n"
-msgstr "Неправильно задано имя файла. знак <%c> недопустим."
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬ п╥п╟п╢п╟п╫п╬ п╦п╪я▐ я└п╟п╧п╩п╟. п╥п╫п╟п╨ <%c> п╫п╣п╢п╬п©я┐я│я┌п╦п╪."
 
 #: ../lib/gis/legal_name.c:75 ../lib/gis/legal_name.c:77
 #, fuzzy, c-format
 msgid "Output name '%s' is not valid rast name."
-msgstr "   ."
+msgstr "п▓я▀я┘п╬п╢п╫п╬п╣ п╦п╪я▐ '%s' - п╫п╣п╢п╬п©я┐я│я┌п╦п╪п╬п╣ п╦п╪я▐ п╢п╩я▐ я─п╟я│я┌я─п╬п╡п╬пЁп╬ я└п╟п╧п╩п╟."
 
 #: ../lib/gis/legal_name.c:88 ../lib/gis/legal_name.c:90
 #, fuzzy, c-format
 msgid "Cannot find input map '%s'"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ п╡я┘п╬п╢п╫я┐я▌ п╨п╟я─я┌я┐ '%s'"
 
 #: ../lib/gis/legal_name.c:109 ../lib/gis/legal_name.c:111
 #, fuzzy, c-format
 msgid "Output map '%s' is used as input"
-msgstr "   "
+msgstr "п▓я▀я┘п╬п╢п╫п╟я▐ п╨п╟я─я┌п╟ '%s' п╦я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╟ п╨п╟п╨ п╡я┘п╬п╢п╫п╟я▐"
 
 #: ../lib/gis/debug.c:68
 #, fuzzy, c-format
 msgid "Cannot open debug file '%s'"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ debug-я└п╟п╧п╩ '%s'"
 
 #: ../lib/gis/get_datum_name.c:53
 #, c-format
@@ -1979,16 +2080,18 @@ msgid ""
 "\n"
 "Please specify datum name\n"
 msgstr ""
+"\n"
+"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, я┐п╨п╟п╤п╦я┌п╣ п╦п╪я▐ п╢п╟я┌я┐п╪п╟\n"
 
 #: ../lib/gis/get_datum_name.c:54
 #, fuzzy, c-format
 msgid "Enter 'list' for the list of available datums\n"
-msgstr "Введите 'list' для вывода списка datum\n"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ 'list' п╢п╩я▐ п╡я▀п╡п╬п╢п╟ я│п©п╦я│п╨п╟ п╢п╬я│я┌я┐п©п╫я▀я┘ п╢п╟я┌я┐п╪п╬п╡\n"
 
 #: ../lib/gis/get_datum_name.c:55
 #, c-format
 msgid "or 'custom' if you wish to enter custom parameters\n"
-msgstr ""
+msgstr "п╦п╩п╦ 'custom' п╣я│п╩п╦ п╫я┐п╤п╫п╬ п╡п╡п╣я│я┌п╦ п╢я─я┐пЁп╦п╣ п©п╟я─п╟п╪п╣я┌я─я▀\n"
 
 #: ../lib/gis/get_datum_name.c:93
 #, c-format
@@ -1996,68 +2099,72 @@ msgid ""
 "\n"
 "invalid datum\n"
 msgstr ""
+"\n"
+"п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╧ п╢п╟я┌я┐п╪\n"
 
 #: ../lib/gis/datum.c:172
 #, fuzzy, c-format
 msgid "unable to open datum table file: %s"
-msgstr "не могу открыть файл: %s"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ я┌п╟п╠п╩п╦я├я▀ п╢п╟я┌я┐п╪п╬п╡: %s"
 
 #: ../lib/gis/datum.c:196
 #, fuzzy, c-format
 msgid "error in datum table file, line %d"
-msgstr "ошибка в файле данных, строка %d"
+msgstr "п╬я┬п╦п╠п╨п╟ п╡ я└п╟п╧п╩п╣ я┌п╟п╠п╩п╦я├я▀ п╢п╟я┌я┐п╪п╬п╡, я│я┌я─п╬п╨п╟ %d"
 
 #: ../lib/gis/list.c:116
 #, fuzzy, c-format
 msgid "no %s files available in current mapset\n"
-msgstr " "
+msgstr "п╡ я┌п╣п╨я┐я┴п╣п╪ п╫п╟п╠п╬я─п╣ я└п╟п╧п╩я▀ %s п╫п╣п╢п╬я│я┌я┐п©п╫я▀\n"
 
 #: ../lib/gis/list.c:118
 #, fuzzy, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr "   "
+msgstr "п╡ п╫п╟п╠п╬я─п╣ <%s> я└п╟п╧п╩я▀ %s п╫п╣п╢п╬я│я┌я┐п©п╫я▀"
 
 #: ../lib/gis/list.c:132
 #, fuzzy, c-format
 msgid "hit RETURN to continue -->"
-msgstr "нажмите RETURN для продолжения -->"
+msgstr "п╫п╟п╤п╪п╦я┌п╣ RETURN п╢п╩я▐ п©я─п╬п╢п╬п╩п╤п╣п╫п╦я▐ -->"
 
 #: ../lib/gis/list.c:184
 #, fuzzy, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "%s файлов в наборе данных %s:\n"
+msgstr "%s я└п╟п╧п╩п╬п╡ п╡ п╫п╟п╠п╬я─п╣ п╢п╟п╫п╫я▀я┘ <%s>:\n"
 
 #: ../lib/gis/list.c:258
 #, fuzzy
 msgid "G_list: Unknown element type"
-msgstr "Неизвестная проекция"
+msgstr "G_list: п²п╣п╦п╥п╡п╣я│я┌п╫я▀п╧ я┌п╦п© я█п╩п╣п╪п╣п╫я┌п╟"
 
 #: ../lib/gis/proj2.c:49
 #, fuzzy
 msgid "Latitude-Longitude"
-msgstr "Широта - Долгота"
+msgstr "п╗п╦я─п╬я┌п╟-п■п╬п╩пЁп╬я┌п╟"
 
 #: ../lib/gis/proj2.c:51
 #, fuzzy
 msgid "Other Projection"
-msgstr "Другая проекция"
+msgstr "п■я─я┐пЁп╟я▐ п©я─п╬п╣п╨я├п╦я▐"
 
 #: ../lib/gis/opencell.c:185
 #, fuzzy, c-format
 msgid "unable to open raster map [%s in %s]"
-msgstr "невозможно открыть растровую карту [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я─п╟я│я┌я─п╬п╡я┐я▌ п╨п╟я─я┌я┐ [%s п╡ %s]"
 
 #: ../lib/gis/opencell.c:269
 #, fuzzy, c-format
 msgid ""
 "unable to open [%s] in [%s] since it is a reclass of [%s] in [%s] which does "
 "not exist"
-msgstr "         "
+msgstr ""
+"п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ [%s] п╡ [%s] я┌п╟п╨ п╨п╟п╨ п╬п╫ - п©п╣я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦я▐ [%s] п╡ [%s] "
+"п╨п╬я┌п╬я─п╟я▐ п╫п╣ я│я┐я┴п╣я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/opencell.c:292
 #, fuzzy, c-format
 msgid "[%s] in mapset [%s]-format field in header file invalid"
-msgstr "[%s] в наб. данных [%s]- формат поля в файле заголовка неверен"
+msgstr "[%s] п╡ п╫п╟п╠п╬я─п╣ [%s]-я└п╬я─п╪п╟я┌ п©п╬п╩я▐ п╡ я└п╟п╧п╩п╣ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╫п╣п╡п╣я─п╣п╫"
 
 #: ../lib/gis/opencell.c:301
 #, fuzzy, c-format
@@ -2065,207 +2172,209 @@ msgid ""
 "[%s] in mapset [%s] - in different projection than current region:\n"
 " found map [%s] in: <%s>, should be <%s> "
 msgstr ""
-"   \n"
-"       "
+"[%s] п╡ п╫п╟п╠п╬я─п╣ [%s] - п╡ п©я─п╬п╣п╨я├п╦п╦ п╬я┌п╩п╦я┤п╫п╬п╧ п╬я┌ п©я─п╬п╣п╨я├п╦п╦ я┌п╣п╨я┐я┴п╣пЁп╬ я─п╣пЁп╦п╬п╫п╟:\n"
+" п╫п╟п╧п╢п╣п╫п╟ п╨п╟я─я┌п╟ [%s] п╡: <%s>, п╢п╬п╩п╤п╫п╬ п╠я▀я┌я▄ <%s> "
 
 #: ../lib/gis/opencell.c:308
 #, fuzzy, c-format
 msgid "[%s] in mapset [%s] - in different zone [%d] than current region [%d]"
-msgstr "   "
+msgstr "[%s] п╡ п╫п╟п╠п╬я─п╣ [%s] - п╡ п╢я─я┐пЁп╬п╧ п╥п╬п╫п╣ [%d] я┤п╣п╪ я┌п╣п╨я┐я┴п╦п╧ я─п╣пЁп╦п╬п╫ [%d]"
 
 #: ../lib/gis/opencell.c:316
 #, fuzzy, c-format
 msgid "[%s] in [%s] - bytes per cell (%d) too large"
-msgstr "[%s] в [%s] - байт на клетку (%d) слишком много"
+msgstr "[%s] п╡ [%s] - п╠п╟п╧я┌ п╫п╟ я▐я┤п╣п╧п╨я┐ (%d) я│п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬"
 
 #: ../lib/gis/opencell.c:625
 #, fuzzy, c-format
 msgid "opencell: %s - illegal file name"
-msgstr "opencell: %s - неправильное имя файла"
+msgstr "opencell: %s - п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╦п╪я▐ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/opencell.c:718
 msgid "Can't write embedded null values for map open for random access"
 msgstr ""
+"п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п╫я┐п╩п╣п╡я▀п╣ п╥п╫п╟я┤п╣п╫п╦я▐ п╢п╩я▐ п╨п╟я─я┌я▀ п╬я┌п╨я─я▀я┌п╬п╧ п╢п╩я▐ я│п╩я┐я┤п╟п╧п╫п╬пЁп╬ "
+"п╢п╬я│я┌я┐п©п╟"
 
 #: ../lib/gis/opencell.c:936 ../lib/gis/opencell.c:991
 #, fuzzy, c-format
 msgid "unable to find [%s] in [%s]"
-msgstr "не могу найти [%s] в [%s]"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╫п╟п╧я┌п╦ [%s] п╡ [%s]"
 
 #: ../lib/gis/opencell.c:1043
 #, fuzzy, c-format
 msgid "unable to find [%s]"
-msgstr "не могу найти [%s]"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╫п╟п╧я┌п╦ [%s]"
 
 #: ../lib/gis/opencell.c:1049
 #, fuzzy, c-format
 msgid "Unable to open %s"
-msgstr "Не могу открыть [%s]"
+msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ [%s]"
 
 #: ../lib/gis/opencell.c:1058
 #, fuzzy, c-format
 msgid "invalid type: field %s in file %s "
-msgstr "неверный тип: поле %s в файле %s "
+msgstr "п╫п╣п╡п╣я─п╫я▀п╧ я┌п╦п©: п©п╬п╩п╣ %s п╡ я└п╟п╧п╩п╣ %s "
 
 #: ../lib/gis/put_title.c:28
 #, fuzzy, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr "категории для [%s] в [%s] отсутствуют или заданы неверно"
+msgstr "п╨п╟я┌п╣пЁп╬я─п╦п╦ п╢п╩я▐ [%s] п╡ [%s] п╬я┌я│я┐я┌я│я┌п╡я┐я▌я┌ п╦п╩п╦ п╥п╟п╢п╟п╫я▀ п╫п╣п╡п╣я─п╫п╬"
 
 #: ../lib/gis/put_title.c:38
 #, fuzzy, c-format
 msgid "G_put_title - can't create a temp file"
-msgstr "G_put_title - не могу создать врем. файл"
+msgstr "G_put_title - п╫п╣ п╪п╬пЁя┐ я│п╬п╥п╢п╟я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #: ../lib/gis/put_title.c:58
 #, fuzzy, c-format
 msgid "category information for [%s] in [%s] invalid"
-msgstr "категории для [%s] в [%s] заданы неверно"
+msgstr "п╨п╟я┌п╣пЁп╬я─п╦п╦ п╢п╩я▐ [%s] п╡ [%s] п╥п╟п╢п╟п╫я▀ п╫п╣п╡п╣я─п╫п╬"
 
 #: ../lib/gis/put_title.c:66
 #, fuzzy, c-format
 msgid "G_put_title - can't reopen temp file"
-msgstr "G_put_title - не могу заново открыть врем. файл"
+msgstr "G_put_title - п╫п╣ п╪п╬пЁя┐ п╥п╟п╫п╬п╡п╬ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #: ../lib/gis/put_title.c:75
 #, fuzzy, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr "невозможно записать категории для [%s] в [%s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п╨п╟я┌п╣пЁп╬я─п╦п╦ п╢п╩я▐ [%s] п╡ [%s]"
 
 #: ../lib/gis/quant_io.c:92
 #, fuzzy, c-format
 msgid "The floating data range for %s@%s is empty"
-msgstr "Диапазон с плав. точкой для %s@%s пуст"
+msgstr "п■п╦п╟п©п╟п╥п╬п╫ я│ п©п╩п╟п╡. я┌п╬я┤п╨п╬п╧ п╢п╩я▐ %s@%s п©я┐я│я┌"
 
 #: ../lib/gis/quant_io.c:101
 #, fuzzy, c-format
 msgid "The integer data range for %s@%s is empty"
-msgstr "Диапазон целых чисел для %s@%s пуст"
+msgstr "п■п╦п╟п©п╟п╥п╬п╫ я├п╣п╩я▀я┘ я┤п╦я│п╣п╩ п╢п╩я▐ %s@%s п©я┐я│я┌"
 
 #: ../lib/gis/quant_io.c:167
 #, fuzzy, c-format
 msgid "quantization file [%s] in mapset [%s] %s"
-msgstr "файл разбиения значений [%s] в наб. данных [%s] %s"
+msgstr "я└п╟п╧п╩ я─п╟п╥п╠п╦п╣п╫п╦я▐ п╥п╫п╟я┤п╣п╫п╦п╧ [%s] п╡ п╫п╟п╠. п╢п╟п╫п╫я▀я┘ [%s] %s"
 
 #: ../lib/gis/system.c:90
 msgid "Can not create a new process!"
-msgstr ""
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ п╫п╬п╡я▀п╧ п©я─п╬я├п╣я│я│!"
 
 #: ../lib/gis/myname.c:51
 #, fuzzy
 msgid "Unknown Location"
-msgstr "ОБЛАСТЬ неизвестна"
+msgstr "п·п▒п⌡п░п║п╒п╛ п╫п╣п╦п╥п╡п╣я│я┌п╫п╟"
 
 #: ../lib/gis/color_rules.c:115
 msgid "syntax error"
-msgstr ""
+msgstr "я│п╦п╫я┌п╟п╨я│п╦я┤п╣я│п╨п╟я▐ п╬я┬п╦п╠п╨п╟"
 
 #: ../lib/gis/color_rules.c:116
 msgid "R/G/B not in range 0-255"
-msgstr ""
+msgstr "R/G/B п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟ 0-255"
 
 #: ../lib/gis/color_rules.c:117
 #, fuzzy
 msgid "invalid color name"
-msgstr "Неверные координаты"
+msgstr "п²п╣п╡п╣я─п╫п╬п╣ п╦п╪я▐ я├п╡п╣я┌п╟"
 
 #: ../lib/gis/color_rules.c:118
 msgid "percentage not in range 0-100"
-msgstr ""
+msgstr "п©я─п╬я├п╣п╫я┌ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟ 0-100"
 
 #: ../lib/gis/color_rules.c:119
 msgid "invalid value"
-msgstr ""
+msgstr "п╫п╣п╡п╣я─п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣"
 
 #: ../lib/gis/color_rules.c:120
 #, fuzzy
 msgid "unknown error"
-msgstr "Неизвестная проекция"
+msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п╬я┬п╦п╠п╨п╟"
 
-#: ../lib/gis/color_rules.c:151
-#, c-format
-msgid "bad rule (%s): %s"
-msgstr ""
+#: ../lib/gis/color_rules.c:152
+#, fuzzy, c-format
+msgid "bad rule (%s): [%s]"
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п©я─п╟п╡п╦п╩п╬ (%s): %s"
 
 #: ../lib/gis/spawn.c:77 ../lib/gis/spawn.c:110
 #, fuzzy
 msgid "Too many arguments"
-msgstr "Слишком много открытых файлов"
+msgstr "п║п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ п╬я┌п╨я─я▀я┌я▀я┘ я└п╟п╧п╩п╬п╡"
 
-#: ../lib/gis/spawn.c:132 ../lib/gis/spawn.c:385
+#: ../lib/gis/spawn.c:132 ../lib/gis/spawn.c:408
 #, fuzzy
 msgid "Unable to create a new process"
-msgstr "Невозможно создать файл заголовка для [%s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s]"
 
-#: ../lib/gis/spawn.c:142 ../lib/gis/spawn.c:410
+#: ../lib/gis/spawn.c:142 ../lib/gis/spawn.c:232 ../lib/gis/spawn.c:433
 #, fuzzy
 msgid "Unable to execute command"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
-#: ../lib/gis/spawn.c:237 ../lib/gis/spawn.c:245
+#: ../lib/gis/spawn.c:260 ../lib/gis/spawn.c:268
 #, c-format
 msgid "G_spawn: unable to restore signal %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡п╬я│я│я┌п╟п╫п╬п╡п╦я┌я▄ я│п╦пЁп╫п╟п╩ %d"
 
-#: ../lib/gis/spawn.c:278
+#: ../lib/gis/spawn.c:301
 #, c-format
 msgid "G_spawn: unable to reset signal %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╠я─п╬я│п╦я┌я▄ я│п╦пЁп╫п╟п╩  %d"
 
-#: ../lib/gis/spawn.c:288
+#: ../lib/gis/spawn.c:311
 #, c-format
 msgid "G_spawn: unable to ignore signal %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╦пЁп╫п╬я─п╦я─п╬п╡п╟я┌я▄ я│п╦пЁп╫п╟п╩ %d"
 
-#: ../lib/gis/spawn.c:299
+#: ../lib/gis/spawn.c:322
 #, c-format
 msgid "G_spawn: unable to block signal %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п╠п╩п╬п╨п╦я─п╬п╡п╟я┌я▄ я│п╦пЁп╫п╟п╩ %d"
 
-#: ../lib/gis/spawn.c:308
+#: ../lib/gis/spawn.c:331
 #, c-format
 msgid "G_spawn: unable to unblock signal %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я─п╟п╥п╠п╩п╬п╨п╦я─п╬п╡п╟я┌я▄ я│п╦пЁп╫п╟п╩ %d"
 
-#: ../lib/gis/spawn.c:334
+#: ../lib/gis/spawn.c:357
 #, fuzzy, c-format
 msgid "G_spawn: unable to open file %s"
 msgstr " "
 
-#: ../lib/gis/spawn.c:340 ../lib/gis/spawn.c:350
+#: ../lib/gis/spawn.c:363 ../lib/gis/spawn.c:373
 #, c-format
 msgid "G_spawn: unable to duplicate descriptor %d to %d"
-msgstr ""
+msgstr "G_spawn: п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╢я┐п╠п╩п╦я─п╬п╡п╟я┌я▄ п╢п╣я│п╨я─п╦п©я┌п╬я─ %d to %d"
 
-#: ../lib/gis/spawn.c:402
+#: ../lib/gis/spawn.c:425
 #, fuzzy, c-format
 msgid "Unable to change directory to %s"
 msgstr " "
 
-#: ../lib/gis/mapset.c:41
+#: ../lib/gis/mapset.c:39
 #, fuzzy
 msgid "MAPSET is not set"
-msgstr "НАБОР ДАННЫХ не задан"
+msgstr "п²п░п▒п·п═ п╫п╣ п╥п╟п╢п╟п╫"
 
-#: ../lib/gis/mapset.c:60 ../lib/gis/gisinit.c:58
+#: ../lib/gis/mapset.c:58 ../lib/gis/gisinit.c:58
 #, fuzzy, c-format
 msgid "MAPSET %s not found"
-msgstr "НАБОР ДАННЫХ %s не найден"
+msgstr "п²п░п▒п·п═ %s п╫п╣ п╫п╟п╧п╢п╣п╫"
 
 #: ../lib/gis/gishelp.c:49
 #, fuzzy, c-format
 msgid "one moment...\n"
-msgstr "один момент...\n"
+msgstr "п╬п╢п╦п╫ п╪п╬п╪п╣п╫я┌...\n"
 
 #: ../lib/gis/gishelp.c:54
 #, fuzzy, c-format
 msgid "No help available for command [%s]\n"
-msgstr "Помощь для команды [%s] отсутствует\n"
+msgstr "п²п╣я┌ я│п©я─п╟п╡п╨п╦ п╢п╩я▐ п╨п╬п╪п╟п╫п╢я▀ [%s]\n"
 
 #: ../lib/gis/make_colr.c:41
 #, fuzzy, c-format
 msgid " The raster map %s@%s is empty"
-msgstr " Растровая карта %s@%s пуста"
+msgstr " п═п╟я│я┌я─п╬п╡п╟я▐ п╨п╟я─я┌п╟ %s@%s п©я┐я│я┌п╟"
 
 #: ../lib/gis/make_colr.c:49
 #, fuzzy, c-format
@@ -2273,7 +2382,10 @@ msgid ""
 "\n"
 "\n"
 "Color table needed for file [%s] in mapset [%s].\n"
-msgstr "   "
+msgstr ""
+"\n"
+"\n"
+"п²п╣п╬п╠я┘п╬п╢п╦п╪п╟ я├п╡п╣я┌п╬п╡п╟я▐ п╢п╩я▐ я└п╟п╧п╩п╟ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s].\n"
 
 #: ../lib/gis/make_colr.c:52
 #, c-format
@@ -2281,128 +2393,130 @@ msgid ""
 "\n"
 "Please identify the type desired:\n"
 msgstr ""
+"\n"
+"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╬п©я─п╣п╢п╣п╩п╦я┌п╣ п╫я┐п╤п╫я▀п╧ я┌п╦п©:\n"
 
 #: ../lib/gis/make_colr.c:53
 #, fuzzy, c-format
 msgid "    1:  Random colors\n"
-msgstr "    1:  Случайные цвета\n"
+msgstr "    1:  п║п╩я┐я┤п╟п╧п╫я▀п╣ я├п╡п╣я┌п╟\n"
 
 #: ../lib/gis/make_colr.c:54
 #, fuzzy, c-format
 msgid "    2:  Red, green, and blue color ramps\n"
-msgstr "    2:  Красн., зелен., и син. с разбиением\n"
+msgstr "    2:  п я─п╟я│п╫п╟я▐, п╥п╣п╩п╣п╫п╟я▐, п╦ я│п╦п╫я▐я▐ я├п╡п╣я┌п╬п╡п╟я▐ я┬п╨п╟п╩п╟\n"
 
 #: ../lib/gis/make_colr.c:55
 #, fuzzy, c-format
 msgid "    3:  Color wave\n"
-msgstr "    3:  Цветовая гамма\n"
+msgstr "    3:  п╕п╡п╣я┌п╬п╡п╟я▐ пЁп╟п╪п╪п╟\n"
 
 #: ../lib/gis/make_colr.c:56
 #, fuzzy, c-format
 msgid "    4:  Gray scale\n"
-msgstr "    4:  Оттенки серого\n"
+msgstr "    4:  п·я┌я┌п╣п╫п╨п╦ я│п╣я─п╬пЁп╬\n"
 
 #: ../lib/gis/make_colr.c:57
 #, fuzzy, c-format
 msgid "    5:  Aspect\n"
-msgstr "    5:  Аспект\n"
+msgstr "    5:  п░я│п©п╣п╨я┌\n"
 
 #: ../lib/gis/make_colr.c:58
 #, fuzzy, c-format
 msgid "    6:  Rainbow colors\n"
-msgstr "    6:  Радуга\n"
+msgstr "    6:  п═п╟п╢я┐пЁп╟\n"
 
 #: ../lib/gis/make_colr.c:59
 #, fuzzy, c-format
 msgid "    7:  Red through yellow to green\n"
-msgstr "    7:  От красн. через желт. до зелен.\n"
+msgstr "    7:  п·я┌ п╨я─п╟я│п╫п╬пЁп╬ я┤п╣я─п╣п╥ п╤п╣п╩я┌я▀п╧ п╢п╬ п╥п╣п╩п╣п╫п╬пЁп╬\n"
 
 #: ../lib/gis/make_colr.c:60
 #, fuzzy, c-format
 msgid "    8:  Green through yellow to red\n"
-msgstr "    8:  От зелен. через желт. до красн.\n"
+msgstr "    8:  п·я┌ п╥п╣п╩п╣п╫п╬пЁп╬ я┤п╣я─п╣п╥ п╤п╣п╩я┌я▀п╧ п╢п╬ п╨я─п╟я│п╫п╬пЁп╬\n"
 
 #: ../lib/gis/make_colr.c:61
 #, c-format
 msgid "RETURN  quit\n"
-msgstr ""
+msgstr "RETURN  quit\n"
 
 #: ../lib/gis/make_colr.c:82
 #, fuzzy, c-format
 msgid ""
 "\n"
 "%s invalid; Try again > "
-msgstr "  "
+msgstr "%s п╫п╣п╡п╣я─п╣п╫; п÷п╬п©я─п╬п╠я┐п╧я┌п╣ п╣я┴п╣ я─п╟п╥ > "
 
 #: ../lib/gis/range.c:195
 #, fuzzy, c-format
 msgid "can't read f_range file for [%s in %s]"
-msgstr "невозможно прочитать f_range файл для [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╦я┌п╟я┌я▄ f_range я└п╟п╧п╩ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/range.c:312
 #, fuzzy, c-format
 msgid "can't read range file for [%s in %s]"
-msgstr "невозможно прочитать файл диапазона для [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╦я┌п╟я┌я▄ я└п╟п╧п╩ п╢п╦п╟п©п╟п╥п╬п╫п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/range.c:365 ../lib/gis/range.c:416
 #, fuzzy, c-format
 msgid "can't write range file for [%s in %s]"
-msgstr "невозможно записать файл диапазона для [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я└п╟п╧п╩ п╢п╦п╟п©п╟п╥п╬п╫п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/gisinit.c:55
 #, fuzzy, c-format
 msgid "MAPSET %s - permission denied"
-msgstr "НАБОР ДАННЫХ %s - доступ не разрешен"
+msgstr "п²п░п▒п·п═ %s - п╢п╬я│я┌я┐п© п╥п╟п©я─п╣я┴п╣п╫"
 
 #: ../lib/gis/gisinit.c:101
 #, fuzzy
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr "\aОШИБКА: Система не была инициализирована. Забыли G_gisinit()\n"
+msgstr "\aп·п╗п≤п▒п п░: п║п╦я│я┌п╣п╪п╟ п╫п╣ п╦п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫п╟. п²п╣ п╡я▀п©п╬п╩п╫п╣п╫ G_gisinit()\n"
 
-#: ../lib/gis/get_row.c:47 ../lib/gis/get_row.c:939
+#: ../lib/gis/get_row.c:47 ../lib/gis/get_row.c:937
 #, fuzzy, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
-msgstr "[%s в %s] - чтение строки %d за пределами региона"
+msgstr "[%s п╡ %s] - я┤я┌п╣п╫п╦п╣ я│я┌я─п╬п╨п╦ %d п╥п╟ п©я─п╣п╢п╣п╩п╟п╪п╦ я─п╣пЁп╦п╬п╫п╟"
 
 #: ../lib/gis/get_row.c:315
 #, c-format
 msgid "cell_values_float: xdr_float failed for index %d"
-msgstr ""
+msgstr "cell_values_float: xdr_float п╥п╟п╡п╣я─я┬п╣п╫ п╫п╣я┐п╢п╟я┤п╫п╬ п╢п╩я▐ п╦п╫п╢п╣п╨я│п╟ %d"
 
 #: ../lib/gis/get_row.c:359
-#, c-format
+#, fuzzy, c-format
 msgid "cell_values_double: xdr_double failed for index %d"
-msgstr ""
+msgstr "cell_values_double: xdr_double п╥п╟п╡п╣я─я┬п╣п╫ п╫п╣я┐п╢п╟я┤п╫п╬ п╢п╩я▐ п╦п╫п╢п╣п╨я│п╟ %d."
 
 #: ../lib/gis/get_row.c:504
 #, fuzzy, c-format
 msgid "Error reading compressed map <%s@%s>, row %d"
-msgstr "   "
+msgstr "п╬я┬п╦п╠п╨п╟ я┤я┌п╣п╫п╦я▐ я│п╤п╟я┌п╬п╧ п╨п╟я─я┌я▀ [%s] п╦п╥ п╫п╟п╠п╬я─п╟ [%s], я─я▐п╢ %d"
 
 #: ../lib/gis/get_row.c:507
 #, fuzzy, c-format
 msgid "Error reading map <%s@%s>, row %d"
-msgstr "   "
+msgstr "п╬я┬п╦п╠п╨п╟ я┤я┌п╣п╫п╦я▐ п╨п╟я─я┌я▀ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s], я─я▐п╢ %d"
 
-#: ../lib/gis/get_row.c:919 ../lib/gis/get_row.c:925
+#: ../lib/gis/get_row.c:917 ../lib/gis/get_row.c:923
 #, fuzzy, c-format
 msgid "Error reading null row %d"
-msgstr " "
+msgstr "п╬я┬п╦п╠п╨п╟ я┤я┌п╣п╫п╦я▐ п╫я┐п╩п╣п╡п╬пЁп╬ я─я▐п╢п╟ %d"
 
-#: ../lib/gis/get_row.c:1006
+#: ../lib/gis/get_row.c:1004
 #, fuzzy
 msgid "Unable to realloc buffer"
-msgstr "Невозможно realloc буфер"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ realloc п╠я┐я└п╣я─"
 
 #: ../lib/gis/get_projname.c:32
 #, fuzzy, c-format
 msgid "%s not found"
-msgstr "%s не найден"
+msgstr "%s п╫п╣ п╫п╟п╧п╢п╣п╫"
 
 #: ../lib/gis/get_projname.c:35
 #, fuzzy, c-format
 msgid "ERROR in reading %s"
-msgstr "Ошибка чтения %s"
+msgstr "п·я┬п╦п╠п╨п╟ я┤я┌п╣п╫п╦я▐ %s"
 
 #: ../lib/gis/get_projname.c:49
 #, c-format
@@ -2411,11 +2525,14 @@ msgid ""
 "\n"
 "Please specify projection name\n"
 msgstr ""
+"\n"
+"\n"
+"п÷п╬п╤п╟п╩я┐п╧я│я┌п╟, п╥п╟п╢п╟п╧я┌п╣ п╫п╟п╥п╡п╟п╫п╦п╣ п©я─п╬п╣п╨я├п╦п╦\n"
 
 #: ../lib/gis/get_projname.c:50
 #, fuzzy, c-format
 msgid "Enter 'list' for the list of available projections\n"
-msgstr "Введите 'list' для списка возможных проекций\n"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ 'list' п╢п╩я▐ я│п©п╦я│п╨п╟ п╡п╬п╥п╪п╬п╤п╫я▀я┘ п©я─п╬п╣п╨я├п╦п╧\n"
 
 #: ../lib/gis/get_projname.c:72
 #, c-format
@@ -2423,38 +2540,41 @@ msgid ""
 "\n"
 "invalid projection\n"
 msgstr ""
+"\n"
+"п╫п╣п╡п╣я─п╫п╟я▐ п©я─п╬п╣п╨я├п╦я▐\n"
 
 #: ../lib/gis/ask_cell.c:56 ../lib/gis/ask_cell.c:75 ../lib/gis/ask_cell.c:94
 #: ../lib/gis/ask_cell.c:101
 #, fuzzy
 msgid "with titles"
-msgstr "с названиями"
+msgstr "я│ п╫п╟п╥п╡п╟п╫п╦я▐п╪п╦"
 
 #: ../lib/gis/ask_cell.c:113
 #, fuzzy
 msgid "(no title)"
-msgstr "(без названия)"
+msgstr "(п╠п╣п╥ п╫п╟п╥п╡п╟п╫п╦я▐)"
 
 #: ../lib/gis/ls.c:63
 #, fuzzy, c-format
 msgid "Unable to open directory %s"
-msgstr " "
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ п©п╟п©п╨я┐ %s"
 
 #: ../lib/gis/set_window.c:82
 msgid ""
 "G_set_window(): projection/zone differs from that of currently open raster "
 "maps"
 msgstr ""
+"G_set_window(): п©я─п╬п╣п╨я├п╦я▐/п╥п╬п╫п╟ п╬я┌п╩п╦я┤п╟п╣я┌я│я▐ п╬я┌ я┌п╣п╨я┐я┴п╦я┘ п╬я┌п╨я─я▀я┌я▀я┘ я─п╟я│я┌я─п╬п╡я▀я┘ п╨п╟я─я┌"
 
 #: ../lib/gis/format.c:162
 #, fuzzy, c-format
 msgid "Fail of initial read of compressed file [%s in %s]"
-msgstr "Ошибка чтения сжатого файла [%s в %s]"
+msgstr "п·я┬п╦п╠п╨п╟ я┤я┌п╣п╫п╦я▐ я│п╤п╟я┌п╬пЁп╬ я└п╟п╧п╩п╟ [%s п╡ %s]"
 
 #: ../lib/gis/put_row.c:212
 #, fuzzy, c-format
 msgid "G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"
-msgstr "   !"
+msgstr "G_put_map_row: %s п╫п╣ я├п╣п╩п╬п╣! п≤я│п©п╬п╩я▄п╥я┐п╧я┌п╣ G_put_[f/d]_raster_row()!"
 
 #: ../lib/gis/put_row.c:249
 #, fuzzy, c-format
@@ -2479,17 +2599,17 @@ msgstr " "
 #: ../lib/gis/put_row.c:308
 #, fuzzy, c-format
 msgid "map [%s] - unable to write row %d"
-msgstr "карта [%s] - невозможно записать строку %d"
+msgstr "п╨п╟я─я┌п╟ [%s] - п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я│я┌я─п╬п╨я┐ %d"
 
 #: ../lib/gis/put_row.c:396
 #, c-format
 msgid "xdr_float failed for index %d of row %d"
-msgstr ""
+msgstr "xdr_float п╥п╟п╡п╣я─я┬п╣п╫ п╫п╣я┐п╢п╟я┤п╫п╬ п╢п╩я▐ п╦п╫п╢п╣п╨я│п╟ %d я─я▐п╢п╟ %d"
 
 #: ../lib/gis/put_row.c:425
 #, c-format
 msgid "xdr_double failed for index %d of row %d"
-msgstr ""
+msgstr "xdr_double п╥п╟п╡п╣я─я┬п╣п╫ п╫п╣я┐п╢п╟я┤п╫п╬ п╢п╩я▐ п╦п╫п╢п╣п╨я│п╟ %d я─я▐п╢п╟ %d"
 
 #: ../lib/gis/put_row.c:769
 #, fuzzy, c-format
@@ -2499,20 +2619,21 @@ msgstr " "
 #: ../lib/gis/put_row.c:790 ../lib/gis/put_row.c:796
 #, c-format
 msgid "error writing null row %d"
-msgstr ""
+msgstr "п╬я┬п╦п╠п╨п╟ п©я─п╦ п╥п╟п©п╦я│п╦ п╫я┐п╩п╣п╡п╬п╧ я│я┌я─п╬п╨п╦ %d"
 
 #: ../lib/gis/history.c:184
 #, fuzzy, c-format
 msgid "can't write history information for [%s]"
-msgstr "невозможно записать историю для [%s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п╦я│я┌п╬я─п╦я▌ п╢п╩я▐ [%s]"
 
 #: ../lib/gis/history.c:269
 msgid "Not enough room in history file to record command line."
-msgstr ""
+msgstr "п²п╣п╢п╬я│я┌п╟я┌п╬я┤п╫п╬ п╪п╣я│я┌п╟ п╡ я└п╟п╧п╩п╣ п╦я│я┌п╬я─п╦п╦ п╢п╩я▐ п╥п╟п©п╦я│п╦ п╨п╬п╪п╟п╫п╢п╫п╬п╧ я│я┌я─п╬п╨п╦"
 
 #: ../lib/gis/history.c:291
 msgid "Not enough room in history file for command line (truncated)."
 msgstr ""
+"п²п╣п╢п╬я│я┌п╟я┌п╬я┤п╫п╬ п╪п╣я│я┌п╟ п╡ я└п╟п╧п╩п╣ п╦я│я┌п╬я─п╦п╦ п╢п╩я▐ п╥п╟п©п╦я│п╦ п╨п╬п╪п╟п╫п╢п╫п╬п╧ я│я┌я─п╬п╨п╦ (truncated)"
 
 #: ../lib/gis/closecell.c:223
 #, fuzzy, c-format
@@ -2524,7 +2645,7 @@ msgstr "   "
 #: ../lib/gis/closecell.c:243
 #, fuzzy, c-format
 msgid "Error writing floating point format file for map %s"
-msgstr "Ошибка записи в файл с плавающей точкой для карты %s"
+msgstr "п·я┬п╦п╠п╨п╟ п╥п╟п©п╦я│п╦ п╡ я└п╟п╧п╩ я│ п©п╩п╟п╡п╟я▌я┴п╣п╧ я┌п╬я┤п╨п╬п╧ п╢п╩я▐ п╨п╟я─я┌я▀ %s"
 
 #: ../lib/gis/closecell.c:289
 #, fuzzy, c-format
@@ -2535,307 +2656,310 @@ msgstr "   "
 
 #: ../lib/gis/closecell.c:343
 msgid "unable to write quant file!"
-msgstr ""
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ quant я└п╟п╧п╩!"
 
 #: ../lib/gis/closecell.c:391
 msgid "unable to write f_format file for CELL maps"
-msgstr ""
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ я└п╟п╧п╩ f_format п╢п╩я▐ CELL п╨п╟я─я┌"
 
 #: ../lib/gis/home.c:40
 #, fuzzy
 msgid "unable to determine user's home directory"
-msgstr "невозможно установить домашний каталог пользователя"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬п©я─п╣п╢п╣п╩п╦я┌я▄ п╢п╬п╪п╟я┬п╫п╦п╧ п╨п╟я┌п╟п╩п╬пЁ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
-#: ../lib/gis/error.c:315
+#: ../lib/gis/error.c:308
 #, fuzzy
 msgid "WARNING: "
-msgstr "ПРЕДУПРЕЖДЕНИЕ "
+msgstr "п÷п═п∙п■пёп÷п═п∙п√п■п∙п²п≤п∙: "
 
-#: ../lib/gis/error.c:316
+#: ../lib/gis/error.c:309
 #, fuzzy
 msgid "ERROR: "
-msgstr "ОШИБКА "
+msgstr "п·п╗п≤п▒п п░: "
 
 #: ../lib/gis/get_cellhd.c:74 ../lib/gis/get_cellhd.c:103
 #, fuzzy, c-format
 msgid "Unable to read header file for raster map <%s@%s>."
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/get_cellhd.c:76
 #, fuzzy, c-format
 msgid " It is a reclass of raster map <%s@%s> "
-msgstr "Это рекласс от [%s в %s]"
+msgstr "п╜я┌п╬ п©п╣я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦я▐ [%s п╡ %s]"
 
 #: ../lib/gis/get_cellhd.c:79
 #, fuzzy, c-format
 msgid "which is missing."
-msgstr "который отсутствует"
+msgstr "п╨п╬я┌п╬я─я▀п╧ п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/get_cellhd.c:81
 #, fuzzy, c-format
 msgid "whose header file can't be opened."
-msgstr "чей файл заголовка не может быть открыт"
+msgstr "я┤п╣п╧ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╫п╣ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п╬я┌п╨я─я▀я┌"
 
 #: ../lib/gis/get_cellhd.c:91
 #, fuzzy, c-format
 msgid "Unable to open header file for raster map <%s@%s>"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/gis/get_cellhd.c:107
 #, fuzzy, c-format
 msgid " It is a reclass of raster map <%s@%s> whose header file is invalid."
-msgstr "Это рекласс от [%s в %s] чей файл заголовка имеет неверный формат\n"
+msgstr ""
+"п╜я┌п╬ п©п╣я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦я▐ [%s п╡ %s] я┤п╣п╧ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╦п╪п╣п╣я┌ п╫п╣п╡п╣я─п╫я▀п╧ я└п╬я─п╪п╟я┌\n"
 
 #: ../lib/gis/get_cellhd.c:111
 #, fuzzy, c-format
 msgid " Invalid format."
-msgstr "Неверный формат\n"
+msgstr "п²п╣п╡п╣я─п╫я▀п╧ я└п╬я─п╪п╟я┌\n"
 
 #: ../lib/gis/cats.c:385
 #, fuzzy, c-format
 msgid "category support for [%s] in mapset [%s] %s"
-msgstr "категории [%s] в наборе данных [%s] %s"
+msgstr "п╨п╟я┌п╣пЁп╬я─п╦п╦ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s] %s"
 
 #: ../lib/gis/cats.c:424
 #, fuzzy, c-format
 msgid "category support for vector map [%s] in mapset [%s] %s"
-msgstr "категории векторной карты[%s] в наборе данных [%s] %s"
+msgstr "п╨п╟я┌п╣пЁп╬я─п╦п╦ п╡п╣п╨я┌п╬я─п╫п╬п╧ п╨п╟я─я┌я▀ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s] %s"
 
 #: ../lib/gis/get_ellipse.c:87
 #, fuzzy, c-format
 msgid "Unable to open file %s in <%s>"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
 #: ../lib/gis/get_ellipse.c:345
 #, fuzzy, c-format
 msgid "Lines%s of ellipsoid table file <%s> are invalid"
-msgstr "     "
+msgstr "п²п╣п╡п╣я─п╫я▀п╣ п╩п╦п╫п╦п╦ %s п╡ я└п╟п╧п╩п╣ я┌п╟п╠п╩п╦я├я▀ я█п╩п╩п╦п©я│п╬п╦п╢п╬п╡ <%s>"
 
 #: ../lib/gis/get_ellipse.c:346
 #, fuzzy, c-format
 msgid "Line%s of ellipsoid table file <%s> is invalid"
-msgstr "Линия      "
+msgstr "п²п╣п╡п╣я─п╫п╟я▐ п╩п╦п╫п╦я▐ %s п╡ я└п╟п╧п╩п╣ я┌п╟п╠п╩п╦я├я▀ я█п╩п╩п╦п©я│п╬п╦п╢п╬п╡ <%s>"
 
 #: ../lib/gis/get_ellipse.c:365 ../lib/gis/get_ellipse.c:391
 #, fuzzy, c-format
 msgid "Invalid a: field '%s' in file %s in <%s>"
-msgstr "неверно задано поле a: %s в файле %s в %s"
+msgstr "п╫п╣п╡п╣я─п╫п╬ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ a: %s п╡ я└п╟п╧п╩п╣ %s п╡ %s"
 
 #: ../lib/gis/get_ellipse.c:378
 #, fuzzy, c-format
 msgid "Invalid ellipsoid '%s' in file %s in <%s>"
-msgstr "неверно задан эллипсоид %s в файле %s в %s"
+msgstr "п╫п╣п╡п╣я─п╫п╬ п╥п╟п╢п╟п╫ я█п╩п╩п╦п©я│п╬п╦п╢ %s п╡ я└п╟п╧п╩п╣ %s п╡ %s"
 
 #: ../lib/gis/get_ellipse.c:395
 #, fuzzy, c-format
 msgid "Invalid es: field '%s' in file %s in <%s>"
-msgstr "неверно задано поле es: %s в файле %s в %s"
+msgstr "п╫п╣п╡п╣я─п╫п╬ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ es: %s п╡ я└п╟п╧п╩п╣ %s п╡ %s"
 
 #: ../lib/gis/get_ellipse.c:409
 #, fuzzy, c-format
 msgid "No ellipsoid info given in file %s in <%s>"
-msgstr "Нет информации об эллипсоиде в файле %s в %s"
+msgstr "п²п╣я┌ п╦п╫я└п╬я─п╪п╟я├п╦п╦ п╬п╠ я█п╩п╩п╦п©я│п╬п╦п╢п╣ п╡ я└п╟п╧п╩п╣ %s п╡ %s"
 
 #: ../lib/gis/location.c:46
 #, fuzzy, c-format
 msgid "LOCATION << %s >> not available"
-msgstr " "
+msgstr "п·п╠п╩п╟я│я┌я▄ << %s >> п╫п╣п╢п╬я│я┌я┐п©п╫п╟"
 
 #: ../lib/gis/null_val.c:94
 #, fuzzy
 msgid "EmbedGivenNulls: wrong data type!"
-msgstr "EmbedGivenNulls: неверный тип данных!"
+msgstr "EmbedGivenNulls: п╫п╣п╡п╣я─п╫я▀п╧ я┌п╦п© п╢п╟п╫п╫я▀я┘!"
 
 #: ../lib/gis/null_val.c:115
 #, fuzzy
 msgid "Null values have not been initialized. "
-msgstr "Нулевые величины не были инициализированы."
+msgstr "п²я┐п╩п╣п╡я▀п╣ п╡п╣п╩п╦я┤п╦п╫я▀ п╫п╣ п╠я▀п╩п╦ п╦п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫я▀."
 
 #: ../lib/gis/null_val.c:116
 #, fuzzy
 msgid "G_gisinit() must be called first. "
-msgstr "Сначала нужно вызвать G_gisinit(). "
+msgstr "п║п╫п╟я┤п╟п╩п╟ п╫я┐п╤п╫п╬ п╡я▀п╥п╡п╟я┌я▄ G_gisinit(). "
 
 #: ../lib/gis/null_val.c:117
 #, fuzzy
 msgid "Please advise GRASS developers of this error.\n"
-msgstr "Сообщите разработчикам GRASS об этой ошибке.\n"
+msgstr "п║п╬п╬п╠я┴п╦я┌п╣ я─п╟п╥я─п╟п╠п╬я┌я┤п╦п╨п╟п╪ GRASS п╬п╠ я█я┌п╬п╧ п╬я┬п╦п╠п╨п╣.\n"
 
 #: ../lib/gis/null_val.c:231
 #, fuzzy
 msgid "G_set_null_value: wrong data type!"
-msgstr "G_set_null_value: неверный тип данных!"
+msgstr "G_set_null_value: п╫п╣п╡п╣я─п╫я▀п╧ я┌п╦п© п╢п╟п╫п╫я▀я┘!"
 
 #: ../lib/gis/get_projinfo.c:36 ../lib/gis/get_projinfo.c:67
 #, fuzzy, c-format
 msgid "<%s> file not found for location <%s>"
-msgstr "Файл %s не найден для области %s\n"
+msgstr "п╓п╟п╧п╩ <%s> п╫п╣ п╫п╟п╧п╢п╣п╫ п╢п╩я▐ п╬п╠п╩п╟я│я┌п╦ <%s>\n"
 
 #: ../lib/gis/get_projinfo.c:43 ../lib/gis/get_projinfo.c:74
 #, fuzzy, c-format
 msgid "ERROR in reading <%s> file for location <%s>"
-msgstr "ОШИБКА чтения файла %s для области %s\n"
+msgstr "п·п╗п≤п▒п п░ я┤я┌п╣п╫п╦я▐ я└п╟п╧п╩п╟ %s п╢п╩я▐ п╬п╠п╩п╟я│я┌п╦ %s\n"
 
-#: ../lib/gis/mapset_msc.c:49
+#: ../lib/gis/mapset_msc.c:63
 #, fuzzy, c-format
-msgid "can't make mapset element %s (%s)"
-msgstr "невозможно создать элемент наб. данных %s (%s)"
+msgid "Unable to make mapset element %s (%s)"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я█п╩п╣п╪п╣п╫я┌ п╫п╟п╠п╬я─п╟ %s (%s)"
 
 #: ../lib/gis/parser.c:345
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr ""
+msgstr "я┐я│п╩п╬п╡п╦я▐ WHERE  SQL-п╥п╟п©я─п╬я│п╟ п╫п╣ п╦п╪п╣п╣я┌ п╨п╩я▌я┤п╣п╡п╬пЁп╬ я│п╩п╬п╡п╟ 'where'"
 
 #: ../lib/gis/parser.c:346
 msgid "Example: income < 1000 and inhab >= 10000"
-msgstr ""
+msgstr "п÷я─п╦п╪п╣я─: income < 1000 and inhab >= 10000"
 
 #: ../lib/gis/parser.c:354
 msgid "Table name"
-msgstr ""
+msgstr "п≤п╪я▐ я┌п╟п╠п╩п╦я├я▀"
 
 #: ../lib/gis/parser.c:362
 msgid "Driver name"
-msgstr ""
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╢я─п╟п╧п╡п╣я─п╟"
 
 #: ../lib/gis/parser.c:370
 msgid "Database name"
-msgstr ""
+msgstr "п²п╟п╥п╡п╟п╫п╦п╣ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘"
 
 #: ../lib/gis/parser.c:378
 #, fuzzy
 msgid "Name of attribute column"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п©п╬п╩я▐"
 
 #: ../lib/gis/parser.c:386
 #, fuzzy
 msgid "Name of attribute column(s)"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п©п╬п╩я▐(п╣п╧)"
 
 #: ../lib/gis/parser.c:396
 #, fuzzy
 msgid "Name of input imagery group"
-msgstr " "
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬п╧ пЁя─я┐п©п©я▀ п╦п╥п╬п╠я─п╟п╤п╣п╫п╦п╧"
 
 #: ../lib/gis/parser.c:406 ../lib/gis/parser.c:431
 msgid "Name of input raster map"
-msgstr ""
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬п╧ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:415 ../lib/gis/parser.c:440
 #, fuzzy
 msgid "Name of input raster map(s)"
-msgstr " "
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬п╧ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌(я▀)"
 
 #: ../lib/gis/parser.c:423
 msgid "Name for output raster map"
-msgstr ""
+msgstr "п≤п╪я▐ п╡я▀я┘п╬п╢п╫п╬п╧ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:448
 msgid "Name of base raster map"
-msgstr ""
+msgstr "п≤п╪я▐ п╠п╟п╥п╬п╡п╬п╧ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:456
 msgid "Name of cover raster map"
-msgstr ""
+msgstr "п≤п╪я▐ п╡п╣я─я┘п╫п╣п╧ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:464
 #, fuzzy
 msgid "Name of elevation raster map"
-msgstr " "
+msgstr "п≤п╪я▐ я─п╟я│я┌я─п╬п╡п╬п╧ п╨п╟я─я┌я▀ я─п╣п╩я▄п╣я└п╟"
 
 #: ../lib/gis/parser.c:473
 #, fuzzy
 msgid "Name of elevation raster map(s)"
-msgstr " "
+msgstr "п≤п╪я▐ я─п╟я│я┌я─п╬п╡я▀я┘(п╬п╧) п╨п╟я─я┌(я▀) я─п╣п╩я▄п╣я└п╟"
 
 #: ../lib/gis/parser.c:483 ../lib/gis/parser.c:508
 #, fuzzy
 msgid "Name of input raster3d map"
-msgstr " "
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬п╧ raster3d п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:492 ../lib/gis/parser.c:517
 #, fuzzy
 msgid "Name of input raster3d map(s)"
-msgstr " "
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫я▀я┘(п╬п╧) raster3d п╨п╟я─я┌(я▀)"
 
 #: ../lib/gis/parser.c:500
 #, fuzzy
 msgid "Name for output raster3d map"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п╡я▀я┘п╬п╢п╫п╬п╧ raster3d п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:527 ../lib/gis/parser.c:552
 #, fuzzy
 msgid "Name of input vector map"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬п╧ п╡п╣п╨я┌п╬я─п╫п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:536 ../lib/gis/parser.c:561
 #, fuzzy
 msgid "Name of input vector map(s)"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫я▀я┘(п╬п╧) п╡п╣п╨я┌п╬я─п╫я▀я┘(п╬п╧) п╨п╟я─я┌(я▀)"
 
 #: ../lib/gis/parser.c:544
 #, fuzzy
 msgid "Name for output vector map"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п╡я▀я┘п╬п╢п╫п╬п╧ п╡п╣п╨я┌п╬я─п╫п╬п╧ п╨п╟я─я┌я▀"
 
 #: ../lib/gis/parser.c:570
 msgid "Type"
-msgstr ""
+msgstr "п╒п╦п©"
 
 #: ../lib/gis/parser.c:571
 msgid "Feature type(s)"
-msgstr ""
+msgstr "п╒п╦п©(я▀) п╬п╠я┼п╣п╨я┌п╟(п╬п╡)"
 
 #: ../lib/gis/parser.c:578
 msgid "Layer number"
-msgstr ""
+msgstr "п²п╬п╪п╣я─ я│п╩п╬я▐"
 
 #: ../lib/gis/parser.c:579
 msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use."
 msgstr ""
+"п∙п╢п╦п╫я│я┌п╡п╣п╫п╫п╟я▐ п╡п╣п╨я┌п╬я─п╫п╟я▐ п╨п╟я─я┌п╟ п╪п╬п╤п╣я┌ п╠я▀я┌я▄ п©п╬п╢п╨п╩я▌я┤п╣п╫п╟ п╨ п╫п╣я│п╨п╬п╩я▄п╨п╦п╪ я┌п╟п╠п╩п╦я├п╟п╪п╦ "
+"п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘. п╜я┌п╬ я┤п╦я│п╩п╬ п╬п©я─п╣п╢п╣п╩я▐п╣я┌ п╨п╟п╨я┐я▌ я┌п╟п╠п╩п╦я├я┐ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄."
 
 #: ../lib/gis/parser.c:586
 msgid "Category value"
-msgstr ""
+msgstr "п≈п╫п╟я┤п╣п╫п╦п╣ п╨п╟я┌п╣пЁп╬я─п╦п╦"
 
 #: ../lib/gis/parser.c:593
 msgid "Category values"
-msgstr ""
+msgstr "п≈п╫п╟я┤п╣п╫п╦я▐ п╨п╟я┌п╣пЁп╬я─п╦п╧"
 
 #: ../lib/gis/parser.c:594
 msgid "Example: 1,3,7-9,13"
-msgstr ""
+msgstr "п÷я─п╦п╪п╣я─: 1,3,7-9,13"
 
 #: ../lib/gis/parser.c:604
 #, fuzzy
 msgid "Name of input file"
-msgstr " "
+msgstr "п≤п╪я▐ п╦я│я┘п╬п╢п╫п╬пЁп╬ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/parser.c:612
 #, fuzzy
 msgid "Name for output file"
-msgstr "вектор"
+msgstr "п≤п╪я▐ п╡я▀я┘п╬п╢п╫п╬пЁп╬ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/parser.c:620
 msgid "Field separator"
-msgstr ""
+msgstr "п═п╟п╥п╢п╣п╩п╦я┌п╣п╩я▄ п©п╬п╩п╣п╧"
 
 #: ../lib/gis/parser.c:631
 msgid "Color"
-msgstr ""
+msgstr "п╕п╡п╣я┌"
 
 #: ../lib/gis/parser.c:632
 msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
+msgstr "п⌡п╦п╠п╬ я│я┌п╟п╫п╢я─п╟я┌п╫п╬п╣ п╫п╟п╥п╡п╟п╫п╦п╣ я├п╡п╣я┌п╟, п╩п╦п╠п╬ я┌я─п╦п©п╩п╣я┌ R:G:B"
 
 #: ../lib/gis/parser.c:641
 msgid "Background color"
-msgstr ""
+msgstr "п╕п╡п╣я┌ я└п╬п╫п╟"
 
 #: ../lib/gis/parser.c:642
 msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr ""
+msgstr "п⌡п╦п╠п╬ я│я┌п╟п╫п╢п╟я─я┌п╫я▀п╧ я├п╡п╣я┌ GRASS, п╩п╦п╠п╬ я┌я─п╦п©п╩п╣я┌ R:G:B, п╩п╦п╠п╬ \"none\""
 
 #: ../lib/gis/parser.c:787
 #, c-format
@@ -2853,7 +2977,7 @@ msgstr ""
 #: ../lib/gis/parser.c:949
 #, fuzzy, c-format
 msgid "Sorry <%s> is not a valid option\n"
-msgstr "Извините <%s> невозможная опция\n"
+msgstr "п≤п╥п╡п╦п╫п╦я┌п╣, п╬п©я├п╦я▐ <%s> п╫п╣п╡п╣я─п╫п╟\n"
 
 #: ../lib/gis/parser.c:1060
 #, c-format
@@ -2861,6 +2985,8 @@ msgid ""
 "\n"
 "Description:\n"
 msgstr ""
+"\n"
+"п·п©п╦я│п╟п╫п╦п╣:\n"
 
 #: ../lib/gis/parser.c:1067
 #, c-format
@@ -2868,6 +2994,8 @@ msgid ""
 "\n"
 "Keywords:\n"
 msgstr ""
+"\n"
+"п п╩я▌я┤п╣п╡я▀п╣ я│п╩п╬п╡п╟:\n"
 
 #: ../lib/gis/parser.c:1071
 #, c-format
@@ -2876,6 +3004,9 @@ msgid ""
 "Usage:\n"
 " "
 msgstr ""
+"\n"
+"п≤я│п©п╬п╩я▄п╥п╬п╡п╟п╫п╦п╣:\n"
+" "
 
 #: ../lib/gis/parser.c:1143
 #, c-format
@@ -2883,18 +3014,20 @@ msgid ""
 "\n"
 "Flags:\n"
 msgstr ""
+"\n"
+"п╓п╩п╟пЁп╦:\n"
 
-#: ../lib/gis/parser.c:1166 ../lib/gis/parser.c:1654 ../lib/gis/parser.c:1940
+#: ../lib/gis/parser.c:1166 ../lib/gis/parser.c:1654 ../lib/gis/parser.c:1941
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "п═п╟п╥я─п╣я┬п╦я┌я▄ п╡я▀я┘п╬п╢п╫я▀п╪ я└п╟п╧п╩п╟п╪ п©п╣я─п╣п╥п╟п©п╦я│я▀п╡п╟я┌я▄ я│я┐я┴п╣я│я┌п╡я┐я▌я┴п╦п╣ я└п╟п╧п╩я▀"
 
 #: ../lib/gis/parser.c:1168 ../lib/gis/parser.c:1658
 msgid "Verbose module output"
-msgstr ""
+msgstr "п°п╫п╬пЁп╬я│п╩п╬п╡п╫п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ я─п╟п╠п╬я┌я▀ п╪п╬п╢я┐п╩я▐"
 
 #: ../lib/gis/parser.c:1169 ../lib/gis/parser.c:1661
 msgid "Quiet module output"
-msgstr ""
+msgstr "п я─п╟я┌п╨п╬п╣ п╬п©п╦я│п╟п╫п╦п╣ я─п╟п╠п╬я┌я▀ п╪п╬п╢я┐п╩я▐"
 
 #: ../lib/gis/parser.c:1175
 #, c-format
@@ -2902,202 +3035,216 @@ msgid ""
 "\n"
 "Parameters:\n"
 msgstr ""
+"\n"
+"п÷п╟я─п╟п╪п╣я┌я─я▀:\n"
 
 #: ../lib/gis/parser.c:1198
 #, fuzzy, c-format
 msgid "  %*s   default: %s\n"
-msgstr "  %*s   по умолчанию: %s\n"
+msgstr "  %*s   п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌: %s\n"
 
 #: ../lib/gis/parser.c:1537
 msgid "NAME"
-msgstr ""
+msgstr "п≤п°п╞"
 
 #: ../lib/gis/parser.c:1550
 msgid "KEYWORDS"
-msgstr ""
+msgstr "п п⌡п╝п╖п≤"
 
 #: ../lib/gis/parser.c:1555
 msgid "SYNOPSIS"
-msgstr ""
+msgstr "п║п╦п╫п╬п©я│п╦я│"
 
 #: ../lib/gis/parser.c:1629
 msgid "Flags"
-msgstr ""
+msgstr "п╓п╩п╟пЁп╦"
 
 #: ../lib/gis/parser.c:1670
 msgid "Parameters"
-msgstr ""
+msgstr "п÷п╟я─п╟п╪п╣я┌я─я▀"
 
 #: ../lib/gis/parser.c:1711
 #, fuzzy
 msgid "Options"
-msgstr " опции: %s\n"
+msgstr "п·п©я├п╦п╦"
 
 #: ../lib/gis/parser.c:1717
 #, fuzzy
 msgid "Default"
-msgstr " по умол.: %s\n"
+msgstr "п÷п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
-#: ../lib/gis/parser.c:1942
+#: ../lib/gis/parser.c:1943
 msgid "Allow overwrite"
-msgstr ""
+msgstr "п═п╟п╥я─п╣я┬п╦я┌я▄ п©п╣я─п╣п╥п╟п©п╦я│я▄"
 
-#: ../lib/gis/parser.c:1950
+#: ../lib/gis/parser.c:1951
 msgid "Run with minimal output messages"
-msgstr ""
+msgstr "п▓я▀п©п╬п╩п╫я▐я┌я▄ я│ п╪п╦п╫п╦п╪п╟п╩я▄п╫я▀п╪ п╨п╬п╩п╦я┤п╣я│я┌п╡п╬п╪ я│п╬п╬п╠я┴п╣п╫п╦п╧"
 
-#: ../lib/gis/parser.c:1952
+#: ../lib/gis/parser.c:1953
 msgid "Run quietly"
+msgstr "п≈п╟п©я┐я│п╨п╟я┌я▄ п╠п╣п╥ я│п╬п╬п╠я┴п╣п╫п╦п╧"
+
+#: ../lib/gis/parser.c:1986
+msgid "Unable to spawn the 'wish' program"
 msgstr ""
 
-#: ../lib/gis/parser.c:1985
-#, fuzzy
-msgid "Unable to spawn wish"
-msgstr "Не могу открыть [%s]"
-
-#: ../lib/gis/parser.c:2004
+#: ../lib/gis/parser.c:2005
 #, fuzzy
 msgid "Unable to determine program name"
-msgstr "невозможно установить домашний каталог пользователя"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬п©я─п╣п╢п╣п╩п╦я┌я▄ п╢п╬п╪п╟я┬п╫п╦п╧ п╨п╟я┌п╟п╩п╬пЁ п©п╬п╩я▄п╥п╬п╡п╟я┌п╣п╩я▐"
 
-#: ../lib/gis/parser.c:2059
+#: ../lib/gis/parser.c:2060
 #, fuzzy, c-format
 msgid "  %*s   options: "
-msgstr "  %*s   опции: "
+msgstr "  %*s   п╬п©я├п╦п╦: "
 
-#: ../lib/gis/parser.c:2108 ../lib/gis/parser.c:2125
+#: ../lib/gis/parser.c:2109 ../lib/gis/parser.c:2126
 #, fuzzy, c-format
 msgid "Sorry, <%c> is not a valid flag\n"
-msgstr "Извините, <%c> невозможный флаг\n"
+msgstr "п≤п╥п╡п╦п╫п╦я┌п╣, я└п╩п╟пЁ <%c> п╫п╣п╡п╣я─п╣п╫\n"
 
-#: ../lib/gis/parser.c:2180
+#: ../lib/gis/parser.c:2181
 #, fuzzy, c-format
 msgid "Sorry, <%s=> is ambiguous\n"
-msgstr "Извините, <%s=> неоднозначный параметр\n"
+msgstr "п≤п╥п╡п╦п╫п╦я┌п╣, п©п╟я─п╟п╪п╣я┌я─ <%s=> п╫п╣п╬п╢п╫п╬п╥п╫п╟я┤п╣п╫\n"
 
-#: ../lib/gis/parser.c:2187
+#: ../lib/gis/parser.c:2188
 #, fuzzy, c-format
 msgid "Sorry, <%s> is not a valid parameter\n"
-msgstr "Извините, <%s> невозможный параметр\n"
+msgstr "п≤п╥п╡п╦п╫п╦я┌п╣, п©п╟я─п╟п╪п╣я┌я─ <%s> п╫п╣п╡п╣я─п╣п╫\n"
 
-#: ../lib/gis/parser.c:2272
+#: ../lib/gis/parser.c:2273
 #, fuzzy, c-format
 msgid ""
 "\n"
 "ERROR: illegal range syntax for parameter <%s>\n"
-msgstr " "
+msgstr ""
+"\n"
+"п·я┬п╦п╠п╨п╟: п╫п╣п╡п╣я─п╫я▀п╧ я│п╦п╫я┌п╟п╨я│п╦я│ п╢п╦п╟п©п╟п╥п╬п╫п╟ п╢п╩я▐ п©п╟я─п╟п╪п╣я┌я─п╟ <%s>\n"
 
-#: ../lib/gis/parser.c:2274
+#: ../lib/gis/parser.c:2275
 #, fuzzy, c-format
 msgid "       Presented as: %s\n"
-msgstr "       Представленного как: %s\n"
+msgstr "       п÷я─п╣п╢я│я┌п╟п╡п╩п╣п╫п╫п╬пЁп╬ п╨п╟п╨: %s\n"
 
-#: ../lib/gis/parser.c:2277
+#: ../lib/gis/parser.c:2278
 #, fuzzy, c-format
 msgid ""
 "\n"
 "ERROR: value <%s> out of range for parameter <%s>\n"
-msgstr "   "
+msgstr ""
+"\n"
+"п·я┬п╦п╠п╨п╟: п╥п╫п╟я┤п╣п╫п╦п╣ <%s> п╡я▀я┘п╬п╢п╦я┌ п╥п╟ п╢п╦п╟п©п╟п╥п╬п╫ п©п╟я─п╟п╪п╣я┌я─п╟ <%s>\n"
 
-#: ../lib/gis/parser.c:2279
+#: ../lib/gis/parser.c:2280
 #, fuzzy, c-format
 msgid "       Legal range: %s\n"
-msgstr "       Возможный диапазон: %s\n"
+msgstr "       п▓п╬п╥п╪п╬п╤п╫я▀п╧ п╢п╦п╟п©п╟п╥п╬п╫: %s\n"
 
-#: ../lib/gis/parser.c:2282
+#: ../lib/gis/parser.c:2283
 #, fuzzy, c-format
 msgid ""
 "\n"
 "ERROR: Missing value for parameter <%s>\n"
-msgstr " "
+msgstr ""
+"\n"
+"п·я┬п╦п╠п╨п╟: п·я┌я│я┐я┌п╡я┐п╣я┌ п╥п╫п╟я┤п╣п╫п╦п╣ п╢п╩я▐ п©п╟я─п╟п╪п╣я┌я─п╟ <%s>\n"
 
-#: ../lib/gis/parser.c:2442
+#: ../lib/gis/parser.c:2443
 #, fuzzy, c-format
 msgid ""
 "\n"
 "ERROR: Required parameter <%s> not set:\n"
 "    (%s).\n"
 msgstr ""
-" \n"
-"  "
+"\n"
+"п·я┬п╦п╠п╨п╟: п╒я─п╣п╠я┐п╣п╪я▀п╧ п©п╟я─п╟п╪п╣я┌я─ <%s> п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫:\n"
+"    (%s).\n"
 
-#: ../lib/gis/parser.c:2545
+#: ../lib/gis/parser.c:2546
 #, fuzzy, c-format
 msgid ""
 "\n"
 "ERROR: option <%s> must be provided in multiples of %d\n"
-msgstr " "
+msgstr ""
+"\n"
+"п·я┬п╦п╠п╨п╟: п╬п©я├п╦я▐ <%s> п╢п╬п╩п╤п╫п╟ п╥п╟п╢п╟п╡п╟я┌я▄я│я▐ п╡ п╥п╫п╟я┤п╣п╫п╦я▐я┘ %d\n"
 
-#: ../lib/gis/parser.c:2547
+#: ../lib/gis/parser.c:2548
 #, fuzzy, c-format
 msgid "       You provided %d items:\n"
-msgstr "       Вы задали %d раз:\n"
+msgstr "       п▓я▀ п╥п╟п╢п╟п╩п╦ %d я─п╟п╥:\n"
 
-#: ../lib/gis/parser.c:2602
+#: ../lib/gis/parser.c:2603
 #, fuzzy, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
-msgstr "   "
+msgstr "п·я┬п╦п╠п╨п╟: п╬п©я├п╦я▐ <%s>: <%s> я│я┐я┴п╣я│я┌п╡я┐п╣я┌.\n"
 
-#: ../lib/gis/parser.c:2649
+#: ../lib/gis/parser.c:2650
 #, c-format
 msgid ""
 "\n"
 "FLAG: Set the following flag?\n"
 msgstr ""
+"\n"
+"п╓п╩п╟пЁ: п≈п╟п╢п╟я┌я▄ я│п╩п╣п╢я┐я▌я┴п╦п╧ я└п╩п╟пЁ?\n"
 
-#: ../lib/gis/parser.c:2663
+#: ../lib/gis/parser.c:2664
 #, fuzzy, c-format
 msgid ""
 "\n"
 "OPTION:   %s\n"
-msgstr " "
+msgstr ""
+" \n"
+"п·п©я├п╦я▐:   %s\n"
 
-#: ../lib/gis/parser.c:2664
+#: ../lib/gis/parser.c:2665
 #, fuzzy, c-format
 msgid "     key: %s\n"
-msgstr "     ключ: %s\n"
+msgstr "     п╨п╩я▌я┤: %s\n"
 
-#: ../lib/gis/parser.c:2666
+#: ../lib/gis/parser.c:2667
 #, fuzzy, c-format
 msgid "  format: %s\n"
-msgstr "  формат: %s\n"
-
-#: ../lib/gis/parser.c:2668
-#, fuzzy, c-format
-msgid " default: %s\n"
-msgstr " по умол.: %s\n"
+msgstr "  я└п╬я─п╪п╟я┌: %s\n"
 
 #: ../lib/gis/parser.c:2669
 #, fuzzy, c-format
-msgid "required: %s\n"
-msgstr "необх.: %s\n"
+msgid " default: %s\n"
+msgstr " п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌: %s\n"
 
-#: ../lib/gis/parser.c:2671
+#: ../lib/gis/parser.c:2670
+#, fuzzy, c-format
+msgid "required: %s\n"
+msgstr "п╫п╣п╬п╠я┘п╬п╢п╦п╪п╬: %s\n"
+
+#: ../lib/gis/parser.c:2672
 #, fuzzy, c-format
 msgid "multiple: %s\n"
-msgstr "множ.: %s\n"
+msgstr "п╪п╫п╬п╤.: %s\n"
 
-#: ../lib/gis/parser.c:2673
+#: ../lib/gis/parser.c:2674
 #, fuzzy, c-format
 msgid " options: %s\n"
-msgstr " опции: %s\n"
+msgstr " п╬п©я├п╦п╦: %s\n"
 
-#: ../lib/gis/parser.c:2688
+#: ../lib/gis/parser.c:2689
 #, fuzzy, c-format
 msgid "enter option > "
-msgstr "задайте опцию > "
+msgstr "п╡п╡п╣п╢п╦я┌п╣ п╬п©я├п╦я▌ > "
 
-#: ../lib/gis/parser.c:2702 ../lib/gis/parser.c:2713
+#: ../lib/gis/parser.c:2703 ../lib/gis/parser.c:2714
 #, fuzzy
 msgid "   Try again? "
-msgstr "   Попробовать снова? "
+msgstr "   п÷п╬п©я─п╬п╠п╬п╡п╟я┌я▄ я│п╫п╬п╡п╟? "
 
-#: ../lib/gis/parser.c:2711
+#: ../lib/gis/parser.c:2712
 #, fuzzy, c-format
 msgid "Sorry, %s is not accepted.\n"
-msgstr "Извините, %s не приемлемо.\n"
+msgstr "п≤п╥п╡п╦п╫п╦я┌п╣, %s п╫п╣п╢п╬п©я┐я│я┌п╦п╪п╬.\n"
 
-#: ../lib/gis/parser.c:2722
+#: ../lib/gis/parser.c:2723
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -3105,67 +3252,68 @@ msgid ""
 "  %s\n"
 msgstr ""
 "\n"
-"  "
+"п▓я▀ п╡я▀п╠я─п╟п╩п╦:\n"
+"  %s\n"
 
-#: ../lib/gis/parser.c:2723
+#: ../lib/gis/parser.c:2724
 #, fuzzy
 msgid "Is this correct? "
-msgstr "Правильно?"
+msgstr "п÷я─п╟п╡п╦п╩я▄п╫п╬?"
 
-#: ../lib/gis/parser.c:2792
+#: ../lib/gis/parser.c:2793
 #, fuzzy
 msgid "to accept the default"
-msgstr "чтобы установить по умолчанию"
+msgstr "я┤я┌п╬п╠я▀ я┐я│я┌п╟п╫п╬п╡п╦я┌я▄ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌"
 
 #: ../lib/gis/reclass.c:150
 #, fuzzy, c-format
 msgid "Too many reclass categories for [%s in %s]"
-msgstr "Слишком много категорий для реклассификации [%s в %s]"
+msgstr "п║п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ п╨п╟я┌п╣пЁп╬я─п╦п╧ п╢п╩я▐ я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦п╦ [%s п╡ %s]"
 
 #: ../lib/gis/reclass.c:153
 #, fuzzy, c-format
 msgid "Illegal reclass format in header file for [%s in %s]"
-msgstr "Неправильный формат реклассификации в файле заголовка для [%s в %s]"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╧ я└п╬я─п╪п╟я┌ я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦п╦ п╡ я└п╟п╧п╩п╣ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/reclass.c:248
 #, fuzzy
 msgid "Illegal reclass request"
-msgstr "Данная реклассификация невозможна"
+msgstr "п■п╟п╫п╫п╟я▐ я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦я▐ п╫п╣п╡п╬п╥п╪п╬п╤п╫п╟"
 
 #: ../lib/gis/reclass.c:253
 #, fuzzy
 msgid "Illegal reclass type"
-msgstr "Неправильно задан тип реклассификации"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬ п╥п╟п╢п╟п╫ я┌п╦п© я─п╣п╨п╩п╟я│я│п╦я└п╦п╨п╟я├п╦п╦"
 
 #: ../lib/gis/reclass.c:260
 #, fuzzy, c-format
 msgid "Unable to create header file for [%s in %s]"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/reclass.c:310
 #, fuzzy, c-format
 msgid "Unable to create dependency file in [%s in %s]"
-msgstr "Невозможно создать сопутствующий dependency файл для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я│п╬п©я┐я┌я│я┌п╡я┐я▌я┴п╦п╧ dependency я└п╟п╧п╩ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/quant_rw.c:208
 #, fuzzy, c-format
 msgid "Cannot write quant rules: map %s is integer"
-msgstr "Невозможно записать правила разбиения значений: карта %s целочисленная"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п©я─п╟п╡п╦п╩п╟ я─п╟п╥п╠п╦п╣п╫п╦я▐ п╥п╫п╟я┤п╣п╫п╦п╧: п╨п╟я─я┌п╟ %s я├п╣п╩п╬я┤п╦я│п╩п╣п╫п╫п╟я▐"
 
 #: ../lib/gis/quant_rw.c:218
 #, fuzzy, c-format
 msgid "Cannot write quant rules for map %s"
-msgstr "Невозможно записать правила разбиения значений для карты %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╥п╟п©п╦я│п╟я┌я▄ п©я─п╟п╡п╦п╩п╟ я─п╟п╥п╠п╦п╣п╫п╦я▐ п╥п╫п╟я┤п╣п╫п╦п╧ п╢п╩я▐ п╨п╟я─я┌я▀ %s"
 
 #: ../lib/gis/raster_metadata.c:111
 #, fuzzy, c-format
 msgid "Can't read %s for [%s in %s]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/raster_metadata.c:143
 #, fuzzy, c-format
 msgid "Can't create %s metadata file for [%s in %s]"
-msgstr "Невозможно прочесть файл заголовка для [%s в %s]\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]\n"
 
 #: ../lib/gis/timestamp.c:298
 #, fuzzy, c-format
@@ -3175,7 +3323,7 @@ msgstr "     "
 #: ../lib/gis/timestamp.c:308
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map %s in mapset %s"
-msgstr "Задана неверная временная метка для %s карты %s в наб. данных %s"
+msgstr "п≈п╟п╢п╟п╫п╟ п╫п╣п╡п╣я─п╫п╟я▐ п╡я─п╣п╪п╣п╫п╫п╟я▐ п╪п╣я┌п╨п╟ п╢п╩я▐ %s п╨п╟я─я┌я▀ %s п╡ п╫п╟п╠. п╢п╟п╫п╫я▀я┘ %s"
 
 #: ../lib/gis/timestamp.c:332
 #, fuzzy, c-format
@@ -3185,168 +3333,171 @@ msgstr "     "
 #: ../lib/gis/timestamp.c:342
 #, fuzzy, c-format
 msgid "Invalid timestamp file for %s map %s in mapset %s"
-msgstr "Неверный формат файла временной метки для %s карты %s в наб. данных %s"
+msgstr "п²п╣п╡п╣я─п╫я▀п╧ я└п╬я─п╪п╟я┌ я└п╟п╧п╩п╟ п╡я─п╣п╪п╣п╫п╫п╬п╧ п╪п╣я┌п╨п╦ п╢п╩я▐ %s п╨п╟я─я┌я▀ %s п╡ п╫п╟п╠. п╢п╟п╫п╫я▀я┘ %s"
 
 #: ../lib/gis/adj_cellhd.c:47 ../lib/gis/adj_cellhd.c:196
 #, fuzzy
 msgid "Illegal n-s resolution value"
-msgstr "Неверно задано разрешение n-s"
+msgstr "п²п╣п╡п╣я─п╫п╬ п╥п╟п╢п╟п╫п╬ я─п╟п╥я─п╣я┬п╣п╫п╦п╣ n-s"
 
 #: ../lib/gis/adj_cellhd.c:52 ../lib/gis/adj_cellhd.c:203
 #, fuzzy
 msgid "Illegal row value"
-msgstr "Неправильная величина строки"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╟я▐ п╡п╣п╩п╦я┤п╦п╫п╟ я│я┌я─п╬п╨п╦"
 
 #: ../lib/gis/adj_cellhd.c:57 ../lib/gis/adj_cellhd.c:210
 #, fuzzy
 msgid "Illegal e-w resolution value"
-msgstr "Неверно задано разрешение e-w"
+msgstr "п²п╣п╡п╣я─п╫п╬ п╥п╟п╢п╟п╫п╬ я─п╟п╥я─п╣я┬п╣п╫п╦п╣ e-w"
 
 #: ../lib/gis/adj_cellhd.c:62 ../lib/gis/adj_cellhd.c:217
 #, fuzzy
 msgid "Illegal col value"
-msgstr "Неправильная величина столбца"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╟я▐ п╡п╣п╩п╦я┤п╦п╫п╟ я│я┌п╬п╩п╠я├п╟"
 
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:248
 #, c-format
 msgid "Fixing subtle input data rounding error of north boundary (%g>%g)"
-msgstr ""
+msgstr "п≤я│п©я─п╟п╡п╩п╣п╫п╦п╣ п╬я┬п╦п╠п╨п╦ п╬п╨я─я┐пЁп╩п╣п╫п╦я▐ п╢п╩я▐ я│п╣п╡п╣я─п╫п╬п╧ пЁя─п╟п╫п╦я├я▀ (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:84 ../lib/gis/adj_cellhd.c:251
 #, fuzzy
 msgid "Illegal latitude for North"
-msgstr "Неправильная широта для Севера"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╟я▐ я┬п╦я─п╬я┌п╟ п╢п╩я▐ п║п╣п╡п╣я─п╟"
 
 #: ../lib/gis/adj_cellhd.c:89 ../lib/gis/adj_cellhd.c:256
 #, c-format
 msgid "Fixing subtle input data rounding error of south boundary (%g>%g)"
-msgstr ""
+msgstr "п≤я│п©я─п╟п╡п╩п╣п╫п╦п╣ п╬я┬п╦п╠п╨п╦ п╬п╨я─я┐пЁп╩п╣п╫п╦я▐ п╢п╩я▐ я▌п╤п╫п╬п╧ пЁя─п╟п╫п╦я├я▀ (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:92 ../lib/gis/adj_cellhd.c:259
 #, fuzzy
 msgid "Illegal latitude for South"
-msgstr "Неправильная широта для Юга"
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╟я▐ я┬п╦я─п╬я┌п╟ п╢п╩я▐ п╝пЁп╟"
 
 #: ../lib/gis/adj_cellhd.c:103 ../lib/gis/adj_cellhd.c:270
 #, c-format
 msgid "Fixing subtle input data rounding error of west boundary (%g>%g)"
-msgstr ""
+msgstr "п≤я│п©я─п╟п╡п╩п╣п╫п╦п╣ п╬я┬п╦п╠п╨п╦ п╬п╨я─я┐пЁп╩п╣п╫п╦я▐ п╢п╩я▐ п╥п╟п©п╟п╢п╫п╬п╧ пЁя─п╟п╫п╦я├я▀ (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:113 ../lib/gis/adj_cellhd.c:280
 #, c-format
 msgid "Fixing subtle input data rounding error of east boundary (%g>%g)"
-msgstr ""
+msgstr "п≤я│п©я─п╟п╡п╩п╣п╫п╦п╣ п╬я┬п╦п╠п╨п╦ п╬п╨я─я┐пЁп╩п╣п╫п╦я▐ п╢п╩я▐ п╡п╬я│я┌п╬я┤п╫п╬п╧ пЁя─п╟п╫п╦я├я▀ (%g>%g)"
 
 #: ../lib/gis/adj_cellhd.c:127 ../lib/gis/adj_cellhd.c:294
 #, fuzzy
 msgid "North must be north of South"
-msgstr "Север должен быть к северу от Юга"
+msgstr "п║п╣п╡п╣я─ п╢п╬п╩п╤п╣п╫ п╠я▀я┌я▄ п╨ я│п╣п╡п╣я─я┐ п╬я┌ п╝пЁп╟"
 
 #: ../lib/gis/adj_cellhd.c:129 ../lib/gis/adj_cellhd.c:296
 #, fuzzy
 msgid "North must be larger than South"
-msgstr "Север должен быть больше Юга"
+msgstr "п║п╣п╡п╣я─ п╢п╬п╩п╤п╣п╫ п╠я▀я┌я▄ п╠п╬п╩я▄я┬п╣ п╝пЁп╟"
 
 #: ../lib/gis/adj_cellhd.c:132 ../lib/gis/adj_cellhd.c:299
 #, fuzzy
 msgid "East must be larger than West"
-msgstr "Восток должен быть больше Запада"
+msgstr "п▓п╬я│я┌п╬п╨ п╢п╬п╩п╤п╣п╫ п╠я▀я┌я▄ п╠п╬п╩я▄я┬п╣ п≈п╟п©п╟п╢п╟"
 
 #: ../lib/gis/adj_cellhd.c:150 ../lib/gis/adj_cellhd.c:337
 #, fuzzy
 msgid "Invalid coordinates"
-msgstr "Неверные координаты"
+msgstr "п²п╣п╡п╣я─п╫я▀п╣ п╨п╬п╬я─п╢п╦п╫п╟я┌я▀"
 
 #: ../lib/gis/adj_cellhd.c:198
 msgid "Illegal n-s3 resolution value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ я─п╟п╥я─п╣я┬п╣п╫п╦п╣ n-s3"
 
 #: ../lib/gis/adj_cellhd.c:205
 msgid "Illegal row3 value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣ row3"
 
 #: ../lib/gis/adj_cellhd.c:212
 msgid "Illegal e-w3 resolution value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ я─п╟п╥я─п╣я┬п╣п╫п╦п╣ e-w3"
 
 #: ../lib/gis/adj_cellhd.c:219
 msgid "Illegal col3 value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣ col3"
 
 #: ../lib/gis/adj_cellhd.c:224
 msgid "Illegal t-b3 resolution value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ я─п╟п╥я─п╣я┬п╣п╫п╦п╣ t-b3"
 
 #: ../lib/gis/adj_cellhd.c:229
 msgid "Illegal depths value"
-msgstr ""
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╬п╣ п╥п╫п╟я┤п╣п╫п╦п╣ пЁп╩я┐п╠п╦п╫я▀"
 
 #: ../lib/gis/adj_cellhd.c:301
 #, fuzzy
 msgid "Top must be larger than Bottom"
-msgstr "Север должен быть больше Юга"
+msgstr "п▓п╣я─я┘ п╢п╬п╩п╤п╣п╫ п╠я▀я┌я▄ п╠п╬п╩я▄я┬п╣ п²п╦п╥п╟"
 
 #: ../lib/gis/rd_cellhd.c:136
 #, fuzzy
 msgid "duplicate projection field"
-msgstr "дважды задано поле проекции"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ п©я─п╬п╣п╨я├п╦п╦"
 
 #: ../lib/gis/rd_cellhd.c:147
 #, fuzzy
 msgid "duplicate zone field"
-msgstr "дважды задано поле зоны"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ п╥п╬п╫я▀"
 
 #: ../lib/gis/rd_cellhd.c:157
 #, fuzzy
 msgid "projection field missing"
-msgstr "отсутствует поле проекции"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ п©я─п╬п╣п╨я├п╦п╦"
 
 #: ../lib/gis/rd_cellhd.c:159
 #, fuzzy
 msgid "zone field missing"
-msgstr "отсутствует поле зоны"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ п╥п╬п╫я▀"
 
 #: ../lib/gis/rd_cellhd.c:181
 #, fuzzy
 msgid "duplicate north field"
-msgstr "дважды задано поле север"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я│п╣п╡п╣я─"
 
 #: ../lib/gis/rd_cellhd.c:190
 #, fuzzy
 msgid "duplicate south field"
-msgstr "дважды задано поле юг"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я▌пЁ"
 
 #: ../lib/gis/rd_cellhd.c:199
 #, fuzzy
 msgid "duplicate east field"
-msgstr "дважды задано поле восток"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ п╡п╬я│я┌п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:208
 #, fuzzy
 msgid "duplicate west field"
-msgstr "дважды задано поле запад"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ п╥п╟п©п╟п╢"
 
 #: ../lib/gis/rd_cellhd.c:217
+#, fuzzy
 msgid "duplicate top field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣я│я▐ п╡п╣я─я┘п╫п╣п╣ п©п╬п╩п╣"
 
 #: ../lib/gis/rd_cellhd.c:226
+#, fuzzy
 msgid "duplicate bottom field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣я│я▐ п╫п╦п╤п╫п╣п╣ п©п╬п╩п╣"
 
 #: ../lib/gis/rd_cellhd.c:235
 #, fuzzy
 msgid "duplicate e-w resolution field"
-msgstr "дважды задано поле разрешения в-з"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я─п╟п╥я─п╣я┬п╣п╫п╦я▐ п╡-п╥"
 
 #: ../lib/gis/rd_cellhd.c:246
+#, fuzzy
 msgid "duplicate 3D e-w resolution field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣я│я▐ п©п╬п╩п╣ 3D я─п╟п╥я─п╣я┬п╣п╫п╦я▐ п╡п╬я│я┌п╬п╨-п╥п╟п©п╟п╢ "
 
 #: ../lib/gis/rd_cellhd.c:257
 #, fuzzy
 msgid "duplicate n-s resolution field"
-msgstr "дважды задано поле разрешения с-ю"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я─п╟п╥я─п╣я┬п╣п╫п╦я▐ я│-я▌"
 
 #: ../lib/gis/rd_cellhd.c:268
 #, fuzzy
@@ -3354,184 +3505,191 @@ msgid "duplicate 3D n-s resolution field"
 msgstr " "
 
 #: ../lib/gis/rd_cellhd.c:279
+#, fuzzy
 msgid "duplicate t-b resolution field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣я│я▐ п©п╬п╩п╣ я─п╟п╥я─п╣я┬п╣п╫п╦я▐ п╡п╣я─я┘-п╫п╦п╥"
 
 #: ../lib/gis/rd_cellhd.c:290
 #, fuzzy
 msgid "duplicate rows field"
-msgstr "дважды задано поле строк"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я│я┌я─п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:301
+#, fuzzy
 msgid "duplicate 3D rows field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣ п©п╬п╩п╣ 3D я│я┌я─п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:312
 #, fuzzy
 msgid "duplicate cols field"
-msgstr "дважды задано поле столбцов"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я│я┌п╬п╩п╠я├п╬п╡"
 
 #: ../lib/gis/rd_cellhd.c:323
+#, fuzzy
 msgid "duplicate 3D cols field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣ п©п╬п╩п╣ 3D п╨п╬п╩п╬п╫п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:334
 msgid "duplicate depths field"
-msgstr ""
+msgstr "п╢я┐п╠п╩п╦я─я┐я▌я┴п╣п╣я│я▐ п©п╬п╩п╣ пЁп╩я┐п╠п╦п╫"
 
 #: ../lib/gis/rd_cellhd.c:345
 #, fuzzy
 msgid "duplicate format field"
-msgstr "дважды задано поле формата"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я└п╬я─п╪п╟я┌п╟"
 
 #: ../lib/gis/rd_cellhd.c:354
 #, fuzzy
 msgid "duplicate compressed field"
-msgstr "дважды задано поле сжатия"
+msgstr "п╢п╡п╟п╤п╢я▀ п╥п╟п╢п╟п╫п╬ п©п╬п╩п╣ я│п╤п╟я┌п╦я▐"
 
 #: ../lib/gis/rd_cellhd.c:365
 #, fuzzy
 msgid "north field missing"
-msgstr "отсутствует поле север"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ я│п╣п╡п╣я─"
 
 #: ../lib/gis/rd_cellhd.c:367
 #, fuzzy
 msgid "south field missing"
-msgstr "отсутствует поле юг"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ я▌пЁ"
 
 #: ../lib/gis/rd_cellhd.c:369
 #, fuzzy
 msgid "west field missing"
-msgstr "отсутствует поле запад"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ п╥п╟п©п╟п╢"
 
 #: ../lib/gis/rd_cellhd.c:371
 #, fuzzy
 msgid "east field missing"
-msgstr "отсутствует поле восток"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ п╡п╬я│я┌п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:373
 #, fuzzy
 msgid "cols field missing"
-msgstr "отсутствует поле столбцов"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ я│я┌п╬п╩п╠я├п╬п╡"
 
 #: ../lib/gis/rd_cellhd.c:375
 #, fuzzy
 msgid "rows field missing"
-msgstr "отсутствует поле строк"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ п©п╬п╩п╣ я│я┌я─п╬п╨"
 
 #: ../lib/gis/rd_cellhd.c:386
 #, fuzzy
 msgid "ewres3 field missing"
-msgstr "отсутствует"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/rd_cellhd.c:388
 #, fuzzy
 msgid "nsres3 field missing"
-msgstr "отсутствует"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/rd_cellhd.c:390
 #, fuzzy
 msgid "cols3 field missing"
-msgstr "отсутствует"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/rd_cellhd.c:392
 #, fuzzy
 msgid "rows3 field missing"
-msgstr "отсутствует"
+msgstr "п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌"
 
 #: ../lib/gis/rd_cellhd.c:448
 #, fuzzy, c-format
 msgid "line %d: <%s>"
-msgstr "строка %d: <%s>"
+msgstr "я│я┌я─п╬п╨п╟ %d: <%s>"
 
 #: ../lib/gis/auto_mask.c:66
 #, fuzzy
 msgid "Unable to open automatic MASK file"
-msgstr "Невозможно открыть автоматически MASK файл"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ MASK я└п╟п╧п╩ п╟п╡я┌п╬п╪п╟я┌п╦я┤п╣я│п╨п╦"
 
 #: ../lib/gis/env.c:248
 #, fuzzy
 msgid "GISRC - variable not set"
-msgstr "GISRC - переменная не установлена"
+msgstr "GISRC - п©п╣я─п╣п╪п╣п╫п╫п╟я▐ п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫п╟"
 
 #: ../lib/gis/env.c:279
 #, fuzzy, c-format
 msgid "G_getenv(): Variable %s not set"
-msgstr "GISRC - переменная не установлена"
+msgstr "GISRC - п©п╣я─п╣п╪п╣п╫п╫п╟я▐ п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫п╟"
 
 #: ../lib/gis/env.c:305
 #, fuzzy, c-format
 msgid "%s not set"
-msgstr "%s не установлен"
+msgstr "%s п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫"
 
 #: ../lib/gis/done_msg.c:37
 #, fuzzy, c-format
 msgid "%s complete. %s"
-msgstr "   "
+msgstr "%s п╥п╟п╡п╣я─я┬п╣п╫. %s"
 
 #: ../lib/gis/get_window.c:69 ../lib/gis/get_window.c:88
 #, fuzzy, c-format
 msgid ""
 "region for current mapset %s\n"
 "run \"g.region\""
-msgstr " "
+msgstr ""
+"я─п╣пЁп╦п╬п╫ п╢п╩я▐ я┌п╣п╨я┐я┴п╣пЁп╬ п╫п╟п╠п╬я─п╟ %s\n"
+"п╡я▀п©п╬п╩п╫п╦я┌п╣ \"g.region\""
 
 #: ../lib/gis/get_window.c:124
 #, fuzzy, c-format
 msgid "default region %s"
-msgstr "регион по умолчанию %s"
+msgstr "я─п╣пЁп╦п╬п╫ п©п╬ я┐п╪п╬п╩я┤п╟п╫п╦я▌ %s"
 
 #: ../lib/gis/get_window.c:146
 #, fuzzy
 msgid "is not set"
-msgstr "не установлен"
+msgstr "п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫"
 
 #: ../lib/gis/get_window.c:156
 #, fuzzy, c-format
 msgid ""
 "is invalid\n"
 "%s"
-msgstr "   "
+msgstr ""
+"п╫п╣п╡п╣я─п╫п╬\n"
+"%s"
 
 #: ../lib/gis/mask_info.c:42
 #, fuzzy, c-format
 msgid "<%s> in mapset <%s>"
-msgstr "<%s> в наб. данных <%s>"
+msgstr "<%s> п╡ п╫п╟п╠п╬я─п╣ <%s>"
 
 #: ../lib/gis/mask_info.c:45
 #, fuzzy
 msgid "none"
-msgstr "нет"
+msgstr "п╫п╣я┌"
 
 #: ../lib/gis/mask_info.c:48
 #, fuzzy
 msgid "not known"
-msgstr "не известно"
+msgstr "п╫п╣п╦п╥п╡п╣я│я┌п╫п╬"
 
 #: ../lib/gis/color_read.c:123
 #, fuzzy, c-format
 msgid "color support for [%s] in mapset [%s] %s"
-msgstr "поддержка цвета для [%s] в наборе данных [%s] %s"
+msgstr "п©п╬п╢п╢п╣я─п╤п╨п╟ я├п╡п╣я┌п╟ п╢п╩я▐ [%s] п╡ п╫п╟п╠п╬я─п╣ [%s] %s"
 
 #: ../lib/gis/view.c:180
 #, fuzzy, c-format
 msgid "Unable to open %s for writing"
-msgstr "Невозможно открыть %s для записи"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ %s п╢п╩я▐ п╥п╟п©п╦я│п╦"
 
 #: ../lib/gis/view.c:269 ../lib/gis/view.c:486
 #, fuzzy, c-format
 msgid "Unable to open %s for reading"
-msgstr "Невозможно открыть %s для чтения"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ %s п╢п╩я▐ я┤я┌п╣п╫п╦я▐"
 
 #: ../lib/gis/view.c:472
 #, fuzzy, c-format
 msgid "GRASS window when view was saved:\n"
-msgstr "Окно GRASS в момент сохранения композиции:\n"
+msgstr "п·п╨п╫п╬ GRASS п╡ п╪п╬п╪п╣п╫я┌ я│п╬я┘я─п╟п╫п╣п╫п╦я▐ п╨п╬п╪п©п╬п╥п╦я├п╦п╦:\n"
 
 #: ../lib/gis/view.c:547
 #, fuzzy, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr " Окно, сохр. в \"%s\" полностью за пределами текущ. окна GRASS."
+msgstr " п·п╨п╫п╬, я│п╬я┘я─. п╡ \"%s\" п©п╬п╩п╫п╬я│я┌я▄я▌ п╥п╟ п©я─п╣п╢п╣п╩п╟п╪п╦ я┌п╣п╨я┐я┴. п╬п╨п╫п╟ GRASS."
 
 #: ../lib/gis/view.c:550
 #, fuzzy, c-format
@@ -3542,47 +3700,47 @@ msgstr " ."
 #: ../lib/gis/ask.c:339
 #, fuzzy
 msgid "to cancel request"
-msgstr "для отмены"
+msgstr "п╢п╩я▐ п╬я┌п╪п╣п╫я▀"
 
 #: ../lib/gis/ask.c:395
 #, fuzzy, c-format
 msgid "Enter a new %s file name"
-msgstr "Введите новое %s имя файла"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ п╫п╬п╡п╬п╣ %s п╦п╪я▐ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/ask.c:401
 #, fuzzy, c-format
 msgid "Enter the name of an existing %s file"
-msgstr "Введите имя существующего %s файла"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ п╦п╪я▐ я│я┐я┴п╣я│я┌п╡я┐я▌я┴п╣пЁп╬ %s я└п╟п╧п╩п╟"
 
 #: ../lib/gis/ask.c:405
 #, fuzzy, c-format
 msgid "Enter %s file name"
-msgstr "Введите %s имя файла"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ %s п╦п╪я▐ я└п╟п╧п╩п╟"
 
 #: ../lib/gis/ask.c:425
 #, fuzzy, c-format
 msgid "Enter 'list' for a list of existing %s files\n"
-msgstr "Введите 'list' для вывода списка существующих %s файлов\n"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ 'list' п╢п╩я▐ п╡я▀п╡п╬п╢п╟ я│п©п╦я│п╨п╟ я│я┐я┴п╣я│я┌п╡я┐я▌я┴п╦я┘ %s я└п╟п╧п╩п╬п╡\n"
 
 #: ../lib/gis/ask.c:428
 #, fuzzy, c-format
 msgid "Enter 'list -f' for "
-msgstr "Введите 'list -f' для"
+msgstr "п▓п╡п╣п╢п╦я┌п╣ 'list -f' п╢п╩я▐"
 
 #: ../lib/gis/ask.c:430
 #, fuzzy, c-format
 msgid "a list %s"
-msgstr "списка %s"
+msgstr "я│п©п╦я│п╨п╟ %s"
 
 #: ../lib/gis/ask.c:432
 #, fuzzy, c-format
 msgid "an extended list"
-msgstr "расширеный список"
+msgstr "я─п╟я│я┬п╦я─п╣п╫я▀п╧ я│п©п╦я│п╬п╨"
 
 #: ../lib/gis/ask.c:436
 #, fuzzy, c-format
 msgid "Hit RETURN %s\n"
-msgstr "Нажмите RETURN %s\n"
+msgstr "п²п╟п╤п╪п╦я┌п╣ RETURN %s\n"
 
 #: ../lib/gis/ask.c:458 ../lib/gis/ask.c:565 ../lib/gis/ask.c:587
 #, fuzzy, c-format
@@ -3622,260 +3780,269 @@ msgstr " "
 #: ../lib/gis/ask.c:569
 #, fuzzy
 msgid "ask: can't happen"
-msgstr "ask: не может быть"
+msgstr "ask: п╫п╣ п╪п╬п╤п╣я┌ п╠я▀я┌я▄"
 
 #: ../lib/gis/alloc.c:42
 msgid "G_malloc: out of memory"
-msgstr ""
+msgstr "G_malloc: out of memory"
 
 #: ../lib/gis/alloc.c:75
 msgid "G_calloc: out of memory"
-msgstr ""
+msgstr "G_calloc: out of memory"
 
 #: ../lib/gis/alloc.c:111
 msgid "G_realloc: out of memory"
-msgstr ""
+msgstr "G_realloc: out of memory"
 
 #: ../lib/gis/histogram.c:60
 #, fuzzy, c-format
 msgid "Histogram for [%s in %s] missing (run r.support)"
-msgstr "Гистограмма для [%s в %s] отсутствует (выполните r.support)"
+msgstr "п⌠п╦я│я┌п╬пЁя─п╟п╪п╪п╟ п╢п╩я▐ [%s п╡ %s] п╬я┌я│я┐я┌я│я┌п╡я┐п╣я┌ (п╡я▀п©п╬п╩п╫п╦я┌п╣ r.support)"
 
 #: ../lib/gis/histogram.c:68
 #, fuzzy, c-format
 msgid "Can't read histogram for [%s in %s]"
-msgstr "Невозможно прочесть гистограмму для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
 #: ../lib/gis/histogram.c:79 ../lib/gis/histogram.c:89
 #, fuzzy, c-format
 msgid "Invalid histogram file for [%s in %s]"
-msgstr "Неверный формат файла гистограммы [%s в %s]"
+msgstr "п²п╣п╡п╣я─п╫я▀п╧ я└п╬я─п╪п╟я┌ я└п╟п╧п╩п╟ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я▀ [%s п╡ %s]"
 
 #: ../lib/gis/histogram.c:370
 #, fuzzy, c-format
 msgid "can't create histogram for [%s in %s]"
-msgstr "невозможно создать гистограмму для [%s в %s]"
+msgstr "п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ пЁп╦я│я┌п╬пЁя─п╟п╪п╪я┐ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/imagery/fopen.c:28
+#: ../lib/imagery/fopen.c:24
 #, fuzzy, c-format
 msgid "Unable to create file [%s] of group [%s in %s]"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/imagery/fopen.c:46 ../lib/imagery/fopen.c:73
+#: ../lib/imagery/fopen.c:38 ../lib/imagery/fopen.c:61
 #, fuzzy, c-format
 msgid "Unable to open file [%s] of group [%s in %s]"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
-#: ../lib/imagery/fopen.c:62
+#: ../lib/imagery/fopen.c:53
 #, fuzzy, c-format
 msgid "Unable to find file [%s] of group [%s in %s]"
-msgstr "не могу найти [%s] в [%s]"
+msgstr "п╫п╣ п╪п╬пЁя┐ п╫п╟п╧я┌п╦ [%s] п╡ [%s]"
 
-#: ../lib/imagery/fopen.c:94
+#: ../lib/imagery/fopen.c:82
 #, fuzzy, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Невозможно создать файл заголовка для [%s в %s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]"
 
-#: ../lib/imagery/fopen.c:115 ../lib/imagery/fopen.c:145
+#: ../lib/imagery/fopen.c:103 ../lib/imagery/fopen.c:133
 #, fuzzy, c-format
 msgid "Unable to open file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr "Невозможно открыть файл %s в %s"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ %s п╡ %s"
 
-#: ../lib/imagery/fopen.c:134
+#: ../lib/imagery/fopen.c:122
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr ""
 
+#: ../lib/imagery/target.c:42
+#, fuzzy, c-format
+msgid "Unable to read target file for group [%s]"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ я│п╬п╥п╢п╟я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s]"
+
 #: ../lib/gmath/la.c:63 ../lib/gmath/la.c:120
 msgid "Matrix dimensions out of range"
-msgstr ""
+msgstr "п═п╟п╥п╪п╣я─я▀ п╪п╟я┌я─п╦я├я▀ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:154
+#, fuzzy
 msgid "Matrix is not initialised fully."
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├п╟ п╫п╣ п©п╬п╩п╫п╬я│я┌я▄я▌ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫п╟."
 
 #: ../lib/gmath/la.c:159
 #, fuzzy
 msgid "Unable to allocate space for matrix copy"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/gmath/la.c:251
 msgid "First scalar multiplier must be non-zero"
-msgstr ""
+msgstr "п÷п╣я─п╡я▀п╧ я│п╨п╟п╩я▐я─п╫я▀п╧ п╪п╫п╬п╤п╦я┌п╣п╩я▄ п╢п╬п╩п╤п╣п╫ п╠я▀я┌я▄ п╫п╣ я─п╟п╡п╣п╫ п╫я┐п╩я▌"
 
 #: ../lib/gmath/la.c:257 ../lib/gmath/la.c:265 ../lib/gmath/la.c:326
 msgid "One or both input matrices uninitialised"
-msgstr ""
+msgstr "п·п╢п╫п╟ п╦п╩п╦ п╬п╠п╣ п╪п╟я┌я─п╦я├я▀ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫я▀"
 
 #: ../lib/gmath/la.c:270 ../lib/gmath/la.c:331
 msgid "Matrix order does not match"
-msgstr ""
+msgstr "п÷п╬я─я▐п╢п╬п╨ п╪п╟я┌я─п╦я├я▀ п╫п╣ я│п╬п╡п©п╟п╢п╟п╣я┌"
 
 #: ../lib/gmath/la.c:276
 #, fuzzy
 msgid "Unable to allocate space for matrix sum"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/gmath/la.c:336
 #, fuzzy
 msgid "Unable to allocate space for matrix product"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/gmath/la.c:448
 msgid "Input: one or both data matrices uninitialised"
-msgstr ""
+msgstr "п▓п╡п╬п╢: п╬п╢п╫п╟ п╦п╩п╦ п╬п╠п╣ п╪п╟я┌я─п╦я├я▀ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫я▀"
 
 #: ../lib/gmath/la.c:453
 msgid "Principal matrix is not properly dimensioned"
-msgstr ""
+msgstr "п≈п╟п╢п╟п╫я▀ п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╣ я─п╟п╥п╪п╣я─я▀ пЁп╩п╟п╡п╫п╬п╧ п╪п╟я┌я─п╦я├я▀"
 
 #: ../lib/gmath/la.c:458
 msgid "Input: you must have at least one array to solve"
-msgstr ""
+msgstr "п▓п╡п╬п╢: п╢п╩я▐ я─п╣я┬п╣п╫п╦п╣ п╫п╣п╬п╠я┘п╬п╢п╦п╪п╬ п╫п╣ п╪п╣п╫я▄я┬п╣ п╬п╢п╫п╬пЁп╬ п╪п╟я│я│п╦п╡п╟"
 
 #: ../lib/gmath/la.c:464
 msgid "Could not allocate space for solution matrix"
-msgstr ""
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ п╪п╣я│я┌п╬ п╢п╩я▐ п╪п╟я┌я─п╦я├я▀ я─п╣я┬п╣п╫п╦я▐"
 
 #: ../lib/gmath/la.c:470 ../lib/gmath/la.c:478
 msgid "Could not allocate space for working matrix"
-msgstr ""
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ п╪п╣я│я┌п╬ п╢п╩я▐ я─п╟п╠п╬я┤п╣п╧ п╪п╟я┌я─п╦я├я▀"
 
 #: ../lib/gmath/la.c:530
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├п╟ (п╦п╩п╦ я│я┐п╠п╪п╟я┌я─п╦я├п╟ п╡я▀я─п╬п╤п╢п╣п╫п╟). п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ я─п╣я┬п╣п╫п╦п╣"
 
 #: ../lib/gmath/la.c:534
 msgid "Problem in LA routine."
-msgstr ""
+msgstr "п÷я─п╬п╠п╩п╣п╪п╟ п╡ LA п©я─п╬я├п╣п╢я┐я─п╣."
 
 #: ../lib/gmath/la.c:541
 msgid "Procedure not yet available for selected matrix type"
-msgstr ""
+msgstr "п■п╩я▐ п╡я▀п╠я─п╟п╫п╫п╬пЁп╬ я┌п╦п©п╟ п╪п╟я┌я─п╦я├я▀ п©я─п╬я├п╣п╢я┐я─п╟ п╣я┴п╣ п╫п╣ п╢п╬я│я┌я┐п©п╫п╟"
 
 #: ../lib/gmath/la.c:575
 msgid "Matrix is not square. Cannot determine inverse"
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├п╟ п╫п╣ п©я─я▐п╪п╬я┐пЁп╬п╩я▄п╫п╟я▐, п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ п╬п╠я─п╟я┌п╫я┐я▌ п╪п╟я┌я─п╦я├я┐."
 
 #: ../lib/gmath/la.c:580
 #, fuzzy
 msgid "Unable to allocate space for matrix"
-msgstr "Невозможно выделить память\n"
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #: ../lib/gmath/la.c:597
 msgid "Matrix is singular"
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├п╟ п╡я▀я─п╬п╤п╢п╣п╫п╟."
 
 #: ../lib/gmath/la.c:602
 msgid "Problem in LA procedure."
-msgstr ""
+msgstr "п÷я─п╬п╠п╩п╣п╪п╟ п╡ LA п©я─п╬я├п╣п╢я┐я─п╣."
 
 #: ../lib/gmath/la.c:692
+#, fuzzy
 msgid "Element array has not been allocated"
-msgstr ""
+msgstr "п°п╟я│я│п╦п╡ я█п╩п╣п╪п╣п╫я┌п╬п╡ п╫п╣ я│п╬п╥п╢п╟п╫"
 
 #: ../lib/gmath/la.c:698
 msgid "Specified element is outside array bounds"
-msgstr ""
+msgstr "пёп╨п╟п╥п╟п╫п╫я▀п╧ я█п╩п╣п╪п╣п╫я┌ п╡я▀я┘п╬п╢п╦я┌ п╥п╟ пЁя─п╟п╫п╦я├я▀ п╪п╟я│я│п╦п╡п╟"
 
 #: ../lib/gmath/la.c:754
 msgid "Specified matrix column index is outside range"
-msgstr ""
+msgstr "пёп╨п╟п╥п╟п╫п╫я▀п╧ п╦п╫п╢п╣п╨я│ п╨п╬п╩п╬п╫п╨п╦ п╪п╟я┌я─п╦я├я▀ п╫п╟я┘п╬п╢п╦я┌я│я▐ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:759 ../lib/gmath/la.c:801 ../lib/gmath/la.c:1125
 #: ../lib/gmath/la.c:1178 ../lib/gmath/la.c:1252
 msgid "Matrix is not initialised"
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├п╟ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫п╟"
 
 #: ../lib/gmath/la.c:764 ../lib/gmath/la.c:806
+#, fuzzy
 msgid "Could not allocate space for vector structure"
-msgstr ""
+msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╫п╟п╧я┌п╦ п╪п╣я│я┌п╬ п╢п╩я▐ п╡п╣п╨я┌п╬я─п╫п╬п╧ я│я┌я─я┐п╨я┌я┐я─я▀"
 
 #: ../lib/gmath/la.c:796
 msgid "Specified matrix row index is outside range"
-msgstr ""
+msgstr "пёп╨п╟п╥п╟п╫п╫я▀п╧ п╦п╫п╢п╣п╨я│ я─я▐п╢п╟ п╪п╟я┌я─п╦я├я▀ п╫п╟я┘п╬п╢п╦я┌я│я▐ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:837
 msgid "Specified row index is outside range"
-msgstr ""
+msgstr "пёп╨п╟п╥п╟п╫п╫я▀п╧ п╦п╫п╢п╣п╨я│ я─я▐п╢п╟ п╫п╟я┘п╬п╢п╦я┌я│я▐ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:842
 msgid "Specified column index is outside range"
-msgstr ""
+msgstr "пёп╨п╟п╥п╟п╫п╫я▀п╧ п╦п╫п╢п╣п╨я│ п╨п╬п╩п╬п╫п╨п╦ п╫п╟я┘п╬п╢п╦я┌я│я▐ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:862
 #, fuzzy
 msgid "Unknown vector type."
-msgstr "Неизвестная проекция"
+msgstr "п²п╣п╦п╥п╡п╣я│я┌п╫п╟я▐ п©я─п╬п╣п╨я├п╦я▐"
 
 #: ../lib/gmath/la.c:991
+#, fuzzy
 msgid "Output vector is uninitialized"
-msgstr ""
+msgstr "п▓я▀я┘п╬п╢п╫п╬п╧ п╡п╣п╨я┌п╬я─ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫"
 
 #: ../lib/gmath/la.c:996
 msgid "Vectors are not of the same type"
-msgstr ""
+msgstr "п▓п╣п╨я┌п╬я─я▀ п╬я┌п╫п╬я│я▐я┌я│я▐ п╨ я─п╟п╥п╫я▀п╪ я┌п╦п©п╟п╪"
 
 #: ../lib/gmath/la.c:1001
 msgid "Output vector is of incorrect type"
-msgstr ""
+msgstr "п▓я▀я┘п╬п╢п╫п╬п╧ п╡п╣п╨я┌п╬я─ п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╬пЁп╬ я┌п╦п©п╟"
 
 #: ../lib/gmath/la.c:1006
 msgid "Matrices not allowed"
-msgstr ""
+msgstr "п°п╟я┌я─п╦я├я▀ п╫п╣ я─п╟п╥я─п╣я┬п╣п╫я▀"
 
 #: ../lib/gmath/la.c:1013
 msgid "Vectors have differing dimensions"
-msgstr ""
+msgstr "п▓п╣п╨я┌п╬я─я▀ п╦п╪п╣я▌я┌ я─п╟п╥п╫я▀п╣ я─п╟п╥п╪п╣я─я▀"
 
 #: ../lib/gmath/la.c:1020
 msgid "Output vector has incorrect dimension"
-msgstr ""
+msgstr "п▓я▀я┘п╬п╢п╫п╬п╧ п╡п╣п╨я┌п╬я─ п╦п╪п╣п╣я┌ п╫п╣п©я─п╟п╡п╦п╩я▄п╫я▀п╣ я─п╟п╥п╪п╣я─я▀"
 
 #: ../lib/gmath/la.c:1067
 msgid "Vector dimensions out of range"
-msgstr ""
+msgstr "п═п╟п╥п╪п╣я─я▀ п╡п╣п╨я┌п╬я─п╟ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:1073
 msgid "Row/column out of range"
-msgstr ""
+msgstr "п═я▐п╢/п╨п╬п╩п╬п╫п╨п╟ п╡п╫п╣ п╢п╦п╟п©п╟п╥п╬п╫п╟"
 
 #: ../lib/gmath/la.c:1291
 msgid "Vector structure is not initialised"
-msgstr ""
+msgstr "п▓п╣п╨я┌п╬я─п╫п╟я▐ я│я┌я─я┐п╨я┌я┐я─п╟ п╫п╣ п╦п╫п╫п╦я├п╦п╟п╩п╦п╥п╦я─п╬п╡п╟п╫п╟"
 
 #: ../lib/gmath/la.c:1413 ../lib/gmath/la.c:1421 ../lib/gmath/la.c:1426
 msgid "Input format error"
-msgstr ""
+msgstr "п·я┬п╦п╠п╨п╟ п╦я│я┘п╬п╢п╫п╬пЁп╬ я└п╬я─п╪п╟я┌п╟"
 
 #: ../lib/gmath/del2g.c:51
 msgid "    taking FFT of image..."
-msgstr ""
+msgstr "    п©п╬п╩я┐я┤п╣п╫п╦п╣ FFT п╦п╥п╬п╠я─п╟п╤п╣п╫п╦я▐..."
 
 #: ../lib/gmath/del2g.c:58
 msgid "Insufficent memory for allocation of gaussian"
-msgstr ""
+msgstr "Insufficent memory for allocation of gaussian"
 
 #: ../lib/gmath/del2g.c:60
 msgid "    computing del**2 g..."
-msgstr ""
+msgstr "    п╡я▀я┤п╦я│п╩п╣п╫п╦п╣ del**2 g..."
 
 #: ../lib/gmath/del2g.c:63
 msgid "    taking FFT of del**2 g..."
-msgstr ""
+msgstr "    п╡я▀я┤п╦я│п╩п╣п╫п╦п╣ FFT del**2 g..."
 
 #: ../lib/gmath/del2g.c:67
 msgid "    multiplying transforms..."
-msgstr ""
+msgstr "    я┐п╪п╫п╬п╤п╣п╫п╦п╣ я┌я─п╟п╫я│я└п╬я─п╪п╟я├п╦п╧..."
 
 #: ../lib/gmath/del2g.c:70
 msgid "    taking inverse FFT..."
-msgstr ""
+msgstr "    п©п╬п╩я┐я┤п╣п╫п╦п╣ п╬п╠я─п╟я┌п╫п╬пЁп╬ FFT..."
 
 #: ../lib/display/tran_colr.c:132 ../lib/display/tran_colr.c:134
 #, fuzzy, c-format
 msgid "[%s]: No such color"
-msgstr " "
+msgstr "[%s]: п²п╣я│я┐я┴п╣я│я┌п╡я┐я▌я┴п╦п╧ я├п╡п╣я┌"
 
 #: ../lib/symbol/read.c:203
 #, fuzzy, c-format
@@ -3997,7 +4164,7 @@ msgstr ""
 #: ../lib/rst/interp_float/input2d.c:49
 #, fuzzy, c-format
 msgid "Mask raster map <%s> not found"
-msgstr "вектор  "
+msgstr "п╡п╣п╨я┌п╬я─  "
 
 #: ../lib/rst/interp_float/input2d.c:72
 msgid "Bitmap mask created"
@@ -4005,15 +4172,15 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Can't read header file for [%s in %s]\n"
-#~ msgstr "Невозможно прочесть файл заголовка для [%s в %s]\n"
+#~ msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©я─п╬я┤п╣я│я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]\n"
 
 #, fuzzy
 #~ msgid "Can't open header file for [%s in %s]"
-#~ msgstr "Невозможно открыть файл заголовка для [%s в %s]\n"
+#~ msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╬я┌п╨я─я▀я┌я▄ я└п╟п╧п╩ п╥п╟пЁп╬п╩п╬п╡п╨п╟ п╢п╩я▐ [%s п╡ %s]\n"
 
 #, fuzzy
 #~ msgid "Cannot get field info"
-#~ msgstr "Не могу открыть врем. файл"
+#~ msgstr "п²п╣ п╪п╬пЁя┐ п╬я┌п╨я─я▀я┌я▄ п╡я─п╣п╪. я└п╟п╧п╩"
 
 #, fuzzy
 #~ msgid "Cannot open database"
@@ -4024,28 +4191,32 @@ msgstr ""
 #~ msgstr " "
 
 #, fuzzy
+#~ msgid "Error opening raster map %s"
+#~ msgstr "п║п╩п╦я┬п╨п╬п╪ п╪п╫п╬пЁп╬ я─п╟я│я┌я─п╬п╡я▀я┘ я└п╟п╧п╩п╬п╡ п╬я┌п╨я─я▀я┌я▀"
+
+#, fuzzy
 #~ msgid "Output name '%s' is not valid vector name."
-#~ msgstr "    вектор."
+#~ msgstr "    п╡п╣п╨я┌п╬я─."
 
 #, fuzzy
 #~ msgid "Cannot copy vector '%s' to '%s'"
-#~ msgstr "вектор    "
+#~ msgstr "п╡п╣п╨я┌п╬я─    "
 
 #, fuzzy
 #~ msgid "Cannot open existing vector map <%s>"
-#~ msgstr "вектор  "
+#~ msgstr "п╡п╣п╨я┌п╬я─  "
 
 #, fuzzy
 #~ msgid "Cannot delete existing vector <%s>"
-#~ msgstr "вектор  "
+#~ msgstr "п╡п╣п╨я┌п╬я─  "
 
 #, fuzzy
 #~ msgid "Cannot open new vector %s"
-#~ msgstr "вектор  "
+#~ msgstr "п╡п╣п╨я┌п╬я─  "
 
 #, fuzzy
 #~ msgid "Cannot open history file for vector '%s'"
-#~ msgstr "вектор  "
+#~ msgstr "п╡п╣п╨я┌п╬я─  "
 
 #, fuzzy
 #~ msgid "Could not stat file '%s'"
@@ -4053,23 +4224,23 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Can't open directory %s"
-#~ msgstr "вектор  "
+#~ msgstr "п╡п╣п╨я┌п╬я─  "
 
 #, fuzzy
 #~ msgid "Unable to allocate options"
-#~ msgstr "Невозможно выделить память\n"
+#~ msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п╡я▀п╢п╣п╩п╦я┌я▄ п©п╟п╪я▐я┌я▄\n"
 
 #, fuzzy
 #~ msgid "%s - ** illegal name **"
-#~ msgstr "%s - ** невозможное имя **"
+#~ msgstr "%s - ** п╫п╣п╡п╬п╥п╪п╬п╤п╫п╬п╣ п╦п╪я▐ **"
 
 #, fuzzy
 #~ msgid "No such graphics monitor as <%s>.\n"
-#~ msgstr "Графический дисплей <%s> не существует.\n"
+#~ msgstr "п⌠я─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ <%s> п╫п╣ я│я┐я┴п╣я│я┌п╡я┐п╣я┌.\n"
 
 #, fuzzy
 #~ msgid "Please run \"d.mon\" to select a valid graphics monitor.\n"
-#~ msgstr "Выполните \"d.mon\" для выбора существующего дисплея.\n"
+#~ msgstr "п▓я▀п©п╬п╩п╫п╦я┌п╣ \"d.mon\" п╢п╩я▐ п╡я▀п╠п╬я─п╟ я│я┐я┴п╣я│я┌п╡я┐я▌я┴п╣пЁп╬ п╢п╦я│п©п╩п╣я▐.\n"
 
 #, fuzzy
 #~ msgid "Can't stat %s\n"
@@ -4077,7 +4248,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Error - Monitor <%s> is in use.\n"
-#~ msgstr "Ошибка - Дисплей <%s> занят.\n"
+#~ msgstr "п·я┬п╦п╠п╨п╟ - п■п╦я│п©п╩п╣п╧ <%s> п╥п╟п╫я▐я┌.\n"
 
 #, fuzzy
 #~ msgid "Error - Monitor <%s> is in use by %s.\n"
@@ -4085,27 +4256,27 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Error - Could not complete locking process for monitor <%s>.\n"
-#~ msgstr "Ошибка - не было закончено запирание (lock) для дисплея <%s>.\n"
+#~ msgstr "п·я┬п╦п╠п╨п╟ - п╫п╣ п╠я▀п╩п╬ п╥п╟п╨п╬п╫я┤п╣п╫п╬ п╥п╟п©п╦я─п╟п╫п╦п╣ (lock) п╢п╩я▐ п╢п╦я│п©п╩п╣я▐ <%s>.\n"
 
 #, fuzzy
 #~ msgid "Error - Can't set up pipe to graphics device.\n"
-#~ msgstr "Ошибка - Нет канала (pipe) к графическому устройству.\n"
+#~ msgstr "п·я┬п╦п╠п╨п╟ - п²п╣я┌ п╨п╟п╫п╟п╩п╟ (pipe) п╨ пЁя─п╟я└п╦я┤п╣я│п╨п╬п╪я┐ я┐я│я┌я─п╬п╧я│я┌п╡я┐.\n"
 
 #, fuzzy
 #~ msgid "Error - Graphics monitor <%s> not running!\n"
-#~ msgstr "Ошибка - Графический дисплей <%s> не включен!\n"
+#~ msgstr "п·я┬п╦п╠п╨п╟ - п⌠я─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ <%s> п╫п╣ п╡п╨п╩я▌я┤п╣п╫!\n"
 
 #, fuzzy
 #~ msgid "Please start graphics monitor <%s>.\n"
-#~ msgstr "Включите графический дисплей <%s>.\n"
+#~ msgstr "п▓п╨п╩я▌я┤п╦я┌п╣ пЁя─п╟я└п╦я┤п╣я│п╨п╦п╧ п╢п╦я│п©п╩п╣п╧ <%s>.\n"
 
 #, fuzzy
 #~ msgid "Not connected...\n"
-#~ msgstr "Нет соединения...\n"
+#~ msgstr "п²п╣я┌ я│п╬п╣п╢п╦п╫п╣п╫п╦я▐...\n"
 
 #, fuzzy
 #~ msgid "Couldn't connect to monitor. Will try once more.\n"
-#~ msgstr "Невозможно подключить дисплей. Еще одна попытка.\n"
+#~ msgstr "п²п╣п╡п╬п╥п╪п╬п╤п╫п╬ п©п╬п╢п╨п╩я▌я┤п╦я┌я▄ п╢п╦я│п©п╩п╣п╧. п∙я┴п╣ п╬п╢п╫п╟ п©п╬п©я▀я┌п╨п╟.\n"
 
 #, fuzzy
 #~ msgid "Decompressed data buffer %s"
@@ -4121,7 +4292,7 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Mapset of open file %s"
-#~ msgstr "Набор данных  "
+#~ msgstr "п²п╟п╠п╬я─ п╢п╟п╫п╫я▀я┘  "
 
 #, fuzzy
 #~ msgid "Color file for [%s] not available"
@@ -4133,4 +4304,4 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "ERROR: GISBASE not set\n"
-#~ msgstr "ОШИБКА: GISBASE не установлен\n"
+#~ msgstr "п·п╗п≤п▒п п░: GISBASE п╫п╣ я┐я│я┌п╟п╫п╬п╡п╩п╣п╫\n"

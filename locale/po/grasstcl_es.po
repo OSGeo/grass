@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasstcl_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-26 21:14+0100\n"
+"POT-Creation-Date: 2008-05-06 20:32+0200\n"
 "PO-Revision-Date: 2008-03-06 17:59+0100\n"
 "Last-Translator: Carlos Davila <carluti@users.sourceforge.net>\n"
 "Language-Team: Español <grass-translations@lists.osgeo.org>\n"
@@ -295,7 +295,8 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../lib/gis/gui.tcl:11 ../lib/gis/gui.tcl:15 ../lib/gis/gui.tcl:19
-#: ../lib/gis/gui.tcl:310 ../gui/tcltk/gis.m/runandoutput.tcl:258
+#: ../lib/gis/gui.tcl:310 ../gui/tcltk/gis.m/runandoutput.tcl:259
+#: ../gui/tcltk/gis.m/runandoutput.tcl:265
 #: ../gui/tcltk/gis.m/grassabout.tcl:94 ../gui/tcltk/gis.m/gmlib.tcl:137
 msgid "Error"
 msgstr "Error"
@@ -338,7 +339,7 @@ msgstr "Ejecutar"
 #: ../gui/tcltk/gis.m/animate.tcl:484 ../gui/tcltk/gis.m/dnviz.tcl:208
 #: ../gui/tcltk/gis.m/dnviz.tcl:212 ../gui/tcltk/gis.m/gridline.tcl:162
 #: ../gui/tcltk/gis.m/gridline.tcl:214 ../gui/tcltk/gis.m/gridline.tcl:241
-#: ../gui/tcltk/gis.m/legend.tcl:189 ../gui/tcltk/gis.m/legend.tcl:192
+#: ../gui/tcltk/gis.m/legend.tcl:219 ../gui/tcltk/gis.m/legend.tcl:222
 #: ../gui/tcltk/gis.m/raster.tcl:192 ../gui/tcltk/gis.m/raster.tcl:196
 #: ../gui/tcltk/gis.m/chart.tcl:184 ../gui/tcltk/gis.m/chart.tcl:188
 #: ../gui/tcltk/gis.m/vector.tcl:330 ../gui/tcltk/gis.m/vector.tcl:334
@@ -790,7 +791,7 @@ msgstr "AVISO: Por favor, especificar un archivo georreferenciado válido"
 #: ../gui/tcltk/gis.m/frames.tcl:275 ../gui/tcltk/gis.m/animate.tcl:91
 #: ../gui/tcltk/gis.m/mapprint.tcl:194 ../gui/tcltk/gis.m/mapprint.tcl:201
 #: ../gui/tcltk/gis.m/gridline.tcl:99 ../gui/tcltk/gis.m/gridline.tcl:406
-#: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:476
+#: ../gui/tcltk/gis.m/legend.tcl:95 ../gui/tcltk/gis.m/legend.tcl:506
 #: ../gui/tcltk/gis.m/raster.tcl:86 ../gui/tcltk/gis.m/raster.tcl:463
 #: ../gui/tcltk/gis.m/chart.tcl:89 ../gui/tcltk/gis.m/chart.tcl:441
 #: ../gui/tcltk/gis.m/vector.tcl:194 ../gui/tcltk/gis.m/vector.tcl:819
@@ -841,7 +842,7 @@ msgstr "  o por tamaños graduados (puntos y líneas)"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:223 ../gui/tcltk/gis.m/labels.tcl:118
 #: ../gui/tcltk/gis.m/rastarrows.tcl:147 ../gui/tcltk/gis.m/rastnums.tcl:146
-#: ../gui/tcltk/gis.m/gridline.tcl:147 ../gui/tcltk/gis.m/legend.tcl:172
+#: ../gui/tcltk/gis.m/gridline.tcl:147 ../gui/tcltk/gis.m/legend.tcl:200
 #: ../gui/tcltk/gis.m/raster.tcl:168 ../gui/tcltk/gis.m/chart.tcl:166
 #: ../gui/tcltk/gis.m/vector.tcl:306 ../gui/tcltk/gis.m/cmd.tcl:105
 #: ../gui/tcltk/gis.m/barscale.tcl:160 ../gui/tcltk/gis.m/rgbhis.tcl:143
@@ -851,7 +852,7 @@ msgstr "Opaco"
 
 #: ../gui/tcltk/gis.m/thematic.tcl:227 ../gui/tcltk/gis.m/labels.tcl:122
 #: ../gui/tcltk/gis.m/rastarrows.tcl:151 ../gui/tcltk/gis.m/rastnums.tcl:150
-#: ../gui/tcltk/gis.m/gridline.tcl:151 ../gui/tcltk/gis.m/legend.tcl:176
+#: ../gui/tcltk/gis.m/gridline.tcl:151 ../gui/tcltk/gis.m/legend.tcl:204
 #: ../gui/tcltk/gis.m/raster.tcl:172 ../gui/tcltk/gis.m/chart.tcl:170
 #: ../gui/tcltk/gis.m/cmd.tcl:109 ../gui/tcltk/gis.m/barscale.tcl:164
 #: ../gui/tcltk/gis.m/rgbhis.tcl:147 ../gui/tcltk/gis.m/dtext.tcl:170
@@ -1275,6 +1276,10 @@ msgstr "Guardar"
 msgid "Output - GIS.m"
 msgstr "Salida - GIS.m"
 
+#: ../gui/tcltk/gis.m/runandoutput.tcl:266
+msgid "This module requires X11 support, but no xmons were found"
+msgstr ""
+
 #: ../gui/tcltk/gis.m/maptool.tcl:41 ../gui/tcltk/gis.m/georecttool.tcl:40
 msgid "Display active layers"
 msgstr "Visualizar capas activas"
@@ -1345,7 +1350,7 @@ msgstr ""
 "visualización"
 
 #: ../gui/tcltk/gis.m/maptool.tcl:228 ../gui/tcltk/gis.m/gmmenu.tcl:615
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1857 ../gui/tcltk/d.m/menu.tcl:554
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1859 ../gui/tcltk/d.m/menu.tcl:554
 msgid "Query"
 msgstr "Consultas"
 
@@ -1440,7 +1445,7 @@ msgid "  cell values font "
 msgstr "  fuente de valores de celda "
 
 #: ../gui/tcltk/gis.m/rastnums.tcl:180 ../gui/tcltk/gis.m/gridline.tcl:187
-#: ../gui/tcltk/gis.m/legend.tcl:234 ../gui/tcltk/gis.m/barscale.tcl:204
+#: ../gui/tcltk/gis.m/legend.tcl:264 ../gui/tcltk/gis.m/barscale.tcl:204
 #: ../gui/tcltk/gis.m/maptext.tcl:180 ../gui/tcltk/gis.m/dtext.tcl:226
 #: ../gui/tcltk/gis.m/histogram.tcl:177
 msgid "select font for text"
@@ -1686,7 +1691,17 @@ msgstr "Cargando capas..."
 msgid "Layers loaded"
 msgstr "Capas cargadas"
 
-#: ../gui/tcltk/gis.m/gmtree.tcl:1171
+#: ../gui/tcltk/gis.m/gmtree.tcl:1166
+#, fuzzy
+msgid "Selected raster layer is empty"
+msgstr "Añandir capa ráster"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1177
+#, fuzzy
+msgid "Selected vector layer is empty"
+msgstr "Añadir capa vectorial"
+
+#: ../gui/tcltk/gis.m/gmtree.tcl:1183
 msgid "You can digitize raster or vector maps only"
 msgstr "Sólo se pueden digitalizar mapas ráster o vectoriales"
 
@@ -3477,116 +3492,116 @@ msgstr "Mapa ráster para la leyenda"
 msgid "legend for %s"
 msgstr "leyenda para %s"
 
-#: ../gui/tcltk/gis.m/legend.tcl:165
+#: ../gui/tcltk/gis.m/legend.tcl:193
 msgid "Display legend for raster map using cat values and labels"
 msgstr ""
 "Mostrar leyenda para mapa ráster usando valores de categorías y etiquetas"
 
-#: ../gui/tcltk/gis.m/legend.tcl:182
+#: ../gui/tcltk/gis.m/legend.tcl:210
 msgid "Raster map: "
 msgstr "Mapa ráster: "
 
-#: ../gui/tcltk/gis.m/legend.tcl:199
+#: ../gui/tcltk/gis.m/legend.tcl:229
 #, tcl-format
 msgid "Legend placement and size as 0-100% of display"
 msgstr "Posición y tamaño de la leyenda como 0-100% of de la visualización"
 
-#: ../gui/tcltk/gis.m/legend.tcl:205
+#: ../gui/tcltk/gis.m/legend.tcl:235
 #, tcl-format
 msgid "    x,y of lower left corner (in % from display top left)"
 msgstr ""
 "    X,Y de la esquina inferior izquierda (en % f desde superior izquierda de "
 "la visualización)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:208 ../gui/tcltk/gis.m/barscale.tcl:191
+#: ../gui/tcltk/gis.m/legend.tcl:238 ../gui/tcltk/gis.m/barscale.tcl:191
 #: ../gui/tcltk/gis.m/maptext.tcl:150 ../gui/tcltk/gis.m/dtext.tcl:197
 msgid "place with mouse"
 msgstr "situar con ratón"
 
-#: ../gui/tcltk/gis.m/legend.tcl:216
+#: ../gui/tcltk/gis.m/legend.tcl:246
 msgid "    legend height "
 msgstr "    altura de la leyenda "
 
-#: ../gui/tcltk/gis.m/legend.tcl:218
+#: ../gui/tcltk/gis.m/legend.tcl:248
 #, tcl-format
 msgid "Legend height (% of display)"
 msgstr "Altura de la leyenda (% o de la visualización)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:219
+#: ../gui/tcltk/gis.m/legend.tcl:249
 msgid "%  width"
 msgstr "%  anchura"
 
-#: ../gui/tcltk/gis.m/legend.tcl:221
+#: ../gui/tcltk/gis.m/legend.tcl:251
 #, tcl-format
 msgid "Legend width (% of display)"
 msgstr "Anchura de la leyenda (% of de la visualización)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:228
+#: ../gui/tcltk/gis.m/legend.tcl:258
 msgid "Legend appearance: text color"
 msgstr "Apariencia de la leyenda: color de texto"
 
-#: ../gui/tcltk/gis.m/legend.tcl:232
+#: ../gui/tcltk/gis.m/legend.tcl:262
 msgid "  legend text font "
 msgstr "  fuente de texto de la leyenda "
 
-#: ../gui/tcltk/gis.m/legend.tcl:243
+#: ../gui/tcltk/gis.m/legend.tcl:273
 msgid "do not display labels"
 msgstr "no mostrar etiquetas"
 
-#: ../gui/tcltk/gis.m/legend.tcl:245
+#: ../gui/tcltk/gis.m/legend.tcl:275
 msgid "do not display values"
 msgstr "no mostrar valores"
 
-#: ../gui/tcltk/gis.m/legend.tcl:252
+#: ../gui/tcltk/gis.m/legend.tcl:282
 msgid "    number of lines (0=display all):"
 msgstr "    número de líneas (0=mostrar todas):"
 
-#: ../gui/tcltk/gis.m/legend.tcl:254
+#: ../gui/tcltk/gis.m/legend.tcl:284
 msgid "Lines to display"
 msgstr "Líneas a visualizar"
 
-#: ../gui/tcltk/gis.m/legend.tcl:256
+#: ../gui/tcltk/gis.m/legend.tcl:286
 msgid "invert legend"
 msgstr "invertir leyenda"
 
-#: ../gui/tcltk/gis.m/legend.tcl:263
+#: ../gui/tcltk/gis.m/legend.tcl:293
 msgid "    interval between categories (integer maps)"
 msgstr "    intervalo entre categorías (mapas enteros)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:265
+#: ../gui/tcltk/gis.m/legend.tcl:295
 msgid "Thinning interval"
 msgstr "Intervalo de adelgazamiento"
 
-#: ../gui/tcltk/gis.m/legend.tcl:272
+#: ../gui/tcltk/gis.m/legend.tcl:302
 msgid "draw smooth gradient (fp maps)"
 msgstr "Dibujar gradiente suavizado (fp mapas)"
 
-#: ../gui/tcltk/gis.m/legend.tcl:274
+#: ../gui/tcltk/gis.m/legend.tcl:304
 msgid "with maximum of"
 msgstr "con máximo de "
 
-#: ../gui/tcltk/gis.m/legend.tcl:276
+#: ../gui/tcltk/gis.m/legend.tcl:306
 msgid "Maximum lines to display for gradient"
 msgstr "Máximo de líneas a mostrar para gradiente"
 
-#: ../gui/tcltk/gis.m/legend.tcl:277 ../gui/tcltk/gis.m/chart.tcl:196
+#: ../gui/tcltk/gis.m/legend.tcl:307 ../gui/tcltk/gis.m/chart.tcl:196
 #: ../gui/tcltk/d.m/chart.tcl:108 ../gui/tcltk/d.m/vector.tcl:229
 msgid "lines"
 msgstr "líneas"
 
-#: ../gui/tcltk/gis.m/legend.tcl:283
+#: ../gui/tcltk/gis.m/legend.tcl:313
 msgid "Display legend for subset of raster values"
 msgstr "Mostrar leyenda para subconjunto de valores ráster"
 
-#: ../gui/tcltk/gis.m/legend.tcl:290
+#: ../gui/tcltk/gis.m/legend.tcl:320
 msgid "skip categories with no labels"
 msgstr "ignorar categorías sin etiquetas"
 
-#: ../gui/tcltk/gis.m/legend.tcl:297
+#: ../gui/tcltk/gis.m/legend.tcl:327
 msgid "    legend for only these categories     "
 msgstr "    leyenda sólo para estas categorías     "
 
-#: ../gui/tcltk/gis.m/legend.tcl:304
+#: ../gui/tcltk/gis.m/legend.tcl:334
 msgid "    legend for only this range of values"
 msgstr "    leyenda sólo para este rango de valores"
 
@@ -3684,6 +3699,10 @@ msgstr "tamaño:"
 #: ../gui/tcltk/gis.m/dtext.tcl:228 ../gui/tcltk/d.m/fttext.tcl:149
 msgid "  color"
 msgstr "  color "
+
+#: ../gui/tcltk/gis.m/maplabels.tcl:326
+msgid "Could not open labels file "
+msgstr ""
 
 #: ../gui/tcltk/gis.m/raster.tcl:127
 msgid "Raster drape map"
@@ -4039,8 +4058,8 @@ msgstr "Comando:"
 msgid "Maximum zoom-in reached"
 msgstr "Máximo aumento de zum alcanzado"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:593 ../gui/tcltk/gis.m/mapcanvas.tcl:1136
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1217 ../gui/tcltk/gis.m/georect.tcl:1576
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:593 ../gui/tcltk/gis.m/mapcanvas.tcl:1219
+#: ../gui/tcltk/gis.m/georect.tcl:1576
 msgid "Error setting region"
 msgstr "Error al establecer la región"
 
@@ -4048,11 +4067,11 @@ msgstr "Error al establecer la región"
 msgid "please wait..."
 msgstr "por favor espere..."
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:760 ../gui/tcltk/gis.m/mapcanvas.tcl:1811
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:760 ../gui/tcltk/gis.m/mapcanvas.tcl:1813
 msgid "You have to select map layer first"
 msgstr "Tiene que seleccionar la capa del mapa primero"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:761 ../gui/tcltk/gis.m/mapcanvas.tcl:1812
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:761 ../gui/tcltk/gis.m/mapcanvas.tcl:1814
 msgid "No map layer selected"
 msgstr "Ninguna capa de mapa seleccionada"
 
@@ -4082,43 +4101,48 @@ msgstr ""
 msgid "Display: rows=%d cols=%d  N-S res=%g  E-W res=%g"
 msgstr "Mostrar: filas=%d columnas=%d resolución N-S=%g resolución E-W=%g"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1182
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1136
+#, fuzzy
+msgid "Error setting region (Problem with g.region?)"
+msgstr "Error al leer la resolución actual con g.region"
+
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1182 ../gui/tcltk/gis.m/mapcanvas.tcl:1187
 msgid "Error reading current resolution with g.region"
 msgstr "Error al leer la resolución actual con g.region"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1242 ../gui/tcltk/gis.m/georect.tcl:2018
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1244 ../gui/tcltk/gis.m/georect.tcl:2018
 msgid "Drag or click mouse to zoom"
 msgstr "Arrastrar o clic de ratón para hacer zum"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1244 ../gui/tcltk/gis.m/georect.tcl:2020
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1246 ../gui/tcltk/gis.m/georect.tcl:2020
 msgid "Drag or click mouse to unzoom"
 msgstr "Arrastrar o clic de ratón para deshacer zum"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1479 ../gui/tcltk/gis.m/georect.tcl:2218
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1481 ../gui/tcltk/gis.m/georect.tcl:2218
 msgid "Drag with mouse to pan"
 msgstr "Arrastrar con el ratón para panorámica"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1606
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1608
 msgid "Measurement"
 msgstr "Medida"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1625
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1627
 msgid "Draw measure line with mouse"
 msgstr "Dibujar línea de medida con el ratón"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1782
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1784
 msgid "Click to query feature"
 msgstr "Hacer clic para consultar elemento"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1850
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1852
 msgid "This layer type does not support queries"
 msgstr "Este tipo de capa no soporta consultas"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1851
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1853
 msgid "Query not supported"
 msgstr "Consulta no soportada"
 
-#: ../gui/tcltk/gis.m/mapcanvas.tcl:1858
+#: ../gui/tcltk/gis.m/mapcanvas.tcl:1860
 msgid "You must select a map to query\n"
 msgstr "Se debe seleccionar un mapa a consultar\n"
 
