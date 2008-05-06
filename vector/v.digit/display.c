@@ -197,6 +197,7 @@ void display_bg ( void )
     
     G_debug (2, "display_bg()");
 
+    putenv("GRASS_VERBOSE=0");
     putenv("GRASS_RENDER_IMMEDIATE=TRUE");
     putenv("GRASS_TRUECOLOR=TRUE");
 
