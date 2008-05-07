@@ -230,10 +230,10 @@ int main(int argc,char *argv[])
 
     /* Report number of points not used */
     if ( outside_cnt )
-	G_warning ( _("%d points outside current region skip"), outside_cnt );
+	G_warning(_("%d points outside current region were skipped"), outside_cnt );
 
     if ( nocat_cnt )
-	G_warning ( _("%d points without category skip"), nocat_cnt );
+	G_warning(_("%d points without category were skipped"), nocat_cnt );
     
     /* Sort cache by current region row */
     qsort (cache, point_cnt, sizeof (struct order), by_row);
