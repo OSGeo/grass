@@ -123,7 +123,11 @@ isofonts fn get findfont exch scalefont setfont} BD
 /CTY {mg add bt bb sub D2 sub} BD
 
 % proc used for highlight color
-/HC {0 0 NM dup false charpath stroke} BD
+% (temporarily change miter limit to avoid the M-problem)
+% /HC {0 0 NM dup false charpath gsave 2 setmiterlimit stroke grestore} BD
+% proc used for highlight color
+% (temporarily change line join style so highlight is rounded)
+/HC {0 0 NM dup false charpath gsave 1 setlinejoin stroke grestore} BD
 
 % proc used before included EPS file
 /BeginEPSF {
