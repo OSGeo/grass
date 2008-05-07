@@ -45,7 +45,6 @@ FILES = \
 	$(ETC)/license \
 	$(ETC)/welcome \
 	$(ETC)/VERSIONNUMBER \
-	$(ETC)/msgs \
 	$(ETC)/gis_set.tcl \
 	$(ETC)/epsg_option.tcl \
 	$(ETC)/file_option.tcl \
