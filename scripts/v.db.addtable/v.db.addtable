@@ -184,10 +184,13 @@ v.db.connect map="$GIS_OPT_MAP" database="$database" driver="$driver" \
 # (creates new row for each vector line):
 v.to.db "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" option=cat col=cat
 
-g.message "Current attribute table links:"
-v.db.connect -p "$GIS_OPT_MAP"
+if [ -z "$GRASS_VERBOSE" ] || [ "$GRASS_VERBOSE" -gt 0 ] ; then
+   g.message "Current attribute table links:"
+   v.db.connect -p "$GIS_OPT_MAP"
+fi
 
 # write cmd history:
 v.support map="$GIS_OPT_MAP" cmdhist="${CMDLINE}"
 
 exit 0
+
