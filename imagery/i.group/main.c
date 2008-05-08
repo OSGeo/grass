@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
             struct Ref ref;
 	    
 	    if (I_find_group(group) == 0) {
-		G_fatal_error(_("Specified group does not exist"));
+		G_fatal_error(_("Specified group does not exist in current mapset"));
 	    }
 
 	    if (sgrp->answer) {
