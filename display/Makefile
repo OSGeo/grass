@@ -19,14 +19,13 @@ SUBDIRS = \
 	d.his \
 	d.histogram \
 	d.info \
+	d.labels \
 	d.legend \
 	d.linegraph \
-	d.mapgraph \
 	d.measure \
 	d.menu \
 	d.mon \
 	d.nviz \
-	d.paint.labels \
 	d.path \
 	d.profile \
 	d.rast \
