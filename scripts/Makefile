@@ -2,13 +2,10 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	d.correlate \
-	d.font.freetype \
 	d.monsize \
 	d.mvmon \
 	d.out.gpsdrive \
-	d.out.png \
 	d.out.file \
-	d.paint.labels \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
@@ -17,7 +14,6 @@ SUBDIRS = \
 	d.shadedmap \
 	d.slide.show \
 	d.split \
-	d.text.freetype \
 	d.vect.thematic \
 	db.dropcol \
 	db.droptable \
@@ -35,9 +31,7 @@ SUBDIRS = \
 	i.spectral \
 	i.tasscap \
 	m.proj \
-	p.out.vrml \
 	r.blend \
-	r.cats \
 	r.fillnulls \
 	r.in.aster \
 	r.in.srtm \
@@ -51,7 +45,6 @@ SUBDIRS = \
 	r.regression.line \
 	r.shaded.relief \
 	r.tileset \
-	r.univar.sh \
 	r3.mapcalculator \
 	v.build.all \
 	v.centroids \
@@ -75,7 +68,6 @@ SUBDIRS = \
 	v.in.wfs \
 	v.rast.stats \
 	v.report \
-	v.univar.sh \
 	v.what.vect
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
