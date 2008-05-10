@@ -185,7 +185,7 @@ fi
 
 
 #dump cats to file to avoid "too many argument" problem:
-r.cats "${VECTOR}_${TMPNAME}" fs=';' --quiet | cut -d';' -f1 > "$TMP.cats"
+r.category "${VECTOR}_${TMPNAME}" fs=';' --quiet | cut -d';' -f1 > "$TMP.cats"
 #echo "List of categories found: $CATSLIST"
 NUMBER=`cat "$TMP.cats" | wc -l | awk '{print $1}'`
 if [ $NUMBER -lt 1 ] ; then
