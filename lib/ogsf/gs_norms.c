@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
+/*!
+  \file gs_norms.c
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/*  gs_norms.c
-    Bill Brown, USACERL
-    functions for calculating normals
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL
 */
 
 #include <grass/gstypes.h>

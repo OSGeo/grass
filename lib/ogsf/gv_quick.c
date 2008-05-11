@@ -1,15 +1,21 @@
-/*
-* $Id$
-*/
+/*!
+  \file gv_quick.c
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/*  gv_quick.c
-    Bill Brown, USACERL  
-    December 1993
-*/
+  Trying some stuff to draw a quick version of a vector map, to represent
+  it when doing interactive translations.
 
-/*
-Trying some stuff to draw a quick version of a vector map, to represent
-it when doing interactive translations.
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+
+  \author Bill Brown, USACERL (December 1993)
 */
 
 #include <stdio.h>

@@ -1,45 +1,49 @@
-/*
-* $Id$
-*/
+/*!
+  \file gsdrape.c
+ 
+  \brief OGSF library - functions to intersect line segments with edges of surface polygons
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/* drape.c
- * AUTHOR: Bill Brown, UI GMS Lab
- * functions to intersect line segments with edges of surface polygons 
-*/
-
-/*
-For efficiency, intersections are found without respect to which
-specific triangle edge is intersected, but on a broader sense with
-the horizontal, vertical, and diagonal seams in the grid, then
-the intersections are ordered.  If quadstrips are used for drawing 
-rather than tmesh, triangulation is not consistant; for diagonal
-intersections, the proper diagonal to intersect would need to be
-determined according to the algorithm used by qstrip (look at nearby
-normals). It may be faster to go ahead and find the intersections 
-with the other diagonals using the same methods, then at sorting 
-time determine which diagonal array to look at for each quad.  
-It would also require a mechanism for throwing out unused intersections
-with the diagonals during the ordering phase.
-Do intersections in 2D, fill line structure with 3D pts (maybe calling
-routine will cache for redrawing).  Get Z value by using linear interp 
-between corners.
-
-1) check for easy cases:
-    a) single point
-    b) colinear with horizontal or vertical edges
-    c) colinear with diagonal edges of triangles
-2) calculate three arrays of ordered intersections:
-    a) with vertical edges
-    b) with horizontal edges
-    c) with diagonal edges
-   and interpolate Z, using simple linear interpolation.
-3) eliminate duplicate intersections (need only compare one coord for each)
-4) build ordered set of points.
-
-Return static pointer to 3D set of points.  Max number of intersections
-will be rows + cols + diags, so should allocate this number to initialize.
-Let calling routine worry about copying points for caching.
-
+  For efficiency, intersections are found without respect to which
+  specific triangle edge is intersected, but on a broader sense with
+  the horizontal, vertical, and diagonal seams in the grid, then
+  the intersections are ordered.  If quadstrips are used for drawing 
+  rather than tmesh, triangulation is not consistant; for diagonal
+  intersections, the proper diagonal to intersect would need to be
+  determined according to the algorithm used by qstrip (look at nearby
+  normals). It may be faster to go ahead and find the intersections 
+  with the other diagonals using the same methods, then at sorting 
+  time determine which diagonal array to look at for each quad.  
+  It would also require a mechanism for throwing out unused intersections
+  with the diagonals during the ordering phase.
+  Do intersections in 2D, fill line structure with 3D pts (maybe calling
+  routine will cache for redrawing).  Get Z value by using linear interp 
+  between corners.
+  
+  - check for easy cases:
+   - single point
+   - colinear with horizontal or vertical edges
+   - colinear with diagonal edges of triangles
+  - calculate three arrays of ordered intersections:
+   - with vertical edges
+   - with horizontal edges
+   - with diagonal edges and interpolate Z, using simple linear interpolation.
+  - eliminate duplicate intersections (need only compare one coord for each)
+  - build ordered set of points.
+  
+  Return static pointer to 3D set of points.  Max number of intersections
+  will be rows + cols + diags, so should allocate this number to initialize.
+  Let calling routine worry about copying points for caching.
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown UI GMS Lab
 */
 
 #include <stdio.h>

@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
+/*!
+  \file gsd_label.c
+ 
+  \brief OGSF library - objects management
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
 
-/*  gsd.c
-    Bill Brown, USACERL  
-    October 1993
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (October 1993)
 */
 
 #include <stdio.h>

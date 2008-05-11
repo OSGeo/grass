@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
-
-/*  Gs.c 
-    Bill Brown, USACERL  
-    January 1993
+/*!
+  \file Gs3.c
+ 
+  \brief OGSF library - loading and manipulating surfaces
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
 */
 
 #include <stdlib.h>
@@ -56,20 +64,20 @@
 
 typedef int FILEDESC;
 
-/*
-#define TRACE_FUNCS
-*/
-
 #define NO_DATA_COL 0xffffff
 
-/************************************************************************/
-/* This should be a function variable that 
- * may be replaced by a user's function. 
- * Or else use G_set_error_routine.
+/*!
+  \brief Warning handling
+
+  This should be a function variable that 
+  may be replaced by a user's function. 
+  Or else use G_set_error_routine().
+
+  \param str message
 */
 void Gs_warning(char *str)
 {
-    fprintf(stderr, "%s\n", str);
+    G_warning("%s", str);
 
     return;
 }
@@ -78,10 +86,10 @@ void Gs_warning(char *str)
 /* This should be a function variable that 
  * may be replaced by a user's function. 
  * Or else use G_set_error_routine.
-*/
+ */
 void Gs_status(char *str)
 {
-    fprintf(stderr, "%s\n", str);
+    G_debug(3, "%s", str);
 
     return;
 }

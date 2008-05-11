@@ -1,13 +1,25 @@
+/*!
+  \file m33_table.h
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
+
+  LookUpTable for the MarchingCubes 33 Algorithm
+  Thomas Lewiner, thomas.lewiner@polytechnique.org, Math Dept, PUC-Rio
+
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+
+  \author Tomas Paudits, 2004
+*/
+
 #ifndef _CELL_TABLE_H
 #define _CELL_TABLE_H
-
-/*
-LookUpTable for the MarchingCubes 33 Algorithm
-Thomas Lewiner, thomas.lewiner@polytechnique.org, Math Dept, PUC-Rio
-
-Implementation in ogsf library
-Tomas Paudits, 2004
-*/
 
 typedef struct
 {

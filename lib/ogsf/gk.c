@@ -1,5 +1,18 @@
-/*
-* $Id$
+/*!
+  \file gk.c
+ 
+  \brief OGSF library - setting and manipulating keyframes animation
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL, GMSL/University of Illinois
 */
 
 #include <stdlib.h>

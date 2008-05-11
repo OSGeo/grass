@@ -1,9 +1,21 @@
-/*
-Based on implementation of MarchingCubes 33 Algorithm by
-Thomas Lewiner, thomas.lewiner@polytechnique.org, Math Dept, PUC-Rio
+/*!
+  \file gvl_calc2.c
+ 
+  \brief OGSF library - loading and manipulating volumes
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-Implementation in ogsf library
-Tomas Paudits, 2004
+  Based on implementation of MarchingCubes 33 Algorithm by
+  Thomas Lewiner, thomas.lewiner@polytechnique.org, Math Dept, PUC-Rio
+
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Tomas Paudits, 2004
 */
 
 #include <float.h>

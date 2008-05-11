@@ -1,7 +1,19 @@
-/*  GVL.c
-    Volume access routines
-    Bill Brown, UI-GMSL, May 1997
-    Tomas Paudits, Februar 2004
+/*!
+  \file GVL2.c
+ 
+  \brief OGSF library - loading and manipulating volumes
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown UI-GMSL (May 1997)
+  Tomas Paudits (February 2004)
 */
 
 #include <grass/gis.h>
@@ -9,17 +21,17 @@
 #include <grass/gstypes.h>
 #include "gsget.h"
 
-#ifdef TRACE_FUNCS
-#define TRACE_GVL_FUNCS
-#endif
-
 static int Vol_ID[MAX_VOLS];
 static int Next_vol = 0;
 
 static G3D_Region wind3;
 static double Region[6];
 
-/***********************************************************************/
+/*!
+  \brief Library intialization for volumes
+
+  Set region extent (N,S,W,E,T,B)
+*/
 void GVL_libinit(void)
 {
     G3d_initDefaults();
@@ -35,7 +47,14 @@ void GVL_libinit(void)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Get region extent settings
+
+  \param[out] n,s,w,e north, south, west, east
+  \param[out] t,b top, bottom
+
+  \return 1
+*/
 int GVL_get_region(float *n, float *s, float *w, float *e, float *t, float *b)
 {
     *n = Region[0];
@@ -48,47 +67,56 @@ int GVL_get_region(float *n, float *s, float *w, float *e, float *t, float *b)
     return (1);
 }
 
-/***********************************************************************/
-/* TODO: gvl_file.c use this - change*/
+/*!
+  \brief Get window 
+
+  \todo gvl_file.c use this - change
+
+  \return pointer to G3D_Region struct (static)
+*/
 void *GVL_get_window()
 {
     return &wind3;
 }
 
-/***********************************************************************/
+/*!
+  \brief Check if volume set exists
+
+  \param id volume set id
+
+  \return 1 found
+  \return 0 not found
+*/
 int GVL_vol_exists(int id)
 {
     int i, found = 0;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_vol_exists");
-    }
-#endif
+    G_debug(3, "GVL_vol_exists");
 
     if (NULL == gvl_get_vol(id)) {
     return (0);
     }
 
     for (i = 0; i < Next_vol && !found; i++) {
-    if (Vol_ID[i] == id) {
-        found = 1;
-    }
+	if (Vol_ID[i] == id) {
+	    found = 1;
+	}
     }
 
     return (found);
 }
 
-/***********************************************************************/
+/*!
+  \brief Add new volume set
+
+  \return volume set id
+  \return -1 on error
+*/
 int GVL_new_vol(void)
 {
     geovol *nvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_new_vol");
-    }
-#endif
+    G_debug(3, "GVL_new_vol");
 
     if (Next_vol < MAX_VOLS) {
         nvl = gvl_get_new_vol();
@@ -106,14 +134,26 @@ int GVL_new_vol(void)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of available volume sets
+
+  \return number of volume sets
+*/
 int GVL_num_vols(void)
 {
     return (gvl_num_vols());
 }
 
-/***********************************************************************/
-/* USER must free!! */
+/*!
+  \brief Get list volume sets
+
+  Must be freed if not needed!
+
+  \param[out] numvols number of volume sets
+
+  \return pointer to list of volume sets
+  \return NULL on error
+*/
 int *GVL_get_vol_list(int *numvols)
 {
     int i, *ret;
@@ -121,162 +161,194 @@ int *GVL_get_vol_list(int *numvols)
     *numvols = Next_vol;
 
     if (Next_vol) {
-    if (NULL == (ret = (int *) G_malloc(Next_vol * sizeof(int)))) {
-        fprintf(stderr, "can't malloc\n");
+	ret = (int *) G_malloc(Next_vol * sizeof(int));
+	if (!ret)
+	    return (NULL);
 
-        return (NULL);
-    }
-
-    for (i = 0; i < Next_vol; i++) {
-        ret[i] = Vol_ID[i];
-    }
-
-    return (ret);
+	for (i = 0; i < Next_vol; i++) {
+	    ret[i] = Vol_ID[i];
+	}
+    
+	return (ret);
     }
 
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Delete volume set from list
+
+  \param id volume set id
+
+  \return 1 on success
+  \return -1 on error (invalid volume set id)
+*/
 int GVL_delete_vol(int id)
 {
     int i, j, found = 0;
-
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_delete_vol");
-    }
-#endif
-
+    
+    G_debug(3, "GVL_delete_vol");
+    
     if (GVL_vol_exists(id)) {
-
-    for (i = 0; i < GVL_isosurf_num_isosurfs(id); i++) {
-        GVL_isosurf_del(id, 0);
-    }
+	
+	for (i = 0; i < GVL_isosurf_num_isosurfs(id); i++) {
+	    GVL_isosurf_del(id, 0);
+	}
+	
 	for (i = 0; i < GVL_slice_num_slices(id); i++) {
-        GVL_slice_del(id, 0);
+	    GVL_slice_del(id, 0);
+	}
+	
+	gvl_delete_vol(id);
+	
+	for (i = 0; i < Next_vol && !found; i++) {
+	    if (Vol_ID[i] == id) {
+		found = 1;
+		for (j = i; j < Next_vol; j++) {
+		    Vol_ID[j] = Vol_ID[j + 1];
+		}
+	    }
+	}
+	
+	if (found) {
+	    --Next_vol;
+	    
+	    return (1);
+	}
     }
-
-    gvl_delete_vol(id);
-
-    for (i = 0; i < Next_vol && !found; i++) {
-        if (Vol_ID[i] == id) {
-        found = 1;
-        for (j = i; j < Next_vol; j++) {
-            Vol_ID[j] = Vol_ID[j + 1];
-        }
-        }
-    }
-
-    if (found) {
-        --Next_vol;
-
-        return (1);
-    }
-    }
-
+    
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Load volume
+
+  \param id volume set id
+  \param filename filename
+  
+  \return -1 on error
+  \return 0 on success
+*/
 int GVL_load_vol(int id, char *filename)
 {
-	geovol *gvl;
+    geovol *gvl;
     int handle;
-
+    
     if (NULL == (gvl = gvl_get_vol(id))) {
         return (-1);
     }
-
+    
     if (0 > (handle = gvl_file_newh(filename, VOL_FTYPE_G3D)))
         return (-1);
-
+    
     gvl->hfile = handle;
-
-	return (0);
+    
+    return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get volume set name
+
+  \param id volume set id
+  \param[out] filename name (must be allocated)
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_get_volname(int id, char *filename)
 {
     geovol *gvl;
 
     if (NULL == (gvl = gvl_get_vol(id))) {
-    return (-1);
+	return (-1);
     }
-
+    
     if (0 > gvl->hfile) {
-    return (-1);
+	return (-1);
     }
-
+    
     G_strcpy(filename, gvl_file_get_name(gvl->hfile));
 
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get dimension
+
+  \param id volume set id
+  \param[out] rows,cols,depths number of rows, cols, depth
+*/
 void GVL_get_dims(int id, int *rows, int *cols, int *depths)
 {
     geovol *gvl;
-
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_get_dims");
-    }
-#endif
-
+    
+    G_debug(3, "GVL_get_dims");
+    
     gvl = gvl_get_vol(id);
-
+    
     if (gvl) {
-    *rows = gvl->rows;
-    *cols = gvl->cols;
-    *depths = gvl->depths;
+	*rows = gvl->rows;
+	*cols = gvl->cols;
+	*depths = gvl->depths;
     }
-
+    
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set trans ?
+  
+  \param id volume set id
+  \param xtrans,ytrans,ztrans x/y/z trans values
+*/
 void GVL_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_set_trans");
-    }
-#endif
+    G_debug(3, "GVL_set_trans");
 
     gvl = gvl_get_vol(id);
 
     if (gvl) {
-    gvl->x_trans = xtrans;
-    gvl->y_trans = ytrans;
-    gvl->z_trans = ztrans;
+	gvl->x_trans = xtrans;
+	gvl->y_trans = ytrans;
+	gvl->z_trans = ztrans;
     }
 
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Get trans ?
+
+  \param id volume set id
+  \param[out] xtrans,ytrans,ztrans x/y/z trans values
+  
+  \return 1 on success
+  \return -1 on error
+*/
 int GVL_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geovol *gvl;
-
+    
     gvl = gvl_get_vol(id);
-
+    
     if (gvl) {
-    *xtrans = gvl->x_trans;
-    *ytrans = gvl->y_trans;
-    *ztrans = gvl->z_trans;
-
-    return (1);
+	*xtrans = gvl->x_trans;
+	*ytrans = gvl->y_trans;
+	*ztrans = gvl->z_trans;
+	
+	return (1);
     }
-
+    
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Draw volume set
+
+  \param vid volume set id
+*/
 void GVL_draw_vol(int vid)
 {
     geovol *gvl;
@@ -290,16 +362,16 @@ void GVL_draw_vol(int vid)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Draw volume wire mode
+
+  \param id volume set id
+*/
 void GVL_draw_wire(int id)
 {
     geovol *gvl;
 
-#ifdef TRACE_GS_FUNCS
-    {
-	Gs_status("GVL_draw_wire");
-    }
-#endif
+    G_debug(3, "GVL_draw_wire");
 
     gvl = gvl_get_vol(id);
 
@@ -310,47 +382,66 @@ void GVL_draw_wire(int id)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Draw all volume sets
+*/
 void GVL_alldraw_vol(void)
 {
     int id;
 
     for (id = 0; id < Next_vol; id++) {
-    GVL_draw_vol(Vol_ID[id]);
+	GVL_draw_vol(Vol_ID[id]);
     }
 
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Draw all volume sets in wire mode
+*/
 void GVL_alldraw_wire(void)
 {
     int id;
 
     for (id = 0; id < Next_vol; id++) {
-    GVL_draw_wire(Vol_ID[id]);
+	GVL_draw_wire(Vol_ID[id]);
     }
 
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set client data for volume set
+
+  \param id volume set id
+  \param clientd pointer to client data
+
+  \return 1 on success
+  \return -1 on error
+*/
 int GVL_Set_ClientData(int id, void *clientd)
 {
     geovol *gvl;
-
+    
     gvl = gvl_get_vol(id);
-
+    
     if (gvl) {
-    gvl->clientdata = clientd;
-
-    return (1);
+	gvl->clientdata = clientd;
+	
+	return (1);
     }
-
+    
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get client data
+
+  \param id volume set id
+
+  \return pointer to client data
+  \return NULL on error
+*/
 void *GVL_Get_ClientData(int id)
 {
     geovol *gvl;
@@ -358,23 +449,23 @@ void *GVL_Get_ClientData(int id)
     gvl = gvl_get_vol(id);
 
     if (gvl) {
-    return (gvl->clientdata);
+	return (gvl->clientdata);
     }
 
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set focus on map center
+
+  \param id volume set id
+*/
 void GVL_set_focus_center_map(int id)
 {
     float center[3];
     geovol *gvl;
 
-#ifdef TRACE_GS_FUNCS
-    {
-	Gs_status("GS_set_focus_center_map");
-    }
-#endif
+    G_debug(3, "GS_set_focus_center_map");
 
     gvl = gvl_get_vol(id);
 
@@ -385,22 +476,27 @@ void GVL_set_focus_center_map(int id)
 
 	GS_set_focus(center);
     }
+
+    return;
 }
 
 /************************************************************************/
 /* ISOSURFACES */
 /************************************************************************/
 
-/***********************************************************************/
+/*!
+  \brief Get draw resolution for isosurface
+
+  \todo error handling
+
+  \param id volume set id
+  \param[out] xres,yres,zres x/y/z resolution value
+*/
 void GVL_isosurf_get_drawres(int id, int *xres, int *yres, int *zres)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_get_drawres");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_get_drawres");
 
     gvl = gvl_get_vol(id);
 
@@ -413,17 +509,21 @@ void GVL_isosurf_get_drawres(int id, int *xres, int *yres, int *zres)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set draw resolution of isosurface
+
+  \param id volume set id
+  \param xres,yres,zres x/y/z resolution value
+
+  \return -1 on error (invalid values/volume set id)
+  \return 0 on success
+*/
 int GVL_isosurf_set_drawres(int id, int xres, int yres, int zres)
 {
     geovol *gvl;
     int i;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_set_drawres");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_set_drawres");
 
     if (xres < 1 || yres < 1 || zres < 1) {
         return (-1);
@@ -436,63 +536,80 @@ int GVL_isosurf_set_drawres(int id, int xres, int yres, int zres)
         gvl->isosurf_y_mod = yres;
         gvl->isosurf_z_mod = zres;
 
-		for (i = 0; i < gvl->n_isosurfs; i++) {
-			gvl_isosurf_set_att_changed(gvl->isosurf[i], ATT_TOPO);
-		}
-    }
-
-    return (0);
-}
-
-/***********************************************************************/
-int GVL_isosurf_get_drawmode(int id, int *mode)
-{
-    geovol *gvl;
-
-    gvl = gvl_get_vol(id);
-
-    if (gvl) {
-    *mode = gvl->isosurf_draw_mode;
-
-    return (1);
+	for (i = 0; i < gvl->n_isosurfs; i++) {
+	    gvl_isosurf_set_att_changed(gvl->isosurf[i], ATT_TOPO);
+	}
+	
+	return (0);
     }
 
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get draw-mode of isosurface
+
+  \param id volume set id
+  \param[out] mode draw-mode
+
+  \return 1 on success
+  \return -1 on error
+*/
+int GVL_isosurf_get_drawmode(int id, int *mode)
+{
+    geovol *gvl;
+    
+    gvl = gvl_get_vol(id);
+    
+    if (gvl) {
+	*mode = gvl->isosurf_draw_mode;
+	
+	return (1);
+    }
+    
+    return (-1);
+}
+
+/*!
+  \brief Set draw-mode of isosurface
+
+  \param id volume set id
+  \param mode draw-mode
+
+  \return 0 on success
+  \return -1 on error (invalid volume set id)
+*/
 int GVL_isosurf_set_drawmode(int id, int mode)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_set_drawmode");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_set_drawmode");
 
     gvl = gvl_get_vol(id);
 
     if (gvl) {
-    gvl->isosurf_draw_mode = mode;
-
-    return (0);
+	gvl->isosurf_draw_mode = mode;
+	
+	return (0);
     }
 
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Add isosurface
+
+  \param id volume set id
+
+  \return -1 on error (invalid volume set id
+  \return 1 on success
+*/
 int GVL_isosurf_add(int id)
 {
     geovol *gvl;
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_add");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_add");
 
     gvl = gvl_get_vol(id);
 
@@ -510,22 +627,26 @@ int GVL_isosurf_add(int id)
 
     gvl->n_isosurfs++;
     gvl->isosurf[gvl->n_isosurfs - 1] = (geovol_isosurf *) isosurf;
-
+    
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Delete isosurface
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_isosurf_del(int id, int isosurf_id)
 {
     geovol *gvl;
     geovol_isosurf *isosurf;
     int i;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_del");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_del");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -549,84 +670,101 @@ int GVL_isosurf_del(int id, int isosurf_id)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Move up isosurface in list
+  
+  \param id volume set id
+  \param isosurf_id isosurface id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_isosurf_move_up(int id, int isosurf_id)
 {
-	geovol *gvl;
-	geovol_isosurf *tmp;
+    geovol *gvl;
+    geovol_isosurf *tmp;
+    
+    G_debug(3, "GVL_isosurf_move_up");
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_move_up");
-    }
-#endif
-
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
-	if (isosurf_id < 0 || isosurf_id > (gvl->n_isosurfs - 1))
-		return (-1);
-
-	if (isosurf_id == 0)
-		return (1);
-
-	tmp = gvl->isosurf[isosurf_id - 1];
-	gvl->isosurf[isosurf_id - 1] = gvl->isosurf[isosurf_id];
-	gvl->isosurf[isosurf_id] = tmp;
-
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
+    if (isosurf_id < 0 || isosurf_id > (gvl->n_isosurfs - 1))
+	return (-1);
+    
+    if (isosurf_id == 0)
 	return (1);
+    
+    tmp = gvl->isosurf[isosurf_id - 1];
+    gvl->isosurf[isosurf_id - 1] = gvl->isosurf[isosurf_id];
+    gvl->isosurf[isosurf_id] = tmp;
+    
+    return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Move down isosurface in list
+  
+  \param id volume set id
+  \param isosurf_id isosurface id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_isosurf_move_down(int id, int isosurf_id)
 {
-	geovol *gvl;
-	geovol_isosurf *tmp;
+    geovol *gvl;
+    geovol_isosurf *tmp;
+    
+    G_debug(3, "GVL_isosurf_move_up");
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_move_up");
-    }
-#endif
-
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
-	if (isosurf_id < 0 || isosurf_id > (gvl->n_isosurfs - 1))
-		return (-1);
-
-	if (isosurf_id == (gvl->n_isosurfs - 1))
-		return (1);
-
-	tmp = gvl->isosurf[isosurf_id + 1];
-	gvl->isosurf[isosurf_id + 1] = gvl->isosurf[isosurf_id];
-	gvl->isosurf[isosurf_id] = tmp;
-
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
+    if (isosurf_id < 0 || isosurf_id > (gvl->n_isosurfs - 1))
+	return (-1);
+    
+    if (isosurf_id == (gvl->n_isosurfs - 1))
 	return (1);
+    
+    tmp = gvl->isosurf[isosurf_id + 1];
+    gvl->isosurf[isosurf_id + 1] = gvl->isosurf[isosurf_id];
+    gvl->isosurf[isosurf_id] = tmp;
+    
+    return (1);
 }
 
-/***********************************************************************/
-int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set, float *constant, char *mapname)
+/*!
+  \brief Get isosurface attributes
+
+  \param id volume set id
+  \param isosurf_id surface id
+  \param att attribute id
+  \param[out] set
+  \param[out] constant
+  \param[out] mapname
+
+  \return -1 on error
+  \return 1 on success
+*/
+int GVL_isosurf_get_att(int id, int isosurf_id,
+			int att, int *set, float *constant, char *mapname)
 {
     int src;
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_get_att");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_get_att");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
     if (isosurf) {
         if (-1 != (src = gvl_isosurf_get_att_src(isosurf, att))) {
             *set = src;
-
+	    
             if (src == CONST_ATT) {
                 *constant = isosurf->att[att].constant;
             }
@@ -643,16 +781,21 @@ int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set, float *consta
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Unset isosurface attributes
+
+  \param id volume set id
+  \param isosurface_id isosurface id
+  \param att attribute id
+
+  \return ?
+  \return -1 on error
+*/
 int GVL_isosurf_unset_att(int id, int isosurf_id, int att)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_unset_att");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_unset_att");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -663,16 +806,22 @@ int GVL_isosurf_unset_att(int id, int isosurf_id, int att)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set constant isosurface attribute
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param att attribute id
+  \param constant constant value
+
+  \return ?
+  \return -1 on error
+*/
 int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_set_att_const");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_set_att_const");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -683,16 +832,22 @@ int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set isosurface map attribute
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param att attribute id
+  \param filename map name
+
+  \return ?
+  \return -1 on error
+*/
 int GVL_isosurf_set_att_map(int id, int isosurf_id, int att, char *filename)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_set_att_map");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_set_att_map");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -703,16 +858,21 @@ int GVL_isosurf_set_att_map(int id, int isosurf_id, int att, char *filename)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get isosurface flags
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param[out] inout map name
+
+  \return 1 on success
+  \return -1 on error
+*/
 int GVL_isosurf_get_flags(int id, int isosurf_id, int *inout)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_get_flags");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_get_flags");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -724,38 +884,46 @@ int GVL_isosurf_get_flags(int id, int isosurf_id, int *inout)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set isosurface flags
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param inout map name
+
+  \return 1 on success
+  \return -1 on error
+*/
 int GVL_isosurf_set_flags(int id, int isosurf_id, int inout)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_get_flags");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_get_flags");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
     if (isosurf) {
         isosurf->inout_mode = inout;
-
-		return (1);
+	
+	return (1);
     }
 
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of available isosurfaces
+
+  \param id volume set id
+
+  \return number of isosurfaces
+  \return -1 on error
+*/
 int GVL_isosurf_num_isosurfs(int id)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_num_isosurfs");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_num_isosurfs");
 
     gvl = gvl_get_vol(id);
 
@@ -766,17 +934,23 @@ int GVL_isosurf_num_isosurfs(int id)
     return (-1);
 }
 
-/***********************************************************************/
-/* mask attribute special: constant is set to indicate invert or no */
+/*!
+  \brief Set mask attribute mode
+
+  Mask attribute special: constant is set to indicate invert or no
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param mode attribute mode
+
+  \return mode id
+  \return -1 on error
+*/
 int GVL_isosurf_set_maskmode(int id, int isosurf_id, int mode)
 {
     geovol_isosurf *isosurf;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_set_att_const");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_set_att_const");
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -789,7 +963,16 @@ int GVL_isosurf_set_maskmode(int id, int isosurf_id, int mode)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get isosurface mask mode
+
+  \param id volume set id
+  \param isosurf_id isosurface id
+  \param mode attribute mode
+
+  \return 1 on success
+  \return -1 on error
+*/
 int GVL_isosurf_get_maskmode(int id, int isosurf_id, int *mode)
 {
     geovol_isosurf *isosurf;
@@ -797,9 +980,9 @@ int GVL_isosurf_get_maskmode(int id, int isosurf_id, int *mode)
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
     if (isosurf) {
-    *mode = isosurf->att[ATT_MASK].constant;
-
-    return (1);
+	*mode = isosurf->att[ATT_MASK].constant;
+	
+	return (1);
     }
 
     return (-1);
@@ -809,16 +992,17 @@ int GVL_isosurf_get_maskmode(int id, int isosurf_id, int *mode)
 /* SLICES */
 /************************************************************************/
 
-/***********************************************************************/
+/*!
+  \brief Get draw resolution of slice
+
+  \param id volume set id
+  \param[out] xres,yres,zres x/y/z resolution value
+*/
 void GVL_slice_get_drawres(int id, int *xres, int *yres, int *zres)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_get_drawres");
-    }
-#endif
+    G_debug(3, "GVL_slice_get_drawres");
 
     gvl = gvl_get_vol(id);
 
@@ -831,17 +1015,21 @@ void GVL_slice_get_drawres(int id, int *xres, int *yres, int *zres)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set draw resolution of slice
+
+  \param id volume set id
+  \param xres,yres,zres x/y/z resolution value
+
+  \return 0 on success
+  \return -1 on error (invalid value or id)
+*/
 int GVL_slice_set_drawres(int id, int xres, int yres, int zres)
 {
     geovol *gvl;
     int i;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_set_drawres");
-    }
-#endif
+    G_debug(3, "GVL_slice_set_drawres");
 
     if (xres < 1 || yres < 1 || zres < 1) {
         return (-1);
@@ -854,15 +1042,25 @@ int GVL_slice_set_drawres(int id, int xres, int yres, int zres)
         gvl->slice_y_mod = yres;
         gvl->slice_z_mod = zres;
 
-		for (i = 0; i < gvl->n_slices; i++) {
-			gvl->slice[i]->changed = 1;
-		}
+	for (i = 0; i < gvl->n_slices; i++) {
+	    gvl->slice[i]->changed = 1;
+	}
+
+	return (0);
     }
 
-    return (0);
+    return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get slice draw mode
+
+  \param id volume set id
+  \param[out] mode draw mode
+
+  \return 1 on success
+  \return -1 on error (invalid id)
+*/
 int GVL_slice_get_drawmode(int id, int *mode)
 {
     geovol *gvl;
@@ -870,47 +1068,54 @@ int GVL_slice_get_drawmode(int id, int *mode)
     gvl = gvl_get_vol(id);
 
     if (gvl) {
-    *mode = gvl->slice_draw_mode;
-
-    return (1);
+	*mode = gvl->slice_draw_mode;
+	
+	return (1);
     }
 
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set slice draw mode
+
+  \param id volume set id
+  \param mode draw mode
+
+  \return 0 on success
+  \return -1 on error (invalid id)
+*/
 int GVL_slice_set_drawmode(int id, int mode)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_set_drawmode");
-    }
-#endif
+    G_debug(3, "GVL_slice_set_drawmode");
 
     gvl = gvl_get_vol(id);
 
     if (gvl) {
-    gvl->slice_draw_mode = mode;
-
-    return (0);
+	gvl->slice_draw_mode = mode;
+	
+	return (0);
     }
-
+    
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Add slice
+
+  \param id volume set id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_add(int id)
 {
     geovol *gvl;
     geovol_slice *slice;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_add");
-    }
-#endif
+    G_debug(3, "GVL_slice_add");
 
     gvl = gvl_get_vol(id);
 
@@ -932,18 +1137,22 @@ int GVL_slice_add(int id)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Delete slice
+
+  \param id volume set id
+  \param slice_id slice id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_del(int id, int slice_id)
 {
     geovol *gvl;
     geovol_slice *slice;
     int i;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_del");
-    }
-#endif
+    G_debug(3, "GVL_slice_del");
 
     slice = gvl_slice_get_slice(id, slice_id);
 
@@ -967,76 +1176,87 @@ int GVL_slice_del(int id, int slice_id)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Move up slice
+
+  \param id volume set id
+  \param slice_id slice id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_move_up(int id, int slice_id)
 {
-	geovol *gvl;
-	geovol_slice *tmp;
+    geovol *gvl;
+    geovol_slice *tmp;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_move_up");
-    }
-#endif
+    G_debug(3, "GVL_slice_move_up");
 
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
-	if (slice_id < 0 || slice_id > (gvl->n_slices - 1))
-		return (-1);
-
-	if (slice_id == 0)
-		return (1);
-
-	tmp = gvl->slice[slice_id - 1];
-	gvl->slice[slice_id - 1] = gvl->slice[slice_id];
-	gvl->slice[slice_id] = tmp;
-
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
+    if (slice_id < 0 || slice_id > (gvl->n_slices - 1))
+	return (-1);
+    
+    if (slice_id == 0)
 	return (1);
+    
+    tmp = gvl->slice[slice_id - 1];
+    gvl->slice[slice_id - 1] = gvl->slice[slice_id];
+    gvl->slice[slice_id] = tmp;
+    
+    return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Move down slice
+
+  \param id volume set id
+  \param slice_id slice id
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_move_down(int id, int slice_id)
 {
-	geovol *gvl;
-	geovol_slice *tmp;
+    geovol *gvl;
+    geovol_slice *tmp;
+    
+    G_debug(3, "GVL_slice_move_up");
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_slice_move_up");
-    }
-#endif
-
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
-	if (slice_id < 0 || slice_id > (gvl->n_slices - 1))
-		return (-1);
-
-	if (slice_id == (gvl->n_slices - 1))
-		return (1);
-
-	tmp = gvl->slice[slice_id + 1];
-	gvl->slice[slice_id + 1] = gvl->slice[slice_id];
-	gvl->slice[slice_id] = tmp;
-
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
+    if (slice_id < 0 || slice_id > (gvl->n_slices - 1))
+	return (-1);
+    
+    if (slice_id == (gvl->n_slices - 1))
 	return (1);
+    
+    tmp = gvl->slice[slice_id + 1];
+    gvl->slice[slice_id + 1] = gvl->slice[slice_id];
+    gvl->slice[slice_id] = tmp;
+    
+    return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number or slices
+
+  \param id volume set id
+
+  \return number of slices
+  \return -1 on error
+*/
 int GVL_slice_num_slices(int id)
 {
     geovol *gvl;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_isosurf_num_isosurfs");
-    }
-#endif
+    G_debug(3, "GVL_isosurf_num_isosurfs");
 
     gvl = gvl_get_vol(id);
 
@@ -1047,108 +1267,137 @@ int GVL_slice_num_slices(int id)
     return (-1);
 }
 
-/***********************************************************************/
-int GVL_slice_get_pos(int id, int slice_id, float *x1, float *x2, float *y1, float *y2, float *z1, float *z2, int *dir)
+/*!
+  \brief Get slice position
+
+  \param id volume set id
+  \param slice_id slice id
+  \param[out] x1,y1,z1 coordinates ?
+  \param[out] x2,y2,z2 coordinates ?
+  \param[out] dir direction
+
+  \return -1 on error
+  \return 1 on success
+*/
+int GVL_slice_get_pos(int id, int slice_id,
+		      float *x1, float *x2, float *y1, float *y2, float *z1, float *z2, int *dir)
 {
     geovol *gvl;
-	geovol_slice *slice;
-	int cols, rows, depths;
+    geovol_slice *slice;
+    int cols, rows, depths;
 
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
     slice = gvl_slice_get_slice(id, slice_id);
-
-	if (!slice)
-		return (-1);
-
-	if (slice->dir == X) {
+    
+    if (!slice)
+	return (-1);
+    
+    if (slice->dir == X) {
     	cols = gvl->rows;
-		rows = gvl->depths;
-		depths = gvl->cols;
-	} else if (slice->dir == Y) {
-		cols = gvl->cols;
-		rows = gvl->depths;
-		depths = gvl->rows;
-	}  else if (slice->dir == Z) {
-		cols = gvl->cols;
-		rows = gvl->rows;
-		depths = gvl->depths;
-	} else {
-		return (-1);
-	}
-
-	*x1 = slice->x1 / (cols - 1);
-	*x2 = slice->x2 / (cols - 1);
-	*y1 = slice->y1 / (rows - 1);
-	*y2 = slice->y2 / (rows - 1);
-	*z1 = slice->z1 / (depths - 1);
-	*z2 = slice->z2 / (depths - 1);
-
-	*dir = slice->dir;
-
+	rows = gvl->depths;
+	depths = gvl->cols;
+    } else if (slice->dir == Y) {
+	cols = gvl->cols;
+	rows = gvl->depths;
+	depths = gvl->rows;
+    }  else if (slice->dir == Z) {
+	cols = gvl->cols;
+	rows = gvl->rows;
+	depths = gvl->depths;
+    } else {
+	return (-1);
+    }
+    
+    *x1 = slice->x1 / (cols - 1);
+    *x2 = slice->x2 / (cols - 1);
+    *y1 = slice->y1 / (rows - 1);
+    *y2 = slice->y2 / (rows - 1);
+    *z1 = slice->z1 / (depths - 1);
+    *z2 = slice->z2 / (depths - 1);
+    
+    *dir = slice->dir;
+    
     return (1);
 }
 
-/***********************************************************************/
-int GVL_slice_set_pos(int id, int slice_id, float x1, float x2, float y1, float y2, float z1, float z2, int dir)
+/*!
+  \brief Get slice position
+
+  \param id volume set id
+  \param slice_id slice id
+  \param x1,y1,z1 coordinates ?
+  \param x2,y2,z2 coordinates ?
+  \param dir direction
+
+  \return -1 on error
+  \return 1 on success
+*/
+int GVL_slice_set_pos(int id, int slice_id,
+		      float x1, float x2, float y1, float y2, float z1, float z2, int dir)
 {
-	geovol *gvl;
-	geovol_slice *slice;
-	int cols, rows, depths;
-
-	gvl = gvl_get_vol(id);
-
-	if (!gvl)
-		return (-1);
-
+    geovol *gvl;
+    geovol_slice *slice;
+    int cols, rows, depths;
+    
+    gvl = gvl_get_vol(id);
+    
+    if (!gvl)
+	return (-1);
+    
     slice = gvl_slice_get_slice(id, slice_id);
-
-	if (!slice)
-		return (-1);
-
-	if (dir == X) {
+    
+    if (!slice)
+	return (-1);
+    
+    if (dir == X) {
     	cols = gvl->rows;
-		rows = gvl->depths;
-		depths = gvl->cols;
-	} else if (dir == Y) {
-		cols = gvl->cols;
-		rows = gvl->depths;
-		depths = gvl->rows;
-	}  else if (dir == Z) {
-		cols = gvl->cols;
-		rows = gvl->rows;
-		depths = gvl->depths;
-	} else {
-		return (-1);
-	}
-
-	slice->x1 = ((x1 < 0.) ? 0. : ((x1 > 1.) ? 1. : x1)) * (cols - 1);
-	slice->x2 = ((x2 < 0.) ? 0. : ((x2 > 1.) ? 1. : x2)) * (cols - 1);
-	slice->y1 = ((y1 < 0.) ? 0. : ((y1 > 1.) ? 1. : y1)) * (rows - 1);
-	slice->y2 = ((y2 < 0.) ? 0. : ((y2 > 1.) ? 1. : y2)) * (rows - 1);
-	slice->z1 = ((z1 < 0.) ? 0. : ((z1 > 1.) ? 1. : z1)) * (depths - 1);
-	slice->z2 = ((z2 < 0.) ? 0. : ((z2 > 1.) ? 1. : z2)) * (depths - 1);
-
-	slice->dir = dir;
-
-	slice->changed = 1;
-
+	rows = gvl->depths;
+	depths = gvl->cols;
+    } else if (dir == Y) {
+	cols = gvl->cols;
+	rows = gvl->depths;
+	depths = gvl->rows;
+    }  else if (dir == Z) {
+	cols = gvl->cols;
+	rows = gvl->rows;
+	depths = gvl->depths;
+    } else {
+	return (-1);
+    }
+    
+    slice->x1 = ((x1 < 0.) ? 0. : ((x1 > 1.) ? 1. : x1)) * (cols - 1);
+    slice->x2 = ((x2 < 0.) ? 0. : ((x2 > 1.) ? 1. : x2)) * (cols - 1);
+    slice->y1 = ((y1 < 0.) ? 0. : ((y1 > 1.) ? 1. : y1)) * (rows - 1);
+    slice->y2 = ((y2 < 0.) ? 0. : ((y2 > 1.) ? 1. : y2)) * (rows - 1);
+    slice->z1 = ((z1 < 0.) ? 0. : ((z1 > 1.) ? 1. : z1)) * (depths - 1);
+    slice->z2 = ((z2 < 0.) ? 0. : ((z2 > 1.) ? 1. : z2)) * (depths - 1);
+    
+    slice->dir = dir;
+    
+    slice->changed = 1;
+    
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get slice trans ?
+
+  \param id volume set id
+  \param slice_id slice id
+  \param[out] transp transp value
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_get_transp(int id, int slice_id, int *transp)
 {
     geovol_slice *slice;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_get_transp");
-    }
-#endif
+    G_debug(3, "GVL_get_transp");
 
     slice = gvl_slice_get_slice(id, slice_id);
 
@@ -1160,16 +1409,21 @@ int GVL_slice_get_transp(int id, int slice_id, int *transp)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set slice trans ?
+
+  \param id volume set id
+  \param slice_id slice id
+  \param transp transp value
+
+  \return -1 on error
+  \return 1 on success
+*/
 int GVL_slice_set_transp(int id, int slice_id, int transp)
 {
     geovol_slice *slice;
 
-#ifdef TRACE_GVL_FUNCS
-    {
-    Gs_status("GVL_set_transp");
-    }
-#endif
+    G_debug(3, "GVL_set_transp");
 
     slice = gvl_slice_get_slice(id, slice_id);
 
