@@ -259,6 +259,23 @@ AC_DEFUN([LOC_YES_NO],[if test -n "${$1}" ; then echo yes ; else echo no ; fi])
 AC_DEFUN([LOC_MSG_USE],[
 [echo "  $1:]LOC_PAD_26($1)`LOC_YES_NO($2)`"])
 
+AC_DEFUN(LOC_EXEEXT,
+[AC_REQUIRE([AC_CYGWIN])
+AC_REQUIRE([AC_MINGW32])
+AC_MSG_CHECKING([for executable suffix])
+AC_CACHE_VAL(ac_cv_exeext,
+[if test "$CYGWIN" = yes || test "$MINGW32" = yes; then
+  ac_cv_exeext=.exe
+else
+  ac_cv_exeext=no
+fi])
+EXEEXT=""
+test x"${ac_cv_exeext}" != xno && EXEEXT=${ac_cv_exeext}
+AC_MSG_RESULT(${ac_cv_exeext})
+dnl Setting ac_exeext will implicitly change the ac_link command.
+ac_exeext=$EXEEXT
+AC_SUBST(EXEEXT)])
+
 #------------------------------------------------------------------------
 # SC_ENABLE_SHARED --
 #

@@ -32,7 +32,7 @@ AC_PREFIX_DEFAULT(/usr/local)
 AC_CONFIG_HEADER(include/config.h)
 AC_CANONICAL_HOST
 AC_PROG_CC
-AC_EXEEXT
+LOC_EXEEXT
 AC_SUBST(MINGW32)
 
 # Check for full floating-point support, including Infinity and NaN
