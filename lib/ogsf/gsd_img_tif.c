@@ -30,14 +30,22 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <grass/gis.h>
-#include "tiffio.h"
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
+#include "tiffio.h"
 
 unsigned short config = PLANARCONFIG_CONTIG;
 unsigned short compression = -1;
 unsigned short rowsperstrip = 0;
 
+/*!
+  \brief Write data to tif file
 
+  \param name filename
+
+  \return 1 on error
+  \return 0 on success
+*/
 int GS_write_tif(char *name)
 {
     TIFF *out;
@@ -51,7 +59,8 @@ int GS_write_tif(char *name)
 
     out = TIFFOpen(name, "w");
     if (out == NULL) {
-	G_warning("Cannot open file for output.");
+	G_warning(_("Unable to open file <%s> for writing"),
+		  name);
 	return(1);
     }
 
@@ -99,11 +108,11 @@ int GS_write_tif(char *name)
 	    break;
 	}
     }
-    free(pixbuf);
+
+    G_free((void *) pixbuf);
     (void) TIFFClose(out);
 
     return (0);
 }
 
 #endif /* HAVE_TIFF */
-
