@@ -1,27 +1,43 @@
 <H2>DESCRIPTION</H2>
 
+<EM>d.split</EM> divides the active display into a number of equal frames,
+either horizontally or vertically.
 
-<EM>d.split</EM> Divides active display into two equal frames horizontally or vertically, and displays raster maps or runs GRASS commands in each frame.
-<br>
 
 <H2>NOTES</H2>
 
+Frame labels are created as Spanish numbers to distinguish them from
+monitor numbers, etc. These are "<i>uno, dos, tres, cuatro, cinco,
+seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince,
+and dieciseis</i>" for frames 1-16.
+The background frame is called <i>full_screen</i>.
+
+<P>
 Commands such as <em>d.rast.leg</em> will interfere with the frame creation
 and cannot be used.
 
 <H2>EXAMPLE</H2>
 
-<tt>
-d.split view=horiz cmd1="d.rast slope" cmd2="d.histogram slope"
-</tt>
+Split the display monitor into six frames (3x2), jump to the third frame,
+and draw a map.
+<div class="code"><pre>
+  d.split -h frames=6 
+  d.frame -s tres
+  d.rast elevation.dem
+</pre></div>
+<BR>
+
 
 <H2>SEE ALSO</H2>
 
-<EM><A HREF="d.frame.html">d.frame</A></EM>
+<EM>
+<A HREF="d.frame.html">d.frame</A>
+</EM>
 
 
 <H2>AUTHOR</H2>
 
-GRASS team 1989
-Update to GRASS 5.7 by Michael Barton, Arizona State University
-<p><i>Last changed: $Date$</i>
+Hamish Bowman<BR>
+<i>Dunedin, New Zealand</i>
+<p>
+<i>Last changed: $Date$</i>
