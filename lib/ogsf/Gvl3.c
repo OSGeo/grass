@@ -1,7 +1,18 @@
-/*  GVL3.c
-    Volume access routines
-    Tomas Paudits
-    December 2003
+/*!
+  \file Gvl3.c
+ 
+  \brief OGSF library - loading and manipulating volumes
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Tomas Paudits (December 2003)
 */
 
 #include <grass/gis.h>

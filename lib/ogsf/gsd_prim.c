@@ -1,10 +1,18 @@
-/*
-    $Id$
+/*!
+  \file gsd_prim.c
+ 
+  \brief OGSF library - primitive drawing functions
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
 
-    gsd_prim.c
-    Bill Brown, USACERL  
-    January 1993
-    Primitive drawing functions
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (January 1993)
 */
 
 /* DEBUG */

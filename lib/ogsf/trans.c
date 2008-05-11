@@ -1,35 +1,42 @@
-/* NOTE: This file should be REMOVED and any calls to the functions in this
-** file should be replaced with appropriate OpenGL calls.
-*/
+/*!
+  \file trans.c
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/*
-**  Written by Dave Gerdes Jan 1990
-**  Copyright  Dave Gerdes 1990    All rights reserved
-**  US Army Construction Engineering Research Lab
-**
-**  Further authors: Justin Hickey, Bob Covill, Brad Douglas
-**
-**  COPYRIGHT:    (C) 1999, 2006 by the GRASS Development Team
-**
-**               This program is free software under the GNU General Public
-**               License (>=v2). Read the file COPYING that comes with GRASS
-**               for details.
-**
-**  Matrix Transformation library.
-**  
-**   P_pushmatrix ()
-**   P_popmatrix ()
-**   P_scale ()		
-**   P_rot ()
-**   P_transform ()      transform array of vectors using current T matrix
-**      		 This routine should be available in GL!
-**
-**  Arguments are same as GL counterparts
-**
-**  I threw this code together in January at the beginning of this
-**  class.  I was still learning about GL at the time.
-**  There are many places where the code could be improved.
-**
+  NOTE: This file should be REMOVED and any calls to the functions in this
+  file should be replaced with appropriate OpenGL calls.
+
+  Matrix Transformation library.
+  
+  P_pushmatrix ()
+  
+  P_popmatrix ()
+
+  P_scale ()		
+  
+  P_rot ()
+
+  P_transform ()      transform array of vectors using current T matrix
+
+  This routine should be available in GL!
+
+  Arguments are same as GL counterparts
+  
+  I threw this code together in January at the beginning of this
+  class.  I was still learning about GL at the time.
+  There are many places where the code could be improved.
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction Engineering Research Lab
+  Bill Brown USACERL (November 1993)
 */
 
 #include <stdio.h>

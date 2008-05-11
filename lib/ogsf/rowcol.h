@@ -1,7 +1,3 @@
-/*
-* $Id$
-*/
-
 #ifndef _ROWCOL_H
 #define _ROWCOL_H
 

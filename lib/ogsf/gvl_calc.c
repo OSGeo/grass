@@ -1,7 +1,19 @@
-/*  gvl_isosurf_calc.c
- * Tomas Paudits
- * Februar 2004
- */
+/*!
+  \file gvl_calc.c
+ 
+  \brief OGSF library - loading and manipulating volumes
+ 
+  GRASS OpenGL gsurf OGSF Library 
+
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Tomas Paudits (February 2004)
+*/
 
 #include <stdio.h>
 #include <math.h>

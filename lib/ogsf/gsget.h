@@ -1,11 +1,3 @@
-/*
-* $Id$
-*/
-
-/***********
-* gsget.h
-***********/
-
 #ifndef _GSGET_H
 #define _GSGET_H
 

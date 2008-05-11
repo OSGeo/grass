@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
+/*!
+  \file gs_query.c
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/*  gs_query.c
-    Bill Brown, USACERL  
-    January 1994
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (January 1994)
 */
 
 #include <math.h>

@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
+/*!
+  \file gsd_views.c
+ 
+  \brief OGSF library - manipulating views
+ 
+  GRASS OpenGL gsurf OGSF Library 
 
-/*  gsd_views.c
-    Bill Brown, USACERL  
-    January 1993
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (January 1993)
 */
 
 /* DEBUG */

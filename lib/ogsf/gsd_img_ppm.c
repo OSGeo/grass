@@ -1,12 +1,27 @@
-/* - added little/big endian test Markus Neteler
- * -modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
- *
- * $Id$ 
- *
- * changed 10/99 Jaro
- * Created new function GS_write_ppm based
- * on RGB dump 
- */
+/*!
+  \file gsd_img_ppm.c
+ 
+  \brief OGSF library - PPM stuff
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+
+  - added little/big endian test Markus Neteler
+  - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
+  - changed 10/99 Jaro
+  - Created new function GS_write_ppm based on RGB dump 
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL, GMSL/University of Illinois
+  Markus Neteler
+  Bob Covill
+  Jaro Hofierka
+*/
 
 #include <stdlib.h>
 #include <stdio.h>

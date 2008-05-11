@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
-
-/*  gv.c
-    Bill Brown, USACERL  
-    November 1993
+/*!
+  \file gv.c
+ 
+  \brief OGSF library - loading and manipulating vector sets
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (November 1993)
 */
 
 #include <stdio.h>
@@ -14,10 +22,6 @@
 #include "gsget.h"
 
 #define FIRST_VECT_ID 20656
-
-/*
-#define TRACE_FUNCS
-*/
 
 static geovect *Vect_top = NULL;
 

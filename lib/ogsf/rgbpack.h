@@ -1,7 +1,3 @@
-/*
-* $Id$
-*/
-
 #ifndef _RGBPACK_H
 #define _RGBPACK_H
 

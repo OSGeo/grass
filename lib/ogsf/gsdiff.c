@@ -1,21 +1,29 @@
-/*
-* $Id$
-*/
+/*!
+  \file gsdiff.c
+ 
+  \brief OGSF library - loading and manipulating surfaces
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  Routines to set up automatic on-the-fly recalculation
+  of surface elevations, doing a "scaled difference" using another
+  surface for reference
+  
+  Note that we're using a true difference here, between data set values,
+  no translations, etc.
+  
+  \todo generalize this concept to allow transform functions which are
+  dependent on surfaces that are dependent on other surfaces, etc., as long
+  as the dependency doesn't loop back.
 
-/*  gsdiff.c
-    Bill Brown, USACERL  
-    November 1994
-routines to set up automatic on-the-fly recalculation
-of surface elevations, doing a "scaled difference" using another
-surface for reference
-
-Note that we're using a true difference here, between data set values,
-no translations, etc.
-
-TODO: generalize this concept to allow transform functions which are
-dependent on surfaces that are dependent on other surfaces, etc., as long
-as the dependency doesn't loop back.
-
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL, GMSL/University of Illinois (November 1994)
 */
 
 #include <stdio.h>

@@ -1,19 +1,19 @@
-/*
-* $Id$
-*
-****************************************************************************
-*
-* MODULE: 	GRASS ogsf library
-* AUTHOR(S):	Original author - Bill Brown - USA CERL 1991 - 1992
-*   	    	<new author name here>
-* PURPOSE: 	This file needs to be re-written in OpenGL
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+/*!
+  \file gsd_label.c
+ 
+  \brief OGSF library - label management
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (1991-1992)
+*/
 
 #include <grass/gstypes.h>
 #include "rgbpack.h"

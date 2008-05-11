@@ -1,5 +1,55 @@
-/*
-* $Id$
+/*!
+  \file gsds.c
+ 
+  \brief OGSF library - 
+ 
+  GRASS OpenGL gsurf OGSF Library 
+
+  The idea here is to treat datasets as seperate objects, which SHOULD:
+   - allow easier reuse of data for different attributes.
+   - allow a mechanism for changing data and have changes reflected
+   in each attribute using that data.
+   - allow a mechanism to automatically update data when the data source
+   is changed.
+   - allow easier weaning from GRASS.
+   - allow easier use of shared memory between processes.
+
+  These structures are defined in gstypes.h:
+
+  <code>
+  typedef struct{
+  float *fb;
+  int *ib;
+  short *sb;
+  char *cb;
+  struct BM *bm;
+  } typbuff;
+  </code>
+
+  How about adding a transform func here, so GET_MAPATT would do an
+  on-the-fly transformation? Or even a transform func LIST!
+
+  <code>
+  typedef struct{
+  int data_id;
+  int dims[MAXDIMS];
+  int ndims;
+  int numbytes;
+  char unique_name[80];
+  typbuff databuff;
+  int changed;
+  int need_reload;
+  } dataset;
+  </code>
+
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown UI GMS Lab
 */
 
 #include <stdlib.h>
@@ -7,44 +57,6 @@
 #include <string.h>
 
 #include <grass/gstypes.h>
-
-/*  The idea here is to treat datasets as seperate objects, which SHOULD:
- *     - allow easier reuse of data for different attributes.
- *     - allow a mechanism for changing data and have changes reflected
- *       in each attribute using that data.
- *     - allow a mechanism to automatically update data when the data source
- *       is changed.
- *     - allow easier weaning from GRASS.
- *     - allow easier use of shared memory between processes.
- * 
- * These structures are defined in gstypes.h:
- * typedef struct{
- *     float *fb;
- *     int *ib;
- *     short *sb;
- *     char *cb;
- *     struct BM *bm;
- * } typbuff;
-  How about adding a transform func here, so GET_MAPATT would do an
-  on-the-fly transformation? Or even a transform func LIST!
- * 
- * typedef struct{
- *     int data_id;
- *     int dims[MAXDIMS];
- *     int ndims;
- *     int numbytes;
- *     char unique_name[80];
- *     typbuff databuff;
- *     int changed;
- *     int need_reload;
- * } dataset;
- *
- * 
-*/
-
-/*
-#define TRACE_FUNCS
-*/
 
 #define LUCKY 33
 #define BLOC 20

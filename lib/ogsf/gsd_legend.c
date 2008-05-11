@@ -1,6 +1,21 @@
-/*
- * Converted code from legend.c in SG3d
- * routines to set viewport, close viewport, and make legend
+/*!
+  \file gsd_legend.c
+ 
+  \brief OGSF library - legend creation
+ 
+  GRASS OpenGL gsurf OGSF Library 
+
+  Converted code from legend.c in SG3d
+  routines to set viewport, close viewport, and make legend
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL
 */
 
 #include <stdlib.h>
