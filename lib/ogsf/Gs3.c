@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
@@ -20,6 +21,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/bitmap.h>
 
 #include <grass/gsurf.h>
@@ -28,8 +30,9 @@
 #include "gsget.h"
 /* for update_attrange - might be able to move this func now */
 
-
-/* The following macros are only used in the function Gs_update_attrange() */
+/*!
+  \brief Used in the function Gs_update_attrange()
+*/
 #define INIT_MINMAX(p, nm, size, min, max, found) \
 	found = 0; \
 	p+=(size-1); \
@@ -44,6 +47,9 @@
 	    p--; \
 	}
 
+/*!
+  \brief Used in the function Gs_update_attrange()
+*/
 #define SET_MINMAX(p, nm, size, min, max) \
 	p+=(size-1); \
 	while(size--) \
@@ -66,22 +72,6 @@ typedef int FILEDESC;
 
 #define NO_DATA_COL 0xffffff
 
-/*!
-  \brief Warning handling
-
-  This should be a function variable that 
-  may be replaced by a user's function. 
-  Or else use G_set_error_routine().
-
-  \param str message
-*/
-void Gs_warning(char *str)
-{
-    G_warning("%s", str);
-
-    return;
-}
-
 /************************************************************************/
 /* This should be a function variable that 
  * may be replaced by a user's function. 
@@ -94,8 +84,16 @@ void Gs_status(char *str)
     return;
 }
 
-/************************************************************************/
-/* calculates distance in METERS between two points in current projection */
+/*!
+  \brief Calculates distance in METERS between two points in current projection (2D)
+
+  Uses G_distance().
+
+  \param from 'from' point (X, Y)
+  \param to 'to' point (X, Y)
+
+  \return distance
+*/
 double Gs_distance(double *from, double *to)
 {
     static int first = 1;
@@ -108,44 +106,48 @@ double Gs_distance(double *from, double *to)
     return G_distance(from[0], from[1], to[0], to[1]);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for
-   wind->rows * wind->cols floats.
-   This routine simply loads the map into a 2d array by repetitve calls
-   to get_f_raster_row.
+/*!
+  \brief Load raster map as floating point map
+
+  Calling function must have already allocated space in buff for
+  wind->rows * wind->cols floats.
+
+  This routine simply loads the map into a 2d array by repetitve calls
+  to get_f_raster_row.
+
+  \param wind current window
+  \param map_name raster map name
+  \param[out] buff data buffer
+  \param[out] nullmap null map buffer
+  \param[out] has_null indicates if raster map contains null-data
+
+  \return 1
 */
 int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
 			struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
     char *map_set, *nullflags;
-    char err_buff[100];
     int offset, row, col;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("Gs_loadmap_as_float");
-    }
-#endif
+    G_debug(3, "Gs_loadmap_as_float");
 
     map_set = G_find_file2("cell", map_name, "");
+    if (!map_set) {
+	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    }
     *has_null = 0;
 
-    if (NULL == (nullflags = G_allocate_null_buf())) {
-	sprintf(err_buff, "Not able to allocate null buffer for [%s]",
-		map_name);
-	Gs_warning(err_buff);
-
-	exit(0);
+    nullflags = G_allocate_null_buf(); /* G_fatal_error */
+    if (!nullflags) {
+	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	sprintf(err_buff, "Not able to open cellfile for [%s]", map_name);
-	Gs_warning(err_buff);
-	exit(0);
+	G_fatal_error(_("Unable to open raster map <%s>"));
     }
 
-    Gs_status("Loading Data");
+    G_verbose_message(_("Loading data..."));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -159,61 +161,63 @@ int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
 		*has_null = 1;
 		BM_set(nullmap, col, row, 1);
 	    }
-
 	    /* set nm */
 	}
     }
 
-#ifdef DEBUG_MSG
-    {
-	fprintf(stderr, "_HAS-NULL_ = %d\n", *has_null);
-    }
-#endif
+    G_debug(3, "_HAS-NULL_ = %d", *has_null);
 
     G_close_cell(cellfile);
 
-    free(nullflags);
+    G_free(nullflags);
 
     return (1);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for
-   wind->rows * wind->cols integers.
-   This routine simply loads the map into a 2d array by repetitve calls
-   to get_map_row.
+/*!
+  \brief Load raster map as integer map
+
+  Calling function must have already allocated space in buff for
+  wind->rows * wind->cols floats.
+
+  This routine simply loads the map into a 2d array by repetitve calls
+  to get_f_raster_row.
+
+  \todo fn body of Gs_loadmap_as_float()
+
+  \param wind current window
+  \param map_name raster map name
+  \param[out] buff data buffer
+  \param[out] nullmap null map buffer
+  \param[out] has_null indicates if raster map contains null-data
+
+  \return 1
 */
 int Gs_loadmap_as_int(struct Cell_head *wind, char *map_name, int *buff,
 		      struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
     char *map_set, *nullflags;
-    char err_buff[100];
     int offset, row, col;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("Gs_loadmap_as_int");
-    }
-#endif
+    G_debug(3, "Gs_loadmap_as_int");
 
     map_set = G_find_file2("cell", map_name, "");
+    if (!map_set) {
+	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    }
     *has_null = 0;
 
-    if (NULL == (nullflags = G_allocate_null_buf())) {
-	sprintf(err_buff, "Not able to allocate null buffer for [%s]",
-		map_name);
-	Gs_warning(err_buff);
-	exit(0);
+    nullflags = G_allocate_null_buf(); /* G_fatal_error */
+    if (!nullflags) {
+	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	sprintf(err_buff, "Not able to open cellfile for [%s]", map_name);
-	Gs_warning(err_buff);
-	exit(0);
+	G_fatal_error(_("Unable to open raster map <%s>"));
     }
 
-    Gs_status("Loading Data");
+    G_verbose_message(_("Loading data..."));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -234,13 +238,20 @@ int Gs_loadmap_as_int(struct Cell_head *wind, char *map_name, int *buff,
 
     G_close_cell(cellfile);
 
-    free(nullflags);
+    G_free(nullflags);
 
     return (1);
 }
 
-/*********************************************************************/
-/* returns -1 if map is integer and G_read_range fails !! */
+/*!
+  \brief Get map data type
+
+  \param filename raster map name
+  \param negflag
+
+  \return -1 if map is integer and G_read_range() fails
+  \return data type (ARRY_*)
+*/
 int Gs_numtype(char *filename, int *negflag)
 {
     CELL max = 0, min = 0;
@@ -249,7 +260,6 @@ int Gs_numtype(char *filename, int *negflag)
     int shortbits, charbits, bitplace;
     static int max_short, max_char;
     static int first = 1;
-
 
     if (first) {
 	max_short = max_char = 1;
@@ -275,13 +285,12 @@ int Gs_numtype(char *filename, int *negflag)
     }
 
     mapset = G_find_file2("cell", filename, "");
+    if (!mapset) {
+	G_fatal_error(_("Raster map <%s> not found"), filename);
+    }
 
     if (G_raster_map_is_fp(filename, mapset)) {
-#ifdef DEBUG_MSG
-	{
-	    fprintf(stderr, "fp map detected \n");
-	}
-#endif
+	G_debug(3, "Gs_numtype(): fp map detected");
 
 	return (ATTY_FLOAT);
     }
@@ -304,30 +313,36 @@ int Gs_numtype(char *filename, int *negflag)
     return (ATTY_INT);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for
-   wind->rows * wind->cols shorts.  
-   This routine simply loads the map into a 2d array by repetitve calls
-   to get_map_row.
-   Returns 1 on success, -1 on failure, -2 if read ok, but 1 or more values
-   were too large (small) to fit into a short.
-   (in which case the max (min) short is used)
+/*!
+  \brief Load raster map as integer map
+
+  Calling function must have already allocated space in buff for
+  wind->rows * wind->cols shorts.  
+  
+  This routine simply loads the map into a 2d array by repetitve calls
+  to get_map_row.
+  
+  \param wind current window
+  \param map_name raster map name
+  \param[out] buff data buffer
+  \param[out] nullmap null map buffer
+  \param[out] has_null indicates if raster map contains null-data
+
+  \return 1 on success
+  \return -1 on failure,
+  \return -2 if read ok, but 1 or more values were too large (small)
+  to fit into a short (in which case the max (min) short is used)
 */
 int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
 			struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
     char *map_set, *nullflags;
-    char err_buff[100];
     int *ti, *tmp_buf;
     int offset, row, col, val, max_short, overflow, shortsize, bitplace;
     short *ts;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("Gs_loadmap_as_short");
-    }
-#endif
+    G_debug(3, "Gs_loadmap_as_short");
 
     overflow = 0;
     shortsize = 8 * sizeof(short);
@@ -341,28 +356,26 @@ int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
     max_short -= 1;
 
     map_set = G_find_file2("cell", map_name, "");
+    if (!map_set) {
+	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    }
     *has_null = 0;
 
-    if (NULL == (nullflags = G_allocate_null_buf())) {
-	sprintf(err_buff, "Not able to allocate null buffer for [%s]",
-		map_name);
-	Gs_warning(err_buff);
-	exit(0);
+    nullflags = G_allocate_null_buf();
+    if (!nullflags) {
+	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	sprintf(err_buff, "Not able to open cellfile for [%s]", map_name);
-	Gs_warning(err_buff);
-	exit(0);
+	G_fatal_error(_("Unable to open raster map <%s>"));
     }
 
-    if (NULL == (tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)))) {
-	sprintf(err_buff, "out of memory");
-	Gs_warning(err_buff);
-	exit(0);
+    tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
+    if (!tmp_buf) {
+	return -1;
     }
 
-    Gs_status("Loading Data");
+    G_verbose_message(_("Loading data..."));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -398,38 +411,49 @@ int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
     }
 
     G_close_cell(cellfile);
-    free(tmp_buf);
-    free(nullflags);
+
+    G_free(tmp_buf);
+    G_free(nullflags);
 
     return (overflow ? -2 : 1);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for
-   wind->rows * wind->cols unsigned chars.  
-   This routine simply loads the map into a 2d array by repetitve calls
-   to get_map_row.
-   Returns 1 on success, -1 on failure, -2 if read ok, but 1 or more values
-   were too large (small) to fit into an unsigned char.
-   (in which case the max (min) char is used)
-   Since signs of chars can be tricky, we only load positive chars
-   between 0-255.
+/*!
+  \brief Load raster map as integer map
+
+  Calling function must have already allocated space in buff for
+  wind->rows * wind->cols unsigned chars.  
+
+  This routine simply loads the map into a 2d array by repetitve calls
+  to get_map_row.
+
+  Since signs of chars can be tricky, we only load positive chars
+  between 0-255.
+
+  \todo fn body Gs_loadmap_as_float()
+
+  \param wind current window
+  \param map_name raster map name
+  \param[out] buff data buffer
+  \param[out] nullmap null map buffer
+  \param[out] has_null indicates if raster map contains null-data
+
+  \return 1 on success
+  \return -1 on failure
+  \return -2 if read ok, but 1 or more values
+  were too large (small) to fit into an unsigned char.
+  (in which case the max (min) char is used)
 */
 int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
 		       unsigned char *buff, struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
     char *map_set, *nullflags;
-    char err_buff[100];
     int *ti, *tmp_buf;
     int offset, row, col, val, max_char, overflow, charsize, bitplace;
     unsigned char *tc;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("Gs_loadmap_as_char");
-    }
-#endif
+    G_debug(3, "Gs_loadmap_as_char");
 
     overflow = 0;
     charsize = 8 * sizeof(unsigned char);
@@ -444,29 +468,26 @@ int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
     max_char -= 1;
 
     map_set = G_find_file2("cell", map_name, "");
+    if (!map_set) {
+	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    }
     *has_null = 0;
 
-    if (NULL == (nullflags = G_allocate_null_buf())) {
-	sprintf(err_buff, "Not able to allocate null buffer for [%s]",
-		map_name);
-	Gs_warning(err_buff);
-	exit(0);
+    nullflags = G_allocate_null_buf(); /* G_fatal_error */
+    if (!nullflags) {
+	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
-
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	sprintf(err_buff, "Not able to open cellfile for [%s]", map_name);
-	Gs_warning(err_buff);
-	exit(0);
+	G_fatal_error(_("Unable to open raster map <%s>"));
     }
 
-    if (NULL == (tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)))) {
-	sprintf(err_buff, "out of memory");
-	Gs_warning(err_buff);
-	exit(0);
+    tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
+    if (!tmp_buf) {
+	return -1;
     }
 
-    Gs_status("Loading Data");
+    G_verbose_message(_("Loading data..."));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -503,58 +524,62 @@ int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
     }
 
     G_close_cell(cellfile);
-    free(tmp_buf);
-    free(nullflags);
+
+    G_free(tmp_buf);
+    G_free(nullflags);
 
     return (overflow ? -2 : 1);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for
-   struct BM of wind->rows & wind->cols.
-   This routine simply loads the map into the bitmap by repetitve calls
-   to get_map_row.  Any value other than 0 in the map will set the bitmap.
-   (may want to change later to allow specific value to set)
-   Returns 1 on success, -1 on failure.
-   CHANGED TO USE NULLS 
+/*!
+  \brief Load raster map as integer map
+
+  Calling function must have already allocated space in buff for
+  struct BM of wind->rows & wind->cols.
+  
+  This routine simply loads the map into the bitmap by repetitve calls
+  to get_map_row.  Any value other than 0 in the map will set the bitmap.
+  (may want to change later to allow specific value to set)
+
+  Changed to use null.
+  
+  \param wind current window
+  \param map_name raster map name
+  \param[out] buff data buffer
+
+  \returns 1 on success
+  \return -1 on failure
 */
 int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
 			 struct BM *buff)
 {
     FILEDESC cellfile;
     char *map_set, *nullflags;
-    char err_buff[100];
     int *tmp_buf;
     int row, col;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("Gs_loadmap_as_bitmap");
-    }
-#endif
+    G_debug(3, "Gs_loadmap_as_bitmap");
 
     map_set = G_find_file2("cell", map_name, "");
+    if (!map_set) {
+	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	sprintf(err_buff, "Not able to open cellfile for [%s]", map_name);
-	Gs_warning(err_buff);
-	exit(0);
+	G_fatal_error(_("Unable to open raster map <%s>"));
     }
 
-    if (NULL == (tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)))) {
-	sprintf(err_buff, "out of memory");
-	Gs_warning(err_buff);
-	exit(0);
+    tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
+    if (!tmp_buf) {
+	return -1;
     }
 
-    if (NULL == (nullflags = G_allocate_null_buf())) {
-	sprintf(err_buff, "Not able to allocate null buffer for [%s]",
-		map_name);
-	Gs_warning(err_buff);
-	exit(0);
+    nullflags = G_allocate_null_buf();
+    if (!nullflags) {
+	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    Gs_status("Loading Data");
+    G_verbose_message(_("Loading data..."));
 
     for (row = 0; row < wind->rows; row++) {
 	G_get_null_value_row(cellfile, nullflags, row);
@@ -571,15 +596,24 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
     }
 
     G_close_cell(cellfile);
-    free(tmp_buf);
-    free(nullflags);
+
+    G_free(tmp_buf);
+    G_free(nullflags);
 
     return (1);
 }
 
-/************************************************************************/
-/* Calling function must have already allocated space in buff for range of
-data (256 for now) - simply calls get_color for each cat in color range */
+/*!
+  \brief Build color table (256)
+
+  Calling function must have already allocated space in buff for range of
+  data (256 for now) - simply calls get_color for each cat in color range
+  
+  \param filename raster map name
+  \param[out] buff data buffer
+
+  \return 1
+*/
 int Gs_build_256lookup(char *filename, int *buff)
 {
     char *map;
@@ -588,15 +622,18 @@ int Gs_build_256lookup(char *filename, int *buff)
     int i;
     unsigned char r[256], g[256], b[256], set[256];
 
-    Gs_status("building color table");
+    G_debug(3, "building color table");
 
     map = G_find_file2("cell", filename, "");
+    if (!map) {
+	G_fatal_error(_("Raster map <%s> not found"), filename);
+    }
+
     G_read_colors(filename, map, &colrules);
     G_get_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
-	fprintf(stderr, "mincol: %d, maxcol: %d\n", min, max);
-	fprintf(stderr, "WARNING: color table range doesn't match data\n");
+	G_warning(_("Color table range doesn't match data (mincol=%d, maxcol=%d"), min, max);
 
 	min = min < 0 ? 0 : min;
 	max = max > 255 ? 255 : max;
@@ -624,9 +661,16 @@ int Gs_build_256lookup(char *filename, int *buff)
     return (1);
 }
 
-/************************************************************************/
-/* passed an array of 32 bit ints that is converted from cell values
-   to packed colors (0xbbggrr) 
+/*!
+  \brief Pack color table
+
+  Passed an array of 32 bit ints that is converted from cell values
+  to packed colors (0xbbggrr) 
+
+  \param filename raster map name
+  \param buff
+  \param rows number of rows
+  \param cols number of cols
 */
 void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
 {
@@ -635,16 +679,22 @@ void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
     unsigned char *r, *g, *b, *set;
     int *cur, i, j;
 
-    Gs_status("translating colors");
+    map = G_find_file2("cell", filename, "");
+    if (!map) {
+	G_fatal_error(_("Raster map <%s> not found"), filename);
+    }
 
     r = (unsigned char *) G_malloc(cols);
     g = (unsigned char *) G_malloc(cols);
     b = (unsigned char *) G_malloc(cols);
     set = (unsigned char *) G_malloc(cols);
-    map = G_find_file2("cell", filename, "");
+
     G_read_colors(filename, map, &colrules);
 
     cur = buff;
+
+    G_verbose_message(_("Translating colors for raster map <%s>..."),
+		      filename);
 
     for (i = 0; i < rows; i++) {
 	G_lookup_colors(cur, r, g, b, set, cols, &colrules);
@@ -664,19 +714,29 @@ void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
     }
 
     G_free_colors(&colrules);
-    free(r);
-    free(g);
-    free(b);
-    free(set);
+
+    G_free(r);
+    G_free(g);
+    G_free(b);
+    
+    G_free(set);
 
     return;
 }
 
-/************************************************************************/
-/* passed a array of floats that will be converted from cell values
-   to packed colors (0xbbggrr) and float to int 
-   ** floating point data not freed here, use: 
-      gsds_free_data_buff(id, ATTY_FLOAT)
+/*!
+  \brief Pack color table (floating-point map)
+
+  Passed a array of floats that will be converted from cell values
+  to packed colors (0xbbggrr) and float to int 
+  Floating point data not freed here, use: 
+  gsds_free_data_buff(id, ATTY_FLOAT)
+
+  \param filename raster map name
+  \param fbuf
+  \param ibuf
+  \param rows number of rows
+  \param cols number of cols
 */
 void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
 			  int cols)
@@ -687,17 +747,23 @@ void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
     int i, j, *icur;
     FCELL *fcur;
 
-    Gs_status("translating colors from fp");
+    map = G_find_file2("cell", filename, "");
+    if (!map) {
+	G_fatal_error(_("Raster map <%s> not found"), filename);
+    }
 
     r = (unsigned char *) G_malloc(cols);
     g = (unsigned char *) G_malloc(cols);
     b = (unsigned char *) G_malloc(cols);
     set = (unsigned char *) G_malloc(cols);
-    map = G_find_file2("cell", filename, "");
+
     G_read_colors(filename, map, &colrules);
 
     fcur = fbuf;
     icur = ibuf;
+
+    G_verbose_message(_("Translating colors from fp raster map <%s>"),
+		      filename);
 
     for (i = 0; i < rows; i++) {
 	G_lookup_f_raster_colors(fcur, r, g, b, set, cols, &colrules);
@@ -718,18 +784,26 @@ void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
     }
 
     G_free_colors(&colrules);
-    free(r);
-    free(g);
-    free(b);
-    free(set);
+
+    G_free(r);
+    G_free(g);
+    G_free(b);
+    G_free(set);
 
     return;
 }
 
-/************************************************************************/
-/* Formats label as in d.what.rast -> (catval) catlabel 
- * 
- *
+/*!
+  \brief Get categories/labels
+
+  Formats label as in d.what.rast -> (catval) catlabel 
+
+  \param filename raster map name
+  \param drow
+  \param dcol
+  \param catstr category string
+
+  \return 1
 */
 int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
 {
@@ -741,8 +815,7 @@ int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
     int fd;
 
     if ((mapset = G_find_cell(filename, "")) == NULL) {
-	sprintf(catstr, "error");
-	exit(0);
+	G_fatal_error(_("Raster map <%s> not found"), filename);
     }
 
     if (-1 != G_read_cats(filename, mapset, &cats)) {
@@ -764,7 +837,7 @@ int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
 			G_get_c_raster_cat(&buf[dcol], &cats));
 	    }
 
-	    free(buf);
+	    G_free(buf);
 	}
 
 	else {
@@ -783,7 +856,7 @@ int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
 			G_get_d_raster_cat(&dbuf[dcol], &cats));
 	    }
 
-	    free(dbuf);
+	    G_free(dbuf);
 	}
     }
     else {
@@ -798,7 +871,18 @@ int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief Save 3dview
+
+  \param vname view name
+  \param gv pointer to geoview struct
+  \param gd pointer to geodisplay struct
+  \param w current window
+  \param defsurf default geosurf struct
+
+  \return -1 on error
+  \return ?
+*/
 int Gs_save_3dview(char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
@@ -886,7 +970,17 @@ int Gs_save_3dview(char *vname, geoview * gv, geodisplay * gd,
     }
 }
 
-/************************************************************************/
+/*!
+  \brief Load 3dview
+
+  \param vname view name
+  \param gv pointer to geoview struct
+  \param gd pointer to geodisplay struct
+  \param w current window
+  \param defsurf default geosurf struct
+
+  \return 1
+*/
 int Gs_load_3dview(char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
@@ -903,8 +997,8 @@ int Gs_load_3dview(char *vname, geoview * gv, geodisplay * gd,
 
     if (ret >= 0) {
 	if (strcmp((v.pgm_id), "Nvision-ALPHA!")) {
-	    fprintf(stderr, "WARNING: view not saved by this program,\n");
-	    fprintf(stderr, "         there may be some inconsistancies.\n");
+	    G_warning(_("View not saved by this program,"
+			"there may be some inconsistancies"));
 	}
 
 	/* set poly and mesh resolutions */
@@ -1014,10 +1108,14 @@ int Gs_load_3dview(char *vname, geoview * gv, geodisplay * gd,
 
 }
 
-/***********************************************************************/
-/* updates no_zero ranges for att (actually no_null now) */
-/*
-static CELL tmpc;
+/*!
+  \brief Update no_zero ranges for att (actually no_null now)
+  
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+
+  \return -1 on error
+  \return 1 on success
 */
 int Gs_update_attrange(geosurf * gs, int desc)
 {
@@ -1027,8 +1125,7 @@ int Gs_update_attrange(geosurf * gs, int desc)
     struct BM *nm;
     int found;
 
-    gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].range_nz =
-	0.0;
+    gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].range_nz = 0.0;
 
     if (CONST_ATT == gs_get_att_src(gs, desc)) {
 	gs->att[desc].max_nz = gs->att[desc].min_nz = gs->att[desc].constant;
