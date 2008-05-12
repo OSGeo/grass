@@ -1,7 +1,7 @@
 /*!
   \file gk.c
  
-  \brief OGSF library - setting and manipulating keyframes animation
+  \brief OGSF library - setting and manipulating keyframes animation (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
@@ -35,13 +36,20 @@ static float spl3(float tension, double data0, double data1, double x,
 	     (double) tension * rderiv * (x3 - x2)));
 }
 
+/*!
+  \brief Copy keyframes
+
+  \param k source keyframes
+
+  \return pointer to Keylist struct (target)
+*/
 Keylist *gk_copy_key(Keylist * k)
 {
     Keylist *newk;
     int i;
 
-    if (NULL == (newk = (Keylist *) malloc(sizeof(Keylist)))) {
-	fprintf(stderr, "Out of memory\n");
+    newk = (Keylist *) G_malloc(sizeof(Keylist)); /* G_fatal_error */
+    if (!newk) {
 	return (NULL);
     }
 
@@ -57,8 +65,18 @@ Keylist *gk_copy_key(Keylist * k)
     return (newk);
 }
 
-/* get begin & end pos, AND all masks in keys <= pos */
-/* time must be between 0.0 & 1.0 */
+/*!
+  \brief Get mask value
+
+  Get begin & end pos, AND all masks in keys <= pos
+
+  Time must be between 0.0 & 1.0
+
+  \param time timestamp
+  \param keys list of keyframes
+
+  \return mask value
+*/
 unsigned long gk_get_mask_sofar(float time, Keylist * keys)
 {
     Keylist *k;
@@ -83,6 +101,15 @@ unsigned long gk_get_mask_sofar(float time, Keylist * keys)
     return (mask);
 }
 
+/*!
+  \brief ADD
+
+  \param mask mask value
+  \param keys list of keyframes
+  \param[out] keyret output list of keyframes
+
+  \return number of output keyframes
+*/
 int gk_viable_keys_for_mask(unsigned long mask, Keylist * keys,
 			    Keylist ** keyret)
 {
@@ -98,8 +125,20 @@ int gk_viable_keys_for_mask(unsigned long mask, Keylist * keys,
     return (cnt);
 }
 
-/* checks key masks because if they're masked up until the current position,
-   pre-existing (or current) field should be used. */
+/*!
+  \brief Checks key masks
+
+  Because if they're masked up until the current position,
+  pre-existing (or current) field should be used.
+
+  \param view pointer to Viewmode struct
+  \param numsteps number of steps
+  \param keys list of keyframes
+  \param step step value
+  \param onestep
+  \param render
+  \param mode
+*/
 void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
 		      int onestep, int render, unsigned long mode)
 {
@@ -132,17 +171,15 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
 
 	GS_moveto(tmp);
 
-#ifdef KDEBUG
-	{
-	    GS_get_from(tmp);
-	    fprintf(stderr, "MASK: %x\n", mask);
-	    fprintf(stderr, "FROM: %f %f %f\n", tmp[X], tmp[Y], tmp[Z]);
-	}
-#endif
-/* ACS 1 line: was 	GS_get_focus(tmp);
- 	with this kanimator works also for flythrough navigation
-	also changed in GK2.c
-*/
+	GS_get_from(tmp);
+	G_debug(3, "gk_follow_frames():");
+	G_debug(3, "  MASK: %x", mask);
+	G_debug(3, "  FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
+
+	/* ACS 1 line: was 	GS_get_focus(tmp);
+	   with this kanimator works also for flythrough navigation
+	   also changed in GK2.c
+	*/
 	GS_get_viewdir(tmp);
 	if ((mask & KF_DIRX_MASK)) {
 	    tmp[X] = v->fields[KF_DIRX];
@@ -153,19 +190,15 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
 	if ((mask & KF_DIRZ_MASK)) {
 	    tmp[Z] = v->fields[KF_DIRZ];
 	}
-/* ACS 1 line: was 	GS_set_focus(tmp);
- 	with this kanimator works also for flythrough navigation
-	also changed in GK2.c
-*/
+	/* ACS 1 line: was 	GS_set_focus(tmp);
+	   with this kanimator works also for flythrough navigation
+	   also changed in GK2.c
+	*/
 	GS_set_viewdir(tmp);
 
-
-#ifdef KDEBUG
-	{
-	    GS_get_viewdir(tmp);
-	    fprintf(stderr, "DIR: %f %f %f\n", tmp[X], tmp[Y], tmp[Z]);
-	}
-#endif
+	G_debug(3, "gk_follow_frames():");
+	GS_get_viewdir(tmp);
+	G_debug(3, "  DIR: %f %f %f\n", tmp[X], tmp[Y], tmp[Z]);
 
 	if ((mask & KF_TWIST_MASK)) {
 	    GS_set_twist((int) v->fields[KF_TWIST]);
@@ -231,6 +264,11 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
     return;
 }
 
+/*!
+  \brief Free keyframe list
+
+  \param ok pointer to Keylist struct
+*/
 void gk_free_key(Keylist * ok)
 {
     Keylist *k, *prev;
@@ -240,14 +278,27 @@ void gk_free_key(Keylist * ok)
 	while (k) {
 	    prev = k;
 	    k = k->next;
-	    free(prev);
+	    G_free(prev);
 	}
     }
 
     return;
 }
 
-/* here we use a cardinal cubic spline */
+/*!
+  \brief Generate viewnode from keyframes
+  
+  Here we use a cardinal cubic spline
+
+  \param keys list of keyframes
+  \param keysteps keyframe step
+  \param newsteps new step value
+  \param loop loop indicator
+  \param t
+
+  \return pointer to Viewnode
+  \return NULL on failure
+*/
 Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
 				 int loop, float t)
 {
@@ -258,8 +309,8 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
     double dt1, dt2, x, x2, x3, range, time, time_step, len, rderiv, lderiv;
 
     /* allocate tmp keys to hold valid keys for fields */
-    if (NULL == (tkeys = (Keylist **) malloc(keysteps * sizeof(Keylist *)))) {
-	fprintf(stderr, "Unable to allocate memory\n");
+    tkeys = (Keylist **) G_malloc(keysteps * sizeof(Keylist *)); /* G_fatal_error */
+    if (!tkeys) {
 	return (NULL);
     }
 
@@ -267,8 +318,8 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
 
     if (keys && keysteps) {
 	if (keysteps < 3) {
-	    fprintf(stderr, "Need at least 3 keyframes for spline\n");
-	    free(tkeys);
+	    G_warning (_("Need at least 3 keyframes for spline"));
+	    G_free(tkeys);
 	    return (NULL);
 	}
 
@@ -280,10 +331,9 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
 	range = endpos - startpos;
 	time_step = range / (newsteps - 1);
 
-	if (NULL ==
-	    (newview = (Viewnode *) malloc(newsteps * sizeof(Viewnode)))) {
-	    fprintf(stderr, "Out of memory\n");
-	    free(tkeys);
+	newview = (Viewnode *) G_malloc(newsteps * sizeof(Viewnode)); /* G_fatal_error */
+	if(!newview) { /* not used */
+	    G_free(tkeys);
 	    return (NULL);
 	}
 
@@ -310,9 +360,9 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
 					    loop, tkeys, &k, &kp1, &kp2, &km1,
 					    &dt1, &dt2);
 		}
-
+		
 /* ACS 1 line: was	if (len == 0.0) {
- 	when disabling a channel no calculation must be made at all (otherwise core dump)
+   when disabling a channel no calculation must be made at all (otherwise core dump)
 */
 		if (len == 0.0 || nvk == 0) {
 		    if (!k) {
@@ -368,23 +418,40 @@ Viewnode *gk_make_framesfromkeys(Keylist * keys, int keysteps, int newsteps,
 	    }
 	}
 
-	free(tkeys);
+	G_free(tkeys);
 	return (newview);
     }
     else {
-	free(tkeys);
+	G_free(tkeys);
 	return (NULL);
     }
 }
 
-/* finds interval containing time, putting left (or equal) key
-   at km1, right at kp1, 2nd to right at kp2, and second to left at km2.
-   dt1 is given the length of the current + left intervals
-   dt2 is given the length of the current + right intervals
-   returns the length of the current interval (0 on error)
+/*!
+  \brief Find interval containing time
+  
+  Changed June 94 to handle masks - now need to have called get_viable_keys
+  for appropriate mask first to build the ARRAY of viable keyframes.
+  
+  Putting left (or equal) key
+  at km1, right at kp1, 2nd to right at kp2, and second to left at km2.
+  dt1 is given the length of the current + left intervals
+  dt2 is given the length of the current + right intervals
+  
+  \param nvk
+  \param time
+  \param range
+  \param loop
+  \param karray
+  \param km1
+  \param kp1
+  \param kp2
+  \param km2
+  \param dt1
+  \param dt2
 
-   Changed June 94 to handle masks - now need to have called get_viable_keys
-   for appropriate mask first to build the ARRAY of viable keyframes.
+  \return the length of the current interval
+  \return 0 on error
 */
 double get_key_neighbors(int nvk, double time, double range, int loop,
 			 Keylist * karray[], Keylist ** km1, Keylist ** kp1,
@@ -461,13 +528,33 @@ double get_key_neighbors(int nvk, double time, double range, int loop,
     return (len);
 }
 
+/*!
+  \brief Linear interpolation
+  
+  \param dt coeficient
+  \param val2 value 2
+  \param val1 value 1
+
+  \return val1 + dt * (val2 - val1)
+*/
 double lin_interp(float dt, float val1, float val2)
 {
     return ((double) (val1 + dt * (val2 - val1)));
 }
 
-/* finds interval containing time, putting left (or equal) key
-   at km1, right at kp1
+/*!
+  \brief Finds interval containing time, putting left (or equal) key
+  at km1, right at kp1
+
+  \param nvk
+  \param time
+  \param range
+  \param loop
+  \param karray
+  \param km1
+  \param km2
+
+  \return interval value
 */
 double get_2key_neighbors(int nvk, float time, float range, int loop,
 			  Keylist * karray[], Keylist ** km1, Keylist ** kp1)
@@ -501,8 +588,20 @@ double get_2key_neighbors(int nvk, float time, float range, int loop,
     return (len);
 }
 
-/* Here we use linear interpolation. Loop variable isn't used, but left  */
-/* in for use in possible "linear interp with smoothing" version.        */
+/*!
+  \brief Generate viewnode from keyframe list (linear interpolation)
+
+  Here we use linear interpolation. Loop variable isn't used, but left
+  in for use in possible "linear interp with smoothing" version.
+
+  \param kesy keyframe list
+  \param keysteps step value
+  \param newsteps new step value
+  \param loop loop indicator
+
+  \param pointer to viewnode struct
+  \param NULL on failure
+*/
 Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 					int newsteps, int loop)
 {
@@ -512,8 +611,8 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
     float startpos, endpos, dt, range, time, time_step, len;
 
     /* allocate tmp keys to hold valid keys for fields */
-    if (NULL == (tkeys = (Keylist **) malloc(keysteps * sizeof(Keylist *)))) {
-	fprintf(stderr, "Unable to allocate memory\n");
+    tkeys = (Keylist **) G_malloc(keysteps * sizeof(Keylist *)); /* G_fatal_error */
+    if(!tkeys) {
 	return (NULL);
     }
 
@@ -521,8 +620,8 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 
     if (keys && keysteps) {
 	if (keysteps < 2) {
-	    fprintf(stderr, "Need at least 2 keyframes for interpolation\n");
-	    free(tkeys);
+	    G_warning (_("Need at least 2 keyframes for interpolation"));
+	    G_free(tkeys);
 	    return (NULL);
 	}
 
@@ -534,10 +633,9 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 	range = endpos - startpos;
 	time_step = range / (newsteps - 1);
 
-	if (NULL ==
-	    (newview = (Viewnode *) malloc(newsteps * sizeof(Viewnode)))) {
-	    fprintf(stderr, "Out of memory\n");
-	    free(tkeys);
+	newview = (Viewnode *) G_malloc(newsteps * sizeof(Viewnode)); /* G_fatal_error */
+	if(!newview) { /* not used */
+	    G_free(tkeys);
 	    return (NULL);
 	}
 
@@ -564,7 +662,7 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 		}
 
 /* ACS 1 line: was	if (len == 0.0) {
- 	when disabling a channel no calculation must be made at all (otherwise core dump)
+   when disabling a channel no calculation must be made at all (otherwise core dump)
 */
 		if (len == 0.0 || nvk == 0) {
 		    if (!k1) {
@@ -583,19 +681,23 @@ Viewnode *gk_make_linear_framesfromkeys(Keylist * keys, int keysteps,
 						  k1->fields[field],
 						  k2->fields[field]);
 		}
-
 	    }
 	}
 
-	free(tkeys);
+	G_free(tkeys);
 	return (newview);
     }
     else {
-	free(tkeys);
+	G_free(tkeys);
 	return (NULL);
     }
 }
 
+/*!
+  \brief Correct twist value
+
+  \param k keyframe list
+*/
 void correct_twist(Keylist * k)
 {
     Keylist *c, *p, *t;
@@ -624,6 +726,16 @@ void correct_twist(Keylist * k)
     return;
 }
 
+/*!
+  \brief Draw path
+
+  \param views Viewnode struct
+  \param steps step value
+  \param keys keyframe list
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int gk_draw_path(Viewnode * views, int steps, Keylist * keys)
 {
     Viewnode *v;

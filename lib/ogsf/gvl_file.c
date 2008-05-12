@@ -20,6 +20,7 @@
 #include <grass/gstypes.h>
 #include <grass/gsurf.h>
 #include <grass/G3d.h>
+#include <grass/glocale.h>
 
 #define LUCKY                 33
 
@@ -335,9 +336,8 @@ void *open_g3d_file(char *filename, IFLAG *type, double *min, double *max)
 
     /* search for g3d file a return his mapset */
     if (NULL == (mapset = G_find_grid3(filename,""))) {
-#ifdef DEBUG_MSG
-        fprintf(stderr, "can't find grid3 file : %s\n", filename);
-#endif
+	G_warning (_("3D raster map <%s> not found"),
+		   filename);
         return (NULL);
     }
 
