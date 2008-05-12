@@ -2,19 +2,18 @@ MODULE_TOPDIR = ..
 
 SUBDIRS =
 
-OPENGLBASED = nviz
-MOTIFBASED = xganim
-
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 
-#compile if OPENGLBASED present:
+#compile if OpenGL and Tcl/Tk present:
 ifneq ($(strip $(OPENGLLIB)),)
-    SUBDIRS += $(OPENGLBASED)
+ifneq ($(strip $(TCLTKLIBS)),)
+    SUBDIRS += nviz
+endif
 endif
 
-#compile if MOTIFBASED present:
+#compile if Motif present:
 ifneq ($(strip $(XMLIB)),)
-    SUBDIRS += $(MOTIFBASED)
+    SUBDIRS += xganim
 endif
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
