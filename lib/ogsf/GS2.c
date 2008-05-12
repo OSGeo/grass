@@ -1613,8 +1613,9 @@ int GS_load_att_map(int id, char *filename, int att)
     mapset = G_find_cell2(filename, "");
     if (mapset == NULL) {
 	/* Check for valid filename */
-	G_fatal_error ("Raster map <%s> not found",
-		       G_fully_qualified_name(filename, mapset));
+	G_warning ("Raster map <%s> not found",
+		   filename);
+	return -1;
     }
     filename = G_fully_qualified_name(filename, mapset);
 

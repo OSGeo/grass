@@ -22,6 +22,11 @@ void (*Swap_func) ();
 
 static int Cxl = 0;
 
+/*!
+  \brief Check cancel
+
+  \return code
+*/
 int GS_check_cancel(void)
 {
     Cxl_func();
@@ -29,6 +34,9 @@ int GS_check_cancel(void)
     return (Cxl);
 }
 
+/*!
+  \brief Set cancel
+*/
 void GS_set_cancel(int c)
 {
     Cxl = c;
@@ -36,6 +44,11 @@ void GS_set_cancel(int c)
     return;
 }
 
+/*!
+  \brief Set cxl function
+
+  \param pointer to function
+*/
 void GS_set_cxl_func(void (*f) (void))
 {
     Cxl_func = f;
@@ -43,7 +56,11 @@ void GS_set_cxl_func(void (*f) (void))
     return;
 }
 
+/*!
+  \brief Set swap function
 
+  \param pointer to function
+*/
 void GS_set_swap_func(void (*f) (void))
 {
     Swap_func = f;

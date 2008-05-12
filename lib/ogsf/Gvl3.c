@@ -1,7 +1,7 @@
 /*!
   \file Gvl3.c
  
-  \brief OGSF library - loading and manipulating volumes
+  \brief OGSF library - loading volumes (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,19 +13,30 @@
   for details.
   
   \author Tomas Paudits (December 2003)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <grass/gis.h>
 #include <grass/G3d.h>
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
 
-/***********************************************************************/
+/*!
+  \brief Load color table
+
+  \param[out] color_data color data buffer
+  \param name 3D raster map name
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int Gvl_load_colors_data(void **color_data, char *name)
 {
     char *mapset;
     struct Colors *colors;
 
     if (NULL == (mapset = G_find_grid3(name,""))) {
+	G_warning(_("3D raster map <%s> not found"), name);
         return (-1);
     }
 
@@ -42,7 +53,14 @@ int Gvl_load_colors_data(void **color_data, char *name)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Unload color table
+
+  \param color_data color data buffer
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int Gvl_unload_colors_data(void *color_data)
 {
     if (!G_free_colors(color_data))
@@ -53,7 +71,14 @@ int Gvl_unload_colors_data(void *color_data)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get color for value
+
+  \param color_data color data value
+  \param value data value
+
+  \return color value
+*/
 int Gvl_get_color_for_value(void *color_data, float *value)
 {
     int r, g, b;

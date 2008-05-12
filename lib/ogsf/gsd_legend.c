@@ -201,9 +201,10 @@ gsd_put_legend(char *name, GLuint fontbase, int size, int *flags,
     if (flags[2])
 	do_invert = 1;
 
-    mapset = G_find_cell(name, "");
+    mapset = G_find_cell2(name, "");
     if (mapset == NULL) {
-	fprintf(stderr, "Unable to locate raster %s\n", name);
+	G_warning (_("Raster map <%s> not found"),
+		   name);
 	return (-1);
     }
 
