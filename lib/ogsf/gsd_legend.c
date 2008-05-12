@@ -32,13 +32,13 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
-#include "rgbpack.h"
 
+#include "rgbpack.h"
 
 static float *Listcats;
 static int Listnum = 0;
-
 
 /**** TODO
 static int bigger(float *f1, float *f2)
@@ -257,7 +257,7 @@ gsd_put_legend(char *name, GLuint fontbase, int size, int *flags,
     }
 
     if (fmin == fmax)
-	Gs_warning("Range request error for legend");
+	G_warning(_("Range request error for legend"));
 
     /* set a reasonable precision */
     if (is_fp) {
@@ -616,11 +616,12 @@ could also have a LT_MOST that would limit # to some N most frequent
 			else
 			    sprintf(buff, "%d", tcell);
 		    }
-		    else if (cat_vals)
+		    else if (cat_vals) {
 			if (is_fp)
 			    sprintf(buff, "%.*lf", fprec, tdcell);
 			else
 			    sprintf(buff, "%d", tcell);
+		    }
 		}
 		if (horiz) {
 		    labpt[X] = labpos * (sr - sl) + xoff -

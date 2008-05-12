@@ -13,12 +13,15 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
+
 #include "gsget.h"
 #include "rowcol.h"
 
@@ -35,10 +38,12 @@ void gs_err(char *msg)
     return;
 }
 
-/***********************************************************************/
-/* still need to take care of library initialization, 
-   probably want to define a Surf_top of constant value (i.e., 0) */
-/***********************************************************************/
+/*!
+  \brief Library initialization
+
+  Still need to take care of library initialization, 
+  probably want to define a Surf_top of constant value (i.e., 0)
+*/
 void gs_init(void)
 {
     Surf_top = NULL;
@@ -46,17 +51,19 @@ void gs_init(void)
     return;
 }
 
+/*!
+  \brief Get geosurf struct
 
-/***********************************************************************/
+  \param id surface id
+
+  \return pointer to geosurf struct
+  \return NULL if not found
+*/
 geosurf *gs_get_surf(int id)
 {
     geosurf *gs;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_surf");
-    }
-#endif
+    G_debug(3, "gs_get_surf");
 
     for (gs = Surf_top; gs; gs = gs->next) {
 	if (gs->gsurf_id == id) {
@@ -67,16 +74,19 @@ geosurf *gs_get_surf(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get previous geosurf struct
+
+  \param id current surface id
+
+  \return pointer to geosurf struct
+  \return NULL if not found
+*/
 geosurf *gs_get_prev_surface(int id)
 {
     geosurf *ps;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_prev_surface");
-    }
-#endif
+    G_debug(3, "gs_get_prev_surface");
 
     for (ps = Surf_top; ps; ps = ps->next) {
 	if (ps->gsurf_id == id - 1) {
@@ -87,44 +97,54 @@ geosurf *gs_get_prev_surface(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get array of geosurf structs
+
+  \param gsurfs pointer to array
+
+  \return number of geosurfs
+*/
 int gs_getall_surfaces(geosurf ** gsurfs)
 {
     geosurf *gs;
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_num_surfaces");
-    }
-#endif
-
     for (i = 0, gs = Surf_top; gs; gs = gs->next, i++) {
 	gsurfs[i] = gs;
     }
 
+    G_debug(3, "gs_num_surfaces(): num=%d", i);
+
     return (i);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of surfaces
+
+  \return number of surfaces
+*/
 int gs_num_surfaces(void)
 {
     geosurf *gs;
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_num_surfaces");
-    }
-#endif
-
     for (i = 0, gs = Surf_top; gs; gs = gs->next, i++);
+
+    G_debug(3, "gs_num_surfaces(): num=%d", i);
 
     return (i);
 }
 
 
-/***********************************************************************/
+/*!
+  \brief Check if attribute is set
+
+  \param surf pointer to gsurf or NULL to look at all geosurfs
+  \param att attribute id
+
+  \return 1 attribute is set up
+  \return 0 attribute is not set up
+*/
 int gs_att_is_set(geosurf * surf, IFLAG att)
 {
     geosurf *gs;
@@ -143,16 +163,16 @@ int gs_att_is_set(geosurf * surf, IFLAG att)
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get last geosurf struct
+
+  \return pointer to geosurf struct
+*/
 geosurf *gs_get_last_surface(void)
 {
     geosurf *ls;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_last_surface");
-    }
-#endif
+    G_debug(3, "gs_get_last_surface():");
 
     if (!Surf_top) {
 	return (NULL);
@@ -160,29 +180,25 @@ geosurf *gs_get_last_surface(void)
 
     for (ls = Surf_top; ls->next; ls = ls->next);
 
-#ifdef DEBUG
-    {
-	fprintf(stderr, "last surface id: %d\n", ls->gsurf_id);
-    }
-#endif
+    G_debug(3, " last surface id: %d", ls->gsurf_id);
 
     return (ls);
 }
 
 
-/***********************************************************************/
+/*!
+  \brief Get new geosurf struct
+
+  \return pointer to geosurf struct
+*/
 geosurf *gs_get_new_surface(void)
 {
     geosurf *ns, *ls;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_new_surface");
-    }
-#endif
+    G_debug(3, "gs_get_new_surface");
 
-    if (NULL == (ns = (geosurf *) malloc(sizeof(geosurf)))) {
-	gs_err("gs_get_new_surface");
+    ns = (geosurf *) G_malloc(sizeof(geosurf)); /* G_fatal_error */
+    if (!ns) {
 	return (NULL);
     }
 
@@ -200,30 +216,39 @@ geosurf *gs_get_new_surface(void)
     return (ns);
 }
 
+/*!
+  \brief Init geosurf struct
 
-/***********************************************************************/
-/* Now xmin & ox are the same, right? - get rid of ox, oy in geosurf struct?*/
+  Now xmin & ox are the same, right? - get rid of ox, oy in geosurf struct?
+
+  \param gs pointer to geosurf struct
+  \param ox,oy x/y origin coordinates
+  \param rows number of rows
+  \param cols number of cols
+  \param xres,yres x/y resolution value
+
+  \return -1 on error
+  \return 0 on success
+*/
 int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
 		 double xres, double yres)
 {
     geosurf *ps;
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_init_surf");
-    }
-#endif
+    G_debug(3, "gs_init_surf");
 
     if (!gs) {
 	return (-1);
     }
 
+    /* default attributes */
     for (i = 0; i < MAX_ATTS; i++) {
 	gs->att[i].att_src = NOTSET_ATT;
 	gs->att[i].att_type = ATTY_INT;
     }
 
+    /* default values */
     gs->ox = ox;
     gs->oy = oy;
     gs->rows = rows;
@@ -248,6 +273,7 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     gs->curmask = NULL;
     gs->norms = NULL;
 
+    /* default z_exag value */
     if (gs->gsurf_id == FIRST_SURF_ID) {
 	gs->z_exag = 1.0;
     }
@@ -259,7 +285,14 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Init geosurf normbuff
+
+  \param gs pointer to geosurf struct
+
+  \return 0 on error
+  \return 1 on success
+*/
 int gs_init_normbuff(geosurf * gs)
 {
     long size;
@@ -269,13 +302,13 @@ int gs_init_normbuff(geosurf * gs)
     }
 
     if (gs->norms) {
-	free(gs->norms);
+	G_free(gs->norms);
     }
 
     size = gs->rows * gs->cols * sizeof(unsigned long);
 
-    if (NULL == (gs->norms = (unsigned long *) malloc(size))) {
-	gs_err("gs_init_normbuff");
+    gs->norms = (unsigned long *) G_malloc(size); /* G_fatal_error */
+    if (!gs->norms) {
 	return (-1);
     }
 
@@ -284,8 +317,13 @@ int gs_init_normbuff(geosurf * gs)
     return (1);
 }
 
+/*!
+  \brief Debugging, print 'from/to' model coordinates to stderr
 
-/***********************************************************************/
+  \todo G_debug ?
+
+  \param ft pointer to coordinates
+*/
 void print_frto(float (*ft)[4])
 {
     fprintf(stderr, "FROM: %f, %f, %f\n", ft[FROM][X], ft[FROM][Y],
@@ -295,7 +333,13 @@ void print_frto(float (*ft)[4])
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Debugging, print 'to' real coordinates to stderr
+
+  \todo G_debug ?
+
+  \param ft pointer to coordinates
+*/
 void print_realto(float *rt)
 {
     fprintf(stderr, "REAL TO: %f, %f, %f\n", rt[X], rt[Y], rt[Z]);
@@ -303,7 +347,13 @@ void print_realto(float *rt)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Debugging, 256 interger values from buffer
+
+  \todo G_debug ?
+
+  \param ft pointer to buffer
+*/
 void print_256lookup(int *buff)
 {
     int i;
@@ -321,10 +371,15 @@ void print_256lookup(int *buff)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Debugging, print geosurf fields to stderr
+
+  \todo G_debug ?
+
+  \param s pointer to geosurf struct
+*/
 void print_surf_fields(geosurf * s)
 {
-
     fprintf(stderr, "ID: %d\n", s->gsurf_id);
     fprintf(stderr, "rows: %d cols: %d\n", s->rows, s->cols);
     fprintf(stderr, "draw_mode: %x\n", s->draw_mode);
@@ -344,7 +399,13 @@ void print_surf_fields(geosurf * s)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Debugging, print geoview fields to stderr
+
+  \todo G_debug ?
+
+  \param gv pointer to geoview struct
+*/
 void print_view_fields(geoview * gv)
 {
     fprintf(stderr, "coord_sys: %d\n", gv->coord_sys);
@@ -360,16 +421,18 @@ void print_view_fields(geoview * gv)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set default attributes
+
+  \param gs pointer to geosurf struct
+  \param defs array of default values
+  \param null_defs array of null default values
+*/
 void gs_set_defaults(geosurf * gs, float *defs, float *null_defs)
 {
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_set_defaults");
-    }
-#endif
+    G_debug(3, "gs_set_defaults");
 
     for (i = 0; i < MAX_ATTS; i++) {
 	gs->att[i].constant = defs[i];
@@ -382,17 +445,17 @@ void gs_set_defaults(geosurf * gs, float *defs, float *null_defs)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Remove geosurf struct from list
+
+  \param id surface id
+*/
 void gs_delete_surf(int id)
 {
     geosurf *fs;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_delete_surf");
-    }
-#endif
-
+    G_debug(3, "gs_delete_surf");
+    
     fs = gs_get_surf(id);
 
     if (fs) {
@@ -402,17 +465,21 @@ void gs_delete_surf(int id)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Free geosurf struct
+
+  \param fs pointer to geosurf struct
+
+  \return 1 found
+  \return 0 not found
+  \return -1 on error
+*/
 int gs_free_surf(geosurf * fs)
 {
     geosurf *gs;
     int found = 0;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_free_surf");
-    }
-#endif
+    G_debug(3, "gs_free_surf");
 
     if (Surf_top) {
 	if (fs == Surf_top) {
@@ -425,14 +492,14 @@ int gs_free_surf(geosurf * fs)
 		gs_free_unshared_buffs(fs);
 
 		if (fs->curmask) {
-		    free(fs->curmask);
+		    G_free(fs->curmask);
 		}
 
 		if (fs->norms) {
-		    free(fs->norms);
+		    G_free(fs->norms);
 		}
 
-		free(fs);
+		G_free(fs);
 		Surf_top = NULL;
 	    }
 	}
@@ -451,14 +518,14 @@ int gs_free_surf(geosurf * fs)
 	    gs_free_unshared_buffs(fs);
 
 	    if (fs->curmask) {
-		free(fs->curmask);
+		G_free(fs->curmask);
 	    }
 
 	    if (fs->norms) {
-		free(fs->norms);
+		G_free(fs->norms);
 	    }
 
-	    free(fs);
+	    G_free(fs);
 	    fs = NULL;
 	}
 
@@ -468,20 +535,22 @@ int gs_free_surf(geosurf * fs)
     return (-1);
 }
 
-/***********************************************************************/
-/* fs has already been taken out of the list */
-/* this function is fairly revealing about how shared datsets work */
+/*!
+  \brief Free unshared buffers of geosurf struct
+
+  <i>fs</i> has already been taken out of the list
+
+  This function is fairly revealing about how shared datsets work
+
+  \param fs pointer to geosurf struct
+*/
 void gs_free_unshared_buffs(geosurf * fs)
 {
     geosurf *gs;
     int i, j, same;
     int old_datah;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_free_unshared_buffs");
-    }
-#endif
+    G_debug(3, "gs_free_unshared_buffs");
 
     /* for each attribute 
        if !same, free buff   
@@ -508,17 +577,19 @@ void gs_free_unshared_buffs(geosurf * fs)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of reused values
+
+  \param dh value
+
+  \return number of reused values
+*/
 int gs_num_datah_reused(int dh)
 {
     geosurf *gs;
     int ref, j;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_num_datah_reused");
-    }
-#endif
+    G_debug(3, "gs_num_datah_reused");
 
     /* for each attribute 
        if same, ++reference
@@ -537,16 +608,18 @@ int gs_num_datah_reused(int dh)
     return (ref);
 }
 
+/*!
+  \brief Get attribute type
 
-/***********************************************************************/
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+
+  \return -1 on error
+  \return attribute type
+*/
 int gs_get_att_type(geosurf * gs, int desc)
 {
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_att_type");
-    }
-#endif
+    G_debug(3, "gs_get_att_type");
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -561,15 +634,18 @@ int gs_get_att_type(geosurf * gs, int desc)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get attribute source
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+
+  \return -1 on error
+  \return attribute source id
+*/
 int gs_get_att_src(geosurf * gs, int desc)
 {
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_get_att_src");
-    }
-#endif
+    G_debug(3, "gs_get_att_src");
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -582,7 +658,16 @@ int gs_get_att_src(geosurf * gs, int desc)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get attribute typbuff
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+  \param to_write
+
+  \return NULL on error
+  \return pointer to typbuff
+*/
 typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
 {
     typbuff *tb;
@@ -607,16 +692,21 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Allocate attribute buffer
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+  \param type buffer type
+
+  \return -1 on error
+  \return pointer to typbuff (casted)
+*/
 int gs_malloc_att_buff(geosurf * gs, int desc, int type)
 {
     int hdata, dims[2], ndims;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_malloc_att_buff");
-    }
-#endif
+    G_debug(3, "gs_malloc_att_buff");
 
     if (gs) {
 	if (0 < (hdata = gs->att[desc].hdata)) {
@@ -632,21 +722,24 @@ int gs_malloc_att_buff(geosurf * gs, int desc, int type)
     return (-1);
 }
 
+/*!
+  \brief Allocate attribute lookup
 
-/***********************************************************************/
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+
+  \return -1 on error
+  \return pointer to typbuff (casted)
+*/
 int gs_malloc_lookup(geosurf * gs, int desc)
 {
     int size;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_malloc_lookup");
-    }
-#endif
+    G_debug(3, "gs_malloc_lookup");
 
     if (gs) {
 	if (gs->att[desc].lookup) {
-	    free(gs->att[desc].lookup);
+	    G_free(gs->att[desc].lookup);
 	    gs->att[desc].lookup = NULL;
 	}
 
@@ -655,9 +748,8 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 	    size = 32768 * sizeof(int);
 
 	    /* positive integers only, because use as array index */
-	    if (NULL == (gs->att[desc].lookup = (int *) malloc(size))) {
-		gs_err("gs_malloc_lookup");
-
+	    gs->att[desc].lookup = (int *) G_malloc(size); /* G_fatal_error */
+	    if (!gs->att[desc].lookup) {
 		return (-1);
 	    }
 
@@ -666,16 +758,14 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 	    size = 256 * sizeof(int);
 
 	    /* unsigned char */
-	    if (NULL == (gs->att[desc].lookup = (int *) malloc(size))) {
-		gs_err("gs_malloc_lookup");
-
+	    gs->att[desc].lookup = (int *) G_malloc(size);
+	    if (!gs->att[desc].lookup) {
 		return (-1);
 	    }
 
 	    break;
 	default:
-	    gs_err("bad type: gs_malloc_lookup");
-
+	    G_warning("bad type: gs_malloc_lookup");
 	    return (-1);
 	}
 
@@ -688,15 +778,21 @@ int gs_malloc_lookup(geosurf * gs, int desc)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set attribute type
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+  \param type attribute type
+
+  \return -1 on error
+  \return 0 on success
+*/
 int gs_set_att_type(geosurf * gs, int desc, int type)
 {
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_set_att_type");
-    }
-#endif
+    G_debug(3, "gs_set_att_type(): desc=%d, type=%d",
+	    desc, type);
 
     if (gs && LEGAL_TYPE(type)) {
 	gs->att[desc].att_type = type;
@@ -707,27 +803,31 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set attribute source
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+  \param src source id
+
+  \return -1 on error
+  \return 0 on success
+*/
 int gs_set_att_src(geosurf * gs, int desc, int src)
 {
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_set_att_src");
-    }
-#endif
+    G_debug(3, "gs_set_att_src");
 
     /* check if old source was MAP_ATT, free buff */
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
 	if (1 == gs_num_datah_reused(gs->att[desc].hdata)) {
 	    /* only reference */
-	    fprintf(stderr, "replacing existing map\n");
+	    G_warning (_("gs_set_att_src(): replacing existing map"));
 	    gsds_free_datah(gs->att[desc].hdata);
 	}
 
 	if (ATT_TOPO == desc) {
 	    if (gs->norms) {
-		free(gs->norms);
+		G_free(gs->norms);
 	    }
 
 	    gs->norms = NULL;
@@ -744,16 +844,21 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
     return (-1);
 }
 
-/***********************************************************************/
-/* TODO: set typbuf constant */
+/*!
+  \brief Set attribute constant value
+
+  \todo set typbuf constant
+
+  \param gs pointer to geosurf struct
+  \param desc attribute id
+  \param constant constant value
+
+  \return 0 on success
+  \return -1 on error
+*/
 int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gs_set_att_const");
-    }
-#endif
+    G_debug(3, "gs_set_att_const");
 
     if (gs) {
 	gs->att[desc].constant = constant;
@@ -773,7 +878,11 @@ int gs_set_att_const(geosurf * gs, int desc, float constant)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Set geosurf mask mode
+
+  \param invert invert mask
+*/
 void gs_set_maskmode(int invert)
 {
     Invertmask = invert;
@@ -781,14 +890,32 @@ void gs_set_maskmode(int invert)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Check if mask is defined
+
+  \param gs pointer to geosurf struct
+
+  \return 1 if defined
+  \return 0 not defined
+*/
 int gs_mask_defined(geosurf * gs)
 {
     return (gs->att[ATT_MASK].att_src != NOTSET_ATT);
 }
 
-/***********************************************************************/
-/* should only be called when setting up the current mask (gs_bm.c) */
+/*!
+  \brief
+
+  Should only be called when setting up the current mask (gs_bm.c)
+
+  \param tb pointer to typbuff
+  \param col number of cols
+  \param row number of rows
+  \param offset offset value
+
+  \return 1
+  \return 0
+*/
 int gs_masked(typbuff * tb, int col, int row, int offset)
 {
     int ret;
@@ -814,9 +941,17 @@ int gs_masked(typbuff * tb, int col, int row, int offset)
     return (Invertmask ? ret : !ret);
 }
 
-/***********************************************************************/
-/* call this one when you already know att_src is MAP_ATT 
-   - returns packed color for catagory at offset */
+/*!
+  \brief
+
+  Call this one when you already know att_src is MAP_ATT 
+
+  \param cobuff
+  \param coloratt color attribute
+  \param offset offset value
+  
+  \return packed color for catagory at offset
+*/
 int gs_mapcolor(typbuff * cobuff, gsurf_att * coloratt, int offset)
 {
     if (coloratt->lookup) {
@@ -828,12 +963,24 @@ int gs_mapcolor(typbuff * cobuff, gsurf_att * coloratt, int offset)
     return (cobuff->ib[offset]);
 }
 
-/* In the following functions, "extents" refers to translated extents for 
-a single surface, while "range" refers to accumulated extents of all
-loaded surfaces */
+/*
+  In the following functions, "extents" refers to translated extents for 
+  a single surface, while "range" refers to accumulated extents of all
+  loaded surfaces
+*/
 
-/***********************************************************************/
-/* TODO: pass flag to use zminmasked instead of zmin */
+/*!
+  \brief Get z-extent values
+  
+  \todo pass flag to use zminmasked instead of zmin
+
+  \param gs pointer to geosurf struct
+  \param[out] min z-min value
+  \param[out] max z-max value
+  \param[out] mid z-middle value
+
+  \return 1
+*/
 int gs_get_zextents(geosurf * gs, float *min, float *max, float *mid)
 {
     *min = gs->zmin + gs->z_trans;
@@ -843,7 +990,15 @@ int gs_get_zextents(geosurf * gs, float *min, float *max, float *mid)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get x-extent values
+  
+  \param gs pointer to geosurf struct
+  \param[out] min x-min value
+  \param[out] max x-max value
+
+  \return 1
+*/
 int gs_get_xextents(geosurf * gs, float *min, float *max)
 {
     *min = gs->xmin + gs->x_trans;
@@ -852,7 +1007,15 @@ int gs_get_xextents(geosurf * gs, float *min, float *max)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get y-extent values
+  
+  \param gs pointer to geosurf struct
+  \param[out] min y-min value
+  \param[out] max y-max value
+
+  \return 1
+*/
 int gs_get_yextents(geosurf * gs, float *min, float *max)
 {
     *min = gs->ymin + gs->y_trans;
@@ -862,9 +1025,18 @@ int gs_get_yextents(geosurf * gs, float *min, float *max)
 }
 
 
-/***********************************************************************/
-/* TODO: pass flag to use zminmasked instead of zmin */
-/* could also have this return a weighted average for vertical "centroid" */
+/*!
+  \brief Get z-range
+
+  \todo pass flag to use zminmasked instead of zmin
+  could also have this return a weighted average for vertical "centroid"
+
+  \param[out] min z-min value
+  \param[out] max z-max value
+
+  \return -1 on error (no surface)
+  \return 1 on success
+*/
 int gs_get_zrange0(float *min, float *max)
 {
     geosurf *gs;
@@ -890,7 +1062,15 @@ int gs_get_zrange0(float *min, float *max)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get z-range
+
+  \param[out] min z-min value
+  \param[out] max z-max value
+
+  \return -1 on error (no surface)
+  \return 1 on success
+*/
 int gs_get_zrange(float *min, float *max)
 {
     geosurf *gs;
@@ -920,9 +1100,15 @@ int gs_get_zrange(float *min, float *max)
     return (1);
 }
 
+/*!
+  \brief Get x-range
 
+  \param[out] min x-min value
+  \param[out] max x-max value
 
-/***********************************************************************/
+  \return -1 on error (no surface)
+  \return 1 on success
+*/
 int gs_get_xrange(float *min, float *max)
 {
     geosurf *gs;
@@ -952,7 +1138,15 @@ int gs_get_xrange(float *min, float *max)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get y-range
+
+  \param[out] min y-min value
+  \param[out] max y-max value
+
+  \return -1 on error (no surface)
+  \return 1 on success
+*/
 int gs_get_yrange(float *min, float *max)
 {
     geosurf *gs;
@@ -982,10 +1176,16 @@ int gs_get_yrange(float *min, float *max)
     return (1);
 }
 
+/*!
+  \brief Get average z-max value
 
+  Useful for setting position of cplane, lighting ball, etc.
 
-/***********************************************************************/
-/* useful for setting position of cplane, lighting ball, etc. */
+  \param[out] azmax average z-max value
+
+  \return -1 on error
+  \return 1 on success
+*/
 int gs_get_data_avg_zmax(float *azmax)
 {
     float zmax;
@@ -1007,7 +1207,14 @@ int gs_get_data_avg_zmax(float *azmax)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get data center point
+
+  \param[out] center (array X,Y,Z)
+
+  \return -1 on error
+  \return 1 on success
+*/
 int gs_get_datacenter(float *cen)
 {
     float zmin, zmax, ymin, ymax, xmin, xmax;
@@ -1060,7 +1267,12 @@ int gs_get_datacenter(float *cen)
 }
 
 
-/***********************************************************************/
+/*!
+  \brief Set for geosurf need-to-update mark
+
+  \return -1 no surface available
+  \return 1 on success
+*/
 int gs_setall_norm_needupdate(void)
 {
     geosurf *gs;
@@ -1079,7 +1291,15 @@ int gs_setall_norm_needupdate(void)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Check if point is masked
+
+  \param gs pointer to geosurf struct
+  \param pt point coordinates (X,Y,Z)
+
+  \return 1 masked
+  \return 0 not masked
+*/
 int gs_point_is_masked(geosurf * gs, float *pt)
 {
     int vrow, vcol, drow, dcol;
@@ -1168,7 +1388,18 @@ int gs_point_is_masked(geosurf * gs, float *pt)
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Calculate distance on surface
+
+  \param gs pointer to geosurf struct
+  \param p1 from point
+  \param p2 to point
+  \param[out] dist distnace
+  \param use_exag use exag for calculation
+
+  \return 0 on error (points not in region)
+  \return 1 on success
+*/
 int gs_distance_onsurf(geosurf * gs, float *p1, float *p2, float *dist,
 		       int use_exag)
 {
