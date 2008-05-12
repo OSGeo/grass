@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <math.h>
 
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
 #include <grass/keyframe.h>
 #include <grass/kftypes.h>
