@@ -174,7 +174,7 @@ void gk_follow_frames(Viewnode * view, int numsteps, Keylist * keys, int step,
 
 	GS_get_from(tmp);
 	G_debug(3, "gk_follow_frames():");
-	G_debug(3, "  MASK: %x", mask);
+	G_debug(3, "  MASK: %lx", mask);
 	G_debug(3, "  FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
 
 	/* ACS 1 line: was 	GS_get_focus(tmp);
