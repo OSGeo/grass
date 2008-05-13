@@ -13,12 +13,15 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/ogsf_proto.h>
 #include <grass/gstypes.h>
 
@@ -43,8 +46,16 @@ AVOutputFormat *fmt;
 AVFormatContext *oc;
 AVStream *video_st;
 
+/*!
+  \brief Add a video output stream
 
-/* add a video output stream */
+  \param oc
+  \param codec_id
+  \param w
+  \param h
+
+  \return 
+*/
 static AVStream *add_video_stream(AVFormatContext *oc, int codec_id, int w, int h)
 {
     AVCodecContext *c;
@@ -52,7 +63,7 @@ static AVStream *add_video_stream(AVFormatContext *oc, int codec_id, int w, int 
 
     st = av_new_stream(oc, 0);
     if (!st) {
-        fprintf(stderr, "Could not alloc stream\n");
+	G_warning (_("Unable to allocate stream"));
 	return NULL;
     }
 
@@ -86,13 +97,23 @@ static AVStream *add_video_stream(AVFormatContext *oc, int codec_id, int w, int 
     /* some formats want stream headers to be separate */
     if(!strcmp(oc->oformat->name, "mp4") || !strcmp(oc->oformat->name, "mov") || !strcmp(oc->oformat->name, "3gp"))
         c->flags |= CODEC_FLAG_GLOBAL_HEADER;
-
+    
     c->flags |= CODEC_FLAG_QSCALE;
     c->global_quality = st->quality = FF_QP2LAMBDA * 10;
 
     return st;
 }
 
+/*!
+  \brief Allocate picture
+
+  \param pix_fmt
+  \param width picture width
+  \param height picture height
+
+  \return pointer to AVFrame struct
+  \return NULL on failure
+*/
 static AVFrame *alloc_picture(int pix_fmt, int width, int height)
 {
     AVFrame *picture;
@@ -100,19 +121,30 @@ static AVFrame *alloc_picture(int pix_fmt, int width, int height)
     int size;
 
     picture = avcodec_alloc_frame();
+    
     if (!picture)
         return NULL;
+    
     size = avpicture_get_size(pix_fmt, width, height);
     picture_buf = av_malloc(size);
+    
     if (!picture_buf) {
         av_free(picture);
         return NULL;
     }
+    
     avpicture_fill((AVPicture *)picture, picture_buf,
                    pix_fmt, width, height);
+  
     return picture;
 }
 
+/*!
+  \brief Open video
+
+  \param oc
+  \param st
+*/
 static void open_video(AVFormatContext *oc, AVStream *st)
 {
     AVCodec *codec;
@@ -123,13 +155,13 @@ static void open_video(AVFormatContext *oc, AVStream *st)
     /* find the video encoder */
     codec = avcodec_find_encoder(c->codec_id);
     if (!codec) {
-        fprintf(stderr, "video codec not found\n");
+        G_warning (_("Video codec not found"));
         return;
     }
 
     /* open the codec */
     if (avcodec_open(c, codec) < 0) {
-        fprintf(stderr, "could not open codec\n");
+        G_warning (_("Unable to open codec"));
         return;
     }
 
@@ -148,7 +180,7 @@ static void open_video(AVFormatContext *oc, AVStream *st)
     /* allocate the encoded raw picture */
     picture = alloc_picture(c->pix_fmt, c->width, c->height);
     if (!picture) {
-        fprintf(stderr, "Could not allocate picture\n");
+        G_warning (_("Unable to allocate picture"));
         return;
     }
 
@@ -159,12 +191,18 @@ static void open_video(AVFormatContext *oc, AVStream *st)
     if (c->pix_fmt != PIX_FMT_YUV420P) {
         tmp_picture = alloc_picture(PIX_FMT_YUV420P, c->width, c->height);
         if (!tmp_picture) {
-            fprintf(stderr, "Could not allocate temporary picture\n");
+            G_warning (_("Unable to allocate temporary picture"));
             return;
         }
     }
 }
 
+/*!
+  \brief Write video frame
+
+  \param oc
+  \param st
+*/
 static void write_video_frame(AVFormatContext *oc, AVStream *st)
 {
     int out_size, ret;
@@ -207,12 +245,18 @@ static void write_video_frame(AVFormatContext *oc, AVStream *st)
         }
     }
     if (ret != 0) {
-        fprintf(stderr, "Error while writing video frame\n");
+        G_warning (_("Error while writing video frame"));
         return;
     }
     frame_count++;
 }
 
+/*!
+  \brief Close video
+
+  \param oc [unused]
+  \param st
+*/
 static void close_video(AVFormatContext *oc, AVStream *st)
 {
     avcodec_close(st->codec);
@@ -227,10 +271,14 @@ static void close_video(AVFormatContext *oc, AVStream *st)
 
 #endif
 
-/******************************************
- * initialize FAME setup mpeg defaults and
- * open file for writing
-******************************************/
+/*!
+ \brief Initialize FAME setup mpeg defaults and open file for writing
+
+ \param filename file name
+
+ \return -1 on failure
+ \return 0 on success
+*/
 int gsd_init_mpeg(char *filename)
 {
 #ifdef HAVE_FFMPEG
@@ -243,7 +291,8 @@ int gsd_init_mpeg(char *filename)
         b = tmp[1];
         t = tmp[1] + tmp[3] - 1;
 
-	fprintf(stderr, "Opening MPEG stream <%s> ...\n", filename);
+	G_verbose_message (_("Opening MPEG stream <%s>..."),
+			   filename);
 
 	/* initialize libavcodec, and register all codecs and formats */
     	av_register_all();
@@ -251,18 +300,18 @@ int gsd_init_mpeg(char *filename)
 	/* auto detect the output format from the name. default is mpeg. */
     fmt = guess_format(NULL, filename, NULL);
     if (!fmt) {
-        printf("Could not deduce output format from file extension: using MPEG.\n");
+        G_warning (_("Unable to deduce output format from file extension: using MPEG"));
         fmt = guess_format("mpeg", NULL, NULL);
     }
     if (!fmt) {
-        fprintf(stderr, "Could not find suitable output format\n");
+        G_warning (_("Unable to find suitable output format"));
         return (-1);
     }
 
     /* allocate the output media context */
     oc = av_alloc_format_context();
     if (!oc) {
-        fprintf(stderr, "Memory error\n");
+        G_warning (_("Out of memory"));
         return(-1);
     }
     oc->oformat = fmt;
@@ -273,7 +322,7 @@ int gsd_init_mpeg(char *filename)
 #ifdef USE_XVID
     fmt->video_codec = CODEC_ID_XVID;
 #endif
-
+    
     video_st = NULL;
     if (fmt->video_codec != CODEC_ID_NONE) {
         video_st = add_video_stream(oc, fmt->video_codec, (r - l + 1), (t - b + 1) );
@@ -281,7 +330,7 @@ int gsd_init_mpeg(char *filename)
 
     /* set the output parameters (must be done even if no parameters). */
     if (av_set_parameters(oc, NULL) < 0) {
-        fprintf(stderr, "Invalid output format parameters\n");
+        G_warning (_("Invalid output format parameters"));
         return (-1);
     }
 
@@ -295,7 +344,8 @@ int gsd_init_mpeg(char *filename)
         /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
         if (url_fopen(&oc->pb, filename, URL_WRONLY) < 0) {
-            fprintf(stderr, "Could not open '%s'\n", filename);
+            G_warning (_("Unable to open <%s>"),
+			 filename);
             return (-1);
         }
     }
@@ -305,34 +355,35 @@ int gsd_init_mpeg(char *filename)
 
 
 #else
-	fprintf(stderr, "NVIZ has not been built with MPEG output support\n");
-	return(-1);
+    G_warning (_("NVIZ has not been built with MPEG output support"));
+    return(-1);
 #endif
-
-        return (0);
-
+    return (0);
 }
 
-/*********************************************
- * get RGB pixbuf and convert to YUV 4:2:0
- * image and write to mpeg stream
-*********************************************/
+/*!
+  \brief Get RGB pixbuf and convert to YUV 4:2:0
+
+  Image and write to mpeg stream
+
+  \return 0
+*/
 int gsd_write_mpegframe(void)
 {
 #ifdef HAVE_FFMPEG
-        unsigned int xsize, ysize;
-        int x, y, xy, xy_uv;
-        int yy, uu, vv;
-        unsigned char *pixbuf;
-
-        gsd_getimage(&pixbuf, &xsize, &ysize);
-        xy = xy_uv = 0;
-        for (y = ysize - 1; y >= 0; y--) {
-          for (x = 0; x < xsize; x++) {
+    unsigned int xsize, ysize;
+    int x, y, xy, xy_uv;
+    int yy, uu, vv;
+    unsigned char *pixbuf;
+    
+    gsd_getimage(&pixbuf, &xsize, &ysize);
+    xy = xy_uv = 0;
+    for (y = ysize - 1; y >= 0; y--) {
+	for (x = 0; x < xsize; x++) {
 	    unsigned char r = pixbuf[(y * xsize + x) * 4 + 0];
 	    unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
 	    unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
-
+	    
             yy = (0.257 * r) + (0.504 * g) + (0.098 * b) + 16;;
             vv = (0.439 * r) - (0.368 * g) - (0.071 * b) + 128;
             uu = -(0.148 * r) - (0.291 * g) + (0.439 * b) + 128;
@@ -341,57 +392,58 @@ int gsd_write_mpegframe(void)
             
             if( (x % 2) && (y % 2) )
             {
-                    picture->data[1][xy_uv] = uu;
-                    picture->data[2][xy_uv] = vv;
-                    xy_uv++;
+		picture->data[1][xy_uv] = uu;
+		picture->data[2][xy_uv] = vv;
+		xy_uv++;
             }
-
+	    
             xy++;
-          }
-
-        }
-        free(pixbuf);
-
-	write_video_frame(oc, video_st);
+	}
 	
-
+        }
+    G_free(pixbuf);
+    
+    write_video_frame(oc, video_st);
+    
+    
 #endif
-
-        return (0);
-
+    
+    return (0);
 }
 
-/****************************************
- * close the mpeg, free buffer, and close file
-****************************************/
+/*!
+ \brief Close the mpeg, free buffer, and close file
+
+ \return 0
+*/
 int gsd_close_mpeg(void)
 {
 #ifdef HAVE_FFMPEG
-int i;
-
-	close_video(oc, video_st);
-
-	/* write the trailer, if any */
-    	av_write_trailer(oc);
-
-	/* free the streams */
-    	for(i = 0; i < oc->nb_streams; i++) {
-        	av_freep(&oc->streams[i]->codec);
-        	av_freep(&oc->streams[i]);
-    	}
-
+    int i;
+    
+    close_video(oc, video_st);
+    
+    /* write the trailer, if any */
+    av_write_trailer(oc);
+    
+    /* free the streams */
+    for(i = 0; i < oc->nb_streams; i++) {
+	av_freep(&oc->streams[i]->codec);
+	av_freep(&oc->streams[i]);
+    }
+    
     if (!(fmt->flags & AVFMT_NOFILE)) {
         /* close the output file */
         url_fclose(&oc->pb);
     }
-
+    
     /* free the stream */
     av_free(oc);
 
-
-	fprintf(stderr, "Closed MPEG stream.\n");
+    
+    G_debug (3, "Closed MPEG stream");
 #endif
-
-        return (0);
+    
+    return (0);
 }
 

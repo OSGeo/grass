@@ -15,17 +15,24 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <string.h>
 #include <assert.h>
 #include <grass/gstypes.h>
 #include <grass/ogsf_proto.h>
+
 #include "rgbpack.h"
 
+/*!
+  \brief Get text width
 
+  \param s text string
+  \param size size
 
-/****************************************/
+  \return text width
+*/
 int gsd_get_txtwidth(char *s, int size)
 {
     int width, len;
@@ -36,8 +43,13 @@ int gsd_get_txtwidth(char *s, int size)
     return (width);
 }
 
+/*!
+  \brief Get text  height
 
-/*****************************************/
+  \param size size
+
+  \return text height
+*/
 int gsd_get_txtheight(int size)
 {
     unsigned long height;
@@ -48,30 +60,41 @@ int gsd_get_txtheight(int size)
 
 }
 
+/*!
+  \brief Get text descender
 
-/*****************************************/
+  yorig ?? 
+  
+  Is this defined somewhere ?
+
+  \return 2
+*/
 int get_txtdescender()
 {
-
-/* yorig ?? 
- * Is this defined somewhere ?
- */
-
     return (2);
 }
 
-/*****************************************/
+/*!
+  \brief Get text offset
+
+  xorig ??
+  
+  Is this defined somewhere ?
+
+  \return 0
+*/
 int get_txtxoffset()
 {
-
-/* xorig ??
- * Is this defined somewhere ?
- */
-
     return (0);
 }
 
-/*****************************************/
+/*!
+  \brief Display label
+
+  \param fontbase font-base
+  \param lab_pos label position
+  \param txt text string
+*/
 void do_label_display(GLuint fontbase, float *lab_pos, char *txt)
 {
     glRasterPos2f(lab_pos[X], lab_pos[Y]);

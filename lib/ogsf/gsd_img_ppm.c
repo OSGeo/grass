@@ -18,20 +18,32 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
-  Markus Neteler
-  Bob Covill
-  Jaro Hofierka
+  \author Markus Neteler
+  \author Bob Covill
+  \author Jaro Hofierka
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/ogsf_proto.h>
 #include <grass/gstypes.h>
 
+/*!
+  \brief Write ppm file
+
+  \param name file name
+
+  \return 1 on failure
+  \return 0 on success
+*/
 int GS_write_ppm(char *name)
 {
-    int y, x;
+    unsigned int x;
+    int y;
     unsigned int xsize, ysize;
     FILE *fp;
     unsigned char *pixbuf;
@@ -40,7 +52,8 @@ int GS_write_ppm(char *name)
 
 
     if (NULL == (fp = fopen(name, "w"))) {
-	fprintf(stderr, "Cannot open file for output.\n");
+	G_warning (_("Unable to open file <%s> for writing"),
+		   name);
 	return(1);
     }
 
@@ -58,22 +71,33 @@ int GS_write_ppm(char *name)
 	}
 
     }
-    free(pixbuf);
+    G_free(pixbuf);
     fclose(fp);
 
     return (0);
 }
 
+/*!
+  \brief Write zoom to file
+
+  \param name file name
+  \param xsize,ysize
+
+  \return 1 on failure
+  \return 0 on success
+*/
 int GS_write_zoom(char *name, unsigned int xsize, unsigned int ysize)
 {
-    int y, x;
+    unsigned int x;
+    int y;
     FILE *fp;
     unsigned char *pixbuf;
 
     gsd_writeView(&pixbuf, xsize, ysize);
 
     if (NULL == (fp = fopen(name, "w"))) {
-	fprintf(stderr, "Cannot open file for output.\n");
+	G_warning (_("Unable to open file <%s> for writing"),
+		   name);
 	return(1);
     }
 
@@ -96,4 +120,3 @@ int GS_write_zoom(char *name, unsigned int xsize, unsigned int ysize)
 
     return (0);
 }
-
