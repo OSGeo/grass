@@ -1,60 +1,67 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-Locates the closest points between "objects" in two raster maps.  An
+<em>r.distance</em> locates the closest points between "objects" in two raster maps.  An
 "object" is defined as all the grid cells that have the same category
 number, and closest means having the shortest "straight-line" distance.
 The cell centers are considered for the distance calculation (two
 adjacent grid cells have the distance between their cell centers).
+<p>
 
-<P>
+The output is an ascii list, one line per pair of objects, in the following form:
+<div class="code"><pre>
+cat1:cat2:distance:east1:north1:east2:north2
+</pre></div>
 
-The output is an ascii list, one line per pair of objects
-<PRE>
-           cat1:cat2:distance:east1:north1:east2:north2
-</PRE>
+<dl>
+<dt><b>cat1</b>
+<dd>Category number from map1
 
-<H3>Explanation:</H3>
-<DL>
-<DT><B>cat1</B>
-<DD>Category number from map1
+<dt><b>cat2</b>
+<dd>Category number from map2
 
-<DT><B>cat2</B>
-<DD>Category number from map2
+<dt><b>distance</b>
+<dd>The distance in meters between "cat1" and "cat2"
 
-<DT><B>distance</B>
-<DD>The distance in meters between "cat1" and "cat2"
+<dt><b>east1,north1</b>
+<dd>The coordinates of the grid cell "cat1" which is closest to "cat2"
 
-<DT><B>east1,north1</B>
-<DD>The coordinates of the grid cell "cat1" which is closest to "cat2"
+<dt><b>east2,north2</b>
+<dd>The coordinates of the grid cell "cat2" which is closest to "cat1"
+</dl>
 
-<DT><B>east2,north2</B>
-<DD>The coordinates of the grid cell "cat2" which is closest to "cat1"
-</DL>
+<h3>Flags</h3>
+<b>-l</b> 
+The -l flag outputs the category labels of the matched raster objects at the 
+beginning of the line, if they exist.
+<p>
+<b>-o</b>
+The -o flag reports zero distance if the input rasters are overlapping.
+<p>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 The output format lends itself to filtering.  For example, to "see" lines
 connecting each of the category pairs in two maps, filter the output using
-awk and then into <EM>d.map</EM> graph:
-<P>
+awk and then into <em>d.graph</em>:
+<p>
 
-<EM>r.distance maps=map1,map2 | \
-<br>awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m</EM>
+<div class="code"><pre>r.distance maps=map1,map2 | \
+awk -F: '{print "move",$4,$5,"\ndraw",$6,$7}' | d.graph -m</pre></div>
 
-<P>
-To create a site list of all the "map1" coordinates, filter the output into
-awk and then into <EM>s.in.ascii</EM>:
-<P>
+<p>
+To create a vector map of all the "map1" coordinates, filter the output into
+awk and then into <em>v.in.ascii</em>:
+<p>
 
-<EM>r.distance maps=map1,map2 | \
-<br>awk -F: '{print $4,$5}' | s.in.ascii sites=name</EM>
+<div class="code"><pre>r.distance maps=map1,map2 | \
+<br>awk -F: '{print $4,$5}' | v.in.ascii format=point output=name fs=space</pre></div>
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="r.buffer.html">r.buffer</A></EM>,
-<EM><A HREF="r.cost.html">r.cost</A></EM>,
-<EM><A HREF="r.drain.html">r.drain</A></EM>,
-<EM><a href="v.distance.html">v.distance</a></EM>
+<h2>SEE ALSO</h2>
+<em><a href="r.buffer.html">r.buffer</a></em>,
+<em><a href="r.cost.html">r.cost</a></em>,
+<em><a href="r.drain.html">r.drain</a></em>,
+<em><a href="v.distance.html">v.distance</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 
 <p><i>Last changed: $Date$</i></p>
