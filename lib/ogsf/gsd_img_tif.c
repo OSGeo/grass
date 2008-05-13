@@ -18,8 +18,9 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
-  Markus Neteler
-  Jaro Hofierka
+  \author Markus Neteler
+  \author Jaro Hofierka
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <grass/config.h>
@@ -29,9 +30,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
+
 #include <grass/gis.h>
 #include <grass/gstypes.h>
 #include <grass/glocale.h>
+
 #include "tiffio.h"
 
 unsigned short config = PLANARCONFIG_CONTIG;

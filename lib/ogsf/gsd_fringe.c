@@ -1,7 +1,7 @@
 /*!
   \file gsd_fonts.c
  
-  \brief OGSF library - loading and manipulating surfaces
+  \brief OGSF library - manipulating surfaces/fridge (lower level function)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -15,6 +15,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdio.h>
@@ -23,11 +24,12 @@
 #include "gsget.h"
 #include "rowcol.h"
 
-
 #define FRINGE_FORE 0x000000
 #define FRINGE_WIDTH 2
 
-/* Normals */
+/*!
+  \brief Normals
+*/
 float Nnorth[] = { 0.0, 0.8, 0.6 };
 float Nsouth[] = { 0.0, -0.8, 0.6 };
 float Neast[] = { 0.8, 0.0, 0.6 };
@@ -35,17 +37,20 @@ float Nwest[] = { -0.8, 0.0, 0.6 };
 float Ntop[] = { 0.0, 0.0, 1.0 };
 float Nbottom[] = { 0.0, 0.0, -1.0 };
 
-void
-gsd_display_fringe (geosurf * surf, unsigned long clr, float elev, int where[4])
+/*!
+  \brief Display fridge
+
+  \todo add elevation for bottom
+  add color option
+  add ruler grid lines
+
+  \param surf surface (geosurf)
+  \param clr
+  \param elev
+  \param where
+*/
+void gsd_display_fringe (geosurf * surf, unsigned long clr, float elev, int where[4])
 {
-
-    /* TODO -- add elevation for bottom
-     *      -- add color option
-     *      -- add ruler grid lines
-     */
-
-
-
     float bot, xres, yres;   /* world size of view cell */
     int ycnt, xcnt;    /* number of view cells across */
     float xmax, ymax;
@@ -58,10 +63,10 @@ gsd_display_fringe (geosurf * surf, unsigned long clr, float elev, int where[4])
     
     xmax = surf->xmax;
     ymax = surf->ymax;
-  
-/* 
-   bot = surf->zmin - ((surf->zrange/4.) * surf->z_exag);
-*/
+    
+    /* 
+       bot = surf->zmin - ((surf->zrange/4.) * surf->z_exag);
+    */
     bot = elev - ((surf->zrange/4.) * surf->z_exag);
     
     
@@ -125,11 +130,16 @@ gsd_display_fringe (geosurf * surf, unsigned long clr, float elev, int where[4])
     return;
 }
 
+/*!
+  \brief ADD
 
-void
-gsd_fringe_horiz_poly (float bot, geosurf * surf, int row, int side)
+  \param bot
+  \param surf surface (geosurf)
+  \param row
+  \param side
+*/
+void gsd_fringe_horiz_poly (float bot, geosurf * surf, int row, int side)
 {
-
     int col;
     int cnt;
     float pt[4];
@@ -148,7 +158,7 @@ gsd_fringe_horiz_poly (float bot, geosurf * surf, int row, int side)
     gsd_bgnpolygon();
 
     col = 0;
-/* floor left */
+    /* floor left */
     pt[X] = col * (surf->x_mod *  surf->xres) ;
     pt[Y] = ((surf->rows - 1) * surf->yres) - ((row+side)*(surf->y_mod*surf->yres));
     pt[Z] = bot;
@@ -187,9 +197,15 @@ gsd_fringe_horiz_poly (float bot, geosurf * surf, int row, int side)
     return;
 }
 
+/*!
+  \brief ADD
 
-void
-gsd_fringe_horiz_line (float bot, geosurf * surf, int row, int side)
+  \param bot
+  \param surf surface (geosurf)
+  \param row
+  \param side
+*/
+void gsd_fringe_horiz_line (float bot, geosurf * surf, int row, int side)
 {
     int col;
     int cnt;
@@ -210,12 +226,11 @@ gsd_fringe_horiz_line (float bot, geosurf * surf, int row, int side)
     gsd_bgnline();
 
     col = 0;
-/* floor left */
+    /* floor left */
     pt[X] = col * (surf->x_mod *  surf->xres) ;
     pt[Y] = ((surf->rows - 1) * surf->yres) - ((row+side)*(surf->y_mod*surf->yres));
     pt[Z] = bot;
     gsd_vert_func(pt);
-
 
     offset = (row*surf->y_mod*surf->cols) + (col*surf->x_mod) ;
     GET_MAPATT(buff, offset, pt[Z]);
@@ -234,7 +249,7 @@ gsd_fringe_horiz_line (float bot, geosurf * surf, int row, int side)
 	gsd_vert_func(pt);
 	cnt++;
     }
-
+    
     col--;
     pt[X] = col * (surf->x_mod *  surf->xres) ;
     pt[Y] = ((surf->rows - 1) * surf->yres) - ((row+side)*(surf->y_mod*surf->yres));
@@ -256,9 +271,15 @@ gsd_fringe_horiz_line (float bot, geosurf * surf, int row, int side)
     return;
 }
 
+/*!
+  \brief ADD
 
-void
-gsd_fringe_vert_poly (float bot, geosurf * surf, int col, int side)
+  \param bot
+  \param surf surface (geosurf)
+  \param col
+  \param side [unused]
+*/
+void gsd_fringe_vert_poly (float bot, geosurf * surf, int col, int side)
 {
 
     int row;
@@ -318,9 +339,15 @@ gsd_fringe_vert_poly (float bot, geosurf * surf, int col, int side)
     return;
 }
 
-
-void
-gsd_fringe_vert_line (float bot, geosurf * surf, int col, int side)
+/*!						
+  \brief ADD
+  
+  \param bot
+  \param surf surface (geosurf)
+  \param col
+  \param side [unused]
+*/
+void gsd_fringe_vert_line (float bot, geosurf * surf, int col, int side)
 {
     int row;
     int cnt;
@@ -385,8 +412,15 @@ gsd_fringe_vert_line (float bot, geosurf * surf, int col, int side)
     return;
 }
 
-void
-gsd_fringe_horiz_line2 (float bot, geosurf * surf, int row, int side)
+/*!
+  \brief ADD
+
+  \param bot
+  \param surf surface (geosurf)
+  \param row
+  \param side
+*/
+void gsd_fringe_horiz_line2 (float bot, geosurf * surf, int row, int side)
 {
     int col;
     int cnt;
@@ -399,7 +433,6 @@ gsd_fringe_horiz_line2 (float bot, geosurf * surf, int row, int side)
     gsd_pushmatrix();
     gsd_do_scale(1);
     gsd_translate(surf->x_trans, surf->y_trans, surf->z_trans);
-
 
     buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
     xcnt = VCOLS(surf);
@@ -444,5 +477,3 @@ gsd_fringe_horiz_line2 (float bot, geosurf * surf, int row, int side)
     
     return;
 }
-
-

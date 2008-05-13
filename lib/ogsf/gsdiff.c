@@ -1,7 +1,7 @@
 /*!
   \file gsdiff.c
  
-  \brief OGSF library - loading and manipulating surfaces
+  \brief OGSF library - manipulating surfaces (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -24,6 +24,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (November 1994)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdio.h>
@@ -35,7 +36,11 @@ static geosurf *Refsurf = NULL;
 static typbuff *Refbuff = NULL;
 static float Refscale = 1.0;
 
-/***********************************************************************/
+/*!
+  \brief Set scale
+
+  \param scale value
+*/
 void gsdiff_set_SDscale(float scale)
 {
     Refscale = scale;
@@ -43,13 +48,21 @@ void gsdiff_set_SDscale(float scale)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Get scale
+
+  \return scale value
+*/
 float gsdiff_get_SDscale(void)
 {
     return (Refscale);
 }
 
-/***********************************************************************/
+/*!
+  \brief ADD
+
+  \param gsref
+*/
 void gsdiff_set_SDref(geosurf * gsref)
 {
     Refsurf = gsref;
@@ -58,7 +71,11 @@ void gsdiff_set_SDref(geosurf * gsref)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief ADD
+  
+  \return pointer to geosurf struct
+*/
 geosurf *gsdiff_get_SDref(void)
 {
     if (Refsurf && Refbuff) {
@@ -68,7 +85,14 @@ geosurf *gsdiff_get_SDref(void)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief ADD
+  
+  \param val
+  \param offset
+
+  \return value
+*/
 float gsdiff_do_SD(float val, int offset)
 {
     float ref;

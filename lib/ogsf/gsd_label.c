@@ -1,7 +1,7 @@
 /*!
   \file gsd_label.c
  
-  \brief OGSF library - label management
+  \brief OGSF library - label management (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,19 +13,32 @@
   for details.
   
   \author Bill Brown USACERL (1991-1992)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
+
 #include "rgbpack.h"
+
 #define MAX_LIST 20
 
 static int first = 0;
 GLuint label_base;
 GLuint label_id;
 
-void
-gs_put_label(char *text, GLuint fontbase, int size, unsigned long color,
-	     int*pt)
+/*!
+  \brief Put label
+
+  \todo Allocate label dynamicaly
+
+  \param fontbase fontbase settings
+  \param size font size
+  \param color font color
+  \param pt 
+*/
+void gs_put_label(char *text, GLuint fontbase, int size, unsigned long color,
+		  int*pt)
 {
     int txt_width;
     GLint tmp[4];
@@ -41,17 +54,17 @@ gs_put_label(char *text, GLuint fontbase, int size, unsigned long color,
     }
 
     if (label_id > (label_base + MAX_LIST)) {
-	fprintf(stderr, "Max. number of labels reached!\n");
+	G_warning (_("Max. number of labels reached!"));
 	return;
     }
-
+    
     glNewList(label_id, GL_COMPILE_AND_EXECUTE);
     txt_width = gsd_get_txtwidth(text, size);
-
+    
 /* adjust to center text string */
     labpt[X] = (float) (pt[X] - txt_width / 2.);
     labpt[Y] = (float) pt[Y];
-
+    
     glGetIntegerv(GL_VIEWPORT, tmp);
     l = tmp[0];
     r = tmp[0] + tmp[2];
@@ -77,37 +90,34 @@ gs_put_label(char *text, GLuint fontbase, int size, unsigned long color,
 }
 
 
-/****************************************************************
- * Remove current label 
-****************************************************************/
+/*!
+  \brief Remove current label 
+*/
 void gsd_remove_curr(void)
 {
-
     if (label_id) {
 	glDeleteLists(label_id - 1, 1);
 	label_id--;
     }
 
     return;
-
 }
 
 
-/******************************************************************
- * Remove all labels from display list 
-******************************************************************/
+/*!
+  \brief Remove all labels from display list
+*/
 void gsd_remove_all(void)
 {
-
     glDeleteLists(label_base, MAX_LIST);
     label_id = label_base;
 
     return;
 }
 
-/*************************************************************************
- * Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
-**************************************************************************/
+/*!
+  \brief Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
+*/
 void gsd_call_label(void)
 {
     int i;
