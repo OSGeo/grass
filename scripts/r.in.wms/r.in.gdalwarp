@@ -80,6 +80,8 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
     exec g.parser "$0" "$@"
 fi
 
+g.message -d "[r.in.gdalwarp]"
+
 #### setup temporary file
 TMP="`g.tempfile pid=$$`"
 if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
@@ -171,6 +173,11 @@ $CHANNEL_SUFFIXES" | sort -u`
 	else
 		ALPHALAYER=${TMPMAPNAME}.alpha
 	fi
+	# test to see if the alpha map exists
+	g.findfile element=cell file="$ALPHALAYER" > /dev/null
+	if [ $? -ne 0 ] ; then
+	    ALPHALAYER=""
+	fi
 
 	# Calculate the new maps:
 	for SUFFIX in $CHANNEL_SUFFIXES ; do
@@ -185,9 +192,16 @@ $CHANNEL_SUFFIXES" | sort -u`
 		    continue
 		fi
 
-		# Use alpha channel for nulls:
-		GRASS_VERBOSE=1 \
-		  r.mapcalc "${MAP}${sfx} = if( $ALPHALAYER, ${TMPMAPNAME}${sfx}, null() )"
+		g.message -d message="alpha=[$ALPHALAYER]  MAPsfx=[${MAP}${sfx}]  tmpname=[${TMPMAPNAME}${sfx}]"
+		if [ -n "$ALPHALAYER" ] ; then
+		    # Use alpha channel for nulls:
+# problem: I've seen a map where alpha was 1-255; 1 being transparent. what to do?
+#    (Geosci Australia Gold layer, format=tiff)
+		    GRASS_VERBOSE=1 \
+		      r.mapcalc "${MAP}${sfx} = if( $ALPHALAYER, ${TMPMAPNAME}${sfx}, null() )"
+		else
+		    g.copy rast="${TMPMAPNAME}${sfx}","${MAP}${sfx}" --quiet
+		fi		  
 
 		# Copy the color tables:
 		r.colors map=${MAP}${sfx} rast=${TMPMAPNAME}${sfx} --quiet
@@ -210,8 +224,10 @@ $CHANNEL_SUFFIXES" | sort -u`
 	fi
 
 	# Remove the old channels:
-	CHANNEL_LIST_COMMA=`echo "$CHANNEL_LIST" | sed "s/ /,/g"`
+	CHANNEL_LIST_COMMA=`echo "$CHANNEL_LIST" | tr '\n' ',' | sed -e 's/ /,/g' -e 's/,$//'`
+	g.message -d message="CHANNEL_LIST_COMMA=[$CHANNEL_LIST_COMMA]"
 	g.remove rast="$CHANNEL_LIST_COMMA" --quiet
+
 }
 
 nowarpimport () {
@@ -357,6 +373,8 @@ else
 	    #   different color tables so patches output end up all freaky.
 	    #	r.mapcalc r#,g#,b# manual patching + r.composite?
 	    #	or d.out.file + r.in.png + r.region?
+	    # *** there is a GDAL utility to do this: gdal_merge.py
+	    #       http://www.gdal.org/gdal_merge.html
 
 	    #r.patch input="$MAPLIST" output="${GIS_OPT_OUTPUT}"
 	    IFS=" "
