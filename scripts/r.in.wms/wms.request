@@ -130,6 +130,8 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
   exec g.parser "$0" "$@"
 fi
 
+g.message -d "[wms.request]"
+
 SED="sed"
 GREP="grep"
 # check if we have sed

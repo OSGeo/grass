@@ -29,23 +29,29 @@
 #%end
 #%flag
 #% key: o
-#% description: Don't request transparent data.
+#% description: Don't request transparent data
 #% guisection: Request
 #%end
 #%flag
 #% key: c
-#% description: Clean existing data out of download directory.
+#% description: Clean existing data out of download directory
 #% guisection: Download
 #%end
 #%flag
 #% key: k
-#% description: Keep band numbers instead of using band color names.
+#% description: Keep band numbers instead of using band color names
 #% guisection: Import
 #%end
 #%flag
 #% key: p
-#% description: Don't reproject the data, just patch it.
+#% description: Don't reproject the data, just patch it
 #% guisection: Import
+#%end
+#%flag
+#% key: g
+#% label: Use GET method instead of POST data method
+#% description: This may be needed to connect to servers which lack POST capability
+#% guisection: Request
 #%end
 #%option
 #% key: output
@@ -317,37 +323,49 @@ calculate() {
 listLayers() {
 
 	CAPABILITIES_FILE="${TMP}capabilities.xml"
-    
+
 	STRING="service=WMS&request=GetCapabilities&${GIS_OPT_WMSQUERY}";
 	g.message -d message="POST-data: [$STRING]"
 
 	### wget or curl the XML and grep the lines with layer names
 	g.message message="List of layers for server <$GIS_OPT_MAPSERVER>:"
 	g.message -v message=""
-	if [ "$USE_WGET" ] ; then
-	    wget $GIS_OPT_WGETOPTIONS --post-data="${STRING}" "$GIS_OPT_MAPSERVER" -O "$CAPABILITIES_FILE";
-	    message 1 "wget $GIS_OPT_WGETOPTIONS --post-data=\"${STRING}\" \"$GIS_OPT_MAPSERVER\" -O \"$CAPABILITIES_FILE\";"
-	else
-	    curl $GIS_OPT_CURLOPTIONS -o "$CAPABILITIES_FILE" -d "${STRING}" "$GIS_OPT_MAPSERVER"
-	    message 1 "curl $GIS_OPT_CURLOPTIONS -o \"$CAPABILITIES_FILE\" -d \"${STRING}\" \"$GIS_OPT_MAPSERVER\""
-	fi
-	g.message -v message=""
 
-	if [ ! -e "$CAPABILITIES_FILE" ] ; then
-	    g.message -e "Downloading XML file"
-	    \rm "$TMP"
-	    exit 1
+	if [ "$GIS_FLAG_G" -eq 0 ] ; then
+	    if [ "$USE_WGET" ] ; then
+		wget $GIS_OPT_WGETOPTIONS --post-data="${STRING}" \
+		  "$GIS_OPT_MAPSERVER" -O "$CAPABILITIES_FILE";
+		message 1 "wget $GIS_OPT_WGETOPTIONS --post-data=\"${STRING}\" \"$GIS_OPT_MAPSERVER\" -O \"$CAPABILITIES_FILE\";"
+	    else
+		curl $GIS_OPT_CURLOPTIONS -o "$CAPABILITIES_FILE" \
+		  -d "${STRING}" "$GIS_OPT_MAPSERVER"
+		message 1 "curl $GIS_OPT_CURLOPTIONS -o \"$CAPABILITIES_FILE\" -d \"${STRING}\" \"$GIS_OPT_MAPSERVER\""
+	    fi
+	    g.message -v message=""
+
+	    if [ ! -e "$CAPABILITIES_FILE" ] ; then
+		g.message -e "Downloading XML file"
+		\rm "$TMP"
+		exit 1
+	    fi
+
+	    # work-around for brain-dead WMSs which want POST-data as part of the GET URL
+	    #   (allowed by OGC WMS def S6.3.4)
+	    if [ `wc -c < "$CAPABILITIES_FILE"` -eq 0 ] ; then
+		g.message -w "Downloaded XML file was empty -- trying another method"
+		GIS_FLAG_G=1
+	    fi
 	fi
 
-	# work-around for brain-dead WMSs which want POST-data as part of the GET URL (allowed by OGC WMS def S6.3.4)
-	if [ `wc -c < "$CAPABILITIES_FILE"` -eq 0 ] ; then
-	    g.message -w "Downloaded XML file was empty -- trying another method"
+	if  [ "$GIS_FLAG_G" -eq 1 ] ; then
 	    g.message -v message=""
 	    if [ "$USE_WGET" ] ; then
-		wget $GIS_OPT_WGETOPTIONS "${GIS_OPT_MAPSERVER}${STRING}" -O "$CAPABILITIES_FILE";
+		wget $GIS_OPT_WGETOPTIONS "${GIS_OPT_MAPSERVER}${STRING}" \
+		  -O "$CAPABILITIES_FILE";
 		message 1 "wget $GIS_OPT_WGETOPTIONS \"${GIS_OPT_MAPSERVER}${STRING}\" -O \"$CAPABILITIES_FILE\";"
 	    else
-		curl $GIS_OPT_CURLOPTIONS -o "$CAPABILITIES_FILE" "${GIS_OPT_MAPSERVER}${STRING}"
+		curl $GIS_OPT_CURLOPTIONS -o "$CAPABILITIES_FILE" \
+		  "${GIS_OPT_MAPSERVER}${STRING}"
 		message 1 "curl $GIS_OPT_CURLOPTIONS -o \"$CAPABILITIES_FILE\" \"${GIS_OPT_MAPSERVER}${STRING}\""
 	    fi
 	    g.message -v message=""
@@ -484,6 +502,7 @@ if [ $GIS_FLAG_D -eq 0 ] ; then
 	fi
 fi
 
+addflag DOWNLOAD g ${GIS_FLAG_G}
 addargument DOWNLOAD requestfile "${REQUESTFILE}"
 addargument DOWNLOAD wgetoptions "${GIS_OPT_WGETOPTIONS}"
 addargument DOWNLOAD curloptions "${GIS_OPT_CURLOPTIONS}"
