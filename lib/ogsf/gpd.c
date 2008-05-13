@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (December 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdio.h>
@@ -29,52 +30,61 @@
 /* ACS_MODIFY_BEGIN site_attr management ***************************************/
 static float _cur_size_;
 
-/* This substitutes gpd_obj */
+/*!
+  \brief Substitutes gpd_obj()
+
+  \param gs surface (geosurf)
+  \param gp site (geosite)
+  \param gpt point (point)
+  \param site point
+
+  \return 0
+*/
 int gpd_obj_site_attr(geosurf * gs, geosite * gp, geopoint *gpt, Point3 site)
 {
     float size, z, y, x, z_scale, z_offset;
     int marker, color, i, ii, iii;
-	int use_attr, has_drawn;
-	int _put_aside_;
-
-	_put_aside_ = 0;
-	_cur_size_ = gp->size;
-
+    int use_attr, has_drawn;
+    int _put_aside_;
+    
+    _put_aside_ = 0;
+    _cur_size_ = gp->size;
+    
     z_scale = GS_global_exag();
-	z_offset = 0.0;
-
-	has_drawn = 0;
-
-	for(i=0; i<GPT_MAX_ATTR; i++) {
-		color = gp->color; marker = gp->marker; size = gp->size;
-		use_attr = 0;
-
-		if (gp->use_attr[i] & ST_ATT_COLOR) {
-			use_attr = 1;
-			color = gpt->color[i];
-		}
-
-		if (gp->use_attr[i] & ST_ATT_MARKER) {
-			use_attr = 1;
-			marker = gpt->marker[i];
-		}
-
-		if (gp->use_attr[i] & ST_ATT_SIZE) {
-			use_attr = 1;
-			size = gpt->size[i] * gp->size;
-			if (gp->marker == ST_HISTOGRAM) _put_aside_ = 1;
-		}
-
+    z_offset = 0.0;
+    
+    has_drawn = 0;
+    
+    for(i=0; i<GPT_MAX_ATTR; i++) {
+	color = gp->color; marker = gp->marker; size = gp->size;
+	use_attr = 0;
+	
+	if (gp->use_attr[i] & ST_ATT_COLOR) {
+	    use_attr = 1;
+	    color = gpt->color[i];
+	}
+	
+	if (gp->use_attr[i] & ST_ATT_MARKER) {
+	    use_attr = 1;
+	    marker = gpt->marker[i];
+	}
+	
+	if (gp->use_attr[i] & ST_ATT_SIZE) {
+	    use_attr = 1;
+	    size = gpt->size[i] * gp->size;
+	    if (gp->marker == ST_HISTOGRAM) _put_aside_ = 1;
+	}
+	
 /* ACS_MODIFY_BEGIN site_highlight management **********************************/
-		if (gpt->highlight_color) color = gpt->highlight_color_value;
-		if (gpt->highlight_marker) marker = gpt->highlight_marker_value;
-		if (gpt->highlight_size) size *= gpt->highlight_size_value;
+	if (gpt->highlight_color) color = gpt->highlight_color_value;
+	if (gpt->highlight_marker) marker = gpt->highlight_marker_value;
+	if (gpt->highlight_size) size *= gpt->highlight_size_value;
 /* ACS_MODIFY_END site_highlight management ************************************/
-
-		if (_put_aside_) {
-			if (use_attr == 1) {
-				has_drawn = 1;
-
+	
+	if (_put_aside_) {
+	    if (use_attr == 1) {
+		has_drawn = 1;
+		
 /*******************************************************************************
 		fixed size = gp->size
 		this is mailny intended for "histograms" that grow in z, but not in xy
@@ -87,53 +97,62 @@ int gpd_obj_site_attr(geosurf * gs, geosite * gp, geopoint *gpt, Point3 site)
           0  1  4  9
 
 *******************************************************************************/
-				x = site[X];
-				y = site[Y];
-
-				ii = (int)(sqrt(i));
-				iii = ii * ii + ii;
-
-				if (i <= iii) {
-					site[X] += ii * 2.2 * gp->size;
-					site[Y] += (i-ii) * 2.2 * gp->size;
-				} else {
-					site[X] += (ii-(i-iii)) * 2.2 * gp->size;
-					site[Y] += ii * 2.2 * gp->size;
-
-				}
-
-				gpd_obj(gs, color, size, marker, site);
-
-				site[X] = x;
-				site[Y] = y;
-			}
+		x = site[X];
+		y = site[Y];
+		
+		ii = (int)(sqrt(i));
+		iii = ii * ii + ii;
+		
+		if (i <= iii) {
+		    site[X] += ii * 2.2 * gp->size;
+		    site[Y] += (i-ii) * 2.2 * gp->size;
 		} else {
-			if (i>0) z_offset += size;
-			if (use_attr == 1) {
-				has_drawn = 1;
-
-				z = site[Z];
-				site[Z] += z_offset / z_scale;
-
-				gpd_obj(gs, color, size, marker, site);
-
-				site[Z] = z;
-			}
-
-			z_offset += size;
+		    site[X] += (ii-(i-iii)) * 2.2 * gp->size;
+		    site[Y] += ii * 2.2 * gp->size;
+		    
 		}
-	}
-
-	if (has_drawn == 0)
+		
 		gpd_obj(gs, color, size, marker, site);
-
-	return(0);
+		
+		site[X] = x;
+		site[Y] = y;
+	    }
+	} else {
+	    if (i>0) z_offset += size;
+	    if (use_attr == 1) {
+		has_drawn = 1;
+		
+		z = site[Z];
+		site[Z] += z_offset / z_scale;
+		
+		gpd_obj(gs, color, size, marker, site);
+		
+		site[Z] = z;
+	    }
+	    
+	    z_offset += size;
+	}
+    }
+    
+    if (has_drawn == 0)
+	gpd_obj(gs, color, size, marker, site);
+    
+    return(0);
 }
 /* ACS_MODIFY_END site_attr management *****************************************/
 
+/*!
+  \brief Check if point is in region
 
-/* check for cancel every CHK_FREQ points */
+  Check for cancel every CHK_FREQ points
 
+  \param gs surface (geosurf)
+  \param pt point (array(X,Y,Z))
+  \param region region settings (array (top,bottom,left,right))
+
+  \return 0 point outside of region
+  \return 1 point inside region
+*/
 int gs_point_in_region(geosurf * gs, float *pt, float *region)
 {
     float top, bottom, left, right;
@@ -155,10 +174,20 @@ int gs_point_in_region(geosurf * gs, float *pt, float *region)
 	    pt[Y] >= bottom && pt[Y] <= top);
 }
 
-/* TODO: add size1, size2 & dir1, dir2 (eg azimuth, elevation) variables
+/*!
+  \brief ADD
+
+  Do normal transforms before calling
+
+  Note gs: NULL if 3d obj or const elev surface
+
+  \todo add size1, size2 & dir1, dir2 (eg azimuth, elevation) variables
+
+  \param gs surface (geosurf)
+  \param size
+  \param marker
+  \param pt 3d point (Point3)
 */
-/* do normal transforms before calling */
-/* Note gs: NULL if 3d obj or const elev surface */
 void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
 {
     float sz, lpt[3];
@@ -288,11 +317,24 @@ void gpd_obj(geosurf * gs, int color, float size, int marker, Point3 pt)
     return;
 }
 
-/* need to think about translations - If user translates surface,
-sites should automatically go with it, but translating sites should
-translate it relative to surface on which it's displayed */
-/*  TODO: prevent scaling by 0  */
-/* handling mask checking here */
+/*!
+  \brief ADD
+
+  Need to think about translations - If user translates surface,
+  sites should automatically go with it, but translating sites should
+  translate it relative to surface on which it's displayed
+
+  Handling mask checking here
+  
+  \todo prevent scaling by 0 
+
+  \param gp site (geosite)
+  \param gs surface (geosurf)
+  \param do_fast (unused)
+
+  \return 0
+  \return 1
+*/
 int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
 {
     float site[3], konst;
@@ -393,6 +435,16 @@ int gpd_2dsite(geosite * gp, geosurf * gs, int do_fast)
     return (1);
 }
 
+/*!							       
+  \brief ADD
+
+  \param gp site (geosite)
+  \param xo,yo
+  \param do_fast (unused)
+
+  \return 0
+  \return 1
+*/
 int gpd_3dsite(geosite * gp, float xo, float yo, int do_fast)
 {
     float site[3], tz;

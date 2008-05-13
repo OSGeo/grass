@@ -1,7 +1,7 @@
 /*!
   \file gs_bm.c
  
-  \brief OGSF library - loading and manipulating surfaces
+  \brief OGSF library - manipulating bitmaps (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,14 +13,24 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (September 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <grass/gstypes.h>
-#include "gsget.h"
 #include <stdio.h>
+#include <grass/gstypes.h>
+#include <grass/glocale.h>
+#include "gsget.h"
 
-/* do combining of bitmaps, make bitmaps from other data w/maskval */
+/*!
+  \brief Do combining of bitmaps, make bitmaps from other data w/maskval
 
+  \param frombuff data buffer
+  \param maskval mask type
+  \param rows number of rows
+  \param cols number of cols
+
+  \return pointer to BM struct
+*/
 struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
 			  int cols)
 {
@@ -59,6 +69,11 @@ struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
     return (bm);
 }
 
+/*!
+  \brief Zero mask
+
+  \param map pointer to BM struct
+*/
 void gsbm_zero_mask(struct BM *map)
 {
     int numbytes;
@@ -74,13 +89,26 @@ void gsbm_zero_mask(struct BM *map)
     return;
 }
 
-/* mask types */
+/*!
+  \brief mask types
+*/
 #define MASK_OR		1
 #define MASK_ORNOT	2
 #define MASK_AND	3
 #define MASK_XOR	4
 
-/* must be same size, ORs bitmaps & stores in bmvar */
+/*!
+  \brief Mask bitmap
+
+  Must be same size, ORs bitmaps & stores in bmvar
+
+  \param bmvar bitmap (BM) to changed
+  \param bmcom bitmap (BM)
+  \param mask_type mask type (see mask types macros)
+
+  \return -1 on failure (bitmap mispatch)
+  \return 0 on success
+*/
 static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
 {
     int i;
@@ -92,8 +120,7 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
 
     if (bmcon && bmvar) {
 	if (varsize != consize) {
-	    fprintf(stderr, "bitmap mismatch\n");
-
+	    G_warning (_("Bitmap mismatch"));
 	    return (-1);
 	}
 
@@ -104,58 +131,111 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
         case MASK_OR:
             for (i = 0; i < numbytes; i++)
                 bmvar->data[i] |= bmcon->data[i];
-        break;
+	    break;
         case MASK_ORNOT:
             for (i = 0; i < numbytes; i++)
                 bmvar->data[i] |= ~bmcon->data[i];
-        break;
+	    break;
         case MASK_AND:
             for (i = 0; i < numbytes; i++)
                 bmvar->data[i] &= bmcon->data[i];
-        break;
+	    break;
         case MASK_XOR:
             for (i = 0; i < numbytes; i++)
                 bmvar->data[i] ^= bmcon->data[i];
-        break;
+	    break;
         }
-
+	
 	return (0);
     }
 
     return (-1);
 }
 
-/* must be same size, ORs bitmaps & stores in bmvar */
+/*!
+  \brief Mask bitmap (mask type OR)
+
+  Must be same size, ORs bitmaps & stores in bmvar
+
+  \param bmvar bitmap (BM) to changed
+  \param bmcom bitmap (BM)
+  \param mask_type mask type (see mask types macros)
+
+  \return -1 on failure (bitmap mispatch)
+  \return 0 on success
+*/
 int gsbm_or_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_OR);
 }
 
-/* must be same size, ORs bitmap with ~bmcon & stores in bmvar */
+/*!
+  \brief Mask bitmap (mask type ORNOT)
+
+  Must be same size, ORNOTs bitmaps & stores in bmvar
+
+  \param bmvar bitmap (BM) to changed
+  \param bmcom bitmap (BM)
+  \param mask_type mask type (see mask types macros)
+
+  \return -1 on failure (bitmap mispatch)
+  \return 0 on success
+*/
 int gsbm_ornot_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_ORNOT);
 }
 
-/* must be same size, ANDs bitmaps & stores in bmvar */
+/*!
+  \brief Mask bitmap (mask type ADD)
+
+  Must be same size, ADDs bitmaps & stores in bmvar
+
+  \param bmvar bitmap (BM) to changed
+  \param bmcom bitmap (BM)
+  \param mask_type mask type (see mask types macros)
+
+  \return -1 on failure (bitmap mispatch)
+  \return 0 on success
+*/
 int gsbm_and_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_AND);
 }
 
-/* must be same size, XORs bitmaps & stores in bmvar */
+/*!
+  \brief Mask bitmap (mask type XOR)
+
+  Must be same size, XORs bitmaps & stores in bmvar
+
+  \param bmvar bitmap (BM) to changed
+  \param bmcom bitmap (BM)
+  \param mask_type mask type (see mask types macros)
+
+  \return -1 on failure (bitmap mispatch)
+  \return 0 on success
+*/
 int gsbm_xor_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_XOR);
 }
 
-/***********************************************************************/
+/*!
+  \brief Update current maps
+
+  \param surf surface (geosurf)
+
+  \return 0
+  \return 1
+*/
 int gs_update_curmask(geosurf * surf)
 {
     struct BM *b_mask, *b_topo, *b_color;
     typbuff *t_topo, *t_mask, *t_color;
     int row, col, offset, destroy_ok = 1;
     gsurf_att *coloratt;
+
+    G_debug (3, "gs_update_curmask():");
 
     if (surf->mask_needupdate) {
 	surf->mask_needupdate = 0;
@@ -223,24 +303,24 @@ int gs_update_curmask(geosurf * surf)
 	    }
 
 	    if (b_topo) {
-		fprintf(stderr, "Update topo mask\n");
+		G_debug(3, "  Update topo mask");
 		gsbm_or_masks(surf->curmask, b_topo);
 		BM_destroy(b_topo);
 	    }
 
 	    if (b_color) {
-		fprintf(stderr, "Update color mask\n");
+		G_debug(3, "  Update color mask");
 		gsbm_or_masks(surf->curmask, b_color);
 		BM_destroy(b_color);
 	    }
 
 	    if (t_topo->nm) {
-		fprintf(stderr, "Update elev null mask\n");
+		G_debug(3, "  Update elev null mask");
 		gsbm_or_masks(surf->curmask, t_topo->nm);
 	    }
 
 	    if (b_mask) {
-		fprintf(stderr, "Update mask mask\n");
+		G_debug(3, "  Update mask mask");
 
 		if (t_mask->bm) {
 		    if (surf->att[ATT_MASK].constant) {
@@ -274,7 +354,11 @@ int gs_update_curmask(geosurf * surf)
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Print bitmap to stderr
+
+  \param bm bitmap (BM)
+*/
 void print_bm(struct BM *bm)
 {
     int i, j;

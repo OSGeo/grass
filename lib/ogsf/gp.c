@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois (January 1994)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
@@ -24,16 +25,19 @@
 
 static geosite *Site_top = NULL;
 
-/***********************************************************************/
+/*!
+  \brief Get geosite struct
+
+  \param id point set id
+
+  \return pointer to geosite struct
+  \return NULL on failure
+*/
 geosite *gp_get_site(int id)
 {
     geosite *gp;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_get_site");
-    }
-#endif
+    G_debug(3, "gp_get_site");
 
     for (gp = Site_top; gp; gp = gp->next) {
 	if (gp->gsite_id == id) {
@@ -44,16 +48,19 @@ geosite *gp_get_site(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get previous geosite struct from list
+
+  \param id point set id
+
+  \return pointer to geosite struct
+  \return NULL on failure
+*/
 geosite *gp_get_prev_site(int id)
 {
     geosite *pp;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_get_prev_site");
-    }
-#endif
+    G_debug(3, "gp_get_prev_site");
 
     for (pp = Site_top; pp; pp = pp->next) {
 	if (pp->gsite_id == id - 1) {
@@ -64,33 +71,34 @@ geosite *gp_get_prev_site(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of registrated point sets
+
+  \return number of point sets
+*/
 int gp_num_sites(void)
 {
     geosite *gp;
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_num_sites");
-    }
-#endif
+    G_debug(3, "gp_num_sites");
 
     for (i = 0, gp = Site_top; gp; gp = gp->next, i++);
 
     return (i);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get last point set
+
+  \return pointer to geosite struct
+  \return NULL if no point set is available
+*/
 geosite *gp_get_last_site(void)
 {
     geosite *lp;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_get_last_site");
-    }
-#endif
+    G_debug(3, "gp_get_last_site");
 
     if (!Site_top) {
 	return (NULL);
@@ -98,32 +106,30 @@ geosite *gp_get_last_site(void)
 
     for (lp = Site_top; lp->next; lp = lp->next);
 
-#ifdef DEBUG
-    {
-	fprintf(stderr, "last site id: %d\n", lp->gsite_id);
-    }
-#endif
+    G_debug(3, " last site id: %d", lp->gsite_id);
 
     return (lp);
 }
 
-/***********************************************************************/
+/*!
+  \brief Create new geosite instance and add it to list
+
+  \return pointer to geosite struct
+  \return NULL on error
+*/
 geosite *gp_get_new_site(void)
 {
     geosite *np, *lp;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_get_new_site");
-    }
-#endif
+    G_debug(3, "gp_get_new_site");
 
-    if (NULL == (np = (geosite *) malloc(sizeof(geosite)))) {
-	gs_err("gp_get_new_site");
+    np = (geosite *) G_malloc(sizeof(geosite)); /* G_fatal_error */
+    if (!np) {
 	return (NULL);
     }
 
-    if (lp = gp_get_last_site()) {
+    lp = gp_get_last_site();
+    if (lp) {
 	lp->next = np;
 	np->gsite_id = lp->gsite_id + 1;
     }
@@ -137,8 +143,11 @@ geosite *gp_get_new_site(void)
     return (np);
 }
 
-/***********************************************************************/
-/* call after surface is deleted */
+/*!
+  \brief Update drape surfaces
+  
+  Call after surface is deleted
+*/
 void gp_update_drapesurfs(void)
 {
     geosite *gp;
@@ -163,17 +172,20 @@ void gp_update_drapesurfs(void)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set default value for geosite struct
+
+  \param gp pointer to geosite struct
+
+  \return 1 on success
+  \return -1 on failure
+*/
 int gp_set_defaults(geosite * gp)
 {
     int i;
     float dim;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_set_defaults");
-    }
-#endif
+    G_debug(3, "gp_set_defaults");
 
     if (!gp) {
 	return (-1);
@@ -198,7 +210,11 @@ int gp_set_defaults(geosite * gp)
     return (1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Print point set fields, debugging
+
+  \param gp pointer to geosite struct
+*/
 void print_site_fields(geosite * gp)
 {
     int i;
@@ -222,14 +238,17 @@ void print_site_fields(geosite * gp)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Initialize geosite struct
+
+  \param gp pointer to geosite struct
+
+  \return -1 on failure
+  \return 0 on success
+*/
 int gp_init_site(geosite * gp)
 {
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_init_site");
-    }
-#endif
+    G_debug(3, "gp_init_site");
 
     if (!gp) {
 	return (-1);
@@ -238,16 +257,16 @@ int gp_init_site(geosite * gp)
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Delete point set and remove from list
+
+  \param id point set id
+*/
 void gp_delete_site(int id)
 {
     geosite *fp;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_delete_site");
-    }
-#endif
+    G_debug(3, "gp_delete_site");
 
     fp = gp_get_site(id);
 
@@ -258,17 +277,20 @@ void gp_delete_site(int id)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Free geosite struct
+
+  \param fp pointer to geosite struct
+
+  \return 1 on success
+  \return -1 on failure
+*/
 int gp_free_site(geosite * fp)
 {
     geosite *gp;
     int found = 0;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gp_free_site");
-    }
-#endif
+    G_debug(3, "gp_free_site");
 
     if (Site_top) {
 	if (fp == Site_top) {
@@ -279,7 +301,7 @@ int gp_free_site(geosite * fp)
 	    }
 	    else {
 		gp_free_sitemem(fp);
-		free(fp);
+		G_free(fp);
 		Site_top = NULL;
 	    }
 	}
@@ -297,7 +319,7 @@ int gp_free_site(geosite * fp)
 
 	if (found) {
 	    gp_free_sitemem(fp);
-	    free(fp);
+	    G_free(fp);
 	    fp = NULL;
 	}
 
@@ -307,7 +329,11 @@ int gp_free_site(geosite * fp)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Free geosite
+
+  \param fp pointer to geosite struct
+*/
 void gp_free_sitemem(geosite * fp)
 {
     geopoint *gpt, *tmp;
@@ -315,12 +341,12 @@ void gp_free_sitemem(geosite * fp)
     if (fp->points) {
 	for (gpt = fp->points; gpt;) {
 	    if (gpt->cattr) {
-		free(gpt->cattr);
+		G_free(gpt->cattr);
 	    }
 
 	    tmp = gpt;
 	    gpt = gpt->next;
-	    free(tmp);
+	    G_free(tmp);
 	}
 
 	fp->n_sites = 0;
@@ -330,7 +356,13 @@ void gp_free_sitemem(geosite * fp)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set drape surfaces
+
+  \param gp pointer to geosite struct
+  \param hsurf list of surfaces (id)
+  \param nsurf number of surfaces
+*/
 void gp_set_drapesurfs(geosite * gp, int hsurfs[], int nsurfs)
 {
     int i;
