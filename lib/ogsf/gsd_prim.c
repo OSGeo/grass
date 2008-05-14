@@ -1,7 +1,7 @@
 /*!
   \file gsd_prim.c
  
-  \brief OGSF library - primitive drawing functions
+  \brief OGSF library - primitive drawing functions (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,10 +13,9 @@
   for details.
   
   \author Bill Brown USACERL (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-/* DEBUG */
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -32,6 +31,7 @@
 
 #include <grass/gis.h>
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
 
 #define USE_GL_NORMALIZE
 
@@ -66,9 +66,10 @@ static float ogl_mat_spec[4];
 static float ogl_mat_emis[4];
 static float ogl_mat_shin;
 
-/************************************************************************/
-/* Mostly for flushing drawing commands accross a network - glFlush
-*  doesn't block, so if blocking is desired use glFinish.
+/*!
+  \brief Mostly for flushing drawing commands accross a network
+
+  glFlush doesn't block, so if blocking is desired use glFinish.
 */
 void gsd_flush(void)
 {
@@ -77,8 +78,13 @@ void gsd_flush(void)
     return;
 }
 
-/************************************************************************/
-/* Call glColorMaterial before enabling the GL_COLOR_MATERIAL */
+/*!
+  \brief ADD
+
+  Call glColorMaterial before enabling the GL_COLOR_MATERIAL
+
+  \param cm
+*/
 void gsd_colormode(int cm)
 {
     switch (cm) {
@@ -129,18 +135,25 @@ void gsd_colormode(int cm)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Print color mode to stderr
+*/
 void show_colormode(void)
 {
     GLint mat;
 
     glGetIntegerv(GL_COLOR_MATERIAL_PARAMETER, &mat);
-    fprintf(stderr, "Color Material: %d\n", mat);
+    G_message (_("Color Material: %d"), mat);
 
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param x,y
+  \param rad
+*/
 void gsd_circ(float x, float y, float rad)
 {
     GLUquadricObj *qobj = gluNewQuadric();
@@ -154,7 +167,12 @@ void gsd_circ(float x, float y, float rad)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param x,y,z
+  \param rad
+*/
 void gsd_disc(float x, float y, float z, float rad)
 {
     GLUquadricObj *qobj = gluNewQuadric();
@@ -168,7 +186,12 @@ void gsd_disc(float x, float y, float z, float rad)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param center center-point
+  \param siz size value
+*/
 void gsd_sphere(float *center, float siz)
 {
     static int first = 1;
@@ -195,7 +218,11 @@ void gsd_sphere(float *center, float siz)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Write out z-mask
+
+  \param n
+*/
 void gsd_zwritemask(unsigned long n)
 {
     /* OGLXXX glDepthMask is boolean only */
@@ -204,7 +231,11 @@ void gsd_zwritemask(unsigned long n)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param n
+*/
 void gsd_backface(int n)
 {
     glCullFace(GL_BACK);
@@ -213,7 +244,11 @@ void gsd_backface(int n)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param n line width
+*/
 void gsd_linewidth(short n)
 {
     glLineWidth((GLfloat) (n));
@@ -221,7 +256,9 @@ void gsd_linewidth(short n)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bgnqstrip(void)
 {
     glBegin(GL_QUAD_STRIP);
@@ -229,7 +266,9 @@ void gsd_bgnqstrip(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_endqstrip(void)
 {
     glEnd();
@@ -237,7 +276,9 @@ void gsd_endqstrip(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bgntmesh(void)
 {
     glBegin(GL_TRIANGLE_STRIP);
@@ -245,7 +286,9 @@ void gsd_bgntmesh(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_endtmesh(void)
 {
     glEnd();
@@ -253,7 +296,9 @@ void gsd_endtmesh(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bgntstrip(void)
 {
     glBegin(GL_TRIANGLE_STRIP);
@@ -261,7 +306,9 @@ void gsd_bgntstrip(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_endtstrip(void)
 {
     glEnd();
@@ -269,7 +316,9 @@ void gsd_endtstrip(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bgntfan(void)
 {
     glBegin(GL_TRIANGLE_FAN);
@@ -277,7 +326,9 @@ void gsd_bgntfan(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_endtfan(void)
 {
     glEnd();
@@ -285,7 +336,9 @@ void gsd_endtfan(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_swaptmesh(void)
 {
     /* OGLXXX
@@ -298,7 +351,9 @@ void gsd_swaptmesh(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bgnpolygon(void)
 {
     /* OGLXXX
@@ -311,7 +366,9 @@ void gsd_bgnpolygon(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_endpolygon(void)
 {
     glEnd();
@@ -319,7 +376,9 @@ void gsd_endpolygon(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Begin line
+*/
 void gsd_bgnline(void)
 {
     /* OGLXXX for multiple, independent line segments: use GL_LINES */
@@ -327,7 +386,9 @@ void gsd_bgnline(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief End line
+*/
 void gsd_endline(void)
 {
     glEnd();
@@ -335,7 +396,11 @@ void gsd_endline(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Shaded model
+
+  \param bool type
+*/
 void gsd_shademodel(int bool)
 {
     Shade = bool;
@@ -350,13 +415,19 @@ void gsd_shademodel(int bool)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Get shaded model
+
+  \return shade
+*/
 int gsd_getshademodel(void)
 {
     return (Shade);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_bothbuffer(void)
 {
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -365,7 +436,9 @@ void gsd_bothbuffer(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_frontbuffer(int bool)
 {
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -374,7 +447,11 @@ void gsd_frontbuffer(int bool)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param bool
+*/
 void gsd_backbuffer(int bool)
 {
     /* OGLXXX backbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -382,7 +459,9 @@ void gsd_backbuffer(int bool)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_swapbuffers(void)
 {
     /* OGLXXX swapbuffers: 
@@ -394,7 +473,9 @@ void gsd_swapbuffers(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_popmatrix(void)
 {
     glPopMatrix();
@@ -402,7 +483,9 @@ void gsd_popmatrix(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_pushmatrix(void)
 {
     glPushMatrix();
@@ -410,7 +493,9 @@ void gsd_pushmatrix(void)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_scale(float xs, float ys, float zs)
 {
     glScalef(xs, ys, zs);
@@ -418,7 +503,9 @@ void gsd_scale(float xs, float ys, float zs)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_translate(float dx, float dy, float dz)
 {
     glTranslatef(dx, dy, dz);
@@ -426,7 +513,14 @@ void gsd_translate(float dx, float dy, float dz)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param window
+  \param viewport
+  \param modelMatrix
+  \param projMatrix
+*/
 void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
 		   double *projMatrix)
 {
@@ -447,7 +541,18 @@ void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
 
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param pt
+  \param widnow
+  \param viewport
+  \param doubleMatrix
+  \param projMatrix
+
+  \return 0
+  \return 1
+*/
 int gsd_checkpoint(float pt[4],
 		   int window[4],
 		   int viewport[4],
@@ -466,13 +571,17 @@ int gsd_checkpoint(float pt[4],
 
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param angle
+  \param axis
+*/
 void gsd_rot(float angle, char axis)
 {
     GLfloat x;
     GLfloat y;
     GLfloat z;
-    char wrnMsg[512];
 
     switch (axis) {
     case 'x':
@@ -501,11 +610,10 @@ void gsd_rot(float angle, char axis)
 	break;
     default:
 
-	sprintf(wrnMsg, "gsd_rot(): %c is an invalid axis ", axis);
-	strcat(wrnMsg, "specification. Rotation ignored\n");
-	strcat(wrnMsg, "Please advise GRASS developers of this error.\n");
-
-	G_warning(wrnMsg);
+	G_warning (_("gsd_rot(): %c is an invalid axis "
+		     "specification. Rotation ignored. "
+		     "Please advise GRASS developers of this error"),
+		     axis);
 	return;
     }
 
@@ -514,7 +622,13 @@ void gsd_rot(float angle, char axis)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param norm
+  \param col
+  \param pt
+*/
 void gsd_litvert_func(float *norm, unsigned long col, float *pt)
 {
     glNormal3fv(norm);
@@ -524,7 +638,13 @@ void gsd_litvert_func(float *norm, unsigned long col, float *pt)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param norm
+  \param col
+  \param pt
+*/
 void gsd_litvert_func2(float *norm, unsigned long col, float *pt)
 {
     glNormal3fv(norm);
@@ -533,7 +653,11 @@ void gsd_litvert_func2(float *norm, unsigned long col, float *pt)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param pt
+*/
 void gsd_vert_func(float *pt)
 {
     glVertex3fv(pt);
@@ -541,7 +665,11 @@ void gsd_vert_func(float *pt)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param col
+*/
 void gsd_color_func(unsigned int col)
 {
     GLbyte r, g, b, a;
@@ -560,7 +688,9 @@ void gsd_color_func(unsigned int col)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+*/
 void gsd_init_lightmodel(void)
 {
 
@@ -635,14 +765,16 @@ void gsd_init_lightmodel(void)
      if(1) {glCallList(1); glEnable(GL_FRONT);} else glDisable(GL_FRONT);
      */
 
-
     return;
 }
 
-/************************************************************************/
-/* set_shin, set_emis  flags */
-/* sh, em    sh & em should be 0. - 1. */
-/* emcolor   packed colors to use for emission */
+/*!
+  \brief Set material
+  
+  \param set_shin,set_emis  flags
+  \param sh,em should be 0. - 1. 
+  \param emcolor packed colors to use for emission
+*/
 void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 		      int emcolor)
 {
@@ -670,7 +802,12 @@ void gsd_set_material(int set_shin, int set_emis, float sh, float em,
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Define light
+
+  \param num
+  \param vals
+*/
 void gsd_deflight(int num, struct lightdefs *vals)
 {
     if (num > 0 && num <= MAX_LIGHTS) {
@@ -706,8 +843,12 @@ void gsd_deflight(int num, struct lightdefs *vals)
     return;
 }
 
-/************************************************************************/
-/* on = 0 turns them off */
+/*!
+  \brief Switch light on/off
+
+  \param num
+  \param on 1 for 'on', 0 turns them off
+*/
 void gsd_switchlight(int num, int on)
 {
     short defin;
@@ -724,7 +865,15 @@ void gsd_switchlight(int num, int on)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Get image
+
+  \param pixbuf data buffer
+  \param[out] xsize,ysize picture dimension
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
 		 unsigned int *ysize)
 {
@@ -745,7 +894,7 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     *xsize = r - l + 1;
     *ysize = t - b + 1;
 
-    *pixbuf = malloc(*xsize * *ysize * 4);
+    *pixbuf = (unsigned char *) G_malloc((*xsize) * (*ysize) * 4); /* G_fatal_error */
 
     if (!*pixbuf)
 	return (0);
@@ -755,10 +904,18 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     /* OGLXXX lrectread: see man page for glReadPixels */
     glReadPixels(l, b, (r) - (l) + 1, (t) - (b) + 1, GL_RGBA,
 		 GL_UNSIGNED_BYTE, *pixbuf);
+
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief Get viewpoint
+
+  \param tmp
+  \param num
+
+  \return 1
+*/
 int gsd_getViewport(GLint tmp[4], GLint num[2])
 {
 
@@ -769,16 +926,19 @@ int gsd_getViewport(GLint tmp[4], GLint num[2])
     return (1);
 }
 
+/*!
+  \brief Write view
 
-/************************************************************************/
+  \param pixbuf data buffer
+  \param xsize,ysize picture dimension
+*/
 int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 		  unsigned int ysize)
 {
 
     /* Malloc Buffer for image */
-    *pixbuf = malloc(xsize * ysize * 4);
+    *pixbuf = (unsigned char *) G_malloc(xsize * ysize * 4); /* G_fatal_error */
     if (!*pixbuf) {
-	fprintf(stderr, "MALLOC Failed\n");
 	return (0);
     }
 
@@ -790,7 +950,11 @@ int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param yesno turn on/off
+*/
 void gsd_blend(int yesno)
 {
     if (yesno) {
@@ -805,7 +969,12 @@ void gsd_blend(int yesno)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Define clip plane
+
+  \param num
+  \param params
+*/
 void gsd_def_clipplane(int num, double *params)
 {
     int wason = 0;
@@ -827,7 +996,12 @@ void gsd_def_clipplane(int num, double *params)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Set clip plane
+
+  \param num
+  \param able
+*/
 void gsd_set_clipplane(int num, int able)
 {
     /* OGLXXX see man page for glClipPlane equation */
@@ -841,15 +1015,24 @@ void gsd_set_clipplane(int num, int able)
     return;
 }
 
-/************************************************************************/
-/* does nothing */
-/* only called from src.contrib/GMSL/NVIZ2.2/src/glwrappers.c */
+/*!
+  \brief Finish
+
+  Does nothing, only called from src.contrib/GMSL/NVIZ2.2/src/glwrappers.c
+*/
 void gsd_finish(void)
 {
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param l
+  \param r
+  \param b
+  \param t
+*/
 void gsd_viewport(int l, int r, int b, int t)
 {
     /* Screencoord */
@@ -858,9 +1041,14 @@ void gsd_viewport(int l, int r, int b, int t)
     return;
 }
 
-/************************************************************************/
-/* first time called, gets a bunch of objects, then hands them back
- * when needed
+/*!
+  \brief ADD
+
+  First time called, gets a bunch of objects, then hands them back
+  when needed
+
+  \return -1 on failure
+  \return number of objects
 */
 int gsd_makelist(void)
 {
@@ -888,7 +1076,12 @@ int gsd_makelist(void)
 
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param listno
+  \param do_draw
+*/
 void gsd_bgnlist(int listno, int do_draw)
 {
     if (do_draw) {
@@ -901,7 +1094,9 @@ void gsd_bgnlist(int listno, int do_draw)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief End list
+*/
 void gsd_endlist(void)
 {
     glEndList();
@@ -909,10 +1104,15 @@ void gsd_endlist(void)
     return;
 }
 
-/*****************************************************************/
+/*!
+  \brief Delete list
+
+  \param listno
+  \param range
+*/
 void gsd_deletelist(GLuint listno, int range)
 {
-    int i;
+    unsigned int i;
 
     for (i = 1; i < MAX_OBJS; i++) {
 	if (i == listno) {
@@ -925,7 +1125,11 @@ void gsd_deletelist(GLuint listno, int range)
     }
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param listno
+*/
 void gsd_calllist(int listno)
 {
     glCallList(ObjList[listno]);
@@ -934,7 +1138,11 @@ void gsd_calllist(int listno)
 }
 
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param listno
+*/
 void gsd_calllists(int listno)
 {
     int i;
@@ -947,5 +1155,6 @@ void gsd_calllists(int listno)
     gsd_popmatrix();
 
     gsd_call_label();
+
     return;
 }
