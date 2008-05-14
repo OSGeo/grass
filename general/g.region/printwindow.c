@@ -639,7 +639,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    else
 	    {
 		G_format_northing(sh_ll_n, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "north latitude :", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "north latitude:", buf);
 		G_format_northing(sh_ll_s, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s  %s\n", width, "south latitude:", buf);
 		G_format_easting(sh_ll_w, buf, PROJECTION_LL);
@@ -647,9 +647,9 @@ int print_window(struct Cell_head *window, int print_flag)
 		G_format_easting(sh_ll_e, buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s  %s\n", width, "east longitude:", buf);
 		G_format_easting((sh_ll_e - sh_ll_w)/2. + sh_ll_w, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "center longitude:", buf);
+		fprintf(stdout, "%-*s %s\n", width, "center longitude:", buf);
 		G_format_northing((sh_ll_n - sh_ll_s)/2. + sh_ll_s, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s %s\n", width, "center latitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "center latitude:", buf);
 	    }
 
 	    /*It should be calculated which number of rows and cols we have in LL */
