@@ -1,7 +1,7 @@
 /*!
   \file gsd_label.c
  
-  \brief OGSF library - objects management
+  \brief OGSF library - objects management (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL (October 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdio.h>
@@ -25,13 +26,11 @@
 #include "math.h"
 #include "rowcol.h"
 
-/*
-#define TRACE_DFUNCS
-*/
-
 static void init_stuff(void);
 
-/* vertices for octohedron */
+/*!
+  \brief vertices for octohedron
+*/
 float Octo[6][3] = {
     {1.0, 0.0, 0.0},
     {0.0, 1.0, 0.0},
@@ -43,7 +42,9 @@ float Octo[6][3] = {
 
 #define ONORM .57445626
 
-/* normals for flat-shaded octohedron */
+/*!
+  \brief normals for flat-shaded octohedron
+*/
 float OctoN[8][3] = {
     {ONORM, ONORM, ONORM},
     {-ONORM, ONORM, ONORM},
@@ -55,7 +56,8 @@ float OctoN[8][3] = {
     {-ONORM, -ONORM, -ONORM},
 };
 
-/* ???? not sure if any of these are needed for correct lighting.
+/*!
+  ???? not sure if any of these are needed for correct lighting.
 float CubeNormals[6][3] = {
     {ONORM, 0, 0},
     {-ONORM, 0, 0},
@@ -89,10 +91,14 @@ float origin[3] = { 0.0, 0.0, 0.0 };
 #define DOWN_NORM Octo[5]
 #define ORIGIN origin
 
-/* vertices & normals for octagon in xy plane */
+/*!
+  \brief vertices & normals for octagon in xy plane
+*/
 float ogverts[8][3];
 
-/* vertices for octagon in xy plane, z=1 */
+/*!
+  \brief vertices for octagon in xy plane, z=1
+*/
 float ogvertsplus[8][3];
 
 float Pi;
@@ -136,6 +142,13 @@ static void init_stuff(void)
     return;
 }
 
+/*!
+  \brief ADD
+  
+  \param center center point
+  \param colr color value
+  \param siz size value
+*/
 void gsd_plus(float *center, int colr, float siz)
 {
     float v1[3], v2[3];
@@ -164,7 +177,15 @@ void gsd_plus(float *center, int colr, float siz)
     return;
 }
 
-/* TODO: remove fudge, instead fudge the Z buffer */
+/*!
+  \brief Line on surface, fix z-values
+  
+  \todo remove fudge, instead fudge the Z buffer
+
+  \param gs surface (geosurf)
+  \param v1 first point
+  \param v2 second point
+*/
 void gsd_line_onsurf(geosurf * gs, float *v1, float *v2)
 {
     int i, np;
@@ -193,10 +214,22 @@ void gsd_line_onsurf(geosurf * gs, float *v1, float *v2)
     return;
 }
 
-/* TODO: remove fudge, instead fudge the Z buffer */
-/* Like above, except only draws first n points of line, or np,
- * whichever is less.  Returns number of points used. Fills
- * pt with last pt drawn.
+/*!
+  \brief Multiline on surface, fix z-values
+
+  \todo remove fudge, instead fudge the Z buffer
+
+  Like above, except only draws first n points of line, or np,
+  whichever is less.  Returns number of points used. Fills
+  pt with last pt drawn.
+
+  \param gs surface (geosurf)
+  \param v1 first point
+  \param v2 second point
+  \param pt
+  \param n number of segments
+
+  \param number of vertices
 */
 int gsd_nline_onsurf(geosurf * gs, float *v1, float *v2, float *pt, int n)
 {
@@ -231,7 +264,16 @@ int gsd_nline_onsurf(geosurf * gs, float *v1, float *v2, float *pt, int n)
     return (0);
 }
 
-/* Note gs: NULL if flat */
+/*!
+  \brief ADD
+
+  Note gs: NULL if flat
+
+  \param gs surface (geosurf)
+  \param center
+  \param colr color value
+  \param siz size value
+*/
 void gsd_x(geosurf * gs, float *center, int colr, float siz)
 {
     float v1[3], v2[3];
@@ -274,6 +316,13 @@ void gsd_x(geosurf * gs, float *center, int colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw diamond symbol
+
+  \param center center point
+  \param colr color value
+  \param size size value
+*/
 void gsd_diamond(float *center, unsigned long colr, float siz)
 {
     int preshade;
@@ -367,8 +416,17 @@ void gsd_diamond(float *center, unsigned long colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw cube
+
+  Added by Hamish Bowman Nov 2005
+
+  \param center center point
+  \param colr color value
+  \param siz size value
+*/
 void gsd_cube(float *center, unsigned long colr, float siz)
-{  /* added by Hamish Bowman Nov 2005 */
+{ 
     int preshade;
 
     /* see gsd_diamond() "seems right, but isn't" */
@@ -435,8 +493,17 @@ void gsd_cube(float *center, unsigned long colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw box
+
+  Added by Hamish Bowman Nov 2005
+
+  \param center center point
+  \param colr color value
+  \param siz size value
+*/
 void gsd_draw_box(float *center, unsigned long colr, float siz)
-{  /* added by Hamish Bowman Nov 2005 */
+{  
 
     /* see gsd_diamond() "seems right, but isn't" */
     siz *= .5;
@@ -486,6 +553,14 @@ void gsd_draw_box(float *center, unsigned long colr, float siz)
 
     return;
 }
+
+/*!
+  \brief Draw sphere
+
+  \param center center point
+  \param colr color value
+  \param size size value
+*/
 void gsd_drawsphere(float *center, unsigned long colr, float siz)
 {
     siz *= .5;			/* siz is diameter, gsd_sphere uses radius */
@@ -495,6 +570,9 @@ void gsd_drawsphere(float *center, unsigned long colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw diamond lines
+*/
 void gsd_diamond_lines(void)
 {
     gsd_bgnline();
@@ -515,6 +593,13 @@ void gsd_diamond_lines(void)
     return;
 }
 
+/*!
+  \brief Draw asterisk
+
+  \param center center point
+  \param colr color value
+  \param siz size value
+*/
 void gsd_draw_asterisk(float *center, unsigned long colr, float siz)
 {
     float angle;
@@ -563,6 +648,13 @@ void gsd_draw_asterisk(float *center, unsigned long colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw gyro
+
+  \param center center point
+  \param colr color value
+  \param siz size value
+ */
 void gsd_draw_gyro(float *center, unsigned long colr, float siz)
 {
     int i;
@@ -610,6 +702,11 @@ void gsd_draw_gyro(float *center, unsigned long colr, float siz)
     return;
 }
 
+/*!
+  \brief Draw 3d cursor
+
+  \param pt point
+ */
 void gsd_3dcursor(float *pt)
 {
     float big, vert[3];
@@ -646,6 +743,14 @@ void gsd_3dcursor(float *pt)
     return;
 }
 
+/*!
+  \brief ADD
+  
+  \param dir
+  \param slope
+  \param ascpect
+  \param degrees
+*/
 void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
 {
     float dx, dy, dz;
@@ -705,11 +810,19 @@ void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
 }
 
 
-/**************************************************************
- * Function to draw North Arrow takes OpenGL coords and size
- *************************************************************/
+/*!
+  \brief Draw North Arrow takes OpenGL coords and size
+
+  \param pos2
+  \param len
+  \param fontbase
+  \param arw_clr north arrow color
+  \param text_clr text color
+
+  \return 1
+*/
 int gsd_north_arrow (float *pos2, float len, GLuint fontbase,
-	unsigned long arw_clr, unsigned long text_clr)
+		     unsigned long arw_clr, unsigned long text_clr)
 {
     char *txt;
     float v[4][3];
@@ -761,11 +874,11 @@ int gsd_north_arrow (float *pos2, float len, GLuint fontbase,
     glVertex3fv(v[0]);
     gsd_endpolygon();
 
-/* draw N for North */
-/* Need to pick a nice generic font */
-/* TODO -- project text position off arrow
- * bottom along azimuth
- */
+    /* draw N for North */
+    /* Need to pick a nice generic font */
+    /* TODO -- project text position off arrow
+     * bottom along azimuth
+     */
 
     gsd_color_func(text_clr);
     txt = "North";
@@ -785,14 +898,24 @@ int gsd_north_arrow (float *pos2, float len, GLuint fontbase,
 
 }
 
+/*!
+  \brief ADD
 
+  siz is height, sz is global exag to correct for.
+  
+  If onsurf in non-null, z component of dir is dropped and
+  line-on-suf is used, resulting in length of arrow being proportional
+  to slope 
 
-
-/**************************************************************/
-/* siz is height, sz is global exag to correct for.
- * If onsurf in non-null, z component of dir is dropped and
- * line-on-suf is used, resulting in length of arrow being proportional
- * to slope 
+  \param center center point
+  \param colr color value
+  \param siz size value
+  \param dir
+  \param sz
+  \param onsurf surface (geosurf)
+  
+  \return 1 no surface given
+  \return 0 on surface
 */
 int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
 	      float sz, geosurf * onsurf)
@@ -855,7 +978,17 @@ int gsd_arrow(float *center, unsigned long colr, float siz, float *dir,
     return (1);
 }
 
-/**************************************************************/
+/*!
+  \brief Draw north arrow on surface
+
+  \param base
+  \param tip
+  \param colr
+  \param wid
+  \param gs surface (geosurf)
+
+  \return 0
+*/
 int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
 		     geosurf * gs)
 {
@@ -869,10 +1002,9 @@ int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
     gsd_linewidth(wid);
     gsd_color_func(colr);
 
-    /* DEBUG
-       fprintf(stderr,"%f %f -> ", base[X], base[Y]);
-       fprintf(stderr,"%f %f\n", tip[X], tip[Y]);
-     */
+    G_debug (3, "gsd_arrow_onsurf");
+    G_debug (3, "  %f %f -> %f %f", base[X], base[Y], tip[X], tip[Y]);
+    
     gsd_line_onsurf(gs, base, tip);
 
 #ifdef DO_SPHERE_BASE
@@ -888,52 +1020,45 @@ int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
 	base[Z] = tip[Z] = 0.0;
 	GS_v3dir(tip, base, dir0);
 
-	/* DEBUG
-	   fprintf(stderr,"dir0: %f %f %f\n", dir0[X], dir0[Y], dir0[Z]);
-	 */
+	G_debug (3, "  dir0: %f %f %f", dir0[X], dir0[Y], dir0[Z]);
 
 	/* rotate this direction 90 degrees */
 	GS_v3cross(dir0, UP_NORM, dir2);
 	GS_v3mag(dir0, &len);
 	GS_v3eq(dir1, dir0);
 
-	/* DEBUG
-	   fprintf(stderr,"len: %f\n", len);
-	   fprintf(stderr,"a-dir1: %f %f %f\n", dir1[X], dir1[Y], dir1[Z]);
-	   fprintf(stderr,"a-dir2: %f %f %f\n", dir2[X], dir2[Y], dir2[Z]);
-	 */
+	G_debug (3, "  len: %f", len);
+	G_debug (3, "  a-dir1: %f %f %f", dir1[X], dir1[Y], dir1[Z]);
+	G_debug (3, "  a-dir2: %f %f %f", dir2[X], dir2[Y], dir2[Z]);
+
 	dim1 = len * .7;
 	dim2 = len * .2;
 	GS_v3mult(dir1, dim1);
 	GS_v3mult(dir2, dim2);
 
-	/* DEBUG
-	   fprintf(stderr,"b-dir1: %f %f %f\n", dir1[X], dir1[Y], dir1[Z]);
-	   fprintf(stderr,"b-dir2: %f %f %f\n", dir2[X], dir2[Y], dir2[Z]);
-	 */
+	G_debug (3, "  b-dir1: %f %f %f", dir1[X], dir1[Y], dir1[Z]);
+	G_debug (3, "  b-dir2: %f %f %f", dir2[X], dir2[Y], dir2[Z]);
+
 	GS_v3eq(tmp, base);
 	GS_v3add(tmp, dir1);
 	GS_v3add(tmp, dir2);
 
-	/* DEBUG
-	   fprintf(stderr,"%f %f -> ", tmp[X], tmp[Y]);
-	 */
+	G_debug (3, "  %f %f -> ", tmp[X], tmp[Y]);
+
 	gsd_line_onsurf(gs, tmp, tip);
 
 	GS_v3cross(dir0, DOWN_NORM, dir2);
 	GS_v3mult(dir2, dim2);
 	GS_v3eq(tmp, base);
 
-	/* DEBUG
-	   fprintf(stderr,"dir1: %f %f %f\n", dir1[X], dir1[Y], dir1[Z]);
-	   fprintf(stderr,"dir2: %f %f %f\n", dir2[X], dir2[Y], dir2[Z]);
-	 */
+	G_debug (3, "  dir1: %f %f %f", dir1[X], dir1[Y], dir1[Z]);
+	G_debug (3, "  dir2: %f %f %f", dir2[X], dir2[Y], dir2[Z]);
+
 	GS_v3add(tmp, dir1);
 	GS_v3add(tmp, dir2);
 
-	/* DEBUG
-	   fprintf(stderr,"%f %f\n", tmp[X], tmp[Y]);
-	 */
+	G_debug (3, "  %f %f", tmp[X], tmp[Y]);
+
 	gsd_line_onsurf(gs, tip, tmp);
     }
 #endif
@@ -941,9 +1066,16 @@ int gsd_arrow_onsurf(float *base, float *tip, unsigned long colr, int wid,
     return (0);
 }
 
+/*!
+  \brief Draw 3d north arrow
 
-/**************************************************************/
-/* siz1 is height, siz2 is diameter */
+  \param center center point
+  \param colr color value
+  \param siz1 height
+  \param siz2 is diameter
+  \param dir
+  \param sz
+*/
 void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
 		 float *dir, float sz)
 {
@@ -951,26 +1083,21 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
     int preshade;
     static int first = 1;
     static int list;
+    static int debugint = 1;
 
     dir[Z] /= sz;
 
     GS_v3norm(dir);
     dir_to_slope_aspect(dir, &slope, &aspect, 1);
 
-#ifdef DEBUG
-    {
-	static int debugint = 1;
-
-	if (debugint > 100) {
-	    fprintf(stderr,
-		    "pt: %f,%f,%f dir: %f,%f,%f slope: %f aspect: %f\n",
-		    center[X], center[Y], center[Z], dir[X], dir[Y], dir[Z],
-		    slope, aspect);
-	    debugint = 1;
-	}
-	debugint++;
+    if (debugint > 100) {
+	G_debug (3, "gsd_3darrow()");
+	G_debug (3, "  pt: %f,%f,%f dir: %f,%f,%f slope: %f aspect: %f",
+		 center[X], center[Y], center[Z], dir[X], dir[Y], dir[Z],
+		 slope, aspect);
+	debugint = 1;
     }
-#endif
+    debugint++;
 
     preshade = gsd_getshademodel();
 
@@ -1016,11 +1143,18 @@ void gsd_3darrow(float *center, unsigned long colr, float siz1, float siz2,
     return;
 }
 
-
-/**************************************************************
- * Function to draw Scalebar takes OpenGL coords and size
- *  adapted from gsd_north_arrow Hamish Bowman Dec 2006
- *************************************************************/
+/*!
+  \brief Draw Scalebar takes OpenGL coords and size
+  
+  Adapted from gsd_north_arrow Hamish Bowman Dec 2006
+  
+  \param pos2
+  \param fontbase font-base
+  \param bar_clr barscale color
+  \param text_clr text color
+  
+  \return 1
+*/
 int gsd_scalebar (float *pos2, float len, GLuint fontbase,
 	unsigned long bar_clr, unsigned long text_clr)
 {
@@ -1097,10 +1231,13 @@ int gsd_scalebar (float *pos2, float len, GLuint fontbase,
     return (1);
 }
 
+/*!
+  \brief Primitives only called after transforms
 
+  Center is actually center at base of 8 sided cone
 
-/* primitives only called after transforms */
-/* center is actually center at base of 8 sided cone */
+  \param col color value
+*/
 void primitive_cone(unsigned long col)
 {
     float tip[3];
@@ -1130,8 +1267,14 @@ void primitive_cone(unsigned long col)
     return;
 }
 
-/* primitives only called after transforms */
-/* center is actually center at base of 8 sided cylinder */
+/*!
+  \brief Primitives only called after transforms
+
+  Center is actually center at base of 8 sided cylinder
+
+  \param col color value
+  \param caps
+*/
 void primitive_cylinder(unsigned long col, int caps)
 {
     static int first = 1;
@@ -1197,22 +1340,32 @@ void primitive_cylinder(unsigned long col, int caps)
 
 /*** ACS_MODIFY_BEGIN - sites_attribute management ********************************/
 /*
- Draws boxes that are used for histograms by gpd_obj function in gpd.c
- for site_attribute management
+  Draws boxes that are used for histograms by gpd_obj function in gpd.c
+  for site_attribute management
 */
 
- /* vertices for box */
+/*!
+  \brief Vertices for box
+*/
 float Box[8][3] = {{ 1.0,  1.0, -1.0},{-1.0,  1.0, -1.0},{-1.0,  1.0,  1.0},{ 1.0,  1.0,  1.0},
-    				{ 1.0, -1.0, -1.0},{-1.0, -1.0, -1.0},{-1.0, -1.0,  1.0},{ 1.0, -1.0,  1.0}};
+		   { 1.0, -1.0, -1.0},{-1.0, -1.0, -1.0},{-1.0, -1.0,  1.0},{ 1.0, -1.0,  1.0}};
 
 float BoxN[6][3] = {{0, 0, -ONORM},{0, 0, ONORM},{0, ONORM, 0},{0, -ONORM, 0},{ONORM, 0, 0},{-ONORM, 0, 0}};
 
-/* Warning siz is an array (we need it for scale only Z in histograms) */
+/*!
+  \brief Draw box
+
+  Warning siz is an array (we need it for scale only Z in histograms)
+
+  \param center center point
+  \param colr color value
+  \param siz size value
+*/
 void gsd_box(float *center, int colr, float *siz)
 {
     int preshade;
 
-	gsd_pushmatrix();
+    gsd_pushmatrix();
     gsd_translate(center[X], center[Y], center[Z] + siz[2]);
     gsd_scale(siz[0], siz[1], siz[2]);
     preshade = gsd_getshademodel();

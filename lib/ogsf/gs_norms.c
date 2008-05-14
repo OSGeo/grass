@@ -1,7 +1,7 @@
 /*!
   \file gs_norms.c
  
-  \brief OGSF library - 
+  \brief OGSF library - calculation normals (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,14 +13,16 @@
   for details.
   
   \author Bill Brown USACERL
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <grass/gstypes.h>
-#include "gsget.h"
-#include "rowcol.h"
 #include <math.h>
 #include <stdio.h>
 
+#include <grass/gstypes.h>
+#include "gsget.h"
+
+#include "rowcol.h"
 
 #define NTOP 0x00001000
 #define NBOT 0x00000100
@@ -34,7 +36,9 @@
 #define NBL  0x00000110
 #define NBR  0x00000101
 
-/* This macro is only used in the function calc_norm() */
+/*!
+  \brief This macro is only used in the function calc_norm()
+*/
 #define SET_NORM(i) \
        dz1 = z1 - z2; \
        dz2 = z3 - z4; \
@@ -55,10 +59,16 @@ static typbuff *elbuf;
 static unsigned long *norm;
 
 /*
-#define USE_GL_NORMALIZE
+  #define USE_GL_NORMALIZE
 */
 
-/* for optimization */
+/*!
+  \brief Init variables
+
+  for optimization
+
+  \param gs surface (geosurf)
+*/
 void init_vars(geosurf * gs)
 {
     /* optimized - these are static - global to this file */
@@ -89,16 +99,27 @@ void init_vars(geosurf * gs)
     return;
 }
 
-/* OPTIMIZED for constant dy & dx
- * The norm array is always the same size, but diff resolutions
- * force resampled data points to have their normals recalculated,
- * then only those norms are passed to n3f during drawing.
- * Norms are converted to a packed unsigned int for storage,
- * must be converted back at time of use.
- * TODO: fix to correctly calculate norms when mapped to sphere!
- */
-/* Uses the previous and next cells (when available) for normal 
-calculations to produce smoother normals */
+/*!
+  \brief Calculate normals
+
+  OPTIMIZED for constant dy & dx
+  
+  The norm array is always the same size, but diff resolutions
+  force resampled data points to have their normals recalculated,
+  then only those norms are passed to n3f during drawing.
+  Norms are converted to a packed unsigned int for storage,
+  must be converted back at time of use.
+  
+  \todo fix to correctly calculate norms when mapped to sphere!
+
+  Uses the previous and next cells (when available) for normal 
+  calculations to produce smoother normals
+
+  \param gs surface (geosurf)
+
+  \return 1 on success
+  \return 0 on failure
+*/
 int gs_calc_normals(geosurf * gs)
 {
     int row, col;
@@ -120,7 +141,7 @@ int gs_calc_normals(geosurf * gs)
 
     init_vars(gs);
 
-    Gs_status("recalculating normals...");
+    G_debug (3, "recalculating normals...");
 
     /* first row - just use single cell */
     /* first col - use bottom & right neighbors */
@@ -137,7 +158,7 @@ int gs_calc_normals(geosurf * gs)
     /* now use four neighboring points for rows 1 - (n-1) */
     for (row = 1; row < ycnt; row++) {
 	if (!(row % 100)) 
-		fprintf(stderr, "Row %d\r", row);
+	    G_debug (4, "  row %d", row);
 
 	/* turn off left neighbor for first col */
 	calc_norm(gs, row * ymod, 0, ~NLFT);
@@ -166,10 +187,21 @@ int gs_calc_normals(geosurf * gs)
     return (1);
 }
 
-/****************************************************************/
-/* need either four neighbors or two non-linear neighbors */
-/* passed initial state of neighbors known from array position */
-/* and data row & col */
+/*!
+  \brief Calculate normals
+
+  Need either four neighbors or two non-linear neighbors
+  passed initial state of neighbors known from array position
+  and data row & col
+
+  \param gs surface (geosurf)
+  \param drow
+  \param dcol
+  \param neighbors
+
+  \return 0 no normals
+  \return 1 on success
+*/
 int calc_norm(geosurf * gs, int drow, int dcol, unsigned int neighbors)
 {
     long noffset;

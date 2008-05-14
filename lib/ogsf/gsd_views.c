@@ -1,7 +1,7 @@
 /*!
   \file gsd_views.c
  
-  \brief OGSF library - manipulating views
+  \brief OGSF library - manipulating views (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 /* DEBUG */
@@ -31,12 +32,14 @@
 #include <grass/gstypes.h>
 #include "math.h"
 
-/*
-#define TRACE_DFUNCS
-*/
+/*!
+  \brief ADD
 
-/************************************************************************/
-/* sx, sy  screen coordinates */
+  \param vect
+  \param sx, sy  screen coordinates
+
+  \return 1
+*/
 int gsd_get_los(float (*vect)[3], short sx, short sy)
 {
     double fx, fy, fz, tx, ty, tz;
@@ -89,8 +92,14 @@ int gsd_get_los(float (*vect)[3], short sx, short sy)
 }
 
 
-/************************************************************************/
-/* establishes viewing & projection matrices */
+/*!
+  \brief Set view
+  
+  Establishes viewing & projection matrices
+
+  \param gv view (geoview)
+  \param dp display (geodisplay)
+*/
 void gsd_set_view(geoview * gv, geodisplay * gd)
 {
     double up[3];
@@ -129,7 +138,11 @@ void gsd_set_view(geoview * gv, geodisplay * gd)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Check focus
+
+  \param gv view (geoview)
+*/
 void gsd_check_focus(geoview * gv)
 {
     float zmax, zmin;
@@ -148,7 +161,12 @@ void gsd_check_focus(geoview * gv)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param gv view (geoview)
+  \param up
+*/
 void gsd_get_zup(geoview * gv, double *up)
 {
     float alpha;
@@ -177,7 +195,13 @@ void gsd_get_zup(geoview * gv, double *up)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param gv view (geoview)
+
+  \return ?
+*/
 int gsd_zup_twist(geoview * gv)
 {
     float fr_to[2][4];
@@ -251,11 +275,14 @@ int gsd_zup_twist(geoview * gv)
 	}
     }
 
-
     return ((int) (gv->twist + 1800 + look_theta));
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param doexag
+*/
 void gsd_do_scale(int doexag)
 {
     float sx, sy, sz;
@@ -269,7 +296,11 @@ void gsd_do_scale(int doexag)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Convert real to model coordinates
+
+  \param point[in,out] 3d point (Point3)
+*/
 void gsd_real2model(Point3 point)
 {
     float sx, sy, sz;
@@ -285,7 +316,11 @@ void gsd_real2model(Point3 point)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Convert model to real coordinates
+
+  \param point[in,out] 3d point (Point3)
+*/
 void gsd_model2real(Point3 point)
 {
     float sx, sy, sz;
@@ -301,7 +336,12 @@ void gsd_model2real(Point3 point)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Convert model to surface coordinates
+
+  \param gs surface (geosurf)
+  \param point 3d point (Point3)
+*/
 void gsd_model2surf(geosurf * gs, Point3 point)
 {
     float min, max, sx, sy, sz;
@@ -309,7 +349,7 @@ void gsd_model2surf(geosurf * gs, Point3 point)
     /* so far, only one geographic "region" allowed, so origin of
        surface is same as origin of model space, but will need to provide 
        translations here to make up the difference, so not using gs yet */
-
+    
     if (gs) {
 	/* need to undo z scaling & translate */
 	GS_get_scale(&sx, &sy, &sz, 1);
@@ -325,7 +365,12 @@ void gsd_model2surf(geosurf * gs, Point3 point)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Convert surface to real coordinates
+
+  \param gs surface (geosurf)
+  \param[in,out] point 3d point (Point3)
+*/
 void gsd_surf2real(geosurf * gs, Point3 point)
 {
     if (gs) {
@@ -336,7 +381,12 @@ void gsd_surf2real(geosurf * gs, Point3 point)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Convert real to surface coordinates
+
+  \param gs surface (geosurf)
+  \param[in,out] point 3d point (Point3)
+*/
 void gsd_real2surf(geosurf * gs, Point3 point)
 {
     if (gs) {
