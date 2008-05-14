@@ -382,6 +382,7 @@ int print_window(struct Cell_head *window, int print_flag)
 
 		G_format_easting((mid_n_lo + mid_s_lo) / 2., buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %11s\n", width, "center longitude:", buf);
+
 		G_format_northing((mid_n_la + mid_s_la) / 2., buf, PROJECTION_LL);
 		fprintf(stdout, "%-*s %11s\n", width, "center latitude:", buf);
 	    }
@@ -403,10 +404,10 @@ int print_window(struct Cell_head *window, int print_flag)
 	else /* in lat/long already */
 	{
 	    if (window->proj != 0)
-		G_message (_("You are already in lat/long. Use -p flag instead."));
+		G_message (_("You are already in Lat/Long. Use the -p flag instead."));
 	    else
-		G_message (_("You are in xy location (no projection possible, "
-			     "use -p flag instead)."));
+		G_message (_("You are in a simple XY location, projection to Lat/Lon "
+			     "is not possible. Use the -p flag instead."));
 	}
     }
 
@@ -638,17 +639,17 @@ int print_window(struct Cell_head *window, int print_flag)
 	    else
 	    {
 		G_format_northing(sh_ll_n, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "north longitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "north latitude :", buf);
 		G_format_northing(sh_ll_s, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "south longitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "south latitude:", buf);
 		G_format_easting(sh_ll_w, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "west latitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "west longitude:", buf);
 		G_format_easting(sh_ll_e, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "east latitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "east longitude:", buf);
 		G_format_easting((sh_ll_e - sh_ll_w)/2. + sh_ll_w, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s  %s\n", width, "center latitude:", buf);
+		fprintf(stdout, "%-*s  %s\n", width, "center longitude:", buf);
 		G_format_northing((sh_ll_n - sh_ll_s)/2. + sh_ll_s, buf, PROJECTION_LL);
-		fprintf(stdout, "%-*s %s\n", width, "center longitude:", buf);
+		fprintf(stdout, "%-*s %s\n", width, "center latitude:", buf);
 	    }
 
 	    /*It should be calculated which number of rows and cols we have in LL */
@@ -659,7 +660,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	}
 	else
 	{
-	    G_warning (_("No LatLong information for XY-Projection")); 
+	    G_warning(_("Lat/Long calculations are not possible from a simple XY system"));
 	}
     }
     
