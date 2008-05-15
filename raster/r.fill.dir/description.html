@@ -1,10 +1,10 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.fill.dir</EM> filters and generates a depressionless
+<em>r.fill.dir</em> filters and generates a depressionless
 elevation map and a flow direction map from a given raster elevation map.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The <b>type</b> parameter is the type of format at which the user wishes to create
 the flow direction map. The <i>agnps</i> format gives category values from
@@ -12,14 +12,14 @@ the flow direction map. The <i>agnps</i> format gives category values from
 The <i>answers</i> format gives category values from 0-360 degrees, with 0
 (360) facing east and values increasing in the counter clockwise direction
 at 45 degree increments. The <i>grass</i> format gives the same category
-values as the <EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
-program.<P>
+values as the <em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
+program.<p>
 
 The method adopted to filter the elevation map and rectify it is
 based on the paper titled "Software Tools to Extract Structure from Digital
 Elevation Data for Geographic Information System Analysis" by S.K. Jenson
 and J.O. Domingue (1988).
-<P>
+<p>
 
 The procedure takes an elevation layer as input and initially fills all the
 depressions with one pass across the layer. Next, the flow direction
@@ -40,13 +40,13 @@ based on flow directions in the adjacent cells. <em>r.fill.dir</em> iteratates t
 effectively propagating flow directions from areas where the directions are
 known into the area where the flow direction can't otherwise be resolved.
 
-<P>
+<p>
 The flow direction map can be encoded in either ANSWERS (Beasley et.al,
 1982) or AGNPS (Young et.al, 1985) form, so that it can be readily used as
 input to these hydrologic models. The resulting depressionless elevation
 layer can further be manipulated for deriving slopes and other attributes
 required by the hydrologic models.
-<P>
+<p>
 
 In case of local problems, those unfilled areas can be stored optionally.
 Each unfilled area in this maps is numbered. The <b>-f</b> flag
@@ -60,43 +60,43 @@ partially-fixed elevation map, identify the remaining problems and fix the
 problems appropriately.
 <p>
 
-<EM>r.fill.dir</EM> is sensitive to the current window setting. Thus 
+<em>r.fill.dir</em> is sensitive to the current window setting. Thus 
 the program can be used to generate a flow direction map for any 
-sub-area within the full map layer. Also, <EM>r.fill.dir</EM> is
-sensitive to any <EM>mask</EM> in effect.
+sub-area within the full map layer. Also, <em>r.fill.dir</em> is
+sensitive to any <em>mask</em> in effect.
 <p>
 
 In some cases it may be necessary to run r.fill.dir repeatedly (using output
 from one run as input to the next run) before all of problem areas are
 filled.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 <div class="code"><pre>
 r.fill.dir input=ansi.elev elevation=ansi.fill.elev direction=ansi.asp
 </pre></div>
 
-<P>
+<p>
 will create a depressionless (sinkless) elevation map ansi.fill.elev and a flow
 direction map ansi.asp for the type "grass".
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.fillnulls.html">r.fillnulls</A>,
-<A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>
+<em>
+<a href="r.fillnulls.html">r.fillnulls</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a></em>
 
-<P>
+<p>
 Beasley, D.B. and L.F. Huggins. 1982. ANSWERS (areal nonpoint source watershed environmental response simulation): User's manual. U.S. EPA-905/9-82-001, Chicago, IL, 54 p.
-<P>
+<p>
 Jenson, S.K., and J.O. Domingue. 1988. Extracting topographic structure from
 digital elevation model data for geographic information system analysis. Photogram. Engr. and Remote Sens. 54: 1593-1600.
-<P>
+<p>
 Young, R.A., C.A. Onstad, D.D. Bosch and W.P. Anderson. 1985. Agricultural nonpoint surface pollution models (AGNPS) I and II model documentation. St. Paul: Minn. Pollution control Agency and Washington D.C., USDA-Agricultural Research
 Service.
-<P>
+<p>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Fortran version:
 Raghavan Srinivasan, Agricultural Engineering Department, Purdue
 University<br>
