@@ -270,6 +270,10 @@ class GMFrame(wx.Frame):
         
         self.menucmd[menuItem.GetId()] = gcmd
 
+        if len(gcmd) > 0 and \
+                gcmd not in globalvar.grassCmd['all']:
+            menuItem.Enable (False)
+
         rhandler = eval(handler)
 
         self.Bind(wx.EVT_MENU, rhandler, menuItem)
