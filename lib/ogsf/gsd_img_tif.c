@@ -28,7 +28,6 @@
 #ifdef HAVE_TIFFIO_H
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <sys/types.h>
 
 #include <grass/gis.h>

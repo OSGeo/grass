@@ -25,7 +25,6 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>

@@ -16,12 +16,13 @@
   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/ogsf_proto.h>
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 #include "math.h"
 #include "rowcol.h"

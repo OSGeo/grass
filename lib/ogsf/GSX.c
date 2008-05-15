@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL (December 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <grass/gstypes.h>

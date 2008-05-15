@@ -13,14 +13,15 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
-  Doxygenized by Martin Landa <landa.martin gmail.com>
+  \author Doxygenized by Martin Landa <landa.martin gmail.com>
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 
 static int Vect_ID[MAX_VECTS];

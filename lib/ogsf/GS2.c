@@ -24,8 +24,8 @@
   for details.
   
   \author Bill Brown USACERL (1993)
-  Pierre de Mouveaux <p_de_mouveaux hotmail.com> (updated October 1999)
-  Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+  \author Pierre de Mouveaux <p_de_mouveaux hotmail.com> (updated October 1999)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>

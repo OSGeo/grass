@@ -13,14 +13,15 @@
   for details.
   
   \author Bill Brown USACERL (January 1994)
-  Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
+  \author Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
 #include <string.h>
-#include <grass/gis.h>
 
+#include <grass/gis.h>
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 
 static int Site_ID[MAX_SITES];

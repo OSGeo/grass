@@ -1,24 +1,12 @@
 /*!
   \file trans.c
  
-  \brief OGSF library - 
+  \brief OGSF library - matrix transformation (higher level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
   NOTE: This file should be REMOVED and any calls to the functions in this
   file should be replaced with appropriate OpenGL calls.
-
-  Matrix Transformation library.
-  
-  P_pushmatrix ()
-  
-  P_popmatrix ()
-
-  P_scale ()		
-  
-  P_rot ()
-
-  P_transform ()      transform array of vectors using current T matrix
 
   This routine should be available in GL!
 
@@ -36,12 +24,14 @@
   for details.
   
   \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction Engineering Research Lab
-  Bill Brown USACERL (November 1993)
+  \author Bill Brown USACERL (November 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <math.h>
 
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
 
 #define MAX_STACK 20
@@ -77,7 +67,11 @@ static float ident[4][4] = {
     {0., 0., 0., 1.}
 };
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param x,y,z
+*/
 void P_scale(float x, float y, float z)
 {
     d[0][0] = x;
@@ -98,9 +92,9 @@ void P_scale(float x, float y, float z)
     d[3][3] = 1.;
 
     /*
-       **  will write into 1 down on matrix stack
-       **  and then the popmatrix() will place it as the current T matrix
-     */
+    **  will write into 1 down on matrix stack
+    **  and then the popmatrix() will place it as the current T matrix
+    */
     P_pushmatrix();
     P__transform(4, d, c_stack[stack_ptr], trans_mat);
     P_popmatrix();
@@ -108,13 +102,17 @@ void P_scale(float x, float y, float z)
     return;
 }
 
+/*!
+  \brief Transform array of vectors using current T matrix
+  
+  Multiply 'in' matrix (homogenous coordinate generally) by
+  the current transformation matrix, placing the result in 'out'
 
-/************************************************************************/
-/*
-**   multiply 'in' matrix (homogenous coordinate generally) by
-**   the current transformation matrix, placing the result in 'out'
-**
-**       [in][trans_mat] => [out]
+  [in][trans_mat] => [out]
+  
+  \param num_vert
+  \param in
+  \param out
 */
 void P_transform(int num_vert, float (*in)[4], float (*out)[4])
 {
@@ -123,7 +121,18 @@ void P_transform(int num_vert, float (*in)[4], float (*out)[4])
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Transform array of vectors using current T matrix
+  
+  Multiply 'in' matrix (homogenous coordinate generally) by
+  the current transformation matrix, placing the result in 'out'
+
+  [in][trans_mat] => [out]
+  
+  \param num_vert
+  \param in
+  \param out
+*/
 static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
 		  float (*c)[4])
 {
@@ -142,7 +151,13 @@ static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief Copy matrix 
+  
+  \param from 'from' matrix
+  \param to 'to' matrix
+  \param size number of rows (ncols=4)
+*/
 static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
 {
     register int i, j;
@@ -156,14 +171,13 @@ static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
     return;
 }
 
-/************************************************************************/
-/*
-** push current transformation matrix onto matrix stack
+/*!
+  \brief Push current transformation matrix onto matrix stack
 */
 int P_pushmatrix(void)
 {
     if (stack_ptr >= MAX_STACK) {
-	fprintf(stderr, "Out of matrix stack space\n");
+	G_warning ("P_pushmatrix(): %s", _("Out of matrix stack space"));
 
 	return (-1);
     }
@@ -174,14 +188,16 @@ int P_pushmatrix(void)
     return (0);
 }
 
-/************************************************************************/
-/*
-** pop top of matrix stack, placing it into the current transformation matrix
+/*!
+  \brief Pop top of matrix stack, placing it into the current transformation matrix
+
+  \return -1 on failure
+  \return 0 on success
 */
 int P_popmatrix(void)
 {
     if (stack_ptr < 0) {
-	fprintf(stderr, "Tried to pop an empty stack\n");
+	G_warning ("P_popmatrix(): %s", _("Tried to pop an empty stack"));
 
 	return (-1);
     }
@@ -192,8 +208,12 @@ int P_popmatrix(void)
     return (0);
 }
 
+/*!
+  \brief Rotate matrix
 
-/************************************************************************/
+  \param angle angle value
+  \param axis ('x, 'y', 'z')
+*/
 void P_rot(float angle, char axis)
 {
     double theta;

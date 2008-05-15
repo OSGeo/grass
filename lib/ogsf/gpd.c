@@ -16,10 +16,11 @@
   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #include <grass/gstypes.h>
+
 #include "rowcol.h"
 
 #define CHK_FREQ 50

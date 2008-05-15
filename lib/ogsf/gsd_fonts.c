@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <assert.h>
+
 #include <grass/gstypes.h>
 #include <grass/ogsf_proto.h>
 

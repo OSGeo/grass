@@ -16,6 +16,7 @@
   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 

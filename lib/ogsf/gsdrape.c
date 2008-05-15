@@ -44,12 +44,13 @@
   for details.
   
   \author Bill Brown UI GMS Lab
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <stdlib.h>
 
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 #include "rowcol.h"
 #include "math.h"
