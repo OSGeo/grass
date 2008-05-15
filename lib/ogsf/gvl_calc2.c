@@ -1,7 +1,7 @@
 /*!
   \file gvl_calc2.c
  
-  \brief OGSF library - loading and manipulating volumes
+  \brief OGSF library - loading and manipulating volumes, MarchingCubes 33 Algorithm (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -16,6 +16,7 @@
   for details.
   
   \author Tomas Paudits, 2004
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <float.h>
@@ -27,7 +28,14 @@
 
 unsigned char m_case, m_config, m_subconfig;
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param face
+  \param v
+
+  \return
+*/
 int mc33_test_face( char face , float *v)
 {
 	float A,B,C,D ;
@@ -72,7 +80,14 @@ int mc33_test_face( char face , float *v)
 	return face * A * ( A*C - B*D ) >= 0;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param s
+  \param v
+
+  \return
+*/
 int mc33_test_interior( char s, float *v)
 {
 	float t, At = 0, Bt = 0, Ct = 0, Dt = 0, a, b ;
@@ -242,7 +257,14 @@ int mc33_test_interior( char s, float *v)
 	return s < 0;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param c_ndx
+  \param v
+
+  \return
+*/
 int mc33_process_cube(int c_ndx, float *v)
 {
 	m_case   = cases[c_ndx][0] ;

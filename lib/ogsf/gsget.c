@@ -1,7 +1,7 @@
 /*!
   \file gsd_get.c
  
-  \brief OGSF library - 
+  \brief OGSF library - get map attribute (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,10 +13,21 @@
   for details.
   
   \author Bill Brown USACERL (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <grass/gstypes.h>
 
+/*!
+  \brief Get map attributes
+
+  \param buff
+  \param offset
+  \param[out] att
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int get_mapatt(typbuff * buff, int offset, float *att)
 {
     if (buff->nm) {
