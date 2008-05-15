@@ -19,7 +19,6 @@ SUBDIRS = \
 	r.covar \
 	r.cross \
 	r.describe \
-	r.digit \
 	r.distance \
 	r.drain \
 	r.fill.dir \
@@ -50,7 +49,6 @@ SUBDIRS = \
 	r.out.arc \
 	r.out.ascii \
 	r.out.bin \
-	r.out.gdal \
 	r.out.gridatb \
 	r.out.mat \
 	r.out.mpeg \
@@ -112,7 +110,7 @@ SUBDIRS = \
 	simwe \
 	wildfire
 
-GDALBASED = r.in.gdal
+GDALBASED = r.in.gdal r.out.gdal
 
 FFTWBASED = r.surf.fractal
 
@@ -121,6 +119,9 @@ PNGBASED = r.out.png
 CXXBASED = r.terraflow
 
 TIFFBASED = r.out.tiff
+
+XMONBASED = r.digit
+
 
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 
@@ -148,6 +149,12 @@ endif
 ifneq ($(strip $(TIFFLIB)),)
     SUBDIRS += $(TIFFBASED)
 endif
+
+#compile if interactive Xmons are present:
+ifneq ($(USE_X11),)
+    SUBDIRS += $(XMONBASED)
+endif
+
 
 PGM = rasterintro
 
