@@ -1,7 +1,7 @@
 /*!
   \file gvld.c
  
-  \brief OGSF library - loading and manipulating volumes
+  \brief OGSF library - loading and manipulating volumes (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,26 +13,30 @@
   for details.
   
   \author Tomas Paudits (February 2004)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <math.h>
 
 #include <grass/gis.h>
 #include <grass/gstypes.h>
+
 #include "mc33_table.h"
 
 /* usefull macros */
 #define READ() gvl_read_char(pos[i]++, gvl->isosurf[i]->data)
 
-/************************************************************************/
+/*!
+  \brief ADD
+  
+  \param gvl pointer to geovol struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvld_vol(geovol * gvl)
 {
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_vol");
-    }
-#endif
+    G_debug(3, "gvld_vol");
 
     /* SLICES */
     /* calculate slices data, if slices changed */
@@ -53,14 +57,17 @@ int gvld_vol(geovol * gvl)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param gvl pointer to geovol struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvld_wire_vol(geovol * gvl)
 {
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_vol");
-    }
-#endif
+    G_debug(3, "gvld_vol");
 
     gvld_wind3_box(gvl);
 
@@ -73,7 +80,14 @@ int gvld_wire_vol(geovol * gvl)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param gvl pointer to geovol struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvld_isosurf(geovol * gvl)
 {
     float tx, ty, tz;
@@ -118,21 +132,12 @@ int gvld_isosurf(geovol * gvl)
     nz = G_malloc(n_i * sizeof(int));
     e_dl = G_malloc(n_i * sizeof(int));
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_isosurf");
+    G_debug(3, "gvld_isosurf():");
+    for (i = 0; i < gvl->n_isosurfs; i++) {
+	G_debug(4, "  start : gvl: %s isosurf : %d\n",
+		gvl_file_get_name(gvl->hfile), i);
     }
-#endif
-
-#ifdef DEBUG
-    {
-	for (i = 0; i < gvl->n_isosurfs; i++) {
-	    fprintf(stderr, "start : gvl: %s isosurf : %d\n",
-		    gvl_file_get_name(gvl->hfile), i);
-	}
-    }
-#endif
-
+    
     /* shade */
     gsd_shademodel(gvl->isosurf_draw_mode & DM_GOURAUD);
 
@@ -233,24 +238,17 @@ int gvld_isosurf(geovol * gvl)
 	nz[i] = 0;
     }
 
-#ifdef DEBUG
-    {
-	fprintf(stderr, "intialize OK\n", gvl_file_get_name(gvl->hfile), i);
-    }
-#endif
+    G_debug (3, "  intialize OK", gvl_file_get_name(gvl->hfile), i);
 
     for (z = 0; z < depths - 1; z++) {
 	zc = z * zres;
 
 	if (GS_check_cancel()) {
-#ifdef DEBUG
-	    {
-		for (i = 0; i < gvl->n_isosurfs; i++) {
-		    fprintf(stderr, "break : isosurf : %d datalength : %d B\n",
-			    i, pos[i]);
-		}
+	    for (i = 0; i < gvl->n_isosurfs; i++) {
+		G_debug(4, "  break : isosurf : %d datalength : %d B\n",
+			i, pos[i]);
 	    }
-#endif
+
 	    gsd_set_material(1, 1, 0., 0., 0x0);
 	    gsd_popmatrix();
 	    gsd_blend(0);
@@ -387,14 +385,10 @@ int gvld_isosurf(geovol * gvl)
 
     }
 
-#ifdef DEBUG
-    {
-	for (i = 0; i < gvl->n_isosurfs; i++) {
-	    fprintf(stderr, "end : isosurf : %d datalength : %d B\n", i,
-		    pos[i]);
-	}
+    for (i = 0; i < gvl->n_isosurfs; i++) {
+	G_debug(4, "  end : isosurf : %d datalength : %d B\n", i,
+		pos[i]);
     }
-#endif
 
     gsd_set_material(1, 1, 0., 0., 0x0);
     gsd_popmatrix();
@@ -404,7 +398,13 @@ int gvld_isosurf(geovol * gvl)
     return (0);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param gvl pointer to geovol struct
+
+  \return 0
+*/
 int gvld_wire_isosurf(geovol * gvl)
 {
     return (0);
@@ -417,9 +417,13 @@ int gvld_wire_isosurf(geovol * gvl)
 
 #define DISTANCE_2(x1, y1, x2, y2)	sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2))
 
-/* draw slices */
+/*!
+  \brief Draw slices
 
-/************************************************************************/
+  \param gvl pointer to geovol struct
+
+  \return 0
+*/
 int gvld_slices(geovol * gvl)
 {
     float tx, ty, tz;
@@ -429,11 +433,7 @@ int gvld_slices(geovol * gvl)
     GLint viewport[4];
     GLint window[4];
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_slices");
-    }
-#endif
+    G_debug(3, "gvld_slices");
 
     /* shade */
     gsd_shademodel(gvl->slice_draw_mode & DM_GOURAUD);
@@ -473,9 +473,14 @@ int gvld_slices(geovol * gvl)
     return (0);
 }
 
-/* draw slice */
+/*!
+  \brief Draw slice
 
-/************************************************************************/
+  \param gvl pointer to geovol struct
+  \param ndx
+
+  \return 1
+*/
 int gvld_slice(geovol * gvl, int ndx)
 {
     geovol_slice *slice;
@@ -647,8 +652,13 @@ int gvld_slice(geovol * gvl, int ndx)
     return (1);
 }
 
-/************************************************************************/
-/* draw wire slices */
+/*!
+  \brief Draw wire slices 
+
+  \param gvl pointer to geovol struct
+
+  \return 0
+*/
 int gvld_wire_slices(geovol * gvl)
 {
     float pt[3];
@@ -657,11 +667,7 @@ int gvld_wire_slices(geovol * gvl)
 
     geovol_slice *slice;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_wire_slices");
-    }
-#endif
+    G_debug (3, "gvld_wire_slices");
 
     gsd_pushmatrix();
 
@@ -749,17 +755,18 @@ int gvld_wire_slices(geovol * gvl)
     return (0);
 }
 
-/************************************************************************/
-/* draw wind3 box */
+/*!
+  \brief Draw wind3 box
+
+  \param gvl pointer to geovol struct
+
+  \return 0
+*/
 int gvld_wind3_box(geovol * gvl)
 {
     float pt[3];
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gvld_wind3_box");
-    }
-#endif
+    G_debug(3, "gvld_wind3_box");
 
     gsd_pushmatrix();
 

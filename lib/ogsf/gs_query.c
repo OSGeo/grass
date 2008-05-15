@@ -1,7 +1,7 @@
 /*!
   \file gs_query.c
  
-  \brief OGSF library - 
+  \brief OGSF library - query (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,16 +13,18 @@
   for details.
   
   \author Bill Brown USACERL (January 1994)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <math.h>
-#include <stdio.h>
 
+#include <grass/gis.h>
 #include <grass/gstypes.h>
 
-/* Values needed for Ray-Convex Polyhedron Intersection Test below
- * originally by Eric Haines, erich@eye.com
- */
+/*!
+  \brief Values needed for Ray-Convex Polyhedron Intersection Test below
+  originally by Eric Haines, erich@eye.com
+*/
 #ifndef	HUGE_VAL
 #define	HUGE_VAL	1.7976931348623157e+308
 #endif
@@ -33,11 +35,20 @@
 #define	BACKFACE	-1
 /* end Ray-Convex Polyhedron Intersection Test values */
 
-/***********************************************************************/
-/* Crude method of intersecting line of sight with closest part of surface. 
-   Uses los vector to determine the point of first intersection
-   which is returned in point. Returns 0 if los doesn't intersect.  */
-/* los should ALREADY be in surf-world coordinates */
+
+/*!
+  \biref Crude method of intersecting line of sight with closest part of surface. 
+
+  Uses los vector to determine the point of first intersection
+  which is returned in point. Returns 0 if los doesn't intersect. 
+  
+  \param surfid surface id
+  \param los should be in surf-world coordinates
+  \param[out] point intersect point (real)
+
+  \return 0 on failure
+  \return 1 on success
+*/
 int gs_los_intersect1(int surfid, float (*los)[3], float *point)
 {
     float dx, dy, dz, u_d[3];
@@ -46,6 +57,8 @@ int gs_los_intersect1(int surfid, float (*los)[3], float *point)
     float b[3];
     geosurf *gs;
     typbuff *buf;
+
+    G_debug (3, "gs_los_intersect1():");
 
     if (NULL == (gs = gs_get_surf(surfid))) {
 	return (0);
@@ -149,7 +162,7 @@ int gs_los_intersect1(int surfid, float (*los)[3], float *point)
     }
 
     if ((edge) && (b[Z] - (a[Z] + dz * 2.0) > incr * u_d[Z])) {
-	fprintf(stderr, "looking under surface\n");
+	G_debug (3, "  looking under surface");
 
 	return 0;
     }
@@ -161,10 +174,19 @@ int gs_los_intersect1(int surfid, float (*los)[3], float *point)
     return (1);
 }
 
-/* 
- * This version uses the shadow of the los projected down to
- * the surface to generate a line_on_surf, then follows each
- * point in that line until the los intersects it.
+/*!
+  \biref Crude method of intersecting line of sight with closest part of surface. 
+
+  This version uses the shadow of the los projected down to
+  the surface to generate a line_on_surf, then follows each
+  point in that line until the los intersects it.
+  
+  \param surfid surface id
+  \param los should be in surf-world coordinates
+  \param[out] point intersect point (real)
+
+  \return 0 on failure
+  \return 1 on success
 */
 int gs_los_intersect(int surfid, float **los, float *point)
 {
@@ -176,6 +198,8 @@ int gs_los_intersect(int surfid, float **los, float *point)
     geosurf *gs;
     typbuff *buf;
     Point3 *points;
+
+    G_debug (3, "gs_los_intersect");
 
     if (NULL == (gs = gs_get_surf(surfid))) {
 	return (0);
@@ -200,41 +224,40 @@ int gs_los_intersect(int surfid, float **los, float *point)
     points = gsdrape_get_allsegments(gs, bgn, end, &num);
 
 /* DEBUG
-{
-float t1[3], t2[3];
-
-t1[X] = los[FROM][X] ;
-t1[Y] = los[FROM][Y] ;
-
-t2[X] = los[TO][X] ;
-t2[Y] = los[TO][Y] ;
-
-GS_set_draw(GSD_FRONT);
-gsd_pushmatrix();
-gsd_do_scale(1);
-gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
-gsd_linewidth(1);
-gsd_color_func(GS_default_draw_color());
-gsd_line_onsurf(gs, t1, t2);
-gsd_popmatrix();
-GS_set_draw(GSD_BACK);
-gsd_flush();
-}
-fprintf(stderr,"%d points to check\n", num);
-fprintf(stderr,"point0 = %.6lf %.6lf %.6lf FT =%.6lf %.6lf %.6lf\n",
+   {
+   float t1[3], t2[3];
+   
+   t1[X] = los[FROM][X] ;
+   t1[Y] = los[FROM][Y] ;
+   
+   t2[X] = los[TO][X] ;
+   t2[Y] = los[TO][Y] ;
+   
+   GS_set_draw(GSD_FRONT);
+   gsd_pushmatrix();
+   gsd_do_scale(1);
+   gsd_translate(gs->x_trans, gs->y_trans, gs->z_trans);
+   gsd_linewidth(1);
+   gsd_color_func(GS_default_draw_color());
+   gsd_line_onsurf(gs, t1, t2);
+   gsd_popmatrix();
+   GS_set_draw(GSD_BACK);
+   gsd_flush();
+   }
+   fprintf(stderr,"%d points to check\n", num);
+   fprintf(stderr,"point0 = %.6lf %.6lf %.6lf FT =%.6lf %.6lf %.6lf\n",
 	points[0][X],points[0][Y],points[0][Z],
 	los[FROM][X],los[FROM][Y],los[FROM][Z]);
-fprintf(stderr,"incr1 = %.6lf: %.6lf %.6lf %.6lf\n",incr,u_d[X],u_d[Y],u_d[Z]);
-fprintf(stderr,"first point below surf\n");
-fprintf(stderr,"incr2 = %f\n", (float)incr);
-fprintf(stderr,"(%d/%d) %f > %f\n", i,num, a[Z], points[i][Z]);
-fprintf(stderr,"incr3 = %f\n", (float)incr);
-fprintf(stderr,"all points above surf\n");
+	fprintf(stderr,"incr1 = %.6lf: %.6lf %.6lf %.6lf\n",incr,u_d[X],u_d[Y],u_d[Z]);
+	fprintf(stderr,"first point below surf\n");
+	fprintf(stderr,"incr2 = %f\n", (float)incr);
+	fprintf(stderr,"(%d/%d) %f > %f\n", i,num, a[Z], points[i][Z]);
+	fprintf(stderr,"incr3 = %f\n", (float)incr);
+	fprintf(stderr,"all points above surf\n");
 */
 
     if (num < 2) {
-	fprintf(stderr, "-----------------------------\n");
-	fprintf(stderr, "%d points to check\n", num);
+	G_debug (3, "  %d points to check", num);
 
 	return (0);
     }
@@ -255,16 +278,16 @@ fprintf(stderr,"all points above surf\n");
     }
 
 /* DEBUG
-fprintf(stderr,"-----------------------------\n");
-fprintf(stderr,"%d points to check\n", num);
-fprintf(stderr,"incr1 = %.6lf: %.9f %.9f %.9f\n",incr,u_d[X],u_d[Y],u_d[Z]);
-fprintf(stderr,
-"\tpoint0 = %.6f %.6f %.6f\n\tFT = %.6f %.6f %.6f\n\tpoint%d = %.6f %.6f\n",
-	points[0][X],points[0][Y],points[0][Z],
-	los[FROM][X],los[FROM][Y],los[FROM][Z],
-	num-1, points[num-1][X],points[num-1][Y]);
+   fprintf(stderr,"-----------------------------\n");
+   fprintf(stderr,"%d points to check\n", num);
+   fprintf(stderr,"incr1 = %.6lf: %.9f %.9f %.9f\n",incr,u_d[X],u_d[Y],u_d[Z]);
+   fprintf(stderr,
+   "\tpoint0 = %.6f %.6f %.6f\n\tFT = %.6f %.6f %.6f\n\tpoint%d = %.6f %.6f\n",
+   points[0][X],points[0][Y],points[0][Z],
+   los[FROM][X],los[FROM][Y],los[FROM][Z],
+   num-1, points[num-1][X],points[num-1][Y]);
 */
-
+    
     /* This should bring us right above (or below) the first point */
     a[X] = los[FROM][X] + incr * u_d[X] - gs->x_trans;
     a[Y] = los[FROM][Y] + incr * u_d[Y] - gs->y_trans;
@@ -274,14 +297,14 @@ fprintf(stderr,
 	/*  viewing from below surface  */
 	/*  don't use this method */
 /* DEBUG
-fprintf(stderr,"first point below surf\n");
-fprintf(stderr,"aZ= %.6f point0 = %.6f %.6f %.6f FT =%.6f %.6f %.6f\n",
-	a[Z], points[0][X],points[0][Y],points[0][Z],
-	los[FROM][X],los[FROM][Y],los[FROM][Z]);
+   fprintf(stderr,"first point below surf\n");
+   fprintf(stderr,"aZ= %.6f point0 = %.6f %.6f %.6f FT =%.6f %.6f %.6f\n",
+   a[Z], points[0][X],points[0][Y],points[0][Z],
+   los[FROM][X],los[FROM][Y],los[FROM][Z]);
 */
 	return (0);
     }
-
+    
     GS_v3eq(a1, a);
     GS_v3eq(b, a);
 
@@ -327,34 +350,36 @@ fprintf(stderr,"aZ= %.6f point0 = %.6f %.6f %.6f FT =%.6f %.6f %.6f\n",
 	    return (1);
 	}
 
-	fprintf(stderr, "line of sight error %d\n", ret);
-
+	G_debug (3, "  line of sight error %d", ret);
+	
 	return 0;
     }
-
+    
     /* over surface */
     return 0;
 }
 
-/***********************************************************************/
-/* Ray-Convex Polyhedron Intersection Test 
- * originally by Eric Haines, erich@eye.com
- *
- * This test checks the ray against each face of a polyhedron, checking whether
- * the set of intersection points found for each ray-plane intersection
- * overlaps the previous intersection results.  If there is no overlap (i.e.
- * no line segment along the ray that is inside the polyhedron), then the
- * ray misses and returns 0; else 1 is returned if the ray is entering the
- * polyhedron, -1 if the ray originates inside the polyhedron.  If there is
- * an intersection, the distance and the nunber of the face hit is returned.
- *
- *  org, dir	origin and direction of ray 
- *  tmax    	maximum useful distance along ray
- *  phdrn[] 	list of planes in convex polyhedron
- *  ph_num  	number of planes in convex polyhedron
- * *tresult 	returned: distance of intersection along ray
- * *pn	    	returned: number of face hit (0 to ph_num-1)
- *
+/*!
+  \brief Ray-Convex Polyhedron Intersection Test 
+
+  Originally by Eric Haines, erich@eye.com
+  
+  This test checks the ray against each face of a polyhedron, checking whether
+  the set of intersection points found for each ray-plane intersection
+  overlaps the previous intersection results.  If there is no overlap (i.e.
+  no line segment along the ray that is inside the polyhedron), then the
+  ray misses and returns 0; else 1 is returned if the ray is entering the
+  polyhedron, -1 if the ray originates inside the polyhedron.  If there is
+  an intersection, the distance and the nunber of the face hit is returned.
+  
+  \param org,dir origin and direction of ray 
+  \param tmax maximum useful distance along ray
+  \param phdrn list of planes in convex polyhedron
+  \param ph_num number of planes in convex polyhedron
+  \param[out] tresult distance of intersection along ray
+  \param[out] pn number of face hit (0 to ph_num-1)
+
+  \return FACE code
  */
 int RayCvxPolyhedronInt(Point3 org, Point3 dir, double tmax, Point4 * phdrn,
 			int ph_num, double *tresult, int *pn)
@@ -436,7 +461,11 @@ int RayCvxPolyhedronInt(Point3 org, Point3 dir, double tmax, Point4 * phdrn,
     }
 }
 
-/***********************************************************************/
+/*!
+  \brief Get data bounds for plane
+
+  \param[out] planes
+*/
 void gs_get_databounds_planes(Point4 * planes)
 {
     float n, s, w, e, b, t;
@@ -486,10 +515,16 @@ void gs_get_databounds_planes(Point4 * planes)
     return;
 }
 
-/***********************************************************************/
-/* Gets all current cutting planes & data bounding planes, intersects 
-   los with resulting convex polyhedron, then replaces los[FROM] with
-   first point on ray inside data.
+/*!
+  Gets all current cutting planes & data bounding planes
+
+  Intersects los with resulting convex polyhedron, then replaces los[FROM] with
+  first point on ray inside data.
+
+  \param[out] los
+
+  \return 0 on failure
+  \return 1 on success
 */
 int gs_setlos_enterdata(Point3 * los)
 {

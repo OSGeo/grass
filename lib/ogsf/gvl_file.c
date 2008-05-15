@@ -1,7 +1,7 @@
 /*!
   \file gvl_file.c
  
-  \brief OGSF library - loading and manipulating volumes
+  \brief OGSF library - loading and manipulating volumes (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -11,12 +11,15 @@
   GNU General Public License (>=v2). 
   Read the file COPYING that comes with GRASS
   for details.
+
+  \author Tomas Paudits (February 2004)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
+#include <grass/gis.h>
 #include <grass/gstypes.h>
 #include <grass/gsurf.h>
 #include <grass/G3d.h>
@@ -34,7 +37,9 @@
 #define STATUS_READY           0
 #define STATUS_BUSY            1
 
-/* structure for slice mode reading from volume file*/
+/*!
+  \brief structure for slice mode reading from volume file
+*/
 typedef struct
 {
     int num, skip;
@@ -57,126 +62,174 @@ static int Rows, Cols, Depths;
 void *open_g3d_file(char *, IFLAG *, double *, double *);
 int close_g3d_file(void *);
 
-/******************************************************************/
-/* initialize */
+/*!
+  \brief Initialize volume files
+  
+  \return 1
+*/
 static int init_volfiles(void)
 {
     int i;
     G3D_Region *w3;
-
+    
     for (i = 0; i < MAX_VOL_FILES; i++) {
-    /* avoiding dynamic allocation */
-    Data[i] = &(Df[i]);
+	/* avoiding dynamic allocation */
+	Data[i] = &(Df[i]);
     }
-
+    
     Cur_max = MAX_VOL_FILES;
-
+    
     /* get window */
     w3 = GVL_get_window();
-
+    
     /* set cols, rows, depths from window */
     Cols = w3->cols;
     Rows = w3->rows;
     Depths = w3->depths;
-
+    
     return (1);
 }
 
-/******************************************************************/
-/* check number of files */
+/*!
+  \brief Check number of files
+
+  \return 0
+*/
 static int check_num_volfiles(void)
 {
     if (Numfiles < Cur_max) {
-    return (0);
+	return (0);
     }
-
-    fprintf(stderr, "maximum number of datafiles exceeded\n");
-
-    exit(0);
+    
+    G_fatal_error (_("Maximum number of datafiles exceeded"));
 
     /* This return statement keeps compilers happy, it is never executed */
     return (0);
 }
 
-/******************************************************************/
-/* get geovol_file structure for given handle */
+/*!
+  \brief Get geovol_file structure for given handle
+
+  \param id
+
+  \return pointer to geovol_file struct
+  \return NULL on failure
+*/
 geovol_file *gvl_file_get_volfile(int id)
 {
     int i;
-
+    
     for (i = 0; i < Numfiles; i++) {
-    if (Data[i]->data_id == id) {
-        return (Data[i]);
+	if (Data[i]->data_id == id) {
+	    return (Data[i]);
+	}
     }
-    }
-
+    
     return (NULL);
 }
 
-/******************************************************************/
-/* find file with name and type in geovol_file array an return handle*/
+/*!
+  \brief Find file with name and type in geovol_file array an return handle
+  
+  \param name file name
+  \para begin
+
+  \param data id
+  \param -1 not found
+*/
 int find_datah(char *name, IFLAG type, int begin)
 {
     static int i;
     int start;
-
+    
     start = begin ? 0 : i + 1;
-
+    
     for (i = start; i < Numfiles; i++) {
-    if (!strcmp(Data[i]->file_name, name)) {
-        if (Data[i]->file_type == type) {
-            return (Data[i]->data_id);
-        }
+	if (!strcmp(Data[i]->file_name, name)) {
+	    if (Data[i]->file_type == type) {
+		return (Data[i]->data_id);
+	    }
+	}
     }
-    }
-
+    
     return (-1);
 }
 
-/******************************************************************/
-/* return file name for given handle */
+/*!
+  \brief Get file name for given handle
+
+  \param id handle id
+
+  \return file name
+  \return NULL on failure
+*/
 char *gvl_file_get_name(int id)
 {
     int i;
     geovol_file *fvf;
     static char retstr[NAME_SIZ];
-
+    
     for (i = 0; i < Numfiles; i++) {
-    if (Data[i]->data_id == id) {
-        fvf = Data[i];
-        strcpy(retstr, fvf->file_name);
-
-        return (retstr);
+	if (Data[i]->data_id == id) {
+	    fvf = Data[i];
+	    strcpy(retstr, fvf->file_name);
+	    
+	    return (retstr);
+	}
     }
-    }
-
+    
     return (NULL);
 }
 
-/******************************************************************/
-/* return file type for given handle */
+/*!
+  \brief Get file type for given handle
+
+  \param vf pointer to geovol_file struct
+
+  \return file type 
+*/
 int gvl_file_get_file_type(geovol_file *vf)
 {
     return (vf->file_type);
 }
 
-/******************************************************************/
-/* return data type for given handle */
+/*!
+  \brief Get data type for given handle
+
+  \param vf pointer to geovol_file struct
+
+  \return data type
+*/
 int gvl_file_get_data_type(geovol_file *vf)
 {
     return (vf->data_type);
 }
 
-/******************************************************************/
-/* return minimum and maximum value in volume file */
+/*!
+  \brief Get minimum and maximum value in volume file
+
+  \param vf pointer to geovol_file struct
+  \param[out] min min value
+  \param[out] max max value
+*/
 void gvl_file_get_min_max(geovol_file *vf, double *min, double *max)
 {
     *min = vf->min;
     *max = vf->max;
 }
 
-/******************************************************************/
-/* open volume file */
+/*!
+  \brief Open volume file
+
+  \param name file name
+  \param file_type file type
+  \param data_type data type
+  \param[out] min min value
+  \param[out] max max value
+
+  \return pointer to file
+  \return NULL on failure
+*/
 void *open_volfile(char *name, IFLAG file_type, IFLAG *data_type, double *min, double *max)
 {
      if (file_type == VOL_FTYPE_G3D) {
@@ -186,8 +239,15 @@ void *open_volfile(char *name, IFLAG file_type, IFLAG *data_type, double *min, d
     return (NULL);
 }
 
-/******************************************************************/
-/* close volume file */
+/*!
+  \brief Close volume file
+
+  \param map volume filename
+  \param type file type
+
+  \return
+  \return -1 on failure
+*/
 int close_volfile(void *map, IFLAG type)
 {
      if (type == VOL_FTYPE_G3D) {
@@ -197,8 +257,15 @@ int close_volfile(void *map, IFLAG type)
     return (-1);
 }
 
-/******************************************************************/
-/* get handle for given file name and type */
+/*!
+  \brief Get handle for given file name and type
+
+  \param name volume filename
+  \param file_type file type
+
+  \return data id
+  \return -1 on failure
+*/
 int gvl_file_newh(char *name, IFLAG file_type)
 {
     geovol_file *new;
@@ -209,116 +276,122 @@ int gvl_file_newh(char *name, IFLAG file_type)
     double min, max;
 
     if (first) {
-    if (0 > init_volfiles()) {
-        return (-1);
+	if (0 > init_volfiles()) {
+	    return (-1);
+	}
+	
+	first = 0;
     }
-
-    first = 0;
-    }
-
+    
     if ( 0 <= (id = find_datah(name, file_type, 1))) {
         for (i = 0; i < Numfiles; i++) {
-        if (Data[i]->data_id == id) {
-            new = Data[i];
-            new->count++;
-
-            return (id);
-        }
+	    if (Data[i]->data_id == id) {
+		new = Data[i];
+		new->count++;
+		
+		return (id);
+	    }
         }
     }
-
+    
     if (0 > check_num_volfiles()) {
-    return (-1);
+	return (-1);
     }
 
     if (!name) {
-    return (-1);
+	return (-1);
     }
-
+    
     if ((m = open_volfile(name, file_type, &data_type, &min, &max)) == NULL) {
-    return (-1);
+	return (-1);
     }
-
+    
     new = Data[Numfiles];
-
+    
     if (new) {
-    Numfiles++;
-    new->data_id = Cur_id++;
-
-    strcpy(new->file_name, name);
-    new->file_type = file_type;
-    new->count = 1;
-    new->map = m;
-    new->min = min;
-    new->max = max;
-    new->data_type = data_type;
-
-    new->status = STATUS_READY;
-    new->buff = NULL;
-
+	Numfiles++;
+	new->data_id = Cur_id++;
+	
+	strcpy(new->file_name, name);
+	new->file_type = file_type;
+	new->count = 1;
+	new->map = m;
+	new->min = min;
+	new->max = max;
+	new->data_type = data_type;
+	
+	new->status = STATUS_READY;
+	new->buff = NULL;
+	
 	new->mode = 255;
 	gvl_file_set_mode(new, MODE_DEFAULT);
-
-    return (new->data_id);
+	
+	return (new->data_id);
     }
-
+    
     return (-1);
 }
 
-/******************************************************************/
-/* free allocated buffers */
+/*!
+  \brief Free allocated buffers
+
+  \param vf pointer to geovol_file struct
+
+  \return 1
+*/
 int free_volfile_buffs(geovol_file * vf)
 {
     if (vf->mode == MODE_SLICE) {
-        free(vf->buff);
+        G_free(vf->buff);
         vf->buff = NULL;
     }
-
-	if (vf->mode == MODE_PRELOAD) {
-		free(vf->buff);
-        vf->buff = NULL;
+    
+    if (vf->mode == MODE_PRELOAD) {
+	G_free(vf->buff);
+	vf->buff = NULL;
     }
-
+    
     return (1);
 }
 
-/******************************************************************/
-/* free geovol_file structure for given handle */
+/*!
+  \brief Free geovol_file structure for given handle
+
+  \param id 
+
+  \return
+*/
 int gvl_file_free_datah(int id)
 {
     int i, j, found = -1;
     geovol_file *fvf;
 
-#ifdef TRACE_FUNCS
-    {
-    fprintf(stderr, "gvl_file_free_datah\n");
-    }
-#endif
+    G_debug (3, "gvl_file_free_datah");
 
     for (i = 0; i < Numfiles; i++) {
-    if (Data[i]->data_id == id) {
-        found = 1;
-        fvf = Data[i];
-
-        if (fvf->count > 1) {
-            fvf->count--;
-        } else {
-            close_volfile(fvf->map, fvf->file_type);
-            free_volfile_buffs(fvf);
-            strcpy(fvf->file_name, "");
-            fvf->data_id = 0;
-
-            for (j = i; j < (Numfiles - 1); j++) {
-            Data[j] = Data[j + 1];
-            }
-
-            Data[j] = fvf;
-
-            --Numfiles;
-        }
+	if (Data[i]->data_id == id) {
+	    found = 1;
+	    fvf = Data[i];
+	    
+	    if (fvf->count > 1) {
+		fvf->count--;
+	    } else {
+		close_volfile(fvf->map, fvf->file_type);
+		free_volfile_buffs(fvf);
+		strcpy(fvf->file_name, "");
+		fvf->data_id = 0;
+		
+		for (j = i; j < (Numfiles - 1); j++) {
+		    Data[j] = Data[j + 1];
+		}
+		
+		Data[j] = fvf;
+		
+		--Numfiles;
+	    }
+	}
     }
-    }
-
+    
     return (found);
 }
 
@@ -326,8 +399,16 @@ int gvl_file_free_datah(int id)
 /* reading from G3D raster volume files */
 /******************************************************************/
 
-/******************************************************************/
-/* open g3d file */
+/*!
+  \brief Open g3d file
+
+  \param filename file name
+  \param type data type
+  \param[out] min min value
+  \param[out] max max value
+
+  \pointer to data
+*/
 void *open_g3d_file(char *filename, IFLAG *type, double *min, double *max)
 {
     char *mapset;
@@ -335,80 +416,100 @@ void *open_g3d_file(char *filename, IFLAG *type, double *min, double *max)
     void *map;
 
     /* search for g3d file a return his mapset */
-    if (NULL == (mapset = G_find_grid3(filename,""))) {
+    mapset = G_find_grid3(filename, "");
+    if (!mapset) {
 	G_warning (_("3D raster map <%s> not found"),
 		   filename);
         return (NULL);
     }
 
     /* open g3d file */
-    if (NULL == (map = G3d_openCellOld(filename, mapset, G3D_DEFAULT_WINDOW, G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT))) {
-#ifdef DEBUG_MSG
-        fprintf(stderr, "error opening grid3 file : %s\n", filename);
-#endif
+    map = G3d_openCellOld(filename, mapset, G3D_DEFAULT_WINDOW, G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
+    if (!map) {
+        G_warning (_("Unable to open 3D raster map <%s>"), filename);
         return (NULL);
     }
 
     /* load range into range structure of map */
     if (!G3d_range_load(map)) {
-#ifdef DEBUG_MSG
-        fprintf(stderr, "error reading range for file : %s\n", filename);
-#endif
+        G_warning ("Unable to read range of 3D raster map <%s>", filename);
         return (NULL);
     }
 
     G3d_range_min_max(map, min, max);
-
+    
     /* get file data type */
     itype = G3d_fileTypeMap(map);
     if (itype == FCELL_TYPE)
         *type = VOL_DTYPE_FLOAT;
     if (itype == DCELL_TYPE)
         *type = VOL_DTYPE_DOUBLE;
-
+    
     return (map);
 }
 
-/******************************************************************/
-/* close g3d file */
+/*!
+  \brief Close g3d file
+
+  \param map 3d raster map
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int close_g3d_file(void *map)
 {
     /* close opened g3d file */
-    if (G3d_closeCell(map) != 1) {
-#ifdef DEBUG_MSG
-        fprintf(stderr, "error closing grid3 file");
-#endif
-        return (-1);
+    if (G3d_closeCell((G3D_Map *)map) != 1) {
+	G_warning (_("Unable to close 3D raster map <%s>"), ((G3D_Map *)map)->fileName);
+	return (-1);
     }
-
+    
     return (1);
 }
 
-/******************************************************************/
-/* read value from g3d file */
+/*!
+  \brief Eead value from g3d file
+
+  \param type data type
+  \param map 3D raster map
+  \param x,y,z real coordinates
+  \param[out] value data value
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int read_g3d_value(IFLAG type, void *map, int x, int y, int z, void *value)
 {
     switch (type) {
         /* float data type */
-        case (VOL_DTYPE_FLOAT) :
-            *((float *)value) = G3d_getFloat(map, x, y, z);
-            break;
-
+    case (VOL_DTYPE_FLOAT) :
+	*((float *)value) = G3d_getFloat(map, x, y, z);
+	break;
+	
         /* double data type */
-        case (VOL_DTYPE_DOUBLE) :
-            *((double *)value) = G3d_getDouble(map, x, y, z);
-            break;
-
+    case (VOL_DTYPE_DOUBLE) :
+	*((double *)value) = G3d_getDouble(map, x, y, z);
+	break;
+	
         /* unsupported data type */
-        default :
-            return (-1);
+    default :
+	return (-1);
     }
-
+    
     return (1);
 }
 
-/******************************************************************/
-/* read slice of values at level from g3d file */
+/*!
+  \brief Read slice of values at level from g3d file
+
+  \param type data type
+  \param map 3D raster map
+  \param level
+  \param[out] data
+
+  \return -1 on failure
+  \return 0 on success
+*/
 int read_g3d_slice(IFLAG type, void *map, int level, void *data)
 {
     int x, y;
@@ -444,8 +545,16 @@ int read_g3d_slice(IFLAG type, void *map, int level, void *data)
     return (1);
 }
 
-/******************************************************************/
-/* read all values from g3d file */
+/*!
+  \brief Read all values from g3d file
+
+  \param type data type
+  \param map 3D raster map
+  \param[out] data data buffer
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int read_g3d_vol(IFLAG type, void *map, void *data)
 {    
     int x, y, z;
@@ -485,7 +594,16 @@ int read_g3d_vol(IFLAG type, void *map, void *data)
     return (1);
 }
 
-/******************************************************************/
+/*!
+  \brief Check for null value
+
+  \param type data type
+  \param value
+
+  \return 1 if value is null
+  \return 0 if value is not null
+  \return -1 on failure (unsupported data type
+*/
 int is_null_g3d_value(IFLAG type, void *value)
 {
     switch (type) {
@@ -503,14 +621,25 @@ int is_null_g3d_value(IFLAG type, void *value)
         default :
             return (-1);
     }
+
+    return (-1);
 }
 
 /******************************************************************/
 /* reading from buffer */
 /******************************************************************/
 
-/******************************************************************/
-/* get value from buffer */
+/*!
+  \brief Get value from buffer
+
+  \param type data type
+  \param data data buffer
+  \param offset
+  \param value
+
+  \return -1 on failure (unsupported data type)
+  \return 1 on success
+*/
 int get_buff_value(IFLAG type, void *data, int offset, void *value)
 {
     switch (type) {
@@ -536,8 +665,16 @@ int get_buff_value(IFLAG type, void *data, int offset, void *value)
 /* direct mode reading from volume file */
 /******************************************************************/
 
-/******************************************************************/
-/* read value direct from volume file */
+/*!
+  \brief Read value direct from volume file
+
+  \param vf pointer to geovol_file struct
+  \param x,y,z real point
+  \oaram[out] value data value
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int get_direct_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     switch (vf->file_type) {
@@ -558,20 +695,26 @@ int get_direct_value(geovol_file *vf, int x, int y, int z, void *value)
 /* full mode reading from volume file */
 /******************************************************************/
 
-/******************************************************************/
-/* allocate buffer memory for full mode reading */
+/*!
+  \brief Allocate buffer memory for full mode reading
+
+  \param vf pointer to geovol_file
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int alloc_vol_buff(geovol_file *vf)
 {
     switch (vf->data_type) {
         /* float data type */
         case (VOL_DTYPE_FLOAT) :
-            if ((vf->buff = (float*) malloc(sizeof(float) * Cols * Rows * Depths)) == NULL)
+            if ((vf->buff = (float*) G_malloc(sizeof(float) * Cols * Rows * Depths)) == NULL)
                 return (-1);
             break;
 
         /* double data type */
         case (VOL_DTYPE_DOUBLE) :
-            if ((vf->buff = (double*) malloc(sizeof(double) * Cols * Rows * Depths)) == NULL)
+            if ((vf->buff = (double*) G_malloc(sizeof(double) * Cols * Rows * Depths)) == NULL)
                 return (-1);
             break;
 
@@ -583,17 +726,28 @@ int alloc_vol_buff(geovol_file *vf)
     return (1);
 }
 
-/******************************************************************/
-/* free memory buffer memory */
+/*!
+  \brief Free memory buffer memory
+
+  \param vf pointer to geovol_file struct
+
+  \return 1
+*/
 int free_vol_buff(geovol_file *vf)
 {
-    free(vf->buff);
+    G_free(vf->buff);
 
     return (1);
 }
 
-/******************************************************************/
-/* read all values from volume file */
+/*!
+  \brief Read all values from volume file
+
+  \param vf pointer to geovol_file struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int read_vol(geovol_file *vf)
 {
     switch (vf->file_type) {
@@ -610,8 +764,15 @@ int read_vol(geovol_file *vf)
     return (1);
 }
 
-/******************************************************************/
-/* get value from volume buffer */
+/*!
+  \brief Get value from volume buffer
+
+  \param vf pointer to geovol_file struct
+  \param x,y,z real point
+  \param[out] value data value
+
+  \return 1
+*/
 int get_vol_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     get_buff_value(vf->data_type, vf->buff, z * Rows * Cols + y * Cols + x, value);
@@ -623,8 +784,14 @@ int get_vol_value(geovol_file *vf, int x, int y, int z, void *value)
 /* slice mode reading from volume file */
 /******************************************************************/
 
-/******************************************************************/
-/* allocate buffer for slice mode reading */
+/*!
+  \brief Allocate buffer for slice mode reading
+  
+  \param vf pointer to geovol_file struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int alloc_slice_buff(geovol_file *vf)
 {
     int i;
@@ -634,7 +801,7 @@ int alloc_slice_buff(geovol_file *vf)
         /* float data type */
         case (VOL_DTYPE_FLOAT) :
             for (i = 0; i < sd->num; i++) {
-                if ((sd->slice[i] = (float*) malloc(sizeof(float) * Cols * Rows)) == NULL)
+                if ((sd->slice[i] = (float*) G_malloc(sizeof(float) * Cols * Rows)) == NULL)
                     return (-1);
             }
             break;
@@ -642,7 +809,7 @@ int alloc_slice_buff(geovol_file *vf)
         /* double data type */
         case (VOL_DTYPE_DOUBLE) :
             for (i = 0; i < sd->num; i++) {
-                if ((sd->slice[i] = (double*) malloc(sizeof(double) * Cols * Rows)) == NULL)
+                if ((sd->slice[i] = (double*) G_malloc(sizeof(double) * Cols * Rows)) == NULL)
                     return (-1);
             }
             break;
@@ -655,22 +822,35 @@ int alloc_slice_buff(geovol_file *vf)
     return (1);
 }
 
-/******************************************************************/
-/* free buffer for slice mode reading */
+/*!
+  \brief Free buffer for slice mode reading
+
+  \param vf pointer to geovol_file struct
+
+  \return 1
+*/
 int free_slice_buff(geovol_file *vf)
 {
     int i;
     slice_data *sd = (slice_data *) vf->buff;
 
     for (i = 0; i < sd->num; i++) {
-        free(sd->slice[i]);
+        G_free(sd->slice[i]);
     }
 
     return (1);
 }
 
-/******************************************************************/
-/* read slice of values at level from volume file */
+/*!
+  \brief Read slice of values at level from volume file
+
+  \param vf pointer to geovol_file struct
+  \param s
+  \param l
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int read_slice(geovol_file *vf, int s, int l)
 {
     /* get slice structure */
@@ -680,7 +860,7 @@ int read_slice(geovol_file *vf, int s, int l)
     /* G3D file format */
         case (VOL_FTYPE_G3D) :
             if (0 > read_g3d_slice(vf->data_type, vf->map, l, sd->slice[s]))
-                    return (-1);
+		return (-1);
             break;
         /* unsupported file format */
         default :
@@ -690,8 +870,11 @@ int read_slice(geovol_file *vf, int s, int l)
     return (1);
 }
 
-/******************************************************************/
-/* read new slice into buffer */
+/*!
+  \brief Read new slice into buffer
+
+  \param vf pointer to geovol_file struct
+*/
 void shift_slices(geovol_file *vf)
 {
     void *tmp;
@@ -713,8 +896,16 @@ void shift_slices(geovol_file *vf)
     sd->crnt++;
 }
 
-/******************************************************************/
-/* get value from slice buffer */
+/*!
+  \brief Get value from slice buffer
+
+  \param vf pointer to geovol_file struct
+  \param x,y,z real point
+  \param[out] value data value
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int get_slice_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     slice_data *sd = (slice_data *) vf->buff;
@@ -744,8 +935,14 @@ int get_slice_value(geovol_file *vf, int x, int y, int z, void *value)
 /* reading from volume file */
 /******************************************************************/
 
-/******************************************************************/
-/* start read - allocate memory buffer a read first data into buffer */
+/*!
+  \brief Start read - allocate memory buffer a read first data into buffer
+
+  \param vf pointer to geovol_file struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvl_file_start_read(geovol_file *vf)
 {
     int i;
@@ -789,8 +986,14 @@ int gvl_file_start_read(geovol_file *vf)
     return (1);
 }
 
-/******************************************************************/
-/* end read - free buffer memory */
+/*!
+  \brief End read - free buffer memory
+
+  \param vf pointer to geovol_file struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvl_file_end_read(geovol_file *vf)
 {
      /* check status */
@@ -815,8 +1018,14 @@ int gvl_file_end_read(geovol_file *vf)
     return (1);
 }
 
-/******************************************************************/
-/* get value for volume file at x, y, z */
+/*!
+  \brief Get value for volume file at x, y, z
+
+  \param vf pointer to geovol_file struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvl_file_get_value(geovol_file *vf, int x, int y, int z, void *value)
 {
     /*  check status */
@@ -845,7 +1054,15 @@ int gvl_file_get_value(geovol_file *vf, int x, int y, int z, void *value)
     return (1);
 }
 
-/******************************************************************/
+/*!
+  \brief Check for null value
+
+  \param vf pointer to geovol_file struct
+  \param value data value
+
+  \return -1 on failure
+  \return 1 on success
+*/  
 int gvl_file_is_null_value(geovol_file *vf, void *value)
 {
     switch (vf->file_type) {
@@ -857,57 +1074,73 @@ int gvl_file_is_null_value(geovol_file *vf, void *value)
         default :
             return (-1);
     }
+
+    return (-1);
 }
 
 /******************************************************************/
 /* set parameters for reading volumes */
 /******************************************************************/
 
-/******************************************************************/
-/* set read mode */
+/*!
+  \brief Set read mode
+
+  \param vf pointer to geovol_file struct
+  \param mode
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvl_file_set_mode(geovol_file *vf, IFLAG mode)
 {
     slice_data *sd;
-
+    
     if (vf->status == STATUS_BUSY)
         return (-1);
-
+    
     if (vf->mode == mode)
         return (1);
-
+    
     if (vf->mode == MODE_SLICE)
-        free(vf->buff);
-
-	if (vf->mode == MODE_PRELOAD)
-        free(vf->buff);
-
-
-	if (mode == MODE_SLICE) {
-        if ((vf->buff = (slice_data *) malloc(sizeof(slice_data))) == NULL)
-            return (-1);
-
-        sd = (slice_data *) vf->buff;
-        sd->num = 1;
-        sd->crnt = 0;
-        sd->base = 1;
+        G_free(vf->buff);
+    
+    if (vf->mode == MODE_PRELOAD)
+	G_free(vf->buff);
+    
+    if (mode == MODE_SLICE) {
+	if ((vf->buff = (slice_data *) G_malloc(sizeof(slice_data))) == NULL)
+		return (-1);
+	
+	sd = (slice_data *) vf->buff;
+	sd->num = 1;
+	sd->crnt = 0;
+	sd->base = 1;
     }
-
-	if (mode == MODE_PRELOAD) {
-		/* allocate memory */
-        if (0 > alloc_vol_buff(vf))
-          return (-1);
-
-        /* read volume */
-        read_vol(vf);
-	}
-
+    
+    if (mode == MODE_PRELOAD) {
+	/* allocate memory */
+	if (0 > alloc_vol_buff(vf))
+	    return (-1);
+	
+	/* read volume */
+	read_vol(vf);
+    }
+    
     vf->mode = mode;
 
     return (1);
 }
 
-/******************************************************************/
-/* set parameters for slice reading */
+/*!
+  \brief Set parameters for slice reading
+
+  \param vf pointer to geovol_file struct
+  \param n
+  \param b
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gvl_file_set_slices_param(geovol_file *vf, int n, int b)
 {
     slice_data *sd;
@@ -924,4 +1157,3 @@ int gvl_file_set_slices_param(geovol_file *vf, int n, int b)
 
     return (1);
 }
-

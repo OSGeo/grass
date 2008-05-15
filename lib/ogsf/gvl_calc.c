@@ -1,7 +1,7 @@
 /*!
   \file gvl_calc.c
  
-  \brief OGSF library - loading and manipulating volumes
+  \brief OGSF library - loading and manipulating volumes (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -13,9 +13,9 @@
   for details.
   
   \author Tomas Paudits (February 2004)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
 #include <math.h>
 
 #include <grass/gis.h>
@@ -24,7 +24,9 @@
 #include "rgbpack.h"
 #include "mc33_table.h"
 
-/* memory buffer for writing */
+/*!
+  \brief memory buffer for writing
+*/
 #define BUFFER_SIZE 1000000
 
 /* USEFUL MACROS */
@@ -43,12 +45,16 @@
 #define FOR_VAR i_for
 #define FOR_0_TO_N(n, cmd) { int FOR_VAR; for (FOR_VAR = 0; FOR_VAR < n; FOR_VAR++) {cmd;} }
 
-/* writing and reading isosurface data */
+/*!
+  \brief writing and reading isosurface data
+*/
 #define WRITE(c) gvl_write_char(dbuff->ndx_new++, &(dbuff->new), c)
 #define READ() gvl_read_char(dbuff->ndx_old++, dbuff->old)
 #define SKIP(n) dbuff->ndx_old = dbuff->ndx_old + n
 
-/* check and set data descriptor */
+/*!
+  \brief check and set data descriptor
+*/
 #define IS_IN_DATA(att) ((isosurf->data_desc >> att) & 1)
 #define SET_IN_DATA(att) isosurf->data_desc = (isosurf->data_desc | (1 << att))
 
@@ -70,10 +76,12 @@ double ResX, ResY, ResZ;
 /************************************************************************/
 /* ISOSURFACES */
 
-/************************************************************************/
+/*!
+  \brief Write cube index
 
-/************************************************************************/
-/* write cube index */
+  \param ndx
+  \param dbuff
+*/
 void iso_w_cndx(int ndx, data_buffer * dbuff)
 {
     /* cube don't contains polys */
@@ -104,8 +112,11 @@ void iso_w_cndx(int ndx, data_buffer * dbuff)
     }
 }
 
-/************************************************************************/
-/* read cube index */
+/*!
+  \brief Read cube index
+
+  \param dbuff
+*/
 int iso_r_cndx(data_buffer * dbuff)
 {
     int ndx, ndx2;
@@ -130,8 +141,17 @@ int iso_r_cndx(data_buffer * dbuff)
     return ndx;
 }
 
-/************************************************************************/
-/* get value from data input */
+/*!
+  \brief Get value from data input
+
+  \param isosurf
+  \param desc
+  \param x,y,z
+  \param[out] value
+
+  \return 0
+  \return ?
+*/
 int iso_get_cube_value(geovol_isosurf * isosurf, int desc, int x, int y, int z,
 		       float *v)
 {
@@ -175,16 +195,30 @@ int iso_get_cube_value(geovol_isosurf * isosurf, int desc, int x, int y, int z,
     return ret;
 }
 
-/************************************************************************/
-/* get volume file values range */
+/*!
+  \brief Get volume file values range
+
+  \param isosurf
+  \param desc
+  \param[out] min
+  \param[out] max
+*/
 void iso_get_range(geovol_isosurf * isosurf, int desc, double *min, double *max)
 {
     gvl_file_get_min_max(gvl_file_get_volfile(isosurf->att[desc].hfile), min,
 			 max);
 }
 
-/************************************************************************/
-/* read values for cube */
+/*!
+  \brief Read values for cube
+
+  \param isosurf
+  \param desc
+  \param x,y,z
+  \param[out] v
+
+  \return
+*/
 int iso_get_cube_values(geovol_isosurf * isosurf, int desc, int x, int y, int z,
 			float *v)
 {
@@ -201,8 +235,13 @@ int iso_get_cube_values(geovol_isosurf * isosurf, int desc, int x, int y, int z,
     return ret;
 }
 
-/************************************************************************/
-/* calc cube grads */
+/*!
+  \brief Calculate cube grads
+
+  \param isosurf
+  \param x,y,z
+  \param grad
+*/
 void iso_get_cube_grads(geovol_isosurf * isosurf, int x, int y, int z,
 			float (*grad)[3])
 {
@@ -273,8 +312,13 @@ void iso_get_cube_grads(geovol_isosurf * isosurf, int x, int y, int z,
     }
 }
 
-/************************************************************************/
-/* process cube */
+/*!
+  \brief Process cube
+
+  \param isosurf
+  \param x,y,z
+  \param dbuff
+*/
 void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
 		   data_buffer * dbuff)
 {
@@ -526,8 +570,13 @@ void iso_calc_cube(geovol_isosurf * isosurf, int x, int y, int z,
     }
 }
 
-/************************************************************************/
-/* fill data structure with computed isosurfaces polygons */
+/*!
+  \brief Fill data structure with computed isosurfaces polygons
+
+  \param gvol pointer to geovol struct
+
+  \return 1
+*/
 int gvl_isosurf_calc(geovol * gvol)
 {
     int x, y, z;
@@ -665,51 +714,60 @@ int gvl_isosurf_calc(geovol * gvol)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param pos
+  \param data
+  \param c
+*/
 void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 {
     /* check to need allocation memory */
     if ((pos % BUFFER_SIZE) == 0) {
-	if ((*data =
-	     (char *)G_realloc(*data,
-			       sizeof(char) * ((pos / BUFFER_SIZE) +
-					       1) * BUFFER_SIZE)) == NULL) {
-	    gs_err("can't malloc");
+	*data = (char *) G_realloc(*data,
+				   sizeof(char) * ((pos / BUFFER_SIZE) +
+						   1) * BUFFER_SIZE);
+	if (!(*data)) {
 	    return;
 	}
-
-#ifdef DEBUG
-	{
-	    fprintf(stderr, "reallocate memory for pos : %d to : %d B\n", pos,
-		    sizeof(char) * ((pos / BUFFER_SIZE) + 1) * BUFFER_SIZE);
-	}
-#endif
-
+	
+	G_debug (3, "gvl_write_char(): reallocate memory for pos : %d to : %d B", pos,
+		 sizeof(char) * ((pos / BUFFER_SIZE) + 1) * BUFFER_SIZE);
     }
-
+    
     (*data)[pos] = c;
 }
 
-/************************************************************************/
+/*!
+  \brief Read char
+
+  \param pos position index
+  \param data data buffer
+
+  \param char
+*/
 unsigned char gvl_read_char(int pos, unsigned char *data)
 {
     return data[pos];
 }
 
-/************************************************************************/
+/*!
+  \brief Append data to buffer
+
+  \param pos position index
+  \param data data buffer
+*/
 void gvl_align_data(int pos, unsigned char *data)
 {
     /* realloc memory to fit in data length */
-    if ((data = (char *)G_realloc(data, sizeof(char) * pos)) == NULL) {
-	gs_err("can't malloc");
+    data = (char *) G_realloc(data, sizeof(char) * pos); /* G_fatal_error */
+    if (!data) {
 	return;
     }
 
-#ifdef DEBUG
-    {
-	fprintf(stderr, "reallocate memory finally to : %d B\n", pos);
-    }
-#endif
+    G_debug(3, "gvl_align_data(): reallocate memory finally to : %d B", pos);
+
     return;
 }
 
@@ -723,8 +781,14 @@ void gvl_align_data(int pos, unsigned char *data)
 #define SLICE_MODE_INTERP_NO	0
 #define SLICE_MODE_INTERP_YES	1
 
-/************************************************************************/
-/* get value from geovol file */
+/*!
+  \brief Get volume value
+
+  \param gvl pointer to geovol struct
+  \param x,y,z
+
+  \return value
+*/
 float slice_get_value(geovol * gvl, int x, int y, int z)
 {
     static double d;
@@ -755,7 +819,15 @@ float slice_get_value(geovol * gvl, int x, int y, int z)
     return value;
 }
 
-/************************************************************************/
+/*!
+  \brief Calculate slices
+
+  \param gvl pointer to geovol struct
+  \param ndx_slc
+  \param colors
+
+  \return 1
+*/
 int slice_calc(geovol * gvl, int ndx_slc, void *colors)
 {
     int cols, rows, c, r;
@@ -929,7 +1001,13 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief Calculate slices
+
+  \param gvol pointer to geovol struct
+
+  \return 1
+*/
 int gvl_slices_calc(geovol * gvol)
 {
     int i;
