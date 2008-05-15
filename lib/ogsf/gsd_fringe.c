@@ -18,9 +18,8 @@
   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
-
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 #include "rowcol.h"
 

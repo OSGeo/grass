@@ -13,13 +13,14 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 #include <string.h>
 
+#include <grass/gis.h>
 #include <grass/gstypes.h>
 
 /*!

@@ -13,14 +13,17 @@
   for details.
   
   \author Bill Brown USACERL, GMSL/University of Illinois
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
-#include <stdio.h>
+
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
 #include <grass/keyframe.h>
 #include <grass/kftypes.h>
-#include <grass/glocale.h>
+
 
 static int _add_key(Keylist *, int, float);
 static void _remove_key(Keylist *);

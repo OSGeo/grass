@@ -17,9 +17,9 @@
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
 
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 #include <grass/keyframe.h>

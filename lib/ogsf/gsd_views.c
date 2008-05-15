@@ -16,9 +16,6 @@
   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-/* DEBUG */
-#include <stdio.h>
-
 #include <grass/config.h>
 
 #if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)

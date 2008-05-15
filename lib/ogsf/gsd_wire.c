@@ -13,17 +13,15 @@
   for details.
   
   \author Bill Brown USACERL (January 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
-#include <stdio.h>
-
+#include <grass/gis.h>
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 #include "rowcol.h"
 
-/*
-#define TRACE_DFUNCS
-*/
 
 #define DO_ARROWS
 
@@ -38,15 +36,19 @@
 /* may need to add more parameters to tell it which window or off_screen
  * pixmap to draw into. nah - just have one current (OpenGL limitation)
 */
+
+/*!
+  \brief ADD
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_wire_surf(geosurf * surf)
 {
     int desc, ret;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_wire_surf");
-    }
-#endif
+    G_debug(3, "gsd_wire_surf");
 
     desc = ATT_TOPO;
 
@@ -88,7 +90,13 @@ int gsd_wire_surf(geosurf * surf)
     return (ret);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_wire_surf_map(geosurf * surf)
 {
     int check_mask, check_color;
@@ -99,11 +107,7 @@ int gsd_wire_surf_map(geosurf * surf)
     int col_src, curcolor;
     gsurf_att *coloratt;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_wire_surf_map");
-    }
-#endif
+    G_debug(3, "gsd_wire_surf_map");
 
     buff = gs_get_att_typbuff(surf, ATT_TOPO, 0);
     cobuff = gs_get_att_typbuff(surf, ATT_COLOR, 0);
@@ -261,7 +265,14 @@ int gsd_wire_surf_map(geosurf * surf)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param surf surface (geosurf)
+  \param k
+
+  \return
+*/
 int gsd_wire_surf_const(geosurf * surf, float k)
 {
     int do_diff, check_mask, check_color;
@@ -272,11 +283,7 @@ int gsd_wire_surf_const(geosurf * surf, float k)
     gsurf_att *coloratt;
     typbuff *cobuff;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_wire_surf_const");
-    }
-#endif
+    G_debug(3, "gsd_wire_surf_const");
 
     cobuff = gs_get_att_typbuff(surf, ATT_COLOR, 0);
 
@@ -422,15 +429,31 @@ int gsd_wire_surf_const(geosurf * surf, float k)
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  Not yet implemented.
+
+  \param gs surface (geosurf)
+  \param user_func user defined function
+
+  \return 1
+*/
 int gsd_wire_surf_func(geosurf * gs, int (*user_func) ())
 {
     return (1);
 }
 
-/************************************************************************/
-/* need to do Zexag scale of normal for arrow direction, drawing
-routine unexags z for arrow */
+/*!
+  \brief ADD
+
+  Need to do Zexag scale of normal for arrow direction, drawing
+  routine unexags z for arrow
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_wire_arrows(geosurf * surf)
 {
     typbuff *buff, *cobuff;
@@ -442,11 +465,7 @@ int gsd_wire_arrows(geosurf * surf)
     int col_src, curcolor;
     gsurf_att *coloratt;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_norm_arrows");
-    }
-#endif
+    G_debug(3, "gsd_norm_arrows");
 
     /* avoid scaling by zero */
     GS_get_scale(&tx, &ty, &tz, 1);
@@ -532,15 +551,23 @@ int gsd_wire_arrows(geosurf * surf)
     return (1);
 }
 
-/***********************************************************
- * New (TEST) wire routine that draws low res surface 
- * Based on new Trinagle Fan routine
- * Resolution is a function of current surface resolution 
- * times wire resolution
- * TODO - normals have to be recalculated before proper low
- * res surface can be drawn
- * In window optimization has been removed 
-*************************************************************/
+/*!
+  \brief ADD
+
+  New (TEST) wire routine that draws low res surface 
+  Based on new Trinagle Fan routine
+  Resolution is a function of current surface resolution 
+  times wire resolution
+  
+  \todo normals have to be recalculated before proper low
+  res surface can be drawn
+  
+  In window optimization has been removed 
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_coarse_surf_map(geosurf * surf)
 {
     int check_mask, check_color, check_transp;
@@ -801,5 +828,3 @@ int gsd_coarse_surf_map(geosurf * surf)
 
     return (0);
 }
-
-

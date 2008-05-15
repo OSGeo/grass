@@ -13,17 +13,19 @@
   for details.
   
   \author Bill Brown USACERL (October 1993)
+  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
 */
 
 #include <stdlib.h>
-#include <stdio.h>
 
+#include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/gstypes.h>
+
 #include "gsget.h"
 #include "rowcol.h"
 
 /*
-#define TRACE_DFUNCS
 #define CALC_AREA
 */
 
@@ -38,8 +40,9 @@
 
 #define DEBUG_ARROW (0)
 
-/***********************************************************************/
-/* MACROS for use in gsd_ortho_wall ONLY !!! */
+/*!
+  \brief MACROS for use in gsd_ortho_wall ONLY !!!
+*/
 #define SET_SCOLOR(sf) \
 	    if(check_color[sf]) \
 	    { \
@@ -66,15 +69,19 @@ static int FCmode;
  * pixmap to draw into.
 */
 
+/*!
+  \brief ADD
+
+  \param surf surface (geosurf)
+
+  \return
+  \return -1 on error
+*/
 int gsd_surf(geosurf * surf)
 {
     int desc, ret;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_surf");
-    }
-#endif
+    G_debug (3, "gsd_surf");
 
     desc = ATT_TOPO;
 
@@ -120,8 +127,15 @@ int gsd_surf(geosurf * surf)
     return (ret);
 }
 
-/************************************************************************/
-/* Using tmesh - not confident with qstrips portability */
+/*!
+  \brief ADD
+
+  Using tmesh - not confident with qstrips portability
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_surf_map_old(geosurf * surf)
 {
     int check_mask, check_color, check_transp;
@@ -151,11 +165,7 @@ int gsd_surf_map_old(geosurf * surf)
     float kem, ksh, pkem, pksh;
     unsigned int ktrans;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_surf_map_old");
-    }
-#endif
+    G_debug(3, "gsd_surf_map_old");
 
     /* avoid scaling by zero */
     GS_get_scale(&tx, &ty, &tz, 1);
@@ -695,17 +705,26 @@ int gsd_surf_map_old(geosurf * surf)
     show_colormode();
 
 #ifdef CALC_AREA
-    fprintf(stderr, "Surface Area: %.12lf\n", asurf);
-    fprintf(stderr, "Exaggerated Surface Area: %.12lf\n", axsurf);
+    G_debug (4, "  Surface Area: %.12lf", asurf);
+    G_debug (4, "  Exaggerated Surface Area: %.12lf", axsurf);
 #endif
 
     return (0);
 }
 
-/************************************************************************/
-/* Using tmesh - not confident with qstrips portability */
-/* TODO: FIX: do_diff won't work right - needs normals - maybe 
-   calculate on the fly */
+/*!
+  \brief 
+  
+  Using tmesh - not confident with qstrips portability
+  
+  \todo FIX: do_diff won't work right - needs normals - maybe 
+  calculate on the fly
+
+  \param surf surface (geosurf)
+  \param k
+
+  \return
+*/
 int gsd_surf_const(geosurf * surf, float k)
 {
     int do_diff, check_mask, check_color;
@@ -727,11 +746,7 @@ int gsd_surf_const(geosurf * surf, float k)
 
     unsigned int ktrans = 255;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_surf_const");
-    }
-#endif
+    G_debug(3, "gsd_surf_const");
 
     if (GS_check_cancel()) {
 	return (-1);
@@ -1063,18 +1078,35 @@ int gsd_surf_const(geosurf * surf, float k)
     return (0);
 }
 
-/************************************************************************/
+/*!
+  \brief Define user function
+
+  Not yet supported
+
+  \param gs surface (geosurf)
+  \param user_func user function
+
+  \return 1
+*/
 int gsd_surf_func(geosurf * gs, int (*user_func) ())
 {
-
-    /*
-       Gs_status("Not yet supported");
-     */
 
     return (1);
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \param npts1
+  \param npts2
+  \param surf1 first surface (geosurf)
+  \param surf2 second surface (geosurf)
+  \param points1
+  \param points2
+  \param norm
+
+  \return 1
+*/
 int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
 			  geosurf * surf2, Point3 * points1, Point3 * points2,
 			  float *norm)
@@ -1167,8 +1199,11 @@ int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
     return (1);
 }
 
+/*!
+  \brief ADD
 
-/************************************************************************/
+  \param mode
+*/
 void gsd_setfc(int mode)
 {
     FCmode = mode;
@@ -1176,13 +1211,24 @@ void gsd_setfc(int mode)
     return;
 }
 
-/************************************************************************/
+/*!
+  \brief ADD
+
+  \return
+*/
 int gsd_getfc(void)
 {
     return (FCmode);
 }
 
-/******************************** NEW **********************************/
+/*!
+  \brief ADD
+
+  \param surf surface (geosurf)
+  \param point
+
+  \return
+*/
 static int transpoint_is_masked(geosurf * surf, Point3 point)
 {
     Point3 tp;
@@ -1193,12 +1239,20 @@ static int transpoint_is_masked(geosurf * surf, Point3 point)
     return (gs_point_is_masked(surf, tp));
 }
 
-/***********************************************************************/
-/* get_point_below returns: 
-     0 if there is no surface below the current,
-    -1 if the current surface is masked,
-     1 if the surface below the current surface is not masked 
-       (belowsurf is assigned)
+/*!
+  \brief ADD
+
+  \param points
+  \param gsurf
+  \param ptn
+  \param cursurf
+  \param numsurfs
+  \param belowsurf
+
+  \return 0 if there is no surface below the current,
+  \return -1 if the current surface is masked,
+  \return 1 if the surface below the current surface is not masked 
+  (belowsurf is assigned)
 */
 static int get_point_below(Point3 ** points, geosurf ** gsurfs, int ptn,
 			   int cursurf, int numsurfs, int *belowsurf)
@@ -1254,9 +1308,20 @@ static int get_point_below(Point3 ** points, geosurf ** gsurfs, int ptn,
 }
 
 
-/***********************************************************************/
 /*
 #define CPDEBUG
+*/
+
+/*!
+  \brief ADD
+
+  \param np
+  \param ns
+  \param gsurfs
+  \param points
+  \param norm
+
+  \return
 */
 int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 		   float *norm)
@@ -1445,15 +1510,10 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							1.0, points[bn][i][Z],
 							&tx, &ty)) {
 				    /* crossing going up */
-#ifdef CPDEBUG
-				    {
-					fprintf(stderr,
-						"crossing going up at surf %d no. %d\n",
-						n, i);
-					G_sleep(1);
-				    }
-#endif
 
+				    G_debug(4, "crossing going up at surf %d no. %d",
+					    n, i);
+				    
 				    upper = 1;
 				    xing[Z] = ty;
 				    xing[Y] = points[n][i - 1][Y] + tx *
@@ -1486,14 +1546,9 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							     points[bnl][i]
 							     [Z], &tx, &ty)) {
 				    /* crossing going down */
-#ifdef CPDEBUG
-				    {
-					fprintf(stderr,
-						"crossing going down at surf %d no. %d\n",
-						n, i);
-					G_sleep(1);
-				    }
-#endif
+
+				    G_debug (4, "crossing going down at surf %d no. %d",
+					     n, i);
 
 				    upper = 1;
 				    xing[Z] = ty;
@@ -1538,12 +1593,10 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 #ifdef CPDEBUG
 				    {
 					lower = 1;
-					fprintf(stderr,
-						"lower crossing at surf %d no. %d between surfs %d & %d\n",
-						n, i, bn, bnl);
-					G_sleep(1);
 				    }
 #endif
+				    G_debug (4, "lower crossing at surf %d no. %d between surfs %d & %d",
+					     n, i, bn, bnl);
 
 				    xing[Z] = ty;
 				    xing[Y] = points[bn][i - 1][Y] + tx *
@@ -1571,31 +1624,27 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 #ifdef CPDEBUG
 			    {
 				if (!upper && !lower) {
-				    fprintf(stderr,
-					    "Crossing NOT found or masked: \n");
-				    fprintf(stderr,
-					    "\tcurrent surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
-					    n, points[n][i - 1][X],
-					    points[n][i - 1][Y],
-					    points[n][i - 1][Z],
-					    points[n][i][X], points[n][i][Y],
-					    points[n][i][Z]);
-				    fprintf(stderr,
-					    "\tbelow surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
-					    bn, points[bn][i - 1][X],
-					    points[bn][i - 1][Y],
-					    points[bn][i - 1][Z],
-					    points[bn][i][X],
-					    points[bn][i][Y],
-					    points[bn][i][Z]);
-				    fprintf(stderr,
-					    "\tlast below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
-					    bnl, points[bnl][i - 1][X],
-					    points[bnl][i - 1][Y],
-					    points[bnl][i - 1][Z],
-					    points[bnl][i][X],
-					    points[bnl][i][Y],
-					    points[bnl][i][Z]);
+				    G_debug (4, "Crossing NOT found or masked:");
+				    G_debug (4, "  current surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f",
+					     n, points[n][i - 1][X],
+					     points[n][i - 1][Y],
+					     points[n][i - 1][Z],
+					     points[n][i][X], points[n][i][Y],
+					     points[n][i][Z]);
+				    G_debug (4, "  below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
+					     bn, points[bn][i - 1][X],
+					     points[bn][i - 1][Y],
+					     points[bn][i - 1][Z],
+					     points[bn][i][X],
+					     points[bn][i][Y],
+					     points[bn][i][Z]);
+				    G_debug (4, "  last below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
+					     bnl, points[bnl][i - 1][X],
+					     points[bnl][i - 1][Y],
+					     points[bnl][i - 1][Z],
+					     points[bnl][i][X],
+					     points[bnl][i][Y],
+					     points[bnl][i][Z]);
 				}
 			    }
 #endif
@@ -1643,11 +1692,17 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
     return (1);
 }
 
-/************************************************************************/
-/* bgn & end should already be in world modeling coords, but have to */
-/* be reverse-translated to apply to each surface */
-/* float bgn[2], end[2]  2d line for cutting plane */
-/* float norm[3]         indicates which way wall faces */
+/*!
+  \brief ADD
+
+  bgn,end should already be in world modeling coords, but have to
+  be reverse-translated to apply to each surface
+
+  \param bgn,end  2d line for cutting plane
+  \param norm indicates which way wall faces
+  
+  \return
+*/
 int gsd_wall(float *bgn, float *end, float *norm)
 {
     geosurf *gsurfs[MAX_SURFS];
@@ -1675,8 +1730,8 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
 	if (n) {
 	    if (npts != npts1) {
-		fprintf(stderr, "Error: cut-plane points mis-match between surfaces\n");
-		fprintf(stderr, "Check resolution(s)\n");
+		G_warning (_("Cut-plane points mis-match between surfaces. "
+			     "Check resolution(s)."));
 		err = 1;
 		nsurfs = n;
 
@@ -1701,12 +1756,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 	}
 
 	/* allocate space in points and copy tmp to points */
-	if (NULL == (points[n] = (Point3 *) calloc(npts1, sizeof(Point3)))) {
-	    fprintf(stderr, "out of memory\n");
-	    err = 1;
-
-	    break;
-	}
+	points[n] = (Point3 *) G_calloc(npts1, sizeof(Point3)); /* G_fatal_error */
 
 	for (i = 0; i < npts1; i++) {
 	    GS_v3eq(points[n][i], tmp[i]);
@@ -1721,7 +1771,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
     if (err) {
 	for (n = 0; n < nsurfs; n++) {
 	    if (points[n]) {
-		free(points[n]);
+		G_free(points[n]);
 	    }
 	}
 	return (0);
@@ -1732,15 +1782,22 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
     for (n = 0; n < nsurfs - 1; n++) {
 	/* don't free last - it's constant */
-	free(points[n]);
+	G_free(points[n]);
     }
 
     return (ret);
 }
 
-/************************************************************************/
-/* need to do Zexag scale of normal for arrow direction, drawing
-routine unexags z for arrow */
+/*!
+  \brief ADD
+
+  Need to do Zexag scale of normal for arrow direction, drawing
+  routine unexags z for arrow
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_norm_arrows(geosurf * surf)
 {
     typbuff *buff, *cobuff;
@@ -1755,11 +1812,7 @@ int gsd_norm_arrows(geosurf * surf)
     int zeros, dr1, dr2, dr3, dr4;
     int datarow1, datacol1, datarow2, datacol2;
 
-#ifdef TRACE_DFUNCS
-    {
-	Gs_status("gsd_norm_arrows");
-    }
-#endif
+    G_debug(3, "gsd_norm_arrows");
 
     /* avoid scaling by zero */
     GS_get_scale(&tx, &ty, &tz, 1);
@@ -1984,13 +2037,21 @@ int gsd_norm_arrows(geosurf * surf)
 }
 
 
-/************************************************************************
- * New (TEST) surface drawing routine using triangle fan instead of strip
- * Optimized by getting rid of BM_get mask check - GET_MAPPATT does same
- * and returns zero if masked 
- * Only do in window check on Fan center(v0) to further optimize -- this runs 
- * the risk of trimming points in view !!
-*************************************************************************/
+/*!
+  \brief ADD
+
+  New (TEST) surface drawing routine using triangle fan instead of strip
+  
+  Optimized by getting rid of BM_get mask check - GET_MAPPATT does same
+  and returns zero if masked 
+  
+  Only do in window check on Fan center(v0) to further optimize -- this runs 
+  the risk of trimming points in view !!
+
+  \param surf surface (geosurf)
+
+  \return
+*/
 int gsd_surf_map(geosurf * surf)
 {
     int check_mask, check_color, check_transp;
@@ -2299,7 +2360,3 @@ int gsd_surf_map(geosurf * surf)
 
     return (0);
 }
-
-
-
-

@@ -17,11 +17,11 @@
 */
 
 #include <math.h>
-#include <stdio.h>
 
+#include <grass/gis.h>
 #include <grass/gstypes.h>
-#include "gsget.h"
 
+#include "gsget.h"
 #include "rowcol.h"
 
 #define NTOP 0x00001000
