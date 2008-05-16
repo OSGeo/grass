@@ -1,30 +1,30 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.le.setup</EM> program is used to set
+<em>r.le.setup</em> program is used to set
 up the sampling and analysis framework that will be used by the other
-<EM>r.le</EM> programs.
+<em>r.le</em> programs.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <i>Full instructions can be found in the <b>r.le manual</b> (see "REFERENCES"
 section below).</i>
-<P>
+<p>
 
 The first menu allows the user to define a rectangular sampling frame, 
 select how sampling will be done (regions, sampling units, moving window), 
 setup the limits for groups and classes, and change the color table.  
 Use the left mouse button to make your choice.
 
-<P>
+<p>
 
 Information about the structure of the landscape is obtained by overlaying 
 a set of sampling areas on top of a specified part (the sampling frame of 
 a map layer, and then calculating specific structural measures for the part 
 of the map layer that corresponds to the area in each sampling area.  
 
-<P>
+<p>
 
-To setup a <EM><B>sampling frame</B></EM> click on SAMPLING FRAME in the 
+To setup a <em><b>sampling frame</b></em> click on SAMPLING FRAME in the 
 main menu.  The program will ask "Will the sampling frame (total area 
 within which sampling units are distributed) be the whole map? (y/n)  [y]"  
 Just hit a carriage return to accept the default, which is to use the 
@@ -40,9 +40,9 @@ this part of the setup.  This sampling frame will be used in all subsequent
 setup procedures unless you change it.  You can change it at any time by 
 simply clicking on SAMPLING FRAME again.  
 
-<P>
+<p>
 
-A <EM><B>sampling area</B></EM> may be one of four things.  First, it is 
+A <em><b>sampling area</b></em> may be one of four things.  First, it is 
 possible to treat the entire map layer as the one (and only) sampling area.  
 Second, if the map layer can be divided into meaningful geographical regions, 
 then it is possible to treat the regions themselves as sampling areas.  
@@ -51,16 +51,16 @@ fixed shape and size (also called scale) that are placed within the map
 layer as a whole.  The fourth and final option is that the sampling area 
 may be moved systematically across the map as a moving window. 
 
-<P>
+<p>
 
 If regions are to be used as the sampling areas , then the user can use 
-<EM>r.le.setup</EM> to draw regions or any existing map of regions can 
+<em>r.le.setup</em> to draw regions or any existing map of regions can 
 simply be used directly.  To draw regions and create a new regions map 
-in <EM>r.le.setup</EM> select "REGIONS" from the first <EM>r.le.setup</EM> 
+in <em>r.le.setup</em> select "REGIONS" from the first <em>r.le.setup</em> 
 menu, and the user is asked to do the following:
 
-<DL>
-<PRE>
+<dl>
+<pre>
 1.  "ENTER THE NEW REGION MAP NAME:". Only a new raster map name is 
 acceptable. The user can type LIST to find out the existing raster map 
 names in this location and mapset.
@@ -75,48 +75,48 @@ boundary by setting the last vertex to be equal to the first one.
 
 3. A "REGION OPTIONS:" menu is displayed and the user should use the mouse 
 to select one of
-   the options:<BR>
+   the options:<br>
 "DRAW MORE": repeat the above process and setup another region.
 "START OVER": abandon the previous setup and start all over again.
 "DONE-SAVE": save the regions outlined so far and exit this procedure.
 "QUIT-NO SAVE": quit the procedure without saving the regions.
-</PRE>
-</DL>
+</pre>
+</dl>
 
 Once the "DONE-SAVE" option is selected, the new raster map of the sampling 
 regions is generated. It is displayed on the monitor window for several 
 seconds, the monitor window is refreshed, the main menu is displayed again, 
 and the program is ready for other setup work.  Note that you cannot draw 
-regions in areas outside the mask, if a mask is present (see <EM>r.mask</EM> 
+regions in areas outside the mask, if a mask is present (see <em>r.mask</em> 
 command).
 
-<P>
+<p>
 
-The user can also use the GRASS <EM>r.digit</EM> or <EM>v.digit</EM> 
+The user can also use the GRASS <em>r.digit</em> or <em>v.digit</em> 
 programs to digitize circular or polygonal regions and to create a 
-sampling regions map without using <EM>r.le.setup</EM>.  Or, as mention 
+sampling regions map without using <em>r.le.setup</em>.  Or, as mention 
 above, an existing raster map can be used as a regions map.
 
-<P>
+<p>
 
 If sampling units are to be used as the sampling areas (Fig. 2), then 
-choose "SAMPLING UNITS" from the first <EM>r.le.setup</EM> menu.  
-The program checks the <EM>r.le.para</EM> subdirectory for an existing 
+choose "SAMPLING UNITS" from the first <em>r.le.setup</em> menu.  
+The program checks the <em>r.le.para</em> subdirectory for an existing 
 "units" file from a previous setup session and allows the user to rename 
 this file (to save it) before proceeding.  The r.le.setup program will 
 otherwise overwrite the "units" file.  Then the following choice is 
 displayed followed by a series of other choices:
 
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	Which do you want to do?
 	   (1) Use the keyboard to enter sampling unit parameters
 	   (2) Draw the sampling units with the mouse
 							Enter 1 or 2:
 
-</PRE>
-</DL>
+</pre>
+</dl>
 
 When sampling units are defined using the keyboard, the user inputs the 
 shape and size (scale) of the sampling units by specifying dimensions 
@@ -127,58 +127,58 @@ each scale onto the map.  By placing the units with the mouse the user
 can directly determine the method of sampling unit distribution as well 
 as the shape, size, and number of sampling units.
 
-<P>
+<p>
 
 If the choice is made to define sampling units using the keyboard, the 
 following series of questions must be answered:
 
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	How many different SCALES do you want (1-15)?
-</PRE>
-</DL>
+</pre>
+</dl>
 
 The user is asked to specify the number of scales that will be used.  
-The <EM>r.le</EM> programs allow the user to simultaneously sample the 
+The <em>r.le</em> programs allow the user to simultaneously sample the 
 same map with the same measures using sampling areas of different sizes.  
 Currently there can be between 1 and 15 scales that can be sampled 
 simultaneously. Substantial output can be produced if many scales are used.
 
-<P>
+<p>
 
 Sampling units must be placed spatially into the landscape.  There are 
 five options for doing this : 
 
-<P>
+<p>
 
-<EM>Random nonoverlapping</EM><BR>
+<em>Random nonoverlapping</em><br>
 Sampling units are placed in the landscape by randomly choosing numbers 
 that specify the location of the upper left corner of each sampling unit, 
 subject to the constraint that successive sampling units not overlap other 
 sampling units or the edge of the landscape, and that they must be entirely 
-within the area defined by the mask (see <EM>r.mask</EM> command) if one 
+within the area defined by the mask (see <em>r.mask</em> command) if one 
 exists.
 
-<P>
+<p>
 
-<EM>Systematic contiguous</EM><BR>
+<em>Systematic contiguous</em><br>
 Sampling units are placed side by side across the rows.  The user will 
 be able to enter a row and column to indicate where the upper left corner 
 of the systematic contiguous framework should be placed.  Rows are numbered 
 from the top down beginning with row 1 of the sampling frame.  Columns are 
 numbered from left to right, beginning with column 1 of the sampling frame.  
 A random starting location can be obtained by using a standard random 
-number table to choose the starting row and column.  The <EM>r.le.setup</EM> 
+number table to choose the starting row and column.  The <em>r.le.setup</em> 
 program does not avoid placing the set of sampling units over areas 
 outside the mask.  The user will have to make sure that sampling units do 
 not extend outside the mask by choosing a particular starting row and 
 column or by drawing a sampling frame before placing the set of sampling 
 units.
 
-<P>
+<p>
 
-<EM>Systematic noncontiguous</EM><BR>
+<em>Systematic noncontiguous</em><br>
 The user must specify the starting row and column as in #2 above and the 
 amount of spacing (in pixels) between sampling units.  Horizontal and 
 vertical spacing are identical.  Sampling units are again placed side by 
@@ -186,9 +186,9 @@ side (but spaced) across the rows.  As in #2 the program does not avoid
 placing sampling units outside the masked area; the user will have to 
 position the set of units to avoid areas outside the mask.
 
-<P>
+<p>
 
-<EM>Stratified random</EM><BR>
+<em>Stratified random</em><br>
 The strata are rectangular areas within which single sampling units 
 are randomly located.  The user must first specify the starting row 
 and column as in #2 above.  Then the user must specify the number of 
@@ -196,15 +196,15 @@ strata in the horizontal and vertical directions.   As in #2 the program
 does not avoid placing sampling units outside the masked area; the user 
 will have to position the set of units to avoid areas outside the mask.
 
-<P>
+<p>
 
-<EM>Centered over sites</EM><BR>
+<em>Centered over sites</em><br>
 The user must specify the name of a sitefile containing point locations.  
 A single sampling unit is placed with its center over each site in the site 
 file.  This is a useful approach for determining the landscape structure 
 around points, such as around the location of wildlife observations.
 
-<P>
+<p>
 
 The user is prompted to enter a ratio that defines the shape of the 
 sampling units.  Sampling units may have any rectangular shape, 
@@ -213,13 +213,13 @@ are specified by entering the ratio of columns/rows (horizontal
 dimension/vertical dimension) as a real number.  For example, to obtain 
 a sampling unit 10 columns wide by 4 rows long specify the ratio as 2.5 
 (10/4).
-<DL>
-<DD>
-<PRE>
-	Recommended maximum SIZE is m in x cell total area. <BR>
+<dl>
+<dd>
+<pre>
+	Recommended maximum SIZE is m in x cell total area. <br>
 	What size (in cells) for each sampling unit of scale n?
-</PRE>
-</DL>
+</pre>
+</dl>
 
 The user is then given the recommended maximum possible size for a 
 sampling unit (in pixels) and asked to input the size of sampling units 
@@ -229,16 +229,16 @@ make up a single sampling scale, are the same size.  After specifying
 the size, the program determines the nearest actual number of rows and 
 columns, and hence size, that is closest to the requested size, given 
 the shape requested earlier.
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	The nearest size is x cells wide X y cells high = xy cells
 	Is this size OK?  (y/n)  [y]
 
 	Maximum NUMBER of units in scale n is p?
 	What NUMBER of sampling units do you want to try to use?
-</PRE>
-</DL>
+</pre>
+</dl>
 
 The maximum number of units that can be placed over the map, given the 
 shape and size of the units, is then given.  The user can then choose 
@@ -249,12 +249,12 @@ noncontiguous, the program will indicate how many units will fit across
 the columns and down the rows.  The user can then specify a particular 
 layout (e.g., 6 units could be placed as 2 rows of 3 per row or as 3 
 rows of 2 per row).
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	Is this set of sampling units OK?  (y/n)  [y]
-</PRE>
-</DL>
+</pre>
+</dl>
 
 Finally, the set of sampling units is displayed on the screen (e.g., Fig. 1) 
 and the user is asked whether it is acceptable.  If the answer is no, then 
@@ -262,34 +262,34 @@ the user is asked if the screen should be refreshed before redisplaying
 the menu for "Methods of sampling unit distribution" so that the user can 
 try the sampling unit setup again.
 
-<P>
+<p>
 
 The choice is made to define sampling units using the mouse, then the 
 following menu for use with the mouse is displayed:
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	Outline the standard sampling unit of scale n.
 	   Left button:	Check unit size
 	   Middle button:	Move cursor
 	   Right button:	Lower right corner of unit here
-</PRE>
-</DL>
+</pre>
+</dl>
 
 The user can then use the mouse and the rubber band box to outline the 
 standard sampling unit.  Once it has been outlined, the number of columns 
 and rows in the unit, the ratio of width/length and the size of the unit, 
 in cells, will be displayed.  After this first unit is outlined, then a 
 new menu is displayed:
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	Outline more sampling units of scale n?
 	   Left button:	Exit
 	   Middle button:	Check unit position
 	   Right button:	Lower right corner of next unit here
-</PRE>
-</DL>
+</pre>
+</dl>
 
 The user can then place more units identical to the standard unit by 
 simply clicking the right mouse button where the lower right corner of 
@@ -300,7 +300,7 @@ area outside the mask, or so they overlap the edge of the sampling frame.
 Warning messages are issued for all three of these errors and a sampling 
 unit is simply not placed.
 
-<P>
+<p>
 
 Using this procedure a rectangular "window" or single sampling area is 
 moved systematically across the map to produce a new map (Fig. 2,3).  
@@ -310,10 +310,10 @@ distributions of values (Table 1).  The first class or group specified
 when defining class or group limits (section 2.3.2.) is used if 
 distributional measures are chosen with the moving window sampling 
 method.  In this case, the user should manually edit the 
-<EM>r.le.para/recl_tb</EM> file so that the desired group is listed as 
+<em>r.le.para/recl_tb</em> file so that the desired group is listed as 
 the first group in this file. 
 
-<P>
+<p>
 
 Sampling begins with the upper left corner of the window placed over 
 the upper left corner of the sampling frame.  It is strongly recommended 
@@ -334,7 +334,7 @@ across the row.  This option produces a new map layer, whose dimensions
 are smaller by approximately (m-1)/2 rows and columns, where m is the 
 number of rows or columns in the window.  
 
-<P>
+<p>
 
 If the "MOVE-WINDOW" option in the main menu is selected, first the 
 program checks for an existing "move_wind" file, in the r.le.para 
@@ -347,123 +347,123 @@ number of sampling units are, in effect, used.  See the appendix on
 ideas about how moving window size and sampling frame area affect 
 the needed time to complete the analyses.
 
-<P>
+<p>
 
-The <EM>r.le</EM> programs <EM>r.le.dist</EM> and <EM>r.le.patch</EM> 
+The <em>r.le</em> programs <em>r.le.dist</em> and <em>r.le.patch</em> 
 allow the attribute categories in the input map to be reclassed into 
 several attribute groups, and reports the analysis results by each of 
 these attribute groups.  It is necessary to setup group limits for 
-all measures that say "by gp" when typing "<EM>r.le.dist help</EM>" 
-or "<EM>r.le.patch help</EM>" at the GRASS prompt.  The same reclassing 
+all measures that say "by gp" when typing "<em>r.le.dist help</em>" 
+or "<em>r.le.patch help</em>" at the GRASS prompt.  The same reclassing 
 can be done with the measurement indices (e.g., size), except that each 
 "cohort" (class) of the reclassed indices is called an index class 
 instead of a group.  It is also necessary to setup class limits for 
-all measures that say "by class" when typing "<EM>r.le.dist help</EM>" 
-or "<EM>r.le.patch help</EM>" at the GRASS prompt.  
+all measures that say "by class" when typing "<em>r.le.dist help</em>" 
+or "<em>r.le.patch help</em>" at the GRASS prompt.  
 
-<P>
+<p>
 
 Group/class limits are setup by choosing "GROUP/CLASS LIMITS" from the 
-main menu upon starting <EM>r.le.setup</EM>, or you can create the files 
+main menu upon starting <em>r.le.setup</em>, or you can create the files 
 manually using a text editor.  The program checks for existing group/class 
-limit files in subdirectory <EM>r.le.para</EM> and allows the user to 
+limit files in subdirectory <em>r.le.para</em> and allows the user to 
 rename these files prior to continuing.  If the files are not renamed 
 the program will overwrite them.  The files are named recl_tb (attribute 
 group limits), size (size class limits), shape_PA (shape index class 
 limits for perimeter/area index), shape_CPA (shape index class limits 
 for corrected perimeter/area index), shape_RCC (shape index class limits 
 for related circumscribing circle index), and from_to (for the 
-<EM>r.le.dist</EM> program distance methods m7-m9). 
+<em>r.le.dist</em> program distance methods m7-m9). 
 
-<P>
+<p>
 
 Attribute groups and index classes are defined in a different way.  
-In the <EM>r.le</EM> programs attribute groups are defined as in the 
+In the <em>r.le</em> programs attribute groups are defined as in the 
 following example:
-<DL>
-<DD>
-<PRE>
-	1, 3, 5, 7, 9 <B>thru</B> 21 = 1 (comment)
-	31 <B>thru</B> 50 = 2 (comment)
-	<B>end</B>
-</PRE>
-</DL>
+<dl>
+<dd>
+<pre>
+	1, 3, 5, 7, 9 <b>thru</b> 21 = 1 (comment)
+	31 <b>thru</b> 50 = 2 (comment)
+	<b>end</b>
+</pre>
+</dl>
 
 In this example, the existing categories 1, 3, 5, 7, {9, 10, ... 20, 21} 
 are included in the new group 1, while {31, 32, 33, ..., 49, 50} are 
 included in the new group 2.  The characters in bold are the "key words" 
 that are required in the definition.  Each line is called one "reclass rule".
 
-<P>
+<p>
 
 The GRASS reclass convention is adopted here with a little modification 
-(see "<EM>r.reclass</EM>" command in the GRASS User's Manual).  
+(see "<em>r.reclass</em>" command in the GRASS User's Manual).  
 The difference is that r.le only allows one rule for each group while the 
-GRASS <EM>r.reclass</EM> command allows more than one. The definition of 
+GRASS <em>r.reclass</em> command allows more than one. The definition of 
 "from" and "to" groups is simply the extension of the GRASS reclass rule.  
 The advantage of using the GRASS reclass convention is that the user can
 generate a permanent reclassed map, using GRASS programs, directly from the 
-<EM>r.le</EM> setup results.
+<em>r.le</em> setup results.
 
-<P>
+<p>
 
-The <EM>r.le</EM> measurement index classes are defined by the lower 
+The <em>r.le</em> measurement index classes are defined by the lower 
 limits of the classes, as in the following example:
-<DL>
-<DD>
-<PRE>
-	0.0, 10.0, 50.0, 200.0, <B>-999</B>
-</PRE>
-</DL>
+<dl>
+<dd>
+<pre>
+	0.0, 10.0, 50.0, 200.0, <b>-999</b>
+</pre>
+</dl>
 
 This means: 
-<DL>
-<DD>
-<PRE>
+<dl>
+<dd>
+<pre>
 	if v &gt;= 0.0 and v &lt; 10.0 then  v belongs to index class 1;
 	if v &gt;= 10.0 and v &lt; 50.0 then  v belongs to index class 2;
 	if v &gt;= 50.0 and v &lt; 200.0 then v belongs to index class 3;
 	if v &gt;= 200.0 then v belongs to index class 4;
-</PRE>
-</DL>
+</pre>
+</dl>
 
-where v is the calculated index value and <B>-999</B> marks the end of 
+where v is the calculated index value and <b>-999</b> marks the end of 
 the index class definition. The measurement index can be the size index, 
 one of the three shape indices, or one of the three distance indices.  
 The program is currently designed to allow no more than 25 attribute 
 groups, 25 size classes, 25 shape index classes, and 25 distance index 
 classes.  As an alternative, the user may want to permanently group 
-certain attributes prior to entering the <EM>r.le</EM> programs.  
+certain attributes prior to entering the <em>r.le</em> programs.  
 For example, the user may want to group attributes 1-10, in a map whose 
 attributes are ages, into a single attribute representing young patches.  
-The user can do this using the GRASS <EM>r.reclass</EM> and 
-<EM>r.resample</EM> commands, which will create a new map layer that can 
+The user can do this using the GRASS <em>r.reclass</em> and 
+<em>r.resample</em> commands, which will create a new map layer that can 
 then be analyzed directly (without setting up group limits) with the 
-<EM>r.le</EM> programs.
+<em>r.le</em> programs.
 
 
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 Baker, W.L. and Y. Cai. 1992. The r.le programs for multiscale analysis of
 landscape structure using the GRASS geographical information system.
 Landscape Ecology 7(4):291-302.
-<P>
+<p>
 The <A href="http://grass.itc.it/gdp/landscape/r_le_manual5.pdf"><i>r.le</i>
 manual: Quantitative analysis of landscape structures</a> (GRASS 5; 2001)
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<!-- <A HREF="r.le.dist.html">r.le.dist</A>,
-<A HREF="r.le.null.html">r.le.null</A>, -->
-<A HREF="r.le.patch.html">r.le.patch</A>,
-<A HREF="r.le.pixel.html">r.le.pixel</A>,
-<!-- <A HREF="r.le.rename.html">r.le.rename</A>, -->
-<A HREF="r.le.trace.html">r.le.trace</A></EM>
+<em>
+<!-- <a href="r.le.dist.html">r.le.dist</a>,
+<a href="r.le.null.html">r.le.null</a>, -->
+<a href="r.le.patch.html">r.le.patch</a>,
+<a href="r.le.pixel.html">r.le.pixel</a>,
+<!-- <a href="r.le.rename.html">r.le.rename</a>, -->
+<a href="r.le.trace.html">r.le.trace</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 William L. Baker Department of Geography and Recreation University of
 Wyoming Laramie, Wyoming 82071 U.S.A.
