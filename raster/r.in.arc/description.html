@@ -1,9 +1,10 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<i>r.in.arc</i> allows a user to create a (binary) GRASS raster map layer
+<em>r.in.arc</em> allows a user to create a (binary) GRASS raster map layer
 from an ESRI ARC/INFO ascii GRID file with (optional) title.
 
 <p>
+
 The ARC/INFO ascii GRID file header has 6 lines:
 <div class="code"><pre>
      ncols:
@@ -13,8 +14,8 @@ The ARC/INFO ascii GRID file header has 6 lines:
      cellsize:
 </pre></div>
 
-or alternatively (not supported by r.in.arc, but by
-<a href=r.in.gdal.html>r.in.gdal</a>):
+or alternatively (not supported by <em>r.in.arc</em>, but by
+<i><a href=r.in.gdal.html>r.in.gdal</a></i>):
 
 <div class="code"><pre>
      ncols:
@@ -26,10 +27,17 @@ or alternatively (not supported by r.in.arc, but by
 
 <h2>NOTES</h2>
 
-<i>r.in.arc</i> handles floating point cell values. The <b>mult</b>
+<em>r.in.arc</em> handles floating point cell values. The <b>mult</b>
 option allows the number of significant figures of a floating point cell
 to be increased before importing. Multiples of ten are the most functional
 multipliers.
+
+<h2>EXAMPLE</h2>
+
+To import a ARC/INFO ascii grid, applying a 10x multiplier during import, with title:
+<div class="code"><pre>
+r.in.arc input=elev_meters.asc output=elev_decimeters title="Elevation data converted to decimeters" mult=10
+</div></pre>
 
 <h2>SEE ALSO</h2>
 
