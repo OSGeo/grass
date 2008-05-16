@@ -24,6 +24,7 @@ import wx
 
 import gcmd
 import gselect
+import globalvar
 
 class RulesText(wx.Dialog):
     def __init__(self, parent, id=wx.ID_ANY, title=_("Enter rules"),
@@ -82,7 +83,7 @@ class RulesText(wx.Dialog):
                      flag=wx.ALIGN_CENTER_VERTICAL,
                      pos=(row,0))
 
-        self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY, size=(300,-1),
+        self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
                                              type=seltype)
         boxSizer.Add(item=self.selectionInput,
                      pos=(row,1))
