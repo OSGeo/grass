@@ -1,66 +1,66 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.average</EM> calculates the average value of data
-contained in a <EM>cover</EM> raster map layer for areas
+<em>r.average</em> calculates the average value of data
+contained in a <em>cover</em> raster map layer for areas
 assigned the same category value in the user-specified
-<EM>base</EM> raster map layer.  These averaged values are
+<em>base</em> raster map layer.  These averaged values are
 stored in the category labels file associated with a new
-<EM>output</EM> map layer.
+<em>output</em> map layer.
 
 The values to be averaged are taken from a user-specified
-<EM>cover</EM> map.  The <EM>category values</EM> for the
-<EM>cover</EM> map will be averaged, unless the <B>-c</B>
-flag is set.  If the <B>-c</B> flag is set, the values that
-appear in the <EM>category labels</EM> file for the
-<EM>cover</EM> map will be averaged instead (see example
+<em>cover</em> map.  The <em>category values</em> for the
+<em>cover</em> map will be averaged, unless the <b>-c</b>
+flag is set.  If the <b>-c</b> flag is set, the values that
+appear in the <em>category labels</em> file for the
+<em>cover</em> map will be averaged instead (see example
 below).
 
-<P>
+<p>
 
-The <EM>output</EM> map is actually a <EM>reclass</EM> of the <EM>base</EM>
-map (see <EM> <A HREF="r.reclass.html">r.reclass</A></EM>), and will have
-exactly the same <EM>category values</EM> as the <EM>base</EM> map.  The
-averaged values computed by <EM>r.average</EM> are stored in the
-<EM>output</EM> map's <EM>category labels</EM> file.
+The <em>output</em> map is actually a <em>reclass</em> of the <em>base</em>
+map (see <em> <a href="r.reclass.html">r.reclass</a></em>), and will have
+exactly the same <em>category values</em> as the <em>base</em> map.  The
+averaged values computed by <em>r.average</em> are stored in the
+<em>output</em> map's <em>category labels</em> file.
 
-The <B>base=</B> map is an existing raster map layer in the user's current
+The <b>base=</b> map is an existing raster map layer in the user's current
 mapset search path.  For each group of cells assigned the same category
-value in the <EM>base</EM> map, the values assigned these cells in the
-<EM>cover</EM> map will be averaged.
+value in the <em>base</em> map, the values assigned these cells in the
+<em>cover</em> map will be averaged.
 
-The <EM>cover</EM> map is an existing raster map layer containing the values
+The <em>cover</em> map is an existing raster map layer containing the values
 (in the form of cell category values or cell category labels) to be averaged
-within each category of the <EM>base</EM> map.
+within each category of the <em>base</em> map.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-The <B>-c</B> option requires that the category label for
-each category in the <EM>cover</EM> map be a valid number,
+The <b>-c</b> option requires that the category label for
+each category in the <em>cover</em> map be a valid number,
 integer, or decimal.  To be exact, if the first item in the
 label is numeric, then that value is used. Otherwise, zero
 is used.  The following table covers all possible cases:
 
-<P>
-<PRE>
+<p>
+<pre>
          category    value 
          label       used by -c 
          ______________________
           .12	        .12 
           .80 KF        .8 
           no data       0 
-</PRE>
-<P>
+</pre>
+<p>
 
 (This flag is very similar to the @ operator in 
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
 and the user is encouraged to read the manual entry for 
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>
 to see how it works there.) 
 
-<P>
+<p>
 
-The user should use the results of <EM>r.average</EM> with
+The user should use the results of <em>r.average</em> with
 care.  Since this utility assigns a value to each cell
 which is based on global information (i.e., information at
 spatial locations other than just the location of the cell
@@ -68,19 +68,19 @@ itself), the resultant map layer is only valid if the
 geographic region and mask settings are the same as they
 were at the time that the result map was created.
 
-<P>
+<p>
 
 Results are affected by the current region settings and mask. 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Assume that 
-<EM>farms</EM>
+<em>farms</em>
 is a map with 7 farms (i.e., 7 categories), and that 
-<EM>soils.Kfactor</EM>
+<em>soils.Kfactor</em>
 is a map of soil K factor values with the following category file: 
 
-<PRE>
+<pre>
 	cat 	cat 
 	value 	label 
 	0 	no soil data 
@@ -93,22 +93,22 @@ is a map of soil K factor values with the following category file:
 	7 	.32 
 	8 	.37 
 	9 	.43 
-</PRE>
+</pre>
 
 Then 
 
-<P>
-<DL>
-<DD>
-<B>r.average -c base=</B><EM>farms</EM> 
-<B>cover=</B><EM>soils.Kfactor</EM> <B>output=</B><EM>K.by.farm</EM> 
-</DL>
+<p>
+<dl>
+<dd>
+<b>r.average -c base=</b><em>farms</em> 
+<b>cover=</b><em>soils.Kfactor</em> <b>output=</b><em>K.by.farm</em> 
+</dl>
 
 will compute the average soil K factor for each farm, and store the result
-in the output map <EM>K.by.farm</EM>, which will be a reclass of
-<EM>farms</EM> with category labels as follows (example only):
+in the output map <em>K.by.farm</em>, which will be a reclass of
+<em>farms</em> with category labels as follows (example only):
 
-<PRE>
+<pre>
 	cat	cat 
 	value	label 
 	1	.1023 
@@ -118,25 +118,25 @@ in the output map <EM>K.by.farm</EM>, which will be a reclass of
 	5	.003 
 	6	.28 
 	7	.2345 
-</PRE>
+</pre>
 
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.region.html">g.region</A></EM>,
-<EM><A HREF="r.category.html">r.category</A></EM>,
-<EM><A HREF="r.clump.html">r.clump</A></EM>,
-<EM><A HREF="r.describe.html">r.describe</A></EM>,
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.mfilter.html">r.mfilter</A></EM>,
-<EM><A HREF="r.mode.html">r.mode</A></EM>,
-<EM><A HREF="r.neighbors.html">r.neighbors</A></EM>,
-<EM><A HREF="r.reclass.html">r.reclass</A></EM>,
-<EM><A HREF="r.statistics.html">r.statistics</A></EM>,
-<EM><A HREF="r.stats.html">r.stats</A></EM>
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="r.category.html">r.category</a></em>,
+<em><a href="r.clump.html">r.clump</a></em>,
+<em><a href="r.describe.html">r.describe</a></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.mfilter.html">r.mfilter</a></em>,
+<em><a href="r.mode.html">r.mode</a></em>,
+<em><a href="r.neighbors.html">r.neighbors</a></em>,
+<em><a href="r.reclass.html">r.reclass</a></em>,
+<em><a href="r.statistics.html">r.statistics</a></em>,
+<em><a href="r.stats.html">r.stats</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering Research Laboratory

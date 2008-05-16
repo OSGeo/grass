@@ -1,9 +1,9 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The GRASS program <EM>r.compress</EM> can be used to compress and decompress
+The GRASS program <em>r.compress</em> can be used to compress and decompress
 raster map layers.
 
-<P>
+<p>
 
 During compression, this program reformats raster maps
 using a run-length-encoding (RLE) algorithm.  Raster map
@@ -20,34 +20,34 @@ form (see FORMATS below).  GRASS programs can read both compressed
 and regular (uncompressed) file formats.  This allows the use
 of whichever raster data format consumes less space.
 
-<P>
+<p>
 
 As an example, the Spearfish data base raster map layer
-<EM>owner</EM> was originally a size of 26600 bytes.  After
+<em>owner</em> was originally a size of 26600 bytes.  After
 it was compressed, the raster map became only 1249 bytes
 (25351 bytes smaller).
 
-<P>
+<p>
 
 Raster files may be decompressed to return them to their
-original format, using the <B>-u</B> flag of 
-<EM>r.compress</EM>. If <EM>r.compress</EM> is asked to
+original format, using the <b>-u</b> flag of 
+<em>r.compress</em>. If <em>r.compress</em> is asked to
 compress a raster map which is already compressed (or to
 decompress an already decompressed raster map), it simply informs
 the user the map is already (de)compressed and exits. 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<EM>r.compress</EM> can be run either non-interactively or
+<em>r.compress</em> can be run either non-interactively or
 interactively.  In non-interactive use, the user must
 specify the name(s) of the raster map layer(s) to be
 compressed (or decompressed) on the command line, using the
-form <B>map=</B><EM>name</EM>[,<EM>name</EM>,...] (where
-each <EM>name</EM> is the name of a raster map layer to be
+form <b>map=</b><em>name</em>[,<em>name</em>,...] (where
+each <em>name</em> is the name of a raster map layer to be
 compressed or decompressed). The default behavior is to 
 compress the named map(s).  
 
-<H3>FORMATS</H3>
+<h3>FORMATS</h3>
 
 Conceptually, a raster data file consists of rows of cells,
 with each row containing the same number of cells.  A cell
@@ -58,12 +58,12 @@ while category values in the range 256-65535 require 2
 bytes, and category values in the range above 65535 require
 3 (or more) bytes per cell.
 
-<P>
+<p>
 
-The <B>decompressed</B> raster map format matches the
+The <b>decompressed</b> raster map format matches the
 conceptual format.  For example, a raster map with 1 byte
 cells that is 100 rows with 200 cells per row, consists of
-20,000 bytes.  Running the UNIX command <EM>ls -l</EM> on
+20,000 bytes.  Running the UNIX command <em>ls -l</em> on
 this file will show a size of 20,000.  If the cells were 2
 byte cells, the file would require 40,000 bytes.  The map
 layer category values start with the upper left corner cell
@@ -72,12 +72,12 @@ The byte following the last byte of that first row is the
 first cell of the second row of category values (moving
 from left to right).  There are no end-of-row markers or
 other syncing codes in the raster map.  A cell header file
-(<EM>cellhd</EM>) is used to define how this string of bytes
+(<em>cellhd</em>) is used to define how this string of bytes
 is broken up into rows of category values.
 
-<P>
+<p>
 
-The <B>compressed</B> format is not so simple, but is quite
+The <b>compressed</b> format is not so simple, but is quite
 elegant in its design. It not only requires less disk space
 to store the raster data, but often can result in faster
 execution of graphic and analysis programs since there is
@@ -87,19 +87,19 @@ no longer produce), and the version 3.0 format (which is
 automatically used when new raster map layers are
 created).
 
-<H4>PRE-3.0 FORMAT:</H4> 
+<h4>PRE-3.0 FORMAT:</h4> 
 
 First 3 bytes (chars) - These are a special code that identifies 
 the raster data as compressed. 
 
-<P>
+<p>
 
 Address array (long) - array (size of the number of rows +
 1) of addresses pointing to the internal start of each row.
 Because each row may be a different size, this array is
 necessary to provide a mapping of the data.
 
-<P>
+<p>
 
 Row by row, beginning at the northern edge of the data, a
 series of byte groups describes the data.  The number of
@@ -108,16 +108,16 @@ one.  The first byte of each group gives a count (up to
 255) of the number of cells that contain the category
 values given by the remaining bytes of the group.
 
-<H4>POST-3.0 FORMAT:</H4> 
+<h4>POST-3.0 FORMAT:</h4> 
 
 The 3 byte code is not used. 
 Instead, a field in the cell header is used to indicate compressed format. 
 
-<P>
+<p>
 
 The address array is the same. 
 
-<P>
+<p>
 
 The RLE format is the same as the pre-3.0 RLE, except that
 each row of data is preceded by a single byte containing
@@ -125,7 +125,7 @@ the number of bytes per cell for the row, and if
 run-length-encoding the row would not require less space
 than non-run-length-encoding, then the row is not encoded.
 
-<P>
+<p>
 
 These improvements give better compression than the pre-3.0
 format in 99% of the raster data layers.  The kinds of
@@ -135,11 +135,11 @@ files).  But even in this case the raster data layer would
 only be larger by the size of the address array and the
 single byte preceding each row.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.support.html">r.support</A></EM>
+<em><a href="r.support.html">r.support</a></em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 James Westervelt,<br>
 Michael Shapiro,<br> 

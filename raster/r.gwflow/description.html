@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 This numerical program calculates transient, confined and
 unconfined groundwater flow in two dimensions based on  
 raster maps and the current region resolution.
@@ -7,7 +7,7 @@ raster maps.
 
 <p>
 <center>
-<img src=r_gwflow_concept.png border=0><BR>
+<img src=r_gwflow_concept.png border=0><br>
 <table border=0 width=700>
 <tr><td><center>
 <i>Workflow of r.gwflow</i>
@@ -28,7 +28,7 @@ to a large number (billions of seconds) or set the
 specific yield/ effective porosity raster maps to zero.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The groundwater flow calculation is based on Darcy's law and a 
 finite volume discretization. The solved groundwater flow partial 
@@ -69,7 +69,7 @@ only work with normal quadratic matrices, so be careful using them with large ma
 (maps of size 10.000 cells will need more than one gigabyte of RAM).
 Always prefer a sparse matrix solver.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 Use this small script to create a working
 groundwater flow area and data. Make sure you are not in a lat/lon projection.
 
@@ -109,12 +109,12 @@ paraview --data=/tmp/gwdata_conf2d.vtk &
 paraview --data=/tmp/gwdata_unconf2d.vtk &
 </pre></div>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r3.gwflow.html">r3.gwflow</A></EM><br>
-<EM><A HREF="r.out.vtk.html">r.out.vtk</A></EM><br>
+<em><a href="r3.gwflow.html">r3.gwflow</a></em><br>
+<em><a href="r.out.vtk.html">r.out.vtk</a></em><br>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Soeren Gebbert
 
 <p><i>Last changed: $Date$</i>

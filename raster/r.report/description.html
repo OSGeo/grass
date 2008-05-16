@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.report</EM> allows the user to set up a series of report parameters to
+<em>r.report</em> allows the user to set up a series of report parameters to
 be applied to a raster map layer, and creates a report.  If invoked with
 command line arguments, the report will print out to the screen only.
 However, output may be redirected to a file or another program using the
@@ -8,39 +8,39 @@ UNIX redirection mechanism. If invoked without command line arguments, the
 user is given the option of printing out each report and/or saving output to
 a file.
 
-<P>
+<p>
 The report itself consists of two parts, a header section and the main body
 of the report.
 
-<P>
+<p>
 The header section of the report identifies the raster map layer(s) (by map
 layer name and TITLE), location, mapset, report date, and the region of
 interest. The area of interest is described in two parts: the user's current
 geographic region is presented, and the mask is presented (if any is used).
 
-<P>
+<p>
 The main body of the report consists of from one to three tables which
 present the statistics for each category and the totals for each unit
 column.
 
-<P>
-Note that, unlike <EM><A HREF="r.stats.html">r.stats</A></EM>,
-<EM>r.report</EM> allows the user to select the specific units of measure in
+<p>
+Note that, unlike <em><a href="r.stats.html">r.stats</a></em>,
+<em>r.report</em> allows the user to select the specific units of measure in
 which statistics will be reported.
 
-<P>
-Following is the result of a <EM>r.report</EM> run on the raster map layer
-<EM>geology</EM> (located in the Spearfish, SD sample data base), with the
-units expressed in square miles and acres. Here, <EM>r.report</EM> output is
-directed into the file <EM>report.file</EM>.
+<p>
+Following is the result of a <em>r.report</em> run on the raster map layer
+<em>geology</em> (located in the Spearfish, SD sample data base), with the
+units expressed in square miles and acres. Here, <em>r.report</em> output is
+directed into the file <em>report.file</em>.
 
-<H2>EXAMPLE:</H2>
-<DL>
-<DD>
-<B>r.report map=</B><EM>geology</EM> <B>units=</B><EM>miles,acres</EM> &gt; <EM>report.file </EM>
-</DL>
+<h2>EXAMPLE:</h2>
+<dl>
+<dd>
+<b>r.report map=</b><em>geology</em> <b>units=</b><em>miles,acres</em> &gt; <em>report.file </em>
+</dl>
 
-<PRE>
+<pre>
  ____________________________________________________________
 |                 RASTER MAP CATEGORY REPORT                 |
 | LOCATION: spearfish                      Fri Sep 2 09:20:09|
@@ -69,29 +69,29 @@ directed into the file <EM>report.file</EM>.
 |__________________________________|___________|_____________|
 |                 TOTAL            |   65728.60|    102.70   |
 |__________________________________|___________|_____________|
-</PRE>
+</pre>
 
-<H2>NOTES</H2>
-If the user runs <EM>r.report</EM> interactively and saves the report output
+<h2>NOTES</h2>
+If the user runs <em>r.report</em> interactively and saves the report output
 in a file, this file will be placed into the user's current working
 directory.
 
-<P>
-If the user runs <EM>r.report</EM> non-interactively, report output can be
+<p>
+If the user runs <em>r.report</em> non-interactively, report output can be
 saved by redirecting it to a file or a printer using the UNIX redirection
 mechanism.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.region.html">g.region</A>,
-<A HREF="r.coin.html">r.coin</A>,
-<A HREF="r.describe.html">r.describe</A>,
-<A HREF="r.info.html">r.info</A>,
-<A HREF="r.stats.html">r.stats</A>,
-<A HREF="r.univar.html">r.univar</A>
-</EM>
+<em><a href="g.region.html">g.region</a>,
+<a href="r.coin.html">r.coin</a>,
+<a href="r.describe.html">r.describe</a>,
+<a href="r.info.html">r.info</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.univar.html">r.univar</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
 

@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>r.sunmask</em> creates an output map layer based on an input elevation
 raster map layer and the sun position. The output map layer contains the
@@ -10,7 +10,7 @@ location and date/time parameters using the
 to specify date/time for sun position calculation by r.sunmask itself have
 to be used.
 
-<P>
+<p>
 The module performs sunset/sunrise checks and refraction correction for sun
 position calculation. Local coordinate systems are internally transformed to
 latitude/longitude for the SOLPOS algorithm. The elevation is not considered
@@ -31,7 +31,7 @@ Note: In latitude/longitude locations the position coordinates pair
 not specified, the map center's coordinates will be used.
 Also <em>g.region -l</em> displays the map center's coordinates.
 
-<P>
+<p>
 Note for module usage with <em>-g</em> flag and calculations
 close to sunset/sunrise:
 
@@ -59,14 +59,14 @@ correction for atmosphere refraction. The output without
 Acknowledgements: National Renewable Energy Laboratory for their <a href=http://rredc.nrel.gov/solar/codes_algs/solpos/>SOLPOS 2.0</a> sun position
 algorithm.
 
-<H2>SEE ALSO</H2>
-<EM>
+<h2>SEE ALSO</h2>
+<em>
 <a href="g.region.html">g.region</a>,
 <a href="r.sun.html">r.sun</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>
-</EM>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Janne Soimasuo, Finland 1994<br>
 update to FP by Huidae Cho 2001<br>
 added solpos algorithm feature by Markus Neteler 2001

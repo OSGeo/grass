@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.info</EM> reports some basic information about a
+<em>r.info</em> reports some basic information about a
 user-specified raster map layer.  This map layer must exist
 in the user's current mapset search path.  Information
 about the map's boundaries, resolution, projection, data
@@ -9,36 +9,36 @@ type, category number, data base location and mapset,
 the timestamp and
 history are put into a table and written to standard
 output.  The types of information listed can also be found
-in the <EM>cats</EM>, <EM>cellhd</EM>, and <EM>hist</EM>
+in the <em>cats</em>, <em>cellhd</em>, and <em>hist</em>
 directories under the mapset in which the named map is
 stored.
 
-<P>
+<p>
 The user can save the tabular output to a file 
 by using the UNIX redirection mechanism (&gt;); for example, the user 
-might save a report on the <EM>soils</EM> map layer in a file called 
-<EM>soil.rpt</EM> by typing: 
-<DL>
-<DD>
-<B>r.info map=</B><EM>soils</EM> &gt; <EM>soil.rpt</EM> 
-</DL>
+might save a report on the <em>soils</em> map layer in a file called 
+<em>soil.rpt</em> by typing: 
+<dl>
+<dd>
+<b>r.info map=</b><em>soils</em> &gt; <em>soil.rpt</em> 
+</dl>
 
-<P>
-<H2>ACCURACY</H2>
+<p>
+<h2>ACCURACY</h2>
 
 On large maps, the total number of cells in the map may not be displayed 
 with an accurate number. This is only cosmetic.
-<P>
+<p>
 Some standards (ISO-C90) and compilers do not support the 'long long' type 
 as a 64-bit type. In the case that GRASS was built with such a compiler, 
-an accuracy message may be displayed in the output of <EM>r.info</EM> 
+an accuracy message may be displayed in the output of <em>r.info</em> 
 after Total Cells:.
-<P>
+<p>
 
-Below is the report produced by <EM>r.info</EM> for the raster map 
-<EM>slope</EM> in the Spearfish sample data base. 
+Below is the report produced by <em>r.info</em> for the raster map 
+<em>slope</em> in the Spearfish sample data base. 
 
-<PRE>
+<pre>
  +----------------------------------------------------------------------------+
  | Layer:    slope                          Date: Mon Nov  5 10:55:57 2001    |
  | Mapset:   PERMANENT                      Login of Creator: neteler         |
@@ -71,22 +71,22 @@ Below is the report produced by <EM>r.info</EM> for the raster map
  |    min_slp_allowed = 0.000000                                              |
  |                                                                            |
  +----------------------------------------------------------------------------+
-</PRE>
+</pre>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.mapsets.html">g.mapsets</A>,</EM>
-<EM><A HREF="r.coin.html">r.coin</A>,</EM>
-<EM><A HREF="r.describe.html">r.describe</A>,</EM>
-<EM><A HREF="r.report.html">r.report</A>,</EM>
-<EM><A HREF="r.stats.html">r.stats</A>,</EM>
-<EM><A HREF="r.support.html">r.support</A>,</EM>
-<EM><A HREF="r.univar.html">r.univar</A>,</EM>
-<EM><A HREF="r.what.html">r.what</A></EM>
+<em><a href="g.mapsets.html">g.mapsets</a>,</em>
+<em><a href="r.coin.html">r.coin</a>,</em>
+<em><a href="r.describe.html">r.describe</a>,</em>
+<em><a href="r.report.html">r.report</a>,</em>
+<em><a href="r.stats.html">r.stats</a>,</em>
+<em><a href="r.support.html">r.support</a>,</em>
+<em><a href="r.univar.html">r.univar</a>,</em>
+<em><a href="r.what.html">r.what</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael O'Shea, 
-<A HREF="http://www.cecer.army.mil/">U.S. Army Construction Engineering Research Laboratory</A>
+<a href="http://www.cecer.army.mil/">U.S. Army Construction Engineering Research Laboratory</a>
 
 <p><i>Last changed: $Date$</i>

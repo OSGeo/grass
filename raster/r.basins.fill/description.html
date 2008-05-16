@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.basins.fill</EM>
+<em>r.basins.fill</em>
 generates a raster map layer depicting subbasins, based 
 on input raster map layers for the coded stream network 
 (where each channel segment has been "coded" with a unique category value) 
@@ -10,11 +10,11 @@ The raster map layer depicting ridges should include
 the ridge which defines the perimeter of the watershed. 
 The coded stream network can be generated 
 as part of the 
-<EM><A HREF="r.watershed.html">r.watershed</A></EM> program, 
+<em><a href="r.watershed.html">r.watershed</a></em> program, 
 but the map layer of ridges will need to be created by hand
-(for example, through digitizing done in <EM><A HREF="v.digit.html">v.digit</A></EM>).
+(for example, through digitizing done in <em><a href="v.digit.html">v.digit</a></em>).
 
-<P>
+<p>
 
 The resulting output raster map layer will 
 code the subbasins with category values matching 
@@ -24,32 +24,32 @@ made in an attempt to fill in these subbasins.
 If the resulting map layer from this program appears to 
 have holes within a subbasin, the program should be 
 rerun with a higher number of passes. 
-<BR><BR>
+<br><br>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 The current geographic region setting is ignored. 
 Instead, the geographic region for the entire input stream's 
 map layer is used. 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-See Appendix A of the <B>GRASS</B> <a
+See Appendix A of the <b>GRASS</b> <a
 href="http://grass.itc.it/gdp/raster/r.watershed.ps">Tutorial:
 r.watershed</a> for further details on the combined use of
-<EM>r.basins.fill</EM> and <EM><A HREF="r.watershed.html">r.watershed</A></EM>.
+<em>r.basins.fill</em> and <em><a href="r.watershed.html">r.watershed</a></em>.
 
-<P>
-<EM><A HREF="r.watershed.html">r.watershed</A></EM>,
-<EM><A HREF="v.digit.html">v.digit</A></EM>
+<p>
+<em><a href="r.watershed.html">r.watershed</a></em>,
+<em><a href="v.digit.html">v.digit</a></em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Dale White, 
 Dept. of Geography, 
 Pennsylvania State University
-<BR>
+<br>
 Larry Band, Dept. of Geography, University of Toronto, Canada 
 
 <p><i>Last changed: $Date$</i>

@@ -1,9 +1,9 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-Outputs <I>Raster</I> maps in <I>VTK-ASCII</I> format.  <I>Map's</I> are
-valid Raster map's in the current mapset.  <I>output</I> is the name of
+Outputs <i>Raster</i> maps in <i>VTK-ASCII</i> format.  <i>Map's</i> are
+valid Raster map's in the current mapset.  <i>output</i> is the name of
 an VTK-ASCII file which will be written in the current working directory.
-If <I>output</I> is not specified then <B>stdout</B> is used.  
+If <i>output</i> is not specified then <b>stdout</b> is used.  
 The module is sensitive to region settings (set with g.region).
 <br>
 <br>
@@ -27,28 +27,28 @@ More than one RGB dataset (3 maps) is not supported.
 <br>
 The vector input requires three raster maps: x, y, z -- defining the vector coordinates  - in this order. 
 More than one vector dataset (3 maps) is not supported. 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 This filter generates: 
 <ul>
-<li><I>structured points</I> with <I>celldata</I> or <I>pointdata</I> if no elevationfile is given</li>
+<li><i>structured points</i> with <i>celldata</i> or <i>pointdata</i> if no elevationfile is given</li>
 
-<li><I>structured grid</I> (not recommendet) with <I>pointdata</I> if an elevationfile is given</li>
-<li><I>polydataset</I> with <I>pointdata</I> if an elevationfile is given (default)</li> 
+<li><i>structured grid</i> (not recommendet) with <i>pointdata</i> if an elevationfile is given</li>
+<li><i>polydataset</i> with <i>pointdata</i> if an elevationfile is given (default)</li> 
 </ul>
 and puts this in a simple VTK-ASCII file. Nor XML or 
 binary output are supported. It is possible to choose more then one raster map
 to be written to the VTK-ASCII file. Each cell-/pointdata is named like the raster map it represents.
 You can visualize this file with the 
-<EM><A HREF="http://www.vtk.org">VTK Toolkit</A></EM>, 
-<EM><A HREF="http://www.paraview.org">Paraview</A></EM> and 
-<EM><A HREF="http://mayavi.sourceforge.net">MayaVi</A></EM> which are based on VTK.
+<em><a href="http://www.vtk.org">VTK Toolkit</a></em>, 
+<em><a href="http://www.paraview.org">Paraview</a></em> and 
+<em><a href="http://mayavi.sourceforge.net">MayaVi</a></em> which are based on VTK.
 If you have a raster map with partly no data, use the threshold filter in paraview to 
 visualize the valid data. Just filter all data which is greater/lesser than the 
 choosen null value in the VTK-ASCII file.
 <br>
 If elevation map is choosen, a polygonal grid is created with <i>quads</i>, 
 but the user can choose also <i>triangle strips</i> or <i>vertices</i>. 
-These dataformats a documented at <EM><A HREF="http://www.vtk.org">VTK Toolkit</A></EM>.
+These dataformats a documented at <em><a href="http://www.vtk.org">VTK Toolkit</a></em>.
 <br>
 <br>
 If the "-c" flag is used and the data should be visualised together with other data exported via *.out.vtk
@@ -60,24 +60,24 @@ But this will only work with data from the SAME location
 
 
 
-<H3>Difference between point- and celldata</H3>
+<h3>Difference between point- and celldata</h3>
 r.out.vtk can export raster cells with different representations.
 <ul>
    <li>
-      <I>pointdata</I> -- the cells/values are represented by the center of the cell. 
+      <i>pointdata</i> -- the cells/values are represented by the center of the cell. 
       Instead of cells, points are created. Each point can hold different values, 
       but the user can only visualize one value at a time. These points can 
       be connected in different ways.
    </li>
    <li>
-       <I>celldata</I> -- is only provided if no elevation map is given. 
+       <i>celldata</i> -- is only provided if no elevation map is given. 
        The cells are created with the same hight and width as in GRASS. Each cell 
        can hold different values, but the user can only visualize one value at a time. 
    </li>
 </ul>
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
-<H3>Simple Spearfish example</H3>
+<h3>Simple Spearfish example</h3>
 
 <div class="code"><pre>
 #set a nice region
@@ -91,7 +91,7 @@ r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/o
 paraview --data=/tmp/out.vtk
 </pre></div>
 
-<H3>Spearfish example with RGB data</H3>
+<h3>Spearfish example with RGB data</h3>
 
 <div class="code"><pre>
 #set the region
@@ -112,13 +112,13 @@ paraview --data=/tmp/out.vtk
 </pre></div>
 
 <br>
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r3.out.vtk.html">r3.out.vtk</A></EM><br>
-<EM><A HREF="r.out.ascii.html">r.out.ascii</A></EM><br>
-<EM><A HREF="g.region.html">g.region</A></EM><br>
+<em><a href="r3.out.vtk.html">r3.out.vtk</a></em><br>
+<em><a href="r.out.ascii.html">r.out.ascii</a></em><br>
+<em><a href="g.region.html">g.region</a></em><br>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 Soeren Gebbert
 
 <p><i>Last changed: $Date$</i>

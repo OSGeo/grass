@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.surf.contour</EM> creates a raster elevation map from a rasterized
+<em>r.surf.contour</em> creates a raster elevation map from a rasterized
 contour map.  Elevation values are determined using procedures similar
 to a manual methods.
 To determine the elevation of a point on a contour map, an individual
@@ -9,43 +9,43 @@ might interpolate its value from those of the two nearest contour lines
 (uphill and downhill).
 
 
-<P>
+<p>
 
-<EM>r.surf.contour</EM> works in a similar way.  Initially, a vector map of
+<em>r.surf.contour</em> works in a similar way.  Initially, a vector map of
 the contour lines is made with the elevation of each line as an attribute.
-When the program <EM><A HREF="v.to.rast.html">v.to.rast</A></EM>
+When the program <em><a href="v.to.rast.html">v.to.rast</a></em>
 is run on the vector map, continuous "lines" of rasters containing the
-contour line values will be the input for <EM>r.surf.contour</EM>. For each
+contour line values will be the input for <em>r.surf.contour</em>. For each
 cell in the input map, either the cell is a contour line cell (which is
 given that value), or a flood fill is generated from that spot until the
-fill comes to two unique values. So the <EM>r.surf.contour</EM> algorithm
+fill comes to two unique values. So the <em>r.surf.contour</em> algorithm
 <strong>linearly interpolates</strong> between contour lines. The flood fill
 is not allowed to cross over
 the rasterized contour lines, thus ensuring that an uphill and downhill
-contour value will be the two values chosen.  <EM>r.surf.contour</EM>
+contour value will be the two values chosen.  <em>r.surf.contour</em>
 interpolates from the uphill and downhill values by the true distance.
 
 
-<H3>Parameters:</H3>
+<h3>Parameters:</h3>
 
-<DL>
+<dl>
 
-<DT><B>input=</B><EM>name</EM> 
+<dt><b>input=</b><em>name</em> 
 
-<DD>Name of an existing raster map that contains a set of 
+<dd>Name of an existing raster map that contains a set of 
 initial category values (i.e., some cells contain known elevation
 values (denoting contours) while the rest contain NULL values or zeros (0)).
 
-<DT><B>output=</B><EM>name</EM> 
+<dt><b>output=</b><em>name</em> 
 
-<DD>Name to be assigned to new output raster map that represents
+<dd>Name to be assigned to new output raster map that represents
 a smooth (e.g., elevation) surface generated from
 the known category values in the input raster map layer.
-</DL>
+</dl>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-<EM>r.surf.contour</EM> works well under the following circumstances:
+<em>r.surf.contour</em> works well under the following circumstances:
 1) the contour lines extend to the the edge of the current region,
 2) the program is run at the same resolution as that of the input map,
 3) there are no disjointed contour lines,
@@ -53,47 +53,47 @@ and 4) no spot elevation data BETWEEN contour lines exist.  Spot elevations at
 the tops of hills and the bottoms of depressions, on the other hand, improve
 the output greatly.
 Violating these constraints will cause non-intuitive anomalies to appear in
-the output map.  Run <EM> <A HREF="r.slope.aspect.html">r.slope.aspect</A>
-</EM> on <EM>r.surf.contour</EM> results to locate potential anomalies.
+the output map.  Run <em> <a href="r.slope.aspect.html">r.slope.aspect</a>
+</em> on <em>r.surf.contour</em> results to locate potential anomalies.
 
 
-<P>
-The running of <EM>r.surf.contour</EM> is very sensitive to the resolution of
+<p>
+The running of <em>r.surf.contour</em> is very sensitive to the resolution of
 rasterized vector map.  If multiple contour lines go through the same raster,
-slight anomalies may occur.  The speed of <EM>r.surf.contour</EM> is dependent
+slight anomalies may occur.  The speed of <em>r.surf.contour</em> is dependent
 on how far "apart" the contour lines are from each other (as measured in
 raster cells).  Since a flood fill algorithm is used, the program's running
 time will grow exponentially with the distance between contour lines.
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 
-<EM>r.surf.contour</EM> has not been fully updated for NULL support and still
+<em>r.surf.contour</em> has not been fully updated for NULL support and still
 considers a value of "<tt>0</tt>" to be NULL. Thus any contour lines at 0 
 elevation (e.g. the coastline) will be ignored. In such cases converting any
-0 values in the input map to -1 with <EM>r.mapcalc</EM> may be a suitable
+0 values in the input map to -1 with <em>r.mapcalc</em> may be a suitable
 work-around.
-<P>
-Currently <EM>r.surf.contour</EM> will only produce CELL (integer) map output.
+<p>
+Currently <em>r.surf.contour</em> will only produce CELL (integer) map output.
 If you would like a finer grade output map (i.e. floating point) it is
 recommended to multiply the <b>input</b> map by 1000 (for example) using
-<em>r.mapcalc</em>, then divide the resultant <EM>r.surf.contour</EM> 
-<b>output</b> map by 1000.0, again with <EM>r.mapcalc</EM>.
-<P>
+<em>r.mapcalc</em>, then divide the resultant <em>r.surf.contour</em> 
+<b>output</b> map by 1000.0, again with <em>r.mapcalc</em>.
+<p>
 Volunteers are sought to remedy both these issues.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.slope.aspect.html">r.slope.aspect</A></EM>,
-<EM><A HREF="r.surf.idw.html">r.surf.idw</A></EM>,
-<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM>,
-<EM><A HREF="v.digit.html">v.digit</A></EM>,
-<EM><A HREF="v.surf.idw.html">v.surf.idw</A></EM>,
-<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>,
-<EM><A HREF="v.to.rast.html">v.to.rast</A></EM>
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>,
+<em><a href="r.surf.idw.html">r.surf.idw</a></em>,
+<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>,
+<em><a href="v.digit.html">v.digit</a></em>,
+<em><a href="v.surf.idw.html">v.surf.idw</a></em>,
+<em><a href="v.surf.rst.html">v.surf.rst</a></em>,
+<em><a href="v.to.rast.html">v.to.rast</a></em>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Chuck Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 

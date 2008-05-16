@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The GRASS tool <EM>r.digit</EM> provides the user with a
+The GRASS tool <em>r.digit</em> provides the user with a
 way to draw lines, areas, and circles on a monitor screen,
 and to save these features in a raster map.  Lines, areas,
 and circles are to be drawn using a pointing device
@@ -9,7 +9,7 @@ pressing each mouse button.  The user is requested to enter
 the category number associated with the line, area, or
 circle subsequently drawn by the user.  Lines, areas, and
 circles are defined by the series of points marked by the
-user inside the map window.  <EM>r.digit</EM> will close
+user inside the map window.  <em>r.digit</em> will close
 areas when the user has not.  By drawing a series of such
 features, the user can repair maps, identify areas of
 interest, or simply draw graphics for advertisement.  When
@@ -17,20 +17,20 @@ drawing is completed, a raster map based on the user's
 instructions is generated.  It is available for use as a
 mask, in analyses, and for display.
 
-<P>
+<p>
 The <b>bgcmd</b> option is intended to be used with display (d.*) commands.
 If several display commands are to be used to render the background
 they should be separated with the semi-colon ';' character.
 When run from the command line, these display commands will generally
 need to be "quoted" as they will contain spaces (see examples).
-<P>
+<p>
 Digitizing is done in a "polygon" method.  Each area is
 circumscribed completely.  Two or more overlapping areas and/or lines
 might define a single part of a map.  Each part of the map,
 however, is assigned only the LAST area or line which
 covered it.
 
-<H3>THE PROCESS:</H3>
+<h3>THE PROCESS:</h3>
 
 <h4>Start a monitor and display a raster to help setup and zoom to area of interest</h4>
 <div class="code"><pre>
@@ -43,34 +43,34 @@ d.mon x0
 r.digit out=name_of_new_raster_map bgcmd="d.rast map=name_of_raster"
 </pre></div>
 
-<OL>
+<ol>
 
-<LI>Choose to define an area or line, exit, or quit.
+<li>Choose to define an area or line, exit, or quit.
 If you choose to finish (<tt>exit</tt>) a new map is then created.
 If you quit, the session exits with nothing created.
 
-<LI>If you choose to make an area or line you must identify
+<li>If you choose to make an area or line you must identify
 the category number for that area or line.
 
-<LI>Using the mouse trace the line or circumscribe the area;
+<li>Using the mouse trace the line or circumscribe the area;
 or, finish (go to Step 1).
 
-</OL>
+</ol>
 
-<H2>SEE ALSO</H2>
-
-
-<EM><A HREF="v.digit.html">v.digit</A></EM>,
-<EM><A HREF="d.graph.html">d.graph</A></EM>,
-<EM><A HREF="d.linegraph.html">d.linegraph</A></EM>,
-<EM><A HREF="g.region.html">g.region</A></EM>,
-<EM><A HREF="r.in.poly.html">r.in.poly</A></EM>,
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.to.vect.html">r.to.vect</A></EM>,
-<EM><A HREF="v.in.ascii.html">v.in.ascii</A></EM>
+<h2>SEE ALSO</h2>
 
 
-<H2>AUTHOR</H2>
+<em><a href="v.digit.html">v.digit</a></em>,
+<em><a href="d.graph.html">d.graph</a></em>,
+<em><a href="d.linegraph.html">d.linegraph</a></em>,
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="r.in.poly.html">r.in.poly</a></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.to.vect.html">r.to.vect</a></em>,
+<em><a href="v.in.ascii.html">v.in.ascii</a></em>
+
+
+<h2>AUTHOR</h2>
 
 Michael Shapiro, U.S.Army Construction Engineering 
 Research Laboratory

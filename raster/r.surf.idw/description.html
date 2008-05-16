@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.surf.idw</EM> fills a grid cell (raster) matrix with
+<em>r.surf.idw</em> fills a grid cell (raster) matrix with
 interpolated values generated from a set of input layer
 data points. It uses a numerical approximation technique
 based on distance squared weighting of the values of
@@ -9,7 +9,7 @@ nearest data points. The number of nearest data points used
 to determined the interpolated value of a cell can be
 specified by the user (default: 12 nearest data points).
 
-<P>
+<p>
 
 If there is a current working mask, it applies to the output 
 raster map. Only those cells falling within the mask will be 
@@ -17,18 +17,18 @@ assigned interpolated values. The search procedure for the
 selection of nearest neighboring points will consider all 
 input data, without regard to the mask. 
 
-The <B>-e</B> flag is the error analysis option that interpolates values
+The <b>-e</b> flag is the error analysis option that interpolates values
 only for those cells of the input raster map which have non-zero values and
-outputs the difference (see <A HREF="#minuse.html">NOTES</A> below).
-<P>
-The <B>npoints</B> parameter defines the number of nearest data points used
+outputs the difference (see <a href="#minuse.html">NOTES</a> below).
+<p>
+The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
-<A NAME="notes.html"><H2>NOTES</H2></A>
+<A NAME="notes.html"><h2>NOTES</h2></a>
 
-<EM>r.surf.idw</EM> is a surface generation utility which
+<em>r.surf.idw</em> is a surface generation utility which
 uses inverse distance squared weighting (as described in
-<B>Applied Geostatistics</B> by E. H. Isaaks and R. M.
+<b>Applied Geostatistics</b> by E. H. Isaaks and R. M.
 Srivastava, Oxford University Press, 1989) to assign
 interpolated values. The implementation includes a
 customized data structure somewhat akin to a sparse matrix
@@ -37,34 +37,34 @@ points are selected.  For latitude/longitude projections,
 distances are calculated from point to point along a
 geodesic.
 
-<P>
+<p>
 
-Unlike <EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM>, which processes
-all input data points in each interpolation cycle, <EM>r.surf.idw</EM>
+Unlike <em><a href="r.surf.idw2.html">r.surf.idw2</a></em>, which processes
+all input data points in each interpolation cycle, <em>r.surf.idw</em>
 attempts to minimize the number of input data for which distances must be
 calculated. Execution speed is therefore a function of the search effort,
 and does not increase appreciably with the number of input data points.
 
-<P>
+<p>
 
-<EM>r.surf.idw</EM> will generally outperform <EM><A
-HREF="r.surf.idw2.html">r.surf.idw2</A></EM> except when the input data
+<em>r.surf.idw</em> will generally outperform <em><A
+HREF="r.surf.idw2.html">r.surf.idw2</a></em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
-the cost of the additional distance calculations performed by <EM><A
-HREF="r.surf.idw2.html">r.surf.idw2</A></EM>. The relative performance of
+the cost of the additional distance calculations performed by <em><A
+HREF="r.surf.idw2.html">r.surf.idw2</a></em>. The relative performance of
 these utilities will depend on the comparative speed of boolean, integer and
 floating point operations on a particular platform.
 
-<P>
+<p>
 
-Worst case search performance by <EM>r.surf.idw</EM> occurs
+Worst case search performance by <em>r.surf.idw</em> occurs
 when the interpolated cell is located outside of the region
 in which input data are distributed. It therefore behooves
 the user to employ a mask when geographic region boundaries
 include large areas outside the general extent of the input
 data.
 
-<P>
+<p>
 
 The degree of smoothing produced by the interpolation will
 increase relative to the number of nearest data points
@@ -73,9 +73,9 @@ irregularly spaced input data.  However, the output result
 for the former may include unacceptable nonconformities in
 the surface pattern.
 
-<P>
+<p>
 
-The <A NAME="minuse.html"><B>-e</B></A> flag option provides a standard
+The <A NAME="minuse.html"><b>-e</b></a> flag option provides a standard
 surface-generation error analysis facility. It produces an output raster map
 of the difference of interpolated values minus input values for those cells
 whose input data are non-zero. For each interpolation cycle, the known value
@@ -85,26 +85,26 @@ the input raster map to analyze the distribution of interpolation error.
 This procedure may be helpful in choosing the number of nearest neighbors
 considered for surface generation.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.surf.contour.html">r.surf.contour</A></EM>,
-<EM><A HREF="r.surf.idw2.html">r.surf.idw2</A></EM>,
-<EM><A HREF="r.surf.gauss.html">r.surf.gauss</A></EM>,
-<EM><A HREF="r.surf.fractal.html">r.surf.fractal</A></EM>,
-<EM><A HREF="r.surf.random.html">r.surf.random</A></EM>,
-<EM><A HREF="v.surf.idw.html">v.surf.idw</A></EM>,
-<EM><A HREF="v.surf.rst.html">v.surf.rst</A></EM>
+<em><a href="r.surf.contour.html">r.surf.contour</a></em>,
+<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>,
+<em><a href="r.surf.gauss.html">r.surf.gauss</a></em>,
+<em><a href="r.surf.fractal.html">r.surf.fractal</a></em>,
+<em><a href="r.surf.random.html">r.surf.random</a></em>,
+<em><a href="v.surf.idw.html">v.surf.idw</a></em>,
+<em><a href="v.surf.rst.html">v.surf.rst</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Greg Koerper 
-<BR>
+<br>
 Global Climate Research Project 
-<BR>
+<br>
 U.S. EPA Environmental Research Laboratory 
-<BR>
+<br>
 200 S.W. 35th Street, JSB 
-<BR>
+<br>
 Corvallis, OR 97333 
 
 <p><i>Last changed: $Date$</i>

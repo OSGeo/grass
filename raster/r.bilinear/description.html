@@ -1,13 +1,13 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<H3>
+<h3>
 This module is deprecated and scheduled for demolition.
-<BR>
+<br>
 Please use "<em><a href="r.resamp.interp.html">r.resamp.interp</a></em>"
-instead.</H3>
+instead.</h3>
 
 
-<EM>r.bilinear</EM> fills a grid cell (raster) matrix with interpolated values
+<em>r.bilinear</em> fills a grid cell (raster) matrix with interpolated values
 generated from a set of input layer data points.  It uses the bilinear
 interpolation method, a simple algorithm usually applied only to
 completely defined raster areas (input data void of null data values). 
@@ -18,7 +18,7 @@ User should be aware that the gradient of the interpolation functions changes
 discontinuously across lines intersecting the cell centers of the input raster.
 
 
-<P>
+<p>
 
 If there is a current working mask, it applies to the output
 raster map.  Only those cells falling within the mask will be
@@ -30,9 +30,9 @@ cells of the output raster that cannot be bounded by 4 input cell centers are
 set to null.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-The <B>north</B> and <B>south</B> parameters have been included to allow
+The <b>north</b> and <b>south</b> parameters have been included to allow
 for specific input values to be assigned to the north and/or south poles for
 longitude-latitude grids.  These data, if included, are used to interpolate
 values for cells that are north or south of a line intersecting the cell 
@@ -46,7 +46,7 @@ interpolation will be "wrap-around" from west to east (across latitude)
 only if the input raster has an east edge identical to its west edge.
 
 
-<P>
+<p>
 
 For longitude-latitude databases, the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
@@ -54,27 +54,27 @@ attempt to implement the latter would violate the integrity of the
 interpolation method.
 
 
-<P>
+<p>
 
-</B><EM>r.bilinear</EM> may be used in some instances as an alternative to the
-nearest neighbor approach inherent to <EM>r.resample</EM>.  Note, however, that
+</b><em>r.bilinear</em> may be used in some instances as an alternative to the
+nearest neighbor approach inherent to <em>r.resample</em>.  Note, however, that
 the extent of non-null data area of the output raster must be less than that
 of the input raster.  The only exception to this occurs in the case where the
-<B>north</B> and <B>south</B> parameters are utilized for longitude-latitude
+<b>north</b> and <b>south</b> parameters are utilized for longitude-latitude
 rasters.
 
-<P>
+<p>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><a href="r.surf.idw.html">r.surf.idw</a></EM>,
-<EM><a href="r.surf.idw2.html">r.surf.idw2</a></EM>,
-<EM><a href="g.region.html">g.region</a></EM>,
-<EM><a href="r.resample.html">r.resample</a></EM>,
-<EM><a href="r.resamp.interp.html">r.resamp.interp</a></EM>,
-<EM><a href="r.resamp.stats.html">r.resamp.stats</a></EM>
+<em><a href="r.surf.idw.html">r.surf.idw</a></em>,
+<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>,
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="r.resample.html">r.resample</a></em>,
+<em><a href="r.resamp.interp.html">r.resamp.interp</a></em>,
+<em><a href="r.resamp.stats.html">r.resamp.stats</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Greg Koerper <br>
 ManTech Environmental Technology, Inc.<br>

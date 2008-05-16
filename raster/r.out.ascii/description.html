@@ -1,23 +1,23 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.out.ascii</EM> converts a user-specified raster map layer
-(<B>input=</B><EM>name</EM>) into an ASCII grid in a text file
-(<B>output=</B><EM>name</EM>) suitable for export to
+<em>r.out.ascii</em> converts a user-specified raster map layer
+(<b>input=</b><em>name</em>) into an ASCII grid in a text file
+(<b>output=</b><em>name</em>) suitable for export to
 other computer systems.
 
-<P>
+<p>
 
-The GRASS program <EM><A HREF="r.in.ascii.html">r.in.ascii</A></EM> can be
+The GRASS program <em><a href="r.in.ascii.html">r.in.ascii</a></em> can be
 used to perform the reverse function, converting an ASCII file in suitable
 format to GRASS raster map format.
-<P>
-<!--With <B>-s</B> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
+<p>
+<!--With <b>-s</b> flag SURFER .grd ASCII GRID instead of GRASS ASCII GRID is
 written (with reverted row order, different header).
-<P>
-With <B>-m</B> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
+<p>
+With <b>-m</b> flag MODFLOW (USGS) free-format array instead of GRASS ASCII
 GRID is written.-->
 
-<P>
+<p>
 To write a SURFER .grd ASCII GRID file (with reverted row order and different
 header) use the <em>-s</em> flag:
 
@@ -28,9 +28,9 @@ r.out.ascii -s input=inname output=outname.grd [dp=value]
 NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files (ignoring
 the <em>null=</em> parameter).
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-The output from <EM>r.out.ascii</EM> may be placed into a file by using the
+The output from <em>r.out.ascii</em> may be placed into a file by using the
 UNIX redirection mechanism; e.g.:
 
 <div class="code"><pre>
@@ -39,21 +39,21 @@ r.out.ascii input=soils output=- &gt; out.file
 
 The output file out.file can then be printed or copied onto a CDROM
 or floppy disk for export purposes.
-<P>
+<p>
 To export the raster values as x,y,z values of cell centers (one per line)
-use the <em><A HREF="r.out.xyz.html">r.out.xyz</A></em> module.
+use the <em><a href="r.out.xyz.html">r.out.xyz</a></em> module.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.in.ascii.html">r.in.ascii</A>,
-<A HREF="r.in.arc.html">r.in.arc</A>,
-<A HREF="r.out.bin.html">r.out.bin</A>,
-<A HREF="r.out.gdal.html">r.out.gdal</A>,
-<A HREF="r.out.xyz.html">r.out.xyz</A>
-</EM>
+<em>
+<a href="r.in.ascii.html">r.in.ascii</a>,
+<a href="r.in.arc.html">r.in.arc</a>,
+<a href="r.out.bin.html">r.out.bin</a>,
+<a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.out.xyz.html">r.out.xyz</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
 <p>

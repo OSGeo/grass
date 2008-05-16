@@ -1,6 +1,6 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The GRASS program <EM>r.patch</EM> allows the user to build a new
+The GRASS program <em>r.patch</em> allows the user to build a new
 raster map the size and resolution of the current region by assigning
 known data values from input raster maps to the cells in this region.
 This is done by filling in "no data" cells, those that do not yet
@@ -14,75 +14,75 @@ map layers, for filling in "holes" in a raster map layer's data (e.g., in
 digital elevation data), or for updating an older map layer with more recent
 data. The current geographic region definition and mask settings are
 respected.
-<P>
-The first <EM>name</EM> listed in the string
-<B>input=</B><EM>name</EM>,<EM>name</EM>,<EM>name</EM>, ... is the name of
+<p>
+The first <em>name</em> listed in the string
+<b>input=</b><em>name</em>,<em>name</em>,<em>name</em>, ... is the name of
 the first map whose data values will be used to fill in "no data" cells
-in the current region. The second through 200 (max) input <EM>name</EM>
+in the current region. The second through 200 (max) input <em>name</em>
 maps will be used, in order, to supply data values for for the remaining
 "no data" cells.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
-Below, the raster map layer on the far left is <B>patched</B> 
-with the middle (<EM>patching</EM>) raster map layer, 
-to produce the <EM>composite</EM> raster map layer on the right. 
+Below, the raster map layer on the far left is <b>patched</b> 
+with the middle (<em>patching</em>) raster map layer, 
+to produce the <em>composite</em> raster map layer on the right. 
 
-<PRE>
+<pre>
   1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
   1 1 0 2 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 2 2 2 0 0
   3 3 3 3 2 2 0 0    0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0
   3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 3 4 4 4 4
   3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4    3 3 3 4 4 4 4 4
   0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
-</PRE>
+</pre>
 
-Switching the <EM>patched</EM> and the <EM>patching</EM> raster map layers 
+Switching the <em>patched</em> and the <em>patching</em> raster map layers 
 produces the following results: 
 
-<PRE>
+<pre>
   0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 1 1 0 0 0 0    1 1 0 2 2 2 0 0    1 1 1 1 2 2 0 0
   0 0 0 0 0 0 0 0    3 3 3 3 2 2 0 0    3 3 3 3 2 2 0 0
   4 4 4 4 4 4 4 4    3 3 3 3 0 0 0 0    4 4 4 4 4 4 4 4
   4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
   4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
-</PRE>
+</pre>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Frequently, this program is used to patch together adjacent map layers which
 have been digitized separately.  The program 
-<EM><A HREF="v.mkgrid.html">v.mkgrid</A></EM> can be used to make adjacent
+<em><a href="v.mkgrid.html">v.mkgrid</a></em> can be used to make adjacent
 maps align neatly.
 
-<P>
+<p>
 The user should check the current geographic region settings before running 
-<EM>r.patch</EM>, to ensure that the region boundaries encompass all 
+<em>r.patch</em>, to ensure that the region boundaries encompass all 
 of the data desired to be included in the composite map and to ensure that the
 region resolution is the resolution of the desired data. To set the
-geographic region settings to one or several raster maps, the <EM>g.region</EM>
+geographic region settings to one or several raster maps, the <em>g.region</em>
 program can be used:
 
 <div class="code"><pre>
 g.region rast=map1[,map2[,...]]
 </pre></div>
 
-<P>
+<p>
 
-Use of <EM>r.patch</EM> is generally followed by use of the GRASS programs 
-<EM><A HREF="g.remove.html">g.remove</A></EM> and 
-<EM><A HREF="g.rename.html">g.rename</A></EM>;
-<EM>g.remove</EM> is used to remove the original (un-patched) raster map
-layers, while <EM>g.rename</EM> is used to then assign to the newly-created
+Use of <em>r.patch</em> is generally followed by use of the GRASS programs 
+<em><a href="g.remove.html">g.remove</a></em> and 
+<em><a href="g.rename.html">g.rename</a></em>;
+<em>g.remove</em> is used to remove the original (un-patched) raster map
+layers, while <em>g.rename</em> is used to then assign to the newly-created
 composite (patched) raster map layer the name of the original raster map
 layer.
 
-<P>
-<EM>r.patch</EM> creates support files for the patched, composite output map. 
+<p>
+<em>r.patch</em> creates support files for the patched, composite output map. 
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Create a list of maps matching a pattern, extend the region to include them
 all, and patch them together to create a mosaic. Overlapping maps will be 
@@ -93,19 +93,19 @@ MAPS=`g.mlist type=rast sep=, pat="map_*"`
 g.region rast=$MAPS
 r.patch in=$MAPS out=mosaic
 </pre></div>
-<BR>
+<br>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.region.html">g.region</A></EM>,
-<EM><A HREF="g.remove.html">g.remove</A></EM>,
-<EM><A HREF="g.rename.html">g.rename</A></EM>,
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.support.html">r.support</A></EM>,
-<EM><A HREF="v.mkgrid.html">v.mkgrid</A></EM>
+<em><a href="g.region.html">g.region</a></em>,
+<em><a href="g.remove.html">g.remove</a></em>,
+<em><a href="g.rename.html">g.rename</a></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.support.html">r.support</a></em>,
+<em><a href="v.mkgrid.html">v.mkgrid</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro, 
 U.S. Army Construction Engineering Research Laboratory

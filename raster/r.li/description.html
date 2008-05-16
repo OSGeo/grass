@@ -15,7 +15,7 @@
 <h2>KEYWORDS</h2>
 raster, landscape structure analysis, overview, landscape metrics, landscape pattern, landscape analysis
 
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 The <em>r.li</em> suite is a toolset for multiscale analysis of landscape structure.
 It aims at replacing the <em>r.le</em> suite of modules through a client-server,
@@ -53,14 +53,14 @@ The general procedure to calculate an index from a raster map is two-fold:
     index using on the areas selected on configuration file.
 </ol>
 
-<H2>NOTE</H2>
+<h2>NOTE</h2>
 
 Also the <em>r.li.daemon</em> has a main function and it can be run, but it is only a
 template for development of new indices.
 <!-- mhh ??: -->
 The function itself has no meaning, it can be used only for debug.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 To calculate a patch density index on a whole 'geology' raster map in the
 Spearfish region, using a 5x5 moving window, follow this procedure:
@@ -115,7 +115,7 @@ program rescale it automatically. For instance if you have selected a
 configuration file on a 200x200 raster map, then the sample area is
 10x10.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <b>Core modules</b>:
 <ul>
@@ -160,27 +160,27 @@ configuration file on a 200x200 raster map, then the sample area is
   <li> <a href="r.li.simpson.html">r.li.simpson</a>: Calculates Simpson's diversity index on a raster map</li>
 </ul>
 
-<H2>ADDING NEW INDICES</H2>
+<h2>ADDING NEW INDICES</h2>
 New indices can be defined and implemented by any C programmer, without having to
 deal with all basic functions (IO etc.). The computing architecture and the functions
 are clearly separated, thus allowing an easy expandability. Every index is defined
 separately, placed in a directory along with its Makefile for compiling it and a file
 description.html which describes the index including a simple example of use.
 
-<H2>REFERENCES</H2>
+<h2>REFERENCES</h2>
 
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351 (<a href="http://www.fs.fed.us/pnw/pubs/gtr_351.pdf">PDF</a>).
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 <a href="mailto:porta@cli.di.unipi.it">Claudio Porta</a> and 
 <a href="mailto:spano@cli.di.unipi.it">Lucio Davide Spano</a>, students of Computer Science 
 University of Pisa (Italy). <br>
 Commission from Faunalia Pontedera (PI)<br>
 
 <p><i>Last changed: $Date$</i>
-<HR>
-<P><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a>
+<hr>
+<p><a href="index.html">Main index</a> - <a href="raster.html">raster index</a> - <a href="full_index.html">Full index</a>
 </body>
 </html>
