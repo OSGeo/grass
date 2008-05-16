@@ -64,10 +64,6 @@ class GMConsole(wx.Panel):
                                    self.parent.notebook,
                                    pageid)
 
-        if Debug.get_level() == 0:
-            # don't redirect when debugging is enabled
-            sys.stderr = self.cmd_stderr
-
         # buttons
         self.console_clear = wx.Button(parent=self, id=wx.ID_CLEAR)
         self.console_save  = wx.Button(parent=self, id=wx.ID_SAVE)
@@ -100,6 +96,19 @@ class GMConsole(wx.Panel):
         # layout
         self.SetAutoLayout(True)
         self.SetSizer(boxsizer1)
+
+    def Redirect(self):
+        """Redirect stderr
+
+        @return True redirected
+        @return False failed
+        """
+        if Debug.get_level() == 0:
+            # don't redirect when debugging is enabled
+            sys.stderr = self.cmd_stderr
+            return True
+
+        return False
 
     def WriteLog(self, line, style=None, wrap=None):
         """Generic method for writing log message in 

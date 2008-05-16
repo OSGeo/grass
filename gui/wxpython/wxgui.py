@@ -178,6 +178,9 @@ class GMFrame(wx.Frame):
         if self.curr_page and not self.curr_page.maptree.mapdisplay.IsShown():
             self.curr_page.maptree.mapdisplay.Show()
 
+        # redirect stderr to log area    
+        self.goutput.Redirect()
+
     def __doLayout(self):
         """Do Layout (unused bacause of aui manager...)"""
         # self.panel = wx.Panel(self,-1, style= wx.EXPAND)
