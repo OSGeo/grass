@@ -1,7 +1,7 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.series</EM> makes each output cell value a function of the values
+<em>r.series</em> makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
 Following methods are available:
 
@@ -24,42 +24,42 @@ Following methods are available:
  <li>max_raster: raster map number with the maximum time-series value
  </ul> 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-With <EM>-n</EM> flag, any cell for which any of the corresponding input cells are
+With <em>-n</em> flag, any cell for which any of the corresponding input cells are
 NULL is automatically set to NULL (NULL propagation). The aggregate function is not
-called, so all methods behave this way with respect to the <EM>-n</EM> flag.
-<P>
-Without <EM>-n</EM> flag, the complete list of inputs for each cell (including
+called, so all methods behave this way with respect to the <em>-n</em> flag.
+<p>
+Without <em>-n</em> flag, the complete list of inputs for each cell (including
 NULLs) is passed to the aggregate function. Individual aggregates can
 handle data as they choose. Mostly, they just compute the aggregate
 over the non-NULL values, producing a NULL result only if all inputs
 are NULL.
 <p>
-The <EM>min_raster</EM> and <EM>max_raster</EM> methods generate a map with the
+The <em>min_raster</em> and <em>max_raster</em> methods generate a map with the
 number of the raster map that holds the minimum/maximum value of the
-time-series. The numbering starts at <EM>0</EM> up to <EM>n</EM> for the
-first and the last raster listed in <EM>input=</EM>, respectively. 
+time-series. The numbering starts at <em>0</em> up to <em>n</em> for the
+first and the last raster listed in <em>input=</em>, respectively. 
 
 
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
-Using <EM>r.series</EM> with wildcards:
+Using <em>r.series</em> with wildcards:
 <br>
 <tt>r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
     output=insitu_data.stddev method=stddev</tt>
-<P>
+<p>
 
-Note the <EM>g.mlist</EM> script also supports regular expressions for 
+Note the <em>g.mlist</em> script also supports regular expressions for 
 selecting map names.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="g.mlist.html">g.mlist</A></EM>,
-<EM><A HREF="g.region.html">g.region</A></EM>
+<em><a href="g.mlist.html">g.mlist</a></em>,
+<em><a href="g.region.html">g.region</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Glynn Clements
 

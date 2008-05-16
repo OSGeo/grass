@@ -1,49 +1,49 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.to.vect</EM> scans the named <B>input</B> raster map
+<em>r.to.vect</em> scans the named <b>input</b> raster map
 layer, extracts points, lines or area edge features from it, converts data
 to GRASS vector format.
 
-<H3>Points</H3>
+<h3>Points</h3>
 
-The <EM>r.to.vect</EM> program extracts data from a GRASS raster map layer and stores output 
-in a new GRASS <EM>vector</EM> file.  
+The <em>r.to.vect</em> program extracts data from a GRASS raster map layer and stores output 
+in a new GRASS <em>vector</em> file.  
 
-<H3>Lines</H3>
-<EM>r.to.vect</EM> assumes that the <EM>input</EM> map has been thinned
-using <EM><A HREF="r.thin.html">r.thin</A></EM>.
+<h3>Lines</h3>
+<em>r.to.vect</em> assumes that the <em>input</em> map has been thinned
+using <em><a href="r.thin.html">r.thin</a></em>.
 
-<P>
+<p>
 
-<EM>r.to.vect</EM> extracts vectors (aka, "arcs") from a
+<em>r.to.vect</em> extracts vectors (aka, "arcs") from a
 raster map.  These arcs may represent linear features
 (like roads or streams), or may represent area edge
 features (like political boundaries, or soil mapping
 units).  
 
-<P>
+<p>
 
-<EM><A HREF="r.thin.html">r.thin</A></EM> and <EM>r.to.vect</EM>
+<em><a href="r.thin.html">r.thin</a></em> and <em>r.to.vect</em>
 may create excessive nodes at every junction, and may create small spurs
 or "dangling lines" during the thinning and vectorization process.
 These excessive nodes and spurs may be removed using
-<EM><A HREF="v.clean.html">v.clean</A></EM>.
+<em><a href="v.clean.html">v.clean</a></em>.
 
 
-<H3>Areas</H3>
+<h3>Areas</h3>
 
-<EM>r.to.vect</EM> first traces the perimeter of each unique
+<em>r.to.vect</em> first traces the perimeter of each unique
 area in the raster map layer and creates vector data to
 represent it.  The cell category values for the raster map
 layer will be used to create attribute information for the
 resultant vector area edge data.
 
-<P>
+<p>
 
 A true vector tracing of the area edges might appear
 blocky, since the vectors outline the edges of raster data
 that are stored in rectangular cells.  To produce a
-better-looking vector map, <EM>r.to.vect</EM> smoothes the
+better-looking vector map, <em>r.to.vect</em> smoothes the
 corners of the vector data as they are being extracted. At
 each change in direction (i.e., each corner), the two
 midpoints of the corner cell (half the cell's height and
@@ -56,48 +56,48 @@ The user should check the resolution of the geographic
 region (and the original data) to estimate the possible
 error introduced by smoothing.
 
-<P>
+<p>
 
-<EM>r.to.vect</EM> extracts only area edges from the named raster input file. 
+<em>r.to.vect</em> extracts only area edges from the named raster input file. 
 If the raster map contains other data (i.e., line edges, or point data) the
 output may be wrong. 
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 
 For feature=line the input raster map MUST be thinned by
-<EM><A HREF="r.thin.html">r.thin</A></EM>;
-if not, <EM>r.to.vect</EM> may crash.
+<em><a href="r.thin.html">r.thin</a></em>;
+if not, <em>r.to.vect</em> may crash.
 
-<H2>AUTHOR</H2>
-<B>Points</B><BR>
-Bill Brown<BR>
-<BR>
+<h2>AUTHOR</h2>
+<b>Points</b><br>
+Bill Brown<br>
+<br>
 
-<B>Lines</B><BR>
-Mike Baba<BR>
-DBA Systems, Inc.<BR>
-10560 Arrowhead Drive<BR>
-Fairfax, Virginia 22030<BR>
-<BR>
+<b>Lines</b><br>
+Mike Baba<br>
+DBA Systems, Inc.<br>
+10560 Arrowhead Drive<br>
+Fairfax, Virginia 22030<br>
+<br>
 
-<B>Areas</B><BR>
-<EM>Original</EM> version of <EM>r.poly</EM>: 
-<BR>
+<b>Areas</b><br>
+<em>Original</em> version of <em>r.poly</em>: 
+<br>
 Jean Ezell and Andrew Heekin, 
 <br>
 U.S. Army Construction Engineering 
 Research Laboratory
 
-<P>
-<EM>Modified</EM> program for smoothed lines: 
-<BR>
+<p>
+<em>Modified</em> program for smoothed lines: 
+<br>
 David Satnik, 
 Central Washington University
 <br>
-Updated 2001 by Andrea Aime, Modena, Italy<BR>
-<BR>
+Updated 2001 by Andrea Aime, Modena, Italy<br>
+<br>
 
-<B>Update</B><BR>
+<b>Update</b><br>
 Original r.to.sites, r.line and r.poly merged and updated to 5.7 by Radim Blazek
 
 <p><i>Last changed: $Date$</i>

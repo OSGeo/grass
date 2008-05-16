@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>r.out.ppm</em> converts a GRASS raster map into a PPM image 
 at the pixel resolution of the CURRENTLY DEFINED REGION. 
@@ -13,7 +13,7 @@ g.region -p rast=[mapname]
 before running <em>r.out.ppm</em>.<p>
 
 By default the PPM file created is 24-bit color, rawbits storage.
-You can use the <B>-G</B> flag to force <em>r.out.ppm</em> to 
+You can use the <b>-G</b> flag to force <em>r.out.ppm</em> to 
 output an 8-bit greyscale instead.
 The greyscale conversion uses the NTSC conversion:<p>
 
@@ -26,17 +26,17 @@ One pixel is written for each cell value, so if <tt>ew_res</tt> and
 <tt>ns_res</tt> differ, the aspect ratio of the resulting image will be off.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 A few ppm file comments are written: the name of the GRASS
 raster map, resolution, etc.  Although these are perfectly legal,
 I've found one PD image utility that chokes on them, so if you need 
-a commentless PPM file, use '<TT>out=-&nbsp;&gt;&nbsp;outfile.ppm</TT>'. (When sending 
+a commentless PPM file, use '<tt>out=-&nbsp;&gt;&nbsp;outfile.ppm</tt>'. (When sending 
 output to stdout, no comments are written.)
 
-<H2>HINTS</H2>
+<h2>HINTS</h2>
 
 You can create a PNG image with NULL values represented by a transparent 
-background by using the <a href="pngdriver.html">PNG driver</A> with 
+background by using the <a href="pngdriver.html">PNG driver</a> with 
 <a href="variables.html">GRASS_TRANSPARENT</a> set to TRUE.
 Alternatively, you can use the <em>pnmtopng</em> program from 
 <a href="http://netpbm.sourceforge.net">netpbm</a> to do this:
@@ -46,15 +46,15 @@ r.out.ppm raster
 pnmtopng -transparent white raster.ppm > raster.png
 </pre></div>
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="d.out.png.html">d.out.png</A></EM><BR>
-<EM><A HREF="r.out.ascii.html">r.out.ascii</A></EM><BR>
-<EM><A HREF="r.out.mpeg.html">r.out.mpeg</A></EM><BR>
-<EM><A HREF="r.out.png.html">r.out.png</A></EM><BR>
-<EM><A HREF="r.out.ppm3.html">r.out.ppm3</A></EM><BR>
-<EM><A HREF="r.out.tiff.html">r.out.tiff</A></EM>
+<h2>SEE ALSO</h2>
+<em><a href="d.out.png.html">d.out.png</a></em><br>
+<em><a href="r.out.ascii.html">r.out.ascii</a></em><br>
+<em><a href="r.out.mpeg.html">r.out.mpeg</a></em><br>
+<em><a href="r.out.png.html">r.out.png</a></em><br>
+<em><a href="r.out.ppm3.html">r.out.ppm3</a></em><br>
+<em><a href="r.out.tiff.html">r.out.tiff</a></em>
  
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Bill Brown, UIUC
 

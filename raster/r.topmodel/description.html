@@ -1,60 +1,60 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<B><EM>r.topmodel</EM></B> simulates TOPMODEL which is a physically based
+<b><em>r.topmodel</em></b> simulates TOPMODEL which is a physically based
 hydrologic model.
-<P>
+<p>
 Note: (i) means input; (o) means output; (o/i) means input or output
-<P>
-The <B>-i</B> flag indicates that input data are given for (o/i).  Without this
+<p>
+The <b>-i</b> flag indicates that input data are given for (o/i).  Without this
 flag, all inputs (i) and intermediate outputs (o/i) should be given.  For
 example, [belevation] map will be created from [elevation] and [basin] in every
 run.  However, given the same [elevation] and [basin], [belevation] output will
 be the same all the time, so r.topmodel can directly take [belevation] as an
 input with this flag to save time.
-<P>
+<p>
 
-<H3>Selected Parameters:</H3>
+<h3>Selected Parameters:</h3>
 
-<DL>
-<DT><B>depressionless</B> map is created as follows:</DT>
-<DD><div class="code"><pre>
+<dl>
+<dt><b>depressionless</b> map is created as follows:</dt>
+<dd><div class="code"><pre>
 r.fill.dir input=elevation elev=depressionless dir=direction type=grass
 </pre></div>
 This option can be omitted if [elevation] map is already depressionless.
-</DD>
-<P>
+</dd>
+<p>
 
-<DT><B>belevation</B> map is created from [elevation] with [basin] mask applied:</DT>
-<DD><div class="code"><pre>
+<dt><b>belevation</b> map is created from [elevation] with [basin] mask applied:</dt>
+<dd><div class="code"><pre>
 r.mapcalc "belevation = if(basin == 0 || isnull(basin), null(), elevation)"
-</pre></div></DD>
-<P>
+</pre></div></dd>
+<p>
 
-<DT><B>topidx</B> map is created as follows:</DT>
-<DD><div class="code"><pre>
+<dt><b>topidx</b> map is created as follows:</dt>
+<dd><div class="code"><pre>
 r.topidx input=elevation output=topidx
-</pre></div></DD>
-<P>
+</pre></div></dd>
+<p>
 
-<DT><B>Qobs</B></DT>
-<DD>Compare simulated flows with observed flows and calculate model
+<dt><b>Qobs</b></dt>
+<dd>Compare simulated flows with observed flows and calculate model
 efficiency.
-</DD>
-<P>
-</DL>
+</dd>
+<p>
+</dl>
 
-<H2>SEE ALSO</H2>
-<EM><A HREF="r.fill.dir.html">r.fill.dir</A></EM>,
-<EM><A HREF="r.mapcalc.html">r.mapcalc</A></EM>,
-<EM><A HREF="r.topidx.html">r.topidx</A></EM>,
-<EM><A HREF="http://geni.ath.cx/r.topmodel.html">How to run r.topmodel</A></EM>
+<h2>SEE ALSO</h2>
+<em><a href="r.fill.dir.html">r.fill.dir</a></em>,
+<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
+<em><a href="r.topidx.html">r.topidx</a></em>,
+<em><a href="http://geni.ath.cx/r.topmodel.html">How to run r.topmodel</a></em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 Main algorithm sources are rewritten in C based on TMOD9502.FOR.
-<BR>
+<br>
 Thanks to Keith Beven.
-<P>
-GRASS port by <A HREF=mailto:grass4u gmail com>Huidae Cho</A><BR>
+<p>
+GRASS port by <a href=mailto:grass4u gmail com>Huidae Cho</a><br>
 Hydro Laboratory, Kyungpook National University, South Korea
 
 <p><i>Last changed: $Date$</i>

@@ -1,43 +1,43 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.category</EM> prints the category values and labels for the raster map
-layer specified by <B>map=</B><EM>name</EM> to standard output.
+<em>r.category</em> prints the category values and labels for the raster map
+layer specified by <b>map=</b><em>name</em> to standard output.
 
-<P>
+<p>
 
 The user can specify all needed parameters on the command line, and run the
 program non-interactively. If the user does not specify any categories
-(e.g., using the optional <B>cats=</B><EM>range</EM>[,<EM>range</EM>,...]
+(e.g., using the optional <b>cats=</b><em>range</em>[,<em>range</em>,...]
 argument), then all the category values and labels for the named raster map
-layer that occur in the map are printed.  The entire <EM>map</EM> is read
-using <EM><A HREF="r.describe.html">r.describe</A></EM>, to determine which
-categories occur in the <EM>map</EM>. If a listing of categories is
+layer that occur in the map are printed.  The entire <em>map</em> is read
+using <em><a href="r.describe.html">r.describe</a></em>, to determine which
+categories occur in the <em>map</em>. If a listing of categories is
 specified, then the labels for those categories only are printed. The
-<EM>cats</EM> may be specified as single category values, or as ranges of
+<em>cats</em> may be specified as single category values, or as ranges of
 values. The user may also (optionally) specify that a field separator other
 than a space or tab be used to separate the category value from its
 corresponding category label in the output, by using the
-<B>fs=</B><EM>character</EM>|<EM>space</EM>|<EM>tab</EM> option (see example
+<b>fs=</b><em>character</em>|<em>space</em>|<em>tab</em> option (see example
 below). If no field separator is specified by the user, a tab is used to
 separate these fields in the output, by default.
 
-<P>
+<p>
 
 The output is sent to standard output in the form of one category per line,
 with the category value first on the line, then an ASCII TAB character (or
-whatever single character or space is specified using the <B>fs</B>
+whatever single character or space is specified using the <b>fs</b>
 parameter), then the label for the category.
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 Any ASCII TAB characters which may be in the label are replaced by spaces. 
-<P>
-The output from <EM>r.category</EM> can be redirected into a file, or piped into
+<p>
+The output from <em>r.category</em> can be redirected into a file, or piped into
 another program.
 
-<H3>Input from a file</H3>
+<h3>Input from a file</h3>
 
 The <b>rules</b> option allows the user to assign category labels from values
 found in a file. The label can refer to a single category, range of
@@ -51,7 +51,7 @@ val1:val2:Label
 If the filename is given as "-", the category labels are read from <tt>stdin</tt>
 
 
-<H3>Default and dynamic category labels</H3>
+<h3>Default and dynamic category labels</h3>
 
 Default and dynamic category labels can be created for categories that
 are not explicitly labeled.
@@ -70,33 +70,33 @@ explicit labels can be also of the form:
    or
    15:30  label description
 </pre>
-<P>
+<p>
 In the format line
 <ul>
 <li>$1 refers to the value num*5.0+1000 (ie, using the first 2 coefficients)
 <li>$2 refers to the value num*5.0+1005 (ie, using the last 2 coefficients)
 </ul>
   $1.2 will print $1 with 2 decimal places.
-<P>
+<p>
 Also, the form $?xxx$yyy$ translates into yyy if the category is 1, xxx 
 otherwise. The $yyy$ is optional. Thus
-<P>
+<p>
   $1 meter$?s
 <p>
-will become: 1 meter (for category 1)<BR>
+will become: 1 meter (for category 1)<br>
 	     2 meters (for category 2), etc.
 
-<P>
+<p>
 format='Elevation: $1.2 to $2.2 feet'   ## Format Statement
 coefficients="5.0,1000,5.0,1005"	## Coefficients
-<P>
+<p>
 The format and coefficients above would be used to generate the
 following statement in creation of the format appropriate category
 string for category "num":
-<P>
+<p>
   sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)
 
-<P>
+<p>
 Note: while both the format and coefficent lines must be present
       a blank line for the format string will effectively suppress
       automatic label generation.
@@ -107,71 +107,71 @@ since i-th rule and i-th label are entered at the same time, we
 know that i-th rule maps fp range to i, thus we know for sure
 that cats.labels[i] corresponds to i-th quant rule
 -->
-<P>
+<p>
 To use a "<tt>$</tt>" in the label without triggering the plural test,
 put "<tt>$$</tt>" in the format string.
-<P>
+<p>
 Use 'single quotes' when using a "<tt>$</tt>" on the command line to
 avoid unwanted shell substitution.
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
-<P>
-<DL>
-<DT><div class="code"><pre>
+<p>
+<dl>
+<dt><div class="code"><pre>
 r.category map=soils
 </pre></div>
-<DD>
+<dd>
 prints the values and labels associated with all of the categories in the
-<EM>soils</EM> raster map layer;
+<em>soils</em> raster map layer;
 
-<DT><div class="code"><pre>
+<dt><div class="code"><pre>
 r.category map=soils cats=10,12,15-20 
 </pre></div>
-<DD>
-prints only the category values and labels for <EM>soils</EM> map layer
+<dd>
+prints only the category values and labels for <em>soils</em> map layer
 categories <tt>10, 12</tt>, and <tt>15</tt> through <tt>20</tt>; and
 
-<DT><div class="code"><pre>
+<dt><div class="code"><pre>
 r.category map=soils cats=10,20 fs=':'
 </pre></div>
-<DD>
-prints the values and labels for <EM>soils</EM> map layer categories
+<dd>
+prints the values and labels for <em>soils</em> map layer categories
 <tt>10</tt> and <tt>20</tt>, but uses "<tt>:</tt>" (instead of a tab)
 as the character separating the category values from the category
 values in the output.
-</DL>
+</dl>
 
-<DL>
-<DT>Example output: 
-<DD>
-<P>
+<dl>
+<dt>Example output: 
+<dd>
+<p>
 <div class="code"><pre>
 10:Dumps, mine, Cc 
 20:Kyle clay, KaA 
 </pre></div>
-</DL>
+</dl>
 
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
-Respect the <B>fs=</B> field separator setting for input rules.
+Respect the <b>fs=</b> field separator setting for input rules.
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 UNIX Manual entries for <i>awk</i> and <i>sort</i>
 
-<P>
-<EM><A HREF="r.coin.html">r.coin</A></EM>,
-<EM><A HREF="r.describe.html">r.describe</A></EM>,
-<EM><A HREF="d.what.rast.html">d.what.rast</A></EM>,
-<EM><A HREF="r.support.html">r.support</A></EM>
+<p>
+<em><a href="r.coin.html">r.coin</a></em>,
+<em><a href="r.describe.html">r.describe</a></em>,
+<em><a href="d.what.rast.html">d.what.rast</a></em>,
+<em><a href="r.support.html">r.support</a></em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<BR>
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
 Hamish Bowman, University of Otago, New Zealand (label creation options)
 
 <p>

@@ -1,13 +1,13 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.coin</EM> tabulates the mutual occurrence of two
+<em>r.coin</em> tabulates the mutual occurrence of two
 raster map layers' categories with respect to one another.
 This analysis program respects the current geographic
 region and mask settings.
 
-<P>
+<p>
 
-<EM>r.coin</EM>
+<em>r.coin</em>
 tabulates the coincidence of category values among the two
 map layers and prepares the basic table from which the
 report is to be created.  This tabulation is followed by an
@@ -15,24 +15,24 @@ indication of how long the coincidence table will be.  If
 the table is extremely long, the user may decide that
 viewing it is not so important after all, and may cancel
 the request at this point.  Assuming the user continues,
-<EM>r.coin</EM> then allows the user to choose one of eight
+<em>r.coin</em> then allows the user to choose one of eight
 units of measure in which the report results can be given.
 These units are:
 
-<P>
+<p>
 
-<DL>
-<DT><EM>c</EM> <DD>cells 
-<DT><EM>p</EM> <DD>percent cover of region 
-<DT><EM>x</EM> <DD>percent of &lt;map name&gt; category (column) 
-<DT><EM>y</EM> <DD>percent of &lt;map name&gt; category (row) 
-<DT><EM>a</EM> <DD>acres 
-<DT><EM>h</EM> <DD>hectares 
-<DT><EM>k</EM> <DD>square kilometers 
-<DT><EM>m</EM> <DD>square miles 
-</DL>
+<dl>
+<dt><em>c</em> <dd>cells 
+<dt><em>p</em> <dd>percent cover of region 
+<dt><em>x</em> <dd>percent of &lt;map name&gt; category (column) 
+<dt><em>y</em> <dd>percent of &lt;map name&gt; category (row) 
+<dt><em>a</em> <dd>acres 
+<dt><em>h</em> <dd>hectares 
+<dt><em>k</em> <dd>square kilometers 
+<dt><em>m</em> <dd>square miles 
+</dl>
 
-<P>
+<p>
 
 Note that three of these options give results as percentage
 values:  "p" is based on the grand total number of cells;
@@ -48,40 +48,40 @@ printed with either 80 or 132 columns.  Finally, the user
 is given the option to rerun the coincidence tabulation
 using a different unit of measurement.
 
-<P>
+<p>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-It is <B>not</B> a good idea to run <EM>r.coin</EM> on a
+It is <b>not</b> a good idea to run <em>r.coin</em> on a
 map layer which has a monstrous number of categories (e.g.,
-unreclassed elevation).  Because <EM>r.coin</EM> reports
+unreclassed elevation).  Because <em>r.coin</em> reports
 information for each and every category, it is better to
-reclassify those categories (using <EM>r.reclass</EM>)
+reclassify those categories (using <em>r.reclass</em>)
 into a more manageable number prior to running
-<EM>r.coin</EM> on the reclassed raster map layer.
+<em>r.coin</em> on the reclassed raster map layer.
 
-<P>
+<p>
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Below is a sample of tabular output produced by
-<EM>r.coin</EM>.  Here, map output is stated in units of
+<em>r.coin</em>.  Here, map output is stated in units of
 square miles.  The report tabulates the coincidence of the
-Spearfish sample database's <EM>owner</EM> and
-<EM>road</EM> raster map layers' categories.  The
-<EM>owner</EM> categories in this case refer to whether the
+Spearfish sample database's <em>owner</em> and
+<em>road</em> raster map layers' categories.  The
+<em>owner</em> categories in this case refer to whether the
 land is in private hands (category 1) or is owned by the
-U.S. Forest Service (category 2). The <EM>roads</EM> map
+U.S. Forest Service (category 2). The <em>roads</em> map
 layer categories refer to various types of roads (with the
 exception of category value "0", which indicates "no data";
 i.e., map locations at which no roads exist).
-<EM>r.coin</EM> does not report category labels. The user
+<em>r.coin</em> does not report category labels. The user
 should run
-<EM><A HREF="r.report.html">r.report</A></EM> or 
-<EM><A HREF="r.category.html">r.category</A></EM> 
+<em><a href="r.report.html">r.report</a></em> or 
+<em><a href="r.category.html">r.category</a></em> 
 to obtain this information. 
 
-<P>
+<p>
 
 The body of the report is arranged in panels. The map layer
 with the most categories is arranged along the vertical
@@ -96,29 +96,29 @@ in that column. A second total represents the sum of all
 the non-zero category rows. A cross total (Table Row Total)
 of all columns for each row appears in a separate panel.
 
-<P>
+<p>
 
 Note how the following information may be obtained from the sample report. 
 
-<P>
+<p>
 
 In the Spearfish data base, in area not owned by the Forest Service, there
 are 50.63 square miles of land not used for roads. Roads make up 9.27 square
 miles of land in this area.
-<P>
+<p>
 Of the total 102.70 square miles in Spearfish, 42.80 
 square miles is owned by the Forest Service. 
-<BR>
+<br>
 In total, there are 14.58 square miles of roads. 
-<P>
+<p>
 There are more category 2 roads outside Forest Service land 
 (2.92 mi. sq.) 
 than there are inside Forest land boundaries (0.72 mi. sq.). 
 
-<P>
+<p>
 Following is a sample report. 
 
-<PRE>
+<pre>
 +------------------------------------------------------------+
 |                    COINCIDENCE TABULATION REPORT           |
 |------------------------------------------------------------|
@@ -170,33 +170,33 @@ Panel #1 of 1
 |--------------------------------|
 |w/o 0   |     14.58 |     14.58 |
 +--------------------------------+
-</PRE>
+</pre>
 
-<P>
+<p>
 
-<EM>r.coin</EM> calculates the coincidence of two raster
-map layers.  Although <EM>r.coin</EM> allows the user to
+<em>r.coin</em> calculates the coincidence of two raster
+map layers.  Although <em>r.coin</em> allows the user to
 rerun the report using different units, it is not possible
 to simply rerun the report with different map layers.  In
 order to choose new map layers, it is necessary to rerun
-<EM>r.coin.</EM>
+<em>r.coin.</em>
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="g.region.html">g.region</A>,
-<!-- not ported to GRASS 6 <A HREF="m.ipf.html">m.ipf</A>, -->
-<A HREF="r.category.html">r.category</A>,
-<A HREF="r.describe.html">r.describe</A>,
-<A HREF="r.reclass.html">r.reclass</A>,
-<A HREF="r.report.html">r.report</A>,
-<A HREF="r.stats.html">r.stats</A>
-</EM>
+<em>
+<a href="g.region.html">g.region</a>,
+<!-- not ported to GRASS 6 <a href="m.ipf.html">m.ipf</a>, -->
+<a href="r.category.html">r.category</a>,
+<a href="r.describe.html">r.describe</a>,
+<a href="r.reclass.html">r.reclass</a>,
+<a href="r.report.html">r.report</a>,
+<a href="r.stats.html">r.stats</a>
+</em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
 Michael O'Shea, 
-<BR>
+<br>
 Michael Shapiro, <br>
 U.S. Army Construction Engineering Research Laboratory
 

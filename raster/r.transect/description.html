@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 This program outputs, in ASCII, the values in a raster map
 which lie along one or more user-defined transect lines.
@@ -9,37 +9,37 @@ azimuth, and distance.
  wide lines, or multiple-cell wide lines.  The output, for
  each transect, may be the values at each of the cells, or a
  single aggregate value (e.g., average or median value). -->
-<P>
+<p>
 
-The <B>line</B> parameter is a definition of (each) transect line,
-specified by the geographic coordinates of its starting point (<EM>easting,
-northing</EM>), the angle and direction of its travel (<EM>azimuth</EM>),
-and its distance (<EM>distance</EM>).
+The <b>line</b> parameter is a definition of (each) transect line,
+specified by the geographic coordinates of its starting point (<em>easting,
+northing</em>), the angle and direction of its travel (<em>azimuth</em>),
+and its distance (<em>distance</em>).
 
-<P>
-The <EM>azimuth</EM> is an angle, in degrees, measured to
-the east of north.  The <EM>distance</EM> is in map units
+<p>
+The <em>azimuth</em> is an angle, in degrees, measured to
+the east of north.  The <em>distance</em> is in map units
 (meters for a metered database, like UTM).
-<P>
-The <B>null</B> parameter can optionally be set to change the character
+<p>
+The <b>null</b> parameter can optionally be set to change the character
 string representing null values.
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-This program is a front-end to the <EM>
-<A HREF="r.profile.html">r.profile</A></EM> program.  It simply converts the
-azimuth and distance to an ending coordinate and then runs <EM>
-<A HREF="r.profile.html">r.profile</A></EM>.
+This program is a front-end to the <em>
+<a href="r.profile.html">r.profile</a></em> program.  It simply converts the
+azimuth and distance to an ending coordinate and then runs <em>
+<a href="r.profile.html">r.profile</a></em>.
 
-There once were <B>width=</B> and <B>result=</B><EM>raw|median|average</EM>
+There once were <b>width=</b> and <b>result=</b><em>raw|median|average</em>
  options which are not currently implemented.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.profile.html">r.profile</A></EM>,
+<em><a href="r.profile.html">r.profile</a></em>,
 <em><a href="gm_profile.html">gis.m: PROFILE TOOL</a></em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 

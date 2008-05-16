@@ -1,4 +1,4 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 <em>r.recode</em> creates an output map layer based on an input raster map
 layer. The output map layer will be a recoding of the input map layer based
@@ -13,12 +13,12 @@ the raster map layer to be recoded, the <em>name</em> of an output layer to
 hold recoded map, and (optionally) the name of a title for the output map.
 
 Rules are defined in one of these formats:
-<PRE>
+<pre>
     old_low:old_high:new_low:new_high
     old_low:old_high:new_val  (i.e. new_high == new_low)
     *:old_val:new_val         (interval [inf, old_val])
     old_val:*:new_val         (interval [old_val, inf])
-</PRE>
+</pre>
 
 <em>r.recode</em> is loosely based on r.reclass and uses the GRASS reclass
 library to convert the rasters. It has routines for converting to every
@@ -45,7 +45,7 @@ new value.
 These four sets of arguments can be given on the command line, or piped via
 stdin or a file. More than one set of arguments is accepted.
 
-<h2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 <b>Map type conversion</b><br>
 
@@ -72,7 +72,7 @@ formatting is as described above. In following example the values 1, 2 and
 </pre>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 CERL
 
 <p><i>Last changed: $Date$</i>

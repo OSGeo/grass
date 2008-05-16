@@ -1,15 +1,15 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.water.outlet</EM> generates a watershed basin from a drainage
-direction map (from <EM><A HREF="r.watershed.html">r.watershed</A></EM>) and
+<em>r.water.outlet</em> generates a watershed basin from a drainage
+direction map (from <em><a href="r.watershed.html">r.watershed</a></em>) and
 a set of coordinates representing the outlet point of watershed.
 
-<H3>Selected Parameters</H3>
-<DL>
+<h3>Selected Parameters</h3>
+<dl>
 
-<DT><B>drainage=</B><EM>name</EM> 
+<dt><b>drainage=</b><em>name</em> 
 
-<DD>Input map: drainage direction. Indicates the "aspect" for each 
+<dd>Input map: drainage direction. Indicates the "aspect" for each 
 cell. Multiplying positive values by 45 will give the direction in 
 degrees that the surface runoff will travel from that cell. The 
 value -1 indicates that the cell is a depression area. 
@@ -17,24 +17,24 @@ Other negative values indicate that
 surface runoff is leaving the boundaries of the current geographic 
 region. The absolute value of these negative cells indicates the 
 direction of flow. This map is generated from 
-<EM><A HREF="r.watershed.html">r.watershed</A></EM>.
+<em><a href="r.watershed.html">r.watershed</a></em>.
 
-<DT><B>basin=</B><EM>name</EM> 
+<dt><b>basin=</b><em>name</em> 
 
-<DD>Output map: Values of one (1) indicate the watershed
+<dd>Output map: Values of one (1) indicate the watershed
 basin. Values of zero are not in the watershed basin.
 
-<DT><B>easting=</B><EM>value</EM> 
+<dt><b>easting=</b><em>value</em> 
 
-<DD>Input value: Easting value of outlet point. 
+<dd>Input value: Easting value of outlet point. 
 
-<DT><B>northing=</B><EM>value</EM> 
+<dt><b>northing=</b><em>value</em> 
 
-<DD>Input value: Northing value of outlet point. 
+<dd>Input value: Northing value of outlet point. 
 
-</DL>
+</dl>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 In the context of this program, a watershed basin is the
 region upstream of an outlet point. Thus, if the user
@@ -42,15 +42,15 @@ chooses an outlet point on a hill slope, the resulting map
 will be a thin silver of land representing the overland
 slope uphill of the point.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="d.where.html">d.where</A>,
-<A HREF="r.watershed.html">r.watershed</A>,
-<A HREF="r.topidx.html">r.topidx</A>
-</EM>
+<em>
+<a href="d.where.html">d.where</a>,
+<a href="r.watershed.html">r.watershed</a>,
+<a href="r.topidx.html">r.topidx</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Charles Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
 

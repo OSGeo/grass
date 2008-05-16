@@ -1,16 +1,16 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.in.bin</EM> allows a user to create a (binary) GRASS raster map layer 
+<em>r.in.bin</em> allows a user to create a (binary) GRASS raster map layer 
 from a variety of binary raster data formats. 
 
-<P>
-The <B> -s</B> flag is used for importing two's-complement signed data.
-<P>
-The <B> -h</B> flag is used to read region information from a Generic
+<p>
+The <b> -s</b> flag is used for importing two's-complement signed data.
+<p>
+The <b> -h</b> flag is used to read region information from a Generic
 Mapping Tools (GMT) type binary header. It is compatible with GMT binary
 grid types 1 and 2.
-<P>
+<p>
 The north, south, east, and west field values entered 
 are the coordinates of the edges of the geographic region. 
 The rows and cols field values entered describe the dimensions 
@@ -20,92 +20,92 @@ of the matrix of data to follow. If input is a
 If the bytes field is entered incorrectly an error will be generated
 suggesting a closer bytes value. 
 
-<P>
-<EM>r.in.bin</EM> can be used to import numerous binary arrays including:
+<p>
+<em>r.in.bin</em> can be used to import numerous binary arrays including:
 ETOPO30, ETOPO-5, ETOPO-2, Globe DEM, BIL, AVHRR and GMT binary arrays (ID 1 &amp; 2)
-<P>
+<p>
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-If optional parameters are not supplied, <B>r.in.bin</B> attempts
+If optional parameters are not supplied, <b>r.in.bin</b> attempts
 to calculate them. For example if the rows and columns parameters are 
-not entered, <B>r.in.bin</B> automatically calculates them by subtracting
+not entered, <b>r.in.bin</b> automatically calculates them by subtracting
 south from north and west from east. This will only produce correct
 results if the raster resolution equals 1. Also, if the north, south, 
-east, and west parameters are not entered, <B>r.in.bin</B> assigns 
+east, and west parameters are not entered, <b>r.in.bin</b> assigns 
 them from the rows and columns parameters. In the above AVHRR example, 
 the raster would be assigned a north=128, south=0, east=128, west=0.
-<P>
+<p>
 The geographic coordinates north, south, east, and west
 describe the outer edges of the geographic region.  They
 run along the edges of the cells at the edge of the
-geographic region and <EM>not</EM> through the center of the cells
+geographic region and <em>not</em> through the center of the cells
 at the edges.
-<P>
+<p>
 Eastern limit of geographic region (in projected coordinates must be east
 of the west parameter value, but in geographical coordinates will wrap
-around the globe; user errors can be detected by comparing the <EM>ewres</EM> and
-<EM>nsres</EM> values of the imported map layer carefully).
+around the globe; user errors can be detected by comparing the <em>ewres</em> and
+<em>nsres</em> values of the imported map layer carefully).
 <br>
 Western limit of geographic region (in projected coordinates must be west
 of the east parameter value, but in geographical coordinates will wrap
-around the globe; user errors can be detected by comparing the <EM>ewres</EM> and
-<EM>nsres</EM> values of the imported map layer carefully).
-<P>
-Notes on (non)signed data:<P>
+around the globe; user errors can be detected by comparing the <em>ewres</em> and
+<em>nsres</em> values of the imported map layer carefully).
+<p>
+Notes on (non)signed data:<p>
 If you use the -s flag the highest bit is the sign bit. If this is 1 the
 data is negative, and the data interval is half of the unsigned (not
 exactly).
-<P>
-This flag is only used if <B>bytes=</B> 1. If <B>bytes=</B> is greater
+<p>
+This flag is only used if <b>bytes=</b> 1. If <b>bytes=</b> is greater
 than 1 the flag is ignored.
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 <h3>GTOPO30 DEM</h3>
-The following is a sample call of <EM>r.in.bin</EM> to import  
+The following is a sample call of <em>r.in.bin</em> to import  
 <a href=http://edcdaac.usgs.gov/gtopo30/gtopo30.asp>GTOPO30 DEM</a>
 data:
-<P>
+<p>
 <div class="code"><pre>
 r.in.bin -sb input=E020N90.DEM output=gtopo30 bytes=2 north=90 south=40
 east=60 west=20 r=6000 c=4800
 </pre></div>
 
-<P>
+<p>
 (you can add "anull=-9999" if you want sea level to have a NULL value)
 
 <h3>GMT</h3>
-The following is a sample call of <EM>r.in.bin</EM> to import a GMT 
+The following is a sample call of <em>r.in.bin</em> to import a GMT 
 type 1 (float) binary array:
-<P>
+<p>
 <div class="code"><pre>
 r.in.bin -hf input=sample.grd output=sample.grass
 </pre></div>
-<P>
+<p>
 (-b could be used to swap bytes if required)
 
 <h3>AVHRR</h3>
-The following is a sample call of <EM>r.in.bin</EM> to import an AVHRR image:
-<P> 
+The following is a sample call of <em>r.in.bin</em> to import an AVHRR image:
+<p> 
 <div class="code"><pre>
 r.in.bin in=p07_b6.dat out=avhrr c=128 r=128
 </pre></div>
 
 
 <h3>ETOPO2</h3>
-The following is a sample call of <EM>r.in.bin</EM> to import 
+The following is a sample call of <em>r.in.bin</em> to import 
 <a href=http://www.ngdc.noaa.gov/mgg/image/2minrelief.html>ETOPO2 DEM</a> data (here full data set):
-<P>
+<p>
 <div class="code"><pre>
 r.in.bin ETOPO2.dos.bin out=ETOPO2min r=5400 c=10800 n=90 s=-90 w=-180 e=180 bytes=2
 r.colors ETOPO2min rules=terrain
 </pre></div>
 
 <h3>TOPEX/SRTM30 PLUS</h3>
-The following is a sample call of <EM>r.in.bin</EM> to import 
+The following is a sample call of <em>r.in.bin</em> to import 
 <a href="http://topex.ucsd.edu/WWW_html/srtm30_plus.html">SRTM30 PLUS</a> data:
-<P>
+<p>
 <div class="code"><pre>
 r.in.bin -sb input=e020n40.Bathmetry.srtm output=e020n40_topex \
          bytes=2 north=40 south=-10 east=60 west=20 r=6000 c=4800
@@ -113,22 +113,22 @@ r.colors e020n40_topex rules=etopo2
 </pre></div>
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="r.out.bin.html">r.out.bin</A>,
-<A HREF="r.in.ascii.html">r.in.ascii</A>, 
-<A HREF="r.out.ascii.html">r.out.ascii</A>, 
-<A HREF="r.in.arc.html">r.in.arc</A>, 
-<A HREF="r.out.arc.html">r.out.arc</A>,
-<A HREF="r.in.gdal.html">r.in.gdal</A>,
-<A HREF="r.out.gdal.html">r.out.gdal</A>,
-<A HREF="r.in.srtm.html">r.in.srtm</A>
-</EM>
+<em>
+<a href="r.out.bin.html">r.out.bin</a>,
+<a href="r.in.ascii.html">r.in.ascii</a>, 
+<a href="r.out.ascii.html">r.out.ascii</a>, 
+<a href="r.in.arc.html">r.in.arc</a>, 
+<a href="r.out.arc.html">r.out.arc</a>,
+<a href="r.in.gdal.html">r.in.gdal</a>,
+<a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.in.srtm.html">r.in.srtm</a>
+</em>
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-Jacques Bouchard, France (bouchard@onera.fr)<BR>
-Bob Covill, Canada (bcovill@tekmap.ns.ca)<BR>
+Jacques Bouchard, France (bouchard@onera.fr)<br>
+Bob Covill, Canada (bcovill@tekmap.ns.ca)<br>
 Man page: Zsolt Felker (felker@c160.pki.matav.hu)
 <p><i>Last changed: $Date$</i>

@@ -1,14 +1,14 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-The <EM>r.in.xyz</EM> module will load and bin ungridded x,y,z ASCII data
+The <em>r.in.xyz</em> module will load and bin ungridded x,y,z ASCII data
 into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster.
-<P>
-<EM>r.in.xyz</EM> is designed for processing massive point cloud datasets,
+<p>
+<em>r.in.xyz</em> is designed for processing massive point cloud datasets,
 for example raw LIDAR or sidescan sonar swath data. It has been tested with
 datasets as large as 1.5 billion points.
-<P>
-Available statistics for populating the raster are:<BR>
+<p>
+Available statistics for populating the raster are:<br>
 <ul>
 <table>
 <tr><td><em>n</em></td>        <td>number of points in cell</td></tr>
@@ -25,20 +25,20 @@ Available statistics for populating the raster are:<BR>
    <td>p<sup><i>th</i></sup> percentile of points in cell</td></tr>
 <tr><td><em>skewness</em></td> <td>skewness of points in cell</td></tr>
 <tr><td><em>trimmean</em></td> <td>trimmed mean of points in cell</td></tr>
-</table><BR>
+</table><br>
 
 <li><em>Variance</em> and derivatives use the biased estimator (n). [subject to change]
 <li><em>Coefficient of variance</em> is given in percentage and defined as
 <tt>(stddev/mean)*100</tt>.
 </ul>
-<BR>
+<br>
 
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
 <h4>Memory use</h4>
 
-While the <B>input</B> file can be arbitrarily large, <EM>r.in.xyz</EM>
+While the <b>input</b> file can be arbitrarily large, <em>r.in.xyz</em>
 will use a large amount of system memory for large raster regions (10000x10000).
 If the module refuses to start complaining that there isn't enough memory,
 use the <b>percent</b> parameter to run the module in several passes.
@@ -50,7 +50,7 @@ and coeff_var</em> will use more.
 
 The aggregate functions <em>median, percentile, skewness</em> and
 <em>trimmed mean</em> will also use more memory.
-<P>
+<p>
 The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 If reading data from a <tt>stdin</tt> stream, the program can only run using
@@ -77,7 +77,7 @@ by the area covered. e.g.
   # Lat/Lon location:
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
-<P>
+<p>
 If you only intend to interpolate the data with <em>r.to.vect</em> and
 <em>v.surf.rst</em>, then there is little point to setting the region
 resolution so fine that you only catch one data point per cell -- you might
@@ -90,32 +90,32 @@ Points falling outside the current region will be skipped. This includes
 points falling <em>exactly</em> on the southern region bound.
 (to capture those adjust the region with "<tt>g.region s=s-0.000001</tt>";
 see <em>g.region</em>)
-<P>
+<p>
 Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
 will be skipped.
-<P>
+<p>
 The <b>zrange</b> parameter may be used for filtering the input data by
 vertical extent. Example uses might include preparing multiple raster
 sections to be combined into a 3D raster array with <em>r.to.rast3</em>, or
 for filtering outliers on relatively flat terrain.
-<P>
+<p>
 In varied terrain the user may find that <em>min</em> maps make for a good
 noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
 may also be useful to find the underlying topography in a forested or urban
 environment if the cells are over sampled.
-<P>
-The user can use a combination of <EM>r.in.xyz</EM> <B>output</b> maps to create
+<p>
+The user can use a combination of <em>r.in.xyz</em> <b>output</b> maps to create
 custom filters. e.g. use <em>r.mapcalc</em> to create a <tt>mean-(2*stddev)</tt>
 map. [In this example the user may want to include a lower bound filter in
 <em>r.mapcalc</em> to remove highly variable points (small <em>n</em>) or run
-<EM>r.neighbors</EM> to smooth the stddev map before further use.]
+<em>r.neighbors</em> to smooth the stddev map before further use.]
 
 
 <h4>Reprojection</h4>
 
 If the raster map is to be reprojected, it may be more appropriate to reproject
 the input points with <em>m.proj</em> or <em>cs2cs</em> before running
-<EM>r.in.xyz</EM>.
+<em>r.in.xyz</em>.
 
 
 <h4>Interpolation into a DEM</h4>
@@ -129,16 +129,16 @@ interpolate with <em>v.surf.rst</em>.
 Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
 and adjust bounds and/or resolution as needed before proceeding.
 
-<P>
+<p>
 Typical commands to create a DEM using a regularized spline fit:
 <div class="code"><pre>
   r.univar lidar_min
   r.to.vect -z feature=point in=lidar_min out=lidar_min_pt
   v.surf.rst layer=0 in=lidar_min_pt elev=lidar_min.rst
 </pre></div>
-<BR>
+<br>
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Import the <a href="http://mpa.itc.it/grasstutor/data_menu2nd.phtml">Jockey's
 Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
@@ -168,31 +168,31 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
   r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
   r.colors lidar_min.rst_scaled rule=bcyr -n -e
 </pre></div>
-<BR>
+<br>
 
 
-<H2>TODO</H2>
+<h2>TODO</h2>
 
 <ul>
-<li> Support for multiple map output from a single run.<BR>
+<li> Support for multiple map output from a single run.<br>
      <tt>method=string[,string,...] output=name[,name,...]</tt>
 </ul>
 
 
-<H2>BUGS</H2>
+<h2>BUGS</h2>
 
 <ul>
 <li> <em>n</em> map sum can be ever-so-slightly more than `<tt>wc -l</tt>`
   with e.g. <tt>percent=10</tt> or less.
-  <BR>Cause unknown.
+  <br>Cause unknown.
 
 <li> <em>n</em> map <tt>percent=100</tt> and <tt>percent=xx</tt> maps
   differ slightly (point will fall above/below the segmentation line)
-  <BR>Investigate with "<tt>r.mapcalc diff=bin_n.100 - bin_n.33</tt>" etc.
-  <BR>Cause unknown.
+  <br>Investigate with "<tt>r.mapcalc diff=bin_n.100 - bin_n.33</tt>" etc.
+  <br>Cause unknown.
 
 <li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
-  <BR>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
+  <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
 <!-- HB: "possible" when someone fixes r.null to allow it ;) -->
 <!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
 </ul>
@@ -200,36 +200,36 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
 If you encounter any problems (or solutions!) please contact the GRASS
 Development Team.
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
 <i>
-<a href="g.region.html">g.region</a><BR>
-<a href="m.proj.html">m.proj</a><BR>
-<a href="r.fillnulls.html">r.fillnulls</a><BR>
-<a href="r.in.ascii.html">r.in.ascii</a><BR>
-<a href="r.mapcalc.html">r.mapcalc</a><BR>
-<a href="r.neighbors.html">r.neighbors</a><BR>
-<a href="r.out.xyz.html">r.out.xyz</a><BR>
-<a href="r.to.rast3.html">r.to.rast3</a><BR>
-<a href="r.to.vect.html">r.to.vect</a><BR>
-<a href="r.univar.html">r.univar</a><BR>
-<a href="r.univar.sh.html">r.univar.sh</a><BR>
-<a href="v.in.ascii.html">v.in.ascii</a><BR>
-<a href="v.out.ascii.html">v.out.ascii</a><BR>
+<a href="g.region.html">g.region</a><br>
+<a href="m.proj.html">m.proj</a><br>
+<a href="r.fillnulls.html">r.fillnulls</a><br>
+<a href="r.in.ascii.html">r.in.ascii</a><br>
+<a href="r.mapcalc.html">r.mapcalc</a><br>
+<a href="r.neighbors.html">r.neighbors</a><br>
+<a href="r.out.xyz.html">r.out.xyz</a><br>
+<a href="r.to.rast3.html">r.to.rast3</a><br>
+<a href="r.to.vect.html">r.to.vect</a><br>
+<a href="r.univar.html">r.univar</a><br>
+<a href="r.univar.sh.html">r.univar.sh</a><br>
+<a href="v.in.ascii.html">v.in.ascii</a><br>
+<a href="v.out.ascii.html">v.out.ascii</a><br>
 <a href="v.surf.rst.html">v.surf.rst</a>
 </i>
 
 
-<H2>AUTHORS</H2>
+<h2>AUTHORS</h2>
 
-Hamish Bowman<BR> <i>
-Department of Marine Science<BR>
-University of Otago<BR>
-New Zealand</i><BR>
-<BR>
+Hamish Bowman<br> <i>
+Department of Marine Science<br>
+University of Otago<br>
+New Zealand</i><br>
+<br>
 Extended by Volker Wichmann to support the aggregate functions
 <i>median, percentile, skewness</i> and <i>trimmed mean</i>.
 
-<BR>
+<br>
 <p>
 <i>Last changed: $Date$</i></p>

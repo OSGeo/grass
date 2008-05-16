@@ -1,55 +1,55 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
 
-<EM>r.out.arc</EM> converts a user-specified raster map layer
-(<B>input=</B><EM>name</EM>) into an ESRI ARC-GRID ascii file
-(<B>output=</B><EM>name</EM>) suitable for export to other computer systems. 
-The dp=<EM>value</EM> option (where <EM>value</EM> is a number of the user's
+<em>r.out.arc</em> converts a user-specified raster map layer
+(<b>input=</b><em>name</em>) into an ESRI ARC-GRID ascii file
+(<b>output=</b><em>name</em>) suitable for export to other computer systems. 
+The dp=<em>value</em> option (where <em>value</em> is a number of the user's
 choice) can be used to request that numbers after decimal points are
 limited.  However, to use this, the user should know the maximum number of
 digits that will occur in the output file.  The user can find the maximum
-number of digits occurring in the output file by running <EM>r.out.arc</EM>
-without the <B>dp=</B><EM>value</EM> option.
+number of digits occurring in the output file by running <em>r.out.arc</em>
+without the <b>dp=</b><em>value</em> option.
 
 
-<P>
+<p>
 
-The GRASS program <EM><A HREF="r.in.arc.html">r.in.arc</A></EM> can be used
+The GRASS program <em><a href="r.in.arc.html">r.in.arc</a></em> can be used
 to perform the reverse function, converting an ESRI ARC-GRID ascii file in
 suitable format to GRASS raster map format. The order of cell values in
 file is from lower left to upper right (reverse to GRASS).
 
-<H2>NOTES</H2>
+<h2>NOTES</h2>
 
-The output from <EM>r.out.arc</EM> may also be placed into a file
+The output from <em>r.out.arc</em> may also be placed into a file
 by using the UNIX redirection mechanism;  e.g.:
 
 <div class="code"><pre>
 r.out.arc input=soils output=- &gt; out.grd
 </pre></div>
 
-The output file <EM>out.grd</EM> can then be copied
+The output file <em>out.grd</em> can then be copied
 onto a CDROM or floppy disk for export purposes.
 
-<P><BR>
-An Arc ASCII grid can be loaded into ArcGIS 8.3 though ArcToolbox.<BR>
+<p><br>
+An Arc ASCII grid can be loaded into ArcGIS 8.3 though ArcToolbox.<br>
 Use the "Import to Raster" -> "ASCII to Grid" tool to create a binary grid 
 which can be selected using ArcCatalog. The spatial analyst extension may 
 need to be installed and activated within Arc.
-<P>
-In ArcGIS 9.0 the import tool can be found at:<BR>
+<p>
+In ArcGIS 9.0 the import tool can be found at:<br>
 ArcMap -> Toolbox -> Conversion Tools -> To Raster -> ASCII to Raster
-<P>
-A GeoTIFF created with <EM><A HREF="r.out.gdal.html">r.out.gdal</A></EM> is
+<p>
+A GeoTIFF created with <em><a href="r.out.gdal.html">r.out.gdal</a></em> is
 sometimes a better solution for transferring raster maps to other GIS software.
-<P>
-<H2>SEE ALSO</H2>
+<p>
+<h2>SEE ALSO</h2>
 
-<EM><A HREF="r.in.arc.html">r.in.arc</A></EM><BR>
-<EM><A HREF="r.out.gdal.html">r.out.gdal</A></EM><BR>
+<em><a href="r.in.arc.html">r.in.arc</a></em><br>
+<em><a href="r.out.gdal.html">r.out.gdal</a></em><br>
 
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 
 Markus Neteler, University of Hannover, Germany, <br>
 based on r.out.ascii written by <br>

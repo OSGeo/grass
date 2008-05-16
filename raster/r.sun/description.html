@@ -10,7 +10,7 @@ topography is optionally incorporated, a correction factor for shadowing to acco
 for the earth curvature is internally calucated.<br>
 The units of the parameters are specified in brackets, a hyphen in the brackets
 explains that the parameter has no units.
-<P>
+<p>
 For latitude-longitude coordinates it requires that the elevation map is in meters.
 The rules are:
 <ul>
@@ -18,7 +18,7 @@ The rules are:
 <li> Other coordinates: elevation in the same unit as the easting-northing coordinates.
 </ul>
 
-<P>
+<p>
 The solar geometry of the model is based on the works of Krcho (1990), later
 improved by Jenco (1992). The equations describing Sun &#8211; Earth position as
 well as an interaction of the solar radiation with atmosphere were originally 
@@ -134,7 +134,7 @@ reclassified into coarser categories. This could lead to incorrect results.
 </p>
 
 <h2> OPTIONS</h2>
-<P>Currently, there are two modes of r.sun.
+<p>Currently, there are two modes of r.sun.
 In the first mode it calculates solar incidence angle and solar irradiance
 raster maps using the set local time. In the second mode daily sums of solar
 irradiation [Wh.m-2.day-1] are computed for a specified day.</p>
@@ -173,7 +173,7 @@ rural&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.1&nbsp; 2.2&nbsp; 2.5&nbsp; 2.9&nbsp; 3.2&
 city&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.1&nbsp; 3.2&nbsp; 3.5&nbsp; 4.0&nbsp; 4.2&nbsp; 4.3&nbsp; 4.4&nbsp; 4.3&nbsp; 4.0&nbsp; 3.6&nbsp; 3.3&nbsp; 3.1&nbsp; 3.75&nbsp;&nbsp;<br>
 industrial 4.1&nbsp; 4.3&nbsp; 4.7&nbsp; 5.3&nbsp; 5.5&nbsp; 5.7&nbsp; 5.8&nbsp; 5.7&nbsp; 5.3&nbsp; 4.9&nbsp; 4.5&nbsp; 4.2&nbsp; 5.00
 </pre>
-<P>
+<p>
 Planned improvements include the use of the SOLPOS algorithm for solar 
 geometry calculations and internal computation of aspect and slope.
 
@@ -182,7 +182,7 @@ A map of shadows can be extracted from the solar incidence angle map
 (incidout). Areas with zero values are shadowed. The <em>-s</em> flag
 has to be used.
 
-<H2>EXAMPLE</H2>
+<h2>EXAMPLE</h2>
 
 Nice looking maps can be created with the model's output as follows:
 <div class="code"><pre>

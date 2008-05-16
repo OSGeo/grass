@@ -1,37 +1,37 @@
-<H2>DESCRIPTION</H2>
+<h2>DESCRIPTION</h2>
 
-<EM>r.what</EM> outputs the category values and (optionally) the category
+<em>r.what</em> outputs the category values and (optionally) the category
 labels associated with user-specified locations on raster input map(s).
 Locations are specified as geographic x,y coordinate pairs (i.e., pair of
 eastings and northings); the user can also (optionally) associate a label
 with each location.
 
-<P>
+<p>
 The input coordinates can be entered directly on the command line, or
 redirected via <tt>stdin</tt> from an input text file, script, or piped from
-another program (like <EM><A HREF="d.where.html">d.where</A></EM>).
-<P>
+another program (like <em><a href="d.where.html">d.where</a></em>).
+<p>
 If none of the above input methods are used and the module is run from the
 terminal prompt, the program will interactively query the user for point
 locations and labels.
-<P>
+<p>
 Each line of the input consists of an easting, a northing, and an optional
 label, which are separated by spaces. In interactive mode, the word
 "<tt>end</tt>" must be typed after the last pair of input coordinates.
-<P>
-<EM>r.what</EM> output consists of the input geographic location and label,
+<p>
+<em>r.what</em> output consists of the input geographic location and label,
 and, for each user-named raster map layer, the category value, and (if
-the <B>-f</B> label flag is specified) the category label associated with
+the <b>-f</b> label flag is specified) the category label associated with
 the cell(s) at this geographic location.
 
 
-<H2>EXAMPLES</H2>
+<h2>EXAMPLES</h2>
 
 
 <h4>Input from <tt>stdin</tt> on the command line</h4>
 
 Input coordinates may be given directly from <tt>stdin</tt>, for example:
-<BR> (input data appears between the "<tt>EOF</tt>" markers)
+<br> (input data appears between the "<tt>EOF</tt>" markers)
 
 <div class="code"><pre>
 r.what input=soils,aspect << EOF
@@ -52,7 +52,7 @@ echo "635342.21 7654321.09" | r.what input=soils,aspect
 
 <h4>Input from a text file containing coordinates</h4>
 
-The contents of an ASCII text file can be redirected to <EM>r.what</EM>
+The contents of an ASCII text file can be redirected to <em>r.what</em>
 as follows. If we have a file called <i>input_coord.txt</i> containing the
 coordinates and labels given in the example above:
 
@@ -102,7 +102,7 @@ v.out.ascii bugsites fs=' ' | r.what input=soils,aspect
 
 <h4>Output containing raster map category labels</h4>
 
-Here we use the <B>-f</B> label flag to enable the output of category labels
+Here we use the <b>-f</b> label flag to enable the output of category labels
 associated with the raster cell(s), as well as values. (categorical maps only)
 
 <div class="code"><pre>
@@ -117,27 +117,27 @@ EOF
 
 
 
-<H2>NOTE</H2>
+<h2>NOTE</h2>
 
 The maximum number of raster map layers that can be queried at one time is 150.
 <!-- as given by raster/r.what/main.c "#define NFILES 150" -->
 
 
-<H2>SEE ALSO</H2>
+<h2>SEE ALSO</h2>
 
-<EM>
-<A HREF="d.where.html">d.where</A>,
-<A HREF="r.category.html">r.category</A>,
-<A HREF="r.report.html">r.report</A>,
-<A HREF="r.stats.html">r.stats</A>,
-<A HREF="r.series.html">r.series</A>,
-<A HREF="r.univar.html">r.univar</A>,
-<A HREF="v.what.html">v.what</A>,
-<A HREF="v.what.rast.html">v.what.rast</A>,
-<A HREF="v.what.vect.html">v.what.vect</A>
-</EM>
+<em>
+<a href="d.where.html">d.where</a>,
+<a href="r.category.html">r.category</a>,
+<a href="r.report.html">r.report</a>,
+<a href="r.stats.html">r.stats</a>,
+<a href="r.series.html">r.series</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="v.what.html">v.what</a>,
+<a href="v.what.rast.html">v.what.rast</a>,
+<a href="v.what.vect.html">v.what.vect</a>
+</em>
 
-<H2>AUTHOR</H2>
+<h2>AUTHOR</h2>
 Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
 
