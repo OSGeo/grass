@@ -482,24 +482,7 @@ int main (int argc, char *argv[])
 			G_fatal_error (_("Unable to read header of 3D raster map <%s@%s>"),
 				       name, mapset);
 
-		window.proj = win.proj;
-		window.zone = win.zone;
-		window.north = win.north;
-		window.south = win.south;
-		window.east = win.east;
-		window.west = win.west;
-		window.top = win.top;
-		window.bottom = win.bottom;
-		window.rows = win.rows;
-		window.rows3 = win.rows;
-		window.cols = win.cols;
-		window.cols3 = win.cols;
-		window.depths = win.depths;
-		window.ns_res = win.ns_res;
-		window.ns_res3 = win.ns_res;
-		window.ew_res = win.ew_res;
-		window.ew_res3 = win.ew_res;
-		window.tb_res = win.tb_res;
+		G3d_regionToCellHead (&win, &window);
 	}
 
 	/* vect= */
