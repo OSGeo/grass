@@ -1636,7 +1636,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer1.Add(self.snappingValue, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
         flexSizer1.Add(self.snappingUnit, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
         # background map
-        text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Backgroud vector map"))
+        text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Background vector map"))
         self.backgroundMap = gselect.Select(parent=panel, id=wx.ID_ANY, size=(200,-1),
                                            type="vector")
         self.backgroundMap.SetValue(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value'))
