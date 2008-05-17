@@ -362,7 +362,7 @@ Icons = {
                               label=_("Split line/boundary"),
                               desc=_("Left: Select; Middle: Unselect; Right: Confirm")),
     "digExit"    : MetaIcon (img=icons_img["quit"],
-                             label=_("Quit digitization tool")),
+                             label=_("Quit digitizing tool")),
     "digAdditionalTools" : MetaIcon (img=icons_img["digAdditionalTools"],
                                      label=_("Additional tools " \
                                                  "(copy, flip, connect, etc.)"),

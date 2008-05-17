@@ -2424,7 +2424,7 @@ class MapFrame(wx.Frame):
             for toolRow in range(0, self.digittoolbar.numOfRows):
                 self._mgr.AddPane(self.digittoolbar.toolbar[toolRow],
                                   wx.aui.AuiPaneInfo().
-                                  Name("digittoolbar" + str(toolRow)).Caption(_("Digit Toolbar")).
+                                  Name("digittoolbar" + str(toolRow)).Caption(_("Vector digitizer toolbar")).
                                   ToolbarPane().Top().Row(toolRow + 1).
                                   LeftDockable(False).RightDockable(False).
                                   BottomDockable(False).TopDockable(True).
