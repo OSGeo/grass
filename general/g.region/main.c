@@ -532,6 +532,8 @@ int main (int argc, char *argv[])
 			map_window.south = box.S;
 			map_window.west	 = box.W;
 			map_window.east	 = box.E;
+			map_window.top   = box.T;
+			map_window.bottom = box.B;
 
 			if (!first)
 			{
@@ -548,6 +550,10 @@ int main (int argc, char *argv[])
 					window.east : map_window.east;
 				window.west = (window.west < map_window.west) ?
 					window.west : map_window.west;
+				if (map_window.top > window.top)
+					window.top = map_window.top;
+				if (map_window.bottom < window.bottom)
+					window.bottom = map_window.bottom;
 			}
 
 			if(window.north == window.south)
@@ -559,6 +565,12 @@ int main (int argc, char *argv[])
 			{
 			      window.west = window.west - 0.5 * temp_window.ew_res;
 			      window.east = window.east + 0.5 * temp_window.ew_res;
+			}
+			if (window.top == window.bottom) {
+			      window.bottom = (window.bottom
+					       - 0.5 * temp_window.tb_res);
+			      window.top    = (window.top
+					       + 0.5 * temp_window.tb_res);
 			}
 
 			if(flag.res_set->answer)
