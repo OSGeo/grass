@@ -1,0 +1,192 @@
+<h2>DESCRIPTION</h2>
+
+<i>Vector digitizing tool</i> is
+a <em><a href="wxGUI.html">wxGUI</a></em> component intended for
+interactive editing vector maps
+(see <em><a href="v.edit.html">v.edit</a></em> for non-interactive
+vector editing GRASS capabilities).
+
+<p>
+Currently, only 2D vector features (points, lines, centroids and
+boundaries) can be edited.
+
+Vector features can be selected using mouse or by query (e.g. minimal
+vector line length). Vector features can be selected by bounding box
+or simply by mouse click (based on "Settings"->"General"->"Select
+threshold" value).
+
+<p>
+Vector digitizer can be activated from Main toolbar in Map Display by
+selecting "Digitize" from "Tools" combobox. Vector map to be edited
+can be afterwards selected from digitizer toolbar ("Select vector map"
+combobox, note that only vector maps from the current layer tree in Layer
+Manager are available).
+
+Vector digitizer can be alternatively also activated from contextual
+menu in Layer Manager by selecting "Start editing" on selected vector
+map in the layer tree.
+
+<p>
+New vector map can be easily created from digitizer toolbar by
+selecting "New vector map" in "Select vector map" combobox. A new
+vector map is created, added to the current layer tree in Layer
+Manager and opened for editing. "Select vector map" combobox in
+digitizer toolbar also allows switching easily between vector maps to be
+edited.
+
+<h2>NOTES</h2>
+
+<i>Dead (deleted)</i> are internally only marked in the geometry file
+as 'dead' but it remains there and occupies space. Any vector module
+used afterwards on this vector map which really reads and writes
+vector geometry (so not <em><a href="g.copy.html">g.copy</a></em>)
+will writes only features which are 'alive'.
+
+<p>
+<i>Added or modified</i> vector features are <i>snapped</i> to
+existing vector features ("Settings"->"General"->"Snapping", nodes or vertices)
+based on "Settings"->"General"->"Snapping threshold" value. To
+disable snapping set up snapping threshold to '0'.
+
+<h2>Digitizer toolbar</h2>
+
+<center>
+<br><img src="wxGUI_vector_digitizer_toolbar.jpg" border="1"><br><br>
+</center>
+
+<dl>
+  <dt><img src="icons/silk/bullet_add.png">&nbsp;Digitize new point</dt>
+  <dd>Add new point to vector map and optionally define its
+  attributes.</dd>
+
+  <dt><img src="icons/silk/vector_add.png">&nbsp;Digitize new line</dt>
+  <dd>Add new line to vector map and optionally define its
+  attributes.</dd>
+
+  <dt><img src="icons/silk/shape_handles.png">&nbsp;Digitize new boundary</dt>
+  <dd>Add new boundary to vector map and optionally define its
+  attributes.</dd>
+
+  <dt><img src="icons/silk/shape_square_add.png">&nbsp;Digitize new centroid</dt>
+  <dd>Add new centroid to vector map and optionally define its
+  attributes.</dd>
+
+  <dt><img src="icons/silk/chart_line.png">&nbsp;Move vertex</dt>
+  <dd>Move selected vertex of linear feature. Thus shape of linear
+  feature is changed.</dd>
+
+  <dt><img src="icons/silk/chart_line_add.png">&nbsp;Add vertex</dt>
+  <dd>Add new vertex to selected linear feature (shape not
+  changed).</dd>
+
+  <dt><img src="icons/silk/chart_line_delete.png">&nbsp;Remove vertex</dt>
+  <dd>Remove selected vertex from linear feature. Thus shape of selected
+  feature can be changed.</dd>
+
+  <dt><img src="icons/silk/chart_line_link.png">&nbsp;Split line/boundary</dt>
+  <dd>Split selected linear feature on given position to separate
+  vector features.</dd>
+
+  <dt><img src="icons/silk/chart_line_edit.png">&nbsp;Edit line/boundary</dt>
+  <dd>Edit selected linear feature, add new segments or remove
+  existing segments of linear feature.</dd>
+
+  <dt><img src="icons/silk/bullet_go.png">&nbsp;Move feature(s)</dt>
+  <dd>Move selected vector features. Selection can be done by mouse or
+    by query.</dd>
+
+  <dt><img src="icons/silk/vector_delete.png">&nbsp;Delete feature(s)</dt>
+  <dd>Delete selected vector features. Selection can be done by mouse
+  or by query.</dd>
+
+  <dt><img src="icons/silk/chart_organisation.png">&nbsp;Display/update categories</dt>
+  <dd>Display categories of selected vector feature. Category settings
+  can be modified, new layer/category pairs added or already defined pairs
+  removed.</dd>
+
+  <dt><img src="icons/silk/chart_organisation_add.png">&nbsp;Copy categories</dt>
+  <dd>Copy category settings of selected vector feature to other
+  vector features. Layer/category pairs of source vector features are
+  appended to the target feature category settings. Existing
+  layer/category pairs are not removed from category settings of the
+  target features.</dd>
+
+  <dt><img src="icons/silk/table.png">&nbsp;Display/update attributes</dt>
+  <dd>Display attributes of selected vector feature (based on its
+    category settings).  Attributes can be also modified. Same
+    functionality is accessible from Main toolbar "Query vector map
+    (editable mode)".</dd>
+
+  <dt><img src="icons/silk/plugin.png">&nbsp;Additional tools</dt>
+  <dd>
+    <ul>
+      <li>Copy features from (background) map<br> Make identical copy of
+	selected vector features. If background vector map
+	("Settings"->"General"->"Background map") is given copy
+	features from background vector map, not from currently
+	modified vector map.</li>
+      <li>Flip selected lines/boundaries<br> Flip direction of
+	selected linear features (lines or boundaries).</li>
+      <li>Merge selected lines/boundaries<br> Merge (at least two)
+	selected vector lines or boundaries. The geometry of the
+	merged vector lines can be changed. If the second line from
+	two selected lines is in opposite direction to the first, it
+	will be flipped. See also
+	module <em><a href="v.build.polylines.html">v.build.polylines</a></em>.</li>
+      <li>Break selected lines/boundaries at intersection<br> Split
+	given vector line or boundary into two lines on given position
+	(based on <em><a href="v.clean.html">v.clean</a></em>,
+	tool=break).</li>
+      <li>Snap selected lines/boundaries (only to nodes)<br> Snap
+	vector features in given threshold. See also
+	module <em><a href="v.clean.html">v.clean</a></em>. Note that
+	this tool supports only snapping to nodes. Snapping to vector
+	features from background vector map is not currently
+	supported.</li>
+      <li>Connect two selected lines/boundaries<br> Connect selected
+	lines or boundaries, the first given line is connected to the
+	second one. The second line is broken if necessary. The lines
+	are connected only if distance between them is not greater
+	than snapping threshold value.</li>
+      <li>Query tool<br>Select vector features by min/max length value
+      (linear features or dangles).</li>
+      <li>Z-bulk labeling of 3D lines<br> Assign z coordinate to 3D
+	vector lines in bounding box.</li>
+      <li>Feature type conversion<br> Change feature type of selected
+	geometry features. Points are converted to centroids,
+	centroids to points, lines to boundaries and boundaries to
+	lines.</li>
+    </ul>
+  </dd>
+
+  <dt><img src="icons/silk/arrow_undo.png">&nbsp;Undo</dt>
+  <dd>Undo previous operations.</dd>
+
+  <dt><img src="icons/silk/color_swatch.png">&nbsp;Settings</dt>
+  <dd>Dialog for vector digitizer settings.</dd>
+
+  <dt><img src="icons/silk/door_in.png">&nbsp;Quit digitizing tool</dt>
+  <dd>Changes in vector map can be optionally discarded when
+  digitizing session is quited.</dd>
+
+</dl>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.edit.html">v.edit</a>,
+<a href="v.category.html">v.category</a>
+</em>
+
+<p>
+See also <a href="http://grass.osgeo.org/wiki/WxPython-based_GUI_for_GRASS#Vector_digitizer">Wiki</a> page.
+
+<p>
+TCL/TK-based <a href="v.digit.html">v.digit</a>.
+
+<h2>AUTHORS</h2>
+
+Martin Landa, FBK-irst, Trento, Italy
+
+<p>
+<i>$Date$</i>
