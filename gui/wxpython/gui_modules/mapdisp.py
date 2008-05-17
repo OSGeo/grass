@@ -2201,12 +2201,26 @@ class BufferedWindow(wx.Window):
         if tmpreg:
             os.environ["GRASS_REGION"] = tmpreg
 
-    def Distance(self, beginpt, endpt):
-        """Calculete distance"""
+    def Distance(self, beginpt, endpt, screen=True):
+        """Calculete distance
+
+        LL-locations not supported
+
+        @todo Use m.distance
+
+        @param beginpt first point
+        @param endpt second point
+        @param screen True for screen coordinates otherwise EN
+        """
         x1, y1 = beginpt
         x2, y2 = endpt
-        dEast  = (x2-x1) * self.Map.region["ewres"]
-        dNorth = (y2-y1) * self.Map.region["nsres"]
+        if screen:
+            dEast  = (x2 - x1) * self.Map.region["ewres"]
+            dNorth = (y2 - y1) * self.Map.region["nsres"]
+        else:
+            dEast  = (x2 - x1)
+            dNorth = (y2 - y1)
+            
 
         return (math.sqrt(math.pow((dEast),2) + math.pow((dNorth),2)), (dEast, dNorth))
 
@@ -2506,7 +2520,22 @@ class MapFrame(wx.Frame):
         # update statusbar if required
         if self.toggleStatus.GetSelection() == 0: # Coordinates
             e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
-            self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
+            if self.digittoolbar and \
+                    self.digittoolbar.action == 'addLine' and \
+                    self.digittoolbar.type in ('line', 'boundary') and \
+                    len(self.MapWindow.polycoords) > 0:
+                # for linear feature show segment and total length
+                distance_seg = self.MapWindow.Distance(self.MapWindow.polycoords[-1],
+                                                       (e, n), screen=False)[0]
+                distance_tot = distance_seg
+                for idx in range(1, len(self.MapWindow.polycoords)):
+                    distance_tot += self.MapWindow.Distance(self.MapWindow.polycoords[idx-1],
+                                                            self.MapWindow.polycoords[idx],
+                                                            screen=False )[0]
+                self.statusbar.SetStatusText("%.2f, %.2f (seg: %.2f; tot: %.2f)" % \
+                                                 (e, n, distance_seg, distance_tot), 0)
+            else:
+                self.statusbar.SetStatusText("%.2f, %.2f" % (e, n), 0)
 
         event.Skip()
 
