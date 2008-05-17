@@ -3,9 +3,9 @@
  *
  * MODULE:       d.vect
  * AUTHOR(S):    CERL, Radim Blazek, others
- * PURPOSE:      Display the binary vector (dig) file that the user wants displayed 
+ * PURPOSE:      Display the binary vector file that the user wants displayed 
  *               on top of the current image.
- * COPYRIGHT:    (C) 2004-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -95,7 +95,7 @@ main (int argc, char **argv)
 	char map_name[128] ;
 	struct GModule *module;
 	struct Option *map_opt;
-	struct Option *color_opt, *fcolor_opt, *rgbcol_opt;
+	struct Option *color_opt, *fcolor_opt, *rgbcol_opt, *zcol_opt;
 	struct Option *type_opt, *display_opt;
 	struct Option *icon_opt, *size_opt;
 	struct Option *where_opt;
@@ -106,7 +106,7 @@ main (int argc, char **argv)
 	struct Option *width_opt, *wcolumn_opt, *wscale_opt;
 	struct Option *render_opt;
 	struct Flag   *verbose_flag; /* please remove before GRASS 7 released */
-	struct Flag   *id_flag, *table_acolors_flag, *cats_acolors_flag, *x_flag;
+	struct Flag   *id_flag, *table_acolors_flag, *cats_acolors_flag, *x_flag, *zcol_flag;
 	struct cat_list *Clist;
 	int *cats, ncat;
 	LATTR lattr;
@@ -181,6 +181,15 @@ main (int argc, char **argv)
 	rgbcol_opt->description=
 	    _("Name of color definition column (for use with -a flag)");
 	rgbcol_opt->answer     = "GRASSRGB" ;
+
+	zcol_opt = G_define_option();
+	zcol_opt->key          = "zcolor";
+	zcol_opt->key_desc     = "style";
+	zcol_opt->type         = TYPE_STRING;
+	zcol_opt->required     = NO;
+	zcol_opt->description  = _("Type of color table (for use with -z flag)");
+	zcol_opt->answer       = "terrain";
+	zcol_opt->guisection   = _("Colors");
 
 	/* Lines */
 	width_opt = G_define_option() ;
@@ -351,6 +360,11 @@ main (int argc, char **argv)
 	x_flag->description	=
 	    _("Don't add to list of vectors and commands in monitor "
 	      "(it won't be drawn if the monitor is refreshed)");
+
+	zcol_flag = G_define_flag ();
+	zcol_flag->key		= 'z';
+	zcol_flag->description	=
+	    _("Colorize polygons according to z height)");
 
 	/* Check command line */
 	if (G_parser(argc, argv))
@@ -650,7 +664,8 @@ main (int argc, char **argv)
 				       has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat,
 				       (int) id_flag->answer, table_acolors_flag->answer,
 				       cats_acolors_flag->answer, &window, rgbcol_opt->answer,
-				       default_width, wcolumn_opt->answer, width_scale );
+				       default_width, wcolumn_opt->answer, width_scale, 
+				       zcol_flag->answer, zcol_opt->answer );
 		    }
 	            if ( wcolumn_opt->answer )
 	                D_line_width(default_width);
@@ -666,7 +681,7 @@ main (int argc, char **argv)
 			has_color ? &color : NULL, has_fcolor ? &fcolor : NULL, chcat, Symb,
 			size, (int) id_flag->answer, table_acolors_flag->answer,
 			cats_acolors_flag->answer, rgbcol_opt->answer, default_width,
-			wcolumn_opt->answer, width_scale) ;
+			wcolumn_opt->answer, width_scale, zcol_flag->answer, zcol_opt->answer) ;
 	            if ( wcolumn_opt->answer )
 	                D_line_width(default_width);
 		}

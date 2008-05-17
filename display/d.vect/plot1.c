@@ -135,7 +135,7 @@ int plot1 (
     const struct color_rgb *color, const struct color_rgb *fcolor,
     int chcat, SYMBOL *Symb, int size, int id_flag,
     int table_colors_flag, int cats_color_flag, char *rgb_column,
-    int default_width, char *width_column, double width_scale)
+    int default_width, char *width_column, double width_scale, int z_color_flag, char *style)
 {
     int i, ltype, nlines = 0, line, cat = -1;
     double *x, *y;
@@ -323,6 +323,21 @@ int plot1 (
 	        if (Cats->n_cats > 0 && !found) continue;
 	}
 
+	/* z height colors */
+	if( z_color_flag && Vect_is_3d (Map)) {
+	  BOUND_BOX box;
+	  double zval;
+	  struct Colors colors;
+
+	  Vect_get_map_box (Map, &box );
+	  zval = Points->z[0];
+	  G_debug (3, "display line %d, cat %d, x: %f, y: %f, z: %f", line,
+		cat, Points->x[0], Points->y[0], Points->z[0]);
+	  custom_rgb = TRUE;
+	  G_make_fp_colors(&colors, style, box.B, box.T);
+	  G_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	  G_debug (3, "b %d, g: %d, r %d", blu, grn, red);
+	}
 
 	if( table_colors_flag ) {
 
@@ -461,8 +476,8 @@ int plot1 (
 		D_symbol(Symb, x0, y0, line_color, fill_color);
 
 
-	} else if (color || custom_rgb) {
-	    if (!table_colors_flag && !cats_color_flag)
+	} else if (color || custom_rgb || (z_color_flag && Vect_is_3d (Map))) {
+	    if (!table_colors_flag && !cats_color_flag && !z_color_flag)
 		R_RGB_color(color->r, color->g, color->b);
 	    else {
 		if (custom_rgb)
