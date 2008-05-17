@@ -66,6 +66,27 @@ d.vect -c soils disp=attr attrcol=label
 d.vect -c soils where="label='VBF'" display=shape,attr attrcol=label
 </pre></div>
 
+<p>
+3D points, 3D lines and 3D polygons colorized according to z height:
+<div class="code"><pre>
+g.region rast=elevation.10m
+r.random elevation.10m n=5000 vector=random3d -d
+d.mon x0
+# display as black points
+d.vect random3d
+# display 3D points colorized according to z height
+d.vect -z random3d zcol=gyr
+
+# 3D contour lines
+r.contour elevation.10m out=contour20m step=20
+d.vect -z contour20m zcol=gyr
+
+# generate 3D triangles
+v.delaunay random3d out=random3d_del
+# display 3D polygons colorized according to z height
+d.vect -z random3d_del type=area zcol=gyr
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -78,8 +99,10 @@ d.vect -c soils where="label='VBF'" display=shape,attr attrcol=label
 <a HREF="sql.html">GRASS SQL interface</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+CERL<br>
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+other GRASS developers
 
 <p><i>Last changed: $Date$</i><p>

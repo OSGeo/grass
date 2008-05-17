@@ -17,7 +17,7 @@ int darea ( struct Map_info *Map, struct cat_list *Clist,
 	    const struct color_rgb *bcolor, const struct color_rgb *fcolor, 
 	    int chcat, int id_flag, int table_colors_flag, int cats_color_flag,
 	    struct Cell_head *window, char *rgb_column, int default_width,
-	    char *width_column, double width_scale) {
+	    char *width_column, double width_scale, int z_color_flag, char *style) {
 
     int    num, area, isle, n_isles, n_points;
     double xl, yl;
@@ -211,6 +211,23 @@ int darea ( struct Map_info *Map, struct cat_list *Clist,
 	  continue;
 	}
 
+	/* z height colors */
+	if( z_color_flag && Vect_is_3d (Map)) {
+	  BOUND_BOX box;
+	  double zval;
+	  struct Colors colors;
+
+	  Vect_get_map_box (Map, &box );
+	  zval = Points->z[0];
+	  G_debug (3, "display area %d, centroid %d, cat %d, x: %f, y: %f, z: %f", area, centroid, 
+		cat, Points->x[0], Points->y[0], Points->z[0]);
+	  rgb = 1;
+	  G_make_fp_colors(&colors, style, box.B, box.T);
+	  G_get_raster_color(&zval, &red, &grn, &blu, &colors, DCELL_TYPE);
+	  G_debug (3, "b %d, g: %d, r %d", blu, grn, red);
+	}
+
+
 	if( table_colors_flag ) {
 	  centroid = Vect_get_area_centroid ( Map, area );
 	  if( cat >= 0 ) {
@@ -249,7 +266,7 @@ int darea ( struct Map_info *Map, struct cat_list *Clist,
 	    rgb = 0;
 	  } 
 	} /* end if table_colors_flag */
- 	
+
 	/* random colors */
 	if( cats_color_flag ) {
 	  rgb = 0;
@@ -305,8 +322,8 @@ int darea ( struct Map_info *Map, struct cat_list *Clist,
 	  D_line_width(width);
 	} /* end if nrec_width */
 
-	if ( fcolor ) {
-	  if (!table_colors_flag && !cats_color_flag) {
+	if ( fcolor || (z_color_flag && Vect_is_3d (Map)) ) {
+	  if (!table_colors_flag && !cats_color_flag && !z_color_flag) {
 	    R_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 	    plot_polygon ( Points->x, Points->y, Points->n_points);
 	  }
