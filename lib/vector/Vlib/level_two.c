@@ -58,7 +58,7 @@ Vect_get_num_primitives (struct Map_info *map, int type)
 }
 
 /*!
-  \brief Fet number of line vectors (points, lines, centroids)
+  \brief Fetch number of line vectors (points, lines, centroids)
 
   \param map vector map
 
