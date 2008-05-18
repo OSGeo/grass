@@ -105,6 +105,7 @@ main (int argc, char **argv)
 
   /* initialize working region */
   G_get_window (&Window);
+  G_percent(0, 100, 1);
   Vect_region_box ( &Window, &Box );
 
   freeinit(&sfl, sizeof *sites);
@@ -129,6 +130,7 @@ main (int argc, char **argv)
       double x, y, z, angle, slope;
       int ret;
 
+      G_percent(area, nareas, 2);
       Vect_reset_line ( Points );
       Vect_reset_cats ( Cats );
       
