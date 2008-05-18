@@ -3267,7 +3267,7 @@ class MapFrame(wx.Frame):
         Init histogram display canvas and tools
         """
         self.histogram = histogram.HistFrame(self,
-                                             id=wx.ID_ANY, pos=wx.DefaultPosition, size=(400,300),
+                                             id=wx.ID_ANY, size=globalvar.HIST_WINDOW_SIZE,
                                              style=wx.DEFAULT_FRAME_STYLE)
 
         #show new display
