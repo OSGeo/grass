@@ -223,7 +223,18 @@ class VirtualAttributeList(wx.ListCtrl,
                     self.itemDataMap[i].append('')
 
                 if keyId > -1 and keyId == j:
-                    cat = self.columns[columnNames[j]]['ctype'] (value)
+                    try:
+                        cat = self.columns[columnNames[j]]['ctype'] (value)
+                    except ValueError, e:
+                        cat = -1
+                        wx.MessageBox(parent=self,
+                                      message=_("Error loading attribute data. "
+                                                "Record number: %d. Unable to cast value '%s' in "
+                                                "key column (%s) to integer.\n\n"
+                                                "Details: %s") % \
+                                          (i + 1, value, keyColumn, e),
+                                      caption=_("Error"),
+                                      style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 j += 1
 
             # insert to table
@@ -336,9 +347,12 @@ class VirtualAttributeList(wx.ListCtrl,
     def Sorter(self, key1, key2):
         colName = self.GetColumn(self._col).GetText()
         ascending = self._colSortFlag[self._col]
-        # convert always string
-        item1 = self.columns[colName]["ctype"](self.itemDataMap[key1][self._col])
-        item2 = self.columns[colName]["ctype"](self.itemDataMap[key2][self._col])
+        try:
+            item1 = self.columns[colName]["ctype"](self.itemDataMap[key1][self._col])
+            item2 = self.columns[colName]["ctype"](self.itemDataMap[key2][self._col])
+        except ValueError:
+            item1 = self.itemDataMap[key1][self._col]
+            item2 = self.itemDataMap[key2][self._col]
 
         if type(item1) == type('') or type(item2) == type(''):
             cmpVal = locale.strcoll(str(item1), str(item2))

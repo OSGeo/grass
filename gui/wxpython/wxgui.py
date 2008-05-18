@@ -1159,11 +1159,18 @@ class GMFrame(wx.Frame):
 
         pointdata = (icon, size)
 
+        busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
+                           parent=self)
+        wx.Yield()
+
         self.dbmanager = dbm.AttributeManager(parent=self, id=wx.ID_ANY,
                                               title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
                                                                    mapname),
                                               size=wx.Size(500,300), vectmap=mapname,
                                               pointdata=pointdata)
+
+        busy.Destroy()
+
         self.dbmanager.Show()
 
     def OnNewDisplay(self, event=None):
