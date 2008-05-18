@@ -81,6 +81,7 @@ DIALOG_GSELECT_SIZE = (400, -1)
 DIALOG_TEXTCTRL_SIZE = (400, -1)
 
 MAP_WINDOW_SIZE = (680, 520)
+HIST_WINDOW_SIZE = (500, 350)
 
 """File name extension binaries/scripts"""
 if subprocess.mswindows:

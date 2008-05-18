@@ -370,7 +370,7 @@ class LayerTree(CT.CustomTreeCtrl):
         if not self.histogramFrame:
             self.histogramFrame = histogram.HistFrame(self,
                                                       id=wx.ID_ANY,
-                                                      pos=wx.DefaultPosition, size=(400, 300),
+                                                      pos=wx.DefaultPosition, size=globalvar.HIST_WINDOW_SIZE,
                                                       style=wx.DEFAULT_FRAME_STYLE)
             # show new display
             self.histogramFrame.Show()
