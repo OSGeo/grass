@@ -2,13 +2,12 @@
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 2/2004, 2006
   -->
-<title>GRASS Vector File Processing</title>
 
 See especially \ref Vector_Library for details (extra page). 
 
-- \subpage \ref gisvectintro
-- \subpage \ref Creating_and_Opening_New_Vector_Files
-- \subpage \ref Vector_Category_File
+- \subpage gisvectintro
+- \subpage Creating_and_Opening_New_Vector_Files
+- \subpage Vector_Category_File
 
 \section gisvectintro GRASS Vector File Processing
 Authors:
