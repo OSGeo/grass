@@ -65,7 +65,6 @@ int I_put_group(char *group)
 int I_get_subgroup (char *group,char *subgroup)
 {
     FILE *fd;
-    FILE *I_fopen_group_file_old();
     int stat;
 
     *subgroup = 0;
@@ -85,7 +84,6 @@ int I_get_subgroup (char *group,char *subgroup)
 int I_put_subgroup(char *group,char *subgroup)
 {
     FILE *fd;
-    FILE *I_fopen_group_file_new();
 
     if (!I_find_group(group))
 	return 0;
@@ -150,8 +148,6 @@ static int get_ref (
     char name[INAME_LEN], mapset[INAME_LEN];
     char color[20];
     FILE *fd;
-    FILE *I_fopen_group_ref_old();
-    FILE *I_fopen_subgroup_ref_old();
 
     I_init_group_ref (ref);
 
@@ -295,9 +291,6 @@ static int put_ref( char *group, char *subgroup, struct Ref *ref)
 {
     int n;
     FILE *fd;
-    FILE *I_fopen_group_ref_new();
-    FILE *I_fopen_subgroup_ref_new();
-
 
     if (*subgroup == 0)
 	fd = I_fopen_group_ref_new(group) ;
