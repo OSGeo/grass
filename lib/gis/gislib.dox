@@ -2,35 +2,33 @@
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 2/2004, 2005, 2006
   -->
-<title>GRASS GIS Library</title>
-
 
 This chapter is divided in the following pages:
-- \subpage \ref gislibintro 
-- \subpage \ref gisrasterlib
-- \subpage \ref gisvectorlib
+- \subpage gislibintro 
+- \subpage gisrasterlib
+- \subpage gisvectorlib
 
 \section gislibintro Introduction
 
 This sections is divided as follows:
-- \subpage \ref gislibintro
-- \subpage \ref Raster_File_Processing
-- \subpage \ref Vector_File_Processing
-- \subpage \ref General_Plotting_Routines
-- \subpage \ref Temporary_Files
-- \subpage \ref Command_Line_Parsing
-- \subpage \ref Full_Module_Example
-- \subpage \ref Compiling_and_Installing_GRASS_Modules
-- \subpage \ref Multiple_Architecture_Conventions
-- \subpage \ref Full_Structure_Members_Description
-- \subpage \ref Complete_Structure_Members_Table
-- \subpage \ref Description_of_Complex_Structure_Members
-- \subpage \ref String_Manipulation_Functions
-- \subpage \ref Enhanced_UNIX_Routines
-- \subpage \ref GIS_Library_Data_Structures
-- \subpage \ref Loading_the_GIS_Library
-- \subpage \ref TimeStamp_functions
-- \subpage \ref GRASS_GIS_Library_Overview
+- \subpage gislibintro
+- \subpage Raster_File_Processing
+- \subpage Vector_File_Processing
+- \subpage General_Plotting_Routines
+- \subpage Temporary_Files
+- \subpage Command_Line_Parsing
+- \subpage Full_Module_Example
+- \subpage Compiling_and_Installing_GRASS_Modules
+- \subpage Multiple_Architecture_Conventions
+- \subpage Full_Structure_Members_Description
+- \subpage Complete_Structure_Members_Table
+- \subpage Description_of_Complex_Structure_Members
+- \subpage String_Manipulation_Functions
+- \subpage Enhanced_UNIX_Routines
+- \subpage GIS_Library_Data_Structures
+- \subpage Loading_the_GIS_Library
+- \subpage TimeStamp_functions
+- \subpage GRASS_GIS_Library_Overview
 
 The <i>GIS Library</i> is the primary programming library provided
 with the GRASS system. <b>Programs must use this libary to access the
