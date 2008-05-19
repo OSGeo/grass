@@ -2,7 +2,6 @@
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 2/2004, 8/2005, 2006
   -->
-<title>GRASS Raster File Processing</title>
 
 \section gisrastintro GRASS Raster File Processing
 
@@ -11,46 +10,46 @@
  and the lower GRASS 5.x/6.x parts need to me merged.
  </B>
 
-- \subpage \ref gisrastintro
-- \subpage \ref Opening_an_Existing_Raster_File
-- \subpage \ref Creating_and_Opening_New_Raster_Files
-- \subpage \ref Allocating_Raster_I_O_Buffers
-- \subpage \ref Reading_Raster_Files
-- \subpage \ref Raster_Map_Layer_Support_Routines
-- \subpage \ref Raster_Header_File
-- \subpage \ref Raster_Category_File
-- \subpage \ref Reading_and_Writing_the_Raster_Category_File
-- \subpage \ref Querying_and_Changing_the_Categories_Structure
-- \subpage \ref Raster_Color_Table
-- \subpage \ref Reading_and_Writing_the_Raster_Color_File
-- \subpage \ref Lookup_Up_Raster_Colors
-- \subpage \ref Creating_and_or_Modifying_the_Color_Table
-- \subpage \ref Predefined_Color_Tables
-- \subpage \ref Raster_History_File
-- \subpage \ref Raster_Range_File
-- \subpage \ref Raster_Histograms
-- \subpage \ref GRASS_5_raster_API
-- \subpage \ref Upgrades_to_Raster_Functions
-- \subpage \ref Null_no_data
-- \subpage \ref Color_Functions
-- \subpage \ref New_functions_to_support_colors_for_floating_point
-- \subpage \ref New_functions_to_support_a_colors_for_the_NULL_value
-- \subpage \ref New_functions_to_support_a_default_color
-- \subpage \ref New_functions_to_support_treating_a_raster_layer_as_a_color_image
-- \subpage \ref Upgraded_color_functions
-- \subpage \ref Changes_to_the_Colors_structure
-- \subpage \ref Changes_to_the_colr_file
-- \subpage \ref Range_functions
-- \subpage \ref New_range_functions
-- \subpage \ref New_and_Upgraded_Cell_stats_functions
-- \subpage \ref New_Quantization_Functions
-- \subpage \ref Categories_Labeling_Functions
-- \subpage \ref Changes_to_the_cats_file
-- \subpage \ref Range_functions
-- \subpage \ref New_Functions_to_read_write_access_and_modify_Categories_structure
-- \subpage \ref Library_Functions_that_are_Deprecated
-- \subpage \ref Guidelines_for_upgrading_GRASS_4_x_Modules
-- \subpage \ref Important_hints_for_upgrades_to_raster_modules
+- \subpage gisrastintro
+- \subpage Opening_an_Existing_Raster_File
+- \subpage Creating_and_Opening_New_Raster_Files
+- \subpage Allocating_Raster_I_O_Buffers
+- \subpage Reading_Raster_Files
+- \subpage Raster_Map_Layer_Support_Routines
+- \subpage Raster_Header_File
+- \subpage Raster_Category_File
+- \subpage Reading_and_Writing_the_Raster_Category_File
+- \subpage Querying_and_Changing_the_Categories_Structure
+- \subpage Raster_Color_Table
+- \subpage Reading_and_Writing_the_Raster_Color_File
+- \subpage Lookup_Up_Raster_Colors
+- \subpage Creating_and_or_Modifying_the_Color_Table
+- \subpage Predefined_Color_Tables
+- \subpage Raster_History_File
+- \subpage Raster_Range_File
+- \subpage Raster_Histograms
+- \subpage GRASS_5_raster_API
+- \subpage Upgrades_to_Raster_Functions
+- \subpage Null_no_data
+- \subpage Color_Functions
+- \subpage New_functions_to_support_colors_for_floating_point
+- \subpage New_functions_to_support_a_colors_for_the_NULL_value
+- \subpage New_functions_to_support_a_default_color
+- \subpage New_functions_to_support_treating_a_raster_layer_as_a_color_image
+- \subpage Upgraded_color_functions
+- \subpage Changes_to_the_Colors_structure
+- \subpage Changes_to_the_colr_file
+- \subpage Range_functions
+- \subpage New_range_functions
+- \subpage New_and_Upgraded_Cell_stats_functions
+- \subpage New_Quantization_Functions
+- \subpage Categories_Labeling_Functions
+- \subpage Changes_to_the_cats_file
+- \subpage Range_functions
+- \subpage New_Functions_to_read_write_access_and_modify_Categories_structure
+- \subpage Library_Functions_that_are_Deprecated
+- \subpage Guidelines_for_upgrading_GRASS_4_x_Modules
+- \subpage Important_hints_for_upgrades_to_raster_modules
 
 <P>
 Raster files are the heart and soul of GRASS (update 2005: meanwhile also
