@@ -9,6 +9,8 @@ LIB_OBJS = card.o \
 	rect.o \
 	split_q.o 
 
+EXTRA_LIBS = $(MATHLIB)
+
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 RTLINC = $(ARCH_INCDIR)/rtree
