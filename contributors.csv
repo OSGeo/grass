@@ -1,7 +1,8 @@
 cvs_id,name,email,country,osgeo_id,rfc2_agreed
 -,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes
 -,Eric Patton,<epatton nrcan.gc.ca>,Canada,epatton,yes
--,Maris Nartiss,<maris.gis@gmail.com>,Latvia,marisn,yes
+-,Maris Nartiss,<maris.gis gmail.com>,Latvia,marisn,yes
+-,Marco Pasetti,<marco.pasetti alice.it>,Italy,marcopx,yes
 alex,Alex Shevlakov,<sixote yahoo.com>,Russia,-,-
 andreas,Andreas Lange,<andreas.c.lange gmx.de>,Germany,-,-
 benjamin,Benjamin Ducke,<benjamin.ducke ufg.uni-kiel.de>,Germany,benducke,yes
