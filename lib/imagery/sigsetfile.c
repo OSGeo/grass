@@ -5,6 +5,10 @@ FILE *I_fopen_sigset_file_new( char *group, char *subgroup, char *name)
     char element[GNAME_MAX*2];
     FILE *fd;
 
+    /* create sigset directory */
+    sprintf(element, "%s/subgroup/%s/sigset", group, subgroup);
+    G__make_mapset_element_misc("group", element);
+
     sprintf (element, "subgroup/%s/sigset/%s", subgroup, name);
 
     fd = G_fopen_new_misc ("group", element, group);
