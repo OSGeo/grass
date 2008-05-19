@@ -74,6 +74,10 @@ I_fopen_subgroup_file_new (
     FILE *fd;
     char element[GNAME_MAX*2];
 
+    /* create subgroup directory */
+    sprintf(element, "%s/subgroup/%s", group, subgroup);
+    G__make_mapset_element_misc("group", element);
+
     /* get subgroup element name */
     sprintf (element, "subgroup/%s/%s", subgroup, file);
 
@@ -94,6 +98,10 @@ I_fopen_subgroup_file_append (
 {
     FILE *fd;
     char element[GNAME_MAX*2];
+
+    /* create subgroup directory */
+    sprintf(element, "%s/subgroup/%s", group, subgroup);
+    G__make_mapset_element_misc("group", element);
 
     /* get subgroup element name */
     sprintf (element, "subgroup/%s/%s", subgroup, file);
