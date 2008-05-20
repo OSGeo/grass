@@ -9,6 +9,10 @@ FILE *I_fopen_signature_file_new (
     char element[GNAME_MAX*2];
     FILE *fd;
 
+    /* create sigset directory */
+    sprintf(element, "%s/subgroup/%s/sig", group, subgroup);
+    G__make_mapset_element_misc("group", element);
+
     sprintf (element, "subgroup/%s/sig/%s", subgroup, name);
 
     fd = G_fopen_new_misc ("group", element, group);
