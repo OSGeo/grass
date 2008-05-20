@@ -51,6 +51,12 @@ The <i>Maximum metric</i> is given by the formula
 
 where the isolines of distance from a point are squares.
 
+<p>
+
+If there are two cells which are equal candidates to grow into an empty space, 
+<em>r.grow</em> will choose the northernmost candidate; if there are multiple 
+candidates with the same northing, the westernmost is chosen. 
+
 <h2>SEE ALSO</h2>
 
 <em><a href="r.buffer.html">r.buffer</a></em><br>
