@@ -1,9 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.select</em> prints attributes of a vector map.
+<em>v.db.select</em> prints attributes of a vector map from one or several
+user selected attribute table columns.
 
 <h2>EXAMPLE</h2>
 
+Select and show entire table:
 <div class="code"><pre>
 v.db.select roads
 cat|label
@@ -14,6 +16,20 @@ cat|label
 4|light-duty road, improved surface
 5|unimproved road
 </pre></div>
+
+<p>
+Select and show single column from table (multiple columns can be specified as comma separated list):
+<div class="code"><pre>
+v.db.select roads col=label
+label
+no data
+interstate
+primary highway, hard surface
+secondary highway, hard surface
+light-duty road, improved surface
+unimproved road
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 

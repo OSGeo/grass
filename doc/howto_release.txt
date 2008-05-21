@@ -171,6 +171,7 @@ Contents
    redazionenews@mondogis.net
    mfeilner@linuxnewmedia.de
    info@harzer.de
+   info@j-geoinfo.net
 
  Web:
    http://slashgeo.org/submit.pl
@@ -190,6 +191,7 @@ Contents
    http://www.foss4g.org/FOSS4G/modules.php?name=Submit_News
    http://groups.google.com/group/Remote-Sensing-GIS-for-a-New-World
    http://groups.google.com/group/comp.infosystems.gis
+   http://www.heise.de/software/download/edit_7105 (update, MN)
 
    ... anywhere else? Please add here.
 

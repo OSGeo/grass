@@ -1,7 +1,11 @@
-/*! \mainpage projlib GRASS and the PROJ4 projection library
+/*! \page projlib GRASS and the PROJ4 projection library
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 11/2005
   -->
+
+by GRASS Development Team
+
+http://grass.osgeo.org
 
 \section projintro GRASS and the PROJ4 projection library
 
