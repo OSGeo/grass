@@ -118,7 +118,6 @@ proc putGRASSRC { filename } {
 
 proc CheckLocation {} {
 	# Returns 0, if location is invalid, 1 othervise.
-	# Are hardcoded / in path's OK? They where here before me :) Maris.
     global database location
     
     set found 0
@@ -138,12 +137,9 @@ proc CheckLocation {} {
     } else {
         cdir $dir
         .frame0.frameNMS.second.entry configure -state disabled
-        if {[file isdirectory "PERMANENT"]} {
-            # All good locations have valid PERMANENT mapset.
-            if {[file exists "$dir/PERMANENT/DEFAULT_WIND"] != 0} {
-                set found 1
-                .frame0.frameNMS.second.entry configure -state normal
-            }
+        if {[file isdirectory "PERMANENT"] && [file exists "$dir/PERMANENT/DEFAULT_WIND"]} {
+            set found 1
+            .frame0.frameNMS.second.entry configure -state normal
         }
     }
     
@@ -151,6 +147,16 @@ proc CheckLocation {} {
     return $found
 }
 
+proc CheckMapset {} {
+	global database location mapset
+	
+	if { $mapset == "" } { return 0; }
+	
+	if { [file exists "$database/$location/$mapset/WIND"] } {
+		return 1
+	}
+	return 0
+}
 
 #############################################################################
 proc gisSetWindow {} {
@@ -483,12 +489,11 @@ proc gisSetWindow {} {
 				0 OK;
 			set mapset ""
             } else {
-                if {[file exists "$database/$location/$mapset/WIND"] == 0} {
+                if {[CheckMapset] == 0} {
                     DialogGen .wrnDlg [G_msg "WARNING: invalid mapset"] warning \
                     [format [G_msg "Warning: <%s> is not a valid mapset"] $mapset] \
                     0 OK;
-                }
-                if { $mapset != "" && [file exists "$database/$location/$mapset/WIND"] != 0} {
+                } else {
                     puts stdout "GISDBASE='$database';"
                     puts stdout "LOCATION_NAME='$location';"
                     puts stdout "MAPSET='$mapset';"
@@ -647,12 +652,11 @@ proc gisSetWindow {} {
 				0 OK;
 			set mapset ""
             } else {
-                if {[file exists "$database/$location/$mapset/WIND"] == 0} {
+                if {[CheckMapset] == 0} {
                     DialogGen .wrnDlg [G_msg "WARNING: invalid mapset"] warning \
                     [format [G_msg "Warning: <%%s> is not a valid mapset"] $mapset] \
                     0 OK;
-                }
-                if { $mapset != "" && [file exists "$database/$location/$mapset/WIND"] != 0} {
+                } else {
                     puts stdout "GISDBASE='$database';"
                     puts stdout "LOCATION_NAME='$location';"
                     puts stdout "MAPSET='$mapset';"

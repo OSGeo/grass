@@ -43,11 +43,11 @@
 # 
 #############################################################################
 namespace eval fileOpt {
-	variable fileLocation #name of new location to be created
-	variable filepath  #path to georeferenced file
+	variable fileLocation ;#name of new location to be created
+	variable filepath  ;#path to georeferenced file
 	global env
 	global database 
-	global mingw #test to see if we are running a windows version in mingw
+	global mingw ;#test to see if we are running a windows version in mingw
 	global refresh
 }
 
