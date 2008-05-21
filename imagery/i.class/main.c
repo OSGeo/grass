@@ -65,7 +65,6 @@ int main (int argc, char *argv[])
 
     img_subgrp = G_define_standard_option (G_OPT_I_GROUP);
     img_subgrp->key = "subgroup";
-    img_subgrp->gisprompt    = "old,subgroup,subgroup";
     img_subgrp->description  = _("Name of input imagery subgroup");
 
     out_sig = G_define_standard_option(G_OPT_F_OUTPUT);
