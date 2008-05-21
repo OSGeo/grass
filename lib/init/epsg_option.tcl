@@ -49,18 +49,18 @@
 #############################################################################
 
 namespace eval epsgOpt {
-	variable browsedepsg #path to EPSG code file
-	variable epsgLocation #name of new location to be created
-	variable epsg_code  #EPSG code number
-	variable searchterm #text string searched in EPSG file
+	variable browsedepsg ;#path to EPSG code file
+	variable epsgLocation ;#name of new location to be created
+	variable epsg_code  ;#EPSG code number
+	variable searchterm ;#text string searched in EPSG file
 	variable dir 
-	variable start #starting index for searching EPSG text widget
-	variable epsgtxt #text widget with EPSG definitions and codes
-	variable dtnum #datum transformation number
+	variable start ;#starting index for searching EPSG text widget
+	variable epsgtxt ;#text widget with EPSG definitions and codes
+	variable dtnum ;#datum transformation number
 	global env
 	global database 
 	global refresh
-	global mingw #test to see if we are running a windows version in mingw
+	global mingw ;#test to see if we are running a windows version in mingw
 
 
 }
