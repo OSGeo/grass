@@ -63,8 +63,12 @@ int main (int argc, char *argv[])
 
     img_grp = G_define_standard_option (G_OPT_I_GROUP);
 
-    img_subgrp = G_define_standard_option (G_OPT_I_GROUP);
+    /* img_subgrp = G_define_standard_option (G_OPT_I_SUBGROUP); */ /* not used since gisprompt needs to be deactivated for interactive use */
+    img_subgrp = G_define_option();
     img_subgrp->key = "subgroup";
+    img_subgrp->type = TYPE_STRING;
+    img_subgrp->key_desc = "name";
+    img_subgrp->required = YES;
     img_subgrp->description  = _("Name of input imagery subgroup");
 
     out_sig = G_define_standard_option(G_OPT_F_OUTPUT);
