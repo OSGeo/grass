@@ -17,7 +17,7 @@
  *  \return int
  */
 
-int I_find_group(char *group)
+int I_find_group(const char *group)
 {
     if (group == NULL || *group == 0)
 	return 0;
@@ -25,7 +25,7 @@ int I_find_group(char *group)
     return G_find_file2 ("group", group, G_mapset()) != NULL ;
 }
 
-int I_find_group_file(char *group, char *file)
+int I_find_group_file(const char *group, const char *file)
 {
     if (!I_find_group (group))
 	return 0;
@@ -35,7 +35,7 @@ int I_find_group_file(char *group, char *file)
     return G_find_file2_misc ("group", file, group, G_mapset()) != NULL ;
 }
 
-int I_find_subgroup(char *group, char *subgroup)
+int I_find_subgroup(const char *group, const char *subgroup)
 {
     char element[GNAME_MAX];
 
@@ -49,7 +49,7 @@ int I_find_subgroup(char *group, char *subgroup)
     return G_find_file2_misc ("group", element, group, G_mapset()) != NULL ;
 }
 
-int I_find_subgroup_file(char *group, char *subgroup, char *file)
+int I_find_subgroup_file(const char *group, const char *subgroup, const char *file)
 {
     char element[GNAME_MAX*2];
 

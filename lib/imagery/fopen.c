@@ -15,7 +15,7 @@
 
 
 FILE *
-I_fopen_group_file_new(char *group, char *file)
+I_fopen_group_file_new(const char *group, const char *file)
 {
     FILE *fd;
 
@@ -29,7 +29,7 @@ I_fopen_group_file_new(char *group, char *file)
 
 
 FILE *
-I_fopen_group_file_append (char *group, char *file)
+I_fopen_group_file_append (const char *group, const char *file)
 {
     FILE *fd;
 
@@ -43,7 +43,7 @@ I_fopen_group_file_append (char *group, char *file)
 
 
 FILE *
-I_fopen_group_file_old (char *group, char *file)
+I_fopen_group_file_old (const char *group, const char *file)
 {
     FILE *fd;
 
@@ -67,9 +67,9 @@ I_fopen_group_file_old (char *group, char *file)
 
 FILE *
 I_fopen_subgroup_file_new (
-    char *group,
-    char *subgroup,
-    char *file)
+    const char *group,
+    const char *subgroup,
+    const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX*2];
@@ -92,9 +92,9 @@ I_fopen_subgroup_file_new (
 
 FILE *
 I_fopen_subgroup_file_append (
-    char *group,
-    char *subgroup,
-    char *file)
+    const char *group,
+    const char *subgroup,
+    const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX*2];
@@ -117,9 +117,9 @@ I_fopen_subgroup_file_append (
 
 FILE *
 I_fopen_subgroup_file_old (
-    char *group,
-    char *subgroup,
-    char *file)
+    const char *group,
+    const char *subgroup,
+    const char *file)
 {
     FILE *fd;
     char element[GNAME_MAX*2];

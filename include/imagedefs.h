@@ -17,54 +17,54 @@ int I_ask_group_old(char *, char *);
 /* eol.c */
 int I_get_to_eol(char *, int, FILE *);
 /* find.c */
-int I_find_group(char *);
-int I_find_group_file(char *, char *);
-int I_find_subgroup(char *, char *);
-int I_find_subgroup_file(char *, char *, char *);
+int I_find_group(const char *);
+int I_find_group_file(const char *, const char *);
+int I_find_subgroup(const char *, const char *);
+int I_find_subgroup_file(const char *, const char *, const char *);
 /* fopen.c */
-FILE *I_fopen_group_file_new(char *, char *);
-FILE *I_fopen_group_file_append(char *, char *);
-FILE *I_fopen_group_file_old(char *, char *);
-FILE *I_fopen_subgroup_file_new(char *, char *, char *);
-FILE *I_fopen_subgroup_file_append(char *, char *, char *);
-FILE *I_fopen_subgroup_file_old(char *, char *, char *);
+FILE *I_fopen_group_file_new(const char *, const char *);
+FILE *I_fopen_group_file_append(const char *, const char *);
+FILE *I_fopen_group_file_old(const char *, const char *);
+FILE *I_fopen_subgroup_file_new(const char *, const char *, const char *);
+FILE *I_fopen_subgroup_file_append(const char *, const char *, const char *);
+FILE *I_fopen_subgroup_file_old(const char *, const char *, const char *);
 /* georef.c */
 int I_compute_georef_equations(struct Control_Points *, double [3], double [3], double [3], double [3]);
 int I_georef(double, double, double *, double *, double [3], double [3]);
 /* group.c */
 int I_get_group(char *);
-int I_put_group(char *);
-int I_get_subgroup(char *, char *);
-int I_put_subgroup(char *, char *);
-int I_get_group_ref(char *, struct Ref *);
-int I_get_subgroup_ref(char *, char *, struct Ref *);
+int I_put_group(const char *);
+int I_get_subgroup(const char *, char *);
+int I_put_subgroup(const char *, const char *);
+int I_get_group_ref(const char *, struct Ref *);
+int I_get_subgroup_ref(const char *, const char *, struct Ref *);
 int I_init_ref_color_nums(struct Ref *);
-int I_put_group_ref(char *, struct Ref *);
-int I_put_subgroup_ref(char *, char *, struct Ref *);
-int I_add_file_to_group_ref(char *, char *, struct Ref *);
-int I_transfer_group_ref_file(struct Ref *, int, struct Ref *);
+int I_put_group_ref(const char *, const struct Ref *);
+int I_put_subgroup_ref(const char *, const char *, const struct Ref *);
+int I_add_file_to_group_ref(const char *, const char *, struct Ref *);
+int I_transfer_group_ref_file(const struct Ref *, int, struct Ref *);
 int I_init_group_ref(struct Ref *);
 int I_free_group_ref(struct Ref *);
 /* list_gp.c */
-int I_list_group(char *, struct Ref *, FILE *);
-int I_list_group_simple(struct Ref *, FILE *);
+int I_list_group(const char *, const struct Ref *, FILE *);
+int I_list_group_simple(const struct Ref *, FILE *);
 /* list_subgp.c */
-int I_list_subgroup(char *, char *, struct Ref *, FILE *);
-int I_list_subgroup_simple(struct Ref *, FILE *);
+int I_list_subgroup(const char *, const char *, const struct Ref *, FILE *);
+int I_list_subgroup_simple(const struct Ref *, FILE *);
 /* loc_info.c */
-int I_location_info(char *, char *);
+int I_location_info(char *, const char *);
 /* ls_groups.c */
 int I_list_groups(int);
-int I_list_subgroups(char *, int);
+int I_list_subgroups(const char *, int);
 /* points.c */
 int I_new_control_point(struct Control_Points *, double, double, double, double, int);
-int I_get_control_points(char *, struct Control_Points *);
-int I_put_control_points(char *, struct Control_Points *);
+int I_get_control_points(const char *, struct Control_Points *);
+int I_put_control_points(const char *, const struct Control_Points *);
 /* ref.c */
-FILE *I_fopen_group_ref_new(char *);
-FILE *I_fopen_group_ref_old(char *);
-FILE *I_fopen_subgroup_ref_new(char *, char *);
-FILE *I_fopen_subgroup_ref_old(char *, char *);
+FILE *I_fopen_group_ref_new(const char *);
+FILE *I_fopen_group_ref_old(const char *);
+FILE *I_fopen_subgroup_ref_new(const char *, const char *);
+FILE *I_fopen_subgroup_ref_old(const char *, const char *);
 /* sig.c */
 int I_init_signatures(struct Signature *, int);
 int I_new_signature(struct Signature *);
@@ -73,8 +73,8 @@ int I_read_one_signature(FILE *, struct Signature *);
 int I_read_signatures(FILE *, struct Signature *);
 int I_write_signatures(FILE *, struct Signature *);
 /* sigfile.c */
-FILE *I_fopen_signature_file_new(char *, char *, char *);
-FILE *I_fopen_signature_file_old(char *, char *, char *);
+FILE *I_fopen_signature_file_new(const char *, const char *, const char *);
+FILE *I_fopen_signature_file_old(const char *, const char *, const char *);
 /* sigset.c */
 int I_SigSetNClasses(struct SigSet *);
 struct ClassData *I_AllocClassData(struct SigSet *, struct ClassSig *, int);
@@ -83,20 +83,20 @@ int I_SigSetNBands(struct SigSet *, int);
 struct ClassSig *I_NewClassSig(struct SigSet *);
 struct SubSig *I_NewSubSig(struct SigSet *, struct ClassSig *);
 int I_ReadSigSet(FILE *, struct SigSet *);
-int I_SetSigTitle(struct SigSet *, char *);
-char *I_GetSigTitle(struct SigSet *);
-int I_SetClassTitle(struct ClassSig *, char *);
-char *I_GetClassTitle(struct ClassSig *);
-int I_WriteSigSet(FILE *, struct SigSet *);
+int I_SetSigTitle(struct SigSet *, const char *);
+const char *I_GetSigTitle(const struct SigSet *);
+int I_SetClassTitle(struct ClassSig *, const char *);
+const char *I_GetClassTitle(const struct ClassSig *);
+int I_WriteSigSet(FILE *, const struct SigSet *);
 /* sigsetfile.c */
-FILE *I_fopen_sigset_file_new(char *, char *, char *);
-FILE *I_fopen_sigset_file_old(char *, char *, char *);
+FILE *I_fopen_sigset_file_new(const char *, const char *, const char *);
+FILE *I_fopen_sigset_file_old(const char *, const char *, const char *);
 /* target.c */
-int I_get_target(char *, char *, char *);
-int I_put_target(char *, char *, char *);
+int I_get_target(const char *, char *, char *);
+int I_put_target(const char *, const char *, const char *);
 /* title.c */
-int I_get_group_title(char *, char *, int);
-int I_put_group_title(char *, char *);
+int I_get_group_title(const char *, char *, int);
+int I_put_group_title(const char *, const char *);
 /* var.c */
 double I_variance(double, double, int);
 double I_stddev(double, double, int);

@@ -23,14 +23,14 @@
 
 FILE *
 I_fopen_group_ref_new (
-    char *group)
+    const char *group)
 {
     return I_fopen_group_file_new (group, "REF");
 }
 
 FILE *
 I_fopen_group_ref_old (
-    char *group)
+    const char *group)
 {
     return I_fopen_group_file_old (group, "REF");
 }
@@ -38,7 +38,7 @@ I_fopen_group_ref_old (
 /*
 FILE *
 I_fopen_group_ref_append (
-    char *group)
+    const char *group)
 {
     return I_fopen_group_file_append (group, "REF");
 }
@@ -46,16 +46,16 @@ I_fopen_group_ref_append (
 
 FILE *
 I_fopen_subgroup_ref_new (
-    char *group,
-    char *subgroup)
+    const char *group,
+    const char *subgroup)
 {
     return I_fopen_subgroup_file_new (group, subgroup, "REF");
 }
 
 FILE *
 I_fopen_subgroup_ref_old (
-    char *group,
-    char *subgroup)
+    const char *group,
+    const char *subgroup)
 {
     FILE *fd;
 

@@ -20,7 +20,7 @@
  */
 
 int I_get_target(
-    char *group,
+    const char *group,
     char *location,
     char *mapset)
 {
@@ -64,9 +64,9 @@ int I_get_target(
  */
 
 int I_put_target (
-    char *group,
-    char *location,
-    char *mapset)
+    const char *group,
+    const char *location,
+    const char *mapset)
 {
     FILE *fd;
 
