@@ -5,7 +5,7 @@
 /* makes a three part title with location, mapset info */
 int I_location_info(
     char *buf,
-    char *middle)
+    const char *middle)
 {
     char left[80];
     char right[80];

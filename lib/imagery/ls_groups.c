@@ -2,6 +2,7 @@
 * I_list_groups (full)
 * I_list_subgroups (group, full)
 *************************************************************/
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -16,9 +17,9 @@ int I_list_groups (int full)
     char *element;
     int i;
 
-    char buf[1024];
+    char buf[GPATH_MAX];
     char title[50];
-    FILE *ls, *temp, *popen();
+    FILE *ls, *temp;
     struct Ref ref;
     int any;
 
@@ -39,6 +40,7 @@ int I_list_groups (int full)
     G__file_name (buf+strlen(buf), element, "", G_mapset());
     strcat (buf, ";ls");
     if (!full) strcat (buf, " -C");
+    /* FIXME: use G__ls() */
     if ((ls = popen (buf, "r")))
     {
 	while (G_getl(buf, sizeof(buf), ls))
@@ -76,13 +78,13 @@ int I_list_groups (int full)
     return 0;
 }
 
-int I_list_subgroups (char *group,int full)
+int I_list_subgroups (const char *group, int full)
 {
-    char element[100];
+    char element[GNAME_MAX+15];
     int i;
 
-    char buf[1024];
-    FILE *ls, *temp, *popen();
+    char buf[GPATH_MAX];
+    FILE *ls, *temp;
     struct Ref ref;
     int any;
 
@@ -103,6 +105,7 @@ int I_list_subgroups (char *group,int full)
     G__file_name (buf+strlen(buf), element, "", G_mapset());
     strcat (buf, ";ls");
     if (!full) strcat (buf, " -C");
+    /* FIXME: use G__ls() */
     if ((ls = popen (buf, "r")))
     {
 	while (G_getl(buf, sizeof(buf), ls))

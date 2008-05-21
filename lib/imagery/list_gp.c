@@ -10,8 +10,8 @@
  * \return 0
  */
 int I_list_group (
-    char *group,
-    struct Ref *ref,
+    const char *group,
+    const struct Ref *ref,
     FILE *fd)
 {
     char buf[80];
@@ -62,7 +62,7 @@ int I_list_group (
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_group_simple (struct Ref *ref, FILE *fd)
+int I_list_group_simple (const struct Ref *ref, FILE *fd)
 {
     int i;
 

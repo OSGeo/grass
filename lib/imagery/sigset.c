@@ -278,18 +278,17 @@ get_subclass_covar(
 
 int I_SetSigTitle(
     struct SigSet *S,
-    char *title)
+    const char *title)
 {
     if (title == NULL) title = "";
     if (S->title)
         free (S->title);
-    S->title = G_malloc (strlen (title)+1);
-    strcpy(S->title, title);
+    S->title = G_store(title);
 
     return 0;
 }
 
-char * I_GetSigTitle(struct SigSet *S)
+const char *I_GetSigTitle(const struct SigSet *S)
 {
     if (S->title)
         return S->title;
@@ -299,18 +298,17 @@ char * I_GetSigTitle(struct SigSet *S)
 
 int I_SetClassTitle(
     struct ClassSig *C,
-    char *title)
+    const char *title)
 {
     if (title == NULL) title = "";
     if (C->title)
         free (C->title);
-    C->title = G_malloc (strlen (title)+1);
-    strcpy(C->title, title);
+    C->title = G_store (title);
 
     return 0;
 }
 
-char *I_GetClassTitle ( struct ClassSig *C)
+const char *I_GetClassTitle (const struct ClassSig *C)
 {
     if (C->title)
         return C->title;
@@ -320,10 +318,10 @@ char *I_GetClassTitle ( struct ClassSig *C)
 
 int I_WriteSigSet(
     FILE *fd,
-    struct SigSet *S)
+    const struct SigSet *S)
 {
-    struct ClassSig *Cp;
-    struct SubSig *Sp;
+    const struct ClassSig *Cp;
+    const struct SubSig *Sp;
     int i,j, b1, b2;
 
     fprintf (fd, "title: %s\n",I_GetSigTitle(S));

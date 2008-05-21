@@ -1,6 +1,6 @@
 #include <grass/imagery.h>
 
-FILE *I_fopen_sigset_file_new( char *group, char *subgroup, char *name)
+FILE *I_fopen_sigset_file_new(const char *group, const char *subgroup, const char *name)
 {
     char element[GNAME_MAX*2];
     FILE *fd;
@@ -19,7 +19,7 @@ FILE *I_fopen_sigset_file_new( char *group, char *subgroup, char *name)
     return fd;
 }
 
-FILE *I_fopen_sigset_file_old ( char *group, char *subgroup, char *name)
+FILE *I_fopen_sigset_file_old(const char *group, const char *subgroup, const char *name)
 {
     char element[GNAME_MAX*2];
     FILE *fd;

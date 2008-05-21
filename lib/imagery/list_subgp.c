@@ -11,9 +11,9 @@
  * \return 0
  */
 int I_list_subgroup (
-    char *group,
-    char *subgroup,
-    struct Ref *ref,
+    const char *group,
+    const char *subgroup,
+    const struct Ref *ref,
     FILE *fd)
 {
     char buf[80];
@@ -66,7 +66,7 @@ int I_list_subgroup (
  * \return 0
  */
 /* same as above, but one map per line in map@mapset form */
-int I_list_subgroup_simple(struct Ref *ref, FILE *fd)
+int I_list_subgroup_simple(const struct Ref *ref, FILE *fd)
 {
     return I_list_group_simple(ref, fd);
 }

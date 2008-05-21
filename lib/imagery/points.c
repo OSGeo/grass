@@ -80,7 +80,7 @@ int I_new_control_point (struct Control_Points *cp,
     return 0;
 }
 
-static int I_write_control_points(FILE *fd, struct Control_Points *cp)
+static int I_write_control_points(FILE *fd, const struct Control_Points *cp)
 {
     int i;
 
@@ -111,7 +111,7 @@ static int I_write_control_points(FILE *fd, struct Control_Points *cp)
  */
 
 int I_get_control_points (
-    char *group,
+    const char *group,
     struct Control_Points *cp)
 {
     FILE *fd;
@@ -154,8 +154,8 @@ int I_get_control_points (
  */
 
 int I_put_control_points (
-    char *group,
-    struct Control_Points *cp)
+    const char *group,
+    const struct Control_Points *cp)
 {
     FILE *fd;
     char msg[100];

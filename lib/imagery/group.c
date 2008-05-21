@@ -27,9 +27,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <grass/imagery.h>
-static int get_ref(char *,char *,struct Ref *);
-static int set_color(char *,char *,char *,struct Ref *);
-static int put_ref(char *,char *,struct Ref *);
+static int get_ref(const char *, const char *, struct Ref *);
+static int set_color(const char *, const char *, const char *, struct Ref *);
+static int put_ref(const char *, const char *, const struct Ref *);
 
 /* get current group name from file GROUPFILE in current mapset */
 int I_get_group(char *group)
@@ -49,7 +49,7 @@ int I_get_group(char *group)
 }
 
 /* write group name to file GROUPFILE in current mapset */
-int I_put_group(char *group)
+int I_put_group(const char *group)
 {
     FILE *fd;
 
@@ -62,7 +62,7 @@ int I_put_group(char *group)
 }
 
 /* get current subgroup for group in current mapset */
-int I_get_subgroup (char *group,char *subgroup)
+int I_get_subgroup(const char *group, char *subgroup)
 {
     FILE *fd;
     int stat;
@@ -81,7 +81,7 @@ int I_get_subgroup (char *group,char *subgroup)
 }
 
 /* write current subgroup to group in current mapset */
-int I_put_subgroup(char *group,char *subgroup)
+int I_put_subgroup(const char *group, const char *subgroup)
 {
     FILE *fd;
 
@@ -109,7 +109,7 @@ int I_put_subgroup(char *group,char *subgroup)
  */
 
 int I_get_group_ref(
-    char *group,
+    const char *group,
     struct Ref *ref)
 {
     return get_ref (group, "", ref);
@@ -131,16 +131,16 @@ int I_get_group_ref(
  */
 
 int I_get_subgroup_ref(
-    char *group,
-    char *subgroup,
+    const char *group,
+    const char *subgroup,
     struct Ref *ref)
 {
     return get_ref (group, subgroup, ref);
 }
 
 static int get_ref (
-    char *group,
-    char *subgroup,
+    const char *group,
+    const char *subgroup,
     struct Ref *ref)
 {
     int n;
@@ -176,7 +176,7 @@ static int get_ref (
     return 1;
 }
 
-static int set_color(char *name,char *mapset,char *color,struct Ref *ref)
+static int set_color(const char *name, const char *mapset, const char *color, struct Ref *ref)
 {
     int n;
 
@@ -260,7 +260,7 @@ int I_init_ref_color_nums(struct Ref *ref)
  *  \return int
  */
 
-int I_put_group_ref(char *group, struct Ref *ref)
+int I_put_group_ref(const char *group, const struct Ref *ref)
 {
     return put_ref (group, "", ref);
 }
@@ -282,12 +282,12 @@ int I_put_group_ref(char *group, struct Ref *ref)
  *  \return int
  */
 
-int I_put_subgroup_ref(char *group, char *subgroup, struct Ref *ref)
+int I_put_subgroup_ref(const char *group, const char *subgroup, const struct Ref *ref)
 {
     return put_ref (group, subgroup, ref);
 }
 
-static int put_ref( char *group, char *subgroup, struct Ref *ref)
+static int put_ref(const char *group, const char *subgroup, const struct Ref *ref)
 {
     int n;
     FILE *fd;
@@ -337,7 +337,7 @@ static int put_ref( char *group, char *subgroup, struct Ref *ref)
  *  \return int
  */
 
-int I_add_file_to_group_ref(char *name, char *mapset, struct Ref *ref)
+int I_add_file_to_group_ref(const char *name, const char *mapset, struct Ref *ref)
 {
     int n;
 
@@ -384,7 +384,7 @@ int I_add_file_to_group_ref(char *name, char *mapset, struct Ref *ref)
  *  \return int
  */
 
-int I_transfer_group_ref_file (struct Ref *ref2, int n, struct Ref *ref1)
+int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
 {
     int k;
 

@@ -2,9 +2,9 @@
 #include <grass/imagery.h>
 
 FILE *I_fopen_signature_file_new (
-    char *group,
-    char *subgroup,
-    char *name)
+    const char *group,
+    const char *subgroup,
+    const char *name)
 {
     char element[GNAME_MAX*2];
     FILE *fd;
@@ -23,9 +23,9 @@ FILE *I_fopen_signature_file_new (
 }
 
 FILE *I_fopen_signature_file_old(
-    char *group,
-    char *subgroup,
-    char *name)
+    const char *group,
+    const char *subgroup,
+    const char *name)
 {
     char element[GNAME_MAX*2];
     FILE *fd;

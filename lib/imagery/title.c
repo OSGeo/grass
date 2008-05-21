@@ -2,7 +2,7 @@
 #include <grass/imagery.h>
 
 
-int I_get_group_title (char *group, char *title, int n)
+int I_get_group_title(const char *group, char *title, int n)
 {
     FILE *fd;
 
@@ -20,7 +20,7 @@ int I_get_group_title (char *group, char *title, int n)
 }
 
 
-int I_put_group_title (char *group, char *title)
+int I_put_group_title(const char *group, const char *title)
 {
     FILE *fd;
 
