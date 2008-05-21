@@ -6,12 +6,14 @@ raster maps from ASCII files in the current directory
 containing polygon, linear, and point features.
 
 <p>
+
 The <b>input</b> file is an ASCII text file containing the
 polygon, linear, and point feature definitions.
 The format of this file is described in the
-<a href="#format.html"><b>INPUT FORMAT</b></a> section below.
+<a href="#format.html"><i>INPUT FORMAT</i></a> section below.
 
 <p>
+
 The number of raster <b>rows</b> to hold in memory is per default 4096.
 This parameter allows users with less memory (or more) on their
 system to control how much memory <em>r.in.poly</em> uses.
@@ -21,20 +23,23 @@ Usually the default value is fine.
 <h2>NOTES</h2>
 
 <p>
+
 The data will be imported using the current region settings to set the
 new raster map's bounds and resolution. Any features falling outside
 the current region will be cropped. The region settings are contolled
 with the <em>g.region</em> module.
 
 <p>
+
 The format is a simplified version of the standard GRASS vector ASCII
 format used by <em>v.in.ascii</em>.
 
 <p>
+
 Polygons are filled, i.e. they define an area.
 
 <A NAME="format.html"></a>
-<h2>INPUT FORMAT</h2>
+<h3>Input Format</h3>
 
 The input format for the <b>input</b> file consists of
 sections describing either polygonal areas, linear features, or
@@ -92,21 +97,16 @@ A
 </pre></div>
 
 <h2>SEE ALSO</h2>
-
-<a href="r.digit.html">r.digit</a> for
-interactive on-screen polygon/line digitizing for raster maps
-<p>
-<a href="r.colors.html">r.colors</a>
-for creates color tables for raster maps
-<p>
-
-<a href="d.rast.edit.html">d.rast.edit</a>,
-<a href="g.region.html">g.region</a>,
-<a href="r.in.xyz.html">r.in.xyz</a>,
-<a href="r.patch.html">r.patch</a>,
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="v.digit.html">v.digit</a>
-
+<i>
+<a href="r.digit.html">r.digit</a></i> (for interactive on-screen polygon/line digitizing for raster maps)<br>
+<i><a href="r.colors.html">r.colors</a></i> (for raster map color table creation)<br>
+<i><a href="d.rast.edit.html">d.rast.edit</a><br>
+<a href="g.region.html">g.region</a><br>
+<a href="r.in.xyz.html">r.in.xyz</a><br>
+<a href="r.patch.html">r.patch</a><br>
+<a href="v.in.ascii.html">v.in.ascii</a><br>
+<a href="v.digit.html">v.digit</a><br>
+</i>
 
 <h2>AUTHOR</h2>
 
