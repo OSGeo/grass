@@ -315,7 +315,7 @@ G_define_option (void)
  *
  * - general: G_OPT_WHERE, G_OPT_COLUMN, G_OPT_COLUMNS, G_OPT_TABLE, G_OPT_DRIVER, G_OPT_DATABASE
  *
- * - imagery: G_OPT_I_GROUP
+ * - imagery: G_OPT_I_GROUP, G_OPT_I_SUBGROUP
  *
  * - raster: G_OPT_R_INPUT, G_OPT_R_INPUTS, G_OPT_R_OUTPUT, G_OPT_R_MAP, G_OPT_R_MAPS, G_OPT_R_BASE, G_OPT_R_COVER, G_OPT_R_ELEV, G_OPT_R_ELEVS
  *
@@ -394,6 +394,14 @@ G_define_standard_option (int opt)
 	    Opt->required     = YES;
 	    Opt->gisprompt    = "old,group,group";
 	    Opt->description  = _("Name of input imagery group");
+            break;
+        case G_OPT_I_SUBGROUP:
+	    Opt->key          = "subgroup";
+	    Opt->type         = TYPE_STRING;
+	    Opt->key_desc     = "name";
+	    Opt->required     = YES;
+	    Opt->gisprompt    = "old,subgroup,subgroup";
+	    Opt->description  = _("Name of input imagery subgroup");
             break;
 
 	/* raster maps */    
