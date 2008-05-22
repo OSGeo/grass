@@ -4,10 +4,12 @@ The <em>r.in.xyz</em> module will load and bin ungridded x,y,z ASCII data
 into a new raster map. The user may choose from a variety of statistical
 methods in creating the new raster.
 <p>
+
 <em>r.in.xyz</em> is designed for processing massive point cloud datasets,
 for example raw LIDAR or sidescan sonar swath data. It has been tested with
 datasets as large as 1.5 billion points.
 <p>
+
 Available statistics for populating the raster are:<br>
 <ul>
 <table>
@@ -33,7 +35,6 @@ Available statistics for populating the raster are:<br>
 </ul>
 <br>
 
-
 <h2>NOTES</h2>
 
 <h4>Memory use</h4>
@@ -50,7 +51,9 @@ and coeff_var</em> will use more.
 
 The aggregate functions <em>median, percentile, skewness</em> and
 <em>trimmed mean</em> will also use more memory.
+
 <p>
+
 The default map <b>type</b>=<tt>FCELL</tt> is intended as compromise between
 preserving data precision and limiting system resource consumption.
 If reading data from a <tt>stdin</tt> stream, the program can only run using
@@ -77,7 +80,9 @@ by the area covered. e.g.
   # Lat/Lon location:
   # points_per_sq_m = n_points / (ns_extent * ew_extent*cos(lat) * (1852*60)^2)
 </pre></div>
+
 <p>
+
 If you only intend to interpolate the data with <em>r.to.vect</em> and
 <em>v.surf.rst</em>, then there is little point to setting the region
 resolution so fine that you only catch one data point per cell -- you might
@@ -93,17 +98,23 @@ see <em>g.region</em>)
 <p>
 Blank lines and comment lines starting with the hash symbol (<tt>#</tt>)
 will be skipped.
+
 <p>
+
 The <b>zrange</b> parameter may be used for filtering the input data by
 vertical extent. Example uses might include preparing multiple raster
 sections to be combined into a 3D raster array with <em>r.to.rast3</em>, or
 for filtering outliers on relatively flat terrain.
+
 <p>
+
 In varied terrain the user may find that <em>min</em> maps make for a good
 noise filter as most LIDAR noise is from premature hits. The <em>min</em> map
 may also be useful to find the underlying topography in a forested or urban
 environment if the cells are over sampled.
+
 <p>
+
 The user can use a combination of <em>r.in.xyz</em> <b>output</b> maps to create
 custom filters. e.g. use <em>r.mapcalc</em> to create a <tt>mean-(2*stddev)</tt>
 map. [In this example the user may want to include a lower bound filter in
@@ -117,7 +128,6 @@ If the raster map is to be reprojected, it may be more appropriate to reproject
 the input points with <em>m.proj</em> or <em>cs2cs</em> before running
 <em>r.in.xyz</em>.
 
-
 <h4>Interpolation into a DEM</h4>
 
 The vector engine's topographic abilities introduce a finite memory overhead
@@ -130,6 +140,7 @@ Run <em>r.univar</em> on your raster map to check the number of non-NULL cells
 and adjust bounds and/or resolution as needed before proceeding.
 
 <p>
+
 Typical commands to create a DEM using a regularized spline fit:
 <div class="code"><pre>
   r.univar lidar_min
@@ -178,7 +189,6 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
      <tt>method=string[,string,...] output=name[,name,...]</tt>
 </ul>
 
-
 <h2>BUGS</h2>
 
 <ul>
@@ -193,7 +203,6 @@ Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
 
 <li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
   <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
-<!-- HB: "possible" when someone fixes r.null to allow it ;) -->
 <!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
 </ul>
 
