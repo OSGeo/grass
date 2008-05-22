@@ -524,7 +524,7 @@ proc make_ui {} {
 	    -side left
 
 	frame .tools
-	label .tools.value_l -text "Value:"
+	label .tools.value_l -text "New value:"
 	entry .tools.value -textvariable brush
 	label .tools.color_l -text "Color:"
 	label .tools.color -bitmap gray12 -foreground black
