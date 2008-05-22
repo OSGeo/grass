@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     set->key          = "set" ;
     set->type         = TYPE_STRING ;
     set->description  = _("GRASS variable to set") ;
-    set->key_desc     = "\"VARIABLE=value\"" ;
+    set->key_desc     = "VARIABLE=value" ;
     set->required     = NO;
 
     store_opt               = G_define_option() ;
