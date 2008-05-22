@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  ****************************************************************************
  *
  * MODULE:       d.rast.num
@@ -334,12 +332,12 @@ int draw_number (double number, int prec, RASTER_MAP_TYPE map_type)
 	  if(!G_is_c_null_value(&cell))
 	    sprintf(no,"%d",(int)number);
 	  else
-	    sprintf(no,"N");
+	    sprintf(no,"Null");
 	}else{
 	  if(!G_is_d_null_value(&dcell))
 	    sprintf(no,"%.*f", prec, number);
 	  else
-	   sprintf(no,"N");
+	   sprintf(no,"Null");
 	}
 	len = strlen(no);
 
