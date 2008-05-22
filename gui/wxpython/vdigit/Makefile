@@ -27,6 +27,8 @@ $(LIB_NAME).i: digit.i dig_types.i driver.h digit.h
 $(LIB_NAME).py $(LIB_NAME)_wrap.cpp: $(LIB_NAME).i
 	$(SWIG) -c++ -python -shadow -o $(LIB_NAME)_wrap.cpp $<
 
+.NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
+
 $(SHLIB): $(SHLIB_OBJS)
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
 
