@@ -80,8 +80,9 @@ virtual host onto Telascience.org infrastructure (sharing with other OSGeo servi
 
 * Web statistics
 ** See URL at http://wiki.osgeo.org/wiki/Project_Stats
-** OSGeo: awstats (http://download.osgeo.org/logs-bin/awstats.pl?config=grass.osgeo.org)
+** OSGeo: awstats (http://grass.osgeo.org/logs-bin/awstats.pl?config=grass.osgeo.org)
 *** configuration at: /etc/awstats/awstats.grass.osgeo.org.conf
+***                   /etc/httpd/conf.d/sites/grass.osgeo.org.conf
 *** httpd logs: /var/log/httpd/grass_*
 *** awstats processed log files: /osgeo/download/logs
 *** cronjob script: /osgeo/scripts/update_logs.sh
