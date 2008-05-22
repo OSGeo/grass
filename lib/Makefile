@@ -58,6 +58,7 @@ default: headers
 	$(MAKE) subdirs
 
 headers: 
+	if [ ! -d $(GISBASE)/include ]; then $(MKDIR) $(GISBASE)/include; fi
 	if [ ! -d $(GISBASE)/include/grass ]; then $(MKDIR) $(GISBASE)/include/grass; fi
 	if [ ! -d $(GISBASE)/include/grass/vect ]; then $(MKDIR) $(GISBASE)/include/grass/vect; fi
 	if [ ! -d $(GISBASE)/include/Make ]; then $(MKDIR) $(GISBASE)/include/Make; fi
