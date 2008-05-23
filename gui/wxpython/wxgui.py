@@ -1162,7 +1162,7 @@ class GMFrame(wx.Frame):
         busy = wx.BusyInfo(message=_("Please wait, loading attribute data..."),
                            parent=self)
         wx.Yield()
-
+        
         self.dbmanager = dbm.AttributeManager(parent=self, id=wx.ID_ANY,
                                               title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
                                                                    mapname),

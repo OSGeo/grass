@@ -541,7 +541,9 @@ class GRASSStartup(wx.Frame):
         self.listOfMapsetsSelectable = []
         
         for mapset in glob.glob(os.path.join(self.gisdbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.basename(mapset) != 'PERMANENT':
+            if os.path.isdir(mapset) and \
+                    os.path.isfile(os.path.join(self.gisdbase, location, mapset, "WIND")) and \
+                    os.path.basename(mapset) != 'PERMANENT':
                 self.listOfMapsets.append(os.path.basename(mapset))
         
         utils.ListSortLower(self.listOfMapsets)

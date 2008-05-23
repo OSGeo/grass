@@ -147,6 +147,8 @@ class VirtualAttributeList(wx.ListCtrl,
         @return -1 if key column is not displayed
         """
 
+        self.log.write(_("Loading data..."))
+
         # These two should probably be passed to init more cleanly
         # setting the numbers of items = number of elements in the dictionary
         self.itemDataMap  = {}
@@ -2022,26 +2024,24 @@ class LayerBook(wx.Notebook):
         #
         # get default values
         #
+        self.defaultConnect = {}
         cmdConnect = gcmd.Command(['db.connect',
                                    '-p',
                                    '--q'])
         for line in cmdConnect.ReadStdOutput():
             item, value = line.split(':')
-            item  = item.strip()
-            value = value.strip()
-            if item == 'driver':
-                self.defaultDriver = value
-            elif item == 'database':
-                self.defaultDatabase = value
+            self.defaultConnect[item.strip()] = value.strip()
 
-        if len(self.defaultDriver) == 0 or \
-               len(self.defaultDatabase) == 0:
+        if len(self.defaultConnect['driver']) == 0 or \
+               len(self.defaultConnect['database']) == 0:
             raise gcmd.DBMError(_('Unable to determine default DB connection settings. '
                                   'Please define DB connection using db.connect module.'))
         
-        self.defaultTables = self.__getTables(self.defaultDriver, self.defaultDatabase)
+        self.defaultTables = self.__getTables(self.defaultConnect['driver'],
+                                              self.defaultConnect['database'])
         try:
-            self.defaultColumns = self.__getColumns(self.defaultDriver, self.defaultDatabase,
+            self.defaultColumns = self.__getColumns(self.defaultConnect['driver'],
+                                                    self.defaultConnect['database'],
                                                     self.defaultTables[0])
         except IndexError:
             self.defaultColumns = []
@@ -2091,8 +2091,8 @@ class LayerBook(wx.Notebook):
                                                choices=self.defaultColumns))}
         
         # set default values for widgets
-        self.addLayerWidgets['driver'][1].SetStringSelection(self.defaultDriver)
-        self.addLayerWidgets['database'][1].SetValue(self.defaultDatabase)
+        self.addLayerWidgets['driver'][1].SetStringSelection(self.defaultConnect['driver'])
+        self.addLayerWidgets['database'][1].SetValue(self.defaultConnect['database'])
         self.addLayerWidgets['table'][1].SetSelection(0)
         self.addLayerWidgets['key'][1].SetSelection(0)
         # events
@@ -2343,10 +2343,18 @@ class LayerBook(wx.Notebook):
             driver   = self.mapDBInfo.layers[layer]['driver']
             database = self.mapDBInfo.layers[layer]['database']
             table    = self.mapDBInfo.layers[layer]['table']
+
             listOfColumns = self.__getColumns(driver, database, table)
             self.modifyLayerWidgets['driver'][1].SetStringSelection(driver)
             self.modifyLayerWidgets['database'][1].SetValue(database)
-            self.modifyLayerWidgets['table'][1].SetStringSelection(table)
+            if table in self.modifyLayerWidgets['table'][1].GetItems():
+                self.modifyLayerWidgets['table'][1].SetStringSelection(table)
+            else:
+                if self.defaultConnect['schema'] != '':
+                    table = self.defaultConnect['schema'] + table # try with default schema
+                else:
+                    table = 'public.' + table # try with 'public' schema
+                self.modifyLayerWidgets['table'][1].SetStringSelection(table)
             self.modifyLayerWidgets['key'][1].SetItems(listOfColumns)
             self.modifyLayerWidgets['key'][1].SetSelection(0)
 
@@ -2461,15 +2469,18 @@ class LayerBook(wx.Notebook):
         table    = self.addLayerWidgets['table'][1]
         key      = self.addLayerWidgets['key'][1]
 
-        driver.SetStringSelection(self.defaultDriver)
-        database.SetValue(self.defaultDatabase)
-        tables = self.__getTables(self.defaultDriver, self.defaultDatabase)
+        driver.SetStringSelection(self.defaultConnect['driver'])
+        database.SetValue(self.defaultConnect['database'])
+        tables = self.__getTables(self.defaultConnect['driver'],
+                                  self.defaultConnect['database'])
         table.SetItems(tables)
         table.SetSelection(0)
         if len(tables) == 0:
             key.SetItems([])
         else:
-            cols = self.__getColumns(self.defaultDriver, self.defaultDatabase, tables[0])
+            cols = self.__getColumns(self.defaultConnect['driver'],
+                                     self.defaultConnect['database'],
+                                     tables[0])
             key.SetItems(cols)
             key.SetSelection(0)
 
