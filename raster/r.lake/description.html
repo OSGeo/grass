@@ -17,7 +17,9 @@ match three criteria and to define the lake:
 
 <p>The water level must be in DEM units.</p>
 
-<p>The seed (starting) point can be a raster map with at least one
+<h2>NOTES</h2>
+
+The seed (starting) point can be a raster map with at least one
 cell value greater than zero, or a seed point can be specified as an E,
 N coordinate pair. If the seed is specified as a coordinate pair, an additional
 check is done to make sure that the target water level is above the level of 
@@ -26,28 +28,23 @@ Specifying a target water level below surface represented by DEM will result in 
 empty map. Note: a raster lake map created in a previous run can also be used
 as a seed map for a new run to simulate rising water levels.</p>
 
-<p>The module will create a new map (<em>lake=foo</em>) or can be set to replace
-the input (<em>seed=bar</em>) map if the <em>-o</em> flag is used.  The user can use
-<em>-o</em> flag to create animations of rising water level without
+<p>
+
+The module will create a new map (<b>lake=foo</b>) or can be set to replace
+the input (<b>seed=bar</b>) map if the <b>-o</b> flag is used.  The user can use
+<b>-o</b> flag to create animations of rising water level without
 producing a separate map for each frame.  An initial seed map must be created 
 to start the sequence, and will be overwritten during subsequent runs with resulting
 water levels maps (i.e., a single file serves for both input and output).</p>
 
-<p>Negative output (the <em>-n</em> flag) is useful for visualisations in NVIZ. 
+<p>
+
+Negative output (the <b>-n</b> flag) is useful for visualisations in NVIZ. 
 It equals the mapcalc's expression <em>"negative = 0 - positive"</em>.</p>
 
-<h2>KNOWN BUGS AND LIMITATIONS</h2>
+<h3>MAPCALC EQUIVALENT - FOR GRASS HACKERS</h3>
 
-<ul>
-  <li>The entire map is loaded into RAM.</li>
-  <li>The module is NOT large file safe. (due to the previous point)</li>
-  <li>A completely negative seed map will not work! At least one cell must have 
-  a value >0. Output from <em>r.lake -n</em> can NOT be used as input in the next run.</li>
-</ul>
-
-<h2>MAPCALC EQUIVALENT - FOR GRASS HACKERS</h2>
-
-<p>This module was initially created as a script using
+This module was initially created as a script using
 <em>r.mapcalc</em>. This had some limitations - it was slow and no
 checks where done to find out required iteration count. The shell script 
 code (using <em>r.mapcalc</em>) used in the original script is shown below:
@@ -71,6 +68,15 @@ The ${seedmap} variable is replaced by seed map names, ${dem} with DEM map name,
 ${wlevel} with target water level.  To get single water level, this code block is
 called with same level numerous times (in a loop) as the lake grows by single cells
 during single run.</p>
+
+<h2>BUGS/KNOWN ISSUES</h2>
+
+<ul>
+  <li>The entire map is loaded into RAM.</li>
+  <li>The module is NOT large file safe. (due to the previous point)</li>
+  <li>A completely negative seed map will not work! At least one cell must have 
+  a value >0. Output from <em>r.lake -n</em> can NOT be used as input in the next run.</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
