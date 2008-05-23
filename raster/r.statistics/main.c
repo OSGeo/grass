@@ -63,6 +63,7 @@ main (int argc, char **argv)
     
     outputmap = G_define_standard_option (G_OPT_R_OUTPUT);
     outputmap->description = _("Resultant raster map (not used with 'distribution')");
+    outputmap->required = NO;
 
     flag_c = G_define_flag();
     flag_c->key = 'c';
@@ -182,7 +183,7 @@ main (int argc, char **argv)
 static int is_ok (char *method, char *map)
 {
     if (map == NULL)
-        G_fatal_error (_("An output map needs to be defined with method '%s'"), method);
+        G_fatal_error (_("An output raster map needs to be defined with method '%s'"), method);
 
     return 0;
 }
