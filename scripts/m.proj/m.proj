@@ -132,7 +132,7 @@ fi
 
 unset IN_PROJ
 if [ $GIS_FLAG_I -eq 1 ] ; then
-   IN_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+   IN_PROJ="+proj=longlat +datum=WGS84"
    if [ $GIS_FLAG_V -eq 1 ] ; then
      g.message "Assuming LL WGS84 as input, current projection as output."
    fi
@@ -151,7 +151,7 @@ fi
 
 unset OUT_PROJ
 if [ $GIS_FLAG_O -eq 1 ] ; then
-   OUT_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+   OUT_PROJ="+proj=longlat +datum=WGS84"
    if [ $GIS_FLAG_V -eq 1 ] ; then
      g.message "Assuming current projection as input, LL WGS84 as output."
    fi

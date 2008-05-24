@@ -213,7 +213,7 @@ fi
 if [ -n "$GIS_OPT_PROJ" ] ; then
     IN_PROJ="$GIS_OPT_PROJ"
 else
-    IN_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+    IN_PROJ="+proj=longlat +datum=WGS84"
 fi
 OUT_PROJ="`g.proj -jf`"
 PROJ_TYPE=`g.region -p | grep 'projection' | cut -f2 -d" "`
