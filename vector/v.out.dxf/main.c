@@ -34,6 +34,7 @@ static int add_plines(struct Map_info *, double);
 
 int main(int argc, char *argv[])
 {
+    int nlines;
     double textsize;
     char *mapset, *dxf_file;
     struct Map_info In;
@@ -69,25 +70,31 @@ int main(int argc, char *argv[])
     if (output->answer)
 	dxf_file = G_store(output->answer);
     else {
+	char fname[GNAME_MAX];
+	char fmapset[GMAPSET_MAX];
 	dxf_file = G_malloc(strlen(input->answer) + 5);
-	sprintf(dxf_file, "%s.dxf", input->answer);
+	if (G__name_is_fully_qualified(input->answer, fname, fmapset))
+	    sprintf(dxf_file, "%s.dxf", fname);
+	else
+	    sprintf(dxf_file, "%s.dxf", input->answer);
     }
 
     Vect_set_open_level(2);
     Vect_open_old(&In, input->answer, mapset);
 
     dxf_open(dxf_file);		/* open output */
-    G_free(dxf_file);
 
     textsize = do_limits(&In);	/* does header in dxf_fp */
     make_layername();
     dxf_entities();
-    add_plines(&In, textsize);	/* puts plines in dxf_fp */
+    nlines = add_plines(&In, textsize);	/* puts plines in dxf_fp */
 
     dxf_endsec();
     dxf_eof();			/* puts final stuff in dxf_fp, closes file */
 
-    G_done_msg("");
+    G_done_msg(_("%d features written to '%s'."), nlines, dxf_file);
+
+    G_free(dxf_file);
 
     exit(EXIT_SUCCESS);
 }
@@ -189,7 +196,5 @@ int add_plines(struct Map_info *Map, double textsize)
 	}
     }
 
-    G_message (_("%d features written"), nlines);
-
-    return 0;
+    return nlines;
 }
