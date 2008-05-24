@@ -90,13 +90,8 @@ int main(int argc, char *argv[])
     flag.frame->key = 'f';
     flag.frame->description = _("Import polyface meshes as 3D wire frame");
 
-    opt.input = G_define_option();
-    opt.input->key = "input";
-    opt.input->type = TYPE_STRING;
-    opt.input->required = YES;
-    opt.input->multiple = NO;
-    opt.input->gisprompt = "old_file,file,input";
-    opt.input->description = _("DXF input file");
+    opt.input = G_define_standard_option(G_OPT_F_INPUT);
+    opt.input->description = _("Name of input DXF file");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
     opt.output->required = NO;
@@ -120,7 +115,7 @@ int main(int argc, char *argv[])
 
     /* open DXF file */
     if (!(dxf = dxf_open(opt.input->answer)))
-	G_fatal_error(_("Cannot open dxf file <%s>"), opt.input->answer);
+	G_fatal_error(_("Unable to open DXF file <%s>"), opt.input->answer);
 
     if (flag_list) {
 	num_layers = 0;
@@ -153,20 +148,18 @@ int main(int argc, char *argv[])
 	layers = opt.layers->answers;
 
 	if (Vect_legal_filename(output) < 0)
-	    G_fatal_error(_("Use output= option to change vector map name"));
+	    G_fatal_error(_("Use '%s' option to change vector map name"),
+			  opt.output->key);
 
 	/* create vector map */
 	Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));
 	if (Vect_open_new(Map, output, 1) < 0)
-	    G_fatal_error(_("Cannot open new vector map <%s>"), output);
+	    G_fatal_error(_("Unable to create vector map <%s>"), output);
 
 	Vect_set_map_name(Map, output);
 
 	Vect_hist_command(Map);
     }
-
-    if (!flag_list)
-	G_message (_("Conversion of <%s> to vector map:"), opt.input->answer);
 
     /* import */
     dxf_to_vect(dxf, Map);
