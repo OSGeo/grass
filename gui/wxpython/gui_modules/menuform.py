@@ -1348,6 +1348,7 @@ class GUI:
     """
     def __init__(self, parent=-1):
         self.parent = parent
+        self.grass_task = None
 
     def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=-1, show=True, modal=False):
         """
@@ -1434,6 +1435,31 @@ class GUI:
         
         # print >> sys.stderr, time.time() - start
         return cmd
+
+    def GetCommandInputMapParamKey(self, cmd):
+        """Get parameter key for input raster/vector map
+        
+        @param cmd module name
+        
+        @return parameter key
+        @return None on failure
+        """
+        # parse the interface decription
+        if not self.grass_task:
+            self.grass_task = grassTask()
+            handler = processTask(self.grass_task)
+            xml.sax.parseString(getInterfaceDescription(cmd), handler)
+
+            for p in self.grass_task.params:
+                if p.get('name', '') in ('input', 'map'):
+                    age = p.get('age', '')
+                    prompt = p.get('prompt', '')
+                    element = p.get('element', '') 
+                    if age == 'old' and \
+                            element in ('cell', 'grid3', 'vector') and \
+                            prompt in ('raster', '3d-raster', 'vector'):
+                        return p.get('name', None)
+        return None
 
 class StaticWrapText(wx.StaticText):
     """
