@@ -240,7 +240,7 @@ elif [ $VERBOSE -eq 1 ] ; then
 fi
 
 #### set up projection info
-IN_PROJ="+proj=longlat +towgs84=0.000,0.000,0.000"
+IN_PROJ="+proj=longlat +datum=WGS84"
 OUT_PROJ="`g.proj -jf`"
 PROJ_TYPE=`g.region -p | grep 'projection' | cut -f2 -d" "`
 if [ $PROJ_TYPE -eq 0 ] && [ $KEEP_WGS84 -ne 1 ] ; then
