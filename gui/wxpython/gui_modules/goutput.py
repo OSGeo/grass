@@ -396,8 +396,8 @@ class GMStderr:
 
             if 'GRASS_INFO_PERCENT' in line:
                 # 'GRASS_INFO_PERCENT: 10' -> value=10
-                value = int(line.split(':')[1].strip())
-                if value < 100:
+                value = int(line.rsplit(':', 1)[1].strip())
+                if value >= 0 and value < 100:
                     self.gmgauge.SetValue(value)
                 else:
                     self.gmgauge.SetValue(0) # reset progress bar on '0%'
