@@ -130,7 +130,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
     char *map_set, *nullflags;
     int offset, row, col;
 
-    G_debug(3, "Gs_loadmap_as_float");
+    G_debug(3, "Gs_loadmap_as_float(): name=%s", map_name);
 
     map_set = G_find_cell2(map_name, "");
     if (!map_set) {
@@ -167,7 +167,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
 	}
     }
 
-    G_debug(3, "_HAS-NULL_ = %d", *has_null);
+    G_debug(4, "  has_null=%d", *has_null);
 
     G_close_cell(cellfile);
 
@@ -1132,10 +1132,10 @@ int Gs_load_3dview(char *vname, geoview * gv, geodisplay * gd,
 }
 
 /*!
-  \brief Update no_zero ranges for att (actually no_null now)
+  \brief Update no_zero ranges for attribute (actually no_null now)
   
   \param gs pointer to geosurf struct
-  \param desc attribute id
+  \param desc attribute id (descriptor)
 
   \return -1 on error
   \return 1 on success
@@ -1245,6 +1245,9 @@ int Gs_update_attrange(geosurf * gs, int desc)
 	gs->zmin_nz = gs->zmin;
 	gs->zrange_nz = gs->zmax_nz - gs->zmin_nz;
     }
+
+    G_debug (3, "Gs_update_attrange(): min=%f max=%f",
+	     gs->zmin, gs->zmax);
 
     return (1);
 }

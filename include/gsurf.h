@@ -1,10 +1,18 @@
-/*
-* $Id$
-*/
-
-/*  gsurf.h
-    Bill Brown, USACERL
-    January 1993
+/*!
+  \file gsurf.h
+ 
+  \brief OGSF library - main header
+ 
+  GRASS OpenGL gsurf OGSF Library 
+ 
+  (C) 1999-2008 by the GRASS Development Team
+ 
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Bill Brown USACERL (January 1993)
 */
 
 #ifndef _GSURF_H
@@ -69,17 +77,17 @@
 #define LEGAL_SRC(s) (s==NOTSET_ATT||s==MAP_ATT||s==CONST_ATT||s==FUNC_ATT)
 
 /* site markers */
-#define ST_X        1
+#define ST_X          1
 #define ST_BOX        2
-#define ST_SPHERE    3
+#define ST_SPHERE     3
 #define ST_CUBE       4
-#define ST_DIAMOND     5
-#define ST_DEC_TREE     6
-#define ST_CON_TREE     7
-#define ST_ASTER    8
-#define ST_GYRO            9
+#define ST_DIAMOND    5
+#define ST_DEC_TREE   6
+#define ST_CON_TREE   7
+#define ST_ASTER      8
+#define ST_GYRO       9
 /* ACS_MODIFY_One Line site_attr management ***************************************/
-#define ST_HISTOGRAM       10
+#define ST_HISTOGRAM  10
 
 /* site attribute modes (what attribute of marker category is used for) */
 /* TODO: may want to make these OR'able */

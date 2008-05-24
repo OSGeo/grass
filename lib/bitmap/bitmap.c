@@ -47,11 +47,14 @@ static int Size = 1;
 
 /*!
  * \brief Create bitmap of dimension x/y and return structure token. 
+ *
  * Bitmap is initialized to all zeros
  *
- *  \param int x
- *  \param int y
- *  \return struct BM or NULL on error
+ *  \param x x dimension
+ *  \param y y dimension
+ *
+ *  \return pointer to struct BM
+ *  \return NULL on error
  */
 
 struct BM *BM_create (int x, int y)
