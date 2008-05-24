@@ -432,10 +432,11 @@ class GMFrame(wx.Frame):
         except:
             layer = None
         if layer and len(cmdlist) == 1: # only if no paramaters given
-            if type == 'raster' and cmdlist[0][0] == 'r' and cmdlist[0][1] != '3':
-                cmdlist.append(name) # TODO map/input=
-            elif type == 'vector' and cmdlist[0][0] == 'v':
-                cmdlist.append(name) # TODO map/input=
+            if (type == 'raster' and cmdlist[0][0] == 'r' and cmdlist[0][1] != '3') or \
+                    (type == 'vector' and cmdlist[0][0] == 'v'):
+                input = menuform.GUI().GetCommandInputMapParamKey(cmdlist[0])
+                if input:
+                    cmdlist.append("%s=%s" % (input, name))
 
         return cmdlist
 
