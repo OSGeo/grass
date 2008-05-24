@@ -83,10 +83,11 @@ void void_func(void)
 }
 
 /*!
-  \brief Library initialization
+  \brief Initialize OGSF library
 
-  Get region settings - wind, Region (NSWE array)
-  Compute scale
+  Get region settings - wind
+
+  Set Region (NSWE array) and compute scale
 */
 void GS_libinit(void)
 {
@@ -213,8 +214,6 @@ int GS_new_surface(void)
 {
     geosurf *ns;
 
-    G_debug(3, "GS_new_surface");
-
     if (Next_surf < MAX_SURFS) {
 	ns = gs_get_new_surface();
 	gs_init_surf(ns, wind.west + wind.ew_res / 2.,
@@ -228,8 +227,12 @@ int GS_new_surface(void)
 	Surf_ID[Next_surf] = ns->gsurf_id;
 	++Next_surf;
 
+	G_debug(3, "GS_new_surface(): id=%d", ns->gsurf_id);
+	
 	return (ns->gsurf_id);
     }
+
+
 
     return (-1);
 }
@@ -1569,11 +1572,11 @@ int GS_delete_surface(int id)
 
 
 /*!
-  \brief Load attribute map
+  \brief Load raster map as attribute
 
   \param id surface id
   \param filename filename
-  \param att attribute id
+  \param att attribute descriptor
 
   \return -1 on error (invalid surface id)
   \return ?
@@ -1588,7 +1591,7 @@ int GS_load_att_map(int id, char *filename, int att)
     int reuse = 0, begin, hdata, ret, neg = 0, has_null = 0;
     typbuff *tbuff;
 
-    G_debug (3, "GS_load_att_map(): att_map: %s", filename);
+    G_debug (3, "GS_load_att_map(): map=%s", filename);
 
     gs = gs_get_surf(id);
 
@@ -1747,8 +1750,6 @@ int GS_load_att_map(int id, char *filename, int att)
 				      tbuff->nm, &has_null);
 	    filename = G_fully_qualified_name(filename, mapset);
 
-	    G_debug(3, "HAS-NULL = %d", has_null);
-
 	    break;
 	case ATTY_INT:
 	default:
@@ -1769,7 +1770,7 @@ int GS_load_att_map(int id, char *filename, int att)
 	    return (-1);
 	}
 
-	G_debug(3, "HAS-NULL = %d", has_null);
+	G_debug(4, "  has_null=%d", has_null);
 
 	if (!has_null) {
 	    gsds_free_data_buff(gs->att[att].hdata, ATTY_NULL);
@@ -1842,9 +1843,6 @@ int GS_load_att_map(int id, char *filename, int att)
     if (-1 == Gs_update_attrange(gs, att)) {
 	G_warning(_("Error finding range"));
     }
-
-    G_debug (3, "Range Updated: %f %f",
-	     gs->zmin, gs->zmax);
 
     return (ret);
 }
@@ -2068,7 +2066,7 @@ int GS_setall_drawmode(int mode)
   \brief Set draw mode
 
   \param id surface id
-  \param mode mode id
+  \param mode mode type(s)
 
   \return 0 on success
   \return -1 on error (invalid surface id)
@@ -2077,7 +2075,8 @@ int GS_set_drawmode(int id, int mode)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_set_drawmode");
+    G_debug(3, "GS_set_drawmode(): id=%d mode=%d",
+	    id, mode);
 
     gs = gs_get_surf(id);
 
@@ -2215,7 +2214,8 @@ int GS_set_drawres(int id, int xres, int yres, int xwire, int ywire)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_set_drawres");
+    G_debug(3, "GS_set_drawres() id=%d xyres=%d/%d xywire=%d/%d",
+	    id, xres, yres, xwire, ywire);
 
     if (xres < 1 || yres < 1 || xwire < 1 || ywire < 1) {
 	return (-1);
@@ -2271,8 +2271,6 @@ void GS_get_drawres(int id, int *xres, int *yres, int *xwire, int *ywire)
 void GS_get_dims(int id, int *rows, int *cols)
 {
     geosurf *gs;
-
-    G_debug(3, "GS_get_dims");
 
     gs = gs_get_surf(id);
 

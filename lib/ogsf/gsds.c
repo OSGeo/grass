@@ -1,7 +1,7 @@
 /*!
   \file gsds.c
  
-  \brief OGSF library - ? (lower level functions) 
+  \brief OGSF library - dataset loading and management (lower level functions) 
  
   GRASS OpenGL gsurf OGSF Library 
 
@@ -79,7 +79,7 @@ static int Cur_max;
 static int Tot_mem = 0;
 
 /*!
-  \brief Initialize 
+  \brief Initialize gsds
 */
 static int init_gsds(void)
 {
@@ -211,7 +211,7 @@ int gsds_findh(char *name, IFLAG * changes, IFLAG * types, int begin)
 /*!
   \brief Get handle to gsds
 
-  \param name
+  \param name raster map name
 
   \return -1 on failure
   \return data id
@@ -266,16 +266,14 @@ int gsds_newh(char *name)
 }
 
 /*!
-  \brief Get typbuff
+  \brief Get data buffer
 
-  change_flag just tells us to set changed flag
+  Doesn't prevent writing a buff thats's been gotten with change_flag
+  == 0 (could return a copy, but willing to trust calling func for
+  now)
   
-  Doesn't prevent
-  writing a buff thats's been gotten with change_flag == 0 (could return a
-  copy, but willing to trust calling func for now)
-  
-  \param id
-  \param change_flag
+  \param id dataset id
+  \param change_flag set changed flag
 
   \return pointer to typbuff struct
   \return NULL on failure
@@ -359,10 +357,10 @@ int gsds_free_datah(int id)
 }
 
 /*!
-  \brief ADD
+  \brief Free allocated buffer
 
-  \param id
-  \param typ
+  \param id dataset id
+  \param typ data type
 
   \return 0 not found
   \return 1 found
@@ -384,12 +382,12 @@ int gsds_free_data_buff(int id, int typ)
 }
 
 /*!
-  \brief ADD
+  \brief Free data buffer
 
-  \param ds
-  \param typ
+  \param ds pointer to dataset struct
+  \param typ data type
 
-  \return
+  \return freed size
 */
 int free_data_buffs(dataset * ds, int typ)
 {
@@ -457,8 +455,8 @@ int free_data_buffs(dataset * ds, int typ)
     ds->numbytes -= freed;
 
     if (freed) {
-	G_debug (3, "freed data from id no. %d", ds->data_id);
-	G_debug (3, "%.3f Kbytes freed, current total = %.3f",
+	G_debug (5, "free_data_buffs(): freed data from id no. %d", ds->data_id);
+	G_debug (5, "free_data_buffs(): %.3f Kbytes freed, current total = %.3f",
 		 freed / 1000., Tot_mem / 1000.);
     }
     
@@ -470,10 +468,10 @@ int free_data_buffs(dataset * ds, int typ)
 
   \todo add ATTY_CONST
 
-  \param id
-  \param dims
-  \param ndims
-  \param type
+  \param id dataset id
+  \param dims array of dimensions
+  \param ndims number of dimensions
+  \param type data type
 
   \return
 */
@@ -590,7 +588,7 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	ds->ndims = ndims;
 	Tot_mem += siz;
 
-	G_debug (3, "%f Kbytes allocated, current total = %f",
+	G_debug (5, "gsds_alloc_typbuff(): %f Kbytes allocated, current total = %f",
 		 siz / 1000., Tot_mem / 1000.);
 
 	return (siz);

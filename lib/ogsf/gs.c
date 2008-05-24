@@ -39,7 +39,7 @@ void gs_err(char *msg)
 }
 
 /*!
-  \brief Library initialization
+  \brief Initialize library
 
   Still need to take care of library initialization, 
   probably want to define a Surf_top of constant value (i.e., 0)
@@ -63,10 +63,11 @@ geosurf *gs_get_surf(int id)
 {
     geosurf *gs;
 
-    G_debug(3, "gs_get_surf");
+    G_debug(4, "gs_get_surf():");
 
     for (gs = Surf_top; gs; gs = gs->next) {
 	if (gs->gsurf_id == id) {
+	    G_debug(4, "  id=%d", id);
 	    return (gs);
 	}
     }
@@ -86,7 +87,7 @@ geosurf *gs_get_prev_surface(int id)
 {
     geosurf *ps;
 
-    G_debug(3, "gs_get_prev_surface");
+    G_debug(4, "gs_get_prev_surface");
 
     for (ps = Surf_top; ps; ps = ps->next) {
 	if (ps->gsurf_id == id - 1) {
@@ -113,7 +114,7 @@ int gs_getall_surfaces(geosurf ** gsurfs)
 	gsurfs[i] = gs;
     }
 
-    G_debug(3, "gs_num_surfaces(): num=%d", i);
+    G_debug(4, "gs_num_surfaces(): num=%d", i);
 
     return (i);
 }
@@ -130,7 +131,7 @@ int gs_num_surfaces(void)
 
     for (i = 0, gs = Surf_top; gs; gs = gs->next, i++);
 
-    G_debug(3, "gs_num_surfaces(): num=%d", i);
+    G_debug(4, "gs_num_surfaces(): num=%d", i);
 
     return (i);
 }
@@ -164,7 +165,7 @@ int gs_att_is_set(geosurf * surf, IFLAG att)
 }
 
 /*!
-  \brief Get last geosurf struct
+  \brief Get last allocated geosurf struct from list
 
   \return pointer to geosurf struct
 */
@@ -172,30 +173,27 @@ geosurf *gs_get_last_surface(void)
 {
     geosurf *ls;
 
-    G_debug(3, "gs_get_last_surface():");
-
     if (!Surf_top) {
 	return (NULL);
     }
 
     for (ls = Surf_top; ls->next; ls = ls->next);
 
-    G_debug(3, " last surface id: %d", ls->gsurf_id);
+    G_debug(4, "gs_get_last_surface(): last surface id=%d",
+	    ls->gsurf_id);
 
     return (ls);
 }
 
 
 /*!
-  \brief Get new geosurf struct
+  \brief Allocate new geosurf struct
 
   \return pointer to geosurf struct
 */
 geosurf *gs_get_new_surface(void)
 {
     geosurf *ns, *ls;
-
-    G_debug(3, "gs_get_new_surface");
 
     ns = (geosurf *) G_malloc(sizeof(geosurf)); /* G_fatal_error */
     if (!ns) {
@@ -213,13 +211,15 @@ geosurf *gs_get_new_surface(void)
 
     ns->next = NULL;
 
+    G_debug(4, "gs_get_new_surface(): id=%d", ns->gsurf_id);
+
     return (ns);
 }
 
 /*!
-  \brief Init geosurf struct
+  \brief Initialize allocated geosurf struct
 
-  Now xmin & ox are the same, right? - get rid of ox, oy in geosurf struct?
+  \todo Now xmin & ox are the same, right? - get rid of ox, oy in geosurf struct?
 
   \param gs pointer to geosurf struct
   \param ox,oy x/y origin coordinates
@@ -236,7 +236,7 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     geosurf *ps;
     int i;
 
-    G_debug(3, "gs_init_surf");
+    G_debug(4, "gs_init_surf() id=%d", gs->gsurf_id);
 
     if (!gs) {
 	return (-1);
@@ -422,17 +422,17 @@ void print_view_fields(geoview * gv)
 }
 
 /*!
-  \brief Set default attributes
+  \brief Set default attribute values
 
   \param gs pointer to geosurf struct
-  \param defs array of default values
-  \param null_defs array of null default values
+  \param defs array of default values (dim MAX_ATTRS)
+  \param null_defs array of null default values (dim MAX_ATTRS)
 */
 void gs_set_defaults(geosurf * gs, float *defs, float *null_defs)
 {
     int i;
 
-    G_debug(3, "gs_set_defaults");
+    G_debug(4, "gs_set_defaults(): id=%d", gs->gsurf_id);
 
     for (i = 0; i < MAX_ATTS; i++) {
 	gs->att[i].constant = defs[i];
@@ -454,7 +454,7 @@ void gs_delete_surf(int id)
 {
     geosurf *fs;
 
-    G_debug(3, "gs_delete_surf");
+    G_debug(4, "gs_delete_surf");
     
     fs = gs_get_surf(id);
 
@@ -479,7 +479,7 @@ int gs_free_surf(geosurf * fs)
     geosurf *gs;
     int found = 0;
 
-    G_debug(3, "gs_free_surf");
+    G_debug(4, "gs_free_surf");
 
     if (Surf_top) {
 	if (fs == Surf_top) {
@@ -550,7 +550,7 @@ void gs_free_unshared_buffs(geosurf * fs)
     int i, j, same;
     int old_datah;
 
-    G_debug(3, "gs_free_unshared_buffs");
+    G_debug(4, "gs_free_unshared_buffs");
 
     /* for each attribute 
        if !same, free buff   
@@ -589,7 +589,7 @@ int gs_num_datah_reused(int dh)
     geosurf *gs;
     int ref, j;
 
-    G_debug(3, "gs_num_datah_reused");
+    G_debug(4, "gs_num_datah_reused");
 
     /* for each attribute 
        if same, ++reference
@@ -619,7 +619,7 @@ int gs_num_datah_reused(int dh)
 */
 int gs_get_att_type(geosurf * gs, int desc)
 {
-    G_debug(3, "gs_get_att_type");
+    G_debug(4, "gs_get_att_type");
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -645,7 +645,7 @@ int gs_get_att_type(geosurf * gs, int desc)
 */
 int gs_get_att_src(geosurf * gs, int desc)
 {
-    G_debug(3, "gs_get_att_src");
+    G_debug(4, "gs_get_att_src(): id=%d desc=%d", gs->gsurf_id, desc);
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -662,8 +662,8 @@ int gs_get_att_src(geosurf * gs, int desc)
   \brief Get attribute typbuff
 
   \param gs pointer to geosurf struct
-  \param desc attribute id
-  \param to_write
+  \param desc attribute id (descriptor)
+  \param to_write non-zero value for 'write'
 
   \return NULL on error
   \return pointer to typbuff
@@ -672,6 +672,9 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
 {
     typbuff *tb;
     geosurf *gsref;
+
+    G_debug(4, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
+	    gs->gsurf_id, desc, to_write);
 
     if (gs) {
 	if ((tb = gsds_get_typbuff(gs->att[desc].hdata, to_write))) {
@@ -696,8 +699,8 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
   \brief Allocate attribute buffer
 
   \param gs pointer to geosurf struct
-  \param desc attribute id
-  \param type buffer type
+  \param desc attribute id (descriptor)
+  \param type buffer type (based on raster map type)
 
   \return -1 on error
   \return pointer to typbuff (casted)
@@ -706,7 +709,7 @@ int gs_malloc_att_buff(geosurf * gs, int desc, int type)
 {
     int hdata, dims[2], ndims;
 
-    G_debug(3, "gs_malloc_att_buff");
+    G_debug(4, "gs_malloc_att_buff");
 
     if (gs) {
 	if (0 < (hdata = gs->att[desc].hdata)) {
@@ -735,7 +738,7 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 {
     int size;
 
-    G_debug(3, "gs_malloc_lookup");
+    G_debug(4, "gs_malloc_lookup");
 
     if (gs) {
 	if (gs->att[desc].lookup) {
@@ -791,7 +794,7 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 int gs_set_att_type(geosurf * gs, int desc, int type)
 {
 
-    G_debug(3, "gs_set_att_type(): desc=%d, type=%d",
+    G_debug(4, "gs_set_att_type(): desc=%d, type=%d",
 	    desc, type);
 
     if (gs && LEGAL_TYPE(type)) {
@@ -807,7 +810,7 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
   \brief Set attribute source
 
   \param gs pointer to geosurf struct
-  \param desc attribute id
+  \param desc attribute id (descriptor)
   \param src source id
 
   \return -1 on error
@@ -815,7 +818,8 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
 */
 int gs_set_att_src(geosurf * gs, int desc, int src)
 {
-    G_debug(3, "gs_set_att_src");
+    G_debug(4, "gs_set_att_src(): id=%d desc=%d src=%d",
+	    gs->gsurf_id, desc, src);
 
     /* check if old source was MAP_ATT, free buff */
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
@@ -858,7 +862,7 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
 */
 int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
-    G_debug(3, "gs_set_att_const");
+    G_debug(4, "gs_set_att_const");
 
     if (gs) {
 	gs->att[desc].constant = constant;
