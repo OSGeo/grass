@@ -144,6 +144,8 @@ To enable digitizer you need to compile 'vdigit'
 component. Note that you must configure GRASS with C++ (--with-cxx),
 Python (--with-python) and wxWidgets (--with-wxwidgets) support.
 
+NOTE: There is no need to do the following symlink or ldconfig on OSX.
+
 First, create a symlink to _gdi_.so shared library
 
 $ sudo ln -s `locate _gdi_.so` /usr/local/lib/libgdi.so

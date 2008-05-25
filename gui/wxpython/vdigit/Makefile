@@ -7,13 +7,18 @@ SOURCES := $(wildcard *.cpp) $(LIB_NAME)_wrap.cpp
 SHLIB_OBJS := $(patsubst %.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
 EXTRA_CFLAGS = $(SHLIB_CFLAGS) $(GDALCFLAGS) $(PYTHONCFLAGS) $(WXWIDGETSCXXFLAGS)
-EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB) $(WXWIDGETSLIB) $(PYTHONLDFLAGS) -lgdi
+EXTRA_LIBS = $(VECTLIB) $(GISLIB) $(GDALLIBS) $(VEDITLIB) $(WXWIDGETSLIB) $(PYTHONLDFLAGS)
+ifeq ($(findstring darwin,$(ARCH)),darwin)
+EXTRA_LIBS := -bundle -undefined dynamic_lookup $(EXTRA_LIBS)
+else
+EXTRA_LIBS := $(EXTRA_LIBS) -lgdi
+endif
 
 LOCAL_HEADERS = digit.h driver.h
 
 ETCDIR = $(ETC)/wxpython
 
-SHLIB = $(OBJDIR)/_$(LIB_NAME)$(SHLIB_SUFFIX)
+SHLIB = $(OBJDIR)/_$(LIB_NAME).so
 
 EXTRA_CLEAN_FILES = $(SHLIB) $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
@@ -30,7 +35,11 @@ $(LIB_NAME).py $(LIB_NAME)_wrap.cpp: $(LIB_NAME).i
 .NOTPARALLEL: $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
 $(SHLIB): $(SHLIB_OBJS)
+ifeq ($(findstring darwin,$(ARCH)),darwin)
+	$(CXX) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
+else
 	$(SHLIB_LD) -o $@ $(LDFLAGS) $^ $(EXTRA_LIBS)
+endif
 
 install_vdigit: $(SHLIB) $(LIB_NAME).py
 	$(INSTALL) $(SHLIB) $(ETCDIR)/vdigit/
