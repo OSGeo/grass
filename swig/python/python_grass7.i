@@ -1,4 +1,4 @@
-//File : python_grass6.i
+//File : python_grass7.i
 
 %include "carrays.i"
 %array_functions(int, intArray);
@@ -10,7 +10,7 @@
 %pointer_functions(float, floatp);
 %pointer_functions(double, doublep);
 
-%module python_grass6
+%module python_grass7
 %{
 #include <stdio.h>
 #include <stdarg.h>

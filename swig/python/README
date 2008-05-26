@@ -16,11 +16,11 @@ How to INSTALL?
 
 3. Run make in the swig/python/ directory
 
-It will create two files, python_grass6.py and _python_grass6.so.
+It will create two files, python_grass7.py and _python_grass7.so.
 
 4. From within GRASS (or a fake grass session) run "python test.py" to
    test and to automatically create a byte-compiled version of the module
-   (python_grass6.pyc). The .pyc file is platform independent and may be
+   (python_grass7.pyc). The .pyc file is platform independent and may be
    safely shared among systems. Even so, it doesn't hurt to rebuild it
    ourselves while we still have write permissions and to make sure we
    are using an up to date copy. (out of date copies will be ignored)
@@ -31,11 +31,11 @@ It will create two files, python_grass6.py and _python_grass6.so.
 How to use it?
 --------------
 
-import python_grass6
+import python_grass7
 GRASS functions will be available in this module.
 Eg: 
-	import python_grass6
-	mapset=python_grass6.G_mapset()
+	import python_grass7
+	mapset=python_grass7.G_mapset()
 	print mapset
 
 See examples/m.distance for an example of a working SWIG-Python module.
