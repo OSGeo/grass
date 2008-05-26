@@ -38,7 +38,9 @@ close_array_seg (void)
 		        flag = 1;
 		        while (flag) { 
 			    G_get_color(r,&red,&green,&blue, &colors);
-			    if((blue*.11 + red*.30 + green*.59) < 100) { 
+			    /* if existing rule is too dark then append a new
+					rule to override it */
+			    if((blue*.11 + red*.30 + green*.59) < 100) {
 				G_set_color(r, rd, gr, bl, &colors);
 			        flag = 0;
 		            }
@@ -59,7 +61,8 @@ close_array_seg (void)
 	}
 	G_percent(r-1,max,3); /* finish it */
       }
-      else G_debug(1, "Too many subbasins to reasonably check neighboring color spread");
+      else G_debug(1, "Too many subbasins to reasonably check for color brightness");
+        /* using the existing stack of while/for/for/for/while loops ... */
    }
 
     /* stream segments map */
