@@ -1438,6 +1438,8 @@ Vect_remove_small_areas();
 
 \section remove_duplicates Vector remove_duplicates functions
 
+Vect_line_check_duplicate();
+
 Vect_remove_duplicates();
 
 
