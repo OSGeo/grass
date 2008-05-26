@@ -8,7 +8,7 @@ rem #########################################################################
 rem *******Environment variables***********
 rem Uncomment and set the following values if they differ from the indicated default
 
-rem Directory where your .grassrc6 file will be stored
+rem Directory where your .grassrc7 file will be stored
 rem set HOME=%USERPROFILE%
 
 rem Name of the wish (Tk) executable

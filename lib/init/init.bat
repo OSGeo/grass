@@ -14,7 +14,7 @@ rem             In particular also, GUI mode prints nothing to the terminal
 rem             and does not expect or provide an interactive terminal
 rem             running in addition to the GUI display.
 rem 
-rem  COPYRIGHT: (C) 2006 by the GRASS Development Team
+rem  COPYRIGHT: (C) 2006, 2008 by the GRASS Development Team
 rem
 rem             This program is free software under the GNU General Public
 rem   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -30,7 +30,7 @@ if not "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\bin;%WINGISBASE%\lib;%GRAS
 
 set GRASS_VERSION=GRASS_VERSION_NUMBER
 if "%HOME%"=="" set HOME=%USERPROFILE%
-set WINGISRC=%HOME%\.grassrc6
+set WINGISRC=%HOME%\.grassrc7
 rem Make sure %GISRC% is set so g.dirseps will work
 rem (not actually used)
 set GISRC=junk

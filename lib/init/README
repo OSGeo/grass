@@ -1,10 +1,11 @@
 o GRASS text mode startup
 
-  "grass63" starts up d.m by default (if not first time user).
-  "grass63 -text" will start up in text mode.
-  "grass63 -tcltk" or "grass63 -gui" will start up in tcltk mode.
+  "grass70" starts up d.m by default (if not first time user).
+  "grass70 -text" will start up in text mode.
+  "grass70 -tcltk" or "grass70 -gui" will start up in tcltk mode.
+  "grass70 -wxpython" will start up in wxpython mode.
 
-  You can use alias "grass63" to "grass63 -text" to use text mode by default.
+  You can use alias "grass70" to "grass70 -text" to use text mode by default.
   Or set env var GRASS_GUI=text.
 
 
@@ -25,18 +26,18 @@ o GRASS non-interactive startup examples
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
 
-	grass63 -	# non-interactive startup using LOCATION location
+	grass70 -	# non-interactive startup using LOCATION location
 
   ex2)
 	export GISDBASE=/usr/home/grass/usr/data1
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
   	
-	grass63 -	# non-interactive startup using
+	grass70 -	# non-interactive startup using
 			# GISDBASE/LOCATION_NAME/MAPSET location
 
 
-  Also, the first argument of grass63 can override these env vars.
+  Also, the first argument of grass70 can override these env vars.
 
   ex3)
   	export LOCATION=/usr/home/grass/usr/data1/loc1/map1
@@ -44,7 +45,7 @@ o GRASS non-interactive startup examples
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
 
-	grass63 /usr/home/grass/usr/data2/loc2-1/map1-1
+	grass70 /usr/home/grass/usr/data2/loc2-1/map1-1
 			# non-interactive startup using
 			# /usr/home/grass/usr/data2/loc2-1/map1-1 location
 
@@ -53,7 +54,7 @@ o GRASS non-interactive startup examples
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
   	
-	grass63 /usr/home/grass/usr/data2/loc2-1/map1-1
+	grass70 /usr/home/grass/usr/data2/loc2-1/map1-1
 			# non-interactive startup using
 			# /usr/home/grass/usr/data2/loc2-1/map1-1 location
 
@@ -63,7 +64,7 @@ o GRASS non-interactive startup examples
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
 
-	grass63 map1-1	# non-interactive startup using
+	grass70 map1-1	# non-interactive startup using
 			# GISDBASE/LOCATION_NAME/map1-1 location
 
   ex6)
@@ -72,7 +73,7 @@ o GRASS non-interactive startup examples
 	export LOCATION_NAME=loc1
 	export MAPSET=map1
 
-	grass63 loc2-1/map1-1
+	grass70 loc2-1/map1-1
 			# non-interactive startup using
 			# GISDBASE/loc2-1/map1-1 location
 

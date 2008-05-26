@@ -159,7 +159,7 @@ GIS_LOCK=$$
 export GIS_LOCK
 
 # Set the global grassrc file
-GISRCRC="$HOME/.grassrc6"
+GISRCRC="$HOME/.grassrc7"
 
 # Set the session grassrc file
 if [ "$MINGW" ] ; then
@@ -187,8 +187,8 @@ cleanup_tmp()
 
 ## use TMPDIR if it exists, otherwise /tmp
 #tmp=${TMPDIR-/tmp}
-#tmp="$tmp/grass6-$USER-$GIS_LOCK"
-tmp=/tmp/grass6-$USER-$GIS_LOCK
+#tmp="$tmp/grass7-$USER-$GIS_LOCK"
+tmp=/tmp/grass7-$USER-$GIS_LOCK
 (umask 077 && mkdir "$tmp") || {
     echo "Cannot create temporary directory! Exiting." 1>&2
     exit 1

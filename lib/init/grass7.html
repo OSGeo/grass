@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
- <TITLE>GRASS 6</TITLE>
+ <TITLE>GRASS 7</TITLE>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
@@ -12,11 +12,11 @@
 
 <H2>NAME</H2>
 
-<EM><B>grass63</B></EM>  - The GRASS startup program<BR>
+<EM><B>grass70</B></EM>  - The GRASS startup program<BR>
 
 <H2>SYNOPSIS</H2>
 
-<B>grass63</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
+<B>grass70</B> [<B>-</B>] [<B>-v</B>] [<B>-h | -help | --help</B>]
     [<B>-text | -gui | -tcltk | -wx]</B>]
     [[[<B>&lt;GISDBASE&gt;/</B>]<B>&lt;LOCATION_NAME&gt;/</B>]
     	<B>&lt;MAPSET&gt;</B>]
@@ -37,14 +37,14 @@ mapset to work on.
 
 <P>
 The GRASS program will save both the desired user interface and mapset.
-Thus, the next time the user runs GRASS, typing <EM>grass63</EM> (without any
+Thus, the next time the user runs GRASS, typing <EM>grass70</EM> (without any
 options) will start grass with the previous settings for the user interface
 and mapset.
 
 <P>
-If you specify a graphical user interface (Tcl/Tk or wxPython), the <EM>grass63</EM>
+If you specify a graphical user interface (Tcl/Tk or wxPython), the <EM>grass70</EM>
 program will try to verify that the system you specified exists and that you
-can access it successfully. If any of these checks fail, then <EM>grass63</EM>
+can access it successfully. If any of these checks fail, then <EM>grass70</EM>
 will automatically switch back to the text user interface mode.
 
 <H2>OPTIONS</H2>
@@ -102,20 +102,20 @@ All command line options are optional.
 <H3>User Interface Environment Variable</H3>
 
 <P>
-The <EM>grass63</EM> program will check for the existence of an environment
+The <EM>grass70</EM> program will check for the existence of an environment
 variable called GRASS_GUI which indicates the type of user interface for
-GRASS to use. If this variable is not set when <EM>grass63</EM> is run, then
-it will be created and then saved in the $HOME/.grassrc6 file for the next
+GRASS to use. If this variable is not set when <EM>grass70</EM> is run, then
+it will be created and then saved in the $HOME/.grassrc7 file for the next
 time GRASS is run. In addition to "text", "tcltk" or "wx", the GRASS_GUI variable
 can be set to the name of the GUI to use, for example "gis.m" or "wxgrass".
 
 <P>
-There is an order of precedence in the way <EM>grass63</EM> determines the user
+There is an order of precedence in the way <EM>grass70</EM> determines the user
 interface to use. The following is the hierarchy from highest precedence to
 lowest.
 
 <P>
-The user may add own environment variable settings to $HOME/.grassrc6 file
+The user may add own environment variable settings to $HOME/.grassrc7 file
 which are used during next startup of GRASS (list of 
 <a href=variables.html>implemented environment variables</a>). 
 
@@ -124,7 +124,7 @@ which are used during next startup of GRASS (list of
 <DT><B>Interface precedence</B>
 <DD>Command line argument<BR>
     Environment variable GRASS_GUI<BR>
-    Value set in $HOME/.grassrc6<BR>
+    Value set in $HOME/.grassrc7<BR>
     Default value - currently gis.m
 
 </DL>
@@ -219,7 +219,7 @@ the mapset to use. The following are some possible examples.
     
     Start GRASS with the following command:<BR><BR>
     
-    grass63 -<BR><BR>
+    grass70 -<BR><BR>
     
     GRASS will start with the mapset defined by LOCATION since the LOCATION
     variable overrides the other variables.<BR><BR>
@@ -233,7 +233,7 @@ the mapset to use. The following are some possible examples.
     
     Start GRASS with the following command:<BR><BR>
     
-    grass63 -<BR><BR>
+    grass70 -<BR><BR>
     
     GRASS will start with the mapset defined by
     GISDBASE/LOCATION_NAME/MAPSET.<BR><BR>
@@ -248,7 +248,7 @@ the mapset to use. The following are some possible examples.
     
     Start GRASS with the following command:<BR><BR>
     
-    grass63 /usr/home/grass/data/thailand/forests<BR><BR>
+    grass70 /usr/home/grass/data/thailand/forests<BR><BR>
     
     GRASS will start with the mapset /home/grass/data/thailand/forests which
     overrides the environment variables.<BR><BR>
@@ -263,7 +263,7 @@ the mapset to use. The following are some possible examples.
     
     Start GRASS with the following command:<BR><BR>
     
-    grass63 swamps<BR><BR>
+    grass70 swamps<BR><BR>
     
     GRASS will start with the mapset defined by GISDBASE/LOCATION_NAME/swamps
     since the command line argument for the mapset overrides the environment
@@ -279,7 +279,7 @@ the mapset to use. The following are some possible examples.
     
     Start GRASS with the following command:<BR><BR>
     
-    grass63 thailand/forests<BR><BR>
+    grass70 thailand/forests<BR><BR>
     
     GRASS will start with the mapset defined by GISDBASE/thailand/forests
     since the command line arguments for the location and mapset overrides
@@ -300,19 +300,19 @@ The following are some examples of how you could start GRASS
 
 <DL>
 
-<DT><B>grass63</B>
+<DT><B>grass70</B>
 <DD> Start GRASS using the default user interface. The user will be prompted
     to choose the appropriate location and mapset.
 
-<DT><B>grass63 -gui</B>
+<DT><B>grass70 -gui</B>
 <DD> Start GRASS using the Tcl/Tk based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<DT><B>grass63 -text</B>
+<DT><B>grass70 -text</B>
 <DD> Start GRASS using the text based user interface. The user will be
     prompted to choose the appropriate location and mapset.
 
-<DT><B>grass63 -gui -</B>
+<DT><B>grass70 -gui -</B>
 <DD> Start GRASS using the Tcl/Tk based user interface and try to obtain
     the location and mapset from environment variables.
 
@@ -345,10 +345,10 @@ first version of <EM>wish</EM>.
 
 <H2>FILES</H2>
 
-<EM>$UNIX_BIN/grass63</EM> - GRASS startup program (Linux, MacOSX etc.)<BR><BR>
-<EM>$WINDOWS_BIN/grass63.bat</EM> - GRASS startup program (MS-Windows)<BR><BR>
+<EM>$UNIX_BIN/grass70</EM> - GRASS startup program (Linux, MacOSX etc.)<BR><BR>
+<EM>$WINDOWS_BIN/grass70.bat</EM> - GRASS startup program (MS-Windows)<BR><BR>
 <EM>$GISBASE/etc/Init.sh</EM> - GRASS initialization script called by
-    <EM>grass63</EM><BR><BR>
+    <EM>grass70</EM><BR><BR>
 <EM>$GISBASE/etc/gis_set.tcl</EM> - Tcl/Tk script to set the
     location and mapset to use. Called by <EM>Init.sh</EM><BR><BR>
 
