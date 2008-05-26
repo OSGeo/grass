@@ -130,9 +130,9 @@
   	- remove cva, install again: WARNING: list item 'cva' exists in index.html (?)
 	- superfluous warning upon uninstall of extension w/o "entries-gisman"
 	- due to bad command line parsing, listing installed extensions only works like this:
-		./gem --grass=/usr/local/grass-6.1.cvs -q
+		./gem --grass=/usr/local/grass-7.0.svn -q
 	  NOT like this:
-	  	./gem -q --grass=/usr/local/grass-6.1.cvs
+	  	./gem -q --grass=/usr/local/grass-7.0.svn
 
   
 */
@@ -179,8 +179,8 @@ void show_help ( void ) {
 	fprintf (stdout, "be installed instead using the -b option. ");
 	fprintf (stdout, "For installation from source code, a C compiler and make tools are needed.\n");
 	fprintf (stdout, "\nExample:\n");
-	fprintf (stdout, "\tgem -b macosx --grass=/usr/local/grass-6.0.0 -i myExtension\n");
-	fprintf (stdout, "Installs the MacOS X binaries for 'myExtension' in /usr/local/grass-6.0.0.\n");
+	fprintf (stdout, "\tgem -b macosx --grass=/usr/local/grass-7.0.0 -i myExtension\n");
+	fprintf (stdout, "Installs the MacOS X binaries for 'myExtension' in /usr/local/grass-7.0.0.\n");
 	exit (0);	
 }
 
