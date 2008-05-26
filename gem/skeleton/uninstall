@@ -8,7 +8,7 @@
 
 # UNINSTALL_BASE will be exported by the GRASS extension managing tool
 # it contains the path to the GRASS binary files installed on the
-# user's system (e.g. /usr/local/grass-6.x.y).
+# user's system (e.g. /usr/local/grass-7.x.y).
 # By prefixing every file name with $UNINSTALL_BASE, we make sure
 # that deletions do not occur outside the GRASS installation dir.
 

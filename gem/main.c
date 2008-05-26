@@ -398,7 +398,7 @@ int main (int argc, char *argv[]) {
 					print_error (ERR_INVOCATION,"missing file or directory name.\n");
 				}			
 			if ( optopt == 'g' ) {
-				print_error (ERR_INVOCATION,"missing path to GRASS 6.\n");
+				print_error (ERR_INVOCATION,"missing path to GRASS 7.\n");
 			}
 			if ( optopt == 'b' ) {
 				print_error (ERR_INVOCATION,"missing name of binary architecture.\n");

@@ -75,7 +75,7 @@ static void init_sockets(void)
  * _get_make_sock_path(), builds and tests the path for the socket
  * directory.  Returns NULL on any failure, otherwise it returns the
  * directory path. The path will be like 
- * "/tmp/grass6-$USER-$GIS_LOCK".
+ * "/tmp/grass7-$USER-$GIS_LOCK".
  * ($GIS_LOCK is set in lib/init/init.sh to PID) 
  * ---------------------------------------------------------------------*/
 
@@ -83,7 +83,7 @@ static char *
 _get_make_sock_path (void)
 {
     char *path, *user, *lock;
-    const char *prefix = "/tmp/grass6";
+    const char *prefix = "/tmp/grass7";
     int len, status;
     struct stat theStat;
     

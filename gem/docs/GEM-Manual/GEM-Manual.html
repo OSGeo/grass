@@ -51,7 +51,7 @@ Manual</H1>
 
 <H3>Abstract:</H3>
 <DIV>
-GRASS 6 Extensions Manager (GEM) is a small stand-alone program intended
+GRASS 7 Extensions Manager (GEM) is a small stand-alone program intended
 to make it easy for GRASS GIS users to download, compile and install
 additional GRASS modules. GEM manages source code, scripts and pre-compiled
 binaries in a simple file layout called an <I>extension</I>. Extensions
@@ -62,7 +62,7 @@ file, a so-called <I>extension package</I> using external programs
 such as tar and gzip. An extension (package) can be created easily
 by copying existing source codes into the right places of a skeleton
 file layout and filling in some information in simple, commented ASCII
-files. Makefiles written for GRASS 6 should work with minimal changes
+files. Makefiles written for GRASS 7 should work with minimal changes
 as GEM uses a simplified version of the orginal GRASS make system.
 
 <P>
@@ -412,7 +412,7 @@ given in section <A HREF="#sub:Basic-Usage">3.4</A>.
 <!-- MATH
  $\framebox{\parbox[t][1\totalheight]{1\columnwidth}{%
 Note: please make sure that you system-wide linker path includes the
-location of the GRASS dynamic libraries (e.g. \emph{/usr/local/grass-6.1.cvs/libs}).
+location of the GRASS dynamic libraries (e.g. \emph{/usr/local/grass-7.x.cvs/libs}).
 This is usually done by adding an appropriate entry to \emph{/etc/ld.so.conf}
 and running \emph{ldconfig}. You may have to consult your system's
 administrator.%
@@ -1020,8 +1020,8 @@ files (see following sections).
 
 <P>
 You will find the skeleton package files in the subdirectory <I>$GISBASE/etc/gem/skeleton</I>
-(replace <I>$GISBASE</I> with the path to your GRASS 6.1 install,
-e.g. <I>/usr/local/grass-6.1.cvs</I>).
+(replace <I>$GISBASE</I> with the path to your GRASS 7.1 install,
+e.g. <I>/usr/local/grass-7.x.cvs</I>).
 
 <P>
 Look into the skeleton extension directory and open the ASCII files
@@ -1348,7 +1348,7 @@ script using GEM's ``-config-opts='' option.
 The default configure script, that ships with the skeleton extension
 has all optional dependencies disabled (ca. line 2600 and following
 of the configure script). The check for the proj program and libraries
-(mandatory for GRASS 6.1) has been completely removed. If your extension
+(mandatory for GRASS 7.1) has been completely removed. If your extension
 code calls proj directly, you may want to add this part of the configure
 script back in.
 
@@ -1729,7 +1729,7 @@ respectively). HTML man pages for individual modules have to be named
 code directory.
 
 <P>
-Use an HTML manual page of an existing GRASS 6.1 module for a template.
+Use an HTML manual page of an existing GRASS 7.1 module for a template.
 
 <P>
 At the top of your description.html file, right after the <TT>&lt;h2&gt;NAME&lt;/h2&gt;</TT>
@@ -1833,7 +1833,7 @@ operation will be:
 or
 
 <P>
-<I>/Applications/Grass/grass61cvs.app/Contents/Resources/grass-6.1.cvs</I>
+<I>/Applications/Grass/grass61cvs.app/Contents/Resources/grass-7.x.cvs</I>
 
 <P>
 if you decided to also install Lorenzo's copy of the CVS version.
@@ -2007,8 +2007,8 @@ B..2 Changes to the GRASS Make System Files</A>
 
 <P>
 GEM exports three environment variables that point to the directories
-storing GRASS 6 headers and libs and to the install location (e.g.
-<I>/usr/local/grass-6.2.</I>0):
+storing GRASS 7 headers and libs and to the install location (e.g.
+<I>/usr/local/grass-7.x.</I>0):
 
 <P>
 <TT>GINSTALL_INC</TT>
