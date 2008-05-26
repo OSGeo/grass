@@ -24,7 +24,7 @@ How to build:
 
 How to install:
  Copy the fruits of the build into the same place as the GRASS SWIG
-   module (_python_grass6.so etc.). for example:
+   module (_python_grass7.so etc.). for example:
 
  cp build/lib.linux-i686-2.4/*NumPtr.* ../
    or to some place on your system: 

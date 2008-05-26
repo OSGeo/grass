@@ -79,9 +79,9 @@ GPL'ed), image processing and geographic information system (GIS).</p>
 
 <h3>Quick Introduction</h3>
 
-<!-- the files grass6.html & helptext.html file live in lib/init/ -->
+<!-- the files grass7.html & helptext.html file live in lib/init/ -->
 <ul>
-<li><a href=\"grass6.html\">GRASS startup manual page</a></li>
+<li><a href=\"grass7.html\">GRASS startup manual page</a></li>
 <li><a href=\"helptext.html\">How to start with GRASS</a></li>
 <li>Introductions
  <ul>

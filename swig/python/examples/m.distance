@@ -54,24 +54,24 @@ def main():
     #### add your code here ####
 
     # run this before starting python to append module search path:
-    #   export PYTHONPATH=/usr/src/grass63/swig/python
+    #   export PYTHONPATH=/usr/src/grass70/swig/python
     #   check with "import sys; sys.path"
     # or:
-    sys.path.append("/usr/src/grass63/swig/python")
-    # FIXME: install the g6lib.py bindings in $GISBASE/lib/ ?
-    import python_grass6 as g6lib
+    sys.path.append("/usr/src/grass70/swig/python")
+    # FIXME: install the g7lib.py bindings in $GISBASE/lib/ ?
+    import python_grass7 as g7lib
  
     # for passing pointers
     import Numeric
     import NumPtr
 
-    g6lib.G_gisinit('m.distance')
+    g7lib.G_gisinit('m.distance')
     # returns 0 on success
 
 
     ### calc distance ###
     
-    proj_type = g6lib.G_begin_distance_calculations()
+    proj_type = g7lib.G_begin_distance_calculations()
     # returns 0 if projection has no metrix (ie. imagery)
     # returns 1 if projection is planimetric
     # returns 2 if projection is latitude-longitude
@@ -114,8 +114,8 @@ def main():
 
         # TODO: for clarity, figure out how to replace "3" with
         #       the defined LOCATION_LL constant from gis.i
-        g6lib.G_scan_easting(coords[0], eastPtr, 3)
-        g6lib.G_scan_northing(coords[1], northPtr, 3)
+        g7lib.G_scan_easting(coords[0], eastPtr, 3)
+        g7lib.G_scan_northing(coords[1], northPtr, 3)
         x1 = float(easting)
         y1 = float(northing)
     else:
@@ -129,15 +129,15 @@ def main():
     for i in range(1, (len(coords) / 2)):
 
         if proj_type == 2:
-            g6lib.G_scan_easting (coords[ i*2 + 0 ], eastPtr, 3)
-            g6lib.G_scan_northing(coords[ i*2 + 1 ], northPtr, 3)
+            g7lib.G_scan_easting (coords[ i*2 + 0 ], eastPtr, 3)
+            g7lib.G_scan_northing(coords[ i*2 + 1 ], northPtr, 3)
             x2 = float(easting)
             y2 = float(northing)
         else:
             x2 = float(coords[ i*2 + 0 ])
             y2 = float(coords[ i*2 + 1 ])
 
-        segment_distance = g6lib.G_distance(x1, y1, x2, y2)
+        segment_distance = g7lib.G_distance(x1, y1, x2, y2)
         overall_distance += segment_distance
 
         print "segment %d distance is %.2f meters" % (i, segment_distance)
@@ -160,7 +160,7 @@ def main():
     if len(coords) < 6:
         return
  
-    g6lib.G_begin_polygon_area_calculations()
+    g7lib.G_begin_polygon_area_calculations()
     # returns 0 if the projection is not measurable (ie. imagery or xy)
     # returns 1 if the projection is planimetric (ie. UTM or SP)
     # returns 2 if the projection is non-planimetric (ie. latitude-longitude)
@@ -178,7 +178,7 @@ def main():
     Ys = Numeric.array(y, Numeric.Float64)
     Yptr = NumPtr.getpointer(Ys)
     
-    area = g6lib.G_area_of_polygon(Xptr, Yptr, npoints)
+    area = g7lib.G_area_of_polygon(Xptr, Yptr, npoints)
     print "AREA:  %10.2f square meters" % area
     print
 
@@ -186,9 +186,9 @@ def main():
     # we don't need this, but just to have a look
     if False:
         if proj_type == 1:
-            g6lib.G_database_units_to_meters_factor()
+            g7lib.G_database_units_to_meters_factor()
             # 1.0
-        print "Location units are", g6lib.G_database_unit_name(True)
+        print "Location units are", g7lib.G_database_unit_name(True)
 
 
     #### end of your code ####
