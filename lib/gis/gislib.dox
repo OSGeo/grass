@@ -1509,7 +1509,7 @@ pole; 0 if it contains neither pole.
 \section Vector_File_Processing GRASS Vector File Processing
 
  Please refer to GRASS Vector File Processing in Chapter \ref gisvectintro .
- Note, that the old "sites" are stored as vector points in GRASS 6.
+ Note, that the old "sites" are stored as vector points since GRASS 6.
 
 \section General_Plotting_Routines General Plotting Routines
 
@@ -2135,18 +2135,18 @@ make
 make install
 \endverbatim
 
-Then the code will be compiled into "/usr/local/grass-6.x.y" directory. The start
-script "grass6x" will be placed into "/usr/local/bin/".\\
+Then the code will be compiled into "/usr/local/grass-7.x.y" directory. The start
+script "grass7x" will be placed into "/usr/local/bin/".\\
 
 Optionally other target directories can be specified while "configuring":
 
 \verbatim
-./configure --prefix=/opt/grass-6.x.y --with-bindir=/usr/bin
+./configure --prefix=/opt/grass-7.x.y --with-bindir=/usr/bin
 make
 make install
 \endverbatim
 
-This will store the GRASS binaries into the directory "/opt/grass-6.x.y" and
+This will store the GRASS binaries into the directory "/opt/grass-7.x.y" and
 the  script mentioned above into "/usr/bin".
 
 The script "make" is required to compile single modules. The

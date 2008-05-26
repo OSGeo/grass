@@ -44,11 +44,11 @@ Installation order:
 
 GRASS source code is currently distributed in 2 forms:
 
-1) Officially released source code (e.g. grass-6.0.0.tar.gz or later)
+1) Officially released source code (e.g. grass-7.0.0.tar.gz or later)
 
   The Full source code version contains all the GRASS source code
   required for compilation. It is distributed as one file (*.tar.gz
-  package) and the version is composed of 3 numbers, e.g. 6.0.0, 6.0.1
+  package) and the version is composed of 3 numbers, e.g. 7.0.0, 7.0.1
   etc.
 
 2) SVN or SVN Snapshots of source code (SVN or SVN snapshot)
@@ -57,7 +57,7 @@ GRASS source code is currently distributed in 2 forms:
   repository (http://svn.osgeo.org/grass/) or as a snapshot
   (*.tar.gz package) of that SVN repository. The SVN snapshot name
   contains the date when the snapshot was created (checked out from
-  the SVN repository), e.g. grass-6.3.svn_src_snapshot_2008_01_19.tar.gz
+  the SVN repository), e.g. grass-7.0.svn_src_snapshot_2008_10_19.tar.gz
 
 
 (B) COMPILATION
@@ -150,16 +150,16 @@ See also CODE OPTIMIZATION below.
 
 After compilation, the resulting code is stored in the directory
     ./dist.$ARCH
-and the scripts (grass6, ...) in
+and the scripts (grass70, ...) in
     ./bin.$ARCH
 
 To run GRASS, simply start
-    ./bin.$ARCH/grass6
+    ./bin.$ARCH/grass70
 
 or run
 
     make install
-    grass6
+    grass70
 
 
 (E) INSTALLATION ON MACOSX
@@ -186,7 +186,7 @@ SVN, you have to perform a few steps. In general:
 
 In detail:
 
-    cd /where/your/grass6sourcecode/lives/
+    cd /where/your/grass7sourcecode/lives/
     svn update
     ./configure ...
     make
@@ -207,9 +207,9 @@ the main source code directory or locally with
     "INST_NOW=y make"
 
 You may want to define an alias for this:
-    alias gmake6='INST_NOW=y make'
+    alias gmake7='INST_NOW=y make'
 Then simply compile/install the current module with
-    gmake6
+    gmake7
 
 Note: If you keep your module source code outside the standard GRASS
 source code directory structure, you will have to change the relative

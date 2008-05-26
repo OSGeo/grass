@@ -140,7 +140,7 @@ fi
 
 # if gisrc has text startup, switch back to Terminal (gotta duplicate some init.sh stuff)
 # eventually, when TclTk optional, can run appropriate apps per GUI here (ie X11)
-GISRCRC="$HOME/.grassrc6"
+GISRCRC="$HOME/.grassrc7"
 if [ ! "$GRASS_GUI" ] ; then
 	if [ -f "$GISRCRC" ] ; then
 		GRASS_GUI=`awk '/GRASS_GUI/ {print $2}' "$GISRCRC"`

@@ -18,7 +18,7 @@
 # GEM_ACTION can be "INSTALL", "QUERY", "DETAILS", "LICENSE", "CLEAN"
 
 # INSTALL_BASE is the path to the GRASS binary files installed on the
-# user's system (e.g. /usr/local/grass-6.x.y).
+# user's system (e.g. /usr/local/grass-7.x.y).
 # For some actions, INSTALL_BASE is not required and will be set to
 # "UNDEFINED".
 

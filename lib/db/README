@@ -26,7 +26,7 @@
 DBMI Library
 
 Original author: Joel Jones (jjones * zorro.cecer.army.mil | jjones * uiuc.edu )
-            Ref: http://grass.itc.it/pipermail/grass-dev/1995-February/002006.html
+            Ref: http://lists.osgeo.org/pipermail/grass-dev/1995-February/002015.html
 
 Directory contents:
 
@@ -45,7 +45,7 @@ The DBMI user modules are stored in
 ../../db/base/
 
 NOTE:
- Please read grass6/db/drivers/README
+ Please read db/drivers/README
 
 To generate dbmi_driver/dbstubs.h automatically, run './mk_dbstubs_h.sh' in
 dbmi_driver/ directory.
