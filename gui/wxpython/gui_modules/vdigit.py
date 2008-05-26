@@ -10,6 +10,7 @@ CLASSES:
  * VDigitSettingsDialog
  * VDigitCategoryDialog
  * VDigitZBulkDialog
+ * VDigitDuplicatesDialog
 
 PURPOSE: Vector digitization tool for wxPython GUI
 
@@ -1341,9 +1342,10 @@ class CDisplayDriver(AbstractDisplayDriver):
         nselected = self.__display.SelectLinesByBox(x1, y1, -1.0 * wxvdigit.PORT_DOUBLE_MAX,
                                                     x2, y2, wxvdigit.PORT_DOUBLE_MAX,
                                                     type)
+        
         Debug.msg(4, "CDisplayDriver.SelectLinesByBox(): selected=%d" % \
                       nselected)
-
+        
         return nselected
 
     def SelectLineByPoint(self, point, type=0):
@@ -1381,6 +1383,37 @@ class CDisplayDriver(AbstractDisplayDriver):
             
         return selected
 
+    def GetDuplicates(self):
+        """Return ids of (selected) duplicated vector features
+        """
+        # -> id : (list of ids)
+        dupl = dict(self.__display.GetDuplicates())
+
+        vdigitComp = UserSettings.Get(group='advanced', key='digitInterface', subkey='type')
+
+        # -> id : ((id, cat), ...)
+        dupl_full = {}
+        for key in dupl.keys():
+            dupl_full[key] = []
+            for id in dupl[key]:
+                catStr = ''
+
+                # categories not supported for v.edit !
+                if vdigitComp == 'vdigit':
+                    cats = self.parent.GetLineCats(line=id)
+
+                    for layer in cats.keys():
+                        if len(cats[layer]) > 0:
+                            catStr = "%d: (" % layer
+                            for cat in cats[layer]:
+                                catStr += "%d," % cat
+                            catStr = catStr.rstrip(',')
+                            catStr += ')'
+
+                dupl_full[key].append([id, catStr])
+
+        return dupl_full
+
     def GetSelectedVertex(self, coords):
         """Get PseudoDC id(s) of vertex (of selected line)
         on position 'coords'
@@ -1405,6 +1438,17 @@ class CDisplayDriver(AbstractDisplayDriver):
                   ",".join(["%d" % v for v in id]))
 
         self.__display.SetSelected(id)
+
+    def UnSelect(self, id):
+        """Unselect vector features
+
+        @param id list of feature id(s)
+        """
+
+        Debug.msg(4, "CDisplayDriver.UnSelect(): id=%s" % \
+                      ",".join(["%d" % v for v in id]))
+        
+        self.__display.UnSelect(id)
 
     def UpdateRegion(self):
         """Set geographical region
@@ -1442,6 +1486,11 @@ class CDisplayDriver(AbstractDisplayDriver):
         self.__display.UpdateSettings (wx.Color(UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[0],
                                                 UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[1],
                                                 UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[2],
+                                                255).GetRGB(),
+                                       UserSettings.Get(group='vdigit', key='checkForDupl', subkey='enabled'),
+                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[0],
+                                                UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[1],
+                                                UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[2],
                                                 255).GetRGB(),
                                        UserSettings.Get(group='vdigit', key='symbolPoint', subkey='enabled'),
                                        wx.Color(UserSettings.Get(group='vdigit', key='symbolPoint', subkey='color')[0],
@@ -1693,6 +1742,12 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(self.selectThreshValue, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
         flexSizer.Add(units, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                       border=10)
+
+        self.checkForDupl = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                        label=_("Check for duplicates"))
+        self.checkForDupl.SetValue(UserSettings.Get(group='vdigit', key="checkForDupl", subkey='enabled'))
+        flexSizer.Add(item=self.checkForDupl, proportion=0, flag=wx.EXPAND)
+
         sizer.Add(item=flexSizer, proportion=0, flag=wx.EXPAND)
         border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
@@ -1887,6 +1942,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return (
             #            ("Background", "symbolBackground"),
             (_("Highlight"), "symbolHighlight"),
+            (_("Highlight (duplicates)"), "symbolHighlightDupl"),
             (_("Point"), "symbolPoint"),
             (_("Line"), "symbolLine"),
             (_("Boundary (no area)"), "symbolBoundaryNo"),
@@ -2070,6 +2126,8 @@ class VDigitSettingsDialog(wx.Dialog):
                                            value=self.FindWindowById(self.selectFeature[feature]).IsChecked())
         UserSettings.Set(group='vdigit', key="selectThresh", subkey='value',
                          value=int(self.selectThreshValue.GetValue()))
+        UserSettings.Set(group='vdigit', key="checkForDupl", subkey='enabled',
+                         value=self.checkForDupl.IsChecked())
 
         # on-exit
         UserSettings.Set(group='vdigit', key="saveOnExit", subkey='enabled',
@@ -2614,3 +2672,118 @@ class VDigitZBulkDialog(wx.Dialog):
 
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
+
+class VDigitDuplicatesDialog(wx.Dialog):
+    """
+    Show duplicated feature ids
+    """
+    def __init__(self, parent, data, title=_("List of duplicates"),
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+                 pos=wx.DefaultPosition):
+
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style,
+                           pos=pos)
+        
+        self.parent = parent # BufferedWindow
+        self.data = data
+        self.winList = []
+
+        # panel  = wx.Panel(parent=self, id=wx.ID_ANY)
+
+        # notebook
+        self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+
+        id = 1
+        for key in self.data.keys():
+            panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+            self.notebook.AddPage(page=panel, text=" %d " % (id))
+            
+            # notebook body
+            border = wx.BoxSizer(wx.VERTICAL)
+
+            win = CheckListFeature(parent=panel, data=list(self.data[key]))
+            self.winList.append(win.GetId())
+
+            border.Add(item=win, proportion=1,
+                       flag=wx.ALL | wx.EXPAND, border=5)
+
+            panel.SetSizer(border)
+
+            id += 1
+
+        # buttons
+        btnCancel = wx.Button(self, wx.ID_CANCEL)
+        btnOk = wx.Button(self, wx.ID_OK)
+        btnOk.SetDefault()
+
+        # sizers
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnCancel)
+        btnSizer.AddButton(btnOk)
+        btnSizer.Realize()
+        
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=btnSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+
+        self.SetSizer(mainSizer)
+        mainSizer.Fit(self)
+        self.SetAutoLayout(True)
+
+        # set min size for dialog
+        self.SetMinSize((250, 180))
+
+    def GetUnSelected(self):
+        """Get unselected items (feature id)
+
+        @return list of ids
+        """
+        ids = []
+        for id in self.winList:
+            wlist = self.FindWindowById(id)
+
+            for item in range(wlist.GetItemCount()):
+                if not wlist.IsChecked(item):
+                    ids.append(int(wlist.GetItem(item, 0).GetText()))
+                    
+        return ids
+
+class CheckListFeature(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
+    """List of mapset/owner/group"""
+    def __init__(self, parent, data,
+                 pos=wx.DefaultPosition, log=None):
+        self.parent = parent
+        self.data = data
+
+        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
+                             style=wx.LC_REPORT)
+
+        listmix.CheckListCtrlMixin.__init__(self)
+
+        self.log = log
+
+        # setup mixins
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+
+        self.LoadData(self.data)
+
+    def LoadData(self, data):
+        """Load data into list"""
+        self.InsertColumn(0, _('Feature id'))
+        self.InsertColumn(1, _('Layer (Categories)'))
+
+        for item in data:
+            index = self.InsertStringItem(sys.maxint, str(item[0]))
+            self.SetStringItem(index, 1, str(item[1]))
+
+        # enable all items by default
+        for item in range(self.GetItemCount()):
+            self.CheckItem(item, True)
+
+        self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
+        self.SetColumnWidth(col=1, width=wx.LIST_AUTOSIZE_USEHEADER)
+                
+    def OnCheckItem(self, index, flag):
+        """Mapset checked/unchecked"""
+        pass

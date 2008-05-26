@@ -3,6 +3,7 @@
 
 #include <iostream> // debug
 #include <vector>
+#include <map>
 #include <cmath>
 
 // For compilers that support precompilation, includes "wx.h".
@@ -54,9 +55,8 @@ private:
     ids_map ids; // gId : {dcIds, ...}
     */
 
-    // list of selected features (gId)
-    // std::vector<int> selected; 
     struct ilist *selected;
+    struct ilist *selectedDupl;
 
     bool drawSegments;         // draw segments of selected line
 
@@ -88,6 +88,7 @@ private:
 
     struct _settings {
 	wxColor highlight;
+	symbol highlightDupl;
 
 	symbol point;
 	symbol line;
@@ -128,21 +129,22 @@ private:
 	long int vertex;
     } topology;
 
-    void Cell2Pixel (double east, double north, double depth,
-		     double *x, double *y, double *z);
+    void Cell2Pixel (double, double, double,
+		     double *, double *, double *);
     
-    int DrawCross(int line, const wxPoint *point, int size=5);
+    int DrawCross(int, const wxPoint *, int size=5);
 
-    int DrawLine(int line);
-    int DrawLineVerteces(int line);
-    int DrawLineNodes(int line);
+    int DrawLine(int);
+    int DrawLineVerteces(int);
+    int DrawLineNodes(int);
 
     /* debug */
     void PrintIds();
 
     /* select feature */
-    bool IsSelected(int line);
-    // std::vector<int>::iterator GetSelectedIter(int line);
+    bool IsSelected(int);
+    bool IsDuplicated(int);
+
     std::vector<int> ListToVector(struct ilist *);
     int VectorToList(struct ilist *, const std::vector<int>&);
 
@@ -163,7 +165,9 @@ public:
 					  double, int, int);
 
     std::vector<int> GetSelected(bool);
+    std::map<int, std::vector <int> > GetDuplicates();
     int SetSelected(std::vector<int>);
+    int UnSelect(std::vector<int>);
     std::vector<int> GetSelectedVertex(double, double, double);
 
     /* general */
@@ -182,6 +186,7 @@ public:
 		   double, double);
 
     void UpdateSettings(unsigned long,
+			bool, unsigned long,
 			bool, unsigned long, /* enabled, color */
 			bool, unsigned long,
 			bool, unsigned long,

@@ -110,7 +110,8 @@ class Settings:
             #
             'vdigit' : {
                 # symbology
-                'symbolHighlight'   : { 'enabled' : None,  'color' : (255, 255, 0, 255) }, #yellow
+                'symbolHighlight'   : { 'enabled' : None,  'color' : (255, 255, 0, 255) }, # yellow
+                'symbolHighlightDupl' : { 'enabled' : None,  'color' : (255, 72, 0, 255) }, # red
                 'symbolPoint'       : { 'enabled' : True,  'color' : (0, 0, 0, 255) }, # black
                 'symbolLine'        : { 'enabled' : True,  'color' : (0, 0, 0, 255) }, # black
                 'symbolBoundaryNo'  : { 'enabled' : True,  'color' : (126, 126, 126, 255) }, # grey
@@ -145,6 +146,7 @@ class Settings:
                 'selectFeatureCentroid' : { 'enabled' : True },
                 'selectFeatureBoundary' : { 'enabled' : True },
                 'selectThresh'          : { 'value' : 10, 'units' : 'screen pixels'},
+                'checkForDupl'          : { 'enabled' : False },
                 # exit
                 'saveOnExit'            : { 'enabled' : False },
                 },

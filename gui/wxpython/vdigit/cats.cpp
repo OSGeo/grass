@@ -165,7 +165,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
 	return lc;
     }
 
-    line = -1;
+    line = line_id;
     if (line_id == -1) {
 	line = display->selected->value[0];
     }
