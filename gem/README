@@ -45,10 +45,10 @@ Requirements:
 Usage: start 'gem' w/o parameters for information
 
 	To install a module into your GRASS installation, in this example
-	/usr/local/grass-6.0.0, simply pass the name of the archive containing
+	/usr/local/grass-7.0.0, simply pass the name of the archive containing
 	the extension or the directory with the unpacked files (e.g. 'cva.tgz'):
 	
-	$ gem --grass=/usr/local/grass-6.0.0 -i cva.tgz
+	$ gem --grass=/usr/local/grass-7.0.0 -i cva.tgz
 
 	You will be asked for the password of the user owning the GRASS
 	binary files, if required.
