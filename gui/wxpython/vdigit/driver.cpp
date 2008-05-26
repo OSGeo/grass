@@ -40,6 +40,7 @@ DisplayDriver::DisplayDriver(void *device)
     cats = Vect_new_cats_struct();
     
     selected = Vect_new_list();
+    selectedDupl = Vect_new_list();
 
     drawSegments = false;
 
@@ -66,6 +67,7 @@ DisplayDriver::~DisplayDriver()
     delete pointsScreen;
     Vect_destroy_cats_struct(cats);
     Vect_destroy_list(selected);
+    Vect_destroy_list(selectedDupl);
 }
 
 /**
@@ -160,7 +162,12 @@ int DisplayDriver::DrawLine(int line)
     // dcId += points->n_points * 2 - 1;
 
     if (IsSelected(line)) { // line selected ?
-	pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	if (settings.highlightDupl.enabled && IsDuplicated(line)) {
+	    pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
+	}
+	else {
+	    pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	}
 	draw = true;
 	dcId = 1;
 	topology.highlight++;
@@ -307,7 +314,12 @@ int DisplayDriver::DrawLineVerteces(int line)
 	dcId = 0;
     }
     else {
-	pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	if (settings.highlightDupl.enabled && IsDuplicated(line)) {
+	    pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
+	}
+	else {
+	    pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	}
 	if (drawSegments) {
 	    dcId = 3; // first vertex
 	}
@@ -378,7 +390,12 @@ int DisplayDriver::DrawLineNodes(int line)
 
 	// determine color
 	if (IsSelected(line)) {
-	    pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	    if (settings.highlightDupl.enabled && IsDuplicated(line)) {
+		pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
+	    }
+	    else {
+		pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
+	    }
 	    draw = true;
 	    if (!drawSegments) {
 		dcId = 1;
@@ -621,6 +638,7 @@ int DisplayDriver::DrawCross(int line, const wxPoint* point, int size)
   \return 
 */
 void DisplayDriver::UpdateSettings(unsigned long highlight,
+				   bool ehighlightDupl, unsigned long chighlightDupl,
 				   bool ePoint,       unsigned long cPoint, /* enabled, color */
 				   bool eLine,        unsigned long cLine,
 				   bool eBoundaryNo,  unsigned long cBoundaryNo,
@@ -635,6 +653,9 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   int lineWidth)
 {
     settings.highlight.Set(highlight);
+    
+    settings.highlightDupl.enabled = ehighlightDupl;
+    settings.highlightDupl.color.Set(chighlightDupl);
 
     settings.point.enabled = ePoint;
     settings.point.color.Set(cPoint);
@@ -763,24 +784,16 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
     for (int i = 0; i < list->n_values; i++) {
 	line = list->value[i];
 	if (!IsSelected(line)) {
-	    // selected.push_back(line);
 	    Vect_list_append(selected, line);
 	}
 	else {
-	    // selected.erase(GetSelectedIter(line));
 	    Vect_list_delete(selected, line);
 	}
     }
 
-    // remove all duplicate ids
-    // sort(selected.begin(), selected.end());
-    // selected.erase(unique(selected.begin(), selected.end()), selected.end());
-
     Vect_destroy_line_struct(bbox);
     Vect_destroy_list(list);
 
-    // return selected.size();
-    // return selected->n_values;
     return list->n_values;
 }
 
@@ -810,11 +823,9 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
 
     if (line > 0) {
 	if (!IsSelected(line)) {
-	    // selected.push_back(line);
 	    Vect_list_append(selected, line);
 	}
 	else {
-	    // selected.erase(GetSelectedIter(line));
 	    Vect_list_delete(selected, line);
 	}
 
@@ -844,33 +855,12 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
 */
 bool DisplayDriver::IsSelected(int line)
 {
-    // if (GetSelectedIter(line) != selected.end())
     if (Vect_val_in_list(selected, line))
 	return true;
 
     return false;
 }
 
-/**
-   \brief Is vector object selected?
-   
-   \param[in] line id
-
-   \return item iterator
-   \return selected.end() if object is not selected
-*/
-/*
-std::vector<int>::iterator DisplayDriver::GetSelectedIter(int line)
-{
-    for(std::vector<int>::iterator i = selected.begin(), e = selected.end();
-	i != e; ++i) {
-	if (line == *i)
-	    return i;
-    }
-
-    return selected.end();
-}
-*/
 /**
    \brief Get ids of selected objects
 
@@ -898,35 +888,72 @@ std::vector<int> DisplayDriver::GetSelected(bool grassId)
 	}
     }
 
-    /*
-    for(std::vector<int>::const_iterator i = selected.begin(), e = selected.end();
-	i != e; ++i) {
-	line = *i;
-	ids_map::const_iterator ii = ids.find(line);
-	if (ii != ids.end()) { // line found
-	    long int endId = ii->second.npoints * 2 - 1 + ii->second.startId;
-	    int type, i;
-	    int vx, vy, vz;
-	    type = Vect_read_line (mapInfo, points, cats, line);
-	    i = 0;
- 	    for (long int id = ii->second.startId; id < endId; id++) {
-		dc_ids.push_back(id);
-                // set bounding boxes for all selected objects (only nodes)
-		if (id % 2) {
-		    Cell2Pixel(points->x[i], points->y[i], points->z[i],
-			       &vx, &vy, &vz);
-		    wxRect rect (wxPoint (vx, vy), wxPoint (vx, vy));
-		    dc->SetIdBounds(id, rect);
+    return dc_ids;
+}
 
-		    i++;
+/**
+   \brief Get feature (grass) ids of duplicated objects
+
+   \return list of ids
+*/
+std::map<int, std::vector <int> > DisplayDriver::GetDuplicates()
+{
+    std::map<int, std::vector<int> > ids;
+
+    struct line_pnts *APoints, *BPoints;
+ 
+    int line;
+
+    APoints = Vect_new_line_struct();
+    BPoints = Vect_new_line_struct();
+
+    Vect_reset_list(selectedDupl);
+
+    for (int i = 0; i < selected->n_values; i++) {
+	line = selected->value[i];
+	if (IsDuplicated(line))
+	    continue;
+	
+	Vect_read_line(mapInfo, APoints, NULL, line);
+	
+	for (int j = 0; j < selected->n_values; j++) {
+	    if (i == j || IsDuplicated(selected->value[j]))
+		continue;
+	    
+	    Vect_read_line(mapInfo, BPoints, NULL, selected->value[j]);
+	    
+	    if (Vect_line_check_duplicate (APoints, BPoints, WITHOUT_Z)) {
+		if (ids.find(i) == ids.end()) {
+		    ids[i] = std::vector<int> ();
+		    ids[i].push_back(selected->value[i]);
+		    Vect_list_append(selectedDupl, selected->value[i]);
 		}
-
+		ids[i].push_back(selected->value[j]);
+		Vect_list_append(selectedDupl, selected->value[j]);
 	    }
 	}
     }
-    */
+    
+    Vect_destroy_line_struct(APoints);
+    Vect_destroy_line_struct(BPoints);
+    
+    return ids;
+}
 
-    return dc_ids;
+/**
+   \brief Check for already marked duplicates
+
+   \param line line id
+
+   \return 1 line already marked as duplicated
+   \return 0 not duplicated
+*/
+bool DisplayDriver::IsDuplicated(int line)
+{
+    if (Vect_val_in_list(selectedDupl, line))
+	return true;
+    
+    return false;
 }
 
 /**
@@ -938,13 +965,42 @@ std::vector<int> DisplayDriver::GetSelected(bool grassId)
 */
 int DisplayDriver::SetSelected(std::vector<int> id)
 {
-    // selected = id;
     VectorToList(selected, id);
 
     if (selected->n_values <= 0)
 	drawSegments = false;
 
     return 1;
+}
+
+/**
+   \brief Unselect selected vector features
+   
+   \param[in] list of GRASS feature ids
+
+   \return number of selected features
+*/
+int DisplayDriver::UnSelect(std::vector<int> id)
+{
+    bool checkForDupl;
+
+    checkForDupl = false;
+
+    for (std::vector<int>::const_iterator i = id.begin(), e = id.end();
+	 i != e; ++i) {
+	if (IsSelected(*i)) {
+	    Vect_list_delete(selected, *i);
+	}
+	if (settings.highlightDupl.enabled && IsDuplicated(*i)) {
+	    checkForDupl = true;
+	}
+    }
+
+    if (checkForDupl) {
+	GetDuplicates();
+    }
+
+    return selected->n_values;
 }
 
 /**
@@ -1149,4 +1205,3 @@ int print_error(const char *msg, int type)
     
     return 0;
 }
-

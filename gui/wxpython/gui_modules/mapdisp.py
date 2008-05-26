@@ -62,6 +62,7 @@ import utils
 import gdialogs
 from vdigit import VDigitCategoryDialog as VDigitCategoryDialog
 from vdigit import VDigitZBulkDialog    as VDigitZBulkDialog
+from vdigit import VDigitDuplicatesDialog as VDigitDuplicatesDialog
 from vdigit import GV_LINES            as VDigit_Lines_Type
 from debug import Debug               as Debug
 from icon  import Icons               as Icons
@@ -1383,6 +1384,25 @@ class BufferedWindow(wx.Window):
                             self.moveIds = digitClass.driver.GetSelectedVertex(pos1)
                             if len(self.moveIds) == 0: # no vertex found
                                 digitClass.driver.SetSelected([])
+
+                                   
+                    #
+                    # check for duplicates
+                    #
+                    if UserSettings.Get(group='vdigit', key='checkForDupl', subkey='enabled') is True:
+                        dupl = digitClass.driver.GetDuplicates()
+                        self.UpdateMap(render=False)
+
+                        if dupl:
+                            posWindow = self.ClientToScreen((self.mouse['end'][0] + self.dialogOffset,
+                                                             self.mouse['end'][1] + self.dialogOffset))
+                            
+                            dlg = VDigitDuplicatesDialog(parent=self, data=dupl, pos=posWindow)
+
+                            if dlg.ShowModal() == wx.ID_OK:
+                                digitClass.driver.UnSelect(dlg.GetUnSelected())
+                                # update selected
+                                self.UpdateMap(render=False)
 
                     if digitToolbar.action != "editLine":
                         # -> move line || move vertex
