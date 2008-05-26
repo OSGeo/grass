@@ -273,6 +273,8 @@ void Vect_break_lines ( struct Map_info *, int, struct Map_info *, FILE * );
 int Vect_break_lines_list (struct Map_info *, struct ilist *, int, struct Map_info *, FILE *);
 void Vect_break_polygons ( struct Map_info *, int, struct Map_info *, FILE * );
 void Vect_remove_duplicates ( struct Map_info *, int, struct Map_info *, FILE * );
+int Vect_line_check_duplicate ( const struct line_pnts *,
+				const struct line_pnts *, int );
 void Vect_snap_lines ( struct Map_info *, int, double, struct Map_info *, FILE * );
 void Vect_snap_lines_list (struct Map_info *, struct ilist *, double, struct Map_info *, FILE *);
 void Vect_remove_dangles ( struct Map_info *, int, double, struct Map_info *, FILE * );

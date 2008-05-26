@@ -40,12 +40,11 @@ Vect_remove_duplicates ( struct Map_info *Map, int type, struct Map_info *Err, F
 {
 	struct line_pnts *APoints, *BPoints;
 	struct line_cats *ACats, *BCats, *Cats;
-        int    i, j, k, c, atype, btype, bline;
-	int    nlines, npoints, nbcats_orig;
+        int    i, j, c, atype, btype, bline;
+	int    nlines, nbcats_orig;
 	BOUND_BOX  ABox; 
 	struct ilist *List; 
 	int ndupl;
-	int forw, backw;
 
 	
         APoints = Vect_new_line_struct ();
@@ -84,34 +83,10 @@ Vect_remove_duplicates ( struct Map_info *Map, int type, struct Map_info *Err, F
 		if ( i == bline ) continue; 
 		
 	        btype = Vect_read_line (Map, BPoints, BCats, bline);
-	
-		/* Check if the lines are identical */
-		if ( APoints->n_points != BPoints->n_points ) continue;
 
-		npoints = APoints->n_points;
-		/* Forward */
-		forw = 1;
-	        for ( k = 0; k <  APoints->n_points; k++ ){ 
-                    if ( APoints->x[k] != BPoints->x[k] ||
-			 APoints->y[k] != BPoints->y[k] ||
-			 (Vect_is_3d(Map) && APoints->z[k] != BPoints->z[k])) {
-                        forw = 0;
-			break;
-		    }	
-		}
-		
-		/* Backward */
-		backw = 1;
-	        for ( k = 0; k <  APoints->n_points; k++ ){ 
-                    if ( APoints->x[k] != BPoints->x[npoints - k - 1] || 
-			 APoints->y[k] != BPoints->y[npoints - k - 1] ||
- 			 (Vect_is_3d(Map) && APoints->z[k] != BPoints->z[npoints - k - 1])) {
-			backw = 0;
-			break;
-		    }	
-		}
-		
-		if ( !forw && !backw ) continue;
+		/* check for duplicates */
+		if (!Vect_line_check_duplicate (APoints, BPoints, Vect_is_3d(Map)))
+		    continue;
 
 		/* Lines area identical -> remove current */
 		if ( Err ) {
@@ -147,4 +122,53 @@ Vect_remove_duplicates ( struct Map_info *Map, int type, struct Map_info *Err, F
 	    fprintf (msgout, "\n"); 
 
 	return;
+}
+
+/*!
+  \brief Check for duplicate lines
+
+  \param APoints first line geometry
+  \param BPoints second line geometry
+
+  \return 1 duplicate
+  \return 0 not duplicate
+*/
+int Vect_line_check_duplicate(const struct line_pnts *APoints,
+			      const struct line_pnts *BPoints, int with_z)
+{
+    int k;
+    int npoints;
+    int forw, backw;
+
+    if ( APoints->n_points != BPoints->n_points )
+	return 0;
+    
+    npoints = APoints->n_points;
+
+    /* Forward */
+    forw = 1;
+    for (k = 0; k < APoints->n_points; k++) { 
+	if (APoints->x[k] != BPoints->x[k] ||
+	    APoints->y[k] != BPoints->y[k] ||
+	    (with_z && APoints->z[k] != BPoints->z[k])) {
+	    forw = 0;
+	    break;
+	}   
+    }
+
+    /* Backward */
+    backw = 1;
+    for (k = 0; k < APoints->n_points; k++) { 
+	if (APoints->x[k] != BPoints->x[npoints - k - 1] || 
+	    APoints->y[k] != BPoints->y[npoints - k - 1] ||
+	    (with_z && APoints->z[k] != BPoints->z[npoints - k - 1])) {
+	    backw = 0;
+	    break;
+	}   
+    }
+ 
+    if (!forw && !backw)
+	return 0;
+    
+    return 1;
 }
