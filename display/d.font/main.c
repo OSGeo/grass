@@ -18,6 +18,9 @@
  *****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include <grass/gis.h>
 #include <grass/display.h>
 #include <grass/raster.h>
@@ -80,27 +83,56 @@ int main( int argc , char **argv )
 	if (R_open_driver() != 0)
 		G_fatal_error (_("No graphics device selected"));
 
-	if (flag1->answer)
+	if (flag1->answer) /* List font names */
 	{
 		print_font_list(stdout, 0);
 		R_close_driver();
 		exit(EXIT_SUCCESS);
 	}
 
-	if (flag2->answer)
+	if (flag2->answer) /* List fonts verbosely */
 	{
 		print_font_list(stdout, 1);
 		R_close_driver();
 		exit(EXIT_SUCCESS);
 	}
 
-	if (opt2->answer)
-		R_font(opt2->answer);
-	else
-	if (opt1->answer)
-		R_font(opt1->answer);
+	if (opt2->answer) /* Full path to freetype font */
+	{
+		struct stat info;
 
-	if (opt3->answer)
+		/* Check a valid filename has been supplied */
+		if(stat(opt2->answer, &info) != 0)
+			G_fatal_error(_("Unable to access font path %s: %s"),
+				      opt2->answer, strerror(errno));
+    
+		if(!S_ISREG(info.st_mode))
+			G_fatal_error(_("Font path %s is not a file"), opt2->answer);
+		else
+			R_font(opt2->answer);
+	}
+	else
+	if (opt1->answer) /* Font name from fontcap */
+	{
+		int i = 0;
+
+		/* Check the fontname given is valid */
+		read_freetype_fonts(0);
+		while (i < num_fonts)
+		{
+			if(strcmp(opt1->answer, fonts[i]) == 0)
+			{
+				R_font(opt1->answer);
+				break;
+			}
+			i++;
+		}
+	        if (i >= num_fonts)
+			G_fatal_error(_("Font name %s is invalid. Consider running g.mkfontcap."),
+				      opt1->answer);
+	}
+
+	if (opt3->answer) /* Set character encoding */
 		R_charset(opt3->answer);
 
 	/* add this command to the list */
