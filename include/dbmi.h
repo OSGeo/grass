@@ -6,7 +6,7 @@
 
 #define DB_VERSION "0"
 
-#define DB_DEFAULT_DRIVER "dbf"
+#define DB_DEFAULT_DRIVER "sqlite"
 
 /* DB Prodedure Numbers */
 #define DB_PROC_VERSION                 999
