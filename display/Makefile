@@ -38,6 +38,7 @@ SUBDIRS = \
 	d.title \
 	d.vect \
 	d.vect.chart \
+	d.thematic.area \
 	d.what.rast \
 	d.what.vect \
 	d.where \
