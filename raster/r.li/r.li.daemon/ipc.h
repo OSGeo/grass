@@ -53,7 +53,7 @@ typedef struct fields_maskedarea{
 	int y;
 	int rl;
 	int cl;
-	char mask[150];
+	char mask[GNAME_MAX];
 } fields_maskedarea ;
 
 /**
