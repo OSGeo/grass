@@ -9,7 +9,7 @@
  *               As seed You can use already existing map or
  *               X,Y coordinates.
  *
- * COPYRIGHT:    (C) 2005-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2005-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -43,13 +43,13 @@ void save_map (FCELL **out, int out_fd, int rows, int cols, int flag, FCELL *min
     int row, col;
     double cellsize = -1;
 
-    G_debug(1,_("Saving new map"));
+    G_debug(1, "Saving new map");
 
     if (G_begin_cell_area_calculations() == 0 || G_begin_cell_area_calculations() == 1) /* All cells have constant size... */
     {
       cellsize = G_area_of_cell_at_row(0);
     }
-    G_debug(1,_("Cell area: %f"),cellsize);
+    G_debug(1, "Cell area: %f", cellsize);
 
     for (row = 0; row < rows; row++)
     {
@@ -65,7 +65,8 @@ void save_map (FCELL **out, int out_fd, int rows, int cols, int flag, FCELL *min
             }
             if (out[row][col] > 0 || out[row][col] < 0)
             {
-              G_debug(5,"volume %f += cellsize %f  * value %f [%d,%d]",*volume, cellsize, out[row][col],row,col);
+              G_debug(5, "volume %f += cellsize %f  * value %f [%d,%d]",
+		      *volume, cellsize, out[row][col],row,col);
               *area += cellsize;
               *volume += cellsize * out[row][col];
             }
@@ -77,7 +78,8 @@ void save_map (FCELL **out, int out_fd, int rows, int cols, int flag, FCELL *min
               *min_depth = out[row][col];
         }
         if (G_put_f_raster_row(out_fd, out[row])==-1)
-          G_fatal_error(_("Error writing result map file!"));
+	  G_fatal_error(_("Failed writing output raster map row %d"),
+			row);
         G_percent(row+1,rows,5);
     }
 }
@@ -155,15 +157,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-        _("Fills lake from seed at given level");
+        _("Fills lake from seed at given level.");
 
-    tmap_opt = G_define_option() ;
-    tmap_opt->key         = "dem";
-    tmap_opt->key_desc    = "name";
-    tmap_opt->description = _("Terrain raster map (DEM)");
-    tmap_opt->type        = TYPE_STRING;
-    tmap_opt->gisprompt   = "old,fcell,raster";
-    tmap_opt->required    = YES;
+    tmap_opt = G_define_option(G_OPT_R_ELEV) ;
 
     wlvl_opt = G_define_option() ;
     wlvl_opt->key         = "wl";
@@ -171,13 +167,10 @@ int main(int argc, char *argv[])
     wlvl_opt->type        = TYPE_DOUBLE;
     wlvl_opt->required    = YES;
 
-    lake_opt = G_define_option() ;
+    lake_opt = G_define_option(G_OPT_R_OUTPUT) ;
     lake_opt->key         = "lake";
-    lake_opt->key_desc    = "name";
-    lake_opt->description = _("Output raster map with lake");
-    lake_opt->type        = TYPE_STRING;
-    lake_opt->gisprompt   = "new,fcell,raster";
-    lake_opt->required    = NO;
+    lake_opt->description = _("Name for output raster map with lake");
+    smap_opt->required    = NO;
 
     sdxy_opt = G_define_option() ;
     sdxy_opt->key         = "xy";
@@ -187,12 +180,9 @@ int main(int argc, char *argv[])
     sdxy_opt->required    = NO;
     sdxy_opt->multiple    = NO;
 
-    smap_opt = G_define_option() ;
+    smap_opt = G_define_option(G_OPT_R_MAP) ;
     smap_opt->key         = "seed";
-    smap_opt->key_desc    = "name";
-    smap_opt->description = _("Raster map with seed (at least 1 cell > 0)");
-    smap_opt->type        = TYPE_STRING;
-    smap_opt->gisprompt   = "old,cell,raster";
+    smap_opt->description = _("Name of raster map with seed (at least 1 cell > 0)");
     smap_opt->required    = NO;
 
     negative_flag = G_define_flag();
@@ -233,7 +223,7 @@ int main(int argc, char *argv[])
     {
       lake_fd = G_open_raster_new(lakemap, 1);
       if (lake_fd < 0)
-        G_fatal_error(_("Cannot write lake raster map <%s>!"), lakemap);
+        G_fatal_error(_("Unable to create raster map <%s>"), lakemap);
     }
 
     rows = G_window_rows();
@@ -253,36 +243,41 @@ int main(int argc, char *argv[])
 
       if (start_row < 0 || start_row > rows ||
           start_col < 0 || start_col > cols)
-          G_fatal_error(_("Seed point outside the current region."));
+          G_fatal_error(_("Seed point outside the current region"));
     }
 
     /* Open terran map */
-    mapset = G_find_cell(terrainmap,"");
+    mapset = G_find_cell2(terrainmap,"");
     if (mapset == NULL)
-        G_fatal_error(_("Terrain raster map <%s> not found!"), terrainmap);
+        G_fatal_error(_("Raster map <%s> not found"), terrainmap);
 
-    in_terran_fd = G_open_cell_old(terrainmap,mapset);
-    if (in_terran_fd < 0) G_fatal_error(_("Cannot open terrain raster map <%s@%s>!"), terrainmap,mapset);
+    in_terran_fd = G_open_cell_old(terrainmap, mapset);
+    if (in_terran_fd < 0)
+      G_fatal_error(_("Unable to open raster map <%s>"),
+		    G_fully_qualified_name(terrainmap, mapset));
 
     /* Open seed map */
     if (smap_opt->answer)
     {
-      mapset = G_find_cell(seedmap,"");
+      mapset = G_find_cell2(seedmap,"");
       if (mapset == NULL)
-          G_fatal_error(_("Seed map <%s> not found!"), seedmap);
+          G_fatal_error(_("Raster map <%s> not found"),
+			seedmap);
 
       out_fd = G_open_cell_old(seedmap,mapset);
-      if (out_fd < 0) G_fatal_error(_("Cannot open seed map <%s@%s>!"), seedmap, mapset);
+      if (out_fd < 0)
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      G_fully_qualified_name(seedmap, mapset));
     }
 
     /* Pointers to rows. Row = ptr to 'col' size array. */
     in_terran = (FCELL **)G_malloc(rows * sizeof(FCELL *));
     out_water = (FCELL **)G_malloc(rows * sizeof(FCELL *));
     if (in_terran == NULL || out_water == NULL)
-         G_fatal_error(_("Failure to allocate memory for row pointers"));
+         G_fatal_error(_("G_malloc: out of memory"));
 
 
-    G_debug(1,_("Loading maps: "));
+    G_debug(1, "Loading maps...");
     /* foo_rows[row] == array with data (2d array). */
     for (row = 0; row < rows; row++)
     {
@@ -291,11 +286,13 @@ int main(int argc, char *argv[])
 
         /* In newly created space load data from file.*/
         if (G_get_f_raster_row(in_terran_fd, in_terran[row], row)!=1)
-          G_fatal_error(_("Error reading terrain raster map. Probably broken file."));
+          G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			terrainmap, row);
 
         if (smap_opt->answer)
           if (G_get_f_raster_row(out_fd, out_water[row], row)!=1)
-            G_fatal_error(_("Error reading seed raster map. Probably broken file."));
+            G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  seedmap, row);
 
         G_percent(row+1,rows,5);
     }
@@ -304,7 +301,8 @@ int main(int argc, char *argv[])
     if (sdxy_opt->answer)
       /* Check is water level higher than seed point */
       if (in_terran[start_row][start_col] >= water_level)
-        G_fatal_error(_("Given water level at seed point is below earth surface. \n Increase water level or move seed point."));
+        G_fatal_error(_("Given water level at seed point is below earth surface. "
+			"Increase water level or move seed point."));
       out_water[start_row][start_col] = 1;
 
     /* Close seed map for reading. */
@@ -319,19 +317,21 @@ int main(int argc, char *argv[])
     else
     {
       out_fd = G_open_raster_new(seedmap, 1);
-      if (out_fd < 0) G_fatal_error(_("Cannot write lake raster map <%s@%s>!"), seedmap, mapset);
+      if (out_fd < 0)
+	G_fatal_error(_("Unable to create raster map <%s>"),
+		      seedmap);
     }
 
     /* More pases are renudant. Real pases count is controled by altered cell count. */
     pases = (int) (rows*cols)/2;
 
-    G_debug(1,_("Starting lake filling at level of %8.4f in %d passes. \nPercent done:"),water_level,pases);
+    G_debug(1, "Starting lake filling at level of %8.4f in %d passes. Percent done:", water_level,pases);
 
     lastcount = 0;
 
     for (pass = 0; pass < pases; pass++)
     {
-    G_debug(3,_("Pass: %d\n"),pass);
+    G_debug(3,_("Pass: %d"),pass);
     curcount  = 0;
         /* Move from left upper corner to right lower corner. */
         for (row = 0; row < rows; row++)
@@ -412,12 +412,12 @@ int main(int argc, char *argv[])
     }
 
     if (G_write_colors(lakemap, G_mapset(), &colr) != 1)
-      G_fatal_error(_("Error writing color file for <%s@%s>!"),lakemap,G_mapset());
-
+      G_fatal_error(_("Unable to read color file of raster map <%s>"),
+		    lakemap);
+    
     G_short_history(lakemap, "raster", &history);
     G_command_history(&history);
     G_write_history(lakemap, &history);
-    G_message(_("All done."));
 
     return EXIT_SUCCESS;
 }
