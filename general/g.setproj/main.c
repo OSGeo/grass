@@ -121,13 +121,13 @@ int main(int argc, char *argv[])
 	    "\nWARNING: A projection file already exists for this location\n(Filename '%s')\n",
 		path);
 	fprintf(stderr,
-	    "\nThis file contains all the parameters for the\nlocation's projection: %s\n", buf);
+	    "\nThis file contains all the parameters for the location's projection:\n  %s\n", buf);
 	fprintf(stderr,
 	    "\n    Overriding this information implies that the old projection parameters\n"
-	    "	 were incorrect.  If you change the parameters, all existing data will be\n"
-	    "	 interpreted differently by the projection software.\n%c%c%c", 7, 7, 7);
+	    "    were incorrect.  If you change the parameters, all existing data will\n"
+	    "    be interpreted differently by the projection software.\n%c%c%c", 7, 7, 7);
 	fprintf(stderr,
-	    "    GRASS will not re-project your data automatically\n");
+	    "    GRASS will not re-project your data automatically.\n\n");
 
 	if (!G_yes(_("Would you still like to change some of the parameters?"), 0)) {
 	    G_message(_("The projection information will not be updated"));
