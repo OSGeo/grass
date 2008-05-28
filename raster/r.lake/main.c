@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
     module->description =
         _("Fills lake from seed at given level.");
 
-    tmap_opt = G_define_option(G_OPT_R_ELEV) ;
+    tmap_opt = G_define_standard_option(G_OPT_R_ELEV) ;
 
     wlvl_opt = G_define_option() ;
     wlvl_opt->key         = "wl";
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     wlvl_opt->type        = TYPE_DOUBLE;
     wlvl_opt->required    = YES;
 
-    lake_opt = G_define_option(G_OPT_R_OUTPUT) ;
+    lake_opt = G_define_standard_option(G_OPT_R_OUTPUT) ;
     lake_opt->key         = "lake";
     lake_opt->description = _("Name for output raster map with lake");
     smap_opt->required    = NO;
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     sdxy_opt->required    = NO;
     sdxy_opt->multiple    = NO;
 
-    smap_opt = G_define_option(G_OPT_R_MAP) ;
+    smap_opt = G_define_standard_option(G_OPT_R_MAP) ;
     smap_opt->key         = "seed";
     smap_opt->description = _("Name of raster map with seed (at least 1 cell > 0)");
     smap_opt->required    = NO;
