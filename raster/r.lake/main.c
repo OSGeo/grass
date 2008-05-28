@@ -331,7 +331,7 @@ int main(int argc, char *argv[])
 
     for (pass = 0; pass < pases; pass++)
     {
-    G_debug(3,_("Pass: %d"),pass);
+    G_debug(3, "Pass: %d" ,pass);
     curcount  = 0;
         /* Move from left upper corner to right lower corner. */
         for (row = 0; row < rows; row++)
