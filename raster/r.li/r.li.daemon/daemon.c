@@ -37,7 +37,7 @@
 int calculateIndex(char *file, int f(int, char **, area_des, double *),\
  char** parameters, char *raster, char *output){
 	
-	char pathSetup[150],out[150], parsed;
+	char pathSetup[GPATH_MAX],out[GPATH_MAX], parsed;
 	char * reportChannelName, * random_access_name;
 	struct History history;
 	g_areas g;
@@ -272,7 +272,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),\
 int parseSetup(char *path, list l, g_areas g, char *raster){
 	struct stat s;
 	struct Cell_head cellhd;
-	char * buf, *token, *mapset;/* g_region[350]; */
+	char * buf, *token, *mapset;
 	int setup;
 	int letti;
 	double rel_x, rel_y, rel_rl, rel_cl;
@@ -368,7 +368,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster){
 	else if (strcmp("MASKEDSAMPLEAREA", token) == 0){
 		double rel_sa_x, rel_sa_y, rel_sa_rl, rel_sa_cl;
 		int aid = 1;
-		char maskname[150];
+		char maskname[GNAME_MAX];
 		do{
 			rel_sa_x = atof(strtok(NULL, "|"));
 			rel_sa_y = atof(strtok(NULL, "|"));
@@ -413,7 +413,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster){
 	else if (strcmp("MASKEDOVERLAYAREA", token) == 0){
 		double sa_n, sa_s, sa_w, sa_e;
 		int aid = 1;
-		char maskname[150];
+		char maskname[GNAME_MAX];
 		msg m;
 		do {
 			strcpy(maskname, strtok(NULL,"|"));
