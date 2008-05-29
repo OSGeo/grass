@@ -50,7 +50,13 @@ NVIZ debug tip:
    at the start of nviz2.2_script, change the DEBUG setting to:
    set DEBUG 1
 
-To debug NVIZ using gdb:
+To debug NVIZ:
+
+$ gdb $GISBASE/etc/nviz2.2/nviz
+> run -f $GISBASE/etc/nviz2.2/scripts/nviz2.2_script <any args>
+
+If you don't need to debug the startup, you can start NVIZ then
+"attach" to the process. E.g.
 
 $ gdb $GISBASE/etc/nviz2.2/nviz
 > attach <pid>
