@@ -131,7 +131,7 @@ export LC_NUMERIC
 
 alt=$GIS_OPT_ALTITUDE
 az=$GIS_OPT_AZIMUTH
-elev=$GIS_OPT_MAP
+elev=$GIS_OPT_INPUT
 zmult=$GIS_OPT_ZMULT
 scale=$GIS_OPT_SCALE
 
@@ -141,15 +141,15 @@ if [ -z "$name" ] ; then
    exit 1
 fi
 
-if [ "$GIS_OPT_MAP" = "$GIS_OPT_SHADEDMAP" ]; then
+if [ "$GIS_OPT_INPUT" = "$GIS_OPT_OUTPUT" ]; then
 	g.message -e "Input elevation map and output relief map must have different names"
 	exit 1
 fi
 
-if [ -z "$GIS_OPT_SHADEDMAP" ]; then
+if [ -z "$GIS_OPT_OUTPUT" ]; then
     ELEVSHADE="${elev%%@*}.shade"
 else
-    ELEVSHADE="$GIS_OPT_SHADEDMAP"
+    ELEVSHADE="$GIS_OPT_OUTPUT"
 fi
 
 # allow - and . chars in the map name
@@ -198,14 +198,14 @@ fi
 r.colors "$ELEVSHADE" color=grey
 
 # record metadata
-r.support "$ELEVSHADE" title="Shaded relief of \"$GIS_OPT_MAP\"" history=""
+r.support "$ELEVSHADE" title="Shaded relief of \"$GIS_OPT_INPUT\"" history=""
 r.support "$ELEVSHADE" history="r.shaded.relief settings:"
 r.support "$ELEVSHADE" history="  altitude=$alt  azimuth=$GIS_OPT_AZIMUTH  zmult=$zmult  scale=$GIS_OPT_SCALE"
 if [ -n "$GIS_OPT_UNITS" ] ; then
    r.support map="$ELEVSHADE" history="  units=$GIS_OPT_UNITS  (adjusted scale=$scale)"
 fi
 
-if [ -n "$GIS_OPT_SHADEDMAP" ] ; then
+if [ -n "$GIS_OPT_OUTPUT" ] ; then
     g.message "Shaded relief map created and named <$ELEVSHADE>."
 else
     g.message "Shaded relief map created and named <$ELEVSHADE>. Consider renaming."
