@@ -79,7 +79,12 @@ fi
 filemapset="${mapset}"
 HISTFILEDIR=$GISDBASE/$LOCATION_NAME/$filemapset/cell_misc/
 
+# save defined font setting
+FONTCMD=`d.frame -l | grep d.font | sed 's+"++1'| sed 's+"++1'`
 d.frame -e
+
+# restore font setting
+$FONTCMD
 
 #at=bottom,top,left,right
 
