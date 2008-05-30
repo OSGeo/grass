@@ -77,6 +77,9 @@ consulting companies.</p>
 Geographic Resources Analysis Support System (GRASS), an open source (GNU
 GPL'ed), image processing and geographic information system (GIS).</p>
 
+<table>
+<tr>
+<td valign=\"top\">
 <h3>Quick Introduction</h3>
 
 <!-- the files grass7.html & helptext.html file live in lib/init/ -->
@@ -267,6 +270,8 @@ FILENAME=index.html
 write_html_header $FILENAME "GRASS GIS $GRASSVERSION Reference Manual" 1
 
 #modules:
+echo "</td>" >> $FILENAME
+echo "<td valign=\"top\">" >> $FILENAME
 echo "<h3>Manual sections:</h3>" >> $FILENAME
 echo "<ul>" >> $FILENAME
 #for all module groups:
@@ -283,6 +288,8 @@ echo "<li><a href=\"wxGUI.html\">wxGUI</a> wxPython-based GUI frontend</li>" >> 
 echo "<li><a href=\"xganim.html\">xganim</a> tool  for animating a raster map series</li>" >> $FILENAME
 	      
 echo "</ul>" >> $FILENAME
+echo "</td></tr>" >> $FILENAME
+echo "</table>" >> $FILENAME
 
 #insert a special comment so that GEM will know where to merge docs of extensions
 echo >> "$FILENAME"
