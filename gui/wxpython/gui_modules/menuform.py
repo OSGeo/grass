@@ -1041,7 +1041,7 @@ class cmdPanel(wx.Panel):
                                 flag=wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND, border=5)
 
                 if p.get('multiple','yes') == 'yes' or \
-                        p.get('type','string') == 'string':
+                        p.get('type', 'string') in ('string', 'float'):
                     txt3 = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
                                        size=globalvar.DIALOG_TEXTCTRL_SIZE)
                     if p.get('value','') != '':
