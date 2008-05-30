@@ -4,13 +4,14 @@
 #
 # MODULE:       r.shaded.relief
 # AUTHOR(S):	CERL
+#               parameters standardized: Markus Neteler, 2008
 #               updates: Michael Barton, 2004
 #               updates: Gordon Keith, 2003
 #               updates: Andreas Lange, 2001
 #               updates: David Finlayson, 2001
 #               updates: Markus Neteler, 2001, 1999
 # PURPOSE:	Creates shaded relief map from raster elevation map (DEM)
-# COPYRIGHT:	(C) 1999 - 2004 by the GRASS Development Team
+# COPYRIGHT:	(C) 1999 - 2008 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,14 +52,14 @@
 #%  keywords: raster, elevation
 #% End
 #% option
-#%  key: map
+#%  key: input
 #%  type: string
 #%  gisprompt: old,cell,raster
 #%  description: Input elevation map
 #%  required : yes
 #% end
 #% option
-#%  key: shadedmap
+#%  key: output
 #%  type: string
 #%  gisprompt: new,cell,raster
 #%  description: Output shaded relief map name
