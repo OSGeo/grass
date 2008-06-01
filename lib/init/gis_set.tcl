@@ -392,11 +392,11 @@ proc gisSetWindow {} {
                     } else {
                     #generate default DB definition, create dbf subdirectory:
                     set varfp [open $mymapset/VAR "w"]
-                    puts $varfp "DB_DRIVER: dbf"
-                    puts $varfp "DB_DATABASE: \$GISDBASE/\$LOCATION_NAME/\$MAPSET/dbf/"
+                    puts $varfp "DB_DRIVER: sqlite"
+                    puts $varfp "DB_DATABASE: \$GISDBASE/\$LOCATION_NAME/\$MAPSET/sqlite.db"
                     close $varfp
                     catch {file attributes $mymapset/VAR -permissions u+rw,go+r}
-                    file mkdir $mymapset/dbf
+#                    file mkdir $mymapset/dbf
                     #copy over the WIND definition:
                     catch {file copy $mymapset/../PERMANENT/DEFAULT_WIND $mymapset/WIND}
                     catch {file attributes $mymapset/WIND -permissions u+rw,go+r}

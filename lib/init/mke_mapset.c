@@ -31,15 +31,22 @@ int make_mapset (char *location, char *mapset)
 		perror("fopen");
 		G_fatal_error("Cannot create <%s> file in new mapset", buffer2);
 	}
-	fprintf (fd, "DB_DRIVER: dbf\n");
-	fprintf (fd, "DB_DATABASE: $GISDBASE/$LOCATION_NAME/$MAPSET/dbf/\n");
+	/* Use DB_DEFAULT_DRIVER from <grass/dbmi.h> instead of hardcoding? */
+	fprintf (fd, "DB_DRIVER: sqlite\n");
+	fprintf (fd, "DB_DATABASE: $GISDBASE/$LOCATION_NAME/$MAPSET/sqlite.db\n");
 	fclose (fd);
 	G_free(buffer2);
-	
+
+#ifdef KEEP_IF_DB_PER_MAP
+/* create similar dir structure for SQLite if a db file is to be
+   created for every vector map instead of one DB per mapset */
+	if(strcmp(DB_DEFAULT_DRIVER, "dbf") == 0 ) {
 /* Make the dbf/ subdirectory */
-	sprintf( buffer, "%s/%s/dbf", location, mapset );
-	if( G_mkdir( buffer ) != 0 )
+	    sprintf( buffer, "%s/%s/dbf", location, mapset );
+	    if( G_mkdir( buffer ) != 0 )
 		return -1;
+	}
+#endif
 
 	return(0) ;
 }
