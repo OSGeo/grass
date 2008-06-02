@@ -32,7 +32,7 @@
 #include <grass/gstypes.h>
 
 /*!
-  \brief Write ppm file
+  \brief Save current GL screen to ppm file
 
   \param name file name
 
@@ -48,7 +48,6 @@ int GS_write_ppm(char *name)
     unsigned char *pixbuf;
 
     gsd_getimage(&pixbuf, &xsize, &ysize);
-
 
     if (NULL == (fp = fopen(name, "w"))) {
 	G_warning (_("Unable to open file <%s> for writing"),

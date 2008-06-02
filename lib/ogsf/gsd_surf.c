@@ -81,7 +81,7 @@ int gsd_surf(geosurf * surf)
 {
     int desc, ret;
 
-    G_debug (3, "gsd_surf");
+    G_debug (4, "gsd_surf(): id=%d", surf->gsurf_id);
 
     desc = ATT_TOPO;
 
@@ -746,7 +746,7 @@ int gsd_surf_const(geosurf * surf, float k)
 
     unsigned int ktrans = 255;
 
-    G_debug(3, "gsd_surf_const");
+    G_debug(4, "gsd_surf_const(): id=%d", surf->gsurf_id);
 
     if (GS_check_cancel()) {
 	return (-1);
@@ -2038,10 +2038,8 @@ int gsd_norm_arrows(geosurf * surf)
 
 
 /*!
-  \brief ADD
+  \brief Draw surface using triangle fan instead of strip
 
-  New (TEST) surface drawing routine using triangle fan instead of strip
-  
   Optimized by getting rid of BM_get mask check - GET_MAPPATT does same
   and returns zero if masked 
   

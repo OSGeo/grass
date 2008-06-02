@@ -38,7 +38,7 @@
 */
 
 /*!
-  \brief ADD
+  \brief Draw surface wire
 
   \param surf surface (geosurf)
 
@@ -48,7 +48,7 @@ int gsd_wire_surf(geosurf * surf)
 {
     int desc, ret;
 
-    G_debug(3, "gsd_wire_surf");
+    G_debug(3, "gsd_wire_surf(): id=%d", surf->gsurf_id);
 
     desc = ATT_TOPO;
 
@@ -552,7 +552,7 @@ int gsd_wire_arrows(geosurf * surf)
 }
 
 /*!
-  \brief ADD
+  \brief Draw coarse surface
 
   New (TEST) wire routine that draws low res surface 
   Based on new Trinagle Fan routine

@@ -79,11 +79,11 @@ void gsd_flush(void)
 }
 
 /*!
-  \brief ADD
+  \brief Set color mode
 
   Call glColorMaterial before enabling the GL_COLOR_MATERIAL
 
-  \param cm
+  \param cm color mode value
 */
 void gsd_colormode(int cm)
 {
@@ -221,7 +221,10 @@ void gsd_sphere(float *center, float siz)
 /*!
   \brief Write out z-mask
 
-  \param n
+  Enable or disable writing into the depth buffer
+
+  \param n Specifies whether the depth buffer is enabled for
+  writing
 */
 void gsd_zwritemask(unsigned long n)
 {
@@ -352,7 +355,7 @@ void gsd_swaptmesh(void)
 }
 
 /*!
-  \brief ADD
+  \brief Delimit the vertices of a primitive or a group of like primitives
 */
 void gsd_bgnpolygon(void)
 {
@@ -367,7 +370,7 @@ void gsd_bgnpolygon(void)
 }
 
 /*!
-  \brief ADD
+  \brief Delimit the vertices of a primitive or a group of like primitives
 */
 void gsd_endpolygon(void)
 {
@@ -397,9 +400,9 @@ void gsd_endline(void)
 }
 
 /*!
-  \brief Shaded model
+  \brief Set shaded model
 
-  \param bool type
+  \param bool type non-zero for GL_SMOOTH otherwise GL_FLAT
 */
 void gsd_shademodel(int bool)
 {
@@ -437,7 +440,10 @@ void gsd_bothbuffer(void)
 }
 
 /*!
-  \brief ADD
+  \brief Specify which color buffers are to be drawn
+  into
+
+  \param bool non-zero for enable otherwise disable front buffer
 */
 void gsd_frontbuffer(int bool)
 {
@@ -448,9 +454,10 @@ void gsd_frontbuffer(int bool)
 }
 
 /*!
-  \brief ADD
+  \brief Specify which color buffers are to be drawn
+  into
 
-  \param bool
+  \param bool non-zero for enable otherwise disable back buffer
 */
 void gsd_backbuffer(int bool)
 {
@@ -460,7 +467,7 @@ void gsd_backbuffer(int bool)
 }
 
 /*!
-  \brief ADD
+  \brief Swap buffers
 */
 void gsd_swapbuffers(void)
 {
@@ -474,7 +481,7 @@ void gsd_swapbuffers(void)
 }
 
 /*!
-  \brief ADD
+  \brief Pop the current matrix stack
 */
 void gsd_popmatrix(void)
 {
@@ -484,7 +491,7 @@ void gsd_popmatrix(void)
 }
 
 /*!
-  \brief ADD
+  \brief Push the current matrix stack
 */
 void gsd_pushmatrix(void)
 {
@@ -494,7 +501,11 @@ void gsd_pushmatrix(void)
 }
 
 /*!
-  \brief ADD
+  \brief Multiply the current matrix by a general scaling matrix
+
+  \param xs x scale value
+  \param ys y scale value
+  \param zs z scale value
 */
 void gsd_scale(float xs, float ys, float zs)
 {
@@ -504,7 +515,11 @@ void gsd_scale(float xs, float ys, float zs)
 }
 
 /*!
-  \brief ADD
+  \brief Multiply the current matrix by a translation matrix
+
+  \param dx x translation value
+  \param dy y translation value
+  \param dz z translation value
 */
 void gsd_translate(float dx, float dy, float dz)
 {
@@ -514,12 +529,12 @@ void gsd_translate(float dx, float dy, float dz)
 }
 
 /*!
-  \brief ADD
+  \brief Get viewport
 
-  \param window
+  \param[out] window
   \param viewport
-  \param modelMatrix
-  \param projMatrix
+  \param modelMatrix model matrix
+  \param projMatrix projection matrix
 */
 void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
 		   double *projMatrix)
@@ -623,11 +638,11 @@ void gsd_rot(float angle, char axis)
 }
 
 /*!
-  \brief ADD
+  \brief Set the current normal vector & specify vertex
 
-  \param norm
-  \param col
-  \param pt
+  \param norm normal vector
+  \param col color value
+  \param pt point (model coordinates)
 */
 void gsd_litvert_func(float *norm, unsigned long col, float *pt)
 {
@@ -666,9 +681,9 @@ void gsd_vert_func(float *pt)
 }
 
 /*!
-  \brief ADD
+  \brief Set current color
 
-  \param col
+  \param col color value
 */
 void gsd_color_func(unsigned int col)
 {
@@ -866,7 +881,7 @@ void gsd_switchlight(int num, int on)
 }
 
 /*!
-  \brief Get image
+  \brief Get image of current GL screen
 
   \param pixbuf data buffer
   \param[out] xsize,ysize picture dimension
@@ -951,7 +966,7 @@ int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 }
 
 /*!
-  \brief ADD
+  \brief Specify pixel arithmetic
 
   \param yesno turn on/off
 */
@@ -1026,12 +1041,17 @@ void gsd_finish(void)
 }
 
 /*!
-  \brief ADD
+  \brief Set the viewport
   
-  \param l
-  \param r
-  \param b
-  \param t
+  <i>l</i>, <i>b</i> specify the lower left corner of the viewport
+  rectangle, in pixels.
+
+  <i>r</i>, <i>t</i> specify the width and height of the viewport.
+
+  \param l left
+  \param r right
+  \param b bottom
+  \param t top
 */
 void gsd_viewport(int l, int r, int b, int t)
 {

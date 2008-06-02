@@ -132,6 +132,9 @@ void GS_libinit(void)
 int GS_get_longdim(float *dim)
 {
     *dim = Longdim;
+
+    G_debug(3, "GS_get_longdim(): dim=%g", *dim);
+
     return (1);
 }
 
@@ -153,7 +156,7 @@ int GS_get_region(float *n, float *s, float *w, float *e)
 }
 
 /*!
-  \brief Set attributes to default
+  \brief Set default attributes for map objects
 
   \param defs attributes array (dim MAX_ATTS)
   \param null_defs null attributes array (dim MAX_ATTS)
@@ -280,8 +283,8 @@ int GS_new_light(void)
 
   \bug I think lights array doesnt match sgi_light array
   
-  \param num light id (starts with 1?)
-  \param xpos,ypos,zpos coordinates
+  \param num light id (starts with 1)
+  \param xpos,ypos,zpos coordinates (model)
   \param local ?
 */
 void GS_setlight_position(int num, float xpos, float ypos, float zpos,
@@ -1454,7 +1457,7 @@ int GS_get_maskmode(int id, int *mode)
   \brief Set client data
 
   \param id surface id
-  \param clientd ?
+  \param clientd pointer to client data struct
 
   \return 1 on success
   \return -1 on error (invalid surface id)
@@ -1856,7 +1859,7 @@ void GS_draw_surf(int id)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_draw_surf");
+    G_debug(3, "GS_draw_surf(): id=%d", id);
 
     gs = gs_get_surf(id);
     if (gs) {
@@ -1881,7 +1884,7 @@ void GS_draw_surf(int id)
 }
 
 /*!
-  \brief Draw wire
+  \brief Draw surface wire
 
   Overrides draw_mode for fast display
 
@@ -1891,7 +1894,7 @@ void GS_draw_wire(int id)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_draw_wire");
+    G_debug(3, "GS_draw_wire(): id=%d", id);
 
     gs = gs_get_surf(id);
 
@@ -1989,7 +1992,7 @@ void GS_set_global_exag(float exag)
 */
 float GS_global_exag(void)
 {
-    G_debug(3, "GS_global_exag");
+    G_debug(3, "GS_global_exag(): %g", Gv.vert_exag);
 
     return (Gv.vert_exag);
 }
@@ -2342,7 +2345,7 @@ int GS_get_exag_guess(int id, float *exag)
 }
 
 /*!
-  Get Z extents for all loaded surfaces
+  \brief Get Z extents for all loaded surfaces
 
   Treating zeros as "no data"
 
@@ -2371,6 +2374,9 @@ void GS_get_zrange_nz(float *min, float *max)
 	    }
 	}
     }
+
+    G_debug (3, "GS_get_zrange_nz(): min=%g max=%g",
+             *min, *max);
 
     return;
 }
@@ -2490,7 +2496,7 @@ void GS_ready_draw(void)
 }
 
 /*!
-  \brief Draw done
+  \brief Draw done, swap buffers
 */
 void GS_done_draw(void)
 {
@@ -2604,7 +2610,7 @@ void GS_set_focus_center_map(int id)
 }
 
 /*!
-  \brief Move position to
+  \brief Move to position
 
   \param pt point model coordinates
 */
@@ -2612,7 +2618,7 @@ void GS_moveto(float *pt)
 {
     float ft[3];
 
-    G_debug(3, "GS_moveto");
+    G_debug(3, "GS_moveto(): %f,%f,%f", pt[0], pt[1], pt[2]);
 
     if (Gv.infocus) {
 	GS_v3eq(Gv.from_to[FROM], pt);
@@ -2652,7 +2658,7 @@ void GS_moveto_real(float *pt)
   \param id surface id
   \param[out] min min z-value
   \param[out] max max z-value
-  \param[out] mid middle z-value ?
+  \param[out] mid middle z-value
 
   \return -1 on error (invalid surface id)
   \return ?
@@ -2661,11 +2667,11 @@ int GS_get_zextents(int id, float *min, float *max, float *mid)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_get_zextents");
-
     if (NULL == (gs = gs_get_surf(id))) {
 	return (-1);
     }
+
+    G_debug(3, "GS_get_zextents(): id=%d", id);
 
     return (gs_get_zextents(gs, min, max, mid));
 }
@@ -2675,7 +2681,7 @@ int GS_get_zextents(int id, float *min, float *max, float *mid)
 
   \param[out] min min z-value
   \param[out] max max z-value
-  \param doexag ?
+  \param doexag use z-exaggeration
 
   \return 1 on success
   \return -1 on error
@@ -2685,8 +2691,6 @@ int GS_get_zrange(float *min, float *max, int doexag)
     int ret_surf, ret_vol;
     float surf_min, surf_max;
     float vol_min, vol_max;
-    
-    G_debug(3, "GS_get_zrange");
     
     ret_surf = gs_get_zrange(&surf_min, &surf_max);
     ret_vol = gvl_get_zrange(&vol_min, &vol_max);
@@ -2707,19 +2711,21 @@ int GS_get_zrange(float *min, float *max, int doexag)
 	*max *= Gv.vert_exag;
     }
     
+    G_debug(3, "GS_get_zrange(): min=%g max=%g",
+	    *min, *max);
     return ((ret_surf > 0 || ret_vol > 0) ? (1) :(-1));
 }
 
 /*!
-  \brief Get 'from' coordinates
+  \brief Get 'from' position
 
   \param[out] fr from model coordinates
 */
 void GS_get_from(float *fr)
 {
-    G_debug(3, "GS_get_from");
-
     GS_v3eq(fr, Gv.from_to[FROM]);
+
+    G_debug(3, "GS_get_from(): %f,%f,%f", fr[0], fr[1], fr[2]);
 
     return;
 }
@@ -2908,7 +2914,8 @@ void GS_set_infocus(void)
 */
 void GS_set_viewport(int left, int right, int bottom, int top)
 {
-    G_debug(3, "GS_set_viewport");
+    G_debug(3, "GS_set_viewport(): left=%d, right=%d, "
+	    "bottom=%d, top=%d", left, right, bottom, top);
 
     gsd_viewport(left, right, bottom, top);
 
@@ -3162,7 +3169,7 @@ void GS_unset_cplane(int num)
   \brief Get scale
 
   \param sx,sy,sz x/y/z scale values
-  \param doexag ?
+  \param doexag use vertical exaggeration
 */
 void GS_get_scale(float *sx, float *sy, float *sz, int doexag)
 {
@@ -3366,6 +3373,8 @@ void GS_clear(int col)
 
 /*!
   \brief Get aspect value
+
+  \return aspect value
 */
 double GS_get_aspect(void)
 {

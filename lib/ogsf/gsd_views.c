@@ -276,9 +276,9 @@ int gsd_zup_twist(geoview * gv)
 }
 
 /*!
-  \brief ADD
+  \brief Set current scale
 
-  \param doexag
+  \param doexag use z-exaggeration
 */
 void gsd_do_scale(int doexag)
 {

@@ -638,7 +638,7 @@ int gs_get_att_type(geosurf * gs, int desc)
   \brief Get attribute source
 
   \param gs pointer to geosurf struct
-  \param desc attribute id
+  \param desc attribute id (descriptor)
 
   \return -1 on error
   \return attribute source id
@@ -659,7 +659,7 @@ int gs_get_att_src(geosurf * gs, int desc)
 }
 
 /*!
-  \brief Get attribute typbuff
+  \brief Get attribute data buffer
 
   \param gs pointer to geosurf struct
   \param desc attribute id (descriptor)
