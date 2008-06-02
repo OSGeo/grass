@@ -236,7 +236,7 @@ int gs_update_curmask(geosurf * surf)
     int row, col, offset, destroy_ok = 1;
     gsurf_att *coloratt;
 
-    G_debug (3, "gs_update_curmask():");
+    G_debug (4, "gs_update_curmask(): id=%d", surf->gsurf_id);
 
     if (surf->mask_needupdate) {
 	surf->mask_needupdate = 0;
@@ -304,24 +304,24 @@ int gs_update_curmask(geosurf * surf)
 	    }
 
 	    if (b_topo) {
-		G_debug(3, "  Update topo mask");
+		G_debug(4, "gs_update_curmask(): update topo mask");
 		gsbm_or_masks(surf->curmask, b_topo);
 		BM_destroy(b_topo);
 	    }
 
 	    if (b_color) {
-		G_debug(3, "  Update color mask");
+		G_debug(4, "gs_update_curmask(): update color mask");
 		gsbm_or_masks(surf->curmask, b_color);
 		BM_destroy(b_color);
 	    }
 
 	    if (t_topo->nm) {
-		G_debug(3, "  Update elev null mask");
+		G_debug(4, "gs_update_curmask(): update elev null mask");
 		gsbm_or_masks(surf->curmask, t_topo->nm);
 	    }
 
 	    if (b_mask) {
-		G_debug(3, "  Update mask mask");
+		G_debug(4, "gs_update_curmask(): update mask mask");
 
 		if (t_mask->bm) {
 		    if (surf->att[ATT_MASK].constant) {

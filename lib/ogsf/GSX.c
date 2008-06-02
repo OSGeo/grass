@@ -24,7 +24,7 @@ void (*Swap_func) ();
 static int Cxl = 0;
 
 /*!
-  \brief Check cancel
+  \brief Check for cancel
 
   \return code
 */
