@@ -47,10 +47,12 @@ main (int argc, char *argv[])
     int count = 0; /* number of features with non-null attribute */
     double sum = 0.0;
     double sumsq = 0.0;
+    double sumcb = 0.0;
+    double sumqt = 0.0;
     double sum_abs = 0.0;
     double min = 0.0/0.0; /* init as nan */
     double max = 0.0/0.0;
-    double mean, mean_abs, pop_variance, sample_variance, pop_stdev, sample_stdev, pop_coeff_variation;
+    double mean, mean_abs, pop_variance, sample_variance, pop_stdev, sample_stdev, pop_coeff_variation, kurtosis, skewness;
     double total_size = 0.0;     /* total size: length/area */
 
     /* Extended statistics */
@@ -199,6 +201,8 @@ main (int argc, char *argv[])
 		    if ( type & GV_POINTS ) {
 			sum += val;
 			sumsq += val*val;
+			sumcb += val*val*val;
+			sumqt += val*val*val*val;
 			sum_abs += fabs (val);
 		    } else { /* GV_LINES */
 			double l;
@@ -206,6 +210,8 @@ main (int argc, char *argv[])
 			l = Vect_line_length ( Points );
 			sum += l*val;
 			sumsq += l*val*val;
+			sumcb += l*val*val*val;
+			sumqt += l*val*val*val*val;
 			sum_abs += l * fabs (val);
 			total_size += l;
 		    }
@@ -270,6 +276,8 @@ main (int argc, char *argv[])
 			a = Vect_get_area_area ( &Map, area );
 			sum += a*val;
 			sumsq += a*val*val;
+			sumcb += a*val*val*val;
+			sumqt += a*val*val*val*val;
 			sum_abs += a * fabs (val);
 			total_size += a;
 		    }
@@ -291,6 +299,7 @@ main (int argc, char *argv[])
 	    pop_stdev = sqrt(pop_variance);
 	    */
 	} else {
+	    double n = count;
 	    mean = sum / count;
 	    mean_abs = sum_abs / count;
 	    pop_variance = (sumsq - sum*sum/count)/count;
@@ -298,6 +307,10 @@ main (int argc, char *argv[])
 	    pop_coeff_variation = pop_stdev / (sqrt (sum * sum) / count);
 	    sample_variance = (sumsq - sum*sum/count)/(count-1);
 	    sample_stdev = sqrt(sample_variance);
+	    kurtosis = (sumqt/count - 4*sum*sumcb/(n*n) + 6*sum*sum*sumsq/(n*n*n) - 3*sum*sum*sum*sum/(n*n*n*n))
+		        / (sample_stdev*sample_stdev*sample_stdev*sample_stdev) - 3;
+	    skewness = (sumcb/n - 3*sum*sumsq/(n*n) + 2*sum*sum*sum/(n*n*n)) 
+	                / (sample_stdev*sample_stdev*sample_stdev);
 	}
     }
 
@@ -320,6 +333,8 @@ main (int argc, char *argv[])
 		if ( otype & GV_POINTS ) {
 		    fprintf(stdout, "sample_stddev=%g\n", sample_stdev);
 		    fprintf(stdout, "sample_variance=%g\n", sample_variance);
+		    fprintf(stdout, "kurtosis=%g\n", kurtosis);
+		    fprintf(stdout, "skewness=%g\n", skewness);
 		}
 	    }
 	}
@@ -340,6 +355,8 @@ main (int argc, char *argv[])
 		if ( otype & GV_POINTS ) {
 		    fprintf(stdout, "sample standard deviation: %g\n", sample_stdev);
 		    fprintf(stdout, "sample variance: %g\n", sample_variance);
+		    fprintf(stdout, "kurtosis: %g\n", kurtosis);
+		    fprintf(stdout, "skewness: %g\n", skewness);
 		}
 	    }
 	}
