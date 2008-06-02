@@ -3,7 +3,6 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	r.average \
 	r.basins.fill \
-	r.bilinear \
 	r.bitpattern \
 	r.buffer \
 	r.carve \
