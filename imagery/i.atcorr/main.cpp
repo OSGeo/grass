@@ -301,8 +301,9 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
         /* loop over all the values in the row */
 		for(col = 0; col < G_window_cols(); col++)
 		{
-			if(isnan(vis[col]) || isnan(alt[col]) || isnan(buf[col])) {buf[col] = FP_NAN; continue;}
-      alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
+/* TODO: use G_set_f_null_value()?? */
+		if(vis && isnan(vis[col]) || alt && isnan(alt[col]) || isnan(buf[col])) {buf[col] = FP_NAN; continue;}
+      		alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
 
             /* check if both maps are active and if whether any value has changed */
             if((ialt_fd >= 0) && (ivis_fd >= 0) && ((prev_vis != vis[col]) || (prev_alt != alt[col])))
