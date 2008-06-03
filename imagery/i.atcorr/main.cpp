@@ -70,11 +70,11 @@ int hit = 0;
 int mis = 0;
 
 /* function prototypes */
-static void adjust_region (char *);
+static void adjust_region (char *, char *);
 static CELL round_c (FCELL);
 static void write_fp_to_cell (int, FCELL *);
 static void process_raster (int, InputMask, ScaleRange, int, int, int, bool, ScaleRange, bool);
-static void copy_colors (char *, char *);
+static void copy_colors (char *, char *, char *);
 static void define_module (void);
 static struct Options define_options (void);
 static void read_scale (Option *, ScaleRange *);
@@ -85,11 +85,11 @@ static void read_scale (Option *, ScaleRange *);
  Atmospheric corrections should be done on the whole
  satelite image, not just portions.
  */
-static void adjust_region (char *name)
+static void adjust_region (char *name, char *mapset)
 {
 	struct Cell_head iimg_head;	/* the input image header file */
 
-	if(G_get_cellhd(name, G_mapset(), &iimg_head) < 0) 
+	if(G_get_cellhd(name, mapset, &iimg_head) < 0) 
 		G_fatal_error ("Unable to retreive header dat for input image");
 
 	if(G_set_window(&iimg_head) < 0) 
@@ -388,11 +388,11 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 
 
 /* Copy the colors from map named iname to the map named oname */
-static void copy_colors (char *iname, char *oname)
+static void copy_colors (char *iname, char *imapset, char *oname)
 {
 	struct Colors colors;
 
-	G_read_colors(iname, G_mapset(), &colors);
+	G_read_colors(iname, imapset, &colors);
 	G_write_colors(oname, G_mapset(), &colors);
 }
 
@@ -403,10 +403,10 @@ static void define_module (void)
 	struct GModule *module;
 
 	module = G_define_module();
-	module->label = "Performs atmospheric correction using the 6S algorithm.";
+	module->label = _("Performs atmospheric correction using the 6S algorithm.");
 	module->description =
-	 "6S - Second Simulation of Satellite Signal in the Solar Spectrum.";/*
-	 
+	 _("6S - Second Simulation of Satellite Signal in the Solar Spectrum.");
+	/* 
 	 " Incorporated into Grass by Christo A. Zietsman, January 2003.\n"
 	 " Converted from Fortran to C by Christo A. Zietsman, November 2002.\n\n"
 	 " Adapted by Mauro A. Homem Antunes for atmopheric corrections of\n"
@@ -538,7 +538,7 @@ int main(int argc, char* argv[])
 	int oimg_fd;	        /* output image's file descriptor */
 	int ialt_fd = -1;       /* input elevation map's file descriptor */
     int ivis_fd = -1;       /* input visibility map's file descriptor */
-
+    char *iimg_mapset, *ialt_mapset, *iviz_mapset;
     
 	/* Define module */
 	define_module();
@@ -551,19 +551,27 @@ int main(int argc, char* argv[])
 	if (G_parser(argc, argv) < 0)
 		exit (EXIT_FAILURE);
 
-    adjust_region(opts.iimg->answer);
-
 	/* open input raster */
-	if((iimg_fd = G_open_cell_old(opts.iimg->answer, G_mapset())) < 0)
+	if ( (iimg_mapset = G_find_cell2 ( opts.iimg->answer, "") ) == NULL )
+	     G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
+	if((iimg_fd = G_open_cell_old(opts.iimg->answer, iimg_mapset)) < 0)
 		G_fatal_error ("Unable to open input raster");
-        
-    if(opts.ialt->answer)
-        if((ialt_fd = G_open_cell_old(opts.ialt->answer, G_mapset())) < 0)
-            G_warning ("Unable to open DEM raster");
 
-    if(opts.ivis->answer)
-        if((ivis_fd = G_open_cell_old(opts.ivis->answer, G_mapset())) < 0)
+	adjust_region(opts.iimg->answer, iimg_mapset);
+        
+        if(opts.ialt->answer) {
+	  if ( (ialt_mapset = G_find_cell2 ( opts.ialt->answer, "") ) == NULL )
+	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
+	  if((ialt_fd = G_open_cell_old(opts.ialt->answer, ialt_mapset)) < 0)
+            G_warning ("Unable to open DEM raster");
+	}
+
+	if(opts.ivis->answer) {
+	  if ( (iviz_mapset = G_find_cell2 ( opts.ivis->answer, "") ) == NULL )
+	       G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
+          if((ivis_fd = G_open_cell_old(opts.ivis->answer, iviz_mapset)) < 0)
             G_warning ("Unable to open visibility raster");
+	}
                 
 	/* open a floating point raster or not? */
 	if(opts.oflt->answer)
@@ -604,7 +612,7 @@ int main(int argc, char* argv[])
 
     /* Copy the colors of the input raster to the output raster.
        Scaling is ignored and color ranges might not be correct. */
-	copy_colors(opts.iimg->answer, opts.oimg->answer);
+	copy_colors(opts.iimg->answer, iimg_mapset, opts.oimg->answer);
 
 	exit (EXIT_SUCCESS);
 }
