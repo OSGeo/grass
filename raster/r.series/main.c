@@ -5,7 +5,7 @@
  *               Hamish Bowman <hamish_nospam yahoo.com>, Jachym Cepicky <jachym les-ejk.cz>,
  *               Martin Wegmann <wegmann biozentrum.uni-wuerzburg.de>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -46,6 +46,8 @@ struct menu
 	{c_quart1, 0, "quart1",     "first quartile"},
 	{c_quart3, 0, "quart3",     "third quartile"},
 	{c_perc90, 0, "perc90",     "ninetieth percentile"},
+	{c_skew,   0, "skewness",   "skewness"},
+	{c_kurt,   0, "kurtosis",   "kurtosis"},
 	{NULL,     0, NULL,         NULL}
 };
 

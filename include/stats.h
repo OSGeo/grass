@@ -27,6 +27,8 @@ extern stat_func c_reg_r2;
 extern stat_func c_quart1;
 extern stat_func c_quart3;
 extern stat_func c_perc90;
+extern stat_func c_skew;
+extern stat_func c_kurt;
 
 extern stat_func_w w_ave;
 extern stat_func_w w_count;
@@ -41,6 +43,8 @@ extern stat_func_w w_reg_r2;
 extern stat_func_w w_stddev;
 extern stat_func_w w_sum;
 extern stat_func_w w_var;
+extern stat_func_w w_skew;
+extern stat_func_w w_kurt;
 
 extern int sort_cell(DCELL *, int);
 extern int sort_cell_w(DCELL (*)[2], int);
