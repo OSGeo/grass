@@ -42,6 +42,9 @@ static const char *GRASS_copyright __attribute__((unused))
 
 #define GIS_H_VERSION "$Revision$"
 
+#define G_gisinit(pgm) G__gisinit(GIS_H_VERSION, (pgm))
+#define G_no_gisinit() G__no_gisinit(GIS_H_VERSION)
+
 /* Define TRUE and FALSE for boolean comparisons */
 #ifndef TRUE
 #define TRUE 1

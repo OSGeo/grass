@@ -588,8 +588,8 @@ char *G_gisdbase(void);
 int G_gishelp(const char *, const char *);
 
 /* gisinit.c */
-int G_gisinit(const char *);
-int G_no_gisinit(void);
+int G__gisinit(const char *, const char *);
+int G__no_gisinit(const char *);
 int G__check_gisinit(void);
 
 /* histo_eq.c */
