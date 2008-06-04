@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <grass/gis.h>
 #include "G.h"
@@ -36,7 +37,7 @@ static int gisinit(void);
  * \return exit() is called on error
  */
 
-int G_gisinit(const char *pgm)
+int G__gisinit(const char *version, const char *pgm)
 {
     char *mapset;
 
@@ -44,6 +45,9 @@ int G_gisinit(const char *pgm)
 	return 0;
 
     G_set_program_name (pgm);
+
+    if (strcmp(version, GIS_H_VERSION) != 0)
+        G_fatal_error(_("Incompatible library version for module"));
 
    /* Make sure location and mapset are set */
     G_location_path();
@@ -75,10 +79,13 @@ int G_gisinit(const char *pgm)
  * \return always returns 0 on success
  */
 
-int G_no_gisinit(void)
+int G__no_gisinit(const char *version)
 {
     if ( initialized )
 	return 0;
+
+    if (strcmp(version, GIS_H_VERSION) != 0)
+        G_fatal_error(_("Incompatible library version for module"));
 
     gisinit();
 
