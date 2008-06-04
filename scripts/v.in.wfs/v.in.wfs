@@ -70,4 +70,4 @@ v.in.ogr dsn="$TMP.xml" out=$OUT -o
 #rm -f "$TMP.xml"
 
 g.message "Vector points map <$OUT> imported from WFS."
-exit
+exit 0
