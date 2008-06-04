@@ -106,7 +106,7 @@ fi
 #### setup temporary file
 TMP="`g.tempfile pid=$$`"
 if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
-    g.mesage -e "unable to create temporary files"
+    g.message -e "unable to create temporary files"
     exit 1
 fi
 
