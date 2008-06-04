@@ -862,7 +862,8 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
 */
 int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
-    G_debug(4, "gs_set_att_const");
+    G_debug(4, "gs_set_att_const(): id=%d, desc=%d, const=%f",
+	    gs->gsurf_id, desc, constant);
 
     if (gs) {
 	gs->att[desc].constant = constant;

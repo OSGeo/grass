@@ -119,9 +119,9 @@ void gsd_cplane_on(int num)
 }
 
 /*!
-  \brief ADD
+  \brief Turn off clip plane
 
-  \param num
+  \param num cplane id
 */
 void gsd_cplane_off(int num)
 {

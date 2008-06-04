@@ -241,7 +241,7 @@ int GS_new_surface(void)
 }
 
 /*!
-  \brief Add new light model
+  \brief Add new model light
 
   \return light model id
   \return -1 on error (MAX_LIGHTS exceded)
@@ -285,7 +285,7 @@ int GS_new_light(void)
   
   \param num light id (starts with 1)
   \param xpos,ypos,zpos coordinates (model)
-  \param local ?
+  \param local local coordinate (for viewport)
 */
 void GS_setlight_position(int num, float xpos, float ypos, float zpos,
 			  int local)
@@ -2520,7 +2520,8 @@ void GS_done_draw(void)
 void GS_set_focus(float *realto)
 {
 
-    G_debug(3, "GS_set_focus");
+    G_debug(3, "GS_set_focus(): %f,%f,%f",
+	    realto[0], realto[1], realto[2]);
 
     Gv.infocus = 1;
     GS_v3eq(Gv.real_to, realto);
@@ -2905,8 +2906,6 @@ void GS_set_infocus(void)
     return;
 }
 
-
-
 /*!
   \brief Set viewport
 
@@ -3154,7 +3153,7 @@ void GS_set_cplane(int num)
 }
 
 /*!
-  \brief Unset cplace
+  \brief Unset clip place (turn off)
 
   \param num cplane id
 */
