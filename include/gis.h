@@ -40,6 +40,8 @@
 static const char *GRASS_copyright __attribute__((unused))
 	= "GRASS GNU GPL licensed Software" ;
 
+#define GIS_H_VERSION "$Revision$"
+
 /* Define TRUE and FALSE for boolean comparisons */
 #ifndef TRUE
 #define TRUE 1
