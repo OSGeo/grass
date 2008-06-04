@@ -704,7 +704,7 @@ void gsd_color_func(unsigned int col)
 }
 
 /*!
-  \brief ADD
+  \brief Initialize model light
 */
 void gsd_init_lightmodel(void)
 {
@@ -820,8 +820,8 @@ void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 /*!
   \brief Define light
 
-  \param num
-  \param vals
+  \param num light id (starts with 1)
+  \param vals position(x,y,z,w), color, ambientm, emission
 */
 void gsd_deflight(int num, struct lightdefs *vals)
 {

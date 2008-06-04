@@ -2224,9 +2224,9 @@ int gsd_surf_map(geosurf * surf)
 		row /= 2;
 	}
 	*/
-		datarow1 = row * ymod; 
-		datarow2 = (row - (step_val/2)) * ymod;
-		datarow3 = (row + (step_val/2)) * ymod;
+	datarow1 = row * ymod; 
+	datarow2 = (row - (step_val/2)) * ymod;
+	datarow3 = (row + (step_val/2)) * ymod;
 	
 	
 	y1 = ymax - row*yres;
@@ -2239,96 +2239,95 @@ int gsd_surf_map(geosurf * surf)
 	
 	
 	for (col = start_val; col < xcnt; col+=step_val) {
-
-	datacol1 = col * xmod;
-	datacol2 = (col - (step_val/2)) * xmod;
-	datacol3 = (col + (step_val/2)) * xmod;
-	
-	x1 = col*xres;
-	x2 = (col-(step_val/2))*xres;
-	x3 = (col+(step_val/2))*xres;
-	
-
-	/* 0 */
-	/*
-	if (check_mask) {
-		if (BM_get(surf->curmask, datacol1, datarow1))
-			continue;
-	}
-	*/
-	
-	cnt1++;
-	
-	/* Do not need BM_get because GET_MAPATT calls
-	 * same and returns zero if masked
-	*/
-	offset2[0] = y1off+datacol1; /* fan center */
-	pt2[0][X] = x1; pt2[0][Y] = y1; /* fan center */
-	pt[X]=pt2[0][X]; pt[Y] = pt2[0][Y];
+	    datacol1 = col * xmod;
+	    datacol2 = (col - (step_val/2)) * xmod;
+	    datacol3 = (col + (step_val/2)) * xmod;
+	    
+	    x1 = col*xres;
+	    x2 = (col-(step_val/2))*xres;
+	    x3 = (col+(step_val/2))*xres;
+	    
+	    
+	    /* 0 */
+	    /*
+	      if (check_mask) {
+	      if (BM_get(surf->curmask, datacol1, datarow1))
+	      continue;
+	      }
+	    */
+	    
+	    cnt1++;
+	    
+	    /* Do not need BM_get because GET_MAPATT calls
+	     * same and returns zero if masked
+	     */
+	    offset2[0] = y1off+datacol1; /* fan center */
+	    pt2[0][X] = x1; pt2[0][Y] = y1; /* fan center */
+	    pt[X]=pt2[0][X]; pt[Y] = pt2[0][Y];
 		if ( !GET_MAPATT(buff, offset2[0], pt[Z]) ) 
-			continue; /* masked */
+		    continue; /* masked */
 		else {
-	pt[Z] *= zexag;
-		if (gsd_checkpoint
+		    pt[Z] *= zexag;
+		    if (gsd_checkpoint
 			(pt, window, viewport, modelMatrix, projMatrix)) 
-			 continue;
+			continue;
 		}
 		
-	
-	offset2[1] = y2off+datacol2;
-	offset2[2] = y2off+datacol1;
-	offset2[3] = y2off+datacol3;
-	offset2[4] = y1off+datacol3;
-	offset2[5] = y3off+datacol3;
-	offset2[6] = y3off+datacol1;
-	offset2[7] = y3off+datacol2;
-	offset2[8] = y1off+datacol2;
-	offset2[9] = y2off+datacol2; /* repeat 1st corner to close */
-	
-	pt2[1][X] = x2;	pt2[1][Y] = y2;
-	pt2[2][X] = x1;	pt2[2][Y] = y2;
-	pt2[3][X] = x3;	pt2[3][Y] = y2;
-	pt2[4][X] = x3;	pt2[4][Y] = y1;
-	pt2[5][X] = x3;	pt2[5][Y] = y3;
-	pt2[6][X] = x1;	pt2[6][Y] = y3;
-	pt2[7][X] = x2;	pt2[7][Y] = y3;
-	pt2[8][X] = x2;	pt2[8][Y] = y1;
-	pt2[9][X] = x2;	pt2[9][Y] = y2; /* repeat 1st corner to close */
-	
-	
-	/* Run through triangle fan */
+		
+		offset2[1] = y2off+datacol2;
+		offset2[2] = y2off+datacol1;
+		offset2[3] = y2off+datacol3;
+		offset2[4] = y1off+datacol3;
+		offset2[5] = y3off+datacol3;
+		offset2[6] = y3off+datacol1;
+		offset2[7] = y3off+datacol2;
+		offset2[8] = y1off+datacol2;
+		offset2[9] = y2off+datacol2; /* repeat 1st corner to close */
+		
+		pt2[1][X] = x2;	pt2[1][Y] = y2;
+		pt2[2][X] = x1;	pt2[2][Y] = y2;
+		pt2[3][X] = x3;	pt2[3][Y] = y2;
+		pt2[4][X] = x3;	pt2[4][Y] = y1;
+		pt2[5][X] = x3;	pt2[5][Y] = y3;
+		pt2[6][X] = x1;	pt2[6][Y] = y3;
+		pt2[7][X] = x2;	pt2[7][Y] = y3;
+		pt2[8][X] = x2;	pt2[8][Y] = y1;
+		pt2[9][X] = x2;	pt2[9][Y] = y2; /* repeat 1st corner to close */
+		
+		
+		/* Run through triangle fan */
 		gsd_bgntfan();
 		for (ii = 0; ii < 10; ii++) {
-		
-			if ( ii > 0) {
+		    
+		    if ( ii > 0) {
 			pt[X]=pt2[ii][X]; pt[Y] = pt2[ii][Y];
-				if (!GET_MAPATT(buff, offset2[ii], pt[Z]) )
-					continue;
+			if (!GET_MAPATT(buff, offset2[ii], pt[Z]) )
+			    continue;
 			pt[Z] *= zexag;
-			}
-			
-			FNORM(surf->norms[offset2[ii]], n);
-											
-			if (check_color)
-				curcolor = gs_mapcolor(cobuff, coloratt, offset2[ii]);
-
+		    }
+		    
+		    FNORM(surf->norms[offset2[ii]], n);
+		    
+		    if (check_color)
+			curcolor = gs_mapcolor(cobuff, coloratt, offset2[ii]);
+		    
 		    if (check_transp) {
 			GET_MAPATT(trbuff, offset2[ii], ttr);
 			ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
 			ktrans = (char) (255 - ktrans) << 24;
 		    }
-
+		    
 		    if (check_material) {
 			if (check_emis) {
 			    GET_MAPATT(embuff, offset2[ii], kem);
 			    kem = SCALE_ATT(ematt, kem, 0., 1.);
 			}
-
+			
 			if (check_shin) {
 			    GET_MAPATT(shbuff, offset2[ii], ksh);
 			    ksh = SCALE_ATT(shatt, ksh, 0., 1.);
 			}
-
+			
 			if (pksh != ksh || pkem != kem
 			    || (kem && check_color)) {
 			    pksh = ksh;
@@ -2337,24 +2336,20 @@ int gsd_surf_map(geosurf * surf)
 					     ksh, kem, curcolor);
 			}
 		    }
-
+		    
 		    gsd_litvert_func(n, ktrans | curcolor, pt);
 		    
 		    
-	} /* close ii loop */
+		} /* close ii loop */
 		gsd_endtfan();
 		cnt2++;
-	
-
- 
         } /* end col */
-        
-   } /* end row */
-
-
+    } /* end row */
+    
+    
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-
+    
     return (0);
 }
