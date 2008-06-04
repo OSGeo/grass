@@ -471,7 +471,10 @@ int Nnew_map_obj_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
     arglist[2] = topo_string;
     if ((argc >= 3) && (strncmp(argv[2], "name=", 5))) {
         arglist[3] = argv[2];
-        set_att(new_id, SURF, data, interp, 3, arglist);
+        if (set_att(new_id, SURF, data, interp, 3, arglist) != TCL_OK) {
+	    GS_delete_surface(new_id);
+	    return (TCL_ERROR);
+	}
         file_used = 1;
     }
     else {
@@ -1749,6 +1752,9 @@ int set_att(int id, int type, Nv_data * data, Tcl_Interp * interp, int argc,
 
 	    G_debug(3, "Loading attribute map %s\n", argv[3]);
 	    ret = GS_load_att_map(id, argv[3], att);
+	    if (ret < 0) {
+		return TCL_ERROR;
+	    }
     }
 
     /* After we've loaded a constant map or a file,

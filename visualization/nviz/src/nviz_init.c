@@ -288,7 +288,11 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	for (i = 0; elev->answers[i]; i++) {
 	    arglist[1] = "surf";
 	    arglist[2] = elev->answers[i];
-	    Nnew_map_obj_cmd(data, interp, 3, arglist);
+
+	    if (Nnew_map_obj_cmd(data, interp, 3, arglist) != TCL_OK) {
+		G_warning(_("Loading data failed"));
+		continue;
+	    }
 
 	    /* See if we should autoload the color file */
 	    if (aload) {
