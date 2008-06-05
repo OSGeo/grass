@@ -2318,14 +2318,8 @@ class MapFrame(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=3, style=0)
         self.statusbar.SetStatusWidths([-5, -2, -1])
         self.toggleStatus = wx.Choice(self.statusbar, wx.ID_ANY,
-                                      choices = [_("Coordinates"),
-                                                 _("Extent"),
-                                                 _("Comp. region"),
-                                                 _("Show comp. extent"),
-                                                 _("Display mode"),
-                                                 _("Display geometry"),
-                                                 _("Map scale")])
-	self.toggleStatus.SetSelection(0)
+                                      choices = globalvar.MAP_DISPLAY_STATUSBAR_MODE)
+	self.toggleStatus.SetSelection(UserSettings.Get(group='display', key='statusbarMode', subkey='selection'))
         self.statusbar.Bind(wx.EVT_CHOICE, self.OnToggleStatus, self.toggleStatus)
         # auto-rendering checkbox
         self.autoRender = wx.CheckBox(parent=self.statusbar, id=wx.ID_ANY,

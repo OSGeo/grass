@@ -35,6 +35,7 @@ from wx.lib.wordwrap import wordwrap
 import gcmd
 import grassenv
 import utils
+import globalvar
 from debug import Debug as Debug
 
 class Settings:
@@ -73,6 +74,7 @@ class Settings:
                 'driver': { 'type': 'default' },
                 'compResolution' : { 'enabled' : False },
                 'autoRendering': { 'enabled' : False },
+                'statusbarMode': { 'selection' : 0 },
                 },
             #
             # advanced
@@ -232,6 +234,7 @@ class Settings:
                                                                 'verbose',
                                                                 'quiet']
         self.internalSettings['display']['driver']['choices'] = ['default']
+        self.internalSettings['display']['statusbarMode']['choices'] = globalvar.MAP_DISPLAY_STATUSBAR_MODE
         
     def GetMapsetPath(self):
         """Store mapset search path"""
@@ -653,7 +656,27 @@ class PreferencesDialog(wx.Dialog):
 
 
         #
-        # display mode (use computation resolution?)
+        # Statusbar mode
+        #
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Statusbar mode:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        listOfModes = self.settings.Get(group='display', key='statusbarMode', subkey='choices', internal=True)
+        statusbarMode = wx.Choice(parent=panel, id=wx.ID_ANY, size=(150, -1),
+                                  choices=listOfModes,
+                                  name="GetSelection")
+        statusbarMode.SetSelection(self.settings.Get(group='display', key='statusbarMode', subkey='selection'))
+        self.winId['display:statusbarMode:selection'] = statusbarMode.GetId()
+
+        gridSizer.Add(item=statusbarMode,
+                      flag=wx.ALIGN_RIGHT,
+                      pos=(row, 1))
+
+        #
+        # Use computation resolution
         #
         row += 1
         compResolution = wx.CheckBox(parent=panel, id=wx.ID_ANY,
@@ -1078,6 +1101,7 @@ class PreferencesDialog(wx.Dialog):
                 value = win.GetStringSelection()
             else:
                 value = win.GetValue()
+
             self.settings.Set(group, key, subkey, value)
 
         #

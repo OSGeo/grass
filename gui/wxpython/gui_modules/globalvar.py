@@ -83,6 +83,14 @@ DIALOG_TEXTCTRL_SIZE = (400, -1)
 MAP_WINDOW_SIZE = (680, 520)
 HIST_WINDOW_SIZE = (500, 350)
 
+MAP_DISPLAY_STATUSBAR_MODE = [_("Coordinates"),
+                              _("Extent"),
+                              _("Comp. region"),
+                              _("Show comp. extent"),
+                              _("Display mode"),
+                              _("Display geometry"),
+                              _("Map scale")]
+
 """File name extension binaries/scripts"""
 if subprocess.mswindows:
     EXT_BIN = '.exe'
