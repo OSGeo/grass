@@ -66,6 +66,8 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'display':
             self.inDisplay = True
             self.displayIndex += 1
+
+            # window position and size
             posAttr = attrs.get('dim', '')
             if posAttr:
                 posVal = map(int, posAttr.split(','))
@@ -79,12 +81,20 @@ class ProcessWorkspaceFile(HandlerBase):
                 pos = None
                 size = None
 
+            extentAttr = attrs.get('extent', '')
+            if extentAttr:
+                # w, s, e, n
+                extent = map(float, extentAttr.split(','))
+            else:
+                extent = None
+
             self.displays.append({
                 "render"         : bool(int(attrs.get('render', "0"))),
                 "mode"           : int(attrs.get('mode', 0)),
                 "showCompExtent" : bool(int(attrs.get('showCompExtent', "0"))),
                 "pos"            : pos,
-                "size"           : size})
+                "size"           : size,
+                "extent"         : extent})
             
         elif name == 'group':
             self.groupName    = attrs.get('name', None)
