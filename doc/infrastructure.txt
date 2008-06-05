@@ -12,6 +12,7 @@ Maintainer: M. Neteler
 
 * http://grass.osgeo.org
 ** X Ghz X CPU, sponsored by Telascience.org at San Diego Supercomputer Center (USA).
+** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status#Telascience_Blades
 ** Hardware: Blade xblade14-2
    (http://wiki.osgeo.org/wiki/SAC_Service_Status#Telascience_Blades
     http://wiki.osgeo.org/index.php/SAC)
@@ -22,6 +23,10 @@ Maintainer: M. Neteler
 *** Apache rewrite engine to http://grass.osgeo.org
 ** Notes: Since OSGeo-SAC doesn't want to hand out too many ssh accesses to the osgeo1 and osgeo2 machines, we moved grass.osgeo.org as
 virtual host onto Telascience.org infrastructure (sharing with other OSGeo services there)
+
+* Backup:
+** grass.osgeo.org is backup'ed via rsync to osgeo2: http://wiki.osgeo.org/wiki/SAC:Backups#download.osgeo.org
+** Wiki backup, via rsync to http://josef.fsv.cvut.cz/WIKI/grass-osgeo/index.php/Main_Page
 
 * Web pages:
 ** hosted in SVN server (developers can modify, see
