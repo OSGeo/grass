@@ -63,8 +63,19 @@ data.
 <P>
 Raster maps are exported with <a href="r.out.gdal.html">r.out.gdal</a>
 into common formats. Also <a href="r.out.bin.html">r.out.bin</a>,
-<a href="r.out.vtk.html">r.out.vtk</a> and other export modules are
-available.
+<a href="r.out.vtk.html">r.out.vtk</a>, <a href="r.out.ascii.html">r.out.ascii</a>
+and other export modules are available. They export the data according
+to the current region settings. If those differ from the original map,
+the map is resampled on the fly (nearest neighbor algorithm). In other
+words, the output will have as many rows and columns as the current region.
+To export maps with various grid spacings(e.g, 500x500 or 200x500), you
+can just change the region resolution with <a href="g.region.html">g.region</a>
+and then export the map. The resampling is done with nearest neighbor
+algorithm in this case. If you want some other form of resampling, 
+first change the region, then explicitly resample the map with e.g.
+<a href="r.resamp.interp.html">r.resamp.interp</a> or
+<a href="r.resamp.stats.html">r.resamp.stats</a>, then export the 
+resampled map.
 
 
 <h3>Metadata</h3>
