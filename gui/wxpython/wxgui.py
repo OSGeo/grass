@@ -627,8 +627,11 @@ class GMFrame(wx.Frame):
             #
             # start map displays first (list of layers can be empty)
             #
+            displayId = 0
             for display in gxwXml.displays:
                 mapdisplay = self.NewDisplay(show=False)
+                maptree = self.gm_cb.GetPage(displayId).maptree
+
                 # set windows properties
                 mapdisplay.SetProperties(render=display['render'],
                                          mode=display['mode'],
@@ -641,7 +644,14 @@ class GMFrame(wx.Frame):
                     if display['size']:
                         mapdisplay.SetSize(display['size'])
 
+                # set extent if defined
+                if display['extent']:
+                    w, s, e, n = display['extent']
+                    maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
+
                 mapdisplay.Show()
+
+                displayId += 1
     
             maptree = None 
             selected = [] # list of selected layers
@@ -899,21 +909,27 @@ class GMFrame(wx.Frame):
             # list of displays
             for page in range(0, self.gm_cb.GetPageCount()):
                 mapTree = self.gm_cb.GetPage(page).maptree
+                region = mapTree.Map.region
 
                 displayPos = mapTree.mapdisplay.GetPosition()
                 displaySize = mapTree.mapdisplay.GetSize()
 
                 file.write('%s<display render="%d" '
                            'mode="%d" showCompExtent="%d" '
-                           'dim="%d,%d,%d,%d">\n' % (' ' * self.indent,
-                                                     int(mapTree.mapdisplay.autoRender.IsChecked()),
-                                                     mapTree.mapdisplay.toggleStatus.GetSelection(),
-                                                     int(mapTree.mapdisplay.showRegion.IsChecked()),
-                                                     displayPos[0],
-                                                     displayPos[1],
-                                                     displaySize[0],
-                                                     displaySize[1]
-                                                     ))
+                           'dim="%d,%d,%d,%d" '
+                           'extent="%f,%f,%f,%f">\n' % (' ' * self.indent,
+                                                      int(mapTree.mapdisplay.autoRender.IsChecked()),
+                                                      mapTree.mapdisplay.toggleStatus.GetSelection(),
+                                                      int(mapTree.mapdisplay.showRegion.IsChecked()),
+                                                      displayPos[0],
+                                                      displayPos[1],
+                                                      displaySize[0],
+                                                      displaySize[1],
+                                                      region['w'],
+                                                      region['s'],
+                                                      region['e'],
+                                                      region['n']
+                                                      ))
 
                 # list of layers
                 item = mapTree.GetFirstChild(mapTree.root)[0]
