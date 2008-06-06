@@ -20,6 +20,10 @@ import os
 import sys
 import locale
 
+### i18N
+import gettext
+gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
+
 def CheckForWx():
     """Try to import wx module and check its version"""
     majorVersion = 2.8
