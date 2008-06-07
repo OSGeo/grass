@@ -11,6 +11,7 @@ G_PROJ_GLOBAL struct Cell_head cellhd;
 void input_currloc(void);
 int input_wkt(char *);
 int input_proj4(char *);
+int input_epsg(int);
 int input_georef(char *);
 
 /* output.c */

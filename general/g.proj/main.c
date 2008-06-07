@@ -195,12 +195,9 @@ int main(int argc, char *argv[])
     else if (inproj4->answer)
         /* Input in PROJ.4 format */
         input_proj4(inproj4->answer);
-    else if (inepsg->answer) {
+    else if (inepsg->answer)
 	/* Input from EPSG code */
-	char buffer[64];
-	sprintf(buffer, "+init=epsg:%s", inepsg->answer);
-	input_proj4(buffer);
-    }
+	input_epsg(atoi(inepsg->answer));
     else 
         /* Input from georeferenced file */
         input_georef(ingeo->answer);

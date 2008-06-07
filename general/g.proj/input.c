@@ -143,7 +143,43 @@ int input_proj4(char *proj4params)
    
     return ret;
 }
-       
+
+/**
+ * \brief Read projection information corresponding to an EPSG co-ordinate 
+ *        system number
+ * 
+ * Determines projection information corresponding to an EPSG co-ordinate 
+ * system number and stores in global structs projinfo and projunits.
+ * Populates global cellhd with default region information.
+ * 
+ * \param epsg_num    EPSG number for co-ordinate system
+ * 
+ * \return        2 if a projected or lat/long co-ordinate system has been
+ *                defined; 1 if an unreferenced XY co-ordinate system has
+ *                been defined
+ **/
+
+int input_epsg(int epsg_num)
+{
+    OGRSpatialReferenceH hSRS;
+    int ret = 0;
+
+    /* Set finder function for locating OGR csv co-ordinate system tables */
+    SetCSVFilenameHook( GPJ_set_csv_loc );
+
+    hSRS = OSRNewSpatialReference(NULL);
+    if (OSRImportFromEPSG(hSRS, epsg_num) != OGRERR_NONE)
+        G_fatal_error(_("Unable to translate EPSG code"));
+
+    ret = GPJ_osr_to_grass(&cellhd, &projinfo, &projunits, hSRS, 0);
+
+    OSRDestroySpatialReference(hSRS);
+   
+    set_default_region();
+   
+    return ret;
+}
+
 /**
  * \brief Read projection and region information associated with a 
  *        georeferenced file
