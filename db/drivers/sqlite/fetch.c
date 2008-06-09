@@ -137,6 +137,9 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
            SQLITE_TEXT     3
            SQLITE_BLOB     4
            SQLITE_NULL     5
+
+          lib/db/dbmi_base/sqltype.c defines:
+           DB_SQL_TYPE_*
         */
 
 	/* Note: we have set DATESTYLE TO ISO in db_driver_open_select_cursor() so datetime
