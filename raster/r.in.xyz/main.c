@@ -126,6 +126,7 @@ int main(int argc, char *argv[])
 
     double min = 0.0/0.0; /* init as nan */
     double max = 0.0/0.0; /* init as nan */
+    double zscale = 1.0;
     size_t offset, n_offset;
     int    n = 0;
     double sum = 0.;
@@ -140,7 +141,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *input_opt, *output_opt, *delim_opt, *percent_opt, *type_opt;
-    struct Option *method_opt, *xcol_opt, *ycol_opt, *zcol_opt, *zrange_opt;
+    struct Option *method_opt, *xcol_opt, *ycol_opt, *zcol_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt;
     struct Flag *scan_flag, *shell_style, *skipline;
 
@@ -211,6 +212,14 @@ int main(int argc, char *argv[])
     zrange_opt->key_desc   = "min,max";
     zrange_opt->description = _("Filter range for z data (min,max)");
 
+    zscale_opt = G_define_option();
+    zscale_opt->key = "zscale";
+    zscale_opt->type = TYPE_DOUBLE;
+    zscale_opt->required = NO;
+    zscale_opt->answer   = "1.0";
+    zscale_opt->key_desc   = "zscale";
+    zscale_opt->description = _("Scale to apply to z data");
+
     percent_opt = G_define_option();
     percent_opt->key = "percent";
     percent_opt->type = TYPE_INTEGER;
@@ -274,6 +283,7 @@ int main(int argc, char *argv[])
     max_col = (zcol > max_col) ? zcol : max_col;
 
     percent = atoi(percent_opt->answer);
+    zscale = atof(zscale_opt->answer);
 
     /* parse zrange */
     do_zfilter = FALSE;
@@ -453,7 +463,7 @@ int main(int argc, char *argv[])
 	if( zrange_opt->answer )
 	    G_warning(_("zrange will not be taken into account during scan"));
 
-	scan_bounds(in_fp, xcol, ycol, zcol, fs, shell_style->answer, skipline->answer);
+	scan_bounds(in_fp, xcol, ycol, zcol, fs, shell_style->answer, skipline->answer, zscale);
 
 	if(!from_stdin)
 	    fclose(in_fp);
@@ -597,6 +607,8 @@ int main(int argc, char *argv[])
 	    }
 	    if( 1 != sscanf(tokens[zcol-1], "%lf", &z) )
 		G_fatal_error(_("Bad z-coordinate line %d column %d. <%s>"), line, zcol, tokens[zcol-1]);
+
+	    z=z/zscale;
 	    if(zrange_opt->answer) {
 		if (z < zrange_min || z > zrange_max) {
 		    G_free_tokens(tokens);
@@ -1011,7 +1023,7 @@ int main(int argc, char *argv[])
 
 
 
-int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_style, int skipline)
+int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_style, int skipline, double zscale)
 {
     int    line, first, max_col;
     char   buff[BUFFSIZE];
@@ -1105,10 +1117,10 @@ int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_styl
 	fprintf(stderr,_("Range:     min         max\n"));
 	fprintf(stdout,"x: %11f %11f\n", min_x, max_x);
 	fprintf(stdout,"y: %11f %11f\n", min_y, max_y);
-	fprintf(stdout,"z: %11f %11f\n", min_z, max_z);
+	fprintf(stdout,"z: %11f %11f\n", min_z/zscale, max_z/zscale);
    } else
         fprintf(stdout,"n=%f s=%f e=%f w=%f b=%f t=%f\n", 
-	  max_y, min_y, max_x, min_x, min_z, max_z);
+	  max_y, min_y, max_x, min_x, min_z/zscale, max_z/zscale);
 
     G_debug(1, "Processed %d lines.", line);
     G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
