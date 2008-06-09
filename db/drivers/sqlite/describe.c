@@ -168,14 +168,16 @@ int describe_table( sqlite3_stmt *statement,
 	    fsize = 20;
 	    break;
 
-	case SQLITE_TEXT:
-	    fsize = 255;
-	    break;
-	    
 	case SQLITE_FLOAT:
 	    fsize = 20;
 	    break;
-	    
+
+	case SQLITE_TEXT:
+	    fsize = 255;
+	    break;
+	
+	/* SQLITE_BLOB, SQLITE_NULL needed here? */
+	
 	default:
 	    fsize = 99999; /* sqlite doesn't care, it must be long enough to
                           satisfy tests in GRASS */
@@ -253,19 +255,43 @@ void get_column_info ( sqlite3_stmt *statement, int col,
 
     G_debug ( 3, "litetype = %d", *litetype );
 
+    /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
+           SQLITE_INTEGER  1
+           SQLITE_FLOAT    2
+           SQLITE_TEXT     3
+           SQLITE_BLOB     4
+           SQLITE_NULL     5
+
+       lib/db/dbmi_base/sqltype.c:
+           DB_SQL_TYPE_CHARACTER:        0 "CHARACTER"
+           DB_SQL_TYPE_NUMERIC:          1 "NUMERIC"
+           DB_SQL_TYPE_DECIMAL:          2 "DECIMAL"
+           DB_SQL_TYPE_SMALLINT:         3 "SMALLINT"
+           DB_SQL_TYPE_INTEGER:          4 "INTEGER"
+           DB_SQL_TYPE_REAL:             5 "REAL"
+           DB_SQL_TYPE_DOUBLE_PRECISION: 6 "DOUBLE PRECISION"
+           DB_SQL_TYPE_DATE:             7 "DATE"
+           DB_SQL_TYPE_TIME:             8 "TIME"
+           DB_SQL_TYPE_SERIAL:           9 "SERIAL"
+           DB_SQL_TYPE_TEXT:             10 "TEXT"
+           DB_SQL_TYPE_TIMESTAMP:        11 "TIMESTAMP"
+           DB_SQL_TYPE_INTERVAL:         12 "INTERVAL"
+           default                       13 "unknown"
+    */
+
     switch ( *litetype) {
 	case SQLITE_INTEGER:
 	    *sqltype = DB_SQL_TYPE_INTEGER;
+	    break;
+
+	case SQLITE_FLOAT:
+	    *sqltype = DB_SQL_TYPE_DOUBLE_PRECISION;
 	    break;
 
 	case SQLITE_TEXT:
 	    *sqltype = DB_SQL_TYPE_TEXT;
 	    break;
 	    
-	case SQLITE_FLOAT:
-	    *sqltype = DB_SQL_TYPE_DOUBLE_PRECISION;
-	    break;
-
 	case SQLITE_NULL:
 	    *sqltype = DB_SQL_TYPE_TEXT; /* good choice? */
 	    break;
