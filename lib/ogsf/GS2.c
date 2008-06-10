@@ -2611,9 +2611,9 @@ void GS_set_focus_center_map(int id)
 }
 
 /*!
-  \brief Move to position
+  \brief Move viewpoint 
 
-  \param pt point model coordinates
+  \param pt 'from' model coordinates
 */
 void GS_moveto(float *pt)
 {
@@ -2718,7 +2718,7 @@ int GS_get_zrange(float *min, float *max, int doexag)
 }
 
 /*!
-  \brief Get 'from' position
+  \brief Get viewpoint 'from' position
 
   \param[out] fr from model coordinates
 */
@@ -2732,7 +2732,7 @@ void GS_get_from(float *fr)
 }
 
 /*!
-  \brief Get 'from' real coordinates
+  \brief Get viewpoint 'from' real coordinates
 
   \param[out] fr 'from' real coordinates
 */
@@ -2867,7 +2867,7 @@ int GS_get_twist(void)
 }
 
 /*!
-  \brief Set twist value
+  \brief Set viewpoint twist value
 
   10ths of degrees off twelve o'clock
   
@@ -3165,7 +3165,7 @@ void GS_unset_cplane(int num)
 }
 
 /*!
-  \brief Get scale
+  \brief Get axis scale
 
   \param sx,sy,sz x/y/z scale values
   \param doexag use vertical exaggeration
@@ -3269,7 +3269,7 @@ int GS_load_3dview(char *vname, int surfid)
 ************************************************************************/
 
 /*!
-  \brief Init view
+  \brief Init viewpoint
 
   \todo allow to set center?
 */
@@ -3380,8 +3380,6 @@ double GS_get_aspect(void)
     int left, right, bottom, top;
     GLint tmp[4];
 
-    G_debug(3, "GS_get_aspect");
-
     /* OGLXXX
      * get GL_VIEWPORT:
      * You can probably do better than this.
@@ -3391,6 +3389,9 @@ double GS_get_aspect(void)
     right = tmp[0] + tmp[2] - 1;
     bottom = tmp[1];
     top = tmp[1] + tmp[3] - 1;
+
+    G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d",
+	    left, right, top, bottom);
 
     return ((double) (right - left) / (top - bottom));
 }
