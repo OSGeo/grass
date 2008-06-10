@@ -1,4 +1,20 @@
-#include "string.h"
+/*!
+  \file color_str.c
+  
+  \brief GIS library - color management, named color to RGB triplet
+  
+  (C) 2001-2008 by the GRASS Development Team
+  
+  This program is free software under the 
+  GNU General Public License (>=v2). 
+  Read the file COPYING that comes with GRASS
+  for details.
+  
+  \author Original author CERL
+*/
+
+#include <string.h>
+
 #include <grass/gis.h>
 #include <grass/colors.h>
 
@@ -43,33 +59,57 @@ static const struct color_name standard_color_names[] =
     {"brown",   BROWN}
 };
 
+/*!
+  \brief Get number of named colors (RGB triplets)
+
+  \return number of colors
+*/
 int G_num_standard_colors(void)
 {
     return sizeof(standard_colors_rgb) / sizeof(standard_colors_rgb[0]);
 }
 
+/*!
+  \brief Get RGB triplet of given color
+
+  \param n color index
+*/
 struct color_rgb G_standard_color_rgb(int n)
 {
     return standard_colors_rgb[n];
 }
 
+/*!
+  \brief Get number of named colors (color names)
+
+  \return number of colors
+*/
 int G_num_standard_color_names(void)
 {
     return sizeof(standard_color_names) / sizeof(standard_color_names[0]);
 }
 
+/*!
+  \brief Get color name
+
+  \param n color index
+*/
 const struct color_name *G_standard_color_name(int n)
 {
     return &standard_color_names[n];
 }
 
-/* 
-*  Parses color string and sets red,green,blue
-* 
-*  Returns: 1 - OK
-*           2 - NONE 
-*           0 - Error 
-* 
+/*! 
+  \brief Parse color string and set red,green,blue
+
+  \param str color string
+  \param[out] red red value
+  \param[out] grn green value
+  \param[out] blu blue value
+
+  \return 1 OK
+  \return 2 NONE 
+  \return 0 on error 
 */
 int G_str_to_color(const char *str, int *red, int *grn, int *blu)
 {
@@ -114,4 +154,3 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
 	
     return 0;
 }
-
