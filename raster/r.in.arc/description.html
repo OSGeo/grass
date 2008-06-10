@@ -5,17 +5,18 @@ from an ESRI ARC/INFO ascii GRID file with (optional) title.
 
 <p>
 
-The ARC/INFO ascii GRID file header has 6 lines:
+The ARC/INFO ascii GRID file header has 6 lines (last line optional):
 <div class="code"><pre>
      ncols:
      nrows:
      xllcorner:
      yllcorner:
      cellsize:
+     nodata_value:
 </pre></div>
 
 or alternatively (not supported by <em>r.in.arc</em>, but by
-<i><a href=r.in.gdal.html>r.in.gdal</a></i>):
+<i><a href=r.in.gdal.html>r.in.gdal</a></i>, last line optional):
 
 <div class="code"><pre>
      ncols:
@@ -23,6 +24,7 @@ or alternatively (not supported by <em>r.in.arc</em>, but by
      xllcenter:
      yllcenter:
      cellsize:
+     nodata_value:
 </pre></div>
 
 <h2>NOTES</h2>
