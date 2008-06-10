@@ -159,10 +159,10 @@ void gsd_check_focus(geoview * gv)
 }
 
 /*!
-  \brief ADD
+  \brief Get z-up vector (z-direction)
 
   \param gv view (geoview)
-  \param up
+  \param up up vector
 */
 void gsd_get_zup(geoview * gv, double *up)
 {
@@ -316,7 +316,7 @@ void gsd_real2model(Point3 point)
 /*!
   \brief Convert model to real coordinates
 
-  \param point[in,out] 3d point (Point3)
+  \param point[in,out] 3d point (x,y,z)
 */
 void gsd_model2real(Point3 point)
 {
