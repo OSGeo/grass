@@ -51,7 +51,7 @@ int Digit::Undo(int level)
 	level = changesetDead - changesetCurrent;
     }
 
-    G_debug(0, "Digit.Undo(): changeset_last=%d changeset_dead=%d, changeset_current=%d, level=%d",
+    G_debug(2, "Digit.Undo(): changeset_last=%d changeset_dead=%d, changeset_current=%d, level=%d",
 	    changesetLast, changesetDead, changesetCurrent, level);
     
     if (level < 0) { /* undo */
