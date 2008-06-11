@@ -293,6 +293,9 @@ int main(int argc, char **argv)
 	    int ltype, cat;
 	    
 	    G_debug ( 3, "line = %d", line );
+
+	    G_percent(line, nlines, 2);
+
 	    ltype = Vect_read_line (&In, LPoints, LCats, line);
 	    if ( !(ltype & type ) ) continue;
 
@@ -313,6 +316,8 @@ int main(int argc, char **argv)
 	nareas = Vect_get_num_areas (&In);
 	for ( area = 1; area <= nareas; area++ ) {
 	    int i, isle, nisles;
+
+	    G_percent(area, nareas, 2);
 	    
 	    centroid = Vect_get_area_centroid ( &In, area );
 	    cat = -1;
@@ -349,7 +354,7 @@ int main(int argc, char **argv)
     Vect_close(&In);
     Vect_close(&Out);
 
-    G_message (_("[%d] points written to output vector map"),
+    G_done_msg (_("%d points written to output vector map"),
 	       point_cat - 1);
 
     exit(EXIT_SUCCESS);
