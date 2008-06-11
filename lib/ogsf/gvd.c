@@ -1,7 +1,7 @@
 /*!
   \file gvd.c
  
-  \brief OGSF library - loading and manipulating vector sets
+  \brief OGSF library - loading and manipulating vector sets (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,28 +13,33 @@
   for details.
   
   \author Bill Brown USACERL (December 1993)
+  \author Doxygenized by Martin Landa (June 2008)
 */
 	
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <grass/gis.h>
 #include <grass/gstypes.h>
+
 #include "rowcol.h"
-
-/*
-#define DEBUGVECT
-#define DEBUGVECT_2
-*/
-
-#ifdef DEBUGVECT
-static int K=0;
-#endif
 
 #define CHK_FREQ 5
 /* check for cancel every CHK_FREQ lines */
 
-/*****************************************************************/
-/* FIX to use fast clipping and move to gs.c */
+/*!
+  \brief Clip segment
+  
+  \todo to use fast clipping and move to gs.c
+
+  \param gs surface
+  \param bgn begin point
+  \param end end point
+  \param region region settings 
+
+  \return 1 segment inside region
+  \return 0 segment outside region
+*/
 int gs_clip_segment(geosurf *gs, float *bgn, float *end, float *region)
 {
     float top, bottom, left, right;
@@ -61,13 +66,22 @@ int gs_clip_segment(geosurf *gs, float *bgn, float *end, float *region)
 	   end[Y] >= bottom && end[Y] <= top);
 }
 
-/*****************************************************************/
-/* need to think about translations - If user translates surface,
-vector should automatically go with it, but translating vector should
-translate it relative to surface on which it's displayed?
+/*!
+  \brief Draw vector set
 
-handling mask checking here, but may be more appropriate to
-handle in get_drape_segments? */
+  Need to think about translations - If user translates surface,
+  vector should automatically go with it, but translating vector should
+  translate it relative to surface on which it's displayed?
+
+  Handling mask checking here, but may be more appropriate to
+  handle in get_drape_segments?
+
+  \param gv vector set
+  \param gs surface
+  \param do_fast non-zero for fast mode
+
+  \return
+*/
 int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 {
     int i,j,k;
@@ -77,7 +91,8 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
     int npts, src, check; 
     geoline *gln;
     
-    G_debug(3, "Draw vector layer."); 
+    G_debug(4, "gvd_vect(): id=%d", gv->gvect_id); 
+
     if (GS_check_cancel())
     {
     	return(0);
@@ -134,7 +149,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 
     for (; gln; gln=gln->next)
     {
-        G_debug(3, "Draw vector layer object type = %d dims = %d", gln->type, gln->dims); 
+        G_debug(4, "gvd_vect(): type = %d dims = %d", gln->type, gln->dims); 
 
 	if (!(++check % CHK_FREQ))
 	{
@@ -149,7 +164,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 
 	if ( gln->type == OGSF_LINE ) { /* line */
 	    if ( gln->dims  == 2 ) {    /* 2d line */
-                G_debug(3, "Draw 2D vector line."); 
+                G_debug(4, "gvd_vect(): 2D vector line"); 
 		for (k=0; k < gln->npts - 1; k++) {
 		    bgn[X] = gln->p2[k][X] + gv->x_trans - gs->ox;
 		    bgn[Y] = gln->p2[k][Y] + gv->y_trans - gs->oy;
@@ -197,7 +212,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 	    }
 	    else /* 3D line */
 	    {
-                G_debug(3, "Draw 3D vector line."); 
+                G_debug(4, "gvd_vect(): 3D vector line"); 
 		points = (Point3 *) malloc ( sizeof(Point3) );
 		
                 gsd_color_func(gv->color);
@@ -214,7 +229,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 	    }
 	} else if ( gln->type == OGSF_POLYGON ) { /* polygon */
 	    if ( gln->dims  == 3 ) {    /* 3D polygon */
-		G_debug(3, "Draw 3D polygon."); 
+		G_debug(4, "gvd_vect(): draw 3D polygon"); 
 
 		/* We want at least 3 points */
 		if ( gln->npts >= 3 ) { 
@@ -244,7 +259,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 		    }
 		    glEnd();
 		    glLightModeli ( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
-		    free ( points );
+		    G_free ( points );
 		} 
 	    } else { /* 2D polygons */
                 /* TODO */
@@ -258,7 +273,14 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
     return(1);
 }
 
-/*****************************************************************/
+/*!
+  \brief Draw line on surface
+
+  \param gs surface
+  \param bgn first line point
+  \param end end line point
+  \param color color value
+*/
 void gvd_draw_lineonsurf(geosurf *gs, float *bgn, float *end, int color)
 {
     Point3 *points;

@@ -187,7 +187,7 @@ int GS_surf_exists(int id)
 {
     int i, found = 0;
 
-    G_debug(3, "GS_surf_exists");
+    G_debug(3, "GS_surf_exists(): id=%d", id);
 
 
     if (NULL == gs_get_surf(id)) {

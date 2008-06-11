@@ -248,7 +248,7 @@ void gsd_backface(int n)
 }
 
 /*!
-  \brief ADD
+  \brief Set width of rasterized lines
 
   \param n line width
 */

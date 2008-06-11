@@ -64,13 +64,13 @@ int GV_new_vector(void)
 {
     geovect *nv;
 
-    G_debug(3, "GV_new_vector");
-
     if (Next_vect < MAX_VECTS) {
 	nv = gv_get_new_vect();
 	gv_set_defaults(nv);
 	Vect_ID[Next_vect] = nv->gvect_id;
 	++Next_vect;
+
+	G_debug(3, "GV_new_vector(): id=%d", nv->gvect_id);
 
 	return (nv->gvect_id);
     }
@@ -220,10 +220,10 @@ int GV_get_vectname(int id, char *filename)
   \brief Set vector set mode
 
   \param id vector set id
-  \param mem
+  \param mem non-zero for use memory
   \param color color value
-  \param width
-  \param flat
+  \param width line width
+  \param flat non-zero for flat mode
 
   \return -1 on error (invalid vector set id)
   \return 1 on success
