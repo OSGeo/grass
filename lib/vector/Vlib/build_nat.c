@@ -406,7 +406,7 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
 {
     struct Plus_head *plus ;
     int    i, j, s, type, lineid;
-    long offset; 
+    long   offset; 
     int    side, line, area;
     struct line_pnts *Points, *APoints;
     struct line_cats *Cats;
@@ -474,6 +474,7 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
     List = Vect_new_list ();
 
     if ( plus->built < GV_BUILD_BASE ) { 
+	int npoints;
 	/* 
 	*  We shall go through all primitives in coor file and 
 	*  add new node for each end point to nodes structure
@@ -482,11 +483,13 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
        
 	/* register lines, create nodes */ 
 	Vect_rewind ( Map );
-	prnmsg (_("Registering lines: "));
+	prnmsg (_("Registering primitives: "));
 	i = 1; j = 1;
+	npoints = 0;
 	while ( 1 ) {
 	    /* register line */
 	    type = Vect_read_next_line (Map, Points, Cats);
+
 	    /* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
 	    if ( type == -1 ) { 
 		G_warning(_("Unable to read vector map"));
@@ -494,6 +497,8 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
 	    } else if ( type == -2 ) {
 		break;
 	    }
+
+	    npoints += Points->n_points;
 	    
 	    offset = Map->head.last_offset;
 
@@ -523,7 +528,8 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
 	    }
 	    i++; j++;
 	}
-	prnmsg ("\r%d %s      \n", plus->n_lines, _("primitives registered"));
+	prnmsg ("\r%d %s            \n", npoints, _("vertices registered"));
+	prnmsg ("%d %s\n", plus->n_lines, _("primitives registered"));
 
 	plus->built = GV_BUILD_BASE;
     }
