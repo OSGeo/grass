@@ -120,8 +120,6 @@ geovect *gv_get_new_vect(void)
 {
     geovect *nv, *lv;
 
-    G_debug(4, "gv_get_new_vect()");
-
     nv = (geovect *) G_malloc(sizeof(geovect));
     if (!nv) {
 	/* G_fatal_error */
@@ -138,6 +136,8 @@ geovect *gv_get_new_vect(void)
     }
 
     nv->next = NULL;
+
+    G_debug(4, "gv_get_new_vect() id=%d", nv->gvect_id);
 
     return (nv);
 }
