@@ -51,10 +51,11 @@ user can outline the classes of interest.
 <P>
 
 The first screen in the program <EM>i.class</EM> asks the user for the
-<A HREF="i.group.html">imagery</A> <EM>group</EM> and <EM>subgroup</EM> to be analyzed:
+<A HREF="i.group.html">imagery</A> <EM>group</EM> and <EM>subgroup</EM>
+to be analyzed:
 
 
-<PRE>
+<div class="code"><PRE>
 LOCATION: location    SUPERVISED CLASSIFIER     MAPSET: demo
 
      Please select the group and subgroup to be analyzed
@@ -65,7 +66,7 @@ SUBGROUP:   123________   (list will show available subgroups)
 
      AFTER COMPLETING ALL ANSWERS, HIT &lt;ESC&gt; TO CONTINUE
                    (OR &lt;Ctrl-C&gt; TO CANCEL)
-</PRE>
+</PRE></div>
 
 <P>
 
@@ -83,12 +84,12 @@ Note that this subgroup must contain more than one band.
 
 After the first screen, the program asks the user for the name of the
 resulting signature file.  The signature file is both the output file for
-<EM>i.class</EM> and the required input file for the GRASS
-program 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.  
-It contains the region means and
-covariance matrices that are used to classify an image in 
-<EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+<EM>i.class</EM> and the required input file for the GRASS 
+<EM><A HREF="i.maxlik.html">i.maxlik</A></EM> module.
+It contains the region means and covariance matrices that are used to
+classify an image in  <EM><A HREF="i.maxlik.html">i.maxlik</A></EM>.
+The signature file will be saved in the
+<tt>$MAPSET/group/$GROUP/subgroup/$SUBGROUP/sig/</tt> directory.
 
 <P>
 
@@ -118,7 +119,7 @@ to enter names for the signatures created.
 The display frame layout that <EM>i.class</EM> uses is
 represented below for reference.
 
-<PRE>
+<div class="code"><PRE>
 +-----------------------+---------------------------+
 |                       |                           |
 |                       |    Map Display Frame      |
@@ -141,7 +142,8 @@ represented below for reference.
 +-----------------------+---------------------------+
 |        Menu Frame                                 |
 +---------------------------------------------------+
-</PRE>
+</PRE></div>
+
 
 <H2>THE MENUS</H2>
 
@@ -352,6 +354,7 @@ either a "No" answer or the signature description is
 entered, the user is returned to the Command Menu.
 
 </DL>
+
 
 <H2>NOTES</H2>
 
