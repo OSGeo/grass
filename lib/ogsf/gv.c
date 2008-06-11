@@ -1,7 +1,7 @@
 /*!
   \file gv.c
  
-  \brief OGSF library - loading and manipulating vector sets
+  \brief OGSF library - loading and manipulating vector sets (lower level functions)
  
   GRASS OpenGL gsurf OGSF Library 
  
@@ -13,6 +13,7 @@
   for details.
   
   \author Bill Brown USACERL (November 1993)
+  \author Doxygenized by Martin Landa (June 2008)
 */
 
 #include <stdio.h>
@@ -25,16 +26,19 @@
 
 static geovect *Vect_top = NULL;
 
-/***********************************************************************/
+/*!
+  \brief Get vector set
+
+  \param id vector set id
+
+  \return pointer to geovect struct
+  \return NULL on failure
+*/
 geovect *gv_get_vect(int id)
 {
     geovect *gv;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_get_vect");
-    }
-#endif
+    G_debug(4, "gv_get_vect() id=%d", id);
 
     for (gv = Vect_top; gv; gv = gv->next) {
 	if (gv->gvect_id == id) {
@@ -45,16 +49,19 @@ geovect *gv_get_vect(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get previous vector set
+
+  \param id vector set id
+
+  \return pointer to geovect struct
+  \return NULL on failure
+*/
 geovect *gv_get_prev_vect(int id)
 {
     geovect *pv;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_get_prev_vect");
-    }
-#endif
+    G_debug(4, "gv_get_prev_vect(): id=%d", id);
 
     for (pv = Vect_top; pv; pv = pv->next) {
 	if (pv->gvect_id == id - 1) {
@@ -65,33 +72,32 @@ geovect *gv_get_prev_vect(int id)
     return (NULL);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get number of loaded vector sets
+
+  \return number of vector sets
+*/
 int gv_num_vects(void)
 {
     geovect *gv;
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_num_vects");
-    }
-#endif
-
     for (i = 0, gv = Vect_top; gv; gv = gv->next, i++);
+
+    G_debug(4, "gv_num_vects(): num=%d", i);
 
     return (i);
 }
 
-/***********************************************************************/
+/*!
+  \brief Get last loaded vector set
+
+  \return pointer to geovect struct
+  \return NULL on failure (no vector set available)
+*/
 geovect *gv_get_last_vect(void)
 {
     geovect *lv;
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_get_last_vect");
-    }
-#endif
 
     if (!Vect_top) {
 	return (NULL);
@@ -99,29 +105,26 @@ geovect *gv_get_last_vect(void)
 
     for (lv = Vect_top; lv->next; lv = lv->next);
 
-#ifdef DEBUG
-    {
-	fprintf(stderr, "last vect id: %d\n", lv->gvect_id);
-    }
-#endif
-
+    G_debug(4, "gv_get_last_vect(): id=%d", lv->gvect_id);
+    
     return (lv);
 }
 
-/***********************************************************************/
+/*!
+  \brief Allocate memory for new vector set
+
+  \return pointer to geovect struct
+  \return NULL on failure
+*/
 geovect *gv_get_new_vect(void)
 {
     geovect *nv, *lv;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_get_new_vect");
-    }
-#endif
+    G_debug(4, "gv_get_new_vect()");
 
-    if (NULL == (nv = (geovect *) malloc(sizeof(geovect)))) {
-	gs_err("gv_get_new_vect");
-
+    nv = (geovect *) G_malloc(sizeof(geovect));
+    if (!nv) {
+	/* G_fatal_error */
 	return (NULL);
     }
 
@@ -139,8 +142,11 @@ geovect *gv_get_new_vect(void)
     return (nv);
 }
 
-/***********************************************************************/
-/* call after surface is deleted */
+/*!
+  \brief Update drape surfaces
+
+  Call after surface is deleted
+*/
 void gv_update_drapesurfs(void)
 {
     geovect *gv;
@@ -163,16 +169,19 @@ void gv_update_drapesurfs(void)
     }
 }
 
-/***********************************************************************/
+/*!
+  \brief Set attributes of vector set to default values
+
+  \param gv pointer to geovect struct
+
+  \return -1 on error
+  \return 0 on success
+*/
 int gv_set_defaults(geovect * gv)
 {
     int i;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_set_defaults");
-    }
-#endif
+    G_debug(4, "gv_set_defaults() id=%d", gv->gvect_id);
 
     if (!gv) {
 	return (-1);
@@ -193,32 +202,35 @@ int gv_set_defaults(geovect * gv)
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Initialize geovect struct
+
+  \param gv pointer to geovect struct
+
+  \return -1 on failure
+  \return 0 on succcess
+*/
 int gv_init_vect(geovect * gv)
 {
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_init_vect");
-    }
-#endif
-
     if (!gv) {
 	return (-1);
     }
 
+    G_debug(4, "gv_init_vect() id=%d", gv->gvect_id);
+    
     return (0);
 }
 
-/***********************************************************************/
+/*!
+  \brief Delete vector set (unload)
+
+  \param id vector set id
+*/
 void gv_delete_vect(int id)
 {
     geovect *fv;
 
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_delete_vect");
-    }
-#endif
+    G_debug(4, "gv_delete_vect(): id=%d", id);
 
     fv = gv_get_vect(id);
 
@@ -229,17 +241,18 @@ void gv_delete_vect(int id)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Free allocated memory for geovect struct
+
+  \param fv pointer to geovect struct
+
+  \return -1 on failure
+  \return 1 on success
+*/
 int gv_free_vect(geovect * fv)
 {
     geovect *gv;
     int found = 0;
-
-#ifdef TRACE_FUNCS
-    {
-	Gs_status("gv_free_vect");
-    }
-#endif
 
     if (Vect_top) {
 	if (fv == Vect_top) {
@@ -250,7 +263,7 @@ int gv_free_vect(geovect * fv)
 	    }
 	    else {
 		gv_free_vectmem(fv);
-		free(fv);
+		G_free(fv);
 		Vect_top = NULL;
 	    }
 	}
@@ -267,8 +280,9 @@ int gv_free_vect(geovect * fv)
 	}
 
 	if (found) {
+	    G_debug(4, "gv_free_vect(): id=%d", fv->gvect_id);
 	    gv_free_vectmem(fv);
-	    free(fv);
+	    G_free(fv);
 	    fv = NULL;
 	}
 
@@ -278,7 +292,11 @@ int gv_free_vect(geovect * fv)
     return (-1);
 }
 
-/***********************************************************************/
+/*!
+  \brief Free allocated memory
+
+  \param fv pointer to geovect struct
+*/
 void gv_free_vectmem(geovect * fv)
 {
     geoline *gln, *tmpln;
@@ -287,17 +305,17 @@ void gv_free_vectmem(geovect * fv)
 	for (gln = fv->lines; gln;) {
 	    if (gln->dims == 2) {
 		sub_Vectmem(gln->npts * sizeof(Point2));
-		free(gln->p2);
+		G_free(gln->p2);
 	    }
 
 	    if (gln->dims == 3) {
-		free(gln->p3);
+		G_free(gln->p3);
 	    }
 
 	    tmpln = gln;
 	    gln = gln->next;
 	    sub_Vectmem(sizeof(geoline));
-	    free(tmpln);
+	    G_free(tmpln);
 	}
 
 	fv->n_lines = 0;
@@ -309,7 +327,13 @@ void gv_free_vectmem(geovect * fv)
     return;
 }
 
-/***********************************************************************/
+/*!
+  \brief Set drape surfaces for vector set
+
+  \param gv pointer to geovect struct
+  \param hsurfs array of surfaces (id)
+  \param nsurfs number of surfaces
+*/
 void gv_set_drapesurfs(geovect * gv, int *hsurfs, int nsurfs)
 {
     int i;
