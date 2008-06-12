@@ -294,8 +294,6 @@ int main(int argc, char **argv)
 	    
 	    G_debug ( 3, "line = %d", line );
 
-	    G_percent(line, nlines, 2);
-
 	    ltype = Vect_read_line (&In, LPoints, LCats, line);
 	    if ( !(ltype & type ) ) continue;
 
@@ -307,6 +305,7 @@ int main(int argc, char **argv)
                 write_line ( &Out, LPoints, cat, vertex_type, inter_flag->answer, 
 			     dmax, table_flag->answer );
 	    }
+	    G_percent(line, nlines, 2);
 	}
     }
 
@@ -317,8 +316,6 @@ int main(int argc, char **argv)
 	for ( area = 1; area <= nareas; area++ ) {
 	    int i, isle, nisles;
 
-	    G_percent(area, nareas, 2);
-	    
 	    centroid = Vect_get_area_centroid ( &In, area );
 	    cat = -1;
 	    if ( centroid > 0 ) {
@@ -340,6 +337,7 @@ int main(int argc, char **argv)
 		write_line ( &Out, LPoints, cat, vertex_type, inter_flag->answer, 
 			     dmax, table_flag->answer );
 	    }
+	    G_percent(area, nareas, 2);
 	}
     }	
 
