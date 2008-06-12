@@ -277,6 +277,8 @@ class processTask(HandlerBase):
         self.inGispromptContent = False
         self.inGuisection = False
         self.inKeywordsContent = False
+        self.inKeyDesc = False
+        self.addKeyDesc = False
         self.inFirstParameter = True
         self.task = task_description
 
@@ -298,6 +300,7 @@ class processTask(HandlerBase):
             self.param_element = ''
             self.param_prompt = ''
             self.param_guisection = ''
+            self.param_key_desc = []
             # Look for the parameter name, type, requiredness
             self.param_name = attrs.get('name', None)
             self.param_type = attrs.get('type', None)
@@ -343,6 +346,14 @@ class processTask(HandlerBase):
             self.inKeywordsContent = True
             self.keyword = ''
 
+        if name == 'keydesc':
+            self.inKeyDesc = True
+            self.key_desc = ''
+            
+        if name == 'item':
+            if self.inKeyDesc:
+                self.addKeyDesc = True
+
     # works with python 2.0, but is not SAX compliant
     def characters(self, ch):
         self.my_characters(ch)
@@ -373,6 +384,8 @@ class processTask(HandlerBase):
             self.guisection = self.guisection + ch
         if self.inKeywordsContent:
             self.keyword = self.keyword + ch
+        if self.addKeyDesc:
+            self.key_desc = self.key_desc + ch
 
     def endElement(self, name):
         # If it's not a parameter element, ignore it
@@ -396,7 +409,8 @@ class processTask(HandlerBase):
                 "default" : self.param_default,
                 "values" : self.param_values,
                 "values_desc" : self.param_values_description,
-                "value" : ''})
+                "value" : '',
+                "key_desc": self.param_key_desc})
 
             if self.inFirstParameter:
                 self.task.firstParam = self.param_name # store name of first parameter
@@ -443,6 +457,15 @@ class processTask(HandlerBase):
             for keyword in self.keyword.split(','):
                 self.task.keywords.append (normalize_whitespace(keyword))
             self.inKeywordsContent = False
+
+        if name == 'keydesc':
+            self.param_key_desc = self.param_key_desc.split()
+            self.inKeyDesc = False
+
+        if name == 'item':
+            if self.inKeyDesc:
+                self.param_key_desc = normalize_whitespace(self.key_desc)
+                self.addKeyDesc = False
 
 class helpPanel(wx.html.HtmlWindow):
     """
@@ -997,6 +1020,7 @@ class cmdPanel(wx.Panel):
 
                         if p.get('type','') == 'integer' and \
                                 p.get('multiple','no') == 'no':
+
                             # for multiple integers use textctrl instead of spinsctrl
                             try:
                                 minValue, maxValue = map(int, valuelist[0].split('-'))
@@ -1041,7 +1065,8 @@ class cmdPanel(wx.Panel):
                                 flag=wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND, border=5)
 
                 if p.get('multiple','yes') == 'yes' or \
-                        p.get('type', 'string') in ('string', 'float'):
+                        p.get('type', 'string') in ('string', 'float') or \
+                        len(p.get('key_desc', [])) > 1:
                     txt3 = wx.TextCtrl(parent=which_panel, value = p.get('default',''),
                                        size=globalvar.DIALOG_TEXTCTRL_SIZE)
                     if p.get('value','') != '':
