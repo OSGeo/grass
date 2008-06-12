@@ -1199,7 +1199,7 @@ class cmdPanel(wx.Panel):
 
         # TODO: be less arbitrary with these 600
         self.panelMinHeight = 100
-        self.constrained_size = (min(600, maxsizes[0]) + 25, min(600, maxsizes[1]) + 25)
+        self.constrained_size = (min(600, maxsizes[0]) + 25, min(400, maxsizes[1]) + 25)
         for section in sections:
             tab[section].SetMinSize( (self.constrained_size[0], self.panelMinHeight) )
             # tab[section].SetMinSize( constrained_size )
