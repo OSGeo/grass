@@ -159,6 +159,10 @@ class AbstractDigit:
             except:
                 pass
 
+        # avoid using current vector map as background map
+        if self.map == UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'):
+            UserSettings.Set(group='vdigit', key='backgroundMap', subkey='value', value='')
+
     def SelectLinesByQueryThresh(self):
         """Generic method used for SelectLinesByQuery()
         -- to get threshold value"""
@@ -1687,7 +1691,7 @@ class VDigitSettingsDialog(wx.Dialog):
         # background map
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Background vector map"))
         self.backgroundMap = gselect.Select(parent=panel, id=wx.ID_ANY, size=(200,-1),
-                                           type="vector")
+                                           type="vector", exceptOf=[self.parent.digit.map])
         self.backgroundMap.SetValue(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value'))
         self.backgroundMap.Bind(wx.EVT_TEXT, self.OnChangeBackgroundMap)
         flexSizer2.Add(text, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
