@@ -27,7 +27,7 @@ from preferences import globalSettings as UserSettings
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id, size,
-                 type, multiple=False, mapsets=None):
+                 type, multiple=False, mapsets=None, exceptOf=[]):
         """
         Custom control to create a ComboBox with a tree control
         to display and select GIS elements within acessible mapsets.
@@ -39,7 +39,7 @@ class Select(wx.combo.ComboCtrl):
         self.tcp = TreeCtrlComboPopup()
         self.SetPopupControl(self.tcp)
         self.SetPopupExtents(0,100)
-        self.tcp.GetElementList(type, mapsets)
+        self.tcp.GetElementList(type, mapsets, exceptOf)
         self.tcp.SetMultiple(multiple)
 
     def SetElementList(self, type):
@@ -116,7 +116,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
         return wx.Size(minWidth, min(200, maxHeight))
 
-    def GetElementList(self, element, mapsets=None):
+    def GetElementList(self, element, mapsets=None, exceptOf=[]):
         """
         Get list of GIS elements in accessible mapsets and display as tree
         with all relevant elements displayed beneath each mapset branch
@@ -195,7 +195,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 elem_list.sort()
                 for elem in elem_list:
                     if elem != '':
-                        self.AddItem(elem+'@'+dir, parent=dir_node)
+                        fullqElem = elem + '@' + dir
+                        if len(exceptOf) > 0 and fullqElem in exceptOf:
+                            continue
+                        self.AddItem(fullqElem, parent=dir_node)
             except:
                 continue
 
