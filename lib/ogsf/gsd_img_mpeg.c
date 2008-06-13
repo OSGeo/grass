@@ -27,15 +27,12 @@
 /* FFMPEG stuff */
 #ifdef HAVE_FFMPEG
 #include <avformat.h>
-#include <swscale.h>
 
 /* 5 seconds stream duration */
 #define STREAM_DURATION   5.0
 #define STREAM_FRAME_RATE 25 /* 25 images/s */
 #define STREAM_NB_FRAMES  ((int)(STREAM_DURATION * STREAM_FRAME_RATE))
 #define STREAM_PIX_FMT PIX_FMT_YUV420P /* default pix_fmt */
-
-static int sws_flags = SWS_BICUBIC;
 
 AVFrame *picture, *tmp_picture;
 uint8_t *video_outbuf;
@@ -206,7 +203,6 @@ static void write_video_frame(AVFormatContext *oc, AVStream *st)
 {
     int out_size, ret;
     AVCodecContext *c;
-    static struct SwsContext *img_convert_ctx;
 
     c = st->codec;
 
