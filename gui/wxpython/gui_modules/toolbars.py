@@ -40,7 +40,7 @@ class AbstractToolbar(object):
     """Abstract toolbar class"""
     def __init__():
         pass
-
+        
     def InitToolbar(self, parent, toolbar, toolData):
         """Initialize toolbar, i.e. add tools to the toolbar
 
@@ -51,6 +51,7 @@ class AbstractToolbar(object):
             self.CreateTool(parent, toolbar, *tool)
 
         self._toolbar = toolbar
+        self._data = toolData
         
     def ToolbarData(self):
         """Toolbar data"""
@@ -79,7 +80,21 @@ class AbstractToolbar(object):
     def GetToolbar(self):
         """Get toolbar widget reference"""
         return self._toolbar
-    
+
+    def EnableLongHelp(self, enable=True):
+        """Enable/disable long help
+
+        @param enable True for enable otherwise disable
+        """
+        for tool in self._data:
+            if tool[0] == '': # separator
+                continue
+            
+            if enable:
+                self._toolbar.SetToolLongHelp(tool[0], tool[5])
+            else:
+                self._toolbar.SetToolLongHelp(tool[0], "")
+                
 class MapToolbar(AbstractToolbar):
     """
     Main Map Display toolbar
@@ -179,7 +194,7 @@ class MapToolbar(AbstractToolbar):
         """
         tool =  event.GetString()
 
-        if tool == "Digitize" and not self.mapdisplay.digittoolbar:
+        if tool == "Digitize" and not self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.AddToolbar("digit")
 
 class GRToolbar(AbstractToolbar):
@@ -455,9 +470,9 @@ class VDigitToolbar(AbstractToolbar):
 
     def OnTool(self, event):
         """Tool selected -> toggle tool to pointer"""
-        id = self.parent.maptoolbar.pointer
-        self.parent.maptoolbar.toolbar.ToggleTool(id, True)
-        self.parent.maptoolbar.mapdisplay.OnPointer(event)
+        id = self.parent.toolbars['map'].pointer
+        self.parent.toolbars['map'].toolbar.ToggleTool(id, True)
+        self.parent.toolbars['map'].mapdisplay.OnPointer(event)
         if event:
             event.Skip()
         
@@ -785,7 +800,7 @@ class VDigitToolbar(AbstractToolbar):
 
         # update toolbar
         self.combo.SetValue (layerSelected.name)
-        self.parent.maptoolbar.combo.SetValue ('Digitize')
+        self.parent.toolbars['map'].combo.SetValue ('Digitize')
         # set initial category number for new features (layer=1), etc.
 
         Debug.msg (4, "VDigitToolbar.StartEditing(): layerSelectedID=%d layer=%s" % \

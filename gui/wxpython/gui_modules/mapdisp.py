@@ -605,7 +605,7 @@ class BufferedWindow(wx.Window):
         #
         # render vector map layer
         #
-        digitToolbar = self.parent.digittoolbar
+        digitToolbar = self.parent.toolbars['vdigit']
         if renderVector and digitToolbar and \
                 digitToolbar.layerSelectedID != None:
             # set region
@@ -640,7 +640,7 @@ class BufferedWindow(wx.Window):
             self.DrawLines(self.pdcTmp)
         if self.parent.gismanager.georectifying:
             # -> georectifier (redraw GCPs)
-            if self.parent.grtoolbar:
+            if self.parent.toolbars['georect']:
                 coordtype = 'gcpcoord'
             else:
                 coordtype = 'mapcoord'
@@ -935,7 +935,7 @@ class BufferedWindow(wx.Window):
                 self.DragMap(move)
 
             # dragging decoration overlay item
-            elif (self.mouse['use'] == 'pointer' and not self.parent.digittoolbar) and \
+            elif (self.mouse['use'] == 'pointer' and not self.parent.toolbars['vdigit']) and \
                     self.dragid != None and \
                     self.dragid != 99:
                 self.DragItem(self.dragid, event)
@@ -986,9 +986,9 @@ class BufferedWindow(wx.Window):
                 self.mouse['begin'] = self.mouse['end']
         elif self.mouse['use'] == 'zoom':
             pass
-        elif self.mouse["use"] == "pointer" and self.parent.digittoolbar:
+        elif self.mouse["use"] == "pointer" and self.parent.toolbars['vdigit']:
             # digitization
-            digitToolbar = self.parent.digittoolbar
+            digitToolbar = self.parent.toolbars['vdigit']
             digitClass   = self.parent.digit
             east, north = self.Pixel2Cell(self.mouse['begin'])
 
@@ -1266,7 +1266,7 @@ class BufferedWindow(wx.Window):
         elif self.mouse["use"] == "pointer" and self.parent.gismanager.georectifying:
             # -> georectifying
             coord = self.Pixel2Cell(self.mouse['end'])
-            if self.parent.grtoolbar:
+            if self.parent.toolbars['georect']:
                 coordtype = 'gcpcoord'
             else:
                 coordtype = 'mapcoord'
@@ -1274,9 +1274,9 @@ class BufferedWindow(wx.Window):
             self.parent.gismanager.georectifying.SetGCPData(coordtype, coord, self)
             self.UpdateMap(render=False, renderVector=False)
 
-        elif self.mouse["use"] == "pointer" and self.parent.digittoolbar:
+        elif self.mouse["use"] == "pointer" and self.parent.toolbars['vdigit']:
             # digitization tool active
-            digitToolbar = self.parent.digittoolbar
+            digitToolbar = self.parent.toolbars['vdigit']
             digitClass   = self.parent.digit
 
             pos1 = self.Pixel2Cell(self.mouse['begin'])
@@ -1514,7 +1514,7 @@ class BufferedWindow(wx.Window):
         #                self.polycoords = []
         #                self.mouse['begin'] = self.mouse['end'] = [0, 0]
         #                self.Refresh()
-        elif self.mouse['use'] == 'pointer' and self.parent.digittoolbar:
+        elif self.mouse['use'] == 'pointer' and self.parent.toolbars['vdigit']:
             # digitization tool
             pass
         else:
@@ -1560,7 +1560,7 @@ class BufferedWindow(wx.Window):
                 r.Inflate(4,4)
                 self.RefreshRect(r, False)
 
-        digitToolbar = self.parent.digittoolbar
+        digitToolbar = self.parent.toolbars['vdigit']
         if digitToolbar:
             digitClass = self.parent.digit
             # digitization tool (confirm action)
@@ -1592,7 +1592,7 @@ class BufferedWindow(wx.Window):
         Debug.msg (5, "BufferedWindow.OnRightUp(): use=%s" % \
                    self.mouse["use"])
 
-        digitToolbar = self.parent.digittoolbar
+        digitToolbar = self.parent.toolbars['vdigit']
         if digitToolbar:
             digitClass = self.parent.digit
             # digitization tool (confirm action)
@@ -1718,7 +1718,7 @@ class BufferedWindow(wx.Window):
 
     def OnMiddleDown(self, event):
         """Middle mouse button pressed"""
-        digitToolbar = self.parent.digittoolbar
+        digitToolbar = self.parent.toolbars['vdigit']
         # digitization tool
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
@@ -1779,7 +1779,7 @@ class BufferedWindow(wx.Window):
     def OnMouseMoving(self, event):
         """Motion event and no mouse buttons were pressed"""
 
-        digitToolbar = self.parent.digittoolbar
+        digitToolbar = self.parent.toolbars['vdigit']
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
             self.mouse['end'] = event.GetPositionTuple()[:]
@@ -2306,9 +2306,9 @@ class MapFrame(wx.Frame):
         #
         # Add toolbars
         #
-        self.maptoolbar = None
-        self.digittoolbar = None
-        self.grtoolbar = None
+        self.toolbars = { 'map' : None,
+                          'vdigit' : None,
+                          'georect' : None }
         for toolb in toolbars:
             self.AddToolbar(toolb)
 
@@ -2436,9 +2436,9 @@ class MapFrame(wx.Frame):
          - georect georectifier
          """
         if name == "map":
-            self.maptoolbar = toolbars.MapToolbar(self, self.Map)
+            self.toolbars['map'] = toolbars.MapToolbar(self, self.Map)
 
-            self._mgr.AddPane(self.maptoolbar.toolbar,
+            self._mgr.AddPane(self.toolbars['map'].toolbar,
                               wx.aui.AuiPaneInfo().
                               Name("maptoolbar").Caption(_("Map Toolbar")).
                               ToolbarPane().Top().
@@ -2447,12 +2447,12 @@ class MapFrame(wx.Frame):
                               CloseButton(False).Layer(2))
 
         if name == "digit":
-            self.digittoolbar = toolbars.VDigitToolbar(self, self.Map, self.tree)
+            self.toolbars['vdigit'] = toolbars.VDigitToolbar(self, self.Map, self.tree)
 
-            for toolRow in range(0, self.digittoolbar.numOfRows):
-                self._mgr.AddPane(self.digittoolbar.toolbar[toolRow],
+            for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
+                self._mgr.AddPane(self.toolbars['vdigit'].toolbar[toolRow],
                                   wx.aui.AuiPaneInfo().
-                                  Name("digittoolbar" + str(toolRow)).Caption(_("Vector digitizer toolbar")).
+                                  Name("vdigittoolbar" + str(toolRow)).Caption(_("Vector digitizer toolbar")).
                                   ToolbarPane().Top().Row(toolRow + 1).
                                   LeftDockable(False).RightDockable(False).
                                   BottomDockable(False).TopDockable(True).
@@ -2465,11 +2465,11 @@ class MapFrame(wx.Frame):
             self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SOLID)
 
         if name == "georect":
-            self.grtoolbar = toolbars.GRToolbar(self, self.Map)
+            self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
 
-            self._mgr.AddPane(self.grtoolbar.toolbar,
+            self._mgr.AddPane(self.toolbars['georect'].toolbar,
                               wx.aui.AuiPaneInfo().
-                              Name("grtoolbar").Caption(_("Georectification Toolbar")).
+                              Name("georecttoolbar").Caption(_("Georectification Toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
@@ -2489,12 +2489,12 @@ class MapFrame(wx.Frame):
             return
         elif name == "digit":
             # TODO: not destroy only hide
-            for toolRow in range(0, self.digittoolbar.numOfRows):
-                self._mgr.DetachPane (self.digittoolbar.toolbar[toolRow])
-                self.digittoolbar.toolbar[toolRow].Destroy()
-            self.digittoolbar = None
+            for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
+                self._mgr.DetachPane (self.toolbars['vdigit'].toolbar[toolRow])
+                self.toolbars['vdigit'].toolbar[toolRow].Destroy()
+            self.toolbars['vdigit'] = None
 
-        self.maptoolbar.combo.SetValue ("Tools");
+        self.toolbars['map'].combo.SetValue ("Tools");
         self._mgr.Update()
 
     def __InitDisplay(self):
@@ -2534,9 +2534,9 @@ class MapFrame(wx.Frame):
         # update statusbar if required
         if self.toggleStatus.GetSelection() == 0: # Coordinates
             e, n = self.MapWindow.Pixel2Cell(event.GetPositionTuple())
-            if self.digittoolbar and \
-                    self.digittoolbar.action == 'addLine' and \
-                    self.digittoolbar.type in ('line', 'boundary') and \
+            if self.toolbars['vdigit'] and \
+                    self.toolbars['vdigit'].action == 'addLine' and \
+                    self.toolbars['vdigit'].type in ('line', 'boundary') and \
                     len(self.MapWindow.polycoords) > 0:
                 # for linear feature show segment and total length
                 distance_seg = self.MapWindow.Distance(self.MapWindow.polycoords[-1],
@@ -2583,17 +2583,17 @@ class MapFrame(wx.Frame):
         self.MapWindow.mouse['box'] = "point"
 
         # change the cursor
-        if self.digittoolbar:
+        if self.toolbars['vdigit']:
             # digitization tool activated
             self.MapWindow.SetCursor(self.cursors["cross"])
 
             # reset mouse['box'] if needed
-            if self.digittoolbar.action in ['addLine']:
-                if self.digittoolbar.type in ['point', 'centroid']:
+            if self.toolbars['vdigit'].action in ['addLine']:
+                if self.toolbars['vdigit'].type in ['point', 'centroid']:
                     self.MapWindow.mouse['box'] = 'point'
                 else: # line, boundary
                     self.MapWindow.mouse['box'] = 'line'
-            elif self.digittoolbar.action in ['addVertex', 'removeVertex', 'splitLine',
+            elif self.toolbars['vdigit'].action in ['addVertex', 'removeVertex', 'splitLine',
                                          'editLine', 'displayCats', 'displayAttrs',
                                          'copyCats', 'connectLine']:
                 self.MapWindow.mouse['box'] = 'point'
@@ -2737,11 +2737,15 @@ class MapFrame(wx.Frame):
 
         if self.toggleStatus.GetSelection() == 0: # Coordinates
             self.statusbar.SetStatusText("", 0)
+            # enable long help
+            self.StatusbarEnableLongHelp()
 
         elif self.toggleStatus.GetSelection() == 1: # Extent
             self.statusbar.SetStatusText("%.2f - %.2f, %.2f - %.2f" %
                                          (self.Map.region["w"], self.Map.region["e"],
                                           self.Map.region["s"], self.Map.region["n"]), 0)
+            # enable long help
+            self.StatusbarEnableLongHelp()
 
         elif self.toggleStatus.GetSelection() == 2: # Comp. region
             compregion = self.Map.GetRegion()
@@ -2749,19 +2753,28 @@ class MapFrame(wx.Frame):
                                          (compregion["w"], compregion["e"],
                                           compregion["s"], compregion["n"],
                                           compregion["ewres"], compregion["nsres"]), 0)
+            # enable long help
+            self.StatusbarEnableLongHelp()
 
         elif self.toggleStatus.GetSelection() == 3: # Show comp. extent
             self.statusbar.SetStatusText("", 0)
             self.showRegion.Show()
+            # disable long help
+            self.StatusbarEnableLongHelp(False)
 
         elif self.toggleStatus.GetSelection() == 4: # Display mode
             self.statusbar.SetStatusText("", 0)
             self.compResolution.Show()
-            
+            # disable long help
+            self.StatusbarEnableLongHelp(False)
+
         elif self.toggleStatus.GetSelection() == 5: # Display geometry
             self.statusbar.SetStatusText("rows=%d; cols=%d; nsres=%.2f; ewres=%.2f" %
                                          (self.Map.region["rows"], self.Map.region["cols"],
                                           self.Map.region["nsres"], self.Map.region["ewres"]), 0)
+            # enable long help
+            self.StatusbarEnableLongHelp()
+
         elif self.toggleStatus.GetSelection() == 6: # Map scale
             # TODO: need to be fixed...
             ### screen X region problem
@@ -2804,9 +2817,18 @@ class MapFrame(wx.Frame):
             self.mapScaleValue = scale
             self.mapScale.Show()
 
+            # disable long help
+            self.StatusbarEnableLongHelp(False)
+
         else:
             self.statusbar.SetStatusText("", 1)
 
+    def StatusbarEnableLongHelp(self, enable=True):
+        """Enable/disable toolbars long help"""
+        for toolbar in self.toolbars.itervalues():
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
+                
     def StatusbarReposition(self):
         """Reposition checkbox in statusbar"""
         # reposition checkbox

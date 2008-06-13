@@ -261,7 +261,7 @@ class LayerTree(CT.CustomTreeCtrl):
 
             layer = self.GetPyData(self.layer_selected)[0]['maplayer']
             # enable editing only for vector map layers available in the current mapset
-            digit = self.mapdisplay.digittoolbar
+            digit = self.mapdisplay.toolbars['vdigit']
             if layer.GetMapset() != grassenv.GetGRASSVariable("MAPSET"):
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID5, False)
@@ -392,13 +392,13 @@ class LayerTree(CT.CustomTreeCtrl):
             event.Skip()
             return
 
-        if not self.mapdisplay.digittoolbar: # enable tool
+        if not self.mapdisplay.toolbars['vdigit']: # enable tool
             self.mapdisplay.AddToolbar("digit")
         else: # tool already enabled
             pass
 
         # mark layer as 'edited'
-        self.mapdisplay.digittoolbar.StartEditing (maplayer)
+        self.mapdisplay.toolbars['vdigit'].StartEditing (maplayer)
 
     def OnStopEditing (self, event):
         """
@@ -410,7 +410,7 @@ class LayerTree(CT.CustomTreeCtrl):
             event.Skip()
             return
 
-        self.mapdisplay.digittoolbar.OnExit()
+        self.mapdisplay.toolbars['vdigit'].OnExit()
         self.mapdisplay.imgVectorMap = None
 
     def OnPopupProperties (self, event):
@@ -756,8 +756,8 @@ class LayerTree(CT.CustomTreeCtrl):
         if self.mapdisplay.autoRender.GetValue(): 
             self.mapdisplay.OnRender(None)
 
-        if self.mapdisplay.digittoolbar:
-            self.mapdisplay.digittoolbar.UpdateListOfLayers (updateTool=True)
+        if self.mapdisplay.toolbars['vdigit']:
+            self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool=True)
 
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
@@ -1106,8 +1106,8 @@ class LayerTree(CT.CustomTreeCtrl):
         self.GetPyData(item)[0]['maplayer'] = maplayer
 
         # if digitization tool enabled -> update list of available vector map layers
-        if self.mapdisplay.digittoolbar:
-            self.mapdisplay.digittoolbar.UpdateListOfLayers(updateTool=True)
+        if self.mapdisplay.toolbars['vdigit']:
+            self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)
 
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 
