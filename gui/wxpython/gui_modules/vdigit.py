@@ -781,7 +781,7 @@ class VDigit(AbstractDigit):
         except (ImportError, NameError):
             self.digit = None
 
-        self.toolbar = mapwindow.parent.digittoolbar
+        self.toolbar = mapwindow.parent.toolbars['vdigit']
 
     def __del__(self):
         del self.digit
@@ -2044,7 +2044,7 @@ class VDigitSettingsDialog(wx.Dialog):
     def OnSave(self, event):
         """Button 'Save' clicked"""
         self.UpdateSettings()
-        self.parent.digittoolbar.settingsDialog = None
+        self.parent.toolbars['vdigit'].settingsDialog = None
 
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
@@ -2060,7 +2060,7 @@ class VDigitSettingsDialog(wx.Dialog):
 
     def OnCancel(self, event):
         """Button 'Cancel' clicked"""
-        self.parent.digittoolbar.settingsDialog = None
+        self.parent.toolbars['vdigit'].settingsDialog = None
         self.Close()
 
     def UpdateSettings(self):
