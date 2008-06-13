@@ -16,15 +16,17 @@
  *
  *****************************************************************************/
 #define GLOBAL
+
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "global.h"
+
 #include <grass/glocale.h>
+
+#include "global.h"
 
 int main (int argc, char *argv[])
 {
-    char *to_screen = " output to screen ";
     int *fd;
     char **names;
     char **ptr;
@@ -46,7 +48,7 @@ int main (int argc, char *argv[])
     struct Quant q;
     CELL min, max, null_set=0;
     DCELL dmin, dmax;
-	struct GModule *module;
+    struct GModule *module;
     struct
     {
 	struct Flag *A ;   /* print averaged values instead of intervals */
@@ -84,26 +86,20 @@ int main (int argc, char *argv[])
     G_gisinit (argv[0]);
 
     module = G_define_module();
-    module->keywords = _("raster");
+    module->keywords = _("raster, statistics");
     module->description =
 		_("Generates area statistics for raster map layers.");
 					        
-/* Define the different options */
+    /* Define the different options */
 
-    option.cell = G_define_option() ;
-    option.cell->key        = "input";
-    option.cell->type       = TYPE_STRING;
-    option.cell->required   = YES;
-    option.cell->multiple   = YES;
-    option.cell->gisprompt  = "old,cell,raster" ;
-    option.cell->description= _("Raster input maps(s)") ;
+    option.cell = G_define_standard_option(G_OPT_R_INPUTS);
 
-    option.fs = G_define_option() ;
-    option.fs->key        = "fs";
+    option.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    option.output->required   = NO;
+    option.output->description = _("Name for output file (if omitted or \"-\" output to stdout)");
+
+    option.fs = G_define_standard_option(G_OPT_F_SEP) ;
     option.fs->key_desc   = "character|space|tab" ;
-    option.fs->type       = TYPE_STRING;
-    option.fs->required   = NO;
-    option.fs->multiple   = NO;
     option.fs->answer     = "space";
     option.fs->description= _("Output field separator");
 
@@ -115,13 +111,6 @@ int main (int argc, char *argv[])
     option.nv->answer     = "*";
     option.nv->description= _("String representing no data cell value");
 
-    option.output = G_define_option();
-    option.output->key    = "output";
-    option.output->type   = TYPE_STRING;
-    option.output->required   = NO;
-    option.output->multiple   = NO;
-    option.output->description= _("Output file name");
-
     option.nsteps = G_define_option();
     option.nsteps->key    = "nsteps";
     option.nsteps->type   = TYPE_INTEGER;
@@ -129,9 +118,6 @@ int main (int argc, char *argv[])
     option.nsteps->multiple   = NO;
     option.nsteps->answer     = "255";
     option.nsteps->description= _("Number of fp subranges to collect stats from");
-    /*
-    option.output->answer     = to_screen;
-    */
 
 /* Define the different flags */
 
@@ -142,22 +128,42 @@ int main (int argc, char *argv[])
     flag.A = G_define_flag() ;
     flag.A->key         = 'A' ;
     flag.A->description = _("Print averaged values instead of intervals") ;
+    flag.A->guisection = _("Print");
 
     flag.a = G_define_flag() ;
     flag.a->key         = 'a' ;
     flag.a->description = _("Print area totals") ;
+    flag.a->guisection = _("Print");
 
     flag.c = G_define_flag() ;
     flag.c->key         = 'c' ;
     flag.c->description = _("Print cell counts") ;
+    flag.c->guisection = _("Print");
 
     flag.p = G_define_flag() ;
     flag.p->key         = 'p' ;
     flag.p->description = _("Print APPROXIMATE percents (total percent may not be 100%)") ;
+    flag.p->guisection = _("Print");
 
     flag.l = G_define_flag() ;
     flag.l->key         = 'l' ;
     flag.l->description = _("Print category labels") ;
+    flag.l->guisection = _("Print");
+
+    flag.g = G_define_flag() ;
+    flag.g->key = 'g';
+    flag.g->description = _("Print grid coordinates (east and north)");
+    flag.g->guisection = _("Print");
+
+    flag.x = G_define_flag() ;
+    flag.x->key = 'x';
+    flag.x->description = _("Print x and y (column and row)");
+    flag.x->guisection = _("Print");
+
+    flag.r = G_define_flag() ;
+    flag.r->key = 'r';
+    flag.r->description = _("Print raw indexes of fp ranges (fp maps only)");
+    flag.r->guisection = _("Print");
 
     flag.n = G_define_flag() ;
     flag.n->key         = 'n' ;
@@ -167,43 +173,32 @@ int main (int argc, char *argv[])
     flag.N->key         = 'N' ;
     flag.N->description = _("Suppress reporting of NULLs when all values are NULL") ;
 
-    flag.g = G_define_flag() ;
-    flag.g->key = 'g';
-    flag.g->description = _("Print grid coordinates (east and north)");
-
-    flag.x = G_define_flag() ;
-    flag.x->key = 'x';
-    flag.x->description = _("Print x and y (column and row)");
-
     flag.C = G_define_flag() ;
     flag.C->key         = 'C' ;
     flag.C->description = _("Report for cats fp ranges (fp maps only)") ;
-
-    flag.r = G_define_flag() ;
-    flag.r->key = 'r';
-    flag.r->description = _("Print raw indexes of fp ranges (fp maps only)");
 
     flag.i = G_define_flag() ;
     flag.i->key = 'i';
     flag.i->description = _("Read fp map as integer (use map's quant rules)");
 
     if (G_parser(argc, argv))
-	exit (-1);
+	exit (EXIT_FAILURE);
 
     name = option.output->answer;
-    if (name != NULL && strcmp(name, to_screen) != 0)
+    if (name != NULL && strcmp(name, "-") != 0)
     {
 	if(NULL == freopen (name, "w", stdout))
 	{
-	    perror (name);
-	    exit(EXIT_FAILURE);
+	    G_fatal_error (_("Unable to open file <%s> for writing"), name);
 	}
     }
+
     sscanf(option.nsteps->answer, "%d", &nsteps);
     if(nsteps <= 0)
     {
-         G_warning(_("nsteps must be greater than zero; using nsteps=255"));
-	 nsteps = 255;
+	G_warning(_("'%s' must be greater than zero; using %s=255"),
+		  option.nsteps->key, option.nsteps->key);
+	nsteps = 255;
     }
     cat_ranges = flag.C->answer;
 
@@ -212,7 +207,6 @@ int main (int argc, char *argv[])
     as_int = flag.i->answer;
     nrows = G_window_rows();
     ncols = G_window_cols();
-
 
     fd = NULL;
     nfiles = 0;
@@ -275,12 +269,14 @@ int main (int argc, char *argv[])
 	{
 	    is_fp[nfiles] = 0;
 	    if(cat_ranges || nsteps != 255)
-	         G_warning(_("%s: -i means read %s as integer! -C flag and/or nsteps option will be ignored"), G_program_name(),name);
+	         G_warning(_("Raster map <%s> is reading as integer map! "
+			     "Flag '-%c' and/or '%s' option will be ignored."),
+			   G_fully_qualified_name(name, mapset), flag.C->key, option.nsteps->key);
         }
 	if (with_labels || (cat_ranges && is_fp[nfiles])) 
 	{
 	    labels = (struct Categories *)
-		   G_realloc (labels, (nfiles+1) * sizeof(struct Categories));
+		G_realloc (labels, (nfiles+1) * sizeof(struct Categories));
 	    if (G_read_cats (name, mapset, &labels[nfiles]) < 0)
 		G_init_cats((CELL) 0, "", &labels[nfiles]);
 	}
@@ -292,16 +288,21 @@ int main (int argc, char *argv[])
 	   {
 	      if(! G_quant_nof_rules (&labels[nfiles].q))
 	      {
-	         G_warning(_("%s: cats for %s are either missing or have no explicit labels. Using nsteps=%d"), G_program_name(),name, nsteps);
+	         G_warning(_("Cats for raster map <%s> are either missing or have no explicit labels. "
+			     "Using %s=%d."),
+			   G_fully_qualified_name(name, mapset), option.nsteps->key, nsteps);
 		 cat_ranges = 0;
               }
 	      else if (nsteps != 255)
-	         G_warning(_("%s: -C flag was given, using cats fp ranges of %s, ignoring nsteps option"), G_program_name(),name);
+	         G_warning(_("Flag '-%c' was given, using cats fp ranges of raster map <%s>, "
+			     "ignoring '%s' option"),
+			   flag.C->key, G_fully_qualified_name(name, mapset), option.nsteps->key);
            }
 	   if(!cat_ranges) /* DO NOT use else here, cat_ranges can change */
 	   {
 	      if(G_read_fp_range (name, mapset, &fp_range) < 0)
-	         G_fatal_error (_("%s: can't read fp range for [%s]"),G_program_name(),name);
+		  G_fatal_error (_("Unable to read fp range of raster map <%s>"),
+				 G_fully_qualified_name(name, mapset));
 	      G_get_fp_range_min_max (&fp_range, &DMIN[nfiles], &DMAX[nfiles]);
  	      G_quant_add_rule (&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps);
 	      /* set the quant rules for reading the map */
@@ -319,7 +320,8 @@ int main (int argc, char *argv[])
 	else
 	{
 	   if(G_read_range (name, mapset, &range) < 0)
-	      G_fatal_error (_("Unable to read range for map <%s>"),name);
+	       G_fatal_error (_("Unable to read range for map <%s>"),
+			      G_fully_qualified_name(name, mapset));
 	   G_get_range_min_max (&range, &min, &max);
         }
 	if(!null_set)
@@ -340,8 +342,8 @@ int main (int argc, char *argv[])
 	raw_stats (fd,  with_coordinates, with_xy, with_labels);
     else
 	cell_stats (fd, with_percents, with_counts, with_areas, with_labels, fmt);
+
+    G_done_msg(" ");
+
     exit(EXIT_SUCCESS);
 }
-
-
-
