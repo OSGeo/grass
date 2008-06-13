@@ -169,6 +169,14 @@
 #% guisection: Import
 #%end
 #%option
+#% key: cap_file
+#% type: string
+#% label: Filename to save capabilities XML file to
+#% description: Requires list available layers flag
+#% required: no
+#% guisection: Request
+#%end
+#%option
 #% key: v
 #% type: integer
 #% description: Verbosity level
@@ -426,7 +434,14 @@ listLayers() {
 	g.message message=""
 
 	if [ -e "$CAPABILITIES_FILE" ] ; then
-	    \rm -f "$CAPABILITIES_FILE" "${TMP}capabilities.txt" "$TMP"
+	    \rm -f "${TMP}capabilities.txt" "$TMP"
+
+	    if [ -n "$GIS_OPT_CAP_FILE" ] ; then
+		mv "$CAPABILITIES_FILE" "$GIS_OPT_CAP_FILE"
+	    else
+		\rm -f "$CAPABILITIES_FILE"
+	    fi
+    
         fi
         exit 1;
 }
