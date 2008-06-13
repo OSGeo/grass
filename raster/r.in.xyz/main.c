@@ -563,7 +563,7 @@ int main(int argc, char *argv[])
 		else if(line < estimated_lines)
 		    G_percent(line, estimated_lines, 3);
 	    }
-
+	    
 	    if((buff[0] == '#') || (buff[0] == '\0')) {
 		continue; /* line is a comment or blank */
 	    }
@@ -676,6 +676,7 @@ int main(int argc, char *argv[])
 		}
 	    }
 	} /* while !EOF */
+	G_percent(1, 1, 1); /* flush */
 
 	G_debug(2, "pass %d finished, %d coordinates in box", pass, count);
 	count_total += count;
@@ -974,6 +975,7 @@ int main(int argc, char *argv[])
 		G_close_cell(out_fd);
 		G_fatal_error(_("Writing map, row %d"), ((pass-1)*rows)+row);
 	    }
+	    G_percent(row, rows, 3);
 	}
 
 	/* free memory */
@@ -993,7 +995,7 @@ int main(int argc, char *argv[])
 
     } /* passes loop */
 
-    G_percent(1,1,1); /* flush */
+    G_percent(1, 1, 1); /* flush */
     G_free(raster_row);
 
     /* close input file */
