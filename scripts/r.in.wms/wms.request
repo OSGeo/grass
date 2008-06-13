@@ -150,7 +150,7 @@ fi
 defaultIFS="$IFS"
 
 
-#####################
+####################################
 # name:     message
 # purpose:  displays messages to the user
 # usage: message level text
@@ -166,7 +166,7 @@ message () {
 BC="bc"
 BCARGS="-l"
 
-#####################3
+####################################
 # name: calculate
 # purpose: perform calculations
 # usage: varname "expr"
@@ -177,7 +177,7 @@ calculate() {
 	eval $1=$c_tmp
 }
 
-################################################################
+####################################
 # Calculate the number of tiles!!
 # Download and them
 GetTiles() {
