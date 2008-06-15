@@ -217,7 +217,6 @@ int main(int argc, char *argv[])
     zscale_opt->type = TYPE_DOUBLE;
     zscale_opt->required = NO;
     zscale_opt->answer   = "1.0";
-    zscale_opt->key_desc   = "zscale";
     zscale_opt->description = _("Scale to apply to z data");
 
     percent_opt = G_define_option();
@@ -563,7 +562,7 @@ int main(int argc, char *argv[])
 		else if(line < estimated_lines)
 		    G_percent(line, estimated_lines, 3);
 	    }
-	    
+
 	    if((buff[0] == '#') || (buff[0] == '\0')) {
 		continue; /* line is a comment or blank */
 	    }
@@ -608,7 +607,8 @@ int main(int argc, char *argv[])
 	    if( 1 != sscanf(tokens[zcol-1], "%lf", &z) )
 		G_fatal_error(_("Bad z-coordinate line %d column %d. <%s>"), line, zcol, tokens[zcol-1]);
 
-	    z=z/zscale;
+	    z=z*zscale;
+
 	    if(zrange_opt->answer) {
 		if (z < zrange_min || z > zrange_max) {
 		    G_free_tokens(tokens);
@@ -676,10 +676,11 @@ int main(int argc, char *argv[])
 		}
 	    }
 	} /* while !EOF */
-	G_percent(1, 1, 1); /* flush */
 
+	G_percent(1, 1, 1); /* flush */
 	G_debug(2, "pass %d finished, %d coordinates in box", pass, count);
 	count_total += count;
+
 
 	/* calc stats and output */
 	G_message(_("Writing to map ..."));
@@ -772,36 +773,36 @@ int main(int argc, char *argv[])
 		    n_offset = (row*cols + col) * G_raster_size(CELL_TYPE);
 		    if( G_is_null_value(index_array + n_offset, CELL_TYPE) )	/* no points in cell */
 			G_set_null_value(ptr, 1, rtype);
-		    else							/* one or more points in cell */
+		    else						/* one or more points in cell */
 		    {
 			head_id = G_get_raster_value_c(index_array + n_offset, CELL_TYPE);
 			node_id = head_id;
 	
 			n = 0;
 
-			while (node_id != -1)					/* count number of points in cell */
+			while (node_id != -1)				/* count number of points in cell */
 			{
 			    n++;
 			    node_id = nodes[node_id].next;
 			}
 
-			if( n == 1 )						/* only one point, use that */
+			if( n == 1 )					/* only one point, use that */
 			    G_set_raster_value_d(ptr, nodes[head_id].z, rtype);
-			else if( n%2 != 0 )					/* odd number of points: median_i = (n + 1) / 2 */
+			else if( n%2 != 0 )				/* odd number of points: median_i = (n + 1) / 2 */
 			{
 			    n = (n + 1) / 2;
 			    node_id = head_id;
-			    for(j=1; j<n; j++)					/* get "median element" */
+			    for(j=1; j<n; j++)				/* get "median element" */
 				node_id = nodes[node_id].next;
 
 			    G_set_raster_value_d(ptr, nodes[node_id].z, rtype);
 			}
-			else							/* even number of points: median = (val_below + val_above) / 2 */
+			else						/* even number of points: median = (val_below + val_above) / 2 */
 			{
 			    z = (n + 1) / 2.0;
 			    n = floor(z);
 			    node_id = head_id;
-			    for(j=1; j<n; j++)					/* get element "below" */
+			    for(j=1; j<n; j++)				/* get element "below" */
 				node_id = nodes[node_id].next;
 
 			    z = (nodes[node_id].z + nodes[nodes[node_id].next].z) / 2;
@@ -823,30 +824,30 @@ int main(int argc, char *argv[])
 			node_id = head_id;
 			n = 0;
 
-			while (node_id != -1)					/* count number of points in cell */
+			while (node_id != -1)				/* count number of points in cell */
 			{
 			    n++;
 			    node_id = nodes[node_id].next;
 			}
 
 			z = (pth * (n+1))/100.0;
-			r_low = floor(z);					/* lower rank */
+			r_low = floor(z);				/* lower rank */
 			if (r_low < 1)
 			    r_low = 1;
 			else if (r_low > n)
 			    r_low = n;
 
-			r_up = ceil(z);						/* upper rank */
+			r_up = ceil(z);					/* upper rank */
 			if (r_up > n)
 			    r_up = n;
 
 			node_id = head_id;
-			for (j=1; j<r_low; j++)					/* search lower value */
+			for (j=1; j<r_low; j++)				/* search lower value */
 			    node_id = nodes[node_id].next;
 
-			z = nodes[node_id].z;					/* save lower value */
+			z = nodes[node_id].z;				/* save lower value */
 			node_id = head_id;
-			for (j=1; j<r_up; j++)					/* search upper value */
+			for (j=1; j<r_up; j++)				/* search upper value */
 			    node_id = nodes[node_id].next;
 
 			z = (z + nodes[node_id].z) / 2;
@@ -915,7 +916,7 @@ int main(int argc, char *argv[])
 							
 			node_id = head_id;
 			n = 0;
-			while (node_id != -1)					/* count number of points in cell */
+			while (node_id != -1)			/* count number of points in cell */
 			{
 			    n++;
 			    node_id = nodes[node_id].next;
@@ -925,12 +926,12 @@ int main(int argc, char *argv[])
 			    mean = nodes[head_id].z;
 			else
 			{
-			    k = floor(trim * n + 0.5);				/* number of ranks to discard on each tail */
+			    k = floor(trim * n + 0.5);		/* number of ranks to discard on each tail */
 						
-			    if (k > 0 && (n - 2*k) > 0)				/* enough elements to discard */
+			    if (k > 0 && (n - 2*k) > 0)		/* enough elements to discard */
 			    {
 				node_id = head_id;
-				for (j=0; j<k; j++)				/* move to first rank to consider */
+				for (j=0; j<k; j++)		/* move to first rank to consider */
 				    node_id = nodes[node_id].next;
 
 				j = k + 1;
@@ -938,7 +939,7 @@ int main(int argc, char *argv[])
 				n = 0;
 				sum = 0.0;
 			
-				while (j <= k)					/* get values in interval */
+				while (j <= k)			/* get values in interval */
 				{
 				    n++;
 				    sum += nodes[node_id].z;
@@ -975,7 +976,6 @@ int main(int argc, char *argv[])
 		G_close_cell(out_fd);
 		G_fatal_error(_("Writing map, row %d"), ((pass-1)*rows)+row);
 	    }
-	    G_percent(row, rows, 3);
 	}
 
 	/* free memory */
@@ -1025,7 +1025,8 @@ int main(int argc, char *argv[])
 
 
 
-int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_style, int skipline, double zscale)
+int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_style,
+		int skipline, double zscale)
 {
     int    line, first, max_col;
     char   buff[BUFFSIZE];
@@ -1119,10 +1120,10 @@ int scan_bounds(FILE* fp, int xcol, int ycol, int zcol, char *fs, int shell_styl
 	fprintf(stderr,_("Range:     min         max\n"));
 	fprintf(stdout,"x: %11f %11f\n", min_x, max_x);
 	fprintf(stdout,"y: %11f %11f\n", min_y, max_y);
-	fprintf(stdout,"z: %11f %11f\n", min_z/zscale, max_z/zscale);
+	fprintf(stdout,"z: %11f %11f\n", min_z*zscale, max_z*zscale);
    } else
         fprintf(stdout,"n=%f s=%f e=%f w=%f b=%f t=%f\n", 
-	  max_y, min_y, max_x, min_x, min_z/zscale, max_z/zscale);
+	  max_y, min_y, max_x, min_x, min_z*zscale, max_z*zscale);
 
     G_debug(1, "Processed %d lines.", line);
     G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
