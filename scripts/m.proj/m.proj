@@ -183,7 +183,7 @@ if [ -z "$GIS_OPT_INPUT" ] || [ "$GIS_OPT_INPUT" = "-" ] ; then
    EXITCODE=0
    while [ $EXITCODE -eq 0 ] ; do
       unset REPLY
-      read -n 256 -t 2 REPLY
+      read REPLY
       EXITCODE=$?
       if [ -n "$REPLY" ] ; then
 	 echo "$REPLY" >> "$TMP"
