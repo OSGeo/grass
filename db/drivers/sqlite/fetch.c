@@ -147,7 +147,7 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
 
 	switch ( litetype ) {
 	    case SQLITE_TEXT:
-		if (sqltype == 6 ) { /* date string */
+		if (sqltype == DB_SQL_TYPE_DATE ) { /* date string */
 		   /* Example: '1999-01-25' */
 		   G_debug(3, "sqlite fetched date: %s",sqlite3_column_text ( c->statement, col));
 		   ns = sscanf((char *) sqlite3_column_text ( c->statement, col), "%4d-%2d-%2d",
