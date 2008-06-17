@@ -452,4 +452,3 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double E[], double
 
 	return MSUCCESS;
 }
-

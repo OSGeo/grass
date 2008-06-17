@@ -5,7 +5,7 @@
  *               Glynn Clements
  * PURPOSE:      Utility to compute transformation based upon GCPs and 
  *               output error measurements
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2006-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +21,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 
 extern int CRS_compute_georef_equations(struct Control_Points *,double *, double *,double *,double *,int);
 extern int CRS_georef(double,double,double *,double *,double *,double *,int);
@@ -85,7 +86,8 @@ static void compute_transformation(void)
 	equation_stat = CRS_compute_georef_equations(&points, E12, N12, E21, N21, order);
 
 	if (equation_stat == 0)
-		G_fatal_error("Not Enough Points -- %d are required.", order_pnts[order - 1]);
+		G_fatal_error(_("Not enough points, %d are required"),
+			      order_pnts[order - 1]);
 
 	if (equation_stat <= 0)
 		return;
@@ -179,13 +181,13 @@ static void do_stats(const char *name, const struct Stats *st)
 static void analyze(void)
 {
 	if (equation_stat == -1)
-		G_warning("Poorly placed control points");
+		G_warning(_("Poorly placed control points"));
 	else if (equation_stat == -2)
-		G_fatal_error("Insufficient memory");
+		G_fatal_error(_("Insufficient memory"));
 	else if (equation_stat < 0)
-		G_fatal_error("Parameter error");
+		G_fatal_error(_("Parameter error"));
 	else if (equation_stat == 0)
-		G_fatal_error("No active control points");
+		G_fatal_error(_("No active control points"));
 	else if (summary)
 	{
 		printf("Number of active points: %d\n", count);
@@ -233,16 +235,11 @@ int main(int argc, char **argv)
 
 	/* Get Args */
 	module = G_define_module();
-	module->keywords = _("general");
-    module->description =
-		_("Computes a coordinate transformation based on the control points");
+	module->keywords = _("general, transformation, GCP");
+	module->description =
+		_("Computes a coordinate transformation based on the control points.");
 
-	grp = G_define_option();
-	grp->key             = "group";
-	grp->type            = TYPE_STRING;
-	grp->required        = YES;
-	grp->gisprompt       = "old,group,group";
-	grp->description     = _("Name of imagery group");
+	grp = G_define_standard_option(G_OPT_I_GROUP);
 
 	val = G_define_option();
 	val->key             = "order";
@@ -257,6 +254,15 @@ int main(int argc, char **argv)
 	fmt->required        = NO;
 	fmt->multiple        = YES;
 	fmt->options         = "idx,src,dst,fwd,rev,fxy,rxy,fd,rd";
+	fmt->descriptions    = _("idx;point index;"
+				 "src;source coordinates;"
+				 "dst;destination coordinates;"
+				 "fwd;forward coordinates (destination);"
+				 "rev;reverse coordinates (source);"
+				 "fxy;forward coordinates difference (destination);"
+				 "rxy;reverse coordinates difference (source);"
+				 "fd;forward error (destination);"
+				 "rd;reverse error (source)");
 	fmt->answer          = "fd,rd";
 	fmt->description     = _("Output format");
 
@@ -280,6 +286,7 @@ int main(int argc, char **argv)
 
 	I_put_control_points(name, &points);
 
+	analyze();
+
 	return 0;
 }
-
