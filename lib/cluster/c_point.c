@@ -1,7 +1,7 @@
 /****************************************************************
  * I_cluster_point (C,x)
  *     struct Cluster *C;
- *     CELL *x;
+ *     DCELL *x;
  *
  * adds the point x to the list of data points to be "clustered"
  *
@@ -16,17 +16,17 @@
  * note: if all values in x are zero, the point is rejected
  ***************************************************************/
 
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 static int extend(struct Cluster *,int);
 static int all_zero(struct Cluster *,int);
 
-int I_cluster_point( struct Cluster *C, CELL *x)
+int I_cluster_point( struct Cluster *C, DCELL *x)
 {
     int band;
 
 /* reject points which contain nulls in one of the bands */
     for (band = 0; band < C->nbands; band++)
-	if (G_is_c_null_value(&x[band])) return 1; /* fixed 11/99 Agus Carr */
+	if (G_is_d_null_value(&x[band])) return 1; /* fixed 11/99 Agus Carr */
 /*
     if (band >= C->nbands)
 	return 1;
@@ -41,7 +41,7 @@ int I_cluster_point( struct Cluster *C, CELL *x)
     {
 	register double z;
 
- /*       if(G_is_c_null_value(&x[band])) continue;*/
+ /*       if(G_is_d_null_value(&x[band])) continue;*/
 	z = C->points[band][C->npoints] = x[band];
 	C->band_sum[band]  += z;
 	C->band_sum2[band] += z*z;
@@ -56,13 +56,13 @@ int I_cluster_begin_point_set (struct Cluster *C, int n)
 }
 
 int I_cluster_point_part (
-    struct Cluster *C,register CELL x,int band, int n)
+    struct Cluster *C, DCELL x, int band, int n)
 {
-    CELL tmp=x;
-    if(G_is_c_null_value(&tmp)) return 1;
+    DCELL tmp=x;
+    if(G_is_d_null_value(&tmp)) return 1;
     C->points[band][C->npoints+n] = x;
-    C->band_sum[band]  += (double) x;
-    C->band_sum2[band] += (double) x*x;
+    C->band_sum[band]  += x;
+    C->band_sum2[band] += x*x;
 
     return 0;
 }
@@ -106,7 +106,7 @@ static int extend(struct Cluster *C, int n)
 	C->np += 128;
 	for (band = 0; band < C->nbands; band++)
 	{
-	    C->points[band] = (CELL *) I_realloc (C->points[band], C->np * sizeof (CELL)) ;
+	    C->points[band] = (DCELL *) I_realloc (C->points[band], C->np * sizeof(DCELL)) ;
 	    if (C->points[band] == NULL)
 		return 0;
 	}

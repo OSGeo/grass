@@ -47,11 +47,11 @@ open_files (void)
                 G_program_name());
     }
 
-    cell = (CELL **) G_malloc (ref.nfiles * sizeof (CELL *));
+    cell = (DCELL **) G_malloc (ref.nfiles * sizeof (DCELL *));
     cellfd = (int *) G_malloc (ref.nfiles * sizeof (int));
     for (n=0; n < ref.nfiles; n++)
     {
-	cell[n] = G_allocate_cell_buf();
+	cell[n] = G_allocate_d_raster_buf();
 	name   = ref.file[n].name;
 	mapset = ref.file[n].mapset;
 	if ((cellfd[n] = G_open_cell_old (name, mapset)) < 0)

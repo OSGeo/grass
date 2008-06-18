@@ -1,6 +1,7 @@
-#include <grass/imagery.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 
 int print_band_means (FILE *fd, struct Cluster *C)

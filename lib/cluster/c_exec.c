@@ -17,7 +17,7 @@
  *  -2 interrupted
  *   1 not enough data points
  *************************************************************/
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 int I_cluster_exec (
     struct Cluster *C,int maxclass,int iterations,

@@ -26,6 +26,27 @@
 #include "local_proto.h"
 
 
+struct Cluster C;
+struct Signature in_sig;
+
+int maxclass ;
+double conv ;
+double sep ;
+int iters ;
+int mcs;
+char *group;
+char *subgroup;
+struct Ref ref;
+char *outsigfile;
+char *insigfile;
+char *reportfile;
+DCELL **cell;
+int *cellfd;
+FILE *report;
+int sample_rows, sample_cols;
+int verbose;
+time_t start_time;
+
 static int interrupted = 0;
 
 
@@ -36,7 +57,7 @@ main (int argc, char *argv[])
     int n;
     int row,nrows;
     int col,ncols;
-    CELL *x;
+    DCELL *x;
     struct Cell_head window;
     FILE *fd;
 
@@ -261,7 +282,7 @@ main (int argc, char *argv[])
     fprintf(report, "\n");
     fflush (report);
 
-    x = (CELL *) G_malloc (ref.nfiles * sizeof(CELL));
+    x = (DCELL *) G_malloc (ref.nfiles * sizeof(DCELL));
 
     I_cluster_begin (&C,ref.nfiles);
 
@@ -272,7 +293,7 @@ main (int argc, char *argv[])
 	if (verbose)
 	    G_percent (row, nrows, 2);
 	for (n=0; n < ref.nfiles; n++)
-	    if (G_get_c_raster_row (cellfd[n], cell[n], row) < 0)
+	    if (G_get_d_raster_row (cellfd[n], cell[n], row) < 0)
 		exit(EXIT_FAILURE);
 	for (col = sample_cols-1; col < ncols; col += sample_cols)
 	{

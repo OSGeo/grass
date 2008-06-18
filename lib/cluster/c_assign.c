@@ -1,6 +1,5 @@
 #include <math.h>
-
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 int I_cluster_assign ( struct Cluster *C, int *interrupted)
 {
@@ -25,7 +24,7 @@ fprintf (stderr,"I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)\n",
 	    d = 0.0;
 	    for (band = 0; band < C->nbands; band++)
 	    {
-		q = (double) C->points[band][p];
+		q = C->points[band][p];
 		q -= C->mean[band][c];
 		d += q*q;
 	    }
@@ -38,7 +37,7 @@ fprintf (stderr,"I_cluster_assign(npoints=%d,nclasses=%d,nbands=%d)\n",
 	C->class[p] = class;
 	C->count[class]++;
 	for (band = 0; band < C->nbands; band++)
-	    C->sum[band][class] += (double) C->points[band][p] ;
+	    C->sum[band][class] += C->points[band][p] ;
     }
 
 	return 0;
