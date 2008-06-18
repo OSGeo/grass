@@ -251,9 +251,12 @@ class CoordinateSystemPage(TitledPage):
                                      label=_("Use coordinate system of selected "
                                              "georeferenced file"))
         self.radio4 = wx.RadioButton(parent=self, id=wx.ID_ANY,
+                                     label=_("Use coordinate system of selected "
+                                             "WKT file"))
+        self.radio5 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Create custom PROJ.4 parameters "
                                              "string for coordinate system"))
-        self.radio5 = wx.RadioButton(parent=self, id=wx.ID_ANY,
+        self.radio6 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Use arbitrary non-earth "
                                              "coordinate system (XY)"))
         # layout
@@ -268,6 +271,8 @@ class CoordinateSystemPage(TitledPage):
                        flag=wx.ALIGN_LEFT, pos=(4, 1))
         self.sizer.Add(item=self.radio5,
                        flag=wx.ALIGN_LEFT, pos=(5, 1))
+        self.sizer.Add(item=self.radio6,
+                       flag=wx.ALIGN_LEFT, pos=(6, 1))
 
         # bindings
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio1.GetId())
@@ -275,6 +280,7 @@ class CoordinateSystemPage(TitledPage):
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio3.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio4.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio5.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radio6.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED,  self.OnEnterPage)
         
         # do page layout
@@ -306,10 +312,14 @@ class CoordinateSystemPage(TitledPage):
             self.SetNext(self.parent.filepage)
             self.parent.sumpage.SetPrev(self.parent.filepage)
         elif event.GetId() == self.radio4.GetId():
+            coordsys = "wkt"
+            self.SetNext(self.parent.wktpage)
+            self.parent.sumpage.SetPrev(self.parent.wktpage)
+        elif event.GetId() == self.radio5.GetId():
             coordsys = "custom"
             self.SetNext(self.parent.custompage)
             self.parent.sumpage.SetPrev(self.parent.custompage)
-        elif event.GetId() == self.radio5.GetId():
+        elif event.GetId() == self.radio6.GetId():
             coordsys = "xy"
             self.SetNext(self.parent.sumpage)
             self.parent.sumpage.SetPrev(self.parent.csystemspage)
@@ -1127,6 +1137,84 @@ class GeoreferencedFilePage(TitledPage):
     def OnCreate(self, event):
         pass
 
+class WKTPage(TitledPage):
+    """
+    Wizard page for selecting WKT file to use
+    for setting coordinate system parameters
+    """
+
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Select WKT file"))
+
+        self.wktfile = ''
+
+        # create controls
+        self.lfile= self.MakeLabel(_("WKT file:"))
+        self.tfile = self.MakeTextCtrl(size=(300,-1))
+        self.bbrowse = self.MakeButton(_("Browse"))
+
+        # do layout
+        self.sizer.AddGrowableCol(3)
+        self.sizer.Add(item=self.lfile, flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTRE_VERTICAL |
+                       wx.ALL, border=5, pos=(1, 1))
+        self.sizer.Add(item=self.tfile, flag=wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTRE_VERTICAL |
+                       wx.ALL, border=5, pos=(1, 2))
+        self.sizer.Add(item=self.bbrowse, flag=wx.ALIGN_LEFT |
+                       wx.ALL, border=5, pos=(1, 3))
+
+        self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
+        self.tfile.Bind(wx.EVT_TEXT, self.OnText)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+
+        # do page layout
+        # self.DoLayout()
+
+    def OnEnterPage(self, event):
+        if len(self.wktfile) == 0:
+            # disable 'next' button by default
+            wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+        else:
+            wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+
+        event.Skip()
+
+    def OnPageChanging(self, event):
+        if event.GetDirection() and self.wktfile == '':
+            event.Veto()
+        self.GetNext().SetPrev(self)
+
+        event.Skip()
+
+    def OnText(self, event):
+        self.wktfile = event.GetString()
+        nextButton = wx.FindWindowById(wx.ID_FORWARD)
+        if len(self.wktfile) > 0 and os.path.isfile(self.wktfile):
+            if not nextButton.IsEnabled():
+                nextButton.Enable(True)
+        else:
+            if nextButton.IsEnabled():
+                nextButton.Enable(False)
+
+        event.Skip()
+
+    def OnBrowse(self, event):
+        """Choose file"""
+        dlg = wx.FileDialog(self,
+                            _("Select WKT file"),
+                            os.getcwd(), "", "*.*", wx.OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            self.tfile.SetValue(path)
+        dlg.Destroy()
+
+        event.Skip()
+
+    def OnCreate(self, event):
+        pass
+
 class EPSGPage(TitledPage):
     """
     Wizard page for selecting EPSG code for
@@ -1502,6 +1590,9 @@ class SummaryPage(TitledPage):
         elif coordsys == 'file':
             label = 'matches file %s' % self.parent.filepage.georeffile
             self.lprojection.SetLabel(label)
+        elif coordsys == 'wkt':
+            label = 'matches file %s' % self.parent.wktpage.wktfile
+            self.lprojection.SetLabel(label)
         elif coordsys == 'proj':
             label = ('%s, %s%s' % (projdesc, datumdesc, ellipsedesc))
             self.lprojection.SetLabel(label)
@@ -1560,6 +1651,7 @@ class LocationWizard(wx.Object):
         self.projtypepage = ProjTypePage(self.wizard,self)
         self.epsgpage = EPSGPage(self.wizard, self)
         self.filepage = GeoreferencedFilePage(self.wizard, self)
+        self.wktpage = WKTPage(self.wizard, self)
         self.ellipsepage = EllipsePage(self.wizard, self)
         self.custompage = CustomPage(self.wizard, self)
         self.sumpage = SummaryPage(self.wizard, self)
@@ -1591,6 +1683,9 @@ class LocationWizard(wx.Object):
         self.filepage.SetPrev(self.csystemspage)
         self.filepage.SetNext(self.sumpage)
 
+        self.wktpage.SetPrev(self.csystemspage)
+        self.wktpage.SetNext(self.sumpage)
+
         self.custompage.SetPrev(self.csystemspage)
         self.custompage.SetNext(self.sumpage)
 
@@ -1606,6 +1701,7 @@ class LocationWizard(wx.Object):
         self.projtypepage.DoLayout()
         self.epsgpage.DoLayout()
         self.filepage.DoLayout()
+        self.wktpage.DoLayout()
         self.ellipsepage.DoLayout()
         self.custompage.DoLayout()
         self.sumpage.DoLayout()
@@ -1763,6 +1859,8 @@ class LocationWizard(wx.Object):
             success = self.EPSGCreate()
         elif coordsys == "file":
             success = self.FileCreate()
+        elif coordsys == "wkt":
+            success = self.WKTCreate()
 
         return success
 
@@ -2004,6 +2102,35 @@ class LocationWizard(wx.Object):
 
         p = gcmd.Command(cmdlist, stderr=None)
 
+        if p.returncode == 0:
+            return True
+
+        return False
+
+    def WKTCreate(self):
+        """
+        Create a new location from a WKT file
+        """
+        wktfile = self.wktpage.wktfile
+        location = self.startpage.location
+
+        cmdlist = []
+
+        # this should not happen
+        if not wktfile or not os.path.isfile(wktfile):
+            dlg = wx.MessageBox(parent=self.wizard,
+                                message="%s: %s ('%s')" % \
+                                    (_("Unable to create new location"),
+                                     _("file not found"),
+                                     wktfile),
+                                caption=("Error"), style=wx.OK | wx.ICON_ERROR)
+            return False
+
+        # creating location
+        cmdlist = ['g.proj', '-c',
+                   'wkt=%s' % wktfile,
+                   'location=%s' % location]
+        p = gcmd.Command(cmdlist)
         if p.returncode == 0:
             return True
 
