@@ -64,6 +64,8 @@ int main(int argc, char *argv[])
     format_opt->required = NO;
     format_opt->multiple = NO;
     format_opt->options = "point,standard";
+    format_opt->descriptions = _("point;simple x,y[,z] list;"
+				 "standard;GRASS's vector ASCII format");
     format_opt->answer = "point";
     format_opt->description = _("Input file format");
 
