@@ -13,30 +13,25 @@
 #endif
 
 #include <grass/imagery.h>
+#include <grass/cluster.h>
 
-#ifndef GLOBAL
-# define GLOBAL extern
-#endif
+extern struct Cluster C;
+extern struct Signature in_sig;
 
-
-
-GLOBAL struct Cluster C;
-GLOBAL struct Signature in_sig;
-
-GLOBAL int maxclass ;
-GLOBAL double conv ;
-GLOBAL double sep ;
-GLOBAL int iters ;
-GLOBAL int mcs;
-GLOBAL char *group;
-GLOBAL char *subgroup;
-GLOBAL struct Ref ref;
-GLOBAL char *outsigfile;
-GLOBAL char *insigfile;
-GLOBAL char *reportfile;
-GLOBAL CELL **cell;
-GLOBAL int *cellfd;
-GLOBAL FILE *report;
-GLOBAL int sample_rows, sample_cols;
-GLOBAL int verbose;
-GLOBAL time_t start_time;
+extern int maxclass ;
+extern double conv ;
+extern double sep ;
+extern int iters ;
+extern int mcs;
+extern char *group;
+extern char *subgroup;
+extern struct Ref ref;
+extern char *outsigfile;
+extern char *insigfile;
+extern char *reportfile;
+extern DCELL **cell;
+extern int *cellfd;
+extern FILE *report;
+extern int sample_rows, sample_cols;
+extern int verbose;
+extern time_t start_time;

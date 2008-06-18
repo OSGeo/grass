@@ -1,4 +1,4 @@
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 int I_cluster_exec_allocate(struct Cluster *C)
 {

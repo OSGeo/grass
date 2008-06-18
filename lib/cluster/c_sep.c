@@ -1,4 +1,5 @@
-#include <grass/imagery.h>
+#include <math.h>
+#include <grass/cluster.h>
 
 #define FAR ((double) -1.0)
 
@@ -12,7 +13,6 @@ double I_cluster_separation(struct Cluster *C,int class1,int class2)
     double n1,n2;
     double m1,m2;
     double s1,s2;
-    double sqrt();
 
     if (C->count[class1] < 2) return FAR;
     if (C->count[class2] < 2) return FAR;
@@ -23,8 +23,8 @@ double I_cluster_separation(struct Cluster *C,int class1,int class2)
     a1 = a2 = 0.0;
     for (band = 0; band < C->nbands; band++)
     {
-	s1 = (double) C->sum[band][class1] ;
-	s2 = (double) C->sum[band][class2] ;
+	s1 = C->sum[band][class1] ;
+	s2 = C->sum[band][class2] ;
 	m1 = s1 / n1;
 	m2 = s2 / n2;
 	q = m1 - m2;
@@ -32,12 +32,12 @@ double I_cluster_separation(struct Cluster *C,int class1,int class2)
 	d += q;
 
 
-	var = (double) C->sum2[band][class1] - (s1 * m1) ;
+	var = C->sum2[band][class1] - (s1 * m1) ;
 	var /= n1 - 1;
 	if (var)
 	    a1 += q/var;
 
-	var = (double) C->sum2[band][class2] - (s2 * m2) ;
+	var = C->sum2[band][class2] - (s2 * m2) ;
 	var /= n2 - 1;
 	if (var)
 	    a2 += q/var;

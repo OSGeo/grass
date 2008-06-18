@@ -1,4 +1,4 @@
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 int I_cluster_signatures ( struct Cluster *C)
 {
     int c, p, band1, band2;
@@ -47,7 +47,7 @@ if (c >= C->nclasses)
 	dn = n = C->S.sig[c].npoints = C->count[c];
 	if (n == 0) dn = 1.0;
 	for (band1 = 0; band1 < C->nbands; band1++)
-	    C->S.sig[c].mean[band1] = (double) C->sum[band1][c] / dn;
+	    C->S.sig[c].mean[band1] = C->sum[band1][c] / dn;
 	dn = n = C->count[c] - 1;
 	if (n < 1)
 	    continue;

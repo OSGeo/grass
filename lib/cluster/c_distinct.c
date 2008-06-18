@@ -1,4 +1,4 @@
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 int I_cluster_distinct(struct Cluster *C, double separation)
 {
@@ -6,7 +6,6 @@ int I_cluster_distinct(struct Cluster *C, double separation)
     int distinct;
     double dmin;
     double dsep;
-    double I_cluster_separation();
 
 /* compute sum of squares for each class */
     I_cluster_sum2 (C);

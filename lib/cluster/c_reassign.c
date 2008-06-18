@@ -1,10 +1,10 @@
 #include <math.h>
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 int I_cluster_reassign(struct Cluster *C, int *interrupted)
 {
     double min,d,z;
-    int q;
+    double q;
     int c,np;
     int old;
     int p, band, class;
@@ -60,7 +60,7 @@ int I_cluster_reassign(struct Cluster *C, int *interrupted)
 
 	    for (band = 0; band < C->nbands; band++)
 	    {
-		q = (int) C->points[band][p];
+		q = C->points[band][p];
 		C->sumdiff[band][class] += q;
 		C->sumdiff[band][old] -= q;
 	    }

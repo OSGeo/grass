@@ -1,4 +1,4 @@
-#include <grass/imagery.h>
+#include <grass/cluster.h>
 
 /* compute sum of squares for each class */
 int I_cluster_sum2(struct Cluster *C)
@@ -20,7 +20,7 @@ fprintf (stderr, "I_cluster_sum2(npoints=%d,nclasses=%d,nbands=%d)\n", C->npoint
 	    continue;
 	for (band = 0; band < C->nbands; band++)
 	{
-	    q = (double)C->points[band][p];
+	    q = C->points[band][p];
 	    C->sum2[band][class] += q*q;
 	}
     }

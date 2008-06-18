@@ -21,6 +21,7 @@ SUBDIRS = \
 	gtcltk \
 	form \
 	imagery \
+	cluster \
 	proj \
 	rowio \
 	segment \
