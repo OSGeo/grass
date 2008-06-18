@@ -17,6 +17,7 @@ CLASSES:
     * SummaryPage
     * RegionDef
     * LocationWizard
+    * SelectDatumDialog
 
 PURPOSE:   Create a new GRASS Location. User can choose from multiple methods.
 
@@ -43,6 +44,7 @@ import wx.wizard as wiz
 
 import gcmd
 import globalvar
+import utils
 try:
     import subprocess
 except:
@@ -1636,12 +1638,12 @@ class LocationWizard(wx.Object):
                     dlg.Destroy()
 
             elif success == False:
-                dlg = wx.MessageDialog(parent=self.wizard,
-                                       message="%s." % _("Unable to create new location"),
-                                       caption=_("Error"),
-                                       style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                if dlg.ShowModal() == wx.ID_OK:
-                    self.wizard.Destroy()
+                self.wizard.Destroy()
+                wx.MessageBox(parent=self.parent,
+                              message="%s" % _("Unable to create new location. "
+                                               "Location <%s> not created.") % self.startpage.location,
+                              caption=_("Location wizard"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             else: # None
                 pass
         else:
@@ -1881,7 +1883,9 @@ class LocationWizard(wx.Object):
         cmdlist = ['g.proj', '-c',
                    'proj4=%s' % proj4string,
                    'location=%s' % self.startpage.location]
-        p = gcmd.Command(cmdlist)
+
+        p = gcmd.Command(cmdlist, stderr=None)
+
         if p.returncode == 0:
             return True
 
@@ -1895,7 +1899,9 @@ class LocationWizard(wx.Object):
         cmdlist = ['g.proj', '-c',
                    'proj4=%s' % proj4string,
                    'location=%s' % location]
-        p = gcmd.Command(cmdlist)
+
+        p = gcmd.Command(cmdlist, stderr=None)
+
         if p.returncode == 0:
             return True
 
@@ -1923,31 +1929,38 @@ class LocationWizard(wx.Object):
                    'datumtrans=-1']
         p = gcmd.Command(cmdlist)
 
+        dtoptions = {}
         try:
-            dtoptions = p.ReadStdOutput()[0]
+            line = p.ReadStdOutput()
+            i = 0
+            while i < len(line):
+                if line[i] == '---':
+                    for j in range(3):
+                        dtoptions[line[i+1]] = (line[i+2],
+                                                line[i+3],
+                                                line[i+4])
+                    i += 5
         except:
-            dtoptions = None
-            
+            pass
+
         if dtoptions != None:
             dtrans = ''
             # open a dialog to select datum transform number
-            dlg = wx.TextEntryDialog(self.wizard, dtoptions,
-                                     caption=_('Select datum transformation'),
-                                     defaultValue='1',
-                                         style=wx.TE_WORDWRAP | wx.MINIMIZE_BOX | wx.MAXIMIZE_BOX|
-                                     wx.RESIZE_BORDER |wx.VSCROLL |
-                                     wx.OK | wx.CANCEL)
+            dlg = SelectDatumDialog(self.parent, datums=dtoptions)
             
-            if dlg.ShowModal() == wx.ID_CANCEL:
+            if dlg.ShowModal() == wx.ID_OK:
+                dtrans = dlg.GetDatum()
+                if dtrans == '':
+                    wx.MessageBox(parent=self.parent,
+                                  message=_('Datum transform is required.'),
+                                  caption=_("Error"),
+                                  style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                    dlg.Destroy()
+                    return False
+                dlg.Destroy()
+            else:
                 dlg.Destroy()
                 return False
-            else:
-                dtrans = dlg.GetValue()
-                if dtrans != '':
-                    dlg.Destroy()
-                else:
-                    wx.MessageBox(_('Datum transform is required.'))
-                    return False
 
             cmdlist = ['g.proj', '-c',
                        'epsg=%s' % epsgcode,
@@ -1959,7 +1972,7 @@ class LocationWizard(wx.Object):
                        'location=%s' % location,
                        'datumtrans=1']
 
-        p = gcmd.Command(cmdlist)
+        p = gcmd.Command(cmdlist, stderr=None)
         if p.returncode == 0:
             return True
 
@@ -1988,7 +2001,9 @@ class LocationWizard(wx.Object):
         cmdlist = ['g.proj', '-c',
                    'georef=%s' % georeffile,
                    'location=%s' % location]
-        p = gcmd.Command(cmdlist)
+
+        p = gcmd.Command(cmdlist, stderr=None)
+
         if p.returncode == 0:
             return True
 
@@ -2460,6 +2475,87 @@ class RegionDef(BaseClass, wx.Frame):
 
     def OnCancel(self, event):
         self.Destroy()
+
+class SelectDatumDialog(wx.Dialog):
+    """Dialog for selecting datum transformations"""
+    def __init__(self, parent, datums, title=_("Select datum transformation"),
+                 pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE):
+
+        self.datums = datums
+        wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
+
+        panel = wx.Panel(self, wx.ID_ANY)
+
+        sizer = wx.BoxSizer(wx.VERTICAL)
+
+        #
+        # dialog body
+        #
+        bodyBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                               label=" %s " % _("List of datum transformations"))
+        bodySizer = wx.StaticBoxSizer(bodyBox, wx.HORIZONTAL)
+        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+        
+        gridSizer.Add(item=wx.StaticText(parent=panel, label=_("Datums:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+
+        items = self.datums.keys()
+        utils.ListSortLower(items)
+        self.cdatums = wx.ComboBox(parent=panel, id=wx.ID_ANY,
+                              style=wx.CB_SIMPLE | wx.CB_READONLY,
+                              choices=items,
+                              size=(300,-1))
+        self.cdatums.SetSelection(0)
+        self.cdatums.Bind(wx.EVT_COMBOBOX, self.OnChangeDatum)
+        gridSizer.Add(item=self.cdatums, pos=(0, 1))
+
+        self.textWidth = self.GetSize()[0]
+        self.datumDesc = wx.StaticText(parent=panel,
+                                       label='\n'.join(self.datums[self.cdatums.GetStringSelection()]))
+        self.datumDesc.Wrap(self.textWidth)
+
+        gridSizer.Add(item=self.datumDesc, flag=wx.EXPAND,
+                      pos=(1, 0), span=(1, 2))
+
+        bodySizer.Add(item=gridSizer, proportion=1,
+                      flag=wx.ALL | wx.ALIGN_CENTER | wx.EXPAND, border=5)
+
+        #
+        # buttons
+        #
+        btnsizer = wx.StdDialogButtonSizer()
+
+        btn = wx.Button(parent=panel, id=wx.ID_OK)
+        btn.SetDefault()
+        btnsizer.AddButton(btn)
+
+        btn = wx.Button(parent=panel, id=wx.ID_CANCEL)
+        btnsizer.AddButton(btn)
+        btnsizer.Realize()
+
+        sizer.Add(item=bodySizer, proportion=1,
+                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+
+        sizer.Add(item=btnsizer, proportion=0,
+                  flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
+
+        #
+        # set panel sizer
+        #
+        panel.SetSizer(sizer)
+        sizer.Fit(panel)
+        self.SetSize(self.GetBestSize())
+
+    def OnChangeDatum(self, event):
+        """Datum changed, update description text"""
+        self.datumDesc.SetLabel('\n'.join(self.datums[event.GetString()]))
+        self.datumDesc.Wrap(self.textWidth)
+
+        event.Skip()
+
+    def GetDatum(self):
+        """Get selected datum"""
+        return self.cdatums.GetStringSelection()
 
 if __name__ == "__main__":
     app = wx.PySimpleApp()
