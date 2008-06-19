@@ -142,9 +142,10 @@ int do_labels (FILE *infile, int do_rotation)
 	else if (! strncmp(text, "hwi", 3))
 	    sscanf(text,"%*s %d", &highlight_width) ;
 
-	else if (! strncmp(text, "tex", 3))
+	else if (! strncmp(text, "tex", 3)) {
 		show_it() ;
-
+		rotation = 0.0; /* reset */
+	}
 
 	else
 	{
