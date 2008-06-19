@@ -5,11 +5,11 @@
  *               Radim Blazek <radim.blazek gmail.com>
  *               Bob Covill <bcovill tekmap.ns.ca>, Huidae Cho
  *               <grass4u gmail.com>, Glynn Clements <glynn
- *               gclements.plus.com>, Hamish Bowman <hamish_nospam
- *               yahoo.com>, Markus Neteler <neteler itc.it>,
+ *               gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Alessandro Frigeri <afrigeri unipg.it>
  * PURPOSE:      This is an enhanced PostScript version of the p.map program
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -467,7 +467,7 @@ int main(int argc,char *argv[])
 	   }
 	   continue;
 	}
-	
+
 	if (KEY("text"))
 	{
 	    double e, n;
@@ -756,7 +756,13 @@ int main(int argc,char *argv[])
     G_message (_("PostScript file [%s] successfully written."),
 		 output_file->answer);
 
-    unlink (ps_mask_file);
+    /* cleanup the tempfiles */
+    unlink(ps_mask_file);
+    if(PS.plfile) unlink(PS.plfile); 
+    if(PS.commentfile) unlink(PS.commentfile);
+/*    if(sessionfile) unlink(sessionfile);    created in session.c (how to remove?) */
+    if(labels.other) unlink(labels.other);
+
     exit(EXIT_SUCCESS);
 }
 
