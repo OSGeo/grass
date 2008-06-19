@@ -54,7 +54,7 @@ following rules:
  *               be used. Note that most linked list functionality (add,
  *               remove, get) is supported, but their is no sorting
  *               functionality.
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -67,7 +67,7 @@ following rules:
 
 
 4.  - deleted.
-    We don't want the $ ID $ in source code any more as it causes problems
+    We don't want the $ID$ in source code any more as it causes problems
     for the SVN branches.
 
 
@@ -148,7 +148,7 @@ following rules:
 
     Always use the gettext macros with _("") for user messages,
     example:
-      G_fatal_error (_("Vector map <%s> not found"), name); 
+      G_fatal_error(_("Vector map <%s> not found"), name); 
 
 
     Pipe/file data output:
@@ -191,12 +191,13 @@ following rules:
 	G_setenv() instead of setenv()
 	G_unsetenv() instead of unsetenv()
 	G_sleep() instead of sleep()
+	G_system() instead of system()
 
 	Could somebody please add others (please verify that they are
 	useful and safe first)
 
 
-12. Use function names which fulfil the official GNU naming convention.
+12. Use function names which fulfill the official GNU naming convention.
     http://www.gnu.org/prep/standards/html_node/Names.html#Names
 
     Instead of naming a function like: MyNewFunction() use underscores
@@ -263,7 +264,8 @@ following rules:
     MS-Windows: [to be suggested]
 
 
-18. Make sure a new line is at the end of each file.
+18. Make sure a new line is at the end of each file and UNIX style newlines
+    are used (\n).
 
 
 19. When writing Makefiles, use the current standard.
@@ -278,7 +280,8 @@ following rules:
     cp  (normal file) | $(INSTALL) -m 644 file target
     ar                | $(AR)
 
-    rm: be VERY careful with recursive remove.
+    rm: be VERY careful with recursive remove. Also beware of
+    removing $(FOO)* if $(FOO) has any chance of being empty.
 
     Examples: see below examples or others
               raster/r.info/Makefile
@@ -305,6 +308,7 @@ following rules:
 
 23. Add/update, if required the related GUI menus:
      gui/tcltk/gis.m/gmmenu.tcl
+     gui/wxpython/gui_modules/menudata.py
 
 
 24. For consistency, use README rather than README.txt for any README files.
@@ -316,8 +320,8 @@ following rules:
     lib/init/variables.html
 
 
-26. Be sure to develop on top of the LATEST GRASS code (which is in SVN repository).
-    You can re-check before submission with 'svn diff':
+26. Be sure to develop on top of the LATEST GRASS code (which is in our SVN
+    repository). You can re-check before submission with 'svn diff':
 
     Be sure to create unified ("diff -u") format. "Plain" diffs (the default
     format) are risky, because they will apply without warning to code which
@@ -325,7 +329,7 @@ following rules:
 
     Such diffs should be made from the top-level directory, e.g.
     "svn diff display/d.vect/main.c"; that way, the diff will
-    include the pathname rather than just "main.c".
+    include the pathname rather than just an ambiguous "main.c".
 
 
 27. Try to use module names which describe shortly the intended purpose of the module.
@@ -342,7 +346,7 @@ following rules:
 	v. 	- vector commands
 
     Some additional naming conventions
-    * export modules:     (type).out.(format) eg: r.out.arc,  v.out.ascii
+    * export modules:     (type).out.(format) eg: r.out.arc, v.out.ascii
     * import module:      (type).in.(format)  eg: r.in.arc, v.in.ascii
     * conversion modules: (type).to.(type)    eg: r.to.vect, v.to.rast, r3.to.rast
 
