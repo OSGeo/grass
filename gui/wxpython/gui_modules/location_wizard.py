@@ -2025,6 +2025,7 @@ class LocationWizard(wx.Object):
         cmdlist = ['g.proj',
                    'epsg=%s' % epsgcode,
                    'datumtrans=-1']
+
         p = gcmd.Command(cmdlist)
 
         dtoptions = {}
@@ -2071,6 +2072,7 @@ class LocationWizard(wx.Object):
                        'datumtrans=1']
 
         p = gcmd.Command(cmdlist, stderr=None)
+
         if p.returncode == 0:
             return True
 
@@ -2130,7 +2132,9 @@ class LocationWizard(wx.Object):
         cmdlist = ['g.proj', '-c',
                    'wkt=%s' % wktfile,
                    'location=%s' % location]
-        p = gcmd.Command(cmdlist)
+
+        p = gcmd.Command(cmdlist, stderr=None)
+
         if p.returncode == 0:
             return True
 
