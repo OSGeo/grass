@@ -1,5 +1,5 @@
-#ifndef __VEDIT_H__
-#define __VEDIT_H__
+#ifndef GRASS_VEDIT_H
+#define GRASS_VEDIT_H
 
 #include <grass/gis.h>
 #include <grass/Vect.h>
@@ -83,4 +83,4 @@ int Vedit_bulk_labeling (struct Map_info *, struct ilist *,
 			 double, double, double, double,
 			 double, double);
 
-#endif /* __VEDIT_H__ */
+#endif /* GRASS_VEDIT_H */
