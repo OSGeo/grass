@@ -237,6 +237,7 @@ do_label (FILE *fd, int font_override)
 	    hwidth = 0.;
 	    width = 1.;
 	    fontsize = 0;
+	    rotate = 0.;
 
             continue;
         }
