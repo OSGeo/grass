@@ -2042,7 +2042,7 @@ class LocationWizard(wx.Object):
         except:
             pass
 
-        if dtoptions != None:
+        if dtoptions != {}:
             dtrans = ''
             # open a dialog to select datum transform number
             dlg = SelectDatumDialog(self.parent, datums=dtoptions)
