@@ -752,6 +752,8 @@ static const char *papszDatumEquiv[] =
     "European_Terrestrial_Reference_System_1989",
     "ETRS_1989",
     "European_Terrestrial_Reference_System_1989",
+    "ETRF_1989",
+    "European_Terrestrial_Reference_System_1989",
     "NZGD_2000",
     "New_Zealand_Geodetic_Datum_2000",
     "Monte_Mario_Rome",
@@ -805,7 +807,7 @@ static void DatumNameMassage( char ** ppszDatum )
         pszDatum[j+1] = '\0';
     
 /* -------------------------------------------------------------------- */
-/*      Search for datum equivelences.  Specific massaged names get     */
+/*      Search for datum equivalences.  Specific massaged names get     */
 /*      mapped to OpenGIS specified names.                              */
 /* -------------------------------------------------------------------- */
     for( i = 0; papszDatumEquiv[i] != NULL; i += 2 )
