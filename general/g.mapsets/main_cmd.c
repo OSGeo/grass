@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/spawn.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "externs.h"
@@ -38,10 +39,12 @@ main (int argc, char *argv[])
     char **tokens;
     int no_tokens;
     FILE *fp;
+    char   path[GPATH_MAX];
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3;
     struct Flag *print;
     struct Flag *list;
+    struct Flag *tcl;
 
     G_gisinit (argv[0]);
 
@@ -81,6 +84,10 @@ main (int argc, char *argv[])
     print->key = 'p';
     print->description = _("Print current mapset search path");
 
+    tcl = G_define_flag();
+    tcl->key = 's';
+    tcl->description = _("Show mapset selection dialog");
+
     Path[0] = '\0';
     nchoices = 0;
 
@@ -91,6 +98,12 @@ main (int argc, char *argv[])
     {
 	get_available_mapsets();
 	display_available_mapsets(0);
+    }
+
+    if (tcl->answer)
+    {
+        sprintf(path, "%s/etc/g.mapsets.tcl", G_gisbase());
+        G_spawn(path, "g.mapsets.tcl", NULL);
     }
 
     if (opt1->answer)
