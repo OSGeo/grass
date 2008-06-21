@@ -15,16 +15,19 @@ label is allowed but not required (see <B>-l</B> flag).
 
 <P>
 <B>Example COGO input:</B>
-<P>
-P23 N 23:14:12 W 340<BR>
-P24 S 04:18:56 E 230<BR>
-...<BR>
+<div class="code"><pre>
+   P23 N 23:14:12 W 340
+   P24 S 04:18:56 E 230
+   ...
+</pre></div>
+
 <P>
 The first column may contain a label and you must use the <B>-l</B>
 flag so the program knows.  This is followed by a space, and then
 either the character 'N' or 'S' to indicate whether the bearing is
 relative to the north or south directions.  After another space,
-the angle begins.  Generally, the angle can be of the form
+the angle begins in degrees, minutes, and seconds in
+"DDD:MM:SS.SSSS" format. Generally, the angle can be of the form
 <EM>digits + separator + digits + separator + digits [+ '.' + digits]</EM>.
 A space follows the angle, and is then followed by either the 'E' or 'W'
 characters. A space separates the bearing from the distance (which should
@@ -32,10 +35,11 @@ be in appropriate linear units).
 
 <P>
 <B>Output of the above input:</B>
-<P>
--134.140211 312.420236 P23<BR>
--116.832837 83.072345 P24<BR>
-...<BR>
+<div class="code"><pre>
+   -134.140211 312.420236 P23
+   -116.832837 83.072345 P24
+   ...
+</pre></div>
 <P>
 Unless specified with the <B>coord</B> option, calculations begin from (0,0).
 
@@ -57,7 +61,6 @@ using the familiar GRASS parser interface.
 
 <P>
 
-
 <H2>NOTES</H2>
 
 This program is very simplistic, and will not handle deviations
@@ -67,8 +70,76 @@ the output.  However, it is envisioned that this program
 will be extended to provide the capability to generate
 vector and/or sites layers.
 
+
+<H2>EXAMPLE</H2>
+
+<div class="code"><pre>
+   m.cogo -l in=cogo.dat
+</pre></div>
+
+Where the <tt>cogo.dat</tt> input file looks like:
+<div class="code"><pre>
+# Sample COGO input file -- This defines an area.
+# &lt;label&gt; &lt;bearing&gt; &lt;distance&gt;
+P001 S 88:44:56 W 6.7195
+P002 N 33:34:15 W 2.25
+P003 N 23:23:50 W 31.4024
+P004 N 05:04:45 W 25.6981
+P005 N 18:07:25 E 22.2439
+P006 N 27:49:50 E 75.7317
+P007 N 22:56:50 E 87.4482
+P008 N 37:45:15 E 37.7835
+P009 N 46:04:30 E 11.5854
+P010 N 90:00:00 E 8.8201
+P011 N 90:00:00 E 164.1128
+P012 S 48:41:12 E 10.1311
+P013 S 00:25:50 W 255.7652
+P014 N 88:03:13 W 98.8567
+P015 S 88:44:56 W 146.2713
+P016 S 88:44:56 W 18.7164
+</pre></div>
+
+Round trip:
+<div class="code"><pre>
+   m.cogo -l in=cogo.dat | m.cogo -rl in="-"
+</pre></div>
+
+
+Import as a vector points map:
+<div class="code"><pre>
+   m.cogo -l in=cogo.dat | v.in.ascii out=cogo_points x=1 y=2 fs=space
+</pre></div>
+
+
+Shell script to import as a vector line map:
+<div class="code"><pre>
+    m.cogo -l in=cogo.dat | tac | awk '
+       BEGIN { FS=" " ; R=0 }
+       $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
+       END { printf("L %d\n", R) }' | tac | \
+       v.in.ascii -n format=standard out=cogo_line
+</pre></div>
+
+Unclosed lines may be snapped with <em>v.clean</em>, converted to
+boundaries with <em>v.type</em>, and closed boundaries may be
+converted to areas with <em>v.centroids</em>.
+
+
+<H2>SEE ALSO</H2>
+
+<em>
+<a HREF="v.centroids.html">v.centroids</a>,
+<a HREF="v.clean.html">v.clean</a>,
+<a HREF="v.digit.html">v.digit</a>,
+<a HREF="v.in.ascii.html">v.in.ascii</a>,
+<a HREF="v.type.html">v.type</a>
+</em>
+
+
+
 <H2>AUTHOR</H2>
 
 Eric G. Miller
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
