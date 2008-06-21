@@ -186,7 +186,9 @@ class grassTask:
         self.name = _('unknown')
         self.params = []
         self.description = ''
+        self.label = ''
         self.flags = []
+        self.keywords = []
         if grassModule is not None:
             xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
 
@@ -286,7 +288,6 @@ class processTask(HandlerBase):
 
         if name == 'task':
             self.task.name = attrs.get('name', None)
-            self.task.keywords = []
 
         if name == 'parameter':
             self.inParameter = True;
@@ -424,7 +425,10 @@ class processTask(HandlerBase):
                 "guisection" : self.flag_guisection } )
 
         if name == 'label':
-            self.param_label = normalize_whitespace(self.label)
+            if self.inParameter:
+                self.param_label = normalize_whitespace(self.label)
+            else:
+                self.task.label = normalize_whitespace(self.label)
 
         if name == 'description':
             if self.inValueContent:
@@ -709,7 +713,12 @@ class mainFrame(wx.Frame):
         #
         # put module description
         #
-        self.description = StaticWrapText (parent=self.panel, label=self.task.description)
+        if self.task.label != '':
+            module_desc = self.task.label + os.linesep + self.task.description
+        else:
+            module_desc = self.task.description
+        self.description = StaticWrapText (parent=self.panel,
+                                           label=module_desc)
         topsizer.Add (item=self.description, proportion=1, border=5,
                       flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
