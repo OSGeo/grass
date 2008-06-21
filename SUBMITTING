@@ -229,9 +229,9 @@ following rules:
 15. To promote a consistent coding style, please use the "indent" program
     on all new C modules using the following switches:
     
-     $ indent -nbad -bap -bbb -nbbo -nbc -br -bli1 -bls -cbi0 -ncdb -nce \
-        -ci4 -cli0 -ncs -d0 -di0 -fc1 -nfca -hnl -i4 -ip4 -l80 -lc80 -lp \
-	-npcs -pi4 -nprs -npsl -sbi0 -sc -nsob -ss -ts8  main.c
+     $ indent -bad -bap -bbb -br -bli0 -bls -cli0 -ncs -fc1 -hnl -i4 \
+      -nbbo -nbc -nbfda -nbfde -ncdb -ncdw -nce -nfca -npcs -nprs \
+      -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss -ts8 -ut main.c
 
     Existing code should not be re-indented except in extreme cases, as this
     will make "diff" comparisons with older versions impossible. If indent is 
