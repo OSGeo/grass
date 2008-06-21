@@ -335,7 +335,7 @@ static int remove_subgroup_files(char group[INAME_LEN],
 	    /* Parse out mapset */
 	    if (G__name_is_fully_qualified(rasters[n], xname, xmapset)) {
 		strcpy(tmp_name, xname);
-		strcpy(mapset, xmapset);
+                mapset = xmapset;
 	    }
 
 	    G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m, ref_tmp.file[m].name);
