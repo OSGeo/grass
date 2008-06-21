@@ -262,12 +262,13 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
     struct Ref ref_tmp;
     char *mapset;
     char tmp_name[INAME_LEN];
-    char xname[512], xmapset[512];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     I_get_group_ref(group, &ref_tmp);
     I_init_group_ref(&ref);
 
  
+    G_debug(3, "remove_group_files: ref_tmp.nfiles %d", ref_tmp.nfiles);
     /* Go through existing files to check for duplicates */
     for (m = 0; m < ref_tmp.nfiles; m++) {
 	skip = 0;
@@ -282,6 +283,7 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
 		strcpy(mapset, xmapset);
 	    }
 
+	    G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m, ref_tmp.file[m].name);
 	    if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
 		(strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
 		G_message(_("Removing raster map <%s> from group"),
@@ -316,11 +318,12 @@ static int remove_subgroup_files(char group[INAME_LEN],
     struct Ref ref_tmp;
     char *mapset;
     char tmp_name[INAME_LEN];
-    char xname[512], xmapset[512];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     I_get_subgroup_ref(group, subgroup, &ref_tmp);
     I_init_group_ref(&ref);
 
+    G_debug(3, "remove_subgroup_files: ref_tmp.nfiles %d", ref_tmp.nfiles);
     /* Go through existing files to check for duplicates */
     for (m = 0; m < ref_tmp.nfiles; m++) {
 	skip = 0;
@@ -335,6 +338,8 @@ static int remove_subgroup_files(char group[INAME_LEN],
 		strcpy(mapset, xmapset);
 	    }
 
+	    G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m, ref_tmp.file[m].name);
+	    G_debug(3, "mapset %s, ref_tmp.file[%d].mapset: %s", mapset, m, ref_tmp.file[m].mapset);
 	    if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
 		(strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
 		G_message(_("Removing raster map <%s> from subgroup"),
