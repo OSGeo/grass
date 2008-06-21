@@ -31,9 +31,6 @@
 #define FORMAT_2 " %1[NS] %d%c%d%c%lf %1[EW] %lf "
 #define FORMAT_3 " %lf %lf %s "
 
-#ifndef hypot
-#define hypot(x,y) (sqrt(x*x+y*y))
-#endif
 
 struct survey_record {
       char   label[20];
@@ -82,6 +79,7 @@ next_line (FILE *infile)
    const char *cptr;
    
    memset (line, 0, sizeof(line));
+/* TODO: update to G_getl2(), but this fn needs to return pointer to string not ok/EOF int */
    cptr = fgets (line, 512, infile);
    return cptr;
 }
@@ -165,12 +163,16 @@ parse_reverse (const char *in, struct survey_record *out)
    else
       out->haslabel = YES;
 
+   G_debug(5, "IN:  x=%f  y=%f  out->x=%f  out->y=%f", x, y, out->x, out->y);
+
    out->rads = atan2(y - out->y, x - out->x);
    out->dist = hypot(x - out->x, y - out->y);
    out->x = x;
    out->y = y;
    out->dd = RAD2DEG(out->rads);
-   
+
+   G_debug(5, "OUT: out->dd=%f  out->dist=%f", out->dd, out->dist);
+
    if (out->rads >= 0.0)
    {
       out->n_s[0] = 'N';
@@ -342,10 +344,16 @@ main (int argc, char **argv)
    {  
       record.x = record.y = 0.0;
    }
-   
+
    while ((cptr = next_line(infile)))
    {
       linenum++;
+
+      if( (cptr[0] == '#') || (cptr[0] == '\0') || (cptr[0] == '\n') ) {
+	/* remove \n check once module is updated to use G_getl2() */
+	 continue; /* line is a comment or blank */
+      }
+
       if (!parse_line(cptr, &record))
       {
          if (verbose)
