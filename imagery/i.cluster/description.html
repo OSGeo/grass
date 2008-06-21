@@ -13,13 +13,25 @@ classification.
 
 <EM>i.cluster</EM> is a clustering algorithm that reads
 through the (raster) imagery data and builds pixel clusters
-based on the spectral reflectances of the pixels.  The
-pixel clusters are imagery categories that can be related
+based on the spectral reflectances of the pixels (see Figure).
+The pixel clusters are imagery categories that can be related
 to land cover types on the ground.  The spectral
 distributions of the clusters (which will be the land cover
 spectral signatures) are influenced by six parameters set
 by the user.  The first parameter set by the user is the
 initial number of clusters to be discriminated.
+
+<p>
+<center>
+<img src="landsat_cluster.png" border=1><BR>
+<table border=0 width=590>
+<tr><td><center>
+<i>Fig.: Land use/land cover clustering of LANDSAT scene (simplified)</i>
+</center></td></tr>
+</table>
+</center>
+<p>
+
 <EM>i.cluster</EM> starts by generating spectral signatures
 for this number of clusters and "attempts" to end up with
 this number of clusters during the clustering process.  The
