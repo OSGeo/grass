@@ -1,10 +1,10 @@
-/*! \mainpage GRASS 6 Programmer's Manual
+/*! \mainpage GRASS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
      * updated 8/2005, 2006, 2007, 2008
   -->
 
-<h2>GRASS 6 Programmer's Manual</h2>
+<h2>GRASS 7 Programmer's Manual</h2>
 
 <a href="http://grass.osgeo.org">GRASS GIS</a> (Geographic Resources
 Analysis Support System) is an open source, Free Software
@@ -38,6 +38,9 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 <P>
 <I>Missing entries below are either not yet uploaded to SVN (need to be migrated
 from GRASS 5 Programmer's manual) or are simply undocumented.</I>
+
+<P>
+<I>PLEASE UPDATE FOR GRASS 7</I>
 
 <h3>Principal library</h3>
 
