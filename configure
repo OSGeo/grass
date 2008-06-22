@@ -3394,7 +3394,7 @@ y | ye | yes | n | no)
 	{ echo "configure: error: *** You must supply a directory list to --with-libs." 1>&2; exit 1; }
 	;;
 esac
-echo "$ac_t""$LIBRARY_DIRS" 1>&6
+echo "$ac_t""$with_libs" 1>&6
 
 if test -n "$with_libs"; then
     for dir in $with_libs; do
