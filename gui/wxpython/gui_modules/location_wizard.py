@@ -252,7 +252,7 @@ class CoordinateSystemPage(TitledPage):
                                              "georeferenced file"))
         self.radio4 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Use coordinate system of selected "
-                                             "WKT file"))
+                                             "WKT or PRJ file"))
         self.radio5 = wx.RadioButton(parent=self, id=wx.ID_ANY,
                                      label=_("Create custom PROJ.4 parameters "
                                              "string for coordinate system"))
