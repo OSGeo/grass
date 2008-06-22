@@ -1,0 +1,8 @@
+/*! \page clusterlib GRASS cluster analysis statistics Library
+
+\section clusterintro Introduction to cluster analysis statistics Library
+
+This library does a k-means style of cluster analysis.
+It is currently only used by i.cluster.
+
+*/
