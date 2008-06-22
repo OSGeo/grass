@@ -340,17 +340,17 @@ int I_WriteSigSet(
 	{
 	    Sp = &Cp->SubSig[j];
 	    fprintf (fd, " subclass:\n");
-	    fprintf (fd, "  pi: %f\n", Sp->pi);
+	    fprintf (fd, "  pi: %g\n", Sp->pi);
 	    fprintf (fd, "  means:");
 	    for (b1 = 0; b1 < S->nbands; b1++)
-		fprintf (fd, " %f", Sp->means[b1]);
+		fprintf (fd, " %g", Sp->means[b1]);
 	    fprintf (fd, "\n");
 	    fprintf (fd, "  covar:\n");
 	    for (b1 = 0; b1 < S->nbands; b1++)
 	    {
 		fprintf (fd, "   ");
 		for (b2 = 0; b2 < S->nbands; b2++)
-		    fprintf (fd, " %f", Sp->R[b1][b2]);
+		    fprintf (fd, " %g", Sp->R[b1][b2]);
 		fprintf (fd, "\n");
 	    }
 	    fprintf (fd, " endsubclass:\n");
