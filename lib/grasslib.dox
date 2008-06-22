@@ -1,10 +1,10 @@
-/*! \mainpage GRASS 7 Programmer's Manual
+/*! \mainpage GRASS 6 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
      * updated 8/2005, 2006, 2007, 2008
   -->
 
-<h2>GRASS 7 Programmer's Manual</h2>
+<h2>GRASS 6 Programmer's Manual</h2>
 
 <a href="http://grass.osgeo.org">GRASS GIS</a> (Geographic Resources
 Analysis Support System) is an open source, Free Software
@@ -39,9 +39,6 @@ Main web site: <a href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 <I>Missing entries below are either not yet uploaded to SVN (need to be migrated
 from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 
-<P>
-<I>PLEASE UPDATE FOR GRASS 7</I>
-
 <h3>Principal library</h3>
 
 (the name refers to the directory name in lib/ in the source code)
@@ -63,10 +60,11 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>arraystats: Library of statistics for arrays of doubles - \ref arraystats (new, under development)
 <li>bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
 <li>btree:	Binary tree library - \ref btree
-<li>cairodriver:<a href="http://cairographics.org">Cairo</a> display driver library - \ref cairodriver
+<li>cairodriver: <a href="http://cairographics.org">Cairo</a> display driver library - \ref cairodriver
 <li>cdhc:	Library for testing normality and exponentiality - \ref cdhc 
+<li>cluster:    Library for cluster analysis (image processing) - \ref cluster
 <li>datetime:	DateTime library - \ref datetime
-<li>\ref db:	\ref dbmilib
+<li>db:		\ref dbmilib
 <li>display:	\ref displaylib
 <li>%driver:     Graphics monitor driver
 <li>dspf:       DSPF libary - \ref dspf (obsolete?)
@@ -95,7 +93,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>vask:	Cursor management library - \ref vask
 <li>%vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
 </ul>
-<!--<li>image:	extra imagery library (mainly still unused) - \ref image3lib-->
+<!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
 <!--<li>D:		display library - \ref d_displaylib-->
 <!--<li>front.end:	interface for interactive modules library - \ref frontend-->
 
