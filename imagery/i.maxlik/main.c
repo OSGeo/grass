@@ -111,7 +111,7 @@ int main(int argc,char *argv[])
 	    G_percent(row, nrows, 2);
 
 	for (band = 0; band < Ref.nfiles; band++)
-	    if (G_get_c_raster_row (cellfd[band], cell[band], row) < 0) /*fixed 11/99*/
+	    if (G_get_d_raster_row (cellfd[band], cell[band], row) < 0) /*fixed 11/99*/
 		exit(EXIT_FAILURE);
 
 	classify(class_cell, reject_cell, ncols);

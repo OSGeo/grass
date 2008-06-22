@@ -9,7 +9,7 @@ GLOBAL char *subgroup;
 GLOBAL char *sigfile;
 GLOBAL struct Ref Ref;
 GLOBAL struct Signature S;
-GLOBAL CELL **cell;
+GLOBAL DCELL **cell;
 GLOBAL int *cellfd;
 GLOBAL CELL *class_cell, *reject_cell;
 GLOBAL int class_fd, reject_fd;

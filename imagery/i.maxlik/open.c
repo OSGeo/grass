@@ -31,12 +31,12 @@ open_files (void)
                     "The subgroup must have at least 2 files."));
     }
 
-    cell = (CELL **) G_malloc (Ref.nfiles * sizeof (CELL *));
+    cell = (DCELL **) G_malloc (Ref.nfiles * sizeof (DCELL *));
     cellfd = (int *) G_malloc (Ref.nfiles * sizeof (int));
     P = (double *) G_malloc (Ref.nfiles * sizeof (double));
     for (n=0; n < Ref.nfiles; n++)
     {
-	cell[n] = G_allocate_cell_buf();
+	cell[n] = G_allocate_d_raster_buf();
 	name = Ref.file[n].name;
 	mapset = Ref.file[n].mapset;
 	if ((cellfd[n] = G_open_cell_old (name, mapset)) < 0)
