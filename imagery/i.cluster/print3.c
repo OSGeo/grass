@@ -19,7 +19,7 @@ int print_seed_means (FILE *fd, struct Cluster *C)
     {
 	fprintf (fd, _("class %-3d "), c+1);
 	for (band = 0; band < C->nbands; band++)
-	    fprintf (fd, " %6.2f", C->mean[band][c]);
+	    fprintf (fd, " %g", C->mean[band][c]);
 	fprintf (fd, "\n");
     }
     fprintf (fd, "\n");

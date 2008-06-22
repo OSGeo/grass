@@ -134,16 +134,16 @@ int I_write_signatures (
 	fprintf (fd, "#%s\n", s->desc);
 	fprintf (fd, "%d\n", s->npoints);
 	for (i=0; i < S->nbands; i++)
-	    fprintf(fd, "%f ", s->mean[i]);
+	    fprintf(fd, "%g ", s->mean[i]);
 	fprintf (fd, "\n");
 	for (i=0; i < S->nbands; i++)
 	{
 	    for (n=0; n <= i; n++)
-		fprintf (fd, "%f ", s->var[i][n]);
+		fprintf (fd, "%g ", s->var[i][n]);
 	    fprintf (fd, "\n");
 	}
 	if (s->have_color)
-	    fprintf (fd, "%f %f %f\n", s->r, s->g, s->b);
+	    fprintf (fd, "%g %g %g\n", s->r, s->g, s->b);
     }
     return 1;
 }

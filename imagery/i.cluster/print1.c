@@ -13,11 +13,11 @@ int print_band_means (FILE *fd, struct Cluster *C)
 	C->nbands, C->nbands == 1 ? "" : "s");
     fprintf (fd, _(" means  "));
     for (band = 0; band < C->nbands; band++)
-	fprintf (fd," %6.2f",C->band_sum[band]/C->npoints);
+	fprintf (fd," %g",C->band_sum[band]/C->npoints);
     fprintf (fd,"\n");
     fprintf (fd, _(" stddev "));
     for (band = 0; band < C->nbands; band++)
-	fprintf (fd, " %6.2f",
+	fprintf (fd, " %g",
 	    I_stddev(C->band_sum[band], C->band_sum2[band], C->npoints));
     fprintf (fd, "\n\n");
 
