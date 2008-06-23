@@ -4,7 +4,7 @@
 #include "region.h"
 
 int read_block (
-    CELL ***img,           /* img[band][row[col] */
+    DCELL ***img,           /* img[band][row[col] */
     struct Region *region,
     struct files *files
 )
@@ -15,7 +15,7 @@ int read_block (
     {
 	for (row = region->ymin; row < region->ymax; row++)
 	{
-	    if(G_get_c_raster_row (files->band_fd[band], files->cellbuf, row) < 0)
+	    if(G_get_d_raster_row (files->band_fd[band], files->cellbuf, row) < 0)
 		exit(1);
 	    for (col = region->xmin; col < region->xmax; col++)
 		    img[band][row][col] = files->cellbuf[col];

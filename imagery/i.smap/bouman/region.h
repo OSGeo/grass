@@ -27,10 +27,10 @@ void dec_reg(struct Region *);
 void copy_reg(struct Region *, struct Region *);
 void reg_to_wdht(struct Region *, int *, int *);
 /* read_block.c */
-int read_block (CELL ***, struct Region *, struct files *);
+int read_block (DCELL ***, struct Region *, struct files *);
 /* segment.c */
 #ifdef GRASS_IMAGERY_H
 /* model.c */
 void extract_init(struct SigSet *);
-void extract(CELL ***, struct Region *, LIKELIHOOD ***, struct SigSet *);
+void extract(DCELL ***, struct Region *, LIKELIHOOD ***, struct SigSet *);
 #endif

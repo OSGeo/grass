@@ -19,16 +19,16 @@ int write_img (
 	if (!parms->quiet) G_percent (row, nrows, 2);
 	for (col = 0; col < ncols; col++)
 	{
-	   if(G_is_c_null_value((CELL *)&img[row][col]))
-		   G_set_c_null_value(&files->cellbuf[col], 1);
+	   if(0 && img[row][col] == 0)
+		G_set_c_null_value(&files->outbuf[col], 1);
            else
 	   {
 		int class = (int)img[row][col];
 		G_debug(3, "class: [%d] row/col: [%d][%d]", class, row, col);
-		files->cellbuf[col] = (CELL)S->ClassSig[class].classnum;
+		files->outbuf[col] = (CELL)S->ClassSig[class].classnum;
            }
 	}
-	G_put_raster_row (files->output_fd, files->cellbuf, CELL_TYPE);
+	G_put_raster_row (files->output_fd, files->outbuf, CELL_TYPE);
     }
     if (!parms->quiet) G_percent (row, nrows, 2);
 
