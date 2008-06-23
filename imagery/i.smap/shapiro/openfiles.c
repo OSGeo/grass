@@ -20,7 +20,8 @@ int openfiles (struct parms *parms, struct files *files)
                 parms->subgroup, parms->group);
 
     /* allocate file descriptors, and io buffer */
-    files->cellbuf = G_allocate_cell_buf();
+    files->cellbuf = G_allocate_d_raster_buf();
+    files->outbuf = G_allocate_c_raster_buf();
     files->isdata = G_malloc(G_window_cols());
 
     files->nbands    = Ref.nfiles;

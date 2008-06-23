@@ -12,7 +12,8 @@ struct files
     int *band_fd;
     int nbands;
 
-    CELL *cellbuf;
+    DCELL *cellbuf;
+    CELL *outbuf;
     char *isdata;
 };
 

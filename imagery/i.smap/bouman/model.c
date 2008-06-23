@@ -63,7 +63,7 @@ void extract_init (struct SigSet *S)
 
 void 
 extract (
-    CELL ***img,             /* multispectral image, img[band][i][j] */
+    DCELL ***img,             /* multispectral image, img[band][i][j] */
     struct Region *region,    /* region to extract */
     LIKELIHOOD ***ll,        /* log likelihood, ll[i][j][class] */
     struct SigSet *S        /* class signatures */
@@ -104,7 +104,7 @@ extract (
       /* Check for no data condition */
       no_data = 1;
       for(b1=0; (b1<nbands)&&no_data; b1++)
-         no_data = no_data&&(G_is_c_null_value(&img[b1][i][j]));
+         no_data = no_data&&(G_is_d_null_value(&img[b1][i][j]));
 
       if(no_data) {
         for(m=0; m<S->nclasses; m++ )

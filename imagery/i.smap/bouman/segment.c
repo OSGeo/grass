@@ -21,7 +21,7 @@
 
 static void init_reg (struct Region *, int,int, int);
 static int increment_reg (struct Region *, int, int, int);
-static int shift_img (CELL ***, int , struct Region *, int);
+static int shift_img (DCELL ***, int , struct Region *, int);
 static int shift_ll (LIKELIHOOD ****, struct Region *, int);
 
 
@@ -35,7 +35,7 @@ int segment (
   int ml;                     /* max likelihood? */
   int quiet;                  /* be quiet when running? */
 
-  CELL ***img;                /* multispectral image, img[band][i][j] */
+  DCELL ***img;               /* multispectral image, img[band][i][j] */
   int  wd,ht;                 /* image width and height */
   struct Region region;       /* specifies image subregion */
   int nbands;                 /* number of bands */
@@ -74,7 +74,7 @@ int segment (
   alpha_dec = (double *)G_malloc(D*sizeof(double));
 
   /* allocate image block */
-  img = (CELL ***)multialloc(sizeof(CELL),3,nbands,block_size,block_size);
+  img = (DCELL ***)multialloc(sizeof(DCELL),3,nbands,block_size,block_size);
 
   /* allocate memory for log likelihood pyramid */
   ll_pym = (LIKELIHOOD ****)get_cubic_pyramid(block_size,block_size,nclasses,sizeof(LIKELIHOOD));
@@ -169,7 +169,7 @@ static int increment_reg (struct Region *region, int wd, int ht, int block_size)
    return(1);
 }
 
-static int shift_img (CELL ***img, int nbands,
+static int shift_img (DCELL ***img, int nbands,
     struct Region *region, int block_size)
 {
     static int xoffset=0;
@@ -247,7 +247,7 @@ static int shift_ll (LIKELIHOOD ****ll_pym,
 
 
 #ifdef COMMENTED_OUT
-int read_block (CELL ***img, int wd, int ht, int nbands, struct Region *region, char *infn)
+int read_block (DCELL ***img, int wd, int ht, int nbands, struct Region *region, char *infn)
 {
      static first=1;
      static unsigned char ***img_buf;
