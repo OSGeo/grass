@@ -12,38 +12,25 @@ int parse (int argc, char *argv[], struct parms *parms)
     struct Flag *quiet;
     struct Flag *ml;
 
-    group = G_define_option();
-    group->key = "group";
-    group->description = _("imagery group");
-    group->required = YES;
-    group->type = TYPE_STRING;
-    group->gisprompt = "old,group,group";
+    group = G_define_standard_option(G_OPT_I_GROUP);
 
-    subgroup = G_define_option();
-    subgroup->key = "subgroup";
-    subgroup->description = _("imagery subgroup");
-    subgroup->required = YES;
-    subgroup->type = TYPE_STRING;
+    subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
 
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
-    sigfile->description = _("imagery signaturefile");
+    sigfile->description = _("Name of imagery signaturefile");
+    sigfile->key_desc     = "name";
     sigfile->required = YES;
     sigfile->type = TYPE_STRING;
 
     blocksize = G_define_option();
     blocksize->key = "blocksize";
-    blocksize->description = _("size of submatrix to process at one time");
+    blocksize->description = _("Size of submatrix to process at one time");
     blocksize->required = NO;
     blocksize->type = TYPE_INTEGER;
     blocksize->answer = "128";
 
-    output = G_define_option();
-    output->key = "output";
-    output->description = _("output raster map");
-    output->required = YES;
-    output->type = TYPE_STRING;
-    output->gisprompt = "new,cell,raster";
+    output = G_define_standard_option(G_OPT_R_OUTPUT);
 
     ml = G_define_flag();
     ml->key = 'm';
@@ -53,7 +40,7 @@ int parse (int argc, char *argv[], struct parms *parms)
     quiet->key = 'q';
     quiet->description = _("Run quietly");
 
-    if (G_parser(argc,argv)) exit(1);
+    if (G_parser(argc,argv)) exit(EXIT_FAILURE);
 
     parms->quiet = quiet->answer;
     parms->ml = ml->answer;

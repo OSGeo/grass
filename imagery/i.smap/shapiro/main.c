@@ -47,8 +47,6 @@ int main (int argc, char *argv[])
     segment (&S, &parms, &files);
 
     closefiles(&parms, &files);
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
-
-
 
