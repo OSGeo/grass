@@ -10,7 +10,7 @@
 #               SPOT Vegetation (1km, global) data:
 #               http://free.vgt.vito.be/
 #
-# COPYRIGHT:    (c) 2004,2007 GRASS Development Team
+# COPYRIGHT:    (c) 2004-2008 GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -51,6 +51,7 @@
 #% required : no
 #%end
 
+
 if test "$GISBASE" = ""; then
     echo "You must be in GRASS GIS to run this program." >&2
     exit 1
@@ -66,7 +67,6 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
     exec g.parser "$0" "$@"
 fi
 
-PROG=`basename $0`
 
 #### check if we have awk
 if [ ! -x "`which awk`" ] ; then
@@ -90,11 +90,33 @@ if [ ! -x "`which gdalinfo`" ] ; then
     exit 1
 fi
 
-#### trap ctrl-c
-trap 2 3 15
+
+PID=$$
+TMPFILE="`g.tempfile $PID`"
+
+cleanup()
+{
+   #remove temporary region file
+   unset WIND_OVERRIDE
+   g.remove region="spot_$PID" --quiet
+   
+   #### clean up the mess
+   rm -f "$VRTFILE" "$TMPFILE"
+}
+
+# what to do in case of user break:
+exitprocedure()
+{
+   g.message -e message='User break!'
+   cleanup
+   exit 1
+}
+
+# shell check for user break (signal list: trap -l)
+trap "exitprocedure" 2 3 15
+
 
 #### a function for writing VRT files
-
 create_VRT_file(){
  WESTCENTER=`cat $PROJFILE  | grep CARTO_UPPER_LEFT_X  | tr -s ' ' ' ' | cut -d' ' -f2`
  NORTHCENTER=`cat $PROJFILE | grep CARTO_UPPER_LEFT_Y  | tr -s ' ' ' ' | cut -d' ' -f2`
@@ -129,43 +151,41 @@ create_VRT_file(){
  #echo $RESOLUTION
 
  echo "<VRTDataset rasterXSize=\"$XSIZE\" rasterYSize=\"$YSIZE\">" >> "$1"
- echo " <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>" >> $1
- echo "   <GeoTransform>$WESTCORNER, $RESOLUTION, 0.0000000000000000e+00, $NORTHCORNER, 0.0000000000000e+00, -$RESOLUTION</GeoTransform>" >> $1
- echo "   <VRTRasterBand dataType=\"Byte\" band=\"1\">" >> $1
- echo "    <NoDataValue>0.00000000000000E+00</NoDataValue>" >> $1
- echo "    <ColorInterp>Gray</ColorInterp>" >> $1
- echo "    <SimpleSource>" >> $1
- echo "     <SourceFilename>$2</SourceFilename>" >> $1
- echo "      <SourceBand>1</SourceBand>" >> $1
- echo "      <SrcRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> $1
- echo "      <DstRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> $1
- echo "    </SimpleSource>" >> $1
- echo " </VRTRasterBand>" >> $1
- echo "</VRTDataset>" >> $1
+ echo " <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>" >> "$1"
+ echo "   <GeoTransform>$WESTCORNER, $RESOLUTION, 0.0000000000000000e+00, $NORTHCORNER, 0.0000000000000e+00, -$RESOLUTION</GeoTransform>" >> "$1"
+ echo "   <VRTRasterBand dataType=\"Byte\" band=\"1\">" >> "$1"
+ echo "    <NoDataValue>0.00000000000000E+00</NoDataValue>" >> "$1"
+ echo "    <ColorInterp>Gray</ColorInterp>" >> "$1"
+ echo "    <SimpleSource>" >> "$1"
+ echo "     <SourceFilename>$2</SourceFilename>" >> "$1"
+ echo "      <SourceBand>1</SourceBand>" >> "$1"
+ echo "      <SrcRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> "$1"
+ echo "      <DstRect xOff=\"0\" yOff=\"0\" xSize=\"$XSIZE\" ySize=\"$YSIZE\"/>" >> "$1"
+ echo "    </SimpleSource>" >> "$1"
+ echo " </VRTRasterBand>" >> "$1"
+ echo "</VRTDataset>" >> "$1"
 }
+
 
 ################### let's go
 
-PID=$$
-TMPFILE="`g.tempfile $PID`"
-
-if [ ! -z "$GIS_OPT_FILE" ] ; then
+if [ -n "$GIS_OPT_FILE" ] ; then
     SPOTDIR="`dirname $GIS_OPT_FILE`"
     SPOTNAME=`basename $GIS_OPT_FILE .HDF`
 fi
 
-if [ ! -z "$GIS_OPT_RAST" ] ; then
+if [ -n "$GIS_OPT_RAST" ] ; then
     NAME="$GIS_OPT_RAST"
 else
-    NAME=$SPOTNAME
+    NAME="$SPOTNAME"
 fi
 
-if [ ! -z `g.findfile elem=cell file="$NAME" | grep ^file | cut -f2 -d=` ] ; then
+if [ -n `g.findfile elem=cell file="$NAME" | grep ^file | cut -f2 -d=` ] ; then
 	g.message -e message="<$NAME> already exists. Aborting."
 	exit 1
 fi
 
-# still a ZIP file?
+# still a ZIP file?  (is this portable?? see the r.in.srtm script for ideas)
 if [ "`file -ib $GIS_OPT_FILE`" = "application/x-zip" ] ; then
   g.message -e message="Please extract $GIS_OPT_FILE before import."
   exit 1
@@ -186,6 +206,7 @@ g.message "Importing SPOT VGT NDVI map..."
 r.in.gdal "$VRTFILE" output="$NAME"
 if [ $? -eq 1 ] ; then
    g.message -e "An error occurred. Stop."
+   cleanup
    exit 1
 fi
 
@@ -200,10 +221,14 @@ g.message message="Imported SPOT VEGETATION NDVI map <$NAME>."
 # Coefficient a = 0.004
 # Coefficient b = -0.1
 
+
+# clone current region
+g.region save="spot_$PID"
+
 # switch to a temporary region
-WIND_OVERRIDE=spot_$PID
+WIND_OVERRIDE="spot_$PID"
 export WIND_OVERRIDE
-g.region -d --quiet
+
 g.region rast="$NAME" --quiet
 
 g.message "Remapping digital numbers to NDVI..."
@@ -251,6 +276,7 @@ if [ $GIS_FLAG_A -eq 1 ] ; then
   r.in.gdal "$VRTFILE" output="$NAME.sm"
   if [ $? -eq 1 ] ; then
      g.message -e "An error occurred. Stop."
+     cleanup
      exit 1
   fi
 
@@ -278,13 +304,10 @@ EOF
   g.message message="Filtered SPOT VEGETATION NDVI map <${NAME}_filt>."
 fi
 
-# remove the temporary region
-g.remove region="spot_$PID" --quiet
 
-#### clean up the mess
-rm -f "$VRTFILE" "$TMPFILE"
+# remove the temporary region and files
+cleanup
 
-#### end
 # write cmd history:
 r.support "$NAME" history="${CMDLINE}"
 
