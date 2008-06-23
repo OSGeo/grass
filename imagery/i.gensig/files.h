@@ -7,7 +7,7 @@ struct files
     struct Categories training_labels;
 
     int *band_fd;
-    CELL **band_cell;
+    DCELL **band_cell;
     int nbands;
 };
 int closefiles(struct files *);

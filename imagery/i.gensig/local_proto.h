@@ -13,5 +13,3 @@ int tqli(double [], double [], int, double **);
 int tred2(double **, int, double [], double []);
 /* lookup_class.c */
 int lookup_class(CELL *, int, CELL *, int, CELL *);
-/* opencell.c */
-CELL *open_cell(char *, char *, int *);

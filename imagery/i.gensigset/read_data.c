@@ -22,7 +22,8 @@ int read_data (struct files *files, struct SigSet *S)
 	G_percent (row, nrows, 2);
 	read_training_map (class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)
-	    if (G_get_c_raster_row (files->band_fd[b], files->band_cell[b], row) < 0) exit(1);
+	    if (G_get_d_raster_row (files->band_fd[b], files->band_cell[b], row) < 0)
+		exit(1);
 
 	for (col = 0; col < ncols; col++)
 	{
@@ -31,10 +32,10 @@ int read_data (struct files *files, struct SigSet *S)
 	    Data = &S->ClassSig[n].ClassData;
 	    for (b = 0; b < files->nbands; b++)
 	    {
-		if(G_is_c_null_value(&files->band_cell[b][col]))
+		if(G_is_d_null_value(&files->band_cell[b][col]))
 		     G_set_d_null_value(&Data->x[Data->count][b], 1);
                 else
-		    Data->x[Data->count][b] = (double) files->band_cell[b][col];
+		    Data->x[Data->count][b] = files->band_cell[b][col];
             }
 	    Data->count++;
 	}
