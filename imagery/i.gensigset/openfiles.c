@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include <grass/imagery.h>
+#include <grass/glocale.h>
 #include "files.h"
 #include "parms.h"
 
 int openfiles (struct parms *parms, struct files *files)
 {
     struct Ref Ref;	/* subgroup reference list */
-    CELL *open_cell();  /* opens existing rastermaps and returns fd and allocated io buffer */
+    char *mapset;
     int n;
 
 
@@ -27,12 +28,23 @@ int openfiles (struct parms *parms, struct files *files)
     /* allocate file descriptors, and array of io buffers */
     files->nbands    = Ref.nfiles;
     files->band_fd   = (int *) G_calloc (Ref.nfiles, sizeof(int));
-    files->band_cell = (CELL **) G_calloc (Ref.nfiles, sizeof(CELL *));
+    files->band_cell = (DCELL **) G_calloc (Ref.nfiles, sizeof(DCELL *));
+
+    /* open training map for reading */
+    mapset = G_find_cell2(parms->training_map, "");
+    files->train_fd = G_open_cell_old(parms->training_map, mapset);
+    if (files->train_fd < 0)
+	G_fatal_error(_("Unable to open training map <%s>"), parms->training_map);
+    files->train_cell = G_allocate_c_raster_buf();
 
     /* open all maps for reading */
-    files->train_cell = open_cell (parms->training_map, NULL, &files->train_fd);
     for (n = 0; n < Ref.nfiles; n++)
-	files->band_cell[n] = open_cell (Ref.file[n].name, Ref.file[n].mapset, &files->band_fd[n]);
+    {
+	files->band_fd[n] = G_open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
+	if (files->band_fd[n] < 0)
+	    G_fatal_error(_("Unable to open training map <%s in %s>"), Ref.file[n].name, Ref.file[n].mapset);
+	files->band_cell[n] = G_allocate_d_raster_buf();
+    }
 
     return 0;
 }

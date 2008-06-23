@@ -12,7 +12,8 @@ int compute_covariances (struct files *files, struct Signature *S)
     int n;
     int b,b1,b2;
     int nrows, ncols, row, col;
-    CELL *class, *cell1, *cell2;
+    CELL *class;
+    DCELL *cell1, *cell2;
 
     for (n = 0; n < S->nsigs; n++)       /* for each signature (aka class) */
 	for (b1 = 0; b1 < S->nbands; b1++)
@@ -33,7 +34,7 @@ int compute_covariances (struct files *files, struct Signature *S)
 	G_percent (row, nrows, 2);
 	read_training_map (class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)	/* NOTE: files->nbands == S->nbands */
-	    if (G_get_c_raster_row (files->band_fd[b], files->band_cell[b], row) < 0) exit(1);
+	    if (G_get_d_raster_row (files->band_fd[b], files->band_cell[b], row) < 0) exit(1);
 	for (b1 = 0; b1 < files->nbands; b1++)
 	{
 	    cell1 = files->band_cell[b1];

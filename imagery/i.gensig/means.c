@@ -11,7 +11,8 @@ int compute_means (struct files *files, struct Signature *S)
     int n, n_nulls;
     int b;
     int nrows, ncols, row, col;
-    CELL *class, *cell;
+    CELL *class;
+    DCELL *cell;
 
     for (n = 0; n < S->nsigs; n++)       /* for each signature (aka class) */
 	for (b = 0; b < S->nbands; b++)  /* for each band file */
@@ -32,10 +33,11 @@ int compute_means (struct files *files, struct Signature *S)
 	read_training_map (class, row, ncols, files);
 	for (b = 0; b < files->nbands; b++)	/* NOTE: files->nbands == S->nbands */
 	{
-	    if (G_get_c_raster_row (files->band_fd[b], cell = files->band_cell[b], row) < 0) exit(1);
+	    if (G_get_d_raster_row (files->band_fd[b], cell = files->band_cell[b], row) < 0)
+		exit(1);
 	    for (col = 0; col < ncols; col++)
 	    {
-		if(G_is_c_null_value(&cell[col]))
+		if(G_is_d_null_value(&cell[col]))
 		{
 		    n_nulls++;
 		    continue;
