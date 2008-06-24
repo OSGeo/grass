@@ -300,7 +300,7 @@ if [ $CREATE_POINTS -eq 1 ] ; then
     cat "${TMP}.xcsv" | tr '+' '|' | cut -f3,4,5,6 -d '|' | \
 	sed -e 's/-99999999.000000//' -e 's/|$/|_/' \
 	    -e 's/01\/01\/1970|00:00:00 AM/|/' \
-	    -e 's/^|/|/'> "$TMP".attributes
+	    -e 's/^|/-9999|/'> "$TMP".attributes
 
 
     #### reproject if needed
