@@ -296,10 +296,11 @@ if [ $CREATE_POINTS -eq 1 ] ; then
 
     cat "${TMP}.xcsv" | cut -f 1,2 -d '|'| tr '|' ' '  > "$TMP".base
 # FIXME: if last field (comments) is empty it causes a not-enough fields error in v.in.ascii
-
+# FIXME: if altitude column is empty (1st attr) v.in.ascii complains as the column type is defined as 'double'
     cat "${TMP}.xcsv" | tr '+' '|' | cut -f3,4,5,6 -d '|' | \
 	sed -e 's/-99999999.000000//' -e 's/|$/|_/' \
-	    -e 's/01\/01\/1970|00:00:00 AM/|/' > "$TMP".attributes
+	    -e 's/01\/01\/1970|00:00:00 AM/|/' \
+	    -e 's/^|/|/'> "$TMP".attributes
 
 
     #### reproject if needed
@@ -344,7 +345,7 @@ if [ $CREATE_POINTS -eq 1 ] ; then
 	    g.message "Importing Tracks as points..."
 	fi
 
-	cat "${TMP}.asc" | v.in.ascii output="$NAME" cat=0 \
+	v.in.ascii in="${TMP}.asc" output="$NAME" cat=0 \
 	  columns='x double precision, y double precision, altitude double precision, gmt_date varchar(10), gmt_time varchar(11), comments varchar(40)'
 	EXITCODE=$?
 
