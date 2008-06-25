@@ -549,7 +549,6 @@ class CommandThread(Thread):
         if self.stdout:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stdout.fileno()
-            # FIXME (MS Windows)
 	    if not subprocess.mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
@@ -557,7 +556,6 @@ class CommandThread(Thread):
         if self.stderr:
             # make module stdout/stderr non-blocking
             out_fileno = self.module.stderr.fileno()
-            # FIXME (MS Windows)
 	    if not subprocess.mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
