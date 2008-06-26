@@ -1,5 +1,4 @@
 /*
- *
  ****************************************************************************
  *
  * MODULE:     v.out.ascii
@@ -7,8 +6,8 @@
  *             James Westervelt, U.S. Army Construction Engineering Research Laboratory
  *             Radim Blazek, ITC-Irst, Trento, Italy
  *
- * PURPOSE:    r.out.ascii: writes ASCII GRID file
- * COPYRIGHT:  (C) 2000 by the GRASS Development Team
+ * PURPOSE:    v.out.ascii: writes GRASS vector data as ASCII files
+ * COPYRIGHT:  (C) 2000-2008 by the GRASS Development Team
  *
  *             This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -21,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -128,6 +128,9 @@ int main(int argc, char *argv[])
     if (output->answer) {
 	if (ver == 4) {
 	    ascii = G_fopen_new("dig_ascii", output->answer);
+	}
+	else if( strcmp(output->answer, "-") == 0 ) {
+	    ascii = stdout;
 	}
 	else {
 	    ascii = fopen(output->answer, "w");
