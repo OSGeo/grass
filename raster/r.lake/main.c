@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     lake_opt = G_define_standard_option(G_OPT_R_OUTPUT) ;
     lake_opt->key         = "lake";
     lake_opt->description = _("Name for output raster map with lake");
-    smap_opt->required    = NO;
+    lake_opt->required    = NO;
 
     sdxy_opt = G_define_option() ;
     sdxy_opt->key         = "xy";
