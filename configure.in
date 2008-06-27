@@ -708,10 +708,10 @@ else
   GDAL=
   ac_save_libs="$LIBS"
   LIBS="$LIBS $GDAL_LIBS"
-  AC_CHECK_FUNC(GDALOpen, , [
+  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],,[
   LIBS="$LIBS $GDAL_DEP_LIBS"
-  AC_CHECK_FUNC(GDALOpen, GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS", [
-  AC_MSG_ERROR([*** couldn't find GDAL])
+  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+  AC_MSG_ERROR([*** Unable to locate GDAL library.])
   ])
   ])
   LIBS=${ac_save_libs}
@@ -1142,23 +1142,8 @@ LOC_CHECK_INCLUDES(GL/gl.h GL/glu.h,OpenGL,$OPENGLINC)
 
 LOC_CHECK_LIB_PATH(opengl,OpenGL,OPENGL_LIB_PATH)
 
-ac_save_ldflags="$LDFLAGS"
-ac_save_libs="$LIBS"
-LDFLAGS="$OPENGL_LIB_PATH $LDFLAGS"
-AC_MSG_CHECKING(for OpenGL library)
-LIBS="-lopengl32"
-AC_TRY_LINK([#include <GL/gl.h>],[glEnd();],[
-AC_MSG_RESULT(found)
-OPENGLLIB=-lopengl32
-AC_MSG_CHECKING(for GLU library)
-LIBS="-lglu32 $OPENGLLIB"
-AC_TRY_LINK([#include <GL/glu.h>],[gluNewQuadric();],[
-AC_MSG_RESULT(found)
-OPENGLULIB=-lglu32
-],[AC_MSG_ERROR([*** Unable to locate GLU library.])])
-],[AC_MSG_ERROR([*** Unable to locate OpenGL library.])])
-LIBS=${ac_save_libs}
-LDFLAGS=${ac_save_ldflags}
+LOC_CHECK_LINK(opengl32,[#include <GL/gl.h>],[glEnd();],OpenGL,$OPENGL_LIB_PATH,OPENGLLIB)
+LOC_CHECK_LINK(glu32,[#include <GL/glu.h>],[gluNewQuadric();],GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB)
 
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
@@ -1200,7 +1185,10 @@ LOC_CHECK_INCLUDES(sql.h,ODBC,$ODBCINC)
 LOC_CHECK_LIB_PATH(odbc,ODBC,ODBCLIB)
 
 LOC_CHECK_LIBS(odbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,$ICONVLIB,,[
-LOC_CHECK_LIBS(iodbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,,,)
+LOC_CHECK_LIBS(iodbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,,,[
+LOC_CHECK_LINK(odbc32,[#include <windows.h>
+#include <sql.h>],[SQLAllocEnv((SQLHENV *)0);],ODBC,$ODBCLIB,ODBCLIB)
+])
 ])
 
 fi # $USE_ODBC
