@@ -77,6 +77,34 @@ AC_CHECK_HEADERS($1, [], ifelse($4,[],[
 CPPFLAGS=$ac_save_cppflags
 ])
 
+dnl $1  = library
+dnl $2  = header
+dnl $3  = function call
+dnl $4  = descriptive name
+dnl $5  = LDFLAGS initialiser
+dnl $6  = result variable
+dnl $7  = mandatory dependencies (not added to $5)
+dnl $8  = mandatory dependencies (added to $5)
+dnl $9  = ACTION-IF-NOT-FOUND
+
+define(LOC_CHECK_LINK,[
+ac_save_ldflags="$LDFLAGS"
+ac_save_libs="$LIBS"
+AC_MSG_CHECKING(for $4 library)
+LDFLAGS="$5 $LDFLAGS"
+LIBS="-l$1 $7 $8"
+AC_TRY_LINK([$2],[$3],[
+AC_MSG_RESULT(found)
+$6="$$6 -l$1 $8"
+],[
+ifelse($9,[],[
+    AC_MSG_ERROR([*** Unable to locate $4 library.])
+],$9)
+])
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+])
+
 dnl autoconf undefines "shift", so use "builtin([shift], ...)"
 
 define(LOC_SHIFT1,[builtin([shift],$*)])
