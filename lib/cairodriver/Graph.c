@@ -2,17 +2,19 @@
 #include <cairo-ps.h>
 #include <cairo-pdf.h>
 #include <cairo-svg.h>
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
 #include <cairo-xlib.h>
+#endif
 
-#ifndef __MINGW32__
 #include <unistd.h>
+#ifndef __MINGW32__
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 #endif
 
-#if CAIRO_HAS_XLIB_SURFACE
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -39,7 +41,7 @@ static void init_cairo(void);
 static int ends_with(const char *string, const char *suffix);
 static void map_file(void);
 
-#if CAIRO_HAS_XLIB_SURFACE
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
 static int init_xlib(void)
 {
 	Display *dpy;
@@ -228,7 +230,7 @@ int Cairo_Graph_set(int argc, char **argv)
 	p = getenv("GRASS_AUTO_WRITE");
 	auto_write = p && strcmp(p, "TRUE") == 0;
 
-#if CAIRO_HAS_XLIB_SURFACE
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
 	p = getenv("GRASS_CAIRO_DRAWABLE");
 	if (p)
 		return init_xlib();
