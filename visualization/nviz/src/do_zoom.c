@@ -352,6 +352,7 @@ static void create_pixmap(int width, int height)
 #endif
 }
 
+#ifdef OPENGL_X11
 static int Error_Handler(ClientData closure, XErrorEvent *event)
 {
     if (!dpy)
@@ -359,6 +360,7 @@ static int Error_Handler(ClientData closure, XErrorEvent *event)
     XmuPrintDefaultErrorMessage(dpy, event, stderr);
     return 0;
 }
+#endif
 
 int Create_OS_Ctx(int width, int height)
 {
