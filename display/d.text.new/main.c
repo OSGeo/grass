@@ -222,7 +222,7 @@ int main(int argc, char **argv)
     opt.charset->key = "charset";
     opt.charset->type = TYPE_STRING;
     opt.charset->required = NO;
-    opt.charset->description = "Text encoding (only applicable to TrueType fonts)";
+    opt.charset->description = _("Text encoding (only applicable to TrueType fonts)");
 
     flag.m = G_define_flag();
     flag.m->key = 'm';
