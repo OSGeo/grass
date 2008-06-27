@@ -1,6 +1,10 @@
 #ifndef _ODBC_H_
 #define	_ODBC_H_
 
+#ifdef __MINGW32__
+#include <windows.h>
+#endif
+
 /* configure checks for sql.h and stores in $(ODBCINC) */
 #include <sql.h>     
 #include <sqlext.h>  
