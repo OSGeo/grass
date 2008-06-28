@@ -6,7 +6,7 @@
 #
 # MODULE:	g.mremove
 # AUTHOR(S):	Huidae Cho - grass4u@gmail.com
-# PURPOSE:	applied wildcard to g.remove
+# PURPOSE:	Removes data files using basic regular expressions and wildcards
 # COPYRIGHT:	(C) 2000 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -17,13 +17,13 @@
 
 
 #%Module
-#%  description: Apply regular expressions and wildcards to g.remove
+#%  description: Removes data files using basic regular expressions and wildcards.
 #%  keywords: general, map management
 #%End
 
 #%flag
 #%  key: r
-#%  description: Use regular expression instead of wildcard
+#%  description: Use basic regular expressions instead of wildcards
 #%end
 
 #%flag
@@ -121,11 +121,11 @@ found=""
 
 search() {
     if [ ! "$2" ]; then
-        return
+	return
     fi
     found="$found"`
-        g.mlist $regex sep=, mapset="$MAPSET" type="$1" pattern="$2" |
-        sed "s,^\(.\), $1=\1,"`
+	g.mlist $regex sep=, mapset="$MAPSET" type="$1" pattern="$2" |
+	sed "s,^\(.\), $1=\1,"`
 }
 
 search rast	"$GIS_OPT_RAST"
