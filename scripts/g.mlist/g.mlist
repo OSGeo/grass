@@ -42,7 +42,7 @@
 #% required : no
 #%end
 #%option
-#% key: sep
+#% key: separator
 #% type: string
 #% description: Output separator (default: newline)
 #% required : no
@@ -94,7 +94,7 @@ fi
 
 type="$GIS_OPT_TYPE"
 mapset="$GIS_OPT_MAPSET"
-sep="$GIS_OPT_SEP"
+separator="$GIS_OPT_SEPARATOR"
 search="$GIS_OPT_PATTERN"
 
 # list all datatypes
@@ -120,8 +120,8 @@ for mapset in $mapsets
 do
     do_list
 done | sort | (
-    if [ "$sep" != "" ] ; then
-	tr '\n' "$sep" | sed 's/.$/\
+    if [ "$separator" != "" ] ; then
+	tr '\n' "$separator" | sed 's/.$/\
 /'
     else
 	cat
