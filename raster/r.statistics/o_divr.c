@@ -3,10 +3,6 @@
 #include <grass/gis.h>
 #include "method.h"
 
-/* function prototypes */
-static long divr (struct stats *);
-
-
 int 
 o_divr (char *basemap, char *covermap, char *outputmap, int usecats, struct Categories *cats)
 {

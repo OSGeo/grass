@@ -34,6 +34,7 @@ main (int argc, char **argv)
     struct Option *method, *basemap, *covermap, *outputmap;
     struct Flag *flag_c;
     struct Categories cats;
+    char methods[1024];
 
     G_gisinit (argv[0]);
 
@@ -46,20 +47,21 @@ main (int argc, char **argv)
 
     covermap = G_define_standard_option (G_OPT_R_COVER);
 
+    for (o_method = 0; menu[o_method].name; o_method++)
+    {
+       if (o_method)
+	  strcat (methods, ",");
+       else
+      	  *(methods) = 0;
+       strcat (methods, menu[o_method].name);
+    }
+
     method = G_define_option();
     method->key         = "method";
     method->type        = TYPE_STRING;
     method->required    = YES;
     method->description = _("Method of object-based statistic");
-    method->options     = G_malloc(1024);
-    for (o_method = 0; menu[o_method].name; o_method++)
-    {
-       if (o_method)
-	  strcat (method->options, ",");
-       else
-      	  *(method->options) = 0;
-	  strcat (method->options, menu[o_method].name);
-    }
+    method->options     = methods;
     
     outputmap = G_define_standard_option (G_OPT_R_OUTPUT);
     outputmap->description = _("Resultant raster map (not used with 'distribution')");

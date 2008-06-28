@@ -570,28 +570,28 @@ struct Key_Value
 
 struct Option                	    /* Structure that stores option info */
 {
-    char *key;                      /* Key word used on command line    */
+    const char *key;                /* Key word used on command line    */
     int type;                       /* Option type                      */
     int required;                   /* REQUIRED or OPTIONAL             */
     int multiple;                   /* Multiple entries OK              */
-    char *options;                  /* Approved values or range or NULL */
-    char **opts;                    /* NULL or NULL terminated array of parsed options */
-    char *key_desc;                 /* one word describing the key      */
-    char *label;                    /* Optional short label, used in GUI as item label */
-    char *description;              /* String describing option         */
-    char *descriptions;             /* ';' separated pairs of option and option descriptions */
+    const char *options;            /* Approved values or range or NULL */
+    const char **opts;              /* NULL or NULL terminated array of parsed options */
+    const char *key_desc;           /* one word describing the key      */
+    const char *label;              /* Optional short label, used in GUI as item label */
+    const char *description;        /* String describing option         */
+    const char *descriptions;       /* ';' separated pairs of option and option descriptions */
 				    /* For example: (with ->options = "break,rmdupl")
 				     * "break;break lines on intersections;"
 				     * "rmdupl;remove duplicates"
 				     */
-    char **descs;                   /* parsed descriptions, array of either NULL or string */
+    const char **descs;             /* parsed descriptions, array of either NULL or string */
                                     /* in the same order as options */
     char *answer;                   /* Option answer                    */
-    char *def;                      /* Where original answer gets saved */
+    const char *def;                /* Where original answer gets saved */
     char **answers;                 /* Option answers (for multiple=YES)*/
     struct Option *next_opt;        /* Pointer to next option struct    */
-    char *gisprompt;                /* Interactive prompt guidance      */
-    char *guisection;               /* GUI Layout guidance: ';' delimited heirarchical tree position */
+    const char *gisprompt;          /* Interactive prompt guidance      */
+    const char *guisection;         /* GUI Layout guidance: ';' delimited heirarchical tree position */
     int (*checker)();               /* Routine to check answer or NULL  */
     int count;
 };
@@ -600,17 +600,17 @@ struct Flag                 	    /* Structure that stores flag info  */
 {
     char key;                       /* Key char used on command line    */
     char answer;                    /* Stores flag state: 0/1           */
-    char *label;                    /* Optional short label, used in GUI as item label */
-    char *description;              /* String describing flag meaning   */
-    char *guisection;               /* GUI Layout guidance: ';' delimited heirarchical tree position */
+    const char *label;              /* Optional short label, used in GUI as item label */
+    const char *description;        /* String describing flag meaning   */
+    const char *guisection;         /* GUI Layout guidance: ';' delimited heirarchical tree position */
     struct Flag *next_flag;         /* Pointer to next flag struct      */
 };
 
 struct GModule                      /* Structure that stores module info  */
 {
-    char *label;                    /* Optional short description for GUI */
-    char *description;              /* String describing module */
-    char *keywords;                 /* Keywords describing module */
+    const char *label;              /* Optional short description for GUI */
+    const char *description;        /* String describing module */
+    const char *keywords;           /* Keywords describing module */
 	/* further items are possible: author(s), version */
     int overwrite;                  /* overwrite old files */
     int verbose;                    /* print all informations about progress and so on */
