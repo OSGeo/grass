@@ -1,17 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.addtable</em> creates and adds a new attribute table to a given vector map. It 
-links the table to the specified layer of the vector map. If the vector map
-is not yet linked to any table, new a database link is established based
-on the MAPSET database settings (see <em>db.connect</em>).
+<em>v.db.addtable</em> creates and adds a new attribute table to a given vector
+map. It links the table to the specified layer of the vector map. If the vector
+map is not yet linked to any table, new a database link is established based on
+the MAPSET database settings (see <em>db.connect</em>).
 
 <h2>NOTES</h2>
 
-<em>v.db.addtable</em> is a front-end to <em>db.execute</em> to allow easier usage.
+<em>v.db.addtable</em> is a front-end to <em>db.execute</em> to allow easier
+usage.
 
-The supported types of columns depend on the database backend. However, 
-all backends should support VARCHAR, INT, DOUBLE and DATE. The default dbf backend
-supports only these types.
+The supported types of columns depend on the database backend. However, all
+backends should support VARCHAR, INT, DOUBLE PRECISION and DATE. The default
+dbf backend supports only these types.
 
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
@@ -19,7 +20,7 @@ The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 Adding a new attribute table with a single column to default layer 1:<br>
 <div class="code"><pre>
-v.db.addtable sentiero_brenta_points columns="slope double"
+v.db.addtable sentiero_brenta_points columns="slope double precision"
 v.db.connect -p sentiero_brenta_points
 v.info -c sentiero_brenta_points
 </pre></div>
@@ -27,7 +28,7 @@ v.info -c sentiero_brenta_points
 <p>
 Adding a new attribute table with two columns to layer 2:<br>
 <div class="code"><pre>
-v.db.addtable sentiero_brenta_points columns="slope double,myname varchar(15)" layer=2
+v.db.addtable sentiero_brenta_points columns="slope double precision,myname varchar(15)" layer=2
 v.db.connect -p sentiero_brenta_points
 v.info -c sentiero_brenta_points
 </pre></div>
