@@ -146,10 +146,12 @@ int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"));
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      map_name);
     }
 
-    G_verbose_message(_("Loading data..."));
+    G_message(_("Loading raster map <%s>..."),
+	      map_name);
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -219,10 +221,12 @@ int Gs_loadmap_as_int(struct Cell_head *wind, char *map_name, int *buff,
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"));
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      map_name);
     }
 
-    G_verbose_message(_("Loading data..."));
+    G_message(_("Loading raster map <%s>..."),
+	      map_name);
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -376,7 +380,8 @@ int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"));
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      map_name);
     }
 
     tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
@@ -384,7 +389,8 @@ int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
 	return -1;
     }
 
-    G_verbose_message(_("Loading data..."));
+    G_message(_("Loading raster map <%s>..."),
+	      map_name);
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -490,7 +496,8 @@ int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"));
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      map_name);
     }
 
     tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
@@ -498,7 +505,8 @@ int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
 	return -1;
     }
 
-    G_verbose_message(_("Loading data..."));
+    G_message(_("Loading raster map <%s>..."),
+	      map_name);
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -579,7 +587,8 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
     }
 
     if ((cellfile = G_open_cell_old(map_name, map_set)) == -1) {
-	G_fatal_error(_("Unable to open raster map <%s>"));
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      map_name);
     }
 
     tmp_buf = (int *) G_malloc(wind->cols * sizeof(int)); /* G_fatal_error */
@@ -592,7 +601,8 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
 	G_fatal_error(_("Unable to allocate memory for a null buffer"));
     }
 
-    G_verbose_message(_("Loading data..."));
+    G_message(_("Loading raster map <%s>..."),
+	      map_name);
 
     for (row = 0; row < wind->rows; row++) {
 	G_get_null_value_row(cellfile, nullflags, row);
@@ -711,8 +721,8 @@ void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
 
     cur = buff;
 
-    G_verbose_message(_("Translating colors for raster map <%s>..."),
-		      filename);
+    G_message(_("Translating colors from raster map <%s>..."),
+	      filename);
 
     for (i = 0; i < rows; i++) {
 	G_lookup_colors(cur, r, g, b, set, cols, &colrules);
@@ -782,8 +792,8 @@ void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
     fcur = fbuf;
     icur = ibuf;
 
-    G_verbose_message(_("Translating colors from fp raster map <%s>"),
-		      filename);
+    G_message(_("Translating colors from raster map <%s>..."),
+	      filename);
 
     for (i = 0; i < rows; i++) {
 	G_lookup_f_raster_colors(fcur, r, g, b, set, cols, &colrules);
