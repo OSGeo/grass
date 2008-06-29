@@ -1,16 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.db.addcol</em> adds one or more column(s) to the attribute table connected
-to a given vector map. It automatically checks the connection for the specified
-layer.
+<em>v.db.addcol</em> adds one or more column(s) to the attribute table
+connected to a given vector map. It automatically checks the connection for the
+specified layer.
 
 <h2>NOTES</h2>
 
 v.db.addcol is a front-end to <em>db.execute</em> to allow easier usage.
 
-The supported types of columns depend on the database backend. However, 
-all backends should support VARCHAR, INT, DOUBLE/REAL and DATE. The default dbf backend
-supports only these types.
+The supported types of columns depend on the database backend. However, all
+backends should support VARCHAR, INT, DOUBLE PRECISION and DATE. The default
+dbf backend supports only these types.
 
 The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
