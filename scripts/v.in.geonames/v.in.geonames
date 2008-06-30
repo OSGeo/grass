@@ -101,17 +101,22 @@ if [ $? -eq 1 ] ; then
   exit 1
 fi
 
+if [ ! -f "$GIS_OPT_INPUT" ] ; then
+    g.message -e "File '${FILEORIG}' not found"
+    exit 1
+fi
+
 #let's go
 #change TAB to semicolon (we cannot use 'tr' due to possibly repeated empty columns)
 TAB=`awk 'BEGIN{printf "\t";}'`
-cat "${FILEORIG}" | sed  "s+$TAB+|+g"  > "${TMPFILE}"
+cat "${FILEORIG}" | sed  "s+$TAB+|+g"  > "${TMPFILE}".csv
 
-# filter away non-standard chars due to v.in.ascii limitation:
-# TODO: better fix this
-cat "${TMPFILE}" |  tr -dc "[:blank:][:cntrl:][:graph:][:alnum:][:digit:][:punct:]\n" > "${TMPFILE}_ascii.csv"
-rm -f "${TMPFILE}"
+## filter away non-standard chars due to v.in.ascii limitation:
+## TODO: better fix this
+#cat "${TMPFILE}" |  tr -dc "[:blank:][:cntrl:][:graph:][:alnum:][:digit:][:punct:]\n" > "${TMPFILE}.csv"
+#rm -f "${TMPFILE}"
 
-NUM_PLACES=`wc -l "${TMPFILE}_ascii.csv" | awk '{print $1}'`
+NUM_PLACES=`wc -l "${TMPFILE}.csv" | awk '{print $1}'`
 g.message "Converted $NUM_PLACES place names."
 
 # pump data into GRASS:
@@ -143,14 +148,18 @@ g.message "Converted $NUM_PLACES place names."
 # TODO: elevation seems to contain spurious char stuff :(
 
 # debug:
-# head -n 3 ${TMPFILE}_ascii.csv
-v.in.ascii cat=0 x=6 y=5 fs="|" in="${TMPFILE}_ascii.csv" out="$GIS_OPT_OUTPUT" \
+# head -n 3 ${TMPFILE}.csv
+v.in.ascii cat=0 x=6 y=5 fs="|" in="${TMPFILE}.csv" out="$GIS_OPT_OUTPUT" \
    columns='geonameid integer, name varchar(200), asciiname varchar(200), alternatename varchar(4000), latitude double precision, longitude double precision, featureclass varchar(1), featurecode varchar(10), countrycode varchar(2), cc2 varchar(60), admin1code varchar(20), admin2code varchar(20), admin3code varchar(20), admin4code varchar(20), population integer, elevation varchar(5), gtopo30 integer, timezone varchar(50), modification date'
 
-rm -f "${TMPFILE}_ascii.csv"
+if [ $? -eq 0 ] ; then
+   # write cmd history:
+   v.support $GIS_OPT_OUTPUT cmdhist="${CMDLINE}"
+   rm -f "${TMPFILE}.csv"
+   exit 0
+fi
+rm -f "${TMPFILE}.csv"
 
-# write cmd history:
-v.support $GIS_OPT_OUTPUT cmdhist="${CMDLINE}"
-
-exit 0
+# should not happen
+exit 1
 
