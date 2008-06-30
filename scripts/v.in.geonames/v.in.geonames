@@ -28,7 +28,7 @@
 #%option
 #% key: input
 #% type: string
-#% key: name
+#% key_desc: name
 #% description: Uncompressed geonames file from (with .txt extension)
 #% gisprompt: old_file,file,input
 #% required : yes
@@ -36,7 +36,7 @@
 #%option
 #% key: output
 #% type: string
-#% key: name
+#% key_desc: name
 #% gisprompt: new,vector,vector
 #% description: Name for output vector map
 #% required : yes
