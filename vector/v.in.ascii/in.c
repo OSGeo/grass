@@ -439,45 +439,45 @@ int main(int argc, char *argv[])
 		    switch (coltype[i]) {
 		    case DB_C_TYPE_INT:
 			if (ctype == DB_C_TYPE_DOUBLE) {
-			    G_warning(_("Column number %d defined as double "
-					"has only integer values"), i + 1);
+			    G_warning(_("Column number %d <%s> defined as double "
+					"has only integer values"), i + 1, db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_STRING) {
-			    G_warning(_("Column number %d defined as string "
-					"has only integer values"), i + 1);
+			    G_warning(_("Column number %d <%s> defined as string "
+					"has only integer values"), i + 1, db_get_column_name(column));
 			}
 			break;
 		    case DB_C_TYPE_DOUBLE:
 			if (ctype == DB_C_TYPE_INT) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
-					  ("Column number %d defined as integer "
-					   "has double values"), i + 1);
+					  ("Column number %d <%s> defined as integer "
+					   "has double values"), i + 1, db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_STRING) {
-			    G_warning(_("Column number %d defined as string "
-					"has double values"), i + 1);
+			    G_warning(_("Column number %d <%s> defined as string "
+					"has double values"), i + 1, db_get_column_name(column));
 			}
 			break;
 		    case DB_C_TYPE_STRING:
 			if (ctype == DB_C_TYPE_INT) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
-					  ("Column number %d defined as integer "
-					   "has string values"), i + 1);
+					  ("Column number %d <%s> defined as integer "
+					   "has string values"), i + 1, db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_DOUBLE) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
-					  ("Column number %d defined as double "
-					   "has string values"), i + 1);
+					  ("Column number %d <%s> defined as double "
+					   "has string values"), i + 1, db_get_column_name(column));
 			}
 			if (length < collen[i]) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
-					  ("Length of column %d (%d) is less than "
+					  ("Length of column %d <%s> (%d) is less than "
 					   "maximum value " "length (%d)"),
-					  i + 1, length, collen[i]);
+					  i + 1, db_get_column_name(column), length, collen[i]);
 			}
 			break;
 		    }
