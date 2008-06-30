@@ -1,0 +1,156 @@
+#!/bin/sh
+
+############################################################################
+#
+# MODULE:       v.in.geonames
+#
+# AUTHOR(S):    Markus Neteler, neteler cealp it
+#
+# PURPOSE:      Import geonames.org dumps
+#               http://download.geonames.org/export/dump/
+#
+#               Feature Codes: http://www.geonames.org/export/codes.html
+#
+# COPYRIGHT:    (c) 2008 Markus Neteler, GRASS Development Team
+#
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
+#
+# TODO: fix encoding issues for Asian fonts in 'alternatename' column (v.in.ascii)
+#       fix spurious char stuff in elevation column
+#############################################################################
+
+#%Module
+#%  description: Imports geonames.org country files into a GRASS vector points map.
+#%  keywords: vector, import, gazetteer
+#%End
+#%option
+#% key: input
+#% type: string
+#% key: name
+#% description: Uncompressed geonames file from (with .txt extension)
+#% gisprompt: old_file,file,input
+#% required : yes
+#%end
+#%option
+#% key: output
+#% type: string
+#% key: name
+#% gisprompt: new,vector,vector
+#% description: Name for output vector map
+#% required : yes
+#%end
+
+if  [ -z "$GISBASE" ] ; then
+    echo "You must be in GRASS GIS to run this program." >&2
+    exit 1
+fi
+
+# save command line
+if [ "$1" != "@ARGS_PARSED@" ] ; then
+    CMDLINE="`basename $0`"
+    for arg in "$@" ; do
+        CMDLINE="$CMDLINE \"$arg\""
+    done
+    export CMDLINE
+    exec g.parser "$0" "$@"
+fi
+
+PROG=`basename $0`
+
+#### check if we have awk
+if [ ! -x "`which awk`" ] ; then
+    g.message -e "awk required, please install awk/gawk first"
+    exit 1
+fi
+
+# setting environment, so that awk works properly in all languages
+unset LC_ALL
+LC_NUMERIC=C
+export LC_NUMERIC
+
+eval `g.gisenv`
+: ${GISBASE?} ${GISDBASE?} ${LOCATION_NAME?} ${MAPSET?}
+LOCATION="$GISDBASE"/"$LOCATION_NAME"/"$MAPSET"
+
+
+if [ -n "$GIS_OPT_INPUT" ] ; then
+    FILEORIG="$GIS_OPT_INPUT"
+    if [ -n "$GIS_OPT_VECT" ] ; then
+       FILE="$GIS_OPT_VECT"
+    else
+       FILE=`basename $FILEORIG .txt`
+       FILE=`basename $FILE .csv`
+    fi
+fi
+
+#### setup temporary file
+TMPFILE="`g.tempfile pid=$$`"
+if [ $? -ne 0 ] || [ -z "$TMPFILE" ] ; then
+    g.message -e "Unable to create temporary files"
+    exit 1
+fi
+#### trap ctrl-c so that we can clean up tmp
+trap 'rm -f "${TMPFILE}" "${TMPFILE}_ascii.csv"' 2 3 15
+
+#are we in LatLong location?
+g.proj -p | grep -i name | grep -i Lon  > /dev/null
+if [ $? -eq 1 ] ; then
+  g.message -e "This module only operates in LatLong/WGS84 locations"
+  exit 1
+fi
+
+#let's go
+#change TAB to semicolon (we cannot use 'tr' due to possibly repeated empty columns)
+TAB=`awk 'BEGIN{printf "\t";}'`
+cat "${FILEORIG}" | sed  "s+$TAB+|+g"  > "${TMPFILE}"
+
+# filter away non-standard chars due to v.in.ascii limitation:
+# TODO: better fix this
+cat "${TMPFILE}" |  tr -dc "[:blank:][:cntrl:][:graph:][:alnum:][:digit:][:punct:]\n" > "${TMPFILE}_ascii.csv"
+rm -f "${TMPFILE}"
+
+NUM_PLACES=`wc -l "${TMPFILE}_ascii.csv" | awk '{print $1}'`
+g.message "Converted $NUM_PLACES place names."
+
+# pump data into GRASS:
+#  http://download.geonames.org/export/dump/readme.txt
+#  The main 'geoname' table has the following fields :
+#  ---------------------------------------------------
+#  geonameid         : integer id of record in geonames database
+#  name              : name of geographical point (utf8) varchar(200)
+#  asciiname         : name of geographical point in plain ascii characters, varchar(200)
+#  alternatenames    : alternatenames, comma separated varchar(4000)
+#  latitude          : latitude in decimal degrees (wgs84)
+#  longitude         : longitude in decimal degrees (wgs84)
+#  feature class     : see http://www.geonames.org/export/codes.html, char(1)
+#  feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
+#  country code      : ISO-3166 2-letter country code, 2 characters
+#  cc2               : alternate country codes, comma separated, ISO-3166 2-letter country code, 60 characters
+#  admin1 code       : fipscode (subject to change to iso code), isocode for the us and ch, see file admin1Codes.txt for display names of this code; varchar(20)
+#  admin2 code       : code for the second administrative division, a county in the US, see file admin2Codes.txt; varchar(80)
+#  admin3 code       : code for third level administrative division, varchar(20)
+#  admin4 code       : code for fourth level administrative division, varchar(20)
+#  population        : integer
+#  elevation         : in meters, integer
+#  gtopo30           : average elevation of 30'x30' (ca 900mx900m) area in meters, integer
+#  timezone          : the timezone id (see file http://download.geonames.org/export/dump/timeZones.txt)
+#  modification date : date of last modification in yyyy-MM-dd format
+
+# geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate
+
+# TODO: elevation seems to contain spurious char stuff :(
+
+# debug:
+# head -n 3 ${TMPFILE}_ascii.csv
+v.in.ascii cat=0 x=6 y=5 fs="|" in="${TMPFILE}_ascii.csv" out="$GIS_OPT_OUTPUT" \
+   columns='geonameid integer, name varchar(200), asciiname varchar(200), alternatename varchar(4000), latitude double precision, longitude double precision, featureclass varchar(1), featurecode varchar(10), countrycode varchar(2), cc2 varchar(60), admin1code varchar(20), admin2code varchar(20), admin3code varchar(20), admin4code varchar(20), population integer, elevation varchar(5), gtopo30 integer, timezone varchar(50), modification date'
+
+rm -f "${TMPFILE}_ascii.csv"
+
+# write cmd history:
+v.support $GIS_OPT_OUTPUT cmdhist="${CMDLINE}"
+
+exit 0
+

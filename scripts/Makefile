@@ -59,8 +59,9 @@ SUBDIRS = \
 	v.db.univar \
 	v.db.update \
 	v.dissolve \
-	v.in.garmin \
 	v.in.e00 \
+	v.in.garmin \
+	v.in.geonames \
 	v.in.gns \
 	v.in.gpsbabel \
 	v.in.mapgen \
