@@ -158,8 +158,10 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 				   skip = TRUE;
 			    }
 			}
-			else
-			    G_fatal_error(_("Unparsable longitude value: %s"), tokens[i]);
+			else {
+			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
+			    G_fatal_error(_("Unparsable longitude value in column <%d>: %s"), i, tokens[i]);
+			}
 		    }
 
 		    if (i == ycol) {
@@ -173,8 +175,10 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			 	    skip = TRUE;
 			    }
 			}
-			else
-			    G_fatal_error(_("Unparsable latitude value: %s"), tokens[i]);
+			else {
+			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
+			    G_fatal_error(_("Unparsable latitude value in column <%d>: %s"), i, tokens[i]);
+			}
 		    }
  		} /* if (x or y) */
 
