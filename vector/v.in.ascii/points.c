@@ -74,7 +74,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     char *coorbuf, *tmp_token, *sav_buf;
     int skip = FALSE, skipped = 0;
 
-    buflen = 1000;
+    buflen = 4000;
     buf = (char *)G_malloc(buflen);
     buf_raw = (char *)G_malloc(buflen);
     coorbuf = (char *)G_malloc(256);
@@ -269,7 +269,7 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 		  int *coltype, int xcol, int ycol, int zcol, int catcol,
 		  int skip_lines)
 {
-    char *buf, buf2[1000];
+    char *buf, buf2[4000];
     int cat = 0;
     int row = 1;
     struct line_pnts *Points;
