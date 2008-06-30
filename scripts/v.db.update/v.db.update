@@ -41,7 +41,7 @@
 #%option
 #% key: value
 #% type: string
-#% description: Value to update the column with (varchar values have to be in single quotes, e.g. 'grass')
+#% description: Value to update the column with (varchar values have to be in single quotes, e.g. 'grass'), can be (combination of) other column(s)
 #% required : no
 #%end
 #%option
