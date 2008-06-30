@@ -40,7 +40,7 @@
 #%option
 #% key: columns
 #% type: string
-#% description: Name and type of the new column(s) (types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE)
+#% description: Name and type of the new column(s) ('name type [,name type, ...]' - types depend on database backend, but all support VARCHAR(), INT, DOUBLE PRECISION and DATE)
 #% required : yes
 #%end
 
