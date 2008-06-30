@@ -36,7 +36,7 @@ char **G_tokenize ( const char *buf, const char *delim)
 	char *p;
 
 	i = 0;
-	while (*buf == ' ' || *buf == '\t')  /* needed for G_free () */
+	while (!G_index(delim,*buf) && (*buf == ' ' || *buf == '\t'))  /* needed for G_free () */
 		buf++;
 
 	p = G_store (buf);
@@ -45,7 +45,7 @@ char **G_tokenize ( const char *buf, const char *delim)
 
 	while (1)
 	{
-		while (*p == ' ' || *p == '\t')
+		while (!G_index(delim,*p) && (*p == ' ' || *p == '\t'))
 			p++;
 		if (*p == 0)
 			break;
