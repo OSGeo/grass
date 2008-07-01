@@ -214,6 +214,7 @@ class LayerTree(CT.CustomTreeCtrl):
             self.popupID8 = wx.NewId()
             self.popupID9 = wx.NewId()
             self.popupID10 = wx.NewId()
+            self.popupID11 = wx.NewId() # nviz
 
         self.popupMenu = wx.Menu()
         # general item
@@ -247,7 +248,9 @@ class LayerTree(CT.CustomTreeCtrl):
             mltype = self.GetPyData(self.layer_selected)[0]['type']
         except:
             mltype = None
-        # vector specific items
+        #
+        # vector layers (specific items)
+        #
         if mltype and mltype == "vector":
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, text=_("Show attribute data"))
@@ -278,8 +281,9 @@ class LayerTree(CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID7, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID7)
 
-
-        # raster
+        #
+        # raster layers (specific items)
+        #
         elif mltype and mltype == "raster":
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, _("Histogram"))
@@ -288,6 +292,9 @@ class LayerTree(CT.CustomTreeCtrl):
             self.Bind (wx.EVT_MENU, self.OnProfile, id=self.popupID5)
             self.popupMenu.Append(self.popupID6, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID6)
+            if self.mapdisplay.toolbars['nviz']:
+                self.popupMenu.Append(self.popupID11, _("Nviz properties"))
+                self.Bind (wx.EVT_MENU, self.OnNvizProperties, id=self.popupID11)
 
         ## self.PopupMenu(self.popupMenu, pos)
         self.PopupMenu(self.popupMenu)
@@ -445,7 +452,17 @@ class LayerTree(CT.CustomTreeCtrl):
 
         self.RefreshSelected()
         self.Refresh()
-        
+
+    def OnNvizProperties(self, event):
+        """Nviz-related properties (raster/vector/volume)
+
+        @todo vector/volume
+        """
+        import nviz
+        dlg = nviz.RasterPropertiesDialog(parent=self,
+                                          map=self.GetPyData(self.layer_selected)[0]['maplayer'].name)
+        dlg.Show()
+
     def RenameLayer (self, event):
         """Rename layer"""
         self.EditLabel(self.layer_selected)
@@ -602,6 +619,7 @@ class LayerTree(CT.CustomTreeCtrl):
                                     'type' : ltype,
                                     'ctrl' : ctrlId,
                                     'maplayer' : None,
+                                    'nviz' : None,
                                     'prowin' : None}, 
                                    None))
 
@@ -856,6 +874,10 @@ class LayerTree(CT.CustomTreeCtrl):
             self.RefreshLine(layer)
         except:
             pass
+
+        # update nviz tools
+        if self.mapdisplay.toolbars['nviz']:
+            self.mapdisplay.nvizToolWin.UpdatePage('surface')
 
     def OnCollapseNode(self, event):
         """

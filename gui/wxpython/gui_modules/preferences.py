@@ -196,8 +196,60 @@ class Settings:
                              'width' : 2,
                              },
                 },
+            'nviz' : {
+                'view' : {'persp' : { 'value' : 40,
+                                      'min' : 1,
+                                      'max' : 100,
+                                      'step' : 5,
+                                      'update' : False,
+                                      },
+                          'pos' : { 'x' : 0.85,
+                                    'y' : 0.85,
+                                    'update' : False,
+                                    },
+                          'height' : { 'value': -1,
+                                       'min' : -2245, # TODO: determine min/max height
+                                       'max' : 3695, 
+                                       'step' : 100,
+                                       'update' : False,
+                                       },
+                          'twist' : { 'value' : 0,
+                                      'min' : -180,
+                                      'max' : 180,
+                                      'step' : 5,
+                                      'update' : False,
+                                      },
+                          'z-exag' : { 'value': 1.0,
+                                       'min' : 0.0,
+                                       'max' : 10,
+                                       'step' : 1,
+                                       'update' : False
+                                       },
+                          },
+                'surface' : {
+                    'shine': { 'map' : False,
+                               'value' : 60.0,
+                                   },
+                    'color' : { 'map' : True,
+                                'value' : (0, 0, 0, 255), # constant: black
+                                },
+                    'draw' : {
+                        'color' : (136, 136, 136, 255),
+                        'mode' : 1, # fine
+                        'style' : 1, # surface
+                        'shading' : 1, # gouraud
+                        'res-fine' : 6,
+                        'res-coarse' : 9,
+                        },
+                    'position' : {
+                        'x' : 0,
+                        'y' : 0,
+                        'z' : 0,
+                        },
+                    },
+                },
             }
-
+        
         #
         # user settings
         #
@@ -283,9 +335,16 @@ class Settings:
                 line = line.rstrip('%s' % os.linesep)
                 group, key = line.split(':')[0:2]
                 kv = line.split(':')[2:]
+                subkeyMaster = None
+                if len(kv) % 2 != 0: # multiple (e.g. nviz)
+                    subkeyMaster = kv[0]
+                    del kv[0]
                 idx = 0
                 while idx < len(kv):
-                    subkey = kv[idx]
+                    if subkeyMaster:
+                        subkey = [subkeyMaster, kv[idx]]
+                    else:
+                        subkey = kv[idx]
                     value = kv[idx+1]
                     if len(value) == 0:
                         self.Append(settings, group, key, subkey, '')
@@ -301,13 +360,16 @@ class Settings:
                             tmp = value.replace('(','').replace(')', '').split(',')
                             try:
                                 value = tuple(map(int, tmp))
-                            except:
+                            except ValueError:
                                 value = tuple(tmp)
                         else:
                             try:
                                 value = int(value)
-                            except:
-                                pass
+                            except ValueError:
+                                try:
+                                    value = float(value)
+                                except ValueError:
+                                    pass
 
                         self.Append(settings, group, key, subkey, value)
                     idx += 2
@@ -337,13 +399,26 @@ class Settings:
         try:
             file = open(filePath, "w")
             for group in settings.keys():
-                for item in settings[group].keys():
-                    file.write('%s:%s:' % (group, item))
-                    items = settings[group][item].keys()
-                    for idx in range(len(items)):
-                        file.write('%s:%s' % (items[idx], settings[group][item][items[idx]]))
-                        if idx < len(items) - 1:
-                            file.write(':')
+                for key in settings[group].keys():
+                    file.write('%s:%s:' % (group, key))
+                    subkeys = settings[group][key].keys()
+                    for idx in range(len(subkeys)):
+                        value = settings[group][key][subkeys[idx]]
+                        if type(value) == type({}):
+                            if idx > 0:
+                                file.write('%s%s:%s:' % (os.linesep, group, key))
+                            file.write('%s:' % subkeys[idx])
+                            kvalues = settings[group][key][subkeys[idx]].keys()
+                            srange = range(len(kvalues))
+                            for sidx in srange:
+                                file.write('%s:%s' % (kvalues[sidx],
+                                                      settings[group][key][subkeys[idx]][kvalues[sidx]]))
+                                if sidx < len(kvalues) - 1:
+                                    file.write(':')
+                        else:
+                            file.write('%s:%s' % (subkeys[idx], value))
+                            if idx < len(subkeys) - 1:
+                                file.write(':')
                     file.write('%s' % os.linesep)
         except IOError, e:
             raise gcmd.SettingsError(e)
@@ -362,9 +437,10 @@ class Settings:
         @param group settings group
         @param key
         @param subkey if not given return dict of key
-        
-        @return value
+        @param subkey1 
+        @param internal use internal settings instead
 
+        @return value
         """
         if internal is True:
             settings = self.internalSettings
@@ -378,7 +454,11 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                return settings[group][key][subkey]
+                if type(subkey) == type([]):
+                    return settings[group][key][subkey[0]][subkey[1]]
+                else:
+                    return settings[group][key][subkey]  
+
         except KeyError:
             raise gcmd.SettingsError("%s %s:%s:%s." % (_("Unable to get value"),
                                                        group, key, subkey))
@@ -390,8 +470,9 @@ class Settings:
         
         @param group settings group
         @param key key
-        @param subkey subkey
+        @param subkey subkey (value or list)
         @param value value
+        @param internal use internal settings instead
         """
         if internal is True:
             settings = self.internalSettings
@@ -399,9 +480,10 @@ class Settings:
             settings = self.userSettings
 
         try:
-            if not settings[group][key].has_key(subkey):
-                raise KeyError
-            settings[group][key][subkey] = value
+            if type(subkey) == type([]):
+                settings[group][key][subkey[0]][subkey[1]] = value
+            else:
+                settings[group][key][subkey] = value
         except KeyError:
             raise gcmd.SettingsError("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
 
@@ -413,7 +495,7 @@ class Settings:
         @param dict settings dictionary to use
         @param group settings group
         @param key key
-        @param subkey subkey
+        @param subkey subkey (value or list)
         @param value value
         """
         if not dict.has_key(group):
@@ -422,7 +504,13 @@ class Settings:
         if not dict[group].has_key(key):
             dict[group][key] = {}
 
-        dict[group][key][subkey] = value
+        if type(subkey) == type([]):
+            # TODO: len(subkey) > 2
+            if not dict[group][key].has_key(subkey[0]):
+                dict[group][key][subkey[0]] = {}
+            dict[group][key][subkey[0]][subkey[1]] = value
+        else:
+            dict[group][key][subkey] = value
 
     def GetDefaultSettings(self):
         """Get default user settings"""
