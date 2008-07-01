@@ -274,7 +274,7 @@ static void close_video(AVFormatContext *oc, AVStream *st)
  \return -1 on failure
  \return 0 on success
 */
-int gsd_init_mpeg(char *filename)
+int gsd_init_mpeg(const char *filename)
 {
 #ifdef HAVE_FFMPEG
 	GLuint l, r, b, t;

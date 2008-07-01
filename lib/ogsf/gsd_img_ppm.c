@@ -39,7 +39,7 @@
   \return 1 on failure
   \return 0 on success
 */
-int GS_write_ppm(char *name)
+int GS_write_ppm(const char *name)
 {
     unsigned int x;
     int y;
@@ -84,7 +84,7 @@ int GS_write_ppm(char *name)
   \return 1 on failure
   \return 0 on success
 */
-int GS_write_zoom(char *name, unsigned int xsize, unsigned int ysize)
+int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
 {
     unsigned int x;
     int y;
