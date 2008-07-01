@@ -246,7 +246,7 @@ int main (int argc, char **argv)
     xtract_line( cat_count, cat_array, &In, &Out, new_cat, type, dissolve, field, type_only, r_flag -> answer ? 1 : 0);
     
     if (G_verbose() > G_verbose_min())
-	Vect_build (&Out, stdout);
+	Vect_build (&Out, stderr);
     else
 	Vect_build (&Out, NULL);
     

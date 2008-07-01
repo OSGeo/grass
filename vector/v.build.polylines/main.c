@@ -218,7 +218,7 @@ int main (int argc, char **argv)
   Vect_close (&map);
 
   if (G_verbose() > G_verbose_min())
-      Vect_build (&Out, stdout); 
+      Vect_build (&Out, stderr); 
   else
       Vect_build (&Out, NULL); 
 

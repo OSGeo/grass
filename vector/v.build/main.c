@@ -146,7 +146,7 @@ main (int argc, char *argv[])
 	    }
 	}
 
-	Vect_build ( &Err, stdout );
+	Vect_build ( &Err, stderr );
         Vect_close ( &Err );
     }
 

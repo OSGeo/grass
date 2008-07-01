@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     G_free(lines);
 
     if (G_verbose() > G_verbose_min())
-	Vect_build(&out, stdout);
+	Vect_build(&out, stderr);
     else
 	Vect_build(&out, NULL);
 
