@@ -9,7 +9,7 @@
  *               
  * PURPOSE:      A general module to convert site_lists to vector point layers.
  * 	    
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -53,8 +53,8 @@ int main (int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vector, import");
-    module->description = "Converts a GRASS site_lists file into a vector map.";
+    module->keywords = _("vector, import, sites");
+    module->description = _("Converts a GRASS site_lists file into a vector map.");
 
     sitein = G_define_option();
     sitein->key          = "input";
@@ -64,13 +64,7 @@ int main (int argc, char *argv[])
     sitein->multiple     = NO;
     sitein->gisprompt    = "old,site_lists,site list";
 
-    outvect = G_define_option();
-    outvect->key          = "output";
-    outvect->description  = "Name of vector output file";
-    outvect->type         = TYPE_STRING;
-    outvect->required     = YES;
-    outvect->multiple     = NO;
-    outvect->gisprompt    = "new,vector,vector";
+    outvect = G_define_standard_option(G_OPT_V_OUTPUT);
 
     if (G_parser(argc, argv)) exit(EXIT_FAILURE);
 
@@ -82,23 +76,26 @@ int main (int argc, char *argv[])
     sname = sitein->answer;
 
     mapset = G_find_file2 ("site_lists", sname, "");
-    if (mapset == NULL) G_fatal_error("Site file file [%s] not available\n",sname);
+    if (mapset == NULL)
+	G_fatal_error(_("Site file <%s> not found"), sname);
 
     if ((site = G_oldsites_open_old ( sname, mapset)) == NULL)
-        G_fatal_error ("Not able to open site file <%s@%s>\n", sname, mapset);
+        G_fatal_error (_("Unable to open site file <%s@%s>"),
+			 sname, mapset);
 
     if (G_oldsite_describe(site, &dims, &map_type, &strs, &dbls) != 0) 
-        G_fatal_error("Unable to guess site_list format!\n");
+        G_fatal_error(_("Unable to guess site_list format"));
 
     if ((s = G_site_new_struct(map_type, dims, strs, dbls)) == NULL)
-        G_fatal_error ("Failed to allocate site structure");
+        G_fatal_error (_("Failed to allocate site structure"));
 
-    fprintf (stdout,"Input format: dimension: %d   strings: %d   FP:%d\n", dims, strs, dbls); 
+    G_verbose_message (_("Input format: dimension: %d strings: %d FP: %d"),
+		       dims, strs, dbls); 
     
     if (map_type == FCELL_TYPE || map_type == DCELL_TYPE) {
-        fprintf (stdout,"Floating point category values, using sequential integer for category\n");
+        G_message (_("Floating point category values, using sequential integer for category"));
     } else if (map_type != CELL_TYPE) {
-        fprintf (stdout,  "No category values, using sequential integer for category\n");
+        G_message (_("No category values, using sequential integer for category"));
     }
 
     clen = (int *) G_calloc ( strs, sizeof ( int ) );
@@ -148,29 +145,35 @@ int main (int argc, char *argv[])
     G_debug ( 1, db_get_string ( &sql ) );
     
     driver = db_start_driver( fi->driver );
-    if (driver == NULL) G_fatal_error ( "Cannot open driver %s", fi->driver );
+    if (driver == NULL)
+	G_fatal_error (_("Unable to start driver <%s>"),
+		       fi->driver );
     db_init_handle (&handle);
     db_set_handle (&handle, Vect_subst_var(fi->database,&Map), NULL);
     if (db_open_database(driver, &handle) != DB_OK) {
 	db_shutdown_driver(driver);
-	G_fatal_error ( "Cannot open database %s", fi->database );
+	G_fatal_error (_("Unable to open database <%s> by driver <%s>"),
+		       fi->database, fi->driver);
     }
 
     if (db_execute_immediate (driver, &sql) != DB_OK ) {
 	db_close_database(driver);
 	db_shutdown_driver(driver);
-	G_fatal_error ( "Cannot create table: %s", db_get_string ( &sql )  );
+	G_fatal_error (_("Unable to create table: %s"),
+		       db_get_string ( &sql )  );
     }
 
     if ( db_create_index2(driver, fi->table, "cat" ) != DB_OK )
-	G_warning ( "Cannot create index" );
-
+	G_warning (_("Unable to create index for table <%s>, key <%s>"),
+		   fi->table, "cat");
+    
     if (db_grant_on_table (driver, fi->table, DB_PRIV_SELECT, DB_GROUP|DB_PUBLIC ) != DB_OK )
-	G_fatal_error ( "Cannot grant privileges on table %s", fi->table );
+	G_fatal_error (_("Unable to grant privileges on table <%s>"),
+		       fi->table );
 
     /* Convert */
-    fprintf (stdout, "Transfering sites to vect file\n");
-
+    G_verbose_message(_("Transfering sites to vector point map..."));
+    
     count = 0;
     rewind ( site );
     while ( G_oldsite_get(site,s) >= 0) {
@@ -220,19 +223,23 @@ int main (int argc, char *argv[])
 	if (db_execute_immediate (driver, &sql) != DB_OK ) {
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
-	    G_fatal_error ( "Cannot inser new row: %s", db_get_string ( &sql )  );
+	    G_fatal_error (_("Unable to insert new record: %s"),
+			   db_get_string ( &sql )  );
 	}
         count++;
     }
-    fprintf (stdout,"%d sites read\n", count); 
+
     fclose(site);
     db_close_database(driver);
     db_shutdown_driver(driver);
+
     Vect_build (&Map, stderr);
     Vect_close (&Map);
+
     G_site_free_struct(s);
 
-    fprintf (stdout,"Vector file complete\n"); 
+    G_done_msg(_("%d sites written."),
+	       count); 
     
-    return 0;
+    exit(EXIT_SUCCESS);
 }
