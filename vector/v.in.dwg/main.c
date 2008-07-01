@@ -237,7 +237,7 @@ main (int argc, char *argv[])
     adCloseFile(dwghandle); 
     adCloseAd2();
     
-    Vect_build ( &Map, stdout );
+    Vect_build ( &Map, stderr );
     Vect_close ( &Map );
 
     exit(EXIT_SUCCESS);

@@ -152,7 +152,7 @@ main (int argc, char *argv[])
 	    }
 	    fprintf ( stderr, "%d area polygons written.\n", n );
 	    
-	    Vect_build ( &Out, stdout ); 
+	    Vect_build ( &Out, stderr ); 
 	    Vect_close (&Out);
 	}
 
