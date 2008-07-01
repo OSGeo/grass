@@ -1,5 +1,4 @@
-#MODULE_TOPDIR = ../../..
-MODULE_TOPDIR = $(HOME)/src/grass6_devel
+MODULE_TOPDIR = ../../..
 
 PGM = nviz_cmd
 
