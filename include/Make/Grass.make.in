@@ -144,6 +144,7 @@ QTREE_LIBNAME         = grass_qtree
 
 # NVIZ related
 OGSF_LIBNAME          = grass_ogsf
+NVIZ_LIBNAME          = grass_nviz
 
 # triangulation libraries
 SOS_LIBNAME           = grass_sos
@@ -247,6 +248,7 @@ QTREELIB      = -l$(QTREE_LIBNAME)
 
 # NVIZ related
 OGSFLIB       = -l$(OGSF_LIBNAME) $(BITMAPLIB) $(G3DLIB) $(GISLIB) $(SITESLIB) $(VECTRLIB) 
+NVIZLIB       = -l$(NVIZ_LIBNAME) $(BITMAPLIB) $(G3DLIB) $(GISLIB) $(VECTRLIB) 
 
 # triangulation libraries
 SOSLIB        = -l$(SOS_LIBNAME)
@@ -342,6 +344,7 @@ QTREEDEP      = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(QTREE_LIBNAME)$(LIB_SUFFIX)
 
 # NVIZ related
 OGSFDEP      = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(OGSF_LIBNAME)$(LIB_SUFFIX)
+NVIZDEP      = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(NVIZ_LIBNAME)$(LIB_SUFFIX)
 
 # triangulation libraries
 SOSDEP      = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(SOS_LIBNAME)$(LIB_SUFFIX)

@@ -3,6 +3,7 @@ MODULE:    mapdisp.py
 
 CLASSES:
  - Command
+ - MapWindow
  - BufferedWindow
  - MapFrame
  - MapApp
@@ -121,7 +122,68 @@ class Command(Thread):
 
         sys.exit()
 
-class BufferedWindow(wx.Window):
+class MapWindow(object):
+    """Abstract map window class
+
+    Parent for BufferedWindow class (2D display mode) and
+    GLWindow (3D display mode)
+    """
+    def __init__(self, parent, id,
+                 pos=wx.DefaultPosition,
+                 size=wx.DefaultSize,
+                 style=wx.NO_FULL_REPAINT_ON_RESIZE,
+                 Map=None, tree=None, gismgr=None):
+        pass
+
+    def EraseMap(self):
+        """
+        Erase the canvas (virtual method)
+        """
+        pass
+
+    def UpdateMap(self):
+        """
+        Updates the canvas anytime there is a change to the
+        underlaying images or to the geometry of the canvas.
+        """
+        pass
+
+    def OnLeftDown(self, event):
+        pass
+
+    def OnLeftUp(self, event):
+        pass
+
+    def OnMouseMotion(self, event):
+        pass
+
+    def ZoomToMap(self, event):
+        pass
+
+    def GetSelectedLayer(self, nviz=False, index=False):
+        """Get selected layer from layer tree
+
+        @param nviz get nviz properties instead
+
+        @return map layer instance
+        @return None on failure
+        """
+        # get currently selected map layer
+        if not self.tree or not self.tree.GetSelection():
+            return None
+        
+        item = self.tree.GetSelection()
+        try:
+            if nviz:
+                layer = self.tree.GetPyData(item)[0]['nviz']
+            else:
+                layer = self.tree.GetPyData(item)[0]['maplayer']
+        except:
+            layer = None
+            
+        return layer
+
+class BufferedWindow(MapWindow, wx.Window):
     """
     A Buffered window class.
 
@@ -137,7 +199,10 @@ class BufferedWindow(wx.Window):
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
                  Map=None, tree=None, gismgr=None):
 
+        MapWindow.__init__(self, parent, id, pos, size, style,
+                           Map, tree, gismgr)
         wx.Window.__init__(self, parent, id, pos, size, style)
+
         self.parent = parent
         self.Map = Map
         self.tree = tree
@@ -539,13 +604,12 @@ class BufferedWindow(wx.Window):
 
     def UpdateMap(self, render=True, renderVector=True):
         """
-        Updates the canvas anytime there is a change to the underlaying images
-        or to the geometry of the canvas.
+        Updates the canvas anytime there is a change to the
+        underlaying images or to the geometry of the canvas.
 
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
         """
-
         start = time.clock()
 
         self.resize = False
@@ -711,7 +775,7 @@ class BufferedWindow(wx.Window):
 
     def EraseMap(self):
         """
-        Erase the map display
+        Erase the canvas
         """
         self.Draw(self.pdc, pdctype='clear')
 
@@ -2037,15 +2101,7 @@ class BufferedWindow(wx.Window):
         """
         zoomreg = {}
 
-        # find selected map
-        if not self.tree or not self.tree.GetSelection():
-            return
-
-        item  = self.tree.GetSelection()
-        try:
-            layer = self.tree.GetPyData(item)[0]['maplayer']
-        except:
-            layer = None
+        layer = self.GetSelectedLayer()
 
         if layer is None:
             return
@@ -2308,7 +2364,8 @@ class MapFrame(wx.Frame):
         #
         self.toolbars = { 'map' : None,
                           'vdigit' : None,
-                          'georect' : None }
+                          'georect' : None, 
+                          'nviz' : None }
         for toolb in toolbars:
             self.AddToolbar(toolb)
 
@@ -2368,9 +2425,14 @@ class MapFrame(wx.Frame):
         #
         # Init map display (buffered DC & set default cursor)
         #
-        self.MapWindow = BufferedWindow(self, id=wx.ID_ANY, Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+        self.MapWindow2D = BufferedWindow(self, id=wx.ID_ANY,
+                                          Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+        # default is 2D display mode
+        self.MapWindow = self.MapWindow2D
         self.MapWindow.Bind(wx.EVT_MOTION, self.OnMotion)
         self.MapWindow.SetCursor(self.cursors["default"])
+        # used by Nviz (3D display mode)
+        self.MapWindow3D = None 
 
         #
         # initialize region values
@@ -2434,7 +2496,8 @@ class MapFrame(wx.Frame):
          - map basic map toolbar
          - digit vector digitizer
          - georect georectifier
-         """
+        """
+        # default toolbar
         if name == "map":
             self.toolbars['map'] = toolbars.MapToolbar(self, self.Map)
 
@@ -2445,8 +2508,8 @@ class MapFrame(wx.Frame):
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
-
-        if name == "digit":
+        # vector digitizer
+        elif name == "vdigit":
             self.toolbars['vdigit'] = toolbars.VDigitToolbar(self, self.Map, self.tree)
 
             for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
@@ -2463,18 +2526,75 @@ class MapFrame(wx.Frame):
             self.MapWindow.zoomtype = 0
             self.MapWindow.pen     = wx.Pen(colour='red',   width=2, style=wx.SOLID)
             self.MapWindow.polypen = wx.Pen(colour='green', width=2, style=wx.SOLID)
-
-        if name == "georect":
+        # georectifier
+        elif name == "georect":
             self.toolbars['georect'] = toolbars.GRToolbar(self, self.Map)
 
             self._mgr.AddPane(self.toolbars['georect'].toolbar,
                               wx.aui.AuiPaneInfo().
-                              Name("georecttoolbar").Caption(_("Georectification Toolbar")).
+                              Name("georecttoolbar").Caption(_("Georectification toolbar")).
                               ToolbarPane().Top().
                               LeftDockable(False).RightDockable(False).
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
+        # nviz
+        elif name == "nviz":
+            import nviz
+            # check for GLCanvas and OpenGL
+            msg = None
+            if not nviz.haveGLCanvas:
+                msg = _("Unable to start Nviz. The GLCanvas class has not been included with this build "
+                        "of wxPython! Switching back to 2D display mode.")
+            if not nviz.haveOpenGL:
+                msg = _("Unable to start Nviz. The OpenGL package was not found. You can get it "
+                        "at http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.")
+            if not nviz.haveNviz:
+                msg = _("Unable to start Nviz. Python extension for Nviz was not found. "
+                        "Switching back to 2D display mode.")
 
+            if msg:
+                wx.MessageBox(parent=self,
+                              message=msg,
+                              caption=_("Error"))
+                return
+
+            #
+            # create GL window & NVIZ toolbar
+            #
+            if not self.MapWindow3D:
+                self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
+                                                 Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+                self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
+                                                       mapWindow=self.MapWindow3D)
+            
+            #
+            # add Nviz toolbar and disable 2D display mode tools
+            #
+            self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
+            self.toolbars['map'].Enable2D(False)
+            self.toggleStatus.Enable(False)
+
+            self.nvizToolWin.Show()
+
+            #
+            # switch from MapWindow to MapWindowGL
+            # add nviz toolbar
+            #
+            self._mgr.DetachPane(self.MapWindow2D)
+            self.MapWindow2D.Hide()
+            self._mgr.AddPane(self.MapWindow3D, wx.aui.AuiPaneInfo().CentrePane().
+                              Dockable(False).BestSize((-1,-1)).
+                              CloseButton(False).DestroyOnClose(True).
+                              Layer(0))
+            self._mgr.AddPane(self.toolbars['nviz'].toolbar,
+                              wx.aui.AuiPaneInfo().
+                              Name("nviztoolbar").Caption(_("Nviz toolbar")).
+                              ToolbarPane().Top().Row(1).
+                              LeftDockable(False).RightDockable(False).
+                              BottomDockable(False).TopDockable(True).
+                              CloseButton(False).Layer(2))
+            self.MapWindow = self.MapWindow3D
+            
         self._mgr.Update()
 
     def RemoveToolbar (self, name):
@@ -2487,14 +2607,36 @@ class MapFrame(wx.Frame):
         # cannot hide main toolbar
         if name == "map":
             return
-        elif name == "digit":
+        elif name == "vdigit":
             # TODO: not destroy only hide
             for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
                 self._mgr.DetachPane (self.toolbars['vdigit'].toolbar[toolRow])
                 self.toolbars['vdigit'].toolbar[toolRow].Destroy()
-            self.toolbars['vdigit'] = None
+        else:
+            self._mgr.DetachPane (self.toolbars[name].toolbar)
+            self.toolbars[name].toolbar.Destroy()
 
-        self.toolbars['map'].combo.SetValue ("Tools");
+        self.toolbars[name] = None
+
+        if name == 'nviz':
+            # hide nviz tools
+            self.nvizToolWin.Hide()
+            # unload data
+            self.MapWindow3D.Reset()
+            # switch from MapWindowGL to MapWindow
+            self._mgr.DetachPane(self.MapWindow3D)
+            self.MapWindow3D.Hide()
+            self.MapWindow2D.Show()
+            self._mgr.AddPane(self.MapWindow2D, wx.aui.AuiPaneInfo().CentrePane().
+                              Dockable(False).BestSize((-1,-1)).
+                              CloseButton(False).DestroyOnClose(True).
+                              Layer(0))
+            self.MapWindow = self.MapWindow2D
+        
+        self.toolbars['map'].combo.SetValue ("Tools")
+        self.toolbars['map'].Enable2D(True)
+        self.toggleStatus.Enable(True)
+
         self._mgr.Update()
 
     def __InitDisplay(self):
