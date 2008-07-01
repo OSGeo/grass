@@ -195,7 +195,7 @@ void GS_clear(int);
 double GS_get_aspect(void);
 int GS_has_transparency(void);
 void GS_zoom_setup(int *, int *, int *, int *, int *, int *);
-int GS_write_zoom(char *, unsigned int, unsigned int);
+int GS_write_zoom(const char *, unsigned int, unsigned int);
 void GS_draw_all_list(void);
 void GS_delete_list(GLuint);
 int GS_draw_legend(char *, GLuint, int, int *, float *, int *);
@@ -462,13 +462,13 @@ void do_label_display(GLuint, float *, char *);
 int get_txtxoffset();
 
 /* From gsd_img_ppm.c */
-int GS_write_ppm(char *);
-int gsd_init_mpeg(char *);
+int GS_write_ppm(const char *);
+int gsd_init_mpeg(const char *);
 int gsd_write_mpegframe(void);
 int gsd_close_mpeg(void);
 
 /* From gsd_img_tif.c */
-int GS_write_tif(char *);
+int GS_write_tif(const char *);
 
 /* From gsd_label.c */
 void gs_put_label(char *, GLuint , int , unsigned long, int *);

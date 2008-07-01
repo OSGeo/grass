@@ -34,7 +34,7 @@
 #include <grass/gstypes.h>
 #include <grass/glocale.h>
 
-#include "tiffio.h"
+#include <tiffio.h>
 
 unsigned short config = PLANARCONFIG_CONTIG;
 unsigned short compression = -1;
@@ -48,7 +48,7 @@ unsigned short rowsperstrip = 0;
   \return 1 on error
   \return 0 on success
 */
-int GS_write_tif(char *name)
+int GS_write_tif(const char *name)
 {
     TIFF *out;
     int y, x;
