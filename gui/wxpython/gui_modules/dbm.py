@@ -1288,7 +1288,6 @@ class AttributeManager(wx.Frame):
             
         # apply changes
         self.OnApply(event)
-        print self.mapDBInfo.GetColumns(table)
 
         # update widgets
         self.FindWindowById(self.layerPage[self.layer]['renameCol']).SetItems(self.mapDBInfo.GetColumns(table))
