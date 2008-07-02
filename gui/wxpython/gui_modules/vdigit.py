@@ -758,7 +758,7 @@ class VEdit(AbstractDigit):
 
     def Undo(self, level=-1):
         """Undo not implemented here"""
-        wx.MessageBox(parent=self.mapWindow, message=_("Undondo is not implemented in vedit component. "
+        wx.MessageBox(parent=self.mapWindow, message=_("Undo is not implemented in vedit component. "
                                                     "Use vdigit instead."),
                       caption=_("Message"), style=wx.ID_OK | wx.ICON_INFORMATION | wx.CENTRE)
 
@@ -1179,6 +1179,10 @@ class VDigit(AbstractDigit):
         
         if ret < 0: # disable undo tool
             self.toolbar.EnableUndo(False)
+
+    def GetUndoLevel(self):
+        """Get undo level (number of active changesets)"""
+        return self.digit.GetUndoLevel()
         
     def __getSnapThreshold(self):
         """Get snap mode and threshold value

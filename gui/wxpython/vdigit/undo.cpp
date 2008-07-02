@@ -235,3 +235,13 @@ int Digit::RemoveActionFromChangeset(int changeset, Digit::action_type type, int
 
     return action.size();
 }
+
+/**
+   \brief Get undo level (number of active changesets)
+
+   \return number
+*/
+int Digit::GetUndoLevel()
+{
+    return changesetCurrent - changesetDead;
+}
