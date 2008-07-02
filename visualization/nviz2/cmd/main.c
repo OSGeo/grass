@@ -25,7 +25,6 @@
 #include "local_proto.h"
 
 static void swap_gl();
-static int opt_get_num_answers(const struct Option *);
 
 int main (int argc, char *argv[])
 {
@@ -33,12 +32,7 @@ int main (int argc, char *argv[])
     struct GParams *params;
 
     char *mapset;
-    unsigned int i;
-    unsigned int ncolor_map, ncolor_const, nmask_map;
-    unsigned int ntransp_map, ntransp_const, nshine_map, nshine_const;
-    unsigned int nemit_map, nemit_const;
-    int *surf_list, nsurfs;
-    int id, ret;
+    int i, ret;
     float vp_height, z_exag; /* calculated viewpoint height, z-exag */
     int width, height; /* output image size */
     char *output_name;
@@ -57,6 +51,9 @@ int main (int argc, char *argv[])
 
     /* define options, call G_parser() */
     parse_command(argc, argv, params);
+
+    /* check parameters consistency */
+    check_parameters(params);
 
     width = atoi(params->size->answers[0]);
     height = atoi(params->size->answers[1]);
@@ -103,126 +100,10 @@ int main (int argc, char *argv[])
     Nviz_set_light_ambient(&data, 1,
 			   0.3, 0.3, 0.3);
 
-    /*
-     * load raster maps (surface topography) map/constant
-     */
-    if (params->elev_map->answer) {
-	/* maps */
-	for (i = 0; params->elev_map->answers[i]; i++) {
-	    mapset = G_find_cell2 (params->elev_map->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Raster map <%s> not found"),
-			      params->elev_map->answers[i]);
-	    }
-	    
-	    /* topography */
-	    id = Nviz_new_map_obj(MAP_OBJ_SURF,
-				  G_fully_qualified_name(params->elev_map->answers[i], mapset), 0.0,
-				  &data);
-	}
-    }
-
-    ncolor_map = opt_get_num_answers(params->color_map);
-    ncolor_const = opt_get_num_answers(params->color_const);
-    if (params->elev_const->answer) {
-	/* constants */
-	float value;
-	surf_list = GS_get_surf_list(&nsurfs);
-	for (i = 0; params->elev_const->answers[i]; i++) {
-	    value = atof(params->elev_const->answers[i]);
-	    /* check for color */
-	    if (i + nsurfs >= ncolor_map + ncolor_const) {
-		G_fatal_error (_("Missing color settings for elevation value %f"),
-			       value);
-		/* topography */
-		id = Nviz_new_map_obj(MAP_OBJ_SURF,
-				      NULL, value,
-				      &data);
-	    }
-	}
-    }
-
-    /* set surface attributes */
-    surf_list = GS_get_surf_list(&nsurfs);
-    nmask_map = opt_get_num_answers(params->mask_map);
-    ntransp_map = opt_get_num_answers(params->transp_map);
-    ntransp_const = opt_get_num_answers(params->transp_const);
-    nshine_map = opt_get_num_answers(params->shine_map);
-    nshine_const = opt_get_num_answers(params->shine_const);
-    nemit_map = opt_get_num_answers(params->emit_map);
-    nemit_const = opt_get_num_answers(params->emit_const);
-    for (i = 0; i < (unsigned int) nsurfs; i++) {
-	id = surf_list[i];
-	/* color */
-	if (i < ncolor_map) {
-	    mapset = G_find_cell2 (params->color_map->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Raster map <%s> not found"),
-			      params->color_map->answers[i]);
-	    }
-	    
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-			  G_fully_qualified_name(params->color_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-	else if (i < ncolor_map + ncolor_const) { /* check for color value */
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT,
-			  NULL, Nviz_color_from_str(params->color_const->answers[i]),
-			  &data);
-	}
-	else { /* use by default elevation map for coloring */
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
-			  G_fully_qualified_name(params->elev_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-	/* mask */
-	if (i < nmask_map) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_MASK, MAP_ATT,
-			  G_fully_qualified_name(params->mask_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-
-	/* transparency */
-	if (i < ntransp_map) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, MAP_ATT,
-			  G_fully_qualified_name(params->transp_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-	else if (i < ntransp_map + ntransp_const) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, CONST_ATT,
-			  NULL, atof(params->transp_const->answers[i-ntransp_map]),
-			  &data);
-	}
-
-	/* shininess */
-	if (i < nshine_map) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_SHINE, MAP_ATT,
-			  G_fully_qualified_name(params->shine_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-	else if (i < nshine_map + nshine_const) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_SHINE, CONST_ATT,
-			  NULL, atof(params->shine_const->answers[i-nshine_map]),
-			  &data);
-	}
-
-	/* emission */
-	if (i < nemit_map) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_EMIT, MAP_ATT,
-			  G_fully_qualified_name(params->emit_map->answers[i], mapset), -1.0,
-			  &data);
-	}
-	else if (i < nemit_map + nemit_const) {
-	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_EMIT, CONST_ATT,
-			  NULL, atof(params->emit_const->answers[i-nemit_map]),
-			  &data);
-	}
-
-        /*
-	  if (i > 1)
-	  set_default_wirecolors(data, i);
-	*/
-    }
+    /* load raster maps (surface topography) & set attributes (map/constant) */
+    load_rasters(params, &data);
+    /* set draw mode for loaded surfaces */
+    set_draw_mode(params);
 
     /* load vectors */
     if (params->vector->answer) {
@@ -309,26 +190,4 @@ int main (int argc, char *argv[])
 void swap_gl()
 {
     return;
-}
-
-/*!
-  \brief Get number of answers of given option
-
-  \param pointer to option
-
-  \return number
-*/
-int opt_get_num_answers(const struct Option *opt)
-{
-    int i, num;
-    i = num = 0;
-    if (opt->answer) {
-	while (opt->answers[i]) {
-	    if (strcmp(opt->answers[i++], "")) {
-		num++; /* skip empty values */
-	    }
-	}
-    }
-
-    return i;
 }

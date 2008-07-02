@@ -93,4 +93,6 @@ IconsSilk = {
     "grGcpDelete"  : 'bullet_delete.png',
     "grGcpReload"  : 'arrow_refresh.png',
     "grSettings"   : 'color_swatch.png',
+    # nviz
+    "nvizSettings"   : 'color_swatch.png',
     }
