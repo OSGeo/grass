@@ -133,6 +133,8 @@ icons_default = {
     "grGcpDelete"  : wx.ART_ERROR, # FIXME
     "grGcpReload"  : 'gui-redraw.gif',
     "grSettings"   : 'edit-color.gif', 
+    # nviz 
+    "nvizSettings" : 'settings.gif',   
     }
 
 # merge icons dictionaries, join paths
@@ -418,6 +420,10 @@ Icons = {
     "grSettings": MetaIcon (img=icons_img["grSettings"],
                             label=_("Settings"),
                             desc=_("Settings dialog for georectification tool")),
+    # nviz
+    "nvizSettings": MetaIcon (img=icons_img["nvizSettings"],
+                              label=_("Settings"),
+                              desc=_("Show Nviz settings dialog")),
     }
 
 # testing ...

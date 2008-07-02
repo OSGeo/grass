@@ -167,8 +167,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 value = self.view['persp']['step']
             self.view['persp']['value'] += value
-            if self.view['persp']['value'] < 0:
-                self.view['persp']['value'] = 0
+            if self.view['persp']['value'] < 1:
+                self.view['persp']['value'] = 1
             elif self.view['persp']['value'] > 100:
                 self.view['persp']['value'] = 100
 
@@ -390,12 +390,12 @@ class NvizToolWindow(wx.Frame):
         btnSave.SetDefault()
         # bindings
         btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes for this session"))
+        btnApply.SetToolTipString(_("Apply changes and update display"))
         btnApply.SetDefault()
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(_("Close dialog and save changes to user settings file"))
+        btnSave.SetToolTipString(_("Apply changes, update display and save changes to layer settings"))
         btnCancel.Bind(wx.EVT_BUTTON, self.OnClose)
-        btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
+        btnCancel.SetToolTipString(_("Hide dialog and ignore changes"))
         # sizer
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(btnApply)
@@ -827,7 +827,8 @@ class NvizToolWindow(wx.Frame):
         #         spin.SetRange(self.settings[name]['min'],
         #                      self.settings[name]['max'])
 
-        spin.Bind(wx.EVT_SPINCTRL, self.OnViewChange)
+        # no 'changed' event ... (FIXME)
+        spin.Bind(wx.EVT_SPINCTRL, self.OnViewChangedSpin)
         self.win['view'][name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
@@ -877,7 +878,12 @@ class NvizToolWindow(wx.Frame):
 
     def OnViewChanged(self, event):
         """View changed, render in full resolution"""
-        print '#'
+        self.mapWindow.render = True
+        self.mapWindow.Refresh(False)
+
+    def OnViewChangedSpin(self, event):
+        """View changed, render in full resolution"""
+        self.OnViewChange(event)
         self.mapWindow.render = True
         self.mapWindow.Refresh(False)
 
@@ -994,8 +1000,6 @@ class NvizToolWindow(wx.Frame):
         """
         layer = self.mapWindow.GetSelectedLayer()
         id = self.mapWindow.GetMapObjId(layer)
-
-        print self.mapWindow.update
 
         #
         # surface
@@ -1225,7 +1229,7 @@ class NvizToolWindow(wx.Frame):
                 #
                 for attr in ('topo', 'color'):
                     self.SetSurfaceUseMap(attr, True) # -> map
-                    if layer.type == 'raster':
+                    if layer and layer.type == 'raster':
                         self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
                     else:
                         self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
@@ -1317,7 +1321,6 @@ class ViewPositionWindow(wx.Window):
         self.pdc.DrawToDC(dc)
 
     def OnMouse(self, event):
-        print event.LeftIsDown(), event.LeftUp()
         if event.LeftIsDown():
             x, y = event.GetPosition()
             self.Draw(pos=(x, y))
