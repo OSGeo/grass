@@ -1181,16 +1181,17 @@ class BufferedWindow(MapWindow, wx.Window):
                             self.parent.dialogs['attributes'].UpdateDialog(cats=digitClass.GetLineCats(),
                                                                       line=line)
 
-                    line = self.parent.dialogs['attributes'].GetLine()
-                    if self.parent.dialogs['attributes'].mapDBInfo and line:
-                        # highlight feature & re-draw map
-                        digitClass.driver.SetSelected([line])
-                        if not self.parent.dialogs['attributes'].IsShown():
-                            self.parent.dialogs['attributes'].Show()
-                    else:
-                        digitClass.driver.SetSelected([])
-                        if self.parent.dialogs['attributes'].IsShown():
-                            self.parent.dialogs['attributes'].Hide()
+                    if self.parent.dialogs['attributes']:
+                        line = self.parent.dialogs['attributes'].GetLine()
+                        if self.parent.dialogs['attributes'].mapDBInfo and line:
+                            # highlight feature & re-draw map
+                            digitClass.driver.SetSelected([line])
+                            if not self.parent.dialogs['attributes'].IsShown():
+                                self.parent.dialogs['attributes'].Show()
+                        else:
+                            digitClass.driver.SetSelected([])
+                            if self.parent.dialogs['attributes'].IsShown():
+                                self.parent.dialogs['attributes'].Hide()
 
                 else: # displayCats
                     if self.parent.dialogs['category'] is None:
