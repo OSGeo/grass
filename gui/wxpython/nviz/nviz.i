@@ -1,6 +1,6 @@
 /* File: nviz.i */
 
-%module grass6_wxnviz
+%module grass7_wxnviz
 %{
 #include <grass/gsurf.h>
 #include <grass/gstypes.h>

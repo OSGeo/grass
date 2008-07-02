@@ -50,7 +50,7 @@ from preferences import globalSettings as UserSettings
 try:
     digitPath = os.path.join(globalvar.ETCWXDIR, "vdigit")
     sys.path.append(digitPath)
-    import grass6_wxvdigit as wxvdigit
+    import grass7_wxvdigit as wxvdigit
     GV_LINES = wxvdigit.GV_LINES
     digitErr = ''
 except ImportError, err:

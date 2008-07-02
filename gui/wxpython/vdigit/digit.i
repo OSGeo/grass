@@ -1,6 +1,6 @@
 /* File: digit.i */
 
-%module grass6_wxvdigit
+%module grass7_wxvdigit
 %{
 #include <grass/gis.h>
 #include <grass/gisdefs.h>
