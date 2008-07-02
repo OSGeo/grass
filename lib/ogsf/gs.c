@@ -825,7 +825,7 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
 	if (1 == gs_num_datah_reused(gs->att[desc].hdata)) {
 	    /* only reference */
-	    G_warning (_("gs_set_att_src(): replacing existing map"));
+	    G_debug (4, "gs_set_att_src(): replacing existing map");
 	    gsds_free_datah(gs->att[desc].hdata);
 	}
 
