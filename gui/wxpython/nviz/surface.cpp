@@ -127,6 +127,10 @@ int Nviz::SetSurfaceAttr(int id, int attr, bool map, const char *value)
 {
     int ret;
 
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+
     if (map) {
 	ret = Nviz_set_attr(id, MAP_OBJ_SURF, attr, MAP_ATT,
 			    value, -1.0,
@@ -204,6 +208,10 @@ int Nviz::UnsetSurfaceEmit(int id)
 */
 int Nviz::UnsetSurfaceAttr(int id, int attr)
 {
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+
     return Nviz_unset_attr(id, MAP_OBJ_SURF, attr);
 }
 
@@ -214,12 +222,20 @@ int Nviz::UnsetSurfaceAttr(int id, int attr)
   \param fine x/y fine resolution
   \param coarse x/y coarse resolution
 
-  \return -1 on error
-  \return 0 on success
+  \return 0 on error
+  \return 1 on success
 */
 int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 {
-    return GS_set_drawres(id, fine, fine, coarse, coarse);
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+
+    if (GS_set_drawres(id, fine, fine, coarse, coarse) < 0) {
+	return 0;
+    }
+
+    return 1;
 }
 
 /*!
@@ -239,16 +255,27 @@ int Nviz::SetSurfaceRes(int id, int fine, int coarse)
   \param id surface id (<= 0 for all)
   \param style draw style
 
-  \return 0 on success
-  \return -1 on error
+  \return 1 on success
+  \return 0 on error
 */
 int Nviz::SetSurfaceStyle(int id, int style)
 {
     if (id > 0) {
-	return GS_set_drawmode(id, style);
+	if (!GS_surf_exists(id)) {
+	    return 0;
+	}
+	
+	if (GS_set_drawmode(id, style) < 0) {
+	    return 0;
+	}
+	return 1;
     }
 
-    return GS_setall_drawmode(style);
+    if (GS_setall_drawmode(style) < 0) {
+	return 0;
+    }
+
+    return 1;
 }
 
 /*!
@@ -259,10 +286,15 @@ int Nviz::SetSurfaceStyle(int id, int style)
   \param surface id
   \param color color string (R:G:B)
 
-  \return 1
+  \return 1 on success
+  \return 0 on failure
 */
 int Nviz::SetWireColor(int id, const char* color)
 {
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+
     GS_set_wire_color(id, Nviz_color_from_str(color));
 
     return 1;

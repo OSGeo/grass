@@ -19,8 +19,8 @@ EXTRA_CLEAN_FILES = $(SHLIB) $(LIB_NAME).i $(LIB_NAME).py $(LIB_NAME)_wrap.cpp
 
 default: install_nviz
 
-$(LIB_NAME).i: nviz.i dig_types.i nviz.h
-	cat nviz.i dig_types.i > $(LIB_NAME).i
+$(LIB_NAME).i: nviz.i nviz_types.i nviz.h
+	cat nviz.i nviz_types.i > $(LIB_NAME).i
 	echo "/* auto-generated swig typedef file */" >> $(LIB_NAME).i
 	cat nviz.h >> $(LIB_NAME).i
 

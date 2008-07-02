@@ -189,36 +189,38 @@ int Nviz_draw_all(nv_data *data, int clear)
     if (draw_vect)
 	Nviz_draw_all_vect (data);
 
+    /*
     if (draw_site)
-	; // site_draw_all_together(data, interp);
+	site_draw_all_together(data, interp);
 
     if (draw_vol)
-	; // vol_draw_all_cmd(data, interp, argc, argv);
-    
+	vol_draw_all_cmd(data, interp, argc, argv);
+    */
     GS_done_draw();
     GS_set_draw(GSD_BACK);
     
+    /*
     if (!draw_north_arrow)
-	; // draw_north_arrow = EMPTYSTRING; 
+	draw_north_arrow = EMPTYSTRING; 
     
     if (!arrow_x)
-	; // arrow_x = EMPTYSTRING; 
+	arrow_x = EMPTYSTRING; 
     
     if (!draw_scalebar)
-	; // draw_scalebar = EMPTYSTRING; 
+	draw_scalebar = EMPTYSTRING; 
     
     if (!draw_bar_x)
-	; // bar_x = EMPTYSTRING; 
+	bar_x = EMPTYSTRING; 
     
     if (!draw_fringe)
-	; // draw_fringe = EMPTYSTRING; 
+	draw_fringe = EMPTYSTRING; 
     
     if (!draw_label)
-	; // draw_label = EMPTYSTRING; 
+	draw_label = EMPTYSTRING; 
     
     if (!draw_legend)
-	; // draw_legend = EMPTYSTRING; 
-    
+	draw_legend = EMPTYSTRING; 
+    */
     /* Draw decorations */
     
     /* North Arrow
@@ -308,9 +310,6 @@ int Nviz_draw_all(nv_data *data, int clear)
 */
 int Nviz_draw_quick(nv_data *dc, int clear)
 {
-    int i, max;
-    int *surf_list, *vol_list;
-
     GS_set_draw(GSD_BACK);
     
     if (clear)
@@ -319,19 +318,6 @@ int Nviz_draw_quick(nv_data *dc, int clear)
     GS_ready_draw();
 
     GS_alldraw_wire();
-
-    /*
-    surf_list = GS_get_surf_list(&max);
-
-    max = GS_num_surfs();
-    for (i = 0; i < max; i++) {
-	if (!check_blank(surf_list[i])) {
-	    GS_draw_wire(surf_list[i]);
-	}
-    }
-
-    G_free (surf_list);
-    */
 
     /*
     vol_list = GVL_get_vol_list(&max);
@@ -386,20 +372,3 @@ int Nviz_draw_all_vect(nv_data *dc)
     return 1;
 }
 
-/*!
-  \brief Set draw mode
-
-  Draw modes:
-   - DRAW_COARSE
-   - DRAW_FINE
-   - DRAW_BOTH
-
-  \param data nviz data
-  \param mode draw mode
-*/
-void Nviz_set_draw_mode(nv_data *data, int mode)
-{
-    data->draw_mode = mode;
-
-    return;
-}
