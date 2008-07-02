@@ -1072,11 +1072,15 @@ class BufferedWindow(MapWindow, wx.Window):
             posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
                                              position[1] + self.dialogOffset))
 
-            if digitToolbar.action not in ["moveVertex", "addVertex",
-                                           "removeVertex", "editLine"]:
+            if digitToolbar.action not in ("moveVertex", "addVertex",
+                                           "removeVertex", "editLine"):
                 # set pen
                 self.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
                 self.polypen = wx.Pen(colour='dark green', width=2, style=wx.SOLID)
+
+            if digitToolbar.action in ("addVertex", "removeVertex"):
+                # unselect
+                digitClass.driver.SetSelected([])
 
             if digitToolbar.action == "addLine":
                 if digitToolbar.type in ["point", "centroid"]:
@@ -1138,7 +1142,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.pdcTmp.SetPen(self.polypen)
 
             elif digitToolbar.action == "splitLine":
-                pass
+                # unselect
+                digitClass.driver.SetSelected([])
 
             elif digitToolbar.action in ["displayAttrs", "displayCats"]:
                 qdist = digitClass.driver.GetThreshold(type='selectThresh')
@@ -1479,18 +1484,28 @@ class BufferedWindow(MapWindow, wx.Window):
                 pointOnLine = digitClass.driver.SelectLineByPoint(pos1,
                                                                   type=VDigit_Lines_Type)
                 if pointOnLine:
-                    self.UpdateMap(render=False) # highlight object
                     if digitToolbar.action in ["splitLine", "addVertex"]:
+                        self.UpdateMap(render=False) # highlight object
                         self.DrawCross(pdc=self.pdcTmp, coords=self.Cell2Pixel(pointOnLine),
                                        size=5)
                     elif digitToolbar.action == "removeVertex":
                         # get only id of vertex
-                        id = digitClass.driver.GetSelectedVertex(pos1)[0]
-                        x, y = self.pdcVector.GetIdBounds(id)[0:2]
-                        self.pdcVector.RemoveId(id)
-                        self.DrawCross(pdc=self.pdcTmp, coords=(x, y),
-                                       size=5)
+                        try:
+                            id = digitClass.driver.GetSelectedVertex(pos1)[0]
+                        except IndexError:
+                            id = None
 
+                        if id:
+                            x, y = self.pdcVector.GetIdBounds(id)[0:2]
+                            self.pdcVector.RemoveId(id)
+                            self.UpdateMap(render=False) # highlight object
+                            self.DrawCross(pdc=self.pdcTmp, coords=(x, y),
+                                           size=5)
+                        else:
+                            # unselect
+                            digitClass.driver.SetSelected([])
+                            self.UpdateMap(render=False)
+                            
             elif digitToolbar.action == "copyLine":
                 if UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value') == '':
                     # no background map -> copy from current vector map layer
