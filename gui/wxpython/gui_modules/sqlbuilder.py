@@ -47,7 +47,6 @@ class SQLFrame(wx.Frame):
         # variables
         #
         self.vectmap = vectmap
-        print self.vectmap
         if not "@" in self.vectmap:
             self.vectmap = self.vectmap + "@" + grassenv.GetGRASSVariable ("MAPSET")
         self.mapname, self.mapset = self.vectmap.split("@")
@@ -316,7 +315,9 @@ class SQLFrame(wx.Frame):
                     (self.driver, self.database,self.tablename,
                         self.text_sql.GetValue().strip().replace("\n"," "))):
                 # FIXME: LOG
-                print self.text_sql.GetValue().strip().replace("\n"," "), "not correct!"
+                # print self.text_sql.GetValue().strip().replace("\n"," "), "not correct!"
+                pass
+
     def OnClear(self, event):
         self.text_sql.SetValue("")
 
