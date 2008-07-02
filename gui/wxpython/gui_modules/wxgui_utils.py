@@ -400,7 +400,7 @@ class LayerTree(CT.CustomTreeCtrl):
             return
 
         if not self.mapdisplay.toolbars['vdigit']: # enable tool
-            self.mapdisplay.AddToolbar("digit")
+            self.mapdisplay.AddToolbar('vdigit')
         else: # tool already enabled
             pass
 

@@ -47,7 +47,7 @@ from preferences import globalSettings as UserSettings
 try:
     nvizPath = os.path.join(globalvar.ETCWXDIR, "nviz")
     sys.path.append(nvizPath)
-    import grass6_wxnviz as wxnviz
+    import grass7_wxnviz as wxnviz
     haveNviz = True
 except ImportError:
     haveNviz = False

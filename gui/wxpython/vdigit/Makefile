@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-LIB_NAME = grass6_wxvdigit
+LIB_NAME = grass7_wxvdigit
 SOURCES := $(wildcard *.cpp) $(LIB_NAME)_wrap.cpp
 SHLIB_OBJS := $(patsubst %.cpp, $(OBJDIR)/%.o, $(SOURCES))
 
