@@ -20,9 +20,6 @@
 #ifndef WATER_H
 #define WATER_H
 
-/* $Id$ */
-
-
 /* watershed analysis related structures */
 
 #include "types.h"

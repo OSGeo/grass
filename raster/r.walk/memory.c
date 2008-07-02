@@ -1,7 +1,3 @@
-/*
- * $Id$
- */
-
 /* -*-c-basic-offset: 4;-*-
  *  Chained memory allocator 
  *  memory.c

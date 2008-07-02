@@ -1,6 +1,4 @@
 /*
-* $Id$
-*
 * Cell-file area extraction
 *   Boundary tracing algorithm
 * 

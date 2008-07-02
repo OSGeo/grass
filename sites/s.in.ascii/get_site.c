@@ -1,4 +1,3 @@
-/* $Id$ */
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>

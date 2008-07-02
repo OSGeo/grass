@@ -4,7 +4,7 @@
 
  * @Copyright David D.Gray <ddgray@armadce.demon.co.uk>
  * 27th. Sep. 2000
- * Last updated: $Id$
+ * Last updated: 2007-08-26
  *
 
  * This file is part of GRASS GIS. It is free software. You can 

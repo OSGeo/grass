@@ -1,4 +1,3 @@
-/* box.c  $Id$ */
 #include <grass/gis.h>
 #include <grass/display.h>
 #include <grass/raster.h>

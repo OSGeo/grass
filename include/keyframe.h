@@ -1,7 +1,3 @@
-/*
-* $Id$
-*/
-
 #ifndef _KEYFRAME_H
 #define _KEYFRAME_H
 

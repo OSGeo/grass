@@ -1,4 +1,4 @@
-/* $Id$
+/*
  * draw_scale places a scale in the upper left hand corner of a map image
  */
 

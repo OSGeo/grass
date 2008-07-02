@@ -22,8 +22,7 @@
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999
- * \date $Id$
+ * \date 2007-11-01
  */
 
 /*

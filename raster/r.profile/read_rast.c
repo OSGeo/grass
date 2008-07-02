@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  * Copyright (C) 2000 by the GRASS Development Team
  * Author: Bob Covill <bcovill@tekmap.ns.ca>
  * 

@@ -20,8 +20,6 @@
 #ifndef RTIMER_H
 #define RTIMER_H
 
-/* $Id$ */
-
 #ifdef __MINGW32__
 
 #include <time.h>

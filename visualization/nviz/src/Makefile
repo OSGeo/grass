@@ -1,4 +1,3 @@
-# $Id$
 # Makefile for building nvwish
 # Requires Tk 8.x and Tcl 8.x
 

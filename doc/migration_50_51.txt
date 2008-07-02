@@ -1,7 +1,5 @@
-$Id$
-
-
 Rules to migrate GRASS 5.0 modules into GRASS 5.7
+Date: 2003-09-11
 
 While implementing GRASS 5.7 a major cleanup of GRASS modules
 has to be done. The following rules shall help the programmer

@@ -1,7 +1,3 @@
-/*
- * $Id$
- */
-
 /* possible TODO: add support for magnify (zoom=) */
 
 #include <grass/gis.h>

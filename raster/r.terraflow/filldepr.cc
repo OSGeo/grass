@@ -26,8 +26,6 @@
 
 #define FLOOD_DEBUG if(0)
 
-/* $Id$ */
-
 /************************************************************/
 /* INPUT: stream containing the edgelist of watershed adjacency graph
 E={(u,v,h) | 0 <= u,v <= W-1}; W is the maximum number of watersheds

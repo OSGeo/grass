@@ -26,10 +26,6 @@
 #include "ccforest.h"
 #include "3scan.h"
 
-
-
-/* $Id$ */
-
 #define PLAT_DEBUG if(0)
 
 
