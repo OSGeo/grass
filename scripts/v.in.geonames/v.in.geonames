@@ -101,20 +101,23 @@ if [ $? -eq 1 ] ; then
   exit 1
 fi
 
+# input test
 if [ ! -f "$GIS_OPT_INPUT" ] ; then
     g.message -e "File '${FILEORIG}' not found"
     exit 1
 fi
 
+# DBF doesn't support lengthy text fields
+driver=`db.connect -p | grep -i driver | cut -d':' -f2`
+if [ "$driver" = "dbf" ] ; then
+   g.message -w "Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"
+fi
+
+
 #let's go
 #change TAB to semicolon (we cannot use 'tr' due to possibly repeated empty columns)
 TAB=`awk 'BEGIN{printf "\t";}'`
 cat "${FILEORIG}" | sed  "s+$TAB+|+g"  > "${TMPFILE}".csv
-
-## filter away non-standard chars due to v.in.ascii limitation:
-## TODO: better fix this
-#cat "${TMPFILE}" |  tr -dc "[:blank:][:cntrl:][:graph:][:alnum:][:digit:][:punct:]\n" > "${TMPFILE}.csv"
-#rm -f "${TMPFILE}"
 
 NUM_PLACES=`wc -l "${TMPFILE}.csv" | awk '{print $1}'`
 g.message "Converted $NUM_PLACES place names."
