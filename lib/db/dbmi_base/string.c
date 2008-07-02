@@ -138,6 +138,13 @@ db_enlarge_string  (dbString *x, int len)
     return DB_OK;
 }
 
+/*!
+ \fn
+ \brief
+ \return
+ \param
+*/
+
 char *
 db_get_string (dbString *x)
 
