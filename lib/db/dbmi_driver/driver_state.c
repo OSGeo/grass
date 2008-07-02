@@ -28,10 +28,10 @@ db__test_database_open (void)
 
 
 void
-db__mark_database_open (char *dbname, char *dbschema)
+db__mark_database_open (const char *dbname, const char *dbschema)
 {
-    state.dbname = dbname;
-    state.dbschema = dbschema;
+    state.dbname = db_store(dbname);
+    state.dbschema = db_store(dbschema);
     state.open = 1;
 }
 

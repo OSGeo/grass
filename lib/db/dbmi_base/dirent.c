@@ -32,7 +32,7 @@ static void sort_dirent();
 /* read directory and build an array of dbDirent's */
 /* append one entry with name = NULL to mark end of array */
 dbDirent *
-db_dirent  (char *dirname, int *n)
+db_dirent  (const char *dirname, int *n)
 
 {
     DIR  *dp;

@@ -4,7 +4,7 @@
 #include <grass/dbmi.h>
 
 /*!
- \fn int db_table_exists ( char *, char *, char *)
+ \fn int db_table_exists ( const char *, const char *, const char *)
  \brief check if table exists
  \param drvname: driver name
  \param dbname: database name
@@ -13,7 +13,7 @@
  \param 
 */
 int
-db_table_exists ( char *drvname, char *dbname, char *tabname)
+db_table_exists ( const char *drvname, const char *dbname, const char *tabname)
 {
     dbDriver *driver;
     dbString *names;

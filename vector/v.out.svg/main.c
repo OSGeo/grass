@@ -156,8 +156,8 @@ int main (int argc, char *argv[]) {
             Column = db_get_table_column (Table, i);
             if (attr_opt->answer != NULL) {
                 for (j=0; attr_opt->answers[j] != NULL; j++) {
-                    if ( G_strcasecmp(G_tolcase(attr_opt->answers[j]),
-				      G_tolcase(db_get_column_name(Column))) == 0 ) {
+                    if ( G_strcasecmp(attr_opt->answers[j],
+				      db_get_column_name(Column)) == 0 ) {
                         attr_cols[attr_size] = i;
                         attr_size +=1;
                         break;
@@ -366,7 +366,8 @@ static int mk_attribs (int cat, struct field_info *Fi, dbDriver *Driver,
             Column = db_get_table_column (Table, attr_cols[i]);
             Value  = db_get_column_value(Column);
             db_convert_column_value_to_string (Column, &dbstring);
-            fprintf(fpsvg,"gg:%s=\"", G_tolcase(db_get_column_name(Column)));
+	    G_strcpy(buf, db_get_column_name(Column));
+            fprintf(fpsvg,"gg:%s=\"", G_tolcase(buf));
             print_escaped_for_xml(db_get_string (&dbstring));
             fprintf(fpsvg,"\" ");
         }

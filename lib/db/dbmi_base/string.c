@@ -30,13 +30,13 @@ db_init_string  (dbString *x)
  *   else 'x' is made to point to 's'
  * returns DB_OK or DB_MEMORY_ERR
  */
-static int set_string();
+static int set_string(dbString *x, char *s, int  copy);
 
 int
-db_set_string  (dbString *x, char *s)
+db_set_string  (dbString *x, const char *s)
 
 {
-    return set_string (x, s, 1);
+    return set_string (x, (char *) s, 1);
 }
 
 /*!
@@ -217,7 +217,7 @@ db_alloc_string_array  (int count)
  \param 
 */
 int
-db_append_string  (dbString *x, char *s)
+db_append_string  (dbString *x, const char *s)
 
 {
     int len;

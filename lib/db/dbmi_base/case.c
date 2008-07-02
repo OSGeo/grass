@@ -59,7 +59,7 @@ db_Cstring_to_uppercase (char *s)
  \param 
 */
 int
-db_nocase_compare (char *a, char *b)
+db_nocase_compare (const char *a, const char *b)
 {
     char s, t;
 

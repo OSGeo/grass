@@ -79,9 +79,9 @@ void supported_formats(char **formats)
     return;
 }
 
-int import_band(GDALDatasetH hMEMDS, int band, char *name, char *mapset,
+int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *mapset,
 		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-		double nodataval, char *nodatakey)
+		double nodataval, const char *nodatakey)
 {
 
     struct Colors sGrassColors;

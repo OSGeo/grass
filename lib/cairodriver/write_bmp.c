@@ -48,7 +48,6 @@ void write_bmp(void)
 {
 	char header[HEADER_SIZE];
 	FILE *output;
-	int x, y;
 
 	output = fopen(file_name, "wb");
 	if (!output)

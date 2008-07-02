@@ -33,6 +33,7 @@ main (int argc, char *argv[])
 	struct GModule *module;
 	struct Option *mapset;
 	struct Flag *full;
+	char *str;
 
 	init (argv[0]);
 
@@ -51,18 +52,19 @@ main (int argc, char *argv[])
 	element->description = "Data type";
 	for (len=0,n=0 ; n < nlist; n++)
 	    len += strlen (list[n].alias)+1;
-	element->options = G_malloc(len);
+	str = G_malloc(len);
 
 	for (n=0; n < nlist; n++)
 	{
 	    if (n)
 	    {
-		G_strcat (element->options, ",");
-		G_strcat (element->options, list[n].alias);
+		G_strcat (str, ",");
+		G_strcat (str, list[n].alias);
 	    }
 	    else
-		G_strcpy (element->options, list[n].alias);
+		G_strcpy (str, list[n].alias);
 	}
+	element->options = str;
 
 	mapset = G_define_option();
 	mapset->key = "mapset";

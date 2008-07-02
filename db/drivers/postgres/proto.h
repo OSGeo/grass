@@ -1,10 +1,10 @@
 /* error.c */
 void init_error ( void );
-void append_error ( char * );
+void append_error ( const char * );
 void report_error ( void );
 
 /* cursor.c */
-cursor * alloc_cursor ();
+cursor * alloc_cursor (void);
 void free_cursor ( cursor * );
 
 /* describe.c*/
@@ -13,4 +13,4 @@ int get_column_info ( PGresult *, int, int *, int *, int *, int * );
 int get_gpg_type ( int );
 
 /* parse.c */
-int parse_conn ( char *, PGCONN *);
+int parse_conn ( const char *, PGCONN *);

@@ -22,7 +22,7 @@ db_init_handle  (dbHandle *handle)
  \param 
 */
 int
-db_set_handle  (dbHandle *handle, char *dbName, char *dbSchema)
+db_set_handle  (dbHandle *handle, const char *dbName, const char *dbSchema)
 
 {
     int stat;
@@ -40,7 +40,7 @@ db_set_handle  (dbHandle *handle, char *dbName, char *dbSchema)
  \return 
  \param 
 */
-char *
+const char *
 db_get_handle_dbname (dbHandle *handle)
 
 {
@@ -53,7 +53,7 @@ db_get_handle_dbname (dbHandle *handle)
  \return 
  \param 
 */
-char *
+const char *
 db_get_handle_dbschema (dbHandle *handle)
 
 {

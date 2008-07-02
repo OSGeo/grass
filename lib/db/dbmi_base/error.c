@@ -9,7 +9,7 @@ static int  err_code = DB_OK;
 static char *err_msg = 0;
 static int  auto_print_errors = 1;
 static int auto_print_protocol_errors = 1;
-static void (*user_print_function)();
+static void (*user_print_function)(const char *);
 
 static char *who = NULL;
 
@@ -20,7 +20,7 @@ static char *who = NULL;
  \param 
 */
 void
-db_on_error (void (*f)())
+db_on_error (void (*f)(const char *))
 
 {
     user_print_function = f;
@@ -33,7 +33,7 @@ db_on_error (void (*f)())
  \param 
 */
 void
-db_set_error_who (char *me)
+db_set_error_who (const char *me)
 
 {
     if (who) free(who);
@@ -46,8 +46,8 @@ db_set_error_who (char *me)
  \return 
  \param 
 */
-char *
-db_get_error_who()
+const char *
+db_get_error_who(void)
 {
     return who?who:"";
 }
@@ -59,7 +59,7 @@ db_get_error_who()
  \param 
 */
 void
-db_error (char *s)
+db_error (const char *s)
 
 {
     if (s == NULL)
@@ -80,7 +80,7 @@ db_error (char *s)
  \param 
 */
 void
-db_protocol_error()
+db_protocol_error(void)
 {
     int flag;
 
@@ -98,7 +98,7 @@ db_protocol_error()
  \param 
 */
 void
-db_syserror (char *s)
+db_syserror (const char *s)
 
 {
     char lead[1024];
@@ -125,7 +125,7 @@ db_syserror (char *s)
  \param 
 */
 int
-db_get_error_code()
+db_get_error_code(void)
 {
     return err_flag ? err_code : DB_OK;
 }
@@ -137,7 +137,7 @@ db_get_error_code()
  \param 
 */
 void
-db_memory_error()
+db_memory_error(void)
 {
     db_error ("dbmi: Out of Memory");
     err_code = DB_MEMORY_ERR;
@@ -150,7 +150,7 @@ db_memory_error()
  \param 
 */
 void
-db_procedure_not_implemented (char *name)
+db_procedure_not_implemented (const char *name)
 
 {
     char msg[128];
@@ -183,7 +183,7 @@ db_noproc_error(procnum)
  \param 
 */
 void
-db_clear_error()
+db_clear_error(void)
 {
     err_flag = 0;
     err_code = DB_OK;
@@ -197,7 +197,7 @@ db_clear_error()
  \param 
 */
 void
-db_print_error()
+db_print_error(void)
 {
     char lead[1024];
 
@@ -226,7 +226,7 @@ static int debug_on = 0;
  \param 
 */
 void
-db_debug_on()
+db_debug_on(void)
 {
     debug_on = 1;
 }
@@ -238,7 +238,7 @@ db_debug_on()
  \param 
 */
 void
-db_debug_off()
+db_debug_off(void)
 {
     debug_on = 0;
 }
@@ -250,7 +250,7 @@ db_debug_off()
  \param 
 */
 void
-db_debug (char *s)
+db_debug (const char *s)
 
 {
     if (debug_on)
@@ -263,10 +263,10 @@ db_debug (char *s)
  \return 
  \param 
 */
-char *
-db_get_error_msg()
+const char *
+db_get_error_msg(void)
 {
-    return err_flag ? err_msg : (char *)NULL;
+    return err_flag ? err_msg : (const char *)NULL;
 }
 
 /*!
@@ -276,7 +276,7 @@ db_get_error_msg()
  \param flag
 */
 void
-db_auto_print_errors (flag)
+db_auto_print_errors (int flag)
 {
     auto_print_errors = flag;
     auto_print_protocol_errors = flag;
@@ -289,7 +289,7 @@ db_auto_print_errors (flag)
  \param 
 */
 void
-db_auto_print_protocol_errors (flag)
+db_auto_print_protocol_errors (int flag)
 {
     auto_print_protocol_errors = flag;
 }

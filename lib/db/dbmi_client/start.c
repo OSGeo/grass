@@ -15,24 +15,24 @@
 
 
 /**
- * \fn dbDriver *db_start_driver (char *name)
+ * \fn dbDriver *db_start_driver (const char *name)
  *
  * \brief Initialize a new dbDriver for db transaction.
  *
  * If <b>name</b> is NULL, the db name will be assigned 
  * connection.driverName.
  *
- * \param[in] char * driver name
+ * \param[in] const char * driver name
  * \return NULL on error
  */
 
 dbDriver *
-db_start_driver (char *name)
+db_start_driver (const char *name)
 
 {
     dbDriver *driver;
     dbDbmscap *list, *cur;
-    char *startup;
+    const char *startup;
     int p1[2], p2[2];
     int pid;
     int stat;

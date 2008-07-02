@@ -191,7 +191,7 @@ main (int argc,char *argv[])
 	sprintf (table_name, "%s_aux", out_opt->answer);
  
     /* Open driver and database */
-    if (db_table_exists (dvr, db, &table_name)){  /*Something went wrong in a 
+    if (db_table_exists (dvr, db, table_name)){  /*Something went wrong in a 
 						    previous v.surf.bspline execution*/
 	dbString sql;
 	char buf[1024];

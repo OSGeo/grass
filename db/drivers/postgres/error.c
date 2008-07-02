@@ -17,7 +17,7 @@ init_error ( void )
 
 /* append error message */
 void
-append_error ( char *msg )
+append_error ( const char *msg )
 {
     db_append_string ( errMsg, msg);
 }

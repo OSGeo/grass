@@ -27,7 +27,7 @@
 
 int db__driver_open_database(dbHandle * handle)
 {
-    char *name;
+    const char *name;
     int len;
     dbConnection connection;
     char buf[1024];

@@ -27,7 +27,7 @@ main (int argc, char **argv)
     struct Option *to_driver, *to_database, *to_table;
     struct Option *where, *select;
     struct GModule *module;
-    char   *drv, *db;
+    const char   *drv, *db;
 
     /* Set description */
     module              = G_define_module();

@@ -38,12 +38,12 @@ db_create_index (dbDriver *driver, dbIndex *index)
  \param 
 */
 int
-db_create_index2 (dbDriver *driver, char *table_name, char *column_name)
+db_create_index2 (dbDriver *driver, const char *table_name, const char *column_name)
 {
     int ret;
     dbIndex index;
     char buf[1000];
-    char *tbl;
+    const char *tbl;
 
     db_init_index ( &index );
     db_alloc_index_columns ( &index, 1 );

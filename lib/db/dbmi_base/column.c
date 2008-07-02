@@ -387,7 +387,7 @@ db_init_column  (dbColumn *column)
  \param 
 */
 int
-db_set_column_name  (dbColumn *column, char *name)
+db_set_column_name  (dbColumn *column, const char *name)
 
 {
     return db_set_string (&column->columnName, name);
@@ -398,7 +398,7 @@ db_set_column_name  (dbColumn *column, char *name)
  \return 
  \param 
 */
-char *
+const char *
 db_get_column_name  (dbColumn *column)
 
 {
@@ -411,7 +411,7 @@ db_get_column_name  (dbColumn *column)
  \param 
 */
 int
-db_set_column_description  (dbColumn *column, char *description)
+db_set_column_description  (dbColumn *column, const char *description)
 
 {
     return db_set_string (&column->description, description);
@@ -422,7 +422,7 @@ db_set_column_description  (dbColumn *column, char *description)
  \return 
  \param 
 */
-char *
+const char *
 db_get_column_description  (dbColumn *column)
 
 {

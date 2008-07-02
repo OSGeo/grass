@@ -120,15 +120,16 @@ main (int argc, char *argv[])
 
     for (n = 0; n < nlist; n++)
     {
+	char *str;
 	p = parm[n] = G_define_option();
 	p->key = list[n].alias;
 	p->type = TYPE_STRING;
 	p->required = NO;
 	p->multiple = YES;
-	p->gisprompt = G_malloc (64);
-	sprintf (p->gisprompt, "old,%s,%s", list[n].mainelem, list[n].maindesc);
-	p->description = G_malloc (64);
-	sprintf (p->description, _("%s file(s) to be removed"), list[n].alias);
+	G_asprintf (&str, "old,%s,%s", list[n].mainelem, list[n].maindesc);
+	p->gisprompt = str;
+	G_asprintf (&str, _("%s file(s) to be removed"), list[n].alias);
+	p->description = str;
     }
 
     if (G_parser(argc, argv))

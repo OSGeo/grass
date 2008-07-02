@@ -1236,7 +1236,7 @@ int G_sites_get_fields(FILE * ptr, char*** cnames, int** ctypes, int** ndx)
     struct field_info *fi;
     int nrows, row, ncols, col, ndbl, nstr, ctype;
 
-    char * name;
+    const char * name;
     dbDriver *driver;
     dbString stmt;
     dbCursor cursor;

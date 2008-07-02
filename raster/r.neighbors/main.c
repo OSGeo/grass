@@ -115,7 +115,7 @@ int main (int argc, char *argv[])
 	parm.method->type       = TYPE_STRING ;
 	parm.method->required   = NO ;
 	parm.method->answer     = "average";
-	p = parm.method->options  = G_malloc(1024);
+	p = G_malloc(1024);
 	for (n = 0; menu[n].name; n++)
 	{
 		if (n)
@@ -124,6 +124,7 @@ int main (int argc, char *argv[])
 			*p = 0;
 		strcat (p, menu[n].name);
 	}
+	parm.method->options  = p;
 	parm.method->description= _("Neighborhood operation") ;
 
 	parm.size = G_define_option() ;

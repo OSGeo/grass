@@ -8,7 +8,8 @@
 int db__driver_open_database (dbHandle *handle)
 
 {
-    char *name, *schema, *user, *password, buf[500];
+    char buf[500];
+    const char *name, *schema, *user, *password;
     dbConnection connection;
     PGCONN pgconn;
     PGresult *res;
@@ -37,9 +38,6 @@ int db__driver_open_database (dbHandle *handle)
 
     pg_conn = PQsetdbLogin( pgconn.host, pgconn.port, pgconn.options, pgconn.tty, 
 		            pgconn.dbname, user, password );
-
-    G_free ( user );
-    G_free ( password );
     
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
 	append_error ( "Cannot connect to Postgres: " );

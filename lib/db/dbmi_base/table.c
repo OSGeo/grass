@@ -76,7 +76,7 @@ db_free_table  (dbTable *table)
  \param 
 */
 int
-db_set_table_name  (dbTable *table, char *name)
+db_set_table_name  (dbTable *table, const char *name)
 
 {
     return db_set_string (&table->tableName, name);
@@ -88,7 +88,7 @@ db_set_table_name  (dbTable *table, char *name)
  \return 
  \param 
 */
-char *
+const char *
 db_get_table_name  (dbTable *table)
 
 {
@@ -102,7 +102,7 @@ db_get_table_name  (dbTable *table)
  \param 
 */
 int
-db_set_table_description  (dbTable *table, char *description)
+db_set_table_description  (dbTable *table, const char *description)
 
 {
     return db_set_string (&table->description, description);
@@ -114,7 +114,7 @@ db_set_table_description  (dbTable *table, char *description)
  \return 
  \param 
 */
-char *
+const char *
 db_get_table_description  (dbTable *table)
 
 {
@@ -345,7 +345,7 @@ db_table_to_sql ( dbTable *table, dbString *sql)
 {
     int col, ncols;
     dbColumn   *column;
-    char *colname;
+    const char *colname;
     int sqltype, ctype;
     char buf[500];
     

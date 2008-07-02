@@ -117,21 +117,21 @@ struct Item
 static struct Item first_item ;
 static struct Item *current_item ;
 static int n_items = 0 ;
-static int show_options(int ,char *);
+static int show_options(int ,const char *);
 static int show(const char *,int);
 static int set_flag (int);
-static int contains (char *,int);
+static int contains (const char *,int);
 static int set_option( char *);
 static int check_opts();
-static int check_an_opt( char *, int , char *,char *);
-static int check_int(char *, char *);
-static int check_double( char *, char *);
-static int check_string( char *, char *);
-static int check_required();
-static int split_opts();
-static int check_multiple_opts();
-static int check_overwrite();
-static int interactive( char *);
+static int check_an_opt(const char *, int , const char *,const char *);
+static int check_int(const char *, const char *);
+static int check_double(const char *, const char *);
+static int check_string(const char *, const char *);
+static int check_required(void);
+static int split_opts(void);
+static int check_multiple_opts(void);
+static int check_overwrite(void);
+static int interactive(const char *);
 static int interactive_flag( struct Flag *);
 static int interactive_option( struct Option *);
 static int gis_prompt( struct Option *, char *);
@@ -762,7 +762,7 @@ int G_parser (int argc, char **argv)
 			i++;
 		    }
 
-		    opt->opts = (char **)G_calloc( cnt+1, sizeof(char*) );
+		    opt->opts = (const char **)G_calloc( cnt+1, sizeof(const char*) );
 		    
 		    i = 0;
 		    while ( tokens[i] ) {
@@ -774,7 +774,7 @@ int G_parser (int argc, char **argv)
 		    if(opt->descriptions ) {
 		        delm[0] = ';';
 
-			opt->descs = (char **)G_calloc( cnt+1, sizeof(char*) );
+			opt->descs = (const char **)G_calloc( cnt+1, sizeof(const char*) );
 			tokens = G_tokenize ( opt->descriptions, delm );
 			
 			i = 0;
@@ -1052,7 +1052,7 @@ int G_usage (void)
 	struct Option *opt ;
 	struct Flag *flag ;
 	char item[256];
-	char *key_desc;
+	const char *key_desc;
 	int maxlen;
 	int len, n;
 	int new_prompt = 0;
@@ -1227,7 +1227,7 @@ int G_usage (void)
 
 
 /**
- * \fn void print_escaped_for_xml (FILE * fp, char * str)
+ * \fn void print_escaped_for_xml (FILE * fp, const char * str)
  *
  * \brief Formats text for XML.
  *
@@ -1235,7 +1235,7 @@ int G_usage (void)
  * \param[in] str string to write
  */
 
-static void print_escaped_for_xml (FILE * fp, char * str) {
+static void print_escaped_for_xml (FILE * fp, const char * str) {
 	for (;*str;str++) {
 		switch (*str) {
 			case '&':
@@ -1258,8 +1258,8 @@ static void print_escaped_for_xml (FILE * fp, char * str) {
  * \brief Format text for HTML output
  */
 #define do_escape(c,escaped) case c: fputs(escaped,f);break
-static void print_escaped_for_html( FILE *f, char *str ) {
-	char *s;
+static void print_escaped_for_html( FILE *f, const char *str ) {
+	const char *s;
 	for(s=str;*s;s++) {
 		switch(*s) {
 			do_escape('&',"&amp;");
@@ -1524,7 +1524,7 @@ static void G_usage_html (void)
 {
 	struct Option *opt ;
 	struct Flag *flag ;
-	char *type;
+	const char *type;
 	int new_prompt = 0;
 
 	new_prompt = uses_new_gisprompt();
@@ -1872,7 +1872,7 @@ static void G_script(void)
 static void generate_tcl(FILE *fp)
 {
 	int new_prompt = uses_new_gisprompt();
-	char *type;
+	const char *type;
 	int optn;
 
 	fprintf(fp, "begin_dialog {%s} {\n", pgm_name);
@@ -2059,7 +2059,7 @@ static void G_tcltk (void)
  *
  **************************************************************************/
 
-static int show_options(int maxlen,char *str)
+static int show_options(int maxlen, const char *str)
 {
 	char *buff = G_store(str) ;
 	char *p1, *p2 ;
@@ -2138,7 +2138,7 @@ static int set_flag (int f)
 /* contents() is used to find things strings with characters like commas and
  * dashes.
  */
-static int contains (char *s, int c)
+static int contains (const char *s, int c)
 {
 	while(*s)
 	{
@@ -2250,7 +2250,7 @@ static int check_opts (void)
 	return(error) ;
 }
 
-static int check_an_opt (char *key, int type, char *options, char *answer)
+static int check_an_opt (const char *key, int type, const char *options, const char *answer)
 {
 	int error ;
 
@@ -2294,7 +2294,7 @@ static int check_an_opt (char *key, int type, char *options, char *answer)
 	return(error) ;
 }
 
-static int check_int (char *ans, char *opts)
+static int check_int (const char *ans, const char *opts)
 {
 	int d, lo, hi;
 
@@ -2362,7 +2362,7 @@ char *opts ;
 }
 */
 
-static int check_double (char *ans, char *opts)
+static int check_double (const char *ans, const char *opts)
 {
 	double d, lo, hi;
 
@@ -2404,7 +2404,7 @@ static int check_double (char *ans, char *opts)
 	}
 }
 
-static int check_string (char *ans, char *opts)
+static int check_string (const char *ans, const char *opts)
 {
 	if (*opts == '\0')
 		return(0) ;
@@ -2526,7 +2526,7 @@ static int split_opts (void)
 static int check_multiple_opts (void)
 {
 	struct Option *opt ;
-	char *ptr ;
+	const char *ptr ;
 	int n_commas ;
 	int n ;
 	int error ;
@@ -2622,7 +2622,7 @@ static int check_overwrite (void)
 	return(error) ;
 }
 
-static int interactive( char *command)
+static int interactive(const char *command)
 {
 	struct Item *item ;
 

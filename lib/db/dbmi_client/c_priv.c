@@ -8,7 +8,7 @@
  \param to grant to : DB_GROUP | DB_PUBLIC
 */
 int
-db_grant_on_table ( dbDriver *driver, char *tableName, int priv, int to)
+db_grant_on_table ( dbDriver *driver, const char *tableName, int priv, int to)
 {
     int ret_code;
     dbString name;

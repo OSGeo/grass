@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     struct Option *table_opt;
     struct GModule *module;
     char   *mapset, buf[2000];
-    char   *drv, *db;
+    const char *drv, *db;
     struct Map_info In, Out;
     struct line_cats *LCats, *SCats; 
     struct line_pnts *LPoints, *SPoints, *PlPoints;

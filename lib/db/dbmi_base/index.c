@@ -103,7 +103,7 @@ db_free_index_array  (dbIndex *list, int count)
  \param 
 */
 int
-db_set_index_name  (dbIndex *index, char *name)
+db_set_index_name  (dbIndex *index, const char *name)
 
 {
     return db_set_string (&index->indexName, name);
@@ -115,7 +115,7 @@ db_set_index_name  (dbIndex *index, char *name)
  \return 
  \param 
 */
-char *
+const char *
 db_get_index_name  (dbIndex *index)
 
 {
@@ -129,7 +129,7 @@ db_get_index_name  (dbIndex *index)
  \param 
 */
 int
-db_set_index_table_name  (dbIndex *index, char *name)
+db_set_index_table_name  (dbIndex *index, const char *name)
 
 {
     return db_set_string (&index->tableName, name);
@@ -141,7 +141,7 @@ db_set_index_table_name  (dbIndex *index, char *name)
  \return 
  \param 
 */
-char *
+const char *
 db_get_index_table_name  (dbIndex *index)
 
 {
@@ -168,7 +168,7 @@ db_get_index_number_of_columns  (dbIndex *index)
  \param 
 */
 int
-db_set_index_column_name  (dbIndex *index, int column_num, char *name)
+db_set_index_column_name  (dbIndex *index, int column_num, const char *name)
 
 {
     if (column_num < 0 || column_num >= index->numColumns)
@@ -185,14 +185,14 @@ db_set_index_column_name  (dbIndex *index, int column_num, char *name)
  \return 
  \param 
 */
-char *
+const char *
 db_get_index_column_name  (dbIndex *index, int column_num)
 
 {
     if (column_num < 0 || column_num >= index->numColumns)
     {
 	db_error ("db_get_index_column_name(): invalid column number");
-	return ( (char *) NULL);
+	return ( (const char *) NULL);
     }
     return db_get_string (&index->columnNames[column_num]);
 }

@@ -23,7 +23,7 @@
 
 int db__driver_open_database( dbHandle *handle )
 {
-    char *name;
+    const char *name;
     dbConnection connection;
 
     init_error();
