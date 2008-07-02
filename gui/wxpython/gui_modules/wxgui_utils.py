@@ -458,10 +458,10 @@ class LayerTree(CT.CustomTreeCtrl):
 
         @todo vector/volume
         """
-        import nviz
-        dlg = nviz.RasterPropertiesDialog(parent=self,
-                                          map=self.GetPyData(self.layer_selected)[0]['maplayer'].name)
-        dlg.Show()
+        if not self.mapdisplay.nvizToolWin.IsShown():
+            self.mapdisplay.nvizToolWin.Show()
+
+        self.mapdisplay.nvizToolWin.SetPage('surface')
 
     def RenameLayer (self, event):
         """Rename layer"""

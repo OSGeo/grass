@@ -29,23 +29,15 @@ void Nviz::Draw(bool quick)
 
     Nviz_draw_cplane(data, -1, -1); // ?
 
-    if (data->draw_mode == DRAW_COARSE || 
-	data->draw_mode == DRAW_BOTH || quick) {
+    if (quick) {
 	Nviz_draw_quick(data, 1); // clear screen
     }
-
-    if (data->draw_mode == DRAW_FINE ||
-	data->draw_mode == DRAW_BOTH) {
-	if (data->draw_mode == DRAW_FINE) {
-	    Nviz_draw_all (data, 1); // clear screen
-	}
-	else {
-	    Nviz_draw_all (data, 0);
-	}
+    else {
+      Nviz_draw_all (data, 1); // clear screen
     }
 
-    G_debug(1, "Nviz::Draw(): mode=%d, quick=%d",
-	    data->draw_mode, quick);
+    G_debug(1, "Nviz::Draw(): quick=%d",
+	    quick);
     
     return;
 }
@@ -59,24 +51,5 @@ void Nviz::EraseMap()
 
     G_debug(1, "Nviz::EraseMap()");
 
-    return;
-}
-
-/*!
-  \brief Set draw mode
-
-  Draw modes:
-   - DRAW_COARSE
-   - DRAW_FINE
-   - DRAW_BOTH
-
-  \param mode draw mode
-*/
-void Nviz::SetDrawMode(int mode)
-{
-    Nviz_set_draw_mode(data, mode);
-
-    G_debug(1, "Nviz::SetDrawMode(): mode=%d",
-	    mode);
     return;
 }

@@ -79,6 +79,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #             None])
 
         self.init = False
+        self.render = True # render in full resolution
 
         #
         # create nviz instance
@@ -192,15 +193,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnLeftUp(self, event):
         self.ReleaseMouse()
 
-    def UpdateMap(self, render=False):
+    def UpdateMap(self):
         """
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
-
-        render:
-         - None do not render (todo)
-         - True render
-         - False quick render
 
         @param render re-render map composition
         """
@@ -225,12 +221,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #glRotatef((self.y - self.lastY) * yScale, 1.0, 0.0, 0.0);
         #glRotatef((self.x - self.lastX) * xScale, 0.0, 1.0, 0.0);
 
-        if render is not None:
-            self.parent.onRenderGauge.Show()
-            if self.parent.onRenderGauge.GetRange() > 0:
-                self.parent.onRenderGauge.SetValue(1)
-                self.parent.onRenderTimer.Start(100)
-            self.parent.onRenderCounter = 0
+        self.parent.onRenderGauge.Show()
+        if self.parent.onRenderGauge.GetRange() > 0:
+            self.parent.onRenderGauge.SetValue(1)
+            self.parent.onRenderTimer.Start(100)
+        self.parent.onRenderCounter = 0
 
         if 'view' in self.update.keys():
             self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
@@ -243,11 +238,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.nvizClass.SetZExag(self.view['z-exag']['value'])
             del self.update['z-exag']
 
-        #         if render is True:
-        #             self.nvizClass.Draw(False)
-        #         elif render is False:
-        #             self.nvizClass.Draw(True) # quick
-        self.nvizClass.Draw(False)
+        if self.render is True:
+            self.nvizClass.Draw(False)
+        else:
+            self.nvizClass.Draw(True) # quick
 
         self.SwapBuffers()
 
@@ -267,7 +261,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # self.parent.StatusbarUpdate()
 
         Debug.msg(3, "GLWindow.UpdateMap(): render=%s, -> time=%g" % \
-                      (render, (stop-start)))
+                      (self.render, (stop-start)))
 
     def EraseMap(self):
         """
@@ -583,15 +577,18 @@ class NvizToolWindow(wx.Frame):
                                  # size=globalvar.DIALOG_GSELECT_SIZE,
                                  size=(200, -1),
                                  type="raster")
-            self.win['surface'][code]['map'] = map.GetId() - 1 # FIXME ! 
+            self.win['surface'][code]['map'] = map.GetId() - 1 # FIXME
             map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
+            # changing map topography not allowed
+            if code == 'topo':
+                map.Enable(False)
             gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL,
                           pos=(row, 2))
 
             if code == 'color':
                 value = csel.ColourSelect(panel, id=wx.ID_ANY,
                                           colour=UserSettings.Get(group='nviz', key='surface',
-                                                                 subkey=['color', 'value']))
+                                                                  subkey=['color', 'value']))
                 value.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceMap)
             elif code == 'mask':
                 value = None
@@ -817,7 +814,8 @@ class NvizToolWindow(wx.Frame):
                            style=style,
                            size=size)
 
-        slider.Bind(wx.EVT_SCROLL, self.OnChangeValue)
+        slider.Bind(wx.EVT_SCROLL, self.OnViewChange)
+        slider.Bind(wx.EVT_SCROLL_CHANGED, self.OnViewChanged)
         self.win['view'][name]['slider'] = slider.GetId()
 
         spin = wx.SpinCtrl(parent=parent, id=wx.ID_ANY, size=(65, -1),
@@ -829,7 +827,7 @@ class NvizToolWindow(wx.Frame):
         #         spin.SetRange(self.settings[name]['min'],
         #                      self.settings[name]['max'])
 
-        spin.Bind(wx.EVT_SPINCTRL, self.OnChangeValue)
+        spin.Bind(wx.EVT_SPINCTRL, self.OnViewChange)
         self.win['view'][name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
@@ -858,7 +856,8 @@ class NvizToolWindow(wx.Frame):
 
         return None
 
-    def OnChangeValue(self, event):
+    def OnViewChange(self, event):
+        """Change view, render in quick mode"""
         # find control
         winName = self.__GetWindowName(self.win['view'], event.GetId())
         if not winName:
@@ -873,6 +872,13 @@ class NvizToolWindow(wx.Frame):
         else:
             self.mapWindow.update[winName] = None
 
+        self.mapWindow.render = False
+        self.mapWindow.Refresh(False)
+
+    def OnViewChanged(self, event):
+        """View changed, render in full resolution"""
+        print '#'
+        self.mapWindow.render = True
         self.mapWindow.Refresh(False)
 
     def OnResetView(self, event):
@@ -989,6 +995,8 @@ class NvizToolWindow(wx.Frame):
         layer = self.mapWindow.GetSelectedLayer()
         id = self.mapWindow.GetMapObjId(layer)
 
+        print self.mapWindow.update
+
         #
         # surface
         #
@@ -1026,10 +1034,6 @@ class NvizToolWindow(wx.Frame):
                         self.mapWindow.nvizClass.SetSurfaceEmit(id, map, str(value)) 
 
                 del self.mapWindow.update[attrb]
-
-        # draw mode
-        if self.mapWindow.update.has_key('draw-mode'):
-            self.mapWindow.nvizClass.SetDrawMode(self.mapWindow.update['draw-mode'])
 
         # draw res
         if self.mapWindow.update.has_key('draw-res'):
@@ -1094,17 +1098,18 @@ class NvizToolWindow(wx.Frame):
             incSel = 0
 
         if map is True: # map
-            self.FindWindowById(self.win['surface'][attrb]['map']).Enable(True)
+            if attrb != 'topo': # changing map topography not allowed
+                self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(True) # FIXME
             if self.win['surface'][attrb]['const']:
                 self.FindWindowById(self.win['surface'][attrb]['const']).Enable(False)
             self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(1 + incSel)
         elif map is False: # const
-            self.FindWindowById(self.win['surface'][attrb]['map']).Enable(False)
+            self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(False)
             if self.win['surface'][attrb]['const']:
                 self.FindWindowById(self.win['surface'][attrb]['const']).Enable(True)
             self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(2 + incSel)
         else: # unset
-            self.FindWindowById(self.win['surface'][attrb]['map']).Enable(False)
+            self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(False)
             if self.win['surface'][attrb]['const']:
                 self.FindWindowById(self.win['surface'][attrb]['const']).Enable(False)
             self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(0)
@@ -1114,11 +1119,14 @@ class NvizToolWindow(wx.Frame):
         if not self.mapWindow.init:
             return
 
-        attrb = self.__GetWindowName(self.win['surface'], event.GetId())
+        attrb = self.__GetWindowName(self.win['surface'], event.GetId()) 
         if not attrb:
             return
 
         selection = self.FindWindowById(self.win['surface'][attrb]['use']).GetSelection()
+        if self.win['surface'][attrb]['required']:
+            selection += 1
+
         if selection == 0: # unset
             map = None
             value = ''
@@ -1155,17 +1163,14 @@ class NvizToolWindow(wx.Frame):
         mode = self.FindWindowById(self.win['surface']['draw']['mode']).GetSelection()
         if mode == 0: # coarse
             value |= wxnviz.DM_WIRE
-            self.mapWindow.update['draw-mode'] = wxnviz.DRAW_COARSE
             self.FindWindowById(self.win['surface']['draw']['res-coarse']).Enable(True)
             self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(False)
         elif mode == 1: # fine
             value |= wxnviz.DM_POLY
-            self.mapWindow.update['draw-mode'] = wxnviz.DRAW_FINE
             self.FindWindowById(self.win['surface']['draw']['res-coarse']).Enable(False)
             self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(True)
         else: # both
             value |= wxnviz.DM_WIRE_POLY
-            self.mapWindow.update['draw-mode'] = wxnviz.DRAW_BOTH
             self.FindWindowById(self.win['surface']['draw']['res-coarse']).Enable(True)
             self.FindWindowById(self.win['surface']['draw']['res-fine']).Enable(True)
 
@@ -1220,7 +1225,10 @@ class NvizToolWindow(wx.Frame):
                 #
                 for attr in ('topo', 'color'):
                     self.SetSurfaceUseMap(attr, True) # -> map
-                    self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
+                    if layer.type == 'raster':
+                        self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
+                    else:
+                        self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
                 if UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'map']) is False:
                     self.SetSurfaceUseMap('shine', False)
                     value = UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'value'])
@@ -1254,6 +1262,11 @@ class NvizToolWindow(wx.Frame):
                         
                     win.SetValue(data['value'])
 
+    def SetPage(self, name):
+        """Get named page"""
+        if name == 'surface':
+            self.notebook.SetSelection(1)
+
 class ViewPositionWindow(wx.Window):
     """Position control window (for NvizToolWindow)"""
     def __init__(self, parent, id, mapwindow,
@@ -1275,6 +1288,7 @@ class ViewPositionWindow(wx.Window):
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
+        # self.Bind(wx.EVT_MOTION,       self.OnMouse)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
 
     def Draw(self, pos=None):
@@ -1303,6 +1317,7 @@ class ViewPositionWindow(wx.Window):
         self.pdc.DrawToDC(dc)
 
     def OnMouse(self, event):
+        print event.LeftIsDown(), event.LeftUp()
         if event.LeftIsDown():
             x, y = event.GetPosition()
             self.Draw(pos=(x, y))
@@ -1314,6 +1329,9 @@ class ViewPositionWindow(wx.Window):
             self.settings['pos']['y'] = y
             self.mapWindow.update['view'] = None
 
-            self.mapWindow.Refresh(eraseBackground=False)
-            # self.mapWindow.UpdateMap()
-            # self.mapWindow.OnPaint(None)
+            self.mapWindow.render = False
+        
+        if event.LeftUp():
+            self.mapWindow.render = True
+        
+        self.mapWindow.Refresh(eraseBackground=False)

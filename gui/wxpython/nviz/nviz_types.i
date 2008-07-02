@@ -22,10 +22,6 @@
 #define VIEW_DEFAULT_TWIST 0.0
 #define VIEW_DEFAULT_ZEXAG 1.0
 
-#define DRAW_COARSE 0
-#define DRAW_FINE 1
-#define DRAW_BOTH 2
-
 /* extracted from include/gsurf.h */
 #define DM_GOURAUD   0x00000100
 #define DM_FLAT      0x00000200

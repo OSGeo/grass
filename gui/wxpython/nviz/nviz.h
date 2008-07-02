@@ -67,7 +67,6 @@ public:
     /* draw.cpp */
     void Draw(bool);
     void EraseMap();
-    void SetDrawMode(int);
 
     /* surface.cpp */
     int SetSurfaceTopo(int, bool, const char *);

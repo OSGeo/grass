@@ -11,5 +11,9 @@ EXTRA_CFLAGS = $(INC) \
 EXTRA_LIBS = $(GISLIB) $(XLIBPATH) $(XMLIB) $(XTLIB) $(XLIB) $(XEXTRALIBS) $(OGSFLIB)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+
+# doxygen
+DOXNAME=nviz
 
 default: lib

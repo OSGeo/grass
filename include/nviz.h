@@ -82,8 +82,6 @@ typedef struct {
     /* background color */
     int bgcolor;
 
-    /* draw */
-    int draw_mode;
 } nv_data;
 
 /* The following structure is used to associate client data with surfaces.
@@ -138,7 +136,6 @@ int Nviz_draw_all_surf(nv_data *);
 int Nviz_draw_all(nv_data *, int);
 int Nviz_draw_quick(nv_data *, int);
 int Nviz_draw_all_vect(nv_data *);
-void Nviz_set_draw_mode(nv_data *, int);
 
 /* exag.c */
 int Nviz_get_exag_height(float *, float *, float *);
