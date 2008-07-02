@@ -1,8 +1,6 @@
 #! /bin/sh
 #############################################################################
 #
-# $Id$
-#
 # MODULE:   	GRASS Initialization
 # AUTHOR(S):	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
 #               William Kyngesburye - kyngchaos@kyngchaos.com

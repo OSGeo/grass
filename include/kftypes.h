@@ -1,7 +1,3 @@
-/*
-* $Id$
-*/
-
 #ifndef _KFTYPES_H
 #define _KFTYPES_H
 

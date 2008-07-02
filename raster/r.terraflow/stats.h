@@ -20,8 +20,6 @@
 #ifndef STATS_H
 #define STATS_H
 
-/* $Id$ */
-
 #include <sys/types.h>
 
 #include <fstream>

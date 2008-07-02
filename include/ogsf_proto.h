@@ -1,11 +1,9 @@
 /*
-* $Id$
-*
 ****************************************************************************
 *
-* MODULE:     GRASS ogsf library
+* MODULE:       GRASS ogsf library
 * AUTHOR(S):    Justin Hickey - Bangkok Thailand - jhickey@hpcc.nectec.or.th
-* PURPOSE:     To list the prototypes for all accessible functions in this
+* PURPOSE:      To list the prototypes for all accessible functions in this
 *               library. The prototypes are listed by the file in which their
 *               function definitions reside.
 * COPYRIGHT:    (C) 2000 by the GRASS Development Team

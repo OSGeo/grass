@@ -8,7 +8,7 @@
  * modified by Mitasova in August 1999 (fix for elev color)
  * modified by Brown in September 1999 (fix for Timestamps)
  * Modified by Mitasova in Nov. 1999 (write given tension into hist)
- * $Id$
+ * Last modification: 2006-12-13
  *
  */
 

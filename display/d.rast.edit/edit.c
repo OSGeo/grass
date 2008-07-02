@@ -1,5 +1,4 @@
-/*  $Id$
- * 
+/*
  * Chris Rewerts, Agricultural Engineering, Purdue University April 1991
  * 
  * The material here based originally on Dwhat. Idea is to allow user to mouse

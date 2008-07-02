@@ -1,6 +1,4 @@
 /*
-* $Id$
-*
 * G_calc_solar_position() calculates solar position parameters from
 * given position, date and time
 *

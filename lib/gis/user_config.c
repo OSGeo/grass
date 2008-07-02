@@ -19,8 +19,7 @@
  *
  * \author Eric G Miller - egm2 at jps net
  *
- * \date 2000
- * \date $Id$
+ * \date 2007-04-14
  */
 
 #include <stdio.h>

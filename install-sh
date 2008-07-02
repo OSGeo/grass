@@ -2,9 +2,7 @@
 
 #############################################################################
 #
-# $Id: install-sh,v 1.1 2002-01-06 17:28:56 radim Exp $
-#
-# MODULE:   	Grass Compilation
+# MODULE:   	GRASS Compilation
 # AUTHOR(S):	Original author MIT (X11R5)
 # PURPOSE:  	This file is required by configure to create the config.cache
 #   	    	file.

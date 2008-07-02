@@ -1,7 +1,3 @@
-/*
-* $Id$
-*/
-
 /*  gstypes.h
     Bill Brown, USACERL
     January 1993

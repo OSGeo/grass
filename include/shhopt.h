@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef SHHOPT_H
 #define SHHOPT_H
 

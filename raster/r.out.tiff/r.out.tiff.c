@@ -17,8 +17,6 @@
  *
  *****************************************************************************/
 /* 
- * $Id$
- *
  * Added support for Tiled TIFF output ( -l switch )
  * Luca Cristelli (luca.cristelli ies.it) 1/2001
  * 

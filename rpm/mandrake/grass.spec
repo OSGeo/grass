@@ -1,5 +1,5 @@
 # GRASS 6.0.0 RPM spec file for Mandrake
-# $Id$
+# Date: 2006-06-23
 
 %define PACKAGE_NAME grass
 %define PACKAGE_VERSION 6.0.0

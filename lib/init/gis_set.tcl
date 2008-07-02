@@ -1,7 +1,5 @@
 #############################################################################
 #
-# $Id$
-#
 # MODULE:   	Grass Tcl/Tk Initialization
 # AUTHOR(S):	Original author unknown - probably CERL
 #   	    	Justin Hickey - Thailand - jhickey hpcc.nectec.or.th

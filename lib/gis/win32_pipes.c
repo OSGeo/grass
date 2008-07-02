@@ -1,6 +1,4 @@
 /*
-* $Id$
-*
 ****************************************************************************
 *
 * LIBRARY:      unix_socks.c  -- Routines related to using UNIX domain 
