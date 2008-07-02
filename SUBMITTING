@@ -388,6 +388,23 @@ following rules:
     See
     http://svnbook.red-bean.com/en/1.4/svn.advanced.props.html
 
+    To set a property:
+
+      svn propset svn:keywords 'Author Date Id' <directory>
+
+    To edit the svn:ignore property using your default text editor:
+
+      svn propedit svn:ignore <directory>
+
+    To set the svn:ignore property non-interactively, first create a
+    file containing the value:
+
+      echo "*.tmp.html" > ignore.txt
+      echo "*OBJ*" >> ignore.txt
+
+    then use:
+
+      svn propset -F ignore.txt svn:ignore <directory>
 
 30. Use doxygen style for source code documentation. It is required
     for GRASS libraries, but also recommended for GRASS modules.
