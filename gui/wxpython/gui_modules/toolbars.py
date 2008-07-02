@@ -856,14 +856,15 @@ class VDigitToolbar(AbstractToolbar):
             # save changes (only for vdigit)
             if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
                 if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
-                    dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
-                                                                         "in vector map <%s>?") % layerSelected.name,
-                                           caption=_("Save changes?"),
-                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                    if dlg.ShowModal() == wx.ID_NO:
-                        # revert changes
-                        self.parent.digit.Undo(0)
-                    dlg.Destroy()
+                    if self.parent.digit.GetUndoLevel() > 0:
+                        dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
+                                                                             "in vector map <%s>?") % layerSelected.name,
+                                               caption=_("Save changes?"),
+                                               style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                        if dlg.ShowModal() == wx.ID_NO:
+                            # revert changes
+                            self.parent.digit.Undo(0)
+                        dlg.Destroy()
 
             self.parent.digit.SetMapName(None) # -> close map
 

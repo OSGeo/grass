@@ -80,6 +80,7 @@ public:
     std::vector<int> GetLayers();
 
     int Undo(int);
+    int GetUndoLevel();
 };
 
 #endif /* __DIGIT_H__ */
