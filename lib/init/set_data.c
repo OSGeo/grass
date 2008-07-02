@@ -272,7 +272,7 @@ int main (int argc, char *argv[])
 }
 
 int 
-list_locations (char *gisdbase)
+list_locations (const char *gisdbase)
 {
     fprintf(stderr, "\nAvailable locations:\n") ;
     fprintf(stderr, "----------------------\n") ;
@@ -282,9 +282,9 @@ list_locations (char *gisdbase)
 }
 
 int
-list_mapsets (char *location_name, char *location)
+list_mapsets (const char *location_name, const char *location)
 {
-    char **mapsets;
+    const char **mapsets;
     int i, num_mapsets;
     int any, ok, any_ok;
     int len, tot_len;
@@ -328,7 +328,7 @@ list_mapsets (char *location_name, char *location)
 int
 first_word (char *buf)
 {
-    char temp[80];
+    char temp[GNAME_MAX];
 
     *temp = 0;
     sscanf (buf, "%s", temp);

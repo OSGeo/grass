@@ -7,7 +7,7 @@
  \param 
 */
 int
-db_convert_Cstring_to_column_value  (char *Cstring, dbColumn *column)
+db_convert_Cstring_to_column_value  (const char *Cstring, dbColumn *column)
 
 {
     dbValue *value;
@@ -25,7 +25,7 @@ db_convert_Cstring_to_column_value  (char *Cstring, dbColumn *column)
  \param 
 */
 int
-db_convert_Cstring_to_column_default_value  (char *Cstring, dbColumn *column)
+db_convert_Cstring_to_column_default_value  (const char *Cstring, dbColumn *column)
 
 {
     dbValue *value;

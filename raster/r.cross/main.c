@@ -43,7 +43,6 @@ main (int argc, char *argv[])
     struct Colors pcolr;
     char buf[1024];
     CELL result;
-    CELL cross();
     struct GModule *module;
     struct
     {
@@ -70,8 +69,8 @@ main (int argc, char *argv[])
     parm.input->required   = YES;
     parm.input->multiple   = YES;	
     parm.input->gisprompt  = "old,cell,raster" ;
-    sprintf(parm.input->description= G_malloc(60),
-	_("Names of 2-%d input raster maps"), NFILES);
+    sprintf(buf, _("Names of 2-%d input raster maps"), NFILES);
+    parm.input->description= G_store(buf);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 

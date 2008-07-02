@@ -98,7 +98,7 @@ static void parse_command_line (int argc, char **argv)
     struct Option *driver, *database, *input;
     struct Flag *i;
     struct GModule *module;
-    char *drv, *db;
+    const char *drv, *db;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]) ;

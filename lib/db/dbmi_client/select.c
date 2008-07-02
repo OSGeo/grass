@@ -60,11 +60,11 @@ static int cmpvaluestring(const void *pa, const void *pb)
    dbCatVal * const *a = pa;
    dbCatVal * const *b = pb;
 
-   return strcmp( (char *) a, (char *) b );
+   return strcmp( (const char *) a, (const char *) b );
 }
 
 /*!
- \fn db_select_int (dbDriver *driver, char *tab, char *col, char *where, int **pval)
+ \fn db_select_int (dbDriver *driver, const char *tab, const char *col, const char *where, int **pval)
  \brief Select array of ordered integers from table/column
  \return number of selected values, -1 on error
  \param driver DB driver
@@ -74,11 +74,12 @@ static int cmpvaluestring(const void *pa, const void *pb)
  \param pval array of ordered integer values
 */
 
-int db_select_int (dbDriver *driver, char *tab, char *col, char *where, int **pval)
+int db_select_int (dbDriver *driver, const char *tab, const char *col, const char *where, int **pval)
 {
     int type, more, alloc, count;
     int *val;
-    char buf[1024], *sval;
+    char buf[1024];
+    const char *sval;
     dbString stmt;
     dbCursor cursor;
     dbColumn *column;
@@ -154,7 +155,7 @@ int db_select_int (dbDriver *driver, char *tab, char *col, char *where, int **pv
 }
 
 /*!
- \fn db_select_value (dbDriver *driver, char *tab, char *key, int id, char *col, dbValue *val) 
+ \fn db_select_value (dbDriver *driver, const char *tab, const char *key, int id, const char *col, dbValue *val) 
  \brief Select one (first) value from table/column for key/id
  \return number of selected values, -1 on error
  \param driver DB driver
@@ -164,7 +165,7 @@ int db_select_int (dbDriver *driver, char *tab, char *col, char *where, int **pv
  \param col name of column to select the value from
  \param val dbValue to store within
 */
-int db_select_value (dbDriver *driver, char *tab, char *key, int id, char *col, dbValue *val) 
+int db_select_value (dbDriver *driver, const char *tab, const char *key, int id, const char *col, dbValue *val) 
 {
     int  more, count;
     char buf[1024];
@@ -202,7 +203,7 @@ int db_select_value (dbDriver *driver, char *tab, char *key, int id, char *col, 
 }
 
 /*!
- \fn int db_select_CatValArray (dbDriver *driver, char *tab, char *key, char *col, char *where, dbCatValArray *cvarr)
+ \fn int db_select_CatValArray (dbDriver *driver, const char *tab, const char *key, const char *col, const char *where, dbCatValArray *cvarr)
  \brief Select pairs key/value to array, values are sorted by key (must be integer)
  \return number of selected values, -1 on error
  \param driver DB driver
@@ -211,7 +212,7 @@ int db_select_value (dbDriver *driver, char *tab, char *key, int id, char *col, 
  \param col value column name
  \param cvarr dbCatValArray to store within
 */
-int db_select_CatValArray ( dbDriver *driver, char *tab, char *key, char *col, char *where, 
+int db_select_CatValArray ( dbDriver *driver, const char *tab, const char *key, const char *col, const char *where, 
 			    dbCatValArray *cvarr )
 {
     int  i, type, more, nrows;

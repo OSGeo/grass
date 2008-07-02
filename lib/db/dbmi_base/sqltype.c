@@ -6,7 +6,7 @@
  \return 
  \param 
 */
-char *
+const char *
 db_sqltype_name (int sqltype)
 
 {

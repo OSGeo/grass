@@ -2,13 +2,13 @@
 #include "macros.h"
 
 /*!
- \fn dbDriver * db_start_driver_open_database ( char *drvname, char *dbname )
+ \fn dbDriver * db_start_driver_open_database ( const char *drvname, const char *dbname )
  \brief 
  \return 
  \param 
 */
 dbDriver *
-db_start_driver_open_database ( char *drvname, char *dbname )
+db_start_driver_open_database ( const char *drvname, const char *dbname )
 {
     dbHandle handle;
     dbDriver *driver;

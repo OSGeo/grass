@@ -14,7 +14,7 @@
 *  returns:  DB_OK     - OK
 *            DB_FAILED - error
 */
-int parse_conn ( char *str, PGCONN *pgconn )
+int parse_conn ( const char *str, PGCONN *pgconn )
 {
     int  i;
     char **tokens, delm[2];

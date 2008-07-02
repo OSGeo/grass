@@ -66,7 +66,6 @@ void read_bmp(void)
 {
 	char header[HEADER_SIZE];
 	FILE *input;
-	int x, y;
 
 	input = fopen(file_name, "rb");
 	if (!input)

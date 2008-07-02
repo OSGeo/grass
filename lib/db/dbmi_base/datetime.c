@@ -184,7 +184,7 @@ int db_convert_value_datetime_into_string  (dbValue *value, int sqltype, dbStrin
  *  otherwise the to and from markings in sqltype are used.
  *  where "*" represents any non-whitespace character
  */
-int db_convert_Cstring_to_value_datetime  (char *buf, int sqltype, dbValue *value)
+int db_convert_Cstring_to_value_datetime  (const char *buf, int sqltype, dbValue *value)
 {
     int from, to;
     int year, month, day, hour, minute;

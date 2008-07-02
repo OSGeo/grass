@@ -31,7 +31,8 @@
 int db__driver_open_database (dbHandle *handle)
 
 {
-    char *name, name2[2000];
+    char name2[2000];
+    const char *name;
     
     G_debug(3, "\ndb_driver_open_database()" );
 

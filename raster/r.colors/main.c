@@ -29,7 +29,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static char **rules;
+static const char **rules;
 static int nrules;
 
 static void scan_rules(void)
@@ -40,7 +40,7 @@ static void scan_rules(void)
 
     rules = G__ls(path, &nrules);
 
-    rules = G_realloc(rules, (nrules + 4) * sizeof(char *));
+    rules = G_realloc(rules, (nrules + 4) * sizeof(const char *));
 
     rules[nrules++] = G_store("random");
     rules[nrules++] = G_store("grey.eq");
@@ -57,7 +57,7 @@ static char *rules_list(void)
 
     for (i = 0; i < nrules; i++)
     {
-	char *name = rules[i];
+	const char *name = rules[i];
 	int n = strlen(name);
 
 	if (size < len + n + 2)

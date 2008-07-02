@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 
 /*!
-  \fn int db_column_sqltype (dbDriver *driver, char *tab, char *col)
+  \fn int db_column_sqltype (dbDriver *driver, const char *tab, const char *col)
   \brief Get column sqltype
   
   See db_sqltype_name ()
@@ -32,7 +32,7 @@
   \param col column name
 */
 int
-db_column_sqltype (dbDriver *driver, char *tab, char *col)
+db_column_sqltype (dbDriver *driver, const char *tab, const char *col)
 {
     dbTable *table;
     dbString table_name;
@@ -59,7 +59,7 @@ db_column_sqltype (dbDriver *driver, char *tab, char *col)
 }
 
 /*!
-  \fn int db_column_Ctype (dbDriver *driver, char *tab, char *col)
+  \fn int db_column_Ctype (dbDriver *driver, const char *tab, const char *col)
   \brief Get column Ctype
 
   See db_sqltype_to_Ctype()
@@ -69,7 +69,7 @@ db_column_sqltype (dbDriver *driver, char *tab, char *col)
   \param col column name
 */
 int
-db_column_Ctype (dbDriver *driver, char *tab, char *col)
+db_column_Ctype (dbDriver *driver, const char *tab, const char *col)
 {
     int type;
     if ( ( type = db_column_sqltype ( driver, tab, col ) ) >= 0 ) {
@@ -81,7 +81,7 @@ db_column_Ctype (dbDriver *driver, char *tab, char *col)
 }
 
 /*!
-  \fn int db_get_column ( dbDriver *Driver, char *tname, char *cname, dbColumn **Column )
+  \fn int db_get_column ( dbDriver *Driver, const char *tname, const char *cname, dbColumn **Column )
   \brief Get column structure by table and column name.
   
   Column is set to new dbColumn structure or NULL if column was not found
@@ -92,7 +92,7 @@ db_column_Ctype (dbDriver *driver, char *tab, char *col)
   \param Column column structure to store within
 */
 int
-db_get_column ( dbDriver *Driver, char *tname, char *cname, dbColumn **Column )
+db_get_column ( dbDriver *Driver, const char *tname, const char *cname, dbColumn **Column )
 {
     int   i, ncols;
     dbTable *Table;

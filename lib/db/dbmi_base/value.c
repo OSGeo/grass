@@ -76,7 +76,7 @@ db_get_value_as_double (dbValue *value, int ctype)
  \return 
  \param 
 */
-char *
+const char *
 db_get_value_string (dbValue *value)
 
 {
@@ -222,7 +222,7 @@ db_set_value_double (dbValue *value, double d)
  \param 
 */
 int
-db_set_value_string (dbValue *value, char *s)
+db_set_value_string (dbValue *value, const char *s)
 
 {
     db_set_value_not_null(value);

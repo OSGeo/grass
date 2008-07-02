@@ -17,7 +17,8 @@ F_generate (char *drvname, char *dbname, char *tblname, char *key, int keyval,
 	    char **form) 
 {
     int      col, ncols, ctype, sqltype, more; 
-    char     buf[5000], buf1[100], *colname;
+    char     buf[5000], buf1[100];
+    const char *colname;
     dbString sql, html, str;
     dbDriver *driver;
     dbHandle handle;

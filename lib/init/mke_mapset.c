@@ -10,9 +10,9 @@ extern int errno;
 
 #include <grass/gis.h>
 
-int make_mapset (char *location, char *mapset)
+int make_mapset (const char *location, const char *mapset)
 {
-	char buffer[2048] ;
+	char buffer[GPATH_MAX] ;
 	char *buffer2;
 	FILE *fd ;
 	struct Cell_head window;

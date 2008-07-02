@@ -9,7 +9,7 @@
  \param 
 */
 char *
-db_store (char *s)
+db_store (const char *s)
 {
     char *a;
 

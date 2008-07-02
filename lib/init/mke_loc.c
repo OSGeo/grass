@@ -7,10 +7,10 @@
 #include "local_proto.h"
 
 int 
-make_location (char *gisdbase, char *location_name)
+make_location (const char *gisdbase, const char *location_name)
 {
     struct Cell_head window;
-    char buf[1024];
+    char buf[GPATH_MAX];
     int i;
     char myname[75];
     char *mapset;

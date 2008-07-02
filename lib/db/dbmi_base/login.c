@@ -19,7 +19,7 @@ typedef struct {
     DATA *data;
 } LOGIN;
 
-static char *
+static const char *
 login_filename( void )
 {
     static char *file;
@@ -41,7 +41,7 @@ init_login ( LOGIN *login )
 }
 
 void
-add_login ( LOGIN *login, char *dr, char *db, char *usr, char *pwd ) 
+add_login ( LOGIN *login, const char *dr, const char *db, const char *usr, const char *pwd ) 
 {
     if ( login->n == login->a ) {
 	login->a += 10;
@@ -64,7 +64,7 @@ int
 read_file ( LOGIN *login ) 
 {
     int ret;
-    char *file;
+    const char *file;
     struct stat info;
     FILE *fd;
     char buf[2001], dr[500], db[500], usr[500], pwd[500];
@@ -113,7 +113,7 @@ int
 write_file ( LOGIN *login ) 
 {
     int i;
-    char *file;
+    const char *file;
     FILE *fd;
 
     file = login_filename();
@@ -150,7 +150,7 @@ write_file ( LOGIN *login )
  \return DB_FAILED
 */
 int
-db_set_login ( char *driver, char *database, char *user, char *password )
+db_set_login ( const char *driver, const char *database, const char *user, const char *password )
 {
     int i, found;
     LOGIN login;
@@ -196,7 +196,7 @@ db_set_login ( char *driver, char *database, char *user, char *password )
  \return DB_FAILED
 */
 int
-db_get_login ( char *driver, char *database, char **user, char **password )
+db_get_login ( const char *driver, const char *database, const char **user, const char **password )
 {
     int   i;
     LOGIN login;

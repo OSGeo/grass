@@ -2,13 +2,13 @@
 #include "macros.h"
 
 /*!
- \fn int db_delete_table ( char *drvname, char *dbname, char *tblname )
+ \fn int db_delete_table ( const char *drvname, const char *dbname, const char *tblname )
  \brief 
  \return 
  \param 
 */
 int
-db_delete_table ( char *drvname, char *dbname, char *tblname )
+db_delete_table ( const char *drvname, const char *dbname, const char *tblname )
 {
     dbDriver *driver;
     dbHandle handle;

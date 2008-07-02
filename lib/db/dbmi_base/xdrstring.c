@@ -112,12 +112,12 @@ db__recv_string(dbString *x)
 }
 
 int
-db__send_Cstring(char *s)
+db__send_Cstring(const char *s)
 {
     dbString x;
 
     db_init_string (&x);
-    db_set_string_no_copy (&x, s);
+    db_set_string_no_copy (&x, (char *) s);
 
     return db__send_string (&x);
 }

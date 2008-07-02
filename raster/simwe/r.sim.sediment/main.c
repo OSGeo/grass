@@ -135,7 +135,7 @@ int main ( int argc, char *argv[])
 		ymax = ymin + stepy * (float) my;
 		hhc = hhmax = 0.;
 			
-/*
+#if 0
 		bxmi=2093113. * conv;
 		bymi=731331. * conv;
 		bxma=2093461. * conv;
@@ -147,7 +147,7 @@ int main ( int argc, char *argv[])
 		mx2o= (int)((bxma-bxmi)/bresx);
 		my2o= (int)((byma-bymi)/bresy);
 		
-		/* relative small box coordinates: leave 1 grid layer for overlap 
+		/* relative small box coordinates: leave 1 grid layer for overlap */
 		
 		bxmi = bxmi - mixx + stepx;
 		bymi = bymi - miyy + stepy;
@@ -155,7 +155,7 @@ int main ( int argc, char *argv[])
 		byma = byma - miyy - stepy;
 		mx2 = mx2o - 2*((int) (stepx / bresx));
 		my2 = my2o - 2*((int) (stepy / bresy)); 
-*/
+#endif
 
 	parm.elevin = G_define_standard_option(G_OPT_R_INPUT);
 	parm.elevin->key = "elevin";

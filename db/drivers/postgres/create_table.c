@@ -7,7 +7,7 @@ db__driver_create_table (dbTable *table)
 {
     int col, ncols;
     dbColumn   *column;
-    char *colname;
+    const char *colname;
     int sqltype;
     char buf[500];
     PGresult *res;

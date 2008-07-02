@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
     char   *mapset, buf[2000];
-    char   *drv, *db;
+    const char *drv, *db;
     struct Map_info In, Out, PMap, EMap;
     struct line_cats *LCats, *PCats; 
     struct line_pnts *LPoints, *L2Points, *PPoints;

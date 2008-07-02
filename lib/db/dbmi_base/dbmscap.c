@@ -44,8 +44,8 @@ dbmscap_filename(err_flag)
  \return 
  \param 
 */
-char *
-db_dbmscap_filename()
+const char *
+db_dbmscap_filename(void)
 {
     return dbmscap_filename(1);
 }
@@ -57,7 +57,7 @@ db_dbmscap_filename()
  \param 
 */
 int
-db_has_dbms()
+db_has_dbms(void)
 {
     return (dbmscap_filename(0) != NULL);
 }
@@ -91,7 +91,7 @@ db_copy_dbmscap_entry (dbDbmscap *dst, dbDbmscap *src)
  * for available dbmi drivers in $(GISBASE)/driver/db/  */ 
 
 dbDbmscap *
-db_read_dbmscap()
+db_read_dbmscap(void)
 {
     /*	
     FILE *fd;
@@ -108,29 +108,30 @@ db_read_dbmscap()
     dbDbmscap *list = NULL;
 
 /* START OF OLD CODE FOR dbmscap FILE - NOT USED, BUT KEEP IT FOR FUTURE */
+#if 0
     /* get the full name of the dbmscap file */
-    /*
+
     file = db_dbmscap_filename();
     if (file == NULL)
 	return (dbDbmscap *) NULL;
-    */
+
     
     /* open the dbmscap file */
-    /*
+
     fd = fopen (file, "r");
     if (fd == NULL)
     {
 	db_syserror (file);
 	return (dbDbmscap *) NULL;
     }
-    */ 
+
     
     /* find all valid entries
      * blank lines and lines with # as first non blank char are ignored
      * format is:
      *   driver name:startup command:comment
      */
-    /*
+
     for (line = 1; fgets (buf, sizeof buf, fd); line++)
     {
 	if (sscanf (buf, "%1s", comment) != 1 || *comment == '#')
@@ -148,7 +149,7 @@ db_read_dbmscap()
 	    break;
     }
     fclose (fd);
-    */
+#endif
 /* END OF OLD CODE FOR dbmscap FILE */
 
 /* START OF NEW CODE FOR SEARCH IN $(GISBASE)/driver/db/ */

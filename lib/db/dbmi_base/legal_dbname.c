@@ -14,7 +14,7 @@
  \param  name table name to be checked
 */
 
-int db_legal_tablename (char *s)
+int db_legal_tablename (const char *s)
 {
     char buf[GNAME_MAX];
     

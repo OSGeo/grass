@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 		 ? create_univar_stat_struct (-1, cells, 0)
 		 : 0);
 
-	for (p = (const char **)param.inputfile->answers; *p; p++) {
+	for (p = param.inputfile->answers; *p; p++) {
 	    int fd = open_raster (*p);
 
 	    if (map_type != -1) {
@@ -187,9 +187,9 @@ process_raster (univar_stat *stats, int fd,
     const RASTER_MAP_TYPE map_type = G_get_raster_map_type (fd);
     void *nextp
 	= ((! param.extended->answer) ? 0
-	   : (map_type == DCELL_TYPE) ? stats->dcell_array
-	   : (map_type == FCELL_TYPE) ? stats->fcell_array
-	   : stats->cell_array);
+	   : (map_type == DCELL_TYPE) ? (void *) stats->dcell_array
+	   : (map_type == FCELL_TYPE) ? (void *) stats->fcell_array
+	   : (void *) stats->cell_array);
     const size_t value_sz = G_raster_size (map_type);
     unsigned int row;
     void *raster_row;

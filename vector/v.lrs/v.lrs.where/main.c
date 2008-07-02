@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
     char   *mapset;
-    char   *drv, *db;
+    const char *drv, *db;
     struct Map_info LMap, PMap;
     struct line_cats *LCats, *PCats; 
     struct line_pnts *LPoints, *PPoints;

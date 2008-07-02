@@ -1,3 +1,4 @@
+#include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -7,7 +8,7 @@
 
 static char *rfind(char *string, char c);
 static int make_parent_dir(char *path, int mode);
-static int make_dir(char *path, int mode);
+static int make_dir(const char *path, int mode);
 
 
 /*!
@@ -17,11 +18,13 @@ static int make_dir(char *path, int mode);
  \param 
 */
 int
-db_driver_mkdir (char *path, int mode, int parentdirs)
+db_driver_mkdir (const char *path, int mode, int parentdirs)
 {
     if (parentdirs)
     {
-	if (make_parent_dir (path, mode) != DB_OK)
+	char path2[GPATH_MAX];
+	strcpy(path2, path);
+	if (make_parent_dir (path2, mode) != DB_OK)
 	    return DB_FAILED;
     }
 
@@ -32,7 +35,7 @@ db_driver_mkdir (char *path, int mode, int parentdirs)
 /* make a directory if it doesn't exist */
 /* this routine could be made more intelligent as to why it failed */
 static int
-make_dir (char *path, int mode)
+make_dir (const char *path, int mode)
 {
     if (db_isdir(path) == DB_OK)
 	return DB_OK;

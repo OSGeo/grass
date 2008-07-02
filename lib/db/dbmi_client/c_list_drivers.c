@@ -6,7 +6,7 @@
  \return return char
  \param void
 */
-char *
+const char *
 db_list_drivers(void)
 {
     dbDbmscap *list, *cur;

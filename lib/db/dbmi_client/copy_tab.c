@@ -27,10 +27,10 @@ static int cmp ( const void *pa, const void *pb)
 */
 /* Warning, driver opened as second must be closed as first, otherwise it hangs, not sure why */
 int
-db__copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, 
-		char *where, char *select,
-		char *selcol, int *ivals, int nvals)
+db__copy_table ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, 
+		const char *where, const char *select,
+		const char *selcol, int *ivals, int nvals)
 {
     int col, ncols, sqltype, ctype, more, selcol_found;
     char buf[1000]; 
@@ -43,7 +43,7 @@ db__copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
     dbCursor cursor;
     dbColumn *column;
     dbValue *value;
-    char *colname;
+    const char *colname;
     dbDriver *from_driver, *to_driver;
     int count, i;
 
@@ -121,7 +121,7 @@ db__copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
     }
 
     for (i = 0; i < count; i++) {
-        char *tblname = db_get_string(&tblnames[i]);
+        const char *tblname = db_get_string(&tblnames[i]);
 
         if (strcmp(to_tblname, tblname) == 0) {
 	    G_warning("Table '%s' already exists", to_dbname);
@@ -344,15 +344,15 @@ db__copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
 }
 
 /*!
- \fn int db_copy_table (char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname )
+ \fn int db_copy_table (const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname )
  \brief Copy a table
  \return 
  \param
 */
 int
-db_copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname )
+db_copy_table ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname )
 {
     return db__copy_table ( from_drvname, from_dbname, from_tblname, 
 	                    to_drvname, to_dbname, to_tblname,
@@ -361,15 +361,15 @@ db_copy_table ( char *from_drvname, char *from_dbname, char *from_tblname,
 }
 
 /*!
- \fn int db_copy_table_where (char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, char *where )
+ \fn int db_copy_table_where (const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *where )
  \brief Copy a table
  \return 
  \param where WHERE SQL condition (without where key word) or NULL
 */
 int
-db_copy_table_where ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, char *where )
+db_copy_table_where ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *where )
 {
     return db__copy_table ( from_drvname, from_dbname, from_tblname, 
 	                    to_drvname, to_dbname, to_tblname,
@@ -378,15 +378,15 @@ db_copy_table_where ( char *from_drvname, char *from_dbname, char *from_tblname,
 }
 
 /*!
- \fn int db_copy_table_select ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, char *select )
+ \fn int db_copy_table_select ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *select )
  \brief Copy a table
  \return 
  \param select is full select statement or NULL
 */
 int
-db_copy_table_select ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, char *select )
+db_copy_table_select ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *select )
 {
     return db__copy_table ( from_drvname, from_dbname, from_tblname, 
 	                    to_drvname, to_dbname, to_tblname,
@@ -395,9 +395,9 @@ db_copy_table_select ( char *from_drvname, char *from_dbname, char *from_tblname
 }
 
 /*!
- \fn int db_copy_table_by_ints ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname,
-                char *selcol, int *ivals, int nvals )
+ \fn int db_copy_table_by_ints ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname,
+                const char *selcol, int *ivals, int nvals )
  \brief Copy a table, but only records where value of column 'selcol'
         is in 'ivals' 
  \return 
@@ -406,9 +406,9 @@ db_copy_table_select ( char *from_drvname, char *from_dbname, char *from_tblname
  \param nvals number of values in ivals
 */
 int
-db_copy_table_by_ints ( char *from_drvname, char *from_dbname, char *from_tblname,
-                char *to_drvname, char *to_dbname, char *to_tblname, 
-		char *selcol, int *ivals, int nvals )
+db_copy_table_by_ints ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
+                const char *to_drvname, const char *to_dbname, const char *to_tblname, 
+		const char *selcol, int *ivals, int nvals )
 {
     return db__copy_table ( from_drvname, from_dbname, from_tblname, 
 	                    to_drvname, to_dbname, to_tblname,

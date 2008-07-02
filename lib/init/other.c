@@ -6,14 +6,14 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
-static char *filename (char *name, char *mapset)
+static char *filename (const char *name, const char *mapset)
 {
-    static char path[1024];
+    static char path[GPATH_MAX];
     G__file_name (path, "", name, mapset);
     return path;
 }
 
-int mapset_permissions (char *mapset)
+int mapset_permissions (const char *mapset)
 {
     int stat;
 
@@ -26,7 +26,7 @@ int mapset_permissions (char *mapset)
     return stat;
 }
 
-int mapset_message (char *mapset)
+int mapset_message (const char *mapset)
 {
     if(printfile(filename (".message", mapset)))
 	hit_return();
@@ -34,14 +34,14 @@ int mapset_message (char *mapset)
     return 0;
 }
 
-int mapset_question (char *mapset)
+int mapset_question (const char *mapset)
 {
     if(printfile(filename(".question", mapset)))
 	return G_yes("Select this mapset? ", -1);
     return 1;
 }
 
-int printfile (char *name)
+int printfile (const char *name)
 {
     int fd;
     int n;
@@ -50,7 +50,7 @@ int printfile (char *name)
     fd = open (name, 0);
     if (fd < 0) return 0;
     while ((n = read (fd, buf, sizeof buf)) > 0)
-	write (1, buf, n);
+	write (STDOUT_FILENO, buf, n);
     close (fd);
     return 1;
 }

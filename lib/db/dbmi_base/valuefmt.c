@@ -10,7 +10,7 @@
  \param 
 */
 int
-db_convert_Cstring_to_value  (char *Cstring, int sqltype, dbValue *value)
+db_convert_Cstring_to_value  (const char *Cstring, int sqltype, dbValue *value)
 
 {
     int i;
@@ -50,9 +50,8 @@ db_convert_value_to_string (dbValue *value, int sqltype, dbString *string)
 
 {
     char buf[64];
-    char *bp;
+    const char *bp = buf;
 
-    bp = buf;
     if (db_test_value_isnull(value))
     {
 	*buf = 0;
