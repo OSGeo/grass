@@ -395,7 +395,11 @@ class VDigitToolbar(AbstractToolbar):
         
         # toogle to pointer by default
         self.OnTool(None)
-        
+
+        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
+            self.toolbar[0].EnableTool(self.copyCats, False) # not implemented (TODO)
+            self.toolbar[0].SetToolShortHelp(self.copyCats, _("Not implemented yet"))
+            
     def ToolbarData(self, row=None):
         """
         Toolbar data

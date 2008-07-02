@@ -1073,7 +1073,7 @@ class PreferencesDialog(wx.Dialog):
         # digitization interface
         #
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Digitization interface:")),
+                                         label=_("Vector digitizer interface:")),
                        flag=wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL,
                        pos=(row, 0))
