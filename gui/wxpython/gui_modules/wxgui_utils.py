@@ -215,7 +215,9 @@ class LayerTree(CT.CustomTreeCtrl):
             self.popupID9 = wx.NewId()
             self.popupID10 = wx.NewId()
             self.popupID11 = wx.NewId() # nviz
-
+            self.popupID12 = wx.NewId()
+            self.popupID13 = wx.NewId()
+            
         self.popupMenu = wx.Menu()
         # general item
         self.popupMenu.Append(self.popupID1, text=_("Remove"))
@@ -239,7 +241,7 @@ class LayerTree(CT.CustomTreeCtrl):
             self.popupMenu.Append(self.popupID3, text=_("Properties"))
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
             self.popupMenu.Append(self.popupID9, text=_("Zoom to selected map"))
-            self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.ZoomToMap, id=self.popupID9)
+            self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToMap, id=self.popupID9)
             self.popupMenu.Append(self.popupID10, text=_("Set computational region from selected map"))
             self.Bind(wx.EVT_MENU, self.OnSetCompRegFromMap, id=self.popupID10)
 
@@ -285,6 +287,10 @@ class LayerTree(CT.CustomTreeCtrl):
         # raster layers (specific items)
         #
         elif mltype and mltype == "raster":
+            self.popupMenu.Append(self.popupID12, text=_("Zoom to selected map (ignore NULLs)"))
+            self.Bind(wx.EVT_MENU, self.mapdisplay.MapWindow.OnZoomToRaster, id=self.popupID12)
+            self.popupMenu.Append(self.popupID13, text=_("Set computational region from selected map (ignore NULLs)"))
+            self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID13)
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID4, _("Histogram"))
             self.Bind (wx.EVT_MENU, self.OnHistogram, id=self.popupID4)
@@ -316,8 +322,19 @@ class LayerTree(CT.CustomTreeCtrl):
         # print output to command log area
         self.gismgr.goutput.RunCmd(cmd)
 
+    def OnSetCompRegFromRaster(self, event):
+        """Set computational region from selected raster map (ignore NULLs)"""
+        mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+
+        cmd = ['g.region',
+               '-p',
+               'zoom=%s' % mapLayer.name]
+        
+        # print output to command log area
+        self.gismgr.goutput.RunCmd(cmd)
+         
     def OnSetCompRegFromMap(self, event):
-        """Set computational region from selected map"""
+        """Set computational region from selected raster/vector map"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         mltype = self.GetPyData(self.layer_selected)[0]['type']
 

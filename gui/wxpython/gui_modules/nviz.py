@@ -290,7 +290,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizClass.Reset()
         self.init = False
 
-    def ZoomToMap(self, event):
+    def OnZoomToMap(self, event):
         """
         Set display extents to match selected raster
         or vector map or volume.
@@ -302,7 +302,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if layer is None:
             return
 
-        Debug.msg (3, "GLWindow.ZoomToMap(): layer=%s, type=%s" % \
+        Debug.msg (3, "GLWindow.OnZoomToMap(): layer=%s, type=%s" % \
                        (layer.name, layer.type))
 
         self.nvizClass.SetViewportDefault()
