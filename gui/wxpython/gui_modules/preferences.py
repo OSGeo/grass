@@ -44,7 +44,7 @@ class Settings:
         #
         # settings filename
         #
-        self.fileName = ".grasswx"
+        self.fileName = ".grasswx7"
         self.filePath = None
 
         #
@@ -80,7 +80,7 @@ class Settings:
             # advanced
             #
             'advanced' : {
-                'settingsFile'   : { 'type' : 'gisdbase' }, # gisdbase, location, mapset
+                'settingsFile'   : { 'type' : 'home' }, # home, gisdbase, location, mapset
                 'digitInterface' : { 'type' : 'vdigit' }, # vedit, vdigit
                 'iconTheme'      : { 'type' : 'silk' }, # grass, silk
                 },
@@ -275,7 +275,8 @@ class Settings:
                                                                      _('All available mapsets')]
         self.internalSettings['atm']['leftDbClick']['choices'] = [_('Edit selected record'),
                                                                   _('Display selected')]
-        self.internalSettings['advanced']['settingsFile']['choices'] = ['gisdbase',
+        self.internalSettings['advanced']['settingsFile']['choices'] = ['home',
+                                                                        'gisdbase',
                                                                         'location',
                                                                         'mapset']
         self.internalSettings['advanced']['iconTheme']['choices'] = ['grass',
@@ -313,13 +314,16 @@ class Settings:
         mapset_file = os.path.join(gisdbase, location_name, mapset_name, self.fileName)
         location_file = os.path.join(gisdbase, location_name, self.fileName)
         gisdbase_file = os.path.join(gisdbase, self.fileName)
-
+        home_file = os.path.join(os.path.expanduser("~"), self.fileName) # MS Windows fix ?
+        
         if os.path.isfile(mapset_file):
             self.filePath = mapset_file
         elif os.path.isfile(location_file):
             self.filePath = location_file
         elif os.path.isfile(gisdbase_file):
             self.filePath = gisdbase_file
+        elif os.path.isfile(home_file):
+            self.filePath = home_file
         
         if self.filePath:
             self.__ReadFile(self.filePath, settings)
@@ -382,11 +386,14 @@ class Settings:
             settings = self.userSettings
         
         loc = self.Get(group='advanced', key='settingsFile', subkey='type')
+        home = os.path.expanduser("~") # MS Windows fix ?
         gisdbase = grassenv.GetGRASSVariable("GISDBASE")
         location_name = grassenv.GetGRASSVariable("LOCATION_NAME")
         mapset_name = grassenv.GetGRASSVariable("MAPSET")
         filePath = None
-        if loc == 'gisdbase':
+        if loc == 'home':
+            filePath = os.path.join(home, self.fileName)
+        elif loc == 'gisdbase':
             filePath = os.path.join(gisdbase, self.fileName)
         elif loc == 'location':
             filePath = os.path.join(gisdbase, location_name, self.fileName)
