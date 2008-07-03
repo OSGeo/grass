@@ -57,6 +57,7 @@ private:
 
     struct ilist *selected;
     struct ilist *selectedDupl;
+    bool drawSelected;
 
     bool drawSegments;         // draw segments of selected line
 
@@ -169,6 +170,7 @@ public:
     int SetSelected(std::vector<int>);
     int UnSelect(std::vector<int>);
     std::vector<int> GetSelectedVertex(double, double, double);
+    void DrawSelected(bool);
 
     /* general */
     int CloseMap();

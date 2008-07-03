@@ -168,7 +168,12 @@ int DisplayDriver::DrawLine(int line)
 	else {
 	    pen = new wxPen(settings.highlight, settings.lineWidth, wxSOLID);
 	}
-	draw = true;
+	if (drawSelected) {
+	    draw = true;
+	}
+	else {
+	    draw = false;
+	}
 	dcId = 1;
 	topology.highlight++;
     }
@@ -314,6 +319,9 @@ int DisplayDriver::DrawLineVerteces(int line)
 	dcId = 0;
     }
     else {
+	if (!drawSelected) {
+	    return -1;
+	}
 	if (settings.highlightDupl.enabled && IsDuplicated(line)) {
 	    pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
 	}
@@ -390,6 +398,9 @@ int DisplayDriver::DrawLineNodes(int line)
 
 	// determine color
 	if (IsSelected(line)) {
+	    if (!drawSelected) {
+		return -1;
+	    }
 	    if (settings.highlightDupl.enabled && IsDuplicated(line)) {
 		pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
 	    }
@@ -767,6 +778,7 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
     struct line_pnts *bbox;
 
     drawSegments = false;
+    drawSelected = true;
 
     list = Vect_new_list();
     bbox = Vect_new_line_struct();
@@ -817,6 +829,8 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
     double px, py, pz;
 
     std::vector<double> p;
+
+    drawSelected = true;
 
     line = Vect_find_line(mapInfo, x, y, z,
 			  type, thresh, with_z, 0);
@@ -965,6 +979,8 @@ bool DisplayDriver::IsDuplicated(int line)
 */
 int DisplayDriver::SetSelected(std::vector<int> id)
 {
+    drawSelected = true;
+
     VectorToList(selected, id);
 
     if (selected->n_values <= 0)
@@ -1204,4 +1220,16 @@ int print_error(const char *msg, int type)
     fprintf(stderr, "%s", msg);
     
     return 0;
+}
+
+/**
+   \brief Draw selected features
+
+   \param draw if true draw selected features
+*/
+void DisplayDriver::DrawSelected(bool draw)
+{
+    drawSelected = draw;
+
+    return;
 }

@@ -970,6 +970,10 @@ class VDigit(AbstractDigit):
         except:
             lineid = -1
 
+        if len(coords) < 2:
+            self.DeleteSelectedLines()
+            return 0
+            
         listCoords = []
         for c in coords:
             for x in c:
@@ -1483,7 +1487,11 @@ class CDisplayDriver(AbstractDisplayDriver):
         """
 
         return self.__display.GetMapBoundingBox()
-    
+
+    def DrawSelected(self, draw=True):
+        """Show/hide selected features"""
+        self.__display.DrawSelected(draw)
+        
     def UpdateSettings(self):
         """Update display driver settings"""
         # TODO map units
