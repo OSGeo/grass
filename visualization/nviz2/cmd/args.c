@@ -22,6 +22,10 @@
 
 #include "local_proto.h"
 
+static void print_error(int, int, int,
+			const char *, const char *,
+			const char *, const char *);
+
 /*!
    \brief Parse command
 
@@ -316,23 +320,31 @@ void parse_command(int argc, char* argv[], struct GParams *params)
   \brief Get number of answers of given option
 
   \param pointer to option
-  
-  \return number
+  \param[out] number of non-zero length items (or NULL)
+  \param[out] number of all items (or NULL)
 */
-int opt_get_num_answers(const struct Option *opt)
+void opt_get_num_answers(const struct Option *opt, int *non_zero, int *all)
 {
-    int i, num;
-    i = num = 0;
+    int i;
+
+    i = 0;
+    if (non_zero)
+	*non_zero = 0;
+    if (all) 
+	*all = 0;
     if (opt->answer) {
 	while (opt->answers[i]) {
+	    if (all)
+		(*all)++;
 	    if (strcmp(opt->answers[i], "")) {
-		num++; /* skip empty values */
+		if (non_zero)
+		    (*non_zero)++; /* skip empty values */
 	    }
 	    i++;
 	}
     }
 
-    return i;
+    return;
 }
 
 /*!
@@ -342,33 +354,117 @@ int opt_get_num_answers(const struct Option *opt)
 */
 void check_parameters(const struct GParams * params)
 {
-    int nelevs;
-    int ncolor_map, ncolor_const, nmasks, ntransps;
-    int nshines, nemits;
+    int nelev_map, nelev_const, nelev_map0, nelev_const0, nelevs0;
+    int nmaps0, nconsts0;
 
-    nelevs = opt_get_num_answers(params->elev_map);
-    nelevs += opt_get_num_answers(params->elev_const);
+    /* topography */
+    opt_get_num_answers(params->elev_map, &nelev_map, &nelev_map0); 
+    opt_get_num_answers(params->elev_const, &nelev_const, &nelev_const0);
 
-    if (nelevs < 1)
+    if (nelev_map + nelev_const < 1)
 	G_fatal_error(_("At least one <%s> or <%s> required"),
 		      params->elev_map->key, params->elev_const->key);
 
-    ncolor_map = opt_get_num_answers(params->color_map);
-    ncolor_const = opt_get_num_answers(params->color_const);
+    if ((nelev_map > 0 && nelev_const > 0) &&
+	(nelev_map0 != nelev_const0))
+	G_fatal_error (_("Inconsistent number of attributes (<%s> %d, <%s> %d)"),
+		       params->elev_map->key, nelev_map0,
+		       params->elev_const->key, nelev_const0);
+    
+    if (nelev_map0 > 0)
+	nelevs0 = nelev_map0;
+    else
+	nelevs0 = nelev_const0;
 
-    if (nelevs != ncolor_map + ncolor_const)
-	G_fatal_error(_("Invalid number of color attributes (<%s> %d, <%s> %d"),
-		      params->color_map->key, ncolor_map,
-		      params->color_const->key, ncolor_const);
+    /* color */
+    opt_get_num_answers(params->color_map, NULL, &nmaps0);
+    opt_get_num_answers(params->color_const, NULL, &nconsts0);
 
-    nmasks = opt_get_num_answers(params->mask_map);
-    ntransps = opt_get_num_answers(params->transp_map);
-    ntransps += opt_get_num_answers(params->transp_const);
-    nshines = opt_get_num_answers(params->shine_map);
-    nshines += opt_get_num_answers(params->shine_const);
-    nemits = opt_get_num_answers(params->emit_map);
-    nemits += opt_get_num_answers(params->emit_const);
+    print_error(nmaps0, nconsts0, nelevs0,
+		params->elev_map->key, params->elev_const->key,
+		params->color_map->key, params->color_const->key);
 
+    /* mask */
+    opt_get_num_answers(params->mask_map, NULL, &nmaps0);
+    if (nmaps0 > 0 && nelevs0 != nmaps0)
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+		      params->elev_map->key, params->elev_const->key, nelevs0,
+		      params->mask_map->key, nmaps0);
+
+
+    /* transparency */
+    opt_get_num_answers(params->transp_map, NULL, &nmaps0);
+    opt_get_num_answers(params->transp_const, NULL, &nconsts0);
+    print_error(nmaps0, nconsts0, nelevs0,
+		params->elev_map->key, params->elev_const->key,
+		params->transp_map->key, params->transp_const->key);
+
+    /* shininess */
+    opt_get_num_answers(params->shine_map, NULL, &nmaps0);
+    opt_get_num_answers(params->shine_const, NULL, &nconsts0);
+    print_error(nmaps0, nconsts0, nelevs0,
+		params->elev_map->key, params->elev_const->key,
+		params->shine_map->key, params->shine_const->key);
+
+    /* emit */
+    opt_get_num_answers(params->emit_map, NULL, &nmaps0);
+    opt_get_num_answers(params->emit_const, NULL, &nconsts0);
+    print_error(nmaps0, nconsts0, nelevs0,
+		params->elev_map->key, params->elev_const->key,
+		params->emit_map->key, params->emit_const->key);
+
+    /* draw mode */
+    if (!params->mode_all->answer) { /* use one mode for all surfaces */
+	opt_get_num_answers(params->mode, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->mode->key, nconsts0);
+
+	opt_get_num_answers(params->res_fine, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->res_fine->key, nconsts0);
+
+	opt_get_num_answers(params->res_coarse, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->res_coarse->key, nconsts0);
+
+	opt_get_num_answers(params->style, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->style->key, nconsts0);
+
+	opt_get_num_answers(params->shade, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->shade->key, nconsts0);
+
+	opt_get_num_answers(params->wire_color, NULL, &nconsts0);
+	if (nconsts0 > 0 && nconsts0 != nelevs0)
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+			  params->elev_map->key, params->elev_const->key, nelevs0,
+			  params->wire_color->key, nconsts0);
+    }
+
+    return;
+}
+
+void print_error(int nmaps, int nconsts, int nelevs,
+		 const char *elev_map, const char *elev_const,
+		 const char *map_name, const char *const_name)
+{
+    if ((nmaps > 0 && nelevs != nmaps) ||
+	(nconsts > 0 && nelevs != nconsts))
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"),
+		      elev_map, elev_const, nelevs,
+		      map_name, nmaps,
+		      const_name, nconsts);
 
     return;
 }

@@ -25,7 +25,7 @@ struct GParams {
 /* args.c */
 void parse_command(int, char**, struct GParams *);
 int color_from_cmd(const char *);
-int opt_get_num_answers(const struct Option *);
+void opt_get_num_answers(const struct Option *, int *, int *);
 void check_parameters(const struct GParams *);
 
 /* surface.c */
