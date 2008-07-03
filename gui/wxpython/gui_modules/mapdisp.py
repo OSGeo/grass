@@ -157,7 +157,7 @@ class MapWindow(object):
     def OnMouseMotion(self, event):
         pass
 
-    def ZoomToMap(self, event):
+    def OnZoomToMap(self, event):
         pass
 
     def GetSelectedLayer(self, nviz=False, index=False):
@@ -2138,7 +2138,20 @@ class BufferedWindow(MapWindow, wx.Window):
 
         return removed
 
-    def ZoomToMap(self, event):
+    def OnZoomToMap(self, event):
+        """
+        Set display extents to match selected raster (including NULLs)
+        or vector map.
+        """
+        self.ZoomToMap()
+
+    def OnZoomToRaster(self, event):
+        """
+        Set display extents to match selected raster map (ignore NULLs)
+        """
+        self.ZoomToMap(zoom=True)
+        
+    def ZoomToMap(self, zoom=False):
         """
         Set display extents to match selected raster
         or vector map.
@@ -2155,7 +2168,10 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # selected layer must be a valid map
         if layer.type in ('raster', 'rgb', 'his', 'shaded', 'arrow'):
-            self.Map.region = self.Map.GetRegion(rast="%s" % layer.name)
+            if layer.type == 'raster':
+                self.Map.region = self.Map.GetRegion(rast="%s" % layer.name, zoom=zoom)
+            else:
+                self.Map.region = self.Map.GetRegion(rast="%s" % layer.name)
         elif layer.type in ('vector', 'thememap', 'themechart'):
             if self.parent.digit and layer.name == self.parent.digit.map and \
                self.parent.digit.type == 'vdigit':
@@ -3651,7 +3667,7 @@ class MapFrame(wx.Frame):
         # Add items to the menu
         zoommap = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to selected map'))
         zoommenu.AppendItem(zoommap)
-        self.Bind(wx.EVT_MENU, self.MapWindow.ZoomToMap, zoommap)
+        self.Bind(wx.EVT_MENU, self.MapWindow.OnZoomToMap, zoommap)
 
         zoomwind = wx.MenuItem(zoommenu, wx.ID_ANY, _('Zoom to computational region (set with g.region)'))
         zoommenu.AppendItem(zoomwind)

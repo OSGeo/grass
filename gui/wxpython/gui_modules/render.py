@@ -474,7 +474,7 @@ class Map(object):
             self.height = 480
             return False
 
-    def GetRegion(self, rast=None, vect=None,
+    def GetRegion(self, rast=None, zoom=False, vect=None,
                   n=None, s=None, e=None, w=None, default=False):
         """
         Get region settings (g.region -upgc)
@@ -483,6 +483,7 @@ class Map(object):
 
         @param rast raster name or None
         @param vect vector name or None
+        @param zoom zoom to raster (ignore NULLs)
         @param n,s,e,w force extent
         @param default force default region settings
         
@@ -516,10 +517,14 @@ class Map(object):
             cmdList.append('w=%s' % w)
 
         if rast:
-            cmdList.append('rast=%s' % rast)
+            if zoom:
+                cmdList.append('zoom=%s' % rast)
+            else:
+                cmdList.append('rast=%s' % rast)
+
         if vect:
             cmdList.append('vect=%s' % vect)
-
+        
         try:
             cmdRegion = gcmd.Command(cmdList)
         except gcmd.CmdError, e:
