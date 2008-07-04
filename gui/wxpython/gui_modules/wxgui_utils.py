@@ -824,9 +824,13 @@ class LayerTree(CT.CustomTreeCtrl):
             if checked: # enable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.LoadRaster(mapLayer)
+                elif mapLayer.type == 'vector':
+                    self.mapdisplay.MapWindow.LoadVector(mapLayer)
             else: # disable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.UnloadRaster(mapLayer)
+                elif mapLayer.type == 'vector':
+                    self.mapdisplay.MapWindow.UnloadVector(mapLayer)
 
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 

@@ -1050,7 +1050,9 @@ class NvizToolbar(AbstractToolbar):
         win = self.parent.nvizToolWin
         if not win.IsShown():
             self.parent.nvizToolWin.Show()
-    
+        else:
+            self.parent.nvizToolWin.Hide()
+
     def OnExit (self, event=None):
         """Quit nviz tool (swith to 2D mode)"""
 

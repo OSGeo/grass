@@ -105,3 +105,58 @@ int Nviz::UnloadSurface(int id)
 
     return 1;
 }
+
+/*!
+  \brief Load vector map overlay
+
+  \param name vector map name
+
+  \return object id
+  \return -1 on failure
+*/
+int Nviz::LoadVector(const char *name)
+{
+    int id;
+    char *mapset;
+
+    if (GS_num_surfs() == 0) { /* load base surface if no loaded */
+	int *surf_list, nsurf;
+	
+	Nviz_new_map_obj(MAP_OBJ_SURF, NULL, 0.0, data);
+
+	surf_list = GS_get_surf_list(&nsurf);
+	GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
+    }
+
+    mapset = G_find_vector2 (name, "");
+    if (mapset == NULL) {
+	G_warning(_("Vector map <%s> not found"),
+		      name);
+    }
+
+    id = Nviz_new_map_obj(MAP_OBJ_VECT,
+		     G_fully_qualified_name(name, mapset), 0.0,
+		     data);
+
+    return id;
+}
+  
+/*!
+  \brief Unload vector
+
+  \param id surface id
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz::UnloadVector(int id)
+{
+    if (!GV_vect_exists(id)) {
+	return 0;
+    }
+
+    if (GV_delete_vector(id) < 0)
+      return 0;
+
+    return 1;
+}
