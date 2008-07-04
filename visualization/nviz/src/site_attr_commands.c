@@ -288,7 +288,7 @@ int attr_eval_color(float xvalue, int n, float *x,
 							float *mr, float *mg, float *mb);
 
 /* better move to ../../../include/P_site.h */
-SITE_ATT * G_sites_get_atts (FILE * ptr, int* cat);
+SITE_ATT * G_sites_get_atts (struct Map_info * ptr, int* cat);
 
 /*******************************************************************************/
 /*******************************************************************************/
@@ -322,7 +322,7 @@ int Nsite_attr_get_fields_name_cmd(data, interp, argc, argv)
     if (argc != 2) return (TCL_ERROR);
 
 	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 	for(i=0; i<ncols; i++) {
 		sprintf(buf, "%s", cnames[i]);
@@ -354,8 +354,8 @@ int Nsite_attr_get_fields_type_cmd(data, interp, argc, argv)
 
     if (argc != 2) return (TCL_ERROR);
 
-	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	Map = G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 	for(i=0; i<ncols; i++) {
 		sprintf(buf, "%c", ctypes[i]);
@@ -387,8 +387,8 @@ int Nsite_attr_get_fields_name_and_type_cmd(data, interp, argc, argv)
 
     if (argc != 2) return (TCL_ERROR);
 
-	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	Map = G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 	for(i=0; i<ncols; i++) {
 		sprintf(buf, "%s", cnames[i]);
@@ -433,8 +433,8 @@ int Nsite_attr_get_field_values_cmd(data, interp, argc, argv)
 
 	index=atoi(argv[2]);
 
-	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	Map = G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 	for (i=0; i<Map->n_site_att; i++) {
 		sa = &(Map->site_att[i]);
@@ -483,8 +483,8 @@ int Nsite_attr_get_field_not_emtpy_cats_cmd(data, interp, argc, argv)
 
 	index=atoi(argv[2]);
 
-	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	Map = G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 	for (i=0; i<Map->n_site_att; i++) {
 		sa = &(Map->site_att[i]);
@@ -534,11 +534,11 @@ int Nsite_attr_get_record_values_cmd(data, interp, argc, argv)
 
 	cat=atoi(argv[2]);
 
-	Map = (struct Map_info *)G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
-	ncols=G_sites_get_fields((FILE *)Map, &cnames, &ctypes, &ndx);
+	Map = G_sites_open_old(argv[1], G_find_vector2(argv[1], ""));
+	ncols=G_sites_get_fields(Map, &cnames, &ctypes, &ndx);
 
 
-	if ( (sa = (SITE_ATT *)G_sites_get_atts((FILE *)Map, &cat)) == NULL ) return (TCL_ERROR);
+	if ( (sa = (SITE_ATT *)G_sites_get_atts(Map, &cat)) == NULL ) return (TCL_ERROR);
 
 	for (i=0; i<ncols; i++) {
 		switch(ctypes[i]) {
@@ -606,10 +606,10 @@ int site_attr_open_map(geosite * gp, int index,
 {
 	const char *function_name="site_attr_open_map";
 
-	*Map = (struct Map_info *)G_sites_open_old(gp->filename, G_find_vector2(gp->filename, ""));
+	*Map = G_sites_open_old(gp->filename, G_find_vector2(gp->filename, ""));
 
 	/* this is needed to find association between names and proper indexes/types */
-	*ncols=G_sites_get_fields((FILE *)*Map, cnames, ctypes, ndx);
+	*ncols=G_sites_get_fields(*Map, cnames, ctypes, ndx);
 
 	if (*ncols <= 0) {
 		printf("WARNING / \"%s()\": site \"%s\" database error\n", function_name, gp->filename);
@@ -748,10 +748,10 @@ int site_attr_set_color(geosite * gp, int nattr, int index, int n, const char** 
 			gpt->color[nattr] = attr_eval_color(gpt->cat, n, x, yr, yg, yb, mr, mg, mb);
 		}
 		else if (ctypes[index] == 'd') {
-			if ( (sa = (SITE_ATT *)G_sites_get_atts((FILE *)Map, &(gpt->cat))) == NULL ) continue;
+			if ( (sa = (SITE_ATT *)G_sites_get_atts(Map, &(gpt->cat))) == NULL ) continue;
 			else gpt->color[nattr] = attr_eval_color(sa->dbl[ndx[index]], n, x, yr, yg, yb, mr, mg, mb);
 		} else {
-			if ( (sa = (SITE_ATT *)G_sites_get_atts((FILE *)Map, &(gpt->cat))) == NULL ) continue;
+			if ( (sa = (SITE_ATT *)G_sites_get_atts(Map, &(gpt->cat))) == NULL ) continue;
 			else gpt->color[nattr] = attr_eval_color_string(sa->str[ndx[index]], n, argvX, yr, yg, yb);
 		}
 	}
@@ -783,11 +783,11 @@ int site_attr_set_size(geosite * gp, int nattr, int index, int n, const char** a
 			gpt->size[nattr] = attr_eval_entry(gpt->cat, n, x, y, m);
 		}
 		else if (ctypes[index] == 'd') {
-			if ( (sa = (SITE_ATT *)G_sites_get_atts((FILE *)Map, &(gpt->cat))) == NULL ) continue;
+			if ( (sa = (SITE_ATT *)G_sites_get_atts(Map, &(gpt->cat))) == NULL ) continue;
 			else gpt->size[nattr] = attr_eval_entry(sa->dbl[ndx[index]], n, x, y, m);
 		}
 		else {
-			if ( (sa = (SITE_ATT *)G_sites_get_atts((FILE *)Map, &(gpt->cat))) == NULL ) continue;
+			if ( (sa = (SITE_ATT *)G_sites_get_atts(Map, &(gpt->cat))) == NULL ) continue;
 			else gpt->size[nattr] = attr_eval_entry_string(sa->str[ndx[index]], n, argvX, y);
 		}
 	}

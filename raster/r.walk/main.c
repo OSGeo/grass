@@ -393,7 +393,7 @@ int main(int argc, char *argv[])
 
 
     if (opt7->answer) {
-	FILE *fp;
+	struct Map_info *fp;
 	struct start_pt *new_start_pt;
 	Site *site = NULL;	/* pointer to Site */
 	int dims, strs, dbls;
@@ -439,7 +439,7 @@ int main(int argc, char *argv[])
     }
 
     if (opt8->answer) {
-	FILE *fp;
+	struct Map_info *fp;
 	struct start_pt *new_start_pt;
 	Site *site = NULL;	/* pointer to Site */
 	int dims, strs, dbls;

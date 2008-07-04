@@ -106,7 +106,6 @@ SUBDIRS = \
 	r.watershed \
 	r.what \
 	r.what.color \
-	simwe \
 	wildfire
 
 GDALBASED = r.in.gdal r.out.gdal

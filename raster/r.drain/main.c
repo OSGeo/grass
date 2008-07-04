@@ -204,7 +204,7 @@ int main(int argc, char **argv)
     }
     if (vpointopt->answer) {
 	for (i = 0; vpointopt->answers[i] != NULL; i++) {
-	    FILE *fp;
+	    struct Map_info *fp;
 	    /* struct start_pt  *new_start_pt; */
 	    Site *site = NULL;	/* pointer to Site */
 	    int dims, strs, dbls;
