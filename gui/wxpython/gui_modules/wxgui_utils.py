@@ -800,7 +800,7 @@ class LayerTree(CT.CustomTreeCtrl):
         event.Skip()
 
     def OnLayerChecked(self, event):
-        """Enable/disable given layer item"""
+        """Enable/disable data layer"""
         item    = event.GetItem()
         checked = item.IsChecked()
         
@@ -817,6 +817,16 @@ class LayerTree(CT.CustomTreeCtrl):
 
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
+
+        if self.mapdisplay.toolbars['nviz']:
+            # nviz - load/unload data layer
+            mapLayer = self.GetPyData(item)[0]['maplayer']
+            if checked: # enable
+                if mapLayer.type == 'raster':
+                    self.mapdisplay.MapWindow.LoadRaster(mapLayer)
+            else: # disable
+                if mapLayer.type == 'raster':
+                    self.mapdisplay.MapWindow.UnloadRaster(mapLayer)
 
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 

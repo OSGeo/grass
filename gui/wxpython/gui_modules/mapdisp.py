@@ -2619,6 +2619,17 @@ class MapFrame(wx.Frame):
                 return
 
             #
+            # add Nviz toolbar and disable 2D display mode tools
+            #
+            self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
+            self.toolbars['map'].Enable2D(False)
+            self.toggleStatus.Enable(False)
+
+            busy = wx.BusyInfo(message=_("Please wait, loading data..."),
+                               parent=self)
+            wx.Yield()
+        
+            #
             # create GL window & NVIZ toolbar
             #
             if not self.MapWindow3D:
@@ -2627,12 +2638,8 @@ class MapFrame(wx.Frame):
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
             
-            #
-            # add Nviz toolbar and disable 2D display mode tools
-            #
-            self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
-            self.toolbars['map'].Enable2D(False)
-            self.toggleStatus.Enable(False)
+
+            busy.Destroy()
 
             self.nvizToolWin.Show()
 

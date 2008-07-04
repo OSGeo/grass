@@ -98,10 +98,17 @@ class DigitError(GException):
                             parent=parent)
 
 class DBMError(GException):
-    """Exception raised for Attribute Table Manager"""
+    """Attribute Table Manager exception class"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
                             title=_("Error in Attribute Table Manager"),
+                            parent=parent)
+
+class NvizError(GException):
+    """Nviz exception class"""
+    def __init__(self, message, parent=None):
+        GException.__init__(self, message,
+                            title=_("Nviz error"),
                             parent=parent)
 
 class Popen(subprocess.Popen):

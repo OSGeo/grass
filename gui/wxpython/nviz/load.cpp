@@ -32,7 +32,7 @@ extern "C" {
   \return object id
   \return -1 on failure
 */
-int Nviz::LoadRaster(const char* name, const char *color_name, const char *color_value)
+int Nviz::LoadSurface(const char* name, const char *color_name, const char *color_value)
 {
     char *mapset;
     int id;
@@ -84,4 +84,24 @@ int Nviz::LoadRaster(const char* name, const char *color_name, const char *color
     G_debug(1, "Nviz::LoadRaster(): name=%s", name);
 
     return id;
+}
+
+/*!
+  \brief Unload surface
+
+  \param id surface id
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz::UnloadSurface(int id)
+{
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+
+    if (GS_delete_surface(id) < 0)
+      return 0;
+
+    return 1;
 }
