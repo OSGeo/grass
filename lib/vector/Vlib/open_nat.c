@@ -83,7 +83,7 @@ V1_open_old_nat ( struct Map_info *Map, int update)
 int 
 V1_open_new_nat (
 	      struct Map_info *Map,
-	      char *name,
+	      const char *name,
 	      int with_z)
 {
   char buf[1000];

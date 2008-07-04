@@ -100,7 +100,7 @@ typedef struct
  
 typedef struct
 {
-  char *name, *desc, *form, *labels, *stime;
+  const char *name, *desc, *form, *labels, *stime;
   struct TimeStamp *time;
 } Site_head;
 

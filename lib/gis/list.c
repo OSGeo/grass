@@ -149,7 +149,7 @@ static int list_element( FILE *out,
 {
     char path[GPATH_MAX];
     int count = 0;
-    const char **list;
+    char **list;
     int i;
 
 /*

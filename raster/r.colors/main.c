@@ -29,7 +29,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static const char **rules;
+static char **rules;
 static int nrules;
 
 static void scan_rules(void)

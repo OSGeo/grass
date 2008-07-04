@@ -56,6 +56,7 @@ int output_data(int tt, double ft)
       G_fatal_error ("Cannot open %s", outwalk);
     else
     {
+	char buf[GNAME_MAX+40];
     if(NULL == (sd = G_site_new_struct(-1,2,0,1)))
         G_fatal_error("memory allocation failed for site");
 
@@ -64,10 +65,8 @@ int output_data(int tt, double ft)
 	else
       walkershead.name = outwalk;
 
-      walkershead.desc = G_strdup ("output walkers");
-      walkershead.desc = (char *) G_malloc (128 * sizeof (char));
-      sprintf (walkershead.desc, "output walkers of %s [raster]",
-               depth);
+      sprintf (buf, "output walkers of %s [raster]", depth);
+      walkershead.desc = G_store(buf);
       walkershead.time = NULL;
       walkershead.stime = NULL;
       walkershead.labels = NULL;

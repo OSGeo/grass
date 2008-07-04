@@ -37,7 +37,7 @@ int Vect_overlay_and (struct Map_info *, int, struct ilist *, struct ilist *,
   \return -1 on error
 */
 int 
-Vect_overlay_str_to_operator ( char *str )
+Vect_overlay_str_to_operator ( const char *str )
 {
     
     if ( strcmp ( str, GV_ON_AND ) == 0 )

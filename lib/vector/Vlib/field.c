@@ -81,8 +81,8 @@ Vect_reset_dblinks ( struct dblinks *p )
   \return -1 error
 */
 int
-Vect_map_add_dblink ( struct Map_info *Map, int number, char *name, char *table, char *key, 
-	             char *db, char *driver )
+Vect_map_add_dblink ( struct Map_info *Map, int number, const char *name, const char *table, const char *key, 
+	             const char *db, const char *driver )
 {
     int ret;
 
@@ -211,7 +211,7 @@ Vect_check_dblink ( struct dblinks *p, int field )
   \return -1 error
 */
 int
-Vect_add_dblink ( struct dblinks *p, int number, char *name, char *table, char *key, char *db, char *driver )
+Vect_add_dblink ( struct dblinks *p, int number, const char *name, const char *table, const char *key, const char *db, const char *driver )
 {
     int ret;
     
@@ -264,13 +264,13 @@ struct field_info
 *Vect_default_field_info (
 			  struct Map_info *Map,  
 			  int  field,    
-			  char *field_name, 
+			  const char *field_name, 
 			  int  type ) 
 {
     struct field_info *fi;
     char buf[1000], buf2[1000];
-    char *schema;
-    char *drv, *db;
+    const char *schema;
+    const char *drv, *db;
     dbConnection  connection;
     
     G_debug (1, "Vect_default_field_info(): map = %s field = %d", Map->name, field);
@@ -666,7 +666,7 @@ Vect_write_dblinks ( struct Map_info *Map )
   \return pointer to new string
 */
 char *
-Vect_subst_var ( char *in, struct Map_info *Map )
+Vect_subst_var ( const char *in, struct Map_info *Map )
 {
     char *c;
     char buf[1000], str[1000];

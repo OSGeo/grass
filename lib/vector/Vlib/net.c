@@ -90,9 +90,9 @@ Vect_net_build_graph (  struct Map_info *Map,
 			int ltype,  
        			int afield, 
 			int nfield, 
-			char *afcol,
-			char *abcol,
-			char *ncol, 
+			const char *afcol,
+			const char *abcol,
+			const char *ncol, 
 			int geo,    
 		        int algorithm )
 {

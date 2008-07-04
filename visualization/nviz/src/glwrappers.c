@@ -52,7 +52,7 @@ int Nset_background_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpre
 
 }
 
-int tcl_color_to_int(char *clr)
+int tcl_color_to_int(const char *clr)
 {
     int r, g, b;
     int c;

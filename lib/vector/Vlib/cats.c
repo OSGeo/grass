@@ -338,10 +338,11 @@ Vect_destroy_cat_list (struct cat_list *p)
   \return number of errors in ranges
 */
 int 
-Vect_str_to_cat_list (char *str, struct cat_list *list)
+Vect_str_to_cat_list (const char *str, struct cat_list *list)
 {
   int i, nr, l, err = 0;
-  char *s, *e, buf[100];
+  const char *s, *e;
+  char buf[100];
   int min, max;
   
   G_debug (3, "Vect_str_to_cat_list(): str = %s", str);

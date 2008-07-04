@@ -52,11 +52,11 @@ static int cmp_names(const void *aa, const void *bb)
  * \return          Pointer to array of strings containing the listing
  **/
 
-const char **G__ls(const char *dir, int *num_files)
+char **G__ls(const char *dir, int *num_files)
 {
     struct dirent *dp;
     DIR *dfd;
-    const char **dir_listing = NULL;
+    char **dir_listing = NULL;
     int n = 0;
 
     if ((dfd = opendir(dir)) == NULL)
@@ -66,7 +66,7 @@ const char **G__ls(const char *dir, int *num_files)
     {
        if(dp->d_name[0] != '.') /* Don't list hidden files */
        {
-          dir_listing = (const char **)G_realloc(dir_listing, 
+          dir_listing = (char **)G_realloc(dir_listing, 
 					   (1 + n) * sizeof(char *));
           dir_listing[n] = G_store(dp->d_name);
           n++;
@@ -95,12 +95,12 @@ const char **G__ls(const char *dir, int *num_files)
 void G_ls(const char *dir, FILE *stream)
 {
     int i, n;
-    const char **dir_listing = G__ls(dir, &n);
+    char **dir_listing = G__ls(dir, &n);
 
     G_ls_format(dir_listing, n, 0, stream);
 
     for (i = 0; i < n; i++)
-        G_free((char *)dir_listing[i]);
+        G_free(dir_listing[i]);
    
     G_free(dir_listing);
    
@@ -122,7 +122,7 @@ void G_ls(const char *dir, FILE *stream)
  * \param stream    Stream to print listing to
  **/
 
-void G_ls_format(const char **list, int num_items, int perline, FILE *stream)
+void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 {
     int i;
 
@@ -166,10 +166,10 @@ void G_ls_format(const char **list, int num_items, int perline, FILE *stream)
     {
 	const int max
 	    = num_items + column_height - (num_items % column_height);
-	const char **next;
+	char **next;
 
 	for (i = 1, next = list; i <= num_items; i++) {
-	    const char **cur = next;
+	    char **cur = next;
 
 	    next += column_height;
 	    if (next >= list + num_items) {

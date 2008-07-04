@@ -81,7 +81,7 @@ Vect_new_varray (int size)
   \return -1 on error
  */
 int 
-Vect_set_varray_from_cat_string ( struct Map_info *Map, int field, char *cstring,
+Vect_set_varray_from_cat_string ( struct Map_info *Map, int field, const char *cstring,
                                 int type, int value, VARRAY *varray )
 {
     int ret;
@@ -235,7 +235,7 @@ static int in_array (int *cats, size_t ncats, int cat)
   \return -1 on error
  */
 int 
-Vect_set_varray_from_db ( struct Map_info *Map, int field, char *where,
+Vect_set_varray_from_db ( struct Map_info *Map, int field, const char *where,
                                 int type, int value, VARRAY *varray )
 {
     int i, n, c, centr, cat, *cats;

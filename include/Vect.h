@@ -45,37 +45,37 @@ int Vect_get_line_cat ( struct Map_info *, int, int );
 
       /* List of categories */
 struct cat_list *Vect_new_cat_list (void);
-int Vect_str_to_cat_list (char *, struct cat_list *);
+int Vect_str_to_cat_list (const char *, struct cat_list *);
 int Vect_array_to_cat_list (int *, int, struct cat_list *);
 int Vect_cat_in_cat_list (int, struct cat_list *);
 int Vect_destroy_cat_list (struct cat_list *);
 
       /* Vector array */
 VARRAY *Vect_new_varray (int size);
-int Vect_set_varray_from_cat_string ( struct Map_info *, int, char *, int, int, VARRAY *);
+int Vect_set_varray_from_cat_string ( struct Map_info *, int, const char *, int, int, VARRAY *);
 int Vect_set_varray_from_cat_list ( struct Map_info *, int, struct cat_list *, int, int, VARRAY *);
-int Vect_set_varray_from_db ( struct Map_info *, int, char *, int, int, VARRAY *);
+int Vect_set_varray_from_db ( struct Map_info *, int, const char *, int, int, VARRAY *);
 
      /* DB connection - field info */
 struct dblinks *Vect_new_dblinks_struct ( void );
 void Vect_reset_dblinks ( struct dblinks *p );
-int Vect_add_dblink ( struct dblinks *p, int number, char *name, char *table, char *key, 
-	              char *db, char *driver );
+int Vect_add_dblink ( struct dblinks *p, int number, const char *name, const char *table, const char *key, 
+	              const char *db, const char *driver );
 int Vect_check_dblink ( struct dblinks *p, int field );
-int Vect_map_add_dblink ( struct Map_info *, int number, char *name, char *table, char *key, 
-	              char *db, char *driver );
+int Vect_map_add_dblink ( struct Map_info *, int number, const char *name, const char *table, const char *key, 
+	              const char *db, const char *driver );
 int Vect_map_del_dblink ( struct Map_info *, int number ); 
 int Vect_map_check_dblink ( struct Map_info *, int field);
 int Vect_read_dblinks ( struct Map_info * );
 int Vect_write_dblinks ( struct Map_info * );
 struct field_info *Vect_default_field_info ( struct Map_info *Map, int  field, 
-	                char *field_name, int  type );
+	                const char *field_name, int  type );
 struct field_info *Vect_get_dblink (  struct Map_info *Map, int link );
 struct field_info *Vect_get_field (  struct Map_info *Map, int field );
 void Vect_set_db_updated ( struct Map_info *Map );
-char *Vect_get_column_names (struct Map_info *Map, int field);
-char *Vect_get_column_types (struct Map_info *Map, int field);
-char *Vect_get_column_names_types (struct Map_info *Map, int field);
+const char *Vect_get_column_names (struct Map_info *Map, int field);
+const char *Vect_get_column_types (struct Map_info *Map, int field);
+const char *Vect_get_column_names_types (struct Map_info *Map, int field);
 
       /* List of FID (feature ID) (integers) */
 struct ilist *Vect_new_list (void);
@@ -122,28 +122,28 @@ int Vect_cidx_open ( struct Map_info *, int);
     /* Set/get Map header info */
 int  Vect_read_header (struct Map_info *);
 int  Vect_write_header (struct Map_info *);
-char *Vect_get_name (struct Map_info *);
-char *Vect_get_mapset (struct Map_info *);
-char *Vect_get_full_name (struct Map_info *);
+const char *Vect_get_name (struct Map_info *);
+const char *Vect_get_mapset (struct Map_info *);
+const char *Vect_get_full_name (struct Map_info *);
 int  Vect_is_3d (struct Map_info *);
-int  Vect_set_organization (struct Map_info *, char *);
-char *Vect_get_organization (struct Map_info *);
-int  Vect_set_date (struct Map_info *, char *);
-char *Vect_get_date (struct Map_info *);
-int  Vect_set_person (struct Map_info *, char *);
-char *Vect_get_person (struct Map_info *);
-int  Vect_set_map_name (struct Map_info *, char *);
-char *Vect_get_map_name (struct Map_info *);
-int  Vect_set_map_date (struct Map_info *, char *);
-char *Vect_get_map_date (struct Map_info *);
-int  Vect_set_comment (struct Map_info *, char *);
-char *Vect_get_comment (struct Map_info *);
+int  Vect_set_organization (struct Map_info *, const char *);
+const char *Vect_get_organization (struct Map_info *);
+int  Vect_set_date (struct Map_info *, const char *);
+const char *Vect_get_date (struct Map_info *);
+int  Vect_set_person (struct Map_info *, const char *);
+const char *Vect_get_person (struct Map_info *);
+int  Vect_set_map_name (struct Map_info *, const char *);
+const char *Vect_get_map_name (struct Map_info *);
+int  Vect_set_map_date (struct Map_info *, const char *);
+const char *Vect_get_map_date (struct Map_info *);
+int  Vect_set_comment (struct Map_info *, const char *);
+const char *Vect_get_comment (struct Map_info *);
 int  Vect_set_scale (struct Map_info *, int );
 int  Vect_get_scale (struct Map_info *);
 int  Vect_set_zone (struct Map_info *, int );
 int  Vect_get_zone (struct Map_info *);
 int  Vect_get_proj (struct Map_info *);
-char *Vect_get_proj_name (struct Map_info *);
+const char *Vect_get_proj_name (struct Map_info *);
 int  Vect_set_thresh (struct Map_info *, double );
 double Vect_get_thresh (struct Map_info *);
 int Vect_get_constraint_box ( struct Map_info *, BOUND_BOX *);
@@ -171,14 +171,14 @@ int Vect_set_fatal_error (int);
 int Vect_get_fatal_error ();
 
     /* Open/close/rewind/set_constraints for map */
-int Vect_check_input_output_name(char *, char *, int);
-int Vect_legal_filename(char *);
+int Vect_check_input_output_name(const char *, const char *, int);
+int Vect_legal_filename(const char *);
 int Vect_set_open_level (int);
-int Vect_open_old (struct Map_info *, char *, char *);
-int Vect_open_old_head (struct Map_info *, char *, char *);
-int Vect_open_new (struct Map_info *, char *, int);
-int Vect_open_update (struct Map_info *, char *, char *);
-int Vect_open_update_head ( struct Map_info *, char *, char *);
+int Vect_open_old (struct Map_info *, const char *, const char *);
+int Vect_open_old_head (struct Map_info *, const char *, const char *);
+int Vect_open_new (struct Map_info *, const char *, int);
+int Vect_open_update (struct Map_info *, const char *, const char *);
+int Vect_open_update_head ( struct Map_info *, const char *, const char *);
 int Vect_copy_head_data (struct Map_info *, struct  Map_info *);
 int Vect_build ( struct Map_info *, FILE *);
 int Vect_get_built ( struct Map_info *Map );
@@ -234,7 +234,7 @@ int Vect_get_updated_node (struct Map_info *map, int idx);
 
       /* History */
 int Vect_hist_command ( struct Map_info *Map );
-int Vect_hist_write ( struct Map_info *Map, char *str );
+int Vect_hist_write ( struct Map_info *Map, const char *str );
 int Vect_hist_copy ( struct Map_info *In, struct Map_info *Out );
 void Vect_hist_rewind ( struct Map_info *Map );
 char *Vect_hist_read ( char *s, int size, struct Map_info *Map );
@@ -287,7 +287,7 @@ int Vect_clean_small_angles_at_nodes ( struct Map_info *Map, int type, struct Ma
 	                               FILE *msgout);
 
     /* Overlay */
-int Vect_overlay_str_to_operator ( char * );
+int Vect_overlay_str_to_operator ( const char * );
 int Vect_overlay ( struct Map_info *, int, struct ilist *, struct ilist *, 
 	           struct Map_info *, int, struct ilist *, struct ilist *,
                    int, struct Map_info *);
@@ -300,7 +300,7 @@ void Vect_graph_set_node_costs ( GRAPH *, int, double);
 int Vect_graph_shortest_path ( GRAPH *, int, int, struct ilist *, double * );
 
     /* Network (graph) */
-int Vect_net_build_graph ( struct Map_info *, int, int, int, char *, char *, char *, int, int);
+int Vect_net_build_graph ( struct Map_info *, int, int, int, const char *, const char *, const char *, int, int);
 int Vect_net_shortest_path ( struct Map_info *, int, int, struct ilist *, double *);
 int Vect_net_get_line_cost ( struct Map_info *, int, int, double *);
 int Vect_net_get_node_cost ( struct Map_info *, int, double *);
@@ -316,12 +316,12 @@ int Vect_topo_dump ( struct Map_info *, FILE *);
 double Vect_points_distance ( double, double, double, double, double, double, int);
 int Vect_option_to_types (struct Option *);
 int Vect_copy_map_lines ( struct Map_info *, struct Map_info * );
-int Vect_copy ( char *, char *, char *, FILE * );
-int Vect_rename ( char *, char *, FILE * );
-int Vect_copy_table ( struct Map_info *, struct Map_info *, int, int, char *, int );
-int Vect_copy_table_by_cats ( struct Map_info *, struct Map_info *, int, int, char *, int, int*, int );
+int Vect_copy ( const char *, const char *, const char *, FILE * );
+int Vect_rename ( const char *, const char *, FILE * );
+int Vect_copy_table ( struct Map_info *, struct Map_info *, int, int, const char *, int );
+int Vect_copy_table_by_cats ( struct Map_info *, struct Map_info *, int, int, const char *, int, int*, int );
 int Vect_copy_tables ( struct Map_info *, struct Map_info *, int );
-int Vect_delete ( char *map );
+int Vect_delete ( const char *map );
 int Vect_segment_intersection ( double, double, double, double, double, double, 
 	                        double, double, double, double, double, double,    
 				double *, double *, double *, double *, double *, double *,  
@@ -330,7 +330,7 @@ int Vect_line_intersection ( struct line_pnts *, struct line_pnts *,
                              struct line_pnts ***, struct line_pnts ***,
                              int *, int *, int );
 int Vect_line_check_intersection ( struct line_pnts *, struct line_pnts *, int );
-char *Vect_subst_var ( char *str, struct Map_info *Map);
+char *Vect_subst_var ( const char *str, struct Map_info *Map);
 
 /* Internal functions, MUST NOT be used in modules */
 int Vect_print_header (struct Map_info *);
@@ -338,7 +338,7 @@ int Vect__init_head (struct Map_info *);
 
     /* Open/close/rewind map */
 int Vect_coor_info ( struct Map_info *, struct Coor_info *);
-char *Vect_maptype_info ( struct Map_info *);
+const char *Vect_maptype_info ( struct Map_info *);
 int Vect_open_topo (struct Map_info *, int);
 int Vect_save_topo ( struct Map_info *);
 int Vect_open_spatial_index (struct Map_info *);
@@ -352,7 +352,7 @@ int Vect__read_head (struct Map_info *);
 int V1_open_old_nat (struct Map_info *, int);
 int V1_open_old_ogr (struct Map_info *, int);
 int V2_open_old_ogr (struct Map_info *);
-int V1_open_new_nat (struct Map_info *, char *, int);
+int V1_open_new_nat (struct Map_info *, const char *, int);
 int V1_rewind_nat (struct Map_info *);
 int V1_rewind_ogr (struct Map_info *);
 int V2_rewind_nat (struct Map_info *);
