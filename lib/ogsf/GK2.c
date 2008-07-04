@@ -209,7 +209,7 @@ void GK_update_tension(void)
 
   \param name filename
 */
-void GK_print_keys(char *name)
+void GK_print_keys(const char *name)
 {
     Keylist *k;
     FILE *fp;

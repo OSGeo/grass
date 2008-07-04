@@ -11,28 +11,15 @@
  *      if name is of the form nnn in ppp then
  *      name = nnn and mapset = ppp
  *
- *  \param char *name       file name to look for
- *  \param char *mapset     mapset to search. if mapset is ""
- *                         will search in mapset search list
+ *  \param const char *name       file name to look for
+ *  \param const char *mapset     mapset to search. if mapset is ""
+ *                                will search in mapset search list
  *  \return char *  pointer to a string with name of mapset
  *              where cell file was found, or NULL if not found
  */
 
-char *
-G_find_grid3  (char *cell, char *mset)
+char *G_find_grid3(const char *name, const char *mapset)
 
 {
-    char name[256], mapset[256], element[512];
-
-    if (cell == NULL || *cell == 0)
-        return 0;
-
-    if(G__name_is_fully_qualified (cell, name, mapset))
-        sprintf (element, "grid3/%s", name);
-    else
-        sprintf (element, "grid3/%s", cell);
-
-    return (G_find_file (element, "cell", mset));
-    /* actually looks for the data, not the directory */
-
+    return G_find_file2_misc ("grid3", "cell", name, mapset);
 }

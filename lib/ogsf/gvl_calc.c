@@ -747,7 +747,7 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 
   \param char
 */
-unsigned char gvl_read_char(int pos, unsigned char *data)
+unsigned char gvl_read_char(int pos, const unsigned char *data)
 {
     return data[pos];
 }

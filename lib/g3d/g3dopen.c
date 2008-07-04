@@ -10,7 +10,7 @@
 /*---------------------------------------------------------------------------*/
 
 void *
-G3d_openCellOldNoHeader  (char *name, char *mapset)
+G3d_openCellOldNoHeader  (const char *name, const char *mapset)
 
 {
   G3D_Map *map;
@@ -84,7 +84,7 @@ G3d_openCellOldNoHeader  (char *name, char *mapset)
  */
 
 void *
-G3d_openCellOld  (char *name, char *mapset, G3D_Region *window, int typeIntern, int cache)
+G3d_openCellOld  (const char *name, const char *mapset, G3D_Region *window, int typeIntern, int cache)
 
 {
   G3D_Map *map; 
@@ -214,7 +214,7 @@ G3d_openCellOld  (char *name, char *mapset, G3D_Region *window, int typeIntern, 
  */
 
 void *
-G3d_openCellNew  (char *name, int typeIntern, int cache, G3D_Region *region)
+G3d_openCellNew  (const char *name, int typeIntern, int cache, G3D_Region *region)
 
 {
   G3D_Map *map;

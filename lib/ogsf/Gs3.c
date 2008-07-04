@@ -76,7 +76,7 @@ typedef int FILEDESC;
  * may be replaced by a user's function. 
  * Or else use G_set_error_routine.
  */
-void Gs_status(char *str)
+void Gs_status(const char *str)
 {
     G_debug(3, "%s", str);
 
@@ -123,11 +123,12 @@ double Gs_distance(double *from, double *to)
   \return 1 on success
   \return 0 on failure
 */
-int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
+int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name, float *buff,
 			struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
-    char *map_set, *nullflags;
+    const char *map_set;
+    char *nullflags;
     int offset, row, col;
 
     G_debug(3, "Gs_loadmap_as_float(): name=%s", map_name);
@@ -198,11 +199,12 @@ int Gs_loadmap_as_float(struct Cell_head *wind, char *map_name, float *buff,
   \return 1 on success
   \return 0 on failure
 */
-int Gs_loadmap_as_int(struct Cell_head *wind, char *map_name, int *buff,
+int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
 		      struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
-    char *map_set, *nullflags;
+    const char *map_set;
+    char *nullflags;
     int offset, row, col;
 
     G_debug(3, "Gs_loadmap_as_int");
@@ -261,11 +263,11 @@ int Gs_loadmap_as_int(struct Cell_head *wind, char *map_name, int *buff,
   \return -1 if map is integer and G_read_range() fails
   \return data type (ARRY_*)
 */
-int Gs_numtype(char *filename, int *negflag)
+int Gs_numtype(const char *filename, int *negflag)
 {
     CELL max = 0, min = 0;
     struct Range range;
-    char *mapset;
+    const char *mapset;
     int shortbits, charbits, bitplace;
     static int max_short, max_char;
     static int first = 1;
@@ -344,11 +346,12 @@ int Gs_numtype(char *filename, int *negflag)
   \return -2 if read ok, but 1 or more values were too large (small)
   to fit into a short (in which case the max (min) short is used)
 */
-int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
+int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name, short *buff,
 			struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
-    char *map_set, *nullflags;
+    const char *map_set;
+    char *nullflags;
     int *ti, *tmp_buf;
     int offset, row, col, val, max_short, overflow, shortsize, bitplace;
     short *ts;
@@ -459,11 +462,12 @@ int Gs_loadmap_as_short(struct Cell_head *wind, char *map_name, short *buff,
   were too large (small) to fit into an unsigned char.
   (in which case the max (min) char is used)
 */
-int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
+int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
 		       unsigned char *buff, struct BM *nullmap, int *has_null)
 {
     FILEDESC cellfile;
-    char *map_set, *nullflags;
+    const char *map_set;
+    char *nullflags;
     int *ti, *tmp_buf;
     int offset, row, col, val, max_char, overflow, charsize, bitplace;
     unsigned char *tc;
@@ -569,11 +573,12 @@ int Gs_loadmap_as_char(struct Cell_head *wind, char *map_name,
   \returns 1 on success
   \return -1 on failure
 */
-int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
+int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
 			 struct BM *buff)
 {
     FILEDESC cellfile;
-    char *map_set, *nullflags;
+    const char *map_set;
+    char *nullflags;
     int *tmp_buf;
     int row, col;
 
@@ -638,9 +643,9 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, char *map_name,
   \return 1 on success
   \return 0 on failure
 */
-int Gs_build_256lookup(char *filename, int *buff)
+int Gs_build_256lookup(const char *filename, int *buff)
 {
-    char *map;
+    const char *mapset;
     struct Colors colrules;
     CELL min, max, cats[256];
     int i;
@@ -648,14 +653,14 @@ int Gs_build_256lookup(char *filename, int *buff)
 
     G_debug(3, "building color table");
 
-    map = G_find_cell2(filename, "");
-    if (!map) {
+    mapset = G_find_cell2(filename, "");
+    if (!mapset) {
 	G_warning(_("Raster map <%s> not found"),
 		  filename);
 	return 0;
     }
 
-    G_read_colors(filename, map, &colrules);
+    G_read_colors(filename, mapset, &colrules);
     G_get_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
@@ -698,15 +703,15 @@ int Gs_build_256lookup(char *filename, int *buff)
   \param rows number of rows
   \param cols number of cols
 */
-void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
+void Gs_pack_colors(const char *filename, int *buff, int rows, int cols)
 {
-    char *map;
+    const char *mapset;
     struct Colors colrules;
     unsigned char *r, *g, *b, *set;
     int *cur, i, j;
 
-    map = G_find_cell2(filename, "");
-    if (!map) {
+    mapset = G_find_cell2(filename, "");
+    if (!mapset) {
 	G_warning(_("Raster map <%s> not found"),
 		  filename);
 	return;
@@ -717,7 +722,7 @@ void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
     b = (unsigned char *) G_malloc(cols);
     set = (unsigned char *) G_malloc(cols);
 
-    G_read_colors(filename, map, &colrules);
+    G_read_colors(filename, mapset, &colrules);
 
     cur = buff;
 
@@ -766,17 +771,17 @@ void Gs_pack_colors(char *filename, int *buff, int rows, int cols)
   \param rows number of rows
   \param cols number of cols
 */
-void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
+void Gs_pack_colors_float(const char *filename, float *fbuf, int *ibuf, int rows,
 			  int cols)
 {
-    char *map;
+    const char *mapset;
     struct Colors colrules;
     unsigned char *r, *g, *b, *set;
     int i, j, *icur;
     FCELL *fcur;
 
-    map = G_find_cell2(filename, "");
-    if (!map) {
+    mapset = G_find_cell2(filename, "");
+    if (!mapset) {
 	G_warning(_("Raster map <%s> not found"),
 		  filename);
 	return;
@@ -787,7 +792,7 @@ void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
     b = (unsigned char *) G_malloc(cols);
     set = (unsigned char *) G_malloc(cols);
 
-    G_read_colors(filename, map, &colrules);
+    G_read_colors(filename, mapset, &colrules);
 
     fcur = fbuf;
     icur = ibuf;
@@ -836,10 +841,10 @@ void Gs_pack_colors_float(char *filename, float *fbuf, int *ibuf, int rows,
   \return 1 on success
   \return 0 on failure
 */
-int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
+int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 {
     struct Categories cats;
-    char *mapset;
+    const char *mapset;
     CELL *buf;
     DCELL *dbuf;
     RASTER_MAP_TYPE map_type;
@@ -916,10 +921,10 @@ int Gs_get_cat_label(char *filename, int drow, int dcol, char *catstr)
   \return -1 on error
   \return ?
 */
-int Gs_save_3dview(char *vname, geoview * gv, geodisplay * gd,
+int Gs_save_3dview(const char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
-    char *mapset;
+    const char *mapset;
     struct G_3dview v;
     float zmax, zmin;
 
@@ -1014,10 +1019,10 @@ int Gs_save_3dview(char *vname, geoview * gv, geodisplay * gd,
 
   \return 1
 */
-int Gs_load_3dview(char *vname, geoview * gv, geodisplay * gd,
+int Gs_load_3dview(const char *vname, geoview * gv, geodisplay * gd,
 		   struct Cell_head *w, geosurf * defsurf)
 {
-    char *mapset;
+    const char *mapset;
     struct G_3dview v;
     int ret = -1;
     float pt[3];

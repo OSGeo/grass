@@ -34,7 +34,7 @@
 
   \return text width
 */
-int gsd_get_txtwidth(char *s, int size)
+int gsd_get_txtwidth(const char *s, int size)
 {
     int width, len;
 
@@ -70,7 +70,7 @@ int gsd_get_txtheight(int size)
 
   \return 2
 */
-int get_txtdescender()
+int get_txtdescender(void)
 {
     return (2);
 }
@@ -84,7 +84,7 @@ int get_txtdescender()
 
   \return 0
 */
-int get_txtxoffset()
+int get_txtxoffset(void)
 {
     return (0);
 }
@@ -96,11 +96,11 @@ int get_txtxoffset()
   \param lab_pos label position
   \param txt text string
 */
-void do_label_display(GLuint fontbase, float *lab_pos, char *txt)
+void do_label_display(GLuint fontbase, float *lab_pos, const char *txt)
 {
     glRasterPos2f(lab_pos[X], lab_pos[Y]);
     glListBase(fontbase);
-    glCallLists(strlen(txt), GL_BYTE, (GLubyte *) txt);
+    glCallLists(strlen(txt), GL_UNSIGNED_BYTE, (const GLvoid *) txt);
 
     return;
 }

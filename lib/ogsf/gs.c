@@ -31,7 +31,7 @@ static geosurf *Surf_top;
 static int Invertmask;
 
 /***********************************************************************/
-void gs_err(char *msg)
+void gs_err(const char *msg)
 {
     G_warning ("%s", msg);
 

@@ -825,7 +825,7 @@ void dir_to_slope_aspect(float *dir, float *slope, float *aspect, int degrees)
 int gsd_north_arrow (float *pos2, float len, GLuint fontbase,
 		     unsigned long arw_clr, unsigned long text_clr)
 {
-    char *txt;
+    const char *txt;
     float v[4][3];
     float base[3][3];
     float Ntop[] = { 0.0, 0.0, 1.0 };
@@ -889,7 +889,7 @@ int gsd_north_arrow (float *pos2, float len, GLuint fontbase,
 
     glRasterPos3fv(base[0]);
     glListBase(fontbase);
-    glCallLists(strlen(txt), GL_BYTE, (GLubyte *) txt);
+    glCallLists(strlen(txt), GL_UNSIGNED_BYTE, (const GLvoid *) txt);
     GS_done_draw();
 
     gsd_popmatrix();        

@@ -667,7 +667,7 @@ int gvl_isosurf_set_att_const(geovol_isosurf *isosurf, int desc, float constant)
   \return -1 on failure
   \return 1 on success
 */
-int gvl_isosurf_set_att_map(geovol_isosurf *isosurf, int desc, char *filename)
+int gvl_isosurf_set_att_map(geovol_isosurf *isosurf, int desc, const char *filename)
 {
     int hfile;
 

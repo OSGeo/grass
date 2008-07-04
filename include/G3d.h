@@ -265,7 +265,7 @@ void G3d_compareFiles(char *, char *, char *, char *);
 /* grass/src/libes/g3d/filename.c */
 void G3d_filename(char *, char *, char *, char *);
 /* grass/src/libes/g3d/find_grid3.c */
-char *G_find_grid3(char *, char *);
+char *G_find_grid3(const char *, const char *);
 /* grass/src/libes/g3d/fpcompress.c */
 void G_fpcompress_printBinary(char *, int);
 void G_fpcompress_dissectXdrDouble(unsigned char *);
@@ -289,9 +289,9 @@ int G3d_readCats(char *, char *, struct Categories *);
 /* grass/src/libes/g3d/g3dclose.c */
 int G3d_closeCell(G3D_Map *);
 /* grass/src/libes/g3d/g3dcolor.c */
-int G3d_removeColor(char *);
-int G3d_readColors(char *, char *, struct Colors *);
-int G3d_writeColors(char *, char *, struct Colors *);
+int G3d_removeColor(const char *);
+int G3d_readColors(const char *, const char *, struct Colors *);
+int G3d_writeColors(const char *, const char *, struct Colors *);
 /* grass/src/libes/g3d/g3ddefaults.c */
 void G3d_setCompressionMode(int, int, int, int);
 void G3d_getCompressionMode(int *, int *, int *, int *);
@@ -375,9 +375,9 @@ int G3d_isNullValueNum(void *, int);
 void G3d_setNullValue(void *, int, int);
 /* grass/src/libes/g3d/g3dopen2.c */
 /* grass/src/libes/g3d/g3dopen.c */
-void *G3d_openCellOldNoHeader(char *, char *);
-void * G3d_openCellOld (char *, char * , G3D_Region *, int, int);
-void * G3d_openCellNew (char *, int, int, G3D_Region * );
+void *G3d_openCellOldNoHeader(const char *, const char *);
+void * G3d_openCellOld (const char *, const char * , G3D_Region *, int, int);
+void * G3d_openCellNew (const char *, int, int, G3D_Region * );
 /* grass/src/libes/g3d/g3dparam.c */
 void G3d_setStandard3dInputParams(void);
 int G3d_getStandard3dParams(int *, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *, int *);
@@ -385,7 +385,7 @@ void G3d_setWindowParams(void);
 char *G3d_getWindowParams(void);
 /* grass/src/libes/g3d/g3drange.c */
 void G3d_range_updateFromTile(G3D_Map *, char *, int, int, int, int, int, int, int, int);
-int G3d_readRange(char *, char *, struct FPRange *);
+int G3d_readRange(const char *, const char *, struct FPRange *);
 int G3d_range_load(G3D_Map *);
 void G3d_range_min_max(G3D_Map *, double *, double *);
 int G3d_range_write(G3D_Map *);

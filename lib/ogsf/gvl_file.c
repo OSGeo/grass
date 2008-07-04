@@ -59,7 +59,7 @@ static int Cur_max;
 static int Rows, Cols, Depths;
 
 /* local functions prototypes */
-void *open_g3d_file(char *, IFLAG *, double *, double *);
+void *open_g3d_file(const char *, IFLAG *, double *, double *);
 int close_g3d_file(void *);
 
 /*!
@@ -137,7 +137,7 @@ geovol_file *gvl_file_get_volfile(int id)
   \param data id
   \param -1 not found
 */
-int find_datah(char *name, IFLAG type, int begin)
+int find_datah(const char *name, IFLAG type, int begin)
 {
     static int i;
     int start;
@@ -230,7 +230,7 @@ void gvl_file_get_min_max(geovol_file *vf, double *min, double *max)
   \return pointer to file
   \return NULL on failure
 */
-void *open_volfile(char *name, IFLAG file_type, IFLAG *data_type, double *min, double *max)
+void *open_volfile(const char *name, IFLAG file_type, IFLAG *data_type, double *min, double *max)
 {
      if (file_type == VOL_FTYPE_G3D) {
         return open_g3d_file(name, data_type, min, max);
@@ -266,7 +266,7 @@ int close_volfile(void *map, IFLAG type)
   \return data id
   \return -1 on failure
 */
-int gvl_file_newh(char *name, IFLAG file_type)
+int gvl_file_newh(const char *name, IFLAG file_type)
 {
     geovol_file *new;
     static int first = 1;
@@ -409,9 +409,9 @@ int gvl_file_free_datah(int id)
 
   \pointer to data
 */
-void *open_g3d_file(char *filename, IFLAG *type, double *min, double *max)
+void *open_g3d_file(const char *filename, IFLAG *type, double *min, double *max)
 {
-    char *mapset;
+    const char *mapset;
     int itype;
     void *map;
 

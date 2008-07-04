@@ -30,9 +30,9 @@
   \return -1 on failure
   \return 1 on success
 */
-int Gvl_load_colors_data(void **color_data, char *name)
+int Gvl_load_colors_data(void **color_data, const char *name)
 {
-    char *mapset;
+    const char *mapset;
     struct Colors *colors;
 
     if (NULL == (mapset = G_find_grid3(name,""))) {

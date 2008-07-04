@@ -181,7 +181,7 @@ int GP_delete_site(int id)
   \return -1 on error
   \return 1 on success
 */
-int GP_load_site(int id, char *filename)
+int GP_load_site(int id, const char *filename)
 {
     geosite *gp;
 
@@ -290,7 +290,7 @@ int GP_set_sitemode(int id, int atmod, int color, int width, float size,
   \return 0 for no attribute info
   \return -1 for bad parameter
 */
-int GP_attmode_color(int id, char *filename)
+int GP_attmode_color(int id, const char *filename)
 {
     geosite *gp;
 

@@ -38,7 +38,7 @@ GLuint label_id;
   \param color font color
   \param pt 
 */
-void gs_put_label(char *text, GLuint fontbase, int size, unsigned long color,
+void gs_put_label(const char *text, GLuint fontbase, int size, unsigned long color,
 		  int*pt)
 {
     int txt_width;
