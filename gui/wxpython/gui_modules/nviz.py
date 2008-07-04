@@ -25,6 +25,7 @@ from threading import Thread
 
 import wx
 import wx.lib.colourselect as csel
+import wx.lib.scrolledpanel as scrolled
 try:
     from wx import glcanvas
     haveGLCanvas = True
@@ -275,11 +276,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         @todo volumes
         """
-        for raster in self.Map.GetListOfLayers(l_type='raster', l_active=True):
-            self.LoadRaster(raster)
+        # load raster maps
+        for layer in self.Map.GetListOfLayers(l_type='raster', l_active=True):
+            self.LoadRaster(layer)
+
+        # load vector maps
+        for layer in self.Map.GetListOfLayers(l_type='vector', l_active=True):
+            self.LoadVector(layer)
 
     def LoadRaster(self, layer):
-        """Load raster"""
+        """Load raster map -> surface"""
         if layer.type != 'raster':
             return
 
@@ -297,7 +303,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.object[self.Map.GetLayerIndex(layer)] = id ### FIXME layer index is not fixed id!
 
     def UnloadRaster(self, layer):
-        """Unload raster"""
+        """Unload raster map"""
         if layer.type != 'raster':
             return
 
@@ -309,6 +315,31 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if self.nvizClass.UnloadSurface(self.object[idx]) == 0:
                 raise gcmd.NvizError(parent=self.parent,
                                      message=_("Unable to unload raster map <%s>" % layer.name))
+    def LoadVector(self, layer):
+        """Load vector map overlay"""
+        if layer.type != 'vector':
+            return
+
+        id = self.nvizClass.LoadVector(str(layer.name))
+        if id < 0:
+            raise gcmd.NvizError(parent=self.parent,
+                                 message=_("Unable to load vector map <%s>" % layer.name))
+
+        self.object[self.Map.GetLayerIndex(layer)] = id ### FIXME layer index is not fixed id!
+
+    def UnloadVector(self, layer):
+        """Unload vector map overlay"""
+        if layer.type != 'vector':
+            return
+
+        idx = self.Map.GetLayerIndex(layer) ### FIXME layer index is not fixed id!
+        if not self.object.has_key(idx):
+            return
+
+        if layer.type == 'vector':
+            if self.nvizClass.UnloadVector(self.object[idx]) == 0:
+                raise gcmd.NvizError(parent=self.parent,
+                                     message=_("Unable to unload vector map <%s>" % layer.name))
 
     def Reset(self):
         """Reset (unload data)"""
@@ -396,12 +427,22 @@ class NvizToolWindow(wx.Frame):
 
         self.win = {} # window ids
 
+        #
         # notebook
+        #
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
 
+        # view page
         self.__createViewPage()
+        # surface page
         self.__createSurfacePage()
         self.UpdatePage('surface')
+        # vector page
+        self.__createVectorPage()
+        self.UpdatePage('vector')
+        # settings page
+        self.__createSettingsPage()
+        self.UpdatePage('settings')
 
         mainSizer.Add(item=self.notebook, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
@@ -431,7 +472,14 @@ class NvizToolWindow(wx.Frame):
         mainSizer.Add(item=btnSizer, proportion=0, flag=wx.ALIGN_CENTER | wx.ALL,
                       border=5)
 
+        #
+        # bindings
+        #
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
 
+        #
+        # layout
+        #
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         
@@ -464,7 +512,7 @@ class NvizToolWindow(wx.Frame):
         gridSizer.Add(item=posSizer, pos=(0, 0))
                   
         # perspective
-        self.CreateControl(panel, 'persp')
+        self.CreateControl(panel, dict=self.win['view'], name='persp')
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Perspective:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER)
         gridSizer.Add(item=self.FindWindowById(self.win['view']['persp']['slider']), pos=(2, 0))
@@ -472,7 +520,7 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.ALIGN_CENTER)        
 
         # twist
-        self.CreateControl(panel, 'twist')
+        self.CreateControl(panel, dict=self.win['view'], name='twist')
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Twist:")),
                       pos=(1, 1), flag=wx.ALIGN_CENTER)
         gridSizer.Add(item=self.FindWindowById(self.win['view']['twist']['slider']), pos=(2, 1))
@@ -480,8 +528,8 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.ALIGN_CENTER)        
 
         # height + z-exag
-        self.CreateControl(panel, 'height', sliderHor=False)
-        self.CreateControl(panel, 'z-exag', sliderHor=False)
+        self.CreateControl(panel, dict=self.win['view'], name='height', sliderHor=False)
+        self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False)
         heightSizer = wx.GridBagSizer(vgap=3, hgap=3)
         heightSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Height:")),
                       pos=(0, 0), flag=wx.ALIGN_LEFT, span=(1, 2))
@@ -546,6 +594,9 @@ class NvizToolWindow(wx.Frame):
     def __createSurfacePage(self):
         """Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+        # panel = scrolled.ScrolledPanel(parent=self.notebook, id=wx.ID_ANY)
+        # panel.SetupScrolling(scroll_x=True, scroll_y=True)
+
         self.notebook.AddPage(page=panel,
                               text=" %s " % _("Surface"))
         
@@ -826,27 +877,126 @@ class NvizToolWindow(wx.Frame):
         
         panel.SetSizer(pageSizer)
 
-    def CreateControl(self, parent, name, sliderHor=True):
+    def __createVectorPage(self):
+        """Create view settings page"""
+        panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+        self.notebook.AddPage(page=panel,
+                              text=" %s " % _("Vector"))
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.win['vector'] = {}
+        #
+        # vector lines
+        #
+        self.win['vector']['lines'] = {}
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Vector lines")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+
+        # width
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Width:")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+
+        width = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                            initial=1,
+                            min=1,
+                            max=100) # TODO
+        # width.SetName("value")
+        # self.win['vector']['lines']['width'] = width.GetId()
+        # width.Bind(wx.EVT_SPINCTRL, self.OnVectorWidth)
+        gridSizer.Add(item=width, pos=(0, 1),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+
+        gridSizer.AddGrowableCol(2)
+
+        # color
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Color:")),
+                      pos=(0, 3), flag=wx.ALIGN_CENTER_VERTICAL)
+
+        color = csel.ColourSelect(panel, id=wx.ID_ANY)
+        gridSizer.Add(item=color, pos=(0, 4))
+
+        gridSizer.AddGrowableCol(5)
+
+        # display
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Display:")),
+                      pos=(0, 6), flag=wx.ALIGN_CENTER_VERTICAL)
+
+        display = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                             choices = [_("on surface"),
+                                        _("flat")])
+        display.SetSelection(0)
+        display.Bind(wx.EVT_CHOICE, self.OnVectorDisplay)
+        gridSizer.Add(item=display, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0, 7))
+
+        surface = wx.ComboBox(parent=panel, id=wx.ID_ANY, size=(250, -1),
+                              style=wx.CB_SIMPLE | wx.CB_READONLY,
+                              choices=[])
+        self.win['vector']['lines']['surface'] = surface.GetId()
+        gridSizer.Add(item=surface, 
+                      pos=(1, 0), span=(1, 8),
+                      flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+
+        # high
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Hight above surface:")),
+                      pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL,
+                      span=(1, 2))
+        
+        self.CreateControl(panel, dict=self.win['vector']['lines'], name='height', size=300)
+        gridSizer.Add(item=self.FindWindowById(self.win['vector']['lines']['height']['slider']),
+                      pos=(2, 2), span=(1, 6))
+        gridSizer.Add(item=self.FindWindowById(self.win['vector']['lines']['height']['spin']),
+                      pos=(3, 4),
+                      flag=wx.ALIGN_CENTER)        
+
+        boxSizer.Add(item=gridSizer, proportion=1,
+                     flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL,
+                      border=5)
+
+        panel.SetSizer(pageSizer)
+
+    def __createSettingsPage(self):
+        """Create settings page"""
+        panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+        self.notebook.AddPage(page=panel,
+                              text=" %s " % _("Settings"))
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.win['settings'] = {}
+
+        panel.SetSizer(pageSizer)
+
+    def CreateControl(self, parent, dict, name, sliderHor=True, size=200):
         """Add control (Slider + SpinCtrl)"""
-        self.win['view'][name] = {}
+        dict[name] = {}
         if sliderHor:
             style = wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | \
                 wx.SL_BOTTOM
-            size = (200, -1)
+            sizeW = (size, -1)
         else:
             style = wx.SL_VERTICAL | wx.SL_AUTOTICKS | \
                 wx.SL_BOTTOM | wx.SL_INVERSE
-            size = (-1, 200)
+            sizeW = (-1, size)
         slider = wx.Slider(parent=parent, id=wx.ID_ANY,
                            value=self.settings[name]['value'],
                            minValue=self.settings[name]['min'],
                            maxValue=self.settings[name]['max'],
                            style=style,
-                           size=size)
+                           size=sizeW)
 
         slider.Bind(wx.EVT_SCROLL, self.OnViewChange)
         slider.Bind(wx.EVT_SCROLL_CHANGED, self.OnViewChanged)
-        self.win['view'][name]['slider'] = slider.GetId()
+        dict[name]['slider'] = slider.GetId()
 
         spin = wx.SpinCtrl(parent=parent, id=wx.ID_ANY, size=(65, -1),
                            initial=self.settings[name]['value'],
@@ -859,7 +1009,7 @@ class NvizToolWindow(wx.Frame):
 
         # no 'changed' event ... (FIXME)
         spin.Bind(wx.EVT_SPINCTRL, self.OnViewChangedSpin)
-        self.win['view'][name]['spin'] = spin.GetId()
+        dict[name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
         """Update dialog settings"""
@@ -1264,7 +1414,18 @@ class NvizToolWindow(wx.Frame):
     def OnSurfaceWireColor(self, event):
         """Set wire color"""
         self.SetSurfaceWireColor(event.GetValue())
-        
+
+    def OnVectorDisplay(self, event):
+        """Display vector lines on surface/flat"""
+        if event.GetSelection() == 0: # surface
+            self.FindWindowById(self.win['vector']['lines']['surface']).Enable(True)
+            # set first found surface
+            ### TODO
+        else: # flat
+            self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
+
+        event.Skip()
+    
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
         layer = self.mapWindow.GetSelectedLayer()
@@ -1391,3 +1552,4 @@ class ViewPositionWindow(wx.Window):
             self.mapWindow.render = True
         
         self.mapWindow.Refresh(eraseBackground=False)
+        
