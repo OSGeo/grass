@@ -822,7 +822,7 @@ void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
   \param range values range
   \param pt ?
 */
-int GS_draw_legend(char *name, GLuint fontbase, int size, int *flags,
+int GS_draw_legend(const char *name, GLuint fontbase, int size, int *flags,
 	       float *range, int *pt)
 {
     int list_no;
@@ -1584,12 +1584,12 @@ int GS_delete_surface(int id)
   \return -1 on error (invalid surface id)
   \return ?
 */
-int GS_load_att_map(int id, char *filename, int att)
+int GS_load_att_map(int id, const char *filename, int att)
 {
     geosurf *gs;
     unsigned int changed;
     unsigned int atty;
-    char *mapset;
+    const char *mapset;
     struct Cell_head rast_head;
     int reuse = 0, begin, hdata, ret, neg = 0, has_null = 0;
     typbuff *tbuff;
@@ -3242,7 +3242,7 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
 
   \return ?
 */
-int GS_save_3dview(char *vname, int surfid)
+int GS_save_3dview(const char *vname, int surfid)
 {
     return (Gs_save_3dview(vname, &Gv, &Gd, &wind, gs_get_surf(surfid)));
 }
@@ -3255,7 +3255,7 @@ int GS_save_3dview(char *vname, int surfid)
 
   \return ?
 */
-int GS_load_3dview(char *vname, int surfid)
+int GS_load_3dview(const char *vname, int surfid)
 {
 
     return (Gs_load_3dview(vname, &Gv, &Gd, &wind, gs_get_surf(surfid)));

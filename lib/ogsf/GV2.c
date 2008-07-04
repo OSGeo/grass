@@ -171,7 +171,7 @@ int GV_delete_vector(int id)
   \return -1 on error (invalid vector set id)
   \return 1 on success
 */
-int GV_load_vector(int id, char *filename)
+int GV_load_vector(int id, const char *filename)
 {
     geovect *gv;
 

@@ -40,7 +40,7 @@ static int Tot_mem = 0;
   \return pointer to geoline struct
   \return NULL on failure
 */
-geoline *Gv_load_vect(char *grassname, int *nlines)
+geoline *Gv_load_vect(const char *grassname, int *nlines)
 {
     struct Map_info map;
     struct line_pnts *points;
@@ -48,9 +48,9 @@ geoline *Gv_load_vect(char *grassname, int *nlines)
     int np, i, n, nareas, nl=0, area, type, is3d;
     struct Cell_head  wind;
     float vect[2][3];
-    char *mapset;
+    const char *mapset;
 
-    mapset = G_find_vector2((const char *) grassname, "");
+    mapset = G_find_vector2(grassname, "");
     if (!mapset) {
 	G_warning(_("Vector map <%s> not found"),
 		  grassname);

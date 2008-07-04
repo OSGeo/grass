@@ -38,9 +38,9 @@
   \return 1 on success
   \return 0 on failure
 */
-int Gp_set_color(char *grassname, geopoint * gp)
+int Gp_set_color(const char *grassname, geopoint * gp)
 {
-    char *col_map;
+    const char *col_map;
     struct Colors sc;
     CELL cat;
     geopoint *tp;
@@ -87,7 +87,7 @@ int Gp_set_color(char *grassname, geopoint * gp)
   \return pointer to geopoint struct
   \return NULL on failure
 */
-geopoint *Gp_load_sites(char *grassname, int *nsites, int *has_z,
+geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
 			int *has_att)
 {
     struct Map_info map;
@@ -98,13 +98,13 @@ geopoint *Gp_load_sites(char *grassname, int *nsites, int *has_z,
     struct Cell_head wind;
     RASTER_MAP_TYPE rtype;
     int ndim;
-    char *mapset;
+    const char *mapset;
 
     np = 0;
     eof = 0;
     *has_z = *has_att = 0;
 
-    mapset = G_find_vector2((const char *) grassname, "");
+    mapset = G_find_vector2(grassname, "");
     if (!mapset) {
 	G_warning (_("Vector map <%s> not found"),
 		   grassname);

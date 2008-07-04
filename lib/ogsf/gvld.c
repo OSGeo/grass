@@ -238,7 +238,7 @@ int gvld_isosurf(geovol * gvl)
 	nz[i] = 0;
     }
 
-    G_debug (3, "  intialize OK", gvl_file_get_name(gvl->hfile), i);
+    G_debug (3, "  intialize OK");
 
     for (z = 0; z < depths - 1; z++) {
 	zc = z * zres;

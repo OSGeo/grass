@@ -10,14 +10,14 @@
 #include <grass/gis.h>
 #include "G3d_intern.h"
 
-static int read_colors(char *,char *,char *,struct Colors *);
+static int read_colors(const char *,const char *,const char *,struct Colors *);
 static int read_new_colors(FILE *,struct Colors *);
 static int read_old_colors(FILE *,struct Colors *);
 
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_removeColor  (char *name)
+G3d_removeColor  (const char *name)
  /* adapted from G_remove_colr */
 
 
@@ -44,7 +44,7 @@ G3d_removeColor  (char *name)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readColors  (char *name, char *mapset, struct Colors *colors)
+G3d_readColors  (const char *name, const char *mapset, struct Colors *colors)
  /* adapted from G_read_colors */
 
 
@@ -102,7 +102,7 @@ G3d_readColors  (char *name, char *mapset, struct Colors *colors)
   return -1;
 }
 
-static int read_colors( char *element , char *name , char *mapset , struct Colors *colors)
+static int read_colors( const char *element , const char *name , const char *mapset , struct Colors *colors)
 {
     FILE *fd ;
     int stat;
@@ -357,7 +357,7 @@ static int read_old_colors ( FILE *fd, struct Colors *colors )
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_writeColors  (char *name, char *mapset, struct Colors *colors)
+G3d_writeColors  (const char *name, const char *mapset, struct Colors *colors)
  /* adapted from G_write_colors */
 
 

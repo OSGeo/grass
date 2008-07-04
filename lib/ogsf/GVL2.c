@@ -229,7 +229,7 @@ int GVL_delete_vol(int id)
   \return -1 on error
   \return 0 on success
 */
-int GVL_load_vol(int id, char *filename)
+int GVL_load_vol(int id, const char *filename)
 {
     geovol *gvl;
     int handle;
@@ -843,7 +843,7 @@ int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
   \return ?
   \return -1 on error
 */
-int GVL_isosurf_set_att_map(int id, int isosurf_id, int att, char *filename)
+int GVL_isosurf_set_att_map(int id, int isosurf_id, int att, const char *filename)
 {
     geovol_isosurf *isosurf;
 

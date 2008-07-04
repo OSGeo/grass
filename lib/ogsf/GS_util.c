@@ -52,7 +52,7 @@
 
   \return distance between two geographic coordinates in current projection
 */
-double GS_geodistance(double *from, double *to, char *units)
+double GS_geodistance(double *from, double *to, const char *units)
 {
     double meters;
 

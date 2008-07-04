@@ -198,7 +198,7 @@ int gsd_make_nice_number(float *num)
 
   \return
 */
-GLuint gsd_put_legend(char *name, GLuint fontbase, int size, int *flags,
+GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		      float *rangef, int *pt)
 {
     GLint sl, sr, sb, st;
@@ -208,7 +208,7 @@ GLuint gsd_put_legend(char *name, GLuint fontbase, int size, int *flags,
     struct Categories cats;
     struct Range range;
     struct FPRange fp_range;
-    char *mapset;
+    const char *mapset;
     struct Colors colors;
     CELL min, max;
     DCELL fmin, fmax;
@@ -370,7 +370,8 @@ GLuint gsd_put_legend(char *name, GLuint fontbase, int size, int *flags,
 	float *dividers;
 	int labw, maxlabw, numlabs;
 	float labpos, labpt[3];
-	char *cstr, buff[80];
+	const char *cstr;
+	char buff[80];
 	GLint wt, wb, wl, wr;	/* Whole legend area, not just box */
 	int xoff, yoff;
 	int incr;		/* for do_invert */

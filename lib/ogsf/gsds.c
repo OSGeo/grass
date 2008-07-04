@@ -185,7 +185,7 @@ static int get_type(dataset * ds)
   \return data id
   \return -1 not found
 */
-int gsds_findh(char *name, IFLAG * changes, IFLAG * types, int begin)
+int gsds_findh(const char *name, IFLAG * changes, IFLAG * types, int begin)
 {
     static int i;
     int start;
@@ -216,7 +216,7 @@ int gsds_findh(char *name, IFLAG * changes, IFLAG * types, int begin)
   \return -1 on failure
   \return data id
 */
-int gsds_newh(char *name)
+int gsds_newh(const char *name)
 {
     dataset *new;
     static int first = 1;

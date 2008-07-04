@@ -48,7 +48,7 @@ G3d_range_updateFromTile  (G3D_Map *map, char *tile, int rows, int cols, int dep
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readRange  (char *name, char *mapset, struct FPRange *drange)
+G3d_readRange  (const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from G_read_fp_range */
 {
   int fd;
