@@ -48,15 +48,12 @@ static int site_att_cmp ( const void *pa, const void *pb) {
  *                      -2 on other fatal error or insufficient data,
  *                       1 on format mismatch (extra data)
  */
-int G_site_get ( FILE *fptr, Site *s)
+int G_site_get (struct Map_info *Map, Site *s)
 {
     int    i, type, cat;
-    struct Map_info *Map;
     static struct line_pnts *Points = NULL;
     static struct line_cats *Cats = NULL;
     SITE_ATT *sa;
-
-    Map = (struct Map_info *) fptr;
 
     if ( Points == NULL ) Points = Vect_new_line_struct ();
     if ( Cats == NULL ) Cats = Vect_new_cats_struct ();
@@ -101,13 +98,10 @@ int G_site_get ( FILE *fptr, Site *s)
 
 
 /* Writes a site to file open on fptr. */
-int G_site_put ( FILE *fptr, const Site *s)
+int G_site_put (struct Map_info *Map, const Site *s)
 {
-    struct Map_info *Map;
     static struct line_pnts *Points = NULL;
     static struct line_cats *Cats = NULL;
-
-    Map = (struct Map_info *) fptr;
 
     if ( Points == NULL ) Points = Vect_new_line_struct ();
     if ( Cats == NULL ) Cats = Vect_new_cats_struct ();
@@ -140,13 +134,8 @@ int G_site_put ( FILE *fptr, const Site *s)
  *                      -1 on EOF,
  *                      -2 for other error.
  */
-int G_site_describe ( FILE *ptr,
-  int *dims,int *cat,int *strs,int *dbls)
+int G_site_describe (struct Map_info *Map, int *dims,int *cat,int *strs,int *dbls)
 {
-    struct Map_info *Map;
-
-    Map = (struct Map_info *) ptr;
-    
     if ( Vect_is_3d(Map) ) {
 	G_debug (1, "Vector is 3D -> number of site dimensions is 3");
 	*dims = 3;
@@ -168,12 +157,9 @@ int G_site_describe ( FILE *ptr,
 /*-
  * Writes site_head struct.
  */
-int G_site_put_head ( FILE *ptr, Site_head *head)
+int G_site_put_head ( struct Map_info *Map, Site_head *head)
 {
-    struct Map_info *Map;
     static char buf[128];
-
-    Map = (struct Map_info *) ptr;
 
     if (head->name!=NULL)
 	Vect_set_map_name (Map, head->name);
@@ -217,12 +203,8 @@ int G_site_put_head ( FILE *ptr, Site_head *head)
 /*-
  * Fills in site_head struct.
  */
-int G_site_get_head (FILE *ptr, Site_head *head)
+int G_site_get_head (struct Map_info *Map, Site_head *head)
 {
-    struct Map_info *Map;
-
-    Map = (struct Map_info *) ptr;
-
     head->name = Vect_get_name(Map);
     head->desc = Vect_get_comment(Map);
     head->form = NULL;
@@ -275,11 +257,11 @@ int G_site_get_head (FILE *ptr, Site_head *head)
  *      rejects all names that begin with .
  **********************************************************************
  *
- *  FILE *
+ *  struct Map_info *
  *  G_sites_open_old (name, mapset)
  *      opens the existing site list file 'name' in the 'mapset'
  *
- *  FILE *
+ *  struct Map_info *
  *  G_sites_open_new (name)
  *      opens a new site list file 'name' in the current mapset
  *
@@ -325,7 +307,7 @@ char * G_ask_sites_in_mapset (const char *prompt, char *name)
 }
 
 
-FILE * G_sites_open_old (char *name,char *mapset)
+struct Map_info * G_sites_open_old (const char *name, const char *mapset)
 {
     struct Map_info *Map;
     struct field_info *fi;
@@ -357,7 +339,7 @@ FILE * G_sites_open_old (char *name,char *mapset)
     fi = Vect_get_field(Map, 1);
     if ( fi == NULL ) {  /* not attribute table */ 
 	G_debug ( 1, "No attribute table" );
-	return (FILE *) Map;
+	return Map;
     }
     
     driver = db_start_driver_open_database ( fi->driver, fi->database );
@@ -453,11 +435,11 @@ FILE * G_sites_open_old (char *name,char *mapset)
     /* sort attributes */
     qsort ( (void *)Map->site_att, Map->n_site_att, sizeof(SITE_ATT), site_att_cmp );
     
-    return (FILE *) Map;
+    return Map;
 }
 
 
-FILE * G_sites_open_new (char *name)
+struct Map_info *G_sites_open_new (const char *name)
 {
     struct Map_info *Map;
     
@@ -470,16 +452,13 @@ FILE * G_sites_open_new (char *name)
 
     G_debug ( 1, "New vector map opened");
 
-    return (FILE *) Map;
+    return Map;
 }
 
 
-void G_sites_close ( FILE * ptr)
+void G_sites_close (struct Map_info *Map)
 {
     int i, j;
-    struct Map_info *Map;
-
-    Map = (struct Map_info *) ptr;
 
     if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW)
 	Vect_build (Map, stderr);
@@ -505,19 +484,19 @@ void G_sites_close ( FILE * ptr)
 /* They are retained here only for backwards */
 /* compatability while porting applications  */
 /*********************************************/
-FILE *G_fopen_sites_old (char *name, char *mapset)
+struct Map_info *G_fopen_sites_old (const char *name, const char *mapset)
 {
     return G_sites_open_old (name, mapset);
 }
 
 
-FILE *G_fopen_sites_new (char *name)
+struct Map_info *G_fopen_sites_new (const char *name)
 {
     return G_sites_open_new (name);
 }
 
 
-int G_get_site ( FILE *fd, double *east,double *north, char **desc)
+int G_get_site (struct Map_info *fd, double *east,double *north, char **desc)
 {
     /* TODO ? */
     G_fatal_error ( "G_get_site() not yet updated.");
@@ -526,7 +505,7 @@ int G_get_site ( FILE *fd, double *east,double *north, char **desc)
 }
 
 
-int G_put_site ( FILE *fd, double east,double north, const char *desc)
+int G_put_site (struct Map_info *fd, double east,double north, const char *desc)
 {
     /* TODO ? */
     G_fatal_error ( "G_put_site() not yet updated.");
@@ -1209,19 +1188,13 @@ char *G_site_format (const Site *s, const char *fs, int id)
 
  Functions to obtain fields in order to draw sites with each point having a
  geometric property depending from database values.
-
- IN ALL THESE FUNCTIONS I FOLLOW THE CONVENTION TO PASS Map_info* as FILE*
-  FOR COHERENCE WITH OTHER ALREADY WRITTEN FUNCTION IN sites.c FILE.
 */
 
 /*
  Returns a pointer to the SITE_ATT in Map_info *ptr and with category cat
 */
-SITE_ATT * G_sites_get_atts (FILE * ptr, int* cat)
+SITE_ATT * G_sites_get_atts (struct Map_info *Map, int* cat)
 {
-    struct Map_info *Map;
-    Map = (struct Map_info *) ptr;
-
 	return (SITE_ATT *) bsearch ( (void *) cat, (void *)Map->site_att, Map->n_site_att,
 					 sizeof(SITE_ATT), site_att_cmp );
 }
@@ -1231,9 +1204,8 @@ SITE_ATT * G_sites_get_atts (FILE * ptr, int* cat)
 
   WARNING: user is responsible to free allocated memory, directly or calling G_sites_free_fields()
 */
-int G_sites_get_fields(FILE * ptr, char*** cnames, int** ctypes, int** ndx)
+int G_sites_get_fields(struct Map_info *Map, char*** cnames, int** ctypes, int** ndx)
 {
-    struct Map_info *Map;
     struct field_info *fi;
     int nrows, row, ncols, col, ndbl, nstr, ctype;
 
@@ -1251,7 +1223,6 @@ int G_sites_get_fields(FILE * ptr, char*** cnames, int** ctypes, int** ndx)
 		Should it be not true in the future, maybe we'll have to change this by choosing
 		appropriate fields and multiple categories */
 
-    Map = (struct Map_info *) ptr;
     fi = (struct field_info *)Vect_get_field(Map, 1);
 
 

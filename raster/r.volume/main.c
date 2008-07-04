@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     char *curr_mapset, *data_mapset, *clump_mapset;
     double avg, vol, total_vol, east, north, *sum;
     struct Cell_head window;
-    FILE *fd_sites = NULL;
+    struct Map_info *fd_sites = NULL;
     Site *mysite;
     Site_head site_info;
     struct GModule *module;
