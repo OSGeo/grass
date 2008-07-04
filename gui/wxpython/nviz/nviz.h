@@ -62,7 +62,8 @@ public:
     void SetLightsDefault();
 
     /* load.cpp */
-    int LoadRaster(const char*, const char *, const char *);
+    int LoadSurface(const char*, const char *, const char *);
+    int UnloadSurface(int);
 
     /* draw.cpp */
     void Draw(bool);

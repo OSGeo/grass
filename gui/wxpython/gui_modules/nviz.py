@@ -193,7 +193,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnLeftUp(self, event):
         self.ReleaseMouse()
 
-    def UpdateMap(self):
+    def UpdateMap(self, render=True):
         """
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
@@ -276,14 +276,39 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         @todo volumes
         """
         for raster in self.Map.GetListOfLayers(l_type='raster', l_active=True):
-            id = self.nvizClass.LoadRaster(str(raster.name), None, None)
-            # set resolution
-            res = UserSettings.Get(group='nviz', key='surface',
-                                   subkey=['draw', 'res-fine'])
-            wire = UserSettings.Get(group='nviz', key='surface',
-                                    subkey=['draw', 'res-coarse'])
-            self.nvizClass.SetSurfaceRes(id, res, wire)
-            self.object[self.Map.GetLayerIndex(raster)] = id
+            self.LoadRaster(raster)
+
+    def LoadRaster(self, layer):
+        """Load raster"""
+        if layer.type != 'raster':
+            return
+
+        id = self.nvizClass.LoadSurface(str(layer.name), None, None)
+        if id < 0:
+            raise gcmd.NvizError(parent=self.parent,
+                                 message=_("Unable to load raster map <%s>" % layer.name))
+
+        # set resolution
+        res = UserSettings.Get(group='nviz', key='surface',
+                               subkey=['draw', 'res-fine'])
+        wire = UserSettings.Get(group='nviz', key='surface',
+                                subkey=['draw', 'res-coarse'])
+        self.nvizClass.SetSurfaceRes(id, res, wire)
+        self.object[self.Map.GetLayerIndex(layer)] = id ### FIXME layer index is not fixed id!
+
+    def UnloadRaster(self, layer):
+        """Unload raster"""
+        if layer.type != 'raster':
+            return
+
+        idx = self.Map.GetLayerIndex(layer) ### FIXME layer index is not fixed id!
+        if not self.object.has_key(idx):
+            return
+
+        if layer.type == 'raster':
+            if self.nvizClass.UnloadSurface(self.object[idx]) == 0:
+                raise gcmd.NvizError(parent=self.parent,
+                                     message=_("Unable to unload raster map <%s>" % layer.name))
 
     def Reset(self):
         """Reset (unload data)"""
@@ -722,7 +747,7 @@ class NvizToolWindow(wx.Frame):
         all = wx.Button(panel, id=wx.ID_ANY, label=_("All"))
         all.SetToolTipString(_("Use for all loaded surfaces"))
         # self.win['reset'] = reset.GetId()
-        # reset.Bind(wx.EVT_BUTTON, self.OnResetView)
+        all.Bind(wx.EVT_BUTTON, self.OnSurfaceModeAll)
         gridSizer.Add(item=all, flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
                       pos=(2, 4))
 
@@ -740,10 +765,12 @@ class NvizToolWindow(wx.Frame):
 
         elev = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                            label=_("by elevation"))
+        elev.Enable(False) # TODO: not implemented yet
         gridSizer.Add(item=elev, pos=(0, 1))
 
         color = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                            label=_("by color"))
+        color.Enable(False) # TODO: not implemented yet
         gridSizer.Add(item=color, pos=(0, 2))
 
         boxSizer.Add(item=gridSizer, proportion=1,
@@ -768,6 +795,7 @@ class NvizToolWindow(wx.Frame):
                         initial=0,
                         min=0,
                         max=100)
+        x.Enable(False) # TODO: not implemented yet
         gridSizer.Add(item=x, pos=(0, 1))
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
@@ -777,6 +805,7 @@ class NvizToolWindow(wx.Frame):
                         initial=0,
                         min=0,
                         max=100)
+        y.Enable(False) # TODO: not implemented yet
         gridSizer.Add(item=y, pos=(0, 3))
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
@@ -786,6 +815,7 @@ class NvizToolWindow(wx.Frame):
                         initial=0,
                         min=0,
                         max=100)
+        z.Enable(False) # TODO: not implemented yet
         gridSizer.Add(item=z, pos=(0, 5))
 
         boxSizer.Add(item=gridSizer, proportion=1,
@@ -1041,17 +1071,26 @@ class NvizToolWindow(wx.Frame):
 
         # draw res
         if self.mapWindow.update.has_key('draw-res'):
-            coarse, fine = self.mapWindow.update['draw-res']
-
-            self.mapWindow.nvizClass.SetSurfaceRes(id, fine, coarse)
+            coarse, fine, all = self.mapWindow.update['draw-res']
+            if all:
+                self.mapWindow.nvizClass.SetSurfaceRes(-1, fine, coarse)
+            else:
+                self.mapWindow.nvizClass.SetSurfaceRes(id, fine, coarse)
 
         # draw style
         if self.mapWindow.update.has_key('draw-style'):
-            self.mapWindow.nvizClass.SetSurfaceStyle(id, self.mapWindow.update['draw-style'])
-
+            style, all = self.mapWindow.update['draw-style']
+            if all:
+                self.mapWindow.nvizClass.SetSurfaceStyle(-1, style)
+            else:
+                self.mapWindow.nvizClass.SetSurfaceStyle(id, style)
         # wire color
         if self.mapWindow.update.has_key('draw-color'):
-            self.mapWindow.nvizClass.SetWireColor(id, str(self.mapWindow.update['draw-color']))
+            color, all = self.mapWindow.update['draw-color']
+            if all:
+                self.mapWindow.nvizClass.SetWireColor(id, str(color))
+            else:
+                self.mapWindow.nvizClass.SetWireColor(-1, str(color))
 
         self.mapWindow.Refresh(False)
 
@@ -1152,16 +1191,23 @@ class NvizToolWindow(wx.Frame):
 
     def OnSurfaceResolution(self, event):
         """Draw resolution changed"""
+        self.SetSurfaceResolution()
+
+    def SetSurfaceResolution(self, all=False, apply=True):
+        """Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
             
-        self.mapWindow.update['draw-res'] = (coarse, fine)
+        self.mapWindow.update['draw-res'] = (coarse, fine, all) 
 
-        if self.parent.autoRender.IsChecked():
+        if apply and self.parent.autoRender.IsChecked():
             self.OnApply(None)
 
-    def SetSurfaceMode(self):
-        """Set draw mode"""
+    def SetSurfaceMode(self, apply=True, all=False):
+        """Set draw mode
+
+        @param apply allow auto-rendering
+        """
         value = 0
 
         mode = self.FindWindowById(self.win['surface']['draw']['mode']).GetSelection()
@@ -1190,20 +1236,27 @@ class NvizToolWindow(wx.Frame):
         else: # surface
             value |= wxnviz.DM_GOURAUD
 
-        self.mapWindow.update['draw-style'] = value
+        self.mapWindow.update['draw-style'] = (value, all)
 
-        if self.parent.autoRender.IsChecked():
+        if apply and self.parent.autoRender.IsChecked():
             self.OnApply(None)
 
     def OnSurfaceMode(self, event):
         """Set draw mode"""
         self.SetSurfaceMode()
 
-    def SetSurfaceWireColor(self, color):
+    def OnSurfaceModeAll(self, event):
+        """Set draw mode (including wire color) for all loaded surfaces"""
+        self.SetSurfaceMode(apply=False, all=True)
+        self.SetSurfaceResolution(apply=False, all=True)
+        color = self.FindWindowById(self.win['surface']['draw']['color']).GetColour()
+        self.SetSurfaceWireColor(color, all=True)
+
+    def SetSurfaceWireColor(self, color, all=False):
         """Set wire color"""
         value = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
-        self.mapWindow.update['draw-color'] = value
+        self.mapWindow.update['draw-color'] = (value, all)
 
         if self.parent.autoRender.IsChecked():
             self.OnApply(None)

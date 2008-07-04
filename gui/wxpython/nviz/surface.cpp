@@ -227,12 +227,17 @@ int Nviz::UnsetSurfaceAttr(int id, int attr)
 */
 int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 {
-    if (!GS_surf_exists(id)) {
-	return 0;
-    }
+    if (id > 0) {
+	if (!GS_surf_exists(id)) {
+	    return 0;
+	}
 
-    if (GS_set_drawres(id, fine, fine, coarse, coarse) < 0) {
-	return 0;
+	if (GS_set_drawres(id, fine, fine, coarse, coarse) < 0) {
+	    return 0;
+	}
+    }
+    else {
+	GS_setall_drawres(fine, fine, coarse, coarse);
     }
 
     return 1;
@@ -283,19 +288,35 @@ int Nviz::SetSurfaceStyle(int id, int style)
 
   \todo all
 
-  \param surface id
+  \param surface id (< 0 for all)
   \param color color string (R:G:B)
 
   \return 1 on success
   \return 0 on failure
 */
-int Nviz::SetWireColor(int id, const char* color)
+int Nviz::SetWireColor(int id, const char* color_str)
 {
-    if (!GS_surf_exists(id)) {
-	return 0;
-    }
+    int color;
 
-    GS_set_wire_color(id, Nviz_color_from_str(color));
+    color = Nviz_color_from_str(color_str);
+
+    if (id > 0) {
+	if (!GS_surf_exists(id)) {
+	    return 0;
+	}
+	GS_set_wire_color(id, color);
+    }
+    else {
+	int *surf_list, nsurfs, id;
+
+	surf_list = GS_get_surf_list(&nsurfs);
+	for (int i = 0; i < nsurfs; i++) {
+	    id = surf_list[i];
+	    GS_set_wire_color(id, color);
+	}
+
+	G_free(surf_list);
+    }
 
     return 1;
 }
