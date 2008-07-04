@@ -192,7 +192,7 @@ int check_blank(Tcl_Interp *, int);
 int Nget_first_exag_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nget_height_cmd(Nv_data *, Tcl_Interp *, int, char **);
 /* glwrappers.c */
-int tcl_color_to_int(char *);
+int tcl_color_to_int(const char *);
 int Nresize_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nfinish_cmd(ClientData, Tcl_Interp *, int, char **);
 int Nset_background_cmd(Nv_data *, Tcl_Interp *, int, char **);
@@ -365,31 +365,25 @@ struct Map_info;
 
 /* site_attr_commands.c */
 int site_attr_open_map(geosite *, int, struct Map_info **, int *, char ***, int **, int **);
-int site_attr_set_color(geosite *, int, int, int, char**, char**);
-int site_attr_set_size(geosite *, int, int, int, char**, char**);
+int site_attr_set_color(geosite *, int, int, int, const char**, const char**);
+int site_attr_set_size(geosite *, int, int, int, const char**, const char**);
 int site_attr_set_fixed_color(geosite *, int, unsigned int);
 int site_attr_set_fixed_size(geosite *, int, float);
 int site_attr_set_fixed_marker(geosite *, int, int);
 int site_attr_set(Tcl_Interp *, geosite *, int, char *, int, char *, char *);
 int site_attr_unset(Tcl_Interp *, geosite *, int, char *);
 int site_attr_get(Tcl_Interp *, geosite *, int);
-int site_attr_set_color(geosite *, int, int, int, char**, char**);
-int site_attr_set_size(geosite *, int, int, int, char**, char**);
-int site_attr_set_fixed_color(geosite *, int, unsigned int);
-int site_attr_set_fixed_size(geosite *, int, float);
-int site_attr_set_fixed_marker(geosite *, int, int);
 void site_attr_init_tcl(Tcl_Interp *, Nv_data *);
 void site_attr_init(int);
-int attr_interp_entries(int , char** , char** , float **, float **, float **);
-int attr_interp_colors(int , char** , char** , float **, float **, float **, float **, float **, float **, float **);
-int attr_get_int_BBGGRR(char* );
-int attr_interp_entries(int , char** , char** , float **, float **, float **);
-int attr_interp_entries_string(int , char** , float **);
-int attr_interp_colors(int , char** , char** , float **,float **, float **, float **, float **, float **, float **);
-int attr_interp_colors_string(int , char** , float **, float **, float **);
+int attr_interp_entries(int , const char** , const char** , float **, float **, float **);
+int attr_interp_colors(int , const char** , const char** , float **, float **, float **, float **, float **, float **, float **);
+int attr_get_int_BBGGRR(const char* );
+float attr_get_RRGGBB(const char*, float *, float *, float *);
+int attr_interp_entries_string(int , const char** , float **);
+int attr_interp_colors_string(int , const char** , float **, float **, float **);
 int attr_eval_color(float , int , float *, float *, float *, float *, float *, float *, float *);
-int attr_eval_color_string(char* , int , char** , float *, float *, float *);
-float attr_eval_entry_string(char* , int , char** , float*);
+int attr_eval_color_string(const char* , int , const char** , float *, float *, float *);
+float attr_eval_entry_string(const char* , int , const char** , float*);
 
 /* pick_vect_commands.c */
 void pick_init_tcl(Tcl_Interp *, Nv_data *);

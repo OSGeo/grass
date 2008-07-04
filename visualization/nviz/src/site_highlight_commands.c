@@ -277,7 +277,7 @@ geopoint * site_highlight_get_geopoint(geosite * gp, int cat)
 }
 
 
-int site_highlight_loop(geosite * gp, char ** argvPtr, int argcPtr, int what, int flag, float value)
+int site_highlight_loop(geosite * gp, const char ** argvPtr, int argcPtr, int what, int flag, float value)
 {
 	geopoint * gpt;
 	int i;

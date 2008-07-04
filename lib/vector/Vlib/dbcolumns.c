@@ -37,7 +37,7 @@
   \return list of column(s) names on success
   \return NULL on error 
 */
-char *Vect_get_column_names(struct Map_info *Map, int field)
+const char *Vect_get_column_names(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -46,14 +46,11 @@ char *Vect_get_column_names(struct Map_info *Map, int field)
     dbString table_name;
     dbTable *table;
     char buf[2000];
-    char *ptr;
 
     
     num_dblinks = Vect_get_num_dblinks(Map);
-    if (num_dblinks <= 0) {
+    if (num_dblinks <= 0)
 	return (NULL);
-    }
-    else {			/* num_dblinks > 0 */
 
 	G_debug(3,
 		"Displaying column names for database connection of layer %d:",
@@ -85,10 +82,7 @@ char *Vect_get_column_names(struct Map_info *Map, int field)
 	db_close_database(driver);
 	db_shutdown_driver(driver);
 
-	ptr = G_malloc ( strlen(G_chop(buf)) );
-        sprintf (ptr, "%s", buf);
-        return (ptr);
-    }
+        return G_store(G_chop(buf));
 }
 
 /*!
@@ -100,7 +94,7 @@ char *Vect_get_column_names(struct Map_info *Map, int field)
   \return list of column(s) types on success
   \return NULL on error 
 */
-char *Vect_get_column_types(struct Map_info *Map, int field)
+const char *Vect_get_column_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -109,14 +103,11 @@ char *Vect_get_column_types(struct Map_info *Map, int field)
     dbString table_name;
     dbTable *table;
     char buf[2000];
-    char *ptr;
 
     
     num_dblinks = Vect_get_num_dblinks(Map);
-    if (num_dblinks <= 0) {
+    if (num_dblinks <= 0)
 	return (NULL);
-    }
-    else {			/* num_dblinks > 0 */
 
 	G_debug(3,
 		"Displaying column types for database connection of layer %d:",
@@ -148,10 +139,7 @@ char *Vect_get_column_types(struct Map_info *Map, int field)
 	db_close_database(driver);
 	db_shutdown_driver(driver);
 
-	ptr = G_malloc ( strlen(G_chop(buf)) );
-        sprintf (ptr, "%s", buf);
-        return (ptr);
-    }
+        return G_store(G_chop(buf));
 }
 
 
@@ -164,7 +152,7 @@ char *Vect_get_column_types(struct Map_info *Map, int field)
   \return list of column(s) types on success
   \retutn NULL on error 
 */
-char *Vect_get_column_names_types(struct Map_info *Map, int field)
+const char *Vect_get_column_names_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -173,14 +161,11 @@ char *Vect_get_column_names_types(struct Map_info *Map, int field)
     dbString table_name;
     dbTable *table;
     char buf[2000];
-    char *ptr;
 
     
     num_dblinks = Vect_get_num_dblinks(Map);
-    if (num_dblinks <= 0) {
+    if (num_dblinks <= 0)
 	return (NULL);
-    }
-    else {			/* num_dblinks > 0 */
 
 	G_debug(3,
 		"Displaying column types for database connection of layer %d:",
@@ -214,8 +199,5 @@ char *Vect_get_column_names_types(struct Map_info *Map, int field)
 	db_close_database(driver);
 	db_shutdown_driver(driver);
 
-	ptr = G_malloc ( strlen(G_chop(buf)) );
-        sprintf (ptr, "%s", buf);
-        return (ptr);
-    }
+        return G_store(G_chop(buf));
 }

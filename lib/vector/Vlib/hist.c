@@ -62,7 +62,7 @@ Vect_hist_command ( struct Map_info *Map )
   \return the number of characters printed
 */
 int 
-Vect_hist_write ( struct Map_info *Map, char *str )
+Vect_hist_write ( struct Map_info *Map, const char *str )
 {
     int ret ;
     

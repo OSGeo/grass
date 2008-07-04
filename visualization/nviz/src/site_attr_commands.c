@@ -277,8 +277,8 @@ void site_attr_init_tcl(Tcl_Interp * interp, Nv_data * data)
   These following functions will better stay in appropriate .h files if
     these functions will be put in separate files
 */
-int attr_interp_entries(int n, char** argvX, char** argvY, float **x, float **y, float **m);
-int attr_interp_colors(int n, char** argvX, char** argvY, float **x,
+int attr_interp_entries(int n, const char** argvX, const char** argvY, float **x, float **y, float **m);
+int attr_interp_colors(int n, const char** argvX, const char** argvY, float **x,
 							float **yr, float **yg, float **yb,
 							float **mr, float **mg, float **mb);
 
@@ -627,8 +627,8 @@ void site_attr_close_map(struct Map_info *Map, int ncols, char **cnames, int *ct
 
 
 /* declarations of following functions */
-int site_attr_set_color(geosite * gp, int nattr, int index, int n, char** argvX, char** argvY);
-int site_attr_set_size(geosite * gp, int nattr, int index, int n, char** argvX, char** argvY);
+int site_attr_set_color(geosite * gp, int nattr, int index, int n, const char** argvX, const char** argvY);
+int site_attr_set_size(geosite * gp, int nattr, int index, int n, const char** argvX, const char** argvY);
 int site_attr_set_fixed_color(geosite * gp, int nattr, unsigned int color);
 int site_attr_set_fixed_size(geosite * gp, int nattr, float size);
 int site_attr_set_fixed_marker(geosite * gp, int nattr, int marker);
@@ -728,7 +728,7 @@ int site_attr_get(Tcl_Interp *interp, geosite * gp, int nattr)
 
 
 
-int site_attr_set_color(geosite * gp, int nattr, int index, int n, char** argvX, char** argvY)
+int site_attr_set_color(geosite * gp, int nattr, int index, int n, const char** argvX, const char** argvY)
 {
 	struct Map_info *Map; geopoint *gpt; SITE_ATT *sa;
 	int *ctypes; char **cnames; int *ndx;
@@ -763,7 +763,7 @@ int site_attr_set_color(geosite * gp, int nattr, int index, int n, char** argvX,
 	return(0);
 }
 
-int site_attr_set_size(geosite * gp, int nattr, int index, int n, char** argvX, char** argvY)
+int site_attr_set_size(geosite * gp, int nattr, int index, int n, const char** argvX, const char** argvY)
 {
 	struct Map_info *Map; geopoint *gpt; SITE_ATT *sa;
 	int *ctypes; char **cnames; int *ndx;
@@ -834,7 +834,7 @@ int site_attr_set_fixed_marker(geosite * gp, int nattr, int marker)
 /* Color conversion functions **************************************************/
 /*******************************************************************************/
 
-int attr_get_int_BBGGRR(char* rrggbb)
+int attr_get_int_BBGGRR(const char* rrggbb)
 {
 /* rrggbb is in the form of #RRGGBB (first char is skipped) */
 	char strbuf[16];
@@ -846,7 +846,7 @@ int attr_get_int_BBGGRR(char* rrggbb)
 }
 
 
-float attr_get_RRGGBB(char* rrggbb, float *r, float *g, float *b)
+float attr_get_RRGGBB(const char* rrggbb, float *r, float *g, float *b)
 {
 /* rrggbb is in the form of #RRGGBB (first char is skipped) */
 	char strbuf[16];
@@ -979,7 +979,7 @@ int Nget_interpolated_values_cmd(data, interp, argc, argv)
 	 - string do not: values are kept constant and change when there is a new one
 
 ********************************************************************************/
-int attr_interp_entries(int n, char** argvX, char** argvY, float **x, float **y, float **m)
+int attr_interp_entries(int n, const char** argvX, const char** argvY, float **x, float **y, float **m)
 {
 	const char *function_name="attr_interp_entries";
 
@@ -1005,7 +1005,7 @@ int attr_interp_entries(int n, char** argvX, char** argvY, float **x, float **y,
 	return(0);
 }
 
-int attr_interp_entries_string(int n, char** argvY, float **y)
+int attr_interp_entries_string(int n, const char** argvY, float **y)
 {
 	int i;
 	*y = (float*) malloc(n*sizeof(float));
@@ -1013,9 +1013,9 @@ int attr_interp_entries_string(int n, char** argvY, float **y)
 	return(0);
 }
 
-int attr_interp_colors(int n, char** argvX, char** argvY, float **x,
-							float **yr, float **yg, float **yb,
-							float **mr, float **mg, float **mb)
+int attr_interp_colors(int n, const char** argvX, const char** argvY, float **x,
+		       float **yr, float **yg, float **yb,
+		       float **mr, float **mg, float **mb)
 {
 	const char *function_name="attr_interp_colors";
 
@@ -1054,8 +1054,8 @@ int attr_interp_colors(int n, char** argvX, char** argvY, float **x,
 
 }
 
-int attr_interp_colors_string(int n, char** argvY,
-							float **yr, float **yg, float **yb)
+int attr_interp_colors_string(int n, const char** argvY,
+			      float **yr, float **yg, float **yb)
 {
 	int i;
 
@@ -1084,7 +1084,7 @@ float attr_eval_entry(float xvalue, int n, float *x, float *y, float *m)
 	}
 }
 
-float attr_eval_entry_string(char* xvalue, int n, char** x, float* y)
+float attr_eval_entry_string(const char* xvalue, int n, const char** x, float* y)
 {
 	int i;
 	if (strcmp(xvalue, x[0]) <= 0) return(y[0]);
@@ -1097,8 +1097,8 @@ float attr_eval_entry_string(char* xvalue, int n, char** x, float* y)
 }
 
 int attr_eval_color(float xvalue, int n, float *x,
-							float *yr, float *yg, float *yb,
-							float *mr, float *mg, float *mb)
+		    float *yr, float *yg, float *yb,
+		    float *mr, float *mg, float *mb)
 {
 	int i;
 	float r, g, b, dx;
@@ -1118,8 +1118,8 @@ int attr_eval_color(float xvalue, int n, float *x,
 	}
 }
 
-int attr_eval_color_string(char* xvalue, int n, char** x,
-							float *yr, float *yg, float *yb)
+int attr_eval_color_string(const char* xvalue, int n, const char** x,
+			   float *yr, float *yg, float *yb)
 {
 	int i;
 

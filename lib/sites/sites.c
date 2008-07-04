@@ -205,7 +205,8 @@ int G_site_put_head ( FILE *ptr, Site_head *head)
 	                return -1; /* added to prevent crash 5/2000 MN*/
 	        }
             }
-            G_format_timestamp (head->time, head->stime);
+            G_format_timestamp (head->time, buf);
+	    head->stime = G_store(buf);
 	    Vect_set_date (Map, head->stime);
         }
     }

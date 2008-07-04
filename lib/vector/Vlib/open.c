@@ -114,9 +114,9 @@ Vect_set_open_level (int level)
  * \return -1 in error
  */
 int
-Vect__open_old ( struct Map_info *Map, char *name, char *mapset, int update, int head_only ) 
+Vect__open_old ( struct Map_info *Map, const char *name, const char *mapset, int update, int head_only ) 
 {
-  char buf[200], buf2[200], xname[512], xmapset[512], errmsg[2000];
+  char buf[GNAME_MAX+10], buf2[GMAPSET_MAX+10], xname[GNAME_MAX], xmapset[GMAPSET_MAX], errmsg[2000];
   FILE *fp;
   int level, level_request, ferror;
   int format, ret;
@@ -373,10 +373,7 @@ Vect__open_old ( struct Map_info *Map, char *name, char *mapset, int update, int
  * \return -1 on error
 */
 int
-Vect_open_old (
-		struct Map_info *Map,
-		char *name,
-		char *mapset)
+Vect_open_old (struct Map_info *Map, const char *name, const char *mapset)
 {
     return ( Vect__open_old (Map, name, mapset, 0, 0) );
 }
@@ -394,7 +391,7 @@ Vect_open_old (
  * \return -1 on error
 */
 int
-Vect_open_update (struct Map_info *Map, char *name, char *mapset)
+Vect_open_update (struct Map_info *Map, const char *name, const char *mapset)
 {
     int ret;
 
@@ -431,7 +428,7 @@ Vect_open_update (struct Map_info *Map, char *name, char *mapset)
  * \return -1 on error
  */
 int
-Vect_open_old_head (struct Map_info *Map, char *name, char *mapset)
+Vect_open_old_head (struct Map_info *Map, const char *name, const char *mapset)
 {
     return ( Vect__open_old (Map, name, mapset, 0, 1) );
 }
@@ -449,7 +446,7 @@ Vect_open_old_head (struct Map_info *Map, char *name, char *mapset)
  * \return -1 on error
  */
 int
-Vect_open_update_head ( struct Map_info *Map, char *name, char *mapset)
+Vect_open_update_head ( struct Map_info *Map, const char *name, const char *mapset)
 {
     int ret;
 
@@ -480,7 +477,7 @@ Vect_open_update_head ( struct Map_info *Map, char *name, char *mapset)
  * \return -1 on error
 */
 int 
-Vect_open_new (struct Map_info *Map, char *name, int with_z)
+Vect_open_new (struct Map_info *Map, const char *name, int with_z)
 {
     int  ret, ferror;
     char errmsg[2000], buf[200];
@@ -499,7 +496,7 @@ Vect_open_new (struct Map_info *Map, char *name, int with_z)
     }
 
     /* Check if map already exists */
-    if ( G_find_file(GRASS_VECT_DIRECTORY, name, G_mapset()) != NULL ) {
+    if ( G_find_file2(GRASS_VECT_DIRECTORY, name, G_mapset()) != NULL ) {
         G_warning (_("Vector map <%s> already exists and will be overwritten"), name); 
 	
         ret = Vect_delete ( name );
@@ -608,12 +605,11 @@ Vect_coor_info ( struct Map_info *Map, struct Coor_info *Info )
  * \return maptype string on success
  * \return error message on error
  */
-char * 
+const char * 
 Vect_maptype_info ( struct Map_info *Map )
 {
-    char *maptype;
+    char maptype[1000];
 
-    maptype = G_malloc(sizeof(char) * 200);
     switch (  Map->format ) {
         case GV_FORMAT_NATIVE :
             sprintf (maptype, "native");
@@ -625,7 +621,7 @@ Vect_maptype_info ( struct Map_info *Map )
             sprintf (maptype, "unknown %d (update Vect_maptype_info)", Map->format);
     }
 	
-    return maptype;
+    return G_store(maptype);
 }
 
 

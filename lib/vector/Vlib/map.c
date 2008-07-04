@@ -149,14 +149,14 @@ copy_file(const char *src, const char *dst)
   \return 0 success
 */
 int 
-Vect_copy ( char *in, char *mapset, char *out, FILE *msgout )
+Vect_copy ( const char *in, const char *mapset, const char *out, FILE *msgout )
 {
     int i, n, ret, type;
     struct Map_info In, Out;
     struct field_info *Fi, *Fin;
     char   old_path[GPATH_MAX], new_path[GPATH_MAX], buf[GPATH_MAX]; 
     struct stat info;
-    char *files[] = { GRASS_VECT_FRMT_ELEMENT, GRASS_VECT_COOR_ELEMENT,
+    const char *files[] = { GRASS_VECT_FRMT_ELEMENT, GRASS_VECT_COOR_ELEMENT,
                       GRASS_VECT_HEAD_ELEMENT, GRASS_VECT_HIST_ELEMENT,
                       GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
                       NULL };
@@ -279,7 +279,7 @@ Vect_copy ( char *in, char *mapset, char *out, FILE *msgout )
   \return 0 success
 */
 int 
-Vect_rename ( char *in, char *out, FILE *msgout )
+Vect_rename ( const char *in, const char *out, FILE *msgout )
 {
     int i, n, ret, type;
     struct Map_info Map;
@@ -399,7 +399,7 @@ Vect_rename ( char *in, char *out, FILE *msgout )
   \return 0 success
 */
 int 
-Vect_delete ( char *map )
+Vect_delete ( const char *map )
 {
     int i, n, ret;
     struct Map_info Map;
@@ -407,11 +407,9 @@ Vect_delete ( char *map )
     char   buf[GPATH_MAX];
     DIR    *dir;
     struct dirent *ent; 
-    char *tmp;
+    const char *tmp;
 
     G_debug (3, "Delete vector '%s'", map );
-
-    G_chop ( map );
 
     if ( map == NULL || strlen ( map ) == 0 ) {
 	G_warning (_("Invalid vector map name <%s>"), map ? map : "null");
@@ -604,7 +602,7 @@ Vect_copy_tables ( struct Map_info *In, struct Map_info *Out, int field )
 */
 int 
 Vect_copy_table ( struct Map_info *In, struct Map_info *Out, int field_in, 
-	           int field_out,  char *field_name, int type )
+	           int field_out,  const char *field_name, int type )
 {
     return Vect_copy_table_by_cats ( In, Out, field_in, field_out, field_name, type, NULL, 0); 
 }
@@ -626,11 +624,11 @@ Vect_copy_table ( struct Map_info *In, struct Map_info *Out, int field_in,
 */
 int 
 Vect_copy_table_by_cats ( struct Map_info *In, struct Map_info *Out, int field_in, 
-	           int field_out,  char *field_name, int type, int *cats, int ncats )
+	           int field_out,  const char *field_name, int type, int *cats, int ncats )
 {
     int    ret;
     struct field_info *Fi, *Fin;
-    char   *name, *key;
+    const char   *name, *key;
 
     G_debug (2, "Vect_copy_table(): field_in = %d field_out = %d", field_in, field_out);
 

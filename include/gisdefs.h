@@ -711,9 +711,9 @@ char *G_location(void);
 char *G__location_path(void);
 
 /* ls.c */
-const char **G__ls(const char *, int *);
+char **G__ls(const char *, int *);
 void G_ls(const char *, FILE *);
-void G_ls_format(const char **, int, int, FILE *);
+void G_ls_format(char **, int, int, FILE *);
 
 /* lu.c */
 int G_ludcmp(double **, int, int *, double *);
@@ -1124,7 +1124,7 @@ int G_read_vector_timestamp(const char *, const char *, struct TimeStamp *);
 int G_write_raster_timestamp(const char *, const struct TimeStamp *);
 int G_write_vector_timestamp(const char *, const struct TimeStamp *);
 int G_format_timestamp ( const struct TimeStamp *, char *);
-int G_scan_timestamp ( struct TimeStamp *, char *);
+int G_scan_timestamp ( struct TimeStamp *, const char *);
 int G_remove_raster_timestamp (const char *);
 int G_remove_vector_timestamp (const char *);
 int G_read_grid3_timestamp (const char *,const char *, struct TimeStamp *);

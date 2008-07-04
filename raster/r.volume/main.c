@@ -203,19 +203,15 @@ int main(int argc, char *argv[])
 
     /* got everything, now do output */
     if (*site_list) {
+	char desc[GNAME_MAX*2+40];
 	site_info.form = NULL;
 	site_info.time = NULL;
 	site_info.stime = NULL;
-	site_info.labels = (char *)G_malloc(80 * sizeof(char));
-	site_info.name = (char *)G_malloc(80 * sizeof(char));
-	site_info.desc = (char *)G_malloc(80 * sizeof(char));
-	if (site_info.desc == NULL || site_info.name == NULL ||
-	    site_info.labels == NULL)
-	    G_fatal_error(_("Memory allocation error"));
-	sprintf(site_info.desc, "from %s on map %s using clumps from %s",
+	sprintf(desc, "from %s on map %s using clumps from %s",
 		argv[0], datamap, clumpmap);
-	sprintf(site_info.name, "%s", site_list);
-	sprintf(site_info.labels,
+	site_info.desc = G_store(desc);
+	site_info.name = G_store(site_list);
+	site_info.labels = G_store(
 		"centroid east|centroid north|#cat vol avg t n");
 	G_site_put_head(fd_sites, &site_info);
     }

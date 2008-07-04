@@ -284,7 +284,7 @@ list_locations (const char *gisdbase)
 int
 list_mapsets (const char *location_name, const char *location)
 {
-    const char **mapsets;
+    char **mapsets;
     int i, num_mapsets;
     int any, ok, any_ok;
     int len, tot_len;

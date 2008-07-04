@@ -211,7 +211,7 @@ int G_format_timestamp (
  */
 int G_scan_timestamp (
     struct TimeStamp *ts,
-    char *buf)
+    const char *buf)
 {
     char temp[1024], *t;
     const char *slash;

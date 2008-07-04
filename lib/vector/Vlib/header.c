@@ -24,7 +24,7 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
-static int lookup(char *file, char *key, char *value, size_t len);
+static int lookup(const char *file, const char *key, char *value, size_t len);
 
 
 /*!
@@ -198,7 +198,7 @@ Vect__read_head (struct Map_info *Map)
 
   \return poiter to map name
 */
-char *
+const char *
 Vect_get_name (struct Map_info *Map)
 {
     return (Map->name);
@@ -211,7 +211,7 @@ Vect_get_name (struct Map_info *Map)
 
   \return poiter to mapset name
 */
-char *
+const char *
 Vect_get_mapset (struct Map_info *Map)
 {
     return (Map->mapset);
@@ -224,7 +224,7 @@ Vect_get_mapset (struct Map_info *Map)
 
   \return poiter to map name (name@mapset)
 */
-char *
+const char *
 Vect_get_full_name (struct Map_info *Map)
 {
     char *ptr;
@@ -257,7 +257,7 @@ Vect_is_3d (struct Map_info *Map )
   \return 0
 */
 int
-Vect_set_organization (struct Map_info *Map, char *str )
+Vect_set_organization (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.organization );
     Map->head.organization = G_store ( str );
@@ -272,7 +272,7 @@ Vect_set_organization (struct Map_info *Map, char *str )
   
   \return organization string
 */
-char *
+const char *
 Vect_get_organization (struct Map_info *Map)
 {
     return (Map->head.organization);
@@ -290,7 +290,7 @@ Vect_get_organization (struct Map_info *Map)
   \return 0 on success
 */
 int
-Vect_set_date (struct Map_info *Map, char *str )
+Vect_set_date (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.date );
     Map->head.date = G_store ( str );
@@ -307,7 +307,7 @@ Vect_set_date (struct Map_info *Map, char *str )
 
   \return date of digitization string
 */
-char *
+const char *
 Vect_get_date (struct Map_info *Map)
 {
     return (Map->head.date);
@@ -322,7 +322,7 @@ Vect_get_date (struct Map_info *Map)
   \return 0 on success
 */
 int
-Vect_set_person (struct Map_info *Map, char *str )
+Vect_set_person (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.your_name );
     Map->head.your_name = G_store ( str );
@@ -336,7 +336,7 @@ Vect_set_person (struct Map_info *Map, char *str )
 
   \return user name string
 */
-char *
+const char *
 Vect_get_person (struct Map_info *Map)
 {
     return (Map->head.your_name);
@@ -351,7 +351,7 @@ Vect_get_person (struct Map_info *Map)
   \return 0 on success
 */
 int
-Vect_set_map_name (struct Map_info *Map, char *str )
+Vect_set_map_name (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.map_name );
     Map->head.map_name = G_store ( str );
@@ -365,7 +365,7 @@ Vect_set_map_name (struct Map_info *Map, char *str )
 
   \return map name string
 */
-char *
+const char *
 Vect_get_map_name (struct Map_info *Map)
 {
     return (Map->head.map_name);
@@ -380,7 +380,7 @@ Vect_get_map_name (struct Map_info *Map)
   \return 0 on success
 */
 int
-Vect_set_map_date (struct Map_info *Map, char *str )
+Vect_set_map_date (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.source_date );
     Map->head.source_date = G_store ( str );
@@ -394,7 +394,7 @@ Vect_set_map_date (struct Map_info *Map, char *str )
 
   \return date when the source map was originally produced string
 */
-char *
+const char *
 Vect_get_map_date (struct Map_info *Map)
 {
     return (Map->head.source_date);
@@ -437,7 +437,7 @@ Vect_get_scale (struct Map_info *Map)
   \return 0 on success
 */
 int
-Vect_set_comment (struct Map_info *Map, char *str )
+Vect_set_comment (struct Map_info *Map, const char *str )
 {
     G_free ( Map->head.line_3 );
     Map->head.line_3 = G_store ( str );
@@ -451,7 +451,7 @@ Vect_set_comment (struct Map_info *Map, char *str )
 
   \return comment or other info string
 */
-char *
+const char *
 Vect_get_comment (struct Map_info *Map)
 {
     return (Map->head.line_3);
@@ -515,11 +515,10 @@ Vect_get_proj (struct Map_info *Map)
   \return poiter to projection name
 */
 
-char *Vect_get_proj_name (struct Map_info *Map)
+const char *Vect_get_proj_name (struct Map_info *Map)
 {
+    char name[256];
     int n;
-    static char name[256];
-    char *G__projection_name();
 
     switch(n=Vect_get_proj(Map))
     {
@@ -531,7 +530,7 @@ char *Vect_get_proj_name (struct Map_info *Map)
     }
     if(!lookup (PROJECTION_FILE, "name", name, sizeof(name)))
 	strcpy (name, _("Unknown projection"));
-    return name;
+    return G_store(name);
 }
 
 /*!
@@ -566,7 +565,7 @@ Vect_get_thresh (struct Map_info *Map)
 
 
 /* from lib/gis/proj3.c */
-static int lookup(char *file, char *key, char *value, size_t len)
+static int lookup(const char *file, const char *key, char *value, size_t len)
 {
     char path[GPATH_MAX];
 

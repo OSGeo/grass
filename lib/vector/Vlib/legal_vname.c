@@ -33,9 +33,14 @@
   \return -1 if name does not start with letter A..Za..z or if name does not continue with A..Za..z0..9_@
 */
 
-int Vect_legal_filename (char *s)
+int Vect_legal_filename (const char *s)
 {
+    /* full list of SQL keywords available at
+       http://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
+    */
+    static const char *keywords[] = {"and", "or", "not", NULL};
     char buf[GNAME_MAX];
+    int i;
     
     sprintf(buf, "%s", s);
     
@@ -57,15 +62,11 @@ int Vect_legal_filename (char *s)
 	    return -1;
 	}
 
-    /* full list of SQL keywords available at
-       http://www.postgresql.org/docs/8.2/static/sql-keywords-appendix.html
-    */
-    if (G_strcasecmp(buf, "and") == 0 ||
-	G_strcasecmp(buf, "or") == 0 ||
-	G_strcasecmp(buf, "not") == 0) {
-	G_warning (_("Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."), buf);
-	return -1;
-    }
+    for (i = 0; keywords[i]; i++)
+	if (G_strcasecmp(buf, keywords[i]) == 0) {
+	    G_warning (_("Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."), buf);
+	    return -1;
+	}
 
     return 1;
 }
@@ -86,9 +87,9 @@ int Vect_legal_filename (char *s)
  \return 1 error
 */
 
-int Vect_check_input_output_name ( char * input, char * output, int error )
+int Vect_check_input_output_name ( const char * input, const char * output, int error )
 {
-    char *mapset;
+    const char *mapset;
 
     if ( Vect_legal_filename(output) == -1 ) {
 	if ( error == GV_FATAL_EXIT ) {
@@ -115,7 +116,8 @@ int Vect_check_input_output_name ( char * input, char * output, int error )
     }
 
     if ( strcmp(mapset,G_mapset()) == 0 ) {
-	char *in, nm[1000], ms[1000];
+	const char *in;
+	char nm[GNAME_MAX], ms[GMAPSET_MAX];
 	
         if ( G__name_is_fully_qualified(input,nm,ms) ) {
 	    in = nm;
