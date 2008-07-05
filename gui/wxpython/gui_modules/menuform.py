@@ -672,6 +672,7 @@ class mainFrame(wx.Frame):
             # abort
             self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
             self.btn_abort.SetToolTipString(_("Abort the running command"))
+            self.btn_abort.Enable(False)
             # copy
             btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
             btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
