@@ -1,5 +1,5 @@
-#ifndef __DIGIT_H__
-#define __DIGIT_H__
+#ifndef WXVDIGIT_DIGIT_H
+#define WXVDIGIT_DIGIT_H
 
 #define GSQL_MAX 4000
 
@@ -83,5 +83,5 @@ public:
     int GetUndoLevel();
 };
 
-#endif /* __DIGIT_H__ */
+#endif /* WXVDIGIT_DIGIT_H */
 

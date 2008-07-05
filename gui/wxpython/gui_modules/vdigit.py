@@ -1563,6 +1563,11 @@ class CDisplayDriver(AbstractDisplayDriver):
                                                 UserSettings.Get(group='vdigit', key='symbolVertex', subkey='color')[1],
                                                 UserSettings.Get(group='vdigit', key='symbolVertex', subkey='color')[2],
                                                 255).GetRGB(),
+                                       UserSettings.Get(group='vdigit', key='symbolDirection', subkey='enabled'),
+                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[0],
+                                                UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[1],
+                                                UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[2],
+                                                255).GetRGB(),
                                        UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'))
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -1969,7 +1974,8 @@ class VDigitSettingsDialog(wx.Dialog):
             (_("Centroid (duplicate in area)"), "symbolCentroidDup"),
             (_("Node (one line)"), "symbolNodeOne"),
             (_("Node (two lines)"), "symbolNodeTwo"),
-            (_("Vertex"), "symbolVertex"))
+            (_("Vertex"), "symbolVertex"),
+            (_("Direction"), "symbolDirection"),)
 
     def OnChangeCategoryMode(self, event):
         """Change category mode"""

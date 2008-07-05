@@ -125,6 +125,7 @@ class Settings:
                 'symbolNodeOne'     : { 'enabled' : True,  'color' : (255, 0, 0, 255) }, # red
                 'symbolNodeTwo'     : { 'enabled' : True,  'color' : (0, 86, 45, 255) }, # dark green
                 'symbolVertex'      : { 'enabled' : False, 'color' : (255, 20, 147, 255) }, # deep pink
+                'symbolDirection'   : { 'enabled' : False, 'color' : (255, 0, 0, 255) }, # red
                 # display
                 'lineWidth' : { 'value' : 2, 'units' : 'screen pixels' },
                 # snapping
@@ -327,7 +328,7 @@ class Settings:
         
         if self.filePath:
             self.__ReadFile(self.filePath, settings)
-            
+        
     def __ReadFile(self, filename, settings=None):
         """Read settings from file to dict"""
         if settings is None:
