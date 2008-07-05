@@ -40,7 +40,7 @@ class Select(wx.combo.ComboCtrl):
         self.SetPopupControl(self.tcp)
         self.SetPopupExtents(0,100)
         self.tcp.GetElementList(type, mapsets, exceptOf)
-        self.tcp.SetMultiple(multiple)
+        self.tcp.SetData(type, mapsets, exceptOf, multiple)
 
     def SetElementList(self, type):
         self.tcp.seltree.DeleteAllItems()
@@ -57,6 +57,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.value = [] # for multiple is False -> len(self.value) in [0,1]
         self.curitem = None
         self.multiple = False
+        self.type = None
+        self.mapsets = []
+        self.exceptOf = []
 
     def Create(self, parent):
         self.seltree = wx.TreeCtrl(parent, style=wx.TR_HIDE_ROOT
@@ -99,6 +102,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
     def OnPopup(self):
         """Limited only for first selected"""
+        # update list
+        self.seltree.DeleteAllItems()
+        self.GetElementList(self.type, self.mapsets, self.exceptOf)
+
         if len(self.value) > 0:
             self.seltree.EnsureVisible(self.value[0])
             self.seltree.SelectItem(self.value[0])
@@ -253,9 +260,9 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
 
         evt.Skip()
 
-    def SetMultiple(self, value):
+    def SetData(self, type, mapsets, exceptOf, multiple):
         """Select multiple items?"""
-        self.multiple = value
-
-
-
+        self.type = type
+        self.mapsets = mapsets
+        self.exceptOf = exceptOf
+        self.multiple = multiple
