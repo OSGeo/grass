@@ -160,6 +160,9 @@ class MapWindow(object):
     def OnZoomToMap(self, event):
         pass
 
+    def OnZoomToRaster(self, event):
+        pass
+
     def GetSelectedLayer(self, nviz=False, index=False):
         """Get selected layer from layer tree
 
