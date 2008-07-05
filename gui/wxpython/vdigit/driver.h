@@ -1,5 +1,5 @@
-#ifndef __DRIVER_H__
-#define __DRIVER_H__
+#ifndef WXVDIGIT_DRIVER_H
+#define WXVDIGIT_DRIVER_H
 
 #include <iostream> // debug
 #include <vector>
@@ -107,6 +107,8 @@ private:
 
 	symbol vertex;
 
+	symbol direction;
+
 	int lineWidth;    // screen units 
     } settings;
 
@@ -132,12 +134,16 @@ private:
 
     void Cell2Pixel (double, double, double,
 		     double *, double *, double *);
-    
+    double DistanceInPixels(double);
+
     int DrawCross(int, const wxPoint *, int size=5);
+    int DrawArrow(double, double, double, double, double,
+		   int);
 
     int DrawLine(int);
     int DrawLineVerteces(int);
     int DrawLineNodes(int);
+    int DrawDirectionArrow();
 
     /* debug */
     void PrintIds();
@@ -200,9 +206,10 @@ public:
 			bool, unsigned long,
 			bool, unsigned long,
 			bool, unsigned long,
+			bool, unsigned long,
 			int);
 };
 
 int print_error(const char *, int);
 
-#endif /* __DRIVER_H__ */
+#endif /* WXVDIGIT_DRIVER_H */

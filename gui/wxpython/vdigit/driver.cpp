@@ -6,15 +6,17 @@
    This driver is designed for wxPython GRASS GUI (digitization tool).
    Draw vector map layer to PseudoDC.
 
+   (C) by the GRASS Development Team
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
 
-   \author (C) by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2007-2008 
 */
+
+#include <cmath>
 
 #include "driver.h"
 
@@ -274,12 +276,18 @@ int DisplayDriver::DrawLine(int line)
 		}
 	    }
 	    else {
-		wxPoint points[pointsScreen->GetCount()];
+		wxPoint wxPoints[pointsScreen->GetCount()];
 		for (size_t i = 0; i < pointsScreen->GetCount(); i++) {
 		    wxPoint *point_beg = (wxPoint *) pointsScreen->Item(i)->GetData();
-		    points[i] = *point_beg;
+		    wxPoints[i] = *point_beg;
 		}
-		dc->DrawLines(pointsScreen->GetCount(), points);
+		dc->DrawLines(pointsScreen->GetCount(), wxPoints);
+
+		if (!IsSelected(line) && settings.direction.enabled) {
+		    DrawDirectionArrow();
+		    // restore pen
+		    dc->SetPen(*pen);
+		}
 	    }
 	}
     }
@@ -572,12 +580,30 @@ void DisplayDriver::Cell2Pixel(double east, double north, double depth,
     *x = int((east  - w) / region.map_res);
     *y = int((n - north) / region.map_res);
     */
-    *x = (east  - w) / region.map_res;
-    *y = (n - north) / region.map_res;
-
-    *z = 0;
+    if (x)
+	*x = (east  - w) / region.map_res;
+    if (y)
+	*y = (n - north) / region.map_res;
+    if (z)
+	*z = 0.;
 
     return;
+}
+
+/**
+   \brief Calculate distance in pixels
+
+   \todo LL projection
+
+   \param dist real distance
+*/
+double DisplayDriver::DistanceInPixels(double dist)
+{
+    double x;
+    
+    Cell2Pixel(region.map_west + dist, region.map_north, 0.0, &x, NULL, NULL);
+
+    return std::sqrt(x * x);
 }
 
 /**
@@ -661,6 +687,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   bool eNodeOne,     unsigned long cNodeOne,
 				   bool eNodeTwo,     unsigned long cNodeTwo,
 				   bool eVertex,      unsigned long cVertex,
+				   bool eDirection,   unsigned long cDirection,
 				   int lineWidth)
 {
     settings.highlight.Set(highlight);
@@ -696,6 +723,9 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 
     settings.vertex.enabled = eVertex;
     settings.vertex.color.Set(cVertex);
+
+    settings.direction.enabled = eDirection;
+    settings.direction.color.Set(cDirection);
 
     settings.lineWidth = lineWidth;
 }
@@ -1232,4 +1262,110 @@ void DisplayDriver::DrawSelected(bool draw)
     drawSelected = draw;
 
     return;
+}
+
+/**
+   \brief Draw line direction arrow
+
+   \return number of drawn arrows
+*/
+int DisplayDriver::DrawDirectionArrow()
+{
+    int narrows;
+    int size; // arrow length in pixels
+    int limit; // segment length limit for drawing symbol (in pixels)
+    double dist, angle, pos;
+    double e, n, d, x0, y0, z0, x1, y1, z1;
+    struct line_pnts *points_seg;
+    wxPen *pen_arrow;
+    
+    narrows = 0;
+    size = 5;
+    limit = 5; // 5px for line segment
+
+    points_seg = Vect_new_line_struct();
+    pen_arrow = new wxPen(settings.direction.color, settings.lineWidth, wxSOLID);
+
+    dc->SetPen(*pen_arrow);
+
+    dist = Vect_line_length(points);
+    
+    if (DistanceInPixels(dist) >= limit) {
+	while (1) {
+	    pos = (narrows + 1) * 8 * limit * region.map_res;
+
+	    if (Vect_point_on_line(points, pos,
+				   &e, &n, &d, NULL, NULL) < 1) {
+		break;
+	    }
+	    
+	    Cell2Pixel(e, n, d, &x0, &y0, &z0);
+	    
+	    if (Vect_point_on_line(points, pos - 3 * size * region.map_res,
+				   &e, &n, &d, &angle, NULL) < 1) {
+		break;
+	    }
+	    
+	    Cell2Pixel(e, n, d, &x1, &y1, &z1);
+	    
+	    DrawArrow(x0, y0, x1, y1, angle, size);
+
+	    if(narrows > 1e2) // low resolution, break
+		break;
+
+	    narrows++;
+	}
+
+	// draw at least one arrow in the middle of line
+	if (narrows < 1) {
+	    dist /= 2.;
+	    if (Vect_point_on_line(points, dist,
+				   &e, &n, &d, NULL, NULL) > 0) {
+	    
+		Cell2Pixel(e, n, d, &x0, &y0, &z0);
+		
+		if (Vect_point_on_line(points, dist - 3 * size * region.map_res,
+				       &e, &n, &d, &angle, NULL) > 0) {
+		    
+		    Cell2Pixel(e, n, d, &x1, &y1, &z1);
+		    
+		    DrawArrow(x0, y0, x1, y1, angle, size);
+		}
+	    }
+	}
+    }
+
+    Vect_destroy_line_struct(points_seg);
+    
+    return narrows;
+}
+
+/**
+   \brief Draw arrow symbol on line
+
+   \param x0,y0 arrow origin
+   \param x1,x1 arrow ending point (on line)
+   \param angle point ending point angle
+   \param size arrow size
+
+   \return 1
+*/
+int DisplayDriver::DrawArrow(double x0, double y0,
+			     double x1, double y1, double angle,
+			     int size)
+{
+    double x, y;
+    double angle_symb;
+
+    angle_symb = angle - M_PI / 2.;
+    x = x1 + size * std::cos(angle_symb);
+    y = y1 - size * std::sin(angle_symb);
+    dc->DrawLine((wxCoord) x, (wxCoord) y, (wxCoord) x0, (wxCoord) y0);
+    
+    angle_symb = M_PI / 2. + angle;
+    x = x1 + size * std::cos(angle_symb);
+    y = y1 - size * std::sin(angle_symb);
+    dc->DrawLine((wxCoord) x0, (wxCoord) y0, (wxCoord) x, (wxCoord) y);
+
+    return 1;
 }
