@@ -248,6 +248,19 @@ class Settings:
                         'z' : 0,
                         },
                     },
+                'vector' : {
+                    'lines' : {
+                        'width' : 2,
+                        'color' : (0, 0, 255, 255), # blue
+                        'flat' : False,
+                        'height' : 0,
+                        },
+                    },
+                'settings': {
+                    'general' : {
+                        'bgcolor' : (255, 255, 255, 255), # white
+                        },
+                    },
                 },
             }
         

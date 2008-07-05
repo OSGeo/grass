@@ -114,3 +114,15 @@ void swap_gl()
 {
     return;
 }
+
+/*!
+  \brief Set background color
+
+  \param color_str color string
+*/
+void Nviz::SetBgColor(const char *color_str)
+{
+    data->bgcolor = Nviz_color_from_str(color_str);
+
+    return;
+}

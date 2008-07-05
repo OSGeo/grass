@@ -1,7 +1,7 @@
 /**
-   \file map_obj.cpp
+   \file surface.cpp
    
-   \brief Experimental C++ wxWidgets Nviz prototype -- map object management
+   \brief Experimental C++ wxWidgets Nviz prototype -- surface attributes
 
    Used by wxGUI Nviz extension.
 
