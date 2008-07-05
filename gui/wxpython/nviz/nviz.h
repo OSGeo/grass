@@ -1,5 +1,5 @@
-#ifndef __NVIZ_H__
-#define __NVIZ_H__
+#ifndef WXNVIZ_H
+#define WXNVIZ_H
 
 #include <vector>
 
@@ -57,6 +57,7 @@ public:
     int SetDisplay(void *);
     void InitView();
     void Reset();
+    void SetBgColor(const char *);
 
     /* lights.cpp */
     void SetLightsDefault();
@@ -84,6 +85,9 @@ public:
     int SetSurfaceRes(int, int, int);
     int SetSurfaceStyle(int, int);
     int SetWireColor(int, const char *);
+
+    /* vector */
+    int SetVectorLineMode(int, const char *, int, int);
 };
 
-#endif /* __NVIZ_H__ */
+#endif /* WXNVIZ_H */

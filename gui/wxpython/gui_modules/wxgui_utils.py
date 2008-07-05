@@ -908,7 +908,13 @@ class LayerTree(CT.CustomTreeCtrl):
 
         # update nviz tools
         if self.mapdisplay.toolbars['nviz']:
-            self.mapdisplay.nvizToolWin.UpdatePage('surface')
+            type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
+            if type == 'raster':
+                self.mapdisplay.nvizToolWin.UpdatePage('surface')
+                self.mapdisplay.nvizToolWin.SetPage('surface')
+            elif type == 'vector':
+                self.mapdisplay.nvizToolWin.UpdatePage('vector')
+                self.mapdisplay.nvizToolWin.SetPage('vector')
 
     def OnCollapseNode(self, event):
         """

@@ -432,16 +432,21 @@ class NvizToolWindow(wx.Frame):
         #
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
 
+        self.page = {}
         # view page
         self.__createViewPage()
+        self.page['view'] = 0
         # surface page
         self.__createSurfacePage()
-        self.UpdatePage('surface')
+        self.page['surface'] = 1
         # vector page
         self.__createVectorPage()
-        self.UpdatePage('vector')
+        self.page['vector'] = 2
         # settings page
         self.__createSettingsPage()
+        self.page['settings'] = 3
+        self.UpdatePage('surface')
+        self.UpdatePage('vector')
         self.UpdatePage('settings')
 
         mainSizer.Add(item=self.notebook, proportion=1,
@@ -903,10 +908,11 @@ class NvizToolWindow(wx.Frame):
         width = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                             initial=1,
                             min=1,
-                            max=100) # TODO
-        # width.SetName("value")
-        # self.win['vector']['lines']['width'] = width.GetId()
-        # width.Bind(wx.EVT_SPINCTRL, self.OnVectorWidth)
+                            max=100)
+        width.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                        subkey=['lines', 'width']))
+        self.win['vector']['lines']['width'] = width.GetId()
+        width.Bind(wx.EVT_SPINCTRL, self.OnVectorLines)
         gridSizer.Add(item=width, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -917,7 +923,12 @@ class NvizToolWindow(wx.Frame):
                                          label=_("Color:")),
                       pos=(0, 3), flag=wx.ALIGN_CENTER_VERTICAL)
 
-        color = csel.ColourSelect(panel, id=wx.ID_ANY)
+        color = csel.ColourSelect(panel, id=wx.ID_ANY,
+                                  colour=UserSettings.Get(group='nviz', key='vector',
+                                                          subkey=['lines', 'color']))
+        self.win['vector']['lines']['color'] = color.GetId()
+        color.Bind(csel.EVT_COLOURSELECT, self.OnVectorLines)
+
         gridSizer.Add(item=color, pos=(0, 4))
 
         gridSizer.AddGrowableCol(5)
@@ -930,8 +941,14 @@ class NvizToolWindow(wx.Frame):
         display = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
                              choices = [_("on surface"),
                                         _("flat")])
-        display.SetSelection(0)
+        if UserSettings.Get(group='nviz', key='vector',
+                            subkey=['lines', 'flat']):
+            display.SetSelection(1)
+        else:
+            display.SetSelection(0)
+        self.win['vector']['lines']['flat'] = display.GetId()
         display.Bind(wx.EVT_CHOICE, self.OnVectorDisplay)
+
         gridSizer.Add(item=display, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 7))
 
@@ -973,6 +990,37 @@ class NvizToolWindow(wx.Frame):
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.win['settings'] = {}
+
+        #
+        # general
+        #
+        self.win['settings']['general'] = {}
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("General")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
+
+        # background color
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Background color:")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+
+        color = csel.ColourSelect(panel, id=wx.ID_ANY,
+                                  colour=UserSettings.Get(group='nviz', key='settings',
+                                                          subkey=['general', 'bgcolor']))
+        self.win['settings']['general']['bgcolor'] = color.GetId()
+        color.Bind(csel.EVT_COLOURSELECT, self.OnSettings)
+        gridSizer.Add(item=color, pos=(0, 1))
+
+
+        boxSizer.Add(item=gridSizer, proportion=1,
+                  flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL,
+                      border=5)
+        
+        panel.SetSizer(pageSizer)
+
 
         panel.SetSizer(pageSizer)
 
@@ -1181,9 +1229,17 @@ class NvizToolWindow(wx.Frame):
         layer = self.mapWindow.GetSelectedLayer()
         id = self.mapWindow.GetMapObjId(layer)
 
-        #
-        # surface
-        #
+        if layer.type == 'raster':
+            self.ApplySurface(id)
+        elif layer.type == 'vector':
+            self.ApplyVector(id)
+
+        self.ApplySettings()
+
+        self.mapWindow.Refresh(False)
+
+    def ApplySurface(self, id):
+        """Apply changes for surfaces"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
@@ -1242,7 +1298,27 @@ class NvizToolWindow(wx.Frame):
             else:
                 self.mapWindow.nvizClass.SetWireColor(-1, str(color))
 
-        self.mapWindow.Refresh(False)
+    def ApplyVector(self, id):
+        """Apply changes for vector"""
+        width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
+
+        color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
+        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+
+        if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
+            flat = False
+        else:
+            flat = True
+
+        self.mapWindow.nvizClass.SetVectorLineMode(id, str(color), width, flat)
+
+    def ApplySettings(self):
+        """Apply changes in settings"""
+        # bgcolor
+        color = self.FindWindowById(self.win['settings']['general']['bgcolor']).GetColour()
+        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+
+        self.mapWindow.nvizClass.SetBgColor(str(color))
 
     def OnClose(self, event):
         """Close button pressed
@@ -1424,8 +1500,21 @@ class NvizToolWindow(wx.Frame):
         else: # flat
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
 
+        self.OnVectorLines(event)
+
         event.Skip()
-    
+
+    def OnVectorLines(self, event):
+        """Set vector lines mode, apply changes if auto-rendering is enabled"""
+        if self.parent.autoRender.IsChecked():
+            self.OnApply(None)
+        
+    def OnSettings(self, event):
+        """Update settings, apply changes if auto-rendering is enabled""" 
+        
+        if self.parent.autoRender.IsChecked():
+            self.OnApply(None)
+            
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
         layer = self.mapWindow.GetSelectedLayer()
@@ -1479,11 +1568,12 @@ class NvizToolWindow(wx.Frame):
                         win = self.FindWindowById(self.win['surface'][attr]['const'])
                         
                     win.SetValue(data['value'])
+        elif pageId == 'vector':
+            pass
 
     def SetPage(self, name):
         """Get named page"""
-        if name == 'surface':
-            self.notebook.SetSelection(1)
+        self.notebook.SetSelection(self.page[name])
 
 class ViewPositionWindow(wx.Window):
     """Position control window (for NvizToolWindow)"""
