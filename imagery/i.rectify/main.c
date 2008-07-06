@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
 	  "transformation for each pixel in the image based on the "
 	  "control points");
 
+    grp = G_define_standard_option(G_OPT_I_GROUP);
+
     ifile = G_define_standard_option(G_OPT_R_INPUT);
     ifile->required = NO;
 
