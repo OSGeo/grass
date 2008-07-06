@@ -707,7 +707,9 @@ else
 
   GDAL=
   ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $GDAL_LIBS"
+  CFLAGS="$CFLAGS $GDAL_CFLAGS"
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],,[
   LIBS="$LIBS $GDAL_DEP_LIBS"
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
@@ -715,6 +717,7 @@ else
   ])
   ])
   LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
 
   AC_SUBST(GDAL_LIBS)
   AC_SUBST(GDAL_CFLAGS)
@@ -1142,8 +1145,11 @@ LOC_CHECK_INCLUDES(GL/gl.h GL/glu.h,OpenGL,$OPENGLINC)
 
 LOC_CHECK_LIB_PATH(opengl,OpenGL,OPENGL_LIB_PATH)
 
+ac_save_cflags="$CFLAGS"
+CFLAGS="$CFLAGS $OPENGLINC"
 LOC_CHECK_LINK(opengl32,[#include <GL/gl.h>],[glEnd();],OpenGL,$OPENGL_LIB_PATH,OPENGLLIB)
 LOC_CHECK_LINK(glu32,[#include <GL/glu.h>],[gluNewQuadric();],GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB)
+CFLAGS=${ac_save_cflags}
 
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
@@ -1186,8 +1192,11 @@ LOC_CHECK_LIB_PATH(odbc,ODBC,ODBCLIB)
 
 LOC_CHECK_LIBS(odbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,$ICONVLIB,,[
 LOC_CHECK_LIBS(iodbc,SQLConnect,ODBC,$ODBCLIB,ODBCLIB,,,[
+ac_save_cflags="$CFLAGS"
+CFLAGS="$CFLAGS $ODBCINC"
 LOC_CHECK_LINK(odbc32,[#include <windows.h>
 #include <sql.h>],[SQLAllocEnv((SQLHENV *)0);],ODBC,$ODBCLIB,ODBCLIB)
+CFLAGS=${ac_save_cflags}
 ])
 ])
 
