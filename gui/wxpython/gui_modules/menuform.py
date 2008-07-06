@@ -711,7 +711,7 @@ class mainFrame(wx.Frame):
                          flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                          border=5)
 
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
         #constrained_size = self.notebookpanel.GetSize()
         # 80 takes the tabbar into account
@@ -839,11 +839,6 @@ class mainFrame(wx.Frame):
             self.notebookpanel.OnPageChange(None)
             
         event.Skip()
-
-    def OnCloseWindow(self, event):
-        """Close the main window"""
-        self.MakeModal(False)
-        self.Destroy()
 
     def OnAbout(self, event):
         """General 'about' information"""
