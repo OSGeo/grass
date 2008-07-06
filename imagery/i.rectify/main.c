@@ -58,20 +58,8 @@ int main(int argc, char *argv[])
 	  "transformation for each pixel in the image based on the "
 	  "control points");
 
-    grp = G_define_option();
-    grp->key = "group";
-    grp->type = TYPE_STRING;
-    grp->required = YES;
-    grp->gisprompt = "old,group,group";
-    grp->description = _("Name of imagery group");
-
-    ifile = G_define_option();
-    ifile->key = "input";
-    ifile->type = TYPE_STRING;
+    ifile = G_define_standard_option(G_OPT_R_INPUT);
     ifile->required = NO;
-    ifile->multiple = YES;
-    ifile->gisprompt = "old,cell,raster";
-    ifile->description = _("Name of input raster map(s)");
 
     ext = G_define_option();
     ext->key = "extension";
@@ -94,7 +82,6 @@ int main(int argc, char *argv[])
     a = G_define_flag();
     a->key = 'a';
     a->description = _("Rectify all images in group");
-
 
 
     if (G_parser(argc, argv))
