@@ -646,14 +646,14 @@ class mainFrame(wx.Frame):
         # buttons
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
-        btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
-        btn_cancel.SetToolTipString(_("Cancel the command settings and ignore changes"))
-        btnsizer.Add(item=btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
-        btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btn_cancel.SetToolTipString(_("Cancel the command settings and ignore changes"))
+        btnsizer.Add(item=self.btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
+        self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # help
-        btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
-        btn_help.SetToolTipString(_("Show manual page of the command"))
-        btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
+        self.btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
+        self.btn_help.SetToolTipString(_("Show manual page of the command"))
+        self.btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
             btn_ok = wx.Button(parent=self.panel, id=wx.ID_OK)
@@ -678,8 +678,8 @@ class mainFrame(wx.Frame):
             self.btn_abort.SetToolTipString(_("Abort the running command"))
             self.btn_abort.Enable(False)
             # copy
-            btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
-            btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
+            self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
+            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
 
             btnsizer.Add(item=self.btn_abort, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
@@ -689,16 +689,16 @@ class mainFrame(wx.Frame):
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
 
-            btnsizer.Add(item=btn_clipboard, proportion=0,
+            btnsizer.Add(item=self.btn_clipboard, proportion=0,
                          flag=wx.ALL | wx.ALIGN_CENTER,
                          border=10)
 
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
             self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
-            btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+            self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
 
         # add help button
-        btnsizer.Add(item=btn_help, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
+        btnsizer.Add(item=self.btn_help, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
 
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER)
 
@@ -798,7 +798,11 @@ class mainFrame(wx.Frame):
             gcmd.Command(cmd)
 
         # update buttons status
-        self.btn_run.Enable(False)
+        for btn in (self.btn_run,
+                    self.btn_cancel,
+                    self.btn_clipboard,
+                    self.btn_help):
+            btn.Enable(False)
         self.btn_abort.Enable(True)
 
     def OnAbort(self, event):
@@ -808,7 +812,11 @@ class mainFrame(wx.Frame):
         except IndexError:
             pass
 
-        self.btn_run.Enable(True)
+        for btn in (self.btn_run,
+                    self.btn_cancel,
+                    self.btn_clipboard,
+                    self.btn_help):
+            btn.Enable(True)
         self.btn_abort.Enable(False)
 
     def OnCopy(self, event):
