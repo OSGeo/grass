@@ -650,6 +650,10 @@ class mainFrame(wx.Frame):
         btn_cancel.SetToolTipString(_("Cancel the command settings and ignore changes"))
         btnsizer.Add(item=btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
         btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        # help
+        btn_help = wx.Button(parent=self.panel, id=wx.ID_HELP)
+        btn_help.SetToolTipString(_("Show manual page of the command"))
+        btn_help.Bind(wx.EVT_BUTTON, self.OnHelp)
         if self.get_dcmd is not None: # A callback has been set up
             btn_apply = wx.Button(parent=self.panel, id=wx.ID_APPLY)
             btn_ok = wx.Button(parent=self.panel, id=wx.ID_OK)
@@ -692,6 +696,9 @@ class mainFrame(wx.Frame):
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
             self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
             btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+
+        # add help button
+        btnsizer.Add(item=btn_help, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
 
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER)
 
@@ -824,6 +831,14 @@ class mainFrame(wx.Frame):
             self.Hide()
         else:
             self.Destroy()
+
+    def OnHelp(self, event):
+        """Show manual page (switch to the 'Manual' notebook page)"""
+        if hasattr(self.notebookpanel, "manual_tab_id"):
+            self.notebookpanel.notebook.SetSelection(self.notebookpanel.manual_tab_id)
+            self.notebookpanel.OnPageChange(None)
+            
+        event.Skip()
 
     def OnCloseWindow(self, event):
         """Close the main window"""
@@ -1240,11 +1255,17 @@ class cmdPanel(wx.Panel):
         event.Skip()
 
     def OnPageChange(self, event):
+        if not event:
+            sel = self.notebook.GetSelection()
+        else:
+            sel = event.GetSelection()
+
         if hasattr(self, "manual_tab_id") and \
-                event.GetSelection() == self.manual_tab_id:
+                sel == self.manual_tab_id:
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manual_tab.Ok:
+                wx.Yield()
                 self.manual_tab.LoadPage(self.manual_tab.fspath + self.task.name + ".html")
                 self.manual_tab.Ok = True
 
