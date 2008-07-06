@@ -59,6 +59,8 @@ class Settings:
                 'mapsetPath'  : { 'selection' : 0 }, 
                 # use default window layout (layer manager, displays, ...)
                 'defWindowPos' : { 'enabled' : False, 'dim' : '' },
+                # expand/collapse element list
+                'elementListExpand' : { 'selection' : 0 },
                 },
             'manager' : {
                 # show opacity level widget
@@ -285,24 +287,28 @@ class Settings:
                 self.internalSettings[group][key] = {}
 
         self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
-        self.internalSettings['general']['mapsetPath']['choices'] = [_('Mapset search path'),
-                                                                     _('All available mapsets')]
-        self.internalSettings['atm']['leftDbClick']['choices'] = [_('Edit selected record'),
-                                                                  _('Display selected')]
-        self.internalSettings['advanced']['settingsFile']['choices'] = ['home',
+        self.internalSettings['general']['mapsetPath']['choices'] = (_('Mapset search path'),
+                                                                     _('All available mapsets'))
+        self.internalSettings['general']['elementListExpand']['choices'] = (_("Collapse all except PERMANENT and current"),
+                                                                            _("Collapse all except PERMANENT"),
+                                                                            _("Collapse all"),
+                                                                            _("Expand all"))
+        self.internalSettings['atm']['leftDbClick']['choices'] = (_('Edit selected record'),
+                                                                  _('Display selected'))
+        self.internalSettings['advanced']['settingsFile']['choices'] = ('home',
                                                                         'gisdbase',
                                                                         'location',
-                                                                        'mapset']
-        self.internalSettings['advanced']['iconTheme']['choices'] = ['grass',
-                                                                     'silk']
-        self.internalSettings['advanced']['digitInterface']['choices'] = ['vedit',
-                                                                          'vdigit']
-        self.internalSettings['cmd']['verbosity']['choices'] = ['grassenv',
+                                                                        'mapset')
+        self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',
+                                                                     'silk')
+        self.internalSettings['advanced']['digitInterface']['choices'] = ('vedit',
+                                                                          'vdigit')
+        self.internalSettings['cmd']['verbosity']['choices'] = ('grassenv',
                                                                 'verbose',
-                                                                'quiet']
+                                                                'quiet')
         self.internalSettings['display']['driver']['choices'] = ['default']
         self.internalSettings['display']['statusbarMode']['choices'] = globalvar.MAP_DISPLAY_STATUSBAR_MODE
-        
+
     def GetMapsetPath(self):
         """Store mapset search path"""
         all, access = utils.ListOfMapsets()
@@ -638,6 +644,27 @@ class PreferencesDialog(wx.Dialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 1))
         
+        #
+        # expand element list
+        #
+        row +=1
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Element list:")),
+                      flag=wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 0))
+        elementList = wx.Choice(parent=panel, id=wx.ID_ANY, 
+                                choices=self.settings.Get(group='general', key='elementListExpand',
+                                                          subkey='choices', internal=True),
+                                name="GetSelection")
+        elementList.SetSelection(self.settings.Get(group='general', key='elementListExpand',
+                                                   subkey='selection'))
+        self.winId['general:elementListExpand:selection'] = elementList.GetId()
+
+        gridSizer.Add(item=elementList,
+                      flag=wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 1))
 
         #
         # default window layout

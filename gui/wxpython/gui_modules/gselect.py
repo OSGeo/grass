@@ -211,8 +211,26 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 continue
 
             if self.seltree.ItemHasChildren(dir_node):
-                self.seltree.Expand(dir_node)
+                sel = UserSettings.Get(group='general', key='elementListExpand',
+                                       subkey='selection')
+                collapse = True
 
+                if sel == 0: # collapse all expect PERMANENT and current
+                    if dir in ('PERMANENT', curr_mapset):
+                        collapse = False
+                elif sel == 1: # collapse all expect PERMANENT
+                    if dir == 'PERMANENT':
+                        collapse = False
+                elif sel == 2: # collapse all
+                    pass
+                elif sel == 3: # expand all
+                    collapse = False
+                
+                if collapse:
+                    self.seltree.Collapse(dir_node)
+                else:
+                    self.seltree.Expand(dir_node)
+                
     # helpers
     def FindItem(self, parentItem, text):
         item, cookie = self.seltree.GetFirstChild(parentItem)
