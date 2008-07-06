@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     grp = G_define_standard_option(G_OPT_I_GROUP);
 
-    ifile = G_define_standard_option(G_OPT_R_INPUT);
+    ifile = G_define_standard_option(G_OPT_R_INPUTS);
     ifile->required = NO;
 
     ext = G_define_option();
