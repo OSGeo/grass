@@ -243,6 +243,7 @@ int GV_unselect_surf(int, int);
 int GV_surf_is_selected(int, int);
 void GV_draw_vect(int);
 void GV_alldraw_vect(void);
+void GV_alldraw_fastvect(void);
 void GV_draw_fastvect(int);
 int GV_Set_ClientData(int, void *);
 void *GV_Get_ClientData(int);

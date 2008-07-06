@@ -439,7 +439,7 @@ void GV_draw_vect(int vid)
 }
 
 /*!
-  \brief Draw all vector sets
+  \brief Draw all loaded vector sets
 */
 void GV_alldraw_vect(void)
 {
@@ -453,7 +453,9 @@ void GV_alldraw_vect(void)
 }
 
 /*!
-  \brief Draw vector sets
+  \brief Draw vector set (fast mode)
+
+  \todo Seems to be broken, nothing is drawn
 
   \param vid vector set id
 */
@@ -475,6 +477,20 @@ void GV_draw_fastvect(int vid)
 	}
     }
 
+    return;
+}
+
+/*!
+  \brief Draw all loaded vector sets (fast mode)
+*/
+void GV_alldraw_fastvect(void)
+{
+    int id;
+
+    for (id = 0; id < Next_vect; id++) {
+	GV_draw_fastvect(Vect_ID[id]);
+    }
+    
     return;
 }
 

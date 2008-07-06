@@ -410,6 +410,8 @@ sets.
 
 GV_alldraw_vect()
 
+GV_alldraw_fastvect()
+
 GV_delete_vector()
 
 GV_draw_fastvect()
