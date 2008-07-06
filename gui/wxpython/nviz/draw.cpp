@@ -26,14 +26,13 @@
 */
 void Nviz::Draw(bool quick)
 {
-
     Nviz_draw_cplane(data, -1, -1); // ?
 
     if (quick) {
-	Nviz_draw_quick(data, 1); // clear screen
+	Nviz_draw_quick(data); 
     }
     else {
-      Nviz_draw_all (data, 1); // clear screen
+      Nviz_draw_all (data); 
     }
 
     G_debug(1, "Nviz::Draw(): quick=%d",

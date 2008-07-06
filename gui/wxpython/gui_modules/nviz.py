@@ -26,18 +26,20 @@ from threading import Thread
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
+errorMsg = ''
 try:
     from wx import glcanvas
     haveGLCanvas = True
-except ImportError:
+except ImportError, e:
     haveGLCanvas = False
-
+    errorMsg = e
 try:
     from OpenGL.GL import *
     from OpenGL.GLUT import *
     haveOpenGL = True
-except ImportError:
+except ImportError, e:
     haveOpenGL = False
+    errorMsg = e
 
 import globalvar
 import gcmd
@@ -50,8 +52,9 @@ try:
     sys.path.append(nvizPath)
     import grass7_wxnviz as wxnviz
     haveNviz = True
-except ImportError:
+except ImportError, e:
     haveNviz = False
+    errorMsg = e
 
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
@@ -222,11 +225,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #glRotatef((self.y - self.lastY) * yScale, 1.0, 0.0, 0.0);
         #glRotatef((self.x - self.lastX) * xScale, 0.0, 1.0, 0.0);
 
-        self.parent.onRenderGauge.Show()
-        if self.parent.onRenderGauge.GetRange() > 0:
-            self.parent.onRenderGauge.SetValue(1)
-            self.parent.onRenderTimer.Start(100)
-        self.parent.onRenderCounter = 0
+        if self.render:
+            self.parent.onRenderGauge.Show()
+            self.parent.onRenderGauge.SetRange(2)
+            self.parent.onRenderGauge.SetValue(0)
 
         if 'view' in self.update.keys():
             self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
@@ -240,6 +242,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             del self.update['z-exag']
 
         if self.render is True:
+            self.parent.onRenderGauge.SetValue(1)
+            wx.Yield()
             self.nvizClass.Draw(False)
         else:
             self.nvizClass.Draw(True) # quick
@@ -248,17 +252,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         stop = time.clock()
 
-        #
-        # hide process bar
-        #
-        if self.parent.onRenderGauge.GetRange() > 0:
-            self.parent.onRenderTimer.Stop()
-        self.parent.onRenderGauge.Hide()
+        if self.render:
+            self.parent.onRenderGauge.SetValue(2)
+            # hide process bar
+            self.parent.onRenderGauge.Hide()
 
         #
         # update statusbar
         #
-        ### self.Map.SetRegion()
         # self.parent.StatusbarUpdate()
 
         Debug.msg(3, "GLWindow.UpdateMap(): render=%s, -> time=%g" % \
@@ -299,6 +300,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                subkey=['draw', 'res-fine'])
         wire = UserSettings.Get(group='nviz', key='surface',
                                 subkey=['draw', 'res-coarse'])
+
         self.nvizClass.SetSurfaceRes(id, res, wire)
         self.object[self.Map.GetLayerIndex(layer)] = id ### FIXME layer index is not fixed id!
 
@@ -445,6 +447,7 @@ class NvizToolWindow(wx.Frame):
         # settings page
         self.__createSettingsPage()
         self.page['settings'] = 3
+        self.pageUpdated = True
         self.UpdatePage('surface')
         self.UpdatePage('vector')
         self.UpdatePage('settings')
@@ -453,29 +456,15 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.EXPAND | wx.ALL, border=5)
 
         #
-        # button (see menuform)
+        # update dialog (selected layer)
         #
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
-        btnApply = wx.Button(self, wx.ID_APPLY)
-        btnSave = wx.Button(self, wx.ID_SAVE)
-        btnSave.SetDefault()
-        # bindings
-        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        btnApply.SetToolTipString(_("Apply changes and update display"))
-        btnApply.SetDefault()
-        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
-        btnSave.SetToolTipString(_("Apply changes, update display and save changes to layer settings"))
-        btnCancel.Bind(wx.EVT_BUTTON, self.OnClose)
-        btnCancel.SetToolTipString(_("Hide dialog and ignore changes"))
-        # sizer
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(btnApply)
-        btnSizer.AddButton(btnCancel)
-        btnSizer.AddButton(btnSave)
-        btnSizer.Realize()
-        
-        mainSizer.Add(item=btnSizer, proportion=0, flag=wx.ALIGN_CENTER | wx.ALL,
-                      border=5)
+        mapLayer = self.mapWindow.GetSelectedLayer()
+        if mapLayer:
+            type = mapLayer.type
+            if type == 'raster':
+                self.UpdatePage('surface')
+            elif type == 'vector':
+                self.UpdatePage('vector')
 
         #
         # bindings
@@ -1224,24 +1213,21 @@ class NvizToolWindow(wx.Frame):
             
         self.mapWindow.SetLayerSettings(data)
 
-    def OnApply(self, event):
-        """Apply button pressed
-        
-        Apply changes, update map
-        """
-        layer = self.mapWindow.GetSelectedLayer()
-        id = self.mapWindow.GetMapObjId(layer)
+    def UpdateLayerProperties(self):
+        """Update data layer properties"""
+        mapLayer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(nviz=True)
+        print '#1', data
+        id = self.mapWindow.GetMapObjId(mapLayer)
 
-        if layer.type == 'raster':
-            self.ApplySurface(id)
-        elif layer.type == 'vector':
-            self.ApplyVector(id)
+        if mapLayer.type == 'raster':
+            self.UpdateRasterProperties(id, data)
+        elif mapLayer.type == 'vector':
+            self.UpdateVectorProperies(id, data)
 
-        self.ApplySettings()
+        print '#2', self.mapWindow.GetSelectedLayer(nviz=True)
 
-        self.mapWindow.Refresh(False)
-
-    def ApplySurface(self, id):
+    def UpdateRasterProperties(self, id, data):
         """Apply changes for surfaces"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
@@ -1276,6 +1262,8 @@ class NvizToolWindow(wx.Frame):
                     elif attrb == 'emit':
                         self.mapWindow.nvizClass.SetSurfaceEmit(id, map, str(value)) 
 
+                # update properties
+                data[attrb] = self.mapWindow.update[attrb]
                 del self.mapWindow.update[attrb]
 
         # draw res
@@ -1286,6 +1274,9 @@ class NvizToolWindow(wx.Frame):
             else:
                 self.mapWindow.nvizClass.SetSurfaceRes(id, fine, coarse)
 
+            # update properties
+            data['draw-res'] = self.mapWindow.update['draw-res']
+
         # draw style
         if self.mapWindow.update.has_key('draw-style'):
             style, all = self.mapWindow.update['draw-style']
@@ -1293,6 +1284,10 @@ class NvizToolWindow(wx.Frame):
                 self.mapWindow.nvizClass.SetSurfaceStyle(-1, style)
             else:
                 self.mapWindow.nvizClass.SetSurfaceStyle(id, style)
+
+            # update properties
+            data['draw-style'] = self.mapWindow.update['draw-style']
+
         # wire color
         if self.mapWindow.update.has_key('draw-color'):
             color, all = self.mapWindow.update['draw-color']
@@ -1301,20 +1296,19 @@ class NvizToolWindow(wx.Frame):
             else:
                 self.mapWindow.nvizClass.SetWireColor(-1, str(color))
 
-    def ApplyVector(self, id):
+            # update properties
+            data['draw-color'] = self.mapWindow.update['draw-color']
+
+    def UpdateVectorProperties(self, id, data):
         """Apply changes for vector"""
-        width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
-
-        color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
-        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
-
-        if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
-            flat = False
-        else:
-            flat = True
-
-        self.mapWindow.nvizClass.SetVectorLineMode(id, str(color), width, flat)
-
+        if self.mapWindow.update.has_key('vector-lines'):
+            width, color, flat = self.mapWindow.update['vector-lines']
+            self.mapWindow.nvizClass.SetVectorLineMode(id, color, width, flat)
+            
+        if self.mapWindow.update.has_key('vector-height'):
+            height = self.mapWindow.update['vector-height']
+            self.mapWindow.nvizClass.SetVectorHeight(id, height)
+            
     def ApplySettings(self):
         """Apply changes in settings"""
         # bgcolor
@@ -1360,8 +1354,10 @@ class NvizToolWindow(wx.Frame):
         self.SetSurfaceUseMap(attrb, useMap)
         
         self.mapWindow.update[attrb] = (useMap, str(value))
+        self.UpdateLayerProperties()
+
         if self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+            self.mapWindow.Refresh(False)
 
     def SetSurfaceUseMap(self, attrb, map=None):
         if attrb in ('topo', 'color', 'shine'):
@@ -1413,26 +1409,29 @@ class NvizToolWindow(wx.Frame):
                 value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
             map = False
 
-        self.mapWindow.update[attrb] = (map, str(value))
+        if self.pageUpdated: # do not update when selection is changed
+            self.mapWindow.update[attrb] = (map, str(value))
+            self.UpdateLayerProperties()
 
-        if self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+            if self.parent.autoRender.IsChecked():
+                self.mapWindow.Refresh(False)
 
     def OnSurfaceResolution(self, event):
         """Draw resolution changed"""
         self.SetSurfaceResolution()
 
-    def SetSurfaceResolution(self, all=False, apply=True):
+        if apply and self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+
+    def SetSurfaceResolution(self, all=False):
         """Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
             
         self.mapWindow.update['draw-res'] = (coarse, fine, all) 
+        self.UpdateLayerProperties()
 
-        if apply and self.parent.autoRender.IsChecked():
-            self.OnApply(None)
-
-    def SetSurfaceMode(self, apply=True, all=False):
+    def SetSurfaceMode(self, all=False):
         """Set draw mode
 
         @param apply allow auto-rendering
@@ -1465,34 +1464,41 @@ class NvizToolWindow(wx.Frame):
         else: # surface
             value |= wxnviz.DM_GOURAUD
 
-        self.mapWindow.update['draw-style'] = (value, all)
-
-        if apply and self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+        if self.pageUpdated:
+            self.mapWindow.update['draw-style'] = (value, all)
+            self.UpdateLayerProperties()
 
     def OnSurfaceMode(self, event):
         """Set draw mode"""
         self.SetSurfaceMode()
 
+        if apply and self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+
     def OnSurfaceModeAll(self, event):
         """Set draw mode (including wire color) for all loaded surfaces"""
-        self.SetSurfaceMode(apply=False, all=True)
-        self.SetSurfaceResolution(apply=False, all=True)
+        self.SetSurfaceMode(all=True)
+        self.SetSurfaceResolution(all=True)
         color = self.FindWindowById(self.win['surface']['draw']['color']).GetColour()
         self.SetSurfaceWireColor(color, all=True)
 
-    def SetSurfaceWireColor(self, color, all=False):
+        if apply and self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+
+    def SetSurfaceWireColor(self, color, all=False, apply=True):
         """Set wire color"""
         value = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
-        self.mapWindow.update['draw-color'] = (value, all)
-
-        if self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+        if self.pageUpdated:
+            self.mapWindow.update['draw-color'] = (value, all)
+            self.UpdateLayerProperties()
 
     def OnSurfaceWireColor(self, event):
         """Set wire color"""
         self.SetSurfaceWireColor(event.GetValue())
+
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
 
     def OnVectorDisplay(self, event):
         """Display vector lines on surface/flat"""
@@ -1509,8 +1515,21 @@ class NvizToolWindow(wx.Frame):
 
     def OnVectorLines(self, event):
         """Set vector lines mode, apply changes if auto-rendering is enabled"""
+        width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
+
+        color = self.FindWindowById(self.win['vector']['lines']['color']).GetColour()
+        color = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
+
+        if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
+            flat = False
+        else:
+            flat = True
+
+        self.mapWindow.update['vector-lines'] = (width, color, flat)
+        self.UpdateLayerProperties()
+                
         if self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+            self.mapWindow.Refresh(False)
         
     def OnVectorHeight(self, event):
         value = event.GetInt()
@@ -1521,18 +1540,22 @@ class NvizToolWindow(wx.Frame):
             # spin
             win = self.FindWindowById(self.win['vector']['lines']['height']['slider'])
         win.SetValue(value)
-    
-    def OnVectorHeightSpin(self, event):
-        print event
+
+        self.mapWindow.update['vector-height'] = value
+        self.UpdateLayerProperties()
+
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
     
     def OnSettings(self, event):
         """Update settings, apply changes if auto-rendering is enabled""" 
         
         if self.parent.autoRender.IsChecked():
-            self.OnApply(None)
+            self.mapWindow.Refresh(False)
             
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
+        self.pageUpdated = False
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(nviz=True)
 
@@ -1542,24 +1565,24 @@ class NvizToolWindow(wx.Frame):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
         elif pageId == 'surface':
-            # disable vector and enable current
+            # disable vector and enable surface page
             self.notebook.GetPage(self.page['surface']).Enable(True)
             self.notebook.GetPage(self.page['vector']).Enable(False)
 
-            if data is None: # use default values
-                #
+            # use default values
+            if data == {}:
                 # attributes
-                #
-                for attr in ('topo', 'color'):
-                    self.SetSurfaceUseMap(attr, True) # -> map
+                for attr in ('topo', 'color'): # required
                     if layer and layer.type == 'raster':
                         self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
                     else:
                         self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
+                    self.SetSurfaceUseMap(attr, True) # -> map
                 if UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'map']) is False:
                     self.SetSurfaceUseMap('shine', False)
                     value = UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'value'])
                     self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
+
                 #
                 # draw
                 #
@@ -1612,6 +1635,8 @@ class NvizToolWindow(wx.Frame):
                 for type in ('slider', 'spin'):
                     win = self.FindWindowById(self.win['vector']['lines']['height'][type])
                     win.SetValue(value)
+
+        self.pageUpdated = True
 
     def SetPage(self, name):
         """Get named page"""
