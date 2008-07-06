@@ -88,6 +88,7 @@ public:
 
     /* vector */
     int SetVectorLineMode(int, const char *, int, int);
+    int SetVectorHeight(int, float);
 };
 
 #endif /* WXNVIZ_H */

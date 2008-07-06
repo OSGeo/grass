@@ -42,3 +42,22 @@ int Nviz::SetVectorLineMode(int id, const char *color_str,
     
     return 1;
 }
+
+/**
+  \brief Set vector height above surface
+
+  \param id vector set id
+  \param height
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz::SetVectorHeight(int id, float height)
+{
+    if(!GV_vect_exists(id))
+	return 0;
+    
+    GV_set_trans(id, 0.0, 0.0, height);
+
+    return 1;
+}

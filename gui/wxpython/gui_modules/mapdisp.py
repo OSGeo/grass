@@ -179,6 +179,9 @@ class MapWindow(object):
         try:
             if nviz:
                 layer = self.tree.GetPyData(item)[0]['nviz']
+                if layer is None: # initialize data
+                    self.tree.GetPyData(item)[0]['nviz'] = {}
+                    layer = self.tree.GetPyData(item)[0]['nviz']
             else:
                 layer = self.tree.GetPyData(item)[0]['maplayer']
         except:
@@ -2606,14 +2609,19 @@ class MapFrame(wx.Frame):
             # check for GLCanvas and OpenGL
             msg = None
             if not nviz.haveGLCanvas:
-                msg = _("Unable to start Nviz. The GLCanvas class has not been included with this build "
-                        "of wxPython! Switching back to 2D display mode.")
+                msg = _("Unable to start Nviz. The GLCanvas class has not been "
+                        "included with this build "
+                        "of wxPython! Switching back to "
+                        "2D display mode.\n\nDetails: %s" % nviz.errorMsg)
             if not nviz.haveOpenGL:
-                msg = _("Unable to start Nviz. The OpenGL package was not found. You can get it "
-                        "at http://PyOpenGL.sourceforge.net. Switching back to 2D display mode.")
+                msg = _("Unable to start Nviz. The OpenGL package "
+                        "was not found. You can get it "
+                        "at http://PyOpenGL.sourceforge.net. "
+                        "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
             if not nviz.haveNviz:
-                msg = _("Unable to start Nviz. Python extension for Nviz was not found. "
-                        "Switching back to 2D display mode.")
+                msg = _("Unable to start Nviz. Python extension "
+                        "for Nviz was not found. "
+                        "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
 
             if msg:
                 wx.MessageBox(parent=self,
@@ -2626,7 +2634,9 @@ class MapFrame(wx.Frame):
             #
             self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
             self.toolbars['map'].Enable2D(False)
-            self.toggleStatus.Enable(False)
+            
+            # erase map window
+            self.MapWindow.EraseMap()
 
             busy = wx.BusyInfo(message=_("Please wait, loading data..."),
                                parent=self)
@@ -2641,7 +2651,12 @@ class MapFrame(wx.Frame):
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
             
-
+            #
+            # update status bar
+            #
+            self.toggleStatus.Enable(False)
+            self.SetStatusText("")
+            
             busy.Destroy()
 
             self.nvizToolWin.Show()
