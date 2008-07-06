@@ -611,7 +611,7 @@ class GMFrame(wx.Frame):
                                          "\n\n%s" % err,
                                      parent=self)
 
-            busy = wx.BusyInfo(message=_("Please wait, loading map layers into layer tree..."),
+            busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
                                parent=self)
             wx.Yield()
 
@@ -710,7 +710,7 @@ class GMFrame(wx.Frame):
                 self.NewDisplay()
 
             maptree = self.curr_page.maptree
-            busy = wx.BusyInfo(message=_("Please wait, loading map layers into layer tree..."),
+            busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
                                parent=self)
             wx.Yield()
 
@@ -746,7 +746,7 @@ class GMFrame(wx.Frame):
         if not self.curr_page:
             self.NewDisplay()
 
-        busy = wx.BusyInfo(message=_("Please wait, loading map layers into layer tree..."),
+        busy = wx.BusyInfo(message=_("Please wait, loading workspace..."),
                            parent=self)
         wx.Yield()
 
