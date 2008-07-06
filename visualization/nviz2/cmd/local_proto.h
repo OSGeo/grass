@@ -13,7 +13,7 @@ struct GParams {
   /* draw */
     *mode, *res_fine, *res_coarse, *style, *shade, *wire_color,
   /* vector */
-    *vector, 
+    *vector, *line_width, *line_color, *line_mode,
   /* misc */
     *exag, *bgcolor, 
   /* viewpoint */

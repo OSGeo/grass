@@ -165,7 +165,7 @@ int main (int argc, char *argv[])
 
     /* draw */
     Nviz_draw_cplane(&data, -1, -1);
-    Nviz_draw_all (&data, 1); /* clear screen */
+    Nviz_draw_all (&data);
 
     /* write to image */
     ret = 0;

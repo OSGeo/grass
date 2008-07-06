@@ -208,6 +208,18 @@ void parse_command(int argc, char* argv[], struct GParams *params)
     params->wire_color->answer = "136:136:136";
     params->wire_color->guisection = _("Draw");
 
+    /* shading */
+    params->shade = G_define_option();
+    params->shade->key = "shading";
+    params->shade->key_desc = "string";
+    params->shade->type = TYPE_STRING;
+    params->shade->required = YES;
+    params->shade->multiple = YES;
+    params->shade->description = _("Shading");
+    params->shade->options = "flat,gouraud";
+    params->shade->answer = "gouraud";
+    params->shade->guisection = _("Draw");
+
     /*
       vector
     */
@@ -217,6 +229,38 @@ void parse_command(int argc, char* argv[], struct GParams *params)
     params->vector->description = _("Name of vector overlay map(s)");
     params->vector->guisection = _("Vector");
     params->vector->key = "vector";
+
+    /* line width */
+    params->line_width = G_define_option();
+    params->line_width->key = "line_width";
+    params->line_width->key_desc = "value";
+    params->line_width->type = TYPE_INTEGER;
+    params->line_width->required = NO;
+    params->line_width->multiple = YES;
+    params->line_width->description = _("Vector line width");
+    params->line_width->guisection = _("Vector");
+    params->line_width->options = "1-100";
+
+    /* line color */
+    params->line_color = G_define_standard_option(G_OPT_C_FG);
+    params->line_color->multiple = YES;
+    params->line_color->required = NO;
+    params->line_color->label = _("Vector line color");
+    params->line_color->key = "line_color";
+    params->line_color->answer = "blue";
+    params->line_color->guisection = _("Vector");
+
+    /* shading */
+    params->line_mode = G_define_option();
+    params->line_mode->key = "line_display";
+    params->line_mode->key_desc = "string";
+    params->line_mode->type = TYPE_STRING;
+    params->line_mode->required = YES;
+    params->line_mode->multiple = YES;
+    params->line_mode->description = _("Vector line display mode");
+    params->line_mode->options = "surface,flat";
+    params->line_mode->answer = "surface";
+    params->line_mode->guisection = _("Vector");
 
     /*
       misc
