@@ -20,7 +20,6 @@
 #include <grass/nviz.h>
 
 static int sort_surfs_max(int *, int *, int *, int);
-static int check_blank(int);
 
 /*!
   \brief Draw all loaded surfaces
@@ -56,9 +55,7 @@ int Nviz_draw_all_surf(nv_data *dc)
     GS_setlight_position(num, 0., 0., 1., 0);
 
     for (i = 0; i < nsurfs; i++) {
-	if (!check_blank(sortSurfs[i])) {
-	    GS_draw_surf(sortSurfs[i]);
-	}
+	GS_draw_surf(sortSurfs[i]);
     }
     
     /* GS_draw_cplane_fence params will change - surfs aren't used anymore */
@@ -115,30 +112,39 @@ int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
     return 1;
 }
 
-/*
-  \brief Check if a specific map object should be blanked for
-  a draw.
+/*!
+  \brief Draw all loaded vector sets
 
-  This option is used by one of the script tools for
-  blanking maps during specific frames.
-  
-  \param map_id map object id
-  
-  \return 0 not blank
-  \return 1 blank
+  \param dc nviz data
+
+  \return 1
 */
-int check_blank(int map_id)
+int Nviz_draw_all_vect(nv_data *dc)
 {
-    return 0;
+    // GS_set_cancel(0);
+
+    /* in case transparency is set */
+    GS_set_draw(GSD_BOTH);
+
+    GS_ready_draw();
+
+    GV_alldraw_vect();
+
+    GS_done_draw();
+    
+    GS_set_draw(GSD_BACK);
+
+    // GS_set_cancel(0);
+
+    return 1;
 }
 
 /*!
-  \brief Draw all 
+  \brief Draw all map objects (in full resolution) and decorations
 
   \param data nviz data
-  \param clear clear screen before drawing
 */
-int Nviz_draw_all(nv_data *data, int clear)
+int Nviz_draw_all(nv_data *data)
 {
     int draw_surf, draw_vect, draw_site, draw_vol;
     int draw_north_arrow, arrow_x, draw_label, draw_legend;
@@ -166,9 +172,10 @@ int Nviz_draw_all(nv_data *data, int clear)
     // Tcl_SetVar(interp, "is_drawing", "1", TCL_GLOBAL_ONLY);
     
     GS_set_draw(GSD_BACK); /* needs to be BACK to avoid flickering */
-    if (clear)
-	GS_clear(data->bgcolor);
+
     GS_ready_draw();
+
+    GS_clear(data->bgcolor);
 
 /*
     buf_surf     = Tcl_GetVar(interp, "surface", TCL_GLOBAL_ONLY);
@@ -302,22 +309,26 @@ int Nviz_draw_all(nv_data *data, int clear)
 }
 
 /*!
-  \brief Draw in coarse mode
+  \brief Draw all surfaces in wireframe
 
   \param dc nviz data
-  \param clear clear screen before drawing
+
   \return 1
 */
-int Nviz_draw_quick(nv_data *dc, int clear)
+int Nviz_draw_quick(nv_data *data)
 {
     GS_set_draw(GSD_BACK);
     
-    if (clear)
-	GS_clear(dc->bgcolor);
-
     GS_ready_draw();
 
+    GS_clear(data->bgcolor);
+
+    /* draw surfaces */
     GS_alldraw_wire();
+
+    /* draw vector */
+    /* GV_alldraw_fastvect(); is broken */
+    /* GV_alldraw_vect(); */
 
     /*
     vol_list = GVL_get_vol_list(&max);
@@ -332,42 +343,6 @@ int Nviz_draw_quick(nv_data *dc, int clear)
     GS_done_draw();
 
     // flythrough_postdraw_cb();
-
-    return 1;
-}
-
-/*!
-  \brief Draw all loaded vector sets
-
-  \param dc nviz data
-
-  \return 1
-*/
-int Nviz_draw_all_vect(nv_data *dc)
-{
-    int i, nvects;
-    int *vect_list;
-
-    // GS_set_cancel(0);
-    vect_list = GV_get_vect_list(&nvects);
-
-    /* in case transparency is set */
-    GS_set_draw(GSD_BOTH);
-
-    GS_ready_draw();
-
-    for (i = 0; i < nvects; i++) {
-	if (!check_blank(vect_list[i])) {
-	    GV_draw_vect(vect_list[i]);
-	}
-    }
-    G_free (vect_list);
-
-    GS_done_draw();
-    
-    GS_set_draw(GSD_BACK);
-
-    // GS_set_cancel(0);
 
     return 1;
 }
