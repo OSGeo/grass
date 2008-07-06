@@ -517,7 +517,9 @@ class NvizToolWindow(wx.Frame):
         gridSizer.Add(item=posSizer, pos=(0, 0))
                   
         # perspective
-        self.CreateControl(panel, dict=self.win['view'], name='persp')
+        self.CreateControl(panel, dict=self.win['view'], name='persp',
+                           range=(self.settings['persp']['min'], self.settings['persp']['max']),
+                           bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Perspective:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER)
         gridSizer.Add(item=self.FindWindowById(self.win['view']['persp']['slider']), pos=(2, 0))
@@ -525,7 +527,9 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.ALIGN_CENTER)        
 
         # twist
-        self.CreateControl(panel, dict=self.win['view'], name='twist')
+        self.CreateControl(panel, dict=self.win['view'], name='twist',
+                           range=(self.settings['twist']['min'], self.settings['twist']['max']),
+                           bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Twist:")),
                       pos=(1, 1), flag=wx.ALIGN_CENTER)
         gridSizer.Add(item=self.FindWindowById(self.win['view']['twist']['slider']), pos=(2, 1))
@@ -533,8 +537,12 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.ALIGN_CENTER)        
 
         # height + z-exag
-        self.CreateControl(panel, dict=self.win['view'], name='height', sliderHor=False)
-        self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False)
+        self.CreateControl(panel, dict=self.win['view'], name='height', sliderHor=False,
+                           range=(self.settings['height']['min'], self.settings['height']['max']),
+                           bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
+        self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False,
+                           range=(self.settings['z-exag']['min'], self.settings['z-exag']['max']),
+                           bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         heightSizer = wx.GridBagSizer(vgap=3, hgap=3)
         heightSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Height:")),
                       pos=(0, 0), flag=wx.ALIGN_LEFT, span=(1, 2))
@@ -909,8 +917,6 @@ class NvizToolWindow(wx.Frame):
                             initial=1,
                             min=1,
                             max=100)
-        width.SetValue(UserSettings.Get(group='nviz', key='vector',
-                                        subkey=['lines', 'width']))
         self.win['vector']['lines']['width'] = width.GetId()
         width.Bind(wx.EVT_SPINCTRL, self.OnVectorLines)
         gridSizer.Add(item=width, pos=(0, 1),
@@ -941,11 +947,6 @@ class NvizToolWindow(wx.Frame):
         display = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
                              choices = [_("on surface"),
                                         _("flat")])
-        if UserSettings.Get(group='nviz', key='vector',
-                            subkey=['lines', 'flat']):
-            display.SetSelection(1)
-        else:
-            display.SetSelection(0)
         self.win['vector']['lines']['flat'] = display.GetId()
         display.Bind(wx.EVT_CHOICE, self.OnVectorDisplay)
 
@@ -966,12 +967,14 @@ class NvizToolWindow(wx.Frame):
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL,
                       span=(1, 2))
         
-        self.CreateControl(panel, dict=self.win['vector']['lines'], name='height', size=300)
+        self.CreateControl(panel, dict=self.win['vector']['lines'], name='height', size=300,
+                           range=(0, 1000),
+                           bind=(self.OnVectorHeight, self.OnVectorHeight, self.OnVectorHeight))
         gridSizer.Add(item=self.FindWindowById(self.win['vector']['lines']['height']['slider']),
                       pos=(2, 2), span=(1, 6))
         gridSizer.Add(item=self.FindWindowById(self.win['vector']['lines']['height']['spin']),
                       pos=(3, 4),
-                      flag=wx.ALIGN_CENTER)        
+                      flag=wx.ALIGN_CENTER)
 
         boxSizer.Add(item=gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
@@ -1024,7 +1027,7 @@ class NvizToolWindow(wx.Frame):
 
         panel.SetSizer(pageSizer)
 
-    def CreateControl(self, parent, dict, name, sliderHor=True, size=200):
+    def CreateControl(self, parent, dict, name, range, bind, sliderHor=True, size=200):
         """Add control (Slider + SpinCtrl)"""
         dict[name] = {}
         if sliderHor:
@@ -1037,26 +1040,27 @@ class NvizToolWindow(wx.Frame):
             sizeW = (-1, size)
         slider = wx.Slider(parent=parent, id=wx.ID_ANY,
                            value=self.settings[name]['value'],
-                           minValue=self.settings[name]['min'],
-                           maxValue=self.settings[name]['max'],
+                           minValue=range[0],
+                           maxValue=range[1],
                            style=style,
                            size=sizeW)
-
-        slider.Bind(wx.EVT_SCROLL, self.OnViewChange)
-        slider.Bind(wx.EVT_SCROLL_CHANGED, self.OnViewChanged)
+        slider.SetName('slider')
+        slider.Bind(wx.EVT_SCROLL, bind[0])
+        slider.Bind(wx.EVT_SCROLL_CHANGED, bind[1])
         dict[name]['slider'] = slider.GetId()
 
         spin = wx.SpinCtrl(parent=parent, id=wx.ID_ANY, size=(65, -1),
                            initial=self.settings[name]['value'],
-                           min=self.settings[name]['min'],
-                           max=self.settings[name]['max'])
+                           min=range[0],
+                           max=range[1])
         #         spin = wx.SpinButton(parent=parent, id=wx.ID_ANY)
         #         spin.SetValue (self.settings[name]['value'])
         #         spin.SetRange(self.settings[name]['min'],
         #                      self.settings[name]['max'])
 
         # no 'changed' event ... (FIXME)
-        spin.Bind(wx.EVT_SPINCTRL, self.OnViewChangedSpin)
+        spin.SetName('spin')
+        spin.Bind(wx.EVT_SPINCTRL, bind[2])
         dict[name]['spin'] = spin.GetId()
 
     def UpdateSettings(self):
@@ -1112,8 +1116,7 @@ class NvizToolWindow(wx.Frame):
     def OnViewChangedSpin(self, event):
         """View changed, render in full resolution"""
         self.OnViewChange(event)
-        self.mapWindow.render = True
-        self.mapWindow.Refresh(False)
+        self.OnViewChanged(None)
 
     def OnResetView(self, event):
         """Reset to default view (view page)"""
@@ -1509,6 +1512,19 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.OnApply(None)
         
+    def OnVectorHeight(self, event):
+        value = event.GetInt()
+        if type(event) == type(wx.ScrollEvent()):
+            # slider
+            win = self.FindWindowById(self.win['vector']['lines']['height']['spin'])
+        else:
+            # spin
+            win = self.FindWindowById(self.win['vector']['lines']['height']['slider'])
+        win.SetValue(value)
+    
+    def OnVectorHeightSpin(self, event):
+        print event
+    
     def OnSettings(self, event):
         """Update settings, apply changes if auto-rendering is enabled""" 
         
@@ -1526,6 +1542,10 @@ class NvizToolWindow(wx.Frame):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
         elif pageId == 'surface':
+            # disable vector and enable current
+            self.notebook.GetPage(self.page['surface']).Enable(True)
+            self.notebook.GetPage(self.page['vector']).Enable(False)
+
             if data is None: # use default values
                 #
                 # attributes
@@ -1569,7 +1589,29 @@ class NvizToolWindow(wx.Frame):
                         
                     win.SetValue(data['value'])
         elif pageId == 'vector':
-            pass
+            # disable surface and enable current
+            self.notebook.GetPage(self.page['surface']).Enable(False)
+            self.notebook.GetPage(self.page['vector']).Enable(True)
+
+            if data is None: # defaut values
+                # lines
+                for name in ('width', 'color'):
+                    win = self.FindWindowById(self.win['vector']['lines'][name])
+                    win.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                                  subkey=['lines', name]))
+
+                display = self.FindWindowById(self.win['vector']['lines']['flat'])
+                if UserSettings.Get(group='nviz', key='vector',
+                                    subkey=['lines', 'flat']):
+                    display.SetSelection(1)
+                else:
+                    display.SetSelection(0)
+            
+                value = UserSettings.Get(group='nviz', key='vector',
+                                         subkey=['lines', 'height'])
+                for type in ('slider', 'spin'):
+                    win = self.FindWindowById(self.win['vector']['lines']['height'][type])
+                    win.SetValue(value)
 
     def SetPage(self, name):
         """Get named page"""
