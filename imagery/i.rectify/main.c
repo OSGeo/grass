@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     ext->type = TYPE_STRING;
     ext->required = YES;
     ext->multiple = NO;
-    ext->description = _("Output file extension (inputfile(s) + extension)");
+    ext->description = _("Output raster map(s) suffix");
 
     val = G_define_option();
     val->key = "order";
@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 
     a = G_define_flag();
     a->key = 'a';
-    a->description = _("Rectify all images in group");
+    a->description = _("Rectify all raster maps in group");
 
 
     if (G_parser(argc, argv))
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     }
 
     if (order < 1 || order > MAXORDER)
-	G_fatal_error(_("Invalid order (%d) please enter 1 to %d"), order,
+	G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order,
 		      MAXORDER);
 
     /* determine the number of files in this group */
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Group <%s> does not exist"), grp->answer);
 
     if (ref.nfiles <= 0) {
-	G_important_message(_("Group <%s> contains no maps. Run i.group"), grp->answer);
+	G_important_message(_("Group <%s> contains no raster maps; run i.group"), grp->answer);
 	exit(EXIT_SUCCESS);
     }
 
@@ -181,7 +181,7 @@ void err_exit(char *file, char *grp)
 {
     int n;
 
-    fprintf(stderr, "Input file <%s> does not exist in group <%s>.\n Try:\n",
+    fprintf(stderr, "Input raster map <%s> does not exist in group <%s>.\n Try:\n",
 	    file, grp);
 
     for (n = 0; n < ref.nfiles; n++)
