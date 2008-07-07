@@ -210,9 +210,8 @@ class Settings:
                                      'y' : 0.85,
                                      'update' : False,
                                      },
-                           'height' : { 'value': -1,
-                                        'min' : -2245, # TODO: determine min/max height
-                                        'max' : 3695, 
+                           'height' : { 'min' : -3000, # TODO: determine min/max height
+                                        'max' : 4000, 
                                         'step' : 100,
                                         'update' : False,
                                        },
@@ -222,9 +221,7 @@ class Settings:
                                        'step' : 5,
                                        'update' : False,
                                        },
-                           'z-exag' : { 'value': 1.0,
-                                        'min' : 0.0,
-                                        'max' : 10,
+                           'z-exag' : { 'value': 1,
                                         'step' : 1,
                                         'update' : False
                                         },

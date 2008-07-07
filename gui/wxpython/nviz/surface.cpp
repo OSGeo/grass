@@ -320,3 +320,48 @@ int Nviz::SetWireColor(int id, const char* color_str)
 
     return 1;
 }
+
+/*!
+  \brief Get surface position
+
+  \param id surface id
+
+  \return x,y,z
+  \return zero-length vector on error
+*/
+std::vector<double> Nviz::GetSurfacePosition(int id)
+{
+    std::vector<double> vals;
+    float x, y, z;
+    if (!GS_surf_exists(id)) {
+	return vals;
+    }
+    
+    GS_get_trans(id, &x, &y, &z);
+    
+    vals.push_back(double (x));
+    vals.push_back(double (y));
+    vals.push_back(double (z));
+
+    return vals;
+}
+
+/*!
+  \brief Set surface position
+
+  \param id surface id
+  \param x,y,z translation values
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz::SetSurfacePosition(int id, float x, float y, float z)
+{
+    if (!GS_surf_exists(id)) {
+	return 0;
+    }
+    
+    GS_set_trans(id, x, y, z);
+
+    return 1;
+}
