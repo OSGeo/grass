@@ -1,0 +1,8 @@
+/*! \page nvizlib GRASS Nviz Library
+
+\section nvizintro Introduction to Nviz Library
+
+This library is build on \ref ogsflib and serves as the interface for
+wxGUI Nviz extension and CLI-based Nviz module.
+
+*/

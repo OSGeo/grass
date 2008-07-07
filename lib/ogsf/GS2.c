@@ -2382,16 +2382,14 @@ void GS_get_zrange_nz(float *min, float *max)
 }
 
 /*!
-  \brief Set trans ?
+  \brief Set translation (surface position)
 
   \param id surface id
-  \param xtrans,ytrans,ztrans real trans coordinates
+  \param xtrans,ytrans,ztrans translation values
 */
 void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geosurf *gs;
-
-    G_debug(3, "GS_set_trans");
 
     gs = gs_get_surf(id);
 
@@ -2401,20 +2399,21 @@ void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
 	gs->z_trans = ztrans;
     }
 
+    G_debug(3, "GS_set_trans(): id=%d, x=%f, y=%f, z=%f",
+	    id, xtrans, ytrans, ztrans);
+
     return;
 }
 
 /*!
-  \brief Get trans ?
+  \brief Get translation values (surface position)
 
   \param id surface id
-  \param[out] xtrans,ytrans,ztrans real trans coordinates
+  \param[out] xtrans,ytrans,ztrans trans values
 */
 void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geosurf *gs;
-
-    G_debug(3, "GS_get_trans");
 
     gs = gs_get_surf(id);
 
@@ -2423,6 +2422,9 @@ void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 	*ytrans = gs->y_trans;
 	*ztrans = gs->z_trans;
     }
+
+    G_debug(3, "GS_get_trans: id=%d, x=%f, y=%f, z=%f",
+	    id, *xtrans, *ytrans, *ztrans);
 
     return;
 }

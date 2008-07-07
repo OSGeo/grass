@@ -95,7 +95,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>symbol:	Drawing symbols for %point %vector data library - \ref symbol
 <li>vask:	Cursor management library - \ref vask
 <li>%vector:	\ref Vector_Library (GRASS Vector and Direct Graph Library)
-<li>nviz:       Nviz library (used by wxGUI Nviz extension and CLI-based Nviz module)
+<li>nviz:       \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
 </ul>
 <!--<li>image3:	extra imagery library (mainly still unused) - \ref image3lib-->
 <!--<li>D:		display library - \ref d_displaylib-->
