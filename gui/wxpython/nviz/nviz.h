@@ -85,6 +85,8 @@ public:
     int SetSurfaceRes(int, int, int);
     int SetSurfaceStyle(int, int);
     int SetWireColor(int, const char *);
+    std::vector<double> GetSurfacePosition(int);
+    int SetSurfacePosition(int, float, float, float);
 
     /* vector */
     int SetVectorLineMode(int, const char *, int, int);
