@@ -119,7 +119,7 @@ struct render_window {
     AGLContext contextId;
     AGLPixmap windowId;
     GWorldPtr pixmap;
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO */
 #endif
 };
