@@ -812,13 +812,6 @@ class mainFrame(wx.Frame):
         except IndexError:
             pass
 
-        for btn in (self.btn_run,
-                    self.btn_cancel,
-                    self.btn_clipboard,
-                    self.btn_help):
-            btn.Enable(True)
-        self.btn_abort.Enable(False)
-
     def OnCopy(self, event):
         """Copy the command"""
         cmddata = wx.TextDataObject()
