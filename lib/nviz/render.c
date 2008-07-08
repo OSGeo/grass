@@ -65,7 +65,7 @@ void Nviz_destroy_render_window(struct render_window *rwin)
     aglDestroyContext(rwin->contextId);
     aglDestroyAGLPixmap(rwin->windowId); 
     /* TODO FreePixMap */
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO: wglDeleteContext( HRC hrc ) */
 #endif
 
@@ -91,7 +91,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     XVisualInfo  *v;
 #elif defined(OPENGL_AQUA)
     AGLPixelFmtID v;
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     int v;
 #endif
 
@@ -104,7 +104,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     rwin->displayId = XOpenDisplay((char *) display);
 #elif defined(OPENGL_AQUA)
     /* TODO */
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO */
 #endif
 
@@ -125,7 +125,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     rwin->displayId = aglChoosePixelFmt(GDHandle *dev, int ndev, attributeList);
     
     rwin->contextId = aglCreateContext(rwin->display, NULL); 
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO int ChoosePixelFormat( HDC hdc, PIXELFORMATDESCRIPTOR *pfd ) */
 #endif
 
@@ -151,7 +151,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     /* create an off-screen AGL rendering area */
     rwin->windowId = aglCreateAGLPixmap(rwin->displayId,
 					rwin->pixmap); 
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO */
 #endif
 
@@ -186,7 +186,7 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
 	return 1;
 
     aglMakeCurrent(rwin->windowId, rwin->contextId);
-#elif defined(OPENGL_WGL)
+#elif defined(OPENGL_WINDOWS)
     /* TODO wglMakeCurrent( HDC hdc, HGLRC hrc ) */
 #endif
 
