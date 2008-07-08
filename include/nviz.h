@@ -1,6 +1,8 @@
 #ifndef GRASS_NVIZ_H
 #define GRASS_NVIZ_H
 
+#include <grass/config.h>
+
 /*** Windows headers ***/
 #if defined(OPENGL_WINDOWS)
 #  define WIN32_LEAN_AND_MEAN
