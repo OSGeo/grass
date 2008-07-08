@@ -3129,15 +3129,15 @@ class MapFrame(wx.Frame):
         point = wx.GetMousePosition()
         printmenu = wx.Menu()
         # Add items to the menu
-        setup = wx.MenuItem(printmenu, wx.ID_ANY,'Page setup')
+        setup = wx.MenuItem(printmenu, wx.ID_ANY, _('Page setup'))
         printmenu.AppendItem(setup)
         self.Bind(wx.EVT_MENU, self.printopt.OnPageSetup, setup)
 
-        preview = wx.MenuItem(printmenu, wx.ID_ANY,'Print preview')
+        preview = wx.MenuItem(printmenu, wx.ID_ANY, _('Print preview'))
         printmenu.AppendItem(preview)
         self.Bind(wx.EVT_MENU, self.printopt.OnPrintPreview, preview)
 
-        doprint = wx.MenuItem(printmenu, wx.ID_ANY,'Print display')
+        doprint = wx.MenuItem(printmenu, wx.ID_ANY, _('Print display'))
         printmenu.AppendItem(doprint)
         self.Bind(wx.EVT_MENU, self.printopt.OnDoPrint, doprint)
 
