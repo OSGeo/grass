@@ -330,7 +330,17 @@ class GMConsole(wx.Panel):
             if hasattr(self.parent.parent, "btn_abort"):
                 dialog.btn_abort.Enable(False)
 
+            if hasattr(self.parent.parent, "btn_cancel"):
+                dialog.btn_cancel.Enable(True)
+
+            if hasattr(self.parent.parent, "btn_clipboard"):
+                dialog.btn_clipboard.Enable(True)
+
+            if hasattr(self.parent.parent, "btn_help"):
+                dialog.btn_help.Enable(True)
+
             dialog.btn_run.Enable(True)
+            
             if dialog.get_dcmd is None and \
                    dialog.closebox.IsChecked():
                 time.sleep(1)
