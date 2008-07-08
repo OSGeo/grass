@@ -1,9 +1,6 @@
 #ifndef GRASS_NVIZ_H
 #define GRASS_NVIZ_H
 
-#include <grass/gsurf.h>
-#include <grass/gstypes.h>
-
 /*** Windows headers ***/
 #if defined(OPENGL_WINDOWS)
 #  define WIN32_LEAN_AND_MEAN
@@ -33,6 +30,9 @@
 #else /* make sure only one platform defined */
 #  error Unsupported platform, or confused platform defines...
 #endif
+
+#include <grass/gsurf.h>
+#include <grass/gstypes.h>
 
 #define MAP_OBJ_UNDEFINED 0
 #define MAP_OBJ_SURF 1
@@ -109,10 +109,19 @@ typedef struct {
 } nv_clientdata;
 
 struct render_window {
+#if defined(OPENGL_X11)
     Display *displayId;   /* display connection */
     GLXContext contextId; /* GLX rendering context */
-    Pixmap pixmap;
     GLXPixmap windowId;
+    Pixmap pixmap;
+#elif defined(OPENGL_AQUA)
+    AGLPixelFmtID displayId;
+    AGLContext contextId;
+    AGLPixmap windowId;
+    GWorldPtr pixmap;
+#elif defined(OPENGL_WGL)
+    /* TODO */
+#endif
 };
 
 /* change_view.c */
