@@ -415,8 +415,8 @@ class NvizToolWindow(wx.Frame):
                  style=wx.DEFAULT_FRAME_STYLE, mapWindow=None):
         
         self.parent = parent # MapFrame
+        self.lmgr = self.parent.gismanager # GMFrame
         self.mapWindow = mapWindow
-        self.settings = mapWindow.view # GLWindow.view
 
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
@@ -498,7 +498,7 @@ class NvizToolWindow(wx.Frame):
         posSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("N")),
                      pos=(0, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_BOTTOM)
         viewPos = ViewPositionWindow(panel, id=wx.ID_ANY, size=(175, 175),
-                                     settings=self.settings, mapwindow=self.mapWindow)
+                                     mapwindow=self.mapWindow)
         self.win['view']['pos'] = viewPos.GetId()
         posSizer.Add(item=viewPos,
                      pos=(1, 1), flag=wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL)
@@ -532,7 +532,7 @@ class NvizToolWindow(wx.Frame):
 
         # height + z-exag
         self.CreateControl(panel, dict=self.win['view'], name='height', sliderHor=False,
-                           range=(self.settings['height']['min'], self.settings['height']['max']),
+                           range=(self.mapWindow.view['height']['min'], self.mapWindow.view['height']['max']),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False,
                            range=(0, 1),
@@ -1244,7 +1244,7 @@ class NvizToolWindow(wx.Frame):
                 wx.SL_BOTTOM | wx.SL_INVERSE
             sizeW = (-1, size)
         try:
-            val = self.settings[name]['value']
+            val = self.mapWindow.view[name]['value']
         except KeyError:
             val=-1
         slider = wx.Slider(parent=parent, id=wx.ID_ANY,
@@ -1263,9 +1263,9 @@ class NvizToolWindow(wx.Frame):
                            min=range[0],
                            max=range[1])
         #         spin = wx.SpinButton(parent=parent, id=wx.ID_ANY)
-        #         spin.SetValue (self.settings[name]['value'])
-        #         spin.SetRange(self.settings[name]['min'],
-        #                      self.settings[name]['max'])
+        #         spin.SetValue (self.mapWindow.view[name]['value'])
+        #         spin.SetRange(self.mapWindow.view[name]['min'],
+        #                      self.mapWindow.view[name]['max'])
 
         # no 'changed' event ... (FIXME)
         spin.SetName('spin')
@@ -1283,7 +1283,7 @@ class NvizToolWindow(wx.Frame):
                     value = UserSettings.Get(group='nviz', key='view',
                                              subkey=['height', 'value'], internal=True)
                 else:
-                    value = self.settings[control]['value']
+                    value = self.mapWindow.view[control]['value']
                 self.FindWindowById(win).SetValue(value)
 
         self.FindWindowById(self.win['view']['pos']).Draw()
@@ -1310,9 +1310,9 @@ class NvizToolWindow(wx.Frame):
         if not winName:
             return
 
-        self.settings[winName]['value'] = event.GetInt()
+        self.mapWindow.view[winName]['value'] = event.GetInt()
         for win in self.win['view'][winName].itervalues():
-            self.FindWindowById(win).SetValue(self.settings[winName]['value'])
+            self.FindWindowById(win).SetValue(self.mapWindow.view[winName]['value'])
 
         if winName in ('pos', 'height', 'twist', 'persp'):
             self.mapWindow.update['view'] = None
@@ -1342,32 +1342,32 @@ class NvizToolWindow(wx.Frame):
         """Look at (view page)"""
         sel = event.GetSelection()
         if sel == 0: # top
-            self.settings['pos']['x'] = 0.5
-            self.settings['pos']['y'] = 0.5
+            self.mapWindow.view['pos']['x'] = 0.5
+            self.mapWindow.view['pos']['y'] = 0.5
         elif sel == 1: # north
-            self.settings['pos']['x'] = 0.5
-            self.settings['pos']['y'] = 0.0
+            self.mapWindow.view['pos']['x'] = 0.5
+            self.mapWindow.view['pos']['y'] = 0.0
         elif sel == 2: # south
-            self.settings['pos']['x'] = 0.5
-            self.settings['pos']['y'] = 1.0
+            self.mapWindow.view['pos']['x'] = 0.5
+            self.mapWindow.view['pos']['y'] = 1.0
         elif sel == 3: # east
-            self.settings['pos']['x'] = 1.0
-            self.settings['pos']['y'] = 0.5
+            self.mapWindow.view['pos']['x'] = 1.0
+            self.mapWindow.view['pos']['y'] = 0.5
         elif sel == 4: # west
-            self.settings['pos']['x'] = 0.0
-            self.settings['pos']['y'] = 0.5
+            self.mapWindow.view['pos']['x'] = 0.0
+            self.mapWindow.view['pos']['y'] = 0.5
         elif sel == 5: # north-west
-            self.settings['pos']['x'] = 0.0
-            self.settings['pos']['y'] = 0.0
+            self.mapWindow.view['pos']['x'] = 0.0
+            self.mapWindow.view['pos']['y'] = 0.0
         elif sel == 6: # north-east
-            self.settings['pos']['x'] = 1.0
-            self.settings['pos']['y'] = 0.0
+            self.mapWindow.view['pos']['x'] = 1.0
+            self.mapWindow.view['pos']['y'] = 0.0
         elif sel == 7: # south-east
-            self.settings['pos']['x'] = 1.0
-            self.settings['pos']['y'] = 1.0
+            self.mapWindow.view['pos']['x'] = 1.0
+            self.mapWindow.view['pos']['y'] = 1.0
         elif sel == 8: # south-west
-            self.settings['pos']['x'] = 0.0
-            self.settings['pos']['y'] = 1.0
+            self.mapWindow.view['pos']['x'] = 0.0
+            self.mapWindow.view['pos']['y'] = 1.0
 
         self.mapWindow.update['view'] = None
         self.UpdateSettings()
@@ -1375,17 +1375,17 @@ class NvizToolWindow(wx.Frame):
 
     def OnDefault(self, event):
         """Restore default settings"""
-        self.settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
-        UserSettings.Set(group='nviz', key='view',
-                         value=self.settings)
-
-        for subgroup, key in self.settings.iteritems(): # view, surface, vector...
+        settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
+        UserSettings.Set(group='nviz',
+                         value=settings)
+        
+        for subgroup, key in settings.iteritems(): # view, surface, vector...
             if subgroup != 'view':
                 continue
             for subkey, value in key.iteritems():
                 for subvalue in value.keys():
                     win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
-                    val = self.settings[subgroup][subkey][subvalue]
+                    val = settings[subgroup][subkey][subvalue]
                     if subkey == 'pos':
                         val = int(val * 100)
 
@@ -1397,12 +1397,14 @@ class NvizToolWindow(wx.Frame):
         """Apply button pressed"""
         if self.notebook.GetSelection() == self.page['settings']:
             self.ApplySettings()
-
-        event.Skip()
+        
+        if event:
+            event.Skip()
 
     def ApplySettings(self):
         """Apply Nviz settings for current session"""
-        for subgroup, key in self.settings.iteritems(): # view, surface, vector...
+        settings = UserSettings.Get(group='nviz')
+        for subgroup, key in settings.iteritems(): # view, surface, vector...
             if subgroup != 'view':
                 continue
             for subkey, value in key.iteritems():
@@ -1410,8 +1412,9 @@ class NvizToolWindow(wx.Frame):
                     value = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue]).GetValue()
                     if subkey == 'pos':
                         value = float(value) / 100
-                    self.settings[subgroup][subkey][subvalue] = int(value)
 
+                    settings[subgroup][subkey][subvalue] = value
+                    
     def OnSave(self, event):
         """OK button pressed
         
@@ -1422,60 +1425,67 @@ class NvizToolWindow(wx.Frame):
         #
         self.OnApply(None)
 
-        #
-        # save settings
-        #
-        type = self.mapWindow.GetSelectedLayer().type
-        data = self.mapWindow.GetSelectedLayer(nviz=True)
-        if data is None: # no settings
-            data = {}
+        if self.notebook.GetSelection() == self.page['settings']:
+            fileSettings = {}
+            UserSettings.ReadSettingsFile(settings=fileSettings)
+            fileSettings['nviz'] = UserSettings.Get(group='nviz')
+            file = UserSettings.SaveToFile(fileSettings)
+            self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
+
+#         #
+#         # save settings
+#         #
+#         type = self.mapWindow.GetSelectedLayer().type
+#         data = self.mapWindow.GetSelectedLayer(nviz=True)
+#         if data is None: # no settings
+#             data = {}
     
-        if type == 'raster': # -> surface
-            #
-            # surface attributes
-            #
-            data['attribute'] = {}
-            for attrb in ('topo', 'color', 'mask',
-                         'transp', 'shine', 'emit'):
-                use = self.FindWindowById(self.win['surface'][attrb]['use']).GetSelection()
-                if self.win['surface'][attrb]['required']: # map, constant
-                    if use == 0: # map
-                        map = True
-                    elif use == 1: # constant
-                        map = False
-                else: # unset, map, constant
-                    if use == 0: # unset
-                        map = None
-                    elif use == 1: # map
-                        map = True
-                    elif use == 2: # constant
-                        map = False
+#         if type == 'raster': # -> surface
+#             #
+#             # surface attributes
+#             #
+#             data['attribute'] = {}
+#             for attrb in ('topo', 'color', 'mask',
+#                          'transp', 'shine', 'emit'):
+#                 use = self.FindWindowById(self.win['surface'][attrb]['use']).GetSelection()
+#                 if self.win['surface'][attrb]['required']: # map, constant
+#                     if use == 0: # map
+#                         map = True
+#                     elif use == 1: # constant
+#                         map = False
+#                 else: # unset, map, constant
+#                     if use == 0: # unset
+#                         map = None
+#                     elif use == 1: # map
+#                         map = True
+#                     elif use == 2: # constant
+#                         map = False
 
-                if map is None:
-                    continue
+#                 if map is None:
+#                     continue
 
-                if map:
-                    value = self.FindWindowById(self.win['surface'][attrb]['map']).GetValue()
-                else:
-                    if attrb == 'color':
-                        value = self.FindWindowById(self.win['surface'][attrb]['map']).GetColour()
-                    else:
-                        value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
+#                 if map:
+#                     value = self.FindWindowById(self.win['surface'][attrb]['map']).GetValue()
+#                 else:
+#                     if attrb == 'color':
+#                         value = self.FindWindowById(self.win['surface'][attrb]['map']).GetColour()
+#                     else:
+#                         value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
                     
-                data['attribute'][attrb] = {}
-                data['attribute'][attrb]['map'] = map
-                data['attribute'][attrb]['value'] = value
+#                 data['attribute'][attrb] = {}
+#                 data['attribute'][attrb]['map'] = map
+#                 data['attribute'][attrb]['value'] = value
 
-            #
-            # draw
-            #
-            data['draw'] = {}
-            for control in ('mode', 'shading', 'style'):
-                data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetSelection()
-            for control in ('res-coarse', 'res-fine'):
-                data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetValue()
+#             #
+#             # draw
+#             #
+#             data['draw'] = {}
+#             for control in ('mode', 'shading', 'style'):
+#                 data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetSelection()
+#             for control in ('res-coarse', 'res-fine'):
+#                 data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetValue()
             
-        self.mapWindow.SetLayerSettings(data)
+#         self.mapWindow.SetLayerSettings(data)
 
     def UpdateLayerProperties(self):
         """Update data layer properties"""
@@ -1860,7 +1870,7 @@ class NvizToolWindow(wx.Frame):
         data = self.mapWindow.GetSelectedLayer(nviz=True)
 
         if pageId == 'view':
-            max = self.settings['z-exag']['value'] * 10
+            max = self.mapWindow.view['z-exag']['value'] * 10
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
@@ -1946,8 +1956,7 @@ class ViewPositionWindow(wx.Window):
     """Position control window (for NvizToolWindow)"""
     def __init__(self, parent, id, mapwindow,
                  pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, settings={}):
-        self.settings = settings
+                 size=wx.DefaultSize):
         self.mapWindow = mapwindow
 
         wx.Window.__init__(self, parent, id, pos, size)
@@ -1970,8 +1979,8 @@ class ViewPositionWindow(wx.Window):
         w, h = self.GetClientSize()
 
         if pos is None:
-            x = self.settings['pos']['x']
-            y = self.settings['pos']['y']
+            x = self.mapWindow.view['pos']['x']
+            y = self.mapWindow.view['pos']['y']
             x = x * w
             y = y * h
         else:
@@ -1999,8 +2008,8 @@ class ViewPositionWindow(wx.Window):
             w, h = self.GetClientSize()
             x = float(x) / w
             y = float(y) / h
-            self.settings['pos']['x'] = x
-            self.settings['pos']['y'] = y
+            self.mapWindow.view['pos']['x'] = x
+            self.mapWindow.view['pos']['y'] = y
             self.mapWindow.update['view'] = None
 
             self.mapWindow.render = False

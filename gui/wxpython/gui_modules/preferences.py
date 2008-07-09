@@ -1389,8 +1389,8 @@ class PreferencesDialog(wx.Dialog):
             else:
                 value = win.GetValue()
 
-            self.settings.Set(group, key, subkey, value)
-
+            self.settings.Set(group, value, key, subkey)
+            
         #
         # update default window dimension
         #
