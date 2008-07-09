@@ -2068,7 +2068,7 @@ class VDigitSettingsDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['vdigit'] = UserSettings.Get(group='vdigit')
         file = UserSettings.SaveToFile(fileSettings)
-        self.parent.gismanager.goutput.WriteLog('Vector digitizer settings saved to file <%s>.' % file)
+        self.parent.gismanager.goutput.WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
 
         self.Close()
 
