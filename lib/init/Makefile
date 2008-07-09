@@ -6,7 +6,7 @@
 #               Markus Neteler, Andrea Antonello
 # PURPOSE:  	To create the various scripts and programs which are required
 #   	    	to start GRASS.
-# COPYRIGHT:    (C) 2000 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -49,12 +49,14 @@ FILES = \
 	$(ETC)/epsg_option.tcl \
 	$(ETC)/file_option.tcl \
 	$(ETC)/gintro.gif \
-	$(ETC)/grass.ico \
+	$(ETC)/grass-run.sh \
+	$(ETC)/grass-xterm-wrapper
+
+ICONS = $(ETC)/grass.ico \
 	$(ETC)/grass_map.ico \
 	$(ETC)/grass_dialog.ico \
 	$(ETC)/grass_sql.ico \
-	$(ETC)/grass-run.sh \
-	$(ETC)/grass-xterm-wrapper
+	$(ETC)/grass_nviz.ico
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
@@ -69,7 +71,7 @@ ifneq ($(strip $(MINGW)),)
 		$(ETC)/grass-run.bat
 endif
 
-default: $(FILES)
+default: $(FILES) $(ICONS)
 	$(MKDIR) $(GISBASE)/docs/html
 	$(INSTALL_DATA) variables.html $(GISBASE)/docs/html/variables.html
 	$(INSTALL_DATA) grass7.html $(GISBASE)/docs/html/grass7.html
@@ -164,19 +166,7 @@ $(ETC)/gintro.gif: gintro.gif
 	rm -f $@
 	$(INSTALL_DATA) gintro.gif $@
 
-$(ETC)/grass.ico: grass.ico
-	rm -f $@
-	$(INSTALL_DATA) $< $@
-
-$(ETC)/grass_map.ico: grass_map.ico
-	rm -f $@
-	$(INSTALL_DATA) $< $@
-
-$(ETC)/grass_sql.ico: grass_sql.ico
-	rm -f $@
-	$(INSTALL_DATA) $< $@
-
-$(ETC)/grass_dialog.ico: grass_dialog.ico
+$(ICONS): grass.ico grass_map.ico grass_sql.ico grass_dialog.ico grass_nviz.ico
 	rm -f $@
 	$(INSTALL_DATA) $< $@
 
