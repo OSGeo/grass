@@ -20,6 +20,7 @@ for details.
 import os
 import sys
 import time
+import copy
 
 from threading import Thread
 
@@ -76,12 +77,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         self.parent = parent # MapFrame
 
-        # attribList=[wx.WX_GL_RGBA, wx.GLX_RED_SIZE, 1,
-        #             wx.GLX_GREEN_SIZE, 1,
-        #             wx.GLX_BLUE_SIZE, 1,
-        #             wx.GLX_DEPTH_SIZE, 1,
-        #             None])
-
         self.init = False
         self.render = True # render in full resolution
 
@@ -110,6 +105,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # default values
         #
         self.view = UserSettings.Get(group='nviz', key='view') # reference
+        self.iview = UserSettings.Get(group='nviz', key='view', internal=True)
         self.update = {} # update view/controls
         self.object = {} # loaded data objects (layer index / gsurf id)
 
@@ -145,7 +141,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.nvizClass.InitView()
             self.LoadDataLayers()
             self.view['z-exag']['value'], \
-                self.view['height']['value'] = self.nvizClass.SetViewDefault()
+                self.iview['height']['value'] = self.nvizClass.SetViewDefault()
             
             if hasattr(self.parent, "nvizToolWin"):
                 self.parent.nvizToolWin.UpdatePage('view')
@@ -180,7 +176,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.parent.nvizToolWin.UpdateSettings()
 
             self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                                   self.view['height']['value'],
+                                   self.iview['height']['value'],
                                    self.view['persp']['value'],
                                    self.view['twist']['value'])
 
@@ -232,7 +228,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         if 'view' in self.update.keys():
             self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                                   self.view['height']['value'],
+                                   self.iview['height']['value'],
                                    self.view['persp']['value'],
                                    self.view['twist']['value'])
             del self.update['view']
@@ -370,7 +366,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view['pos']['x'] = wxnviz.VIEW_DEFAULT_POS_X
         self.view['pos']['y'] = wxnviz.VIEW_DEFAULT_POS_Y
         self.view['z-exag']['value'], \
-            self.view['height']['value'] = self.nvizClass.SetViewDefault()
+            self.iview['height']['value'] = self.nvizClass.SetViewDefault()
         self.view['persp']['value'] = wxnviz.VIEW_DEFAULT_PERSP
         self.view['twist']['value'] = wxnviz.VIEW_DEFAULT_TWIST
 
@@ -506,8 +502,9 @@ class NvizToolWindow(wx.Frame):
         gridSizer.Add(item=posSizer, pos=(0, 0))
                   
         # perspective
+        range = UserSettings.Get(group='nviz', key='view', subkey='persp', internal=True)
         self.CreateControl(panel, dict=self.win['view'], name='persp',
-                           range=(self.settings['persp']['min'], self.settings['persp']['max']),
+                           range=(range['min'], range['max']),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Perspective:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER)
@@ -516,8 +513,9 @@ class NvizToolWindow(wx.Frame):
                       flag=wx.ALIGN_CENTER)        
 
         # twist
+        range = UserSettings.Get(group='nviz', key='view', subkey='twist', internal=True)
         self.CreateControl(panel, dict=self.win['view'], name='twist',
-                           range=(self.settings['twist']['min'], self.settings['twist']['max']),
+                           range=(range['min'], range['max']),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         gridSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Twist:")),
                       pos=(1, 1), flag=wx.ALIGN_CENTER)
@@ -1014,15 +1012,18 @@ class NvizToolWindow(wx.Frame):
 
 
         # perspective
+        self.win['settings']['view']['persp'] = {}
         pvals = UserSettings.Get(group='nviz', key='view', subkey='persp')
+        ipvals = UserSettings.Get(group='nviz', key='view', subkey='persp', internal=True)
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Perspective (value):")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         pval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=pvals['value'],
-                           min=pvals['min'],
-                           max=pvals['max'])
+                           min=ipvals['min'],
+                           max=ipvals['max'])
+        self.win['settings']['view']['persp']['value'] = pval.GetId()
         gridSizer.Add(item=pval, pos=(0, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1032,12 +1033,14 @@ class NvizToolWindow(wx.Frame):
 
         pstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=pvals['step'],
-                           min=pvals['min'],
-                           max=pvals['max']-1)
+                           min=ipvals['min'],
+                           max=ipvals['max']-1)
+        self.win['settings']['view']['persp']['step'] = pstep.GetId()
         gridSizer.Add(item=pstep, pos=(0, 3),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # position
+        self.win['settings']['view']['pos'] = {}
         posvals = UserSettings.Get(group='nviz', key='view', subkey='pos')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Position") + " (x):"),
@@ -1047,6 +1050,7 @@ class NvizToolWindow(wx.Frame):
                            initial=posvals['x'] * 100,
                            min=0,
                            max=100)
+        self.win['settings']['view']['pos']['x'] = px.GetId()
         gridSizer.Add(item=px, pos=(1, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1058,10 +1062,12 @@ class NvizToolWindow(wx.Frame):
                            initial=posvals['y'] * 100,
                            min=0,
                            max=100)
+        self.win['settings']['view']['pos']['y'] = py.GetId()
         gridSizer.Add(item=py, pos=(1, 3),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # height
+        self.win['settings']['view']['height'] = {}
         hvals = UserSettings.Get(group='nviz', key='view', subkey='height')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Height") + " (min):"),
@@ -1071,6 +1077,7 @@ class NvizToolWindow(wx.Frame):
                            initial=hvals['min'],
                            min=-1e6,
                            max=1e6)
+        self.win['settings']['view']['height']['min'] = hmin.GetId()
         gridSizer.Add(item=hmin, pos=(2, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1082,6 +1089,7 @@ class NvizToolWindow(wx.Frame):
                            initial=hvals['max'],
                            min=-1e6,
                            max=1e6)
+        self.win['settings']['view']['height']['max'] = hmax.GetId()
         gridSizer.Add(item=hmax, pos=(2, 3),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1093,19 +1101,23 @@ class NvizToolWindow(wx.Frame):
                            initial=hvals['step'],
                            min=1,
                            max=hvals['max']-1)
+        self.win['settings']['view']['height']['step'] = hstep.GetId()
         gridSizer.Add(item=hstep, pos=(2, 5),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # twist
+        self.win['settings']['view']['twist'] = {}
         tvals = UserSettings.Get(group='nviz', key='view', subkey='twist')
+        itvals = UserSettings.Get(group='nviz', key='view', subkey='twist', internal=True)
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Twist (value):")),
                       pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL)
 
         tval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=tvals['value'],
-                           min=tvals['min'],
-                           max=tvals['max'])
+                           min=itvals['min'],
+                           max=itvals['max'])
+        self.win['settings']['view']['twist']['value'] = tval.GetId()
         gridSizer.Add(item=tval, pos=(3, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1115,12 +1127,14 @@ class NvizToolWindow(wx.Frame):
 
         tstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=tvals['step'],
-                           min=tvals['min'],
-                           max=tvals['max']-1)
+                           min=itvals['min'],
+                           max=itvals['max']-1)
+        self.win['settings']['view']['twist']['step'] = tstep.GetId()
         gridSizer.Add(item=tstep, pos=(3, 3),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # z-exag
+        self.win['settings']['view']['z-exag'] = {}
         zvals = UserSettings.Get(group='nviz', key='view', subkey='z-exag')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Z-exag (value):")),
@@ -1130,6 +1144,7 @@ class NvizToolWindow(wx.Frame):
                            initial=zvals['value'],
                            min=-1e6,
                            max=1e6)
+        self.win['settings']['view']['z-exag']['value'] = zval.GetId()
         gridSizer.Add(item=zval, pos=(4, 1),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1141,6 +1156,7 @@ class NvizToolWindow(wx.Frame):
                            initial=zvals['step'],
                            min=-1e6,
                            max=1e6)
+        self.win['settings']['view']['z-exag']['step'] = zstep.GetId()
         gridSizer.Add(item=zstep, pos=(4, 3),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
@@ -1181,7 +1197,32 @@ class NvizToolWindow(wx.Frame):
         pageSizer.Add(item=boxSizer, proportion=0,
                       flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=5)
-        
+
+        #
+        # buttons
+        #
+        btnDefault = wx.Button(panel, wx.ID_CANCEL, label=_("Default"))
+        btnSave = wx.Button(panel, wx.ID_SAVE)
+        btnApply = wx.Button(panel, wx.ID_APPLY)
+
+        btnDefault.Bind(wx.EVT_BUTTON, self.OnDefault)
+        btnDefault.SetToolTipString(_("Restore default settings"))
+        btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
+        btnApply.SetToolTipString(_("Apply changes for the current session"))
+        btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
+        btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
+        btnSave.SetDefault()
+
+        btnSizer = wx.StdDialogButtonSizer()
+        btnSizer.AddButton(btnDefault)
+        btnSizer.AddButton(btnApply)
+        btnSizer.AddButton(btnSave)
+        btnSizer.Realize()
+
+        pageSizer.Add(item=btnSizer, proportion=1,
+                      flag=wx.EXPAND | wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_BOTTOM,
+                      border=5)
+
         panel.SetSizer(pageSizer)
 
     def CreateControl(self, parent, dict, name, range, bind, sliderHor=True, size=200):
@@ -1231,7 +1272,12 @@ class NvizToolWindow(wx.Frame):
                         'twist',
                         'z-exag'):
             for win in self.win['view'][control].itervalues():
-                self.FindWindowById(win).SetValue(int(self.settings[control]['value']))
+                if control == 'height':
+                    value = UserSettings.Get(group='nviz', key='view',
+                                             subkey=['height', 'value'], internal=True)
+                else:
+                    value = self.settings[control]['value']
+                self.FindWindowById(win).SetValue(value)
 
         self.FindWindowById(self.win['view']['pos']).Draw()
         self.FindWindowById(self.win['view']['pos']).Refresh(False)
@@ -1319,6 +1365,45 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.update['view'] = None
         self.UpdateSettings()
         self.mapWindow.Refresh(False)
+
+    def OnDefault(self, event):
+        """Restore default settings"""
+        self.settings = copy.deepcopy(UserSettings.GetDefaultSettings()['nviz'])
+        UserSettings.Set(group='nviz', key='view',
+                         value=self.settings)
+
+        for subgroup, key in self.settings.iteritems(): # view, surface, vector...
+            if subgroup != 'view':
+                continue
+            for subkey, value in key.iteritems():
+                for subvalue in value.keys():
+                    win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
+                    val = self.settings[subgroup][subkey][subvalue]
+                    if subkey == 'pos':
+                        val = int(val * 100)
+
+                    win.SetValue(val)
+        
+        event.Skip()
+
+    def OnApply(self, event):
+        """Apply button pressed"""
+        if self.notebook.GetSelection() == self.page['settings']:
+            self.ApplySettings()
+
+        event.Skip()
+
+    def ApplySettings(self):
+        """Apply Nviz settings for current session"""
+        for subgroup, key in self.settings.iteritems(): # view, surface, vector...
+            if subgroup != 'view':
+                continue
+            for subkey, value in key.iteritems():
+                for subvalue in value.keys():
+                    value = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue]).GetValue()
+                    if subkey == 'pos':
+                        value = float(value) / 100
+                    self.settings[subgroup][subkey][subvalue] = int(value)
 
     def OnSave(self, event):
         """OK button pressed
