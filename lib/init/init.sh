@@ -24,7 +24,7 @@
 
 trap "echo 'User break!' ; exit" 2 3 15
 
-# change to wxpython as needed
+# Set default GUI
 DEFAULT_GUI="wxpython"
 
 # the following is only meant to be an internal variable for debugging this script.
