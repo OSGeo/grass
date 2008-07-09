@@ -25,7 +25,7 @@
 trap "echo 'User break!' ; exit" 2 3 15
 
 # change to wxpython as needed
-DEFAULT_GUI="tcltk"
+DEFAULT_GUI="wxpython"
 
 # the following is only meant to be an internal variable for debugging this script.
 #  use 'g.gisenv set="DEBUG=[0-5]"' to turn GRASS debug mode on properly.
