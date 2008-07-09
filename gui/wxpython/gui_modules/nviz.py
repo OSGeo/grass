@@ -420,7 +420,14 @@ class NvizToolWindow(wx.Frame):
 
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
 
+        #
+        # icon
+        #
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
+
+        #
         # dialog body
+        #
         mainSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.win = {} # window ids
