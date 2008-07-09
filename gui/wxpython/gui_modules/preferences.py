@@ -56,183 +56,322 @@ class Settings:
             #
             'general': {
                 # current mapset search path
-                'mapsetPath'  : { 'selection' : 0 }, 
+                'mapsetPath'  : {
+                    'selection' : 0
+                    }, 
                 # use default window layout (layer manager, displays, ...)
-                'defWindowPos' : { 'enabled' : False, 'dim' : '' },
+                'defWindowPos' : {
+                    'enabled' : False,
+                    'dim' : ''
+                    },
                 # expand/collapse element list
-                'elementListExpand' : { 'selection' : 0 },
+                'elementListExpand' : {
+                    'selection' : 0 
+                    },
                 },
             'manager' : {
                 # show opacity level widget
-                'changeOpacityLevel' : { 'enabled' : False }, 
+                'changeOpacityLevel' : {
+                    'enabled' : False
+                    }, 
                 # ask when removing layer from layer tree
-                'askOnRemoveLayer' : { 'enabled' : True },
+                'askOnRemoveLayer' : {
+                    'enabled' : True
+                    },
                 },
             #
             # display
             #
             'display': {
-                'displayFont' : { 'value' : '' },
-                'driver': { 'type': 'default' },
-                'compResolution' : { 'enabled' : False },
-                'autoRendering': { 'enabled' : False },
-                'statusbarMode': { 'selection' : 0 },
+                'displayFont' : {
+                    'value' : ''
+                    },
+                'driver': {
+                    'type': 'default'
+                    },
+                'compResolution' : {
+                    'enabled' : False
+                    },
+                'autoRendering': {
+                    'enabled' : False
+                    },
+                'statusbarMode': {
+                    'selection' : 0
+                    },
                 },
             #
             # advanced
             #
             'advanced' : {
-                'settingsFile'   : { 'type' : 'home' }, # home, gisdbase, location, mapset
-                'digitInterface' : { 'type' : 'vdigit' }, # vedit, vdigit
-                'iconTheme'      : { 'type' : 'silk' }, # grass, silk
+                'settingsFile' : {
+                    'type' : 'home'
+                    }, # home, gisdbase, location, mapset
+                'digitInterface' : {
+                    'type' : 'vdigit'
+                    }, # vedit, vdigit
+                'iconTheme' : {
+                    'type' : 'silk'
+                    }, # grass, silk
                 },
             #
             # Attribute Table Manager
             #
             'atm' : {
-                'highlight' : { 'color' : (255, 255, 0, 255), 'width' : 2},
-                'leftDbClick' : { 'selection' : 0 },
+                'highlight' : {
+                    'color' : (255, 255, 0, 255),
+                    'width' : 2
+                    },
+                'leftDbClick' : {
+                    'selection' : 0
+                    },
             },
             #
             # Command
             #
             'cmd': {
-                'overwrite' : { 'enabled' : False },
-                'closeDlg' : { 'enabled' : False },
-                'verbosity' : { 'selection' : 'grassenv' },
-                'rasterOverlay' : { 'enabled' : False },
+                'overwrite' : {
+                    'enabled' : False
+                    },
+                'closeDlg' : {
+                    'enabled' : False
+                    },
+                'verbosity' : {
+                    'selection' : 'grassenv'
+                    },
+                'rasterOverlay' : {
+                    'enabled' : False
+                    },
                 },
             #
             # Workspace
             #
             'workspace' : {
-                'posDisplay' : { 'enabled' : False },
-                'posManager' : { 'enabled' : False },
+                'posDisplay' : {
+                    'enabled' : False
+                    },
+                'posManager' : {
+                    'enabled' : False
+                    },
                 },
             #
             # vdigit
             #
             'vdigit' : {
                 # symbology
-                'symbolHighlight'   : { 'enabled' : None,  'color' : (255, 255, 0, 255) }, # yellow
-                'symbolHighlightDupl' : { 'enabled' : None,  'color' : (255, 72, 0, 255) }, # red
-                'symbolPoint'       : { 'enabled' : True,  'color' : (0, 0, 0, 255) }, # black
-                'symbolLine'        : { 'enabled' : True,  'color' : (0, 0, 0, 255) }, # black
-                'symbolBoundaryNo'  : { 'enabled' : True,  'color' : (126, 126, 126, 255) }, # grey
-                'symbolBoundaryOne' : { 'enabled' : True,  'color' : (0, 255, 0, 255) }, # green
-                'symbolBoundaryTwo' : { 'enabled' : True,  'color' : (255, 135, 0, 255) }, # orange
-                'symbolCentroidIn'  : { 'enabled' : True,  'color' : (0, 0, 255, 255) }, # blue
-                'symbolCentroidOut' : { 'enabled' : True,  'color' : (165, 42, 42, 255) }, # brown
-                'symbolCentroidDup' : { 'enabled' : True,  'color' : (156, 62, 206, 255) }, # violet
-                'symbolNodeOne'     : { 'enabled' : True,  'color' : (255, 0, 0, 255) }, # red
-                'symbolNodeTwo'     : { 'enabled' : True,  'color' : (0, 86, 45, 255) }, # dark green
-                'symbolVertex'      : { 'enabled' : False, 'color' : (255, 20, 147, 255) }, # deep pink
-                'symbolDirection'   : { 'enabled' : False, 'color' : (255, 0, 0, 255) }, # red
+                'symbolHighlight' : {
+                    'enabled' : None,
+                    'color' : (255, 255, 0, 255)
+                    }, # yellow
+                'symbolHighlightDupl' : {
+                    'enabled' : None,
+                    'color' : (255, 72, 0, 255)
+                    }, # red
+                'symbolPoint' : {
+                    'enabled' : True,
+                    'color' : (0, 0, 0, 255)
+                    }, # black
+                'symbolLine' : {
+                    'enabled' : True,
+                    'color' : (0, 0, 0, 255)
+                    }, # black
+                'symbolBoundaryNo' : {
+                    'enabled' : True,
+                    'color' : (126, 126, 126, 255)
+                    }, # grey
+                'symbolBoundaryOne' : {
+                    'enabled' : True,
+                    'color' : (0, 255, 0, 255)
+                    }, # green
+                'symbolBoundaryTwo' : {
+                    'enabled' : True,
+                    'color' : (255, 135, 0, 255)
+                    }, # orange
+                'symbolCentroidIn' : {
+                    'enabled' : True,
+                    'color' : (0, 0, 255, 255)
+                    }, # blue
+                'symbolCentroidOut' : {
+                    'enabled' : True,
+                    'color' : (165, 42, 42, 255)
+                    }, # brown
+                'symbolCentroidDup' : {
+                    'enabled' : True,
+                    'color' : (156, 62, 206, 255)
+                    }, # violet
+                'symbolNodeOne' : {
+                    'enabled' : True,
+                    'color' : (255, 0, 0, 255)
+                    }, # red
+                'symbolNodeTwo' : {
+                    'enabled' : True,
+                    'color' : (0, 86, 45, 255)
+                    }, # dark green
+                'symbolVertex' : {
+                    'enabled' : False,
+                    'color' : (255, 20, 147, 255)
+                    }, # deep pink
+                'symbolDirection' : {
+                    'enabled' : False,
+                    'color' : (255, 0, 0, 255)
+                    }, # red
                 # display
-                'lineWidth' : { 'value' : 2, 'units' : 'screen pixels' },
+                'lineWidth' : {
+                    'value' : 2,
+                    'units' : 'screen pixels'
+                    },
                 # snapping
-                'snapping' : { 'value' : 10, 'units' : 'screen pixels' },
-                'snapToVertex' : { 'enabled' : False },
-                'backgroundMap' : {'value' : ''},
+                'snapping' : {
+                    'value' : 10,
+                    'units' : 'screen pixels'
+                    },
+                'snapToVertex' : {
+                    'enabled' : False
+                    },
+                'backgroundMap' : {
+                    'value' : ''
+                    },
                 # digitize new record
-                'addRecord' : { 'enabled' : True },
-                'layer' : {'value' : 1 },
-                'category' : {'value' : 1 },
-                'categoryMode' : {'selection' : 0 },
+                'addRecord' : {
+                    'enabled' : True
+                    },
+                'layer' :{
+                    'value' : 1
+                    },
+                'category' : {
+                    'value' : 1
+                    },
+                'categoryMode' : {
+                    'selection' : 0
+                    },
                 # delete existing feature(s)
-                'delRecord' : { 'enabled' : True },
+                'delRecord' : {
+                    'enabled' : True
+                    },
                 # query tool
-                'query'       : { 'selection' : 0, 'box' : True },
-                'queryLength' : { 'than-selection' : 0, 'thresh' : 0 },
-                'queryDangle' : { 'than-selection' : 0, 'thresh' : 0 },
+                'query' : {
+                    'selection' : 0,
+                    'box' : True
+                    },
+                'queryLength' : {
+                    'than-selection' : 0,
+                    'thresh' : 0
+                    },
+                'queryDangle' : {
+                    'than-selection' : 0,
+                    'thresh' : 0
+                    },
                 # select feature (point, line, centroid, boundary)
-                'selectFeaturePoint'    : { 'enabled' : True },
-                'selectFeatureLine'     : { 'enabled' : True },
-                'selectFeatureCentroid' : { 'enabled' : True },
-                'selectFeatureBoundary' : { 'enabled' : True },
-                'selectThresh'          : { 'value' : 10, 'units' : 'screen pixels'},
-                'checkForDupl'          : { 'enabled' : False },
+                'selectFeaturePoint' : {
+                    'enabled' : True
+                    },
+                'selectFeatureLine' : {
+                    'enabled' : True
+                    },
+                'selectFeatureCentroid' : {
+                    'enabled' : True
+                    },
+                'selectFeatureBoundary' : {
+                    'enabled' : True
+                    },
+                'selectThresh' : {
+                    'value' : 10,
+                    'units' : 'screen pixels'
+                    },
+                'checkForDupl' : {
+                    'enabled' : False
+                    },
                 # exit
-                'saveOnExit'            : { 'enabled' : False },
+                'saveOnExit' : {
+                    'enabled' : False
+                    },
                 },
             'profile': {
-                'raster0' : { 'pcolor' : (0, 0, 255, 255), # profile line color
-                              'pwidth' : 1, # profile line width
-                              'pstyle' : 'solid', # profile line pen style
-                              },
-                'raster1' : { 'pcolor' : (255, 0, 0, 255), 
-                              'pwidth' : 1, 
-                              'pstyle' : 'solid', 
-                              },
-                'raster2' : { 'pcolor' : (0, 255, 0, 255), 
-                              'pwidth' : 1, 
-                              'pstyle' : 'solid', 
-                              },
-                'font' : { 'titleSize' : 12,
-                           'axisSize' : 11,
-                           'legendSize' : 10,
-                           },
-                'marker' : { 'color' : wx.Colour(0, 0, 0),
-                             'fill' : 'transparent',
-                             'size' : 2,
-                             'type' : 'triangle',
-                             'legend' : _('Segment break'),
-                             },
-                'grid' : { 'color' : wx.Colour(200,200,200) ,
-                           'enabled' : True,
-                           },
-                'x-axis' : { 'type' : 'auto', # axis format
-                             'min' : 0, # axis min for custom axis range
-                             'max': 0, # axis max for custom axis range
-                             'log' : False,
-                             },
-                'y-axis' : { 'type' : 'auto', # axis format
-                             'min' : 0, # axis min for custom axis range
-                             'max': 0, # axis max for custom axis range
-                             'log' : False,
-                             },
-                'legend' : { 'enabled' : True
-                             },
+                'raster0' : {
+                    'pcolor' : (0, 0, 255, 255), # profile line color
+                    'pwidth' : 1, # profile line width
+                    'pstyle' : 'solid', # profile line pen style
+                    },
+                'raster1' : {
+                    'pcolor' : (255, 0, 0, 255), 
+                    'pwidth' : 1, 
+                    'pstyle' : 'solid', 
+                    },
+                'raster2' : {
+                    'pcolor' : (0, 255, 0, 255), 
+                    'pwidth' : 1, 
+                    'pstyle' : 'solid', 
+                    },
+                'font' : {
+                    'titleSize' : 12,
+                    'axisSize' : 11,
+                    'legendSize' : 10,
+                    },
+                'marker' : {
+                    'color' : wx.Colour(0, 0, 0),
+                    'fill' : 'transparent',
+                    'size' : 2,
+                    'type' : 'triangle',
+                    'legend' : _('Segment break'),
+                    },
+                'grid' : {
+                    'color' : wx.Colour(200,200,200) ,
+                    'enabled' : True,
+                    },
+                'x-axis' : {
+                    'type' : 'auto', # axis format
+                    'min' : 0, # axis min for custom axis range
+                    'max': 0, # axis max for custom axis range
+                    'log' : False,
+                    },
+                'y-axis' : {
+                    'type' : 'auto', # axis format
+                    'min' : 0, # axis min for custom axis range
+                    'max': 0, # axis max for custom axis range
+                    'log' : False,
+                    },
+                'legend' : {
+                    'enabled' : True
+                    },
                 },
             'georect' : {
-                'symbol' : { 'color' : (0, 0, 255, 255),
-                             'width' : 2,
-                             },
+                'symbol' : {
+                    'color' : (0, 0, 255, 255),
+                    'width' : 2,
+                    },
                 },
             'nviz' : {
-                'view' : { 'persp' : { 'value' : 40,
-                                       'min' : 1,
-                                       'max' : 100,
-                                       'step' : 5,
-                                       'update' : False,
-                                       },
-                           'pos' : { 'x' : 0.85,
-                                     'y' : 0.85,
-                                     'update' : False,
-                                     },
-                           'height' : { 'min' : -3000, # TODO: determine min/max height
-                                        'max' : 4000, 
-                                        'step' : 100,
-                                        'update' : False,
-                                       },
-                           'twist' : { 'value' : 0,
-                                       'min' : -180,
-                                       'max' : 180,
-                                       'step' : 5,
-                                       'update' : False,
-                                       },
-                           'z-exag' : { 'value': 1,
-                                        'step' : 1,
-                                        'update' : False
-                                        },
-                           },
+                'view' : {
+                    'persp' : {
+                        'value' : 40,
+                        'step' : 5,
+                        },
+                    'pos' : {
+                        'x' : 0.85,
+                        'y' : 0.85,
+                        },
+                    'height' : {
+                        'min' : -3000, # TODO: determine min/max height
+                        'max' : 4000, 
+                        'step' : 100,
+                        },
+                    'twist' : {
+                        'value' : 0,
+                        'step' : 5,
+                        },
+                    'z-exag' : {
+                        'value': 1,
+                        'step' : 1,
+                        },
+                    },
                 'surface' : {
-                    'shine': { 'map' : False,
-                               'value' : 60.0,
-                               },
-                    'color' : { 'map' : True,
-                                'value' : (0, 0, 0, 255), # constant: black
-                                },
+                    'shine': {
+                        'map' : False,
+                        'value' : 60.0,
+                        },
+                    'color' : {
+                        'map' : True,
+                        'value' : (0, 0, 0, 255), # constant: black
+                        },
                     'draw' : {
                         'color' : (136, 136, 136, 255),
                         'mode' : 1, # fine
@@ -306,6 +445,16 @@ class Settings:
         self.internalSettings['display']['driver']['choices'] = ['default']
         self.internalSettings['display']['statusbarMode']['choices'] = globalvar.MAP_DISPLAY_STATUSBAR_MODE
 
+        self.internalSettings['nviz']['view'] = {}
+        self.internalSettings['nviz']['view']['twist'] = {}
+        self.internalSettings['nviz']['view']['twist']['min'] = -180
+        self.internalSettings['nviz']['view']['twist']['max'] = 180
+        self.internalSettings['nviz']['view']['persp'] = {}
+        self.internalSettings['nviz']['view']['persp']['min'] = 1
+        self.internalSettings['nviz']['view']['persp']['max'] = 100
+        self.internalSettings['nviz']['view']['height'] = {}
+        self.internalSettings['nviz']['view']['height']['value'] = -1
+        
     def GetMapsetPath(self):
         """Store mapset search path"""
         all, access = utils.ListOfMapsets()
@@ -459,9 +608,8 @@ class Settings:
         Raise KeyError if key is not found
         
         @param group settings group
-        @param key
-        @param subkey if not given return dict of key
-        @param subkey1 
+        @param key (value, None)
+        @param subkey (value, list or None)
         @param internal use internal settings instead
 
         @return value
@@ -487,14 +635,14 @@ class Settings:
             raise gcmd.SettingsError("%s %s:%s:%s." % (_("Unable to get value"),
                                                        group, key, subkey))
         
-    def Set(self, group, key, subkey, value, internal=False):
+    def Set(self, group, value, key=None, subkey=None, internal=False):
         """Set value of key/subkey
 
         Raise KeyError if group/key is not found
         
         @param group settings group
-        @param key key
-        @param subkey subkey (value or list)
+        @param key key (value, None)
+        @param subkey subkey (value, list or None)
         @param value value
         @param internal use internal settings instead
         """
@@ -504,10 +652,16 @@ class Settings:
             settings = self.userSettings
 
         try:
-            if type(subkey) == type([]):
-                settings[group][key][subkey[0]][subkey[1]] = value
+            if subkey is None:
+                if key is None:
+                    settings[group] = value
+                else:
+                    settings[group][key] = value
             else:
-                settings[group][key][subkey] = value
+                if type(subkey) == type([]):
+                    settings[group][key][subkey[0]][subkey[1]] = value
+                else:
+                    settings[group][key][subkey] = value
         except KeyError:
             raise gcmd.SettingsError("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
 
