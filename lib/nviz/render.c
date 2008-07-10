@@ -103,7 +103,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 #if defined(OPENGL_X11)
     rwin->displayId = XOpenDisplay((char *) display);
 #elif defined(OPENGL_AQUA)
-    /* TODO */
+    /* TODO: open mac display */
 #elif defined(OPENGL_WINDOWS)
     /* TODO */
 #endif
@@ -121,10 +121,10 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     rwin->contextId = glXCreateContext(rwin->displayId,
 				       v, NULL, GL_FALSE);
 #elif defined(OPENGL_AQUA)
-    /* TODO */
-    rwin->displayId = aglChoosePixelFmt(GDHandle *dev, int ndev, attributeList);
+    /* TODO: dev = NULL, ndev = 0 ? */
+    rwin->displayId = aglChoosePixelFmt(NULL, 0, attributeList);
     
-    rwin->contextId = aglCreateContext(rwin->display, NULL); 
+    rwin->contextId = aglCreateContext(rwin->displayId, NULL); 
 #elif defined(OPENGL_WINDOWS)
     /* TODO int ChoosePixelFormat( HDC hdc, PIXELFORMATDESCRIPTOR *pfd ) */
 #endif
@@ -147,7 +147,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 					v, rwin->pixmap);
 #elif defined(OPENGL_AQUA)
     /* create win pixmap to render to (same depth as RootWindow) */
-    rwin->pixmap = NULL; /* TODO */
+    rwin->pixmap = NULL; /* TODO: create GWorldPtr */
     /* create an off-screen AGL rendering area */
     rwin->windowId = aglCreateAGLPixmap(rwin->displayId,
 					rwin->pixmap); 
@@ -185,7 +185,8 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
     if (rwin->contextId == aglGetCurrentContext())
 	return 1;
 
-    aglMakeCurrent(rwin->windowId, rwin->contextId);
+    /* TODO: mac_win */
+    aglMakeCurrent((AGLDrawable) mac_win, rwin->contextId);
 #elif defined(OPENGL_WINDOWS)
     /* TODO wglMakeCurrent( HDC hdc, HGLRC hrc ) */
 #endif
