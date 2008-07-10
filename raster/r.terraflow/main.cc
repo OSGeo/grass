@@ -111,7 +111,7 @@ parse_args(int argc, char *argv[]) {
   d8cut->key  = "d8cut";
   d8cut->type = TYPE_DOUBLE;
   d8cut->required = NO;
-  d8cut->answer = "infinity"; /* default value */
+  d8cut->answer = G_store("infinity"); /* default value */
   d8cut->description =
     _("If flow accumulation is larger than this value it is routed using "
       "SFD (D8) direction \n \t\t (meaningfull only  for MFD flow)");
@@ -122,7 +122,7 @@ parse_args(int argc, char *argv[]) {
   mem->key         = "memory";
   mem->type        = TYPE_INTEGER;
   mem->required    = NO;
-  mem->answer      = "300"; /* 300MB default value */
+  mem->answer      = G_store("300"); /* 300MB default value */
   mem->description = _("Maximum runtime memory size (in MB)");
 
   /* temporary STREAM path */
@@ -131,7 +131,7 @@ parse_args(int argc, char *argv[]) {
   streamdir->key        = "STREAM_DIR";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
-  streamdir->answer     = "/var/tmp"; 
+  streamdir->answer     = G_store("/var/tmp"); 
   streamdir->description=
      _("Directory to hold temporary files (they can be large)");
 
@@ -150,7 +150,7 @@ parse_args(int argc, char *argv[]) {
   stats_opt->type       = TYPE_STRING;
   stats_opt->required   = NO;
   stats_opt->description= _("Name of file containing runtime statistics");
-  stats_opt->answer     = "stats.out";
+  stats_opt->answer     = G_store("stats.out");
 
 
   if (G_parser(argc, argv)) {

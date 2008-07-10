@@ -22,12 +22,12 @@
 
 
 #include "mm.h"
-
+#include <string>
 
 void  LOG_avail_memo();
 
 size_t getAvailableMemory();
 
-void  MEMORY_LOG(char* str);
+void  MEMORY_LOG(std::string str);
 
 #endif

@@ -20,8 +20,8 @@
 #include <ctype.h>
 #include <time.h>
 
+#include <string> 
 #include "fill.h"
-#include "option.h"
 #include "common.h"
 #include "water.h"
 #include "sortutils.h"
@@ -138,9 +138,9 @@ public:
 
 
 char *
-verbosedir(char *s) {
+verbosedir(std::string s) {
   static char buf[BUFSIZ];
-  sprintf(buf, "dump/%s", s);
+  sprintf(buf, "dump/%s", s.c_str());
   return buf;
 }
 
