@@ -656,7 +656,7 @@ class Map(object):
         Returns list of layers of selected properties or list of all
         layers. 
 
-        @param l_type layer type, e.g. raster/vector/wms/overlay
+        @param l_type layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
         @param l_mapset all layers from given mapset (only for maplayers)
         @param l_name all layers with given name
         @param l_active only layers with 'active' attribute set to True or False
@@ -667,7 +667,12 @@ class Map(object):
 
         selected = []
 
-        if l_type == 'overlay':
+        if type(l_type) == type(''):
+            one_type = True
+        else:
+            one_type = False
+
+        if one_type and l_type == 'overlay':
             list = self.overlays
         else:
             list = self.layers
@@ -675,8 +680,11 @@ class Map(object):
         # ["raster", "vector", "wms", ... ]
         for layer in list:
             # specified type only
-            if l_type != None and layer.type != l_type:
-                continue
+            if l_type != None:
+                if one_type and layer.type != l_type:
+                    continue
+                elif not one_type and layer.type not in l_type:
+                    continue
 
             # mapset
             if (l_mapset != None and type != 'overlay') and \

@@ -268,6 +268,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizClass.EraseMap()
         self.SwapBuffers()
 
+    def IsLoaded(self, layer):
+        """Check if layer is already loaded"""
+        if self.Map.GetLayerIndex(layer) in self.object.keys():
+            return 1
+
+        return 0
+
     def LoadDataLayers(self):
         """Load raster/vector from current layer tree
 
@@ -1880,7 +1887,7 @@ class NvizToolWindow(wx.Frame):
             self.notebook.GetPage(self.page['vector']).Enable(False)
 
             # use default values
-            if data == {}:
+            if data == {} or data == None:
                 # attributes
                 for attr in ('topo', 'color'): # required
                     if layer and layer.type == 'raster':

@@ -818,7 +818,8 @@ class LayerTree(CT.CustomTreeCtrl):
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
-        if self.mapdisplay.toolbars['nviz']:
+        if self.mapdisplay.toolbars['nviz'] and \
+                self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
             if checked: # enable
@@ -907,7 +908,9 @@ class LayerTree(CT.CustomTreeCtrl):
             pass
 
         # update nviz tools
-        if self.mapdisplay.toolbars['nviz']:
+        if self.mapdisplay.toolbars['nviz'] and \
+                self.GetPyData(self.layer_selected) is not None:
+            # update Nviz tool window
             type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
             if type == 'raster':
                 self.mapdisplay.nvizToolWin.UpdatePage('surface')
@@ -1107,7 +1110,29 @@ class LayerTree(CT.CustomTreeCtrl):
 
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
-
+        
+        if self.mapdisplay.toolbars['nviz']:
+            # update nviz session
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            mapWin = self.mapdisplay.MapWindow
+            if len(mapLayer.GetCmd()) > 0:
+                if mapLayer.type == 'raster':
+                    self.mapdisplay.nvizToolWin.UpdatePage('surface')
+                    self.mapdisplay.nvizToolWin.SetPage('surface')
+                    if not mapWin.IsLoaded(mapLayer):
+                        mapWin.LoadRaster(mapLayer)
+                elif mapLayer.type == 'vector':
+                    self.mapdisplay.nvizToolWin.UpdatePage('vector')
+                    self.mapdisplay.nvizToolWin.SetPage('vector')
+                    if not mapWin.IsLoaded(mapLayer):
+                        mapWin.LoadVector(mapLayer)
+                
+                # reset view when first layer loaded
+                nlayers = len(mapWin.Map.GetListOfLayers(l_type=('raster', 'vector'),
+                                                         l_active=True))
+                if nlayers < 2:
+                    mapWin.ResetView()
+        
     def ReorderLayers(self):
         """Add commands from data associated with
         any valid layers (checked or not) to layer list in order to
