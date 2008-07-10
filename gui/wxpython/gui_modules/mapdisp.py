@@ -2606,6 +2606,7 @@ class MapFrame(wx.Frame):
         # nviz
         elif name == "nviz":
             import nviz
+
             # check for GLCanvas and OpenGL
             msg = None
             if not nviz.haveGLCanvas:
