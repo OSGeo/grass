@@ -104,9 +104,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # default values
         #
-        self.view = UserSettings.Get(group='nviz', key='view') # reference
+        self.view = copy.deepcopy(UserSettings.Get(group='nviz', key='view')) # copy
         self.iview = UserSettings.Get(group='nviz', key='view', internal=True)
         self.update = {} # update view/controls
+        self.update['view'] = None
+        self.update['surface'] = {}
+        for sec in ('attribute', 'draw', 'mask', 'position'):
+            self.update['surface'][sec] = {}
+        self.update['vector'] = {}
+        for sec in ('lines', ):
+            self.update['vector'][sec] = {}
         self.object = {} # loaded data objects (layer index / gsurf id)
 
         self.size = None
@@ -139,14 +146,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.SetCurrent()
         if not self.init:
             self.nvizClass.InitView()
+
             self.LoadDataLayers()
-            self.view['z-exag']['value'], \
-                self.iview['height']['value'] = self.nvizClass.SetViewDefault()
+
+            self.ResetView()
             
             if hasattr(self.parent, "nvizToolWin"):
                 self.parent.nvizToolWin.UpdatePage('view')
                 self.parent.nvizToolWin.UpdateSettings()
+
             self.init = True
+
         self.UpdateMap()
 
     def OnMouseAction(self, event):
@@ -226,16 +236,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.parent.onRenderGauge.SetRange(2)
             self.parent.onRenderGauge.SetValue(0)
 
-        if 'view' in self.update.keys():
+        if self.update['view']:
+            if 'z-exag' in self.update['view']:
+                self.nvizClass.SetZExag(self.view['z-exag']['value'])
+
             self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
                                    self.iview['height']['value'],
                                    self.view['persp']['value'],
                                    self.view['twist']['value'])
-            del self.update['view']
 
-        if 'z-exag' in self.update.keys():
-            self.nvizClass.SetZExag(self.view['z-exag']['value'])
-            del self.update['z-exag']
+            self.update['view'] = None
 
         if self.render is True:
             self.parent.onRenderGauge.SetValue(1)
@@ -370,15 +380,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def ResetView(self):
         """Reset to default view"""
-        self.view['pos']['x'] = wxnviz.VIEW_DEFAULT_POS_X
-        self.view['pos']['y'] = wxnviz.VIEW_DEFAULT_POS_Y
         self.view['z-exag']['value'], \
             self.iview['height']['value'] = self.nvizClass.SetViewDefault()
-        self.view['persp']['value'] = wxnviz.VIEW_DEFAULT_PERSP
-        self.view['twist']['value'] = wxnviz.VIEW_DEFAULT_TWIST
 
-        self.update['view'] = None
-        self.update['z-exag'] = None
+        self.view['pos']['x'] = UserSettings.Get(group='nviz', key='view',
+                                                 subkey=('pos', 'x'))
+        self.view['pos']['y'] = UserSettings.Get(group='nviz', key='view',
+                                                 subkey=('pos', 'x'))
+        self.view['persp']['value'] = UserSettings.Get(group='nviz', key='view',
+                                                       subkey=('persp', 'value'))
+
+        self.view['twist']['value'] = UserSettings.Get(group='nviz', key='view',
+                                                       subkey=('twist', 'value'))
+
+        self.update['view'] = ('z-exag', 'pos', 'persp', 'twist')
 
     def GetMapObjId(self, layer):
         """Get map object id of given map layer (2D)
@@ -391,26 +406,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             return self.object[index]
         except:
             return -1
-
-    def SetLayerSettings(self, data):
-        """Set settings for selected layer
-
-        @param data settings
-
-        @return 1 on success
-        @return 0 on failure
-        """
-        # get currently selected map layer
-        if not self.tree or not self.tree.GetSelection():
-            return 0
-        
-        item = self.tree.GetSelection()
-        try:
-            self.tree.SetPyData(item)[0]['nviz'] = data
-        except:
-            return 0
-            
-        return 1
 
 class NvizToolWindow(wx.Frame):
     """Experimental window for Nviz tools
@@ -1317,14 +1312,17 @@ class NvizToolWindow(wx.Frame):
         if not winName:
             return
 
-        self.mapWindow.view[winName]['value'] = event.GetInt()
-        for win in self.win['view'][winName].itervalues():
-            self.FindWindowById(win).SetValue(self.mapWindow.view[winName]['value'])
-
-        if winName in ('pos', 'height', 'twist', 'persp'):
-            self.mapWindow.update['view'] = None
+        if winName == 'height':
+            view = self.mapWindow.iview # internal
         else:
-            self.mapWindow.update[winName] = None
+            view = self.mapWindow.view
+
+        view[winName]['value'] = event.GetInt()
+
+        for win in self.win['view'][winName].itervalues():
+            self.FindWindowById(win).SetValue(view[winName]['value'])
+
+        self.mapWindow.update['view'] = (winName, )
 
         self.mapWindow.render = False
         self.mapWindow.Refresh(False)
@@ -1336,6 +1334,8 @@ class NvizToolWindow(wx.Frame):
 
     def OnViewChangedSpin(self, event):
         """View changed, render in full resolution"""
+        # TODO: use step value instead
+
         self.OnViewChange(event)
         self.OnViewChanged(None)
 
@@ -1376,7 +1376,7 @@ class NvizToolWindow(wx.Frame):
             self.mapWindow.view['pos']['x'] = 0.0
             self.mapWindow.view['pos']['y'] = 1.0
 
-        self.mapWindow.update['view'] = None
+        self.mapWindow.update['view'] = ('pos', )
         self.UpdateSettings()
         self.mapWindow.Refresh(False)
 
@@ -1439,15 +1439,6 @@ class NvizToolWindow(wx.Frame):
             file = UserSettings.SaveToFile(fileSettings)
             self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
 
-#         #
-#         # save settings
-#         #
-#         type = self.mapWindow.GetSelectedLayer().type
-#         data = self.mapWindow.GetSelectedLayer(nviz=True)
-#         if data is None: # no settings
-#             data = {}
-    
-#         if type == 'raster': # -> surface
 #             #
 #             # surface attributes
 #             #
@@ -1502,21 +1493,24 @@ class NvizToolWindow(wx.Frame):
 
         if mapLayer.type == 'raster':
             self.UpdateRasterProperties(id, data)
+            # reset updates
+            for sec in self.mapWindow.update['surface'].keys():
+                self.mapWindow.update['surface'][sec] = {}
         elif mapLayer.type == 'vector':
             self.UpdateVectorProperties(id, data)
+            # reset updates
+            for sec in self.mapWindow.update['vector'].keys():
+                self.mapWindow.update['vector'][sec] = {}
 
-        # reset
-        self.mapWindow.update = {}
-
-        # print self.mapWindow.GetSelectedLayer(nviz=True)
+        print self.mapWindow.GetSelectedLayer(nviz=True)
 
     def UpdateRasterProperties(self, id, data):
         """Apply changes for surfaces"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
-            if self.mapWindow.update.has_key(attrb):
-                map, value = self.mapWindow.update[attrb]
+            if self.mapWindow.update['surface']['attribute'].has_key(attrb):
+                map, value = self.mapWindow.update['surface']['attribute'][attrb]
                 if map is None: # unset
                     # only optional attributes
                     if attrb == 'mask':
@@ -1546,32 +1540,32 @@ class NvizToolWindow(wx.Frame):
                         self.mapWindow.nvizClass.SetSurfaceEmit(id, map, str(value)) 
 
         # draw res
-        if self.mapWindow.update.has_key('draw-res'):
-            coarse, fine, all = self.mapWindow.update['draw-res']
+        if self.mapWindow.update['surface']['draw'].has_key('resolution'):
+            coarse, fine, all = self.mapWindow.update['surface']['draw']['resolution']
             if all:
                 self.mapWindow.nvizClass.SetSurfaceRes(-1, fine, coarse)
             else:
                 self.mapWindow.nvizClass.SetSurfaceRes(id, fine, coarse)
 
         # draw style
-        if self.mapWindow.update.has_key('draw-style'):
-            style, all = self.mapWindow.update['draw-style']
+        if self.mapWindow.update['surface']['draw'].has_key('mode'):
+            style, all = self.mapWindow.update['surface']['draw']['mode']
             if all:
                 self.mapWindow.nvizClass.SetSurfaceStyle(-1, style)
             else:
                 self.mapWindow.nvizClass.SetSurfaceStyle(id, style)
 
         # wire color
-        if self.mapWindow.update.has_key('draw-color'):
-            color, all = self.mapWindow.update['draw-color']
+        if self.mapWindow.update['surface']['draw'].has_key('color'):
+            color, all = self.mapWindow.update['surface']['draw']['color']
             if all:
                 self.mapWindow.nvizClass.SetWireColor(id, str(color))
             else:
                 self.mapWindow.nvizClass.SetWireColor(-1, str(color))
 
         # position
-        if self.mapWindow.update.has_key('surface-position'):
-            axis, value = self.mapWindow.update['surface-position']
+        if self.mapWindow.update['surface']['position'].has_key('coords'):
+            axis, value = self.mapWindow.update['surface']['position']['coords']
             x, y, z = self.mapWindow.nvizClass.GetSurfacePosition(id)
             if axis == 0:
                 x = value
@@ -1579,25 +1573,32 @@ class NvizToolWindow(wx.Frame):
                 y = value
             else:
                 z = value
+            self.mapWindow.update['surface']['position']['coords'] = (x, y, z)
             self.mapWindow.nvizClass.SetSurfacePosition(id, x, y, z)
                 
         # update properties
-        for prop in self.mapWindow.update.keys():
-            data[prop] = self.mapWindow.update[prop]
+        for sec in self.mapWindow.update['surface'].keys():
+            if not data.has_key(sec):
+                data[sec] = {}
+            for prop in self.mapWindow.update['surface'][sec].keys():
+                data[sec][prop] = self.mapWindow.update['surface'][sec][prop]
 
     def UpdateVectorProperties(self, id, data):
         """Apply changes for vector"""
-        if self.mapWindow.update.has_key('vector-lines'):
-            width, color, flat = self.mapWindow.update['vector-lines']
+        if self.mapWindow.update['vector']['lines'].has_key('mode'):
+            width, color, flat = self.mapWindow.update['vector']['lines']['mode']
             self.mapWindow.nvizClass.SetVectorLineMode(id, color, width, flat)
             
-        if self.mapWindow.update.has_key('vector-height'):
-            height = self.mapWindow.update['vector-height']
+        if self.mapWindow.update['vector']['lines'].has_key('height'):
+            height = self.mapWindow.update['vector']['lines']['height']
             self.mapWindow.nvizClass.SetVectorHeight(id, height)
  
         # update properties
-        for prop in self.mapWindow.update.keys():
-            data[prop] = self.mapWindow.update[prop]
+        for sec in self.mapWindow.update['vector'].keys():
+            if not data.has_key(sec):
+                data[sec] = {}
+            for prop in self.mapWindow.update['vector'][sec].keys():
+                data[sec][prop] = self.mapWindow.update['vector'][sec][prop]
            
     def OnBgColor(self, event):
         """Background color changed"""
@@ -1626,6 +1627,9 @@ class NvizToolWindow(wx.Frame):
         if not attrb:
             return
 
+        # reset updates
+        self.mapWindow.update['surface']['attribute'] = {}
+
         selection = event.GetSelection()
         if self.win['surface'][attrb]['required']: # no 'unset'
             selection += 1
@@ -1645,7 +1649,7 @@ class NvizToolWindow(wx.Frame):
 
         self.SetSurfaceUseMap(attrb, useMap)
         
-        self.mapWindow.update[attrb] = (useMap, str(value))
+        self.mapWindow.update['surface']['attribute'][attrb] = (useMap, str(value))
         self.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
@@ -1702,7 +1706,7 @@ class NvizToolWindow(wx.Frame):
             map = False
 
         if self.pageUpdated: # do not update when selection is changed
-            self.mapWindow.update[attrb] = (map, str(value))
+            self.mapWindow.update['surface']['attribute'][attrb] = (map, str(value))
             self.UpdateLayerProperties()
 
             if self.parent.autoRender.IsChecked():
@@ -1720,7 +1724,10 @@ class NvizToolWindow(wx.Frame):
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
             
-        self.mapWindow.update['draw-res'] = (coarse, fine, all) 
+        # reset updates
+        self.mapWindow.update['surface']['draw'] = {}
+        self.mapWindow.update['surface']['draw']['resolution'] = (coarse, fine, all) 
+
         self.UpdateLayerProperties()
 
     def SetSurfaceMode(self, all=False):
@@ -1757,7 +1764,9 @@ class NvizToolWindow(wx.Frame):
             value |= wxnviz.DM_GOURAUD
 
         if self.pageUpdated:
-            self.mapWindow.update['draw-style'] = (value, all)
+            # reset updates
+            self.mapWindow.update['surface']['draw'] = {}
+            self.mapWindow.update['surface']['draw']['style'] = (value, all)
             self.UpdateLayerProperties()
 
     def OnSurfaceMode(self, event):
@@ -1782,7 +1791,9 @@ class NvizToolWindow(wx.Frame):
         value = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
         if self.pageUpdated:
-            self.mapWindow.update['draw-color'] = (value, all)
+            # reset updates
+            self.mapWindow.update['surface']['draw'] = {}
+            self.mapWindow.update['surface']['draw']['color'] = (value, all)
             self.UpdateLayerProperties()
 
     def OnSurfaceWireColor(self, event):
@@ -1817,7 +1828,8 @@ class NvizToolWindow(wx.Frame):
         axis = self.FindWindowById(self.win['surface']['position']['axis']).GetSelection()
         value = event.GetInt()
         
-        self.mapWindow.update['surface-position'] = (axis, value)
+        self.mapWindow.update['surface']['position'] = {}
+        self.mapWindow.update['surface']['position']['coords'] = (axis, value)
         self.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
@@ -1848,7 +1860,7 @@ class NvizToolWindow(wx.Frame):
         else:
             flat = True
 
-        self.mapWindow.update['vector-lines'] = (width, color, flat)
+        self.mapWindow.update['vector']['lines']['mode'] = (width, color, flat)
         self.UpdateLayerProperties()
                 
         if self.parent.autoRender.IsChecked():
@@ -1864,7 +1876,7 @@ class NvizToolWindow(wx.Frame):
             win = self.FindWindowById(self.win['vector']['lines']['height']['slider'])
         win.SetValue(value)
 
-        self.mapWindow.update['vector-height'] = value
+        self.mapWindow.update['vector']['lines']['height'] = value
         self.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
@@ -2015,9 +2027,11 @@ class ViewPositionWindow(wx.Window):
             w, h = self.GetClientSize()
             x = float(x) / w
             y = float(y) / h
-            self.mapWindow.view['pos']['x'] = x
-            self.mapWindow.view['pos']['y'] = y
-            self.mapWindow.update['view'] = None
+            if x >= 0 and x <= 1.0:
+                self.mapWindow.view['pos']['x'] = x
+            if y >= 0 and y <= 1.0:
+                self.mapWindow.view['pos']['y'] = y
+            self.mapWindow.update['view'] = ('pos', )
 
             self.mapWindow.render = False
         

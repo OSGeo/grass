@@ -24,11 +24,6 @@ extern "C" {
 
 #include <wx/glcanvas.h>
 
-#define VIEW_DEFAULT_POS_X 0.85
-#define VIEW_DEFAULT_POS_Y 0.85
-#define VIEW_DEFAULT_PERSP 40.0
-#define VIEW_DEFAULT_TWIST 0.0
-
 class Nviz
 {
 private:

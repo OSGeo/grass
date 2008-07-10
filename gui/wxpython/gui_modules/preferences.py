@@ -626,7 +626,8 @@ class Settings:
                 else:
                     return settings[group][key]
             else:
-                if type(subkey) == type([]):
+                if type(subkey) == type([]) or \
+                        type(subkey) == type(()):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
                     return settings[group][key][subkey]  

@@ -866,10 +866,40 @@ class GMFrame(wx.Frame):
                         file.write('%s</parameter>\n' % (' ' * self.indent));
                 self.indent -= 4
                 file.write('%s</task>\n' % (' ' * self.indent));
+                nviz = mapTree.GetPyData(item)[0]['nviz']
+                if nviz:
+                    file.write('%s<nviz>\n' % (' ' * self.indent));
+                    self.WriteNvizToWorkspace(file, self.indent, nviz, type=maplayer.type)
+                    file.write('%s</nviz>\n' % (' ' * self.indent));
                 self.indent -= 4
                 file.write('%s</layer>\n' % (' ' * self.indent));
             item = mapTree.GetNextSibling(item)
         self.indent -= 4
+
+    def WriteNvizToWorkspace(self, file, indent, data, type):
+        """Save Nviz layer properties to workspace
+
+        @param file file stream
+        @param indent indentation value
+        @param data Nviz layer properties
+        @param type map layer type ('raster' or 'vector')
+        """
+        indent += 4
+        if type == 'raster':
+            for attrb in data.iterkeys():
+                if len(data[attrb]) < 1: # skip empty attributes
+                    continue
+                for name in data[attrb].iterkeys():
+                    if attrb == 'attribute': # surface attribute
+                        map, value = data[attrb][name]
+                        print '%s<%s name="%s" map="%d">\n' % \
+                            (' ' * indent, attrb, name, map)
+                    indent += 4
+                    print '%s<value>%s</value>\n' % (' ' * indent, value)
+                    indent -= 4
+                    print '%s<%s>\n' % (' ' * indent, attrb)
+        elif type == 'vector':
+            pass
 
     def SaveToWorkspaceFile(self, filename):
         """Save layer tree layout to workspace file
