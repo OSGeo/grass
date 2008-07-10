@@ -60,9 +60,10 @@ std::vector<double> Nviz::SetViewDefault()
     Nviz_get_exag_height(&vp_height, NULL, NULL);
     ret.push_back(vp_height);
 
+    /*
     SetView(VIEW_DEFAULT_POS_X, VIEW_DEFAULT_POS_Y,
 	    vp_height, VIEW_DEFAULT_PERSP, VIEW_DEFAULT_TWIST);
-
+    */
     G_debug(1, "Nviz::SetViewDefault()");
 
     return ret;

@@ -1,6 +1,6 @@
 <!--	grass-gxw.dtd
 
-	Copyright (C) 2007 by the GRASS Development Team
+	Copyright (C) 2007-2008 by the GRASS Development Team
 	Author: Martin Landa <landa.martin gmail.com>
 	
 	This program is free software under the GPL (>=v2)
@@ -45,7 +45,7 @@
 
 <!--    map layer
 -->
-<!ELEMENT layer (selected?, task?)>
+<!ELEMENT layer (selected?, task?, nviz?)>
 <!ATTLIST layer	type	CDATA   #REQUIRED>
 <!ATTLIST layer	name	CDATA   #REQUIRED>
 <!ATTLIST layer	checked (0 | 1) #REQUIRED>
@@ -70,8 +70,16 @@
 -->
 <!ELEMENT value         (#PCDATA)>
 
-
 <!--    enabled flag
 -->
 <!ELEMENT flag          EMPTY>
 <!ATTLIST flag          name            CDATA #REQUIRED>
+
+<!--    nviz layer properties
+-->
+<!ELEMENT nviz	        (attribute*)>
+
+<!--    nviz  surface attribute parameter
+-->
+<!ELEMENT attribute     (value)>
+<!ATTLIST attribute	map		(0 | 1) #REQUIRED>
