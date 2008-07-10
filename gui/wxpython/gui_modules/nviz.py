@@ -1439,52 +1439,6 @@ class NvizToolWindow(wx.Frame):
             file = UserSettings.SaveToFile(fileSettings)
             self.lmgr.goutput.WriteLog(_('Nviz settings saved to file <%s>.') % file)
 
-#             #
-#             # surface attributes
-#             #
-#             data['attribute'] = {}
-#             for attrb in ('topo', 'color', 'mask',
-#                          'transp', 'shine', 'emit'):
-#                 use = self.FindWindowById(self.win['surface'][attrb]['use']).GetSelection()
-#                 if self.win['surface'][attrb]['required']: # map, constant
-#                     if use == 0: # map
-#                         map = True
-#                     elif use == 1: # constant
-#                         map = False
-#                 else: # unset, map, constant
-#                     if use == 0: # unset
-#                         map = None
-#                     elif use == 1: # map
-#                         map = True
-#                     elif use == 2: # constant
-#                         map = False
-
-#                 if map is None:
-#                     continue
-
-#                 if map:
-#                     value = self.FindWindowById(self.win['surface'][attrb]['map']).GetValue()
-#                 else:
-#                     if attrb == 'color':
-#                         value = self.FindWindowById(self.win['surface'][attrb]['map']).GetColour()
-#                     else:
-#                         value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
-                    
-#                 data['attribute'][attrb] = {}
-#                 data['attribute'][attrb]['map'] = map
-#                 data['attribute'][attrb]['value'] = value
-
-#             #
-#             # draw
-#             #
-#             data['draw'] = {}
-#             for control in ('mode', 'shading', 'style'):
-#                 data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetSelection()
-#             for control in ('res-coarse', 'res-fine'):
-#                 data['draw'][control] = self.FindWindowById(self.win['surface']['draw'][control]).GetValue()
-            
-#         self.mapWindow.SetLayerSettings(data)
-
     def UpdateLayerProperties(self):
         """Update data layer properties"""
         mapLayer = self.mapWindow.GetSelectedLayer()
@@ -1510,7 +1464,8 @@ class NvizToolWindow(wx.Frame):
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
             if self.mapWindow.update['surface']['attribute'].has_key(attrb):
-                map, value = self.mapWindow.update['surface']['attribute'][attrb]
+                map = self.mapWindow.update['surface']['attribute'][attrb]['map']
+                value = self.mapWindow.update['surface']['attribute'][attrb]['value']
                 if map is None: # unset
                     # only optional attributes
                     if attrb == 'mask':
@@ -1586,8 +1541,9 @@ class NvizToolWindow(wx.Frame):
     def UpdateVectorProperties(self, id, data):
         """Apply changes for vector"""
         if self.mapWindow.update['vector']['lines'].has_key('mode'):
-            width, color, flat = self.mapWindow.update['vector']['lines']['mode']
-            self.mapWindow.nvizClass.SetVectorLineMode(id, color, width, flat)
+            attrb = self.mapWindow.update['vector']['lines']['mode']
+            self.mapWindow.nvizClass.SetVectorLineMode(id, attrb['color'],
+                                                       attrb['width'], attrb['flat'][0])
             
         if self.mapWindow.update['vector']['lines'].has_key('height'):
             height = self.mapWindow.update['vector']['lines']['height']
@@ -1649,7 +1605,9 @@ class NvizToolWindow(wx.Frame):
 
         self.SetSurfaceUseMap(attrb, useMap)
         
-        self.mapWindow.update['surface']['attribute'][attrb] = (useMap, str(value))
+        self.mapWindow.update['surface']['attribute'][attrb] = { 'map' : useMap,
+                                                                 'value' : str(value),
+                                                                 }
         self.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
@@ -1706,7 +1664,9 @@ class NvizToolWindow(wx.Frame):
             map = False
 
         if self.pageUpdated: # do not update when selection is changed
-            self.mapWindow.update['surface']['attribute'][attrb] = (map, str(value))
+            self.mapWindow.update['surface']['attribute'][attrb] = { 'map' : map,
+                                                                     'value' : str(value),
+                                                                     }
             self.UpdateLayerProperties()
 
             if self.parent.autoRender.IsChecked():
@@ -1857,10 +1817,15 @@ class NvizToolWindow(wx.Frame):
 
         if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
             flat = False
+            map = ''
         else:
             flat = True
+            map = ''
 
-        self.mapWindow.update['vector']['lines']['mode'] = (width, color, flat)
+        self.mapWindow.update['vector']['lines']['mode'] = { 'width' : width,
+                                                             'color' : color,
+                                                             'flat' : (flat, map)
+                                                             }
         self.UpdateLayerProperties()
                 
         if self.parent.autoRender.IsChecked():
