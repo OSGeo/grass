@@ -178,7 +178,7 @@ unsigned int AMI_STREAM<T>::get_block_length() {
 /**********************************************************************/
 /* creates a random file name, opens the file for reading and writing
    and and returns a file descriptor */
-int ami_single_temp_name(char *base, char* tmp_path);
+int ami_single_temp_name(const std::string& base, char* tmp_path);
 
 
 /**********************************************************************/

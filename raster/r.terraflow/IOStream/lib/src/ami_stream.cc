@@ -32,7 +32,7 @@
 /* creates a random file name, opens the file for reading and writing
    and and returns a file descriptor */
 int
-ami_single_temp_name(char *base, char* tmp_path) {
+ami_single_temp_name(const std::string& base, char* tmp_path) {
  
   char *base_dir;
   int fd;
@@ -41,7 +41,7 @@ ami_single_temp_name(char *base, char* tmp_path) {
   base_dir = getenv(STREAM_TMPDIR);
   assert(base_dir);
 
-  sprintf(tmp_path, "%s/%s_XXXXXX", base_dir, base);
+  sprintf(tmp_path, "%s/%s_XXXXXX", base_dir, base.c_str());
 #ifdef __MINGW32__
   fd = mktemp(tmp_path) ? open(tmp_path, O_CREAT|O_EXCL|O_RDWR, 0600) : -1;
 #else

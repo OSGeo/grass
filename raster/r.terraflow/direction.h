@@ -141,6 +141,16 @@ direction_type encodeDirection(const genericWindow<elevation_type>& elevwin,
 			       const dimension_type ncols,
 			       dimension_type row, dimension_type col);
 
+direction_type encodeDirectionMFD(const genericWindow<elevation_type>& elevwin,
+			       const dimension_type nrows, 
+			       const dimension_type ncols,
+			       dimension_type row, dimension_type col);
+
+direction_type encodeDirectionSFD(const genericWindow<elevation_type>& elevwin,
+			       const dimension_type nrows, 
+			       const dimension_type ncols,
+			       dimension_type row, dimension_type col);
+
 direction_type findDominant(direction_type dir);
 char directionSymbol(direction_type dir);
 

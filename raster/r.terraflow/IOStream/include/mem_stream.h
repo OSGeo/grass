@@ -84,7 +84,7 @@ off_t MEM_STREAM<T>::stream_len(void) {
 template<class T>
 AMI_err MEM_STREAM<T>::name(char **stream_name)  {
 
-  char *path = "dummy";
+  char const* path = "dummy";
 
   *stream_name = new char [strlen(path) + 1];
   strcpy(*stream_name, path);

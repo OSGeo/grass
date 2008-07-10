@@ -46,8 +46,7 @@ getAvailableMemory() {
   return fmem;
 }
 
-void 
-MEMORY_LOG(char* str) {
-  printf("%s", str);
+void MEMORY_LOG(std::string str) {
+  printf("%s", str.c_str());
   fflush(stdout);
 }
