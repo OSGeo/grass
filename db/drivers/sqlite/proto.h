@@ -1,9 +1,11 @@
 #ifndef __SQLITE_PROTO_H__
 #define __SQLITE_PROTO_H__
 
+#include "globals.h"
+
 /* error.c */
 void init_error ( void );
-void append_error ( char * );
+void append_error ( const char * );
 void report_error ( void );
 
 /* cursor.c */

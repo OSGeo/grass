@@ -1,5 +1,8 @@
 #include <sqlite3.h>
 
+#ifndef DBMI_SQLITE_PROTO_H
+#define DBMI_SQLITE_PROTO_H
+
 /* cursors */
 typedef struct _cursor {
     sqlite3_stmt *statement;
@@ -12,12 +15,7 @@ typedef struct _cursor {
 
 } cursor;  
 
-#ifdef MAIN
-    sqlite3 *sqlite;
-    dbString *errMsg = NULL; /* error message */
-#else
-    extern sqlite3 *sqlite;
-    extern dbString *errMsg;
-#endif 
+extern sqlite3 *sqlite;
 
+#endif
 

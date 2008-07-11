@@ -14,7 +14,10 @@
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include "proto.h"
 #include "globals.h"
+
+static dbString *errMsg = NULL; /* error message */
 
 /* init error message */
 void
@@ -30,7 +33,7 @@ init_error ( void )
 
 /* append error message */
 void
-append_error ( char *msg )
+append_error ( const char *msg )
 {
     db_append_string ( errMsg, msg);
 }
