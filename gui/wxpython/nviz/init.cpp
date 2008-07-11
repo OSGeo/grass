@@ -16,8 +16,6 @@
    \date 2008
 */
 
-#include <clocale>
-
 #include "nviz.h"
 
 static void swap_gl();
@@ -27,8 +25,6 @@ static void swap_gl();
 */
 Nviz::Nviz()
 {
-    setlocale(LC_NUMERIC, "C");
-
     G_gisinit(""); /* GRASS functions */
 
     G_set_verbose(0); // TODO: read progress info

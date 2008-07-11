@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <locale.h>
+
 #include <grass/gis.h>
 #include "G.h"
 #include <grass/glocale.h>
@@ -139,6 +141,8 @@ static int gisinit(void)
     G__init_null_patterns();
 
     initialized = 1;
+
+    setlocale(LC_NUMERIC, "C");
 
     return 0;
 }

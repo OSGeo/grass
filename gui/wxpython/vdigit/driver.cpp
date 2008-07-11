@@ -17,7 +17,6 @@
 */
 
 #include <cmath>
-#include <clocale>
 
 #include "driver.h"
 
@@ -32,8 +31,6 @@
 */
 DisplayDriver::DisplayDriver(void *device)
 {
-    setlocale(LC_NUMERIC, "C");
-
     G_gisinit(""); /* GRASS functions */
 
     mapInfo = NULL;
