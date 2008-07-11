@@ -14,6 +14,8 @@
    \date 2008
 */
 
+#include <clocale>
+
 #include "driver.h"
 #include "digit.h"
 
@@ -24,6 +26,8 @@
 */
 Digit::Digit(DisplayDriver *ddriver)
 {
+    setlocale(LC_NUMERIC, "C");
+
     display = ddriver;
 
     if (display->mapInfo) {

@@ -1,4 +1,5 @@
-"""@package nviz.py
+"""
+@package nviz.py
 
 @brief 2.5/3D visialization mode for Map Display Window
 
