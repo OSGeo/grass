@@ -53,6 +53,7 @@ class ProcessWorkspaceFile(HandlerBase):
         #
         self.inNviz = False
         self.inAttribute = False
+        self.refAttribute = None
 
         #
         # layer manager properties
@@ -125,7 +126,8 @@ class ProcessWorkspaceFile(HandlerBase):
             self.layerName     = attrs.get('name', None)
             self.layerChecked  = attrs.get('checked', None)
             self.layerOpacity  = attrs.get('opacity', None)
-            self.layerSelected = False;
+            self.layerSelected = False
+            self.layerNviz     = None
             self.cmd = []
 
         elif name == 'task':
@@ -168,9 +170,27 @@ class ProcessWorkspaceFile(HandlerBase):
         #
         elif name == 'nviz':
             self.inNviz = True
+            # init nviz layer properties
+            self.layerNviz = {}
+            self.layerNviz['view'] = None
+            self.layerNviz['surface'] = {}
+            for sec in ('attribute', 'draw', 'mask', 'position'):
+                self.layerNviz['surface'][sec] = {}
+            self.layerNviz['vector'] = {}
+            for sec in ('lines', ):
+                self.layerNviz['vector'][sec] = {}
 
         elif name == 'attribute':
             self.inAttribute = True
+            tagName = str(name)
+            attrbName = str(attrs.get('name', ''))
+            self.layerNviz['surface'][tagName][attrbName] = {}
+            if attrs.get('map', '0'):
+                self.layerNviz['surface'][tagName][attrbName]['map'] = False
+            else:
+                self.layerNviz['surface'][tagName][attrbName]['map'] = True
+
+            self.refAttribute = self.layerNviz['surface'][tagName][attrbName]
 
     def endElement(self, name):
         if name == 'gxw':
@@ -193,7 +213,8 @@ class ProcessWorkspaceFile(HandlerBase):
                     "cmd"      : None,
                     "group"    : self.inGroup,
                     "display"  : self.displayIndex,
-                    "selected" : self.layerSelected})
+                    "selected" : self.layerSelected,
+                    "nviz"     : self.layerNviz})
 
             if self.layerOpacity:
                 self.layers[-1]["opacity"] = float(self.layerOpacity)
@@ -225,9 +246,10 @@ class ProcessWorkspaceFile(HandlerBase):
         #
         elif name == 'nviz':
             self.inNviz = False
-        
+
         elif name == 'attribute':
             self.inAttribute = False
+            self.refAttribute['value'] = str(self.value)
 
     def characters(self, ch):
         self.my_characters(ch)
@@ -411,7 +433,7 @@ class WriteWorkspaceFile(object):
                     i += 1
                     self.indent -= 4
             # end tag
-            self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+            self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
         self.indent -= 4
 
     def __writeNvizVector(self, data):

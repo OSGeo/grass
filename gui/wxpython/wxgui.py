@@ -667,7 +667,8 @@ class GMFrame(wx.Frame):
                                            lchecked=layer['checked'],
                                            lopacity=layer['opacity'],
                                            lcmd=layer['cmd'],
-                                           lgroup=layer['group'])
+                                           lgroup=layer['group'],
+                                           lnviz=layer['nviz'])
                 
                 # tag 'selected' added 2008/04
                 if layer.has_key('selected'):

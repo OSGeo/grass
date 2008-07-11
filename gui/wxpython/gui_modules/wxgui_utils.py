@@ -485,11 +485,17 @@ class LayerTree(CT.CustomTreeCtrl):
         self.EditLabel(self.layer_selected)
 
     def AddLayer(self, ltype, lname=None, lchecked=None,
-                 lopacity=None, lcmd=None, lgroup=None):
+                 lopacity=None, lcmd=None, lgroup=None, lnviz=None):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
-        Note: lcmd is given as a list
+        @param ltyle layer type (raster, vector, ...)
+        @param lname layer name
+        @param lchecked if True layer is checked
+        @param lopacity layer opacity level
+        @param lcmd command (given as a list)
+        @param lgroup group name or None
+        @param lnviz layer Nviz properties
         """
 
         self.first = True
@@ -636,7 +642,7 @@ class LayerTree(CT.CustomTreeCtrl):
                                     'type' : ltype,
                                     'ctrl' : ctrlId,
                                     'maplayer' : None,
-                                    'nviz' : None,
+                                    'nviz' : lnviz,
                                     'prowin' : None}, 
                                    None))
 

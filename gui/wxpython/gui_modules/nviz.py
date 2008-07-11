@@ -1,5 +1,4 @@
-"""
-@package nviz.py
+"""@package nviz.py
 
 @brief 2.5/3D visialization mode for Map Display Window
 
@@ -1726,7 +1725,7 @@ class NvizToolWindow(wx.Frame):
         if self.pageUpdated:
             # reset updates
             self.mapWindow.update['surface']['draw'] = {}
-            self.mapWindow.update['surface']['draw']['style'] = (value, all)
+            self.mapWindow.update['surface']['draw']['mode'] = (value, all)
             self.UpdateLayerProperties()
 
     def OnSurfaceMode(self, event):
@@ -1863,48 +1862,58 @@ class NvizToolWindow(wx.Frame):
             self.notebook.GetPage(self.page['surface']).Enable(True)
             self.notebook.GetPage(self.page['vector']).Enable(False)
 
-            # use default values
-            if data == {} or data == None:
-                # attributes
-                for attr in ('topo', 'color'): # required
-                    if layer and layer.type == 'raster':
-                        self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
-                    else:
-                        self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
-                    self.SetSurfaceUseMap(attr, True) # -> map
-                if UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'map']) is False:
-                    self.SetSurfaceUseMap('shine', False)
-                    value = UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'value'])
-                    self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
+            #
+            # set default values
+            #
+            # attributes
+            for attr in ('topo', 'color'): # required
+                if layer and layer.type == 'raster':
+                    self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
+                else:
+                    self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
+                self.SetSurfaceUseMap(attr, True) # -> map
+            
+            if UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'map']) is False:
+                self.SetSurfaceUseMap('shine', False)
+                value = UserSettings.Get(group='nviz', key='surface', subkey=['shine', 'value'])
+                self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
 
-                #
-                # draw
-                #
-                for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
-                    win = self.FindWindowById(self.win['surface']['draw'][control])
-
-                    name = win.GetName()
-
-                    if name == "selection":
-                        win.SetSelection(value)
-                    elif name == "colour":
-                        win.SetColour(value)
-                    else:
-                        win.SetValue(value)
-                # enable/disable res widget + set draw mode
-                self.SetSurfaceMode()
-                color = self.FindWindowById(self.win['surface']['draw']['color'])
-                self.SetSurfaceWireColor(color.GetColour())
-
-            elif layer.type == 'raster':
+            #
+            # draw
+            #
+            for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
+                win = self.FindWindowById(self.win['surface']['draw'][control])
+                
+                name = win.GetName()
+                
+                if name == "selection":
+                    win.SetSelection(value)
+                elif name == "colour":
+                    win.SetColour(value)
+                else:
+                    win.SetValue(value)
+            # enable/disable res widget + set draw mode
+            self.SetSurfaceMode()
+            color = self.FindWindowById(self.win['surface']['draw']['color'])
+            self.SetSurfaceWireColor(color.GetColour())
+            
+            if layer.type == 'raster':
+                surfProp = data['surface']
                 # surface attributes
-                for attr in data['attr']:
-                    if attr['map']:
+                for attr in surfProp['attribute'].iterkeys():
+                    print attr
+                    if surfProp['attribute'][attr]['map']:
                         win = self.FindWindowById(self.win['surface'][attr]['map'])
                     else:
                         win = self.FindWindowById(self.win['surface'][attr]['const'])
                         
-                    win.SetValue(data['value'])
+                    if attr == 'color':
+                        color = tuple(map(int, surfProp['attribute'][attr]['value'].split(':')))
+                        # TODO: save as tuple
+                        win.SetColour(color)
+                    else:
+                        win.SetValue(surfProp['attribute'][attr]['value'])
+
         elif pageId == 'vector':
             # disable surface and enable current
             self.notebook.GetPage(self.page['surface']).Enable(False)
