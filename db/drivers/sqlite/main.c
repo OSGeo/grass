@@ -11,11 +11,13 @@
 * for details.
 *
 **************************************************************/
-#define MAIN
+
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "globals.h"
 #include "dbdriver.h"
+
+sqlite3 *sqlite;
 
 int main (int argc, char *argv[])
 
