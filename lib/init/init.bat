@@ -118,7 +118,7 @@ FOR /F "usebackq delims==" %%i IN (`g.gisenv "get=LOCATION_NAME"`) DO @set LOCAT
 type "%WINGISBASE%\etc\welcome"
 
 "%WINGISBASE%\etc\echo" ""
-"%WINGISBASE%\etc\echo" "GRASS homepage:                          http://grass.itc.it/"
+"%WINGISBASE%\etc\echo" "GRASS homepage:                          http://grass.osgeo.org/"
 "%WINGISBASE%\etc\echo" "This version running thru:               Windows Command Shell (cmd.exe)"
 "%WINGISBASE%\etc\echo" "When ready to quit enter:                exit"
 "%WINGISBASE%\etc\echo" "Help is available with the command:      g.manual -i"

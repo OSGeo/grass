@@ -2,7 +2,7 @@
 
 by GRASS Development Team
 
-http://www.grass-gis.org
+http://grass.osgeo.org
 
 <h2>Table of contents</h2>
 
@@ -810,7 +810,7 @@ map river because table is stored in a reliable RDBMS.
 \section grassdglib DGLib (Directed Graph Library)
 
 The Directed Graph Library or DGLib (Micarelli 2002, \ref dglib ,
-http://grass.itc.it/dglib/) provides functionality for vector network
+http://grass.osgeo.org/dglib/) provides functionality for vector network
 analysis. This library released under GPL is hosted by the GRASS
 project (within the GRASS source code). As a stand-alone library it
 may also be used by other software projects.

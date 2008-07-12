@@ -399,6 +399,21 @@ pdfdocs:
 	(cd swig/; $(MAKE) cleandocs ; $(MAKE) pdfdocs)
 	@echo "Written PDF docs in: lib/db/latex/, lib/g3d/latex/, lib/gis/latex/, lib/gmath/latex/ lib/gpde/latex/ lib/ogsf/latex/, lib/proj//latex/, lib/segment/latex/, lib/vector/latex/ lib/vector/dglib/latex/ rfc/latex/ swig/latex/"
 
+cleandocs:
+	(cd lib/db/ ; $(MAKE) cleandocs)
+	(cd lib/g3d/ ; $(MAKE) cleandocs)
+	(cd lib/gis/ ; $(MAKE) cleandocs)
+	(cd lib/gmath/ ; $(MAKE) cleandocs)
+	(cd lib/gpde/ ; $(MAKE) cleandocs)
+	(cd lib/ogsf/ ; $(MAKE) cleandocs)
+	(cd lib/proj/ ; $(MAKE) cleandocs)
+	(cd lib/segment/; $(MAKE) cleandocs)
+	(cd lib/vector/ ; $(MAKE) cleandocs)
+	(cd lib/vector/dglib/ ; $(MAKE) cleandocs)
+	(cd lib/ ; $(MAKE) cleandocs)
+	(cd rfc/ ; $(MAKE) cleandocs)
+	(cd swig/; $(MAKE) cleandocs)
+
 html2pdfdoc:
 	@ echo "Light PDF document from modules' HTML documentation"
 	@ # http://www.htmldoc.org

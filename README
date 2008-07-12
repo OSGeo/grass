@@ -33,7 +33,9 @@ Graphviz dot (http://www.research.att.com/sw/tools/graphviz/).
 
 To build the GRASS programmer's documentation, run
    make htmldocs
-here. This takes quite some time. The result is in doxygenhtml/index.html
+or to generate documentation as single html file (recommended for simple reading)
+   make htmldocs-single
+here. This takes quite some time. The result is in lib/html/index.html
 which refers to further document repositories in
    lib/vector/html/index.html
    lib/db/html/index.html
