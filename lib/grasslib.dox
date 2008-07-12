@@ -104,7 +104,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <h3>Interfaces</h3>
 
 <ul>
-<li> GRASS SWIG interface <a href=../../swig/html/>see here</a>.
+<li> GRASS SWIG interface <a href="../../swig/html/index.html">see here</a>.
 </ul>
 
 <h3>File structure of GRASS Location</h3>
@@ -155,6 +155,6 @@ as follows:
   storage in database (DBMS).</li>
 </ul>
 
-<img src="http://grass.osgeo.org/images/loc_struct.png" alt="Diagram of GRASS file structure">
+\image html "loc_struct.png" "Diagram of GRASS file structure"
 
 */

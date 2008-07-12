@@ -2,7 +2,6 @@
 <!-- doxygenized from "GRASS 5 Programmer's Manual" 
      by M. Neteler 8/2005
   -->
-<title>GRASS Numerical math interface</title>
 
 \section gmathintro Numerical math interface with optional support of LAPACK/BLAS
 
