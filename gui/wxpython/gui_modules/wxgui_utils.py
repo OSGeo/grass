@@ -828,11 +828,19 @@ class LayerTree(CT.CustomTreeCtrl):
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
+
             if checked: # enable
+                
+                busy = wx.BusyInfo(message=_("Please wait, loading data..."),
+                                   parent=self.mapdisplay)
+                wx.Yield()
+
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.LoadRaster(mapLayer)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.LoadVector(mapLayer)
+
+                busy.Destroy()
             else: # disable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.UnloadRaster(mapLayer)
@@ -918,6 +926,7 @@ class LayerTree(CT.CustomTreeCtrl):
                 self.GetPyData(self.layer_selected) is not None:
             # update Nviz tool window
             type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
+
             if type == 'raster':
                 self.mapdisplay.nvizToolWin.UpdatePage('surface')
                 self.mapdisplay.nvizToolWin.SetPage('surface')

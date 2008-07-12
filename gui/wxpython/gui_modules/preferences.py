@@ -373,7 +373,7 @@ class Settings:
                         'value' : (0, 0, 0, 255), # constant: black
                         },
                     'draw' : {
-                        'color' : (136, 136, 136, 255),
+                        'wire-color' : (136, 136, 136, 255),
                         'mode' : 1, # fine
                         'style' : 1, # surface
                         'shading' : 1, # gouraud

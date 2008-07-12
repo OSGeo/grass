@@ -38,22 +38,13 @@ class ProcessWorkspaceFile(HandlerBase):
     defined in grass-gxw.dtd.
     """
     def __init__(self):
-        self.inGxw       = False
-        self.inLayer     = False
-        self.inTask      = False
-        self.inParameter = False
-        self.inFlag      = False
-        self.inValue     = False
-        self.inGroup     = False
-        self.inDisplay   = False
-        self.inLayerManager = False
-
-        #
-        # Nviz section
-        #
-        self.inNviz = False
-        self.inAttribute = False
-        self.refAttribute = None
+        self.inTag = {}
+        for tag in ('gxw', 'layer', 'task', 'parameter',
+                    'flag', 'value', 'group', 'display',
+                    'layer_manager',
+                    'nviz', 'attribute', 'draw', 'resolution',
+                    'wire_color'):
+            self.inTag[tag] = False
 
         #
         # layer manager properties
@@ -71,11 +62,9 @@ class ProcessWorkspaceFile(HandlerBase):
         self.displayIndex = -1 # first display has index '0'
 
     def startElement(self, name, attrs):
-        if name == 'gxw':
-            self.inGxw = True
+        self.inTag[name] = True
 
-        elif name == 'display':
-            self.inDisplay = True
+        if name == 'display':
             self.displayIndex += 1
 
             # window position and size
@@ -116,12 +105,10 @@ class ProcessWorkspaceFile(HandlerBase):
                 "checked" : int(self.groupChecked),
                 "opacity" : None,
                 "cmd"     : None,
-                "group"   : self.inGroup,
+                "group"   : self.inTag['group'],
                 "display" : self.displayIndex})
-            self.inGroup = True
 
         elif name == 'layer':
-            self.inLayer = True
             self.layerType     = attrs.get('type', None)
             self.layerName     = attrs.get('name', None)
             self.layerChecked  = attrs.get('checked', None)
@@ -131,29 +118,24 @@ class ProcessWorkspaceFile(HandlerBase):
             self.cmd = []
 
         elif name == 'task':
-            self.inTask = True;
             name = attrs.get('name', None)
             self.cmd.append(name)
 
         elif name == 'parameter':
-            self.inParameter = True;
             self.parameterName = attrs.get('name', None)
 
         elif name == 'value':
-            self.inValue = True
             self.value = ''
 
         elif name == 'flag':
-            self.inFlag = True;
             name = attrs.get('name', None)
             self.cmd.append('-' + name)
 
         elif name == 'selected':
-            if self.inLayer:
+            if self.inTag['layer']:
                 self.layerSelected = True;
 
         elif name == 'layer_manager':
-            self.inLayerManager = True
             posAttr = attrs.get('dim', '')
             if posAttr:
                 posVal = map(int, posAttr.split(','))
@@ -169,7 +151,6 @@ class ProcessWorkspaceFile(HandlerBase):
         # Nviz section
         #
         elif name == 'nviz':
-            self.inNviz = True
             # init nviz layer properties
             self.layerNviz = {}
             self.layerNviz['view'] = None
@@ -181,37 +162,48 @@ class ProcessWorkspaceFile(HandlerBase):
                 self.layerNviz['vector'][sec] = {}
 
         elif name == 'attribute':
-            self.inAttribute = True
             tagName = str(name)
             attrbName = str(attrs.get('name', ''))
             self.layerNviz['surface'][tagName][attrbName] = {}
-            if attrs.get('map', '0'):
+            if attrs.get('map', '0') == '0':
                 self.layerNviz['surface'][tagName][attrbName]['map'] = False
             else:
                 self.layerNviz['surface'][tagName][attrbName]['map'] = True
 
             self.refAttribute = self.layerNviz['surface'][tagName][attrbName]
+        
+        elif name == 'draw':
+            tagName = str(name)
+            self.layerNviz['surface'][tagName]['mode'] = {}
+            self.layerNviz['surface'][tagName]['mode']['all'] = False
+            self.layerNviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
+            self.layerNviz['surface'][tagName]['mode']['desc'] = {}
+            self.layerNviz['surface'][tagName]['mode']['desc']['shading'] = \
+                str(attrs.get('shading', ''))
+            self.layerNviz['surface'][tagName]['mode']['desc']['style'] = \
+                str(attrs.get('style', ''))
+            self.layerNviz['surface'][tagName]['mode']['desc']['mode'] = \
+                str(attrs.get('mode', ''))
 
+        elif name == 'resolution':
+            self.resolutionType = str(attrs.get('type', ''))
+            if not self.layerNviz['surface']['draw'].has_key(str(name)):
+                self.layerNviz['surface']['draw'][str(name)] = {}
+                
     def endElement(self, name):
-        if name == 'gxw':
-            self.inGxw = False
+        self.inTag[name] = False
 
-        elif name == 'display':
-            self.inDisplay = False
-
-        elif name == 'group':
-            self.inGroup = False
+        if name == 'group':
             self.groupName = self.groupChecked = None
 
         elif name == 'layer':
-            self.inLayer = False
             self.layers.append({
                     "type"     : self.layerType,
                     "name"     : self.layerName,
                     "checked"  : int(self.layerChecked),
                     "opacity"  : None,
                     "cmd"      : None,
-                    "group"    : self.inGroup,
+                    "group"    : self.inTag['group'],
                     "display"  : self.displayIndex,
                     "selected" : self.layerSelected,
                     "nviz"     : self.layerNviz})
@@ -224,38 +216,37 @@ class ProcessWorkspaceFile(HandlerBase):
             self.layerType = self.layerName = self.Checked = \
                 self.Opacity = self.cmd = None
 
-        elif name == 'task':
-            self.inTask = False
-
         elif name == 'parameter':
-            self.inParameter = False
             self.cmd.append('%s=%s' % (self.parameterName, self.value))
             self.parameterName = self.value = None
-
-        elif name == 'value':
-            self.inValue = False
-
-        elif name == 'flag':
-            self.inFlag = False
-
-        elif name == 'layer_manager':
-            self.inLayerManager = False
 
         #
         # Nviz section
         #
-        elif name == 'nviz':
-            self.inNviz = False
-
         elif name == 'attribute':
-            self.inAttribute = False
-            self.refAttribute['value'] = str(self.value)
+            try:
+                self.refAttribute['value'] = int(self.value)
+            except ValueError:
+                try:
+                    self.refAttribute['value'] = float(self.value)
+                except ValueError:
+                    self.refAttribute['value'] = str(self.value)
+
+        elif name == 'resolution':
+            self.layerNviz['surface']['draw']['resolution']['all'] = False
+            self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
+            del self.resolutionType
+
+        elif name == 'wire_color':
+            self.layerNviz['surface']['draw']['wire-color'] = {}
+            self.layerNviz['surface']['draw']['wire-color']['all'] = False
+            self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
 
     def characters(self, ch):
         self.my_characters(ch)
 
     def my_characters(self, ch):
-        if self.inValue:
+        if self.inTag['value']:
             self.value += ch
 
 class WriteWorkspaceFile(object):
@@ -374,9 +365,9 @@ class WriteWorkspaceFile(object):
                 if nviz:
                     self.file.write('%s<nviz>\n' % (' ' * self.indent));
                     if maplayer.type == 'raster':
-                        self.__writeNvizSurface(nviz)
+                        self.__writeNvizSurface(nviz['surface'])
                     elif maplayer.type == 'vector':
-                        self.__writeNvizVector(nviz)
+                        self.__writeNvizVector(nviz['vector'])
                     self.file.write('%s</nviz>\n' % (' ' * self.indent));
                 self.indent -= 4
                 self.file.write('%s</layer>\n' % (' ' * self.indent));
@@ -400,40 +391,51 @@ class WriteWorkspaceFile(object):
                     self.indent += 4
                     self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]['value']))
                     self.indent -= 4
+                    # end tag
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
             # draw mode
             if attrb == 'draw':
                 self.file.write('%s<%s' %(' ' * self.indent, attrb))
-                resTag = None
-                for name in data[attrb]:
-                    if name == 'resolution':
-                        self.indent += 4
-                        resTag = ''
-                        for type, value in (('coarse', data[attrb][name][0]),
-                                            ('fine', data[attrb][name][1])):
-                            resTag += '%s<resolution type="%s">\n' % (' ' * self.indent, type)
-                            self.indent += 4
-                            resTag += '%s<value>%s</value>\n' % (' ' * self.indent, value)
-                            self.indent -= 4
-                            resTag += '%s</resolution>\n' % (' ' * self.indent)
-                        self.indent -= 4
-                    else:
-                        # note: second argument is 'all' -> skip
-                        self.file.write(' %s="%s"' % (name, data[attrb][name][0]))
+                if data[attrb].has_key('mode'):
+                    for tag, value in data[attrb]['mode']['desc'].iteritems():
+                        self.file.write(' %s="%s"' % (tag, value))
                 self.file.write('>\n') # <draw ...>
-                if resTag:
-                    self.file.write(resTag)
+
+                if data[attrb].has_key('resolution'):
+                    self.indent += 4
+                    for type in ('coarse', 'fine'):
+                        self.file.write('%s<resolution type="%s">\n' % (' ' * self.indent, type))
+                        self.indent += 4
+                        self.file.write('%s<value>%d</value>\n' % (' ' * self.indent,
+                                                                   data[attrb]['resolution'][type]))
+                        self.indent -= 4
+                        self.file.write('%s</resolution>\n' % (' ' * self.indent))
+
+                if data[attrb].has_key('wire-color'):
+                    self.file.write('%s<wire_color>\n' % (' ' * self.indent))
+                    self.indent += 4
+                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent,
+                                                               data[attrb]['wire-color']['value']))
+                    self.indent -= 4
+                    self.file.write('%s</wire_color>\n' % (' ' * self.indent))
+            
             # position
             elif attrb == 'position':
                 self.file.write('%s<%s>\n' %(' ' * self.indent, attrb))
                 i = 0
                 for tag in ('x', 'y', 'z'):
                     self.indent += 4
-                    self.file.write('%s<%s>%s<%s>\n' % (' ' * self.indent, tag,
+                    file.write('%s<%s>%s<%s>\n' % (' ' * self.indent, tag,
                                                    data[attrb][name][i], tag))
                     i += 1
                     self.indent -= 4
-            # end tag
-            self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
+            if attrb != 'attribute':
+                # end tag
+                self.indent -= 4
+                self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+
         self.indent -= 4
 
     def __writeNvizVector(self, data):

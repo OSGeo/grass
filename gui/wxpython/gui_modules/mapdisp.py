@@ -2635,8 +2635,15 @@ class MapFrame(wx.Frame):
             #
             self.toolbars['nviz'] = toolbars.NvizToolbar(self, self.Map)
             self.toolbars['map'].Enable2D(False)
-            
+
+            #
+            # update status bar
+            #
+            self.toggleStatus.Enable(False)
+
+            #
             # erase map window
+            #
             self.MapWindow.EraseMap()
 
             busy = wx.BusyInfo(message=_("Please wait, loading data..."),
@@ -2649,14 +2656,9 @@ class MapFrame(wx.Frame):
             if not self.MapWindow3D:
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
                                                  Map=self.Map, tree=self.tree, gismgr=self.gismanager)
+                self.MapWindow3D.OnPaint(None) # -> LoadData
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
-            
-            #
-            # update status bar
-            #
-            self.toggleStatus.Enable(False)
-            self.SetStatusText("")
             
             busy.Destroy()
 
@@ -2680,6 +2682,7 @@ class MapFrame(wx.Frame):
                               BottomDockable(False).TopDockable(True).
                               CloseButton(False).Layer(2))
             self.MapWindow = self.MapWindow3D
+            self.SetStatusText("", 0)
             
         self._mgr.Update()
 
