@@ -77,9 +77,24 @@
 
 <!--    nviz layer properties
 -->
-<!ELEMENT nviz	        (attribute*)>
+<!ELEMENT nviz	        (attribute*, draw?)>
 
-<!--    nviz  surface attribute parameter
+<!--    nviz surface attribute parameter
 -->
 <!ELEMENT attribute     (value)>
 <!ATTLIST attribute	map		(0 | 1) #REQUIRED>
+
+<!--    nviz surface draw mode parameter
+-->
+<!ELEMENT draw          (resolution*, wire-color?)>
+<!ATTLIST draw	        mode		(coarse | fine | both) #IMPLIED>
+<!ATTLIST draw	        style		(wire | surface) #IMPLIED>
+<!ATTLIST draw	        shading		(gouraud | flat) #IMPLIED>
+
+<!--    nviz surface draw resolution
+-->
+<!ELEMENT resolution    (value)>
+
+<!--    nviz surface wire color
+-->
+<!ELEMENT wire_color    (value)>
