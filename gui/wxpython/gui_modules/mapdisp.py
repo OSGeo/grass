@@ -179,9 +179,6 @@ class MapWindow(object):
         try:
             if nviz:
                 layer = self.tree.GetPyData(item)[0]['nviz']
-                if layer is None: # initialize data
-                    self.tree.GetPyData(item)[0]['nviz'] = {}
-                    layer = self.tree.GetPyData(item)[0]['nviz']
             else:
                 layer = self.tree.GetPyData(item)[0]['maplayer']
         except:
@@ -2656,10 +2653,10 @@ class MapFrame(wx.Frame):
             if not self.MapWindow3D:
                 self.MapWindow3D = nviz.GLWindow(self, id=wx.ID_ANY,
                                                  Map=self.Map, tree=self.tree, gismgr=self.gismanager)
-                self.MapWindow3D.OnPaint(None) # -> LoadData
                 self.nvizToolWin = nviz.NvizToolWindow(self, id=wx.ID_ANY,
                                                        mapWindow=self.MapWindow3D)
-            
+                self.MapWindow3D.OnPaint(None) # -> LoadData
+
             busy.Destroy()
 
             self.nvizToolWin.Show()

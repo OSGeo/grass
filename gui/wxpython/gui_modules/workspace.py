@@ -42,8 +42,13 @@ class ProcessWorkspaceFile(HandlerBase):
         for tag in ('gxw', 'layer', 'task', 'parameter',
                     'flag', 'value', 'group', 'display',
                     'layer_manager',
-                    'nviz', 'attribute', 'draw', 'resolution',
-                    'wire_color'):
+                    'nviz',
+                    # surface
+                    'attribute', 'draw', 'resolution',
+                    'wire_color', 'position', 'x', 'y', 'z',
+                    # vector lines
+                    'lines', 'color', 'width', 'mode',
+                    'map', 'height'):
             self.inTag[tag] = False
 
         #
@@ -124,7 +129,8 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'parameter':
             self.parameterName = attrs.get('name', None)
 
-        elif name == 'value':
+        elif name in ('value', 'x', 'y', 'z',
+                      'color', 'width', 'height'):
             self.value = ''
 
         elif name == 'flag':
@@ -153,13 +159,14 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'nviz':
             # init nviz layer properties
             self.layerNviz = {}
-            self.layerNviz['view'] = None
-            self.layerNviz['surface'] = {}
-            for sec in ('attribute', 'draw', 'mask', 'position'):
-                self.layerNviz['surface'][sec] = {}
-            self.layerNviz['vector'] = {}
-            for sec in ('lines', ):
-                self.layerNviz['vector'][sec] = {}
+            if self.layerType == 'raster':
+                self.layerNviz['surface'] = {}
+                for sec in ('attribute', 'draw', 'mask', 'position'):
+                    self.layerNviz['surface'][sec] = {}
+            elif self.layerType == 'vector':
+                self.layerNviz['vector'] = {}
+                for sec in ('lines', ):
+                    self.layerNviz['vector'][sec] = {}
 
         elif name == 'attribute':
             tagName = str(name)
@@ -189,7 +196,15 @@ class ProcessWorkspaceFile(HandlerBase):
             self.resolutionType = str(attrs.get('type', ''))
             if not self.layerNviz['surface']['draw'].has_key(str(name)):
                 self.layerNviz['surface']['draw'][str(name)] = {}
-                
+
+        elif name == 'position':
+            self.layerNviz['surface']['position'] = {}
+        
+        elif name == 'mode':
+            if self.inTag['nviz'] and self.inTag['lines']:
+                self.layerNviz['vector']['lines']['mode'] = {}
+                self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
+        
     def endElement(self, name):
         self.inTag[name] = False
 
@@ -242,11 +257,42 @@ class ProcessWorkspaceFile(HandlerBase):
             self.layerNviz['surface']['draw']['wire-color']['all'] = False
             self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
 
+        elif name == 'x':
+            self.layerNviz['surface']['position']['x'] = int(self.value)
+
+        elif name == 'y':
+            self.layerNviz['surface']['position']['y'] = int(self.value)
+
+        elif name == 'z':
+            self.layerNviz['surface']['position']['z'] = int(self.value)
+        
+        elif name == 'color':
+            if self.inTag['nviz'] and self.inTag['lines']:
+                self.layerNviz['vector']['lines']['color'] = str(self.value)
+
+        elif name == 'width':
+            if self.inTag['nviz'] and self.inTag['lines']:
+                self.layerNviz['vector']['lines']['width'] = int(self.value)
+
+        elif name == 'height':
+            if self.inTag['nviz'] and self.inTag['lines']:
+                self.layerNviz['vector']['lines']['height'] = int(self.value)
+        
+        elif name == 'color':
+            if self.inTag['nviz'] and self.inTag['lines']:
+                self.layerNviz['vector']['lines']['color'] = str(self.value)
+
     def characters(self, ch):
         self.my_characters(ch)
 
     def my_characters(self, ch):
-        if self.inTag['value']:
+        if self.inTag['value'] or \
+                self.inTag['x'] or \
+                self.inTag['y'] or \
+                self.inTag['z'] or \
+                self.inTag['color'] or \
+                self.inTag['width'] or \
+                self.inTag['height']:
             self.value += ch
 
 class WriteWorkspaceFile(object):
@@ -419,6 +465,7 @@ class WriteWorkspaceFile(object):
                                                                data[attrb]['wire-color']['value']))
                     self.indent -= 4
                     self.file.write('%s</wire_color>\n' % (' ' * self.indent))
+                self.indent -= 4
             
             # position
             elif attrb == 'position':
@@ -426,14 +473,13 @@ class WriteWorkspaceFile(object):
                 i = 0
                 for tag in ('x', 'y', 'z'):
                     self.indent += 4
-                    file.write('%s<%s>%s<%s>\n' % (' ' * self.indent, tag,
-                                                   data[attrb][name][i], tag))
+                    self.file.write('%s<%s>%d</%s>\n' % (' ' * self.indent, tag,
+                                                        data[attrb][tag], tag))
                     i += 1
                     self.indent -= 4
 
             if attrb != 'attribute':
                 # end tag
-                self.indent -= 4
                 self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
 
         self.indent -= 4
@@ -450,21 +496,17 @@ class WriteWorkspaceFile(object):
             self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
             self.indent += 4
             for name in data[attrb].iterkeys():
-                self.file.write('%s<%s>' % (' ' * self.indent, name))
-                if type(data[attrb][name]) == type({}):
-                    self.file.write('\n')
-                    self.indent += 4
-                    for subname in data[attrb][name].iterkeys():
-                        if subname == 'flat':
-                            self.file.write('%s<style flat="%d">%s</style>\n' % (' ' * self.indent, 
-                                                                            data[attrb][name][subname][0],
-                                                                            data[attrb][name][subname][1]))
-                        else:
-                            self.file.write('%s<%s>%s</%s>\n' % (' ' * self.indent, subname,
-                                                            data[attrb][name][subname], subname))
-                    self.indent -= 4
-                    self.file.write('%s</%s>\n' % (' ' * self.indent, name))
+                if name == 'mode':
+                    self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
+                                                          data[attrb][name]['type']))
+                    if data[attrb][name]['type'] == 'surface':
+                        self.indent += 4
+                        self.file.write('%s<map>%s</map>\n' % (' ' * self.indent,
+                                                               data[attrb][name]['map']))
+                        self.indent -= 4
+                    self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
                 else:
+                    self.file.write('%s<%s>' % (' ' * self.indent, name))
                     self.file.write('%s</%s>\n' % (data[attrb][name], name))
             self.indent -= 4
             self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))

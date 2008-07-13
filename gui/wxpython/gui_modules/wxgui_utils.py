@@ -842,10 +842,12 @@ class LayerTree(CT.CustomTreeCtrl):
 
                 busy.Destroy()
             else: # disable
+                data = self.GetPyData(item)[0]['nviz']
+                id = data['object']['id']
                 if mapLayer.type == 'raster':
-                    self.mapdisplay.MapWindow.UnloadRaster(mapLayer)
+                    self.mapdisplay.MapWindow.UnloadRaster(id)
                 elif mapLayer.type == 'vector':
-                    self.mapdisplay.MapWindow.UnloadVector(mapLayer)
+                    self.mapdisplay.MapWindow.UnloadVector(id)
 
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 
