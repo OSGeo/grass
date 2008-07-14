@@ -212,6 +212,9 @@ int Nviz::UnsetSurfaceAttr(int id, int attr)
 	return 0;
     }
 
+    G_debug(1, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d",
+	    id, attr);
+    
     return Nviz_unset_attr(id, MAP_OBJ_SURF, attr);
 }
 
@@ -227,6 +230,10 @@ int Nviz::UnsetSurfaceAttr(int id, int attr)
 */
 int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 {
+    G_debug(1, "Nviz::SetSurfaceRes(): id=%d, fine=%d, coarse=%d",
+	    id, fine, coarse);
+
+
     if (id > 0) {
 	if (!GS_surf_exists(id)) {
 	    return 0;
@@ -265,6 +272,9 @@ int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 */
 int Nviz::SetSurfaceStyle(int id, int style)
 {
+    G_debug(1, "Nviz::SetSurfaceStyle(): id=%d, style=%d",
+	    id, style);
+
     if (id > 0) {
 	if (!GS_surf_exists(id)) {
 	    return 0;
@@ -297,6 +307,9 @@ int Nviz::SetSurfaceStyle(int id, int style)
 int Nviz::SetWireColor(int id, const char* color_str)
 {
     int color;
+
+    G_debug(1, "Nviz::SetWireColor(): id=%d, color=%s",
+	    id, color_str);
 
     color = Nviz_color_from_str(color_str);
 
@@ -339,6 +352,10 @@ std::vector<double> Nviz::GetSurfacePosition(int id)
     
     GS_get_trans(id, &x, &y, &z);
     
+    G_debug(1, "Nviz::GetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
+	    id, x, y, z);
+
+
     vals.push_back(double (x));
     vals.push_back(double (y));
     vals.push_back(double (z));
@@ -361,6 +378,9 @@ int Nviz::SetSurfacePosition(int id, float x, float y, float z)
 	return 0;
     }
     
+    G_debug(1, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",
+	    id, x, y, z);
+
     GS_set_trans(id, x, y, z);
 
     return 1;
