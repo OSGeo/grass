@@ -152,7 +152,7 @@ int Gs_loadmap_as_float(struct Cell_head *wind, const char *map_name, float *buf
     }
 
     G_message(_("Loading raster map <%s>..."),
-	      map_name);
+	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -228,7 +228,7 @@ int Gs_loadmap_as_int(struct Cell_head *wind, const char *map_name, int *buff,
     }
 
     G_message(_("Loading raster map <%s>..."),
-	      map_name);
+	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -393,7 +393,7 @@ int Gs_loadmap_as_short(struct Cell_head *wind, const char *map_name, short *buf
     }
 
     G_message(_("Loading raster map <%s>..."),
-	      map_name);
+	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -510,7 +510,7 @@ int Gs_loadmap_as_char(struct Cell_head *wind, const char *map_name,
     }
 
     G_message(_("Loading raster map <%s>..."),
-	      map_name);
+	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
 	offset = row * wind->cols;
@@ -607,7 +607,7 @@ int Gs_loadmap_as_bitmap(struct Cell_head *wind, const char *map_name,
     }
 
     G_message(_("Loading raster map <%s>..."),
-	      map_name);
+	      G_fully_qualified_name(map_name, map_set));
 
     for (row = 0; row < wind->rows; row++) {
 	G_get_null_value_row(cellfile, nullflags, row);
