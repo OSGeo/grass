@@ -113,7 +113,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	}
     }
 
-    if (snap != NO_SNAP) { /* apply snapping (node or vertex) */
+    if (snap != NO_SNAP && (type & GV_LINES)) { /* apply snapping (node or vertex) */
 	Vedit_snap_line(display->mapInfo, BgMap, nbgmaps,
 			-1, Points,
 			threshold, (snap == SNAP) ? 0 : 1); 
