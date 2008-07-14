@@ -63,6 +63,9 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 		   grassname);
 	return NULL;
     }
+
+    G_message(_("Loading vector map <%s>..."),
+	      G_fully_qualified_name(grassname, mapset));
     
     top = gln = (geoline *) G_malloc(sizeof(geoline)); /* G_fatal_error */
     if (!top) {
