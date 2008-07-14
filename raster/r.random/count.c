@@ -85,12 +85,14 @@ void get_stats (struct rr_state *theState)
                 set_min(&theState->buf, col, &theState->min);
                 set_max(&theState->buf, col, &theState->max);
             }
-            if (is_null_value(theState->cover, col)) {
-                theState->cnNulls++;
-            } else {
-                set_min(&theState->cover, col, &theState->cmin);
-                set_max(&theState->cover, col, &theState->cmax);
-            }
+	    if (theState->docover == 1) {
+                if (is_null_value(theState->cover, col)) {
+                    theState->cnNulls++;
+                } else {
+                    set_min(&theState->cover, col, &theState->cmin);
+                    set_max(&theState->cover, col, &theState->cmax);
+                }
+	    }
         }
         
         G_percent(row, nrows, 2);

@@ -73,7 +73,7 @@ main (int argc, char *argv[])
 
     flag.zero = G_define_flag() ;
     flag.zero->key         = 'z' ;
-    flag.zero->description = _("Generate vector points for category zero also");
+    flag.zero->description = _("Generate vector points also for NULL category");
 
     flag.info = G_define_flag() ;
     flag.info->key         = 'i' ;
@@ -116,7 +116,7 @@ main (int argc, char *argv[])
 
     if (flag.info->answer)
     {
-        fprintf (stderr,
+	G_message (
                 "Raster:      %s@%s\n"
                 "Cover:       %s@%s\n"
                 "Cell Count:  %d\n"
@@ -173,7 +173,7 @@ main (int argc, char *argv[])
                 G_fatal_error (_("There aren't [%ld] cells in the current region"),
 			       targets);
             else
-		G_fatal_error (_("There aren't [%ld] non-zero cells in the current region"),
+		G_fatal_error (_("There aren't [%ld] non-NULL cells in the current region"),
 			       targets);
         }
 

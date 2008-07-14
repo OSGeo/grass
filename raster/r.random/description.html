@@ -1,152 +1,66 @@
 <h2>DESCRIPTION</h2>
-
+<p>
 The program <em>r.random</em> allows the user to create a
-raster map layer and a vector points map containing 
+raster map layer and/or a vector points map containing 
 coordinates of points whose locations have been randomly
 determined.  The program locates these randomly generated
-sites (vector points) within the current geographic region and mask (if
-any), on non-zero category value data areas within a
+vector points (sites) within the current geographic region and mask (if
+any), on non-NULL category value data areas within a
 user-specified raster map layer.  If the user sets the
-<b>-z</b> flag, sites will be randomly generated across all
+<b>-z</b> flag, points will be randomly generated across all
 cells (even those with NULL values).
 
 <p>
-
-The <em>raster_output</em> raster map layer is created in
-the user's current mapset.  The category values and
+The category values and
 corresponding category names already associated with the
-random vector point locations in the <em>input</em> map layer are
-assigned to these sites in the <em>raster_output</em> map
+random point locations in the <em>input</em> map layer are
+assigned to these points in the <em>raster_output</em> map
 layer. If the <b>-z</b> is specified, then a unique entry
 is made for the value used where the <em>input</em> was NULL.
 This value is at least 1 less than the smallest value in the
 <em>input</em> raster and is given a medium gray color.
 
+<h2>NOTES</h2>
 <p>
+If a <em>cover</em> raster map is specified and the <em>cover</em> map
+contains NULL (no data) values, these points are suppressed in the
+resulting <em>vector_output</em> or <em>raster_output</em> map.
 
+<p>
 The <em>vector_output</em> file created by <em>r.random</em>
-contains a listing of the sites' coordinates;
-these coordinates are the <em>center points</em> of the
-randomly selected cells.  A double attribute contains the cell value
+contains vector points that represent the <em>center points</em> of the
+randomly generated cells.  A <em>value</em> attribute contains the cell value
 of the <em>input</em> raster (or the assigned value
-when <b>-z</b> is used. The values a stored in the <em>value</em>
-column in the attached attribute table. <br>
+when <b>-z</b> is used). <br>
 If a <em>cover</em> map is additionally specified, a second
 column  <em>covervalue</em> is populated with raster values from
 the <em>cover</em> map.
 
-
-<h2>OPTIONS</h2>
-
+<p>
 The user may specify the quantity of random locations to be
 generated either as a <em>positive integer</em> (e.g., 10),
 or as a <em>percentage of the raster map layer's cells</em> 
 (e.g., 10%, or 3.05%).  The number of cells considered for 
 the percentage reflects whether or not the <b>-z</b> flag
-was given.   Options are 0-100; percentages less than
-one percent may be stated as decimals.  
+was given. Options are 0-100; percentages less than
+one percent may be stated as decimals.
 
 <p>
-
-<em>r.random</em> can be run interactively or
-non-interactively.  The user may provide program arguments
-on the command line, specifying an input raster map layer name
-(<b>input=</b><em>name</em>), optionally a cover raster map layer name
-(<b>cover=</b><em>name</em>), output raster map layer name
-(<b>raster_output=</b><em>name</em>), output vector points map
-name (<b>vector_output=</b><em>name</em>), and 
-the number of sites to be randomly generated as a
-total number of sites (<b>n=</b><em>number</em>) or as
-a percentage of the map's size
-(<b>n=</b><em>number</em><b>%</b>).  The user can also
-direct that <em>r.random</em> run quietly (using the
-<b>-q</b>)</em> option, and/or direct <em>r.random</em> to
-also generate random vector point locations against cells
-containing NULL values (using the <b>-z</b> option).  The
-<b>-i</b> can be used to get a count of the total cells and
-NULL cells given the current region settings.
-
-
-<h3>Flags:</h3>
-
-<dl>
-<dt><b>-z</b>
-
-<dd>Include NULL cells in the pool
-from which <em>r.random</em> will randomly generate vector point locations. 
-
-<dt><b>-i</b>
-
-<dd>Print the raster map's name and location, 
+Flag <b>-i</b> prints the raster map's name and location, 
 the total number of cells under the current region settings, and
 the number of NULL valued cells under the current region settings.
-Then exit without doing anything.  Useful for deciding on the number
+Then module exits without doing anything.  Useful for deciding on the number
 of sites to have <em>r.random</em> create.
-
-<dt><b>-d</b>
-
-<dd>Generate vector points with 3D geometry instead of 2D geometry.
-The z values correspond to the raster map values. 
-</dl>
+<b>WARNING:</b> this feature may be removed in future. Use 
+<a href="g.region.html">g.region</a> and 
+<a href="r.report.html">r.report</a>
+instead.
+<div class="code"><pre>
+g.region -p
+r.report map=inputmap units=c null=* nsteps=1
+</pre></div>
 
 <p>
-
-<h3>Parameters:</h3>
-
-<dl>
-<dt><b>input=</b><em>name</em>
-<dd>An existing raster map layer in the user's current mapset search path. 
-<em>r.random</em> will randomly generate sites on a user-specified portion 
-of the cells in this <em>input</em> raster map. 
-
-<dt><b>cover=</b><em>name</em>
-<dd>An existing raster map layer in the user's current mapset search path.
-<em>r.random</em> will extract raster values at the generates random sites
-from this <em>cover</em> raster map. The cover map only generates output
-for the <em>vector_output</em> map.
-
-<dt><b>n=</b><em>number</em>
-<dd>Specify the quantity of sites to be randomly generated as 
-either a <em>positive</em> integer, or as a <em>percentage</em> value of 
-the number of cells in the <em>input</em> map layer. 
-If stated as a positive integer, <em>number</em> is 
-the number of sites (i.e., number of cells) to appear 
-in the <em>raster_output</em> layer and/or <em>vector_output</em> file. 
-<br>
-Options: Non-percentage values should be given as positive integer values 
-less than or equal to the number of cells in the input map layer. 
-Percentage values given should be within the range 0.00 - 100.00 
-(decimal values are allowed). 
-
-
-<dt><b>raster_output=</b><em>name</em>
-<dd>The new raster map layer to hold program output. This map will contain 
-the sites randomly generated by <em>r.random</em>. If the -z flag is not set, 
-all sites will be assigned whatever category values were assigned these 
-cell locations in the <em>input</em> raster map layer. 
-If the -z flag is set, all sites except those falling on NULL cells
-in the <em>input</em> value will be assigned the category values 
-assigned these cells in the input layer; sites falling on NULL cells 
-in the <em>input</em> layer will be assigned to a newly created 
-category in the <em>raster_output</em> layer with at least one integer
-value less than the minimum value in the <em>input</em> layer. 
-
-
-<dt><b>vector_output=</b><em>name</em>
-<dd>The new GRASS <em>vector_output</em> file to hold program output. 
-If no <em>vector_output</em> file name is given on the command line, 
-no <em>vector_output</em> file will be created by <em>r.random</em>. 
-(See <em>raster_output</em> parameter description, above.) 
-
-Note. Although the user need not request that <em>r.random</em> output 
-both a raster map layer (<em>raster_output</em>) 
-and a vector points map (<em>vector_output</em>), the user must 
-specify that at least one of these outputs be produced. 
-</dl>
-
-
-<h2>NOTES</h2>
-
 To create random vector point locations within some, but not all, 
 non-zero categories of the input raster map layer, 
 the user must first create a reclassified raster map layer 
@@ -154,13 +68,9 @@ of the original raster map layer (e.g., using the GRASS
 program <em><a href="r.reclass.html">r.reclass</a></em>) 
 that contains only the desired categories, 
 and then use the reclassed raster map layer as input to <em>r.random</em>.
-<p>
-If a <em>cover</em> raster map is specified and the <em>cover</em> map
-contains NULL (no data) values, these sites are suppressed in the
-resulting <em>vector_output</em> map.
 
 <h2>EXAMPLES</h2>
-
+<p>
 Random vector elevation points sampled from elevation map in the
 Spearfish region, result stored in 2D vector map:
 
