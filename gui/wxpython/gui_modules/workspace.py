@@ -129,8 +129,7 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'parameter':
             self.parameterName = attrs.get('name', None)
 
-        elif name in ('value', 'x', 'y', 'z',
-                      'color', 'width', 'height'):
+        elif name in ('value', 'x', 'y', 'z'):
             self.value = ''
 
         elif name == 'flag':
@@ -289,10 +288,7 @@ class ProcessWorkspaceFile(HandlerBase):
         if self.inTag['value'] or \
                 self.inTag['x'] or \
                 self.inTag['y'] or \
-                self.inTag['z'] or \
-                self.inTag['color'] or \
-                self.inTag['width'] or \
-                self.inTag['height']:
+                self.inTag['z']:
             self.value += ch
 
 class WriteWorkspaceFile(object):
@@ -506,8 +502,11 @@ class WriteWorkspaceFile(object):
                         self.indent -= 4
                     self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
                 else:
-                    self.file.write('%s<%s>' % (' ' * self.indent, name))
-                    self.file.write('%s</%s>\n' % (data[attrb][name], name))
+                    self.file.write('%s<%s>\n' % (' ' * self.indent, name))
+                    self.indent += 4
+                    self.file.write('%s<value>%s</value>\n' % (' ' * self.indent, data[attrb][name]))
+                    self.indent -= 4
+                    self.file.write('%s</%s>\n' % (' ' * self.indent, name))
             self.indent -= 4
             self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
 
