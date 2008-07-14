@@ -106,7 +106,7 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 		    int line, struct line_pnts* Points, 
 		    double thresh, int to_vertex)
 {
-    int i, type, npoints, node, rewrite;
+    int i, npoints, node, rewrite;
     double *x, *y, *z;
 
     struct line_cats *Cats;
@@ -146,14 +146,14 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
     } /* for each line vertex */
     
     /* close boundaries or lines */
-    if (!rewrite && (type & GV_LINES) &&
+    if (!rewrite &&
 	Vect_points_distance(x[0], y[0], z[0],
 			     x[npoints-1], y[npoints-1], z[npoints-1],
 			     WITHOUT_Z) <= thresh) {
 	x[npoints-1] = x[0];
 	y[npoints-1] = y[0];
 	z[npoints-1] = z[0];
-	
+
 	rewrite = 1;
     }
 
@@ -193,9 +193,11 @@ int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
     for(i = 0; i < List -> n_values; i++) {
 	line = List -> value[i];
 	type = Vect_read_line(Map, Points, Cats, line);
-	if (type < 0) {
-	    return -1;
+
+	if (!(type & GV_LINES)) {
+	    continue;
 	}
+
 	if (Vedit_snap_line(Map, BgMap, nbgmaps,
 			    line, Points, thresh, to_vertex) == 1) {
 	    if (Vect_rewrite_line (Map, line, type, Points, Cats) < 0) {
