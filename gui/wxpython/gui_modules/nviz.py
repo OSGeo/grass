@@ -166,6 +166,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if wheel != 0:
             current  = event.GetPositionTuple()[:]
             Debug.msg (5, "GLWindow.OnMouseMotion(): wheel=%d" % wheel)
+            prev_value = self.view['persp']['value']
             if wheel > 0:
                 value = -1 * self.view['persp']['step']
             else:
@@ -176,19 +177,20 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             elif self.view['persp']['value'] > 100:
                 self.view['persp']['value'] = 100
 
-            if hasattr(self.parent, "nvizToolWin"):
-                self.parent.nvizToolWin.UpdateSettings()
+            if prev_value != self.view['persp']['value']:
+                if hasattr(self.parent, "nvizToolWin"):
+                    self.parent.nvizToolWin.UpdateSettings()
 
-            self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                                   self.iview['height']['value'],
-                                   self.view['persp']['value'],
-                                   self.view['twist']['value'])
+                    self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
+                                           self.iview['height']['value'],
+                                           self.view['persp']['value'],
+                                           self.view['twist']['value'])
 
-            # redraw map
-            self.OnPaint(None)
+                # redraw map
+                self.OnPaint(None)
 
-            # update statusbar
-            ### self.parent.StatusbarUpdate()
+                # update statusbar
+                ### self.parent.StatusbarUpdate()
 
     def OnLeftDown(self, event):
         self.CaptureMouse()
@@ -266,6 +268,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         Debug.msg(3, "GLWindow.UpdateMap(): render=%s, -> time=%g" % \
                       (self.render, (stop-start)))
 
+        # print stop-start
+
     def EraseMap(self):
         """
         Erase the canvas
@@ -298,6 +302,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             listOfItems.append(item)
 
             item = self.tree.GetNextSibling(item)
+
+        start = time.time()
 
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
@@ -346,6 +352,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
                 self.UpdateLayerProperties(item)
             
+                # print data
+
+        stop = time.time()
+        
+        Debug.msg(3, "GLWindow.LoadDataLayers(): time=%f" % (stop-start))
+
+        # print stop - start
+
     def LoadRaster(self, layer):
         """Load raster map -> surface"""
         if layer.type != 'raster':
@@ -364,11 +378,32 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to unload raster map <%s>" % layer.name))
 
-    def GetSurfaceMode(self, mode, style, shade):
+    def GetSurfaceMode(self, mode, style, shade, string=False):
         """Determine surface draw mode"""
         value = 0
         desc = {}
 
+        if string:
+            if mode == 'coarse':
+                value |= wxnviz.DM_WIRE
+            elif mode == 'fine':
+                value |= wxnviz.DM_POLY
+            else: # both
+                value |= wxnviz.DM_WIRE_POLY
+
+            if style == 'wire':
+                value |= wxnviz.DM_GRID_WIRE
+            else: # surface
+                value |= wxnviz.DM_GRID_SURF
+
+            if shade == 'flat':
+                value |= wxnviz.DM_FLAT
+            else: # surface
+                value |= wxnviz.DM_GOURAUD
+
+            return value
+
+        # -> string is False
         if mode == 0: # coarse
             value |= wxnviz.DM_WIRE
             desc['mode'] = 'coarse'
@@ -613,6 +648,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         # draw style
         if 'surface:draw:mode' in self.update:
+            if data['draw']['mode']['value'] < 0: # need to calculate
+                data['draw']['mode']['value'] = \
+                    self.GetSurfaceMode(mode=data['draw']['mode']['desc']['mode'],
+                                        style=data['draw']['mode']['desc']['style'],
+                                        shade=data['draw']['mode']['desc']['shading'],
+                                        string=True)
             style = data['draw']['mode']['value']
             if data['draw']['mode']['all']:
                 self.nvizClass.SetSurfaceStyle(-1, style)
@@ -631,9 +672,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # position
         if 'surface:position' in self.update:
-            x = data['surface']['position']['x']
-            y = data['surface']['position']['y']
-            z = data['surface']['position']['z']
+            x = data['position']['x']
+            y = data['position']['y']
+            z = data['position']['z']
             self.nvizClass.SetSurfacePosition(id, x, y, z)
             self.update.remove('surface:position')
         
@@ -960,6 +1001,7 @@ class NvizToolWindow(wx.Frame):
                           choices = [_("coarse"),
                                      _("fine"),
                                      _("both")])
+        mode.SetSelection(0)
         mode.SetName("selection")
         mode.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
         self.win['surface']['draw']['mode'] = mode.GetId()
@@ -1841,14 +1883,16 @@ class NvizToolWindow(wx.Frame):
 
         value, desc = self.mapWindow.GetSurfaceMode(mode, style, shade)
 
+        return value, desc
+
     def OnSurfaceMode(self, event):
         """Set draw mode"""
-        self.SetSurfaceMode()
+        value, desc = self.SetSurfaceMode()
 
         self.mapWindow.update.append('surface:draw:mode')
         data = self.mapWindow.GetSelectedLayer(nviz=True)
         data['surface']['draw']['mode'] = { 'value' : value,
-                                            'all' : all,
+                                            'all' : False,
                                             'desc' : desc }
 
         self.mapWindow.UpdateLayerProperties()
@@ -2044,7 +2088,10 @@ class NvizToolWindow(wx.Frame):
 
         self.SetSurfaceUseMap('shine', data['attribute']['shine']['map'])
         value = data['attribute']['shine']['value']
-        self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
+        if data['attribute']['shine']['map']:
+            self.FindWindowById(self.win['surface']['shine']['map']).SetValue(value)
+        else:
+            self.FindWindowById(self.win['surface']['shine']['const']).SetValue(value)
 
         #
         # draw

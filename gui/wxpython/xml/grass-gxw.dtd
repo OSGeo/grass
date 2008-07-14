@@ -77,11 +77,12 @@
 
 <!--    nviz layer properties
 -->
-<!ELEMENT nviz	        (attribute*, draw?)>
+<!ELEMENT nviz	        (attribute*, draw?, position?, lines?)>
 
 <!--    nviz surface attribute parameter
 -->
 <!ELEMENT attribute     (value)>
+<!ATTLIST attribute	name		CDATA   #REQUIRED>
 <!ATTLIST attribute	map		(0 | 1) #REQUIRED>
 
 <!--    nviz surface draw mode parameter
@@ -98,3 +99,22 @@
 <!--    nviz surface wire color
 -->
 <!ELEMENT wire_color    (value)>
+
+<!--    nviz surface position
+-->
+<!ELEMENT position     (x, y, z)>
+
+<!--    nviz surface position coordinate
+-->
+<!ELEMENT x         (#PCDATA)>
+<!ELEMENT y         (#PCDATA)>
+<!ELEMENT z         (#PCDATA)>
+
+<!--    nviz vector lines element
+-->
+<!ELEMENT lines     (color?, width?, mode?, height?)>
+<!ELEMENT color     (value)>
+<!ELEMENT width     (value)>
+<!ELEMENT height    (value)>
+<!ELEMENT mode      (map?)>
+<!ATTLIST mode	    type (flat | surface) #REQUIRED>
