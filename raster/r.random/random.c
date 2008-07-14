@@ -109,8 +109,9 @@ int execute_random (struct rr_state *theState)
     init_rand();
     nc = (theState->use_nulls) ? theState->nCells : 
             theState->nCells - theState->nNulls ;
-    nt = theState->nRand;
+    nt = theState->nRand; /* Number of points to generate */
     cat = 1;
+    /* Execute for loop for every row if nt>1 */
     for (row = 0; row < nrows && nt ; row++)
     {
         if (G_get_raster_row (infd, theState->buf.data.v, row, theState->buf.type) < 0)
@@ -126,8 +127,11 @@ int execute_random (struct rr_state *theState)
 	    if (!theState->use_nulls && is_null_value(theState->buf, col) )
                 continue;
             if (theState->docover == 1) {  /* skip no data cover points */
-                if (!theState->use_nulls && is_null_value(theState->cover, col) )
-                    continue;
+		if (!theState->use_nulls && is_null_value(theState->cover, col) ) {
+			/* If cover is NULL, then output aso must be NULL */
+			set_to_null(&theState->buf, col); 
+			continue;
+		}
             }
 
             if (make_rand() % nc < nt)
