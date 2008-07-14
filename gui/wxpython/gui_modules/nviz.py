@@ -91,11 +91,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.nvizClass.SetDisplay(self)
 
         #
-        # set default lighting model
-        #
-        self.nvizClass.SetLightsDefault()
-
-        #
         # initialize mouse position
         #
         self.lastX = self.x = 30
@@ -418,7 +413,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # draw
         #
         for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
-            self.update.append('surface:draw:%s' % control)
+            if control[:3] == 'res':
+                if 'surface:draw:%s' % 'resolution' not in self.update:
+                    self.update.append('surface:draw:%s' % 'resolution')
+                    data['draw']['resolution'] = { 'all' : False,
+                                                   control[4:] : value }
+                else:
+                    data['draw']['resolution'][control[4:]] = value
+                continue
+            else:
+                self.update.append('surface:draw:%s' % control)
+
             if control == 'wire-color':
                 value = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
             elif control in ('mode', 'style', 'shading'):
@@ -619,9 +624,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if 'surface:draw:wire-color' in self.update:
             color = data['draw']['wire-color']['value']
             if data['draw']['wire-color']['all']:
-                self.nvizClass.SetWireColor(id, str(color))
-            else:
                 self.nvizClass.SetWireColor(-1, str(color))
+            else:
+                self.nvizClass.SetWireColor(id, str(color))
                 self.update.remove('surface:draw:wire-color')
         
         # position
@@ -696,8 +701,8 @@ class NvizToolWindow(wx.Frame):
         # settings page
         self.__createSettingsPage()
         self.page['settings'] = 3
-        self.pageUpdated = True
         self.UpdatePage('settings')
+        self.pageChanging = False
 
         mainSizer.Add(item=self.notebook, proportion=1,
                       flag=wx.EXPAND | wx.ALL, border=5)
@@ -1782,8 +1787,8 @@ class NvizToolWindow(wx.Frame):
             else:
                 value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
             map = False
-
-        if self.pageUpdated: # do not update when selection is changed
+        
+        if not self.pageChanging:
             self.mapWindow.update.append('surface:attribute:%s' % attrb)
             data = self.mapWindow.GetSelectedLayer(nviz=True)
             data['surface']['attribute'][attrb] = { 'map' : map,
@@ -1836,18 +1841,17 @@ class NvizToolWindow(wx.Frame):
 
         value, desc = self.mapWindow.GetSurfaceMode(mode, style, shade)
 
-        if self.pageUpdated:
-            self.mapWindow.update.append('surface:draw:mode')
-            data = self.mapWindow.GetSelectedLayer(nviz=True)
-            data['surface']['draw']['mode'] = { 'value' : value,
-                                                'all' : all,
-                                                'desc' : desc }
-
-            self.mapWindow.UpdateLayerProperties()
-
     def OnSurfaceMode(self, event):
         """Set draw mode"""
         self.SetSurfaceMode()
+
+        self.mapWindow.update.append('surface:draw:mode')
+        data = self.mapWindow.GetSelectedLayer(nviz=True)
+        data['surface']['draw']['mode'] = { 'value' : value,
+                                            'all' : all,
+                                            'desc' : desc }
+
+        self.mapWindow.UpdateLayerProperties()
 
         if apply and self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
@@ -1866,16 +1870,15 @@ class NvizToolWindow(wx.Frame):
         """Set wire color"""
         value = str(color[0]) + ':' + str(color[1]) + ':' + str(color[2])
 
-        if self.pageUpdated:
-            self.mapWindow.update.append('surface:draw:wire-color')
-            data = self.mapWindow.GetSelectedLayer(nviz=True)
-            data['surface']['draw']['wire-color'] = { 'value' : value,
-                                                      'all' : all }
-            self.mapWindow.UpdateLayerProperties()
-
     def OnSurfaceWireColor(self, event):
         """Set wire color"""
         self.SetSurfaceWireColor(event.GetValue())
+
+        self.mapWindow.update.append('surface:draw:wire-color')
+        data = self.mapWindow.GetSelectedLayer(nviz=True)
+        data['surface']['draw']['wire-color'] = { 'value' : value,
+                                                  'all' : all }
+        self.mapWindow.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
@@ -1990,7 +1993,7 @@ class NvizToolWindow(wx.Frame):
     
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
-        self.pageUpdated = False
+        self.pageChanging = True
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(nviz=True)
 
@@ -2017,7 +2020,7 @@ class NvizToolWindow(wx.Frame):
             self.notebook.GetPage(self.page['surface']).Enable(False)
             self.notebook.GetPage(self.page['vector']).Enable(True)
 
-        self.pageUpdated = True
+        self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data):
         #
@@ -2047,6 +2050,31 @@ class NvizToolWindow(wx.Frame):
         # draw
         #
         for control, dict in data['draw'].iteritems():
+            if control == 'resolution':
+                self.FindWindowById(self.win['surface']['draw']['res-coarse']).SetValue(dict['coarse'])
+                self.FindWindowById(self.win['surface']['draw']['res-fine']).SetValue(dict['fine'])
+                continue
+
+            if control == 'mode':
+                if dict['desc']['mode'] == 'coarse':
+                    self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(0)
+                elif dict['desc']['mode'] == 'fine':
+                    self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(1)
+                else: # both
+                    self.FindWindowById(self.win['surface']['draw']['mode']).SetSelection(2)
+                    
+                if dict['desc']['style'] == 'wire':
+                    self.FindWindowById(self.win['surface']['draw']['style']).SetSelection(0)
+                else: # surface
+                    self.FindWindowById(self.win['surface']['draw']['style']).SetSelection(1)
+
+                if dict['desc']['shading'] == 'flat':
+                    self.FindWindowById(self.win['surface']['draw']['shading']).SetSelection(0)
+                else: # gouraud
+                    self.FindWindowById(self.win['surface']['draw']['shading']).SetSelection(1)
+                
+                continue
+
             value = dict['value']
             win = self.FindWindowById(self.win['surface']['draw'][control])
             
@@ -2151,9 +2179,10 @@ class ViewPositionWindow(wx.Window):
             self.mapWindow.update.append('view')
 
             self.mapWindow.render = False
-        
-        if event.LeftUp():
+            self.mapWindow.Refresh(eraseBackground=False)
+
+        elif event.LeftUp():
             self.mapWindow.render = True
+            self.mapWindow.Refresh(eraseBackground=False)
         
-        self.mapWindow.Refresh(eraseBackground=False)
-        
+        event.Skip()

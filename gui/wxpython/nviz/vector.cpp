@@ -34,6 +34,10 @@ int Nviz::SetVectorLineMode(int id, const char *color_str,
     if(!GV_vect_exists(id))
 	return 0;
 
+    G_debug(1, "Nviz::SetVectorMode(): id=%d, color=%s, width=%d, flat=%d",
+	    id, color_str, width, flat);
+
+
     color = Nviz_color_from_str(color_str);
 
     /* use memory by default */
@@ -56,7 +60,10 @@ int Nviz::SetVectorHeight(int id, float height)
 {
     if(!GV_vect_exists(id))
 	return 0;
-    
+
+    G_debug(1, "Nviz::SetVectorHeight(): id=%d, height=%f",
+	    id, height);
+
     GV_set_trans(id, 0.0, 0.0, height);
 
     return 1;

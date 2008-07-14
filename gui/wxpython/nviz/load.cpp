@@ -81,7 +81,7 @@ int Nviz::LoadSurface(const char* name, const char *color_name, const char *colo
     /* focus on loaded data */
     Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1);
 
-    G_debug(1, "Nviz::LoadRaster(): name=%s", name);
+    G_debug(1, "Nviz::LoadRaster(): name=%s -> id=%d", name, id);
 
     return id;
 }
@@ -99,6 +99,8 @@ int Nviz::UnloadSurface(int id)
     if (!GS_surf_exists(id)) {
 	return 0;
     }
+
+    G_debug(1, "Nviz::UnloadSurface(): id=%d", id);
 
     if (GS_delete_surface(id) < 0)
       return 0;
@@ -138,6 +140,8 @@ int Nviz::LoadVector(const char *name)
 		     G_fully_qualified_name(name, mapset), 0.0,
 		     data);
 
+    G_debug(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id);
+
     return id;
 }
   
@@ -154,6 +158,8 @@ int Nviz::UnloadVector(int id)
     if (!GV_vect_exists(id)) {
 	return 0;
     }
+
+    G_debug(1, "Nviz::UnloadVector(): id=%d", id);
 
     if (GV_delete_vector(id) < 0)
       return 0;
