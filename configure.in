@@ -1133,8 +1133,6 @@ fi # $OPENGL_AQUA
 
 if test "$OPENGL_WINDOWS" = 1 ; then
 
-AC_MSG_WARN([*** --with-opengl=windows is untested.])
-
 # With OpenGL includes directory
 
 LOC_CHECK_INC_PATH(opengl,OpenGL,OPENGLINC)
