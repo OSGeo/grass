@@ -105,7 +105,7 @@ class MapToolbar(AbstractToolbar):
         self.mapcontent = map
         self.mapdisplay = mapdisplay
 
-	self.toolbar = wx.ToolBar(parent=self.mapdisplay, id=wx.ID_ANY)
+        self.toolbar = wx.ToolBar(parent=self.mapdisplay, id=wx.ID_ANY)
         self.toolbar.SetToolBitmapSize(globalvar.toolbarSize)
 
         self.InitToolbar(self.mapdisplay, self.toolbar, self.ToolbarData())
@@ -119,6 +119,10 @@ class MapToolbar(AbstractToolbar):
 
         # realize the toolbar
         self.toolbar.Realize()
+        
+        #workaround for Mac bug. May be fixed by 2.8.8, but not before then.
+        self.combo.Hide()
+        self.combo.Show()
             
     def ToolbarData(self):
         """Toolbar data"""
