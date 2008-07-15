@@ -16,10 +16,10 @@
   \date 2008
 */
 
+#include "local_proto.h"
+
 #include <grass/gsurf.h>
 #include <grass/gstypes.h>
-
-#include "local_proto.h"
 
 /*!
   \brief Save current GL screen to an ppm file.
