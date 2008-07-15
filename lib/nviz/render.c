@@ -25,7 +25,7 @@
   \return pointer to render_window struct
   \return NULL on failure
 */
-struct render_window *Nviz_new_render_window()
+struct render_window *Nviz_new_render_window(void)
 {
   struct render_window *rwin;
 
@@ -42,12 +42,20 @@ struct render_window *Nviz_new_render_window()
 */
 void Nviz_init_render_window(struct render_window *rwin)
 {
+#if defined(OPENGL_X11)
     rwin->displayId = NULL;
     rwin->contextId = NULL;
     rwin->pixmap = 0;
     rwin->windowId = 0;
-
-    return;
+#elif defined(OPENGL_AQUA)
+    rwin->pixelFmtId = NULL;
+    rwin->contextId = NULL;
+    rwin->pixmap = 0;
+    rwin->windowId = 0;
+#elif defined(OPENGL_WINDOWS)
+    rwin->displayId = NULL;
+    rwin->contextId = NULL;
+#endif
 }
 
 /*!
@@ -66,12 +74,12 @@ void Nviz_destroy_render_window(struct render_window *rwin)
     aglDestroyAGLPixmap(rwin->windowId); 
     /* TODO FreePixMap */
 #elif defined(OPENGL_WINDOWS)
-    /* TODO: wglDeleteContext( HRC hrc ) */
+    wglDeleteContext(rwin->contextId);
+    DeleteDC(rwin->displayId);
+    DeleteObject(rwin->bitmapId);
 #endif
 
     G_free ((void *) rwin);
-
-    return;
 }
 
 /*!
@@ -88,53 +96,27 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 			      int width, int height)
 {
 #if defined(OPENGL_X11)
-    XVisualInfo  *v;
-#elif defined(OPENGL_AQUA)
-    AGLPixelFmtID v;
-#elif defined(OPENGL_WINDOWS)
-    int v;
-#endif
-
     int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1,
 			    GLX_GREEN_SIZE, 1, GLX_BLUE_SIZE, 1,
 			    GLX_DEPTH_SIZE, 1, None };
+    XVisualInfo  *v;
 
-    /* get the default display connection */
-#if defined(OPENGL_X11)
     rwin->displayId = XOpenDisplay((char *) display);
-#elif defined(OPENGL_AQUA)
-    /* TODO: open mac display */
-#elif defined(OPENGL_WINDOWS)
-    /* TODO */
-#endif
-
     if (!rwin->displayId) {
 	G_fatal_error (_("Bad server connection"));
     }
 
-    /* get visual info and set up pixmap buffer */
-#if defined(OPENGL_X11)
     v = glXChooseVisual(rwin->displayId,
 			DefaultScreen(rwin->displayId),
 			attributeList);
 
     rwin->contextId = glXCreateContext(rwin->displayId,
 				       v, NULL, GL_FALSE);
-#elif defined(OPENGL_AQUA)
-    /* TODO: dev = NULL, ndev = 0 ? */
-    rwin->displayId = aglChoosePixelFmt(NULL, 0, attributeList);
-    
-    rwin->contextId = aglCreateContext(rwin->displayId, NULL); 
-#elif defined(OPENGL_WINDOWS)
-    /* TODO int ChoosePixelFormat( HDC hdc, PIXELFORMATDESCRIPTOR *pfd ) */
-#endif
 
     if (!rwin->contextId) {
 	G_fatal_error (_("Unable to create rendering context"));
     }
 
-
-#if defined(OPENGL_X11)
     /* create win pixmap to render to (same depth as RootWindow) */
     rwin->pixmap = XCreatePixmap(rwin->displayId,
 				RootWindow(rwin->displayId, v->screen),
@@ -145,20 +127,57 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
     /* create an off-screen GLX rendering area */
     rwin->windowId = glXCreateGLXPixmap(rwin->displayId,
 					v, rwin->pixmap);
-#elif defined(OPENGL_AQUA)
-    /* create win pixmap to render to (same depth as RootWindow) */
-    rwin->pixmap = NULL; /* TODO: create GWorldPtr */
-    /* create an off-screen AGL rendering area */
-    rwin->windowId = aglCreateAGLPixmap(rwin->displayId,
-					rwin->pixmap); 
-#elif defined(OPENGL_WINDOWS)
-    /* TODO */
-#endif
 
     if (v) {
 	XFree(v);
     }
+#elif defined(OPENGL_AQUA)
+    int attributeList[] = { AGL_RGBA, AGL_RED_SIZE, 1,
+			    AGL_GREEN_SIZE, 1, AGL_BLUE_SIZE, 1,
+			    AGL_DEPTH_SIZE, 1, AGL_NONE };
+    /* TODO: open mac display */
 
+    /* TODO: dev = NULL, ndev = 0 ? */
+    rwin->pixelFmtId = aglChoosePixelFmt(NULL, 0, attributeList);
+    
+    rwin->contextId = aglCreateContext(rwin->pixelFmtId, NULL); 
+
+    /* create win pixmap to render to (same depth as RootWindow) */
+    rwin->pixmap = NULL; /* TODO: create GWorldPtr */
+    /* create an off-screen AGL rendering area */
+    rwin->windowId = aglCreateAGLPixmap(rwin->pixelFmtId,
+					rwin->pixmap); 
+#elif defined(OPENGL_WINDOWS)
+    PIXELFORMATDESCRIPTOR pfd = { 
+	    sizeof(PIXELFORMATDESCRIPTOR),  //  size of this pfd 
+	    1,                     /* version number           */ 
+	    PFD_DRAW_TO_WINDOW |   /* support window 	       */
+	    PFD_SUPPORT_OPENGL |   /* support OpenGL 	       */
+	    PFD_DOUBLEBUFFER,      /* double buffered 	       */
+	    PFD_TYPE_RGBA,         /* RGBA type 	       */
+	    24,                    /* 24-bit color depth       */
+	    0, 0, 0, 0, 0, 0,      /* color bits ignored       */
+	    0,                     /* no alpha buffer 	       */
+	    0,                     /* shift bit ignored        */
+	    0,                     /* no accumulation buffer   */
+	    0, 0, 0, 0,            /* accum bits ignored       */
+	    32,                    /* 32-bit z-buffer          */
+	    0,                     /* no stencil buffer        */
+	    0,                     /* no auxiliary buffer      */
+	    PFD_MAIN_PLANE,        /* main layer 	       */
+	    0,                     /* reserved 		       */
+	    0, 0, 0                /* layer masks ignored      */
+    };
+    int iPixelFormat;
+
+    rwin->displayId = CreateCompatibleDC(NULL);
+    iPixelFormat = ChoosePixelFormat(rwin->displayId, &pfd);
+    SetPixelFormat(rwin->displayId, iPixelFormat, &pfd); 
+    rwin->bitmapId = CreateCompatibleBitmap(rwin->displayId, width, height);
+    SelectObject(rwin->displayId, rwin->bitmapId);
+    rwin->contextId = wglCreateContext(rwin->displayId); 
+    /* TODO */
+#endif
     return 1;
 }
 
@@ -172,10 +191,10 @@ int Nviz_create_render_window(struct render_window *rwin, void *display,
 */
 int Nviz_make_current_render_window(const struct render_window *rwin)
 {
+#if defined(OPENGL_X11)
     if (!rwin->displayId || !rwin->contextId)
 	return 0;
 
-#if defined(OPENGL_X11)
     if (rwin->contextId == glXGetCurrentContext())
 	return 1;
 
@@ -188,7 +207,10 @@ int Nviz_make_current_render_window(const struct render_window *rwin)
     /* TODO: mac_win */
     aglMakeCurrent((AGLDrawable) mac_win, rwin->contextId);
 #elif defined(OPENGL_WINDOWS)
-    /* TODO wglMakeCurrent( HDC hdc, HGLRC hrc ) */
+    if (!rwin->displayId || !rwin->contextId)
+	return 0;
+
+    wglMakeCurrent(rwin->displayId, rwin->contextId);
 #endif
 
     return 1;

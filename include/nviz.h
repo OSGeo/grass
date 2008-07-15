@@ -117,12 +117,14 @@ struct render_window {
     GLXPixmap windowId;
     Pixmap pixmap;
 #elif defined(OPENGL_AQUA)
-    AGLPixelFmtID displayId;
+    AGLPixelFmtID pixelFmtId;
     AGLContext contextId;
     AGLPixmap windowId;
     GWorldPtr pixmap;
 #elif defined(OPENGL_WINDOWS)
-    /* TODO */
+    HDC displayId;   /* display context */
+    HGLRC contextId; /* rendering context */
+    HBITMAP bitmapId;
 #endif
 };
 
