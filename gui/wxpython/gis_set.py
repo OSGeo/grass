@@ -57,7 +57,7 @@ class GRASSStartup(wx.Frame):
         
         wx.Frame.__init__(self, parent=parent, id=id, style=style)
 
-	self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         #
         # graphical elements
@@ -127,7 +127,7 @@ class GRASSStartup(wx.Frame):
         self.manageloc = wx.Choice(parent=self.panel, id=wx.ID_ANY,
                                    choices=[_('Rename mapset'), _('Rename location'),
                                             _('Delete mapset'), _('Delete location')])
-	self.manageloc.SetSelection(0)
+        self.manageloc.SetSelection(0)
 
         # textinputs
         self.tgisdbase = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY, value="", size=(300, -1),
@@ -200,6 +200,7 @@ class GRASSStartup(wx.Frame):
             self.UpdateLocations(self.gisdbase)
             try:
                 self.lblocations.SetSelection(self.listOfLocations.index(location))
+                self.lblocations.EnsureVisible(self.listOfLocations.index(location))
             except ValueError:
                 print >> sys.stderr, _("ERROR: Location <%s> not found") % \
                     (location)
@@ -210,6 +211,7 @@ class GRASSStartup(wx.Frame):
             if mapset:
                 try:
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
+                    self.lbmapsets.EnsureVisible(self.listOfMapsets.index(mapset))
                 except ValueError:
                     self.lbmapsets.Clear()
                     print >> sys.stderr, _("ERROR: Mapset <%s> not found") % \
