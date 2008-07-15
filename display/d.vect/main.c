@@ -101,7 +101,7 @@ main (int argc, char **argv)
 	struct Option *where_opt;
 	struct Option *field_opt, *cat_opt, *lfield_opt;
 	struct Option *lcolor_opt, *bgcolor_opt, *bcolor_opt;
-	struct Option *lsize_opt, *font_opt, *xref_opt, *yref_opt;
+	struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
 	struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
 	struct Option *width_opt, *wcolumn_opt, *wscale_opt;
 	struct Option *render_opt;
@@ -282,6 +282,12 @@ main (int argc, char **argv)
 	font_opt->type       = TYPE_STRING ;
 	font_opt->guisection = _("Labels");
 	font_opt->description= _("Font name");
+
+	enc_opt = G_define_option() ;
+	enc_opt->key        = "encoding" ;
+	enc_opt->type       = TYPE_STRING ;
+	enc_opt->guisection = _("Labels");
+	enc_opt->description= _("Text encoding");
 
 	xref_opt = G_define_option() ;
 	xref_opt->key        = "xref" ;
@@ -602,6 +608,7 @@ main (int argc, char **argv)
 
 	lattr.size = atoi(lsize_opt->answer);
 	lattr.font = font_opt->answer;
+	lattr.enc = enc_opt->answer;
 	switch ( xref_opt->answer[0] )
 	  {
 	    case 'l':

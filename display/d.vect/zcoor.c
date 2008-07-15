@@ -22,7 +22,9 @@ int zcoor ( struct Map_info *Map, int type, LATTR *lattr ) {
     R_text_size(lattr->size, lattr->size) ;
     if (lattr->font)
         R_font(lattr->font) ;
-	
+    if (lattr->enc)
+	R_charset(lattr->enc) ;
+
     Vect_rewind ( Map );
 
 

@@ -61,6 +61,8 @@ int attr ( struct Map_info *Map, int type, char *attrcol,
 	R_text_size(lattr->size, lattr->size) ;
 	if (lattr->font)
 	    R_font(lattr->font) ;
+	if (lattr->enc)
+	    R_charset(lattr->enc) ;
 		  
         if ( chcat ) {
 	     int found = 0;
