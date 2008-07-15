@@ -14,6 +14,7 @@ typedef struct {
     struct rgb_color color, bgcolor, bcolor;
     int    size;
     char   *font;
+    char   *enc;
     int    xref, yref;
 } LATTR;
 
