@@ -1201,7 +1201,7 @@ class VDigit(AbstractDigit):
             else:
                 snap = wxvdigit.SNAP
         else:
-            snap = v.digit.NO_SNAP
+            snap = wxvdigit.NO_SNAP
 
         return (snap, thresh)
 
@@ -1241,10 +1241,10 @@ class AbstractDisplayDriver:
         @param value threshold to be set up
         @param units units (map, screen)
         """
-        if not value:
+        if value is None:
             value = UserSettings.Get(group='vdigit', key=type, subkey='value')
 
-        if not units:
+        if units is None:
             units = UserSettings.Get(group='vdigit', key=type, subkey='units')
 
         if units == "screen pixels":
@@ -1254,7 +1254,7 @@ class AbstractDisplayDriver:
                 res = reg['nsres']
             else:
                 res = reg['ewres']
-                
+
             threshold = value * res
         else:
             threshold = value
@@ -1696,7 +1696,7 @@ class VDigitSettingsDialog(wx.Dialog):
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Snapping threshold"))
         self.snappingValue = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(75, -1),
                                          initial=UserSettings.Get(group='vdigit', key="snapping", subkey='value'),
-                                         min=1, max=1e6)
+                                         min=0, max=1e6)
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingUnit = wx.Choice(parent=panel, id=wx.ID_ANY, size=(125, -1),
                                       choices=["screen pixels", "map units"])
@@ -2010,6 +2010,7 @@ class VDigitSettingsDialog(wx.Dialog):
     def OnChangeSnappingValue(self, event):
         """Change snapping value - update static text"""
         value = self.snappingValue.GetValue()
+        
         if self.snappingUnit.GetStringSelection() == "map units":
             threshold = value
         else:
