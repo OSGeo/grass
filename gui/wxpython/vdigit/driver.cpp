@@ -119,6 +119,34 @@ int DisplayDriver::DrawMap(bool force)
 	    region.box.W, region.box.E, region.box.S, region.box.N);
 
     dc->BeginDrawing();
+
+    if (settings.area.enabled) {
+	/* draw area fills first */
+	int area;
+	struct ilist *listAreas, *listCentroids;
+	BOUND_BOX areaBox;
+
+	listAreas = Vect_new_list();
+	listCentroids = Vect_new_list();
+
+	Vect_select_areas_by_box(mapInfo, &(region.box),
+				 listAreas);
+
+	for (int i = 0; i < listAreas->n_values; i++) {
+	    area = listAreas->value[i];
+	    /* check for other centroids -- only area with one centroid is valid */
+	    Vect_get_area_box(mapInfo, area, &areaBox);
+	    
+	    if(Vect_select_lines_by_box(mapInfo, &areaBox,
+					GV_CENTROID, listCentroids) == 1) {
+		DrawArea(area);
+	    }
+	}
+
+	Vect_destroy_list(listAreas);
+	Vect_destroy_list(listCentroids);
+    }
+
     for (int i = 0; i < listLines->n_values; i++) {
 	DrawLine(listLines->value[i]);
     }
@@ -132,26 +160,66 @@ int DisplayDriver::DrawMap(bool force)
 }	
 
 /**
+   \brief Draw area fill
+
+   \param area area id
+
+   \return 1 on success
+   \return -1 on failure (vector object is dead, etc.)
+*/
+int DisplayDriver::DrawArea(int area)
+{
+    double x, y, z;
+    struct line_pnts *points;
+
+    if (!dc || !Vect_area_alive (mapInfo, area))
+	return -1;
+
+    points = Vect_new_line_struct();
+
+    // get boundary points
+    Vect_get_area_points(mapInfo, area, points);
+
+    // convert EN -> xy
+    wxPoint wxPoints[points->n_points];
+
+    for (int i = 0; i < points->n_points; i++) {
+	Cell2Pixel(points->x[i], points->y[i], points->z[i],
+		   &x, &y, &z);
+	wxPoints[i] = wxPoint((int) x, (int) y);
+    }
+
+    // draw polygon
+    dc->SetBrush(wxBrush(settings.area.color));
+    dc->SetPen(wxPen(settings.area.color));
+    dc->DrawPolygon(points->n_points, wxPoints);
+
+    Vect_destroy_line_struct(points);
+
+    return 1;
+}
+
+/**
    \brief Draw selected vector objects to the device
  
    \param[in] line id
+
    \return 1 on success
    \return -1 on failure (vector object is dead, etc.)
 */
 int DisplayDriver::DrawLine(int line)
 {
-    if (!dc || !Vect_line_alive (mapInfo, line))
-	return -1;
-
-    int dcId;    // 0 | 1 | segment id
-    int type;    // line type
+    int dcId;       // 0 | 1 | segment id
+    int type;       // line type
     double x, y, z; // screen coordinates
-    bool draw;   // draw object ?
-
+    bool draw;      // draw object ?
     wxPen *pen;
-
+    
     pen = NULL;
     draw = false;
+
+    if (!dc || !Vect_line_alive (mapInfo, line))
+	return -1;
 
     // read line
     type = Vect_read_line (mapInfo, points, cats, line);
@@ -260,19 +328,19 @@ int DisplayDriver::DrawLine(int line)
 	    if (dcId > 0 && drawSegments) {
 		dcId = 2; // first segment
 		for (size_t i = 0; i < pointsScreen->GetCount() - 1; dcId += 2) {
-		wxPoint *point_beg = (wxPoint *) pointsScreen->Item(i)->GetData();
-		wxPoint *point_end = (wxPoint *) pointsScreen->Item(++i)->GetData();
-
-		// set bounds for line
-		// wxRect rect (*point_beg, *point_end);
-		// dc->SetIdBounds(startId, rect);
-		
-		dc->SetId(dcId); // set unique id & set bbox for each segment
-		dc->SetPen(*pen);
-		wxRect rect (*point_beg, *point_end);
-		dc->SetIdBounds(dcId, rect);
-		dc->DrawLine(point_beg->x, point_beg->y,
-			     point_end->x, point_end->y);
+		    wxPoint *point_beg = (wxPoint *) pointsScreen->Item(i)->GetData();
+		    wxPoint *point_end = (wxPoint *) pointsScreen->Item(++i)->GetData();
+		    
+		    // set bounds for line
+		    // wxRect rect (*point_beg, *point_end);
+		    // dc->SetIdBounds(startId, rect);
+		    
+		    dc->SetId(dcId); // set unique id & set bbox for each segment
+		    dc->SetPen(*pen);
+		    wxRect rect (*point_beg, *point_end);
+		    dc->SetIdBounds(dcId, rect);
+		    dc->DrawLine(point_beg->x, point_beg->y,
+				 point_end->x, point_end->y);
 		}
 	    }
 	    else {
@@ -281,6 +349,7 @@ int DisplayDriver::DrawLine(int line)
 		    wxPoint *point_beg = (wxPoint *) pointsScreen->Item(i)->GetData();
 		    wxPoints[i] = *point_beg;
 		}
+		
 		dc->DrawLines(pointsScreen->GetCount(), wxPoints);
 
 		if (!IsSelected(line) && settings.direction.enabled) {
@@ -687,6 +756,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   bool eNodeOne,     unsigned long cNodeOne,
 				   bool eNodeTwo,     unsigned long cNodeTwo,
 				   bool eVertex,      unsigned long cVertex,
+				   bool eArea,        unsigned long cArea,
 				   bool eDirection,   unsigned long cDirection,
 				   int lineWidth)
 {
@@ -723,6 +793,9 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 
     settings.vertex.enabled = eVertex;
     settings.vertex.color.Set(cVertex);
+
+    settings.area.enabled = eArea;
+    settings.area.color.Set(cArea);
 
     settings.direction.enabled = eDirection;
     settings.direction.color.Set(cDirection);

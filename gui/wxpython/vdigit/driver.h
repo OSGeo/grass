@@ -107,6 +107,8 @@ private:
 
 	symbol vertex;
 
+	symbol area;
+
 	symbol direction;
 
 	int lineWidth;    // screen units 
@@ -144,6 +146,8 @@ private:
     int DrawLineVerteces(int);
     int DrawLineNodes(int);
     int DrawDirectionArrow();
+
+    int DrawArea(int);
 
     /* debug */
     void PrintIds();
@@ -196,6 +200,7 @@ public:
     void UpdateSettings(unsigned long,
 			bool, unsigned long,
 			bool, unsigned long, /* enabled, color */
+			bool, unsigned long,
 			bool, unsigned long,
 			bool, unsigned long,
 			bool, unsigned long,
