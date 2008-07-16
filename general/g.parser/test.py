@@ -53,22 +53,15 @@ def main():
     #end of your code 
     
 if __name__ == "__main__":
-    args = ""
-    for arg in sys.argv:
-        args += arg+" "
-
-    if !os.getenv("GISBASE"):
+    if not os.getenv("GISBASE"):
         print >> sys.stderr, "You must be in GRASS GIS to run this program."
         sys.exit(0)
 
     try:
-        if ( sys.argv[1] != "@ARGS_PARSED@" ):
-            os.system("g.parser %s " % (args))
+        if len(sys.argv) < 2 or sys.argv[1] != "@ARGS_PARSED@":
+            os.execvp("g.parser", ["g.parser"] + sys.argv)
     except IndexError:
-        os.system("g.parser %s" % (args))
+	os.execvp("g.parser", ["g.parser"] + sys.argv)
 
     if sys.argv[1] == "@ARGS_PARSED@":
         main();
-
-
-
