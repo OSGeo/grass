@@ -829,18 +829,22 @@ class LayerTree(CT.CustomTreeCtrl):
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
 
+            busy = wx.BusyInfo(message=_("Please wait, updating data..."),
+                               parent=self.mapdisplay)
+
+            wx.Yield()            
+
             if checked: # enable
-                
-                busy = wx.BusyInfo(message=_("Please wait, loading data..."),
-                                   parent=self.mapdisplay)
-                wx.Yield()
-
+                id = -1
                 if mapLayer.type == 'raster':
-                    self.mapdisplay.MapWindow.LoadRaster(mapLayer)
+                    id = self.mapdisplay.MapWindow.LoadRaster(mapLayer)
                 elif mapLayer.type == 'vector':
-                    self.mapdisplay.MapWindow.LoadVector(mapLayer)
+                    id = self.mapdisplay.MapWindow.LoadVector(mapLayer)
 
-                busy.Destroy()
+                if id > 0:
+                    self.mapdisplay.MapWindow.SetLayerData(item, id)
+                    self.mapdisplay.MapWindow.UpdateLayerProperties(item)
+
             else: # disable
                 data = self.GetPyData(item)[0]['nviz']
                 id = data['object']['id']
@@ -848,7 +852,11 @@ class LayerTree(CT.CustomTreeCtrl):
                     self.mapdisplay.MapWindow.UnloadRaster(id)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.UnloadVector(id)
+                data.pop('object')
+                data.pop('view')
 
+            busy.Destroy()
+        
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 
             self.mapdisplay.OnRender(None)
@@ -1136,12 +1144,12 @@ class LayerTree(CT.CustomTreeCtrl):
                 if mapLayer.type == 'raster':
                     self.mapdisplay.nvizToolWin.UpdatePage('surface')
                     self.mapdisplay.nvizToolWin.SetPage('surface')
-                    if not mapWin.IsLoaded(mapLayer):
+                    if not mapWin.IsLoaded(layer):
                         mapWin.LoadRaster(mapLayer)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.nvizToolWin.UpdatePage('vector')
                     self.mapdisplay.nvizToolWin.SetPage('vector')
-                    if not mapWin.IsLoaded(mapLayer):
+                    if not mapWin.IsLoaded(layer):
                         mapWin.LoadVector(mapLayer)
                 
                 # reset view when first layer loaded

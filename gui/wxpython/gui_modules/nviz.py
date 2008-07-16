@@ -278,7 +278,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.SwapBuffers()
 
     def IsLoaded(self, layer):
-        """Check if layer is already loaded"""
+        """Check if layer (item) is already loaded"""
         data = self.tree.GetPyData(layer)[0]['nviz']
 
         if not data or not data.has_key('object'):
@@ -309,7 +309,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             item = listOfItems.pop()
             type = self.tree.GetPyData(item)[0]['type']
             mapLayer = self.tree.GetPyData(item)[0]['maplayer']
-            data = self.tree.GetPyData(item)[0]['nviz']
 
             if type == 'raster':
                 id = self.LoadRaster(mapLayer)
@@ -317,48 +316,54 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 id = self.LoadVector(mapLayer)
 
             if type == 'raster' or type == 'vector':
-                # init layer data properties
-                if data is None:
-                    self.tree.GetPyData(item)[0]['nviz'] = {}
-                    data = self.tree.GetPyData(item)[0]['nviz']
-
-                    if type == 'raster':
-                        data['surface'] = {}
-                        for sec in ('attribute', 'draw', 'mask', 'position'):
-                            data['surface'][sec] = {}
-
-                        self.SetSurfaceDefaultProp(data['surface'])
-                    elif type == 'vector':
-                        data['vector'] = {}
-                        for sec in ('lines', ):
-                            data['vector'][sec] = {}
-
-                        self.SetVectorDefaultProp(data['vector'])
-
-                # set updates
-                else:
-                    for sec in data.keys():
-                        for sec1 in data[sec].keys():
-                            for sec2 in data[sec][sec1].keys():
-                                self.update.append('%s:%s:%s' % (sec, sec1, sec2))
-
-                # associate with map object id
-                if not data.has_key('object'):
-                    data['object'] = { 'id' : id,
-                                       'init' : False }
-                
-                if not data.has_key('view'):
-                    data['view'] = None
-
+                self.SetLayerData(item, id)
                 self.UpdateLayerProperties(item)
             
-                # print data
+                # print self.tree.GetPyData(item)[0]['nviz']
+                # print self.update
 
         stop = time.time()
         
         Debug.msg(3, "GLWindow.LoadDataLayers(): time=%f" % (stop-start))
 
         # print stop - start
+
+    def SetLayerData(self, item, id):
+        """Set map object properties"""
+        data = self.tree.GetPyData(item)[0]['nviz']
+            
+        # init layer data properties
+        if data is None:
+            self.tree.GetPyData(item)[0]['nviz'] = {}
+            data = self.tree.GetPyData(item)[0]['nviz']
+
+            if type == 'raster':
+                data['surface'] = {}
+                for sec in ('attribute', 'draw', 'mask', 'position'):
+                    data['surface'][sec] = {}
+
+                self.SetSurfaceDefaultProp(data['surface'])
+            elif type == 'vector':
+                data['vector'] = {}
+                for sec in ('lines', ):
+                    data['vector'][sec] = {}
+
+                self.SetVectorDefaultProp(data['vector'])
+
+        # set updates
+        else:
+            for sec in data.keys():
+                for sec1 in data[sec].keys():
+                    for sec2 in data[sec][sec1].keys():
+                        self.update.append('%s:%s:%s' % (sec, sec1, sec2))
+
+        # associate with map object id
+        if not data.has_key('object'):
+            data['object'] = { 'id' : id,
+                               'init' : False }
+                
+            if not data.has_key('view'):
+                data['view'] = None
 
     def LoadRaster(self, layer):
         """Load raster map -> surface"""
