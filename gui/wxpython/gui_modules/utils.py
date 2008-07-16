@@ -128,46 +128,49 @@ def ListOfCatsToRange(cats):
         
     return catstr.strip(',')
 
-def ListOfMapsets():
+def ListOfMapsets(all=False):
     """Get list of available/accessible mapsets
 
-    @return ([available mapsets], [accessible mapsets]) 
+    @param all if True get list of all mapsets
+
+    @return list of mapsets
     """
-    all_mapsets = []
-    accessible_mapsets = []
+    mapsets = []
 
     ### FIXME
     # problem using Command here (see preferences.py)
     # cmd = gcmd.Command(['g.mapsets', '-l'])
-    cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-l'],
-                           stdout=subprocess.PIPE)
+    if all:
+        cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-l'],
+                               stdout=subprocess.PIPE)
     
-    try:
-        # for mset in cmd.ReadStdOutput()[0].split(' '):
-        for line in cmd.stdout.readlines():
-            for mset in line.strip('%s' % os.linesep).split(' '):
-                if len(mset) == 0:
-                    continue
-                all_mapsets.append(mset)
-    except:
-        raise gcmd.CmdError('Unable to get list of available mapsets.')
+        try:
+            # for mset in cmd.ReadStdOutput()[0].split(' '):
+            for line in cmd.stdout.readlines():
+                for mset in line.strip('%s' % os.linesep).split(' '):
+                    if len(mset) == 0:
+                        continue
+                    mapsets.append(mset)
+        except:
+            raise gcmd.CmdError(_('Unable to get list of available mapsets.'))
     
-    # cmd = gcmd.Command(['g.mapsets', '-p'])
-    cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-p'],
-                           stdout=subprocess.PIPE)
-    try:
-        # for mset in cmd.ReadStdOutput()[0].split(' '):
-        for line in cmd.stdout.readlines():
-            for mset in line.strip('%s' % os.linesep).split(' '):
-                if len(mset) == 0:
-                    continue
-                accessible_mapsets.append(mset)
-    except:
-        raise gcmd.CmdError('Unable to get list of accessible mapsets.')
+    else:
+        # cmd = gcmd.Command(['g.mapsets', '-p'])
+        cmd = subprocess.Popen(['g.mapsets' + globalvar.EXT_BIN, '-p'],
+                               stdout=subprocess.PIPE)
+        try:
+            # for mset in cmd.ReadStdOutput()[0].split(' '):
+            for line in cmd.stdout.readlines():
+                for mset in line.strip('%s' % os.linesep).split(' '):
+                    if len(mset) == 0:
+                        continue
+                    mapsets.append(mset)
+        except:
+            raise gcmd.CmdError(_('Unable to get list of accessible mapsets.'))
 
-    ListSortLower(all_mapsets)
+        ListSortLower(mapsets)
     
-    return (all_mapsets, accessible_mapsets)
+    return mapsets
 
 def ListSortLower(list):
     """Sort list items (not case-sensitive)"""
