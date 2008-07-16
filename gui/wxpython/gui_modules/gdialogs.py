@@ -576,7 +576,7 @@ class LoadMapLayersDialog(wx.Dialog):
 
         self.mapset = wx.ComboBox(parent=self, id=wx.ID_ANY,
                                   style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                  choices=UserSettings.Get(group='general', key='mapsetPath', subkey='value', internal=True),
+                                  choices=utils.ListOfMapsets(),
                                   size=(250,-1))
         self.mapset.SetStringSelection(grassenv.GetGRASSVariable("MAPSET"))
         bodySizer.Add(item=self.mapset,

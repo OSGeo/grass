@@ -23,6 +23,7 @@ import wx.combo
 
 import globalvar
 import gcmd
+import utils
 from preferences import globalSettings as UserSettings
 
 class Select(wx.combo.ComboCtrl):
@@ -135,7 +136,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         
         # list of mapsets in current location
         if mapsets is None:
-            mapsets = UserSettings.Get(group='general', key='mapsetPath', subkey='value', internal=True)
+            mapsets = utils.ListOfMapsets()
 
         # map element types to g.mlist types
         elementdict = {'cell':'rast',

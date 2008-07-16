@@ -55,10 +55,6 @@ class Settings:
             # general
             #
             'general': {
-                # current mapset search path
-                'mapsetPath'  : {
-                    'selection' : 0
-                    }, 
                 # use default window layout (layer manager, displays, ...)
                 'defWindowPos' : {
                     'enabled' : False,
@@ -422,9 +418,7 @@ class Settings:
             for key in self.userSettings[group].keys():
                 self.internalSettings[group][key] = {}
 
-        self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
-        self.internalSettings['general']['mapsetPath']['choices'] = (_('Mapset search path'),
-                                                                     _('All available mapsets'))
+        # self.internalSettings['general']["mapsetPath"]['value'] = self.GetMapsetPath()
         self.internalSettings['general']['elementListExpand']['choices'] = (_("Collapse all except PERMANENT and current"),
                                                                             _("Collapse all except PERMANENT"),
                                                                             _("Collapse all"),
@@ -455,15 +449,6 @@ class Settings:
         self.internalSettings['nviz']['view']['height'] = {}
         self.internalSettings['nviz']['view']['height']['value'] = -1
         
-    def GetMapsetPath(self):
-        """Store mapset search path"""
-        all, access = utils.ListOfMapsets()
-
-        if self.Get(group='general', key='mapsetPath', subkey='selection') == 0:
-            return access
-        else:
-            return all
-    
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
@@ -776,30 +761,9 @@ class PreferencesDialog(wx.Dialog):
         gridSizer.AddGrowableCol(0)
 
         #
-        # mapsets path
-        #
-        row = 0
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Mapsets path:")),
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL,
-                       pos=(row, 0))
-        mapsetPath = wx.Choice(parent=panel, id=wx.ID_ANY, size=(200, -1),
-                                    choices=self.settings.Get(group='general', key='mapsetPath',
-                                                              subkey='choices', internal=True),
-                                    name="GetSelection")
-        mapsetPath.SetSelection(self.settings.Get(group='general', key='mapsetPath', subkey='selection'))
-        self.winId['general:mapsetPath:selection'] = mapsetPath.GetId()
-
-        gridSizer.Add(item=mapsetPath,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 1))
-        
-        #
         # expand element list
         #
-        row +=1
+        row = 0
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("Element list:")),
                       flag=wx.ALIGN_LEFT |
@@ -1522,7 +1486,8 @@ class MapsetAccess(wx.Dialog):
         
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
-        self.all_mapsets, self.accessible_mapsets = utils.ListOfMapsets()
+        self.all_mapsets = utils.ListOfMapsets(all=True)
+        self.accessible_mapsets = utils.ListOfMapsets(all=False)
         self.curr_mapset = grassenv.GetGRASSVariable('MAPSET')
 
         # make a checklistbox from available mapsets and check those that are active
@@ -1541,13 +1506,8 @@ class MapsetAccess(wx.Dialog):
                   flag=wx.ALL | wx.EXPAND, border=5)
 
         # check all accessible mapsets
-        if globalSettings.Get(group='general', key='mapsetPath', subkey='selection') == 1:
-            for mset in self.all_mapsets:
-                self.mapsetlb.CheckItem(self.all_mapsets.index(mset), True)
-        else:
-            for mset in self.accessible_mapsets:
-                self.mapsetlb.CheckItem(self.all_mapsets.index(mset), True)
-                pass
+        for mset in self.accessible_mapsets:
+            self.mapsetlb.CheckItem(self.all_mapsets.index(mset), True)
 
         # dialog buttons
         line = wx.StaticLine(parent=self, id=wx.ID_ANY,
