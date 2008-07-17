@@ -84,7 +84,7 @@ default: builddemolocation
 	@echo "Started compilation: `date`"  >> $(ERRORLOG)
 	@echo "--"                           >> $(ERRORLOG)
 	@echo "Errors in:"                   >> $(ERRORLOG)
-	chmod 744 install-sh
+	chmod 755 install-sh
 	@list='$(SUBDIRS)'; \
 	for subdir in $$list; do \
 		$(MAKE) -C $$subdir; \
