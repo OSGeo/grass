@@ -330,6 +330,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def SetLayerData(self, item, id):
         """Set map object properties"""
+        type = self.tree.GetPyData(item)[0]['maplayer'].type
         data = self.tree.GetPyData(item)[0]['nviz']
             
         # init layer data properties
@@ -2033,6 +2034,7 @@ class NvizToolWindow(wx.Frame):
 
         self.mapWindow.update.append('vector:lines:height')
         data = self.mapWindow.GetSelectedLayer(nviz=True)
+        
         data['vector']['lines']['height'] = value
 
         self.mapWindow.UpdateLayerProperties()
@@ -2052,19 +2054,15 @@ class NvizToolWindow(wx.Frame):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
         elif pageId == 'surface':
-            if data and data.has_key('surface'):
-                self.UpdateSurfacePage(layer, data['surface'])
-            else:
-                self.UpdateSurfacePage(layer, None)
+            self.UpdateSurfacePage(layer, data['surface'])
+
             # disable vector and enable surface page
             self.notebook.GetPage(self.page['surface']).Enable(True)
             self.notebook.GetPage(self.page['vector']).Enable(False)
             
         elif pageId == 'vector':
-            if data and data.has_key('vector'):
-                self.UpdateVectorPage(layer, data['vector'])
-            else:
-                self.UpdateVectorPage(layer, None)
+            self.UpdateVectorPage(layer, data['vector'])
+
             # disable surface and enable current
             self.notebook.GetPage(self.page['surface']).Enable(False)
             self.notebook.GetPage(self.page['vector']).Enable(True)

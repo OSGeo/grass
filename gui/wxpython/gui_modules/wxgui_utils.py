@@ -1141,17 +1141,27 @@ class LayerTree(CT.CustomTreeCtrl):
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:
+                id = -1
                 if mapLayer.type == 'raster':
-                    self.mapdisplay.nvizToolWin.UpdatePage('surface')
-                    self.mapdisplay.nvizToolWin.SetPage('surface')
                     if not mapWin.IsLoaded(layer):
-                        mapWin.LoadRaster(mapLayer)
+                        id = mapWin.LoadRaster(mapLayer)
+                        if id > 0:
+                            self.mapdisplay.MapWindow.SetLayerData(layer, id)
+                            self.mapdisplay.MapWindow.UpdateLayerProperties(layer)
+
+                        self.mapdisplay.nvizToolWin.UpdatePage('surface')
+                        self.mapdisplay.nvizToolWin.SetPage('surface')
+
                 elif mapLayer.type == 'vector':
-                    self.mapdisplay.nvizToolWin.UpdatePage('vector')
-                    self.mapdisplay.nvizToolWin.SetPage('vector')
                     if not mapWin.IsLoaded(layer):
-                        mapWin.LoadVector(mapLayer)
-                
+                        id = mapWin.LoadVector(mapLayer)
+                        if id > 0:
+                            self.mapdisplay.MapWindow.SetLayerData(layer, id)
+                            self.mapdisplay.MapWindow.UpdateLayerProperties(layer)
+                            
+                        self.mapdisplay.nvizToolWin.UpdatePage('vector')
+                        self.mapdisplay.nvizToolWin.SetPage('vector')
+
                 # reset view when first layer loaded
                 nlayers = len(mapWin.Map.GetListOfLayers(l_type=('raster', 'vector'),
                                                          l_active=True))
