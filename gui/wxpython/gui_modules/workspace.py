@@ -67,8 +67,6 @@ class ProcessWorkspaceFile(HandlerBase):
         self.displayIndex = -1 # first display has index '0'
 
     def startElement(self, name, attrs):
-        self.inTag[name] = True
-
         if name == 'display':
             self.displayIndex += 1
 
@@ -204,10 +202,10 @@ class ProcessWorkspaceFile(HandlerBase):
             if self.inTag['nviz'] and self.inTag['lines']:
                 self.layerNviz['vector']['lines']['mode'] = {}
                 self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
+
+        self.inTag[name] = True
         
     def endElement(self, name):
-        self.inTag[name] = False
-
         if name == 'group':
             self.groupName = self.groupChecked = None
 
@@ -281,6 +279,8 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'color':
             if self.inTag['nviz'] and self.inTag['lines']:
                 self.layerNviz['vector']['lines']['color'] = str(self.value)
+
+        self.inTag[name] = False
 
     def characters(self, ch):
         self.my_characters(ch)
