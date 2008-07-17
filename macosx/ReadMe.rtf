@@ -1,4 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf270
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf330
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Monaco;}
 {\colortbl;\red255\green255\blue255;}
 \margl1440\margr1440\vieww8720\viewh11500\viewkind0
@@ -298,7 +298,7 @@ The linker in Leopard's GCC from Xcode 3.0 has a bit of a problem with some libr
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \f0\fs24 \cf0 \
-Xcode 3.1 does not have this problem.  In other words, make sure to install the latest Xcode (currently the iPhone SDK beta = Xcode 3.1 beta).\
+Xcode 3.1 does not have this problem.  In other words, make sure to install the latest Xcode.\
 \
 \'95 64bits\
 \
@@ -449,7 +449,7 @@ The
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-Building a universal X11 Tcl/Tk is easy, and not worth the time to make an Xcode sub-project for.  First, you need the latest 
+Building a universal X11 Tcl/Tk is easy.  First, you need the latest 
 \b 8.4.x
 \b0  source for both Tcl and Tk (they are separate packages).  For 64bits on Leopard, at least 8.4.17 is required.\
 \
@@ -522,7 +522,7 @@ $ ./configure --prefix=/usr/local/tcltk --enable-threads --disable-corefoundatio
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \b0\fs24 \cf0 \
-A universal GPSBabel is also possible to build without too much fuss.  First, you need the GPSBabel source from {\field{\*\fldinst{HYPERLINK "http://www.gpsbabel.org/"}}{\fldrslt www.gpsbabel.org}}.  If you need support for USB GPS units, get the libusb source from {\field{\*\fldinst{HYPERLINK "http://libusb.sourceforge.net/"}}{\fldrslt libusb.sourceforge.net}}.  It needs X11 for libexpat.\
+A universal GPSBabel is also possible to build without too much fuss.  First, you need the GPSBabel source from {\field{\*\fldinst{HYPERLINK "http://www.gpsbabel.org/"}}{\fldrslt www.gpsbabel.org}}.  If you need support for USB GPS units, get the libusb 0.1 source from {\field{\*\fldinst{HYPERLINK "http://libusb.sourceforge.net/"}}{\fldrslt libusb.sourceforge.net}}.  It needs X11 for libexpat.  Do not get the new libusb 1.0 beta, that has a completely API and GPSBabel doesn't support it yet, as far as I can make out.\
 \
 For libusb, unzip the source and cd to the source folder in a Terminal.  Then:\
 \
