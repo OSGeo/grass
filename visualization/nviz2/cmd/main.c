@@ -31,8 +31,7 @@ int main (int argc, char *argv[])
     struct GModule *module;
     struct GParams *params;
 
-    char *mapset;
-    int i, ret;
+    int ret;
     float vp_height, z_exag; /* calculated viewpoint height, z-exag */
     int width, height; /* output image size */
     char *output_name;
@@ -102,30 +101,14 @@ int main (int argc, char *argv[])
 
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
-    /* set draw mode for loaded surfaces */
+    /* set draw mode of loaded surfaces */
     set_draw_mode(params);
 
-    /* load vectors */
+    /* load vector maps & set line mode */
     if (params->vector->answer) {
-	if (!params->elev_map->answer && GS_num_surfs() == 0) { /* load base surface if no loaded */
-	    int *surf_list, nsurf;
-
-	    Nviz_new_map_obj(MAP_OBJ_SURF, NULL, 0.0, &data);
-
-	    surf_list = GS_get_surf_list(&nsurf);
-	    GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
-	}
-
-	for (i = 0; params->vector->answers[i]; i++) {
-	    mapset = G_find_vector2 (params->vector->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Vector map <%s> not found"),
-			      params->vector->answers[i]);
-	    }
-	    Nviz_new_map_obj(MAP_OBJ_VECT,
-			     G_fully_qualified_name(params->vector->answers[i], mapset), 0.0,
-			     &data);
-	}
+	load_vectors(params, &data);
+	/* set attributes for 2d lines */
+	set_lines_attrb(params);
     }
 
     /* focus on loaded data */

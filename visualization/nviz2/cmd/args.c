@@ -240,6 +240,7 @@ void parse_command(int argc, char* argv[], struct GParams *params)
     params->line_width->description = _("Vector line width");
     params->line_width->guisection = _("Vector");
     params->line_width->options = "1-100";
+    params->line_width->answer = "2";
 
     /* line color */
     params->line_color = G_define_standard_option(G_OPT_C_FG);
@@ -250,9 +251,9 @@ void parse_command(int argc, char* argv[], struct GParams *params)
     params->line_color->answer = "blue";
     params->line_color->guisection = _("Vector");
 
-    /* shading */
+    /* line mode */
     params->line_mode = G_define_option();
-    params->line_mode->key = "line_display";
+    params->line_mode->key = "line_mode";
     params->line_mode->key_desc = "string";
     params->line_mode->type = TYPE_STRING;
     params->line_mode->required = YES;
@@ -261,6 +262,18 @@ void parse_command(int argc, char* argv[], struct GParams *params)
     params->line_mode->options = "surface,flat";
     params->line_mode->answer = "surface";
     params->line_mode->guisection = _("Vector");
+
+    /* line height */
+    params->line_height = G_define_option();
+    params->line_height->key = "line_height";
+    params->line_height->key_desc = "value";
+    params->line_height->type = TYPE_INTEGER;
+    params->line_height->required = NO;
+    params->line_height->multiple = YES;
+    params->line_height->description = _("Vector line height");
+    params->line_height->guisection = _("Vector");
+    params->line_height->options = "0-1000";
+    params->line_height->answer = "0";
 
     /*
       misc
@@ -372,10 +385,13 @@ void opt_get_num_answers(const struct Option *opt, int *non_zero, int *all)
     int i;
 
     i = 0;
-    if (non_zero)
+
+    if(non_zero)
 	*non_zero = 0;
-    if (all) 
+
+    if(all)
 	*all = 0;
+
     if (opt->answer) {
 	while (opt->answers[i]) {
 	    if (all)
@@ -400,6 +416,8 @@ void check_parameters(const struct GParams * params)
 {
     int nelev_map, nelev_const, nelev_map0, nelev_const0, nelevs0;
     int nmaps0, nconsts0;
+
+    int nvects;
 
     /* topography */
     opt_get_num_answers(params->elev_map, &nelev_map, &nelev_map0); 
@@ -431,7 +449,7 @@ void check_parameters(const struct GParams * params)
     /* mask */
     opt_get_num_answers(params->mask_map, NULL, &nmaps0);
     if (nmaps0 > 0 && nelevs0 != nmaps0)
-	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 		      params->elev_map->key, params->elev_const->key, nelevs0,
 		      params->mask_map->key, nmaps0);
 
@@ -461,7 +479,7 @@ void check_parameters(const struct GParams * params)
     if (!params->mode_all->answer) { /* use one mode for all surfaces */
 	opt_get_num_answers(params->mode, NULL, &nconsts0);
 	if (nconsts0 > 0 && nconsts0 != nelevs0)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key, nelevs0,
 			  params->mode->key, nconsts0);
 
@@ -473,28 +491,61 @@ void check_parameters(const struct GParams * params)
 
 	opt_get_num_answers(params->res_coarse, NULL, &nconsts0);
 	if (nconsts0 > 0 && nconsts0 != nelevs0)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key, nelevs0,
 			  params->res_coarse->key, nconsts0);
 
 	opt_get_num_answers(params->style, NULL, &nconsts0);
 	if (nconsts0 > 0 && nconsts0 != nelevs0)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key, nelevs0,
 			  params->style->key, nconsts0);
 
 	opt_get_num_answers(params->shade, NULL, &nconsts0);
 	if (nconsts0 > 0 && nconsts0 != nelevs0)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key, nelevs0,
 			  params->shade->key, nconsts0);
 
 	opt_get_num_answers(params->wire_color, NULL, &nconsts0);
 	if (nconsts0 > 0 && nconsts0 != nelevs0)
-	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key, nelevs0,
 			  params->wire_color->key, nconsts0);
     }
+
+    /*
+     * vector
+     */
+    opt_get_num_answers(params->vector, &nvects, NULL);
+
+    /* width */
+    opt_get_num_answers(params->line_width, NULL, &nconsts0);
+    if (nvects > 0 && nconsts0 != nvects)
+      G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		    params->vector->key, nvects,
+		    params->line_width->key, nconsts0);
+
+    /* color */
+    opt_get_num_answers(params->line_color, NULL, &nconsts0);
+    if (nvects > 0 && nconsts0 != nvects)
+      G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d"),
+		    params->vector->key, nvects,
+		    params->line_color->key, nconsts0);
+
+    /* mode */
+    opt_get_num_answers(params->line_mode, NULL, &nconsts0);
+    if (nvects > 0 && nconsts0 != nvects)
+      G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		    params->vector->key, nvects,
+		    params->line_mode->key, nconsts0);
+
+    /* height */
+    opt_get_num_answers(params->line_height, NULL, &nconsts0);
+    if (nvects > 0 && nconsts0 != nvects)
+      G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+		    params->vector->key, nvects,
+		    params->line_height->key, nconsts0);
 
     return;
 }
