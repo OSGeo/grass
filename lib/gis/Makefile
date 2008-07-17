@@ -1,7 +1,7 @@
 MODULE_TOPDIR = ../..
 
 LIB_NAME = $(GIS_LIBNAME)
-EXTRA_LIBS = $(XDRLIB) $(DATETIMELIB) $(INTLLIB) $(MATHLIB)
+EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(INTLLIB) $(MATHLIB)
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections gui.tcl
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
