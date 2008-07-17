@@ -925,12 +925,19 @@ class LayerTree(CT.CustomTreeCtrl):
         oldlayer = event.GetOldItem()
         layer = event.GetItem()
         self.layer_selected = layer
+        
         try:
             self.RefreshLine(oldlayer)
             self.RefreshLine(layer)
         except:
             pass
 
+        # update statusbar -> show command string
+        if self.GetPyData(layer) and self.GetPyData(layer)[0]['maplayer']:
+            cmd = self.GetPyData(layer)[0]['maplayer'].GetCmd(string=True)
+            if len(cmd) > 0:
+                self.gismgr.SetStatusText(cmd)
+        
         # update nviz tools
         if self.mapdisplay.toolbars['nviz'] and \
                 self.GetPyData(self.layer_selected) is not None:
