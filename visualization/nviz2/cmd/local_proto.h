@@ -13,7 +13,7 @@ struct GParams {
   /* draw */
     *mode, *res_fine, *res_coarse, *style, *shade, *wire_color,
   /* vector */
-    *vector, *line_width, *line_color, *line_mode,
+    *vector, *line_width, *line_color, *line_mode, *line_height,
   /* misc */
     *exag, *bgcolor, 
   /* viewpoint */
@@ -30,8 +30,13 @@ void check_parameters(const struct GParams *);
 
 /* surface.c */
 int load_rasters(const struct GParams *,
-		 nv_data *data);
+		 nv_data *);
 void set_draw_mode(const struct GParams *);
+
+/* vector.c */
+int load_vectors(const struct GParams *,
+		 nv_data *);
+int set_lines_attrb(const struct GParams *);
 
 /* write_img.c */
 int write_img(const char *, int);
