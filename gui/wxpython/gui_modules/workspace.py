@@ -111,7 +111,8 @@ class ProcessWorkspaceFile(HandlerBase):
                 "opacity" : None,
                 "cmd"     : None,
                 "group"   : self.inTag['group'],
-                "display" : self.displayIndex})
+                "display" : self.displayIndex,
+                "nviz"    : None})
 
         elif name == 'layer':
             self.layerType     = attrs.get('type', None)
@@ -372,7 +373,7 @@ class WriteWorkspaceFile(object):
                                (' ' * self.indent, name, checked));
                 self.indent += 4
                 subItem = mapTree.GetFirstChild(item)[0]
-                self.WriteLayer(subItem)
+                self.__writeLayer(mapTree, subItem)
                 self.indent -= 4
                 self.file.write('%s</group>\n' % (' ' * self.indent));
             else:
