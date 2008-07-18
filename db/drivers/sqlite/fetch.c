@@ -106,6 +106,8 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
 	int col, litetype, sqltype;
 	dbColumn   *column;
 	dbValue    *value;
+	const char *text;
+	dbDateTime *dt;
 
 	col = c->kcols[i]; /* known cols */
  		
@@ -115,6 +117,7 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
         litetype  = db_get_column_host_type(column); 
 */
 	litetype = sqlite3_column_type ( c->statement, col );
+	text = (const char *) sqlite3_column_text ( c->statement, col);
 
 	value  = db_get_column_value (column);
 	db_zero_string (&value->s);
@@ -128,8 +131,7 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
 	}
 
 	G_debug (3, "col %d, litetype %d, sqltype %d: val = '%s'", 
-		    col, litetype, sqltype, 
-		    sqlite3_column_text ( c->statement, col) );
+		    col, litetype, sqltype, text );
 
        /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
            SQLITE_INTEGER  1
@@ -145,38 +147,88 @@ db__driver_fetch (dbCursor *cn, int position, int *more)
 	/* Note: we have set DATESTYLE TO ISO in db_driver_open_select_cursor() so datetime
 	 *       format should be ISO */
 
-	switch ( litetype ) {
-	    case SQLITE_TEXT:
-		if (sqltype == DB_SQL_TYPE_DATE ) { /* date string */
-		   /* Example: '1999-01-25' */
-		   G_debug(3, "sqlite fetched date: %s",sqlite3_column_text ( c->statement, col));
-		   ns = sscanf((char *) sqlite3_column_text ( c->statement, col), "%4d-%2d-%2d",
-                             &(value->t.year), &(value->t.month), &(value->t.day) );
-		   if ( ns != 3 ) {
-			append_error ( "Cannot scan date:");
-			append_error ((char *) sqlite3_column_text (c->statement, col));
-			report_error();
-			return DB_FAILED;
-                   }
-                   value->t.hour = 0;
-                   value->t.minute = 0;
-                   value->t.seconds = 0.0;
-		} else { /* other string */
-		    db_set_string ( &(value->s), (char *) sqlite3_column_text ( c->statement, col));
-		}
-		break;
+	switch ( sqltype ) {
+	case DB_SQL_TYPE_INTEGER:
+	case DB_SQL_TYPE_SMALLINT:
+	case DB_SQL_TYPE_SERIAL:
+	    value->i = sqlite3_column_int ( c->statement, col);
+	    break;
 
-	    case SQLITE_INTEGER:
-	    	value->i = sqlite3_column_int ( c->statement, col);
-		break;
-		
-	    case SQLITE_FLOAT:
-	    	value->d = sqlite3_column_double ( c->statement, col);
-		break;
+	case DB_SQL_TYPE_REAL:
+	case DB_SQL_TYPE_DOUBLE_PRECISION:
+	    value->d = sqlite3_column_double ( c->statement, col);
+	    break;
 
-	    case SQLITE_NULL:
-		/* do nothing  ? */
-		break;
+	case DB_SQL_TYPE_DATE:
+	    dt = &value->t;
+	    dt->hour = 0;
+	    dt->minute = 0;
+	    dt->seconds = 0.0;
+	    G_debug(3, "sqlite fetched date: %s", text);
+	    ns = sscanf(text, "%4d-%2d-%2d",
+			&dt->year, &dt->month, &dt->day);
+	    if ( ns != 3 ) {
+		append_error ( "Cannot scan date:");
+		append_error (text);
+		report_error();
+		return DB_FAILED;
+	    }
+	    break;
+
+	case DB_SQL_TYPE_TIME:
+	    dt = &value->t;
+	    dt->year = 0;
+	    dt->month = 0;
+	    dt->day = 0;
+	    G_debug(3, "sqlite fetched date: %s", text);
+	    ns = sscanf(text, "%2d:%2d:%lf",
+			&dt->hour, &dt->minute, &dt->seconds);
+	    if ( ns != 3 ) {
+		append_error ( "Cannot scan time:");
+		append_error (text);
+		report_error();
+		return DB_FAILED;
+	    }
+	    break;
+
+	case DB_SQL_TYPE_TIMESTAMP:
+	    dt = &value->t;
+	    G_debug(3, "sqlite fetched timestamp: %s", text);
+	    ns = sscanf(text, "%4d-%2d-%2d %2d:%2d:%lf",
+			&dt->year, &dt->month, &dt->day, 
+			&dt->hour, &dt->minute, &dt->seconds);
+	    if ( ns != 6 ) {
+		append_error ( "Cannot scan timestamp:");
+		append_error (text);
+		report_error();
+		return DB_FAILED;
+	    }
+	    break;
+
+	case DB_SQL_TYPE_INTERVAL:
+	    dt = &value->t;
+	    dt->year = 0;
+	    dt->month = 0;
+	    dt->day = 0;
+	    dt->hour = 0;
+	    dt->minute = 0;
+	    G_debug(3, "sqlite fetched interval: %s", text);
+	    G_warning("SQLite driver: parsing of interval values not implemented; assuming seconds");
+	    ns = sscanf(text, "%lf", &dt->seconds);
+	    if ( ns != 1 ) {
+		append_error ( "Cannot scan interval:");
+		append_error (text);
+		report_error();
+		return DB_FAILED;
+	    }
+	    break;
+
+	case DB_SQL_TYPE_DECIMAL:
+	case DB_SQL_TYPE_NUMERIC:
+	case DB_SQL_TYPE_CHARACTER:
+	case DB_SQL_TYPE_TEXT:
+	    db_set_string ( &value->s, text);
+	    break;
 	}
     }
 

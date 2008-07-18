@@ -29,9 +29,6 @@ int
 db__driver_create_table (dbTable *table)
 {
     int col, ncols;
-    dbColumn   *column;
-    const char *colname;
-    int sqltype;
     sqlite3_stmt *statement;
     dbString sql;
     const char *rest;
@@ -52,10 +49,12 @@ db__driver_create_table (dbTable *table)
     ncols = db_get_table_number_of_columns(table);
 
     for ( col = 0; col < ncols; col++ ) {
-        column = db_get_table_column (table, col);
-	colname = db_get_column_name (column);
-	sqltype = db_get_column_sqltype (column);
-	
+        dbColumn *column = db_get_table_column (table, col);
+	const char *colname = db_get_column_name (column);
+	int sqltype = db_get_column_sqltype (column);
+	int collen = db_get_column_length (column);
+	char buf[32];
+
 	G_debug ( 3, "%s (%s)", colname, db_sqltype_name(sqltype) );
 
 	if ( col > 0 ) db_append_string ( &sql, ", " );
@@ -63,25 +62,45 @@ db__driver_create_table (dbTable *table)
 	db_append_string ( &sql, " " );
 	switch ( sqltype ) {
 	    case DB_SQL_TYPE_CHARACTER:
-	    case DB_SQL_TYPE_TEXT:
-		db_append_string ( &sql, "text");
+		sprintf(buf, "varchar(%d)", collen);
+		db_append_string ( &sql, buf);
                 break;
 	    case DB_SQL_TYPE_SMALLINT:
+		db_append_string ( &sql, "smallint");
+		break;
 	    case DB_SQL_TYPE_INTEGER:
 		db_append_string ( &sql, "integer");
 		break;
 	    case DB_SQL_TYPE_REAL:
-	    case DB_SQL_TYPE_DOUBLE_PRECISION:
-	    case DB_SQL_TYPE_DECIMAL:
-	    case DB_SQL_TYPE_NUMERIC:
-	    case DB_SQL_TYPE_INTERVAL:
 		db_append_string ( &sql, "real");
 		break;
-	    case DB_SQL_TYPE_DATE:
-	    case DB_SQL_TYPE_TIME:
-	    case DB_SQL_TYPE_TIMESTAMP:
-		db_append_string ( &sql, "text");
+	    case DB_SQL_TYPE_DOUBLE_PRECISION:
+		db_append_string ( &sql, "double precision");
 		break;
+	    case DB_SQL_TYPE_DECIMAL:
+		db_append_string ( &sql, "decimal");
+		break;
+	    case DB_SQL_TYPE_NUMERIC:
+		db_append_string ( &sql, "numeric");
+		break;
+	    case DB_SQL_TYPE_DATE:
+		db_append_string ( &sql, "date");
+		break;
+	    case DB_SQL_TYPE_TIME:
+		db_append_string ( &sql, "time");
+		break;
+	    case DB_SQL_TYPE_TIMESTAMP:
+		db_append_string ( &sql, "timestamp");
+		break;
+	    case DB_SQL_TYPE_INTERVAL:
+		db_append_string ( &sql, "interval");
+		break;
+	    case DB_SQL_TYPE_TEXT:
+		db_append_string ( &sql, "text");
+                break;
+	    case DB_SQL_TYPE_SERIAL:
+		db_append_string ( &sql, "serial");
+                break;
  	    default:
                 G_warning ( "Unknown column type (%s)", colname);
 		return DB_FAILED;

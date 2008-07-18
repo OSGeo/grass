@@ -14,6 +14,5 @@ void free_cursor ( cursor * );
 
 /* describe.c*/
 int describe_table ( sqlite3_stmt *, dbTable **, cursor * );
-void get_column_info ( sqlite3_stmt *, int, int *, int * );
 
 #endif /* __SQLITE_PROTO_H__ */
