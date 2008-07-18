@@ -20,7 +20,9 @@
 
 /* function prototypes */
 static int affinity_type (const char *);
-
+static int parse_type (const char *, int *);
+static void get_column_info ( sqlite3_stmt *statement, int col, 
+			      int *litetype, int *sqltype, int *length );
 
 /**
  * \fn int db__driver_describe_table (dbString *table_name, dbTable **table)
@@ -105,9 +107,9 @@ int describe_table( sqlite3_stmt *statement,
 
     for (i = 0; i < ncols; i++) 
     {
-        int  litetype, sqltype;
+        int  litetype, sqltype, length;
 	
-	get_column_info ( statement, i, &litetype, &sqltype );
+	get_column_info ( statement, i, &litetype, &sqltype, &length );
 
 	if ( sqltype == DB_SQL_TYPE_UNKNOWN ) continue;
 	    
@@ -150,7 +152,7 @@ int describe_table( sqlite3_stmt *statement,
 
 	fname = sqlite3_column_name ( statement, i );
 
-	get_column_info ( statement, i, &litetype, &sqltype );
+	get_column_info ( statement, i, &litetype, &sqltype, &fsize );
 
 	G_debug(2, "col: %s, nkcols %d, litetype : %d, sqltype %d", 
 		    fname, nkcols, litetype, sqltype );
@@ -163,22 +165,38 @@ int describe_table( sqlite3_stmt *statement,
 	    continue;
 	}
 
-	switch ( litetype) {
-	case SQLITE_INTEGER:
+	switch (sqltype) {
+	case DB_SQL_TYPE_SMALLINT:
+	case DB_SQL_TYPE_INTEGER:
+	case DB_SQL_TYPE_SERIAL:
 	    fsize = 20;
 	    break;
 
-	case SQLITE_FLOAT:
+	case DB_SQL_TYPE_REAL:
+	case DB_SQL_TYPE_DOUBLE_PRECISION:
+	case DB_SQL_TYPE_DECIMAL:
+	case DB_SQL_TYPE_NUMERIC:
 	    fsize = 20;
 	    break;
 
-	case SQLITE_TEXT:
-	    fsize = 255;
+	case DB_SQL_TYPE_DATE:
+	case DB_SQL_TYPE_TIME:
+	case DB_SQL_TYPE_TIMESTAMP:
+	case DB_SQL_TYPE_INTERVAL:
+	    fsize = 20;
 	    break;
-	
-	/* SQLITE_BLOB, SQLITE_NULL needed here? */
+
+	case DB_SQL_TYPE_CHARACTER:
+	    /* fsize is already correct */
+	    break;
+
+	case DB_SQL_TYPE_TEXT:
+	    /* fudge for clients which don't understand variable-size fields */
+	    fsize = 1000;
+	    break;
 	
 	default:
+	    G_warning("SQLite driver: unknown type: %d", sqltype);
 	    fsize = 99999; /* sqlite doesn't care, it must be long enough to
                           satisfy tests in GRASS */
 	}
@@ -223,6 +241,17 @@ int describe_table( sqlite3_stmt *statement,
 }
 
 
+static int dbmi_type ( int litetype )
+{
+    switch (litetype) {
+    case SQLITE_INTEGER:	return DB_SQL_TYPE_INTEGER;
+    case SQLITE_FLOAT:		return DB_SQL_TYPE_DOUBLE_PRECISION;
+    case SQLITE_TEXT:		return DB_SQL_TYPE_TEXT;
+    case SQLITE_NULL:		return DB_SQL_TYPE_TEXT; /* good choice? */
+    default:			return DB_SQL_TYPE_UNKNOWN;
+    }
+}
+
 /**
  * \fn void get_column_info (sqlite3_stmt *statement, int col, int *litetype, int *sqltype)
  *
@@ -234,8 +263,8 @@ int describe_table( sqlite3_stmt *statement,
  * \param[in,out] sqltype
  */
 
-void get_column_info ( sqlite3_stmt *statement, int col, 
-		int *litetype, int *sqltype )
+static void get_column_info ( sqlite3_stmt *statement, int col, 
+			      int *litetype, int *sqltype, int *length )
 {
     const char *decltype;
     
@@ -243,6 +272,7 @@ void get_column_info ( sqlite3_stmt *statement, int col,
     if ( decltype ) 
     {
 	G_debug ( 4, "column: %s, decltype = %s", sqlite3_column_name ( statement, col), decltype );
+	*sqltype = parse_type ( decltype, length );
 	*litetype = affinity_type ( decltype );
     }
     else
@@ -251,54 +281,12 @@ void get_column_info ( sqlite3_stmt *statement, int col,
 	
 	/* If there are no results it gives 0 */ 
 	*litetype = sqlite3_column_type ( statement, col );
+	*sqltype = dbmi_type ( *litetype );
+	*length = 0;
     }
 
+    G_debug ( 3, "sqltype = %d", *sqltype );
     G_debug ( 3, "litetype = %d", *litetype );
-
-    /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
-           SQLITE_INTEGER  1
-           SQLITE_FLOAT    2
-           SQLITE_TEXT     3
-           SQLITE_BLOB     4
-           SQLITE_NULL     5
-
-       lib/db/dbmi_base/sqltype.c:
-           DB_SQL_TYPE_CHARACTER:        0 "CHARACTER"
-           DB_SQL_TYPE_NUMERIC:          1 "NUMERIC"
-           DB_SQL_TYPE_DECIMAL:          2 "DECIMAL"
-           DB_SQL_TYPE_SMALLINT:         3 "SMALLINT"
-           DB_SQL_TYPE_INTEGER:          4 "INTEGER"
-           DB_SQL_TYPE_REAL:             5 "REAL"
-           DB_SQL_TYPE_DOUBLE_PRECISION: 6 "DOUBLE PRECISION"
-           DB_SQL_TYPE_DATE:             7 "DATE"
-           DB_SQL_TYPE_TIME:             8 "TIME"
-           DB_SQL_TYPE_SERIAL:           9 "SERIAL"
-           DB_SQL_TYPE_TEXT:             10 "TEXT"
-           DB_SQL_TYPE_TIMESTAMP:        11 "TIMESTAMP"
-           DB_SQL_TYPE_INTERVAL:         12 "INTERVAL"
-           default                       13 "unknown"
-    */
-
-    switch ( *litetype) {
-	case SQLITE_INTEGER:
-	    *sqltype = DB_SQL_TYPE_INTEGER;
-	    break;
-
-	case SQLITE_FLOAT:
-	    *sqltype = DB_SQL_TYPE_DOUBLE_PRECISION;
-	    break;
-
-	case SQLITE_TEXT:
-	    *sqltype = DB_SQL_TYPE_TEXT;
-	    break;
-	    
-	case SQLITE_NULL:
-	    *sqltype = DB_SQL_TYPE_TEXT; /* good choice? */
-	    break;
-	    
-	default:
-	    *sqltype = DB_SQL_TYPE_UNKNOWN;
-    }
 }
 
 /*  SQLite documentation:
@@ -325,7 +313,7 @@ static int affinity_type (const char *declared)
     char *lc;
     int aff = SQLITE_FLOAT;
 
-    lc = strdup ( declared );
+    lc = G_store ( declared );
     G_tolcase ( lc );
     G_debug(4, "affinity_type: %s", lc);
 
@@ -342,7 +330,131 @@ static int affinity_type (const char *declared)
     {
         aff = SQLITE_BLOB;
     }
-  
+
+    G_free(lc);
+
     return aff;	
 }
 
+static int parse_type (const char *declared, int *length)
+{
+    char buf[256];
+    char word[4][256];
+
+    strncpy(buf, declared, sizeof(buf));
+    buf[sizeof(buf)-1] = '\0';
+    G_chop(buf);
+    G_tolcase(buf);
+
+    *length = 1;
+
+#define streq(a,b) (strcmp((a),(b)) == 0)
+
+    if (streq(buf, "smallint") ||
+	streq(buf, "int2"))
+	return DB_SQL_TYPE_SMALLINT;
+
+    if (streq(buf, "integer") ||
+	streq(buf, "int") ||
+	streq(buf, "int4") ||
+	streq(buf, "bigint") ||
+	streq(buf, "int8"))
+	return DB_SQL_TYPE_INTEGER;
+
+    if (streq(buf, "real") ||
+	streq(buf, "float4"))
+	return DB_SQL_TYPE_REAL;
+
+    if (streq(buf, "double") ||
+	streq(buf, "float8"))
+	return DB_SQL_TYPE_DOUBLE_PRECISION;
+
+    if (streq(buf, "decimal"))
+	return DB_SQL_TYPE_DECIMAL;
+
+    if (streq(buf, "numeric"))
+	return DB_SQL_TYPE_NUMERIC;
+
+    if (streq(buf, "date"))
+	return DB_SQL_TYPE_DATE;
+    if (streq(buf, "time") ||
+	streq(buf, "timetz"))
+	return DB_SQL_TYPE_TIME;
+
+    if (streq(buf, "timestamp") ||
+	streq(buf, "timestamptz"))
+	return DB_SQL_TYPE_TIMESTAMP;
+
+    if (streq(buf, "interval"))
+	return DB_SQL_TYPE_INTERVAL;
+
+    if (streq(buf, "text"))
+	return DB_SQL_TYPE_TEXT;
+
+    if (streq(buf, "serial") ||
+	streq(buf, "serial4"))
+	return DB_SQL_TYPE_SERIAL;
+
+    if (streq(buf, "character")
+	|| streq(buf, "char")
+	|| streq(buf, "varchar"))
+	return DB_SQL_TYPE_CHARACTER;
+
+    if (sscanf(buf, "%s %s", word[0], word[1]) == 2)
+    {
+	if (streq(word[0], "double") && streq(word[1], "precision"))
+	    return DB_SQL_TYPE_DOUBLE_PRECISION;
+	if (streq(word[0], "character") && streq(word[1], "varying"))
+	    return DB_SQL_TYPE_CHARACTER;
+    }
+
+    if (sscanf(buf, "%s %s %s %s", word[0], word[1], word[2], word[3]) == 4 &&
+	(streq(word[1], "with") || streq(word[1], "without")) &&
+	streq(word[2], "time") &&
+	streq(word[3], "zone"))
+    {
+	if (streq(word[0], "time"))
+	    return DB_SQL_TYPE_TIME;
+	if (streq(word[0], "timestamp"))
+	    return DB_SQL_TYPE_TIMESTAMP;
+    }
+
+    if (sscanf(buf, "varchar ( %d )", length) == 1 ||
+	sscanf(buf, "character varying ( %d )", length) == 1 ||
+	sscanf(buf, "character ( %d )", length) == 1 ||
+	sscanf(buf, "char ( %d )", length) == 1)
+	return DB_SQL_TYPE_CHARACTER;
+
+    if (sscanf(buf, "interval ( %d )", length) == 1)
+	return DB_SQL_TYPE_INTERVAL;
+
+    if (sscanf(buf, "numeric ( %d , %d )", length, length) == 2)
+	return DB_SQL_TYPE_NUMERIC;
+
+    if (sscanf(buf, "decimal ( %d , %d )", length, length) == 2)
+	return DB_SQL_TYPE_DECIMAL;
+
+    if (sscanf(buf, "time ( %d )", length) == 1 ||
+	sscanf(buf, "timetz ( %d )", length) == 1)
+	return DB_SQL_TYPE_TIME;
+
+    if (sscanf(buf, "timestamp ( %d )", length) == 1 ||
+	sscanf(buf, "timestamptz ( %d )", length) == 1)
+	return DB_SQL_TYPE_TIMESTAMP;
+
+    if (sscanf(buf, "%s ( %d ) %s %s %s", word[0], length, word[1], word[2], word[3]) == 5 &&
+	(streq(word[1], "with") || streq(word[1], "without")) &&
+	streq(word[2], "time") &&
+	streq(word[3], "zone"))
+    {
+	if (streq(word[0], "time"))
+	    return DB_SQL_TYPE_TIME;
+	if (streq(word[0], "timestamp"))
+	    return DB_SQL_TYPE_TIMESTAMP;
+    }
+
+#undef streq
+
+    G_warning("SQLite driver: unable to parse decltype: %s", declared);
+    return DB_SQL_TYPE_UNKNOWN;
+}
