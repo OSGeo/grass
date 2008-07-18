@@ -55,6 +55,7 @@ void Nviz_init_render_window(struct render_window *rwin)
 #elif defined(OPENGL_WINDOWS)
     rwin->displayId = NULL;
     rwin->contextId = NULL;
+    rwin->bitmapId = NULL;
 #endif
 }
 
