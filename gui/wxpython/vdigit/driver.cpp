@@ -127,7 +127,6 @@ int DisplayDriver::DrawMap(bool force)
 	bool draw;
 	struct ilist *listAreas, *listCentroids;
 	struct line_pnts *points, *ipoints, **isles;
-	BOUND_BOX areaBox;
 
 	wxBrush *fillArea, *fillIsle;
 
@@ -179,18 +178,6 @@ int DisplayDriver::DrawMap(bool force)
 		}
 		else {
 		    Vect_reset_list(listCentroids);
-		}
-
-		Vect_get_area_box(mapInfo, area, &areaBox);
-		if (areaBox.E > region.box.E && areaBox.W < region.box.W &&
-		    areaBox.S < region.box.S && areaBox.N > region.box.N) {
-
-		    Vect_reset_line(points);
-		    Vect_append_point(points, region.box.W, region.box.N, 0.0);
-		    Vect_append_point(points, region.box.E, region.box.N, 0.0);
-		    Vect_append_point(points, region.box.E, region.box.S, 0.0);
-		    Vect_append_point(points, region.box.W, region.box.S, 0.0);
-		    Vect_append_point(points, region.box.W, region.box.N, 0.0);
 		}
 
 		draw = true;
