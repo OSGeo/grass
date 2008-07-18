@@ -207,7 +207,7 @@ class Settings:
                     'color' : (255, 20, 147, 255)
                     }, # deep pink
                 'symbolArea' : {
-                    'enabled' : True,
+                    'enabled' : False,
                     'color' : (217, 255, 217, 255)
                     }, # green
                 'symbolDirection' : {

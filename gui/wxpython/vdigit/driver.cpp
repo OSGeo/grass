@@ -127,25 +127,34 @@ int DisplayDriver::DrawMap(bool force)
 	bool draw;
 	struct ilist *listAreas, *listCentroids;
 	struct line_pnts *points, *ipoints, **isles;
+	BOUND_BOX areaBox;
 
+	wxBrush *fillArea, *fillIsle;
+
+	fillArea = new wxBrush(settings.area.color);
+	fillIsle = new wxBrush(*wxWHITE_BRUSH);
+	
 	listAreas = Vect_new_list();
 	listCentroids = Vect_new_list();
-
+	
 	points = Vect_new_line_struct();
 	ipoints = NULL;
 
-	Vect_select_areas_by_box(mapInfo, &(region.box),
+	Vect_select_areas_by_box(mapInfo, &region.box,
 				 listAreas);
 
 	for (int i = 0; i < listAreas->n_values; i++) {
 	    area = listAreas->value[i];
+	    
+	    if (!Vect_area_alive (mapInfo, area))
+		return -1;
+
 	    /* check for other centroids -- only area with one centroid is valid */
 	    centroid = Vect_get_area_centroid(mapInfo, area);
 
 	    if(centroid > 0) {
-		Vect_get_area_points(mapInfo, area, points);
-		
-		num_isles = Vect_get_area_num_isles(mapInfo, area);
+		/* check for isles */
+		num_isles = Vect_get_area_num_isles(mapInfo, area); /* TODO */
 		if (num_isles < 1)
 		    isles = NULL;
 		else
@@ -153,12 +162,37 @@ int DisplayDriver::DrawMap(bool force)
 		for (int j = 0; j < num_isles; j++) {
 		    ipoints = Vect_new_line_struct();
 		    isle = Vect_get_area_isle(mapInfo, area, j);
+
+		    if (!Vect_isle_alive (mapInfo, isle))
+			return -1;
+
 		    Vect_get_isle_points(mapInfo, isle, ipoints);
 		    isles[j] = ipoints;
 		}
-		Vect_select_lines_by_polygon(mapInfo, points,
-					     num_isles, isles, GV_CENTROID, listCentroids);
-		
+
+		Vect_get_area_points(mapInfo, area, points);
+
+		/* avoid processing areas with large number of polygon points (ugly) */
+		if (points->n_points < 5000) {
+		    Vect_select_lines_by_polygon(mapInfo, points,
+						 num_isles, isles, GV_CENTROID, listCentroids);
+		}
+		else {
+		    Vect_reset_list(listCentroids);
+		}
+
+		Vect_get_area_box(mapInfo, area, &areaBox);
+		if (areaBox.E > region.box.E && areaBox.W < region.box.W &&
+		    areaBox.S < region.box.S && areaBox.N > region.box.N) {
+
+		    Vect_reset_line(points);
+		    Vect_append_point(points, region.box.W, region.box.N, 0.0);
+		    Vect_append_point(points, region.box.E, region.box.N, 0.0);
+		    Vect_append_point(points, region.box.E, region.box.S, 0.0);
+		    Vect_append_point(points, region.box.W, region.box.S, 0.0);
+		    Vect_append_point(points, region.box.W, region.box.N, 0.0);
+		}
+
 		draw = true;
 		for (int c = 0; c < listCentroids->n_values; c++) {
 		    if(Vect_get_centroid_area(mapInfo, listCentroids->value[c]) < 0) {
@@ -168,11 +202,15 @@ int DisplayDriver::DrawMap(bool force)
 		}
 		
 		if (draw) {
-		    DrawArea(area);
-		    
+		    dc->SetBrush(*fillArea);
+		    dc->SetPen(*wxTRANSPARENT_PEN);
+		    DrawArea(points);
+
 		    for (int j = 0; j < num_isles; j++) {
-			isle = Vect_get_area_isle(mapInfo, area, j);
-			// DrawIsle(isle) -> TODO
+			/* draw isles in white */
+			dc->SetBrush(*fillIsle);
+			dc->SetPen(*wxTRANSPARENT_PEN);
+			DrawArea(isles[j]);
 		    }
 		}
 
@@ -186,6 +224,9 @@ int DisplayDriver::DrawMap(bool force)
 	    }
 	}
 
+	delete fillArea;
+	delete fillIsle;
+
 	Vect_destroy_line_struct(points);
 
 	Vect_destroy_list(listAreas);
@@ -198,7 +239,7 @@ int DisplayDriver::DrawMap(bool force)
     dc->EndDrawing();
 
     // PrintIds();
-
+    
     Vect_destroy_list(listLines);
 
     return listLines->n_values;
@@ -207,23 +248,14 @@ int DisplayDriver::DrawMap(bool force)
 /**
    \brief Draw area fill
 
-   \param area area id
+   \param area boundary points
 
    \return 1 on success
    \return -1 on failure (vector object is dead, etc.)
 */
-int DisplayDriver::DrawArea(int area)
+int DisplayDriver::DrawArea(const line_pnts* points)
 {
     double x, y, z;
-    struct line_pnts *points;
-
-    if (!dc || !Vect_area_alive (mapInfo, area))
-	return -1;
-
-    points = Vect_new_line_struct();
-
-    // get boundary points
-    Vect_get_area_points(mapInfo, area, points);
 
     // convert EN -> xy
     wxPoint wxPoints[points->n_points];
@@ -235,11 +267,7 @@ int DisplayDriver::DrawArea(int area)
     }
 
     // draw polygon
-    dc->SetBrush(wxBrush(settings.area.color));
-    dc->SetPen(wxPen(settings.area.color));
     dc->DrawPolygon(points->n_points, wxPoints);
-
-    Vect_destroy_line_struct(points);
 
     return 1;
 }
@@ -841,7 +869,11 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 
     settings.area.enabled = eArea;
     settings.area.color.Set(cArea);
-
+    settings.area.color.Set(settings.area.color.Red(),
+			    settings.area.color.Green(),
+			    settings.area.color.Blue(),
+			    100); /* transparency */
+    
     settings.direction.enabled = eDirection;
     settings.direction.color.Set(cDirection);
 
