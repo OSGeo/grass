@@ -296,7 +296,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         item = self.tree.GetFirstChild(self.tree.root)[0]
         while item and item.IsOk():
             type = self.tree.GetPyData(item)[0]['type']
-            if type not in ('raster', 'vector'):
+            if not item.IsChecked() or \
+                    type not in ('raster', 'vector'):
+                item = self.tree.GetNextSibling(item)
                 continue
 
             listOfItems.append(item)
@@ -319,9 +321,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.SetLayerData(item, id)
                 self.UpdateLayerProperties(item)
             
-                # print self.tree.GetPyData(item)[0]['nviz']
-                # print self.update
-
         stop = time.time()
         
         Debug.msg(3, "GLWindow.LoadDataLayers(): time=%f" % (stop-start))
@@ -738,16 +737,15 @@ class NvizToolWindow(wx.Frame):
         self.page = {}
         # view page
         self.__createViewPage()
-        self.page['view'] = 0
+        self.page['view'] = { 'id' : 0 }
         # surface page
-        self.__createSurfacePage()
-        self.page['surface'] = 1
+        size = self.__createSurfacePage()
+        size = (size[0] + 20, size[0] + 20)
         # vector page
         self.__createVectorPage()
-        self.page['vector'] = 2
         # settings page
         self.__createSettingsPage()
-        self.page['settings'] = 3
+        self.page['settings'] = { 'id' : 1 }
         self.UpdatePage('settings')
         self.pageChanging = False
 
@@ -764,7 +762,9 @@ class NvizToolWindow(wx.Frame):
         #
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
-        
+
+        self.SetSize(size)
+
     def __createViewPage(self):
         """Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
@@ -883,15 +883,18 @@ class NvizToolWindow(wx.Frame):
 
         panel.SetSizer(pageSizer)
 
+        return panel.GetBestSize()
+
     def __createSurfacePage(self):
         """Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+        self.page['surface'] = {}
+        self.page['surface']['id'] = -1
+        self.page['surface']['panel'] = panel.GetId()
+
         # panel = scrolled.ScrolledPanel(parent=self.notebook, id=wx.ID_ANY)
         # panel.SetupScrolling(scroll_x=True, scroll_y=True)
 
-        self.notebook.AddPage(page=panel,
-                              text=" %s " % _("Surface"))
-        
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.win['surface'] = {}
@@ -1161,13 +1164,16 @@ class NvizToolWindow(wx.Frame):
                       border=5)
         
         panel.SetSizer(pageSizer)
+        
+        return panel.GetBestSize()
 
     def __createVectorPage(self):
         """Create view settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
-        self.notebook.AddPage(page=panel,
-                              text=" %s " % _("Vector"))
-        
+        self.page['vector'] = {}
+        self.page['vector']['id'] = -1
+        self.page['vector']['panel'] = panel.GetId()
+
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.win['vector'] = {}
@@ -1255,6 +1261,8 @@ class NvizToolWindow(wx.Frame):
                       border=5)
 
         panel.SetSizer(pageSizer)
+
+        return panel.GetBestSize()
 
     def __createSettingsPage(self):
         """Create settings page"""
@@ -1518,6 +1526,8 @@ class NvizToolWindow(wx.Frame):
 
         panel.SetSizer(pageSizer)
 
+        return panel.GetBestSize()
+
     def CreateControl(self, parent, dict, name, range, bind, sliderHor=True, size=200):
         """Add control (Slider + SpinCtrl)"""
         dict[name] = {}
@@ -1690,7 +1700,7 @@ class NvizToolWindow(wx.Frame):
 
     def OnApply(self, event):
         """Apply button pressed"""
-        if self.notebook.GetSelection() == self.page['settings']:
+        if self.notebook.GetSelection() == self.page['settings']['id']:
             self.ApplySettings()
         
         if event:
@@ -1720,7 +1730,7 @@ class NvizToolWindow(wx.Frame):
         #
         self.OnApply(None)
 
-        if self.notebook.GetSelection() == self.page['settings']:
+        if self.notebook.GetSelection() == self.page['settings']['id']:
             fileSettings = {}
             UserSettings.ReadSettingsFile(settings=fileSettings)
             fileSettings['nviz'] = UserSettings.Get(group='nviz')
@@ -2047,26 +2057,46 @@ class NvizToolWindow(wx.Frame):
         self.pageChanging = True
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(nviz=True)
-
+        
         if pageId == 'view':
             max = self.mapWindow.view['z-exag']['value'] * 10
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
-        elif pageId == 'surface':
+        elif pageId == 'surface' and \
+                self.notebook.GetSelection() != self.page['surface']['id']:
+            if self.page['vector']['id'] > -1:
+                self.notebook.RemovePage(self.page['vector']['id'])
+                self.page['vector']['id'] = -1
+
+            self.page['surface']['id'] = 1
+            self.page['settings']['id'] = 2
+
+            panel = wx.FindWindowById(self.page['surface']['panel'])
+            self.notebook.InsertPage(n=self.page['surface']['id'],
+                                     page=panel,
+                                     text=" %s " % _("Surface"),
+                                     select=True)
+
             self.UpdateSurfacePage(layer, data['surface'])
 
-            # disable vector and enable surface page
-            self.notebook.GetPage(self.page['surface']).Enable(True)
-            self.notebook.GetPage(self.page['vector']).Enable(False)
+        elif pageId == 'vector' and \
+                self.notebook.GetSelection() != self.page['vector']['id']:
+            if self.page['surface']['id'] > -1:
+                self.notebook.RemovePage(self.page['surface']['id'])
+                self.page['surface']['id'] = -1
+
+            self.page['vector']['id'] = 1
+            self.page['settings']['id'] = 2
+
+            panel = wx.FindWindowById(self.page['vector']['panel'])
+            self.notebook.InsertPage(n=self.page['vector']['id'],
+                                     page=panel,
+                                     text=" %s " % _("Vector"),
+                                     select=True)
             
-        elif pageId == 'vector':
             self.UpdateVectorPage(layer, data['vector'])
-
-            # disable surface and enable current
-            self.notebook.GetPage(self.page['surface']).Enable(False)
-            self.notebook.GetPage(self.page['vector']).Enable(True)
-
+        
         self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data):
@@ -2164,7 +2194,7 @@ class NvizToolWindow(wx.Frame):
 
     def SetPage(self, name):
         """Get named page"""
-        self.notebook.SetSelection(self.page[name])
+        self.notebook.SetSelection(self.page[name]['id'])
 
 class ViewPositionWindow(wx.Window):
     """Position control window (for NvizToolWindow)"""
