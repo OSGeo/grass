@@ -122,12 +122,17 @@ int DisplayDriver::DrawMap(bool force)
 
     if (settings.area.enabled) {
 	/* draw area fills first */
-	int area;
+	int area, centroid, isle;
+	int num_isles;
+	bool draw;
 	struct ilist *listAreas, *listCentroids;
-	BOUND_BOX areaBox;
+	struct line_pnts *points, *ipoints, **isles;
 
 	listAreas = Vect_new_list();
 	listCentroids = Vect_new_list();
+
+	points = Vect_new_line_struct();
+	ipoints = NULL;
 
 	Vect_select_areas_by_box(mapInfo, &(region.box),
 				 listAreas);
@@ -135,13 +140,53 @@ int DisplayDriver::DrawMap(bool force)
 	for (int i = 0; i < listAreas->n_values; i++) {
 	    area = listAreas->value[i];
 	    /* check for other centroids -- only area with one centroid is valid */
-	    Vect_get_area_box(mapInfo, area, &areaBox);
-	    
-	    if(Vect_select_lines_by_box(mapInfo, &areaBox,
-					GV_CENTROID, listCentroids) == 1) {
-		DrawArea(area);
+	    centroid = Vect_get_area_centroid(mapInfo, area);
+
+	    if(centroid > 0) {
+		Vect_get_area_points(mapInfo, area, points);
+		
+		num_isles = Vect_get_area_num_isles(mapInfo, area);
+		if (num_isles < 1)
+		    isles = NULL;
+		else
+		    isles = (struct line_pnts **) G_malloc(num_isles * sizeof(struct line_pnts *));
+		for (int j = 0; j < num_isles; j++) {
+		    ipoints = Vect_new_line_struct();
+		    isle = Vect_get_area_isle(mapInfo, area, j);
+		    Vect_get_isle_points(mapInfo, isle, ipoints);
+		    isles[j] = ipoints;
+		}
+		Vect_select_lines_by_polygon(mapInfo, points,
+					     num_isles, isles, GV_CENTROID, listCentroids);
+		
+		draw = true;
+		for (int c = 0; c < listCentroids->n_values; c++) {
+		    if(Vect_get_centroid_area(mapInfo, listCentroids->value[c]) < 0) {
+			draw = false;
+			break;
+		    }
+		}
+		
+		if (draw) {
+		    DrawArea(area);
+		    
+		    for (int j = 0; j < num_isles; j++) {
+			isle = Vect_get_area_isle(mapInfo, area, j);
+			// DrawIsle(isle) -> TODO
+		    }
+		}
+
+		if(isles) {
+		    for (int j = 0; j < num_isles; j++) {
+			Vect_destroy_line_struct(isles[j]);
+			isles[j] = NULL;
+		    }
+		    G_free((void *) isles);
+		}
 	    }
 	}
+
+	Vect_destroy_line_struct(points);
 
 	Vect_destroy_list(listAreas);
 	Vect_destroy_list(listCentroids);
