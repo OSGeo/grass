@@ -940,7 +940,8 @@ class LayerTree(CT.CustomTreeCtrl):
         
         # update nviz tools
         if self.mapdisplay.toolbars['nviz'] and \
-                self.GetPyData(self.layer_selected) is not None:
+                self.GetPyData(self.layer_selected) is not None and \
+                self.layer_selected.IsChecked():
             # update Nviz tool window
             type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
 

@@ -176,6 +176,9 @@ class MapWindow(object):
             return None
         
         item = self.tree.GetSelection()
+        if not item.IsChecked():
+            return None
+
         try:
             if nviz:
                 layer = self.tree.GetPyData(item)[0]['nviz']
