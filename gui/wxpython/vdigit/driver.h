@@ -147,7 +147,7 @@ private:
     int DrawLineNodes(int);
     int DrawDirectionArrow();
 
-    int DrawArea(int);
+    int DrawArea(const line_pnts *);
 
     /* debug */
     void PrintIds();
