@@ -14,5 +14,5 @@ default:
 	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg
 	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg/panel
 	-$(MKDIR) $(GRASS_NVIZ_DOCS)/nvimg/work
-	find . -type f \( -name '*.html' -o -name '*.png' -o -name '*.gif' \) -print | \
+	find -L . -type f \( -name '*.html' -o -name '*.png' -o -name '*.gif' \) -print | \
 		while read file ; do $(INSTALL_DATA) $$file $(GRASS_NVIZ_DOCS)/$$file ; done
