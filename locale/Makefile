@@ -72,10 +72,10 @@ mo:
 		suffix=`echo $$po | cut -d'_' -f2-`; \
 		lingua=`basename $$suffix .po`; \
 		prefix=`echo $$po | cut -d'_' -f1`; \
-		install -d $(MO_DIR)/$$lingua/LC_MESSAGES/ ; \
+		$(INSTALL) -d $(MO_DIR)/$$lingua/LC_MESSAGES/ ; \
 		echo -n $$po": "; \
 		if [ $$prefix = $(TCLDOMAIN) ]; then\
-		install -d $(MSG_DIR) ; \
+		$(INSTALL) -d $(MSG_DIR) ; \
 		msgfmt --statistics --tcl -l $$lingua \
 			-d $(MSG_DIR)/ $$po ;\
 		else \
