@@ -2872,7 +2872,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     type  = columns[name]['type']
                     value = columns[name]['values'][idx]
                     id    = columns[name]['ids'][idx]
-                    if name.lower() != key:
+                    if name != key:
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnCancel(self, event):
@@ -2992,7 +2992,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     else:
                         value = ''
 
-                    if name.lower() == key:
+                    if name == key:
                         box    = wx.StaticBox (parent=panel, id=wx.ID_ANY,
                                                label=" %s %s " % (_("Category"), value))
                         boxFont = self.GetFont()
@@ -3121,6 +3121,14 @@ class VectorDBInfo:
             else:
                 return False
 
+            # check for key column
+            # v.db.connect -g/p returns always key column name lowercase
+            if self.layers[layer]["key"] not in columns.keys():
+                for col in columns.keys():
+                    if col.lower() == self.layers[layer]["key"]:
+                        self.layers[layer]["key"] = col.upper()
+                        break
+            
             self.tables[table] = columns
 
         return True
