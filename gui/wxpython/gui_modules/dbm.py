@@ -2797,12 +2797,13 @@ class DisplayAttributesDialog(wx.Dialog):
         # find updated values for each layer/category
         for layer in self.mapDBInfo.layers.keys(): # for each layer
             table = self.mapDBInfo.layers[layer]["table"]
+            key = self.mapDBInfo.layers[layer]["key"]
             columns = self.mapDBInfo.tables[table]
-            for idx in range(len(columns["cat"]['values'])): # for each category
+            for idx in range(len(columns[key]['values'])): # for each category
                 updatedColumns = []
                 updatedValues = []
                 for name in columns.keys():
-                    if name == "cat":
+                    if name == key:
                         cat = columns[name]['values'][idx]
                         continue
                     type  = columns[name]['type']
@@ -2831,7 +2832,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     continue
 
                 if self.action == "add":
-                    sqlString = "INSERT INTO %s (cat," % table
+                    sqlString = "INSERT INTO %s (%s," % (table, key)
                 else:
                     sqlString = "UPDATE %s SET " % table
 
@@ -2864,13 +2865,14 @@ class DisplayAttributesDialog(wx.Dialog):
         """Reset form"""
         for layer in self.mapDBInfo.layers.keys():
             table = self.mapDBInfo.layers[layer]["table"]
+            key = self.mapDBInfo.layers[layer]["key"]
             columns = self.mapDBInfo.tables[table]
-            for idx in range(len(columns["cat"]['values'])):
+            for idx in range(len(columns[key]['values'])):
                 for name in columns.keys():
                     type  = columns[name]['type']
                     value = columns[name]['values'][idx]
                     id    = columns[name]['ids'][idx]
-                    if name.lower() != "cat":
+                    if name.lower() != key:
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnCancel(self, event):
@@ -2927,7 +2929,10 @@ class DisplayAttributesDialog(wx.Dialog):
             if not query: # select by layer/cat
                 if cats.has_key(layer): 
                     for cat in cats[layer]:
-                        nselected = self.mapDBInfo.SelectFromTable(layer, where="cat=%d" % cat)
+                        nselected = self.mapDBInfo.SelectFromTable(layer,
+                                                                   where="%s=%d" % \
+                                                                       (self.mapDBInfo.layers[layer]['key'],
+                                                                        cat))
                 else:
                     nselected = 0
 
@@ -2938,9 +2943,10 @@ class DisplayAttributesDialog(wx.Dialog):
                 if nselected <= 0:
                     if cats.has_key(layer):
                         table = self.mapDBInfo.layers[layer]["table"]
+                        key = self.mapDBInfo.layers[layer]["key"]
                         columns = self.mapDBInfo.tables[table]
                         for name in columns.keys():
-                            if name == "cat":
+                            if name == key:
                                 for cat in cats[layer]:
                                     self.mapDBInfo.tables[table][name]['values'].append(cat)
                             else:
@@ -2960,10 +2966,11 @@ class DisplayAttributesDialog(wx.Dialog):
             border = wx.BoxSizer(wx.VERTICAL)
 
             table   = self.mapDBInfo.layers[layer]["table"]
+            key   = self.mapDBInfo.layers[layer]["key"]
             columns = self.mapDBInfo.tables[table]
 
             # value
-            if len(columns["cat"]['values']) == 0: # no cats
+            if len(columns[key]['values']) == 0: # no cats
                 sizer  = wx.BoxSizer(wx.VERTICAL)
                 txt = wx.StaticText(parent=panel, id=wx.ID_ANY,
                                     label=_("No database record available."))
@@ -2974,7 +2981,7 @@ class DisplayAttributesDialog(wx.Dialog):
                            border=10)
                 panel.SetSizer(border)
                 continue
-            for idx in range(len(columns["cat"]['values'])):
+            for idx in range(len(columns[key]['values'])):
                 flexSizer = wx.FlexGridSizer (cols=4, hgap=3, vgap=3)
                 flexSizer.AddGrowableCol(3)
                 # columns
@@ -2985,7 +2992,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     else:
                         value = ''
 
-                    if name.lower() == "cat":
+                    if name.lower() == key:
                         box    = wx.StaticBox (parent=panel, id=wx.ID_ANY,
                                                label=" %s %s " % (_("Category"), value))
                         boxFont = self.GetFont()
@@ -3188,7 +3195,7 @@ class VectorDBInfo:
                                       "database=%s" % self.layers[layer]["database"],
                                       "driver=%s"   % self.layers[layer]["driver"]])
 
-        # self.tables[table]["cat"][1] = str(cat)
+        # self.tables[table][key][1] = str(cat)
         if selectCommand.returncode == 0:
             for line in selectCommand.ReadStdOutput():
                 name, value = line.split('|')
