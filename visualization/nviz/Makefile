@@ -37,7 +37,7 @@ endif
 	for file in $(SCRIPTS) ; do $(INSTALL) $$file $(INSTALL_DIR)/scripts ; done
 	-$(MKDIR) $(INSTALL_DIR)/bitmaps
 	-$(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough
-	find bitmaps -path '*/.svn' -prune -o -type f -print | \
+	find -L bitmaps -path '*/.svn' -prune -o -type f -print | \
 		while read file ; do $(INSTALL_DATA) $$file $(INSTALL_DIR)/$$file ; done
 
 docs:
