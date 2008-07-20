@@ -388,11 +388,18 @@ class Settings:
                     },
                 'vector' : {
                     'lines' : {
+                        'show' : True,
                         'width' : 2,
                         'color' : (0, 0, 255, 255), # blue
                         'flat' : False,
                         'height' : 0,
                         },
+                    'points' : {
+                        'show' : False,
+                        'size' : 100,
+                        'symbol' : 1,
+                        'color' : (0, 0, 255, 255), # blue
+                        }
                     },
                 'settings': {
                     'general' : {
@@ -452,7 +459,16 @@ class Settings:
         self.internalSettings['nviz']['view']['persp']['max'] = 100
         self.internalSettings['nviz']['view']['height'] = {}
         self.internalSettings['nviz']['view']['height']['value'] = -1
-        
+        self.internalSettings['nviz']['vector'] = {}
+        self.internalSettings['nviz']['vector']['points'] = {}
+        self.internalSettings['nviz']['vector']['points']['icon'] = ('x',
+                                                                     _("sphere"),
+                                                                     _("diamond"),
+                                                                     _("cube"),
+                                                                     _("box"),
+                                                                     _("gyro"),
+                                                                     _("aster"),
+                                                                     _("histogram"))
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:

@@ -68,3 +68,23 @@ int Nviz::SetVectorHeight(int id, float height)
 
     return 1;
 }
+
+/**
+   \brief Set reference surface of vector set
+
+   \param id vector set id
+   \param surf_id surface id
+
+   \return 1 on success
+   \return 0 on failure
+*/
+int Nviz::SetVectorSurface(int id, int surf_id)
+{
+    if (!GS_surf_exists(surf_id) || !GV_vect_exists(id))
+	return 0;
+
+    if (GV_select_surf(id, surf_id) < 0)
+	return 0;
+
+    return 1;
+}
