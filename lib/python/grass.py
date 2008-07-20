@@ -3,6 +3,8 @@ import os.path
 import sys
 import types
 import subprocess
+import re
+import atexit
 
 # GRASS-oriented interface to subprocess module
 
@@ -110,3 +112,72 @@ def parser():
     os.execvp("g.parser", [name] + argv)
     raise OSError("error executing g.parser")
 
+# interface to g.tempfile
+
+def tempfile():
+    return read_command("g.tempfile", pid = os.getpid()).strip()
+
+# interface to g.gisenv
+
+_kv_regex = re.compile("([^=]+)='(.*)';?")
+
+def gisenv():
+    lines = read_command("g.gisenv").splitlines()
+    return dict([_kv_regex.match(line).groups() for line in lines])
+
+# interface to g.region
+
+def region():
+    lines = read_command("g.region", flags='g').splitlines()
+    return dict([line.split('=',1) for line in lines])
+
+def use_temp_region():
+    name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
+    run_command("g.region", save = name)
+    os.environ['WIND_OVERRIDE'] = name
+    atexit.register(del_temp_region)
+
+def del_temp_region():
+    try:
+	name = os.environ.pop('WIND_OVERRIDE')
+	run_command("g.remove", quiet = True, region = name)
+    except:
+	pass
+
+# interface to g.findfile
+
+def find_file(name, element = 'cell'):
+    lines = read_command("g.findfile", element = element, file = name).splitlines()
+    return dict([_kv_regex.match(line).groups() for line in lines])
+
+# interface to g.list
+
+def list_grouped(type):
+    dashes_re = re.compile("^----+$")
+    mapset_re = re.compile("<(.*)>:$")
+    result = {}
+    for line in read_command("g.list", type = type).splitlines():
+	if line == "":
+	    continue
+	if dashes_re.match(line):
+	    continue
+	m = mapset_re.search(line)
+	if m:
+	    mapset = m.group(1)
+	    result[mapset] = []
+	    continue
+	result[mapset].extend(line.split())
+    return result
+
+def _concat(xs):
+    result = []
+    for x in xs:
+	result.extend(x)
+    return result
+
+def list_pairs(type):
+    return _concat([[(map, mapset) for map in maps]
+		    for mapset, maps in list_grouped(type).iteritems()])
+
+def list_strings(type):
+    return ["%s@%s" % pair for pair in list_pairs(type)]
