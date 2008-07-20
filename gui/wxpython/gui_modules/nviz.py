@@ -80,6 +80,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.init = False
         self.render = True # render in full resolution
 
+        # list of loaded map layers
+        self.layers = {}
+        for type in ('raster', 'vector'):
+            self.layers[type] = {}
+            self.layers[type]['name'] = []
+            self.layers[type]['id'] = []
+
         #
         # create nviz instance
         #
@@ -148,6 +155,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                         self.parent.nvizToolWin.UpdatePage('vector')
 
                 self.parent.nvizToolWin.UpdateSettings()
+
+                # update widgets
+                win = self.parent.nvizToolWin.FindWindowById( \
+                    self.parent.nvizToolWin.win['vector']['lines']['surface'])
+                win.SetItems(self.layers['raster']['name'])
 
             self.init = True
 
@@ -248,8 +260,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.parent.onRenderGauge.SetValue(1)
             wx.Yield()
             self.nvizClass.Draw(False)
-        else:
+        elif render is False:
             self.nvizClass.Draw(True) # quick
+        else: # None -> reuse last rendered image
+            pass # TODO
 
         self.SwapBuffers()
 
@@ -375,6 +389,16 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to load raster map <%s>" % layer.name))
         
+        self.layers['raster']['name'].append(layer.name)
+        self.layers['raster']['id'].append(id)
+
+        # update tools window
+        if hasattr(self.parent, "nvizToolWin"):
+            toolWin = self.parent.nvizToolWin
+            win = toolWin.FindWindowById( \
+                toolWin.win['vector']['lines']['surface'])
+            win.SetItems(self.layers['raster']['name'])
+
         return id
 
     def UnloadRaster(self, id):
@@ -382,6 +406,23 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.nvizClass.UnloadSurface(id) == 0:
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to unload raster map <%s>" % layer.name))
+
+        idx = self.layers['raster']['id'].index(id)
+        del self.layers['raster']['name'][idx]
+        del self.layers['raster']['id'][idx]
+
+        # update tools window
+        if hasattr(self.parent, "nvizToolWin"):
+            toolWin = self.parent.nvizToolWin
+            win = toolWin.FindWindowById( \
+                toolWin.win['vector']['lines']['surface'])
+            win.SetItems(self.layers['raster']['name'])
+
+            # remove surface page
+            if toolWin.notebook.GetSelection() == toolWin.page['surface']['id']:
+                toolWin.notebook.RemovePage(toolWin.page['surface']['id'])
+                toolWin.page['surface']['id'] = -1
+                toolWin.page['settings']['id'] = 1
 
     def GetSurfaceMode(self, mode, style, shade, string=False):
         """Determine surface draw mode"""
@@ -461,7 +502,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 else:
                     data['draw']['resolution'][control[4:]] = value
                 continue
-            else:
+            elif control not in ('style', 'shading'):
                 self.update.append('surface:draw:%s' % control)
 
             if control == 'wire-color':
@@ -492,6 +533,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to load vector map <%s>" % layer.name))
 
+        self.layers['vector']['name'].append(layer.name)
+        self.layers['vector']['id'].append(id)
+
         return id
 
     def UnloadVector(self, id):
@@ -500,11 +544,30 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to unload vector map <%s>" % layer.name))
 
+        idx = self.layers['vector']['id'].index(id)
+        del self.layers['vector']['name'][idx]
+        del self.layers['vector']['id'][idx]
+
+        if hasattr(self.parent, "nvizToolWin"):
+            toolWin = self.parent.nvizToolWin
+            # remove vector page
+            if toolWin.notebook.GetSelection() == toolWin.page['vector']['id']:
+                toolWin.notebook.RemovePage(toolWin.page['vector']['id'])
+                toolWin.page['vector']['id'] = -1
+                toolWin.page['settings']['id'] = 1
+
     def SetVectorDefaultProp(self, data):
         """Set default vector properties"""
-        #
-        # lines
-        #
+        if UserSettings.Get(group='nviz', key='vector',
+                            subkey=['lines', 'show']):
+            self.SetVectorLinesDefaultProp(data)
+
+        if UserSettings.Get(group='nviz', key='vector',
+                            subkey=['points', 'show']):
+            self.SetVectorPointsDefaultProp(data)
+
+    def SetVectorLinesDefaultProp(self, data):
+        """Set default vector properties -- lines"""
         # width
         data['lines']['width'] = \
             UserSettings.Get(group='nviz', key='vector',
@@ -524,13 +587,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             type = 'flat'
             map  = None
         else:
-            type = 'surface'
-            map  = '' # TODO
+            if len(self.layers['raster']['name']) > 1:
+                type = 'surface'
+                map  = self.layers['raster']['name']
+            else:
+                type = 'flat'
+                map = None
 
         data['lines']['mode'] = {}
         data['lines']['mode']['type'] = type
         if map:
-            data['lines']['mode']['map'] = map
+            data['lines']['mode']['surface'] = map
         
         self.update.append('vector:lines:mode')
             
@@ -538,6 +605,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         data['lines']['height'] = UserSettings.Get(group='nviz', key='vector',
                                                    subkey=['lines', 'height'])
         self.update.append('vector:lines:height')
+
+    def SetVectorPointsDefaultProp(self, data):
+        """Set default vector properties -- points"""
+        # size
+        # symbol
+        # color
+        pass
 
     def Reset(self):
         """Reset (unload data)"""
@@ -686,22 +760,46 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def UpdateVectorProperties(self, id, data):
         """Apply changes for vector"""
 
-        if 'vector:lines:mode' in self.update:
+        #
+        # lines
+        #
+        # mode
+        if 'vector:lines:color' in self.update or \
+                'vector:lines:width' in self.update or \
+                'vector:lines:mode' in self.update:
             width = data['lines']['width']
             color = data['lines']['color']
             if data['lines']['mode']['type'] == 'flat':
                 flat = True
+                if data['lines'].has_key('surface'):
+                    data['lines'].pop('surface')
             else:
                 flat = False
+                if not 'vector:lines:surface' in self.update:
+                    self.update.append('vector:lines:surface')
+
             self.nvizClass.SetVectorLineMode(id, color,
                                              width, flat)
-            self.update.remove('vector:lines:mode')
-        
+            if 'vector:lines:color' in self.update:
+                self.update.remove('vector:lines:color')
+            if 'vector:lines:width' in self.update:
+                self.update.remove('vector:lines:width')
+            if 'vector:lines:mode' in self.update:
+                self.update.remove('vector:lines:mode')
+        # height
         if 'vector:lines:height' in self.update:
             self.nvizClass.SetVectorHeight(id,
                                            data['lines']['height'])
             self.update.remove('vector:lines:height')
 
+        # surface
+        if 'vector:lines:surface' in self.update:
+            idx = self.layers['raster']['name'].index(data['lines']['mode']['surface'])
+            if idx > -1:
+                self.nvizClass.SetVectorSurface(id,
+                                                self.layers['raster']['id'][idx])
+            self.update.remove('vector:lines:surface')
+           
 class NvizToolWindow(wx.Frame):
     """Experimental window for Nviz tools
 
@@ -740,7 +838,7 @@ class NvizToolWindow(wx.Frame):
         self.page['view'] = { 'id' : 0 }
         # surface page
         size = self.__createSurfacePage()
-        size = (size[0] + 20, size[0] + 20)
+        size = (size[0] + 25, size[0] + 20)
         # vector page
         self.__createVectorPage()
         # settings page
@@ -1177,10 +1275,21 @@ class NvizToolWindow(wx.Frame):
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.win['vector'] = {}
+
         #
         # vector lines
         #
         self.win['vector']['lines'] = {}
+
+        showLines = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                label=_("Show vector lines"))
+        self.win['vector']['lines']['show'] = showLines.GetId()
+        showLines.SetValue(True)
+        showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
+
+        pageSizer.Add(item=showLines, proportion=0,
+                      flag=wx.ALL | wx.EXPAND, border=5)
+
         box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
                             label=" %s " % (_("Vector lines")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -1234,6 +1343,7 @@ class NvizToolWindow(wx.Frame):
         surface = wx.ComboBox(parent=panel, id=wx.ID_ANY, size=(250, -1),
                               style=wx.CB_SIMPLE | wx.CB_READONLY,
                               choices=[])
+        surface.Bind(wx.EVT_COMBOBOX, self.OnVectorSurface)
         self.win['vector']['lines']['surface'] = surface.GetId()
         gridSizer.Add(item=surface, 
                       pos=(1, 0), span=(1, 8),
@@ -1257,8 +1367,70 @@ class NvizToolWindow(wx.Frame):
         boxSizer.Add(item=gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
         pageSizer.Add(item=boxSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=5)
+
+        #
+        # vector points
+        #
+        self.win['vector']['points'] = {}
+
+        showPoints = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                label=_("Show vector points"))
+        self.win['vector']['points']['show'] = showPoints.GetId()
+        showPoints.SetValue(False) # disable by default
+        showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
+
+        pageSizer.Add(item=showPoints, proportion=0,
+                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Vector points")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+
+        # icon size
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Icon size:")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+
+        isize = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                            initial=100,
+                            min=1,
+                            max=1e6)
+        self.win['vector']['points']['size'] = isize.GetId()
+        gridSizer.Add(item=isize, pos=(0, 1),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+
+        # icon symbol
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("symbol:")),
+                      pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        isym = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                          choices = [_("coarse"),
+                                     _("fine"),
+                                     _("both")])
+        isym.SetName("selection")
+        self.win['vector']['points']['symbol'] = isym.GetId()
+        gridSizer.Add(item=isym, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0, 3))
+
+        # icon symbol
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("color:")),
+                      pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL)
+        icolor = csel.ColourSelect(panel, id=wx.ID_ANY)
+        icolor.SetName("color")
+        self.win['vector']['points']['color'] = icolor.GetId()
+        gridSizer.Add(item=icolor, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0, 5))
+        
+        boxSizer.Add(item=gridSizer, proportion=1,
+                     flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border=5)
+
 
         panel.SetSizer(pageSizer)
 
@@ -1484,14 +1656,86 @@ class NvizToolWindow(wx.Frame):
                       border=5)
 
         #
-        # vector
+        # vector lines
         #
         self.win['settings']['vector'] = {}
+        self.win['settings']['vector']['lines'] = {}
         box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
-                            label=" %s " % (_("Vector")))
+                            label=" %s " % (_("Vector lines")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
+        # show
+        row = 0
+        showLines = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                label=_("Show lines"))
+        showLines.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                            subkey=['lines', 'show']))
+        gridSizer.Add(item=showLines, pos=(row, 0))
+
+
+        boxSizer.Add(item=gridSizer, proportion=1,
+                  flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border=5)
+
+        #
+        # vector points
+        #
+        self.win['settings']['vector']['points'] = {}
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Vector points")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=3, hgap=5)
+
+        # show
+        row = 0
+        showPoints = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                 label=_("Show points"))
+        showPoints.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                             subkey=['points', 'show']))
+        gridSizer.Add(item=showPoints, pos=(row, 0))
+
+        # icon size
+        row += 1 
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Icon size:")),
+                      pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        
+        isize = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                            initial=100,
+                            min=1,
+                            max=1e6)
+        self.win['settings']['vector']['points']['size'] = isize.GetId()
+        isize.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                        subkey=['points', 'size']))
+        gridSizer.Add(item=isize, pos=(row, 1),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+
+        # icon symbol
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("symbol:")),
+                      pos=(row, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        isym = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                          choices=UserSettings.Get(group='nviz', key='vector',
+                                                   subkey=['points', 'icon'], internal=True))
+        self.win['settings']['vector']['points']['symbol'] = isym.GetId()
+        isym.SetSelection(UserSettings.Get(group='nviz', key='vector',
+                                           subkey=['points', 'symbol']))
+        gridSizer.Add(item=isym, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 3))
+
+        # icon symbol
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("color:")),
+                      pos=(row, 4), flag=wx.ALIGN_CENTER_VERTICAL)
+        icolor = csel.ColourSelect(panel, id=wx.ID_ANY)
+        self.win['settings']['vector']['points']['color'] = icolor.GetId()
+        icolor.SetColour(UserSettings.Get(group='nviz', key='vector',
+                                          subkey=['points', 'color']))
+        gridSizer.Add(item=icolor, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(row, 5))
 
         boxSizer.Add(item=gridSizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=3)
@@ -1710,14 +1954,16 @@ class NvizToolWindow(wx.Frame):
         """Apply Nviz settings for current session"""
         settings = UserSettings.Get(group='nviz')
         for subgroup, key in settings.iteritems(): # view, surface, vector...
-            if subgroup != 'view':
-                continue
             for subkey, value in key.iteritems():
                 for subvalue in value.keys():
-                    value = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue]).GetValue()
+                    # print subgroup, subkey, subvalue, value
+                    win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
+                    if win.GetName() == "selection":
+                        value = win.GetSelection()
+                    else:
+                        value = win.GetValue()
                     if subkey == 'pos':
                         value = float(value) / 100
-
                     settings[subgroup][subkey][subvalue] = value
                     
     def OnSave(self, event):
@@ -1992,12 +2238,48 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
+    def OnVectorShow(self, event):
+        """Show vector lines/points"""
+        checked = event.IsChecked()
+        
+        id = event.GetId()
+        sec = None
+        if id == self.win['vector']['lines']['show']:
+            sec = 'lines'
+        elif id == self.win['vector']['points']['show']:
+            sec = 'points'
+
+        if sec is None:
+            return
+
+        for win in self.win['vector'][sec].keys():
+            if win == 'show':
+                continue
+            if type(self.win['vector'][sec][win]) == type({}):
+                for swin in self.win['vector'][sec][win].keys():
+                    if checked:
+                        self.FindWindowById(self.win['vector'][sec][win][swin]).Enable(True)
+                    else:
+                        self.FindWindowById(self.win['vector'][sec][win][swin]).Enable(False)
+            else:
+                if checked:
+                    self.FindWindowById(self.win['vector'][sec][win]).Enable(True)
+                else:
+                    self.FindWindowById(self.win['vector'][sec][win]).Enable(False)
+
     def OnVectorDisplay(self, event):
         """Display vector lines on surface/flat"""
         if event.GetSelection() == 0: # surface
+            if len(self.mapWindow.layers['raster']['name']) < 1:
+                event.Veto()
+                return
+
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(True)
             # set first found surface
-            ### TODO
+            data = self.mapWindow.GetSelectedLayer(nviz=True)
+            data['vector']['lines']['mode']['surface'] = self.mapWindow.layers['raster']['name'][0]
+            self.FindWindowById(self.win['vector']['lines']['surface']).SetStringSelection( \
+                self.mapWindow.layers['raster']['name'][0])
         else: # flat
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
 
@@ -2015,7 +2297,8 @@ class NvizToolWindow(wx.Frame):
         mode = {}
         if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
             mode['type'] = 'surface'
-            mode['map'] = '' # TODO
+            mode['surface'] = self.FindWindowById(self.win['vector']['lines']['surface']).GetValue()
+            self.mapWindow.update.append('vector:lines:surface')
         else:
             mode['type'] = 'flat'
 
@@ -2026,7 +2309,7 @@ class NvizToolWindow(wx.Frame):
         data['vector']['lines']['width'] = width
         data['vector']['lines']['color'] = color
         data['vector']['lines']['mode'] = mode
-                                                           
+
         self.mapWindow.UpdateLayerProperties()
                 
         if self.parent.autoRender.IsChecked():
@@ -2052,6 +2335,17 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
     
+    def OnVectorSurface(self, event):
+        """Reference surface for vector map"""
+        self.mapWindow.update.append('vector:lines:surface')
+        
+        data['vector']['lines']['mode']['surface'] = event.GetValue()
+
+        self.mapWindow.UpdateLayerProperties()
+
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+        
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
         self.pageChanging = True
@@ -2075,7 +2369,7 @@ class NvizToolWindow(wx.Frame):
             panel = wx.FindWindowById(self.page['surface']['panel'])
             self.notebook.InsertPage(n=self.page['surface']['id'],
                                      page=panel,
-                                     text=" %s " % _("Surface"),
+                                     text=" %s " % _("Layer properties"),
                                      select=True)
 
             self.UpdateSurfacePage(layer, data['surface'])
@@ -2092,7 +2386,7 @@ class NvizToolWindow(wx.Frame):
             panel = wx.FindWindowById(self.page['vector']['panel'])
             self.notebook.InsertPage(n=self.page['vector']['id'],
                                      page=panel,
-                                     text=" %s " % _("Vector"),
+                                     text=" %s " % _("Layer properties"),
                                      select=True)
             
             self.UpdateVectorPage(layer, data['vector'])
@@ -2187,6 +2481,9 @@ class NvizToolWindow(wx.Frame):
             display.SetSelection(1)
         else:
             display.SetSelection(0)
+            surface = self.FindWindowById(self.win['vector']['lines']['surface'])
+            if len(surface.GetItems()) > 0:
+                surface.SetSelection(0)
                 
         for type in ('slider', 'spin'):
             win = self.FindWindowById(self.win['vector']['lines']['height'][type])

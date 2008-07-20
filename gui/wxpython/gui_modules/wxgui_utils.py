@@ -940,17 +940,25 @@ class LayerTree(CT.CustomTreeCtrl):
         
         # update nviz tools
         if self.mapdisplay.toolbars['nviz'] and \
-                self.GetPyData(self.layer_selected) is not None and \
-                self.layer_selected.IsChecked():
-            # update Nviz tool window
-            type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
+                self.GetPyData(self.layer_selected) is not None:
 
-            if type == 'raster':
-                self.mapdisplay.nvizToolWin.UpdatePage('surface')
-                self.mapdisplay.nvizToolWin.SetPage('surface')
-            elif type == 'vector':
-                self.mapdisplay.nvizToolWin.UpdatePage('vector')
-                self.mapdisplay.nvizToolWin.SetPage('vector')
+            if self.layer_selected.IsChecked():
+                # update Nviz tool window
+                type = self.GetPyData(self.layer_selected)[0]['maplayer'].type
+
+                if type == 'raster':
+                    self.mapdisplay.nvizToolWin.UpdatePage('surface')
+                    self.mapdisplay.nvizToolWin.SetPage('surface')
+                elif type == 'vector':
+                    self.mapdisplay.nvizToolWin.UpdatePage('vector')
+                    self.mapdisplay.nvizToolWin.SetPage('vector')
+            else:
+                for page in ('surface', 'vector'):
+                    pageId = self.mapdisplay.nvizToolWin.page[page]['id']
+                    if pageId > -1:
+                        self.mapdisplay.nvizToolWin.notebook.RemovePage(pageId)
+                        self.mapdisplay.nvizToolWin.page[page]['id'] = -1
+                        self.mapdisplay.nvizToolWin.page['settings']['id'] = 1 
 
     def OnCollapseNode(self, event):
         """
