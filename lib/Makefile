@@ -34,7 +34,8 @@ SUBDIRS = \
 	symbol \
 	init \
 	cdhc \
-	stats
+	stats \
+	python
 
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 

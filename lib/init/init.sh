@@ -296,6 +296,13 @@ if [ ! "$GRASS_PYTHON" ] ; then
 fi
 export GRASS_PYTHON
 
+# Set PYTHONPATH to find GRASS Python modules
+if [ ! "PYTHONPATH" ] ; then
+  PYTHONPATH="$GISBASE/etc/python"
+else
+  PYTHONPATH="$GISBASE/etc/python:$PYTHONPATH"
+fi
+export PYTHONPATH
 
 # try and find a web browser if one isn't already specified
 if [ ! "$GRASS_HTML_BROWSER" ] ; then
