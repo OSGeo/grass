@@ -245,7 +245,7 @@ int GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
   \param id point set id
   \param atmod
   \param color icon color
-  \param width 
+  \param width icon line width
   \param size icon size
   \param marker icon symbol
 

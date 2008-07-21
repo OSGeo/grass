@@ -2,10 +2,9 @@
  *
  * MODULE:       nviz_cmd
  *               
- * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
+ * AUTHOR(S):    Martin Landa <landa.martin gmail.com> (Google SoC 2008)
  *               
  * PURPOSE:      Experimental NVIZ CLI prototype
- *               Google SoC 2008
  *               
  * COPYRIGHT:    (C) 2008 by the GRASS Development Team
  *
@@ -73,7 +72,7 @@ int main (int argc, char *argv[])
     Nviz_init_data(&data);
 
     /* define default attributes for map objects */
-    Nviz_set_attr_default();
+    Nviz_set_surface_attr_default();
 
     /* set background color */
     Nviz_set_bgcolor(&data, Nviz_color_from_str(params->bgcolor->answer)); 
@@ -102,13 +101,20 @@ int main (int argc, char *argv[])
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
     /* set draw mode of loaded surfaces */
-    set_draw_mode(params);
+    surface_set_draw_mode(params);
 
-    /* load vector maps & set line mode */
-    if (params->vector->answer) {
-	load_vectors(params, &data);
+    /* load line vector maps */
+    if (params->vlines->answer) {
+	load_vector_lines(params, &data);
+	/* set attributes of 2d lines */
+	vlines_set_attrb(params);
+    }
+
+    /* load point vector maps */
+    if (params->vpoints->answer) {
+	load_vector_points(params, &data);
 	/* set attributes for 2d lines */
-	set_lines_attrb(params);
+	vpoints_set_attrb(params);
     }
 
     /* focus on loaded data */

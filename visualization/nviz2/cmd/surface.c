@@ -32,24 +32,24 @@ int load_rasters(const struct GParams *params,
 {
     char *mapset;
     int i;
-    int nelevs, nelev_map0, nelev_const0, ncolor_map0, ncolor_const0, nmask_map0;
-    int ntransp_map0, ntransp_const0, nshine_map0, nshine_const0;
-    int nemit_map0, nemit_const0;
+    int nelevs, nelev_map, nelev_const, ncolor_map, ncolor_const, nmask_map;
+    int ntransp_map, ntransp_const, nshine_map, nshine_const;
+    int nemit_map, nemit_const;
     int *surf_list, nsurfs;
     int id;
 
-    opt_get_num_answers(params->elev_map, NULL, &nelev_map0);
-    opt_get_num_answers(params->elev_const, NULL, &nelev_const0);
+    nelev_map   = opt_get_num_answers(params->elev_map);
+    nelev_const = opt_get_num_answers(params->elev_const);
 
-    if (nelev_map0 > 0)
-	nelevs = nelev_map0;
+    if (nelev_map > 0)
+	nelevs = nelev_map;
     else
-	nelevs = nelev_const0;
+	nelevs = nelev_const;
 
     /* topography (required) */    
     for (i = 0; i < nelevs; i++) {
 	/* check maps */
-	if (i < nelev_map0 && strcmp(params->elev_map->answers[i], "")) {
+	if (i < nelev_map && strcmp(params->elev_map->answers[i], "")) {
 	    mapset = G_find_cell2 (params->elev_map->answers[i], "");
 	    if (mapset == NULL) {
 		G_fatal_error(_("Raster map <%s> not found"),
@@ -61,7 +61,7 @@ int load_rasters(const struct GParams *params,
 				  data);
 	}
 	else {
-	    if (i < nelev_const0 && strcmp(params->elev_const->answers[i], "")) {
+	    if (i < nelev_const && strcmp(params->elev_const->answers[i], "")) {
 		id = Nviz_new_map_obj(MAP_OBJ_SURF,
 				      NULL, atof(params->elev_const->answers[i]),
 				      data);
@@ -76,21 +76,21 @@ int load_rasters(const struct GParams *params,
     /* set surface attributes */
     surf_list = GS_get_surf_list(&nsurfs);
 
-    opt_get_num_answers(params->color_map, NULL, &ncolor_map0);
-    opt_get_num_answers(params->color_const, NULL, &ncolor_const0);
-    opt_get_num_answers(params->mask_map, NULL, &nmask_map0);
-    opt_get_num_answers(params->transp_map, NULL, &ntransp_map0);
-    opt_get_num_answers(params->transp_const, NULL, &ntransp_const0);
-    opt_get_num_answers(params->shine_map, NULL, &nshine_map0);
-    opt_get_num_answers(params->shine_const, NULL, &nshine_const0);
-    opt_get_num_answers(params->emit_map, NULL, &nemit_map0);
-    opt_get_num_answers(params->emit_const, NULL, &nemit_const0);
+    ncolor_map = opt_get_num_answers(params->color_map);
+    ncolor_const =opt_get_num_answers(params->color_const);
+    nmask_map = opt_get_num_answers(params->mask_map);
+    ntransp_map = opt_get_num_answers(params->transp_map);
+    ntransp_const = opt_get_num_answers(params->transp_const);
+    nshine_map = opt_get_num_answers(params->shine_map);
+    nshine_const = opt_get_num_answers(params->shine_const);
+    nemit_map = opt_get_num_answers(params->emit_map);
+    nemit_const = opt_get_num_answers(params->emit_const);
 
     for (i = 0; i < nsurfs; i++) {
 	id = surf_list[i];
 	/* color */
 	/* check for color map */
-	if (i < ncolor_map0 && strcmp(params->color_map->answers[i], "")) {
+	if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
 	    mapset = G_find_cell2 (params->color_map->answers[i], "");
 	    if (mapset == NULL) {
 		G_fatal_error(_("Raster map <%s> not found"),
@@ -102,7 +102,7 @@ int load_rasters(const struct GParams *params,
 			  data);
 	}
 	/* check for color value */
-	else if (i < ncolor_const0 && strcmp(params->color_const->answers[i], "")) { 
+	else if (i < ncolor_const && strcmp(params->color_const->answers[i], "")) { 
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, CONST_ATT,
 			  NULL, Nviz_color_from_str(params->color_const->answers[i]),
 			  data);
@@ -115,43 +115,43 @@ int load_rasters(const struct GParams *params,
 			      G_fully_qualified_name(params->elev_map->answers[i], mapset));
 	}
 	/* mask */
-	if (i < nmask_map0 && strcmp(params->mask_map->answers[i], "")) {
+	if (i < nmask_map && strcmp(params->mask_map->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_MASK, MAP_ATT,
 			  G_fully_qualified_name(params->mask_map->answers[i], mapset), -1.0,
 			  data);
 	}
 
 	/* transparency */
-	if (i < ntransp_map0 && strcmp(params->transp_map->answers[i], "")) {
+	if (i < ntransp_map && strcmp(params->transp_map->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, MAP_ATT,
 			  G_fully_qualified_name(params->transp_map->answers[i], mapset), -1.0,
 			  data);
 	}
-	else if (i < ntransp_const0 && strcmp(params->transp_const->answers[i], "")) {
+	else if (i < ntransp_const && strcmp(params->transp_const->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_TRANSP, CONST_ATT,
 			  NULL, atof(params->transp_const->answers[i]),
 			  data);
 	}
 
 	/* shininess */
-	if (i < nshine_map0 && strcmp(params->shine_map->answers[i], "")) {
+	if (i < nshine_map && strcmp(params->shine_map->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_SHINE, MAP_ATT,
 			  G_fully_qualified_name(params->shine_map->answers[i], mapset), -1.0,
 			  data);
 	}
-	else if (i < nshine_const0 && strcmp(params->shine_const->answers[i], "")) {
+	else if (i < nshine_const && strcmp(params->shine_const->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_SHINE, CONST_ATT,
 			  NULL, atof(params->shine_const->answers[i]),
 			  data);
 	}
 
 	/* emission */
-	if (i < nemit_map0 && strcmp(params->emit_map->answers[i], "")) {
+	if (i < nemit_map && strcmp(params->emit_map->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_EMIT, MAP_ATT,
 			  G_fully_qualified_name(params->emit_map->answers[i], mapset), -1.0,
 			  data);
 	}
-	else if (i < nemit_const0 && strcmp(params->emit_const->answers[i], "")) {
+	else if (i < nemit_const && strcmp(params->emit_const->answers[i], "")) {
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_EMIT, CONST_ATT,
 			  NULL, atof(params->emit_const->answers[i]),
 			  data);
@@ -171,7 +171,7 @@ int load_rasters(const struct GParams *params,
 
   \param params module parameters
 */
-void set_draw_mode(const struct GParams *params)
+void surface_set_draw_mode(const struct GParams *params)
 {
     int *surf_list, nsurfs;
     int i, id, draw_mode;
