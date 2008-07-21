@@ -1,22 +1,24 @@
 #!/usr/bin/python
 ############################################################################
 #
-# MODULE:       r_in_aster.py
-# AUTHOR(S):    Michael Barton (michael.barton@asu.edu)
-#                   Based on r.in.aster bash script for GRASS 
-#                   by Michael Barton and Paul Kelly
-# PURPOSE:      Rectifies, georeferences, & imports Terra-ASTER imagery 
-#                   using gdalwarp
-# COPYRIGHT:    (C) 2008 by the GRASS Development Team
+# MODULE:    r_in_aster.py
+# AUTHOR(S): Michael Barton (michael.barton@asu.edu) and
+#               Glynn Clements (glynn@gclements.plus.com)
+#               Based on r.in.aster bash script for GRASS 
+#               by Michael Barton and Paul Kelly
+# PURPOSE:   Rectifies, georeferences, & imports Terra-ASTER imagery 
+#               using gdalwarp
+# COPYRIGHT: (C) 2008 by the GRASS Development Team
 #
-#       This program is free software under the GNU General Public
-#       License (>=v2). Read the file COPYING that comes with GRASS
-#       for details.
+#   This program is free software under the GNU General Public
+#   License (>=v2). Read the file COPYING that comes with GRASS
+#   for details.
 #
 #############################################################################
 #
 # Requires:
 #   gdalwarp
+#   gdal compiled with HDF4 support
 
 #%Module
 #%  description: Georeference, rectify, and import Terra-ASTER imagery and relative DEM's using gdalwarp.
@@ -60,14 +62,60 @@ import sys
 import os
 import subprocess
 import platform
+import grass
+
+bands = {
+    'L1A': {
+        '1':  "VNIR_Band1:ImageData",
+        '2':  "VNIR_Band2:ImageData",
+        '3n': "VNIR_Band3N:ImageData",
+        '3b': "VNIR_Band3B:ImageData",
+        '4':  "SWIR_Band4:ImageData",
+        '5':  "SWIR_Band5:ImageData",
+        '6':  "SWIR_Band6:ImageData",
+        '7':  "SWIR_Band7:ImageData",
+        '8':  "SWIR_Band8:ImageData",
+        '9':  "SWIR_Band9:ImageData",
+        '10': "TIR_Band10:ImageData",
+        '11': "TIR_Band11:ImageData",
+        '12': "TIR_Band12:ImageData",
+        '13': "TIR_Band13:ImageData",
+        '14': "TIR_Band14:ImageData"
+    },
+    'L1B': {
+        '1':  "VNIR_Swath:ImageData1",
+        '2':  "VNIR_Swath:ImageData2",
+        '3n': "VNIR_Swath:ImageData3N",
+        '3b': "VNIR_Swath:ImageData3B",
+        '4':  "SWIR_Swath:ImageData4",
+        '5':  "SWIR_Swath:ImageData5",
+        '6':  "SWIR_Swath:ImageData6",
+        '7':  "SWIR_Swath:ImageData7",
+        '8':  "SWIR_Swath:ImageData8",
+        '9':  "SWIR_Swath:ImageData9",
+        '10': "TIR_Swath:ImageData10",
+        '11': "TIR_Swath:ImageData11",
+        '12': "TIR_Swath:ImageData12",
+        '13': "TIR_Swath:ImageData13",
+        '14': "TIR_Swath:ImageData14"
+    }
+}
+
+def _message(msg, *args):
+    subprocess.call(["g.message", "message=%s" % msg] + list(args))
+
+def debug(msg):
+    _message(msg, '-d')
+
+def message(msg):
+    _message(msg)
+
+def error(msg):
+    _message(msg, '-e')
+    sys.exit(1)
 
 def main():
 
-    #if ( os.getenv("GIS_FLAG_OVERWRITE") == "1" ):
-    #    print "Flag -f set"
-    #else:
-    #    print "Flag -f not set"
-         
     #check whether gdalwarp is in path and executable
     p = None
     try:
@@ -75,8 +123,7 @@ def main():
     except:
         pass
     if p == None or p != 0:
-        subprocess.call(["g.message", "-e", "gdalwarp is not in the path and executable"])
-        return
+        error("gdalwarp is not in the path and executable")
 
     #initialize variables
     dataset = ''
@@ -85,128 +132,53 @@ def main():
     band = ''
     outfile = ''
     bandlist = []
-    
+
     #create temporary file to hold gdalwarp output before importing to GRASS
-    tempfileCmd = subprocess.Popen(["g.tempfile","pid=%d" % os.getpid()],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    tempfile = tempfileCmd.stdout.read().strip()
-    tempfile=tempfile + '.tif'
+    tempfile = grass.read_command("g.tempfile", pid = os.getpid()).strip() + '.tif'
 
     #get projection information for current GRASS location
-    p = subprocess.Popen(['g.proj', '-jf'], stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-    proj = p.stdout.read()
+    proj = grass.read_command('g.proj', flags = 'jf').strip()
 
     #currently only runs in projected location
     if "XY location" in proj:
-      subprocess.call(["g.message", "-e", "This module needs to be run in a projected location (found: %s)" % proj])
-      return
+      error ("This module needs to be run in a projected location (found: %s)" % proj)
 
-    
+
     #process list of bands
-    if os.getenv("GIS_OPT_BAND").strip() == 'all':
-        bandlist = ['1','2','3n','3b','4','5','6','7','8','9','10','11','12','13','14']
+    allbands = ['1','2','3n','3b','4','5','6','7','8','9','10','11','12','13','14']
+    if options['band'].strip() == 'all':
+        bandlist = allbands
     else:
-        bandlist = os.getenv("GIS_OPT_BAND").split(',')
-        
-    print 'bandlist =',bandlist
+        bandlist = options['band'].split(',')
 
     #initialize datasets for L1A and L1B
-    #
-    
-    if os.getenv("GIS_OPT_PROCTYPE") == "L1A":
+    if options['proctype'] in ["L1A", "L1B"]:
         for band in bandlist:
-            if band == '1':
-                dataset="VNIR_Band1:ImageData"
-            elif band == '2':
-                dataset="VNIR_Band2:ImageData"
-            elif band == '3n':
-                dataset="VNIR_Band3N:ImageData"
-            elif band == '3b':
-                dataset="VNIR_Band3B:ImageData"
-            elif band == '4':
-                dataset="SWIR_Band4:ImageData"
-            elif band == '5':
-                dataset="SWIR_Band5:ImageData"
-            elif band == '6':
-                dataset="SWIR_Band6:ImageData"
-            elif band == '7':
-                dataset="SWIR_Band7:ImageData"
-            elif band == '8':
-                dataset="SWIR_Band8:ImageData"
-            elif band == '9':
-                dataset="SWIR_Band9:ImageData"
-            elif band == '10':
-                dataset="TIR_Band10:ImageData"
-            elif band == '11':
-                dataset="TIR_Band11:ImageData"
-            elif band == '12':
-                dataset="TIR_Band12:ImageData"
-            elif band == '13':
-                dataset="TIR_Band13:ImageData"
-            elif band == '14':
-                dataset="TIR_Band14:ImageData"        
-            srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (os.getenv("GIS_OPT_INPUT"), dataset)
-            import_aster(proj, srcfile, tempfile, band)
-            
-    elif os.getenv("GIS_OPT_PROCTYPE") == "L1B":
-        for band in bandlist:
-            if band == '1':
-                dataset="VNIR_Swath:ImageData1"
-            elif band == '2':
-                dataset="VNIR_Swath:ImageData2"
-            elif band == '3n':
-                dataset="VNIR_Swath:ImageData3N"
-            elif band == '3b':
-                dataset="VNIR_Swath:ImageData3B"
-            elif band == '4':
-                dataset="SWIR_Swath:ImageData4"
-            elif band == '5':
-                dataset="SWIR_Swath:ImageData5"
-            elif band == '6':
-                dataset="SWIR_Swath:ImageData6"
-            elif band == '7':
-                dataset="SWIR_Swath:ImageData7"
-            elif band == '8':
-                dataset="SWIR_Swath:ImageData8"
-            elif band == '9':
-                dataset="SWIR_Swath:ImageData9"
-            elif band == '10':
-                dataset="TIR_Swath:ImageData10"
-            elif band == '11':
-                dataset="TIR_Swath:ImageData11"
-            elif band == '12':
-                dataset="TIR_Swath:ImageData12"
-            elif band == '13':
-                dataset="TIR_Swath:ImageData13"
-            elif band == '14':
-                dataset="TIR_Swath:ImageData14"        
-            srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (os.getenv("GIS_OPT_INPUT"), dataset)
-            import_aster(proj, srcfile, tempfile, band)
-
-    elif os.getenv("GIS_OPT_PROCTYPE") == "DEM": 
-        srcfile=os.getenv("GIS_OPT_INPUT")
+            if band in allbands:
+                dataset = bands[options['proctype']][band]
+                srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (options['input'], dataset)
+                import_aster(proj, srcfile, tempfile, band)
+            else:
+                error('band %s is not an available Terra/ASTER band' % band)
+    elif options['proctype'] == "DEM": 
+        srcfile=options['input']
         import_aster(proj, srcfile, tempfile, "DEM")
 
-    #for debugging
-    #print 'source file=',srcfile
-    #print 'tempfile=',tempfile
-    #print 'proj =',proj
-           
     # write cmd history: Not sure how to replicate this in Python yet
     #r.support "$GIS_OPT_OUTPUT" history="${CMDLINE}"
 
     #cleanup
-    subprocess.call(["g.message", "Cleaning up ..."])
+    message("Cleaning up ...")
     os.remove(tempfile)
-    subprocess.call(["g.message", "Done."])
+    message("Done.")
 
     return
 
 def import_aster(proj, srcfile, tempfile, band):
     #run gdalwarp with selected options (must be in $PATH)
     #to translate aster image to geotiff
-    subprocess.call(["g.message", "Georeferencing aster image ..."])    
-    subprocess.call(["g.message", "-d", "message=gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile)])
+    message("Georeferencing aster image ...")
+    debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
     if platform.system() == "Darwin":
         cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile ]
@@ -216,25 +188,16 @@ def import_aster(proj, srcfile, tempfile, band):
     if p != 0:
         #check to see if gdalwarp executed properly
         return
-    
+
     #p = subprocess.call(["gdal_translate", srcfile, tempfile])
 
     #import geotiff to GRASS
-    subprocess.call(["g.message", "Importing into GRASS ..."])
-    outfile = os.getenv("GIS_OPT_OUTPUT").strip()+'.'+band
-    cmd = ["r.in.gdal", "input=%s" % tempfile, "output=%s" % outfile]
-    if ( os.getenv("GIS_FLAG_O") == "1" ):
-        cmd.append("--o")
-    #msgcmd = ['g.message']
-    #msgcmd = msgcmd.extend(cmd)
-    #subprocess.call(msgcmd)
-    subprocess.call(cmd)
-    
+    message("Importing into GRASS ...")
+    outfile = options['output'].strip()+'.'+band
+    grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
+
     return
 
 if __name__ == "__main__":
-    if ( len(sys.argv) <= 1 or sys.argv[1] != "@ARGS_PARSED@" ):
-        os.execvp("g.parser", [sys.argv[0]] + sys.argv)
-    else:
-        main();
-
+    options, flags = grass.parser()
+    main()
