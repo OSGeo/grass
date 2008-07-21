@@ -181,6 +181,10 @@ main (int argc, char *argv[])
 	    }
 	    Vect_check_input_output_name ( in_opt->answer, out_opt->answer, GV_FATAL_EXIT );
 	}
+	else {
+	  if ( G_find_vector2 (in_opt->answer, "") == NULL)
+	      G_fatal_error (_("Vector map <%s> not found"), in_opt->answer);
+	}
 	
         Points = Vect_new_line_struct ();
 	Cats = Vect_new_cats_struct ();
