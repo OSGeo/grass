@@ -6,7 +6,7 @@
 * PURPOSE:      To list the prototypes for all accessible functions in this
 *               library. The prototypes are listed by the file in which their
 *               function definitions reside.
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
+* COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
 *
 *               This program is free software under the GNU General Public
 *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -306,7 +306,6 @@ int Gp_set_color(const char *, geopoint *);
 geopoint *Gp_load_sites(const char *, int *, int *, int *);
 
 /* From Gs3.c */
-void Gs_status(const char *);
 double Gs_distance(double *, double *);
 int Gs_loadmap_as_float(struct Cell_head *, const char *, float *, struct BM *,
     int *);

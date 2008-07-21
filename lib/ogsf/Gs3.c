@@ -71,18 +71,6 @@ typedef int FILEDESC;
 
 #define NO_DATA_COL 0xffffff
 
-/************************************************************************/
-/* This should be a function variable that 
- * may be replaced by a user's function. 
- * Or else use G_set_error_routine.
- */
-void Gs_status(const char *str)
-{
-    G_debug(3, "%s", str);
-
-    return;
-}
-
 /*!
   \brief Calculates distance in METERS between two points in current projection (2D)
 

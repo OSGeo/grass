@@ -114,7 +114,7 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
     Vect_set_open_level (2);
     if (Vect_open_old (&map, grassname, "") == -1) {
 	G_fatal_error (_("Unable to open vector map <%s>"),
-		       grassname);
+		       G_fully_qualified_name(grassname, mapset));
     }
 
     Points = Vect_new_line_struct ();
@@ -144,7 +144,7 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
 	case -1:
 	{
 	    G_warning(_("Unable to read vector map <%s>"),
-		      grassname);
+		      G_fully_qualified_name(grassname, mapset));
 	    return (NULL);
 	}
 	case -2: /* EOF */
@@ -203,12 +203,12 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
     Vect_close (&map);
     
     if (!np) {
-	G_warning (_("No points from %s fall within current region"),
-		   grassname);
+	G_warning (_("No points from vector map <%s> fall within current region"),
+		   G_fully_qualified_name(grassname, mapset));
 	return(NULL);
     } else {
-	G_verbose_message(_("Vector file <%s> loaded with %d points"),
-			  grassname, np);
+	G_message(_("Vector map <%s> loaded (%d points)"),
+		  G_fully_qualified_name(grassname, mapset), np);
     }
     
     *nsites = np;
