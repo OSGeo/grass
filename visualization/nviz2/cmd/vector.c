@@ -21,23 +21,49 @@
 
 #include "local_proto.h"
 
+static int load_vectors(const struct Option *, const struct Option *,
+			const struct Option *, int, nv_data *);
+
 /*!
-  \brief Load vector maps and set attributes
+  \brief Load vector maps (lines)
   
   \param params module parameters
   \param data nviz data
 
   \return number of loaded vectors
 */
-int load_vectors(const struct GParams *params,
-		 nv_data *data)
+int load_vector_lines(const struct GParams *params,
+		      nv_data *data)
+{
+    return load_vectors(params->elev_map, params->elev_const,
+			params->vlines, MAP_OBJ_VECT, data);
+}
+
+/*!
+  \brief Load vector maps (points)
+  
+  \param params module parameters
+  \param data nviz data
+
+  \return number of loaded vectors
+*/
+int load_vector_points(const struct GParams *params,
+		       nv_data *data)
+{
+    return load_vectors(params->elev_map, params->elev_const,
+			params->vpoints, MAP_OBJ_SITE, data);
+}
+
+int load_vectors(const struct Option *elev_map, const struct Option *elev_const,
+		 const struct Option *vect, int map_obj_type, nv_data *data)
 {
     int i;
     int nvects;
 
     char *mapset;
 
-    if (!params->elev_map->answer && GS_num_surfs() == 0) { /* load base surface if no loaded */
+    if ((!elev_map->answer || elev_const->answer) &&
+	GS_num_surfs() == 0) { /* load base surface if no loaded */
 	int *surf_list, nsurf;
 	
 	Nviz_new_map_obj(MAP_OBJ_SURF, NULL, 0.0, data);
@@ -48,14 +74,14 @@ int load_vectors(const struct GParams *params,
 
     nvects = 0;
 
-    for (i = 0; params->vector->answers[i]; i++) {
-	mapset = G_find_vector2 (params->vector->answers[i], "");
+    for (i = 0; vect->answers[i]; i++) {
+	mapset = G_find_vector2 (vect->answers[i], "");
 	if (mapset == NULL) {
-	    G_fatal_error(_("Vector map <%s> not found"),
-			  params->vector->answers[i]);
+	  G_fatal_error(_("Vector map <%s> not found"),
+			vect->answers[i]);
 	}
-	Nviz_new_map_obj(MAP_OBJ_VECT,
-			 G_fully_qualified_name(params->vector->answers[i], mapset), 0.0,
+	Nviz_new_map_obj(map_obj_type,
+			 G_fully_qualified_name(vect->answers[i], mapset), 0.0,
 			 data);
 
 	nvects++;
@@ -65,14 +91,14 @@ int load_vectors(const struct GParams *params,
 }
 
 /*!
-  \brief Set vector mode
+  \brief Set vector lines mode
 
   \param params parameters
 
   \return 1 on success
   \return 0 on failure
 */
-int set_lines_attrb(const struct GParams *params)
+int vlines_set_attrb(const struct GParams *params)
 {
     int i, color, width, flat, height;
     int *vect_list, nvects;
@@ -81,9 +107,9 @@ int set_lines_attrb(const struct GParams *params)
     
     for(i = 0; i < nvects; i++) {
 	/* mode -- use memory by default */
-	color =  Nviz_color_from_str(params->line_color->answers[i]);
-	width = atoi(params->line_width->answers[i]);
-	if (strcmp(params->line_mode->answers[i], "flat") == 0)
+	color =  Nviz_color_from_str(params->vline_color->answers[i]);
+	width = atoi(params->vline_width->answers[i]);
+	if (strcmp(params->vline_mode->answers[i], "flat") == 0)
 	    flat = 1;
 	else
 	    flat = 0;
@@ -91,10 +117,23 @@ int set_lines_attrb(const struct GParams *params)
 	    return 0;
 
 	/* height */
-	height = atoi(params->line_height->answers[i]);
+	height = atoi(params->vline_height->answers[i]);
 	if (height > 0)
 	    GV_set_trans(vect_list[i], 0.0, 0.0, height);
     }
 
+    return 1;
+}
+
+/*!
+  \brief Set vector points mode
+
+  \param params parameters
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int vpoints_set_attrb(const struct GParams *params)
+{
     return 1;
 }

@@ -91,7 +91,7 @@ int Nviz_new_map_obj(int type, const char *name, float value,
     /* vector overlay */
     else if (type == MAP_OBJ_VECT) {
 	if (GV_num_vects() >= MAX_VECTS) {
-	    G_warning (_("Maximum vectors loaded!"));
+	    G_warning (_("Maximum vector line maps loaded!"));
 	    return -1;
 	}
 
@@ -120,7 +120,7 @@ int Nviz_new_map_obj(int type, const char *name, float value,
     else if (type == MAP_OBJ_SITE) {
 	geosite * gp;
 	if (GP_num_sites() >= MAX_SITES) {
-	    G_warning (_("Maximum point vectors loaded!"));
+	    G_warning (_("Maximum vector point maps loaded!"));
 	    return -1;
 	}
 	
@@ -137,17 +137,15 @@ int Nviz_new_map_obj(int type, const char *name, float value,
 	/* load vector points */
 	if (0 > GP_load_site(new_id, name)) {
 	    GP_delete_site(new_id);
-	    G_warning (_("Error loading point vector map <%s>"), name);
+	    G_warning (_("Error loading vector map <%s>"), name);
 	    return -1;
 	}
 
 	/* initialize display parameters */
 	GP_set_sitemode(new_id, ST_ATT_NONE, 0xFF0000, 2, 100, ST_X);
 	surf_list = GS_get_surf_list(&num_surfs);
-	if (num_surfs) {
-	    for (i = 0; i < num_surfs; i++) {
-		GP_select_surf(new_id, surf_list[i]);
-	    }
+	for (i = 0; i < num_surfs; i++) {
+	    GP_select_surf(new_id, surf_list[i]);
 	}
 	G_free (surf_list);
     }
@@ -291,9 +289,9 @@ int Nviz_set_attr(int id, int type, int desc, int src,
 }
 
 /*!
-  \brief Set default map object attributes
+  \brief Set default surface attributes
 */
-void Nviz_set_attr_default()
+void Nviz_set_surface_attr_default()
 {
     float defs[MAX_ATTS];
     

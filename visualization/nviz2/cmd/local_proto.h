@@ -12,8 +12,10 @@ struct GParams {
     *emit_map, *emit_const,
   /* draw */
     *mode, *res_fine, *res_coarse, *style, *shade, *wire_color,
-  /* vector */
-    *vector, *line_width, *line_color, *line_mode, *line_height,
+  /* vector lines */
+    *vlines, *vline_width, *vline_color, *vline_mode, *vline_height,
+  /* vector points */
+    *vpoints, *vpoint_size, *vpoint_symbol, *vpoint_color,
   /* misc */
     *exag, *bgcolor, 
   /* viewpoint */
@@ -25,18 +27,21 @@ struct GParams {
 /* args.c */
 void parse_command(int, char**, struct GParams *);
 int color_from_cmd(const char *);
-void opt_get_num_answers(const struct Option *, int *, int *);
+int opt_get_num_answers(const struct Option *);
 void check_parameters(const struct GParams *);
 
 /* surface.c */
 int load_rasters(const struct GParams *,
 		 nv_data *);
-void set_draw_mode(const struct GParams *);
+void surface_set_draw_mode(const struct GParams *);
 
 /* vector.c */
-int load_vectors(const struct GParams *,
-		 nv_data *);
-int set_lines_attrb(const struct GParams *);
+int load_vector_lines(const struct GParams *,
+		      nv_data *);
+int load_vector_points(const struct GParams *,
+		       nv_data *);
+int vlines_set_attrb(const struct GParams *);
+int vpoints_set_attrb(const struct GParams *);
 
 /* write_img.c */
 int write_img(const char *, int);
