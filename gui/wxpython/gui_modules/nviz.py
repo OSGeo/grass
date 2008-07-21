@@ -403,11 +403,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def UnloadRaster(self, id):
         """Unload raster map"""
+        idx = self.layers['raster']['id'].index(id)
+        layerName = self.layers['raster']['name']
+        
         if self.nvizClass.UnloadSurface(id) == 0:
             raise gcmd.NvizError(parent=self.parent,
-                                 message=_("Unable to unload raster map <%s>" % layer.name))
+                                 message=_("Unable to unload raster map <%s>" % layerName))
 
-        idx = self.layers['raster']['id'].index(id)
         del self.layers['raster']['name'][idx]
         del self.layers['raster']['id'][idx]
 
@@ -523,12 +525,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                  'desc' : desc,
                                  'all' : False }
 
-    def LoadVector(self, layer):
-        """Load vector map overlay"""
+    def LoadVector(self, layer, points=False):
+        """Load vector map overlay
+
+        @param layer map layer instance
+        @param points if True load points instead of lines
+        """
         if layer.type != 'vector':
             return
 
-        id = self.nvizClass.LoadVector(str(layer.name))
+        id = self.nvizClass.LoadVector(str(layer.name), points)
+        print id, points
         if id < 0:
             raise gcmd.NvizError(parent=self.parent,
                                  message=_("Unable to load vector map <%s>" % layer.name))
@@ -538,23 +545,24 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         return id
 
-    def UnloadVector(self, id):
-        """Unload vector map overlay"""
-        if self.nvizClass.UnloadVector(id) == 0:
-            raise gcmd.NvizError(parent=self.parent,
-                                 message=_("Unable to unload vector map <%s>" % layer.name))
+    def UnloadVector(self, id, points=False):
+        """Unload vector map overlay
+
+        @param id data layer id
+        @param points if True unload points layer instead of lines layer
+        """
+        ret = self.nvizClass.UnloadVector(id, points)
 
         idx = self.layers['vector']['id'].index(id)
+        layerName = self.layers['vector']['name'][idx]
+
+        if ret == 0:
+            raise gcmd.NvizError(parent=self.parent,
+                                 message=_("Unable to unload vector map <%s>" % layerName))
+
+        
         del self.layers['vector']['name'][idx]
         del self.layers['vector']['id'][idx]
-
-        if hasattr(self.parent, "nvizToolWin"):
-            toolWin = self.parent.nvizToolWin
-            # remove vector page
-            if toolWin.notebook.GetSelection() == toolWin.page['vector']['id']:
-                toolWin.notebook.RemovePage(toolWin.page['vector']['id'])
-                toolWin.page['vector']['id'] = -1
-                toolWin.page['settings']['id'] = 1
 
     def SetVectorDefaultProp(self, data):
         """Set default vector properties"""
@@ -1284,7 +1292,10 @@ class NvizToolWindow(wx.Frame):
         showLines = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                 label=_("Show vector lines"))
         self.win['vector']['lines']['show'] = showLines.GetId()
-        showLines.SetValue(True)
+        showLines.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                            subkey=['lines', 'show']))
+        self.UpdateVectorShow(showLines.GetId(),
+                              showLines.IsChecked())
         showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
         pageSizer.Add(item=showLines, proportion=0,
@@ -1378,8 +1389,11 @@ class NvizToolWindow(wx.Frame):
         showPoints = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                 label=_("Show vector points"))
         self.win['vector']['points']['show'] = showPoints.GetId()
-        showPoints.SetValue(False) # disable by default
-        showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
+        showPoints.SetValue(UserSettings.Get(group='nviz', key='vector',
+                                             subkey=['points', 'show']))
+        self.UpdateVectorShow(showPoints.GetId(),
+                              showPoints.IsChecked())
+        showPoints.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
         pageSizer.Add(item=showPoints, proportion=0,
                       flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
@@ -1695,6 +1709,7 @@ class NvizToolWindow(wx.Frame):
                                  label=_("Show points"))
         showPoints.SetValue(UserSettings.Get(group='nviz', key='vector',
                                              subkey=['points', 'show']))
+        self.win['settings']['vector']['points']['show'] = showPoints.GetId()
         gridSizer.Add(item=showPoints, pos=(row, 0))
 
         # icon size
@@ -1720,17 +1735,19 @@ class NvizToolWindow(wx.Frame):
         isym = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
                           choices=UserSettings.Get(group='nviz', key='vector',
                                                    subkey=['points', 'icon'], internal=True))
+        isym.SetName("selection")
         self.win['settings']['vector']['points']['symbol'] = isym.GetId()
         isym.SetSelection(UserSettings.Get(group='nviz', key='vector',
                                            subkey=['points', 'symbol']))
         gridSizer.Add(item=isym, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(row, 3))
 
-        # icon symbol
+        # icon color
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("color:")),
                       pos=(row, 4), flag=wx.ALIGN_CENTER_VERTICAL)
         icolor = csel.ColourSelect(panel, id=wx.ID_ANY)
+        icolor.SetName("color")
         self.win['settings']['vector']['points']['color'] = icolor.GetId()
         icolor.SetColour(UserSettings.Get(group='nviz', key='vector',
                                           subkey=['points', 'color']))
@@ -1956,10 +1973,16 @@ class NvizToolWindow(wx.Frame):
         for subgroup, key in settings.iteritems(): # view, surface, vector...
             for subkey, value in key.iteritems():
                 for subvalue in value.keys():
-                    # print subgroup, subkey, subvalue, value
-                    win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
+                    # print subgroup, subkey, subvalue
+                    try: # TODO
+                        win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
+                    except:
+                        continue
+                    
                     if win.GetName() == "selection":
                         value = win.GetSelection()
+                    elif win.GetName() == "color":
+                        value = win.GetColour()
                     else:
                         value = win.GetValue()
                     if subkey == 'pos':
@@ -2238,35 +2261,67 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
-    def OnVectorShow(self, event):
-        """Show vector lines/points"""
-        checked = event.IsChecked()
-        
-        id = event.GetId()
-        sec = None
-        if id == self.win['vector']['lines']['show']:
-            sec = 'lines'
-        elif id == self.win['vector']['points']['show']:
-            sec = 'points'
+    def UpdateVectorShow(self, vecType, enabled):
+        """Enable/disable lines/points widgets
 
-        if sec is None:
-            return
+        @param vecType vector type (lines, points)
+        """
+        if vecType != 'lines' and vecType != 'points':
+            return False
 
-        for win in self.win['vector'][sec].keys():
+        for win in self.win['vector'][vecType].keys():
             if win == 'show':
                 continue
-            if type(self.win['vector'][sec][win]) == type({}):
-                for swin in self.win['vector'][sec][win].keys():
-                    if checked:
-                        self.FindWindowById(self.win['vector'][sec][win][swin]).Enable(True)
+            if type(self.win['vector'][vecType][win]) == type({}):
+                for swin in self.win['vector'][vecType][win].keys():
+                    if enabled:
+                        self.FindWindowById(self.win['vector'][vecType][win][swin]).Enable(True)
                     else:
-                        self.FindWindowById(self.win['vector'][sec][win][swin]).Enable(False)
+                        self.FindWindowById(self.win['vector'][vecType][win][swin]).Enable(False)
             else:
-                if checked:
-                    self.FindWindowById(self.win['vector'][sec][win]).Enable(True)
+                if enabled:
+                    self.FindWindowById(self.win['vector'][vecType][win]).Enable(True)
                 else:
-                    self.FindWindowById(self.win['vector'][sec][win]).Enable(False)
+                    self.FindWindowById(self.win['vector'][vecType][win]).Enable(False)
 
+        return True
+    
+    def OnVectorShow(self, event):
+        """Show vector lines/points"""
+        winId = event.GetId()
+
+        vecType = None
+        if winId == self.win['vector']['lines']['show']:
+            vecType = 'lines'
+        elif winId == self.win['vector']['points']['show']:
+            vecType = 'points'
+
+        if vecType is None:
+            return
+
+        checked = event.IsChecked()
+        mapLayer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(nviz=True)
+        id = data['object']['id']
+
+        if vecType == 'lines':
+            if checked:
+                self.mapWindow.LoadVector(mapLayer)
+            else:
+                self.mapWindow.UnloadVector(id)
+        else: # points
+            if checked:
+                self.mapWindow.LoadVector(mapLayer, points=True)
+            else:
+                self.mapWindow.UnloadVector(id, points=True)
+            
+        self.UpdateVectorShow(vecType, checked)
+        
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+
+        event.Skip()
+    
     def OnVectorDisplay(self, event):
         """Display vector lines on surface/flat"""
         if event.GetSelection() == 0: # surface

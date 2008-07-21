@@ -100,7 +100,7 @@ int Nviz_new_map_obj(int type, const char *name, float value,
 	if (name) {
 	    if (GV_load_vector(new_id, name) < 0) {
 		GV_delete_vector(new_id);
-		G_warning (_("Error loading vector <%s>"), name);
+		G_warning (_("Error loading vector map <%s>"), name);
 		return -1;
 	    }
 	}
@@ -112,6 +112,41 @@ int Nviz_new_map_obj(int type, const char *name, float value,
 	if (num_surfs) {
 	    for (i = 0; i < num_surfs; i++) {
 		GV_select_surf(new_id, surf_list[i]);
+	    }
+	}
+	G_free (surf_list);
+    }
+    /* vector points overlay */
+    else if (type == MAP_OBJ_SITE) {
+	geosite * gp;
+	if (GP_num_sites() >= MAX_SITES) {
+	    G_warning (_("Maximum point vectors loaded!"));
+	    return -1;
+	}
+	
+	new_id = GP_new_site();
+
+	/* initizalize site attributes */
+	/* TODO: move to ogsflib */
+	gp = gp_get_site(new_id);
+
+	for (i = 0; i < GPT_MAX_ATTR; i++)
+	    gp->use_attr[i] = ST_ATT_NONE;
+
+
+	/* load vector points */
+	if (0 > GP_load_site(new_id, name)) {
+	    GP_delete_site(new_id);
+	    G_warning (_("Error loading point vector map <%s>"), name);
+	    return -1;
+	}
+
+	/* initialize display parameters */
+	GP_set_sitemode(new_id, ST_ATT_NONE, 0xFF0000, 2, 100, ST_X);
+	surf_list = GS_get_surf_list(&num_surfs);
+	if (num_surfs) {
+	    for (i = 0; i < num_surfs; i++) {
+		GP_select_surf(new_id, surf_list[i]);
 	    }
 	}
 	G_free (surf_list);

@@ -40,6 +40,7 @@
 #define MAP_OBJ_SURF 1
 #define MAP_OBJ_VOL 2
 #define MAP_OBJ_VECT 3
+#define MAP_OBJ_SITE 4
 
 #define DRAW_COARSE 0
 #define DRAW_FINE 1

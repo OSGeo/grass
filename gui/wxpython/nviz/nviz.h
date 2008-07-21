@@ -60,8 +60,8 @@ public:
     /* load.cpp */
     int LoadSurface(const char*, const char *, const char *);
     int UnloadSurface(int);
-    int LoadVector(const char *);
-    int UnloadVector(int);
+    int LoadVector(const char *, bool);
+    int UnloadVector(int, bool);
 
     /* draw.cpp */
     void Draw(bool);

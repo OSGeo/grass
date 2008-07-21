@@ -852,6 +852,15 @@ class LayerTree(CT.CustomTreeCtrl):
                     self.mapdisplay.MapWindow.UnloadRaster(id)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.UnloadVector(id)
+                    
+                    if hasattr(self.parent, "nvizToolWin"):
+                        toolWin = self.parent.nvizToolWin
+                        # remove vector page
+                        if toolWin.notebook.GetSelection() == toolWin.page['vector']['id']:
+                            toolWin.notebook.RemovePage(toolWin.page['vector']['id'])
+                            toolWin.page['vector']['id'] = -1
+                            toolWin.page['settings']['id'] = 1
+
                 data.pop('object')
                 data.pop('view')
 

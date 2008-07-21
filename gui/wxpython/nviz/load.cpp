@@ -112,11 +112,12 @@ int Nviz::UnloadSurface(int id)
   \brief Load vector map overlay
 
   \param name vector map name
+  \param points if true load 2d points rather then 2d lines
 
   \return object id
   \return -1 on failure
 */
-int Nviz::LoadVector(const char *name)
+int Nviz::LoadVector(const char *name, bool points)
 {
     int id;
     char *mapset;
@@ -133,12 +134,19 @@ int Nviz::LoadVector(const char *name)
     mapset = G_find_vector2 (name, "");
     if (mapset == NULL) {
 	G_warning(_("Vector map <%s> not found"),
-		      name);
+		  name);
     }
 
-    id = Nviz_new_map_obj(MAP_OBJ_VECT,
-		     G_fully_qualified_name(name, mapset), 0.0,
-		     data);
+    if (points) {
+      id = Nviz_new_map_obj(MAP_OBJ_SITE,
+			    G_fully_qualified_name(name, mapset), 0.0,
+			    data);
+    }
+    else {
+      id = Nviz_new_map_obj(MAP_OBJ_VECT,
+			    G_fully_qualified_name(name, mapset), 0.0,
+			    data);
+    }
 
     G_debug(1, "Nviz::LoadVector(): name=%s -> id=%d", name, id);
 
@@ -146,23 +154,34 @@ int Nviz::LoadVector(const char *name)
 }
   
 /*!
-  \brief Unload vector
+  \brief Unload vector set
 
-  \param id surface id
+  \param id vector set id
+  \param points vector points or lines set
 
   \return 1 on success
   \return 0 on failure
 */
-int Nviz::UnloadVector(int id)
+int Nviz::UnloadVector(int id, bool points)
 {
-    if (!GV_vect_exists(id)) {
-	return 0;
-    }
-
     G_debug(1, "Nviz::UnloadVector(): id=%d", id);
 
-    if (GV_delete_vector(id) < 0)
-      return 0;
+    if (points) {
+	if (!GP_site_exists(id)) {
+	    return 0;
+	}
+	
+	if (GP_delete_site(id) < 0)
+	    return 0;
+    }
+    else {
+	if (!GV_vect_exists(id)) {
+	    return 0;
+	}
+	
+	if (GV_delete_vector(id) < 0)
+	    return 0;
+    }
 
     return 1;
 }
