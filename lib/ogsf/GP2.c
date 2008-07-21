@@ -39,12 +39,6 @@ int GP_site_exists(int id)
 {
     int i, found = 0;
 
-#ifdef TRACE_GP_FUNCS
-    {
-	Gs_status("GP_site_exists");
-    }
-#endif
-
     if (NULL == gp_get_site(id)) {
 	return (0);
     }
@@ -54,12 +48,14 @@ int GP_site_exists(int id)
 	    found = 1;
 	}
     }
+    
+    G_debug(3, "GP_site_exists(): found=%d", found);
 
     return (found);
 }
 
 /*!
-  \brief Register new point set
+  \brief Create new point set
 
   \return point set id
   \return -1 on error (number of point sets exceeded)
@@ -68,17 +64,14 @@ int GP_new_site(void)
 {
     geosite *np;
 
-#ifdef TRACE_GP_FUNCS
-    {
-	Gs_status("GP_new_site");
-    }
-#endif
-
     if (Next_site < MAX_SITES) {
 	np = gp_get_new_site();
 	gp_set_defaults(np);
 	Site_ID[Next_site] = np->gsite_id;
 	++Next_site;
+
+	G_debug(3, "GP_new_site() id=%d", np->gsite_id);
+
 	return (np->gsite_id);
     }
 
@@ -86,7 +79,7 @@ int GP_new_site(void)
 }
 
 /*!
-  \brief Get number of available point sets
+  \brief Get number of loaded point sets
 
   \return number of point sets
 */
@@ -139,11 +132,7 @@ int GP_delete_site(int id)
 {
     int i, j, found = 0;
 
-#ifdef TRACE_GP_FUNCS
-    {
-	Gs_status("GP_delete_site");
-    }
-#endif
+    G_debug(3, "GP_delete_site(): id=%d", id);
 
     if (GP_site_exists(id)) {
 	gp_delete_site(id);
@@ -197,8 +186,10 @@ int GP_load_site(int id, const char *filename)
 	strcpy(gp->filename, filename);
     }
 
-    if (gp->points = Gp_load_sites(filename, &(gp->n_sites),
-				   &(gp->has_z), &(gp->has_att))) {
+    gp->points = Gp_load_sites(filename, &(gp->n_sites),
+			       &(gp->has_z), &(gp->has_att));
+
+    if(gp->points) {
 	return (1);
     }
 
@@ -249,14 +240,14 @@ int GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
 }
 
 /*!
-  \brief Set mode for point set
+  \brief Set point set mode
 
   \param id point set id
   \param atmod
-  \param color color value
+  \param color icon color
   \param width 
-  \param size point size
-  \param marker marker symbol
+  \param size icon size
+  \param marker icon symbol
 
   \return -1 on error (point set not found)
 */
@@ -393,11 +384,8 @@ void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geosite *gp;
 
-#ifdef TRACE_GP_FUNCS
-    {
-	Gs_status("GP_set_trans");
-    }
-#endif
+    G_debug(3, "GP_set_trans(): id=%d trans=%f,%f,%f",
+	    id, xtrans, ytrans, ztrans);
 
     gp = gp_get_site(id);
     if (gp) {
@@ -419,12 +407,6 @@ void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geosite *gp;
 
-#ifdef TRACE_GP_FUNCS
-    {
-	Gs_status("GP_get_trans");
-    }
-#endif
-
     gp = gp_get_site(id);
 
     if (gp) {
@@ -432,6 +414,9 @@ void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 	*ytrans = gp->y_trans;
 	*ztrans = gp->z_trans;
     }
+
+    G_debug(3, "GP_get_trans(): id=%d, trans=%f,%f,%f",
+	    id, *xtrans, *ytrans, *ztrans);
 
     return;
 }

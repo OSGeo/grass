@@ -64,9 +64,6 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 	return NULL;
     }
 
-    G_message(_("Loading vector map <%s>..."),
-	      G_fully_qualified_name(grassname, mapset));
-    
     top = gln = (geoline *) G_malloc(sizeof(geoline)); /* G_fatal_error */
     if (!top) {
 	return NULL;
@@ -242,12 +239,13 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
    
     if (!nl) {
 	G_warning (_("No features from vector map <%s> fall within current region"),
-		   grassname);
+		   G_fully_qualified_name(grassname, mapset));
 	return (NULL);
     }
-    
-    G_verbose_message (_("Vector map <%s> loaded (%d features)"),
-		       grassname, nl);
+    else {
+      G_message (_("Vector map <%s> loaded (%d features)"),
+		 grassname, nl);
+    }
     
     *nlines = nl;
     
