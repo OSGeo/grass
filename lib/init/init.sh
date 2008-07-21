@@ -945,10 +945,6 @@ bash|msh|cygwin)
     export HOME
     bashrc="$HOME/.bashrc"
     rm -f "$bashrc"
-    if [ "$sh" != "cygwin" ] ; then
-	# this does not work on cygwin for unknown reasons
-	echo "test -z $PROFILEREAD && . /etc/profile" > "$bashrc"
-    fi
     echo "test -r ~/.alias && . ~/.alias" >> "$bashrc"
     echo "PS1='GRASS GRASS_VERSION_NUMBER ($LOCATION_NAME):\w > '" >> "$bashrc"
     echo "PROMPT_COMMAND=$GISBASE/etc/prompt.sh" >> "$bashrc"
