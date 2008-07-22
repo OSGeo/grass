@@ -59,7 +59,7 @@ wxGUI Nviz extension and CLI-based Nviz module.
 
  - Nviz_set_attr()
 
- - Nviz_set_attr_default()
+ - Nviz_set_surface_attr_default()
 
  - Nviz_unset_attr()
 

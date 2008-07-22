@@ -15,7 +15,7 @@ struct GParams {
   /* vector lines */
     *vlines, *vline_width, *vline_color, *vline_mode, *vline_height,
   /* vector points */
-    *vpoints, *vpoint_size, *vpoint_symbol, *vpoint_color,
+    *vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width,
   /* misc */
     *exag, *bgcolor, 
   /* viewpoint */

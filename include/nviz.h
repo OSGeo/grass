@@ -148,6 +148,8 @@ int Nviz_draw_cplane(nv_data *, int, int);
 /* draw.c */
 int Nviz_draw_all_surf(nv_data *);
 int Nviz_draw_all_vect(nv_data *);
+int Nviz_draw_all_site(nv_data *);
+int Nviz_draw_all_vol(nv_data *);
 int Nviz_draw_all(nv_data *);
 int Nviz_draw_quick(nv_data *);
 
@@ -172,6 +174,7 @@ int Nviz_new_map_obj(int, const char *, float,
 int Nviz_set_attr(int, int, int, int, const char *, float,
 		  nv_data *);
 void Nviz_set_surface_attr_default();
+int Nviz_set_vpoint_attr_default();
 int Nviz_unset_attr(int, int, int);
 
 /* nviz.c */
