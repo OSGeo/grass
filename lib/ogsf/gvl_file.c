@@ -167,7 +167,7 @@ char *gvl_file_get_name(int id)
 {
     int i;
     geovol_file *fvf;
-    static char retstr[NAME_SIZ];
+    static char retstr[GPATH_MAX];
     
     for (i = 0; i < Numfiles; i++) {
 	if (Data[i]->data_id == id) {
@@ -312,7 +312,7 @@ int gvl_file_newh(const char *name, IFLAG file_type)
 	Numfiles++;
 	new->data_id = Cur_id++;
 	
-	strcpy(new->file_name, name);
+	new->file_name = G_store(name);
 	new->file_type = file_type;
 	new->count = 1;
 	new->map = m;
@@ -378,7 +378,10 @@ int gvl_file_free_datah(int id)
 	    } else {
 		close_volfile(fvf->map, fvf->file_type);
 		free_volfile_buffs(fvf);
-		strcpy(fvf->file_name, "");
+
+		G_free(fvf->file_name);
+		fvf->file_name = NULL;
+
 		fvf->data_id = 0;
 		
 		for (j = i; j < (Numfiles - 1); j++) {

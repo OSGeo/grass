@@ -182,9 +182,7 @@ int GP_load_site(int id, const char *filename)
 	gp_free_sitemem(gp);
     }
 
-    if (NAME_SIZ > strlen(filename)) {
-	strcpy(gp->filename, filename);
-    }
+    gp->filename = G_store(filename);
 
     gp->points = Gp_load_sites(filename, &(gp->n_sites),
 			       &(gp->has_z), &(gp->has_att));
@@ -198,6 +196,8 @@ int GP_load_site(int id, const char *filename)
 
 /*!
   \brief Get point set filename
+
+  Note: char array is allocated by G_store()
 
   \param id point set id
   \param[out] filename point set filename
@@ -213,7 +213,7 @@ int GP_get_sitename(int id, char *filename)
 	return (-1);
     }
 
-    strcpy(filename, gp->filename);
+    filename = G_store(gp->filename);
 
     return (1);
 }

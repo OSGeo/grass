@@ -187,6 +187,7 @@ int gv_set_defaults(geovect * gv)
 	return (-1);
     }
 
+    gv->filename = NULL;
     gv->n_lines = gv->n_surfs = gv->use_mem = 0;
     gv->x_trans = gv->y_trans = gv->z_trans = 0.0;
     gv->lines = NULL;
@@ -301,6 +302,9 @@ void gv_free_vectmem(geovect * fv)
 {
     geoline *gln, *tmpln;
 
+    G_free((void *) fv->filename);
+    fv->filename = NULL;
+    
     if (fv->lines) {
 	for (gln = fv->lines; gln;) {
 	    if (gln->dims == 2) {

@@ -66,7 +66,6 @@
 #define CF_USR_CHANGED 0x000010
 #define CF_CHARSCALED  0x000100
 
-#define NAME_SIZ 80
 #define MAX_TF 6
 
 #define MASK_TL 0x10000000
@@ -113,7 +112,7 @@ typedef struct{
     int dims[MAXDIMS];
     int ndims;
     int numbytes;
-    char unique_name[NAME_SIZ];
+    char *unique_name;
     typbuff databuff;
     IFLAG changed;
     int need_reload;
@@ -173,7 +172,7 @@ typedef struct g_vect{
     int flat_val;
     int n_surfs;
     int color, width;
-    char filename[NAME_SIZ];
+    char *filename;
     float x_trans, y_trans, z_trans;
 /* also maybe center & rotate? */
     geoline *lines;
@@ -224,7 +223,7 @@ typedef struct g_site{
 /* ACS_MODIFY OneLine site_attr ************************************************/
     int use_attr[GPT_MAX_ATTR]; /* ST_ATT_COLOR, ST_ATT_MARKER, ST_ATT_SIZE, ST_ATT_NONE, for multiple attr's */
 
-    char filename[NAME_SIZ];
+    char *filename;
     transform attr_trans;
     float size;
     float x_trans, y_trans, z_trans;
@@ -239,7 +238,7 @@ typedef struct
     int data_id; /* id */
     IFLAG file_type; /* file type */
     unsigned int count; /* number of referencies to this file */
-    char file_name[NAME_SIZ]; /* file name */
+    char *file_name; /* file name */
 
     IFLAG data_type;
     void *map; /* pointer to volume file descriptor */

@@ -193,6 +193,7 @@ int gp_set_defaults(geosite * gp)
 
     GS_get_longdim(&dim);
 
+    gp->filename = NULL;
     gp->n_sites = gp->use_z = gp->n_surfs = gp->use_mem = 0;
     gp->x_trans = gp->y_trans = gp->z_trans = 0.0;
     gp->size = dim / 100.;
@@ -338,6 +339,8 @@ void gp_free_sitemem(geosite * fp)
 {
     geopoint *gpt, *tmp;
 
+    G_free((void *) fp->filename);
+    fp->filename = NULL;
     if (fp->points) {
 	for (gpt = fp->points; gpt;) {
 	    if (gpt->cattr) {

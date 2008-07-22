@@ -247,7 +247,7 @@ int gsds_newh(const char *name)
 	    new->dims[i] = 0;
 	}
 
-	strcpy(new->unique_name, name);
+	new->unique_name = G_store(name);
 	new->databuff.fb = NULL;
 	new->databuff.ib = NULL;
 	new->databuff.sb = NULL;
@@ -304,7 +304,7 @@ char *gsds_get_name(int id)
 {
     int i;
     dataset *fds;
-    static char retstr[160];
+    static char retstr[GPATH_MAX];
 
     for (i = 0; i < Numsets; i++) {
 	if (Data[i]->data_id == id) {
@@ -319,7 +319,7 @@ char *gsds_get_name(int id)
 }
 
 /*!
-  \brief ADD
+  \brief Free allocated dataset
 
   \param id
 
@@ -338,7 +338,8 @@ int gsds_free_datah(int id)
 	    found = 1;
 	    fds = Data[i];
 	    free_data_buffs(fds, ATTY_ANY);
-	    strcpy(fds->unique_name, "");
+	    G_free((void *)fds->unique_name);
+	    fds->unique_name = NULL;
 	    fds->data_id = 0;
 
 	    for (j = i; j < (Numsets - 1); j++) {
