@@ -21,6 +21,7 @@ import sys
 import wx
 import wx.combo
 
+import grass
 import globalvar
 import gcmd
 import utils
@@ -131,8 +132,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         with all relevant elements displayed beneath each mapset branch
         """
         # get current mapset
-        cmdlist = ['g.gisenv', 'get=MAPSET']
-        curr_mapset = gcmd.Command(cmdlist).ReadStdOutput()[0]
+        curr_mapset = grass.gisenv()['MAPSET']
         
         # list of mapsets in current location
         if mapsets is None:
@@ -195,12 +195,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 mapsets[i] = mapsets[0]
                 mapsets[0] = curr_mapset
 
+        filesdict = grass.list_grouped(elementdict[element])
+        
         for dir in mapsets:
             dir_node = self.AddItem('Mapset: '+dir)
             self.seltree.SetItemTextColour(dir_node,wx.Colour(50,50,200))
             try:
-                cmdlist = ['g.mlist', 'type=%s' % elementdict[element], 'mapset=%s' % dir]
-                elem_list = gcmd.Command(cmdlist).ReadStdOutput()
+                elem_list = filesdict[dir]
                 elem_list.sort()
                 for elem in elem_list:
                     if elem != '':
