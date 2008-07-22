@@ -1462,8 +1462,7 @@ msgstr "Kann die Ausgabe-Karte nicht schlie√üen."
 #: ../raster3d/r3.out.vtk/main.c:545
 msgid "Error closing 3d raster map, the VTK file may be incomplete."
 msgstr ""
-"Fehler beim Schlie√üen der 3D-Rasterkarte. Die VTK-Datei k√∂nnte unvollst√"
-"§ndig sein."
+"Fehler beim Schlie√üen der 3D-Rasterkarte. Die VTK-Datei k√∂nnte unvollst√§ndig sein."
 
 #: ../raster3d/r3.out.vtk/main.c:560 ../raster/r.out.vtk/main.c:390
 msgid "Error closing VTK-ASCII file"
@@ -6213,8 +6212,7 @@ msgstr ""
 #: ../raster/r.null/null.c:86
 msgid "Create NULL-value bitmap file validating all data cells"
 msgstr ""
-"Erzeuge eine Null-Wert Bitmap Datei, die alle Daten-Zellen f√ºr g√ºltig erkl√"
-"§rt."
+"Erzeuge eine Null-Wert Bitmap Datei, die alle Daten-Zellen f√ºr g√ºltig erkl√§rt."
 
 #: ../raster/r.null/null.c:90
 #, fuzzy
@@ -7405,8 +7403,7 @@ msgstr "Methode der objektbasierten Statistik."
 #: ../raster/r.statistics/main.c:65
 msgid "Resultant raster map (not used with 'distribution')"
 msgstr ""
-"Resultierende Rasterkarte (wird nicht benutzt, wenn Methode 'Verteilung' gew√"
-"§hlt wurde)."
+"Resultierende Rasterkarte (wird nicht benutzt, wenn Methode 'Verteilung' gew√§hlt wurde)."
 
 #: ../raster/r.statistics/main.c:78 ../raster/r.statistics/main.c:84
 msgid "This module currently only works for integer (CELL) maps"
@@ -7723,8 +7720,7 @@ msgstr "Keine Karte erstellt."
 #: ../raster/r.grow2/main.c:129
 msgid "Generates a raster map layer with contiguous areas grown by one cell."
 msgstr ""
-"Erzeugt eine Rasterkarte mit kontinuierlich um eine Zelle gewachsenen Fl√"
-"§chen."
+"Erzeugt eine Rasterkarte mit kontinuierlich um eine Zelle gewachsenen Fl√§chen."
 
 #: ../raster/r.grow2/main.c:140
 msgid "Radius of buffer in raster cells"
@@ -14264,14 +14260,12 @@ msgstr ""
 #: ../raster/wildfire/r.ros/main.c:236
 msgid "Name of raster map containing the 10-HOUR fuel MOISTURE (%)"
 msgstr ""
-"Name der Rasterkarte, die die 10-Stunden Feuchtigkeit von Brennstoff enth√"
-"§lt (%)."
+"Name der Rasterkarte, die die 10-Stunden Feuchtigkeit von Brennstoff enth√§lt (%)."
 
 #: ../raster/wildfire/r.ros/main.c:242
 msgid "Name of raster map containing the 100-HOUR fuel MOISTURE (%)"
 msgstr ""
-"Name der Rasterkarte, die die 100-Stunden Feuchtigkeit von Brennstoff enth√"
-"§lt (%)."
+"Name der Rasterkarte, die die 100-Stunden Feuchtigkeit von Brennstoff enth√§lt (%)."
 
 #: ../raster/wildfire/r.ros/main.c:249
 msgid "Name of raster map containing LIVE fuel MOISTURE (%)"
@@ -14426,8 +14420,7 @@ msgid ""
 "Name of raster map containing fine Fuel MOISture of the cell receiving a "
 "spotting firebrand (%) (required w/ -s)"
 msgstr ""
-"Name der Rasterkarte, die die genaue Brennstofffeuchtigkeit einer Zelle enth√"
-"§lt, die von einem Brand erreicht wird (%) (ben√∂tigt w/-s)."
+"Name der Rasterkarte, die die genaue Brennstofffeuchtigkeit einer Zelle enth√§lt, die von einem Brand erreicht wird (%) (ben√∂tigt w/-s)."
 
 #: ../raster/wildfire/r.spread/main.c:176
 msgid "Basic sampling window SIZE needed to meet certain accuracy (3)"
@@ -24890,7 +24883,7 @@ msgstr "Aktuelles Fenster nicht einstellbar."
 
 #: ../display/d.rast.edit/cell.c:43
 msgid "Can't clear current graphics window"
-msgstr "Kann aktuelles Grafik-Fenster nicht s‰ubern."
+msgstr "Kann aktuelles Grafik-Fenster nicht s√§ubern."
 
 #: ../display/d.rast.edit/cell.c:84 ../display/d.rast/display.c:76
 msgid "Cannot use current window"
@@ -27237,7 +27230,7 @@ msgstr ""
 #: ../display/d.frame/select.c:53
 #, c-format
 msgid "Left:   Select frame\n"
-msgstr "Links:   Fenster (frame) ausw‰hlen.\n"
+msgstr "Links:   Fenster (frame) ausw√§hlen.\n"
 
 #: ../display/d.frame/select.c:54
 #, c-format
@@ -27289,7 +27282,7 @@ msgstr "Name"
 
 #: ../display/d.frame/frame.c:98
 msgid "Frame to be created/selected"
-msgstr "Fenster (frame), das erstellt/ausgew‰hlt werden soll."
+msgstr "Fenster (frame), das erstellt/ausgew√§hlt werden soll."
 
 #: ../display/d.frame/frame.c:102
 msgid "bottom,top,left,right"
@@ -27880,8 +27873,7 @@ msgstr "Datei mit den Projektionsinformationen."
 #: ../general/g.proj/main.c:112
 msgid "ASCII file containing a WKT projection description (- for stdin)"
 msgstr ""
-"ASCII-Datei die eine einzige Zeile mit WKT Projektionsinformationen enth√"
-"§lt. (- f√ºr stdin)."
+"ASCII-Datei die eine einzige Zeile mit WKT Projektionsinformationen enth√§lt. (- f√ºr stdin)."
 
 #: ../general/g.proj/main.c:121
 msgid "PROJ.4 projection description (- for stdin)"
