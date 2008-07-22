@@ -365,6 +365,18 @@ void args_vpoint(struct GParams *params)
     params->vpoint_size->options = "1-1000";
     params->vpoint_size->answer = "100";
 
+    /* point width */
+    params->vpoint_width = G_define_option();
+    params->vpoint_width->key = "vpoint_width";
+    params->vpoint_width->key_desc = "value";
+    params->vpoint_width->type = TYPE_INTEGER;
+    params->vpoint_width->required = NO;
+    params->vpoint_width->multiple = YES;
+    params->vpoint_width->description = _("Icon width");
+    params->vpoint_width->guisection = _("Vector points");
+    params->vpoint_width->options = "1-1000";
+    params->vpoint_width->answer = "2";
+
     /* point color */
     params->vpoint_color = G_define_standard_option(G_OPT_C_FG);
     params->vpoint_color->multiple = YES;
@@ -375,16 +387,16 @@ void args_vpoint(struct GParams *params)
     params->vpoint_color->guisection = _("Vector points");
 
     /* point mode */
-    params->vpoint_symbol = G_define_option();
-    params->vpoint_symbol->key = "vpoint_symbol";
-    params->vpoint_symbol->key_desc = "string";
-    params->vpoint_symbol->type = TYPE_STRING;
-    params->vpoint_symbol->required = YES;
-    params->vpoint_symbol->multiple = YES;
-    params->vpoint_symbol->description = _("Icon symbol");
-    params->vpoint_symbol->options = "x,sphere,diamond,cube,box,gyro,aster,histogram";
-    params->vpoint_symbol->answer = "sphere";
-    params->vpoint_symbol->guisection = _("Vector points");
+    params->vpoint_marker = G_define_option();
+    params->vpoint_marker->key = "vpoint_marker";
+    params->vpoint_marker->key_desc = "string";
+    params->vpoint_marker->type = TYPE_STRING;
+    params->vpoint_marker->required = YES;
+    params->vpoint_marker->multiple = YES;
+    params->vpoint_marker->description = _("Icon marker");
+    params->vpoint_marker->options = "x,sphere,diamond,cube,box,gyro,aster,histogram";
+    params->vpoint_marker->answer = "sphere";
+    params->vpoint_marker->guisection = _("Vector points");
 
     return;
 }

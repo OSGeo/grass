@@ -118,7 +118,6 @@ int Nviz_new_map_obj(int type, const char *name, float value,
     }
     /* vector points overlay */
     else if (type == MAP_OBJ_SITE) {
-	geosite * gp;
 	if (GP_num_sites() >= MAX_SITES) {
 	    G_warning (_("Maximum vector point maps loaded!"));
 	    return -1;
@@ -127,12 +126,7 @@ int Nviz_new_map_obj(int type, const char *name, float value,
 	new_id = GP_new_site();
 
 	/* initizalize site attributes */
-	/* TODO: move to ogsflib */
-	gp = gp_get_site(new_id);
-
-	for (i = 0; i < GPT_MAX_ATTR; i++)
-	    gp->use_attr[i] = ST_ATT_NONE;
-
+	Nviz_set_vpoint_attr_default(new_id);
 
 	/* load vector points */
 	if (0 > GP_load_site(new_id, name)) {
@@ -305,6 +299,30 @@ void Nviz_set_surface_attr_default()
     GS_set_att_defaults(defs, defs);
 
     return;
+}
+
+/*!
+  \brief Set default vector point attributes
+
+  \param id vector point set id
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz_set_vpoint_attr_default(int id)
+{
+    int i;
+    geosite * gp;
+    
+    gp = gp_get_site(id);
+
+    if (!gp) 
+	return 0;
+
+    for (i = 0; i < GPT_MAX_ATTR; i++)
+	gp->use_attr[i] = ST_ATT_NONE;
+
+    return 1;
 }
 
 /*!

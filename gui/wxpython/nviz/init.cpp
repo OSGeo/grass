@@ -75,7 +75,7 @@ void Nviz::InitView()
     Nviz_init_data(data);
 
     /* define default attributes for map objects */
-    Nviz_set_attr_default();
+    Nviz_set_surface_attr_default();
     /* set background color */
     Nviz_set_bgcolor(data, Nviz_color_from_str("white")); /* TODO */
 

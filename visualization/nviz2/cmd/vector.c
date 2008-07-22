@@ -135,5 +135,42 @@ int vlines_set_attrb(const struct GParams *params)
 */
 int vpoints_set_attrb(const struct GParams *params)
 {
+    int i;
+    int *site_list, nsites;
+    int marker, color, width;
+    float size;
+    char *marker_str;
+
+    site_list = GP_get_site_list(&nsites);
+    
+    for(i = 0; i < nsites; i++) {
+	color =  Nviz_color_from_str(params->vpoint_color->answers[i]);
+	size = atof(params->vpoint_size->answers[i]);
+	width = atoi(params->vpoint_width->answers[i]);
+	marker_str = params->vpoint_marker->answers[i];
+
+	if (strcmp(marker_str, "x") == 0)
+	    marker = ST_X;
+	else if (strcmp(marker_str, "sphere") == 0)
+	    marker = ST_SPHERE;
+	else if (strcmp(marker_str, "diamond") == 0)
+	    marker = ST_DIAMOND;
+	else if (strcmp(marker_str, "cube") == 0)
+	    marker = ST_CUBE;
+	else if (strcmp(marker_str, "box") == 0)
+	    marker = ST_BOX;
+	else if (strcmp(marker_str, "gyro") == 0)
+	    marker = ST_GYRO;
+	else if (strcmp(marker_str, "aster") == 0)
+	    marker = ST_ASTER;
+	else if (strcmp(marker_str, "histogram") == 0)
+	    marker = ST_HISTOGRAM;
+	else
+	    G_fatal_error(_("Unknow icon marker"));
+
+	GP_set_sitemode(site_list[i], ST_ATT_NONE,
+			color, width, size, marker);
+    }
+	
     return 1;
 }
