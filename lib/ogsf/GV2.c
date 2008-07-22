@@ -183,9 +183,7 @@ int GV_load_vector(int id, const char *filename)
 	gv_free_vectmem(gv);
     }
 
-    if (NAME_SIZ > strlen(filename)) {
-	strcpy(gv->filename, filename);
-    }
+    gv->filename = G_store(filename);
 
     if ((gv->lines = Gv_load_vect(filename, &(gv->n_lines)))) {
 	return (1);
@@ -196,6 +194,8 @@ int GV_load_vector(int id, const char *filename)
 
 /*!
   \brief Get vector map name
+
+  Note: char array is allocated by G_store()
 
   \param id vector set id
   \param filename filename
@@ -211,7 +211,7 @@ int GV_get_vectname(int id, char *filename)
 	return (-1);
     }
 
-    strcpy(filename, gv->filename);
+    filename = G_store(gv->filename);
 
     return (1);
 }
