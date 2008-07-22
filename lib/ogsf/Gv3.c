@@ -60,7 +60,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     Vect_set_open_level (2); 
     if (Vect_open_old (&map, grassname, "") == -1) {
 	G_warning (_("Unable to open vector map <%s>"),
-		   grassname);
+		   G_fully_qualified_name(grassname, mapset));
 	return NULL;
     }
 
@@ -244,7 +244,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     }
     else {
       G_message (_("Vector map <%s> loaded (%d features)"),
-		 grassname, nl);
+		 G_fully_qualified_name(grassname, mapset), nl);
     }
     
     *nlines = nl;
