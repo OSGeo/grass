@@ -426,6 +426,9 @@ class WriteWorkspaceFile(object):
         for attrb in data.iterkeys():
             if len(data[attrb]) < 1: # skip empty attributes
                 continue
+            if attrb == 'object':
+                continue
+            
             for name in data[attrb].iterkeys():
                 # surface attribute
                 if attrb == 'attribute':

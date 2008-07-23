@@ -142,6 +142,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         dc = wx.PaintDC(self)
         self.SetCurrent()
+        
         if not self.init:
             self.nvizClass.InitView()
 
@@ -343,13 +344,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         while(len(listOfItems) > 0):
             item = listOfItems.pop()
             type = self.tree.GetPyData(item)[0]['type']
+            
+            try:
+                if type == 'raster':
+                    self.LoadRaster(item)
+            except gcmd.NvizError, e:
+                print >> sys.stderr, "Nviz: %s" % (self.nvizClass.GetErrorMsg())
+                print >> sys.stderr, "Nviz: " + e.message
 
-            if type == 'raster':
-                self.LoadRaster(item)
+            try:
+                if type == 'vector':
+                    self.LoadVector(item)
+            except gcmd.NvizError, e:
+                print >> sys.stderr, "Nviz: %s" % (self.nvizClass.GetErrorMsg())
+                print >> sys.stderr, "Nviz: " + e.message
 
-            elif type == 'vector':
-                self.LoadVector(item)
-                
         stop = time.time()
         
         Debug.msg(3, "GLWindow.LoadDataLayers(): time=%f" % (stop-start))
@@ -402,7 +411,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = self.nvizClass.LoadSurface(str(layer.name), None, None)
         if id < 0:
             raise gcmd.NvizError(parent=self.parent,
-                                 message=_("Unable to load raster map <%s>" % layer.name))
+                                 message=_("Raster map <%s> not loaded" % layer.name))
         
         self.layers['raster']['name'].append(layer.name)
         self.layers['raster']['id'].append(id)
@@ -587,7 +596,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
             if id < 0:
                 raise gcmd.NvizError(parent=self.parent,
-                                     message=_("Unable to load vector map <%s>" % layer.name))
+                                     message=_("Vector map <%s> (%s) not loaded" % \
+                                                   (layer.name, type)))
 
             self.layers['v' + type]['name'].append(layer.name)
             self.layers['v'  + type]['id'].append(id)

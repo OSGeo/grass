@@ -19,6 +19,8 @@
 #include "nviz.h"
 
 static void swap_gl();
+static int print_error(const char *, const int);
+static std::string *error;
 
 /*!
   \brief Initialize Nviz class instance
@@ -27,6 +29,9 @@ Nviz::Nviz()
 {
     G_gisinit(""); /* GRASS functions */
 
+    error = new std::string();
+
+    G_set_error_routine(&print_error);
     G_set_verbose(0); // TODO: read progress info
 
     GS_libinit();
@@ -51,6 +56,8 @@ Nviz::~Nviz()
 
     data = NULL;
     glCanvas = NULL;
+
+    delete error;
 }
 
 /*!
@@ -126,4 +133,25 @@ void Nviz::SetBgColor(const char *color_str)
     data->bgcolor = Nviz_color_from_str(color_str);
 
     return;
+}
+
+std::string Nviz::GetErrorMsg()
+{
+    if (error) {
+	std::string retStr(*error);
+	error->clear();
+	return retStr;
+    }
+
+    return std::string();
+}
+
+int print_error(const char *msg, const int type)
+{
+    if (error) {
+	error->append(msg);
+	error->append("\n");
+    }
+
+    return 0;
 }
