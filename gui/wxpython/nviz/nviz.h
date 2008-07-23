@@ -1,7 +1,6 @@
 #ifndef WXNVIZ_H
 #define WXNVIZ_H
 
-#include <string>
 #include <vector>
 
 extern "C" {
@@ -25,6 +24,8 @@ extern "C" {
 
 #include <wx/glcanvas.h>
 
+#include <Python.h>
+
 class Nviz
 {
 private:
@@ -37,12 +38,10 @@ private:
 
 public:
     /* constructor */
-    Nviz();
+    Nviz(PyObject *);
 
     /* destructor */
     ~Nviz();
-
-    std::string GetErrorMsg();
 
     /* change_view.cpp */
     int ResizeWindow(int, int);

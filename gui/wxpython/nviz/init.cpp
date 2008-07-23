@@ -20,16 +20,16 @@
 
 static void swap_gl();
 static int print_error(const char *, const int);
-static std::string *error;
+static PyObject *logStream;
 
 /*!
   \brief Initialize Nviz class instance
 */
-Nviz::Nviz()
+Nviz::Nviz(PyObject *log)
 {
     G_gisinit(""); /* GRASS functions */
 
-    error = new std::string();
+    logStream = log;
 
     G_set_error_routine(&print_error);
     G_set_verbose(0); // TODO: read progress info
@@ -57,7 +57,7 @@ Nviz::~Nviz()
     data = NULL;
     glCanvas = NULL;
 
-    delete error;
+    logStream = NULL;
 }
 
 /*!
@@ -135,22 +135,19 @@ void Nviz::SetBgColor(const char *color_str)
     return;
 }
 
-std::string Nviz::GetErrorMsg()
-{
-    if (error) {
-	std::string retStr(*error);
-	error->clear();
-	return retStr;
-    }
-
-    return std::string();
-}
-
 int print_error(const char *msg, const int type)
 {
-    if (error) {
-	error->append(msg);
-	error->append("\n");
+    char *fmsg;
+
+    if (logStream) {
+	fmsg = (char *) G_malloc (strlen(msg) + 6);
+	sprintf (fmsg, "Nviz: %s", msg);
+    
+	PyFile_WriteString(fmsg, logStream);
+	G_free((void *) fmsg);
+    }
+    else {
+	fprintf(stderr, "Nviz: %s\n", msg);
     }
 
     return 0;

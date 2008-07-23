@@ -94,7 +94,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # create nviz instance
         #
-        self.nvizClass = wxnviz.Nviz()
+        self.nvizClass = wxnviz.Nviz(sys.stderr)
 
         #
         # set current display
@@ -349,14 +349,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if type == 'raster':
                     self.LoadRaster(item)
             except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz: %s" % (self.nvizClass.GetErrorMsg())
                 print >> sys.stderr, "Nviz: " + e.message
 
             try:
                 if type == 'vector':
                     self.LoadVector(item)
             except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz: %s" % (self.nvizClass.GetErrorMsg())
                 print >> sys.stderr, "Nviz: " + e.message
 
         stop = time.time()
