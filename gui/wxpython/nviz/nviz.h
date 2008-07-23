@@ -64,7 +64,7 @@ public:
     int UnloadVector(int, bool);
 
     /* draw.cpp */
-    void Draw(bool);
+    void Draw(bool, bool, bool);
     void EraseMap();
 
     /* surface.cpp */

@@ -78,7 +78,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.parent = parent # MapFrame
 
         self.init = False
-        self.render = True # render in full resolution
+        # render mode 
+        self.render = { 'quick' : False,
+                        # do not render vector lines in quick mode
+                        'vlines' : False,
+                        'vpoints' : False }
 
         # list of loaded map layers
         self.layers = {}
@@ -239,7 +243,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #glRotatef((self.y - self.lastY) * yScale, 1.0, 0.0, 0.0);
         #glRotatef((self.x - self.lastX) * xScale, 0.0, 1.0, 0.0);
 
-        if self.render:
+        if self.render['quick'] is False:
             self.parent.onRenderGauge.Show()
             self.parent.onRenderGauge.SetRange(2)
             self.parent.onRenderGauge.SetValue(0)
@@ -256,12 +260,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
             self.update.remove('view')
 
-        if self.render is True:
+        if self.render['quick'] is False:
             self.parent.onRenderGauge.SetValue(1)
             wx.Yield()
-            self.nvizClass.Draw(False)
-        elif self.render is False:
-            self.nvizClass.Draw(True) # quick
+            self.nvizClass.Draw(False, False, False)
+        elif self.render['quick'] is True:
+            # quick
+            self.nvizClass.Draw(True,
+                                self.render['vlines'],
+                                self.render['vpoints'])
         else: # None -> reuse last rendered image
             pass # TODO
 
@@ -269,7 +276,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         stop = time.clock()
 
-        if self.render:
+        if self.render['quick'] is False:
             self.parent.onRenderGauge.SetValue(2)
             # hide process bar
             self.parent.onRenderGauge.Hide()
@@ -279,8 +286,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # self.parent.StatusbarUpdate()
 
-        Debug.msg(3, "GLWindow.UpdateMap(): render=%s, -> time=%g" % \
-                      (self.render, (stop-start)))
+        Debug.msg(3, "GLWindow.UpdateMap(): quick=%d, -> time=%g" % \
+                      (self.render['quick'], (stop-start)))
 
         # print stop-start
 
@@ -2098,12 +2105,12 @@ class NvizToolWindow(wx.Frame):
         if winName == 'z-exag':
             self.mapWindow.update.append('z-exag')
         
-        self.mapWindow.render = False
+        self.mapWindow.render['quick'] = True
         self.mapWindow.Refresh(False)
 
     def OnViewChanged(self, event):
         """View changed, render in full resolution"""
-        self.mapWindow.render = True
+        self.mapWindow.render['quick'] = False
         self.mapWindow.Refresh(False)
 
     def OnViewChangedSpin(self, event):
@@ -2610,12 +2617,21 @@ class NvizToolWindow(wx.Frame):
 
         self.mapWindow.UpdateLayerProperties()
 
-        self.mapWindow.render = False
+        self.mapWindow.render['quick'] = True
+        self.mapWindow.render['v' + vtype] = True
         self.mapWindow.Refresh(False)
     
     def OnVectorHeightFull(self, event):
         """Vector height changed, render in full resolution"""
-        self.mapWindow.render = True
+        id = event.GetId()
+        if id == self.win['vector']['lines']['height']['spin'] or \
+                id == self.win['vector']['lines']['height']['slider']:
+            vtype = 'lines'
+        else:
+            vtype = 'points'
+
+        self.mapWindow.render['quick'] = False
+        self.mapWindow.render['v' + vtype] = False
         self.mapWindow.Refresh(False)
 
     def OnVectorHeightSpin(self, event):
@@ -2895,11 +2911,11 @@ class ViewPositionWindow(wx.Window):
                 self.mapWindow.view['pos']['y'] = y
             self.mapWindow.update.append('view')
 
-            self.mapWindow.render = False
+            self.mapWindow.render['quick'] = True
             self.mapWindow.Refresh(eraseBackground=False)
 
         elif event.LeftUp():
-            self.mapWindow.render = True
+            self.mapWindow.render['quick'] = False
             self.mapWindow.Refresh(eraseBackground=False)
         
         event.Skip()

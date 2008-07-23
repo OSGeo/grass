@@ -238,7 +238,8 @@ int Nviz_draw_all(nv_data *data)
 
   \return 1
 */
-int Nviz_draw_quick(nv_data *data)
+int Nviz_draw_quick(nv_data *data,
+		    int draw_vlines, int draw_vpoints)
 {
     GS_set_draw(GSD_BACK);
     
@@ -249,9 +250,13 @@ int Nviz_draw_quick(nv_data *data)
     /* draw surfaces */
     GS_alldraw_wire();
 
-    /* draw vector */
-    /* GV_alldraw_fastvect(); is broken */
-    /* GV_alldraw_vect(); */
+    /* draw vector lines */
+    if (draw_vlines)
+	GV_alldraw_fastvect();
+
+    /* draw vector points */
+    if (draw_vpoints)
+	GP_alldraw_site();
 
     /*
     vol_list = GVL_get_vol_list(&max);
