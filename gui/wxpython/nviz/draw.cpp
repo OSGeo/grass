@@ -24,15 +24,15 @@
 
   \param quick true for forcing coarse draw mode 
 */
-void Nviz::Draw(bool quick)
+void Nviz::Draw(bool quick, bool quick_vlines, bool quick_vpoints)
 {
     Nviz_draw_cplane(data, -1, -1); // ?
 
     if (quick) {
-	Nviz_draw_quick(data); 
+	Nviz_draw_quick(data, quick_vlines, quick_vpoints); 
     }
     else {
-      Nviz_draw_all (data); 
+	Nviz_draw_all (data); 
     }
 
     G_debug(1, "Nviz::Draw(): quick=%d",

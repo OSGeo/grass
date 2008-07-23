@@ -151,7 +151,7 @@ int Nviz_draw_all_vect(nv_data *);
 int Nviz_draw_all_site(nv_data *);
 int Nviz_draw_all_vol(nv_data *);
 int Nviz_draw_all(nv_data *);
-int Nviz_draw_quick(nv_data *);
+int Nviz_draw_quick(nv_data *, int, int);
 
 /* exag.c */
 int Nviz_get_exag_height(float *, float *, float *);
