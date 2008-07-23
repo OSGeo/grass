@@ -1,3 +1,4 @@
+#include <math.h>
 #include <grass/arraystats.h>
 
 
@@ -5,7 +6,7 @@
 void basic_stats(double *data, int count, struct GASTATS *stats)
 {
     int i = 1;
-    double sum = 0, sumsq = 0;
+    double sum = 0, sumsq = 0, sumabs = 0;
     double dev = 0, dev2 = 0;
 
     stats->count = count;
@@ -14,12 +15,15 @@ void basic_stats(double *data, int count, struct GASTATS *stats)
 
     for (i = 0; i < count; i++) {
 	sum += data[i];
+	sumabs += fabs(data[i]);
 	sumsq += data[i] * data[i];
     }
     stats->sum = sum;
+    stats->sumabs = sumabs;
     stats->sumsq = sumsq;
 
     stats->mean = stats->sum / stats->count;
+    stats->meanabs = stats->sumabs / stats->count;
     for (i = 0; i < count; i++) {
 	dev2 = dev2 + (data[i] - stats->mean) * (data[i] - stats->mean);
 	dev = dev + (data[i] - stats->mean);
