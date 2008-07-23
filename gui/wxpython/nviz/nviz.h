@@ -1,6 +1,7 @@
 #ifndef WXNVIZ_H
 #define WXNVIZ_H
 
+#include <string>
 #include <vector>
 
 extern "C" {
@@ -40,6 +41,8 @@ public:
 
     /* destructor */
     ~Nviz();
+
+    std::string GetErrorMsg();
 
     /* change_view.cpp */
     int ResizeWindow(int, int);
