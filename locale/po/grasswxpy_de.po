@@ -1684,7 +1684,7 @@ msgid ""
 msgstr ""
 "Reinterpoliert und berechnet topographische Analysen basierend auf einer "
 "Eingabe-Rasterkarte in eine neue Rasterkarte unter Benutzung von regularized "
-"splines with tension und GlÃ€ttung (RST)."
+"splines with tension und Glättung (RST)."
 
 #: ../gui/wxpython/gui_modules/menudata.py:577
 #, fuzzy
@@ -2627,7 +2627,7 @@ msgid ""
 "Produces a raster map layer of uniform random deviates whose range can be "
 "expressed by the user."
 msgstr ""
-"Erzeugt eine Rasterkarte mit zufÃ€lligen Werten, die vom Benutzer festgelegt "
+"Erzeugt eine Rasterkarte mit zufälligen Werten, die vom Benutzer festgelegt "
 "werden kÃ¶nnen."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1051
@@ -2638,7 +2638,7 @@ msgstr "Erzeuge zufällige Oberfläche mit räumlicher Abhängigkeit"
 #: ../gui/wxpython/gui_modules/menudata.py:1052
 #, fuzzy
 msgid "Generates random surface(s) with spatial dependence."
-msgstr "Erzeugt zufÃ€llige OberflÃ€che(n) mit rÃ€umlicher AbhÃ€ngigkeit."
+msgstr "Erzeugt zufällige Oberfläche(n) mit räumlicher Abhängigkeit."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1058
 #, fuzzy
@@ -2649,7 +2649,7 @@ msgstr "Zeilen"
 #, fuzzy
 msgid "Produces a vector map layer of specified contours from a raster map layer."
 msgstr ""
-"Erzeugt eine GRASS BinÃ€r-Vektorkarte mit Kontourlinien einer GRASS "
+"Erzeugt eine GRASS Binär-Vektorkarte mit Kontourlinien einer GRASS "
 "Rasterkarte."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1062
@@ -2665,7 +2665,7 @@ msgstr "Raster"
 #: ../gui/wxpython/gui_modules/menudata.py:1065
 #, fuzzy
 msgid "Bilinear interpolation utility for raster map layers."
-msgstr "Bilineares Interpolationswerkzeug fÃŒr Rasterkarten."
+msgstr "Bilineares Interpolationswerkzeug für Rasterkarten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1069
 #, fuzzy
@@ -2684,7 +2684,7 @@ msgstr "Raster"
 #: ../gui/wxpython/gui_modules/menudata.py:1076
 #, fuzzy
 msgid "Surface interpolation utility for raster map layers."
-msgstr "OberflÃ€cheninterpolationswerkzeug fÃŒr Rasterkarten."
+msgstr "Oberflächeninterpolationswerkzeug für Rasterkarten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1080
 #, fuzzy
@@ -2697,7 +2697,7 @@ msgid ""
 "Surface interpolation from vector point data by Inverse Distance Squared "
 "Weighting."
 msgstr ""
-"OberflÃ€cheninterpolation aus Vektor-Punktdaten durch Inverse Distance "
+"Oberflächeninterpolation aus Vektor-Punktdaten durch Inverse Distance "
 "Squared Weighting."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1086
@@ -2709,7 +2709,7 @@ msgstr "Raster"
 #, fuzzy
 msgid "Surface generation program from rasterized contours."
 msgstr ""
-"Erzeugt eine RasteroberflÃ€che aus gerasterten Konturlinien mit "
+"Erzeugt eine Rasteroberfläche aus gerasterten Konturlinien mit "
 "HÃ¶heninformationen."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1091
@@ -2747,7 +2747,7 @@ msgstr "Raster"
 #: ../gui/wxpython/gui_modules/menudata.py:1107
 #, fuzzy
 msgid "Output basic information about a raster map layer."
-msgstr "Gibt grundlegende Informationen ÃŒber eine Rasterkarte aus."
+msgstr "Gibt grundlegende Informationen über eine Rasterkarte aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1111
 msgid "Manage category information"
@@ -2768,7 +2768,7 @@ msgstr "Allgemeine Statistiken"
 #: ../gui/wxpython/gui_modules/menudata.py:1118
 #, fuzzy
 msgid "Generates area statistics for raster map layers."
-msgstr "Erzeugt FlÃ€chenstatistiken fÃŒr Rasterkarten."
+msgstr "Erzeugt Flächenstatistiken für Rasterkarten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1122
 #, fuzzy
@@ -2797,7 +2797,7 @@ msgstr "Raster"
 #: ../gui/wxpython/gui_modules/menudata.py:1133
 #, fuzzy
 msgid "Reports statistics for raster map layers."
-msgstr "Gibt statistische Werte fÃŒr eine Rasterkarte aus."
+msgstr "Gibt statistische Werte für eine Rasterkarte aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1137
 msgid "Statistics for clumped cells"
@@ -2819,7 +2819,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menudata.py:1143
 #, fuzzy
 msgid "Surface area estimation for rasters."
-msgstr "AbschÃ€tzung der GrÃ¶Ãe der RasteroberflÃ€chen."
+msgstr "Abschätzung der GrÃ¶Ã?e der Rasteroberflächen."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1147
 #, fuzzy
@@ -2868,7 +2868,7 @@ msgid ""
 "Outputs a covariance/correlation matrix for user-specified raster map layer"
 "(s)."
 msgstr ""
-"Gibt eine Kovarianz/Korrelations-Matrix fÃŒr (eine) benutzerdefiniert "
+"Gibt eine Kovarianz/Korrelations-Matrix für (eine) benutzerdefiniert "
 "Rasterkarte(n) aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1169
@@ -2921,7 +2921,7 @@ msgstr "Erstelle oder baue Topologie neu"
 #: ../gui/wxpython/gui_modules/menudata.py:1192
 #, fuzzy
 msgid "Creates topology for GRASS vector map."
-msgstr "Erzeugt Paint-Label fÃŒr GRASS Vektordateien und angehÃ€ngte Label."
+msgstr "Erzeugt Paint-Label für GRASS Vektordateien und angehängte Label."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1196
 #, fuzzy
@@ -2931,7 +2931,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/gui_modules/menudata.py:1197
 #, fuzzy
 msgid "Toolset for cleaning topology of vector map."
-msgstr "Werkzeugkasten zum SÃ€ubern der Vektortopologie"
+msgstr "Werkzeugkasten zum Säubern der Vektortopologie"
 
 #: ../gui/wxpython/gui_modules/menudata.py:1201
 #, fuzzy
@@ -2960,7 +2960,7 @@ msgstr "Zentroide"
 #: ../gui/wxpython/gui_modules/menudata.py:1214
 #, fuzzy
 msgid "Adds missing centroids to closed boundaries."
-msgstr "FÃŒge fehlende Zentroide zu geschlossenen FlÃ€chengrenzen (boundaries)."
+msgstr "Füge fehlende Zentroide zu geschlossenen Flächengrenzen (boundaries)."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1219
 msgid "Build polylines"
@@ -3015,7 +3015,7 @@ msgstr "Vektor Raster"
 msgid "Converts vector map to 3D by sampling of elevation raster map."
 msgstr ""
 "Konvertiert 2D Vektorkarte in eine 3D-Vektorkarte, in dem die HÃ¶henkarte "
-"gesamplet wird. StandardmÃ€Ãig wird die Nearest Neighbor-Methode verwendet."
+"gesamplet wird. StandardmäÃ?ig wird die Nearest Neighbor-Methode verwendet."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1246
 #, fuzzy
@@ -3046,7 +3046,7 @@ msgstr "Erzeuge Tabelle"
 #: ../gui/wxpython/gui_modules/menudata.py:1259
 #, fuzzy
 msgid "Creates paint labels for a vector map from attached attributes."
-msgstr "Erzeugt Paint-Label fÃŒr GRASS Vektordateien und angehÃ€ngte Label."
+msgstr "Erzeugt Paint-Label für GRASS Vektordateien und angehängte Label."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1264
 #, fuzzy
@@ -3111,7 +3111,7 @@ msgstr "Vektor abfragen:"
 #, fuzzy
 msgid "Creates a buffer around features of given type (areas must contain centroid)."
 msgstr ""
-"Erzeugt einen Puffer um die angegebenen Geometrietypen (FlÃ€chen mÃŒssen "
+"Erzeugt einen Puffer um die angegebenen Geometrietypen (Flächen müssen "
 "Zentroiden enthalten)."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1297
@@ -3316,7 +3316,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/gui_modules/menudata.py:1394
 #, fuzzy
 msgid "Create a new vector map layer by combining other vector map layers."
-msgstr "Konvertiert eine GRASS-BinÃ€rkarte vom Vektor- in das Rasterformat."
+msgstr "Konvertiert eine GRASS-Binärkarte vom Vektor- in das Rasterformat."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1400
 #, fuzzy
@@ -3362,7 +3362,7 @@ msgstr "Bereich feature für von"
 #: ../gui/wxpython/gui_modules/menudata.py:1421
 #, fuzzy
 msgid "Create a new vector from the current region."
-msgstr "Startpunkt %d ist auÃerhalb der aktuellen Region."
+msgstr "Startpunkt %d ist auÃ?erhalb der aktuellen Region."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1424
 #, fuzzy
@@ -3401,7 +3401,7 @@ msgid ""
 "Creates a Voronoi diagram from an input vector map containing points or "
 "centroids."
 msgstr ""
-"Erstellt eine Rasterkarte und eine Vektorpunktkarte, die zufÃ€llig "
+"Erstellt eine Rasterkarte und eine Vektorpunktkarte, die zufällig "
 "angeordnete Punkte enthalten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1443
@@ -3412,7 +3412,7 @@ msgstr "Erzeuge Punkte"
 #: ../gui/wxpython/gui_modules/menudata.py:1444
 #, fuzzy
 msgid "Creates a GRASS vector map of a user-defined grid."
-msgstr "Konvertiert eine GRASS-BinÃ€rkarte vom Vektor- in das Rasterformat."
+msgstr "Konvertiert eine GRASS-Binärkarte vom Vektor- in das Rasterformat."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1447
 #, fuzzy
@@ -3448,7 +3448,7 @@ msgstr "Erzeuge zufällige Punkte"
 #: ../gui/wxpython/gui_modules/menudata.py:1460
 #, fuzzy
 msgid "Randomly generate a 2D/3D vector points map."
-msgstr "Erzeugt zufÃ€llige 3D/3D GRASS Vektorpunkt-Karten."
+msgstr "Erzeugt zufällige 3D/3D GRASS Vektorpunkt-Karten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1464
 #, fuzzy
@@ -3491,8 +3491,8 @@ msgid ""
 "Calculates univariate statistics from a GRASS raster map based on vector "
 "polygons and uploads statistics to new attribute columns."
 msgstr ""
-"Berechnet Kennzahlen univariater Statistik einer Rasterkarte fÃŒr Polygone "
-"und fÃŒgt die Ergebnisse als neue Spalte der Attributtabelle an."
+"Berechnet Kennzahlen univariater Statistik einer Rasterkarte für Polygone "
+"und fügt die Ergebnisse als neue Spalte der Attributtabelle an."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1488
 #, fuzzy
@@ -3520,7 +3520,7 @@ msgstr "Raster"
 #, fuzzy
 msgid "Uploads raster values at positions of vector points to the table."
 msgstr ""
-"Ãberninmmt die Rasterwerte an einem angegebenen Vektor-Punkt in die "
+"Ã?berninmmt die Rasterwerte an einem angegebenen Vektor-Punkt in die "
 "Attributtabelle."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1499
@@ -3546,7 +3546,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/gui_modules/menudata.py:1509
 #, fuzzy
 msgid "Outputs basic information about a user-specified vector map layer."
-msgstr "Gibt Basisinformationen ÃŒber eine angegebene Vektorkarte aus."
+msgstr "Gibt Basisinformationen über eine angegebene Vektorkarte aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1514
 #, fuzzy
@@ -3578,7 +3578,7 @@ msgstr "Univariate Statistik"
 msgid ""
 "Calculates univariate statistics for attribute. Variance and standard "
 "deviation is calculated only for points if specified."
-msgstr "fÃŒr attribute Abweichung ist fÃŒr"
+msgstr "für attribute Abweichung ist für"
 
 #: ../gui/wxpython/gui_modules/menudata.py:1531
 msgid "Quadrat indices"
@@ -3626,7 +3626,7 @@ msgstr "Zielbildgruppe"
 #: ../gui/wxpython/gui_modules/menudata.py:1553
 #, fuzzy
 msgid "Targets an imagery group to a GRASS location and mapset."
-msgstr "Legt das Ziel fÃŒr eine Bildgruppe auf eine GRASS Location mit Mapset."
+msgstr "Legt das Ziel für eine Bildgruppe auf eine GRASS Location mit Mapset."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1558
 #, fuzzy
@@ -3681,8 +3681,8 @@ msgid ""
 "Rectifies an image by computing a coordinate transformation for each pixel "
 "in the image based on the control points"
 msgstr ""
-"Entzerrt ein Bild indem eine Koordinatentransformation fÃŒr jeden Bildpunkt "
-"des Bildes basierend auf Kontrollpunkten durchgefÃŒhrt wird."
+"Entzerrt ein Bild indem eine Koordinatentransformation für jeden Bildpunkt "
+"des Bildes basierend auf Kontrollpunkten durchgeführt wird."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1588
 msgid "Ortho photo rectification (requires Xterm)"
@@ -3716,9 +3716,9 @@ msgid ""
 "The resulting signature file is used as input for i.maxlik, to generate an "
 "unsupervised image classification."
 msgstr ""
-"Ein Clusteralgorithmus, der spektrale Signaturen fÃŒr Landbedeckungsklassen "
+"Ein Clusteralgorithmus, der spektrale Signaturen für Landbedeckungsklassen "
 "aus einem Bild ermittelt. Die resultierende Signaturdatei kann als Eingabe "
-"fÃŒr i.maxlik fÃŒr eine unÃŒberwachte Klassifikation verwendet werden."
+"für i.maxlik für eine unüberwachte Klassifikation verwendet werden."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1606
 msgid "Maximum likelihood classification (MLC)"
@@ -3744,7 +3744,7 @@ msgid ""
 "Performs contextual image classification using sequential maximum a "
 "posteriori (SMAP) estimation."
 msgstr ""
-"FÃŒhrt eine nachbarschaftsbasierte Bildklassifikation unter Anwendung des "
+"Führt eine nachbarschaftsbasierte Bildklassifikation unter Anwendung des "
 "'sequential maximum a posteriori (SMAP)' Ansatzes durch."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1617
@@ -3764,7 +3764,7 @@ msgstr "Eingabe:"
 #: ../gui/wxpython/gui_modules/menudata.py:1623
 #, fuzzy
 msgid "Generates statistics for i.maxlik from raster map layer."
-msgstr "Erstelle Statistiken fÃŒr i.maxlik aus der Rasterkarte."
+msgstr "Erstelle Statistiken für i.maxlik aus der Rasterkarte."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1627
 #, fuzzy
@@ -3826,7 +3826,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menudata.py:1658
 #, fuzzy
 msgid "Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data"
-msgstr "Tasseled Cap (Kauth Thomas) Transformation fÃŒr LANDSAT-TM Daten."
+msgstr "Tasseled Cap (Kauth Thomas) Transformation für LANDSAT-TM Daten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1661
 #, fuzzy
@@ -3841,7 +3841,7 @@ msgstr "Kovarianz/Korrelation"
 #: ../gui/wxpython/gui_modules/menudata.py:1664
 #, fuzzy
 msgid "Canonical components analysis (cca) program for image processing."
-msgstr "Kanonische Komponenten Analyse (cca) Programm fÃŒr die Bildverarbeitung."
+msgstr "Kanonische Komponenten Analyse (cca) Programm für die Bildverarbeitung."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1668
 #, fuzzy
@@ -3851,7 +3851,7 @@ msgstr "Hauptkomponente"
 #: ../gui/wxpython/gui_modules/menudata.py:1669
 #, fuzzy
 msgid "Principal components analysis (pca) program for image processing."
-msgstr "Hauptkomponentenanalyse (PCA) Program fÃŒr die Bildverarbeitung."
+msgstr "Hauptkomponentenanalyse (PCA) Program für die Bildverarbeitung."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1673
 #, fuzzy
@@ -3861,7 +3861,7 @@ msgstr "Fast Fourier Transformation"
 #: ../gui/wxpython/gui_modules/menudata.py:1674
 #, fuzzy
 msgid "Fast Fourier Transform (FFT) for image processing."
-msgstr "Fast Fourier Transformation (FFT) fÃŒr die Bildverarbeitung."
+msgstr "Fast Fourier Transformation (FFT) für die Bildverarbeitung."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1678
 #, fuzzy
@@ -3871,7 +3871,7 @@ msgstr "Inverse Fast Fourier Transformtion"
 #: ../gui/wxpython/gui_modules/menudata.py:1679
 #, fuzzy
 msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
-msgstr "Inverse Fast Fourier Transformation (ifft) fÃŒr die Bildverarbeitung."
+msgstr "Inverse Fast Fourier Transformation (ifft) für die Bildverarbeitung."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1687
 msgid "Bit pattern comparison "
@@ -3893,7 +3893,7 @@ msgid ""
 "Calculate error matrix and kappa parameter for accuracy assessment of "
 "classification result."
 msgstr ""
-"Berechnet Fehlermatrix und Kappa-Parameter fÃŒr die GenauigkeitsabschÃ€tzung "
+"Berechnet Fehlermatrix und Kappa-Parameter für die Genauigkeitsabschätzung "
 "(accuracy assessment) der Klassifikationsergebnisse."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1697
@@ -3929,7 +3929,7 @@ msgstr ""
 #: ../gui/wxpython/gui_modules/menudata.py:1714
 #, fuzzy
 msgid "Print/add/remove a timestamp for a 3D raster map"
-msgstr "Ausgeben/HinzufÃŒgen/Entfernen eines Zeitstempels fÃŒr 3D-Rasterkarten."
+msgstr "Ausgeben/Hinzufügen/Entfernen eines Zeitstempels für 3D-Rasterkarten."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1721
 msgid "3D Mask"
@@ -3958,7 +3958,7 @@ msgstr ""
 msgid ""
 "Creates cross section 2D raster map from 3d raster map based on 2D elevation "
 "map"
-msgstr "Erzeugt eine section von LautstÃ€rke ein"
+msgstr "Erzeugt eine section von Lautstärke ein"
 
 #: ../gui/wxpython/gui_modules/menudata.py:1736
 #, fuzzy
@@ -3985,7 +3985,7 @@ msgstr ""
 #, fuzzy
 msgid "Outputs basic information about a user-specified 3D raster map layer."
 msgstr ""
-"Gibt Basisinformationen ÃŒber eine durch den Benutzer angegebene 3D "
+"Gibt Basisinformationen über eine durch den Benutzer angegebene 3D "
 "Rasterkarte aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1751
@@ -4028,7 +4028,7 @@ msgstr "Treiber auflisten"
 #: ../gui/wxpython/gui_modules/menudata.py:1765
 #, fuzzy
 msgid "List all database drivers."
-msgstr "Listet alle verfÃŒgbaren Datenbanktreiber auf."
+msgstr "Listet alle verfügbaren Datenbanktreiber auf."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1769
 #, fuzzy
@@ -4038,7 +4038,7 @@ msgstr "Tabellen auflisten"
 #: ../gui/wxpython/gui_modules/menudata.py:1770
 #, fuzzy
 msgid "Lists all tables for a given database."
-msgstr "Listet alle Tabellen fÃŒr eine angegebene Datenbank auf."
+msgstr "Listet alle Tabellen für eine angegebene Datenbank auf."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1776
 msgid "Manage databases"
@@ -4052,7 +4052,7 @@ msgstr ""
 #, fuzzy
 msgid "Prints/sets general DB connection for current mapset and exits."
 msgstr ""
-"Gibt oder setzt generelle Datenbankverbindung fÃŒr das aktuelle Mapset und "
+"Gibt oder setzt generelle Datenbankverbindung für das aktuelle Mapset und "
 "beendet sich."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1783
@@ -4172,7 +4172,7 @@ msgstr "SQL-Statement ausführen"
 #: ../gui/wxpython/gui_modules/menudata.py:1840
 #, fuzzy
 msgid "Executes any SQL statement."
-msgstr "FÃŒhre jegliches SQL-Abfrage aus."
+msgstr "Führe jegliches SQL-Abfrage aus."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1846
 #, fuzzy
@@ -4196,7 +4196,7 @@ msgstr "Vektor"
 #: ../gui/wxpython/gui_modules/menudata.py:1854
 #, fuzzy
 msgid "Prints/sets DB connection for a vector map to attribute table."
-msgstr "Gibt oder setzt Datenbankverbindung fÃŒr eine Vektorkarte."
+msgstr "Gibt oder setzt Datenbankverbindung für eine Vektorkarte."
 
 #: ../gui/wxpython/gui_modules/menudata.py:1861
 #, fuzzy
