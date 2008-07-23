@@ -162,6 +162,8 @@ class GMFrame(wx.Frame):
             except:
                 pass
 
+        self.Show()
+
         # load workspace file if requested
         if (self.workspaceFile):
             # load given workspace file
@@ -627,28 +629,29 @@ class GMFrame(wx.Frame):
             # start map displays first (list of layers can be empty)
             #
             displayId = 0
+            mapdisplay = []
             for display in gxwXml.displays:
-                mapdisplay = self.NewDisplay(show=False)
+                mapdisplay.append(self.NewDisplay(show=False))
                 maptree = self.gm_cb.GetPage(displayId).maptree
 
                 # set windows properties
-                mapdisplay.SetProperties(render=display['render'],
+                mapdisplay[-1].SetProperties(render=display['render'],
                                          mode=display['mode'],
                                          showCompExtent=display['showCompExtent'])
 
                 # set position and size of map display
                 if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
                     if display['pos']:
-                        mapdisplay.SetPosition(display['pos'])
+                        mapdisplay[-1].SetPosition(display['pos'])
                     if display['size']:
-                        mapdisplay.SetSize(display['size'])
+                        mapdisplay[-1].SetSize(display['size'])
 
                 # set extent if defined
                 if display['extent']:
                     w, s, e, n = display['extent']
                     maptree.Map.region = maptree.Map.GetRegion(w=w, s=s, e=e, n=n)
-
-                mapdisplay.Show()
+                    
+                mapdisplay[-1].Show()
 
                 displayId += 1
     
@@ -686,6 +689,9 @@ class GMFrame(wx.Frame):
             if maptree:
                 # reverse list of map layers
                 maptree.Map.ReverseListOfLayers()
+
+            for mdisp in mapdisplay:
+                mdisp.MapWindow2D.UpdateMap()
 
             file.close()
         except IOError, err:
