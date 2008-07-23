@@ -372,7 +372,7 @@ class GMStdout:
             self.gmstc.StartStyling(p1, 0xff)
             self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleOutput)
 
-class GMStderr:
+class GMStderr(object):
     """GMConsole standard error output
 
     Based on FrameOutErr.py
