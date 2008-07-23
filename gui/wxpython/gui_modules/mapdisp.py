@@ -163,12 +163,12 @@ class MapWindow(object):
     def OnZoomToRaster(self, event):
         pass
 
-    def GetSelectedLayer(self, nviz=False, index=False):
+    def GetSelectedLayer(self, type='layer'):
         """Get selected layer from layer tree
 
-        @param nviz get nviz properties instead
+        @param type 'item' / 'layer' / 'nviz'
 
-        @return map layer instance
+        @return layer / map layer properties / nviz properties
         @return None on failure
         """
         # get currently selected map layer
@@ -179,8 +179,11 @@ class MapWindow(object):
         if not item.IsChecked():
             return None
 
+        if type == 'item':
+            return item
+        
         try:
-            if nviz:
+            if type == 'nviz':
                 layer = self.tree.GetPyData(item)[0]['nviz']
             else:
                 layer = self.tree.GetPyData(item)[0]['maplayer']

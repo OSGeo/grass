@@ -85,8 +85,11 @@ public:
 
     /* vector */
     int SetVectorLineMode(int, const char *, int, int);
-    int SetVectorHeight(int, float);
-    int SetVectorSurface(int, int);
+    int SetVectorLineHeight(int, float);
+    int SetVectorLineSurface(int, int);
+    int SetVectorPointMode(int, const char*, int, float, int);
+    int SetVectorPointHeight(int, float);
+    int SetVectorPointSurface(int, int);
 };
 
 #endif /* WXNVIZ_H */

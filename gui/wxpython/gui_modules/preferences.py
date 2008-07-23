@@ -397,8 +397,10 @@ class Settings:
                     'points' : {
                         'show' : False,
                         'size' : 100,
-                        'symbol' : 1,
+                        'width' : 2,
+                        'marker' : 2,
                         'color' : (0, 0, 255, 255), # blue
+                        'height' : 0,
                         }
                     },
                 'settings': {
@@ -461,14 +463,16 @@ class Settings:
         self.internalSettings['nviz']['view']['height']['value'] = -1
         self.internalSettings['nviz']['vector'] = {}
         self.internalSettings['nviz']['vector']['points'] = {}
-        self.internalSettings['nviz']['vector']['points']['icon'] = ('x',
-                                                                     _("sphere"),
-                                                                     _("diamond"),
-                                                                     _("cube"),
-                                                                     _("box"),
-                                                                     _("gyro"),
-                                                                     _("aster"),
-                                                                     _("histogram"))
+        self.internalSettings['nviz']['vector']['points']['marker'] = ("x",
+                                                                       _("box"),
+                                                                       _("sphere"),
+                                                                       _("cube"),
+                                                                       _("diamond"),
+                                                                       _("dtree"),
+                                                                       _("ctree"),
+                                                                       _("aster"),
+                                                                       _("gyro"),
+                                                                       _("histogram"))
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
