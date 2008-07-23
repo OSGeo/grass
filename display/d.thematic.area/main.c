@@ -25,6 +25,7 @@
 #include <grass/colors.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include <grass/arraystats.h>
 #include "plot.h"
 #include "local_proto.h"
 
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
     char *mapset;
     int ret, level;
     int i, stat = 0;
-    int nclass, nbreaks, *frequencies;
+    int nclass = 0, nbreaks, *frequencies, boxsize = 0;
     int chcat = 0;
     int r, g, b;
     int has_color = 0;
@@ -46,16 +47,19 @@ int main(int argc, char **argv)
     struct Option *map_opt;
     struct Option *column_opt;
     struct Option *breaks_opt;
+    struct Option *algo_opt;
+    struct Option *nbclass_opt;
     struct Option *colors_opt;
     struct Option *bcolor_opt;
     struct Option *bwidth_opt;
     struct Option *where_opt;
     struct Option *field_opt;
     struct Option *render_opt;
-    struct Flag *legend_flag, *x_flag, *nodraw_flag;
+    struct Option *legend_file_opt;
+    struct Flag *legend_flag, *algoinfo_flag, *x_flag, *nodraw_flag;
 
     struct cat_list *Clist;
-    int *cats, ncat, nrec;
+    int *cats, ncat, nrec, ctype;
     struct Map_info Map;
     struct field_info *fi;
     dbDriver *driver;
@@ -63,7 +67,9 @@ int main(int argc, char **argv)
     dbCatValArray cvarr;
     struct Cell_head window;
     BOUND_BOX box;
-    double overlap, *breakpoints, min, max;
+    double overlap, *breakpoints, min = 0, max = 0, *data = NULL, class_info = 0.0;
+    struct GASTATS stats;
+    FILE *fd;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -86,17 +92,38 @@ int main(int argc, char **argv)
     breaks_opt = G_define_option();
     breaks_opt->key = "breaks";
     breaks_opt->type = TYPE_STRING;
-    breaks_opt->required = YES;
+    breaks_opt->required = NO;
     breaks_opt->multiple = YES;
     breaks_opt->description = _("Class breaks, without minimum and maximum");
+
+    algo_opt = G_define_option();
+    algo_opt->key = "algorithm";
+    algo_opt->type = TYPE_STRING;
+    algo_opt->required = NO;
+    algo_opt->multiple = NO;
+    algo_opt->options = "int,std,qua,equ,dis";
+    algo_opt->description = _("Algorithm to use for classification");
+    algo_opt->descriptions = _("int;simple intervals;"
+			       "std;standard deviations;"
+			       "qua;quantiles;"
+			       "equ;equiprobable (normal distribution);"
+			       "dis;discontinuities");
+
+    nbclass_opt = G_define_option();
+    nbclass_opt->key = "nbclasses";
+    nbclass_opt->type = TYPE_INTEGER;
+    nbclass_opt->required = NO;
+    nbclass_opt->multiple = NO;
+    nbclass_opt->description = _("Number of classes to define");
 
     colors_opt = G_define_option();
     colors_opt->key = "colors";
     colors_opt->type = TYPE_STRING;
     colors_opt->required = YES;
     colors_opt->multiple = YES;
-    colors_opt->description = _("Colors (one more than class breaks).");
-    colors_opt->gisprompt = GISPROMPT_COLOR;
+    colors_opt->description = _("Colors (one per class).");
+    /* This won't work. We would need multiple color prompt.
+     * colors_opt->gisprompt = GISPROMPT_COLOR; */
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->description =
@@ -125,7 +152,7 @@ int main(int argc, char **argv)
     render_opt->type = TYPE_STRING;
     render_opt->required = NO;
     render_opt->multiple = NO;
-    render_opt->answer = "l";
+    render_opt->answer = "c";
     render_opt->options = "g,r,d,c,l";
     render_opt->description = _("Rendering method for filled polygons");
     render_opt->descriptions =
@@ -136,11 +163,22 @@ int main(int argc, char **argv)
 	  "l;use the display library culling functions (features: culling, polylines)");
 
 
+    legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
+    legend_file_opt->key = "legendfile";
+    legend_file_opt->description =
+	_("File in which to save d.graph instructions for legend display");
+    legend_file_opt->required = NO;
 
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
 	_("Create legend information and send to stdout");
+
+    algoinfo_flag = G_define_flag();
+    algoinfo_flag->key = 'e';
+    algoinfo_flag->description =
+	_
+	("When printing legend info , include extended statistical info from classification algorithm");
 
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
@@ -217,7 +255,7 @@ int main(int argc, char **argv)
     /*Get CatValArray needed for plotting and for legend calculations */
     db_CatValArray_init(&cvarr);
     nrec = db_select_CatValArray(driver, fi->table, fi->key,
-				 column_opt->answer, NULL, &cvarr);
+				 column_opt->answer, where_opt->answer, &cvarr);
 
 
     G_debug(3, "nrec (%s) = %d", column_opt->answer, nrec);
@@ -229,8 +267,6 @@ int main(int argc, char **argv)
     if (nrec < 0)
 	G_fatal_error(_("Cannot select data (%s) from table"),
 		      column_opt->answer);
-
-    G_debug(2, "\n%d records selected from table", nrec);
 
     for (i = 0; i < cvarr.n_values; i++) {
 	G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat, column_opt->answer,
@@ -271,20 +307,90 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unknown color: [%s]"), bcolor_opt->answer);
     }
 
-    /*Get class breaks */
-    nbreaks = 0;
-    while (breaks_opt->answers[nbreaks] != NULL)
-	nbreaks++;
-    nclass = nbreaks + 1;	/*add one since breaks do not include min and max values */
-    G_debug(3, "nclass = %d", nclass);
 
-    breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
-    for (i = 0; i < nbreaks; i++)
-	breakpoints[i] = atof(breaks_opt->answers[i]);
+    /* if both class breaks and (algorithm or classnumber) are given, give precedence to class 
+     * breaks
+     */
+
+    if (breaks_opt->answers) {
+
+	if (algo_opt->answer || nbclass_opt->answer)
+	    G_warning(_
+		      ("You gave both manual breaks and a classification algorithm or a number of classes. The manual breaks have precedence and will thus be used."));
+
+
+	/*Get class breaks */
+	nbreaks = 0;
+	while (breaks_opt->answers[nbreaks] != NULL)
+	    nbreaks++;
+	nclass = nbreaks + 1;	/*add one since breaks do not include min and max values */
+	G_debug(3, "nclass = %d", nclass);
+
+	breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
+	for (i = 0; i < nbreaks; i++)
+	    breakpoints[i] = atof(breaks_opt->answers[i]);
+
+    }
+    else {
+
+	if (algo_opt->answer && nbclass_opt->answer) {
+
+	    ret = db_CatValArray_sort_by_value(&cvarr);
+	    if (ret == DB_FAILED)
+		G_fatal_error("Could not sort array of values..");
+
+
+	    data = (double *)G_malloc((nrec) * sizeof(double));
+	    for (i = 0; i < nrec; i++)
+		data[i] = 0.0;
+
+	    ctype = cvarr.ctype;
+	    if (ctype == DB_C_TYPE_INT) {
+		for (i = 0; i < nrec; i++)
+		    data[i] = cvarr.value[i].val.i;
+	    }
+	    else {
+		for (i = 0; i < nrec; i++)
+		    data[i] = cvarr.value[i].val.d;
+	    }
+
+
+	    /* min and max are needed later for the legend */
+	    if (cvarr.ctype == DB_C_TYPE_INT) {
+		min = cvarr.value[0].val.i;
+		max = cvarr.value[cvarr.n_values - 1].val.i;
+	    }
+	    else {
+		min = cvarr.value[0].val.d;
+		max = cvarr.value[cvarr.n_values - 1].val.d;
+	    }
+
+	    nclass = atoi(nbclass_opt->answer);
+	    nbreaks = nclass - 1;	/* we need one less classbreaks (min and 
+					 * max exluded) than classes */
+
+	    breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
+	    for (i = 0; i < nbreaks; i++)
+		breakpoints[i] = 0;
+
+	    /* Get classbreaks for given algorithm and number of classbreaks.
+	     * class_info takes any info coming from the classification algorithms */
+	    class_info =
+		class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
+				      breakpoints);
+
+	}
+	else {
+
+	    G_fatal_error(_
+			  ("You must either give classbreaks or a classification algrorithm"));
+
+	}
+    };
 
     frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
     for (i = 0; i < nbreaks + 1; i++)
-	    frequencies[i] = 0;
+	frequencies[i] = 0;
 
     /* Fill colors */
     colors = (struct color_rgb *)G_malloc(nclass * sizeof(struct color_rgb));
@@ -308,78 +414,89 @@ int main(int argc, char **argv)
     }
 
 
+    /* Not sure if this is needed, but probably won't hurt */
+    db_CatValArray_sort(&cvarr);
 
     /* Now's let's prepare the actual plotting */
-	if (R_open_driver() != 0)
-	    G_fatal_error(_("No graphics device selected"));
+    if (R_open_driver() != 0)
+	G_fatal_error(_("No graphics device selected"));
 
-	D_setup(0);
+    D_setup(0);
 
-	G_setup_plot(D_get_d_north(), D_get_d_south(),
-		     D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
+    G_setup_plot(D_get_d_north(), D_get_d_south(),
+		 D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
 
-	if (verbose)
-	    G_message(_("Plotting ..."));
+    if (verbose)
+	G_message(_("Plotting ..."));
 
-	Vect_get_map_box(&Map, &box);
+    Vect_get_map_box(&Map, &box);
 
-	if (window.north < box.S || window.south > box.N ||
-	    window.east < box.W ||
-	    window.west > G_adjust_easting(box.E, &window)) {
-	    G_message(_
-		      ("The bounding box of the map is outside the current region, "
-		       "nothing drawn."));
-	    stat = 0;
-	}
-	else {
-	    overlap =
-		G_window_percentage_overlap(&window, box.N, box.S, box.E,
-					    box.W);
-	    G_debug(1, "overlap = %f \n", overlap);
-	    if (overlap < 1)
-		Vect_set_constraint_region(&Map, window.north, window.south,
-					   window.east, window.west,
-					   PORT_DOUBLE_MAX, -PORT_DOUBLE_MAX);
+    if (window.north < box.S || window.south > box.N ||
+	window.east < box.W || window.west > G_adjust_easting(box.E, &window)) {
+	G_message(_
+		  ("The bounding box of the map is outside the current region, "
+		   "nothing drawn."));
+	stat = 0;
+    }
+    else {
+	overlap =
+	    G_window_percentage_overlap(&window, box.N, box.S, box.E, box.W);
+	G_debug(1, "overlap = %f \n", overlap);
+	if (overlap < 1)
+	    Vect_set_constraint_region(&Map, window.north, window.south,
+				       window.east, window.west,
+				       PORT_DOUBLE_MAX, -PORT_DOUBLE_MAX);
 
-	    /* default line width */
-	    D_line_width(default_width);
+	/* default line width */
+	D_line_width(default_width);
 
 
-	    stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
-			      has_color ? &bcolor : NULL, chcat, &window,
-			      default_width, frequencies, nodraw_flag->answer);
+	stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
+			  has_color ? &bcolor : NULL, chcat, &window,
+			  default_width, frequencies, nodraw_flag->answer);
 
 
-	    /* reset line width: Do we need to get line width from display
-	     * driver (not implemented)?  It will help restore previous line
-	     * width (not just 0) determined by another module (e.g.,
-	     * d.linewidth). */
-	    R_line_width(0);
+	/* reset line width: Do we need to get line width from display
+	 * driver (not implemented)?  It will help restore previous line
+	 * width (not just 0) determined by another module (e.g.,
+	 * d.linewidth). */
+	R_line_width(0);
 
-	}			/* end window check if */
+    }				/* end window check if */
 
-	if (!x_flag->answer) {
-	    D_add_to_list(G_recreate_command());
+    if (!x_flag->answer) {
+	D_add_to_list(G_recreate_command());
 
-	    D_set_dig_name(G_fully_qualified_name(map_name, mapset));
-	    D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
-	}
+	D_set_dig_name(G_fully_qualified_name(map_name, mapset));
+	D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
+    }
 
-	R_close_driver();
+    R_close_driver();
+
+
 
 
 
     if (legend_flag->answer) {
+	if (algoinfo_flag->answer) {
 
-	ret = db_CatValArray_sort_by_value(&cvarr);
-        if(cvarr.ctype == DB_C_TYPE_INT) {
-	     min=cvarr.value[0].val.i;
-	     max=cvarr.value[cvarr.n_values-1].val.i;
-	} else {
-	     min=cvarr.value[0].val.d;
-	     max=cvarr.value[cvarr.n_values-1].val.d;
+	    basic_stats(data, nrec, &stats);
+
+	    fprintf(stdout, _("\nClassification of %s into %i classes\n"),
+		    column_opt->answer, nbreaks + 1);
+	    fprintf(stdout, _("Using algorithm: *** %s ***\n"),
+		    algo_opt->answer);
+	    fprintf(stdout, _("Mean: %f\tStandard deviation = %f\n"),
+		    stats.mean, stats.stdev);
+
+	    if (G_strcasecmp(algo_opt->answer, "dis") == 0)
+		fprintf(stdout, _("Last chi2 = %f\n"), class_info);
+	    if (G_strcasecmp(algo_opt->answer, "std") == 0)
+		fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
+			class_info);
+	    fprintf(stdout, "\n");
+
 	}
-
 
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
 		min, breakpoints[0], frequencies[0], colors[0].r, colors[0].g,
@@ -392,11 +509,32 @@ int main(int argc, char **argv)
 	}
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
 		breakpoints[nbreaks - 1], max, frequencies[nbreaks],
+		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+    }
+
+    if (legend_file_opt->answer) {
+	fd = fopen(legend_file_opt->answer, "w");
+	boxsize = 100 / nclass;
+	fprintf(fd, "symbol basic/box %i 5 10 black %d:%d:%d\n", boxsize,
 		colors[0].r, colors[0].g, colors[0].b);
+	fprintf(fd, "move 15 7 \n");
+	fprintf(fd, "text %f - %f\n", min, breakpoints[0]);
+	for (i = 1; i < nbreaks; i++) {
+	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
+		    10 + i * 10, colors[i].r, colors[i].g, colors[i].b);
+	    fprintf(fd, "move 15 %i\n", 7 + i * 10);
+	    fprintf(fd, "text %f - %f\n", breakpoints[i - 1], breakpoints[i]);
+	}
+	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
+		10 + i * 10, colors[nbreaks].r, colors[nbreaks].g,
+		colors[nbreaks].b);
+	fprintf(fd, "move 15 %i\n", 7 + i * 10);
+	fprintf(fd, "text %f - %f\n", breakpoints[nbreaks - 1], max);
+	fclose(fd);
     }
 
     if (verbose)
-	G_done_msg("");
+	G_done_msg(" ");
 
     Vect_close(&Map);
     Vect_destroy_cat_list(Clist);
