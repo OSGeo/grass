@@ -35,6 +35,7 @@ SUBDIRS = \
 	init \
 	cdhc \
 	stats \
+	arraystats \
 	python
 
 include $(MODULE_TOPDIR)/include/Make/Platform.make
