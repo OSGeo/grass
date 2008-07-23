@@ -829,43 +829,32 @@ class LayerTree(CT.CustomTreeCtrl):
             # nviz - load/unload data layer
             mapLayer = self.GetPyData(item)[0]['maplayer']
 
-            busy = wx.BusyInfo(message=_("Please wait, updating data..."),
-                               parent=self.mapdisplay)
-
-            wx.Yield()            
+            self.mapdisplay.SetStatusText(_("Please wait, updating data..."), 0)
 
             if checked: # enable
-                id = -1
                 if mapLayer.type == 'raster':
-                    id = self.mapdisplay.MapWindow.LoadRaster(mapLayer)
+                    self.mapdisplay.MapWindow.LoadRaster(item)
                 elif mapLayer.type == 'vector':
-                    id = self.mapdisplay.MapWindow.LoadVector(mapLayer)
-
-                if id > 0:
-                    self.mapdisplay.MapWindow.SetLayerData(item, id)
-                    self.mapdisplay.MapWindow.UpdateLayerProperties(item)
+                    self.mapdisplay.MapWindow.LoadVector(item)
 
             else: # disable
                 data = self.GetPyData(item)[0]['nviz']
-                id = data['object']['id']
+
                 if mapLayer.type == 'raster':
-                    self.mapdisplay.MapWindow.UnloadRaster(id)
+                    self.mapdisplay.MapWindow.UnloadRaster(item)
                 elif mapLayer.type == 'vector':
-                    self.mapdisplay.MapWindow.UnloadVector(id)
+                    self.mapdisplay.MapWindow.UnloadVector(item)
                     
-                    if hasattr(self.parent, "nvizToolWin"):
-                        toolWin = self.parent.nvizToolWin
+                    if hasattr(self.mapdisplay, "nvizToolWin"):
+                        toolWin = self.mapdisplay.nvizToolWin
                         # remove vector page
                         if toolWin.notebook.GetSelection() == toolWin.page['vector']['id']:
                             toolWin.notebook.RemovePage(toolWin.page['vector']['id'])
                             toolWin.page['vector']['id'] = -1
                             toolWin.page['settings']['id'] = 1
 
-                data.pop('object')
-                data.pop('view')
+            self.mapdisplay.SetStatusText("", 0)
 
-            busy.Destroy()
-        
         # redraw map if auto-rendering is enabled
         if self.mapdisplay.autoRender.GetValue(): 
             self.mapdisplay.OnRender(None)
@@ -1169,13 +1158,7 @@ class LayerTree(CT.CustomTreeCtrl):
                 id = -1
                 if mapLayer.type == 'raster':
                     if not mapWin.IsLoaded(layer):
-                        id = mapWin.LoadRaster(mapLayer)
-                        if id > 0:
-                            self.mapdisplay.MapWindow.SetLayerData(layer, id)
-                            self.mapdisplay.MapWindow.UpdateLayerProperties(layer)
-
-                        self.mapdisplay.nvizToolWin.UpdatePage('surface')
-                        self.mapdisplay.nvizToolWin.SetPage('surface')
+                        mapWin.LoadRaster(layer)
 
                 elif mapLayer.type == 'vector':
                     if not mapWin.IsLoaded(layer):

@@ -36,4 +36,14 @@
 #define DM_GRID_WIRE 0x00000400
 #define DM_GRID_SURF 0x00000800
 
-#define WC_COLOR_ATT 0xFF000000
+/* site markers */
+#define ST_X          1
+#define ST_BOX        2
+#define ST_SPHERE     3
+#define ST_CUBE       4
+#define ST_DIAMOND    5
+#define ST_DEC_TREE   6
+#define ST_CON_TREE   7
+#define ST_ASTER      8
+#define ST_GYRO       9
+#define ST_HISTOGRAM  10
