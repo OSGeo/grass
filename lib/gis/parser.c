@@ -2159,7 +2159,7 @@ static int is_option(const char *string)
 	if (p == string)
 		return 0;
 	p--;
-	if (*p == ' ' || *p == '\t')
+	if (!strchr("abcdefghijklmnopqrstuvwxyz0123456789", *p))
 		return 0;
 
 	return 1;
