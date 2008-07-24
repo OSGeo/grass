@@ -22,6 +22,7 @@ SUBDIRS = \
 	r.drain \
 	r.fill.dir \
 	r.flow \
+	r.grow.distance \
 	r.grow2 \
 	r.gwflow \
 	r.his \
