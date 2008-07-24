@@ -1,54 +1,16 @@
 /*!
  * \file error.c
+ * 
+ * \brief GIS Library: Error messages functions
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author USACERL and many others
  */
-
-/*
- **********************************************************************
- *
- * G_fatal_error (msg)
- *      char *msg          One line error message
- *
- * G_warning (msg)
- *      char *msg
- *
- *   Gives the message, msg, to the user.  Also print a message to 
- *   $GISBASE/GIS_ERROR_LOG if the file exists and is writeable; 
- *   and to the file $HOME/GIS_ERROR_LOG in the user's home directory 
- *   if $HOME is set and the file exists.
- *   G_warning() returns, which G_fatal_error() exits.
- *
- *   note:  By default, the message is handled by an internal routine
- *      which prints the message to the screen.   Using G_set_error_routine()
- *      the programmer can have the message handled by another routine.
- *      This is especially useful if the message should go to a particular
- *      location on the screen when using curses or to a location on
- *      a graphics device (monitor).
- *          
- **********************************************************************
- * G_set_error_routine (error_routine)
- *      int (*error_routine)()
- *
- *   Establishes error_routine as the routine that will handle 
- *   the printing of subsequent error messages. error_routine
- *   will be called like this:
- *      error_routine(msg, fatal)  
- *         char *msg ;
- **********************************************************************
- * G_unset_error_routine ()
- *
- *   After this call subsequent error messages will be handled in the
- *   default method.  Error messages are printed directly to the
- *   screen:
- *           ERROR: message
- *   -or-    WARNING: message
- *
- **********************************************************************/
-/*
-     Throughout the code the references to these routines attempt to
-	send format strings and arguments.  It seems that we expect
-	these to handle varargs, so now they do.    7-Mar-1999
-		Bill Hughes
-*/
 
 #include <stdlib.h>
 #include <string.h>
@@ -105,13 +67,11 @@ vfprint_error (int type, const char *template, va_list ap)
 }
 
 /*!
- * \fn void G_message (const char *msg,...)
- *
  * \brief Print a message to stderr
  *
  * The output format depends on enviroment variable GRASS_MESSAGE_FORMAT
  *
- * \param[in] msg string.  Cannot be NULL.
+ * \param msg string (cannot be NULL)
 */
 void G_message (const char *msg,...)
 {
@@ -121,18 +81,17 @@ void G_message (const char *msg,...)
 	vfprint_error (MSG, msg, ap);
 	va_end(ap);
     }
+
+    return;
 }
 
-
 /*!
- * \fn void G_verbose_message (const char *msg,...)
- *
  * \brief Print a message to stderr but only if module is in verbose mode
  *
  * The output format depends on enviroment variables
  *  GRASS_MESSAGE_FORMAT and GRASS_VERBOSE
  *
- * \param[in] msg string.  Cannot be NULL.
+ * \param msg string (cannot be NULL)
 */
 void G_verbose_message (const char *msg, ...)
 {
@@ -142,12 +101,11 @@ void G_verbose_message (const char *msg, ...)
 	vfprint_error (MSG, msg, ap);
 	va_end(ap);
     }
+
+    return;
 }
 
-
 /*!
- * \fn void G_important_message (const char *msg,...)
- *
  * \brief Print a message to stderr even in brief mode (verbosity=1)
  *
  * Ususally just G_percent()/G_clicker() would be shown at this level.
@@ -156,7 +114,7 @@ void G_verbose_message (const char *msg, ...)
  * The output format depends on enviroment variables
  *  GRASS_MESSAGE_FORMAT and GRASS_VERBOSE
  *
- * \param[in] msg string.  Cannot be NULL.
+ * \param msg string (cannot be NULL)
 */
 void G_important_message(const char *msg, ...)
 {
@@ -166,13 +124,11 @@ void G_important_message(const char *msg, ...)
 	vfprint_error (MSG, msg, ap);
 	va_end(ap);
     }
+
+    return;
 }
 
-
-
 /*!
- * \fn int G_fatal_error (const char *msg,...)
- *
  * \brief Print a fatal error message to stderr
  * 
  * The output format depends on enviroment variable
@@ -185,11 +141,11 @@ void G_important_message(const char *msg, ...)
  * on the screen when using curses or to a location on a graphics
  * device (monitor).
  *
+ * \param msg string (cannot be NULL)
+
  * \return Terminates with an exit status of EXIT_FAILURE if no external
  * routine is specified by G_set_error_routine()
- *
- * \param[in] msg string.  Cannot be NULL.
-*/
+ */
 int G_fatal_error (const char *msg,...)
 {
     va_list ap;
@@ -202,9 +158,6 @@ int G_fatal_error (const char *msg,...)
 }
 
 /*!
- *
- * \fn int G_warning (const char *msg, ...)
- *
  * \brief Print a warning message to stderr
  * 
  * The output format depends on enviroment variable
@@ -212,7 +165,9 @@ int G_fatal_error (const char *msg,...)
  *
  * A warning message can be suppressed by G_suppress_warnings()
  *
- * \param[in] msg string.  Cannot be NULL.
+ * \param msg string (cannot be NULL)
+ *
+ * \return 0
 */
 int G_warning (const char *msg, ...)
 {
@@ -228,11 +183,10 @@ int G_warning (const char *msg, ...)
 }
 
 /*!
- * \fn int G_suppress_warnings (int flag)
- *
  * \brief Suppress printing a warning message to stderr
  * 
- * \param[in] flag a warning message will be suppressed if non-zero value is given
+ * \param flag a warning message will be suppressed if non-zero value is given
+ *
  * \return previous flag
 */
 int G_suppress_warnings (int flag)
@@ -245,13 +199,10 @@ int G_suppress_warnings (int flag)
 }
 
 /*!
- * \fn int G_sleep_on_error (int flag)
- *
  * \brief Turn on/off no_sleep flag
  * 
  * \param flag if non-zero/zero value is given G_sleep() will be activated/deactivated
  *
- * \param[in] flag error  message will be suppressed if non-zero value is given
  * \return previous flag
 */
 int G_sleep_on_error (int flag)
@@ -264,15 +215,13 @@ int G_sleep_on_error (int flag)
 }
 
 /*!
- * \fn int G_set_error_routine ( int (*error_routine)(char *, int))
- *
  * \brief Establishes error_routine as the routine that will handle
  * the printing of subsequent error messages.
  * 
- * \param[in] error_routine routine will be called like this: error_routine(msg,
+ * \param error_routine routine will be called like this: error_routine(msg,
  * fatal)
  *
- * \return always null
+ * \return 0
 */
 int G_set_error_routine(int (*error_routine)(const char *, int))
 {
@@ -281,14 +230,12 @@ int G_set_error_routine(int (*error_routine)(const char *, int))
 }
 
 /*!
- * \fn int G_unset_error_routine (void)
- *
  * \brief After this call subsequent error messages will be handled in the
  * default method.
  * 
  * Error messages are printed directly to the screen: ERROR: message or WARNING: message
  *
- * \return always returns 0.
+ * \return 0
 */
 int G_unset_error_routine(void)
 {
@@ -542,8 +489,6 @@ static void print_sentence (FILE *fd, const int type, const char *msg)
 }
 
 /*!
- * \fn int G_info_format ( void ) 
- *
  * \brief Get current message format
  * 
  * Maybe set to either "standard" or "gui" (normally GRASS takes care)
