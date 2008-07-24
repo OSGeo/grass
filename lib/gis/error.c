@@ -314,7 +314,7 @@ static int print_error(const char *msg, const int type)
     else /* WARN */
 	fatal = FALSE;
 
-    if ( (type == WARN || type == ERR) && ext_error) { /* Function defined by application */
+    if ( (type == MSG || type == WARN || type == ERR) && ext_error) { /* Function defined by application */
 	ext_error (msg, fatal);
     } else {
 	char *w;
