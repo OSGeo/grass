@@ -49,6 +49,10 @@ static map *maps;
 static int num_maps;
 static int max_maps;
 
+static void **omaps;
+static int num_omaps;
+static int max_omaps;
+
 static unsigned char *red, *grn, *blu;
 static unsigned char *set;
 
@@ -58,16 +62,6 @@ static int min_col = INT_MAX;
 static int max_col = -INT_MAX;
 
 /****************************************************************************/
-
-static int handle_to_fd(void *handle)
-{
-	return (int) handle;
-}
-
-static void *fd_to_handle(int fd)
-{
-	return (void *) fd;
-}
 
 static void read_row(void *handle, char *buf, int type, int depth, int row)
 {
@@ -586,7 +580,6 @@ void close_maps(void)
 int open_output_map(const char *name, int res_type)
 {
 	void *handle;
-	int fd;
 
 	G3d_setFileType(res_type == FCELL_TYPE ? FCELL_TYPE : DCELL_TYPE);
 
@@ -599,21 +592,28 @@ int open_output_map(const char *name, int res_type)
 	if (!handle)
 		G_fatal_error(_("Unable to create raster map <%s>"), name);
 
-	fd = handle_to_fd(handle);
 
-	return fd;
+	if (num_omaps >= max_omaps)
+	{
+		max_omaps += 10;
+		omaps = G_realloc(omaps, max_omaps * sizeof(void *));
+	}
+
+	omaps[num_omaps] = handle;
+
+	return num_omaps++;
 }
 
 void put_map_row(int fd, void *buf, int res_type)
 {
-	void *handle = fd_to_handle(fd);
+	void *handle = omaps[fd];
 
 	write_row(handle, buf, res_type, current_depth, current_row);
 }
 
 void close_output_map(int fd)
 {
-	void *handle = fd_to_handle(fd);
+	void *handle = omaps[fd];
 
 	if (!G3d_closeCell(handle))
 		G_fatal_error(_("Unable to close output raster map"));
