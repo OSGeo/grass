@@ -18,9 +18,15 @@
 
 #include "nviz.h"
 
+#define MSG  0
+#define WARN 1
+#define ERR  2
+
 static void swap_gl();
 static int print_error(const char *, const int);
+static void print_sentence (PyObject*, const int, const char *);
 static PyObject *logStream;
+static int message_id = 1;
 
 /*!
   \brief Initialize Nviz class instance
@@ -32,7 +38,6 @@ Nviz::Nviz(PyObject *log)
     logStream = log;
 
     G_set_error_routine(&print_error);
-    G_set_verbose(0); // TODO: read progress info
 
     GS_libinit();
     /* GVL_libinit(); TODO */
@@ -137,18 +142,71 @@ void Nviz::SetBgColor(const char *color_str)
 
 int print_error(const char *msg, const int type)
 {
-    char *fmsg;
-
     if (logStream) {
-	fmsg = (char *) G_malloc (strlen(msg) + 6);
-	sprintf (fmsg, "Nviz: %s", msg);
-    
-	PyFile_WriteString(fmsg, logStream);
-	G_free((void *) fmsg);
+	print_sentence(logStream, type, msg);
     }
     else {
 	fprintf(stderr, "Nviz: %s\n", msg);
     }
 
     return 0;
+}
+
+/*
+  \brief Print one message, prefix inserted before each new line
+
+  From lib/gis/error.c
+*/
+void print_sentence (PyObject *pyFd, const int type, const char *msg)
+{
+    char prefix[256];
+    const char *start;
+    char* sentence;
+
+    switch ( type ) {
+	case MSG: 
+    	    sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), message_id);
+	    break;
+	case WARN:
+    	    sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), message_id);
+	    break;
+	case ERR:
+    	    sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), message_id);
+	    break;
+    }
+
+    start = msg;
+
+    PyFile_WriteString("\n", pyFd);
+
+    while ( *start != '\0' ) {
+	const char *next = start;
+
+	PyFile_WriteString(prefix, pyFd);
+
+	while ( *next != '\0' ) {
+	    next++;
+		
+	    if ( *next == '\n' ) {
+	        next++;
+		break;
+	    }
+	}
+
+	sentence = (char *) G_malloc ((next - start + 1) * sizeof (char));
+	strncpy(sentence, start, next - start + 1);
+	sentence[next-start] = '\0';
+
+	PyFile_WriteString(sentence, pyFd);
+	G_free((void *)sentence);
+
+	PyFile_WriteString("\n", pyFd);
+	start = next;
+    }
+
+    PyFile_WriteString("\n", pyFd);
+    sprintf(prefix, "GRASS_INFO_END(%d,%d)\n", getpid(), message_id);
+    PyFile_WriteString(prefix, pyFd);
+
+    message_id++;
 }
