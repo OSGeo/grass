@@ -121,6 +121,7 @@ static int show_options(int ,const char *);
 static int show(const char *,int);
 static int set_flag (int);
 static int contains (const char *,int);
+static int is_option(const char *);
 static int set_option( char *);
 static int check_opts();
 static int check_an_opt(const char *, int , const char *,const char *);
@@ -938,7 +939,7 @@ int G_parser (int argc, char **argv)
 
 			}
 			/* If we see standard option format (option=val) */
-			else if (contains(ptr, '='))
+			else if (is_option(ptr))
 			{
 				error += set_option(ptr) ;
 				need_first_opt = 0 ;
@@ -2147,6 +2148,21 @@ static int contains (const char *s, int c)
 		s++ ;
 	}
 	return(0) ;
+}
+
+static int is_option(const char *string)
+{
+	const char *p = strchr(string, '=');
+
+	if (!p)
+		return 0;
+	if (p == string)
+		return 0;
+	p--;
+	if (*p == ' ' || *p == '\t')
+		return 0;
+
+	return 1;
 }
 
 static int set_option (char *string)
