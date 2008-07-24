@@ -14,7 +14,6 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
- *  TODO before GRASS 7 released: change param 'STREAM_DIR' -> 'stream_dir'
  *****************************************************************************/
  
 #include <stdio.h>
@@ -128,7 +127,7 @@ parse_args(int argc, char *argv[]) {
   /* temporary STREAM path */
   struct Option *streamdir;
   streamdir = G_define_option() ;
-  streamdir->key        = "STREAM_DIR";
+  streamdir->key        = "stream_dir";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
   streamdir->answer     = G_store("/var/tmp"); 
