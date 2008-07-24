@@ -3660,7 +3660,7 @@ msgstr ""
 
 #: ../lib/gmath/la.c:602
 msgid "Problem in LA procedure."
-msgstr ""
+msgstr "LA 루틴에 문제가 있습니다"
 
 #: ../lib/gmath/la.c:692
 msgid "Element array has not been allocated"
@@ -3693,80 +3693,80 @@ msgstr ""
 
 #: ../lib/gmath/la.c:842
 msgid "Specified column index is outside range"
-msgstr ""
+msgstr "지정한 컬럼이 범위를 벗어났습니다"
 
 #: ../lib/gmath/la.c:862
 msgid "Unknown vector type."
-msgstr ""
+msgstr "알려지지 않은 벡터타입입니다"
 
 #: ../lib/gmath/la.c:991
 msgid "Output vector is uninitialized"
-msgstr ""
+msgstr "출력벡터가 초기화되지 않았습니다"
 
 #: ../lib/gmath/la.c:996
 msgid "Vectors are not of the same type"
-msgstr ""
+msgstr "벡터의 타입이 서로 다릅니다"
 
 #: ../lib/gmath/la.c:1001
 msgid "Output vector is of incorrect type"
-msgstr ""
+msgstr "출력벡터의 타입이 틀렸습니다"
 
 #: ../lib/gmath/la.c:1006
 msgid "Matrices not allowed"
-msgstr ""
+msgstr "메트릭스 타입은 허용되지 않습니다"
 
 #: ../lib/gmath/la.c:1013
 msgid "Vectors have differing dimensions"
-msgstr ""
+msgstr "벡터의 차원이 서로 다릅니다"
 
 #: ../lib/gmath/la.c:1020
 msgid "Output vector has incorrect dimension"
-msgstr ""
+msgstr "출력벡터의 차원이 틀렸습니다"
 
 #: ../lib/gmath/la.c:1067
 msgid "Vector dimensions out of range"
-msgstr ""
+msgstr "벡터의 차원이 범위를 벗어났습니다"
 
 #: ../lib/gmath/la.c:1073
 msgid "Row/column out of range"
-msgstr ""
+msgstr "행/열이 범위를 벗어났습니다"
 
 #: ../lib/gmath/la.c:1291
 msgid "Vector structure is not initialised"
-msgstr ""
+msgstr "벡터 구조체가 초기화되지 않았습니다"
 
 #: ../lib/gmath/la.c:1413 ../lib/gmath/la.c:1421 ../lib/gmath/la.c:1426
 msgid "Input format error"
-msgstr ""
+msgstr "입력양식 오류"
 
 #: ../lib/gmath/del2g.c:51
 msgid "    taking FFT of image..."
-msgstr ""
+msgstr "    이미지의 FFT를 구하는 중..."
 
 #: ../lib/gmath/del2g.c:58
 msgid "Insufficent memory for allocation of gaussian"
-msgstr ""
+msgstr "가우시안 할당을 위한 메모리가 부족합니다"
 
 #: ../lib/gmath/del2g.c:60
 msgid "    computing del**2 g..."
-msgstr ""
+msgstr "    del**2 g를 계산 중..."
 
 #: ../lib/gmath/del2g.c:63
 msgid "    taking FFT of del**2 g..."
-msgstr ""
+msgstr "    del**2 g의 FFT를 구하는 중..."
 
 #: ../lib/gmath/del2g.c:67
 msgid "    multiplying transforms..."
-msgstr ""
+msgstr "    변환을 곱하는 중..."
 
 #: ../lib/gmath/del2g.c:70
 msgid "    taking inverse FFT..."
-msgstr ""
+msgstr "    역FFT를 구하는 중..."
 
 #: ../lib/display/tran_colr.c:132 ../lib/display/tran_colr.c:134
 #, c-format
 msgid "[%s]: No such color"
-msgstr ""
+msgstr "[%s]: 없는 색상입니다"
 
 #: ../lib/symbol/read.c:203
 #, c-format
@@ -3878,16 +3878,16 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:379
 msgid "some points outside of region -- will ignore..."
-msgstr ""
+msgstr "영역밖의 일부 점들은 무시합니다..."
 
 #: ../lib/rst/interp_float/input2d.c:49
 #, c-format
 msgid "Mask raster map <%s> not found"
-msgstr ""
+msgstr "마스트 래스터맵 <%s>를 찾을 수 없습니다"
 
 #: ../lib/rst/interp_float/input2d.c:72
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "비트맵 마스크를 생성했습니다"
 
 #, fuzzy
 #~ msgid "Cannot get field info"
