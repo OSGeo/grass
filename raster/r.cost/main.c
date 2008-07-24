@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
     srows = scols = SEGCOLSIZE;
     if (maxmem > 0)
 	segments_in_memory =
-	    2 + maxmem * (nrows / SEGCOLSIZE) * (ncols / SEGCOLSIZE) / 100;
+	    2 + maxmem * (1 + nrows / SEGCOLSIZE) * (1 + ncols / SEGCOLSIZE) / 100;
     else
 	segments_in_memory = 4 * (nrows / SEGCOLSIZE + ncols / SEGCOLSIZE + 2);
 
