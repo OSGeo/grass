@@ -1,17 +1,15 @@
 /*!
   \file level_two.c
   
-  \brief Vector library - topo level 
+  \brief Vector library - topology level functions
   
   (C) 2001-2008 by the GRASS Development Team
   
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
 
   \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-  Update to GRASS 5.7 Radim Blazek and David D. Gray.
+  \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
   
   \date 2001-2008
 */
@@ -22,7 +20,7 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Get number of nodes
+  \brief Get number of nodes in vector map
 
   \param Map vector map
 
@@ -35,12 +33,12 @@ Vect_get_num_nodes (struct Map_info *map)
 }
 
 /*!
-  \brief Get number of primitives
+  \brief Get number of primitives in vector map
 
   \param map vector map
   \patam type feature type
 
-  \return number of primitives of given type 
+  \return number of primitives
  */
 int 
 Vect_get_num_primitives (struct Map_info *map, int type)
@@ -58,11 +56,11 @@ Vect_get_num_primitives (struct Map_info *map, int type)
 }
 
 /*!
-  \brief Fetch number of line vectors (points, lines, centroids)
+  \brief Fetch number of features (points, lines, boundaries, centroids) in vector map
 
   \param map vector map
 
-  \return number of line vectors
+  \return number of features
  */
 int 
 Vect_get_num_lines (struct Map_info *map)
@@ -71,7 +69,7 @@ Vect_get_num_lines (struct Map_info *map)
 }
 
 /*!
-  \brief Get number of areas
+  \brief Get number of areas in vector map
 
   \param map vector map
 
@@ -84,7 +82,7 @@ Vect_get_num_areas (struct Map_info *map)
 }
 
 /*!
-  \brief Get number of faces
+  \brief Get number of faces in vector map
 
   \param map vector map
   
@@ -97,7 +95,7 @@ Vect_get_num_faces (struct Map_info *map)
 }
 
 /*!
-  \brief Get number of islands
+  \brief Get number of islands in vector map
 
   \param map vector map
 
@@ -123,11 +121,11 @@ Vect_get_num_dblinks (struct Map_info *map)
 }
 
 /*!
-  \brief Get number of updated lines
+  \brief Get number of updated features
 
   \param map vector map
 
-  \return number of updated lines
+  \return number of updated features
  */
 int 
 Vect_get_num_updated_lines (struct Map_info *map)
@@ -177,13 +175,13 @@ Vect_get_updated_node (struct Map_info *map, int idx)
 }
 
 /*!
-  \brief Get 2D/3D coordinates of node
+  \brief Get node coordinates
 
   \param map vector map
-  \param num 
-  \param x,y,z coordinates values
+  \param num node id
+  \param x,y,z coordinates values (for 2D coordinates z is NULL)
 
-  \return 2D/3D coordinates of node
+  \return 0
  */
 int 
 Vect_get_node_coor (struct Map_info *map, int num, double *x, double *y, double *z)
@@ -201,13 +199,13 @@ Vect_get_node_coor (struct Map_info *map, int num, double *x, double *y, double 
 }
 
 /*!
-  \brief Get starting and ending node of line
+  \brief Get line nodes
   
   \param Map vector map
   \param line line id
-  \param n1, n2 ids of line nodes
+  \param n1, n2 ids of line nodes (or NULL)
 
-  \return numbers of line nodes
+  \return 1
 */
 int 
 Vect_get_line_nodes ( struct Map_info *Map, int line, int *n1, int *n2)
@@ -226,13 +224,13 @@ Vect_get_line_nodes ( struct Map_info *Map, int line, int *n1, int *n2)
 }
 
 /*!
-  \brief Get areas/isles on the left and right
+  \brief Get area/isle ids on the left and right
 
   \param Map vector map
-  \param line
-  \param[out] left,right numbers of areas/isles on the left and right
+  \param line line id
+  \param[out] left,right area/isle id on the left and right
 
-  \return numbers of areas/isles on the left and right
+  \return 1
 */
 int 
 Vect_get_line_areas ( struct Map_info *Map, int line, int *left, int *right)
@@ -251,12 +249,12 @@ Vect_get_line_areas ( struct Map_info *Map, int line, int *left, int *right)
 }
 
 /*!
-  \brief Returns number of lines for node
+  \brief Get number of lines for node
   
   \param Map vector map
   \param node node id
 
-  \return numbers of lines for a node
+  \return numbers of lines
 */
 int 
 Vect_get_node_n_lines ( struct Map_info *Map, int node )
@@ -270,13 +268,13 @@ Vect_get_node_n_lines ( struct Map_info *Map, int node )
 }
 
 /*!
-  \brief Returns line number for node line index
+  \brief Get line id for node line index
   
   \param Map vector map
-  \param node node number
-  \param line line index, range : 0 - Vect_get_node_n_lines()
+  \param node node id
+  \param line line index (range: 0 - Vect_get_node_n_lines())
 
-  \return line number for node line index 
+  \return line id
 */
 int 
 Vect_get_node_line ( struct Map_info *Map, int node, int line )
@@ -292,7 +290,7 @@ Vect_get_node_line ( struct Map_info *Map, int node, int line )
 
   \param Map vector map
   \param node node number
-  \param line line index, range : 0 - Vect_get_node_n_lines()
+  \param line line index (range: 0 - Vect_get_node_n_lines())
 
   \return angle of segment of the line connected to the node
 */
@@ -306,14 +304,14 @@ Vect_get_node_line_angle ( struct Map_info *Map, int node, int line )
 }
 
 /*!
-  \brief Returns ID of area the centroid is within
+  \brief Get area id the centroid is within
 
   \param Map vector map
   \param centroid centroid id
 
-  \return ID of area the centroid is within
+  \return area id the centroid is within
   \return 0 for not in area
-  \return negative ID if area/centroid (?) is duplicate
+  \return negative id if area/centroid (?) is duplicate
 */
 int 
 Vect_get_centroid_area ( struct Map_info *Map, int centroid )
