@@ -14,9 +14,9 @@
 #include "local_proto.h"
 
 int dareatheme(struct Map_info *Map, struct cat_list *Clist,
-	       dbCatValArray * cvarr, double *breaks, int nbreaks,
+	       dbCatValArray *cvarr, double *breaks, int nbreaks,
 	       const struct color_rgb *colors, const struct color_rgb *bcolor,
-	       int chcat, struct Cell_head *window, int default_width, int *frequencies, int nodraw)
+	       int chcat, struct Cell_head *window, int default_width)
 {
 
     int num, area, isle, n_isles, n_points;
@@ -33,10 +33,14 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
     IPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
+    /* We need to sort the CatValArray by cat for the bsearch in 
+     * db_CatValArray_get_value 
+     */
+    db_CatValArray_sort(cvarr);
 
     num = Vect_get_num_areas(Map);
     G_debug(2, "n_areas = %d", num);
-   
+
 
     for (area = 1; area <= num; area++) {
 	int i;
@@ -146,13 +150,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 	    }
 	}
 
-	/* find out into which class breakval falls */
-	i = 0;
-	while (breakval > breaks[i] && i < nbreaks)
-	    i++;
-	frequencies[i]++;
-
-        if(!nodraw) {
 	/* plot polygon in class color */
 	R_RGB_color(colors[i].r, colors[i].g, colors[i].b);
 	plot_polygon(Points->x, Points->y, Points->n_points);
@@ -171,7 +168,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 		plot_polyline(Points->x, Points->y, Points->n_points);
 	    }
 	}
-      } /* end if !nodraw */
     }				/* end for loop over areas */
 
     Vect_destroy_line_struct(Points);

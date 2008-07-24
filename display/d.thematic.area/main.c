@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     char *mapset;
     int ret, level;
     int i, stat = 0;
-    int nclass = 0, nbreaks, *frequencies, boxsize = 0;
+    int nclass = 0, nbreaks, *frequencies, boxsize, textsize, ypos;
     int chcat = 0;
     int r, g, b;
     int has_color = 0;
@@ -67,7 +67,8 @@ int main(int argc, char **argv)
     dbCatValArray cvarr;
     struct Cell_head window;
     BOUND_BOX box;
-    double overlap, *breakpoints, min = 0, max = 0, *data = NULL, class_info = 0.0;
+    double overlap, *breakpoints, min = 0, max = 0, *data = NULL, class_info =
+	0.0;
     struct GASTATS stats;
     FILE *fd;
 
@@ -383,17 +384,15 @@ int main(int argc, char **argv)
 	else {
 
 	    G_fatal_error(_
-			  ("You must either give classbreaks or a classification algrorithm"));
+			  ("You must either give classbreaks or a classification algorithm"));
 
 	}
     };
 
-    frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
-    for (i = 0; i < nbreaks + 1; i++)
-	frequencies[i] = 0;
 
     /* Fill colors */
     colors = (struct color_rgb *)G_malloc(nclass * sizeof(struct color_rgb));
+
 
     if (colors_opt->answers != NULL) {
 	for (i = 0; i < nclass; i++) {
@@ -414,75 +413,81 @@ int main(int argc, char **argv)
     }
 
 
-    /* Not sure if this is needed, but probably won't hurt */
-    db_CatValArray_sort(&cvarr);
+    if (!nodraw_flag->answer) {
+	/* Now's let's prepare the actual plotting */
+	if (R_open_driver() != 0)
+	    G_fatal_error(_("No graphics device selected"));
 
-    /* Now's let's prepare the actual plotting */
-    if (R_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
+	D_setup(0);
 
-    D_setup(0);
+	G_setup_plot(D_get_d_north(), D_get_d_south(),
+		     D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
 
-    G_setup_plot(D_get_d_north(), D_get_d_south(),
-		 D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
+	if (verbose)
+	    G_message(_("Plotting ..."));
 
-    if (verbose)
-	G_message(_("Plotting ..."));
+	Vect_get_map_box(&Map, &box);
 
-    Vect_get_map_box(&Map, &box);
+	if (window.north < box.S || window.south > box.N ||
+	    window.east < box.W ||
+	    window.west > G_adjust_easting(box.E, &window)) {
+	    G_message(_
+		      ("The bounding box of the map is outside the current region, "
+		       "nothing drawn."));
+	    stat = 0;
+	}
+	else {
+	    overlap =
+		G_window_percentage_overlap(&window, box.N, box.S, box.E,
+					    box.W);
+	    G_debug(1, "overlap = %f \n", overlap);
+	    if (overlap < 1)
+		Vect_set_constraint_region(&Map, window.north, window.south,
+					   window.east, window.west,
+					   PORT_DOUBLE_MAX, -PORT_DOUBLE_MAX);
 
-    if (window.north < box.S || window.south > box.N ||
-	window.east < box.W || window.west > G_adjust_easting(box.E, &window)) {
-	G_message(_
-		  ("The bounding box of the map is outside the current region, "
-		   "nothing drawn."));
-	stat = 0;
-    }
-    else {
-	overlap =
-	    G_window_percentage_overlap(&window, box.N, box.S, box.E, box.W);
-	G_debug(1, "overlap = %f \n", overlap);
-	if (overlap < 1)
-	    Vect_set_constraint_region(&Map, window.north, window.south,
-				       window.east, window.west,
-				       PORT_DOUBLE_MAX, -PORT_DOUBLE_MAX);
-
-	/* default line width */
-	D_line_width(default_width);
-
-
-	stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
-			  has_color ? &bcolor : NULL, chcat, &window,
-			  default_width, frequencies, nodraw_flag->answer);
+	    /* default line width */
+	    D_line_width(default_width);
 
 
-	/* reset line width: Do we need to get line width from display
-	 * driver (not implemented)?  It will help restore previous line
-	 * width (not just 0) determined by another module (e.g.,
-	 * d.linewidth). */
-	R_line_width(0);
-
-    }				/* end window check if */
-
-    if (!x_flag->answer) {
-	D_add_to_list(G_recreate_command());
-
-	D_set_dig_name(G_fully_qualified_name(map_name, mapset));
-	D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
-    }
-
-    R_close_driver();
+	    stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
+			      has_color ? &bcolor : NULL, chcat, &window,
+			      default_width);
 
 
+	    /* reset line width: Do we need to get line width from display
+	     * driver (not implemented)?  It will help restore previous line
+	     * width (not just 0) determined by another module (e.g.,
+	     * d.linewidth). */
+	    R_line_width(0);
 
+	}			/* end window check if */
 
+	if (!x_flag->answer) {
+	    D_add_to_list(G_recreate_command());
+
+	    D_set_dig_name(G_fully_qualified_name(map_name, mapset));
+	    D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
+	}
+
+	R_close_driver();
+
+    }				/* end of nodraw_flag condition */
+
+    frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
+    for (i = 0; i < nbreaks + 1; i++)
+	frequencies[i] = 0.0;
+    class_frequencies(data, nrec, nbreaks, breakpoints, frequencies);
 
     if (legend_flag->answer) {
+
 	if (algoinfo_flag->answer) {
 
 	    basic_stats(data, nrec, &stats);
 
-	    fprintf(stdout, _("\nClassification of %s into %i classes\n"),
+	    fprintf(stdout, _("\nTotal number of records: %.0f\n"),
+		    stats.count);
+	    fprintf(stdout, _("Classification of %s into %i classes\n"),
 		    column_opt->answer, nbreaks + 1);
 	    fprintf(stdout, _("Using algorithm: *** %s ***\n"),
 		    algo_opt->answer);
@@ -515,21 +520,27 @@ int main(int argc, char **argv)
     if (legend_file_opt->answer) {
 	fd = fopen(legend_file_opt->answer, "w");
 	boxsize = 100 / nclass;
-	fprintf(fd, "symbol basic/box %i 5 10 black %d:%d:%d\n", boxsize,
+	textsize = boxsize / 10;
+	fprintf(fd, "size %i %i\n", textsize, textsize);
+	ypos = 10;
+	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize, ypos,
 		colors[0].r, colors[0].g, colors[0].b);
-	fprintf(fd, "move 15 7 \n");
-	fprintf(fd, "text %f - %f\n", min, breakpoints[0]);
+	fprintf(fd, "move 15 %i \n", ypos - textsize / 2);
+	fprintf(fd, "text %f - %f | %i\n", min, breakpoints[0], frequencies[0]);
 	for (i = 1; i < nbreaks; i++) {
+	    ypos = 10 + i * 10;
 	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		    10 + i * 10, colors[i].r, colors[i].g, colors[i].b);
-	    fprintf(fd, "move 15 %i\n", 7 + i * 10);
-	    fprintf(fd, "text %f - %f\n", breakpoints[i - 1], breakpoints[i]);
+		    ypos, colors[i].r, colors[i].g, colors[i].b);
+	    fprintf(fd, "move 15 %i\n", ypos - textsize / 2);
+	    fprintf(fd, "text %f - %f | %i\n", breakpoints[i - 1],
+		    breakpoints[i], frequencies[i]);
 	}
+	ypos = 10 + i * 10;
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		10 + i * 10, colors[nbreaks].r, colors[nbreaks].g,
-		colors[nbreaks].b);
-	fprintf(fd, "move 15 %i\n", 7 + i * 10);
-	fprintf(fd, "text %f - %f\n", breakpoints[nbreaks - 1], max);
+		ypos, colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+	fprintf(fd, "move 15 %i\n", ypos - textsize / 2);
+	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1], max,
+		frequencies[nbreaks]);
 	fclose(fd);
     }
 
