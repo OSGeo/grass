@@ -98,9 +98,10 @@
 #% option
 #%  key: units
 #%  type: string
-#%  description: Set scaling factor (applies to lat./long. locations only)
+#%  description: Set scaling factor (applies to lat./long. locations only, none: scale=1)
 #%  required : no
-#%  options: meters,feet
+#%  options: none,meters,feet
+#%  answer: none
 #% end
 
 if  [ -z "$GISBASE" ] ; then

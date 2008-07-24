@@ -34,15 +34,14 @@ however, any raster map layer can be named.
 <B>scale</B> than vertical scale. If 'scale' is a number then the ewres 
 and nsres are multiplied by that scale to calculate the shading. (Default=1.0 
 for equivalent horizontal and vertical scales.)
-<br>For ETOPO2 data a scale factor of 10000 generates an acceptable
-shading effect.
 
-<LI>For the special case when a latitude-longitude projection is used 
-with an elevation map measured in meters or feet, the <B>units</B> can
-be set to automatically set the horizontal scale to the the number of 
-meters or feet in a degree of latitude. The script scales latitude and 
-longitude equally, so it's only approximately right, but for shading 
+<LI>For the special case when a latitude-longitude projection is used with an
+elevation map measured in meters (e.g., SRTM, ETOPO2 etc.) or feet, the 
+<b>units</b> can be set to automatically set the horizontal scale to the the number of 
+meters (scale=111120) or feet (scale=370400) in a degree of latitude. The script scales
+latitude and longitude equally, so it's only approximately right, but for shading 
 it's close enough. It makes the difference between a usable and unusable shade.
+The <b>units</b> parameter overrides the <b>scale</b> parameter.
 
 <LI>The <b>zmult</b> exaggeration factor that changes the apparent relief
 for the shaded relief map.  This can be any positive (or negative) floating
