@@ -50,9 +50,12 @@ def run_command(*args, **kwargs):
     ps = start_command(*args, **kwargs)
     return ps.wait()
 
-def read_command(*args, **kwargs):
+def pipe_command(*args, **kwargs):
     kwargs['stdout'] = subprocess.PIPE
-    ps = start_command(*args, **kwargs)
+    return start_command(*args, **kwargs)
+
+def read_command(*args, **kwargs):
+    ps = pipe_command(*args, **kwargs)
     return ps.communicate()[0]
 
 # interface to g.message
