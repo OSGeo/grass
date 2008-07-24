@@ -24,6 +24,7 @@
 
 static void swap_gl();
 static int print_error(const char *, const int);
+static int print_percent(int);
 static void print_sentence (PyObject*, const int, const char *);
 static PyObject *logStream;
 static int message_id = 1;
@@ -38,6 +39,8 @@ Nviz::Nviz(PyObject *log)
     logStream = log;
 
     G_set_error_routine(&print_error);
+    // TODO
+    // G_set_percent_routine(&print_percent);
 
     GS_libinit();
     /* GVL_libinit(); TODO */
@@ -57,6 +60,10 @@ Nviz::Nviz(PyObject *log)
 */
 Nviz::~Nviz()
 {
+    G_unset_error_routine();
+    // TODO
+    // G_unset_percent_routine();
+
     G_free((void *) data);
 
     data = NULL;
@@ -209,4 +216,14 @@ void print_sentence (PyObject *pyFd, const int type, const char *msg)
     PyFile_WriteString(prefix, pyFd);
 
     message_id++;
+}
+
+int print_percent(int x)
+{
+    char msg[256];
+
+    sprintf(msg, "GRASS_INFO_PERCENT: %d\n", x);
+    PyFile_WriteString(msg, logStream);
+
+    return 0;
 }
