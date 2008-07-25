@@ -1,16 +1,15 @@
 /**
-   \file move.c
+   \file vector/vedit/move.c
 
-   \brief Vedit library - snapping
+   \brief Vedit library - move primitives
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2007-2008 by the GRASS Development Team
 
-   \author (C) 2007-2008 by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
-   Jachym Cepicky <jachym.cepicky gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Martin Landa <landa.martin gmail.com>
+   \author Jachym Cepicky <jachym.cepicky gmail.com>
 
    \date 2007-2008
 */
@@ -18,15 +17,15 @@
 #include <grass/vedit.h>
 
 /**
-   \brief Move selected features
+   \brief Move selected primitives
    
-   \param[in] Map vector map
-   \param[in] BgMap, nbgmaps list of background vector maps for snapping   
-   \param[in] List list of features to be moved
-   \param[in] move_x,move_y,move_z direction (move_z used only if map is 3D)
-   \param[in] snap enable snapping (see globals.h)
+   \param Map vector map
+   \param BgMap, nbgmaps list of background vector maps used for snapping   
+   \param List list of primitives to be moved
+   \param move_x,move_y,move_z direction (move_z used only if map is 3D)
+   \param snap enable snapping (see globals.h)
 
-   \return number of modified features
+   \return number of modified primitives
    \return -1 on error
 */
 int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,

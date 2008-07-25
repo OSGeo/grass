@@ -1,0 +1,68 @@
+/*! \page Vedit_Library GRASS Vedit Library
+
+by GRASS Development Team
+
+http://grass.osgeo.org
+
+\section veditIntro Introduction to Vedit Library
+
+This library contains higher level functions to edit %vector primitives
+geometry (see \ref Vector_Library). Currently only 2D primitives are
+supported (points, lines, boundaries and centroids).
+
+<p>
+The library is currently used by v.edit module and wxGUI %vector digitizer.
+
+\section veditFn Functions
+
+\subsection veditModify Modify lines/boundaries
+
+ - int Vedit_split_lines()
+
+ - int Vedit_connect_lines()
+
+ - int Vedit_chtype_lines()
+
+ - int Vedit_delete_lines()
+
+ - int Vedit_flip_lines()
+
+ - int Vedit_merge_lines()
+
+ - int Vedit_move_lines()
+
+\subsection veditCats Manipulate feature categories
+
+ - int Vedit_modify_cats()
+
+\subsection veditCopy Copy primitives
+
+ - int Vedit_copy_lines()
+
+\subsection veditSelect Select primitives
+
+ - int Vedit_select_by_query()
+
+\subsection veditSnap Snapping
+
+ - int Vedit_snap_point()
+
+ - int Vedit_snap_line()
+
+ - int Vedit_snap_lines()
+
+\subsection veditVertex Vertex manipulation
+
+ - int Vedit_move_vertex()
+
+ - int Vedit_add_vertex()
+
+ - int Vedit_remove_vertex()
+
+\subsection veditMisc Miscellaneous
+
+ - double Vedit_get_min_distance()
+
+ - int Vedit_bulk_labeling()
+
+*/

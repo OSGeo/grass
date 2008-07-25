@@ -1,16 +1,15 @@
 /**
-   \file copy.c
+   \file vector/vedit/copy.c
 
-   \brief Vedit library - copy features
+   \brief Vedit library - copy primitives
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2007-2008 by the GRASS Development Team
 
-   \author (C) 2007-2008 by the GRASS Development Team
-   Jachym Cepicky <jachym.cepicky gmail.com>
-   Martin Landa <landa.martin gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Jachym Cepicky <jachym.cepicky gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2007-2008
 */
@@ -18,13 +17,13 @@
 #include <grass/vedit.h>
 
 /**
-   \brief Copy selected features
+   \brief Copy selected primitives
 
-   \param[in] Map vector map copy to
-   \param[in] FromMap vector map copy from (if not given use Map)
-   \param[in] List list of selected features (to be copied)
+   \param Map vector map copy to
+   \param FromMap vector map copy from (if not given use Map)
+   \param List list of selected primitives (to be copied)
 
-   \return number of copied features
+   \return number of copied primitives
    \return -1 on error 
  */
 int Vedit_copy_lines (struct Map_info *Map, struct Map_info *FromMap,

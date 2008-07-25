@@ -1,16 +1,15 @@
 /**
-   \file vertex.c
+   \file vector/vedit/vertex.c
 
    \brief Vedit library - vertex manipulation
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2006-2008 by the GRASS Development Team
 
-   \author (C) 2006-2008 by the GRASS Development Team
-   Jachym Cepicky <jachym.cepicky gmail.com>
-   Martin Landa <landa.martin gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Jachym Cepicky <jachym.cepicky gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2006-2008
 */
@@ -20,15 +19,15 @@
 /**
    \brief Move all vertices in bounding box(es)
 
-   \param[in] Map vector map
-   \param[in] BgMap, nbgmaps list of background vector maps for snapping
-   \param[in] List list of selected features
-   \param[in] coord points location
-   \param[in] thresh_coords threshold value for selecting vector feature
-   \param[in] thresh_snap threshold value used for snapping
-   \param[in] move_x,move_y,move_z direction (move_z is used when map is 3D)
-   \param[in] move_first move only first vertex found in the bounding box
-   \param[in] snap snapping mode (see vedit.h)
+   \param Map vector map
+   \param BgMap, nbgmaps list of background vector maps for snapping
+   \param List list of selected lines
+   \param coord points location
+   \param thresh_coords threshold value for selecting lines
+   \param thresh_snap threshold value used for snapping
+   \param move_x,move_y,move_z direction (move_z is used when map is 3D)
+   \param move_first move only first vertex found in the bounding box
+   \param snap snapping mode (see vedit.h)
 
    \return number of moved verteces
    \return -1 on error
@@ -172,16 +171,16 @@ int Vedit_move_vertex(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps
 }
 
 /**
-   \brief Add new vertex to line.
+   \brief Add new vertex to line
 
    Shape of line is not changed.
 
-   TODO: 3D
+   \todo 3D
 
-   \param[in] Map vector map
-   \param[in] List list of features
-   \param[in] coord points location
-   \param[in] thresh find line in given threshold
+   \param Map vector map
+   \param List list of lines
+   \param coord points location
+   \param thresh find line in given threshold
 
    \return number of add verteces
    \return -1 on error
@@ -262,12 +261,12 @@ int Vedit_add_vertex(struct Map_info *Map, struct ilist *List,
 /**
    \brief Remove vertex from line
 
-   TODO: 3D
+   \todo 3D
 
-   \param[in] Map vector map
-   \param[in] List list of selected features
-   \param[in] coord points location
-   \param[in] thresh threshold value to find a line
+   \param Map vector map
+   \param List list of selected lines
+   \param coord points location
+   \param thresh threshold value to find a line
 
    \return number of removed vertices
    \return -1 on error

@@ -1,14 +1,12 @@
 /**
-   \file distance.c
+   \file vector/vedit/distance.c
 
    \brief Vedit library - distance calculation
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
-
    (C) 2007-2008 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Martin Landa <landa.martin gmail.com>
 
@@ -20,10 +18,10 @@
 /**
    \brief Calculate distances between two lines
  
-   TODO: LL projection
+   \todo LL projection
 
-   \param[in] Points1 first line
-   \param[in] Points2 second line
+   \param Points1 first line geometry
+   \param Points2 second line geometry
    \param[out] index of minimal distance
 
    \return minimal distance betwen two lines (their nodes)

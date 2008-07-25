@@ -1,15 +1,15 @@
 /**
-   \file zbulk.c
+   \file vector/vedit/zbulk.c
 
-   \brief Vedit library - Bulk labeling (automated labeling of vector features)
+   \brief Vedit library - Bulk labeling (automated labeling of vector
+   features)
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2007-2008 by the GRASS Development Team
 
-   \author (C) 2007-2008 by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2007-2008
 */
@@ -18,15 +18,15 @@
 #include <grass/vedit.h>
 
 /**
-   \brief Z bulk-labeling.
+   \brief Lines z-bulk labeling
 
-   Automated labeling (z coordinate assignment) of vector lines (contours).
+   Automated labeling (z coordinate assignment) of vector lines (iso-lines).
 
-   \param[in] Map vector map
-   \param[in] List list of selected features
-   \param[in] point_start_end staring and ending point
-   \param[in] start starting value
-   \param[in] step step
+   \param Map vector map
+   \param List list of selected lines
+   \param point_start_end staring and ending point
+   \param start starting value
+   \param step step value
 
    \return number of modified features
    \return -1 on error
