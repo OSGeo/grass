@@ -32,8 +32,9 @@ parse_command_line (int argc, char *argv[])
     parms.type = G_define_standard_option(G_OPT_V_TYPE) ;
     parms.type->options      = "point,line,boundary,centroid";
     parms.type->answer       = "point,line,boundary,centroid";
-    parms.type->label        = _("Type of elements (for coor valid point/centroid, "
+    parms.type->description  = _("Type of elements (for coor valid point/centroid, "
 				 "for length valid line/boundary)");	
+    parms.type->label        = _("Type of elements");	
     
     parms.field = G_define_standard_option(G_OPT_V_FIELD);
 
