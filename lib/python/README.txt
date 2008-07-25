@@ -23,6 +23,22 @@ GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
 MONITOR='x0';
 
+def pipe_command(*args, **kwargs):
+
+Passes all arguments to start_command, but also adds
+"stdout = subprocess.PIPE". Returns the Popen object. Example:
+
+>>> p = grass.pipe_command("g.gisenv")
+>>> print p
+<subprocess.Popen object at 0xb7c12f6c>
+>>> print p.communicate()[0]
+GISDBASE='/opt/grass-data';
+LOCATION_NAME='spearfish57';
+MAPSET='glynn';
+GRASS_DB_ENCODING='ascii';
+GRASS_GUI='text';
+MONITOR='x0';
+
 def run_command(*args, **kwargs):
 
 Passes all arguments to start_command, then waits for the process to
@@ -128,3 +144,16 @@ Example:
 
 >>> grass.list_strings('rast')
 ['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
+
+def parse_color(val, dflt = None):
+
+Parses the string "val" as a GRASS colour, which can be either one of
+the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
+(r,g,b) triple whose components are floating point values between 0
+and 1. Example:
+
+>>> grass.parse_color("red")
+(1.0, 0.0, 0.0)
+>>> grass.parse_color("255:0:0")
+(1.0, 0.0, 0.0)
+
