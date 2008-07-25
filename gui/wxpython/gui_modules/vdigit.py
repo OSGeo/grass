@@ -1575,8 +1575,7 @@ class CDisplayDriver(AbstractDisplayDriver):
                                                 UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[1],
                                                 UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[2],
                                                 255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'),
-                                       UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
+                                       UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'))
 
 class VDigitSettingsDialog(wx.Dialog):
     """
