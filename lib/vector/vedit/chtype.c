@@ -1,25 +1,37 @@
 /**
-   \file chtype.c
+   \file vector/vedit/chtype.c
 
-   \brief Vedit library - change feature type
+   \brief Vedit library - change primitives type
 
-   Supported conversions:
-    - point<->centroid
-    - line<->boundary
+    (C) 2008 by the GRASS Development Team
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author (C) 2008 by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2008
 */
 
 #include <grass/vedit.h>
 
+/**
+   \brief Change primitive type
+
+   Supported conversions:
+    - point <-> centroid
+    - line <-> boundary
+
+    \param Map vector map
+    \param List list of selected primitives
+    \param[out] npoints number of points after conversion
+    \param[out] ncentroids number of centroids after conversion
+    \param[out] nlines number of lines after conversion
+    \param[out] nboundaries number of boundaries after conversion
+
+    \return number of modified primitives
+    \return -1 on error
+*/
 int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
 		       int *npoints, int *ncentroids,
 		       int *nlines, int *nboundaries)

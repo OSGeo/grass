@@ -1,15 +1,14 @@
 /**
-   \file delete.c
+   \file vector/vedit/delete.c
 
-   \brief Vedit library - delete features
+   \brief Vedit library - delete primitives
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2007-2008 by the GRASS Development Team
 
-   \author (C) 2007-2008 by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2007-2008
 */
@@ -17,12 +16,12 @@
 #include <grass/vedit.h>
 
 /**
-   \brief Delete selected features
+   \brief Delete selected primitives
 
-   \param[in] Map vector map
-   \param[in] List list of features to be deleted
+   \param Map vector map
+   \param List list of primitives to be deleted
 
-   \return number of deleted features
+   \return number of deleted primitives
    \return -1 on on error
  */
 int Vedit_delete_lines(struct Map_info *Map, struct ilist *List)

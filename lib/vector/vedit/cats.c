@@ -1,16 +1,15 @@
 /**
-   \file cats.c
+   \file vector/vedit/cats.c
 
    \brief Vedit library - category manipulation
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   (C) 2006-2008 by the GRASS Development Team
 
-   \author (C) 2006-2008 by the GRASS Development Team
-   Jachym Cepicky <jachym.cepicky gmail.com>
-   Martin Landa <landa.martin gmail.com>
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Jachym Cepicky <jachym.cepicky gmail.com>
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2006-2008
 */
@@ -18,15 +17,15 @@
 #include <grass/vedit.h>
 
 /**
-   \brief Add/remove categories of selected vector features
+   \brief Add / remove categories
 
-   \param[in] Map vector map
-   \param[in] List list of selected features
-   \param[in] layer layer number
-   \param[in] del action (non-zero for delete otherwise add)
-   \param[in] cats_list list of category numbers
+   \param Map vector map
+   \param List list of selected primitives
+   \param layer layer number
+   \param del action (non-zero for delete otherwise add)
+   \param cats_list list of category numbers
 
-   \return number of modified features
+   \return number of modified primitives
    \return -1 on error
 */
 int Vedit_modify_cats (struct Map_info *Map, struct ilist *List,

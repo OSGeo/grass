@@ -1,13 +1,14 @@
 /**
-   \brief Vedit library - select vector features (by query)
+   \file vector/vedit/select.c
 
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   \brief Vedit library - select primitives by query
 
-   \author (C) 2007-2008 by the GRASS Development Team
-   Martin Landa <landa.martin gmail.com>
+   (C) 2007-2008 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Martin Landa <landa.martin gmail.com>
 
    \date 2007-2008
 */
@@ -20,23 +21,23 @@ static int select_by_query(struct Map_info *, int, int, double,
 static int merge_lists (struct ilist* alist, struct ilist* blist);
 
 /**
-   \brief Select features by query (based on geometry properties)
+   \brief Select primitives by query (based on geometry properties)
 
    Currently supported:
-    - QUERY_LENGTH, select all features longer than threshold (or shorter if threshold is < 0)
+    - QUERY_LENGTH, select all lines longer than threshold (or shorter if threshold is < 0)
     - QUERY_DANGLE, select all dangles longer than threshold (or shorter if threshold is < 0)
 
    Perform global query if <i>List</i> is empty otherwise query only
    selected vector objects.
 
-   \param[in] Map vector map
-   \param[in] type feature type
-   \param[in] layer layer number
-   \param[in] thresh threshold value (< 0 for 'shorter', > 0 for 'longer')
-   \param[in] query query (length, dangle, ...)
+   \param Map vector map
+   \param type feature type
+   \param layer layer number
+   \param thresh threshold value (< 0 for 'shorter', > 0 for 'longer')
+   \param query query (length, dangle, ...)
    \param[in,out] List list of selected features
  
-   \return number of selected lines
+   \return number of selected primitives
 */
 int Vedit_select_by_query(struct Map_info *Map,
 			  int type, int layer, double thresh, int query,
@@ -122,7 +123,7 @@ int Vedit_select_by_query(struct Map_info *Map,
 }
 
 /**
-   \brief Query given feature
+   \brief Query selected primitive
 
    \return 1 line test positive 
    \return 0 line test negative
@@ -237,7 +238,7 @@ int select_by_query(struct Map_info *Map, int line, int type, double thresh,
    \brief Merge two lists, i.e. store only duplicate items
 
    \param[in,out] alist list to be merged
-   \param[in] blist list used for merging
+   \param blist list used for merging
 
    \return result number of items
 */
