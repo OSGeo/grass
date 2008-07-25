@@ -15,7 +15,7 @@ The library is currently used by v.edit module and wxGUI %vector digitizer.
 
 \section veditFn Functions
 
-\subsection veditModify Modify lines/boundaries
+\subsection veditModify Modify primitives
 
  - int Vedit_split_lines()
 
