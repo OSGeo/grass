@@ -1,35 +1,34 @@
 """
-MODULE: vdigit
+@package vdigit
 
-CLASSES:
- * AbstractDigit 
- * VEdit
- * VDigit
- * AbstractDisplayDriver
- * CDisplayDriver
- * VDigitSettingsDialog
- * VDigitCategoryDialog
- * VDigitZBulkDialog
- * VDigitDuplicatesDialog
+@brief Vector digitizer extension
 
-PURPOSE: Vector digitization tool for wxPython GUI
+Progress:
+ (1) v.edit called on the background (class VEdit)
+ (2) Reimplentation of v.digit (VDigit)
 
-         Note: Initial version under development
+Import:
 
-         Progress:
-          (1) v.edit called on the background (class VEdit)
-          (2) Reimplentation of v.digit (VDigit)
+  from vdigit import VDigit as VDigit
 
-         Import:
-          from vdigit import VDigit as VDigit
-          
-AUTHORS: The GRASS Development Team
-         Martin Landa <landa.martin gmail.com>
+Classes:
+ - AbstractDigit 
+ - VEdit
+ - VDigit
+ - AbstractDisplayDriver
+ - CDisplayDriver
+ - VDigitSettingsDialog
+ - VDigitCategoryDialog
+ - VDigitZBulkDialog
+ - VDigitDuplicatesDialog
 
-COPYRIGHT: (C) 2007-2008 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+(C) 2007-2008 by the GRASS Development Team
+
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
+
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -1576,7 +1575,8 @@ class CDisplayDriver(AbstractDisplayDriver):
                                                 UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[1],
                                                 UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[2],
                                                 255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'))
+                                       UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'),
+                                       UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
 
 class VDigitSettingsDialog(wx.Dialog):
     """
@@ -1781,12 +1781,24 @@ class VDigitSettingsDialog(wx.Dialog):
         border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         #
+        # digitize lines box
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Digitize line features"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        self.intersect = wx.CheckBox(parent=panel, label=_("Break lines on intersection"))
+        self.intersect.SetValue(UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
+        sizer.Add(item=self.intersect, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
+
+        border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
+
+        #
         # save-on-exit box
         #
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Save changes"))
         # save changes on exit?
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        self.save = wx.CheckBox(parent=panel, label=_("Save changes on exit automatically"))
+        self.save = wx.CheckBox(parent=panel, label=_("Save changes on exit"))
         self.save.SetValue(UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled'))
         sizer.Add(item=self.save, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
         border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)

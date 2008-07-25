@@ -284,6 +284,10 @@ class Settings:
                 'saveOnExit' : {
                     'enabled' : False
                     },
+                # break lines on intersection
+                'breakLines' : {
+                    'enabled' : False,
+                    },
                 },
             'profile': {
                 'raster0' : {

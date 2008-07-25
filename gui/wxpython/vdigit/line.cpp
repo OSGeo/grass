@@ -82,11 +82,11 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     Cats = Vect_new_cats_struct();
 
     if (layer > 0) {
-      Vect_cat_set(Cats, layer, cat);
-
-      if (cat > GetCategory(layer)) {
-	  SetCategory(layer, cat); /* set up max category for layer */
-      }
+	Vect_cat_set(Cats, layer, cat);
+	
+	if (cat > GetCategory(layer)) {
+	    SetCategory(layer, cat); /* set up max category for layer */
+	}
     }
 
     i = 0;
@@ -124,6 +124,11 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	return -1;
     }
 
+    /* break on intersection */
+    if (settings.breakLines) {
+	// TODO
+    }
+    
     /* register changeset */
     AddActionToChangeset(changesets.size(), ADD, newline);
 
@@ -629,10 +634,9 @@ int Digit::SnapLines(double thresh)
 }
 
 /**
-   \brief Connect two selected lines/boundaries
+   \brief Connect selected lines/boundaries
 
-   \return 1 lines connected
-   \return 0 lines not connected
+   \return number of modified lines
    \return -1 on error
 */
 int Digit::ConnectLines(double thresh)
@@ -643,9 +647,6 @@ int Digit::ConnectLines(double thresh)
     if (!display->mapInfo) {
 	return -1;
     }
-
-    if (display->selected->n_values != 2)
-	return 0;
 
     /* register changeset */
     changeset = changesets.size();
@@ -658,7 +659,7 @@ int Digit::ConnectLines(double thresh)
     ret = Vedit_connect_lines(display->mapInfo, display->selected,
 			      thresh);
 
-    if (ret == 1) {
+    if (ret > 0) {
 	nlines_diff = Vect_get_num_lines(display->mapInfo) - nlines_diff;
 	for(int i = Vect_get_num_lines(display->mapInfo); i > nlines_diff; i--) {
 	    AddActionToChangeset(changeset, ADD, i);

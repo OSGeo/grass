@@ -672,7 +672,7 @@ class VDigitToolbar(AbstractToolbar):
         toolMenu.AppendItem(snap)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnSnap, snap)
 
-        connect = wx.MenuItem(toolMenu, wx.ID_ANY, _('Connect two selected lines/boundaries'))
+        connect = wx.MenuItem(toolMenu, wx.ID_ANY, _('Connect selected lines/boundaries'))
         toolMenu.AppendItem(connect)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnConnect, connect)
 
@@ -727,7 +727,7 @@ class VDigitToolbar(AbstractToolbar):
         """Connect selected lines/boundaries"""
         Debug.msg(2, "Digittoolbar.OnConnect():")
         self.action="connectLine"
-        self.parent.MapWindow.mouse['box'] = 'point'
+        self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnQuery(self, event):
         """Query selected lines/boundaries"""
