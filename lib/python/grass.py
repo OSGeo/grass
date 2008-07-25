@@ -184,3 +184,33 @@ def list_pairs(type):
 
 def list_strings(type):
     return ["%s@%s" % pair for pair in list_pairs(type)]
+
+# color parsing
+
+named_colors = {
+    "white":   (1.00, 1.00, 1.00),
+    "black":   (0.00, 0.00, 0.00),
+    "red":     (1.00, 0.00, 0.00),
+    "green":   (0.00, 1.00, 0.00),
+    "blue":    (0.00, 0.00, 1.00),
+    "yellow":  (1.00, 1.00, 0.00),
+    "magenta": (1.00, 0.00, 1.00),
+    "cyan":    (0.00, 1.00, 1.00),
+    "aqua":    (0.00, 0.75, 0.75),
+    "grey":    (0.75, 0.75, 0.75),
+    "gray":    (0.75, 0.75, 0.75),
+    "orange":  (1.00, 0.50, 0.00),
+    "brown":   (0.75, 0.50, 0.25),
+    "purple":  (0.50, 0.00, 1.00),
+    "violet":  (0.50, 0.00, 1.00),
+    "indigo":  (0.00, 0.50, 1.00)}
+
+def parse_color(val, dflt = None):
+    if val in named_colors:
+        return named_colors[val]
+
+    vals = val.split(':')
+    if len(vals) == 3:
+        return tuple(float(v) / 255 for v in vals)
+
+    return dflt
