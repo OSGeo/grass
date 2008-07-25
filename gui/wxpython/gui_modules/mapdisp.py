@@ -1285,13 +1285,6 @@ class BufferedWindow(MapWindow, wx.Window):
                     begin = self.Pixel2Cell(self.mouse['begin'])
 
                     self.DrawLines(self.pdcTmp, begin, end)
-            elif digitToolbar.action == "connectLine":
-                if len(digitClass.driver.GetSelected()) > 1:
-                    # if two line selected -> reset
-                    digitClass.driver.SetSelected([])
-                digitClass.driver.SelectLineByPoint(self.Pixel2Cell(self.mouse['begin']),
-                                                    digitClass.GetSelectType())
-
         else:
             # get decoration id
             self.lastpos = self.mouse['begin']
@@ -1385,7 +1378,7 @@ class BufferedWindow(MapWindow, wx.Window):
             if digitToolbar.action in ["deleteLine", "moveLine", "moveVertex",
                                        "copyCats", "editLine", "flipLine",
                                        "mergeLine", "snapLine",
-                                       "queryLine", "breakLine", "typeConv"]:
+                                       "queryLine", "breakLine", "typeConv", "connectLine"]:
                 nselected = 0
                 # -> delete line || move line || move vertex
                 if digitToolbar.action in ["moveVertex", "editLine"]:
@@ -1469,11 +1462,12 @@ class BufferedWindow(MapWindow, wx.Window):
                     else:
                         nselected = digitClass.driver.SelectLinesByBox(pos1, pos2,
                                                                        digitClass.GetSelectType())
+                        
                         if nselected == 0:
                             if digitClass.driver.SelectLineByPoint(pos1,
                                                                    digitClass.GetSelectType()) is not None:
                                 nselected = 1
-
+                        
                 if nselected > 0:
                     if digitToolbar.action in ["moveLine", "moveVertex"]:
                         # get pseudoDC id of objects which should be redrawn
@@ -1797,7 +1791,7 @@ class BufferedWindow(MapWindow, wx.Window):
             elif digitToolbar.action == "snapLine":
                 digitClass.SnapLine()
             elif digitToolbar.action == "connectLine":
-                if len(digitClass.driver.GetSelected()) == 2:
+                if len(digitClass.driver.GetSelected()) > 1:
                     digitClass.ConnectLine()
             elif digitToolbar.action == "copyLine":
                 digitClass.CopyLine(self.copyIds)
@@ -2829,7 +2823,7 @@ class MapFrame(wx.Frame):
                     self.MapWindow.mouse['box'] = 'line'
             elif self.toolbars['vdigit'].action in ['addVertex', 'removeVertex', 'splitLine',
                                          'editLine', 'displayCats', 'displayAttrs',
-                                         'copyCats', 'connectLine']:
+                                         'copyCats']:
                 self.MapWindow.mouse['box'] = 'point'
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'

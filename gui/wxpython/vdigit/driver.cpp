@@ -818,7 +818,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   bool eVertex,      unsigned long cVertex,
 				   bool eArea,        unsigned long cArea,
 				   bool eDirection,   unsigned long cDirection,
-				   int lineWidth)
+				   int lineWidth, bool breakLines)
 {
     settings.highlight.Set(highlight);
     
@@ -865,6 +865,10 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
     settings.direction.color.Set(cDirection);
 
     settings.lineWidth = lineWidth;
+    
+    settings.breakLines = breakLines;
+
+    return;
 }
 
 /**
