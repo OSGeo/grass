@@ -27,6 +27,12 @@ private:
 	struct line_pnts *Points;
 	struct line_cats *Cats;
     };
+
+    /* settings */
+    struct _settings {
+	bool breakLines;
+    } settings;
+
     std::map<int, std::vector<action_meta> > changesets;
     int changesetCurrent;  /* first changeset to apply */
     int changesetDead;     /* first dead changeset */
@@ -81,6 +87,8 @@ public:
 
     int Undo(int);
     int GetUndoLevel();
+
+    void UpdateSettings(bool);
 };
 
 #endif /* WXVDIGIT_DIGIT_H */
