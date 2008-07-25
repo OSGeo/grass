@@ -38,7 +38,7 @@ Digit::Digit(DisplayDriver *ddriver)
 }
 
 /**
-   Digit class destructor
+   \brief Digit class destructor
 
    Frees changeset structure
 */
@@ -47,4 +47,16 @@ Digit::~Digit()
     for(int changeset = 0; changeset < (int) changesets.size(); changeset++) {
 	FreeChangeset(changeset);
     }
+}
+
+/**
+   \brief Update digit settings
+
+   \param breakLines break lines on intersection
+*/
+void Digit::UpdateSettings(bool breakLines)
+{
+    settings.breakLines = breakLines;
+
+    return;
 }

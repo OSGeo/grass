@@ -112,8 +112,6 @@ private:
 	symbol direction;
 
 	int lineWidth;    // screen units 
-
-	bool breakLines;
     } settings;
 
     struct _topology {
@@ -214,7 +212,7 @@ public:
 			bool, unsigned long,
 			bool, unsigned long,
 			bool, unsigned long,
-			int, bool);
+			int);
 };
 
 int print_error(const char *, int);
