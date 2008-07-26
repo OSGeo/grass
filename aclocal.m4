@@ -50,6 +50,24 @@ if test -n "$with_$1_libs"; then
 fi
 ])
 
+AC_DEFUN([LOC_CHECK_FRAMEWORK_PATH],[
+AC_MSG_CHECKING(for location of $2 framework)
+case "$with_$1_framework" in
+y | ye | yes | n | no)
+	AC_MSG_ERROR([*** You must supply a directory to --with-$1-framework.])
+	;;
+esac
+AC_MSG_RESULT($with_$1_framework)
+
+if test -n "$with_$1_framework"; then
+    if test -d $with_$1_framework; then
+        $3="$$3 -F$with_$1_framework"
+    else
+        AC_MSG_ERROR([*** $2 framework directory $dir does not exist.])
+    fi
+fi
+])
+
 AC_DEFUN([LOC_CHECK_SHARE_PATH],[
 AC_MSG_CHECKING(for location of $2 data files)
 case "$with_$1_share" in
@@ -223,6 +241,11 @@ LOC_PAD([  --with-$1-libs=DIRS])[$2 library files are in DIRS])
 AC_DEFUN([LOC_ARG_WITH_SHARE],[
 AC_ARG_WITH($1-share,
 LOC_PAD([  --with-$1-share=DIR])[$2 data files are in DIR])
+])
+
+AC_DEFUN([LOC_ARG_WITH_FRAMEWORK],[
+AC_ARG_WITH($1-framework,
+LOC_PAD([  --with-$1-framework=DIR])[$2 framework is in DIR])
 ])
 
 AC_DEFUN([LOC_OPTIONAL],[

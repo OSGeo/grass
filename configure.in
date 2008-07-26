@@ -233,6 +233,7 @@ LOC_ARG_WITH_LIB(png, PNG)
 
 LOC_ARG_WITH_INC(tcltk, Tcl/Tk)
 LOC_ARG_WITH_LIB(tcltk, Tcl/Tk)
+LOC_ARG_WITH_FRAMEWORK(tcltk, Tcl/Tk)
 
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
@@ -798,6 +799,27 @@ TCLTKLIBS=
 
 if test -n "$USE_TCLTK"; then
 
+LOC_CHECK_FRAMEWORK_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
+
+if test -n "$TCLTKLIBPATH" ; then
+
+dir="$with_tcltk_framework"
+TCLINCDIR="-I$dir/Tcl.framework/Headers -I$dir/Tk.framework/Headers -I$dir/Tk.framework/PrivateHeaders"
+
+LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
+LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR)
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$TCLTKLIBPATH -framework Tcl -framework Tk $LIBS"
+AC_CHECK_FUNC(Tk_MainWindow,[
+TCLTKLIBS = -framework Tcl -framework Tk
+],[
+AC_MSG_ERROR([*** Unable to locate Tcl/Tk libraries.])
+])
+LDFLAGS=$ac_save_ldflags
+
+else
+
 # With Tcl/Tk includes directory
 
 LOC_CHECK_INC_PATH(tcltk,Tcl/Tk,TCLINCDIR)
@@ -844,6 +866,9 @@ LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHL
 
 
 TCLTKLIBS="$TKLIB $TCLLIB"
+
+fi
+
 AC_DEFINE(HAVE_TCLTK)
 
 fi # $USE_TCLTK
