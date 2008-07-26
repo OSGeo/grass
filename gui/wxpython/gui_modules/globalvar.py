@@ -33,7 +33,7 @@ def CheckForWx():
         import wxversion
         wxversion.select(str(majorVersion))
         import wx
-        version = wx.__version__
+        version = wx.version().split(' ')[0]
         if float(version[:3]) < majorVersion:
             raise ValueError('You are using wxPython version %s' % str(version))
         if float(version[:3]) == 2.8 and \
