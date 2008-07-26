@@ -328,6 +328,7 @@ int Gs_update_attrange(geosurf *, int);
 
 /* From Gv3.c */
 geoline *Gv_load_vect(const char *, int *);
+void sub_Vectmem(int);
 
 /* From gk.c */
 Keylist *gk_copy_key(Keylist *);
