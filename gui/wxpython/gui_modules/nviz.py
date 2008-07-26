@@ -363,12 +363,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         # print stop - start
 
-    def SetLayerData(self, item, id):
+    def SetLayerData(self, item, id, nvizType):
         """Set map object properties"""
         type = self.tree.GetPyData(item)[0]['maplayer'].type
         data = self.tree.GetPyData(item)[0]['nviz']
             
-        # init layer data properties
+        # set default properties
         if data is None:
             self.tree.GetPyData(item)[0]['nviz'] = {}
             data = self.tree.GetPyData(item)[0]['nviz']
@@ -378,16 +378,34 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 for sec in ('attribute', 'draw', 'mask', 'position'):
                     data['surface'][sec] = {}
 
+                if id > 0 and not data[nvizType].has_key('object'):
+                    data[nvizType]['object'] = { 'id' : id,
+                                                 'init' : False }
+
                 self.SetSurfaceDefaultProp(data['surface'])
             elif type == 'vector':
                 data['vector'] = {}
                 for sec in ('lines', 'points'):
                     data['vector'][sec] = {}
 
+                if id > 0 and not data['vector'][nvizType].has_key('object'):
+                    data['vector'][nvizType]['object'] = { 'id' : id,
+                                                           'init' : False }
+
                 self.SetVectorDefaultProp(data['vector'])
 
         # set updates
         else:
+            if id > 0:
+                if type == 'raster':
+                    if not data[nvizType].has_key('object'):
+                        data[nvizType]['object'] = { 'id' : id,
+                                                     'init' : False }
+                elif type == 'vector':
+                    if not data['vector'][nvizType].has_key('object'):
+                        data['vector'][nvizType]['object'] = { 'id' : id,
+                                                               'init' : False }
+            
             for sec in data.keys():
                 for sec1 in data[sec].keys():
                     for sec2 in data[sec][sec1].keys():
@@ -415,12 +433,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers['raster']['id'].append(id)
 
         # set default/workspace layer properties
-        data = self.SetLayerData(item, id)
+        data = self.SetLayerData(item, id, 'surface')
 
-        # associate with map object id
-        data['surface']['object'] = { 'id' : id,
-                                      'init' : False }
-                
         # update properties
         self.UpdateLayerProperties(item)
 
@@ -585,32 +599,34 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if UserSettings.Get(group='nviz', key='vector',
                                     subkey=[v, 'show']):
                     vecType.append(v)
-
+        id = -1
         for type in vecType:
             if type == 'lines':
                 id = self.nvizClass.LoadVector(str(layer.name), False)
             else:
                 id = self.nvizClass.LoadVector(str(layer.name), True)
 
+            # set default/workspace layer properties
+            data = self.SetLayerData(item, id, type)['vector']
+
             if id < 0:
-                raise gcmd.NvizError(parent=self.parent,
-                                     message=_("Vector map <%s> (%s) not loaded" % \
-                                                   (layer.name, type)))
+                print >> sys.stderr, _("Vector map <%s> (%s) not loaded") % \
+                    (layer.name, type)
+                continue
 
             self.layers['v' + type]['name'].append(layer.name)
             self.layers['v'  + type]['id'].append(id)
 
-            # set default/workspace layer properties
-            data = self.SetLayerData(item, id)['vector']
-
-            data[type]['object'] = { 'id' : id,
-                                     'init' : False }
-
-            # update properties
-            self.UpdateLayerProperties(item)
-
+        if id < 0:
+            self.SetLayerData(item, id, 'lines')
+            self.SetLayerData(item, id, 'points')
+        
+        # update properties
+        self.UpdateLayerProperties(item)
+        
         # update tools window
-        if hasattr(self.parent, "nvizToolWin"):
+        if hasattr(self.parent, "nvizToolWin") and \
+                item == self.GetSelectedLayer(type='item'):
             toolWin = self.parent.nvizToolWin
 
             toolWin.UpdatePage('vector')
@@ -741,7 +757,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.update.append('vector:points:width')
             self.update.append('vector:points:marker')
             self.update.append('vector:points:color')
-            
+            self.update.append('vector:points:surface')
+        
     def Reset(self):
         """Reset (unload data)"""
         self.nvizClass.Reset()
@@ -1464,10 +1481,6 @@ class NvizToolWindow(wx.Frame):
         showLines = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                 label=_("Show vector lines"))
         self.win['vector']['lines']['show'] = showLines.GetId()
-        showLines.SetValue(UserSettings.Get(group='nviz', key='vector',
-                                            subkey=['lines', 'show']))
-        self.UpdateVectorShow(showLines.GetId(),
-                              showLines.IsChecked())
         showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
         pageSizer.Add(item=showLines, proportion=0,
@@ -1562,10 +1575,6 @@ class NvizToolWindow(wx.Frame):
         showPoints = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                 label=_("Show vector points"))
         self.win['vector']['points']['show'] = showPoints.GetId()
-        showPoints.SetValue(UserSettings.Get(group='nviz', key='vector',
-                                             subkey=['points', 'show']))
-        self.UpdateVectorShow(showPoints.GetId(),
-                              showPoints.IsChecked())
         showPoints.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
         pageSizer.Add(item=showPoints, proportion=0,
@@ -1899,6 +1908,7 @@ class NvizToolWindow(wx.Frame):
         row = 0
         showLines = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                 label=_("Show lines"))
+        self.win['settings']['vector']['lines']['show'] = showLines.GetId()
         showLines.SetValue(UserSettings.Get(group='nviz', key='vector',
                                             subkey=['lines', 'show']))
         gridSizer.Add(item=showLines, pos=(row, 0))
@@ -2208,6 +2218,7 @@ class NvizToolWindow(wx.Frame):
                     try: # TODO
                         win = self.FindWindowById(self.win['settings'][subgroup][subkey][subvalue])
                     except:
+                        # print 'e', subgroup, subkey, subvalue
                         continue
                     
                     if win.GetName() == "selection":
@@ -2218,6 +2229,7 @@ class NvizToolWindow(wx.Frame):
                         value = win.GetValue()
                     if subkey == 'pos':
                         value = float(value) / 100
+                    
                     settings[subgroup][subkey][subvalue] = value
                     
     def OnSave(self, event):
@@ -2543,7 +2555,7 @@ class NvizToolWindow(wx.Frame):
         
         if checked:
             id = data[vecType]['object']['id']
-            self.mapWindow.SetLayerData(item, id)
+            self.mapWindow.SetLayerData(item, id, vecType)
         
             # update properties
             self.mapWindow.UpdateLayerProperties(item)
@@ -2696,44 +2708,44 @@ class NvizToolWindow(wx.Frame):
         self.pageChanging = True
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')
-
+        
         if pageId == 'view':
             max = self.mapWindow.view['z-exag']['value'] * 10
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
-        elif pageId == 'surface' and \
-                self.notebook.GetSelection() != self.page['surface']['id']:
-            if self.page['vector']['id'] > -1:
-                self.notebook.RemovePage(self.page['vector']['id'])
-                self.page['vector']['id'] = -1
+        elif pageId == 'surface':
+            if self.notebook.GetSelection() != self.page['surface']['id']:
+                if self.page['vector']['id'] > -1:
+                    self.notebook.RemovePage(self.page['vector']['id'])
+                    self.page['vector']['id'] = -1
 
-            self.page['surface']['id'] = 1
-            self.page['settings']['id'] = 2
+                self.page['surface']['id'] = 1
+                self.page['settings']['id'] = 2
 
-            panel = wx.FindWindowById(self.page['surface']['panel'])
-            self.notebook.InsertPage(n=self.page['surface']['id'],
-                                     page=panel,
-                                     text=" %s " % _("Layer properties"),
-                                     select=True)
+                panel = wx.FindWindowById(self.page['surface']['panel'])
+                self.notebook.InsertPage(n=self.page['surface']['id'],
+                                         page=panel,
+                                         text=" %s " % _("Layer properties"),
+                                         select=True)
 
             self.UpdateSurfacePage(layer, data['surface'])
 
-        elif pageId == 'vector' and \
-                self.notebook.GetSelection() != self.page['vector']['id']:
-            if self.page['surface']['id'] > -1:
-                self.notebook.RemovePage(self.page['surface']['id'])
-                self.page['surface']['id'] = -1
+        elif pageId == 'vector':
+            if self.notebook.GetSelection() != self.page['vector']['id']:
+                if self.page['surface']['id'] > -1:
+                    self.notebook.RemovePage(self.page['surface']['id'])
+                    self.page['surface']['id'] = -1
 
-            self.page['vector']['id'] = 1
-            self.page['settings']['id'] = 2
+                self.page['vector']['id'] = 1
+                self.page['settings']['id'] = 2
 
-            panel = wx.FindWindowById(self.page['vector']['panel'])
-            self.notebook.InsertPage(n=self.page['vector']['id'],
-                                     page=panel,
-                                     text=" %s " % _("Layer properties"),
-                                     select=True)
-            
+                panel = wx.FindWindowById(self.page['vector']['panel'])
+                self.notebook.InsertPage(n=self.page['vector']['id'],
+                                         page=panel,
+                                         text=" %s " % _("Layer properties"),
+                                         select=True)
+
             self.UpdateVectorPage(layer, data['vector'])
         
         self.pageChanging = False
@@ -2815,6 +2827,14 @@ class NvizToolWindow(wx.Frame):
         #
         # lines
         #
+        show = self.FindWindowById(self.win['vector']['lines']['show'])
+        if data['lines'].has_key('object'):
+            show.SetValue(True)
+        else:
+            show.SetValue(False)
+        self.UpdateVectorShow(show.GetId(),
+                              show.IsChecked())
+
         width = self.FindWindowById(self.win['vector']['lines']['width'])
         width.SetValue(data['lines']['width'])
 
@@ -2842,6 +2862,14 @@ class NvizToolWindow(wx.Frame):
         #
         # points
         #
+        show = self.FindWindowById(self.win['vector']['points']['show'])
+        if data['points'].has_key('object'):
+            show.SetValue(True)
+        else:
+            show.SetValue(False)
+        self.UpdateVectorShow(show.GetId(),
+                              show.IsChecked())
+
         for prop in ('size', 'width', 'marker', 'color'):
             win = self.FindWindowById(self.win['vector']['points'][prop])
             name = win.GetName()

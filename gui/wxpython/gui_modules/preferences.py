@@ -392,7 +392,7 @@ class Settings:
                     },
                 'vector' : {
                     'lines' : {
-                        'show' : True,
+                        'show' : False,
                         'width' : 2,
                         'color' : (0, 0, 255, 255), # blue
                         'flat' : False,
