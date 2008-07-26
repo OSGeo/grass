@@ -23,7 +23,9 @@
 #include <grass/glocale.h>
 #include <grass/gstypes.h>
 
+/*
 #define TRAK_MEM
+*/
 
 #ifdef TRAK_MEM
 static int Tot_mem = 0;
@@ -254,50 +256,4 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 #endif
     
     return(top);
-}
-
-/*!
-  \brief Tracking memory
-
-  \param plus plus number
-*/
-void add_Vectmem(int plus)
-{
-#ifdef TRAK_MEM
-    {
-    	Tot_mem+=plus;
-    }
-#endif
-    
-    return;
-}
-
-/*!
-  \brief Tracking memory
-
-  \param minus mimus number
-*/
-void sub_Vectmem(int minus)
-{
-#ifdef TRAK_MEM
-    {
-    	Tot_mem-=minus;
-    }
-#endif
-    
-    return;
-}
-
-/*!
-  \brief Tracking memory (print)
-*/
-void show_Vectmem(void)
-{
-#ifdef TRAK_MEM
-    {
-    	G_message("Total vect memory = %d Kbytes", Tot_mem/1000);
-    }
-#endif
-    
-    return;
 }
