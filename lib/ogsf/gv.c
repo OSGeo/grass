@@ -326,8 +326,6 @@ void gv_free_vectmem(geovect * fv)
 	fv->lines = NULL;
     }
 
-    show_Vectmem();
-
     return;
 }
 

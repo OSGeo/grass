@@ -257,3 +257,19 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     
     return(top);
 }
+
+/*! 
+  \brief Tracking memory 
+  
+  \param minus mimus number 
+*/
+void sub_Vectmem(int minus) 
+{ 
+#ifdef TRAK_MEM 
+    { 
+	Tot_mem-=minus; 
+    } 
+#endif 
+    
+    return; 
+} 
