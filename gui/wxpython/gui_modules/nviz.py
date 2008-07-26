@@ -2659,7 +2659,7 @@ class NvizToolWindow(wx.Frame):
         # TODO: use step value instead
 
         self.OnVectorHeight(event)
-        self.OnVectorHeightFull(None)
+        self.OnVectorHeightFull(event)
 
     def OnVectorSurface(self, event):
         """Reference surface for vector map (lines/points)"""
