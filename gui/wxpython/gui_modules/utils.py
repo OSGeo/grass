@@ -19,6 +19,7 @@ import sys
 
 import globalvar
 import gcmd
+import grassenv
 try:
     import subprocess
 except:
@@ -56,38 +57,41 @@ def GetTempfile(pref=None):
     except:
         return None
 
-def GetLayerNameFromCmd(dcmd):
-    """Get layer name from GRASS command
+def GetLayerNameFromCmd(dcmd, fullyQualified=False):
+    """Get map name from GRASS command
 
     @param dcmd GRASS command (given as list)
+    @param fullyQualified change map name to be fully qualified
 
     @return map name
     @return '' if no map name found in command
     """
     mapname = ''
-    for item in dcmd:
-        if 'map=' in item:
-            mapname = item.split('=')[1]
-        elif 'input=' in item:
-            mapname = item.split('=')[1]
-        elif 'red=' in item:
-            mapname = item.split('=')[1]
-        elif 'h_map=' in item:
-            mapname = item.split('=')[1]
-        elif 'reliefmap' in item:
-            mapname = item.split('=')[1]
-        elif 'd.grid' in item:
-            mapname = 'grid'
-        elif 'd.geodesic' in item:
-            mapname = 'geodesic'
-        elif 'd.rhumbline' in item:
-            mapname = 'rhumb'
-        elif 'labels=' in item:
-            mapname = item.split('=')[1]+' labels'
+
+    if 'd.grid' == dcmd[0]:
+        mapname = 'grid'
+    elif 'd.geodesic' in dcmd[0]:
+        mapname = 'geodesic'
+    elif 'd.rhumbline' in dcmd[0]:
+        mapname = 'rhumb'
+    elif 'labels=' in dcmd[0]:
+        mapname = dcmd[idx].split('=')[1]+' labels'
+    else:
+        for idx in range(len(dcmd)):
+            if 'map=' in dcmd[idx] or \
+                    'input=' in dcmd[idx] or \
+                    'red=' in dcmd[idx] or \
+                    'h_map=' in dcmd[idx] or \
+                    'reliefmap' in dcmd[idx]:
+                break
             
-        if mapname != '':
-            break
-        
+        if idx < len(dcmd):
+            mapname = dcmd[idx].split('=')[1]
+            if fullyQualified and '@' not in mapname:
+                dcmd[idx] = dcmd[idx].split('=')[0] + '=' + \
+                    mapname +  '@' + grassenv.GetGRASSVariable('MAPSET')
+                mapname = dcmd[idx].split('=')[1]
+                        
     return mapname
 
 def ListOfCatsToRange(cats):

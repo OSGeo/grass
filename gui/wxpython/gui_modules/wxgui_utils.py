@@ -1134,7 +1134,7 @@ class LayerTree(CT.CustomTreeCtrl):
 
         # set layer text to map name
         if dcmd:
-            mapname = utils.GetLayerNameFromCmd(dcmd)
+            mapname = utils.GetLayerNameFromCmd(dcmd, fullyQualified=True)
             self.SetItemText(layer, mapname)
 
         # update layer data
