@@ -252,7 +252,7 @@ int Nviz_draw_quick(nv_data *data,
 
     /* draw vector lines */
     if (draw_vlines)
-	GV_alldraw_fastvect();
+	GV_alldraw_vect();
 
     /* draw vector points */
     if (draw_vpoints)
