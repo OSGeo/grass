@@ -2554,7 +2554,11 @@ class NvizToolWindow(wx.Frame):
         self.UpdateVectorShow(vecType, checked)
         
         if checked:
-            id = data[vecType]['object']['id']
+            try:
+                id = data[vecType]['object']['id']
+            except KeyError:
+                return
+
             self.mapWindow.SetLayerData(item, id, vecType)
         
             # update properties

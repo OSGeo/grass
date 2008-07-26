@@ -422,6 +422,9 @@ class WriteWorkspaceFile(object):
 
         @param data Nviz layer properties
         """
+        if not data.has_key('object'): # skip disabled
+            return
+
         self.indent += 4
         for attrb in data.iterkeys():
             if len(data[attrb]) < 1: # skip empty attributes
@@ -485,7 +488,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
     def __writeNvizVector(self, data):
-        """Save Nviz vector layer properties to workspace
+        """Save Nviz vector layer properties (lines/points) to workspace
 
         @param data Nviz layer properties
         """
@@ -493,16 +496,22 @@ class WriteWorkspaceFile(object):
         for attrb in data.iterkeys():
             if len(data[attrb]) < 1: # skip empty attributes
                 continue
+
+            if not data[attrb].has_key('object'): # skip disabled
+                continue
+            
             self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
             self.indent += 4
             for name in data[attrb].iterkeys():
+                if name == 'object':
+                    continue
                 if name == 'mode':
                     self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
                                                           data[attrb][name]['type']))
                     if data[attrb][name]['type'] == 'surface':
                         self.indent += 4
                         self.file.write('%s<map>%s</map>\n' % (' ' * self.indent,
-                                                               data[attrb][name]['map']))
+                                                               data[attrb][name]['surface']))
                         self.indent -= 4
                     self.file.write('%s</%s>\n' % ((' ' * self.indent, name)))
                 else:
