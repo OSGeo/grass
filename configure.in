@@ -791,34 +791,54 @@ AC_SUBST(USE_PNG)
 
 # Enable TCLTK option
 
-LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
-
 TCLINCDIR=
 TCLTKLIBPATH=
 TCLTKLIBS=
 
+AC_MSG_CHECKING(whether to use Tcl/Tk)
+AC_MSG_RESULT("$with_tcltk")
+case "$with_tcltk" in
+	n|no)
+		TCLTK_TYPE=none
+		;;
+	y|yes|x|x11)
+		TCLTK_TYPE=X11
+		USE_TCLTK=1
+		TCLTK_X11=1
+		;;
+	aqua|mac|osx|macosx)
+		TCLTK_TYPE=Aqua
+		USE_TCLTK=1
+		TCLTK_AQUA=1
+		;;
+	win|windows|mswin)
+		TCLTK_TYPE=Windows
+		USE_TCLTK=1
+		TCLTK_WINDOWS=1
+		;;
+	*)
+		AC_MSG_ERROR([*** Valid arguments for --with-tcltk= are yes,no,x11,aqua,windows.])
+		;;
+esac
+
 if test -n "$USE_TCLTK"; then
 
-LOC_CHECK_FRAMEWORK_PATH(tcltk,Tcl/Tk,TCLTKLIBPATH)
+if test -n "$TCLTK_AQUA" ; then
 
-if test -n "$TCLTKLIBPATH" ; then
+LOC_CHECK_FRAMEWORK_PATH(tcltk,Tcl/Tk,TCLTKPATH)
 
-dir="$with_tcltk_framework"
-TCLINCDIR="-I$dir/Tcl.framework/Headers -I$dir/Tk.framework/Headers -I$dir/Tk.framework/PrivateHeaders"
+LOC_CHECK_INCLUDES(Tk/tk.h,Tcl/Tk,$TCLTKPATH)
 
-LOC_CHECK_INCLUDES(tcl.h,Tcl,$TCLINCDIR)
-LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR)
+LOC_CHECK_FUNC(Tk_MainWindow,Tcl/Tk framework,TCLTKLIBS,-framework Tcl -framework Tk,$TCLTKPATH)
 
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$TCLTKLIBPATH -framework Tcl -framework Tk $LIBS"
-AC_CHECK_FUNC(Tk_MainWindow,[
-TCLTKLIBS="-framework Tcl -framework Tk"
-],[
-AC_MSG_ERROR([*** Unable to locate Tcl/Tk libraries.])
-])
-LDFLAGS=$ac_save_ldflags
+TCLINCDIR="$TCLTKPATH"
+TCLTKLIBPATH="$TCLTKPATH"
 
-else
+AC_DEFINE(TCLTK_AQUA)
+
+fi # TCLTK_AQUA
+
+if test -n "$TCLTK_X11" -o -n "$TCLTK_WINDOWS" ; then
 
 # With Tcl/Tk includes directory
 
@@ -864,16 +884,27 @@ LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHL
 ],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
 ],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
 
-
 TCLTKLIBS="$TKLIB $TCLLIB"
 
+if test -n "$TCLTK_X11" ; then
+AC_DEFINE(TCLTK_X11)
 fi
+if test -n "$TCLTK_WINDOWS" ; then
+AC_DEFINE(TCLTK_WINDOWS)
+fi
+
+fi # TCLTK_X11 || TCLTK_WINDOWS
 
 AC_DEFINE(HAVE_TCLTK)
 
 fi # $USE_TCLTK
 
-TKINCDIR=$TCLINCDIR
+TKINCDIR="$TCLINCDIR"
+
+AC_SUBST(USE_TCLTK)
+AC_SUBST(TCLTK_X11)
+AC_SUBST(TCLTK_AQUA)
+AC_SUBST(TCLTK_WINDOWS)
 
 AC_SUBST(TCLINCDIR)
 AC_SUBST(TKINCDIR)
@@ -1122,11 +1153,8 @@ LOC_CHECK_LIBS(GLU,gluBeginCurve,GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB $X_L
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$LDFLAGS $OPENGLLIB"
-AC_CHECK_FUNC(glXCreatePbuffer, [AC_DEFINE(HAVE_PBUFFERS)])
-AC_CHECK_FUNC(glXCreateGLXPixmap, [AC_DEFINE(HAVE_PIXMAPS)])
-LDFLAGS=${ac_save_ldflags}
+LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS)])
+LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS)])
 
 AC_DEFINE(OPENGL_X11)
 
@@ -1134,27 +1162,15 @@ fi # $OPENGL_X11
 
 if test "$OPENGL_AQUA" = 1 ; then
 
-with_opengl_includes=/System/Library/Frameworks/OpenGL.framework/Headers
-with_opengl_libs="-framework OpenGL -framework AGL -framework ApplicationServices"
+LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
-# With OpenGL includes directory
+LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_INC_PATH(opengl,OpenGL,OPENGLINC)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIBS,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIBS,,$OPENGLPATH,$OPENGLLIBS)
 
-LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLINC)
-
-# With OpenGL library directory
-
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$with_opengl_libs $LDFLAGS"
-AC_CHECK_FUNC(glBegin,[
-AC_CHECK_FUNC(gluBeginCurve,[
-OPENGLLIB="$with_opengl_libs"
-USE_OPENGL=1
-OPENGL_AQUA=1
-],[AC_MSG_ERROR([*** Unable to locate GLU library.])])
-],[AC_MSG_ERROR([*** Unable to locate OpenGL library.])])
-LDFLAGS=${ac_save_ldflags}
+OPENGLINC="$OPENGLPATH"
+OPENGLLIBPATH="$OPENGLPATH"
 
 AC_DEFINE(OPENGL_AQUA)
 
@@ -1470,12 +1486,7 @@ LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
 
 CAIROLIB=`pkg-config --libs cairo`
 
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$LDFLAGS $CAIROLIB"
-AC_CHECK_FUNC(cairo_create,,[
-AC_MSG_ERROR([*** Unable to locate cairo_create() function.])
-])
-LDFLAGS=${ac_save_ldflags}
+LOC_CHECK_FUNC(cairo_create,,,,,$CAIROLIB,[:])
 
 fi # $USE_CAIRO
 
@@ -1805,6 +1816,7 @@ LOC_MSG([  C++ compiler:                ${CXX} ${CXXFLAGS}])
 LOC_MSG([  Building shared libraries:   ${shared_ok}])
 LOC_MSG([  64bit support:               ${do64bit}])
 LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
+LOC_MSG([  Tcl/Tk platform:             ${TCLTK_TYPE}])
 LOC_MSG_USE(MacOSX application,MACOSX_APP)
 LOC_MSG()
 LOC_MSG_USE(NVIZ,USE_TOGL)

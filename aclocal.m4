@@ -169,6 +169,36 @@ ifelse($8,[],[
 LDFLAGS=${ac_save_ldflags}
 ])
 
+dnl $1  = function
+dnl $2  = descriptive name
+dnl $3  = result variable
+dnl $4  = LIBS initialiser (added to $3)
+dnl $5  = LDFLAGS initialiser (not added to $3)
+dnl $6  = LIBS initialiser (not added to $3)
+dnl $7  = ACTION-IF-FOUND
+dnl $8  = ACTION-IF-NOT-FOUND
+
+define(LOC_CHECK_FUNC,[
+ac_save_libs="$LIBS"
+ac_save_ldflags="$LDFLAGS"
+LIBS="$4 $6 $LIBS"
+LDFLAGS="$5 $LDFLAGS"
+AC_CHECK_FUNC($1,[
+ifelse($7,[],[
+    $3="$$3 $4"
+],$7)
+],[
+ifelse($8,[],[
+ifelse($2,[],
+    [AC_MSG_ERROR([*** Unable to locate $2.])],
+    [AC_MSG_ERROR([*** Unable to locate $1.])]
+)
+],$8)
+])
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+])
+
 AC_DEFUN([LOC_CHECK_VERSION_STRING],[
 AC_MSG_CHECKING($3 version)
 ac_save_cppflags="$CPPFLAGS"
