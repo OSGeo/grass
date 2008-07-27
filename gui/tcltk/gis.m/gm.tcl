@@ -77,8 +77,8 @@ if {![catch {set env(HOSTTYPE)}]} {
 }
 
 # add for OSX aqua
-if {![catch {set env(osxaqua)}]} {
-    set osxaqua $env(osxaqua)
+if {[tk windowingsystem] == "aqua"} {
+    set osxaqua "1"
 } else {
     set osxaqua "0"
 }
