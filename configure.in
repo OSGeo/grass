@@ -812,7 +812,7 @@ LOC_CHECK_INCLUDES(tk.h,Tk,$TCLINCDIR)
 ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$TCLTKLIBPATH -framework Tcl -framework Tk $LIBS"
 AC_CHECK_FUNC(Tk_MainWindow,[
-TCLTKLIBS = -framework Tcl -framework Tk
+TCLTKLIBS="-framework Tcl -framework Tk"
 ],[
 AC_MSG_ERROR([*** Unable to locate Tcl/Tk libraries.])
 ])
