@@ -1147,7 +1147,7 @@ class PreferencesDialog(wx.Dialog):
         askOnDeleteRec.SetValue(self.settings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'))
         self.winId['atm:askOnDeleteRec:enabled'] = askOnDeleteRec.GetId()
 
-        flexSizer.Add(askOnDeleteRec, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
+        flexSizer.Add(askOnDeleteRec, proportion=0)
 
         dataBrowserSizer.Add(item=flexSizer,
                            proportion=0,
