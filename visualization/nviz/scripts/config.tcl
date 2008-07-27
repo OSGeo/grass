@@ -31,7 +31,7 @@ set bit_map_path "$gisbase/etc/nviz2.2/bitmaps"
 set nv_path "$gisbase/etc/nviz2.2"
 
 #Get ProcessName varaible set from nviz2.2_script
- set ProcessName $env(NV_processname)
+set ProcessName $env(NV_processname)
 
 if {[info exists env(MSYSCON)]} {
     set mingw "1"
@@ -78,6 +78,7 @@ source $src_boot/etc/nviz2.2/scripts/extra_bindings.tcl
 #  Resources
 ##########################################################################
 option add *background gray90 widgetDefault
+option add *highlightBackground gray90 widgetDefault
 option add *activeBackground gray80 widgetDefault
 option add *font -*-helvetica-medium-r-normal-*-12-*-iso8859-1 widgetDefault
 option add *Label.font -*-helvetica-bold-r-normal-*-12-*-iso8859-1
