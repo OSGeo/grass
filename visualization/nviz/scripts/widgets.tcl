@@ -587,7 +587,7 @@ proc mkMapList { P type {cmd null}} {
 		set name [Nget_map_name $name $type]
 	}
 
-	menubutton $P -text $name -menu $P.m -relief sunken -bg white
+	menubutton $P -text $name -menu $P.m -relief sunken
 	menu $P.m -tearoff 0
 	foreach i $list {
 		set map_name [Nget_map_name $i $type]

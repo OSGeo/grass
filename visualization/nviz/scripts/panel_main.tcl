@@ -32,11 +32,13 @@
 ###########################################################################
 
 global arw_clr arw_text_clr
-
+global src_boot
+source $src_boot/etc/nviz2.2/scripts/config.tcl
 
 proc mkmainPanel { BASE } {
 	global Nv_
 	global XY
+	
 	#Globals for draw features
 	global surface vector sites volume
 	global legend labels n_arrow scalebar

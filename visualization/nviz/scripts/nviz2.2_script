@@ -30,6 +30,7 @@
 global src_boot
 global env
 global BGColor
+set BGColor #FFFFFF
 
 #If set to 1 output debug statements
 global DEBUG
@@ -37,8 +38,6 @@ set DEBUG 0
 
 #Initialize ProcessName variable
 set env(NV_processname) NVIZ
-
-set BGColor #FFFFFF
 
 source $src_boot/etc/nviz2.2/scripts/config.tcl
 
@@ -234,7 +233,7 @@ proc Nv_makeGUI {{BASE .}} {
 if {$DEBUG} {puts "Build toplevel window"}
 
 	set Nv_(First) 1
-	wm geometry . +10+10
+	wm geometry . +100+50
 	wm minsize . 10 10
 	wm sizefrom . user
 
@@ -256,15 +255,15 @@ if {$DEBUG} {puts "toplevel made"}
 
 	#panel area frame
 	frame $Nv_(PAREA) -relief flat -bd 0
-	pack $Nv_(PAREA) -side left -fill y -expand 0
+	pack $Nv_(PAREA) -side left -fill y -expand no
 
 	#togl canvas
 	frame .middle.draw -relief groove -bd 2
-	pack .middle.draw -side left -fill both -expand 1
+	pack .middle.draw -side left -fill both -expand yes
 
 	entry .bottom.entry -relief sunken -state disabled \
 		-background #FFFFFF -textvariable Nv_(text)
-	pack .bottom.entry -side left -fill both -expand 1
+	pack .bottom.entry -side left -fill both -expand yes
 
 	set cwidth [exec $src_boot/bin/g.gisenv X3D_WIDTH]
 	set cheight [exec $src_boot/bin/g.gisenv X3D_HEIGHT]
@@ -272,20 +271,20 @@ if {$DEBUG} {puts "toplevel made"}
 	if {$cwidth > 0 && $cheight > 0} {
 		togl .middle.draw.canvas -rgba true -double true -depth true \
 				-width $cwidth -height $cheight
-		pack .middle.draw.canvas -side top -expand 0
+		pack .middle.draw.canvas -side top -expand no
 	} elseif {$cwidth == "" && $cheight > 0} {
 		togl .middle.draw.canvas -rgba true -double true -depth true \
 				-height $cheight
-		pack .middle.draw.canvas -side top -fill x -expand 1
+		pack .middle.draw.canvas -side top -fill x -expand yes
 	} elseif {$cheight == "" && $cwidth > 0} {
 		togl .middle.draw.canvas -rgba true -double true -depth true \
 				-width $cwidth
-		pack .middle.draw.canvas -side top -fill y -expand 1
+		pack .middle.draw.canvas -side top -fill y -expand yes
 	} else {
 	#nothing set
 	set constrained 1
 		togl .middle.draw.canvas -rgba true -double true -depth true
-		pack .middle.draw.canvas -side top -fill both -expand 1
+		pack .middle.draw.canvas -side top -fill both -expand yes
 	}
 
 	bind .middle.draw.canvas <Expose> {Nv_expose %W}
@@ -301,11 +300,11 @@ if {$DEBUG} {puts "toplevel made"}
 	#Moved the following packing here to satisfy some TCL versions
 	#Prevents minimized GUI
 	#top frame for menubar
-	pack .top -side top -fill x -expand 0
+	pack .top -side top -fill x -expand no
 	#middle frame for menus and togl canvas
-	pack .middle  -side top -fill both -expand 1
+	pack .middle  -side top -fill both -expand yes
 	#botom frame for statusbar
-	pack .bottom -side top -fill x -expand 0
+	pack .bottom -side top -fill x -expand no
 
 
 # DEBUG
@@ -330,12 +329,12 @@ if {$DEBUG} {puts "panel area made"}
 	###########################################################################
 	# make	menubar
 	###########################################################################
-	frame $Nv_(AREA).menu  -relief raised -borderwidth 1
-	pack $Nv_(AREA).menu -side top -fill x -expand 0
+	frame $Nv_(AREA).menu  -relief flat -borderwidth 1
+	pack $Nv_(AREA).menu -side top -fill x -expand no
 
 	pack $Nv_(PAREA).canvas -side top -fill both -expand yes
 	pack $Nv_(PAREA).f1 -side left -before $Nv_(PAREA).canvas -fill y
-	pack $Nv_(PAREA).f1.scrolly -side top -fill y -expand 1
+	pack $Nv_(PAREA).f1.scrolly -side top -fill y -expand yes
 	pack $Nv_(PAREA).f1.b1 -side bottom -fill x
 
 	pack $Nv_(P_AREA) -side top -fill y -expand yes
@@ -347,9 +346,20 @@ if {$DEBUG} {puts "panel area made"}
 	#Bind menu area to canvas and scrollbars
 	$Nv_(PAREA).canvas create window 0 0 -window $Nv_(P_AREA) -anchor nw
 	bind $Nv_(P_AREA) <Configure> "set_scrollsize"
+
+	pack [Nv_mkMenu $Nv_(AREA).menu.help Help \
+		{"NVIZ Help" "About NVIZ" "NVIZ - Bugs / ToDo"} \
+		{0 0 0} \
+		{"nviz_browse nviz_toc.html" "nviz_browse nviz_desc.html" "nviz_browse bugs_todo.html"} ] \
+		-side right -fill x -expand yes -anchor e
+
+	# DEBUG
+	if {$DEBUG} {puts "Help menu made"}
+	
+	set leftmenu [frame $Nv_(AREA).menu.left -relief flat -bd 0]
 	
 	# file menu
-	set filemenu [Nv_mkMenu $Nv_(AREA).menu.file File \
+	set filemenu [Nv_mkMenu $leftmenu.file File \
 			  {"Load State ..." "Save State ..." \
 				"" \
 				"Set Canvas Size ..."
@@ -370,20 +380,11 @@ if {$DEBUG} {puts "panel area made"}
 				"Separator" \
 				"reset_Nviz" "Nv_close_scripting ; exit ; puts"}]
 
-	pack $filemenu -side left -fill x -expand 0
+	pack $filemenu -side left -fill x -expand yes 
 
 
 # DEBUG
 if {$DEBUG} {puts "file menu made"}
-
-	pack [Nv_mkMenu $Nv_(AREA).menu.help Help \
-		{"NVIZ Help" "About NVIZ" "NVIZ - Bugs / ToDo"} \
-		{0 0 0} \
-		{"nviz_browse nviz_toc.html" "nviz_browse nviz_desc.html" "nviz_browse bugs_todo.html"} ] \
-		-side right -fill x -expand 0
-
-# DEBUG
-if {$DEBUG} {puts "Help menu made"}
 
 	# Take these out later when these features are more reliable
 #	 $Nv_(AREA).menu.file.m entryconfigure 3 -state disabled
@@ -392,51 +393,54 @@ if {$DEBUG} {puts "Help menu made"}
 # DEBUG
 if {$DEBUG} {puts "disabled made"}
 
-	pack [Nv_mkConfigMenu $Nv_(AREA).menu.config] -side left -fill x -expand 0
+	pack [Nv_mkConfigMenu $leftmenu.config] -side left -fill x -expand yes 
 
-	pack [Nv_mkPanelMenu $Nv_(AREA).menu.panel] -side left -fill x -expand 0
+	pack [Nv_mkPanelMenu $leftmenu.panel] -side left -fill x -expand yes 
 # DEBUG
 if {$DEBUG} {puts "scripting menu 0 made"}
 
 
 	# Make a menu entry for scripting
-	menubutton $Nv_(AREA).menu.scripting -text Scripting \
-	-menu $Nv_(AREA).menu.scripting.m -underline 0
-	menu $Nv_(AREA).menu.scripting.m
+	menubutton $leftmenu.scripting -text Scripting \
+		-menu $leftmenu.scripting.m -underline 0
+	set scriptingmenu [menu $leftmenu.scripting.m]
 
-	$Nv_(AREA).menu.scripting.m add checkbutton -label "On" \
-	-onvalue 1 -offvalue 0 -variable ScriptState \
-	-command "script_handle_on"
+	$scriptingmenu add checkbutton -label "On" \
+		-onvalue 1 -offvalue 0 -variable ScriptState \
+		-command "script_handle_on"
 
-	$Nv_(AREA).menu.scripting.m add separator
+	$scriptingmenu add separator
 
-	$Nv_(AREA).menu.scripting.m add command -label "Create New Scriptfile" \
-	-underline 0 -command SetScriptFile
+	$scriptingmenu add command -label "Create New Scriptfile" \
+		-underline 0 -command SetScriptFile
 
-	$Nv_(AREA).menu.scripting.m add command -label "Open and Play Script" \
-	-underline 0 -command {set ScriptPlaying 1 ; exec nviz -f $default_panel_path/script_play &}
+	$scriptingmenu add command -label "Open and Play Script" \
+		-underline 0 -command {set ScriptPlaying 1 ; exec nviz -f $default_panel_path/script_play &}
 
-	$Nv_(AREA).menu.scripting.m add command -label "Close Script" \
-	-underline 1 -command Nv_close_scripting
+	$scriptingmenu add command -label "Close Script" \
+		-underline 1 -command Nv_close_scripting
 
-	$Nv_(AREA).menu.scripting.m add separator
+	$scriptingmenu add separator
 
-	$Nv_(AREA).menu.scripting.m add command -label "Add Script Line" \
-	-underline 0 -command AddScriptLine
+	$scriptingmenu add command -label "Add Script Line" \
+		-underline 0 -command AddScriptLine
 
-	$Nv_(AREA).menu.scripting.m add command -label "Add Script Command" \
-	-underline 1 -command AddScriptCmd
+	$scriptingmenu add command -label "Add Script Command" \
+		-underline 1 -command AddScriptCmd
 
-	$Nv_(AREA).menu.scripting.m add separator
+	$scriptingmenu add separator
 
-	$Nv_(AREA).menu.scripting.m add command -label "Script Tools" \
-	-underline 1 -command {exec nviz -f $default_panel_path/script_tools -q &}
+	$scriptingmenu add command -label "Script Tools" \
+		-underline 1 -command {exec nviz -f $default_panel_path/script_tools -q &}
 
-	pack $Nv_(AREA).menu.scripting -side left -fill x -expand 0
+	pack $leftmenu.scripting -side left -fill x -expand yes
 
 
 # DEBUG
 if {$DEBUG} {puts "scripting menu made"}
+
+	pack $leftmenu -side left -fill x -expand yes 
+
 
 	tk_menuBar $Nv_(AREA).menu $Nv_(AREA).menu.file $Nv_(AREA).menu.panel \
 	$Nv_(AREA).menu.scripting
@@ -778,10 +782,10 @@ proc set_canvas_size { dummy } {
 	frame .canvas_size.f2
 	frame .canvas_size.f3
 	pack .canvas_size.f3 .canvas_size.f1 .canvas_size.f2 -side top \
-			-fill both -expand 1
+			-fill both -expand yes
 	
 	label .canvas_size.f3.l1 -text "Set Size of Display Canvas"
-	pack .canvas_size.f3.l1 -side top -fill both -expand 0
+	pack .canvas_size.f3.l1 -side top -fill both -expand no
 	
 	label .canvas_size.f1.l1 -text "Width"
 	entry .canvas_size.f1.e1 -textvariable cwidth -width 6
@@ -804,10 +808,10 @@ proc set_canvas_size { dummy } {
 	button .canvas_size.f2.b1 -text "Close" \
 		-command {
 			if {$constrained} {
-					pack $Nv_(TOP).canvas -side top -fill both -expand 1
+					pack $Nv_(TOP).canvas -side top -fill both -expand yes
 			} else {
 					$Nv_(TOP).canvas configure -width $cwidth -height $cheight
-					pack $Nv_(TOP).canvas -side top -expand 0 -fill none
+					pack $Nv_(TOP).canvas -side top -expand no -fill none
 				#Need Nset_viewport to make sure reshape is called
 				Nset_viewport $cwidth $cheight
 			}
