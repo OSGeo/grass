@@ -26,12 +26,13 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 
 def CheckForWx():
     """Try to import wx module and check its version"""
+    
     majorVersion = 2.8
     minorVersion = 1.1
 
     try:
-        import wxversion
-        wxversion.select(str(majorVersion))
+        #import wxversion
+        #wxversion.select(str(majorVersion))
         import wx
         version = wx.version().split(' ')[0]
         if float(version[:3]) < majorVersion:
