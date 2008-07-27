@@ -48,6 +48,11 @@ class Settings:
         self.filePath = None
 
         #
+        # key/value separator
+        #
+        self.sep = ';'
+
+        #
         # default settings
         #
         self.defaultSettings = {
@@ -314,14 +319,14 @@ class Settings:
                     'legendSize' : 10,
                     },
                 'marker' : {
-                    'color' : wx.Colour(0, 0, 0),
+                    'color' : (0, 0, 0, 255),
                     'fill' : 'transparent',
                     'size' : 2,
                     'type' : 'triangle',
                     'legend' : _('Segment break'),
                     },
                 'grid' : {
-                    'color' : wx.Colour(200,200,200) ,
+                    'color' : (200, 200, 200, 255),
                     'enabled' : True,
                     },
                 'x-axis' : {
@@ -480,6 +485,7 @@ class Settings:
                                                                        _("aster"),
                                                                        _("gyro"),
                                                                        _("histogram"))
+        
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
@@ -519,8 +525,8 @@ class Settings:
             file = open(filename, "r")
             for line in file.readlines():
                 line = line.rstrip('%s' % os.linesep)
-                group, key = line.split(':')[0:2]
-                kv = line.split(':')[2:]
+                group, key = line.split(self.sep)[0:2]
+                kv = line.split(self.sep)[2:]
                 subkeyMaster = None
                 if len(kv) % 2 != 0: # multiple (e.g. nviz)
                     subkeyMaster = kv[0]
@@ -532,32 +538,8 @@ class Settings:
                     else:
                         subkey = kv[idx]
                     value = kv[idx+1]
-                    if len(value) == 0:
-                        self.Append(settings, group, key, subkey, '')
-                    else:
-                        # casting
-                        if value == 'True':
-                            value = True
-                        elif value == 'False':
-                            value = False
-                        elif value == 'None':
-                            value = None
-                        elif value[0] == '(':
-                            tmp = value.replace('(','').replace(')', '').split(',')
-                            try:
-                                value = tuple(map(int, tmp))
-                            except ValueError:
-                                value = tuple(tmp)
-                        else:
-                            try:
-                                value = int(value)
-                            except ValueError:
-                                try:
-                                    value = float(value)
-                                except ValueError:
-                                    pass
-
-                        self.Append(settings, group, key, subkey, value)
+                    value = self.__parseValue(value, read=True)
+                    self.Append(settings, group, key, subkey, value)
                     idx += 2
         finally:
             file.close()
@@ -589,34 +571,66 @@ class Settings:
             file = open(filePath, "w")
             for group in settings.keys():
                 for key in settings[group].keys():
-                    file.write('%s:%s:' % (group, key))
+                    file.write('%s%s%s%s' % (group, self.sep, key, self.sep))
                     subkeys = settings[group][key].keys()
                     for idx in range(len(subkeys)):
                         value = settings[group][key][subkeys[idx]]
                         if type(value) == type({}):
                             if idx > 0:
-                                file.write('%s%s:%s:' % (os.linesep, group, key))
-                            file.write('%s:' % subkeys[idx])
+                                file.write('%s%s%s%s%s' % (os.linesep, group, self.sep, key, self.sep))
+                            file.write('%s%s' % (subkeys[idx], self.sep))
                             kvalues = settings[group][key][subkeys[idx]].keys()
                             srange = range(len(kvalues))
                             for sidx in srange:
-                                file.write('%s:%s' % (kvalues[sidx],
-                                                      settings[group][key][subkeys[idx]][kvalues[sidx]]))
+                                svalue = self.__parseValue(settings[group][key][subkeys[idx]][kvalues[sidx]])
+                                file.write('%s%s%s' % (kvalues[sidx], self.sep,
+                                                       svalue))
                                 if sidx < len(kvalues) - 1:
-                                    file.write(':')
+                                    file.write('%s' % self.sep)
                         else:
-                            file.write('%s:%s' % (subkeys[idx], value))
+                            value = self.__parseValue(settings[group][key][subkeys[idx]])
+                            file.write('%s%s%s' % (subkeys[idx], self.sep, value))
                             if idx < len(subkeys) - 1:
-                                file.write(':')
+                                file.write('%s' % self.sep)
                     file.write('%s' % os.linesep)
         except IOError, e:
-            raise gcmd.SettingsError(e)
-        except:
-            raise gcmd.SettingsError('Writing settings to file <%s> failed.' % filePath)
-
+            raise gcmd.SettingsError(message=e)
+        except StandardError, e:
+            raise gcmd.SettingsError(message=_('Writing settings to file <%s> failed.'
+                                               '\n\nDetails: %s') % (filePath, e))
+        
         file.close()
 
         return filePath
+
+    def __parseValue(self, value, read=False):
+        """Parse value to be store in settings file"""
+        if read: # -> read settings (cast values)
+            if value == 'True':
+                value = True
+            elif value == 'False':
+                value = False
+            elif value == 'None':
+                value = None
+            elif ':' in value: # -> color
+                value = tuple(map(int, value.split(':')))
+            else:
+                try:
+                    value = int(value)
+                except ValueError:
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        pass
+        else: # -> write settings
+            if type(value) == type(wx.Colour(0, 0, 0, 0)):
+                print value, type(value)
+            if type(value) == type(()): # -> color
+                value = str(value[0]) + ':' +\
+                    str(value[1]) + ':' + \
+                    str(value[2])
+
+        return value
 
     def Get(self, group, key=None, subkey=None, internal=False):
         """Get value by key/subkey
@@ -1093,10 +1107,12 @@ class PreferencesDialog(wx.Dialog):
 
         flexSizer = wx.FlexGridSizer (cols=2, hgap=5, vgap=5)
         flexSizer.AddGrowableCol(0)
+        
         label = wx.StaticText(parent=panel, id=wx.ID_ANY, label="Color")
         hlColor = csel.ColourSelect(parent=panel, id=wx.ID_ANY,
                                     colour=self.settings.Get(group='atm', key='highlight', subkey='color'),
                                     size=(25, 25))
+        hlColor.SetName('GetColour')
         self.winId['atm:highlight:color'] = hlColor.GetId()
 
         flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
@@ -1391,6 +1407,8 @@ class PreferencesDialog(wx.Dialog):
                 value = win.IsChecked()
             elif win.GetName() == 'GetStringSelection':
                 value = win.GetStringSelection()
+            elif win.GetName() == 'GetColour':
+                value = tuple(win.GetValue())
             else:
                 value = win.GetValue()
 

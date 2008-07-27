@@ -2224,7 +2224,7 @@ class NvizToolWindow(wx.Frame):
                     if win.GetName() == "selection":
                         value = win.GetSelection()
                     elif win.GetName() == "color":
-                        value = win.GetColour()
+                        value = tuple(win.GetColour())
                     else:
                         value = win.GetValue()
                     if subkey == 'pos':
