@@ -159,6 +159,7 @@ def list_grouped(type):
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>:$")
     result = {}
+    mapset = None
     for line in read_command("g.list", type = type).splitlines():
 	if line == "":
 	    continue
@@ -169,7 +170,8 @@ def list_grouped(type):
 	    mapset = m.group(1)
 	    result[mapset] = []
 	    continue
-	result[mapset].extend(line.split())
+        if mapset:
+            result[mapset].extend(line.split())
     return result
 
 def _concat(xs):
