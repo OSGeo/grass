@@ -1652,7 +1652,8 @@ class VDigitSettingsDialog(wx.Dialog):
             flexSizer.Add(textLabel, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
             flexSizer.Add(enabled, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
             flexSizer.Add(color, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
-
+            color.SetName("GetColour")
+        
         sizer.Add(item=flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=10)
         
         panel.SetSizer(sizer)
@@ -2111,10 +2112,10 @@ class VDigitSettingsDialog(wx.Dialog):
                 UserSettings.Set(group='vdigit', key=key, subkey='enabled',
                                  value=enabled.IsChecked())
                 UserSettings.Set(group='vdigit', key=key, subkey='color',
-                                 value=color.GetColour())
+                                 value=tuple(color.GetColour()))
             else:
                 UserSettings.Set(group='vdigit', key=key, subkey='color',
-                                 value=color.GetColour())
+                                 value=tuple(color.GetColour()))
         # display
         UserSettings.Set(group='vdigit', key="lineWidth", subkey='value',
                          value=int(self.lineWidthValue.GetValue()))
