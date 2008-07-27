@@ -800,18 +800,10 @@ case "$GRASS_GUI" in
     
     # Check for tcltk interface
     tcltk | gis.m)
-	if [ "$osxaqua" ] ; then
-		"$GISBASE/scripts/gis.m" | sh &
-	else
-		"$GISBASE/scripts/gis.m"
-	fi	
+	"$GISBASE/scripts/gis.m"
 	;;
     oldtcltk | d.m)
-	if [ "$osxaqua" ] ; then
-		"$GISBASE/scripts/d.m" | sh &
-	else
-		"$GISBASE/scripts/d.m"
-	fi
+	"$GISBASE/scripts/d.m"
 	;;
     wxpython)
         "$GISBASE/etc/wxpython/scripts/wxgui"
