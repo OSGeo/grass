@@ -8581,7 +8581,7 @@ rm -f conftest*
 if eval "test \"`echo '$ac_cv_func_'Tk_MainWindow`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
-TCLTKLIBS = -framework Tcl -framework Tk
+TCLTKLIBS="-framework Tcl -framework Tk"
 
 else
   echo "$ac_t""no" 1>&6
