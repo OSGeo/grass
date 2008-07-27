@@ -249,6 +249,7 @@ LOC_ARG_WITH_LIB(ffmpeg, FFMPEG)
 
 LOC_ARG_WITH_INC(opengl, OpenGL)
 LOC_ARG_WITH_LIB(opengl, OpenGL)
+LOC_ARG_WITH_FRAMEWORK(opengl, OpenGL)
 
 LOC_ARG_WITH_INC(odbc, ODBC)
 LOC_ARG_WITH_LIB(odbc, ODBC)
@@ -1166,8 +1167,8 @@ LOC_CHECK_FRAMEWORK_PATH(opengl,OpenGL,OPENGLPATH)
 
 LOC_CHECK_INCLUDES(OpenGL/gl.h OpenGL/glu.h,OpenGL,$OPENGLPATH)
 
-LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIBS,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
-LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIBS,,$OPENGLPATH,$OPENGLLIBS)
+LOC_CHECK_FUNC(glBegin,OpenGL library,OPENGLLIB,-framework OpenGL -framework AGL -framework ApplicationServices,$OPENGLPATH)
+LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 
 OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
