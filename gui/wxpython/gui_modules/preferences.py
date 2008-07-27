@@ -523,6 +523,7 @@ class Settings:
 
         try:
             file = open(filename, "r")
+            line = ''
             for line in file.readlines():
                 line = line.rstrip('%s' % os.linesep)
                 group, key = line.split(self.sep)[0:2]
@@ -541,8 +542,13 @@ class Settings:
                     value = self.__parseValue(value, read=True)
                     self.Append(settings, group, key, subkey, value)
                     idx += 2
-        finally:
+        except ValueError, e:
+            print >> sys.stderr, _("Error: Reading settings from file <%s> failed.\n"
+                                   "       Details: %s\n"
+                                   "       Line: '%s'") % (filename, e, line)
             file.close()
+
+        file.close()
 
     def SaveToFile(self, settings=None):
         """Save settings to the file"""
