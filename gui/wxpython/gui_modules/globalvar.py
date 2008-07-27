@@ -1,19 +1,18 @@
 """
-MODULE:    global.py
+@package global.py
 
-PURPOSE:   Global variables
+@brief Global variables
 
-           This module provide the space for global variables
-           used in the code.
+This module provide the space for global variables
+used in the code.
 
-AUTHOR(S): GRASS Development Team
-           Martin Landa <landa.martin gmail.com>
+(C) 2007 by the GRASS Development Team
 
-COPYRIGHT: (C) 2007 by the GRASS Development Team
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
 
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -26,25 +25,18 @@ gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unico
 
 def CheckForWx():
     """Try to import wx module and check its version"""
-    
-    majorVersion = 2.8
-    minorVersion = 1.1
-
+    minVersion = [2, 8, 1, 1]
     try:
-        #import wxversion
-        #wxversion.select(str(majorVersion))
+        import wxversion
+        wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
         version = wx.version().split(' ')[0]
-        if float(version[:3]) < majorVersion:
-            raise ValueError('You are using wxPython version %s' % str(version))
-        if float(version[:3]) == 2.8 and \
-                float(version[4:]) < minorVersion:
-            raise ValueError('You are using wxPython version %s' % str(version))
+        if map(int, version.split('.')) < minVersion:
+            raise ValueError('Your wxPython version is %s.%s.%s.%s' % tuple(version.split('.')))
 
     except (ImportError, ValueError, wxversion.VersionError), e:
-        print >> sys.stderr, 'ERROR: ' + str(e) + \
-            '. wxPython >= %s.%s is required. Detailed information in README file.' % \
-            (str(majorVersion), str(minorVersion))
+        print >> sys.stderr, 'ERROR: wxGUI requires wxPython >= %d.%d.%d.%d. ' % tuple(minVersion) + \
+            '%s. Detailed information in README file.' % (str(e))
         sys.exit(1)
     except locale.Error, e:
         print >> sys.stderr, "Unable to set locale:", e
