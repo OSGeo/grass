@@ -23,8 +23,15 @@ import locale
 import gettext
 gettext.install('grasswxpy', os.path.join(os.getenv("GISBASE"), 'locale'), unicode=True)
 
+# wxversion.select() called once at the beginning
+check = True
+
 def CheckForWx():
     """Try to import wx module and check its version"""
+    global check
+    if not check:
+        return
+    
     minVersion = [2, 8, 1, 1]
     try:
         import wxversion
@@ -41,6 +48,8 @@ def CheckForWx():
     except locale.Error, e:
         print >> sys.stderr, "Unable to set locale:", e
         os.environ['LC_ALL'] = ''
+
+    check = False
 
 CheckForWx()
 import wx
