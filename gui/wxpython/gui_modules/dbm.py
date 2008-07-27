@@ -28,13 +28,14 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
-Martin Landa <landa.martin gmail.com>
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import sys
 import os
 import locale
 import tempfile
+import copy
 
 ### i18N
 import gettext
@@ -87,7 +88,6 @@ class VirtualAttributeList(wx.ListCtrl,
         self.layer   = layer
 
         self.columns              = {} # <- LoadData()
-        self.itemCatsMap          = {} # <- LoadData() (first call)
 
         # self.selectedCats         = []
         # self.lastTurnSelectedCats = [] # just temporary, for comparation
@@ -153,6 +153,7 @@ class VirtualAttributeList(wx.ListCtrl,
         # setting the numbers of items = number of elements in the dictionary
         self.itemDataMap  = {}
         self.itemIndexMap = []
+        self.itemCatsMap  = {}
 
         self.DeleteAllItems()
 
@@ -172,14 +173,11 @@ class VirtualAttributeList(wx.ListCtrl,
         else:
             columnNames = self.mapDBInfo.GetColumns(tableName)
 
-        if len(self.itemCatsMap) > 0:
+        try:
+            # for maps connected via v.external
+            keyId = columnNames.index(keyColumn)
+        except:
             keyId = -1
-        else:
-            try:
-                # for maps connected via v.external
-                keyId = columnNames.index(keyColumn)
-            except:
-                keyId = -1
 
         i = 0
         info = wx.ListItem()
@@ -481,12 +479,9 @@ class AttributeManager(wx.Frame):
         #
         # buttons
         #
-        # self.btnApply      = wx.Button(parent=self.panel, id=wx.ID_APPLY)
         self.btnQuit       = wx.Button(parent=self.panel, id=wx.ID_EXIT)
-        # self.btn_unselect = wx.Button(self, -1, "Unselect")
 
         # events
-        # self.btnApply.Bind(wx.EVT_BUTTON,           self.OnApply)
         self.btnQuit.Bind(wx.EVT_BUTTON,            self.OnCloseWindow)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.browsePage)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.manageTablePage)
@@ -567,6 +562,7 @@ class AttributeManager(wx.Frame):
 
             # sql statement box
             btnApply = wx.Button(parent=panel, id=wx.ID_APPLY)
+            btnApply.SetToolTipString(_("Apply SELECT statement and reload data records"))
             btnApply.Bind(wx.EVT_BUTTON, self.OnApplySqlStatement)
             btnSqlBuilder = wx.Button(parent=panel, id=wx.ID_ANY, label=_("SQL Builder"))
             btnSqlBuilder.Bind(wx.EVT_BUTTON, self.OnBuilder)
@@ -958,25 +954,75 @@ class AttributeManager(wx.Frame):
         table    = self.mapDBInfo.layers[self.layer]["table"]
         key      = self.mapDBInfo.layers[self.layer]["key"]
 
+        indeces = []
+        # collect SQL statements
         while item != -1:
-            # list.DeleteItem(item)
-            cat = int(list.GetItemText(item)) # FIXME
+            index = list.itemIndexMap[item]
+            indeces.append(index)
+
+            cat = list.itemCatsMap[index]
             
             self.listOfSQLStatements.append('DELETE FROM %s WHERE %s=%d' % \
                                                 (table, key, cat))
 
-            index = list.itemIndexMap[item]
-            del list.itemIndexMap[item]
-            del list.itemDataMap[index]
-            list.SetItemCount(list.GetItemCount()-1)
-            
             item = list.GetNextSelected(item)
 
+        if UserSettings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'):
+            deleteDialog = wx.MessageBox(parent=self,
+                                         message=_("Selected data records (%d) will permanently deleted "
+                                                   "from table. Do you want to delete them?") % \
+                                             (len(self.listOfSQLStatements)),
+                                         caption=_("Delete records"),
+                                         style=wx.YES_NO | wx.CENTRE)
+            if deleteDialog != wx.YES:
+                self.listOfSQLStatements = []
+                return
+
+        # restore maps
+        i = 0
+        indexTemp = copy.copy(list.itemIndexMap)
+        list.itemIndexMap = []
+        dataTemp = copy.deepcopy(list.itemDataMap)
+        list.itemDataMap = {}
+        catsTemp = copy.deepcopy(list.itemCatsMap)
+        list.itemCatsMap = {}
+
+        i = 0
+        for index in indexTemp:
+            if index in indeces:
+                continue
+            list.itemIndexMap.append(i)
+            list.itemDataMap[i] = dataTemp[index]
+            list.itemCatsMap[i] = catsTemp[index]
+
+            i += 1
+            
+        list.SetItemCount(len(list.itemIndexMap))
+
+        # deselect items
+        item = list.GetFirstSelected()
+        while item != -1:
+            list.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
+            item = list.GetNextSelected(item)
+        
+        # submit SQL statements
+        self.ApplyCommands()
+        
         event.Skip()
 
     def OnDataItemDeleteAll(self, event):
         """Delete all items from the list"""
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        if UserSettings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'):
+            deleteDialog = wx.MessageBox(parent=self,
+                                         message=_("All data records (%d) will permanently deleted "
+                                                   "from table. Do you want to delete them?") % \
+                                             (len(list.itemIndexMap)),
+                                         caption=_("Delete records"),
+                                         style=wx.YES_NO | wx.CENTRE)
+            if deleteDialog != wx.YES:
+                return
+
         list.DeleteAllItems()
         list.itemDataMap  = {}
         list.itemIndexMap = []
@@ -985,6 +1031,8 @@ class AttributeManager(wx.Frame):
         table = self.mapDBInfo.layers[self.layer]["table"]
         self.listOfSQLStatements.append('DELETE FROM %s' % table)
 
+        self.ApplyCommands()
+        
         event.Skip()
 
     def OnDataDrawSelected(self, event):
@@ -1090,11 +1138,11 @@ class AttributeManager(wx.Frame):
             list.itemCatsMap[index] = cat
             list.SetItemCount(list.GetItemCount() + 1)
 
-            # store statement for OnApply()
             self.listOfSQLStatements.append('INSERT INTO %s (%s) VALUES(%s)' % \
                                                 (table,
                                                  columnsString.strip(','),
                                                  valuesString.strip(',')))
+            self.ApplyCommands()
             
     def OnDataItemEdit(self, event):
         """Edit selected record of the attribute table"""
@@ -1180,8 +1228,10 @@ class AttributeManager(wx.Frame):
 
             if len(updateString) > 0:
                 self.listOfSQLStatements.append('UPDATE %s SET %s WHERE %s=%d' % \
-                                                     (table, updateString.strip(','),
-                                                      keyColumn, cat))
+                                                    (table, updateString.strip(','),
+                                                     keyColumn, cat))
+                self.ApplyCommands()
+                
     def OnDataReload(self, event):
         """Reload list of records"""
         self.OnApplySqlStatement(None)
@@ -1287,7 +1337,7 @@ class AttributeManager(wx.Frame):
                 return
             
         # apply changes
-        self.OnApply(event)
+        self.ApplyCommands()
 
         # update widgets
         self.FindWindowById(self.layerPage[self.layer]['renameCol']).SetItems(self.mapDBInfo.GetColumns(table))
@@ -1332,7 +1382,7 @@ class AttributeManager(wx.Frame):
             item = list.GetFirstSelected()
 
         # apply changes
-        self.OnApply(event)
+        self.ApplyCommands()
 
         # update widgets
         table = self.mapDBInfo.layers[self.layer]['table']
@@ -1353,7 +1403,7 @@ class AttributeManager(wx.Frame):
         self.FindWindowById(self.layerPage[self.layer]['tableData']).DeleteAllItems()
 
         # apply changes
-        self.OnApply(event)
+        self.ApplyCommands()
 
         # update widgets
         table = self.mapDBInfo.layers[self.layer]['table']
@@ -1362,7 +1412,7 @@ class AttributeManager(wx.Frame):
 
         event.Skip()
 
-    def OnTableReload(self, event):
+    def OnTableReload(self, event=None):
         """Reload table description"""
         self.FindWindowById(self.layerPage[self.layer]['tableData']).Populate(update=True)
         self.listOfCommands = []
@@ -1413,7 +1463,7 @@ class AttributeManager(wx.Frame):
                                     'columns=%s %s' % (name, type)])
 
         # apply changes
-        self.OnApply(event)
+        self.ApplyCommands()
 
         # update widgets
         self.FindWindowById(self.layerPage[self.layer]['addColName']).SetValue('')
@@ -1446,14 +1496,12 @@ class AttributeManager(wx.Frame):
             self.FindWindowById(self.layerPage[self.layer]['statement']).Enable(True)
             self.FindWindowById(self.layerPage[self.layer]['builder']).Enable(True)
 
-    def OnApply(self, event):
-        """Apply button pressed"""
-        # page = self.notebook.GetSelection()
-
+    def ApplyCommands(self):
+        """Apply changes"""
         # perform GRASS commands (e.g. v.db.addcol)
         if len(self.listOfCommands) > 0:
             for cmd in self.listOfCommands:
-                Debug.msg(3, 'AttributeManager.OnApply() cmd=\'%s\'' %
+                Debug.msg(3, 'AttributeManager.ApplyCommands() cmd=\'%s\'' %
                           ' '.join(cmd))
                 gcmd.Command(cmd)
 
@@ -1488,16 +1536,13 @@ class AttributeManager(wx.Frame):
                    'driver=%s' % driver,
                    'database=%s' % database]
 
-            Debug.msg(3, 'AttributeManger.OnApply(): %s' %
+            Debug.msg(3, 'AttributeManger.ApplyCommands(): %s' %
                       ';'.join(["%s" % s for s in self.listOfSQLStatements]))
 
             gcmd.Command(cmd)
 
             # reset list of statements
             self.listOfSQLStatements = []
-
-            # perform select statement
-            self.OnApplySqlStatement(event)
 
     def OnApplySqlStatement(self, event):
         """Apply simple/advanced sql statement"""
@@ -3250,7 +3295,7 @@ class ModifyTableRecord(wx.Dialog):
         # buttons
         #
         self.btnCancel = wx.Button(self.panel, wx.ID_CANCEL)
-        self.btnSubmit = wx.Button(self.panel, wx.ID_OK)
+        self.btnSubmit = wx.Button(self.panel, wx.ID_OK, _("Submit"))
         self.btnSubmit.SetDefault()
 
         #

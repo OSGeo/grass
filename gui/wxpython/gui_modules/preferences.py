@@ -120,6 +120,9 @@ class Settings:
                 'leftDbClick' : {
                     'selection' : 0
                     },
+                'askOnDeleteRec' : {
+                    'enabled' : True
+                    },
             },
             #
             # Command
@@ -1136,6 +1139,15 @@ class PreferencesDialog(wx.Dialog):
 
         flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(leftDbClick, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
+
+        # ask on delete record
+        askOnDeleteRec = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                     label=_("Ask when deleting data record(s) from table"),
+                                     name='IsChecked')
+        askOnDeleteRec.SetValue(self.settings.Get(group='atm', key='askOnDeleteRec', subkey='enabled'))
+        self.winId['atm:askOnDeleteRec:enabled'] = askOnDeleteRec.GetId()
+
+        flexSizer.Add(askOnDeleteRec, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         dataBrowserSizer.Add(item=flexSizer,
                            proportion=0,
