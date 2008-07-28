@@ -10,12 +10,6 @@
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
 \fs24 \cf0 \
-\pard\tx1080\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\i \cf0 2008-3-30\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\i0 \cf0 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 \cf0 \ul \ulc0 Contents\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
@@ -31,7 +25,6 @@ Building GRASS\
 	Leopard Notes*\
 	Building an Installer Package\
 	Bundling Libraries and Programs\
-Tcl/Tk\
 Developer Notes\
 Help Files*\
 Addon Modules\
@@ -97,15 +90,7 @@ With this option, the
 \f1\fs20 --prefix=/Applications
 \f0\fs24  yourself for configure.\
 \
-The makefile tries to figure out the Tcl/Tk prefix from the configuration.  This may not work in some cases.  All that is configured are the includes and libraries locations, but the bundling step needs to know the prefix.  This will only work if both Tcl and Tk have the same prefix.  If it has problems figuring out the Tcl/Tk prefix, set TCLTKPREFIX in the Terminal before running make:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 export TCLTKPREFIX=[/path/to/tcltk/prefix]\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-It also tries to figure out the location of the GDAL programs, from the configured GDAL libs.  This is set in grass.sh, and if it doesn't correctly figure it out (some GRASS commands fail to find needed GDAL commands), set GDAL_BIN before running make:\
+The makefile tries to figure out the location of the GDAL programs, from the configured GDAL libs.  This is set in grass.sh, and if it doesn't correctly figure it out (some GRASS commands fail to find needed GDAL commands), set GDAL_BIN before running make:\
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
@@ -342,8 +327,6 @@ GRASS uses
 \f1\fs20 PATH
 \f0\fs24 , so helper programs installed there will be found.\
 \
-The Tcl/Tk bundling below is an example of bundling both libraries and programs.  This is hardwired into the install make target.\
-\
 There is NO need to bundle 
 \i everything
 \i0 .  Bundling readily available libraries and programs installed in standard locations is not necessary.  Some things you might want to bundle include:\
@@ -358,35 +341,6 @@ Things to leave out:\
 - applications that duplicate the above items (ie GPSBabel.app)\
 - /Library/Frameworks stuff\
 \
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\b \cf0 Tcl/Tk\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\b0 \cf0 \
-By default, the application is built expecting a local copy of Tcl/Tk inside the application package (to simplify installation).  This will override any GRASS_WISH and GRASS_TCLSH environment setting you may have in your shell startup (ie .bash_profile).  
-\i This is currently hardwired to Tcl/Tk 8.4.
-\i0 \
-\
-If you want to try building GRASS using Tcl/Tk Aqua (not recommended), set TCLTK_INTERNAL to a space before compiling:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 export TCLTK_INTERNAL=" "\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
-Tcl/Tk Aqua has some cosmetic issues in general - widgets displayed from OSX are often too big and mess up layout, some widgets don't even use OSX equivalents (sliders are an example).  There are also problems with NVIZ that come and go.\
-\
-If you want to experiment with Tcl/Tk 8.5, configure with the tcltk option pointing to TclTk 8.5 binaries, then set TCLTKVER before compiling to 8.5:\
-\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f1\fs20 \cf0 export TCLTKVER="8.5"\
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
-
-\f0\fs24 \cf0 \
 \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
 
