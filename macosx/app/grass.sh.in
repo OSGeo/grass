@@ -7,7 +7,7 @@
 # PURPOSE:  	The source file for this shell script is in
 #   	    	macosx/app/grass.sh.in and is the grass startup script for
 #               the Mac OS X application build.
-# COPYRIGHT:    (C) 2000-2005 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -32,8 +32,8 @@ GISBASE_USER="$HOME/Library/GRASS/$grass_ver"
 GISBASE_SYSTEM="/Library/GRASS/$grass_ver"
 
 # for extra utils
-# hack - ideally user should have these in their PATH, but make sure here
-PATH="@GDAL_BIN_PATH@:@PROJ_BIN_PATH@:$PATH"
+# ideally user should have these in their PATH, but make sure here
+PATH="@GDAL_BIN_PATH@@PROJ_BIN_PATH@$PATH"
 export PATH
 
 # add some OS X style app support paths, and create user one if missing.
@@ -89,6 +89,8 @@ fi
 
 ### X11 stuff
 
+if [ "@X11@" ] ; then
+
 # start X11 if not running
 # some users may be annoyed by this, but X11 required for some stuff for now
 if [ -d "/Applications/Utilities/X11.app" ] ; then
@@ -113,26 +115,13 @@ if [ ! "$pathX11" ] ; then
 	fi
 fi
 
-# default to internal X11 Tcl/Tk
-@TCLTK_INTERNAL@if [ ! "$GRASS_TCLSH" ] ; then
-	GRASS_TCLSH="$GISBASE/bin/tclsh@TCLTKVER@"
-	export GRASS_TCLSH
-	GRASS_WISH="$GISBASE/bin/wish@TCLTKVER@"
-	export GRASS_WISH
-	# internal - force osxaqua off
-	unset osxaqua
-	# override TCL_LIBRARY to internal
-	TCL_LIBRARY="$GISBASE/lib/tcl@TCLTKVER@"
-	export TCL_LIBRARY
-	TK_LIBRARY="$GISBASE/lib/tk@TCLTKVER@"
-	export TK_LIBRARY
-@TCLTK_INTERNAL@fi
-
 # make sure there is a DISPLAY set
 if [ ! "$DISPLAY" ] ; then
 	DISPLAY=:0.0
 	export DISPLAY
 fi
+
+fi # X11
 
 ### end X11 block
 
