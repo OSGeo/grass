@@ -44,11 +44,13 @@ class ProcessWorkspaceFile(HandlerBase):
                     'layer_manager',
                     'nviz',
                     # surface
-                    'attribute', 'draw', 'resolution',
+                    'surface', 'attribute', 'draw', 'resolution',
                     'wire_color', 'position', 'x', 'y', 'z',
                     # vector lines
-                    'lines', 'color', 'width', 'mode',
-                    'map', 'height'):
+                    'vlines', 'color', 'width', 'mode',
+                    'map', 'height',
+                    # vector points
+                    'vpoints'):
             self.inTag[tag] = False
 
         #
@@ -163,43 +165,47 @@ class ProcessWorkspaceFile(HandlerBase):
                     self.layerNviz['surface'][sec] = {}
             elif self.layerType == 'vector':
                 self.layerNviz['vector'] = {}
-                for sec in ('lines', ):
+                for sec in ('lines', 'points'):
                     self.layerNviz['vector'][sec] = {}
 
         elif name == 'attribute':
-            tagName = str(name)
-            attrbName = str(attrs.get('name', ''))
-            self.layerNviz['surface'][tagName][attrbName] = {}
-            if attrs.get('map', '0') == '0':
-                self.layerNviz['surface'][tagName][attrbName]['map'] = False
-            else:
-                self.layerNviz['surface'][tagName][attrbName]['map'] = True
+            if self.inTag['nviz'] and self.inTag['surface']:
+                tagName = str(name)
+                attrbName = str(attrs.get('name', ''))
+                self.layerNviz['surface'][tagName][attrbName] = {}
+                if attrs.get('map', '0') == '0':
+                    self.layerNviz['surface'][tagName][attrbName]['map'] = False
+                else:
+                    self.layerNviz['surface'][tagName][attrbName]['map'] = True
 
-            self.refAttribute = self.layerNviz['surface'][tagName][attrbName]
+                self.refAttribute = self.layerNviz['surface'][tagName][attrbName]
         
         elif name == 'draw':
-            tagName = str(name)
-            self.layerNviz['surface'][tagName]['mode'] = {}
-            self.layerNviz['surface'][tagName]['mode']['all'] = False
-            self.layerNviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
-            self.layerNviz['surface'][tagName]['mode']['desc'] = {}
-            self.layerNviz['surface'][tagName]['mode']['desc']['shading'] = \
-                str(attrs.get('shading', ''))
-            self.layerNviz['surface'][tagName]['mode']['desc']['style'] = \
-                str(attrs.get('style', ''))
-            self.layerNviz['surface'][tagName]['mode']['desc']['mode'] = \
-                str(attrs.get('mode', ''))
+            if self.inTag['nviz'] and self.inTag['surface']:
+                tagName = str(name)
+                self.layerNviz['surface'][tagName]['mode'] = {}
+                self.layerNviz['surface'][tagName]['mode']['all'] = False
+                self.layerNviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
+                self.layerNviz['surface'][tagName]['mode']['desc'] = {}
+                self.layerNviz['surface'][tagName]['mode']['desc']['shading'] = \
+                    str(attrs.get('shading', ''))
+                self.layerNviz['surface'][tagName]['mode']['desc']['style'] = \
+                    str(attrs.get('style', ''))
+                self.layerNviz['surface'][tagName]['mode']['desc']['mode'] = \
+                    str(attrs.get('mode', ''))
 
         elif name == 'resolution':
-            self.resolutionType = str(attrs.get('type', ''))
-            if not self.layerNviz['surface']['draw'].has_key(str(name)):
-                self.layerNviz['surface']['draw'][str(name)] = {}
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.resolutionType = str(attrs.get('type', ''))
+                if not self.layerNviz['surface']['draw'].has_key(str(name)):
+                    self.layerNviz['surface']['draw'][str(name)] = {}
 
         elif name == 'position':
-            self.layerNviz['surface']['position'] = {}
+            if self.inTag['nviz'] and inTag['surface']:
+                self.layerNviz['surface']['position'] = {}
         
         elif name == 'mode':
-            if self.inTag['nviz'] and self.inTag['lines']:
+            if self.inTag['nviz'] and self.inTag['vlines']:
                 self.layerNviz['vector']['lines']['mode'] = {}
                 self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
 
@@ -237,47 +243,53 @@ class ProcessWorkspaceFile(HandlerBase):
         # Nviz section
         #
         elif name == 'attribute':
-            try:
-                self.refAttribute['value'] = int(self.value)
-            except ValueError:
+            if self.inTag['nviz'] and self.inTag['surface']:
                 try:
-                    self.refAttribute['value'] = float(self.value)
+                    self.refAttribute['value'] = int(self.value)
                 except ValueError:
-                    self.refAttribute['value'] = str(self.value)
+                    try:
+                        self.refAttribute['value'] = float(self.value)
+                    except ValueError:
+                        self.refAttribute['value'] = str(self.value)
 
         elif name == 'resolution':
-            self.layerNviz['surface']['draw']['resolution']['all'] = False
-            self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
-            del self.resolutionType
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.layerNviz['surface']['draw']['resolution']['all'] = False
+                self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
+                del self.resolutionType
 
         elif name == 'wire_color':
-            self.layerNviz['surface']['draw']['wire-color'] = {}
-            self.layerNviz['surface']['draw']['wire-color']['all'] = False
-            self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.layerNviz['surface']['draw']['wire-color'] = {}
+                self.layerNviz['surface']['draw']['wire-color']['all'] = False
+                self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
 
         elif name == 'x':
-            self.layerNviz['surface']['position']['x'] = int(self.value)
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.layerNviz['surface']['position']['x'] = int(self.value)
 
         elif name == 'y':
-            self.layerNviz['surface']['position']['y'] = int(self.value)
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.layerNviz['surface']['position']['y'] = int(self.value)
 
         elif name == 'z':
-            self.layerNviz['surface']['position']['z'] = int(self.value)
+            if self.inTag['nviz'] and self.inTag['surface']:
+                self.layerNviz['surface']['position']['z'] = int(self.value)
         
         elif name == 'color':
-            if self.inTag['nviz'] and self.inTag['lines']:
+            if self.inTag['nviz'] and self.inTag['vlines']:
                 self.layerNviz['vector']['lines']['color'] = str(self.value)
 
         elif name == 'width':
-            if self.inTag['nviz'] and self.inTag['lines']:
+            if self.inTag['nviz'] and self.inTag['vlines']:
                 self.layerNviz['vector']['lines']['width'] = int(self.value)
 
         elif name == 'height':
-            if self.inTag['nviz'] and self.inTag['lines']:
+            if self.inTag['nviz'] and self.inTag['vlines']:
                 self.layerNviz['vector']['lines']['height'] = int(self.value)
         
         elif name == 'color':
-            if self.inTag['nviz'] and self.inTag['lines']:
+            if self.inTag['nviz'] and self.inTag['vlines']:
                 self.layerNviz['vector']['lines']['color'] = str(self.value)
 
         self.inTag[name] = False
@@ -426,6 +438,8 @@ class WriteWorkspaceFile(object):
             return
 
         self.indent += 4
+        self.file.write('%s<surface>\n' % (' ' * self.indent))
+        self.indent += 4
         for attrb in data.iterkeys():
             if len(data[attrb]) < 1: # skip empty attributes
                 continue
@@ -486,6 +500,8 @@ class WriteWorkspaceFile(object):
                 self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
 
         self.indent -= 4
+        self.file.write('%s</surface>\n' % (' ' * self.indent))
+        self.indent -= 4
 
     def __writeNvizVector(self, data):
         """Save Nviz vector layer properties (lines/points) to workspace
@@ -500,7 +516,7 @@ class WriteWorkspaceFile(object):
             if not data[attrb].has_key('object'): # skip disabled
                 continue
             
-            self.file.write('%s<%s>\n' % (' ' * self.indent, attrb))
+            self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))
             self.indent += 4
             for name in data[attrb].iterkeys():
                 if name == 'object':
@@ -521,7 +537,7 @@ class WriteWorkspaceFile(object):
                     self.indent -= 4
                     self.file.write('%s</%s>\n' % (' ' * self.indent, name))
             self.indent -= 4
-            self.file.write('%s</%s>\n' % (' ' * self.indent, attrb))
+            self.file.write('%s</v%s>\n' % (' ' * self.indent, attrb))
 
         self.indent -= 4
 

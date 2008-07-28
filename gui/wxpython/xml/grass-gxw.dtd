@@ -75,9 +75,15 @@
 <!ELEMENT flag          EMPTY>
 <!ATTLIST flag          name            CDATA #REQUIRED>
 
+<!-- *********************** Nviz *********************** -->
+
 <!--    nviz layer properties
 -->
-<!ELEMENT nviz	        (attribute*, draw?, position?, lines?)>
+<!ELEMENT nviz	        (surface? | (vlines | vpoints)?)>
+
+<!--    nviz surface properties
+-->
+<!ELEMENT surface       (attribute*, draw?, position?)>
 
 <!--    nviz surface attribute parameter
 -->
@@ -112,7 +118,7 @@
 
 <!--    nviz vector lines element
 -->
-<!ELEMENT lines     (color?, width?, mode?, height?)>
+<!ELEMENT vlines    (color?, width?, mode?, height?)>
 <!ELEMENT color     (value)>
 <!ELEMENT width     (value)>
 <!ELEMENT height    (value)>
