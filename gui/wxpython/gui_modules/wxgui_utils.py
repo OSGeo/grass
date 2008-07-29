@@ -59,7 +59,7 @@ class LayerTree(CT.CustomTreeCtrl):
                  ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
                  CT.TR_EDIT_LABELS | CT.TR_MULTIPLE,
-                 idx=None, gismgr=None, notebook=None, auimgr=None, showMapDisplay=True):
+                 **kargs):
         CT.CustomTreeCtrl.__init__(self, parent, id, pos, size, style, ctstyle)
 
         ### SetAutoLayout() causes that no vertical scrollbar is displayed
@@ -78,11 +78,11 @@ class LayerTree(CT.CustomTreeCtrl):
         self.saveitem = {}         # dictionary to preserve layer attributes for drag and drop
         self.first = True          # indicates if a layer is just added or not
         self.drag = False          # flag to indicate a drag event is in process
-        self.disp_idx = idx
-        self.gismgr = gismgr
-        self.notebook = notebook   # GIS Manager notebook for layer tree
-        self.treepg = parent       # notebook page holding layer tree
-        self.auimgr = auimgr       # aui manager
+        self.disp_idx = kargs['idx']
+        self.gismgr = kargs['gismgr']
+        self.notebook = kargs['notebook'] # Layer Manager notebook for layer tree
+        self.treepg = parent              # notebook page holding layer tree
+        self.auimgr = kargs['auimgr']     # aui manager
 
         # init associated map display
         self.mapdisplay = mapdisp.MapFrame(self,
@@ -99,7 +99,7 @@ class LayerTree(CT.CustomTreeCtrl):
                                    " - Location: " + grassenv.GetGRASSVariable("LOCATION_NAME")))
 
         # show new display
-        if showMapDisplay is True:
+        if kargs['showMapDisplay'] is True:
             self.mapdisplay.Show()
             self.mapdisplay.Refresh()
             self.mapdisplay.Update()
