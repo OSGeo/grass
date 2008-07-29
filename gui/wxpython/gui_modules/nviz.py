@@ -353,7 +353,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
             try:
                 if type == 'vector':
-                    self.LoadVector(item)
+                    data = self.tree.GetPyData(item)[0]['nviz']
+                    vecType = []
+                    if data and data.has_key('vector'):
+                        for v in ('lines', 'points'):
+                            if data['vector'][v]:
+                                vecType.append(v)
+                    self.LoadVector(item, vecType)
             except gcmd.NvizError, e:
                 print >> sys.stderr, "Nviz: " + e.message
             
@@ -372,45 +378,53 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         """
         type = self.tree.GetPyData(item)[0]['maplayer'].type
         # reference to original layer properties (can be None)
-        dataOrig = self.tree.GetPyData(item)[0]['nviz']
-            
-        if dataOrig is None:
-            # set default properties
+        data = self.tree.GetPyData(item)[0]['nviz']
+
+        if data is None:
+            # init data structure
             self.tree.GetPyData(item)[0]['nviz'] = {}
             data = self.tree.GetPyData(item)[0]['nviz']
+
+            if type == 'raster':
+                data[nvizType] = {}
+                for sec in ('attribute', 'draw', 'mask', 'position'):
+                    data[nvizType][sec] = {}
+
+                # reset to default properties
+                self.SetSurfaceDefaultProp(data[nvizType])
+                        
+            elif type == 'vector':
+                data['vector'] = {}
+                for sec in ('lines', 'points'):
+                    data['vector'][sec] = {}
+
+                # reset to default properties (lines/points)
+                self.SetVectorDefaultProp(data['vector'])
+        
         else:
-            data = dataOrig
-
-        # reset data
-        if type == 'raster':
-            data[nvizType] = {}
-            for sec in ('attribute', 'draw', 'mask', 'position'):
-                data[nvizType][sec] = {}
-            
-            if id > 0:
-                data[nvizType]['object'] = { 'id' : id,
-                                             'init' : False }
-
-            self.SetSurfaceDefaultProp(data[nvizType])
-        elif type == 'vector':
-            data['vector'] = {}
-            for sec in ('lines', 'points'):
-                data['vector'][sec] = {}
-                
-            if id > 0:
-                data['vector'][nvizType]['object'] = { 'id' : id,
-                                                       'init' : False }
-
-            self.SetVectorDefaultProp(data['vector']) # for both - lines/points
-
-        # set updates
-        if dataOrig:
+            # check data
+            if type == 'vector':
+                if not data['vector']['lines']:
+                    self.SetVectorLinesDefaultProp(data['vector']['lines'])
+                if not data['vector']['points']:
+                    self.SetVectorPointsDefaultProp(data['vector']['points'])
+                    
+            # set updates
             for sec in data.keys():
                 for sec1 in data[sec].keys():
                     for sec2 in data[sec][sec1].keys():
                         if sec2 not in ('object'):
                             self.update.append('%s:%s:%s' % (sec, sec1, sec2))
 
+        # set id
+        if id > 0:
+            if type == 'raster':
+               data[nvizType]['object'] = { 'id' : id,
+                                            'init' : False }
+            elif type == 'vector':
+                data['vector'][nvizType]['object'] = { 'id' : id,
+                                                       'init' : False }
+        
         return data
 
     def LoadRaster(self, item):
@@ -554,6 +568,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
             if control[:3] == 'res':
+                if not data['draw'].has_key('resolution'):
+                    data['draw']['resolution'] = { 'all' : False }
                 if 'surface:draw:%s' % 'resolution' not in self.update:
                     self.update.append('surface:draw:%s' % 'resolution')
                     data['draw']['resolution'] = { 'all' : False,
@@ -601,8 +617,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                     subkey=[v, 'show']):
                     vecType.append(v)
 
-                # set default properties
-                self.SetLayerData(item, -1, v)
+        # set default properties
+        self.SetLayerData(item, -1, 'lines')
+        self.SetLayerData(item, -1, 'points')
 
         id = -1
         for type in vecType:
@@ -753,12 +770,17 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if len(self.layers['raster']['name']) > 0:
             data['mode']['surface'] = self.layers['raster']['name'][0]
         
+        # height
+        data['height'] = UserSettings.Get(group='nviz', key='vector',
+                                          subkey=['points', 'height'])
+
         if data.has_key('object'):
             self.update.append('vector:points:size')
             self.update.append('vector:points:width')
             self.update.append('vector:points:marker')
             self.update.append('vector:points:color')
             self.update.append('vector:points:surface')
+            self.update.append('vector:points:height')
         
     def Reset(self):
         """Reset (unload data)"""
@@ -965,7 +987,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 'vector:points:width' in self.update or \
                 'vector:points:marker' in self.update or \
                 'vector:points:color' in self.update:
-            
             ret = self.nvizClass.SetVectorPointMode(id, data['color'],
                                                     data['width'], float(data['size']),
                                                     data['marker'] + 1)
@@ -2873,7 +2894,7 @@ class NvizToolWindow(wx.Frame):
             showPoints.SetValue(False)
         self.UpdateVectorShow(showPoints.GetId(),
                               showPoints.IsChecked())
-        
+        # size, width, marker, color
         for prop in ('size', 'width', 'marker', 'color'):
             win = self.FindWindowById(self.win['vector']['points'][prop])
             name = win.GetName()
@@ -2884,6 +2905,10 @@ class NvizToolWindow(wx.Frame):
                 win.SetValue(color)
             else:
                 win.SetValue(data['points'][prop])
+        # height
+        for type in ('slider', 'spin'):
+            win = self.FindWindowById(self.win['vector']['points']['height'][type])
+            win.SetValue(data['points']['height'])
 
     def SetPage(self, name):
         """Get named page"""
