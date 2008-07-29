@@ -233,7 +233,6 @@ LOC_ARG_WITH_LIB(png, PNG)
 
 LOC_ARG_WITH_INC(tcltk, Tcl/Tk)
 LOC_ARG_WITH_LIB(tcltk, Tcl/Tk)
-LOC_ARG_WITH_FRAMEWORK(tcltk, Tcl/Tk)
 
 LOC_ARG_WITH_INC(postgres, PostgreSQL)
 LOC_ARG_WITH_LIB(postgres, PostgreSQL)
@@ -792,54 +791,13 @@ AC_SUBST(USE_PNG)
 
 # Enable TCLTK option
 
+LOC_CHECK_USE(tcltk,Tcl/Tk,USE_TCLTK)
+
 TCLINCDIR=
 TCLTKLIBPATH=
 TCLTKLIBS=
 
-AC_MSG_CHECKING(whether to use Tcl/Tk)
-AC_MSG_RESULT("$with_tcltk")
-case "$with_tcltk" in
-	n|no)
-		TCLTK_TYPE=none
-		;;
-	y|yes|x|x11)
-		TCLTK_TYPE=X11
-		USE_TCLTK=1
-		TCLTK_X11=1
-		;;
-	aqua|mac|osx|macosx)
-		TCLTK_TYPE=Aqua
-		USE_TCLTK=1
-		TCLTK_AQUA=1
-		;;
-	win|windows|mswin)
-		TCLTK_TYPE=Windows
-		USE_TCLTK=1
-		TCLTK_WINDOWS=1
-		;;
-	*)
-		AC_MSG_ERROR([*** Valid arguments for --with-tcltk= are yes,no,x11,aqua,windows.])
-		;;
-esac
-
 if test -n "$USE_TCLTK"; then
-
-if test -n "$TCLTK_AQUA" ; then
-
-LOC_CHECK_FRAMEWORK_PATH(tcltk,Tcl/Tk,TCLTKPATH)
-
-LOC_CHECK_INCLUDES(Tk/tk.h,Tcl/Tk,$TCLTKPATH)
-
-LOC_CHECK_FUNC(Tk_MainWindow,Tcl/Tk framework,TCLTKLIBS,-framework Tcl -framework Tk,$TCLTKPATH)
-
-TCLINCDIR="$TCLTKPATH"
-TCLTKLIBPATH="$TCLTKPATH"
-
-AC_DEFINE(TCLTK_AQUA)
-
-fi # TCLTK_AQUA
-
-if test -n "$TCLTK_X11" -o -n "$TCLTK_WINDOWS" ; then
 
 # With Tcl/Tk includes directory
 
@@ -885,27 +843,13 @@ LOC_CHECK_LIBS(tk$tcltk_ver2,Tk_MainWindow,Tk,$TCLTKLIBPATH,TKLIB,$TCLLIB,$MATHL
 ],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
 ],$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS)
 
+
 TCLTKLIBS="$TKLIB $TCLLIB"
-
-if test -n "$TCLTK_X11" ; then
-AC_DEFINE(TCLTK_X11)
-fi
-if test -n "$TCLTK_WINDOWS" ; then
-AC_DEFINE(TCLTK_WINDOWS)
-fi
-
-fi # TCLTK_X11 || TCLTK_WINDOWS
-
 AC_DEFINE(HAVE_TCLTK)
 
 fi # $USE_TCLTK
 
-TKINCDIR="$TCLINCDIR"
-
-AC_SUBST(USE_TCLTK)
-AC_SUBST(TCLTK_X11)
-AC_SUBST(TCLTK_AQUA)
-AC_SUBST(TCLTK_WINDOWS)
+TKINCDIR=$TCLINCDIR
 
 AC_SUBST(TCLINCDIR)
 AC_SUBST(TKINCDIR)
@@ -1817,7 +1761,6 @@ LOC_MSG([  C++ compiler:                ${CXX} ${CXXFLAGS}])
 LOC_MSG([  Building shared libraries:   ${shared_ok}])
 LOC_MSG([  64bit support:               ${do64bit}])
 LOC_MSG([  OpenGL platform:             ${OPENGL_TYPE}])
-LOC_MSG([  Tcl/Tk platform:             ${TCLTK_TYPE}])
 LOC_MSG_USE(MacOSX application,MACOSX_APP)
 LOC_MSG()
 LOC_MSG_USE(NVIZ,USE_TOGL)
