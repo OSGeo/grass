@@ -119,8 +119,17 @@
 <!--    nviz vector lines element
 -->
 <!ELEMENT vlines    (color?, width?, mode?, height?)>
+
+<!--    nviz vector points element
+-->
+<!ELEMENT vpoints   (color?, width?, mode?, height?, size?)>
+<!ATTLIST vpoints    marker (x | box | sphere | cube | diamond | dtree | ctree | aster | gyro | histogram) #REQUIRED>
+
+<!--    nviz vector elements
+-->
 <!ELEMENT color     (value)>
 <!ELEMENT width     (value)>
 <!ELEMENT height    (value)>
 <!ELEMENT mode      (map?)>
 <!ATTLIST mode	    type (flat | surface) #REQUIRED>
+<!ELEMENT size      (value)>

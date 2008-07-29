@@ -32,6 +32,8 @@ import xml.sax.handler
 HandlerBase=xml.sax.handler.ContentHandler
 from xml.sax import make_parser
 
+from preferences import globalSettings as UserSettings
+
 class ProcessWorkspaceFile(HandlerBase):
     """
     A SAX handler for the GXW XML file, as
@@ -50,7 +52,7 @@ class ProcessWorkspaceFile(HandlerBase):
                     'vlines', 'color', 'width', 'mode',
                     'map', 'height',
                     # vector points
-                    'vpoints'):
+                    'vpoints', 'size'):
             self.inTag[tag] = False
 
         #
@@ -130,7 +132,7 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'parameter':
             self.parameterName = attrs.get('name', None)
 
-        elif name in ('value', 'x', 'y', 'z'):
+        elif name in ('value', 'x', 'y', 'z', 'map'):
             self.value = ''
 
         elif name == 'flag':
@@ -205,10 +207,23 @@ class ProcessWorkspaceFile(HandlerBase):
                 self.layerNviz['surface']['position'] = {}
         
         elif name == 'mode':
-            if self.inTag['nviz'] and self.inTag['vlines']:
-                self.layerNviz['vector']['lines']['mode'] = {}
-                self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
+            if self.inTag['nviz']:
+                if self.inTag['vlines']:
+                    self.layerNviz['vector']['lines']['mode'] = {}
+                    self.layerNviz['vector']['lines']['mode']['type'] = str(attrs.get('type', ''))
+                    self.layerNviz['vector']['lines']['mode']['surface'] = ''
+                elif self.inTag['vpoints']:
+                    self.layerNviz['vector']['points']['mode'] = {}
+                    self.layerNviz['vector']['points']['mode']['type'] = str(attrs.get('type', ''))
+                    self.layerNviz['vector']['points']['mode']['surface'] = ''
 
+        elif name == 'vpoints':
+            if self.inTag['nviz']:
+                marker = str(attrs.get('marker', ''))
+                markerId = list(UserSettings.Get(group='nviz', key='vector',
+                                                 subkey=['points', 'marker'], internal=True)).index(marker)
+                self.layerNviz['vector']['points']['marker'] = markerId
+        
         self.inTag[name] = True
         
     def endElement(self, name):
@@ -226,7 +241,7 @@ class ProcessWorkspaceFile(HandlerBase):
                     "display"  : self.displayIndex,
                     "selected" : self.layerSelected,
                     "nviz"     : self.layerNviz})
-
+            
             if self.layerOpacity:
                 self.layers[-1]["opacity"] = float(self.layerOpacity)
             if self.cmd:
@@ -277,20 +292,36 @@ class ProcessWorkspaceFile(HandlerBase):
                 self.layerNviz['surface']['position']['z'] = int(self.value)
         
         elif name == 'color':
-            if self.inTag['nviz'] and self.inTag['vlines']:
-                self.layerNviz['vector']['lines']['color'] = str(self.value)
-
+            if self.inTag['nviz']:
+                if self.inTag['vlines']:
+                    self.layerNviz['vector']['lines']['color'] = str(self.value)
+                elif self.inTag['vpoints']:
+                    self.layerNviz['vector']['points']['color'] = str(self.value)
+                    
         elif name == 'width':
-            if self.inTag['nviz'] and self.inTag['vlines']:
-                self.layerNviz['vector']['lines']['width'] = int(self.value)
+            if self.inTag['nviz']:
+                if self.inTag['vlines']:
+                    self.layerNviz['vector']['lines']['width'] = int(self.value)
+                elif self.inTag['vpoints']:
+                    self.layerNviz['vector']['points']['width'] = int(self.value)
 
         elif name == 'height':
-            if self.inTag['nviz'] and self.inTag['vlines']:
-                self.layerNviz['vector']['lines']['height'] = int(self.value)
+            if self.inTag['nviz']:
+                if self.inTag['vlines']:
+                    self.layerNviz['vector']['lines']['height'] = int(self.value)
+                elif self.inTag['vpoints']:
+                    self.layerNviz['vector']['points']['height'] = int(self.value)
         
-        elif name == 'color':
-            if self.inTag['nviz'] and self.inTag['vlines']:
-                self.layerNviz['vector']['lines']['color'] = str(self.value)
+        elif name == 'size':
+            if self.inTag['nviz'] and self.inTag['vpoints']:
+                self.layerNviz['vector']['points']['size'] = int(self.value)
+
+        elif name == 'map':
+            if self.inTag['nviz']:
+                if self.inTag['vlines']:
+                    self.layerNviz['vector']['lines']['mode']['surface'] = str(self.value)
+                elif self.inTag['vpoints']:
+                    self.layerNviz['vector']['points']['mode']['surface'] = str(self.value)
 
         self.inTag[name] = False
 
@@ -301,7 +332,8 @@ class ProcessWorkspaceFile(HandlerBase):
         if self.inTag['value'] or \
                 self.inTag['x'] or \
                 self.inTag['y'] or \
-                self.inTag['z']:
+                self.inTag['z'] or \
+                self.inTag['map']:
             self.value += ch
 
 class WriteWorkspaceFile(object):
@@ -515,11 +547,18 @@ class WriteWorkspaceFile(object):
 
             if not data[attrb].has_key('object'): # skip disabled
                 continue
-            
-            self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))
+            if attrb == 'lines':
+                self.file.write('%s<v%s>\n' % (' ' * self.indent, attrb))
+            elif attrb == 'points':
+                markerId = data[attrb]['marker']
+                marker = UserSettings.Get(group='nviz', key='vector',
+                                          subkey=['points', 'marker'], internal=True)[markerId]
+                self.file.write('%s<v%s marker="%s">\n' % (' ' * self.indent,
+                                                           attrb,
+                                                           marker))
             self.indent += 4
             for name in data[attrb].iterkeys():
-                if name == 'object':
+                if name in ('object', 'marker'):
                     continue
                 if name == 'mode':
                     self.file.write('%s<%s type="%s">\n' % (' ' * self.indent, name,
