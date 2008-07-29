@@ -439,8 +439,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         id = self.nvizClass.LoadSurface(str(layer.name), None, None)
         if id < 0:
-            raise gcmd.NvizError(parent=self.parent,
-                                 message=_("Raster map <%s> not loaded" % layer.name))
+            print >> sys.stderr, _("Loading raster map <%s> failed") % layer.name
         
         self.layers['raster']['name'].append(layer.name)
         self.layers['raster']['id'].append(id)
@@ -475,8 +474,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = data['surface']['object']['id']
 
         if self.nvizClass.UnloadSurface(id) == 0:
-            raise gcmd.NvizError(parent=self.parent,
-                                 message=_("Unable to unload raster map <%s>" % layer.name))
+            print >> sys.stderr, _("Unable to unload raster map <%s>") % layer.name
+        else:
+            print _("Raster map <%s> unloaded") % layer.name
 
         data['surface'].pop('object')
 
@@ -629,10 +629,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 id = self.nvizClass.LoadVector(str(layer.name), True)
 
             if id < 0:
-                print >> sys.stderr, _("Vector map <%s> (%s) not loaded") % \
+                print >> sys.stderr, _("Loading vector map <%s> (%s) failed") % \
                     (layer.name, type)
                 continue
-            
+
             # update layer properties
             self.SetLayerData(item, id, type)
         
@@ -679,9 +679,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 ret = self.nvizClass.UnloadVector(id, True)
             if ret == 0:
-                raise gcmd.NvizError(parent=self.parent,
-                                     message=_("Unable to unload vector map <%s>" % layer.name))
+                print >> sys.stderr, _("Unable to unload vector map <%s> (%s)") % \
+                    (layer.name, vtype)
+            else:
+                print >> sys.stderr, _("Vector map <%s> (%s) unloaded") % \
+                    (layer.name, vtype)
 
+            
             data[vtype].pop('object')
 
             idx = self.layers['v' + vtype]['id'].index(id)
@@ -1496,6 +1500,16 @@ class NvizToolWindow(wx.Frame):
         self.win['vector'] = {}
 
         #
+        # desc
+        #
+        desc = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                             label="")
+        self.win['vector']['desc'] = desc.GetId()
+        pageSizer.Add(item=desc, proportion=0,
+                      flag=wx.EXPAND | wx.ALL,
+                      border=10)
+
+        #
         # vector lines
         #
         self.win['vector']['lines'] = {}
@@ -1506,7 +1520,7 @@ class NvizToolWindow(wx.Frame):
         showLines.Bind(wx.EVT_CHECKBOX, self.OnVectorShow)
 
         pageSizer.Add(item=showLines, proportion=0,
-                      flag=wx.ALL | wx.EXPAND, border=5)
+                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
                             label=" %s " % (_("Vector lines")))
@@ -2846,6 +2860,26 @@ class NvizToolWindow(wx.Frame):
         self.SetSurfaceWireColor(color.GetColour())
 
     def UpdateVectorPage(self, layer, data):
+        vInfo = gcmd.Command(['v.info',
+                              'map=%s' % layer.name])
+        for line in vInfo.ReadStdOutput():
+            if 'Map is 3D' in line:
+                mapIs3D = int(line.replace('|', '').split(':')[1].strip())
+                break
+        if mapIs3D:
+            desc = _("Vector map <%s> is 3D") % layer.name
+            enable = False
+        else:
+            desc = _("Vector map <%s> is 2D") % layer.name
+            enable = True
+            
+        self.FindWindowById(self.win['vector']['lines']['flat']).Enable(enable)
+        for v in ('lines', 'points'):
+            self.FindWindowById(self.win['vector'][v]['surface']).Enable(enable)
+            self.FindWindowById(self.win['vector'][v]['height']['slider']).Enable(enable)
+            self.FindWindowById(self.win['vector'][v]['height']['spin']).Enable(enable)
+            
+        self.FindWindowById(self.win['vector']['desc']).SetLabel(desc)
         #
         # lines
         #

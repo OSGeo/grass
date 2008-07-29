@@ -367,7 +367,7 @@ class GMStdout:
         for line in s.split(os.linesep):
             p1 = self.gmstc.GetCurrentPos() # get caret position
             self.gmstc.AddTextWrapped(line, wrap=None) # no wrapping && adds os.linesep
-            # self.gmstc.EnsureCaretVisible()
+            self.gmstc.EnsureCaretVisible()
             p2 = self.gmstc.GetCurrentPos()
             self.gmstc.StartStyling(p1, 0xff)
             self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleOutput)
@@ -435,7 +435,7 @@ class GMStderr(object):
                 if len(line) > 0:
                     p1 = self.gmstc.GetCurrentPos()
                     self.gmstc.AddTextWrapped(line, wrap=60) # wrap && add os.linesep
-                    # self.gmstc.EnsureCaretVisible()
+                    self.gmstc.EnsureCaretVisible()
                     p2 = self.gmstc.GetCurrentPos()
                     self.gmstc.StartStyling(p1, 0xff)
                     self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleUnknown)
@@ -452,7 +452,7 @@ class GMStderr(object):
                     self.gmstc.AddTextWrapped(self.message, wrap=60) #wrap && add os.linesep
                 else:
                     self.gmstc.AddText(self.message + os.linesep)
-                # self.gmstc.EnsureCaretVisible()
+                self.gmstc.EnsureCaretVisible()
                 p2 = self.gmstc.GetCurrentPos()
                 self.gmstc.StartStyling(p1, 0xff)
                 if self.type == 'error':
