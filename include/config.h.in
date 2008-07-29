@@ -245,15 +245,6 @@
 /* define if OpenGL uses Windows */
 #undef OPENGL_WINDOWS
 
-/* define if Tcl/Tk uses X11 */
-#undef TCLTK_X11
-
-/* define if Tcl/Tk uses Aqua (MacOS X) */
-#undef TCLTK_AQUA
-
-/* define if Tcl/Tk uses Windows */
-#undef TCLTK_WINDOWS
-
 /*
  * configuration information solely dependent on the above
  * nothing below this point should need changing
