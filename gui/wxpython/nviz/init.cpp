@@ -172,13 +172,13 @@ void print_sentence (PyObject *pyFd, const int type, const char *msg)
 
     switch ( type ) {
 	case MSG: 
-    	    sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), message_id);
+    	    sprintf (prefix, "GRASS_INFO_MESSAGE(%d,%d): Nviz: ", getpid(), message_id);
 	    break;
 	case WARN:
-    	    sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), message_id);
+    	    sprintf (prefix, "GRASS_INFO_WARNING(%d,%d): Nviz: ", getpid(), message_id);
 	    break;
 	case ERR:
-    	    sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), message_id);
+    	    sprintf (prefix, "GRASS_INFO_ERROR(%d,%d): Nviz: ", getpid(), message_id);
 	    break;
     }
 

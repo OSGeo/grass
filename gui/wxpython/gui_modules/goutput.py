@@ -58,7 +58,6 @@ class GMConsole(wx.Panel):
         
         # redirect
         self.cmd_stdout = GMStdout(self.cmd_output)
-        ### sys.stdout = self.cmd_stdout
         self.cmd_stderr = GMStderr(self.cmd_output,
                                    self.console_progressbar,
                                    self.parent.notebook,
@@ -105,8 +104,9 @@ class GMConsole(wx.Panel):
         """
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
+            sys.stdout = self.cmd_stdout
             sys.stderr = self.cmd_stderr
-            
+
             return True
 
         return False
@@ -361,7 +361,7 @@ class GMStdout:
         self.gmstc  = gmstc
 
     def write(self, s):
-        if len(s) == 0:
+        if len(s) == 0 or s == '\n':
             return
         s = s.replace('\n', os.linesep)
         for line in s.split(os.linesep):
@@ -402,7 +402,7 @@ class GMStderr(object):
         s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
         s = s.replace('\b', '').replace('\r', '%s' % os.linesep)
- 
+
         for line in s.split(os.linesep):
             if len(line) == 0:
                 continue
@@ -416,19 +416,13 @@ class GMStderr(object):
                     self.gmgauge.SetValue(0) # reset progress bar on '0%'
             elif 'GRASS_INFO_MESSAGE' in line:
                 self.type = 'message'
-                if len(self.message) > 0:
-                    self.message += os.linesep
-                self.message += line.split(':', 1)[1].strip()
+                self.message = line.split(':', 1)[1].strip()
             elif 'GRASS_INFO_WARNING' in line:
                 self.type = 'warning'
-                if len(self.message) > 0:
-                    self.message += os.linesep
-                self.message += line.split(':', 1)[1].strip()
+                self.message = line.split(':', 1)[1].strip()
             elif 'GRASS_INFO_ERROR' in line:
                 self.type = 'error'
-                if len(self.message) > 0:
-                    self.message += os.linesep
-                self.message += line.split(':', 1)[1].strip()
+                self.message = line.split(':', 1)[1].strip()
             elif 'GRASS_INFO_END' in line:
                 self.printMessage = True
             elif not self.type:
@@ -440,7 +434,7 @@ class GMStderr(object):
                     self.gmstc.StartStyling(p1, 0xff)
                     self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleUnknown)
             elif len(line) > 0:
-                self.message += os.linesep + line.strip()
+                self.message += line.strip() + os.linesep
 
             if self.printMessage and len(self.message) > 0:
                 p1 = self.gmstc.GetCurrentPos()
@@ -451,7 +445,7 @@ class GMStderr(object):
                 if os.linesep not in self.message:
                     self.gmstc.AddTextWrapped(self.message, wrap=60) #wrap && add os.linesep
                 else:
-                    self.gmstc.AddText(self.message + os.linesep)
+                    self.gmstc.AddText(self.message)
                 self.gmstc.EnsureCaretVisible()
                 p2 = self.gmstc.GetCurrentPos()
                 self.gmstc.StartStyling(p1, 0xff)
@@ -464,6 +458,7 @@ class GMStderr(object):
 
                 self.type = ''
                 self.message = ''
+                self.printMessage = False
 
 class GMStc(wx.stc.StyledTextCtrl):
     """Styled GMConsole

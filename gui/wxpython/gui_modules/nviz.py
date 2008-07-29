@@ -349,7 +349,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 if type == 'raster':
                     self.LoadRaster(item)
             except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz: " + e.message
+                print >> sys.stderr, "Nviz:" + e.message
 
             try:
                 if type == 'vector':
@@ -361,7 +361,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                 vecType.append(v)
                     self.LoadVector(item, vecType)
             except gcmd.NvizError, e:
-                print >> sys.stderr, "Nviz: " + e.message
+                print >> sys.stderr, "Nviz:" + e.message
             
         stop = time.time()
         
@@ -439,7 +439,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         id = self.nvizClass.LoadSurface(str(layer.name), None, None)
         if id < 0:
-            print >> sys.stderr, _("Loading raster map <%s> failed") % layer.name
+            print >> sys.stderr, "Nviz:" + _("Loading raster map <%s> failed") % layer.name
         
         self.layers['raster']['name'].append(layer.name)
         self.layers['raster']['id'].append(id)
@@ -474,9 +474,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         id = data['surface']['object']['id']
 
         if self.nvizClass.UnloadSurface(id) == 0:
-            print >> sys.stderr, _("Unable to unload raster map <%s>") % layer.name
+            print >> sys.stderr, "Nviz:" + _("Unable to unload raster map <%s>") % layer.name
         else:
-            print _("Raster map <%s> unloaded") % layer.name
+            print "Nviz:" + _("Raster map <%s> unloaded successfully") % layer.name
 
         data['surface'].pop('object')
 
@@ -629,7 +629,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 id = self.nvizClass.LoadVector(str(layer.name), True)
 
             if id < 0:
-                print >> sys.stderr, _("Loading vector map <%s> (%s) failed") % \
+                print >> sys.stderr, "Nviz:" + _("Loading vector map <%s> (%s) failed") % \
                     (layer.name, type)
                 continue
 
@@ -679,10 +679,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 ret = self.nvizClass.UnloadVector(id, True)
             if ret == 0:
-                print >> sys.stderr, _("Unable to unload vector map <%s> (%s)") % \
+                print >> sys.stderr, "Nviz:" + _("Unable to unload vector map <%s> (%s)") % \
                     (layer.name, vtype)
             else:
-                print >> sys.stderr, _("Vector map <%s> (%s) unloaded") % \
+                print "Nviz:" + _("Vector map <%s> (%s) unloaded successfully") % \
                     (layer.name, vtype)
 
             
