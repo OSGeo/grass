@@ -15,21 +15,72 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Michael Barton (Arizona State University)
-Martin Landa <landa.martin gmail.com>
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
 import sys
 import textwrap
 import time
+import threading
+import Queue
 
 import wx
 import wx.stc
+from wx.lib.newevent import NewEvent
 
 import globalvar
 import gcmd
 from debug import Debug as Debug
 
+wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
+wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
+wxCmdDone,     EVT_CMD_DONE     = NewEvent()
+wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
+
+def GrassCmd(cmd, stdout, stderr):
+    """Run GRASS command on background"""
+    return gcmd.RunCommand(cmd=cmd,
+                           stdout=stdout, stderr=stderr)
+
+class CmdThread(threading.Thread):
+    """Thread for GRASS commands"""
+    requestId = 0
+    def __init__(self, parent, requestQ, resultQ, **kwds):
+        threading.Thread.__init__(self, **kwds)
+
+        self.setDaemon(True)
+
+        self.parent = parent # GMConsole
+        
+        self.requestQ = requestQ
+        self.resultQ = resultQ
+
+        self.start()
+
+    def RunCmd(self, callable, *args, **kwds):
+        CmdThread.requestId += 1
+
+        self.requestTime = time.time()
+
+        self.requestQ.put((CmdThread.requestId, callable, args, kwds))
+        
+        return CmdThread.requestId
+
+    def run(self):
+        while True:
+            requestId, callable, args, kwds = self.requestQ.get()
+            self.resultQ.put((requestId, callable(*args, **kwds)))
+
+            event = wxCmdDone(aborted=False,
+                              time=self.requestTime,
+                              pid=requestId)
+            wx.PostEvent(self.parent, event)
+
+    def abort(self):
+        # TODO
+        print self.resultQ.get_()
+        
 class GMConsole(wx.Panel):
     """
     Create and manage output console for commands entered on the
@@ -43,33 +94,58 @@ class GMConsole(wx.Panel):
         # initialize variables
         self.Map             = None
         self.parent          = parent # GMFrame
-        self.cmdThreads      = {}     # cmdThread : cmdPID
         self.lineWidth       = 80
         self.pageid          = pageid
 
+        #
+        # create queues
+        #
+        self.requestQ = Queue.Queue()
+        self.resultQ = Queue.Queue()
+
+        #
         # progress bar
+        #
         self.console_progressbar = wx.Gauge(parent=self, id=wx.ID_ANY,
                                             range=100, pos=(110, 50), size=(-1, 25),
                                             style=wx.GA_HORIZONTAL)
-
+        self.console_progressbar.Bind(EVT_CMD_PROGRESS, self.OnCmdProgress)
+        
+        #
         # text control for command output
+        #
         self.cmd_output = GMStc(parent=self, id=wx.ID_ANY, margin=margin,
                                 wrap=None) 
+        self.cmd_output_timer = wx.Timer(self.cmd_output, id=wx.ID_ANY)
+        self.cmd_output.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
+        self.cmd_output.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
+        self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         
-        # redirect
-        self.cmd_stdout = GMStdout(self.cmd_output)
-        self.cmd_stderr = GMStderr(self.cmd_output,
-                                   self.console_progressbar,
-                                   self.parent.notebook,
-                                   pageid)
+        #
+        # stream redirection
+        #
+        self.cmd_stdout = GMStdout(self)
+        self.cmd_stderr = GMStderr(self)
 
+        #
+        # thread
+        #
+        self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
+
+        #
         # buttons
+        #
         self.console_clear = wx.Button(parent=self, id=wx.ID_CLEAR)
         self.console_save  = wx.Button(parent=self, id=wx.ID_SAVE)
         self.Bind(wx.EVT_BUTTON, self.ClearHistory, self.console_clear)
         self.Bind(wx.EVT_BUTTON, self.SaveHistory,  self.console_save)
 
-        # output control layout
+        self.Bind(EVT_CMD_ABORT, self.OnCmdDone)
+        
+        self.__layout()
+
+    def __layout(self):
+        """Do layout"""
         boxsizer1 = wx.BoxSizer(wx.VERTICAL)
         gridsizer1 = wx.GridSizer(rows=1, cols=2, vgap=0, hgap=0)
         boxsizer1.Add(item=self.cmd_output, proportion=1,
@@ -89,9 +165,6 @@ class GMConsole(wx.Panel):
         boxsizer1.Fit(self)
         boxsizer1.SetSizeHints(self)
 
-        # set up event handler for any command thread results
-        gcmd.EVT_RESULT(self, self.OnResult)
-        
         # layout
         self.SetAutoLayout(True)
         self.SetSizer(boxsizer1)
@@ -104,8 +177,9 @@ class GMConsole(wx.Panel):
         """
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
-            sys.stdout = self.cmd_stdout
-            sys.stderr = self.cmd_stderr
+            #sys.stdout = self.cmd_stdout
+            #sys.stderr = self.cmd_stderr
+            pass
 
             return True
 
@@ -122,7 +196,7 @@ class GMConsole(wx.Panel):
         if not style:
             style = self.cmd_output.StyleDefault
 
-        self.cmd_output.GotoPos(self.cmd_output.GetEndStyled())
+        self.cmd_output.GotoPos(self.cmd_output.GetLength())
         p1 = self.cmd_output.GetCurrentPos()
         
         # fill space
@@ -131,16 +205,17 @@ class GMConsole(wx.Panel):
             line += diff * ' '
 
         self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds os.linesep
-        self.cmd_output.EnsureCaretVisible()
+
         p2 = self.cmd_output.GetCurrentPos()
         self.cmd_output.StartStyling(p1, 0xff)
         self.cmd_output.SetStyling(p2 - p1, style)
 
+        self.cmd_output.EnsureCaretVisible()
+        
     def WriteCmdLog(self, line, pid=None):
         """Write out line in selected style"""
         if pid:
             line = '(' + str(pid) + ') ' + line
-
         self.WriteLog(line, self.cmd_output.StyleCommand)
 
     def RunCmd(self, command):
@@ -164,7 +239,7 @@ class GMConsole(wx.Panel):
         except:
             curr_disp = None
 
-        if len(self.GetListOfCmdThreads()) > 0:
+        if not self.requestQ.empty():
             # only one running command enabled (per GMConsole instance)
             busy = wx.BusyInfo(message=_("Unable to run the command, another command is running..."),
                                parent=self)
@@ -228,16 +303,15 @@ class GMConsole(wx.Panel):
                     menuform.GUI().ParseCommand(cmdlist, parentframe=self)
                 else:
                     # process GRASS command with argument
-                    cmdPID = len(self.cmdThreads.keys())+1
+                    cmdPID = self.cmdThread.requestId + 1
                     self.WriteCmdLog('%s' % ' '.join(cmdlist), pid=cmdPID)
+
+                    self.cmdThread.RunCmd(GrassCmd,
+                                          cmdlist, self.cmd_stdout, self.cmd_stderr)
                     
-                    grassCmd = gcmd.Command(cmdlist, wait=False,
-                                            stdout=self.cmd_stdout,
-                                            stderr=self.cmd_stderr)
-                    
-                    self.cmdThreads[grassCmd.cmdThread] = { 'cmdPID' : cmdPID }
-                    
-                    return grassCmd
+                    self.cmd_output_timer.Start(50)
+
+                    return None
                 # deactivate computational region and return to display settings
                 if tmpreg:
                     os.environ["GRASS_REGION"] = tmpreg
@@ -291,37 +365,67 @@ class GMConsole(wx.Panel):
 
         dlg.Destroy()
 
-    def GetListOfCmdThreads(self, onlyAlive=True):
-        """Return list of command threads)"""
-        list = []
-        for t in self.cmdThreads.keys():
-            Debug.msg (4, "GMConsole.GetListOfCmdThreads(): name=%s, alive=%s" %
-                       (t.getName(), t.isAlive()))
-            if onlyAlive and not t.isAlive():
-                continue
-            list.append(t)
-
-        return list
-
-    def OnResult(self, event):
-        """Show result status"""
+    def GetCmd(self):
+        """Get running command or None"""
+        return self.requestQ.get()
         
-        if event.cmdThread.aborted:
+    def OnCmdOutput(self, event):
+        """Print command output"""
+        message = event.text
+        type  = event.type
+
+        # message prefix
+        if type == 'warning':
+            messege = 'WARNING: ' + message
+        elif type == 'error':
+            message = 'ERROR: ' + message
+            
+        p1 = self.cmd_output.GetCurrentPos()
+
+        if os.linesep not in message:
+            self.cmd_output.AddTextWrapped(message, wrap=60)
+        else:
+            self.cmd_output.AppendText(message)
+
+        p2 = self.cmd_output.GetCurrentPos()
+        self.cmd_output.StartStyling(p1, 0xff)
+        if type == 'error':
+            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleError)
+        elif type == 'warning':
+            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleWarning)
+        elif type == 'message':
+            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleMessage)
+        else: # unknown
+            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleUnknown)
+            
+        self.cmd_output.EnsureCaretVisible()
+        
+    def OnCmdProgress(self, event):
+        """Update progress message info"""
+        self.console_progressbar.SetValue(event.value)
+
+    def OnCmdDone(self, event):
+        """Command done (or aborted)"""
+        if event.aborted:
+            self.cmdThread.abort()
+            
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
                             'and can be corrupted'), self.cmd_output.StyleWarning)
             self.WriteCmdLog(_('Command aborted'),
-                             pid=self.cmdThreads[event.cmdThread]['cmdPID'])
+                             pid=self.cmdThread.requestId)
         else:
             try:
                 # Process results here
-                self.WriteCmdLog(_('Command finished (%d sec)') % (time.time() - event.cmdThread.startTime),
-                                 pid=self.cmdThreads[event.cmdThread]['cmdPID'])
+                self.WriteCmdLog(_('Command finished (%d sec)') % (time.time() - event.time),
+                                 pid=event.pid)
             except KeyError:
                 # stopped deamon
                 pass
-                
+        
         self.console_progressbar.SetValue(0) # reset progress bar on '0%'
+
+        self.cmd_output_timer.Stop()
 
         # updated command dialog
         if hasattr(self.parent.parent, "btn_run"):
@@ -340,11 +444,16 @@ class GMConsole(wx.Panel):
                 dialog.btn_help.Enable(True)
 
             dialog.btn_run.Enable(True)
-            
+
             if dialog.get_dcmd is None and \
                    dialog.closebox.IsChecked():
                 time.sleep(1)
                 dialog.Close()
+
+        event.Skip()
+        
+    def OnProcessPendingOutputWindowEvents(self, event):
+        self.ProcessPendingEvents()
 
 class GMStdout:
     """GMConsole standard output
@@ -357,22 +466,20 @@ class GMStdout:
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
-    def __init__(self, gmstc):
-        self.gmstc  = gmstc
+    def __init__(self, parent):
+        self.parent = parent # GMConsole
 
     def write(self, s):
         if len(s) == 0 or s == '\n':
             return
         s = s.replace('\n', os.linesep)
+        
         for line in s.split(os.linesep):
-            p1 = self.gmstc.GetCurrentPos() # get caret position
-            self.gmstc.AddTextWrapped(line, wrap=None) # no wrapping && adds os.linesep
-            self.gmstc.EnsureCaretVisible()
-            p2 = self.gmstc.GetCurrentPos()
-            self.gmstc.StartStyling(p1, 0xff)
-            self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleOutput)
-
-class GMStderr(object):
+            evt = wxCmdOutput(text=line + os.linesep,
+                              type='')
+            wx.PostEvent(self.parent.cmd_output, evt)
+        
+class GMStderr:
     """GMConsole standard error output
 
     Based on FrameOutErr.py
@@ -383,37 +490,29 @@ class GMStderr(object):
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
     """
-    def __init__(self, gmstc, gmgauge, notebook, pageid):
-        self.gmstc    = gmstc
-        self.gmgauge  = gmgauge
-        self.notebook = notebook
-        self.pageid   = pageid
-
+    def __init__(self, parent):
+        self.parent = parent # GMConsole
+ 
         self.type = ''
         self.message = ''
         self.printMessage = False
-        
-    def write(self, s):
-        if self.pageid > -1:
-            # swith notebook page to 'command output'
-            if self.notebook.GetSelection() != self.pageid: 
-                self.notebook.SetSelection(self.pageid)
 
+    def write(self, s):
         s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
         s = s.replace('\b', '').replace('\r', '%s' % os.linesep)
-
+        progressValue = -1
+        
         for line in s.split(os.linesep):
             if len(line) == 0:
                 continue
-            
+
             if 'GRASS_INFO_PERCENT' in line:
-                # 'GRASS_INFO_PERCENT: 10' -> value=10
                 value = int(line.rsplit(':', 1)[1].strip())
                 if value >= 0 and value < 100:
-                    self.gmgauge.SetValue(value)
+                    progressValue = value
                 else:
-                    self.gmgauge.SetValue(0) # reset progress bar on '0%'
+                    progressValue = 0
             elif 'GRASS_INFO_MESSAGE' in line:
                 self.type = 'message'
                 self.message = line.split(':', 1)[1].strip()
@@ -427,39 +526,28 @@ class GMStderr(object):
                 self.printMessage = True
             elif not self.type:
                 if len(line) > 0:
-                    p1 = self.gmstc.GetCurrentPos()
-                    self.gmstc.AddTextWrapped(line, wrap=60) # wrap && add os.linesep
-                    self.gmstc.EnsureCaretVisible()
-                    p2 = self.gmstc.GetCurrentPos()
-                    self.gmstc.StartStyling(p1, 0xff)
-                    self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleUnknown)
+                    continue
+                evt = wxCmdOutput(text=line,
+                                  type='')
+                wx.PostEvent(self.parent.cmd_output, evt)
             elif len(line) > 0:
                 self.message += line.strip() + os.linesep
 
             if self.printMessage and len(self.message) > 0:
-                p1 = self.gmstc.GetCurrentPos()
-                if self.type == 'warning':
-                    self.message = 'WARNING: ' + self.message
-                elif self.type == 'error':
-                    self.message = 'ERROR: ' + self.message
-                if os.linesep not in self.message:
-                    self.gmstc.AddTextWrapped(self.message, wrap=60) #wrap && add os.linesep
-                else:
-                    self.gmstc.AddText(self.message)
-                self.gmstc.EnsureCaretVisible()
-                p2 = self.gmstc.GetCurrentPos()
-                self.gmstc.StartStyling(p1, 0xff)
-                if self.type == 'error':
-                    self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleError)
-                elif self.type == 'warning':
-                    self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleWarning)
-                elif self.type == 'self.message':
-                    self.gmstc.SetStyling(p2 - p1 + 1, self.gmstc.StyleSelf.Message)
+                evt = wxCmdOutput(text=self.message,
+                                  type=self.type)
+                wx.PostEvent(self.parent.cmd_output, evt)
 
                 self.type = ''
                 self.message = ''
                 self.printMessage = False
 
+        # update progress message
+        if progressValue > -1:
+            # self.gmgauge.SetValue(progressValue)
+            evt = wxCmdProgress(value=progressValue)
+            wx.PostEvent(self.parent.console_progressbar, evt)
+            
 class GMStc(wx.stc.StyledTextCtrl):
     """Styled GMConsole
 
@@ -542,7 +630,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         wx.TheClipboard.Flush()
         evt.Skip()
 
-    def AddTextWrapped(self, str, wrap=None):
+    def AddTextWrapped(self, txt, wrap=None):
         """Add string to text area.
 
         String is wrapped and linesep is also added to the end
@@ -551,11 +639,12 @@ class GMStc(wx.stc.StyledTextCtrl):
             wrap = self.wrap
 
         if wrap is not None:
-            str = textwrap.fill(str, wrap) + os.linesep
+            txt = textwrap.fill(txt, wrap) + os.linesep
         else:
-            str += os.linesep
+            txt += os.linesep
 
-        self.AddText(str)
+        self.AddText(txt)
+
 
     def SetWrap(self, wrap):
         """Set wrapping value
