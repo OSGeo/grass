@@ -773,7 +773,7 @@ class mainFrame(wx.Frame):
 
     def OnRun(self, event):
         """Run the command"""
-        if len(self.goutput.GetListOfCmdThreads()) > 0:
+        if not self.goutput.resultQ.empty():
             return
 
         cmd = self.createCmd()
@@ -807,10 +807,8 @@ class mainFrame(wx.Frame):
 
     def OnAbort(self, event):
         """Abort running command"""
-        try:
-            self.goutput.GetListOfCmdThreads()[0].abort()
-        except IndexError:
-            pass
+        event = goutput.wxCmdAbort(aborted=True)
+        wx.PostEvent(self.goutput, event)
 
     def OnCopy(self, event):
         """Copy the command"""

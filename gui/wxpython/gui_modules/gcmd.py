@@ -491,8 +491,8 @@ class CommandThread(Thread):
     @param stdout  redirect standard output or None
     @param stderr  redirect standard error output or None
     """
-    def __init__ (self, cmd, stdin=None,
-                  stdout=None, stderr=sys.stderr):
+    def __init__ (self, cmd,
+                  stdin=None, stdout=None, stderr=sys.stderr):
 
         Thread.__init__(self)
         
@@ -517,6 +517,7 @@ class CommandThread(Thread):
             return
         
         self.startTime = time.time()
+        
         # TODO: wx.Exectute/wx.Process (?)
         try:
             self.module = Popen(self.cmd,
@@ -526,8 +527,7 @@ class CommandThread(Thread):
         except OSError, e:
             self.rerr = str(e)
             return
-            # raise CmdError(self.cmd[0], str(e))
-
+        
         if self.stdin: # read stdin if requested ...
             self.module.stdin.write(self.stdin)
             self.module.stdin.close()
@@ -535,21 +535,6 @@ class CommandThread(Thread):
         # redirect standard outputs...
         if self.stdout or self.stderr:
             self.__redirect_stream()
-
-    def __read_all(self, fd):
-        out = ""
-        while True:
-            try:
-                bytes = fd.read(4096)
-            except IOError, e:
-                if e[0] != errno.EAGAIN:
-                    raise
-                break
-            if not bytes:
-                break
-            out += bytes
-
-        return out
 
     def __redirect_stream(self):
         """Redirect stream"""
@@ -569,31 +554,27 @@ class CommandThread(Thread):
                 
         # wait for the process to end, sucking in stuff until it does end
         while self.module.poll() is None:
-            time.sleep(.1)
             if self._want_abort: # abort running process
                 self.module.kill()
                 self.aborted = True
                 if hasattr(self.stderr, "gmstc"):
                     # -> GMConsole
                     wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
+                    pass
                 return 
             if self.stdout:
-                # line = self.__read_all(self.module.stdout)
                 line = recv_some(self.module, e=0, stderr=0)
                 self.stdout.write(line)
             if self.stderr:
-                # line = self.__read_all(self.module.stderr)
                 line = recv_some(self.module, e=0, stderr=1)
                 self.stderr.write(line)
                 self.rerr = line
 
         # get the last output
         if self.stdout:
-            # line = self.__read_all(self.module.stdout)
             line = recv_some(self.module, e=0, stderr=0)
             self.stdout.write(line)
         if self.stderr:
-            # line = self.__read_all(self.module.stderr)
             line = recv_some(self.module, e=0, stderr=1)
             self.stderr.write(line)
             if len(line) > 0:
@@ -602,11 +583,94 @@ class CommandThread(Thread):
         if hasattr(self.stderr, "gmstc"):
             # -> GMConsole
             wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
-
+            pass
+        
     def abort(self):
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
 
+class RunCommand:
+    """Run command in separate thread
+
+    @param cmd GRASS command (given as list)
+    @param stdin standard input stream 
+    @param stdout  redirect standard output or None
+    @param stderr  redirect standard error output or None
+    """
+    def __init__ (self, cmd, stdin=None,
+                  stdout=sys.stdout, stderr=sys.stderr):
+
+        self.cmd    = cmd
+        self.stdin  = stdin
+        self.stdout = stdout
+        self.stderr = stderr
+        
+        self._want_abort = False
+        self.aborted = False
+        
+        self.startTime = time.time()
+        
+        try:
+            self.module = Popen(self.cmd,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
+        except OSError, e:
+            self.rerr = str(e)
+            return 1
+        
+        if self.stdin: # read stdin if requested ...
+            self.module.stdin.write(self.stdin)
+            self.module.stdin.close()
+
+        # redirect standard outputs...
+        if self.stdout or self.stderr:
+            self.__redirect_stream()
+
+    def __redirect_stream(self):
+        """Redirect stream"""
+        if self.stdout:
+            # make module stdout/stderr non-blocking
+            out_fileno = self.module.stdout.fileno()
+	    if not subprocess.mswindows:
+                flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
+                fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
+                
+        if self.stderr:
+            # make module stdout/stderr non-blocking
+            out_fileno = self.module.stderr.fileno()
+	    if not subprocess.mswindows:
+                flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
+                fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
+                
+        # wait for the process to end, sucking in stuff until it does end
+        while self.module.poll() is None:
+            if self._want_abort: # abort running process
+                self.module.kill()
+                return
+            if self.stdout:
+                line = recv_some(self.module, e=0, stderr=0)
+                self.stdout.write(line)
+            if self.stderr:
+                line = recv_some(self.module, e=0, stderr=1)
+                self.stderr.write(line)
+                self.rerr = line
+
+        # get the last output
+        if self.stdout:
+            line = recv_some(self.module, e=0, stderr=0)
+            self.stdout.write(line)
+        if self.stderr:
+            line = recv_some(self.module, e=0, stderr=1)
+            self.stderr.write(line)
+            if len(line) > 0:
+                self.rerr = line
+
+    def abort(self):
+        """Abort running process, used by main thread to signal an abort"""
+        print 'a'
+        self._want_abort = True
+    
 # testing ...
 if __name__ == "__main__":
     SEP = "-----------------------------------------------------------------------------"
