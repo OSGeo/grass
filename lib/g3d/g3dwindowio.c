@@ -138,7 +138,7 @@ G3d_readWindow  (G3D_Region *window, const char *windowName)
 {
   struct Cell_head win;
   struct Key_Value *windowKeys;
-  char path[1024], msg[1024];
+  char path[GPATH_MAX];
   int status;
 
 
@@ -169,8 +169,7 @@ G3d_readWindow  (G3D_Region *window, const char *windowName)
 
       windowKeys = G_read_key_value_file (path, &status);
       if (status != 0) {
-	sprintf (msg, "G3d_readWindow: Unable to open %s", path);
-	G3d_error (msg);
+	G3d_error ("G3d_readWindow: Unable to open %s", path);
 	return 0;
       }
 
@@ -182,8 +181,7 @@ G3d_readWindow  (G3D_Region *window, const char *windowName)
 				 &(window->cols), &(window->depths),
 				 &(window->ew_res), &(window->ns_res), 
 				 &(window->tb_res))) {
-	sprintf (msg, "G3d_readWindow: error extracting window key(s) of file %s", path);
-	G3d_error (msg);
+	G3d_error ("G3d_readWindow: error extracting window key(s) of file %s", path);
 	return 0;
       }
 
@@ -276,7 +274,7 @@ G3d_writeWindow (window, windowName)
  */
 
 void
-G3d_useWindowParams ()
+G3d_useWindowParams (void)
 
 {
   G3d_setWindowParams ();

@@ -321,9 +321,9 @@ int G3d_readDoubles(int, int, double *, int);
 /* grass/src/libes/g3d/g3derror.c */
 void G3d_skipError(const char *);
 void G3d_printError(const char *);
-void G3d_fatalError(const char *, ...);
-void G3d_fatalError_noargs(const char *);
-void G3d_error(const char *, ...);
+void G3d_fatalError(const char *, ...) __attribute__((format(printf,1,2))) __attribute__((noreturn));
+void G3d_fatalError_noargs(const char *) __attribute__((noreturn));
+void G3d_error(const char *, ...) __attribute__((format(printf,1,2)));
 /* grass/src/libes/g3d/g3dfpxdr.c */
 int G3d_isXdrNullNum(const void *, int);
 int G3d_isXdrNullFloat(const float *);
