@@ -19,20 +19,20 @@
  *  \param map
  *  \param nofTiles
  *  \param type
- *  \return char * : a pointer to the vector ... if successful,
+ *  \return void * : a pointer to the vector ... if successful,
  *                   NULL ... otherwise.
  */
 
-char *
+void *
 G3d_allocTilesType  (G3D_Map *map, int nofTiles, int type)
 
 {
-  char *tiles;
+  void *tiles;
 
   tiles = G3d_malloc (map->tileSize * G3d_length (type) * nofTiles);
   if (tiles == NULL) {
     G3d_error ("G3d_allocTilesType: error in G3d_malloc");
-    return (char *) NULL;
+    return NULL;
   }
 
   return tiles;
@@ -48,19 +48,19 @@ G3d_allocTilesType  (G3D_Map *map, int nofTiles, int type)
  *
  *  \param map
  *  \param nofTiles
- *  \return char * 
+ *  \return void * 
  */
 
-char *
+void *
 G3d_allocTiles  (G3D_Map *map, int nofTiles)
 
 {
-  char *tiles;
+  void *tiles;
 
   tiles = G3d_allocTilesType (map, nofTiles, map->typeIntern);
   if (tiles == NULL) {
     G3d_error ("G3d_allocTiles: error in G3d_allocTilesType");
-    return (char *) NULL;
+    return NULL;
   }
 
   return tiles;
@@ -79,7 +79,7 @@ G3d_allocTiles  (G3D_Map *map, int nofTiles)
  */
 
 void
-G3d_freeTiles  (char *tiles)
+G3d_freeTiles  (void *tiles)
 
 {
   G3d_free (tiles);

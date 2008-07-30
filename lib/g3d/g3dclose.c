@@ -13,14 +13,14 @@ static int
 G3d_closeNew  (G3D_Map *map)
 
 {
-  char path[4096], buf[4096];
+  char path[GPATH_MAX];
   struct Categories cats;
   struct History hist;
 
   G3d_removeColor (map->fileName);
 
   /* create empty cats file */
-  G_init_raster_cats ((char *) NULL, &cats);
+  G_init_raster_cats (NULL, &cats);
   G3d_writeCats (map->fileName, &cats);
   G_free_cats (&cats);
 
@@ -30,8 +30,7 @@ G3d_closeNew  (G3D_Map *map)
   /*Use the G3d function to write the history file,
    * otherwise the path is wrong */
   if (!G3d_writeHistory(map->fileName, &hist)) {
-      sprintf(buf, "G3d_closeNew: can't write raster3d history");
-      G3d_error(buf);
+      G3d_error("G3d_closeNew: can't write raster3d history");
   }
 
 
@@ -47,10 +46,8 @@ G3d_closeNew  (G3D_Map *map)
   if (link (map->tempName, path) < 0) {
 #endif
     if(rename(map->tempName, path)) {
-      sprintf (buf,
-	   "G3d_closeNew: can't move temp raster map %s\nto 3d data file %s",
+      G3d_error ("G3d_closeNew: can't move temp raster map %s\nto 3d data file %s",
 	       map->tempName, path);
-      G3d_error (buf);
       return 0;
     }
   } else 

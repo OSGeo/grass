@@ -61,7 +61,6 @@ int g3d_file_type = G3D_NO_DEFAULT;
 int g3d_tile_dimension[3] = {G3D_NO_DEFAULT, G3D_NO_DEFAULT, G3D_NO_DEFAULT};
 void (*g3d_error_fun)(const char *) = NULL;
 char *g3d_unit_default = NULL;
-extern char * G3d_getWindowParams(void);                                        
 
 /*---------------------------------------------------------------------------*/
 
@@ -335,7 +334,7 @@ G3d_setErrorFun  (void (*fun)(const char *))
  */
 
 void
-G3d_setUnit  (char *unit)
+G3d_setUnit  (const char *unit)
 
 {
   G3d_free (g3d_unit_default);
@@ -357,11 +356,11 @@ G3d_setUnit  (char *unit)
  */
 
 void
-G3d_initDefaults ()
+G3d_initDefaults (void)
 
 {
   static int firstTime = 1;
-  char *value, *windowName;
+  const char *value, *windowName;
   G3D_Region window;
 
   if (! firstTime) return;
@@ -614,7 +613,7 @@ G3d_initDefaults ()
   {
     value = getenv (G3D_DEFAULT_WINDOW3D);
     if (value != NULL) 
-      if (*value != 0) windowName = G_store (value);
+      if (*value != 0) windowName = value;
   }
 
   if (! G3d_readWindow (&window, windowName))

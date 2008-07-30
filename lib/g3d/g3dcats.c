@@ -24,7 +24,7 @@
  */
 
 int
-G3d_writeCats  (char *name, struct Categories *cats)
+G3d_writeCats  (const char *name, struct Categories *cats)
  /* adapted from G_write_cats */
 
 
@@ -33,9 +33,9 @@ G3d_writeCats  (char *name, struct Categories *cats)
 {
   FILE *fd;
   int i;
-  char *descr;
+  const char *descr;
   DCELL val1, val2;
-  char str1[100], str2[100], buf[200], buf2[200], xname[512], xmapset[512];
+  char str1[100], str2[100], buf[200], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   if (G__name_is_fully_qualified (name, xname, xmapset)) {
     sprintf (buf, "%s/%s", G3D_DIRECTORY, xname);
@@ -82,7 +82,7 @@ G3d_writeCats  (char *name, struct Categories *cats)
 /*---------------------------------------------------------------------------*/
 
 static int
-read_cats  (char *name, char *mapset, struct Categories *pcats)
+read_cats  (const char *name, const char *mapset, struct Categories *pcats)
  /* adapted from G__read_cats */
 
 
@@ -183,7 +183,7 @@ error:
  */
 
 int
-G3d_readCats  (char *name, char *mapset, struct Categories *pcats)
+G3d_readCats  (const char *name, const char *mapset, struct Categories *pcats)
  /* adapted from G_read_cats */
 
 
@@ -191,9 +191,7 @@ G3d_readCats  (char *name, char *mapset, struct Categories *pcats)
 
 
 {
-  char err[100];
-  char *type;
-  CELL G__read_cats();
+  const char *type;
 
   switch (read_cats (name, mapset, pcats)) {
   case -2:
@@ -206,8 +204,7 @@ G3d_readCats  (char *name, char *mapset, struct Categories *pcats)
     return 0;
   }
 
-  sprintf(err,"category support for [%s] in mapset [%s] %s",
+  G_warning ("category support for [%s] in mapset [%s] %s",
 	  name, mapset, type);
-  G_warning (err);
   return -1;
 }

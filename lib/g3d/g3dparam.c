@@ -159,7 +159,7 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type, int *useLzwDefault,
 static struct Option *windowParam = NULL;
 
 void
-G3d_setWindowParams()
+G3d_setWindowParams(void)
 
 {
   windowParam = G_define_option();
@@ -173,7 +173,7 @@ G3d_setWindowParams()
 
 /*----------------------------------------------------------------------------*/
 
-char * G3d_getWindowParams()
+char * G3d_getWindowParams(void)
 
 {
   if (windowParam == NULL) return NULL;

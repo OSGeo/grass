@@ -338,8 +338,8 @@ compareFilesNocache  (void *map, void *map2)
     for (y = 0; y < ny * tileY; y++) {
       for (x = 0; x < nx * tileX; x++) {
 
-	G3d_getBlock (map, x, y, z, 1, 1, 1, (char *)n1p, typeIntern);
-	G3d_getBlock (map2, x, y, z, 1, 1, 1, (char *)n2p, typeIntern2);
+	G3d_getBlock (map, x, y, z, 1, 1, 1, n1p, typeIntern);
+	G3d_getBlock (map2, x, y, z, 1, 1, 1, n2p, typeIntern2);
 
 	if (typeIntern == FCELL_TYPE)
 	{
@@ -395,7 +395,7 @@ compareFilesNocache  (void *map, void *map2)
  */
 
 void
-G3d_compareFiles  (char *f1, char *mapset1, char *f2, char *mapset2)
+G3d_compareFiles  (const char *f1, const char *mapset1, const char *f2, const char *mapset2)
 
 {
   void *map, *map2; 
@@ -472,8 +472,8 @@ G3d_compareFiles  (char *f1, char *mapset1, char *f2, char *mapset2)
     {
       for (x = 0; x < cols; x++) 
       {
-	G3d_getValueRegion (map, x, y, z, (char *)n1p, typeIntern);
-	G3d_getValueRegion (map2, x, y, z, (char *)n2p, typeIntern2);
+	G3d_getValueRegion (map, x, y, z, n1p, typeIntern);
+	G3d_getValueRegion (map2, x, y, z, n2p, typeIntern2);
 
 	G3d_isNullValueNum (n1p, typeIntern);
 	G3d_isNullValueNum (n2p, typeIntern2);

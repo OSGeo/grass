@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <rpc/types.h>
@@ -8,67 +9,46 @@
 
 /*---------------------------------------------------------------------------*/
 
-#define XDR_NULL_BYTE_0 255
-#define XDR_NULL_BYTE_1 255
-#define XDR_NULL_BYTE_2 255
-#define XDR_NULL_BYTE_3 255
-#define XDR_NULL_BYTE_4 255
-#define XDR_NULL_BYTE_5 255
-#define XDR_NULL_BYTE_6 255
-#define XDR_NULL_BYTE_7 255
-
 int
-G3d_isXdrNullNum  (unsigned char *num, int isFloat)
+G3d_isXdrNullNum  (const void *num, int isFloat)
 
 {
-  if (*num++ != XDR_NULL_BYTE_0) return 0;
-  if (*num++ != XDR_NULL_BYTE_1) return 0;
-  if (*num++ != XDR_NULL_BYTE_2) return 0;
-  if (*num++ != XDR_NULL_BYTE_3) return 0;
+  static const char null_bytes[8] = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+  };
 
-  if (isFloat) return 1;
-
-  if (*num++ != XDR_NULL_BYTE_4) return 0;
-  if (*num++ != XDR_NULL_BYTE_5) return 0;
-  if (*num++ != XDR_NULL_BYTE_6) return 0;
-  return (*num == XDR_NULL_BYTE_7);
+  return memcmp(num, null_bytes, isFloat ? 4 : 8) == 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_isXdrNullFloat  (float *f)
+G3d_isXdrNullFloat  (const float *f)
 
 {
-  return G3d_isXdrNullNum ((unsigned char *) f, 1);
+  return G3d_isXdrNullNum (f, 1);
 }
 
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_isXdrNullDouble  (double *d)
+G3d_isXdrNullDouble  (const double *d)
 
 {
-  return G3d_isXdrNullNum ((unsigned char *) d, 0);
+  return G3d_isXdrNullNum (d, 0);
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_setXdrNullNum  (unsigned char *num, int isFloat)
+G3d_setXdrNullNum  (void *num, int isFloat)
 
 {
-  *num++ = XDR_NULL_BYTE_0;
-  *num++ = XDR_NULL_BYTE_1;
-  *num++ = XDR_NULL_BYTE_2;
-  *num++ = XDR_NULL_BYTE_3;
+  static const char null_bytes[8] = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+  };
 
-  if (isFloat) return;	
- 
-  *num++ = XDR_NULL_BYTE_4;
-  *num++ = XDR_NULL_BYTE_5;
-  *num++ = XDR_NULL_BYTE_6;
-  *num = XDR_NULL_BYTE_7;
+  memcpy(num, null_bytes, isFloat ? 4 : 8);
 }
   
 /*---------------------------------------------------------------------------*/
@@ -77,7 +57,7 @@ void
 G3d_setXdrNullDouble  (double *d)
 
 {
-  G3d_setXdrNullNum ((unsigned char *) d, 0);
+  G3d_setXdrNullNum (d, 0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -86,7 +66,7 @@ void
 G3d_setXdrNullFloat  (float *f)
 
 {
-  G3d_setXdrNullNum ((unsigned char *) f, 1);
+  G3d_setXdrNullNum (f, 1);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -143,7 +123,7 @@ G3d_initFpXdr  (G3D_Map *map, int misuseBytes)
 
 /*---------------------------------------------------------------------------*/
 
-char *xdrTmp;
+static void *xdrTmp;
 static int dstType, srcType, type, externLength, eltLength, isFloat, useXdr;
 static int (* xdrFun) ();
 static XDR *xdrs;
@@ -178,23 +158,21 @@ G3d_initCopyToXdr  (G3D_Map *map, int sType)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_copyToXdr  (char *src, int nofNum)
+G3d_copyToXdr  (const void *src, int nofNum)
 
 {
-  char *srcLast;
+  int i;
 
   if (useXdr == G3D_NO_XDR) {
     G3d_copyValues (src, 0, srcType, xdrTmp, 0, type, nofNum);
-    xdrTmp += nofNum * G3d_externLength (type);
+    xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength (type));
     return 1;
   }
 
-  srcLast = src + nofNum * eltLength;
-
-  for ( ; src != srcLast ; src += eltLength) {
+  for (i = 0 ; i < nofNum ; i++, src = G_incr_void_ptr(src, eltLength)) {
 
     if (G3d_isNullValueNum (src, srcType)) {
-      G3d_setXdrNullNum ((unsigned char *) xdrTmp, isFloat);
+      G3d_setXdrNullNum (xdrTmp, isFloat);
       if (! xdr_setpos (xdrs, xdr_getpos (xdrs) + externLength)) {
 	G3d_error ("G3d_copyToXdr: positioning xdr failed");
       return 0;
@@ -217,7 +195,7 @@ G3d_copyToXdr  (char *src, int nofNum)
       }
     }
 
-    xdrTmp += externLength;
+    xdrTmp = G_incr_void_ptr(xdrTmp, externLength);
   }
 
   return 1;
@@ -254,22 +232,20 @@ G3d_initCopyFromXdr  (G3D_Map *map, int dType)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_copyFromXdr  (int nofNum, char *dst)
+G3d_copyFromXdr  (int nofNum, void *dst)
 
 {
-  char *dstLast;
+  int i;
 
   if (useXdr == G3D_NO_XDR) {
     G3d_copyValues (xdrTmp, 0, type, dst, 0, dstType, nofNum);
-    xdrTmp += nofNum * G3d_externLength (type);
+    xdrTmp = G_incr_void_ptr(xdrTmp, nofNum * G3d_externLength (type));
     return 1;
   }
 
-  dstLast = dst + nofNum * eltLength;
+  for (i = 0 ; i < nofNum; i++, dst = G_incr_void_ptr(dst, eltLength)) {
 
-  for ( ; dst != dstLast ; dst += eltLength) {
-
-    if (G3d_isXdrNullNum ((unsigned char *) xdrTmp, isFloat)) {
+    if (G3d_isXdrNullNum (xdrTmp, isFloat)) {
       G3d_setNullValue (dst, 1, dstType);
       if (! xdr_setpos (xdrs, xdr_getpos (xdrs) + externLength)) {
 	G3d_error ("G3d_copyFromXdr: positioning xdr failed");
@@ -293,7 +269,7 @@ G3d_copyFromXdr  (int nofNum, char *dst)
       }
     }
 
-    xdrTmp += externLength;
+    xdrTmp = G_incr_void_ptr(xdrTmp, externLength);
   }
 
   return 1;

@@ -4,7 +4,7 @@
 /*----------------------------------------------------------------------------*/
 
 void *
-G3d_openNewParam  (char *name, int typeIntern, int cache, G3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX, int tileY, int tileZ)
+G3d_openNewParam  (const char *name, int typeIntern, int cache, G3D_Region *region, int type, int doLzw, int doRle, int precision, int tileX, int tileY, int tileZ)
 
 {
   void *map;

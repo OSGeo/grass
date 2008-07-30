@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <rpc/types.h>
@@ -19,59 +20,57 @@ G3d_g3dType2cellType  (int g3dType)
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyFloat2Double  (float *src, int offsSrc, double *dst, int offsDst, int nElts)
+G3d_copyFloat2Double  (const float *src, int offsSrc, double *dst, int offsDst, int nElts)
 
 {
-  float *srcStop;
+  int i;
 
   src += offsSrc;
   dst += offsDst;
-  srcStop = src + nElts;
-  while (src != srcStop) *dst++ = *src++;
+
+  for (i = 0; i < nElts; i++)
+    dst[i] = (double) src[i];
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyDouble2Float  (double *src, int offsSrc, float *dst, int offsDst, int nElts)
+G3d_copyDouble2Float  (const double *src, int offsSrc, float *dst, int offsDst, int nElts)
 
 {
-  double *srcStop;
+  int i;
 
   src += offsSrc;
   dst += offsDst;
-  srcStop = src + nElts;
-  while (src != srcStop) *dst++ = *src++;
+
+  for (i = 0; i < nElts; i++)
+    dst[i] = (float) src[i];
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyValues  (char *src, int offsSrc, int typeSrc, char *dst, int offsDst, int typeDst, int nElts)
+G3d_copyValues  (const void *src, int offsSrc, int typeSrc, void *dst, int offsDst, int typeDst, int nElts)
 
 {
-  char *srcStop;
   int eltLength;
 
   if ((typeSrc == FCELL_TYPE) && (typeDst == DCELL_TYPE)) {
-    G3d_copyFloat2Double ((float *) src, offsSrc, (double *) dst,
-			  offsDst, nElts);
+    G3d_copyFloat2Double (src, offsSrc, dst, offsDst, nElts);
     return;
   }
   
   if ((typeSrc == DCELL_TYPE) && (typeDst == FCELL_TYPE)) {
-    G3d_copyDouble2Float ((double *) src, offsSrc, (float *) dst,
-			  offsDst, nElts);
+    G3d_copyDouble2Float (src, offsSrc, dst, offsDst, nElts);
     return;
   }
 
   eltLength = G3d_length (typeSrc);
 
-  src += eltLength * offsSrc;
-  dst += eltLength * offsDst;
+  src = G_incr_void_ptr(src, eltLength * offsSrc);
+  dst = G_incr_void_ptr(dst, eltLength * offsDst);
 
-  srcStop = src + nElts * eltLength;
-  while (src != srcStop) *dst++ = *src++;
+  memcpy(dst, src, nElts * eltLength);
 }
 
 /*---------------------------------------------------------------------------*/

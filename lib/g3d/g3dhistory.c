@@ -33,12 +33,8 @@
 #include <grass/glocale.h>
 #include "G3d_intern.h"
 
-/*local prototype */
-void SimpleErrorMessage(FILE * fd, char *name, char *mapset);
-
-
 /*simple error message */
-void SimpleErrorMessage(FILE * fd, char *name, char *mapset)
+void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
 {
     if (fd != NULL)
 	fclose(fd);
@@ -64,11 +60,11 @@ void SimpleErrorMessage(FILE * fd, char *name, char *mapset)
  *  \return int
  */
 
-int G3d_readHistory(char *name, char *mapset, struct History *hist)
+int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 /* This function is adapted from G_read_history */
 {
     FILE *fd;
-    char buff[1024], buf2[200], xname[512], xmapset[512];
+    char buff[1024], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_zero(hist, sizeof(struct History));
 
@@ -162,12 +158,12 @@ int G3d_readHistory(char *name, char *mapset, struct History *hist)
  *  \return int
  */
 
-int G3d_writeHistory(char *name, struct History *hist)
+int G3d_writeHistory(const char *name, struct History *hist)
 /* This function is adapted from G_write_history */
 {
     FILE *fd;
     int i;
-    char buf[200], buf2[200], xname[512], xmapset[512];
+    char buf[200], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);

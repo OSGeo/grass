@@ -81,8 +81,15 @@ G3d_fatalError_noargs  (const char *msg)
 }
 
 void
-G3d_error  (const char *msg)
+G3d_error  (const char *msg, ...)
 
 {
-    (*g3d_error_fun) (msg);
+    char buffer[2000];  /* No novels to the error logs, OK? */
+    va_list ap;
+
+    va_start(ap,msg);
+    vsprintf(buffer,msg,ap);
+    va_end(ap);
+
+    (*g3d_error_fun) (buffer);
 }

@@ -53,8 +53,8 @@ G3d_readColors  (const char *name, const char *mapset, struct Colors *colors)
 
 {
   char buf[512], buf2[200];
-  char *err;
-  char xname[512], xmapset[512];
+  const char *err;
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
   struct FPRange drange;
   DCELL dmin, dmax;
 
@@ -97,8 +97,7 @@ G3d_readColors  (const char *name, const char *mapset, struct Colors *colors)
     return 1;
   }
 
-  sprintf(buf,"color support for [%s] in mapset [%s] %s", name, mapset, err);
-  G_warning (buf);
+  G_warning ("color support for [%s] in mapset [%s] %s", name, mapset, err);
   return -1;
 }
 

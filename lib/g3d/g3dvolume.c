@@ -50,14 +50,7 @@ verifyVolumeEdges (nx, ny, nz)
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getVolumeA (map, u, nx, ny, nz, volumeBuf, type)
-
-     void *map;
-     double u[2][2][2][3];
-     int nx, ny, nz;
-     char *volumeBuf;
-     int type;
-
+G3d_getVolumeA (void *map, double u[2][2][2][3], int nx, int ny, int nz, void *volumeBuf, int type)
 {
   typedef double doubleArray[3];
 
@@ -140,23 +133,13 @@ G3d_getVolumeA (map, u, nx, ny, nz, volumeBuf, type)
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getVolume (map, 
-	       originNorth, originWest, originBottom,
-	       vxNorth, vxWest, vxBottom,
-	       vyNorth, vyWest, vyBottom,
-	       vzNorth, vzWest, vzBottom,
-	       nx, ny, nz,
-	       volumeBuf, type)
-
-     void *map;
-     double originNorth, originWest, originBottom;
-     double vxNorth, vxWest, vxBottom;
-     double vyNorth, vyWest, vyBottom;
-     double vzNorth, vzWest, vzBottom;
-     int nx, ny, nz;
-     char *volumeBuf;
-     int type;
-
+G3d_getVolume (void *map, 
+	       double originNorth, double originWest, double originBottom,
+	       double vxNorth, double vxWest, double vxBottom,
+	       double vyNorth, double vyWest, double vyBottom,
+	       double vzNorth, double vzWest, double vzBottom,
+	       int nx, int ny, int nz,
+	       void *volumeBuf, int type)
 {
   double u[2][2][2][3];
 
@@ -198,19 +181,11 @@ G3d_getVolume (map,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_getAllignedVolume (map, 
-		       originNorth, originWest, originBottom,
-		       lengthNorth, lengthWest, lengthBottom, 
-		       nx, ny, nz,
-		       volumeBuf, type)
-
-     void *map;
-     double originNorth, originWest, originBottom;
-     double lengthNorth, lengthWest, lengthBottom;
-     int nx, ny, nz;
-     char *volumeBuf;
-     int type;
-
+G3d_getAlignedVolume (void *map, 
+		      double originNorth, double originWest, double originBottom,
+		      double lengthNorth, double lengthWest, double lengthBottom, 
+		      int nx, int ny, int nz,
+		      void *volumeBuf, int type)
 {
   G3d_getVolume (map, 
 		 originNorth, originWest, originBottom, 
@@ -224,28 +199,21 @@ G3d_getAllignedVolume (map,
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_makeAllignedVolumeFile (map, fileName,
-			    originNorth, originWest, originBottom,
-			    lengthNorth, lengthWest, lengthBottom, 
-			    nx, ny, nz)
-
-     void *map;
-     char *fileName;
-     double originNorth, originWest, originBottom;
-     double lengthNorth, lengthWest, lengthBottom;
-     int nx, ny, nz;
-    
+G3d_makeAlignedVolumeFile (void *map, const char *fileName,
+			   double originNorth, double originWest, double originBottom,
+			   double lengthNorth, double lengthWest, double lengthBottom, 
+			   int nx, int ny, int nz)
 {
-  char *volumeBuf;
+  void *volumeBuf;
   void *mapVolume;
   int x, y, z, eltLength;
   G3D_Region region;
 
-  volumeBuf = (char *) G3d_malloc (nx * ny * nz * sizeof (G3d_getFileType ()));
+  volumeBuf = G3d_malloc (nx * ny * nz * sizeof (G3d_getFileType ()));
   if (volumeBuf == NULL) 
-    G3d_fatalError ("G3d_makeAllignedVolumeFile: error in G3d_malloc");
+    G3d_fatalError ("G3d_makeAlignedVolumeFile: error in G3d_malloc");
 
-  G3d_getAllignedVolume (map, 
+  G3d_getAlignedVolume (map, 
 			 originNorth, originWest, originBottom,
 			 lengthNorth, lengthWest, lengthBottom, 
 			 nx, ny, nz,
@@ -266,7 +234,7 @@ G3d_makeAllignedVolumeFile (map, fileName,
   mapVolume = G3d_openCellNew (fileName, G3d_getFileType (), 
 			       G3D_USE_CACHE_DEFAULT, &region);
   if (mapVolume == NULL) 
-    G3d_fatalError ("G3d_makeAllignedVolumeFile: error in G3d_openCellNew");
+    G3d_fatalError ("G3d_makeAlignedVolumeFile: error in G3d_openCellNew");
 
   eltLength = G3d_length (G3d_getFileType ());
 
@@ -275,15 +243,15 @@ G3d_makeAllignedVolumeFile (map, fileName,
       for (x = 0; x < nx; x++) {
 /* G3d_putValueRegion? */
 	if (! G3d_putValue (mapVolume, x, y, z, 
-			    volumeBuf + (z * ny * nx + y * nx + x) * eltLength,
+			    G_incr_void_ptr(volumeBuf, (z * ny * nx + y * nx + x) * eltLength),
 			    G3d_fileTypeMap (mapVolume)))
-	  G3d_fatalError ("G3d_makeAllignedVolumeFile: error in G3d_putValue");
+	  G3d_fatalError ("G3d_makeAlignedVolumeFile: error in G3d_putValue");
       }
     }
   }
 
   if (! G3d_closeCell (mapVolume))
-    G3d_fatalError ("G3d_makeAllignedVolumeFile: error in G3d_closeCell");
+    G3d_fatalError ("G3d_makeAlignedVolumeFile: error in G3d_closeCell");
 
   G3d_free (volumeBuf);
 }

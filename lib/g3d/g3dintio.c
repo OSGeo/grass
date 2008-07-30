@@ -9,7 +9,7 @@
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_writeInts  (int fd, int useXdr, int *i, int nofNum)
+G3d_writeInts  (int fd, int useXdr, const int *i, int nofNum)
 
 {
   int firstTime = 1;

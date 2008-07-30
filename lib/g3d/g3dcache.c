@@ -8,9 +8,10 @@
 /*---------------------------------------------------------------------------*/
 
 static int
-cacheRead_readFun  (int tileIndex, char *tileBuf, G3D_Map *map)
+cacheRead_readFun  (int tileIndex, void *tileBuf, void *closure)
 
 {
+  G3D_Map *map = closure;
   if (! G3d_readTile (map, tileIndex, tileBuf, map->typeIntern)) {
     G3d_error ("cacheRead_readFun: error in G3d_readTile");
     return 0;
@@ -57,9 +58,10 @@ to convert from index to the fileposition.
 /*---------------------------------------------------------------------------*/
 
 static int
-cacheWrite_readFun  (int tileIndex, char *tileBuf, G3D_Map *map)
+cacheWrite_readFun  (int tileIndex, void *tileBuf, void *closure)
 
 {
+  G3D_Map *map = closure;
   int index, nBytes;
   long pos, offs, offsLast;
 
@@ -137,9 +139,10 @@ cacheWrite_readFun  (int tileIndex, char *tileBuf, G3D_Map *map)
 /*---------------------------------------------------------------------------*/
 
 static int
-cacheWrite_writeFun  (int tileIndex, char *tileBuf, G3D_Map *map)
+cacheWrite_writeFun  (int tileIndex, const void *tileBuf, void *closure)
 
 {
+  G3D_Map *map = closure;
   int nBytes;
   long offs;
 
@@ -276,9 +279,10 @@ G3d_disposeCache  (G3D_Map *map)
 /*---------------------------------------------------------------------------*/
 
 static int
-cacheFlushFun  (int tileIndex, char *tileBuf, G3D_Map *map)
+cacheFlushFun  (int tileIndex, const void *tileBuf, void *closure)
 
 {
+  G3D_Map *map = closure;
   if (! G3d_writeTile (map, tileIndex, tileBuf, map->typeIntern)) {
     G3d_error ("cacheFlushFun: error in G3d_writeTile");
     return 0;

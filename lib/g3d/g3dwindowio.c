@@ -6,7 +6,6 @@
 #include <string.h>
 #include <grass/gis.h>
 #include "G3d_intern.h"
-#include "g3dkeys.h"
 
 /*---------------------------------------------------------------------------*/
 
@@ -55,10 +54,10 @@ G3d_readWriteWindow  (struct Key_Value *windowKeys, int doRead, int *proj, int *
  * otherwise G3D_WINDOW_DATABASE ("$MAPSET/windows3d/$NAME")
  */
 static void
-G3d_getFullWindowPath  (char path[1024], char *windowName)
+G3d_getFullWindowPath  (char *path, const char *windowName)
 
 {
-  char xname[512], xmapset[512];
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   if (windowName == NULL) {
     G__file_name (path, "", G3D_WINDOW_ELEMENT, G_mapset ());
@@ -134,7 +133,7 @@ G3d_getWindowLocation (path, windowName)
  */
 
 int
-G3d_readWindow  (G3D_Region *window, char *windowName)
+G3d_readWindow  (G3D_Region *window, const char *windowName)
 
 {
   struct Cell_head win;
