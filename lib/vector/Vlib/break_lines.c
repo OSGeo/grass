@@ -36,7 +36,7 @@
 void 
 Vect_break_lines ( struct Map_info *Map, int type, struct Map_info *Err, FILE *msgout )
 {
-    Vect_break_lines_list (Map, NULL, type, Err, msgout);
+    Vect_break_lines_list (Map, NULL, NULL, type, Err, msgout);
 
     return;
 }
@@ -52,7 +52,8 @@ Vect_break_lines ( struct Map_info *Map, int type, struct Map_info *Err, FILE *m
   0,0;1,0;0,0 is broken at 1,0.
   
   \param Map input vector map 
-  \param List_break list of lines to be broken or NULL
+  \param List_break list of lines (NULL for all lines in vector map)
+  \param List_ref list of reference lines or NULL
   \param type feature type
   \param[out] Err vector map where points at intersections will be written or NULL
   \param[out] msgout file pointer where messages will be written or NULL
@@ -61,7 +62,7 @@ Vect_break_lines ( struct Map_info *Map, int type, struct Map_info *Err, FILE *m
 */
 
 int
-Vect_break_lines_list ( struct Map_info *Map, struct ilist *List_break,
+Vect_break_lines_list ( struct Map_info *Map, struct ilist *List_break, struct ilist *List_ref,
 			int type, struct Map_info *Err, FILE *msgout )
 {
     struct line_pnts *APoints, *BPoints, *Points;
@@ -122,6 +123,10 @@ Vect_break_lines_list ( struct Map_info *Map, struct ilist *List_break,
 	else {
 	    aline = iline + 1;
 	}
+
+	if (List_ref && !Vect_val_in_list(List_ref, aline))
+	    continue;
+
 	G_debug (3, "aline =  %d", aline);
 	if ( !Vect_line_alive ( Map, aline ) )
 	    continue;
@@ -242,6 +247,7 @@ Vect_break_lines_list ( struct Map_info *Map, struct ilist *List_break,
 		    Vect_line_prune ( AXLines[k] );
 		    if ( (atype & GV_POINTS) || AXLines[k]->n_points > 1 ) {
 			ret = Vect_write_line ( Map, atype, AXLines[k], ACats );  
+			Vect_list_append(List_ref, ret);
 			G_debug (3, "Line %d written, npoints = %d", ret, AXLines[k]->n_points);
 			if (List_break) {
 			    Vect_list_append(List_break, ret);
