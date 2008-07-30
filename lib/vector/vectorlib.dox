@@ -947,6 +947,7 @@ Vect_region_box();
 
 Vect_break_lines();
 
+Vect_break_lines_list();
 
 \section break_polygons Vector break_polygons functions
 

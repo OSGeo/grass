@@ -51,6 +51,9 @@ Vect_break_lines ( struct Map_info *Map, int type, struct Map_info *Err, FILE *m
   The function also breaks lines forming collapsed loop, for example
   0,0;1,0;0,0 is broken at 1,0.
   
+  If reference lines are given (<i>List_ref</i>) break only lines
+  which intersect reference lines.
+
   \param Map input vector map 
   \param List_break list of lines (NULL for all lines in vector map)
   \param List_ref list of reference lines or NULL
@@ -247,7 +250,9 @@ Vect_break_lines_list ( struct Map_info *Map, struct ilist *List_break, struct i
 		    Vect_line_prune ( AXLines[k] );
 		    if ( (atype & GV_POINTS) || AXLines[k]->n_points > 1 ) {
 			ret = Vect_write_line ( Map, atype, AXLines[k], ACats );  
-			Vect_list_append(List_ref, ret);
+			if (List_ref) {
+			    Vect_list_append(List_ref, ret);
+			}
 			G_debug (3, "Line %d written, npoints = %d", ret, AXLines[k]->n_points);
 			if (List_break) {
 			    Vect_list_append(List_break, ret);
