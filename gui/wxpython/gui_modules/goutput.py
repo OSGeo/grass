@@ -71,7 +71,6 @@ class CmdThread(threading.Thread):
         while True:
             requestId, callable, args, kwds = self.requestQ.get()
             self.requestCmd = callable(*args, **kwds)
-            self.requestCmd.start()
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             event = wxCmdDone(aborted=self.requestCmd.aborted,
@@ -81,7 +80,7 @@ class CmdThread(threading.Thread):
 
     def abort(self):
         self.requestCmd.abort()
-        
+    
 class GMConsole(wx.Panel):
     """
     Create and manage output console for commands entered on the
@@ -411,6 +410,8 @@ class GMConsole(wx.Panel):
         
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
+        time.sleep(.1) # wait for stdout
+        
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
@@ -475,9 +476,13 @@ class GMStdout:
     def write(self, s):
         if len(s) == 0 or s == '\n':
             return
+        
         s = s.replace('\n', os.linesep)
         
         for line in s.split(os.linesep):
+            if len(line) == 0:
+                continue
+            
             evt = wxCmdOutput(text=line + os.linesep,
                               type='')
             wx.PostEvent(self.parent.cmd_output, evt)
@@ -509,7 +514,6 @@ class GMStderr:
         for line in s.split(os.linesep):
             if len(line) == 0:
                 continue
-
             if 'GRASS_INFO_PERCENT' in line:
                 value = int(line.rsplit(':', 1)[1].strip())
                 if value >= 0 and value < 100:
@@ -527,8 +531,8 @@ class GMStderr:
                 self.message = line.split(':', 1)[1].strip()
             elif 'GRASS_INFO_END' in line:
                 self.printMessage = True
-            elif not self.type:
-                if len(line) > 0:
+            elif self.type == '':
+                if len(line) == 0:
                     continue
                 evt = wxCmdOutput(text=line,
                                   type='')
