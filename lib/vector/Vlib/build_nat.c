@@ -528,8 +528,8 @@ Vect_build_nat ( struct Map_info *Map, int build, FILE *msgout )
 	    }
 	    i++; j++;
 	}
-	prnmsg ("\r%d %s            \n", npoints, _("vertices registered"));
-	prnmsg ("%d %s\n", plus->n_lines, _("primitives registered"));
+	prnmsg ("\r%d %s            \n", plus->n_lines, _("primitives registered"));
+	prnmsg ("%d %s\n", npoints , _("vertices registered"));
 
 	plus->built = GV_BUILD_BASE;
     }
