@@ -303,7 +303,7 @@ int main (int argc, char *argv[])
 				    coord, thresh[THRESH_COORDS], NULL);
 	}
 	else {
-	    ret = Vect_break_lines_list(&Map, List,
+	    ret = Vect_break_lines_list(&Map, List, NULL,
 					GV_LINES, NULL, NULL);
 	}
 	G_message(_("%d lines broken"), ret);

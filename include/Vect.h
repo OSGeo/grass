@@ -270,7 +270,7 @@ int Vect_point_in_island ( double, double, struct Map_info *, int);
 
     /* Cleaning */
 void Vect_break_lines ( struct Map_info *, int, struct Map_info *, FILE * );
-int Vect_break_lines_list (struct Map_info *, struct ilist *, int, struct Map_info *, FILE *);
+int Vect_break_lines_list (struct Map_info *, struct ilist *, struct ilist *, int, struct Map_info *, FILE *);
 void Vect_break_polygons ( struct Map_info *, int, struct Map_info *, FILE * );
 void Vect_remove_duplicates ( struct Map_info *, int, struct Map_info *, FILE * );
 int Vect_line_check_duplicate ( const struct line_pnts *,
@@ -283,8 +283,8 @@ void Vect_select_dangles (struct Map_info *, int, double, FILE *, struct ilist *
 void Vect_remove_bridges ( struct Map_info *, struct Map_info *, FILE * );
 void Vect_chtype_bridges ( struct Map_info *, struct Map_info *, FILE * );
 int Vect_remove_small_areas ( struct Map_info *, double, struct Map_info *, FILE *, double * );
-int Vect_clean_small_angles_at_nodes ( struct Map_info *Map, int type, struct Map_info *Err, 
-	                               FILE *msgout);
+int Vect_clean_small_angles_at_nodes ( struct Map_info *, int, struct Map_info *, 
+	                               FILE *);
 
     /* Overlay */
 int Vect_overlay_str_to_operator ( const char * );
