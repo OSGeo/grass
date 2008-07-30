@@ -481,12 +481,23 @@ Vect_open_new (struct Map_info *Map, const char *name, int with_z)
 {
     int  ret, ferror;
     char errmsg[2000], buf[200];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_debug ( 2, "Vect_open_new(): name = %s", name);
     
     Vect__init_head (Map);
     ferror = Vect_get_fatal_error ();
     Vect_set_fatal_error (GV_FATAL_EXIT);
+
+    if (G__name_is_fully_qualified(name, xname, xmapset))
+    {
+	if (strcmp(xmapset, G_mapset()) != 0)
+	{
+	    sprintf ( errmsg, _("%s is not in the current mapset (%s)"), name, G_mapset());
+	    fatal_error (ferror , errmsg );
+	}
+	name = xname;
+    }
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0 ) {

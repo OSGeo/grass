@@ -119,11 +119,6 @@ int main(int argc, char *argv[])
     n = atoi(parm.nsites->answer);
     b = (flag.drand48->answer == '\0') ? 0 : 1;
 
-    if (G_legal_filename(output) == -1) {
-	G_fatal_error(_("<%s> is an illegal file name"),
-		      output);
-    }
-
     if (n <= 0) {
 	G_fatal_error(_("Number of points must be > 0 (%d given)"),
 		      n);
