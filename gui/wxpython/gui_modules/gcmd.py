@@ -4,11 +4,16 @@
 @brief GRASS command interface
 
 Classes:
- * GException
- * DigitError
- * Popen (from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440554)
- * Command
- * CommandThread
+ - GException
+ - GStdError
+ - CmdError
+ - SettingsError
+ - DigitError
+ - DBMError
+ - NvizError
+ - Popen (from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/440554)
+ - Command
+ - CommandThread
 
 (C) 2007-2008 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -44,7 +49,7 @@ else:
     import fcntl
 from threading import Thread
 
-# import wxgui_utils # log window
+import grass
 import globalvar
 import utils
 from debug import Debug as Debug
@@ -257,22 +262,6 @@ def send_all(p, data):
             raise Exception(message)
         data = buffer(data, sent)
 
-# Define notification event for thread completion
-EVT_RESULT_ID = wx.NewId()
-
-def EVT_RESULT(win, func):
-    """Define Result Event"""
-    win.Connect(-1, -1, EVT_RESULT_ID, func)
-
-class ResultEvent(wx.PyEvent):
-    """Simple event to carry arbitrary result data"""
-    def __init__(self, data):
-        wx.PyEvent.__init__(self)
-
-        self.SetEventType(EVT_RESULT_ID)
-
-        self.cmdThread = data
-
 class Command:
     """
     Run GRASS command in separate thread
@@ -306,13 +295,13 @@ class Command:
                   stdout=None, stderr=sys.stderr):
 
         self.cmd = cmd
+        self.stderr = stderr
+
 	# hack around platform-specific extension for binaries
 	if self.cmd[0] in globalvar.grassCmd['script']:
 	    self.cmd[0] = self.cmd[0] + globalvar.EXT_SCT
 	else:
 	    self.cmd[0] = self.cmd[0] + globalvar.EXT_BIN
-
-        self.stderr = stderr
 
         #
         # set verbosity level
@@ -338,14 +327,10 @@ class Command:
         #
         # create command thread
         #
-        self.cmdThread = CommandThread(cmd, stdin,
-                                       stdout, stderr)
-        
-        #
-        # start thread
-        #
+        self.cmdThread = RunCommand(cmd, stdin,
+                                    stdout, stderr)
         self.cmdThread.start()
-            
+        
         if wait:
             self.cmdThread.join()
             if self.cmdThread.module:
@@ -482,115 +467,8 @@ class Command:
 
         return msgString
 
-
 class CommandThread(Thread):
-    """Run command in separate thread
-
-    @param cmd GRASS command (given as list)
-    @param stdin standard input stream 
-    @param stdout  redirect standard output or None
-    @param stderr  redirect standard error output or None
-    """
-    def __init__ (self, cmd,
-                  stdin=None, stdout=None, stderr=sys.stderr):
-
-        Thread.__init__(self)
-        
-        self.cmd    = cmd
-        self.stdin  = stdin
-        self.stdout = stdout
-        self.stderr = stderr
-
-        self.module = None
-        self.rerr   = ''
-
-        self._want_abort = False
-        self.aborted = False
-
-        self.startTime = None
-
-        self.setDaemon(True)
-        
-    def run(self):
-        """Run command"""
-        if len(self.cmd) == 0:
-            return
-        
-        self.startTime = time.time()
-        
-        # TODO: wx.Exectute/wx.Process (?)
-        try:
-            self.module = Popen(self.cmd,
-                                stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.PIPE)
-        except OSError, e:
-            self.rerr = str(e)
-            return
-        
-        if self.stdin: # read stdin if requested ...
-            self.module.stdin.write(self.stdin)
-            self.module.stdin.close()
-
-        # redirect standard outputs...
-        if self.stdout or self.stderr:
-            self.__redirect_stream()
-
-    def __redirect_stream(self):
-        """Redirect stream"""
-        if self.stdout:
-            # make module stdout/stderr non-blocking
-            out_fileno = self.module.stdout.fileno()
-	    if not subprocess.mswindows:
-                flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
-                fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
-                
-        if self.stderr:
-            # make module stdout/stderr non-blocking
-            out_fileno = self.module.stderr.fileno()
-	    if not subprocess.mswindows:
-                flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
-                fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
-                
-        # wait for the process to end, sucking in stuff until it does end
-        while self.module.poll() is None:
-            if self._want_abort: # abort running process
-                self.module.kill()
-                self.aborted = True
-                if hasattr(self.stderr, "gmstc"):
-                    # -> GMConsole
-                    wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
-                    pass
-                return 
-            if self.stdout:
-                line = recv_some(self.module, e=0, stderr=0)
-                self.stdout.write(line)
-            if self.stderr:
-                line = recv_some(self.module, e=0, stderr=1)
-                self.stderr.write(line)
-                self.rerr = line
-
-        # get the last output
-        if self.stdout:
-            line = recv_some(self.module, e=0, stderr=0)
-            self.stdout.write(line)
-        if self.stderr:
-            line = recv_some(self.module, e=0, stderr=1)
-            self.stderr.write(line)
-            if len(line) > 0:
-                self.rerr = line
-
-        if hasattr(self.stderr, "gmstc"):
-            # -> GMConsole
-            wx.PostEvent(self.stderr.gmstc.parent, ResultEvent(self))
-            pass
-        
-    def abort(self):
-        """Abort running process, used by main thread to signal an abort"""
-        self._want_abort = True
-
-class RunCommand:
-    """Run command in separate thread
+    """Create separate thread for command
 
     @param cmd GRASS command (given as list)
     @param stdin standard input stream 
@@ -600,15 +478,25 @@ class RunCommand:
     def __init__ (self, cmd, stdin=None,
                   stdout=sys.stdout, stderr=sys.stderr):
 
+        Thread.__init__(self)
+
         self.cmd    = cmd
         self.stdin  = stdin
         self.stdout = stdout
         self.stderr = stderr
         
+        self.module = None
+        self.error  = ''
+        
         self._want_abort = False
         self.aborted = False
+
+        self.setDaemon(True)
         
     def run(self):
+        if len(self.cmd) == 0:
+            return
+
         self.startTime = time.time()
         
         try:
@@ -617,7 +505,7 @@ class RunCommand:
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         except OSError, e:
-            self.rerr = str(e)
+            self.error = str(e)
             return 1
         
         if self.stdin: # read stdin if requested ...
@@ -671,66 +559,4 @@ class RunCommand:
     def abort(self):
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True
-    
-# testing ...
-if __name__ == "__main__":
-    SEP = "-----------------------------------------------------------------------------"
-
-    print SEP
-
-    # d.rast verbosely, wait for process termination
-    print "Running d.rast..."
-
-    cmd = Command(cmd=["d.rast", "elevation.dem"], verbose=3, wait=True, rerr=True)
-
-    if cmd.returncode == None:
-        print "RUNNING"
-    elif cmd.returncode == 0:
-        print "SUCCESS"
-    else:
-        print "FAILURE (%d)" % cmd.returncode
-
-    print SEP
-
-    # v.net.path silently, wait for process termination
-    print "Running v.net.path for 0 593527.6875 4925297.0625 602083.875 4917545.8125..."
-
-    cmd = Command(cmd=["v.net.path", "in=roads@PERMANENT", "out=tmp", "dmax=100000", "--o"],
-                  stdin="0 593527.6875 4925297.0625 602083.875 4917545.8125",
-                  verbose=0,
-                  wait=True, rerr=None)
-
-    if cmd.returncode == None:
-        print "RUNNING"
-    elif cmd.returncode == 0:
-        print "SUCCESS"
-    else:
-        print "FAILURE (%d)" % cmd.returncode
-
-    print SEP
-
-    # d.vect silently, do not wait for process termination
-    # returncode will be None
-    print "Running d.vect tmp..."
-
-    cmd = Command(["d.vect", "tmp"], verbose=2, wait=False, rerr=None)
-
-    if cmd.returncode == None:
-        print "RUNNING"
-    elif cmd.returncode == 0:
-        print "SUCCESS"
-    else:
-        print "FAILURE (%d)" % cmd.returncode
-
-    cmd = Command(["g.region", "-p"])
-
-    for line in cmd.ReadStdOutput():
-        print line
-
-    cmd = Command(["g.region", "-p"], stderr=None)
-
-    for line in cmd.ReadStdOutput():
-        print line
-    for line in cmd.ReadErrOutput():
-        print line
     
