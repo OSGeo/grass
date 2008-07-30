@@ -6,13 +6,12 @@
 #include <rpc/xdr.h>
 #include <grass/G3d.h>
 #include "G3d_intern.h"
-#include "g3dkeys.h"
 
 /*---------------------------------------------------------------------------*/
 
-char *tmpCompress = NULL;
+void *tmpCompress;
 int tmpCompressLength;
-char *xdr = NULL;
+void *xdr;
 int xdrLength;
 
 /*---------------------------------------------------------------------------*/
@@ -106,20 +105,18 @@ G3d_readHeader  (G3D_Map *map, int *proj, int *zone, double *north, double *sout
 
 {
   struct Key_Value *headerKeys;
-  char path[1024], msg[1024];
+  char path[GPATH_MAX];
   int status;
 
   G3d_filename (path, G3D_HEADER_ELEMENT, map->fileName, map->mapset);
   if (access(path, R_OK) != 0) {
-    sprintf (msg,"G3d_readHeader: unable to find [%s]", path);
-    G3d_error (msg);
+    G3d_error ("G3d_readHeader: unable to find [%s]", path);
     return 0;
   }
   
   headerKeys = G_read_key_value_file (path, &status);
   if (status != 0) {
-    sprintf (msg, "G3d_readHeader: Unable to open %s", path);
-    G3d_error (msg);
+    G3d_error ("G3d_readHeader: Unable to open %s", path);
     return 0;
   }
 
@@ -131,9 +128,8 @@ G3d_readHeader  (G3D_Map *map, int *proj, int *zone, double *north, double *sout
 			     tileX, tileY, tileZ,
 			     type, compression, useRle, useLzw, precision,
 			     dataOffset, useXdr, hasIndex, unit)) {
-    sprintf (msg, "G3d_readHeader: error extracting header key(s) of file %s",
+    G3d_error ("G3d_readHeader: error extracting header key(s) of file %s",
 	     path);
-    G3d_error (msg);
     return 0;
   }
 
@@ -148,7 +144,7 @@ G3d_writeHeader  (G3D_Map *map, int proj, int zone, double north, double south, 
 
 {
   struct Key_Value *headerKeys;
-  char path[1024], msg[1024];
+  char path[GPATH_MAX];
   int status;
 
   headerKeys = G_create_key_value();
@@ -162,9 +158,8 @@ G3d_writeHeader  (G3D_Map *map, int proj, int zone, double north, double south, 
 			     &type, &compression, &useRle, &useLzw, 
 			     &precision, &dataOffset, &useXdr, &hasIndex,
 			     &unit)) {
-    sprintf (msg, "G3d_writeHeader: error adding header key(s) for file %s", 
+    G3d_error ("G3d_writeHeader: error adding header key(s) for file %s", 
 	     path);
-    G3d_error (msg);
     return 0;
   }
 
@@ -176,8 +171,7 @@ G3d_writeHeader  (G3D_Map *map, int proj, int zone, double north, double south, 
 
   if (status == 0) return 1;
 
-  sprintf (msg, "G3d_writeHeader: error writing header file %s", path);
-  G3d_error (msg);
+  G3d_error ("G3d_writeHeader: error writing header file %s", path);
   return 0;
 }
   

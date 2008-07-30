@@ -22,12 +22,12 @@
  */
 
 void
-G3d_changeType  (void *map, char *nameOut)
+G3d_changeType  (void *map, const char *nameOut)
 
 {
   void *map2;
   int x, y, z, saveType;
-  char *data, *data2;
+  void *data, *data2;
   G3D_Region region;
   int tileSize;
   int tileX, tileY, tileZ, typeIntern, typeIntern2;

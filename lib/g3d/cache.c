@@ -1,45 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <grass/G3d.h>
 #include "G3d_intern.h"
 #include "cachehash.h"
 
-/*---------------------------------------------------------------------------*/
-#ifndef GRASS_G3D_H
-typedef struct {
-  
-  char *elts;       /* ptr to array of elts */
-  int nofElts;      /* size of "elts" */
-  int eltSize;      /* size of elt in "elts" */
-
-  int *names;       /* name[i] is the name of elts[i] */
-
-  char *locks;      /* lock[i] == 1 iff elts[i] is locked
-                       lock[i] == 0 iff elts[i] is unlocked but active
-                       lock[i] == 2 iff elts[i] doesn't contain valid data */
-  int autoLock;     /* 1 if auto locking is turned on */
-  int nofUnlocked;  /* nof tiles which are unlocked */
-  int minUnlocked;  /* min nof elts which have to remain unlocked. min = 1 */
-
-  int *next, *prev; /* prev/next pointers for fifo */
-  int first, last;  /* index (into next) of first and last elt in fifo */
-                    /* first == -1 iff fifo is empty */
-
-  int (* eltRemoveFun) (); /* callback activated if the contents of an 
-			       elt needs to be removed */
-  void *eltRemoveFunData;   /* pointer to user data passed along with 
-			       eltRemoveFun */
-  int (* eltLoadFun) ();   /* callback activated to load contents of an elt */
-  void *eltLoadFunData;     /* pointer to user data passed along with 
-			       eltLoadFun */
-
-  void *hash;       /* ptr to hashTable used to relate external names to
-                       internal indices (elts) */
-
-} G3D_cache;
-#endif
 /*---------------------------------------------------------------------------*/
 
 #define IS_ACTIVE_ELT(elt) (c->locks[elt] != 2)
@@ -91,7 +58,7 @@ G3d_cache_reset  (G3D_cache *c)
 /*---------------------------------------------------------------------------*/
 
 static int
-cache_dummy_fun ()
+cache_dummy_fun(int tileIndex, const void *tileBuf, void *map)
 
 {
   return 1;
@@ -188,7 +155,7 @@ G3d_cache_set_loadFun  (G3D_cache *c, int (*eltLoadFun)(), void *eltLoadFunData)
 /*---------------------------------------------------------------------------*/
 
 void *
-G3d_cache_new_read  (int nofElts, int sizeOfElts, int nofNames, int (*eltLoadFun)(), void *eltLoadFunData)
+G3d_cache_new_read  (int nofElts, int sizeOfElts, int nofNames, read_fn *eltLoadFun, void *eltLoadFunData)
 
 {
   return G3d_cache_new (nofElts, sizeOfElts, nofNames,
@@ -515,7 +482,7 @@ G3d_cache_flush_all  (G3D_cache *c)
 
 /*---------------------------------------------------------------------------*/
 
-char *
+void *
 G3d_cache_elt_ptr  (G3D_cache *c, int name)
 
 {
@@ -539,7 +506,7 @@ G3d_cache_elt_ptr  (G3D_cache *c, int name)
     if (! c->eltRemoveFun (oldName, c->elts + c->eltSize * index, 
 			   c->eltRemoveFunData)) {
       G3d_error ("G3d_cache_elt_ptr: error in c->eltRemoveFun");
-      return (char *) NULL;
+      return NULL;
     }
   } 
 
@@ -554,13 +521,13 @@ G3d_cache_elt_ptr  (G3D_cache *c, int name)
   if (doUnlock) 
     if (! G3d_cache_unlock (c, name)) {
       G3d_error ("G3d_cache_elt_ptr: error in G3d_cache_unlock");
-      return (char *) NULL;
+      return NULL;
     }
 
   if (! c->eltLoadFun (name, c->elts + c->eltSize * index, 
 		       c->eltLoadFunData)) {
     G3d_error("G3d_cache_elt_ptr: error in c->eltLoadFun");
-    return (char *) NULL;
+    return NULL;
   }
 
   return c->elts + c->eltSize * index;
@@ -583,10 +550,10 @@ G3d_cache_load  (G3D_cache *c, int name)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_cache_get_elt  (G3D_cache *c, int name, char *dst)
+G3d_cache_get_elt  (G3D_cache *c, int name, void *dst)
 
 {
-  char *elt, *eltStop;
+  const void *elt;
 
   elt = G3d_cache_elt_ptr (c, name);
   if (elt == NULL) {
@@ -594,8 +561,7 @@ G3d_cache_get_elt  (G3D_cache *c, int name, char *dst)
     return 0;
   }
 
-  eltStop = elt + c->eltSize;
-  while (elt != eltStop) *dst++ = *elt++;
+  memcpy(dst, elt, c->eltSize);
 
   return 1;
 }
@@ -603,10 +569,10 @@ G3d_cache_get_elt  (G3D_cache *c, int name, char *dst)
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_cache_put_elt  (G3D_cache *c, int name, char *src)
+G3d_cache_put_elt  (G3D_cache *c, int name, const void *src)
 
 {
-  char *elt, *eltStop;
+  void *elt;
 
   elt = G3d_cache_elt_ptr (c, name);
   if (elt == NULL) {
@@ -614,8 +580,7 @@ G3d_cache_put_elt  (G3D_cache *c, int name, char *src)
     return 0;
   }
 
-  eltStop = elt + c->eltSize;
-  while (elt != eltStop) *elt++ = *src++;
+  memcpy(elt, src, c->eltSize);
 
   return 1;
 }
@@ -660,10 +625,10 @@ cache_test_print  (G3D_cache *c)
 /*---------------------------------------------------------------------------*/
 
 static int
-cache_test_flush_fun  (int name, int *eltPtr, void *data)
+cache_test_flush_fun  (int name, const void *eltPtr, void *data)
 
 {
-  printf ("flushing name %d value %d\n", name, eltPtr[17]);
+  printf ("flushing name %d value %d\n", name, ((const int *)eltPtr)[17]);
   return 0;
 }
 
@@ -677,17 +642,17 @@ typedef struct {
 } cache_test_data_type;
 
 static int
-cache_test_load_fun  (int name, char *eltPtr, void *data)
+cache_test_load_fun  (int name, void *eltPtr, void *data)
 
 {
-  char *eltStop, *src;
+  const void *src;
 
   printf ("loading name %d value %d\n", name, 
 	  ((cache_test_data_type *) data)->value[17]);
 
-  src = (char *) ((cache_test_data_type *) data)->value;
-  eltStop = eltPtr + ((cache_test_data_type *) data)->size;
-  while (eltPtr != eltStop) *eltPtr++ = *src++;
+  src = ((cache_test_data_type *) data)->value;
+  memcpy(eltPtr, src, ((cache_test_data_type *) data)->size);
+
   return 0;
 }
 

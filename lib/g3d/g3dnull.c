@@ -7,7 +7,7 @@
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_isNullValueNum  (void *n, int type)
+G3d_isNullValueNum  (const void *n, int type)
 
 {
   if (type == FCELL_TYPE) 

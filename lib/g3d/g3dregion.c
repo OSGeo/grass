@@ -156,7 +156,7 @@ G3d_adjustRegion  (G3D_Region *region)
 
 {
   struct Cell_head region2d;
-  char *err;
+  const char *err;
 
   G3d_regionToCellHead (region, &region2d);
   if ( (err = G_adjust_Cell_head3 (&region2d, 1, 1, 1)) != NULL ) {
@@ -187,7 +187,7 @@ G3d_adjustRegionRes  (G3D_Region *region)
 
 {
   struct Cell_head region2d;
-  char *err;
+  const char *err;
 
   G3d_regionToCellHead (region, &region2d);
   if ( (err = G_adjust_Cell_head3 (&region2d, 1, 1, 1)) != NULL ) {
@@ -246,7 +246,7 @@ G3d_regionCopy  (G3D_Region *regionDest, G3D_Region *regionSrc)
  */
 
 void
-G3d_getRegionValue  (G3D_Map *map, double north, double east, double top, char *value, int type)
+G3d_getRegionValue  (G3D_Map *map, double north, double east, double top, void *value, int type)
 
 {
   int row, col, depth;
@@ -276,14 +276,14 @@ G3d_getRegionValue  (G3D_Map *map, double north, double east, double top, char *
 /*---------------------------------------------------------------------------*/
 
 int
-G3d_readRegionMap  (char *name, char *mapset, G3D_Region *region)
+G3d_readRegionMap  (const char *name, const char *mapset, G3D_Region *region)
 
 {
-  char fullName[1000];
-  char xname[512], xmapset[512];
+  char fullName[GPATH_MAX];
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   if (G__name_is_fully_qualified (name, xname, xmapset)) 
-    G3d_filename (fullName, G3D_HEADER_ELEMENT, xname, mapset);
+    G3d_filename (fullName, G3D_HEADER_ELEMENT, xname, xmapset);
   else
     G3d_filename (fullName, G3D_HEADER_ELEMENT, name, mapset);
   return G3d_readWindow (region, fullName);

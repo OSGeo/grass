@@ -25,7 +25,7 @@ void *
 G3d_malloc  (int nBytes)
 
 {
-  char *buf;
+  void *buf;
 
   if (nBytes <= 0) nBytes = 1;
   if ((buf = malloc (nBytes)) != NULL) return buf;

@@ -7,13 +7,13 @@
 /*---------------------------------------------------------------------------*/
 
 static void
-retileNocache  (void *map, char *nameOut, int tileX, int tileY, int tileZ)
+retileNocache  (void *map, const char *nameOut, int tileX, int tileY, int tileZ)
 
 {
   void *map2;
   int x, y, z, saveType, nx, ny, nz;
   int typeIntern;
-  char *data;
+  void *data;
   int tileXsave, tileYsave, tileZsave;
   G3D_Region region;
 
@@ -71,7 +71,7 @@ retileNocache  (void *map, char *nameOut, int tileX, int tileY, int tileZ)
  */
 
 void
-G3d_retile  (void *map, char *nameOut, int tileX, int tileY, int tileZ)
+G3d_retile  (void *map, const char *nameOut, int tileX, int tileY, int tileZ)
 
 {
   void *map2;
@@ -124,8 +124,8 @@ G3d_retile  (void *map, char *nameOut, int tileX, int tileY, int tileZ)
     for (y = 0; y < rows; y++)
       for (x = 0; x < cols; x++) {
 
-	G3d_getValueRegion (map, x, y, z, (char *)&value, typeIntern);
-	if (! G3d_putValue(map2, x, y, z, (char *)&value, typeIntern))
+	G3d_getValueRegion (map, x, y, z, &value, typeIntern);
+	if (! G3d_putValue(map2, x, y, z, &value, typeIntern))
 	  G3d_fatalError ("G3d_retile: error in G3d_putValue");
       }
   }

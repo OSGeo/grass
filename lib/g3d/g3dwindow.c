@@ -193,7 +193,7 @@ G3d_getFloat  (G3D_Map *map, int x, int y, int z)
 {
   float value;
 
-  G3d_getValue (map, x, y, z, (char *)&value, FCELL_TYPE);
+  G3d_getValue (map, x, y, z, &value, FCELL_TYPE);
   return value;
 }
 
@@ -219,6 +219,6 @@ G3d_getDouble  (G3D_Map *map, int x, int y, int z)
 {
   double value;
 
-  G3d_getValue (map, x, y, z, (char *)&value, DCELL_TYPE);
+  G3d_getValue (map, x, y, z, &value, DCELL_TYPE);
   return value;
 }

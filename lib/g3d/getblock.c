@@ -10,7 +10,7 @@ void
 G3d_getBlockNocache  (G3D_Map *map, int x0, int y0, int z0, int nx, int ny, int nz, void *block, int type)
 
 {
-  char *tile;
+  void *tile;
   int tileX0, tileY0, tileZ0, tileOffsX0, tileOffsY0, tileOffsZ0;
   int tileX1, tileY1, tileZ1, tileOffsX1, tileOffsY1, tileOffsZ1;
   int tx, ty, tz, dx, dy, dz, x, y, z, rows, cols, depths;
@@ -95,7 +95,7 @@ G3d_getBlockNocache  (G3D_Map *map, int x0, int y0, int z0, int nx, int ny, int 
  */
 
 void
-G3d_getBlock  (G3D_Map *map, int x0, int y0, int z0, int nx, int ny, int nz, char *block, int type)
+G3d_getBlock  (G3D_Map *map, int x0, int y0, int z0, int nx, int ny, int nz, void *block, int type)
 
 {
   int x, y, z, nNull, x1, y1, z1, length;
@@ -115,15 +115,15 @@ G3d_getBlock  (G3D_Map *map, int x0, int y0, int z0, int nx, int ny, int nz, cha
     for (y = y0; y < y1; y++) {
       for (x = x0; x < x1; x++) {
 	G3d_getValueRegion (map, x, y, z, block, type);
-	block += length;
+	block = G_incr_void_ptr(block, length);
       }
       nNull = x0 + nx - x;
       G3d_setNullValue (block, nNull, type);
-      block += length * nNull;
+      block = G_incr_void_ptr(block, length * nNull);
     }
     nNull = (y0 + ny - y) * nx;
     G3d_setNullValue (block, nNull, type);
-    block += length * nNull;
+    block = G_incr_void_ptr(block, length * nNull);
   }
   nNull = (z0 + nz - z) * ny * nx;
   G3d_setNullValue (block, nNull, type);

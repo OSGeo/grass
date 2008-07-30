@@ -120,7 +120,7 @@ G3d_getMaskFloat  (G3D_Map *map, int x, int y, int z)
   top = ((double) z + 0.5) / (double) map->window.depths * 
           (map->window.top - map->window.bottom) + map->window.bottom;
 
-  G3d_getRegionValue (G3d_maskMap, north, east, top, (char *)&value, FCELL_TYPE);
+  G3d_getRegionValue (G3d_maskMap, north, east, top, &value, FCELL_TYPE);
   return value;
 }     
 
@@ -283,7 +283,7 @@ G3d_maskDouble  (G3D_Map *map, int x, int y, int z, double *value)
  */
 
 void
-G3d_maskTile  (G3D_Map *map, int tileIndex, char *tile, int type)
+G3d_maskTile  (G3D_Map *map, int tileIndex, void *tile, int type)
 
 {
   int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
@@ -410,7 +410,7 @@ G3d_maskIsOff (G3D_Map *map)
  *  \return char * 
  */
 
-char * 
+const char * 
 G3d_maskFile (void)
 {
  return G3D_MASK_MAP;

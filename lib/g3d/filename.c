@@ -7,11 +7,8 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_filename  (char *path, char *elementName, char *mapName, char *mapset)
+G3d_filename  (char *path, const char *elementName, const char *mapName, const char *mapset)
 
 {
-  char map[300];
-
-  sprintf(map, "%s/%s", G3D_DIRECTORY, mapName);
-  G__file_name (path, map, elementName, mapset);
+  G__file_name_misc(path, G3D_DIRECTORY, elementName, mapName, mapset);
 }

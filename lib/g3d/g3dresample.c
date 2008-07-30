@@ -21,7 +21,7 @@
  */
 
 void
-G3d_nearestNeighbor  (G3D_Map *map, int row, int col, int depth, char *value, int type)
+G3d_nearestNeighbor  (G3D_Map *map, int row, int col, int depth, void *value, int type)
 
 {
 

@@ -10,7 +10,7 @@
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_range_updateFromTile  (G3D_Map *map, char *tile, int rows, int cols, int depths, int xRedundant, int yRedundant, int zRedundant, int nofNum, int type)
+G3d_range_updateFromTile  (G3D_Map *map, const void *tile, int rows, int cols, int depths, int xRedundant, int yRedundant, int zRedundant, int nofNum, int type)
 {
   int y, z, cellType;
   struct FPRange *range;
@@ -27,9 +27,10 @@ G3d_range_updateFromTile  (G3D_Map *map, char *tile, int rows, int cols, int dep
     for (z = 0; z < depths; z++) {
       for (y = 0; y < rows; y++) {
 	G_row_update_fp_range (tile, cols, range, cellType);
-	tile += map->tileX * G3d_length (type);
+	tile = G_incr_void_ptr(tile, map->tileX * G3d_length (type));
       }
-      if (yRedundant) tile += map->tileX * yRedundant * G3d_length (type);
+      if (yRedundant)
+	tile = G_incr_void_ptr(tile, map->tileX * yRedundant * G3d_length (type));
     }
     return;
   }
@@ -37,7 +38,7 @@ G3d_range_updateFromTile  (G3D_Map *map, char *tile, int rows, int cols, int dep
   if (yRedundant) {
     for (z = 0; z < depths; z++) {
       G_row_update_fp_range (tile, map->tileX * rows, range, cellType);
-      tile += map->tileXY * G3d_length (type);
+      tile = G_incr_void_ptr(tile, map->tileXY * G3d_length (type));
     }
     return;
   }
@@ -52,7 +53,9 @@ G3d_readRange  (const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from G_read_fp_range */
 {
   int fd;
-  char buf[200], xdr_buf[100], buf2[200], xname[512], xmapset[512];
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+  char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2], buf2[GMAPSET_MAX + sizeof(G3D_RANGE_ELEMENT) + 2];
+  char xdr_buf[100];
   DCELL dcell1, dcell2;
   XDR xdr_str;
 
@@ -90,8 +93,7 @@ G3d_readRange  (const char *name, const char *mapset, struct FPRange *drange)
 
 error:
   if (fd > 0) close(fd);
-  sprintf (buf, "can't read range file for [%s in %s]", name, mapset);
-  G_warning (buf);
+  G_warning ("can't read range file for [%s in %s]", name, mapset);
   return -1;
 }
 
@@ -144,11 +146,13 @@ G3d_range_min_max  (G3D_Map *map, double *min, double *max)
 /*-------------------------------------------------------------------------*/
 
 static int
-writeRange  (char *name, struct FPRange *range)
+writeRange  (const char *name, struct FPRange *range)
  /* adapted from G_write_fp_range */
 {
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+  char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2], buf2[GMAPSET_MAX + sizeof(G3D_RANGE_ELEMENT) + 2];
+  char xdr_buf[100];
   int fd;
-  char buf[200], xdr_buf[100], buf2[200], xname[512], xmapset[512];
   XDR xdr_str;
 
   if (G__name_is_fully_qualified (name, xname, xmapset)) {

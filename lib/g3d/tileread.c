@@ -7,7 +7,7 @@
 #include "G3d_intern.h"
 
 static int
-G3d_xdrTile2tile  (G3D_Map *map, char *tile, int rows, int cols, int depths, int xRedundant, int yRedundant, int zRedundant, int nofNum, int type)
+G3d_xdrTile2tile  (G3D_Map *map, void *tile, int rows, int cols, int depths, int xRedundant, int yRedundant, int zRedundant, int nofNum, int type)
 
 {
   int y, z, xLength, yLength, length;
@@ -36,13 +36,13 @@ G3d_xdrTile2tile  (G3D_Map *map, char *tile, int rows, int cols, int depths, int
 	  G3d_error ("G3d_xdrTile2tile: error in G3d_copyFromXdr");
 	  return 0;
 	}
-	tile += cols * length;
+	tile = G_incr_void_ptr(tile, cols * length);
 	G3d_setNullValue (tile, xRedundant, type);
-	tile += xLength;
+	tile = G_incr_void_ptr(tile, xLength);
       }
       if (yRedundant) {
 	G3d_setNullValue (tile, map->tileX * yRedundant, type);
-	tile += yLength;
+	tile = G_incr_void_ptr(tile, yLength);
       }
     }
     if (! zRedundant) return 1;
@@ -57,9 +57,9 @@ G3d_xdrTile2tile  (G3D_Map *map, char *tile, int rows, int cols, int depths, int
 	G3d_error ("G3d_xdrTile2tile: error in G3d_copyFromXdr");
 	return 0;
       }
-      tile += map->tileX * rows * length;
+      tile = G_incr_void_ptr(tile, map->tileX * rows * length);
       G3d_setNullValue (tile, map->tileX * yRedundant, type);
-      tile += yLength;
+      tile = G_incr_void_ptr(tile, yLength);
     }
     if (! zRedundant) return 1;
 
@@ -74,7 +74,7 @@ G3d_xdrTile2tile  (G3D_Map *map, char *tile, int rows, int cols, int depths, int
 
   if (! zRedundant) return 1;
 
-  tile += map->tileXY * depths * length;
+  tile = G_incr_void_ptr(tile, map->tileXY * depths * length);
   G3d_setNullValue (tile, map->tileXY * zRedundant, type);
 
   return 1;
@@ -141,7 +141,7 @@ G3d_readTileCompressed  (G3D_Map *map, int tileIndex, int nofNum)
  */
 
  int
-G3d_readTile  (G3D_Map *map, int tileIndex, char *tile, int type)
+G3d_readTile  (G3D_Map *map, int tileIndex, void *tile, int type)
 
 {
   int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
@@ -202,7 +202,7 @@ G3d_readTile  (G3D_Map *map, int tileIndex, char *tile, int type)
  */
 
 int
-G3d_readTileFloat  (G3D_Map *map, int tileIndex, char *tile)
+G3d_readTileFloat  (G3D_Map *map, int tileIndex, void *tile)
 
 {
   if (! G3d_readTile (map, tileIndex, tile, FCELL_TYPE)) {
@@ -228,7 +228,7 @@ G3d_readTileFloat  (G3D_Map *map, int tileIndex, char *tile)
  */
 
 int
-G3d_readTileDouble  (G3D_Map *map, int tileIndex, char *tile)
+G3d_readTileDouble  (G3D_Map *map, int tileIndex, void *tile)
 
 {
   if (! G3d_readTile (map, tileIndex, tile, DCELL_TYPE)) {

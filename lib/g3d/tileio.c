@@ -66,22 +66,22 @@
  *                 NULL ... otherwise.
  */
 
-char *
+void *
 G3d_getTilePtr  (G3D_Map *map, int tileIndex)
 
 {
-  char *ptr;
+  void *ptr;
 
   if ((tileIndex >= map->nTiles) || (tileIndex < 0)) {
     G3d_error ("G3d_getTilePtr: tileIndex out of range");
-    return (char *) NULL;
+    return NULL;
   } 
 
   if (map->useCache) {
     ptr = G3d_cache_elt_ptr (map->cache, tileIndex);
     if (ptr == NULL) {
       G3d_error ("G3d_getTilePtr: error in G3d_cache_elt_ptr");
-      return (char *) NULL;
+      return NULL;
     } 
     return ptr;
   }
@@ -91,7 +91,7 @@ G3d_getTilePtr  (G3D_Map *map, int tileIndex)
   map->currentIndex = tileIndex;
   if (! G3d_readTile (map, map->currentIndex, map->data, map->typeIntern)) {
     G3d_error ("G3d_getTilePtr: error in G3d_readTile");
-    return (char *) NULL;
+    return NULL;
   } 
 
   return map->data;
