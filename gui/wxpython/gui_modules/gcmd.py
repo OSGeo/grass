@@ -327,8 +327,8 @@ class Command:
         #
         # create command thread
         #
-        self.cmdThread = RunCommand(cmd, stdin,
-                                    stdout, stderr)
+        self.cmdThread = CommandThread(cmd, stdin,
+                                       stdout, stderr)
         self.cmdThread.start()
         
         if wait:
