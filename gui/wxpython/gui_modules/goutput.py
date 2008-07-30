@@ -39,9 +39,9 @@ wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 
 def GrassCmd(cmd, stdout, stderr):
-    """Run GRASS command on background"""
-    return gcmd.RunCommand(cmd=cmd,
-                           stdout=stdout, stderr=stderr)
+    """Return GRASS command thread"""
+    return gcmd.CommandThread(cmd=cmd,
+                              stdout=stdout, stderr=stderr)
 
 class CmdThread(threading.Thread):
     """Thread for GRASS commands"""
@@ -71,6 +71,7 @@ class CmdThread(threading.Thread):
         while True:
             requestId, callable, args, kwds = self.requestQ.get()
             self.requestCmd = callable(*args, **kwds)
+            self.requestCmd.start()
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             event = wxCmdDone(aborted=self.requestCmd.aborted,
