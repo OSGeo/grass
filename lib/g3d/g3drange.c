@@ -207,7 +207,7 @@ int
 G3d_range_write  (G3D_Map *map)
 
 {
-  char path[4096];
+  char path[GPATH_MAX];
 
   G3d_filename (path, G3D_RANGE_ELEMENT, map->fileName, map->mapset);
   remove ( path );
