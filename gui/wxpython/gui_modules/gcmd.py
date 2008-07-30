@@ -221,6 +221,7 @@ class Popen(subprocess.Popen):
                     return ''
                 
                 r = conn.read(maxsize)
+                
                 if not r:
                     return self._close(which)
     
@@ -319,12 +320,6 @@ class Command:
                     os.environ["GRASS_VERBOSE"] = str(verbose)
 
         #
-        # set message formatting
-        #
-        message_format = os.getenv("GRASS_MESSAGE_FORMAT")
-        os.environ["GRASS_MESSAGE_FORMAT"] = "gui"
-
-        #
         # create command thread
         #
         self.cmdThread = CommandThread(cmd, stdin,
@@ -365,11 +360,6 @@ class Command:
         else:
             Debug.msg (3, "Command(): cmd='%s', wait=%s, returncode=?, alive=%s" % \
                            (' '.join(cmd), wait, self.cmdThread.isAlive()))
-
-        if message_format:
-            os.environ["GRASS_MESSAGE_FORMAT"] = message_format
-        else:
-            os.unsetenv("GRASS_MESSAGE_FORMAT")
 
         if verbose_orig:
             os.environ["GRASS_VERBOSE"] = verbose_orig
@@ -492,6 +482,16 @@ class CommandThread(Thread):
         self.aborted = False
 
         self.setDaemon(True)
+
+        # set message formatting
+        self.message_format = os.getenv("GRASS_MESSAGE_FORMAT")
+        os.environ["GRASS_MESSAGE_FORMAT"] = "gui"
+        
+    def __del__(self):
+        if self.message_format:
+            os.environ["GRASS_MESSAGE_FORMAT"] = self.message_format
+        else:
+            os.unsetenv("GRASS_MESSAGE_FORMAT")
         
     def run(self):
         if len(self.cmd) == 0:
@@ -531,7 +531,7 @@ class CommandThread(Thread):
 	    if not subprocess.mswindows:
                 flags = fcntl.fcntl(out_fileno, fcntl.F_GETFL)
                 fcntl.fcntl(out_fileno, fcntl.F_SETFL, flags| os.O_NONBLOCK)
-                
+        
         # wait for the process to end, sucking in stuff until it does end
         while self.module.poll() is None:
             if self._want_abort: # abort running process
