@@ -39,6 +39,10 @@ virtual host onto Telascience.org infrastructure (sharing with other OSGeo servi
 ** RSS feed: rss.xml file stored in SVN-Web
 ** TODO: To be migrated to OSGeo Drupal (http://grass-dev.osgeo.net)
 
+* i18N translation statistics (http://grass.osgeo.org/devel/i18n.php#statistics)
+** based in Linux weekly snapshot
+** GRASS version is coded in devel/i18n_stats.inc
+
 * Weekly snapshots (generated Saturday morning California time):
 ** Source code tarball of SVN HEAD
 ** Linux binary snapshot is compiled
