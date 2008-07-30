@@ -62,7 +62,7 @@ class CmdThread(threading.Thread):
         CmdThread.requestId += 1
 
         self.requestTime = time.time()
-
+        self.requestCmd = None
         self.requestQ.put((CmdThread.requestId, callable, args, kwds))
         
         return CmdThread.requestId
@@ -70,16 +70,16 @@ class CmdThread(threading.Thread):
     def run(self):
         while True:
             requestId, callable, args, kwds = self.requestQ.get()
-            self.resultQ.put((requestId, callable(*args, **kwds)))
+            self.requestCmd = callable(*args, **kwds)
+            self.resultQ.put((requestId, self.requestCmd.run()))
 
-            event = wxCmdDone(aborted=False,
+            event = wxCmdDone(aborted=self.requestCmd.aborted,
                               time=self.requestTime,
                               pid=requestId)
             wx.PostEvent(self.parent, event)
 
     def abort(self):
-        # TODO
-        print self.resultQ.get_()
+        self.requestCmd.abort()
         
 class GMConsole(wx.Panel):
     """
@@ -140,7 +140,7 @@ class GMConsole(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.ClearHistory, self.console_clear)
         self.Bind(wx.EVT_BUTTON, self.SaveHistory,  self.console_save)
 
-        self.Bind(EVT_CMD_ABORT, self.OnCmdDone)
+        self.Bind(EVT_CMD_ABORT, self.OnCmdAbort)
         
         self.__layout()
 
@@ -404,11 +404,13 @@ class GMConsole(wx.Panel):
         """Update progress message info"""
         self.console_progressbar.SetValue(event.value)
 
+    def OnCmdAbort(self, event):
+        """Abort running command"""
+        self.cmdThread.abort()
+        
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
         if event.aborted:
-            self.cmdThread.abort()
-            
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
                             'and can be corrupted'), self.cmd_output.StyleWarning)

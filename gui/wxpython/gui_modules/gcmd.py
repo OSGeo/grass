@@ -608,6 +608,7 @@ class RunCommand:
         self._want_abort = False
         self.aborted = False
         
+    def run(self):
         self.startTime = time.time()
         
         try:
@@ -647,6 +648,7 @@ class RunCommand:
         while self.module.poll() is None:
             if self._want_abort: # abort running process
                 self.module.kill()
+                self.aborted = True
                 return
             if self.stdout:
                 line = recv_some(self.module, e=0, stderr=0)
@@ -668,7 +670,6 @@ class RunCommand:
 
     def abort(self):
         """Abort running process, used by main thread to signal an abort"""
-        print 'a'
         self._want_abort = True
     
 # testing ...

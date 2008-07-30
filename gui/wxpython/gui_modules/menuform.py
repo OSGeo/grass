@@ -773,9 +773,6 @@ class mainFrame(wx.Frame):
 
     def OnRun(self, event):
         """Run the command"""
-        if not self.goutput.resultQ.empty():
-            return
-
         cmd = self.createCmd()
 
         if cmd == [] or cmd == None:
