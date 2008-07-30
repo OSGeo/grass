@@ -382,10 +382,29 @@ class GMConsole(wx.Panel):
             
         p1 = self.cmd_output.GetCurrentPos()
 
-        if os.linesep not in message:
-            self.cmd_output.AddTextWrapped(message, wrap=60)
+        message = message.replace('\r', '')
+
+        pc = -1
+        if '\b' in message:
+            pc = p1
+            last_c = ''
+            for c in message:
+                if c == '\b':
+                    pc -= 1
+                else:
+                    self.cmd_output.SetCurrentPos(pc)
+                    self.cmd_output.ReplaceSelection(c)
+                    pc = self.cmd_output.GetCurrentPos()
+                    if c != ' ':
+                        last_c = c
+            if last_c not in ('0123456789'):
+                self.cmd_output.AddText('\n')
+                pc = -1
         else:
-            self.cmd_output.AppendText(message)
+            if os.linesep not in message:
+                self.cmd_output.AddTextWrapped(message, wrap=60)
+            else:
+                self.cmd_output.AddText(message)
 
         p2 = self.cmd_output.GetCurrentPos()
         self.cmd_output.StartStyling(p1, 0xff)
@@ -397,6 +416,9 @@ class GMConsole(wx.Panel):
             self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleMessage)
         else: # unknown
             self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleUnknown)
+
+        if pc > 0:
+            self.cmd_output.SetCurrentPos(pc)
             
         self.cmd_output.EnsureCaretVisible()
         
@@ -508,7 +530,6 @@ class GMStderr:
     def write(self, s):
         s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
-        s = s.replace('\b', '').replace('\r', '%s' % os.linesep)
         progressValue = -1
         
         for line in s.split(os.linesep):
