@@ -126,7 +126,46 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 
     /* break on intersection */
     if (settings.breakLines) {
-	// TODO
+	int lineBreak;
+	BOUND_BOX lineBox;
+	struct ilist *list, *listBreak, *listRef;
+	struct line_pnts *points_check;
+
+	list = Vect_new_list();
+	listRef = Vect_new_list();
+	listBreak = Vect_new_list();
+	
+	points_check = Vect_new_line_struct();
+
+	/* find all relevant lines */
+	Vect_get_line_box(display->mapInfo, newline, &lineBox);
+	Vect_select_lines_by_box(display->mapInfo, &lineBox,
+				 GV_LINES, list);
+
+	/* check for intersection */
+	Vect_list_append(listBreak, newline);
+	Vect_list_append(listRef, newline);
+	for (int i = 0; i < list->n_values; i++) {
+	    lineBreak = list->value[i];
+	    if (lineBreak == newline)
+		continue;
+
+	    type = Vect_read_line(display->mapInfo, points_check, NULL, lineBreak);
+	    if (!(type & GV_LINES))
+		continue;
+
+	    if (Vect_line_check_intersection(Points, points_check,
+					     WITHOUT_Z))
+		Vect_list_append(listBreak, lineBreak);
+	}
+
+	Vect_break_lines_list(display->mapInfo, listBreak, listRef,
+			      GV_LINES, NULL, NULL);
+
+	Vect_destroy_line_struct(points_check);
+	Vect_destroy_list(list);
+	Vect_destroy_list(listBreak);
+	Vect_destroy_list(listRef);
     }
     
     /* register changeset */
@@ -586,7 +625,7 @@ int Digit::BreakLines()
 	AddActionToChangeset(changeset, DELETE, display->selected->value[i]);
     }
 
-    ret = Vect_break_lines_list(display->mapInfo, display->selected,
+    ret = Vect_break_lines_list(display->mapInfo, display->selected, NULL,
 				GV_LINES, NULL, NULL);
 
     if (ret > 0) {

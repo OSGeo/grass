@@ -764,6 +764,10 @@ class VEdit(AbstractDigit):
                                                     "Use vdigit instead."),
                       caption=_("Message"), style=wx.ID_OK | wx.ICON_INFORMATION | wx.CENTRE)
 
+    def UpdateSettings(self):
+        """Update digit settigs"""
+        pass
+    
 class VDigit(AbstractDigit):
     """
     Prototype of digitization class based on v.digit reimplementation
@@ -785,6 +789,8 @@ class VDigit(AbstractDigit):
 
         self.toolbar = mapwindow.parent.toolbars['vdigit']
 
+        self.UpdateSettings()
+        
     def __del__(self):
         del self.digit
         
@@ -1189,6 +1195,11 @@ class VDigit(AbstractDigit):
     def GetUndoLevel(self):
         """Get undo level (number of active changesets)"""
         return self.digit.GetUndoLevel()
+
+    def UpdateSettings(self):
+        """Update digit settigs"""
+        self.digit.UpdateSettings(UserSettings.Get(group='vdigit', key='breakLines',
+                                                   subkey='enabled'))
         
     def __getSnapThreshold(self):
         """Get snap mode and threshold value
@@ -1788,6 +1799,9 @@ class VDigitSettingsDialog(wx.Dialog):
 
         self.intersect = wx.CheckBox(parent=panel, label=_("Break lines on intersection"))
         self.intersect.SetValue(UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
+        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
+            self.intersect.Enable(False)
+        
         sizer.Add(item=self.intersect, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
 
         border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
@@ -2176,10 +2190,17 @@ class VDigitSettingsDialog(wx.Dialog):
         # on-exit
         UserSettings.Set(group='vdigit', key="saveOnExit", subkey='enabled',
                          value=self.save.IsChecked())
+
+        # break lines
+        UserSettings.Set(group='vdigit', key="breakLines", subkey='enabled',
+                         value=self.intersect.IsChecked())
         
         # update driver settings
         self.parent.digit.driver.UpdateSettings()
 
+        # update digit settings
+        self.parent.digit.UpdateSettings()
+        
         # redraw map if auto-rendering is enabled
         if self.parent.autoRender.GetValue(): 
             self.parent.OnRender(None)
