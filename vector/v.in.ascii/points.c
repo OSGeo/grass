@@ -396,7 +396,7 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	    }
 	}
 
-	G_percent(row, nrows + 1, 2);
+	G_percent(row, nrows, 2);
 
 	G_free_tokens(tokens);
 
