@@ -229,10 +229,11 @@ class VirtualAttributeList(wx.ListCtrl,
                         cat = -1
                         wx.MessageBox(parent=self,
                                       message=_("Error loading attribute data. "
-                                                "Record number: %d. Unable to cast value '%s' in "
-                                                "key column (%s) to integer.\n\n"
-                                                "Details: %s") % \
-                                          (i + 1, value, keyColumn, e),
+                                                "Record number: %(rec)d. Unable to cast value '%(val)s' in "
+                                                "key column (%(key)s) to integer.\n\n"
+                                                "Details: %(detail)s") % \
+                                          { 'rec' : i + 1, 'val' : value,
+                                            'key' : keyColumn, 'detail' : e},
                                       caption=_("Error"),
                                       style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 j += 1

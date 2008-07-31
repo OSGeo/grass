@@ -1120,8 +1120,8 @@ class GCP(wx.Frame):
         self.bkw_rmserror = round((sumsq_bkw_err/i)**0.5,4)
         self.list.ResizeColumns()
 
-        self.SetStatusText(_('RMS error for selected points forward: %s backward: %s') % \
-                           (self.fwd_rmserror, self.bkw_rmserror))
+        self.SetStatusText(_('RMS error for selected points forward: %(fwd)s backward: %(bkw)s') % \
+                           { 'fwd' : self.fwd_rmserror, 'bkw' : self.bkw_rmserror })
         
 class GCPList(wx.ListCtrl,
               CheckListCtrlMixin,

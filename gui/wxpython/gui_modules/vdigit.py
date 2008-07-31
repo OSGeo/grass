@@ -140,9 +140,9 @@ class AbstractDigit:
             ret = self.driver.Reset(self.map)
         except StandardError, e:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message=_('Unable to initialize display driver, '
-                                            'see README file for more information.%s%s'
-                                            'Details: %s (%s)') % (os.linesep, os.linesep, e, digitErr))
+                                  message="%s %s (%s)" % (_('Unable to initialize display driver, '
+                                                            'see README file for more information.\n\n'
+                                                            'Details:'), e, digitErr))
         
         if map and ret == -1:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
