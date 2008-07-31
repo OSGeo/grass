@@ -91,7 +91,7 @@ read_cats  (const char *name, const char *mapset, struct Categories *pcats)
 
 {
   FILE *fd;
-  char buff[1024], buf2[200], xname[512], xmapset[512];
+  char buff[1024], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
   CELL cat;
   DCELL val1, val2;
   int old;
