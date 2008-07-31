@@ -76,6 +76,7 @@ class CmdThread(threading.Thread):
             event = wxCmdDone(aborted=self.requestCmd.aborted,
                               time=self.requestTime,
                               pid=requestId)
+            time.sleep(.1)
             wx.PostEvent(self.parent, event)
 
     def abort(self):
@@ -432,8 +433,6 @@ class GMConsole(wx.Panel):
         
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
-        time.sleep(.1) # wait for stdout
-        
         if event.aborted:
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
