@@ -193,10 +193,38 @@ class Layer(object):
         """Check if layer is activated for rendering"""
         return self.active
 
+    def SetType(self, type):
+        """Set layer type"""
+        if type not in ('raster', 'vector', 'overlay', 'command'):
+            raise gcmd.GStdError(_("Unsupported map layer type '%s'") % str(type))
+        
+        self.type = type
+
+    def SetName(self, name):
+        """Set layer name"""
+        self.name = name
+
+    def SetCmd(self, cmd):
+        """Set layer name"""
+        self.cmdlist = cmd
+
     def SetActive(self, enable=True):
         """Active or deactive layer"""
-        self.active = enable
+        self.active = bool(enable)
 
+    def SetHidden(self, enable=False):
+        """Hide or show map layer in Layer Manager"""
+        self.hidden = bool(enable)
+
+    def SetOpacity(self, value):
+        """Set opacity value"""
+        if value < 0:
+            value = 0.
+        elif value > 1:
+            value = 1.
+        
+        self.opacity = float(value)
+        
     def SetCmd(self, cmd):
         """Set new command for layer"""
         self.cmdlist = cmd
@@ -915,40 +943,45 @@ class Map(object):
         Debug.msg (4, "Map.ReoderLayers(): layers=%s" % \
                    (layerNameList))
 
-    def ChangeLayer(self, layer, type, command, name=None,
-                    l_active=True, l_hidden=False, l_opacity=1, l_render=False):
+    def ChangeLayer(self, layer, render=False, **kargs):
         """
-        Change layer properties
+        Change map layer properties
 
+        @param layer map layer instance
         @param type layer type ('raster', 'vector', etc.)
         @param command  GRASS command given as list
         @param name layer name
-        @param l_active layer render only if True
-        @param l_hidden layer not displayed in layer tree if True
-        @param l_opacity opacity level range from 0(transparent) - 1(not transparent)
-        @param l_render render an image if True
+        @param active layer render only if True
+        @param hidden layer not displayed in layer tree if True
+        @param opacity opacity level range from 0(transparent) - 1(not transparent)
+        @param render render an image if True
         """
 
-        # l_opacity must be <0;1>
-        if l_opacity < 0: l_opacity = 0
-        elif l_opacity > 1: l_opacity = 1
+        Debug.msg (3, "Map.ChangeLayer(): layer=%s" % layer.name)
 
-        Debug.msg (3, "Map.ChangeLayer():")
+        if kargs.has_key('type'):
+            layer.SetType(kargs['type']) # check type
 
-        newlayer = MapLayer(type=type, cmd=command, name=name,
-                            active=l_active, hidden=l_hidden, opacity=l_opacity)
+        if kargs.has_key('command'):
+            layer.SetCmd(kargs['command'])
+            
+        if kargs.has_key('name'):
+            layer.SetName(kargs['name'])
 
-        oldlayerindex = self.layers.index(layer)
+        if kargs.has_key('active'):
+            layer.SetActive(kargs['active'])
 
-        # add maplayer to the list of layers
-        if layer:
-            self.layers[oldlayerindex] = newlayer
+        if kargs.has_key('hidden'):
+            layer.SetHidden(kargs['hidden'])
 
-        if l_render and not layer.Render():
+        if kargs.has_key('opacity'):
+            layer.SetOpacity(kargs['opacity'])
+            
+        if render and not layer.Render():
             raise gcmd.GException(_("Unable to render map layer <%s>.") % 
                                   (name))
 
-        return self.layers[-1]
+        return layer
 
     def ChangeOpacity(self, layer, l_opacity):
         """
