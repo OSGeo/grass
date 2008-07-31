@@ -232,8 +232,12 @@ int main (int argc, char *argv[])
     /* Cycle through all lines */
     Vect_rewind ( &Map );
     i = 0;
+    fprintf (stderr, _("Reprojecting primitives: "));
     while(1) {
 	++i;
+	if (i % 1000 == 0) {
+	    fprintf (stderr, "%7d\b\b\b\b\b\b\b", i);
+	}
 	type = Vect_read_next_line (&Map, Points, Cats); /* read line */
 	if ( type == 0 ) continue; /* Dead */
 
@@ -248,6 +252,7 @@ int main (int argc, char *argv[])
 
 	Vect_write_line (&Out_Map, type, Points, Cats); /* write line */
     }  /* end lines section */
+    fprintf (stderr, "\r");
 
     /* Copy tables */
     Vect_copy_tables ( &Map, &Out_Map, 0 );
