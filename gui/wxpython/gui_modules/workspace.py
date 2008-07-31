@@ -622,9 +622,9 @@ class ProcessGrcFile(object):
         if self.num_error > 0:
             wx.MessageBox(parent=parent,
                           message=_("Some lines were skipped when reading settings "
-                                    "from file <%s>.\nSee 'Command output' window for details.\n\n"
-                                    "Number of skipped lines: %d" % \
-                                        (self.filename, self.num_error)),
+                                    "from file <%(file)s>.\nSee 'Command output' window for details.\n\n"
+                                    "Number of skipped lines: %(line)d") % \
+                                        { 'file' : self.filename, 'line' : self.num_error },
                           caption=_("Warning"), style=wx.OK | wx.ICON_EXCLAMATION)
             parent.goutput.WriteLog('Map layers loaded from GRC file <%s>' % self.filename)
             parent.goutput.WriteLog('Skipped lines:\n%s' % self.error)

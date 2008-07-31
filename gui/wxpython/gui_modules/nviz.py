@@ -629,8 +629,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 id = self.nvizClass.LoadVector(str(layer.name), True)
 
             if id < 0:
-                print >> sys.stderr, "Nviz:" + _("Loading vector map <%s> (%s) failed") % \
-                    (layer.name, type)
+                print >> sys.stderr, "Nviz:" + _("Loading vector map <%(name)s> (%()types) failed") % \
+                    { 'name' : layer.name, 'type' : type }
                 continue
 
             # update layer properties
@@ -679,11 +679,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 ret = self.nvizClass.UnloadVector(id, True)
             if ret == 0:
-                print >> sys.stderr, "Nviz:" + _("Unable to unload vector map <%s> (%s)") % \
-                    (layer.name, vtype)
+                print >> sys.stderr, "Nviz:" + _("Unable to unload vector map <%(name)s> (%(type)s)") % \
+                    { 'name': layer.name, 'type' : vtype }
             else:
-                print "Nviz:" + _("Vector map <%s> (%s) unloaded successfully") % \
-                    (layer.name, vtype)
+                print "Nviz:" + _("Vector map <%(name)s> (%(type)s) unloaded successfully") % \
+                    { 'name' : layer.name, 'type' : vtype }
 
             
             data[vtype].pop('object')
