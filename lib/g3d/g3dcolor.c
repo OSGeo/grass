@@ -23,7 +23,7 @@ G3d_removeColor  (const char *name)
 
 
 {
-  char buf[200], secondary[500], buf2[200], xname[512], xmapset[512];
+  char buf[200], secondary[500], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   if (G__name_is_fully_qualified (name, xname, xmapset)) {
     sprintf (buf, "%s/%s", G3D_DIRECTORY, xname);
@@ -365,7 +365,7 @@ G3d_writeColors  (const char *name, const char *mapset, struct Colors *colors)
 
 {
   char element[512], buf[512], buf2[200];
-  char xname[512], xmapset[512];
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
   FILE *fd;
   int stat;
 

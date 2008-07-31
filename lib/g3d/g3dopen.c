@@ -14,7 +14,7 @@ G3d_openCellOldNoHeader  (const char *name, const char *mapset)
 
 {
   G3D_Map *map;
-  char buf[200], buf2[200], xname[512], xmapset[512];
+  char buf[200], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   G3d_initDefaults ();
 
@@ -220,7 +220,7 @@ G3d_openCellNew  (const char *name, int typeIntern, int cache, G3D_Region *regio
   G3D_Map *map;
   int nofHeaderBytes, dummy = 0, compression, precision;
   long ldummy = 0;
-  char xname[512], xmapset[512];
+  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
   G3d_initDefaults ();
   if (! G3d_maskOpenOld ()) {
