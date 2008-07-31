@@ -289,11 +289,6 @@ class GMConsole(wx.Panel):
                 #
                 # other GRASS commands (r|v|g|...)
                 #
-                if hasattr(self.parent, "curr_page"):
-                    # change notebook page only for Layer Manager
-                    if self.parent.notebook.GetSelection() != 1:
-                        self.parent.notebook.SetSelection(1)
-
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 tmpreg = os.getenv("GRASS_REGION")
