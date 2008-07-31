@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     }
 
     if (format == FORMAT_POINT) {
-	int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen;
+      int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen, nrows;
 	int n_int = 0, n_double = 0, n_string = 0;
 	char buf[1000];
 	struct field_info *Fi;
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 	}
 	unlink(tmp);
 
-	points_analyse(ascii, tmpascii, fs, &rowlen, &ncols, &minncols,
+	points_analyse(ascii, tmpascii, fs, &rowlen, &ncols, &minncols, &nrows,
 		       &coltype, &collen, skip_lines, xcol, ycol,
 		       region_flag->answer);
 
@@ -510,7 +510,7 @@ int main(int argc, char *argv[])
 	    table = NULL;
 	}
 
-	points_to_bin(tmpascii, rowlen, &Map, driver, table, fs, ncols,
+	points_to_bin(tmpascii, rowlen, &Map, driver, table, fs, nrows, ncols,
 		      coltype2, xcol, ycol, zcol, catcol, skip_lines);
 
 	if (driver) {

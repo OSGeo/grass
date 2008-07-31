@@ -48,12 +48,13 @@ static int is_double(char *str)
  * rowlength: maximum row length
  * ncolumns: number of columns
  * minncolumns: minimum number of columns
+ * nrows: number of rows
  * column_type: column types
  * column_length: column lengths (string only)
  */
 
 int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
-		   int *rowlength, int *ncolumns, int *minncolumns,
+		   int *rowlength, int *ncolumns, int *minncolumns, int *nrows,
 		   int **column_type, int **column_length, int skip_lines,
 		   int xcol, int ycol, int region_flag)
 {
@@ -242,6 +243,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     *minncolumns = minncols;
     *column_type = coltype;
     *column_length = collen;
+    *nrows = row - 1; /* including skipped lines */
 
     G_free(buf);
     G_free(buf_raw);
@@ -265,7 +267,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
  * Note: column types (both in header or coldef) must be supported by driver
  */
 int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
-		  dbDriver * driver, char *table, char *fs, int ncols,
+		  dbDriver * driver, char *table, char *fs, int nrows, int ncols,
 		  int *coltype, int xcol, int ycol, int zcol, int catcol,
 		  int skip_lines)
 {
@@ -394,7 +396,11 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	    }
 	}
 
+	G_percent(row, nrows + 1, 2);
+
 	G_free_tokens(tokens);
+
+	row++;
     }
 
     return 0;
