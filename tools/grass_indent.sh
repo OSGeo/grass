@@ -8,5 +8,5 @@ if [ $# -lt 1 ] ; then
 else
  indent -bad -bap -bbb -br -bli0 -bls -cli0 -ncs -fc1 -hnl -i4 \
       -nbbo -nbc -nbfda -nbfde -ncdb -ncdw -nce -nfca -npcs -nprs \
-      -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss -ts8 -ut $@
+      -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss -ts8 -ut "$@"
 fi
