@@ -290,7 +290,8 @@ class processTask(HandlerBase):
             self.task.name = attrs.get('name', None)
 
         if name == 'parameter':
-            self.inParameter = True;
+            self.inParameter = True
+            self.label = '' # tmp variable
             self.param_label = ''
             self.param_description = ''
             self.param_default = ''
@@ -309,7 +310,9 @@ class processTask(HandlerBase):
             self.param_multiple = attrs.get('multiple', None)
 
         if name == 'flag':
-            self.inFlag = True;
+            self.inFlag = True
+            self.label = '' # tmp variable
+            self.flag_label = ''
             self.flag_description = ''
             self.flag_default = ''
             self.flag_guisection = ''
@@ -421,12 +424,15 @@ class processTask(HandlerBase):
             self.inFlag = False;
             self.task.flags.append({
                 "name" : self.flag_name,
+                "label" : self.flag_label,
                 "description" : self.flag_description,
                 "guisection" : self.flag_guisection } )
 
         if name == 'label':
             if self.inParameter:
                 self.param_label = normalize_whitespace(self.label)
+            elif self.inFlag:
+                self.flag_label = normalize_whitespace(self.label)
             else:
                 self.task.label = normalize_whitespace(self.label)
 
