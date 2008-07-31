@@ -391,6 +391,7 @@ following rules:
     To set a property:
 
       svn propset svn:keywords 'Author Date Id' <directory>
+      svn propset svn:mime-type text/x-sh grass_shellscript.sh
 
     To edit the svn:ignore property using your default text editor:
 
