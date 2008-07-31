@@ -1226,12 +1226,11 @@ class LayerTree(CT.CustomTreeCtrl):
                 opac = self.GetPyData(item)[0]['maplayer'].GetOpacity(float=True)
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
-        maplayer = self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'], type=type,
-                                        command=cmdlist, name=self.GetItemText(item),
-                                        l_active=chk, l_hidden=hidden, l_opacity=opac, l_render=False)
 
-        self.GetPyData(item)[0]['maplayer'] = maplayer
-
+        self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'],
+                             command=cmdlist, name=self.GetItemText(item),
+                             active=chk, l_hidden=hidden, l_opacity=opac)
+        
         # if digitization tool enabled -> update list of available vector map layers
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)

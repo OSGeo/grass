@@ -335,7 +335,7 @@ class HistFrame(wx.Frame):
         #
         # Add layer to the map
         #
-        self.layer = self.Map.AddLayer(type="command", name='', command=['d.histogram'],
+        self.layer = self.Map.AddLayer(type="command", name='histogram', command=['d.histogram'],
                                        l_active=False, l_hidden=False, l_opacity=1, l_render=False)
 
 
@@ -403,9 +403,7 @@ class HistFrame(wx.Frame):
         """
         self.mapname = utils.GetLayerNameFromCmd(cmd)
 
-        self.layer = self.Map.ChangeLayer(layer=self.layer, type="command", name='histogram',
-                                          command=cmd,
-                                          l_active=True, l_hidden=False, l_opacity=1.0)
+        self.layer = self.Map.ChangeLayer(layer=self.layer, command=cmd, active=True)
 
         return self.layer
 
