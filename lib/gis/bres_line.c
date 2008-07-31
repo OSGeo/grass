@@ -1,22 +1,22 @@
 /*
  * \file bres_line.c
  *
- * \brief Bresenham line routines.
+ * \brief GIS Library - Bresenham line routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2007
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn int G_bresenham_line (int x0, int y0, int x1, int y1, int (*point)())
- *
  * \brief Bresenham line algorithm.
  *
  * Draws a line from <b>x1,y1</b> to <b>x2,y2</b> using Bresenham's 

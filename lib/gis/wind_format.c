@@ -1,14 +1,16 @@
 /**
  * \file wind_format.c
  *
- * \brief Window formatting functions.
+ * \brief GIS Library - Window formatting functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -19,8 +21,6 @@ static int format_double(double,char *);
 
 
 /**
- * \fn int G_format_northing (double north, char *buf, int projection)
- *
  * \brief Northing to ASCII.
  *
  * Converts the double representation of the <b>north</b> coordinate to 
@@ -44,8 +44,6 @@ int G_format_northing ( double north, char *buf,int projection)
 
 
 /**
- * \fn int G_format_easting (double east, char *buf, int projection)
- *
  * \brief Easting to ASCII.
  *
  * Converts the double representation of the <b>east</b> coordinate to
@@ -69,8 +67,6 @@ int G_format_easting ( double east, char *buf,int projection)
 
 
 /**
- * \fn int G_format_resolution (double res, char *buf, int projection)
- *
  * \brief Resolution to ASCII.
  *
  * Converts the double representation of the <b>resolution</b> to its 

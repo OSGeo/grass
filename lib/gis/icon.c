@@ -1,14 +1,16 @@
 /**
  * \file icon.c
  *
- * \brief Plot icon
+ * \brief GIS Library - Plot icon
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2007
+ * \date 1999-2008
  */
 
 #include <stdlib.h>
@@ -37,16 +39,14 @@ static void trans ( double *x, double *y, int n_points,
 }
 
 /**
- * \fn G_plot_icon (double xc, double yc, int type, double angle, double scale)
- *
  * \brief Plot icon
- *
- * \return 1
  *
  * \param[in] xc,yc icon coordinates
  * \param[in] type  icon type
  * \param[in] angle rotation angle [rad]
  * \param[in] scale scale factor
+ *
+ * \return 1
  */
 int G_plot_icon (double xc, double yc, int type, double angle, double scale) 
 {

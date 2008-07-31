@@ -1,14 +1,16 @@
 /**
  * \file area_sphere.c
  *
- * \brief Sphereical area calculation routines.
+ * \brief GIS Library - Sphereical area calculation routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <math.h>
@@ -24,8 +26,6 @@ static double M;
  */
 
 /**
- * \fn int G_begin_zone_area_on_sphere (double r, double s)
- *
  * \brief Initialize calculations for sphere.
  *
  * Initializes raster area calculations for a sphere.
@@ -45,8 +45,6 @@ int G_begin_zone_area_on_sphere (double r,double s)
 
 
 /**
- * \fn double G_darea0_on_sphere (double lat)
- *
  * \brief Calculates integral for area between two latitudes.
  *
  * \param[in] lat latitude
@@ -60,8 +58,6 @@ double G_darea0_on_sphere (double lat)
 
 
 /**
- * \fn double G_area_for_zone_on_sphere (double north, double south)
- *
  * \brief Calculates area between latitudes.
  *
  * This routine shows how to calculate area between two lats, but

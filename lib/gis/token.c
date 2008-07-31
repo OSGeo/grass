@@ -1,14 +1,16 @@
 /**
  * \file token.c
  *
- * \brief Token functions.
+ * \brief GIS Library - Token functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdlib.h>
@@ -16,8 +18,6 @@
 
 
 /**
- * \fn char **G_tokenize (char *buf, char *delim)
- *
  * \brief Tokenize string.
  *
  * Given a string, <b>buf</b>, turn delimiter, <b>delim</b>, into '\0' 
@@ -65,8 +65,6 @@ char **G_tokenize ( const char *buf, const char *delim)
 
 
 /**
- * \fn int G_number_of_tokens (char **tokens)
- *
  * \brief Return number of tokens.
  *
  * <b>Note:</b> Function is incomplete.
@@ -89,8 +87,6 @@ int G_number_of_tokens(char **tokens)
 
 
 /**
- * \fn int G_free_tokens (char **tokens)
- *
  * \brief Free memory allocated to tokens.
  *
  * <b>Note:</b> <i>G_free_tokens()</i> must be called when finished with 

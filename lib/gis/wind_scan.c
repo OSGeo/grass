@@ -1,14 +1,16 @@
 /**
  * \file wind_scan.c
  *
- * \brief Window scanning functions.
+ * \brief GIS Library - Window scanning functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -19,8 +21,6 @@ static int scan_double(const char *,double *);
 
 
 /**
- * \fn int G_scan_northing (char *buf, double *northing, int projection)
- *
  * \brief ASCII northing to double.
  *
  * Converts the ASCII "northing" coordinate string in <b>buf</b> to its 
@@ -50,8 +50,6 @@ int G_scan_northing ( const char *buf, double *northing, int projection)
 
 
 /**
- * \fn int G_scan_easting (char *buf, double *easting, int projection)
- *
  * \brief ASCII easting to double.
  *
  * Converts the ASCII "easting" coordinate string in <b>buf</b> to its 
@@ -85,8 +83,6 @@ int G_scan_easting ( const char *buf, double *easting, int projection)
 
 
 /**
- * \fn int G_scan_resolution (char *buf, double *res, int projection)
- *
  * \brief ASCII resolution to double.
  *
  * Converts the ASCII "resolution" string in <b>buf</b> to its double 

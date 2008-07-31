@@ -1,7 +1,9 @@
 /**
  * \file legal_name.c
  *
- * \brief Functions to handle file name legality.
+ * \brief GIS Library - Functions to handle file name legality.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -18,8 +20,6 @@
 
 
 /**
- * \fn int G_legal_filename (char *s)
- *
  * \brief Check for legal database file name.
  *
  * Legal file names will <b>not</b> begin with '.' or NULL and must 
@@ -51,8 +51,6 @@ int G_legal_filename (const char *s)
 
 
 /**
- * \fn int G_check_input_output_name (char * input, char * output, int error)
- *
  * \brief Check input and output file names.
  *
  * Check: 1) output is legal map name, 2) if can find input map, and 3) 
@@ -72,9 +70,9 @@ int G_check_input_output_name ( const char * input, const char * output, int err
     if ( output == NULL) return 0; /* don't die on undefined parameters */
     if ( G_legal_filename(output) == -1 ) {
 	if ( error == GR_FATAL_EXIT ) {
-	    G_fatal_error ( _("Output name '%s' is not valid rast name."), output );  
+	    G_fatal_error ( _("Output raster map name <%s> is not valid map name"), output );  
 	} else if ( error == GR_FATAL_PRINT ) {
-	    G_warning ( _("Output name '%s' is not valid rast name."), output );
+	    G_warning ( _("Output raster map name <%s> is not valid map name"), output );
 	    return 1;
 	} else { /* GR_FATAL_RETURN */
 	    return 1;
@@ -85,9 +83,9 @@ int G_check_input_output_name ( const char * input, const char * output, int err
     
     if ( mapset == NULL ) {
 	if ( error == GR_FATAL_EXIT ) {
-	    G_fatal_error ( _("Cannot find input map '%s'"), input );  
+	    G_fatal_error ( _("Raster map <%s> not found"), input );  
 	} else if ( error == GR_FATAL_PRINT ) {
-	    G_warning ( _("Cannot find input map '%s'"), input );
+	    G_warning ( _("Raster map <%s> not found"), input );
 	    return 1;
 	} else { /* GR_FATAL_RETURN */
 	    return 1;
@@ -106,9 +104,9 @@ int G_check_input_output_name ( const char * input, const char * output, int err
 	
      	if ( strcmp(in,output) == 0 ) {
 	    if ( error == GR_FATAL_EXIT ) {
-		G_fatal_error ( _("Output map '%s' is used as input"), output );  
+		G_fatal_error ( _("Output raster map <%s> is used as input"), output );  
 	    } else if ( error == GR_FATAL_PRINT ) {
-		G_warning ( _("Output map '%s' is used as input"), output );
+		G_warning ( _("Output raster map <%s> is used as input"), output );
 		return 1;
 	    } else { /* GR_FATAL_RETURN */
 		return 1;

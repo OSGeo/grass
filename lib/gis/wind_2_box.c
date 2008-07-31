@@ -1,22 +1,22 @@
 /**
  * \file wind_2_box.c
  *
- * \brief Window box functions.
+ * \brief GIS Library - Window box functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn int G_adjust_window_to_box (struct Cell_head *src, struct Cell_head *dst, int rows, int cols)
- *
  * \brief Adjusts window to a rectangular box.
  *
  * Creates a new window <b>dst</b> from a window <b>src</b> which fits 

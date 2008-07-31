@@ -1,14 +1,16 @@
 /**
  * \file wr_cellhd.c
  *
- * \brief Write Cell Header functions.
+ * \brief GIS Library - Write Cell Header functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -16,12 +18,10 @@
 
 
 /**
- * \fn int G__write_Cell_head (FILE *fd, struct Cell_head *cellhd, int is_cellhd)
- *
  * \brief Write cell header or window.
  *
- * \param[in,out] fd
- * \param[in] cellhd
+ * \param[in,out] fd header file
+ * \param[in] cellhd pointed to cell header structure
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return always returns 1
  */
@@ -69,12 +69,10 @@ int G__write_Cell_head ( FILE *fd,
 
 
 /**
- * \fn int G__write_Cell_head3 (FILE *fd, struct Cell_head *cellhd, int is_cellhd)
- *
  * \brief Write 3D cell header or window.
  *
- * \param[in,out] fd
- * \param[in] cellhd
+ * \param[in,out] fd header file
+ * \param[in] cellhd pointer to cell header structure
  * \param[in] is_cellhd 1 cell header; 0 window
  * \return always returns 1
  */

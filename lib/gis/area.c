@@ -1,14 +1,16 @@
 /**
  * \file area.c
  *
- * \brief Area calculation functions.
+ * \brief GIS Library - Area calculation functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
@@ -28,8 +30,6 @@ static double (*darea0)(double);
 
 
 /**
- * \fn int G_begin_cell_area_calculations (void)
- *
  * \brief Begin cell area calculations.
  *
  * This routine must be called once before any call to
@@ -80,8 +80,6 @@ int G_begin_cell_area_calculations(void)
 
 
 /**
- * \fn double G_area_of_cell_at_row (int row)
- *
  * \brief Cell area in specified <b>row</b>.
  *
  * This routine returns the area in square meters of a cell in the
@@ -115,8 +113,6 @@ G_area_of_cell_at_row (int row)
 
 
 /**
- * \fn int G_begin_polygon_area_calculations (void)
- *
  * \brief Begin polygon area calculations.
  *
  * This initializes the polygon area calculation routines. It is used 
@@ -150,8 +146,6 @@ int G_begin_polygon_area_calculations(void)
 
 
 /**
- * \fn double G_area_of_polygon (const double *x, const double *y, int n)
- *
  * \brief Area in square meters of polygon.
  *
  * Returns the area in square meters of the polygon described by the 

@@ -1,14 +1,16 @@
 /**
  * \file is.c
  *
- * \brief Tests for file existence.
+ * \brief GIS Library - Tests for file existence.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 2001-2006
+ * \date 2001-2008
  */
 
 #include <stdio.h>
@@ -38,8 +40,7 @@ static int test_path_file ( const char *path, const char *file )
 
 
 /**
- * \fn int G_is_gisbase (const char *path)
- *
+
  * \brief Test if specified directory is GISBASE.
  *
  * \param[in] path Path to directory
@@ -54,8 +55,6 @@ int G_is_gisbase (const char *path)
 
 
 /**
- * \fn int G_is_location (const char *path)
- *
  * \brief Test if specified directory is location.
  *
  * \param[in] path Path to directory
@@ -70,8 +69,6 @@ int G_is_location (const char *path)
 
 
 /**
- * \fn int G_is_mapset (const char *path)
- *
  * \brief Test if specified directory is mapset.
  *
  * \param[in] path Path to directory

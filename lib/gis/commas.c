@@ -1,14 +1,16 @@
 /**
  * \file commas.c
  *
- * \brief Comma string functions.
+ * \brief GIS Library - Comma string functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <string.h>
@@ -16,19 +18,18 @@
 
 
 /**
- * \fn int G_insert_commas (char *buf)
- *
  * \brief Inserts commas into a number string.
  *
- * Examples:<br>
- * 1234567    becomes 1,234,567<br>
- * 1234567.89 becomes 1,234,567.89<br>
- * 12345      becomes 12,345<br>
- * 1234       stays   1234<br>
+ * Examples:
+ *
+ *  - 1234567    becomes 1,234,567
+ *  - 1234567.89 becomes 1,234,567.89
+ *  - 12345      becomes 12,345
+ *  - 1234       stays   1234
  *
  * <b>Note:</b> Does not work with negative numbers.
  *
- * \param[in,out] buf
+ * \param[in,out] buf string
  * \return 1 if no commas inserted
  * \return 0 if commas inserted
  */
@@ -72,17 +73,15 @@ int G_insert_commas(char *buf)
 
 
 /**
- * \fn int G_remove_commas (char *buf)
- *
  * \brief Removes commas from number string.
  *
- * Examples:<br>
- * 1,234,567    becomes 1234567<br>
- * 1,234,567.89 becomes 1234567.89<br>
- * 12,345      becomes 12345<br>
- * 1234       stays   1234
+ * Examples:
+ *  - 1,234,567    becomes 1234567<br>
+ *  - 1,234,567.89 becomes 1234567.89<br>
+ *  - 12,345      becomes 12345<br>
+ *  - 1234       stays   1234
  *
- * \param[in,out] buf
+ * \param[in,out] buf string
  * \return always returns 0
  */
 

@@ -1,19 +1,7 @@
 /**
  * \file parser.c
  *
- * \brief GIS library - Argument parsing functions.
- *
- * \author Radim Blazek
- *
- * \date 2003-2008 (C) The GRASS development team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- */
-
-/***************************************************************************
- * Routines used to assist in command line parsing.  
- ***************************************************************************
+ * \brief GIS Library - Argument parsing functions.
  *
  * Parses the command line provided through argc and argv.  Example:
  * Assume the previous calls:
@@ -66,8 +54,16 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- ***************************************************************************
-*/
+ * (C) 2001-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Radim Blazek
+ *
+ * \date 2003-2008
+ *
+ */
 
 #include <grass/config.h>
 
@@ -146,8 +142,6 @@ static void G_script (void);
 
 
 /**
- * \fn int G_disable_interactive (void)
- *
  * \brief Disables the ability of the parser to operate interactively.
  *
  * When a user calls a command with no arguments on the command line, 
@@ -169,8 +163,6 @@ G_disable_interactive (void)
 
  
 /**
- * \fn struct Flag *G_define_flag (void)
- *
  * \brief Initializes a Flag struct.
  *
  * Allocates memory for the Flag structure and returns a pointer to this 
@@ -180,7 +172,7 @@ G_disable_interactive (void)
  * at the command line using a minus sign followed by the character
  * representing the flag.
  *
- * \retval Flag * Pointer to a Flag struct
+ * \return Flag * Pointer to a Flag struct
  */
 
 struct Flag *
@@ -227,8 +219,6 @@ G_define_flag (void)
 
 
 /**
- * \fn struct Option *G_define_option (void)
- *
  * \brief Initializes an Option struct.
  *
  * Allocates memory for the Option structure and returns a pointer to
@@ -241,7 +231,7 @@ G_define_flag (void)
  * values (e.g. "red,orange,yellow").  Unless the option string is NULL, 
  * user provided input will be evaluated agaist this string.
  *
- * \retval Option * Pointer to an Option struct
+ * \return Option * Pointer to an Option struct
  */
 
 struct Option *
@@ -302,8 +292,6 @@ G_define_option (void)
 
 
 /**
- * \fn struct Option *G_define_standard_option (int opt)
- *
  * \brief Create standardised Option structure.
  *
  * This function will create a standardised Option structure
@@ -314,19 +302,19 @@ G_define_option (void)
  * If an invalid parameter was specified a empty Option structure will 
  * be returned (not NULL).
  *
- * - general: G_OPT_WHERE, G_OPT_COLUMN, G_OPT_COLUMNS, G_OPT_TABLE, G_OPT_DRIVER, G_OPT_DATABASE
+ *  - general: G_OPT_WHERE, G_OPT_COLUMN, G_OPT_COLUMNS, G_OPT_TABLE, G_OPT_DRIVER, G_OPT_DATABASE
  *
- * - imagery: G_OPT_I_GROUP, G_OPT_I_SUBGROUP
+ *  - imagery: G_OPT_I_GROUP, G_OPT_I_SUBGROUP
  *
- * - raster: G_OPT_R_INPUT, G_OPT_R_INPUTS, G_OPT_R_OUTPUT, G_OPT_R_MAP, G_OPT_R_MAPS, G_OPT_R_BASE, G_OPT_R_COVER, G_OPT_R_ELEV, G_OPT_R_ELEVS
+ *  - raster: G_OPT_R_INPUT, G_OPT_R_INPUTS, G_OPT_R_OUTPUT, G_OPT_R_MAP, G_OPT_R_MAPS, G_OPT_R_BASE, G_OPT_R_COVER, G_OPT_R_ELEV, G_OPT_R_ELEVS
  *
- * - raster3d: G_OPT_R3_INPUT, G_OPT_R3_INPUTS, G_OPT_R3_OUTPUT, G_OPT_R3_MAP, G_OPT_R3_MAPS
+ *  - raster3d: G_OPT_R3_INPUT, G_OPT_R3_INPUTS, G_OPT_R3_OUTPUT, G_OPT_R3_MAP, G_OPT_R3_MAPS
  *
- * - vector: G_OPT_V_INPUT, G_OPT_V_INPUTS, G_OPT_V_OUTPUT, G_OPT_V_MAP, G_OPT_V_MAPS, G_OPT_V_TYPE, G_OPT_V_FIELD, G_OPT_V_CAT, G_OPT_V_CATS
+ *  - vector: G_OPT_V_INPUT, G_OPT_V_INPUTS, G_OPT_V_OUTPUT, G_OPT_V_MAP, G_OPT_V_MAPS, G_OPT_V_TYPE, G_OPT_V_FIELD, G_OPT_V_CAT, G_OPT_V_CATS
  *
  * \param[in] opt Type of Option struct to create
  *
- * \retval Option * Pointer to an Option struct
+ * \return Option * Pointer to an Option struct
  */
 
 struct Option *
@@ -657,11 +645,9 @@ G_define_standard_option (int opt)
 
 
 /**
- * \fn struct GModule *G_define_module (void)
- *
  * \brief Initializes a new module.
  *
- * \retval GModule * Pointer to a GModule struct
+ * \return GModule * Pointer to a GModule struct
  */
 
 struct GModule *
@@ -683,8 +669,6 @@ G_define_module (void)
 /* The main parsing routine */
 
 /**
- * \fn int G_parser (int argc, char **argv)
- *
  * \brief Parse command line.
  *
  * The command line parameters <b>argv</b> and the number of parameters 
@@ -1025,8 +1009,6 @@ static int uses_new_gisprompt (void)
 
 
 /**
- * \fn int G_usage (void)
- *
  * \brief Command line help/usage message.
  *
  * Calls to <i>G_usage()</i> allow the programmer to print the usage 
@@ -1228,8 +1210,6 @@ int G_usage (void)
 
 
 /**
- * \fn void print_escaped_for_xml (FILE * fp, const char * str)
- *
  * \brief Formats text for XML.
  *
  * \param[in,out] fp file to write to
@@ -2850,14 +2830,12 @@ static int gis_prompt (struct Option *opt, char *buff)
 }
 
 /**
- * \fn char *G_recreate_command (void)
- *
  * \brief Creates command to run non-interactive.
  *
  * Creates a command-line that runs the current command completely
  * non-interactive.
  *
- * \retval char * Pointer to a char string
+ * \return char * Pointer to a char string
  */
 char *G_recreate_command (void)
 {

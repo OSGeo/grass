@@ -1,22 +1,22 @@
 /**
  * \file zero_cell.c
  *
- * \brief Zero cell buffer functions.
+ * \brief GIS Library - Zero cell buffer functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn int G_zero_cell_buf (CELL *buf)
- *
  * \brief Zero a raster CELL buffer.
  *
  * This routines assigns each member of the raster buffer array 
@@ -39,8 +39,6 @@ int G_zero_cell_buf (CELL *buf)
 
 
 /**
- * \fn int G_zero_raster_buf (void *rast, RASTER_MAP_TYPE data_type)
- *
  * \brief Zero a raster buffer.
  *
  * This routines assigns each member of the raster buffer array 

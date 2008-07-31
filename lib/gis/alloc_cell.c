@@ -1,14 +1,16 @@
 /**
  * \file alloc_cell.c
  *
- * \brief Raster allocation routines.
+ * \brief GIS Library - Raster allocation routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <math.h>
@@ -22,8 +24,6 @@ static int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
 
 
 /**
- * \fn size_t G_raster_size (RASTER_MAP_TYPE data_type)
- *
  * \brief Returns size of a raster CELL in bytes.
  *
  * If <b>data_type</b> is CELL_TYPE, returns sizeof(CELL)
@@ -42,8 +42,6 @@ size_t G_raster_size (RASTER_MAP_TYPE data_type)
 
 
 /**
- * \fn CELL *G_allocate_cell_buf (void)
- *
  * \brief Allocate memory for a CELL type raster map.
  *
  * This routine allocates a buffer of type CELL just large enough to 
@@ -71,8 +69,6 @@ G_allocate_cell_buf (void)
 
 
 /**
- * \fn void *G_allocate_raster_buf (RASTER_MAP_TYPE data_type)
- *
  * \brief Allocate memory for a raster map of type <b>data_type</b>.
  *
  * Allocate an array of CELL, FCELL, or DCELL (depending on 
@@ -92,8 +88,6 @@ G_allocate_raster_buf  (RASTER_MAP_TYPE data_type)
 
 
 /**
- * \fn CELL *G_allocate_c_raster_buf (void)
- *
  * \brief Allocates memory for a raster map of type CELL.
  *
  * Allocate an array of CELL based on the number of columns in the 
@@ -110,8 +104,6 @@ G_allocate_c_raster_buf (void)
 
 
 /**
- * \fn FCELL *G_allocate_f_raster_buf (void)
- *
  * \brief Allocates memory for a raster map of type FCELL.
  *
  * Allocate an array of FCELL based on the number of columns in the 
@@ -128,8 +120,6 @@ G_allocate_f_raster_buf (void)
 
 
 /**
- * \fn DCELL *G_allocate_d_raster_buf (void)
- *
  * \brief Allocates memory for a raster map of type DCELL.
  *
  * Allocate an array of DCELL based on the number of columns in the 
@@ -146,8 +136,6 @@ G_allocate_d_raster_buf (void)
 
 
 /**
- * \fn char *G_allocate_null_buf (void)
- *
  * \brief Allocates memory for a null buffer.
  *
  * Allocate an array of char based on the number of columns in the 
@@ -164,8 +152,6 @@ G_allocate_null_buf (void)
 
 
 /**
- * \fn unsigned char *G__allocate_null_bits (int cols)
- *
  * \brief Allocates memory for null bits.
  *
  * Allocates an array of unsigned char based on <b>cols</b>.
@@ -183,8 +169,6 @@ G__allocate_null_bits (int cols)
 
 
 /**
- * \fn int G__null_bitstream_size (int cols)
- *
  * \brief Determines null bitstream size.
  *
  * \param[in] cols number of columns

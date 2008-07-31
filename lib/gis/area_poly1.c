@@ -1,14 +1,16 @@
 /**
  * \file area_poly1.c
  *
- * \brief Polygon area calculation routines.
+ * \brief GIS Library - Polygon area calculation routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <math.h>
@@ -47,8 +49,6 @@ static double Qbar(double x)
 
 
 /**
- * \fn int G_begin_ellipsoid_polygon_area (double a, double e2)
- *
  * \brief Begin area calculations.
  *
  * This initializes the polygon area calculations for the
@@ -87,8 +87,6 @@ int G_begin_ellipsoid_polygon_area (double a,double e2)
 
 
 /**
- * \fn double G_ellipsoid_polygon_area (const double *lon, const double *lat, int n)
- *
  * \brief Area of lat-long polygon.
  *
  * Returns the area in square meters of the polygon described by the 

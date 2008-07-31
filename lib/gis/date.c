@@ -1,14 +1,16 @@
 /**
  * \file date.c
  *
- * \brief Date functions.
+ * \brief GIS Library - Date functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <time.h>
@@ -16,8 +18,6 @@
 
 
 /**
- * \fn char *G_date (void)
- *
  * \brief Current date and time.
  *
  * Returns a pointer to a string which is the current date and time. The 

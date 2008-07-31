@@ -1,14 +1,22 @@
 /**
  * \file snprintf.c
  *
- * \brief snprintf() clone functions.
+ * \brief GIS Library - snprintf() clone functions.
+ *
+ *
+ * \todo if needed, implement alternative versions for portability.
+ *  potential code source:
+ *   - http://www.ijs.si/software/snprintf/
+ *   - openssh's snprintf() implementation: bsd-snprintf.c
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Markus Neteler
  *
- * \date 2006
+ * \date 2006-2008
  */
 
 #include <stdio.h>
@@ -18,19 +26,9 @@
 #include <assert.h>
 #include <grass/gis.h>
 
-
-/* TODO: if needed, implement alternative versions for portability.
-   potential code source:
-    - http://www.ijs.si/software/snprintf/
-    - openssh's snprintf() implementation: bsd-snprintf.c
- */
-
 /* #ifdef HAVE_SNPRINTF */
 
-
 /**
- * \fn int G_snprintf(char *str, size_t size, const char *fmt, ...)
- *
  * \brief snprintf() clone.
  *
  * <b>Note:</b> The use of <i>snprintf()</i>/<i>G_snprintf()</i> is 

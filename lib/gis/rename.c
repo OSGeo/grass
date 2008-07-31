@@ -1,7 +1,9 @@
 /**
  * \file rename.c
  *
- * \brief Rename file functions.
+ * \brief GIS Library - Rename file functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,12 +21,9 @@
 
 
 /**
- **\fn int G_rename_file (char *oldname, char *newname)
- **
  **\brief Rename a file in the filesystem.
  **
  **The file or directory <b>oldname</b> is renamed to <b>newname</b>.<br>
- **
  **
  ** \param[in] oldname
  ** \param[in] newname
@@ -43,8 +42,6 @@ int G_rename_file ( const char *oldname, const char *newname )
 }
 
 /**
- * \fn int G_rename (char *element, char *oldname, char *newname)
- *
  * \brief Rename a database file.
  *
  * The file or directory <b>oldname</b> under the database <b>element</b>

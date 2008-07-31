@@ -1,11 +1,15 @@
-/* rotate.c
+/*!
+ * \file rotate.c
  *
- *   Copyright (C) 2007 by Hamish Bowman, Glynn Clements
- *   Author(s): Hamish Bowman, Glynn Clements
+ * \brief GIS Library - rotate
  *
- *   This program is free software under the GNU General Public
- *   License (>=v2). Read the file COPYING that comes with GRASS
- *   for details.
+ * (C) 2001-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Hamish Bowman, Glynn Clements
  */
 
 #include <math.h>
@@ -17,17 +21,16 @@
 
 
 /*!
- * \fn void G_rotate_around_point(double, double, double*, double*, double)
+ * \brief Rotate point (double version)
  *
- * \desc given a point, angle, and origin, rotate the point around the origin 
+ * Given a point, angle, and origin, rotate the point around the origin 
  * by the given angle. Coordinates and results are double prec floating point.
  *
  * \param X0  X component of origin (center of circle)
  * \param Y0  Y component of origin (center of circle)
- * \param X1  X component of point to be rotated (variable is modified!)
- * \param Y1  Y component of point to be rotated (variable is modified!)
+ * \param[out] X1  X component of point to be rotated (variable is modified!)
+ * \param[out] Y1  Y component of point to be rotated (variable is modified!)
  * \param angle  in degrees, measured CCW from east
- * \return void
  */
 void G_rotate_around_point(double X0, double Y0, double *X1, double *Y1, double angle)
 {
@@ -42,21 +45,18 @@ void G_rotate_around_point(double X0, double Y0, double *X1, double *Y1, double 
 	*Y1 = Y0 + dy1;
 }
 
-
-
 /*!
- * \fn void G_rotate_around_point_int(int, int, int*, int*, double)
+ * \brief Rotate point (int version)
  *
- * \desc given a point, angle, and origin, rotate the point around the origin 
+ * Given a point, angle, and origin, rotate the point around the origin 
  * by the given angle. Coordinates are given in integer and results are rounded
  * back to integer.
  *
  * \param X0  X component of origin (center of circle)
  * \param Y0  Y component of origin (center of circle)
- * \param X1  X component of point to be rotated (variable is modified!)
- * \param Y1  Y component of point to be rotated (variable is modified!)
+ * \param[out] X1  X component of point to be rotated (variable is modified!)
+ * \param[out] Y1  Y component of point to be rotated (variable is modified!)
  * \param angle  in degrees, measured CCW from east
- * \return void
  */
 void G_rotate_around_point_int(int X0, int Y0, int *X1, int *Y1, double angle)
 {

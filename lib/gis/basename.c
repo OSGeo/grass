@@ -1,7 +1,9 @@
 /**
  * \file basename.c
  *
- * \brief Program basename routines.
+ * \brief GIS Library - Program basename routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -18,8 +20,6 @@
 
 
 /**
- * \fn char * G_basename (char *filename, const char *desired_ext)
- *
  * \brief Truncates filename to the base part (before the last '.')
  * if it matches the extension, otherwise leaves it unchanged.
  * 

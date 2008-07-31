@@ -1,14 +1,16 @@
 /**
  * \file squeeze.c
  *
- * \brief String white space removal functions.
+ * \brief GIS Library - String white space removal functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1998-2006
+ * \date 1998-2008
  */
 
 #include <ctype.h>
@@ -28,8 +30,6 @@
 
 
 /**
- * \fn char *G_squeeze (char *line)
- *
  * \brief Remove superfluous white space.
  *
  * Leading and trailing white space is removed from the string 

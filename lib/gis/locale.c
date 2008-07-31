@@ -1,14 +1,16 @@
 /**
  * \file locale.c
  *
- * \brief Functions to handle locale.
+ * \brief GIS Library - Functions to handle locale.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 2004-2006
+ * \date 2004-2008
  */
 
 #include <grass/config.h>
@@ -41,8 +43,6 @@ locale_dir(void)
 
 
 /**
- * \fn char *G_gettext (const char *package, const char *msgid)
- *
  * \brief Gets localized text.
  *
  * \param[in] package

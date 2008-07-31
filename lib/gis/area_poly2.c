@@ -1,22 +1,22 @@
 /**
  * \file area_poly2.c
  *
- * \brief Planimetric polygon area calculation routines.
+ * \brief GIS Library - Planimetric polygon area calculation routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn double G_planimetric_polygon_area (const double *x, const double *y, int n)
- *
  * \brief Calculates planimetric polygon area.
  *
  * \param[in] x array of x values

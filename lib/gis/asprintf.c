@@ -1,7 +1,7 @@
 /**
  * \file asprintf.c
  *
- * \brief GRASS implementation of asprintf().
+ * \brief GIS Library - GRASS implementation of asprintf().
  *
  * Eric G. Miller - Thu, 2 May 2002 17:51:54 -0700
  *
@@ -14,12 +14,14 @@
  * <b>WARNING:</b> Temporarily, the G_asprintf macro cannot be used. See 
  * explanation in gisdefs.h.
  *
+ * (C) 2001-2008 by the GRASS Development Team
+ *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Eric Miller - egm2 at jps net
  *
- * \date 2002-2006
+ * \date 2002-2008
  */
 
 #define _GNU_SOURCE /* enable asprintf */
@@ -39,8 +41,6 @@
 #ifndef G_asprintf
 
 /**
- * \fn int G_asprintf (char **out, const char *fmt, ...)
- *
  * \brief Safe replacement for <i>asprintf()</i>.
  *
  * Allocate a string large enough to hold the new output, including the 

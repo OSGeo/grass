@@ -1,14 +1,16 @@
 /**
  * \file myname.c
  *
- * \brief Database name functions.
+ * \brief GIS Library - Database name functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <string.h>
@@ -17,8 +19,6 @@
 
 
 /**
- * \fn char *G_myname ()
- *
  * \brief Returns location title.
  *
  * Returns a one line title for the database location. This title is 
