@@ -1,7 +1,9 @@
 /**
  * \file spawn.c
  *
- * \brief Handles process spawning.
+ * \brief GIS Library -  Handles process spawning.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -40,8 +42,6 @@
 
 
 /**
- * \fn int G_spawn (char *command, ...)
- *
  * \brief Spawns a new process.
  *
  * A more useful alternative to G_system(), which takes the 
@@ -603,6 +603,16 @@ static void parse_arglist(va_list va)
 	}
 }
 
+/**
+ * \brief Spawn new process based on <b>command</b>.
+ *
+ * This is a more advanced version of G_spawn().
+ *
+ * \param[in] command
+ * \param[in] args arguments
+ * \return -1 on error
+ * \return process status on success
+ */
 int G_vspawn_ex(const char *command, const char **args)
 {
 	begin_spawn();
@@ -613,8 +623,6 @@ int G_vspawn_ex(const char *command, const char **args)
 }
 
 /**
- * \fn int G_spawn_ex(char *command, ...)
- *
  * \brief Spawn new process based on <b>command</b>.
  *
  * This is a more advanced version of G_spawn().

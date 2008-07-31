@@ -1,14 +1,16 @@
 /**
  * \file adj_cellhd.c
  *
- * \brief CELL header adjustment.
+ * \brief GIS Library - CELL header adjustment.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
@@ -16,8 +18,6 @@
 
 
 /**
- * \fn char *G_adjust_Cell_head (struct Cell_head *cellhd, int row_flag, int col_flag)
- *
  * \brief Adjust cell header.
  *
  * This function fills in missing parts of the input
@@ -160,8 +160,6 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd,int row_flag,int col_flag)
 
 
 /**
- * \fn char *G_adjust_Cell_head3 (struct Cell_head *cellhd, int row_flag, int col_flag, int depth_flag)
- *
  * \brief Adjust cell header for 3D values.
  *
  * This function fills in missing parts of the input

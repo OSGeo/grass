@@ -3,6 +3,8 @@
  *
  * \brief Set window
  *
+ * (C) 2001-2008 by the GRASS Development Team
+ *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
@@ -16,16 +18,13 @@
 #include "G.h"
 
 /**
- * \fn int G_get_set_window (struct Cell_head *window)
- *
  * \brief Get the current working window.
  *
  * The current working window values are returned in the structure
  * 'window'.
  *
- * \return 1
- *
  * \param[out] window window structure to be set
+ * \return 1
  */
 int G_get_set_window (struct Cell_head *window)
 {
@@ -37,16 +36,14 @@ int G_get_set_window (struct Cell_head *window)
 
 
 /**
- * \fn int G_set_window (struct Cell_head *window)
- *
  * \brief Establishes 'window' as the current working window.
  * 
  * Any opened cell files has its file-to-window mapping reworked.
  *
+ * \param[in] window window to become operative window
+ * 
  * \return -1 on error
  * \return  1 on success
- *
- * \param[in] window window to become operative window
  */
 int G_set_window (struct Cell_head *window)
 {

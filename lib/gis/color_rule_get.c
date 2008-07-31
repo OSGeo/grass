@@ -1,10 +1,26 @@
+/**
+ * \file color_rule_get.c
+ *
+ * \brief GIS Library - Get color rules.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License 
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author GRASS GIS Development Team
+ *
+ * \date 1999-2008
+ */
+
 #include <grass/gis.h>
 
 /*! 
- \fn G_colors_count ( struct Colors *colors )
- \brief get both modular and fixed rules count 
- \return number of rules in color table
- \param colors pointer to color table structure
+  \brief Get both modular and fixed rules count 
+
+  \param colors pointer to color table structure
+  
+  \return number of rules in color table
 */
 int G_colors_count ( const struct Colors *colors )
 {
@@ -33,13 +49,19 @@ int G_colors_count ( const struct Colors *colors )
 }
 
 /*! 
- \fn G_get_f_color_rule ( struct Colors *colors )
- \brief get color rule from both modular and fixed rules
-        rules are returned in the order as stored in the table (i.e. unexpected, high values first)
- \return 0 success 
- \return 1 index out of range  
- \param colors pointer to color table structure
- \param rule rule index from 0 to G_color_count()-1
+  \brief Get color rule from both modular and fixed rules
+
+  Rules are returned in the order as stored in the table (i.e. unexpected, high values first)
+
+  \param val1 color value
+  \param[out] r1,g1,b1 color value
+  \param val2 color value
+  \param[out] r2,g2,b2 color value
+  \param colors pointer to color table structure
+  \param rule rule index from 0 to G_color_count()-1
+
+  \return 0 success 
+  \return 1 index out of range  
 */
 int G_get_f_color_rule ( DCELL *val1, unsigned char *r1, unsigned char *g1, unsigned char *b1,
 			 DCELL *val2, unsigned char *r2, unsigned char *g2, unsigned char *b2, 
@@ -92,4 +114,3 @@ int G_get_f_color_rule ( DCELL *val1, unsigned char *r1, unsigned char *g1, unsi
 
     return 0;
 }
-

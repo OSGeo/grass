@@ -1,9 +1,11 @@
 /*!
  * \file strings.c
  * 
- * \brief string/chring movement functions
+ * \brief GIS Library - string/chring movement functions
  *
- * (C) 1999-2007 by the GRASS Development Team
+ * \todo merge interesting functions from ../datetime/scan.c here
+ *
+ * (C) 1999-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -12,67 +14,6 @@
  * \author Dave Gerdes (USACERL), Michael Shapiro (USACERL), Amit
  * Parghi (USACERL), Bernhard Reiter (Intevation GmbH, Germany) and
  * many others
- */
-
-/* TODO: merge interesting functions from 
-   ../datetime/scan.c
-   here
-*/
-
-/*
- * string/chring movement functions
- *
-** G_strcpy (T, F)
-** G_strncpy (T, F, n)	copy F up to null or n, always copy null
-** G_chrcpy (T, F, n)
-** G_strmov (T, F)
-** G_chrmov (T, F, n)
-** G_strcat (T, F)
-** G_chrcat (T, F, n)
-**     char *T, *F;
-**     int n;
- *
- * G_strcpy (T, F)    copy F up to null, copy null
- * G_chrcpy (T, F, n) copy F up to n,    copy null
- * 
- * G_strmov (T, F)    copy F up to null
- * G_chrmov (T, F, n) copy F up to n
- * 
- * G_strcat (T, F)    cat F up to null, copy null
- * G_chrcat (T, F, n) cat F up to n,    copy null
- *
- * the -cpy and -cat functions are for null-terminated destinations;
- * the -mov functions are for non-null-terminated ('chring') destinations.
- * all functions return 'T'.
- *
- * Author Dave Gerdes (USACERL)
- *
- *
- * G_strcasecmp(a, b) char *a, *b;
- *   string compare ignoring case (upper or lower)
- *   returns: -1 a<b; 0 a==b; 1 a>b
- *
- * Author Michael Shapiro (USACERL)
- *
- *
- * G_strstr(mainString, subString)
- *	Return a pointer to the first occurrence of subString
- *	in mainString, or NULL if no occurrences are found.
- * G_strdup(string)
- *	Return a pointer to a string that is a duplicate of the string
- *	given to G_strdup.  The duplicate is created using malloc.
- *	If unable to allocate the required space, NULL is returned.
- *
- * Author: Amit Parghi (USACERL), 1993 02 23
- *
- * G_strchg(char* bug, char character, char new) {
- *      replace all occurencies of character in string(inplace) with new
- *
- * Author: Bernhard Reiter (Intevation GmbH, Germany)
- *
- * char * G_str_replace(char* buffer, char* old_str, char* new_str)
- *  Replace all occurencies of old_str in buffer with new_str
- *  Author Beverly Wallace (LMCO)
  */
 
 #include <string.h>
@@ -93,16 +34,14 @@ static char *G_strend (const char *S)
 }
 
 /*!
- * \fn char *G_strcpy (char *T, const char *F)
- *
  * \brief Copies characters from the string F into the string T.
  *
  * This function has undefined results if the strings overlap.
  *
- * \return T value
- *
  * \param[out] T target string 
  * \param[in] F source string
+ *
+ * \return pointer to T
  */
 char *G_strcpy (char *T, const char *F)
 {
@@ -114,19 +53,16 @@ char *G_strcpy (char *T, const char *F)
 }
 
 /*!
- * \fn char *G_chrcpy (char *T, const char *F, int n)
- *
  * \brief Copies characters from the string F into the string T.
  * 
  * Copies just the first n characters from the string F. At the end
  * the null terminator is written into the string T.
  *
- *
- * \return T value 
- *
  * \param[out] T target string
  * \param[in] F source string
  * \param[in] n number of characters to copy
+ *
+ * \return T value 
  */
 char *G_chrcpy (char *T, const char *F, int n)
 {
@@ -139,8 +75,6 @@ char *G_chrcpy (char *T, const char *F, int n)
 }
 
 /*!
- * \fn char *G_strncpy (char *T, const char *F, int n)
- *
  * \brief This function is similar to G_chrcpy() but always copies at least
  * n characters into the string T.
  * 
@@ -148,11 +82,11 @@ char *G_chrcpy (char *T, const char *F, int n)
  * characters. At the end the null terminator is written into the
  * string T.
  *
- * \return T value
- *
  * \param[out] T target string
  * \param[in] F source string
  * \param[in] n number of characters to copy
+ *
+ * \return T value
  */
 char *G_strncpy (char *T, const char *F, int n)
 {
@@ -165,15 +99,13 @@ char *G_strncpy (char *T, const char *F, int n)
 }
 
 /*!
- * \fn char *G_strmov (char *T, const char *F)
- *
  * \brief Copies characters from the string F (not including the
  * terminating null character) into the string T.
  *
- * \return T value
- *
  * \param[out] T target string
  * \param[in] F source string
+ *
+ * \return T value
  */
 char *G_strmov (char *T, const char *F)
 {
@@ -185,19 +117,17 @@ char *G_strmov (char *T, const char *F)
 }
 
 /*!
- * \fn char *G_chrmov (char *T, const char *F, int n)
- *
  * \brief This copies characters from the string F (exactly n
  * characters) into the string T.
  *
  * The terminating null character is not explicitly written into the
  * string T.
  *
- * \return T value
- *
  * \param[out] T target string
  * \param[in] F source string
  * \param[in] n number of characters to copy
+ *
+ * \return T value
  */
 char *G_chrmov (char *T, const char *F, int n)
 {
@@ -209,8 +139,6 @@ char *G_chrmov (char *T, const char *F, int n)
 }
 
 /*!
- * \fn char *G_strcat (char *T, const char *F)
- *
  * \brief This copies characters from the string F into the string T.
  *
  * This function is similar to G_strcpy(), except that the
@@ -218,10 +146,10 @@ char *G_chrmov (char *T, const char *F, int n)
  * T, instead of overwriting it.  That is, the first character from
  * F overwrites the null character marking the end of T.
  *
- * \return T value
- *
  * \param[out] T target string
  * \param[in] F source string
+ *
+ * \return T value
  */
 char *G_strcat (char *T, const char *F)
 {
@@ -230,8 +158,6 @@ char *G_strcat (char *T, const char *F)
 }
 
 /*!
- * \fn char *G_chrcat (char *T, const char *F, int n)
- *
  * \brief This function is like G_strcat() except that not more than n
  * characters from F are appended to the end of T.
  *
@@ -240,11 +166,11 @@ char *G_strcat (char *T, const char *F)
  * T, instead of overwriting it.  That is, the first character from
  * F overwrites the null character marking the end of T.
  *
- * \return T value
- *
  * \param[out] T target string
  * \param[in] F source string
  * \param[in] n number of character to copy
+ *
+ * \return T value
  */
 char *G_chrcat (char *T, const char *F, int n)
 {
@@ -253,18 +179,16 @@ char *G_chrcat (char *T, const char *F, int n)
 }
 
 /*!
- * \fn int G_strcasecmp(const char *x, const char *y)
- *
  * \brief String compare ignoring case (upper or lower)
  *
  * Returning a value that has the same sign as the difference between
  * the first differing pair of characters
  *
- * \return 0 the two strings are equal
- * \return -1, 1
- *
  * \param[in] x first string to compare
  * \param[in] y second string to compare
+ *
+ * \return 0 the two strings are equal
+ * \return -1, 1
  */
 int G_strcasecmp(const char *x, const char *y)
 {
@@ -291,17 +215,15 @@ int G_strcasecmp(const char *x, const char *y)
 }
 
 /*!
- * \fn char *G_strstr(char *mainString, const char *subString)
- *
  * \brief Finds the first occurrence of the character C in the
  * null-terminated string beginning at mainString
+ *
+ * \param[in] mainString string where to find sub-string
+ * \param[in] subString sub-string
  *
  * \return a pointer to the first occurrence of subString in
  * mainString
  * \return NULL if no occurrences are found
- *
- * \param[in] mainString string where to find sub-string
- * \param[in] subString sub-string
  */
 char *G_strstr(const char *mainString, const char *subString)
 {
@@ -328,16 +250,14 @@ char *G_strstr(const char *mainString, const char *subString)
 }
 
 /*!
- * \fn char *G_strdup(const char *string)
- *
  * \brief Copies the null-terminated string into a newly
  * allocated string. The string is allocated using G_malloc().
+ *
+ * \param[in] string the string to duplicate
  *
  * \return pointer to a string that is a duplicate of the string
  *  given to G_strdup().
  * \return NULL if unable to allocate the required space
- *
- * \param[in] string the string to duplicate
  */
 char *G_strdup(const char *string)
 {
@@ -353,15 +273,13 @@ char *G_strdup(const char *string)
 }
 
 /*!
- * \fn char *G_strchg(char* bug, char character, char new)
- *
  * \brief Replace all occurencies of character in string bug with new
- *
- * \return bug string
  *
  * \param[in,out] bug base string
  * \param[in] character character to replace
  * \param[in] new new character
+ *
+ * \return bug string
  */
 char *G_strchg(char* bug, char character, char new)
 {
@@ -375,23 +293,21 @@ char *G_strchg(char* bug, char character, char new)
 }
 
 /*!
- * \fn char *G_str_replace(char* buffer, const char* old_str, const char* new_str) 
- *
  * \brief Replace all occurencies of old_str in buffer with new_str
  *
  * Code example:
- * \verbatim
+ * \code
  * char *name;
  * name = G_str_replace ( inbuf, ".exe", "" );
  * ... 
  * G_free (name);
- * \endverbatim
- *
- * \return the newly allocated string, input buffer is unchanged 
+ * \endcode
  *
  * \param[in,out] buffer main string
  * \param[in] old_str string to replace
  * \param[in] new_str new string
+ *
+ * \return the newly allocated string, input buffer is unchanged 
  */
 char *G_str_replace(char* buffer, const char* old_str, const char* new_str) 
 {
@@ -460,14 +376,11 @@ char *G_str_replace(char* buffer, const char* old_str, const char* new_str)
 }
 
 /*!
- * \fn int G_strip(register char *buf)
- *
  * \brief Removes all leading and trailing white space from string.
- *
- * \return 0
  *
  * \param[in,out] buf buffer to be worked on
  *
+ * \return 0
  */
 int G_strip (char *buf)
 {
@@ -494,25 +407,14 @@ int G_strip (char *buf)
 }
 
 /*!
- * \fn char *G_chop (char *line)
- *
  * \brief Chop leading and trailing white spaces:
  * \verbatim space, \f, \n, \r, \t, \v \endverbatim
  *
- * \return pointer to string
+ * modified copy of G_squeeze();    RB March 2000 <Radim.Blazek@dhv.cz>
  *
  * \param line buffer to be worked on
- */
-/*
- * G_chop - chop leading and trailing white spaces: 
- *          space, \f, \n, \r, \t, \v
- *        - returns pointer to string
- *    
- * char *G_chop (char *s)
  *
- * modified copy of G_squeeze();    RB March 2000
- *                          <Radim.Blazek@dhv.cz>
- *
+ * \return pointer to string
  */
 char *G_chop (char *line)
 {
@@ -542,8 +444,6 @@ char *G_chop (char *line)
 }
 
 /*!
- * \fn void G_str_to_upper (char *str)
- *
  * \brief Convert string to upper case
  *
  * \param[in,out] str pointer to string
@@ -562,8 +462,6 @@ void G_str_to_upper (char *str)
 }
 
 /*!
- * \fn void G_str_to_lower (char *str)
- *
  * \brief Convert string to lower case
  *
  * \param[in,out] str pointer to string
@@ -582,13 +480,11 @@ void G_str_to_lower (char *str)
 }
 
 /*!
- * \fn int G_str_to_sql (char *str)
- *
  * \brief Make string SQL compliant
  *
- * \return number of changed characters
- *
  * \param[in,out] str pointer to string
+ *
+ * \return number of changed characters
  */
 int G_str_to_sql (char *str)
 {

@@ -1,7 +1,7 @@
 /**
  * \file user_config.c
  *
- * \brief Routines related to user's GRASS configuration, tmp, and 
+ * \brief GIS Library - Routines related to user's GRASS configuration, tmp, and 
  * miscellaneous files.
  *
  * Functions related to the user's GRASS configuration, tmp, and 
@@ -13,6 +13,8 @@
  * provided as a candidate for handling $HOME/.grass files and 
  * subdirectories. There may be more functionality desired (such as 
  * deletion routines, directory globs).<br>
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -294,8 +296,6 @@ _make_sublevels(const char *elems)
 
     
 /**
- * \fn char *G_rc_path (char *element, char *item)
- *
  * \brief Returns path to <b>element</b> and <b>item</b>.
  *
  * Either <b>element</b> or <b>item</b> can be NULL, but not both.  If 

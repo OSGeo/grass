@@ -1,11 +1,13 @@
 /**
  * \file distance.c
  *
- * \brief Distance calculation functions.
+ * \brief GIS Library - Distance calculation functions.
  *
  * WARNING: this code is preliminary and may be changed,
  * including calling sequences to any of the functions
  * defined here.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -17,7 +19,7 @@
 
 #include <math.h>
 #include <grass/gis.h>
-
+#include <grass/glocale.h>
 
 static double min4(double, double, double, double);
 static double min2(double, double);
@@ -28,8 +30,6 @@ static double factor = 1.0;
 
 
 /**
- * \fn int G_begin_distance_calculations (void)
- *
  * \brief Begin distance calculations.
  *
  * Initializes the distance calculations. It is used both for the
@@ -64,8 +64,6 @@ int G_begin_distance_calculations(void)
 
 
 /**
- * \fn double G_distance (double e1, double n1, double e2, double n2)
- *
  * \brief Returns distance in meters.
  *
  * This routine computes the distance, in meters, from
@@ -73,11 +71,9 @@ int G_begin_distance_calculations(void)
  * latitude-longitude, this distance is measured along the geodesic. Two
  * routines perform geodesic distance calculations.
  *
- * \param[in] x1
- * \param[in] y1
- * \param[in] x2
- * \param[in] y2
- * \return double
+ * \param[in] e1,n1 east-north coordinates of first point
+ * \param[in] e2,n2 east-north coordinates of second point
+ * \return distance
  */
 
 double G_distance (double e1,double n1,double e2,double n2)
@@ -90,18 +86,10 @@ double G_distance (double e1,double n1,double e2,double n2)
 
 
 /**
- * \fn double G_distance_between_line_segments (double ax1, double ay1, double ax2, double ay2, double bx1, double by1, double bx2, double by2)
- *
  * \brief Returns distance between two line segments in meters.
  *
- * \param[in] ax1
- * \param[in] ay1
- * \param[in] ax2
- * \param[in] ay2
- * \param[in] bx1
- * \param[in] by2
- * \param[in] bx2
- * \param[in] by2
+ * \param[in] ax1,ay2,ax2,ay2 first segment
+ * \param[in] bx1,by2,bx2,by2 second segment
  * \return double
  */
 
@@ -130,17 +118,12 @@ G_distance_between_line_segments (
 
 
 /**
- * \fn double G_distance_point_to_line_segment (double xp, double yp, double x1, double y1, double x2, double y2)
- *
  * \brief Returns distance between a point and line segment in meters.
  *
- * \param[in] xp
- * \param[in] yp
- * \param[in] x1
- * \param[in] y1
- * \param[in] x2
- * \param[in] y2
- * \return double
+ * \param[in] xp,yp point coordinates
+ * \param[in] x1,x1 segment point coordinates
+ * \param[in] x2,y2 segment point coordinates
+ * \return distance
  */
 
 double
@@ -179,8 +162,9 @@ G_distance_point_to_line_segment (
 	break;
     default:
 	/* parallel/colinear cases shouldn't occur with perpendicular lines */
-	fprintf (stderr,"G_distance_point_to_line_segment: shouldn't happen\n");
-fprintf(stderr," code=%d P=(%f,%f) S=(%f,%f)(%f,%f)\n",t,xp,yp,x1,y1,x2,y2);
+	G_warning (_("G_distance_point_to_line_segment: shouldn't happen: "
+		     "code=%d P=(%f,%f) S=(%f,%f)(%f,%f)"),
+		   t, xp, yp, x1, y1, x2, y2);
 	return -1.0;
     }
 

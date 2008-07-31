@@ -1,14 +1,16 @@
 /**
  * \file window_map.c
  *
- * \brief Window mapping functions.
+ * \brief GIS Library - Window mapping functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdlib.h>
@@ -20,8 +22,6 @@
 
 
 /**
- * \fn int G__create_window_mapping (int fd)
- *
  * \brief Create window mapping.
  *
  * Creates mapping from cell header into window. The boundaries and 
@@ -99,12 +99,10 @@ int G__create_window_mapping (int fd)
 	}
     }
 
-#ifdef DEBUG
-    fprintf (stderr, "create window mapping (%d cols)", G__.window.cols);
+    G_debug (3, "create window mapping (%d cols)", G__.window.cols);
     for (i = 0; i < G__.window.cols; i++)
-        fprintf (stderr, "%s%ld", i%15?" ":"\n", (long)fcb->col_map[i]);
+	G_debug(3, "%s%ld", i%15?" ":"\n", (long)fcb->col_map[i]);
     fprintf (stderr, "\n");
-#endif
 
     /* compute C1,C2 for row window mapping */
     fcb->C1 = G__.window.ns_res / fcb->cellhd.ns_res ;
@@ -115,8 +113,6 @@ int G__create_window_mapping (int fd)
 
 
 /**
- * \fn double G_northing_to_row (double north, const struct Cell_head *window)
- *
  * \brief Northing to row.
  *
  * Converts a <b>north</b>ing relative to a <b>window</b> to a row.<br>
@@ -125,7 +121,7 @@ int G__create_window_mapping (int fd)
  *
  * \param[in] north
  * \param[in] window
- * \return double
+ * \return row id
  */
 
 double G_northing_to_row (double north,
@@ -136,8 +132,6 @@ double G_northing_to_row (double north,
 
 
 /**
- * \fn double G_adjust_east_longitude (double east, double west)
- *
  * \brief Adjust east longitude.
  *
  * This routine returns an equivalent <b>east</b> that is
@@ -148,7 +142,7 @@ double G_northing_to_row (double north,
  *
  * \param[in,out] east
  * \param[in] west
- * \return double returns east
+ * \return east coordinate
  */
 
 double G_adjust_east_longitude (
@@ -164,8 +158,6 @@ double G_adjust_east_longitude (
 
 
 /**
- * \fn double G_adjust_easting (double east, const struct Cell_head *window)
- *
  * \brief Returns east larger than west.
  *
  * If the region projection is <i>PROJECTION_LL</i>, then this routine 
@@ -176,7 +168,7 @@ double G_adjust_east_longitude (
  *
  * \param[in,out] east
  * \param[in] window
- * \return double returns east
+ * \return east coordinate
  */
 
 double G_adjust_easting ( double east,
@@ -194,8 +186,6 @@ double G_adjust_easting ( double east,
 
 
 /**
- * \fn double G_easting_to_col (double east, const struct Cell_head *window)
- *
  * \brief Easting to column.
  *
  * Converts <b>east</b> relative to a <b>window</b> to a column.<br>
@@ -204,7 +194,7 @@ double G_adjust_easting ( double east,
  *
  * \param[in] east
  * \param[in] window
- * \return double
+ * \return column id
  */
 
 double G_easting_to_col ( double east,
@@ -217,22 +207,20 @@ double G_easting_to_col ( double east,
 
 
 /**
- * \fn double G_row_to_northing (double row, const struct Cell_head *window)
- *
  * \brief Row to northing.
  *
  * Converts a <b>row</b> relative to a <b>window</b> to a
  * northing.<br>
  * <b>Note:</b> row is a double:
- * - row+0.0 will return the northing for the northern edge of the row.<br>
- * - row+0.5 will return the northing for the center of the row.<br>
- * - row+1.0 will return the northing for the southern edge of the row.<br>
+ *  - row+0.0 will return the northing for the northern edge of the row.<br>
+ *  - row+0.5 will return the northing for the center of the row.<br>
+ *  - row+1.0 will return the northing for the southern edge of the row.<br>
  * <b>Note:</b> The result is a <i>double</i>. Casting it to an 
  * <i>int</i> will give the column number.
  *
  * \param[in] row
  * \param[in] window
- * \return double
+ * \return north coordinate
  */
 
 double G_row_to_northing ( double row,
@@ -243,19 +231,17 @@ double G_row_to_northing ( double row,
 
 
 /**
- * \fn double G_col_to_easting (double col, const struct Cell_head *window)
- *
  * \brief Column to easting.
  *
  * Converts a <b>col</b> relative to a <b>window</b> to an easting.<br>
  * <b>Note:</b> <b>col</b> is a <i>double</i>:<br>
- * - col+0.0 will return the easting for the western edge of the column.<br>
- * - col+0.5 will return the easting for the center of the column.<br>
- * - col+1.0 will return the easting for the eastern edge of the column.<br>
+ *  - col+0.0 will return the easting for the western edge of the column.<br>
+ *  - col+0.5 will return the easting for the center of the column.<br>
+ *  - col+1.0 will return the easting for the eastern edge of the column.<br>
  *
  * \param[in] col
  * \param[in] window
- * \return double
+ * \return east coordinate
  */
 
 double G_col_to_easting (double col,
@@ -266,8 +252,6 @@ double G_col_to_easting (double col,
 
 
 /**
- * \fn int G_window_rows ()
- *
  * \brief Number of rows in active window.
  *
  * This routine returns the number of rows in the active module window. 
@@ -288,7 +272,7 @@ double G_col_to_easting (double col,
   }
  \endcode 
  *
- *  \return int number of rows
+ *  \return number of rows
  */
 
 int G_window_rows (void)
@@ -300,8 +284,6 @@ int G_window_rows (void)
 
 
 /**
- * \fn int G_window_cols ()
- *
  * \brief Number of columns in active window.
  *
  * These
@@ -323,7 +305,7 @@ int G_window_rows (void)
   }
  \endcode 
  *
- * \return int number of columns
+ * \return number of columns
  */
 
 int G_window_cols (void)
@@ -335,8 +317,6 @@ int G_window_cols (void)
 
 
 /**
- * \fn int G__init_window ()
- *
  * \brief Initialize window.
  *
  * \return always returns 0
@@ -355,8 +335,6 @@ int G__init_window (void)
 
 
 /**
- * \fn int G_row_repeat_nomask (int fd, int row)
- *
  * \brief Loops rows until mismatch?.
  *
  * This routine works fine if the mask is not set. It may give incorrect 

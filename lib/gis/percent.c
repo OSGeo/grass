@@ -1,14 +1,16 @@
 /**
  * \file percent.c
  *
- * \brief Percentage progress functions.
+ * \brief GIS Library - percentage progress functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -20,8 +22,6 @@ static int first = 1;
 
 
 /**
- * \fn int G_percent (long n, long d, int s)
- *
  * \brief Print percent complete messages.
  *
  * This routine prints a percentage complete message to stderr. The
@@ -59,8 +59,6 @@ int G_percent (long n,long d,int s)
 
 
 /**
- * \fn int G_percent2 (long n, long d, int s, FILE *out)
- *
  * \brief Print percent complete messages.
  *
  * This routine prints a percentage complete message to stderr. The
@@ -141,8 +139,6 @@ int G_percent2 (long n,long d,int s, FILE *out)
 
 
 /**
- * \fn int G_percent_reset (void)
- *
  * \brief Reset G_percent() to 0%; do not add newline.
  *
  * \return always returns 0

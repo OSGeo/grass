@@ -1,14 +1,16 @@
 /**
  * \file alloc.c
  *
- * \brief Memory allocation routines.
+ * \brief GIS Library - Memory allocation routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdlib.h>
@@ -17,8 +19,6 @@
 
 
 /**
- * \fn void *G_malloc (size_t n)
- *
  * \brief Memory allocation.
  *
  * Allocates a block of
@@ -45,8 +45,6 @@ void *G_malloc (size_t n)
 
 
 /**
- * \fn void *G_calloc (size_t m, size_t n)
- *
  * \brief Memory allocation.
  *
  * Allocates a
@@ -78,8 +76,6 @@ void *G_calloc (size_t m, size_t n)
 
 
 /**
- * \fn void *G_realloc (void *buf, size_t n)
- *
  * \brief Memory reallocation.
  *
  * Changes the
@@ -114,8 +110,6 @@ void *G_realloc (void *buf, size_t n)
 
 
 /**
- * \fn void G_free(void *buf)
- *
  * \brief Free allocated memory.
  *
  * \param[in,out] buf buffer holding original data

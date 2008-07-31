@@ -1,14 +1,16 @@
 /**
  * \file system.c
  *
- * \brief Command execution functions.
+ * \brief GIS Library - Command execution functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/config.h>
@@ -25,8 +27,6 @@
 
 
 /**
- * \fn int G_system (char *command)
- *
  * \brief Run a shell level command.
  *
  * This is essentially the UNIX <i>system()</i> call, except for the 

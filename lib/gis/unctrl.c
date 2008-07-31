@@ -1,7 +1,9 @@
 /**
  * \file unctrl.c
  *
- * \brief Handles control characters.
+ * \brief GIS Library - Handles control characters.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -16,8 +18,6 @@
 
 
 /**
- * \fn char *G_unctrl (int c)
- *
  * \brief Printable version of control character.
  *
  * This routine returns a pointer to a string which contains an
@@ -27,7 +27,7 @@
  * represented by DEL/RUB. Normal characters remain unchanged.
  *
  * \param[in] int c
- * \retval char * pointer to string containing English-like representation for character <b>c</b>
+ * \return char * pointer to string containing English-like representation for character <b>c</b>
  */
 
 char *G_unctrl (int c)

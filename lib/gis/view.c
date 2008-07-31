@@ -1,14 +1,16 @@
 /**
  * \file view.c
  *
- * \brief 3D View functions.
+ * \brief GIS Library - 3D View functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Bill Brown - US Army CERL
  *
- * \date 1992-2006
+ * \date 1992-2008
  */
 
 #include <stdio.h>
@@ -32,8 +34,6 @@ static int Suppress_warn = 0;
 
 
 /**
- * \fn int G_3dview_warning (int b)
- *
  * \brief Turns 3D View warnings on and off.
  *
  * If Suppress_warn is 0, a warning will be printed if less than 95% of
@@ -52,8 +52,6 @@ int G_3dview_warning(int b)
 
 
 /**
- * \fn int G_get_3dview_defaults (struct G_3dview *v, struct Cell_head *w)
- *
  * \brief Sets default for <b>v</b> based on <b>w</b>.
  *
  * \param[in,out] v
@@ -110,8 +108,6 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
 
 
 /**
- * \fn int G_put_3dview (char *fname, char *mapset, struct G_3dview *View, struct Cell_head *Win)
- *
  * \brief Saves info to a 3d.view file.
  *
  * The address of a window (struct Cell_head *) may be passed, or if 
@@ -238,8 +234,6 @@ int G_put_3dview(const char *fname, const char *mapset,
 
 
 /**
- * \fn int G_get_3dview (char *fname, char *mapset, struct G_3dview *View)
- *
  * \brief Gets a 3D View.
  *
  * If reading an old format, the window boundaries are not checked 

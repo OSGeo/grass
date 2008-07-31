@@ -1,14 +1,16 @@
 /**
  * \file align_window.c
  *
- * \brief Window alignment functions.
+ * \brief GIS Library - Window alignment functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -17,8 +19,6 @@
 
 
 /**
- * \fn char *G_align_window (struct Cell_head *window, const struct Cell_head *ref)
- *
  * \brief Align two regions.
  *
  * Modifies the input <b>window</b> to align to

@@ -1,7 +1,7 @@
 /**
  * \file rhumbline.c
  *
- * \brief Rhumbline calculation routines.
+ * \brief GIS Library - Rhumbline calculation routines.
  *
  * From "Map Projections" by Peter Richardus and Ron K. Alder, 1972<br>
  * (526.8 R39m in Map & Geography Library)<br>
@@ -16,12 +16,14 @@
  * <br>
  * <b>WARNING:</b> This code is preliminary. It may not even be correct.
  *
+ * (C) 2001-2008 by the GRASS Development Team
+ *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <math.h>
@@ -39,17 +41,13 @@ static int parallel;
 
 
 /**
- * \fn int G_begin_rhumbline_equation (double lon1, double lat1, double lon2, double lat2)
- *
  * \brief Start rhumbline calculations.
  *
  * <b>Note:</b> This function must be called before other rhumbline 
  * functions to initialize parameters.
  *
- * \param[in] lon1 first longitude
- * \param[in] lat1 first latitude
- * \param[in] lon2 second longitude
- * \param[in] lat2 second latitude
+ * \param[in] lon1,lat1 longitude, latitude of first point
+ * \param[in] lon2,lat2 longitude, latitude of second point
  * \return 1 on success
  * \return 0 on error
  */
@@ -88,8 +86,6 @@ int G_begin_rhumbline_equation (
 
 
 /**
- * \fn double G_rhumbline_lat_from_lon (double lon)
- *
  * \brief Calculates rhumbline latitude.
  *
  * <b>Note:</b> Function only works if lon1 < lon < lon2.

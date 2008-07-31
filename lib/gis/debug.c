@@ -1,14 +1,16 @@
 /**
  * \file debug.c
  *
- * \brief Debug functions.
+ * \brief GIS Library - Debug functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -24,20 +26,18 @@ static int grass_debug_level = -1;
 
 
 /**
- * \fn int G_debug (int level, char *msg,...)
- *
  * \brief Print debugging message.
  *
  * Print debugging message if environment variable GRASS_DEBUG_LEVEL
  * is set to level equal or greater  
  *
  * Levels: (recommended levels)<br>
- * 1 - message is printed once or few times per module<br>
- * 3 - each row (raster) or line (vector)<br>
- * 5 - each cell (raster) or point (vector) 
+ *  - 1 - message is printed once or few times per module<br>
+ *  - 3 - each row (raster) or line (vector)<br>
+ *  - 5 - each cell (raster) or point (vector) 
  *
- * \param[in] level
- * \param[in] msg
+ * \param[in] level level
+ * \param[in] msg message
  * \return 0 on error
  * \return 1 on success
  */
@@ -88,16 +88,13 @@ int G_debug (int level, const char *msg,...)
 
 
 /**
- * \fn int G_dump (int fd)
- *
  * \brief Dumps status of various GIS parameters.
  * 
  * Dumps status of various GIS parameters of a particular
  * file descriptor, <b>fd</b>.
  *
- * \param[in] fd
+ * \param[in] fd file
  * \return always returns 0
- *
 */
 
 int G_dump(int fd)

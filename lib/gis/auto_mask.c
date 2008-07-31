@@ -1,14 +1,16 @@
 /**
  * \file auto_mask.c
  *
- * \brief Auto masking routines.
+ * \brief GIS Library - Auto masking routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdlib.h>
@@ -18,8 +20,6 @@
 
 
 /**
- * \fn int G__check_for_auto_masking ()
- *
  * \brief Checks for auto masking.
  *
  * On first call, opens the mask file if declared and available and 
@@ -76,8 +76,6 @@ int G__check_for_auto_masking (void)
 
 
 /**
- * \fn int G_suppress_masking ()
- *
  * \brief Suppresses masking.
  *
  * \return always returns 0
@@ -98,8 +96,6 @@ int G_suppress_masking (void)
 
 
 /**
- * \fn int G_unsuppress_masking ()
- *
  * \brief Unsuppresses masking.
  *
  * \return always returns 0

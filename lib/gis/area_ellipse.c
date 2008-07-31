@@ -1,14 +1,16 @@
 /**
  * \file area_ellipse.c
  *
- * \brief Ellipse area routines.
+ * \brief GIS Library - Ellipse area routines.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <math.h>
@@ -26,8 +28,6 @@ static double M;
  */
 
 /**
- * \fn int G_begin_zone_area_on_ellipsoid (double a, double e2, double s)
- *
  * \brief Begin area calculations for ellipsoid.
  *
  * Initializes raster area calculations for an ellipsoid, where <b>a</b> 
@@ -56,8 +56,6 @@ int G_begin_zone_area_on_ellipsoid (double a,double e2,double s)
 
 
 /**
- * \fn double G_darea0_on_ellipsoid (double lat)
- *
  * \brief Calculate integral for area between two latitudes.
  *
  * This routine is part of the integral for the area between two 
@@ -79,8 +77,6 @@ G_darea0_on_ellipsoid (double lat)
 
 
 /**
- * \fn double G_area_for_zone_on_ellipsoid (double north, double south)
- *
  * \brief Calculates area between latitudes.
  *
  * This routine shows how to calculate area between two lats, but

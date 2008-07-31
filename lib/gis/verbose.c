@@ -1,19 +1,21 @@
 /**
  * \file verbose.c
  *
- * \brief Functions to check for GRASS_VERBOSE environment variable.
+ * \brief GIS Library - Functions to check for GRASS_VERBOSE environment variable.
  *
  * see also:
- * G_percent()
- * G_message()
- * G_warning()
+ *  - G_percent()
+ *  - G_message()
+ *  - G_warning()
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author Jachym Cepicky - jachym.cepicky at centrum cz
+ * \author Jachym Cepicky - jachym.cepicky at gmail.com
  *
- * \date 2006
+ * \date 2006-2008
  */
 
 #include <stdlib.h>
@@ -28,8 +30,6 @@ static int verbose = -1; /* current verbosity level */
 
 
 /**
- * \fn int G_verbose (void)
- *
  * \brief Get current verbosity level.
  *
  * Currently, there are 4 levels of verbosity.
@@ -61,8 +61,6 @@ int G_verbose (void)
 
 
 /**
- * \fn int G_verbose_max (void)
- *
  * \brief Get max verbosity level.
  *
  * \return max verbosity level
@@ -75,8 +73,6 @@ int G_verbose_max (void)
 
 
 /**
- * \fn int G_verbose_std (void)
- *
  * \brief Get standard verbosity level.
  *
  * \return standard verbosity level
@@ -89,8 +85,6 @@ int G_verbose_std (void)
 
 
 /**
- * \fn int G_verbose_min (void)
- *
  * \brief Get min verbosity level.
  *
  * \return min verbosity level
@@ -102,8 +96,6 @@ int G_verbose_min (void)
 }
 
 /**
- * \fn int G_set_verbose (int level)
- *
  * \brief Set verbosity level.
  *
  * \param level: new verbosity level

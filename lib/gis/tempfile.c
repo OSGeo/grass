@@ -1,14 +1,16 @@
 /**
  * \file tempfile.c
  *
- * \brief Temporary file functions.
+ * \brief GIS Library - Temporary file functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <string.h>
@@ -18,8 +20,6 @@
 
 
 /**
- * \fn char *G_tempfile (void)
- *
  * \brief Returns a temporary file name.
  *
  * This routine returns a pointer to a string containing a unique 
@@ -50,8 +50,6 @@ char *G_tempfile(void)
 
 
 /**
- * \fn char *G__tempfile (int pid)
- *
  * \brief Create tempfile from process id.
  *
  * See <i>G_tempfile()</i>.
@@ -83,8 +81,6 @@ char *G__tempfile (int pid)
 
 
 /**
- * \fn int G__temp_element (char *element)
- *
  * \brief Populates <b>element</b> with a path string.
  *
  * \param[in,out] element

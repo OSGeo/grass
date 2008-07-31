@@ -1,22 +1,22 @@
 /**
  * \file wind_overlap.c
  *
- * \brief Window overlap functions.
+ * \brief GIS Library - Window overlap functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn int G_window_overlap (struct Cell_head *window, double N, double S, double E, double W)
- *
  * \brief Determins if a box overlays a map window.
  *
  * Given a map <b>window</b>, and a box of <b>N</b>,<b>S</b>,<b>E</b>,<b>W</b>
@@ -24,11 +24,11 @@
  *
  * Note: knows about global wrap-around for lat-long.
  *
- * \param[in] window
- * \param[in] N
- * \param[in] S
- * \param[in] E
- * \param[in] W
+ * \param[in] window pointer to window structure
+ * \param[in] N north
+ * \param[in] S south
+ * \param[in] E east
+ * \param[in] W west
  * \return 1 if box overlaps window
  * \return 0 if box does not overlap window
  */
@@ -61,8 +61,6 @@ int G_window_overlap ( const struct Cell_head *window,
 
 
 /**
- * \fn double G_window_percentage_overlap (struct Cell_head *window, double N, double S, double E, double W)
- *
  * \brief Determines percentage of box is contained in the <b>window</b>.
  *
  * This version returns the percentage (from 0 to 1) of the box 
@@ -72,12 +70,12 @@ int G_window_overlap ( const struct Cell_head *window,
  * level-two startup so only those arcs that enter the window are
  * actually read.
  *
- * \param[in] window
- * \param[in] N
- * \param[in] S
- * \param[in] E
- * \param[in] W
- * \return Percentage of overlap
+ * \param[in] window pointer to widnow structure
+ * \param[in] N north
+ * \param[in] S south
+ * \param[in] E east
+ * \param[in] W west
+ * \return percentage of overlap
  */
 
 double G_window_percentage_overlap ( const struct Cell_head *window,

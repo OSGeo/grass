@@ -1,7 +1,7 @@
 /**
  * \file unix_sockets.c
  *
- * \brief Unix sockets support functions.
+ * \brief GIS Library - Unix sockets support functions.
  *
  * Routines related to using UNIX domain sockets for IPC mechanisms 
  * (such as XDRIVER).<br>
@@ -16,20 +16,20 @@
  * <b>Note:</b> This implementation of UNIX sockets provides zero 
  * security checking so should not be used from untrusted clients.<br>
  *
+ * (C) 2001-2008 by the GRASS Development Team
+ *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Eric G. Miller
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/config.h>
 
 #ifdef HAVE_SOCKET
 
-#include <grass/gis.h>
-#include <grass/version.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -49,6 +49,10 @@
 #include <netinet/in.h>
 #define INVALID_SOCKET (-1)
 #endif
+
+#include <grass/gis.h>
+#include <grass/version.h>
+#include <grass/glocale.h>
 
 /** For systems where the *_LOCAL (POSIX 1g) is not defined 
  ** There's not really any difference between PF and AF in practice.
@@ -96,7 +100,7 @@ _get_make_sock_path (void)
     }
 
     if ( (lock = getenv ( "GIS_LOCK" )) == NULL )
-	G_fatal_error ("Cannot get GIS_LOCK enviroment variable value");
+	G_fatal_error (_("Unable to get GIS_LOCK enviroment variable value"));
 
     len = strlen(prefix) + strlen(user) + strlen(lock) + 3;
     path = G_malloc (len);
@@ -212,8 +216,6 @@ static int make_address(sockaddr_t *addr, const char *name, int exists)
 #endif
         
 /**
- * \fn char *G_sock_get_fname (const char *name)
- *
  * \brief Builds full path for a UNIX socket.
  *
  * Caller should <i>G_free()</i> the return value when it is no longer 
@@ -248,8 +250,6 @@ G_sock_get_fname (const char *name)
 
 
 /**
- * \fn int G_sock_exists (const char *name)
- *
  * \brief Checks socket existence.
  *
  * \param[in] name
@@ -277,8 +277,6 @@ G_sock_exists (const char *name)
 
 
 /**
- * \fn int G_sock_bind (const char *name)
- *
  * \brief Binds socket to file descriptor.
  *
  * Takes the full pathname for a UNIX socket and returns the file 
@@ -335,8 +333,6 @@ G_sock_bind (const char *name)
 }
 
 /**
- * \fn int G_sock_listen (int sockfd, unsigned int queue_len)
- *
  * \brief Wrapper function to <i>listen()</i>.
  *
  * \param[in] sockfd
@@ -353,8 +349,6 @@ G_sock_listen (int sockfd, unsigned int queue_len)
 
 
 /**
- * \fn int G_sock_accept (int sockfd)
- *
  * \brief Wrapper around <i>accept()</i>.
  *
  * <b>Note:</b> This call will usually block until a connection arrives. 
@@ -376,8 +370,6 @@ G_sock_accept (int sockfd)
  
 
 /**
- * \fn int G_sock_connect (const char *name)
- *
  * \brief Tries to connect to the UNIX socket specified by <b>name</b>.
  *
  * \param[in] name
@@ -412,5 +404,4 @@ G_sock_connect (const char *name)
 	return sockfd;
 }
 
-/* vim: set softtabstop=4 shiftwidth=4 expandtab : */
 #endif

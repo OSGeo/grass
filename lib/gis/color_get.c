@@ -1,22 +1,22 @@
 /**
  * \file color_get.c
  *
- * \brief Functions to get colors from a raster map.
+ * \brief GIS Library - Functions to get colors from a raster map.
  *
- * This program is free software under the GNU General Public License 
+ * (C) 2001-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <grass/gis.h>
 
 
 /**
- * \fn int G_get_color (CELL n, int *red, int *grn, int *blu, struct Colors *colors)
- *
  * \brief Get a category color.
  *
  * The <b>red, green</b>, and
@@ -49,8 +49,6 @@ int G_get_color (CELL n, int *red, int *grn, int *blu, struct Colors *colors)
 
 
 /**
- * \fn int G_get_raster_color (void *rast, int *red, int *grn, int *blu, struct Colors *colors, RASTER_MAP_TYPE map_type)
- *
  * \brief Gets color from raster.
  *
  * Looks up the rgb colors for
@@ -82,8 +80,6 @@ int G_get_raster_color (const void *rast,
 
 
 /**
- * \fn int G_get_c_raster_color (CELL *rast, int *red, int *grn, int *blu, struct Colors *colors)
- *
  * \brief Gets color for a CELL raster.
  *
  * Looks up the rgb colors for CELL
@@ -106,8 +102,6 @@ int G_get_c_raster_color (const CELL *rast,
 
 
 /**
- * \fn int G_get_f_raster_color (FCELL *rast, int *red, int *grn, int *blu, struct Colors *colors)
- *
  * \brief Gets color for a FCELL raster.
  *
  *  Looks up the rgb colors for FCELL <em>rast</em> in the color table
@@ -130,8 +124,6 @@ int G_get_f_raster_color (const FCELL *rast,
 
 
 /**
- * \fn int G_get_d_raster_color (DCELL *rast, int *red, int *grn, int *blu, struct Colors *colors)
- *
  * \brief Gets color for a DCELL raster.
  *
  *  Looks up the rgb colors for DCELL <em>rast</em> in the color table
@@ -154,8 +146,6 @@ int G_get_d_raster_color (const DCELL *rast,
 
 
 /**
- * \fn int G_get_null_value_color (int *red, int *grn, int *blu, const struct Colors *colors)
- *
  * \brief  Gets color for null value.
  *
  * Puts the red, green, and blue components of <b>colors</b> for the
@@ -191,8 +181,6 @@ int G_get_null_value_color (int *red, int *grn, int *blu,
 
 
 /**
- * \fn int G_get_default_color (int *red, int *grn, int *blu, const struct Colors *colors)
- *
  * \brief Gets default color.
  *
  *  Puts the red, green, and blue components of the

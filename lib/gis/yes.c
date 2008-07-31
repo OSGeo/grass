@@ -1,14 +1,16 @@
 /**
  * \file yes.c
  *
- * \brief Yes/No functions.
+ * \brief GIS Library - Yes/No functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
 
 #include <stdio.h>
@@ -16,8 +18,6 @@
 
 
 /**
- * \fn int G_yes (char *question, int dflt)
- *
  * \brief Ask a yes/no question.
  *
  * This routine prints a <b>question</b> to the user, and expects the user to

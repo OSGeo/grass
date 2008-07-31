@@ -1,24 +1,24 @@
 /**
  * \file done_msg.c
  *
- * \brief Done message functions.
+ * \brief GIS Library - Done message functions.
+ *
+ * (C) 2001-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2006
+ * \date 1999-2008
  */
+
+#include <stdarg.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#include <stdarg.h>
-
 
 /**
- * \fn int G_done_msg (const char *msg, ...)
- *
  * \brief Print a final message.
  *
  * \param[in] msg string.  Cannot be NULL.

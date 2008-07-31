@@ -1,9 +1,9 @@
 /*!
  * \file get_projinfo.c
  * 
- * \brief GRASS GIS Library
+ * \brief GIS Library - Get projection info
  *
- * (C) 1999-2007 by the GRASS Development Team
+ * (C) 1999-2008 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -18,8 +18,6 @@
 #define PERMANENT "PERMANENT"
 
 /*!
- * \fn struct Key_Value* G_get_projunits(void) 
- *
  * \brief Gets unit information for location
  *
  * \return pointer to Key_Value structure with key/value pairs
@@ -49,8 +47,6 @@ struct Key_Value* G_get_projunits(void)
 }
 
 /*!
- * \fn struct Key_Value* G_get_projinfo(void) 
- *
  * \brief Gets projection information for location
  *
  * \return pointer to Key_Value structure with key/value pairs
