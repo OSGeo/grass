@@ -90,7 +90,7 @@ int main (int argc, char *argv[])
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
-    flag.list->label = _("List vector maps in input location and exit");
+    flag.list->description = _("List vector maps in input location and exit");
 
     flag.transformz = G_define_flag();
     flag.transformz->key = 'z';
