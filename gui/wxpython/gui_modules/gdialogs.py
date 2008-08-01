@@ -734,7 +734,11 @@ class ImportDxfDialog(wx.Dialog):
         #
         self.list = LayersList(self)
         self.list.LoadData()
-        
+
+        self.add = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+                               label=_("Add imported layers into layer tree"))
+        self.add.SetValue(True)
+
         #
         # buttons
         #
@@ -787,6 +791,9 @@ class ImportDxfDialog(wx.Dialog):
                        flag=wx.ALL | wx.EXPAND, border=5)
         
         dialogSizer.Add(item=layerSizer, proportion=1,
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
+        dialogSizer.Add(item=self.add, proportion=0,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         #
@@ -842,10 +849,23 @@ class ImportDxfDialog(wx.Dialog):
             # run in Layer Manager
             self.parent.goutput.RunCmd(cmd)
 
+        if self.add.IsChecked():
+            maptree = self.parent.curr_page.maptree
+            for layer, output in data:
+                # add imported layers into layer tree
+                maptree.AddLayer(ltype='vector',
+                                 lname=output,
+                                 lcmd=['d.vect', 'map=%s' % output])
+
+        self.parent.notebook.SetSelection(0)
+        
         self.OnCancel()
         
     def OnAbort(self, event):
-        """Abort running import"""
+        """Abort running import
+
+        @todo not yet implemented
+        """
         pass
         
     def OnSetInput(self, event):
@@ -916,8 +936,9 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             item = self.GetNextItem(item)
             if item == -1:
                 break
-            # layer / output name
-            data.append((self.GetItem(item, 1).GetText(),
-                         self.GetItem(item, 2).GetText()))
+            if self.IsChecked(item):
+                # layer / output name
+                data.append((self.GetItem(item, 1).GetText(),
+                             self.GetItem(item, 2).GetText()))
 
         return data
