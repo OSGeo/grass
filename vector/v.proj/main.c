@@ -94,8 +94,8 @@ int main (int argc, char *argv[])
 
     flag.transformz = G_define_flag();
     flag.transformz->key = 'z';
-    flag.transformz->label = _("3D vector maps only");
-    flag.transformz->description = _("Assume z co-ordinate is ellipsoidal height and "
+    flag.transformz->description = _("3D vector maps only");
+    flag.transformz->label = _("Assume z co-ordinate is ellipsoidal height and "
 				     "transform if possible");
    
     /* The parser checks if the map already exists in current mapset,
