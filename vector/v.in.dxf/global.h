@@ -43,6 +43,7 @@ void set_entity(char *);
 void add_layer_to_list(char *);
 int is_layer_in_list(char *);
 void init_list(void);
+void print_layer(const char*);
 
 /* read_dxf.c */
 struct dxf_file *dxf_open(char *);

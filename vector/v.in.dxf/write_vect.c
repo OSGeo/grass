@@ -55,7 +55,7 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
 
 	db_set_string(&sql, buf);
 	if (db_execute_immediate(driver, &sql) != DB_OK)
-	    G_fatal_error(_("Cannot execute: %s"), db_get_string(&sql));
+	    G_fatal_error(_("Unable to insert new record: %s"), db_get_string(&sql));
 	db_free_string(&sql);
     }
     else
@@ -182,7 +182,7 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
 	    db_start_driver_open_database(Fi[i]->driver,
 					  Vect_subst_var(Fi[i]->database, Map));
 	if (!driver)
-	    G_fatal_error(_("Cannot open database %s by driver %s"),
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Vect_subst_var(Fi[i]->database, Map), Fi[i]->driver);
 
 	db_begin_transaction(driver);
@@ -201,18 +201,20 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
     db_set_string(&sql, buf);
 
     if (db_execute_immediate(driver, &sql) != DB_OK)
-	G_fatal_error(_("Cannot create table: %s"), db_get_string(&sql));
+	G_fatal_error(_("Unable to create table: %s"), db_get_string(&sql));
     db_free_string(&sql);
 
     if (db_grant_on_table
 	(driver, Fi[i]->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error(_("Cannot grant privileges on table %s"), Fi[i]->table);
+	G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi[i]->table);
     if (db_create_index2(driver, Fi[i]->table, Fi[i]->key) != DB_OK)
-	G_warning(_("Cannot create index"));
+	G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		  Fi[i]->table, Fi[i]->key);
 
     if (Vect_map_add_dblink(Map, *field, field_name, Fi[i]->table, "cat",
 			    Fi[i]->database, Fi[i]->driver))
-	G_warning(_("Cannot link table: %s"), Fi[i]->table);
+	G_warning(_("Unable to add database link for vector map <%s>"),
+		  Vect_get_full_name(Map));
 
     return i;
 }
