@@ -72,8 +72,9 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	    if (polyline_flag & 8 || polyline_flag & 16 || polyline_flag & 17 ||
 		polyline_flag & 32)
 		if (warn_flag70) {
-		    G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
-			      polyline_flag);
+		    if (!flag_list)
+			G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
+				  polyline_flag);
 		    warn_flag70 = 0;
 		}
 	    break;
@@ -102,8 +103,7 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			if (flag_list) {
 			    if (!is_layer_in_list(dxf_buf)) {
 				add_layer_to_list(dxf_buf);
-				fprintf(stdout, _("Layer %d: %s\n"), num_layers,
-					dxf_buf);
+				print_layer(dxf_buf);
 			    }
 			    return 0;
 			}

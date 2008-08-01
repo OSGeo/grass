@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
 	num_layers = 0;
 	layers = NULL;
 	Map = NULL;
+	G_verbose_message(_("Layer number: layer name (GRASS compliant name)"));
     }
     else {
 	/* make vector map name SQL compliant */
