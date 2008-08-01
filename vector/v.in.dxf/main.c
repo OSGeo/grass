@@ -125,8 +125,9 @@ int main(int argc, char *argv[])
     }
     else {
 	/* make vector map name SQL compliant */
-	if (opt.output->answer)
+	if (opt.output->answer) {
 	    output = G_store(opt.output->answer);
+	}
 	else {
 	    char *p, *p2;
 
@@ -147,6 +148,11 @@ int main(int argc, char *argv[])
 	}
 
 	layers = opt.layers->answers;
+	
+	if(!G_check_overwrite(argc, argv) && G_find_vector2(output, G_mapset())) {
+	    G_fatal_error(_("Option <%s>: <%s> exists."),
+			  opt.output->key, output);
+	}
 
 	if (Vect_legal_filename(output) < 0)
 	    G_fatal_error(_("Use '%s' option to change vector map name"),
