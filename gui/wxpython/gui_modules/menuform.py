@@ -35,10 +35,10 @@ Classes:
  Method added to automatically re-run with pythonw on a Mac.
 
 @author Jan-Oliver Wagner <jan@intevation.de>
-Bernhard Reiter <bernhard@intevation.de>
-Michael Barton, Arizona State University
-Daniel Calvelo <dca.gis@gmail.com>
-Martin Landa <landa.martin@gmail.com>
+@author Bernhard Reiter <bernhard@intevation.de>
+@author Michael Barton, Arizona State University
+@author Daniel Calvelo <dca.gis@gmail.com>
+@author Martin Landa <landa.martin@gmail.com>
 
 @todo
  - verify option value types
@@ -944,9 +944,8 @@ class cmdPanel(wx.Panel):
         for f in visible_flags:
             which_sizer = tabsizer[ f['guisection'] ]
             which_panel = tab[ f['guisection'] ]
-            # if label is given -> label and description -> tooltip
-            # otherwise description -> lavel
-            if p.get('label','') != '':
+            # if label is given: description -> tooltip
+            if f.get('label','') != '':
                 title = text_beautify( f['label'] )
                 tooltip = text_beautify ( f['description'] )
             else:
