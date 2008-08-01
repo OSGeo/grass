@@ -75,11 +75,11 @@ class CmdThread(threading.Thread):
             event = wxCmdRun(cmd=args[0],
                              pid=requestId)
             wx.PostEvent(self.parent, event)
-            
-            self.requestCmd = callable(*args, **kwds)
 
             time.sleep(.1)
             
+            self.requestCmd = callable(*args, **kwds)
+
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             event = wxCmdDone(aborted=self.requestCmd.aborted,
