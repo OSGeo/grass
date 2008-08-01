@@ -349,11 +349,11 @@ class Command:
                                     os.linesep, os.linesep,
                                     _("Details:"),
                                     os.linesep,
-                                    self.PrintModuleOutput()))
+                                    _("Error: ") + self.GetError()))
                 elif rerr == sys.stderr: # redirect message to sys
                     stderr.write("Execution failed: '%s'" % (' '.join(self.cmd)))
                     stderr.write("%sDetails:%s%s" % (os.linesep,
-                                                     self.PrintModuleOutput(),
+                                                     _("Error: ") + self.GetError(),
                                                      os.linesep))
             else:
                 pass # nop
@@ -408,7 +408,7 @@ class Command:
         if self.stderr is None:
             lines = self.ReadErrOutput()
         else:
-            lines = self.cmdThread.rerr.strip('%s' % os.linesep). \
+            lines = self.cmdThread.error.strip('%s' % os.linesep). \
                 split('%s' % os.linesep)
         
         msg = []
@@ -435,6 +435,14 @@ class Command:
 
         return msg
 
+    def GetError(self):
+        """Get error message or ''"""
+        for type, msg in self.__ProcessStdErr():
+            if type == 'ERROR':
+                return msg
+
+        return ''
+    
     def PrintModuleOutput(self, error=True, warning=False, message=False):
         """Print module errors, warnings, messages to output
 
@@ -544,7 +552,8 @@ class CommandThread(Thread):
             if self.stderr:
                 line = recv_some(self.module, e=0, stderr=1)
                 self.stderr.write(line)
-                self.rerr = line
+                if len(line) > 0:
+                    self.error = line
 
         # get the last output
         if self.stdout:
@@ -554,8 +563,8 @@ class CommandThread(Thread):
             line = recv_some(self.module, e=0, stderr=1)
             self.stderr.write(line)
             if len(line) > 0:
-                self.rerr = line
-
+                self.error = line
+            
     def abort(self):
         """Abort running process, used by main thread to signal an abort"""
         self._want_abort = True

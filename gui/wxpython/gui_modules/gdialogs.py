@@ -9,7 +9,9 @@ List of classes:
  - DecorationDialog
  - TextLayerDialog 
  - LoadMapLayersDialog
-
+ - ImportDxfDialog
+ - LayerList (used by ImportDxfMulti) 
+ 
 (C) 2008 by the GRASS Development Team
 
 This program is free software under the GNU General Public
@@ -19,10 +21,13 @@ for details.
 @author Martin Landa <landa.martin gmail.com>
 """
 
+import os
 import sys
 import re
 
 import wx
+import wx.lib.filebrowsebutton as filebrowse
+import wx.lib.mixins.listctrl as listmix
 
 import gcmd
 import grassenv
@@ -702,3 +707,217 @@ class LoadMapLayersDialog(wx.Dialog):
         """Get selected layer type"""
         return self.layerType.GetStringSelection()
     
+class ImportDxfDialog(wx.Dialog):
+    """Import dxf layers"""
+    def __init__(self, parent, id=wx.ID_ANY, title=_("Import DXF layers"), 
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+
+        self.parent = parent # GMFrame
+        
+        wx.Dialog.__init__(self, parent, id, title, style=style)
+
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
+        #
+        # input
+        #
+        self.input = filebrowse.FileBrowseButton(parent=self.panel, id=wx.ID_ANY, 
+                                                 size=globalvar.DIALOG_GSELECT_SIZE, labelText='',
+                                                 dialogTitle=_('Choose DXF file to import'),
+                                                 buttonText=_('Browse'),
+                                                 startDirectory=os.getcwd(), fileMode=0,
+                                                 changeCallback=self.OnSetInput) # TODO: wildcard
+        
+       
+        #
+        # list of layers
+        #
+        self.list = LayersList(self)
+        self.list.LoadData()
+        
+        #
+        # buttons
+        #
+        # cancel
+        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btn_cancel.SetToolTipString(_("Close dialog"))
+        self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        # run
+        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Run"))
+        self.btn_run.SetToolTipString(_("Import selected layers"))
+        self.btn_run.SetDefault()
+        self.btn_run.Enable(False)
+        self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
+        # abort
+        self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
+        self.btn_abort.SetToolTipString(_("Abort the running command"))
+        self.btn_abort.Enable(False)
+        self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
+        
+        self.__doLayout()
+        self.Layout()
+
+    def __doLayout(self):
+        dialogSizer = wx.BoxSizer(wx.VERTICAL)
+        #
+        # input
+        #
+        inputBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                label=" %s " % _("Input DXF file"))
+        inputSizer = wx.StaticBoxSizer(inputBox, wx.HORIZONTAL)
+
+        inputSizer.Add(item=wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Choose DXF file:")),
+                       proportion=0,
+                       flag=wx.ALIGN_CENTER_VERTICAL)
+
+        inputSizer.Add(item=self.input, proportion=1,
+                       flag=wx.EXPAND, border=1)
+        
+        dialogSizer.Add(item=inputSizer, proportion=0,
+                        flag=wx.ALL | wx.EXPAND, border=5)
+
+        #
+        # list of DXF layers
+        #
+        layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
+                                label=" %s " % _("List of DXF layers"))
+        layerSizer = wx.StaticBoxSizer(layerBox, wx.HORIZONTAL)
+
+        layerSizer.Add(item=self.list, proportion=1,
+                       flag=wx.ALL | wx.EXPAND, border=5)
+        
+        dialogSizer.Add(item=layerSizer, proportion=1,
+                        flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+
+        #
+        # buttons
+        #
+        btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
+        
+        btnsizer.Add(item=self.btn_cancel, proportion=0,
+                     flag=wx.ALL | wx.ALIGN_CENTER,
+                     border=10)
+        
+        btnsizer.Add(item=self.btn_abort, proportion=0,
+                     flag=wx.ALL | wx.ALIGN_CENTER,
+                     border=10)
+        
+        btnsizer.Add(item=self.btn_run, proportion=0,
+                     flag=wx.ALL | wx.ALIGN_CENTER,
+                     border=10)
+        
+        dialogSizer.Add(item=btnsizer, proportion=0,
+                        flag=wx.ALIGN_CENTER)
+        
+        # dialogSizer.SetSizeHints(self.panel)
+        # self.panel.SetAutoLayout(True)
+        self.panel.SetSizer(dialogSizer)
+        dialogSizer.Fit(self.panel)
+        
+        self.Layout()
+        # auto-layout seems not work here - FIXME
+        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 125, 200))
+        width = self.GetSize()[0]
+        self.list.SetColumnWidth(col=1, width=width/2)
+
+    def OnCancel(self, event=None):
+        """Close dialog"""
+        self.Close()
+
+    def OnRun(self, event):
+        """Import data (each layes as separate vector map)"""
+        data = self.list.GetLayers()
+        
+        # hide dialog
+        self.Hide()
+        
+        for layer, output in data:
+            cmd = ['v.in.dxf',
+                   'input=%s' % self.input.GetValue(),
+                   'layers=%s' % layer,
+                   'output=%s' % output]
+            if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'):
+                cmd.append('--overwrite')
+            
+            # run in Layer Manager
+            self.parent.goutput.RunCmd(cmd)
+
+        self.OnCancel()
+        
+    def OnAbort(self, event):
+        """Abort running import"""
+        pass
+        
+    def OnSetInput(self, event):
+        """Input DXF file/OGR dsn defined, update list of layer widget"""
+        filePath = event.GetString()
+
+        try:
+            cmd = gcmd.Command(['v.in.dxf',
+                                'input=%s' % filePath,
+                                '-l', '--q'], stderr=None)
+        except gcmd.CmdError, e:
+            wx.MessageBox(parent=self, message=_("File <%(file)s>: Unable to get list of DXF layers.\n\n%(details)s") % \
+                          { 'file' : filePath, 'details' : e.message },
+                          caption=_("Error"), style=wx.ID_OK | wx.ICON_ERROR | wx.CENTRE)
+            self.list.LoadData()
+            self.btn_run.Enable(False)
+            return
+
+        data = []
+        for line in cmd.ReadStdOutput():
+            layerId = line.split(':')[0].split(' ')[1]
+            layer = line.split(':')[1]
+            layerName, grassName = layer.split('/')
+            data.append((layerId, layerName.strip(), grassName.strip()))
+
+        self.list.LoadData(data)
+        self.btn_run.Enable(True)
+        
+class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
+                 listmix.CheckListCtrlMixin, listmix.TextEditMixin):
+    """List of layers to be imported (dxf, shp...)"""
+    def __init__(self, parent, pos=wx.DefaultPosition,
+                 log=None):
+        self.parent = parent
+        
+        wx.ListCtrl.__init__(self, parent, wx.ID_ANY,
+                             style=wx.LC_REPORT)
+        listmix.CheckListCtrlMixin.__init__(self)
+        self.log = log
+
+        # setup mixins
+        listmix.ListCtrlAutoWidthMixin.__init__(self)
+        listmix.TextEditMixin.__init__(self)
+        
+        self.InsertColumn(0, _('Layer'))
+        self.InsertColumn(1, _('Layer name'))
+        self.InsertColumn(2, _('Output vector map name (editable)'))
+
+    def LoadData(self, data=None):
+        """Load data into list"""
+        if data is None:
+            return
+
+        for id, name, grassName in data:
+            index = self.InsertStringItem(sys.maxint, str(id))
+            self.SetStringItem(index, 1, "%s" % str(name))
+            self.SetStringItem(index, 2, "%s" % str(grassName))
+            # check by default
+            self.CheckItem(index, True)
+        
+        self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
+        
+    def GetLayers(self):
+        """Get list of layers (layer name, output name)"""
+        data = []
+        item = -1
+        while True:
+            item = self.GetNextItem(item)
+            if item == -1:
+                break
+            # layer / output name
+            data.append((self.GetItem(item, 1).GetText(),
+                         self.GetItem(item, 2).GetText()))
+
+        return data
