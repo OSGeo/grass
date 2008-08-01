@@ -154,8 +154,8 @@ proc create_overview {} {
 	grid .overview.canvas .overview.yscroll -sticky nsew
 	grid .overview.xscroll -sticky nsew
 
-	grid rowconfigure    . 0 -weight 1
-	grid columnconfigure . 0 -weight 1
+	grid rowconfigure    .overview 0 -weight 1
+	grid columnconfigure .overview 0 -weight 1
 
 	bind .overview.canvas <ButtonPress-1>   { set_window %x %y }
 	bind .overview.canvas <B1-Motion>       { set_window %x %y }
