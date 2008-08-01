@@ -61,7 +61,7 @@ void print_layer(const char* layer_name)
     G_str_to_lower(grass_name);
     G_str_to_sql(grass_name);
 
-    fprintf(stdout, _("Layer %d: %s (%s)\n"), num_layers,
+    fprintf(stdout, _("Layer %d: %s / %s\n"), num_layers,
 	    layer_name, grass_name);
 
     fflush(stdout);
