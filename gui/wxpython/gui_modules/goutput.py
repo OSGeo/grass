@@ -35,6 +35,7 @@ from debug import Debug as Debug
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
+wxCmdRun,      EVT_CMD_RUN      = NewEvent()
 wxCmdDone,     EVT_CMD_DONE     = NewEvent()
 wxCmdAbort,    EVT_CMD_ABORT    = NewEvent()
 
@@ -61,7 +62,6 @@ class CmdThread(threading.Thread):
     def RunCmd(self, callable, *args, **kwds):
         CmdThread.requestId += 1
 
-        self.requestTime = time.time()
         self.requestCmd = None
         self.requestQ.put((CmdThread.requestId, callable, args, kwds))
         
@@ -70,13 +70,24 @@ class CmdThread(threading.Thread):
     def run(self):
         while True:
             requestId, callable, args, kwds = self.requestQ.get()
+            
+            requestTime = time.time()
+            event = wxCmdRun(cmd=args[0],
+                             pid=requestId)
+            wx.PostEvent(self.parent, event)
+            
             self.requestCmd = callable(*args, **kwds)
+
+            time.sleep(.1)
+            
             self.resultQ.put((requestId, self.requestCmd.run()))
 
             event = wxCmdDone(aborted=self.requestCmd.aborted,
-                              time=self.requestTime,
+                              time=requestTime,
                               pid=requestId)
+
             time.sleep(.1)
+
             wx.PostEvent(self.parent, event)
 
     def abort(self):
@@ -120,6 +131,7 @@ class GMConsole(wx.Panel):
         self.cmd_output_timer = wx.Timer(self.cmd_output, id=wx.ID_ANY)
         self.cmd_output.Bind(EVT_CMD_OUTPUT, self.OnCmdOutput)
         self.cmd_output.Bind(wx.EVT_TIMER, self.OnProcessPendingOutputWindowEvents)
+        self.Bind(EVT_CMD_RUN, self.OnCmdRun)
         self.Bind(EVT_CMD_DONE, self.OnCmdDone)
         
         #
@@ -240,15 +252,12 @@ class GMConsole(wx.Panel):
         except:
             curr_disp = None
 
-        if not self.requestQ.empty():
-            # only one running command enabled (per GMConsole instance)
-            busy = wx.BusyInfo(message=_("Unable to run the command, another command is running..."),
-                               parent=self)
-            wx.Yield()
-            time.sleep(3)
-            busy.Destroy()
-            return  None
-
+        # switch to 'Command output'
+        if hasattr(self.parent, "curr_page"):
+            # change notebook page only for Layer Manager
+            if self.parent.notebook.GetSelection() != 1:
+                self.parent.notebook.SetSelection(1)
+        
         # command given as a string ?
         try:
             cmdlist = command.strip().split(' ')
@@ -299,9 +308,6 @@ class GMConsole(wx.Panel):
                     menuform.GUI().ParseCommand(cmdlist, parentframe=self)
                 else:
                     # process GRASS command with argument
-                    cmdPID = self.cmdThread.requestId + 1
-                    self.WriteCmdLog('%s' % ' '.join(cmdlist), pid=cmdPID)
-
                     self.cmdThread.RunCmd(GrassCmd,
                                           cmdlist, self.cmd_stdout, self.cmd_stderr)
                     
@@ -314,10 +320,6 @@ class GMConsole(wx.Panel):
         else:
             # Send any other command to the shell. Send output to
             # console output window
-            if hasattr(self.parent, "curr_page"):
-                # change notebook page only for Layer Manager
-                if self.parent.notebook.GetSelection() != 1:
-                    self.parent.notebook.SetSelection(1)
 
             # if command is not a GRASS command, treat it like a shell command
             try:
@@ -369,7 +371,6 @@ class GMConsole(wx.Panel):
         """Print command output"""
         message = event.text
         type  = event.type
-
         # message prefix
         if type == 'warning':
             messege = 'WARNING: ' + message
@@ -425,7 +426,11 @@ class GMConsole(wx.Panel):
     def OnCmdAbort(self, event):
         """Abort running command"""
         self.cmdThread.abort()
-        
+
+    def OnCmdRun(self, event):
+        """Run command"""
+        self.WriteCmdLog('%s' % ' '.join(event.cmd), pid=event.pid)
+
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
         if event.aborted:
@@ -606,7 +611,7 @@ class GMStc(wx.stc.StyledTextCtrl):
         self.StyleMessageSpec = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
         # unknown
         self.StyleUnknown     = 6
-        self.StyleUnknownSpec = "face:Courier New,size:10,fore:#7F0000,back:#FFFFFF"
+        self.StyleUnknownSpec = "face:Courier New,size:10,fore:#000000,back:#FFFFFF"
         
         # default and clear => init
         self.StyleSetSpec(wx.stc.STC_STYLE_DEFAULT, self.StyleDefaultSpec)

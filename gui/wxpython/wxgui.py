@@ -1027,6 +1027,9 @@ class GMFrame(wx.Frame):
                   Icons["attrtable"].GetLabel(), self.OnShowAttributeTable)
                   )
 
+    def OnImportDxfFile(self, event):
+        gdialogs.ImportDxfDialog(parent=self).ShowModal()
+        
     def OnShowAttributeTable(self, event):
         """
         Show attribute table of the given vector map layer

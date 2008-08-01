@@ -153,6 +153,12 @@ class Data:
                                  "self.OnMenuCmd",
                                  "v.in.dxf"),
 
+                                (_("Multiple DXF import"),
+                                 _("Converts selected DXF layers to GRASS vector maps."),
+                                 "self.OnImportDxfFile",
+                                 ""),
+                                ("","","", ""),
+                                
                                 (_("ESRI e00 import"),
                                  _("Import E00 file into a vector map."),
                                  "self.OnMenuCmd",
