@@ -1111,7 +1111,7 @@ class GMFrame(wx.Frame):
         # create layer tree (tree control for managing GIS layers)  and put on new notebook page
         self.curr_page.maptree = wxgui_utils.LayerTree(self.curr_page, id=wx.ID_ANY, pos=wx.DefaultPosition,
                                                        size=wx.DefaultSize, style=wx.TR_HAS_BUTTONS
-                                                       |wx.TR_LINES_AT_ROOT|wx.TR_EDIT_LABELS|wx.TR_HIDE_ROOT
+                                                       |wx.TR_LINES_AT_ROOT|wx.TR_HIDE_ROOT
                                                        |wx.TR_DEFAULT_STYLE|wx.NO_BORDER|wx.FULL_REPAINT_ON_RESIZE,
                                                        idx=self.disp_idx, gismgr=self, notebook=self.gm_cb,
                                                        auimgr=self._auimgr, showMapDisplay=show)
