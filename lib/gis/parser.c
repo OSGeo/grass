@@ -77,6 +77,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
@@ -2604,8 +2605,16 @@ static int check_overwrite (void)
 			    if ( G_find_file (element, opt->answer, G_mapset()) ) /* found */
 			    {
 				if ( !overwrite && !over ) { 
-				    fprintf(stderr, _("ERROR: option <%s>: <%s> exists.\n"), 
-						   opt->key, opt->answer );
+				    if ( G_info_format() != G_INFO_FORMAT_GUI ) {
+					fprintf(stderr, _("ERROR: option <%s>: <%s> exists.\n"), 
+						opt->key, opt->answer );
+				    }
+				    else {
+					fprintf(stderr, "GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
+						getpid(), opt->key, opt->answer);
+					fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
+						getpid());
+				    }
 
 				    error = 1;
 				}
