@@ -365,8 +365,6 @@ class Settings:
                         'y' : 0.85,
                         },
                     'height' : {
-                        'min' : -3000, # TODO: determine min/max height
-                        'max' : 4000, 
                         'step' : 100,
                         },
                     'twist' : {
