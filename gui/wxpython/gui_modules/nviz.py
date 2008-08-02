@@ -2862,17 +2862,30 @@ class NvizToolWindow(wx.Frame):
     def UpdateVectorPage(self, layer, data):
         vInfo = gcmd.Command(['v.info',
                               'map=%s' % layer.name])
+        npoints = nprimitives = 0
         for line in vInfo.ReadStdOutput():
             if 'Map is 3D' in line:
                 mapIs3D = int(line.replace('|', '').split(':')[1].strip())
-                break
+            elif 'Number of points' in line:
+                npoints = int(line.replace('|', '').split(':')[1].strip().split(' ')[0])
+                nprimitives = npoints
+            elif 'Number of lines' in line:
+                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0])
+            elif 'Number of boundaries' in line:
+                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0]) # boundaries
+                nprimitives += int(line.replace('|', '').split(':')[2].strip()) # faces
+            elif 'Number of centroids' in line:
+                nprimitives += int(line.replace('|', '').split(':')[1].strip().split(' ')[0]) # centroids
+                nprimitives += int(line.replace('|', '').split(':')[2].strip()) # kernels
+
         if mapIs3D:
             desc = _("Vector map <%s> is 3D") % layer.name
             enable = False
         else:
             desc = _("Vector map <%s> is 2D") % layer.name
             enable = True
-            
+        desc += " - " + _("%d primitives (%d points)") % (nprimitives, npoints)
+
         self.FindWindowById(self.win['vector']['lines']['flat']).Enable(enable)
         for v in ('lines', 'points'):
             self.FindWindowById(self.win['vector'][v]['surface']).Enable(enable)
@@ -2884,13 +2897,16 @@ class NvizToolWindow(wx.Frame):
         # lines
         #
         showLines = self.FindWindowById(self.win['vector']['lines']['show'])
-
         if data['lines'].has_key('object'):
             showLines.SetValue(True)
         else:
             showLines.SetValue(False)
-        
-        self.UpdateVectorShow(showLines.GetId(),
+            if nprimitives - npoints > 0:
+                showLines.Enable(True)
+            else:
+                showLines.Enable(False)
+
+        self.UpdateVectorShow('lines',
                               showLines.IsChecked())
 
         width = self.FindWindowById(self.win['vector']['lines']['width'])
@@ -2926,7 +2942,12 @@ class NvizToolWindow(wx.Frame):
             showPoints.SetValue(True)
         else:
             showPoints.SetValue(False)
-        self.UpdateVectorShow(showPoints.GetId(),
+            if npoints > 0:
+                showPoints.Enable(True)
+            else:
+                showPoints.Enable(False)
+        
+        self.UpdateVectorShow('points',
                               showPoints.IsChecked())
         # size, width, marker, color
         for prop in ('size', 'width', 'marker', 'color'):
