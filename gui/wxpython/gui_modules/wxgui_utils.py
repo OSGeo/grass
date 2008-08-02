@@ -29,6 +29,7 @@ import wx.lib.customtreectrl as CT
 import wx.combo
 import wx.lib.newevent
 
+import gdialogs
 import globalvar
 import menuform
 import mapdisp
@@ -45,22 +46,28 @@ try:
     import subprocess
 except:
     from compat import subprocess
+    
+try:
+    import treemixin 
+except ImportError:
+    from wx.lib.mixins import treemixin
+
 
 TREE_ITEM_HEIGHT = 25
 
-class LayerTree(CT.CustomTreeCtrl):
+class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     """
     Creates layer tree structure
     """
-    #	def __init__(self, parent, id, pos, size, style):
     def __init__(self, parent,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize, style=wx.SUNKEN_BORDER,
                  ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT |
                  CT.TR_HIDE_ROOT | CT.TR_ROW_LINES | CT.TR_FULL_ROW_HIGHLIGHT |
-                 CT.TR_EDIT_LABELS | CT.TR_MULTIPLE,
-                 **kargs):
-        CT.CustomTreeCtrl.__init__(self, parent, id, pos, size, style, ctstyle)
+                 CT.TR_MULTIPLE,**kargs):
+        self.items = []
+        self.itemCounter = 0
+        super(LayerTree, self).__init__(parent, id, pos, size, style=style, ctstyle=ctstyle)
 
         ### SetAutoLayout() causes that no vertical scrollbar is displayed
         ### when some layers are not visible in layer tree
@@ -80,9 +87,9 @@ class LayerTree(CT.CustomTreeCtrl):
         self.drag = False          # flag to indicate a drag event is in process
         self.disp_idx = kargs['idx']
         self.gismgr = kargs['gismgr']
-        self.notebook = kargs['notebook'] # Layer Manager notebook for layer tree
-        self.treepg = parent              # notebook page holding layer tree
-        self.auimgr = kargs['auimgr']     # aui manager
+        self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
+        self.treepg = parent      # notebook page holding layer tree
+        self.auimgr = kargs['auimgr']       # aui manager
 
         # init associated map display
         self.mapdisplay = mapdisp.MapFrame(self,
@@ -106,6 +113,7 @@ class LayerTree(CT.CustomTreeCtrl):
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None,None))
+        self.items = []
 
         #create image list to use with layer tree
         il = wx.ImageList(16, 16, mask=False)
@@ -170,13 +178,11 @@ class LayerTree(CT.CustomTreeCtrl):
         self.Bind(wx.EVT_TREE_SEL_CHANGED,      self.OnChangeSel)
         self.Bind(CT.EVT_TREE_ITEM_CHECKED,     self.OnLayerChecked)
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
-        self.Bind(wx.EVT_TREE_BEGIN_DRAG,       self.OnBeginDrag)
-        self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
-        self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnChangeLayerName)
+        #self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnChangeLayerName)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-
+                
     def OnKeyUp(self, event):
         """Key pressed"""
         key = event.GetKeyCode()
@@ -185,9 +191,9 @@ class LayerTree(CT.CustomTreeCtrl):
 
         event.Skip()
 
-    def OnChangeLayerName (self, event):
-        """Change layer name"""
-        Debug.msg (3, "LayerTree.OnChangeLayerName: name=%s" % event.GetLabel())
+    #def OnChangeLayerName (self, event):
+    #    """Change layer name"""
+    #    Debug.msg (3, "LayerTree.OnChangeLayerName: name=%s" % event.GetLabel())
 
     def OnLayerContextMenu (self, event):
         """Contextual menu for item/layer"""
@@ -446,29 +452,42 @@ class LayerTree(CT.CustomTreeCtrl):
         if not self.GetPyData(self.layer_selected)[0]['ctrl']:
             return
 
-        win = self.FindWindowById(self.GetPyData(self.layer_selected)[0]['ctrl'])
-        type = win.GetName()
+        #win = self.FindWindowById(self.GetPyData(self.layer_selected)[0]['ctrl'])
+        #type = win.GetName()
+        #
+        #self.layer_selected.DeleteWindow()
 
-        self.layer_selected.DeleteWindow()
+        maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
+        current_opacity = maplayer.GetOpacity()
+        
+        dlg = gdialogs.SetOpacityDialog(self, opacity=current_opacity)
 
-        opacity = self.GetPyData(self.layer_selected)[0]['maplayer'].GetOpacity()
-        if type == 'staticText':
-            ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-                               style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
-                               name='spinCtrl')
-            ctrl.SetValue(opacity)
-            self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
-        else:
-            ctrl = wx.StaticText(self, id=wx.ID_ANY,
-                                 name='staticText')
-            if opacity < 100:
-                ctrl.SetLabel('   (' + str(opacity) + '%)')
-                
-        self.GetPyData(self.layer_selected)[0]['ctrl'] = ctrl.GetId()
-        self.layer_selected.SetWindow(ctrl)
+        if dlg.ShowModal() == wx.ID_OK:
+            new_opacity = dlg.GetOpacity() # string            
+            self.Map.ChangeOpacity(maplayer, new_opacity)
+            maplayer.SetOpacity(new_opacity)
+            # redraw map if auto-rendering is enabled
+            if self.mapdisplay.autoRender.GetValue(): 
+                self.mapdisplay.OnRender(None)
 
-        self.RefreshSelected()
-        self.Refresh()
+
+        #if type == 'staticText':
+        #    ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
+        #                       style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
+        #                       name='spinCtrl')
+        #    ctrl.SetValue(opacity)
+        #    self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
+        #else:
+        #    ctrl = wx.StaticText(self, id=wx.ID_ANY,
+        #                         name='staticText')
+        #    if opacity < 100:
+        #        ctrl.SetLabel('   (' + str(opacity) + '%)')
+        #        
+        #self.GetPyData(self.layer_selected)[0]['ctrl'] = ctrl.GetId()
+        #self.layer_selected.SetWindow(ctrl)
+
+        #self.RefreshSelected()
+        #self.Refresh()
 
     def OnNvizProperties(self, event):
         """Nviz-related properties (raster/vector/volume)
@@ -484,12 +503,12 @@ class LayerTree(CT.CustomTreeCtrl):
         """Rename layer"""
         self.EditLabel(self.layer_selected)
 
-    def AddLayer(self, ltype, lname=None, lchecked=None,
+    def AddLayer(self, ltype, lname=None, lchecked=None, \
                  lopacity=None, lcmd=None, lgroup=None, lnviz=None):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
-        @param ltyle layer type (raster, vector, ...)
+        @param ltype layer type (raster, vector, ...)
         @param lname layer name
         @param lchecked if True layer is checked
         @param lopacity layer opacity level
@@ -520,42 +539,47 @@ class LayerTree(CT.CustomTreeCtrl):
             grouptext = _('Layer group:') + str(self.groupnode)
             self.groupnode += 1
         else:
+            ctrl = wx.Button(self, id=wx.ID_ANY, label=_("Edit..."))
+            self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
+            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
+            
             # all other items (raster, vector, ...)
-            if UserSettings.Get(group='manager', key='changeOpacityLevel', subkey='enabled'):
-                ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-                                   style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
-                                   name='spinCtrl')
-                
-                self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
-            else:
-                ctrl = wx.StaticText(self, id=wx.ID_ANY,
-                                     name='staticText')
+            #if UserSettings.Get(group='manager', key='changeOpacityLevel', subkey='enabled'):
+            #    ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
+            #                       style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
+            #                       name='spinCtrl')
+            #    
+            #    self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
+            #else:
+            #    ctrl = wx.StaticText(self, id=wx.ID_ANY,
+            #                         name='staticText')
         # add layer to the layer tree
         if self.layer_selected and self.layer_selected != self.GetRootItem():
-            if self.GetPyData(self.layer_selected)[0]['type'] != 'group':
-                if lgroup is False:
-                    # -> last child of root (loading from workspace)
-                    layer = self.AppendItem(parentId=self.root,
-                                            text='', ct_type=1, wnd=ctrl)
-                elif lgroup is True:
-                    # -> last child of group (loading from workspace)
-                    parent = self.GetItemParent(self.layer_selected)
-                    layer = self.AppendItem(parentId=parent,
-                                            text='', ct_type=1, wnd=ctrl)
-                elif lgroup is None:
-                    # -> previous sibling of selected layer
-                    parent = self.GetItemParent(self.layer_selected)
-                    layer = self.InsertItem(parentId=parent,
-                                            input=self.GetPrevSibling(self.layer_selected),
-                                            text='', ct_type=1, wnd=ctrl)
-
-            else: # group -> first child of selected layer
+            
+            if self.GetPyData(self.layer_selected)[0]['type'] == 'group' \
+                and self.IsExpanded(self.layer_selected):
+                # add to group (first child of self.layer_selected) if group expanded
                 layer = self.PrependItem(parent=self.layer_selected,
                                          text='', ct_type=1, wnd=ctrl)
-                self.Expand(self.layer_selected)
-        else: # add first layer to the layer tree (i.e. first child of root)
-            layer = self.PrependItem(parent=self.root,
-                                     text='', ct_type=1, wnd=ctrl)
+            else:
+                # prepend to individual layer or non-expanded group
+                parent = self.GetItemParent(self.layer_selected)
+                layer = self.InsertItem(parentId=parent, input=self.GetPrevSibling(self.layer_selected),
+                                       text='', ct_type=1, wnd=ctrl)
+                #if lgroup is False:
+                #    # last child of root
+                #    layer = self.AppendItem(parentId=self.root,
+                #                            text='', ct_type=1, wnd=ctrl)
+                #elif lgroup is None or lgroup is True:
+                #    # insert item as last child
+                #    parent = self.GetItemParent(self.layer_selected)
+                #    # layer = self.InsertItem(parentId=parent, input=self.GetPrevSibling(self.layer_selected),
+                #    #                        text='', ct_type=1, wnd=ctrl)
+                #    layer = self.AppendItem(parentId=parent,
+                #                            text='', ct_type=1, wnd=ctrl)
+
+        else: # add first layer to the layer tree (first child of root)
+            layer = self.PrependItem(parent=self.root, text='', ct_type=1, wnd=ctrl)
 
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
@@ -565,6 +589,10 @@ class LayerTree(CT.CustomTreeCtrl):
             checked = True
 
         self.CheckItem(layer, checked=checked)
+
+        # select new item
+        self.SelectItem(layer, select=True)
+        self.layer_selected = layer
 
         # add text and icons for each layer ltype
         if ltype == 'raster':
@@ -647,23 +675,7 @@ class LayerTree(CT.CustomTreeCtrl):
                                     'prowin' : None}, 
                                    None))
 
-            # find previous map layer instance
-            prevItem = self.GetLastChild(self.root)
-            prevMapLayer = None
-            while prevItem and prevItem.IsOk() and \
-                    prevItem != layer:
-                if self.GetPyData(prevItem)[0]['maplayer']:
-                    prevMapLayer = self.GetPyData(prevItem)[0]['maplayer']
-                
-                prevItem = self.GetPrevSibling(prevItem)
-            
-            if prevMapLayer:
-                pos = self.Map.GetLayerIndex(prevMapLayer) + 1
-            else:
-                pos = -1
-
-            maplayer = self.Map.AddLayer(pos=pos,
-                                         type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
+            maplayer = self.Map.AddLayer(type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
                                          l_active=checked, l_hidden=False,
                                          l_opacity=opacity, l_render=render)
             self.GetPyData(layer)[0]['maplayer'] = maplayer
@@ -691,10 +703,6 @@ class LayerTree(CT.CustomTreeCtrl):
         if checked is True:
             self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
-        # select new item
-        self.SelectItem(layer, select=True)
-        self.layer_selected = layer
-        
         # layer.SetHeight(TREE_ITEM_HEIGHT)
 
         return layer
@@ -774,7 +782,7 @@ class LayerTree(CT.CustomTreeCtrl):
             pass
 
     def OnActivateLayer(self, event):
-        """Click on the layer item.
+        """Double click on the layer item.
         Launch property dialog, or expand/collapse group of items, etc."""
         
         layer = event.GetItem()
@@ -994,145 +1002,32 @@ class LayerTree(CT.CustomTreeCtrl):
         if self.GetPyData(self.layer_selected)[0]['type'] == 'group':
             self.SetItemImage(self.layer_selected, self.folder_open)
 
-    def OnBeginDrag(self, event):
-        """
-        Drag and drop of tree nodes
-        """
-
-        item  = event.GetItem()
-        Debug.msg (3, "LayerTree.OnBeginDrag(): layer=%s" % \
-                   (self.GetItemText(item)))
-
-        event.Allow()
-        self.drag = True
-        self.DoSelectItem(item, unselect_others=True)
-
+    def OnDrop(self, dropTarget, dragItem):
         # save everthing associated with item to drag
-        self.dragItem = item
-
-    def RecreateItem (self, event, oldItem, parent=None):
-        """
-        Recreate item (needed for OnEndDrag())
-        """
-        Debug.msg (4, "LayerTree.RecreateItem(): layer=%s" % \
-                   self.GetItemText(oldItem))
-
-        # fetch data (olditem)
-        text    = self.GetItemText(oldItem)
-        image   = self.GetItemImage(oldItem, 0)
-        if self.GetPyData(oldItem)[0]['ctrl']:
-            oldctrl = self.FindWindowById(self.GetPyData(oldItem)[0]['ctrl'])
-        else:
-            oldctrl = None
-        checked = self.IsItemChecked(oldItem)
+        dropIndex = self.GetIndexOfItem(dropTarget)
+        dragIndex = self.GetIndexOfItem(dragItem)
         
-        # recreate spin/text control for layer
-        if self.GetPyData(oldItem)[0]['type'] == 'command':
-            newctrl = wx.TextCtrl(self, id=wx.ID_ANY, value='',
-                                  pos=wx.DefaultPosition, size=(250,25),
-                                  style=wx.TE_MULTILINE|wx.TE_WORDWRAP)
-            try:
-                newctrl.SetValue(self.GetPyData(oldItem)[0]['maplayer'].GetCmd(string=True))
-            except:
-                pass
-            newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
-            newctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
-        elif self.GetPyData(oldItem)[0]['type'] == 'group' or oldctrl is None:
-            newctrl = None
-        else:
-            opacity = self.GetPyData(oldItem)[0]['maplayer'].GetOpacity()
-            if oldctrl.GetName() == 'staticText':
-                newctrl = wx.StaticText(self, id=wx.ID_ANY,
-                                        name='staticText')
-                if opacity < 100:
-                    newctrl.SetLabel('   (' + str(opacity) + '%)')
-            else:
-                newctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-                                      style=wx.SP_ARROW_KEYS, min=0, max=100,
-                                      name='spinCtrl')
-                newctrl.SetValue(opacity)
-                self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, newctrl)
-
-        # decide where to put new layer and put it there
-        if not parent:
-            flag = self.HitTest(event.GetPoint())[1]
-        else:
-            flag = 0
-
-        if self.GetPyData(oldItem)[0]['type'] == 'group':
-            windval = None
-            data    = None
-        else:
-            windval = self.GetPyData(self.layer_selected)[0]['maplayer'].GetOpacity()
-            data    = self.GetPyData(oldItem)
-
-        # create GenericTreeItem instance
-        if flag & wx.TREE_HITTEST_ABOVE:
-            newItem = self.PrependItem(self.root, text=text, \
-                                   ct_type=1, wnd=newctrl, image=image, \
-                                   data=data)
-        elif (flag &  wx.TREE_HITTEST_BELOW) or (flag & wx.TREE_HITTEST_NOWHERE) \
-                 or (flag & wx.TREE_HITTEST_TOLEFT) or (flag & wx.TREE_HITTEST_TORIGHT):
-            newItem = self.AppendItem(self.root, text=text, \
-                                  ct_type=1, wnd=newctrl, image=image, \
-                                  data=data)
-        else:
-            if parent:
-                afteritem = parent
-            else:
-                afteritem = event.GetItem()
-
-            if  self.GetPyData(afteritem)[0]['type'] == 'group':
-                parent = afteritem
-                newItem = self.AppendItem(parent, text=text, \
-                                      ct_type=1, wnd=newctrl, image=image, \
-                                      data=data)
-                self.Expand(afteritem)
-            else:
-                parent = self.GetItemParent(afteritem)
-                newItem = self.InsertItem(parent, afteritem, text=text, \
-                                      ct_type=1, wnd=newctrl, image=image, \
-                                      data=data)
-
-        # add layer at new position
-        self.SetPyData(newItem, self.GetPyData(oldItem))
-        if newctrl:
-            self.GetPyData(newItem)[0]['ctrl'] = newctrl.GetId()
-        else:
-            self.GetPyData(newItem)[0]['ctrl'] = None
-            
-        self.CheckItem(newItem, checked=checked)
-
-        # newItem.SetHeight(TREE_ITEM_HEIGHT)
-
-        return newItem
-
-    def OnEndDrag(self, event):
-        """
-        Insert copy of layer in new
-        position and delete original at old position
-        """
-
-        self.drag = True
+        #Insert copy of layer in new position and delete original at old position
         try:
-            old = self.dragItem  # make sure this member exists
+            old = dragItem  # make sure this member exists
         except:
             return
 
-        Debug.msg (4, "LayerTree.OnEndDrag(): layer=%s" % \
-                   (self.GetItemText(self.dragItem)))
+        Debug.msg (4, "LayerTree.OnDrop(): layer=%s" % \
+                   (self.GetItemText(dragItem)))
+        
+        # recreate data layer
+        newItem  = self.RecreateItem (dragItem, dropTarget)
 
-        newItem  = self.RecreateItem (event, self.dragItem)
-
+        # if recreated layer is a group, also recreate its children
         if  self.GetPyData(newItem)[0]['type'] == 'group':
-            (child, cookie) = self.GetFirstChild(self.dragItem)
+            (child, cookie) = self.GetFirstChild(dragItem)
             if child:
                 while child:
-                    self.RecreateItem(event, child, parent=newItem)
+                    self.RecreateItem(child, dropTarget, parent=newItem)
                     self.Delete(child)
                     child = self.GetNextChild(old, cookie)[0]
-
-            self.Expand(newItem)
+            #self.Expand(newItem)
 
         # delete layer at original position
         try:
@@ -1147,8 +1042,94 @@ class LayerTree(CT.CustomTreeCtrl):
         # select new item
         self.SelectItem(newItem)
 
-        # completed drag and drop
-        self.drag = False
+    def RecreateItem (self, dragItem, dropTarget, parent=None):
+        """
+        Recreate item (needed for OnEndDrag())
+        """
+        Debug.msg (4, "LayerTree.RecreateItem(): layer=%s" % \
+                   self.GetItemText(dragItem))
+
+        # fetch data (dragItem)
+        checked = self.IsItemChecked(dragItem)
+        image   = self.GetItemImage(dragItem, 0)
+        text    = self.GetItemText(dragItem)
+        if self.GetPyData(dragItem)[0]['ctrl']:
+            # recreate spin/text control for layer
+            oldctrl = self.FindWindowById(self.GetPyData(dragItem)[0]['ctrl'])
+            opacity = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
+            if oldctrl.GetName() == 'staticText':
+                newctrl = wx.StaticText(self, id=wx.ID_ANY,
+                                        name='staticText')
+                if opacity < 100:
+                    newctrl.SetLabel('   (' + str(opacity) + '%)')
+            else:
+                newctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
+                                      style=wx.SP_ARROW_KEYS, min=0, max=100,
+                                      name='spinCtrl')
+                newctrl.SetValue(opacity)
+                self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, newctrl)
+            windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
+            data    = self.GetPyData(dragItem)
+        
+        elif self.GetPyData(dragItem)[0]['type'] == 'command':
+            # recreate command layer
+            oldctrl = None
+            newctrl = wx.TextCtrl(self, id=wx.ID_ANY, value='',
+                                  pos=wx.DefaultPosition, size=(250,25),
+                                  style=wx.TE_MULTILINE|wx.TE_WORDWRAP)
+            try:
+                newctrl.SetValue(self.GetPyData(dragItem)[0]['maplayer'].GetCmd(string=True))
+            except:
+                pass
+            newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
+            newctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
+            windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
+            data    = self.GetPyData(dragItem)
+
+        elif self.GetPyData(dragItem)[0]['type'] == 'group':
+            #recreate group
+            newctrl = None
+            windval = None
+            data    = None
+            
+        if dropTarget != None:
+            if parent:
+                # new item is a group
+                afteritem = parent
+            else:
+                # new item is a single layer
+                afteritem = dropTarget
+
+            # dragItem dropped on group
+            if  self.GetPyData(afteritem)[0]['type'] == 'group':
+                newItem = self.PrependItem(afteritem, text=text, \
+                                      ct_type=1, wnd=newctrl, image=image, \
+                                      data=data)
+                self.Expand(afteritem)
+            else:
+                #dragItem dropped on single layer
+                newparent = self.GetItemParent(afteritem)
+                newItem = self.InsertItem(newparent, self.GetPrevSibling(afteritem), \
+                                       text=text, ct_type=1, wnd=newctrl, \
+                                       image=image, data=data)
+        else:
+            # if dragItem not dropped on a layer or group, prepend it to the layer tree
+            newItem = self.PrependItem(self.root, text=text, \
+                                  ct_type=1, wnd=newctrl, image=image, \
+                                  data=data)
+
+        #update new layer 
+        self.SetPyData(newItem, self.GetPyData(dragItem))
+        if newctrl:
+            self.GetPyData(newItem)[0]['ctrl'] = newctrl.GetId()
+        else:
+            self.GetPyData(newItem)[0]['ctrl'] = None
+            
+        self.CheckItem(newItem, checked=checked)
+
+        # newItem.SetHeight(TREE_ITEM_HEIGHT)
+
+        return newItem
 
     def GetOptData(self, dcmd, layer, params, propwin):
         """Process layer data"""
@@ -1247,11 +1228,12 @@ class LayerTree(CT.CustomTreeCtrl):
                 opac = self.GetPyData(item)[0]['maplayer'].GetOpacity(float=True)
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
+        maplayer = self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'], type=type,
+                                        command=cmdlist, name=self.GetItemText(item),
+                                        l_active=chk, l_hidden=hidden, l_opacity=opac, l_render=False)
 
-        self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'],
-                             command=cmdlist, name=self.GetItemText(item),
-                             active=chk, l_hidden=hidden, l_opacity=opac)
-        
+        self.GetPyData(item)[0]['maplayer'] = maplayer
+
         # if digitization tool enabled -> update list of available vector map layers
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)
@@ -1285,3 +1267,4 @@ class LayerTree(CT.CustomTreeCtrl):
             item = self.GetNextSibling(item)
 
         return None
+    
