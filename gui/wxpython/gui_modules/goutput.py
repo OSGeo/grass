@@ -695,18 +695,17 @@ class GMStc(wx.stc.StyledTextCtrl):
             txt += os.linesep
         
         if '\r' in txt:
-            self.linePos = -1
+            self.parent.linePos = -1
             for seg in txt.split('\r'):
-                if self.linePos > -1:
-                    self.cmd_output.SetCurrenPos()
-                    self.ReplaceText(iseg) + ' ' * (self.lineWidth - len(iseg))
+                if self.parent.linePos > -1:
+                    self.SetCurrentPos(self.parent.linePos)
+                    self.ReplaceSelection(seg)
                 else:
-                    self.AddText(iseg)
-                self.linePos = self.GetCurrentPos()
-                    
-                iseg += 1
+                    self.parent.linePos = self.GetCurrentPos()
+                    self.AddText(seg)
         else:
+            self.parent.linePos = self.GetCurrentPos()
             self.AddText(txt)
-            self.linePos = self.GetCurrentPos()
+        
             
             
