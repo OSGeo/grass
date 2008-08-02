@@ -629,7 +629,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 id = self.nvizClass.LoadVector(str(layer.name), True)
 
             if id < 0:
-                print >> sys.stderr, "Nviz:" + _("Loading vector map <%(name)s> (%()types) failed") % \
+                print >> sys.stderr, "Nviz:" + _("Loading vector map <%(name)s> (%(type)s) failed") % \
                     { 'name' : layer.name, 'type' : type }
                 continue
 
@@ -811,8 +811,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def ResetView(self):
         """Reset to default view"""
         self.view['z-exag']['value'], \
-            self.iview['height']['value'] = self.nvizClass.SetViewDefault()
-
+            self.iview['height']['value'], \
+            self.iview['height']['min'], \
+            self.iview['height']['max'] = self.nvizClass.SetViewDefault()
+        
         self.view['pos']['x'] = UserSettings.Get(group='nviz', key='view',
                                                  subkey=('pos', 'x'))
         self.view['pos']['y'] = UserSettings.Get(group='nviz', key='view',
@@ -1138,7 +1140,7 @@ class NvizToolWindow(wx.Frame):
 
         # height + z-exag
         self.CreateControl(panel, dict=self.win['view'], name='height', sliderHor=False,
-                           range=(self.mapWindow.view['height']['min'], self.mapWindow.view['height']['max']),
+                           range=(0, 1),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False,
                            range=(0, 1),
@@ -1764,93 +1766,78 @@ class NvizToolWindow(wx.Frame):
         pvals = UserSettings.Get(group='nviz', key='view', subkey='persp')
         ipvals = UserSettings.Get(group='nviz', key='view', subkey='persp', internal=True)
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Perspective (value):")),
+                                         label=_("Perspective:")),
                       pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("(value)")),
+                      pos=(0, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         pval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=pvals['value'],
                            min=ipvals['min'],
                            max=ipvals['max'])
         self.win['settings']['view']['persp']['value'] = pval.GetId()
-        gridSizer.Add(item=pval, pos=(0, 1),
+        gridSizer.Add(item=pval, pos=(0, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("(step):")),
-                      pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                                         label=_("(step)")),
+                      pos=(0, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         pstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=pvals['step'],
                            min=ipvals['min'],
                            max=ipvals['max']-1)
         self.win['settings']['view']['persp']['step'] = pstep.GetId()
-        gridSizer.Add(item=pstep, pos=(0, 3),
+        gridSizer.Add(item=pstep, pos=(0, 4),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # position
         self.win['settings']['view']['pos'] = {}
         posvals = UserSettings.Get(group='nviz', key='view', subkey='pos')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Position") + " (x):"),
+                                         label=_("Position:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("(x)")),
+                      pos=(1, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         px = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=posvals['x'] * 100,
                            min=0,
                            max=100)
         self.win['settings']['view']['pos']['x'] = px.GetId()
-        gridSizer.Add(item=px, pos=(1, 1),
+        gridSizer.Add(item=px, pos=(1, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="(y):"),
-                      pos=(1, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                                         label="(y)"),
+                      pos=(1, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         py = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=posvals['y'] * 100,
                            min=0,
                            max=100)
         self.win['settings']['view']['pos']['y'] = py.GetId()
-        gridSizer.Add(item=py, pos=(1, 3),
+        gridSizer.Add(item=py, pos=(1, 4),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # height
         self.win['settings']['view']['height'] = {}
         hvals = UserSettings.Get(group='nviz', key='view', subkey='height')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Height") + " (min):"),
+                                         label=_("Height")),
                       pos=(2, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-
-        hmin = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           initial=hvals['min'],
-                           min=-1e6,
-                           max=1e6)
-        self.win['settings']['view']['height']['min'] = hmin.GetId()
-        gridSizer.Add(item=hmin, pos=(2, 1),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="(max):"),
-                      pos=(2, 2), flag=wx.ALIGN_CENTER_VERTICAL)
-
-        hmax = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
-                           initial=hvals['max'],
-                           min=-1e6,
-                           max=1e6)
-        self.win['settings']['view']['height']['max'] = hmax.GetId()
-        gridSizer.Add(item=hmax, pos=(2, 3),
-                      flag=wx.ALIGN_CENTER_VERTICAL)
-
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label="(step):"),
-                      pos=(2, 4), flag=wx.ALIGN_CENTER_VERTICAL)
+                                         label=_("(step)")),
+                      pos=(2, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         hstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=hvals['step'],
                            min=1,
                            max=hvals['max']-1)
         self.win['settings']['view']['height']['step'] = hstep.GetId()
-        gridSizer.Add(item=hstep, pos=(2, 5),
+        gridSizer.Add(item=hstep, pos=(2, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # twist
@@ -1858,54 +1845,60 @@ class NvizToolWindow(wx.Frame):
         tvals = UserSettings.Get(group='nviz', key='view', subkey='twist')
         itvals = UserSettings.Get(group='nviz', key='view', subkey='twist', internal=True)
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Twist (value):")),
+                                         label=_("Twist")),
                       pos=(3, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("(value)")),
+                      pos=(3, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         tval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=tvals['value'],
                            min=itvals['min'],
                            max=itvals['max'])
         self.win['settings']['view']['twist']['value'] = tval.GetId()
-        gridSizer.Add(item=tval, pos=(3, 1),
+        gridSizer.Add(item=tval, pos=(3, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("(step):")),
-                      pos=(3, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                                         label=_("(step)")),
+                      pos=(3, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         tstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=tvals['step'],
                            min=itvals['min'],
                            max=itvals['max']-1)
         self.win['settings']['view']['twist']['step'] = tstep.GetId()
-        gridSizer.Add(item=tstep, pos=(3, 3),
+        gridSizer.Add(item=tstep, pos=(3, 4),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         # z-exag
         self.win['settings']['view']['z-exag'] = {}
         zvals = UserSettings.Get(group='nviz', key='view', subkey='z-exag')
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Z-exag (value):")),
+                                         label=_("Z-exag")),
                       pos=(4, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("(value)")),
+                      pos=(4, 1), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         zval = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=zvals['value'],
                            min=-1e6,
                            max=1e6)
         self.win['settings']['view']['z-exag']['value'] = zval.GetId()
-        gridSizer.Add(item=zval, pos=(4, 1),
+        gridSizer.Add(item=zval, pos=(4, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                          label=_("(step):")),
-                      pos=(4, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+                      pos=(4, 3), flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
 
         zstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=zvals['step'],
                            min=-1e6,
                            max=1e6)
         self.win['settings']['view']['z-exag']['step'] = zstep.GetId()
-        gridSizer.Add(item=zstep, pos=(4, 3),
+        gridSizer.Add(item=zstep, pos=(4, 4),
                       flag=wx.ALIGN_CENTER_VERTICAL)
 
         boxSizer.Add(item=gridSizer, proportion=1,
@@ -2747,9 +2740,13 @@ class NvizToolWindow(wx.Frame):
         
         if pageId == 'view':
             max = self.mapWindow.view['z-exag']['value'] * 10
+            hmin = self.mapWindow.iview['height']['min']
+            hmax = self.mapWindow.iview['height']['max']
             for control in ('spin', 'slider'):
                 self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
                                                                                   max)
+                self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
+                                                                                  hmax)
         elif pageId == 'surface':
             if self.notebook.GetSelection() != self.page['surface']['id']:
                 if self.page['vector']['id'] > -1:

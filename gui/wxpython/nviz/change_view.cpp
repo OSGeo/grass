@@ -42,13 +42,13 @@ int Nviz::ResizeWindow(int width, int height)
 /*!
   \brief Set default view (based on loaded data)
 
-  \return height, z-exag value
+  \return z-exag value, default, min and max height
 */
 std::vector<double> Nviz::SetViewDefault()
 {
     std::vector<double> ret;
 
-    float vp_height, z_exag;
+    float hdef, hmin, hmax, z_exag;
 
     /* determine z-exag */
     z_exag = Nviz_get_exag();
@@ -57,14 +57,13 @@ std::vector<double> Nviz::SetViewDefault()
 		     z_exag);
 
     /* determine height */
-    Nviz_get_exag_height(&vp_height, NULL, NULL);
-    ret.push_back(vp_height);
+    Nviz_get_exag_height(&hdef, &hmin, &hmax);
+    ret.push_back(hdef);
+    ret.push_back(hmin);
+    ret.push_back(hmax);
 
-    /*
-    SetView(VIEW_DEFAULT_POS_X, VIEW_DEFAULT_POS_Y,
-	    vp_height, VIEW_DEFAULT_PERSP, VIEW_DEFAULT_TWIST);
-    */
-    G_debug(1, "Nviz::SetViewDefault()");
+    G_debug(1, "Nviz::SetViewDefault(): hdef=%f, hmin=%f, hmax=%f",
+	    hdef, hmin, hmax);
 
     return ret;
 }
