@@ -692,7 +692,8 @@ class GMStc(wx.stc.StyledTextCtrl):
         if wrap:
             txt = textwrap.fill(txt, wrap) + os.linesep
         else:
-            txt += os.linesep
+            if txt[-1] != os.linesep:
+                txt += os.linesep
         
         if '\r' in txt:
             self.parent.linePos = -1
