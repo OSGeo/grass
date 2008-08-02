@@ -534,23 +534,28 @@ class LayerTree(CT.CustomTreeCtrl):
         if self.layer_selected and self.layer_selected != self.GetRootItem():
             if self.GetPyData(self.layer_selected)[0]['type'] != 'group':
                 if lgroup is False:
-                    # last child of root
+                    # -> last child of root (loading from workspace)
                     layer = self.AppendItem(parentId=self.root,
                                             text='', ct_type=1, wnd=ctrl)
-                elif lgroup is None or lgroup is True:
-                    # insert item as last child
+                elif lgroup is True:
+                    # -> last child of group (loading from workspace)
                     parent = self.GetItemParent(self.layer_selected)
-                    # layer = self.InsertItem(parentId=parent, input=self.GetPrevSibling(self.layer_selected),
-                    #                        text='', ct_type=1, wnd=ctrl)
                     layer = self.AppendItem(parentId=parent,
                                             text='', ct_type=1, wnd=ctrl)
+                elif lgroup is None:
+                    # -> previous sibling of selected layer
+                    parent = self.GetItemParent(self.layer_selected)
+                    layer = self.InsertItem(parentId=parent,
+                                            input=self.GetPrevSibling(self.layer_selected),
+                                            text='', ct_type=1, wnd=ctrl)
 
-            else: # group (first child of self.layer_selected)
+            else: # group -> first child of selected layer
                 layer = self.PrependItem(parent=self.layer_selected,
                                          text='', ct_type=1, wnd=ctrl)
                 self.Expand(self.layer_selected)
-        else: # add first layer to the layer tree (first child of root)
-            layer = self.PrependItem(parent=self.root, text='', ct_type=1, wnd=ctrl)
+        else: # add first layer to the layer tree (i.e. first child of root)
+            layer = self.PrependItem(parent=self.root,
+                                     text='', ct_type=1, wnd=ctrl)
 
         # layer is initially unchecked as inactive (beside 'command')
         # use predefined value if given
