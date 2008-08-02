@@ -566,10 +566,6 @@ class LayerTree(CT.CustomTreeCtrl):
 
         self.CheckItem(layer, checked=checked)
 
-        # select new item
-        self.SelectItem(layer, select=True)
-        self.layer_selected = layer
-
         # add text and icons for each layer ltype
         if ltype == 'raster':
             self.SetItemImage(layer, self.rast_icon)
@@ -651,7 +647,23 @@ class LayerTree(CT.CustomTreeCtrl):
                                     'prowin' : None}, 
                                    None))
 
-            maplayer = self.Map.AddLayer(type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
+            # find previous map layer instance
+            prevItem = self.GetLastChild(self.root)
+            prevMapLayer = None
+            while prevItem and prevItem.IsOk() and \
+                    prevItem != layer:
+                if self.GetPyData(prevItem)[0]['maplayer']:
+                    prevMapLayer = self.GetPyData(prevItem)[0]['maplayer']
+                
+                prevItem = self.GetPrevSibling(prevItem)
+            
+            if prevMapLayer:
+                pos = self.Map.GetLayerIndex(prevMapLayer) + 1
+            else:
+                pos = -1
+
+            maplayer = self.Map.AddLayer(pos=pos,
+                                         type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
                                          l_active=checked, l_hidden=False,
                                          l_opacity=opacity, l_render=render)
             self.GetPyData(layer)[0]['maplayer'] = maplayer
@@ -679,6 +691,10 @@ class LayerTree(CT.CustomTreeCtrl):
         if checked is True:
             self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
+        # select new item
+        self.SelectItem(layer, select=True)
+        self.layer_selected = layer
+        
         # layer.SetHeight(TREE_ITEM_HEIGHT)
 
         return layer
