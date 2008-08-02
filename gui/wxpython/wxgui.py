@@ -1166,6 +1166,12 @@ class GMFrame(wx.Frame):
         rastmenu.AppendItem(addrast)
         self.Bind(wx.EVT_MENU, self.AddRaster, addrast)
 
+        if self.curr_page.maptree.mapdisplay.toolbars['nviz']:
+            addrast3d = wx.MenuItem(rastmenu, -1, Icons ["addrast3d"].GetLabel())
+            addrast3d.SetBitmap(Icons["addrast3d"].GetBitmap (self.iconsize))
+            rastmenu.AppendItem(addrast3d)
+            self.Bind(wx.EVT_MENU, self.AddRaster3d, addrast3d)
+
         addshaded = wx.MenuItem(rastmenu, -1, Icons ["addshaded"].GetLabel())
         addshaded.SetBitmap(Icons["addshaded"].GetBitmap (self.iconsize))
         rastmenu.AppendItem(addshaded)
@@ -1291,6 +1297,10 @@ class GMFrame(wx.Frame):
         """Add raster map with cell numbers"""
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('rastnum')
+
+    def AddRaster3d(self, event):
+        self.notebook.SetSelection(0)
+        self.curr_page.maptree.AddLayer('raster')
 
     def addVector(self, event):
         """Add vector layer"""

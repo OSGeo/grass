@@ -57,13 +57,14 @@ IconsSilk = {
     "digUndo" : 'arrow_undo.png',
     "digSettings" : 'color_swatch.png',
     "digAdditionalTools" : 'plugin.png',
-    # gis manager
+    # layer manager
     "newdisplay" : 'application_add.png',
     "workspaceNew" : 'page_white.png',
     "workspaceLoad" : 'page_white_get.png',
     "workspaceOpen" : 'folder.png',
     "workspaceSave" : 'page_save.png',
     "addrast"    : 'image_add.png',
+    "addrast3d"  : 'bricks.png',
     "addshaded"  : 'picture_empty.png',
     "addrarrow"  : 'arrow_inout.png',
     "addvect"    : 'map_add.png',

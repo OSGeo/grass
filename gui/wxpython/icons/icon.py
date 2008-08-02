@@ -87,6 +87,7 @@ icons_default = {
     "workspaceOpen" : 'file-open.gif',
     "workspaceSave" : 'file-save.gif',
     "addrast"    : 'element-cell.gif',
+    "addrast3d"    : 'element-grid3.gif',
     "addvect"    : 'element-vector.gif',
     "addcmd"     : 'gui-cmd.gif',
     "addgrp"     : 'gui-group.gif',
@@ -314,6 +315,8 @@ Icons = {
                              label=_("Add labels")),
     "addtext"    : MetaIcon (img=icons_img["addtext"],
                              label=_("Add text layer")),
+    "addrast3d"  : MetaIcon (img=icons_img["addrast3d"],
+                             label=_("Add 3D raster map")),
     # digit
     "digAddPoint": MetaIcon (img=icons_img["digAddPoint"],
                              label=_("Digitize new point"),
