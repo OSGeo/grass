@@ -708,6 +708,21 @@ class mainFrame(wx.Frame):
 
         guisizer.Add(item=btnsizer, proportion=0, flag=wx.ALIGN_CENTER)
 
+        if self.parent is not None:
+            self.outputType = None
+            for p in self.task.params:
+                if p.get('name', '') == 'output':
+                    self.outputType = p.get('prompt', None)
+                    break
+            if self.outputType:
+                # add newly created map into layer tree
+                self.addbox = wx.CheckBox(parent=self.panel,
+                                          label=_('Add created map into layer tree'), style = wx.NO_BORDER)
+                self.addbox.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+                guisizer.Add(item=self.addbox, proportion=0,
+                             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                             border=5)
+        
         if self.get_dcmd is None:
             # close dialog when command is terminated
             self.closebox = wx.CheckBox(parent=self.panel,

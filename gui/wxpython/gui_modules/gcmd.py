@@ -488,9 +488,9 @@ class CommandThread(Thread):
         
         self._want_abort = False
         self.aborted = False
-
+        
         self.setDaemon(True)
-
+        
         # set message formatting
         self.message_format = os.getenv("GRASS_MESSAGE_FORMAT")
         os.environ["GRASS_MESSAGE_FORMAT"] = "gui"
@@ -519,7 +519,7 @@ class CommandThread(Thread):
         if self.stdin: # read stdin if requested ...
             self.module.stdin.write(self.stdin)
             self.module.stdin.close()
-
+            
         # redirect standard outputs...
         if self.stdout or self.stderr:
             self.__redirect_stream()
@@ -545,7 +545,7 @@ class CommandThread(Thread):
             if self._want_abort: # abort running process
                 self.module.kill()
                 self.aborted = True
-                return
+                return 
             if self.stdout:
                 line = recv_some(self.module, e=0, stderr=0)
                 self.stdout.write(line)

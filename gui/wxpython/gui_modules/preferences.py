@@ -145,6 +145,9 @@ class Settings:
                 'rasterOverlay' : {
                     'enabled' : False
                     },
+                'addNewLayer' : {
+                    'enabled' : False
+                    },
                 },
             #
             # Workspace
@@ -1051,6 +1054,16 @@ class PreferencesDialog(wx.Dialog):
         self.winId['cmd:closeDlg:enabled'] = close.GetId()
 
         gridSizer.Add(item=close,
+                      pos=(row, 0), span=(1, 2))
+        row += 1
+        # add layer
+        add = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                          label=_("Add created map into layer tree"),
+                          name="IsChecked")
+        add.SetValue(self.settings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+        self.winId['cmd:addNewLayer:enabled'] = add.GetId()
+
+        gridSizer.Add(item=add,
                       pos=(row, 0), span=(1, 2))
         row += 1
         # verbosity

@@ -57,12 +57,12 @@ def GetTempfile(pref=None):
     except:
         return None
 
-def GetLayerNameFromCmd(dcmd, fullyQualified=False):
+def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None):
     """Get map name from GRASS command
 
     @param dcmd GRASS command (given as list)
     @param fullyQualified change map name to be fully qualified
-
+    @param force parameter otherwise 'input'/'map'
     @return map name
     @return '' if no map name found in command
     """
@@ -78,12 +78,15 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False):
         mapname = dcmd[idx].split('=')[1]+' labels'
     else:
         for idx in range(len(dcmd)):
-            if 'map=' in dcmd[idx] or \
-                    'input=' in dcmd[idx] or \
-                    'red=' in dcmd[idx] or \
-                    'h_map=' in dcmd[idx] or \
-                    'reliefmap' in dcmd[idx]:
+            if param and param in dcmd[idx]:
                 break
+            elif not param:
+                if 'map=' in dcmd[idx] or \
+                        'input=' in dcmd[idx] or \
+                        'red=' in dcmd[idx] or \
+                        'h_map=' in dcmd[idx] or \
+                        'reliefmap' in dcmd[idx]:
+                    break
             
         if idx < len(dcmd):
             mapname = dcmd[idx].split('=')[1]
