@@ -115,7 +115,7 @@ icons_default = {
     "font"       : 'gui-font.gif',
     "histogram"  : 'module-d.histogram.gif',
     "color"      : 'edit-color.gif',
-    "options"    :  wx.ART_ERROR, # FIXME
+    "layeropts"  : 'gui-layeroptions.gif',
     # profile 
     "profile"    : 'gui-profile.gif',
     "transect"   : 'gui-profiledefine.gif',
@@ -129,8 +129,8 @@ icons_default = {
     'grGcpRms'     : 'gui-rms.gif',
     'grGcpRefresh' : 'gui-display.gif',
     "grGcpSave"    : 'file-save.gif', 
-    "grGcpAdd"     : wx.ART_ERROR, # FIXME
-    "grGcpDelete"  : wx.ART_ERROR, # FIXME
+    "grGcpAdd"     : wx.ART_NEW, # FIXME
+    "grGcpDelete"  : wx.ART_DELETE, # FIXME
     "grGcpReload"  : 'gui-redraw.gif',
     "grSettings"   : 'edit-color.gif', 
     # nviz 
@@ -391,8 +391,8 @@ Icons = {
                              label=_("Select font")),
     "color"      : MetaIcon (img=icons_img["color"],
                              label=_("Select color")),
-    "options"    : MetaIcon (img=icons_img["options"],
-                             label=_("Set histogram options")),
+    "layeropts"  : MetaIcon (img=icons_img["layeropts"],
+                             label=_("Set options")),
     "analyze"    : MetaIcon (img=icons_img["analyze"],
                              label=_("Analyze")),
     # georectify
