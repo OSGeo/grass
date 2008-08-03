@@ -61,6 +61,13 @@
 #% description: Column to be queried
 #% required : yes
 #%end
+#%option
+#% key: dmax
+#% type: double
+#% description: Maximum query distance in map units
+#% answer: 0.0
+#% required: no
+#%end
 
 
 if  [ -z "$GISBASE" ] ; then
@@ -72,12 +79,11 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
     exec g.parser "$0" "$@"
 fi
 
-
 exec v.distance from="$GIS_OPT_VECTOR" \
 	to="$GIS_OPT_QVECTOR" \
 	column="$GIS_OPT_COLUMN" \
 	to_column="$GIS_OPT_QCOLUMN" \
 	upload=to_attr \
-	dmax=0 \
+	dmax=$GIS_OPT_DMAX \
 	from_layer=$GIS_OPT_LAYER \
 	to_layer=$GIS_OPT_QLAYER
