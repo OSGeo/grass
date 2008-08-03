@@ -36,6 +36,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
+#include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 #ifndef RAND_MAX
@@ -54,9 +55,10 @@ double drand48()
 
 int main(int argc, char *argv[])
 {
-    char *output;
-    double (*rng) (), max;
-    int i, n, b;
+    char *output, buf[2000];
+    double (*rng) ();
+    double max, zmin, zmax;
+    int i, n, b, type, usefloat;
     struct Map_info Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -64,12 +66,16 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *output, *nsites, *zmin, *zmax;
+	struct Option *output, *nsites, *zmin, *zmax, *zcol;
     } parm;
     struct
     {
 	struct Flag *rand, *drand48, *z, *notopo;
     } flag;
+    struct field_info *Fi;
+    dbDriver *driver;
+    dbTable *table;
+    dbString sql;
 
     G_gisinit(argv[0]);
 
@@ -90,15 +96,23 @@ int main(int argc, char *argv[])
     parm.zmin->key = "zmin";
     parm.zmin->type = TYPE_DOUBLE;
     parm.zmin->required = NO;
-    parm.zmin->description = _("Minimum z height (needs -z flag)");
+    parm.zmin->description = _("Minimum z height (needs -z flag or column name)");
     parm.zmin->answer = "0.0";
 
     parm.zmax = G_define_option();
     parm.zmax->key = "zmax";
     parm.zmax->type = TYPE_DOUBLE;
     parm.zmax->required = NO;
-    parm.zmax->description = _("Maximum z height (needs -z flag)");
+    parm.zmax->description = _("Maximum z height (needs -z flag or column name)");
     parm.zmax->answer = "0.0";
+    
+    parm.zcol = G_define_standard_option(G_OPT_COLUMN);
+    parm.zcol->key = "column";
+    parm.zcol->required = NO;
+    parm.zcol->multiple = NO;
+    parm.zcol->label = _("Column name and type (i.e. INTEGER, DOUBLE PRECISION) for z values");
+    parm.zcol->description =
+            _("Writes Z data to column instead of 3D vector");
 
     flag.z = G_define_flag();
     flag.z->key = 'z';
@@ -115,6 +129,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (flag.z->answer && parm.zcol->answer) {
+        G_fatal_error(_("v.random can't create 3D vector and attribute table at same time"));
+    }
+    
     output = parm.output->answer;
     n = atoi(parm.nsites->answer);
     b = (flag.drand48->answer == '\0') ? 0 : 1;
@@ -129,6 +147,74 @@ int main(int argc, char *argv[])
     else
 	Vect_open_new(&Out, output, WITHOUT_Z);
 
+    /* Do we need to write random values into attribute table? */
+    if (parm.zcol->answer) { 
+        Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
+        driver = db_start_driver_open_database(Fi->driver, Vect_subst_var(Fi->database, &Out));
+        if (driver == NULL) {
+            Vect_delete(parm.output->answer);
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          Vect_subst_var(Fi->database, &Out), Fi->driver);
+        }
+        db_begin_transaction(driver);
+
+        db_init_string(&sql);
+        sprintf(buf, "create table %s (cat integer, %s)", Fi->table, parm.zcol->answer);
+        db_set_string(&sql, buf);
+        Vect_map_add_dblink(&Out, 1, NULL, Fi->table, "cat", Fi->database, Fi->driver);
+        
+        /* Create table */
+        G_debug(3, db_get_string(&sql));
+        if (db_execute_immediate(driver, &sql) != DB_OK) {
+            db_close_database(driver);
+            db_shutdown_driver(driver);
+            Vect_delete(parm.output->answer);
+            G_fatal_error(_("Unable to create table: %s"),
+                          db_get_string(&sql));
+        }
+
+        /* Grant */
+        if (db_grant_on_table
+            (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK) {
+                 db_close_database(driver);
+                 db_shutdown_driver(driver);
+                 Vect_delete(parm.output->answer);
+                 G_fatal_error(_("Unable to grant privileges on table <%s>"),
+                               Fi->table);
+        }
+        
+        /* OK. Let's check what type of column user has created */
+        db_set_string(&sql, Fi->table);
+        if (db_describe_table(driver, &sql, &table) != DB_OK) {
+            db_close_database(driver);
+            db_shutdown_driver(driver);
+            Vect_delete(parm.output->answer);
+            G_fatal_error(_("Unable to describe table <%s>"),
+                          Fi->table);
+        }
+        
+        if (db_get_table_number_of_columns(table) != 2) {
+            db_close_database(driver);
+            db_shutdown_driver(driver);
+            Vect_delete(parm.output->answer);
+            G_fatal_error(_("Table should contain only two columns"));
+        }
+        
+        type = db_get_column_sqltype(db_get_table_column(table, 1));
+        usefloat = -1;
+        if (type == DB_SQL_TYPE_SMALLINT || type == DB_SQL_TYPE_INTEGER)
+            usefloat = 0;
+        if (type == DB_SQL_TYPE_REAL || type == DB_SQL_TYPE_DOUBLE_PRECISION)
+            usefloat = 1;
+        if (usefloat < 0) {
+            db_close_database(driver);
+            db_shutdown_driver(driver);
+            Vect_delete(parm.output->answer);
+            G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER" 
+                    " and DOUBLE PRECISION column types."));
+        }
+    }
+    
     Vect_hist_command(&Out);
 
     if (b) {
@@ -145,10 +231,15 @@ int main(int argc, char *argv[])
 
     G_get_window(&window);
 
+    if (flag.z->answer || parm.zcol->answer) {
+        zmax = atof(parm.zmax->answer);
+        zmin = atof(parm.zmin->answer);
+    }
+
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    G_important_message(_("Generating points..."));
+    G_message(_("Generating points..."));
     for (i = 0; i < n; ++i) {
 	double x, y, z;
 
@@ -157,21 +248,44 @@ int main(int argc, char *argv[])
 	Vect_reset_line(Points);
 	Vect_reset_cats(Cats);
 
-	x = rng() / max * (window.west - window.east) + window.east;
-	y = rng() / max * (window.north - window.south) + window.south;
-
+        x = rng() / max * (window.west - window.east) + window.east;
+        y = rng() / max * (window.north - window.south) + window.south;
 
 	if (flag.z->answer) {
-	    z = rng() / max * (atof(parm.zmax->answer) -
-			       atof(parm.zmin->answer)) +
-		atof(parm.zmin->answer);
+            z = rng() / max * (zmax - zmin) + zmin;
 	    Vect_append_point(Points, x, y, z);
 	}
 	else
 	    Vect_append_point(Points, x, y, 0.0);
 
+        if (parm.zcol->answer) {
+            z = rng() / max * (zmax - zmin) + zmin; 
+
+            sprintf(buf, "insert into %s values ( %d, ", Fi->table, i+1 );
+            db_set_string(&sql, buf);
+            /* Round random value if column is integer type */
+            if (usefloat)
+                sprintf(buf, "%f )", z);
+            else
+                sprintf(buf, "%.0f )", z);
+            db_append_string(&sql, buf);
+
+            G_debug(3, db_get_string ( &sql ));
+            if (db_execute_immediate (driver, &sql) != DB_OK) {
+                db_close_database(driver);
+                db_shutdown_driver(driver);
+                Vect_delete(parm.output->answer);
+                G_fatal_error(_("Cannot insert new row: %s"), db_get_string ( &sql ));
+            }
+        }
+
 	Vect_cat_set(Cats, 1, i + 1);
 	Vect_write_line(&Out, GV_POINT, Points, Cats);
+    }
+    
+    if (parm.zcol->answer) {
+        db_commit_transaction ( driver );
+        db_close_database_shutdown_driver ( driver );
     }
 
     if (!flag.notopo->answer) {
