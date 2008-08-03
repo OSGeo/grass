@@ -28,6 +28,7 @@ int execute_random (struct rr_state *theState)
     struct line_pnts *Points;
     struct line_cats *Cats;
     int cat;
+    RASTER_MAP_TYPE type;
 
     G_get_window (&window);
 
@@ -45,10 +46,15 @@ int execute_random (struct rr_state *theState)
     }
 
     if (theState->outraster != NULL) {
-        if ((outfd = G_open_raster_new (theState->outraster, theState->buf.type)) < 0)
+        if (theState->docover == 1) 
+            type = theState->cover.type;
+        else
+            type = theState->buf.type;
+        if ((outfd = G_open_raster_new (theState->outraster, type)) < 0)
             G_fatal_error (_("Cannot create raster map <%s>"), 
 			   theState->outraster);
         theState->fd_new = outfd;
+        
     }
 
     if (theState->outvector) {
@@ -122,16 +128,14 @@ int execute_random (struct rr_state *theState)
                 G_fatal_error (_("Cannot read raster row [%d] from cover raster map <%s>"),
 		    	       row, theState->inrcover);
         }
+        
         for (col = 0; col < ncols && nt ; col++)
         {
 	    if (!theState->use_nulls && is_null_value(theState->buf, col) )
                 continue;
             if (theState->docover == 1) {  /* skip no data cover points */
-		if (!theState->use_nulls && is_null_value(theState->cover, col) ) {
-			/* If cover is NULL, then output aso must be NULL */
-			set_to_null(&theState->buf, col); 
-			continue;
-		}
+		if (!theState->use_nulls && is_null_value(theState->cover, col) ) 
+                    continue;
             }
 
             if (make_rand() % nc < nt)
@@ -193,22 +197,34 @@ int execute_random (struct rr_state *theState)
         }
 
         while (col < ncols) {
-                set_to_null(&theState->buf, col++);
+                set_to_null(&theState->buf, col);
                 if (theState->docover == 1)
-		    set_to_null(&theState->cover, col++);
+		    set_to_null(&theState->cover, col);
+                col++;
 	}
 
-        if (theState->outraster) /* nothing to do in case of cover map */
-            G_put_raster_row(outfd, theState->buf.data.v, theState->buf.type);
+        if (theState->outraster) { 
+            if (theState->docover == 1)  
+                G_put_raster_row(outfd, theState->cover.data.v, theState->cover.type);
+            else 
+                G_put_raster_row(outfd, theState->buf.data.v, theState->buf.type);
+        }
     }
 
     /* Catch any remaining rows in the window*/
     if (theState->outraster && row < nrows) {
-        for ( col = 0 ; col < ncols; col++)
-            set_to_null(&theState->buf, col);
-        
-        for ( ; row < nrows ; row++)
-            G_put_raster_row(outfd, theState->buf.data.v, theState->buf.type);
+        for ( col = 0 ; col < ncols; col++) {
+            if (theState->docover == 1) 
+                set_to_null(&theState->cover, col);
+            else
+                set_to_null(&theState->buf, col);
+        }
+        for ( ; row < nrows ; row++) {
+            if (theState->docover == 1)
+                G_put_raster_row(outfd, theState->cover.data.v, theState->cover.type);
+            else
+                G_put_raster_row(outfd, theState->buf.data.v, theState->buf.type);
+        }
     }
             
     if (nt > 0)
