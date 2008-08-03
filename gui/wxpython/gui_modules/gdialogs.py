@@ -11,7 +11,8 @@ List of classes:
  - LoadMapLayersDialog
  - ImportDxfDialog
  - LayerList (used by ImportDxfMulti) 
- 
+ - SetOpacityDialog
+
 (C) 2008 by the GRASS Development Team
 
 This program is free software under the GNU General Public
@@ -945,52 +946,64 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
 
 class SetOpacityDialog(wx.Dialog):
     """Set opacity of map layers"""
-    def __init__(self, parent, id=wx.ID_ANY, title=_("Set Opacity (100=opaque, 0=transparent"),
+    def __init__(self, parent, id=wx.ID_ANY, title=_("Set Map Layer Opacity"),
                  size=wx.DefaultSize, pos=wx.DefaultPosition,
                  style=wx.DEFAULT_DIALOG_STYLE, opacity=100):
 
         self.parent = parent # GMFrame
-        super(SetOpacityDialog, self).__init__(parent, id=id, pos=pos, size=size, style=style)
+        super(SetOpacityDialog, self).__init__(parent, id=id, pos=pos,
+                                               size=size, style=style, title=title)
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
-        self.opacity = opacity    # current opacity
+        self.opacity = opacity  # current opacity
         self.parent  = parent  # MapFrame
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.BoxSizer(wx.HORIZONTAL)
-        self.spin = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
+        self.spin = wx.SpinCtrl(self.panel, id=wx.ID_ANY, value="",
                                style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
                                name='spinCtrl')
         
         #self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, self.spin)
         self.spin.SetValue(self.opacity)
-        box.Add(item=self.spin, proportion=0,
-                flag=wx.ALIGN_CENTRE|wx.ALL, border=5)
-        sizer.Add(item=box, proportion=0,
-                  flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border=5)
+        
+        box.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
+                                   label=_("Set opacity (100=opaque, 0=transparent):")),
+                proportion=0,
+                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=5)
+        box.Add(item=self.spin, proportion=1,
+                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=5)
 
-        line = wx.StaticLine(parent=self, id=wx.ID_ANY, size=(20,-1), style=wx.LI_HORIZONTAL)
+        sizer.Add(item=box, proportion=0,
+                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
+
+        line = wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
+                             size=(20,-1), style=wx.LI_HORIZONTAL)
         sizer.Add(item=line, proportion=0,
-                  flag=wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border=5)
+                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
 
-        self.btnOK = wx.Button(parent=self, id=wx.ID_OK)
+        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
         self.btnOK.SetDefault()
         btnsizer.AddButton(self.btnOK)
 
-        btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
+        btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btnCancel)
         btnsizer.Realize()
 
         sizer.Add(item=btnsizer, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+
+        self.SetSize(self.GetBestSize())
+
+        self.Layout()
 
     def GetOpacity(self):
         """Button 'OK' pressed"""

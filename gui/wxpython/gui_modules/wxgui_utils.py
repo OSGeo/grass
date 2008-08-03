@@ -461,7 +461,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         maplayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         current_opacity = maplayer.GetOpacity()
         
-        dlg = gdialogs.SetOpacityDialog(self, opacity=current_opacity)
+        dlg = gdialogs.SetOpacityDialog(self, opacity=current_opacity,
+                                        title=_("Set opacity <%s>") % maplayer.GetName())
 
         if dlg.ShowModal() == wx.ID_OK:
             new_opacity = dlg.GetOpacity() # string            
