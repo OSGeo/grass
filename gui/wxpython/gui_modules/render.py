@@ -189,6 +189,10 @@ class Layer(object):
         
         return int (self.opacity * 100)
 
+    def GetName(self):
+        """Get map layer name"""
+        return self.name
+    
     def IsActive(self):
         """Check if layer is activated for rendering"""
         return self.active
