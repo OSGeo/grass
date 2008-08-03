@@ -80,14 +80,14 @@ icons_default = {
     "digUndo" : wx.ART_ERROR, # FIXME
     "digSettings" : 'settings.gif',
     "digAdditionalTools" : wx.ART_ERROR, # FIXME
-    # gis manager
+    # layer manager
     "newdisplay" : 'gui-startmon.gif',
     "workspaceNew" : 'file-new.gif',
     "workspaceLoad" : 'file-new.gif', # change the icon if possible
     "workspaceOpen" : 'file-open.gif',
     "workspaceSave" : 'file-save.gif',
     "addrast"    : 'element-cell.gif',
-    "addrast3d"    : 'element-grid3.gif',
+    "addrast3d"  : 'element-grid3.gif',
     "addvect"    : 'element-vector.gif',
     "addcmd"     : 'gui-cmd.gif',
     "addgrp"     : 'gui-group.gif',

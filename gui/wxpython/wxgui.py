@@ -1217,17 +1217,17 @@ class GMFrame(wx.Frame):
         addvect = wx.MenuItem(vectmenu, -1, Icons["addvect"].GetLabel())
         addvect.SetBitmap(Icons["addvect"].GetBitmap(self.iconsize))
         vectmenu.AppendItem(addvect)
-        self.Bind(wx.EVT_MENU, self.addVector, addvect)
+        self.Bind(wx.EVT_MENU, self.AddVector, addvect)
 
         addtheme = wx.MenuItem(vectmenu, -1, Icons["addthematic"].GetLabel())
         addtheme.SetBitmap(Icons["addthematic"].GetBitmap(self.iconsize))
         vectmenu.AppendItem(addtheme)
-        self.Bind(wx.EVT_MENU, self.addThemeMap, addtheme)
+        self.Bind(wx.EVT_MENU, self.AddThemeMap, addtheme)
 
         addchart = wx.MenuItem(vectmenu, -1, Icons["addchart"].GetLabel())
         addchart.SetBitmap(Icons["addchart"].GetBitmap(self.iconsize))
         vectmenu.AppendItem(addchart)
-        self.Bind(wx.EVT_MENU, self.addThemeChart, addchart)
+        self.Bind(wx.EVT_MENU, self.AddThemeChart, addchart)
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
@@ -1273,6 +1273,10 @@ class GMFrame(wx.Frame):
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('raster')
 
+    def AddRaster3d(self, event):
+        self.notebook.SetSelection(0)
+        self.curr_page.maptree.AddLayer('3d-raster')
+
     def AddRGB(self, event):
         """Add RGB layer"""
         self.notebook.SetSelection(0)
@@ -1298,21 +1302,17 @@ class GMFrame(wx.Frame):
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('rastnum')
 
-    def AddRaster3d(self, event):
-        self.notebook.SetSelection(0)
-        self.curr_page.maptree.AddLayer('raster')
-
-    def addVector(self, event):
+    def AddVector(self, event):
         """Add vector layer"""
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('vector')
 
-    def addThemeMap(self, event):
+    def AddThemeMap(self, event):
         """Add thematic map layer"""
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('thememap')
 
-    def addThemeChart(self, event):
+    def AddThemeChart(self, event):
         """Add thematic chart layer"""
         self.notebook.SetSelection(0)
         self.curr_page.maptree.AddLayer('themechart')
