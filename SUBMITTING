@@ -390,7 +390,7 @@ following rules:
 
     To set a property:
 
-      svn propset svn:keywords 'Author Date Id' <directory>
+      svn propset svn:keywords 'Author Date Id' <file>
       svn propset svn:mime-type text/x-sh grass_shellscript.sh
 
     To edit the svn:ignore property using your default text editor:
@@ -406,6 +406,23 @@ following rules:
     then use:
 
       svn propset -F ignore.txt svn:ignore <directory>
+
+    List of mime-type:
+      C files (.c): text/x-csrc
+      Header files (.h): text/x-chdr
+      C++ files (.cpp): text/x-c++src
+      Makefiles: text/x-makefile
+      HTML files (.html): text/html
+      Python files (.py): text/x-python
+      PNG files (.png): image/png
+      GIF files (.gif): image/gif
+      JPEG files (.jpg): image/jpeg
+      XML files (.xml): application/xml
+      DTD files (.dtd): application/xml-dtd
+      Text files (.txt): text/plain
+      GIMP XCF files (.xcf): application/x-xcf
+      
+      (please update the list...)
 
 30. Use doxygen style for source code documentation. It is required
     for GRASS libraries, but also recommended for GRASS modules.
@@ -441,13 +458,13 @@ following rules:
 
        For details see Vect_snap_lines_list()
 
-       \param[in] Map input vector map 
-       \param[in] type type of lines to be snap
-       \param[in] thresh threshold value for snapping
-       \param[out] Err vector map where lines representing snap are written or NULL
+       \param Map pointer to input vector map 
+       \param type filter features of given type to be snap
+       \param thresh threshold value for snapping
+       \param[out] Err pointer to vector map where lines representing snap are written or NULL
        \param[out] msgout file pointer where messages will be written or NULL
        
-       \return	   
+       \return 1	   
     */
 
 
