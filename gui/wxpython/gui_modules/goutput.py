@@ -254,12 +254,6 @@ class GMConsole(wx.Panel):
         except:
             curr_disp = None
 
-        # switch to 'Command output'
-        # if hasattr(self.parent, "curr_page"):
-            # change notebook page only for Layer Manager
-            # if self.parent.notebook.GetSelection() != 1:
-            # self.parent.notebook.SetSelection(1)
-        
         # command given as a string ?
         try:
             cmdlist = command.strip().split(' ')
@@ -375,6 +369,10 @@ class GMConsole(wx.Panel):
         message = event.text
         type  = event.type
         
+        # switch to 'Command output'
+        if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
+            self.parent.notebook.SetSelection(self.parent.goutput.pageid)
+
         # message prefix
         if type == 'warning':
             messege = 'WARNING: ' + message

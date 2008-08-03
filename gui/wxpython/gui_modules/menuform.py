@@ -799,10 +799,6 @@ class mainFrame(wx.Frame):
         if cmd == [] or cmd == None:
             return
 
-        # change page if needed
-        if self.notebookpanel.notebook.GetSelection() != self.notebookpanel.goutput.pageid:
-            self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutput.pageid)
-
         if cmd[0][0:2] != "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents
