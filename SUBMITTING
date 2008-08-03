@@ -408,19 +408,18 @@ following rules:
       svn propset -F ignore.txt svn:ignore <directory>
 
     List of mime-type:
-      C files (.c): text/x-csrc
-      Header files (.h): text/x-chdr
       C++ files (.cpp): text/x-c++src
-      Makefiles: text/x-makefile
-      HTML files (.html): text/html
-      Python files (.py): text/x-python
-      PNG files (.png): image/png
-      GIF files (.gif): image/gif
-      JPEG files (.jpg): image/jpeg
-      XML files (.xml): application/xml
+      C files (.c): text/x-csrc
       DTD files (.dtd): application/xml-dtd
+      GIF files (.gif): image/gif
+      Header files (.h): text/x-chdr
+      HTML files (.html): text/html
+      JPEG files (.jpg): image/jpeg
+      Makefiles: text/x-makefile
+      PNG files (.png): image/png
+      Python files (.py): text/x-python
       Text files (.txt): text/plain
-      GIMP XCF files (.xcf): application/x-xcf
+      XML files (.xml): application/xml
       
       (please update the list...)
 
