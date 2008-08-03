@@ -950,56 +950,57 @@ class SetOpacityDialog(wx.Dialog):
                  size=wx.DefaultSize, pos=wx.DefaultPosition,
                  style=wx.DEFAULT_DIALOG_STYLE, opacity=100):
 
-        self.parent = parent # GMFrame
+        self.parent = parent    # GMFrame
+        self.opacity = opacity  # current opacity
+
         super(SetOpacityDialog, self).__init__(parent, id=id, pos=pos,
                                                size=size, style=style, title=title)
 
-        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
-
-        self.opacity = opacity  # current opacity
-        self.parent  = parent  # MapFrame
-
+        panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        self.spin = wx.SpinCtrl(self.panel, id=wx.ID_ANY, value="",
-                               style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
-                               name='spinCtrl')
-        
-        #self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, self.spin)
-        self.spin.SetValue(self.opacity)
-        
-        box.Add(item=wx.StaticText(parent=self.panel, id=wx.ID_ANY,
-                                   label=_("Set opacity (100=opaque, 0=transparent):")),
-                proportion=0,
-                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=5)
-        box.Add(item=self.spin, proportion=1,
-                flag=wx.ALL | wx.ALIGN_CENTER_VERTICAL, border=5)
+        box = wx.GridBagSizer(vgap=5, hgap=5)
+        self.value = wx.Slider(panel, id=wx.ID_ANY, value=self.opacity,
+                               style=wx.SL_HORIZONTAL | wx.SL_AUTOTICKS | \
+                                   wx.SL_TOP | wx.SL_LABELS,
+                               minValue=0, maxValue=100,
+                               size=(350, -1))
+
+        box.Add(item=self.value,
+                flag=wx.ALIGN_CENTRE, pos=(0, 0), span=(1, 2))
+        box.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                   label=_("transparent")),
+                pos=(1, 0))
+        box.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                   label=_("opaque")),
+                flag=wx.ALIGN_RIGHT,
+                pos=(1, 1))
 
         sizer.Add(item=box, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
-        line = wx.StaticLine(parent=self.panel, id=wx.ID_ANY,
-                             size=(20,-1), style=wx.LI_HORIZONTAL)
+        line = wx.StaticLine(parent=panel, id=wx.ID_ANY,
+                             style=wx.LI_HORIZONTAL)
         sizer.Add(item=line, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
         # buttons
         btnsizer = wx.StdDialogButtonSizer()
 
-        self.btnOK = wx.Button(parent=self.panel, id=wx.ID_OK)
-        self.btnOK.SetDefault()
-        btnsizer.AddButton(self.btnOK)
+        btnOK = wx.Button(parent=panel, id=wx.ID_OK)
+        btnOK.SetDefault()
+        btnsizer.AddButton(btnOK)
 
-        btnCancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        btnCancel = wx.Button(parent=panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btnCancel)
         btnsizer.Realize()
 
         sizer.Add(item=btnsizer, proportion=0,
                   flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALL, border=5)
 
-        self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        panel.SetSizer(sizer)
+        sizer.Fit(panel)
 
         self.SetSize(self.GetBestSize())
 
@@ -1008,7 +1009,7 @@ class SetOpacityDialog(wx.Dialog):
     def GetOpacity(self):
         """Button 'OK' pressed"""
         # return opacity value
-        opacity = float(self.spin.GetValue()) / 100
+        opacity = float(self.value.GetValue()) / 100
         return opacity
 
 
