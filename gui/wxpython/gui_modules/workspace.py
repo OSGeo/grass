@@ -422,6 +422,9 @@ class WriteWorkspaceFile(object):
                 self.file.write('%s</group>\n' % (' ' * self.indent));
             else:
                 name = mapTree.GetItemText(item)
+                # remove 'opacity' part
+                if '(opacity' in name:
+                    name = name.split('(', -1)[0].strip()
                 opacity = maplayer.GetOpacity(float=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d" opacity="%f">\n' % \
                                (' ' * self.indent, type, name, checked, opacity));
