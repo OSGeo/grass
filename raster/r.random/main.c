@@ -33,7 +33,6 @@ main (int argc, char *argv[])
     double percentage;
     long targets;
     long count;
-    int zero;
     struct rr_state  myState;
 
     struct GModule *module;
@@ -46,7 +45,7 @@ main (int argc, char *argv[])
     module->keywords = _("raster");
     module->description =
         _("Creates a raster map layer and vector point map "
-        "containing randomly located sites.");
+        "containing randomly located points.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT) ;
     parm.input->description= _("Name of input raster map") ;
@@ -73,7 +72,7 @@ main (int argc, char *argv[])
 
     flag.zero = G_define_flag() ;
     flag.zero->key         = 'z' ;
-    flag.zero->description = _("Generate vector points also for NULL category");
+    flag.zero->description = _("Generate points also for NULL category");
 
     flag.info = G_define_flag() ;
     flag.info->key         = 'i' ;
@@ -105,12 +104,12 @@ main (int argc, char *argv[])
     if (myState.mapset == NULL)
 	G_fatal_error (_("Raster map <%s> not found"), myState.inraster);
 
-    if (parm.cover->answer) {
+    if (myState.docover == 1) {
 	myState.cmapset = G_find_cell (myState.inrcover, "");
 	if (myState.cmapset == NULL)
 	    G_fatal_error (_("Raster map <%s> not found"), myState.inrcover);
     }
-
+    
     /* If they only want info we ignore the rest */
     get_stats(&myState);
 
@@ -169,7 +168,7 @@ main (int argc, char *argv[])
     {
         if (targets > count)
         {
-            if (zero)
+            if (myState.use_nulls)
                 G_fatal_error (_("There aren't [%ld] cells in the current region"),
 			       targets);
             else
