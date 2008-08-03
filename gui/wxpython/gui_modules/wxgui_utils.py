@@ -28,6 +28,7 @@ import wx
 import wx.lib.customtreectrl as CT
 import wx.combo
 import wx.lib.newevent
+import wx.lib.buttons  as  buttons
 
 import gdialogs
 import globalvar
@@ -466,28 +467,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             new_opacity = dlg.GetOpacity() # string            
             self.Map.ChangeOpacity(maplayer, new_opacity)
             maplayer.SetOpacity(new_opacity)
+            opacity_pct = int(new_opacity * 100)
+            layername = self.GetItemText(self.layer_selected)
+            layerbase = layername.split('(')[0].strip()
+            self.SetItemText(self.layer_selected, \
+                             layerbase + ' (opacity: ' + str(opacity_pct) + '%)')
+            
             # redraw map if auto-rendering is enabled
             if self.mapdisplay.autoRender.GetValue(): 
                 self.mapdisplay.OnRender(None)
-
-
-        #if type == 'staticText':
-        #    ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-        #                       style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
-        #                       name='spinCtrl')
-        #    ctrl.SetValue(opacity)
-        #    self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
-        #else:
-        #    ctrl = wx.StaticText(self, id=wx.ID_ANY,
-        #                         name='staticText')
-        #    if opacity < 100:
-        #        ctrl.SetLabel('   (' + str(opacity) + '%)')
-        #        
-        #self.GetPyData(self.layer_selected)[0]['ctrl'] = ctrl.GetId()
-        #self.layer_selected.SetWindow(ctrl)
-
-        #self.RefreshSelected()
-        #self.Refresh()
 
     def OnNvizProperties(self, event):
         """Nviz-related properties (raster/vector/volume)
@@ -539,20 +527,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             grouptext = _('Layer group:') + str(self.groupnode)
             self.groupnode += 1
         else:
-            ctrl = wx.Button(self, id=wx.ID_ANY, label=_("Edit..."))
-            self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
+            btnbmp = Icons["layeropts"].GetBitmap((16,16))
+            ctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp)
+            ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
-            
-            # all other items (raster, vector, ...)
-            #if UserSettings.Get(group='manager', key='changeOpacityLevel', subkey='enabled'):
-            #    ctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-            #                       style=wx.SP_ARROW_KEYS, initial=100, min=0, max=100,
-            #                       name='spinCtrl')
-            #    
-            #    self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, ctrl)
-            #else:
-            #    ctrl = wx.StaticText(self, id=wx.ID_ANY,
-            #                         name='staticText')
         # add layer to the layer tree
         if self.layer_selected and self.layer_selected != self.GetRootItem():
             
@@ -644,14 +622,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         if ltype != 'group':
             if lopacity:
-                opacity = lopacity
-                if UserSettings.Get(group='manager', key='changeOpacityLevel', subkey='enabled'):
-                    ctrl.SetValue(int(lopacity * 100))
-                else:
-                    if opacity < 1.0:
-                        ctrl.SetLabel('   (' + str(int(opacity * 100)) + '%)')
+                opacity = int(l_opacity * 100)
             else:
-                opacity = 1.0
+                opacity = 100
+            
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
                 render = False
@@ -914,39 +888,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         event.Skip()
 
-    def OnOpacity(self, event):
-        """
-        Set opacity level for map layer
-        """
-        Debug.msg (3, "LayerTree.OnOpacity(): %s" % event.GetInt())
-
-        ctrl = event.GetEventObject().GetId()
-        maplayer = None
-
-        vislayer = self.GetFirstVisibleItem()
-
-        layer = None
-        for item in range(0, self.GetCount()):
-            if self.GetPyData(vislayer)[0]['ctrl'] == ctrl:
-                layer = vislayer
-
-            if not self.GetNextVisible(vislayer):
-                break
-            else:
-                vislayer = self.GetNextVisible(vislayer)
-
-        if layer:
-            maplayer = self.GetPyData(layer)[0]['maplayer']
-
-        opacity = event.GetInt() / 100.
-        # change opacity parameter for item in layers list in render.Map
-        if maplayer and self.drag == False:
-            self.Map.ChangeOpacity(maplayer, opacity)
-
-        # redraw map if auto-rendering is enabled
-        if self.mapdisplay.autoRender.GetValue(): 
-            self.mapdisplay.OnRender(None)
-
     def OnChangeSel(self, event):
         """Selection changed"""
         oldlayer = event.GetOldItem()
@@ -1055,19 +996,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         text    = self.GetItemText(dragItem)
         if self.GetPyData(dragItem)[0]['ctrl']:
             # recreate spin/text control for layer
-            oldctrl = self.FindWindowById(self.GetPyData(dragItem)[0]['ctrl'])
+            btnbmp = Icons["layeropts"].GetBitmap((16,16))
+            newctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp)
+            newctrl.SetToolTip(_("Click to edit layer settings"))
+            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
             opacity = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
-            if oldctrl.GetName() == 'staticText':
-                newctrl = wx.StaticText(self, id=wx.ID_ANY,
-                                        name='staticText')
-                if opacity < 100:
-                    newctrl.SetLabel('   (' + str(opacity) + '%)')
-            else:
-                newctrl = wx.SpinCtrl(self, id=wx.ID_ANY, value="",
-                                      style=wx.SP_ARROW_KEYS, min=0, max=100,
-                                      name='spinCtrl')
-                newctrl.SetValue(opacity)
-                self.Bind(wx.EVT_SPINCTRL, self.OnOpacity, newctrl)
             windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
             data    = self.GetPyData(dragItem)
         
@@ -1136,8 +1069,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # set layer text to map name
         if dcmd:
+            opacity = int(self.GetPyData(layer)[0]['maplayer'].GetOpacity(float=True) * 100)
             mapname = utils.GetLayerNameFromCmd(dcmd, fullyQualified=True)
-            self.SetItemText(layer, mapname)
+            self.SetItemText(layer, mapname + ' (opacity: ' + str(opacity) + '%)')
 
         # update layer data
         if params:
