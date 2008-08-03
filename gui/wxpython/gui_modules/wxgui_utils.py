@@ -128,6 +128,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         trgif = Icons["addrast"].GetBitmap(bmpsize)
         self.rast_icon = il.Add(trgif)
 
+        trgif = Icons["addrast3d"].GetBitmap(bmpsize)
+        self.rast3d_icon = il.Add(trgif)
+
         trgif = Icons["addrgb"].GetBitmap(bmpsize)
         self.rgb_icon = il.Add(trgif)
 
@@ -497,7 +500,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
-        @param ltype layer type (raster, vector, ...)
+        @param ltype layer type (raster, vector, 3d-raster, ...)
         @param lname layer name
         @param lchecked if True layer is checked
         @param lopacity layer opacity level
@@ -577,6 +580,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype == 'raster':
             self.SetItemImage(layer, self.rast_icon)
             self.SetItemText(layer, '%s %s' % (_('raster'), _('(double click to set properties)')))
+        elif ltype == '3d-raster':
+            self.SetItemImage(layer, self.rast3d_icon)
+            self.SetItemText(layer, '%s %s' % (_('3d raster'), _('(double click to set properties)')))
         elif ltype == 'rgb':
             self.SetItemImage(layer, self.rgb_icon)
             self.SetItemText(layer, '%s %s' % (_('RGB'), _('(double click to set properties)')))
@@ -711,6 +717,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = ['d.rast']
             if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
                 cmd.append('-o')
+            menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
+                                        parentframe=self)
+        elif ltype == '3d-raster':
+            cmd = ['d.rast3d']
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
                                         parentframe=self)
         elif ltype == 'rgb':
