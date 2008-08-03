@@ -2162,7 +2162,7 @@ class BufferedWindow(MapWindow, wx.Window):
         zoomreg = {}
 
         layer = self.GetSelectedLayer()
-
+        
         if layer is None:
             return
 

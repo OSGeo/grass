@@ -470,7 +470,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             opacity_pct = int(new_opacity * 100)
             layername = self.GetItemText(self.layer_selected)
             layerbase = layername.split('(')[0].strip()
-            self.SetItemText(self.layer_selected, \
+            self.SetItemText(self.layer_selected,
                              layerbase + ' (opacity: ' + str(opacity_pct) + '%)')
             
             # redraw map if auto-rendering is enabled
@@ -528,7 +528,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.groupnode += 1
         else:
             btnbmp = Icons["layeropts"].GetBitmap((16,16))
-            ctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp)
+            ctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24,24))
             ctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
         # add layer to the layer tree
@@ -622,7 +622,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         if ltype != 'group':
             if lopacity:
-                opacity = int(l_opacity * 100)
+                opacity = int(lopacity * 100)
             else:
                 opacity = 100
             
@@ -669,6 +669,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # use predefined layer name if given
         if lname:
             if ltype != 'command':
+                if opacity:
+                    lname = lname + ' (opacity: ' + str(opacity) + '%)'
                 self.SetItemText(layer, lname)
             else:
                 ctrl.SetValue(lname)
@@ -1162,8 +1164,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 opac = self.GetPyData(item)[0]['maplayer'].GetOpacity(float=True)
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
+        # determine layer name
+        layerName = utils.GetLayerNameFromCmd(cmdlist, fullyQualified=True)
+        if not layerName:
+            layerName = self.GetItemText(item)
         maplayer = self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'], type=type,
-                                        command=cmdlist, name=self.GetItemText(item),
+                                        command=cmdlist, name=layerName,
                                         l_active=chk, l_hidden=hidden, l_opacity=opac, l_render=False)
 
         self.GetPyData(item)[0]['maplayer'] = maplayer

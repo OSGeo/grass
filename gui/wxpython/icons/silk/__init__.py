@@ -79,6 +79,7 @@ IconsSilk = {
     "addhis"     : 'his.png',
     "addthematic": 'thematic.png',
     "addchart"   : 'chart_bar.png',
+    "layeropts"  : 'map_edit.png',
     # profile analysis
     "transect"   : 'image_edit.png',
     "profiledraw"  : 'arrow_refresh.png',
