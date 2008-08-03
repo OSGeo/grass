@@ -9,8 +9,8 @@ attribute table into the attribute table of <u>points</u> present in the
 The upload <b>column</b>, into which the query results are stored, must be
 present in the <b>vector</b> map. Use <em>v.db.addcol</em> to add one if needed.
 <p>
-This module only uploads attributes which exist at the exact positions of
-the input's <b>vector</b> points. For a "nearest feature" fit, use
+Use dmax parameter to control query distance tolerance (how far points can be from 
+<b>qvector</b> features). For more options, use
 <em>v.distance</em> instead.
 <P>
 In case of a multipoint input <b>vector</b> map, with several points having the
