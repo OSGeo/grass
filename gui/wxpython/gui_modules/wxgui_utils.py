@@ -701,7 +701,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             else:
                 self.GetPyData(layer)[0]['propwin'].Show()
             
-            self.GetPyData(layer)[0]['propwin'].CentreOnParent()
             return
         
         completed = ''
@@ -772,8 +771,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'group':
             pass
         
-        self.GetPyData(layer)[0]['propwin'].CentreOnParent()
-
     def OnActivateLayer(self, event):
         """Double click on the layer item.
         Launch property dialog, or expand/collapse group of items, etc."""
@@ -1108,26 +1105,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
-        
-        if self.mapdisplay.toolbars['nviz']:
+
+        if self.mapdisplay.toolbars['nviz'] and dcmd:
             # update nviz session
             mapLayer = self.GetPyData(layer)[0]['maplayer']
             mapWin = self.mapdisplay.MapWindow
             if len(mapLayer.GetCmd()) > 0:
                 id = -1
                 if mapLayer.type == 'raster':
-                    if not mapWin.IsLoaded(layer):
-                        mapWin.LoadRaster(layer)
-
+                    if mapWin.IsLoaded(layer):
+                        mapWin.UnloadRaster(layer)
+                    
+                    mapWin.LoadRaster(layer)
                 elif mapLayer.type == 'vector':
-                    if not mapWin.IsLoaded(layer):
-                        id = mapWin.LoadVector(mapLayer)
-                        if id > 0:
-                            self.mapdisplay.MapWindow.SetLayerData(layer, id)
-                            self.mapdisplay.MapWindow.UpdateLayerProperties(layer)
-                            
-                        self.mapdisplay.nvizToolWin.UpdatePage('vector')
-                        self.mapdisplay.nvizToolWin.SetPage('vector')
+                    if mapWin.IsLoaded(layer):
+                        mapWin.UnloadVector(layer)
+                    
+                    mapWin.LoadVector(mapLayer)
 
                 # reset view when first layer loaded
                 nlayers = len(mapWin.Map.GetListOfLayers(l_type=('raster', 'vector'),
