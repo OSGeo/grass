@@ -335,7 +335,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnSetCompRegFromRaster(self, event):
         """Set computational region from selected raster map (ignore NULLs)"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
-
+        
         cmd = ['g.region',
                '-p',
                'zoom=%s' % mapLayer.name]
@@ -677,8 +677,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if lname:
             if ltype != 'command':
                 if opacity:
-                    lname = lname + ' (opacity: ' + str(opacity) + '%)'
-                self.SetItemText(layer, lname)
+                    name = lname + ' (opacity: ' + str(opacity) + '%)'
+                self.SetItemText(layer, name )
             else:
                 ctrl.SetValue(lname)
 
