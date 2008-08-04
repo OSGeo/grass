@@ -153,7 +153,7 @@ class Data:
                                  "self.OnMenuCmd",
                                  "v.in.dxf"),
 
-                                (_("Multiple DXF import"),
+                                (_("Multiple DXF layers import"),
                                  _("Converts selected DXF layers to GRASS vector maps."),
                                  "self.OnImportDxfFile",
                                  ""),
