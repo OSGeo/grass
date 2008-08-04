@@ -36,6 +36,7 @@ import globalvar
 import gselect
 import menuform
 import utils
+import grass
 from preferences import globalSettings as UserSettings
 
 class NewVectorDialog(wx.Dialog):
@@ -733,12 +734,12 @@ class ImportDxfDialog(wx.Dialog):
         #
         # list of layers
         #
-        self.list = LayersList(self)
+        self.list = LayersList(self.panel)
         self.list.LoadData()
 
         self.add = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                label=_("Add imported layers into layer tree"))
-        self.add.SetValue(True)
+        self.add.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
 
         #
         # buttons
@@ -748,16 +749,11 @@ class ImportDxfDialog(wx.Dialog):
         self.btn_cancel.SetToolTipString(_("Close dialog"))
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
         # run
-        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Run"))
+        self.btn_run = wx.Button(parent=self.panel, id=wx.ID_OK, label= _("&Import"))
         self.btn_run.SetToolTipString(_("Import selected layers"))
         self.btn_run.SetDefault()
         self.btn_run.Enable(False)
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
-        # abort
-        self.btn_abort = wx.Button(parent=self.panel, id=wx.ID_STOP)
-        self.btn_abort.SetToolTipString(_("Abort the running command"))
-        self.btn_abort.Enable(False)
-        self.btn_abort.Bind(wx.EVT_BUTTON, self.OnAbort)
         
         self.__doLayout()
         self.Layout()
@@ -789,7 +785,7 @@ class ImportDxfDialog(wx.Dialog):
         layerSizer = wx.StaticBoxSizer(layerBox, wx.HORIZONTAL)
 
         layerSizer.Add(item=self.list, proportion=1,
-                       flag=wx.ALL | wx.EXPAND, border=5)
+                      flag=wx.ALL | wx.EXPAND, border=5)
         
         dialogSizer.Add(item=layerSizer, proportion=1,
                         flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
@@ -806,10 +802,6 @@ class ImportDxfDialog(wx.Dialog):
                      flag=wx.ALL | wx.ALIGN_CENTER,
                      border=10)
         
-        btnsizer.Add(item=self.btn_abort, proportion=0,
-                     flag=wx.ALL | wx.ALIGN_CENTER,
-                     border=10)
-        
         btnsizer.Add(item=self.btn_run, proportion=0,
                      flag=wx.ALL | wx.ALIGN_CENTER,
                      border=10)
@@ -818,15 +810,15 @@ class ImportDxfDialog(wx.Dialog):
                         flag=wx.ALIGN_CENTER)
         
         # dialogSizer.SetSizeHints(self.panel)
-        # self.panel.SetAutoLayout(True)
+        self.panel.SetAutoLayout(True)
         self.panel.SetSizer(dialogSizer)
         dialogSizer.Fit(self.panel)
         
         self.Layout()
         # auto-layout seems not work here - FIXME
-        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 125, 200))
+        self.SetMinSize((globalvar.DIALOG_GSELECT_SIZE[0] + 125, 300))
         width = self.GetSize()[0]
-        self.list.SetColumnWidth(col=1, width=width/2)
+        self.list.SetColumnWidth(col=1, width=width/2 - 50)
 
     def OnCancel(self, event=None):
         """Close dialog"""
@@ -853,10 +845,15 @@ class ImportDxfDialog(wx.Dialog):
         if self.add.IsChecked():
             maptree = self.parent.curr_page.maptree
             for layer, output in data:
+                if '@' not in output:
+                    name = output + '@' + grass.gisenv()['MAPSET']
+                else:
+                    name = output
                 # add imported layers into layer tree
                 maptree.AddLayer(ltype='vector',
-                                 lname=output,
-                                 lcmd=['d.vect', 'map=%s' % output])
+                                 lname=name,
+                                 lcmd=['d.vect',
+                                       'map=%s' % name])
 
         self.parent.notebook.SetSelection(0)
         
@@ -915,6 +912,9 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
         self.InsertColumn(1, _('Layer name'))
         self.InsertColumn(2, _('Output vector map name (editable)'))
 
+        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
+        self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
+
     def LoadData(self, data=None):
         """Load data into list"""
         if data is None:
@@ -928,6 +928,50 @@ class LayersList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin,
             self.CheckItem(index, True)
         
         self.SetColumnWidth(col=0, width=wx.LIST_AUTOSIZE_USEHEADER)
+
+    def OnPopupMenu(self, event):
+        """Show popup menu"""
+        if self.GetItemCount() < 1:
+            return
+        
+        if not hasattr(self, "popupDataID1"):
+            self.popupDataID1 = wx.NewId()
+            self.popupDataID2 = wx.NewId()
+
+            self.Bind(wx.EVT_MENU, self.OnSelectAll,  id=self.popupDataID1)
+            self.Bind(wx.EVT_MENU, self.OnSelectNone, id=self.popupDataID2)
+
+        # generate popup-menu
+        menu = wx.Menu()
+        menu.Append(self.popupDataID1, _("Select all"))
+        menu.Append(self.popupDataID2, _("Deselect all"))
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def OnSelectAll(self, event):
+        """Select all items"""
+        item = -1
+        
+        while True:
+            item = self.GetNextItem(item)
+            if item == -1:
+                break
+            self.CheckItem(item, True)
+
+        event.Skip()
+        
+    def OnSelectNone(self, event):
+        """Deselect items"""
+        item = -1
+        
+        while True:
+            item = self.GetNextItem(item, wx.LIST_STATE_SELECTED)
+            if item == -1:
+                break
+            self.CheckItem(item, False)
+
+        event.Skip()
         
     def GetLayers(self):
         """Get list of layers (layer name, output name)"""
