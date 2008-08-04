@@ -1399,6 +1399,7 @@ class GrassGUIApp(wx.App):
 
     def OnInit(self):
         self.mf = mainFrame(parent=None, ID=wx.ID_ANY, task_description=self.grass_task)
+        self.mf.CentreOnScreen()
         self.mf.Show(True)
         self.SetTopWindow(self.mf)
         # print >> sys.stderr, time.time() - start
@@ -1413,7 +1414,7 @@ class GUI:
         self.parent = parent
         self.grass_task = None
 
-    def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=-1, show=True, modal=False):
+    def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None, show=True, modal=False):
         """
         Parse command
 
@@ -1435,10 +1436,7 @@ class GUI:
             if completed[2]:
                 dcmd_params.update(completed[2])
 
-        if parentframe != -1:
-            self.parent = parentframe
-        else:
-            self.parent = None
+        self.parent = parentframe
 
         # parse the interface decription
         self.grass_task = grassTask()
@@ -1491,6 +1489,8 @@ class GUI:
                      propwin=self.mf)
         
         if show:
+            if self.parent:
+                self.mf.CentreOnParent()
             self.mf.Show(show)
             self.mf.MakeModal(modal)
         else:
