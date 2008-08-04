@@ -946,7 +946,7 @@ class VDigitToolbar(AbstractToolbar):
 
 class ProfileToolbar(AbstractToolbar):
     """
-    Toolbar for digitization
+    Toolbar for profiling raster map
     """
     def __init__(self, parent, mapdisplay, map):
         self.parent     = parent
