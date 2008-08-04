@@ -89,12 +89,11 @@ double G_database_units_to_meters_factor(void)
 	char *unit;
 	double factor;
     } table[] = {
-	{
-	"unit", 1.0}, {
-	"meter", 1.0}, {
-	"foot", .3048}, {
-	"inch", .0254}, {
-	NULL, 0.0}
+	{"unit",  1.0},
+	{"meter", 1.0},
+	{"foot", .3048},
+	{"inch", .0254},
+	{NULL, 0.0}
     };
 
     factor = 0.0;
