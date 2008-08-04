@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#include <ami_stream.h>
+#include <grass/iostream/ami_stream.h>
 
 /**********************************************************************/
 /* creates a random file name, opens the file for reading and writing

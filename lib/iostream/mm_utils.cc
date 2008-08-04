@@ -16,29 +16,37 @@
  *
  *****************************************************************************/
 
-#include <ami.h>
-#include <minmaxheap.h>
+#include <sys/types.h>
+#include <ctype.h>
 
-#if(0)
-#define TEST_SIZE (1<<20)
-
-int main() {
-  int m = TEST_SIZE/100;
-  MinMaxHeap<int> foo(TEST_SIZE);
-
-  for(int i=0; i<TEST_SIZE; i++) {
-	foo.insert(i);
-  }
-  int z;
-  cout << " ------------------------------" << endl;
-  for(int i=0; i<TEST_SIZE; i++) {
-	bool r;
-	r = foo.extract_min(z);
-	r = foo.extract_max(z);
-	if(i%m == 0) {
-	  cerr << i << endl;
-	}
-  }
-
-}
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
+#include <ostream>
+#else
+#include <ostream.h>
 #endif
+
+#include <iostream>
+using namespace std;
+#include <stdio.h>
+
+#include <grass/iostream/mm.h>
+
+
+void 
+LOG_avail_memo() {
+  size_t sz_avail=0;
+  sz_avail = MM_manager.memory_available();
+  printf("available memory: %.2fMB\n", sz_avail/(float)(1<<20));
+}
+
+size_t
+getAvailableMemory() {
+  size_t fmem;
+  fmem = MM_manager.memory_available();
+  return fmem;
+}
+
+void MEMORY_LOG(std::string str) {
+  printf("%s", str.c_str());
+  fflush(stdout);
+}

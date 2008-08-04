@@ -24,7 +24,7 @@
 #include <assert.h>
 #include <iostream>
 using namespace std;
-#include <mm.h>
+#include <grass/iostream/mm.h>
 
 #define MM_DEBUG if(0)
 

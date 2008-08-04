@@ -19,7 +19,7 @@
 #ifndef _fill_h
 #define _fill_h
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "common.h"
 #include "water.h"
 

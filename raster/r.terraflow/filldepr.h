@@ -19,7 +19,7 @@
 #ifndef __FILL_DEPR_H
 #define __FILL_DEPR_H
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "types.h"
 #include "water.h"
 

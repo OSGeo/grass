@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-#include <ami.h> 
+#include <grass/iostream/ami.h> 
 
 #include "nodata.h"
 #include "common.h"

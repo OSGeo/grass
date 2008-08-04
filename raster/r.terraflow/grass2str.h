@@ -20,7 +20,7 @@
 #ifndef _gras2str_H
 #define _gras2str_H
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "option.h"
 #include "types.h"
 #include "common.h"

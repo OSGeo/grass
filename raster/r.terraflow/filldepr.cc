@@ -18,7 +18,7 @@
 
 #include <assert.h>
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "filldepr.h"
 #include "unionFind.h"
 #include "common.h"

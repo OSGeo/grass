@@ -20,7 +20,7 @@
 #ifndef GRID_H
 #define GRID_H
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "types.h"
 #include "plateau.h"
 #include "water.h"

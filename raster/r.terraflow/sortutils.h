@@ -22,7 +22,7 @@
 #include <fstream>
 using namespace std;
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "common.h"
 
 

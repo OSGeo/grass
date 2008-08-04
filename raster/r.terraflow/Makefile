@@ -14,20 +14,11 @@ OBJARCH=OBJ.$(ARCH)
 FLOAT_OBJ := $(patsubst %.cc, $(OBJARCH)/FLOAT/%.o, $(SOURCES))
 SHORT_OBJ := $(patsubst %.cc, $(OBJARCH)/SHORT/%.o, $(SOURCES))
 
-IOSTREAM_LIBNAME = iostream
-IOSTREAM_DIR = IOStream
-IOSTREAM_INC = $(IOSTREAM_DIR)/include
-IOSTREAM_LIB =  -l$(IOSTREAM_LIBNAME)
-IOSTREAM_DEPLIB = $(ARCH_LIBDIR)/$(STLIB_PREFIX)$(IOSTREAM_LIBNAME)$(STLIB_SUFFIX)
-
-CXXFLAGS += -I$(IOSTREAM_INC) \
-		-DUSER=\"$(USER)\" \
+CXXFLAGS += -DUSER=\"$(USER)\" \
 		-DNODATA_FIX -D_FILE_OFFSET_BITS=64
 
-LIBS = $(GISLIB) 
-DEPLIBS = $(DEPGISLIB)
-
-CLEAN_SUBDIRS = $(IOSTREAM_DIR)
+LIBS = $(GISLIB) $(IOSTREAMLIB)
+DEPLIBS = $(GISDEP) $(IOSTREAMDEP)
 
 #Note: 	if a header file is modified, the .o files do not get rebuilt..
 #		header files should be included as prerequisites, but does not work 
@@ -55,14 +46,10 @@ $(OBJARCH)/FLOAT:
 $(OBJARCH)/SHORT:
 	$(MKDIR) $@
 
-$(BIN)/$(PGM)$(EXE): $(FLOAT_OBJ) $(DEPLIBS) $(IOSTREAM_DEPLIB)
+$(BIN)/$(PGM)$(EXE): $(FLOAT_OBJ) $(DEPLIBS)
 	$(CXX) -DELEV_FLOAT $(LDFLAGS) -o $@ $(FLOAT_OBJ) $(LIBS) $(MATHLIB) \
-	$(XDRLIB) $(IOSTREAM_LIB)
+	$(XDRLIB)
 
-$(BIN)/$(PGM).short$(EXE): $(SHORT_OBJ) $(DEPLIBS) $(IOSTREAM_DEPLIB)
+$(BIN)/$(PGM).short$(EXE): $(SHORT_OBJ) $(DEPLIBS)
 	$(CXX) -DELEV_SHORT $(LDFLAGS) -o $@ $(SHORT_OBJ) $(LIBS) $(MATHLIB) \
-	$(XDRLIB) $(IOSTREAM_LIB)
-
-$(IOSTREAM_DEPLIB):
-	$(MAKE) -C $(IOSTREAM_DIR)
-
+	$(XDRLIB)

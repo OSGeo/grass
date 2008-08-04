@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "types.h"
 
 

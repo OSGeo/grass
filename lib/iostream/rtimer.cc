@@ -16,37 +16,31 @@
  *
  *****************************************************************************/
 
-#include <sys/types.h>
-#include <ctype.h>
 
-#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
-#include <ostream>
-#else
-#include <ostream.h>
-#endif
-
-#include <iostream>
-using namespace std;
+#include <sys/time.h>
 #include <stdio.h>
+#include <string.h>
+#include <strings.h>
 
-#include <mm.h>
+#include <grass/iostream/rtimer.h>
 
-
-void 
-LOG_avail_memo() {
-  size_t sz_avail=0;
-  sz_avail = MM_manager.memory_available();
-  printf("available memory: %.2fMB\n", sz_avail/(float)(1<<20));
+char *
+rt_sprint_safe(char *buf, Rtimer rt) {
+  if(rt_w_useconds(rt) == 0) {
+	sprintf(buf, "[%4.2fu (%.0f%%) %4.2fs (%.0f%%) %4.2f %.1f%%]",
+			0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  } else {
+	sprintf(buf, "[%4.2fu (%.0f%%) %4.2fs (%.0f%%) %4.2f %.1f%%]",
+			rt_u_useconds(rt)/1000000,
+			100.0*rt_u_useconds(rt)/rt_w_useconds(rt),
+			rt_s_useconds(rt)/1000000,
+			100.0*rt_s_useconds(rt)/rt_w_useconds(rt),
+			rt_w_useconds(rt)/1000000,
+			100.0*(rt_u_useconds(rt)+rt_s_useconds(rt)) / rt_w_useconds(rt));
+  }
+  return buf;
 }
 
-size_t
-getAvailableMemory() {
-  size_t fmem;
-  fmem = MM_manager.memory_available();
-  return fmem;
-}
 
-void MEMORY_LOG(std::string str) {
-  printf("%s", str.c_str());
-  fflush(stdout);
-}
+
+
