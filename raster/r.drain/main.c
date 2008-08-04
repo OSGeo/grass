@@ -117,18 +117,16 @@ int main(int argc, char **argv)
     coordopt->required = NO;
     coordopt->multiple = YES;
     coordopt->key_desc = "x,y";
-    coordopt->description =
-	_("The E and N coordinates of starting point(s)");
+    coordopt->description = _("The E and N coordinates of starting point(s)");
 
     vpointopt = G_define_option();
     vpointopt->key = "vector_points";
     vpointopt->type = TYPE_STRING;
     vpointopt->required = NO;
     vpointopt->multiple = YES;
-    vpointopt->gisprompt= "old,vector,vector";
+    vpointopt->gisprompt = "old,vector,vector";
     vpointopt->key_desc = "name";
-    vpointopt->description =
-	_("Vector map(s) containing starting point(s)");
+    vpointopt->description = _("Vector map(s) containing starting point(s)");
 
     flag1 = G_define_flag();
     flag1->key = 'c';
@@ -160,7 +158,7 @@ int main(int argc, char **argv)
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
 
-    if( (flag1->answer + flag2->answer + flag3->answer) > 1 )
+    if ((flag1->answer + flag2->answer + flag3->answer) > 1)
 	G_fatal_error(_("Specify just one of the -c, -a and -n flags"));
 
     mode = 0;
@@ -191,20 +189,23 @@ int main(int argc, char **argv)
 
 	    if (start_row < 0 || start_row > nrows ||
 		start_col < 0 || start_col > ncols) {
-		G_warning(_("Starting point %d is outside the current region"),
+		G_warning(_
+			  ("Starting point %d is outside the current region"),
 			  i + 1);
 		continue;
 	    }
 	    points_row[npoints] = start_row;
 	    points_col[npoints] = start_col;
 	    npoints++;
-	    if(npoints >= MAX_POINTS) G_fatal_error(_("Too many start points"));
+	    if (npoints >= MAX_POINTS)
+		G_fatal_error(_("Too many start points"));
 	    have_points = 1;
 	}
     }
     if (vpointopt->answer) {
 	for (i = 0; vpointopt->answers[i] != NULL; i++) {
 	    struct Map_info *fp;
+
 	    /* struct start_pt  *new_start_pt; */
 	    Site *site = NULL;	/* pointer to Site */
 	    int dims, strs, dbls;
@@ -217,7 +218,7 @@ int main(int argc, char **argv)
 
 	    fp = G_fopen_sites_old(vpointopt->answers[i], search_mapset);
 
-	    if (0 != G_site_describe( fp, &dims, &cat, &strs, &dbls))
+	    if (0 != G_site_describe(fp, &dims, &cat, &strs, &dbls))
 		G_fatal_error(_("Failed to guess site file format"));
 
 	    site = G_site_new_struct(cat, dims, strs, dbls);
@@ -230,20 +231,23 @@ int main(int argc, char **argv)
 		start_row = (int)G_northing_to_row(site->north, &window);
 
 		/* effectively just a duplicate check to G_site_in_region() ??? */
-		if (start_row < 0 || start_row > nrows || start_col < 0 || start_col > ncols)
+		if (start_row < 0 || start_row > nrows || start_col < 0 ||
+		    start_col > ncols)
 		    continue;
 
 		points_row[npoints] = start_row;
 		points_col[npoints] = start_col;
 		npoints++;
-		if(npoints >= MAX_POINTS) G_fatal_error(_("Too many start points"));
+		if (npoints >= MAX_POINTS)
+		    G_fatal_error(_("Too many start points"));
 		have_points = 1;
 	    }
 
 	    /* only catches maps out of range until something is found, not after */
-	    if(!have_points) {
-		G_warning(_("Starting vector map <%s> contains no points in the current region"),
-		      vpointopt->answers[i]);
+	    if (!have_points) {
+		G_warning(_
+			  ("Starting vector map <%s> contains no points in the current region"),
+			  vpointopt->answers[i]);
 	    }
 	}
     }
@@ -260,6 +264,7 @@ int main(int argc, char **argv)
     G_begin_distance_calculations();
     {
 	double e1, n1, e2, n2;
+
 	e1 = window.east;
 	n1 = window.north;
 	e2 = e1 + window.ew_res;
@@ -314,13 +319,13 @@ int main(int argc, char **argv)
     resolve(fd, nrows, &bndC);
 
     /* free the buffers already used */
-    G_free (bndC.b[0]);
-    G_free (bndC.b[1]);
-    G_free (bndC.b[2]);
+    G_free(bndC.b[0]);
+    G_free(bndC.b[1]);
+    G_free(bndC.b[2]);
 
-    G_free (bnd.b[0]);
-    G_free (bnd.b[1]);
-    G_free (bnd.b[2]);
+    G_free(bnd.b[0]);
+    G_free(bnd.b[1]);
+    G_free(bnd.b[2]);
 
     /* determine the drainage paths */
 
@@ -435,7 +440,7 @@ int main(int argc, char **argv)
     /* close files and free buffers */
     G_close_cell(new_id);
 
-    G_put_cell_title (new_map_name, "Surface flow trace");
+    G_put_cell_title(new_map_name, "Surface flow trace");
 
     G_short_history(new_map_name, "raster", &history);
     G_command_history(&history);

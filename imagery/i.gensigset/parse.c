@@ -3,7 +3,7 @@
 #include <grass/imagery.h>
 #include "parms.h"
 
-int parse (int argc, char *argv[], struct parms *parms)
+int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap, *maxsig;
 
@@ -40,32 +40,32 @@ int parse (int argc, char *argv[], struct parms *parms)
     maxsig->type = TYPE_INTEGER;
     maxsig->answer = "10";
 
-    if (G_parser(argc,argv)) exit(1);
+    if (G_parser(argc, argv))
+	exit(1);
 
     parms->training_map = trainingmap->answer;
     parms->group = group->answer;
     parms->subgroup = subgroup->answer;
     parms->sigfile = sigfile->answer;
 
-/* check all the inputs */
-    if(G_find_cell(parms->training_map, "") == NULL)
-    {
-	fprintf (stderr, "ERROR: training map [%s] not found\n", parms->training_map);
+    /* check all the inputs */
+    if (G_find_cell(parms->training_map, "") == NULL) {
+	fprintf(stderr, "ERROR: training map [%s] not found\n",
+		parms->training_map);
 	exit(1);
     }
-    if (!I_find_group(parms->group))
-    {
-	fprintf (stderr, "ERROR: group [%s] not found\n", parms->group);
+    if (!I_find_group(parms->group)) {
+	fprintf(stderr, "ERROR: group [%s] not found\n", parms->group);
 	exit(1);
     }
-    if (!I_find_subgroup(parms->group, parms->subgroup))
-    {
-	fprintf (stderr, "ERROR: subgroup [%s] not found\n", parms->subgroup);
+    if (!I_find_subgroup(parms->group, parms->subgroup)) {
+	fprintf(stderr, "ERROR: subgroup [%s] not found\n", parms->subgroup);
 	exit(1);
     }
-    if (sscanf (maxsig->answer, "%d", &parms->maxsubclasses) != 1 || parms->maxsubclasses <= 0)
-    {
-	fprintf (stderr,"ERROR: illegal number of sub-signatures [%s]\n", maxsig->answer);
+    if (sscanf(maxsig->answer, "%d", &parms->maxsubclasses) != 1 ||
+	parms->maxsubclasses <= 0) {
+	fprintf(stderr, "ERROR: illegal number of sub-signatures [%s]\n",
+		maxsig->answer);
 	exit(1);
     }
 

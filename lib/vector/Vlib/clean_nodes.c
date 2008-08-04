@@ -1,229 +1,264 @@
 /*!
-  \file clean_nodes.c
-  
-  \brief Vector library - Clean boundaries at nodes
-  
-  Higher level functions for reading/writing/manipulating vectors.
+   \file clean_nodes.c
 
-  (C) 2001-2008 by the GRASS Development Team
-  
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Radim Blazek
-  
-  \date 2001-2008
-*/
+   \brief Vector library - Clean boundaries at nodes
 
-#include <stdlib.h> 
+   Higher level functions for reading/writing/manipulating vectors.
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Radim Blazek
+
+   \date 2001-2008
+ */
+
+#include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
 /*!
-  \brief Clean small angles at nodes.
+   \brief Clean small angles at nodes.
 
-  It may happen that even if the angle between 2 boundaries at node is
-  very small, the calculated angle is 0 because of
-  representation error.  The map must be built at least on level
-  GV_BUILD_BASE
+   It may happen that even if the angle between 2 boundaries at node is
+   very small, the calculated angle is 0 because of
+   representation error.  The map must be built at least on level
+   GV_BUILD_BASE
 
-  \param Map input map
-  \param Err vector map where error line segments are written
-  \param msgout file pointer where messages will be written or NULL
+   \param Map input map
+   \param Err vector map where error line segments are written
+   \param msgout file pointer where messages will be written or NULL
 
-  \return number of line modifications
-*/
-int 
-Vect_clean_small_angles_at_nodes ( struct Map_info *Map, int otype, struct Map_info *Err, FILE *msgout)
+   \return number of line modifications
+ */
+int
+Vect_clean_small_angles_at_nodes(struct Map_info *Map, int otype,
+				 struct Map_info *Err, FILE * msgout)
 {
     int node;
     int nmodif = 0;
     struct line_pnts *Points;
     struct line_cats *SCats, *LCats, *OCats;
 
-    Points = Vect_new_line_struct ();
-    SCats = Vect_new_cats_struct ();
-    LCats = Vect_new_cats_struct ();
-    OCats = Vect_new_cats_struct ();
+    Points = Vect_new_line_struct();
+    SCats = Vect_new_cats_struct();
+    LCats = Vect_new_cats_struct();
+    OCats = Vect_new_cats_struct();
 
-    if ( msgout ) fprintf (msgout, "%s: %5d", _("Modifications"), nmodif ); 
-    
-    for ( node = 1; node <= Vect_get_num_nodes(Map); node++ ){ 
+    if (msgout)
+	fprintf(msgout, "%s: %5d", _("Modifications"), nmodif);
+
+    for (node = 1; node <= Vect_get_num_nodes(Map); node++) {
 	int i, nlines;
-	
-	G_debug (3, "node = %d", node );
-	if ( !Vect_node_alive ( Map, node ) ) continue;
 
-	while ( 1 ) {
+	G_debug(3, "node = %d", node);
+	if (!Vect_node_alive(Map, node))
+	    continue;
+
+	while (1) {
 	    float angle1 = -100;
-	    int line1 = -999; /* value not important, just for debug */
+	    int line1 = -999;	/* value not important, just for debug */
 	    int clean = 1;
-	    
-	    
-	    nlines = Vect_get_node_n_lines ( Map, node );
-	    G_debug (3, "nlines = %d", nlines );
 
-	    for ( i = 0; i < nlines; i++ ) {
+
+	    nlines = Vect_get_node_n_lines(Map, node);
+	    G_debug(3, "nlines = %d", nlines);
+
+	    for (i = 0; i < nlines; i++) {
 		P_LINE *Line;
 		int line2;
 		float angle2;
-		    
-		line2 = Vect_get_node_line ( Map, node, i );
-		Line = Map->plus.Line[abs(line2)];
-		if ( !Line ) continue;
-		G_debug (4, "  type = %d", Line->type );
-		if ( !(Line->type & (otype & GV_LINES)) ) continue;
-		
-		angle2 = Vect_get_node_line_angle ( Map, node, i );
-		if ( angle2 == -9.0 ) continue; /* Degenerated line */
-	    
-		G_debug (4, "  line1 = %d angle1 = %e line2 = %d angle2 = %e", line1, angle1, line2, angle2 );
 
-		if ( angle2 == angle1 ) { 
+		line2 = Vect_get_node_line(Map, node, i);
+		Line = Map->plus.Line[abs(line2)];
+		if (!Line)
+		    continue;
+		G_debug(4, "  type = %d", Line->type);
+		if (!(Line->type & (otype & GV_LINES)))
+		    continue;
+
+		angle2 = Vect_get_node_line_angle(Map, node, i);
+		if (angle2 == -9.0)
+		    continue;	/* Degenerated line */
+
+		G_debug(4, "  line1 = %d angle1 = %e line2 = %d angle2 = %e",
+			line1, angle1, line2, angle2);
+
+		if (angle2 == angle1) {
 		    int j;
 		    double length1, length2;
-		    int short_line; /* line with shorter end segment */
-		    int long_line;  /* line with longer end segment */
-		    int new_short_line=0; /* line number of short line after rewrite */
+		    int short_line;	/* line with shorter end segment */
+		    int long_line;	/* line with longer end segment */
+		    int new_short_line = 0;	/* line number of short line after rewrite */
 		    int short_type, long_type, type;
 		    double x, y, z, nx, ny, nz;
-		    
-		    G_debug (4, "  identical angles -> clean" );
+
+		    G_debug(4, "  identical angles -> clean");
 
 		    /* Length of end segments for both lines */
-		    Vect_read_line ( Map, Points, NULL, abs(line1) );
-		    if ( line1 > 0 ) {
-			length1 = Vect_points_distance ( Points->x[0], Points->y[0], 0.0,
-				                         Points->x[1], Points->y[1], 0.0, 0 );
-		    } else {
+		    Vect_read_line(Map, Points, NULL, abs(line1));
+		    if (line1 > 0) {
+			length1 =
+			    Vect_points_distance(Points->x[0], Points->y[0],
+						 0.0, Points->x[1],
+						 Points->y[1], 0.0, 0);
+		    }
+		    else {
 			int np;
+
 			np = Points->n_points;
-			length1 = Vect_points_distance ( Points->x[np-1], Points->y[np-1], 0.0,
-				                         Points->x[np-2], Points->y[np-2], 0.0, 0 );
+			length1 =
+			    Vect_points_distance(Points->x[np - 1],
+						 Points->y[np - 1], 0.0,
+						 Points->x[np - 2],
+						 Points->y[np - 2], 0.0, 0);
 		    }
 
-		    Vect_read_line ( Map, Points, NULL, abs(line2) );
-		    if ( line2 > 0 ) {
-			length2 = Vect_points_distance ( Points->x[0], Points->y[0], 0.0,
-				                         Points->x[1], Points->y[1], 0.0, 0 );
-		    } else {
-			int np;
-			np = Points->n_points;
-			length2 = Vect_points_distance ( Points->x[np-1], Points->y[np-1], 0.0,
-				                         Points->x[np-2], Points->y[np-2], 0.0, 0 );
+		    Vect_read_line(Map, Points, NULL, abs(line2));
+		    if (line2 > 0) {
+			length2 =
+			    Vect_points_distance(Points->x[0], Points->y[0],
+						 0.0, Points->x[1],
+						 Points->y[1], 0.0, 0);
 		    }
-		    
-		    G_debug (4, "  length1 = %f length2 = %f", length1, length2 );
+		    else {
+			int np;
 
-		    if ( length1 < length2 ) {
+			np = Points->n_points;
+			length2 =
+			    Vect_points_distance(Points->x[np - 1],
+						 Points->y[np - 1], 0.0,
+						 Points->x[np - 2],
+						 Points->y[np - 2], 0.0, 0);
+		    }
+
+		    G_debug(4, "  length1 = %f length2 = %f", length1,
+			    length2);
+
+		    if (length1 < length2) {
 			short_line = line1;
 			long_line = line2;
-		    } else { 
+		    }
+		    else {
 			short_line = line2;
 			long_line = line1;
 		    }
 
 		    /* Remove end segment from short_line */
-		    short_type = Vect_read_line ( Map, Points, SCats, abs(short_line) );
-			    
-		    if ( short_line > 0 ) {
+		    short_type =
+			Vect_read_line(Map, Points, SCats, abs(short_line));
+
+		    if (short_line > 0) {
 			x = Points->x[1];
 			y = Points->y[1];
 			z = Points->z[1];
-			Vect_line_delete_point ( Points, 0 ); /* first */
-		    } else {
-			x = Points->x[Points->n_points-2];
-			y = Points->y[Points->n_points-2];
-			z = Points->z[Points->n_points-2];
-			Vect_line_delete_point ( Points, Points->n_points-1 ); /* last */
+			Vect_line_delete_point(Points, 0);	/* first */
+		    }
+		    else {
+			x = Points->x[Points->n_points - 2];
+			y = Points->y[Points->n_points - 2];
+			z = Points->z[Points->n_points - 2];
+			Vect_line_delete_point(Points, Points->n_points - 1);	/* last */
 		    }
 
-		    if ( Points->n_points > 1 ) {
-			new_short_line = Vect_rewrite_line ( Map, abs(short_line), short_type, Points, SCats );
-		    } else {
-			Vect_delete_line ( Map, abs(short_line) );
+		    if (Points->n_points > 1) {
+			new_short_line =
+			    Vect_rewrite_line(Map, abs(short_line),
+					      short_type, Points, SCats);
+		    }
+		    else {
+			Vect_delete_line(Map, abs(short_line));
 		    }
 
 		    /* It may happen that it is one line, in that case we have to take the new
 		     * short line as long line, orientation is not changed */
-		    if ( abs(line1) == abs(line2) ) {
-			if ( long_line > 0 )
+		    if (abs(line1) == abs(line2)) {
+			if (long_line > 0)
 			    long_line = new_short_line;
-			else 
+			else
 			    long_line = -new_short_line;
 		    }
-		    
+
 
 		    /* Add new line (must be before rewrite of long_line otherwise node could be deleted) */
-		    long_type = Vect_read_line ( Map, NULL, LCats, abs(long_line) );
-		    
-		    Vect_reset_cats ( OCats );
-		    for ( j = 0; j < SCats->n_cats; j++ ) {
-			Vect_cat_set ( OCats, SCats->field[j], SCats->cat[j] );
+		    long_type =
+			Vect_read_line(Map, NULL, LCats, abs(long_line));
+
+		    Vect_reset_cats(OCats);
+		    for (j = 0; j < SCats->n_cats; j++) {
+			Vect_cat_set(OCats, SCats->field[j], SCats->cat[j]);
 		    }
-		    for ( j = 0; j < LCats->n_cats; j++ ) {
-			Vect_cat_set ( OCats, LCats->field[j], LCats->cat[j] );
+		    for (j = 0; j < LCats->n_cats; j++) {
+			Vect_cat_set(OCats, LCats->field[j], LCats->cat[j]);
 		    }
 
-		    if ( long_type == GV_BOUNDARY || short_type == GV_BOUNDARY ) {
+		    if (long_type == GV_BOUNDARY || short_type == GV_BOUNDARY) {
 			type = GV_BOUNDARY;
-		    } else { 
+		    }
+		    else {
 			type = GV_LINE;
 		    }
 
-		    Vect_get_node_coor ( Map, node, &nx, &ny, &nz );
-		    Vect_reset_line ( Points );
-		    Vect_append_point ( Points, nx, ny, nz );
-		    Vect_append_point ( Points, x, y, z );
-		    Vect_write_line ( Map, type, Points, OCats );
+		    Vect_get_node_coor(Map, node, &nx, &ny, &nz);
+		    Vect_reset_line(Points);
+		    Vect_append_point(Points, nx, ny, nz);
+		    Vect_append_point(Points, x, y, z);
+		    Vect_write_line(Map, type, Points, OCats);
 
-		    if ( Err ) {
-		        Vect_write_line ( Err, type, Points, OCats );
+		    if (Err) {
+			Vect_write_line(Err, type, Points, OCats);
 		    }
 
-		    /* Snap long_line to the new short_line end */ 
-		    long_type = Vect_read_line ( Map, Points, LCats, abs(long_line) );
-		    if ( long_line > 0 ) {
+		    /* Snap long_line to the new short_line end */
+		    long_type =
+			Vect_read_line(Map, Points, LCats, abs(long_line));
+		    if (long_line > 0) {
 			Points->x[0] = x;
 			Points->y[0] = y;
 			Points->z[0] = z;
-		    } else {
-			Points->x[Points->n_points-1] = x;
-			Points->y[Points->n_points-1] = y;
-			Points->z[Points->n_points-1] = z;
 		    }
-		    Vect_line_prune ( Points );
-		    if ( Points->n_points > 1 ) {
-		        Vect_rewrite_line ( Map, abs(long_line), long_type, Points, LCats );
-		    } else {
-			Vect_delete_line ( Map, abs(long_line) );
+		    else {
+			Points->x[Points->n_points - 1] = x;
+			Points->y[Points->n_points - 1] = y;
+			Points->z[Points->n_points - 1] = z;
+		    }
+		    Vect_line_prune(Points);
+		    if (Points->n_points > 1) {
+			Vect_rewrite_line(Map, abs(long_line), long_type,
+					  Points, LCats);
+		    }
+		    else {
+			Vect_delete_line(Map, abs(long_line));
 		    }
 
 		    nmodif += 3;
 		    clean = 0;
-		    
+
 		    break;
 		}
-		
+
 		line1 = line2;
 		angle1 = angle2;
 	    }
-    
-	    if ( msgout ) {
-		fprintf (msgout, "\r%s: %5d", _("Modifications"), nmodif ); 
-		fflush ( msgout );
+
+	    if (msgout) {
+		fprintf(msgout, "\r%s: %5d", _("Modifications"), nmodif);
+		fflush(msgout);
 	    }
 
-	    if ( clean )
-	        break;
+	    if (clean)
+		break;
 
 	}
 
     }
-    if ( msgout ) fprintf (stderr, "\n" ); 
+    if (msgout)
+	fprintf(stderr, "\n");
 
     return (nmodif);
 }

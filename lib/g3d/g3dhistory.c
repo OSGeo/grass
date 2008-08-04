@@ -60,7 +60,8 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  *  \return int
  */
 
-int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
+int G3d_readHistory(const char *name, const char *mapset,
+		    struct History *hist)
 /* This function is adapted from G_read_history */
 {
     FILE *fd;
@@ -132,8 +133,8 @@ int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 
     hist->edlinecnt = 0;
     while ((hist->edlinecnt < MAXEDLINES) &&
-	   (G_getl(hist->edhist[hist->edlinecnt], sizeof(hist->edhist[0]), fd)))
-    {
+	   (G_getl
+	    (hist->edhist[hist->edlinecnt], sizeof(hist->edhist[0]), fd))) {
 	G_ascii_check(hist->edhist[hist->edlinecnt]);
 	hist->edlinecnt++;
     }
@@ -192,4 +193,3 @@ int G3d_writeHistory(const char *name, struct History *hist)
     fclose(fd);
     return 0;
 }
-

@@ -27,6 +27,7 @@ GLOBAL View *VIEW_MENU;
 GLOBAL View *VIEW_HISTO;
 
 GLOBAL int THE_COLORS[10];
+
 #define BLACK	THE_COLORS[0]
 #define BLUE	THE_COLORS[1]
 #define BROWN	THE_COLORS[2]
@@ -67,8 +68,11 @@ GLOBAL int THE_COLORS[10];
 		     {200,0,200},   /*purple*/\
 		     {255,0,0},     /*red*/   \
 		     {255,255,255}, /*white*/ \
-		     {255,255,0}} /*yellow*/
-GLOBAL struct { int red, grn, blue; } Color_table[10] INIT( MY_COLORS );
+		     {255,255,0}}	/*yellow */
+GLOBAL struct
+{
+    int red, grn, blue;
+} Color_table[10] INIT(MY_COLORS);
 
 GLOBAL struct Ref Refer;
 GLOBAL FILE *outsig_fd;

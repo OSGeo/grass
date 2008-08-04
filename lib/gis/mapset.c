@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *   char *
@@ -27,43 +28,39 @@
  *  \return char * 
  */
 
-char *
-G_mapset(void)
+char *G_mapset(void)
 {
     static char mapset[GMAPSET_MAX];
     static int first = 1;
     char *m;
 
     m = G__mapset();
-    if( m == NULL )
-        G_fatal_error( _("MAPSET is not set") );
+    if (m == NULL)
+	G_fatal_error(_("MAPSET is not set"));
 
     if (first)
-	    first = 0;
-    else if (strcmp(mapset,m) == 0)
-	    return mapset;
-    strcpy (mapset,m);
+	first = 0;
+    else if (strcmp(mapset, m) == 0)
+	return mapset;
+    strcpy(mapset, m);
 
-    switch (G__mapset_permissions (mapset))
-    {
+    switch (G__mapset_permissions(mapset)) {
     case 0:
     case 1:
-	    return mapset;
-    /*
-    case 0:
-	    G_fatal_error ("MAPSET %s - permission denied", mapset);
-	    break;
-    */
+	return mapset;
+	/*
+	   case 0:
+	   G_fatal_error ("MAPSET %s - permission denied", mapset);
+	   break;
+	 */
     default:
-	    G_fatal_error (_("MAPSET %s not found"), mapset);
-	    break;
+	G_fatal_error(_("MAPSET %s not found"), mapset);
+	break;
     }
     exit(EXIT_FAILURE);
 }
 
-char *
-G__mapset(void)
+char *G__mapset(void)
 {
     return G__getenv("MAPSET");
 }
-

@@ -1,3 +1,4 @@
+
 /****************************************************************
 this program runs its arguments as  a  commmand.  it  essentially
 does what the sh would do to look for the command. if / occurs in
@@ -19,19 +20,20 @@ the user's shell to re-activate interrupts in shell-ese.
 #include <unistd.h>
 #include "local_proto.h"
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-    signal (SIGINT, SIG_DFL);
+    signal(SIGINT, SIG_DFL);
 #ifndef __MINGW32__
-    signal (SIGQUIT, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
 #endif
 
     argc--;
     argv++;
-    if (argc <= 0) exit(1);
+    if (argc <= 0)
+	exit(1);
 
-    execvp (argv[0],argv);
-    fprintf (stderr, "%s: Command not found\n",argv[0]);
+    execvp(argv[0], argv);
+    fprintf(stderr, "%s: Command not found\n", argv[0]);
     exit(127);
 
     exit(0);

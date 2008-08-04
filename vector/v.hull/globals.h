@@ -24,4 +24,3 @@ int VERBOSE;
 
 /* number of DEMs in the input */
 int NSLICES;
-

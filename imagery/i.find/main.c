@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       i.find
@@ -16,6 +17,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 /************************************************************************
  * usage: i.find location mapset element file [element2 file2]...
  *
@@ -49,19 +51,18 @@
 
 
 /* function prototypes */
-static int find (FILE *fd, char *element);
+static int find(FILE * fd, char *element);
 
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char *tempfile;
     int n;
 
-    if (argc < 5 || argc%2 == 0)
+    if (argc < 5 || argc % 2 == 0)
 	G_fatal_error(_("usage: %s location mapset element file."), argv[0]);
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     /*
      * this code assumes that the SEARCH PATH is not read
@@ -69,31 +70,30 @@ main (int argc, char *argv[])
      */
     tempfile = G_tempfile();
 
-    G__setenv ("LOCATION_NAME", argv[1]);
-    G__setenv ("MAPSET", argv[2]);
+    G__setenv("LOCATION_NAME", argv[1]);
+    G__setenv("MAPSET", argv[2]);
 
-    for (n = 3; n < argc; n += 2)
-    {
-        FILE *fd;
-        int ok;
+    for (n = 3; n < argc; n += 2) {
+	FILE *fd;
+	int ok;
 
-        /* get this list into a temp file first */
-	fd = fopen (tempfile, "w");
+	/* get this list into a temp file first */
+	fd = fopen(tempfile, "w");
 	if (fd == NULL)
-            G_fatal_error(_("Unable to open temp file."));
+	    G_fatal_error(_("Unable to open temp file."));
 
-        remove(argv[n+1]);
-	ok = find (fd, argv[n]);
-	fclose (fd);
+	remove(argv[n + 1]);
+	ok = find(fd, argv[n]);
+	fclose(fd);
 
-        /* move the temp file to the real file
-         * this allows programs to run i.find in the background
-         * and check for completion by looking for the file
-         */
+	/* move the temp file to the real file
+	 * this allows programs to run i.find in the background
+	 * and check for completion by looking for the file
+	 */
 	if (ok)
-            G_rename_file(tempfile, argv[n+1]);
+	    G_rename_file(tempfile, argv[n + 1]);
 
-        remove(tempfile);
+	remove(tempfile);
     }
     G_free(tempfile);
 
@@ -101,55 +101,49 @@ main (int argc, char *argv[])
 }
 
 
-static int find (FILE *fd, char *element)
+static int find(FILE * fd, char *element)
 {
     int len1 = 0, len2 = 0;
     char *mapset;
     int n;
 
-    fseek (fd, 0L, SEEK_SET);
-    fwrite (&len1, sizeof(len1), 1L, fd);
-    fwrite (&len2, sizeof(len2), 1L, fd);
+    fseek(fd, 0L, SEEK_SET);
+    fwrite(&len1, sizeof(len1), 1L, fd);
+    fwrite(&len2, sizeof(len2), 1L, fd);
 
-    for (n=0; ((mapset = G__mapset_name(n)) != NULL); n++)
-    {
-        int len;
-        char dir[1024];
-        struct dirent *dp;
-        DIR *dfd;
+    for (n = 0; ((mapset = G__mapset_name(n)) != NULL); n++) {
+	int len;
+	char dir[1024];
+	struct dirent *dp;
+	DIR *dfd;
 
-	G__file_name (dir, element, "", mapset);
-        if ((dfd = opendir(dir)) == NULL)
-            continue;
+	G__file_name(dir, element, "", mapset);
+	if ((dfd = opendir(dir)) == NULL)
+	    continue;
 
-	len = strlen (mapset);
+	len = strlen(mapset);
 	if (len > len2)
 	    len2 = len;
 
-        while ((dp = readdir(dfd)) != NULL)
-        {
-	    if(dp->d_name[0] != '.')
-	    {       	
+	while ((dp = readdir(dfd)) != NULL) {
+	    if (dp->d_name[0] != '.') {
 		fprintf(fd, "%s %s\n", dp->d_name, mapset);
 		len = strlen(dp->d_name);
 		if (len > len1)
 		    len1 = len;
-	    }	   
-        }
+	    }
+	}
 
-        closedir(dfd);
+	closedir(dfd);
     }
 
     if (len1 == 0 || len2 == 0)
 	return 0;
 
-    fflush (fd);
-    fseek (fd, 0L, SEEK_SET);
-    fwrite (&len1, sizeof(len1), 1L, fd);
-    fwrite (&len2, sizeof(len2), 1L, fd);
+    fflush(fd);
+    fseek(fd, 0L, SEEK_SET);
+    fwrite(&len1, sizeof(len1), 1L, fd);
+    fwrite(&len2, sizeof(len2), 1L, fd);
 
     return 1;
 }
-
-
-

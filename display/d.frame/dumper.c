@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <grass/gis.h>
 
-int 
-main (void)
+int main(void)
 {
     char **pads;
     char **items;
@@ -14,56 +13,48 @@ main (void)
     int count;
     int p;
     int i;
-    int n ;
-    int stat ;
+    int n;
+    int stat;
 
     if (R_open_driver() != 0)
-	    G_fatal_error ("No graphics device selected");
+	G_fatal_error("No graphics device selected");
 
-    R_pad_list (&pads, &npads);
-    for (p = -1; p < npads; p++)
-    {
-	if (p < 0)
-	{
-	    fprintf (stdout,"SCREEN STATUS:\n");
-	    stat = R_pad_select ("");
+    R_pad_list(&pads, &npads);
+    for (p = -1; p < npads; p++) {
+	if (p < 0) {
+	    fprintf(stdout, "SCREEN STATUS:\n");
+	    stat = R_pad_select("");
 	}
-	else
-	{
-	    fprintf (stdout,"FRAME: %s\n", pads[p]);
-	    stat = R_pad_select (pads[p]);
+	else {
+	    fprintf(stdout, "FRAME: %s\n", pads[p]);
+	    stat = R_pad_select(pads[p]);
 	}
 
-	if (stat)
-	{
-	    R_pad_perror ("    ERROR", stat);
+	if (stat) {
+	    R_pad_perror("    ERROR", stat);
 	    continue;
 	}
 
-	stat = R_pad_list_items (&items, &nitems);
-	if (stat)
-	{
-	    R_pad_perror ("    ERROR", stat);
+	stat = R_pad_list_items(&items, &nitems);
+	if (stat) {
+	    R_pad_perror("    ERROR", stat);
 	    continue;
 	}
 
-	for (i = 0; i < nitems; i++)
-	{
-	    fprintf (stdout,"    %8s:", items[i]);
-	    stat = R_pad_get_item (items[i], &list, &count);
-	    if (stat)
-	    {
-		R_pad_perror ("          ERROR", stat);
+	for (i = 0; i < nitems; i++) {
+	    fprintf(stdout, "    %8s:", items[i]);
+	    stat = R_pad_get_item(items[i], &list, &count);
+	    if (stat) {
+		R_pad_perror("          ERROR", stat);
 		continue;
 	    }
-	    for (n = 0; n < count; n++)
-	    {
+	    for (n = 0; n < count; n++) {
 		if (n == 0)
-		    fprintf (stdout,"%s\n", list[n]);
+		    fprintf(stdout, "%s\n", list[n]);
 		else
-		    fprintf (stdout,"             %s\n", list[n]);
+		    fprintf(stdout, "             %s\n", list[n]);
 	    }
-	    R_pad_freelist (list,count);
+	    R_pad_freelist(list, count);
 	}
     }
 

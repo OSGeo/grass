@@ -74,7 +74,7 @@
 #define DB_SQL_TYPE_TIME            10
 #define DB_SQL_TYPE_TIMESTAMP       11
 #define DB_SQL_TYPE_INTERVAL        12
-#define DB_SQL_TYPE_TEXT            13  /* length not defined */
+#define DB_SQL_TYPE_TEXT            13	/* length not defined */
 
 #define DB_SQL_TYPE_SERIAL          21
 
@@ -123,40 +123,46 @@
 #define DB_DEFINED	1
 #define DB_UNDEFINED	2
 
-typedef void * dbAddress;
-typedef int    dbToken;
+typedef void *dbAddress;
+typedef int dbToken;
 
-typedef struct _db_string {
+typedef struct _db_string
+{
     char *string;
     int nalloc;
 } dbString;
 
-typedef struct _dbmscap {
-    char driverName[256];   /* symbolic name for the dbms system */
-    char startup[256];      /* command to run the driver */
-    char comment[256];      /* comment field             */
-    struct _dbmscap *next;  /* linked list               */
+typedef struct _dbmscap
+{
+    char driverName[256];	/* symbolic name for the dbms system */
+    char startup[256];		/* command to run the driver */
+    char comment[256];		/* comment field             */
+    struct _dbmscap *next;	/* linked list               */
 } dbDbmscap;
 
-typedef struct _db_dirent {
-    dbString name;           /* file/dir name             */
-    int isdir;               /* bool: name is a directory */
-    int perm;                /* permissions               */
+typedef struct _db_dirent
+{
+    dbString name;		/* file/dir name             */
+    int isdir;			/* bool: name is a directory */
+    int perm;			/* permissions               */
 } dbDirent;
 
-typedef struct _db_driver {
-    dbDbmscap dbmscap;       /* dbmscap entry for this driver */
-    FILE *send, *recv;       /* i/o to-from driver            */
-    int pid;                 /* process id of the driver      */
+typedef struct _db_driver
+{
+    dbDbmscap dbmscap;		/* dbmscap entry for this driver */
+    FILE *send, *recv;		/* i/o to-from driver            */
+    int pid;			/* process id of the driver      */
 } dbDriver;
 
-typedef struct _db_handle {
-    dbString dbName;            /* database name               */
-    /* dbString dbPath; */            /* directory containing dbName */
-    dbString dbSchema;          /* database schema */
+typedef struct _db_handle
+{
+    dbString dbName;		/* database name               */
+    /* dbString dbPath; *//* directory containing dbName */
+    dbString dbSchema;		/* database schema */
 } dbHandle;
 
-typedef struct _db_date_time {
+typedef struct _db_date_time
+{
     char current;
     int year;
     int month;
@@ -166,41 +172,45 @@ typedef struct _db_date_time {
     double seconds;
 } dbDateTime;
 
-typedef struct _db_value {
-    char       isNull;
-    int        i;
-    double     d;
-    dbString   s;
+typedef struct _db_value
+{
+    char isNull;
+    int i;
+    double d;
+    dbString s;
     dbDateTime t;
 } dbValue;
 
-typedef struct _db_column {
+typedef struct _db_column
+{
     dbString columnName;
     dbString description;
-    int     sqlDataType;
-    int     hostDataType;
+    int sqlDataType;
+    int hostDataType;
     dbValue value;
-    int     dataLen;
-    int     precision;
-    int     scale;
-    char    nullAllowed;
-    char    hasDefaultValue;
-    char    useDefaultValue;
+    int dataLen;
+    int precision;
+    int scale;
+    char nullAllowed;
+    char hasDefaultValue;
+    char useDefaultValue;
     dbValue defaultValue;
-    int     select;
-    int     update;
+    int select;
+    int update;
 } dbColumn;
 
-typedef struct _db_table {
-    dbString   tableName;
-    dbString   description;
-    int        numColumns;
-    dbColumn * columns;
-    int        priv_insert;
-    int        priv_delete;
+typedef struct _db_table
+{
+    dbString tableName;
+    dbString description;
+    int numColumns;
+    dbColumn *columns;
+    int priv_insert;
+    int priv_delete;
 } dbTable;
 
-typedef struct _db_cursor {
+typedef struct _db_cursor
+{
     dbToken token;
     dbDriver *driver;
     dbTable *table;
@@ -209,55 +219,57 @@ typedef struct _db_cursor {
     int mode;
 } dbCursor;
 
-typedef struct _db_index {
-    dbString   indexName;
-    dbString   tableName;
-    int        numColumns;
-    dbString * columnNames;
-    char       unique;
+typedef struct _db_index
+{
+    dbString indexName;
+    dbString tableName;
+    int numColumns;
+    dbString *columnNames;
+    char unique;
 } dbIndex;
 
-typedef struct _db_driver_state 
+typedef struct _db_driver_state
 {
     char *dbname;
     char *dbschema;
-    int  open;
-    int  ncursors;
+    int open;
+    int ncursors;
     dbCursor **cursor_list;
-}dbDriverState;
+} dbDriverState;
 
 /* category value (integer) */
 typedef struct
 {
-    int  cat;  /* category */
-    int  val;  /* value */
-}dbCatValI;
+    int cat;			/* category */
+    int val;			/* value */
+} dbCatValI;
 
 /* category value */
 typedef struct
 {
-    int  cat;  /* category */
-    int  isNull; 
-    union { 
-        int        i;
-        double     d;
+    int cat;			/* category */
+    int isNull;
+    union
+    {
+	int i;
+	double d;
 	/* s and t were added 22.8.2005, both are pointers,
 	 * they so should not take more than 8 bytes.
-         * It would be better to add dbString, not pointer,
-         * But it could be > 8 bytes on some systems */
-        dbString   *s;
-        dbDateTime *t;
+	 * It would be better to add dbString, not pointer,
+	 * But it could be > 8 bytes on some systems */
+	dbString *s;
+	dbDateTime *t;
     } val;
-}dbCatVal;
+} dbCatVal;
 
 /* category value array */
 typedef struct
 {
-    int  n_values; 
-    int  alloc;
-    int  ctype;   /* C type of values stored in array DB_C_TYPE_* */
+    int n_values;
+    int alloc;
+    int ctype;			/* C type of values stored in array DB_C_TYPE_* */
     dbCatVal *value;
-}dbCatValArray;
+} dbCatValArray;
 
 /* parameters of connection */
 typedef struct _db_connection
@@ -269,21 +281,21 @@ typedef struct _db_connection
     char *location;
     char *user;
     char *password;
-    char *keycol;       /* name of default key column */
-    char *group;        /* deafault group to which select privilege is granted */
-}dbConnection;
+    char *keycol;		/* name of default key column */
+    char *group;		/* deafault group to which select privilege is granted */
+} dbConnection;
 
 /* reclass rule */
 typedef struct
 {
-    int  count;     /* number of defined rules */
-    int  alloc;     /* size of allocated array */
-    char *table;    /* table name */
-    char *key;      /* key column name */
-    int  *cat;      /* array of new category numbers */
-    char **where;   /* array of SQL WHERE conditions */
-    char **label;   /* array of new category labels */
-}dbRclsRule;
+    int count;			/* number of defined rules */
+    int alloc;			/* size of allocated array */
+    char *table;		/* table name */
+    char *key;			/* key column name */
+    int *cat;			/* array of new category numbers */
+    char **where;		/* array of SQL WHERE conditions */
+    char **label;		/* array of new category labels */
+} dbRclsRule;
 
 #include <grass/proto_dbmi.h>
 

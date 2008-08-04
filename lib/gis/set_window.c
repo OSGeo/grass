@@ -1,3 +1,4 @@
+
 /**
  * \file set_window.c
  *
@@ -26,11 +27,11 @@
  * \param[out] window window structure to be set
  * \return 1
  */
-int G_get_set_window (struct Cell_head *window)
+int G_get_set_window(struct Cell_head *window)
 {
-    G__init_window() ;
-    G_copy((char *) window, (char *) &G__.window, sizeof(*window) ) ;
-    
+    G__init_window();
+    G_copy((char *)window, (char *)&G__.window, sizeof(*window));
+
     return 1;
 }
 
@@ -45,7 +46,7 @@ int G_get_set_window (struct Cell_head *window)
  * \return -1 on error
  * \return  1 on success
  */
-int G_set_window (struct Cell_head *window)
+int G_set_window(struct Cell_head *window)
 {
     int i;
     int maskfd;
@@ -55,45 +56,41 @@ int G_set_window (struct Cell_head *window)
     /* adjust the real one, not a copy
        G_copy (&twindow, window, sizeof(struct Cell_head));
        window = &twindow;
-    */
+     */
 
-    if ((err = G_adjust_Cell_head (window, 0,0)))
-    {
-	G_warning ("G_set_window(): %s", err);
+    if ((err = G_adjust_Cell_head(window, 0, 0))) {
+	G_warning("G_set_window(): %s", err);
 	return -1;
     }
 
     /* except for MASK, cell files open for read must have same projection
      * and zone as new window
      */
-    maskfd = G__.auto_mask > 0 ? G__.mask_fd : - 1;
-    for (i = 0; i < G__.fileinfo_count; i++)
-    {
-	if (G__.fileinfo[i].open_mode == OPEN_OLD)
-	{
+    maskfd = G__.auto_mask > 0 ? G__.mask_fd : -1;
+    for (i = 0; i < G__.fileinfo_count; i++) {
+	if (G__.fileinfo[i].open_mode == OPEN_OLD) {
 	    if (G__.fileinfo[i].cellhd.zone == window->zone &&
-	        G__.fileinfo[i].cellhd.proj == window->proj)
-		    continue;
-	    if (i != maskfd)
-	    {
-		G_warning (_("G_set_window(): projection/zone differs from that of "
-			     "currently open raster maps"));
+		G__.fileinfo[i].cellhd.proj == window->proj)
+		continue;
+	    if (i != maskfd) {
+		G_warning(_
+			  ("G_set_window(): projection/zone differs from that of "
+			   "currently open raster maps"));
 		return -1;
 	    }
 	}
     }
-    
+
     /* close the mask */
-    if (G__.auto_mask > 0)
-    {
-	G_close_cell (maskfd);
-        /* G_free (G__.mask_buf); */
+    if (G__.auto_mask > 0) {
+	G_close_cell(maskfd);
+	/* G_free (G__.mask_buf); */
 	G__.mask_fd = -1;
 	G__.auto_mask = -1;	/* turn off masking */
     }
 
     /* copy the window to the current window */
-    G_copy ((char *) &G__.window, (char *) window, sizeof (*window));
+    G_copy((char *)&G__.window, (char *)window, sizeof(*window));
 
     G__.window_set = 1;
 
@@ -102,47 +99,46 @@ int G_set_window (struct Cell_head *window)
      * also the memory for reading and writing must be reallocated for all opened
      * cell files
      */
-    for (i = 0; i < G__.fileinfo_count; i++)
-    {
-        if(G__.fileinfo[i].open_mode != OPEN_OLD &&
-           G__.fileinfo[i].open_mode != OPEN_NEW_UNCOMPRESSED &&
-           G__.fileinfo[i].open_mode != OPEN_NEW_COMPRESSED &&
-           G__.fileinfo[i].open_mode != OPEN_NEW_RANDOM)
-              continue;
+    for (i = 0; i < G__.fileinfo_count; i++) {
+	if (G__.fileinfo[i].open_mode != OPEN_OLD &&
+	    G__.fileinfo[i].open_mode != OPEN_NEW_UNCOMPRESSED &&
+	    G__.fileinfo[i].open_mode != OPEN_NEW_COMPRESSED &&
+	    G__.fileinfo[i].open_mode != OPEN_NEW_RANDOM)
+	    continue;
 
 	if (G__.fileinfo[i].open_mode == OPEN_OLD)
-	    G__create_window_mapping (i);
-/* code commented 10/1999 due to problems */
-/*      else */
-        /* opened for writing */
-/*      {
-            G_free (G__.fileinfo[i].data);
-            G__.fileinfo[i].data = (unsigned char *) G_calloc (G__.window.cols,
-                 G_raster_size(G__.fileinfo[i].map_type));
-        }
-*/
-        /* allocate null bitstream buffers for reading/writing null rows */
-/*      for (j=0;j< NULL_ROWS_INMEM; j++)
-        {
-           G_free (G__.fileinfo[i].NULL_ROWS[j]);
-           G__.fileinfo[i].NULL_ROWS[j] = G__allocate_null_bits(G__.window.cols);
-        }
-*/
+	    G__create_window_mapping(i);
+	/* code commented 10/1999 due to problems */
+	/*      else */
+	/* opened for writing */
+	/*      {
+	   G_free (G__.fileinfo[i].data);
+	   G__.fileinfo[i].data = (unsigned char *) G_calloc (G__.window.cols,
+	   G_raster_size(G__.fileinfo[i].map_type));
+	   }
+	 */
+	/* allocate null bitstream buffers for reading/writing null rows */
+	/*      for (j=0;j< NULL_ROWS_INMEM; j++)
+	   {
+	   G_free (G__.fileinfo[i].NULL_ROWS[j]);
+	   G__.fileinfo[i].NULL_ROWS[j] = G__allocate_null_bits(G__.window.cols);
+	   }
+	 */
 
-        /* initialize : no NULL rows in memory */
-/*      G__.fileinfo[i].min_null_row = (-1) * NULL_ROWS_INMEM;
-        if(G__.fileinfo[i].null_cur_row > 0)
-        {
-            G_warning(
-             "Calling G_set_window() in the middle of writing map %s", 
-                       G__.fileinfo[i].name);
-            G__.fileinfo[i].null_cur_row = 0;
-        }
-*/
+	/* initialize : no NULL rows in memory */
+	/*      G__.fileinfo[i].min_null_row = (-1) * NULL_ROWS_INMEM;
+	   if(G__.fileinfo[i].null_cur_row > 0)
+	   {
+	   G_warning(
+	   "Calling G_set_window() in the middle of writing map %s", 
+	   G__.fileinfo[i].name);
+	   G__.fileinfo[i].null_cur_row = 0;
+	   }
+	 */
     }
 
     /* turn masking (back) on if necessary */
-    G__check_for_auto_masking ();
+    G__check_for_auto_masking();
 
     /* reallocate/enlarge the G__. buffers for reading raster maps */
     G__reallocate_null_buf();

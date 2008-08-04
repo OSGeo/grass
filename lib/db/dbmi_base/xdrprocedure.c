@@ -3,21 +3,17 @@
 
 
 /******** client only ***************/
-int
-db__start_procedure_call (int procnum)
+int db__start_procedure_call(int procnum)
 {
     int reply;
 
-    DB_SEND_INT (procnum);
-    DB_RECV_INT (&reply);
-    if (reply != procnum)
-    {
-	if (reply == 0)
-	{
+    DB_SEND_INT(procnum);
+    DB_RECV_INT(&reply);
+    if (reply != procnum) {
+	if (reply == 0) {
 	    db_noproc_error(procnum);
 	}
-	else
-	{
+	else {
 	    db_protocol_error();
 	}
 	return DB_PROTOCOL_ERR;
@@ -32,8 +28,7 @@ db__start_procedure_call (int procnum)
  * DB_OK  ok
  * DB_EOF eof from client
  */
-int
-db__recv_procnum (int *n)
+int db__recv_procnum(int *n)
 {
     int stat = DB_OK;
 
@@ -43,14 +38,12 @@ db__recv_procnum (int *n)
     return stat;
 }
 
-int
-db__send_procedure_ok(int n)
+int db__send_procedure_ok(int n)
 {
-    return db__send_int (n);
+    return db__send_int(n);
 }
 
-int
-db__send_procedure_not_implemented(int n)
+int db__send_procedure_not_implemented(int n)
 {
-    return db__send_int (n ? 0 : -1);
+    return db__send_int(n ? 0 : -1);
 }

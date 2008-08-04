@@ -14,18 +14,17 @@
  * \return float
  */
 
-float 
-G_math_rand (int seed)
+float G_math_rand(int seed)
 {
 #if defined(HAVE_DRAND48)
-	if (seed < 0)
-		srand48(-seed);
+    if (seed < 0)
+	srand48(-seed);
 
-	return (float) drand48();
+    return (float)drand48();
 #else
-	if (seed < 0)
-		srand(-seed);
+    if (seed < 0)
+	srand(-seed);
 
-	return 1.0f * rand() / RAND_MAX;
+    return 1.0f * rand() / RAND_MAX;
 #endif
 }

@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       Vector library 
@@ -20,30 +21,28 @@
 #include <ogr_api.h>
 
 /* Rewind vector data file to cause reads to start at beginning. 
-** returns 0 on success
-**        -1 on error
-*/
-int 
-V1_rewind_ogr (struct Map_info *Map)
+ ** returns 0 on success
+ **        -1 on error
+ */
+int V1_rewind_ogr(struct Map_info *Map)
 {
-    G_debug (2, "V1_rewind_ogr(): name = %s", Map->name);
+    G_debug(2, "V1_rewind_ogr(): name = %s", Map->name);
 
     Map->fInfo.ogr.lines_num = 0;
     Map->fInfo.ogr.lines_next = 0;
 
-    OGR_L_ResetReading ( Map->fInfo.ogr.layer );
-    
+    OGR_L_ResetReading(Map->fInfo.ogr.layer);
+
     return 0;
 }
 
-int 
-V2_rewind_ogr (struct Map_info *Map)
+int V2_rewind_ogr(struct Map_info *Map)
 {
-    G_debug (2, "V2_rewind_ogr(): name = %s", Map->name);
+    G_debug(2, "V2_rewind_ogr(): name = %s", Map->name);
 
     Map->next_line = 1;
-    
-    return 0; 
+
+    return 0;
 }
 
-#endif 
+#endif

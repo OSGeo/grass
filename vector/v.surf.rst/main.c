@@ -1,3 +1,4 @@
+
 /*-
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
  * University of Illinois
@@ -137,14 +138,14 @@ int main(int argc, char *argv[])
     struct multfunc *functions;
     struct multtree *tree;
     int open_check;
-    char   buf[1024];
+    char buf[1024];
 
     struct GModule *module;
     struct
     {
-	struct Option *input, *field, *zcol, *wheresql, *scol, *elev, *slope, *aspect,
-	    *pcurv, *tcurv, *mcurv, *treefile, *overfile, *maskmap, *dmin,
-	    *dmax, *zmult, *fi, *rsm, *segmax, *npmin, *cvdev, *devi, 
+	struct Option *input, *field, *zcol, *wheresql, *scol, *elev, *slope,
+	    *aspect, *pcurv, *tcurv, *mcurv, *treefile, *overfile, *maskmap,
+	    *dmin, *dmax, *zmult, *fi, *rsm, *segmax, *npmin, *cvdev, *devi,
 	    *theta, *scalex;
     } parm;
     struct
@@ -159,8 +160,8 @@ int main(int argc, char *argv[])
     module->keywords = _("vector");
     module->description =
 	_("Spatial approximation and topographic analysis from given "
-	"point or isoline data in vector format to floating point "
-	"raster format using regularized spline with tension.");
+	  "point or isoline data in vector format to floating point "
+	  "raster format using regularized spline with tension.");
 
     if (G_get_set_window(&cellhd) == -1)
 	G_fatal_error("G_get_set_window() failed");
@@ -182,7 +183,7 @@ int main(int argc, char *argv[])
     sprintf(dminchar, "%f", dmin);
 
 
-    flag.cv = G_define_flag ();
+    flag.cv = G_define_flag();
     flag.cv->key = 'c';
     flag.cv->description =
 	_("Perform cross-validation procedure without raster approximation");
@@ -190,19 +191,20 @@ int main(int argc, char *argv[])
     flag.cprght = G_define_flag();
     flag.cprght->key = 't';
     flag.cprght->description = _("Use scale dependent tension");
-    flag.cprght->guisection  = _("Settings");
+    flag.cprght->guisection = _("Settings");
 
     flag.deriv = G_define_flag();
     flag.deriv->key = 'd';
     flag.deriv->description =
 	_("Output partial derivatives instead of topographic parameters");
-    flag.deriv->guisection  = _("Output_options");
+    flag.deriv->guisection = _("Output_options");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
     parm.field->description =
-	_("Field value. If set to 0, z coordinates are used. (3D vector only)");
+	_
+	("Field value. If set to 0, z coordinates are used. (3D vector only)");
     parm.field->answer = "1";
 
     parm.zcol = G_define_option();
@@ -210,7 +212,8 @@ int main(int argc, char *argv[])
     parm.zcol->type = TYPE_STRING;
     parm.zcol->required = NO;
     parm.zcol->description =
-	_("Name of the attribute column with values to be used for approximation (if layer>0)");
+	_
+	("Name of the attribute column with values to be used for approximation (if layer>0)");
 
     parm.wheresql = G_define_standard_option(G_OPT_WHERE);
 
@@ -223,31 +226,31 @@ int main(int argc, char *argv[])
     parm.slope->key = "slope";
     parm.slope->required = NO;
     parm.slope->description = _("Output slope raster map");
-    parm.slope->guisection  = _("Output_options");
+    parm.slope->guisection = _("Output_options");
 
     parm.aspect = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.aspect->key = "aspect";
     parm.aspect->required = NO;
     parm.aspect->description = _("Output aspect raster map");
-    parm.aspect->guisection  = _("Output_options");
+    parm.aspect->guisection = _("Output_options");
 
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.pcurv->key = "pcurv";
     parm.pcurv->required = NO;
     parm.pcurv->description = _("Output profile curvature raster map");
-    parm.pcurv->guisection  = _("Output_options");
+    parm.pcurv->guisection = _("Output_options");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tcurv->key = "tcurv";
     parm.tcurv->required = NO;
     parm.tcurv->description = _("Output tangential curvature raster map");
-    parm.tcurv->guisection  = _("Output_options");
+    parm.tcurv->guisection = _("Output_options");
 
     parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.mcurv->key = "mcurv";
     parm.mcurv->required = NO;
     parm.mcurv->description = _("Output mean curvature raster map");
-    parm.mcurv->guisection  = _("Output_options");
+    parm.mcurv->guisection = _("Output_options");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "maskmap";
@@ -260,14 +263,14 @@ int main(int argc, char *argv[])
     parm.fi->answer = TENSION;
     parm.fi->required = NO;
     parm.fi->description = _("Tension parameter");
-    parm.fi->guisection  = _("Settings");
+    parm.fi->guisection = _("Settings");
 
     parm.rsm = G_define_option();
     parm.rsm->key = "smooth";
     parm.rsm->type = TYPE_DOUBLE;
     parm.rsm->required = NO;
     parm.rsm->description = _("Smoothing parameter");
-    parm.rsm->guisection  = _("Settings");
+    parm.rsm->guisection = _("Settings");
 
     parm.scol = G_define_option();
     parm.scol->key = "scolumn";
@@ -275,7 +278,7 @@ int main(int argc, char *argv[])
     parm.scol->required = NO;
     parm.scol->description =
 	_("Name of the attribute column with smoothing parameters");
-    parm.scol->guisection  = _("Settings");
+    parm.scol->guisection = _("Settings");
 
     parm.segmax = G_define_option();
     parm.segmax->key = "segmax";
@@ -283,7 +286,7 @@ int main(int argc, char *argv[])
     parm.segmax->answer = MAXSEGM;
     parm.segmax->required = NO;
     parm.segmax->description = _("Maximum number of points in a segment");
-    parm.segmax->guisection  = _("Settings");
+    parm.segmax->guisection = _("Settings");
 
     parm.npmin = G_define_option();
     parm.npmin->key = "npmin";
@@ -291,8 +294,9 @@ int main(int argc, char *argv[])
     parm.npmin->answer = MINPOINTS;
     parm.npmin->required = NO;
     parm.npmin->description =
-	_("Minimum number of points for approximation in a segment (>segmax)");
-    parm.npmin->guisection  = _("Settings");
+	_
+	("Minimum number of points for approximation in a segment (>segmax)");
+    parm.npmin->guisection = _("Settings");
 
     parm.dmin = G_define_option();
     parm.dmin->key = "dmin";
@@ -300,17 +304,19 @@ int main(int argc, char *argv[])
     parm.dmin->required = NO;
     parm.dmin->answer = dminchar;
     parm.dmin->description =
-	_("Minimum distance between points (to remove almost identical points)");
-    parm.dmin->guisection  = _("Settings");
+	_
+	("Minimum distance between points (to remove almost identical points)");
+    parm.dmin->guisection = _("Settings");
 
     parm.dmax = G_define_option();
     parm.dmax->key = "dmax";
     parm.dmax->type = TYPE_DOUBLE;
     parm.dmax->required = NO;
-    parm.dmax->answer = dmaxchar; 
+    parm.dmax->answer = dmaxchar;
     parm.dmax->description =
-	_("Maximum distance between points on isoline (to insert additional points)");
-    parm.dmax->guisection  = _("Settings");
+	_
+	("Maximum distance between points on isoline (to insert additional points)");
+    parm.dmax->guisection = _("Settings");
 
     parm.zmult = G_define_option();
     parm.zmult->key = "zmult";
@@ -319,7 +325,7 @@ int main(int argc, char *argv[])
     parm.zmult->required = NO;
     parm.zmult->description =
 	_("Conversion factor for values used for approximation");
-    parm.zmult->guisection  = _("Settings");
+    parm.zmult->guisection = _("Settings");
 
     parm.devi = G_define_option();
     parm.devi->key = "devi";
@@ -327,27 +333,28 @@ int main(int argc, char *argv[])
     parm.devi->required = NO;
     parm.devi->gisprompt = "new,vector,vector";
     parm.devi->description = _("Output deviations vector point file");
-    parm.devi->guisection  = _("Analysis");
+    parm.devi->guisection = _("Analysis");
 
     parm.cvdev = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.cvdev->key = "cvdev";
     parm.cvdev->required = NO;
-    parm.cvdev->description = _("Output cross-validation errors vector point file");
-    parm.cvdev->guisection  = _("Analysis");
+    parm.cvdev->description =
+	_("Output cross-validation errors vector point file");
+    parm.cvdev->guisection = _("Analysis");
 
     parm.treefile = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.treefile->key = "treefile";
     parm.treefile->required = NO;
     parm.treefile->description =
 	_("Output vector map showing quadtree segmentation");
-    parm.treefile->guisection  = _("Analysis");
+    parm.treefile->guisection = _("Analysis");
 
     parm.overfile = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.overfile->key = "overfile";
     parm.overfile->required = NO;
     parm.overfile->description =
 	_("Output vector map showing overlapping windows");
-    parm.overfile->guisection  = _("Analysis");
+    parm.overfile->guisection = _("Analysis");
 
     parm.theta = G_define_option();
     parm.theta->key = "theta";
@@ -355,14 +362,14 @@ int main(int argc, char *argv[])
     parm.theta->required = NO;
     parm.theta->description =
 	_("Anisotropy angle (in degrees counterclockwise from East)");
-    parm.theta->guisection  = _("Anisotropy");
+    parm.theta->guisection = _("Anisotropy");
 
     parm.scalex = G_define_option();
     parm.scalex->key = "scalex";
     parm.scalex->type = TYPE_DOUBLE;
     parm.scalex->required = NO;
     parm.scalex->description = _("Anisotropy scaling factor");
-    parm.scalex->guisection  = _("Anisotropy");
+    parm.scalex->guisection = _("Anisotropy");
 
 
     if (G_parser(argc, argv))
@@ -387,21 +394,21 @@ int main(int argc, char *argv[])
     treefile = parm.treefile->answer;
     overfile = parm.overfile->answer;
 
-/*    if (treefile)
-	Vect_check_input_output_name(input, treefile, GV_FATAL_EXIT);
+    /*    if (treefile)
+       Vect_check_input_output_name(input, treefile, GV_FATAL_EXIT);
 
-    if (overfile)
-	Vect_check_input_output_name(input, overfile, GV_FATAL_EXIT);
-*/
+       if (overfile)
+       Vect_check_input_output_name(input, overfile, GV_FATAL_EXIT);
+     */
     if ((elev == NULL) && (pcurv == NULL) && (tcurv == NULL)
-	  && (mcurv == NULL)
-	  && (slope == NULL) && (aspect == NULL) && (devi == NULL)
-	  && (cvdev == NULL) )
+	&& (mcurv == NULL)
+	&& (slope == NULL) && (aspect == NULL) && (devi == NULL)
+	&& (cvdev == NULL))
 	G_warning(_("You are not outputing any raster or vector maps"));
 
-    if ( parm.wheresql->answer != NULL ) {
-        if ( field < 1 )
-            G_fatal_error ( _("'layer' must be > 0 for 'where'.") );
+    if (parm.wheresql->answer != NULL) {
+	if (field < 1)
+	    G_fatal_error(_("'layer' must be > 0 for 'where'."));
     }
     cond2 = ((pcurv != NULL) || (tcurv != NULL) || (mcurv != NULL));
     cond1 = ((slope != NULL) || (aspect != NULL) || cond2);
@@ -410,10 +417,12 @@ int main(int argc, char *argv[])
     cv = flag.cv->answer;
 
     if ((cv && cvdev == NULL) || (!(cv) && cvdev != NULL))
-	G_fatal_error(_("Both cross-validation options (-c flag and cvdev vector output) must be specified"));
+	G_fatal_error(_
+		      ("Both cross-validation options (-c flag and cvdev vector output) must be specified"));
 
-    if((elev != NULL || cond1 || cond2 || devi != NULL) && cv )
-	G_fatal_error(_("The cross-validation cannot be computed simultaneously with output raster or devi file"));
+    if ((elev != NULL || cond1 || cond2 || devi != NULL) && cv)
+	G_fatal_error(_
+		      ("The cross-validation cannot be computed simultaneously with output raster or devi file"));
 
     ertre = 0.1;
     sscanf(parm.dmax->answer, "%lf", &dmax);
@@ -423,7 +432,7 @@ int main(int argc, char *argv[])
     sscanf(parm.npmin->answer, "%d", &npmin);
     sscanf(parm.zmult->answer, "%lf", &zmult);
 
-/* if (fi=0.000000)  G_fatal_error("Tension must be > 0.000000") */
+    /* if (fi=0.000000)  G_fatal_error("Tension must be > 0.000000") */
 
     if (parm.theta->answer)
 	sscanf(parm.theta->answer, "%lf", &theta);
@@ -431,34 +440,39 @@ int main(int argc, char *argv[])
     if (parm.scalex->answer) {
 	sscanf(parm.scalex->answer, "%lf", &scalex);
 	if (!parm.theta->answer)
-	    G_fatal_error(_("Using anisotropy - both theta and scalex have to be specified"));
+	    G_fatal_error(_
+			  ("Using anisotropy - both theta and scalex have to be specified"));
     }
 
-    if(parm.rsm->answer){
-    	sscanf(parm.rsm->answer, "%lf", &rsm);
-    	if(rsm < 0.0) G_fatal_error("Smoothing must be a positive value");
-    	if(scol != NULL)
-	    G_warning(_("Both smatt and smooth options specified - using constant"));
+    if (parm.rsm->answer) {
+	sscanf(parm.rsm->answer, "%lf", &rsm);
+	if (rsm < 0.0)
+	    G_fatal_error("Smoothing must be a positive value");
+	if (scol != NULL)
+	    G_warning(_
+		      ("Both smatt and smooth options specified - using constant"));
     }
     else {
-	sscanf (SMOOTH, "%lf", &rsm);
-    	if (scol != NULL) rsm = -1; /* used in InterpLib to indicate variable smoothing */
+	sscanf(SMOOTH, "%lf", &rsm);
+	if (scol != NULL)
+	    rsm = -1;		/* used in InterpLib to indicate variable smoothing */
     }
 
 
-    if (npmin > MAXPOINTS - 50){
-        G_warning(_("The computation will last too long - lower npmin is suggested"));
-        KMAX2 = 2 * npmin; /* was: KMAX2 = npmin + 50;*/
+    if (npmin > MAXPOINTS - 50) {
+	G_warning(_
+		  ("The computation will last too long - lower npmin is suggested"));
+	KMAX2 = 2 * npmin;	/* was: KMAX2 = npmin + 50; */
     }
     else
-        KMAX2 = 2 * npmin; /* was: KMAX2 = MAXPOINTS; fixed by JH in 12/01*/
+	KMAX2 = 2 * npmin;	/* was: KMAX2 = MAXPOINTS; fixed by JH in 12/01 */
 
-/* handling of KMAX2 in GRASS4 v.surf.rst
-    if (npmin > MAXPOINTS - 50)
-	KMAX2 = npmin + 50;
-    else
-	KMAX2 = MAXPOINTS;
-*/
+    /* handling of KMAX2 in GRASS4 v.surf.rst
+       if (npmin > MAXPOINTS - 50)
+       KMAX2 = npmin + 50;
+       else
+       KMAX2 = MAXPOINTS;
+     */
 
     dmin = dmin * dmin;
     KMIN = npmin;
@@ -515,8 +529,8 @@ int main(int argc, char *argv[])
     open_check = Vect_open_old(&Map, input, mapset);
     if (open_check < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), input);
-/*    if (open_check < 2)
-	G_fatal_error(_("You first need to run v.build on vector map <%s>"), input);*/
+    /*    if (open_check < 2)
+       G_fatal_error(_("You first need to run v.build on vector map <%s>"), input); */
 
     /* we can't read the input file's timestamp as they don't exist in   */
     /*   the new vector format. Even so, a TimeStamp structure is needed */
@@ -524,46 +538,49 @@ int main(int argc, char *argv[])
     /* If anyone is ever motivated to add it, the Plus_head struct has   */
     /*  'long coor_mtime' and dig_head has 'char *date; char *source_date;' */
     /*   which could be read in.                                         */
-    inhead.time = (struct TimeStamp *) NULL;
+    inhead.time = (struct TimeStamp *)NULL;
     inhead.stime = NULL;
 
     if (devi != NULL || cvdev != NULL) {
 
-          Pnts = Vect_new_line_struct();
-          Cats2 = Vect_new_cats_struct ();
-          db_init_string (&sql2);
+	Pnts = Vect_new_line_struct();
+	Cats2 = Vect_new_cats_struct();
+	db_init_string(&sql2);
 
-          if (devi != NULL) Vect_open_new (&Map2, devi, 1);
-	  else
-		  Vect_open_new (&Map2, cvdev, 1);
-          Vect_hist_command ( &Map2 );
-          ff = Vect_default_field_info ( &Map2, 1, NULL, GV_1TABLE );
-          Vect_map_add_dblink ( &Map2, 1, NULL, ff->table, "cat", ff->database, ff->driver);
+	if (devi != NULL)
+	    Vect_open_new(&Map2, devi, 1);
+	else
+	    Vect_open_new(&Map2, cvdev, 1);
+	Vect_hist_command(&Map2);
+	ff = Vect_default_field_info(&Map2, 1, NULL, GV_1TABLE);
+	Vect_map_add_dblink(&Map2, 1, NULL, ff->table, "cat", ff->database,
+			    ff->driver);
 
-          /* Create new table */
-          db_zero_string (&sql2);
-          sprintf ( buf, "create table %s ( ", ff->table );
-          db_append_string ( &sql2, buf);
-          db_append_string ( &sql2, "cat integer" );
-          db_append_string ( &sql2, ", flt1 double precision" );
-          db_append_string ( &sql2, ")" );
-          G_debug ( 1, db_get_string ( &sql2 ) );
-          driver2 = db_start_driver_open_database ( ff->driver, ff->database );
-          if ( driver2 == NULL )
-             G_fatal_error (_("Cannot open database %s by driver %s"), ff->database,ff->driver );
+	/* Create new table */
+	db_zero_string(&sql2);
+	sprintf(buf, "create table %s ( ", ff->table);
+	db_append_string(&sql2, buf);
+	db_append_string(&sql2, "cat integer");
+	db_append_string(&sql2, ", flt1 double precision");
+	db_append_string(&sql2, ")");
+	G_debug(1, db_get_string(&sql2));
+	driver2 = db_start_driver_open_database(ff->driver, ff->database);
+	if (driver2 == NULL)
+	    G_fatal_error(_("Cannot open database %s by driver %s"),
+			  ff->database, ff->driver);
 
-          if (db_execute_immediate (driver2, &sql2) != DB_OK ) {
-                  db_close_database(driver2);
-                  db_shutdown_driver(driver2);
-                  G_fatal_error (_("Cannot create table: %s"), db_get_string ( &sql2 )  );
-          }
-          count = 1;
+	if (db_execute_immediate(driver2, &sql2) != DB_OK) {
+	    db_close_database(driver2);
+	    db_shutdown_driver(driver2);
+	    G_fatal_error(_("Cannot create table: %s"), db_get_string(&sql2));
+	}
+	count = 1;
 
     }
 
     ertot = 0.;
     if (per)
-	G_message( _("Percent complete: "));
+	G_message(_("Percent complete: "));
     if (elev != NULL)
 	Tmp_file_z = G_tempfile();
     if (slope != NULL)
@@ -577,7 +594,7 @@ int main(int argc, char *argv[])
     if (mcurv != NULL)
 	Tmp_file_xy = G_tempfile();
 
-    zero_array_cell = (FCELL *) G_malloc (sizeof(FCELL) * n_cols);
+    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
     if (!zero_array_cell)
 	G_fatal_error(_("Not enough memory for zero_array_cell"));
 
@@ -587,51 +604,63 @@ int main(int argc, char *argv[])
 
     if (Tmp_file_z != NULL) {
 	if (NULL == (Tmp_fd_z = fopen(Tmp_file_z, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_z);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_z);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_z)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_dx != NULL) {
 	if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_dx);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_dx);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dx)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_dy != NULL) {
 	if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_dy);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_dy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
 
     if (Tmp_file_xx != NULL) {
 	if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_xx);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_xx);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xx)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_yy != NULL) {
 	if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_yy);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_yy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_yy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_xy != NULL) {
 	if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_xy);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_xy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
+		G_fatal_error(_
+			      ("Not enough disk space -- cannot write files"));
 	}
     }
 
@@ -640,7 +669,8 @@ int main(int argc, char *argv[])
 		      SCIK1, SCIK2, SCIK3, rsm, elev, slope, aspect, pcurv,
 		      tcurv, mcurv, dmin, x_orig, y_orig, deriv, theta,
 		      scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx,
-		      Tmp_fd_yy, Tmp_fd_xy, devi, inhead.time, cv, parm.wheresql->answer);
+		      Tmp_fd_yy, Tmp_fd_xy, devi, inhead.time, cv,
+		      parm.wheresql->answer);
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
 		    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst,
@@ -653,7 +683,7 @@ int main(int argc, char *argv[])
     if (totsegm <= 0)
 	clean_fatal_error(_("Input failed"));
 
-    /*Vect_set_release_support(&Map);*/
+    /*Vect_set_release_support(&Map); */
     Vect_close(&Map);
 
     if (treefile != NULL) {
@@ -690,8 +720,7 @@ int main(int argc, char *argv[])
 	ddisk += disk;
     ddisk += sddisk;
     G_message(_("Processing all selected output files\n"
-                "will require %d bytes of disk space for temp files"),
-	    ddisk);
+		"will require %d bytes of disk space for temp files"), ddisk);
 
     deltx = xmax - xmin;
     delty = ymax - ymin;
@@ -699,8 +728,7 @@ int main(int argc, char *argv[])
 
     if (dtens) {
 	params.fi = params.fi * dnorm / 1000.;
-	G_message("dnorm = %f, rescaled tension = %f", dnorm,
-		params.fi);
+	G_message("dnorm = %f, rescaled tension = %f", dnorm, params.fi);
     }
 
     bitmask = IL_create_bitmask(&params);
@@ -709,7 +737,7 @@ int main(int argc, char *argv[])
 
     ertot = 0.;
     if (per)
-	G_message( _("Percent complete: "));
+	G_message(_("Percent complete: "));
     if (IL_interp_segments_2d(&params, info, info->root, bitmask,
 			      zmin, zmax, &zminac, &zmaxac, &gmin, &gmax,
 			      &c1min, &c1max, &c2min, &c2max, &ertot, totsegm,
@@ -733,7 +761,7 @@ int main(int argc, char *argv[])
     if (ii < 0)
 	clean_fatal_error
 	    (_("Cannot write raster maps -- try to increase resolution"));
-    G_free (zero_array_cell);
+    G_free(zero_array_cell);
     if (elev != NULL)
 	fclose(Tmp_fd_z);
     if (slope != NULL)
@@ -779,10 +807,10 @@ int main(int argc, char *argv[])
 	unlink(Tmp_file_xy);
 
     if (cvdev != NULL || devi != NULL) {
-	    /*  db_close_database_shutdown_driver ( driver2 );*/
-	    db_close_database (driver2);
-	    Vect_build (&Map2, stderr);
-	    Vect_close (&Map2);
+	/*  db_close_database_shutdown_driver ( driver2 ); */
+	db_close_database(driver2);
+	Vect_build(&Map2, stderr);
+	Vect_close(&Map2);
     }
 
     G_done_msg("\n");
@@ -812,21 +840,21 @@ int print_tree(struct multtree *tree,
     else {
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
-	xarray[0] = ((struct quaddata *) (tree->data))->x_orig + x_orig;
-	yarray[0] = ((struct quaddata *) (tree->data))->y_orig + y_orig;
+	xarray[0] = ((struct quaddata *)(tree->data))->x_orig + x_orig;
+	yarray[0] = ((struct quaddata *)(tree->data))->y_orig + y_orig;
 	xarray[1] = xarray[0];
 	yarray[3] = yarray[0];
-	xarray[3] = ((struct quaddata *) (tree->data))->xmax + x_orig;
-	yarray[1] = ((struct quaddata *) (tree->data))->ymax + y_orig;
+	xarray[3] = ((struct quaddata *)(tree->data))->xmax + x_orig;
+	yarray[1] = ((struct quaddata *)(tree->data))->ymax + y_orig;
 	yarray[2] = yarray[1];
 	xarray[2] = xarray[3];
 	yarray[4] = yarray[0];
 	xarray[4] = xarray[0];
 	if (0 > Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, 5))
 	    clean_fatal_error(_("Out of memory"));
-	Vect_write_line(Map, (unsigned int) type, Points, Cats);
+	Vect_write_line(Map, (unsigned int)type, Points, Cats);
 
-	G_free (Points);
+	G_free(Points);
     }
     return 1;
 }

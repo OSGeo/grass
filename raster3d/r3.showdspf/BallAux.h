@@ -1,9 +1,14 @@
+
 /***** BallAux.h - Vector and quaternion routines for Arcball. *****/
 #ifndef _H_BallAux
 #define _H_BallAux
 
-typedef struct {float x, y, z, w;} Quat;
-enum QuatPart {XX, YY, ZZ, WW, QuatLen};
+typedef struct
+{
+    float x, y, z, w;
+} Quat;
+enum QuatPart
+{ XX, YY, ZZ, WW, QuatLen };
 typedef Quat HVect;
 typedef float HMatrix[QuatLen][QuatLen];
 

@@ -13,12 +13,12 @@
 #include "transport.h"
 
 /* PAD FUNCTIONS
-       The monitor has a very simple database management capabil­
-       ity  which supports the windowing.  There are scratch pads
-       to be written on. Each scratch pad can contain items,  and
-       each  item can have a list of values.  These are NOT to be
-       used by the programmer.  They are used indirectly  through
-       the displaylib library calls.
+   The monitor has a very simple database management capabil­
+   ity  which supports the windowing.  There are scratch pads
+   to be written on. Each scratch pad can contain items,  and
+   each  item can have a list of values.  These are NOT to be
+   used by the programmer.  They are used indirectly  through
+   the displaylib library calls.
  */
 
 static void _get_list(char ***list, int *count)
@@ -32,103 +32,102 @@ static void _get_list(char ***list, int *count)
 
     buf = _get_text_2();
 
-    for (n = 0; *buf; n++)
-    {
-	    if (n == 0)
-		    a = G_malloc(sizeof(char *));
-	    else
-		    a = G_realloc(a, (n+1) * sizeof(char *));
+    for (n = 0; *buf; n++) {
+	if (n == 0)
+	    a = G_malloc(sizeof(char *));
+	else
+	    a = G_realloc(a, (n + 1) * sizeof(char *));
 
-	    a[n] = G_strdup(buf);
+	a[n] = G_strdup(buf);
 
-	    buf = _get_text_2();
+	buf = _get_text_2();
     }
 
-    *list = a ;
+    *list = a;
     *count = n;
 }
 
 int REM_pad_create(const char *pad)
 {
-	char result;
+    char result;
 
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_CREATE);
-	_send_text(pad);
-	_get_char(&result);
+    _send_ident(PAD_CREATE);
+    _send_text(pad);
+    _get_char(&result);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return result;
+    return result;
 }
 
 int REM_pad_current(char *name)
 {
-	char result;
+    char result;
 
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_CURRENT);
-	_get_char(&result);
-	_get_text(name);
+    _send_ident(PAD_CURRENT);
+    _get_char(&result);
+    _get_text(name);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return result;
+    return result;
 }
 
 int REM_pad_delete(void)
 {
-	char result;
+    char result;
 
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_DELETE);
-	_get_char(&result);
+    _send_ident(PAD_DELETE);
+    _get_char(&result);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return result ;
+    return result;
 }
 
 int REM_pad_invent(char *pad)
 {
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_INVENT);
-	_get_text(pad);
+    _send_ident(PAD_INVENT);
+    _get_text(pad);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return 0;
+    return 0;
 }
 
 int REM_pad_list(char ***list, int *count)
 {
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_LIST);
-	_get_list(list, count);
+    _send_ident(PAD_LIST);
+    _get_list(list, count);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return 0;
+    return 0;
 }
 
 int REM_pad_select(const char *pad)
 {
-	char result;
+    char result;
 
-	_hold_signals(1);
+    _hold_signals(1);
 
-	_send_ident(PAD_SELECT);
-	_send_text(pad);
-	_get_char(&result);
+    _send_ident(PAD_SELECT);
+    _send_text(pad);
+    _get_char(&result);
 
-	_hold_signals(0);
+    _hold_signals(0);
 
-	return result;
+    return result;
 }
 
 int REM_pad_append_item(const char *item, const char *value, int replace)
@@ -214,4 +213,3 @@ int REM_pad_set_item(const char *item, const char *value)
 }
 
 #endif /* HAVE_SOCKET */
-

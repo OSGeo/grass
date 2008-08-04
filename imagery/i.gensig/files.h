@@ -15,6 +15,7 @@ int compute_covariances(struct files *, struct Signature *);
 int get_training_classes(struct files *, struct Signature *);
 int compute_means(struct files *, struct Signature *);
 int read_training_map(CELL *, int, int, struct files *);
+
 #ifdef _l_parms_h
 int read_training_labels(struct parms *, struct files *);
 int openfiles(struct parms *, struct files *);

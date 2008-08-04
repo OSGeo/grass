@@ -36,5 +36,5 @@
 typedef unsigned char dglByte_t;
 typedef long dglInt32_t;
 typedef long long dglInt64_t;
-	
+
 #endif

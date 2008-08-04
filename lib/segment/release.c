@@ -1,3 +1,4 @@
+
 /**
  * \file release.c
  *
@@ -31,7 +32,7 @@
  * \return -1 if segment is not available (not open)
  */
 
-int segment_release ( SEGMENT *SEG)
+int segment_release(SEGMENT * SEG)
 {
     int i;
 

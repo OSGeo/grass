@@ -1,7 +1,7 @@
 /* Function: vlegfile
-**
-** Author: Paul W. Carlson	April 1992
-*/
+ **
+ ** Author: Paul W. Carlson     April 1992
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -11,8 +11,7 @@
 
 #define KEY(x) (strcmp(key,x)==0)
 
-static char *help[] =
-{
+static char *help[] = {
     "where      x y",
     "font       fontname",
     "fontsize   fontsize",
@@ -22,9 +21,8 @@ static char *help[] =
     ""
 };
 
-int 
-read_vlegend (void)
-{	
+int read_vlegend(void)
+{
     char buf[1024];
     char *key, *data;
     int fontsize, cols, border;
@@ -36,52 +34,47 @@ read_vlegend (void)
     cols = 1;
     border = -1;
 
-    while (input(2, buf, help))
-    {
-	if (!key_data(buf, &key, &data)) continue;
+    while (input(2, buf, help)) {
+	if (!key_data(buf, &key, &data))
+	    continue;
 
-        if (KEY("where"))
- 	{
-	    if (sscanf(data, "%lf %lf", &x, &y) != 2)
-	    {
+	if (KEY("where")) {
+	    if (sscanf(data, "%lf %lf", &x, &y) != 2) {
 		x = y = 0.0;
 		error(key, data, "illegal where request");
 	    }
-	    else continue;
+	    else
+		continue;
 	}
 
-	if (KEY("fontsize"))
-	{
+	if (KEY("fontsize")) {
 	    fontsize = atoi(data);
 	    continue;
 	}
 
-	if (KEY("font"))
-	{
+	if (KEY("font")) {
 	    get_font(data);
 	    vector.font = G_store(data);
 	    continue;
 	}
 
-	if (KEY("width"))
-	{
+	if (KEY("width")) {
 	    G_strip(data);
-	    width = atof (data);
+	    width = atof(data);
 	    continue;
 	}
 
-	if (KEY("cols"))
-	{
-	    cols = atoi (data);
-	    if (cols < 1 || cols > 10) cols = 1;
+	if (KEY("cols")) {
+	    cols = atoi(data);
+	    if (cols < 1 || cols > 10)
+		cols = 1;
 	    continue;
 	}
 
-	if (KEY("border"))
-	{
+	if (KEY("border")) {
 	    border = get_color_number(data);
 	    if (border < 0) {
-		if( border != -999) /* here -999 is "none" */
+		if (border != -999)	/* here -999 is "none" */
 		    error(key, data, "illegal border request");
 		border = -1;
 	    }
@@ -92,10 +85,13 @@ read_vlegend (void)
     }
     vector.x = x;
     vector.y = y;
-    if (fontsize) vector.fontsize = fontsize;
+    if (fontsize)
+	vector.fontsize = fontsize;
 
-    if (width > 0) vector.width = width;
-    else vector.width = 3 * fontsize / 72.0;
+    if (width > 0)
+	vector.width = width;
+    else
+	vector.width = 3 * fontsize / 72.0;
 
     vector.cols = cols;
     vector.border = border;

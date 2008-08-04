@@ -146,6 +146,7 @@ int lang(struct line_pnts *Points, double thresh, int look_ahead, int with_z)
 	for (i = from + 1; i < to; i++) {
 	    double px, py, pz, pdist;
 	    int status;
+
 	    if (dig_distance2_point_to_line
 		(Points->x[i], Points->y[i], Points->z[i], x1, y1, z1, x2, y2,
 		 z2, with_z, &px, &py, &pz, &pdist, &status) > thresh) {
@@ -292,9 +293,11 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
 
     int i;
     int n = Points->n_points;
+
     /* the maximum number of points  which may be 
      * included in the output */
     int nexp = n * (reduction / (double)100.0);
+
     /* line too short */
     if (n < 3)
 	return n;
@@ -317,6 +320,7 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
     }
 
     int indices;
+
     indices = 0;
 
     /* preserve first and last point */
@@ -332,6 +336,7 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
     /* priority queue of line segments,
      * key is the distance of the furthest point */
     binary_heap pq;
+
     if (!binary_heap_init(n, &pq)) {
 	G_fatal_error(_("Out of memory"));
 	G_free(sel);
@@ -356,6 +361,7 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
 	int left = index[em];
 	int right = index[em + 1];
 	int furt = index[em + 2];
+
 	/*mark the furthest point */
 	sel[furt] = 1;
 	nexp--;
@@ -381,6 +387,7 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
 
     /* copy selected points */
     int selected = 0;
+
     for (i = 0; i < n; i++) {
 	if (sel[i]) {
 	    Points->x[selected] = Points->x[i];

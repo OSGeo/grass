@@ -3,8 +3,7 @@
 
 int G__projection_units(int n)
 {
-    switch (n)
-    {
+    switch (n) {
     case PROJECTION_XY:
 	return 0;
     case PROJECTION_UTM:
@@ -18,10 +17,9 @@ int G__projection_units(int n)
     }
 }
 
-char *G__unit_name (int unit,int plural)
+char *G__unit_name(int unit, int plural)
 {
-    switch (unit)
-    {
+    switch (unit) {
     case 0:
 	return plural ? "units" : "unit";
     case METERS:
@@ -37,8 +35,7 @@ char *G__unit_name (int unit,int plural)
 
 char *G__projection_name(int n)
 {
-    switch (n)
-    {
+    switch (n) {
     case PROJECTION_XY:
 	return "x,y";
     case PROJECTION_UTM:

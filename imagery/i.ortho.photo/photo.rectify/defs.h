@@ -12,7 +12,7 @@ typedef struct
 /* this is a graphics structure */
 typedef struct
 {
-    int top, bottom ,left, right;
+    int top, bottom, left, right;
     int nrows, ncols;
     struct
     {
@@ -20,30 +20,30 @@ typedef struct
 	struct Cell_head head;
 	char name[30];
 	char mapset[30];
-	int top, bottom ,left, right;
+	int top, bottom, left, right;
 	double ew_res, ns_res;	/* original map resolution */
     } cell;
 } View;
 
 typedef struct
 {
-    int   type;         /* object type */
-    int (*handler)();	/* routine to handle the event */
-    char *label;	/* label to display if MENU or OPTION */
-    int   binding;      /* OPTION bindings */
-    int  *status;	/* MENU,OPTION status */
-    int top,bottom,left,right;
+    int type;			/* object type */
+    int (*handler) ();		/* routine to handle the event */
+    char *label;		/* label to display if MENU or OPTION */
+    int binding;		/* OPTION bindings */
+    int *status;		/* MENU,OPTION status */
+    int top, bottom, left, right;
 } Objects;
 
-typedef struct 
+typedef struct
 {
-    double XT,YT,ZT;       /* object space */
+    double XT, YT, ZT;		/* object space */
     int rowT, colT;
-    double xt,yt;          /* image space */
+    double xt, yt;		/* image space */
     int rowt, colt;
 } Tie_Point;
 
-typedef struct 
+typedef struct
 {
     double E12[3], N12[3], E21[3], N21[3];
 } Patch;

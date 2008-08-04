@@ -6,21 +6,20 @@
 
 void read_weights(const char *filename)
 {
-	FILE *fp = fopen(filename, "r");
-	int i, j;
+    FILE *fp = fopen(filename, "r");
+    int i, j;
 
-	ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
-	for (i = 0; i < ncb.nsize; i++)
-		ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
+    ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
+    for (i = 0; i < ncb.nsize; i++)
+	ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));
 
-	if (!fp)
-		G_fatal_error(_("Unable to open weights file %s"), filename);
+    if (!fp)
+	G_fatal_error(_("Unable to open weights file %s"), filename);
 
-	for (i = 0; i < ncb.nsize; i++)
+    for (i = 0; i < ncb.nsize; i++)
 	for (j = 0; j < ncb.nsize; j++)
-		if (fscanf(fp, "%lf", &ncb.weights[i][j]) != 1)
-			G_fatal_error(_("Error reading weights file %s"), filename);
+	    if (fscanf(fp, "%lf", &ncb.weights[i][j]) != 1)
+		G_fatal_error(_("Error reading weights file %s"), filename);
 
-	fclose(fp);
+    fclose(fp);
 }
-

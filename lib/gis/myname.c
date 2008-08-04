@@ -1,3 +1,4 @@
+
 /**
  * \file myname.c
  *
@@ -31,8 +32,7 @@
  * \return Pointer to a string
  */
 
-char *
-G_myname(void)
+char *G_myname(void)
 {
     static char name[GNAME_MAX];
     char path[GPATH_MAX];
@@ -41,14 +41,13 @@ G_myname(void)
 
     ok = 0;
 
-    G__file_name (path,"","MYNAME","PERMANENT");
-    if ((fd = fopen(path,"r")))
-    {
+    G__file_name(path, "", "MYNAME", "PERMANENT");
+    if ((fd = fopen(path, "r"))) {
 	ok = G_getl(name, sizeof name, fd);
-	fclose (fd);
+	fclose(fd);
     }
     if (!ok)
-	strcpy(name, _("Unknown Location")) ;
+	strcpy(name, _("Unknown Location"));
 
     return name;
 }

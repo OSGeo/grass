@@ -18,34 +18,32 @@ tan(x)
 
 #define DEGREES_TO_RADIANS (M_PI / 180.0)
 
-int 
-f_tan(int argc, const int *argt, void **args)
+int f_tan(int argc, const int *argt, void **args)
 {
-	DCELL *res = args[0];
-	DCELL *arg1 = args[1];
-	int i;
+    DCELL *res = args[0];
+    DCELL *arg1 = args[1];
+    int i;
 
-	if (argc < 1)
-		return E_ARG_LO;
-	if (argc > 1)
-		return E_ARG_HI;
+    if (argc < 1)
+	return E_ARG_LO;
+    if (argc > 1)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	if (argt[1] != DCELL_TYPE)
-		return E_ARG_TYPE;
+    if (argt[1] != DCELL_TYPE)
+	return E_ARG_TYPE;
 
-	for (i = 0; i < columns; i++)
-		if (IS_NULL_D(&arg1[i]))
-			SET_NULL_D(&res[i]);
-		else
-		{
-			floating_point_exception = 0;
-			res[i] = tan(arg1[i] * DEGREES_TO_RADIANS);
-			if (floating_point_exception)
-				SET_NULL_D(&res[i]);
-		}
+    for (i = 0; i < columns; i++)
+	if (IS_NULL_D(&arg1[i]))
+	    SET_NULL_D(&res[i]);
+	else {
+	    floating_point_exception = 0;
+	    res[i] = tan(arg1[i] * DEGREES_TO_RADIANS);
+	    if (floating_point_exception)
+		SET_NULL_D(&res[i]);
+	}
 
-	return 0;
+    return 0;
 }

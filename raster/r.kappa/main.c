@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.kappa
@@ -31,106 +32,110 @@
 /* function prototypes */
 static void layer(char *s);
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
- int i;
- struct GModule *module;
- struct { 
-   struct Option *map, *ref, *output, *titles;
- } parms;
+    int i;
+    struct GModule *module;
+    struct
+    {
+	struct Option *map, *ref, *output, *titles;
+    } parms;
 
- struct { 
-   struct Flag *n, *w, *h;
- } flags;
+    struct
+    {
+	struct Flag *n, *w, *h;
+    } flags;
 
- G_gisinit(argv[0]);
+    G_gisinit(argv[0]);
 
- module = G_define_module();
- module->keywords = _("raster");
+    module = G_define_module();
+    module->keywords = _("raster");
     module->description =
-      _("Calculate error matrix and kappa "
-	"parameter for accuracy assessment of classification "
-	"result.");
+	_("Calculate error matrix and kappa "
+	  "parameter for accuracy assessment of classification " "result.");
 
- parms.map = G_define_standard_option(G_OPT_R_INPUT);
- parms.map->key		="classification";
- parms.map->description	=_("Name of raster map containing classification result");
+    parms.map = G_define_standard_option(G_OPT_R_INPUT);
+    parms.map->key = "classification";
+    parms.map->description =
+	_("Name of raster map containing classification result");
 
- parms.ref = G_define_standard_option(G_OPT_R_INPUT);
- parms.ref->key		="reference";
- parms.ref->description	=_("Name of raster map containing reference classes");
+    parms.ref = G_define_standard_option(G_OPT_R_INPUT);
+    parms.ref->key = "reference";
+    parms.ref->description =
+	_("Name of raster map containing reference classes");
 
- parms.output = G_define_standard_option(G_OPT_F_OUTPUT);
- parms.output->required		=NO;
- parms.output->description 	=_("Name for output file containing error matrix and kappa");
+    parms.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    parms.output->required = NO;
+    parms.output->description =
+	_("Name for output file containing error matrix and kappa");
 
- parms.titles = G_define_option();
- parms.titles->key		="title";
- parms.titles->type		=TYPE_STRING;
- parms.titles->required		=NO;
- parms.titles->description	=_("Title for error matrix and kappa");
- parms.titles->answer		="ACCURACY ASSESSMENT";
+    parms.titles = G_define_option();
+    parms.titles->key = "title";
+    parms.titles->type = TYPE_STRING;
+    parms.titles->required = NO;
+    parms.titles->description = _("Title for error matrix and kappa");
+    parms.titles->answer = "ACCURACY ASSESSMENT";
 
- flags.w = G_define_flag();
- flags.w->key = 'w';
- flags.w->label = _("Wide report");
- flags.w->description = _("132 columns (default: 80)");
+    flags.w = G_define_flag();
+    flags.w->key = 'w';
+    flags.w->label = _("Wide report");
+    flags.w->description = _("132 columns (default: 80)");
 
- flags.h = G_define_flag();
- flags.h->key = 'h';
- flags.h->description = _("No header in the report");
+    flags.h = G_define_flag();
+    flags.h->key = 'h';
+    flags.h->description = _("No header in the report");
 
- if (G_parser(argc, argv))
-   exit (EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
- G_get_window (&window);
+    G_get_window(&window);
 
- maps[0] = parms.ref->answer;
- maps[1] = parms.map->answer;
- for (i=0; i<2; i++)
-   layer (maps[i]);
- 
- if (parms.output->answer) {
-   output=parms.output->answer;
-   if (G_legal_filename (output) < 0) {
-     G_fatal_error (_("Illegal output file name <%s>"), 
-		    parms.output->answer);
-   }
- }
- else
-  output = NULL;
+    maps[0] = parms.ref->answer;
+    maps[1] = parms.map->answer;
+    for (i = 0; i < 2; i++)
+	layer(maps[i]);
 
- title = parms.titles->answer;
+    if (parms.output->answer) {
+	output = parms.output->answer;
+	if (G_legal_filename(output) < 0) {
+	    G_fatal_error(_("Illegal output file name <%s>"),
+			  parms.output->answer);
+	}
+    }
+    else
+	output = NULL;
 
-/* run r.stats to obtain statistics of map layers */
- stats();
+    title = parms.titles->answer;
 
-/* print header of the output */
- if (!flags.h->answer)
-   prn_header();
+    /* run r.stats to obtain statistics of map layers */
+    stats();
 
-/* prepare the data for calculation */
- prn_error_mat(flags.w->answer?132:80, flags.h->answer);
+    /* print header of the output */
+    if (!flags.h->answer)
+	prn_header();
 
-/* generate the error matrix, kappa and variance */
- calc_kappa();
- 
- return EXIT_SUCCESS;
+    /* prepare the data for calculation */
+    prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
+
+    /* generate the error matrix, kappa and variance */
+    calc_kappa();
+
+    return EXIT_SUCCESS;
 }
 
 
 static void layer(char *s)
 {
-  char name[GNAME_MAX], *mapset;
-  int n;
+    char name[GNAME_MAX], *mapset;
+    int n;
 
-  strcpy (name, s);
-  if ((mapset = G_find_cell2 (name, "")) == NULL)
-    G_fatal_error( _("Raster map <%s> not found"), s);
+    strcpy(name, s);
+    if ((mapset = G_find_cell2(name, "")) == NULL)
+	G_fatal_error(_("Raster map <%s> not found"), s);
 
-  n = nlayers++;
-  layers = (LAYER *) G_realloc(layers, 2*sizeof(LAYER));
-  layers[n].name = G_store (name);
-  layers[n].mapset = mapset;
-  G_read_cats (name, mapset, &layers[n].labels);
-} 
+    n = nlayers++;
+    layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));
+    layers[n].name = G_store(name);
+    layers[n].mapset = mapset;
+    G_read_cats(name, mapset, &layers[n].labels);
+}

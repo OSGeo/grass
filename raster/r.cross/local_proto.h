@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -20,14 +21,19 @@
 
 /* cats.c */
 int set_cat(CELL, CELL *, struct Categories *);
+
 /* cross.c */
-CELL cross(int [], int, int, int);
+CELL cross(int[], int, int, int);
+
 /* main.c */
 int main(int, char *[]);
+
 /* renumber.c */
 int renumber(int, int);
+
 /* store.c */
 int store_reclass(CELL, int, CELL *);
+
 /* tree.c */
 int plant_tree(void);
 int first_node(CELL **, CELL **);

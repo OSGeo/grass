@@ -23,19 +23,17 @@
  *                   NULL ... otherwise.
  */
 
-void *
-G3d_allocTilesType  (G3D_Map *map, int nofTiles, int type)
-
+void *G3d_allocTilesType(G3D_Map * map, int nofTiles, int type)
 {
-  void *tiles;
+    void *tiles;
 
-  tiles = G3d_malloc (map->tileSize * G3d_length (type) * nofTiles);
-  if (tiles == NULL) {
-    G3d_error ("G3d_allocTilesType: error in G3d_malloc");
-    return NULL;
-  }
+    tiles = G3d_malloc(map->tileSize * G3d_length(type) * nofTiles);
+    if (tiles == NULL) {
+	G3d_error("G3d_allocTilesType: error in G3d_malloc");
+	return NULL;
+    }
 
-  return tiles;
+    return tiles;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -51,19 +49,17 @@ G3d_allocTilesType  (G3D_Map *map, int nofTiles, int type)
  *  \return void * 
  */
 
-void *
-G3d_allocTiles  (G3D_Map *map, int nofTiles)
-
+void *G3d_allocTiles(G3D_Map * map, int nofTiles)
 {
-  void *tiles;
+    void *tiles;
 
-  tiles = G3d_allocTilesType (map, nofTiles, map->typeIntern);
-  if (tiles == NULL) {
-    G3d_error ("G3d_allocTiles: error in G3d_allocTilesType");
-    return NULL;
-  }
+    tiles = G3d_allocTilesType(map, nofTiles, map->typeIntern);
+    if (tiles == NULL) {
+	G3d_error("G3d_allocTiles: error in G3d_allocTilesType");
+	return NULL;
+    }
 
-  return tiles;
+    return tiles;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -78,9 +74,7 @@ G3d_allocTiles  (G3D_Map *map, int nofTiles)
  *  \return void
  */
 
-void
-G3d_freeTiles  (void *tiles)
-
+void G3d_freeTiles(void *tiles)
 {
-  G3d_free (tiles);
+    G3d_free(tiles);
 }

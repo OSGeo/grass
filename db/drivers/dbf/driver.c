@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -17,15 +18,12 @@
 #include <grass/dbmi.h>
 #include "globals.h"
 
-int
-db__driver_init  (int argc, char *argv[])
-
+int db__driver_init(int argc, char *argv[])
 {
     return DB_OK;
 }
 
-int
-db__driver_finish()
+int db__driver_finish()
 {
     return DB_OK;
 }

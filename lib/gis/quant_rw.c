@@ -69,10 +69,11 @@ int G_truncate_fp_map(const char *name, const char *mapset)
     G_quant_init(&quant);
     G_quant_truncate(&quant);
     /* quantize the map */
-    if(G_write_quant (name, mapset, &quant) < 0)
-    {
-        sprintf(buf, "G_truncate_fp_map: can't write quant rules for map %s", name);        G_warning(buf);
-        return -1;
+    if (G_write_quant(name, mapset, &quant) < 0) {
+	sprintf(buf, "G_truncate_fp_map: can't write quant rules for map %s",
+		name);
+	G_warning(buf);
+	return -1;
     }
     return 1;
 }
@@ -85,10 +86,11 @@ int G_round_fp_map(const char *name, const char *mapset)
     G_quant_init(&quant);
     G_quant_round(&quant);
     /* round the map */
-    if(G_write_quant (name, mapset, &quant) < 0)
-    {
-        sprintf(buf, "G_truncate_fp_map: can't write quant rules for map %s", name);        G_warning(buf);
-        return -1;
+    if (G_write_quant(name, mapset, &quant) < 0) {
+	sprintf(buf, "G_truncate_fp_map: can't write quant rules for map %s",
+		name);
+	G_warning(buf);
+	return -1;
     }
     return 1;
 }
@@ -108,26 +110,24 @@ int G_round_fp_map(const char *name, const char *mapset)
  *  \return int
  */
 
-int G_quantize_fp_map(
-    const char *name, const char *mapset,
-    CELL min,CELL max)
+int G_quantize_fp_map(const char *name, const char *mapset,
+		      CELL min, CELL max)
 {
     char buf[300];
     DCELL d_min, d_max;
     struct FPRange fp_range;
 
-    if(G_read_fp_range(name, mapset, &fp_range) < 0)
-    {
-        sprintf(buf, "G_quantize_fp_map: can't read fp range for map %s", name);
-        G_warning(buf);
-        return -1;
+    if (G_read_fp_range(name, mapset, &fp_range) < 0) {
+	sprintf(buf, "G_quantize_fp_map: can't read fp range for map %s",
+		name);
+	G_warning(buf);
+	return -1;
     }
-    G_get_fp_range_min_max(&fp_range, &d_min,  &d_max);
-    if(G_is_d_null_value(&d_min) || G_is_d_null_value(&d_max))
-    {
-	 sprintf(buf, "G_quantize_fp_map: raster map %s is empty", name);
-	 G_warning(buf);
-	 return -1;
+    G_get_fp_range_min_max(&fp_range, &d_min, &d_max);
+    if (G_is_d_null_value(&d_min) || G_is_d_null_value(&d_max)) {
+	sprintf(buf, "G_quantize_fp_map: raster map %s is empty", name);
+	G_warning(buf);
+	return -1;
     }
     return G_quantize_fp_map_range(name, mapset, d_min, d_max, min, max);
 }
@@ -156,10 +156,8 @@ int G_quantize_fp_map(
  *  \return int
  */
 
-int G_quantize_fp_map_range(
-    const char *name, const char *mapset,
-    DCELL d_min,DCELL d_max,
-    CELL min,CELL max)
+int G_quantize_fp_map_range(const char *name, const char *mapset,
+			    DCELL d_min, DCELL d_max, CELL min, CELL max)
 {
     char buf[300];
     struct Quant quant;
@@ -167,10 +165,12 @@ int G_quantize_fp_map_range(
     G_quant_init(&quant);
     G_quant_add_rule(&quant, d_min, d_max, min, max);
     /* quantize the map */
-    if(G_write_quant (name, mapset, &quant) < 0)
-    {
-        sprintf(buf, "G_quantize_fp_map_range: can't write quant rules for map %s", name);        G_warning(buf);
-        return -1;
+    if (G_write_quant(name, mapset, &quant) < 0) {
+	sprintf(buf,
+		"G_quantize_fp_map_range: can't write quant rules for map %s",
+		name);
+	G_warning(buf);
+	return -1;
     }
     return 1;
 }
@@ -195,32 +195,29 @@ int G_quantize_fp_map_range(
  *  \return int
  */
 
-int G_write_quant(
-     const char *name, const char *mapset,
-     const struct Quant *quant)
+int G_write_quant(const char *name, const char *mapset,
+		  const struct Quant *quant)
 {
-     CELL cell_min, cell_max;
-     DCELL d_min, d_max;
-     char buf[300];
+    CELL cell_min, cell_max;
+    DCELL d_min, d_max;
+    char buf[300];
 
-     if (G_raster_map_type (name, mapset) == CELL_TYPE)
-     {
-            sprintf(buf, _("Cannot write quant rules: map %s is integer"), name);
-            G_warning(buf);
-            return -1;
-     }
+    if (G_raster_map_type(name, mapset) == CELL_TYPE) {
+	sprintf(buf, _("Cannot write quant rules: map %s is integer"), name);
+	G_warning(buf);
+	return -1;
+    }
 
-     G_quant_get_limits (quant, &d_min, &d_max, &cell_min, &cell_max); 
+    G_quant_get_limits(quant, &d_min, &d_max, &cell_min, &cell_max);
 
-     /* first actually write the rules */
-     if( G__quant_export (name, mapset, quant) < 0)
-     {
-            sprintf(buf, _("Cannot write quant rules for map %s"), name);
-            G_warning(buf);
-            return -1;
-     }
+    /* first actually write the rules */
+    if (G__quant_export(name, mapset, quant) < 0) {
+	sprintf(buf, _("Cannot write quant rules for map %s"), name);
+	G_warning(buf);
+	return -1;
+    }
 
-     return 1;
+    return 1;
 }
 
 /*-------------------------------------------------------------------------*/
@@ -245,10 +242,8 @@ int G_write_quant(
  *  \return int
  */
 
-int G_read_quant(
-     const char *name, const char *mapset,
-     struct Quant *quant)
+int G_read_quant(const char *name, const char *mapset, struct Quant *quant)
 {
-     G_quant_init (quant);
-     return G__quant_import(name, mapset, quant);
+    G_quant_init(quant);
+    return G__quant_import(name, mapset, quant);
 }

@@ -1,3 +1,4 @@
+
 /**
  * \file user_config.c
  *
@@ -44,19 +45,19 @@
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef __MINGW32__  /* TODO */
-static char *
-_make_toplevel (void)
+#ifndef __MINGW32__		/* TODO */
+static char *_make_toplevel(void)
 {
     size_t len;
     int status;
+
 #ifdef __MINGW32__
     char *defaulthomedir = "c:";
-    char *homedir = getenv ( "HOME" );
-#else    
+    char *homedir = getenv("HOME");
+#else
     uid_t me;
     struct passwd *my_passwd;
-#endif    
+#endif
     struct stat buf;
     char *path;
 
@@ -64,76 +65,69 @@ _make_toplevel (void)
 
     /* Query whatever database to get user's home dir */
 #ifdef __MINGW32__
-    if ( NULL == homedir ) {
-        homedir = defaulthomedir;
+    if (NULL == homedir) {
+	homedir = defaulthomedir;
     }
-    
-    len = strlen ( homedir ) + 8; /* + "/.grass\0" */
-    if ( NULL == ( path = G_calloc ( 1, len ) ) ) {
-        return NULL;
+
+    len = strlen(homedir) + 8;	/* + "/.grass\0" */
+    if (NULL == (path = G_calloc(1, len))) {
+	return NULL;
     }
-    sprintf ( path, "%s%s", homedir, "/.grass" );
+    sprintf(path, "%s%s", homedir, "/.grass");
 #else
     me = getuid();
-    my_passwd = getpwuid (me);
+    my_passwd = getpwuid(me);
     if (my_passwd == NULL)
-        return NULL;
+	return NULL;
 
-    len = strlen (my_passwd->pw_dir) + 8; /* + "/.grass\0" */
-    if (NULL == (path = G_calloc (1, len)))
-        return NULL;
+    len = strlen(my_passwd->pw_dir) + 8;	/* + "/.grass\0" */
+    if (NULL == (path = G_calloc(1, len)))
+	return NULL;
 
-    sprintf (path, "%s%s", my_passwd->pw_dir, "/.grass");
+    sprintf(path, "%s%s", my_passwd->pw_dir, "/.grass");
 #endif
 
-    status = G_lstat (path, &buf);
+    status = G_lstat(path, &buf);
 
     /* If errno == ENOENT, the directory doesn't exist */
-    if (status != 0)
-    {
-        if (errno == ENOENT)
-        {
-            status = G_mkdir (path);
-    
-            if (status != 0)  /* mkdir failed */
-            {
-                G_free (path);
-                return NULL;
-            }
-            
-            /* override umask settings, if possible */
-            chmod (path, S_IRWXU);
+    if (status != 0) {
+	if (errno == ENOENT) {
+	    status = G_mkdir(path);
 
-            /* otherwise mkdir succeeded, we're done here */
-            return path;
-        }
-        
-        /* other errors should not be defined ??? give up */
-        G_free (path);
-        return NULL;
+	    if (status != 0) {	/* mkdir failed */
+		G_free(path);
+		return NULL;
+	    }
+
+	    /* override umask settings, if possible */
+	    chmod(path, S_IRWXU);
+
+	    /* otherwise mkdir succeeded, we're done here */
+	    return path;
+	}
+
+	/* other errors should not be defined ??? give up */
+	G_free(path);
+	return NULL;
     }
     /* implicit else */
 
     /* Examine the stat "buf" */
     /* It better be a directory */
-    if (!S_ISDIR(buf.st_mode)) /* File, link, something else */
-    {
-        errno = ENOTDIR; /* element is not a directory, but should be */
-        G_free (path);
-        return NULL;
+    if (!S_ISDIR(buf.st_mode)) {	/* File, link, something else */
+	errno = ENOTDIR;	/* element is not a directory, but should be */
+	G_free(path);
+	return NULL;
     }
 
     /* No read/write/execute ??? */
-    if (!(
-          (S_IRUSR & buf.st_mode) &&
-          (S_IWUSR & buf.st_mode) &&
-          (S_IXUSR & buf.st_mode)
-         )
-       )
-    {
-        errno = EACCES;  /* Permissions error */
-        G_free (path);
-        return NULL;
+    if (!((S_IRUSR & buf.st_mode) &&
+	  (S_IWUSR & buf.st_mode) && (S_IXUSR & buf.st_mode)
+	)
+	) {
+	errno = EACCES;		/* Permissions error */
+	G_free(path);
+	return NULL;
     }
 
     /* We'll assume that if the user grants greater permissions
@@ -156,41 +150,38 @@ _make_toplevel (void)
  * Returns 0 if there are no elements, or an element
  * beginning with a '.' or containing a '//' is found.
  *************************************************************************/
-static int
-_elem_count_split (char *elems)
+static int _elem_count_split(char *elems)
 {
     int i;
     size_t len;
     char *begin, *end;
-    
+
     /* Some basic assertions */
-    assert (elems != NULL);
-    assert ((len = strlen(elems)) > 0);
-    assert (*elems != '/');
-    
+    assert(elems != NULL);
+    assert((len = strlen(elems)) > 0);
+    assert(*elems != '/');
+
     begin = elems;
-    for (i = 0; begin != NULL && len > begin - elems; i++)
-    {
-        /* check '.' condition */
-        if (*begin == '.')
-            return 0;
-        end = strchr (begin, '/');
-        /* check '//' condition */
-        if (end != NULL && end == begin)
-            return 0;
-        /* okay, change '/' into '\0' */
-        begin = end;
-        if (begin != NULL)
-        {
-            *begin = '\0';  /* begin points at '/', change it */
-            begin++;        /* increment begin to next char */
-        }
+    for (i = 0; begin != NULL && len > begin - elems; i++) {
+	/* check '.' condition */
+	if (*begin == '.')
+	    return 0;
+	end = strchr(begin, '/');
+	/* check '//' condition */
+	if (end != NULL && end == begin)
+	    return 0;
+	/* okay, change '/' into '\0' */
+	begin = end;
+	if (begin != NULL) {
+	    *begin = '\0';	/* begin points at '/', change it */
+	    begin++;		/* increment begin to next char */
+	}
     }
 
     /* That's it */
     return i;
 }
-    
+
 
 /**************************************************************************
  * _make_sublevels(): creates subelements as necessary from the passed
@@ -198,8 +189,7 @@ _elem_count_split (char *elems)
  * if it fails.  "elems" must not be NULL, zero length, or have any
  * elements that begin with a '.' or any occurrences of '//'.
  *************************************************************************/
-static char *
-_make_sublevels(const char *elems)
+static char *_make_sublevels(const char *elems)
 {
     int i, status;
     char *cp, *path, *top, *ptr;
@@ -207,94 +197,83 @@ _make_sublevels(const char *elems)
 
     /* Get top level path */
     if (NULL == (top = _make_toplevel()))
-        return NULL;
+	return NULL;
 
     /* Make a copy of elems */
-    if (NULL == (cp = G_store (elems)))
-    {
-        G_free (top);
-        return NULL;
+    if (NULL == (cp = G_store(elems))) {
+	G_free(top);
+	return NULL;
     }
-    
+
     /* Do element count, sanity checking and "splitting" */
-    if ((i = _elem_count_split (cp)) < 1)
-    {
-        G_free (cp);
-        G_free (top);
-        return NULL;
+    if ((i = _elem_count_split(cp)) < 1) {
+	G_free(cp);
+	G_free(top);
+	return NULL;
     }
 
     /* Allocate our path to be large enough */
-    if ((path = G_calloc (1, strlen(top) + strlen(elems) + 2)) == NULL)
-    {
-        G_free (top);
-        G_free (cp);
-        return NULL;
+    if ((path = G_calloc(1, strlen(top) + strlen(elems) + 2)) == NULL) {
+	G_free(top);
+	G_free(cp);
+	return NULL;
     }
-    
+
     /* Now loop along adding directories if they don't exist
      * make sure the thing is a directory as well.
      * If there was a trailing '/' in the original "elem", it doesn't
      * make it into the returned path.
      */
-    for (; i > 0; i--)
-    {
-        sprintf (path, "%s/%s", top, cp);
-        errno = 0;
-        status = G_lstat (path, &buf);
-        if (status != 0)
-        {
-            /* the element doesn't exist */
-            status = G_mkdir (path);
-            if (status != 0)
-            {
-                /* Some kind of problem... */
-                G_free (top);
-                G_free (cp);
-                return NULL;
-            }
-            /* override umask settings, if possible */
-            chmod (path, S_IRWXU);
-        }
-        else
-        {
-            /* Examine the stat "buf" */
-            /* It better be a directory */
-            if (!S_ISDIR(buf.st_mode)) /* File, link, something else */
-            {
-                errno = ENOTDIR; /* element is not a directory, but should be */
-                G_free (path);
-                return NULL;
-            }
+    for (; i > 0; i--) {
+	sprintf(path, "%s/%s", top, cp);
+	errno = 0;
+	status = G_lstat(path, &buf);
+	if (status != 0) {
+	    /* the element doesn't exist */
+	    status = G_mkdir(path);
+	    if (status != 0) {
+		/* Some kind of problem... */
+		G_free(top);
+		G_free(cp);
+		return NULL;
+	    }
+	    /* override umask settings, if possible */
+	    chmod(path, S_IRWXU);
+	}
+	else {
+	    /* Examine the stat "buf" */
+	    /* It better be a directory */
+	    if (!S_ISDIR(buf.st_mode)) {	/* File, link, something else */
+		errno = ENOTDIR;	/* element is not a directory, but should be */
+		G_free(path);
+		return NULL;
+	    }
 
-            /* No read/write/execute ??? */
-            if (!(
-                  (S_IRUSR & buf.st_mode) &&
-                  (S_IWUSR & buf.st_mode) &&
-                  (S_IXUSR & buf.st_mode)
-                 )
-               )
-            {
-                errno = EACCES;  /* Permissions error */
-                G_free (path);
-                return NULL;
-            }
+	    /* No read/write/execute ??? */
+	    if (!((S_IRUSR & buf.st_mode) &&
+		  (S_IWUSR & buf.st_mode) && (S_IXUSR & buf.st_mode)
+		)
+		) {
+		errno = EACCES;	/* Permissions error */
+		G_free(path);
+		return NULL;
+	    }
 
-            /* okay continue ... */
-        }
+	    /* okay continue ... */
+	}
 
-        ptr = strchr (cp, '\0');
-        *ptr = '/';
+	ptr = strchr(cp, '\0');
+	*ptr = '/';
     }
 
     /* All done, free memory */
-    G_free (top);
-    G_free (cp);
+    G_free(top);
+    G_free(cp);
 
     return path;
 }
 
-    
+
 /**
  * \brief Returns path to <b>element</b> and <b>item</b>.
  *
@@ -309,46 +288,41 @@ _make_sublevels(const char *elems)
  * \return Pointer to string path
  */
 
-char *
-G_rc_path (const char *element, const char *item)
+char *G_rc_path(const char *element, const char *item)
 {
     size_t len;
     char *path, *ptr;
 
-    assert (!(element == NULL && item == NULL));
+    assert(!(element == NULL && item == NULL));
 
     /* Simple item in top-level */
-    if (element == NULL)
-    {
-        path = _make_toplevel();
+    if (element == NULL) {
+	path = _make_toplevel();
     }
-    else if (item == NULL)
-    {
-        return _make_sublevels (element);
+    else if (item == NULL) {
+	return _make_sublevels(element);
     }
-    else
-    {
-        path = _make_sublevels (element);
+    else {
+	path = _make_sublevels(element);
     }
-   
 
-    assert (*item != '.');
-    assert (path != NULL);
-    ptr = strchr (item, '/'); /* should not have slashes */
-    assert (ptr == NULL);
+
+    assert(*item != '.');
+    assert(path != NULL);
+    ptr = strchr(item, '/');	/* should not have slashes */
+    assert(ptr == NULL);
     len = strlen(path) + strlen(item) + 2;
-    if ((ptr = G_realloc (path, len)) == NULL)
-    {
-        G_free (path);
-        return NULL;
+    if ((ptr = G_realloc(path, len)) == NULL) {
+	G_free(path);
+	return NULL;
     }
     path = ptr;
-    ptr = strchr (path, '\0');
-    sprintf (ptr, "/%s", item);
+    ptr = strchr(path, '\0');
+    sprintf(ptr, "/%s", item);
 
     return path;
-} /* G_rc_path */
-       
+}				/* G_rc_path */
+
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
 #endif

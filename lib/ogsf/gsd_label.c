@@ -1,20 +1,20 @@
 /*!
-  \file gsd_label.c
- 
-  \brief OGSF library - label management (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
+   \file gsd_label.c
 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (1991-1992)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - label management (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (1991-1992)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -29,17 +29,17 @@ GLuint label_base;
 GLuint label_id;
 
 /*!
-  \brief Put label
+   \brief Put label
 
-  \todo Allocate label dynamicaly
+   \todo Allocate label dynamicaly
 
-  \param fontbase fontbase settings
-  \param size font size
-  \param color font color
-  \param pt 
-*/
-void gs_put_label(const char *text, GLuint fontbase, int size, unsigned long color,
-		  int*pt)
+   \param fontbase fontbase settings
+   \param size font size
+   \param color font color
+   \param pt 
+ */
+void gs_put_label(const char *text, GLuint fontbase, int size,
+		  unsigned long color, int *pt)
 {
     int txt_width;
     GLint tmp[4];
@@ -55,17 +55,17 @@ void gs_put_label(const char *text, GLuint fontbase, int size, unsigned long col
     }
 
     if (label_id > (label_base + MAX_LIST)) {
-	G_warning (_("Max. number of labels reached!"));
+	G_warning(_("Max. number of labels reached!"));
 	return;
     }
-    
+
     glNewList(label_id, GL_COMPILE_AND_EXECUTE);
     txt_width = gsd_get_txtwidth(text, size);
-    
-/* adjust to center text string */
-    labpt[X] = (float) (pt[X] - txt_width / 2.);
-    labpt[Y] = (float) pt[Y];
-    
+
+    /* adjust to center text string */
+    labpt[X] = (float)(pt[X] - txt_width / 2.);
+    labpt[Y] = (float)pt[Y];
+
     glGetIntegerv(GL_VIEWPORT, tmp);
     l = tmp[0];
     r = tmp[0] + tmp[2];
@@ -79,7 +79,7 @@ void gs_put_label(const char *text, GLuint fontbase, int size, unsigned long col
     gsd_color_func(color);
 
     do_label_display(fontbase, labpt, text);
-    
+
 
     gsd_end_legend_viewport();
 
@@ -92,8 +92,8 @@ void gs_put_label(const char *text, GLuint fontbase, int size, unsigned long col
 
 
 /*!
-  \brief Remove current label 
-*/
+   \brief Remove current label 
+ */
 void gsd_remove_curr(void)
 {
     if (label_id) {
@@ -106,8 +106,8 @@ void gsd_remove_curr(void)
 
 
 /*!
-  \brief Remove all labels from display list
-*/
+   \brief Remove all labels from display list
+ */
 void gsd_remove_all(void)
 {
     glDeleteLists(label_base, MAX_LIST);
@@ -117,8 +117,8 @@ void gsd_remove_all(void)
 }
 
 /*!
-  \brief Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
-*/
+   \brief Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
+ */
 void gsd_call_label(void)
 {
     int i;

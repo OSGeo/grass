@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       $ETC/current_time_s_ms
@@ -18,14 +19,14 @@
 
 int main()
 {
-   struct timeval t; 
-          
-   if (gettimeofday(&t, NULL) == -1) {
-      fprintf(stderr,"gettimeofday error"); 
-      return 1; 
-   } 
-   fprintf(stdout,"%li.%li\n", t.tv_sec, t.tv_usec); 
-   fflush(stdout);
+    struct timeval t;
 
-   return 0; 
+    if (gettimeofday(&t, NULL) == -1) {
+	fprintf(stderr, "gettimeofday error");
+	return 1;
+    }
+    fprintf(stdout, "%li.%li\n", t.tv_sec, t.tv_usec);
+    fflush(stdout);
+
+    return 0;
 }

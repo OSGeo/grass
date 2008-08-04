@@ -1,3 +1,4 @@
+
 /***********************************************************
 *
 * MODULE:       SQLite driver 
@@ -17,9 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_close_cursor (dbCursor *dbc)
-
+int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
 
@@ -30,7 +29,7 @@ db__driver_close_cursor (dbCursor *dbc)
     if (c == NULL)
 	return DB_FAILED;
 
-    sqlite3_finalize ( c->statement );
+    sqlite3_finalize(c->statement);
 
     /* free_cursor(cursor) */
     free_cursor(c);
@@ -39,24 +38,24 @@ db__driver_close_cursor (dbCursor *dbc)
 }
 
 
-cursor * alloc_cursor()
+cursor *alloc_cursor()
 {
-    cursor     *c;
+    cursor *c;
 
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-        append_error("Cannot allocate cursor.");
-        return NULL; 
-    } 
+	append_error("Cannot allocate cursor.");
+	return NULL;
+    }
 
     c->statement = NULL;
-    
+
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-        append_error("Cannot ad new token.");
-        return NULL; 
+	append_error("Cannot ad new token.");
+	return NULL;
     }
 
     c->kcols = NULL;
@@ -65,12 +64,10 @@ cursor * alloc_cursor()
     return c;
 }
 
-void free_cursor( cursor *c)
+void free_cursor(cursor * c)
 {
     db_drop_token(c->token);
 
-    G_free ( c->kcols );
-    G_free(c);  
+    G_free(c->kcols);
+    G_free(c);
 }
-
-

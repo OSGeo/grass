@@ -31,8 +31,9 @@
 /* ************************************************************************* */
 /* Writes the strcutured points Header ************************************* */
 /* ************************************************************************* */
-void write_vtk_structured_point_header(FILE * fp, char *vtkFile, G3D_Region region,
-				   int dp, double scale)
+void write_vtk_structured_point_header(FILE * fp, char *vtkFile,
+				       G3D_Region region, int dp,
+				       double scale)
 {
     G_debug(3,
 	    _
@@ -69,11 +70,11 @@ void write_vtk_structured_point_header(FILE * fp, char *vtkFile, G3D_Region regi
     }
     else {
 	if (param.origin->answer)
-	    fprintf(fp, "ORIGIN %.*f %.*f %.*f\n", dp, region.west - x_extent, dp,
-		    region.south - y_extent, dp, region.bottom * scale);
+	    fprintf(fp, "ORIGIN %.*f %.*f %.*f\n", dp, region.west - x_extent,
+		    dp, region.south - y_extent, dp, region.bottom * scale);
 	else
-	    fprintf(fp, "ORIGIN %.*f %.*f %.*f\n", dp, region.west - x_extent, dp,
-		    region.south - y_extent, dp, region.bottom);
+	    fprintf(fp, "ORIGIN %.*f %.*f %.*f\n", dp, region.west - x_extent,
+		    dp, region.south - y_extent, dp, region.bottom);
     }
 
     if (param.point->answer)
@@ -88,7 +89,8 @@ void write_vtk_structured_point_header(FILE * fp, char *vtkFile, G3D_Region regi
 /* ************************************************************************* */
 /* Writes the strcutured grid header **************************************** */
 /* ************************************************************************* */
-void write_vtk_structured_grid_header(FILE * fp, char *vtkFile, G3D_Region region)
+void write_vtk_structured_grid_header(FILE * fp, char *vtkFile,
+				      G3D_Region region)
 {
     G_debug(3,
 	    _
@@ -100,7 +102,8 @@ void write_vtk_structured_grid_header(FILE * fp, char *vtkFile, G3D_Region regio
     fprintf(fp, "DIMENSIONS %i %i %i\n", region.cols, region.rows,
 	    region.depths);
     /*Only point data is available */
-    fprintf(fp, "POINTS %i float\n", region.cols * region.rows * region.depths);
+    fprintf(fp, "POINTS %i float\n",
+	    region.cols * region.rows * region.depths);
 
     return;
 }
@@ -108,7 +111,8 @@ void write_vtk_structured_grid_header(FILE * fp, char *vtkFile, G3D_Region regio
 /* ************************************************************************* */
 /* Writes the unstrcutured grid header ************************************* */
 /* ************************************************************************* */
-void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile, G3D_Region region)
+void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile,
+					G3D_Region region)
 {
     G_debug(3,
 	    _
@@ -122,4 +126,3 @@ void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile, G3D_Region reg
 
     return;
 }
-

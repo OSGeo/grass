@@ -1,3 +1,4 @@
+
 /**
  * \file seek.c
  *
@@ -33,14 +34,14 @@
  * \return -1 if unable to seek
  */
 
-int segment_seek (const SEGMENT *SEG,int n,int index)
+int segment_seek(const SEGMENT * SEG, int n, int index)
 {
     off_t offset;
 
-    offset = (off_t) n * SEG->size + index + SEG->offset;
-    if (lseek (SEG->fd, offset, SEEK_SET) == (off_t)-1)
-    {
-	G_warning ("segment_seek: %s", strerror(errno));
+    offset = (off_t) n *SEG->size + index + SEG->offset;
+
+    if (lseek(SEG->fd, offset, SEEK_SET) == (off_t) - 1) {
+	G_warning("segment_seek: %s", strerror(errno));
 	return -1;
     }
 

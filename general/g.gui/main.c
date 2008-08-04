@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.gui
@@ -59,15 +60,15 @@ int main(int argc, char *argv[])
     rc_file->description = _("Name of workspace file");
 
     oneoff = G_define_flag();
-    oneoff->key         = 'u';
+    oneoff->key = 'u';
     oneoff->description = _("Update default GUI setting");
 
     if (argc > 1 && G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
-    if ( ( (gui_type_env && oneoff->answer) &&
-	    strcmp(gui_type_env, type->answer) != 0 ) || !gui_type_env ) {
+    if (((gui_type_env && oneoff->answer) &&
+	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
 	G_message(_("<%s> is now the default GUI"), type->answer);
 	G_setenv("GRASS_GUI", type->answer);
 
@@ -76,25 +77,30 @@ int main(int argc, char *argv[])
     if (strcmp(type->answer, "oldtcltk") == 0) {
 	sprintf(progname, "%s/etc/dm/d.m.tcl", G_gisbase());
 	if (rc_file->answer) {
-	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl", rc_file->answer, NULL);
+	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl",
+		    rc_file->answer, NULL);
 	}
 	else {
-	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl", NULL);
+	    G_spawn(getenv("GRASS_WISH"), "d.m", progname, "-name", "d_m_tcl",
+		    NULL);
 	}
     }
     else if (strcmp(type->answer, "tcltk") == 0) {
 	sprintf(progname, "%s/etc/gm/gm.tcl", G_gisbase());
 	if (rc_file->answer) {
-	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name", "gm_tcl", rc_file->answer, NULL);
+	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name",
+		    "gm_tcl", rc_file->answer, NULL);
 	}
 	else {
-	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name", "gm_tcl", NULL);
+	    G_spawn(getenv("GRASS_WISH"), "gis.m", progname, "-name",
+		    "gm_tcl", NULL);
 	}
     }
     else if (strcmp(type->answer, "wxpython") == 0) {
-	sprintf (progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
+	sprintf(progname, "%s/etc/wxpython/wxgui.py", G_gisbase());
 	if (rc_file->answer) {
-	    G_spawn("python", "wxgui", progname, "--workspace", rc_file->answer, NULL);
+	    G_spawn("python", "wxgui", progname, "--workspace",
+		    rc_file->answer, NULL);
 	}
 	else {
 	    G_spawn("python", "wxgui", progname, NULL);

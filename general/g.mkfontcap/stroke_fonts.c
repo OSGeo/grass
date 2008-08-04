@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.mkfontcap
@@ -25,8 +26,10 @@
 
 struct font_desc
 {
-   char *filename;    /**< Filename in fonts directory */
-   char *description; /**< Descriptive name of font contained in this file */
+
+    char *filename;   /**< Filename in fonts directory */
+
+    char *description;/**< Descriptive name of font contained in this file */
 };
 
 static struct font_desc *font_descriptions = NULL;
@@ -50,50 +53,48 @@ void find_stroke_fonts(void)
     char *dirpath, *fonttable;
     char **dirlisting;
     int numfiles, i;
-     
-    G_asprintf (&dirpath, "%s/fonts", G_gisbase());
-   
-    dirlisting = G__ls (dirpath, &numfiles);
-   
-    G_asprintf (&fonttable, "%s/fonts.table", dirpath);
-    if (access(fonttable, R_OK) == 0)
-        load_font_descriptions(fonttable);
-   
-    for (i = 0; i < numfiles; i++)
-    {
-    	if (!strstr(dirlisting[i], ".hmp"))
-    	    continue;
 
-    	if (totalfonts >= maxfonts)
-    	{
-    	    maxfonts += 20;   
-            fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
-    	}        
-       
-        /* Path */
-        G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath, 
-		                              HOST_DIRSEP, dirlisting[i]);
-        G_convert_dirseps_to_host(fontcap[totalfonts].path);
-        /* Description & Name */
-    	fontcap[totalfonts].longname = G_store( get_desc(dirlisting[i]) );
-    	*(strstr(dirlisting[i], ".hmp")) = '\0';
-    	fontcap[totalfonts].name = G_store(dirlisting[i]);
-        /* Font Type */
-        fontcap[totalfonts].type = GFONT_STROKE;
-        /* These two probably not relevant */
-        fontcap[totalfonts].index = 0;
-        fontcap[totalfonts].encoding = G_store("utf-8");       
-        totalfonts++;
-       
-        G_free(dirlisting[i]);       
+    G_asprintf(&dirpath, "%s/fonts", G_gisbase());
+
+    dirlisting = G__ls(dirpath, &numfiles);
+
+    G_asprintf(&fonttable, "%s/fonts.table", dirpath);
+    if (access(fonttable, R_OK) == 0)
+	load_font_descriptions(fonttable);
+
+    for (i = 0; i < numfiles; i++) {
+	if (!strstr(dirlisting[i], ".hmp"))
+	    continue;
+
+	if (totalfonts >= maxfonts) {
+	    maxfonts += 20;
+	    fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
+	}
+
+	/* Path */
+	G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath,
+		   HOST_DIRSEP, dirlisting[i]);
+	G_convert_dirseps_to_host(fontcap[totalfonts].path);
+	/* Description & Name */
+	fontcap[totalfonts].longname = G_store(get_desc(dirlisting[i]));
+	*(strstr(dirlisting[i], ".hmp")) = '\0';
+	fontcap[totalfonts].name = G_store(dirlisting[i]);
+	/* Font Type */
+	fontcap[totalfonts].type = GFONT_STROKE;
+	/* These two probably not relevant */
+	fontcap[totalfonts].index = 0;
+	fontcap[totalfonts].encoding = G_store("utf-8");
+	totalfonts++;
+
+	G_free(dirlisting[i]);
     }
     G_free(dirlisting);
-   
-    if( font_descriptions )
-        free_font_descriptions();
-   
+
+    if (font_descriptions)
+	free_font_descriptions();
+
     return;
-   
+
 }
 
 /**
@@ -114,39 +115,37 @@ static int load_font_descriptions(const char *descfile)
     size_t memsize = 0;
     FILE *fp;
     char buff[500];
-     
-    fp = fopen( descfile, "r" );
-    if( fp == NULL )
-    {	
-        G_warning( "Unable to open font description file %s for reading: %s", 
-		   descfile, strerror(errno) );
-        return 0;
+
+    fp = fopen(descfile, "r");
+    if (fp == NULL) {
+	G_warning("Unable to open font description file %s for reading: %s",
+		  descfile, strerror(errno));
+	return 0;
     }
 
-    while( G_getl2(buff, sizeof(buff), fp) )
-    {
-        char name[100], description[256];
-       
-        if( buff[0] == '#' )
+    while (G_getl2(buff, sizeof(buff), fp)) {
+	char name[100], description[256];
+
+	if (buff[0] == '#')
 	    continue;
 
-        if( sscanf( buff, "%99[^|]|%255[^\n]", name, description ) != 2 )
+	if (sscanf(buff, "%99[^|]|%255[^\n]", name, description) != 2)
 	    continue;
-       
-        if( num_descriptions >= memsize )
-	{
+
+	if (num_descriptions >= memsize) {
 	    memsize += 20;
 	    font_descriptions = G_realloc(font_descriptions,
-					  memsize * sizeof(struct font_desc) );
+					  memsize * sizeof(struct font_desc));
 	}
-       
-        font_descriptions[num_descriptions].filename = G_store(name);
-        font_descriptions[num_descriptions].description = G_store(description);
-        num_descriptions++;
+
+	font_descriptions[num_descriptions].filename = G_store(name);
+	font_descriptions[num_descriptions].description =
+	    G_store(description);
+	num_descriptions++;
     }
-   
+
     fclose(fp);
-   
+
     return (num_descriptions > 0);
 }
 
@@ -168,13 +167,13 @@ static const char *get_desc(const char *filename)
     int i;
 
     for (i = 0; i < num_descriptions; i++)
-        if( G_strcasecmp( filename, font_descriptions[i].filename ) == 0 )
-            return font_descriptions[i].description;
-   
+	if (G_strcasecmp(filename, font_descriptions[i].filename) == 0)
+	    return font_descriptions[i].description;
+
     /* If there was no font descriptions file, or the filename wasn't found
      * in it, we'll end up here and simply return the filename for the
      * description */
-   
+
     return filename;
 }
 
@@ -183,14 +182,13 @@ static const char *get_desc(const char *filename)
  **/
 
 static void free_font_descriptions(void)
-{   
+{
     int i;
-   
-    for (i = 0; i < num_descriptions; i++)
-    {
-        G_free( font_descriptions[i].filename );
-        G_free( font_descriptions[i].description );
+
+    for (i = 0; i < num_descriptions; i++) {
+	G_free(font_descriptions[i].filename);
+	G_free(font_descriptions[i].description);
     }
-   
+
     return;
 }

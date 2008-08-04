@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -55,13 +56,11 @@ static char *rules_list(void)
     int len = 0;
     int i;
 
-    for (i = 0; i < nrules; i++)
-    {
+    for (i = 0; i < nrules; i++) {
 	const char *name = rules[i];
 	int n = strlen(name);
 
-	if (size < len + n + 2)
-	{
+	if (size < len + n + 2) {
 	    size = len + n + 200;
 	    list = G_realloc(list, size);
 	}
@@ -111,10 +110,12 @@ int main(int argc, char **argv)
     char *rules;
     int fp;
     struct GModule *module;
-    struct {
+    struct
+    {
 	struct Flag *r, *w, *l, *g, *e, *i, *n;
     } flag;
-    struct {
+    struct
+    {
 	struct Option *map, *colr, *rast, *rules;
     } opt;
 
@@ -124,23 +125,24 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster, color table");
     module->description =
-	_("Creates/modifies the color table associated with a raster map layer.");
+	_
+	("Creates/modifies the color table associated with a raster map layer.");
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
-    opt.map->required      = NO;
+    opt.map->required = NO;
     opt.map->guisection = _("Required");
 
     scan_rules();
 
     opt.colr = G_define_option();
-    opt.colr->key          = "color";
-    opt.colr->key_desc     = "style";
-    opt.colr->type         = TYPE_STRING;
-    opt.colr->required     = NO;
-    opt.colr->options      = rules_list();
-    opt.colr->description  = _("Type of color table");
-    opt.colr->descriptions = 
-	_("aspect;aspect oriented grey colors;"   
+    opt.colr->key = "color";
+    opt.colr->key_desc = "style";
+    opt.colr->type = TYPE_STRING;
+    opt.colr->required = NO;
+    opt.colr->options = rules_list();
+    opt.colr->description = _("Type of color table");
+    opt.colr->descriptions =
+	_("aspect;aspect oriented grey colors;"
 	  "aspectcolr;aspect oriented rainbow colors;"
 	  "bcyr;blue through cyan through yellow to red;"
 	  "bgyr;blue through green through yellow to red;"
@@ -172,61 +174,62 @@ int main(int argc, char **argv)
     opt.colr->guisection = _("Colors");
 
     opt.rast = G_define_option();
-    opt.rast->key          = "raster";
-    opt.rast->type         = TYPE_STRING;
-    opt.rast->required     = NO;
-    opt.rast->gisprompt    = "old,cell,raster";
-    opt.rast->description  = _("Raster map name from which to copy color table");
+    opt.rast->key = "raster";
+    opt.rast->type = TYPE_STRING;
+    opt.rast->required = NO;
+    opt.rast->gisprompt = "old,cell,raster";
+    opt.rast->description =
+	_("Raster map name from which to copy color table");
 
     opt.rules = G_define_standard_option(G_OPT_F_INPUT);
-    opt.rules->key         = "rules";
-    opt.rules->required    = NO;
+    opt.rules->key = "rules";
+    opt.rules->required = NO;
     opt.rules->description = _("Path to rules file");
     opt.rules->guisection = _("Colors");
 
     flag.r = G_define_flag();
-    flag.r->key = 'r';  
+    flag.r->key = 'r';
     flag.r->description = _("Remove existing color table");
 
     flag.w = G_define_flag();
     flag.w->key = 'w';
-    flag.w->description = _("Only write new color table if one doesn't already exist");
+    flag.w->description =
+	_("Only write new color table if one doesn't already exist");
 
     flag.l = G_define_flag();
     flag.l->key = 'l';
     flag.l->description = _("List available rules then exit");
 
     flag.n = G_define_flag();
-    flag.n->key = 'n';  
+    flag.n->key = 'n';
     flag.n->description = _("Invert colors");
     flag.n->guisection = _("Colors");
 
     flag.g = G_define_flag();
-    flag.g->key = 'g';  
+    flag.g->key = 'g';
     flag.g->description = _("Logarithmic scaling");
     flag.g->guisection = _("Colors");
 
     flag.e = G_define_flag();
-    flag.e->key = 'e';  
+    flag.e->key = 'e';
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Colors");
 
     flag.i = G_define_flag();
-    flag.i->key = 'i';  
+    flag.i->key = 'i';
     flag.i->description = _("Enter rules interactively");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (flag.l->answer)
-    {
+    if (flag.l->answer) {
 	list_rules();
 	return EXIT_SUCCESS;
     }
 
-    overwrite   = !flag.w->answer;
+    overwrite = !flag.w->answer;
     interactive = flag.i->answer;
-    remove      = flag.r->answer;
+    remove = flag.r->answer;
 
     name = opt.map->answer;
 
@@ -238,21 +241,23 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No map specified"));
 
     if (!cmap && !style && !rules && !interactive && !remove)
-	G_fatal_error(_("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
+	G_fatal_error(_
+		      ("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
 
-    if (interactive && (style || rules || cmap) )
-	G_fatal_error(_("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
+    if (interactive && (style || rules || cmap))
+	G_fatal_error(_
+		      ("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
 
-    if ( (style && (cmap || rules)) || (cmap && rules) )
-	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
+    if ((style && (cmap || rules)) || (cmap && rules))
+	G_fatal_error(_
+		      ("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
 
     mapset = G_find_cell2(name, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (remove)
-    {
+    if (remove) {
 	int stat = G_remove_colors(name, mapset);
 
 	if (stat < 0)
@@ -265,7 +270,7 @@ int main(int argc, char **argv)
     G_suppress_warnings(1);
     have_colors = G_read_colors(name, mapset, &colors);
     /*if (have_colors >= 0)
-	G_free_colors(&colors);*/
+       G_free_colors(&colors); */
 
     if (have_colors > 0 && !overwrite)
 	exit(EXIT_SUCCESS);
@@ -276,53 +281,51 @@ int main(int argc, char **argv)
     G_read_fp_range(name, mapset, &range);
     G_get_fp_range_min_max(&range, &min, &max);
 
-    if (interactive)
-    {
+    if (interactive) {
 	if (!read_color_rules(stdin, &colors, min, max, fp))
-	    exit(EXIT_FAILURE); 
+	    exit(EXIT_FAILURE);
     }
-    else if (style)
-    {
+    else if (style) {
 	/* 
 	 * here the predefined color-table color-styles are created by GRASS library calls. 
 	 */
-	if (strcmp(style, "random") == 0)
-	{
+	if (strcmp(style, "random") == 0) {
 	    if (fp)
-		G_fatal_error(_("Can't make random color table for floating point map"));
+		G_fatal_error(_
+			      ("Can't make random color table for floating point map"));
 	    G_make_random_colors(&colors, (CELL) min, (CELL) max);
 	}
-	else if (strcmp(style, "grey.eq") == 0)
-	{
+	else if (strcmp(style, "grey.eq") == 0) {
 	    if (fp)
-		G_fatal_error(_("Can't make grey.eq color table for floating point map"));
+		G_fatal_error(_
+			      ("Can't make grey.eq color table for floating point map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
 	    G_make_histogram_eq_colors(&colors, &statf);
 	}
-	else if (strcmp(style, "grey.log") == 0)
-	{
+	else if (strcmp(style, "grey.log") == 0) {
 	    if (fp)
-		G_fatal_error(_("Can't make logarithmic color table for floating point map"));
+		G_fatal_error(_
+			      ("Can't make logarithmic color table for floating point map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
-	    G_make_histogram_log_colors(&colors, &statf, (CELL) min, (CELL) max);
+	    G_make_histogram_log_colors(&colors, &statf, (CELL) min,
+					(CELL) max);
 	}
-	else if (strcmp(style, "rules") == 0)
-	{
+	else if (strcmp(style, "rules") == 0) {
 	    if (!read_color_rules(stdin, &colors, min, max, fp))
-		exit(EXIT_FAILURE); 
+		exit(EXIT_FAILURE);
 	}
 	else if (find_rule(style))
 	    G_make_fp_colors(&colors, style, min, max);
 	else
 	    G_fatal_error(_("%s - unknown color request"), style);
     }
-    else if (rules)
-    {
+    else if (rules) {
 	if (!G_load_fp_colors(&colors, rules, min, max)) {
 	    /* for backwards compatibility try as std name; remove for GRASS 7 */
 	    char path[GPATH_MAX];
+
 	    /* don't bother with native dirsep as not needed for backwards compatibility */
 	    sprintf(path, "%s/etc/colors/%s", G_gisbase(), rules);
 
@@ -330,8 +333,7 @@ int main(int argc, char **argv)
 		G_fatal_error(_("Unable to load rules file %s"), rules);
 	}
     }
-    else
-    {
+    else {
 	/* use color from another map (cmap) */
 	cmapset = G_find_cell2(cmap, "");
 	if (cmapset == NULL)
@@ -347,16 +349,14 @@ int main(int argc, char **argv)
     if (flag.n->answer)
 	G_invert_colors(&colors);
 
-    if (flag.e->answer)
-    {
+    if (flag.e->answer) {
 	if (!have_stats)
 	    have_stats = get_stats(name, mapset, &statf);
 	G_histogram_eq_colors(&colors_tmp, &colors, &statf);
 	colors = colors_tmp;
     }
 
-    if (flag.g->answer)
-    {
+    if (flag.g->answer) {
 	G_log_colors(&colors_tmp, &colors, 100);
 	colors = colors_tmp;
     }
@@ -366,7 +366,8 @@ int main(int argc, char **argv)
 
     if (G_write_colors(name, mapset, &colors) >= 0)
 	G_message(_("Color table for <%s> set to %s"), name,
-	  interactive ? "rules" : style ? style : rules ? rules : cmap);
+		  interactive ? "rules" : style ? style : rules ? rules :
+		  cmap);
 
     exit(EXIT_SUCCESS);
 }

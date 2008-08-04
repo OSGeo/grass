@@ -4,9 +4,10 @@
 #define GLOBAL extern
 #endif
 /* State flags  Most are Toggles */
-GLOBAL char Data_Loaded;	  /* is there data in memory */
+GLOBAL char Data_Loaded;	/* is there data in memory */
+
 				/* used for abnormal exit logic */
-GLOBAL char Files_Open;	  /* is there data in memory */
+GLOBAL char Files_Open;		/* is there data in memory */
 
 GLOBAL struct Ortho_Camera_File_Ref cam_info;
 

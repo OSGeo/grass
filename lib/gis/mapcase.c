@@ -16,16 +16,14 @@
  *  \return char * 
  */
 
-char *
-G_tolcase  (char *string)
-
+char *G_tolcase(char *string)
 {
     char *p;
 
     for (p = string; *p; p++) {
-        /* convert to lower case */
-        if (*p >= 'A' && *p <= 'Z')
-            *p -= 'A' - 'a';
+	/* convert to lower case */
+	if (*p >= 'A' && *p <= 'Z')
+	    *p -= 'A' - 'a';
     }
 
     return (string);
@@ -48,16 +46,14 @@ G_tolcase  (char *string)
  *  \return char * 
  */
 
-char *
-G_toucase  (char *string)
-
+char *G_toucase(char *string)
 {
     char *p;
 
     for (p = string; *p; p++) {
-        /* convert to upper case */
-        if (*p >= 'A' && *p <= 'z')
-            *p += 'A' - 'a';
+	/* convert to upper case */
+	if (*p >= 'A' && *p <= 'z')
+	    *p += 'A' - 'a';
     }
 
     return (string);

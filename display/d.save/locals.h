@@ -1,7 +1,8 @@
 /* main.c */
-struct list_struct {
-	char *string;
-	struct list_struct *ptr;
+struct list_struct
+{
+    char *string;
+    struct list_struct *ptr;
 };
 
 int main(int, char **);
@@ -12,4 +13,4 @@ int set_item(char *, char **);
 int process_list(char *, char **, int);
 int process_items(char **, int);
 int process_pad(char ***, int *);
-int list_alloc(int, struct list_struct*, char *);
+int list_alloc(int, struct list_struct *, char *);

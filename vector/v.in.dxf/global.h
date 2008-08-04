@@ -43,12 +43,13 @@ void set_entity(char *);
 void add_layer_to_list(char *);
 int is_layer_in_list(char *);
 void init_list(void);
-void print_layer(const char*);
+void print_layer(const char *);
 
 /* read_dxf.c */
 struct dxf_file *dxf_open(char *);
 void dxf_close(struct dxf_file *);
 int dxf_find_header(struct dxf_file *);
+
 #define dxf_get_code(a) dxf_read_code(a, dxf_buf, DXF_BUF_SIZE)
 int dxf_read_code(struct dxf_file *, char *, int);
 
@@ -58,18 +59,25 @@ int make_arc_from_polyline(int, double, double);
 
 /* add_point.c */
 int add_point(struct dxf_file *, struct Map_info *);
+
 /* add_line.c */
 int add_line(struct dxf_file *, struct Map_info *);
+
 /* add_lwpolyline.c */
 int add_lwpolyline(struct dxf_file *, struct Map_info *);
+
 /* add_polyline.c */
 int add_polyline(struct dxf_file *, struct Map_info *);
+
 /* add_3dface.c */
 int add_3dface(struct dxf_file *, struct Map_info *);
+
 /* add_arc.c */
 int add_arc(struct dxf_file *, struct Map_info *);
+
 /* add_circle.c */
 int add_circle(struct dxf_file *, struct Map_info *);
+
 /* add_text.c */
 int add_text(struct dxf_file *, struct Map_info *);
 

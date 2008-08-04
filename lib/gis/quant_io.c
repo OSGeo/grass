@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *  int
@@ -67,108 +68,107 @@
 
 /*--------------------------------------------------------------------------*/
 
-static int quant_parse_file (FILE *,struct Quant *);
+static int quant_parse_file(FILE *, struct Quant *);
 
 #if 0
 static int
 /* redundant: integer range doesn't exist now: it is defined by
    the quant rules */
-quant_load_range ( 
-     struct Quant *quant,
-     const char *name,
-     const char *mapset)
-
+quant_load_range(struct Quant *quant, const char *name, const char *mapset)
 {
-  struct FPRange fprange;
-  struct Range range;
-  char buf[300];
-  DCELL dMin, dMax;
-  CELL min, max;
+    struct FPRange fprange;
+    struct Range range;
+    char buf[300];
+    DCELL dMin, dMax;
+    CELL min, max;
 
-  if (G_read_fp_range (name, mapset, &fprange) <= 0) return 0;
-  G_get_fp_range_min_max (&fprange, &dMin, &dMax);
-  if(G_is_d_null_value(&dMin) || G_is_d_null_value(&dMax))
-  {
-     sprintf(buf, _("The floating data range for %s@%s is empty"), name, mapset);
-     G_warning(buf);
-     return -3;
-  }
+    if (G_read_fp_range(name, mapset, &fprange) <= 0)
+	return 0;
+    G_get_fp_range_min_max(&fprange, &dMin, &dMax);
+    if (G_is_d_null_value(&dMin) || G_is_d_null_value(&dMax)) {
+	sprintf(buf, _("The floating data range for %s@%s is empty"), name,
+		mapset);
+	G_warning(buf);
+	return -3;
+    }
 
-  if (G_read_range (name, mapset, &range) < 0) return 0;
-  G_get_range_min_max (&range, &min, &max);
-  if(G_is_c_null_value(&min) && G_is_c_null_value(&max))
-  {
-     sprintf(buf, _("The integer data range for %s@%s is empty"), name, mapset);
-     G_warning(buf);
-     return -3;
-  }
+    if (G_read_range(name, mapset, &range) < 0)
+	return 0;
+    G_get_range_min_max(&range, &min, &max);
+    if (G_is_c_null_value(&min) && G_is_c_null_value(&max)) {
+	sprintf(buf, _("The integer data range for %s@%s is empty"), name,
+		mapset);
+	G_warning(buf);
+	return -3;
+    }
 
-  G_quant_add_rule(quant, dMin, dMax, min, max);
+    G_quant_add_rule(quant, dMin, dMax, min, max);
 
-  return 1;
+    return 1;
 }
 #endif
 
 /*--------------------------------------------------------------------------*/
 
-int
-G__quant_import  (const char *name, const char *mapset, struct Quant *quant)
-
+int G__quant_import(const char *name, const char *mapset, struct Quant *quant)
 {
-  char buf[1024];
-  char *err;
-  char xname[GNAME_MAX], xmapset[GMAPSET_MAX], element[GNAME_MAX+7];
-  int parsStat;
-  FILE *fd;
-  
-  G_quant_free (quant);
+    char buf[1024];
+    char *err;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX], element[GNAME_MAX + 7];
+    int parsStat;
+    FILE *fd;
 
-  if (G_raster_map_type (name, mapset) == CELL_TYPE) {
-    sprintf (buf,
-	     "G__quant_import: attempt to open quantization table for CELL_TYPE file [%s] in mapset {%s]", 
-	     name, mapset);
-    G_warning (buf);
-    return -2;
-  }
-  
-  if (G__name_is_fully_qualified (name, xname, xmapset)) {
-    if (strcmp (xmapset, mapset) != 0) return -1;
-    name = xname;
-  }
-  
-  /* first check if quant2/mapset/name exists in the current mapset */
-  sprintf (element, "quant2/%s", mapset);
-  if ((fd = G_fopen_old (element, name, G_mapset())))
-  {
-    parsStat = quant_parse_file (fd, quant);
-    fclose (fd);
-    if (parsStat) return 1;
-    sprintf(buf,"quantization file in quant2 for [%s] in mapset [%s] is empty",
-	     name, mapset);
-  }
+    G_quant_free(quant);
 
-  /* now try reading regular : cell_misc/name/quant file */
-  if (! (fd = G_fopen_old_misc ("cell_misc", QUANT_FILE_NAME, name, mapset))) {
+    if (G_raster_map_type(name, mapset) == CELL_TYPE) {
+	sprintf(buf,
+		"G__quant_import: attempt to open quantization table for CELL_TYPE file [%s] in mapset {%s]",
+		name, mapset);
+	G_warning(buf);
+	return -2;
+    }
 
-    /* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 3; */
-    err = "missing";
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (strcmp(xmapset, mapset) != 0)
+	    return -1;
+	name = xname;
+    }
 
-  } else {
-    parsStat = quant_parse_file (fd, quant);
-    fclose (fd);
+    /* first check if quant2/mapset/name exists in the current mapset */
+    sprintf(element, "quant2/%s", mapset);
+    if ((fd = G_fopen_old(element, name, G_mapset()))) {
+	parsStat = quant_parse_file(fd, quant);
+	fclose(fd);
+	if (parsStat)
+	    return 1;
+	sprintf(buf,
+		"quantization file in quant2 for [%s] in mapset [%s] is empty",
+		name, mapset);
+    }
 
-    if (parsStat) return 1;
-    /* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 2; */
+    /* now try reading regular : cell_misc/name/quant file */
+    if (!(fd = G_fopen_old_misc("cell_misc", QUANT_FILE_NAME, name, mapset))) {
 
-    err = "empty";
-  }
-  
-  sprintf (buf, 
-      _("quantization file [%s] in mapset [%s] %s"), 
-      name, mapset, err);
-  G_warning (buf);
+	/* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 3; */
+	err = "missing";
 
-  return 0;
+    }
+    else {
+	parsStat = quant_parse_file(fd, quant);
+	fclose(fd);
+
+	if (parsStat)
+	    return 1;
+	/* int range doesn't exist anymore if (quant_load_range (quant, name, mapset)>0) return 2; */
+
+	err = "empty";
+    }
+
+    sprintf(buf,
+	    _("quantization file [%s] in mapset [%s] %s"), name, mapset, err);
+    G_warning(buf);
+
+    return 0;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -188,129 +188,133 @@ G__quant_import  (const char *name, const char *mapset, struct Quant *quant)
 
 /*--------------------------------------------------------------------------*/
 
-static int quant_parse_file (FILE *fd, struct Quant *quant)
+static int quant_parse_file(FILE * fd, struct Quant *quant)
 {
-  CELL cLow, cHigh;
-  DCELL dLow, dHigh;
-  char buf[1024];
-  int foundNegInf = 0, foundPosInf = 0;
-  
-  while (fgets (buf, sizeof (buf), fd)) 
-  {
-    if(strncmp(buf, "truncate", 8) == 0)
-    {
-	quant->truncate_only = 1;
-	return 1;
-    }
-    if(strncmp(buf, "round", 5) == 0)
-    {
-	quant->round_only = 1;
-	return 1;
-    }
-    switch (sscanf (buf, "%lf:%lf:%d:%d", &dLow, &dHigh, &cLow, &cHigh)) {
-      case 3: G_quant_add_rule (quant, dLow, dHigh, cLow, cLow); break;
-      case 4: G_quant_add_rule (quant, dLow, dHigh, cLow, cHigh); break;
-      default:
-	switch (sscanf (buf, "*:%lf:%d", &dLow, &cLow)) {
-	  case 2: 
-	    if (! foundNegInf) {
-	      G_quant_set_neg_infinite_rule (quant, dLow, cLow); 
-	      foundNegInf = 1;
-	    }
+    CELL cLow, cHigh;
+    DCELL dLow, dHigh;
+    char buf[1024];
+    int foundNegInf = 0, foundPosInf = 0;
+
+    while (fgets(buf, sizeof(buf), fd)) {
+	if (strncmp(buf, "truncate", 8) == 0) {
+	    quant->truncate_only = 1;
+	    return 1;
+	}
+	if (strncmp(buf, "round", 5) == 0) {
+	    quant->round_only = 1;
+	    return 1;
+	}
+	switch (sscanf(buf, "%lf:%lf:%d:%d", &dLow, &dHigh, &cLow, &cHigh)) {
+	case 3:
+	    G_quant_add_rule(quant, dLow, dHigh, cLow, cLow);
 	    break;
-	  default:
-	    switch (sscanf (buf, "%lf:*:%d", &dLow, &cLow)) {
-	      case 2: 
-	        if (! foundPosInf) {
-		  G_quant_set_pos_infinite_rule (quant, dLow, cLow); 
-		  foundPosInf = 1;
+	case 4:
+	    G_quant_add_rule(quant, dLow, dHigh, cLow, cHigh);
+	    break;
+	default:
+	    switch (sscanf(buf, "*:%lf:%d", &dLow, &cLow)) {
+	    case 2:
+		if (!foundNegInf) {
+		    G_quant_set_neg_infinite_rule(quant, dLow, cLow);
+		    foundNegInf = 1;
 		}
 		break;
-	      default: continue;	/* other lines are ignored */
+	    default:
+		switch (sscanf(buf, "%lf:*:%d", &dLow, &cLow)) {
+		case 2:
+		    if (!foundPosInf) {
+			G_quant_set_pos_infinite_rule(quant, dLow, cLow);
+			foundPosInf = 1;
+		    }
+		    break;
+		default:
+		    continue;	/* other lines are ignored */
+		}
 	    }
 	}
     }
-  }
-  
-  if (G_quant_nof_rules (quant) > 0) G_quant_reverse_rule_order (quant);
 
-  return ((G_quant_nof_rules (quant) > 0) || 
-	  (G_quant_get_neg_infinite_rule (quant, &dLow, &cLow) > 0) ||
-	  (G_quant_get_pos_infinite_rule (quant, &dLow, &cLow) > 0));
+    if (G_quant_nof_rules(quant) > 0)
+	G_quant_reverse_rule_order(quant);
+
+    return ((G_quant_nof_rules(quant) > 0) ||
+	    (G_quant_get_neg_infinite_rule(quant, &dLow, &cLow) > 0) ||
+	    (G_quant_get_pos_infinite_rule(quant, &dLow, &cLow) > 0));
 }
 
 /*--------------------------------------------------------------------------*/
+
 /*--------------------------------------------------------------------------*/
 
-static void
-quant_write  (FILE *fd, const struct Quant *quant)
-
+static void quant_write(FILE * fd, const struct Quant *quant)
 {
-  DCELL dLow, dHigh;
-  CELL cLow, cHigh;
-  int i;
+    DCELL dLow, dHigh;
+    CELL cLow, cHigh;
+    int i;
 
-  if(quant->truncate_only)
-  {
-    fprintf (fd, "truncate");
-    return;
-  }
-  if(quant->round_only)
-  {
-    fprintf (fd, "round");
-    return;
-  }
-  if (G_quant_get_neg_infinite_rule (quant, &dLow, &cLow) > 0)
-    fprintf (fd, "*:%.20g:%d\n", dLow, cLow);
+    if (quant->truncate_only) {
+	fprintf(fd, "truncate");
+	return;
+    }
+    if (quant->round_only) {
+	fprintf(fd, "round");
+	return;
+    }
+    if (G_quant_get_neg_infinite_rule(quant, &dLow, &cLow) > 0)
+	fprintf(fd, "*:%.20g:%d\n", dLow, cLow);
 
-  if (G_quant_get_pos_infinite_rule (quant, &dLow, &cLow) > 0)
-    fprintf (fd, "%.20g:*:%d\n", dLow, cLow);
+    if (G_quant_get_pos_infinite_rule(quant, &dLow, &cLow) > 0)
+	fprintf(fd, "%.20g:*:%d\n", dLow, cLow);
 
-  for (i = G_quant_nof_rules (quant) - 1; i >= 0; i--) {
-    G_quant_get_ith_rule (quant, i, &dLow, &dHigh, &cLow, &cHigh);
-    fprintf (fd, "%.20g:%.20g:%d", dLow, dHigh, cLow);
-    if (cLow != cHigh) fprintf (fd, ":%d", cHigh);
-    fprintf (fd, "\n");
-  }
+    for (i = G_quant_nof_rules(quant) - 1; i >= 0; i--) {
+	G_quant_get_ith_rule(quant, i, &dLow, &dHigh, &cLow, &cHigh);
+	fprintf(fd, "%.20g:%.20g:%d", dLow, dHigh, cLow);
+	if (cLow != cHigh)
+	    fprintf(fd, ":%d", cHigh);
+	fprintf(fd, "\n");
+    }
 }
 
 /*--------------------------------------------------------------------------*/
 
 int
-G__quant_export  (const char *name, const char *mapset, const struct Quant *quant)
-
+G__quant_export(const char *name, const char *mapset,
+		const struct Quant *quant)
 {
-  char element[GNAME_MAX+7];
-  char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-  FILE *fd;
+    char element[GNAME_MAX + 7];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    FILE *fd;
 
-  if (G__name_is_fully_qualified (name, xname, xmapset)) {
-    if (strcmp (xmapset, mapset) != 0) return -1;
-    name = xname;
-  }
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (strcmp(xmapset, mapset) != 0)
+	    return -1;
+	name = xname;
+    }
 
-  if(strcmp (G_mapset(), mapset) == 0)
-  {
-     G_remove_misc("cell_misc", QUANT_FILE_NAME, name);
-     G__make_mapset_element_misc ("cell_misc", name);
-     if (! (fd = G_fopen_new_misc ("cell_misc", QUANT_FILE_NAME, name))) return -1;
-  }
-  else
-  {
-     sprintf (element, "quant2/%s", mapset);
-     G_remove (element, name);
-     G__make_mapset_element (element);
-     if (! (fd = G_fopen_new (element, name))) return -1;
-  }
+    if (strcmp(G_mapset(), mapset) == 0) {
+	G_remove_misc("cell_misc", QUANT_FILE_NAME, name);
+	G__make_mapset_element_misc("cell_misc", name);
+	if (!(fd = G_fopen_new_misc("cell_misc", QUANT_FILE_NAME, name)))
+	    return -1;
+    }
+    else {
+	sprintf(element, "quant2/%s", mapset);
+	G_remove(element, name);
+	G__make_mapset_element(element);
+	if (!(fd = G_fopen_new(element, name)))
+	    return -1;
+    }
 
 
 
-  quant_write (fd, quant);
-  fclose (fd);
+    quant_write(fd, quant);
+    fclose(fd);
 
-  return 1;
+    return 1;
 }
 
 /*--------------------------------------------------------------------------*/
+
 /*--------------------------------------------------------------------------*/
+
 /*--------------------------------------------------------------------------*/

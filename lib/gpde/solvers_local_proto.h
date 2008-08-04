@@ -20,4 +20,3 @@
 
 double *vectmem(int size);
 int check_symmetry(N_les * les);
-

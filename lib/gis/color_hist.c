@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *  G_make_histogram_eq_colors (colors, statf)
@@ -38,88 +39,85 @@
  *  \return int
  */
 
-int G_make_histogram_eq_colors (
-    struct Colors *colors,
-    struct Cell_stats *statf)
+int G_make_histogram_eq_colors(struct Colors *colors,
+			       struct Cell_stats *statf)
 {
     long count, total;
-    CELL prev=0,cat;
+    CELL prev = 0, cat;
     double span, sum;
     int first;
     int x, grey;
-    int R,G,B;
+    int R, G, B;
 
-    G_init_colors (colors);
+    G_init_colors(colors);
 
     G_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
     G_set_null_value_color(R, G, B, colors);
 
     total = 0;
 
-    G_rewind_cell_stats (statf);
-    while (G_next_cell_stat (&cat, &count, statf))
+    G_rewind_cell_stats(statf);
+    while (G_next_cell_stat(&cat, &count, statf))
 	if (count > 0)
 	    total += count;
     if (total <= 0)
 	return 0;
 
-    span = total/256.0;
+    span = total / 256.0;
     first = 1;
     grey = 0;
     sum = 0.0;
 
-    G_rewind_cell_stats (statf);
-    while (G_next_cell_stat (&cat, &count, statf))
-    {
+    G_rewind_cell_stats(statf);
+    while (G_next_cell_stat(&cat, &count, statf)) {
 	if (count <= 0)
 	    continue;
-	x = (sum + (count/2.0))/span;
-	if (x < 0) x = 0;
-	else if (x > 255) x = 255;
+	x = (sum + (count / 2.0)) / span;
+	if (x < 0)
+	    x = 0;
+	else if (x > 255)
+	    x = 255;
 	sum += count;
-	if (first)
-	{
+	if (first) {
 	    prev = cat;
 	    grey = x;
 	    first = 0;
 	}
-	else if (grey != x)
-	{
-	    G_add_color_rule (prev, grey, grey, grey, cat-1, grey, grey, grey, colors);
+	else if (grey != x) {
+	    G_add_color_rule(prev, grey, grey, grey, cat - 1, grey, grey,
+			     grey, colors);
 	    grey = x;
 	    prev = cat;
 	}
     }
-    if (!first)
-    {
-	G_add_color_rule (prev, grey, grey, grey, cat, grey, grey, grey, colors);
+    if (!first) {
+	G_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
+			 colors);
     }
 
     return 0;
 }
 
 
-int G_make_histogram_log_colors (
-    struct Colors *colors,
-    struct Cell_stats *statf,
-    int min, int max)
+int G_make_histogram_log_colors(struct Colors *colors,
+				struct Cell_stats *statf, int min, int max)
 {
     long count, total;
     double lmin, lmax;
-    CELL prev=0,cat;
+    CELL prev = 0, cat;
     int first;
     int x, grey;
-    int R,G,B;
+    int R, G, B;
 
-    G_init_colors (colors);
+    G_init_colors(colors);
 
     G_str_to_color(DEFAULT_BG_COLOR, &R, &G, &B);
     G_set_null_value_color(R, G, B, colors);
 
     total = 0;
 
-    G_rewind_cell_stats (statf);
-    while (G_next_cell_stat (&cat, &count, statf))
+    G_rewind_cell_stats(statf);
+    while (G_next_cell_stat(&cat, &count, statf))
 	if (count > 0)
 	    total += count;
     if (total <= 0)
@@ -131,35 +129,34 @@ int G_make_histogram_log_colors (
     lmin = log(min);
     lmax = log(max);
 
-    G_rewind_cell_stats (statf);
-    while (G_next_cell_stat (&cat, &count, statf))
-    {
+    G_rewind_cell_stats(statf);
+    while (G_next_cell_stat(&cat, &count, statf)) {
 	if (count <= 0)
 	    continue;
-	    
+
 	/* log transform normalized */
-	x = (int) ( 255 * (log(cat) - lmin) / (lmax - lmin) );
-	
-       	if (x < 0) x = 0;
-	else if (x > 255) x = 255;
-	if (first)
-	{
+	x = (int)(255 * (log(cat) - lmin) / (lmax - lmin));
+
+	if (x < 0)
+	    x = 0;
+	else if (x > 255)
+	    x = 255;
+	if (first) {
 	    prev = cat;
 	    grey = x;
 	    first = 0;
 	}
-	else if (grey != x)
-	{
-	    G_add_color_rule (prev, grey, grey, grey, cat-1, grey, grey, grey, colors);
+	else if (grey != x) {
+	    G_add_color_rule(prev, grey, grey, grey, cat - 1, grey, grey,
+			     grey, colors);
 	    grey = x;
 	    prev = cat;
 	}
     }
-    if (!first)
-    {
-	G_add_color_rule (prev, grey, grey, grey, cat, grey, grey, grey, colors);
+    if (!first) {
+	G_add_color_rule(prev, grey, grey, grey, cat, grey, grey, grey,
+			 colors);
     }
 
     return 0;
 }
-

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r3.timestamp
@@ -15,7 +16,7 @@
 
 /* based on r.timestamp by Michael Shapiro and v.timestamp by Markus Neteler:
  * 
-  * Stamps grid3 files with date and time.  This main.c is linked to functions 
+ * Stamps grid3 files with date and time.  This main.c is linked to functions 
  * currently residing in lib/gis/timestamp.c
  *
  */
@@ -40,7 +41,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
-    module->description = _("Print/add/remove a timestamp for a 3D raster map");
+    module->description =
+	_("Print/add/remove a timestamp for a 3D raster map");
 
     map = G_define_option();
     map->key = "map";
@@ -91,6 +93,3 @@ int main(int argc, char *argv[])
     G_write_grid3_timestamp(name, &ts);
     exit(EXIT_SUCCESS);
 }
-
-
-

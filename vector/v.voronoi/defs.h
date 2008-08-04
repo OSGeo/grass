@@ -11,4 +11,3 @@ extern struct Map_info In, Out;
 extern int Type;
 extern int All;
 #endif
-

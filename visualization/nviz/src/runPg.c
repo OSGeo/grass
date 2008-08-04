@@ -112,8 +112,8 @@ char *do_query(char *SQL_stmt, struct Sql *pts)
 
 
     sprintf(sqlcmd,
-	     "%s @ '(%f,%f,%f,%f)'::box", SQL_stmt,
-	     pts->minX, pts->minY, pts->maxX, pts->maxY);
+	    "%s @ '(%f,%f,%f,%f)'::box", SQL_stmt,
+	    pts->minX, pts->minY, pts->maxX, pts->maxY);
 
     fprintf(stderr,
 	    "\n\nExecuting\n%s;\n clause  @ '( )'::box addded autonmatically.\n\n",

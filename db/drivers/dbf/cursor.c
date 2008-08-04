@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -19,9 +20,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_close_cursor (dbCursor *dbc)
-
+int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
 
@@ -37,35 +36,31 @@ db__driver_close_cursor (dbCursor *dbc)
 }
 
 
-cursor * alloc_cursor()
+cursor *alloc_cursor()
 {
-    cursor     *c;
+    cursor *c;
 
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
-    if (c == NULL)
-    {
-        append_error ("cannot alloc new cursor");
-        return c; 
-    } 
-    
+    if (c == NULL) {
+	append_error("cannot alloc new cursor");
+	return c;
+    }
+
     /* tokenize it */
     c->token = db_new_token(c);
-    if (c->token < 0)       
-    {
-	free_cursor (c);
+    if (c->token < 0) {
+	free_cursor(c);
 	c = NULL;
-	append_error ("cannot tokenize new cursor\n");
+	append_error("cannot tokenize new cursor\n");
     }
 
     return c;
 }
 
-void free_cursor( cursor *c)
+void free_cursor(cursor * c)
 {
     db_drop_token(c->token);
-    sqpFreeStmt( c->st );  
-    G_free (c);  
+    sqpFreeStmt(c->st);
+    G_free(c);
 }
-
-

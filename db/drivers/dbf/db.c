@@ -93,7 +93,8 @@ int db__driver_open_database(dbHandle * handle)
 		report_error();
 		return DB_FAILED;
 	    }
-	} else { /* some other problem */
+	}
+	else {			/* some other problem */
 	    append_error("Cannot open dbf database: %s\n", name);
 	    report_error();
 	    return DB_FAILED;

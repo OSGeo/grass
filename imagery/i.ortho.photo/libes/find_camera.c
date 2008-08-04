@@ -1,3 +1,4 @@
+
 /**************************************************************
 * I_find_camera (camera)
 *
@@ -5,17 +6,15 @@
 **************************************************************/
 #include <grass/gis.h>
 
-int 
-I_find_camera (char *camera)
+int I_find_camera(char *camera)
 {
     if (camera == NULL || *camera == 0)
 	return 0;
 
-    return G_find_file ("camera", camera , G_mapset()) != NULL ;
+    return G_find_file("camera", camera, G_mapset()) != NULL;
 }
 
-int 
-I_find_camera_file (char *camera, char *file)
+int I_find_camera_file(char *camera, char *file)
 {
     char element[100];
 
@@ -24,10 +23,7 @@ I_find_camera_file (char *camera, char *file)
     if (file == NULL || *file == 0)
 	return 0;
 
-    sprintf (element, "camera");
+    sprintf(element, "camera");
 
-    return G_find_file (element, camera, G_mapset()) != NULL ;
+    return G_find_file(element, camera, G_mapset()) != NULL;
 }
-
-
-

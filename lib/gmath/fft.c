@@ -1,3 +1,4 @@
+
 /**
  * \file fft.c
  *
@@ -69,42 +70,39 @@
 int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 {
 #ifdef HAVE_FFTW3_H
-	fftw_plan plan;
+    fftw_plan plan;
 #else
-	fftwnd_plan plan;
+    fftwnd_plan plan;
 #endif
-	double norm;
-	int i;
+    double norm;
+    int i;
 
-	norm = 1.0 / sqrt(NN);
+    norm = 1.0 / sqrt(NN);
 
 #ifdef HAVE_FFTW3_H
-	plan = fftw_plan_dft_2d(
-		dimc, dimr, data, data,
-		(i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
-		FFTW_ESTIMATE);
+    plan = fftw_plan_dft_2d(dimc, dimr, data, data,
+			    (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
+			    FFTW_ESTIMATE);
 
-	fftw_execute(plan);
+    fftw_execute(plan);
 
-	fftw_destroy_plan(plan);
+    fftw_destroy_plan(plan);
 #else
-	plan = fftw2d_create_plan(
-		dimc, dimr,
-		(i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
-		FFTW_ESTIMATE | FFTW_IN_PLACE);
+    plan = fftw2d_create_plan(dimc, dimr,
+			      (i_sign < 0) ? FFTW_FORWARD : FFTW_BACKWARD,
+			      FFTW_ESTIMATE | FFTW_IN_PLACE);
 
-	fftwnd_one(plan, data, data);
+    fftwnd_one(plan, data, data);
 
-	fftwnd_destroy_plan(plan);
+    fftwnd_destroy_plan(plan);
 #endif
 
-	for (i = 0; i < NN; i++)
-	{
-		data[i][0] *= norm;
-		data[i][1] *= norm;
-	}
+    for (i = 0; i < NN; i++) {
+	data[i][0] *= norm;
+	data[i][1] *= norm;
+    }
 
-	return 0;
+    return 0;
 }
 
 /**
@@ -128,28 +126,26 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 
 int fft(int i_sign, double *DATA[2], int NN, int dimc, int dimr)
 {
-	fftw_complex *data;
-	int i;
+    fftw_complex *data;
+    int i;
 
-	data = (fftw_complex *) G_malloc(NN * sizeof(fftw_complex));
+    data = (fftw_complex *) G_malloc(NN * sizeof(fftw_complex));
 
-	for (i = 0; i < NN; i++)
-	{
-		c_re(data[i]) = DATA[0][i];
-		c_im(data[i]) = DATA[1][i];
-	}
+    for (i = 0; i < NN; i++) {
+	c_re(data[i]) = DATA[0][i];
+	c_im(data[i]) = DATA[1][i];
+    }
 
-	fft2(i_sign, data, NN, dimc, dimr);
+    fft2(i_sign, data, NN, dimc, dimr);
 
-	for (i = 0; i < NN; i++)
-	{
-		DATA[0][i] = c_re(data[i]);
-		DATA[1][i] = c_im(data[i]);
-	}
+    for (i = 0; i < NN; i++) {
+	DATA[0][i] = c_re(data[i]);
+	DATA[1][i] = c_im(data[i]);
+    }
 
-	G_free(data);
+    G_free(data);
 
-	return 0;
+    return 0;
 }
 
 #endif /* HAVE_FFT */

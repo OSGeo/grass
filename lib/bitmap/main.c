@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       bitmap
@@ -20,11 +21,10 @@
 #include <grass/bitmap.h>
 
 
-static int dump_map (struct BM *map);
+static int dump_map(struct BM *map);
 
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int SIZE;
     struct BM *map, *map2;
@@ -35,72 +35,65 @@ main (int argc, char *argv[])
     if (argc < 2)
 	SIZE = 11;
     else
-	SIZE = atoi (argv[1]);
+	SIZE = atoi(argv[1]);
 
-    if(NULL != getenv ("NODUMP"))
+    if (NULL != getenv("NODUMP"))
 	dump = 0;
     else
 	dump = 1;
 
-    map = BM_create (SIZE, SIZE);
+    map = BM_create(SIZE, SIZE);
 
     /* turn on bits in X pattern */
-    for (i = 0 ; i < SIZE ; i++)
-    {
-	BM_set (map, i, i, 1);
-	BM_set (map, (SIZE-1)-i, i, 1);
+    for (i = 0; i < SIZE; i++) {
+	BM_set(map, i, i, 1);
+	BM_set(map, (SIZE - 1) - i, i, 1);
     }
 
 
     if (dump)
-	dump_map (map);
-    fprintf (stdout, "Size = %d\n", BM_get_map_size (map));
+	dump_map(map);
+    fprintf(stdout, "Size = %d\n", BM_get_map_size(map));
 
-    fprintf (stdout, "\n\n");
+    fprintf(stdout, "\n\n");
 
     /* now invert it */
-    for (y = 0 ; y < SIZE ; y++)
-	for (x = 0 ; x < SIZE ; x++)
-	    BM_set(map, x, y, !BM_get (map, x, y));
+    for (y = 0; y < SIZE; y++)
+	for (x = 0; x < SIZE; x++)
+	    BM_set(map, x, y, !BM_get(map, x, y));
 
     if (dump)
-	dump_map (map);
+	dump_map(map);
 
-    fprintf (stdout, "Size = %d\n", BM_get_map_size (map));
+    fprintf(stdout, "Size = %d\n", BM_get_map_size(map));
 
     {
-	fp = fopen ("dumpfile", "w");
-	BM_file_write (fp, map);
-	fclose (fp);
+	fp = fopen("dumpfile", "w");
+	BM_file_write(fp, map);
+	fclose(fp);
 
-	fp = fopen ("dumpfile", "r");
-	map2 = BM_file_read (fp);
-	fclose (fp);
-	dump_map (map2);
+	fp = fopen("dumpfile", "r");
+	map2 = BM_file_read(fp);
+	fclose(fp);
+	dump_map(map2);
     }
 
-    BM_destroy (map);
-    BM_destroy (map2);
+    BM_destroy(map);
+    BM_destroy(map2);
 
     return 0;
 }
 
 
-static int 
-dump_map (struct BM *map)
+static int dump_map(struct BM *map)
 {
     int x, y;
 
-    for (y = 0 ; y < map->rows ; y++)
-    {
-	for (x = 0 ; x < map->cols ; x++)
-	{
-	    fprintf (stdout, "%c", BM_get(map, x, y) ? '#' : '.');
+    for (y = 0; y < map->rows; y++) {
+	for (x = 0; x < map->cols; x++) {
+	    fprintf(stdout, "%c", BM_get(map, x, y) ? '#' : '.');
 
 	}
-	fprintf (stdout, "\n");
+	fprintf(stdout, "\n");
     }
 }
-
-
-

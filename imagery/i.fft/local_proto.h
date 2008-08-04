@@ -5,8 +5,10 @@
 
 /* fft_colors.c */
 int fft_colors(void);
+
 /* orig_wind.c */
-int put_orig_window (struct Cell_head *);
+int put_orig_window(struct Cell_head *);
+
 /* save_fft.c */
 int save_fft(int, double *[2], double *, double *);
 

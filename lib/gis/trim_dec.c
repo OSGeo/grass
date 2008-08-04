@@ -1,3 +1,4 @@
+
 /**
  * \file trim_dec.c
  *
@@ -25,7 +26,7 @@
  * \return always returns 0
  */
 
-int G_trim_decimal (char *buf)
+int G_trim_decimal(char *buf)
 {
     char *mark;
 
@@ -37,7 +38,7 @@ int G_trim_decimal (char *buf)
     mark = buf;
     while (*++buf)
 	if (*buf != '0')
-	    mark = buf+1;
+	    mark = buf + 1;
     *mark = 0;
 
     return 0;

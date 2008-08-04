@@ -11,16 +11,16 @@ typedef struct
 /* this is a graphics structure */
 typedef struct
 {
-    int top, bottom ,left, right;
+    int top, bottom, left, right;
     int nrows, ncols;
     struct
     {
 	int configured;
 	struct Cell_head head;
-	struct Colors    colors;
+	struct Colors colors;
 	char name[30];
 	char mapset[30];
-	int top, bottom ,left, right;
+	int top, bottom, left, right;
 	double ew_res, ns_res;	/* original map resolution */
     } cell;
 } View;
@@ -28,12 +28,12 @@ typedef struct
 
 typedef struct
 {
-    int   type;         /* object type */
-    int (*handler)();	/* routine to handle the event */
-    char *label;	/* label to display if MENU or OPTION */
-    int   binding;      /* OPTION bindings */
-    int  *status;	/* MENU,OPTION status */
-    int top,bottom,left,right;
+    int type;			/* object type */
+    int (*handler) ();		/* routine to handle the event */
+    char *label;		/* label to display if MENU or OPTION */
+    int binding;		/* OPTION bindings */
+    int *status;		/* MENU,OPTION status */
+    int top, bottom, left, right;
 } Objects;
 
 #define MENU_OBJECT 1
@@ -50,6 +50,3 @@ typedef struct
 	{INFO_OBJECT,NULL,label,0,status,0,0,0,0}
 #define OTHER(handler,status) \
 	{OTHER_OBJECT,handler,NULL,0,status,0,0,0,0}
-
-
-

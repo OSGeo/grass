@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -23,31 +24,28 @@
 #include <grass/glocale.h>
 
 
-int execute_distance (void)
+int execute_distance(void)
 {
     int row, col, nrows;
     MAPTYPE *ptr;
 
-	/* find the first 1 in each row, and process that row */
+    /* find the first 1 in each row, and process that row */
 
-    G_message (_("Finding buffer zones..."));
+    G_message(_("Finding buffer zones..."));
 
     nrows = 0;
-    for (row = minrow; row <= maxrow; row++)
-    {
-	ptr = map + MAPINDEX(row,mincol);
-	for (col = mincol; col <= maxcol; col++)
-	{
-	    if (*ptr++ == 1)
-	    {
-                G_percent (nrows++, count_rows_with_data, 2);
-		process_row (row, col);
+    for (row = minrow; row <= maxrow; row++) {
+	ptr = map + MAPINDEX(row, mincol);
+	for (col = mincol; col <= maxcol; col++) {
+	    if (*ptr++ == 1) {
+		G_percent(nrows++, count_rows_with_data, 2);
+		process_row(row, col);
 		break;
 	    }
 	}
     }
 
-    G_percent (nrows, count_rows_with_data, 2);
+    G_percent(nrows, count_rows_with_data, 2);
 
     return 0;
 }

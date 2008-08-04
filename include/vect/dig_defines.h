@@ -5,15 +5,15 @@
 #define GV_FATAL_PRINT   1
 #define GV_FATAL_RETURN  2
 
-#define GRASS_VECT_DIRECTORY    "vector" /* name of vector directory */
-#define GRASS_VECT_FRMT_ELEMENT "frmt" /* format description, data location */ 
-#define GRASS_VECT_COOR_ELEMENT "coor" /* coordinates */
-#define GRASS_VECT_HEAD_ELEMENT "head" /* header information */
-#define GRASS_VECT_DBLN_ELEMENT "dbln" /* link to database */
-#define GRASS_VECT_HIST_ELEMENT "hist" /* history file */
-#define GV_TOPO_ELEMENT "topo"   /* topology */
-#define GV_SIDX_ELEMENT "sidx"   /* spatial index */
-#define GV_CIDX_ELEMENT "cidx"   /* category index */
+#define GRASS_VECT_DIRECTORY    "vector"	/* name of vector directory */
+#define GRASS_VECT_FRMT_ELEMENT "frmt"	/* format description, data location */
+#define GRASS_VECT_COOR_ELEMENT "coor"	/* coordinates */
+#define GRASS_VECT_HEAD_ELEMENT "head"	/* header information */
+#define GRASS_VECT_DBLN_ELEMENT "dbln"	/* link to database */
+#define GRASS_VECT_HIST_ELEMENT "hist"	/* history file */
+#define GV_TOPO_ELEMENT "topo"	/* topology */
+#define GV_SIDX_ELEMENT "sidx"	/* spatial index */
+#define GV_CIDX_ELEMENT "cidx"	/* category index */
 
 #define ENDIAN_LITTLE 0
 #define ENDIAN_BIG    1
@@ -35,13 +35,13 @@
 #define SHRT_SIZ 2
 
 /*
-** assumptions:
-**    double =    8 byte IEEE
-**    float  =    4 byte IEEE
-**    long   =    4 byte int
-**    short  =    2 byte int
-**
-*/
+ ** assumptions:
+ **    double =    8 byte IEEE
+ **    float  =    4 byte IEEE
+ **    long   =    4 byte int
+ **    short  =    2 byte int
+ **
+ */
 
 /* Limits for portable types - I am not sure if OK */
 #define PORT_DOUBLE_MAX 1.7976931348623157e+308
@@ -59,12 +59,12 @@
 
 /* Geometry data formats supported by lib */
 /* Don't change GV_FORMAT_* values, this order is hardcoded in lib */
-#define GV_FORMAT_NATIVE   0 /* grass native format */
-#define GV_FORMAT_OGR      1 /* OGR format */
+#define GV_FORMAT_NATIVE   0	/* grass native format */
+#define GV_FORMAT_OGR      1	/* OGR format */
 
 /* How may tables linked to map */
-#define GV_1TABLE  0   /* One table */
-#define GV_MTABLE  1   /* More, many, multi */
+#define GV_1TABLE  0		/* One table */
+#define GV_MTABLE  1		/* More, many, multi */
 
 #define GV_MODE_READ  0
 #define GV_MODE_WRITE 1
@@ -80,9 +80,9 @@
 /* Topology level details */
 #define GV_BUILD_NONE  0
 #define GV_BUILD_BASE  1
-#define GV_BUILD_AREAS  2  
-#define GV_BUILD_ATTACH_ISLES 3  /* Attach islands to areas */
-#define GV_BUILD_CENTROIDS 4 /* Assign centroids to areas */
+#define GV_BUILD_AREAS  2
+#define GV_BUILD_ATTACH_ISLES 3	/* Attach islands to areas */
+#define GV_BUILD_CENTROIDS 4	/* Assign centroids to areas */
 #define GV_BUILD_ALL GV_BUILD_CENTROIDS
 
 #define VECT_OPEN(Map)   (Map->open == VECT_OPEN_CODE)
@@ -96,7 +96,7 @@
 
 #define GRASS_V_VERSION       "5.0"
 /* The latest versions of files known by current version of the library. Used for new files */
-#define GV_COOR_VER_MAJOR  5 
+#define GV_COOR_VER_MAJOR  5
 #define GV_COOR_VER_MINOR  1
 
 #define GV_TOPO_VER_MAJOR  5
@@ -155,14 +155,15 @@
 #define GV_STORE_CENTROID 4
 #define GV_STORE_FACE     5
 #define GV_STORE_KERNEL   6
-#define GV_STORE_AREA     7   /* used in category index file */
-#define GV_STORE_VOLUME   8   /* used in category index file */
+#define GV_STORE_AREA     7	/* used in category index file */
+#define GV_STORE_VOLUME   8	/* used in category index file */
 
 /* Overlay operators */
-#define GV_ON_AND     "AND"     /* intersect */
+#define GV_ON_AND     "AND"	/* intersect */
 #define GV_ON_OVERLAP "OVERLAP"
 
-typedef enum { 
+typedef enum
+{
     GV_O_AND,
     GV_O_OVERLAP
 } OVERLAY_OPERATOR;
@@ -196,9 +197,8 @@ typedef enum {
 #define CLR_2_NODE	RED
 #endif
 
-#define GV_NCATS_MAX PORT_INT_MAX  /* maximum number of categories for one element */
-#define GV_FIELD_MAX PORT_INT_MAX /* maximum field */
-#define GV_CAT_MAX   PORT_INT_MAX   /* maximum category value */
+#define GV_NCATS_MAX PORT_INT_MAX	/* maximum number of categories for one element */
+#define GV_FIELD_MAX PORT_INT_MAX	/* maximum field */
+#define GV_CAT_MAX   PORT_INT_MAX	/* maximum category value */
 
 #define BUILD_PROG "v.build"
-

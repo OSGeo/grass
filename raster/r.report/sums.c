@@ -1,28 +1,25 @@
 #include "global.h"
 
 /* within group totals:
-    *ns is the first stat
-	(updated upon return to point to next stat)
-     nl is the layer number (or level)
-*/
+ *ns is the first stat
+ (updated upon return to point to next stat)
+ nl is the layer number (or level)
+ */
 
-double 
-area_sum (int *ns, int nl)
+double area_sum(int *ns, int nl)
 {
     double area;
-    int k,n;
+    int k, n;
 
     k = n = *ns;
     area = 0.0;
 
-    if(nl >= 0)
-    {
-	while(n < nstats && same_cats(k,n,nl))
+    if (nl >= 0) {
+	while (n < nstats && same_cats(k, n, nl))
 	    area += Gstats[n++].area;
     }
-    else
-    {
-	while(n < nstats)
+    else {
+	while (n < nstats)
 	    area += Gstats[n++].area;
     }
 
@@ -30,23 +27,20 @@ area_sum (int *ns, int nl)
     return area;
 }
 
-long 
-count_sum (int *ns, int nl)
+long count_sum(int *ns, int nl)
 {
     long count;
-    int k,n;
+    int k, n;
 
     k = n = *ns;
     count = 0;
 
-    if (nl >= 0)
-    {
-	while(n < nstats && same_cats(k,n,nl))
+    if (nl >= 0) {
+	while (n < nstats && same_cats(k, n, nl))
 	    count += Gstats[n++].count;
     }
-    else
-    {
-	while(n < nstats)
+    else {
+	while (n < nstats)
 	    count += Gstats[n++].count;
     }
 
@@ -54,9 +48,9 @@ count_sum (int *ns, int nl)
     return count;
 }
 
-int same_cats (int a,int b,int nl)
+int same_cats(int a, int b, int nl)
 {
-    CELL *cat_a,*cat_b;
+    CELL *cat_a, *cat_b;
 
     cat_a = Gstats[a].cats;
     cat_b = Gstats[b].cats;

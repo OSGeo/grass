@@ -172,7 +172,8 @@ int dxf_text(char *layer, double x, double y, double z, double size, int just,
     fprintf(dxf_fp, "  0\nTEXT\n  8\n%s\n 10\n%f\n 20\n", layer, x);
     fprintf(dxf_fp, "%f\n 30\n%f\n 40\n%f\n  1\n%s\n", y, z, size, text);
     if (just)
-	fprintf(dxf_fp, " 72\n%6d\n 11\n%f\n 21\n%f\n 31\n%f\n", just, x, y, z);
+	fprintf(dxf_fp, " 72\n%6d\n 11\n%f\n 21\n%f\n 31\n%f\n", just, x, y,
+		z);
 
     return 0;
 }

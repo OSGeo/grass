@@ -332,10 +332,12 @@ int test_array_2d(void)
     data11 = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, CELL_TYPE);
     data2 = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, FCELL_TYPE);
     N_print_array_2d_info(data2);
-    data22 = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, FCELL_TYPE);
+    data22 =
+	N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, FCELL_TYPE);
     data3 = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, DCELL_TYPE);
     N_print_array_2d_info(data3);
-    data33 = N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, DCELL_TYPE);
+    data33 =
+	N_alloc_array_2d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, 1, DCELL_TYPE);
 
     /*Fill the first arrays with data */
 
@@ -527,7 +529,8 @@ int test_array_2d(void)
     N_math_array_2d(data2, data22, tmp, N_ARRAY_SUM);
     res = N_convert_array_2d_null_to_zero(tmp);
     if (res == 0) {
-	G_warning("test_array_2d: error in  N_convert_array_2d_null_to_zero ");
+	G_warning
+	    ("test_array_2d: error in  N_convert_array_2d_null_to_zero ");
 	sum++;
     }
     N_free_array_2d(tmp);
@@ -624,19 +627,19 @@ int test_array_3d(void)
 
     /*Alloacte memory for all arrays */
     data1 =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 2,
-			 FCELL_TYPE);
+	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+			 2, FCELL_TYPE);
     N_print_array_3d_info(data1);
     data11 =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 2,
-			 FCELL_TYPE);
+	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+			 2, FCELL_TYPE);
     data2 =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 2,
-			 DCELL_TYPE);
+	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+			 2, DCELL_TYPE);
     N_print_array_3d_info(data2);
     data22 =
-	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS, 2,
-			 DCELL_TYPE);
+	N_alloc_array_3d(TEST_N_NUM_COLS, TEST_N_NUM_ROWS, TEST_N_NUM_DEPTHS,
+			 2, DCELL_TYPE);
 
 
     /*Fill the first arrays with data */

@@ -1,3 +1,4 @@
+
 /**
  * \file rhumbline.c
  *
@@ -32,6 +33,7 @@
 
 
 static int adjust_lat(double *);
+
 #if 0
 static int adjust_lon(double *);
 #endif /* unused */
@@ -52,20 +54,18 @@ static int parallel;
  * \return 0 on error
  */
 
-int G_begin_rhumbline_equation (
-    double lon1,double lat1,double lon2,double lat2)
+int G_begin_rhumbline_equation(double lon1, double lat1, double lon2,
+			       double lat2)
 {
-    adjust_lat (&lat1);
-    adjust_lat (&lat2);
+    adjust_lat(&lat1);
+    adjust_lat(&lat2);
 
-    if (lon1 == lon2)
-    {
-	parallel = 1;	/* a lie */
+    if (lon1 == lon2) {
+	parallel = 1;		/* a lie */
 	L = lat1;
 	return 0;
     }
-    if (lat1 == lat2)
-    {
+    if (lat1 == lat2) {
 	parallel = 1;
 	L = lat1;
 	return 1;
@@ -76,10 +76,10 @@ int G_begin_rhumbline_equation (
     lat1 = Radians(lat1);
     lat2 = Radians(lat2);
 
-    TAN1 = tan (M_PI_4 + lat1/2.0);
-    TAN2 = tan (M_PI_4 + lat2/2.0);
+    TAN1 = tan(M_PI_4 + lat1 / 2.0);
+    TAN2 = tan(M_PI_4 + lat2 / 2.0);
     TAN_A = (lon2 - lon1) / (log(TAN2) - log(TAN1));
-    L    = lon1;
+    L = lon1;
 
     return 1;
 }
@@ -94,13 +94,14 @@ int G_begin_rhumbline_equation (
  * \return double latitude in degrees
  */
 
-double G_rhumbline_lat_from_lon (double lon)
+double G_rhumbline_lat_from_lon(double lon)
 {
-    if (parallel) return L;
+    if (parallel)
+	return L;
 
     lon = Radians(lon);
 
-    return Degrees (2 * atan(exp((lon-L)/TAN_A) * TAN1) - M_PI_2) ;
+    return Degrees(2 * atan(exp((lon - L) / TAN_A) * TAN1) - M_PI_2);
 }
 
 
@@ -119,8 +120,10 @@ static int adjust_lon(double *lon)
 
 static int adjust_lat(double *lat)
 {
-    if (*lat >  90.0) *lat =  90.0;
-    if (*lat < -90.0) *lat = -90.0;
+    if (*lat > 90.0)
+	*lat = 90.0;
+    if (*lat < -90.0)
+	*lat = -90.0;
 
     return 0;
 }

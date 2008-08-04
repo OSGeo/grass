@@ -1,3 +1,4 @@
+
 /*****************************************************************
  *
  * MODULE:       v.convert
@@ -24,12 +25,11 @@
 #include "conv.h"
 #include "local_proto.h"
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Option *opt_in, *opt_out, *opt_end;
-    int    endian;
-    char*  output;
+    int endian;
+    char *output;
     struct GModule *module;
 
     module = G_define_module();
@@ -38,39 +38,39 @@ main (int argc, char *argv[])
 
     /* input vector map */
     opt_in = G_define_standard_option(G_OPT_V_INPUT);
-    opt_in->gisprompt   = "old,dig,vector" ;
+    opt_in->gisprompt = "old,dig,vector";
 
     /* output vector map */
     opt_out = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt_out -> required = NO;
+    opt_out->required = NO;
 
     /* endian of input vector map */
     opt_end = G_define_option();
-    opt_end->key         = "endian";
-    opt_end->type        = TYPE_STRING ;
-    opt_end->required    = NO;
-    opt_end->multiple    = NO;
-    opt_end->options     = "big,little";
+    opt_end->key = "endian";
+    opt_end->type = TYPE_STRING;
+    opt_end->required = NO;
+    opt_end->multiple = NO;
+    opt_end->options = "big,little";
     opt_end->description = _("Endian of input vector map");
-    opt_end->answer      = "big";
+    opt_end->answer = "big";
 
     G_gisinit(argv[0]);
 
-    if (G_parser(argc,argv))
-        exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     /* Numbers in portable format files are saved as big endians */
-    if ( opt_end->answer[0] == 'l' )
+    if (opt_end->answer[0] == 'l')
 	endian = ENDIAN_LITTLE;
     else
 	endian = ENDIAN_BIG;
 
-    if (opt_out -> answer)
-	output = G_store (opt_out -> answer);
+    if (opt_out->answer)
+	output = G_store(opt_out->answer);
     else
-	output = G_store (opt_in -> answer);
+	output = G_store(opt_in->answer);
 
-    old2new (opt_in->answer, output, endian);
+    old2new(opt_in->answer, output, endian);
 
     exit(EXIT_SUCCESS);
 }

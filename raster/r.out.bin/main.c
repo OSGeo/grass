@@ -104,17 +104,17 @@ int main(int argc, char *argv[])
     flag.swap->description = _("Byte swap output");
 
     if (G_parser(argc, argv))
-	exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
-    if( sscanf(parm.null->answer, "%d", &null_str) != 1 )
+    if (sscanf(parm.null->answer, "%d", &null_str) != 1)
 	G_fatal_error(_("Invalid value for null (integers only)"));
 
     name = parm.input->answer;
 
-    if(parm.output->answer)
-	G_strncpy(outfile, parm.output->answer, sizeof(outfile)-1);
+    if (parm.output->answer)
+	G_strncpy(outfile, parm.output->answer, sizeof(outfile) - 1);
     else {
-	G_strncpy(outfile, name, sizeof(outfile)-1-4);
+	G_strncpy(outfile, name, sizeof(outfile) - 1 - 4);
 	strcat(outfile, ".bin");
     }
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create file <%s>"), outfile);
 
     /* Check Endian State of Host Computer */
-    if(G_is_little_endian()) {
+    if (G_is_little_endian()) {
 	swapFlag = 1;		/*true: little endian */
 	if (flag.swap->answer)
 	    swapFlag = 0;	/* Swapping enabled */
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 
 	/* Swap Header if Required */
 	if (flag.swap->answer) {
-            G_message(_("Swapping header data"));
+	    G_message(_("Swapping header data"));
 	    TIFFSwabLong((uint32 *) & header.nx);
 	    TIFFSwabLong((uint32 *) & header.ny);
 	    TIFFSwabLong((uint32 *) & header.node_offset);
@@ -314,19 +314,19 @@ int main(int argc, char *argv[])
 
     if (out_type == CELL_TYPE) {
 	G_message(_("Exporting raster as integer values (bytes=%d)"),
-		sizeof(short));
+		  sizeof(short));
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT integer format ID=2"));
     }
     if (out_type == FCELL_TYPE) {
 	G_message(_("Exporting raster as floating values (bytes=%d)"),
-		sizeof(float));
+		  sizeof(float));
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT float format ID=1"));
     }
     if (out_type == DCELL_TYPE)
 	G_message(_("Exporting raster as double values (bytes=%d)"),
-		sizeof(double));
+		  sizeof(double));
 
     G_message(_("Using the current region settings..."));
     G_message(_("north=%f"), region.north);
@@ -386,12 +386,12 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    G_percent(row, nrows, 2); /* finish it off */
+    G_percent(row, nrows, 2);	/* finish it off */
 
     G_close_cell(fd);
     fclose(fp);
 
-    exit (EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 
 #ifdef UNUSED
@@ -408,9 +408,10 @@ int set_type(char *str, RASTER_MAP_TYPE * out_type)
     if (*ch == 'd' || *ch == 'i' || *ch == 'o' || *ch == 'u' || *ch == 'x' ||
 	*ch == 'X')
 	*out_type = CELL_TYPE;
-    else if (*ch == 'f' || *ch == 'e' || *ch == 'E' || *ch == 'g' || *ch == 'G')
+    else if (*ch == 'f' || *ch == 'e' || *ch == 'E' || *ch == 'g' ||
+	     *ch == 'G')
 	*out_type = DCELL_TYPE;
-/*	*out_type = FCELL_TYPE; */
+    /*      *out_type = FCELL_TYPE; */
 
     return 0;
 }

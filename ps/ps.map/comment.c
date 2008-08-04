@@ -1,9 +1,9 @@
 /* Functions: commentfile, do_comments
-**
-** Function commentfile is an extended version of the p.map function.
-**
-** Author: Paul W. Carlson	April 	1992
-*/
+ **
+ ** Function commentfile is an extended version of the p.map function.
+ **
+ ** Author: Paul W. Carlson     April   1992
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -12,22 +12,20 @@
 #include "local_proto.h"
 
 #define KEY(x) (strcmp(key,x)==0)
-  
-static char *help1[] =
-{
+
+static char *help1[] = {
     "where      x y",
     "font       fontname",
     "fontsize   fontsize",
     "color      color",
     ""
 };
-static char *help2[] =
-{
+static char *help2[] = {
     "enter comments, line by line",
     ""
 };
 
-int read_comment (char *name)
+int read_comment(char *name)
 {
     char buf[1024];
     char *key, *data;
@@ -40,40 +38,36 @@ int read_comment (char *name)
     color = BLACK;
     x = y = 0.0;
 
-    while (input(2, buf, help1))
-    {
-	if (!key_data(buf, &key, &data)) continue;
+    while (input(2, buf, help1)) {
+	if (!key_data(buf, &key, &data))
+	    continue;
 
-        if (KEY("where"))
- 	{
-	    if (sscanf(data, "%lf %lf", &x, &y) != 2)
-	    {
+	if (KEY("where")) {
+	    if (sscanf(data, "%lf %lf", &x, &y) != 2) {
 		x = y = 0.0;
 		error(key, data, "illegal where request");
 	    }
-	    else continue;
+	    else
+		continue;
 	}
 
-	if (KEY("fontsize"))
-	{
+	if (KEY("fontsize")) {
 	    fontsize = atoi(data);
-	    if (fontsize < 4 || fontsize > 50) fontsize = 0;
+	    if (fontsize < 4 || fontsize > 50)
+		fontsize = 0;
 	    continue;
 	}
 
-	if (KEY("color"))
-	{
+	if (KEY("color")) {
 	    color = get_color_number(data);
-	    if (color < 0)
-	    {
+	    if (color < 0) {
 		color = BLACK;
 		error(key, data, "illegal color request");
 	    }
 	    continue;
 	}
 
-	if (KEY("font"))
-	{
+	if (KEY("font")) {
 	    get_font(data);
 	    cmt.font = G_store(data);
 	    continue;
@@ -83,55 +77,52 @@ int read_comment (char *name)
     cmt.x = x;
     cmt.y = y;
     cmt.color = color;
-    if (fontsize) cmt.fontsize = fontsize;
+    if (fontsize)
+	cmt.fontsize = fontsize;
 
     in = NULL;
-    if (*name)
-    {
-	in = fopen (name, "r");
-	if (in == NULL)
-	{
+    if (*name) {
+	in = fopen(name, "r");
+	if (in == NULL) {
 	    error("comment file", name, "can't open");
 	    return 1;
 	}
     }
-    if (PS.commentfile == NULL)
-    {
+    if (PS.commentfile == NULL) {
 	PS.commentfile = G_tempfile();
 	need_blank = 0;
-	if ((out = fopen (PS.commentfile, "w")) != NULL) fclose (out);
+	if ((out = fopen(PS.commentfile, "w")) != NULL)
+	    fclose(out);
     }
-    else need_blank = 1;
+    else
+	need_blank = 1;
 
-    out = fopen (PS.commentfile, "a");
-    if (out == NULL)
-    {
+    out = fopen(PS.commentfile, "a");
+    if (out == NULL) {
 	error("can't create a comments file", "", "");
-	if (in == NULL) gobble_input();
-	else fclose(in);
+	if (in == NULL)
+	    gobble_input();
+	else
+	    fclose(in);
 	return 1;
     }
 
-    if (in == NULL) while (input(2, buf, help2))
-    {
-        if (need_blank)
-        {
-	    fprintf(out, "\n");
-	    need_blank = 0;
-        }
-        /* G_strip(buf);*/
-        fprintf(out, "%s\n", buf);
-    }
-    else
-    {
-	while (G_getl2(buf, sizeof buf, in))
-	{
-	    if (need_blank)
-	    {
+    if (in == NULL)
+	while (input(2, buf, help2)) {
+	    if (need_blank) {
 		fprintf(out, "\n");
 		need_blank = 0;
 	    }
-	    /* G_strip(buf);*/
+	    /* G_strip(buf); */
+	    fprintf(out, "%s\n", buf);
+	}
+    else {
+	while (G_getl2(buf, sizeof buf, in)) {
+	    if (need_blank) {
+		fprintf(out, "\n");
+		need_blank = 0;
+	    }
+	    /* G_strip(buf); */
 	    fprintf(out, "%s\n", buf);
 	}
 	fclose(in);
@@ -141,7 +132,7 @@ int read_comment (char *name)
     return 0;
 }
 
-int do_comment (void)
+int do_comment(void)
 {
     FILE *fp;
     char text[1024];
@@ -154,26 +145,28 @@ int do_comment (void)
     /* set start of first line */
     dy = 1.2 * fontsize;
     y = 72.0 * (PS.page_height - cmt.y);
-    if (cmt.y > PS.page_height) y = PS.min_y - dy;
+    if (cmt.y > PS.page_height)
+	y = PS.min_y - dy;
 
     x = 72.0 * PS.left_marg + 1.5;
-    if (72.0 * cmt.x > x) x = 72.0 * cmt.x;
+    if (72.0 * cmt.x > x)
+	x = 72.0 * cmt.x;
 
     /* read the comment file */
-    if ((fp = fopen(PS.commentfile, "r")) == NULL)
-    {
-        error("comment file", PS.commentfile, "can't open");
-        return 1;
+    if ((fp = fopen(PS.commentfile, "r")) == NULL) {
+	error("comment file", PS.commentfile, "can't open");
+	return 1;
     }
-    while (G_getl2(text, sizeof text, fp)) 
-    {
-	/* G_strip(text);*/
-        if (*text) show_text(x, y, text);
-        y -= dy;
+    while (G_getl2(text, sizeof text, fp)) {
+	/* G_strip(text); */
+	if (*text)
+	    show_text(x, y, text);
+	y -= dy;
     }
-    fclose (fp);
+    fclose(fp);
     y -= 0.25 * dy;
-    if (PS.min_y > y) PS.min_y = y;
+    if (PS.min_y > y)
+	PS.min_y = y;
 
     return 0;
 }

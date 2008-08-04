@@ -1,3 +1,4 @@
+
 /****************************************************************************
 * MODULE:       R-Tree library 
 *              
@@ -18,7 +19,7 @@
 
 /* PGSIZE is normally the natural page size of the machine */
 #define PGSIZE	512
-#define NUMDIMS	3	/* number of dimensions */
+#define NUMDIMS	3		/* number of dimensions */
 
 /* typedef float RectReal; */
 typedef double RectReal;
@@ -38,15 +39,15 @@ typedef double RectReal;
 
 struct Rect
 {
-	RectReal boundary[NUMSIDES]; /* xmin,ymin,...,xmax,ymax,... */
+    RectReal boundary[NUMSIDES];	/* xmin,ymin,...,xmax,ymax,... */
 };
 
 struct Node;
 
 struct Branch
 {
-	struct Rect rect;
-	struct Node *child;
+    struct Rect rect;
+    struct Node *child;
 };
 
 /* max branching factor of a node */
@@ -54,15 +55,15 @@ struct Branch
 
 struct Node
 {
-	int count;
-	int level; /* 0 is leaf, others positive */
-	struct Branch branch[MAXCARD];
+    int count;
+    int level;			/* 0 is leaf, others positive */
+    struct Branch branch[MAXCARD];
 };
 
 struct ListNode
 {
-	struct ListNode *next;
-	struct Node *node;
+    struct ListNode *next;
+    struct Node *node;
 };
 
 /*
@@ -72,32 +73,33 @@ struct ListNode
  * It can terminate the search early by returning 0 in which case
  * the search will return the number of hits found up to that point.
  */
-typedef int (*SearchHitCallback)(int id, void* arg);
+typedef int (*SearchHitCallback) (int id, void *arg);
 
 
-extern int RTreeSearch(struct Node*, struct Rect*, SearchHitCallback, void*);
-extern int RTreeInsertRect(struct Rect*, int, struct Node**, int depth);
-extern int RTreeDeleteRect(struct Rect*, int, struct Node**);
-extern struct Node * RTreeNewIndex(void);
-extern struct Node * RTreeNewNode(void);
-extern void RTreeInitNode(struct Node*);
+extern int RTreeSearch(struct Node *, struct Rect *, SearchHitCallback,
+		       void *);
+extern int RTreeInsertRect(struct Rect *, int, struct Node **, int depth);
+extern int RTreeDeleteRect(struct Rect *, int, struct Node **);
+extern struct Node *RTreeNewIndex(void);
+extern struct Node *RTreeNewNode(void);
+extern void RTreeInitNode(struct Node *);
 extern void RTreeFreeNode(struct Node *);
 extern void RTreeDestroyNode(struct Node *);
 extern void RTreePrintNode(struct Node *, int);
 extern void RTreeTabIn(int);
 extern struct Rect RTreeNodeCover(struct Node *);
-extern void RTreeInitRect(struct Rect*);
+extern void RTreeInitRect(struct Rect *);
 extern struct Rect RTreeNullRect(void);
-extern RectReal RTreeRectArea(struct Rect*);
+extern RectReal RTreeRectArea(struct Rect *);
 extern RectReal RTreeRectSphericalVolume(struct Rect *R);
 extern RectReal RTreeRectVolume(struct Rect *R);
-extern struct Rect RTreeCombineRect(struct Rect*, struct Rect*);
-extern int RTreeOverlap(struct Rect*, struct Rect*);
-extern void RTreePrintRect(struct Rect*, int);
+extern struct Rect RTreeCombineRect(struct Rect *, struct Rect *);
+extern int RTreeOverlap(struct Rect *, struct Rect *);
+extern void RTreePrintRect(struct Rect *, int);
 extern int RTreeAddBranch(struct Branch *, struct Node *, struct Node **);
 extern int RTreePickBranch(struct Rect *, struct Node *);
 extern void RTreeDisconnectBranch(struct Node *, int);
-extern void RTreeSplitNode(struct Node*, struct Branch*, struct Node**);
+extern void RTreeSplitNode(struct Node *, struct Branch *, struct Node **);
 
 extern int RTreeSetNodeMax(int);
 extern int RTreeSetLeafMax(int);

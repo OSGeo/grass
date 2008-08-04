@@ -18,22 +18,22 @@ static char err_msg[1024];
  * error code/msg (in static variables)
  * code==0 will clear the error (ie set msg=NULL)
  * returns 'code' so that it can be used like:
-\code
-  return datetime_error (-1, "bad date");
-\endcode
+ \code
+ return datetime_error (-1, "bad date");
+ \endcode
  *
  *  \param code
  *  \param msg
  *  \return int
  */
 
-int datetime_error (int code, char *msg)
+int datetime_error(int code, char *msg)
 {
     err_code = code;
     *err_msg = 0;
     if (code != 0 && msg)
-	strcpy (err_msg, msg); /* hope err_msg is big enough */
-    
+	strcpy(err_msg, msg);	/* hope err_msg is big enough */
+
     return code;
 }
 
@@ -45,7 +45,7 @@ int datetime_error (int code, char *msg)
  *  \return int
  */
 
-int datetime_error_code (void)
+int datetime_error_code(void)
 {
     return err_code;
 }
@@ -58,7 +58,7 @@ int datetime_error_code (void)
  *  \return char *
  */
 
-char *datetime_error_msg (void)
+char *datetime_error_msg(void)
 {
     return err_msg;
 }
@@ -72,7 +72,7 @@ char *datetime_error_msg (void)
  *  \return void
  */
 
-void datetime_clear_error (void)
+void datetime_clear_error(void)
 {
     err_code = 0;
     *err_msg = 0;

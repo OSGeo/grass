@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       OGR driver 
@@ -19,7 +20,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables( dbString **tlist, int *tcount, int system )
+int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 {
     int i, nlayers;
     dbString *list;
@@ -30,25 +31,24 @@ int db__driver_list_tables( dbString **tlist, int *tcount, int system )
     *tlist = NULL;
     *tcount = 0;
 
-    nlayers = OGR_DS_GetLayerCount( hDs );
-    G_debug ( 3, "%d layers found", nlayers );
-    
-    list = db_alloc_string_array ( nlayers );
-    
-    if (list == NULL ) {
-	append_error ( "Cannot db_alloc_string_array()");
+    nlayers = OGR_DS_GetLayerCount(hDs);
+    G_debug(3, "%d layers found", nlayers);
+
+    list = db_alloc_string_array(nlayers);
+
+    if (list == NULL) {
+	append_error("Cannot db_alloc_string_array()");
 	report_error();
 	return DB_FAILED;
     }
 
     for (i = 0; i < nlayers; i++) {
-	hLayer =  OGR_DS_GetLayer( hDs, i );
-	hFeatureDefn = OGR_L_GetLayerDefn ( hLayer );
-	db_set_string ( &(list[i]), (char *) OGR_FD_GetName( hFeatureDefn ) );
+	hLayer = OGR_DS_GetLayer(hDs, i);
+	hFeatureDefn = OGR_L_GetLayerDefn(hLayer);
+	db_set_string(&(list[i]), (char *)OGR_FD_GetName(hFeatureDefn));
     }
 
     *tlist = list;
     *tcount = nlayers;
     return DB_OK;
 }
-

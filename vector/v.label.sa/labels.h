@@ -33,7 +33,9 @@ typedef struct _label_score label_score_t;
  * A structure representing a point location */
 struct _label_point
 {
+
     double x;	  /**< The X coordinate */
+
     double y;	  /**< The Y coordinate */
 };
 
@@ -41,18 +43,27 @@ struct _label_point
  * This structure represents a label for a vector feature */
 struct _label
 {
+
     struct line_pnts *skyline;	/**< The skyline of the text, as an offest
 				  *  from the label point */
     BOUND_BOX bb;
     double size;
+
     double current_score;	  /**< The current score of the label. */
+
     label_candidate_t *candidates;  /**< A list of candidate positions */
+
     int n_candidates;		 /**< The size of the candidates array */
+
     int current_candidate;	 /**< An index into the candidates array
 				   *  describing the currently selected candidate */
+
     char *text;			 /**< The label text */
+
     int cat;			     /**< the cat of the feature */
+
     int type;			     /**< The feture type (point, line, area) */
+
     struct line_pnts *shape;	     /**< The points for the feature that this
 				       *  label belongs to */
 };
@@ -62,14 +73,19 @@ struct _label
  */
 struct _label_candidate
 {
+
     label_point_t point;     /**< The point of the label position 
 			       *  (lower left corner)*/
+
     double score; /**< The base score of this position (sans overlap metric) */
     double lineover;
+
     double rotation;	 /**< The mount the label is rotated in this position */
+
     label_intersection_t *intersections;  /**< A list of all label candidate 
                                             *  positions which intersect with
                                             *  this position. */
+
     int n_intersections; /**< Number of items in the intersections array */
     struct line_pnts *baseline;
     struct line_pnts *swathline;
@@ -81,7 +97,9 @@ struct _label_candidate
  */
 struct _label_intersection
 {
+
     label_t *label;	/**< A pointer to the #label_t structure */
+
     int candidate;     /**< The number of the candidate */
 };
 
@@ -107,7 +125,7 @@ struct params
     struct Option *bocolor;
     struct Option *bowidth;
 
-/*    struct Option */
+    /*    struct Option */
     /*      struct Option *where; *//* later */
 };
 

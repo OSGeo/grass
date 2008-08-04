@@ -14,4 +14,3 @@ int E_edit_cellhd(struct Cell_head *, int);
 int E_edit_history(struct History *);
 
 #endif
-

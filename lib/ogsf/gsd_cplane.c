@@ -1,20 +1,20 @@
 /*!
-  \file gsd_cplane.c
- 
-  \brief OGSF library - manipulating surfaces (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \file gsd_cplane.c
+
+   \brief OGSF library - manipulating surfaces (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <grass/gstypes.h>
 #include "rowcol.h"
@@ -46,12 +46,12 @@ static void init_cplane(void)
 }
 
 /*!
-  \brief Define cplace
+   \brief Define cplace
 
-  \param num
-  \param pt
-  \param norm
-*/
+   \param num
+   \param pt
+   \param norm
+ */
 void gsd_def_cplane(int num, float *pt, float *norm)
 {
     float sx, sy, sz, ppt[3];
@@ -79,10 +79,10 @@ void gsd_def_cplane(int num, float *pt, float *norm)
 }
 
 /*!
-  \brief Update cplaces
+   \brief Update cplaces
 
-  Called when viewing matrix changes
-*/
+   Called when viewing matrix changes
+ */
 void gsd_update_cplanes(void)
 {
     int i;
@@ -97,10 +97,10 @@ void gsd_update_cplanes(void)
 }
 
 /*!
-  \brief ADD
-  
-  \param num
-*/
+   \brief ADD
+
+   \param num
+ */
 void gsd_cplane_on(int num)
 {
     static int first = 1;
@@ -119,10 +119,10 @@ void gsd_cplane_on(int num)
 }
 
 /*!
-  \brief Turn off clip plane
+   \brief Turn off clip plane
 
-  \param num cplane id
-*/
+   \param num cplane id
+ */
 void gsd_cplane_off(int num)
 {
 
@@ -133,12 +133,12 @@ void gsd_cplane_off(int num)
 }
 
 /*!
-  \brief Get cplane state
-  
-  <i>onstate</i> MUST be big enough to hold MAX_CPLANES ints
+   \brief Get cplane state
 
-  \param onstate
-*/
+   <i>onstate</i> MUST be big enough to hold MAX_CPLANES ints
+
+   \param onstate
+ */
 void gsd_get_cplanes_state(int *onstate)
 {
     int i;
@@ -151,14 +151,14 @@ void gsd_get_cplanes_state(int *onstate)
 }
 
 /*!
-  \brief Get cplaces
+   \brief Get cplaces
 
-  Planes MUST be big enough to hold MAX_CPLANES Point4s
+   Planes MUST be big enough to hold MAX_CPLANES Point4s
 
-  \param places surface coordinates, normal pointing away from visible side
+   \param places surface coordinates, normal pointing away from visible side
 
-  \return ADD
-*/
+   \return ADD
+ */
 int gsd_get_cplanes(Point4 * planes)
 {
     int i, ons;
@@ -181,10 +181,10 @@ int gsd_get_cplanes(Point4 * planes)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param num
-*/
+   \param num
+ */
 void gsd_update_cpnorm(int num)
 {
     float v[1][4];
@@ -203,11 +203,11 @@ void gsd_update_cpnorm(int num)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param num
-  \param rx,ry,rz
-*/
+   \param num
+   \param rx,ry,rz
+ */
 void gsd_cplane_setrot(int num, float rx, float ry, float rz)
 {
     Cp_rot[num][X] = rx;
@@ -221,11 +221,11 @@ void gsd_cplane_setrot(int num, float rx, float ry, float rz)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param num
-  \param tx,ty,tz
-*/
+   \param num
+   \param tx,ty,tz
+ */
 void gsd_cplane_settrans(int num, float tx, float ty, float tz)
 {
     Cp_trans[num][X] = tx;
@@ -238,12 +238,12 @@ void gsd_cplane_settrans(int num, float tx, float ty, float tz)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param surf1 first surface (geosurf)
-  \param surf2 second surface (geosurf) [unused]
-  \param cpnum
-*/
+   \param surf1 first surface (geosurf)
+   \param surf2 second surface (geosurf) [unused]
+   \param cpnum
+ */
 void gsd_draw_cplane_fence(geosurf * surf1, geosurf * surf2, int cpnum)
 {
     int was_on;
@@ -289,10 +289,10 @@ void gsd_draw_cplane_fence(geosurf * surf1, geosurf * surf2, int cpnum)
 }
 
 /*!
-  \brief Draw cplane
+   \brief Draw cplane
 
-  \param num
-*/
+   \param num
+ */
 void gsd_draw_cplane(int num)
 {
     float size, cpv[3];

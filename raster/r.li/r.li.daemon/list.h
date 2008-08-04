@@ -1,3 +1,4 @@
+
 /**
  * \file list.h
  *
@@ -26,10 +27,11 @@
  * \member next the next item in list
  * \member m the content of list node
  */
- struct nodoLista{
-  struct nodoLista *prev;
-  struct nodoLista *next;
-  msg *m;
+struct nodoLista
+{
+    struct nodoLista *prev;
+    struct nodoLista *next;
+    msg *m;
 };
 
 
@@ -40,21 +42,24 @@
  * \member tail last item in list
  * \member size number of items in list
  */
- struct lista{
-  struct nodoLista *head;
-  struct nodoLista *tail;
-  int size;
+struct lista
+{
+    struct nodoLista *head;
+    struct nodoLista *tail;
+    int size;
 };
 
 typedef struct nodoLista *node;
 
 typedef struct lista *list;
+
 /**
  * \brief insert a item in list
  * \param l list where to put items
  * \param mess the message to insert
  */
 void insertNode(list l, msg m);
+
 /**
  * \brief remove head item
  * \param l list where to remove
@@ -75,20 +80,21 @@ void removeNode(list l);
   * \param sf_y y coordinate of sample frame
   * \param maskname name of mask for the area
   */
-struct generatore{
-	int dist;
-	int add_row;
-	int add_col;
-	int rows;
-	int cols;
-	int x;
-	int y;
-	int rl;
-	int cl;
-	int count;
-	int sf_x;
-	int sf_y;
-	char *maskname;
+struct generatore
+{
+    int dist;
+    int add_row;
+    int add_col;
+    int rows;
+    int cols;
+    int x;
+    int y;
+    int rl;
+    int cl;
+    int count;
+    int sf_x;
+    int sf_y;
+    char *maskname;
 };
 
 typedef struct generatore *g_areas;
@@ -98,4 +104,4 @@ typedef struct generatore *g_areas;
  * \param gen area generator to use
  * \param msg next area message
  */
-int next(g_areas gen, msg *toReturn);
+int next(g_areas gen, msg * toReturn);

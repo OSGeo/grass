@@ -1,3 +1,4 @@
+
 /**
  * \file date.c
  *
@@ -26,8 +27,7 @@
  * \return Pointer to a string holding date/time
  */
 
-char *
-G_date(void)
+char *G_date(void)
 {
     time_t clock;
     struct tm *local;

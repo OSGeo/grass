@@ -1,34 +1,34 @@
 /*!
-  \file draw.c
- 
-  \brief Nviz library -- Draw map objects to GLX context
-  
-  COPYRIGHT: (C) 2008 by the GRASS Development Team
+   \file draw.c
 
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+   \brief Nviz library -- Draw map objects to GLX context
 
-  Based on visualization/nviz/src/draw.c and
-  visualization/nviz/src/togl_flythrough.c
+   COPYRIGHT: (C) 2008 by the GRASS Development Team
 
-  \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
 
-  \date 2008
-*/
+   Based on visualization/nviz/src/draw.c and
+   visualization/nviz/src/togl_flythrough.c
+
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+
+   \date 2008
+ */
 
 #include <grass/nviz.h>
 
 static int sort_surfs_max(int *, int *, int *, int);
 
 /*!
-  \brief Draw all loaded surfaces
+   \brief Draw all loaded surfaces
 
-  \param dc nviz data
+   \param dc nviz data
 
-  \return 1
-*/
-int Nviz_draw_all_surf(nv_data *dc)
+   \return 1
+ */
+int Nviz_draw_all_surf(nv_data * dc)
 {
     int i, nsurfs;
     int sortSurfs[MAX_SURFS], sorti[MAX_SURFS];
@@ -36,7 +36,7 @@ int Nviz_draw_all_surf(nv_data *dc)
     float x, y, z;
     int num, w;
 
-/* Get position for Light 1 */
+    /* Get position for Light 1 */
     num = 1;
     x = dc->light[num].x;
     y = dc->light[num].y;
@@ -47,7 +47,7 @@ int Nviz_draw_all_surf(nv_data *dc)
 
     sort_surfs_max(surf_list, sortSurfs, sorti, nsurfs);
 
-    G_free (surf_list);
+    G_free(surf_list);
 
     /* re-initialize lights */
     GS_setlight_position(num, x, y, z, w);
@@ -57,7 +57,7 @@ int Nviz_draw_all_surf(nv_data *dc)
     for (i = 0; i < nsurfs; i++) {
 	GS_draw_surf(sortSurfs[i]);
     }
-    
+
     /* GS_draw_cplane_fence params will change - surfs aren't used anymore */
     for (i = 0; i < MAX_CPLANES; i++) {
 	if (dc->cp_on[i])
@@ -68,23 +68,23 @@ int Nviz_draw_all_surf(nv_data *dc)
 }
 
 /*!
-  \brief Sorts surfaces by max elevation, lowest to highest.
+   \brief Sorts surfaces by max elevation, lowest to highest.
 
-  Puts ordered id numbers in id_sort, leaving id_orig unchanged.
-  Puts ordered indices of surfaces from id_orig in indices.
+   Puts ordered id numbers in id_sort, leaving id_orig unchanged.
+   Puts ordered indices of surfaces from id_orig in indices.
 
-  \param surf pointer to surface array
-  \param id_sort
-  \param indices
-  \param num
+   \param surf pointer to surface array
+   \param id_sort
+   \param indices
+   \param num
 
-  \return 1
-*/
+   \return 1
+ */
 int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
 {
     int i, j;
     float maxvals[MAX_SURFS];
-    float tmp, max=0., tmin, tmax, tmid;
+    float tmp, max = 0., tmin, tmax, tmid;
 
     for (i = 0; i < num; i++) {
 	GS_get_zextents(surf[i], &tmin, &tmax, &tmid);
@@ -113,13 +113,13 @@ int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
 }
 
 /*!
-  \brief Draw all loaded vector sets (lines)
+   \brief Draw all loaded vector sets (lines)
 
-  \param dc nviz data
+   \param dc nviz data
 
-  \return 1
-*/
-int Nviz_draw_all_vect(nv_data *dc)
+   \return 1
+ */
+int Nviz_draw_all_vect(nv_data * dc)
 {
     // GS_set_cancel(0);
 
@@ -131,7 +131,7 @@ int Nviz_draw_all_vect(nv_data *dc)
     GV_alldraw_vect();
 
     GS_done_draw();
-    
+
     GS_set_draw(GSD_BACK);
 
     // GS_set_cancel(0);
@@ -140,13 +140,13 @@ int Nviz_draw_all_vect(nv_data *dc)
 }
 
 /*!
-  \brief Draw all loaded vector point sets
+   \brief Draw all loaded vector point sets
 
-  \param dc nviz data
+   \param dc nviz data
 
-  \return 1
-*/
-int Nviz_draw_all_site(nv_data *dc)
+   \return 1
+ */
+int Nviz_draw_all_site(nv_data * dc)
 {
     int i;
     int *site_list, nsites;
@@ -161,7 +161,7 @@ int Nviz_draw_all_site(nv_data *dc)
     for (i = 0; i < nsites; i++) {
 	GP_draw_site(site_list[i]);
     }
-    G_free (site_list);
+    G_free(site_list);
 
     GS_done_draw();
 
@@ -171,25 +171,25 @@ int Nviz_draw_all_site(nv_data *dc)
 }
 
 /*!
-  \brief Draw all loaded volume sets
+   \brief Draw all loaded volume sets
 
-  \todo To be implement
+   \todo To be implement
 
-  \param dc nviz data
+   \param dc nviz data
 
-  \return 1
-*/
-int Nviz_draw_all_vol(nv_data *dc)
+   \return 1
+ */
+int Nviz_draw_all_vol(nv_data * dc)
 {
     return 1;
 }
 
 /*!
-  \brief Draw all map objects (in full resolution) and decorations
+   \brief Draw all map objects (in full resolution) and decorations
 
-  \param data nviz data
-*/
-int Nviz_draw_all(nv_data *data)
+   \param data nviz data
+ */
+int Nviz_draw_all(nv_data * data)
 {
     int draw_surf, draw_vect, draw_site, draw_vol;
     int draw_north_arrow, arrow_x, draw_label, draw_legend;
@@ -207,7 +207,7 @@ int Nviz_draw_all(nv_data *data)
     draw_scalebar = 0;
     draw_bar_x = 0;
 
-    GS_set_draw(GSD_BACK); /* needs to be BACK to avoid flickering */
+    GS_set_draw(GSD_BACK);	/* needs to be BACK to avoid flickering */
 
     GS_ready_draw();
 
@@ -227,22 +227,21 @@ int Nviz_draw_all(nv_data *data)
 
     GS_done_draw();
     GS_set_draw(GSD_BACK);
-    
+
     return 1;
 }
 
 /*!
-  \brief Draw all surfaces in wireframe
+   \brief Draw all surfaces in wireframe
 
-  \param dc nviz data
+   \param dc nviz data
 
-  \return 1
-*/
-int Nviz_draw_quick(nv_data *data,
-		    int draw_vlines, int draw_vpoints)
+   \return 1
+ */
+int Nviz_draw_quick(nv_data * data, int draw_vlines, int draw_vpoints)
 {
     GS_set_draw(GSD_BACK);
-    
+
     GS_ready_draw();
 
     GS_clear(data->bgcolor);
@@ -259,14 +258,14 @@ int Nviz_draw_quick(nv_data *data,
 	GP_alldraw_site();
 
     /*
-    vol_list = GVL_get_vol_list(&max);
-    max = GVL_num_vols();
-    for (i = 0; i < max; i++) {
-	if (check_blank(interp, vol_list[i]) == 0) {
-	    GVL_draw_wire(vol_list[i]);
-	}
-    }
-    */
+       vol_list = GVL_get_vol_list(&max);
+       max = GVL_num_vols();
+       for (i = 0; i < max; i++) {
+       if (check_blank(interp, vol_list[i]) == 0) {
+       GVL_draw_wire(vol_list[i]);
+       }
+       }
+     */
 
     GS_done_draw();
 
@@ -274,4 +273,3 @@ int Nviz_draw_quick(nv_data *data,
 
     return 1;
 }
-

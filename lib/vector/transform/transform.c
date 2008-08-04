@@ -1,3 +1,4 @@
+
 /**
  * \file transform.c
  *
@@ -52,11 +53,12 @@ residuals_b_predicts_a (ax,ay,bx,by,use,n,residuals,rms)
 #include <grass/libtrans.h>
 
 /* the coefficients */
-static double A0,A1,A2,A3,A4,A5;
-static double B0,B1,B2,B3,B4,B5;
+static double A0, A1, A2, A3, A4, A5;
+static double B0, B1, B2, B3, B4, B5;
 
 /* function prototypes */
-static int resid(double *,double *,double *,double *,int *,int,double *,double *,int);
+static int resid(double *, double *, double *, double *, int *, int, double *,
+		 double *, int);
 
 
 /**
@@ -85,9 +87,8 @@ static int resid(double *,double *,double *,double *,int *,int,double *,double *
  * \return int -2 if less than 4 points used
  */
 
-int compute_transformation_coef(
-    double ax[],double ay[],double bx[],double by[],
-    int *use, int n)
+int compute_transformation_coef(double ax[], double ay[], double bx[],
+				double by[], int *use, int n)
 {
     int i;
     int j;
@@ -105,34 +106,33 @@ int compute_transformation_coef(
 	if (use[i])
 	    count++;
     if (count < 4)
-	return -2; /* must have at least 4 points */
+	return -2;		/* must have at least 4 points */
 
-    for (i = 0; i < 3; i++)
-    {
-        aa[i] = bb[i] = 0.0;
+    for (i = 0; i < 3; i++) {
+	aa[i] = bb[i] = 0.0;
 
-        for (j = 0; j < 3; j++)
+	for (j = 0; j < 3; j++)
 	    cc[i][j] = 0.0;
     }
 
-    for (i = 0; i < n; i++)
-    {
-	if (!use[i]) continue;	/* skip this point */
-        cc[0][0] += 1;
-        cc[0][1] += bx[i];
-        cc[0][2] += by[i];
+    for (i = 0; i < n; i++) {
+	if (!use[i])
+	    continue;		/* skip this point */
+	cc[0][0] += 1;
+	cc[0][1] += bx[i];
+	cc[0][2] += by[i];
 
-        cc[1][1] += bx[i] * bx[i];
-        cc[1][2] += bx[i] * by[i];
-        cc[2][2] += by[i] * by[i];
+	cc[1][1] += bx[i] * bx[i];
+	cc[1][2] += bx[i] * by[i];
+	cc[2][2] += by[i] * by[i];
 
-        aa[0] += ay[i];
-        aa[1] += ay[i] * bx[i];
-        aa[2] += ay[i] * by[i];
+	aa[0] += ay[i];
+	aa[1] += ay[i] * bx[i];
+	aa[2] += ay[i] * by[i];
 
-        bb[0] += ax[i];
-        bb[1] += ax[i] * bx[i];
-        bb[2] += ax[i] * by[i];
+	bb[0] += ax[i];
+	bb[1] += ax[i] * bx[i];
+	bb[2] += ax[i] * by[i];
     }
 
     cc[1][0] = cc[0][1];
@@ -140,10 +140,10 @@ int compute_transformation_coef(
     cc[2][1] = cc[1][2];
 
     /* aa and bb are solved */
-	if ( inverse (cc) < 0)
-		return (-1) ;
-	if ( m_mult ( cc, aa, aar) < 0  ||  m_mult ( cc, bb, bbr) < 0)
-		return (-1) ;
+    if (inverse(cc) < 0)
+	return (-1);
+    if (m_mult(cc, aa, aar) < 0 || m_mult(cc, bb, bbr) < 0)
+	return (-1);
 
     /* the equation coefficients */
     B0 = aar[0];
@@ -155,39 +155,35 @@ int compute_transformation_coef(
     B5 = bbr[2];
 
     /* the inverse equation */
-    x = B2 * B4 - B1 * B5 ;
+    x = B2 * B4 - B1 * B5;
 
-    if( ! x)
-	return (-1) ;
+    if (!x)
+	return (-1);
 
-    A0 = (B1 * B3 - B0 * B4) / x ;
-    A1 = -B1 / x ;
-    A2 =  B4 / x ;
-    A3 = (B0 * B5 - B2 * B3) / x ;
-    A4 = B2 / x ;
-    A5 = -B5 / x ;
+    A0 = (B1 * B3 - B0 * B4) / x;
+    A1 = -B1 / x;
+    A2 = B4 / x;
+    A3 = (B0 * B5 - B2 * B3) / x;
+    A4 = B2 / x;
+    A5 = -B5 / x;
 
     return 1;
 }
 
 
-int transform_a_into_b(
-    double ax,double ay,
-    double *bx,double *by)
+int transform_a_into_b(double ax, double ay, double *bx, double *by)
 {
-    *by = A0 + A1 * ax + A2 * ay ;
-    *bx = A3 + A4 * ax + A5 * ay ;
+    *by = A0 + A1 * ax + A2 * ay;
+    *bx = A3 + A4 * ax + A5 * ay;
 
     return 0;
 }
 
 
-int transform_b_into_a(
-    double bx,double by,
-    double *ax,double *ay)
+int transform_b_into_a(double bx, double by, double *ax, double *ay)
 {
-    *ay = B0  + B1 * bx + B2 * by ;
-    *ax = B3  + B4 * bx + B5 * by ;
+    *ay = B0 + B1 * bx + B2 * by;
+    *ax = B3 + B4 * bx + B5 * by;
 
     return 0;
 }
@@ -203,30 +199,22 @@ solve (a, b)
 **************************************************************/
 
 /*  #define abs(xx) (xx >= 0 ? xx : -xx)  */
-/*	#define N 3  */
+/*      #define N 3  */
 
 
-int residuals_a_predicts_b (
-    double ax[],double ay[],double bx[],double by[],
-    int use[],
-    int n,
-    double residuals[],
-    double *rms)
+int residuals_a_predicts_b(double ax[], double ay[], double bx[], double by[],
+			   int use[], int n, double residuals[], double *rms)
 {
-    resid (ax,ay,bx,by,use,n,residuals,rms,1);
+    resid(ax, ay, bx, by, use, n, residuals, rms, 1);
 
     return 0;
 }
 
 
-int residuals_b_predicts_a(
-    double ax[],double ay[],double bx[],double by[],
-    int use[],
-    int n,
-    double residuals[],
-    double *rms)
+int residuals_b_predicts_a(double ax[], double ay[], double bx[], double by[],
+			   int use[], int n, double residuals[], double *rms)
 {
-    resid (ax,ay,bx,by,use,n,residuals,rms,0);
+    resid(ax, ay, bx, by, use, n, residuals, rms, 0);
 
     return 0;
 }
@@ -240,60 +228,53 @@ int residuals_b_predicts_a(
  * \return int 1
  */
 
-int print_transform_matrix (void)
+int print_transform_matrix(void)
 {
-    fprintf (stdout, "\nTransformation Matrix\n");
-    fprintf (stdout, "| xoff a b |\n");
-    fprintf (stdout, "| yoff d e |\n");
-    fprintf (stdout, "-------------------------------------------\n");
-    fprintf (stdout, "%f %f %f \n", -B3, B2, -B5);
-    fprintf (stdout, "%f %f %f \n", -B0, -B1, B4);
-    fprintf (stdout, "-------------------------------------------\n");
+    fprintf(stdout, "\nTransformation Matrix\n");
+    fprintf(stdout, "| xoff a b |\n");
+    fprintf(stdout, "| yoff d e |\n");
+    fprintf(stdout, "-------------------------------------------\n");
+    fprintf(stdout, "%f %f %f \n", -B3, B2, -B5);
+    fprintf(stdout, "%f %f %f \n", -B0, -B1, B4);
+    fprintf(stdout, "-------------------------------------------\n");
 
     return 1;
 }
 
 
-static int resid(
-    double ax[],double ay[],double bx[],double by[],
-    int use[],int n,
-    double residuals[],
-    double *rms,
-    int atob)
+static int resid(double ax[], double ay[], double bx[], double by[],
+		 int use[], int n, double residuals[], double *rms, int atob)
 {
-    double x,y;
+    double x, y;
     int i;
     int count;
     double sum;
     double delta;
-    double dx,dy;
+    double dx, dy;
 
     count = 0;
     sum = 0.0;
-    for (i=0; i < n; i++)
-    {
-	if (!use[i]) continue;
+    for (i = 0; i < n; i++) {
+	if (!use[i])
+	    continue;
 
 	count++;
-	if (atob)
-	{
-	    transform_a_into_b (ax[i], ay[i], &x, &y);
+	if (atob) {
+	    transform_a_into_b(ax[i], ay[i], &x, &y);
 	    dx = x - bx[i];
 	    dy = y - by[i];
 	}
-	else
-	{
-	    transform_b_into_a (bx[i], by[i], &x, &y);
+	else {
+	    transform_b_into_a(bx[i], by[i], &x, &y);
 	    dx = x - ax[i];
 	    dy = y - ay[i];
 	}
 
 	delta = dx * dx + dy * dy;
-	residuals[i] = sqrt (delta);
+	residuals[i] = sqrt(delta);
 	sum += delta;
     }
-    *rms = sqrt (sum / count);
+    *rms = sqrt(sum / count);
 
     return 0;
 }
-

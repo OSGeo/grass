@@ -9,11 +9,12 @@
 #define MEM  1024
 
 /* function prototypes */
-static int a_dev (double *, int, double *);
+static int a_dev(double *, int, double *);
 
 
 int
-o_adev (char *basemap, char *covermap, char *outputmap, int usecats, struct Categories *cats)
+o_adev(char *basemap, char *covermap, char *outputmap, int usecats,
+       struct Categories *cats)
 {
     char command[1024];
     FILE *stats, *reclass;
@@ -23,67 +24,60 @@ o_adev (char *basemap, char *covermap, char *outputmap, int usecats, struct Cate
     double *tab;
 
     mem = MEM * sizeof(double);
-    tab = (double *) G_malloc(mem);
+    tab = (double *)G_malloc(mem);
 
-    sprintf(command, "r.stats -cn input=\"%s,%s\" fs=space", basemap, covermap);
+    sprintf(command, "r.stats -cn input=\"%s,%s\" fs=space", basemap,
+	    covermap);
 
-    stats = popen(command,"r");
+    stats = popen(command, "r");
 
-    sprintf (command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outputmap);
-    reclass = popen (command, "w");
+    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outputmap);
+    reclass = popen(command, "w");
 
     first = 1;
-    while (read_stats(stats, &basecat, &covercat, &value))
-    {
-	if (first)
-	{
-	   first = 0;
-	   catb  = basecat;
-	   catc  = covercat;
-	   i = 0;
-	   count = 0;
+    while (read_stats(stats, &basecat, &covercat, &value)) {
+	if (first) {
+	    first = 0;
+	    catb = basecat;
+	    catc = covercat;
+	    i = 0;
+	    count = 0;
 	}
 
-	if (basecat != catb)
-	{
-           a_dev(tab, count, &adev);
-           fprintf (reclass, "%ld = %ld %f\n", catb, catb, adev);
-	   catb = basecat;
-	   catc = covercat;
-	   count = 0;
-        }
+	if (basecat != catb) {
+	    a_dev(tab, count, &adev);
+	    fprintf(reclass, "%ld = %ld %f\n", catb, catb, adev);
+	    catb = basecat;
+	    catc = covercat;
+	    count = 0;
+	}
 
-        if(usecats)
-           sscanf (G_get_cat((CELL)covercat, cats), "%lf", &x);
-        else
-           x = covercat;
+	if (usecats)
+	    sscanf(G_get_cat((CELL) covercat, cats), "%lf", &x);
+	else
+	    x = covercat;
 
-        for(i = 0; i < value; i++)
-        {
-           if(count * sizeof(double) >= mem )
-           {
-             mem += MEM * sizeof(double);
-             tab = (double *)G_realloc(tab,mem);
-             /* fprintf(stderr,"MALLOC: %d KB needed\n",(int)(mem/1024));  */
-           }
-           tab[count++] = x;
-        }
+	for (i = 0; i < value; i++) {
+	    if (count * sizeof(double) >= mem) {
+		mem += MEM * sizeof(double);
+		tab = (double *)G_realloc(tab, mem);
+		/* fprintf(stderr,"MALLOC: %d KB needed\n",(int)(mem/1024));  */
+	    }
+	    tab[count++] = x;
+	}
 
     }
-    if (first)
-    {
+    if (first) {
 	catb = catc = 0;
     }
-    else
-    {
-    	a_dev(tab, count, &adev);
-    	fprintf (reclass, "%ld = %ld %f\n", catb, catb, adev);
+    else {
+	a_dev(tab, count, &adev);
+	fprintf(reclass, "%ld = %ld %f\n", catb, catb, adev);
     }
 
     pclose(stats);
-    pclose(reclass); /**/
-
-    return(0);
+    pclose(reclass);
+    /**/ return (0);
 }
 
 
@@ -94,31 +88,28 @@ o_adev (char *basemap, char *covermap, char *outputmap, int usecats, struct Cate
 *
 ************************************************************************/
 
-static int
-a_dev (double *data, int n, double *adev)
+static int a_dev(double *data, int n, double *adev)
 {
- double ave, s;
- int i;
+    double ave, s;
+    int i;
 
-   if(n < 1)
-   {
-    G_warning(_("o_adev: No data in array"));
-    return (1);
-   }
+    if (n < 1) {
+	G_warning(_("o_adev: No data in array"));
+	return (1);
+    }
 
-   *adev = 0.0;
-   s     = 0.0;
+    *adev = 0.0;
+    s = 0.0;
 
-   for(i = 0; i < n; i++)              /* First pass to get the mean     */
-      s += data[i];
-   ave = s / n;
+    for (i = 0; i < n; i++)	/* First pass to get the mean     */
+	s += data[i];
+    ave = s / n;
 
-   for (i = 0; i < n; i++)
-   {
-      *adev += fabs(data[i] - ave);     /* deviation from the mean             */
-   }
+    for (i = 0; i < n; i++) {
+	*adev += fabs(data[i] - ave);	/* deviation from the mean             */
+    }
 
-   *adev /= n;
+    *adev /= n;
 
-   return(0);
+    return (0);
 }

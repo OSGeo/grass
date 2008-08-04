@@ -1,3 +1,4 @@
+
 /**
  * \file V_init.c
  *
@@ -40,23 +41,22 @@ void V_init(void)
 {
     static int first = 1;
 
-    G_clear_screen();   /* this is a kludge - xterm has problems
-			 * it shows what was on the screen after
-			 * endwin is called in V_exit()
-			 */
-    if (first)
-    {
-	initscr () ;		/* initialize curses and tty */
+    G_clear_screen();		/* this is a kludge - xterm has problems
+				 * it shows what was on the screen after
+				 * endwin is called in V_exit()
+				 */
+    if (first) {
+	initscr();		/* initialize curses and tty */
 	first = 0;
     }
 
     /* the order of these 3 calls is important for
      * Mips' braindead implementation of curses  */
-    noecho() ;
-    nonl()   ;
+    noecho();
+    nonl();
     raw();
 
-    clear()  ;
+    clear();
     refresh();
 #ifdef HAVE_KEYPAD
     keypad(stdscr, 1);

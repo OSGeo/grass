@@ -13,4 +13,3 @@ int draw_scale(char *save, int toptext);
 
 /* mouse.c */
 int mouse_query(int toptext);
-

@@ -1,50 +1,51 @@
 /*!
-  \file cplanes_obj.c
- 
-  \brief Nviz library -- Clip planes manipulation
-  
-  COPYRIGHT: (C) 2008 by the GRASS Development Team
+   \file cplanes_obj.c
 
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+   \brief Nviz library -- Clip planes manipulation
 
-  Based on visualization/nviz/src/cutplanes_obj.c
+   COPYRIGHT: (C) 2008 by the GRASS Development Team
 
-  \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
 
-  \date 2008
-*/
+   Based on visualization/nviz/src/cutplanes_obj.c
+
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+
+   \date 2008
+ */
 
 #include <grass/nviz.h>
 
 static void cp_draw(nv_data *, int, int, int);
 
 /*!
-  \brief Creates a clip plane object
-   
-  The number of clip planes is fixed (MAX_CPLANES) and
-  we'll create them all ahead of time anyway we just let
-  the user decide on the id for each.
-*/
-int Nviz_new_cplane(nv_data *data, int id)
+   \brief Creates a clip plane object
+
+   The number of clip planes is fixed (MAX_CPLANES) and
+   we'll create them all ahead of time anyway we just let
+   the user decide on the id for each.
+ */
+int Nviz_new_cplane(nv_data * data, int id)
 {
     data->num_cplanes++;
     /* Initialize internal attributes for this cutplane */
     data->cp_rot[id][X] = data->cp_rot[id][Y] = data->cp_rot[id][Z] = 0.0;
-    data->cp_trans[id][X] = data->cp_trans[id][Y] = data->cp_trans[id][Z] = 0.0;
+    data->cp_trans[id][X] = data->cp_trans[id][Y] = data->cp_trans[id][Z] =
+	0.0;
     data->cp_on[id] = 0;
 
     return 1;
 }
 
 /*!
-  \brief Turn off (make inactive) the given clip plane
+   \brief Turn off (make inactive) the given clip plane
 
-  \param data nviz data
-  \param cplane id
-*/
-int Nviz_off_cplane(nv_data *data, int id)
+   \param data nviz data
+   \param cplane id
+ */
+int Nviz_off_cplane(nv_data * data, int id)
 {
     data->cp_on[id] = 0;
     GS_unset_cplane(id);
@@ -57,8 +58,8 @@ int Nviz_off_cplane(nv_data *data, int id)
 
    \param bound1
    \param bound2
-*/
-int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
+ */
+int Nviz_draw_cplane(nv_data * data, int bound1, int bound2)
 {
     cp_draw(data, data->cur_cplane, bound1, bound2);
 
@@ -66,17 +67,17 @@ int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
 }
 
 /*!
-  \brief Draw current clip plane
+   \brief Draw current clip plane
 
-  \param data nviz data
-  \param current id of current clip plane
-  \param surf1 first surface id
-  \param surf2 second surface id
-*/
-void cp_draw(nv_data *data, int current, int surf1, int surf2)
+   \param data nviz data
+   \param current id of current clip plane
+   \param surf1 first surface id
+   \param surf2 second surface id
+ */
+void cp_draw(nv_data * data, int current, int surf1, int surf2)
 {
     int i, nsurfs;
-    int surf_min=0, surf_max=0, temp;
+    int surf_min = 0, surf_max = 0, temp;
     int *surf_list;
 
     GS_set_draw(GSD_BACK);

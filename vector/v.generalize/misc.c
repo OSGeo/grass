@@ -27,6 +27,7 @@ int type_mask(struct Option *type_opt)
 {
     int res = 0;
     int i;
+
     for (i = 0; type_opt->answers[i]; i++)
 	switch (type_opt->answers[i][0]) {
 	case 'l':
@@ -107,6 +108,7 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
 	Vect_read_line(Out, NULL, Cats, line);
 	for (i = 0; i < Cats->n_cats; i++) {
 	    int f = 0, j;
+
 	    for (j = 0; j < nfields; j++) {	/* find field */
 		if (fields[j] == Cats->field[i]) {
 		    f = j;
@@ -155,8 +157,8 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
 	/* Make a list of categories */
 	IFi = Vect_get_field(In, fields[i]);
 	if (!IFi) {		/* no table */
-	  G_warning(_("Database connection not defined for layer %d"),
-		    fields[i]);
+	    G_warning(_("Database connection not defined for layer %d"),
+		      fields[i]);
 	    continue;
 	}
 
@@ -165,11 +167,11 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
 	ret = db_copy_table_by_ints(IFi->driver, IFi->database, IFi->table,
 				    OFi->driver, Vect_subst_var(OFi->database,
 								Out),
-				    OFi->table, IFi->key, ocats[i], nocats[i]);
+				    OFi->table, IFi->key, ocats[i],
+				    nocats[i]);
 
 	if (ret == DB_FAILED) {
-	  G_warning(_("Unable to copy table <%s>"),
-		    IFi->table);
+	    G_warning(_("Unable to copy table <%s>"), IFi->table);
 	}
 	else {
 	    Vect_map_add_dblink(Out, OFi->number, OFi->name, OFi->table,

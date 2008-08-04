@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -25,9 +26,9 @@
 
 #include "cost.h"
 
-int  allocate(); 
-int  release();
-struct 	cost* get();
-int  give(struct cost* p);
+int allocate();
+int release();
+struct cost *get();
+int give(struct cost *p);
 
 #endif /* __R_COST_MEMORY__ */

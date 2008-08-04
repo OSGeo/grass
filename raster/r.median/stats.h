@@ -5,5 +5,6 @@ struct stats
     long *cat;
     double *area;
 };
+
 /* median.c */
 long median(struct stats *);

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <grass/rowio.h>
 
-static void *my_select ( ROWIO *,int);
-static void pageout ( ROWIO *,int);
+static void *my_select(ROWIO *, int);
+static void pageout(ROWIO *, int);
 
 
 /*!
@@ -28,7 +28,7 @@ static void pageout ( ROWIO *,int);
  *  \return char * 
  */
 
-void *rowio_get (ROWIO *R,int row)
+void *rowio_get(ROWIO * R, int row)
 {
     int i;
     int age;
@@ -42,57 +42,54 @@ void *rowio_get (ROWIO *R,int row)
 
     for (i = 0; i < R->nrows; i++)
 	if (row == R->rcb[i].row)
-	    return my_select (R, i);
+	    return my_select(R, i);
 
     age = 0;
     cur = 0;
 
     for (i = 0; i < R->nrows; i++)
-	if (R->rcb[i].row < 0)	/* free slot ! */
-	{
+	if (R->rcb[i].row < 0) {	/* free slot ! */
 	    cur = i;
 	    break;
 	}
-	else if (age < R->rcb[i].age)
-	{
+	else if (age < R->rcb[i].age) {
 	    cur = i;
 	    age = R->rcb[i].age;
 	}
-    
-    pageout (R, cur);
+
+    pageout(R, cur);
 
     i = (*R->getrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row = row, R->len);
     R->rcb[cur].dirty = 0;
-    if (!i)
-    {
+    if (!i) {
 	R->rcb[cur].row = -1;
 	if (cur == R->cur)
 	    R->cur = -1;
 	return NULL;
     }
 
-    return my_select (R, cur);
+    return my_select(R, cur);
 }
 
-void rowio_flush( ROWIO *R)
+void rowio_flush(ROWIO * R)
 {
     int i;
 
     for (i = 0; i < R->nrows; i++)
-	pageout (R, i);
+	pageout(R, i);
 }
 
-static void pageout ( ROWIO *R,int cur)
+static void pageout(ROWIO * R, int cur)
 {
     if (R->rcb[cur].row < 0)
 	return;
-    if (! R->rcb[cur].dirty)
+    if (!R->rcb[cur].dirty)
 	return;
     (*R->putrow) (R->fd, R->rcb[cur].buf, R->rcb[cur].row, R->len);
     R->rcb[cur].dirty = 0;
 }
 
-static void *my_select ( ROWIO *R,int n)
+static void *my_select(ROWIO * R, int n)
 {
     int i;
 

@@ -1,3 +1,4 @@
+
 /*-
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993 
  * US Army Construction Engineering Research Lab 
@@ -15,16 +16,14 @@
 #include <grass/gis.h>
 #include <grass/interpf.h>
 
-double 
-IL_dist_square (double *pt1, double *pt2, int dim)
+double IL_dist_square(double *pt1, double *pt2, int dim)
 {
-  int i;
-  double sum = 0, s;
+    int i;
+    double sum = 0, s;
 
-  for (i = 0; i < dim; i++)
-  {
-    s = pt1[i] - pt2[i];
-    sum += s * s;
-  }
-  return sum;
+    for (i = 0; i < dim; i++) {
+	s = pt1[i] - pt2[i];
+	sum += s * s;
+    }
+    return sum;
 }

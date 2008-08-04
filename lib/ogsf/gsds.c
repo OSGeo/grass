@@ -1,11 +1,11 @@
 /*!
-  \file gsds.c
- 
-  \brief OGSF library - dataset loading and management (lower level functions) 
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file gsds.c
 
-  The idea here is to treat datasets as seperate objects, which SHOULD:
+   \brief OGSF library - dataset loading and management (lower level functions) 
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   The idea here is to treat datasets as seperate objects, which SHOULD:
    - allow easier reuse of data for different attributes.
    - allow a mechanism for changing data and have changes reflected
    in each attribute using that data.
@@ -14,44 +14,44 @@
    - allow easier weaning from GRASS.
    - allow easier use of shared memory between processes.
 
-  These structures are defined in gstypes.h:
+   These structures are defined in gstypes.h:
 
-  <code>
-  typedef struct{
-  float *fb;
-  int *ib;
-  short *sb;
-  char *cb;
-  struct BM *bm;
-  } typbuff;
-  </code>
+   <code>
+   typedef struct{
+   float *fb;
+   int *ib;
+   short *sb;
+   char *cb;
+   struct BM *bm;
+   } typbuff;
+   </code>
 
-  How about adding a transform func here, so GET_MAPATT would do an
-  on-the-fly transformation? Or even a transform func LIST!
+   How about adding a transform func here, so GET_MAPATT would do an
+   on-the-fly transformation? Or even a transform func LIST!
 
-  <code>
-  typedef struct{
-  int data_id;
-  int dims[MAXDIMS];
-  int ndims;
-  int numbytes;
-  char unique_name[80];
-  typbuff databuff;
-  int changed;
-  int need_reload;
-  } dataset;
-  </code>
+   <code>
+   typedef struct{
+   int data_id;
+   int dims[MAXDIMS];
+   int ndims;
+   int numbytes;
+   char unique_name[80];
+   typbuff databuff;
+   int changed;
+   int need_reload;
+   } dataset;
+   </code>
 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown UI GMS Lab
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown UI GMS Lab
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -79,8 +79,8 @@ static int Cur_max;
 static int Tot_mem = 0;
 
 /*!
-  \brief Initialize gsds
-*/
+   \brief Initialize gsds
+ */
 static int init_gsds(void)
 {
     int i;
@@ -96,30 +96,30 @@ static int init_gsds(void)
 }
 
 /*!
-  \brief Check numsets
+   \brief Check numsets
 
-  \return 0 numset < cur_max
-*/
+   \return 0 numset < cur_max
+ */
 static int check_numsets(void)
 {
     if (Numsets < Cur_max) {
 	return (0);
     }
 
-    G_fatal_error (_("Maximum number of datasets exceeded"));
+    G_fatal_error(_("Maximum number of datasets exceeded"));
 
     /* This return statement keeps compilers happy, it is never executed */
     return (0);
 }
 
 /*!
-  \brief Get dataset
+   \brief Get dataset
 
-  \param id data id
+   \param id data id
 
-  \return pointer to dataset struct
-  \return NULL dataset not found
-*/
+   \return pointer to dataset struct
+   \return NULL dataset not found
+ */
 static dataset *get_dataset(int id)
 {
     int i;
@@ -134,13 +134,13 @@ static dataset *get_dataset(int id)
 }
 
 /*!
-  \brief Get type
+   \brief Get type
 
-  \param ds pointer to dataset struct
+   \param ds pointer to dataset struct
 
-  \return type code
-  \return -1 unsupported type
-*/
+   \return type code
+   \return -1 unsupported type
+ */
 static int get_type(dataset * ds)
 {
     if (ds) {
@@ -169,22 +169,22 @@ static int get_type(dataset * ds)
 }
 
 /*!
-  \brief Get handle to gsds.   
+   \brief Get handle to gsds.   
 
-  Successive calls will continue search until "begin" is set   
-  (problem here is, unique_name no longer uniquely identifies
-  dataset, since changes may be made; but unique_name should still
-  be useful for reloading dataset)
-  changes & types are set to actual for dataset if found.
-  
-  \param name
-  \param changes,types  acceptable changes & types, flags may be or'd
-  not changed is assumed to always be acceptable
-  \param begin flag to indicate search from beginning
+   Successive calls will continue search until "begin" is set   
+   (problem here is, unique_name no longer uniquely identifies
+   dataset, since changes may be made; but unique_name should still
+   be useful for reloading dataset)
+   changes & types are set to actual for dataset if found.
 
-  \return data id
-  \return -1 not found
-*/
+   \param name
+   \param changes,types  acceptable changes & types, flags may be or'd
+   not changed is assumed to always be acceptable
+   \param begin flag to indicate search from beginning
+
+   \return data id
+   \return -1 not found
+ */
 int gsds_findh(const char *name, IFLAG * changes, IFLAG * types, int begin)
 {
     static int i;
@@ -209,13 +209,13 @@ int gsds_findh(const char *name, IFLAG * changes, IFLAG * types, int begin)
 }
 
 /*!
-  \brief Get handle to gsds
+   \brief Get handle to gsds
 
-  \param name raster map name
+   \param name raster map name
 
-  \return -1 on failure
-  \return data id
-*/
+   \return -1 on failure
+   \return data id
+ */
 int gsds_newh(const char *name)
 {
     dataset *new;
@@ -266,18 +266,18 @@ int gsds_newh(const char *name)
 }
 
 /*!
-  \brief Get data buffer
+   \brief Get data buffer
 
-  Doesn't prevent writing a buff thats's been gotten with change_flag
-  == 0 (could return a copy, but willing to trust calling func for
-  now)
-  
-  \param id dataset id
-  \param change_flag set changed flag
+   Doesn't prevent writing a buff thats's been gotten with change_flag
+   == 0 (could return a copy, but willing to trust calling func for
+   now)
 
-  \return pointer to typbuff struct
-  \return NULL on failure
-*/
+   \param id dataset id
+   \param change_flag set changed flag
+
+   \return pointer to typbuff struct
+   \return NULL on failure
+ */
 typbuff *gsds_get_typbuff(int id, IFLAG change_flag)
 {
     dataset *ds;
@@ -293,13 +293,13 @@ typbuff *gsds_get_typbuff(int id, IFLAG change_flag)
 }
 
 /*!
-  \brief Get name
+   \brief Get name
 
-  \param id
+   \param id
 
-  \return name
-  \return NULL on failure
-*/
+   \return name
+   \return NULL on failure
+ */
 char *gsds_get_name(int id)
 {
     int i;
@@ -319,19 +319,19 @@ char *gsds_get_name(int id)
 }
 
 /*!
-  \brief Free allocated dataset
+   \brief Free allocated dataset
 
-  \param id
+   \param id
 
-  \return 0 not found
-  \return 1 found
-*/
+   \return 0 not found
+   \return 1 found
+ */
 int gsds_free_datah(int id)
 {
     int i, j, found = 0;
     dataset *fds;
 
-    G_debug (3, "gsds_free_datah");
+    G_debug(3, "gsds_free_datah");
 
     for (i = 0; i < Numsets; i++) {
 	if (Data[i]->data_id == id) {
@@ -358,14 +358,14 @@ int gsds_free_datah(int id)
 }
 
 /*!
-  \brief Free allocated buffer
+   \brief Free allocated buffer
 
-  \param id dataset id
-  \param typ data type
+   \param id dataset id
+   \param typ data type
 
-  \return 0 not found
-  \return 1 found
-*/
+   \return 0 not found
+   \return 1 found
+ */
 int gsds_free_data_buff(int id, int typ)
 {
     int i, found = 0;
@@ -383,13 +383,13 @@ int gsds_free_data_buff(int id, int typ)
 }
 
 /*!
-  \brief Free data buffer
+   \brief Free data buffer
 
-  \param ds pointer to dataset struct
-  \param typ data type
+   \param ds pointer to dataset struct
+   \param typ data type
 
-  \return freed size
-*/
+   \return freed size
+ */
 int free_data_buffs(dataset * ds, int typ)
 {
     int nsiz = 1, i, siz, freed = 0;
@@ -456,26 +456,28 @@ int free_data_buffs(dataset * ds, int typ)
     ds->numbytes -= freed;
 
     if (freed) {
-	G_debug (5, "free_data_buffs(): freed data from id no. %d", ds->data_id);
-	G_debug (5, "free_data_buffs(): %.3f Kbytes freed, current total = %.3f",
-		 freed / 1000., Tot_mem / 1000.);
+	G_debug(5, "free_data_buffs(): freed data from id no. %d",
+		ds->data_id);
+	G_debug(5,
+		"free_data_buffs(): %.3f Kbytes freed, current total = %.3f",
+		freed / 1000., Tot_mem / 1000.);
     }
-    
+
     return (freed);
 }
 
 /*!
-  \brief Allocates correct buffer according to type, keeps track of total mem
+   \brief Allocates correct buffer according to type, keeps track of total mem
 
-  \todo add ATTY_CONST
+   \todo add ATTY_CONST
 
-  \param id dataset id
-  \param dims array of dimensions
-  \param ndims number of dimensions
-  \param type data type
+   \param id dataset id
+   \param dims array of dimensions
+   \param ndims number of dimensions
+   \param type data type
 
-  \return
-*/
+   \return
+ */
 int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 {
     dataset *ds;
@@ -527,7 +529,8 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    siz *= sizeof(char);
 
 	    if (siz) {
-		if (NULL == (ds->databuff.cb = (unsigned char *) G_malloc(siz))) {
+		if (NULL ==
+		    (ds->databuff.cb = (unsigned char *)G_malloc(siz))) {
 		    return (-1);
 		}
 	    }
@@ -541,7 +544,7 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    siz *= sizeof(short);
 
 	    if (siz) {
-		if (NULL == (ds->databuff.sb = (short *) G_malloc(siz))) {
+		if (NULL == (ds->databuff.sb = (short *)G_malloc(siz))) {
 		    return (-1);
 		}
 	    }
@@ -555,7 +558,7 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    siz *= sizeof(int);
 
 	    if (siz) {
-		if (NULL == (ds->databuff.ib = (int *) G_malloc(siz))) {
+		if (NULL == (ds->databuff.ib = (int *)G_malloc(siz))) {
 		    return (-1);
 		}
 	    }
@@ -569,7 +572,7 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	    siz *= sizeof(float);
 
 	    if (siz) {
-		if (NULL == (ds->databuff.fb = (float *) G_malloc(siz))) {
+		if (NULL == (ds->databuff.fb = (float *)G_malloc(siz))) {
 		    return (-1);
 		}
 	    }
@@ -589,8 +592,9 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 	ds->ndims = ndims;
 	Tot_mem += siz;
 
-	G_debug (5, "gsds_alloc_typbuff(): %f Kbytes allocated, current total = %f",
-		 siz / 1000., Tot_mem / 1000.);
+	G_debug(5,
+		"gsds_alloc_typbuff(): %f Kbytes allocated, current total = %f",
+		siz / 1000., Tot_mem / 1000.);
 
 	return (siz);
     }
@@ -599,33 +603,33 @@ int gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param id
+   \param id
 
-  \return -1 on error
-  \return 
-*/
+   \return -1 on error
+   \return 
+ */
 int gsds_get_changed(int id)
 {
     dataset *ds;
 
     if ((ds = get_dataset(id))) {
-	return ((int) ds->changed);
+	return ((int)ds->changed);
     }
 
     return (-1);
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param id
-  \param reason
-  
-  \return -1 on error
-  \return
-*/
+   \param id
+   \param reason
+
+   \return -1 on error
+   \return
+ */
 int gsds_set_changed(int id, IFLAG reason)
 {
     dataset *ds;
@@ -637,13 +641,13 @@ int gsds_set_changed(int id, IFLAG reason)
     return (-1);
 }
 
-/*!						
-  \brief ADD
+/*!                                             
+   \brief ADD
 
-  \param id
+   \param id
 
-  \return
-*/
+   \return
+ */
 int gsds_get_type(int id)
 {
     dataset *ds;

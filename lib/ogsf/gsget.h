@@ -30,22 +30,22 @@
 
 
 
-#define XYMAXPOS 0x3ff    /* 1023 */
-#define ZMAXPOS 0x3ff    /* 1023 */
+#define XYMAXPOS 0x3ff		/* 1023 */
+#define ZMAXPOS 0x3ff		/* 1023 */
 
-#define NXMASK 0xffe00000/* top 11 bits */
-#define NYMASK 0x1ffc00  /* middle 11 bits of packed int */
-#define NZMASK 0x3ff     /* lowest 10 bits */
+#define NXMASK 0xffe00000	/* top 11 bits */
+#define NYMASK 0x1ffc00		/* middle 11 bits of packed int */
+#define NZMASK 0x3ff		/* lowest 10 bits */
 
 #define NZUP 0x000003ff
 
 /* Fetch Normal vector from packed int */
 /*
-#define FNORM(i,nv)  \
-  nv[X] = ((int)(((i) & NXMASK) >> 21) - XYMAXPOS)/(float)XYMAXPOS; \
-  nv[Y] = ((int)(((i) & NYMASK) >> 10) - XYMAXPOS)/(float)XYMAXPOS; \
-  nv[Z] = (int)((i) & NZMASK) * GS_global_exag()/(float)ZMAXPOS
-*/
+   #define FNORM(i,nv)  \
+   nv[X] = ((int)(((i) & NXMASK) >> 21) - XYMAXPOS)/(float)XYMAXPOS; \
+   nv[Y] = ((int)(((i) & NYMASK) >> 10) - XYMAXPOS)/(float)XYMAXPOS; \
+   nv[Z] = (int)((i) & NZMASK) * GS_global_exag()/(float)ZMAXPOS
+ */
 
 #define FNORM(i,nv)  \
   nv[X] = ((int)(((i) & NXMASK) >> 21) - XYMAXPOS)/(float)XYMAXPOS; \

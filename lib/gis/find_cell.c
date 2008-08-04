@@ -6,9 +6,9 @@
  *        char *mapset     mapset to search. if mapset is ""
  *                         will search in mapset search list
  *
- *	searches for a cell file from the mapset search list
+ *      searches for a cell file from the mapset search list
  *      or in a specified mapset.
- *	returns the mapset name where the cell file was found.
+ *      returns the mapset name where the cell file was found.
  *
  *  returns:
  *      char *  pointer to a string with name of mapset
@@ -40,31 +40,29 @@
  * "@<i>mapset</i>".
  *
  * For example, to find a raster map anywhere in the database:
-\code
-  char name[GNAME_MAX];
-  char *mapset;
-  if ((mapset = G_find_cell(name,"")) == NULL)
-  // not found
-\endcode
+ \code
+ char name[GNAME_MAX];
+ char *mapset;
+ if ((mapset = G_find_cell(name,"")) == NULL)
+ // not found
+ \endcode
  *
  * To check that the raster map exists in the current mapset:
  *
-\code
-  char name[GNAME_MAX];
-  if (G_find_cell(name,G_mapset( )) == NULL)
-  // not found
-\endcode
+ \code
+ char name[GNAME_MAX];
+ if (G_find_cell(name,G_mapset( )) == NULL)
+ // not found
+ \endcode
  *
  *  \param name
  *  \param mapset
  *  \return char * 
  */
 
-char *
-G_find_cell  (char *name, const char *mapset)
-
+char *G_find_cell(char *name, const char *mapset)
 {
-	return G_find_file ("cell", name, mapset);
+    return G_find_file("cell", name, mapset);
 }
 
 
@@ -82,9 +80,7 @@ G_find_cell  (char *name, const char *mapset)
  *  \return char *
  */
 
-char *
-G_find_cell2  (const char *name, const char *mapset)
-
+char *G_find_cell2(const char *name, const char *mapset)
 {
-	return G_find_file2 ("cell", name, mapset);
+    return G_find_file2("cell", name, mapset);
 }

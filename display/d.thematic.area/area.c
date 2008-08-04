@@ -14,7 +14,7 @@
 #include "local_proto.h"
 
 int dareatheme(struct Map_info *Map, struct cat_list *Clist,
-	       dbCatValArray *cvarr, double *breaks, int nbreaks,
+	       dbCatValArray * cvarr, double *breaks, int nbreaks,
 	       const struct color_rgb *colors, const struct color_rgb *bcolor,
 	       int chcat, struct Cell_head *window, int default_width)
 {
@@ -45,6 +45,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
     for (area = 1; area <= num; area++) {
 	int i;
 	BOUND_BOX box;
+
 	G_debug(3, "area = %d", area);
 
 	if (!Vect_area_alive(Map, area))
@@ -157,6 +158,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 	/* XXX rewrite boundary */
 	if (bcolor) {
 	    int i;
+
 	    Vect_get_area_points(Map, area, Points);
 	    R_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    /*use different user defined render methods */

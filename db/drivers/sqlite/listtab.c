@@ -1,3 +1,4 @@
+
 /**
  * \file listtab.c
  *
@@ -29,54 +30,52 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_list_tables (dbString **tlist, int *tcount, int system)
+int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 {
     int i, nrows;
     dbString *list;
     sqlite3_stmt *statement;
     const char *rest;
-    int   ret;
+    int ret;
 
     init_error();
 
-    ret = sqlite3_prepare ( sqlite, 
-	"select name from sqlite_master where type = 'table' or type = 'view'",
-	 -1, &statement, &rest );
+    ret = sqlite3_prepare(sqlite,
+			  "select name from sqlite_master where type = 'table' or type = 'view'",
+			  -1, &statement, &rest);
 
-    if ( ret != SQLITE_OK ) {
-        append_error( "Cannot list tables\n");
-        append_error ((char *) sqlite3_errmsg (sqlite));
-        report_error();
-        sqlite3_finalize ( statement );
-        return DB_FAILED;
+    if (ret != SQLITE_OK) {
+	append_error("Cannot list tables\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	sqlite3_finalize(statement);
+	return DB_FAILED;
     }
 
     nrows = 0;
-    while ( sqlite3_step ( statement ) == SQLITE_ROW )
-    {
-        nrows++;
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+	nrows++;
     }
-    sqlite3_reset ( statement );
-    
-    G_debug ( 3, "nrows = %d", nrows );
-    
+    sqlite3_reset(statement);
+
+    G_debug(3, "nrows = %d", nrows);
+
     list = db_alloc_string_array(nrows);
-    
-    if (list == NULL ) {
-	append_error ( "Cannot db_alloc_string_array()");
+
+    if (list == NULL) {
+	append_error("Cannot db_alloc_string_array()");
 	report_error();
 	return DB_FAILED;
     }
 
     i = 0;
-    while ( sqlite3_step ( statement ) == SQLITE_ROW )
-    {
-        G_debug ( 3, "table: %s", sqlite3_column_text ( statement, 0) );
-	    db_set_string (&list[i], (char *) sqlite3_column_text (statement, 0));
-        i++;
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+	G_debug(3, "table: %s", sqlite3_column_text(statement, 0));
+	db_set_string(&list[i], (char *)sqlite3_column_text(statement, 0));
+	i++;
     }
 
-    sqlite3_finalize ( statement );
+    sqlite3_finalize(statement);
 
     *tlist = list;
     *tcount = nrows;

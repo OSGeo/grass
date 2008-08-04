@@ -21,57 +21,63 @@
 #include <grass/dbmi.h>
 #include <grass/Vect.h>
 
-int reclass ( struct Map_info *In, struct Map_info *Out, int type, int field, dbCatValArray *cvarr, int dissolve)
+int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
+	    dbCatValArray * cvarr, int dissolve)
 {
-    int i, nlines, line, ltype, old_cat, new_cat;	
-    int nocat = 0, rclelem=0, negative=0;
+    int i, nlines, line, ltype, old_cat, new_cat;
+    int nocat = 0, rclelem = 0, negative = 0;
     struct line_pnts *Points;
     struct line_cats *Cats, *NewCats;
 
     Points = Vect_new_line_struct();
-    Cats = Vect_new_cats_struct ();
-    NewCats = Vect_new_cats_struct ();
+    Cats = Vect_new_cats_struct();
+    NewCats = Vect_new_cats_struct();
 
     /* --------------------- Lines Section ------------------------------- */
     /* Cycle through all lines */
-    nlines = Vect_get_num_lines (In);
-    for ( line = 1; line <= nlines; line++) { 
+    nlines = Vect_get_num_lines(In);
+    for (line = 1; line <= nlines; line++) {
 	G_percent(line, nlines, 1);
-	
-	ltype = Vect_read_line ( In, Points, Cats, line );
 
-	Vect_reset_cats ( NewCats );
-	
-	for ( i = 0 ; i < Cats->n_cats; i++ ) {
-	    if ( (ltype & type) && Cats->field[i] == field ) { /* reclass */
-		old_cat =  Cats->cat[i];
-		G_debug (3, "  old_cat = %d", old_cat ); 
+	ltype = Vect_read_line(In, Points, Cats, line);
 
-		if ( db_CatValArray_get_value_int ( cvarr, old_cat, &new_cat ) != DB_OK ) {
+	Vect_reset_cats(NewCats);
+
+	for (i = 0; i < Cats->n_cats; i++) {
+	    if ((ltype & type) && Cats->field[i] == field) {	/* reclass */
+		old_cat = Cats->cat[i];
+		G_debug(3, "  old_cat = %d", old_cat);
+
+		if (db_CatValArray_get_value_int(cvarr, old_cat, &new_cat) !=
+		    DB_OK) {
 		    nocat++;
-		} else { 
-		    G_debug (3, "  new_cat = %d", new_cat ); 
+		}
+		else {
+		    G_debug(3, "  new_cat = %d", new_cat);
 
-		    if ( new_cat < 0 ) {
+		    if (new_cat < 0) {
 			negative++;
-		    } else {
-			Vect_cat_set ( NewCats, field, new_cat );
+		    }
+		    else {
+			Vect_cat_set(NewCats, field, new_cat);
 		    }
 		    rclelem++;
 		}
-	    } else { /* copy */
-		Vect_cat_set ( NewCats, Cats->field[i], Cats->cat[i] );
 	    }
-	}	
-	Vect_write_line (Out, ltype, Points, NewCats);
+	    else {		/* copy */
+		Vect_cat_set(NewCats, Cats->field[i], Cats->cat[i]);
+	    }
+	}
+	Vect_write_line(Out, ltype, Points, NewCats);
     }
 
-    if ( nocat > 0 )
-	G_warning ("For %d elements no new category was defined", nocat );
-    
-    if ( negative > 0 )
-	G_warning ("For %d elements requested negative category (ignored, no category in output)", negative );
+    if (nocat > 0)
+	G_warning("For %d elements no new category was defined", nocat);
 
-    return(rclelem) ;
+    if (negative > 0)
+	G_warning
+	    ("For %d elements requested negative category (ignored, no category in output)",
+	     negative);
+
+    return (rclelem);
 }
-

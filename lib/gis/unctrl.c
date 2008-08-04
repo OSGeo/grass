@@ -1,3 +1,4 @@
+
 /**
  * \file unctrl.c
  *
@@ -30,18 +31,18 @@
  * \return char * pointer to string containing English-like representation for character <b>c</b>
  */
 
-char *G_unctrl (int c)
+char *G_unctrl(int c)
 {
     static char buf[20];
 
     if (c < ' ')
-	sprintf (buf, "ctrl-%c", c|0100);
+	sprintf(buf, "ctrl-%c", c | 0100);
     else if (c < 0177)
 	sprintf(buf, "%c", c);
     else if (c == 0177)
-	sprintf (buf, "DEL/RUB");
+	sprintf(buf, "DEL/RUB");
     else
-	sprintf (buf, "Mctrl-%c", (c&77)|0100);
+	sprintf(buf, "Mctrl-%c", (c & 77) | 0100);
 
     return buf;
 }

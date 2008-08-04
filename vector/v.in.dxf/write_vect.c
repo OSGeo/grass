@@ -55,7 +55,8 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *label,
 
 	db_set_string(&sql, buf);
 	if (db_execute_immediate(driver, &sql) != DB_OK)
-	    G_fatal_error(_("Unable to insert new record: %s"), db_get_string(&sql));
+	    G_fatal_error(_("Unable to insert new record: %s"),
+			  db_get_string(&sql));
 	db_free_string(&sql);
     }
     else
@@ -75,7 +76,7 @@ void write_done(struct Map_info *Map)
     int i;
 
     if (!(found_layers = (num_fields > 0))) {
-	G_warning (_("No DXF layers found!"));
+	G_warning(_("No DXF layers found!"));
 	return;
     }
 
@@ -84,11 +85,11 @@ void write_done(struct Map_info *Map)
 	db_close_database_shutdown_driver(driver);
     }
 
-    G_message (_("Following DXF layers found:"));
+    G_message(_("Following DXF layers found:"));
     for (i = 0; i < num_fields; i++) {
 	/* capital column names are a pain in SQL */
 	G_str_to_lower(field_names[i]);
-	G_message (_("Layer %d: %s"), i + 1, field_names[i]);
+	G_message(_("Layer %d: %s"), i + 1, field_names[i]);
 	G_free(field_names[i]);
 	if (!flag_table) {
 	    if (flag_one_layer && i > 0)
@@ -122,9 +123,9 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
 			 int *cat)
 {
     int i, type;
-    
+
     /* make table name SQL compliant */
-    G_str_to_sql (field_name);
+    G_str_to_sql(field_name);
 
     for (i = 0; i < num_fields; i++) {
 	/* field name already exists */
@@ -173,17 +174,20 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
 	type = GV_MTABLE;
 
     Fi = (struct field_info **)G_realloc(Fi,
-					 (i + 1) * sizeof(struct field_info *));
+					 (i +
+					  1) * sizeof(struct field_info *));
 
     Fi[i] = Vect_default_field_info(Map, *field, field_name, type);
 
     if (!driver) {
 	driver =
 	    db_start_driver_open_database(Fi[i]->driver,
-					  Vect_subst_var(Fi[i]->database, Map));
+					  Vect_subst_var(Fi[i]->database,
+							 Map));
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Vect_subst_var(Fi[i]->database, Map), Fi[i]->driver);
+			  Vect_subst_var(Fi[i]->database, Map),
+			  Fi[i]->driver);
 
 	db_begin_transaction(driver);
 
@@ -206,7 +210,8 @@ static int get_field_cat(struct Map_info *Map, char *field_name, int *field,
 
     if (db_grant_on_table
 	(driver, Fi[i]->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi[i]->table);
+	G_fatal_error(_("Unable to grant privileges on table <%s>"),
+		      Fi[i]->table);
     if (db_create_index2(driver, Fi[i]->table, Fi[i]->key) != DB_OK)
 	G_warning(_("Unable to create index for table <%s>, key <%s>"),
 		  Fi[i]->table, Fi[i]->key);

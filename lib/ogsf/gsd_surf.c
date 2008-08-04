@@ -1,20 +1,20 @@
 /*!
-  \file gsd_surf.c
- 
-  \brief OGSF library - loading and manipulating surfaces
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file gsd_surf.c
 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (October 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - loading and manipulating surfaces
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (October 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 
@@ -26,23 +26,23 @@
 #include "rowcol.h"
 
 /*
-#define CALC_AREA
-*/
+   #define CALC_AREA
+ */
 
 /*
-#define DO_ARROW_SOLID
-#define DEBUG_ARROW ((row && !(row%surf->y_modw))&&(col && !(col%surf->x_modw)))
-*/
+   #define DO_ARROW_SOLID
+   #define DEBUG_ARROW ((row && !(row%surf->y_modw))&&(col && !(col%surf->x_modw)))
+ */
 
 /*
-#define DO_ARROW
-*/
+   #define DO_ARROW
+ */
 
 #define DEBUG_ARROW (0)
 
 /*!
-  \brief MACROS for use in gsd_ortho_wall ONLY !!!
-*/
+   \brief MACROS for use in gsd_ortho_wall ONLY !!!
+ */
 #define SET_SCOLOR(sf) \
 	    if(check_color[sf]) \
 	    { \
@@ -60,28 +60,29 @@ static int FCmode;
 
 /************************************************************************/
 /* Notes on exageration:
-    vertical exageration is of two forms: 
-    1) global exageration (from geoview struct) 
-    2) vertical exageration for each surface (UN-IMPLEMENTED)
-*/
+   vertical exageration is of two forms: 
+   1) global exageration (from geoview struct) 
+   2) vertical exageration for each surface (UN-IMPLEMENTED)
+ */
+
 /************************************************************************/
 /* may need to add more parameters to tell it which window or off_screen
  * pixmap to draw into.
-*/
+ */
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param surf surface (geosurf)
+   \param surf surface (geosurf)
 
-  \return
-  \return -1 on error
-*/
+   \return
+   \return -1 on error
+ */
 int gsd_surf(geosurf * surf)
 {
     int desc, ret;
 
-    G_debug (4, "gsd_surf(): id=%d", surf->gsurf_id);
+    G_debug(4, "gsd_surf(): id=%d", surf->gsurf_id);
 
     desc = ATT_TOPO;
 
@@ -96,7 +97,7 @@ int gsd_surf(geosurf * surf)
 	break;
 
     case MAP_ATT:
-	ret = (gsd_surf_map(surf)); /* changed to use test draw routine */
+	ret = (gsd_surf_map(surf));	/* changed to use test draw routine */
 
 #ifdef DO_ARROW
 	gsd_norm_arrows(surf);
@@ -128,14 +129,14 @@ int gsd_surf(geosurf * surf)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  Using tmesh - not confident with qstrips portability
+   Using tmesh - not confident with qstrips portability
 
-  \param surf surface (geosurf)
+   \param surf surface (geosurf)
 
-  \return
-*/
+   \return
+ */
 int gsd_surf_map_old(geosurf * surf)
 {
     int check_mask, check_color, check_transp;
@@ -201,10 +202,10 @@ int gsd_surf_map_old(geosurf * surf)
     /* Get viewport */
     gsd_getwindow(window, viewport, modelMatrix, projMatrix);
     /* adjust window */
-    window[0] += (int) (yres * 2);
-    window[1] -= (int) (yres * 2);
-    window[2] -= (int) (xres * 2);
-    window[3] += (int) (xres * 2);
+    window[0] += (int)(yres * 2);
+    window[1] -= (int)(yres * 2);
+    window[2] -= (int)(xres * 2);
+    window[3] += (int)(xres * 2);
 
     gsd_colormode(CM_DIFFUSE);
     gsd_pushmatrix();
@@ -231,7 +232,7 @@ int gsd_surf_map_old(geosurf * surf)
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
-	ktrans = (255 - (int) surf->att[ATT_TRANSP].constant) << 24;
+	ktrans = (255 - (int)surf->att[ATT_TRANSP].constant) << 24;
 	gsd_blend(1);
 	gsd_zwritemask(0x0);
     }
@@ -279,7 +280,7 @@ int gsd_surf_map_old(geosurf * surf)
 
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    curcolor = (int) surf->att[ATT_COLOR].constant;
+	    curcolor = (int)surf->att[ATT_COLOR].constant;
 	}
 	else {
 	    curcolor = surf->wire_color;
@@ -342,8 +343,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 	    if (check_transp) {
 		GET_MAPATT(trbuff, offset, ttr);
-		ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-		ktrans = (char) (255 - ktrans) << 24;
+		ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+		ktrans = (char)(255 - ktrans) << 24;
 	    }
 
 	    gsd_litvert_func(n, ktrans | curcolor, pt);
@@ -367,8 +368,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 	    if (check_transp) {
 		GET_MAPATT(trbuff, offset, ttr);
-		ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-		ktrans = (char) (255 - ktrans) << 24;
+		ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+		ktrans = (char)(255 - ktrans) << 24;
 	    }
 
 	    if (check_material) {
@@ -467,8 +468,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 		    if (check_transp) {
 			GET_MAPATT(trbuff, offset, ttr);
-			ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-			ktrans = (char) (255 - ktrans) << 24;
+			ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+			ktrans = (char)(255 - ktrans) << 24;
 		    }
 
 		    if (check_material) {
@@ -522,8 +523,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 		    if (check_transp) {
 			GET_MAPATT(trbuff, offset, ttr);
-			ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-			ktrans = (char) (255 - ktrans) << 24;
+			ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+			ktrans = (char)(255 - ktrans) << 24;
 		    }
 
 		    if (check_material) {
@@ -578,8 +579,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 		if (check_transp) {
 		    GET_MAPATT(trbuff, offset, ttr);
-		    ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-		    ktrans = (char) (255 - ktrans) << 24;
+		    ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+		    ktrans = (char)(255 - ktrans) << 24;
 		}
 
 		if (check_material) {
@@ -647,8 +648,8 @@ int gsd_surf_map_old(geosurf * surf)
 
 		if (check_transp) {
 		    GET_MAPATT(trbuff, offset, ttr);
-		    ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-		    ktrans = (char) (255 - ktrans) << 24;
+		    ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+		    ktrans = (char)(255 - ktrans) << 24;
 		}
 
 		if (check_material) {
@@ -705,26 +706,26 @@ int gsd_surf_map_old(geosurf * surf)
     show_colormode();
 
 #ifdef CALC_AREA
-    G_debug (4, "  Surface Area: %.12lf", asurf);
-    G_debug (4, "  Exaggerated Surface Area: %.12lf", axsurf);
+    G_debug(4, "  Surface Area: %.12lf", asurf);
+    G_debug(4, "  Exaggerated Surface Area: %.12lf", axsurf);
 #endif
 
     return (0);
 }
 
 /*!
-  \brief 
-  
-  Using tmesh - not confident with qstrips portability
-  
-  \todo FIX: do_diff won't work right - needs normals - maybe 
-  calculate on the fly
+   \brief 
 
-  \param surf surface (geosurf)
-  \param k
+   Using tmesh - not confident with qstrips portability
 
-  \return
-*/
+   \todo FIX: do_diff won't work right - needs normals - maybe 
+   calculate on the fly
+
+   \param surf surface (geosurf)
+   \param k
+
+   \return
+ */
 int gsd_surf_const(geosurf * surf, float k)
 {
     int do_diff, check_mask, check_color;
@@ -774,10 +775,10 @@ int gsd_surf_const(geosurf * surf, float k)
     /* Get Viewport */
     gsd_getwindow(window, viewport, modelMatrix, projMatrix);
     /* adjust window */
-    window[0] += (int) (yres * 2);
-    window[1] -= (int) (yres * 2);
-    window[2] -= (int) (xres * 2);
-    window[3] += (int) (xres * 2);
+    window[0] += (int)(yres * 2);
+    window[1] -= (int)(yres * 2);
+    window[2] -= (int)(xres * 2);
+    window[3] += (int)(xres * 2);
 
 
     gsd_colormode(CM_DIFFUSE);
@@ -799,7 +800,7 @@ int gsd_surf_const(geosurf * surf, float k)
 
     if (CONST_ATT == surf->att[ATT_TRANSP].att_src) {
 	gsd_blend(1);
-	ktrans = 255 - (int) surf->att[ATT_TRANSP].constant;
+	ktrans = 255 - (int)surf->att[ATT_TRANSP].constant;
 	gsd_zwritemask(0x0);
     }
 
@@ -814,7 +815,7 @@ int gsd_surf_const(geosurf * surf, float k)
 
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    curcolor = (int) surf->att[ATT_COLOR].constant;
+	    curcolor = (int)surf->att[ATT_COLOR].constant;
 	}
 	else {
 	    curcolor = surf->wire_color;
@@ -1079,15 +1080,15 @@ int gsd_surf_const(geosurf * surf, float k)
 }
 
 /*!
-  \brief Define user function
+   \brief Define user function
 
-  Not yet supported
+   Not yet supported
 
-  \param gs surface (geosurf)
-  \param user_func user function
+   \param gs surface (geosurf)
+   \param user_func user function
 
-  \return 1
-*/
+   \return 1
+ */
 int gsd_surf_func(geosurf * gs, int (*user_func) ())
 {
 
@@ -1095,18 +1096,18 @@ int gsd_surf_func(geosurf * gs, int (*user_func) ())
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param npts1
-  \param npts2
-  \param surf1 first surface (geosurf)
-  \param surf2 second surface (geosurf)
-  \param points1
-  \param points2
-  \param norm
+   \param npts1
+   \param npts2
+   \param surf1 first surface (geosurf)
+   \param surf2 second surface (geosurf)
+   \param points1
+   \param points2
+   \param norm
 
-  \return 1
-*/
+   \return 1
+ */
 int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
 			  geosurf * surf2, Point3 * points1, Point3 * points2,
 			  float *norm)
@@ -1122,7 +1123,7 @@ int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
 
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    color1 = (int) surf1->att[ATT_COLOR].constant;
+	    color1 = (int)surf1->att[ATT_COLOR].constant;
 	}
 	else {
 	    color1 = surf1->wire_color;
@@ -1137,7 +1138,7 @@ int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
     col_src = surf2->att[ATT_COLOR].att_src;
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    color2 = (int) surf2->att[ATT_COLOR].constant;
+	    color2 = (int)surf2->att[ATT_COLOR].constant;
 	}
 	else {
 	    color2 = surf2->wire_color;
@@ -1200,10 +1201,10 @@ int gsd_triangulated_wall(int npts1, int npts2, geosurf * surf1,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param mode
-*/
+   \param mode
+ */
 void gsd_setfc(int mode)
 {
     FCmode = mode;
@@ -1212,23 +1213,23 @@ void gsd_setfc(int mode)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \return
-*/
+   \return
+ */
 int gsd_getfc(void)
 {
     return (FCmode);
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param surf surface (geosurf)
-  \param point
+   \param surf surface (geosurf)
+   \param point
 
-  \return
-*/
+   \return
+ */
 static int transpoint_is_masked(geosurf * surf, Point3 point)
 {
     Point3 tp;
@@ -1240,20 +1241,20 @@ static int transpoint_is_masked(geosurf * surf, Point3 point)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param points
-  \param gsurf
-  \param ptn
-  \param cursurf
-  \param numsurfs
-  \param belowsurf
+   \param points
+   \param gsurf
+   \param ptn
+   \param cursurf
+   \param numsurfs
+   \param belowsurf
 
-  \return 0 if there is no surface below the current,
-  \return -1 if the current surface is masked,
-  \return 1 if the surface below the current surface is not masked 
-  (belowsurf is assigned)
-*/
+   \return 0 if there is no surface below the current,
+   \return -1 if the current surface is masked,
+   \return 1 if the surface below the current surface is not masked 
+   (belowsurf is assigned)
+ */
 static int get_point_below(Point3 ** points, geosurf ** gsurfs, int ptn,
 			   int cursurf, int numsurfs, int *belowsurf)
 {
@@ -1309,20 +1310,20 @@ static int get_point_below(Point3 ** points, geosurf ** gsurfs, int ptn,
 
 
 /*
-#define CPDEBUG
-*/
+   #define CPDEBUG
+ */
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param np
-  \param ns
-  \param gsurfs
-  \param points
-  \param norm
+   \param np
+   \param ns
+   \param gsurfs
+   \param points
+   \param norm
 
-  \return
-*/
+   \return
+ */
 int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 		   float *norm)
 {
@@ -1341,7 +1342,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 
 	    if (col_src != MAP_ATT) {
 		if (col_src == CONST_ATT) {
-		    colors[n] = (int) gsurfs[n]->att[ATT_COLOR].constant;
+		    colors[n] = (int)gsurfs[n]->att[ATT_COLOR].constant;
 		}
 		else {
 		    colors[n] = gsurfs[n]->wire_color;
@@ -1445,6 +1446,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 #ifdef CPDEBUG
 			{
 			    int lower = 0;
+
 			    if (GS_check_cancel()) {
 				break;
 			    }
@@ -1511,9 +1513,10 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							&tx, &ty)) {
 				    /* crossing going up */
 
-				    G_debug(4, "crossing going up at surf %d no. %d",
+				    G_debug(4,
+					    "crossing going up at surf %d no. %d",
 					    n, i);
-				    
+
 				    upper = 1;
 				    xing[Z] = ty;
 				    xing[Y] = points[n][i - 1][Y] + tx *
@@ -1547,8 +1550,9 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							     [Z], &tx, &ty)) {
 				    /* crossing going down */
 
-				    G_debug (4, "crossing going down at surf %d no. %d",
-					     n, i);
+				    G_debug(4,
+					    "crossing going down at surf %d no. %d",
+					    n, i);
 
 				    upper = 1;
 				    xing[Z] = ty;
@@ -1595,8 +1599,9 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 					lower = 1;
 				    }
 #endif
-				    G_debug (4, "lower crossing at surf %d no. %d between surfs %d & %d",
-					     n, i, bn, bnl);
+				    G_debug(4,
+					    "lower crossing at surf %d no. %d between surfs %d & %d",
+					    n, i, bn, bnl);
 
 				    xing[Z] = ty;
 				    xing[Y] = points[bn][i - 1][Y] + tx *
@@ -1624,27 +1629,31 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 #ifdef CPDEBUG
 			    {
 				if (!upper && !lower) {
-				    G_debug (4, "Crossing NOT found or masked:");
-				    G_debug (4, "  current surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f",
-					     n, points[n][i - 1][X],
-					     points[n][i - 1][Y],
-					     points[n][i - 1][Z],
-					     points[n][i][X], points[n][i][Y],
-					     points[n][i][Z]);
-				    G_debug (4, "  below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
-					     bn, points[bn][i - 1][X],
-					     points[bn][i - 1][Y],
-					     points[bn][i - 1][Z],
-					     points[bn][i][X],
-					     points[bn][i][Y],
-					     points[bn][i][Z]);
-				    G_debug (4, "  last below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
-					     bnl, points[bnl][i - 1][X],
-					     points[bnl][i - 1][Y],
-					     points[bnl][i - 1][Z],
-					     points[bnl][i][X],
-					     points[bnl][i][Y],
-					     points[bnl][i][Z]);
+				    G_debug(4,
+					    "Crossing NOT found or masked:");
+				    G_debug(4,
+					    "  current surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f",
+					    n, points[n][i - 1][X],
+					    points[n][i - 1][Y],
+					    points[n][i - 1][Z],
+					    points[n][i][X], points[n][i][Y],
+					    points[n][i][Z]);
+				    G_debug(4,
+					    "  below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
+					    bn, points[bn][i - 1][X],
+					    points[bn][i - 1][Y],
+					    points[bn][i - 1][Z],
+					    points[bn][i][X],
+					    points[bn][i][Y],
+					    points[bn][i][Z]);
+				    G_debug(4,
+					    "  last below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
+					    bnl, points[bnl][i - 1][X],
+					    points[bnl][i - 1][Y],
+					    points[bnl][i - 1][Z],
+					    points[bnl][i][X],
+					    points[bnl][i][Y],
+					    points[bnl][i][Z]);
 				}
 			    }
 #endif
@@ -1684,7 +1693,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 	}
     }
 
-    gsd_colormode(CM_DIFFUSE); /* set colormode back to DIFFUSE */
+    gsd_colormode(CM_DIFFUSE);	/* set colormode back to DIFFUSE */
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
@@ -1693,16 +1702,16 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  bgn,end should already be in world modeling coords, but have to
-  be reverse-translated to apply to each surface
+   bgn,end should already be in world modeling coords, but have to
+   be reverse-translated to apply to each surface
 
-  \param bgn,end  2d line for cutting plane
-  \param norm indicates which way wall faces
-  
-  \return
-*/
+   \param bgn,end  2d line for cutting plane
+   \param norm indicates which way wall faces
+
+   \return
+ */
 int gsd_wall(float *bgn, float *end, float *norm)
 {
     geosurf *gsurfs[MAX_SURFS];
@@ -1730,8 +1739,8 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
 	if (n) {
 	    if (npts != npts1) {
-		G_warning (_("Cut-plane points mis-match between surfaces. "
-			     "Check resolution(s)."));
+		G_warning(_("Cut-plane points mis-match between surfaces. "
+			    "Check resolution(s)."));
 		err = 1;
 		nsurfs = n;
 
@@ -1756,7 +1765,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 	}
 
 	/* allocate space in points and copy tmp to points */
-	points[n] = (Point3 *) G_calloc(npts1, sizeof(Point3)); /* G_fatal_error */
+	points[n] = (Point3 *) G_calloc(npts1, sizeof(Point3));	/* G_fatal_error */
 
 	for (i = 0; i < npts1; i++) {
 	    GS_v3eq(points[n][i], tmp[i]);
@@ -1766,7 +1775,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 	    points[n][i][Y] += gsurfs[n]->y_trans;
 	    points[n][i][Z] += gsurfs[n]->z_trans;
 	}
-    } /* done for */
+    }				/* done for */
 
     if (err) {
 	for (n = 0; n < nsurfs; n++) {
@@ -1789,15 +1798,15 @@ int gsd_wall(float *bgn, float *end, float *norm)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  Need to do Zexag scale of normal for arrow direction, drawing
-  routine unexags z for arrow
+   Need to do Zexag scale of normal for arrow direction, drawing
+   routine unexags z for arrow
 
-  \param surf surface (geosurf)
+   \param surf surface (geosurf)
 
-  \return
-*/
+   \return
+ */
 int gsd_norm_arrows(geosurf * surf)
 {
     typbuff *buff, *cobuff;
@@ -1836,7 +1845,7 @@ int gsd_norm_arrows(geosurf * surf)
 
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    curcolor = (int) surf->att[ATT_COLOR].constant;
+	    curcolor = (int)surf->att[ATT_COLOR].constant;
 	}
 	else {
 	    curcolor = surf->wire_color;
@@ -2038,18 +2047,18 @@ int gsd_norm_arrows(geosurf * surf)
 
 
 /*!
-  \brief Draw surface using triangle fan instead of strip
+   \brief Draw surface using triangle fan instead of strip
 
-  Optimized by getting rid of BM_get mask check - GET_MAPPATT does same
-  and returns zero if masked 
-  
-  Only do in window check on Fan center(v0) to further optimize -- this runs 
-  the risk of trimming points in view !!
+   Optimized by getting rid of BM_get mask check - GET_MAPPATT does same
+   and returns zero if masked 
 
-  \param surf surface (geosurf)
+   Only do in window check on Fan center(v0) to further optimize -- this runs 
+   the risk of trimming points in view !!
 
-  \return
-*/
+   \param surf surface (geosurf)
+
+   \return
+ */
 int gsd_surf_map(geosurf * surf)
 {
     int check_mask, check_color, check_transp;
@@ -2071,15 +2080,15 @@ int gsd_surf_map(geosurf * surf)
     GLdouble modelMatrix[16], projMatrix[16];
     GLint viewport[4];
     GLint window[4];
-    int cnt1=0, cnt2=0;
+    int cnt1 = 0, cnt2 = 0;
 
     int datarow1, datacol1, datarow2, datacol2, datarow3, datacol3;
 
     float kem, ksh, pkem, pksh;
     unsigned int ktrans;
-    
-    int step_val = 2; /* should always be factor of 2 for fan */
-    int start_val = 1; /* one half of step_val */
+
+    int step_val = 2;		/* should always be factor of 2 for fan */
+    int start_val = 1;		/* one half of step_val */
 
     /* avoid scaling by zero */
     GS_get_scale(&tx, &ty, &tz, 1);
@@ -2114,19 +2123,19 @@ int gsd_surf_map(geosurf * surf)
 
     /* Get viewport */
     gsd_getwindow(window, viewport, modelMatrix, projMatrix);
-    
+
 
     gsd_colormode(CM_DIFFUSE);
     gsd_pushmatrix();
     gsd_do_scale(1);
     gsd_translate(surf->x_trans, surf->y_trans, surf->z_trans);
     zexag = surf->z_exag;
-    
+
     /* adjust window */
-    window[0] += (int) (yres * 4 * zexag);
-    window[1] -= (int) (yres * 4 * zexag);
-    window[2] -= (int) (xres * 4 * zexag);
-    window[3] += (int) (xres * 4 * zexag);
+    window[0] += (int)(yres * 4 * zexag);
+    window[1] -= (int)(yres * 4 * zexag);
+    window[2] -= (int)(xres * 4 * zexag);
+    window[3] += (int)(xres * 4 * zexag);
 
     /* CURRENTLY ALWAYS 1.0 */
 #ifdef CALC_AREA
@@ -2140,7 +2149,7 @@ int gsd_surf_map(geosurf * surf)
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
-	ktrans = (255 - (int) surf->att[ATT_TRANSP].constant) << 24;
+	ktrans = (255 - (int)surf->att[ATT_TRANSP].constant) << 24;
 	gsd_blend(1);
 	gsd_zwritemask(0x0);
     }
@@ -2188,7 +2197,7 @@ int gsd_surf_map(geosurf * surf)
 
     if (col_src != MAP_ATT) {
 	if (col_src == CONST_ATT) {
-	    curcolor = (int) surf->att[ATT_COLOR].constant;
+	    curcolor = (int)surf->att[ATT_COLOR].constant;
 	}
 	else {
 	    curcolor = surf->wire_color;
@@ -2202,154 +2211,165 @@ int gsd_surf_map(geosurf * surf)
     /* would also be good to check if colormap == surfmap, to increase speed */
     /* will also need to set check_transp, check_shine, etc & fix material */
     cnt = 0;
-                        
-    for (row = start_val; row < ycnt; row+=step_val) {
-      	if (GS_check_cancel()) {
+
+    for (row = start_val; row < ycnt; row += step_val) {
+	if (GS_check_cancel()) {
 	    gsd_popmatrix();
-	    gsd_blend(0); 
-	    gsd_zwritemask(0xffffffff); 
+	    gsd_blend(0);
+	    gsd_zwritemask(0xffffffff);
 
 	    return (-1);
-	}  
-	
-	/*
-	if (row == 201 && new_fan == 0) {
-		xmod *= 2;
-		ymod *= 2;
-		xres = xmod * surf->xres;
-    		yres = ymod * surf->yres;
-		step_val *= 2;
-		new_fan = 1;
-		row -= 1;
-		row /= 2;
 	}
-	*/
-	datarow1 = row * ymod; 
-	datarow2 = (row - (step_val/2)) * ymod;
-	datarow3 = (row + (step_val/2)) * ymod;
-	
-	
-	y1 = ymax - row*yres;
-	y2 = ymax - (row-(step_val/2))*yres;
-	y3 = ymax - (row+(step_val/2))*yres;
-	
+
+	/*
+	   if (row == 201 && new_fan == 0) {
+	   xmod *= 2;
+	   ymod *= 2;
+	   xres = xmod * surf->xres;
+	   yres = ymod * surf->yres;
+	   step_val *= 2;
+	   new_fan = 1;
+	   row -= 1;
+	   row /= 2;
+	   }
+	 */
+	datarow1 = row * ymod;
+	datarow2 = (row - (step_val / 2)) * ymod;
+	datarow3 = (row + (step_val / 2)) * ymod;
+
+
+	y1 = ymax - row * yres;
+	y2 = ymax - (row - (step_val / 2)) * yres;
+	y3 = ymax - (row + (step_val / 2)) * yres;
+
 	y1off = row * ymod * surf->cols;
-	y2off =  (row - (step_val/2)) * ymod * surf->cols;
-	y3off =  (row + (step_val/2)) * ymod * surf->cols;
-	
-	
-	for (col = start_val; col < xcnt; col+=step_val) {
+	y2off = (row - (step_val / 2)) * ymod * surf->cols;
+	y3off = (row + (step_val / 2)) * ymod * surf->cols;
+
+
+	for (col = start_val; col < xcnt; col += step_val) {
 	    datacol1 = col * xmod;
-	    datacol2 = (col - (step_val/2)) * xmod;
-	    datacol3 = (col + (step_val/2)) * xmod;
-	    
-	    x1 = col*xres;
-	    x2 = (col-(step_val/2))*xres;
-	    x3 = (col+(step_val/2))*xres;
-	    
-	    
+	    datacol2 = (col - (step_val / 2)) * xmod;
+	    datacol3 = (col + (step_val / 2)) * xmod;
+
+	    x1 = col * xres;
+	    x2 = (col - (step_val / 2)) * xres;
+	    x3 = (col + (step_val / 2)) * xres;
+
+
 	    /* 0 */
 	    /*
-	      if (check_mask) {
-	      if (BM_get(surf->curmask, datacol1, datarow1))
-	      continue;
-	      }
-	    */
-	    
+	       if (check_mask) {
+	       if (BM_get(surf->curmask, datacol1, datarow1))
+	       continue;
+	       }
+	     */
+
 	    cnt1++;
-	    
+
 	    /* Do not need BM_get because GET_MAPATT calls
 	     * same and returns zero if masked
 	     */
-	    offset2[0] = y1off+datacol1; /* fan center */
-	    pt2[0][X] = x1; pt2[0][Y] = y1; /* fan center */
-	    pt[X]=pt2[0][X]; pt[Y] = pt2[0][Y];
-		if ( !GET_MAPATT(buff, offset2[0], pt[Z]) ) 
-		    continue; /* masked */
-		else {
-		    pt[Z] *= zexag;
-		    if (gsd_checkpoint
-			(pt, window, viewport, modelMatrix, projMatrix)) 
+	    offset2[0] = y1off + datacol1;	/* fan center */
+	    pt2[0][X] = x1;
+	    pt2[0][Y] = y1;	/* fan center */
+	    pt[X] = pt2[0][X];
+	    pt[Y] = pt2[0][Y];
+	    if (!GET_MAPATT(buff, offset2[0], pt[Z]))
+		continue;	/* masked */
+	    else {
+		pt[Z] *= zexag;
+		if (gsd_checkpoint
+		    (pt, window, viewport, modelMatrix, projMatrix))
+		    continue;
+	    }
+
+
+	    offset2[1] = y2off + datacol2;
+	    offset2[2] = y2off + datacol1;
+	    offset2[3] = y2off + datacol3;
+	    offset2[4] = y1off + datacol3;
+	    offset2[5] = y3off + datacol3;
+	    offset2[6] = y3off + datacol1;
+	    offset2[7] = y3off + datacol2;
+	    offset2[8] = y1off + datacol2;
+	    offset2[9] = y2off + datacol2;	/* repeat 1st corner to close */
+
+	    pt2[1][X] = x2;
+	    pt2[1][Y] = y2;
+	    pt2[2][X] = x1;
+	    pt2[2][Y] = y2;
+	    pt2[3][X] = x3;
+	    pt2[3][Y] = y2;
+	    pt2[4][X] = x3;
+	    pt2[4][Y] = y1;
+	    pt2[5][X] = x3;
+	    pt2[5][Y] = y3;
+	    pt2[6][X] = x1;
+	    pt2[6][Y] = y3;
+	    pt2[7][X] = x2;
+	    pt2[7][Y] = y3;
+	    pt2[8][X] = x2;
+	    pt2[8][Y] = y1;
+	    pt2[9][X] = x2;
+	    pt2[9][Y] = y2;	/* repeat 1st corner to close */
+
+
+	    /* Run through triangle fan */
+	    gsd_bgntfan();
+	    for (ii = 0; ii < 10; ii++) {
+
+		if (ii > 0) {
+		    pt[X] = pt2[ii][X];
+		    pt[Y] = pt2[ii][Y];
+		    if (!GET_MAPATT(buff, offset2[ii], pt[Z]))
 			continue;
+		    pt[Z] *= zexag;
 		}
-		
-		
-		offset2[1] = y2off+datacol2;
-		offset2[2] = y2off+datacol1;
-		offset2[3] = y2off+datacol3;
-		offset2[4] = y1off+datacol3;
-		offset2[5] = y3off+datacol3;
-		offset2[6] = y3off+datacol1;
-		offset2[7] = y3off+datacol2;
-		offset2[8] = y1off+datacol2;
-		offset2[9] = y2off+datacol2; /* repeat 1st corner to close */
-		
-		pt2[1][X] = x2;	pt2[1][Y] = y2;
-		pt2[2][X] = x1;	pt2[2][Y] = y2;
-		pt2[3][X] = x3;	pt2[3][Y] = y2;
-		pt2[4][X] = x3;	pt2[4][Y] = y1;
-		pt2[5][X] = x3;	pt2[5][Y] = y3;
-		pt2[6][X] = x1;	pt2[6][Y] = y3;
-		pt2[7][X] = x2;	pt2[7][Y] = y3;
-		pt2[8][X] = x2;	pt2[8][Y] = y1;
-		pt2[9][X] = x2;	pt2[9][Y] = y2; /* repeat 1st corner to close */
-		
-		
-		/* Run through triangle fan */
-		gsd_bgntfan();
-		for (ii = 0; ii < 10; ii++) {
-		    
-		    if ( ii > 0) {
-			pt[X]=pt2[ii][X]; pt[Y] = pt2[ii][Y];
-			if (!GET_MAPATT(buff, offset2[ii], pt[Z]) )
-			    continue;
-			pt[Z] *= zexag;
+
+		FNORM(surf->norms[offset2[ii]], n);
+
+		if (check_color)
+		    curcolor = gs_mapcolor(cobuff, coloratt, offset2[ii]);
+
+		if (check_transp) {
+		    GET_MAPATT(trbuff, offset2[ii], ttr);
+		    ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
+		    ktrans = (char)(255 - ktrans) << 24;
+		}
+
+		if (check_material) {
+		    if (check_emis) {
+			GET_MAPATT(embuff, offset2[ii], kem);
+			kem = SCALE_ATT(ematt, kem, 0., 1.);
 		    }
-		    
-		    FNORM(surf->norms[offset2[ii]], n);
-		    
-		    if (check_color)
-			curcolor = gs_mapcolor(cobuff, coloratt, offset2[ii]);
-		    
-		    if (check_transp) {
-			GET_MAPATT(trbuff, offset2[ii], ttr);
-			ktrans = (char) SCALE_ATT(tratt, ttr, 0, 255);
-			ktrans = (char) (255 - ktrans) << 24;
+
+		    if (check_shin) {
+			GET_MAPATT(shbuff, offset2[ii], ksh);
+			ksh = SCALE_ATT(shatt, ksh, 0., 1.);
 		    }
-		    
-		    if (check_material) {
-			if (check_emis) {
-			    GET_MAPATT(embuff, offset2[ii], kem);
-			    kem = SCALE_ATT(ematt, kem, 0., 1.);
-			}
-			
-			if (check_shin) {
-			    GET_MAPATT(shbuff, offset2[ii], ksh);
-			    ksh = SCALE_ATT(shatt, ksh, 0., 1.);
-			}
-			
-			if (pksh != ksh || pkem != kem
-			    || (kem && check_color)) {
-			    pksh = ksh;
-			    pkem = kem;
-			    gsd_set_material(check_shin, check_emis,
-					     ksh, kem, curcolor);
-			}
+
+		    if (pksh != ksh || pkem != kem || (kem && check_color)) {
+			pksh = ksh;
+			pkem = kem;
+			gsd_set_material(check_shin, check_emis,
+					 ksh, kem, curcolor);
 		    }
-		    
-		    gsd_litvert_func(n, ktrans | curcolor, pt);
-		    
-		    
-		} /* close ii loop */
-		gsd_endtfan();
-		cnt2++;
-        } /* end col */
-    } /* end row */
-    
-    
+		}
+
+		gsd_litvert_func(n, ktrans | curcolor, pt);
+
+
+	    }			/* close ii loop */
+	    gsd_endtfan();
+	    cnt2++;
+	}			/* end col */
+    }				/* end row */
+
+
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-    
+
     return (0);
 }

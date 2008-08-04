@@ -1,3 +1,4 @@
+
 /**
  * \file basename.c
  *
@@ -33,13 +34,13 @@
  * \return Pointer to filename
  */
 
-char * G_basename(char *filename, const char *desired_ext)
+char *G_basename(char *filename, const char *desired_ext)
 {
     /* Find the last . in the filename */
     char *dot = strrchr(filename, '.');
 
-    if(dot && G_strcasecmp(dot + 1, desired_ext) == 0)
-        *dot = '\0';
+    if (dot && G_strcasecmp(dot + 1, desired_ext) == 0)
+	*dot = '\0';
 
     return filename;
 }

@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *  G_put_cellhd (name, cellhd)
@@ -15,21 +16,20 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int G_put_cellhd (const char *name, struct Cell_head *cellhd)
+int G_put_cellhd(const char *name, struct Cell_head *cellhd)
 {
-    FILE *fd ;
+    FILE *fd;
 
-    if (!(fd = G_fopen_new ("cellhd", name)))
-    {
+    if (!(fd = G_fopen_new("cellhd", name))) {
 	char buf[1024];
 
-	sprintf (buf, _("Unable to create header file for [%s]"), name);
-	G_warning (buf);
+	sprintf(buf, _("Unable to create header file for [%s]"), name);
+	G_warning(buf);
 	return -1;
     }
 
-    G__write_Cell_head (fd, cellhd, 1);
-    fclose (fd);
+    G__write_Cell_head(fd, cellhd, 1);
+    fclose(fd);
 
     return 0;
 }

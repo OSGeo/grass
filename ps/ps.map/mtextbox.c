@@ -1,7 +1,7 @@
 /* Function: multi_text_box_path, multi_lines
-**
-** Author: Paul W. Carlson	March 1992
-*/
+ **
+ ** Author: Paul W. Carlson     March 1992
+ */
 
 #include "ps_info.h"
 
@@ -11,25 +11,25 @@
 #define UPPER 1
 #define CENTER 2
 
-int multi_text_box_path (double x, double y,
-    int xref, int yref, char *text, int fontsize, float rotate)
+int multi_text_box_path(double x, double y,
+			int xref, int yref, char *text, int fontsize,
+			float rotate)
 {
     int numlines;
     char *ptr;
     static int firsttime = 1;
 
     /* write procs if first time called */
-    if (firsttime)
-    {
+    if (firsttime) {
 	firsttime = 0;
 
 	/* procs to get box for multiple text lines */
-    	fprintf(PS.fp, "/CMX {l sub r l sub D2 sub} BD\n");
-    	fprintf(PS.fp, "/CMY {t sub t b sub D2 add} BD\n");
-    	fprintf(PS.fp, "/LMX {l sub} BD\n");
-    	fprintf(PS.fp, "/LMY {b sub} BD\n");
-    	fprintf(PS.fp, "/RMX {r sub} BD\n");
-    	fprintf(PS.fp, "/UMY {t sub} BD\n");
+	fprintf(PS.fp, "/CMX {l sub r l sub D2 sub} BD\n");
+	fprintf(PS.fp, "/CMY {t sub t b sub D2 add} BD\n");
+	fprintf(PS.fp, "/LMX {l sub} BD\n");
+	fprintf(PS.fp, "/LMY {b sub} BD\n");
+	fprintf(PS.fp, "/RMX {r sub} BD\n");
+	fprintf(PS.fp, "/UMY {t sub} BD\n");
 	fprintf(PS.fp, "/MTBX {/y dely def\n");
 	fprintf(PS.fp, "0 1 nlm1 { /i exch def\n");
 	fprintf(PS.fp, "newpath /y y dely sub def\n");
@@ -41,33 +41,32 @@ int multi_text_box_path (double x, double y,
 	fprintf(PS.fp, "} for\n");
 	fprintf(PS.fp, "/t t mg add def /r r mg add def \n");
 	fprintf(PS.fp, "/b b mg sub def /l l mg sub def} BD\n");
-    	fprintf(PS.fp, "/TBM {l b r t B} BD\n");
+	fprintf(PS.fp, "/TBM {l b r t B} BD\n");
 
-	/* proc to draw multiple text lines in text color*/
+	/* proc to draw multiple text lines in text color */
 	fprintf(PS.fp, "/DMT {/y dely def 0 1 nlm1 {\n");
 	fprintf(PS.fp, "/i exch def /y y dely sub def\n");
 	fprintf(PS.fp, "0 y moveto ta i get show } for grestore} BD\n");
 
-	/* proc to draw multiple text lines in highlight color*/
+	/* proc to draw multiple text lines in highlight color */
 	fprintf(PS.fp, "/DMH {/y dely def 0 1 nlm1 {\n");
 	fprintf(PS.fp, "/i exch def /y y dely sub def\n");
-	fprintf(PS.fp, "newpath 0 y moveto ta i get\n"); 
-        fprintf(PS.fp, "false charpath stroke} for} BD\n");
+	fprintf(PS.fp, "newpath 0 y moveto ta i get\n");
+	fprintf(PS.fp, "false charpath stroke} for} BD\n");
     }
 
     /* put text into array */
     numlines = 0;
     ptr = text;
     fprintf(PS.fp, "/ta [ (");
-    while (*ptr)
-    {
-	if (*ptr == '\\' && *(ptr+1) == 'n') 
-	{
+    while (*ptr) {
+	if (*ptr == '\\' && *(ptr + 1) == 'n') {
 	    fprintf(PS.fp, ")\n(");
 	    ptr++;
 	    numlines++;
 	}
-	else fprintf(PS.fp, "%c", *ptr);
+	else
+	    fprintf(PS.fp, "%c", *ptr);
 	ptr++;
     }
     fprintf(PS.fp, ") ] def\n");
@@ -89,40 +88,48 @@ int multi_text_box_path (double x, double y,
 
     fprintf(PS.fp, "gsave TR %.2f rotate ", rotate);
 
-    fprintf(PS.fp, " 0 "); 
+    fprintf(PS.fp, " 0 ");
 
-    switch (xref)
-    {
-   	case LEFT: fprintf(PS.fp, "LMX");  break;
-	case RIGHT: fprintf(PS.fp, "RMX"); break;
-	case CENTER:
-	default:
-		fprintf(PS.fp, "CMX"); break;
+    switch (xref) {
+    case LEFT:
+	fprintf(PS.fp, "LMX");
+	break;
+    case RIGHT:
+	fprintf(PS.fp, "RMX");
+	break;
+    case CENTER:
+    default:
+	fprintf(PS.fp, "CMX");
+	break;
     }
 
-    fprintf(PS.fp, " 0 "); 
+    fprintf(PS.fp, " 0 ");
 
-    switch (yref)
-    {
-	case UPPER: fprintf(PS.fp, "UMY");  break;
-	case LOWER: fprintf(PS.fp, "LMY");  break;
-	case CENTER:
-	default:
-		fprintf(PS.fp, "CMY"); break;
+    switch (yref) {
+    case UPPER:
+	fprintf(PS.fp, "UMY");
+	break;
+    case LOWER:
+	fprintf(PS.fp, "LMY");
+	break;
+    case CENTER:
+    default:
+	fprintf(PS.fp, "CMY");
+	break;
     }
     fprintf(PS.fp, " TR TBM\n");
 
     return 0;
 }
 
-int multi_lines (char *text)
+int multi_lines(char *text)
 {
     char *ptr;
 
     ptr = text;
-    while (*ptr) 
-    {
-	if (*ptr == '\\' && *(ptr+1) == 'n') return 1;
+    while (*ptr) {
+	if (*ptr == '\\' && *(ptr + 1) == 'n')
+	    return 1;
 	ptr++;
     }
     return 0;

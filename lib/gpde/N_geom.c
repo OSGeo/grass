@@ -30,6 +30,7 @@
 N_geom_data *N_alloc_geom_data(void)
 {
     N_geom_data *geom = (N_geom_data *) G_calloc(1, sizeof(N_geom_data));
+
     geom->area = NULL;
     geom->planimetric = 1;
     geom->dim = 0;
@@ -77,7 +78,8 @@ N_geom_data *N_init_geom_data_3d(G3D_Region * region3d, N_geom_data * geodata)
 #pragma omp critical
     {
 
-	G_debug(2, "N_init_geom_data_3d: initializing the geometry structure");
+	G_debug(2,
+		"N_init_geom_data_3d: initializing the geometry structure");
 
 	if (geom == NULL)
 	    geom = N_alloc_geom_data();
@@ -122,7 +124,8 @@ N_geom_data *N_init_geom_data_2d(struct Cell_head * region,
     /*create an openmp lock to assure that only one thread at a time will access this function */
 #pragma omp critical
     {
-	G_debug(2, "N_init_geom_data_2d: initializing the geometry structure");
+	G_debug(2,
+		"N_init_geom_data_2d: initializing the geometry structure");
 
 	/*make a backup from this region */
 	G_get_set_window(&backup);	/*this function is not thread safe */

@@ -9,10 +9,9 @@
  * Required function:
  * Return the name of the main function which is useable in v.mapcalc.
  */
-char *
-fname (void)
+char *fname(void)
 {
-  return "dltest";
+    return "dltest";
 }
 
 /*
@@ -25,25 +24,23 @@ fname (void)
  * Each prototype needs to be represented by one of the typedef and switch
  * cases in func.c of mapcalc.
  */
-char *
-proto (void)
+char *proto(void)
 {
-  return "m=mm";
+    return "m=mm";
 }
 
 /*
  * This is the main function which needs to have the name and prototype
  * as returned above.
  */
-MAP *
-dltest (MAP *m, MAP *n)
+MAP *dltest(MAP * m, MAP * n)
 {
-  char namebuf[128];
+    char namebuf[128];
 
-  printf ("Performing 2 arg dynamically loaded map function on maps "
-	  "%s and %s\n", m->name, n->name);
-  sprintf (namebuf, "%s.%s", m->name, n->name);
-  m = (MAP *)listitem (sizeof (MAP));
-  m->name = strdup (namebuf);
-  return m;
+    printf("Performing 2 arg dynamically loaded map function on maps "
+	   "%s and %s\n", m->name, n->name);
+    sprintf(namebuf, "%s.%s", m->name, n->name);
+    m = (MAP *) listitem(sizeof(MAP));
+    m->name = strdup(namebuf);
+    return m;
 }

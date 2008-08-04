@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/copy.c
 
@@ -26,8 +27,8 @@
    \return number of copied primitives
    \return -1 on error 
  */
-int Vedit_copy_lines (struct Map_info *Map, struct Map_info *FromMap,
-		      struct ilist *List)
+int Vedit_copy_lines(struct Map_info *Map, struct Map_info *FromMap,
+		     struct ilist *List)
 {
     struct line_cats *Cats;
     struct line_pnts *Points;
@@ -36,7 +37,7 @@ int Vedit_copy_lines (struct Map_info *Map, struct Map_info *FromMap,
     int nlines_copied;
 
     nlines_copied = 0;
-    Cats = Vect_new_cats_struct(); 
+    Cats = Vect_new_cats_struct();
     Points = Vect_new_line_struct();
 
     if (!FromMap) {
@@ -45,25 +46,25 @@ int Vedit_copy_lines (struct Map_info *Map, struct Map_info *FromMap,
 
     /* for each line, make a copy */
     for (i = 0; i < List->n_values; i++) {
-	line = List -> value[i];
+	line = List->value[i];
 
 	if (!Vect_line_alive(FromMap, line))
 	    continue;
 
-        type = Vect_read_line(FromMap, Points, Cats, line);
+	type = Vect_read_line(FromMap, Points, Cats, line);
 
-        G_debug(3, "Vedit_copy_lines(): type=%d, line=%d", type, line);
+	G_debug(3, "Vedit_copy_lines(): type=%d, line=%d", type, line);
 
-        /* copy */
-        if (Vect_write_line (Map, type, Points, Cats) < 0) {
+	/* copy */
+	if (Vect_write_line(Map, type, Points, Cats) < 0) {
 	    return -1;
 	}
-        
+
 	nlines_copied++;
     }
 
-    Vect_destroy_line_struct (Points);
-    Vect_destroy_cats_struct (Cats);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return nlines_copied;
 }

@@ -1,3 +1,4 @@
+
 /**
  * \file copy.c
  *
@@ -26,7 +27,7 @@
  *
  * \return always returns 0
  */
-int G_copy (void *a, const void *b, int n)
+int G_copy(void *a, const void *b, int n)
 {
     memcpy(a, b, n);
     return 0;

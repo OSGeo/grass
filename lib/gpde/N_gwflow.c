@@ -54,8 +54,10 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
     data->r = N_alloc_array_2d(cols, rows, 1, DCELL_TYPE);
 
     if (river) {
-	data->river_head = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
-	data->river_leak = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+	data->river_head =
+	    N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+	data->river_leak =
+	    N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
 	data->river_bed = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     }
     else {
@@ -65,7 +67,8 @@ N_gwflow_data3d *N_alloc_gwflow_data3d(int cols, int rows, int depths,
     }
 
     if (drain) {
-	data->drain_leak = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
+	data->drain_leak =
+	    N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
 	data->drain_bed = N_alloc_array_3d(cols, rows, depths, 1, DCELL_TYPE);
     }
     else {
@@ -142,7 +145,8 @@ void N_free_gwflow_data3d(N_gwflow_data3d * data)
  * \param rows int
  * \return N_gwflow_data2d *
  * */
-N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river, int drain)
+N_gwflow_data2d *N_alloc_gwflow_data2d(int cols, int rows, int river,
+				       int drain)
 {
     N_gwflow_data2d *data;
 
@@ -516,10 +520,12 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data * geom, int col,
     S = -1 * T_s * dx / dy;
 
     /*the diagonal entry of the matrix */
-    C = -1 * (W + E + N + S - Ss / data->dt - river_mat * Az - drain_mat * Az);
+    C = -1 * (W + E + N + S - Ss / data->dt - river_mat * Az -
+	      drain_mat * Az);
 
     /*the entry in the right side b of Ax = b */
-    V = (q + hc_start * Ss / data->dt) + r + river_vect * Az + drain_vect * Az;
+    V = (q + hc_start * Ss / data->dt) + r + river_vect * Az +
+	drain_vect * Az;
 
     G_debug(5, "N_callback_gwflow_2d: called [%i][%i]", row, col);
 

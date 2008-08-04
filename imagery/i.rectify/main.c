@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       i.rectify
@@ -79,7 +80,8 @@ int main(int argc, char *argv[])
     c = G_define_flag();
     c->key = 'c';
     c->description =
-	_("Use curr. region settings in target location (def.=calculate smallest area)");
+	_
+	("Use curr. region settings in target location (def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -114,7 +116,9 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Group <%s> does not exist"), grp->answer);
 
     if (ref.nfiles <= 0) {
-	G_important_message(_("Group <%s> contains no raster maps; run i.group"), grp->answer);
+	G_important_message(_
+			    ("Group <%s> contains no raster maps; run i.group"),
+			    grp->answer);
 	exit(EXIT_SUCCESS);
     }
 
@@ -158,18 +162,22 @@ int main(int argc, char *argv[])
     else {
 	/* Calculate smallest region */
 	if (a->answer) {
-	    if (G_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd) < 0)
-		G_fatal_error(_("Unable to read header of raster map <%s>"), ref.file[0].name);
+	    if (G_get_cellhd(ref.file[0].name, ref.file[0].mapset, &cellhd) <
+		0)
+		G_fatal_error(_("Unable to read header of raster map <%s>"),
+			      ref.file[0].name);
 	}
 	else {
-	    if (G_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd) < 0)
-		G_fatal_error(_("Unable to read header of raster map <%s>"), ifile->answers[0]);
+	    if (G_get_cellhd(ifile->answers[0], ref.file[0].mapset, &cellhd) <
+		0)
+		G_fatal_error(_("Unable to read header of raster map <%s>"),
+			      ifile->answers[0]);
 	}
 	georef_window(&cellhd, &target_window, order);
     }
 
-    G_message( _("Using Region: N=%f S=%f, E=%f W=%f"), target_window.north,
-	    target_window.south, target_window.east, target_window.west);
+    G_message(_("Using Region: N=%f S=%f, E=%f W=%f"), target_window.north,
+	      target_window.south, target_window.east, target_window.west);
 
     exec_rectify(order, extension);
 
@@ -181,7 +189,8 @@ void err_exit(char *file, char *grp)
 {
     int n;
 
-    fprintf(stderr, "Input raster map <%s> does not exist in group <%s>.\n Try:\n",
+    fprintf(stderr,
+	    "Input raster map <%s> does not exist in group <%s>.\n Try:\n",
 	    file, grp);
 
     for (n = 0; n < ref.nfiles; n++)

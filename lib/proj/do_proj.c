@@ -1,3 +1,4 @@
+
 /**
    \file do_proj.c
 
@@ -102,7 +103,7 @@ int pj_do_proj(double *x, double *y,
 	}
     }
     if (ok < 0) {
-	G_warning (_("pj_transform() failed: %s"), pj_strerrno(ok));
+	G_warning(_("pj_transform() failed: %s"), pj_strerrno(ok));
     }
     return ok;
 }
@@ -141,6 +142,7 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 
     if (h == NULL) {
 	int i;
+
 	h = G_malloc(sizeof *h * count);
 	/* they say memset is only guaranteed for chars ;-( */
 	for (i = 0; i < count; ++i)

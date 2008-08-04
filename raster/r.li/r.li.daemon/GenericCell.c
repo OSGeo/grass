@@ -1,96 +1,90 @@
 /*
-* AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *			Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
+ *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
- *	 
- *	 BUGS: please send bugs reports to pallecch@cli.di.unipi.it
+ *       
+ *       BUGS: please send bugs reports to pallecch@cli.di.unipi.it
  */
 #include "GenericCell.h"
 
-int equalsGenericCell (generic_cell c1, generic_cell c2)
+int equalsGenericCell(generic_cell c1, generic_cell c2)
 {
-    if  ( (c1.t) != (c2.t) )
-    {
-		return GC_DIFFERENT_TYPE;
+    if ((c1.t) != (c2.t)) {
+	return GC_DIFFERENT_TYPE;
     }
-    switch (c1.t)
-    {
-		case CELL_TYPE:
-		{		    
-		    if(  ( (c1.val).c )  >  ( (c2.val).c )  )
-				return GC_HIGHER;
-		    else
-		    {
-				if( ( (c1.val).c )  ==  ( (c2.val).c ) )
-				    return GC_EQUAL;
-				else
-				    return GC_LOWER;
-		    }
-		    break;
-		}
-		case DCELL_TYPE:
-		{
-		    if(  ( (c1.val).dc )  >  ( (c2.val).dc )  )
-				return GC_HIGHER;
-		    else
-		    {
-				if(  ( (c1.val).dc )  ==  ( (c2.val).dc ) )
-				    return GC_EQUAL;
-				else
-				    return GC_LOWER;
-		    }
-		    break;
-		}
-		case FCELL_TYPE:
-		{
-		    if(  ( (c1.val).fc )  >  ( (c2.val).fc )  )
-				return GC_HIGHER;
-		    else
-		    {
-				if(  ( (c1.val).fc )  ==  ( (c2.val).fc )  )
-				    return GC_EQUAL;
-				else
-				    return GC_LOWER;
-		    }
-		    break;
-		}
-		default :
-		{
-		    return GC_ERR_UNKNOWN;
-		    break;
-		}	
+    switch (c1.t) {
+    case CELL_TYPE:
+	{
+	    if (((c1.val).c) > ((c2.val).c))
+		return GC_HIGHER;
+	    else {
+		if (((c1.val).c) == ((c2.val).c))
+		    return GC_EQUAL;
+		else
+		    return GC_LOWER;
+	    }
+	    break;
+	}
+    case DCELL_TYPE:
+	{
+	    if (((c1.val).dc) > ((c2.val).dc))
+		return GC_HIGHER;
+	    else {
+		if (((c1.val).dc) == ((c2.val).dc))
+		    return GC_EQUAL;
+		else
+		    return GC_LOWER;
+	    }
+	    break;
+	}
+    case FCELL_TYPE:
+	{
+	    if (((c1.val).fc) > ((c2.val).fc))
+		return GC_HIGHER;
+	    else {
+		if (((c1.val).fc) == ((c2.val).fc))
+		    return GC_EQUAL;
+		else
+		    return GC_LOWER;
+	    }
+	    break;
+	}
+    default:
+	{
+	    return GC_ERR_UNKNOWN;
+	    break;
+	}
     }
 }
 
 
-void printGenericCell (generic_cell c)
+void printGenericCell(generic_cell c)
 {
-    switch (c.t)
-    {
-	case CELL_TYPE:
+    switch (c.t) {
+    case CELL_TYPE:
 	{
-	    printf("\n    genericCell_print:c.val.c=%d",(c.val).c); 
+	    printf("\n    genericCell_print:c.val.c=%d", (c.val).c);
 	    fflush(stdout);
 	    break;
 	}
-	case DCELL_TYPE:
+    case DCELL_TYPE:
 	{
-	    printf("\n    genericCell_print:c.val.dc=%f",(c.val).dc);
-	   fflush(stdout);
-	    break;
-	}
-	case FCELL_TYPE:
-	{
-	    printf("\n    genericCell_print:c.val.fc=%f",(c.val).fc);
+	    printf("\n    genericCell_print:c.val.dc=%f", (c.val).dc);
 	    fflush(stdout);
 	    break;
 	}
-	default :
+    case FCELL_TYPE:
+	{
+	    printf("\n    genericCell_print:c.val.fc=%f", (c.val).fc);
+	    fflush(stdout);
+	    break;
+	}
+    default:
 	{
 	    G_fatal_error("printUnionCel: Wrong type");
 	    break;
-	}	
+	}
     }
 }

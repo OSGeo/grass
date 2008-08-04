@@ -19,109 +19,121 @@ static int nareas;
 static int compare(const void *, const void *);
 
 
-int do_areas ( struct Map_info *Map,struct line_pnts *Points, dbCatValArray *Cvarr, int ctype, int field,
-	       int use, double value, int value_type)
+int do_areas(struct Map_info *Map, struct line_pnts *Points,
+	     dbCatValArray * Cvarr, int ctype, int field, int use,
+	     double value, int value_type)
 {
     int i;
-    CELL  cval, cat;
+    CELL cval, cat;
     DCELL dval;
 
-    if (nareas <= 0) return 0;
+    if (nareas <= 0)
+	return 0;
 
     for (i = 0; i < nareas; i++) {
-        /* Note: in old version (grass5.0) there was a check here if the current area 
-	*        is identical to previous one. I don't see any reason for this in topological vectors */
-	cat   = list[i].cat;
-	G_debug ( 3, "Area cat = %d", cat );
+	/* Note: in old version (grass5.0) there was a check here if the current area 
+	 *        is identical to previous one. I don't see any reason for this in topological vectors */
+	cat = list[i].cat;
+	G_debug(3, "Area cat = %d", cat);
 
-	if ( ISNULL ( &cat ) ) { /* No centroid or no category */
-	    set_cat (cat);
-	} else {
-	    if ( use == USE_ATTR ) {
-		if ( ctype == DB_C_TYPE_INT ) {
-		    if ((db_CatValArray_get_value_int (Cvarr, cat, &cval)) != DB_OK) {
-			G_warning (_("No record for area (cat = %d)"), cat);
-			SETNULL( &cval );
+	if (ISNULL(&cat)) {	/* No centroid or no category */
+	    set_cat(cat);
+	}
+	else {
+	    if (use == USE_ATTR) {
+		if (ctype == DB_C_TYPE_INT) {
+		    if ((db_CatValArray_get_value_int(Cvarr, cat, &cval)) !=
+			DB_OK) {
+			G_warning(_("No record for area (cat = %d)"), cat);
+			SETNULL(&cval);
 		    }
-		    set_cat (cval);
-		} else if ( ctype == DB_C_TYPE_DOUBLE ) {
-		    if ((db_CatValArray_get_value_double (Cvarr, cat, &dval)) != DB_OK) {
-			G_warning (_("No record for area (cat = %d)"), cat);
-			SETDNULL( &dval );
-		    }
-		    set_dcat ( dval);
-		} else {
-		    G_fatal_error (_("Unable to use column specified"));
+		    set_cat(cval);
 		}
-	    } else if  ( use == USE_CAT ) {
-		set_cat (cat);
-	    } else { 
-		if ( value_type == USE_CELL )
-		    set_cat ( (int) value);
-		else
-		    set_dcat ( value );
+		else if (ctype == DB_C_TYPE_DOUBLE) {
+		    if ((db_CatValArray_get_value_double(Cvarr, cat, &dval))
+			!= DB_OK) {
+			G_warning(_("No record for area (cat = %d)"), cat);
+			SETDNULL(&dval);
+		    }
+		    set_dcat(dval);
+		}
+		else {
+		    G_fatal_error(_("Unable to use column specified"));
+		}
 	    }
-         }
+	    else if (use == USE_CAT) {
+		set_cat(cat);
+	    }
+	    else {
+		if (value_type == USE_CELL)
+		    set_cat((int)value);
+		else
+		    set_dcat(value);
+	    }
+	}
 
-        if (Vect_get_area_points (Map, list[i].index, Points) <= 0)
-        {
-            G_warning (_("Get area %d failed"), list[i].index);
-            return -1;
-        }
+	if (Vect_get_area_points(Map, list[i].index, Points) <= 0) {
+	    G_warning(_("Get area %d failed"), list[i].index);
+	    return -1;
+	}
 
-	G_plot_polygon (Points->x, Points->y, Points->n_points);
+	G_plot_polygon(Points->x, Points->y, Points->n_points);
     }
 
     return nareas;
 }
 
 
-int sort_areas ( struct Map_info *Map, struct line_pnts *Points, int field)
+int sort_areas(struct Map_info *Map, struct line_pnts *Points, int field)
 {
     int i, centroid;
     struct line_cats *Cats;
     CELL cat;
 
     G_begin_polygon_area_calculations();
-    Cats = Vect_new_cats_struct ();
+    Cats = Vect_new_cats_struct();
 
     /* first count valid areas */
-    nareas = Vect_get_num_areas ( Map );
-    if (nareas == 0) return 0; 
+    nareas = Vect_get_num_areas(Map);
+    if (nareas == 0)
+	return 0;
 
     /* allocate list to hold valid area info */
-    list = (struct list *) G_calloc (nareas * sizeof(char), sizeof(struct list));
+    list =
+	(struct list *)G_calloc(nareas * sizeof(char), sizeof(struct list));
 
     /* store area size,cat,index in list */
     for (i = 0; i < nareas; i++) {
 	list[i].index = i + 1;
-	Vect_get_area_points (Map, i + 1, Points);
-	list[i].size = G_area_of_polygon (Points->x, Points->y, Points->n_points);
-	
-	centroid = Vect_get_area_centroid ( Map, i + 1 );
-	if ( centroid <= 0 ) {
-	    SETNULL( &cat );
-	    G_warning (_("Area without centroid (may be OK for island)"));
-	} else {
-	    Vect_read_line ( Map, NULL, Cats, centroid );
-	    Vect_cat_get (Cats, field, &cat);
-	    if ( cat < 0 ) {
-		SETNULL( &cat );
-		G_warning (_("Area centroid without category"));
-	    } 
+	Vect_get_area_points(Map, i + 1, Points);
+	list[i].size =
+	    G_area_of_polygon(Points->x, Points->y, Points->n_points);
+
+	centroid = Vect_get_area_centroid(Map, i + 1);
+	if (centroid <= 0) {
+	    SETNULL(&cat);
+	    G_warning(_("Area without centroid (may be OK for island)"));
+	}
+	else {
+	    Vect_read_line(Map, NULL, Cats, centroid);
+	    Vect_cat_get(Cats, field, &cat);
+	    if (cat < 0) {
+		SETNULL(&cat);
+		G_warning(_("Area centroid without category"));
+	    }
 	}
 
 	list[i].cat = cat;
     }
 
     /* sort the list by size */
-    qsort (list, nareas * sizeof(char), sizeof(struct list), compare);
+    qsort(list, nareas * sizeof(char), sizeof(struct list), compare);
 
     return nareas;
 }
 
 
-static int compare (const void *aa, const void *bb)
+static int compare(const void *aa, const void *bb)
 {
     const struct list *a = aa, *b = bb;
 
@@ -132,4 +144,3 @@ static int compare (const void *aa, const void *bb)
 
     return 0;
 }
-

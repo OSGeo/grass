@@ -27,4 +27,3 @@ void fatal_error(char *errorMsg, input_maps * in);
 void release_input_maps_struct(input_maps * in);
 
 #endif
-

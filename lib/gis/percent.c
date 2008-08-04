@@ -1,3 +1,4 @@
+
 /**
  * \file percent.c
  *
@@ -52,9 +53,9 @@ static int first = 1;
  * \return always returns 0
  */
 
-int G_percent (long n,long d,int s)
+int G_percent(long n, long d, int s)
 {
-    return ( G_percent2 ( n, d, s, stderr ) );
+    return (G_percent2(n, d, s, stderr));
 }
 
 
@@ -89,45 +90,43 @@ int G_percent (long n,long d,int s)
  * \return always returns 0
  */
 
-int G_percent2 (long n,long d,int s, FILE *out)
+int G_percent2(long n, long d, int s, FILE * out)
 {
     int x, format;
 
-    format = G_info_format ();
+    format = G_info_format();
 
     x = (d <= 0 || s <= 0)
-	? 100
-	: (int) (100 * n / d);
+	? 100 : (int)(100 * n / d);
 
     /* be verbose only 1> */
     if (format == G_INFO_FORMAT_SILENT || G_verbose() < 1)
-        return 0;
+	return 0;
 
-    if (n <= 0 || n >= d || x > prev + s)
-    {
+    if (n <= 0 || n >= d || x > prev + s) {
 	prev = x;
-        
-	if ( format == G_INFO_FORMAT_STANDARD ) {
-	    if ( out != NULL ) {
-	        fprintf (out,"%4d%%\b\b\b\b\b",x);
+
+	if (format == G_INFO_FORMAT_STANDARD) {
+	    if (out != NULL) {
+		fprintf(out, "%4d%%\b\b\b\b\b", x);
 	    }
-	} else { /* GUI */
-	    if ( out != NULL ) {
-		if ( first ) {
-		    fprintf (out,"\n");
+	}
+	else {			/* GUI */
+	    if (out != NULL) {
+		if (first) {
+		    fprintf(out, "\n");
 		}
-		fprintf (out,"GRASS_INFO_PERCENT: %d\n", x);
-		fflush ( out );
+		fprintf(out, "GRASS_INFO_PERCENT: %d\n", x);
+		fflush(out);
 	    }
 	    first = 0;
 	}
     }
 
-    if (x >= 100)
-    {
-	if ( format == G_INFO_FORMAT_STANDARD ) {
-	    if ( out != NULL ) {
-	        fprintf (out,"\n");
+    if (x >= 100) {
+	if (format == G_INFO_FORMAT_STANDARD) {
+	    if (out != NULL) {
+		fprintf(out, "\n");
 	    }
 	}
 	prev = -1;

@@ -9,36 +9,36 @@ static char *charset;
 
 int font_init_freetype(const char *name, int index)
 {
-	if (filename)
-		G_free(filename);
-	filename = G_store(name);
+    if (filename)
+	G_free(filename);
+    filename = G_store(name);
 
-	font_index = index;
-	
-	return 0;
+    font_index = index;
+
+    return 0;
 }
 
 int font_init_charset(const char *str)
 {
-	if (charset)
-		G_free(charset);
-	charset = G_store(str);
-	return 0;
+    if (charset)
+	G_free(charset);
+    charset = G_store(str);
+    return 0;
 }
 
 const char *font_get_freetype_name(void)
 {
-	return filename;
+    return filename;
 }
 
 const char *font_get_charset(void)
 {
-	if (!charset)
-		charset = G_store("ISO-8859-1");
-	return charset;
+    if (!charset)
+	charset = G_store("ISO-8859-1");
+    return charset;
 }
 
 int font_get_index(void)
 {
-	return font_index;
+    return font_index;
 }

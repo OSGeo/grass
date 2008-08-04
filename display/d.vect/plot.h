@@ -1,21 +1,23 @@
 /* TODO: should use 24bit instead of 16 colors, maybe implement
    predefined color tables? */
-struct rgb_color {
-        unsigned char R, G, B;
-       };
+struct rgb_color
+{
+    unsigned char R, G, B;
+};
 
 extern int palette_ncolors;
 extern struct rgb_color palette[16];
 
-typedef struct {
-    int    field;	
-    int    has_bgcolor;
-    int    has_bcolor;
+typedef struct
+{
+    int field;
+    int has_bgcolor;
+    int has_bcolor;
     struct rgb_color color, bgcolor, bcolor;
-    int    size;
-    char   *font;
-    char   *enc;
-    int    xref, yref;
+    int size;
+    char *font;
+    char *enc;
+    int xref, yref;
 } LATTR;
 
 #define LCENTER  0

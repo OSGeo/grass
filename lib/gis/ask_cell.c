@@ -34,7 +34,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-static int lister(char *,char *,char *);
+static int lister(char *, char *, char *);
 
 
 /*!
@@ -48,12 +48,11 @@ static int lister(char *,char *,char *);
  *  \return char * 
  */
 
-char *
-G_ask_cell_new  (const char *prompt, char *name)
-
+char *G_ask_cell_new(const char *prompt, char *name)
 {
 
-	return G_ask_new_ext (prompt, name, "cell", "raster", _("with titles"), lister);
+    return G_ask_new_ext(prompt, name, "cell", "raster", _("with titles"),
+			 lister);
 }
 
 
@@ -68,11 +67,10 @@ G_ask_cell_new  (const char *prompt, char *name)
  *  \return char * 
  */
 
-char *
-G_ask_cell_old  (const char *prompt, char *name)
-
+char *G_ask_cell_old(const char *prompt, char *name)
 {
-	return G_ask_old_ext (prompt, name, "cell", "raster", _("with titles"), lister);
+    return G_ask_old_ext(prompt, name, "cell", "raster", _("with titles"),
+			 lister);
 }
 
 
@@ -87,31 +85,30 @@ G_ask_cell_old  (const char *prompt, char *name)
  *  \return char * 
  */
 
-char *
-G_ask_cell_in_mapset  (const char *prompt, char *name)
-
+char *G_ask_cell_in_mapset(const char *prompt, char *name)
 {
-	return G_ask_in_mapset_ext (prompt, name, "cell", "raster", _("with titles"), lister);
+    return G_ask_in_mapset_ext(prompt, name, "cell", "raster",
+			       _("with titles"), lister);
 }
 
-char *
-G_ask_cell_any  (const char *prompt, char *name)
-
+char *G_ask_cell_any(const char *prompt, char *name)
 {
-	return G_ask_any_ext (prompt, name, "cell", "raster", 1, _("with titles"), lister);
+    return G_ask_any_ext(prompt, name, "cell", "raster", 1, _("with titles"),
+			 lister);
 }
 
-static int lister(char *name,char *mapset,char *buf)
+static int lister(char *name, char *mapset, char *buf)
 {
     char *title;
 
     *buf = 0;
-    if (*name == 0) return 0;
+    if (*name == 0)
+	return 0;
 
-    strcpy (buf, title = G_get_cell_title (name, mapset));
+    strcpy(buf, title = G_get_cell_title(name, mapset));
     if (*buf == 0)
-	strcpy (buf, _("(no title)"));
-    G_free (title);
+	strcpy(buf, _("(no title)"));
+    G_free(title);
 
     return 0;
 }

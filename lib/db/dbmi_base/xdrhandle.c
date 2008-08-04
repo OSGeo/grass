@@ -2,20 +2,18 @@
 #include "macros.h"
 
 
-int
-db__send_handle  (dbHandle *handle)
+int db__send_handle(dbHandle * handle)
 {
-    DB_SEND_STRING (&handle->dbName);
-    DB_SEND_STRING (&handle->dbSchema);
+    DB_SEND_STRING(&handle->dbName);
+    DB_SEND_STRING(&handle->dbSchema);
 
     return DB_OK;
 }
 
-int
-db__recv_handle  (dbHandle *handle)
+int db__recv_handle(dbHandle * handle)
 {
-    DB_RECV_STRING (&handle->dbName);
-    DB_RECV_STRING (&handle->dbSchema);
+    DB_RECV_STRING(&handle->dbName);
+    DB_RECV_STRING(&handle->dbSchema);
 
     return DB_OK;
 }

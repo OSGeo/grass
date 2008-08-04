@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:       d.menu
@@ -185,8 +186,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Menu must contain a title and at least one option"));
     }
 
-    i = D_popup(backcolor, textcolor, dividercolor,
-		top,		/* The col of the top left corner */
+    i = D_popup(backcolor, textcolor, dividercolor, top,	/* The col of the top left corner */
 		left,		/* The row of the top left corner */
 		size,		/* The size of the characters in pixles */
 		options);	/* The text */

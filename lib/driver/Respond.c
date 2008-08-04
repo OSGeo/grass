@@ -4,7 +4,6 @@
 
 void COM_Respond(void)
 {
-	if (driver->Respond)
-		(*driver->Respond)();
+    if (driver->Respond)
+	(*driver->Respond) ();
 }
-

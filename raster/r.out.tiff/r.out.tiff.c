@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.out.tiff
@@ -65,367 +66,351 @@ typedef unsigned long u_long;
 #define	howmany(x, y)	(((x)+((y)-1))/(y))
 #define	streq(a,b)	(strcmp(a,b) == 0)
 
-u_short	config = PLANARCONFIG_CONTIG;
-u_short	compression = -1;
-u_short	rowsperstrip = 0;
+u_short config = PLANARCONFIG_CONTIG;
+u_short compression = -1;
+u_short rowsperstrip = 0;
 
 /* global functions */
 static int write_tfw(const char *, const struct Cell_head *);
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	u_char *buf, *tmpptr;
-	int row, linebytes;
-	TIFF *out;
-	int in;
-	struct rasterfile h;
-	struct Option *inopt, *outopt, *compopt;
-	struct Flag *pflag, *lflag, *tflag;
-	CELL *cell, *cellptr, *cells[MAX_TILE_LENGTH];
-	struct Cell_head cellhd;
-	struct GModule *module;
-	int col, tfw, palette, tiled;
-	char *mapset, *basename, *filename;
-	struct Colors colors;
-	int red, grn, blu, mapsize, isfp;
+    u_char *buf, *tmpptr;
+    int row, linebytes;
+    TIFF *out;
+    int in;
+    struct rasterfile h;
+    struct Option *inopt, *outopt, *compopt;
+    struct Flag *pflag, *lflag, *tflag;
+    CELL *cell, *cellptr, *cells[MAX_TILE_LENGTH];
+    struct Cell_head cellhd;
+    struct GModule *module;
+    int col, tfw, palette, tiled;
+    char *mapset, *basename, *filename;
+    struct Colors colors;
+    int red, grn, blu, mapsize, isfp;
 
-	G_gisinit(argv[0]);
-	
-	/* Set description */
-	module              = G_define_module();
-	module->keywords = _("raster, export");
-	module->description = 
-	    _("Exports a GRASS raster map to a 8/24bit TIFF image file "
-	    "at the pixel resolution of the currently defined region.");
+    G_gisinit(argv[0]);
 
-	inopt = G_define_standard_option(G_OPT_R_INPUT);
+    /* Set description */
+    module = G_define_module();
+    module->keywords = _("raster, export");
+    module->description =
+	_("Exports a GRASS raster map to a 8/24bit TIFF image file "
+	  "at the pixel resolution of the currently defined region.");
 
-	outopt = G_define_option();
-	outopt->key             = "output";
-	outopt->type            =  TYPE_STRING;
-	outopt->required        =  YES;
-	outopt->gisprompt	= "new_file,tiff,tiff";
-	outopt->description     = _("Name for new TIFF file");
+    inopt = G_define_standard_option(G_OPT_R_INPUT);
 
-	compopt = G_define_option();
-	compopt->key		= "compression";
-	compopt->type		= TYPE_STRING;
-	compopt->required       = NO;
-	compopt->options        = "none,packbit,deflate,lzw";
-	compopt->description    = _("TIFF file compression");
-	compopt->answer         = "none";
-	
-	pflag = G_define_flag();
-	pflag->key		= 'p';
-	pflag->description	= _("TIFF Palette output (8bit instead of 24bit).");
+    outopt = G_define_option();
+    outopt->key = "output";
+    outopt->type = TYPE_STRING;
+    outopt->required = YES;
+    outopt->gisprompt = "new_file,tiff,tiff";
+    outopt->description = _("Name for new TIFF file");
 
-	tflag = G_define_flag();
-	tflag->key		= 't';
-	tflag->description      = _("Output TIFF world file");
+    compopt = G_define_option();
+    compopt->key = "compression";
+    compopt->type = TYPE_STRING;
+    compopt->required = NO;
+    compopt->options = "none,packbit,deflate,lzw";
+    compopt->description = _("TIFF file compression");
+    compopt->answer = "none";
 
-	lflag = G_define_flag();
-	lflag->key		= 'l';
-	lflag->description      = _("Output Tiled TIFF");
+    pflag = G_define_flag();
+    pflag->key = 'p';
+    pflag->description = _("TIFF Palette output (8bit instead of 24bit).");
 
-	if (G_parser (argc, argv))
-		exit (EXIT_FAILURE);
+    tflag = G_define_flag();
+    tflag->key = 't';
+    tflag->description = _("Output TIFF world file");
 
-	if (strncmp(compopt->answer, "packbit", 7) == 0)
-		compression = COMPRESSION_PACKBITS;
-	else if (strncmp(compopt->answer, "deflate", 7) == 0)
-		compression = COMPRESSION_DEFLATE;
-	else if (strncmp(compopt->answer, "lzw", 3) == 0)
-		compression = COMPRESSION_LZW;
-	else
-		compression = COMPRESSION_NONE;
-	
-	tiled = lflag->answer;
-	palette = pflag->answer;
-	tfw = tflag->answer;
+    lflag = G_define_flag();
+    lflag->key = 'l';
+    lflag->description = _("Output Tiled TIFF");
 
-	mapset = G_find_cell(inopt->answer, "");
-	if (!mapset)
-		G_fatal_error(_("Raster map <%s> not found"), inopt->answer);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-	if ((G_get_cellhd(inopt->answer, mapset, &cellhd) < 0))
-		G_fatal_error(_("Unable to read header of raster map <%s>"), inopt->answer);
+    if (strncmp(compopt->answer, "packbit", 7) == 0)
+	compression = COMPRESSION_PACKBITS;
+    else if (strncmp(compopt->answer, "deflate", 7) == 0)
+	compression = COMPRESSION_DEFLATE;
+    else if (strncmp(compopt->answer, "lzw", 3) == 0)
+	compression = COMPRESSION_LZW;
+    else
+	compression = COMPRESSION_NONE;
 
-	if ((G_get_window(&cellhd) < 0))
-		G_fatal_error(_("Can't set window"));
+    tiled = lflag->answer;
+    palette = pflag->answer;
+    tfw = tflag->answer;
 
-	G_read_colors(inopt->answer, mapset, &colors);
-	if ((isfp = G_raster_map_is_fp(inopt->answer, mapset)))
-	    G_warning(_("Raster map <%s> in mapset <%s> is a floating point "
-			"map. Decimal values will be rounded to integer!"),
-		      inopt->answer, mapset);
+    mapset = G_find_cell(inopt->answer, "");
+    if (!mapset)
+	G_fatal_error(_("Raster map <%s> not found"), inopt->answer);
 
-	G_set_null_value_color (255, 255, 255, &colors);
-	if (palette && (colors.cmax - colors.cmin > 255))
-	    G_fatal_error (_("Color map for palette must have less "
-			     "than 256 colors for the available range of data"));
+    if ((G_get_cellhd(inopt->answer, mapset, &cellhd) < 0))
+	G_fatal_error(_("Unable to read header of raster map <%s>"),
+		      inopt->answer);
 
-	cell = G_allocate_cell_buf();
-	if ((in = G_open_cell_old (inopt->answer, mapset)) < 0)
-		G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
+    if ((G_get_window(&cellhd) < 0))
+	G_fatal_error(_("Can't set window"));
 
-	basename = G_store(outopt->answer);
-	G_basename(basename, "tiff");
-	G_basename(basename, "tif");
-	filename = G_malloc(strlen(basename) + 5);
-	sprintf(filename, "%s.tif", basename);
-   
-	out = TIFFOpen(filename, "w");
-	if (out == NULL)
-	    G_fatal_error (_("Unable to open TIFF file <%s>"), filename);
+    G_read_colors(inopt->answer, mapset, &colors);
+    if ((isfp = G_raster_map_is_fp(inopt->answer, mapset)))
+	G_warning(_("Raster map <%s> in mapset <%s> is a floating point "
+		    "map. Decimal values will be rounded to integer!"),
+		  inopt->answer, mapset);
 
-	h.ras_width = cellhd.cols;
-	h.ras_height = cellhd.rows;
-	h.ras_depth = 24;
-	if (pflag->answer)
-		h.ras_depth = 8;
+    G_set_null_value_color(255, 255, 255, &colors);
+    if (palette && (colors.cmax - colors.cmin > 255))
+	G_fatal_error(_("Color map for palette must have less "
+			"than 256 colors for the available range of data"));
 
-	TIFFSetField(out, TIFFTAG_IMAGEWIDTH, h.ras_width);
-	TIFFSetField(out, TIFFTAG_IMAGELENGTH, h.ras_height);
-	TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-	TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, h.ras_depth > 8 ? 3 : 1);
-	TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, h.ras_depth > 1 ? 8 : 1);
-	TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
-	mapsize = 1<<h.ras_depth;
+    cell = G_allocate_cell_buf();
+    if ((in = G_open_cell_old(inopt->answer, mapset)) < 0)
+	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
 
-	if (palette) {
-		register u_short *redp, *grnp, *blup, *mapptr;
-		register int i;
+    basename = G_store(outopt->answer);
+    G_basename(basename, "tiff");
+    G_basename(basename, "tif");
+    filename = G_malloc(strlen(basename) + 5);
+    sprintf(filename, "%s.tif", basename);
 
-		G_debug (1, "max %f min %f mapsize %d", 
-			 colors.cmax, colors.cmin, mapsize);
+    out = TIFFOpen(filename, "w");
+    if (out == NULL)
+	G_fatal_error(_("Unable to open TIFF file <%s>"), filename);
 
-		mapptr = (u_short *)G_calloc(mapsize* 3, sizeof (u_short));
-		redp = mapptr;
-		grnp = redp + mapsize;
-		blup = redp + mapsize * 2;
+    h.ras_width = cellhd.cols;
+    h.ras_height = cellhd.rows;
+    h.ras_depth = 24;
+    if (pflag->answer)
+	h.ras_depth = 8;
 
-		/* XXX -- set pointers up before we step through arrays */
+    TIFFSetField(out, TIFFTAG_IMAGEWIDTH, h.ras_width);
+    TIFFSetField(out, TIFFTAG_IMAGELENGTH, h.ras_height);
+    TIFFSetField(out, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+    TIFFSetField(out, TIFFTAG_SAMPLESPERPIXEL, h.ras_depth > 8 ? 3 : 1);
+    TIFFSetField(out, TIFFTAG_BITSPERSAMPLE, h.ras_depth > 1 ? 8 : 1);
+    TIFFSetField(out, TIFFTAG_PLANARCONFIG, config);
+    mapsize = 1 << h.ras_depth;
+
+    if (palette) {
+	register u_short *redp, *grnp, *blup, *mapptr;
+	register int i;
+
+	G_debug(1, "max %f min %f mapsize %d",
+		colors.cmax, colors.cmin, mapsize);
+
+	mapptr = (u_short *) G_calloc(mapsize * 3, sizeof(u_short));
+	redp = mapptr;
+	grnp = redp + mapsize;
+	blup = redp + mapsize * 2;
+
+	/* XXX -- set pointers up before we step through arrays */
 #define	SCALE(x)	(((x)*((1L<<16)-1))/255)
 
-		for (i = colors.cmin; i <= colors.cmax; i++, redp++, grnp++, blup++)
-                {
-			G_get_color(i, &red, &grn, &blu, &colors);
-			*redp = (u_short)(SCALE(red));
-			*grnp = (u_short)(SCALE(grn));
-			*blup = (u_short)(SCALE(blu));
+	for (i = colors.cmin; i <= colors.cmax; i++, redp++, grnp++, blup++) {
+	    G_get_color(i, &red, &grn, &blu, &colors);
+	    *redp = (u_short) (SCALE(red));
+	    *grnp = (u_short) (SCALE(grn));
+	    *blup = (u_short) (SCALE(blu));
 
-			G_debug (1, " %d : %d %d %d   %d %d %d",
-				 i, red, grn, blu, *redp, *grnp, *blup);
+	    G_debug(1, " %d : %d %d %d   %d %d %d",
+		    i, red, grn, blu, *redp, *grnp, *blup);
+	}
+
+	TIFFSetField(out, TIFFTAG_COLORMAP,
+		     mapptr, mapptr + mapsize, mapptr + mapsize * 2);
+	TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE);
+	TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
+    }
+    else {
+	/* XXX this is bogus... */
+	TIFFSetField(out, TIFFTAG_PHOTOMETRIC, h.ras_depth == 24 ?
+		     PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
+	TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
+    }
+
+    if (tiled) {
+	int tilewidth = 128;
+	int tilelength = 128;
+	int imagewidth, imagelength;
+	int spp;
+	char *obuf;
+	char *tptr;
+	uint32 col, oskew, width, i, j;
+
+	imagewidth = h.ras_width;
+	imagelength = h.ras_height;
+	spp = h.ras_depth;
+
+	TIFFSetField(out, TIFFTAG_TILEWIDTH, tilewidth);
+	TIFFSetField(out, TIFFTAG_TILELENGTH, tilelength);
+	obuf = (char *)_TIFFmalloc(TIFFTileSize(out));
+
+	G_debug(1, "Tile buff size: %d", TIFFTileSize(out));
+
+	/* allocate cell buffers */
+	for (i = 0; i < tilelength; i++)
+	    cells[i] = G_allocate_cell_buf();
+
+	/* build tiff tiles from grass buffer */
+	for (row = 0; row < imagelength; row += tilelength) {
+	    uint32 nrow =
+		(row + tilelength >
+		 imagelength) ? imagelength - row : tilelength;
+	    uint32 colb = 0;
+
+	    for (i = 0; i < nrow; i++) {
+		if (G_get_c_raster_row(in, cells[i], row + i) < 0)
+		    G_fatal_error(_("Reading raster map..."));
+	    }
+
+	    for (col = 0; col < imagewidth; col += tilewidth) {
+		tsample_t s;
+
+		i = nrow;
+		tptr = obuf;
+		spp = 1;
+		s = 0;
+		oskew = 0;
+		width = tilewidth;
+
+		G_debug(1, "Tile #: r %d, c %d, s %d", row, col, s);
+
+		/*
+		 * Tile is clipped horizontally.  Calculate
+		 * visible portion and skewing factors.
+		 */
+		if (colb + tilewidth > imagewidth) {
+		    width = (imagewidth - colb);
+		    oskew = tilewidth - width;
 		}
 
-		TIFFSetField(out, TIFFTAG_COLORMAP,
-		        mapptr, mapptr + mapsize, mapptr + mapsize * 2);
-		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_PALETTE);
-		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
-	}
-        else
-        {
-		/* XXX this is bogus... */
-		TIFFSetField(out, TIFFTAG_PHOTOMETRIC, h.ras_depth == 24 ?
-		        PHOTOMETRIC_RGB : PHOTOMETRIC_MINISBLACK);
-		TIFFSetField(out, TIFFTAG_COMPRESSION, compression);
-	}
+		for (i = 0; i < nrow; i++) {
+		    cellptr = cells[i];
 
-	if (tiled)
-        {
-	    int tilewidth = 128;
-	    int tilelength = 128;
-	    int imagewidth, imagelength;
-	    int spp;
-	    char *obuf;
-	    char *tptr;
-            uint32 col, oskew, width, i, j;
-	    
-	    imagewidth = h.ras_width;
-	    imagelength = h.ras_height;
-	    spp = h.ras_depth;
-	    
-	    TIFFSetField(out, TIFFTAG_TILEWIDTH, tilewidth);
-	    TIFFSetField(out, TIFFTAG_TILELENGTH, tilelength);
-	    obuf = (char*)_TIFFmalloc(TIFFTileSize(out));
+		    if (palette) {
+			cellptr += col;
+			for (j = 0; j < width; j++)
+			    *tptr++ = (u_char) * cellptr++;
 
-	    G_debug (1, "Tile buff size: %d",TIFFTileSize(out) );
-	    
-	    /* allocate cell buffers */
-	    for (i = 0; i < tilelength; i++)
-		cells[i] = G_allocate_cell_buf();
-
-	    /* build tiff tiles from grass buffer */
-            for (row = 0; row < imagelength; row += tilelength)
-            {
-                    uint32 nrow = (row+tilelength > imagelength) ? imagelength-row : tilelength;
-                    uint32 colb = 0;
-
-		    for (i = 0; i < nrow; i++)
-                    {
-			if (G_get_c_raster_row (in, cells[i], row + i) < 0)
-			    G_fatal_error(_("Reading raster map..."));
+			tptr += oskew;
 		    }
-
-                    for (col = 0; col < imagewidth; col += tilewidth)
-                    {
-                            tsample_t s;
-			    
-			    i = nrow;
-			    tptr = obuf;
-			    spp = 1;
-			    s = 0;
-			    oskew = 0;
-			    width = tilewidth;
-			    
-			    G_debug (1, "Tile #: r %d, c %d, s %d", row, col, s);
-                            
-			    /*
-                             * Tile is clipped horizontally.  Calculate
-	                     * visible portion and skewing factors.
-                             */
-                            if (colb + tilewidth > imagewidth)
-                            {
-                                   width = (imagewidth - colb);
-                                   oskew = tilewidth - width;
-                            }
-			    
-			    for (i = 0; i < nrow; i++)
-                            {
-				cellptr = cells[i];
-				
-				if (palette)
-                                {
-				    cellptr += col;
-				    for (j = 0; j < width; j++)
-					*tptr++ = (u_char)*cellptr++;
-
-				    tptr += oskew;
-				}
-                                else
-                                {
-				    for (j = 0; j < width; j++)
-                                    {
-					G_get_color(cellptr[col + j], &red, &grn, &blu, &colors);
-					*tptr++ = (u_char) red;
-					*tptr++ = (u_char) grn;
-					*tptr++ = (u_char) blu;
-		       	    	    }
-
-				    tptr += oskew*3;
-				}
-
-				G_debug (3, "row #: i %d tptr %lx", i, (long) tptr);
-			    }
-	    
-			    G_debug (1, "Write Tile #: col %d row %d s %d", col, row, s);
-
-                    	    if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0)
-                            {
-                        	_TIFFfree(obuf);
-                                return (-1);
-                            }
-	 		    
-                            G_percent (row, h.ras_height, 1);
-		    }
-
-		    colb += tilewidth;
-		}
-	}
-        else
-        {
-		linebytes = ((h.ras_depth*h.ras_width+15) >> 3) &~ 1;
-		
-		G_debug (1, "linebytes = %d, TIFFscanlinesize = %d", linebytes,
-			 TIFFScanlineSize(out));
-
-		if (TIFFScanlineSize(out) > linebytes)
-			buf = (u_char *)G_malloc (linebytes);
-		else
-			buf = (u_char *)G_malloc (TIFFScanlineSize(out));
-
-		if (rowsperstrip != (u_short)-1)
-			rowsperstrip = (u_short)(8*1024/linebytes);
-
-		G_debug (1, "rowsperstrip = %d", rowsperstrip);
-		
-		TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
-			     rowsperstrip == 0 ? 1 : rowsperstrip);
-
-		for (row = 0; row < h.ras_height; row++)
-		{
-			tmpptr = buf;
-
-                        G_percent (row, h.ras_height, 2);
-
-			if (G_get_c_raster_row (in, cell, row) < 0)
-				exit(EXIT_FAILURE);
-
-			cellptr = cell;
-			if (palette)
-                        {
-				for (col=0; col < h.ras_width; col++)
-					*tmpptr++ = (u_char)(*cellptr++ - colors.cmin);
-			}
-                        else
-                        {
-				for (col=0; col < h.ras_width; col++)
-                                {
-					G_get_color( cell[col], &red, &grn, &blu, &colors);
-					*tmpptr++ = (u_char) red;
-					*tmpptr++ = (u_char) grn;
-					*tmpptr++ = (u_char) blu;
-				}
+		    else {
+			for (j = 0; j < width; j++) {
+			    G_get_color(cellptr[col + j], &red, &grn, &blu,
+					&colors);
+			    *tptr++ = (u_char) red;
+			    *tptr++ = (u_char) grn;
+			    *tptr++ = (u_char) blu;
 			}
 
-			if (TIFFWriteScanline(out, buf, row, 0) < 0)
-				break;
+			tptr += oskew * 3;
+		    }
+
+		    G_debug(3, "row #: i %d tptr %lx", i, (long)tptr);
 		}
 
-                G_percent (row, h.ras_height, 2);
+		G_debug(1, "Write Tile #: col %d row %d s %d", col, row, s);
+
+		if (TIFFWriteTile(out, obuf, col, row, 0, s) < 0) {
+		    _TIFFfree(obuf);
+		    return (-1);
+		}
+
+		G_percent(row, h.ras_height, 1);
+	    }
+
+	    colb += tilewidth;
 	}
-			   
-	(void) TIFFClose(out);
-	
-	if (tfw)
-	{
-		sprintf(filename, "%s.tfw", basename);
-		write_tfw(filename, &cellhd);
+    }
+    else {
+	linebytes = ((h.ras_depth * h.ras_width + 15) >> 3) & ~1;
+
+	G_debug(1, "linebytes = %d, TIFFscanlinesize = %d", linebytes,
+		TIFFScanlineSize(out));
+
+	if (TIFFScanlineSize(out) > linebytes)
+	    buf = (u_char *) G_malloc(linebytes);
+	else
+	    buf = (u_char *) G_malloc(TIFFScanlineSize(out));
+
+	if (rowsperstrip != (u_short) - 1)
+	    rowsperstrip = (u_short) (8 * 1024 / linebytes);
+
+	G_debug(1, "rowsperstrip = %d", rowsperstrip);
+
+	TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
+		     rowsperstrip == 0 ? 1 : rowsperstrip);
+
+	for (row = 0; row < h.ras_height; row++) {
+	    tmpptr = buf;
+
+	    G_percent(row, h.ras_height, 2);
+
+	    if (G_get_c_raster_row(in, cell, row) < 0)
+		exit(EXIT_FAILURE);
+
+	    cellptr = cell;
+	    if (palette) {
+		for (col = 0; col < h.ras_width; col++)
+		    *tmpptr++ = (u_char) (*cellptr++ - colors.cmin);
+	    }
+	    else {
+		for (col = 0; col < h.ras_width; col++) {
+		    G_get_color(cell[col], &red, &grn, &blu, &colors);
+		    *tmpptr++ = (u_char) red;
+		    *tmpptr++ = (u_char) grn;
+		    *tmpptr++ = (u_char) blu;
+		}
+	    }
+
+	    if (TIFFWriteScanline(out, buf, row, 0) < 0)
+		break;
 	}
 
-	G_free(filename);
-	G_free(basename);   
+	G_percent(row, h.ras_height, 2);
+    }
 
-	G_done_msg (" ");
-	
-	exit (EXIT_SUCCESS);
+    (void)TIFFClose(out);
+
+    if (tfw) {
+	sprintf(filename, "%s.tfw", basename);
+	write_tfw(filename, &cellhd);
+    }
+
+    G_free(filename);
+    G_free(basename);
+
+    G_done_msg(" ");
+
+    exit(EXIT_SUCCESS);
 }
 
 
-static int
-write_tfw(const char *fname, const struct Cell_head *win)
+static int write_tfw(const char *fname, const struct Cell_head *win)
 {
-	int  width = DBL_DIG;
-	FILE *outfile;
-	
-        G_message(_("Writing TIFF World file"));
+    int width = DBL_DIG;
+    FILE *outfile;
 
-	if (fname == NULL)
-		G_fatal_error(_("Got null file name"));
-	if (win == NULL)
-		G_fatal_error(_("Got null region struct"));
-	
-	if ((outfile = fopen(fname, "w")) == NULL)
-		G_fatal_error(_("Unable to open TIFF world file for writing"));
-	
-	fprintf (outfile, "%36.*f \n", width, win->ew_res);
-	fprintf (outfile, "%36.*f \n", width, 0.0);
-	fprintf (outfile, "%36.*f \n", width, 0.0);
-	fprintf (outfile, "%36.*f \n", width, -1 * win->ns_res);
-	fprintf (outfile, "%36.*f \n", width, win->west + win->ew_res / 2.0);
-        fprintf (outfile, "%36.*f \n", width, win->north - win->ns_res / 2.0);
+    G_message(_("Writing TIFF World file"));
 
-	fclose(outfile);
-	return 0;
+    if (fname == NULL)
+	G_fatal_error(_("Got null file name"));
+    if (win == NULL)
+	G_fatal_error(_("Got null region struct"));
+
+    if ((outfile = fopen(fname, "w")) == NULL)
+	G_fatal_error(_("Unable to open TIFF world file for writing"));
+
+    fprintf(outfile, "%36.*f \n", width, win->ew_res);
+    fprintf(outfile, "%36.*f \n", width, 0.0);
+    fprintf(outfile, "%36.*f \n", width, 0.0);
+    fprintf(outfile, "%36.*f \n", width, -1 * win->ns_res);
+    fprintf(outfile, "%36.*f \n", width, win->west + win->ew_res / 2.0);
+    fprintf(outfile, "%36.*f \n", width, win->north - win->ns_res / 2.0);
+
+    fclose(outfile);
+    return 0;
 }

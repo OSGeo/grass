@@ -37,7 +37,7 @@ paramType param;		/*Parameters */
 void fatal_error(void *map, int *fd, int depths, char *errorMsg);	/*Simple Error message */
 void set_params();		/*Fill the paramType structure */
 void g3d_to_raster(void *map, G3D_Region region, int *fd);	/*Write the raster */
-int  open_output_map(const char *name, int res_type);	/*opens the outputmap */
+int open_output_map(const char *name, int res_type);	/*opens the outputmap */
 void close_output_map(int fd);	/*close the map */
 
 
@@ -149,17 +149,17 @@ void g3d_to_raster(void *map, G3D_Region region, int *fd)
 		check = G_put_f_raster_row(fd[pos], fcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
-			       _("Unable to write raster row"));
+				_("Unable to write raster row"));
 	    }
 
 	    if (typeIntern == DCELL_TYPE) {
 		check = G_put_d_raster_row(fd[pos], dcell);
 		if (check != 1)
 		    fatal_error(map, fd, depths,
-			       _("Unable to write raster row"));
+				_("Unable to write raster row"));
 	    }
 	}
-	G_debug(2, "Finished writing map %d.", z+1);
+	G_debug(2, "Finished writing map %d.", z + 1);
 	pos++;
     }
 
@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
 	/*If not equal, set the 3D window correct */
 	if (rows != region.rows || cols != region.cols) {
 	    G_message(_("The 2d and 3d region settings are different. "
-	      "Using the 2D window settings to adjust the 2D part of the 3D region."));
+			"Using the 2D window settings to adjust the 2D part of the 3D region."));
 	    G_get_set_window(&region2d);
 	    region.ns_res = region2d.ns_res;
 	    region.ew_res = region2d.ew_res;
@@ -310,8 +310,8 @@ int main(int argc, char *argv[])
 	G_message(_("Raster map %i Filename: %s"), i + 1, RasterFileName);
 
 	if (G_find_cell2(RasterFileName, ""))
-	    G_message(
-	      _("Raster map %d Filename: %s already exists. Will be overwritten!"),
+	    G_message(_
+		      ("Raster map %d Filename: %s already exists. Will be overwritten!"),
 		      i + 1, RasterFileName);
 
 	if (output_type == FCELL_TYPE)
@@ -347,21 +347,23 @@ int main(int argc, char *argv[])
 
 	sprintf(history.datsrc_1, "3D Raster map:");
 	strncpy(history.datsrc_2, param.input->answer, RECORD_LEN);
-	history.datsrc_2[RECORD_LEN-1] = '\0'; /* strncpy() doesn't null terminate if maxfill */
+	history.datsrc_2[RECORD_LEN - 1] = '\0';	/* strncpy() doesn't null terminate if maxfill */
 
-        sprintf(history.edhist[0], "Level %d of %d", i+1, region.depths);
-        sprintf(history.edhist[1], "Level z-range: %f to %f", 
-	   region.bottom + (i*region.tb_res), region.bottom + (i+1*region.tb_res) );
+	sprintf(history.edhist[0], "Level %d of %d", i + 1, region.depths);
+	sprintf(history.edhist[1], "Level z-range: %f to %f",
+		region.bottom + (i * region.tb_res),
+		region.bottom + (i + 1 * region.tb_res));
 
 	sprintf(history.edhist[3], "Input map full z-range: %f to %f",
-	    inputmap_bounds.bottom, inputmap_bounds.top);
+		inputmap_bounds.bottom, inputmap_bounds.top);
 	sprintf(history.edhist[4], "Input map z-resolution: %f",
-	    inputmap_bounds.tb_res);
+		inputmap_bounds.tb_res);
 	history.edlinecnt = 5;
-	if (! param.res->answer) {
+	if (!param.res->answer) {
 	    sprintf(history.edhist[6], "GIS region full z-range: %f to %f",
-		region.bottom, region.top);
-	    sprintf(history.edhist[7], "GIS region z-resolution: %f", region.tb_res);
+		    region.bottom, region.top);
+	    sprintf(history.edhist[7], "GIS region z-resolution: %f",
+		    region.tb_res);
 	    history.edlinecnt = 8;
 	}
 
@@ -392,4 +394,3 @@ int main(int argc, char *argv[])
 
     return (EXIT_SUCCESS);
 }
-

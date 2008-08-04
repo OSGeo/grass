@@ -1,13 +1,13 @@
 #include <grass/raster.h>
 #include <grass/display.h>
- 
+
 /* DrawText.c 
  *
  * function defined:
  *
  * DrawText(size,row,col,text)
  *
- * int size,		- size of text (percent of window height) 
+ * int size,            - size of text (percent of window height) 
  *     row,             - text row  
  *     col;             - text col
  * char *text;          - text string
@@ -31,24 +31,24 @@
  *
  */
 
-int DrawText (int size, int row, int col, char *text)
+int DrawText(int size, int row, int col, char *text)
 {
-int b,t,l,r;
-int tsize;
-int dots_per_line;
-int cur_dot_row;
+    int b, t, l, r;
+    int tsize;
+    int dots_per_line;
+    int cur_dot_row;
 
 #ifdef DEBUG
-fprintf (stdout,"DrawText: %s\n",text);
+    fprintf(stdout, "DrawText: %s\n", text);
 #endif
 
-D_get_screen_window(&t,&b,&l,&r);
-dots_per_line = (int)(size/100.0*(float)(b-t));
-tsize = (int)(.8*(float)dots_per_line);
-cur_dot_row = t+dots_per_line*row;
-R_text_size(tsize,tsize);
-R_move_abs(l+col*tsize,cur_dot_row);
-R_text(text);
+    D_get_screen_window(&t, &b, &l, &r);
+    dots_per_line = (int)(size / 100.0 * (float)(b - t));
+    tsize = (int)(.8 * (float)dots_per_line);
+    cur_dot_row = t + dots_per_line * row;
+    R_text_size(tsize, tsize);
+    R_move_abs(l + col * tsize, cur_dot_row);
+    R_text(text);
 
     return 0;
 }

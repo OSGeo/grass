@@ -21,52 +21,47 @@ static int blank_line(void *buf);
 
 struct COOR *move(struct COOR *point)
 {
-	if (direction == FORWARD)
-	{
-		if (point->fptr == NULL)		/* at open end of line */
-			return(NULL);
-		if (point->fptr->fptr == point)	/* direction change coming up */
-			direction = BACKWARD;
-		return(point->fptr);
-	}
-	else
-	{
-		if (point->bptr == NULL)
-			return(NULL);
-		if (point->bptr->bptr == point)
-			direction = FORWARD;
-		return(point->bptr);
-	}
+    if (direction == FORWARD) {
+	if (point->fptr == NULL)	/* at open end of line */
+	    return (NULL);
+	if (point->fptr->fptr == point)	/* direction change coming up */
+	    direction = BACKWARD;
+	return (point->fptr);
+    }
+    else {
+	if (point->bptr == NULL)
+	    return (NULL);
+	if (point->bptr->bptr == point)
+	    direction = FORWARD;
+	return (point->bptr);
+    }
 }
 
 /* find_end - search for end of line, starting at a given point and */
 /* moving in a given direction */
 
-struct COOR *find_end(struct COOR *seed,int dir,int *result,int *n)
+struct COOR *find_end(struct COOR *seed, int dir, int *result, int *n)
 {
-	struct COOR *start;
+    struct COOR *start;
 
-	start = seed;
-	direction = dir;
-	*result = *n = 0;
-	while (!*result)
-	{
-		seed = move(seed);
-		(*n)++;
-		if (seed == start)
-			*result = LOOP;
-		else
-		{
-			if (seed == NULL)
-				*result = OPEN;
-			else
-			{
-				if (at_end(seed))
-					*result = END;
-			}
-		}
+    start = seed;
+    direction = dir;
+    *result = *n = 0;
+    while (!*result) {
+	seed = move(seed);
+	(*n)++;
+	if (seed == start)
+	    *result = LOOP;
+	else {
+	    if (seed == NULL)
+		*result = OPEN;
+	    else {
+		if (at_end(seed))
+		    *result = END;
+	    }
 	}
-	return(seed);
+    }
+    return (seed);
 }
 
 /* at_end - test whether a point is at the end of a line;  if so, give */
@@ -74,93 +69,90 @@ struct COOR *find_end(struct COOR *seed,int dir,int *result,int *n)
 
 int at_end(struct COOR *ptr)
 {
-	if (ptr->fptr == ptr)
-		return(BACKWARD);
-	if (ptr->bptr == ptr)
-		return(FORWARD);
-	return(0);
+    if (ptr->fptr == ptr)
+	return (BACKWARD);
+    if (ptr->bptr == ptr)
+	return (FORWARD);
+    return (0);
 }
 
-int read_row (void *buf)
+int read_row(void *buf)
 {
-	void* p;
-	if (last_read)
-		return(0);
-	if (first_read)
-	{
-		blank_line(buf);
-		first_read = 0;
+    void *p;
+
+    if (last_read)
+	return (0);
+    if (first_read) {
+	blank_line(buf);
+	first_read = 0;
+    }
+    else {
+	if (row_count >= n_rows) {
+	    last_read = 1;
+	    blank_line(buf);
 	}
-	else
-	{
-		if (row_count >= n_rows)
-		{
-			last_read = 1;
-			blank_line(buf);
-		}
-		else
-		{
-			/* The buf variable is a void pointer and thus */
-			/* points to anything. Therefore, it's size is */
-			/* unknown and thus, it cannot be used for pointer */
-			/* arithmetic (some compilers treat this as an error */
-			/* - SGI MIPSPro compiler for one). Make the */
-			/* assumption that data_size is the proper number of */
-			/* bytes and cast the buf variable to char * before */
-			/* incrementing */
-			p = ((char *) buf) + data_size;
-			G_get_raster_row(input_fd,p,row_count++,data_type);
-			p = buf;
-			G_set_null_value(p,1,data_type);
-			
-			/* Again we need to cast p to char * under the */
-			/* assumption that the increment is the proper */
-			/* number of bytes. */
-			p = ((char *) p) + (row_length + 1)*data_size;
-			G_set_null_value(p,1,data_type);
-		}
+	else {
+	    /* The buf variable is a void pointer and thus */
+	    /* points to anything. Therefore, it's size is */
+	    /* unknown and thus, it cannot be used for pointer */
+	    /* arithmetic (some compilers treat this as an error */
+	    /* - SGI MIPSPro compiler for one). Make the */
+	    /* assumption that data_size is the proper number of */
+	    /* bytes and cast the buf variable to char * before */
+	    /* incrementing */
+	    p = ((char *)buf) + data_size;
+	    G_get_raster_row(input_fd, p, row_count++, data_type);
+	    p = buf;
+	    G_set_null_value(p, 1, data_type);
+
+	    /* Again we need to cast p to char * under the */
+	    /* assumption that the increment is the proper */
+	    /* number of bytes. */
+	    p = ((char *)p) + (row_length + 1) * data_size;
+	    G_set_null_value(p, 1, data_type);
 	}
-	return(row_length + 2);
+    }
+    return (row_length + 2);
 }
 
 static int blank_line(void *buf)
 {
-	G_set_null_value(buf, row_length + 2,data_type);
-	
-	return 0;
+    G_set_null_value(buf, row_length + 2, data_type);
+
+    return 0;
 }
 
 /* insert values into the table (cat, val | dval) */
-void insert_value (int cat, int val, double dval)
+void insert_value(int cat, int val, double dval)
 {
     char buf[1000];
-    
-    sprintf ( buf, "insert into %s values (%d", Fi->table, cat);
-    db_set_string ( &sql, buf );
-    
-    if ( data_type == CELL_TYPE )
-	sprintf ( buf, ", %d", val );
+
+    sprintf(buf, "insert into %s values (%d", Fi->table, cat);
+    db_set_string(&sql, buf);
+
+    if (data_type == CELL_TYPE)
+	sprintf(buf, ", %d", val);
     else
-	sprintf ( buf, ", %f", dval );
-    
-    db_append_string ( &sql, buf );
-    
-    if ( has_cats ) {
+	sprintf(buf, ", %f", dval);
+
+    db_append_string(&sql, buf);
+
+    if (has_cats) {
 	char *lab;
-	
-	lab = G_get_cat(val, &RastCats); /*cats are loaded only for CELL type */
-	
-	db_set_string (&label, lab);
-	db_double_quote_string ( &label );
-	sprintf ( buf, ", '%s'", db_get_string(&label) );
-	db_append_string ( &sql, buf );
+
+	lab = G_get_cat(val, &RastCats);	/*cats are loaded only for CELL type */
+
+	db_set_string(&label, lab);
+	db_double_quote_string(&label);
+	sprintf(buf, ", '%s'", db_get_string(&label));
+	db_append_string(&sql, buf);
     }
-    
-    db_append_string ( &sql, ")" );
-    
-    G_debug ( 3, db_get_string ( &sql ) );
-    
-    if (db_execute_immediate (driver, &sql) != DB_OK )
-	G_fatal_error (_("Cannot insert new row: %s"), db_get_string(&sql));
-    
+
+    db_append_string(&sql, ")");
+
+    G_debug(3, db_get_string(&sql));
+
+    if (db_execute_immediate(driver, &sql) != DB_OK)
+	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
+
 }

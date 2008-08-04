@@ -12,11 +12,11 @@
 #define	ZERO		0.0000001
 
 
-int	check_ready(void);
-void	getcells(void);
-void	putcells(void);
-void	initialize(void);
-void	atanb(void);
+int check_ready(void);
+void getcells(void);
+void putcells(void);
+void initialize(void);
+void atanb(void);
 
 #ifdef MAIN
 #	define	GLOBAL
@@ -24,8 +24,7 @@ void	atanb(void);
 #	define	GLOBAL	extern
 #endif
 
-GLOBAL	char	*mapset,*iname,*oname;
-GLOBAL	struct	Cell_head	window;
-GLOBAL	DCELL	**cell;
-GLOBAL	DCELL	**atb,**a;
-
+GLOBAL char *mapset, *iname, *oname;
+GLOBAL struct Cell_head window;
+GLOBAL DCELL **cell;
+GLOBAL DCELL **atb, **a;

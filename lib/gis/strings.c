@@ -26,11 +26,11 @@
 #define NULL		0
 #endif
 
-static char *G_strend (const char *S)
+static char *G_strend(const char *S)
 {
     while (*S)
 	S++;
-    return (char *) S;
+    return (char *)S;
 }
 
 /*!
@@ -43,12 +43,11 @@ static char *G_strend (const char *S)
  *
  * \return pointer to T
  */
-char *G_strcpy (char *T, const char *F)
+char *G_strcpy(char *T, const char *F)
 {
     char *d = T;
 
-    while ((*d++ = *F++))
-        ;
+    while ((*d++ = *F++)) ;
     return (T);
 }
 
@@ -64,12 +63,12 @@ char *G_strcpy (char *T, const char *F)
  *
  * \return T value 
  */
-char *G_chrcpy (char *T, const char *F, int n)
+char *G_chrcpy(char *T, const char *F, int n)
 {
     char *d = T;
 
     while (n--)
-        *d++ = *F++;
+	*d++ = *F++;
     *d = '\0';
     return (T);
 }
@@ -88,12 +87,12 @@ char *G_chrcpy (char *T, const char *F, int n)
  *
  * \return T value
  */
-char *G_strncpy (char *T, const char *F, int n)
+char *G_strncpy(char *T, const char *F, int n)
 {
     char *d = T;
 
     while (n-- && *F)
-        *d++ = *F++;
+	*d++ = *F++;
     *d = '\0';
     return (T);
 }
@@ -107,12 +106,12 @@ char *G_strncpy (char *T, const char *F, int n)
  *
  * \return T value
  */
-char *G_strmov (char *T, const char *F)
+char *G_strmov(char *T, const char *F)
 {
     char *d = T;
 
     while (*F)
-        *d++ = *F++;
+	*d++ = *F++;
     return (T);
 }
 
@@ -129,12 +128,12 @@ char *G_strmov (char *T, const char *F)
  *
  * \return T value
  */
-char *G_chrmov (char *T, const char *F, int n)
+char *G_chrmov(char *T, const char *F, int n)
 {
     char *d = T;
 
     while (n--)
-        *d++ = *F++;
+	*d++ = *F++;
     return (T);
 }
 
@@ -151,9 +150,9 @@ char *G_chrmov (char *T, const char *F, int n)
  *
  * \return T value
  */
-char *G_strcat (char *T, const char *F)
+char *G_strcat(char *T, const char *F)
 {
-    G_strcpy (G_strend (T), F);
+    G_strcpy(G_strend(T), F);
     return (T);
 }
 
@@ -172,9 +171,9 @@ char *G_strcat (char *T, const char *F)
  *
  * \return T value
  */
-char *G_chrcat (char *T, const char *F, int n)
+char *G_chrcat(char *T, const char *F, int n)
 {
-    G_chrcpy (G_strend (T), F, n);
+    G_chrcpy(G_strend(T), F, n);
     return (T);
 }
 
@@ -192,25 +191,28 @@ char *G_chrcat (char *T, const char *F, int n)
  */
 int G_strcasecmp(const char *x, const char *y)
 {
-    int xx,yy;
+    int xx, yy;
 
     if (!x)
 	return y ? -1 : 0;
     if (!y)
 	return x ? 1 : 0;
-    while (*x && *y)
-    {
+    while (*x && *y) {
 	xx = *x++;
 	yy = *y++;
 	if (xx >= 'A' && xx <= 'Z')
 	    xx = xx + 'a' - 'A';
 	if (yy >= 'A' && yy <= 'Z')
 	    yy = yy + 'a' - 'A';
-	if (xx < yy) return -1;
-	if (xx > yy) return 1;
+	if (xx < yy)
+	    return -1;
+	if (xx > yy)
+	    return 1;
     }
-    if (*x) return 1;
-    if (*y) return -1;
+    if (*x)
+	return 1;
+    if (*y)
+	return -1;
     return 0;
 }
 
@@ -240,12 +242,13 @@ char *G_strstr(const char *mainString, const char *subString)
 	    q++;
 	}
     } while (*q != '\0' && strncmp(p, q, length) != 0 && q++);
-				/* Short-circuit evaluation is your friend */
+    /* Short-circuit evaluation is your friend */
 
-    if (*q == '\0') {				/* ran off end of mainString */
+    if (*q == '\0') {		/* ran off end of mainString */
 	return NULL;
-    } else {
-	return (char *) q;
+    }
+    else {
+	return (char *)q;
     }
 }
 
@@ -263,7 +266,7 @@ char *G_strdup(const char *string)
 {
     char *p;
 
-    p = G_malloc (strlen(string) + 1);
+    p = G_malloc(strlen(string) + 1);
 
     if (p != NULL) {
 	strcpy(p, string);
@@ -281,15 +284,16 @@ char *G_strdup(const char *string)
  *
  * \return bug string
  */
-char *G_strchg(char* bug, char character, char new)
+char *G_strchg(char *bug, char character, char new)
 {
- char *help = bug;
- while(*help) {
-	if (*help==character)
-		*help=new;
+    char *help = bug;
+
+    while (*help) {
+	if (*help == character)
+	    *help = new;
 	help++;
-	}
- return bug;
+    }
+    return bug;
 }
 
 /*!
@@ -309,70 +313,70 @@ char *G_strchg(char* bug, char character, char new)
  *
  * \return the newly allocated string, input buffer is unchanged 
  */
-char *G_str_replace(char* buffer, const char* old_str, const char* new_str) 
+char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
 {
 
-	char *B, *R;
-	const char *N;
-	char *replace;
-	int count, len;
+    char *B, *R;
+    const char *N;
+    char *replace;
+    int count, len;
 
-	/* Make sure old_str and new_str are not NULL */
-	if (old_str == NULL || new_str == NULL)
-		return G_strdup (buffer);
-	/* Make sure buffer is not NULL */
-	if (buffer == NULL)
-		return NULL;
+    /* Make sure old_str and new_str are not NULL */
+    if (old_str == NULL || new_str == NULL)
+	return G_strdup(buffer);
+    /* Make sure buffer is not NULL */
+    if (buffer == NULL)
+	return NULL;
 
-	/* Make sure old_str occurs */
-  	B = strstr (buffer, old_str);
-	if (B == NULL)
-		/* return NULL; */
-		return G_strdup (buffer);
+    /* Make sure old_str occurs */
+    B = strstr(buffer, old_str);
+    if (B == NULL)
+	/* return NULL; */
+	return G_strdup(buffer);
 
-	if (strlen (new_str) > strlen (old_str)) {
-		/* Count occurences of old_str */
-		count = 0;
-		len = strlen (old_str);
-		B = buffer;
-		while(B != NULL && *B != '\0') {
-  			B = G_strstr (B, old_str);
-			if (B != NULL) {
-				B += len;
-				count++;
-			}
-		}
-	
-  		len = count * (strlen(new_str) - strlen(old_str)) 
-			+ strlen(buffer);
-
-	}
-	else 
-		len = strlen(buffer);
-
-	/* Allocate new replacement */
-	replace = G_malloc (len + 1);
-	if (replace == NULL)
-		return NULL;
-
-	/* Replace old_str with new_str */
+    if (strlen(new_str) > strlen(old_str)) {
+	/* Count occurences of old_str */
+	count = 0;
+	len = strlen(old_str);
 	B = buffer;
-	R = replace;
-	len = strlen (old_str);
-	while(*B != '\0') {
-		if (*B == old_str[0] && strncmp (B, old_str, len) == 0) {
-			N = new_str;
-			while (*N != '\0')
-				*R++ = *N++;
-			B += len;
-		}
-		else {
-			*R++ = *B++;
-		}
+	while (B != NULL && *B != '\0') {
+	    B = G_strstr(B, old_str);
+	    if (B != NULL) {
+		B += len;
+		count++;
+	    }
 	}
-	*R='\0';
 
-	return replace;
+	len = count * (strlen(new_str) - strlen(old_str))
+	    + strlen(buffer);
+
+    }
+    else
+	len = strlen(buffer);
+
+    /* Allocate new replacement */
+    replace = G_malloc(len + 1);
+    if (replace == NULL)
+	return NULL;
+
+    /* Replace old_str with new_str */
+    B = buffer;
+    R = replace;
+    len = strlen(old_str);
+    while (*B != '\0') {
+	if (*B == old_str[0] && strncmp(B, old_str, len) == 0) {
+	    N = new_str;
+	    while (*N != '\0')
+		*R++ = *N++;
+	    B += len;
+	}
+	else {
+	    *R++ = *B++;
+	}
+    }
+    *R = '\0';
+
+    return replace;
 }
 
 /*!
@@ -382,23 +386,18 @@ char *G_str_replace(char* buffer, const char* old_str, const char* new_str)
  *
  * \return 0
  */
-int G_strip (char *buf)
+int G_strip(char *buf)
 {
     register char *a, *b;
 
-/* remove leading white space */
-    for (a = b = buf; *a == ' ' || *a == '\t'; a++)
-	    ;
+    /* remove leading white space */
+    for (a = b = buf; *a == ' ' || *a == '\t'; a++) ;
     if (a != b)
-	while ((*b++ = *a++))
-	    ;
-/* remove trailing white space */
-    for (a = buf; *a; a++)
-	    ;
-    if (a != buf)
-    {
-	for (a--; *a == ' ' || *a == '\t'; a--)
-		;
+	while ((*b++ = *a++)) ;
+    /* remove trailing white space */
+    for (a = buf; *a; a++) ;
+    if (a != buf) {
+	for (a--; *a == ' ' || *a == '\t'; a--) ;
 	a++;
 	*a = 0;
     }
@@ -416,28 +415,26 @@ int G_strip (char *buf)
  *
  * \return pointer to string
  */
-char *G_chop (char *line)
+char *G_chop(char *line)
 {
     register char *f = line, *t = line;
 
-    while (isspace (*f))  	/* go to first non white-space char */
-        f++;
+    while (isspace(*f))		/* go to first non white-space char */
+	f++;
 
-    if (! *f)			/* no more chars in string */
-    {
-        *t = '\0';
+    if (!*f) {			/* no more chars in string */
+	*t = '\0';
 	return (line);
     }
 
-    for (t = line; *t; t++)  	/* go to end */
-        ;
-    while ( isspace (*--t) )	
+    for (t = line; *t; t++)	/* go to end */
 	;
-    *++t = '\0';  		/* remove trailing white-spaces */
+    while (isspace(*--t)) ;
+    *++t = '\0';		/* remove trailing white-spaces */
 
     t = line;
-    while (*f)			/* copy */   
-            *t++ = *f++;
+    while (*f)			/* copy */
+	*t++ = *f++;
     *t = '\0';
 
     return (line);
@@ -448,16 +445,16 @@ char *G_chop (char *line)
  *
  * \param[in,out] str pointer to string
  */
-void G_str_to_upper (char *str)
+void G_str_to_upper(char *str)
 {
     int i = 0;
 
-    if (!str) return;
+    if (!str)
+	return;
 
-    while ( str[i] )
-    {
-        str[i] = toupper(str[i]);
-        i++;
+    while (str[i]) {
+	str[i] = toupper(str[i]);
+	i++;
     }
 }
 
@@ -466,16 +463,16 @@ void G_str_to_upper (char *str)
  *
  * \param[in,out] str pointer to string
  */
-void G_str_to_lower (char *str)
+void G_str_to_lower(char *str)
 {
     int i = 0;
 
-    if (!str) return;
+    if (!str)
+	return;
 
-    while ( str[i] )
-    {
-        str[i] = tolower(str[i]);
-        i++;
+    while (str[i]) {
+	str[i] = tolower(str[i]);
+	i++;
     }
 }
 
@@ -486,29 +483,30 @@ void G_str_to_lower (char *str)
  *
  * \return number of changed characters
  */
-int G_str_to_sql (char *str)
+int G_str_to_sql(char *str)
 {
     int count;
     char *c;
-    
+
     count = 0;
 
-    if (!str) return 0;
+    if (!str)
+	return 0;
 
     c = str;
-    while ( *c )
-    {
+    while (*c) {
 	*c = toascii(*c);
-	
-	if ( !( *c>='A' && *c<='Z' ) && !( *c>='a' && *c<='z' ) && !( *c>='0' && *c<='9' ) ) {
+
+	if (!(*c >= 'A' && *c <= 'Z') && !(*c >= 'a' && *c <= 'z') &&
+	    !(*c >= '0' && *c <= '9')) {
 	    *c = '_';
 	    count++;
 	}
 	c++;
     }
-    
+
     c = str;
-    if ( !( *c>='A' && *c<='Z' ) && !( *c>='a' && *c<='z' ) ) {
+    if (!(*c >= 'A' && *c <= 'Z') && !(*c >= 'a' && *c <= 'z')) {
 	*c = 'x';
 	count++;
     }

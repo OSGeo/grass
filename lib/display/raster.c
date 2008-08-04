@@ -33,37 +33,26 @@ extern int D__overlay_mode;
 
 static int src[2][2], dst[2][2];
 
-static int draw_cell(int,const void *,struct Colors *,RASTER_MAP_TYPE);
+static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
 
-int D_draw_raster(
-    int A_row,
-    const void *array,
-    struct Colors *colors,
-    RASTER_MAP_TYPE data_type)
+int D_draw_raster(int A_row,
+		  const void *array,
+		  struct Colors *colors, RASTER_MAP_TYPE data_type)
 {
     return draw_cell(A_row, array, colors, data_type);
 }
 
-int D_draw_d_raster(
-    int A_row,
-    const DCELL *darray,
-    struct Colors *colors)
+int D_draw_d_raster(int A_row, const DCELL * darray, struct Colors *colors)
 {
     return draw_cell(A_row, darray, colors, DCELL_TYPE);
 }
 
-int D_draw_f_raster(
-    int A_row,
-    const FCELL *farray,
-    struct Colors *colors)
+int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
 {
     return draw_cell(A_row, farray, colors, FCELL_TYPE);
 }
 
-int D_draw_c_raster(
-    int A_row,
-    const CELL *carray,
-    struct Colors *colors)
+int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
 {
     return draw_cell(A_row, carray, colors, CELL_TYPE);
 }
@@ -85,49 +74,44 @@ int D_draw_c_raster(
  *  \return int
  */
 
-int D_draw_cell(
-    int A_row,
-    const CELL *carray,
-    struct Colors *colors)
+int D_draw_cell(int A_row, const CELL * carray, struct Colors *colors)
 {
     return draw_cell(A_row, carray, colors, CELL_TYPE);
 }
 
-static int draw_cell(
-    int A_row,
-    const void *array,
-    struct Colors *colors,
-    RASTER_MAP_TYPE data_type)
+static int draw_cell(int A_row,
+		     const void *array,
+		     struct Colors *colors, RASTER_MAP_TYPE data_type)
 {
-	static unsigned char *red, *grn, *blu, *set;
-	static int nalloc;
+    static unsigned char *red, *grn, *blu, *set;
+    static int nalloc;
 
-	int ncols = src[0][1] - src[0][0];
-	int i;
+    int ncols = src[0][1] - src[0][0];
+    int i;
 
-	if (nalloc < ncols)
-	{
-		nalloc = ncols;
-		red = G_realloc(red, nalloc);
-		grn = G_realloc(grn, nalloc);
-		blu = G_realloc(blu, nalloc);
-		set = G_realloc(set, nalloc);
+    if (nalloc < ncols) {
+	nalloc = ncols;
+	red = G_realloc(red, nalloc);
+	grn = G_realloc(grn, nalloc);
+	blu = G_realloc(blu, nalloc);
+	set = G_realloc(set, nalloc);
+    }
+
+    G_lookup_raster_colors(array, red, grn, blu, set, ncols, colors,
+			   data_type);
+
+    if (D__overlay_mode)
+	for (i = 0; i < ncols; i++) {
+	    set[i] = G_is_null_value(array, data_type);
+	    array = G_incr_void_ptr(array, G_raster_size(data_type));
 	}
 
-	G_lookup_raster_colors(array, red, grn, blu, set, ncols, colors, data_type);
+    A_row =
+	R_scaled_raster(ncols, A_row, red, grn, blu,
+			D__overlay_mode ? set : NULL);
 
-	if (D__overlay_mode)
-		for (i = 0; i < ncols; i++)
-		{
-			set[i] = G_is_null_value(array, data_type);
-			array = G_incr_void_ptr(array, G_raster_size(data_type));
-		}
-
-	A_row = R_scaled_raster(ncols, A_row, red, grn, blu, D__overlay_mode ? set : NULL);
-
-	return (A_row < src[1][1])
-		? A_row
-		: -1;
+    return (A_row < src[1][1])
+	? A_row : -1;
 }
 
 /*!
@@ -145,14 +129,14 @@ static int draw_cell(
  *  \return int
  */
 
-int D_cell_draw_setup(int t,int b,int l,int r)
+int D_cell_draw_setup(int t, int b, int l, int r)
 {
     struct Cell_head window;
 
-    if (G_get_set_window(&window) == -1) 
-        G_fatal_error("Current window not available");
+    if (G_get_set_window(&window) == -1)
+	G_fatal_error("Current window not available");
     if (D_do_conversions(&window, t, b, l, r))
-        G_fatal_error("Error in calculating conversions");
+	G_fatal_error("Error in calculating conversions");
 
     /* Set up the screen for drawing map */
     D_get_a(src);
@@ -163,11 +147,12 @@ int D_cell_draw_setup(int t,int b,int l,int r)
     return 0;
 }
 
-int D_draw_raster_RGB(
-    int A_row,
-    const void *r_raster, const void *g_raster, const void *b_raster,
-    struct Colors *r_colors, struct Colors *g_colors, struct Colors *b_colors,
-    RASTER_MAP_TYPE r_type, RASTER_MAP_TYPE g_type, RASTER_MAP_TYPE b_type)
+int D_draw_raster_RGB(int A_row,
+		      const void *r_raster, const void *g_raster,
+		      const void *b_raster, struct Colors *r_colors,
+		      struct Colors *g_colors, struct Colors *b_colors,
+		      RASTER_MAP_TYPE r_type, RASTER_MAP_TYPE g_type,
+		      RASTER_MAP_TYPE b_type)
 {
     static unsigned char *r_buf, *g_buf, *b_buf, *n_buf;
     static int nalloc;
@@ -179,8 +164,7 @@ int D_draw_raster_RGB(
     int i;
 
     /* reallocate color_buf if necessary */
-    if (nalloc < ncols)
-    {
+    if (nalloc < ncols) {
 	nalloc = ncols;
 	r_buf = G_realloc(r_buf, nalloc);
 	g_buf = G_realloc(g_buf, nalloc);
@@ -189,13 +173,15 @@ int D_draw_raster_RGB(
     }
 
     /* convert cell values to bytes */
-    G_lookup_raster_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols, r_colors, r_type);
-    G_lookup_raster_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols, g_colors, g_type);
-    G_lookup_raster_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols, b_colors, b_type);
+    G_lookup_raster_colors(r_raster, r_buf, n_buf, n_buf, n_buf, ncols,
+			   r_colors, r_type);
+    G_lookup_raster_colors(g_raster, n_buf, g_buf, n_buf, n_buf, ncols,
+			   g_colors, g_type);
+    G_lookup_raster_colors(b_raster, n_buf, n_buf, b_buf, n_buf, ncols,
+			   b_colors, b_type);
 
     if (D__overlay_mode)
-	for (i = 0; i < ncols; i++)
-	{
+	for (i = 0; i < ncols; i++) {
 	    n_buf[i] = (G_is_null_value(r_raster, r_type) ||
 			G_is_null_value(g_raster, g_type) ||
 			G_is_null_value(b_raster, b_type));
@@ -205,15 +191,15 @@ int D_draw_raster_RGB(
 	    b_raster = G_incr_void_ptr(b_raster, b_size);
 	}
 
-    A_row = R_scaled_raster(ncols, A_row, r_buf, g_buf, b_buf, D__overlay_mode ? n_buf : NULL);
+    A_row =
+	R_scaled_raster(ncols, A_row, r_buf, g_buf, b_buf,
+			D__overlay_mode ? n_buf : NULL);
 
     return (A_row < src[1][1])
-	? A_row
-	: -1;
+	? A_row : -1;
 }
 
 void D_cell_draw_end(void)
 {
     R_end_scaled_raster();
 }
-

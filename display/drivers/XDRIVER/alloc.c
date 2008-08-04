@@ -5,15 +5,13 @@
 
 XPoint *alloc_xpoints(int count)
 {
-	static size_t num_alloc;
-	static XPoint *pnts;
+    static size_t num_alloc;
+    static XPoint *pnts;
 
-	if (num_alloc < count)
-	{
-		num_alloc = count;
-		pnts = G_realloc(pnts, num_alloc * sizeof(XPoint));
-	}
+    if (num_alloc < count) {
+	num_alloc = count;
+	pnts = G_realloc(pnts, num_alloc * sizeof(XPoint));
+    }
 
-	return pnts;
+    return pnts;
 }
-

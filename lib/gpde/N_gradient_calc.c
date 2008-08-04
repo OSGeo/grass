@@ -33,7 +33,8 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
     double sumx, sumy;
     int nonullx, nonully;
 
-    G_debug(3, "N_calc_gradient_field_2d_stats: compute gradient field stats");
+    G_debug(3,
+	    "N_calc_gradient_field_2d_stats: compute gradient field stats");
 
     N_calc_array_2d_stats(field->x_array, &minx, &maxx, &sumx, &nonullx, 0);
     N_calc_array_2d_stats(field->y_array, &miny, &maxy, &sumy, &nonully, 0);
@@ -66,7 +67,7 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
  *
  *
  \verbatim
-  ______________ 
+ ______________ 
  |    |    |    |
  |    |    |    |
  |----|-NC-|----|
@@ -76,21 +77,21 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
  |----|-SC-|----|
  |    |    |    |
  |____|____|____|
- 
- 
+
+
  x - direction:
- 
+
  r = 2 * weight[row][col]*weight[row][col + 1] / (weight[row][col]*weight[row][col + 1])
  EC = r * (pot[row][col] - pot[row][col + 1])/dx
- 
+
  y - direction:
- 
+
  r = 2 * weight[row][col]*weight[row + 1][col] / (weight[row][col]*weight[row + 1][col])
  SC = r * (pot[row][col] - pot[row + 1][col])/dy
- 
+
  the values SC and EC are the values of the next row/col
- 
- 
+
+
  \endverbatim
  * \param pot N_array_2d * - the potential N_array_2d 
  * \param weight_x N_array_2d * - the weighting factor N_array_2d used to modify the gradient in x-direction
@@ -98,7 +99,7 @@ void N_calc_gradient_field_2d_stats(N_gradient_field_2d * field)
  * \param geom N_geom_data * - geometry data structure
  * \param gradfield N_gradient_field_2d * - a gradient field of the correct size, if a NULL pointer is provided this gradient field will be new allocated
  * \return N_gradient_field_2d * - the pointer to the computed gradient field
- 
+
  *
  * */
 N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
@@ -205,13 +206,13 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
  * cell and stores them in the provided N_array_2d structures
  *
  * The arrays must have the same size as the gradient field.
- 
+
  \verbatim
- 
+
  Based on this storages scheme the gradient vector for each cell is 
  calculated and stored in the provided  N_array_2d structures
 
-  ______________ 
+ ______________ 
  |    |    |    |
  |    |    |    |
  |----|-NC-|----|
@@ -221,15 +222,15 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
  |----|-SC-|----|
  |    |    |    |
  |____|____|____|
- 
+
  x vector component:
- 
+
  x = (WC + EC) / 2
- 
+
  y vector component:
- 
+
  y = (NC + SC) / 2
- 
+
  \endverbatim
  *
  * \param field N_gradient_field_2d *
@@ -240,7 +241,8 @@ N_gradient_field_2d *N_compute_gradient_field_2d(N_array_2d * pot,
  * */
 void
 N_compute_gradient_field_components_2d(N_gradient_field_2d * field,
-				       N_array_2d * x_comp, N_array_2d * y_comp)
+				       N_array_2d * x_comp,
+				       N_array_2d * y_comp)
 {
     int i, j;
     int rows, cols;
@@ -270,15 +272,15 @@ N_compute_gradient_field_components_2d(N_gradient_field_2d * field,
 	for (i = 0; i < cols; i++) {
 	    N_get_gradient_2d(field, &grad, i, j);
 
-	    /* in case a gradient is zero, we expect a no flow boundary*/
-	    if(grad.WC == 0.0 || grad.EC == 0.0)
-	      vx = (grad.WC + grad.EC);
+	    /* in case a gradient is zero, we expect a no flow boundary */
+	    if (grad.WC == 0.0 || grad.EC == 0.0)
+		vx = (grad.WC + grad.EC);
 	    else
-	      vx = (grad.WC + grad.EC) / 2;
-	    if(grad.NC == 0.0 || grad.SC == 0.0)
-	      vy = (grad.NC + grad.SC);
+		vx = (grad.WC + grad.EC) / 2;
+	    if (grad.NC == 0.0 || grad.SC == 0.0)
+		vy = (grad.NC + grad.SC);
 	    else
-	      vy = (grad.NC + grad.SC) / 2;
+		vy = (grad.NC + grad.SC) / 2;
 
 	    N_put_array_2d_d_value(x, i, j, vx);
 	    N_put_array_2d_d_value(y, i, j, vy);
@@ -302,7 +304,8 @@ void N_calc_gradient_field_3d_stats(N_gradient_field_3d * field)
     double sumx, sumy, sumz;
     int nonullx, nonully, nonullz;
 
-    G_debug(3, "N_calc_gradient_field_3d_stats: compute gradient field stats");
+    G_debug(3,
+	    "N_calc_gradient_field_3d_stats: compute gradient field stats");
 
     N_calc_array_3d_stats(field->x_array, &minx, &maxx, &sumx, &nonullx, 0);
     N_calc_array_3d_stats(field->y_array, &miny, &maxy, &sumy, &nonully, 0);
@@ -343,33 +346,33 @@ void N_calc_gradient_field_3d_stats(N_gradient_field_3d * field)
  *
  *
  \verbatim
-  
-       |  /
-      TC NC
-       |/
+
+ |  /
+ TC NC
+ |/
  --WC-----EC--
-      /|
-    SC BC
-    /  |
- 
+ /|
+ SC BC
+ /  |
+
  x - direction:
- 
+
  r = 2 * weight_x[depth][row][col]*weight_x[depth][row][col + 1] / (weight_X[depth][row][col]*weight_x[depth][row][col + 1])
  EC = r * (pot[depth][row][col] - pot[depth][row][col + 1])/dx
- 
+
  y - direction:
- 
+
  r = 2 * weight_y[depth][row][col]*weight_y[depth][row + 1][col] / (weight_y[depth][row][col]*weight_y[depth][row + 1][col])
  SC = r * (pot[depth][row][col] - pot[depth][row + 1][col])/dy
- 
+
  z - direction:
- 
+
  r = 2 * weight_z[depth][row][col]*weight_z[depth + 1][row][col] / (weight_z[depth][row][col]*weight_z[depth + 1][row][col])
  TC = r * (pot[depth][row][col] - pot[depth + 1][row][col])/dy
- 
+
  the values BC, NC, WC are the values of the next depth/row/col
- 
- 
+
+
  \endverbatim
  * \param pot N_array_3d * - the potential N_array_2d 
  * \param weight_x N_array_3d * - the weighting factor N_array_3d used to modify the gradient in x-direction
@@ -537,34 +540,34 @@ N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
  * The arrays must have the same size as the gradient field.
  *
  \verbatim
- 
+
  Based on this storages scheme the gradient vector for each cell is 
  calculated and stored in the provided  N_array_3d structures
- 
- 
-       |  /
-      TC NC
-       |/
+
+
+ |  /
+ TC NC
+ |/
  --WC-----EC--
-      /|
-    SC BC
-    /  |
- 
- 
+ /|
+ SC BC
+ /  |
+
+
  x vector component:
- 
+
  x = (WC + EC) / 2
- 
+
  y vector component:
- 
+
  y = (NC + SC) / 2
- 
+
  z vector component:
- 
+
  z = (TC + BC) / 2
- 
+
  \endverbatim
- 
+
  * \param field N_gradient_field_3d *
  * \param x_comp N_array_3d * - the array in which the x component will be written
  * \param y_comp N_array_3d * - the array in which the y component will be written
@@ -574,7 +577,8 @@ N_gradient_field_3d *N_compute_gradient_field_3d(N_array_3d * pot,
  * */
 void
 N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
-				       N_array_3d * x_comp, N_array_3d * y_comp,
+				       N_array_3d * x_comp,
+				       N_array_3d * y_comp,
 				       N_array_3d * z_comp)
 {
     int i, j, k;
@@ -612,19 +616,19 @@ N_compute_gradient_field_components_3d(N_gradient_field_3d * field,
 	for (j = 0; j < rows; j++)
 	    for (i = 0; i < cols; i++) {
 		N_get_gradient_3d(field, &grad, i, j, k);
-		/* in case a gradient is zero, we expect a no flow boundary*/
-	        if(grad.WC == 0.0 || grad.EC == 0.0)
-		  vx = (grad.WC + grad.EC);
+		/* in case a gradient is zero, we expect a no flow boundary */
+		if (grad.WC == 0.0 || grad.EC == 0.0)
+		    vx = (grad.WC + grad.EC);
 		else
-		  vx = (grad.WC + grad.EC) / 2;
-	        if(grad.NC == 0.0 || grad.SC == 0.0)
-		  vy = (grad.NC + grad.SC);
-		else  
-		  vy = (grad.NC + grad.SC) / 2;
-	        if(grad.TC == 0.0 || grad.BC == 0.0)
-		  vz = (grad.TC + grad.BC);
-		else  
-		  vz = (grad.TC + grad.BC) / 2;
+		    vx = (grad.WC + grad.EC) / 2;
+		if (grad.NC == 0.0 || grad.SC == 0.0)
+		    vy = (grad.NC + grad.SC);
+		else
+		    vy = (grad.NC + grad.SC) / 2;
+		if (grad.TC == 0.0 || grad.BC == 0.0)
+		    vz = (grad.TC + grad.BC);
+		else
+		    vz = (grad.TC + grad.BC) / 2;
 
 		N_put_array_3d_d_value(x, i, j, k, vx);
 		N_put_array_3d_d_value(y, i, j, k, vy);

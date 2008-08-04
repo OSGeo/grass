@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.reclass
@@ -21,7 +22,7 @@
 #include <grass/glocale.h>
 #include "rule.h"
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Categories cats;
     struct FPRange range;
@@ -40,9 +41,9 @@ int main (int argc, char *argv[])
     } parm;
 
     /* any interaction must run in a term window */
-    G_putenv("GRASS_UI_TERM","1");
+    G_putenv("GRASS_UI_TERM", "1");
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("raster");
@@ -52,7 +53,7 @@ int main (int argc, char *argv[])
 	  "raster map layer.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
-    parm.input->description =  _("Raster map to be reclassified");
+    parm.input->description = _("Raster map to be reclassified");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -67,78 +68,83 @@ int main (int argc, char *argv[])
     parm.title->key = "title";
     parm.title->required = NO;
     parm.title->type = TYPE_STRING;
-    parm.title->description =  _("Title for the resulting raster map");
+    parm.title->description = _("Title for the resulting raster map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    old_mapset = G_find_cell2 (parm.input->answer, "");
+    old_mapset = G_find_cell2(parm.input->answer, "");
     if (old_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.input->answer);
 
-    if (G_legal_filename (parm.output->answer) < 0)
+    if (G_legal_filename(parm.output->answer) < 0)
 	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);
 
-    if (strcmp(parm.input->answer , parm.output->answer ) == 0 && strcmp(old_mapset,G_mapset())==0)
-	G_fatal_error (_("Input map can NOT be the same as output map"));
+    if (strcmp(parm.input->answer, parm.output->answer) == 0 &&
+	strcmp(old_mapset, G_mapset()) == 0)
+	G_fatal_error(_("Input map can NOT be the same as output map"));
 
     srcfp = stdin;
-    if (parm.rules->answer)
-    {
+    if (parm.rules->answer) {
 	srcfp = fopen(parm.rules->answer, "r");
 	if (!srcfp)
-	    G_fatal_error (_("Cannot open rules file <%s>"), parm.rules->answer);
+	    G_fatal_error(_("Cannot open rules file <%s>"),
+			  parm.rules->answer);
     }
     tty = isatty(fileno(srcfp));
 
-    G_init_cats (0, "", &cats);
-    fp = G_raster_map_is_fp (parm.input->answer, old_mapset);
-    G_read_fp_range (parm.input->answer, old_mapset, &range);
-    G_get_fp_range_min_max (&range, &min, &max);
+    G_init_cats(0, "", &cats);
+    fp = G_raster_map_is_fp(parm.input->answer, old_mapset);
+    G_read_fp_range(parm.input->answer, old_mapset, &range);
+    G_get_fp_range_min_max(&range, &min, &max);
     rules = tail = NULL;
     any = 0;
 
-    if (tty)
-	{ 
-	  fprintf (stdout, _("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
-	  if (fp)
-	    fprintf (stdout, _("fp: Data range is %.25f to %.25f\n"), (double)min, (double)max);
-	  else
-	    fprintf (stdout, _("Data range is %ld to %ld\n"), (long)min, (long)max);
-	}
+    if (tty) {
+	fprintf(stdout,
+		_
+		("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
+	if (fp)
+	    fprintf(stdout, _("fp: Data range is %.25f to %.25f\n"),
+		    (double)min, (double)max);
+	else
+	    fprintf(stdout, _("Data range is %ld to %ld\n"), (long)min,
+		    (long)max);
+    }
 
-    while (input(srcfp, tty, buf))
-    {
-	switch (parse (buf, &rules, &tail, &cats))
-	{
+    while (input(srcfp, tty, buf)) {
+	switch (parse(buf, &rules, &tail, &cats)) {
 	case -1:
-	    if (tty)
-	    {
-		fprintf (stderr, _("Illegal reclass rule -"));
-		fprintf (stderr, _(" ignored\n"));
+	    if (tty) {
+		fprintf(stderr, _("Illegal reclass rule -"));
+		fprintf(stderr, _(" ignored\n"));
 	    }
-	    else
-	    {
-		strcat (buf, _(" - invalid reclass rule"));
+	    else {
+		strcat(buf, _(" - invalid reclass rule"));
 		G_fatal_error(buf);
 	    }
 	    break;
 
-	case 0: break;
+	case 0:
+	    break;
 
-	default: any = 1; break;
+	default:
+	    any = 1;
+	    break;
 	}
     }
 
-    if (!any)
-    {
+    if (!any) {
 	if (tty)
-	    G_fatal_error(_("No rules specified. Raster map <%s> not created"), parm.output->answer);
+	    G_fatal_error(_
+			  ("No rules specified. Raster map <%s> not created"),
+			  parm.output->answer);
 	else
 	    G_fatal_error(_("No rules specified"));
     }
 
-    reclass (parm.input->answer, old_mapset, parm.output->answer, rules, &cats, parm.title->answer);
+    reclass(parm.input->answer, old_mapset, parm.output->answer, rules, &cats,
+	    parm.title->answer);
 
     exit(EXIT_SUCCESS);
 }

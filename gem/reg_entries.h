@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            reg_entries.h
  *
@@ -21,18 +22,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _REG_ENTRIES_H
 #define _REG_ENTRIES_H
 
-void register_entries_gisman ( char *pkg_short_name, char *gisbase );
+void register_entries_gisman(char *pkg_short_name, char *gisbase);
 
-void register_entries_gisman2 ( char *pkg_short_name, char *gisbase );
+void register_entries_gisman2(char *pkg_short_name, char *gisbase);
 
-int deregister_entries_gisman ( char *pkg_short_name, char *gisbase );
+int deregister_entries_gisman(char *pkg_short_name, char *gisbase);
 
-void deregister_entries_gisman2 ( char *pkg_short_name, char *gisbase );
+void deregister_entries_gisman2(char *pkg_short_name, char *gisbase);
 
-int restore_entries_gisman ( char *gisbase );
+int restore_entries_gisman(char *gisbase);
 
 #endif /* _REG_ENTRIES_H */

@@ -1,3 +1,4 @@
+
 /*-
  * $Log$
  * Revision 2.1  2006-02-09 03:08:54  glynn
@@ -82,26 +83,26 @@
 
 #define MAX_SITE_STRING 1024
 #define MAX_SITE_LEN 4096
- 
+
 typedef struct
 {
-  double east, north;
-  double *dim;
-  int dim_alloc;
-  RASTER_MAP_TYPE cattype;
-  CELL ccat;
-  FCELL fcat;
-  DCELL dcat;
-  int str_alloc;
-  char **str_att;
-  int dbl_alloc;
-  double *dbl_att;
+    double east, north;
+    double *dim;
+    int dim_alloc;
+    RASTER_MAP_TYPE cattype;
+    CELL ccat;
+    FCELL fcat;
+    DCELL dcat;
+    int str_alloc;
+    char **str_att;
+    int dbl_alloc;
+    double *dbl_att;
 } Site;
- 
+
 typedef struct
 {
-  const char *name, *desc, *form, *labels, *stime;
-  struct TimeStamp *time;
+    const char *name, *desc, *form, *labels, *stime;
+    struct TimeStamp *time;
 } Site_head;
 
 
@@ -137,19 +138,21 @@ typedef struct
 /* The XYZ site struct. Note the use of a union for the cat value is
  * different than the Site struct.
  */
-typedef struct {
-	double x, y, z;
-	RASTER_MAP_TYPE cattype;
-	union {
-		double d;
-		float  f;
-		int    c;
-	} cat ;
+typedef struct
+{
+    double x, y, z;
+    RASTER_MAP_TYPE cattype;
+    union
+    {
+	double d;
+	float f;
+	int c;
+    } cat;
 } SITE_XYZ;
 
 
 /* Allocate 'num' SITE_XYZ structs. Returns NULL on failure */
-SITE_XYZ * G_alloc_site_xyz(size_t);
+SITE_XYZ *G_alloc_site_xyz(size_t);
 
 
 /* Free the array of SITE_XYZ struct */
@@ -166,14 +169,12 @@ void G_free_site_xyz(SITE_XYZ *);
  * to assume that if the number of records read is less than the size of
  * the array, that there aren't any more records.
  */
-int G_readsites_xyz( 
-	FILE * ,   /* The FILE stream to the sites file               */
-	int    ,     /* Attribute type: SITE_COL_DIM, etc...            */
-	int    ,    /* The field index (1 based) for the attribute     */
-	int    ,     /* Size of the array                               */
-	struct Cell_head *,    /* Respect region if not NULL */
-	SITE_XYZ *xyz    /* The site array of size 'size'                   */
-	);
+int G_readsites_xyz(FILE *,	/* The FILE stream to the sites file               */
+		    int,	/* Attribute type: SITE_COL_DIM, etc...            */
+		    int,	/* The field index (1 based) for the attribute     */
+		    int,	/* Size of the array                               */
+		    struct Cell_head *,	/* Respect region if not NULL */
+		    SITE_XYZ * xyz	/* The site array of size 'size'                   */
+    );
 
 #include <grass/P_site.h>
-

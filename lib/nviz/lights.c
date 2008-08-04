@@ -1,32 +1,32 @@
 /*!
-  \file lights.c
- 
-  \brief Nviz library -- Change view settings
-  
-  COPYRIGHT: (C) 2008 by the GRASS Development Team
+   \file lights.c
 
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+   \brief Nviz library -- Change view settings
 
-  Based on visualization/nviz/src/lights.c
+   COPYRIGHT: (C) 2008 by the GRASS Development Team
 
-  \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
 
-  \date 2008
-*/
+   Based on visualization/nviz/src/lights.c
+
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+
+   \date 2008
+ */
 
 #include <grass/glocale.h>
 #include <grass/nviz.h>
 
 /*!
-  \brief Set light position
+   \brief Set light position
 
-  \param data nviz data
-  \param num light num (starts with 0)
-  \param x,y,z,w position, model coordinates
-*/
-int Nviz_set_light_position(nv_data *data, int num,
+   \param data nviz data
+   \param num light num (starts with 0)
+   \param x,y,z,w position, model coordinates
+ */
+int Nviz_set_light_position(nv_data * data, int num,
 			    float x, float y, float z, float w)
 {
     data->light[num].id = num + 1;
@@ -41,12 +41,12 @@ int Nviz_set_light_position(nv_data *data, int num,
 }
 
 /*!
-  \brief Set light brightness
+   \brief Set light brightness
 
-  \param data nviz data
-  \param num light num (starts with 0)
-  \param value brightness value
-*/
+   \param data nviz data
+   \param num light num (starts with 0)
+   \param value brightness value
+ */
 int Nviz_set_light_bright(nv_data * data, int num, float value)
 {
     float r, g, b;
@@ -63,12 +63,12 @@ int Nviz_set_light_bright(nv_data * data, int num, float value)
 }
 
 /*!
-  \brief Set light color
+   \brief Set light color
 
-  \param data nviz data
-  \param num light num (starts with 0)
-  \param red,green,blue rGB values (0-1)
-*/
+   \param data nviz data
+   \param num light num (starts with 0)
+   \param red,green,blue rGB values (0-1)
+ */
 int Nviz_set_light_color(nv_data * data, int num,
 			 float red, float green, float blue)
 {
@@ -88,13 +88,13 @@ int Nviz_set_light_color(nv_data * data, int num,
 }
 
 /*!
-  \brief Set light ambient
+   \brief Set light ambient
 
-  \param data nviz data
-  \param num light num (starts with 0)
-  \param red,green,blue rGB values (0-1)
-*/
-int Nviz_set_light_ambient(nv_data *data, int num,
+   \param data nviz data
+   \param num light num (starts with 0)
+   \param red,green,blue rGB values (0-1)
+ */
+int Nviz_set_light_ambient(nv_data * data, int num,
 			   float red, float green, float blue)
 {
     data->light[num].ar = red;
@@ -107,12 +107,12 @@ int Nviz_set_light_ambient(nv_data *data, int num,
 }
 
 /*!
-  \brief Init new light
+   \brief Init new light
 
-  \param data nviz data
-  \param num light num (starts with 0)
-*/
-int Nviz_init_light(nv_data *data, int num)
+   \param data nviz data
+   \param num light num (starts with 0)
+ */
+int Nviz_init_light(nv_data * data, int num)
 {
     if (num >= MAX_LIGHTS) {
 	return 0;
@@ -134,7 +134,7 @@ int Nviz_init_light(nv_data *data, int num)
     return 1;
 }
 
-int Nviz_new_light(nv_data *data)
+int Nviz_new_light(nv_data * data)
 {
     int num;
 

@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     N_array_3d *zcomp = NULL;
     double error, sor;
     int maxit;
-    const char * solver;
+    const char *solver;
     int x, y, z, stat;
     char *buff = NULL;
 
@@ -190,11 +190,14 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_ ("The direct LU solver do not work with sparse matrices"));
+	G_fatal_error(_
+		      ("The direct LU solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_ ("The direct Gauss solver do not work with sparse matrices"));
+	G_fatal_error(_
+		      ("The direct Gauss solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
-        G_fatal_error(_ ("The direct cholesky solver do not work with sparse matrices"));
+	G_fatal_error(_
+		      ("The direct cholesky solver do not work with sparse matrices"));
 
 
 
@@ -204,7 +207,7 @@ int main(int argc, char *argv[])
     /*get the current region */
     G3d_getWindow(&region);
 
-    /*allocate the geometry structure  for geometry and area calculation*/
+    /*allocate the geometry structure  for geometry and area calculation */
     geom = N_init_geom_data_3d(&region, geom);
 
     /*Set the function callback to the groundwater flow function */
@@ -242,7 +245,7 @@ int main(int argc, char *argv[])
     N_convert_array_3d_null_to_zero(data->s);
 
     /* Set the inactive values to zero, to assure a no flow boundary */
-    for (z = 0; z < geom->depths; z++) {	
+    for (z = 0; z < geom->depths; z++) {
 	for (y = 0; y < geom->rows; y++) {
 	    for (x = 0; x < geom->cols; x++) {
 		stat = (int)N_get_array_3d_d_value(data->status, x, y, z);
@@ -269,31 +272,31 @@ int main(int argc, char *argv[])
 			      (void *)data, call);
     }
 
-  
+
     /*solve the equation system */
-    if (strcmp(solver, N_SOLVER_ITERATIVE_JACOBI) == 0) 
+    if (strcmp(solver, N_SOLVER_ITERATIVE_JACOBI) == 0)
 	N_solver_jacobi(les, maxit, sor, error);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_SOR) == 0) 
+    if (strcmp(solver, N_SOLVER_ITERATIVE_SOR) == 0)
 	N_solver_SOR(les, maxit, sor, error);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_CG) == 0) 
+    if (strcmp(solver, N_SOLVER_ITERATIVE_CG) == 0)
 	N_solver_cg(les, maxit, error);
 
     if (strcmp(solver, N_SOLVER_ITERATIVE_PCG) == 0)
-        N_solver_pcg(les, maxit, error, N_DIAGONAL_PRECONDITION);
+	N_solver_pcg(les, maxit, error, N_DIAGONAL_PRECONDITION);
 
-    if (strcmp(solver, N_SOLVER_ITERATIVE_BICGSTAB) == 0) 
+    if (strcmp(solver, N_SOLVER_ITERATIVE_BICGSTAB) == 0)
 	N_solver_bicgstab(les, maxit, error);
 
-    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0) 
+    if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0)
 	N_solver_lu(les);
 
-    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0) 
+    if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0)
 	N_solver_gauss(les);
 
     if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0)
-        N_solver_cholesky(les);
+	N_solver_cholesky(les);
 
     if (les == NULL)
 	G_fatal_error(_
@@ -301,8 +304,8 @@ int main(int argc, char *argv[])
 
 
     /*write the result to the output file and copy the values to the data->phead array */
-    write_result(data->status, data->phead_start, data->phead, les->x, &region,
-		 param.output->answer);
+    write_result(data->status, data->phead_start, data->phead, les->x,
+		 &region, param.output->answer);
     N_free_les(les);
 
     /*Compute the the velocity field if required and write the result into three rast3d maps */
@@ -357,10 +360,11 @@ int main(int argc, char *argv[])
 /* this function writes the result from the x vector to a g3d map ********** */
 /* ************************************************************************* */
 void
-write_result(N_array_3d * status, N_array_3d * phead_start, N_array_3d * phead,
-	     double *result, G3D_Region * region, char *name)
+write_result(N_array_3d * status, N_array_3d * phead_start,
+	     N_array_3d * phead, double *result, G3D_Region * region,
+	     char *name)
 {
-    void *map = NULL;		
+    void *map = NULL;
     int changemask = 0;
     int z, y, x, rows, cols, depths, count, stat;
     double d1 = 0;
@@ -389,7 +393,7 @@ write_result(N_array_3d * status, N_array_3d * phead_start, N_array_3d * phead,
     }
 
     count = 0;
-    for (z = 0; z < depths; z++) {	
+    for (z = 0; z < depths; z++) {
 	G_percent(z, depths - 1, 10);
 	for (y = 0; y < rows; y++) {
 	    for (x = 0; x < cols; x++) {
@@ -423,4 +427,3 @@ write_result(N_array_3d * status, N_array_3d * phead_start, N_array_3d * phead,
 
     return;
 }
-

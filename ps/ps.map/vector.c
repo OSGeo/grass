@@ -6,8 +6,7 @@
 
 
 /* init vector structure */
-void 
-vector_init ( void ) 
+void vector_init(void)
 {
     vector.count = 0;
     vector.alloc = 0;
@@ -15,11 +14,11 @@ vector_init ( void )
 }
 
 /* allocate at least one free space for layer */
-void 
-vector_alloc ( void )
+void vector_alloc(void)
 {
-    if ( vector.count == vector.alloc ) {
+    if (vector.count == vector.alloc) {
 	vector.alloc += 20;
-	vector.layer = (LAYER *) G_realloc ( vector.layer, vector.alloc * sizeof (LAYER) );
+	vector.layer =
+	    (LAYER *) G_realloc(vector.layer, vector.alloc * sizeof(LAYER));
     }
 }

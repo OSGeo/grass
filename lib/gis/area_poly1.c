@@ -1,3 +1,4 @@
+
 /**
  * \file area_poly1.c
  *
@@ -22,8 +23,11 @@
 
 static double QA, QB, QC;
 static double QbarA, QbarB, QbarC, QbarD;
+
 static double AE;  /** a^2(1-e^2) */
+
 static double Qp;  /** Q at the north pole */
+
 static double E;   /** Area of the earth */
 
 
@@ -60,7 +64,7 @@ static double Qbar(double x)
  * \return always returns 0
  */
 
-int G_begin_ellipsoid_polygon_area (double a,double e2)
+int G_begin_ellipsoid_polygon_area(double a, double e2)
 {
     double e4, e6;
 
@@ -69,18 +73,19 @@ int G_begin_ellipsoid_polygon_area (double a,double e2)
 
     AE = a * a * (1 - e2);
 
-    QA = (2.0/3.0)*e2;
-    QB = (3.0/5.0)*e4;
-    QC = (4.0/7.0)*e6;
+    QA = (2.0 / 3.0) * e2;
+    QB = (3.0 / 5.0) * e4;
+    QC = (4.0 / 7.0) * e6;
 
-    QbarA = -1.0 - (2.0/3.0)*e2 - (3.0/5.0)*e4  -  (4.0/7.0)*e6;
-    QbarB =        (2.0/9.0)*e2 + (2.0/5.0)*e4  +  (4.0/7.0)*e6;
-    QbarC =                     - (3.0/25.0)*e4 - (12.0/35.0)*e6;
-    QbarD =                                        (4.0/49.0)*e6;
+    QbarA = -1.0 - (2.0 / 3.0) * e2 - (3.0 / 5.0) * e4 - (4.0 / 7.0) * e6;
+    QbarB = (2.0 / 9.0) * e2 + (2.0 / 5.0) * e4 + (4.0 / 7.0) * e6;
+    QbarC = -(3.0 / 25.0) * e4 - (12.0 / 35.0) * e6;
+    QbarD = (4.0 / 49.0) * e6;
 
     Qp = Q(M_PI_2);
-    E  = 4 * M_PI * Qp * AE;
-    if (E < 0.0) E = -E;
+    E = 4 * M_PI * Qp * AE;
+    if (E < 0.0)
+	E = -E;
 
     return 0;
 }
@@ -102,26 +107,25 @@ int G_begin_ellipsoid_polygon_area (double a,double e2)
  * \return double Area in square meters
  */
 
-double G_ellipsoid_polygon_area (const double *lon, const double *lat, int n)
+double G_ellipsoid_polygon_area(const double *lon, const double *lat, int n)
 {
-    double x1,y1,x2,y2,dx,dy;
+    double x1, y1, x2, y2, dx, dy;
     double Qbar1, Qbar2;
     double area;
 
-    x2 = Radians (lon[n-1]);
-    y2 = Radians (lat[n-1]);
+    x2 = Radians(lon[n - 1]);
+    y2 = Radians(lat[n - 1]);
     Qbar2 = Qbar(y2);
 
     area = 0.0;
 
-    while (--n >= 0)
-    {
+    while (--n >= 0) {
 	x1 = x2;
 	y1 = y2;
 	Qbar1 = Qbar2;
 
-	x2 = Radians (*lon++);
-	y2 = Radians (*lat++);
+	x2 = Radians(*lon++);
+	y2 = Radians(*lat++);
 	Qbar2 = Qbar(y2);
 
 	if (x1 > x2)
@@ -135,9 +139,9 @@ double G_ellipsoid_polygon_area (const double *lon, const double *lat, int n)
 	area += dx * (Qp - Q(y2));
 
 	if ((dy = y2 - y1) != 0.0)
-	    area += dx * Q(y2) - (dx/dy)*(Qbar2-Qbar1);
+	    area += dx * Q(y2) - (dx / dy) * (Qbar2 - Qbar1);
     }
-    if((area *= AE) < 0.0)
+    if ((area *= AE) < 0.0)
 	area = -area;
 
     /* kludge - if polygon circles the south pole the area will be
@@ -145,8 +149,10 @@ double G_ellipsoid_polygon_area (const double *lon, const double *lat, int n)
      * the difference between total surface area of the earth and
      * the "north pole" area.
      */
-    if (area > E) area = E;
-    if (area > E/2) area = E - area;
+    if (area > E)
+	area = E;
+    if (area > E / 2)
+	area = E - area;
 
     return area;
 }

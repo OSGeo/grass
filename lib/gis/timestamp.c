@@ -96,38 +96,36 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-void G_init_timestamp (struct TimeStamp *ts)
+void G_init_timestamp(struct TimeStamp *ts)
 {
     ts->count = 0;
 }
 
-void G_set_timestamp (struct TimeStamp *ts, const DateTime *dt)
+void G_set_timestamp(struct TimeStamp *ts, const DateTime * dt)
 {
-    datetime_copy (&ts->dt[0],dt);
+    datetime_copy(&ts->dt[0], dt);
     ts->count = 1;
 }
 
-void G_set_timestamp_range (
-    struct TimeStamp *ts,
-    const DateTime *dt1, const DateTime *dt2)
+void G_set_timestamp_range(struct TimeStamp *ts,
+			   const DateTime * dt1, const DateTime * dt2)
 {
-    datetime_copy (&ts->dt[0], dt1);
-    datetime_copy (&ts->dt[1], dt2);
+    datetime_copy(&ts->dt[0], dt1);
+    datetime_copy(&ts->dt[1], dt2);
     ts->count = 2;
 }
 
-int G__read_timestamp (FILE *fd, struct TimeStamp *ts)
+int G__read_timestamp(FILE * fd, struct TimeStamp *ts)
 {
     char buf[1024];
     char comment[2];
 
-    while (fgets(buf, sizeof(buf), fd))
-    {
-	if (sscanf (buf, "%1s", comment) != 1 || *comment == '#')
+    while (fgets(buf, sizeof(buf), fd)) {
+	if (sscanf(buf, "%1s", comment) != 1 || *comment == '#')
 	    continue;
-	return (G_scan_timestamp (ts, buf) > 0 ? 0 : -1);
+	return (G_scan_timestamp(ts, buf) > 0 ? 0 : -1);
     }
-    return -2; /* nothing in the file */
+    return -2;			/* nothing in the file */
 }
 
 
@@ -144,13 +142,13 @@ int G__read_timestamp (FILE *fd, struct TimeStamp *ts)
  *  \param ts    TimeStamp struct
  *  \return int  exit value
  */
-int G__write_timestamp ( FILE *fd, const struct TimeStamp *ts)
+int G__write_timestamp(FILE * fd, const struct TimeStamp *ts)
 {
     char buf[1024];
 
-    if (G_format_timestamp (ts, buf) < 0)
+    if (G_format_timestamp(ts, buf) < 0)
 	return -1;
-    fprintf (fd, "%s\n", buf);
+    fprintf(fd, "%s\n", buf);
     return 0;
 }
 
@@ -170,26 +168,23 @@ int G__write_timestamp ( FILE *fd, const struct TimeStamp *ts)
  *  \param buf   string to receive formatted timestamp
  *  \return int  exit value
  */
-int G_format_timestamp (
-    const struct TimeStamp *ts,
-    char *buf)
+int G_format_timestamp(const struct TimeStamp *ts, char *buf)
 {
     char temp1[128], temp2[128];
+
     *buf = 0;
-    if (ts->count > 0)
-    {
-	if (datetime_format (&ts->dt[0],temp1) != 0)
+    if (ts->count > 0) {
+	if (datetime_format(&ts->dt[0], temp1) != 0)
 	    return -1;
     }
-    if (ts->count > 1)
-    {
-	if (datetime_format (&ts->dt[1],temp2) != 0)
+    if (ts->count > 1) {
+	if (datetime_format(&ts->dt[1], temp2) != 0)
 	    return -1;
     }
     if (ts->count == 1)
-	strcpy (buf, temp1);
+	strcpy(buf, temp1);
     else if (ts->count == 2)
-	sprintf (buf, "%s / %s", temp1, temp2);
+	sprintf(buf, "%s / %s", temp1, temp2);
 
     return 1;
 }
@@ -209,9 +204,7 @@ int G_format_timestamp (
  *  \param buf  String containing formatted time info
  *  \return int exit code
  */
-int G_scan_timestamp (
-    struct TimeStamp *ts,
-    const char *buf)
+int G_scan_timestamp(struct TimeStamp *ts, const char *buf)
 {
     char temp[1024], *t;
     const char *slash;
@@ -221,22 +214,20 @@ int G_scan_timestamp (
     for (slash = buf; *slash; slash++)
 	if (*slash == '/')
 	    break;
-    if (*slash)
-    {
+    if (*slash) {
 	t = temp;
 	while (buf != slash)
 	    *t++ = *buf++;
 	*t = 0;
 	buf++;
-	if (datetime_scan(&dt1,temp) != 0 || datetime_scan(&dt2,buf) != 0)
-		return -1;
-	G_set_timestamp_range (ts, &dt1, &dt2);
-    }
-    else
-    {
-	if(datetime_scan (&dt2, buf) != 0 )
+	if (datetime_scan(&dt1, temp) != 0 || datetime_scan(&dt2, buf) != 0)
 	    return -1;
-	G_set_timestamp (ts, &dt2);
+	G_set_timestamp_range(ts, &dt1, &dt2);
+    }
+    else {
+	if (datetime_scan(&dt2, buf) != 0)
+	    return -1;
+	G_set_timestamp(ts, &dt2);
     }
     return 1;
 }
@@ -258,20 +249,16 @@ int G_scan_timestamp (
  *  \param count  return code
  *  \return int   always 0
  */
-int G_get_timestamps (
-    const struct TimeStamp *ts,
-    DateTime *dt1,DateTime *dt2,
-    int *count)
+int G_get_timestamps(const struct TimeStamp *ts,
+		     DateTime * dt1, DateTime * dt2, int *count)
 {
     *count = 0;
-    if (ts->count > 0)
-    {
-	datetime_copy (dt1, &ts->dt[0]);
+    if (ts->count > 0) {
+	datetime_copy(dt1, &ts->dt[0]);
 	*count = 1;
     }
-    if (ts->count > 1)
-    {
-	datetime_copy (dt2, &ts->dt[1]);
+    if (ts->count > 1) {
+	datetime_copy(dt2, &ts->dt[1]);
 	*count = 2;
     }
 
@@ -284,29 +271,25 @@ int G_get_timestamps (
  * -1 error - can't create timestamp file
  * -2 error - invalid datetime in ts
  */
-static int write_timestamp (
-    const char *maptype, const char *dir, const char *name,
-    const struct TimeStamp *ts)
+static int write_timestamp(const char *maptype, const char *dir,
+			   const char *name, const struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
 
-    fd = G_fopen_new_misc (dir, "timestamp", name);
-    if (fd == NULL)
-    {
-	G_warning (
-		_("Can't create timestamp file for %s map %s in mapset %s"),
-		maptype, name, G_mapset());
+    fd = G_fopen_new_misc(dir, "timestamp", name);
+    if (fd == NULL) {
+	G_warning(_("Can't create timestamp file for %s map %s in mapset %s"),
+		  maptype, name, G_mapset());
 	return -1;
     }
 
-    stat = G__write_timestamp (fd, ts);
-    fclose (fd);
+    stat = G__write_timestamp(fd, ts);
+    fclose(fd);
     if (stat == 0)
 	return 1;
-    G_warning (
-	    _("Invalid timestamp specified for %s map %s in mapset %s"),
-	    maptype, name, G_mapset());
+    G_warning(_("Invalid timestamp specified for %s map %s in mapset %s"),
+	      maptype, name, G_mapset());
     return -2;
 }
 
@@ -316,31 +299,28 @@ static int write_timestamp (
  * -1 error - can't open timestamp file
  * -2 error - invalid datetime values in timestamp file
  */
-static int read_timestamp (
-    const char *maptype, const char *dir, const char *name, const char *mapset,
-    struct TimeStamp *ts)
+static int read_timestamp(const char *maptype, const char *dir,
+			  const char *name, const char *mapset,
+			  struct TimeStamp *ts)
 {
     FILE *fd;
     int stat;
 
-    if (!G_find_file2_misc (dir, "timestamp", name, mapset))
+    if (!G_find_file2_misc(dir, "timestamp", name, mapset))
 	return 0;
-    fd = G_fopen_old_misc (dir, "timestamp", name, mapset);
-    if (fd == NULL)
-    {
-	G_warning (
-		_("Can't open timestamp file for %s map %s in mapset %s"),
-		maptype, name, mapset);
+    fd = G_fopen_old_misc(dir, "timestamp", name, mapset);
+    if (fd == NULL) {
+	G_warning(_("Can't open timestamp file for %s map %s in mapset %s"),
+		  maptype, name, mapset);
 	return -1;
     }
 
-    stat = G__read_timestamp (fd, ts);
-    fclose (fd);
+    stat = G__read_timestamp(fd, ts);
+    fclose(fd);
     if (stat == 0)
 	return 1;
-    G_warning (
-	    _("Invalid timestamp file for %s map %s in mapset %s"),
-	    maptype, name, mapset);
+    G_warning(_("Invalid timestamp file for %s map %s in mapset %s"),
+	      maptype, name, mapset);
     return -2;
 }
 
@@ -361,11 +341,10 @@ static int read_timestamp (
  *  \param ts TimeStamp struct to populate
  *  \return int
  */
-int G_read_raster_timestamp (
-    const char *name, const char *mapset,
-    struct TimeStamp *ts)
+int G_read_raster_timestamp(const char *name, const char *mapset,
+			    struct TimeStamp *ts)
 {
-    return read_timestamp ("raster", RAST_MISC, name, mapset, ts);
+    return read_timestamp("raster", RAST_MISC, name, mapset, ts);
 }
 
 
@@ -381,7 +360,7 @@ int G_read_raster_timestamp (
  *  \param name
  *  \return int
  */
-int G_remove_raster_timestamp (const char *name)
+int G_remove_raster_timestamp(const char *name)
 {
     return G_remove_misc(RAST_MISC, "timestamp", name);
 }
@@ -400,11 +379,10 @@ int G_remove_raster_timestamp (const char *name)
  *  \param ts
  *  \return int
  */
-int G_read_vector_timestamp (
-    const char *name, const char *mapset,
-    struct TimeStamp *ts)
+int G_read_vector_timestamp(const char *name, const char *mapset,
+			    struct TimeStamp *ts)
 {
-    return read_timestamp ("vector", VECT_MISC, name, mapset, ts);
+    return read_timestamp("vector", VECT_MISC, name, mapset, ts);
 }
 
 
@@ -423,7 +401,7 @@ int G_read_vector_timestamp (
  *  \param name
  *  \return int
  */
-int G_remove_vector_timestamp (const char *name)
+int G_remove_vector_timestamp(const char *name)
 {
     return G_remove_misc(VECT_MISC, "timestamp", name);
 }
@@ -440,11 +418,10 @@ int G_remove_vector_timestamp (const char *name)
  *  \param ts
  *  \return int
  */
-int G_read_grid3_timestamp (
-    const char *name, const char *mapset,
-    struct TimeStamp *ts)
+int G_read_grid3_timestamp(const char *name, const char *mapset,
+			   struct TimeStamp *ts)
 {
-    return read_timestamp ("grid3", GRID3, name, mapset, ts);
+    return read_timestamp("grid3", GRID3, name, mapset, ts);
 }
 
 
@@ -460,7 +437,7 @@ int G_read_grid3_timestamp (
  *  \param name
  *  \return int
  */
-int G_remove_grid3_timestamp (const char *name)
+int G_remove_grid3_timestamp(const char *name)
 {
     return G_remove_misc(GRID3, "timestamp", name);
 }
@@ -479,11 +456,9 @@ int G_remove_grid3_timestamp (const char *name)
  *  \param ts
  *  \return int
  */
-int G_write_raster_timestamp (
-    const char *name,
-    const struct TimeStamp *ts)
+int G_write_raster_timestamp(const char *name, const struct TimeStamp *ts)
 {
-    return write_timestamp ("raster", RAST_MISC, name, ts);
+    return write_timestamp("raster", RAST_MISC, name, ts);
 }
 
 
@@ -500,11 +475,9 @@ int G_write_raster_timestamp (
  *  \param ts
  *  \return int
  */
-int G_write_vector_timestamp (
-    const char *name,
-    const struct TimeStamp *ts)
+int G_write_vector_timestamp(const char *name, const struct TimeStamp *ts)
 {
-    return write_timestamp ("vector", VECT_MISC, name, ts);
+    return write_timestamp("vector", VECT_MISC, name, ts);
 }
 
 
@@ -520,9 +493,7 @@ int G_write_vector_timestamp (
  *  \param ts
  *  \return int
  */
-int G_write_grid3_timestamp (
-    const char *name,
-    const struct TimeStamp *ts)
+int G_write_grid3_timestamp(const char *name, const struct TimeStamp *ts)
 {
-    return write_timestamp ("grid3", GRID3, name, ts);
+    return write_timestamp("grid3", GRID3, name, ts);
 }

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       GRASS GIS library - copy_file.c
@@ -30,42 +31,36 @@
  * \return 1 on success; 0 if an error occured (warning will be printed)
  **/
 
-int G_copy_file( const char *infile, const char *outfile )
+int G_copy_file(const char *infile, const char *outfile)
 {
     FILE *infp, *outfp;
     int inchar, outchar;
-     
-    infp = fopen( infile, "r" );
-    if( infp == NULL )
-    {	
-        G_warning( "Cannot open %s for reading: %s", infile, 
-		   strerror(errno) );
-        return 0;
+
+    infp = fopen(infile, "r");
+    if (infp == NULL) {
+	G_warning("Cannot open %s for reading: %s", infile, strerror(errno));
+	return 0;
     }
-      
-    outfp = fopen( outfile, "w" );   
-    if( outfp == NULL )
-    {	
-        G_warning( "Cannot open %s for writing: %s", outfile,
-		   strerror(errno) );
-        return 0;
-    }   
-   
-    while( (inchar = getc(infp)) != EOF )
-    {
-        /* Read a character at a time from infile until EOF
-         * and copy to outfile */
-        outchar = putc( inchar, outfp );
-        if( outchar != inchar)
-	{	    
-            G_warning( "Error writing to %s", outfile );
+
+    outfp = fopen(outfile, "w");
+    if (outfp == NULL) {
+	G_warning("Cannot open %s for writing: %s", outfile, strerror(errno));
+	return 0;
+    }
+
+    while ((inchar = getc(infp)) != EOF) {
+	/* Read a character at a time from infile until EOF
+	 * and copy to outfile */
+	outchar = putc(inchar, outfp);
+	if (outchar != inchar) {
+	    G_warning("Error writing to %s", outfile);
 	    return 0;
-	}       
+	}
     }
-    fflush( outfp );
-   
-    fclose( infp );
-    fclose( outfp );
-      
+    fflush(outfp);
+
+    fclose(infp);
+    fclose(outfp);
+
     return 1;
 }

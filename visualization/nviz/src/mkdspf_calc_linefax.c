@@ -82,17 +82,19 @@ viz_calc_linefax(linefax, args, nargs, interp)
 	/* Note: maximum nthresber of thresholds is set at 127 */
 	{
 	    double temp;
+
 	    if (Tcl_GetDouble(interp, args[4], &temp) != TCL_OK) {
 		pr_commandline(interp);
 		return (TCL_ERROR);
 	    }
-	    interval = (float) temp;	/* off the command line */
+	    interval = (float)temp;	/* off the command line */
 	}
 
 	datarange = Headfax.max - Headfax.min;
 
 	{
 	    char temp1[20], temp2[20], temp3[20];
+
 	    sprintf(temp1, "%f", Headfax.max);
 	    sprintf(temp2, "%f", Headfax.min);
 	    sprintf(temp3, "%f", interval);
@@ -102,6 +104,7 @@ viz_calc_linefax(linefax, args, nargs, interp)
 
 	if (((datarange) / interval) > 126.0) {	/* means #thres = 127 */
 	    char temp[20];
+
 	    interval = datarange / 126.0;
 	    sprintf(temp, " %f\n", interval);
 	    Tcl_AppendResult(interp,
@@ -109,10 +112,11 @@ viz_calc_linefax(linefax, args, nargs, interp)
 			     "New interval", temp, NULL);
 	}
 
-	linefax->nthres = (int) ((datarange) / interval) + 1;
+	linefax->nthres = (int)((datarange) / interval) + 1;
 
 	{
 	    char temp1[20];
+
 	    sprintf(temp1, "%d", linefax->nthres);
 	    Tcl_AppendResult(interp, "Number of thresholds ", temp1, "\n",
 			     NULL);
@@ -127,8 +131,8 @@ viz_calc_linefax(linefax, args, nargs, interp)
 
     case 2:			/*isolated thresholds as listed on commandline */
 	for (i = 0; i < linefax->nthres; i++)
-	    linefax->tvalue[i] = (float) atof(thresh_values[i]);
-	Tcl_Free ((char *) thresh_values);
+	    linefax->tvalue[i] = (float)atof(thresh_values[i]);
+	Tcl_Free((char *)thresh_values);
 	break;
 
     case 3:			/* min and max given on commandline as well as interval */
@@ -138,20 +142,21 @@ viz_calc_linefax(linefax, args, nargs, interp)
 	    char **list_args;
 
 	    Tcl_SplitList(interp, args[4], &num_list_args, &list_args);
-	    interval = (float) atof(list_args[2]);
-	    max = (float) atof(list_args[1]);
-	    min = (float) atof(list_args[0]);
+	    interval = (float)atof(list_args[2]);
+	    max = (float)atof(list_args[1]);
+	    min = (float)atof(list_args[0]);
 	    datarange = max - min;
 
 	    Tcl_AppendResult(interp, "Max thresh ", list_args[1],
 			     "  Min thresh ", list_args[0], "\nInterval ",
 			     list_args[2], "\n", NULL);
 
-	    Tcl_Free ((char *) list_args);
+	    Tcl_Free((char *)list_args);
 	}
 
 	if ((datarange / interval) > 126.0) {
 	    char temp1[20];
+
 	    interval = datarange / 126.0;
 	    sprintf(temp1, "%f", interval);
 	    Tcl_AppendResult(interp,
@@ -159,10 +164,11 @@ viz_calc_linefax(linefax, args, nargs, interp)
 			     "New interval is ", temp1, "\n", NULL);
 	}
 
-	linefax->nthres = (int) (datarange) / interval + 1;
+	linefax->nthres = (int)(datarange) / interval + 1;
 
 	{
 	    char temp1[20];
+
 	    sprintf(temp1, "%d", linefax->nthres);
 	    Tcl_AppendResult(interp, "Number of thresholds ",
 			     temp1, "\n", NULL);
@@ -171,7 +177,7 @@ viz_calc_linefax(linefax, args, nargs, interp)
 	current_tvalue = min;
 	for (i = 0; i < linefax->nthres; i++) {
 	    linefax->tvalue[i] = current_tvalue;
-	    current_tvalue += (float) interval;
+	    current_tvalue += (float)interval;
 	}
 	break;
 
@@ -181,7 +187,9 @@ viz_calc_linefax(linefax, args, nargs, interp)
 }
 
 /****************************** lit_model ************************************/
+
 /****************************** lit_model ************************************/
+
 /****************************** lit_model ************************************/
 int lit_model(linefax, typeid, interp)
      cmndln_info *linefax;

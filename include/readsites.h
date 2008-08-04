@@ -10,9 +10,9 @@
 
 struct zstruct
 {
-  double x, y, z;
+    double x, y, z;
 };
 typedef struct zstruct Z;
-  
+
 /*--------------------functions */
-int G_readsites(FILE *,int,int,int,struct Cell_head *,Z**);
+int G_readsites(FILE *, int, int, int, struct Cell_head *, Z **);

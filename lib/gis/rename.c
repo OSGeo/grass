@@ -1,3 +1,4 @@
+
 /**
  * \file rename.c
  *
@@ -31,14 +32,14 @@
  ** \return -1 on error
  **/
 
-int G_rename_file ( const char *oldname, const char *newname )
+int G_rename_file(const char *oldname, const char *newname)
 {
 
-    #ifdef __MINGW32__
-      remove(newname);
-    #endif
+#ifdef __MINGW32__
+    remove(newname);
+#endif
 
-    return rename(oldname, newname); 
+    return rename(oldname, newname);
 }
 
 /**
@@ -58,8 +59,7 @@ int G_rename_file ( const char *oldname, const char *newname )
  * \return -1 on error
  */
 
-int G_rename ( const char *element,
-    const char *oldname, const char *newname)
+int G_rename(const char *element, const char *oldname, const char *newname)
 {
     const char *mapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -67,18 +67,18 @@ int G_rename ( const char *element,
 
     /* name in mapset legal only if mapset is current mapset */
     mapset = G_mapset();
-    if (G__name_is_fully_qualified (oldname, xname, xmapset)
-    && strcmp (mapset, xmapset))
-	    return -1;
-    if (G__name_is_fully_qualified (newname, xname, xmapset)
-    && strcmp (mapset, xmapset))
-	    return -1;
+    if (G__name_is_fully_qualified(oldname, xname, xmapset)
+	&& strcmp(mapset, xmapset))
+	return -1;
+    if (G__name_is_fully_qualified(newname, xname, xmapset)
+	&& strcmp(mapset, xmapset))
+	return -1;
 
     /* if file does not exist return 0 */
-    if (access (G__file_name (from, element, oldname, mapset),0) != 0)
-	    return 0;
+    if (access(G__file_name(from, element, oldname, mapset), 0) != 0)
+	return 0;
 
-    G__file_name (to, element, newname, mapset);
+    G__file_name(to, element, newname, mapset);
 
     /* return result of rename */
     return G_rename_file(from, to) == 0 ? 1 : -1;

@@ -1,20 +1,20 @@
 /*!
-  \file GK2.c
- 
-  \brief OGSF library - setting and manipulating keyframes animation
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \file GK2.c
+
+   \brief OGSF library - setting and manipulating keyframes animation
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 
@@ -133,13 +133,13 @@ static void _remove_key(Keylist * k)
 }
 
 /*!
-  \brief Set interpolation mode 
+   \brief Set interpolation mode 
 
-  \param mode interpolation mode (KF_LINEAR or KF_SPLINE)
+   \param mode interpolation mode (KF_LINEAR or KF_SPLINE)
 
-  \return 1 on success
-  \return -1 on error (invalid interpolation mode)
-*/
+   \return 1 on success
+   \return -1 on error (invalid interpolation mode)
+ */
 int GK_set_interpmode(int mode)
 {
     if (KF_LEGAL_MODE(mode)) {
@@ -151,10 +151,10 @@ int GK_set_interpmode(int mode)
 }
 
 /*!
-  \brief Set value for tension when interpmode is KF_SPLINE. 
+   \brief Set value for tension when interpmode is KF_SPLINE. 
 
-  \param tens value tens should be between 0.0; 1.0.
-*/
+   \param tens value tens should be between 0.0; 1.0.
+ */
 void GK_set_tension(float tens)
 {
     Tension = tens > 1.0 ? 1.0 : (tens < 0.0 ? 0.0 : tens);
@@ -181,20 +181,20 @@ void GK_showtension_start(void)
 }
 
 /*!
-  \brief Show tension stop ?
+   \brief Show tension stop ?
 
-  Use GK_showtension_start/GK_update_tension/GK_showtension_stop to
-  initialize and stop multi-view display of path when changing
-  tension.
-*/
+   Use GK_showtension_start/GK_update_tension/GK_showtension_stop to
+   initialize and stop multi-view display of path when changing
+   tension.
+ */
 void GK_showtension_stop(void)
 {
     return;
 }
 
 /*!
-  \brief Update tension
-*/
+   \brief Update tension
+ */
 void GK_update_tension(void)
 {
     if (Views) {
@@ -205,10 +205,10 @@ void GK_update_tension(void)
 }
 
 /*!
-  \brief Print keyframe info
+   \brief Print keyframe info
 
-  \param name filename
-*/
+   \param name filename
+ */
 void GK_print_keys(const char *name)
 {
     Keylist *k;
@@ -216,7 +216,7 @@ void GK_print_keys(const char *name)
     int cnt = 1;
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_fatal_error (_("Unable to open file <%s> for writing"), name);
+	G_fatal_error(_("Unable to open file <%s> for writing"), name);
     }
     /* write a default frame rate of 30 at top of file */
     fprintf(fp, "30 \n");
@@ -238,11 +238,11 @@ void GK_print_keys(const char *name)
 }
 
 /*!
-  \brief Recalculate path using the current number of frames requested.
+   \brief Recalculate path using the current number of frames requested.
 
-  Call after changing number of frames or when
-  Keyframes change.
-*/
+   Call after changing number of frames or when
+   Keyframes change.
+ */
 void GK_update_frames(void)
 {
     Keylist *k;
@@ -272,7 +272,8 @@ void GK_update_frames(void)
 	Views = gk_make_linear_framesfromkeys(Keys, Numkeys, Viewsteps, loop);
 
 	if (!Views) {
-	    G_warning(_("Check no. of frames requested and keyframes marked"));
+	    G_warning(_
+		      ("Check no. of frames requested and keyframes marked"));
 	}
     }
     else if (Numkeys > 2) {
@@ -285,7 +286,8 @@ void GK_update_frames(void)
 	    (Keys, Numkeys, Viewsteps, loop, 1.0 - Tension);
 
 	if (!Views) {
-	    G_warning(_("Check no. of frames requested and keyframes marked"));
+	    G_warning(_
+		      ("Check no. of frames requested and keyframes marked"));
 	}
     }
 
@@ -293,10 +295,10 @@ void GK_update_frames(void)
 }
 
 /*!
-  \brief Set the number of frames to be interpolated from keyframes
+   \brief Set the number of frames to be interpolated from keyframes
 
-  \param newsteps number of frames
-*/
+   \param newsteps number of frames
+ */
 void GK_set_numsteps(int newsteps)
 {
     Viewsteps = newsteps;
@@ -306,10 +308,10 @@ void GK_set_numsteps(int newsteps)
 }
 
 /*!
-  \brief Deletes all keyframes, resets field masks.
+   \brief Deletes all keyframes, resets field masks.
 
-  Doesn't change number of frames requested.
-*/
+   Doesn't change number of frames requested.
+ */
 void GK_clear_keys(void)
 {
     gk_free_key(Keys);
@@ -325,17 +327,17 @@ void GK_clear_keys(void)
 }
 
 /*!
-  \brief Move keyframe
+   \brief Move keyframe
 
-  Precis works as in other functions - to identify keyframe to move.
-  Only the first keyframe in the precis range will be moved.
+   Precis works as in other functions - to identify keyframe to move.
+   Only the first keyframe in the precis range will be moved.
 
-  \param oldpos old position
-  \param precis precision value
-  \param newpos new position
+   \param oldpos old position
+   \param precis precision value
+   \param newpos new position
 
-  \return number of keys moved (1 or 0)
-*/
+   \return number of keys moved (1 or 0)
+ */
 int GK_move_key(float oldpos, float precis, float newpos)
 {
     Keylist *k;
@@ -354,19 +356,19 @@ int GK_move_key(float oldpos, float precis, float newpos)
 }
 
 /*!
-  Delete keyframe
+   Delete keyframe
 
-  The values pos and precis are used to determine which keyframes to
-  delete.  Any keyframes with their position within precis of pos will
-  be deleted if justone is zero.  If justone is non-zero, only the first
-  (lowest pos) keyframe in the range will be deleted.
+   The values pos and precis are used to determine which keyframes to
+   delete.  Any keyframes with their position within precis of pos will
+   be deleted if justone is zero.  If justone is non-zero, only the first
+   (lowest pos) keyframe in the range will be deleted.
 
-  \param pos position
-  \param precis precision
-  \param justone delete only one keyframe
+   \param pos position
+   \param precis precision
+   \param justone delete only one keyframe
 
-  \return number of keys deleted.
-*/
+   \return number of keys deleted.
+ */
 int GK_delete_key(float pos, float precis, int justone)
 {
     Keylist *k, *next;
@@ -392,13 +394,13 @@ int GK_delete_key(float pos, float precis, int justone)
 }
 
 /*!
-  \brief Add keyframe
+   \brief Add keyframe
 
-  The pos value is the relative position in the animation for this
-  particular keyframe - used to compare relative distance to neighboring
-  keyframes, it can be any floating point value.
+   The pos value is the relative position in the animation for this
+   particular keyframe - used to compare relative distance to neighboring
+   keyframes, it can be any floating point value.
 
-  The fmask value can be any of the following or'd together:    
+   The fmask value can be any of the following or'd together:    
    - KF_FROMX_MASK    
    - KF_FROMY_MASK    
    - KF_FROMZ_MASK    
@@ -425,10 +427,10 @@ int GK_delete_key(float pos, float precis, int justone)
    \param fmaks
    \param force_replace
    \param precis precision value
-   
+
    \return 1 if key is added
    \return -1 key not added
-*/
+ */
 int GK_add_key(float pos, unsigned long fmask, int force_replace,
 	       float precis)
 {
@@ -447,16 +449,16 @@ int GK_add_key(float pos, unsigned long fmask, int force_replace,
     newk->fields[KF_FROMY] = tmp[Y];
     newk->fields[KF_FROMZ] = tmp[Z];
 
-    G_debug (3, "KEY FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
+    G_debug(3, "KEY FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
 
-/* Instead of View Dir try get_focus (view center) */
-/* View Dir is implied from eye and center position */
-/*    GS_get_viewdir(tmp); */
-    
-/* ACS 1 line: was 	GS_get_focus(tmp);
- 	with this kanimator works also for flythrough navigation
-	also changed in gk.c
-*/
+    /* Instead of View Dir try get_focus (view center) */
+    /* View Dir is implied from eye and center position */
+    /*    GS_get_viewdir(tmp); */
+
+    /* ACS 1 line: was      GS_get_focus(tmp);
+       with this kanimator works also for flythrough navigation
+       also changed in gk.c
+     */
     GS_get_viewdir(tmp);
     newk->fields[KF_DIRX] = tmp[X];
     newk->fields[KF_DIRY] = tmp[Y];
@@ -478,14 +480,14 @@ int GK_add_key(float pos, unsigned long fmask, int force_replace,
 }
 
 /*!
-  \brief Moves the animation to frame number "step".
+   \brief Moves the animation to frame number "step".
 
-  Step should be a value between 1 and the number of frames.  If
-  render is non-zero, calls draw_all.
+   Step should be a value between 1 and the number of frames.  If
+   render is non-zero, calls draw_all.
 
-  \param step step value
-  \param render
-*/
+   \param step step value
+   \param render
+ */
 void GK_do_framestep(int step, int render)
 {
     if (Views) {
@@ -498,10 +500,10 @@ void GK_do_framestep(int step, int render)
 }
 
 /*!
-  \brief Draw the current path
+   \brief Draw the current path
 
-  \param flag
-*/
+   \param flag
+ */
 void GK_show_path(int flag)
 {
     if (flag) {
@@ -525,10 +527,10 @@ void GK_show_path(int flag)
 }
 
 /*!
-  \brief Show vector sets
+   \brief Show vector sets
 
-  \param flag
-*/
+   \param flag
+ */
 void GK_show_vect(int flag)
 {
     if (flag) {
@@ -551,10 +553,10 @@ void GK_show_vect(int flag)
 }
 
 /*!
-  \brief Show point sets
+   \brief Show point sets
 
-  \param flag
-*/
+   \param flag
+ */
 void GK_show_site(int flag)
 {
     if (flag) {
@@ -579,10 +581,10 @@ void GK_show_site(int flag)
 }
 
 /*!
-  \brief Show volumes
+   \brief Show volumes
 
-  \param flag
-*/
+   \param flag
+ */
 void GK_show_vol(int flag)
 {
     if (flag) {
@@ -607,15 +609,15 @@ void GK_show_vol(int flag)
 }
 
 /*!
-  \brief Show list
+   \brief Show list
 
-  \param flag
-*/
-void GK_show_list( int flag)
+   \param flag
+ */
+void GK_show_list(int flag)
 {
     if (flag) {
 	Fmode |= FM_LABEL;
-	
+
 	if (Views) {
 	    GS_draw_all_list();
 	}

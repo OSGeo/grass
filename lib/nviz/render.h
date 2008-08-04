@@ -15,11 +15,11 @@
 #elif defined(OPENGL_X11)
 #  include <X11/Xlib.h>
 #  include <X11/Xutil.h>
-#  include <X11/Xatom.h>        /* for XA_RGB_DEFAULT_MAP atom */
+#  include <X11/Xatom.h>	/* for XA_RGB_DEFAULT_MAP atom */
 #  if defined(__vms)
-#    include <X11/StdCmap.h>    /* for XmuLookupStandardColormap */
+#    include <X11/StdCmap.h>	/* for XmuLookupStandardColormap */
 #  else
-#    include <X11/Xmu/StdCmap.h>        /* for XmuLookupStandardColormap */
+#    include <X11/Xmu/StdCmap.h>	/* for XmuLookupStandardColormap */
 #  endif
 #  include <GL/glx.h>
 
@@ -34,9 +34,10 @@
 #  error Unsupported platform, or confused platform defines...
 #endif
 
-typedef struct {
-    Display *displayId; /* display connection */
-    GLXContext contextId; /* GLX rendering context */
+typedef struct
+{
+    Display *displayId;		/* display connection */
+    GLXContext contextId;	/* GLX rendering context */
     Pixmap pixmap;
     GLXPixmap windowId;
 } render_window;

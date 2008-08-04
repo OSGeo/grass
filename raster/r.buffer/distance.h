@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -38,6 +39,7 @@ struct Distance
 };
 
 typedef unsigned char MAPTYPE;
+
 #define MAX_DIST 254
 /* if MAPTYPE is changed to unsigned short, MAX_DIST can be set to 2^16-2
  * (if short is 2 bytes)

@@ -1,7 +1,6 @@
 #include <grass/gis.h>
 
-int G_invert_colors (
-    struct Colors *colors)
+int G_invert_colors(struct Colors *colors)
 {
     colors->invert = !colors->invert;
 

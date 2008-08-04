@@ -153,7 +153,8 @@ int N_solver_lu(N_les * les)
 int N_solver_cholesky(N_les * les)
 {
     if (les->type != N_NORMAL_LES) {
-	G_warning(_("The cholesky solver does not work with sparse matrices"));
+	G_warning(_
+		  ("The cholesky solver does not work with sparse matrices"));
 	return 0;
     }
 
@@ -267,7 +268,7 @@ int cholesky_decomposition(double **A, int rows)
     double sum_1 = 0.0;
     double sum_2 = 0.0;
     int error = 0;
-	
+
 
     for (k = 0; k < rows; k++) {
 #pragma omp parallel private(i, j, sum_2) shared(A, rows, sum_1)
@@ -279,10 +280,10 @@ int cholesky_decomposition(double **A, int rows)
 #pragma omp single
 	    {
 		if ((A[k][k] - sum_1) < 0) {
-		    error++; /*not allowed to exit the OpenMP region*/
+		    error++;	/*not allowed to exit the OpenMP region */
 		}
 		A[k][k] = sqrt(A[k][k] - sum_1);
-    		sum_1 = 0.0;
+		sum_1 = 0.0;
 	    }
 #pragma omp for schedule (static) private(i, j, sum_2)
 	    for (i = k + 1; i < rows; i++) {
@@ -333,10 +334,10 @@ void backward_solving(double **A, double *x, double *b, int rows)
     for (i = rows - 1; i >= 0; i--) {
 	tmpval = 0;
 	for (j = i + 1; j < rows; j++) {
-	    /*tmpval += A[i][j] * x[j];*/
+	    /*tmpval += A[i][j] * x[j]; */
 	    b[i] = b[i] - A[i][j] * x[j];
 	}
-	/*x[i] = (b[i] - tmpval) / A[i][i];*/
+	/*x[i] = (b[i] - tmpval) / A[i][i]; */
 	x[i] = (b[i]) / A[i][i];
     }
 
@@ -428,4 +429,3 @@ double *vectmem(int rows)
     vector = (double *)(G_calloc(rows, (sizeof(double))));
     return vector;
 }
-

@@ -1,3 +1,4 @@
+
 /****************************************************************
  *								*
  *	segment.c	in	~/src/Glos			*
@@ -60,10 +61,11 @@ struct point *segment(int segment_no, int xmax, int ymax,
 
 	    /*      add chosen point to the point list              */
 	    head = make_list(head, y_actual, x_actual, seg_in_p,
-			     viewpt_elev, quadrant, row_viewpt, col_viewpt, docurv, ellps_a);
+			     viewpt_elev, quadrant, row_viewpt, col_viewpt,
+			     docurv, ellps_a);
 
 	}
-    }	/* end of outer loop */
+    }				/* end of outer loop */
 
 
     if (head != NULL) {
@@ -79,7 +81,8 @@ struct point *segment(int segment_no, int xmax, int ymax,
 	head = hidden_point_elimination(head, viewpt_elev,
 					seg_in_p, seg_out_p, seg_patt_p,
 					quadrant, sign_on_y, sign_on_x,
-					row_viewpt, col_viewpt, patt_flag, docurv, ellps_a);
+					row_viewpt, col_viewpt, patt_flag,
+					docurv, ellps_a);
     }
 
     return (head);

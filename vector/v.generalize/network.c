@@ -32,6 +32,7 @@ typedef struct
 void graph_free(NGRAPH * g)
 {
     int i;
+
     return;
     G_free(g->degree);
     if (g->edge) {
@@ -98,6 +99,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     for (i = 0; i < nnodes; i++) {
 	dglInt32_t *node, *edgeset, *edge;
 	dglEdgesetTraverser_s et;
+
 	node = dglGetNode(gr, (dglInt32_t) i);
 	edgeset = dglNodeGet_OutEdgeset(gr, node);
 	dglEdgeset_T_Initialize(&et, gr, edgeset);
@@ -106,6 +108,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	    int id, from_degree, to_degree;
 	    dglInt32_t *to, *from, *to_edgeset, *to_edge;
 	    dglEdgesetTraverser_s to_et;
+
 	    from = dglEdgeGet_Head(gr, edge);
 	    to = dglEdgeGet_Tail(gr, edge);
 	    to_edgeset = dglNodeGet_OutEdgeset(gr, to);
@@ -118,7 +121,8 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 
 	    /* allocate memory, if it has not been not allocated already */
 	    if (!g.edge[id]) {
-		g.edge[id] = G_malloc(sizeof(int) * (to_degree + from_degree));
+		g.edge[id] =
+		    G_malloc(sizeof(int) * (to_degree + from_degree));
 		if (!g.edge[id]) {
 		    graph_free(&g);
 		    G_fatal_error(_("Out of memory"));
@@ -129,6 +133,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	    for (to_edge = dglEdgeset_T_First(&to_et); to_edge;
 		 to_edge = dglEdgeset_T_Next(&to_et)) {
 		int id2 = abs(dglEdgeGet_Id(gr, to_edge));
+
 		g.edge[id][g.degree[id]++] = id2;
 	    }
 
@@ -158,6 +163,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     G_message(_("Calculating centrality measures..."));
     for (i = 1; i < g.vertices; i++) {
 	int front, back, j;
+
 	G_percent(i, g.vertices - 1, 1);
 	front = 0;
 	back = 1;
@@ -176,11 +182,13 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 
 	while (front != back) {
 	    int v, j;
+
 	    v = queue[front];
 	    comp[i]++;
 	    front = (front + 1) % g.vertices;
 	    for (j = 0; j < g.degree[v]; j++) {
 		int to = g.edge[v][j];
+
 		if (dist[to] > dist[v] + 1) {
 		    paths[to] = paths[v];
 		    internal[v] = 1;
@@ -210,11 +218,13 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
 	memset(betw, 0, sizeof(double) * g.vertices);
 	while (front != back) {
 	    int v, j;
+
 	    v = queue[front];
 	    front = (front + 1) % g.vertices;
 	    betweeness[v] += betw[v];
 	    for (j = 0; j < prev[v]->n_values; j++) {
 		int to = prev[v]->value[j];
+
 		if (betw[to] == 0) {
 		    queue[back] = to;
 		    back = (back + 1) % g.vertices;

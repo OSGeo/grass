@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.surf.idw2
@@ -35,18 +36,17 @@ struct Point *points = NULL;
 struct Point *list;
 
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int fd, maskfd;
     CELL *cell, *mask;
     struct Cell_head window;
     int row, col;
     double north, east;
-    double dx,dy;
-    double maxdist,dist;
+    double dx, dy;
+    double maxdist, dist;
     double sum1, sum2;
-    int i,n,max;
+    int i, n, max;
     struct GModule *module;
     struct History history;
     struct
@@ -58,46 +58,47 @@ main (int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("raster");
-    module->description =
-		_("Surface generation program.");
-					        
+    module->description = _("Surface generation program.");
+
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    parm.npoints = G_define_option() ;
-    parm.npoints->key        = "npoints" ;
-    parm.npoints->key_desc   = "count" ;
-    parm.npoints->type       = TYPE_INTEGER ;
-    parm.npoints->required   = NO ;
-    parm.npoints->description=_("Number of interpolation points");
+    parm.npoints = G_define_option();
+    parm.npoints->key = "npoints";
+    parm.npoints->key_desc = "count";
+    parm.npoints->type = TYPE_INTEGER;
+    parm.npoints->required = NO;
+    parm.npoints->description = _("Number of interpolation points");
     parm.npoints->answer = "12";
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
-/* Make sure that the current projection is not lat/long */
+    /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-         G_fatal_error (_("Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"));
-                            
+	G_fatal_error(_
+		      ("Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"));
+
     if (G_legal_filename(parm.output->answer) < 0)
-	G_fatal_error (_("<%s> is an illegal file name"), parm.output->answer);
+	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);
 
-    if(sscanf(parm.npoints->answer,"%d", &search_points) != 1 || search_points<1)
-	G_fatal_error (_("%s=%s - illegal number of interpolation points"),
-		parm.npoints->key, parm.npoints->answer);
+    if (sscanf(parm.npoints->answer, "%d", &search_points) != 1 ||
+	search_points < 1)
+	G_fatal_error(_("%s=%s - illegal number of interpolation points"),
+		      parm.npoints->key, parm.npoints->answer);
 
-    list = (struct Point *) G_calloc (search_points, sizeof (struct Point));
+    list = (struct Point *)G_calloc(search_points, sizeof(struct Point));
 
-/* read the elevation points from the input raster map */
-    read_cell (parm.input->answer);
+    /* read the elevation points from the input raster map */
+    read_cell(parm.input->answer);
 
     if (npoints == 0)
-	G_fatal_error (_("%s: no data points found"), G_program_name());
+	G_fatal_error(_("%s: no data points found"), G_program_name());
     nsearch = npoints < search_points ? npoints : search_points;
 
-/* get the window, allocate buffers, etc. */
-    G_get_set_window (&window);
+    /* get the window, allocate buffers, etc. */
+    G_get_set_window(&window);
 
     cell = G_allocate_cell_buf();
 
@@ -108,89 +109,78 @@ main (int argc, char *argv[])
 
     fd = G_open_cell_new(parm.output->answer);
     if (fd < 0)
-	G_fatal_error (_("Unable to create raster map <%s>"), parm.output->answer);
+	G_fatal_error(_("Unable to create raster map <%s>"),
+		      parm.output->answer);
 
-    G_message (_("Interpolating raster map <%s>... %d rows... "),
-	parm.output->answer, window.rows);
+    G_message(_("Interpolating raster map <%s>... %d rows... "),
+	      parm.output->answer, window.rows);
 
-    north = window.north - window.ns_res/2.0;
-    for (row = 0; row < window.rows; row++)
-    {
-        G_percent (row, window.rows, 2);
+    north = window.north - window.ns_res / 2.0;
+    for (row = 0; row < window.rows; row++) {
+	G_percent(row, window.rows, 2);
 
-	if (mask)
-	{
-	    if(G_get_map_row(maskfd, mask, row) < 0)
-		G_fatal_error (_("Cannot get row"));
+	if (mask) {
+	    if (G_get_map_row(maskfd, mask, row) < 0)
+		G_fatal_error(_("Cannot get row"));
 	}
 	north += window.ns_res;
-	east = window.west - window.ew_res/2.0;
-	for (col = 0; col < window.cols; col++)
-	{
+	east = window.west - window.ew_res / 2.0;
+	for (col = 0; col < window.cols; col++) {
 	    east += window.ew_res;
-		/* don't interpolate outside of the mask */
-	    if (mask && mask[col] == 0)
-	    {
+	    /* don't interpolate outside of the mask */
+	    if (mask && mask[col] == 0) {
 		cell[col] = 0;
 		continue;
 	    }
-		/* fill list with first nsearch points */
-	    for (i = 0; i < nsearch ; i++)
-	    {
+	    /* fill list with first nsearch points */
+	    for (i = 0; i < nsearch; i++) {
 		dy = points[i].north - north;
-		dx = points[i].east  - east;
-		list[i].dist = dy*dy + dx*dx;
+		dx = points[i].east - east;
+		list[i].dist = dy * dy + dx * dx;
 		list[i].z = points[i].z;
 	    }
-		/* find the maximum distance */
-	    maxdist = list[max=0].dist;
-	    for (n = 1; n < nsearch; n++)
-	    {
+	    /* find the maximum distance */
+	    maxdist = list[max = 0].dist;
+	    for (n = 1; n < nsearch; n++) {
 		if (maxdist < list[n].dist)
-		    maxdist = list[max=n].dist;
+		    maxdist = list[max = n].dist;
 	    }
-		/* go thru rest of the points now */
-	    for ( ; i < npoints; i++)
-	    {
+	    /* go thru rest of the points now */
+	    for (; i < npoints; i++) {
 		dy = points[i].north - north;
-		dx = points[i].east  - east;
-		dist = dy*dy + dx*dx;
+		dx = points[i].east - east;
+		dist = dy * dy + dx * dx;
 
-		if (dist < maxdist)
-		{
-			/* replace the largest dist */
+		if (dist < maxdist) {
+		    /* replace the largest dist */
 		    list[max].z = points[i].z;
 		    list[max].dist = dist;
-		    maxdist = list[max=0].dist;
-		    for (n = 1; n < nsearch; n++)
-		    {
+		    maxdist = list[max = 0].dist;
+		    for (n = 1; n < nsearch; n++) {
 			if (maxdist < list[n].dist)
-			    maxdist = list[max=n].dist;
+			    maxdist = list[max = n].dist;
 		    }
 		}
 	    }
 
-		/* interpolate */
+	    /* interpolate */
 	    sum1 = 0.0;
 	    sum2 = 0.0;
-	    for (n = 0; n < nsearch; n++)
-	    {
-		if ((dist = list[n].dist))
-		{
+	    for (n = 0; n < nsearch; n++) {
+		if ((dist = list[n].dist)) {
 		    sum1 += list[n].z / dist;
-		    sum2 += 1.0/dist;
+		    sum2 += 1.0 / dist;
 		}
-		else
-		{
+		else {
 		    sum1 = list[n].z;
 		    sum2 = 1.0;
 		    break;
 		}
 	    }
-	    cell[col] = (CELL) (sum1/sum2 + 0.5);
+	    cell[col] = (CELL) (sum1 / sum2 + 0.5);
 	}
 
-	G_put_raster_row (fd, cell, CELL_TYPE);
+	G_put_raster_row(fd, cell, CELL_TYPE);
     }
 
     G_free(points);
@@ -206,18 +196,17 @@ main (int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-int 
-newpoint (double z, double east, double north)
+int newpoint(double z, double east, double north)
 {
-    if (npoints_alloc <= npoints)
-    {
+    if (npoints_alloc <= npoints) {
 	npoints_alloc += 1024;
-	points = (struct Point *) G_realloc (points,
-		    npoints_alloc * sizeof (struct Point));
+	points = (struct Point *)G_realloc(points,
+					   npoints_alloc *
+					   sizeof(struct Point));
     }
     points[npoints].north = north;
-    points[npoints].east  = east;
-    points[npoints].z     = z;
+    points[npoints].east = east;
+    points[npoints].z = z;
     npoints++;
 
     return 0;

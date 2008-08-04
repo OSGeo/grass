@@ -1,3 +1,4 @@
+
 /**
  * \file system.c
  *
@@ -47,52 +48,45 @@
  * \return status on success
  */
 
-int G_system (const char *command)
+int G_system(const char *command)
 {
     int status;
+
 #ifndef __MINGW32__
     int pid, w;
 #endif
-    RETSIGTYPE (*sigint)();
+    RETSIGTYPE(*sigint) ();
 #ifdef SIGQUIT
-    RETSIGTYPE (*sigquit)();
+    RETSIGTYPE(*sigquit) ();
 #endif
 
-    sigint  = signal (SIGINT,  SIG_IGN);
+    sigint = signal(SIGINT, SIG_IGN);
 #ifdef SIGQUIT
-    sigquit = signal (SIGQUIT, SIG_IGN);
+    sigquit = signal(SIGQUIT, SIG_IGN);
 #endif
 
-    fflush (stdout);
-    fflush (stderr);
+    fflush(stdout);
+    fflush(stderr);
 
 #ifdef __MINGW32__
-    signal (SIGINT,  SIG_DFL);
-    _spawnlp ( P_WAIT,
-              "cmd.exe",
-              "cmd.exe",
-              "/c",
-              command,
-              NULL );
+    signal(SIGINT, SIG_DFL);
+    _spawnlp(P_WAIT, "cmd.exe", "cmd.exe", "/c", command, NULL);
     status = 0;
-#else    
-    if ( (pid = fork()) == 0)
-    {
-	signal (SIGINT,  SIG_DFL);
-	signal (SIGQUIT, SIG_DFL);
-    
-	execl ("/bin/sh", "sh", "-c", command, NULL);
+#else
+    if ((pid = fork()) == 0) {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+
+	execl("/bin/sh", "sh", "-c", command, NULL);
 	_exit(127);
     }
 
-    if (pid < 0)
-    {
-	G_warning (_("Can not create a new process!"));
+    if (pid < 0) {
+	G_warning(_("Can not create a new process!"));
 	status = -1;
     }
-    else
-    {
-	while ( (w = wait (&status)) != pid && w != -1);
+    else {
+	while ((w = wait(&status)) != pid && w != -1) ;
 
 	if (w == -1)
 	    status = -1;
@@ -100,9 +94,9 @@ int G_system (const char *command)
 
 #endif
 
-    signal (SIGINT,  sigint);
+    signal(SIGINT, sigint);
 #ifdef SIGQUIT
-    signal (SIGQUIT, sigquit);
+    signal(SIGQUIT, sigquit);
 #endif
 
     return (status);

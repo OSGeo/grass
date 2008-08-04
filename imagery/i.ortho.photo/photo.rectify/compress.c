@@ -1,10 +1,9 @@
 #include "global.h"
 
-int 
-compress (char *name)
+int compress(char *name)
 {
     return 0;
     /*
-    return 1;
-    */
+       return 1;
+     */
 }

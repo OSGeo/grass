@@ -1,3 +1,4 @@
+
 /**
    \file ls.c
 
@@ -30,10 +31,10 @@
 
 static int cmp_names(const void *aa, const void *bb)
 {
-   char * const *a = (char * const *) aa;
-   char * const *b = (char * const *) bb;
-   
-   return strcmp(*a, *b);
+    char *const *a = (char *const *)aa;
+    char *const *b = (char *const *)bb;
+
+    return strcmp(*a, *b);
 }
 
 /**
@@ -60,22 +61,20 @@ char **G__ls(const char *dir, int *num_files)
     int n = 0;
 
     if ((dfd = opendir(dir)) == NULL)
-       G_fatal_error(_("Unable to open directory %s"), dir);
+	G_fatal_error(_("Unable to open directory %s"), dir);
 
-    while ((dp = readdir(dfd)) != NULL)
-    {
-       if(dp->d_name[0] != '.') /* Don't list hidden files */
-       {
-          dir_listing = (char **)G_realloc(dir_listing, 
-					   (1 + n) * sizeof(char *));
-          dir_listing[n] = G_store(dp->d_name);
-          n++;
-       }
+    while ((dp = readdir(dfd)) != NULL) {
+	if (dp->d_name[0] != '.') {	/* Don't list hidden files */
+	    dir_listing = (char **)G_realloc(dir_listing,
+					     (1 + n) * sizeof(char *));
+	    dir_listing[n] = G_store(dp->d_name);
+	    n++;
+	}
     }
 
     /* Sort list of filenames alphabetically */
     qsort(dir_listing, n, sizeof(char *), cmp_names);
-   
+
     *num_files = n;
     return dir_listing;
 }
@@ -92,7 +91,7 @@ char **G__ls(const char *dir, int *num_files)
  * \param stream Stream to print listing to
  **/
 
-void G_ls(const char *dir, FILE *stream)
+void G_ls(const char *dir, FILE * stream)
 {
     int i, n;
     char **dir_listing = G__ls(dir, &n);
@@ -100,10 +99,10 @@ void G_ls(const char *dir, FILE *stream)
     G_ls_format(dir_listing, n, 0, stream);
 
     for (i = 0; i < n; i++)
-        G_free(dir_listing[i]);
-   
+	G_free(dir_listing[i]);
+
     G_free(dir_listing);
-   
+
     return;
 }
 
@@ -122,42 +121,41 @@ void G_ls(const char *dir, FILE *stream)
  * \param stream    Stream to print listing to
  **/
 
-void G_ls_format(char **list, int num_items, int perline, FILE *stream)
+void G_ls_format(char **list, int num_items, int perline, FILE * stream)
 {
     int i;
 
     int field_width, column_height;
-    int screen_width = 80; /* Default width of 80 columns */
-   
+    int screen_width = 80;	/* Default width of 80 columns */
+
     if (num_items < 1)
-        return; /* Nothing to print */
-   
+	return;			/* Nothing to print */
+
 #ifdef TIOCGWINSZ
     /* Determine screen_width if possible */
-    {	
-        struct winsize size;
+    {
+	struct winsize size;
 
-        if (ioctl(fileno(stream), TIOCGWINSZ, (char *) &size) == 0)
+	if (ioctl(fileno(stream), TIOCGWINSZ, (char *)&size) == 0)
 	    screen_width = size.ws_col;
-    }   
-#endif                  
+    }
+#endif
 
-    if (perline == 0) 
-    {	
-        int max_len = 0;
+    if (perline == 0) {
+	int max_len = 0;
 
-        for (i=0; i < num_items; i++)
-        {	
-            /* Find maximum filename length */
-            if (strlen(list[i]) > max_len)
-                max_len = strlen(list[i]);
-        }
-                      /* Auto-fit the number of items that will
-                       * fit per line (+1 because of space after item) */
-        perline = screen_width / (max_len + 1);
-        if (perline < 1) perline = 1;
-    }   
-   
+	for (i = 0; i < num_items; i++) {
+	    /* Find maximum filename length */
+	    if (strlen(list[i]) > max_len)
+		max_len = strlen(list[i]);
+	}
+	/* Auto-fit the number of items that will
+	 * fit per line (+1 because of space after item) */
+	perline = screen_width / (max_len + 1);
+	if (perline < 1)
+	    perline = 1;
+    }
+
     /* Field width to accomodate longest filename */
     field_width = screen_width / perline;
     /* Longest column height (i.e. num_items <= perline * column_height) */
@@ -174,14 +172,14 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 	    next += column_height;
 	    if (next >= list + num_items) {
 		/* the next item has to be on the other line */
-		next -= (max - 1
-			 - (next < list + max ? column_height : 0));
-		fprintf (stream, "%s\n", *cur);
-	    } else {
-		fprintf (stream, "%-*s", field_width, *cur);
+		next -= (max - 1 - (next < list + max ? column_height : 0));
+		fprintf(stream, "%s\n", *cur);
+	    }
+	    else {
+		fprintf(stream, "%-*s", field_width, *cur);
 	    }
 	}
     }
-   
+
     return;
 }

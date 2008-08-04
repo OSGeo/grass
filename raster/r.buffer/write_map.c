@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -25,63 +26,60 @@
 
     /* write out result */
 
-int write_output_map (char *output, int offset)
+int write_output_map(char *output, int offset)
 {
-    int fd_in=0, fd_out;
+    int fd_in = 0, fd_out;
     int row;
     register int col;
     register CELL *cell;
     register MAPTYPE *ptr;
     int k;
 
-    fd_out = G_open_cell_new (output);
+    fd_out = G_open_cell_new(output);
     if (fd_out < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);
 
-    if (offset)
-    {
-	fd_in = G_open_cell_old (output, G_mapset());
+    if (offset) {
+	fd_in = G_open_cell_old(output, G_mapset());
 	if (fd_in < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), output);
     }
     cell = G_allocate_cell_buf();
-    G_message( _("Writing output raster map <%s>..."),
-	       output);
+    G_message(_("Writing output raster map <%s>..."), output);
 
     ptr = map;
 
-    for (row = 0; row < window.rows; row++)
-    {
-        G_percent (row, window.rows, 2);
+    for (row = 0; row < window.rows; row++) {
+	G_percent(row, window.rows, 2);
 	col = window.cols;
-	if (!offset)
-	{
+	if (!offset) {
 	    while (col-- > 0)
-		*cell++ = (CELL) *ptr++ ;
+		*cell++ = (CELL) * ptr++;
 	}
-	else
-	{
+	else {
 	    if (G_get_map_row_nomask(fd_in, cell, row) < 0)
-	      G_fatal_error(_("Unable to read raster map <%s> row %d"), output, row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      output, row);
 
-	    while (col-- > 0)
-	    {
+	    while (col-- > 0) {
 		if (*cell == 0 && *ptr != 0)
-		    *cell = (CELL) *ptr + offset ;
+		    *cell = (CELL) * ptr + offset;
 		cell++;
 		ptr++;
 	    }
 	}
 	cell -= window.cols;
 	/* set 0 to NULL */
-	for (k=0; k < window.cols; k++)
-	       if (cell[k] == 0) G_set_null_value(&cell[k], 1, CELL_TYPE);
+	for (k = 0; k < window.cols; k++)
+	    if (cell[k] == 0)
+		G_set_null_value(&cell[k], 1, CELL_TYPE);
 
-	if (G_put_raster_row (fd_out, cell, CELL_TYPE) < 0)
-	  G_fatal_error(_("Failed writing raster map <%s> row %d"), output, row);
+	if (G_put_raster_row(fd_out, cell, CELL_TYPE) < 0)
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"), output,
+			  row);
     }
 
-    G_percent (row, window.rows, 2);
+    G_percent(row, window.rows, 2);
     G_free(cell);
 
     if (offset)

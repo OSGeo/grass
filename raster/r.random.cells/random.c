@@ -1,4 +1,4 @@
-/* random.c								*/
+/* random.c                                                             */
 
 #undef TRACE
 #undef DEBUG
@@ -20,42 +20,43 @@
 #define IC3 51349
 
 
-/* ran1() returns a double with a value between 0.0 and 1.0		*/
+/* ran1() returns a double with a value between 0.0 and 1.0             */
 double ran1(void)
 {
-	static long ix1,ix2,ix3;
-	static double r[98];
-	double temp;
-	static int iff=0;
-	int j;
-	FUNCTION(ran1);
+    static long ix1, ix2, ix3;
+    static double r[98];
+    double temp;
+    static int iff = 0;
+    int j;
 
-	if (Seed < 0 || iff == 0) {
-		iff = 1;
-		ix1 = (IC1 - Seed) % M1;
-		ix1 = (IA1 * ix1 + IC1) % M1;
-		ix2 = ix1 % M2;
-		ix1 = (IA1 * ix1 + IC1) % M1;
-		ix3 = ix1 % M3;
-		for (j=1; j <= 97; j++) {
-			ix1 = (IA1 * ix1 + IC1) % M1;
-			ix2 = (IA2 * ix2 + IC2) % M2;
-			r[j] = (ix1 + ix2 * RM2) * RM1;
-		}
-		Seed = 1;
-	}
+    FUNCTION(ran1);
 
+    if (Seed < 0 || iff == 0) {
+	iff = 1;
+	ix1 = (IC1 - Seed) % M1;
 	ix1 = (IA1 * ix1 + IC1) % M1;
-	ix2 = (IA2 * ix2 + IC2) % M2;
-	ix3 = (IA3 * ix3 + IC3) % M3;
-	j = 1 + ((97 * ix3) / M3);
-	if (j > 97 || j < 1)
-		G_fatal_error("RAN1: j==%d shouldn't happen", j);
+	ix2 = ix1 % M2;
+	ix1 = (IA1 * ix1 + IC1) % M1;
+	ix3 = ix1 % M3;
+	for (j = 1; j <= 97; j++) {
+	    ix1 = (IA1 * ix1 + IC1) % M1;
+	    ix2 = (IA2 * ix2 + IC2) % M2;
+	    r[j] = (ix1 + ix2 * RM2) * RM1;
+	}
+	Seed = 1;
+    }
 
-	temp = r[j];
-	r[j] = (ix1 + ix2 * RM2) * RM1;
+    ix1 = (IA1 * ix1 + IC1) % M1;
+    ix2 = (IA2 * ix2 + IC2) % M2;
+    ix3 = (IA3 * ix3 + IC3) % M3;
+    j = 1 + ((97 * ix3) / M3);
+    if (j > 97 || j < 1)
+	G_fatal_error("RAN1: j==%d shouldn't happen", j);
 
-	return temp;
+    temp = r[j];
+    r[j] = (ix1 + ix2 * RM2) * RM1;
+
+    return temp;
 }
 
 #undef M1

@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            actions.h
  *
@@ -20,36 +21,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _ACTIONS_H
 #define _ACTIONS_H
 
 #include "globals.h"
 
-void check_extension ( char *package, char *name, int *major, int *minor, int *revision );
+void check_extension(char *package, char *name, int *major, int *minor,
+		     int *revision);
 
-void unpack_extension ( char *package );
+void unpack_extension(char *package);
 
-void query_extension ( char *package, char *name, int major, int minor, int revision, char* short_name,
-		       char *invocation, char *org_name );
+void query_extension(char *package, char *name, int major, int minor,
+		     int revision, char *short_name, char *invocation,
+		     char *org_name);
 
-void source_install ( char *package, char *gisbase, char *pkg_short_name, 
-						int pkg_major, int pkg_minor, int pkg_revision, char *grass_version );
-						
-void bin_install ( char *package, char *gisbase, char *bins, char *pkg_short_name, 
-					int pkg_major, int pkg_minor, int pkg_revision, char *grass_version );
+void source_install(char *package, char *gisbase, char *pkg_short_name,
+		    int pkg_major, int pkg_minor, int pkg_revision,
+		    char *grass_version);
 
-void test_install ( char *package, char *gisbase, char *pkg_short_name, 
-						int pkg_major, int pkg_minor, int pkg_revision, char *grass_version );
+void bin_install(char *package, char *gisbase, char *bins,
+		 char *pkg_short_name, int pkg_major, int pkg_minor,
+		 int pkg_revision, char *grass_version);
 
-void uninstall ( char *package, char *pkg_short_name, char *gisbase, char *grass_version );
+void test_install(char *package, char *gisbase, char *pkg_short_name,
+		  int pkg_major, int pkg_minor, int pkg_revision,
+		  char *grass_version);
 
-int source_clean ( char *package );
+void uninstall(char *package, char *pkg_short_name, char *gisbase,
+	       char *grass_version);
 
-void restore ( char *gisbase, char *grass_version );
+int source_clean(char *package);
 
-void list_extensions ( char *gisbase );
+void restore(char *gisbase, char *grass_version);
 
-void run_post ( char *package, int action, char *bins, char *gisbase );
+void list_extensions(char *gisbase);
+
+void run_post(char *package, int action, char *bins, char *gisbase);
 
 #endif /* _ACTIONS_H */

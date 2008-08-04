@@ -23,10 +23,10 @@ int Nquick_draw_cmd(Nv_data * dc, Tcl_Interp * interp)
 	}
     }
 
-	G_free (surf_list);
+    G_free(surf_list);
 
-	vol_list = GVL_get_vol_list(&max);
-	max = GVL_num_vols();
+    vol_list = GVL_get_vol_list(&max);
+    max = GVL_num_vols();
     for (i = 0; i < max; i++) {
 	if (check_blank(interp, vol_list[i]) == 0) {
 	    GVL_draw_wire(vol_list[i]);
@@ -36,7 +36,7 @@ int Nquick_draw_cmd(Nv_data * dc, Tcl_Interp * interp)
     GS_done_draw();
 
 /*** ACS_MODIFY flythrough  ONE LINE ***************/
-     flythrough_postdraw_cb();
+    flythrough_postdraw_cb();
 
     return (TCL_OK);
 }

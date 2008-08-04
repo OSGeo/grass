@@ -2,12 +2,10 @@
 #include "macros.h"
 
 
-int
-db__send_datetime  (dbDateTime *t)
+int db__send_datetime(dbDateTime * t)
 {
     DB_SEND_CHAR(t->current);
-    if (!t->current)
-    {
+    if (!t->current) {
 	DB_SEND_INT(t->year);
 	DB_SEND_INT(t->month);
 	DB_SEND_INT(t->day);
@@ -19,12 +17,10 @@ db__send_datetime  (dbDateTime *t)
     return DB_OK;
 }
 
-int
-db__recv_datetime  (dbDateTime *t)
+int db__recv_datetime(dbDateTime * t)
 {
     DB_RECV_CHAR(&t->current);
-    if (!t->current)
-    {
+    if (!t->current) {
 	DB_RECV_INT(&t->year);
 	DB_RECV_INT(&t->month);
 	DB_RECV_INT(&t->day);

@@ -21,9 +21,10 @@
 
 
 /* no longer used */
-struct V_info {
-    int Level;		/* 0 means unused */
-    int RW;		/* 0 read, 1 write, 2, update */
+struct V_info
+{
+    int Level;			/* 0 means unused */
+    int RW;			/* 0 read, 1 write, 2, update */
 
     char *name;
     char *mapset;

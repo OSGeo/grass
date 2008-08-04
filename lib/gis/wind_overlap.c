@@ -1,3 +1,4 @@
+
 /**
  * \file wind_overlap.c
  *
@@ -33,28 +34,29 @@
  * \return 0 if box does not overlap window
  */
 
-int G_window_overlap ( const struct Cell_head *window,
-    double N,double S,double E,double W)
+int G_window_overlap(const struct Cell_head *window,
+		     double N, double S, double E, double W)
 {
-    if (window->north <= S) return 0;
-    if (window->south >= N) return 0;
+    if (window->north <= S)
+	return 0;
+    if (window->south >= N)
+	return 0;
 
-    if (window->proj == PROJECTION_LL)
-    {
-	while (E < window->west)
-	{
+    if (window->proj == PROJECTION_LL) {
+	while (E < window->west) {
 	    E += 360.0;
 	    W += 360.0;
 	}
-	while (W > window->east)
-	{
+	while (W > window->east) {
 	    E -= 360.0;
 	    W -= 360.0;
 	}
     }
 
-    if (window->east <= W) return 0;
-    if (window->west >= E) return 0;
+    if (window->east <= W)
+	return 0;
+    if (window->west >= E)
+	return 0;
 
     return 1;
 }
@@ -78,57 +80,60 @@ int G_window_overlap ( const struct Cell_head *window,
  * \return percentage of overlap
  */
 
-double G_window_percentage_overlap ( const struct Cell_head *window,
-    double N,double S,double E,double W)
+double G_window_percentage_overlap(const struct Cell_head *window,
+				   double N, double S, double E, double W)
 {
-    double V,H;
-    double n,s,e,w;
+    double V, H;
+    double n, s, e, w;
     double shift;
 
     /* vertical height of the box that overlaps the window */
-    if ((n = window->north) > N) n = N;
-    if ((s = window->south) < S) s = S;
+    if ((n = window->north) > N)
+	n = N;
+    if ((s = window->south) < S)
+	s = S;
     V = n - s;
 
     if (V <= 0.0)
-        return 0.0;
+	return 0.0;
 
     /* global wrap-around, part 1 */
-    if (window->proj == PROJECTION_LL)
-    {
+    if (window->proj == PROJECTION_LL) {
 	shift = 0.0;
-	while (E+shift > window->east)
+	while (E + shift > window->east)
 	    shift -= 360.0;
-	while (E+shift < window->west)
+	while (E + shift < window->west)
 	    shift += 360.0;
 	E += shift;
 	W += shift;
     }
 
     /* horizontal width of the box that overlaps the window */
-    if ((e = window->east) > E) e = E;
-    if ((w = window->west) < W) w = W;
+    if ((e = window->east) > E)
+	e = E;
+    if ((w = window->west) < W)
+	w = W;
     H = e - w;
     if (H <= 0.0)
-        return 0.0;
+	return 0.0;
 
     /* global wrap-around, part 2 */
-    if (window->proj == PROJECTION_LL)
-    {
+    if (window->proj == PROJECTION_LL) {
 	shift = 0.0;
-	while (W+shift < window->west)
+	while (W + shift < window->west)
 	    shift += 360.0;
-	while (W+shift > window->east)
+	while (W + shift > window->east)
 	    shift -= 360.0;
-	if (shift)
-	{
+	if (shift) {
 	    E += shift;
 	    W += shift;
-	    if ((e = window->east) > E) e = E;
-	    if ((w = window->west) < W) w = W;
+	    if ((e = window->east) > E)
+		e = E;
+	    if ((w = window->west) < W)
+		w = W;
 	    H += e - w;
 	}
     }
 
-    return (H*V)/((N-S)*(E-W));
+    return (H * V) / ((N - S) * (E - W));
 }

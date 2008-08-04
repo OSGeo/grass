@@ -54,7 +54,8 @@ static void setParams(void)
     params.map->required = YES;
     params.map->multiple = NO;
     params.map->gisprompt = "old,grid3,3d-raster";
-    params.map->description = _("3d raster map for which to modify null values");
+    params.map->description =
+	_("3d raster map for which to modify null values");
 
     params.setNull = G_define_option();
     params.setNull->key = "setnull";
@@ -75,7 +76,8 @@ static void setParams(void)
 /*--------------------------------------------------------------------------*/
 
 static void
-getParams(char **name, d_Mask ** maskRules, int *changeNull, double *newNullVal)
+getParams(char **name, d_Mask ** maskRules, int *changeNull,
+	  double *newNullVal)
 {
     *name = params.map->answer;
     parse_vallist(params.setNull->answers, maskRules);
@@ -201,7 +203,8 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
-    module->description = _("Explicitly create the 3D NULL-value bitmap file.");
+    module->description =
+	_("Explicitly create the 3D NULL-value bitmap file.");
 
     setParams();
     if (G_parser(argc, argv))

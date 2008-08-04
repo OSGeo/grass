@@ -34,10 +34,10 @@ int G_mkdir(const char *path)
 
 int G_is_dirsep(char c)
 {
-    if( c == GRASS_DIRSEP || c == HOST_DIRSEP )
-        return 1;
+    if (c == GRASS_DIRSEP || c == HOST_DIRSEP)
+	return 1;
     else
-        return 0;
+	return 0;
 }
 
 /**
@@ -51,16 +51,16 @@ int G_is_dirsep(char c)
 
 int G_is_absolute_path(const char *path)
 {
-    if ( G_is_dirsep(path[0])
-#ifdef __MINGW32__	
-	|| ( isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]) )
+    if (G_is_dirsep(path[0])
+#ifdef __MINGW32__
+	|| (isalpha(path[0]) && (path[1] == ':') && G_is_dirsep(path[2]))
 #endif
-       )
-        return 1;
+	)
+	return 1;
     else
-        return 0;
+	return 0;
 }
-   
+
 /**
  * \brief Converts directory separator characters in a string to the
  *        native host separator character (/ on Unix, \ on Windows)
@@ -75,8 +75,8 @@ char *G_convert_dirseps_to_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-        if (*i == GRASS_DIRSEP)
-            *i = HOST_DIRSEP;
+	if (*i == GRASS_DIRSEP)
+	    *i = HOST_DIRSEP;
     }
 
     return path;
@@ -97,8 +97,8 @@ char *G_convert_dirseps_from_host(char *path)
     char *i;
 
     for (i = path; *i; i++) {
-        if (*i == HOST_DIRSEP)
-            *i = GRASS_DIRSEP;
+	if (*i == HOST_DIRSEP)
+	    *i = GRASS_DIRSEP;
     }
 
     return path;
@@ -140,4 +140,3 @@ int G_lstat(const char *file_name, struct stat *buf)
     return lstat(file_name, buf);
 #endif
 }
-

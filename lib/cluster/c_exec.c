@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * I_cluster_exec (C, maxclass, iterations,
@@ -19,27 +20,23 @@
  *************************************************************/
 #include <grass/cluster.h>
 
-int I_cluster_exec (
-    struct Cluster *C,int maxclass,int iterations,
-    double convergence,
-    double separation,int min_class_size,
-    int (*checkpoint)(),
-    int *interrupted)
+int I_cluster_exec(struct Cluster *C, int maxclass, int iterations,
+		   double convergence,
+		   double separation, int min_class_size,
+		   int (*checkpoint) (), int *interrupted)
 {
     int changes;
 
-/* set interrupted to false */
+    /* set interrupted to false */
     *interrupted = 0;
 
-/* check for valid inputs */
-    if (C->npoints < 2)
-    {
-	fprintf (stderr, "cluster: not enough data points (%d)\n",
-	    C->npoints);
+    /* check for valid inputs */
+    if (C->npoints < 2) {
+	fprintf(stderr, "cluster: not enough data points (%d)\n", C->npoints);
 	return 1;
     }
 
-/* check other parms */
+    /* check other parms */
     if (maxclass < 0)
 	maxclass = 1;
     C->nclasses = maxclass;
@@ -57,43 +54,45 @@ int I_cluster_exec (
 	separation = 0.5;
 
 
-/* allocate memory */
+    /* allocate memory */
     if (!I_cluster_exec_allocate(C))
 	return -1;
 
 
-/* generate class means */
-    I_cluster_means (C);
+    /* generate class means */
+    I_cluster_means(C);
     if (checkpoint)
-    	(*checkpoint) (C,1);
+	(*checkpoint) (C, 1);
 
-/* now assign points to nearest class */
-    I_cluster_assign (C,interrupted);
-    if (*interrupted) return -2;
+    /* now assign points to nearest class */
+    I_cluster_assign(C, interrupted);
+    if (*interrupted)
+	return -2;
     I_cluster_sum2(C);
     if (checkpoint)
-    	(*checkpoint) (C,2);
+	(*checkpoint) (C, 2);
 
-/* get rid of empty classes now */
-    I_cluster_reclass (C,1);
+    /* get rid of empty classes now */
+    I_cluster_reclass(C, 1);
 
-    for (C->iteration = 1; ; C->iteration++)
-    {
-	if (*interrupted) return -2;
+    for (C->iteration = 1;; C->iteration++) {
+	if (*interrupted)
+	    return -2;
 
 	changes = 0;
 
-/* re-assign points to nearest class */
+	/* re-assign points to nearest class */
 
-	changes = I_cluster_reassign (C,interrupted);
-	if (*interrupted) return -2;
+	changes = I_cluster_reassign(C, interrupted);
+	if (*interrupted)
+	    return -2;
 
-/* if too many points have changed class, re-assign points */
-	C->percent_stable = (C->npoints-changes) * 100.0;
-	C->percent_stable /= (double) C->npoints;
+	/* if too many points have changed class, re-assign points */
+	C->percent_stable = (C->npoints - changes) * 100.0;
+	C->percent_stable /= (double)C->npoints;
 
 	if (checkpoint)
-	    (*checkpoint) (C,3);
+	    (*checkpoint) (C, 3);
 
 	if (C->iteration >= iterations)
 	    break;
@@ -101,23 +100,23 @@ int I_cluster_exec (
 	if (C->percent_stable < convergence)
 	    continue;
 
-/* otherwise merge non-distinct classes */
+	/* otherwise merge non-distinct classes */
 
-	if (I_cluster_distinct (C,separation))
+	if (I_cluster_distinct(C, separation))
 	    break;
 
 	if (checkpoint)
-	    (*checkpoint) (C,4);
+	    (*checkpoint) (C, 4);
 
-	I_cluster_merge (C) ;
+	I_cluster_merge(C);
     }
 
-/* get rid of small classes */
-    I_cluster_reclass (C,min_class_size);
+    /* get rid of small classes */
+    I_cluster_reclass(C, min_class_size);
     I_cluster_sum2(C);
 
-/* compute the resulting signatures */
-    I_cluster_signatures (C);
+    /* compute the resulting signatures */
+    I_cluster_signatures(C);
 
 
     return 0;

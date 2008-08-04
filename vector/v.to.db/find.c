@@ -3,13 +3,12 @@
 #include  "global.h"
 
 /* returns index to array of values, inserts new if necessary */
-int
-find_cat (int cat)
+int find_cat(int cat)
 {
     int i;
 
-    for (i=0;i<vstat.rcat;i++)    
-	if (Values[i].cat == cat) 
+    for (i = 0; i < vstat.rcat; i++)
+	if (Values[i].cat == cat)
 	    return i;
 
     /* Not found -> add new */
@@ -24,7 +23,6 @@ find_cat (int cat)
     Values[vstat.rcat].nqcats = 0;
     Values[vstat.rcat].aqcats = 0;
     vstat.rcat++;
-    
-    return (vstat.rcat-1);
-}
 
+    return (vstat.rcat - 1);
+}

@@ -1,7 +1,8 @@
 struct signalflag
 {
-	int interrupt;
+    int interrupt;
 };
+
 #ifdef SIG_MAIN
 struct signalflag signalflag;
 #else

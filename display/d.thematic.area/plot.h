@@ -1,8 +1,9 @@
 /* TODO: should use 24bit instead of 16 colors, maybe implement
    predefined color tables? */
-struct rgb_color {
-        unsigned char R, G, B;
-       };
+struct rgb_color
+{
+    unsigned char R, G, B;
+};
 
 extern int palette_ncolors;
 extern struct rgb_color palette[16];

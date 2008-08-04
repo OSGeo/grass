@@ -18,8 +18,7 @@
  *  \return int
  */
 
-int 
-datetime_is_positive (const DateTime *dt)
+int datetime_is_positive(const DateTime * dt)
 {
     return dt->positive != 0;
 }
@@ -35,8 +34,7 @@ datetime_is_positive (const DateTime *dt)
  *  \return int
  */
 
-int 
-datetime_is_negative (const DateTime *dt)
+int datetime_is_negative(const DateTime * dt)
 {
     return dt->positive == 0;
 }
@@ -51,8 +49,7 @@ datetime_is_negative (const DateTime *dt)
  *  \return void
  */
 
-void 
-datetime_set_positive (DateTime *dt)
+void datetime_set_positive(DateTime * dt)
 {
     dt->positive = 1;
 }
@@ -67,8 +64,7 @@ datetime_set_positive (DateTime *dt)
  *  \return void
  */
 
-void 
-datetime_set_negative (DateTime *dt)
+void datetime_set_negative(DateTime * dt)
 {
     dt->positive = 0;
 }
@@ -81,8 +77,7 @@ datetime_set_negative (DateTime *dt)
  *  \return void
  */
 
-void 
-datetime_invert_sign (DateTime *dt)
+void datetime_invert_sign(DateTime * dt)
 {
     dt->positive = !dt->positive;
 }

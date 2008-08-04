@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *  G_read_range (name, mapset, range)
@@ -77,7 +78,7 @@
  **********************************************************************/
 
 #include <unistd.h>
-#include <rpc/types.h> /* need this for sgi */
+#include <rpc/types.h>		/* need this for sgi */
 #include <rpc/xdr.h>
 #include "G.h"
 #include <grass/glocale.h>
@@ -85,12 +86,13 @@
 #define DEFAULT_CELL_MAX 255
 
 /*-------------------------------------------------------------------------*/
+
 /*-------------------------------------------------------------------------*/
 
 /* range functions for type "Range" */
 
 /*-------------------------------------------------------------------------*/
-int G__remove_fp_range (const char *name)
+int G__remove_fp_range(const char *name)
 {
     G_remove_misc("cell_misc", "f_range", name);
 
@@ -107,10 +109,10 @@ int G__remove_fp_range (const char *name)
  *  \return int
  */
 
-int G_construct_default_range ( struct Range *range)
+int G_construct_default_range(struct Range *range)
 {
-    G_update_range (DEFAULT_CELL_MIN, range);
-    G_update_range (DEFAULT_CELL_MAX, range);
+    G_update_range(DEFAULT_CELL_MIN, range);
+    G_update_range(DEFAULT_CELL_MAX, range);
 
     return 0;
 }
@@ -134,9 +136,8 @@ int G_construct_default_range ( struct Range *range)
  *  \return int
  */
 
-int G_read_fp_range (
-    const char *name, const char *mapset,
-    struct FPRange *drange)
+int G_read_fp_range(const char *name, const char *mapset,
+		    struct FPRange *drange)
 {
     struct Range range;
     int fd;
@@ -146,54 +147,50 @@ int G_read_fp_range (
 
     G_init_fp_range(drange);
 
-    if (G_raster_map_type (name, mapset) == CELL_TYPE)
-    {
-       /* if map is integer
-           read integer range and convert it to double */
+    if (G_raster_map_type(name, mapset) == CELL_TYPE) {
+	/* if map is integer
+	   read integer range and convert it to double */
 
-       if(G_read_range (name, mapset, &range) >= 0)
-       {
-	     /* if the integer range is empty */
-	     if(range.first_time)
+	if (G_read_range(name, mapset, &range) >= 0) {
+	    /* if the integer range is empty */
+	    if (range.first_time)
 		return 2;
 
-	     G_update_fp_range ((DCELL) range.min, drange);
-	     G_update_fp_range ((DCELL) range.max, drange);
-             return 1;
-       }
-       return -1;
+	    G_update_fp_range((DCELL) range.min, drange);
+	    G_update_fp_range((DCELL) range.max, drange);
+	    return 1;
+	}
+	return -1;
     }
 
     fd = -1;
 
-    if (G_find_file2_misc ("cell_misc", "f_range", name, mapset))
-    {
-        fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
-	if (fd< 0 )
+    if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
+	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
+	if (fd < 0)
 	    goto error;
 
-        if(read(fd, xdr_buf, 2 * XDR_DOUBLE_NBYTES) != 2 * XDR_DOUBLE_NBYTES )
-	   return 2;
+	if (read(fd, xdr_buf, 2 * XDR_DOUBLE_NBYTES) != 2 * XDR_DOUBLE_NBYTES)
+	    return 2;
 
-	xdrmem_create (&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
-		       XDR_DECODE);
-        
+	xdrmem_create(&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
+		      XDR_DECODE);
+
 	/* if the f_range file exists, but empty */
-        if (! xdr_double (&xdr_str, &dcell1) ||
-            ! xdr_double (&xdr_str, &dcell2)) 
+	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2))
 	    goto error;
 
-	G_update_fp_range (dcell1, drange);
-	G_update_fp_range (dcell2, drange);
-        close(fd) ;
+	G_update_fp_range(dcell1, drange);
+	G_update_fp_range(dcell2, drange);
+	close(fd);
 	return 1;
     }
 
-error:
+  error:
     if (fd > 0)
-	close(fd) ;
-    sprintf (buf, _("can't read f_range file for [%s in %s]"), name, mapset);
-    G_warning (buf);
+	close(fd);
+    sprintf(buf, _("can't read f_range file for [%s in %s]"), name, mapset);
+    G_warning(buf);
     return -1;
 }
 
@@ -226,9 +223,7 @@ error:
  *  \return int
  */
 
-int G_read_range (
-    const char *name, const char *mapset,
-    struct Range *range)
+int G_read_range(const char *name, const char *mapset, struct Range *range)
 {
     FILE *fd;
     CELL x[4];
@@ -241,76 +236,77 @@ int G_read_range (
     fd = NULL;
 
     /* if map is not integer, read quant rules, and get limits */
-    if (G_raster_map_type (name, mapset) != CELL_TYPE)
-    {
-       DCELL dmin, dmax;
-       if(G_read_quant(name, mapset, &quant)<0)
-       {
-	   sprintf(buf, "G_read_range(): can't read quant rules for fp map %s@%s", name, mapset);
-	   G_warning(buf);
-	   return -1;
-       }
-       if(G_quant_is_truncate(&quant) || G_quant_is_round(&quant))
-       {
-	   if(G_read_fp_range(name, mapset, &drange)>=0)
-	   {
-               G_get_fp_range_min_max(&drange, &dmin, &dmax);
-	       if(G_quant_is_truncate(&quant))
-	       {
-		   x[0] = (CELL) dmin;
-		   x[1] = (CELL) dmax;
-               }
-	       else /* round */
-	       {
-		   if(dmin>0) x[0] = (CELL) (dmin + .5);
-		   else x[0] = (CELL) (dmin - .5);
-		   if(dmax>0) x[1] = (CELL) (dmax + .5);
-		   else x[1] = (CELL) (dmax - .5);
-               }
-            }
-	    else return -1;
-       }      
-       else
-           G_quant_get_limits (&quant, &dmin, &dmax, &x[0], &x[1]);
+    if (G_raster_map_type(name, mapset) != CELL_TYPE) {
+	DCELL dmin, dmax;
 
-       G_update_range (x[0], range);
-       G_update_range (x[1], range);
-       return 3;
+	if (G_read_quant(name, mapset, &quant) < 0) {
+	    sprintf(buf,
+		    "G_read_range(): can't read quant rules for fp map %s@%s",
+		    name, mapset);
+	    G_warning(buf);
+	    return -1;
+	}
+	if (G_quant_is_truncate(&quant) || G_quant_is_round(&quant)) {
+	    if (G_read_fp_range(name, mapset, &drange) >= 0) {
+		G_get_fp_range_min_max(&drange, &dmin, &dmax);
+		if (G_quant_is_truncate(&quant)) {
+		    x[0] = (CELL) dmin;
+		    x[1] = (CELL) dmax;
+		}
+		else {		/* round */
+
+		    if (dmin > 0)
+			x[0] = (CELL) (dmin + .5);
+		    else
+			x[0] = (CELL) (dmin - .5);
+		    if (dmax > 0)
+			x[1] = (CELL) (dmax + .5);
+		    else
+			x[1] = (CELL) (dmax - .5);
+		}
+	    }
+	    else
+		return -1;
+	}
+	else
+	    G_quant_get_limits(&quant, &dmin, &dmax, &x[0], &x[1]);
+
+	G_update_range(x[0], range);
+	G_update_range(x[1], range);
+	return 3;
     }
-	 
-    if (G_find_file2_misc ("cell_misc", "range", name, mapset))
-    {
-	fd = G_fopen_old_misc ("cell_misc", "range", name, mapset);
+
+    if (G_find_file2_misc("cell_misc", "range", name, mapset)) {
+	fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
 	if (!fd)
 	    goto error;
 
 	/* if range file exists but empty */
-	if (!fgets (buf, sizeof buf, fd))
-  	   return 2;
+	if (!fgets(buf, sizeof buf, fd))
+	    return 2;
 
-	x[0]=x[1]=x[2]=x[3]=0;
-	count = sscanf (buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
+	x[0] = x[1] = x[2] = x[3] = 0;
+	count = sscanf(buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
 
-        /* if wrong format */
+	/* if wrong format */
 	if (count <= 0)
 	    goto error;
 
-	for (n = 0 ; n < count ; n++)
-	{
-	   /* if count==4, the range file is old (4.1) and 0's in it
-	      have to be ignored */
-	   if(count < 4 || x[n])
-	      G_update_range ((CELL)x[n], range);
-        }
-	fclose(fd) ;
+	for (n = 0; n < count; n++) {
+	    /* if count==4, the range file is old (4.1) and 0's in it
+	       have to be ignored */
+	    if (count < 4 || x[n])
+		G_update_range((CELL) x[n], range);
+	}
+	fclose(fd);
 	return 1;
     }
 
-error:
+  error:
     if (fd)
-	fclose(fd) ;
-    sprintf (buf, _("can't read range file for [%s in %s]"), name, mapset);
-    G_warning (buf);
+	fclose(fd);
+    sprintf(buf, _("can't read range file for [%s in %s]"), name, mapset);
+    G_warning(buf);
     return -1;
 }
 
@@ -335,36 +331,34 @@ error:
  *  \return int
  */
 
-int G_write_range (const char *name, const struct Range *range)
+int G_write_range(const char *name, const struct Range *range)
 {
     FILE *fd;
     char buf[200];
 
-    if (G_raster_map_type (name, G_mapset()) != CELL_TYPE)
-    {
-       sprintf(buf, "G_write_range(): the map is floating point!");
-       goto error;
+    if (G_raster_map_type(name, G_mapset()) != CELL_TYPE) {
+	sprintf(buf, "G_write_range(): the map is floating point!");
+	goto error;
     }
-    fd = G_fopen_new_misc ("cell_misc", "range", name);
+    fd = G_fopen_new_misc("cell_misc", "range", name);
     if (!fd)
 	goto error;
 
-    if(range->first_time)
-    /* if range hasn't been updated */
+    if (range->first_time)
+	/* if range hasn't been updated */
     {
-       fclose (fd);
-       return 0;
+	fclose(fd);
+	return 0;
     }
-    fprintf (fd, "%ld %ld\n",
-	(long)range->min, (long)range->max);
-    fclose (fd);
+    fprintf(fd, "%ld %ld\n", (long)range->min, (long)range->max);
+    fclose(fd);
     return 0;
 
-error:
-    G_remove_misc("cell_misc", "range", name); /* remove the old file with this name */
-    sprintf (buf, _("can't write range file for [%s in %s]"),
-	name, G_mapset());
-    G_warning (buf);
+  error:
+    G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
+    sprintf(buf, _("can't write range file for [%s in %s]"),
+	    name, G_mapset());
+    G_warning(buf);
     return -1;
 }
 
@@ -383,39 +377,41 @@ error:
  *  \return int
  */
 
-int G_write_fp_range (const char *name, const struct FPRange *range)
+int G_write_fp_range(const char *name, const struct FPRange *range)
 {
     int fd;
     char buf[200], xdr_buf[100];
     XDR xdr_str;
 
-    sprintf (buf,"cell_misc/%s", name);
-    fd = G_open_new (buf, "f_range");
-    if (fd< 0)
+    sprintf(buf, "cell_misc/%s", name);
+    fd = G_open_new(buf, "f_range");
+    if (fd < 0)
 	goto error;
 
-    if(range->first_time)
-    /* if range hasn't been updated, write empty file meaning Nulls */
+    if (range->first_time)
+	/* if range hasn't been updated, write empty file meaning Nulls */
     {
-       close (fd);
-       return 0;
+	close(fd);
+	return 0;
     }
 
-    xdrmem_create (&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
-		   XDR_ENCODE);
+    xdrmem_create(&xdr_str, xdr_buf, (u_int) XDR_DOUBLE_NBYTES * 2,
+		  XDR_ENCODE);
 
-    if (! xdr_double (&xdr_str, (double *) &(range->min))) goto error;
-    if (! xdr_double (&xdr_str, (double *) &(range->max))) goto error;
+    if (!xdr_double(&xdr_str, (double *)&(range->min)))
+	goto error;
+    if (!xdr_double(&xdr_str, (double *)&(range->max)))
+	goto error;
 
-    write (fd, xdr_buf, XDR_DOUBLE_NBYTES * 2);
-    close (fd);
+    write(fd, xdr_buf, XDR_DOUBLE_NBYTES * 2);
+    close(fd);
     return 0;
 
-error:
-    G_remove(buf, "f_range"); /* remove the old file with this name */
-    sprintf (buf, _("can't write range file for [%s in %s]"),
-	name, G_mapset());
-    G_warning (buf);
+  error:
+    G_remove(buf, "f_range");	/* remove the old file with this name */
+    sprintf(buf, _("can't write range file for [%s in %s]"),
+	    name, G_mapset());
+    G_warning(buf);
     return -1;
 }
 
@@ -437,17 +433,15 @@ error:
  *  \return int
  */
 
-int G_update_range ( CELL cat, struct Range *range)
+int G_update_range(CELL cat, struct Range *range)
 {
-    if (!G_is_c_null_value(&cat))
-    {
-        if (range->first_time)
-        {
-           range->first_time = 0;
-           range->min = cat;
-           range->max = cat;
-           return 0;
-        }
+    if (!G_is_c_null_value(&cat)) {
+	if (range->first_time) {
+	    range->first_time = 0;
+	    range->min = cat;
+	    range->max = cat;
+	    return 0;
+	}
 	if (cat < range->min)
 	    range->min = cat;
 	if (cat > range->max)
@@ -459,17 +453,15 @@ int G_update_range ( CELL cat, struct Range *range)
 
 /*-------------------------------------------------------------------------*/
 
-int G_update_fp_range ( DCELL val, struct FPRange *range)
+int G_update_fp_range(DCELL val, struct FPRange *range)
 {
-    if (!G_is_d_null_value(&val))
-    {
-        if (range->first_time)
-        {
-           range->first_time = 0;
-           range->min = val;
-           range->max = val;
-           return 0;
-        }
+    if (!G_is_d_null_value(&val)) {
+	if (range->first_time) {
+	    range->first_time = 0;
+	    range->min = val;
+	    range->max = val;
+	    return 0;
+	}
 	if (val < range->min)
 	    range->min = val;
 	if (val > range->max)
@@ -494,34 +486,30 @@ int G_update_fp_range ( DCELL val, struct FPRange *range)
  *  \return int
  */
 
-int G_row_update_range (const CELL *cell,int n, struct Range *range)
+int G_row_update_range(const CELL * cell, int n, struct Range *range)
 {
-    G__row_update_range (cell, n, range, 0);
+    G__row_update_range(cell, n, range, 0);
 
     return 0;
 }
 
 /*-------------------------------------------------------------------------*/
 
-int G__row_update_range (
-    const CELL *cell,int n,
-    struct Range *range,
-    int ignore_zeros)
+int G__row_update_range(const CELL * cell, int n,
+			struct Range *range, int ignore_zeros)
 {
     CELL cat;
 
-    while (n-- > 0)
-    {
+    while (n-- > 0) {
 	cat = *cell++;
-        if (G_is_c_null_value(&cat) || (ignore_zeros && !cat))
-           continue;
-        if (range->first_time)
-        {
-           range->first_time = 0;
-           range->min = cat;
-           range->max = cat;
-           continue;
-        }
+	if (G_is_c_null_value(&cat) || (ignore_zeros && !cat))
+	    continue;
+	if (range->first_time) {
+	    range->first_time = 0;
+	    range->min = cat;
+	    range->max = cat;
+	    continue;
+	}
 	if (cat < range->min)
 	    range->min = cat;
 	if (cat > range->max)
@@ -533,42 +521,41 @@ int G__row_update_range (
 
 /*-------------------------------------------------------------------------*/
 
-int G_row_update_fp_range (
-    const void *rast,int n,
-    struct FPRange *range,
-    RASTER_MAP_TYPE data_type)
+int G_row_update_fp_range(const void *rast, int n,
+			  struct FPRange *range, RASTER_MAP_TYPE data_type)
 {
     DCELL val = 0L;
 
-    while (n-- > 0)
-    {
-	switch(data_type)
-	{
-	   case CELL_TYPE: val = (DCELL) *((CELL *) rast); break;
-	   case FCELL_TYPE: val = (DCELL) *((FCELL *) rast); break;
-	   case DCELL_TYPE: val = *((DCELL *) rast); break;
-        }
-
-        if (G_is_null_value(rast, data_type))
-	{
-           rast = G_incr_void_ptr(rast, G_raster_size(data_type));
-	   continue;
-        }
-        if (range->first_time)
-        {
-           range->first_time = 0;
-           range->min = val;
-           range->max = val;
-        }
-	else
-	{
-	   if (val < range->min)
-	       range->min = val;
-	   if (val > range->max)
-	       range->max = val;
+    while (n-- > 0) {
+	switch (data_type) {
+	case CELL_TYPE:
+	    val = (DCELL) * ((CELL *) rast);
+	    break;
+	case FCELL_TYPE:
+	    val = (DCELL) * ((FCELL *) rast);
+	    break;
+	case DCELL_TYPE:
+	    val = *((DCELL *) rast);
+	    break;
 	}
 
-        rast = G_incr_void_ptr(rast, G_raster_size(data_type));
+	if (G_is_null_value(rast, data_type)) {
+	    rast = G_incr_void_ptr(rast, G_raster_size(data_type));
+	    continue;
+	}
+	if (range->first_time) {
+	    range->first_time = 0;
+	    range->min = val;
+	    range->max = val;
+	}
+	else {
+	    if (val < range->min)
+		range->min = val;
+	    if (val > range->max)
+		range->max = val;
+	}
+
+	rast = G_incr_void_ptr(rast, G_raster_size(data_type));
     }
 
     return 0;
@@ -589,10 +576,10 @@ int G_row_update_fp_range (
  *  \return int
  */
 
-int G_init_range (struct Range *range)
+int G_init_range(struct Range *range)
 {
-    G_set_c_null_value(&(range->min),1);
-    G_set_c_null_value(&(range->max),1);
+    G_set_c_null_value(&(range->min), 1);
+    G_set_c_null_value(&(range->max), 1);
     range->first_time = 1;
 
     return 0;
@@ -618,26 +605,22 @@ int G_init_range (struct Range *range)
  */
 
 
-int G_get_range_min_max(
-    const struct Range *range,
-    CELL *min,CELL *max)
+int G_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
 {
-    if(range->first_time)
-    {
-       G_set_c_null_value(min,1);
-       G_set_c_null_value(max,1);
+    if (range->first_time) {
+	G_set_c_null_value(min, 1);
+	G_set_c_null_value(max, 1);
     }
-    else
-    {
-       if(G_is_c_null_value(&(range->min)))
-           G_set_c_null_value(min,1);
-       else
-           *min = range->min;
+    else {
+	if (G_is_c_null_value(&(range->min)))
+	    G_set_c_null_value(min, 1);
+	else
+	    *min = range->min;
 
-       if(G_is_c_null_value(&(range->max)))
-	   G_set_c_null_value(max,1);
-       else
-           *max = range->max;
+	if (G_is_c_null_value(&(range->max)))
+	    G_set_c_null_value(max, 1);
+	else
+	    *max = range->max;
     }
 
     return 0;
@@ -656,11 +639,11 @@ int G_get_range_min_max(
  *  \return int
  */
 
-int G_init_fp_range ( struct FPRange *range)
+int G_init_fp_range(struct FPRange *range)
 {
-   G_set_d_null_value(&(range->min),1);
-   G_set_d_null_value(&(range->max),1);
-   range->first_time = 1;
+    G_set_d_null_value(&(range->min), 1);
+    G_set_d_null_value(&(range->max), 1);
+    range->first_time = 1;
 
     return 0;
 }
@@ -681,28 +664,24 @@ int G_init_fp_range ( struct FPRange *range)
  *  \return int
  */
 
-int G_get_fp_range_min_max(
-    const struct FPRange *range,
-    DCELL *min,DCELL *max)
+int G_get_fp_range_min_max(const struct FPRange *range,
+			   DCELL * min, DCELL * max)
 {
-    if(range->first_time)
-    {
-       G_set_d_null_value(min,1);
-       G_set_d_null_value(max,1);
+    if (range->first_time) {
+	G_set_d_null_value(min, 1);
+	G_set_d_null_value(max, 1);
     }
-    else
-    {
-       if(G_is_d_null_value(&(range->min)))
-           G_set_d_null_value(min,1);
-       else
-           *min = range->min;
+    else {
+	if (G_is_d_null_value(&(range->min)))
+	    G_set_d_null_value(min, 1);
+	else
+	    *min = range->min;
 
-       if(G_is_d_null_value(&(range->max)))
-	   G_set_d_null_value(max,1);
-       else
-           *max = range->max;
+	if (G_is_d_null_value(&(range->max)))
+	    G_set_d_null_value(max, 1);
+	else
+	    *max = range->max;
     }
 
     return 0;
 }
-

@@ -1,3 +1,4 @@
+
 /**
  * \file area.c
  *
@@ -26,7 +27,7 @@ static double units_to_meters_squared = 0.0;
 static int next_row;
 static double north_value;
 static double north;
-static double (*darea0)(double);
+static double (*darea0) (double);
 
 
 /**
@@ -52,22 +53,19 @@ int G_begin_cell_area_calculations(void)
     double factor;
 
     G_get_set_window(&window);
-    switch(projection = window.proj)
-    {
+    switch (projection = window.proj) {
     case PROJECTION_LL:
-	G_get_ellipsoid_parameters (&a, &e2);
-	if (e2)
-	{
-	    G_begin_zone_area_on_ellipsoid (a, e2, window.ew_res/360.0);
+	G_get_ellipsoid_parameters(&a, &e2);
+	if (e2) {
+	    G_begin_zone_area_on_ellipsoid(a, e2, window.ew_res / 360.0);
 	    darea0 = G_darea0_on_ellipsoid;
 	}
-	else
-	{
-	    G_begin_zone_area_on_sphere (a, window.ew_res/360.0);
+	else {
+	    G_begin_zone_area_on_sphere(a, window.ew_res / 360.0);
 	    darea0 = G_darea0_on_sphere;
 	}
 	next_row = 0;
-	north_value = darea0 (north = window.north);
+	north_value = darea0(north = window.north);
 	return 2;
     default:
 	square_meters = window.ns_res * window.ew_res;
@@ -90,8 +88,7 @@ int G_begin_cell_area_calculations(void)
  * \return double
  */
 
-double
-G_area_of_cell_at_row (int row)
+double G_area_of_cell_at_row(int row)
 {
     register double south_value;
     register double cell_area;
@@ -100,12 +97,12 @@ G_area_of_cell_at_row (int row)
 	return square_meters;
 
     if (row != next_row)
-	north_value = darea0 (north = window.north - row * window.ns_res);
+	north_value = darea0(north = window.north - row * window.ns_res);
 
-    south_value = darea0 (north -= window.ns_res);
+    south_value = darea0(north -= window.ns_res);
     cell_area = north_value - south_value;
 
-    next_row    = row+1;
+    next_row = row + 1;
     north_value = south_value;
 
     return cell_area;
@@ -128,16 +125,14 @@ int G_begin_polygon_area_calculations(void)
     double a, e2;
     double factor;
 
-    if ((projection = G_projection()) == PROJECTION_LL)
-    {
-	G_get_ellipsoid_parameters (&a, &e2);
-	G_begin_ellipsoid_polygon_area (a, e2);
+    if ((projection = G_projection()) == PROJECTION_LL) {
+	G_get_ellipsoid_parameters(&a, &e2);
+	G_begin_ellipsoid_polygon_area(a, e2);
 	return 2;
     }
     factor = G_database_units_to_meters_factor();
-    if (factor > 0.0)
-    {
-	units_to_meters_squared = factor *factor;
+    if (factor > 0.0) {
+	units_to_meters_squared = factor * factor;
 	return 1;
     }
     units_to_meters_squared = 1.0;
@@ -172,9 +167,9 @@ double G_area_of_polygon(const double *x, const double *y, int n)
     double area;
 
     if (projection == PROJECTION_LL)
-	area = G_ellipsoid_polygon_area(x,y,n);
+	area = G_ellipsoid_polygon_area(x, y, n);
     else
-    	area = G_planimetric_polygon_area(x,y,n) * units_to_meters_squared;
+	area = G_planimetric_polygon_area(x, y, n) * units_to_meters_squared;
 
     return area;
 }

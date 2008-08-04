@@ -13,7 +13,7 @@
  * but: the large, the slower - wants a dynamic implementation - TODO
  * possible solution: ratio local elevation range/camera height = 0.003
  */
- 
+
 #define TIE_ROW_DIST 128
 #define TIE_COL_DIST 128
 
@@ -33,8 +33,8 @@
 GLOBAL FILE *Bugsr;
 #endif
 
-GLOBAL ROWCOL row_map[NROWS][NCOLS] ;
-GLOBAL ROWCOL col_map[NROWS][NCOLS] ;
+GLOBAL ROWCOL row_map[NROWS][NCOLS];
+GLOBAL ROWCOL col_map[NROWS][NCOLS];
 GLOBAL ROWCOL row_min[NROWS];
 GLOBAL ROWCOL row_max[NROWS];
 GLOBAL ROWCOL row_left[NROWS];
@@ -58,7 +58,7 @@ GLOBAL struct Ortho_Control_Points temp_points;
 GLOBAL struct Ortho_Camera_File_Ref cam_info;
 
 GLOBAL struct Cell_head elevhd;
-GLOBAL DCELL *elevbuf; 
+GLOBAL DCELL *elevbuf;
 GLOBAL int elevfd;
 GLOBAL char *elev_layer;
 GLOBAL char *mapset_elev;

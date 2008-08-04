@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -20,8 +21,8 @@
 
 #include <grass/gis.h>
 
-#define NFILES 10  /* maximum number of layers */
-#define SHIFT 6 /* 2^SHIFT cats per node */
+#define NFILES 10		/* maximum number of layers */
+#define SHIFT 6			/* 2^SHIFT cats per node */
 #define INCR 16
 
 #define FOUND 0
@@ -38,7 +39,7 @@
 GLOBAL int nfiles;
 GLOBAL int nrows;
 GLOBAL int ncols;
-GLOBAL int NCATS INIT(1<<SHIFT);
+GLOBAL int NCATS INIT(1 << SHIFT);
 GLOBAL char *names[NFILES];
 GLOBAL struct Categories labels[NFILES];
 
@@ -50,9 +51,9 @@ typedef struct
     int right;
 } NODE;
 
-GLOBAL NODE *tree; /* tree of values */
-GLOBAL int tlen;   /* allocate tree size */
-GLOBAL int N;      /* number of actual nodes in tree */
+GLOBAL NODE *tree;		/* tree of values */
+GLOBAL int tlen;		/* allocate tree size */
+GLOBAL int N;			/* number of actual nodes in tree */
 
 typedef struct
 {

@@ -7,7 +7,7 @@ static int ok;
 
 struct box
 {
-    int top, bottom, left,right;
+    int top, bottom, left, right;
 };
 
 #ifndef GLOBALCAM
@@ -26,12 +26,12 @@ GLOBALCAM char fid_id[5];
 GLOBALCAM double *Xf, *Yf;
 GLOBALCAM int pager;
 GLOBALCAM int xmax, ymax, gmax;
-GLOBALCAM    int color;
-GLOBALCAM    int tsize;
-GLOBALCAM    int cury;
-GLOBALCAM    int len;
-GLOBALCAM    int line;
-GLOBALCAM    int top, bottom, left, right, width, middle, nums;
+GLOBALCAM int color;
+GLOBALCAM int tsize;
+GLOBALCAM int cury;
+GLOBALCAM int len;
+GLOBALCAM int line;
+GLOBALCAM int top, bottom, left, right, width, middle, nums;
 
 #define FMT0(buf,n) \
 	sprintf (buf, "%3d ", n)
@@ -53,17 +53,5 @@ GLOBALCAM    int top, bottom, left, right, width, middle, nums;
 	sprintf (buf, "number of fid.  %5d", num_fid)
 #define LHEAD1 "          CAMERA REFERENCE FILE               "
 #define LHEAD3 "                                              "
-#define LHEAD4 "        ID         Photo X         Photo Y    " 
+#define LHEAD4 "        ID         Photo X         Photo Y    "
 #define LHEAD2 "----------------------------------------------"
-
-
-
-
-
-
-
-
-
-
-
-

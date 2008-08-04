@@ -1,3 +1,4 @@
+
 /********************************************************************
  * code in this file is designed to send raster data to the graphics
  * driver. It handles raster->color lookup translation, as well as
@@ -31,7 +32,7 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 
-int D__overlay_mode = 0; /* external for now, but to be fixed later */
+int D__overlay_mode = 0;	/* external for now, but to be fixed later */
 
 
 /*!
@@ -46,9 +47,9 @@ int D__overlay_mode = 0; /* external for now, but to be fixed later */
  *  \return int
  */
 
-int D_set_overlay_mode (int n)
+int D_set_overlay_mode(int n)
 {
-    D__overlay_mode = (n!=0);
+    D__overlay_mode = (n != 0);
 
     return 0;
 }
@@ -64,16 +65,13 @@ int D_set_overlay_mode (int n)
  *    1 ok
  */
 
-int D_color (
-    CELL cat,
-    struct Colors *colors)
+int D_color(CELL cat, struct Colors *colors)
 {
-    return D_c_color (cat, colors);
+    return D_c_color(cat, colors);
 }
 
 /* select color for line drawing */
-int D_c_color ( CELL cat,
-    struct Colors *colors)
+int D_c_color(CELL cat, struct Colors *colors)
 {
     return D_color_of_type(&cat, colors, CELL_TYPE);
 }
@@ -92,8 +90,7 @@ int D_c_color ( CELL cat,
  *  \return int
  */
 
-int D_d_color (DCELL val,
-    struct Colors *colors)
+int D_d_color(DCELL val, struct Colors *colors)
 {
     return D_color_of_type(&val, colors, DCELL_TYPE);
 }
@@ -112,9 +109,7 @@ int D_d_color (DCELL val,
  *  \return int
  */
 
-int D_f_color (
-    FCELL val,
-    struct Colors *colors)
+int D_f_color(FCELL val, struct Colors *colors)
 {
     return D_color_of_type(&val, colors, FCELL_TYPE);
 }
@@ -137,14 +132,12 @@ int D_f_color (
  */
 
 int D_color_of_type(const void *raster,
-    struct Colors *colors,
-    RASTER_MAP_TYPE data_type)
+		    struct Colors *colors, RASTER_MAP_TYPE data_type)
 {
     int r, g, b;
 
     G_get_raster_color(raster, &r, &g, &b, colors, data_type);
-    R_RGB_color((unsigned char) r, (unsigned char) g, (unsigned char) b);
+    R_RGB_color((unsigned char)r, (unsigned char)g, (unsigned char)b);
 
     return 0;
 }
-

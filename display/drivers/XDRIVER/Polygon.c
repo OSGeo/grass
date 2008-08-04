@@ -8,40 +8,37 @@
 
 void XD_Polygon_abs(const int *xarray, const int *yarray, int number)
 {
-	XPoint *xpnts = alloc_xpoints(number);
-	int i;
+    XPoint *xpnts = alloc_xpoints(number);
+    int i;
 
-	if (number < 1)
-		return;
+    if (number < 1)
+	return;
 
-	for (i = 0; i < number; i++)
-	{
-		xpnts[i].x = (short) xarray[i];
-		xpnts[i].y = (short) yarray[i];
-	}
+    for (i = 0; i < number; i++) {
+	xpnts[i].x = (short)xarray[i];
+	xpnts[i].y = (short)yarray[i];
+    }
 
-	XFillPolygon(dpy, bkupmap, gc, xpnts, number, Complex, CoordModeOrigin);
-	needs_flush = 1;
+    XFillPolygon(dpy, bkupmap, gc, xpnts, number, Complex, CoordModeOrigin);
+    needs_flush = 1;
 }
 
 void XD_Polygon_rel(const int *xarray, const int *yarray, int number)
 {
-	XPoint *xpnts = alloc_xpoints(number);
-	int i;
+    XPoint *xpnts = alloc_xpoints(number);
+    int i;
 
-	if (number < 1)
-		return;
+    if (number < 1)
+	return;
 
-	xpnts[0].x = (short) (xarray[0] + cur_x);
-	xpnts[0].y = (short) (yarray[0] + cur_y);
+    xpnts[0].x = (short)(xarray[0] + cur_x);
+    xpnts[0].y = (short)(yarray[0] + cur_y);
 
-	for (i = 1; i < number; i++)
-	{
-		xpnts[i].x = (short) xarray[i];
-		xpnts[i].y = (short) yarray[i];
-	}
+    for (i = 1; i < number; i++) {
+	xpnts[i].x = (short)xarray[i];
+	xpnts[i].y = (short)yarray[i];
+    }
 
-	XFillPolygon(dpy, bkupmap, gc, xpnts, number, Complex, CoordModePrevious);
-	needs_flush = 1;
+    XFillPolygon(dpy, bkupmap, gc, xpnts, number, Complex, CoordModePrevious);
+    needs_flush = 1;
 }
-

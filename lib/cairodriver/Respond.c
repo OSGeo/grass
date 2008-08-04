@@ -3,7 +3,6 @@
 
 void Cairo_Respond(void)
 {
-	if (auto_write)
-		write_image();
+    if (auto_write)
+	write_image();
 }
-

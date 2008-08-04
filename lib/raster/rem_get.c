@@ -23,16 +23,16 @@
  *  \return ~
  */
 
-void REM_get_location_with_box(int cx,int cy, int *wx, int *wy, int *button)
+void REM_get_location_with_box(int cx, int cy, int *wx, int *wy, int *button)
 {
-	_send_ident(GET_LOCATION_WITH_BOX) ;
-	_send_int(&cx) ;
-	_send_int(&cy) ;
-	_send_int(wx) ;
-	_send_int(wy) ;
-	_get_int(wx) ;
-	_get_int(wy) ;
-	_get_int(button) ;
+    _send_ident(GET_LOCATION_WITH_BOX);
+    _send_int(&cx);
+    _send_int(&cy);
+    _send_int(wx);
+    _send_int(wy);
+    _get_int(wx);
+    _get_int(wy);
+    _get_int(button);
 }
 
 /*!
@@ -55,14 +55,14 @@ void REM_get_location_with_box(int cx,int cy, int *wx, int *wy, int *button)
 
 void REM_get_location_with_line(int cx, int cy, int *wx, int *wy, int *button)
 {
-	_send_ident(GET_LOCATION_WITH_LINE) ;
-	_send_int(&cx) ;
-	_send_int(&cy) ;
-	_send_int(wx) ;
-	_send_int(wy) ;
-	_get_int(wx) ;
-	_get_int(wy) ;
-	_get_int(button) ;
+    _send_ident(GET_LOCATION_WITH_LINE);
+    _send_int(&cx);
+    _send_int(&cy);
+    _send_int(wx);
+    _send_int(wy);
+    _get_int(wx);
+    _get_int(wy);
+    _get_int(button);
 }
 
 /*!
@@ -84,16 +84,15 @@ void REM_get_location_with_line(int cx, int cy, int *wx, int *wy, int *button)
 
 void REM_get_location_with_pointer(int *wx, int *wy, int *button)
 {
-	*button = 0; /* ?, how button = -1 is used (see driver) */
+    *button = 0;		/* ?, how button = -1 is used (see driver) */
 
-	_send_ident(GET_LOCATION_WITH_POINTER) ;
-	_send_int(wx) ;
-	_send_int(wy) ;
-	_send_int(button) ;
-	_get_int(wx) ;
-	_get_int(wy) ;
-	_get_int(button) ;
+    _send_ident(GET_LOCATION_WITH_POINTER);
+    _send_int(wx);
+    _send_int(wy);
+    _send_int(button);
+    _get_int(wx);
+    _get_int(wy);
+    _get_int(button);
 }
 
 #endif /* HAVE_SOCKET */
-

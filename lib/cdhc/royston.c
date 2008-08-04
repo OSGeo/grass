@@ -10,62 +10,56 @@
  * needs as181.c as177.c as241.c dcmp.c as66.c 
  */
 
-double *royston (double *x, int n)
+double *royston(double *x, int n)
 {
-  static double y[2];
-  double *a, eps, w, pw, mean=0, ssq=0, *xcopy;
-  int i, ifault, n2; 
+    static double y[2];
+    double *a, eps, w, pw, mean = 0, ssq = 0, *xcopy;
+    int i, ifault, n2;
 
-  n2=(int)floor((double)n/2);
+    n2 = (int)floor((double)n / 2);
 
 #ifndef lint
-  if ((a = (double *) malloc(n2*sizeof(double)))==NULL)
-  {
-      fprintf (stderr, "Memory error in royston\n");
-      exit (EXIT_FAILURE);
-  }
-  if ((xcopy = (double *) malloc (n * sizeof (double))) == NULL)
-  {
-      fprintf (stderr, "Memory error in royston\n");
-      exit (EXIT_FAILURE);
-  }
+    if ((a = (double *)malloc(n2 * sizeof(double))) == NULL) {
+	fprintf(stderr, "Memory error in royston\n");
+	exit(EXIT_FAILURE);
+    }
+    if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
+	fprintf(stderr, "Memory error in royston\n");
+	exit(EXIT_FAILURE);
+    }
 #endif /* lint */
 
-  for (i = 0; i < n; ++i)
-  {
-    xcopy[i] = x[i];
-    mean += x[i];
-  }
-  mean /=n ;
+    for (i = 0; i < n; ++i) {
+	xcopy[i] = x[i];
+	mean += x[i];
+    }
+    mean /= n;
 
-  qsort (xcopy, n, sizeof (double), dcmp);
+    qsort(xcopy, n, sizeof(double), dcmp);
 
-  for (i = 0; i < n; ++i)
-    ssq += (mean-x[i])*(mean-x[i]);
+    for (i = 0; i < n; ++i)
+	ssq += (mean - x[i]) * (mean - x[i]);
 
-  wcoef (a, n, n2, &eps, &ifault);
+    wcoef(a, n, n2, &eps, &ifault);
 
-  if (ifault == 0)
-    wext (xcopy, n, ssq, a, n2, eps, &w, &pw, &ifault);
-  else
-  {
-    fprintf (stderr, "Error in wcoef()\n");
-    return (double *) NULL;
-  }
+    if (ifault == 0)
+	wext(xcopy, n, ssq, a, n2, eps, &w, &pw, &ifault);
+    else {
+	fprintf(stderr, "Error in wcoef()\n");
+	return (double *)NULL;
+    }
 
-  if (ifault==0)
-  {
-    y[0]=w;
-    y[1]=pw;
-  }
-  else
-  {
-    fprintf (stderr, "Error in wcoef()\n");
-    return (double *) NULL;
-  }
+    if (ifault == 0) {
+	y[0] = w;
+	y[1] = pw;
+    }
+    else {
+	fprintf(stderr, "Error in wcoef()\n");
+	return (double *)NULL;
+    }
 
-  free(a);
-  free(xcopy);
+    free(a);
+    free(xcopy);
 
-  return y;
+    return y;
 }

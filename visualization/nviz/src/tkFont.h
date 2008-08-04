@@ -1,9 +1,9 @@
 /*
  * tkFont.h --
  *
- *	Declarations for interfaces between the generic and platform-
- *	specific parts of the font package.  This information is not
- *	visible outside of the font package.
+ *      Declarations for interfaces between the generic and platform-
+ *      specific parts of the font package.  This information is not
+ *      visible outside of the font package.
  *
  * Copyright (c) 1996 Sun Microsystems, Inc.
  *
@@ -27,7 +27,8 @@
  * attributes gotten when the font was instantiated.
  */
 
-typedef struct TkFontAttributes {
+typedef struct TkFontAttributes
+{
     Tk_Uid family;		/* Font family. The most important field. */
     int pointsize;		/* Pointsize of font, 0 for default size, or
 				 * negative number meaning pixel size. */
@@ -54,7 +55,7 @@ typedef struct TkFontAttributes {
  * Possible values for the "slant" field in a TkFontAttributes structure.
  */
 
-#define TK_FS_ROMAN	0	
+#define TK_FS_ROMAN	0
 #define TK_FS_ITALIC	1
 #define TK_FS_OBLIQUE	2	/* This value is only used when parsing X
 				 * font names to determine the closest
@@ -71,9 +72,10 @@ typedef struct TkFontAttributes {
  * font.  The metrics are the physical properties of the font itself.
  */
 
-typedef struct TkFontMetrics {
-    int	ascent;			/* From baseline to top of font. */
-    int	descent;		/* From baseline to bottom of font. */
+typedef struct TkFontMetrics
+{
+    int ascent;			/* From baseline to top of font. */
+    int descent;		/* From baseline to bottom of font. */
     int maxWidth;		/* Width of widest character in font. */
     int fixed;			/* Non-zero if this is a fixed-width font,
 				 * 0 otherwise. */
@@ -86,20 +88,21 @@ typedef struct TkFontMetrics {
  * specific stuff after that.
  */
 
-typedef struct TkFont {
+typedef struct TkFont
+{
     /*
      * Fields used and maintained exclusively by generic code.
      */
 
     int refCount;		/* Number of users of the TkFont. */
-    Tcl_HashEntry *cacheHashPtr;/* Entry in font cache for this structure,
-				 * used when deleting it. */
-    Tcl_HashEntry *namedHashPtr;/* Pointer to hash table entry that
-				 * corresponds to the named font that the
-				 * tkfont was based on, or NULL if the tkfont
-				 * was not based on a named font. */
+    Tcl_HashEntry *cacheHashPtr;	/* Entry in font cache for this structure,
+					 * used when deleting it. */
+    Tcl_HashEntry *namedHashPtr;	/* Pointer to hash table entry that
+					 * corresponds to the named font that the
+					 * tkfont was based on, or NULL if the tkfont
+					 * was not based on a named font. */
     int tabWidth;		/* Width of tabs in this font (pixels). */
-    int	underlinePos;		/* Offset from baseline to origin of
+    int underlinePos;		/* Offset from baseline to origin of
 				 * underline bar (used for drawing underlines
 				 * on a non-underlined font). */
     int underlineHeight;	/* Height of underline bar (used for drawing
@@ -129,7 +132,8 @@ typedef struct TkFont {
  * when attempting to find the closest matching font.
  */
 
-typedef struct TkXLFDAttributes {
+typedef struct TkXLFDAttributes
+{
     TkFontAttributes fa;	/* Standard set of font attributes. */
     Tk_Uid foundry;		/* The foundry of the font. */
     int slant;			/* The tristate value for the slant, which
@@ -188,33 +192,33 @@ typedef struct TkXLFDAttributes {
  * Exported from generic code to platform-specific code.
  */
 
-EXTERN int		TkCreateNamedFont _ANSI_ARGS_((Tcl_Interp *interp,
-			    Tk_Window tkwin, CONST char *name,
-			    TkFontAttributes *faPtr));
-EXTERN void		TkInitFontAttributes _ANSI_ARGS_((
-			    TkFontAttributes *faPtr));
-EXTERN int		TkParseXLFD _ANSI_ARGS_((CONST char *string, 
-			    TkXLFDAttributes *xaPtr));
+EXTERN int TkCreateNamedFont _ANSI_ARGS_((Tcl_Interp * interp,
+					  Tk_Window tkwin, CONST char *name,
+					  TkFontAttributes * faPtr));
+EXTERN void TkInitFontAttributes _ANSI_ARGS_((TkFontAttributes * faPtr));
+EXTERN int TkParseXLFD _ANSI_ARGS_((CONST char *string,
+				    TkXLFDAttributes * xaPtr));
 
 /*
  * Common APIs exported to tkFont.c from all platform-specific
  * implementations. 
  */
 
-EXTERN void		TkpDeleteFont _ANSI_ARGS_((TkFont *tkFontPtr));
-EXTERN TkFont *		TkpGetFontFromAttributes _ANSI_ARGS_((
-			    TkFont *tkFontPtr, Tk_Window tkwin,
-			    CONST TkFontAttributes *faPtr));
-EXTERN void		TkpGetFontFamilies _ANSI_ARGS_((Tcl_Interp *interp,
-			    Tk_Window tkwin));
-EXTERN TkFont *		TkpGetNativeFont _ANSI_ARGS_((Tk_Window tkwin,
-			    CONST char *name));
+EXTERN void TkpDeleteFont _ANSI_ARGS_((TkFont * tkFontPtr));
+EXTERN TkFont *TkpGetFontFromAttributes
+_ANSI_ARGS_((TkFont * tkFontPtr, Tk_Window tkwin,
+	     CONST TkFontAttributes * faPtr));
+EXTERN void TkpGetFontFamilies
+_ANSI_ARGS_((Tcl_Interp * interp, Tk_Window tkwin));
+EXTERN TkFont *TkpGetNativeFont
+_ANSI_ARGS_((Tk_Window tkwin, CONST char *name));
 
 /* CYGNUS LOCAL */
-EXTERN void		TkUpdateFonts _ANSI_ARGS_((Tk_Window tkwin,
-			    int (*changed) (TkFontAttributes *faPtr)));
+EXTERN void TkUpdateFonts _ANSI_ARGS_((Tk_Window tkwin,
+				       int (*changed) (TkFontAttributes *
+						       faPtr)));
 
 # undef TCL_STORAGE_CLASS
 # define TCL_STORAGE_CLASS DLLIMPORT
 
-#endif	/* _TKFONT */
+#endif /* _TKFONT */

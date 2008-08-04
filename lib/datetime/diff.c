@@ -10,35 +10,35 @@
 
 /*************************************************************/
 /*
-	This performs the formula:   result = a - b;
+   This performs the formula:   result = a - b;
 
-	both a and b must be absolute.
-	result will be relative
-	If a is "earlier" than b, then result should be set negative.
+   both a and b must be absolute.
+   result will be relative
+   If a is "earlier" than b, then result should be set negative.
 
-	b must be no more "precise" than a.
-	   (a copy of b is "extended" to the precision of a)
+   b must be no more "precise" than a.
+   (a copy of b is "extended" to the precision of a)
 
-	       datetime_copy (tb, b)
-	       datetime_reset_from_to (tb, b.from, a.to, a.fracsec))
+   datetime_copy (tb, b)
+   datetime_reset_from_to (tb, b.from, a.to, a.fracsec))
 
 
-	If result.to == SECOND, then result.fracsec is a.fracsec
+   If result.to == SECOND, then result.fracsec is a.fracsec
 
-	result will have the following from/to based on a.to:
+   result will have the following from/to based on a.to:
 
-			     result
-		a.to      from    to
-		YEAR      YEAR    YEAR
-		MONTH     YEAR    MONTH
-		DAY       DAY     DAY
-		HOUR      DAY     HOUR
-		MINUTE    DAY     MINUTE
-		SECOND    DAY     SECOND
+   result
+   a.to      from    to
+   YEAR      YEAR    YEAR
+   MONTH     YEAR    MONTH
+   DAY       DAY     DAY
+   HOUR      DAY     HOUR
+   MINUTE    DAY     MINUTE
+   SECOND    DAY     SECOND
 
-	If either 'a' or 'b' has a timezone, both must have a timezone.
-	The difference will account for the differences in the time zones.
-*/
+   If either 'a' or 'b' has a timezone, both must have a timezone.
+   The difference will account for the differences in the time zones.
+ */
 
 static int _datetime_ymd_to_ddays(const DateTime *, double *);
 static int _datetime_compare(const DateTime *, const DateTime *);
@@ -50,25 +50,25 @@ static int _datetime_compare(const DateTime *, const DateTime *);
  * 
  * This performs the formula:   result = a - b; 
  * <ul>
-<li> both a and b must be absolute.
+ <li> both a and b must be absolute.
  * </li>
-<li> result will be relative
+ <li> result will be relative
  * </li>
-<li> If a is "earlier" than b, then result will be set negative.
+ <li> If a is "earlier" than b, then result will be set negative.
  * </li>
-<li> b must be no more "precise" than a.
+ <li> b must be no more "precise" than a.
  * (a copy of b is "extended" to the precision of a)
  * </li>
-<li> If result.to == SECOND, then result.fracsec is a.fracsec
+ <li> If result.to == SECOND, then result.fracsec is a.fracsec
  * </li>
-<li> result will have the following from/to based
+ <li> result will have the following from/to based
  * on a.to: result a.to      from    to YEAR      YEAR    YEAR MONTH     YEAR
  * MONTH DAY       DAY     DAY HOUR      DAY     HOUR MINUTE    DAY   
  * MINUTE SECOND    DAY     SECOND [LAYOUT ??? - see HTML]
  * </li>
-<li> If either 'a' or 'b' has a timezone, both must have a timezone. The
+ <li> If either 'a' or 'b' has a timezone, both must have a timezone. The
  * difference will account for the differences in the time zones.
-</li></ul>
+ </li></ul>
 
  *
  *  \param a
@@ -78,68 +78,68 @@ static int _datetime_compare(const DateTime *, const DateTime *);
  */
 
 int
-datetime_difference (const DateTime *a, const DateTime *b, DateTime *result)
+datetime_difference(const DateTime * a, const DateTime * b, DateTime * result)
 {
     DateTime tb, ta, *early, *late;
     int compare, tzmin;
 
     /* if not both absolute, return error */
-    
-    datetime_copy (&tb, b);
-    datetime_change_from_to (&tb, DATETIME_YEAR, a->to, a->fracsec);
 
-    datetime_copy (&ta, a);
-    if(datetime_get_timezone (&ta, &tzmin) == 0 ||
-		datetime_get_timezone (&tb, &tzmin) == 0){
-	if(datetime_get_timezone (&ta, &tzmin) == 0 &&
-		    datetime_get_timezone (&tb, &tzmin) == 0){
-	    datetime_change_to_utc (&ta);
-	    datetime_change_to_utc (&tb);
+    datetime_copy(&tb, b);
+    datetime_change_from_to(&tb, DATETIME_YEAR, a->to, a->fracsec);
+
+    datetime_copy(&ta, a);
+    if (datetime_get_timezone(&ta, &tzmin) == 0 ||
+	datetime_get_timezone(&tb, &tzmin) == 0) {
+	if (datetime_get_timezone(&ta, &tzmin) == 0 &&
+	    datetime_get_timezone(&tb, &tzmin) == 0) {
+	    datetime_change_to_utc(&ta);
+	    datetime_change_to_utc(&tb);
 	}
 	else
-	    return datetime_error (-1, 
-			       "only one opperand contains valid timezone");
+	    return datetime_error(-1,
+				  "only one opperand contains valid timezone");
     }
-    
+
     /* initialize result */
-    datetime_set_type(result, DATETIME_RELATIVE, 
-		    ta.to < DATETIME_DAY? DATETIME_YEAR: DATETIME_DAY, 
-		    ta.to, ta.fracsec);
+    datetime_set_type(result, DATETIME_RELATIVE,
+		      ta.to < DATETIME_DAY ? DATETIME_YEAR : DATETIME_DAY,
+		      ta.to, ta.fracsec);
     compare = _datetime_compare(&ta, &tb);
-    if(compare > 0){
+    if (compare > 0) {
 	early = &tb;
 	late = &ta;
 	result->positive = 1;
     }
-    else if(compare < 0){
+    else if (compare < 0) {
 	early = &ta;
 	late = &tb;
 	result->positive = 0;
     }
-    else{ /* equal */
-	return(0);
+    else {			/* equal */
+	return (0);
     }
 
     /* now the work */
-    if(datetime_in_interval_year_month (ta.to)){
+    if (datetime_in_interval_year_month(ta.to)) {
 	int dm;
 
-	if(ta.positive == tb.positive){
+	if (ta.positive == tb.positive) {
 	    /* change if we use doubles! */
 	    result->year = abs(late->year - early->year);
 	}
-	else{
+	else {
 	    result->year = late->year + early->year - 2;
 	}
 	dm = late->month - early->month;
-	if(dm >= 0)
+	if (dm >= 0)
 	    result->month = dm;
-	else{
+	else {
 	    result->year -= 1;
 	    result->month = dm + 12;
 	}
     }
-    else{
+    else {
 	DateTime erel, lrel;
 	double latedays, earlydays;
 
@@ -158,7 +158,7 @@ datetime_difference (const DateTime *a, const DateTime *b, DateTime *result)
 	lrel.hour = late->hour;
 	lrel.minute = late->minute;
 	lrel.second = late->second;
-	
+
 	datetime_invert_sign(&erel);
 	datetime_increment(&erel, &lrel);
 
@@ -171,115 +171,116 @@ datetime_difference (const DateTime *a, const DateTime *b, DateTime *result)
 	/* need carry? */
     }
 
-    return(0);
+    return (0);
 }
 
 /*************************************************************/
 /* returns 1 if a is later than b, 
-	  -1 if a is earlier than a,
-	   0 otherwise 
-*/ 
+   -1 if a is earlier than a,
+   0 otherwise 
+ */
 /* only looks at from-to fields defined by a */
 
-static int _datetime_compare(const DateTime *a, const DateTime *b)
+static int _datetime_compare(const DateTime * a, const DateTime * b)
 {
-     int i;
+    int i;
 
-    if(a->positive && !b->positive)
-	return(1);
-    else if(b->positive && !a->positive)
-	return(-1);
+    if (a->positive && !b->positive)
+	return (1);
+    else if (b->positive && !a->positive)
+	return (-1);
 
     /* same signs */
-    for(i = a->from; i <= a->to; i++){
-	switch(i){
+    for (i = a->from; i <= a->to; i++) {
+	switch (i) {
 
-	    case DATETIME_SECOND:
-		if(a->second > b->second)
-		    return(1);
-		else if(a->second < b->second)
-		    return(-1);
-		break;
+	case DATETIME_SECOND:
+	    if (a->second > b->second)
+		return (1);
+	    else if (a->second < b->second)
+		return (-1);
+	    break;
 
-	    case DATETIME_MINUTE:
-		if(a->minute > b->minute)
-		    return(1);
-		else if(a->minute < b->minute)
-		    return(-1);
-		break;
+	case DATETIME_MINUTE:
+	    if (a->minute > b->minute)
+		return (1);
+	    else if (a->minute < b->minute)
+		return (-1);
+	    break;
 
-	    case DATETIME_HOUR:
-		if(a->hour > b->hour)
-		    return(1);
-		else if(a->hour < b->hour)
-		    return(-1);
-		break;
+	case DATETIME_HOUR:
+	    if (a->hour > b->hour)
+		return (1);
+	    else if (a->hour < b->hour)
+		return (-1);
+	    break;
 
-	    case DATETIME_DAY:
-		if(a->day > b->day)
-		    return(1);
-		else if(a->day < b->day)
-		    return(-1);
-		break;
+	case DATETIME_DAY:
+	    if (a->day > b->day)
+		return (1);
+	    else if (a->day < b->day)
+		return (-1);
+	    break;
 
-	    case DATETIME_MONTH:
-		if(a->month > b->month)
-		    return(1);
-		else if(a->month < b->month)
-		    return(-1);
-		break;
+	case DATETIME_MONTH:
+	    if (a->month > b->month)
+		return (1);
+	    else if (a->month < b->month)
+		return (-1);
+	    break;
 
-	    case DATETIME_YEAR: /* only place sign matters */
-		if(a->positive){
-		    if(a->year > b->year)
-			return(1);
-		    else if(a->year < b->year)
-			return(-1);
-		}
-		else{
-		    if(a->year < b->year)
-			return(1);
-		    else if(a->year > b->year)
-			return(-1);
-		}
-		break;
+	case DATETIME_YEAR:	/* only place sign matters */
+	    if (a->positive) {
+		if (a->year > b->year)
+		    return (1);
+		else if (a->year < b->year)
+		    return (-1);
+	    }
+	    else {
+		if (a->year < b->year)
+		    return (1);
+		else if (a->year > b->year)
+		    return (-1);
+	    }
+	    break;
 	}
     }
-    return(0);
+    return (0);
 
 
 }
 
 /*************************************************************/
 
-static int _datetime_ymd_to_ddays(const DateTime *dtymd, double *days)          /* note extra precision! */
-{
+static int _datetime_ymd_to_ddays(const DateTime * dtymd, double *days)
+{				/* note extra precision! */
     int yr, mo;
 
 
     *days = 0.0;
 
-    if(dtymd->positive){
-	*days = dtymd->day - 1;                   /* start w/ days - 1*/
-	for (mo = dtymd->month - 1; mo > 0; mo--){ /* add earlier months */
+    if (dtymd->positive) {
+	*days = dtymd->day - 1;	/* start w/ days - 1 */
+	for (mo = dtymd->month - 1; mo > 0; mo--) {	/* add earlier months */
 	    *days += datetime_days_in_month(dtymd->year, mo, dtymd->positive);
 	}
-	for (yr = dtymd->year - 1; yr > 0; yr--){ /* add earlier years */
+	for (yr = dtymd->year - 1; yr > 0; yr--) {	/* add earlier years */
 	    *days += datetime_days_in_year(yr, dtymd->positive);
 	}
     }
-    else{
-	for (yr = dtymd->year - 1; yr > 0; yr--){ /* add later years */
+    else {
+	for (yr = dtymd->year - 1; yr > 0; yr--) {	/* add later years */
 	    *days += datetime_days_in_year(yr, dtymd->positive);
 	}
-	for (mo = 12; mo >= dtymd->month; mo--){ /*add current & later months*/
+	for (mo = 12; mo >= dtymd->month; mo--) {	/*add current & later months */
 	    *days += datetime_days_in_month(dtymd->year, mo, dtymd->positive);
 	}
-	*days -= dtymd->day;                   /* subtract current days */
+	*days -= dtymd->day;	/* subtract current days */
     }
 
     return 0;
 }
 
 /*************************************************************/
+
 /*************************************************************/

@@ -1,13 +1,13 @@
 /*!
-  \file mapset_msc.c
- 
-  \brief GIS library - Mapset user permission routines.
+   \file mapset_msc.c
 
-  (C) 1999-2008 The GRASS development team
+   \brief GIS library - Mapset user permission routines.
 
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-*/
+   (C) 1999-2008 The GRASS development team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+ */
 
 #include <string.h>
 #include <unistd.h>
@@ -18,19 +18,19 @@
 #include <grass/glocale.h>
 
 /*!
-  \brief Create element in the current mapset.
+   \brief Create element in the current mapset.
 
-  Make the specified element in the current mapset
-  will check for the existence of the element and
-  do nothing if it is found so this routine
-  can be called even if the element already exists.
+   Make the specified element in the current mapset
+   will check for the existence of the element and
+   do nothing if it is found so this routine
+   can be called even if the element already exists.
 
-  \param element element to be created in mapset
+   \param element element to be created in mapset
 
-  \return 0 ?
-  \return ?
-*/
-int G__make_mapset_element (const char *p_element)
+   \return 0 ?
+   \return ?
+ */
+int G__make_mapset_element(const char *p_element)
 {
     char path[GPATH_MAX];
     char *p;
@@ -40,27 +40,25 @@ int G__make_mapset_element (const char *p_element)
     if (*element == 0)
 	return 0;
 
-    G__file_name (p = path, "", "", G_mapset());
+    G__file_name(p = path, "", "", G_mapset());
     while (*p)
 	p++;
-/* add trailing slash if missing */
+    /* add trailing slash if missing */
     --p;
-    if (*p++ != '/')
-    {
-	*p++ = '/' ;
+    if (*p++ != '/') {
+	*p++ = '/';
 	*p = 0;
     }
 
-/* now append element, one directory at a time, to path */
-    while (1)
-    {
-	if (*element == '/' || *element == 0)
-	{
+    /* now append element, one directory at a time, to path */
+    while (1) {
+	if (*element == '/' || *element == 0) {
 	    *p = 0;
-	    if (access (path, 0) != 0)
+	    if (access(path, 0) != 0)
 		G_mkdir(path);
-	    if (access (path, 0) != 0)
-		G_fatal_error (_("Unable to make mapset element %s (%s)"), p_element, path);
+	    if (access(path, 0) != 0)
+		G_fatal_error(_("Unable to make mapset element %s (%s)"),
+			      p_element, path);
 	    if (*element == 0)
 		return 1;
 	}
@@ -69,17 +67,17 @@ int G__make_mapset_element (const char *p_element)
 }
 
 /*!
-  \brief Create misc element in the current mapset.
+   \brief Create misc element in the current mapset.
 
-  \param dir directory path
-  \param name element name
-  
-  \return 0 ?
-  \return ?
-*/
-int G__make_mapset_element_misc (const char *dir, const char *name)
+   \param dir directory path
+   \param name element name
+
+   \return 0 ?
+   \return ?
+ */
+int G__make_mapset_element_misc(const char *dir, const char *name)
 {
-    char buf[GNAME_MAX*2+1];
+    char buf[GNAME_MAX * 2 + 1];
 
     sprintf(buf, "%s/%s", dir, name);
     return G__make_mapset_element(buf);
@@ -93,26 +91,26 @@ int G__make_mapset_element_misc (const char *dir, const char *name)
    \return 1 mapset exists, and user has permission
    \return 0 mapset exists, BUT user denied permission
    \return -1 mapset does not exist
-*/
-int G__mapset_permissions (const char *mapset)
+ */
+int G__mapset_permissions(const char *mapset)
 {
     char path[GPATH_MAX];
     struct stat info;
 
-    G__file_name (path,"","",mapset);
+    G__file_name(path, "", "", mapset);
 
-    if (G_stat (path, &info) != 0)
-	    return -1;
+    if (G_stat(path, &info) != 0)
+	return -1;
     if (!S_ISDIR(info.st_mode))
-	    return -1;
+	return -1;
 
-#ifndef __MINGW32__    
+#ifndef __MINGW32__
     if (info.st_uid != getuid())
-	    return 0;
+	return 0;
     if (info.st_uid != geteuid())
-	    return 0;
+	return 0;
 #endif
-    
+
     return 1;
 }
 
@@ -126,25 +124,26 @@ int G__mapset_permissions (const char *mapset)
    \return 1 mapset exists, and user has permission
    \return 0 mapset exists, BUT user denied permission
    \return -1 mapset does not exist
-*/
-int G__mapset_permissions2 ( const char * gisdbase, const char * location, const char *mapset )
+ */
+int G__mapset_permissions2(const char *gisdbase, const char *location,
+			   const char *mapset)
 {
     char path[GPATH_MAX];
     struct stat info;
 
-    sprintf ( path, "%s/%s/%s", gisdbase, location, mapset );
+    sprintf(path, "%s/%s/%s", gisdbase, location, mapset);
 
-    if (G_stat (path, &info) != 0)
-	    return -1;
+    if (G_stat(path, &info) != 0)
+	return -1;
     if (!S_ISDIR(info.st_mode))
-	    return -1;
+	return -1;
 
-#ifndef __MINGW32__    
+#ifndef __MINGW32__
     if (info.st_uid != getuid())
-	    return 0;
+	return 0;
     if (info.st_uid != geteuid())
-	    return 0;
+	return 0;
 #endif
-    
+
     return 1;
 }

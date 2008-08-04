@@ -20,12 +20,14 @@
 #define FM_VOL  0x00000008
 #define FM_LABEL 0x00000010
 
-typedef struct view_node{
+typedef struct view_node
+{
     float fields[KF_NUMFIELDS];
 } Viewnode;
 
-typedef struct key_node{
-    float  pos, fields[KF_NUMFIELDS];
+typedef struct key_node
+{
+    float pos, fields[KF_NUMFIELDS];
     int look_ahead;
     unsigned long fieldmask;
     struct key_node *next, *prior;

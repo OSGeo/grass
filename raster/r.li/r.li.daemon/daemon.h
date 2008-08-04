@@ -1,3 +1,4 @@
+
 /**
  * \file daemon.h
  *
@@ -16,7 +17,7 @@
  * 
  */
 
-#include <grass/gis.h> 
+#include <grass/gis.h>
 #include "list.h"
 
 
@@ -34,23 +35,26 @@
  * \member pid worker process identifier
  * \member pipe name of pipe to receive message
  */
- typedef struct wd {
- 	int pid;
-	char* pipe;
-	int channel;
- } wd;
- 
+typedef struct wd
+{
+    int pid;
+    char *pipe;
+    int channel;
+} wd;
+
  /** 
   * \brief entry of cell memory menager
   * \member used number of rows in cache
   * \member cache cache matrix
   * \member contents line numbers of elements in cache
   */
- struct cell_memory_entry{
-	int used;
-	CELL ** cache;
-	 int * contents;
+struct cell_memory_entry
+{
+    int used;
+    CELL **cache;
+    int *contents;
 };
+
 /**
  * \brief cell memory menager definition
  */
@@ -62,10 +66,11 @@ typedef struct cell_memory_entry *cell_manager;
   * \member cache cache matrix
   * \member contents line numbers of elements in cache
   */
-struct dcell_memory_entry{
-	int used;
-	DCELL ** cache;
-	int * contents;
+struct dcell_memory_entry
+{
+    int used;
+    DCELL **cache;
+    int *contents;
 };
 
 /**
@@ -79,16 +84,18 @@ typedef struct dcell_memory_entry *dcell_manager;
   * \member cache cache matrix
   * \member contents line numbers of elements in cache
   */
-struct fcell_memory_entry{
-	int used;
-	FCELL ** cache;
-	int * contents;
+struct fcell_memory_entry
+{
+    int used;
+    FCELL **cache;
+    int *contents;
 };
+
 /**
  * \brief dcell memory menager definition
  */
 typedef struct fcell_memory_entry *fcell_manager;
- 
+
  /**
   * \brief fields of an area descriptor
   * \member x the x coordinate of upper left corner
@@ -97,18 +104,19 @@ typedef struct fcell_memory_entry *fcell_manager;
   * \member cl area length in columns
   * \member mask file descriptor of mask raster file (-1 if there is no mask)
  */
- struct area_entry{
- 	 int x;
- 	 int y;
-	 int rl;
-	 int cl;
-	 int mask;
-	 int data_type;
-	 cell_manager cm;
-	 dcell_manager dm;
-	 fcell_manager fm;
-	 char *raster;
-	 char *mask_name;
+struct area_entry
+{
+    int x;
+    int y;
+    int rl;
+    int cl;
+    int mask;
+    int data_type;
+    cell_manager cm;
+    dcell_manager dm;
+    fcell_manager fm;
+    char *raster;
+    char *mask_name;
 };
 
 typedef struct area_entry *area_des;
@@ -126,8 +134,8 @@ typedef struct area_entry *area_des;
  * \return 1  otherwise
  */
 
-int calculateIndex(char *file, int f(int, char **, area_des, double *), \
- char **parameters, char *raster, char *output);
+int calculateIndex(char *file, int f(int, char **, area_des, double *),
+		   char **parameters, char *raster, char *output);
 
 /**
  * \description parses the setup file and populates the list of areas
@@ -157,6 +165,7 @@ int parseSetup(char *path, list l, g_areas g, char *raster);
  * \return MVWIN if a new raster file had to be created
  */
 int disposeAreas(list l, g_areas g, char *def);
+
 /**
  * \brief generate the next area to analyze
  * \param parsed the output of a previous parseSetup function call
@@ -166,7 +175,8 @@ int disposeAreas(list l, g_areas g, char *def);
  * \return 1 if the area is generated
  * \return 0 if there isn't another area
  */
-int next_Area(int parsed, list l, g_areas g, msg* m);
+int next_Area(int parsed, list l, g_areas g, msg * m);
+
 /**
  * \brief writes output in a file
  * \param out the output file
@@ -175,6 +185,7 @@ int next_Area(int parsed, list l, g_areas g, msg* m);
  * \return 0 fail
  */
 int print_Output(int out, msg m);
+
 /**
  * \brief writes errors in a file
  * \param out the output file
@@ -192,9 +203,9 @@ int error_Output(int out, msg m);
  * \param mychannel the channel where to receive the area messages
  * \param result where to put the result of index computing
  */
-void worker(char *raster, int f(int, char **, area_des, double *),\
- char *server_channel, char *mychannel, char ** parameters );
- 
+void worker(char *raster, int f(int, char **, area_des, double *),
+	    char *server_channel, char *mychannel, char **parameters);
+
  /**
   * \brief adapts the mask at current raster file
   * \param mask name of mask raster file
@@ -203,8 +214,8 @@ void worker(char *raster, int f(int, char **, area_des, double *),\
   * \param cl the lenght in cols of sample area
   * \return the name of mask raster file to use
   */
- char * mask_preprocessing(char *mask, char *raster, int rl, int cl);
- 
+char *mask_preprocessing(char *mask, char *raster, int rl, int cl);
+
  /**
   * \brief writes the output for a raster file
   *	\param fd file descriptor for writing
@@ -212,7 +223,8 @@ void worker(char *raster, int f(int, char **, area_des, double *),\
   * \param res the result to be written
   * \return 0 on error, 1 if done
   */
- int raster_Output(int fd, int aid, g_areas g, double res);
+int raster_Output(int fd, int aid, g_areas g, double res);
+
  /**
   * \brief calculates a simple index for code debugging
   * \param fd file descriptor of raster
@@ -221,7 +233,8 @@ void worker(char *raster, int f(int, char **, area_des, double *),\
   * \param result where to return result
   * \return 0 on error, 1 otherwise
   */
- int simple_index(int fd, char ** par, area_des ad, double *result);
+int simple_index(int fd, char **par, area_des ad, double *result);
+
  /**
   * \brief copy the content of regular file random access 
   * on raster mv_fd
@@ -230,31 +243,30 @@ void worker(char *raster, int f(int, char **, area_des, double *),\
   * \param g the mv window generator
   * \return 0 on error, 1 otherwise
   */
- int write_raster(int mv_fd, int random_access, g_areas g);
+int write_raster(int mv_fd, int random_access, g_areas g);
+
  /**
   * \brief get a cell raster row using the memory menager
   * \param fd file descriptor of raster to analyze
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
-  */ 
- CELL * RLI_get_cell_raster_row(int fd, int row, area_des ad);
+  */
+CELL *RLI_get_cell_raster_row(int fd, int row, area_des ad);
+
  /**
   * \brief get a dcell raster row using the memory menager
   * \param fd file descriptor of raster to analyze
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
   */
- DCELL * RLI_get_dcell_raster_row(int fd, int row, area_des ad);
+DCELL *RLI_get_dcell_raster_row(int fd, int row, area_des ad);
+
  /**
   * \brief get a fcell raster row using the memory menager
   * \param fd file descriptor of raster to analyze
   * \param row identifier of row to get
   * \param ad area descriptor of current sample area
   */
- FCELL * RLI_get_fcell_raster_row(int fd, int row, area_des ad);
+FCELL *RLI_get_fcell_raster_row(int fd, int row, area_des ad);
 
 #include "index.h"
-
-
-
-

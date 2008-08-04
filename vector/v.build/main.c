@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       v.build
@@ -20,139 +21,149 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *map_opt, *opt, *err_opt;
     struct Map_info Map;
-    int    i, build = 0, dump = 0, sdump = 0, cdump = 0;
-    
+    int i, build = 0, dump = 0, sdump = 0, cdump = 0;
+
     G_gisinit(argv[0]);
 
-    module = G_define_module(); 
+    module = G_define_module();
     module->keywords = _("vector, topology");
     module->description = _("Creates topology for GRASS vector map.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
-    
+
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
-    err_opt->description  = _("Name for vector map where erroneous vector features are written to");
+    err_opt->description =
+	_
+	("Name for vector map where erroneous vector features are written to");
     err_opt->required = NO;
-    
+
     opt = G_define_option();
     opt->key = "option";
-    opt->type =  TYPE_STRING;
+    opt->type = TYPE_STRING;
     opt->options = "build,dump,sdump,cdump";
     opt->required = NO;
     opt->multiple = YES;
     opt->answer = "build";
-    opt->description  = _("Build topology or dump topology or spatial index to stdout");
-    opt->descriptions = _("build;build topology;"
-			  "dump;write topology to stdout;"
-			  "sdump;write spatial index to stdout;"
-			  "cdump;write category index to stdout");
-   
-    if (G_parser (argc, argv))
-	exit(EXIT_FAILURE); 
+    opt->description =
+	_("Build topology or dump topology or spatial index to stdout");
+    opt->descriptions =
+	_("build;build topology;" "dump;write topology to stdout;"
+	  "sdump;write spatial index to stdout;"
+	  "cdump;write category index to stdout");
 
-    i = 0; 
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    i = 0;
     while (opt->answers[i]) {
-	if ( *opt->answers[i] == 'b')  build = 1;
-        else if ( *opt->answers[i] == 'd')  dump = 1;
-        else if ( *opt->answers[i] == 's')  sdump = 1;
-        else if ( *opt->answers[i] == 'c')  cdump = 1;
+	if (*opt->answers[i] == 'b')
+	    build = 1;
+	else if (*opt->answers[i] == 'd')
+	    dump = 1;
+	else if (*opt->answers[i] == 's')
+	    sdump = 1;
+	else if (*opt->answers[i] == 'c')
+	    cdump = 1;
 
 	i++;
     }
-    if ( err_opt->answer ) {    
-        Vect_check_input_output_name ( map_opt->answer, err_opt->answer, GV_FATAL_EXIT );
+    if (err_opt->answer) {
+	Vect_check_input_output_name(map_opt->answer, err_opt->answer,
+				     GV_FATAL_EXIT);
     }
-    
-    /* build topology */
-    if ( build ) { 
-	/* open input vector */
-	if ( G_find_vector2 (map_opt->answer, G_mapset()) == NULL)
-	     G_fatal_error (_("Vector map <%s> not found in the current mapset"), map_opt->answer);
-	
-	Vect_set_open_level (1); 
-	Vect_open_old (&Map, map_opt->answer, G_mapset()); 
 
-	Vect_build ( &Map, stderr );
+    /* build topology */
+    if (build) {
+	/* open input vector */
+	if (G_find_vector2(map_opt->answer, G_mapset()) == NULL)
+	    G_fatal_error(_
+			  ("Vector map <%s> not found in the current mapset"),
+			  map_opt->answer);
+
+	Vect_set_open_level(1);
+	Vect_open_old(&Map, map_opt->answer, G_mapset());
+
+	Vect_build(&Map, stderr);
     }
     /* dump topology */
     if (dump || sdump || cdump) {
-        if ( !build ) { 
-	    Vect_set_open_level (2);
-	    Vect_open_old (&Map, map_opt->answer, G_mapset()); 
-        }
-        if (dump)
-	    Vect_topo_dump ( &Map, stdout );
+	if (!build) {
+	    Vect_set_open_level(2);
+	    Vect_open_old(&Map, map_opt->answer, G_mapset());
+	}
+	if (dump)
+	    Vect_topo_dump(&Map, stdout);
 
-        if (sdump)
-	    Vect_spatial_index_dump ( &Map, stdout );
+	if (sdump)
+	    Vect_spatial_index_dump(&Map, stdout);
 
-        if (cdump)
-	    Vect_cidx_dump ( &Map, stdout );
+	if (cdump)
+	    Vect_cidx_dump(&Map, stdout);
     }
 
-    if ( err_opt->answer ) {
-	int    nlines, line, type, area, left, right, err, narea;
-        struct Map_info  Err;
+    if (err_opt->answer) {
+	int nlines, line, type, area, left, right, err, narea;
+	struct Map_info Err;
 	struct line_pnts *Points;
 	struct line_cats *Cats;
-	
-	Points = Vect_new_line_struct ();
-        Cats = Vect_new_cats_struct ();
 
-        Vect_open_new (&Err, err_opt->answer, Vect_is_3d(&Map) );
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
 
-	nlines = Vect_get_num_lines (&Map);
+	Vect_open_new(&Err, err_opt->answer, Vect_is_3d(&Map));
 
-	for ( line = 1; line <= nlines; line++ ){
+	nlines = Vect_get_num_lines(&Map);
+
+	for (line = 1; line <= nlines; line++) {
 	    err = 0;
 
-	    if (!Vect_line_alive (&Map, line))
+	    if (!Vect_line_alive(&Map, line))
 		continue;
 
-	    type = Vect_read_line (&Map, Points, Cats, line);
+	    type = Vect_read_line(&Map, Points, Cats, line);
 
-	    if ( type == GV_BOUNDARY ) {
-		Vect_get_line_areas ( &Map, line, &left, &right );
-		if ( left == 0 || right == 0 )
-		    err = 1;
-	    } else if ( type == GV_CENTROID ) {
-		area = Vect_get_centroid_area ( &Map, line );
-		if ( area <= 0 )
+	    if (type == GV_BOUNDARY) {
+		Vect_get_line_areas(&Map, line, &left, &right);
+		if (left == 0 || right == 0)
 		    err = 1;
 	    }
-	    
+	    else if (type == GV_CENTROID) {
+		area = Vect_get_centroid_area(&Map, line);
+		if (area <= 0)
+		    err = 1;
+	    }
+
 	    if (err)
-		Vect_write_line ( &Err, type, Points, Cats );
+		Vect_write_line(&Err, type, Points, Cats);
 
 	}
 
-	narea = Vect_get_num_areas (&Map);
+	narea = Vect_get_num_areas(&Map);
 
 	for (area = 1; area <= narea; area++) {
-	    if (!Vect_area_alive (&Map, area))
+	    if (!Vect_area_alive(&Map, area))
 		continue;
 
 	    if (Vect_get_area_centroid(&Map, area) == 0) {
-		Vect_get_area_points (&Map, area, Points);
-		Vect_reset_cats (Cats);
-		Vect_write_line (&Err, GV_BOUNDARY, Points, Cats);
+		Vect_get_area_points(&Map, area, Points);
+		Vect_reset_cats(Cats);
+		Vect_write_line(&Err, GV_BOUNDARY, Points, Cats);
 	    }
 	}
 
-	Vect_build ( &Err, stderr );
-        Vect_close ( &Err );
+	Vect_build(&Err, stderr);
+	Vect_close(&Err);
     }
 
     if (build || dump || sdump || cdump) {
-	Vect_close (&Map);
+	Vect_close(&Map);
     }
-    
+
     exit(EXIT_SUCCESS);
 }

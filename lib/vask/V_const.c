@@ -1,3 +1,4 @@
+
 /**
  * \file V_const.c
  *
@@ -45,50 +46,43 @@
  * \return -1 on error
  */
 
-int V_const(
-    void *src, int var_type,
-    int row, int col, int length)
+int V_const(void *src, int var_type, int row, int col, int length)
 {
-    union target targetptr ;
+    union target targetptr;
+
     targetptr.i = src;
 
-    if (V__.NUM_CONST >= MAX_CONST ) 
-    {
-	V_error("Too many constants in call to V_const") ;
-	return(-1) ;
+    if (V__.NUM_CONST >= MAX_CONST) {
+	V_error("Too many constants in call to V_const");
+	return (-1);
     }
-    if ((row < 0) || (row >= MAX_LINE))
-    {
-	V_error("Illegal row (%d) in call to V_const", row) ;
-	return(-1) ;
+    if ((row < 0) || (row >= MAX_LINE)) {
+	V_error("Illegal row (%d) in call to V_const", row);
+	return (-1);
     }
-    if ((col < 0) || (col > 80))
-    {
-	V_error("Illegal column (%d) in call to V_const", col) ;
-	return(-1) ;
+    if ((col < 0) || (col > 80)) {
+	V_error("Illegal column (%d) in call to V_const", col);
+	return (-1);
     }
-    if ((length < 0) || ((length + col) > 80))
-    {
-	V_error("Length out of bounds in call to V_const") ;
-	return(-1) ;
+    if ((length < 0) || ((length + col) > 80)) {
+	V_error("Length out of bounds in call to V_const");
+	return (-1);
     }
 
     if ((var_type == 's') || (var_type == 'i') || (var_type == 'f')
-    ||  (var_type == 'l') || (var_type == 'd'))
-    {
-	V__.constant[V__.NUM_CONST].targetptr = targetptr ;
-	V__.constant[V__.NUM_CONST].var_type  = var_type  ;
-	V__.constant[V__.NUM_CONST].row       = row       ;
-	V__.constant[V__.NUM_CONST].col       = col       ;
-	V__.constant[V__.NUM_CONST].length    = length    ;
-	V__.constant[V__.NUM_CONST].decimal_places    = V__.decimal_places    ;
+	|| (var_type == 'l') || (var_type == 'd')) {
+	V__.constant[V__.NUM_CONST].targetptr = targetptr;
+	V__.constant[V__.NUM_CONST].var_type = var_type;
+	V__.constant[V__.NUM_CONST].row = row;
+	V__.constant[V__.NUM_CONST].col = col;
+	V__.constant[V__.NUM_CONST].length = length;
+	V__.constant[V__.NUM_CONST].decimal_places = V__.decimal_places;
 
-	V__.NUM_CONST++ ;
-	return(0) ;
+	V__.NUM_CONST++;
+	return (0);
     }
-    else
-    {
-	V_error("Illegal variable type in call to V_const") ;
-	return(-1) ;
+    else {
+	V_error("Illegal variable type in call to V_const");
+	return (-1);
     }
 }

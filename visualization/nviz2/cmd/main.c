@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       nviz_cmd
@@ -25,14 +26,14 @@
 
 static void swap_gl();
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct GParams *params;
 
     int ret;
-    float vp_height, z_exag; /* calculated viewpoint height, z-exag */
-    int width, height; /* output image size */
+    float vp_height, z_exag;	/* calculated viewpoint height, z-exag */
+    int width, height;		/* output image size */
     char *output_name;
 
     nv_data data;
@@ -45,7 +46,7 @@ int main (int argc, char *argv[])
     module->keywords = _("visualization, raster, vector");
     module->description = _("Experimental NVIZ CLI prototype.");
 
-    params = (struct GParams*) G_malloc(sizeof (struct GParams));
+    params = (struct GParams *)G_malloc(sizeof(struct GParams));
 
     /* define options, call G_parser() */
     parse_command(argc, argv, params);
@@ -55,7 +56,8 @@ int main (int argc, char *argv[])
 
     width = atoi(params->size->answers[0]);
     height = atoi(params->size->answers[1]);
-    G_asprintf(&output_name, "%s.%s", params->output->answer, params->format->answer);
+    G_asprintf(&output_name, "%s.%s", params->output->answer,
+	       params->format->answer);
 
     GS_libinit();
     /* GVL_libinit(); TODO */
@@ -65,7 +67,7 @@ int main (int argc, char *argv[])
     /* define render window */
     offscreen = Nviz_new_render_window();
     Nviz_init_render_window(offscreen);
-    Nviz_create_render_window(offscreen, NULL, width, height); /* offscreen display */
+    Nviz_create_render_window(offscreen, NULL, width, height);	/* offscreen display */
     Nviz_make_current_render_window(offscreen);
 
     /* initialize nviz data */
@@ -75,28 +77,20 @@ int main (int argc, char *argv[])
     Nviz_set_surface_attr_default();
 
     /* set background color */
-    Nviz_set_bgcolor(&data, Nviz_color_from_str(params->bgcolor->answer)); 
+    Nviz_set_bgcolor(&data, Nviz_color_from_str(params->bgcolor->answer));
 
     /* init view */
     Nviz_init_view();
     /* set lights */
     /* TODO: add options */
-    Nviz_set_light_position(&data, 0,
-			    0.68, -0.68, 0.80, 0.0);
-    Nviz_set_light_bright(&data, 0,
-			  0.8);
-    Nviz_set_light_color(&data, 0,
-			 1.0, 1.0, 1.0);
-    Nviz_set_light_ambient(&data, 0,
-			   0.2, 0.2, 0.2);
-    Nviz_set_light_position(&data, 1,
-			    0.0, 0.0, 1.0, 0.0);
-    Nviz_set_light_bright(&data, 1,
-			  0.5);
-    Nviz_set_light_color(&data, 1,
-			 1.0, 1.0, 1.0);
-    Nviz_set_light_ambient(&data, 1,
-			   0.3, 0.3, 0.3);
+    Nviz_set_light_position(&data, 0, 0.68, -0.68, 0.80, 0.0);
+    Nviz_set_light_bright(&data, 0, 0.8);
+    Nviz_set_light_color(&data, 0, 1.0, 1.0, 1.0);
+    Nviz_set_light_ambient(&data, 0, 0.2, 0.2, 0.2);
+    Nviz_set_light_position(&data, 1, 0.0, 0.0, 1.0, 0.0);
+    Nviz_set_light_bright(&data, 1, 0.5);
+    Nviz_set_light_color(&data, 1, 1.0, 1.0, 1.0);
+    Nviz_set_light_ambient(&data, 1, 0.3, 0.3, 0.3);
 
     /* load raster maps (surface topography) & set attributes (map/constant) */
     load_rasters(params, &data);
@@ -126,43 +120,41 @@ int main (int argc, char *argv[])
     }
     else {
 	z_exag = Nviz_get_exag();
-	G_message(_("Vertical exaggeration not given, using calculated value %f"),
+	G_message(_
+		  ("Vertical exaggeration not given, using calculated value %f"),
 		  z_exag);
     }
-    Nviz_change_exag(&data,
-		     z_exag);
+    Nviz_change_exag(&data, z_exag);
 
     if (params->height->answer) {
 	vp_height = atof(params->height->answer);
     }
     else {
 	Nviz_get_exag_height(&vp_height, NULL, NULL);
-	G_message(_("Viewpoint height not given, using calculated value %f"), vp_height);
+	G_message(_("Viewpoint height not given, using calculated value %f"),
+		  vp_height);
     }
-    Nviz_set_viewpoint_height(&data,
-			      vp_height);
-    
+    Nviz_set_viewpoint_height(&data, vp_height);
+
     Nviz_set_viewpoint_position(&data,
 				atof(params->pos->answers[0]),
 				atof(params->pos->answers[1]));
-    Nviz_set_viewpoint_twist(&data,
-			     atoi(params->twist->answer));
-    Nviz_set_viewpoint_persp(&data,
-			     atoi(params->persp->answer));
+    Nviz_set_viewpoint_twist(&data, atoi(params->twist->answer));
+    Nviz_set_viewpoint_persp(&data, atoi(params->persp->answer));
 
     GS_clear(data.bgcolor);
 
     /* draw */
     Nviz_draw_cplane(&data, -1, -1);
-    Nviz_draw_all (&data);
+    Nviz_draw_all(&data);
 
     /* write to image */
     ret = 0;
     if (strcmp(params->format->answer, "ppm") == 0)
-	ret = write_img(output_name, FORMAT_PPM); 
+	ret = write_img(output_name, FORMAT_PPM);
     if (strcmp(params->format->answer, "tif") == 0)
-	ret = write_img(output_name, FORMAT_TIF); 
-    
+	ret = write_img(output_name, FORMAT_TIF);
+
     if (!ret)
 	G_fatal_error(_("Unsupported output format"));
 
@@ -170,8 +162,8 @@ int main (int argc, char *argv[])
 
     Nviz_destroy_render_window(offscreen);
 
-    G_free ((void *) output_name);
-    G_free ((void *) params);
+    G_free((void *)output_name);
+    G_free((void *)params);
 
     exit(EXIT_SUCCESS);
 }

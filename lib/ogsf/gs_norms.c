@@ -1,20 +1,20 @@
 /*!
-  \file gs_norms.c
- 
-  \brief OGSF library - calculation normals (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file gs_norms.c
 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - calculation normals (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <math.h>
 
@@ -37,8 +37,8 @@
 #define NBR  0x00000101
 
 /*!
-  \brief This macro is only used in the function calc_norm()
-*/
+   \brief This macro is only used in the function calc_norm()
+ */
 #define SET_NORM(i) \
        dz1 = z1 - z2; \
        dz2 = z3 - z4; \
@@ -59,16 +59,16 @@ static typbuff *elbuf;
 static unsigned long *norm;
 
 /*
-  #define USE_GL_NORMALIZE
-*/
+   #define USE_GL_NORMALIZE
+ */
 
 /*!
-  \brief Init variables
+   \brief Init variables
 
-  for optimization
+   for optimization
 
-  \param gs surface (geosurf)
-*/
+   \param gs surface (geosurf)
+ */
 void init_vars(geosurf * gs)
 {
     /* optimized - these are static - global to this file */
@@ -85,6 +85,7 @@ void init_vars(geosurf * gs)
 
     {
 	float sx, sy, sz;
+
 	GS_get_scale(&sx, &sy, &sz, 1);
 
 	c_z2 = 2.0 * gs->xres * gs->yres * gs->x_mod * gs->y_mod;
@@ -100,26 +101,26 @@ void init_vars(geosurf * gs)
 }
 
 /*!
-  \brief Calculate normals
+   \brief Calculate normals
 
-  OPTIMIZED for constant dy & dx
-  
-  The norm array is always the same size, but diff resolutions
-  force resampled data points to have their normals recalculated,
-  then only those norms are passed to n3f during drawing.
-  Norms are converted to a packed unsigned int for storage,
-  must be converted back at time of use.
-  
-  \todo fix to correctly calculate norms when mapped to sphere!
+   OPTIMIZED for constant dy & dx
 
-  Uses the previous and next cells (when available) for normal 
-  calculations to produce smoother normals
+   The norm array is always the same size, but diff resolutions
+   force resampled data points to have their normals recalculated,
+   then only those norms are passed to n3f during drawing.
+   Norms are converted to a packed unsigned int for storage,
+   must be converted back at time of use.
 
-  \param gs surface (geosurf)
+   \todo fix to correctly calculate norms when mapped to sphere!
 
-  \return 1 on success
-  \return 0 on failure
-*/
+   Uses the previous and next cells (when available) for normal 
+   calculations to produce smoother normals
+
+   \param gs surface (geosurf)
+
+   \return 1 on success
+   \return 0 on failure
+ */
 int gs_calc_normals(geosurf * gs)
 {
     int row, col;
@@ -141,7 +142,7 @@ int gs_calc_normals(geosurf * gs)
 
     init_vars(gs);
 
-    G_debug (4, "gs_calc_normals(): id=%d", gs->gsurf_id);
+    G_debug(4, "gs_calc_normals(): id=%d", gs->gsurf_id);
 
     /* first row - just use single cell */
     /* first col - use bottom & right neighbors */
@@ -157,8 +158,8 @@ int gs_calc_normals(geosurf * gs)
 
     /* now use four neighboring points for rows 1 - (n-1) */
     for (row = 1; row < ycnt; row++) {
-	if (!(row % 100)) 
-	    G_debug (4, "gs_calc_normals(): row=%d", row);
+	if (!(row % 100))
+	    G_debug(4, "gs_calc_normals(): row=%d", row);
 
 	/* turn off left neighbor for first col */
 	calc_norm(gs, row * ymod, 0, ~NLFT);
@@ -188,20 +189,20 @@ int gs_calc_normals(geosurf * gs)
 }
 
 /*!
-  \brief Calculate normals
+   \brief Calculate normals
 
-  Need either four neighbors or two non-linear neighbors
-  passed initial state of neighbors known from array position
-  and data row & col
+   Need either four neighbors or two non-linear neighbors
+   passed initial state of neighbors known from array position
+   and data row & col
 
-  \param gs surface (geosurf)
-  \param drow data row
-  \param dcol data col
-  \param neighbors neighbors id
+   \param gs surface (geosurf)
+   \param drow data row
+   \param dcol data col
+   \param neighbors neighbors id
 
-  \return 0 no normals
-  \return 1 on success
-*/
+   \return 0 no normals
+   \return 1 on success
+ */
 int calc_norm(geosurf * gs, int drow, int dcol, unsigned int neighbors)
 {
     long noffset;

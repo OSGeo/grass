@@ -1,3 +1,4 @@
+
 /*-
  * G_clicker()
  * 
@@ -9,20 +10,20 @@
 
 static int G_clicker_prev = 0;
 
-int G_clicker (void)
+int G_clicker(void)
 {
-  int x;
-  static char clicks[]="|/-\\"; 
+    int x;
+    static char clicks[] = "|/-\\";
 
-  if (G_clicker_prev == -1 || G_clicker_prev == 3)
-    x = 0;
+    if (G_clicker_prev == -1 || G_clicker_prev == 3)
+	x = 0;
 
-  else
-    x = G_clicker_prev + 1;
+    else
+	x = G_clicker_prev + 1;
 
-  fprintf (stderr, "%1c\b", clicks[x]);
-  fflush (stderr);
-  G_clicker_prev = x;
+    fprintf(stderr, "%1c\b", clicks[x]);
+    fflush(stderr);
+    G_clicker_prev = x;
 
-  return 0;
+    return 0;
 }

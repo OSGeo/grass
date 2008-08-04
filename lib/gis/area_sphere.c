@@ -1,3 +1,4 @@
+
 /**
  * \file area_sphere.c
  *
@@ -38,7 +39,7 @@ static double M;
  * \return int
  */
 
-int G_begin_zone_area_on_sphere (double r,double s)
+int G_begin_zone_area_on_sphere(double r, double s)
 {
     return (M = s * 2.0 * r * r * M_PI);
 }
@@ -51,9 +52,9 @@ int G_begin_zone_area_on_sphere (double r,double s)
  * \return double
  */
 
-double G_darea0_on_sphere (double lat)
+double G_darea0_on_sphere(double lat)
 {
-    return ( M * sin (Radians(lat)) );
+    return (M * sin(Radians(lat)));
 }
 
 
@@ -74,7 +75,7 @@ double G_darea0_on_sphere (double lat)
  * \return double
  */
 
-double G_area_for_zone_on_sphere (double north, double south)
+double G_area_for_zone_on_sphere(double north, double south)
 {
     return (G_darea0_on_sphere(north) - G_darea0_on_sphere(south));
 }

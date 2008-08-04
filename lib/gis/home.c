@@ -29,48 +29,44 @@
  *  \return char * 
  */
 
-char *
-G_home (void)
+char *G_home(void)
 {
     char *home = G__home();
 
     if (home)
 	return home;
-    
+
     G_fatal_error(_("unable to determine user's home directory"));
     return NULL;
 }
 
-char *
-G__home (void)
+char *G__home(void)
 {
     static char *home = 0;
 
     if (home)
-        return home;
+	return home;
 
 #ifdef __MINGW32__
-    { 
+    {
 	char buf[GPATH_MAX];
 
 	/* TODO: we should probably check if the dir exists */
-	home = getenv ( "USERPROFILE" ) ;
+	home = getenv("USERPROFILE");
 
-        if ( !home ) 
-        {
-	    sprintf ( buf, "%s%s", getenv ( "HOMEDRIVE" ), 
-				   getenv ( "HOMEPATH" ) );
+	if (!home) {
+	    sprintf(buf, "%s%s", getenv("HOMEDRIVE"), getenv("HOMEPATH"));
 
-	    if ( strlen(buf) >= 0 )
-		home = G_store ( buf );
-        }
+	    if (strlen(buf) >= 0)
+		home = G_store(buf);
+	}
 
-	if ( !home )
-	    home = getenv ( "HOME" ) ;
+	if (!home)
+	    home = getenv("HOME");
     }
 #else
     home = getenv("HOME");
 #endif
-    G_debug (2, "G__home home = %s", home );
+    G_debug(2, "G__home home = %s", home);
     return home;
 }

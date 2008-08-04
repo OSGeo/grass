@@ -6,9 +6,9 @@
 
 FILE *Bugs2;
 
-int error (char *s)
+int error(char *s)
 {
-    fprintf (stderr, "%s library error routine!", s);
-    fclose (Bugs2);
+    fprintf(stderr, "%s library error routine!", s);
+    fclose(Bugs2);
     return 0;
 }

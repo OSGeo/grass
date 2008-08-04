@@ -1,7 +1,7 @@
 /* raster_metadata.c
  *
  * PURPOSE: functions to read and write raster "units" and "vertical datum"
- *		meta-data info
+ *              meta-data info
  *
  *   Copyright (C) 2007 by Hamish Bowman, and the GRASS Development Team
  *   Author(s): Hamish Bowman, Dunedin, New Zealand
@@ -96,22 +96,22 @@ int G_write_raster_vdatum(const char *name, const char *str)
  * \return -1, EOF (fclose() result) on error
  */
 int G__raster_misc_read_line(const char *elem, const char *name,
-				const char *mapset, char *str)
+			     const char *mapset, char *str)
 {
     FILE *fd;
     char buff[GNAME_MAX];
 
     buff[0] = '\0';
 
-    if (G_find_file2_misc ("cell_misc", elem, name, mapset) == NULL)
+    if (G_find_file2_misc("cell_misc", elem, name, mapset) == NULL)
 	return -1;
 
-    fd = G_fopen_old_misc ("cell_misc", elem, name, mapset);
+    fd = G_fopen_old_misc("cell_misc", elem, name, mapset);
     if (!fd) {
-        G_warning(_("Can't read %s for [%s in %s]"), elem, name, mapset);
+	G_warning(_("Can't read %s for [%s in %s]"), elem, name, mapset);
 	return -1;
     }
-    if(G_getl2(buff, sizeof(buff)-1, fd) == 0) {
+    if (G_getl2(buff, sizeof(buff) - 1, fd) == 0) {
 	/* file is empty */
 	return fclose(fd);
     }
@@ -134,14 +134,15 @@ int G__raster_misc_read_line(const char *elem, const char *name,
  * \return  0 on success
  * \return -1, EOF (fclose() result) on error
  */
-int G__raster_misc_write_line(const char *elem, const char *name, const char *str)
+int G__raster_misc_write_line(const char *elem, const char *name,
+			      const char *str)
 {
     FILE *fd;
 
-    fd = G_fopen_new_misc ("cell_misc", elem, name);
+    fd = G_fopen_new_misc("cell_misc", elem, name);
     if (fd == NULL) {
-        G_warning(_("Can't create %s metadata file for [%s in %s]"),
-		elem, name, G_mapset());
+	G_warning(_("Can't create %s metadata file for [%s in %s]"),
+		  elem, name, G_mapset());
 	return -1;
     }
 

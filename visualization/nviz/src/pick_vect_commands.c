@@ -1,3 +1,4 @@
+
 /***************************************************************
  *
  * MODULE:       pick_vect_commands.c 1.0
@@ -29,6 +30,7 @@
  **************************************************************/
 
 #if 0
+
 /*******************************************************************************
 *** pick_vect "README" *********************************************************
 ********************************************************************************
@@ -119,12 +121,15 @@ WARNING: 	remember to add pick_vect_commands.o
 #include <stdlib.h>
 #include "interface.h"
 
-int Npick_vect_cmd(Nv_data * data, Tcl_Interp * interp, int argc, char **argv);
-int query_vect_cats(char *name, double x, double y, double maxdist, int ** found_cats);
+int Npick_vect_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
+		   char **argv);
+int query_vect_cats(char *name, double x, double y, double maxdist,
+		    int **found_cats);
 
 void pick_init_tcl(Tcl_Interp * interp, Nv_data * data)
 {
-	Tcl_CreateCommand(interp, "Npick_vect", (Tcl_CmdProc*)Npick_vect_cmd, data, NULL);
+    Tcl_CreateCommand(interp, "Npick_vect", (Tcl_CmdProc *) Npick_vect_cmd,
+		      data, NULL);
 }
 
 
@@ -140,11 +145,12 @@ int Npick_vect_cmd(data, interp, argc, argv)
     int sx, sy, id;
     char *name;
 
-	int * found_cats = NULL;
-	int i, n_cats;
+    int *found_cats = NULL;
+    int i, n_cats;
     char buf[2000];
 
-    if (argc != 5) return (TCL_ERROR);
+    if (argc != 5)
+	return (TCL_ERROR);
 
     sx = atoi(argv[1]);
     sy = atoi(argv[2]);
@@ -156,64 +162,75 @@ int Npick_vect_cmd(data, interp, argc, argv)
 #endif
 
     if (!GS_get_selected_point_on_surface(sx, sy, &id, &x, &y, &z)) {
-		sprintf(buf, "%s", "");
-		Tcl_AppendElement(interp, buf);
-		return (TCL_OK);
+	sprintf(buf, "%s", "");
+	Tcl_AppendElement(interp, buf);
+	return (TCL_OK);
     }
 
-	n_cats = query_vect_cats(name, x, y, maxdist, &found_cats);
+    n_cats = query_vect_cats(name, x, y, maxdist, &found_cats);
 
-	for (i=0; i<n_cats; i++) {
-		sprintf(buf, "%d", found_cats[i]);
-		Tcl_AppendElement(interp, buf);
-	}
+    for (i = 0; i < n_cats; i++) {
+	sprintf(buf, "%d", found_cats[i]);
+	Tcl_AppendElement(interp, buf);
+    }
 
-	if (found_cats) free(found_cats);
+    if (found_cats)
+	free(found_cats);
     return (TCL_OK);
 }
 
 
-int query_vect_cats( char *name, double x, double y, double maxdist, int ** found_cats)
+int query_vect_cats(char *name, double x, double y, double maxdist,
+		    int **found_cats)
 {
     struct Map_info Map;
     int line, area;
     static struct line_cats *Cats = NULL;
     char *mapset;
 
-    if ( !Cats )
-        Cats = Vect_new_cats_struct();
+    if (!Cats)
+	Cats = Vect_new_cats_struct();
     else
-		Vect_reset_cats ( Cats );
+	Vect_reset_cats(Cats);
 
-    if ((mapset = G_find_vector2 (name, "")) == NULL) return (-1);
+    if ((mapset = G_find_vector2(name, "")) == NULL)
+	return (-1);
 
-    Vect_open_old( &Map, name, mapset);
+    Vect_open_old(&Map, name, mapset);
 
-    line = Vect_find_line( &Map, x, y, 0.0, GV_POINT | GV_LINE | GV_BOUNDARY | GV_CENTROID, maxdist, 0, 0 );
-    area = Vect_find_area( &Map, x, y );
+    line =
+	Vect_find_line(&Map, x, y, 0.0,
+		       GV_POINT | GV_LINE | GV_BOUNDARY | GV_CENTROID,
+		       maxdist, 0, 0);
+    area = Vect_find_area(&Map, x, y);
 
-    if (line + area == 0) goto error;
+    if (line + area == 0)
+	goto error;
 
-    if (line > 0) Vect_read_line ( &Map, NULL, Cats, line );
-    else if (area > 0) Vect_get_area_cats ( &Map, area, Cats );
+    if (line > 0)
+	Vect_read_line(&Map, NULL, Cats, line);
+    else if (area > 0)
+	Vect_get_area_cats(&Map, area, Cats);
 
     if (Cats->n_cats > 0) {
-		int i;
+	int i;
 
-		*found_cats = (int*) G_malloc(Cats->n_cats*sizeof(int));
+	*found_cats = (int *)G_malloc(Cats->n_cats * sizeof(int));
 
-		for (i = 0; i < Cats->n_cats; i++) {
-			(*found_cats)[i] = Cats->cat[i];
-			G_debug(3, "##################### field: %d category: %d\n", Cats->field[i], Cats->cat[i] );
-		}
-    } else {
-		goto error;
+	for (i = 0; i < Cats->n_cats; i++) {
+	    (*found_cats)[i] = Cats->cat[i];
+	    G_debug(3, "##################### field: %d category: %d\n",
+		    Cats->field[i], Cats->cat[i]);
+	}
+    }
+    else {
+	goto error;
     }
 
     Vect_close(&Map);
     return (Cats->n_cats);
 
-error:
+  error:
     Vect_close(&Map);
     return (-1);
 }

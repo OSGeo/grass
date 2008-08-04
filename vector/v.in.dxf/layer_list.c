@@ -20,7 +20,7 @@ int is_layer_in_list(char *layer)
 {
     char **p;
 
-   /* capital column names are a pain in SQL */
+    /* capital column names are a pain in SQL */
     G_str_to_lower(layer);
 
     if (!layers)
@@ -52,10 +52,10 @@ void init_list(void)
     return;
 }
 
-void print_layer(const char* layer_name)
+void print_layer(const char *layer_name)
 {
     char *grass_name;
-    
+
     grass_name = G_store(layer_name);
 
     G_str_to_lower(grass_name);
@@ -66,7 +66,7 @@ void print_layer(const char* layer_name)
 
     fflush(stdout);
 
-    G_free((void *) grass_name);
+    G_free((void *)grass_name);
 
     return;
 }

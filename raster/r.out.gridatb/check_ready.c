@@ -3,24 +3,22 @@
 #include <grass/glocale.h>
 
 
-void
-check_ready(void)
+void check_ready(void)
 {
-	FILE *fp;
+    FILE *fp;
 
-	mapset = G_find_cell(iname,"");
-	if (!mapset)
-		G_fatal_error(_("Raster map <%s> not found"), iname);
+    mapset = G_find_cell(iname, "");
+    if (!mapset)
+	G_fatal_error(_("Raster map <%s> not found"), iname);
 
-	fp = fopen(file, "r");
-	if (!fp)
-		return;
+    fp = fopen(file, "r");
+    if (!fp)
+	return;
 
-	fclose(fp);
+    fclose(fp);
 
-	if (overwr)
-		unlink(file);
-	else
-		G_fatal_error("%s - file already exists", file);
+    if (overwr)
+	unlink(file);
+    else
+	G_fatal_error("%s - file already exists", file);
 }
-

@@ -37,7 +37,7 @@ viz_iso_surface(linefax, interp)
 	if (!z) {		/* first time thru need to read in four slices of data */
 	    for (slice = 0; slice < 4; slice++) {
 		if ((data[slice] =
-		     (float *) G_malloc (sizeof(float) * XDIMYDIM)) == NULL) {
+		     (float *)G_malloc(sizeof(float) * XDIMYDIM)) == NULL) {
 		    Tcl_AppendResult(interp, "error in allocating memory\n",
 				     NULL);
 		    return (TCL_ERROR);
@@ -62,7 +62,9 @@ viz_iso_surface(linefax, interp)
 }
 
 /************************  percent *******************************************/
+
 /************************  percent *******************************************/
+
 /************************  percent *******************************************/
 percent(z, zloop)
      int z, zloop;
@@ -84,7 +86,9 @@ percent(z, zloop)
 
 
 /************************ calc_cube_info  ************************************/
+
 /************************ calc_cube_info  ************************************/
+
 /************************ calc_cube_info  ************************************/
 
 
@@ -185,13 +189,15 @@ calc_cube_info(data, z1)
 }
 
 /***********************************  xings_fnorm****************************/
+
 /***********************************  xings_fnorm****************************/
+
 /***********************************  xings_fnorm****************************/
 /*  This subroutine is called once for each cell(cube) at given threshold value.
-**  This is the subroutine that is called if flat shading is to be used. 
-**  Subroutine vertices are determined for the polygons that will be 
-**  saved in a display file as well as the normal to the polygon
-*/
+ **  This is the subroutine that is called if flat shading is to be used. 
+ **  Subroutine vertices are determined for the polygons that will be 
+ **  saved in a display file as well as the normal to the polygon
+ */
 
 xings_fnorm(c_ndx, t_ndx)
      int c_ndx;
@@ -200,6 +206,7 @@ xings_fnorm(c_ndx, t_ndx)
     cmndln_info *linefax;
 
     register int i;		/* loop count variable incremented to to examine each edge */
+
     /* listed for c_ndx of cube being examined */
 
 
@@ -295,7 +302,9 @@ xings_fnorm(c_ndx, t_ndx)
 }
 
 /*************************** calc_fnorm  ************************************/
+
 /*************************** calc_fnorm  ************************************/
+
 /*************************** calc_fnorm  ************************************/
 /* this routine calculates the normal to a polygon for flat shading */
 calc_fnorm(c_ndx)
@@ -342,9 +351,9 @@ calc_fnorm(c_ndx)
 	r1z = z3 - z2;
 
 	/* assign the unit vector normal to the polygon for use in lighting */
-	TEMP_NORM[poly_num][0] = (float) (r1y * r2z - r1z * r2y);
-	TEMP_NORM[poly_num][1] = (float) (r1z * r2x - r1x * r2z);
-	TEMP_NORM[poly_num][2] = (float) (r1x * r2y - r1y * r2x);
+	TEMP_NORM[poly_num][0] = (float)(r1y * r2z - r1z * r2y);
+	TEMP_NORM[poly_num][1] = (float)(r1z * r2x - r1x * r2z);
+	TEMP_NORM[poly_num][2] = (float)(r1x * r2y - r1y * r2x);
 	mkdspf_normalize(TEMP_NORM[poly_num]);
 	poly_num += 1;
 
@@ -352,15 +361,17 @@ calc_fnorm(c_ndx)
 }
 
 /*****************************   xings_grad   ********************************/
+
 /*****************************   xings_grad   ********************************/
+
 /*****************************   xings_grad   ********************************/
 
 /*  this subroutine is called once for each cell(cube) at given threshold tvalue 
-**  vertices are determined for the polygons that will be written to a display
-**  file.  Gradients for each vertex are determined to be used as normals
-**  in lighting calculations.
-**  gradients are stored in temporary variables that are also written to display**  file. 
-*/
+ **  vertices are determined for the polygons that will be written to a display
+ **  file.  Gradients for each vertex are determined to be used as normals
+ **  in lighting calculations.
+ **  gradients are stored in temporary variables that are also written to display**  file. 
+ */
 
 xings_grad(data, c_ndx, x1, y1, z1, t_ndx)
      float *data[];
@@ -371,6 +382,7 @@ xings_grad(data, c_ndx, x1, y1, z1, t_ndx)
 
     cmndln_info *linefax;
     register int i;		/* loop count variable incremented to examine each edge */
+
     /* listed for c_ndx of cube being examined */
     int nedges;			/* number of edges as listed for given c_ndx into cell_table */
     int crnt_edge;		/* number of the current edge being examined */
@@ -383,11 +395,11 @@ xings_grad(data, c_ndx, x1, y1, z1, t_ndx)
     float l;			/* length of the normal vector */
     float delta;
 
-/* the following variables are used to calculate gradients in the x,y,Z
-** direction.  gradients are going to be used to calculate relative positions of
-** vertices to the light source. though not specifically necessary, the offset
-** variables facilitate error checking. 
-*/
+    /* the following variables are used to calculate gradients in the x,y,Z
+     ** direction.  gradients are going to be used to calculate relative positions of
+     ** vertices to the light source. though not specifically necessary, the offset
+     ** variables facilitate error checking. 
+     */
     float Data1xoffset, Data1yoffset, Data1zoffset;
     float Data2xoffset, Data2yoffset, Data2zoffset;
     float Data3xoffset, Data3yoffset, Data3zoffset;
@@ -398,7 +410,7 @@ xings_grad(data, c_ndx, x1, y1, z1, t_ndx)
     float Data8xoffset, Data8yoffset, Data8zoffset;
 
 
-/*  HOLDS THE GRADIENT FOR EACH VERTEX OF THE CELL BEING EXAMINED */
+    /*  HOLDS THE GRADIENT FOR EACH VERTEX OF THE CELL BEING EXAMINED */
     float Data_Grad[9][3];
 
     linefax = &Headfax.linefax;
@@ -554,13 +566,13 @@ xings_grad(data, c_ndx, x1, y1, z1, t_ndx)
 
     nedges = cell_table[c_ndx].nedges;	/*ASSIGNED A VALUE FROM CELL_TABLE */
 
-/*  loop for number of edges determined by cell c_ndx, specific edge numbeR
-**  is located in the cell_table[c_ndx].edges[#].  for each edge listed, the
-**  polygon vertices are calculated and stored in temporary array temp_vert[][],
-**  gradients for x,y,z components of these vertices are calculated next as 
-**  a,b,c the length l of this gradient vector is computed and the normalizeD
-**  gradient vector (a/l, b/l, c/l) are stored in the temp_grad[][].
-*/
+    /*  loop for number of edges determined by cell c_ndx, specific edge numbeR
+     **  is located in the cell_table[c_ndx].edges[#].  for each edge listed, the
+     **  polygon vertices are calculated and stored in temporary array temp_vert[][],
+     **  gradients for x,y,z components of these vertices are calculated next as 
+     **  a,b,c the length l of this gradient vector is computed and the normalizeD
+     **  gradient vector (a/l, b/l, c/l) are stored in the temp_grad[][].
+     */
     for (i = 0; i < nedges; i++) {
 	crnt_edge = cell_table[c_ndx].edges[i];
 	switch (crnt_edge) {

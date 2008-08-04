@@ -1,4 +1,4 @@
-/* ransurf.h								*/
+/* ransurf.h                                                            */
 
 #include <stdio.h>
 #include <math.h>
@@ -19,20 +19,20 @@
 
 #define CELLSORTER struct cell_sorter_
 CELLSORTER {
-	int R, C;
-	double Value;
+    int R, C;
+    double Value;
 };
 
-GLOBAL	double	NS, EW;
-GLOBAL	int	CellCount, Rs, Cs;
-GLOBAL	double	 MaxDist, MaxDistSq;
-GLOBAL  FLAG	*Cells;
-GLOBAL  CELLSORTER *DoNext;
-GLOBAL	CELL	**Out, *CellBuffer;
-GLOBAL	int	Seed, OutFD;
-GLOBAL	struct Flag *Verbose;
-GLOBAL  struct Option *Distance;
-GLOBAL  struct Option *Output;
+GLOBAL double NS, EW;
+GLOBAL int CellCount, Rs, Cs;
+GLOBAL double MaxDist, MaxDistSq;
+GLOBAL FLAG *Cells;
+GLOBAL CELLSORTER *DoNext;
+GLOBAL CELL **Out, *CellBuffer;
+GLOBAL int Seed, OutFD;
+GLOBAL struct Flag *Verbose;
+GLOBAL struct Option *Distance;
+GLOBAL struct Option *Output;
 
 #ifdef DEBUG
 #define INDX(a,b) (printf("(a)[%d]:%lf ",(b),(a)[(b)]))

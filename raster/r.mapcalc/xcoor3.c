@@ -12,72 +12,67 @@ y() northing at center of row
 z() height at center of depth
 **********************************************************************/
 
-int
-f_x(int argc, const int *argt, void **args)
+int f_x(int argc, const int *argt, void **args)
 {
-	G3D_Region *window = &current_region3;
-	DCELL *res = args[0];
-	DCELL x;
-	int i;
+    G3D_Region *window = &current_region3;
+    DCELL *res = args[0];
+    DCELL x;
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	x = window->west + 0.5 * window->ew_res;
+    x = window->west + 0.5 * window->ew_res;
 
-	for (i = 0; i < columns; i++)
-	{
-		res[i] = x;
-		x += window->ew_res;
-	}
+    for (i = 0; i < columns; i++) {
+	res[i] = x;
+	x += window->ew_res;
+    }
 
-	return 0;
+    return 0;
 }
 
-int
-f_y(int argc, const int *argt, void **args)
+int f_y(int argc, const int *argt, void **args)
 {
-	G3D_Region *window = &current_region3;
-	DCELL *res = args[0];
-	DCELL y;
-	int i;
+    G3D_Region *window = &current_region3;
+    DCELL *res = args[0];
+    DCELL y;
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	y = window->north - (current_row + 0.5) * window->ns_res;
+    y = window->north - (current_row + 0.5) * window->ns_res;
 
-	for (i = 0; i < columns; i++)
-		res[i] = y;
+    for (i = 0; i < columns; i++)
+	res[i] = y;
 
-	return 0;
+    return 0;
 }
 
-int
-f_z(int argc, const int *argt, void **args)
+int f_z(int argc, const int *argt, void **args)
 {
-	G3D_Region *window = &current_region3;
-	DCELL *res = args[0];
-	DCELL z;
-	int i;
+    G3D_Region *window = &current_region3;
+    DCELL *res = args[0];
+    DCELL z;
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	z = window->top - (current_depth + 0.5) * window->tb_res;
+    z = window->top - (current_depth + 0.5) * window->tb_res;
 
-	for (i = 0; i < columns; i++)
-		res[i] = z;
+    for (i = 0; i < columns; i++)
+	res[i] = z;
 
-	return 0;
+    return 0;
 }
-

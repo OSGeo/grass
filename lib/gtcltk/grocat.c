@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       grocat
@@ -23,27 +24,23 @@ int main(void)
     char inbuff[1024], outbuff[1024];
 
     /* stdin and stdout both line-buffered */
-    if( setvbuf( stdin, inbuff, _IOLBF, sizeof(inbuff) ) )
-    {
-        fprintf( stderr, "grocat: Can't set stdin to line-buffered mode!\n" );
-        exit( EXIT_FAILURE );
+    if (setvbuf(stdin, inbuff, _IOLBF, sizeof(inbuff))) {
+	fprintf(stderr, "grocat: Can't set stdin to line-buffered mode!\n");
+	exit(EXIT_FAILURE);
     }
-    if( setvbuf( stdout, outbuff, _IOLBF, sizeof(outbuff) ) )
-    {
-        fprintf( stderr, "grocat: Can't set stdout to line-buffered mode!\n" );
-        exit( EXIT_FAILURE );
+    if (setvbuf(stdout, outbuff, _IOLBF, sizeof(outbuff))) {
+	fprintf(stderr, "grocat: Can't set stdout to line-buffered mode!\n");
+	exit(EXIT_FAILURE);
     }
 
-    while( (inchar = getc(stdin)) != EOF )
-    {
-        /* Read a character at a time from stdin until EOF
-         * and copy to stdout */
-        outchar = putc( inchar, stdout );
-        if( outchar != inchar)
-        {
-            fprintf(stderr, "grocat: Error writing to stdout!\n");
-            exit(EXIT_FAILURE);
-        }
+    while ((inchar = getc(stdin)) != EOF) {
+	/* Read a character at a time from stdin until EOF
+	 * and copy to stdout */
+	outchar = putc(inchar, stdout);
+	if (outchar != inchar) {
+	    fprintf(stderr, "grocat: Error writing to stdout!\n");
+	    exit(EXIT_FAILURE);
+	}
     }
 
     /* Flush in case last line wasn't terminated properly or something */

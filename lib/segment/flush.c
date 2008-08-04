@@ -1,3 +1,4 @@
+
 /**
  * \file flush.c
  *
@@ -28,13 +29,13 @@
  * \return always returns 0
  */
 
-int segment_flush (SEGMENT *SEG)
+int segment_flush(SEGMENT * SEG)
 {
     int i;
 
     for (i = 0; i < SEG->nseg; i++)
 	if (SEG->scb[i].n >= 0 && SEG->scb[i].dirty)
-	    segment_pageout (SEG, i);
+	    segment_pageout(SEG, i);
 
-	return 0;
+    return 0;
 }

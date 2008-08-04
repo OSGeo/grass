@@ -1,3 +1,4 @@
+
 /**
  * \file align_window.c
  *
@@ -37,28 +38,27 @@
  * \return Pointer to an error string on failure
  */
 
-char *
-G_align_window  (struct Cell_head *window, const struct Cell_head *ref)
+char *G_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
     int preserve;
 
     window->ns_res = ref->ns_res;
     window->ew_res = ref->ew_res;
-    window->zone   = ref->zone;
-    window->proj   = ref->proj;
+    window->zone = ref->zone;
+    window->proj = ref->proj;
 
-    preserve = window->proj == PROJECTION_LL && window->east == (window->west+360);
+    preserve = window->proj == PROJECTION_LL &&
+	window->east == (window->west + 360);
     window->south =
-	G_row_to_northing (ceil(G_northing_to_row (window->south, ref)), ref);
+	G_row_to_northing(ceil(G_northing_to_row(window->south, ref)), ref);
     window->north =
-	G_row_to_northing (floor(G_northing_to_row (window->north, ref)), ref);
+	G_row_to_northing(floor(G_northing_to_row(window->north, ref)), ref);
     window->east =
-	G_col_to_easting (ceil(G_easting_to_col (window->east, ref)), ref);
+	G_col_to_easting(ceil(G_easting_to_col(window->east, ref)), ref);
     window->west =
-	G_col_to_easting (floor(G_easting_to_col (window->west, ref)), ref);
+	G_col_to_easting(floor(G_easting_to_col(window->west, ref)), ref);
 
-    if (window->proj == PROJECTION_LL)
-    {
+    if (window->proj == PROJECTION_LL) {
 	while (window->north > 90.0)
 	    window->north -= window->ns_res;
 	while (window->south < -90.0)
@@ -71,5 +71,5 @@ G_align_window  (struct Cell_head *window, const struct Cell_head *ref)
 		window->east -= window->ew_res;
     }
 
-    return G_adjust_Cell_head (window, 0, 0);
+    return G_adjust_Cell_head(window, 0, 0);
 }

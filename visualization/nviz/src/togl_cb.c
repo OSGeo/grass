@@ -6,9 +6,9 @@
 #include "interface.h"
 
 /*
-static struct Togl *Togl_wins[NV_MAXVIEWS];
-static int Togl_num=0;
-*/
+   static struct Togl *Togl_wins[NV_MAXVIEWS];
+   static int Togl_num=0;
+ */
 
 static struct Togl *Togl_cur = NULL;
 
@@ -19,7 +19,7 @@ static struct Togl *Togl_cur = NULL;
  */
 void create_cb(struct Togl *togl)
 {
-/*   fprintf (stdout,"create_cb\n");*/
+    /*   fprintf (stdout,"create_cb\n"); */
     Togl_cur = togl;
     GS_init_view();
 }
@@ -37,7 +37,7 @@ void reshape_cb(struct Togl *togl)
 
     GS_set_viewport(0, width, 0, height);
 
-/*   GS_clear(0x0000FF); *//* causes red flash - debug only */
+    /*   GS_clear(0x0000FF); *//* causes red flash - debug only */
     GS_set_draw(GSD_BACK);
     GS_ready_draw();
     GS_alldraw_wire();
@@ -62,15 +62,15 @@ void reshape_cb(struct Togl *togl)
 void display_cb(struct Togl *togl)
 {
     GS_set_draw(GSD_BACK);
-/*   GS_clear(0x0000FF); *//* debug only */
-/*
-    GS_set_draw(GSD_BACK);
-    GS_ready_draw();
-    GS_alldraw_wire();
-    GS_done_draw();
-*/
+    /*   GS_clear(0x0000FF); *//* debug only */
+    /*
+       GS_set_draw(GSD_BACK);
+       GS_ready_draw();
+       GS_alldraw_wire();
+       GS_done_draw();
+     */
     /* draw everything at full resolution */
-    Tcl_Eval(Togl_Interp(togl), "Ndraw_all"); /* Just use draw_all */
+    Tcl_Eval(Togl_Interp(togl), "Ndraw_all");	/* Just use draw_all */
 }
 
 void swap_togl(void)
@@ -112,7 +112,7 @@ int unload_font(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 {
     int font_base;
 
-    font_base = (int) atoi(argv[1]);
+    font_base = (int)atoi(argv[1]);
 
     if (!Togl_cur) {
 	fprintf(stderr, "set Togl_CreateFunc\n");
@@ -126,24 +126,24 @@ int unload_font(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 void hide_togl_win(void)
 {
 
-	Tk_UnmapWindow ( Togl_TkWin( Togl_cur ) );
+    Tk_UnmapWindow(Togl_TkWin(Togl_cur));
 
 }
 
 void show_togl_win(void)
 {
-  int width = Togl_Width(Togl_cur);
-  int height = Togl_Height(Togl_cur);
+    int width = Togl_Width(Togl_cur);
+    int height = Togl_Height(Togl_cur);
 
-  Tk_MapWindow ( Togl_TkWin( Togl_cur ) );
-  
-  /* set the viewport just to make sure window is visible */	    
-  GS_set_viewport(0, width, 0, height);
+    Tk_MapWindow(Togl_TkWin(Togl_cur));
 
-  GS_set_draw(GSD_BACK);
-  GS_ready_draw();
-  GS_alldraw_wire();
-  GS_done_draw();
+    /* set the viewport just to make sure window is visible */
+    GS_set_viewport(0, width, 0, height);
+
+    GS_set_draw(GSD_BACK);
+    GS_ready_draw();
+    GS_alldraw_wire();
+    GS_done_draw();
 }
 
 #ifdef TOGL_X11
@@ -164,4 +164,3 @@ int togl_screen_number(void)
 }
 
 #endif
-

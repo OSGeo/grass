@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       OGR driver 
@@ -19,7 +20,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_select_cursor( dbString *sel, dbCursor *dbc, int mode )
+int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 {
     cursor *c;
     dbTable *table;
@@ -34,20 +35,20 @@ int db__driver_open_select_cursor( dbString *sel, dbCursor *dbc, int mode )
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
 
-    c->hLayer = OGR_DS_ExecuteSQL ( hDs, db_get_string(sel), NULL, NULL );
-    
-    if ( c->hLayer == NULL ) {
+    c->hLayer = OGR_DS_ExecuteSQL(hDs, db_get_string(sel), NULL, NULL);
+
+    if (c->hLayer == NULL) {
 	append_error("Cannot select: \n");
-	append_error(db_get_string(sel) );
-	append_error( "\n" );
+	append_error(db_get_string(sel));
+	append_error("\n");
 	report_error();
 	return DB_FAILED;
     }
 
-    if ( describe_table( c->hLayer, &table, c) == DB_FAILED ) {
+    if (describe_table(c->hLayer, &table, c) == DB_FAILED) {
 	append_error("Cannot describe table\n");
 	report_error();
-	OGR_DS_ReleaseResultSet( hDs, c->hLayer );
+	OGR_DS_ReleaseResultSet(hDs, c->hLayer);
 	return DB_FAILED;
     }
 
@@ -59,4 +60,3 @@ int db__driver_open_select_cursor( dbString *sel, dbCursor *dbc, int mode )
 
     return DB_OK;
 }
-

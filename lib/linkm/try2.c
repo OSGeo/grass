@@ -1,27 +1,27 @@
 /*
-**  Written by David Gerdes  US Army Construction Engineering Research Lab
-**  	April 1992
-**  Copyright 1992 USA-CERL   All rights reserved.
-**
-*/
+ **  Written by David Gerdes  US Army Construction Engineering Research Lab
+ **     April 1992
+ **  Copyright 1992 USA-CERL   All rights reserved.
+ **
+ */
 
 
 /*
-**  read from stdin and each line into a linked list of chars
-**  then print it back out.   if there is any argument specified
-**  the lines will be printed out reversed.
-*/
+ **  read from stdin and each line into a linked list of chars
+ **  then print it back out.   if there is any argument specified
+ **  the lines will be printed out reversed.
+ */
 
 #include <stdio.h>
 #include <grass/linkm.h>
 
-struct link {
+struct link
+{
     char let;
     struct link *next;
 };
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     register int i;
     VOID_T *head;
@@ -35,44 +35,40 @@ main (int argc, char *argv[])
 
     List.next = NULL;
     List.let = ' ';
-    
-
-    link_set_chunk_size (1);
-    head = (VOID_T *) link_init (sizeof (struct link));
 
 
-    while (NULL != gets (buf))
-    {
-	for (i = 0 ; buf[i] != '\0' ; i++)
-	{
-	    tmp = (struct link *) link_new (head);
+    link_set_chunk_size(1);
+    head = (VOID_T *) link_init(sizeof(struct link));
+
+
+    while (NULL != gets(buf)) {
+	for (i = 0; buf[i] != '\0'; i++) {
+	    tmp = (struct link *)link_new(head);
 	    tmp->let = buf[i];
 	    if (rev)
-		add_link_rev (&List, tmp);
+		add_link_rev(&List, tmp);
 	    else
-		add_link (&List, tmp);
+		add_link(&List, tmp);
 	}
 
-	dumplist (&List);
+	dumplist(&List);
 
 	p = List.next;
 
-	while (p != NULL && p->next != NULL)
-	{
+	while (p != NULL && p->next != NULL) {
 	    tmp = p->next;
-	    link_dispose (head, p);
+	    link_dispose(head, p);
 	    p = tmp;
 	}
 	List.next = NULL;
     }
 
-    link_cleanup (head);
+    link_cleanup(head);
 
-    exit (0);
+    exit(0);
 }
 
-int 
-add_link_rev (struct link *List, struct link *link)
+int add_link_rev(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -81,8 +77,7 @@ add_link_rev (struct link *List, struct link *link)
     link->next = p;
 }
 
-int 
-add_link (struct link *List, struct link *link)
+int add_link(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -93,16 +88,14 @@ add_link (struct link *List, struct link *link)
     link->next = NULL;
 }
 
-int 
-dumplist (struct link *List)
+int dumplist(struct link *List)
 {
     struct link *p;
 
     p = List->next;
-    while (p != NULL)
-    {
-	putchar (p->let);
+    while (p != NULL) {
+	putchar(p->let);
 	p = p->next;
     }
-    putchar ('\n');
+    putchar('\n');
 }

@@ -222,7 +222,8 @@ int main(int argc, char **argv)
     opt.charset->key = "charset";
     opt.charset->type = TYPE_STRING;
     opt.charset->required = NO;
-    opt.charset->description = _("Text encoding (only applicable to TrueType fonts)");
+    opt.charset->description =
+	_("Text encoding (only applicable to TrueType fonts)");
 
     flag.m = G_define_flag();
     flag.m->key = 'm';
@@ -249,7 +250,7 @@ int main(int argc, char **argv)
     flag.s->description = _("Font size is height in pixels");
 
     flag.c = G_define_flag();
-    flag.c->key         = 'c';
+    flag.c->key = 'c';
     flag.c->description = _("Ignored (compatibility with d.text.freetype)");
 
     /* check command line */
@@ -366,7 +367,8 @@ int main(int argc, char **argv)
 		sprintf(buf, "%s color=%s", buf, opt.color->answer);
 		sprintf(buf, "%s align=%s", buf, opt.align->answer);
 		sprintf(buf, "%s rotation=%s", buf, opt.rotation->answer);
-		sprintf(buf, "%s linespacing=%s", buf, opt.linespacing->answer);
+		sprintf(buf, "%s linespacing=%s", buf,
+			opt.linespacing->answer);
 		if (flag.b->answer)
 		    strcat(buf, " -b");
 		if (flag.r->answer)

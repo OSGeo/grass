@@ -1,3 +1,4 @@
+
 /**
  * \file db.c
  *
@@ -28,68 +29,62 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_open_database (dbHandle *handle)
-
+int db__driver_open_database(dbHandle * handle)
 {
     char name2[2000];
     const char *name;
-    
-    G_debug(3, "\ndb_driver_open_database()" );
+
+    G_debug(3, "\ndb_driver_open_database()");
 
     init_error();
     name = db_get_handle_dbname(handle);
 
     /* if name is empty use connection.databaseName */
-    if (strlen(name) == 0) 
-    {
-        dbConnection connection;
-        db_get_connection(&connection);
+    if (strlen(name) == 0) {
+	dbConnection connection;
+
+	db_get_connection(&connection);
 	name = connection.databaseName;
     }
 
-    G_debug(3, "name = '%s'", name );
+    G_debug(3, "name = '%s'", name);
 
     /* parse variables in db.name if present */
-    if ( strchr(name,'$') )
-    {
-        char **tokens;
-        int no_tokens, n;
+    if (strchr(name, '$')) {
+	char **tokens;
+	int no_tokens, n;
 
-	tokens = G_tokenize (name, "/");
-	no_tokens=G_number_of_tokens(tokens);
+	tokens = G_tokenize(name, "/");
+	no_tokens = G_number_of_tokens(tokens);
 
-        name2[0] = '\0';
-	for (n = 0; n < no_tokens ; n++)
-	{
-	   if ( n > 0 )
-	   	strcat ( name2, "/" );
+	name2[0] = '\0';
+	for (n = 0; n < no_tokens; n++) {
+	    if (n > 0)
+		strcat(name2, "/");
 
-	   G_debug (3, "tokens[%d] = %s", n, tokens[n] );
-	   if ( tokens[n][0] == '$' )
-	   {
-	       G_strchg(tokens[n],'$', ' ' );
-	       G_chop(tokens[n]);
-	       strcat(name2, G__getenv(tokens[n]) );
-	       G_debug (3, "   -> %s", G__getenv(tokens[n]) );
-	   }
-	   else
-	   {
-	       strcat (name2, tokens[n]);
-	   }
-	 }
-	 G_free_tokens ( tokens );
+	    G_debug(3, "tokens[%d] = %s", n, tokens[n]);
+	    if (tokens[n][0] == '$') {
+		G_strchg(tokens[n], '$', ' ');
+		G_chop(tokens[n]);
+		strcat(name2, G__getenv(tokens[n]));
+		G_debug(3, "   -> %s", G__getenv(tokens[n]));
+	    }
+	    else {
+		strcat(name2, tokens[n]);
+	    }
+	}
+	G_free_tokens(tokens);
     }
-    else
-    {
-	strcpy ( name2, name );
+    else {
+	strcpy(name2, name);
     }
 
-    G_debug(2, "name2 = '%s'", name2 );
+    G_debug(2, "name2 = '%s'", name2);
 
-    if ( sqlite3_open(name2,&sqlite) != SQLITE_OK ) {
-	append_error ( "Cannot open database: " );
-        append_error ((char *) sqlite3_errmsg (sqlite));
-	report_error ();
+    if (sqlite3_open(name2, &sqlite) != SQLITE_OK) {
+	append_error("Cannot open database: ");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
 	return DB_FAILED;
     }
 
@@ -105,12 +100,12 @@ int db__driver_open_database (dbHandle *handle)
  * \return int always returns DB_OK
  */
 
-int db__driver_close_database (void)
+int db__driver_close_database(void)
 {
-    G_debug(3, "db_close_database()" );
+    G_debug(3, "db_close_database()");
 
     init_error();
-    sqlite3_close ( sqlite );
+    sqlite3_close(sqlite);
 
     return DB_OK;
 }

@@ -1,8 +1,7 @@
 #include "xdr.h"
 
 
-int
-db__send_double(double d)
+int db__send_double(double d)
 {
     int stat = DB_OK;
 
@@ -15,8 +14,7 @@ db__send_double(double d)
     return stat;
 }
 
-int
-db__recv_double (double *d)
+int db__recv_double(double *d)
 {
     int stat = DB_OK;
 
@@ -30,8 +28,7 @@ db__recv_double (double *d)
 }
 
 
-int
-db__send_double_array (const double *x, int n)
+int db__send_double_array(const double *x, int n)
 {
     int stat = DB_OK;
 
@@ -49,8 +46,7 @@ db__send_double_array (const double *x, int n)
 
 /* returns an allocated array of doubles */
 /* caller is responsible for free() */
-int
-db__recv_double_array (double **x, int *n)
+int db__recv_double_array(double **x, int *n)
 {
     int stat = DB_OK;
     int count = 0;
@@ -61,7 +57,7 @@ db__recv_double_array (double **x, int *n)
 
     *n = count;
 
-    *x = a = (double *) db_calloc(count, sizeof(*a));
+    *x = a = (double *)db_calloc(count, sizeof(*a));
 
     if (!db__recv(a, count * sizeof(*a)))
 	stat = DB_PROTOCOL_ERR;

@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
 
     /*We need to open the map */
     g3map =
-	G3d_openCellOld(name, mapset, G3D_DEFAULT_WINDOW, G3D_TILE_SAME_AS_FILE,
-			G3D_NO_CACHE);
+	G3d_openCellOld(name, mapset, G3D_DEFAULT_WINDOW,
+			G3D_TILE_SAME_AS_FILE, G3D_NO_CACHE);
     if (NULL == g3map)
 	G_fatal_error(_("Error opening grid3 file [%s]"), name);
 
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
     out = stdout;
 
     /*Show the info if no flag is set */
-    if (!rflag->answer && !sflag->answer && !tflag->answer && !gflag->answer &&
-	!timestampflag->answer && !hflag->answer) {
+    if (!rflag->answer && !sflag->answer && !tflag->answer && !gflag->answer
+	&& !timestampflag->answer && !hflag->answer) {
 	divider('+');
 
 	if (G_asprintf
@@ -260,8 +260,8 @@ int main(int argc, char *argv[])
 	    G_format_northing(cellhd.south, tmp2, cellhd.proj);
 	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
 	    if (G_asprintf
-		(&line, "           N: %10s    S: %10s   Res: %5s", tmp1, tmp2,
-		 tmp3) > 0)
+		(&line, "           N: %10s    S: %10s   Res: %5s", tmp1,
+		 tmp2, tmp3) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -270,8 +270,8 @@ int main(int argc, char *argv[])
 	    G_format_easting(cellhd.west, tmp2, cellhd.proj);
 	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
 	    if (G_asprintf
-		(&line, "           E: %10s    W: %10s   Res: %5s", tmp1, tmp2,
-		 tmp3) > 0)
+		(&line, "           E: %10s    W: %10s   Res: %5s", tmp1,
+		 tmp2, tmp3) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -280,8 +280,8 @@ int main(int argc, char *argv[])
 	    format_double(cellhd.bottom, tmp2);
 	    format_double(cellhd.tb_res, tmp3);
 	    if (G_asprintf
-		(&line, "           T: %10s    B: %10s   Res: %5s", tmp1, tmp2,
-		 tmp3) > 0)
+		(&line, "           T: %10s    B: %10s   Res: %5s", tmp1,
+		 tmp2, tmp3) > 0)
 		printline(line);
 	    else
 		G_fatal_error(_("Cannot allocate memory for string"));
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 	    fprintf(out, "datatype=\"%s\"\n",
 		    (data_type ==
 		     FCELL_TYPE ? "float" : (data_type ==
-					    DCELL_TYPE ? "double" : "??")));
+					     DCELL_TYPE ? "double" : "??")));
 
 	}			/*History output */
 	else if (hflag->answer) {
@@ -397,7 +397,8 @@ int main(int argc, char *argv[])
 		    for (i = 0; i < hist.edlinecnt; i++)
 			fprintf(out, "   %s\n", hist.edhist[i]);
 		}
-	    } else {
+	    }
+	    else {
 		G_fatal_error(_("Error while reading history file"));
 	    }
 	}			/*Timestamp */
@@ -433,4 +434,3 @@ int format_double(double value, char *buf)
     G_trim_decimal(buf);
     return 0;
 }
-

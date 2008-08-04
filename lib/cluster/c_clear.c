@@ -1,5 +1,5 @@
 #include <grass/cluster.h>
-int I_cluster_clear (struct Cluster *C)
+int I_cluster_clear(struct Cluster *C)
 {
     C->points = NULL;
     C->band_sum = NULL;
@@ -13,7 +13,7 @@ int I_cluster_clear (struct Cluster *C)
     C->sum2 = NULL;
     C->mean = NULL;
     C->nbands = 0;
-    I_init_signatures (&C->S, 0);
+    I_init_signatures(&C->S, 0);
 
-	return 0;
+    return 0;
 }

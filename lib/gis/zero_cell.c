@@ -1,3 +1,4 @@
+
 /**
  * \file zero_cell.c
  *
@@ -27,7 +28,7 @@
  * \return always returns 0
  */
 
-int G_zero_cell_buf (CELL *buf)
+int G_zero_cell_buf(CELL * buf)
 {
     int i = G_window_cols();
 
@@ -50,14 +51,14 @@ int G_zero_cell_buf (CELL *buf)
  *  \return always returns 0
  */
 
-int G_zero_raster_buf (void *rast, RASTER_MAP_TYPE data_type)
+int G_zero_raster_buf(void *rast, RASTER_MAP_TYPE data_type)
 {
     int i;
     unsigned char *ptr;
 
     /* assuming that the size of unsigned char is 1 byte */
     i = G_window_cols() * G_raster_size(data_type);
-    ptr = (unsigned char *) rast;
+    ptr = (unsigned char *)rast;
 
     while (i--)
 	*ptr++ = 0;

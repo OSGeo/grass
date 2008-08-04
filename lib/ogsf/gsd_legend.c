@@ -1,23 +1,23 @@
 /*!
-  \file gsd_legend.c
- 
-  \brief OGSF library - legend creation
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file gsd_legend.c
 
-  Converted code from legend.c in SG3d
-  routines to set viewport, close viewport, and make legend
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - legend creation
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   Converted code from legend.c in SG3d
+   routines to set viewport, close viewport, and make legend
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 
@@ -50,16 +50,16 @@ static int bigger(float *f1, float *f2)
 #define MAX_LEGEND 256
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param wl
-  \param wb
-  \param wr
-  \param wt
-*/
+   \param wl
+   \param wb
+   \param wr
+   \param wt
+ */
 void gsd_bgn_legend_viewport(GLint wl, GLint wb, GLint wr, GLint wt)
 {
-/* sets the viewport for the legend and the model matrix */
+    /* sets the viewport for the legend and the model matrix */
 
     gsd_colormode(CM_COLOR);
     glPushAttrib(GL_VIEWPORT);
@@ -85,8 +85,8 @@ void gsd_bgn_legend_viewport(GLint wl, GLint wb, GLint wr, GLint wt)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_end_legend_viewport(void)
 {
     /* closes the legend viewport and resets matrix and buffers */
@@ -101,39 +101,39 @@ void gsd_end_legend_viewport(void)
 
     GS_done_draw();
     GS_set_draw(GSD_BACK);
-    
+
     return;
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param lownum
-  \param highnum
-  \param numvals
-  \param vals
+   \param lownum
+   \param highnum
+   \param numvals
+   \param vals
 
-  \return 0 on failure
-  \return range value
-*/
+   \return 0 on failure
+   \return range value
+ */
 int gsd_get_nice_range(float lownum, float highnum, int numvals, float *vals)
 {
-/* get a nice range for displaying legend */
+    /* get a nice range for displaying legend */
 
     int num = 0;
     float curnum, step, start;
-    
+
     if (!numvals)
 	return (0);
 
-    step = (highnum - lownum) / (float) numvals;
+    step = (highnum - lownum) / (float)numvals;
     gsd_make_nice_number(&step);
 
     /* get a starting point */
-    start = step * (int) (1 + lownum / step);
+    start = step * (int)(1 + lownum / step);
     if (start - lownum < .65 * step)
 	start += step;
-    
+
     for (curnum = start; curnum < (highnum - .65 * step); curnum += step) {
 	vals[num++] = curnum;
     }
@@ -143,13 +143,13 @@ int gsd_get_nice_range(float lownum, float highnum, int numvals, float *vals)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param num
+   \param num
 
-  \return 0 on error
-  \return 1 on success
-*/
+   \return 0 on error
+   \return 1 on success
+ */
 int gsd_make_nice_number(float *num)
 {
     float newnum, nextnum;
@@ -187,17 +187,17 @@ int gsd_make_nice_number(float *num)
 }
 
 /*!
-  \brief Put legend
+   \brief Put legend
 
-  \param name
-  \param fontbase font-base
-  \param size
-  \param flags
-  \param rangef
-  \param pt
+   \param name
+   \param fontbase font-base
+   \param size
+   \param flags
+   \param rangef
+   \param pt
 
-  \return
-*/
+   \return
+ */
 GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		      float *rangef, int *pt)
 {
@@ -217,13 +217,13 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
     legend_list = gsd_makelist();
     gsd_bgnlist(legend_list, 1);
 
-/* set coords from pt */
+    /* set coords from pt */
     sl = pt[0];
     sr = pt[1];
     sb = pt[2];
     st = pt[3];
 
-/* set legend flags */
+    /* set legend flags */
     if (flags[0])
 	cat_vals = 1;
     if (flags[1])
@@ -235,23 +235,21 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 
     mapset = G_find_cell2(name, "");
     if (mapset == NULL) {
-	G_warning (_("Raster map <%s> not found"),
-		   name);
+	G_warning(_("Raster map <%s> not found"), name);
 	return (-1);
     }
 
     is_fp = G_raster_map_is_fp(name, mapset);
 
     if (G_read_colors(name, mapset, &colors) == -1) {
-	G_warning (_("Unable to read color file of raster map <%s>"),
-		   name);
+	G_warning(_("Unable to read color file of raster map <%s>"), name);
 	return (-1);
     }
 
     if (cat_labs)
 	if (G_read_cats(name, mapset, &cats) == -1) {
-	    G_warning (_("Unable to read category file of raster map <%s>"),
-		       name);
+	    G_warning(_("Unable to read category file of raster map <%s>"),
+		      name);
 	    cat_labs = 0;
 	}
 
@@ -260,16 +258,16 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	fmin = rangef[0];
 	fmax = rangef[1];
 	if (!is_fp) {
-		min = (int)fmin;
-		max = (int)fmax;
+	    min = (int)fmin;
+	    max = (int)fmax;
 	}
     }
     else {
 	if (is_fp) {
 	    if (G_read_fp_range(name, mapset, &fp_range) != 1) {
-		G_warning (_("Unable to read fp range of raster map <%s>"),
-			   name);
-		return(-1);
+		G_warning(_("Unable to read fp range of raster map <%s>"),
+			  name);
+		return (-1);
 	    }
 	    G_get_fp_range_min_max(&fp_range, &fmin, &fmax);
 	    if (flags[4] && rangef[0] != -9999.)
@@ -279,8 +277,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	}
 	else {
 	    if (G_read_range(name, mapset, &range) == -1) {
-		G_warning (_("Unable to read range of raster map <%s>"),
-			   name);
+		G_warning(_("Unable to read range of raster map <%s>"), name);
 		return (-1);
 	    }
 	    G_get_range_min_max(&range, &min, &max);
@@ -318,9 +315,9 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 
 	iprec = p1 = p2 = 1;
 	if (max > 0)
-	    for (tmp = 1; tmp < max; tmp *= 10, p1++);
+	    for (tmp = 1; tmp < max; tmp *= 10, p1++) ;
 	if (min < 0)
-	    for (tmp = -1; tmp > min; tmp *= 10, p2++);
+	    for (tmp = -1; tmp > min; tmp *= 10, p2++) ;
 
 	iprec = (p1 > p2 ? p1 : p2);
     }
@@ -340,23 +337,23 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 *********/
 
 
-/* how many labels? */
-/*
-  numlabs can't be = max - min + 1 any more because of floating point
-  maybe shouldn't allow discrete legend for floating point maps (unless list)
-  or else check number of different values in floating point map
-  and use each if "reasonable"
-  gs_get_values_in_range(gs, att, low, high, values, &nvals)
-  the nvals sent has a max number to return, nvals returned is the actual
-  number set in values, return val is 1 on success, -1 if > max vals found
-  
-  might need to think about doing histograms first & use same routines here
-  could also have a LT_MOST that would limit # to some N most frequent
-*/
+    /* how many labels? */
+    /*
+       numlabs can't be = max - min + 1 any more because of floating point
+       maybe shouldn't allow discrete legend for floating point maps (unless list)
+       or else check number of different values in floating point map
+       and use each if "reasonable"
+       gs_get_values_in_range(gs, att, low, high, values, &nvals)
+       the nvals sent has a max number to return, nvals returned is the actual
+       number set in values, return val is 1 on success, -1 if > max vals found
 
-/*!
-  ???
-*/
+       might need to think about doing histograms first & use same routines here
+       could also have a LT_MOST that would limit # to some N most frequent
+     */
+
+    /*!
+       ???
+     */
     {
 	int i, k, lleg, horiz;
 	int red, green, blue;
@@ -384,11 +381,11 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	    /* watch out for trying to display mega cats */
 	    if (is_fp && !Listnum) {
 		discrete = 0;	/* maybe later do stats & allow if few #s */
-		G_warning (_("Unable to show discrete FP range (use list"));
+		G_warning(_("Unable to show discrete FP range (use list"));
 		return (-1);
 	    }
 	    if (numlabs < MAX_LEGEND)
-		dividers = (float *) G_malloc(numlabs * sizeof(float));
+		dividers = (float *)G_malloc(numlabs * sizeof(float));
 	}
 	else {
 	    numlabs = gsd_get_nice_range(fmin, fmax, 4, labvals + 1);
@@ -508,7 +505,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 	incr = do_invert ? -1 : 1;
 	for (k = 0, i = 0; k < lleg; k++) {
 	    if (discrete && Listnum)
-		tdcell = Listcats[(int) ((float) k * numlabs / lleg)];
+		tdcell = Listcats[(int)((float)k * numlabs / lleg)];
 	    else {
 		tcell = min + k * (max - min + 1) / lleg;
 		tdcell = fmin + k * (fmax - fmin) / lleg;
@@ -697,11 +694,11 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 
     gsd_end_legend_viewport();
 
-/*
-  gsd_unset_font(fontbase);
-*/
-    
+    /*
+       gsd_unset_font(fontbase);
+     */
+
     gsd_endlist();
-    
+
     return (legend_list);
 }

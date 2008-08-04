@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       v.build.polylines
@@ -14,59 +15,59 @@
  *
  *****************************************************************************/
 /*
-  v.build.polylines
+   v.build.polylines
 
-  *****
- 
-  Mark Lake  5/4/00
+   *****
 
-  University College London
-  Institute of Archaeology
-  31-34 Gordon Square
-  London.  WC1H 0PY
+   Mark Lake  5/4/00
 
-  Email: mark.lake@ucl.ac.uk
+   University College London
+   Institute of Archaeology
+   31-34 Gordon Square
+   London.  WC1H 0PY
 
-  Updated to grass 5.7 by Radim Blazek
-  
-  *****
+   Email: mark.lake@ucl.ac.uk
 
-  PURPOSE 
+   Updated to grass 5.7 by Radim Blazek
 
-  1) Convert lines or mixed lines and polylines to polylines.  Preserve points 
-  if present.  Allow the user to label the new lines as lines or area edges.
+   *****
 
-  *****
+   PURPOSE 
 
-  METHOD
+   1) Convert lines or mixed lines and polylines to polylines.  Preserve points 
+   if present.  Allow the user to label the new lines as lines or area edges.
 
-  1) A line is a single straight line segment defined by one start
-  node, one end node and no other nodes.  In contrast, a polyline
-  consists of a number of straight line segments each joined by a common
-  node which is connected to exactly two lines.  The start and end nodes
-  of the polyline are connected to either one line, or three or more
-  lines.
+   *****
 
-  Points and centroids are ignored by build process and copied to output vector.
+   METHOD
 
-  *****
+   1) A line is a single straight line segment defined by one start
+   node, one end node and no other nodes.  In contrast, a polyline
+   consists of a number of straight line segments each joined by a common
+   node which is connected to exactly two lines.  The start and end nodes
+   of the polyline are connected to either one line, or three or more
+   lines.
 
-  FILES
+   Points and centroids are ignored by build process and copied to output vector.
 
-  1) main.c - algorithm for ifs.
+   *****
 
-  2) walk.c - functions to find start of polylines and to pick up their
-  coordinates.
+   FILES
 
-  3) line_coords.c - structure for storing coordinates.
+   1) main.c - algorithm for ifs.
 
-  *****
+   2) walk.c - functions to find start of polylines and to pick up their
+   coordinates.
 
-  PORTABILITY
+   3) line_coords.c - structure for storing coordinates.
 
-  1) Portable
+   *****
 
-***********************************************************************/
+   PORTABILITY
+
+   1) Portable
+
+   ********************************************************************** */
 #define MAIN
 
 #include <stdlib.h>
@@ -77,152 +78,156 @@
 #include <grass/glocale.h>
 #include "walk.h"
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-  int line;
-  struct line_pnts *points;
-  struct line_cats *Cats;
-  
-  struct Map_info map, Out;
-  struct GModule *module;
-  struct Option *input;
-  struct Option *output;
-  struct Option *cats;
-  struct Flag *quietly;
+    int line;
+    struct line_pnts *points;
+    struct line_cats *Cats;
 
-  int polyline;
-  int *lines_visited;
-  int points_in_polyline;
-  int start_line;
-  int nlines, type;
-  int write_cats;
+    struct Map_info map, Out;
+    struct GModule *module;
+    struct Option *input;
+    struct Option *output;
+    struct Option *cats;
+    struct Flag *quietly;
 
-  char *mapset;
-  int start_type;
+    int polyline;
+    int *lines_visited;
+    int points_in_polyline;
+    int start_line;
+    int nlines, type;
+    int write_cats;
 
-  /*  Initialize the GIS calls */
-  G_gisinit(argv[0]) ;
+    char *mapset;
+    int start_type;
 
-  module = G_define_module();
-  module->keywords = _("vector, geometry, topology");
-  module->description = _("Builds polylines from lines or boundaries.");
+    /*  Initialize the GIS calls */
+    G_gisinit(argv[0]);
 
-  /* Define the options */
+    module = G_define_module();
+    module->keywords = _("vector, geometry, topology");
+    module->description = _("Builds polylines from lines or boundaries.");
 
-  input = G_define_standard_option (G_OPT_V_INPUT);
-  output = G_define_standard_option (G_OPT_V_OUTPUT);
+    /* Define the options */
 
-  cats = G_define_option();
-  cats->key          = "cats";
-  cats->type         = TYPE_STRING;
-  cats->description  = _("Category number mode");
-  cats->options      = "no,first,multi";
-  cats->descriptions = _("no;Do not assign any category number to polyline;"
-			 "first;Assign category number of first line to polyline;"
-			 "multi;Assign multiple category numbers to polyline");
-  cats->answer       = "no";
+    input = G_define_standard_option(G_OPT_V_INPUT);
+    output = G_define_standard_option(G_OPT_V_OUTPUT);
 
-  quietly = G_define_flag ();
-  quietly->key = 'q';
-  quietly->description = _("Do not print polyline info");
+    cats = G_define_option();
+    cats->key = "cats";
+    cats->type = TYPE_STRING;
+    cats->description = _("Category number mode");
+    cats->options = "no,first,multi";
+    cats->descriptions = _("no;Do not assign any category number to polyline;"
+			   "first;Assign category number of first line to polyline;"
+			   "multi;Assign multiple category numbers to polyline");
+    cats->answer = "no";
 
-  if (G_parser(argc, argv)) exit (EXIT_FAILURE);
-  
-  Vect_check_input_output_name ( input->answer, output->answer, GV_FATAL_EXIT );
+    quietly = G_define_flag();
+    quietly->key = 'q';
+    quietly->description = _("Do not print polyline info");
 
-  /* Open binary vector map at level 2 */
-  mapset = G_find_vector2 (input->answer, "");
-  if ( mapset == NULL )
-      G_fatal_error (_("Vector map <%s> not found"), input->answer);  
-  Vect_set_open_level (2);
-  Vect_open_old (&map, input->answer, mapset);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-  /* Open new vector */
-  G_find_vector2 ( output->answer, "");
-  Vect_open_new ( &Out, output->answer, Vect_is_3d(&map) );
+    Vect_check_input_output_name(input->answer, output->answer,
+				 GV_FATAL_EXIT);
 
-  /* Copy header info. */
-  Vect_copy_head_data (&map, &Out); 
+    /* Open binary vector map at level 2 */
+    mapset = G_find_vector2(input->answer, "");
+    if (mapset == NULL)
+	G_fatal_error(_("Vector map <%s> not found"), input->answer);
+    Vect_set_open_level(2);
+    Vect_open_old(&map, input->answer, mapset);
 
-  /* History */
-  Vect_hist_copy (&map, &Out);
-  Vect_hist_command ( &Out );      
+    /* Open new vector */
+    G_find_vector2(output->answer, "");
+    Vect_open_new(&Out, output->answer, Vect_is_3d(&map));
 
-  /* Get the number of lines in the binary map and set up record of lines visited */
+    /* Copy header info. */
+    Vect_copy_head_data(&map, &Out);
 
-  lines_visited = (int*) G_calloc ( Vect_get_num_lines(&map) + 1, sizeof (int));
+    /* History */
+    Vect_hist_copy(&map, &Out);
+    Vect_hist_command(&Out);
 
-  /* Set up points structure and coordinate arrays */
-  points = Vect_new_line_struct ();
-  Cats = Vect_new_cats_struct ();
+    /* Get the number of lines in the binary map and set up record of lines visited */
 
-  /* Write cats */
-  if (strcmp (cats->answer, "no") == 0)
-      write_cats = NO_CATS;
-  else if (strcmp (cats->answer, "first") == 0)
-      write_cats = ONE_CAT;
-  else
-      write_cats = MULTI_CATS;
+    lines_visited =
+	(int *)G_calloc(Vect_get_num_lines(&map) + 1, sizeof(int));
 
-  /* Step over all lines in binary map */
-  polyline = 0;
-  nlines = 0;
+    /* Set up points structure and coordinate arrays */
+    points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
-  for ( line = 1; line <= Vect_get_num_lines(&map); line++ ) {
-      Vect_reset_cats(Cats);
-      type = Vect_read_line (&map, NULL, NULL, line);
-      
-      if (type & GV_LINES)
-	  nlines++;
+    /* Write cats */
+    if (strcmp(cats->answer, "no") == 0)
+	write_cats = NO_CATS;
+    else if (strcmp(cats->answer, "first") == 0)
+	write_cats = ONE_CAT;
+    else
+	write_cats = MULTI_CATS;
 
-      /* Skip line if already visited from another */
-      if (lines_visited [line])
-	  continue;
-     
-      /* Only get here if line is not previously visited */
-      
-      /* Find start of this polyline */
-      start_line = walk_back (&map, line);
-      start_type = Vect_read_line ( &map, NULL, NULL, start_line);
-      if (!quietly->answer) {
-            fprintf (stdout, "Polyline %d: start line = %d \n", polyline, start_line);
-            fflush (stdout);
-      }
+    /* Step over all lines in binary map */
+    polyline = 0;
+    nlines = 0;
 
-      /* Walk forward and pick up coordinates */
-      points_in_polyline = walk_forward_and_pick_up_coords (&map, start_line, points,
-							    lines_visited,
-							    Cats, write_cats);
+    for (line = 1; line <= Vect_get_num_lines(&map); line++) {
+	Vect_reset_cats(Cats);
+	type = Vect_read_line(&map, NULL, NULL, line);
 
-      /* Write the line (type of the first line is used) */
-      Vect_write_line ( &Out, start_type, points, Cats );
+	if (type & GV_LINES)
+	    nlines++;
 
-      if (type & GV_LINES)
-	  polyline++;
-  }
+	/* Skip line if already visited from another */
+	if (lines_visited[line])
+	    continue;
 
-  G_message (_("%d lines or boundaries found in vector map <%s@%s>"),
-	     nlines, Vect_get_name(&map), Vect_get_mapset(&map));
-  G_message (_("%d polylines stored to vector map <%s%s>"),
-	     polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
+	/* Only get here if line is not previously visited */
 
-  /* Copy (all linked) tables if needed */
-  if (write_cats != NO_CATS) {
-      Vect_copy_tables(&map, &Out, 0); 
-  }
+	/* Find start of this polyline */
+	start_line = walk_back(&map, line);
+	start_type = Vect_read_line(&map, NULL, NULL, start_line);
+	if (!quietly->answer) {
+	    fprintf(stdout, "Polyline %d: start line = %d \n", polyline,
+		    start_line);
+	    fflush(stdout);
+	}
 
-  /* Tidy up */
-  Vect_destroy_line_struct (points);
-  Vect_destroy_cats_struct (Cats);
-  G_free ( lines_visited );
-  Vect_close (&map);
+	/* Walk forward and pick up coordinates */
+	points_in_polyline =
+	    walk_forward_and_pick_up_coords(&map, start_line, points,
+					    lines_visited, Cats, write_cats);
 
-  if (G_verbose() > G_verbose_min())
-      Vect_build (&Out, stderr); 
-  else
-      Vect_build (&Out, NULL); 
+	/* Write the line (type of the first line is used) */
+	Vect_write_line(&Out, start_type, points, Cats);
 
-  Vect_close (&Out);
+	if (type & GV_LINES)
+	    polyline++;
+    }
 
-  exit (EXIT_SUCCESS);
+    G_message(_("%d lines or boundaries found in vector map <%s@%s>"),
+	      nlines, Vect_get_name(&map), Vect_get_mapset(&map));
+    G_message(_("%d polylines stored to vector map <%s%s>"),
+	      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));
+
+    /* Copy (all linked) tables if needed */
+    if (write_cats != NO_CATS) {
+	Vect_copy_tables(&map, &Out, 0);
+    }
+
+    /* Tidy up */
+    Vect_destroy_line_struct(points);
+    Vect_destroy_cats_struct(Cats);
+    G_free(lines_visited);
+    Vect_close(&map);
+
+    if (G_verbose() > G_verbose_min())
+	Vect_build(&Out, stderr);
+    else
+	Vect_build(&Out, NULL);
+
+    Vect_close(&Out);
+
+    exit(EXIT_SUCCESS);
 }

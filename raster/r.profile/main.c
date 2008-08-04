@@ -52,7 +52,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_("Outputs the raster map layer values lying on user-defined line(s).");
+	_
+	("Outputs the raster map layer values lying on user-defined line(s).");
 
     parm.opt1 = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
     parm.output->key = "output";
     parm.output->type = TYPE_STRING;
     parm.output->required = NO;
-    parm.output->answer     = "-";
+    parm.output->answer = "-";
     parm.output->gisprompt = "new_file,file,output";
     parm.output->description =
 	_("Name of file for output (use output=- for stdout)");
@@ -80,12 +81,12 @@ int main(int argc, char *argv[])
     parm.res->description =
 	_("Resolution along profile (default = current region resolution)");
 
-    parm.null_str = G_define_option() ;
-    parm.null_str->key        = "null";
-    parm.null_str->type       = TYPE_STRING;
-    parm.null_str->required   = NO;
-    parm.null_str->answer     = "*";
-    parm.null_str->description= _("Character to represent no data cell") ;
+    parm.null_str = G_define_option();
+    parm.null_str->key = "null";
+    parm.null_str->type = TYPE_STRING;
+    parm.null_str->required = NO;
+    parm.null_str->answer = "*";
+    parm.null_str->description = _("Character to represent no data cell");
 
     parm.i = G_define_flag();
     parm.i->key = 'i';
@@ -94,7 +95,8 @@ int main(int argc, char *argv[])
     parm.g = G_define_flag();
     parm.g->key = 'g';
     parm.g->description =
-	_("Output easting and northing in first two columns of four column output");
+	_
+	("Output easting and northing in first two columns of four column output");
 
     parm.c = G_define_flag();
     parm.c->key = 'c';
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
 
     clr = 0;
     if (parm.c->answer)
-	    clr = 1; /* color output */
+	clr = 1;		/* color output */
 
     null_string = parm.null_str->answer;
 
@@ -117,7 +119,7 @@ int main(int argc, char *argv[])
     if (parm.res->answer) {
 	res = atof(parm.res->answer);
 	/* Catch bad resolution ? */
-	if (res <= 0) 
+	if (res <= 0)
 	    G_fatal_error(_("Illegal resolution! [%g]"), res);
     }
     else {
@@ -145,7 +147,7 @@ int main(int argc, char *argv[])
 
     /* initialize color structure */
     if (clr)
-	    G_read_colors(name, mapset, &colors);
+	G_read_colors(name, mapset, &colors);
 
     /* Open ASCII file for output or stdout */
     outfile = parm.output->answer;
@@ -175,29 +177,30 @@ int main(int argc, char *argv[])
     /* Show message giving output format */
     G_message(_("Output Format:"));
     if (coords == 1)
-        sprintf(formatbuff,_("[Easting] [Northing] [Along Track Dist.(m)] [Elevation]"));
-    else 
-	sprintf(formatbuff,_("[Along Track Dist.(m)] [Elevation]"));
-    if(clr) 
-        strcat(formatbuff,_(" [RGB Color]"));
+	sprintf(formatbuff,
+		_("[Easting] [Northing] [Along Track Dist.(m)] [Elevation]"));
+    else
+	sprintf(formatbuff, _("[Along Track Dist.(m)] [Elevation]"));
+    if (clr)
+	strcat(formatbuff, _(" [RGB Color]"));
     G_message(formatbuff);
 
     /* Get Profile Start Coords */
-    if (!parm.profile->answer && !parm.i->answer ) {
-    /* Assume input from stdin */
-        for (n=1; input(b1, ebuf, b2, nbuf, label) ; n++)
-    	{
-	    G_debug(4,"stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
-	    if (!G_scan_easting (ebuf, &e2, G_projection()) ||
-			    !G_scan_northing (nbuf, &n2, G_projection()))
-		    G_fatal_error(_("Invalid coordinates %s %s"), ebuf, nbuf);
+    if (!parm.profile->answer && !parm.i->answer) {
+	/* Assume input from stdin */
+	for (n = 1; input(b1, ebuf, b2, nbuf, label); n++) {
+	    G_debug(4, "stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
+	    if (!G_scan_easting(ebuf, &e2, G_projection()) ||
+		!G_scan_northing(nbuf, &n2, G_projection()))
+		G_fatal_error(_("Invalid coordinates %s %s"), ebuf, nbuf);
 
 	    if (havefirst)
-		do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp, null_string);
+		do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type,
+			   fp, null_string);
 	    e1 = e2;
 	    n1 = n2;
 	    havefirst = TRUE;
-       }
+	}
     }
     else if (parm.i->answer) {
 	/* Select points interactively */
@@ -217,8 +220,9 @@ int main(int argc, char *argv[])
 	fprintf(stderr, _("Right:  Finish profile and exit\n\n"));
 
 	while (button != 3) {
-	    R_get_location_with_line( (int)(0.5+ D_u_to_d_col(e1)),
-		(int)(0.5+ D_u_to_d_row(n1)), &screen_x, &screen_y, &button);
+	    R_get_location_with_line((int)(0.5 + D_u_to_d_col(e1)),
+				     (int)(0.5 + D_u_to_d_row(n1)), &screen_x,
+				     &screen_y, &button);
 
 	    if (button == 1 || button == 2) {
 		e2 = D_d_to_u_col((double)screen_x);
@@ -232,7 +236,8 @@ int main(int argc, char *argv[])
 	    G_plot_line(e1, n1, e2, n2);
 
 	    /* Get profile info */
-	    do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp, null_string);
+	    do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp,
+		       null_string);
 
 	    n1 = n2;
 	    e1 = e2;
@@ -241,7 +246,7 @@ int main(int argc, char *argv[])
 
 	R_close_driver();
     }
-     else {
+    else {
 	/* Coords from Command Line */
 	for (i = 0; parm.profile->answers[i]; i += 2) {
 	    /* Test for number coordinate pairs */
@@ -256,14 +261,18 @@ int main(int argc, char *argv[])
 	    n2 = n1;
 
 	    /* Get profile info */
-	    do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp, null_string);
+	    do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp,
+		       null_string);
 	}
 	else {
 	    for (i = 0; i <= k - 2; i += 2) {
 		G_scan_easting(parm.profile->answers[i], &e1, G_projection());
-		G_scan_northing(parm.profile->answers[i + 1], &n1, G_projection());
-		G_scan_easting(parm.profile->answers[i + 2], &e2, G_projection());
-		G_scan_northing(parm.profile->answers[i + 3], &n2, G_projection());
+		G_scan_northing(parm.profile->answers[i + 1], &n1,
+				G_projection());
+		G_scan_easting(parm.profile->answers[i + 2], &e2,
+			       G_projection());
+		G_scan_northing(parm.profile->answers[i + 3], &n2,
+				G_projection());
 
 		/* Get profile info */
 		do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type,
@@ -284,8 +293,9 @@ int main(int argc, char *argv[])
 
 /* Calculate the Profile Now */
 /* Establish parameters */
-int do_profile(double e1, double e2, double n1, double n2, char *name, int coords, 
-		double res, int fd, int data_type, FILE * fp, char *null_string)
+int do_profile(double e1, double e2, double n1, double n2, char *name,
+	       int coords, double res, int fd, int data_type, FILE * fp,
+	       char *null_string)
 {
     float rows, cols, LEN;
     double Y, X, AZI;
@@ -297,7 +307,8 @@ int do_profile(double e1, double e2, double n1, double n2, char *name, int coord
     G_message(_("Approx. transect length [%f] m"), LEN);
 
     if (!G_point_in_region(e2, n2))
-	G_warning(_("Endpoint coordinates are outside of current region settings"));
+	G_warning(_
+		  ("Endpoint coordinates are outside of current region settings"));
 
     /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {

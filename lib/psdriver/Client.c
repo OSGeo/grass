@@ -3,6 +3,5 @@
 
 void PS_Client_Close(void)
 {
-	fflush(outfp);
+    fflush(outfp);
 }
-

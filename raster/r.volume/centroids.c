@@ -29,6 +29,7 @@ int centroids(int fd,		/* File descriptor of map layer to process */
     int i, adjusted, numb, left, right;
     int *count;
     int row, col, rows, cols;
+
     adjusted = 0;
 
     cell_buf = G_allocate_cell_buf();
@@ -64,7 +65,7 @@ int centroids(int fd,		/* File descriptor of map layer to process */
     if (method > 0)
 	for (i = 0; i <= max; i++) {
 	    if (count[i]) {
-	        numb = count[i];
+		numb = count[i];
 		e[i] /= numb;
 		n[i] /= numb;
 	    }

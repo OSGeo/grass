@@ -1,8 +1,7 @@
 #include "xdr.h"
 
 
-int
-db__send_int(int n)
+int db__send_int(int n)
 {
     int stat = DB_OK;
 
@@ -15,8 +14,7 @@ db__send_int(int n)
     return stat;
 }
 
-int
-db__recv_int (int *n)
+int db__recv_int(int *n)
 {
     int stat = DB_OK;
 
@@ -29,8 +27,7 @@ db__recv_int (int *n)
     return stat;
 }
 
-int
-db__send_int_array (const int *x, int n)
+int db__send_int_array(const int *x, int n)
 {
     int stat = DB_OK;
 
@@ -48,8 +45,7 @@ db__send_int_array (const int *x, int n)
 
 /* returns an allocated array of ints */
 /* caller is responsible for free() */
-int
-db__recv_int_array (int **x, int *n)
+int db__recv_int_array(int **x, int *n)
 {
     int stat = DB_OK;
     int count = 0;
@@ -60,7 +56,7 @@ db__recv_int_array (int **x, int *n)
 
     *n = count;
 
-    *x = a = (int *) db_calloc(count, sizeof(*a));
+    *x = a = (int *)db_calloc(count, sizeof(*a));
 
     if (!db__recv(a, count * sizeof(*a)))
 	stat = DB_PROTOCOL_ERR;

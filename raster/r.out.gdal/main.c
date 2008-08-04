@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       r.out.gdal
@@ -31,7 +32,7 @@
 #include "cpl_string.h"
 #include "gdal.h"
 
-#define GRASS_MAX_COLORS 100000  /* what is the right value ?*/
+#define GRASS_MAX_COLORS 100000	/* what is the right value ? */
 
 void supported_formats(char **formats)
 {
@@ -59,8 +60,9 @@ void supported_formats(char **formats)
 	    pszRWFlag = "ro";
 
 	if (*formats)
-	    fprintf(stdout, "  %s (%s): %s\n", GDALGetDriverShortName(hDriver),
-		    pszRWFlag, GDALGetDriverLongName(hDriver));
+	    fprintf(stdout, "  %s (%s): %s\n",
+		    GDALGetDriverShortName(hDriver), pszRWFlag,
+		    GDALGetDriverLongName(hDriver));
 	else {
 	    if (GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATE, NULL) ||
 		GDALGetMetadataItem(hDriver, GDAL_DCAP_CREATECOPY, NULL)) {
@@ -79,9 +81,10 @@ void supported_formats(char **formats)
     return;
 }
 
-int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *mapset,
-		struct Cell_head *cellhead, RASTER_MAP_TYPE maptype,
-		double nodataval, const char *nodatakey)
+int import_band(GDALDatasetH hMEMDS, int band, const char *name,
+		const char *mapset, struct Cell_head *cellhead,
+		RASTER_MAP_TYPE maptype, double nodataval,
+		const char *nodatakey)
 {
 
     struct Colors sGrassColors;
@@ -104,119 +107,129 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 
     /* Get raster band  */
     GDALRasterBandH hBand = GDALGetRasterBand(hMEMDS, band);
+
     if (hBand == NULL) {
 	G_warning(_("Unable to get raster band"));
 	return -1;
     }
 
     /* Get min/max values. */
-    if( G_read_fp_range(name, mapset, &sRange ) == -1 )
-    {
-        bHaveMinMax = FALSE;
+    if (G_read_fp_range(name, mapset, &sRange) == -1) {
+	bHaveMinMax = FALSE;
     }
-    else
-    {
-        bHaveMinMax = TRUE;
-        G_get_fp_range_min_max( &sRange, &dfCellMin, &dfCellMax );
+    else {
+	bHaveMinMax = TRUE;
+	G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
 
     /* suppress useless warnings */
-    CPLPushErrorHandler( CPLQuietErrorHandler );
+    CPLPushErrorHandler(CPLQuietErrorHandler);
     GDALSetRasterColorInterpretation(hBand, GPI_RGB);
     CPLPopErrorHandler();
 
-    if( G_read_colors(name, mapset, &sGrassColors ) >= 0 )
-    {
+    if (G_read_colors(name, mapset, &sGrassColors) >= 0) {
 	int maxcolor, i;
 	CELL min, max;
 	char key[200], value[200];
 	int rcount;
 
-	G_get_color_range ( &min, &max, &sGrassColors);
-        if ( bHaveMinMax ) {
-	    if ( max < dfCellMax ) {
-	       maxcolor = max;
-            } else {
-	       maxcolor = (int) ceil ( dfCellMax );
+	G_get_color_range(&min, &max, &sGrassColors);
+	if (bHaveMinMax) {
+	    if (max < dfCellMax) {
+		maxcolor = max;
 	    }
-	    if ( maxcolor > GRASS_MAX_COLORS ) { 
+	    else {
+		maxcolor = (int)ceil(dfCellMax);
+	    }
+	    if (maxcolor > GRASS_MAX_COLORS) {
 		maxcolor = GRASS_MAX_COLORS;
-                G_warning("Too many values, color table cut to %d entries", maxcolor );
+		G_warning("Too many values, color table cut to %d entries",
+			  maxcolor);
 	    }
-	} else {
-	    if ( max < GRASS_MAX_COLORS ) {
-	       maxcolor = max;
-            } else {
-	       maxcolor = GRASS_MAX_COLORS;
-               G_warning("Too many values, color table set to %d entries", maxcolor );
+	}
+	else {
+	    if (max < GRASS_MAX_COLORS) {
+		maxcolor = max;
 	    }
-        }
-	
-	rcount = G_colors_count( &sGrassColors );
-	    
-	G_debug(3, "dfCellMin: %f, dfCellMax: %f, maxcolor: %d", dfCellMin, dfCellMax, maxcolor);
+	    else {
+		maxcolor = GRASS_MAX_COLORS;
+		G_warning("Too many values, color table set to %d entries",
+			  maxcolor);
+	    }
+	}
+
+	rcount = G_colors_count(&sGrassColors);
+
+	G_debug(3, "dfCellMin: %f, dfCellMax: %f, maxcolor: %d", dfCellMin,
+		dfCellMax, maxcolor);
 
 	hCT = GDALCreateColorTable(GPI_RGB);
-        for( iColor = 0; iColor <= maxcolor; iColor++ )
-        {
-            int	nRed, nGreen, nBlue;
-            GDALColorEntry sColor;
+	for (iColor = 0; iColor <= maxcolor; iColor++) {
+	    int nRed, nGreen, nBlue;
+	    GDALColorEntry sColor;
 
-            if( G_get_color( iColor, &nRed, &nGreen, &nBlue, &sGrassColors ) )
-            {
-                sColor.c1 = nRed;
-                sColor.c2 = nGreen;
-                sColor.c3 = nBlue;
-                sColor.c4 = 255;
+	    if (G_get_color(iColor, &nRed, &nGreen, &nBlue, &sGrassColors)) {
+		sColor.c1 = nRed;
+		sColor.c2 = nGreen;
+		sColor.c3 = nBlue;
+		sColor.c4 = 255;
 
-                G_debug(3, "G_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d", rcount, nRed, nGreen, nBlue);
-                GDALSetColorEntry( hCT, iColor, &sColor );
-            }
-            else
-            {
-                sColor.c1 = 0;
-                sColor.c2 = 0;
-                sColor.c3 = 0;
-                sColor.c4 = 0;
+		G_debug(3,
+			"G_get_color: Y, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			rcount, nRed, nGreen, nBlue);
+		GDALSetColorEntry(hCT, iColor, &sColor);
+	    }
+	    else {
+		sColor.c1 = 0;
+		sColor.c2 = 0;
+		sColor.c3 = 0;
+		sColor.c4 = 0;
 
-                G_debug(3, "G_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d", rcount, nRed, nGreen, nBlue);
-		GDALSetColorEntry( hCT, iColor, &sColor );
-            }
-        }
+		G_debug(3,
+			"G_get_color: N, rcount %d, nRed %d, nGreen %d, nBlue %d",
+			rcount, nRed, nGreen, nBlue);
+		GDALSetColorEntry(hCT, iColor, &sColor);
+	    }
+	}
 
-	if (rcount > 0)
-	{
+	if (rcount > 0) {
 	    /* Create metadata entries for color table rules */
-	    sprintf ( value, "%d", rcount );
-	    GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", value, NULL);
+	    sprintf(value, "%d", rcount);
+	    GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", value,
+				NULL);
 	}
 
 	/* Add the rules in reverse order */
-	for ( i = rcount-1; i >= 0; i-- ) {
+	for (i = rcount - 1; i >= 0; i--) {
 	    DCELL val1, val2;
 	    unsigned char r1, g1, b1, r2, g2, b2;
 
-	     G_get_f_color_rule ( &val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2, &sGrassColors, i );
-		
+	    G_get_f_color_rule(&val1, &r1, &g1, &b1, &val2, &r2, &g2, &b2,
+			       &sGrassColors, i);
 
-	     sprintf ( key, "COLOR_TABLE_RULE_RGB_%d", rcount-i-1 );
-	     sprintf ( value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1, b1, r2, g2, b2 );
-	     GDALSetMetadataItem(hBand, key, value, NULL);
+
+	    sprintf(key, "COLOR_TABLE_RULE_RGB_%d", rcount - i - 1);
+	    sprintf(value, "%e %e %d %d %d %d %d %d", val1, val2, r1, g1, b1,
+		    r2, g2, b2);
+	    GDALSetMetadataItem(hBand, key, value, NULL);
 	}
 	GDALSetRasterColorTable(hBand, hCT);
-    } else {
-        hCT = GDALCreateColorTable(GPI_RGB);
+    }
+    else {
+	hCT = GDALCreateColorTable(GPI_RGB);
 	GDALSetMetadataItem(hBand, "COLOR_TABLE_RULES_COUNT", "0", NULL);
-        GDALSetRasterColorTable(hBand, hCT);
+	GDALSetRasterColorTable(hBand, hCT);
     }
 
     /* Create GRASS raster buffer */
     void *bufer = G_allocate_raster_buf(maptype);
+
     if (bufer == NULL) {
 	G_warning(_("Unable to allocate buffer for reading raster map"));
 	return -1;
     }
     char *nulls = (char *)G_malloc(cols);
+
     if (nulls == NULL) {
 	G_warning(_("Unable to allocate buffer for reading raster map"));
 	return -1;
@@ -225,11 +238,13 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
     /* Copy data form GRASS raster to memory raster */
     int row, col;
     int n_nulls = 0;
+
     if (maptype == FCELL_TYPE) {
 
 	/* Source datatype understandible by GDAL */
 	GDALDataType datatype = GDT_Float32;
 	FCELL fnullval = (FCELL) nodataval;
+
 	for (row = 0; row < rows; row++) {
 
 	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
@@ -248,8 +263,8 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 		}
 
 	    if (GDALRasterIO
-		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype, 0,
-		 0) >= CE_Failure) {
+		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
+		 0, 0) >= CE_Failure) {
 		G_warning(_("Unable to write GDAL raster file"));
 		return -1;
 	    }
@@ -260,6 +275,7 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 
 	GDALDataType datatype = GDT_Float64;
 	DCELL dnullval = (DCELL) nodataval;
+
 	for (row = 0; row < rows; row++) {
 
 	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
@@ -270,7 +286,7 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 	    G_get_null_value_row(fd, nulls, row);
 	    for (col = 0; col < cols; col++)
 		if (nulls[col]) {
- 		    ((DCELL *) bufer)[col] = dnullval;
+		    ((DCELL *) bufer)[col] = dnullval;
 		    if (n_nulls == 0) {
 			GDALSetRasterNoDataValue(hBand, nodataval);
 		    }
@@ -278,8 +294,8 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 		}
 
 	    if (GDALRasterIO
-		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype, 0,
-		 0) >= CE_Failure) {
+		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
+		 0, 0) >= CE_Failure) {
 		G_warning(_("Unable to write GDAL raster file"));
 		return -1;
 	    }
@@ -290,6 +306,7 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 
 	GDALDataType datatype = GDT_Int32;
 	CELL inullval = (CELL) nodataval;
+
 	for (row = 0; row < rows; row++) {
 
 	    if (G_get_raster_row(fd, bufer, row, maptype) < 0) {
@@ -300,7 +317,7 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 	    G_get_null_value_row(fd, nulls, row);
 	    for (col = 0; col < cols; col++)
 		if (nulls[col]) {
- 		    ((CELL *) bufer)[col] = inullval;
+		    ((CELL *) bufer)[col] = inullval;
 		    if (n_nulls == 0) {
 			GDALSetRasterNoDataValue(hBand, nodataval);
 		    }
@@ -308,8 +325,8 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 		}
 
 	    if (GDALRasterIO
-		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype, 0,
-		 0) >= CE_Failure) {
+		(hBand, GF_Write, 0, row, cols, 1, bufer, cols, 1, datatype,
+		 0, 0) >= CE_Failure) {
 		G_warning(_("Unable to write GDAL raster file"));
 		return -1;
 	    }
@@ -319,14 +336,16 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name, const char *map
 
     if (n_nulls > 0) {
 	if (maptype == CELL_TYPE)
-	    G_warning(_("Input raster map constains cells with NULL-value (no-data). "
-			"The value %d was used to represent no-data values in the input map."
-			"You can specify nodata value by %s parameter."),
-		      (int) nodataval, nodatakey);
+	    G_warning(_
+		      ("Input raster map constains cells with NULL-value (no-data). "
+		       "The value %d was used to represent no-data values in the input map."
+		       "You can specify nodata value by %s parameter."),
+		      (int)nodataval, nodatakey);
 	else
-	    G_warning(_("Input raster map constains cells with NULL-value (no-data). "
-			"The value %g was used to represent no-data values in the input map."
-			"You can specify nodata value by %s parameter."),
+	    G_warning(_
+		      ("Input raster map constains cells with NULL-value (no-data). "
+		       "The value %g was used to represent no-data values in the input map."
+		       "You can specify nodata value by %s parameter."),
 		      nodataval, nodatakey);
     }
 
@@ -357,7 +376,8 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Flag *flag_l;
-    struct Option *input, *format, *type, *output, *createopt, *metaopt, *nodataopt;
+    struct Option *input, *format, *type, *output, *createopt, *metaopt,
+	*nodataopt;
 
     struct Cell_head cellhead;
     struct Ref ref;
@@ -371,7 +391,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description = _("Exports GRASS raster map into GDAL supported formats.");
+    module->description =
+	_("Exports GRASS raster map into GDAL supported formats.");
     module->keywords = _("raster, export");
 
     flag_l = G_define_flag();
@@ -439,7 +460,8 @@ int main(int argc, char *argv[])
     nodataopt = G_define_option();
     nodataopt->key = "nodata";
     nodataopt->type = TYPE_DOUBLE;
-    nodataopt->description = _("Assign a specified nodata value to output bands");
+    nodataopt->description =
+	_("Assign a specified nodata value to output bands");
     nodataopt->multiple = NO;
     nodataopt->required = NO;
 
@@ -457,8 +479,7 @@ int main(int argc, char *argv[])
     }
 
     if (!input->answer) {
-	G_fatal_error(_("Required parameter <%s> not set"),
-		      input->key);
+	G_fatal_error(_("Required parameter <%s> not set"), input->key);
     }
 
     /* Try to open input GRASS raster.. */
@@ -482,10 +503,12 @@ int main(int argc, char *argv[])
     struct Key_Value *projinfo = G_get_projinfo();
     struct Key_Value *projunits = G_get_projunits();
     char *srswkt = GPJ_grass_to_wkt(projinfo, projunits, 0, 0);
+
     G_get_window(&cellhead);
 
     /* Try to create raster data drivers. If failed - exit. */
     GDALDriverH hDriver = NULL, hMEMDriver = NULL;
+
     hDriver = GDALGetDriverByName(format->answer);
     if (hDriver == NULL)
 	G_fatal_error(_("Unable to get <%s> driver"), format->answer);
@@ -585,11 +608,12 @@ int main(int argc, char *argv[])
 
     /* If file type not set by user ... */
     /* Get min/max values. */
-    if( G_read_fp_range(ref.file[0].name, ref.file[0].mapset, &sRange ) == -1 ) {
-        bHaveMinMax = FALSE;
-    } else {
-        bHaveMinMax = TRUE;
-        G_get_fp_range_min_max( &sRange, &dfCellMin, &dfCellMax );
+    if (G_read_fp_range(ref.file[0].name, ref.file[0].mapset, &sRange) == -1) {
+	bHaveMinMax = FALSE;
+    }
+    else {
+	bHaveMinMax = TRUE;
+	G_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
     G_debug(3, "Range: min: %f, max: %f", dfCellMin, dfCellMax);
 
@@ -605,33 +629,38 @@ int main(int argc, char *argv[])
 	    nodataval = -1E37f;
 	}
 	else {
-	   /* Special tricks for GeoTIFF color table support and such */
-	    if (dfCellMin >= 0 && dfCellMax < 256 ) {
+	    /* Special tricks for GeoTIFF color table support and such */
+	    if (dfCellMin >= 0 && dfCellMax < 256) {
 		datatype = GDT_Byte;
 		nodataval = (double)(unsigned char)0xFFu;
-	    } else {
-		if (dfCellMin >= 0 && dfCellMax < 65536 ) {
+	    }
+	    else {
+		if (dfCellMin >= 0 && dfCellMax < 65536) {
 		    datatype = GDT_UInt16;
 		    nodataval = (double)(short)0x8000;
-		} else {
-		    datatype = GDT_Int32; /* need to furthermore fine tune this? */
+		}
+		else {
+		    datatype = GDT_Int32;	/* need to furthermore fine tune this? */
 		    nodataval = (double)(int)0x80000000;
 		}
 	    }
 	}
     }
 
-    G_debug( 3, "Input map datatype=%s\n",
-                    (maptype == CELL_TYPE ? "CELL" :
-                     (maptype == DCELL_TYPE ? "DCELL" :
-                      (maptype == FCELL_TYPE ? "FCELL" : "??"))));
-    G_message(_("Exporting to GDAL data type: %s"), GDALGetDataTypeName(datatype));
+    G_debug(3, "Input map datatype=%s\n",
+	    (maptype == CELL_TYPE ? "CELL" :
+	     (maptype == DCELL_TYPE ? "DCELL" :
+	      (maptype == FCELL_TYPE ? "FCELL" : "??"))));
+    G_message(_("Exporting to GDAL data type: %s"),
+	      GDALGetDataTypeName(datatype));
 
     /* Create dataset for output with target driver or, if needed, with in-memory driver */
     char **papszOptions = NULL;
+
     /* parse dataset creation options */
     if (createopt->answer) {
 	int i;
+
 	i = 0;
 	while (createopt->answers[i]) {
 	    papszOptions = CSLAddString(papszOptions, createopt->answers[i]);
@@ -640,12 +669,13 @@ int main(int argc, char *argv[])
     }
 
     GDALDatasetH hCurrDS = NULL, hMEMDS = NULL, hDstDS = NULL;
-    if(!output->answer)
+
+    if (!output->answer)
 	G_fatal_error(_("Output file name not specified"));
     if (hMEMDriver) {
 	hMEMDS =
-	    GDALCreate(hMEMDriver, "", cellhead.cols, cellhead.rows, ref.nfiles,
-		       datatype, papszOptions);
+	    GDALCreate(hMEMDriver, "", cellhead.cols, cellhead.rows,
+		       ref.nfiles, datatype, papszOptions);
 	if (hMEMDS == NULL)
 	    G_fatal_error(_("Unable to create dataset using "
 			    "memory raster driver"));
@@ -656,13 +686,15 @@ int main(int argc, char *argv[])
 	    GDALCreate(hDriver, output->answer, cellhead.cols, cellhead.rows,
 		       ref.nfiles, datatype, papszOptions);
 	if (hDstDS == NULL)
-	    G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
+	    G_fatal_error(_
+			  ("Unable to create <%s> dataset using <%s> driver"),
 			  output->answer, format->answer);
 	hCurrDS = hDstDS;
     }
 
     /* Set Geo Transform  */
     double adfGeoTransform[6];
+
     adfGeoTransform[0] = cellhead.west;
     adfGeoTransform[1] = cellhead.ew_res;
     adfGeoTransform[2] = 0.0;
@@ -674,6 +706,7 @@ int main(int argc, char *argv[])
 
     /* Set Projection  */
     CPLErr ret;
+
     if (srswkt)
 	ret = GDALSetProjection(hCurrDS, srswkt);
     if (!srswkt || ret == CE_Failure)
@@ -684,11 +717,13 @@ int main(int argc, char *argv[])
 
     /* Export to GDAL raster */
     int band;
+
     for (band = 0; band < ref.nfiles; band++) {
 	if (ref.nfiles > 1) {
 	    G_verbose_message(_("Exporting raster map <%s> (band %d)..."),
-			      G_fully_qualified_name(ref.file[band].name, ref.file[band].mapset),
-			      band+1);
+			      G_fully_qualified_name(ref.file[band].name,
+						     ref.file[band].mapset),
+			      band + 1);
 	}
 	if (import_band
 	    (hCurrDS, band + 1, ref.file[band].name, ref.file[band].mapset,
@@ -700,10 +735,11 @@ int main(int argc, char *argv[])
     /* Finaly create user required raster format from memory raster if in-memory driver was used */
     if (hMEMDS) {
 	hDstDS =
-	    GDALCreateCopy(hDriver, output->answer, hMEMDS, FALSE, papszOptions,
-			   NULL, NULL);
+	    GDALCreateCopy(hDriver, output->answer, hMEMDS, FALSE,
+			   papszOptions, NULL, NULL);
 	if (hDstDS == NULL)
-	    G_fatal_error(_("Unable to create raster map <%s> using driver <%s>"),
+	    G_fatal_error(_
+			  ("Unable to create raster map <%s> using driver <%s>"),
 			  output->answer, format->answer);
     }
 
@@ -713,7 +749,7 @@ int main(int argc, char *argv[])
 
     CSLDestroy(papszOptions);
 
-    G_done_msg (" ");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }

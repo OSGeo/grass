@@ -35,24 +35,25 @@ GLOBAL Group group;
 GLOBAL char interrupt_char;
 GLOBAL char *tempfile1;
 GLOBAL char *tempfile2;
-GLOBAL char *digit_points;            /* digitizer control points */
-GLOBAL char *digit_results;           /* digitizer results */
-GLOBAL int  use_digitizer INIT(0);    /* is there a digitizer out there? */
+GLOBAL char *digit_points;	/* digitizer control points */
+GLOBAL char *digit_results;	/* digitizer results */
+GLOBAL int use_digitizer INIT(0);	/* is there a digitizer out there? */
 
 /* group file list, target cell,vector files */
 GLOBAL char *group_list INIT(NULL);
 GLOBAL char *cell_list INIT(NULL);
 GLOBAL char *vect_list INIT(NULL);
 
-GLOBAL int  from_keyboard  INIT(-1);   /* input method */
-GLOBAL int  from_digitizer INIT(-1);
-GLOBAL int  from_screen    INIT(-1);
-GLOBAL int  from_flag      INIT(0);
+GLOBAL int from_keyboard INIT(-1);	/* input method */
+GLOBAL int from_digitizer INIT(-1);
+GLOBAL int from_screen INIT(-1);
+GLOBAL int from_flag INIT(0);
 
-GLOBAL int  dotsize INIT(4);
+GLOBAL int dotsize INIT(4);
 
 
 GLOBAL int THE_COLORS[10];
+
 #define BLACK	THE_COLORS[0]
 #define BLUE	THE_COLORS[1]
 #define BROWN	THE_COLORS[2]

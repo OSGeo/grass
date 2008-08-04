@@ -25,14 +25,15 @@
 
 /*Prototype */
 /*Formated coordinates output */
-static void write_point_coordinates(struct line_pnts *Points, int dp, double scale, FILE * ascii);
+static void write_point_coordinates(struct line_pnts *Points, int dp,
+				    double scale, FILE * ascii);
 
 
 /* ************************************************************************* */
 /* This function writes the vtk points and coordinates ********************* */
 /* ************************************************************************* */
 int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
-		   int *types, int typenum, int dp, double scale)
+		     int *types, int typenum, int dp, double scale)
 {
     int type, cur, i, k, centroid;
     int pointoffset = 0;
@@ -288,11 +289,12 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 /* This function writes the vtk cells ************************************** */
 /* ************************************************************************* */
 int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
-		  int *types, int typenum)
+		    int *types, int typenum)
 {
     int type, i, j, k, centroid;
     static struct line_pnts *Points;
     struct line_cats *Cats;
+
     /*The keywords may only be written once! */
     int vertkeyword = 1;
     int linekeyword = 1;
@@ -316,7 +318,7 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 	    if (info->typeinfo[types[k]]->numpoints > 0) {
 		if (vertkeyword) {
 		    fprintf(ascii, "VERTICES %i %i\n", info->maxnumvertices,
-			    info->maxnumvertices*2 );
+			    info->maxnumvertices * 2);
 		    vertkeyword = 0;
 		}
 		for (i = 0; i < info->typeinfo[types[k]]->numpoints; i++) {
@@ -356,7 +358,8 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 			fprintf(ascii, "%i", Points->n_points);
 			while (Points->n_points--) {
 			    fprintf(ascii, " %i",
-				    i + info->typeinfo[types[k]]->pointoffset);
+				    i +
+				    info->typeinfo[types[k]]->pointoffset);
 			    i++;
 			}
 			fprintf(ascii, "\n");
@@ -395,7 +398,8 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 			fprintf(ascii, "%i", Points->n_points);
 			while (Points->n_points--) {
 			    fprintf(ascii, " %i",
-				    i + info->typeinfo[types[k]]->pointoffset);
+				    i +
+				    info->typeinfo[types[k]]->pointoffset);
 			    i++;
 			}
 			fprintf(ascii, "\n");
@@ -450,11 +454,12 @@ int write_vtk_cells(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 /* This function writes the categories as vtk cell data ******************** */
 /* ************************************************************************* */
 int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
-		    int layer, int *types, int typenum, int dp)
+		       int layer, int *types, int typenum, int dp)
 {
     int type, cat, i, k, centroid;
     static struct line_pnts *Points;
     struct line_cats *Cats;
+
     /*The keywords may only be written once! */
     int numcelldata =
 	info->maxnumvertices + info->maxnumlines + info->maxnumpolygons;
@@ -546,7 +551,7 @@ int write_vtk_cat_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 }
 
 int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
-		   int layer, int *types, int typenum, int dp)
+		      int layer, int *types, int typenum, int dp)
 {
     G_message("Writing database cell/point data");
 
@@ -557,7 +562,7 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 /* This function writes the point coordinates and the geometric feature **** */
 /* ************************************************************************* */
 int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
-	     int typenum, int dp, double scale)
+	      int typenum, int dp, double scale)
 {
     VTKInfo *info;
     VTKTypeInfo **typeinfo;
@@ -603,8 +608,8 @@ int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
 
     /*4. write the DB data */
     /* not yet implemented
-    write_vtk_db_data(ascii, Map, info, layer, types, typenum, dp);
-    */
+       write_vtk_db_data(ascii, Map, info, layer, types, typenum, dp);
+     */
 
     /*Release the memory */
     for (i = 0; i < infonum; i++) {
@@ -619,7 +624,8 @@ int write_vtk(FILE * ascii, struct Map_info *Map, int layer, int *types,
 /* ************************************************************************* */
 /* This function writes the point coordinates ****************************** */
 /* ************************************************************************* */
-void write_point_coordinates(struct line_pnts *Points, int dp, double scale, FILE * ascii)
+void write_point_coordinates(struct line_pnts *Points, int dp, double scale,
+			     FILE * ascii)
 {
     char *xstring = NULL, *ystring = NULL, *zstring = NULL;
     double *xptr, *yptr, *zptr;
@@ -633,7 +639,7 @@ void write_point_coordinates(struct line_pnts *Points, int dp, double scale, FIL
 	G_trim_decimal(xstring);
 	G_asprintf(&ystring, "%.*f", dp, *yptr++ - y_extent);
 	G_trim_decimal(ystring);
-	G_asprintf(&zstring, "%.*f", dp, scale* (*zptr++));
+	G_asprintf(&zstring, "%.*f", dp, scale * (*zptr++));
 	G_trim_decimal(zstring);
 	fprintf(ascii, "%s %s %s \n", xstring, ystring, zstring);
     }

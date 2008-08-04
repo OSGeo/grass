@@ -218,13 +218,14 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			  rgb_column);
 
 	if (nrec_rgb < 0)
-	    G_fatal_error(_("Cannot select data (%s) from table"), rgb_column);
+	    G_fatal_error(_("Cannot select data (%s) from table"),
+			  rgb_column);
 
 	G_debug(2, "\n%d records selected from table", nrec_rgb);
 
 	for (i = 0; i < cvarr_rgb.n_values; i++) {
-	    G_debug(4, "cat = %d  %s = %s", cvarr_rgb.value[i].cat, rgb_column,
-		    db_get_string(cvarr_rgb.value[i].val.s));
+	    G_debug(4, "cat = %d  %s = %s", cvarr_rgb.value[i].cat,
+		    rgb_column, db_get_string(cvarr_rgb.value[i].val.s));
 	}
     }
 
@@ -335,13 +336,15 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    /* only first category */
 	    cat = Vect_get_line_cat(Map, line,
 				    (Clist->field > 0 ? Clist->field :
-				     (Cats->n_cats > 0 ? Cats->field[0] : 1)));
+				     (Cats->n_cats >
+				      0 ? Cats->field[0] : 1)));
 
 	    if (cat >= 0) {
 		G_debug(3, "display element %d, cat %d", line, cat);
 
 		/* Read RGB colors from db for current area # */
-		if (db_CatValArray_get_value(&cvarr_rgb, cat, &cv_rgb) != DB_OK) {
+		if (db_CatValArray_get_value(&cvarr_rgb, cat, &cv_rgb) !=
+		    DB_OK) {
 		    custom_rgb = FALSE;
 		}
 		else {
@@ -351,7 +354,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			G_debug(3, "element %d: colorstring: %s", line,
 				colorstring);
 
-			if (G_str_to_color(colorstring, &red, &grn, &blu) == 1) {
+			if (G_str_to_color(colorstring, &red, &grn, &blu) ==
+			    1) {
 			    custom_rgb = TRUE;
 			    G_debug(3, "element:%d  cat %d r:%d g:%d b:%d",
 				    line, cat, red, grn, blu);
@@ -417,7 +421,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    /* only first category */
 	    cat = Vect_get_line_cat(Map, line,
 				    (Clist->field > 0 ? Clist->field :
-				     (Cats->n_cats > 0 ? Cats->field[0] : 1)));
+				     (Cats->n_cats >
+				      0 ? Cats->field[0] : 1)));
 
 	    if (cat >= 0) {
 		G_debug(3, "display element %d, cat %d", line, cat);
@@ -429,9 +434,10 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		    width = default_width;
 		}
 		else {
-		    width = width_scale * (cvarr_width.ctype == DB_C_TYPE_INT ?
-					   cv_width->val.i : (int)cv_width->val.
-					   d);
+		    width =
+			width_scale * (cvarr_width.ctype ==
+				       DB_C_TYPE_INT ? cv_width->val.
+				       i : (int)cv_width->val.d);
 		    if (width < 0) {
 			G_warning(_
 				  ("Error in line width column (%s), element %d "

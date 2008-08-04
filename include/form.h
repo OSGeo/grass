@@ -10,10 +10,9 @@
 #define F_KEY_FNAME "_grass_internal_key_name"
 #define F_ENCODING "_grass_internal_database_encoding"
 
-int F_generate ( char *driver, char *database, char *table, char *key, int keyval, 
-	     char *frmname, char *frmmapset, 
-	     int edit_mode, int format, 
-	     char **form );
-int F_open ( char *title, char *html );
-void F_clear ( void );
-void F_close ( void );
+int F_generate(char *driver, char *database, char *table, char *key,
+	       int keyval, char *frmname, char *frmmapset, int edit_mode,
+	       int format, char **form);
+int F_open(char *title, char *html);
+void F_clear(void);
+void F_close(void);

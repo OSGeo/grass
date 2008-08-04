@@ -14,25 +14,27 @@
 #include "local.h"
 
 /* Compare by cat */
-static int cmp ( const void *pa, const void *pb )
+static int cmp(const void *pa, const void *pb)
 {
-    ATTR *p1 = (ATTR*) pa;
-    ATTR *p2 = (ATTR*) pb;
+    ATTR *p1 = (ATTR *) pa;
+    ATTR *p2 = (ATTR *) pb;
 
-    if ( p1->cat < p2->cat ) return -1;
-    if ( p1->cat > p2->cat ) return 1;
+    if (p1->cat < p2->cat)
+	return -1;
+    if (p1->cat > p2->cat)
+	return 1;
     return 0;
 }
 
-ATTR *find_attr ( ATTRIBUTES *attributes, int cat )
+ATTR *find_attr(ATTRIBUTES * attributes, int cat)
 {
     ATTR *attr, key;
 
-    G_debug ( 3, "find_attr() cat = %d", cat);
+    G_debug(3, "find_attr() cat = %d", cat);
 
     key.cat = cat;
-    
-    attr = bsearch ( &key, attributes->attr, attributes->n, sizeof(ATTR), cmp ); 
-    
+
+    attr = bsearch(&key, attributes->attr, attributes->n, sizeof(ATTR), cmp);
+
     return attr;
 }

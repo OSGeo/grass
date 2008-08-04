@@ -1,3 +1,4 @@
+
 /****************************************************************************
 * MODULE:       R-Tree library 
 *              
@@ -26,7 +27,7 @@
 #define SPLIT_Q_GLOBAL extern
 #endif
 
-SPLIT_Q_GLOBAL struct Branch BranchBuf[MAXCARD+1];
+SPLIT_Q_GLOBAL struct Branch BranchBuf[MAXCARD + 1];
 SPLIT_Q_GLOBAL int BranchCount;
 SPLIT_Q_GLOBAL struct Rect CoverSplit;
 SPLIT_Q_GLOBAL RectReal CoverSplitArea;
@@ -34,10 +35,10 @@ SPLIT_Q_GLOBAL RectReal CoverSplitArea;
 /* variables for finding a partition */
 SPLIT_Q_GLOBAL struct PartitionVars
 {
-	int partition[MAXCARD+1];
-	int total, minfill;
-	int taken[MAXCARD+1];
-	int count[2];
-	struct Rect cover[2];
-	RectReal area[2];
+    int partition[MAXCARD + 1];
+    int total, minfill;
+    int taken[MAXCARD + 1];
+    int count[2];
+    struct Rect cover[2];
+    RectReal area[2];
 } Partitions[METHODS];

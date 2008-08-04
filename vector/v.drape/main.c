@@ -1,3 +1,4 @@
+
 /**********************************************************
  *
  * MODULE:       v.drape
@@ -36,11 +37,13 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *type_opt, *rast_opt, *method_opt, *scale_opt;
+    struct Option *in_opt, *out_opt, *type_opt, *rast_opt, *method_opt,
+	*scale_opt;
 
     struct Map_info In, Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
+
     /* int    layer; */
     int line, nlines, otype, ltype;
     BOUND_BOX in_bbox, region_bbox, rast_bbox;
@@ -57,7 +60,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, geometry, sampling");
     module->description =
-      _("Converts vector map to 3D by sampling of elevation raster map.");
+	_("Converts vector map to 3D by sampling of elevation raster map.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -85,8 +88,8 @@ int main(int argc, char *argv[])
     method_opt->options = "nearest,bilinear,cubic";
     method_opt->answer = "nearest";
     method_opt->descriptions = "nearest;nearest neighbor;"
-			"bilinear;bilinear interpolation;"
-			"cubic;cubic convolution interpolation;";
+	"bilinear;bilinear interpolation;"
+	"cubic;cubic convolution interpolation;";
     method_opt->description = _("Sampling method");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -95,13 +98,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* which interpolation method should we use */
-    if ( method_opt->answer[0] == 'b' )
+    if (method_opt->answer[0] == 'b')
 	method = BILINEAR;
-    else if ( method_opt->answer[0] == 'c' )
+    else if (method_opt->answer[0] == 'c')
 	method = CUBIC;
-    else
-    {
-        method = NEAREST;
+    else {
+	method = NEAREST;
     }
 
     /* setup the raster for sampling */
@@ -109,7 +111,7 @@ int main(int argc, char *argv[])
     /* setup the region */
     G_get_window(&window);
 
-    /* used to scale sampled raster values*/
+    /* used to scale sampled raster values */
     scale = atof(scale_opt->answer);
 
     /* Check output type */
@@ -131,7 +133,8 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     /* check input/output vector maps */
-    Vect_check_input_output_name(in_opt->answer, out_opt->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(in_opt->answer, out_opt->answer,
+				 GV_FATAL_EXIT);
 
     mapset = G_find_vector2(in_opt->answer, "");
     if (!mapset) {
@@ -143,24 +146,24 @@ int main(int argc, char *argv[])
     /* checks 
        does the elevation raster cover the entire are of the vector map?
        does the current region include the entire input vector map ?
-    */
+     */
     Vect_get_map_box(&In, &in_bbox);
     Vect_region_box(&window, &region_bbox);
     Vect_region_box(&rast_window, &rast_bbox);
     if (in_bbox.W < region_bbox.W ||
 	in_bbox.E > region_bbox.E ||
-	in_bbox.S < region_bbox.S ||
-	in_bbox.N > region_bbox.N) {
-	G_warning (_("Current region does not include the entire input vector map <%s>"),
-		   in_opt->answer);
+	in_bbox.S < region_bbox.S || in_bbox.N > region_bbox.N) {
+	G_warning(_
+		  ("Current region does not include the entire input vector map <%s>"),
+		  in_opt->answer);
     }
     if (in_bbox.W < rast_bbox.W ||
 	in_bbox.E > rast_bbox.E ||
-	in_bbox.S < rast_bbox.S ||
-	in_bbox.N > rast_bbox.N) {	
-	G_warning (_("Elevation raster map <%s> does not cover the entire area "
-		     "of the input vector map <%s>. "),
-		   rast_opt->answer, in_opt->answer);
+	in_bbox.S < rast_bbox.S || in_bbox.N > rast_bbox.N) {
+	G_warning(_
+		  ("Elevation raster map <%s> does not cover the entire area "
+		   "of the input vector map <%s>. "), rast_opt->answer,
+		  in_opt->answer);
     }
 
     /* setup the new vector map */
@@ -198,11 +201,17 @@ int main(int argc, char *argv[])
 	    case GV_POINT:
 	    case GV_CENTROID:
 	    case GV_KERNEL:
-                /* sample raster at this point, and update the z-coordinate
-                 * (note that input vector should not be 3D!)
-                 */
-                estimated_elevation = scale * G_get_raster_sample(fdrast,
-                            &window, NULL, Points->y[0], Points->x[0], 0, method);
+		/* sample raster at this point, and update the z-coordinate
+		 * (note that input vector should not be 3D!)
+		 */
+		estimated_elevation = scale * G_get_raster_sample(fdrast,
+								  &window,
+								  NULL,
+								  Points->
+								  y[0],
+								  Points->
+								  x[0], 0,
+								  method);
 
 		/* update the elevation value for each data point */
 		Points->z[0] = estimated_elevation;
@@ -216,8 +225,14 @@ int main(int argc, char *argv[])
 		/* loop through each point in a line */
 		for (j = 0; j < Points->n_points; j++) {
 		    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-                    estimated_elevation = scale * G_get_raster_sample(fdrast,
-                                &window, NULL, Points->y[j], Points->x[j], 0, method);
+		    estimated_elevation = scale * G_get_raster_sample(fdrast,
+								      &window,
+								      NULL,
+								      Points->
+								      y[j],
+								      Points->
+								      x[j], 0,
+								      method);
 
 		    /* update the elevation value for each data point */
 		    Points->z[j] = estimated_elevation;
@@ -232,8 +247,14 @@ int main(int argc, char *argv[])
 		/* loop through each point in a line */
 		for (j = 0; j < Points->n_points; j++) {
 		    /* sample raster at this point, and update the z-coordinate (note that input vector should not be 3D!) */
-                    estimated_elevation = scale * G_get_raster_sample(fdrast,
-                                &window, NULL, Points->y[j], Points->x[j], 0, method);
+		    estimated_elevation = scale * G_get_raster_sample(fdrast,
+								      &window,
+								      NULL,
+								      Points->
+								      y[j],
+								      Points->
+								      x[j], 0,
+								      method);
 
 		    /* update the elevation value for each data point */
 		    Points->z[j] = estimated_elevation;
@@ -241,7 +262,7 @@ int main(int argc, char *argv[])
 		break;
 	    }			/* end line type switch */
 
-	    /* write the new line file, with the updated Points struct*/
+	    /* write the new line file, with the updated Points struct */
 	    Vect_write_line(&Out, ltype, Points, Cats);
 	}			/* end looping thru lines */
 

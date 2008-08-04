@@ -1,3 +1,4 @@
+
 /**
  * \file color_get.c
  *
@@ -32,17 +33,17 @@
  *  \return int
  */
 
-int G_get_color (CELL n, int *red, int *grn, int *blu, struct Colors *colors)
+int G_get_color(CELL n, int *red, int *grn, int *blu, struct Colors *colors)
 {
     CELL cat;
     unsigned char r, g, b, set;
 
     cat = n;
-    G_lookup_colors (&cat, &r, &g, &b, &set, 1, colors);
+    G_lookup_colors(&cat, &r, &g, &b, &set, 1, colors);
 
-    *red = (int) r;
-    *grn = (int) g;
-    *blu = (int) b;
+    *red = (int)r;
+    *grn = (int)g;
+    *blu = (int)b;
 
     return (int)set;
 }
@@ -63,17 +64,17 @@ int G_get_color (CELL n, int *red, int *grn, int *blu, struct Colors *colors)
  *  \return int
  */
 
-int G_get_raster_color (const void *rast,
-    int *red, int *grn, int *blu,
-    struct Colors *colors, RASTER_MAP_TYPE map_type)
+int G_get_raster_color(const void *rast,
+		       int *red, int *grn, int *blu,
+		       struct Colors *colors, RASTER_MAP_TYPE map_type)
 {
     unsigned char r, g, b, set;
 
-    G_lookup_raster_colors (rast, &r, &g, &b, &set, 1, colors, map_type);
+    G_lookup_raster_colors(rast, &r, &g, &b, &set, 1, colors, map_type);
 
-    *red = (int) r;
-    *grn = (int) g;
-    *blu = (int) b;
+    *red = (int)r;
+    *grn = (int)g;
+    *blu = (int)b;
 
     return (int)set;
 }
@@ -93,9 +94,8 @@ int G_get_raster_color (const void *rast,
  *  \return int
  */
 
-int G_get_c_raster_color (const CELL *rast,
-    int *red, int *grn, int *blu,
-    struct Colors *colors)
+int G_get_c_raster_color(const CELL * rast,
+			 int *red, int *grn, int *blu, struct Colors *colors)
 {
     return G_get_raster_color(rast, red, grn, blu, colors, CELL_TYPE);
 }
@@ -115,9 +115,8 @@ int G_get_c_raster_color (const CELL *rast,
  *  \return int
  */
 
-int G_get_f_raster_color (const FCELL *rast,
-    int *red, int *grn, int *blu,
-    struct Colors *colors)
+int G_get_f_raster_color(const FCELL * rast,
+			 int *red, int *grn, int *blu, struct Colors *colors)
 {
     return G_get_raster_color(rast, red, grn, blu, colors, FCELL_TYPE);
 }
@@ -137,9 +136,8 @@ int G_get_f_raster_color (const FCELL *rast,
  *  \return int
  */
 
-int G_get_d_raster_color (const DCELL *rast,
-    int *red, int *grn, int *blu,
-    struct Colors *colors)
+int G_get_d_raster_color(const DCELL * rast,
+			 int *red, int *grn, int *blu, struct Colors *colors)
 {
     return G_get_raster_color(rast, red, grn, blu, colors, DCELL_TYPE);
 }
@@ -158,25 +156,23 @@ int G_get_d_raster_color (const DCELL *rast,
  *  \return always returns 0
  */
 
-int G_get_null_value_color (int *red, int *grn, int *blu,
-    const struct Colors *colors)
+int G_get_null_value_color(int *red, int *grn, int *blu,
+			   const struct Colors *colors)
 {
-  if(colors->null_set)
-  {
-      *red = (int) colors->null_red;
-      *grn = (int) colors->null_grn;
-      *blu = (int) colors->null_blu;
-  }
-  else if(colors->undef_set)
-  {
-      *red = (int) colors->undef_red;
-      *grn = (int) colors->undef_grn;
-      *blu = (int) colors->undef_blu;
-  }
-  else
-      *red = *blu = *grn = 255; /* white */
+    if (colors->null_set) {
+	*red = (int)colors->null_red;
+	*grn = (int)colors->null_grn;
+	*blu = (int)colors->null_blu;
+    }
+    else if (colors->undef_set) {
+	*red = (int)colors->undef_red;
+	*grn = (int)colors->undef_grn;
+	*blu = (int)colors->undef_blu;
+    }
+    else
+	*red = *blu = *grn = 255;	/* white */
 
-  return 0;
+    return 0;
 }
 
 
@@ -193,17 +189,16 @@ int G_get_null_value_color (int *red, int *grn, int *blu,
  *  \return always returns 0
  */
 
-int G_get_default_color (int *red, int *grn, int *blu,
-    const struct Colors *colors)
+int G_get_default_color(int *red, int *grn, int *blu,
+			const struct Colors *colors)
 {
-  if(colors->undef_set)
-  {
-      *red = (int) colors->undef_red;
-      *grn = (int) colors->undef_grn;
-      *blu = (int) colors->undef_blu;
-  }
-  else
-      *red = *blu = *grn = 255; /* white */
+    if (colors->undef_set) {
+	*red = (int)colors->undef_red;
+	*grn = (int)colors->undef_grn;
+	*blu = (int)colors->undef_blu;
+    }
+    else
+	*red = *blu = *grn = 255;	/* white */
 
-  return 0;
+    return 0;
 }

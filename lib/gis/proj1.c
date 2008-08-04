@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *  G_projection()
  *
@@ -29,10 +30,10 @@
  *  \return int
  */
 
-int G_projection (void)
+int G_projection(void)
 {
     struct Cell_head window;
 
-    G_get_set_window (&window);
+    G_get_set_window(&window);
     return window.proj;
 }

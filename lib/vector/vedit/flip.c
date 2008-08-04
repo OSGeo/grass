@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/flip.c
 
@@ -34,22 +35,22 @@ int Vedit_flip_lines(struct Map_info *Map, struct ilist *List)
     nlines_flipped = 0;
 
     Points = Vect_new_line_struct();
-    Cats   = Vect_new_cats_struct();
+    Cats = Vect_new_cats_struct();
 
-    for (i = 0; i < List -> n_values; i++) {
-	line = List -> value[i];
+    for (i = 0; i < List->n_values; i++) {
+	line = List->value[i];
 
-	if (!Vect_line_alive (Map, line))
+	if (!Vect_line_alive(Map, line))
 	    continue;
-	
-	type = Vect_read_line (Map, Points, Cats, line);
+
+	type = Vect_read_line(Map, Points, Cats, line);
 
 	if (!(type & GV_LINES))
 	    continue;
 
-	Vect_line_reverse (Points);
+	Vect_line_reverse(Points);
 
-	if (Vect_rewrite_line (Map, line, type, Points, Cats) < 0) {
+	if (Vect_rewrite_line(Map, line, type, Points, Cats) < 0) {
 	    return -1;
 	}
 

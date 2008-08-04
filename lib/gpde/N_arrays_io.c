@@ -106,39 +106,51 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
 	for (x = 0, ptr = rast; x < cols;
 	     x++, ptr = G_incr_void_ptr(ptr, G_raster_size(type))) {
 	    if (type == CELL_TYPE) {
-		if(G_is_c_null_value(ptr)) {
+		if (G_is_c_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
-		} else {
+		}
+		else {
 		    if (data->type == CELL_TYPE)
-		        N_put_array_2d_c_value(data, x, y, (CELL) * (CELL *) ptr);
+			N_put_array_2d_c_value(data, x, y,
+					       (CELL) * (CELL *) ptr);
 		    if (data->type == FCELL_TYPE)
-		        N_put_array_2d_f_value(data, x, y, (FCELL) * (CELL *) ptr);
+			N_put_array_2d_f_value(data, x, y,
+					       (FCELL) * (CELL *) ptr);
 		    if (data->type == DCELL_TYPE)
-		        N_put_array_2d_d_value(data, x, y, (DCELL) * (CELL *) ptr);
+			N_put_array_2d_d_value(data, x, y,
+					       (DCELL) * (CELL *) ptr);
 		}
 	    }
 	    if (type == FCELL_TYPE) {
-		if(G_is_f_null_value(ptr)) {
+		if (G_is_f_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
-		} else {
+		}
+		else {
 		    if (data->type == CELL_TYPE)
-		        N_put_array_2d_c_value(data, x, y, (CELL) * (FCELL *) ptr);
+			N_put_array_2d_c_value(data, x, y,
+					       (CELL) * (FCELL *) ptr);
 		    if (data->type == FCELL_TYPE)
-		        N_put_array_2d_f_value(data, x, y, (FCELL) * (FCELL *) ptr);
+			N_put_array_2d_f_value(data, x, y,
+					       (FCELL) * (FCELL *) ptr);
 		    if (data->type == DCELL_TYPE)
-		        N_put_array_2d_d_value(data, x, y, (DCELL) * (FCELL *) ptr);
+			N_put_array_2d_d_value(data, x, y,
+					       (DCELL) * (FCELL *) ptr);
 		}
 	    }
 	    if (type == DCELL_TYPE) {
-		if(G_is_d_null_value(ptr)) {
+		if (G_is_d_null_value(ptr)) {
 		    N_put_array_2d_value_null(data, x, y);
-		} else {
+		}
+		else {
 		    if (data->type == CELL_TYPE)
-		        N_put_array_2d_c_value(data, x, y, (CELL) * (DCELL *) ptr);
+			N_put_array_2d_c_value(data, x, y,
+					       (CELL) * (DCELL *) ptr);
 		    if (data->type == FCELL_TYPE)
-		        N_put_array_2d_f_value(data, x, y, (FCELL) * (DCELL *) ptr);
+			N_put_array_2d_f_value(data, x, y,
+					       (FCELL) * (DCELL *) ptr);
 		    if (data->type == DCELL_TYPE)
-		        N_put_array_2d_d_value(data, x, y, (DCELL) * (DCELL *) ptr);
+			N_put_array_2d_d_value(data, x, y,
+					       (DCELL) * (DCELL *) ptr);
 		}
 	    }
 	}
@@ -159,7 +171,7 @@ N_array_2d *N_read_rast_to_array_2d(char *name, N_array_2d * array)
  * The N_array_2d must have the same size as the current region.
  If the writing of the raster map fails, G_fatal_error() will
  * be invoked.
- 
+
  * \param array N_array_2d * 
  * \param name char * - the name of the raster map
  * \return void
@@ -260,7 +272,8 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
  * \param mask int - 0 = false, 1 = ture : if a mask is presenent, use it with the input volume map
  * \return N_array_3d * - the existing or new allocated array
  * */
-N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array, int mask)
+N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array,
+				      int mask)
 {
     void *map = NULL;		/*The 3D Rastermap */
     int changemask = 0;
@@ -334,23 +347,25 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d * array, int mask)
 	    for (x = 0; x < cols; x++) {
 		if (type == FCELL_TYPE) {
 		    G3d_getValue(map, x, y, z, &f1, type);
-		    if(G_is_f_null_value((void*)&f1)) {
-		        N_put_array_3d_value_null(data, x, y, z);
-		    } else {
-		        if (data->type == FCELL_TYPE)
+		    if (G_is_f_null_value((void *)&f1)) {
+			N_put_array_3d_value_null(data, x, y, z);
+		    }
+		    else {
+			if (data->type == FCELL_TYPE)
 			    N_put_array_3d_f_value(data, x, y, z, f1);
-		        if (data->type == DCELL_TYPE)
+			if (data->type == DCELL_TYPE)
 			    N_put_array_3d_d_value(data, x, y, z, (double)f1);
 		    }
 		}
 		else {
 		    G3d_getValue(map, x, y, z, &d1, type);
-		    if(G_is_d_null_value((void*)&d1)) {
-		        N_put_array_3d_value_null(data, x, y, z);
-		    } else {
-		        if (data->type == FCELL_TYPE)
+		    if (G_is_d_null_value((void *)&d1)) {
+			N_put_array_3d_value_null(data, x, y, z);
+		    }
+		    else {
+			if (data->type == FCELL_TYPE)
 			    N_put_array_3d_f_value(data, x, y, z, (float)d1);
-		        if (data->type == DCELL_TYPE)
+			if (data->type == DCELL_TYPE)
 			    N_put_array_3d_d_value(data, x, y, z, d1);
 		    }
 
@@ -420,9 +435,11 @@ void N_write_array_3d_to_rast3d(N_array_3d * array, char *name, int mask)
 
     /*Open the new map */
     if (type == DCELL_TYPE)
-	map = G3d_openCellNew(name, DCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
+	map =
+	    G3d_openCellNew(name, DCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
     else if (type == FCELL_TYPE)
-	map = G3d_openCellNew(name, FCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
+	map =
+	    G3d_openCellNew(name, FCELL_TYPE, G3D_USE_CACHE_DEFAULT, &region);
 
     if (map == NULL)
 	G3d_fatalError(_("Error opening g3d map <%s>"), name);

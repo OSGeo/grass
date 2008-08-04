@@ -23,18 +23,18 @@ struct input_maps;
 
 /*Write the point coordinates of type point (1) or celldata (0) */
 void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
-		    int type, double scale);
+		      int type, double scale);
 /*Write the uGrid Cells */
 void write_vtk_unstructured_grid_cells(FILE * fp, G3D_Region region);
+
 /*Write the outputdata */
 void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
-		  int dp);
+		    int dp);
 /*Write the rgb voxel data to the output */
 void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b, FILE * fp,
-			  const char *string, G3D_Region region, int dp);
+			const char *string, G3D_Region region, int dp);
 /*Write the vector data to the output */
 void write_vtk_vector_data(void *map_x, void *map_y, void *map_z, FILE * fp,
-			const char *string, G3D_Region region, int dp);
+			   const char *string, G3D_Region region, int dp);
 
 #endif
-

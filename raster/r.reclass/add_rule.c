@@ -1,10 +1,10 @@
 #include "rule.h"
 
-int 
-add_rule (RULE **tail, CELL lo, CELL hi, CELL new)
+int add_rule(RULE ** tail, CELL lo, CELL hi, CELL new)
 {
     RULE *r;
-    r = (RULE *) G_malloc (sizeof(RULE));
+
+    r = (RULE *) G_malloc(sizeof(RULE));
 
     r->lo = lo;
     r->hi = hi;

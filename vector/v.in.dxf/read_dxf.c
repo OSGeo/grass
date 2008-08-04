@@ -49,7 +49,8 @@ int dxf_find_header(struct dxf_file *dxf)
 {
     while (dxf_get_code(dxf) != -2) {
 	/* some dxf files will not have header information */
-	if (strcmp(dxf_buf, "HEADER") == 0 || strcmp(dxf_buf, "ENTITIES") == 0)
+	if (strcmp(dxf_buf, "HEADER") == 0 ||
+	    strcmp(dxf_buf, "ENTITIES") == 0)
 	    return strcmp(dxf_buf, "HEADER") == 0;
     }
 

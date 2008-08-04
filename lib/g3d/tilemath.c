@@ -22,15 +22,15 @@
  */
 
 void
-G3d_tileIndex2tile  (G3D_Map *map, int tileIndex, int *xTile, int *yTile, int *zTile)
-
+G3d_tileIndex2tile(G3D_Map * map, int tileIndex, int *xTile, int *yTile,
+		   int *zTile)
 {
-  int tileIndex2d;
+    int tileIndex2d;
 
-  *zTile = tileIndex / map->nxy;
-  tileIndex2d = tileIndex % map->nxy;
-  *yTile = tileIndex2d / map->nx;
-  *xTile = tileIndex2d % map->nx;
+    *zTile = tileIndex / map->nxy;
+    tileIndex2d = tileIndex % map->nxy;
+    *yTile = tileIndex2d / map->nx;
+    *xTile = tileIndex2d % map->nx;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -49,11 +49,9 @@ G3d_tileIndex2tile  (G3D_Map *map, int tileIndex, int *xTile, int *yTile, int *z
  *  \return int
  */
 
-int
-G3d_tile2tileIndex  (G3D_Map *map, int xTile, int yTile, int zTile)
-
+int G3d_tile2tileIndex(G3D_Map * map, int xTile, int yTile, int zTile)
 {
-  return map->nxy * zTile + map->nx * yTile + xTile;
+    return map->nxy * zTile + map->nx * yTile + xTile;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -77,12 +75,12 @@ G3d_tile2tileIndex  (G3D_Map *map, int xTile, int yTile, int zTile)
  */
 
 void
-G3d_tileCoordOrigin  (G3D_Map *map, int xTile, int yTile, int zTile, int *x, int *y, int *z)
-
+G3d_tileCoordOrigin(G3D_Map * map, int xTile, int yTile, int zTile, int *x,
+		    int *y, int *z)
 {
-  *x = map->tileX * xTile;
-  *y = map->tileY * yTile;
-  *z = map->tileZ * zTile;
+    *x = map->tileX * xTile;
+    *y = map->tileY * yTile;
+    *z = map->tileZ * zTile;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -102,14 +100,12 @@ G3d_tileCoordOrigin  (G3D_Map *map, int xTile, int yTile, int zTile, int *x, int
  *  \return void
  */
 
-void
-G3d_tileIndexOrigin  (G3D_Map *map, int tileIndex, int *x, int *y, int *z)
-
+void G3d_tileIndexOrigin(G3D_Map * map, int tileIndex, int *x, int *y, int *z)
 {
-  int xTile, yTile, zTile;
+    int xTile, yTile, zTile;
 
-  G3d_tileIndex2tile (map, tileIndex, &xTile, &yTile, &zTile);
-  G3d_tileCoordOrigin (map, xTile, yTile, zTile, x, y, z);
+    G3d_tileIndex2tile(map, tileIndex, &xTile, &yTile, &zTile);
+    G3d_tileCoordOrigin(map, xTile, yTile, zTile, x, y, z);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -137,12 +133,16 @@ G3d_tileIndexOrigin  (G3D_Map *map, int tileIndex, int *x, int *y, int *z)
  */
 
 void
-G3d_coord2tileCoord  (G3D_Map *map, int x, int y, int z, int *xTile, int *yTile, int *zTile, int *xOffs, int *yOffs, int *zOffs)
-
+G3d_coord2tileCoord(G3D_Map * map, int x, int y, int z, int *xTile,
+		    int *yTile, int *zTile, int *xOffs, int *yOffs,
+		    int *zOffs)
 {
-  *xTile = x / map->tileX; *xOffs = x % map->tileX;
-  *yTile = y / map->tileY; *yOffs = y % map->tileY;
-  *zTile = z / map->tileZ; *zOffs = z % map->tileZ;
+    *xTile = x / map->tileX;
+    *xOffs = x % map->tileX;
+    *yTile = y / map->tileY;
+    *yOffs = y % map->tileY;
+    *zTile = z / map->tileZ;
+    *zOffs = z % map->tileZ;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -164,15 +164,15 @@ G3d_coord2tileCoord  (G3D_Map *map, int x, int y, int z, int *xTile, int *yTile,
  */
 
 void
-G3d_coord2tileIndex  (G3D_Map *map, int x, int y, int z, int *tileIndex, int *offset)
-
+G3d_coord2tileIndex(G3D_Map * map, int x, int y, int z, int *tileIndex,
+		    int *offset)
 {
-  int xTile, yTile, zTile, xOffs, yOffs, zOffs;
+    int xTile, yTile, zTile, xOffs, yOffs, zOffs;
 
-  G3d_coord2tileCoord (map, x, y, z, 
-		       &xTile, &yTile, &zTile, &xOffs, &yOffs, &zOffs);
-  *tileIndex = G3d_tile2tileIndex (map, xTile, yTile, zTile);
-  *offset = zOffs * map->tileXY + yOffs * map->tileX + xOffs;
+    G3d_coord2tileCoord(map, x, y, z,
+			&xTile, &yTile, &zTile, &xOffs, &yOffs, &zOffs);
+    *tileIndex = G3d_tile2tileIndex(map, xTile, yTile, zTile);
+    *offset = zOffs * map->tileXY + yOffs * map->tileX + xOffs;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -192,12 +192,10 @@ G3d_coord2tileIndex  (G3D_Map *map, int x, int y, int z, int *tileIndex, int *of
  *  \return int
  */
 
-int 
-G3d_coordInRange  (G3D_Map *map, int x, int y, int z)
-
+int G3d_coordInRange(G3D_Map * map, int x, int y, int z)
 {
-  return (x >= 0) && (x < map->region.cols) && (y >= 0) && (y < map->region.rows) &&
-	 (z >= 0) && (z < map->region.depths);
+    return (x >= 0) && (x < map->region.cols) && (y >= 0) &&
+	(y < map->region.rows) && (z >= 0) && (z < map->region.depths);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -214,11 +212,9 @@ G3d_coordInRange  (G3D_Map *map, int x, int y, int z)
  *  \return int
  */
 
-int
-G3d_tileIndexInRange  (G3D_Map *map, int tileIndex)
-
+int G3d_tileIndexInRange(G3D_Map * map, int tileIndex)
 {
-  return (tileIndex < map->nTiles) && (tileIndex >= 0);
+    return (tileIndex < map->nTiles) && (tileIndex >= 0);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -238,12 +234,10 @@ G3d_tileIndexInRange  (G3D_Map *map, int tileIndex)
  *  \return int
  */
 
-int
-G3d_tileInRange  (G3D_Map *map, int x, int y, int z)
-
+int G3d_tileInRange(G3D_Map * map, int x, int y, int z)
 {
-  return (x >= 0) && (x < map->nx) && (y >= 0) && (y < map->ny) && 
-         (z >= 0) && (z < map->nz);
+    return (x >= 0) && (x < map->nx) && (y >= 0) && (y < map->ny) &&
+	(z >= 0) && (z < map->nz);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -270,44 +264,48 @@ G3d_tileInRange  (G3D_Map *map, int x, int y, int z)
  */
 
 int
-G3d_computeClippedTileDimensions  (G3D_Map *map, int tileIndex, int *rows, int *cols, int *depths, int *xRedundant, int *yRedundant, int *zRedundant)
-
+G3d_computeClippedTileDimensions(G3D_Map * map, int tileIndex, int *rows,
+				 int *cols, int *depths, int *xRedundant,
+				 int *yRedundant, int *zRedundant)
 {
-  int x, y, z;
+    int x, y, z;
 
-  G3d_tileIndex2tile (map, tileIndex, &x, &y, &z);
+    G3d_tileIndex2tile(map, tileIndex, &x, &y, &z);
 
-  if ((x != map->clipX) && (y != map->clipY) && (z != map->clipZ)) {
-    return map->tileSize;
-  }
+    if ((x != map->clipX) && (y != map->clipY) && (z != map->clipZ)) {
+	return map->tileSize;
+    }
 
-  if (x != map->clipX) {
-    *cols = map->tileX; 
-    *xRedundant = 0;
-  } else {
-    *cols = (map->region.cols - 1) % map->tileX + 1;
-    *xRedundant = map->tileX - *cols;
-  }
-  if (y != map->clipY) {
-    *rows = map->tileY; 
-    *yRedundant = 0;
-  } else {
-    *rows = (map->region.rows - 1) % map->tileY + 1;
-    *yRedundant = map->tileY - *rows;
-  }
-  if (z != map->clipZ) {
-    *depths = map->tileZ; 
-    *zRedundant = 0;
-  } else {
-    *depths = (map->region.depths - 1) % map->tileZ + 1;
-    *zRedundant = map->tileZ - *depths;
-  }
+    if (x != map->clipX) {
+	*cols = map->tileX;
+	*xRedundant = 0;
+    }
+    else {
+	*cols = (map->region.cols - 1) % map->tileX + 1;
+	*xRedundant = map->tileX - *cols;
+    }
+    if (y != map->clipY) {
+	*rows = map->tileY;
+	*yRedundant = 0;
+    }
+    else {
+	*rows = (map->region.rows - 1) % map->tileY + 1;
+	*yRedundant = map->tileY - *rows;
+    }
+    if (z != map->clipZ) {
+	*depths = map->tileZ;
+	*zRedundant = 0;
+    }
+    else {
+	*depths = (map->region.depths - 1) % map->tileZ + 1;
+	*zRedundant = map->tileZ - *depths;
+    }
 
-/* printf ("%d (%d %d %d): (%d %d) (%d %d) (%d %d), %d\n", */
-/* 	tileIndex, x, y, z, *rows, *xRedundant, *cols, *yRedundant,  */
-/* 	*depths, *zRedundant, *depths * *cols * *rows); */
+    /* printf ("%d (%d %d %d): (%d %d) (%d %d) (%d %d), %d\n", */
+    /*      tileIndex, x, y, z, *rows, *xRedundant, *cols, *yRedundant,  */
+    /*      *depths, *zRedundant, *depths * *cols * *rows); */
 
-  return *depths * *cols * *rows;
+    return *depths * *cols * *rows;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -326,14 +324,12 @@ G3d_computeClippedTileDimensions  (G3D_Map *map, int tileIndex, int *rows, int *
  *  \return int
  */
 
-int
-G3d_isValidLocation  (G3D_Map *map, double north, double east, double top)
-
+int G3d_isValidLocation(G3D_Map * map, double north, double east, double top)
 {
-  return ((north >= map->region.south) && (north <= map->region.north) &&
-	  (east >= map->region.west) && (east <= map->region.east) &&
-	  (((top >= map->region.bottom) && (top <= map->region.top)) ||
-	   ((top <= map->region.bottom) && (top >= map->region.top))));
+    return ((north >= map->region.south) && (north <= map->region.north) &&
+	    (east >= map->region.west) && (east <= map->region.east) &&
+	    (((top >= map->region.bottom) && (top <= map->region.top)) ||
+	     ((top <= map->region.bottom) && (top >= map->region.top))));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -356,16 +352,19 @@ G3d_isValidLocation  (G3D_Map *map, double north, double east, double top)
  */
 
 void
-G3d_location2coord  (G3D_Map *map, double north, double east, double top, int *x, int *y, int *z)
-
+G3d_location2coord(G3D_Map * map, double north, double east, double top,
+		   int *x, int *y, int *z)
 {
-  if (! G3d_isValidLocation (map, north, east, top))
-    G3d_fatalError ("location2coord: location not in region");
+    if (!G3d_isValidLocation(map, north, east, top))
+	G3d_fatalError("location2coord: location not in region");
 
-  *y = (north - map->region.south) / (map->region.north - map->region.south) * 
-       (map->region.rows - 1);
-  *x = (east - map->region.west) / (map->region.east - map->region.west) * 
-        (map->region.cols - 1);
-  *z = (top - map->region.bottom) / (map->region.top - map->region.bottom) * 
-       (map->region.depths - 1);
+    *y = (north - map->region.south) / (map->region.north -
+					map->region.south) *
+	(map->region.rows - 1);
+    *x = (east - map->region.west) / (map->region.east -
+				      map->region.west) * (map->region.cols -
+							   1);
+    *z = (top - map->region.bottom) / (map->region.top -
+				       map->region.bottom) *
+	(map->region.depths - 1);
 }

@@ -1,3 +1,4 @@
+
 /**
  * \file legal_name.c
  *
@@ -32,7 +33,7 @@
  * \return -1 failure
  */
 
-int G_legal_filename (const char *s)
+int G_legal_filename(const char *s)
 {
     if (*s == '.' || *s == 0) {
 	fprintf(stderr, _("Illegal filename.  Cannot be '.' or 'NULL'\n"));
@@ -40,9 +41,10 @@ int G_legal_filename (const char *s)
     }
 
     for (; *s; s++)
-	if (*s == '/' || *s == '"' || *s == '\'' || *s <= ' ' || 
-            *s == '@' || *s == ',' || *s == '=' || *s == '*' || *s > 0176) {
-		fprintf(stderr, _("Illegal filename. Character <%c> not allowed.\n"), *s);
+	if (*s == '/' || *s == '"' || *s == '\'' || *s <= ' ' ||
+	    *s == '@' || *s == ',' || *s == '=' || *s == '*' || *s > 0176) {
+	    fprintf(stderr,
+		    _("Illegal filename. Character <%c> not allowed.\n"), *s);
 	    return -1;
 	}
 
@@ -63,52 +65,66 @@ int G_legal_filename (const char *s)
  * \return 1 error
  */
 
-int G_check_input_output_name ( const char * input, const char * output, int error )
+int G_check_input_output_name(const char *input, const char *output,
+			      int error)
 {
     char *mapset;
 
-    if ( output == NULL) return 0; /* don't die on undefined parameters */
-    if ( G_legal_filename(output) == -1 ) {
-	if ( error == GR_FATAL_EXIT ) {
-	    G_fatal_error ( _("Output raster map name <%s> is not valid map name"), output );  
-	} else if ( error == GR_FATAL_PRINT ) {
-	    G_warning ( _("Output raster map name <%s> is not valid map name"), output );
+    if (output == NULL)
+	return 0;		/* don't die on undefined parameters */
+    if (G_legal_filename(output) == -1) {
+	if (error == GR_FATAL_EXIT) {
+	    G_fatal_error(_
+			  ("Output raster map name <%s> is not valid map name"),
+			  output);
+	}
+	else if (error == GR_FATAL_PRINT) {
+	    G_warning(_("Output raster map name <%s> is not valid map name"),
+		      output);
 	    return 1;
-	} else { /* GR_FATAL_RETURN */
+	}
+	else {			/* GR_FATAL_RETURN */
 	    return 1;
 	}
     }
 
-    mapset = G_find_cell2 (input, "");
-    
-    if ( mapset == NULL ) {
-	if ( error == GR_FATAL_EXIT ) {
-	    G_fatal_error ( _("Raster map <%s> not found"), input );  
-	} else if ( error == GR_FATAL_PRINT ) {
-	    G_warning ( _("Raster map <%s> not found"), input );
+    mapset = G_find_cell2(input, "");
+
+    if (mapset == NULL) {
+	if (error == GR_FATAL_EXIT) {
+	    G_fatal_error(_("Raster map <%s> not found"), input);
+	}
+	else if (error == GR_FATAL_PRINT) {
+	    G_warning(_("Raster map <%s> not found"), input);
 	    return 1;
-	} else { /* GR_FATAL_RETURN */
+	}
+	else {			/* GR_FATAL_RETURN */
 	    return 1;
 	}
     }
 
-    if ( strcmp(mapset,G_mapset()) == 0 ) {
+    if (strcmp(mapset, G_mapset()) == 0) {
 	char nm[1000], ms[1000];
 	const char *in;
-	
-        if ( G__name_is_fully_qualified(input,nm,ms) ) {
+
+	if (G__name_is_fully_qualified(input, nm, ms)) {
 	    in = nm;
-	} else {
+	}
+	else {
 	    in = input;
 	}
-	
-     	if ( strcmp(in,output) == 0 ) {
-	    if ( error == GR_FATAL_EXIT ) {
-		G_fatal_error ( _("Output raster map <%s> is used as input"), output );  
-	    } else if ( error == GR_FATAL_PRINT ) {
-		G_warning ( _("Output raster map <%s> is used as input"), output );
+
+	if (strcmp(in, output) == 0) {
+	    if (error == GR_FATAL_EXIT) {
+		G_fatal_error(_("Output raster map <%s> is used as input"),
+			      output);
+	    }
+	    else if (error == GR_FATAL_PRINT) {
+		G_warning(_("Output raster map <%s> is used as input"),
+			  output);
 		return 1;
-	    } else { /* GR_FATAL_RETURN */
+	    }
+	    else {		/* GR_FATAL_RETURN */
 		return 1;
 	    }
 	}

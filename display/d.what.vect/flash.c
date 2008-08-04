@@ -1,8 +1,8 @@
-/*	flash.c
-	 - to draw areas and lines in toggled color just to be redrawn 
-	in the calling routine back to the previous color 
-	making quick 'flash' --alex, nov/02
-*/
+/*      flash.c
+   - to draw areas and lines in toggled color just to be redrawn 
+   in the calling routine back to the previous color 
+   making quick 'flash' --alex, nov/02
+ */
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>

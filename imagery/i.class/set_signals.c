@@ -5,29 +5,29 @@
 
 static RETSIGTYPE do_quit(int sig)
 {
-	quit();
+    quit();
 }
 
 static RETSIGTYPE sigint(int sig)
 {
-	signal (sig, sigint);
-	signalflag.interrupt = sig;
+    signal(sig, sigint);
+    signalflag.interrupt = sig;
 }
 
-int set_signals (void)
+int set_signals(void)
 {
-/* set the ctrlz catch 
-	signal (SIGTSTP, ctrlz);
-*/
+    /* set the ctrlz catch 
+       signal (SIGTSTP, ctrlz);
+     */
 #ifdef SIGTSTP
-	signal (SIGTSTP, SIG_IGN); /* ignore ctrl-Z */
+    signal(SIGTSTP, SIG_IGN);	/* ignore ctrl-Z */
 #endif
 
-        /* set other signal catches */
-	signalflag.interrupt = 0;
-	signal (SIGINT, sigint);
+    /* set other signal catches */
+    signalflag.interrupt = 0;
+    signal(SIGINT, sigint);
 
-	signal (SIGTERM, do_quit);
+    signal(SIGTERM, do_quit);
 
-	return 0;
+    return 0;
 }

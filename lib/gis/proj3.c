@@ -23,8 +23,7 @@ char *G_database_unit_name(int plural)
     int n;
     static char name[256];
 
-    switch(n=G_projection())
-    {
+    switch (n = G_projection()) {
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
@@ -32,8 +31,8 @@ char *G_database_unit_name(int plural)
 	return G__unit_name(G__projection_units(n), plural);
     }
 
-    if(!lookup (UNIT_FILE, plural?"units":"unit", name, sizeof(name)))
-	strcpy (name, plural ? "units" : "unit");
+    if (!lookup(UNIT_FILE, plural ? "units" : "unit", name, sizeof(name)))
+	strcpy(name, plural ? "units" : "unit");
     return name;
 }
 
@@ -54,16 +53,15 @@ char *G_database_projection_name(void)
     int n;
     static char name[256];
 
-    switch(n=G_projection())
-    {
+    switch (n = G_projection()) {
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
     case PROJECTION_SP:
 	return G__projection_name(n);
     }
-    if(!lookup (PROJECTION_FILE, "name", name, sizeof(name)))
-	strcpy (name, _("Unknown projection"));
+    if (!lookup(PROJECTION_FILE, "name", name, sizeof(name)))
+	strcpy(name, _("Unknown projection"));
     return name;
 }
 
@@ -90,24 +88,22 @@ double G_database_units_to_meters_factor(void)
     {
 	char *unit;
 	double factor;
-    } table[] =
-    {
-	{"unit", 1.0},
-	{"meter", 1.0},
-	{"foot", .3048},
-	{"inch", .0254},
-	{NULL, 0.0}
+    } table[] = {
+	{
+	"unit", 1.0}, {
+	"meter", 1.0}, {
+	"foot", .3048}, {
+	"inch", .0254}, {
+	NULL, 0.0}
     };
 
     factor = 0.0;
     if (lookup(UNIT_FILE, "meters", buf, sizeof(buf)))
-	sscanf (buf, "%lf", &factor);
-    if (factor <= 0.0)
-    {
+	sscanf(buf, "%lf", &factor);
+    if (factor <= 0.0) {
 	unit = G_database_unit_name(0);
-	for (n=0; table[n].unit; n++)
-	    if (equal(unit, table[n].unit))
-	    {
+	for (n = 0; table[n].unit; n++)
+	    if (equal(unit, table[n].unit)) {
 		factor = table[n].factor;
 		break;
 	    }
@@ -123,7 +119,7 @@ double G_database_units_to_meters_factor(void)
  * returns pointer to valid name if ok
  * NULL otherwise
  ***********************************************************************/
- 
+
 
 /*!
  * \brief get datum name for database
@@ -137,22 +133,22 @@ double G_database_units_to_meters_factor(void)
 
 char *G_database_datum_name(void)
 {
-  static char name[256], params[256];
-  struct Key_Value *projinfo;
-  int datumstatus;
-   
-  if(lookup (PROJECTION_FILE, "datum", name, sizeof(name)))
-    return name;
-  else if( (projinfo = G_get_projinfo()) == NULL )
-    return NULL;
-  else
-    datumstatus = G_get_datumparams_from_projinfo(projinfo, name, params);
-   
-  G_free_key_value( projinfo );
-  if( datumstatus == 2)
-    return params;
-  else  
-    return NULL;
+    static char name[256], params[256];
+    struct Key_Value *projinfo;
+    int datumstatus;
+
+    if (lookup(PROJECTION_FILE, "datum", name, sizeof(name)))
+	return name;
+    else if ((projinfo = G_get_projinfo()) == NULL)
+	return NULL;
+    else
+	datumstatus = G_get_datumparams_from_projinfo(projinfo, name, params);
+
+    G_free_key_value(projinfo);
+    if (datumstatus == 2)
+	return params;
+    else
+	return NULL;
 }
 
 /***********************************************************************
@@ -163,39 +159,39 @@ char *G_database_datum_name(void)
  * returns pointer to valid name if ok
  * NULL otherwise
  ***********************************************************************/
- 
+
 char *G_database_ellipse_name(void)
 {
-  static char name[256];
-  
-  if(!lookup (PROJECTION_FILE, "ellps", name, sizeof(name)))
-  {
-    double a, es;     
-    G_get_ellipsoid_parameters(&a, &es);
-    sprintf(name, "a=%.16g es=%.16g", a, es);
-  }
+    static char name[256];
 
-  /* strcpy (name, "Unknown ellipsoid"); */
-  return name;
+    if (!lookup(PROJECTION_FILE, "ellps", name, sizeof(name))) {
+	double a, es;
+
+	G_get_ellipsoid_parameters(&a, &es);
+	sprintf(name, "a=%.16g es=%.16g", a, es);
+    }
+
+    /* strcpy (name, "Unknown ellipsoid"); */
+    return name;
 }
 
 static int lookup(const char *file, const char *key, char *value, int len)
 {
     char path[GPATH_MAX];
 
-/*
-    G__file_name (path, "", file, G_mapset());
-    if (access(path,0) == 0)
-	return G_lookup_key_value_from_file(path, key, value, len) == 1;
-*/
-    G__file_name (path, "", file, "PERMANENT");
+    /*
+       G__file_name (path, "", file, G_mapset());
+       if (access(path,0) == 0)
+       return G_lookup_key_value_from_file(path, key, value, len) == 1;
+     */
+    G__file_name(path, "", file, "PERMANENT");
     return G_lookup_key_value_from_file(path, key, value, len) == 1;
 }
 
 static int equal(const char *a, const char *b)
 {
     if (a == NULL || b == NULL)
-	return a==b;
+	return a == b;
     while (*a && *b)
 	if (lower(*a++) != lower(*b++))
 	    return 0;

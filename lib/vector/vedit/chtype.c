@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/chtype.c
 
@@ -77,10 +78,10 @@ int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
 	    newtype = -1;
 	    break;
 	}
-	
+
 	G_debug(3, "Vedit_chtype_lines(): line=%d, from_type=%d, to_type=%d",
 		line, type, newtype);
-	
+
 	if (newtype > 0) {
 	    if (Vect_rewrite_line(Map, line, newtype, Points, Cats) < 0) {
 		return -1;
@@ -88,7 +89,7 @@ int Vedit_chtype_lines(struct Map_info *Map, struct ilist *List,
 	    nret++;
 	}
     }
-    
+
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 

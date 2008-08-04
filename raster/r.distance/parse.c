@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -21,8 +22,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-void 
-parse (int argc, char *argv[], struct Parms *parms)
+void parse(int argc, char *argv[], struct Parms *parms)
 {
     struct Option *maps, *fs;
     struct Flag *labels, *overlap;
@@ -38,40 +38,41 @@ parse (int argc, char *argv[], struct Parms *parms)
     maps->description = _("Maps for computing inter-class distances");
     maps->gisprompt = "old,cell,raster";
 
-    fs  = G_define_option();
+    fs = G_define_option();
     fs->key = "fs";
     fs->required = NO;
     fs->multiple = NO;
-    fs->answer   = ":";       /* colon is default output fs */
+    fs->answer = ":";		/* colon is default output fs */
     fs->type = TYPE_STRING;
     fs->description = _("Output field separator");
 
     labels = G_define_flag();
-    labels -> key = 'l';
+    labels->key = 'l';
     labels->description = _("Include category labels in the output");
 
     overlap = G_define_flag();
-    overlap -> key = 'o';
-    overlap->description = _("Report zero distance if rasters are overlapping");
+    overlap->key = 'o';
+    overlap->description =
+	_("Report zero distance if rasters are overlapping");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     name = parms->map1.name = maps->answers[0];
-    mapset = parms->map1.mapset = G_find_cell (name, "");
+    mapset = parms->map1.mapset = G_find_cell(name, "");
     if (mapset == NULL)
-        G_fatal_error ( _("Raster map <%s> not found"), name);
+	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    parms->map1.fullname = G_fully_qualified_name (name,mapset);
+    parms->map1.fullname = G_fully_qualified_name(name, mapset);
 
     name = parms->map2.name = maps->answers[1];
-    mapset = parms->map2.mapset = G_find_cell (name, "");
+    mapset = parms->map2.mapset = G_find_cell(name, "");
     if (mapset == NULL)
-        G_fatal_error ( _("Raster map <%s> not found"), name);
+	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    parms->map2.fullname = G_fully_qualified_name (name,mapset);
+    parms->map2.fullname = G_fully_qualified_name(name, mapset);
 
     parms->labels = labels->answer ? 1 : 0;
     parms->fs = fs->answer;
-    parms->overlap = overlap->answer ? 1:0;
+    parms->overlap = overlap->answer ? 1 : 0;
 }

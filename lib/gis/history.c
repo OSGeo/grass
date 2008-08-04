@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *  G_read_history (name, mapset, phist)
@@ -71,68 +72,65 @@
  *  \return int
  */
 
-int G_read_history (
-    const char *name,
-    const char *mapset,
-    struct History *hist)
+int G_read_history(const char *name, const char *mapset, struct History *hist)
 {
     FILE *fd;
 
-    G_zero (hist, sizeof (struct History));
-    fd = G_fopen_old ("hist", name, mapset);
+    G_zero(hist, sizeof(struct History));
+    fd = G_fopen_old("hist", name, mapset);
     if (!fd)
 	goto error;
 
 
     if (!G_getl(hist->mapid, sizeof(hist->mapid), fd))
 	goto error;
-    G_ascii_check(hist->mapid) ;
+    G_ascii_check(hist->mapid);
 
     if (!G_getl(hist->title, sizeof(hist->title), fd))
 	goto error;
-    G_ascii_check(hist->title) ;
+    G_ascii_check(hist->title);
 
     if (!G_getl(hist->mapset, sizeof(hist->mapset), fd))
 	goto error;
-    G_ascii_check(hist->mapset) ;
+    G_ascii_check(hist->mapset);
 
     if (!G_getl(hist->creator, sizeof(hist->creator), fd))
 	goto error;
-    G_ascii_check(hist->creator) ;
+    G_ascii_check(hist->creator);
 
     if (!G_getl(hist->maptype, sizeof(hist->maptype), fd))
 	goto error;
-    G_ascii_check(hist->maptype) ;
+    G_ascii_check(hist->maptype);
 
     if (!G_getl(hist->datsrc_1, sizeof(hist->datsrc_1), fd))
 	goto error;
-    G_ascii_check(hist->datsrc_1) ;
+    G_ascii_check(hist->datsrc_1);
 
     if (!G_getl(hist->datsrc_2, sizeof(hist->datsrc_2), fd))
 	goto error;
-    G_ascii_check(hist->datsrc_2) ;
+    G_ascii_check(hist->datsrc_2);
 
     if (!G_getl(hist->keywrd, sizeof(hist->keywrd), fd))
 	goto error;
-    G_ascii_check(hist->keywrd) ;
+    G_ascii_check(hist->keywrd);
 
     hist->edlinecnt = 0;
     while ((hist->edlinecnt < MAXEDLINES) &&
-	(G_getl( hist->edhist[hist->edlinecnt], sizeof (hist->edhist[0]), fd)))
-    {
-	G_ascii_check( hist->edhist[hist->edlinecnt]) ;
+	   (G_getl
+	    (hist->edhist[hist->edlinecnt], sizeof(hist->edhist[0]), fd))) {
+	G_ascii_check(hist->edhist[hist->edlinecnt]);
 	hist->edlinecnt++;
     }
 
 
-    fclose(fd) ;
+    fclose(fd);
     return 0;
 
-error:
+  error:
     if (fd != NULL)
-	fclose(fd) ;
-    G_warning (_("can't get history information for [%s] in mapset [%s]"),
-	    name, mapset);
+	fclose(fd);
+    G_warning(_("can't get history information for [%s] in mapset [%s]"),
+	      name, mapset);
     return -1;
 }
 
@@ -152,36 +150,34 @@ error:
  *  \return int
  */
 
-int G_write_history (
-    const char *name,
-    struct History *hist)
+int G_write_history(const char *name, struct History *hist)
 {
     FILE *fd;
     int i;
 
-    fd = G_fopen_new ("hist", name);
+    fd = G_fopen_new("hist", name);
     if (!fd)
-	    goto error;
+	goto error;
 
-    fprintf (fd, "%s\n", hist->mapid)    ; 
-    fprintf (fd, "%s\n", hist->title)    ; 
-    fprintf (fd, "%s\n", hist->mapset)  ; 
-    fprintf (fd, "%s\n", hist->creator)  ; 
-    fprintf (fd, "%s\n", hist->maptype)  ; 
-    fprintf (fd, "%s\n", hist->datsrc_1) ; 
-    fprintf (fd, "%s\n", hist->datsrc_2) ; 
-    fprintf (fd, "%s\n", hist->keywrd)   ; 
+    fprintf(fd, "%s\n", hist->mapid);
+    fprintf(fd, "%s\n", hist->title);
+    fprintf(fd, "%s\n", hist->mapset);
+    fprintf(fd, "%s\n", hist->creator);
+    fprintf(fd, "%s\n", hist->maptype);
+    fprintf(fd, "%s\n", hist->datsrc_1);
+    fprintf(fd, "%s\n", hist->datsrc_2);
+    fprintf(fd, "%s\n", hist->keywrd);
 
-    for(i=0; i < hist->edlinecnt; i++) 
-	    fprintf (fd, "%s\n", hist->edhist[i]) ;
+    for (i = 0; i < hist->edlinecnt; i++)
+	fprintf(fd, "%s\n", hist->edhist[i]);
 
-    fclose (fd) ;
+    fclose(fd);
     return 0;
 
-error:
+  error:
     if (fd)
-	    fclose(fd) ;
-    G_warning (_("can't write history information for [%s]"), name);
+	fclose(fd);
+    G_warning(_("can't write history information for [%s]"), name);
     return -1;
 }
 
@@ -203,10 +199,7 @@ error:
  *  \return int
  */
 
-int G_short_history (
-    const char *name,
-    const char *type,
-    struct History *hist)
+int G_short_history(const char *name, const char *type, struct History *hist)
 {
     strncpy(hist->mapid, G_date(), RECORD_LEN);
     strncpy(hist->title, name, RECORD_LEN);
@@ -258,41 +251,44 @@ int G_short_history (
  *
  */
 
-int G_command_history(struct History *hist) {
+int G_command_history(struct History *hist)
+{
     int j, cmdlen;
     char *cmdlin;
 
     cmdlin = G_recreate_command();
     cmdlen = strlen(cmdlin);
 
-    if(hist->edlinecnt > MAXEDLINES -2) {
-	G_warning(_("Not enough room in history file to record command line."));
+    if (hist->edlinecnt > MAXEDLINES - 2) {
+	G_warning(_
+		  ("Not enough room in history file to record command line."));
 	return 1;
     }
 
-    if(hist->edlinecnt > 0) {    /* add a blank line if preceding history exists */
+    if (hist->edlinecnt > 0) {	/* add a blank line if preceding history exists */
 	strcpy(hist->edhist[hist->edlinecnt], "");
 	hist->edlinecnt++;
     }
 
-    if(cmdlen < 70) {    /* ie if it will fit on a single line */
+    if (cmdlen < 70) {		/* ie if it will fit on a single line */
 	sprintf(hist->edhist[hist->edlinecnt], G_recreate_command());
 	hist->edlinecnt++;
     }
-    else {    /* multi-line required */
-	j = 0;    /* j is the current position in the command line string */
-	while((cmdlen - j) > 70) {
+    else {			/* multi-line required */
+	j = 0;			/* j is the current position in the command line string */
+	while ((cmdlen - j) > 70) {
 	    strncpy(hist->edhist[hist->edlinecnt], &cmdlin[j], 68);
 	    hist->edhist[hist->edlinecnt][68] = '\0';
 	    strcat(hist->edhist[hist->edlinecnt], "\\");
-	    j+=68;
+	    j += 68;
 	    hist->edlinecnt++;
-	    if(hist->edlinecnt > MAXEDLINES -2) {
-		G_warning(_("Not enough room in history file for command line (truncated)."));
+	    if (hist->edlinecnt > MAXEDLINES - 2) {
+		G_warning(_
+			  ("Not enough room in history file for command line (truncated)."));
 		return 2;
 	    }
 	}
-	if((cmdlen - j) > 0) {    /* ie anything left */
+	if ((cmdlen - j) > 0) {	/* ie anything left */
 	    strcpy(hist->edhist[hist->edlinecnt], &cmdlin[j]);
 	    hist->edlinecnt++;
 	}

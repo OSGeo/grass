@@ -3,29 +3,28 @@
 #include "bouman.h"
 
 
-int write_img (
-    unsigned char **img, int ncols, int nrows,
-    struct SigSet *S,            /* class parameters */ 
-    struct parms *parms,         /* parms: command line parameters */
-    struct files *files)         /* files: contains file to output */
-{
+int write_img(unsigned char **img, int ncols, int nrows, struct SigSet *S,	/* class parameters */
+	      struct parms *parms,	/* parms: command line parameters */
+	      struct files *files)
+{				/* files: contains file to output */
     int row, col;
 
     if (!parms->quiet)
-        G_message(_("Writing [%s] ..."), parms->output_map);
+	G_message(_("Writing [%s] ..."), parms->output_map);
 
-    for (row = 0; row < nrows; row++)
-    {
-	if (!parms->quiet) G_percent (row, nrows, 2);
-	for (col = 0; col < ncols; col++)
-	{
+    for (row = 0; row < nrows; row++) {
+	if (!parms->quiet)
+	    G_percent(row, nrows, 2);
+	for (col = 0; col < ncols; col++) {
 	    int class = (int)img[row][col];
+
 	    G_debug(3, "class: [%d] row/col: [%d][%d]", class, row, col);
-	    files->outbuf[col] = (CELL)S->ClassSig[class].classnum;
+	    files->outbuf[col] = (CELL) S->ClassSig[class].classnum;
 	}
-	G_put_raster_row (files->output_fd, files->outbuf, CELL_TYPE);
+	G_put_raster_row(files->output_fd, files->outbuf, CELL_TYPE);
     }
-    if (!parms->quiet) G_percent (row, nrows, 2);
+    if (!parms->quiet)
+	G_percent(row, nrows, 2);
 
     return 0;
 }

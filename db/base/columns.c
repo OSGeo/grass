@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       db.columns
@@ -19,17 +20,17 @@
 #include <grass/glocale.h>
 
 
-struct {
-	char *driver, *database, *table;
+struct
+{
+    char *driver, *database, *table;
 } parms;
 
 
 /* function prototypes */
-static void parse_command_line (int, char **);
+static void parse_command_line(int, char **);
 
 
-int
-main (int argc, char **argv)
+int main(int argc, char **argv)
 {
     dbDriver *driver;
     dbHandle handle;
@@ -37,64 +38,64 @@ main (int argc, char **argv)
     dbString table_name;
     int col, ncols;
 
-    parse_command_line (argc, argv);
+    parse_command_line(argc, argv);
 
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
-        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
-       
-    db_init_handle (&handle);
-    db_set_handle (&handle, parms.database, NULL);
+	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+
+    db_init_handle(&handle);
+    db_set_handle(&handle, parms.database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-        exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     db_init_string(&table_name);
     db_set_string(&table_name, parms.table);
-    if(db_describe_table (driver, &table_name, &table) != DB_OK)
-        exit (EXIT_FAILURE);
+    if (db_describe_table(driver, &table_name, &table) != DB_OK)
+	exit(EXIT_FAILURE);
 
     db_close_database(driver);
     db_shutdown_driver(driver);
 
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++)
-	fprintf(stdout, "%s\n", db_get_column_name(db_get_table_column(table, col)));
+	fprintf(stdout, "%s\n",
+		db_get_column_name(db_get_table_column(table, col)));
 
-    exit (EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 
 
-static void
-parse_command_line (int argc, char **argv)
+static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database, *table;
     struct GModule *module;
     const char *drv, *db;
 
     /* Initialize the GIS calls */
-        G_gisinit(argv[0]) ;
+    G_gisinit(argv[0]);
 
-    table 		= G_define_standard_option(G_OPT_TABLE);
-    table->required 	= YES;
+    table = G_define_standard_option(G_OPT_TABLE);
+    table->required = YES;
 
-    driver 		= G_define_standard_option(G_OPT_DRIVER);
-    driver->options     = db_list_drivers();
-    if ( (drv=db_get_default_driver_name()) )
-        driver->answer = drv;
+    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver->options = db_list_drivers();
+    if ((drv = db_get_default_driver_name()))
+	driver->answer = drv;
 
-    database 		= G_define_standard_option(G_OPT_DATABASE);
-    if ( (db=db_get_default_database_name()) )
-         database->answer = db;
+    database = G_define_standard_option(G_OPT_DATABASE);
+    if ((db = db_get_default_database_name()))
+	database->answer = db;
 
     /* Set description */
-    module              = G_define_module();
+    module = G_define_module();
     module->keywords = _("database, SQL");
     module->description = _("List all columns for a given table.");
 
-    if(G_parser(argc, argv))
-        exit (EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-    parms.driver	= driver->answer;
-    parms.database	= database->answer;
-    parms.table		= table->answer;
+    parms.driver = driver->answer;
+    parms.database = database->answer;
+    parms.table = table->answer;
 }

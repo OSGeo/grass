@@ -4,7 +4,7 @@
 #else
 # define INIT(x)=x
 #endif
- 
+
 #include <grass/gis.h>
 #include <math.h>
 
@@ -26,7 +26,7 @@ GLOBAL LAYER
     struct Categories labels;
 } *layers INIT(NULL);
 GLOBAL int nlayers INIT(0);
- 
+
 #define GSTATS struct _gstats_
 GLOBAL GSTATS
 {

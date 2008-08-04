@@ -85,28 +85,32 @@ int bin_to_asc(FILE * ascii,
 	if (format == FORMAT_POINT) {
 	    /*fprintf(ascii, "%c", ctype); */
 
-	    if(region_flag) {
-		if ((window.east < Points->x[0]) || (window.west > Points->x[0]))
+	    if (region_flag) {
+		if ((window.east < Points->x[0]) ||
+		    (window.west > Points->x[0]))
 		    continue;
 	    }
 	    G_asprintf(&xstring, "%.*f", dp, Points->x[0]);
 	    G_trim_decimal(xstring);
 
-	    if(region_flag) {
-		if ((window.north < Points->y[0]) || (window.south > Points->y[0]))
+	    if (region_flag) {
+		if ((window.north < Points->y[0]) ||
+		    (window.south > Points->y[0]))
 		    continue;
 	    }
 	    G_asprintf(&ystring, "%.*f", dp, Points->y[0]);
 	    G_trim_decimal(ystring);
 
 	    if (Map->head.with_z && ver == 5) {
-		if(region_flag) {
-		    if ((window.top < Points->z[0]) || (window.bottom > Points->z[0]))
+		if (region_flag) {
+		    if ((window.top < Points->z[0]) ||
+			(window.bottom > Points->z[0]))
 			continue;
 		}
 		G_asprintf(&zstring, "%.*f", dp, Points->z[0]);
 		G_trim_decimal(zstring);
-		fprintf(ascii, "%s%s%s%s%s", xstring, fs, ystring, fs, zstring);
+		fprintf(ascii, "%s%s%s%s%s", xstring, fs, ystring, fs,
+			zstring);
 	    }
 	    else {
 		fprintf(ascii, "%s%s%s", xstring, fs, ystring);
@@ -139,8 +143,8 @@ int bin_to_asc(FILE * ascii,
 		    if (Map->head.with_z) {
 			G_asprintf(&zstring, "%.*f", dp, *zptr++);
 			G_trim_decimal(zstring);
-			fprintf(ascii, " %-12s %-12s %-12s\n", xstring, ystring,
-				zstring);
+			fprintf(ascii, " %-12s %-12s %-12s\n", xstring,
+				ystring, zstring);
 		    }
 		    else {
 			fprintf(ascii, " %-12s %-12s\n", xstring, ystring);

@@ -35,40 +35,53 @@ typedef struct Point_list
 
 /* res = a - b */
 extern inline void point_subtract(POINT a, POINT b, POINT * res);
+
 /* res = a + b */
 extern inline void point_add(POINT a, POINT b, POINT * res);
+
 /* dot product of two vectors: ax * bx + ay * by + az * bz */
 extern double point_dot(POINT a, POINT b);
+
 /* squared distance from the origin */
 extern inline double point_dist2(POINT a);
+
 /* assign point Points[index] to the res
  * if with z = 0 then res.z = 0  
  */
-extern inline void point_assign(struct line_pnts *Points, int index, int with_z,
-				POINT * res);
+extern inline void point_assign(struct line_pnts *Points, int index,
+				int with_z, POINT * res);
 /* res = k * a */
 extern inline void point_scalar(POINT a, double k, POINT * res);
+
 /* copy the last point of Points to Points[pos] */
 extern inline void points_copy_last(struct line_pnts *Points, int pos);
+
 /* distance between two points */
 extern inline double point_dist(POINT a, POINT b);
+
 /* squared distance between two points */
 extern inline double point_dist_square(POINT a, POINT b);
+
 /* angle in radians between vectors ab and bc */
 extern inline double point_angle_between(POINT a, POINT b, POINT c);
+
 /* distance squared between a and segment bc */
 extern inline double point_dist_segment_square(POINT a, POINT b, POINT c,
 					       int with_z);
 /* creates empty list of points */
 extern POINT_LIST *point_list_new(POINT p);
+
 /* insert new value to the list just after the l. i.e l->next.p = p */
 extern void point_list_add(POINT_LIST * l, POINT p);
+
 /* copy POINT_LIST structure into line_pnts structure 
  * return 0 on success, -1 on out of memory 
  */
-extern int point_list_copy_to_line_pnts(POINT_LIST l, struct line_pnts *Points);
+extern int point_list_copy_to_line_pnts(POINT_LIST l,
+					struct line_pnts *Points);
 /*free the momory occupied by the list at l.next */
 extern void point_list_free(POINT_LIST l);
+
 /*delete the p->next element and set the pointers appropriatelly */
 extern void point_list_delete_next(POINT_LIST * p);
 #endif

@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            globals.h
  *
@@ -26,8 +27,8 @@
 #define _GLOBALS_H
 
 /* put a 
-#define LOCAL
-into main.c ! */
+   #define LOCAL
+   into main.c ! */
 
 #ifdef LOCAL
 #define EXTERN
@@ -55,7 +56,7 @@ into main.c ! */
 
 #define PROGVERSION 1.03
 
-#define MAXSTR 2048 /* maximum length of strings this program handles */
+#define MAXSTR 2048		/* maximum length of strings this program handles */
 
 /* possible actions */
 #define NONE 0
@@ -120,62 +121,62 @@ into main.c ! */
 
 
 /* ENVIRONMENT VARIABLES */
-EXTERN char GINSTALL_DST [MAXSTR];
-EXTERN char GINSTALL_INC [MAXSTR];
-EXTERN char GINSTALL_LIB [MAXSTR];
-EXTERN char UNINSTALL_BASE [MAXSTR];
-EXTERN char GEM_EXT_NAME [MAXSTR];
-EXTERN char GEM_EXT_VERSION [MAXSTR];
-EXTERN char GEM_EXT_DESCR [MAXSTR];
-EXTERN char GEM_EXT_INFO [MAXSTR];
-EXTERN char GEM_EXT_DEPS [MAXSTR];
-EXTERN char GEM_EXT_BUGS [MAXSTR];
-EXTERN char GEM_EXT_AUTHORS [MAXSTR];
-EXTERN char GEM_GRASS_DIR [MAXSTR];
-EXTERN char GEM_ACTION [MAXSTR];
-EXTERN char INSTALL_BASE [MAXSTR];
-EXTERN char INSTALL_TYPE [MAXSTR];
-EXTERN char GEM_FORCE [MAXSTR];
-EXTERN char GEM_VERBOSE [MAXSTR];
-EXTERN char GEM_GUI [MAXSTR];
-EXTERN char GEM_C_OPTS [MAXSTR];
-EXTERN char EXT_BASE [MAXSTR];
+EXTERN char GINSTALL_DST[MAXSTR];
+EXTERN char GINSTALL_INC[MAXSTR];
+EXTERN char GINSTALL_LIB[MAXSTR];
+EXTERN char UNINSTALL_BASE[MAXSTR];
+EXTERN char GEM_EXT_NAME[MAXSTR];
+EXTERN char GEM_EXT_VERSION[MAXSTR];
+EXTERN char GEM_EXT_DESCR[MAXSTR];
+EXTERN char GEM_EXT_INFO[MAXSTR];
+EXTERN char GEM_EXT_DEPS[MAXSTR];
+EXTERN char GEM_EXT_BUGS[MAXSTR];
+EXTERN char GEM_EXT_AUTHORS[MAXSTR];
+EXTERN char GEM_GRASS_DIR[MAXSTR];
+EXTERN char GEM_ACTION[MAXSTR];
+EXTERN char INSTALL_BASE[MAXSTR];
+EXTERN char INSTALL_TYPE[MAXSTR];
+EXTERN char GEM_FORCE[MAXSTR];
+EXTERN char GEM_VERBOSE[MAXSTR];
+EXTERN char GEM_GUI[MAXSTR];
+EXTERN char GEM_C_OPTS[MAXSTR];
+EXTERN char EXT_BASE[MAXSTR];
 
 
 /* GLOBAL VARIABLES */
 EXTERN int VERBOSE;
-EXTERN char TMPDIR [MAXSTR];
-EXTERN char TMPDB [MAXSTR];
-EXTERN char TMP_GISMAN [MAXSTR];
-EXTERN char TMP_DESCR [MAXSTR];
-EXTERN char TMP_INFO [MAXSTR];
-EXTERN char TMP_DEPS [MAXSTR];
-EXTERN char TMP_BUGS [MAXSTR];
-EXTERN char TMP_AUTHORS [MAXSTR];
-EXTERN char TMP_NULL [MAXSTR]; /* pipe all output that should be hidden to this file */
+EXTERN char TMPDIR[MAXSTR];
+EXTERN char TMPDB[MAXSTR];
+EXTERN char TMP_GISMAN[MAXSTR];
+EXTERN char TMP_DESCR[MAXSTR];
+EXTERN char TMP_INFO[MAXSTR];
+EXTERN char TMP_DEPS[MAXSTR];
+EXTERN char TMP_BUGS[MAXSTR];
+EXTERN char TMP_AUTHORS[MAXSTR];
+EXTERN char TMP_NULL[MAXSTR];	/* pipe all output that should be hidden to this file */
 
-EXTERN char TMP_HTML [MAXSTR];
+EXTERN char TMP_HTML[MAXSTR];
 EXTERN int TMPCLEAN;
 EXTERN int TMPDBCLEAN;
 EXTERN int FORCE;
 EXTERN int UPGRADE;
 EXTERN int SKIP_CFG;
 
-EXTERN char GISMAN_CMD [MAXSTR];
-EXTERN char GISMAN2_CMD [MAXSTR];
-EXTERN char HTML_CMD [MAXSTR];
-EXTERN char QGIS_CMD [MAXSTR];
-EXTERN char UNINSTALL_CMD [MAXSTR];
-EXTERN char CONFIG_OPTS [MAXSTR];
-EXTERN char CONFIG_CMD [MAXSTR];
-EXTERN char MAKE_CMD [MAXSTR];
+EXTERN char GISMAN_CMD[MAXSTR];
+EXTERN char GISMAN2_CMD[MAXSTR];
+EXTERN char HTML_CMD[MAXSTR];
+EXTERN char QGIS_CMD[MAXSTR];
+EXTERN char UNINSTALL_CMD[MAXSTR];
+EXTERN char CONFIG_OPTS[MAXSTR];
+EXTERN char CONFIG_CMD[MAXSTR];
+EXTERN char MAKE_CMD[MAXSTR];
 
 /* stores current working directory */
-EXTERN char CWD [MAXSTR];
+EXTERN char CWD[MAXSTR];
 
 /* this are used to generate a summary message on exit */
-EXTERN int ERROR; /* error code: set to < 0 on abnormal program exit */
-EXTERN int WARNINGS; /* number of warnings issued during program run */
+EXTERN int ERROR;		/* error code: set to < 0 on abnormal program exit */
+EXTERN int WARNINGS;		/* number of warnings issued during program run */
 
 
 

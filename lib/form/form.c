@@ -23,11 +23,12 @@ typedef struct
 static char *Drvname, *Dbname, *Tblname, *Key;
 
 static COLUMN *Columns = NULL;
-static int allocatedRows = 0;			/* allocated space */
+static int allocatedRows = 0;	/* allocated space */
 static int nRows = 0;
 
 /* Start new sql update */
-int reset_values(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
+int reset_values(ClientData cdata, Tcl_Interp * interp, int argc,
+		 char *argv[])
 {
     nRows = 0;
     Drvname = NULL;
@@ -57,7 +58,9 @@ int set_value(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
     else {
 	if (nRows == allocatedRows) {
 	    allocatedRows += 100;
-	    Columns = (COLUMN *) G_realloc(Columns, (allocatedRows) * sizeof(COLUMN));
+	    Columns =
+		(COLUMN *) G_realloc(Columns,
+				     (allocatedRows) * sizeof(COLUMN));
 	}
 	Columns[nRows].name = G_store(argv[1]);
 	Columns[nRows].value = G_store(argv[2]);
@@ -125,7 +128,8 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 	G_warning("Cannot describe table\n");
 	db_shutdown_driver(driver);
 	db_close_database(driver);
-	sprintf(buf, "set submit_msg \"Cannot describe table '%s'\"", Tblname);
+	sprintf(buf, "set submit_msg \"Cannot describe table '%s'\"",
+		Tblname);
 	Tcl_Eval(interp, buf);
 	Tcl_Eval(interp, "set submit_result 0");
 	return TCL_OK;
@@ -141,7 +145,8 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 		keyval = atoi(Columns[i].value);
 	    }
 	    column = db_get_table_column(table, col);
-	    if (G_strcasecmp(db_get_column_name(column), Columns[i].name) == 0) {
+	    if (G_strcasecmp(db_get_column_name(column), Columns[i].name) ==
+		0) {
 		sqltype = db_get_column_sqltype(column);
 		Columns[i].ctype = db_sqltype_to_Ctype(sqltype);
 		found = 1;
@@ -165,23 +170,29 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 
     first = 1;
     for (i = 0; i < nRows; i++) {
-	G_debug(3, "Index = %d of %d Name = %s, Key = %s", i, nRows, Columns[i].name,Key);
+	G_debug(3, "Index = %d of %d Name = %s, Key = %s", i, nRows,
+		Columns[i].name, Key);
 	if (G_strcasecmp(Columns[i].name, Key) == 0)
 	    continue;
 
 	if (G_strcasecmp(Columns[i].name, F_ENCODING) == 0) {
 
-	    G_debug(3, "GRASS_DB_ENCODING env-var is '%s', col val is '%s'", G__getenv("GRASS_DB_ENCODING"),
-		    Columns[i].value);
+	    G_debug(3, "GRASS_DB_ENCODING env-var is '%s', col val is '%s'",
+		    G__getenv("GRASS_DB_ENCODING"), Columns[i].value);
 
-	    if ( (strlen(Columns[i].value) == 0) || G_strcasecmp(Columns[i].value, G__getenv("GRASS_DB_ENCODING")) == 0)
+	    if ((strlen(Columns[i].value) == 0) ||
+		G_strcasecmp(Columns[i].value,
+			     G__getenv("GRASS_DB_ENCODING")) == 0)
 		continue;
 	    else {
 		G_setenv("GRASS_DB_ENCODING", Columns[i].value);
-		G_debug(3, "Set env var GRASS_DB_ENCODING to '%s'", Columns[i].value);
-		if (Tcl_SetSystemEncoding(interp, Columns[i].value) == TCL_ERROR) {
-		    G_warning("Could not set Tcl system encoding to '%s' (%s)",
-			    Columns[i].value,interp->result);
+		G_debug(3, "Set env var GRASS_DB_ENCODING to '%s'",
+			Columns[i].value);
+		if (Tcl_SetSystemEncoding(interp, Columns[i].value) ==
+		    TCL_ERROR) {
+		    G_warning
+			("Could not set Tcl system encoding to '%s' (%s)",
+			 Columns[i].value, interp->result);
 		}
 	    }
 	    continue;
@@ -204,8 +215,9 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 					Tcl_GetEncoding(interp,
 							G__getenv
 							("GRASS_DB_ENCODING")),
-					Columns[i].value, strlen(Columns[i].value), 0,
-					NULL, buf, 2000, NULL, NULL, NULL);
+					Columns[i].value,
+					strlen(Columns[i].value), 0, NULL,
+					buf, 2000, NULL, NULL, NULL);
 
 		if (ret != TCL_OK) {
 		    G_warning("Could not convert UTF to external.");
@@ -216,7 +228,8 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 		}
 
 		db_double_quote_string(&strval);
-		sprintf(buf, "%s = '%s'", Columns[i].name, db_get_string(&strval));
+		sprintf(buf, "%s = '%s'", Columns[i].name,
+			db_get_string(&strval));
 	    }
 	}
 	db_append_string(&sql, buf);
@@ -251,49 +264,45 @@ int submit(ClientData cdata, Tcl_Interp * interp, int argc, char *argv[])
 /* 
  *  Form 
  */
-int Tcl_AppInit(Tcl_Interp *interp)
+int Tcl_AppInit(Tcl_Interp * interp)
 {
-	if (Tcl_Init(interp) == TCL_ERROR)
-		return TCL_ERROR;
+    if (Tcl_Init(interp) == TCL_ERROR)
+	return TCL_ERROR;
 
-	if (Tk_Init(interp) == TCL_ERROR)
-		return TCL_ERROR;
+    if (Tk_Init(interp) == TCL_ERROR)
+	return TCL_ERROR;
 
-	Tcl_StaticPackage(interp, "Tk", Tk_Init, Tk_SafeInit);
+    Tcl_StaticPackage(interp, "Tk", Tk_Init, Tk_SafeInit);
 
-	/*
-	 * Call Tcl_CreateCommand for application-specific commands, if
-	 * they weren't already created by the init procedures called above.
-	 */
+    /*
+     * Call Tcl_CreateCommand for application-specific commands, if
+     * they weren't already created by the init procedures called above.
+     */
 
-	Tcl_CreateCommand(interp, "submit", (Tcl_CmdProc *) submit,
-			  (ClientData) NULL,
-			  (Tcl_CmdDeleteProc *) NULL);
-	Tcl_CreateCommand(interp, "set_value",
-			  (Tcl_CmdProc *) set_value,
-			  (ClientData) NULL,
-			  (Tcl_CmdDeleteProc *) NULL);
-	Tcl_CreateCommand(interp, "reset_values",
-			  (Tcl_CmdProc *) reset_values,
-			  (ClientData) NULL,
-			  (Tcl_CmdDeleteProc *) NULL);
-	/*
-	 * Specify a user-specific startup file to invoke if the application
-	 * is run interactively.  Typically the startup file is "~/.apprc"
-	 * where "app" is the name of the application.  If this line is deleted
-	 * then no user-specific startup file will be run under any conditions.
-	 */
+    Tcl_CreateCommand(interp, "submit", (Tcl_CmdProc *) submit,
+		      (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+    Tcl_CreateCommand(interp, "set_value",
+		      (Tcl_CmdProc *) set_value,
+		      (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+    Tcl_CreateCommand(interp, "reset_values",
+		      (Tcl_CmdProc *) reset_values,
+		      (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+    /*
+     * Specify a user-specific startup file to invoke if the application
+     * is run interactively.  Typically the startup file is "~/.apprc"
+     * where "app" is the name of the application.  If this line is deleted
+     * then no user-specific startup file will be run under any conditions.
+     */
 
-	Tcl_SetVar(interp, "tcl_rcFileName", "~/.grassformrc", TCL_GLOBAL_ONLY);
-	return TCL_OK;
+    Tcl_SetVar(interp, "tcl_rcFileName", "~/.grassformrc", TCL_GLOBAL_ONLY);
+    return TCL_OK;
 }
 
 int main(int argc, char *argv[])
 {
-	G_gisinit("form");
-	G_debug(2, "Form: main()");
+    G_gisinit("form");
+    G_debug(2, "Form: main()");
 
-	Tk_Main(argc, argv, Tcl_AppInit);
-	return 0;
+    Tk_Main(argc, argv, Tcl_AppInit);
+    return 0;
 }
-

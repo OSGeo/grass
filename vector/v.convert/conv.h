@@ -15,24 +15,23 @@
 #define FILE_LINE               0
 #define FILE_AREA               1
 #define FILE_DOT                2
- 
+
 #define FILE_DEAD_LINE          4
 #define FILE_DEAD_AREA          5
 #define FILE_DEAD_DOT           6
 
 struct Line
-  {
-      int type;
-      int n_points;
-      int cat;   /* attached category */
-      double *x, *y;
-  };
+{
+    int type;
+    int n_points;
+    int cat;			/* attached category */
+    double *x, *y;
+};
 
 struct Categ
-  {
-      double x;  /* x location point */
-      double y;  /* y location point */
-      int cat;   /* Category Number */
-      int type;  /* type (new vector5) */
-  };
-
+{
+    double x;			/* x location point */
+    double y;			/* y location point */
+    int cat;			/* Category Number */
+    int type;			/* type (new vector5) */
+};

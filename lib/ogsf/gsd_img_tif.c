@@ -1,27 +1,27 @@
 /*!
-  \file gsd_img_tif.c
- 
-  \brief OGSF library - TIFF stuff
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
+   \file gsd_img_tif.c
 
-  - added little/big endian test Markus Neteler
-  - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
-  - changed 10/99 Jaro
-  - Created new function GS_write_tif based on RGB dump 
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois
-  \author Markus Neteler
-  \author Jaro Hofierka
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - TIFF stuff
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   - added little/big endian test Markus Neteler
+   - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
+   - changed 10/99 Jaro
+   - Created new function GS_write_tif based on RGB dump 
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois
+   \author Markus Neteler
+   \author Jaro Hofierka
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <grass/config.h>
 
@@ -41,13 +41,13 @@ unsigned short compression = -1;
 unsigned short rowsperstrip = 0;
 
 /*!
-  \brief Write data to tif file
+   \brief Write data to tif file
 
-  \param name filename
+   \param name filename
 
-  \return 1 on error
-  \return 0 on success
-*/
+   \return 1 on error
+   \return 0 on success
+ */
 int GS_write_tif(const char *name)
 {
     TIFF *out;
@@ -61,9 +61,8 @@ int GS_write_tif(const char *name)
 
     out = TIFFOpen(name, "w");
     if (out == NULL) {
-	G_warning(_("Unable to open file <%s> for writing"),
-		  name);
-	return(1);
+	G_warning(_("Unable to open file <%s> for writing"), name);
+	return (1);
     }
 
     /* Write out TIFF Tags */
@@ -88,8 +87,8 @@ int GS_write_tif(const char *name)
 	buf = (unsigned char *)G_malloc(TIFFScanlineSize(out));
     }
 
-    if (rowsperstrip != (unsigned short) - 1) {
-	rowsperstrip = (unsigned short) (8 * 1024 / linebytes);
+    if (rowsperstrip != (unsigned short)-1) {
+	rowsperstrip = (unsigned short)(8 * 1024 / linebytes);
     }
 
     TIFFSetField(out, TIFFTAG_ROWSPERSTRIP,
@@ -98,6 +97,7 @@ int GS_write_tif(const char *name)
     /* Done with Header Info */
     for (y = 0; y < ysize; y++) {
 	int yy = ysize - y - 1;
+
 	tmpptr = buf;
 
 	for (x = 0; x < (xsize); x++) {
@@ -111,8 +111,8 @@ int GS_write_tif(const char *name)
 	}
     }
 
-    G_free((void *) pixbuf);
-    (void) TIFFClose(out);
+    G_free((void *)pixbuf);
+    (void)TIFFClose(out);
 
     return (0);
 }

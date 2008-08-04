@@ -79,13 +79,13 @@ int main(int argc, char *argv[])
     module->description =
 	_("Interactively reset the location's projection settings.");
 
-    if( argc>1 && G_parser(argc, argv) )
+    if (argc > 1 && G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
     if (strcmp(G_mapset(), "PERMANENT") != 0)
-	G_fatal_error(
-	  _("You must be in the PERMANENT mapset to run g.setproj"));
+	G_fatal_error(_
+		      ("You must be in the PERMANENT mapset to run g.setproj"));
 
 	/***
          * no longer necessary, table is a static struct 
@@ -118,18 +118,22 @@ int main(int argc, char *argv[])
 	fclose(FPROJ);
 	buf = G_find_key_value("name", old_proj_keys);
 	fprintf(stderr,
-	    "\nWARNING: A projection file already exists for this location\n(Filename '%s')\n",
+		"\nWARNING: A projection file already exists for this location\n(Filename '%s')\n",
 		path);
 	fprintf(stderr,
-	    "\nThis file contains all the parameters for the location's projection:\n  %s\n", buf);
+		"\nThis file contains all the parameters for the location's projection:\n  %s\n",
+		buf);
 	fprintf(stderr,
-	    "\n    Overriding this information implies that the old projection parameters\n"
-	    "    were incorrect.  If you change the parameters, all existing data will\n"
-	    "    be interpreted differently by the projection software.\n%c%c%c", 7, 7, 7);
+		"\n    Overriding this information implies that the old projection parameters\n"
+		"    were incorrect.  If you change the parameters, all existing data will\n"
+		"    be interpreted differently by the projection software.\n%c%c%c",
+		7, 7, 7);
 	fprintf(stderr,
-	    "    GRASS will not re-project your data automatically.\n\n");
+		"    GRASS will not re-project your data automatically.\n\n");
 
-	if (!G_yes(_("Would you still like to change some of the parameters?"), 0)) {
+	if (!G_yes
+	    (_("Would you still like to change some of the parameters?"),
+	     0)) {
 	    G_message(_("The projection information will not be updated"));
 	    leave(SP_NOCHANGE);
 	}
@@ -151,7 +155,7 @@ int main(int argc, char *argv[])
     case 0:			/* No projection/units */
 	if (!exist) {
 	    /* leap frog over code, and just make sure we remove the file */
-	    G_warning (_("XY-location cannot be projected"));
+	    G_warning(_("XY-location cannot be projected"));
 	    goto write_file;
 	    break;
 	}
@@ -191,30 +195,37 @@ int main(int argc, char *argv[])
 
     proj_parms = get_proj_parms(proj_out);
     if (!proj_parms)
-	G_fatal_error(
-	  _("Projection %s is not specified in the file 'proj-parms.table'"), proj_out);
+	G_fatal_error(_
+		      ("Projection %s is not specified in the file 'proj-parms.table'"),
+		      proj_out);
 
     G_set_key_value("name", proj_name, out_proj_keys);
 
     sph_check = 0;
-    if (G_yes(_("Do you wish to specify a geodetic datum for this location?"), 1)) {
+    if (G_yes
+	(_("Do you wish to specify a geodetic datum for this location?"),
+	 1)) {
 	char lbuf[100], lbufa[100];
+
 	if (exist &&
 	    (G_get_datumparams_from_projinfo(old_proj_keys, lbuf, lbufa) ==
 	     2)) {
 	    G_strip(lbuf);
 	    if ((i = G_get_datum_by_name(lbuf)) > 0) {
 		G_message(_("The current datum is %s (%s)"),
-			G_datum_name(i), G_datum_description(i));
-		if (G_yes(
-		  _("Do you wish to change the datum (or datum transformation parameters)?"), 0))
+			  G_datum_name(i), G_datum_description(i));
+		if (G_yes
+		    (_
+		     ("Do you wish to change the datum (or datum transformation parameters)?"),
+		     0))
 		    sph_check = ask_datum(datum, dat_ellps, dat_params);
 		else {
 		    sprintf(datum, lbuf);
 		    sprintf(dat_params, lbufa);
 		    sprintf(dat_ellps, G_datum_ellipsoid(i));
 		    sph_check = 1;
-		    G_message(_("The datum information has not been changed"));
+		    G_message(_
+			      ("The datum information has not been changed"));
 		}
 	    }
 	    else
@@ -227,6 +238,7 @@ int main(int argc, char *argv[])
 
     if (sph_check > 0) {
 	char *paramkey, *paramvalue;
+
 	/* write out key/value pairs to out_proj_keys */
 	if (G_strcasecmp(datum, "custom") != 0)
 	    G_set_key_value("datum", datum, out_proj_keys);
@@ -270,16 +282,20 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		if (exist &&
-		    (buf = G_find_key_value("ellps", old_proj_keys)) != NULL) {
+		    (buf =
+		     G_find_key_value("ellps", old_proj_keys)) != NULL) {
 		    strcpy(spheroid, buf);
 		    G_strip(spheroid);
 		    if (G_get_spheroid_by_name(spheroid, &aa, &e2, &f)) {
 			/* if legal ellips. exist, ask wether or not to change it */
 			G_message(_("The current ellipsoid is %s"), spheroid);
-			if (G_yes(_("Do you want to change ellipsoid parameter?"), 0))
+			if (G_yes
+			    (_("Do you want to change ellipsoid parameter?"),
+			     0))
 			    sph_check = G_ask_ellipse_name(spheroid);
 			else {
-			    G_message(_("The ellipse information has not been changed"));
+			    G_message(_
+				      ("The ellipse information has not been changed"));
 			    sph_check = 1;
 			}
 		    }		/* the val is legal */
@@ -298,13 +314,17 @@ int main(int argc, char *argv[])
 		    if ((buf != NULL) && (sscanf(buf, "%lf", &radius) == 1)) {
 			G_message(_("The radius is currently %f"), radius);
 			if (G_yes(_("Do you want to change the radius?"), 0))
-			    radius = prompt_num_double(
-				_("Enter radius for the sphere in meters"), RADIUS_DEF, 1);
+			    radius =
+				prompt_num_double(_
+						  ("Enter radius for the sphere in meters"),
+						  RADIUS_DEF, 1);
 		    }
 		}
 		else
-		    radius = prompt_num_double(
-			_("Enter radius for the sphere in meters"), RADIUS_DEF, 1);
+		    radius =
+			prompt_num_double(_
+					  ("Enter radius for the sphere in meters"),
+					  RADIUS_DEF, 1);
 	    }			/* end ask radius */
 	}
     }
@@ -349,7 +369,8 @@ int main(int argc, char *argv[])
 		while (cmnd2[++i] != '=')
 		    buffa[j++] = cmnd2[i];
 		buffa[j] = 0;
-		while (cmnd2[++i] != '\t' && cmnd2[i] != '\n' && cmnd2[i] != 0)
+		while (cmnd2[++i] != '\t' && cmnd2[i] != '\n' &&
+		       cmnd2[i] != 0)
 		    buffb[k++] = cmnd2[i];
 		buffb[k] = 0;
 		G_set_key_value(buffa, buffb, out_proj_keys);
@@ -401,42 +422,52 @@ int main(int argc, char *argv[])
 		}
 		else if (G_strcasecmp(desc->type, "lat") == 0) {
 		    double val;
+
 		    while (!get_LL_stuff(parm, desc, 1, &val)) ;
 		    sprintf(tmp_buff, "%.10f", val);
 		    G_set_key_value(desc->key, tmp_buff, out_proj_keys);
 		}
 		else if (G_strcasecmp(desc->type, "lon") == 0) {
 		    double val;
+
 		    while (!get_LL_stuff(parm, desc, 0, &val)) ;
 		    sprintf(tmp_buff, "%.10f", val);
 		    G_set_key_value(desc->key, tmp_buff, out_proj_keys);
 		}
 		else if (G_strcasecmp(desc->type, "float") == 0) {
 		    double val;
+
 		    while (!get_double(parm, desc, &val)) ;
 		    sprintf(tmp_buff, "%.10f", val);
 		    G_set_key_value(desc->key, tmp_buff, out_proj_keys);
 		}
 		else if (G_strcasecmp(desc->type, "int") == 0) {
 		    int val;
+
 		    while (!get_int(parm, desc, &val)) ;
 		    sprintf(tmp_buff, "%d", val);
 		    G_set_key_value(desc->key, tmp_buff, out_proj_keys);
 		}
 		else if (G_strcasecmp(desc->type, "zone") == 0) {
 		    if ((Out_proj == PROJECTION_UTM) && (old_zone != 0)) {
-			G_message(_("The UTM zone is now set to %d"), old_zone);
-			if (!G_yes(_("Do you want to change the UTM zone?"), 0)) {
-			    G_message(_("UTM zone information has not been updated"));
+			G_message(_("The UTM zone is now set to %d"),
+				  old_zone);
+			if (!G_yes
+			    (_("Do you want to change the UTM zone?"), 0)) {
+			    G_message(_
+				      ("UTM zone information has not been updated"));
 			    zone = old_zone;
 			    break;
 			}
 			else {
-			    G_message(_("But if you change zone, all the existing "
-					"data will be interpreted by projection software. "
-					"GRASS will not automatically re-project or even "
-					"change the headers for existing maps."));
-			    if (!G_yes(_("Would you still like to change the UTM zone?"),
+			    G_message(_
+				      ("But if you change zone, all the existing "
+				       "data will be interpreted by projection software. "
+				       "GRASS will not automatically re-project or even "
+				       "change the headers for existing maps."));
+			    if (!G_yes
+				(_
+				 ("Would you still like to change the UTM zone?"),
 				 0)) {
 				zone = old_zone;
 				break;
@@ -555,6 +586,7 @@ int main(int argc, char *argv[])
 		}
 		else {
 		    const struct proj_unit *unit;
+
 		    G_strip(answer);
 		    unit = get_proj_unit(answer);
 		    if (unit) {
@@ -575,6 +607,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 			double unit_fact;
+
 			while (1) {
 			    fprintf(stderr, _("Enter singular for unit: "));
 			    G_gets(answer1);
@@ -584,7 +617,8 @@ int main(int argc, char *argv[])
 			}
 			while (1) {
 			    fprintf(stderr,
-				    _("Enter conversion factor from %s to meters: "),
+				    _
+				    ("Enter conversion factor from %s to meters: "),
 				    answer);
 			    G_gets(answer2);
 			    G_strip(answer2);
@@ -609,7 +643,8 @@ int main(int argc, char *argv[])
 
 	G_write_key_value_file(path, in_unit_keys, &out_stat);
 	if (out_stat != 0)
-	    G_fatal_error(_("Error writing into UNITS output file <%s>"), path);
+	    G_fatal_error(_("Error writing into UNITS output file <%s>"),
+			  path);
 
 	G_free_key_value(in_unit_keys);
     }				/* if */
@@ -617,9 +652,11 @@ int main(int argc, char *argv[])
     if (G__put_window(&cellhd, "", "DEFAULT_WIND") < 0)
 	G_fatal_error(_("Unable to write to DEFAULT_WIND region file"));
     fprintf(stderr,
-	    _("\nProjection information has been recorded for this location\n\n"));
+	    _
+	    ("\nProjection information has been recorded for this location\n\n"));
     if ((old_zone != zone) | (old_proj != cellhd.proj)) {
-	G_message(_("The geographic region information in WIND is now obsolete"));
+	G_message(_
+		  ("The geographic region information in WIND is now obsolete"));
 	G_message(_("Run g.region -d to update it"));
     }
     leave(0);

@@ -1,51 +1,51 @@
 /*!
-  \file gsdrape.c
- 
-  \brief OGSF library - functions to intersect line segments with edges of surface polygons
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file gsdrape.c
 
-  For efficiency, intersections are found without respect to which
-  specific triangle edge is intersected, but on a broader sense with
-  the horizontal, vertical, and diagonal seams in the grid, then
-  the intersections are ordered.  If quadstrips are used for drawing 
-  rather than tmesh, triangulation is not consistant; for diagonal
-  intersections, the proper diagonal to intersect would need to be
-  determined according to the algorithm used by qstrip (look at nearby
-  normals). It may be faster to go ahead and find the intersections 
-  with the other diagonals using the same methods, then at sorting 
-  time determine which diagonal array to look at for each quad.  
-  It would also require a mechanism for throwing out unused intersections
-  with the diagonals during the ordering phase.
-  Do intersections in 2D, fill line structure with 3D pts (maybe calling
-  routine will cache for redrawing).  Get Z value by using linear interp 
-  between corners.
-  
-  - check for easy cases:
+   \brief OGSF library - functions to intersect line segments with edges of surface polygons
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   For efficiency, intersections are found without respect to which
+   specific triangle edge is intersected, but on a broader sense with
+   the horizontal, vertical, and diagonal seams in the grid, then
+   the intersections are ordered.  If quadstrips are used for drawing 
+   rather than tmesh, triangulation is not consistant; for diagonal
+   intersections, the proper diagonal to intersect would need to be
+   determined according to the algorithm used by qstrip (look at nearby
+   normals). It may be faster to go ahead and find the intersections 
+   with the other diagonals using the same methods, then at sorting 
+   time determine which diagonal array to look at for each quad.  
+   It would also require a mechanism for throwing out unused intersections
+   with the diagonals during the ordering phase.
+   Do intersections in 2D, fill line structure with 3D pts (maybe calling
+   routine will cache for redrawing).  Get Z value by using linear interp 
+   between corners.
+
+   - check for easy cases:
    - single point
    - colinear with horizontal or vertical edges
    - colinear with diagonal edges of triangles
-  - calculate three arrays of ordered intersections:
+   - calculate three arrays of ordered intersections:
    - with vertical edges
    - with horizontal edges
    - with diagonal edges and interpolate Z, using simple linear interpolation.
-  - eliminate duplicate intersections (need only compare one coord for each)
-  - build ordered set of points.
-  
-  Return static pointer to 3D set of points.  Max number of intersections
-  will be rows + cols + diags, so should allocate this number to initialize.
-  Let calling routine worry about copying points for caching.
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown UI GMS Lab
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   - eliminate duplicate intersections (need only compare one coord for each)
+   - build ordered set of points.
+
+   Return static pointer to 3D set of points.  Max number of intersections
+   will be rows + cols + diags, so should allocate this number to initialize.
+   Let calling routine worry about copying points for caching.
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown UI GMS Lab
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 
@@ -77,7 +77,7 @@ static Point3 *I3d;
 /* make dependent on resolution? */
 static float EPSILON = 0.000001;
 
-/*vertical, horizontal, & diagonal intersections*/
+/*vertical, horizontal, & diagonal intersections */
 static Point3 *Vi, *Hi, *Di;
 
 static typbuff *Ebuf;		/* elevation buffer */
@@ -85,25 +85,25 @@ static int Flat;
 
 
 /*!
-  \brief Initizalize
+   \brief Initizalize
 
-  \param rows number of rows
-  \param cols number of columns
+   \param rows number of rows
+   \param cols number of columns
 
-  \return -1 on failure
-  \return 1 on success
-*/
+   \return -1 on failure
+   \return 1 on success
+ */
 static int drape_line_init(int rows, int cols)
 {
     /* use G_calloc() [-> G_fatal_error] instead of calloc ? */
     if (NULL == (I3d = (Point3 *) calloc(2 * (rows + cols), sizeof(Point3)))) {
-	return (-1);		
+	return (-1);
     }
 
     if (NULL == (Vi = (Point3 *) calloc(cols, sizeof(Point3)))) {
 	G_free(I3d);
 
-	return (-1);		
+	return (-1);
     }
 
     if (NULL == (Hi = (Point3 *) calloc(rows, sizeof(Point3)))) {
@@ -125,15 +125,15 @@ static int drape_line_init(int rows, int cols)
 }
 
 /*!
-  \brief Get segments
+   \brief Get segments
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param num
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param num
 
-  \return pointer to Point3 struct
-*/
+   \return pointer to Point3 struct
+ */
 static Point3 *_gsdrape_get_segments(geosurf * gs, float *bgn, float *end,
 				     int *num)
 {
@@ -171,13 +171,13 @@ static Point3 *_gsdrape_get_segments(geosurf * gs, float *bgn, float *end,
 }
 
 /*!
-  \brief Calculate 2D distance
+   \brief Calculate 2D distance
 
-  \param p1 first point
-  \param p2 second point
+   \param p1 first point
+   \param p2 second point
 
-  \return distance
-*/
+   \return distance
+ */
 static float dist_squared_2d(float *p1, float *p2)
 {
     float dx, dy;
@@ -189,13 +189,13 @@ static float dist_squared_2d(float *p1, float *p2)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param gs surface (geosurf)
+   \param gs surface (geosurf)
 
-  \return -1 on failure
-  \return 1 on success
-*/
+   \return -1 on failure
+   \return 1 on success
+ */
 int gsdrape_set_surface(geosurf * gs)
 {
     static int first = 1;
@@ -204,7 +204,7 @@ int gsdrape_set_surface(geosurf * gs)
 	first = 0;
 
 	if (0 > drape_line_init(gs->rows, gs->cols)) {
-	    G_warning (_("Unable to process vector map - out of memory"));
+	    G_warning(_("Unable to process vector map - out of memory"));
 	    Ebuf = NULL;
 
 	    return (-1);
@@ -217,9 +217,9 @@ int gsdrape_set_surface(geosurf * gs)
 }
 
 /*!
-  \brief Check if segment intersect vector region
+   \brief Check if segment intersect vector region
 
-  Clipping performed:
+   Clipping performed:
    - bgn and end are replaced so that both points are within viewregion
    - if seg intersects  
 
@@ -229,7 +229,7 @@ int gsdrape_set_surface(geosurf * gs)
 
    \return 0 if segment doesn't intersect the viewregion, or intersects only at corner
    \return otherwise returns 1
-*/
+ */
 int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
 {
     float *replace, xl, yb, xr, yt, xi, yi;
@@ -338,15 +338,15 @@ int seg_intersect_vregion(geosurf * gs, float *bgn, float *end)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param gs surface (geosurf)
-  \param bgn begin point (x,y)
-  \param end end point (x,y)
-  \param num
+   \param gs surface (geosurf)
+   \param bgn begin point (x,y)
+   \param end end point (x,y)
+   \param num
 
-  \return pointer to Point3 struct
-*/
+   \return pointer to Point3 struct
+ */
 Point3 *gsdrape_get_segments(geosurf * gs, float *bgn, float *end, int *num)
 {
     gsdrape_set_surface(gs);
@@ -389,15 +389,15 @@ Point3 *gsdrape_get_segments(geosurf * gs, float *bgn, float *end, int *num)
 
 
 /*!
-  \brief Get all segments
+   \brief Get all segments
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param num
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param num
 
-  \return pointer to Point3 struct
-*/
+   \return pointer to Point3 struct
+ */
 Point3 *gsdrape_get_allsegments(geosurf * gs, float *bgn, float *end,
 				int *num)
 {
@@ -430,14 +430,14 @@ Point3 *gsdrape_get_allsegments(geosurf * gs, float *bgn, float *end,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param f first
-  \param l last
-*/
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param f first
+   \param l last
+ */
 void interp_first_last(geosurf * gs, float *bgn, float *end, Point3 f,
 		       Point3 l)
 {
@@ -459,11 +459,11 @@ void interp_first_last(geosurf * gs, float *bgn, float *end, Point3 f,
 }
 
 /*!
-  \brief ADD
-  
-  \param gs surface (geosurf)
-  \param pt
-*/
+   \brief ADD
+
+   \param gs surface (geosurf)
+   \param pt
+ */
 int _viewcell_tri_interp(geosurf * gs, Point3 pt)
 {
     typbuff *buf;
@@ -474,10 +474,10 @@ int _viewcell_tri_interp(geosurf * gs, Point3 pt)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  In gsd_surf, tmesh draws polys like so:
-  <pre>
+   In gsd_surf, tmesh draws polys like so:
+   <pre>
    --------------
    |           /|
    |          / |          
@@ -503,7 +503,7 @@ int _viewcell_tri_interp(geosurf * gs, Point3 pt)
 
    \return 1 if point is in view region
    \return otherwise 0 (if masked)
-*/
+ */
 int viewcell_tri_interp(geosurf * gs, typbuff * buf, Point3 pt,
 			int check_mask)
 {
@@ -686,13 +686,13 @@ int viewcell_tri_interp(geosurf * gs, typbuff * buf, Point3 pt,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param gs surface (geosurf)
+   \param gs surface (geosurf)
 
-  \return 1 
-  \return 0 
-*/
+   \return 1 
+   \return 0 
+ */
 int in_vregion(geosurf * gs, float *pt)
 {
     if (pt[X] >= 0.0 && pt[Y] <= gs->yrange) {
@@ -705,27 +705,27 @@ int in_vregion(geosurf * gs, float *pt)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  After all the intersections between the segment and triangle
-  edges have been found, they are in three lists.  (intersections
-  with vertical, horizontal, and diagonal triangle edges)
-  
-  Each list is ordered in space from first to last segment points, 
-  but now the lists need to be woven together.  This routine 
-  starts with the first point of the segment and then checks the
-  next point in each list to find the closest, eliminating duplicates
-  along the way and storing the result in I3d.
+   After all the intersections between the segment and triangle
+   edges have been found, they are in three lists.  (intersections
+   with vertical, horizontal, and diagonal triangle edges)
 
-  \param gs surface (geosurf)
-  \param first first point
-  \param last last point
-  \param vi
-  \param hi
-  \param di
+   Each list is ordered in space from first to last segment points, 
+   but now the lists need to be woven together.  This routine 
+   starts with the first point of the segment and then checks the
+   next point in each list to find the closest, eliminating duplicates
+   along the way and storing the result in I3d.
 
-  \return
-*/
+   \param gs surface (geosurf)
+   \param first first point
+   \param last last point
+   \param vi
+   \param hi
+   \param di
+
+   \return
+ */
 int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 		     int di)
 {
@@ -838,8 +838,10 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 
 	if (i == cv + ch + cd) {
 	    G_debug(4, "order_intersects(): stuck on %d", cnum);
-	    G_debug(4, "order_intersects(): cv = %d, ch = %d, cd = %d", cv, ch, cd);
-	    G_debug(4, "order_intersects(): dv = %f, dh = %f, dd = %f", dv, dh, dd);
+	    G_debug(4, "order_intersects(): cv = %d, ch = %d, cd = %d", cv,
+		    ch, cd);
+	    G_debug(4, "order_intersects(): dv = %f, dh = %f, dd = %f", dv,
+		    dh, dd);
 
 	    break;
 	}
@@ -861,22 +863,22 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \todo For consistancy, need to decide how last row & last column are
-  displayed - would it look funny to always draw last row/col with
-  finer resolution if necessary, or would it be better to only show
-  full rows/cols?
+   \todo For consistancy, need to decide how last row & last column are
+   displayed - would it look funny to always draw last row/col with
+   finer resolution if necessary, or would it be better to only show
+   full rows/cols?
 
-  Colinear already eliminated
+   Colinear already eliminated
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param dir direction
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param dir direction
 
-  \return
-*/
+   \return
+ */
 int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 {
     int fcol, lcol, incr, hits, num, offset, drow1, drow2;
@@ -964,15 +966,15 @@ int get_vert_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 }
 
 /*!
-  \brief Get horizontal intersects
+   \brief Get horizontal intersects
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param dir 
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param dir 
 
-  \return number of intersects
-*/
+   \return number of intersects
+ */
 int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 {
     int frow, lrow, incr, hits, num, offset, dcol1, dcol2;
@@ -1058,17 +1060,17 @@ int get_horz_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 }
 
 /*!
-  \brief Get diagonal intersects
+   \brief Get diagonal intersects
 
-  Colinear already eliminated
+   Colinear already eliminated
 
-  \param gs surface (geosurf)
-  \param bgn begin point
-  \param end end point
-  \param dir ? (unused)
+   \param gs surface (geosurf)
+   \param bgn begin point
+   \param end end point
+   \param dir ? (unused)
 
-  \return number of intersects
-*/
+   \return number of intersects
+ */
 int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 {
     int fdig, ldig, incr, hits, num, offset;
@@ -1186,25 +1188,25 @@ int get_diag_intersects(geosurf * gs, float *bgn, float *end, float *dir)
 }
 
 /*!
-  \brief Line intersect
+   \brief Line intersect
 
-  Author: Mukesh Prasad
-  Modified for floating point: Bill Brown
- 
-  This function computes whether two line segments,
-  respectively joining the input points (x1,y1) -- (x2,y2)
-  and the input points (x3,y3) -- (x4,y4) intersect.
-  If the lines intersect, the output variables x, y are
-  set to coordinates of the point of intersection.
-  
-  \param x1,y1,x2,y2 coordinates of endpoints of one segment
-  \param x3,y3,x4,y4 coordinates of endpoints of other segment
-  \param[out] x,y coordinates of intersection point
- 
-  \return 0 no intersection
-  \return 1 intersect
-  \return 2 collinear
-*/
+   Author: Mukesh Prasad
+   Modified for floating point: Bill Brown
+
+   This function computes whether two line segments,
+   respectively joining the input points (x1,y1) -- (x2,y2)
+   and the input points (x3,y3) -- (x4,y4) intersect.
+   If the lines intersect, the output variables x, y are
+   set to coordinates of the point of intersection.
+
+   \param x1,y1,x2,y2 coordinates of endpoints of one segment
+   \param x3,y3,x4,y4 coordinates of endpoints of other segment
+   \param[out] x,y coordinates of intersection point
+
+   \return 0 no intersection
+   \return 1 intersect
+   \return 2 collinear
+ */
 int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
 		   float x4, float y4, float *x, float *y)
 {
@@ -1275,16 +1277,16 @@ int segs_intersect(float x1, float y1, float x2, float y2, float x3, float y3,
 }
 
 /*!
-  \brief Check if point is on plane
+   \brief Check if point is on plane
 
-  Plane defined by three points here; user fills in unk[X] & unk[Y]
+   Plane defined by three points here; user fills in unk[X] & unk[Y]
 
-  \param p1,p2,p3 points defining plane
-  \param unk point
+   \param p1,p2,p3 points defining plane
+   \param unk point
 
-  \return 1 point on plane
-  \return 0 point not on plane
-*/
+   \return 1 point on plane
+   \return 0 point not on plane
+ */
 int Point_on_plane(Point3 p1, Point3 p2, Point3 p3, Point3 unk)
 {
     float plane[4];
@@ -1295,18 +1297,18 @@ int Point_on_plane(Point3 p1, Point3 p2, Point3 p3, Point3 unk)
 }
 
 /*!
-  \brief Check for intersection (point and plane)
+   \brief Check for intersection (point and plane)
 
-  Ax + By + Cz + D = 0, so z = (Ax + By + D) / -C
+   Ax + By + Cz + D = 0, so z = (Ax + By + D) / -C
 
-  User fills in intersect[X] & intersect[Y]
+   User fills in intersect[X] & intersect[Y]
 
-  \param[out] intersect intersect coordinates
-  \param plane plane definition
+   \param[out] intersect intersect coordinates
+   \param plane plane definition
 
-  \return 0 doesn't intersect
-  \return 1 intesects
-*/
+   \return 0 doesn't intersect
+   \return 1 intesects
+ */
 int XY_intersect_plane(float *intersect, float *plane)
 {
     float x, y;
@@ -1323,13 +1325,13 @@ int XY_intersect_plane(float *intersect, float *plane)
 }
 
 /*!
-  \brief Define plane 
+   \brief Define plane 
 
-  \param p1,p2,p3 three point on plane
-  \param[out] plane plane defintion
+   \param p1,p2,p3 three point on plane
+   \param[out] plane plane defintion
 
-  \return 1
-*/
+   \return 1
+ */
 int P3toPlane(Point3 p1, Point3 p2, Point3 p3, float *plane)
 {
     Point3 v1, v2, norm;
@@ -1354,12 +1356,12 @@ int P3toPlane(Point3 p1, Point3 p2, Point3 p3, float *plane)
 
 
 /*!
-  \brief Get cross product
+   \brief Get cross product
 
-  \param a,b,c 
+   \param a,b,c 
 
-  \return cross product c = a cross b
-*/
+   \return cross product c = a cross b
+ */
 int V3Cross(Point3 a, Point3 b, Point3 c)
 {
     c[X] = (a[Y] * b[Z]) - (a[Z] * b[Y]);

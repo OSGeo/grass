@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       db.databases
@@ -19,18 +20,18 @@
 #include <grass/glocale.h>
 
 
-struct {
-	char *driver;
-	char *location;
+struct
+{
+    char *driver;
+    char *location;
 } parms;
 
 
 /* function prototypes */
-static void parse_command_line (int, char **);
+static void parse_command_line(int, char **);
 
 
-int
-main (int argc, char **argv)
+int main(int argc, char **argv)
 {
     dbDriver *driver;
     dbHandle *handles;
@@ -38,22 +39,23 @@ main (int argc, char **argv)
     int nlocs = 0;
     int count, i;
 
-    db_init_string ( &locations );
+    db_init_string(&locations);
     parse_command_line(argc, argv);
 
-    if ( parms.location ) {
-        db_set_string ( &locations, parms.location );
+    if (parms.location) {
+	db_set_string(&locations, parms.location);
 	nlocs = 1;
     }
-    
-    driver = db_start_driver (parms.driver);
+
+    driver = db_start_driver(parms.driver);
     if (driver == NULL)
-        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
-        
-    if(db_list_databases (driver, &locations, nlocs, &handles, &count) != DB_OK)
+	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+
+    if (db_list_databases(driver, &locations, nlocs, &handles, &count) !=
+	DB_OK)
 	G_fatal_error(_("Unable to list databases"));
 
-    db_shutdown_driver (driver);
+    db_shutdown_driver(driver);
 
     for (i = 0; i < count; i++) {
 	fprintf(stdout, "%s", db_get_handle_dbname(&handles[i]));
@@ -64,34 +66,34 @@ main (int argc, char **argv)
 }
 
 
-static void
-parse_command_line (int argc, char **argv)
+static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *location;
     struct GModule *module;
 
     /* Initialize the GIS calls */
-    G_gisinit(argv[0]) ;
+    G_gisinit(argv[0]);
 
-    driver 		= G_define_standard_option(G_OPT_DRIVER);
-    driver->options     = db_list_drivers();
+    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver->options = db_list_drivers();
 
-    location 		  = G_define_option();
-    location->key 	  = "location";
-    location->type 	  = TYPE_STRING;
-    location->required 	  = NO;
-    location->multiple 	  = YES;
+    location = G_define_option();
+    location->key = "location";
+    location->type = TYPE_STRING;
+    location->required = NO;
+    location->multiple = YES;
     location->description = _("Location name");
 
-    
+
     /* Set description */
-    module              = G_define_module();
+    module = G_define_module();
     module->keywords = _("database, SQL");
-    module->description = _("List all databases for a given driver and location.");
+    module->description =
+	_("List all databases for a given driver and location.");
 
-    if(G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-    parms.driver     = driver->answer;
-    parms.location   = location->answer;
+    parms.driver = driver->answer;
+    parms.location = location->answer;
 }

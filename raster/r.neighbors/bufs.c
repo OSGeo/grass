@@ -9,24 +9,23 @@
 
  */
 
-int allocate_bufs (void)
+int allocate_bufs(void)
 {
     int i;
     int bufsize;
 
-    bufsize = (G_window_cols() + 2 * ncb.nsize) * sizeof (DCELL);
+    bufsize = (G_window_cols() + 2 * ncb.nsize) * sizeof(DCELL);
 
-    ncb.buf   = (DCELL **) G_malloc (ncb.nsize * sizeof(DCELL *));
-    for (i = 0; i < ncb.nsize; i++)
-    {
-	ncb.buf[i] = (DCELL *) G_malloc (bufsize) ;
+    ncb.buf = (DCELL **) G_malloc(ncb.nsize * sizeof(DCELL *));
+    for (i = 0; i < ncb.nsize; i++) {
+	ncb.buf[i] = (DCELL *) G_malloc(bufsize);
 	G_set_d_null_value(ncb.buf[i], G_window_cols() + 2 * ncb.nsize);
     }
 
     return 0;
 }
 
-int rotate_bufs (void)
+int rotate_bufs(void)
 {
     DCELL *temp;
     int i;
@@ -34,9 +33,9 @@ int rotate_bufs (void)
     temp = ncb.buf[0];
 
     for (i = 1; i < ncb.nsize; i++)
-	ncb.buf[i-1] = ncb.buf[i];
-    
-    ncb.buf[ncb.nsize-1] = temp;
+	ncb.buf[i - 1] = ncb.buf[i];
+
+    ncb.buf[ncb.nsize - 1] = temp;
 
     return 0;
 }

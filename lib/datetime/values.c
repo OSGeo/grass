@@ -7,7 +7,7 @@
 #include <grass/datetime.h>
 
 
-static int have( int x, const DateTime *dt)
+static int have(int x, const DateTime * dt)
 {
     return datetime_is_between(x, dt->from, dt->to);
 }
@@ -26,7 +26,7 @@ static int have( int x, const DateTime *dt)
  *  \return int
  */
 
-int datetime_check_year (const DateTime *dt, int year)
+int datetime_check_year(const DateTime * dt, int year)
 {
     if (!have(DATETIME_YEAR, dt))
 	return datetime_error(-2, "datetime has no year");
@@ -52,22 +52,21 @@ int datetime_check_year (const DateTime *dt, int year)
  *  \return int
  */
 
-int datetime_check_month (const DateTime *dt, int month)
+int datetime_check_month(const DateTime * dt, int month)
 {
     if (!have(DATETIME_MONTH, dt))
 	return datetime_error(-2, "datetime has no month");
     if (month < 0)
-	return datetime_error(-1,"invalid datetime month");
+	return datetime_error(-1, "invalid datetime month");
     if (datetime_is_absolute(dt) && (month < 1 || month > 12))
-	return datetime_error(-1,"invalid datetime month");
-/*
-    if (dt->from != DATETIME_MONTH && month > 11)
-	return datetime_error(-1,"invalid datetime month");
-BILL CHANGED TO: */
+	return datetime_error(-1, "invalid datetime month");
+    /*
+       if (dt->from != DATETIME_MONTH && month > 11)
+       return datetime_error(-1,"invalid datetime month");
+       BILL CHANGED TO: */
 
-    if (datetime_is_relative(dt) &&
-	dt->from != DATETIME_MONTH && month > 11)
-	return datetime_error(-1,"invalid datetime month");
+    if (datetime_is_relative(dt) && dt->from != DATETIME_MONTH && month > 11)
+	return datetime_error(-1, "invalid datetime month");
 
     return 0;
 }
@@ -89,7 +88,7 @@ BILL CHANGED TO: */
  *  \return int
  */
 
-int datetime_check_day(const DateTime *dt, int day)
+int datetime_check_day(const DateTime * dt, int day)
 {
     int month, year, ad;
     int stat;
@@ -97,16 +96,17 @@ int datetime_check_day(const DateTime *dt, int day)
     if (!have(DATETIME_DAY, dt))
 	return datetime_error(-2, "datetime has no day");
     if (day < 0)
-	return datetime_error(-1,"invalid datetime day");
-    if (datetime_is_absolute(dt))
-    {
-	stat = datetime_get_month (dt, &month);
-	if (stat != 0) return stat;
-	stat = datetime_get_year (dt, &year);
-	if (stat != 0) return stat;
+	return datetime_error(-1, "invalid datetime day");
+    if (datetime_is_absolute(dt)) {
+	stat = datetime_get_month(dt, &month);
+	if (stat != 0)
+	    return stat;
+	stat = datetime_get_year(dt, &year);
+	if (stat != 0)
+	    return stat;
 	ad = datetime_is_positive(dt);
 	if (day < 1 || day > datetime_days_in_month(year, month, ad))
-	    return datetime_error(-1,"invalid datetime day");
+	    return datetime_error(-1, "invalid datetime day");
     }
 
     return 0;
@@ -126,14 +126,14 @@ int datetime_check_day(const DateTime *dt, int day)
  *  \return int
  */
 
-int datetime_check_hour (const DateTime *dt, int hour)
+int datetime_check_hour(const DateTime * dt, int hour)
 {
     if (!have(DATETIME_HOUR, dt))
 	return datetime_error(-2, "datetime has no hour");
     if (hour < 0)
-	return datetime_error(-1,"invalid datetime hour");
+	return datetime_error(-1, "invalid datetime hour");
     if (dt->from != DATETIME_HOUR && hour > 23)
-	return datetime_error(-1,"invalid datetime hour");
+	return datetime_error(-1, "invalid datetime hour");
 
     return 0;
 }
@@ -152,14 +152,14 @@ int datetime_check_hour (const DateTime *dt, int hour)
  *  \return int
  */
 
-int datetime_check_minute (const DateTime *dt, int minute)
+int datetime_check_minute(const DateTime * dt, int minute)
 {
     if (!have(DATETIME_MINUTE, dt))
 	return datetime_error(-2, "datetime has no minute");
     if (minute < 0)
-	return datetime_error(-1,"invalid datetime minute");
+	return datetime_error(-1, "invalid datetime minute");
     if (dt->from != DATETIME_MINUTE && minute > 59)
-	return datetime_error(-1,"invalid datetime minute");
+	return datetime_error(-1, "invalid datetime minute");
 
     return 0;
 }
@@ -178,14 +178,14 @@ int datetime_check_minute (const DateTime *dt, int minute)
  *  \return int
  */
 
-int datetime_check_second (const DateTime *dt, double second)
+int datetime_check_second(const DateTime * dt, double second)
 {
     if (!have(DATETIME_SECOND, dt))
 	return datetime_error(-2, "datetime has no second");
     if (second < 0)
-	return datetime_error(-1,"invalid datetime second");
+	return datetime_error(-1, "invalid datetime second");
     if (dt->from != DATETIME_SECOND && second >= 60.0)
-	return datetime_error(-1,"invalid datetime second");
+	return datetime_error(-1, "invalid datetime second");
 
     return 0;
 }
@@ -204,12 +204,12 @@ int datetime_check_second (const DateTime *dt, double second)
  *  \return int
  */
 
-int datetime_check_fracsec (const DateTime *dt, int fracsec)
+int datetime_check_fracsec(const DateTime * dt, int fracsec)
 {
     if (!have(DATETIME_SECOND, dt))
 	return datetime_error(-2, "datetime has no fracsec");
     if (fracsec < 0)
-	return datetime_error(-1,"invalid datetime fracsec");
+	return datetime_error(-1, "invalid datetime fracsec");
     return 0;
 }
 
@@ -224,7 +224,7 @@ int datetime_check_fracsec (const DateTime *dt, int fracsec)
  *  \return int
  */
 
-int datetime_get_year(const DateTime *dt, int *year)
+int datetime_get_year(const DateTime * dt, int *year)
 {
     int stat;
 
@@ -248,15 +248,14 @@ int datetime_get_year(const DateTime *dt, int *year)
  *  \return int
  */
 
-int datetime_set_year ( DateTime *dt, int year)
+int datetime_set_year(DateTime * dt, int year)
 {
     int stat;
 
     stat = datetime_check_year(dt, year);
-    if (stat == 0)
-    {
+    if (stat == 0) {
 	dt->year = year;
-	if(datetime_is_absolute(dt))
+	if (datetime_is_absolute(dt))
 	    dt->day = 0;
     }
 
@@ -274,7 +273,7 @@ int datetime_set_year ( DateTime *dt, int year)
  *  \return int
  */
 
-int datetime_get_month(const DateTime *dt, int *month)
+int datetime_get_month(const DateTime * dt, int *month)
 {
     int stat;
 
@@ -298,15 +297,14 @@ int datetime_get_month(const DateTime *dt, int *month)
  *  \return int
  */
 
-int datetime_set_month ( DateTime *dt, int month)
+int datetime_set_month(DateTime * dt, int month)
 {
     int stat;
 
     stat = datetime_check_month(dt, month);
-    if (stat == 0)
-    {
+    if (stat == 0) {
 	dt->month = month;
-	if(datetime_is_absolute(dt))
+	if (datetime_is_absolute(dt))
 	    dt->day = 0;
     }
 
@@ -324,7 +322,7 @@ int datetime_set_month ( DateTime *dt, int month)
  *  \return int
  */
 
-int datetime_get_day(const DateTime *dt, int *day)
+int datetime_get_day(const DateTime * dt, int *day)
 {
     int stat;
 
@@ -341,8 +339,8 @@ int datetime_get_day(const DateTime *dt, int *day)
  *
  * if dt.mode = ABSOLUTE, then  the dt.year, dt.month:
  \code
-  if (day >  <b>datetime_days_in_month</b> (dt.year, dt.month)) 
-  {error} 
+ if (day >  <b>datetime_days_in_month</b> (dt.year, dt.month)) 
+ {error} 
  \endcode
  * This implies that year/month must be set  for ABSOLUTE datetimes.
  *
@@ -353,7 +351,7 @@ int datetime_get_day(const DateTime *dt, int *day)
  *  \return int
  */
 
-int datetime_set_day ( DateTime *dt, int day)
+int datetime_set_day(DateTime * dt, int day)
 {
     int stat;
 
@@ -375,7 +373,7 @@ int datetime_set_day ( DateTime *dt, int day)
  *  \return int
  */
 
-int datetime_get_hour(const DateTime *dt, int *hour)
+int datetime_get_hour(const DateTime * dt, int *hour)
 {
     int stat;
 
@@ -397,7 +395,7 @@ int datetime_get_hour(const DateTime *dt, int *hour)
  *  \return int
  */
 
-int datetime_set_hour( DateTime *dt, int hour)
+int datetime_set_hour(DateTime * dt, int hour)
 {
     int stat;
 
@@ -419,7 +417,7 @@ int datetime_set_hour( DateTime *dt, int hour)
  *  \return int
  */
 
-int datetime_get_minute(const DateTime *dt, int *minute)
+int datetime_get_minute(const DateTime * dt, int *minute)
 {
     int stat;
 
@@ -441,7 +439,7 @@ int datetime_get_minute(const DateTime *dt, int *minute)
  *  \return int
  */
 
-int datetime_set_minute( DateTime *dt, int minute)
+int datetime_set_minute(DateTime * dt, int minute)
 {
     int stat;
 
@@ -463,7 +461,7 @@ int datetime_set_minute( DateTime *dt, int minute)
  *  \return int
  */
 
-int datetime_get_second(const DateTime *dt, double *second)
+int datetime_get_second(const DateTime * dt, double *second)
 {
     int stat;
 
@@ -485,7 +483,7 @@ int datetime_get_second(const DateTime *dt, double *second)
  *  \return int
  */
 
-int datetime_set_second( DateTime *dt, double second)
+int datetime_set_second(DateTime * dt, double second)
 {
     int stat;
 
@@ -507,7 +505,7 @@ int datetime_set_second( DateTime *dt, double second)
  *  \return int
  */
 
-int datetime_get_fracsec(const DateTime *dt, int *fracsec)
+int datetime_get_fracsec(const DateTime * dt, int *fracsec)
 {
     int stat;
 
@@ -529,7 +527,7 @@ int datetime_get_fracsec(const DateTime *dt, int *fracsec)
  *  \return int
  */
 
-int datetime_set_fracsec(DateTime *dt, int fracsec)
+int datetime_set_fracsec(DateTime * dt, int fracsec)
 {
     int stat;
 

@@ -20,12 +20,10 @@
 #define READ      0
 #define WRITE     1
 
-static  int     popen_pid[50];
+static int popen_pid[50];
 
 
-FILE *G_popen(
-    const char *cmd,
-    const char *mode)
+FILE *G_popen(const char *cmd, const char *mode)
 {
 
 #ifdef __MINGW32__
@@ -33,63 +31,63 @@ FILE *G_popen(
     int thepipes[2];
     FILE *rv = NULL;
 
-    fflush (stdout);
-    fflush (stderr);
+    fflush(stdout);
+    fflush(stderr);
 
-    /*setvbuf ( stdout, NULL, _IONBF, 0 );*/
+    /*setvbuf ( stdout, NULL, _IONBF, 0 ); */
 
-    if ( _pipe ( thepipes, 256, O_BINARY ) != -1 ) {
-        execl ( "cmd", "cmd", "/c", cmd, (char *) NULL );
-	close ( thepipes[WRITE] );
-	rv = fdopen ( thepipes[READ], mode ); 
+    if (_pipe(thepipes, 256, O_BINARY) != -1) {
+	execl("cmd", "cmd", "/c", cmd, (char *)NULL);
+	close(thepipes[WRITE]);
+	rv = fdopen(thepipes[READ], mode);
     }
 
-    return ( rv );
+    return (rv);
 
 #else /* __MINGW32__ */
 
     int p[2];
     int me, you, pid;
 
-    fflush (stdout);
-    fflush (stderr);
+    fflush(stdout);
+    fflush(stderr);
 
-    if(pipe(p) < 0)
-        return NULL;
+    if (pipe(p) < 0)
+	return NULL;
     me = tst(p[WRITE], p[READ]);
     you = tst(p[READ], p[WRITE]);
-    if((pid = fork()) == 0)
-    {
-/* me and you reverse roles in child */
+    if ((pid = fork()) == 0) {
+	/* me and you reverse roles in child */
 	close(me);
 	close(tst(0, 1));
 	dup(you);
 	close(you);
-	execl("/bin/sh", "sh", "-c", cmd, (char *) NULL);
+	execl("/bin/sh", "sh", "-c", cmd, (char *)NULL);
 	_exit(1);
     }
 
-    if(pid == -1)
+    if (pid == -1)
 	return NULL;
     popen_pid[me] = pid;
     close(you);
 
-    return(fdopen(me, mode));
+    return (fdopen(me, mode));
 
 #endif /* __MINGW32__ */
 
 }
 
-int G_pclose( FILE *ptr)
+int G_pclose(FILE * ptr)
 {
-    RETSIGTYPE (*sigint)();
-#ifdef SIGHUP    
-    RETSIGTYPE (*sighup)();
+    RETSIGTYPE(*sigint) ();
+#ifdef SIGHUP
+    RETSIGTYPE(*sighup) ();
 #endif
 #ifdef SIGQUIT
-    RETSIGTYPE (*sigquit)();
+    RETSIGTYPE(*sigquit) ();
 #endif
     int f;
+
 #ifndef __MINGW32__
     int r;
 #endif
@@ -98,23 +96,22 @@ int G_pclose( FILE *ptr)
     f = fileno(ptr);
     fclose(ptr);
 
-    sigint  = signal(SIGINT, SIG_IGN);
+    sigint = signal(SIGINT, SIG_IGN);
 #ifdef __MINGW32__
-    _cwait ( &status, popen_pid[f], WAIT_CHILD );
-    if ( 0 & status ) {
-      status = -1;
+    _cwait(&status, popen_pid[f], WAIT_CHILD);
+    if (0 & status) {
+	status = -1;
     }
 #else
 
 #ifdef SIGQUIT
     sigquit = signal(SIGQUIT, SIG_IGN);
 #endif
-#ifdef SIGHUP    
-    sighup  = signal(SIGHUP, SIG_IGN);
+#ifdef SIGHUP
+    sighup = signal(SIGHUP, SIG_IGN);
 #endif
-    while((r = wait(&status)) != popen_pid[f] && r != -1)
-	    ;
-    if(r == -1)
+    while ((r = wait(&status)) != popen_pid[f] && r != -1) ;
+    if (r == -1)
 	status = -1;
 
 #endif /* __MINGW32__ */
@@ -124,9 +121,9 @@ int G_pclose( FILE *ptr)
 #ifdef SIGQUIT
     signal(SIGQUIT, sigquit);
 #endif
-#ifdef SIGHUP    
+#ifdef SIGHUP
     signal(SIGHUP, sighup);
 #endif
 
-    return(status);
+    return (status);
 }

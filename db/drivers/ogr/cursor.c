@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       OGR driver 
@@ -20,12 +21,11 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_close_cursor( dbCursor *dbc )
+int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
 
-    G_debug ( 3, "db_driver_close_cursor()" );
+    G_debug(3, "db_driver_close_cursor()");
 
     init_error();
 
@@ -37,28 +37,28 @@ db__driver_close_cursor( dbCursor *dbc )
     /* free_cursor(cursor) */
     free_cursor(c);
 
-    G_debug ( 3, "Cursor closed" );
+    G_debug(3, "Cursor closed");
 
     return DB_OK;
 }
 
 
-cursor * alloc_cursor()
+cursor *alloc_cursor()
 {
-    cursor     *c;
+    cursor *c;
 
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-        append_error("Cannot allocate cursor.");
-        return NULL; 
-    } 
+	append_error("Cannot allocate cursor.");
+	return NULL;
+    }
 
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-        append_error("Cannot ad new token.");
-        return NULL; 
+	append_error("Cannot ad new token.");
+	return NULL;
     }
 
     c->hFeature = NULL;
@@ -66,18 +66,16 @@ cursor * alloc_cursor()
     return c;
 }
 
-void free_cursor( cursor *c )
+void free_cursor(cursor * c)
 {
-    if ( c->hFeature )
-       OGR_F_Destroy( c->hFeature );
+    if (c->hFeature)
+	OGR_F_Destroy(c->hFeature);
 
-    if ( c->hLayer )
-       OGR_DS_ReleaseResultSet( hDs, c->hLayer );
+    if (c->hLayer)
+	OGR_DS_ReleaseResultSet(hDs, c->hLayer);
 
-    G_free ( c->cols );
-    G_free(c);  
+    G_free(c->cols);
+    G_free(c);
 
     db_drop_token(c->token);
 }
-
-

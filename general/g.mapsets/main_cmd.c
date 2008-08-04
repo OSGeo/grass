@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.mapsets
@@ -28,8 +29,7 @@
 
 static char Path[GPATH_MAX];
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     int n;
     int i;
@@ -39,42 +39,44 @@ main (int argc, char *argv[])
     char **tokens;
     int no_tokens;
     FILE *fp;
-    char   path[GPATH_MAX];
+    char path[GPATH_MAX];
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3;
     struct Flag *print;
     struct Flag *list;
     struct Flag *tcl;
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("general, settings");
     module->description =
 	_("Modifies the user's current mapset "
-	"search path, affecting the user's access to data existing "
-	"under the other GRASS mapsets in the current location.");
+	  "search path, affecting the user's access to data existing "
+	  "under the other GRASS mapsets in the current location.");
 
-    opt1 = G_define_option() ;
-    opt1->key        = "mapset" ;
-    opt1->type       = TYPE_STRING ;
-    opt1->required   = NO ;
-    opt1->multiple   = YES ;
-    opt1->description= _("Name(s) of existing mapset(s)");
+    opt1 = G_define_option();
+    opt1->key = "mapset";
+    opt1->type = TYPE_STRING;
+    opt1->required = NO;
+    opt1->multiple = YES;
+    opt1->description = _("Name(s) of existing mapset(s)");
 
-    opt2 = G_define_option() ;
-    opt2->key        = "addmapset" ;
-    opt2->type       = TYPE_STRING ;
-    opt2->required   = NO ;
-    opt2->multiple   = YES ;
-    opt2->description= _("Name(s) of existing mapset(s) to add to search list");
+    opt2 = G_define_option();
+    opt2->key = "addmapset";
+    opt2->type = TYPE_STRING;
+    opt2->required = NO;
+    opt2->multiple = YES;
+    opt2->description =
+	_("Name(s) of existing mapset(s) to add to search list");
 
-    opt3 = G_define_option() ;
-    opt3->key        = "removemapset" ;
-    opt3->type       = TYPE_STRING ;
-    opt3->required   = NO ;
-    opt3->multiple   = YES ;
-    opt3->description= _("Name(s) of existing mapset(s) to remove from search list");
+    opt3 = G_define_option();
+    opt3->key = "removemapset";
+    opt3->type = TYPE_STRING;
+    opt3->required = NO;
+    opt3->multiple = YES;
+    opt3->description =
+	_("Name(s) of existing mapset(s) to remove from search list");
 
     list = G_define_flag();
     list->key = 'l';
@@ -92,75 +94,68 @@ main (int argc, char *argv[])
     nchoices = 0;
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
-    if (list->answer)
-    {
+    if (list->answer) {
 	get_available_mapsets();
 	display_available_mapsets(0);
     }
 
-    if (tcl->answer)
-    {
-        sprintf(path, "%s/etc/g.mapsets.tcl", G_gisbase());
-        G_spawn(path, "g.mapsets.tcl", NULL);
+    if (tcl->answer) {
+	sprintf(path, "%s/etc/g.mapsets.tcl", G_gisbase());
+	G_spawn(path, "g.mapsets.tcl", NULL);
     }
 
-    if (opt1->answer)
-    {
-	for (ptr=opt1->answers; *ptr != NULL; ptr++)
-	{
+    if (opt1->answer) {
+	for (ptr = opt1->answers; *ptr != NULL; ptr++) {
 	    char *mapset;
 
 	    mapset = *ptr;
-	    if (G__mapset_permissions (mapset) < 0)
+	    if (G__mapset_permissions(mapset) < 0)
 		G_fatal_error(_("Mapset <%s> not found"), mapset);
 	    nchoices++;
-	    strcat (Path, mapset);
-	    strcat (Path, " ");
+	    strcat(Path, mapset);
+	    strcat(Path, " ");
 	}
     }
 
     /* add to existing search path */
-    if (opt2->answer)
-    {
+    if (opt2->answer) {
 	char *oldname;
+
 	Path[0] = '\0';
-	
+
 	/* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G__mapset_name(n)) ; n++)
-	{
-	  strcat (Path, oldname);
-	  strcat (Path, " "); 
+	for (n = 0; (oldname = G__mapset_name(n)); n++) {
+	    strcat(Path, oldname);
+	    strcat(Path, " ");
 	}
 
 	/* fetch and add new mapsets from param list */
-	for (ptr=opt2->answers; *ptr != NULL; ptr++)
-	{
+	for (ptr = opt2->answers; *ptr != NULL; ptr++) {
 	    char *mapset;
 
 	    mapset = *ptr;
-	    if (G__mapset_permissions (mapset) < 0)
+	    if (G__mapset_permissions(mapset) < 0)
 		G_fatal_error(_("Mapset <%s> not found"), mapset);
 	    else
 		G_verbose_message(_("Mapset <%s> added to search path"),
 				  mapset);
 
 	    nchoices++;
-	    strcat (Path, mapset);
-	    strcat (Path, " ");
+	    strcat(Path, mapset);
+	    strcat(Path, " ");
 	}
     }
 
     /* remove from existing search path */
-    if (opt3->answer)
-    {
+    if (opt3->answer) {
 	char *oldname;
+
 	Path[0] = '\0';
-	
+
 	/* read existing mapsets from SEARCH_PATH */
-        for (n = 0; (oldname = G__mapset_name(n)) ; n++)
-	{
+	for (n = 0; (oldname = G__mapset_name(n)); n++) {
 	    int found = 0;
 
 	    for (ptr = opt3->answers; *ptr; ptr++)
@@ -174,72 +169,66 @@ main (int argc, char *argv[])
 	    }
 
 	    nchoices++;
-	    strcat (Path, oldname);
-	    strcat (Path, " "); 
+	    strcat(Path, oldname);
+	    strcat(Path, " ");
 	}
     }
 
-    /* stuffem sets nchoices*/
+    /* stuffem sets nchoices */
 
-    if (nchoices == 0)
-    {
-        goto DISPLAY;
+    if (nchoices == 0) {
+	goto DISPLAY;
     }
 
     /* note I'm assuming that mapsets cannot have ' 's in them */
-    tokens = G_tokenize (Path, " ");
+    tokens = G_tokenize(Path, " ");
 
-    fp = G_fopen_new ("", "SEARCH_PATH");
+    fp = G_fopen_new("", "SEARCH_PATH");
     if (!fp)
-        G_fatal_error (_("Cannot open SEARCH_PATH for write"));
+	G_fatal_error(_("Cannot open SEARCH_PATH for write"));
 
     cur_mapset = G_mapset();
 
-/*
-* make sure current mapset is specified in the list
-* if not add it to the head of the list
-*/
+    /*
+     * make sure current mapset is specified in the list
+     * if not add it to the head of the list
+     */
 
     skip = 0;
     for (n = 0; n < nchoices; n++)
-        if (strcmp (cur_mapset, tokens[n]) == 0)
-        {
-            skip = 1;
-            break;
-        }
-    if (!skip)
-    {
-        fprintf (fp, "%s\n", cur_mapset);
+	if (strcmp(cur_mapset, tokens[n]) == 0) {
+	    skip = 1;
+	    break;
+	}
+    if (!skip) {
+	fprintf(fp, "%s\n", cur_mapset);
     }
 
-/*
-* output the list, removing duplicates
-*/
+    /*
+     * output the list, removing duplicates
+     */
 
-    no_tokens=G_number_of_tokens(tokens);
+    no_tokens = G_number_of_tokens(tokens);
 
-    for (n = 0; n < no_tokens ; n++)
-    {
+    for (n = 0; n < no_tokens; n++) {
 	skip = 0;
-        for (i = n; i < no_tokens; i++)
-	{	
-	    if (i != n)	
-	    {
-            	if (strcmp (tokens[i], tokens[n]) == 0)
-                     skip = 1;
-	    } 
-        }
+	for (i = n; i < no_tokens; i++) {
+	    if (i != n) {
+		if (strcmp(tokens[i], tokens[n]) == 0)
+		    skip = 1;
+	    }
+	}
 
 	if (!skip)
-        	fprintf (fp,"%s\n", tokens[n]);
+	    fprintf(fp, "%s\n", tokens[n]);
     }
 
-    fclose (fp);
-    G_free_tokens (tokens);
+    fclose(fp);
+    G_free_tokens(tokens);
 
-DISPLAY:
+  DISPLAY:
     if (print->answer)
-	display_mapset_path (0);
+	display_mapset_path(0);
 
     exit(EXIT_SUCCESS);
 }

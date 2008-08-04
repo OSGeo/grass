@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -17,25 +18,20 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_execute_immediate  (dbString *sql)
-
+int db__driver_execute_immediate(dbString * sql)
 {
     char *s;
-    int  ret;
+    int ret;
 
-    s = db_get_string (sql);
-    
-    ret = execute ( s, NULL);
-    
-    if ( ret == DB_FAILED )
-      {
-         append_error("Error in db_execute_immediate()");
-         report_error( );
-         return DB_FAILED;
-      }
-    
+    s = db_get_string(sql);
+
+    ret = execute(s, NULL);
+
+    if (ret == DB_FAILED) {
+	append_error("Error in db_execute_immediate()");
+	report_error();
+	return DB_FAILED;
+    }
+
     return DB_OK;
 }
-
-

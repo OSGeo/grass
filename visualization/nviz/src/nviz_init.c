@@ -18,7 +18,7 @@ wm title . \"NVIZ\"\n\
 update\n\
 grab .wait_ok.wait\n";
 
-int script_mode=0;
+int script_mode = 0;
 
 static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			 int argc, const char **argv)
@@ -29,7 +29,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     struct GModule *module;
     char *arglist[3], *autoload;
     int i, aload = 1;
-    char *argv2[argc-1];
+    char *argv2[argc - 1];
     int argc2, ii, jj;
 
     /*
@@ -133,15 +133,14 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     /*
      * Routine to strip out script name passed to through argv
      * If left in it treats it as a elev arg and tries to open
-    */
-    for (ii = 0; ii < argc; ii++)
-    {
-        if (ii == 1)
-                continue;
-        argv2[jj] = (char *)argv[ii];
-        jj++;
+     */
+    for (ii = 0; ii < argc; ii++) {
+	if (ii == 1)
+	    continue;
+	argv2[jj] = (char *)argv[ii];
+	jj++;
     }
-    argc2 = argc-1;
+    argc2 = argc - 1;
 
 
     /* BUG?: warning: passing arg 2 of `G_parser' from incompatible pointer type */
@@ -169,48 +168,50 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 
     }
 
-    if (verbose->answer)
-    {
-    fprintf(stderr, "\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr, "Version: %s\n", GRASS_VERSION_STRING);
-    fprintf(stderr, "\n");
-    fprintf(stderr,
-	    "Authors: Bill Brown, Terry Baker, Mark Astley, David Gerdes\n");
-    fprintf(stderr, "\tmodifications: Jaro Hofierka, Bob Covill\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr,
-	    "Please cite one or more of the following references in publications\n");
-    fprintf(stderr, "where the results of this program were used:\n");
-    fprintf(stderr,
-	    "Brown, W.M., Astley, M., Baker, T., Mitasova, H. (1995).\n");
-    fprintf(stderr,
-	    "GRASS as an Integrated GIS and Visualization System for\n");
-    fprintf(stderr,
-	    "Spatio-Temporal Modeling, Proceedings of Auto Carto 12, Charlotte, N.C.\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr,
-	    "Mitasova, H., W.M. Brown, J. Hofierka, 1994, Multidimensional\n");
-    fprintf(stderr, "dynamic cartography. Kartograficke listy, 2, p. 37-50.\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr,
-	    "Mitas L., Brown W. M., Mitasova H., 1997, Role of dynamic\n");
-    fprintf(stderr,
-	    "cartography in simulations of landscape processes based on multi-variate\n");
-    fprintf(stderr,
-	    "fields. Computers and Geosciences, Vol. 23, No. 4, pp. 437-446\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr, "http://www2.gis.uiuc.edu:2280/modviz/viz/nviz.html\n");
-    fprintf(stderr, "\n");
-    fprintf(stderr, "The papers are available at\n");
-    fprintf(stderr, "http://www2.gis.uiuc.edu:2280/modviz/\n");
-    } /* done verbose */
+    if (verbose->answer) {
+	fprintf(stderr, "\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "Version: %s\n", GRASS_VERSION_STRING);
+	fprintf(stderr, "\n");
+	fprintf(stderr,
+		"Authors: Bill Brown, Terry Baker, Mark Astley, David Gerdes\n");
+	fprintf(stderr, "\tmodifications: Jaro Hofierka, Bob Covill\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr,
+		"Please cite one or more of the following references in publications\n");
+	fprintf(stderr, "where the results of this program were used:\n");
+	fprintf(stderr,
+		"Brown, W.M., Astley, M., Baker, T., Mitasova, H. (1995).\n");
+	fprintf(stderr,
+		"GRASS as an Integrated GIS and Visualization System for\n");
+	fprintf(stderr,
+		"Spatio-Temporal Modeling, Proceedings of Auto Carto 12, Charlotte, N.C.\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr,
+		"Mitasova, H., W.M. Brown, J. Hofierka, 1994, Multidimensional\n");
+	fprintf(stderr,
+		"dynamic cartography. Kartograficke listy, 2, p. 37-50.\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr,
+		"Mitas L., Brown W. M., Mitasova H., 1997, Role of dynamic\n");
+	fprintf(stderr,
+		"cartography in simulations of landscape processes based on multi-variate\n");
+	fprintf(stderr,
+		"fields. Computers and Geosciences, Vol. 23, No. 4, pp. 437-446\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr,
+		"http://www2.gis.uiuc.edu:2280/modviz/viz/nviz.html\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "The papers are available at\n");
+	fprintf(stderr, "http://www2.gis.uiuc.edu:2280/modviz/\n");
+    }				/* done verbose */
 
 
     /* Look for quickstart flag */
     if (no_args->answer) {
-	elev->answers = colr->answers = vct->answers = pnt->answers = vol->answers = NULL;
+	elev->answers = colr->answers = vct->answers = pnt->answers =
+	    vol->answers = NULL;
     }
 
 
@@ -265,7 +266,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     /* Parse answeres from user */
     /* Run check to make sure elev == colr */
     if (elev->answers && colr->answers) {
-	int ee=0, cc=0;
+	int ee = 0, cc = 0;
 
 	for (i = 0; elev->answers[i]; i++) {
 	    ee = i;
@@ -275,7 +276,8 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	}
 	if (ee != cc)
 	    G_fatal_error
-		(_("Number of elevation files does not match number of colors files"));
+		(_
+		 ("Number of elevation files does not match number of colors files"));
     }
 
     if (elev->answers) {
@@ -311,16 +313,15 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     }
 
     if (vct->answers) {
-	if (!elev->answers && GS_num_surfs() == 0)
-	{
-		int i;
-		int *surf_list;
+	if (!elev->answers && GS_num_surfs() == 0) {
+	    int i;
+	    int *surf_list;
 
-            	arglist[1] = "surf";
-            	Nnew_map_obj_cmd(data, interp, 2, arglist);
+	    arglist[1] = "surf";
+	    Nnew_map_obj_cmd(data, interp, 2, arglist);
 
-    		surf_list = GS_get_surf_list(&i);
-		GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
+	    surf_list = GS_get_surf_list(&i);
+	    GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
 	}
 	for (i = 0; vct->answers[i]; i++) {
 	    arglist[1] = "vect";
@@ -330,36 +331,35 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     }
 
     if (pnt->answers) {
-	    if (!elev->answers && GS_num_surfs() == 0)
-            {
-                int i;
-                int *surf_list;
+	if (!elev->answers && GS_num_surfs() == 0) {
+	    int i;
+	    int *surf_list;
 
-                arglist[1] = "surf";
-                Nnew_map_obj_cmd(data, interp, 2, arglist);
+	    arglist[1] = "surf";
+	    Nnew_map_obj_cmd(data, interp, 2, arglist);
 
-                surf_list = GS_get_surf_list(&i);
-                GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
-            }
-	    for (i = 0; pnt->answers[i]; i++) {
-		    arglist[1] = "site";
-		    arglist[2] = pnt->answers[i];
-		    Nnew_map_obj_cmd(data, interp, 3, arglist);
-	    }
+	    surf_list = GS_get_surf_list(&i);
+	    GS_set_att_const(surf_list[0], ATT_TRANSP, 255);
+	}
+	for (i = 0; pnt->answers[i]; i++) {
+	    arglist[1] = "site";
+	    arglist[2] = pnt->answers[i];
+	    Nnew_map_obj_cmd(data, interp, 3, arglist);
+	}
     }
-    
+
     if (vol->answers) {
-	    for (i = 0; vol->answers[i]; i++) {
-		    arglist[1] = "vol";
-		    arglist[2] = vol->answers[i];
-		    Nnew_map_obj_cmd(data, interp, 3, arglist);
-	    }
+	for (i = 0; vol->answers[i]; i++) {
+	    arglist[1] = "vol";
+	    arglist[2] = vol->answers[i];
+	    Nnew_map_obj_cmd(data, interp, 3, arglist);
+	}
     }
 
 
 
 
-    return(TCL_OK);
+    return (TCL_OK);
 }
 
 
@@ -387,33 +387,39 @@ int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
      *
      * modify argv0 to compare with cmd.
      */
-    for(tmp2=argv0; *tmp2; tmp2++)
-	    if(*tmp2 == '\\')
-		    *tmp2 = '/';
+    for (tmp2 = argv0; *tmp2; tmp2++)
+	if (*tmp2 == '\\')
+	    *tmp2 = '/';
 #endif
 
     if (strstr(argv0, "script_tools") != NULL ||
-		    strstr(argv0, "script_play") != NULL ||
-		    strstr(argv0, "script_get_line") != NULL ||
-		    strstr(argv0, "script_file_tools") != NULL) {
-	    fprintf(stderr, "Entering script mode ...\n");
-	    tmp2 = (char *)G_malloc ((strlen(cmd) + 2) * (sizeof(char)));
-	    sprintf(tmp2, "%s", cmd);
-	    script_mode = 1;
-    } else if ( strstr(cmd, argv0) == NULL) {
-	    tmp2 = (char *)G_malloc ((strlen(cmd) + strlen(argv0) + strlen(tmp) + 4 ) * (sizeof(char)));
-	    sprintf(tmp2, "%s %s %s", cmd, argv0, tmp);
-    } else {
-	    tmp2 = (char *)G_malloc ((strlen(argv0) + strlen(tmp) + 2) * (sizeof(char)));
-	    sprintf(tmp2, "%s %s", argv0, tmp);
+	strstr(argv0, "script_play") != NULL ||
+	strstr(argv0, "script_get_line") != NULL ||
+	strstr(argv0, "script_file_tools") != NULL) {
+	fprintf(stderr, "Entering script mode ...\n");
+	tmp2 = (char *)G_malloc((strlen(cmd) + 2) * (sizeof(char)));
+	sprintf(tmp2, "%s", cmd);
+	script_mode = 1;
+    }
+    else if (strstr(cmd, argv0) == NULL) {
+	tmp2 =
+	    (char *)G_malloc((strlen(cmd) + strlen(argv0) + strlen(tmp) + 4) *
+			     (sizeof(char)));
+	sprintf(tmp2, "%s %s %s", cmd, argv0, tmp);
+    }
+    else {
+	tmp2 =
+	    (char *)G_malloc((strlen(argv0) + strlen(tmp) + 2) *
+			     (sizeof(char)));
+	sprintf(tmp2, "%s %s", argv0, tmp);
     }
 
     if (TCL_ERROR == Tcl_SplitList(interp, tmp2, &argc, args))
-	    exit(-1);
+	exit(-1);
 
     return (argc);
 }
-    
+
 int make_red_yellow_ramp(int *ramp, int num, int minval, int maxval)
 {
     int g, i, incr;
@@ -436,7 +442,7 @@ int sort_surfs_mid(int *id_sort, int *indices, int num)
 {
     int i, j;
     float midvals[MAX_SURFS];
-    float tmp, max=0., tmin, tmax, tmid;
+    float tmp, max = 0., tmin, tmax, tmid;
     int *surf_list;
 
     surf_list = GS_get_surf_list(&i);
@@ -461,7 +467,7 @@ int sort_surfs_mid(int *id_sort, int *indices, int num)
 	midvals[indices[i]] = max + 1;
 	id_sort[i] = surf_list[indices[i]];
     }
-    return(TCL_OK);
+    return (TCL_OK);
 }
 
 int set_default_wirecolors(Nv_data * dc, int surfs)
@@ -479,12 +485,13 @@ int set_default_wirecolors(Nv_data * dc, int surfs)
 	RGB_TO_INT(greyval, greyval, greyval, color);
 	GS_set_wire_color(surf_list[i], color);
     }
-    G_free (surf_list);
+    G_free(surf_list);
 
 #else
 
     int i, ramp[MAX_SURFS];
     int sortSurfs[MAX_SURFS], sorti[MAX_SURFS];
+
     make_red_yellow_ramp(ramp, surfs, 30, 255);
     sort_surfs_mid(sortSurfs, sorti, surfs);
 
@@ -499,9 +506,10 @@ int set_default_wirecolors(Nv_data * dc, int surfs)
 int Ninit(Tcl_Interp * interp, Tk_Window w)
 {
     static Nv_data data;
-/*
-    char nviz_script[] = "source [exec g.gisenv GISBASE]/etc/nviz2.2/scripts/nviz2.2_script\n";
-*/
+
+    /*
+       char nviz_script[] = "source [exec g.gisenv GISBASE]/etc/nviz2.2/scripts/nviz2.2_script\n";
+     */
 
     /* compile in the home directory */
     Tcl_SetVar(interp, "src_boot", getenv("GISBASE"), TCL_GLOBAL_ONLY);
@@ -511,19 +519,22 @@ int Ninit(Tcl_Interp * interp, Tk_Window w)
     Ninitdata(interp, &data);
 
 /*** ACS_MODIFY flythrough  ONE LINE ******************************************/
-	togl_flythrough_init_tcl(interp, &data);
+    togl_flythrough_init_tcl(interp, &data);
+
 /*** ACS_MODIFY pick  ONE LINE ************************************************/
-	pick_init_tcl(interp, &data);
+    pick_init_tcl(interp, &data);
+
 /*** ACS_MODIFY site_attr  ONE LINE ************************************************/
-	site_attr_init_tcl(interp, &data);
+    site_attr_init_tcl(interp, &data);
+
 /*** ACS_MODIFY site_highlight  ONE LINE ************************************************/
-	site_highlight_init_tcl(interp, &data);
+    site_highlight_init_tcl(interp, &data);
 
-/*
-    if (!script_mode)
-	    Tcl_Eval(interp, nviz_script); */ /* source nviz_script to start main window */
+    /*
+       if (!script_mode)
+       Tcl_Eval(interp, nviz_script); *//* source nviz_script to start main window */
 
-    return(TCL_OK);
+    return (TCL_OK);
 }
 
 void swap_togl();
@@ -540,13 +551,13 @@ int Ninitdata(Tcl_Interp * interp,	/* Current interpreter. */
 
     GS_libinit();
 
-	GVL_libinit(); /* TODO */
+    GVL_libinit();		/* TODO */
 
-	GS_set_swap_func(swap_togl);
+    GS_set_swap_func(swap_togl);
     data->NumCplanes = 0;
     data->CurCplane = 0;
     if (!script_mode)
-	    parse_command(data, interp, argc, argv);
+	parse_command(data, interp, argc, argv);
 
-    return(TCL_OK);
+    return (TCL_OK);
 }

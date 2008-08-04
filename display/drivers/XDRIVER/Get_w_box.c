@@ -15,11 +15,9 @@
 #include "includes.h"
 #include <grass/glocale.h>
 
-int XD_Get_location_with_box (
-    int cx, int cy,                     /* current x and y */
-    int *nx, int *ny,                   /* new x and y */
-    int *button
-)
+int XD_Get_location_with_box(int cx, int cy,	/* current x and y */
+			     int *nx, int *ny,	/* new x and y */
+			     int *button)
 {
     int drawn = 0;
     long event_mask;
@@ -32,31 +30,30 @@ int XD_Get_location_with_box (
     unsigned gcMask;
     int done;
 
-    if (redraw_pid)
-    {
-	G_warning( _("Monitor: interactive command in redraw"));
+    if (redraw_pid) {
+	G_warning(_("Monitor: interactive command in redraw"));
 	return -1;
     }
 
-    G_debug (5, "Get_location_with_box()");
+    G_debug(5, "Get_location_with_box()");
 
     /* Get events that track the pointer to resize the RubberBox until
      * ButtonReleased */
     event_mask = ButtonPressMask | PointerMotionMask;
     XSelectInput(dpy, grwin, event_mask);
-	
+
     /* XOR, so double drawing returns pixels to original state */
     gcMask = GCFunction | GCPlaneMask | GCForeground | GCLineWidth;
     gcValues.function = GXxor;
     gcValues.line_width = 1;
-    gcValues.plane_mask = BlackPixel(dpy,scrn)^WhitePixel(dpy,scrn);
+    gcValues.plane_mask = BlackPixel(dpy, scrn) ^ WhitePixel(dpy, scrn);
     gcValues.foreground = 0xffffffff;
-    xor_gc = XCreateGC(dpy,grwin,gcMask,&gcValues);
+    xor_gc = XCreateGC(dpy, grwin, gcMask, &gcValues);
 
     /* Set the crosshair cursor */
     XDefineCursor(dpy, grwin, cur_xh);
 
-    for (done = 0; !done; ) {
+    for (done = 0; !done;) {
 	if (!get_xevent(event_mask, &event))
 	    break;
 
@@ -73,45 +70,49 @@ int XD_Get_location_with_box (
 	    *ny = event.xbutton.y;
 	    /* do a double draw to 'erase' previous rectangle */
 	    if (drawn)
-		XDrawRectangle(dpy, grwin, xor_gc, oldx, oldy, oldwidth, oldheight);
+		XDrawRectangle(dpy, grwin, xor_gc, oldx, oldy, oldwidth,
+			       oldheight);
 	    /* need to draw a rectangle with (cx,cy) as one corner and
 	     * (*nx,*ny) as opposite corner. Figure the top left coords
 	     * of such a rectangle */
 	    if (cx < *nx) {
 		leftx = cx;
 		width = *nx - cx;
-	    } else {
+	    }
+	    else {
 		leftx = *nx;
 		width = cx - *nx;
 	    }
 	    if (cy < *ny) {
 		topy = cy;
 		height = *ny - cy;
-	    } else {
+	    }
+	    else {
 		topy = *ny;
 		height = cy - *ny;
 	    }
-            /* don't draw a zero volume rectangle */
+	    /* don't draw a zero volume rectangle */
 	    if (width && height) {
-		XDrawRectangle(dpy, grwin, xor_gc, leftx, topy, width, height);
+		XDrawRectangle(dpy, grwin, xor_gc, leftx, topy, width,
+			       height);
 		oldwidth = width;
 		oldheight = height;
 		oldx = leftx;
 		oldy = topy;
 		drawn = 1;
-	    } else
+	    }
+	    else
 		drawn = 0;
 	    break;
 	}
     }
 
-    if (drawn) 
+    if (drawn)
 	XDrawRectangle(dpy, grwin, xor_gc, oldx, oldy, oldwidth, oldheight);
     drawn = 0;
-    XUndefineCursor(dpy, grwin);        /* reset cursor */
-    XSelectInput(dpy, grwin, gemask);   /* restore normal events */
+    XUndefineCursor(dpy, grwin);	/* reset cursor */
+    XSelectInput(dpy, grwin, gemask);	/* restore normal events */
     XFreeGC(dpy, xor_gc);
 
     return 0;
 }
-

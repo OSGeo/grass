@@ -1,20 +1,20 @@
 /*!
-  \file GP2.c
- 
-  \brief OGSF library - loading and manipulating point sets (higher level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (January 1994)
-  \author Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
-*/
+   \file GP2.c
+
+   \brief OGSF library - loading and manipulating point sets (higher level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (January 1994)
+   \author Doxygenized by Martin landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -28,13 +28,13 @@ static int Site_ID[MAX_SITES];
 static int Next_site = 0;
 
 /*!
-  \brief Check if point set exists
+   \brief Check if point set exists
 
-  \param id point set id
-  
-  \return 1 found
-  \return 0 not found
-*/
+   \param id point set id
+
+   \return 1 found
+   \return 0 not found
+ */
 int GP_site_exists(int id)
 {
     int i, found = 0;
@@ -48,18 +48,18 @@ int GP_site_exists(int id)
 	    found = 1;
 	}
     }
-    
+
     G_debug(3, "GP_site_exists(): found=%d", found);
 
     return (found);
 }
 
 /*!
-  \brief Create new point set
+   \brief Create new point set
 
-  \return point set id
-  \return -1 on error (number of point sets exceeded)
-*/
+   \return point set id
+   \return -1 on error (number of point sets exceeded)
+ */
 int GP_new_site(void)
 {
     geosite *np;
@@ -79,25 +79,25 @@ int GP_new_site(void)
 }
 
 /*!
-  \brief Get number of loaded point sets
+   \brief Get number of loaded point sets
 
-  \return number of point sets
-*/
+   \return number of point sets
+ */
 int GP_num_sites(void)
 {
     return (gp_num_sites());
 }
 
 /*!
-  \brief Get list of point sets
-  
-  Must freed when no longer needed!
+   \brief Get list of point sets
 
-  \param numsites number of point sets
+   Must freed when no longer needed!
 
-  \return pointer to list of points sets
-  \return NULL on error
-*/
+   \param numsites number of point sets
+
+   \return pointer to list of points sets
+   \return NULL on error
+ */
 int *GP_get_site_list(int *numsites)
 {
     int i, *ret;
@@ -105,7 +105,7 @@ int *GP_get_site_list(int *numsites)
     *numsites = Next_site;
 
     if (Next_site) {
-	ret = (int *) G_malloc(Next_site * sizeof(int)); /* G_fatal_error */
+	ret = (int *)G_malloc(Next_site * sizeof(int));	/* G_fatal_error */
 	if (!ret) {
 	    return (NULL);
 	}
@@ -121,13 +121,13 @@ int *GP_get_site_list(int *numsites)
 }
 
 /*!
-  \brief Delete registrated point set
+   \brief Delete registrated point set
 
-  \param id point set id
+   \param id point set id
 
-  \return 1 on success
-  \return -1 on error (point sets not available)
-*/
+   \return 1 on success
+   \return -1 on error (point sets not available)
+ */
 int GP_delete_site(int id)
 {
     int i, j, found = 0;
@@ -156,20 +156,20 @@ int GP_delete_site(int id)
 }
 
 /*!
-  \brief Load point set from file
+   \brief Load point set from file
 
-  Check to see if handle already loaded, if so - free before loading new 
-  for now, always load to memory 
-  
-  \todo load file handle & ready for reading instead of using
-  memory
+   Check to see if handle already loaded, if so - free before loading new 
+   for now, always load to memory 
 
-  \param id point set id
-  \param filename point set filename
+   \todo load file handle & ready for reading instead of using
+   memory
 
-  \return -1 on error
-  \return 1 on success
-*/
+   \param id point set id
+   \param filename point set filename
+
+   \return -1 on error
+   \return 1 on success
+ */
 int GP_load_site(int id, const char *filename)
 {
     geosite *gp;
@@ -187,7 +187,7 @@ int GP_load_site(int id, const char *filename)
     gp->points = Gp_load_sites(filename, &(gp->n_sites),
 			       &(gp->has_z), &(gp->has_att));
 
-    if(gp->points) {
+    if (gp->points) {
 	return (1);
     }
 
@@ -195,16 +195,16 @@ int GP_load_site(int id, const char *filename)
 }
 
 /*!
-  \brief Get point set filename
+   \brief Get point set filename
 
-  Note: char array is allocated by G_store()
+   Note: char array is allocated by G_store()
 
-  \param id point set id
-  \param[out] filename point set filename
+   \param id point set id
+   \param[out] filename point set filename
 
-  \return -1 on error (point set not found)
-  \return 1 on success
-*/
+   \return -1 on error (point set not found)
+   \return 1 on success
+ */
 int GP_get_sitename(int id, char *filename)
 {
     geosite *gp;
@@ -219,8 +219,8 @@ int GP_get_sitename(int id, char *filename)
 }
 
 /*!
-  \brief Get point set mode
-*/
+   \brief Get point set mode
+ */
 int GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
 		    int *marker)
 {
@@ -240,17 +240,17 @@ int GP_get_sitemode(int id, int *atmod, int *color, int *width, float *size,
 }
 
 /*!
-  \brief Set point set mode
+   \brief Set point set mode
 
-  \param id point set id
-  \param atmod
-  \param color icon color
-  \param width icon line width
-  \param size icon size
-  \param marker icon symbol
+   \param id point set id
+   \param atmod
+   \param color icon color
+   \param width icon line width
+   \param size icon size
+   \param marker icon symbol
 
-  \return -1 on error (point set not found)
-*/
+   \return -1 on error (point set not found)
+ */
 int GP_set_sitemode(int id, int atmod, int color, int width, float size,
 		    int marker)
 {
@@ -270,17 +270,17 @@ int GP_set_sitemode(int id, int atmod, int color, int width, float size,
 }
 
 /*!
-  \brief Set attribute mode color
+   \brief Set attribute mode color
 
-  \todo make similar routines for attmode_size, attmode_marker (use transform)
-  
-  \param id surface id
-  \param filename filename
+   \todo make similar routines for attmode_size, attmode_marker (use transform)
 
-  \return 1 for success
-  \return 0 for no attribute info
-  \return -1 for bad parameter
-*/
+   \param id surface id
+   \param filename filename
+
+   \return 1 for success
+   \return 0 for no attribute info
+   \return -1 for bad parameter
+ */
 int GP_attmode_color(int id, const char *filename)
 {
     geosite *gp;
@@ -302,13 +302,13 @@ int GP_attmode_color(int id, const char *filename)
 }
 
 /*!
-  \brief Set attribute mode to none
+   \brief Set attribute mode to none
 
-  \param id point set id
+   \param id point set id
 
-  \return -1 on error (invalid point set id)
-  \return 1 on success
-*/
+   \return -1 on error (invalid point set id)
+   \return 1 on success
+ */
 int GP_attmode_none(int id)
 {
     geosite *gp;
@@ -323,15 +323,15 @@ int GP_attmode_none(int id)
 }
 
 /*!
-  \brief Set z-mode
+   \brief Set z-mode
 
-  \param id poin set id
-  \param use_z use z ?
+   \param id poin set id
+   \param use_z use z ?
 
-  \return 1 on success
-  \return 0 no z
-  \return -1 on error (invalid point set id)
-*/
+   \return 1 on success
+   \return 0 no z
+   \return -1 on error (invalid point set id)
+ */
 int GP_set_zmode(int id, int use_z)
 {
     geosite *gp;
@@ -354,14 +354,14 @@ int GP_set_zmode(int id, int use_z)
 }
 
 /*!
-  \brief Get z-mode
+   \brief Get z-mode
 
-  \param id point set id
-  \param[out] use_z use z
-  
-  \return -1 on error (invalid point set id)
-  \return 1 on success
-*/
+   \param id point set id
+   \param[out] use_z use z
+
+   \return -1 on error (invalid point set id)
+   \return 1 on success
+ */
 int GP_get_zmode(int id, int *use_z)
 {
     geosite *gp;
@@ -375,11 +375,11 @@ int GP_get_zmode(int id, int *use_z)
 }
 
 /*!
-  \brief Set trans ?
+   \brief Set trans ?
 
-  \param id point set id
-  \param xtrans,ytrans,ztrans x/y/z trans values
-*/
+   \param id point set id
+   \param xtrans,ytrans,ztrans x/y/z trans values
+ */
 void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geosite *gp;
@@ -398,11 +398,11 @@ void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 }
 
 /*!
-  \brief Get trans
+   \brief Get trans
 
-  \param id point set id
-  \param xtrans,ytrans,ztrans x/y/z trans values
-*/
+   \param id point set id
+   \param xtrans,ytrans,ztrans x/y/z trans values
+ */
 void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geosite *gp;
@@ -422,14 +422,14 @@ void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 }
 
 /*!
-  \brief Select surface
+   \brief Select surface
 
-  \param hp point set id
-  \param hs surface id
+   \param hp point set id
+   \param hs surface id
 
-  \return 1 surface selected
-  \return -1 on error
-*/
+   \return 1 surface selected
+   \return -1 on error
+ */
 int GP_select_surf(int hp, int hs)
 {
     geosite *gp;
@@ -450,14 +450,14 @@ int GP_select_surf(int hp, int hs)
 }
 
 /*!
-  \brief Unselect surface
+   \brief Unselect surface
 
-  \param hp point set id
-  \param hs surface id
+   \param hp point set id
+   \param hs surface id
 
-  \return 1 surface unselected
-  \return -1 on error
-*/
+   \return 1 surface unselected
+   \return -1 on error
+ */
 int GP_unselect_surf(int hp, int hs)
 {
     geosite *gp;
@@ -486,14 +486,14 @@ int GP_unselect_surf(int hp, int hs)
 }
 
 /*!
-  \brief Check if surface is selected
+   \brief Check if surface is selected
 
-  \param hp point set id
-  \param hs surface id
+   \param hp point set id
+   \param hs surface id
 
-  \return 1 selected
-  \return 0 not selected
-*/
+   \return 1 selected
+   \return 0 not selected
+ */
 int GP_surf_is_selected(int hp, int hs)
 {
     int i;
@@ -513,10 +513,10 @@ int GP_surf_is_selected(int hp, int hs)
 }
 
 /*!
-  \brief Draw point set
+   \brief Draw point set
 
-  \param id point set id
-*/
+   \param id point set id
+ */
 void GP_draw_site(int id)
 {
     geosurf *gs;
@@ -538,11 +538,11 @@ void GP_draw_site(int id)
 
 		if (gs) {
 		    gpd_2dsite(gp, gs, 0);
-		#ifdef TRACE_GP_FUNCS
-		    G_debug (3, "Drawing site %d on Surf %d", id,
-			     gp->drape_surf_id[i]);
+#ifdef TRACE_GP_FUNCS
+		    G_debug(3, "Drawing site %d on Surf %d", id,
+			    gp->drape_surf_id[i]);
 		    print_site_fields(gp);
-		#endif
+#endif
 		}
 	    }
 	}
@@ -552,8 +552,8 @@ void GP_draw_site(int id)
 }
 
 /*!
-  \brief Draw all available point sets
-*/
+   \brief Draw all available point sets
+ */
 void GP_alldraw_site(void)
 {
     int id;
@@ -566,14 +566,14 @@ void GP_alldraw_site(void)
 }
 
 /*!
-  \brief Set client data
+   \brief Set client data
 
-  \param id point set id
-  \param clientd client data
+   \param id point set id
+   \param clientd client data
 
-  \return 1 on success
-  \return -1 on error (invalid point set id)
-*/
+   \return 1 on success
+   \return -1 on error (invalid point set id)
+ */
 int GP_Set_ClientData(int id, void *clientd)
 {
     geosite *gp;
@@ -589,13 +589,13 @@ int GP_Set_ClientData(int id, void *clientd)
 }
 
 /*!
-  \brief Get client data
+   \brief Get client data
 
-  \param id point set id
+   \param id point set id
 
-  \return pointer to client data
-  \return NULL on error
-*/
+   \return pointer to client data
+   \return NULL on error
+ */
 void *GP_Get_ClientData(int id)
 {
     geosite *gp;

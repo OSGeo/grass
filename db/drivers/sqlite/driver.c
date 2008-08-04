@@ -1,3 +1,4 @@
+
 /***********************************************************
 *
 * MODULE:       SQLite driver 
@@ -15,16 +16,13 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_init  (int argc, char *argv[])
-
+int db__driver_init(int argc, char *argv[])
 {
     init_error();
     return DB_OK;
 }
 
-int
-db__driver_finish()
+int db__driver_finish()
 {
     return DB_OK;
 }

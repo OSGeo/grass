@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       Cairo driver
@@ -15,8 +16,7 @@
 
 int main(int argc, char **argv)
 {
-	LIB_init(Cairo_Driver(), argc, argv);
+    LIB_init(Cairo_Driver(), argc, argv);
 
-	return LIB_main(argc, argv);
+    return LIB_main(argc, argv);
 }
-

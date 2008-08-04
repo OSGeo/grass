@@ -3,7 +3,6 @@
 
 void XD_draw_point(int x, int y)
 {
-	XDrawPoint(dpy, bkupmap, gc, x, y);
-	needs_flush = 1;
+    XDrawPoint(dpy, bkupmap, gc, x, y);
+    needs_flush = 1;
 }
-

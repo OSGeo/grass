@@ -20,8 +20,7 @@ static struct utsname attname;
 #endif
 #endif
 
-char *
-G__machine_name(void)
+char *G__machine_name(void)
 {
     static char name[128];
 
@@ -29,11 +28,11 @@ G__machine_name(void)
 
 #ifdef HAVE_GETHOSTNAME
     gethostname(name, sizeof(name));
-    name[sizeof(name)-1] = 0;	/* make sure null terminated */
+    name[sizeof(name) - 1] = 0;	/* make sure null terminated */
 #else
 #ifdef HAVE_SYS_UTSNAME_H
-    uname (&attname);
-    strcpy (name, attname.nodename);
+    uname(&attname);
+    strcpy(name, attname.nodename);
 #endif
 #endif
 

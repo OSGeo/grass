@@ -1,3 +1,4 @@
+
 /**
  * \file yes.c
  *
@@ -35,31 +36,35 @@
  * \return 1 for Yes
  */
 
-int G_yes (const char *question,int dflt)
+int G_yes(const char *question, int dflt)
 {
-    fflush (stdout);
+    fflush(stdout);
 
-    while (1)
-    {
-        char answer[100];
+    while (1) {
+	char answer[100];
 
-	fprintf (stderr,"%s", question);
+	fprintf(stderr, "%s", question);
 
-	while (1)
-	{
-	    fprintf (stderr,"(y/n) ");
+	while (1) {
+	    fprintf(stderr, "(y/n) ");
 	    if (dflt >= 0)
-                fprintf (stderr,dflt==0?"[n] ":"[y] ");
+		fprintf(stderr, dflt == 0 ? "[n] " : "[y] ");
 
-	    fflush (stderr);
-	    if (!G_gets(answer)) break;
-	    G_strip (answer);
+	    fflush(stderr);
+	    if (!G_gets(answer))
+		break;
+	    G_strip(answer);
 
-	    switch (*answer)
-	    {
-	    case 'y': case 'Y':	return (1);
-	    case 'n': case 'N':	return (0);
-	    case 0: if (dflt >= 0) return (dflt);
+	    switch (*answer) {
+	    case 'y':
+	    case 'Y':
+		return (1);
+	    case 'n':
+	    case 'N':
+		return (0);
+	    case 0:
+		if (dflt >= 0)
+		    return (dflt);
 	    }
 	}
     }

@@ -4,11 +4,11 @@
 #define GLOBAL extern
 #endif
 
-GLOBAL char *map_name ;
-GLOBAL int color ;
-GLOBAL float size ;
-GLOBAL int style ;
-GLOBAL int type ;
+GLOBAL char *map_name;
+GLOBAL int color;
+GLOBAL float size;
+GLOBAL int style;
+GLOBAL int type;
 GLOBAL int is_fp;
 GLOBAL int nodata;
 GLOBAL int nsteps;

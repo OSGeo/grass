@@ -108,54 +108,56 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /************************************************************************/
-/*                        Configuration options.                        */
+    /*                        Configuration options.                        */
+
 /************************************************************************/
 
-/* -------------------------------------------------------------------- */
-/*      Should the DBFReadStringAttribute() strip leading and           */
-/*      trailing white space?                                           */
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /*      Should the DBFReadStringAttribute() strip leading and           */
+    /*      trailing white space?                                           */
+    /* -------------------------------------------------------------------- */
 #define TRIM_DBF_WHITESPACE
 
-/* -------------------------------------------------------------------- */
-/*      Should we write measure values to the Multipatch object?        */
-/*      Reportedly ArcView crashes if we do write it, so for now it     */
-/*      is disabled.                                                    */
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /*      Should we write measure values to the Multipatch object?        */
+    /*      Reportedly ArcView crashes if we do write it, so for now it     */
+    /*      is disabled.                                                    */
+    /* -------------------------------------------------------------------- */
 #define DISABLE_MULTIPATCH_MEASURE
-    
-/* -------------------------------------------------------------------- */
-/*      SHPAPI_CALL                                                     */
-/*                                                                      */
-/*      The following two macros are present to allow forcing           */
-/*      various calling conventions on the Shapelib API.                */
-/*                                                                      */
-/*      To force __stdcall conventions (needed to call Shapelib         */
-/*      from Visual Basic and/or Dephi I believe) the makefile could    */
-/*      be modified to define:                                          */
-/*                                                                      */
-/*        /DSHPAPI_CALL=__stdcall                                       */
-/*                                                                      */
-/*      If it is desired to force export of the Shapelib API without    */
-/*      using the shapelib.def file, use the following definition.      */
-/*                                                                      */
-/*        /DSHAPELIB_DLLEXPORT                                          */
-/*                                                                      */
-/*      To get both at once it will be necessary to hack this           */
-/*      include file to define:                                         */
-/*                                                                      */
-/*        #define SHPAPI_CALL __declspec(dllexport) __stdcall           */
-/*        #define SHPAPI_CALL1 __declspec(dllexport) * __stdcall        */
-/*                                                                      */
-/*      The complexity of the situtation is partly caused by the        */
-/*      peculiar requirement of Visual C++ that __stdcall appear        */
-/*      after any "*"'s in the return value of a function while the     */
-/*      __declspec(dllexport) must appear before them.                  */
-/* -------------------------------------------------------------------- */
+
+    /* -------------------------------------------------------------------- */
+    /*      SHPAPI_CALL                                                     */
+    /*                                                                      */
+    /*      The following two macros are present to allow forcing           */
+    /*      various calling conventions on the Shapelib API.                */
+    /*                                                                      */
+    /*      To force __stdcall conventions (needed to call Shapelib         */
+    /*      from Visual Basic and/or Dephi I believe) the makefile could    */
+    /*      be modified to define:                                          */
+    /*                                                                      */
+    /*        /DSHPAPI_CALL=__stdcall                                       */
+    /*                                                                      */
+    /*      If it is desired to force export of the Shapelib API without    */
+    /*      using the shapelib.def file, use the following definition.      */
+    /*                                                                      */
+    /*        /DSHAPELIB_DLLEXPORT                                          */
+    /*                                                                      */
+    /*      To get both at once it will be necessary to hack this           */
+    /*      include file to define:                                         */
+    /*                                                                      */
+    /*        #define SHPAPI_CALL __declspec(dllexport) __stdcall           */
+    /*        #define SHPAPI_CALL1 __declspec(dllexport) * __stdcall        */
+    /*                                                                      */
+    /*      The complexity of the situtation is partly caused by the        */
+    /*      peculiar requirement of Visual C++ that __stdcall appear        */
+    /*      after any "*"'s in the return value of a function while the     */
+    /*      __declspec(dllexport) must appear before them.                  */
+    /* -------------------------------------------------------------------- */
 
 #ifdef SHAPELIB_DLLEXPORT
 #  define SHPAPI_CALL __declspec(dllexport)
@@ -174,74 +176,78 @@ extern "C" {
 #ifndef SHPAPI_CALL1
 #  define SHPAPI_CALL1(x)      x SHPAPI_CALL
 #endif
-    
-/* -------------------------------------------------------------------- */
-/*      Macros for controlling CVSID and ensuring they don't appear     */
-/*      as unreferenced variables resulting in lots of warnings.        */
-/* -------------------------------------------------------------------- */
+
+    /* -------------------------------------------------------------------- */
+    /*      Macros for controlling CVSID and ensuring they don't appear     */
+    /*      as unreferenced variables resulting in lots of warnings.        */
+    /* -------------------------------------------------------------------- */
 #ifndef DISABLE_CVSID
 #  define SHP_CVSID(string)     static char cpl_cvsid[] = string; \
 static char *cvsid_aw() { return( cvsid_aw() ? ((char *) NULL) : cpl_cvsid ); }
 #else
 #  define SHP_CVSID(string)
 #endif
-    
-/* -------------------------------------------------------------------- */
-/*      IO/Error hook functions.                                        */
-/* -------------------------------------------------------------------- */
-typedef int *SAFile;
+
+    /* -------------------------------------------------------------------- */
+    /*      IO/Error hook functions.                                        */
+    /* -------------------------------------------------------------------- */
+    typedef int *SAFile;
 
 #ifndef SAOffset
-typedef unsigned long SAOffset;
+    typedef unsigned long SAOffset;
 #endif
 
-typedef struct {
-    SAFile     (*FOpen) ( const char *filename, const char *path);
-    SAOffset   (*FRead) ( void *p, SAOffset size, SAOffset nmemb, SAFile file);
-    SAOffset   (*FWrite)( void *p, SAOffset size, SAOffset nmemb, SAFile file);
-    SAOffset   (*FSeek) ( SAFile file, SAOffset offset, int whence );
-    SAOffset   (*FTell) ( SAFile file );
-    int        (*FFlush)( SAFile file );
-    int        (*FClose)( SAFile file );
+    typedef struct
+    {
+	SAFile(*FOpen) (const char *filename, const char *path);
+	SAOffset(*FRead) (void *p, SAOffset size, SAOffset nmemb,
+			  SAFile file);
+	SAOffset(*FWrite) (void *p, SAOffset size, SAOffset nmemb,
+			   SAFile file);
+	SAOffset(*FSeek) (SAFile file, SAOffset offset, int whence);
+	SAOffset(*FTell) (SAFile file);
+	int (*FFlush) (SAFile file);
+	int (*FClose) (SAFile file);
 
-    void       (*Error) ( const char *message );
-} SAHooks;
+	void (*Error) (const char *message);
+    } SAHooks;
 
-void SHPAPI_CALL SASetupDefaultHooks( SAHooks *psHooks );
+    void SHPAPI_CALL SASetupDefaultHooks(SAHooks * psHooks);
 
 /************************************************************************/
-/*                             SHP Support.                             */
+    /*                             SHP Support.                             */
+
 /************************************************************************/
-typedef	struct
-{
-    SAHooks sHooks;
+    typedef struct
+    {
+	SAHooks sHooks;
 
-    SAFile      fpSHP;
-    SAFile 	fpSHX;
+	SAFile fpSHP;
+	SAFile fpSHX;
 
-    int		nShapeType;				/* SHPT_* */
-    
-    int		nFileSize;				/* SHP file */
+	int nShapeType;		/* SHPT_* */
 
-    int         nRecords;
-    int		nMaxRecords;
-    int		*panRecOffset;
-    int		*panRecSize;
+	int nFileSize;		/* SHP file */
 
-    double	adBoundsMin[4];
-    double	adBoundsMax[4];
+	int nRecords;
+	int nMaxRecords;
+	int *panRecOffset;
+	int *panRecSize;
 
-    int		bUpdated;
+	double adBoundsMin[4];
+	double adBoundsMax[4];
 
-    unsigned char *pabyRec;
-    int         nBufSize;
-} SHPInfo;
+	int bUpdated;
 
-typedef SHPInfo * SHPHandle;
+	unsigned char *pabyRec;
+	int nBufSize;
+    } SHPInfo;
 
-/* -------------------------------------------------------------------- */
-/*      Shape types (nSHPType)                                          */
-/* -------------------------------------------------------------------- */
+    typedef SHPInfo *SHPHandle;
+
+    /* -------------------------------------------------------------------- */
+    /*      Shape types (nSHPType)                                          */
+    /* -------------------------------------------------------------------- */
 #define SHPT_NULL	0
 #define SHPT_POINT	1
 #define SHPT_ARC	3
@@ -258,10 +264,10 @@ typedef SHPInfo * SHPHandle;
 #define SHPT_MULTIPATCH 31
 
 
-/* -------------------------------------------------------------------- */
-/*      Part types - everything but SHPT_MULTIPATCH just uses           */
-/*      SHPP_RING.                                                      */
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */
+    /*      Part types - everything but SHPT_MULTIPATCH just uses           */
+    /*      SHPP_RING.                                                      */
+    /* -------------------------------------------------------------------- */
 
 #define SHPP_TRISTRIP	0
 #define SHPP_TRIFAN	1
@@ -270,289 +276,277 @@ typedef SHPInfo * SHPHandle;
 #define SHPP_FIRSTRING	4
 #define SHPP_RING	5
 
-/* -------------------------------------------------------------------- */
-/*      SHPObject - represents on shape (without attributes) read       */
-/*      from the .shp file.                                             */
-/* -------------------------------------------------------------------- */
-typedef struct
-{
-    int		nSHPType;
+    /* -------------------------------------------------------------------- */
+    /*      SHPObject - represents on shape (without attributes) read       */
+    /*      from the .shp file.                                             */
+    /* -------------------------------------------------------------------- */
+    typedef struct
+    {
+	int nSHPType;
 
-    int		nShapeId; /* -1 is unknown/unassigned */
+	int nShapeId;		/* -1 is unknown/unassigned */
 
-    int		nParts;
-    int		*panPartStart;
-    int		*panPartType;
-    
-    int		nVertices;
-    double	*padfX;
-    double	*padfY;
-    double	*padfZ;
-    double	*padfM;
+	int nParts;
+	int *panPartStart;
+	int *panPartType;
 
-    double	dfXMin;
-    double	dfYMin;
-    double	dfZMin;
-    double	dfMMin;
+	int nVertices;
+	double *padfX;
+	double *padfY;
+	double *padfZ;
+	double *padfM;
 
-    double	dfXMax;
-    double	dfYMax;
-    double	dfZMax;
-    double	dfMMax;
+	double dfXMin;
+	double dfYMin;
+	double dfZMin;
+	double dfMMin;
 
-    int		bMeasureIsUsed;
-} SHPObject;
+	double dfXMax;
+	double dfYMax;
+	double dfZMax;
+	double dfMMax;
 
-/* -------------------------------------------------------------------- */
-/*      SHP API Prototypes                                              */
-/* -------------------------------------------------------------------- */
+	int bMeasureIsUsed;
+    } SHPObject;
 
-/* If pszAccess is read-only, the fpSHX field of the returned structure */
-/* will be NULL as it is not necessary to keep the SHX file open */
-SHPHandle SHPAPI_CALL
-      SHPOpen( const char * pszShapeFile, const char * pszAccess );
-SHPHandle SHPAPI_CALL
-      SHPOpenLL( const char *pszShapeFile, const char *pszAccess, 
-                 SAHooks *psHooks );
-SHPHandle SHPAPI_CALL
-      SHPCreate( const char * pszShapeFile, int nShapeType );
-SHPHandle SHPAPI_CALL
-      SHPCreateLL( const char * pszShapeFile, int nShapeType,
-                   SAHooks *psHooks );
-void SHPAPI_CALL
-      SHPGetInfo( SHPHandle hSHP, int * pnEntities, int * pnShapeType,
-                  double * padfMinBound, double * padfMaxBound );
+    /* -------------------------------------------------------------------- */
+    /*      SHP API Prototypes                                              */
+    /* -------------------------------------------------------------------- */
 
-SHPObject SHPAPI_CALL1(*)
-      SHPReadObject( SHPHandle hSHP, int iShape );
-int SHPAPI_CALL
-      SHPWriteObject( SHPHandle hSHP, int iShape, SHPObject * psObject );
+    /* If pszAccess is read-only, the fpSHX field of the returned structure */
+    /* will be NULL as it is not necessary to keep the SHX file open */
+    SHPHandle SHPAPI_CALL
+	SHPOpen(const char *pszShapeFile, const char *pszAccess);
+    SHPHandle SHPAPI_CALL
+	SHPOpenLL(const char *pszShapeFile, const char *pszAccess,
+		  SAHooks * psHooks);
+    SHPHandle SHPAPI_CALL SHPCreate(const char *pszShapeFile, int nShapeType);
+    SHPHandle SHPAPI_CALL
+	SHPCreateLL(const char *pszShapeFile, int nShapeType,
+		    SAHooks * psHooks);
+    void SHPAPI_CALL
+	SHPGetInfo(SHPHandle hSHP, int *pnEntities, int *pnShapeType,
+		   double *padfMinBound, double *padfMaxBound);
 
-void SHPAPI_CALL
-      SHPDestroyObject( SHPObject * psObject );
-void SHPAPI_CALL
-      SHPComputeExtents( SHPObject * psObject );
-SHPObject SHPAPI_CALL1(*)
-      SHPCreateObject( int nSHPType, int nShapeId, int nParts, 
-                       const int * panPartStart, const int * panPartType,
-                       int nVertices, 
-                       const double * padfX, const double * padfY,
-                       const double * padfZ, const double * padfM );
-SHPObject SHPAPI_CALL1(*)
-      SHPCreateSimpleObject( int nSHPType, int nVertices,
-                             const double * padfX, 
-                             const double * padfY, 
-                             const double * padfZ );
+    SHPObject SHPAPI_CALL1(*)
+      SHPReadObject(SHPHandle hSHP, int iShape);
+    int SHPAPI_CALL
+	SHPWriteObject(SHPHandle hSHP, int iShape, SHPObject * psObject);
 
-int SHPAPI_CALL
-      SHPRewindObject( SHPHandle hSHP, SHPObject * psObject );
+    void SHPAPI_CALL SHPDestroyObject(SHPObject * psObject);
+    void SHPAPI_CALL SHPComputeExtents(SHPObject * psObject);
+    SHPObject SHPAPI_CALL1(*)
+     
+	SHPCreateObject(int nSHPType, int nShapeId, int nParts,
+			const int *panPartStart, const int *panPartType,
+			int nVertices,
+			const double *padfX, const double *padfY,
+			const double *padfZ, const double *padfM);
+    SHPObject SHPAPI_CALL1(*)
+     
+	SHPCreateSimpleObject(int nSHPType, int nVertices,
+			      const double *padfX,
+			      const double *padfY, const double *padfZ);
 
-void SHPAPI_CALL SHPClose( SHPHandle hSHP );
-void SHPAPI_CALL SHPWriteHeader( SHPHandle hSHP );
+    int SHPAPI_CALL SHPRewindObject(SHPHandle hSHP, SHPObject * psObject);
 
-const char SHPAPI_CALL1(*)
-      SHPTypeName( int nSHPType );
-const char SHPAPI_CALL1(*)
-      SHPPartTypeName( int nPartType );
+    void SHPAPI_CALL SHPClose(SHPHandle hSHP);
+    void SHPAPI_CALL SHPWriteHeader(SHPHandle hSHP);
 
-/* -------------------------------------------------------------------- */
-/*      Shape quadtree indexing API.                                    */
-/* -------------------------------------------------------------------- */
+    const char SHPAPI_CALL1(*)
+      SHPTypeName(int nSHPType);
+    const char SHPAPI_CALL1(*)
+      SHPPartTypeName(int nPartType);
 
-/* this can be two or four for binary or quad tree */
+    /* -------------------------------------------------------------------- */
+    /*      Shape quadtree indexing API.                                    */
+    /* -------------------------------------------------------------------- */
+
+    /* this can be two or four for binary or quad tree */
 #define MAX_SUBNODE	4
 
-/* upper limit of tree levels for automatic estimation */
+    /* upper limit of tree levels for automatic estimation */
 #define MAX_DEFAULT_TREE_DEPTH 12
 
-typedef struct shape_tree_node
-{
-    /* region covered by this node */
-    double	adfBoundsMin[4];
-    double	adfBoundsMax[4];
+    typedef struct shape_tree_node
+    {
+	/* region covered by this node */
+	double adfBoundsMin[4];
+	double adfBoundsMax[4];
 
-    /* list of shapes stored at this node.  The papsShapeObj pointers
-       or the whole list can be NULL */
-    int		nShapeCount;
-    int		*panShapeIds;
-    SHPObject   **papsShapeObj;
+	/* list of shapes stored at this node.  The papsShapeObj pointers
+	   or the whole list can be NULL */
+	int nShapeCount;
+	int *panShapeIds;
+	SHPObject **papsShapeObj;
 
-    int		nSubNodes;
-    struct shape_tree_node *apsSubNode[MAX_SUBNODE];
-    
-} SHPTreeNode;
+	int nSubNodes;
+	struct shape_tree_node *apsSubNode[MAX_SUBNODE];
 
-typedef struct
-{
-    SHPHandle   hSHP;
-    
-    int		nMaxDepth;
-    int		nDimension;
-    int         nTotalCount;
-    
-    SHPTreeNode	*psRoot;
-} SHPTree;
+    } SHPTreeNode;
 
-SHPTree SHPAPI_CALL1(*)
-      SHPCreateTree( SHPHandle hSHP, int nDimension, int nMaxDepth,
-                     double *padfBoundsMin, double *padfBoundsMax );
-void    SHPAPI_CALL
-      SHPDestroyTree( SHPTree * hTree );
+    typedef struct
+    {
+	SHPHandle hSHP;
 
-int	SHPAPI_CALL
-      SHPWriteTree( SHPTree *hTree, const char * pszFilename );
-SHPTree SHPAPI_CALL
-      SHPReadTree( const char * pszFilename );
+	int nMaxDepth;
+	int nDimension;
+	int nTotalCount;
 
-int	SHPAPI_CALL
-      SHPTreeAddObject( SHPTree * hTree, SHPObject * psObject );
-int	SHPAPI_CALL
-      SHPTreeAddShapeId( SHPTree * hTree, SHPObject * psObject );
-int	SHPAPI_CALL
-      SHPTreeRemoveShapeId( SHPTree * hTree, int nShapeId );
+	SHPTreeNode *psRoot;
+    } SHPTree;
 
-void 	SHPAPI_CALL
-      SHPTreeTrimExtraNodes( SHPTree * hTree );
+    SHPTree SHPAPI_CALL1(*)
+     
+	SHPCreateTree(SHPHandle hSHP, int nDimension, int nMaxDepth,
+		      double *padfBoundsMin, double *padfBoundsMax);
+    void SHPAPI_CALL SHPDestroyTree(SHPTree * hTree);
 
-int    SHPAPI_CALL1(*)
-      SHPTreeFindLikelyShapes( SHPTree * hTree,
-                               double * padfBoundsMin,
-                               double * padfBoundsMax,
-                               int * );
-int     SHPAPI_CALL
-      SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
+    int SHPAPI_CALL SHPWriteTree(SHPTree * hTree, const char *pszFilename);
+    SHPTree SHPAPI_CALL SHPReadTree(const char *pszFilename);
 
-int SHPAPI_CALL1(*) 
-SHPSearchDiskTree( FILE *fp, 
-                   double *padfBoundsMin, double *padfBoundsMax,
-                   int *pnShapeCount );
+    int SHPAPI_CALL SHPTreeAddObject(SHPTree * hTree, SHPObject * psObject);
+    int SHPAPI_CALL SHPTreeAddShapeId(SHPTree * hTree, SHPObject * psObject);
+    int SHPAPI_CALL SHPTreeRemoveShapeId(SHPTree * hTree, int nShapeId);
+
+    void SHPAPI_CALL SHPTreeTrimExtraNodes(SHPTree * hTree);
+
+    int SHPAPI_CALL1(*)
+     
+	SHPTreeFindLikelyShapes(SHPTree * hTree,
+				double *padfBoundsMin,
+				double *padfBoundsMax, int *);
+    int SHPAPI_CALL
+	SHPCheckBoundsOverlap(double *, double *, double *, double *, int);
+
+    int SHPAPI_CALL1(*)
+     
+	SHPSearchDiskTree(FILE * fp,
+			  double *padfBoundsMin, double *padfBoundsMax,
+			  int *pnShapeCount);
 
 /************************************************************************/
-/*                             DBF Support.                             */
+    /*                             DBF Support.                             */
+
 /************************************************************************/
-typedef	struct
-{
-    SAHooks sHooks;
+    typedef struct
+    {
+	SAHooks sHooks;
 
-    SAFile	fp;
+	SAFile fp;
 
-    int         nRecords;
+	int nRecords;
 
-    int		nRecordLength;
-    int		nHeaderLength;
-    int		nFields;
-    int		*panFieldOffset;
-    int		*panFieldSize;
-    int		*panFieldDecimals;
-    char	*pachFieldType;
+	int nRecordLength;
+	int nHeaderLength;
+	int nFields;
+	int *panFieldOffset;
+	int *panFieldSize;
+	int *panFieldDecimals;
+	char *pachFieldType;
 
-    char	*pszHeader;
+	char *pszHeader;
 
-    int		nCurrentRecord;
-    int		bCurrentRecordModified;
-    char	*pszCurrentRecord;
+	int nCurrentRecord;
+	int bCurrentRecordModified;
+	char *pszCurrentRecord;
 
-    int         nWorkFieldLength;
-    char        *pszWorkField;
-    
-    int		bNoHeader;
-    int		bUpdated;
+	int nWorkFieldLength;
+	char *pszWorkField;
 
-    double      dfDoubleField;
-} DBFInfo;
+	int bNoHeader;
+	int bUpdated;
 
-typedef DBFInfo * DBFHandle;
+	double dfDoubleField;
+    } DBFInfo;
 
-typedef enum {
-  FTString,
-  FTInteger,
-  FTDouble,
-  FTLogical,
-  FTInvalid
-} DBFFieldType;
+    typedef DBFInfo *DBFHandle;
+
+    typedef enum
+    {
+	FTString,
+	FTInteger,
+	FTDouble,
+	FTLogical,
+	FTInvalid
+    } DBFFieldType;
 
 #define XBASE_FLDHDR_SZ       32
 
 
-DBFHandle SHPAPI_CALL
-      DBFOpen( const char * pszDBFFile, const char * pszAccess );
-DBFHandle SHPAPI_CALL
-      DBFOpenLL( const char * pszDBFFile, const char * pszAccess,
-                 SAHooks *psHooks );
-DBFHandle SHPAPI_CALL
-      DBFCreate( const char * pszDBFFile );
-DBFHandle SHPAPI_CALL
-      DBFCreateLL( const char * pszDBFFile, SAHooks *psHooks );
+    DBFHandle SHPAPI_CALL
+	DBFOpen(const char *pszDBFFile, const char *pszAccess);
+    DBFHandle SHPAPI_CALL
+	DBFOpenLL(const char *pszDBFFile, const char *pszAccess,
+		  SAHooks * psHooks);
+    DBFHandle SHPAPI_CALL DBFCreate(const char *pszDBFFile);
+    DBFHandle SHPAPI_CALL
+	DBFCreateLL(const char *pszDBFFile, SAHooks * psHooks);
 
-int	SHPAPI_CALL
-      DBFGetFieldCount( DBFHandle psDBF );
-int	SHPAPI_CALL
-      DBFGetRecordCount( DBFHandle psDBF );
-int	SHPAPI_CALL
-      DBFAddField( DBFHandle hDBF, const char * pszFieldName,
-                   DBFFieldType eType, int nWidth, int nDecimals );
+    int SHPAPI_CALL DBFGetFieldCount(DBFHandle psDBF);
+    int SHPAPI_CALL DBFGetRecordCount(DBFHandle psDBF);
+    int SHPAPI_CALL
+	DBFAddField(DBFHandle hDBF, const char *pszFieldName,
+		    DBFFieldType eType, int nWidth, int nDecimals);
 
-int	SHPAPI_CALL
-      DBFAddNativeFieldType( DBFHandle hDBF, const char * pszFieldName,
-                             char chType, int nWidth, int nDecimals );
+    int SHPAPI_CALL
+	DBFAddNativeFieldType(DBFHandle hDBF, const char *pszFieldName,
+			      char chType, int nWidth, int nDecimals);
 
-DBFFieldType SHPAPI_CALL
-      DBFGetFieldInfo( DBFHandle psDBF, int iField, 
-                       char * pszFieldName, int * pnWidth, int * pnDecimals );
+    DBFFieldType SHPAPI_CALL
+	DBFGetFieldInfo(DBFHandle psDBF, int iField,
+			char *pszFieldName, int *pnWidth, int *pnDecimals);
 
-int SHPAPI_CALL
-      DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName);
+    int SHPAPI_CALL
+	DBFGetFieldIndex(DBFHandle psDBF, const char *pszFieldName);
 
-int 	SHPAPI_CALL
-      DBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
-double 	SHPAPI_CALL
-      DBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
-const char SHPAPI_CALL1(*)
-      DBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
-const char SHPAPI_CALL1(*)
-      DBFReadLogicalAttribute( DBFHandle hDBF, int iShape, int iField );
-int     SHPAPI_CALL
-      DBFIsAttributeNULL( DBFHandle hDBF, int iShape, int iField );
+    int SHPAPI_CALL
+	DBFReadIntegerAttribute(DBFHandle hDBF, int iShape, int iField);
+    double SHPAPI_CALL
+	DBFReadDoubleAttribute(DBFHandle hDBF, int iShape, int iField);
+    const char SHPAPI_CALL1(*)
+      DBFReadStringAttribute(DBFHandle hDBF, int iShape, int iField);
+    const char SHPAPI_CALL1(*)
+      DBFReadLogicalAttribute(DBFHandle hDBF, int iShape, int iField);
+    int SHPAPI_CALL
+	DBFIsAttributeNULL(DBFHandle hDBF, int iShape, int iField);
 
-int SHPAPI_CALL
-      DBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, 
-                                int nFieldValue );
-int SHPAPI_CALL
-      DBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField,
-                               double dFieldValue );
-int SHPAPI_CALL
-      DBFWriteStringAttribute( DBFHandle hDBF, int iShape, int iField,
-                               const char * pszFieldValue );
-int SHPAPI_CALL
-     DBFWriteNULLAttribute( DBFHandle hDBF, int iShape, int iField );
+    int SHPAPI_CALL
+	DBFWriteIntegerAttribute(DBFHandle hDBF, int iShape, int iField,
+				 int nFieldValue);
+    int SHPAPI_CALL
+	DBFWriteDoubleAttribute(DBFHandle hDBF, int iShape, int iField,
+				double dFieldValue);
+    int SHPAPI_CALL
+	DBFWriteStringAttribute(DBFHandle hDBF, int iShape, int iField,
+				const char *pszFieldValue);
+    int SHPAPI_CALL
+	DBFWriteNULLAttribute(DBFHandle hDBF, int iShape, int iField);
 
-int SHPAPI_CALL
-     DBFWriteLogicalAttribute( DBFHandle hDBF, int iShape, int iField,
-			       const char lFieldValue);
-int SHPAPI_CALL
-     DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity, int iField,
-                               void * pValue );
-const char SHPAPI_CALL1(*)
-      DBFReadTuple(DBFHandle psDBF, int hEntity );
-int SHPAPI_CALL
-      DBFWriteTuple(DBFHandle psDBF, int hEntity, void * pRawTuple );
+    int SHPAPI_CALL
+	DBFWriteLogicalAttribute(DBFHandle hDBF, int iShape, int iField,
+				 const char lFieldValue);
+    int SHPAPI_CALL
+	DBFWriteAttributeDirectly(DBFHandle psDBF, int hEntity, int iField,
+				  void *pValue);
+    const char SHPAPI_CALL1(*)
+      DBFReadTuple(DBFHandle psDBF, int hEntity);
+    int SHPAPI_CALL
+	DBFWriteTuple(DBFHandle psDBF, int hEntity, void *pRawTuple);
 
-int SHPAPI_CALL DBFIsRecordDeleted( DBFHandle psDBF, int iShape );
-int SHPAPI_CALL DBFMarkRecordDeleted( DBFHandle psDBF, int iShape, 
-                                      int bIsDeleted );
+    int SHPAPI_CALL DBFIsRecordDeleted(DBFHandle psDBF, int iShape);
+    int SHPAPI_CALL DBFMarkRecordDeleted(DBFHandle psDBF, int iShape,
+					 int bIsDeleted);
 
-DBFHandle SHPAPI_CALL
-      DBFCloneEmpty(DBFHandle psDBF, const char * pszFilename );
- 
-void	SHPAPI_CALL
-      DBFClose( DBFHandle hDBF );
-void    SHPAPI_CALL
-      DBFUpdateHeader( DBFHandle hDBF );
-char    SHPAPI_CALL
-      DBFGetNativeFieldType( DBFHandle hDBF, int iField );
+    DBFHandle SHPAPI_CALL
+	DBFCloneEmpty(DBFHandle psDBF, const char *pszFilename);
+
+    void SHPAPI_CALL DBFClose(DBFHandle hDBF);
+    void SHPAPI_CALL DBFUpdateHeader(DBFHandle hDBF);
+    char SHPAPI_CALL DBFGetNativeFieldType(DBFHandle hDBF, int iField);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* ndef _SHAPEFILE_H_INCLUDED */
+#endif				/* ndef _SHAPEFILE_H_INCLUDED */

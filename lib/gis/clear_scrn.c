@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  *   G_clear_screen()
@@ -11,9 +12,9 @@
 int G_clear_screen(void)
 {
 #ifdef __MINGW32__
-    system ("cls");
+    system("cls");
 #else
-    system ("clear");
+    system("clear");
 #endif
 
     return 0;

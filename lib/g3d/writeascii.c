@@ -15,41 +15,40 @@
  *  \return void
  */
 
-void
-G3d_writeAscii  (void *map, const char *fname)
-
+void G3d_writeAscii(void *map, const char *fname)
 {
-  FILE *fp;
-  double d1 = 0;
-  double *d1p;
-  float *f1p;
-  int x, y, z;
-  int rows, cols, depths, typeIntern;
+    FILE *fp;
+    double d1 = 0;
+    double *d1p;
+    float *f1p;
+    int x, y, z;
+    int rows, cols, depths, typeIntern;
 
-  G3d_getCoordsMap (map, &rows, &cols, &depths);
-  typeIntern = G3d_tileTypeMap (map);
+    G3d_getCoordsMap(map, &rows, &cols, &depths);
+    typeIntern = G3d_tileTypeMap(map);
 
-  d1p = &d1; f1p = (float *) &d1;
+    d1p = &d1;
+    f1p = (float *)&d1;
 
-  if (fname == NULL)
-    fp = stdout;
-  else
-    if ((fp = fopen (fname, "w")) == NULL) 
-      G3d_fatalError ("G3d_writeAscii: can't open file to write\n");
+    if (fname == NULL)
+	fp = stdout;
+    else if ((fp = fopen(fname, "w")) == NULL)
+	G3d_fatalError("G3d_writeAscii: can't open file to write\n");
 
-  for (z = 0; z < depths; z++) 
-    for (y = 0; y < rows; y++) {
-      fprintf (fp, "z y x %d %d (%d - %d)\n", z, y, 0, cols - 1);
-      for (x = 0; x < cols; x++) {
-	G3d_getValueRegion (map, x, y, z, d1p, typeIntern);
-	
-	if (typeIntern == FCELL_TYPE)
-	  fprintf (fp, "%.18f ", *f1p);
-	else
-	  fprintf (fp, "%.50f ", d1);
-      }
-      fprintf (fp, "\n");
-    }
+    for (z = 0; z < depths; z++)
+	for (y = 0; y < rows; y++) {
+	    fprintf(fp, "z y x %d %d (%d - %d)\n", z, y, 0, cols - 1);
+	    for (x = 0; x < cols; x++) {
+		G3d_getValueRegion(map, x, y, z, d1p, typeIntern);
 
-  if (fp != stdout) fclose (fp);
+		if (typeIntern == FCELL_TYPE)
+		    fprintf(fp, "%.18f ", *f1p);
+		else
+		    fprintf(fp, "%.50f ", d1);
+	    }
+	    fprintf(fp, "\n");
+	}
+
+    if (fp != stdout)
+	fclose(fp);
 }

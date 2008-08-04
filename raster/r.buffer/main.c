@@ -1,3 +1,4 @@
+
 /***************************************************************************
 *
 * MODULE:    r.buffer
@@ -28,7 +29,7 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Distance *pd;
     char *input, *output, *mapset;
@@ -60,47 +61,48 @@ int main (int argc, char *argv[])
 
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    opt3 = G_define_option() ;
-    opt3->key        = "distances" ;
-    opt3->type       = TYPE_DOUBLE;
-    opt3->required   = YES ;
-    opt3->multiple   = YES;
-    opt3->description= _("Distance zone(s)") ;
+    opt3 = G_define_option();
+    opt3->key = "distances";
+    opt3->type = TYPE_DOUBLE;
+    opt3->required = YES;
+    opt3->multiple = YES;
+    opt3->description = _("Distance zone(s)");
 
-    opt4 = G_define_option() ;
-    opt4->key        = "units" ;
-    opt4->options    = "meters,kilometers,feet,miles,nautmiles";
-    opt4->type       = TYPE_STRING ;
-    opt4->required   = NO ;
-    opt4->description= _("Units of distance") ;
-    opt4->answer     = "meters";
+    opt4 = G_define_option();
+    opt4->key = "units";
+    opt4->options = "meters,kilometers,feet,miles,nautmiles";
+    opt4->type = TYPE_STRING;
+    opt4->required = NO;
+    opt4->description = _("Units of distance");
+    opt4->answer = "meters";
 
-    flag2 = G_define_flag() ;
-    flag2->key         = 'z' ;  
-    flag2->description = _("Ignore zero (0) data cells instead of NULL cells") ;
+    flag2 = G_define_flag();
+    flag2->key = 'z';
+    flag2->description =
+	_("Ignore zero (0) data cells instead of NULL cells");
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     init_grass();
 
     /* get input, output map names */
-    input     = opt1->answer; 
-    output    = opt2->answer; 
+    input = opt1->answer;
+    output = opt2->answer;
     zone_list = opt3->answers;
-    units     = opt4->answer;
+    units = opt4->answer;
 
-    ZEROFLAG = 0; /* default: use NULL for non-data cells */
-    ZEROFLAG = (flag2->answer);                                               
-        
-    mapset = G_find_cell2 (input, "");
+    ZEROFLAG = 0;		/* default: use NULL for non-data cells */
+    ZEROFLAG = (flag2->answer);
+
+    mapset = G_find_cell2(input, "");
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), input);
 
     if (G_legal_filename(output) < 0)
 	G_fatal_error(_("<%s> is an illegal file name"), output);
 
-        /* parse units */
+    /* parse units */
     if (opt4->answer == NULL)
 	units = "meters";
 
@@ -116,32 +118,31 @@ int main (int argc, char *argv[])
 	to_meters = NAUT_MILES_TO_METERS;
 
     /* parse distances */
-    if(!(count = parse_distances (zone_list, to_meters)))
-        G_fatal_error(_("Parse distances error"));
+    if (!(count = parse_distances(zone_list, to_meters)))
+	G_fatal_error(_("Parse distances error"));
 
 
-	/* need to keep track of distance zones - in memory.
-	 * process MAX_DIST at a time
-	 *
-	 * Coding: 0 == not-yet determined, 1 == input cells,
-	 *         2 == distance zone #1,   3 == distance zone #2, etc.
-	 */
+    /* need to keep track of distance zones - in memory.
+     * process MAX_DIST at a time
+     *
+     * Coding: 0 == not-yet determined, 1 == input cells,
+     *         2 == distance zone #1,   3 == distance zone #2, etc.
+     */
 
-    read_input_map (input, mapset, ZEROFLAG);
+    read_input_map(input, mapset, ZEROFLAG);
 
     offset = 0;
 
     nsteps = (count - 1) / MAX_DIST + 1;
-	
+
     pd = distances;
-    for (step = 1; count > 0; step++)
-    {
-        if (nsteps > 1)
-            G_message(_("Pass %d (of %d)"), step, nsteps);
+    for (step = 1; count > 0; step++) {
+	if (nsteps > 1)
+	    G_message(_("Pass %d (of %d)"), step, nsteps);
 	ndist = count;
 	if (ndist > MAX_DIST)
 	    ndist = MAX_DIST;
-	if(count_rows_with_data > 0) 
+	if (count_rows_with_data > 0)
 	    execute_distance();
 	write_output_map(output, offset);
 	offset += ndist;
@@ -149,18 +150,18 @@ int main (int argc, char *argv[])
 	count -= ndist;
     }
     distances = pd;
-    make_support_files (output, units);
+    make_support_files(output, units);
 
     /* write map history (meta data) */
     G_short_history(output, "raster", &hist);
     sprintf(hist.datsrc_1, "%s", input);
-    if( strlen(opt3->answer) < (RECORD_LEN - 14) ) {
-	sprintf(hist.edhist[0], "Buffer distance%s:", ndist>1 ? "s" : "");
+    if (strlen(opt3->answer) < (RECORD_LEN - 14)) {
+	sprintf(hist.edhist[0], "Buffer distance%s:", ndist > 1 ? "s" : "");
 	sprintf(hist.edhist[1], " %s %s", opt3->answer, units);
 	hist.edlinecnt = 2;
     }
     G_command_history(&hist);
-    G_write_history (output, &hist);
+    G_write_history(output, &hist);
 
 
     exit(EXIT_SUCCESS);

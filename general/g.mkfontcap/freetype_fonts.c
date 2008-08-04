@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.mkfontcap
@@ -49,17 +50,17 @@ void find_freetype_fonts(void)
 {
 #ifdef HAVE_FT2BUILD_H
     int i;
-   
+
     if (FT_Init_FreeType(&ftlibrary) != 0)
-        G_fatal_error("Unable to initialise Freetype");
-   
+	G_fatal_error("Unable to initialise Freetype");
+
     for (i = 0; i < numsearchdirs; i++)
-        find_fonts(searchdirs[i]);
-   
+	find_fonts(searchdirs[i]);
+
     FT_Done_FreeType(ftlibrary);
 #endif /* HAVE_FT2BUILD_H */
     return;
-   
+
 }
 
 #ifdef HAVE_FT2BUILD_H
@@ -86,82 +87,81 @@ static void find_fonts(const char *dirpath)
     struct stat info;
 
     curdir = opendir(dirpath);
-    if (curdir == NULL )
+    if (curdir == NULL)
 	return;
 
     /* loop over current dir */
-    while ((cur_entry = readdir(curdir)))
-    {
+    while ((cur_entry = readdir(curdir))) {
 	if (cur_entry->d_name[0] == '.')
-	    continue; /* Skip hidden files */
-		
+	    continue;		/* Skip hidden files */
+
 	sprintf(filepath, "%s%c%s", dirpath, HOST_DIRSEP, cur_entry->d_name);
 
 	if (stat(filepath, &info))
-	    continue; /* File is unreadable */
+	    continue;		/* File is unreadable */
 
-	if ( S_ISDIR(info.st_mode)) 
-		find_fonts(filepath); /* Recurse into next directory */
-	else
-        {
+	if (S_ISDIR(info.st_mode))
+	    find_fonts(filepath);	/* Recurse into next directory */
+	else {
 	    /* It's a file; we'll try opening it with Freetype to see if
 	     * it's a valid font. */
 	    FT_Long index, facesinfile;
 	    FT_Face face;
-	    index = facesinfile = 0;
-	   
-	    do
-	    {   			   
-                if (totalfonts >= maxfonts)
-                {
-	            maxfonts += 20;
-		    fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
-                }
 
-	        if (FT_New_Face(ftlibrary, filepath, index, &face) == 0)
-		{		     
-	            facesinfile = face->num_faces;
-	            /* Only use scalable fonts */
-	            if (face->face_flags & FT_FACE_FLAG_SCALABLE)
-		    {	
-		        char *buf_ptr;
-       
-		        fontcap[totalfonts].path = G_store(filepath);
-		        fontcap[totalfonts].index = index;
-		        fontcap[totalfonts].type = GFONT_FREETYPE;
-		        fontcap[totalfonts].encoding = G_store("utf-8");
-		       
-		        if (strchr(filepath, HOST_DIRSEP))
+	    index = facesinfile = 0;
+
+	    do {
+		if (totalfonts >= maxfonts) {
+		    maxfonts += 20;
+		    fontcap =
+			G_realloc(fontcap,
+				  maxfonts * sizeof(struct GFONT_CAP));
+		}
+
+		if (FT_New_Face(ftlibrary, filepath, index, &face) == 0) {
+		    facesinfile = face->num_faces;
+		    /* Only use scalable fonts */
+		    if (face->face_flags & FT_FACE_FLAG_SCALABLE) {
+			char *buf_ptr;
+
+			fontcap[totalfonts].path = G_store(filepath);
+			fontcap[totalfonts].index = index;
+			fontcap[totalfonts].type = GFONT_FREETYPE;
+			fontcap[totalfonts].encoding = G_store("utf-8");
+
+			if (strchr(filepath, HOST_DIRSEP))
 			    buf_ptr = strrchr(filepath, HOST_DIRSEP) + 1;
-		        else
+			else
 			    buf_ptr = filepath;
-		        if (strchr(buf_ptr, '.'))
-		            *(strrchr(buf_ptr, '.')) = '\0';
-		        if (index > 0)
-		            G_asprintf(&fontcap[totalfonts].name, "%s%d", buf_ptr, (int)index);
-		        else
+			if (strchr(buf_ptr, '.'))
+			    *(strrchr(buf_ptr, '.')) = '\0';
+			if (index > 0)
+			    G_asprintf(&fontcap[totalfonts].name, "%s%d",
+				       buf_ptr, (int)index);
+			else
 			    fontcap[totalfonts].name = G_store(buf_ptr);
-		        /* There might not be a style name but there will always be a
+			/* There might not be a style name but there will always be a
 			 * family name. */
-		        if (face->style_name == NULL)
-			    fontcap[totalfonts].longname = G_store(face->family_name);
-		        else
-		            G_asprintf(&fontcap[totalfonts].longname, "%s %s", 
-				   face->family_name, face->style_name);
-		        totalfonts++;		       
+			if (face->style_name == NULL)
+			    fontcap[totalfonts].longname =
+				G_store(face->family_name);
+			else
+			    G_asprintf(&fontcap[totalfonts].longname, "%s %s",
+				       face->family_name, face->style_name);
+			totalfonts++;
 		    }
-		   
+
 		    /* Discard this FT_Face structure and use it again */
 		    FT_Done_Face(face);
-			
+
 		}
 	    } while (++index < facesinfile);
-	    
-	}       	       
+
+	}
     }
-   
+
     closedir(curdir);
-   
+
     return;
 }
 

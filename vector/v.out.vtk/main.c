@@ -37,8 +37,8 @@ int main(int argc, char *argv[])
     int layer;
     struct Cell_head region;
     double zscale = 1.0, llscale = 1.0;
-   
-    
+
+
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -81,10 +81,11 @@ int main(int argc, char *argv[])
     layer_opt->answer = "1";
     layer_opt->description = _("Layer number");
 
-    coorcorr = G_define_flag();                                            
-    coorcorr->key = 'c';                                                   
-    coorcorr->description = _("Correct the coordinates to fit the VTK-OpenGL precision");
-    
+    coorcorr = G_define_flag();
+    coorcorr->key = 'c';
+    coorcorr->description =
+	_("Correct the coordinates to fit the VTK-OpenGL precision");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -97,10 +98,10 @@ int main(int argc, char *argv[])
     else {
 	G_fatal_error("Usage: Wrong vector type");
     }
-  
+
     i = 0;
     while (type_opt->answers[i]) {
-        types[i] = -1;
+	types[i] = -1;
 	switch (type_opt->answers[i][0]) {
 	case 'p':
 	    types[i] = GV_POINT;
@@ -130,27 +131,27 @@ int main(int argc, char *argv[])
     G_get_set_window(&region);
 
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
-    if(coorcorr->answer){
-       /*Get the default region for coordiante correction*/
-       G_get_default_window(&region);
+    if (coorcorr->answer) {
+	/*Get the default region for coordiante correction */
+	G_get_default_window(&region);
 
-       /*Use the center of the current region as extent*/
-       y_extent = (region.north + region.south)/2;
-       x_extent = (region.west + region.east)/2;
-    } else
-    {
-       x_extent = 0;
-       y_extent = 0;
+	/*Use the center of the current region as extent */
+	y_extent = (region.north + region.south) / 2;
+	x_extent = (region.west + region.east) / 2;
+    }
+    else {
+	x_extent = 0;
+	y_extent = 0;
     }
 
 
-    /* read and compute the scale factor*/
+    /* read and compute the scale factor */
     sscanf(scale->answer, "%lf", &zscale);
-    /*if LL projection, convert the elevation values to degrees*/
-    if(region.proj == PROJECTION_LL) {
-      llscale = M_PI/(180)*6378137;
-      zscale /= llscale;
-      printf("Scale %g\n", zscale);
+    /*if LL projection, convert the elevation values to degrees */
+    if (region.proj == PROJECTION_LL) {
+	llscale = M_PI / (180) * 6378137;
+	zscale /= llscale;
+	printf("Scale %g\n", zscale);
     }
 
     /*We need level 2 functions */
@@ -170,7 +171,8 @@ int main(int argc, char *argv[])
     /*The precision of the output */
     if (dp_opt->answer) {
 	if (sscanf(dp_opt->answer, "%d", &dp) != 1)
-	    G_fatal_error(_("Failed to interprete 'dp' parameter as an integer"));
+	    G_fatal_error(_
+			  ("Failed to interprete 'dp' parameter as an integer"));
 	if (dp > 8 || dp < 0)
 	    G_fatal_error(_("dp has to be from 0 to 8"));
     }
@@ -181,7 +183,8 @@ int main(int argc, char *argv[])
     /*The Layer */
     if (layer_opt->answer) {
 	if (sscanf(layer_opt->answer, "%d", &layer) != 1)
-	    G_fatal_error(_("Failed to interprete 'layer' parameter as an integer"));
+	    G_fatal_error(_
+			  ("Failed to interprete 'layer' parameter as an integer"));
     }
     else {
 	layer = 1;
@@ -199,4 +202,3 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
-

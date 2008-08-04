@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       monitor
@@ -17,8 +18,8 @@
  * Roberto Flor/ITC-Irst, Trento, Italy
  * August 1999
  *
-*/
-     
+ */
+
 
 
 /****************************************************************
@@ -61,37 +62,34 @@ do {								\
 
 #endif /* __W98__ */
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		G_warning(_("Usage:  %s monitor_name"), argv[0]);
-		return 1;
-	}
+    if (argc != 2) {
+	G_warning(_("Usage:  %s monitor_name"), argv[0]);
+	return 1;
+    }
 
-	return start_mon(argv[1]);
+    return start_mon(argv[1]);
 }
 
-int start_mon (char *name)
+int start_mon(char *name)
 {
-	struct MON_CAP *mon;
+    struct MON_CAP *mon;
 
-	if ((mon = R_parse_monitorcap(MON_NAME,name)) == NULL)
-		G_fatal_error("no such monitor '%s'", name);
+    if ((mon = R_parse_monitorcap(MON_NAME, name)) == NULL)
+	G_fatal_error("no such monitor '%s'", name);
 
 #ifndef __MINGW32__
-	if (*mon->tty != '\0' && strcmp(mon->tty,ttyname(0)) != 0)
-		G_fatal_error("Error:  must start %s from %s\n You are on %s",name,mon->where,ttyname(0));
+    if (*mon->tty != '\0' && strcmp(mon->tty, ttyname(0)) != 0)
+	G_fatal_error("Error:  must start %s from %s\n You are on %s", name,
+		      mon->where, ttyname(0));
 #endif
 
-	G_convert_dirseps_to_host(mon->path);
-	execl(	mon->path,
-		mon->path,
-		name,
-		*mon->tty == '\0' ? "" : "-",
-		mon->link,
-		(char *) 0);
+    G_convert_dirseps_to_host(mon->path);
+    execl(mon->path,
+	  mon->path,
+	  name, *mon->tty == '\0' ? "" : "-", mon->link, (char *)0);
 
-	perror("Could not execute monitor");
-	return 1;
+    perror("Could not execute monitor");
+    return 1;
 }

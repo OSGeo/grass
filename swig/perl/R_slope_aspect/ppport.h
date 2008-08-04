@@ -58,13 +58,13 @@
  * newCONSTSUB()        NEED_newCONSTSUB         NEED_newCONSTSUB_GLOBAL
  *
  */
- 
+
 
 /* To verify whether ppport.h is needed for your module, and whether any
  * special defines should be used, ppport.h can be run through Perl to check
  * your source code. Simply say:
  * 
- * 	perl -x ppport.h *.c *.h *.xs foo/bar*.c [etc]
+ *      perl -x ppport.h *.c *.h *.xs foo/bar*.c [etc]
  * 
  * The result will be a list of patches suggesting changes that should at
  * least be acceptable, if not necessarily the most efficient solution, or a
@@ -75,95 +75,95 @@
  * In order to test for the need of dTHR, please try your module under a
  * recent version of Perl that has threading compiled-in.
  *
- */ 
+ */
 
 
 /*
-#!/usr/bin/perl
-@ARGV = ("*.xs") if !@ARGV;
-%badmacros = %funcs = %macros = (); $replace = 0;
-foreach (<DATA>) {
-	$funcs{$1} = 1 if /Provide:\s+(\S+)/;
-	$macros{$1} = 1 if /^#\s*define\s+([a-zA-Z0-9_]+)/;
-	$replace = $1 if /Replace:\s+(\d+)/;
-	$badmacros{$2}=$1 if $replace and /^#\s*define\s+([a-zA-Z0-9_]+).*?\s+([a-zA-Z0-9_]+)/;
-	$badmacros{$1}=$2 if /Replace (\S+) with (\S+)/;
-}
-foreach $filename (map(glob($_),@ARGV)) {
-	unless (open(IN, "<$filename")) {
-		warn "Unable to read from $file: $!\n";
-		next;
-	}
-	print "Scanning $filename...\n";
-	$c = ""; while (<IN>) { $c .= $_; } close(IN);
-	$need_include = 0; %add_func = (); $changes = 0;
-	$has_include = ($c =~ /#.*include.*ppport/m);
+   #!/usr/bin/perl
+   @ARGV = ("*.xs") if !@ARGV;
+   %badmacros = %funcs = %macros = (); $replace = 0;
+   foreach (<DATA>) {
+   $funcs{$1} = 1 if /Provide:\s+(\S+)/;
+   $macros{$1} = 1 if /^#\s*define\s+([a-zA-Z0-9_]+)/;
+   $replace = $1 if /Replace:\s+(\d+)/;
+   $badmacros{$2}=$1 if $replace and /^#\s*define\s+([a-zA-Z0-9_]+).*?\s+([a-zA-Z0-9_]+)/;
+   $badmacros{$1}=$2 if /Replace (\S+) with (\S+)/;
+   }
+   foreach $filename (map(glob($_),@ARGV)) {
+   unless (open(IN, "<$filename")) {
+   warn "Unable to read from $file: $!\n";
+   next;
+   }
+   print "Scanning $filename...\n";
+   $c = ""; while (<IN>) { $c .= $_; } close(IN);
+   $need_include = 0; %add_func = (); $changes = 0;
+   $has_include = ($c =~ /#.*include.*ppport/m);
 
-	foreach $func (keys %funcs) {
-		if ($c =~ /#.*define.*\bNEED_$func(_GLOBAL)?\b/m) {
-			if ($c !~ /\b$func\b/m) {
-				print "If $func isn't needed, you don't need to request it.\n" if
-				$changes += ($c =~ s/^.*#.*define.*\bNEED_$func\b.*\n//m);
-			} else {
-				print "Uses $func\n";
-				$need_include = 1;
-			}
-		} else {
-			if ($c =~ /\b$func\b/m) {
-				$add_func{$func} =1 ;
-				print "Uses $func\n";
-				$need_include = 1;
-			}
-		}
-	}
+   foreach $func (keys %funcs) {
+   if ($c =~ /#.*define.*\bNEED_$func(_GLOBAL)?\b/m) {
+   if ($c !~ /\b$func\b/m) {
+   print "If $func isn't needed, you don't need to request it.\n" if
+   $changes += ($c =~ s/^.*#.*define.*\bNEED_$func\b.*\n//m);
+   } else {
+   print "Uses $func\n";
+   $need_include = 1;
+   }
+   } else {
+   if ($c =~ /\b$func\b/m) {
+   $add_func{$func} =1 ;
+   print "Uses $func\n";
+   $need_include = 1;
+   }
+   }
+   }
 
-	if (not $need_include) {
-		foreach $macro (keys %macros) {
-			if ($c =~ /\b$macro\b/m) {
-				print "Uses $macro\n";
-				$need_include = 1;
-			}
-		}
-	}
+   if (not $need_include) {
+   foreach $macro (keys %macros) {
+   if ($c =~ /\b$macro\b/m) {
+   print "Uses $macro\n";
+   $need_include = 1;
+   }
+   }
+   }
 
-	foreach $badmacro (keys %badmacros) {
-		if ($c =~ /\b$badmacro\b/m) {
-			$changes += ($c =~ s/\b$badmacro\b/$badmacros{$badmacro}/gm);
-			print "Uses $badmacros{$badmacro} (instead of $badmacro)\n";
-			$need_include = 1;
-		}
-	}
-	
-	if (scalar(keys %add_func) or $need_include != $has_include) {
-		if (!$has_include) {
-			$inc = join('',map("#define NEED_$_\n", sort keys %add_func)).
-			       "#include \"ppport.h\"\n";
-			$c = "$inc$c" unless $c =~ s/#.*include.*XSUB.*\n/$&$inc/m;
-		} elsif (keys %add_func) {
-			$inc = join('',map("#define NEED_$_\n", sort keys %add_func));
-			$c = "$inc$c" unless $c =~ s/^.*#.*include.*ppport.*$/$inc$&/m;
-		}
-		if (!$need_include) {
-			print "Doesn't seem to need ppport.h.\n";
-			$c =~ s/^.*#.*include.*ppport.*\n//m;
-		}
-		$changes++;
-	}
-	
-	if ($changes) {
-		open(OUT,">/tmp/ppport.h.$$");
-		print OUT $c;
-		close(OUT);
-		open(DIFF, "diff -u $filename /tmp/ppport.h.$$|");
-		while (<DIFF>) { s!/tmp/ppport\.h\.$$!$filename.patched!; print STDOUT; }
-		close(DIFF);
-		unlink("/tmp/ppport.h.$$");
-	} else {
-		print "Looks OK\n";
-	}
-}
-__DATA__
-*/
+   foreach $badmacro (keys %badmacros) {
+   if ($c =~ /\b$badmacro\b/m) {
+   $changes += ($c =~ s/\b$badmacro\b/$badmacros{$badmacro}/gm);
+   print "Uses $badmacros{$badmacro} (instead of $badmacro)\n";
+   $need_include = 1;
+   }
+   }
+
+   if (scalar(keys %add_func) or $need_include != $has_include) {
+   if (!$has_include) {
+   $inc = join('',map("#define NEED_$_\n", sort keys %add_func)).
+   "#include \"ppport.h\"\n";
+   $c = "$inc$c" unless $c =~ s/#.*include.*XSUB.*\n/$&$inc/m;
+   } elsif (keys %add_func) {
+   $inc = join('',map("#define NEED_$_\n", sort keys %add_func));
+   $c = "$inc$c" unless $c =~ s/^.*#.*include.*ppport.*$/$inc$&/m;
+   }
+   if (!$need_include) {
+   print "Doesn't seem to need ppport.h.\n";
+   $c =~ s/^.*#.*include.*ppport.*\n//m;
+   }
+   $changes++;
+   }
+
+   if ($changes) {
+   open(OUT,">/tmp/ppport.h.$$");
+   print OUT $c;
+   close(OUT);
+   open(DIFF, "diff -u $filename /tmp/ppport.h.$$|");
+   while (<DIFF>) { s!/tmp/ppport\.h\.$$!$filename.patched!; print STDOUT; }
+   close(DIFF);
+   unlink("/tmp/ppport.h.$$");
+   } else {
+   print "Looks OK\n";
+   }
+   }
+   __DATA__
+ */
 
 #ifndef _P_P_PORTABILITY_H_
 #define _P_P_PORTABILITY_H_
@@ -178,11 +178,11 @@ __DATA__
 #   endif
 #   ifndef PERL_REVISION
 #	define PERL_REVISION	(5)
-        /* Replace: 1 */
+	/* Replace: 1 */
 #       define PERL_VERSION	PATCHLEVEL
 #       define PERL_SUBVERSION	SUBVERSION
-        /* Replace PERL_PATCHLEVEL with PERL_VERSION */
-        /* Replace: 0 */
+	/* Replace PERL_PATCHLEVEL with PERL_VERSION */
+	/* Replace: 0 */
 #   endif
 #endif
 
@@ -251,7 +251,7 @@ __DATA__
 #    define pTHX_
 #    define aTHX
 #    define aTHX_
-#endif         
+#endif
 
 #ifndef dAX
 #   define dAX I32 ax = MARK - PL_stack_base + 1
@@ -266,7 +266,7 @@ __DATA__
 #   define IVSIZE LONGSIZE
 #endif
 #ifndef IVSIZE
-#   define IVSIZE 4 /* A bold guess, but the best we can make. */
+#   define IVSIZE 4		/* A bold guess, but the best we can make. */
 #endif
 
 #ifndef UVSIZE
@@ -302,7 +302,7 @@ typedef NVTYPE NV;
 #if PTRSIZE == LONGSIZE
 #  define PTR2ul(p)     (unsigned long)(p)
 #else
-#  define PTR2ul(p)     INT2PTR(unsigned long,p)        
+#  define PTR2ul(p)     INT2PTR(unsigned long,p)
 #endif
 
 #endif /* !INT2PTR */
@@ -344,11 +344,12 @@ typedef NVTYPE NV;
       })
 #  else
 #    if defined(USE_THREADS)
-static SV * newRV_noinc (SV * sv)
+static SV *newRV_noinc(SV * sv)
 {
-          SV *nsv = (SV*)newRV(sv);       
-          SvREFCNT_dec(sv);               
-          return nsv;                     
+    SV *nsv = (SV *) newRV(sv);
+
+    SvREFCNT_dec(sv);
+    return nsv;
 }
 #    else
 #      define newRV_noinc(sv)    \
@@ -365,50 +366,47 @@ static SV * newRV_noinc (SV * sv)
 #if defined(NEED_newCONSTSUB)
 static
 #else
-extern void newCONSTSUB(HV * stash, char * name, SV *sv);
+extern void newCONSTSUB(HV * stash, char *name, SV * sv);
 #endif
 
 #if defined(NEED_newCONSTSUB) || defined(NEED_newCONSTSUB_GLOBAL)
-void
-newCONSTSUB(stash,name,sv)
-HV *stash;
-char *name;
-SV *sv;
+void newCONSTSUB(stash, name, sv)
+     HV *stash;
+     char *name;
+     SV *sv;
 {
-	U32 oldhints = PL_hints;
-	HV *old_cop_stash = PL_curcop->cop_stash;
-	HV *old_curstash = PL_curstash;
-	line_t oldline = PL_curcop->cop_line;
-	PL_curcop->cop_line = PL_copline;
+    U32 oldhints = PL_hints;
+    HV *old_cop_stash = PL_curcop->cop_stash;
+    HV *old_curstash = PL_curstash;
+    line_t oldline = PL_curcop->cop_line;
 
-	PL_hints &= ~HINT_BLOCK_SCOPE;
-	if (stash)
-		PL_curstash = PL_curcop->cop_stash = stash;
+    PL_curcop->cop_line = PL_copline;
 
-	newSUB(
+    PL_hints &= ~HINT_BLOCK_SCOPE;
+    if (stash)
+	PL_curstash = PL_curcop->cop_stash = stash;
 
+    newSUB(
 #if (PERL_VERSION < 3) || ((PERL_VERSION == 3) && (PERL_SUBVERSION < 22))
-     /* before 5.003_22 */
-		start_subparse(),
+	      /* before 5.003_22 */
+	      start_subparse(),
 #else
 #  if (PERL_VERSION == 3) && (PERL_SUBVERSION == 22)
-     /* 5.003_22 */
-     		start_subparse(0),
+	      /* 5.003_22 */
+	      start_subparse(0),
 #  else
-     /* 5.003_23  onwards */
-     		start_subparse(FALSE, 0),
+	      /* 5.003_23  onwards */
+	      start_subparse(FALSE, 0),
 #  endif
 #endif
-
-		newSVOP(OP_CONST, 0, newSVpv(name,0)),
-		newSVOP(OP_CONST, 0, &PL_sv_no),   /* SvPV(&PL_sv_no) == "" -- GMB */
-		newSTATEOP(0, Nullch, newSVOP(OP_CONST, 0, sv))
+	      newSVOP(OP_CONST, 0, newSVpv(name, 0)), newSVOP(OP_CONST, 0, &PL_sv_no),	/* SvPV(&PL_sv_no) == "" -- GMB */
+	      newSTATEOP(0, Nullch, newSVOP(OP_CONST, 0, sv))
 	);
 
-	PL_hints = oldhints;
-	PL_curcop->cop_stash = old_cop_stash;
-	PL_curstash = old_curstash;
-	PL_curcop->cop_line = oldline;
+    PL_hints = oldhints;
+    PL_curcop->cop_stash = old_cop_stash;
+    PL_curstash = old_curstash;
+    PL_curcop->cop_line = oldline;
 }
 #endif
 
@@ -497,7 +495,7 @@ SV *sv;
 #define aMY_CXT_
 #define _aMY_CXT
 
-#endif 
+#endif
 
 #endif /* START_MY_CXT */
 
@@ -521,7 +519,7 @@ SV *sv;
 
 #ifndef NVef
 #   if defined(USE_LONG_DOUBLE) && defined(HAS_LONG_DOUBLE) && \
-	defined(PERL_PRIfldbl) /* Not very likely, but let's try anyway. */ 
+	defined(PERL_PRIfldbl)	/* Not very likely, but let's try anyway. */
 #       define NVef		PERL_PRIeldbl
 #       define NVff		PERL_PRIfldbl
 #       define NVgf		PERL_PRIgldbl
@@ -543,12 +541,11 @@ SV *sv;
 #       define SvPVbyte(sv, lp) \
           ((SvFLAGS(sv) & (SVf_POK|SVf_UTF8)) == (SVf_POK) \
            ? ((lp = SvCUR(sv)), SvPVX(sv)) : my_sv_2pvbyte(aTHX_ sv, &lp))
-       static char *
-       my_sv_2pvbyte(pTHX_ register SV *sv, STRLEN *lp)
-       {   
-           sv_utf8_downgrade(sv,0);
-           return SvPV(sv,*lp);
-       }
+static char *my_sv_2pvbyte(pTHX_ register SV * sv, STRLEN * lp)
+{
+    sv_utf8_downgrade(sv, 0);
+    return SvPV(sv, *lp);
+}
 #   endif
 #else
 #   define SvPVbyte SvPV
@@ -558,12 +555,12 @@ SV *sv;
 #   define SvPV_nolen(sv) \
         ((SvFLAGS(sv) & (SVf_POK)) == SVf_POK \
          ? SvPVX(sv) : sv_2pv_nolen(sv))
-    static char *
-    sv_2pv_nolen(pTHX_ register SV *sv)
-    {   
-        STRLEN n_a;
-        return sv_2pv(sv, &n_a);
-    }
+static char *sv_2pv_nolen(pTHX_ register SV * sv)
+{
+    STRLEN n_a;
+
+    return sv_2pv(sv, &n_a);
+}
 #endif
 
 #ifndef get_cv
@@ -629,29 +626,35 @@ SV *sv;
 #endif
 
 #ifndef grok_hex
-static UV _grok_hex (char *string, STRLEN *len, I32 *flags, NV *result) {
+static UV _grok_hex(char *string, STRLEN * len, I32 * flags, NV * result)
+{
     NV r = scan_hex(string, *len, I32_CAST len);
+
     if (r > UV_MAX) {
-        *flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
-        if (result) *result = r;
-        return UV_MAX;
+	*flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
+	if (result)
+	    *result = r;
+	return UV_MAX;
     }
-    return (UV)r;
+    return (UV) r;
 }
-        
+
 #   define grok_hex(string, len, flags, result)     \
         _grok_hex((string), (len), (flags), (result))
-#endif 
+#endif
 
 #ifndef grok_oct
-static UV _grok_oct (char *string, STRLEN *len, I32 *flags, NV *result) {
+static UV _grok_oct(char *string, STRLEN * len, I32 * flags, NV * result)
+{
     NV r = scan_oct(string, *len, I32_CAST len);
+
     if (r > UV_MAX) {
-        *flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
-        if (result) *result = r;
-        return UV_MAX;
+	*flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
+	if (result)
+	    *result = r;
+	return UV_MAX;
     }
-    return (UV)r;
+    return (UV) r;
 }
 
 #   define grok_oct(string, len, flags, result)     \
@@ -659,14 +662,17 @@ static UV _grok_oct (char *string, STRLEN *len, I32 *flags, NV *result) {
 #endif
 
 #if !defined(grok_bin) && defined(scan_bin)
-static UV _grok_bin (char *string, STRLEN *len, I32 *flags, NV *result) {
+static UV _grok_bin(char *string, STRLEN * len, I32 * flags, NV * result)
+{
     NV r = scan_bin(string, *len, I32_CAST len);
+
     if (r > UV_MAX) {
-        *flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
-        if (result) *result = r;
-        return UV_MAX;
+	*flags |= PERL_SCAN_GREATER_THAN_UV_MAX;
+	if (result)
+	    *result = r;
+	return UV_MAX;
     }
-    return (UV)r;
+    return (UV) r;
 }
 
 #   define grok_bin(string, len, flags, result)     \
@@ -688,31 +694,31 @@ static UV _grok_bin (char *string, STRLEN *len, I32 *flags, NV *result) {
 
 
 #ifndef IS_NUMBER_IN_UV
-#   define IS_NUMBER_IN_UV		            0x01   
+#   define IS_NUMBER_IN_UV		            0x01
 #   define IS_NUMBER_GREATER_THAN_UV_MAX    0x02
 #   define IS_NUMBER_NOT_INT	            0x04
 #   define IS_NUMBER_NEG		            0x08
-#   define IS_NUMBER_INFINITY	            0x10 
-#   define IS_NUMBER_NAN                    0x20  
+#   define IS_NUMBER_INFINITY	            0x10
+#   define IS_NUMBER_NAN                    0x20
 #endif
-   
+
 #ifndef grok_numeric_radix
 #   define GROK_NUMERIC_RADIX(sp, send) grok_numeric_radix(aTHX_ sp, send)
 
 #define grok_numeric_radix Perl_grok_numeric_radix
-    
-bool
-Perl_grok_numeric_radix(pTHX_ const char **sp, const char *send)
+
+bool Perl_grok_numeric_radix(pTHX_ const char **sp, const char *send)
 {
 #ifdef USE_LOCALE_NUMERIC
 #if (PERL_VERSION > 6) || ((PERL_VERSION == 6) && (PERL_SUBVERSION >= 1))
-    if (PL_numeric_radix_sv && IN_LOCALE) { 
-        STRLEN len;
-        char* radix = SvPV(PL_numeric_radix_sv, len);
-        if (*sp + len <= send && memEQ(*sp, radix, len)) {
-            *sp += len;
-            return TRUE; 
-        }
+    if (PL_numeric_radix_sv && IN_LOCALE) {
+	STRLEN len;
+	char *radix = SvPV(PL_numeric_radix_sv, len);
+
+	if (*sp + len <= send && memEQ(*sp, radix, len)) {
+	    *sp += len;
+	    return TRUE;
+	}
     }
 #else
     /* pre5.6.0 perls don't have PL_numeric_radix_sv so the radix
@@ -720,20 +726,22 @@ Perl_grok_numeric_radix(pTHX_ const char **sp, const char *send)
 #include <locale.h>
     struct lconv *lc = localeconv();
     char *radix = lc->decimal_point;
-    if (radix && IN_LOCALE) { 
-        STRLEN len = strlen(radix);
-        if (*sp + len <= send && memEQ(*sp, radix, len)) {
-            *sp += len;
-            return TRUE; 
-        }
+
+    if (radix && IN_LOCALE) {
+	STRLEN len = strlen(radix);
+
+	if (*sp + len <= send && memEQ(*sp, radix, len)) {
+	    *sp += len;
+	    return TRUE;
+	}
     }
 #endif /* PERL_VERSION */
 #endif /* USE_LOCALE_NUMERIC */
     /* always try "." if numeric radix didn't match because
      * we may have data from different locales mixed */
     if (*sp < send && **sp == '.') {
-        ++*sp;
-        return TRUE;
+	++*sp;
+	return TRUE;
     }
     return FALSE;
 }
@@ -743,195 +751,271 @@ Perl_grok_numeric_radix(pTHX_ const char **sp, const char *send)
 
 #define grok_number Perl_grok_number
 
-int
-Perl_grok_number(pTHX_ const char *pv, STRLEN len, UV *valuep)
+int Perl_grok_number(pTHX_ const char *pv, STRLEN len, UV * valuep)
 {
-  const char *s = pv;
-  const char *send = pv + len;
-  const UV max_div_10 = UV_MAX / 10;
-  const char max_mod_10 = UV_MAX % 10;
-  int numtype = 0;
-  int sawinf = 0;
-  int sawnan = 0;
+    const char *s = pv;
+    const char *send = pv + len;
+    const UV max_div_10 = UV_MAX / 10;
+    const char max_mod_10 = UV_MAX % 10;
+    int numtype = 0;
+    int sawinf = 0;
+    int sawnan = 0;
 
-  while (s < send && isSPACE(*s))
-    s++;
-  if (s == send) {
-    return 0;
-  } else if (*s == '-') {
-    s++;
-    numtype = IS_NUMBER_NEG;
-  }
-  else if (*s == '+')
-  s++;
+    while (s < send && isSPACE(*s))
+	s++;
+    if (s == send) {
+	return 0;
+    }
+    else if (*s == '-') {
+	s++;
+	numtype = IS_NUMBER_NEG;
+    }
+    else if (*s == '+')
+	s++;
 
-  if (s == send)
-    return 0;
+    if (s == send)
+	return 0;
 
-  /* next must be digit or the radix separator or beginning of infinity */
-  if (isDIGIT(*s)) {
-    /* UVs are at least 32 bits, so the first 9 decimal digits cannot
-       overflow.  */
-    UV value = *s - '0';
-    /* This construction seems to be more optimiser friendly.
-       (without it gcc does the isDIGIT test and the *s - '0' separately)
-       With it gcc on arm is managing 6 instructions (6 cycles) per digit.
-       In theory the optimiser could deduce how far to unroll the loop
-       before checking for overflow.  */
-    if (++s < send) {
-      int digit = *s - '0';
-      if (digit >= 0 && digit <= 9) {
-        value = value * 10 + digit;
-        if (++s < send) {
-          digit = *s - '0';
-          if (digit >= 0 && digit <= 9) {
-            value = value * 10 + digit;
-            if (++s < send) {
-              digit = *s - '0';
-              if (digit >= 0 && digit <= 9) {
-                value = value * 10 + digit;
-		        if (++s < send) {
-                  digit = *s - '0';
-                  if (digit >= 0 && digit <= 9) {
-                    value = value * 10 + digit;
-                    if (++s < send) {
-                      digit = *s - '0';
-                      if (digit >= 0 && digit <= 9) {
-                        value = value * 10 + digit;
-                        if (++s < send) {
-                          digit = *s - '0';
-                          if (digit >= 0 && digit <= 9) {
-                            value = value * 10 + digit;
-                            if (++s < send) {
-                              digit = *s - '0';
-                              if (digit >= 0 && digit <= 9) {
-                                value = value * 10 + digit;
-                                if (++s < send) {
-                                  digit = *s - '0';
-                                  if (digit >= 0 && digit <= 9) {
-                                    value = value * 10 + digit;
-                                    if (++s < send) {
-                                      /* Now got 9 digits, so need to check
-                                         each time for overflow.  */
-                                      digit = *s - '0';
-                                      while (digit >= 0 && digit <= 9
-                                             && (value < max_div_10
-                                                 || (value == max_div_10
-                                                     && digit <= max_mod_10))) {
-                                        value = value * 10 + digit;
-                                        if (++s < send)
-                                          digit = *s - '0';
-                                        else
-                                          break;
-                                      }
-                                      if (digit >= 0 && digit <= 9
-                                          && (s < send)) {
-                                        /* value overflowed.
-                                           skip the remaining digits, don't
-                                           worry about setting *valuep.  */
-                                        do {
-                                          s++;
-                                        } while (s < send && isDIGIT(*s));
-                                        numtype |=
-                                          IS_NUMBER_GREATER_THAN_UV_MAX;
-                                        goto skip_value;
-                                      }
-                                    }
-                                  }
-				                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+    /* next must be digit or the radix separator or beginning of infinity */
+    if (isDIGIT(*s)) {
+	/* UVs are at least 32 bits, so the first 9 decimal digits cannot
+	   overflow.  */
+	UV value = *s - '0';
+
+	/* This construction seems to be more optimiser friendly.
+	   (without it gcc does the isDIGIT test and the *s - '0' separately)
+	   With it gcc on arm is managing 6 instructions (6 cycles) per digit.
+	   In theory the optimiser could deduce how far to unroll the loop
+	   before checking for overflow.  */
+	if (++s < send) {
+	    int digit = *s - '0';
+
+	    if (digit >= 0 && digit <= 9) {
+		value = value * 10 + digit;
+		if (++s < send) {
+		    digit = *s - '0';
+		    if (digit >= 0 && digit <= 9) {
+			value = value * 10 + digit;
+			if (++s < send) {
+			    digit = *s - '0';
+			    if (digit >= 0 && digit <= 9) {
+				value = value * 10 + digit;
+				if (++s < send) {
+				    digit = *s - '0';
+				    if (digit >= 0 && digit <= 9) {
+					value = value * 10 + digit;
+					if (++s < send) {
+					    digit = *s - '0';
+					    if (digit >= 0 && digit <= 9) {
+						value = value * 10 + digit;
+						if (++s < send) {
+						    digit = *s - '0';
+						    if (digit >= 0 &&
+							digit <= 9) {
+							value =
+							    value * 10 +
+							    digit;
+							if (++s < send) {
+							    digit = *s - '0';
+							    if (digit >= 0 &&
+								digit <= 9) {
+								value =
+								    value *
+								    10 +
+								    digit;
+								if (++s <
+								    send) {
+								    digit =
+									*s -
+									'0';
+								    if (digit
+									>= 0
+									&&
+									digit
+									<=
+									9) {
+									value
+									    =
+									    value
+									    *
+									    10
+									    +
+									    digit;
+									if (++s < send) {
+									    /* Now got 9 digits, so need to check
+									       each time for overflow.  */
+									    digit
+										=
+										*s
+										-
+										'0';
+									    while
+										(digit
+										 >=
+										 0
+										 &&
+										 digit
+										 <=
+										 9
+										 &&
+										 (value
+										  <
+										  max_div_10
+										  ||
+										  (value
+										   ==
+										   max_div_10
+										   &&
+										   digit
+										   <=
+										   max_mod_10)))
+									    {
+										value
+										    =
+										    value
+										    *
+										    10
+										    +
+										    digit;
+										if (++s < send)
+										    digit
+											=
+											*s
+											-
+											'0';
+										else
+										    break;
+									    }
+									    if (digit >= 0 && digit <= 9 && (s < send)) {
+										/* value overflowed.
+										   skip the remaining digits, don't
+										   worry about setting *valuep.  */
+										do {
+										    s++;
+										} while (s < send && isDIGIT(*s));
+										numtype
+										    |=
+										    IS_NUMBER_GREATER_THAN_UV_MAX;
+										goto skip_value;
+									    }
+									}
+								    }
+								}
+							    }
+							}
+						    }
+						}
+					    }
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
 	    }
-      }
-    }
-    numtype |= IS_NUMBER_IN_UV;
-    if (valuep)
-      *valuep = value;
+	}
+	numtype |= IS_NUMBER_IN_UV;
+	if (valuep)
+	    *valuep = value;
 
-  skip_value:
-    if (GROK_NUMERIC_RADIX(&s, send)) {
-      numtype |= IS_NUMBER_NOT_INT;
-      while (s < send && isDIGIT(*s))  /* optional digits after the radix */
-        s++;
+      skip_value:
+	if (GROK_NUMERIC_RADIX(&s, send)) {
+	    numtype |= IS_NUMBER_NOT_INT;
+	    while (s < send && isDIGIT(*s))	/* optional digits after the radix */
+		s++;
+	}
     }
-  }
-  else if (GROK_NUMERIC_RADIX(&s, send)) {
-    numtype |= IS_NUMBER_NOT_INT | IS_NUMBER_IN_UV; /* valuep assigned below */
-    /* no digits before the radix means we need digits after it */
-    if (s < send && isDIGIT(*s)) {
-      do {
-        s++;
-      } while (s < send && isDIGIT(*s));
-      if (valuep) {
-        /* integer approximation is valid - it's 0.  */
-        *valuep = 0;
-      }
+    else if (GROK_NUMERIC_RADIX(&s, send)) {
+	numtype |= IS_NUMBER_NOT_INT | IS_NUMBER_IN_UV;	/* valuep assigned below */
+	/* no digits before the radix means we need digits after it */
+	if (s < send && isDIGIT(*s)) {
+	    do {
+		s++;
+	    } while (s < send && isDIGIT(*s));
+	    if (valuep) {
+		/* integer approximation is valid - it's 0.  */
+		*valuep = 0;
+	    }
+	}
+	else
+	    return 0;
+    }
+    else if (*s == 'I' || *s == 'i') {
+	s++;
+	if (s == send || (*s != 'N' && *s != 'n'))
+	    return 0;
+	s++;
+	if (s == send || (*s != 'F' && *s != 'f'))
+	    return 0;
+	s++;
+	if (s < send && (*s == 'I' || *s == 'i')) {
+	    s++;
+	    if (s == send || (*s != 'N' && *s != 'n'))
+		return 0;
+	    s++;
+	    if (s == send || (*s != 'I' && *s != 'i'))
+		return 0;
+	    s++;
+	    if (s == send || (*s != 'T' && *s != 't'))
+		return 0;
+	    s++;
+	    if (s == send || (*s != 'Y' && *s != 'y'))
+		return 0;
+	    s++;
+	}
+	sawinf = 1;
+    }
+    else if (*s == 'N' || *s == 'n') {
+	/* XXX TODO: There are signaling NaNs and quiet NaNs. */
+	s++;
+	if (s == send || (*s != 'A' && *s != 'a'))
+	    return 0;
+	s++;
+	if (s == send || (*s != 'N' && *s != 'n'))
+	    return 0;
+	s++;
+	sawnan = 1;
     }
     else
-      return 0;
-  } else if (*s == 'I' || *s == 'i') {
-    s++; if (s == send || (*s != 'N' && *s != 'n')) return 0;
-    s++; if (s == send || (*s != 'F' && *s != 'f')) return 0;
-    s++; if (s < send && (*s == 'I' || *s == 'i')) {
-      s++; if (s == send || (*s != 'N' && *s != 'n')) return 0;
-      s++; if (s == send || (*s != 'I' && *s != 'i')) return 0;
-      s++; if (s == send || (*s != 'T' && *s != 't')) return 0;
-      s++; if (s == send || (*s != 'Y' && *s != 'y')) return 0;
-      s++;
-    }
-    sawinf = 1;
-  } else if (*s == 'N' || *s == 'n') {
-    /* XXX TODO: There are signaling NaNs and quiet NaNs. */
-    s++; if (s == send || (*s != 'A' && *s != 'a')) return 0;
-    s++; if (s == send || (*s != 'N' && *s != 'n')) return 0;
-    s++;
-    sawnan = 1;
-  } else
-    return 0;
+	return 0;
 
-  if (sawinf) {
-    numtype &= IS_NUMBER_NEG; /* Keep track of sign  */
-    numtype |= IS_NUMBER_INFINITY | IS_NUMBER_NOT_INT;
-  } else if (sawnan) {
-    numtype &= IS_NUMBER_NEG; /* Keep track of sign  */
-    numtype |= IS_NUMBER_NAN | IS_NUMBER_NOT_INT;
-  } else if (s < send) {
-    /* we can have an optional exponent part */
-    if (*s == 'e' || *s == 'E') {
-      /* The only flag we keep is sign.  Blow away any "it's UV"  */
-      numtype &= IS_NUMBER_NEG;
-      numtype |= IS_NUMBER_NOT_INT;
-      s++;
-      if (s < send && (*s == '-' || *s == '+'))
-        s++;
-      if (s < send && isDIGIT(*s)) {
-        do {
-          s++;
-        } while (s < send && isDIGIT(*s));
-      }
-      else
-      return 0;
+    if (sawinf) {
+	numtype &= IS_NUMBER_NEG;	/* Keep track of sign  */
+	numtype |= IS_NUMBER_INFINITY | IS_NUMBER_NOT_INT;
     }
-  }
-  while (s < send && isSPACE(*s))
-    s++;
-  if (s >= send)
-    return numtype;
-  if (len == 10 && memEQ(pv, "0 but true", 10)) {
-    if (valuep)
-      *valuep = 0;
-    return IS_NUMBER_IN_UV;
-  }
-  return 0;
+    else if (sawnan) {
+	numtype &= IS_NUMBER_NEG;	/* Keep track of sign  */
+	numtype |= IS_NUMBER_NAN | IS_NUMBER_NOT_INT;
+    }
+    else if (s < send) {
+	/* we can have an optional exponent part */
+	if (*s == 'e' || *s == 'E') {
+	    /* The only flag we keep is sign.  Blow away any "it's UV"  */
+	    numtype &= IS_NUMBER_NEG;
+	    numtype |= IS_NUMBER_NOT_INT;
+	    s++;
+	    if (s < send && (*s == '-' || *s == '+'))
+		s++;
+	    if (s < send && isDIGIT(*s)) {
+		do {
+		    s++;
+		} while (s < send && isDIGIT(*s));
+	    }
+	    else
+		return 0;
+	}
+    }
+    while (s < send && isSPACE(*s))
+	s++;
+    if (s >= send)
+	return numtype;
+    if (len == 10 && memEQ(pv, "0 but true", 10)) {
+	if (valuep)
+	    *valuep = 0;
+	return IS_NUMBER_IN_UV;
+    }
+    return 0;
 }
 #endif /* grok_number */
 

@@ -4,20 +4,20 @@
 
 void sigint();
 
-int set_signals (void)
+int set_signals(void)
 {
 
-/* ignore ctrlz */
+    /* ignore ctrlz */
 
 #ifdef SIGTSTP
-    signal (SIGTSTP, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
 #endif
 
-/* set other signal catches */
+    /* set other signal catches */
 
     signalflag.interrupt = 0;
 
-    signal (SIGINT, sigint);
+    signal(SIGINT, sigint);
 
     return 0;
 }

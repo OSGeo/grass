@@ -2,15 +2,14 @@
 #include <stdlib.h>
 #include <grass/rowio.h>
 
-void rowio_release (ROWIO *R)
+void rowio_release(ROWIO * R)
 {
     int i;
 
-    if (R->rcb)
-    {
+    if (R->rcb) {
 	for (i = 0; i < R->nrows && R->rcb[i].buf; i++)
-	    free (R->rcb[i].buf);
-	free (R->rcb);
+	    free(R->rcb[i].buf);
+	free(R->rcb);
 	R->rcb = NULL;
     }
 }

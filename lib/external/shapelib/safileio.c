@@ -1,3 +1,4 @@
+
 /******************************************************************************
  * $Id: safileio.c,v 1.4 2008/01/16 20:05:14 bram Exp $
  *
@@ -78,112 +79,110 @@ SHP_CVSID("$Id: safileio.c,v 1.4 2008/01/16 20:05:14 bram Exp $");
 
 /************************************************************************/
 /*                              SADFOpen()                              */
+
 /************************************************************************/
 
-SAFile SADFOpen( const char *pszFilename, const char *pszAccess )
-
+SAFile SADFOpen(const char *pszFilename, const char *pszAccess)
 {
-    return (SAFile) fopen( pszFilename, pszAccess );
+    return (SAFile) fopen(pszFilename, pszAccess);
 }
 
 /************************************************************************/
 /*                              SADFRead()                              */
+
 /************************************************************************/
 
-SAOffset SADFRead( void *p, SAOffset size, SAOffset nmemb, SAFile file )
-
+SAOffset SADFRead(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 {
-    return (SAOffset) fread( p, (size_t) size, (size_t) nmemb, 
-                             (FILE *) file );
+    return (SAOffset) fread(p, (size_t) size, (size_t) nmemb, (FILE *) file);
 }
 
 /************************************************************************/
 /*                             SADFWrite()                              */
+
 /************************************************************************/
 
-SAOffset SADFWrite( void *p, SAOffset size, SAOffset nmemb, SAFile file )
-
+SAOffset SADFWrite(void *p, SAOffset size, SAOffset nmemb, SAFile file)
 {
-    return (SAOffset) fwrite( p, (size_t) size, (size_t) nmemb, 
-                              (FILE *) file );
+    return (SAOffset) fwrite(p, (size_t) size, (size_t) nmemb, (FILE *) file);
 }
 
 /************************************************************************/
 /*                              SADFSeek()                              */
+
 /************************************************************************/
 
-SAOffset SADFSeek( SAFile file, SAOffset offset, int whence )
-
+SAOffset SADFSeek(SAFile file, SAOffset offset, int whence)
 {
-    return (SAOffset) fseek( (FILE *) file, (long) offset, whence );
+    return (SAOffset) fseek((FILE *) file, (long)offset, whence);
 }
 
 /************************************************************************/
 /*                              SADFTell()                              */
+
 /************************************************************************/
 
-SAOffset SADFTell( SAFile file )
-
+SAOffset SADFTell(SAFile file)
 {
-    return (SAOffset) ftell( (FILE *) file );
+    return (SAOffset) ftell((FILE *) file);
 }
 
 /************************************************************************/
 /*                             SADFFlush()                              */
+
 /************************************************************************/
 
-int SADFFlush( SAFile file )
-
+int SADFFlush(SAFile file)
 {
-    return fflush( (FILE *) file );
+    return fflush((FILE *) file);
 }
 
 /************************************************************************/
 /*                             SADFClose()                              */
+
 /************************************************************************/
 
-int SADFClose( SAFile file )
-
+int SADFClose(SAFile file)
 {
-    return fclose( (FILE *) file );
+    return fclose((FILE *) file);
 }
 
 /************************************************************************/
 /*                             SADFClose()                              */
+
 /************************************************************************/
 
-int SADRemove( const char *filename )
-
+int SADRemove(const char *filename)
 {
-    return remove( filename );
+    return remove(filename);
 }
 
 /************************************************************************/
 /*                              SADError()                              */
+
 /************************************************************************/
 
-void SADError( const char *message )
-
+void SADError(const char *message)
 {
-    fprintf( stderr, "%s\n", message );
+    fprintf(stderr, "%s\n", message);
 }
 
 /************************************************************************/
 /*                        SASetupDefaultHooks()                         */
+
 /************************************************************************/
 
-void SASetupDefaultHooks( SAHooks *psHooks )
-
+void SASetupDefaultHooks(SAHooks * psHooks)
 {
-    psHooks->FOpen   = SADFOpen;
-    psHooks->FRead   = SADFRead;
-    psHooks->FWrite  = SADFWrite;
-    psHooks->FSeek   = SADFSeek;
-    psHooks->FTell   = SADFTell;
-    psHooks->FFlush  = SADFFlush;
-    psHooks->FClose  = SADFClose;
+    psHooks->FOpen = SADFOpen;
+    psHooks->FRead = SADFRead;
+    psHooks->FWrite = SADFWrite;
+    psHooks->FSeek = SADFSeek;
+    psHooks->FTell = SADFTell;
+    psHooks->FFlush = SADFFlush;
+    psHooks->FClose = SADFClose;
 
-    psHooks->Error   = SADError;
+    psHooks->Error = SADError;
 }
 
 
@@ -193,64 +192,65 @@ void SASetupDefaultHooks( SAHooks *psHooks )
 
 /************************************************************************/
 /*                          Utf8ToWideChar                              */
+
 /************************************************************************/
 
-const wchar_t* Utf8ToWideChar( const char *pszFilename )
+const wchar_t *Utf8ToWideChar(const char *pszFilename)
 {
     int nMulti, nWide;
     wchar_t *pwszFileName;
-    
+
     nMulti = strlen(pszFilename) + 1;
-    nWide = MultiByteToWideChar( CP_UTF8, 0, pszFilename, nMulti, 0, 0);
-    if( nWide == 0 )
-    {
-        return NULL;
+    nWide = MultiByteToWideChar(CP_UTF8, 0, pszFilename, nMulti, 0, 0);
+    if (nWide == 0) {
+	return NULL;
     }
-    pwszFileName = (wchar_t*) malloc(nWide * sizeof(wchar_t));
-    if ( pwszFileName == NULL )
-    {
-        return NULL;
+    pwszFileName = (wchar_t *) malloc(nWide * sizeof(wchar_t));
+    if (pwszFileName == NULL) {
+	return NULL;
     }
-    if( MultiByteToWideChar( CP_UTF8, 0, pszFilename, nMulti, pwszFileName, nWide ) == 0 )
-    {
-        free( pwszFileName );
-        return NULL;
+    if (MultiByteToWideChar
+	(CP_UTF8, 0, pszFilename, nMulti, pwszFileName, nWide) == 0) {
+	free(pwszFileName);
+	return NULL;
     }
     return pwszFileName;
 }
 
 /************************************************************************/
 /*                           SAUtf8WFOpen                               */
+
 /************************************************************************/
 
-SAFile SAUtf8WFOpen( const char *pszFilename, const char *pszAccess )
+SAFile SAUtf8WFOpen(const char *pszFilename, const char *pszAccess)
 {
     SAFile file = NULL;
     const wchar_t *pwszFileName, *pwszAccess;
-    pwszFileName = Utf8ToWideChar( pszFilename );
-    pwszAccess = Utf8ToWideChar( pszAccess );
-    if( pwszFileName != NULL && pwszFileName != NULL)
-    {
-        file = (SAFile) _wfopen( pwszFileName, pwszAccess );
+
+    pwszFileName = Utf8ToWideChar(pszFilename);
+    pwszAccess = Utf8ToWideChar(pszAccess);
+    if (pwszFileName != NULL && pwszFileName != NULL) {
+	file = (SAFile) _wfopen(pwszFileName, pwszAccess);
     }
-    free ((wchar_t*) pwszFileName);
-    free ((wchar_t*) pwszAccess);
+    free((wchar_t *) pwszFileName);
+    free((wchar_t *) pwszAccess);
     return file;
 }
 
 /************************************************************************/
 /*                             SAUtf8WRemove()                          */
+
 /************************************************************************/
 
-int SAUtf8WRemove( const char *pszFilename )
+int SAUtf8WRemove(const char *pszFilename)
 {
-    const wchar_t *pwszFileName = Utf8ToWideChar( pszFilename );
-    int rc = -1; 
-    if( pwszFileName != NULL )
-    {
-        rc = _wremove( pwszFileName );
+    const wchar_t *pwszFileName = Utf8ToWideChar(pszFilename);
+    int rc = -1;
+
+    if (pwszFileName != NULL) {
+	rc = _wremove(pwszFileName);
     }
-    free ((wchar_t*) pwszFileName);
+    free((wchar_t *) pwszFileName);
     return rc;
 }
 
@@ -260,25 +260,26 @@ int SAUtf8WRemove( const char *pszFilename )
 
 /************************************************************************/
 /*                          SASetupUtf8Hooks()                          */
+
 /************************************************************************/
 
-void SASetupUtf8Hooks( SAHooks *psHooks )
+void SASetupUtf8Hooks(SAHooks * psHooks)
 {
-#ifdef SHPAPI_WINDOWS    
-    psHooks->FOpen   = SAUtf8WFOpen;
-    psHooks->Remove  = SAUtf8WRemove;
+#ifdef SHPAPI_WINDOWS
+    psHooks->FOpen = SAUtf8WFOpen;
+    psHooks->Remove = SAUtf8WRemove;
 #else
 #   error "no implementations of UTF-8 hooks available for this platform"
 #endif
-    psHooks->FRead   = SADFRead;
-    psHooks->FWrite  = SADFWrite;
-    psHooks->FSeek   = SADFSeek;
-    psHooks->FTell   = SADFTell;
-    psHooks->FFlush  = SADFFlush;
-    psHooks->FClose  = SADFClose;
+    psHooks->FRead = SADFRead;
+    psHooks->FWrite = SADFWrite;
+    psHooks->FSeek = SADFSeek;
+    psHooks->FTell = SADFTell;
+    psHooks->FFlush = SADFFlush;
+    psHooks->FClose = SADFClose;
 
-    psHooks->Error   = SADError;
-    psHooks->Atof    = atof;
+    psHooks->Error = SADError;
+    psHooks->Atof = atof;
 }
 
 #endif

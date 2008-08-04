@@ -47,10 +47,12 @@ int main(int argc, char *argv[])
     int i, type, iter;
     char *mapset;
     struct GModule *module;	/* GRASS module for parsing arguments */
-    struct Option *map_in, *map_out, *thresh_opt, *method_opt, *look_ahead_opt;
+    struct Option *map_in, *map_out, *thresh_opt, *method_opt,
+	*look_ahead_opt;
     struct Option *iterations_opt, *cat_opt, *alpha_opt, *beta_opt, *type_opt;
     struct Option *field_opt, *where_opt, *reduction_opt, *slide_opt;
-    struct Option *angle_thresh_opt, *degree_thresh_opt, *closeness_thresh_opt;
+    struct Option *angle_thresh_opt, *degree_thresh_opt,
+	*closeness_thresh_opt;
     struct Option *betweeness_thresh_opt;
     struct Flag *ca_flag, *rs_flag;
     int with_z;
@@ -302,15 +304,14 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
 
     if (1 > Vect_open_old(&In, map_in->answer, mapset))
-      G_fatal_error(_("Unable to open vector map <%s>"),
-		    G_fully_qualified_name(map_in->answer, mapset));
+	G_fatal_error(_("Unable to open vector map <%s>"),
+		      G_fully_qualified_name(map_in->answer, mapset));
 
     with_z = Vect_is_3d(&In);
 
     if (0 > Vect_open_new(&Out, map_out->answer, with_z)) {
 	Vect_close(&In);
-	G_fatal_error(_("Unable to create vector map <%s>"),
-		      map_out->answer);
+	G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
 
@@ -318,8 +319,7 @@ int main(int argc, char *argv[])
     layer = atoi(field_opt->answer);
     if (where_opt->answer) {
 	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"),
-			  "layer", "where");
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
 	if (cat_opt->answer)
 	    G_warning(_
 		      ("'where' and 'cats' parameters were supplied, cat will be ignored"));
@@ -332,8 +332,7 @@ int main(int argc, char *argv[])
     }
     else if (cat_opt->answer) {
 	if (layer < 1)
-	    G_fatal_error(_("'%s' must be > 0 for '%s'"),
-			  "layer", "cat");
+	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "cat");
 	varray = Vect_new_varray(Vect_get_num_lines(&In));
 	chcat = 1;
 	if (Vect_set_varray_from_cat_string
@@ -365,8 +364,7 @@ int main(int argc, char *argv[])
 				 betweeness_thresh);
     }
     else {
-	G_message(_("Generalization (%s)..."),
-		  method_opt->answer);
+	G_message(_("Generalization (%s)..."), method_opt->answer);
 	G_percent_reset();
     }
     i = 0;
@@ -382,6 +380,7 @@ int main(int argc, char *argv[])
 
 	if ((type & mask_type) && (!chcat || varray->c[i])) {
 	    int after = 0;
+
 	    for (iter = 0; iter < iterations; iter++) {
 		switch (method) {
 		case DOUGLAS:
@@ -469,8 +468,7 @@ int main(int argc, char *argv[])
 	    Vect_get_area_cats(&In, i, Cats);
 	    ret = Vect_get_point_in_area(&Out, i, &x, &y);
 	    if (ret < 0) {
-		G_warning(_("Unable to calculate centroid for area %d"),
-			  i);
+		G_warning(_("Unable to calculate centroid for area %d"), i);
 		continue;
 	    }
 	    Vect_reset_line(Points);

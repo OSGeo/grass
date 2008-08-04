@@ -57,46 +57,45 @@
  *  \return int
  */
 
-int D_new_window(char *name , int t,int  b,int  l,int  r)
+int D_new_window(char *name, int t, int b, int l, int r)
 {
-	int stat;
-	char buff[256];
+    int stat;
+    char buff[256];
 
-/* If no name was sent, get a unique name for the window */
-	if(! *name)
-		R_pad_invent(name) ;
+    /* If no name was sent, get a unique name for the window */
+    if (!*name)
+	R_pad_invent(name);
 
-/* Create the work pad */
-	if ((stat = R_pad_create (name)))
-	{
-		R_pad_perror (name, stat);
-		return(-1) ;
-	}
+    /* Create the work pad */
+    if ((stat = R_pad_create(name))) {
+	R_pad_perror(name, stat);
+	return (-1);
+    }
 
-/* Select work pad for use */
-	if ((stat = R_pad_select (name)))
-		goto pad_error ;
+    /* Select work pad for use */
+    if ((stat = R_pad_select(name)))
+	goto pad_error;
 
-/* Timestamp current pad */
-	D_timestamp() ;
+    /* Timestamp current pad */
+    D_timestamp();
 
-	sprintf (buff, "%d %d %d %d", t, b, l, r) ;
-	if ((stat = R_pad_set_item ("d_win", buff)))
-		goto pad_error ;
+    sprintf(buff, "%d %d %d %d", t, b, l, r);
+    if ((stat = R_pad_set_item("d_win", buff)))
+	goto pad_error;
 
-/* Display outline of new window */
-	D_show_window(GRAY) ;
+    /* Display outline of new window */
+    D_show_window(GRAY);
 
-	R_set_window(t, b, l, r) ;
+    R_set_window(t, b, l, r);
 
-	return(0) ;
+    return (0);
 
-pad_error:
-	R_pad_delete();
-	sprintf (buff, "window <%s>, item <%s>", name, "d_win");
-	R_pad_perror (buff, stat);
+  pad_error:
+    R_pad_delete();
+    sprintf(buff, "window <%s>, item <%s>", name, "d_win");
+    R_pad_perror(buff, stat);
 
-	return(-1) ;
+    return (-1);
 }
 
 
@@ -118,22 +117,26 @@ pad_error:
 
 int D_new_window_percent(char *name, float b, float t, float l, float r)
 {
-	int scr_t = R_screen_top();
-	int scr_b = R_screen_bot();
-	int scr_l = R_screen_left();
-	int scr_r = R_screen_rite();
+    int scr_t = R_screen_top();
+    int scr_b = R_screen_bot();
+    int scr_l = R_screen_left();
+    int scr_r = R_screen_rite();
 
-	int win_t = 0.5 + scr_t + (scr_b - scr_t) * (100. - t) / 100.0;
-	int win_b = 0.5 + scr_t + (scr_b - scr_t) * (100. - b) / 100.0;
-	int win_l = 0.5 + scr_l + (scr_r - scr_l) * l / 100.0;
-	int win_r = 0.5 + scr_l + (scr_r - scr_l) * r / 100.0;
+    int win_t = 0.5 + scr_t + (scr_b - scr_t) * (100. - t) / 100.0;
+    int win_b = 0.5 + scr_t + (scr_b - scr_t) * (100. - b) / 100.0;
+    int win_l = 0.5 + scr_l + (scr_r - scr_l) * l / 100.0;
+    int win_r = 0.5 + scr_l + (scr_r - scr_l) * r / 100.0;
 
-	if (win_t < scr_t) win_t = scr_t;
-	if (win_b > scr_b) win_b = scr_b;
-	if (win_l < scr_l) win_l = scr_l;
-	if (win_r > scr_r) win_r = scr_r;
+    if (win_t < scr_t)
+	win_t = scr_t;
+    if (win_b > scr_b)
+	win_b = scr_b;
+    if (win_l < scr_l)
+	win_l = scr_l;
+    if (win_r > scr_r)
+	win_r = scr_r;
 
-	return D_new_window(name, win_t, win_b, win_l, win_r);
+    return D_new_window(name, win_t, win_b, win_l, win_r);
 }
 
 
@@ -148,69 +151,64 @@ int D_new_window_percent(char *name, float b, float t, float l, float r)
  *  \return int
  */
 
-int D_set_cur_wind(const char *name )
+int D_set_cur_wind(const char *name)
 {
-	char pad_cur[64] ;
-	int stat ;
-	int not_same_window ;
-	int t, b, l, r ;
+    char pad_cur[64];
+    int stat;
+    int not_same_window;
+    int t, b, l, r;
 
-	/* Abort if window name is null */
-	if (! strlen(name))
-		return(-1) ;
+    /* Abort if window name is null */
+    if (!strlen(name))
+	return (-1);
 
-	/* Abort if window name is not available */
-	if ((stat = R_pad_select(name)))
-		return(stat) ;
-	
-	/* Get name of current window pad */
-	D_get_cur_wind(pad_cur) ;
+    /* Abort if window name is not available */
+    if ((stat = R_pad_select(name)))
+	return (stat);
 
-	/* Establish whether it is the same as the currently selected pad */
-	if (strlen(pad_cur))
-	{
-		not_same_window = strcmp(name, pad_cur) ;
-		if(not_same_window)
-		{
-			R_pad_select(pad_cur) ;
-			D_show_window(GRAY) ;
-		}
+    /* Get name of current window pad */
+    D_get_cur_wind(pad_cur);
+
+    /* Establish whether it is the same as the currently selected pad */
+    if (strlen(pad_cur)) {
+	not_same_window = strcmp(name, pad_cur);
+	if (not_same_window) {
+	    R_pad_select(pad_cur);
+	    D_show_window(GRAY);
 	}
-	else
-	{
-		not_same_window = 1 ;
-	}
+    }
+    else {
+	not_same_window = 1;
+    }
 
-	if(not_same_window)
-	{
+    if (not_same_window) {
 	/* Delete the current window name in no-name pad */
-		R_pad_select("") ;
-		if ((stat = R_pad_delete_item("cur_w")))
-			return(stat) ;
+	R_pad_select("");
+	if ((stat = R_pad_delete_item("cur_w")))
+	    return (stat);
 
 	/* Update the current window name in no-name pad */
-		if ((stat = R_pad_set_item ("cur_w", name)))
-			return(stat) ;
+	if ((stat = R_pad_set_item("cur_w", name)))
+	    return (stat);
 
 	/* Select new window pad */
-		if ((stat = R_pad_select(name)))
-			return(stat) ;
-		
+	if ((stat = R_pad_select(name)))
+	    return (stat);
+
 	/* Outline new window in highlight color */
-		D_show_window(D_translate_color(DEFAULT_FG_COLOR)) ;
+	D_show_window(D_translate_color(DEFAULT_FG_COLOR));
 
 	/* Tell driver of current window */
-		D_get_screen_window(&t, &b, &l, &r) ;
-		R_set_window(t, b, l, r) ;
-	}
-	else
-	{
+	D_get_screen_window(&t, &b, &l, &r);
+	R_set_window(t, b, l, r);
+    }
+    else {
 	/* Select new window pad */
-		if ((stat = R_pad_select(name)))
-			return(stat) ;
-	}
+	if ((stat = R_pad_select(name)))
+	    return (stat);
+    }
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -223,25 +221,24 @@ int D_set_cur_wind(const char *name )
  *  \return int
  */
 
-int D_get_cur_wind( char *name )
+int D_get_cur_wind(char *name)
 {
-	int count;
-	int stat ;
-	char **list ;
+    int count;
+    int stat;
+    char **list;
 
-	if ((stat = R_pad_select("")))
-		return(stat) ;
+    if ((stat = R_pad_select("")))
+	return (stat);
 
-	if ((stat = R_pad_get_item ("cur_w", &list, &count)))
-	{
-		strcpy(name, "") ;
-		return(stat) ;
-	}
+    if ((stat = R_pad_get_item("cur_w", &list, &count))) {
+	strcpy(name, "");
+	return (stat);
+    }
 
-	strcpy(name, list[0]) ;
-	R_pad_freelist (list,count) ;
-	R_pad_select(name) ;
-	return(0) ;
+    strcpy(name, list[0]);
+    R_pad_freelist(list, count);
+    R_pad_select(name);
+    return (0);
 }
 
 
@@ -258,27 +255,27 @@ int D_get_cur_wind( char *name )
  *  \return int
  */
 
-int D_show_window( int color )
+int D_show_window(int color)
 {
-	int t, b, l, r ;
-	int stat ;
+    int t, b, l, r;
+    int stat;
 
-	if ((stat = D_get_screen_window(&t, &b, &l, &r)))
-		return(stat) ;
+    if ((stat = D_get_screen_window(&t, &b, &l, &r)))
+	return (stat);
 
-	R_set_window(t-1, b+1, l-1, r+1) ;
+    R_set_window(t - 1, b + 1, l - 1, r + 1);
 
-	R_standard_color(color) ;
-	R_move_abs(l-1, b) ;
-	R_cont_abs(l-1, t-1) ;
-	R_cont_abs(r, t-1) ;
-	R_cont_abs(r, b) ;
-	R_cont_abs(l-1, b) ;
-	R_flush() ;
+    R_standard_color(color);
+    R_move_abs(l - 1, b);
+    R_cont_abs(l - 1, t - 1);
+    R_cont_abs(r, t - 1);
+    R_cont_abs(r, b);
+    R_cont_abs(l - 1, b);
+    R_flush();
 
-	R_set_window(t, b, l, r) ;
+    R_set_window(t, b, l, r);
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -295,20 +292,20 @@ int D_show_window( int color )
  *  \return int
  */
 
-int D_get_screen_window(int *t,int *b,int *l,int *r)
+int D_get_screen_window(int *t, int *b, int *l, int *r)
 {
-	int stat ;
-	int count ;
-	char **list ;
+    int stat;
+    int count;
+    char **list;
 
-	if ((stat = R_pad_get_item ("d_win", &list, &count)))
-		return(stat) ;
+    if ((stat = R_pad_get_item("d_win", &list, &count)))
+	return (stat);
 
-	sscanf (list[0], "%d %d %d %d", t, b, l, r) ;
+    sscanf(list[0], "%d %d %d %d", t, b, l, r);
 
-	R_pad_freelist (list,count) ;
+    R_pad_freelist(list, count);
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -326,52 +323,51 @@ int D_get_screen_window(int *t,int *b,int *l,int *r)
  *  \return int
  */
 
-int D_check_map_window(struct Cell_head *wind )
+int D_check_map_window(struct Cell_head *wind)
 {
-	char buff[256] ;
-	char ebuf[64], nbuf[64], sbuf[64], wbuf[64];
-	int num ;
-	int count ;
-	char **list ;
-	char *err;
+    char buff[256];
+    char ebuf[64], nbuf[64], sbuf[64], wbuf[64];
+    int num;
+    int count;
+    char **list;
+    char *err;
 
-	if (0 != R_pad_get_item ("m_win", &list, &count))
-	{
-		G_format_easting (wind->east, ebuf, wind->proj);
-		G_format_easting (wind->west, wbuf, wind->proj);
-		G_format_northing (wind->north, nbuf, wind->proj);
-		G_format_northing (wind->south, sbuf, wind->proj);
-		sprintf (buff, "%d %d %s %s %s %s %d %d",
-			wind->proj, wind->zone,
-			ebuf, wbuf,
-			nbuf, sbuf,
-			wind->rows, wind->cols) ;
-		if(R_pad_set_item ("m_win", buff))
-			return(-1) ;
-		return(0) ;
-	}
-	else
-	{
-		num = sscanf (list[0], "%d %d %s %s %s %s %d %d",
-			&wind->proj, &wind->zone,
-			ebuf, wbuf,
-			nbuf, sbuf,
-			&wind->rows, &wind->cols);
+    if (0 != R_pad_get_item("m_win", &list, &count)) {
+	G_format_easting(wind->east, ebuf, wind->proj);
+	G_format_easting(wind->west, wbuf, wind->proj);
+	G_format_northing(wind->north, nbuf, wind->proj);
+	G_format_northing(wind->south, sbuf, wind->proj);
+	sprintf(buff, "%d %d %s %s %s %s %d %d",
+		wind->proj, wind->zone,
+		ebuf, wbuf, nbuf, sbuf, wind->rows, wind->cols);
+	if (R_pad_set_item("m_win", buff))
+	    return (-1);
+	return (0);
+    }
+    else {
+	num = sscanf(list[0], "%d %d %s %s %s %s %d %d",
+		     &wind->proj, &wind->zone,
+		     ebuf, wbuf, nbuf, sbuf, &wind->rows, &wind->cols);
 
-		R_pad_freelist (list,count) ;
+	R_pad_freelist(list, count);
 
-		if (num != 8) return -2;
+	if (num != 8)
+	    return -2;
 
-		if (!G_scan_easting(ebuf, &wind->east, wind->proj)) return -2;
-		if (!G_scan_easting(wbuf, &wind->west, wind->proj)) return -2;
-		if (!G_scan_northing(nbuf, &wind->north, wind->proj)) return -2;
-		if (!G_scan_northing(sbuf, &wind->south, wind->proj)) return -2;
+	if (!G_scan_easting(ebuf, &wind->east, wind->proj))
+	    return -2;
+	if (!G_scan_easting(wbuf, &wind->west, wind->proj))
+	    return -2;
+	if (!G_scan_northing(nbuf, &wind->north, wind->proj))
+	    return -2;
+	if (!G_scan_northing(sbuf, &wind->south, wind->proj))
+	    return -2;
 
-		if ((err = G_adjust_Cell_head(wind, 1, 1)))
-		    return -2;
+	if ((err = G_adjust_Cell_head(wind, 1, 1)))
+	    return -2;
 
-		return 0;
-	}
+	return 0;
+    }
 }
 
 
@@ -388,21 +384,21 @@ int D_check_map_window(struct Cell_head *wind )
  *  \return int
  */
 
-int D_reset_screen_window(int t,int b,int l,int r)
+int D_reset_screen_window(int t, int b, int l, int r)
 {
-	int stat;
-	char buff[256];
+    int stat;
+    char buff[256];
 
-	D_show_window(D_translate_color(DEFAULT_BG_COLOR)) ;
+    D_show_window(D_translate_color(DEFAULT_BG_COLOR));
 
-	sprintf (buff, "%d %d %d %d", t, b, l, r) ;
-	R_pad_delete_item("d_win") ;
-	if ((stat = R_pad_set_item("d_win", buff)))
-		return(stat) ;
+    sprintf(buff, "%d %d %d %d", t, b, l, r);
+    R_pad_delete_item("d_win");
+    if ((stat = R_pad_set_item("d_win", buff)))
+	return (stat);
 
-	D_show_window(D_translate_color(DEFAULT_FG_COLOR)) ;
+    D_show_window(D_translate_color(DEFAULT_FG_COLOR));
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -419,34 +415,33 @@ int D_reset_screen_window(int t,int b,int l,int r)
 
 int D_timestamp(void)
 {
-	char buff[128] ;
-	int stat ;
-	int count ;
-	char **list ;
-	char cur_pad[64] ;
-	int cur_time ;
+    char buff[128];
+    int stat;
+    int count;
+    char **list;
+    char cur_pad[64];
+    int cur_time;
 
-	R_pad_current(cur_pad) ;
+    R_pad_current(cur_pad);
 
-	R_pad_select("") ;
-	if ((stat = R_pad_get_item("time", &list, &count)))
-	{
-		R_pad_set_item("time", "1") ;
-		R_pad_select(cur_pad) ;
-		R_pad_set_item("time", "1") ;
-		return(1) ;
-	}
+    R_pad_select("");
+    if ((stat = R_pad_get_item("time", &list, &count))) {
+	R_pad_set_item("time", "1");
+	R_pad_select(cur_pad);
+	R_pad_set_item("time", "1");
+	return (1);
+    }
 
-	sscanf(list[0],"%d",&cur_time) ;
-	sprintf(buff,"%d",cur_time+1) ;
-	R_pad_set_item("time", buff) ;
+    sscanf(list[0], "%d", &cur_time);
+    sprintf(buff, "%d", cur_time + 1);
+    R_pad_set_item("time", buff);
 
-	R_pad_freelist (list,count) ;
+    R_pad_freelist(list, count);
 
-	R_pad_select(cur_pad) ;
+    R_pad_select(cur_pad);
 
-	R_pad_delete_item("time") ;
-	return (R_pad_set_item ("time", buff)) ;
+    R_pad_delete_item("time");
+    return (R_pad_set_item("time", buff));
 }
 
 
@@ -461,9 +456,9 @@ int D_timestamp(void)
 
 void D_remove_window(void)
 {
-	R_pad_delete();
-	R_pad_select("");
-	R_pad_delete_item("cur_w") ;
+    R_pad_delete();
+    R_pad_select("");
+    R_pad_delete_item("cur_w");
 }
 
 /*!
@@ -477,59 +472,58 @@ void D_remove_window(void)
 
 void D_erase_window(void)
 {
-	int t, b, l, r;
+    int t, b, l, r;
 
-	D_get_screen_window(&t, &b, &l, &r);
-	R_box_abs(l, t, r, b);
-	R_flush();
+    D_get_screen_window(&t, &b, &l, &r);
+    R_box_abs(l, t, r, b);
+    R_flush();
 }
 
 void D_erase(const char *color)
 {
-	int t, b, l, r;
-	int colorindex;
+    int t, b, l, r;
+    int colorindex;
 
-	D_get_screen_window(&t, &b, &l, &r);
-	D_clear_window();
+    D_get_screen_window(&t, &b, &l, &r);
+    D_clear_window();
 
-	/* Parse and select background color */
-	colorindex = D_parse_color (color, 0) ;
-	D_raster_use_color(colorindex);
+    /* Parse and select background color */
+    colorindex = D_parse_color(color, 0);
+    D_raster_use_color(colorindex);
 
-	/* Do the plotting */
-	R_box_abs(l, t, r, b);
+    /* Do the plotting */
+    R_box_abs(l, t, r, b);
 
-	/* Add erase item to the pad */
-	D_set_erase_color(color);
+    /* Add erase item to the pad */
+    D_set_erase_color(color);
 }
 
 void D_remove_windows(void)
 {
-	char **pads;
-	int npads;
-	int i;
+    char **pads;
+    int npads;
+    int i;
 
-	R_pad_list (&pads, &npads);
+    R_pad_list(&pads, &npads);
 
-	R_pad_select("");
-	R_pad_delete_item("time") ;
-	R_pad_delete_item("cur_w") ;
+    R_pad_select("");
+    R_pad_delete_item("time");
+    R_pad_delete_item("cur_w");
 
-	for (i = 0; i < npads; i++)
-	{
-		R_pad_select(pads[i]);
-		R_pad_delete();
-	}
+    for (i = 0; i < npads; i++) {
+	R_pad_select(pads[i]);
+	R_pad_delete();
+    }
 }
 
 void D_full_screen(void)
 {
-	D_remove_windows();
+    D_remove_windows();
 
-	D_new_window_percent("full_screen", 0.0, 100.0, 0.0, 100.0);
-	if (D_set_cur_wind("full_screen") == 0)
-		D_timestamp();
+    D_new_window_percent("full_screen", 0.0, 100.0, 0.0, 100.0);
+    if (D_set_cur_wind("full_screen") == 0)
+	D_timestamp();
 
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR)) ;
-	R_erase() ;
+    R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+    R_erase();
 }

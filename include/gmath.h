@@ -1,3 +1,4 @@
+
 /******************************************************************************
  * gmath.h
  * Top level header file for gmath units
@@ -32,30 +33,39 @@
 /* fft.c */
 int fft(int, double *[2], int, int, int);
 int fft2(int, double (*)[2], int, int, int);
+
 /* gauss.c */
 double G_math_rand_gauss(int, double);
+
 /* max_pow2.c */
-long G_math_max_pow2 (long);
-long G_math_min_pow2 (long);
+long G_math_max_pow2(long);
+long G_math_min_pow2(long);
+
 /* rand1.c */
 float G_math_rand(int);
+
 /* del2g.c */
 int del2g(double *[2], int, double);
+
 /* findzc.c */
-int G_math_findzc(double [], int, double [], double, int);
+int G_math_findzc(double[], int, double[], double, int);
+
 /* getg.c */
 int getg(double, double *[2], int);
+
 /* eigen.c */
 int eigen(double **, double **, double *, int);
 int egvorder2(double *, double **, long);
 int transpose2(double **, long);
+
 /* jacobi.c */
 #define MX 9
-int jacobi(double [MX][MX], long, double [MX], double [MX][MX]);
-int egvorder(double [MX], double [MX][MX], long);
-int transpose(double [MX][MX], long);
+int jacobi(double[MX][MX], long, double[MX], double[MX][MX]);
+int egvorder(double[MX], double[MX][MX], long);
+int transpose(double[MX][MX], long);
+
 /* mult.c */
-int mult (double *v1[2], int size1, double *v2[2], int size2, double *v3[2], int size3);
+int mult(double *v1[2], int size1, double *v2[2], int size2, double *v3[2],
+	 int size3);
 
 #endif /* GMATH_H_ */
-

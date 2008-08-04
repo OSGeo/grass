@@ -3,16 +3,18 @@
 
 /***************************************************************/
 /*                                                             */
-/*      point.h    in   r.spreadpath                           */  
+/*      point.h    in   r.spreadpath                           */
 /*                                                             */
-/*      This header file defines the point data structure      */  
+/*      This header file defines the point data structure      */
 /*      and variables related to this structure.               */
 /*                                                             */
+
 /***************************************************************/
 
-struct point{
-    	int row, col, backrow, backcol;
-    	struct point  *next;
+struct point
+{
+    int row, col, backrow, backcol;
+    struct point *next;
 };
 
 #define POINT           struct point
@@ -29,4 +31,3 @@ struct point{
 #define NEXT_START_PT   PRESENT_PT->next
 
 #endif
-

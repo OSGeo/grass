@@ -10,99 +10,101 @@
 /*---------------------------------------------------------------------------*/
 
 static int
-G3d_tile2xdrTile  (G3D_Map *map, const void *tile, int rows, int cols, int depths, int xRedundant, int yRedundant, int zRedundant, int nofNum, int type)
-
+G3d_tile2xdrTile(G3D_Map * map, const void *tile, int rows, int cols,
+		 int depths, int xRedundant, int yRedundant, int zRedundant,
+		 int nofNum, int type)
 {
-  int y, z;
+    int y, z;
 
-  if (! G3d_initCopyToXdr (map, type)) {
-    G3d_error ("G3d_tile2xdrTile: error in G3d_initCopyToXdr");
-    return 0;
-  }
-    
-
-  if (nofNum == map->tileSize) {
-    if (! G3d_copyToXdr (tile, map->tileSize)) {
-      G3d_error ("G3d_tile2xdrTile: error in G3d_copyToXdr");
-      return 0;
-    }
-    return 1;
-  }
-
-  if (xRedundant) {
-    for (z = 0; z < depths; z++) {
-      for (y = 0; y < rows; y++) {
-	if (! G3d_copyToXdr (tile, cols)) {
-	  G3d_error ("G3d_tile2xdrTile: error in G3d_copyToXdr");
-	  return 0;
-	}
-	tile = G_incr_void_ptr(tile, map->tileX * G3d_length (type));
-      }
-      if (yRedundant) 
-	tile = G_incr_void_ptr(tile, map->tileX * yRedundant * G3d_length (type));
-    }
-    return 1;
-  }
-
-  if (yRedundant) {
-    for (z = 0; z < depths; z++) {
-      if (! G3d_copyToXdr (tile, map->tileX * rows)) {
-	G3d_error ("G3d_tile2xdrTile: error in G3d_copyToXdr");
+    if (!G3d_initCopyToXdr(map, type)) {
+	G3d_error("G3d_tile2xdrTile: error in G3d_initCopyToXdr");
 	return 0;
-      }
-      tile = G_incr_void_ptr(tile, map->tileXY * G3d_length (type));
+    }
+
+
+    if (nofNum == map->tileSize) {
+	if (!G3d_copyToXdr(tile, map->tileSize)) {
+	    G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
+	    return 0;
+	}
+	return 1;
+    }
+
+    if (xRedundant) {
+	for (z = 0; z < depths; z++) {
+	    for (y = 0; y < rows; y++) {
+		if (!G3d_copyToXdr(tile, cols)) {
+		    G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
+		    return 0;
+		}
+		tile = G_incr_void_ptr(tile, map->tileX * G3d_length(type));
+	    }
+	    if (yRedundant)
+		tile =
+		    G_incr_void_ptr(tile,
+				    map->tileX * yRedundant *
+				    G3d_length(type));
+	}
+	return 1;
+    }
+
+    if (yRedundant) {
+	for (z = 0; z < depths; z++) {
+	    if (!G3d_copyToXdr(tile, map->tileX * rows)) {
+		G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
+		return 0;
+	    }
+	    tile = G_incr_void_ptr(tile, map->tileXY * G3d_length(type));
+	}
+	return 1;
+    }
+
+    if (!G3d_copyToXdr(tile, map->tileXY * depths)) {
+	G3d_error("G3d_tile2xdrTile: error in G3d_copyToXdr");
+	return 0;
     }
     return 1;
-  }
-
-  if (! G3d_copyToXdr (tile, map->tileXY * depths)) {
-    G3d_error ("G3d_tile2xdrTile: error in G3d_copyToXdr");
-    return 0;
-  }
-  return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-static int
-G3d_writeTileUncompressed  (G3D_Map *map, int nofNum)
-
+static int G3d_writeTileUncompressed(G3D_Map * map, int nofNum)
 {
-  if (write (map->data_fd, xdr, map->numLengthExtern * nofNum) != 
-      map->numLengthExtern * nofNum) {
-    G3d_error ("G3d_writeTileUncompressed: can't write file.");
-    return 0;
-  }
+    if (write(map->data_fd, xdr, map->numLengthExtern * nofNum) !=
+	map->numLengthExtern * nofNum) {
+	G3d_error("G3d_writeTileUncompressed: can't write file.");
+	return 0;
+    }
 
-  return 1;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
 
-static int
-G3d_writeTileCompressed  (G3D_Map *map, int nofNum)
-
+static int G3d_writeTileCompressed(G3D_Map * map, int nofNum)
 {
-  if (! G_fpcompress_writeXdrNums (map->data_fd, xdr, nofNum, map->precision, 
+    if (!G_fpcompress_writeXdrNums(map->data_fd, xdr, nofNum, map->precision,
 				   tmpCompress, map->type == FCELL_TYPE,
 				   map->useRle, map->useLzw)) {
-    G3d_error (
-	       "G3d_writeTileCompressed: error in G_fpcompress_writeXdrNums");
-    return 0;
-  }
+	G3d_error
+	    ("G3d_writeTileCompressed: error in G_fpcompress_writeXdrNums");
+	return 0;
+    }
 
-  return 1;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
-/*---------------------------------------------------------------------------*/
-
-                       /* EXPORTED FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
+
+		       /* EXPORTED FUNCTIONS */
+
 /*---------------------------------------------------------------------------*/
 
- 
+/*---------------------------------------------------------------------------*/
+
+
 /*!
  * \brief 
  *
@@ -123,56 +125,56 @@ G3d_writeTileCompressed  (G3D_Map *map, int nofNum)
  *          0 ... otherwise.
  */
 
-int
-G3d_writeTile  (G3D_Map *map, int tileIndex, const void *tile, int type)
-
+int G3d_writeTile(G3D_Map * map, int tileIndex, const void *tile, int type)
 {
-  int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
+    int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
 
-  /* valid tileIndex ? */
-  if ((tileIndex >= map->nTiles) || (tileIndex < 0))
-    G3d_fatalError ("G3d_writeTile: tileIndex out of range");
+    /* valid tileIndex ? */
+    if ((tileIndex >= map->nTiles) || (tileIndex < 0))
+	G3d_fatalError("G3d_writeTile: tileIndex out of range");
 
-  /* already written ? */
-  if (map->index[tileIndex] != -1) return 2;
+    /* already written ? */
+    if (map->index[tileIndex] != -1)
+	return 2;
 
-  /* save the file position */
-  map->index[tileIndex] = lseek (map->data_fd, (long) 0, SEEK_END);
-  if (map->index[tileIndex] == -1) {
-    G3d_error ("G3d_writeTile: can't position file");
-    return 0;
-  }
+    /* save the file position */
+    map->index[tileIndex] = lseek(map->data_fd, (long)0, SEEK_END);
+    if (map->index[tileIndex] == -1) {
+	G3d_error("G3d_writeTile: can't position file");
+	return 0;
+    }
 
-  nofNum = G3d_computeClippedTileDimensions (map, tileIndex, 
-					     &rows, &cols, &depths,
-					     &xRedundant, &yRedundant, 
-					     &zRedundant);
+    nofNum = G3d_computeClippedTileDimensions(map, tileIndex,
+					      &rows, &cols, &depths,
+					      &xRedundant, &yRedundant,
+					      &zRedundant);
 
-  G3d_range_updateFromTile (map, tile, rows, cols, depths,
-			    xRedundant, yRedundant, zRedundant, nofNum, type);
+    G3d_range_updateFromTile(map, tile, rows, cols, depths,
+			     xRedundant, yRedundant, zRedundant, nofNum,
+			     type);
 
-  if (! G3d_tile2xdrTile (map, tile, rows, cols, depths,
+    if (!G3d_tile2xdrTile(map, tile, rows, cols, depths,
 			  xRedundant, yRedundant, zRedundant, nofNum, type)) {
-    G3d_error ("G3d_writeTileCompressed: error in G3d_tile2xdrTile");
-    return 0;
-  }
-
-  if (map->compression == G3D_NO_COMPRESSION) {
-    if (! G3d_writeTileUncompressed (map, nofNum)) {
-      G3d_error ("G3d_writeTile: error in G3d_writeTileUncompressed");
-      return 0;
-    }
-  } else
-    if (! G3d_writeTileCompressed (map, nofNum)) {
-      G3d_error ("G3d_writeTile: error in G3d_writeTileCompressed");
-      return 0;
+	G3d_error("G3d_writeTileCompressed: error in G3d_tile2xdrTile");
+	return 0;
     }
 
-  /* compute the length */
-  map->tileLength[tileIndex] = lseek (map->data_fd, (long) 0, SEEK_END) -
-                               map->index[tileIndex];
+    if (map->compression == G3D_NO_COMPRESSION) {
+	if (!G3d_writeTileUncompressed(map, nofNum)) {
+	    G3d_error("G3d_writeTile: error in G3d_writeTileUncompressed");
+	    return 0;
+	}
+    }
+    else if (!G3d_writeTileCompressed(map, nofNum)) {
+	G3d_error("G3d_writeTile: error in G3d_writeTileCompressed");
+	return 0;
+    }
 
-  return 1;
+    /* compute the length */
+    map->tileLength[tileIndex] = lseek(map->data_fd, (long)0, SEEK_END) -
+	map->index[tileIndex];
+
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -189,16 +191,15 @@ G3d_writeTile  (G3D_Map *map, int tileIndex, const void *tile, int type)
  *  \return int
  */
 
-int
-G3d_writeTileFloat  (G3D_Map *map, int tileIndex, const void *tile)
-
+int G3d_writeTileFloat(G3D_Map * map, int tileIndex, const void *tile)
 {
-  int status;
-  
-  if ((status = G3d_writeTile (map, tileIndex, tile, FCELL_TYPE))) return status;
+    int status;
 
-  G3d_error ("G3d_writeTileFloat: error in G3d_writeTile");
-  return 0;
+    if ((status = G3d_writeTile(map, tileIndex, tile, FCELL_TYPE)))
+	return status;
+
+    G3d_error("G3d_writeTileFloat: error in G3d_writeTile");
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -215,21 +216,20 @@ G3d_writeTileFloat  (G3D_Map *map, int tileIndex, const void *tile)
  *  \return int
  */
 
-int
-G3d_writeTileDouble  (G3D_Map *map, int tileIndex, const void *tile)
-
+int G3d_writeTileDouble(G3D_Map * map, int tileIndex, const void *tile)
 {
-  int status;
+    int status;
 
-  if ((status = G3d_writeTile (map, tileIndex, tile, DCELL_TYPE))) return status;
+    if ((status = G3d_writeTile(map, tileIndex, tile, DCELL_TYPE)))
+	return status;
 
-  G3d_error ("G3d_writeTileDouble: error in G3d_writeTile");
-  return 0;
+    G3d_error("G3d_writeTileDouble: error in G3d_writeTile");
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/
 
-                      /* CACHE-MODE-ONLY FUNCTIONS */
+		      /* CACHE-MODE-ONLY FUNCTIONS */
 
 /*---------------------------------------------------------------------------*/
 
@@ -251,29 +251,27 @@ G3d_writeTileDouble  (G3D_Map *map, int tileIndex, const void *tile)
  *          0 ... otherwise.
  */
 
-int
-G3d_flushTile  (G3D_Map *map, int tileIndex)
-
+int G3d_flushTile(G3D_Map * map, int tileIndex)
 {
-  const void *tile;
+    const void *tile;
 
-  tile = G3d_getTilePtr (map, tileIndex);
-  if (tile == NULL) {
-    G3d_error ("G3d_flushTile: error in G3d_getTilePtr");
-    return 0;
-  }
+    tile = G3d_getTilePtr(map, tileIndex);
+    if (tile == NULL) {
+	G3d_error("G3d_flushTile: error in G3d_getTilePtr");
+	return 0;
+    }
 
-  if (! G3d_writeTile (map, tileIndex, tile, map->typeIntern)) {
-    G3d_error ("G3d_flushTile: error in G3d_writeTile");
-    return 0;
-  }
+    if (!G3d_writeTile(map, tileIndex, tile, map->typeIntern)) {
+	G3d_error("G3d_flushTile: error in G3d_writeTile");
+	return 0;
+    }
 
-  if (! G3d__removeTile (map, tileIndex)) {
-    G3d_error ("G3d_flushTile: error in G3d__removeTile");
-    return 0;
-  }
+    if (!G3d__removeTile(map, tileIndex)) {
+	G3d_error("G3d_flushTile: error in G3d__removeTile");
+	return 0;
+    }
 
-  return 1;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -305,23 +303,24 @@ G3d_flushTile  (G3D_Map *map, int tileIndex)
  */
 
 int
-G3d_flushTileCube  (G3D_Map *map, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax)
-
+G3d_flushTileCube(G3D_Map * map, int xMin, int yMin, int zMin, int xMax,
+		  int yMax, int zMax)
 {
-  int x, y, z;
+    int x, y, z;
 
-  if (! map->useCache) 
-    G3d_fatalError ("G3d_flushTileCube: function invalid in non-cache mode");
+    if (!map->useCache)
+	G3d_fatalError
+	    ("G3d_flushTileCube: function invalid in non-cache mode");
 
-  for (x = xMin; x <= xMax; x++)
-    for (y = yMin; y <= yMax; y++)
-      for (z = zMin; z <= zMax; z++) 
-	if (! G3d_flushTile (map, G3d_tile2tileIndex (map, x, y, z))) {
-	  G3d_error ("G3d_flushTileCube: error in G3d_flushTile");
-	  return 0;
-	}
+    for (x = xMin; x <= xMax; x++)
+	for (y = yMin; y <= yMax; y++)
+	    for (z = zMin; z <= zMax; z++)
+		if (!G3d_flushTile(map, G3d_tile2tileIndex(map, x, y, z))) {
+		    G3d_error("G3d_flushTileCube: error in G3d_flushTile");
+		    return 0;
+		}
 
-  return 1;
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -350,70 +349,73 @@ G3d_flushTileCube  (G3D_Map *map, int xMin, int yMin, int zMin, int xMax, int yM
  */
 
 int
-G3d_flushTilesInCube  (G3D_Map *map, int xMin, int yMin, int zMin, int xMax, int yMax, int zMax)
-
+G3d_flushTilesInCube(G3D_Map * map, int xMin, int yMin, int zMin, int xMax,
+		     int yMax, int zMax)
 {
-  int xTileMin, yTileMin, zTileMin, xTileMax, yTileMax, zTileMax;
-  int xOffs, yOffs, zOffs;
-  int regionMaxX, regionMaxY, regionMaxZ;
+    int xTileMin, yTileMin, zTileMin, xTileMax, yTileMax, zTileMax;
+    int xOffs, yOffs, zOffs;
+    int regionMaxX, regionMaxY, regionMaxZ;
 
-  if (! map->useCache) 
-    G3d_fatalError ("G3d_flushTilesInCube: function invalid in non-cache mode");
-/*AV*/
-/*BEGIN OF ORIGINAL CODE */
-/*
- *  G3d_getCoordsMap (map, &regionMaxX, &regionMaxY, &regionMaxZ);
-*/
+    if (!map->useCache)
+	G3d_fatalError
+	    ("G3d_flushTilesInCube: function invalid in non-cache mode");
+     /*AV*/
+	/*BEGIN OF ORIGINAL CODE */
+	/*
+	 *  G3d_getCoordsMap (map, &regionMaxX, &regionMaxY, &regionMaxZ);
+	 */
+	 /*AV*/
+	/* BEGIN OF MY CODE */
+	G3d_getCoordsMap(map, &regionMaxY, &regionMaxX, &regionMaxZ);
+    /* END OF MY CODE */
 
-/*AV*/
-/* BEGIN OF MY CODE */
-  G3d_getCoordsMap (map, &regionMaxY, &regionMaxX, &regionMaxZ);
-/* END OF MY CODE */
+    if ((xMin < 0) && (xMax < 0))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
+    if ((xMin >= regionMaxX) && (xMax >= regionMaxX))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
 
-  if ((xMin < 0) && (xMax < 0))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
-  if ((xMin >= regionMaxX) && (xMax >= regionMaxX))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
+    xMin = MIN(MAX(0, xMin), regionMaxX - 1);
 
-  xMin = MIN (MAX (0, xMin), regionMaxX - 1);
+    if ((yMin < 0) && (yMax < 0))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
+    if ((yMin >= regionMaxY) && (yMax >= regionMaxY))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
 
-  if ((yMin < 0) && (yMax < 0))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
-  if ((yMin >= regionMaxY) && (yMax >= regionMaxY))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
+    yMin = MIN(MAX(0, yMin), regionMaxY - 1);
 
-  yMin = MIN (MAX (0, yMin), regionMaxY - 1);
+    if ((zMin < 0) && (zMax < 0))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
+    if ((zMin >= regionMaxZ) && (zMax >= regionMaxZ))
+	G3d_fatalError("G3d_flushTilesInCube: coordinate out of Range");
 
-  if ((zMin < 0) && (zMax < 0))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
-  if ((zMin >= regionMaxZ) && (zMax >= regionMaxZ))
-    G3d_fatalError ("G3d_flushTilesInCube: coordinate out of Range");
+    zMin = MIN(MAX(0, zMin), regionMaxZ - 1);
 
-  zMin = MIN (MAX (0, zMin), regionMaxZ - 1);
+    G3d_coord2tileCoord(map, xMin, yMin, zMin,
+			&xTileMin, &yTileMin, &zTileMin,
+			&xOffs, &yOffs, &zOffs);
 
-  G3d_coord2tileCoord (map, xMin, yMin, zMin, 
-		       &xTileMin, &yTileMin, &zTileMin, 
-		       &xOffs, &yOffs, &zOffs);
-  
-  if (xOffs != 0) xTileMin++;
-  if (yOffs != 0) yTileMin++;
-  if (zOffs != 0) zTileMin++;
-  
-  G3d_coord2tileCoord (map, xMax + 1, yMax + 1, zMax + 1, 
-		       &xTileMax, &yTileMax, &zTileMax, 
-		       &xOffs, &yOffs, &zOffs);
-  
-  xTileMax--;
-  yTileMax--;
-  zTileMax--;
+    if (xOffs != 0)
+	xTileMin++;
+    if (yOffs != 0)
+	yTileMin++;
+    if (zOffs != 0)
+	zTileMin++;
 
-  if (! G3d_flushTileCube (map, xTileMin, yTileMin, zTileMin, 
+    G3d_coord2tileCoord(map, xMax + 1, yMax + 1, zMax + 1,
+			&xTileMax, &yTileMax, &zTileMax,
+			&xOffs, &yOffs, &zOffs);
+
+    xTileMax--;
+    yTileMax--;
+    zTileMax--;
+
+    if (!G3d_flushTileCube(map, xTileMin, yTileMin, zTileMin,
 			   xTileMax, yTileMax, zTileMax)) {
-    G3d_error ("G3d_flushTilesInCube: error in G3d_flushTileCube");
-    return 0;
-  }
+	G3d_error("G3d_flushTilesInCube: error in G3d_flushTileCube");
+	return 0;
+    }
 
-  return 1;
+    return 1;
 }
 
 #undef MIN
@@ -435,8 +437,7 @@ G3d_flushTilesInCube  (G3D_Map *map, int xMin, int yMin, int zMin, int xMax, int
  *  \return int
  */
 
-int 
-G3d_putDouble ();
+int G3d_putDouble();
 
 
 /*!
@@ -452,30 +453,28 @@ G3d_putDouble ();
  *  \return int
  */
 
-int
-G3d_putFloat (G3D_Map *map, int x, int y, int z, float value)
-
+int G3d_putFloat(G3D_Map * map, int x, int y, int z, float value)
 {
-  int tileIndex, offs;
-  float *tile;
+    int tileIndex, offs;
+    float *tile;
 
-  if (map->typeIntern == DCELL_TYPE) {
-    if (! G3d_putDouble (map, x, y, z, (double) value)) {
-      G3d_error ("G3d_putFloat: error in G3d_putDouble");
-      return 0;
+    if (map->typeIntern == DCELL_TYPE) {
+	if (!G3d_putDouble(map, x, y, z, (double)value)) {
+	    G3d_error("G3d_putFloat: error in G3d_putDouble");
+	    return 0;
+	}
+	return 1;
     }
+
+    G3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
+    tile = (float *)G3d_getTilePtr(map, tileIndex);
+    if (tile == NULL) {
+	G3d_error("G3d_putFloat: error in G3d_getTilePtr");
+	return 0;
+    }
+
+    tile[offs] = value;
     return 1;
-  }
-
-  G3d_coord2tileIndex (map, x, y, z, &tileIndex, &offs);
-  tile = (float *) G3d_getTilePtr (map, tileIndex);
-  if (tile == NULL) {
-    G3d_error ("G3d_putFloat: error in G3d_getTilePtr");
-    return 0;
-  }
-
-  tile[offs] = value;
-  return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -494,34 +493,32 @@ G3d_putFloat (G3D_Map *map, int x, int y, int z, float value)
  *  \return int
  */
 
-int
-G3d_putDouble  (G3D_Map *map, int x, int y, int z, double value)
-
+int G3d_putDouble(G3D_Map * map, int x, int y, int z, double value)
 {
-  int tileIndex, offs;
-  double *tile;
+    int tileIndex, offs;
+    double *tile;
 
-  if (map->typeIntern == FCELL_TYPE) {
-    if (! G3d_putFloat (map, x, y, z, (float) value)) {
-      G3d_error ("G3d_putDouble: error in G3d_putFloat");
-      return 0;
+    if (map->typeIntern == FCELL_TYPE) {
+	if (!G3d_putFloat(map, x, y, z, (float)value)) {
+	    G3d_error("G3d_putDouble: error in G3d_putFloat");
+	    return 0;
+	}
+	return 1;
     }
+
+    G3d_coord2tileIndex(map, x, y, z, &tileIndex, &offs);
+    tile = (double *)G3d_getTilePtr(map, tileIndex);
+    if (tile == NULL) {
+	G3d_error("G3d_putDouble: error in G3d_getTilePtr");
+	return 0;
+    }
+
+    tile[offs] = value;
     return 1;
-  }
-
-  G3d_coord2tileIndex (map, x, y, z, &tileIndex, &offs);
-  tile = (double *) G3d_getTilePtr (map, tileIndex);
-  if (tile == NULL) {
-    G3d_error ("G3d_putDouble: error in G3d_getTilePtr");
-    return 0;
-  }
-
-  tile[offs] = value;
-  return 1;
 }
 
 /*---------------------------------------------------------------------------*/
- 
+
 /*!
  * \brief 
  *
@@ -540,20 +537,19 @@ G3d_putDouble  (G3D_Map *map, int x, int y, int z, double value)
  */
 
 int
-G3d_putValue  (G3D_Map *map, int x, int y, int z, const void *value, int type)
-
+G3d_putValue(G3D_Map * map, int x, int y, int z, const void *value, int type)
 {
-  if (type == FCELL_TYPE) {
-    if (! G3d_putFloat (map, x, y, z, *((float *) value))) {
-      G3d_error ("G3d_putValue: error in G3d_putFloat");
-      return 0;
+    if (type == FCELL_TYPE) {
+	if (!G3d_putFloat(map, x, y, z, *((float *)value))) {
+	    G3d_error("G3d_putValue: error in G3d_putFloat");
+	    return 0;
+	}
+	return 1;
+    }
+
+    if (!G3d_putDouble(map, x, y, z, *((double *)value))) {
+	G3d_error("G3d_putValue: error in G3d_putDouble");
+	return 0;
     }
     return 1;
-  }
-  
-  if (! G3d_putDouble (map, x, y, z, *((double *) value))) {
-    G3d_error ("G3d_putValue: error in G3d_putDouble");
-    return 0;
-  }
-  return 1;
 }

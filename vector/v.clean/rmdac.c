@@ -14,59 +14,59 @@
  * *               for details.
  * *
  * **************************************************************/
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
-int 
-rmdac ( struct Map_info *Out, struct Map_info *Err )
+int rmdac(struct Map_info *Out, struct Map_info *Err)
 {
-        int    i, type, area, ndupl, nlines;
+    int i, type, area, ndupl, nlines;
 
-	struct line_pnts *Points;
-	struct line_cats *Cats;
+    struct line_pnts *Points;
+    struct line_cats *Cats;
 
-	nlines = Vect_get_num_lines (Out);
+    nlines = Vect_get_num_lines(Out);
 
-	Points = Vect_new_line_struct();
-	Cats = Vect_new_cats_struct();
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
-        G_debug (1, "nlines =  %d", nlines );
+    G_debug(1, "nlines =  %d", nlines);
 
-	ndupl = 0;
-	if (G_verbose() > G_verbose_min())
-	  fprintf (stderr, _("Duplicate area centroids: %5d"), ndupl);
+    ndupl = 0;
+    if (G_verbose() > G_verbose_min())
+	fprintf(stderr, _("Duplicate area centroids: %5d"), ndupl);
 
-	for ( i = 1; i <= nlines; i++ ){ 
-	    if ( !Vect_line_alive ( Out, i ) ) continue;
+    for (i = 1; i <= nlines; i++) {
+	if (!Vect_line_alive(Out, i))
+	    continue;
 
-	    type = Vect_read_line (Out, Points, Cats, i);
-	    if ( !(type & GV_CENTROID) ) continue;
+	type = Vect_read_line(Out, Points, Cats, i);
+	if (!(type & GV_CENTROID))
+	    continue;
 
-	    area = Vect_get_centroid_area ( Out, i );
-            G_debug (3, "  area = %d", area);
-	    
-	    if ( area < 0 ) {
-		Vect_delete_line (Out, i); 
-		ndupl++;
+	area = Vect_get_centroid_area(Out, i);
+	G_debug(3, "  area = %d", area);
 
-		if (G_verbose() > G_verbose_min())
-		  fprintf (stderr, "\r%s: %5d", _("Duplicate area centroids"), ndupl);
+	if (area < 0) {
+	    Vect_delete_line(Out, i);
+	    ndupl++;
 
-		if (Err) {
-		    Vect_write_line(Err, type, Points, Cats);
-		}
+	    if (G_verbose() > G_verbose_min())
+		fprintf(stderr, "\r%s: %5d", _("Duplicate area centroids"),
+			ndupl);
+
+	    if (Err) {
+		Vect_write_line(Err, type, Points, Cats);
 	    }
 	}
+    }
 
-	if (G_verbose() > G_verbose_min())
-	  fprintf (stderr, "\n");
-	
-	Vect_destroy_line_struct(Points);
-	Vect_destroy_cats_struct(Cats);
+    if (G_verbose() > G_verbose_min())
+	fprintf(stderr, "\n");
 
-	return ndupl;
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+
+    return ndupl;
 }
-
-

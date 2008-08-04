@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       execute
@@ -17,11 +18,10 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_execute_immediate (dbString *sql)
-
+int db__driver_execute_immediate(dbString * sql)
 {
     PGresult *res;
-    char     *str;
+    char *str;
 
     init_error();
 
@@ -31,26 +31,26 @@ int db__driver_execute_immediate (dbString *sql)
      * string \' GRASS modules escape ' by another ' and string passed to driver is \''
      * postgres takes \' as ' but second ' remains not escaped, result is error.
      * Because of this, all occurencies of \ in sql are escaped by \ */
-    str = G_str_replace ( db_get_string(sql), "\\", "\\\\" );
+    str = G_str_replace(db_get_string(sql), "\\", "\\\\");
 
-    G_debug ( 3, "Escaped SQL: %s", str );
+    G_debug(3, "Escaped SQL: %s", str);
 
-    res = PQexec(pg_conn, str );
+    res = PQexec(pg_conn, str);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error( "Cannot execute: \n" );
-	append_error( str );
-	append_error( "\n" );
+	append_error("Cannot execute: \n");
+	append_error(str);
+	append_error("\n");
 	append_error(PQerrorMessage(pg_conn));
 	report_error();
 	PQclear(res);
-	if ( str ) 
-	    G_free ( str );
+	if (str)
+	    G_free(str);
 	return DB_FAILED;
     }
-    
-    if ( str ) 
-	G_free ( str );
+
+    if (str)
+	G_free(str);
     PQclear(res);
 
     return DB_OK;
@@ -60,18 +60,18 @@ int db__driver_begin_transaction(void)
 {
     PGresult *res;
 
-    G_debug (2, "pg : BEGIN");
+    G_debug(2, "pg : BEGIN");
 
     init_error();
     res = PQexec(pg_conn, "BEGIN");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error( "Cannot 'BEGIN' transaction");
+	append_error("Cannot 'BEGIN' transaction");
 	report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
-    
+
     PQclear(res);
 
     return DB_OK;
@@ -81,20 +81,19 @@ int db__driver_commit_transaction(void)
 {
     PGresult *res;
 
-    G_debug (2, "pg : COMMIT");
+    G_debug(2, "pg : COMMIT");
 
     init_error();
     res = PQexec(pg_conn, "COMMIT");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	append_error( "Cannot 'COMMIT' transaction" );
+	append_error("Cannot 'COMMIT' transaction");
 	report_error();
 	PQclear(res);
 	return DB_FAILED;
     }
-    
+
     PQclear(res);
 
     return DB_OK;
 }
-

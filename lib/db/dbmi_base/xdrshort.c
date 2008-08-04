@@ -2,11 +2,10 @@
 #include "xdr.h"
 
 
-int
-db__send_short(int n)
+int db__send_short(int n)
 {
     int stat = DB_OK;
-    short h = (short) n;
+    short h = (short)n;
 
     if (!db__send(&h, sizeof(h)))
 	stat = DB_PROTOCOL_ERR;
@@ -17,8 +16,7 @@ db__send_short(int n)
     return stat;
 }
 
-int
-db__recv_short (short *n)
+int db__recv_short(short *n)
 {
     int stat = DB_OK;
 
@@ -31,8 +29,7 @@ db__recv_short (short *n)
     return stat;
 }
 
-int
-db__send_short_array (const short *x, int n)
+int db__send_short_array(const short *x, int n)
 {
     int stat = DB_OK;
 
@@ -50,8 +47,7 @@ db__send_short_array (const short *x, int n)
 
 /* returns an allocated array of ints */
 /* caller is responsible for free() */
-int
-db__recv_short_array (short **x, int *n)
+int db__recv_short_array(short **x, int *n)
 {
     int stat = DB_OK;
     int count = 0;
@@ -62,7 +58,7 @@ db__recv_short_array (short **x, int *n)
 
     *n = count;
 
-    *x = a = (short *) db_calloc(count, sizeof(*a));
+    *x = a = (short *)db_calloc(count, sizeof(*a));
 
     if (!db__recv(a, count * sizeof(*a)))
 	stat = DB_PROTOCOL_ERR;
@@ -72,4 +68,3 @@ db__recv_short_array (short **x, int *n)
 
     return stat;
 }
-

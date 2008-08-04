@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.describe
@@ -20,13 +21,18 @@
 
 /* describe.c */
 int describe(char *, char *, int, char *, int, int, int, int, int);
+
 /* dumplist.c */
-int long_list(struct Cell_stats *, DCELL, DCELL, char *, int, RASTER_MAP_TYPE, int);
-int compact_list(struct Cell_stats *, DCELL, DCELL, char *, int, RASTER_MAP_TYPE, int);
+int long_list(struct Cell_stats *, DCELL, DCELL, char *, int, RASTER_MAP_TYPE,
+	      int);
+int compact_list(struct Cell_stats *, DCELL, DCELL, char *, int,
+		 RASTER_MAP_TYPE, int);
 int compact_range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int);
 int range_list(CELL, CELL, CELL, CELL, CELL, CELL, char *, int);
+
 /* main.c */
 int main(int, char *[]);
+
 /* tree.c */
 int plant_tree(void);
 int add_node_to_tree(register CELL);

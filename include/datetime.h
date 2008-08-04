@@ -12,16 +12,17 @@
 #define DATETIME_MINUTE 5
 #define DATETIME_SECOND 6
 
-typedef struct {
-    int mode; 		/* absolute or relative */
+typedef struct
+{
+    int mode;			/* absolute or relative */
     int from, to;
-    int fracsec;	/* #decimal place in printed seconds */
+    int fracsec;		/* #decimal place in printed seconds */
     int year, month, day;
     int hour, minute;
     double second;
     int positive;
-    int tz;		/* timezone - minutes from UTC */
-} DateTime ;
+    int tz;			/* timezone - minutes from UTC */
+} DateTime;
 
 /* prototype of functions */
 #include <grass/P_datetime.h>

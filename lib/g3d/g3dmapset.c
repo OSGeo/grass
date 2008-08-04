@@ -6,13 +6,10 @@
 
 /*---------------------------------------------------------------------------*/
 
-void
-G3d_makeMapsetMapDirectory  (const char *mapName)
-
+void G3d_makeMapsetMapDirectory(const char *mapName)
 {
-  char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2];
+    char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2];
 
-  sprintf(buf, "%s/%s", G3D_DIRECTORY, mapName);
-  G__make_mapset_element (buf);
+    sprintf(buf, "%s/%s", G3D_DIRECTORY, mapName);
+    G__make_mapset_element(buf);
 }
-

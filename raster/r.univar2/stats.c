@@ -28,7 +28,7 @@ univar_stat *create_univar_stat_struct(int map_type, int size, int n_perc)
     stats->max = 0.0 / 0.0;	/*set to nan as default */
     stats->n_perc = n_perc;
     if (n_perc > 0)
-	stats->perc = (int *) G_malloc (n_perc * sizeof (int));
+	stats->perc = (int *)G_malloc(n_perc * sizeof(int));
     else
 	stats->perc = NULL;
     stats->sum_abs = 0.0;
@@ -42,9 +42,11 @@ univar_stat *create_univar_stat_struct(int map_type, int size, int n_perc)
     /* alloacte memory for extended computation */
     if (param.extended->answer) {
 	if (map_type == DCELL_TYPE)
-	    stats->dcell_array = (DCELL *) G_calloc(stats->size, sizeof(DCELL));
+	    stats->dcell_array =
+		(DCELL *) G_calloc(stats->size, sizeof(DCELL));
 	if (map_type == FCELL_TYPE)
-	    stats->fcell_array = (FCELL *) G_calloc(stats->size, sizeof(FCELL));
+	    stats->fcell_array =
+		(FCELL *) G_calloc(stats->size, sizeof(FCELL));
 	if (map_type == CELL_TYPE)
 	    stats->cell_array = (CELL *) G_calloc(stats->size, sizeof(CELL));
     }
@@ -58,7 +60,7 @@ univar_stat *create_univar_stat_struct(int map_type, int size, int n_perc)
 /* *************************************************************** */
 void free_univar_stat_struct(univar_stat * stats)
 {
-    if (stats->perc) 
+    if (stats->perc)
 	G_free(stats->perc);
     if (stats->dcell_array)
 	G_free(stats->dcell_array);
@@ -80,6 +82,7 @@ int print_stats(univar_stat * stats)
 {
     char sum_str[100];
     double mean, variance, stdev, var_coef;
+
     /*for extendet stats */
     double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
     double median = 0.0;
@@ -134,10 +137,10 @@ int print_stats(univar_stat * stats)
 
     /* TODO: mode, skewness, kurtosis */
     if (param.extended->answer) {
-	qpos_perc = (int *) G_calloc(stats->n_perc, sizeof(int));
-	quartile_perc = (double *) G_calloc(stats->n_perc, sizeof(double));
+	qpos_perc = (int *)G_calloc(stats->n_perc, sizeof(int));
+	quartile_perc = (double *)G_calloc(stats->n_perc, sizeof(double));
 	for (i = 0; i < stats->n_perc; i++) {
-	    qpos_perc[i] = (int) (stats->n * 1e-2 * stats->perc[i] - 0.5);
+	    qpos_perc[i] = (int)(stats->n * 1e-2 * stats->perc[i] - 0.5);
 	}
 	qpos_25 = (int)(stats->n * 0.25 - 0.5);
 	qpos_75 = (int)(stats->n * 0.75 - 0.5);
@@ -155,7 +158,7 @@ int print_stats(univar_stat * stats)
 			     stats->cell_array[stats->n / 2]) / 2.0;
 	    quartile_75 = (double)stats->cell_array[qpos_75];
 	    for (i = 0; i < stats->n_perc; i++) {
-		quartile_perc[i] = (double) stats->cell_array[qpos_perc[i]];
+		quartile_perc[i] = (double)stats->cell_array[qpos_perc[i]];
 	    }
 	    break;
 
@@ -200,7 +203,8 @@ int print_stats(univar_stat * stats)
 	    fprintf(stdout, "median=%g\n", median);
 	    fprintf(stdout, "third_quartile=%g\n", quartile_75);
 	    for (i = 0; i < stats->n_perc; i++) {
-		fprintf(stdout, "percentile_%d=%g\n", stats->perc[i], quartile_perc[i]);
+		fprintf(stdout, "percentile_%d=%g\n", stats->perc[i],
+			quartile_perc[i]);
 	    }
 	}
 	else {
@@ -208,7 +212,8 @@ int print_stats(univar_stat * stats)
 	    if (stats->n % 2)
 		fprintf(stdout, "median (odd number of cells): %g\n", median);
 	    else
-		fprintf(stdout, "median (even number of cells): %g\n", median);
+		fprintf(stdout, "median (even number of cells): %g\n",
+			median);
 	    fprintf(stdout, "3rd quartile: %g\n", quartile_75);
 
 
@@ -227,8 +232,8 @@ int print_stats(univar_stat * stats)
 			    quartile_perc[i]);
 	    }
 	}
-	G_free ((void *) quartile_perc);
-	G_free ((void *) qpos_perc);
+	G_free((void *)quartile_perc);
+	G_free((void *)qpos_perc);
     }
 
     if (!(param.shell_style->answer))

@@ -28,7 +28,8 @@ int do_scalebar(void)
 
     /* get scale size */
     scale_size =
-	METERS_TO_INCHES * distance(PS.w.east, PS.w.west) / scale(PS.scaletext);
+	METERS_TO_INCHES * distance(PS.w.east,
+				    PS.w.west) / scale(PS.scaletext);
 
     /* convert scale size to map inches */
     length = (sb.length / scale_size) *
@@ -76,8 +77,9 @@ int do_scalebar(void)
 	    /* do text */
 	    if (i == 0 || lab == sb.numbers) {
 		sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
-		text_box_path(x1, y2 + margin, CENTER, LOWER, num, sb.fontsize, 0);
-		if(sb.bgcolor) { /* TODO: take bg color, not just [white|none] */
+		text_box_path(x1, y2 + margin, CENTER, LOWER, num,
+			      sb.fontsize, 0);
+		if (sb.bgcolor) {	/* TODO: take bg color, not just [white|none] */
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
 		}
@@ -86,11 +88,13 @@ int do_scalebar(void)
 		lab = 0;
 	    }
 
-	    if ((lab > 0 && i == seg - 1) || (sb.numbers == 1 && i == seg - 1)) {
+	    if ((lab > 0 && i == seg - 1) ||
+		(sb.numbers == 1 && i == seg - 1)) {
 		/* special case for last label */
 		sprintf(num, "%s", nice_number(sb.length));
-		text_box_path(x2, y2 + margin, CENTER, LOWER, num, sb.fontsize, 0);
-		if(sb.bgcolor) {
+		text_box_path(x2, y2 + margin, CENTER, LOWER, num,
+			      sb.fontsize, 0);
+		if (sb.bgcolor) {
 		    set_rgb_color(WHITE);
 		    fprintf(PS.fp, "F ");
 		}
@@ -113,7 +117,7 @@ int do_scalebar(void)
 
 	/* draw label */
 	text_box_path(x1, y1 + margin, CENTER, LOWER, "0", sb.fontsize, 0);
-	if(sb.bgcolor) {
+	if (sb.bgcolor) {
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
 	}
@@ -136,7 +140,7 @@ int do_scalebar(void)
 	/* draw label */
 	sprintf(num, "%s", nice_number(sb.length));
 	text_box_path(x1, y2 + margin, CENTER, LOWER, num, sb.fontsize, 0);
-	if(sb.bgcolor) {
+	if (sb.bgcolor) {
 	    set_rgb_color(WHITE);
 	    fprintf(PS.fp, "F ");
 	}
@@ -159,10 +163,11 @@ int do_scalebar(void)
 	    if (lab == sb.numbers) {
 		sprintf(num, "%s", nice_number((sb.length / sb.segment) * i));
 
-		text_box_path(x1, y3 + margin, CENTER, LOWER, num, sb.fontsize, 0);
-		if(sb.bgcolor) {
-	    	    set_rgb_color(WHITE);
-	    	    fprintf(PS.fp, "F ");
+		text_box_path(x1, y3 + margin, CENTER, LOWER, num,
+			      sb.fontsize, 0);
+		if (sb.bgcolor) {
+		    set_rgb_color(WHITE);
+		    fprintf(PS.fp, "F ");
 		}
 		set_rgb_color(BLACK);
 		fprintf(PS.fp, "TIB\n");

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       d.font
@@ -31,146 +32,139 @@ static int max_fonts;
 static int num_fonts;
 
 static void read_freetype_fonts(int verbose);
-static void print_font_list(FILE *fp, int verbose);
+static void print_font_list(FILE * fp, int verbose);
 
-int main( int argc , char **argv )
+int main(int argc, char **argv)
 {
-	struct GModule *module;
-	struct Option *opt1, *opt2, *opt3;
-	struct Flag *flag1, *flag2;
+    struct GModule *module;
+    struct Option *opt1, *opt2, *opt3;
+    struct Flag *flag1, *flag2;
 
-	G_gisinit(argv[0]);
+    G_gisinit(argv[0]);
 
-	module = G_define_module();
-	module->keywords = _("display");
-	module->description =
-			_("Selects the font in which text will be displayed "
-			"on the user's graphics monitor.");
+    module = G_define_module();
+    module->keywords = _("display");
+    module->description =
+	_("Selects the font in which text will be displayed "
+	  "on the user's graphics monitor.");
 
-	opt1 = G_define_option();
-	opt1->key	= "font";
-	opt1->type	= TYPE_STRING;
-	opt1->required	= NO;
-	opt1->answer	= "romans";
-	opt1->description = _("Choose new current font");
+    opt1 = G_define_option();
+    opt1->key = "font";
+    opt1->type = TYPE_STRING;
+    opt1->required = NO;
+    opt1->answer = "romans";
+    opt1->description = _("Choose new current font");
 
-	opt2 = G_define_option();
-	opt2->key	= "path";
-	opt2->type	= TYPE_STRING;
-	opt2->required	= NO;
-	opt2->description = _("Path to Freetype-compatible font including file name");
-	opt2->gisprompt	= "old_file,file,font";
+    opt2 = G_define_option();
+    opt2->key = "path";
+    opt2->type = TYPE_STRING;
+    opt2->required = NO;
+    opt2->description =
+	_("Path to Freetype-compatible font including file name");
+    opt2->gisprompt = "old_file,file,font";
 
-	opt3 = G_define_option();
-	opt3->key	= "charset";
-	opt3->type	= TYPE_STRING;
-	opt3->required	= NO;
-	opt3->answer	= "UTF-8";
-	opt3->description = _("Character encoding");
+    opt3 = G_define_option();
+    opt3->key = "charset";
+    opt3->type = TYPE_STRING;
+    opt3->required = NO;
+    opt3->answer = "UTF-8";
+    opt3->description = _("Character encoding");
 
-	flag1 = G_define_flag();
-	flag1->key	= 'l';
-	flag1->description = _("List fonts");
+    flag1 = G_define_flag();
+    flag1->key = 'l';
+    flag1->description = _("List fonts");
 
-	flag2 = G_define_flag();
-	flag2->key	= 'L';
-	flag2->description = _("List fonts verbosely");
+    flag2 = G_define_flag();
+    flag2->key = 'L';
+    flag2->description = _("List fonts verbosely");
 
-	if (G_parser(argc, argv))
-		exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-	/* load the font */
-	if (R_open_driver() != 0)
-		G_fatal_error (_("No graphics device selected"));
+    /* load the font */
+    if (R_open_driver() != 0)
+	G_fatal_error(_("No graphics device selected"));
 
-	if (flag1->answer) /* List font names */
-	{
-		print_font_list(stdout, 0);
-		R_close_driver();
-		exit(EXIT_SUCCESS);
-	}
-
-	if (flag2->answer) /* List fonts verbosely */
-	{
-		print_font_list(stdout, 1);
-		R_close_driver();
-		exit(EXIT_SUCCESS);
-	}
-
-	if (opt2->answer) /* Full path to freetype font */
-	{
-		struct stat info;
-
-		/* Check a valid filename has been supplied */
-		if(stat(opt2->answer, &info) != 0)
-			G_fatal_error(_("Unable to access font path %s: %s"),
-				      opt2->answer, strerror(errno));
-    
-		if(!S_ISREG(info.st_mode))
-			G_fatal_error(_("Font path %s is not a file"), opt2->answer);
-		else
-			R_font(opt2->answer);
-	}
-	else
-	if (opt1->answer) /* Font name from fontcap */
-	{
-		int i = 0;
-
-		/* Check the fontname given is valid */
-		read_freetype_fonts(0);
-		while (i < num_fonts)
-		{
-			if(strcmp(opt1->answer, fonts[i]) == 0)
-			{
-				R_font(opt1->answer);
-				break;
-			}
-			i++;
-		}
-	        if (i >= num_fonts)
-			G_fatal_error(_("Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"),
-				      opt1->answer);
-	}
-
-	if (opt3->answer) /* Set character encoding */
-		R_charset(opt3->answer);
-
-	/* add this command to the list */
-	D_add_to_list(G_recreate_command());
+    if (flag1->answer) {	/* List font names */
+	print_font_list(stdout, 0);
 	R_close_driver();
-
 	exit(EXIT_SUCCESS);
+    }
+
+    if (flag2->answer) {	/* List fonts verbosely */
+	print_font_list(stdout, 1);
+	R_close_driver();
+	exit(EXIT_SUCCESS);
+    }
+
+    if (opt2->answer) {		/* Full path to freetype font */
+	struct stat info;
+
+	/* Check a valid filename has been supplied */
+	if (stat(opt2->answer, &info) != 0)
+	    G_fatal_error(_("Unable to access font path %s: %s"),
+			  opt2->answer, strerror(errno));
+
+	if (!S_ISREG(info.st_mode))
+	    G_fatal_error(_("Font path %s is not a file"), opt2->answer);
+	else
+	    R_font(opt2->answer);
+    }
+    else if (opt1->answer) {	/* Font name from fontcap */
+	int i = 0;
+
+	/* Check the fontname given is valid */
+	read_freetype_fonts(0);
+	while (i < num_fonts) {
+	    if (strcmp(opt1->answer, fonts[i]) == 0) {
+		R_font(opt1->answer);
+		break;
+	    }
+	    i++;
+	}
+	if (i >= num_fonts)
+	    G_fatal_error(_
+			  ("Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"),
+			  opt1->answer);
+    }
+
+    if (opt3->answer)		/* Set character encoding */
+	R_charset(opt3->answer);
+
+    /* add this command to the list */
+    D_add_to_list(G_recreate_command());
+    R_close_driver();
+
+    exit(EXIT_SUCCESS);
 }
 
 static void read_freetype_fonts(int verbose)
 {
-	char **list;
-	int count;
-	int i;
+    char **list;
+    int count;
+    int i;
 
-	if (verbose)
-		R_font_info(&list, &count);
-	else
-		R_font_list(&list, &count);
+    if (verbose)
+	R_font_info(&list, &count);
+    else
+	R_font_list(&list, &count);
 
-	if (max_fonts < num_fonts + count)
-	{
-		max_fonts = num_fonts + count;
-		fonts = G_realloc(fonts, max_fonts * sizeof(char *));
-	}
+    if (max_fonts < num_fonts + count) {
+	max_fonts = num_fonts + count;
+	fonts = G_realloc(fonts, max_fonts * sizeof(char *));
+    }
 
-	for (i = 0; i < count; i++)
-		fonts[num_fonts++] = list[i];
+    for (i = 0; i < count; i++)
+	fonts[num_fonts++] = list[i];
 }
 
-static void print_font_list(FILE *fp, int verbose)
+static void print_font_list(FILE * fp, int verbose)
 {
-	int i;
+    int i;
 
-	/* find out what fonts we have */
-	read_freetype_fonts(verbose);
+    /* find out what fonts we have */
+    read_freetype_fonts(verbose);
 
-	for (i = 0; i < num_fonts; i++)
-		fprintf(fp, "%s\n", fonts[i]);
+    for (i = 0; i < num_fonts; i++)
+	fprintf(fp, "%s\n", fonts[i]);
 }
-

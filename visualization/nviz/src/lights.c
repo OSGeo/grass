@@ -83,9 +83,9 @@ static int setlgt_ambient(Nv_data * data, Tcl_Interp * interp,	/* Current interp
     if (argc != 5)
 	return (TCL_ERROR);
     num = get_light_num(argv[0]);
-    data->light[num].ar = r = (float) atof(argv[2]);
-    data->light[num].ag = g = (float) atof(argv[3]);
-    data->light[num].ab = b = (float) atof(argv[4]);
+    data->light[num].ar = r = (float)atof(argv[2]);
+    data->light[num].ag = g = (float)atof(argv[3]);
+    data->light[num].ab = b = (float)atof(argv[4]);
     GS_setlight_ambient(num, r, g, b);
     return (TCL_OK);
 }
@@ -132,6 +132,7 @@ static int getlgt_color(Nv_data * data, Tcl_Interp * interp, int argc,	/* Number
     int num;
     char r[32], g[32], b[32];
     char *list[4];
+
     num = get_light_num(argv[0]);
     sprintf(r, "%f", data->light[num].r);
     sprintf(g, "%f", data->light[num].g);
@@ -184,7 +185,7 @@ static int setlgt_bright(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	return (TCL_ERROR);
     num = get_light_num(argv[0]);
 
-    data->light[num].brt = (float) atof(argv[2]);
+    data->light[num].brt = (float)atof(argv[2]);
 
     r = data->light[num].r * data->light[num].brt;
     g = data->light[num].g * data->light[num].brt;
@@ -207,9 +208,9 @@ static int setlgt_color(Nv_data * data, Tcl_Interp * interp,	/* Current interpre
 	return (TCL_ERROR);
     num = get_light_num(argv[0]);
 
-    data->light[num].r = (float) atof(argv[2]);
-    data->light[num].g = (float) atof(argv[3]);
-    data->light[num].b = (float) atof(argv[4]);
+    data->light[num].r = (float)atof(argv[2]);
+    data->light[num].g = (float)atof(argv[3]);
+    data->light[num].b = (float)atof(argv[4]);
 
     r = data->light[num].r * data->light[num].brt;
     g = data->light[num].g * data->light[num].brt;
@@ -233,10 +234,10 @@ static int setlgt_position(Nv_data * data, Tcl_Interp * interp,	/* Current inter
 
     num = get_light_num(argv[0]);
 
-    data->light[num].x = x = (float) atof(argv[2]);
-    data->light[num].y = y = (float) atof(argv[3]);
-    data->light[num].z = z = (float) atof(argv[4]);
-    data->light[num].w = w = (float) atoi(argv[5]);
+    data->light[num].x = x = (float)atof(argv[2]);
+    data->light[num].y = y = (float)atof(argv[3]);
+    data->light[num].z = z = (float)atof(argv[4]);
+    data->light[num].w = w = (float)atoi(argv[5]);
     GS_setlight_position(num, x, y, z, w);
     return (TCL_OK);
 }
@@ -246,6 +247,7 @@ static int switchlight(int argc,	/* Number of arguments. */
     )
 {
     int on, num;
+
     if (argc != 3)
 	return (TCL_ERROR);
     on = (strcmp(argv[0], "off"));
@@ -257,6 +259,7 @@ static int switchlight(int argc,	/* Number of arguments. */
 static int get_light_num(char *lgt)
 {
     int num;
+
     sscanf(lgt, "Nlight%d", &num);
 
     return num;

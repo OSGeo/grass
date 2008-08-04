@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:       d.vect.extract
@@ -25,7 +26,8 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-int extract(struct Map_info *, struct Map_info *, int, const struct color_rgb *, const struct color_rgb *);
+int extract(struct Map_info *, struct Map_info *, int,
+	    const struct color_rgb *, const struct color_rgb *);
 
 int main(int argc, char **argv)
 {
@@ -125,8 +127,8 @@ int main(int argc, char **argv)
 	}
 	Fin = Vect_default_field_info(&Out, Fi->number, Fi->name, tbtype);
 	G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-		Fi->driver, Fi->database, Fi->table, Fin->driver, Fin->database,
-		Fin->table);
+		Fi->driver, Fi->database, Fi->table, Fin->driver,
+		Fin->database, Fin->table);
 	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
 			    Fin->database, Fin->driver);
 

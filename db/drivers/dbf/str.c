@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -20,16 +21,14 @@
 #include "globals.h"
 
 /* save string to value */
-int save_string ( VALUE *val, char *c )
+int save_string(VALUE * val, char *c)
 {
     int len;
 
-    len = strlen ( c ) + 1;
-    val->c = (char *) G_realloc (val->c, len);
+    len = strlen(c) + 1;
+    val->c = (char *)G_realloc(val->c, len);
 
-    strcpy ( val->c, c );
+    strcpy(val->c, c);
 
     return (1);
 }
-    
-

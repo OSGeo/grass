@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       d.frame
@@ -33,8 +34,7 @@
 int check_at(char *);
 int list_all(void);
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char buf[1024];
     int create, select, print, debug, list;
@@ -107,93 +107,87 @@ main (int argc, char *argv[])
 	_("Where to place the frame, values in percent (implies -c)");
     parm.at->checker = check_at;
 
-    if (G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     create = flag.create->answer;
-    print  = flag.print->answer;
+    print = flag.print->answer;
     select = flag.select->answer;
-    debug  = flag.debug->answer;
-    list   = flag.list->answer;
+    debug = flag.debug->answer;
+    list = flag.list->answer;
 
     /* if frame name is given without a control option, treat it as select */
-    if(parm.frame->answer && (!create && !print && !select && !list) )
+    if (parm.frame->answer && (!create && !print && !select && !list))
 	select = TRUE;
 
     /* at= placement implies creation */
     if (parm.at->answer)
 	create = TRUE;
 
-    if (flag.erase->answer)
-    {
+    if (flag.erase->answer) {
 	if (R_open_driver() != 0)
 	    G_fatal_error(_("No graphics device selected"));
 
 	if (!create)
 	    D_full_screen();
-	else
-	{
+	else {
 	    D_remove_windows();
-	    R_standard_color(D_translate_color(DEFAULT_BG_COLOR)) ;
-	    R_erase() ;
+	    R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+	    R_erase();
 	}
 
 	R_close_driver();
     }
 
-    if (create)
-    {
+    if (create) {
 	select = FALSE;
-	sprintf (buf, "%s/etc/frame.create", G_gisbase());
-	if (parm.frame->answer)
-	{
-	    strcat (buf, " frame='");
-	    strcat (buf, parm.frame->answer);
-	    strcat (buf, "'");
+	sprintf(buf, "%s/etc/frame.create", G_gisbase());
+	if (parm.frame->answer) {
+	    strcat(buf, " frame='");
+	    strcat(buf, parm.frame->answer);
+	    strcat(buf, "'");
 	}
-	if (parm.at->answer)
-	{
-	    strcat (buf, " at='");
-	    strcat (buf, parm.at->answer);
-	    strcat (buf, "'");
+	if (parm.at->answer) {
+	    strcat(buf, " at='");
+	    strcat(buf, parm.at->answer);
+	    strcat(buf, "'");
 	}
-	if(system(buf)) exit(EXIT_FAILURE);
+	if (system(buf))
+	    exit(EXIT_FAILURE);
     }
-    if (select)
-    {
-	sprintf (buf, "%s/etc/frame.select", G_gisbase());
-	if (parm.frame->answer)
-	{
-	    strcat (buf, " frame='");
-	    strcat (buf, parm.frame->answer);
-	    strcat (buf, "'");
+    if (select) {
+	sprintf(buf, "%s/etc/frame.select", G_gisbase());
+	if (parm.frame->answer) {
+	    strcat(buf, " frame='");
+	    strcat(buf, parm.frame->answer);
+	    strcat(buf, "'");
 	}
-	if(system(buf)) exit(EXIT_FAILURE);
+	if (system(buf))
+	    exit(EXIT_FAILURE);
     }
 
-    if (debug)
-    {
-	sprintf (buf, "%s/etc/frame.dumper", G_gisbase());
-	if(system (buf)) exit(EXIT_FAILURE);
+    if (debug) {
+	sprintf(buf, "%s/etc/frame.dumper", G_gisbase());
+	if (system(buf))
+	    exit(EXIT_FAILURE);
     }
 
-    if (list)
-    {
-	sprintf (buf, "%s/etc/frame.list", G_gisbase());
-	if(system (buf)) exit(EXIT_FAILURE);
+    if (list) {
+	sprintf(buf, "%s/etc/frame.list", G_gisbase());
+	if (system(buf))
+	    exit(EXIT_FAILURE);
     }
 
-    if (print)
-    {
+    if (print) {
 	if (R_open_driver() != 0)
-	    G_fatal_error (_("No graphics device selected"));
-	D_get_cur_wind(buf) ;
-	D_set_cur_wind(buf) ;
-	R_close_driver() ;
-	fprintf (stdout,"%s\n", buf) ;
+	    G_fatal_error(_("No graphics device selected"));
+	D_get_cur_wind(buf);
+	D_set_cur_wind(buf);
+	R_close_driver();
+	fprintf(stdout, "%s\n", buf);
     }
 
-    if(flag.printall->answer)
+    if (flag.printall->answer)
 	list_all();
 
 
@@ -201,19 +195,18 @@ main (int argc, char *argv[])
 }
 
 
-int 
-check_at (char *s)
+int check_at(char *s)
 {
     float top, bottom, left, right;
 
 
-    if (s == NULL) return 0;
+    if (s == NULL)
+	return 0;
 
-    if(4 != sscanf(s,"%f,%f,%f,%f", &bottom, &top, &left, &right)
-    ||    bottom < 0.0 || top > 100.0 || bottom >= top
-    ||    left < 0.0 || right > 100.0 || left >= right)
-    {
-	fprintf (stderr, "<at=%s> invalid request\n", s);
+    if (4 != sscanf(s, "%f,%f,%f,%f", &bottom, &top, &left, &right)
+	|| bottom < 0.0 || top > 100.0 || bottom >= top
+	|| left < 0.0 || right > 100.0 || left >= right) {
+	fprintf(stderr, "<at=%s> invalid request\n", s);
 	return 1;
     }
     return 0;
@@ -227,12 +220,12 @@ int list_all(void)
     int p;
 
     if (R_open_driver() != 0)
-	G_fatal_error (_("No graphics device selected"));
+	G_fatal_error(_("No graphics device selected"));
 
-    R_pad_list (&pads, &npads);
+    R_pad_list(&pads, &npads);
 
-    for (p = npads-1; p >=0; p--)
-	fprintf (stdout,"%s\n", pads[p]);
+    for (p = npads - 1; p >= 0; p--)
+	fprintf(stdout, "%s\n", pads[p]);
 
     R_close_driver();
 

@@ -181,7 +181,8 @@ int main(int argc, char *argv[])
 	for (i = 0; i < nbreaks + 1; i++)
 	    frequencies[i] = 0;
 
-	ret = class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
+	ret =
+	    class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
 	basic_stats(data, nrec, &stats);
 
 	min = data[0];

@@ -1,3 +1,4 @@
+
 /**
  * \file format.c
  *
@@ -19,8 +20,8 @@
 #include <grass/segment.h>
 
 
-static int _segment_format (int,int,int,int,int,int,int);
-static int write_int(int,int);
+static int _segment_format(int, int, int, int, int, int, int);
+static int write_int(int, int);
 static int zero_fill(int, off_t);
 
 /* fd must be open for write */
@@ -57,9 +58,10 @@ static int zero_fill(int, off_t);
  * \return -3 if illegal parameters are passed
  */
 
-int segment_format (int fd,int nrows,int ncols,int srows,int scols,int len)
+int segment_format(int fd, int nrows, int ncols, int srows, int scols,
+		   int len)
 {
-    return _segment_format (fd, nrows, ncols, srows, scols, len, 1);
+    return _segment_format(fd, nrows, ncols, srows, scols, len, 1);
 }
 
 /**
@@ -96,49 +98,48 @@ int segment_format (int fd,int nrows,int ncols,int srows,int scols,int len)
  * \return -3 if illegal parameters are passed
  */
 
-int segment_format_nofill (int fd, int nrows, int ncols, int srows, int scols, int len)
+int segment_format_nofill(int fd, int nrows, int ncols, int srows, int scols,
+			  int len)
 {
-    return _segment_format (fd, nrows, ncols, srows, scols, len, 0);
+    return _segment_format(fd, nrows, ncols, srows, scols, len, 0);
 }
 
 
-static int _segment_format(
-	int fd,
-	int nrows,int ncols,
-	int srows,int scols,
-	int len,int fill)
+static int _segment_format(int fd,
+			   int nrows, int ncols,
+			   int srows, int scols, int len, int fill)
 {
-    off_t nbytes ;
+    off_t nbytes;
     int spr, size;
 
-    if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0)
-    {
-	G_warning ("segment_format(fd,%d,%d,%d,%d,%d): illegal value(s)",
-	    nrows, ncols, srows, scols, len);
+    if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
+	G_warning("segment_format(fd,%d,%d,%d,%d,%d): illegal value(s)",
+		  nrows, ncols, srows, scols, len);
 	return -3;
     }
 
-    if (lseek (fd, 0L, SEEK_SET) == (off_t)-1)
-    {
-	G_warning ("Segment_format: %s",strerror(errno));
+    if (lseek(fd, 0L, SEEK_SET) == (off_t) - 1) {
+	G_warning("Segment_format: %s", strerror(errno));
 	return -1;
     }
 
-    if (!write_int (fd, nrows) ||  !write_int (fd, ncols)
-    ||  !write_int (fd, srows) ||  !write_int (fd, scols)
-    ||  !write_int (fd, len)) return -1;
+    if (!write_int(fd, nrows) || !write_int(fd, ncols)
+	|| !write_int(fd, srows) || !write_int(fd, scols)
+	|| !write_int(fd, len))
+	return -1;
 
-    if (!fill) return 1;
+    if (!fill)
+	return 1;
 
-    spr = ncols / scols ;
-    if(ncols % scols)
-	spr++ ;
+    spr = ncols / scols;
+    if (ncols % scols)
+	spr++;
 
     size = srows * scols * len;
 
     /* calculate total number of segments */
-    nbytes = spr * ((nrows + srows - 1)/ srows);
-    nbytes *= size ;
+    nbytes = spr * ((nrows + srows - 1) / srows);
+    nbytes *= size;
 
     /* fill segment file with zeros */
     /* NOTE: this could be done faster using lseek() by seeking
@@ -146,22 +147,22 @@ static int _segment_format(
      * provided lseek() on all version of UNIX will create a file
      * with holes that read as zeros.
      */
-    if(zero_fill (fd, nbytes) < 0)
+    if (zero_fill(fd, nbytes) < 0)
 	return -1;
 
     return 1;
 }
 
 
-static int write_int (int fd,int n)
+static int write_int(int fd, int n)
 {
     int x;
     int bytes_wrote;
 
     x = n;
 
-    if((bytes_wrote = write (fd, &x, sizeof(int)) == sizeof(int) ) < 0)
-        G_warning("%s",strerror(errno));
+    if ((bytes_wrote = write(fd, &x, sizeof(int)) == sizeof(int)) < 0)
+	G_warning("%s", strerror(errno));
 
     return bytes_wrote;
 }
@@ -175,39 +176,38 @@ static int zero_fill(int fd, off_t nbytes)
     register int n;
 
     /* zero buf */
-    n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes ;
+    n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
     b = buf;
     while (n-- > 0)
 	*b++ = 0;
 
-    while (nbytes > 0)
-    {
-	n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes ;
-	if(write (fd, buf, n) != n) {
-            G_warning("%s",strerror(errno));
+    while (nbytes > 0) {
+	n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+	if (write(fd, buf, n) != n) {
+	    G_warning("%s", strerror(errno));
 	    return -1;
-        }
+	}
 	nbytes -= n;
     }
     return 1;
 #else
-  /* Using lseek (faster upon initialization).
-     NOTE: This version doesn't allocate disk storage for the file; storage will
-     be allocated dynamically as blocks are actually written. This could 
-     result in zero_fill() succeeding but a subsequent call to write() failing
-     with ENOSPC ("No space left on device").
-   */
+    /* Using lseek (faster upon initialization).
+       NOTE: This version doesn't allocate disk storage for the file; storage will
+       be allocated dynamically as blocks are actually written. This could 
+       result in zero_fill() succeeding but a subsequent call to write() failing
+       with ENOSPC ("No space left on device").
+     */
 
     static const char buf[10];
 
-    G_debug(3,"Using new segmentation code...");
-    if ( lseek(fd,nbytes-1,SEEK_CUR) < 0 ) { 
-            G_warning("%s",strerror(errno));
-	    return -1;
+    G_debug(3, "Using new segmentation code...");
+    if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
+	G_warning("%s", strerror(errno));
+	return -1;
     }
-    if(write (fd,buf, 1) != 1) {
-            G_warning("%s",strerror(errno));
-	    return -1;
+    if (write(fd, buf, 1) != 1) {
+	G_warning("%s", strerror(errno));
+	return -1;
     }
 
     return 1;

@@ -1,3 +1,4 @@
+
 /**
  * \file writ_zeros.c
  *
@@ -25,7 +26,7 @@
  * \return always returns 0
  */
 
-int G_write_zeros (int fd, size_t n)
+int G_write_zeros(int fd, size_t n)
 {
     char zeros[1024];
     char *z;
@@ -44,21 +45,20 @@ int G_write_zeros (int fd, size_t n)
     if (n > sizeof(zeros))
 	i = sizeof(zeros);
     else
-	i = n;	/* this is ok here */
+	i = n;			/* this is ok here */
 
     z = zeros;
     while (i--)
 	*z++ = 0;
 
     /* write n zeros to fd */
-    while (n > 0)
-    {
+    while (n > 0) {
 	if (n > sizeof(zeros))
 	    i = sizeof(zeros);
 	else
-	    i = n;	/* this is ok here */
+	    i = n;		/* this is ok here */
 
-	write (fd, zeros, i);
+	write(fd, zeros, i);
 	n -= i;
     }
 

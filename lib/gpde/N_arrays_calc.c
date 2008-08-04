@@ -48,12 +48,15 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
 #pragma omp single
     {
 	if (source->cols_intern != target->cols_intern)
-	    G_fatal_error("N_copy_array_2d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_copy_array_2d: the arrays are not of equal size");
 
 	if (source->rows_intern != target->rows_intern)
-	    G_fatal_error("N_copy_array_2d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_copy_array_2d: the arrays are not of equal size");
 
-	G_debug(3, "N_copy_array_2d: copy source array to target array size %i",
+	G_debug(3,
+		"N_copy_array_2d: copy source array to target array size %i",
 		source->cols_intern * source->rows_intern);
     }
 
@@ -134,7 +137,7 @@ void N_copy_array_2d(N_array_2d * source, N_array_2d * target)
  * The complete data array inclusively offsets is used for norm calucaltion.
  * Only non-null values are used to calcualte the norm.
  *
- 
+
  * \param a N_array_2d *
  * \param b N_array_2d *
  * \param type the type of the norm -> N_MAXIMUM_NORM, N_EUKLID_NORM
@@ -222,8 +225,10 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
 
     if (withoffset == 1) {
 
-	*min = (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
-	*max = (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
+	*min =
+	    (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
+	*max =
+	    (double)N_get_array_2d_d_value(a, 0 - a->offset, 0 - a->offset);
 
 	for (j = 0 - a->offset; j < a->rows + a->offset; j++) {
 	    for (i = 0 - a->offset; i < a->cols + a->offset; i++) {
@@ -260,7 +265,9 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
 	}
     }
 
-  G_debug(3, "N_calc_array_2d_stats: compute array stats, min %g, max %g, sum %g, nonull %i", *min, *max, *sum, *nonull);
+    G_debug(3,
+	    "N_calc_array_2d_stats: compute array stats, min %g, max %g, sum %g, nonull %i",
+	    *min, *max, *sum, *nonull);
     return;
 }
 
@@ -296,8 +303,8 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
  * \param type  - the type of calculation
  * \return N_array_2d * - the pointer to the result array
  * */
-N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b, N_array_2d * result,
-			    int type)
+N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b,
+			    N_array_2d * result, int type)
 {
     N_array_2d *c;
     int i, j, setnull = 0;
@@ -310,11 +317,14 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b, N_array_2d * result,
     {
 	/*Check the array sizes */
 	if (a->cols_intern != b->cols_intern)
-	    G_fatal_error("N_math_array_2d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_math_array_2d: the arrays are not of equal size");
 	if (a->rows_intern != b->rows_intern)
-	    G_fatal_error("N_math_array_2d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_math_array_2d: the arrays are not of equal size");
 	if (a->offset != b->offset)
-	    G_fatal_error("N_math_array_2d: the arrays have different offsets");
+	    G_fatal_error
+		("N_math_array_2d: the arrays have different offsets");
 
 	G_debug(3, "N_math_array_2d: mathematical calculations, size: %i",
 		a->cols_intern * a->rows_intern);
@@ -324,15 +334,18 @@ N_array_2d *N_math_array_2d(N_array_2d * a, N_array_2d * b, N_array_2d * result,
 	if (c == NULL) {
 	    if (a->type == DCELL_TYPE || b->type == DCELL_TYPE) {
 		c = N_alloc_array_2d(a->cols, a->rows, a->offset, DCELL_TYPE);
-		G_debug(3, "N_math_array_2d: array of type DCELL_TYPE created");
+		G_debug(3,
+			"N_math_array_2d: array of type DCELL_TYPE created");
 	    }
 	    else if (a->type == FCELL_TYPE || b->type == FCELL_TYPE) {
 		c = N_alloc_array_2d(a->cols, a->rows, a->offset, FCELL_TYPE);
-		G_debug(3, "N_math_array_2d: array of type FCELL_TYPE created");
+		G_debug(3,
+			"N_math_array_2d: array of type FCELL_TYPE created");
 	    }
 	    else {
 		c = N_alloc_array_2d(a->cols, a->rows, a->offset, CELL_TYPE);
-		G_debug(3, "N_math_array_2d: array of type CELL_TYPE created");
+		G_debug(3,
+			"N_math_array_2d: array of type CELL_TYPE created");
 	    }
 	}
 	else {
@@ -498,10 +511,12 @@ void N_copy_array_3d(N_array_3d * source, N_array_3d * target)
 
 
     G_debug(3, "N_copy_array_3d: copy source array to target array size %i",
-	    source->cols_intern * source->rows_intern * source->depths_intern);
+	    source->cols_intern * source->rows_intern *
+	    source->depths_intern);
 
     for (i = 0;
-	 i < source->cols_intern * source->rows_intern * source->depths_intern;
+	 i <
+	 source->cols_intern * source->rows_intern * source->depths_intern;
 	 i++) {
 	null = 0;
 	if (source->type == FCELL_TYPE) {
@@ -678,7 +693,9 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
 	}
     }
 
-  G_debug(3, "N_calc_array_3d_stats: compute array stats, min %g, max %g, sum %g, nonull %i", *min, *max, *sum, *nonull);
+    G_debug(3,
+	    "N_calc_array_3d_stats: compute array stats, min %g, max %g, sum %g, nonull %i",
+	    *min, *max, *sum, *nonull);
 
     return;
 }
@@ -717,8 +734,8 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
  * \param type  - the type of calculation
  * \return N_array_3d * - the pointer to the result array
  * */
-N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b, N_array_3d * result,
-			    int type)
+N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b,
+			    N_array_3d * result, int type)
 {
     N_array_3d *c;
     int i, j, k, setnull = 0;
@@ -757,13 +774,17 @@ N_array_3d *N_math_array_3d(N_array_3d * a, N_array_3d * b, N_array_3d * result,
     else {
 	/*Check the array sizes */
 	if (a->cols_intern != c->cols_intern)
-	    G_fatal_error("N_math_array_3d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_math_array_3d: the arrays are not of equal size");
 	if (a->rows_intern != c->rows_intern)
-	    G_fatal_error("N_math_array_3d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_math_array_3d: the arrays are not of equal size");
 	if (a->depths_intern != c->depths_intern)
-	    G_fatal_error("N_math_array_3d: the arrays are not of equal size");
+	    G_fatal_error
+		("N_math_array_3d: the arrays are not of equal size");
 	if (a->offset != c->offset)
-	    G_fatal_error("N_math_array_3d: the arrays have different offsets");
+	    G_fatal_error
+		("N_math_array_3d: the arrays have different offsets");
     }
 
     for (k = 0 - a->offset; k < a->depths + a->offset; k++) {
@@ -834,7 +855,8 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
 	    a->cols_intern * a->rows_intern * a->depths_intern);
 
     if (a->type == FCELL_TYPE)
-	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern; i++) {
+	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
+	     i++) {
 	    if (G3d_isNullValueNum((void *)&(a->fcell_array[i]), FCELL_TYPE)) {
 		a->fcell_array[i] = 0.0;
 		count++;
@@ -842,7 +864,8 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
 	}
 
     if (a->type == DCELL_TYPE)
-	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern; i++) {
+	for (i = 0; i < a->cols_intern * a->rows_intern * a->depths_intern;
+	     i++) {
 	    if (G3d_isNullValueNum((void *)&(a->dcell_array[i]), DCELL_TYPE)) {
 		a->dcell_array[i] = 0.0;
 		count++;
@@ -862,4 +885,3 @@ int N_convert_array_3d_null_to_zero(N_array_3d * a)
 
     return count;
 }
-

@@ -144,9 +144,9 @@ N_solute_transport_data2d *create_solute_transport_data_2d(void)
 		N_put_array_2d_d_value(data->cs, i, j, 1.0);
 	}
     }
-   /*dispersivity length*/
-   data->al = 0.2;
-   data->at = 0.02;
+    /*dispersivity length */
+    data->al = 0.2;
+    data->at = 0.02;
 
 
 
@@ -169,7 +169,7 @@ int test_solute_transport_3d(void)
     N_set_les_callback_3d_func(call, (*N_callback_solute_transport_3d));	/*solute_transport 3d */
 
     data = create_solute_transport_data_3d();
- 
+
     N_calc_solute_transport_disptensor_3d(data);
 
     data->dt = 86400;
@@ -188,20 +188,20 @@ int test_solute_transport_3d(void)
     /*Assemble the matrix */
     /*  
      */
-     /*Jacobi*/ les =
+    /*Jacobi */ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->c_start,
 			  (void *)data, call);
     N_solver_jacobi(les, 100, 1, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-     /*jacobi*/ les =
+    /*jacobi */ les =
 	N_assemble_les_3d(N_NORMAL_LES, geom, data->status, data->c_start,
 			  (void *)data, call);
     N_solver_jacobi(les, 100, 1, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
-   
+
      /*SOR*/ les =
 	N_assemble_les_3d(N_SPARSE_LES, geom, data->status, data->c_start,
 			  (void *)data, call);
@@ -303,26 +303,26 @@ int test_solute_transport_2d(void)
     N_free_gradient_field_2d(field);
 
     N_compute_gradient_field_2d(pot, relax, relax, geom, data->grad);
-    /*The dispersivity tensor*/
+    /*The dispersivity tensor */
     N_calc_solute_transport_disptensor_2d(data);
 
     /*Assemble the matrix */
     /*  
      */
-   /*Jacobi*/ les =
+    /*Jacobi */ les =
 	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->c_start,
 			  (void *)data, call);
     N_solver_jacobi(les, 100, 1, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
 
-     /*jacobi*/ les =
+    /*jacobi */ les =
 	N_assemble_les_2d(N_NORMAL_LES, geom, data->status, data->c_start,
 			  (void *)data, call);
     N_solver_jacobi(les, 100, 1, 0.1e-8);
     N_print_les(les);
     N_free_les(les);
-   
+
      /*SOR*/ les =
 	N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->c_start,
 			  (void *)data, call);

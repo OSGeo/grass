@@ -11,9 +11,11 @@
 #define GLOBAL extern
 #endif
 
-GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps, *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk,*fdwalkers;
-GLOBAL FILE *fdwdepth,*fddetin,*fdtranin,*fdtauin, *fdtc, *fdet, *fdconc, *fdflux,*fderdep;
-GLOBAL FILE *fdsfile,*fw;
+GLOBAL FILE *fdelevin, *fddxin, *fddyin, *fdrain, *fdinfil, *fdtraps,
+    *fdmanin, *fddepth, *fddisch, *fderr, *fdoutwalk, *fdwalkers;
+GLOBAL FILE *fdwdepth, *fddetin, *fdtranin, *fdtauin, *fdtc, *fdet, *fdconc,
+    *fdflux, *fderdep;
+GLOBAL FILE *fdsfile, *fw;
 
 GLOBAL char *elevin;
 GLOBAL char *dxin;
@@ -47,9 +49,11 @@ GLOBAL char *infilval;
 
 GLOBAL struct
 {
-    struct Option *elevin,*dxin,*dyin,*rain,*infil,*traps,*manin,*sfile,*depth,*disch,*err,
-*outwalk,*nwalk,*niter,*outiter,*density,*diffc,*hmax,*halpha,*hbeta,*wdepth,
-*detin,*tranin,*tauin,*tc,*et,*conc,*flux,*erdep,*rainval,*maninval,*infilval;
+    struct Option *elevin, *dxin, *dyin, *rain, *infil, *traps, *manin,
+	*sfile, *depth, *disch, *err, *outwalk, *nwalk, *niter, *outiter,
+	*density, *diffc, *hmax, *halpha, *hbeta, *wdepth, *detin, *tranin,
+	*tauin, *tc, *et, *conc, *flux, *erdep, *rainval, *maninval,
+	*infilval;
 } parm;
 
 
@@ -78,53 +82,53 @@ GLOBAL int npoints;
 GLOBAL int npoints_alloc;
 
 GLOBAL int input_data(void);
-GLOBAL int seeds(long int,long int);
-GLOBAL int seedg(long int,long int);
+GLOBAL int seeds(long int, long int);
+GLOBAL int seedg(long int, long int);
 GLOBAL int grad_check(void);
 GLOBAL void erod(double **);
 GLOBAL void main_loop(void);
-GLOBAL int output_data(int,double);
+GLOBAL int output_data(int, double);
 GLOBAL int output_et(void);
 GLOBAL double ulec(void);
 GLOBAL double gasdev(void);
-GLOBAL double amax1(double,double);
-GLOBAL double amin1(double,double);
-GLOBAL int min(int,int);
-GLOBAL int max(int,int);
+GLOBAL double amax1(double, double);
+GLOBAL double amin1(double, double);
+GLOBAL int min(int, int);
+GLOBAL int max(int, int);
 
 GLOBAL double xmin, ymin, xmax, ymax;
 GLOBAL double mayy, miyy, maxx, mixx;
 GLOBAL int mx, my;
 GLOBAL int mx2, my2;
 
-GLOBAL double bxmi,bymi,bxma,byma,bresx,bresy;
+GLOBAL double bxmi, bymi, bxma, byma, bresx, bresy;
 GLOBAL int maxwab;
-GLOBAL double step,conv;
+GLOBAL double step, conv;
 
 GLOBAL double frac;
 GLOBAL double bxmi, bymi;
 
 GLOBAL float **zz, **cchez;
 GLOBAL double **v1, **v2, **slope;
-GLOBAL double **gama, **gammas,**si,**inf,**sigma;
-GLOBAL float **dc,**tau,**er, **ct, **trap;
-GLOBAL float  **dif;
+GLOBAL double **gama, **gammas, **si, **inf, **sigma;
+GLOBAL float **dc, **tau, **er, **ct, **trap;
+GLOBAL float **dif;
 
-GLOBAL double vavg[MAXW][2], stack[MAXW][3],w[MAXW][3];
+GLOBAL double vavg[MAXW][2], stack[MAXW][3], w[MAXW][3];
 GLOBAL int iflag[MAXW];
 
 GLOBAL double hbeta;
 GLOBAL int ldemo;
-GLOBAL double hhmax, sisum,vmean;
-GLOBAL double infsum,infmean;
+GLOBAL double hhmax, sisum, vmean;
+GLOBAL double infsum, infmean;
 GLOBAL int maxw, maxwa, nwalk;
 GLOBAL double rwalk, bresx, bresy, xrand, yrand;
 GLOBAL double stepx, stepy, xp0, yp0;
-GLOBAL double chmean, si0, deltap, deldif, cch, hhc,halpha;
+GLOBAL double chmean, si0, deltap, deldif, cch, hhc, halpha;
 GLOBAL double eps;
 GLOBAL int maxwab, nstack;
 GLOBAL int iterout, mx2o, my2o;
-GLOBAL int miter,nwalka,lwwfin;
+GLOBAL int miter, nwalka, lwwfin;
 GLOBAL double timec;
 GLOBAL int ts, timesec;
 

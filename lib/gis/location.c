@@ -1,17 +1,17 @@
 /*!
-  \file location.c
-  
-  \brief GIS library - environment routines (location)
-  
-  (C) 2001-2008 by the GRASS Development Team
-  
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Original author CERL
-*/
+   \file location.c
+
+   \brief GIS library - environment routines (location)
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Original author CERL
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -34,16 +34,14 @@
  *  \return char * 
  */
 
-char *
-G_location_path(void)
+char *G_location_path(void)
 {
     char *location;
 
     location = G__location_path();
-    if(access(location,0) != 0) 
-    {
+    if (access(location, 0) != 0) {
 	perror("access");
-	G_fatal_error (_("LOCATION << %s >> not available"), location);
+	G_fatal_error(_("LOCATION << %s >> not available"), location);
     }
 
     return location;
@@ -60,10 +58,9 @@ G_location_path(void)
  *  \param
  *  \return char* tolocation name
  */
-char *
-G_location(void)
+char *G_location(void)
 {
-    return G_getenv ("LOCATION_NAME");
+    return G_getenv("LOCATION_NAME");
 }
 
 /*!
@@ -72,18 +69,17 @@ G_location(void)
  *  \param
  *  \return char* to location path
  */
-char *
-G__location_path(void)
+char *G__location_path(void)
 {
     char *location = 0;
     char *base;
     char *name;
 
-    name      = G_location();
-    base      = G_gisdbase();
-    location  = G_malloc (strlen (base) + strlen (name) + 2);
+    name = G_location();
+    base = G_gisdbase();
+    location = G_malloc(strlen(base) + strlen(name) + 2);
 
-    sprintf (location, "%s/%s", base, name);
+    sprintf(location, "%s/%s", base, name);
 
     return location;
 }

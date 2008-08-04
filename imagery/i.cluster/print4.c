@@ -8,26 +8,23 @@
 #define FMT2 "%g/%d=?"
 
 
-int 
-print_centroids (FILE *fd, struct Cluster *C)
+int print_centroids(FILE * fd, struct Cluster *C)
 {
     int band, cat;
     char buf[40];
 
-    fprintf (fd, _("class centroids (sum/count=mean)\n"));
-    for (band = 0; band < C->nbands; band++)
-    {
-	fprintf (fd, _("band %d"), band+1);
-	for (cat = 0; cat < C->nclasses; cat++)
-	{
+    fprintf(fd, _("class centroids (sum/count=mean)\n"));
+    for (band = 0; band < C->nbands; band++) {
+	fprintf(fd, _("band %d"), band + 1);
+	for (cat = 0; cat < C->nclasses; cat++) {
 	    if (C->count[cat])
-		sprintf (buf, FMT1, C->sum[band][cat], C->count[cat],
-		(double) C->sum[band][cat] / (double) C->count[cat]);
+		sprintf(buf, FMT1, C->sum[band][cat], C->count[cat],
+			(double)C->sum[band][cat] / (double)C->count[cat]);
 	    else
-		sprintf (buf, FMT2, C->sum[band][cat], C->count[cat]);
-	    fprintf (fd, "%s %-18s", cat%4 ? "" : "\n", buf);
+		sprintf(buf, FMT2, C->sum[band][cat], C->count[cat]);
+	    fprintf(fd, "%s %-18s", cat % 4 ? "" : "\n", buf);
 	}
-	fprintf (fd, "\n");
+	fprintf(fd, "\n");
     }
 
     return 0;

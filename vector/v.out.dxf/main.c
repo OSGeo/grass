@@ -46,7 +46,8 @@ int main(int argc, char *argv[])
     /* Set description */
     module = G_define_module();
     module->keywords = _("vector, export");
-    module->description = _("Exports GRASS vector map layers to DXF file format.");
+    module->description =
+	_("Exports GRASS vector map layers to DXF file format.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -72,6 +73,7 @@ int main(int argc, char *argv[])
     else {
 	char fname[GNAME_MAX];
 	char fmapset[GMAPSET_MAX];
+
 	dxf_file = G_malloc(strlen(input->answer) + 5);
 	if (G__name_is_fully_qualified(input->answer, fname, fmapset))
 	    sprintf(dxf_file, "%s.dxf", fname);
@@ -183,8 +185,8 @@ int add_plines(struct Map_info *Map, double textsize)
 	if (ltype & GV_POINTS) {
 	    dxf_point(layer, Points->x[0], Points->y[0], Points->z[0]);
 
-	    dxf_text(llayer, Points->x[0], Points->y[0], Points->z[0], textsize,
-		     CENTERED, cat_num);
+	    dxf_text(llayer, Points->x[0], Points->y[0], Points->z[0],
+		     textsize, CENTERED, cat_num);
 	}
 	else {			/* lines */
 	    dxf_polyline(layer);

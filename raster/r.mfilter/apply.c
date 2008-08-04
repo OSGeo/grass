@@ -1,18 +1,18 @@
 #include "filter.h"
+
 /**************************************************************
  * apply_filter: apply the filter to a single neighborhood
  *
  *  filter:    filter to be applied
  *  input:     input buffers
  **************************************************************/
-CELL 
-apply_filter (FILTER *filter, CELL **input)
+CELL apply_filter(FILTER * filter, CELL ** input)
 {
     int **matrix;
     int size;
     int divisor;
     int round;
-    register int r,c;
+    register int r, c;
     register CELL v;
 
     size = filter->size;
@@ -23,12 +23,11 @@ apply_filter (FILTER *filter, CELL **input)
     for (r = 0; r < size; r++)
 	for (c = 0; c < size; c++)
 	    v += input[r][c] * matrix[r][c];
-/* zero divisor means compute a divisor. this is done by adding the
-   numbers is the divisor matrix where the corresponding cell value
-   is not zero.
-*/
-    if (divisor==0)
-    {
+    /* zero divisor means compute a divisor. this is done by adding the
+       numbers is the divisor matrix where the corresponding cell value
+       is not zero.
+     */
+    if (divisor == 0) {
 	matrix = filter->dmatrix;
 	for (r = 0; r < size; r++)
 	    for (c = 0; c < size; c++)
@@ -38,11 +37,9 @@ apply_filter (FILTER *filter, CELL **input)
 
     /* now round the result to nearest integer. negative numbers are rounded
        a little differently than non-negative numbers
-    */
-    if (divisor)
-    {
-	if(round = divisor/2)
-	{
+     */
+    if (divisor) {
+	if (round = divisor / 2) {
 	    if ((round > 0 && v > 0) || (round < 0 && v < 0))
 		v += round;
 	    else
@@ -52,6 +49,6 @@ apply_filter (FILTER *filter, CELL **input)
     }
     else
 	v = 0;
-    
+
     return v;
 }

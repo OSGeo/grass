@@ -1,3 +1,4 @@
+
 /**
  * \file V_clear.c
  *
@@ -40,21 +41,21 @@
 
 void V_clear(void)
 {
-	static const char text[] = "" ;
-	int at_answer ;
+    static const char text[] = "";
+    int at_answer;
 
-	for (at_answer=0; at_answer < MAX_ANSW; at_answer++)  
-		V__.usr_answ[at_answer].length = 0 ;
+    for (at_answer = 0; at_answer < MAX_ANSW; at_answer++)
+	V__.usr_answ[at_answer].length = 0;
 
-	for (at_answer=0; at_answer < MAX_CONST; at_answer++)  
-		V__.constant[at_answer].length = 0 ;
+    for (at_answer = 0; at_answer < MAX_CONST; at_answer++)
+	V__.constant[at_answer].length = 0;
 
-	for (at_answer=0; at_answer < MAX_LINE; at_answer++) 
-		V__.page.line[at_answer] = text ;
-	
-	V__.NUM_CONST = 0 ;
-	V__.NUM_ANSW  = 0 ;
-	V__.NUM_LINE  = 0 ;
-	V_float_accuracy(DECIMAL_PLACES);
-	sprintf (V__.interrupt_msg, "CANCEL");
+    for (at_answer = 0; at_answer < MAX_LINE; at_answer++)
+	V__.page.line[at_answer] = text;
+
+    V__.NUM_CONST = 0;
+    V__.NUM_ANSW = 0;
+    V__.NUM_LINE = 0;
+    V_float_accuracy(DECIMAL_PLACES);
+    sprintf(V__.interrupt_msg, "CANCEL");
 }

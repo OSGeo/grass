@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.distance
@@ -21,8 +22,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     extern void parse();
     extern void find_edge_cells();
@@ -31,25 +31,24 @@ main (int argc, char *argv[])
     struct Parms parms;
     struct GModule *module;
 
-    G_gisinit (argv[0]);
-    
-    /* Set description */
-    module              = G_define_module();
-    module->keywords = _("raster");
-    module->description = 
-    _("Locates the closest points between objects in two raster maps.");
+    G_gisinit(argv[0]);
 
-    parse (argc, argv, &parms);
-    if (parms.labels)
-    {
-	read_labels (&parms.map1);
-	read_labels (&parms.map2);
+    /* Set description */
+    module = G_define_module();
+    module->keywords = _("raster");
+    module->description =
+	_("Locates the closest points between objects in two raster maps.");
+
+    parse(argc, argv, &parms);
+    if (parms.labels) {
+	read_labels(&parms.map1);
+	read_labels(&parms.map2);
     }
 
-    find_edge_cells (&parms.map1);
-    find_edge_cells (&parms.map2);
+    find_edge_cells(&parms.map1);
+    find_edge_cells(&parms.map2);
 
-    report (&parms);
+    report(&parms);
 
     return 0;
 }

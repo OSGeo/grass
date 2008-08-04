@@ -4,9 +4,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_close_cursor (dbCursor *dbc)
-
+int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
 
@@ -24,24 +22,24 @@ db__driver_close_cursor (dbCursor *dbc)
 }
 
 
-cursor * alloc_cursor(void)
+cursor *alloc_cursor(void)
 {
-    cursor     *c;
+    cursor *c;
 
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-        append_error("Cannot allocate cursor.");
-        return NULL; 
-    } 
+	append_error("Cannot allocate cursor.");
+	return NULL;
+    }
 
     c->res = NULL;
-    
+
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-        append_error("Cannot ad new token.");
-        return NULL; 
+	append_error("Cannot ad new token.");
+	return NULL;
     }
 
     c->cols = NULL;
@@ -50,14 +48,12 @@ cursor * alloc_cursor(void)
     return c;
 }
 
-void free_cursor( cursor *c)
+void free_cursor(cursor * c)
 {
     db_drop_token(c->token);
 
     /* TODO close results if any */
 
-    G_free ( c->cols );
-    G_free(c);  
+    G_free(c->cols);
+    G_free(c);
 }
-
-

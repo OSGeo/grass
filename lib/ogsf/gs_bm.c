@@ -1,20 +1,20 @@
 /*!
-  \file gs_bm.c
- 
-  \brief OGSF library - manipulating bitmaps (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois (September 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \file gs_bm.c
+
+   \brief OGSF library - manipulating bitmaps (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois (September 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -23,15 +23,15 @@
 #include "gsget.h"
 
 /*!
-  \brief Do combining of bitmaps, make bitmaps from other data w/maskval
+   \brief Do combining of bitmaps, make bitmaps from other data w/maskval
 
-  \param frombuff data buffer
-  \param maskval mask type
-  \param rows number of rows
-  \param cols number of cols
+   \param frombuff data buffer
+   \param maskval mask type
+   \param rows number of rows
+   \param cols number of cols
 
-  \return pointer to BM struct
-*/
+   \return pointer to BM struct
+ */
 struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
 			  int cols)
 {
@@ -71,10 +71,10 @@ struct BM *gsbm_make_mask(typbuff * frombuff, float maskval, int rows,
 }
 
 /*!
-  \brief Zero mask
+   \brief Zero mask
 
-  \param map pointer to BM struct
-*/
+   \param map pointer to BM struct
+ */
 void gsbm_zero_mask(struct BM *map)
 {
     int numbytes;
@@ -91,25 +91,25 @@ void gsbm_zero_mask(struct BM *map)
 }
 
 /*!
-  \brief mask types
-*/
+   \brief mask types
+ */
 #define MASK_OR		1
 #define MASK_ORNOT	2
 #define MASK_AND	3
 #define MASK_XOR	4
 
 /*!
-  \brief Mask bitmap
+   \brief Mask bitmap
 
-  Must be same size, ORs bitmaps & stores in bmvar
+   Must be same size, ORs bitmaps & stores in bmvar
 
-  \param bmvar bitmap (BM) to changed
-  \param bmcom bitmap (BM)
-  \param mask_type mask type (see mask types macros)
+   \param bmvar bitmap (BM) to changed
+   \param bmcom bitmap (BM)
+   \param mask_type mask type (see mask types macros)
 
-  \return -1 on failure (bitmap mispatch)
-  \return 0 on success
-*/
+   \return -1 on failure (bitmap mispatch)
+   \return 0 on success
+ */
 static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
 {
     int i;
@@ -121,32 +121,32 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
 
     if (bmcon && bmvar) {
 	if (varsize != consize) {
-	    G_warning (_("Bitmap mismatch"));
+	    G_warning(_("Bitmap mismatch"));
 	    return (-1);
 	}
 
 	if (bmvar->sparse || bmcon->sparse)
 	    return (-1);
 
-        switch (mask_type) {
-        case MASK_OR:
-            for (i = 0; i < numbytes; i++)
-                bmvar->data[i] |= bmcon->data[i];
+	switch (mask_type) {
+	case MASK_OR:
+	    for (i = 0; i < numbytes; i++)
+		bmvar->data[i] |= bmcon->data[i];
 	    break;
-        case MASK_ORNOT:
-            for (i = 0; i < numbytes; i++)
-                bmvar->data[i] |= ~bmcon->data[i];
+	case MASK_ORNOT:
+	    for (i = 0; i < numbytes; i++)
+		bmvar->data[i] |= ~bmcon->data[i];
 	    break;
-        case MASK_AND:
-            for (i = 0; i < numbytes; i++)
-                bmvar->data[i] &= bmcon->data[i];
+	case MASK_AND:
+	    for (i = 0; i < numbytes; i++)
+		bmvar->data[i] &= bmcon->data[i];
 	    break;
-        case MASK_XOR:
-            for (i = 0; i < numbytes; i++)
-                bmvar->data[i] ^= bmcon->data[i];
+	case MASK_XOR:
+	    for (i = 0; i < numbytes; i++)
+		bmvar->data[i] ^= bmcon->data[i];
 	    break;
-        }
-	
+	}
+
 	return (0);
     }
 
@@ -154,81 +154,81 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
 }
 
 /*!
-  \brief Mask bitmap (mask type OR)
+   \brief Mask bitmap (mask type OR)
 
-  Must be same size, ORs bitmaps & stores in bmvar
+   Must be same size, ORs bitmaps & stores in bmvar
 
-  \param bmvar bitmap (BM) to changed
-  \param bmcom bitmap (BM)
-  \param mask_type mask type (see mask types macros)
+   \param bmvar bitmap (BM) to changed
+   \param bmcom bitmap (BM)
+   \param mask_type mask type (see mask types macros)
 
-  \return -1 on failure (bitmap mispatch)
-  \return 0 on success
-*/
+   \return -1 on failure (bitmap mispatch)
+   \return 0 on success
+ */
 int gsbm_or_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_OR);
 }
 
 /*!
-  \brief Mask bitmap (mask type ORNOT)
+   \brief Mask bitmap (mask type ORNOT)
 
-  Must be same size, ORNOTs bitmaps & stores in bmvar
+   Must be same size, ORNOTs bitmaps & stores in bmvar
 
-  \param bmvar bitmap (BM) to changed
-  \param bmcom bitmap (BM)
-  \param mask_type mask type (see mask types macros)
+   \param bmvar bitmap (BM) to changed
+   \param bmcom bitmap (BM)
+   \param mask_type mask type (see mask types macros)
 
-  \return -1 on failure (bitmap mispatch)
-  \return 0 on success
-*/
+   \return -1 on failure (bitmap mispatch)
+   \return 0 on success
+ */
 int gsbm_ornot_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_ORNOT);
 }
 
 /*!
-  \brief Mask bitmap (mask type ADD)
+   \brief Mask bitmap (mask type ADD)
 
-  Must be same size, ADDs bitmaps & stores in bmvar
+   Must be same size, ADDs bitmaps & stores in bmvar
 
-  \param bmvar bitmap (BM) to changed
-  \param bmcom bitmap (BM)
-  \param mask_type mask type (see mask types macros)
+   \param bmvar bitmap (BM) to changed
+   \param bmcom bitmap (BM)
+   \param mask_type mask type (see mask types macros)
 
-  \return -1 on failure (bitmap mispatch)
-  \return 0 on success
-*/
+   \return -1 on failure (bitmap mispatch)
+   \return 0 on success
+ */
 int gsbm_and_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_AND);
 }
 
 /*!
-  \brief Mask bitmap (mask type XOR)
+   \brief Mask bitmap (mask type XOR)
 
-  Must be same size, XORs bitmaps & stores in bmvar
+   Must be same size, XORs bitmaps & stores in bmvar
 
-  \param bmvar bitmap (BM) to changed
-  \param bmcom bitmap (BM)
-  \param mask_type mask type (see mask types macros)
+   \param bmvar bitmap (BM) to changed
+   \param bmcom bitmap (BM)
+   \param mask_type mask type (see mask types macros)
 
-  \return -1 on failure (bitmap mispatch)
-  \return 0 on success
-*/
+   \return -1 on failure (bitmap mispatch)
+   \return 0 on success
+ */
 int gsbm_xor_masks(struct BM *bmvar, struct BM *bmcon)
 {
     return gsbm_masks(bmvar, bmcon, MASK_XOR);
 }
 
 /*!
-  \brief Update current maps
+   \brief Update current maps
 
-  \param surf surface (geosurf)
+   \param surf surface (geosurf)
 
-  \return 0
-  \return 1
-*/
+   \return 0
+   \return 1
+ */
 int gs_update_curmask(geosurf * surf)
 {
     struct BM *b_mask, *b_topo, *b_color;
@@ -236,7 +236,7 @@ int gs_update_curmask(geosurf * surf)
     int row, col, offset, destroy_ok = 1;
     gsurf_att *coloratt;
 
-    G_debug (4, "gs_update_curmask(): id=%d", surf->gsurf_id);
+    G_debug(4, "gs_update_curmask(): id=%d", surf->gsurf_id);
 
     if (surf->mask_needupdate) {
 	surf->mask_needupdate = 0;
@@ -291,7 +291,7 @@ int gs_update_curmask(geosurf * surf)
 		}
 		else {
 		    b_mask = BM_create(surf->cols, surf->rows);
-		    gs_set_maskmode((int) surf->att[ATT_MASK].constant);
+		    gs_set_maskmode((int)surf->att[ATT_MASK].constant);
 
 		    for (row = 0; row < surf->rows; row++) {
 			for (col = 0; col < surf->cols; col++) {
@@ -356,10 +356,10 @@ int gs_update_curmask(geosurf * surf)
 }
 
 /*!
-  \brief Print bitmap to stderr
+   \brief Print bitmap to stderr
 
-  \param bm bitmap (BM)
-*/
+   \param bm bitmap (BM)
+ */
 void print_bm(struct BM *bm)
 {
     int i, j;

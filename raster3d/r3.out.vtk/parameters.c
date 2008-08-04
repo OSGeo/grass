@@ -44,7 +44,8 @@ void set_params()
     param.point = G_define_flag();
     param.point->key = 'p';
     param.point->description =
-	_("Create VTK pointdata instead of VTK celldata (celldata is default)");
+	_
+	("Create VTK pointdata instead of VTK celldata (celldata is default)");
 
     param.top = G_define_option();
     param.top->key = "top";
@@ -124,11 +125,12 @@ void set_params()
     param.origin->guisection = "Advanced options";
     param.origin->description = _("Scale factor effects the origin");
 
-    param.coorcorr = G_define_flag();                                            
-    param.coorcorr->key = 'c';                                                   
+    param.coorcorr = G_define_flag();
+    param.coorcorr->key = 'c';
     param.coorcorr->guisection = "Advanced options";
-    param.coorcorr->description = _("Correct the coordinates to fit the VTK-OpenGL precision");
-    
+    param.coorcorr->description =
+	_("Correct the coordinates to fit the VTK-OpenGL precision");
+
     /* Maybe needed in the future
      * param.xml = G_define_flag ();
      * param.xml->key = 'x';
@@ -137,4 +139,3 @@ void set_params()
 
     return;
 }
-

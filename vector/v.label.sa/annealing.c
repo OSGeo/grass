@@ -3,12 +3,12 @@
  * MODULE:       v.labels.sa
  * AUTHOR(S):    Wolf Bergenheim
  * PURPOSE:      This file contains functions which have to do with the
-                 annealing part of the algorithm.
+ annealing part of the algorithm.
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -52,15 +52,18 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
 {
     /* The temperature of the system */
     double T;
+
     /* The change in energy */
     double dE;
+
     T = -1.0 / log(1.0 / 3.0);
     unsigned int t, tot_better = 0, tot_worse = 0, tot_ign = 0;
 
     fprintf(stderr, "Optimizing label positions: ...");
     for (t = 0; t < TEMP_DECS; t++) {
 	int i;
-	unsigned int successes = 0, consec_successes=0;
+	unsigned int successes = 0, consec_successes = 0;
+
 	for (i = 0; i < (n_labels * 30); i++) {
 	    int l, c, cc, r;
 	    label_t *lp;
@@ -74,8 +77,9 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
 		continue;
 
 	    cc = lp->current_candidate;
-	    /*and a random new candidate place*/
-	    c = (int)((double)(lp->n_candidates) * (rand() / (RAND_MAX + 1.0)));
+	    /*and a random new candidate place */
+	    c = (int)((double)(lp->n_candidates) *
+		      (rand() / (RAND_MAX + 1.0)));
 	    if (c == cc) {
 		if (c == 0)
 		    c++;
@@ -98,6 +102,7 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
 	    /* else apply with probability p=e^(-dE/T) */
 	    else {
 		double p, r;
+
 		p = pow(M_E, -dE / T);
 		r = (double)rand() / RAND_MAX;
 		if (r <= p) {
@@ -143,9 +148,9 @@ void simulate_annealing(label_t * labels, int n_labels, struct params *p)
 static double calc_label_overlap(label_t * label, int cc, int nc)
 {
     int i;
-    double dE=0.0;
+    double dE = 0.0;
 
-/* calculate the overlaps removed */
+    /* calculate the overlaps removed */
     for (i = 0; i < label->candidates[cc].n_intersections; i++) {
 	label_t *ol;
 	int oc;
@@ -157,7 +162,7 @@ static double calc_label_overlap(label_t * label, int cc, int nc)
 	}
     }
 
-/* calculate the overlaps created */
+    /* calculate the overlaps created */
     for (i = 0; i < label->candidates[nc].n_intersections; i++) {
 	label_t *ol;
 	int oc;
@@ -181,7 +186,8 @@ static double calc_label_overlap(label_t * label, int cc, int nc)
 static void do_label_overlap(label_t * label, int cc, int nc)
 {
     int i;
-/* remove the current label overlaps */
+
+    /* remove the current label overlaps */
     for (i = 0; i < label->candidates[cc].n_intersections; i++) {
 	label_t *ol;
 	int oc;
@@ -191,12 +197,12 @@ static void do_label_overlap(label_t * label, int cc, int nc)
 	if (ol->current_candidate == oc) {
 	    ol->current_score -= LABEL_OVERLAP_WEIGHT;
 	    label->current_score -= LABEL_OVERLAP_WEIGHT;
-//	    ol->candidates[oc].score -= LABEL_OVERLAP_WEIGHT;
+	    //          ol->candidates[oc].score -= LABEL_OVERLAP_WEIGHT;
 	    overlaps_removed++;
 	}
     }
 
-/* create new overlaps*/
+    /* create new overlaps */
     for (i = 0; i < label->candidates[nc].n_intersections; i++) {
 	label_t *ol;
 	int oc;
@@ -206,9 +212,8 @@ static void do_label_overlap(label_t * label, int cc, int nc)
 	if (ol->current_candidate == oc) {
 	    ol->current_score += LABEL_OVERLAP_WEIGHT;
 	    label->current_score += LABEL_OVERLAP_WEIGHT;
-//	    ol->candidates[oc]->score += 40;
+	    //          ol->candidates[oc]->score += 40;
 	    overlaps_created++;
 	}
     }
 }
-

@@ -9,45 +9,39 @@
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_group (
-    const char *group,
-    const struct Ref *ref,
-    FILE *fd)
+int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
 {
     char buf[80];
     int i;
     int len, tot_len;
     int max;
 
-    if (ref->nfiles <= 0)
-    {
-	fprintf (fd, "group [%s] is empty\n", group);
+    if (ref->nfiles <= 0) {
+	fprintf(fd, "group [%s] is empty\n", group);
 	return 0;
     }
     max = 0;
-    for (i=0; i < ref->nfiles; i++)
-    {
-	sprintf (buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
-	len = strlen(buf)+4;
-	if (len > max) max = len;
+    for (i = 0; i < ref->nfiles; i++) {
+	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+	len = strlen(buf) + 4;
+	if (len > max)
+	    max = len;
     }
-    fprintf (fd, "group [%s] references the following cellfiles\n", group);
-    fprintf (fd, "-------------\n");
+    fprintf(fd, "group [%s] references the following cellfiles\n", group);
+    fprintf(fd, "-------------\n");
     tot_len = 0;
-    for (i=0; i < ref->nfiles; i++)
-    {
-	sprintf (buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
+    for (i = 0; i < ref->nfiles; i++) {
+	sprintf(buf, "%s in %s", ref->file[i].name, ref->file[i].mapset);
 	tot_len += max;
-	if (tot_len > 78)
-	{
-	    fprintf (fd, "\n");
+	if (tot_len > 78) {
+	    fprintf(fd, "\n");
 	    tot_len = max;
 	}
-	fprintf (fd, "%-*s", max, buf);
+	fprintf(fd, "%-*s", max, buf);
     }
     if (tot_len)
-	fprintf (fd, "\n");
-    fprintf (fd, "-------------\n");
+	fprintf(fd, "\n");
+    fprintf(fd, "-------------\n");
 
     return 0;
 }
@@ -62,15 +56,15 @@ int I_list_group (
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_group_simple (const struct Ref *ref, FILE *fd)
+int I_list_group_simple(const struct Ref *ref, FILE * fd)
 {
     int i;
 
     if (ref->nfiles <= 0)
 	return 0;
 
-    for (i=0; i < ref->nfiles; i++)
-	fprintf(fd , "%s@%s\n", ref->file[i].name, ref->file[i].mapset);
+    for (i = 0; i < ref->nfiles; i++)
+	fprintf(fd, "%s@%s\n", ref->file[i].name, ref->file[i].mapset);
 
     return 0;
 }

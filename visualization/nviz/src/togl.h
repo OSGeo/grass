@@ -65,7 +65,7 @@
 #  endif
 
 #  ifndef TOGL_USE_FONTS
-#    define TOGL_USE_FONTS 1    /* needed for demos */
+#    define TOGL_USE_FONTS 1	/* needed for demos */
 #  endif
 
 #  ifdef __cplusplus
@@ -98,95 +98,98 @@ extern "C" {
 struct Togl;
 typedef struct Togl Togl;
 
-typedef void (Togl_Callback) (Togl *togl);
-typedef int (Togl_CmdProc) (Togl *togl, int argc, CONST84 char *argv[]);
+typedef void (Togl_Callback) (Togl * togl);
+typedef int (Togl_CmdProc) (Togl * togl, int argc, CONST84 char *argv[]);
 
-TOGL_EXTERN int Togl_Init(Tcl_Interp *interp);
+TOGL_EXTERN int Togl_Init(Tcl_Interp * interp);
 
 /* 
  * Default/initial callback setup functions
  */
 
-TOGL_EXTERN void Togl_CreateFunc(Togl_Callback *proc);
-TOGL_EXTERN void Togl_DisplayFunc(Togl_Callback *proc);
-TOGL_EXTERN void Togl_ReshapeFunc(Togl_Callback *proc);
-TOGL_EXTERN void Togl_DestroyFunc(Togl_Callback *proc);
-TOGL_EXTERN void Togl_TimerFunc(Togl_Callback *proc);
+TOGL_EXTERN void Togl_CreateFunc(Togl_Callback * proc);
+TOGL_EXTERN void Togl_DisplayFunc(Togl_Callback * proc);
+TOGL_EXTERN void Togl_ReshapeFunc(Togl_Callback * proc);
+TOGL_EXTERN void Togl_DestroyFunc(Togl_Callback * proc);
+TOGL_EXTERN void Togl_TimerFunc(Togl_Callback * proc);
 TOGL_EXTERN void Togl_ResetDefaultCallbacks(void);
 
 /* 
  * Change callbacks for existing widget
  */
 
-TOGL_EXTERN void Togl_SetCreateFunc(Togl *togl, Togl_Callback *proc);
-TOGL_EXTERN void Togl_SetDisplayFunc(Togl *togl, Togl_Callback *proc);
-TOGL_EXTERN void Togl_SetReshapeFunc(Togl *togl, Togl_Callback *proc);
-TOGL_EXTERN void Togl_SetDestroyFunc(Togl *togl, Togl_Callback *proc);
-TOGL_EXTERN void Togl_SetTimerFunc(Togl *togl, Togl_Callback *proc);
+TOGL_EXTERN void Togl_SetCreateFunc(Togl * togl, Togl_Callback * proc);
+TOGL_EXTERN void Togl_SetDisplayFunc(Togl * togl, Togl_Callback * proc);
+TOGL_EXTERN void Togl_SetReshapeFunc(Togl * togl, Togl_Callback * proc);
+TOGL_EXTERN void Togl_SetDestroyFunc(Togl * togl, Togl_Callback * proc);
+TOGL_EXTERN void Togl_SetTimerFunc(Togl * togl, Togl_Callback * proc);
 
 /* 
  * Miscellaneous
  */
 
-TOGL_EXTERN int Togl_Configure(Tcl_Interp *interp, Togl *togl,
-        int argc, const char *argv[], int flags);
-TOGL_EXTERN void Togl_MakeCurrent(const Togl *togl);
-TOGL_EXTERN void Togl_CreateCommand(char *cmd_name, Togl_CmdProc *cmd_proc);
-TOGL_EXTERN void Togl_PostRedisplay(Togl *togl);
-TOGL_EXTERN void Togl_SwapBuffers(const Togl *togl);
+TOGL_EXTERN int Togl_Configure(Tcl_Interp * interp, Togl * togl,
+			       int argc, const char *argv[], int flags);
+TOGL_EXTERN void Togl_MakeCurrent(const Togl * togl);
+TOGL_EXTERN void Togl_CreateCommand(char *cmd_name, Togl_CmdProc * cmd_proc);
+TOGL_EXTERN void Togl_PostRedisplay(Togl * togl);
+TOGL_EXTERN void Togl_SwapBuffers(const Togl * togl);
 
 /* 
  * Query functions
  */
 
-TOGL_EXTERN const char *Togl_Ident(const Togl *togl);
-TOGL_EXTERN int Togl_Width(const Togl *togl);
-TOGL_EXTERN int Togl_Height(const Togl *togl);
-TOGL_EXTERN Tcl_Interp *Togl_Interp(const Togl *togl);
-TOGL_EXTERN Tk_Window Togl_TkWin(const Togl *togl);
+TOGL_EXTERN const char *Togl_Ident(const Togl * togl);
+TOGL_EXTERN int Togl_Width(const Togl * togl);
+TOGL_EXTERN int Togl_Height(const Togl * togl);
+TOGL_EXTERN Tcl_Interp *Togl_Interp(const Togl * togl);
+TOGL_EXTERN Tk_Window Togl_TkWin(const Togl * togl);
 
 /* 
  * Color Index mode
  */
 
-TOGL_EXTERN unsigned long Togl_AllocColor(const Togl *togl, float red,
-        float green, float blue);
-TOGL_EXTERN void Togl_FreeColor(const Togl *togl, unsigned long index);
-TOGL_EXTERN void Togl_SetColor(const Togl *togl, unsigned long index,
-        float red, float green, float blue);
+TOGL_EXTERN unsigned long Togl_AllocColor(const Togl * togl, float red,
+					  float green, float blue);
+TOGL_EXTERN void Togl_FreeColor(const Togl * togl, unsigned long index);
+TOGL_EXTERN void Togl_SetColor(const Togl * togl, unsigned long index,
+			       float red, float green, float blue);
 
 #  if TOGL_USE_FONTS == 1
 /* 
  * Bitmap fonts
  */
 
-TOGL_EXTERN GLuint Togl_LoadBitmapFont(const Togl *togl, const char *fontname);
-TOGL_EXTERN void Togl_UnloadBitmapFont(const Togl *togl, GLuint fontbase);
+TOGL_EXTERN GLuint Togl_LoadBitmapFont(const Togl * togl,
+				       const char *fontname);
+TOGL_EXTERN void Togl_UnloadBitmapFont(const Togl * togl, GLuint fontbase);
 
 #  endif
 /* 
  * Overlay functions
  */
 
-TOGL_EXTERN void Togl_UseLayer(Togl *togl, int layer);
-TOGL_EXTERN void Togl_ShowOverlay(Togl *togl);
-TOGL_EXTERN void Togl_HideOverlay(Togl *togl);
-TOGL_EXTERN void Togl_PostOverlayRedisplay(Togl *togl);
-TOGL_EXTERN void Togl_OverlayDisplayFunc(Togl_Callback *proc);
-TOGL_EXTERN int Togl_ExistsOverlay(const Togl *togl);
-TOGL_EXTERN int Togl_GetOverlayTransparentValue(const Togl *togl);
-TOGL_EXTERN int Togl_IsMappedOverlay(const Togl *togl);
-TOGL_EXTERN unsigned long Togl_AllocColorOverlay(const Togl *togl,
-        float red, float green, float blue);
-TOGL_EXTERN void Togl_FreeColorOverlay(const Togl *togl, unsigned long index);
+TOGL_EXTERN void Togl_UseLayer(Togl * togl, int layer);
+TOGL_EXTERN void Togl_ShowOverlay(Togl * togl);
+TOGL_EXTERN void Togl_HideOverlay(Togl * togl);
+TOGL_EXTERN void Togl_PostOverlayRedisplay(Togl * togl);
+TOGL_EXTERN void Togl_OverlayDisplayFunc(Togl_Callback * proc);
+TOGL_EXTERN int Togl_ExistsOverlay(const Togl * togl);
+TOGL_EXTERN int Togl_GetOverlayTransparentValue(const Togl * togl);
+TOGL_EXTERN int Togl_IsMappedOverlay(const Togl * togl);
+TOGL_EXTERN unsigned long Togl_AllocColorOverlay(const Togl * togl,
+						 float red, float green,
+						 float blue);
+TOGL_EXTERN void Togl_FreeColorOverlay(const Togl * togl,
+				       unsigned long index);
 
 /* 
  * User client data
  */
 
 TOGL_EXTERN void Togl_ClientData(ClientData clientData);
-TOGL_EXTERN ClientData Togl_GetClientData(const Togl *togl);
-TOGL_EXTERN void Togl_SetClientData(Togl *togl, ClientData clientData);
+TOGL_EXTERN ClientData Togl_GetClientData(const Togl * togl);
+TOGL_EXTERN void Togl_SetClientData(Togl * togl, ClientData clientData);
 
 #  ifdef TOGL_X11
 /* 
@@ -194,10 +197,10 @@ TOGL_EXTERN void Togl_SetClientData(Togl *togl, ClientData clientData);
  * Contributed by Miguel A. De Riera Pasenau (miguel@DALILA.UPC.ES)
  */
 
-TOGL_EXTERN Display *Togl_Display(const Togl *togl);
-TOGL_EXTERN Screen *Togl_Screen(const Togl *togl);
-TOGL_EXTERN int Togl_ScreenNumber(const Togl *togl);
-TOGL_EXTERN Colormap Togl_Colormap(const Togl *togl);
+TOGL_EXTERN Display *Togl_Display(const Togl * togl);
+TOGL_EXTERN Screen *Togl_Screen(const Togl * togl);
+TOGL_EXTERN int Togl_ScreenNumber(const Togl * togl);
+TOGL_EXTERN Colormap Togl_Colormap(const Togl * togl);
 
 #  endif
 #  ifdef __sgi
@@ -210,24 +213,26 @@ TOGL_EXTERN void Togl_OldStereoDrawBuffer(GLenum mode);
 TOGL_EXTERN void Togl_OldStereoClear(GLbitfield mask);
 #  endif
 
-TOGL_EXTERN void Togl_StereoFrustum(GLfloat left, GLfloat right, GLfloat bottom,
-        GLfloat top, GLfloat near, GLfloat far, GLfloat eyeDist,
-        GLfloat eyeOffset);
+TOGL_EXTERN void Togl_StereoFrustum(GLfloat left, GLfloat right,
+				    GLfloat bottom, GLfloat top, GLfloat near,
+				    GLfloat far, GLfloat eyeDist,
+				    GLfloat eyeOffset);
 
 /* 
  * Generate EPS file.
  * Contributed by Miguel A. De Riera Pasenau (miguel@DALILA.UPC.ES)
  */
 
-TOGL_EXTERN int Togl_DumpToEpsFile(const Togl *togl, const char *filename,
-        int inColor, void (*user_redraw) (const Togl *));
+TOGL_EXTERN int Togl_DumpToEpsFile(const Togl * togl, const char *filename,
+				   int inColor,
+				   void (*user_redraw) (const Togl *));
 
 #  ifdef TOGL_AGL_CLASSIC
 /* 
  * Mac-specific setup functions
  */
 extern int Togl_MacInit(void);
-extern int Togl_MacSetupMainInterp(Tcl_Interp *interp);
+extern int Togl_MacSetupMainInterp(Tcl_Interp * interp);
 #  endif
 
 #  ifdef __cplusplus

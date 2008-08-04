@@ -8,7 +8,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-GLOBAL struct Cell_head window ;
+GLOBAL struct Cell_head window;
 
 #define LAYER struct _layer_
 GLOBAL LAYER
@@ -16,8 +16,8 @@ GLOBAL LAYER
     char *name;
     char *mapset;
     struct Categories labels;
-    int nlen;               /* num chars of largest cat when printed */
-    int clen;               /* num chars for cat label when printed */
+    int nlen;			/* num chars of largest cat when printed */
+    int clen;			/* num chars for cat label when printed */
 } *layers INIT(NULL);
 GLOBAL int nlayers INIT(0);
 
@@ -40,7 +40,7 @@ GLOBAL UNITS
     int dp;
     int eformat;
     char *label[2];
-}unit[MAX_UNITS];
+} unit[MAX_UNITS];
 GLOBAL int nunits INIT(0);
 
 #define DEFAULT_PAGE_LENGTH 0
@@ -66,45 +66,57 @@ GLOBAL DCELL *DMAX INIT(NULL), *DMIN INIT(NULL);
 GLOBAL int maskfd;
 GLOBAL CELL *mask;
 GLOBAL CELL NULL_CELL;
-GLOBAL int (*get_row)();
+GLOBAL int (*get_row) ();
+
 /* format.c */
 int format_parms(double, int *, int *, int *, int);
 int scient_format(double, char *, int, int);
 int format_double(double, char *, int, int);
+
 /* header.c */
 int header(int, int);
 int divider(char *);
 int trailer(void);
 int newline(void);
 int lcr(char *, char *, char *, char *, int);
+
 /* label.c */
 char *print_label(char *, int, int, int, int);
+
 /* main.c */
 int main(int, char *[]);
+
 /* maskinfo.c */
 char *maskinfo(void);
+
 /* parse.c */
 int parse_command_line(int, char *[]);
 int parse_units(char *);
 int parse_layer(char *);
 int match(char *, char *, int);
+
 /* prt_report.c */
 int print_report(int, int);
 int construct_val_str(int, CELL *, char *);
 char *construct_cat_label(int, CELL);
+
 /* prt_unit.c */
 int print_unit(int, int, int);
+
 /* report.c */
 int report(void);
+
 /* stats.c */
 int get_stats(void);
+
 /* sums.c */
 double area_sum(int *, int);
 long count_sum(int *, int);
 int same_cats(int, int, int);
 
 GLOBAL char fs[2];
-GLOBAL struct Categories *labels INIT(NULL) ;
+GLOBAL struct Categories *labels INIT(NULL);
+
 #define EVERYTHING 0
 #define REPORT_ONLY 1
 #define STATS_ONLY 2

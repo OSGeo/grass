@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.los
@@ -112,13 +113,14 @@ int main(int argc, char *argv[])
     opt6->type = TYPE_DOUBLE;
     opt6->required = NO;
     opt6->answer = "10000";
-    opt6->options = "0-5000000";  /* observer can be in a plane, too */
+    opt6->options = "0-5000000";	/* observer can be in a plane, too */
     opt6->description = _("Maximum distance from the viewing point (meters)");
     /* http://mintaka.sdsu.edu/GF/explain/atmos_refr/horizon.html */
 
     curvature = G_define_flag();
     curvature->key = 'c';
-    curvature->description = _("Consider earth curvature (current ellipsoid)");
+    curvature->description =
+	_("Consider earth curvature (current ellipsoid)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -143,14 +145,14 @@ int main(int argc, char *argv[])
 	patt_flag = TRUE;
 
     if ((G_projection() == PROJECTION_LL))
-	G_fatal_error(
-	    _("Lat/Long support is not (yet) implemented for this module."));
+	G_fatal_error(_
+		      ("Lat/Long support is not (yet) implemented for this module."));
 
     /* check if specified observer location inside window   */
     if (east < window.west || east > window.east
 	|| north > window.north || north < window.south)
-	G_fatal_error(
-	    _("Specified observer coordinate is outside current region bounds."));
+	G_fatal_error(_
+		      ("Specified observer coordinate is outside current region bounds."));
 
     search_mapset = "";
     old_mapset = G_find_cell2(elev_layer, search_mapset);
@@ -179,7 +181,7 @@ int main(int argc, char *argv[])
 	if (G_get_cellhd(patt_layer, patt_mapset, &cellhd_patt) < 0)
 	    G_fatal_error(_("[%s]: Cannot read map header"), patt_layer);
 
-	/*  allocate buffer space for row-io to layer		*/
+	/*  allocate buffer space for row-io to layer           */
 	cell = G_allocate_raster_buf(CELL_TYPE);
     }
 
@@ -205,7 +207,7 @@ int main(int argc, char *argv[])
 	patt = G_open_cell_old(patt_layer, patt_mapset);
 	if (patt < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), patt_layer);
-	if(G_get_raster_map_type(patt) != CELL_TYPE)
+	if (G_get_raster_map_type(patt) != CELL_TYPE)
 	    G_fatal_error(_("Pattern map should be a binary 0/1 CELL map"));
     }
 
@@ -235,17 +237,19 @@ int main(int argc, char *argv[])
 	close(patt_fd);
     }
 
-   if (curvature->answer){
-      /* try to get the radius the standard GRASS way from the libs */
-      G_get_ellipsoid_parameters (&aa, &e2);
-      if (aa == 0) {
-          /* since there was a problem, take a hardcoded radius :( */
-          G_warning(_("Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"));
-          aa = 6370997.00;
-      }
-      G_debug(3, "radius: %f", aa);
+    if (curvature->answer) {
+	/* try to get the radius the standard GRASS way from the libs */
+	G_get_ellipsoid_parameters(&aa, &e2);
+	if (aa == 0) {
+	    /* since there was a problem, take a hardcoded radius :( */
+	    G_warning(_
+		      ("Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"));
+	    aa = 6370997.00;
+	}
+	G_debug(3, "radius: %f", aa);
     }
-    G_message(_("Using maximum distance from the viewing point (meters): %f"), max_dist);
+    G_message(_("Using maximum distance from the viewing point (meters): %f"),
+	      max_dist);
 
     /*      open, initialize and segment all files          */
     in_fd = open(in_name, 2);
@@ -258,14 +262,16 @@ int main(int argc, char *argv[])
 	segment_init(&seg_patt, patt_fd, 4);
 	for (row = 0; row < nrows; row++) {
 	    if (G_get_raster_row(patt, cell, row, CELL_TYPE) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), patt_layer, row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      patt_layer, row);
 	    segment_put_row(&seg_patt, cell, row);
 	}
     }
 
     for (row = 0; row < nrows; row++) {
 	if (G_get_raster_row(old, fcell, row, FCELL_TYPE) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), elev_layer, row);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  elev_layer, row);
 	segment_put_row(&seg_in, fcell, row);
     }
 
@@ -324,10 +330,11 @@ int main(int argc, char *argv[])
 					slope_1, slope_2, flip, sign_on_y,
 					sign_on_x, viewpt_elev, &seg_in,
 					&seg_out, &seg_patt, row_viewpt,
-					col_viewpt, patt_flag, curvature->answer, aa);
+					col_viewpt, patt_flag,
+					curvature->answer, aa);
 
 	G_percent(segment_no, 16, 5);
-    }	/*      end of for-loop over segments           */
+    }				/*      end of for-loop over segments           */
 
     /* loop over all segment lists to find maximum vertical */
     /* angle of any point when viewed from observer location */
@@ -342,14 +349,15 @@ int main(int argc, char *argv[])
 
     /* calculate factor to be multiplied to every vertical  */
     /* angle for suitable color variation on output map     */
-/*    color_factor = decide_color_range(max_vert_angle * 57.3,
-				      COLOR_SHIFT, COLOR_MAX);   */
+    /*    color_factor = decide_color_range(max_vert_angle * 57.3,
+       COLOR_SHIFT, COLOR_MAX);   */
     color_factor = 1.0;		/* to give true angle? */
 
     /* mark visible points for all segments on outputmap    */
     for (segment_no = 1; segment_no <= 16; segment_no++) {
 	mark_visible_points(heads[segment_no - 1], &seg_out,
-			    row_viewpt, col_viewpt, color_factor, COLOR_SHIFT);
+			    row_viewpt, col_viewpt, color_factor,
+			    COLOR_SHIFT);
     }
 
     /*      mark viewpt on output map                       */
@@ -363,13 +371,15 @@ int main(int argc, char *argv[])
     /* convert output submatrices to full cell overlay      */
     for (row = 0; row < nrows; row++) {
 	int col;
+
 	segment_get_row(&seg_out, fcell, row);
 	for (col = 0; col < ncols; col++)
 	    /* set to NULL if beyond max_dist (0) or blocked view (1) */
 	    if (fcell[col] == 0 || fcell[col] == 1)
 		G_set_null_value(&fcell[col], 1, FCELL_TYPE);
 	if (G_put_raster_row(new, fcell, FCELL_TYPE) < 0)
-	    G_fatal_error(_("Failed writing raster map <%s> row %d"), out_layer, row);
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  out_layer, row);
     }
 
     segment_release(&seg_in);	/* release memory       */

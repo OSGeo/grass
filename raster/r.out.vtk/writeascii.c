@@ -25,7 +25,8 @@
 #include "globaldefs.h"
 
 /*local prototypes */
-static double get_raster_value_as_double(int maptype, void *ptr, double nullval);
+static double get_raster_value_as_double(int maptype, void *ptr,
+					 double nullval);
 
 
 /* ************************************************************************* */
@@ -68,7 +69,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* ************************************************************************* */
 void
 write_vtk_normal_header(FILE * fp, struct Cell_head region, double elevation,
-		     int type)
+			int type)
 {
     G_debug(3, _("write_vtk_normal_header: Writing VTK-Header"));
 
@@ -87,11 +88,12 @@ write_vtk_normal_header(FILE * fp, struct Cell_head region, double elevation,
     fprintf(fp, "SPACING %lf %lf %lf\n", region.ew_res, region.ns_res, 0.0);
 
     if (type)
-	fprintf(fp, "ORIGIN %lf %lf %lf\n", (region.west + region.ew_res / 2) - x_extent,
+	fprintf(fp, "ORIGIN %lf %lf %lf\n",
+		(region.west + region.ew_res / 2) - x_extent,
 		(region.south + region.ns_res / 2) - y_extent, elevation);
     else
-	fprintf(fp, "ORIGIN %lf %lf %lf\n", region.west - x_extent, region.south - y_extent,
-		elevation);
+	fprintf(fp, "ORIGIN %lf %lf %lf\n", region.west - x_extent,
+		region.south - y_extent, elevation);
 
 }
 
@@ -101,7 +103,8 @@ write_vtk_normal_header(FILE * fp, struct Cell_head region, double elevation,
 /* ************************************************************************* */
 void write_vtk_structured_elevation_header(FILE * fp, struct Cell_head region)
 {
-    G_debug(3, _("write_vtk_structured_elevation_header: Writing VTK-Header"));
+    G_debug(3,
+	    _("write_vtk_structured_elevation_header: Writing VTK-Header"));
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
@@ -151,8 +154,8 @@ void write_vtk_pointdata_header(FILE * fp, struct Cell_head region)
 /* ************************************************************************* */
 void
 write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
-			      struct Cell_head region, int out_type,
-			      char *null_value, double scale, int dp)
+				 struct Cell_head region, int out_type,
+				 char *null_value, double scale, int dp)
 {
     int ncols = region.cols;
     int nrows = region.rows;
@@ -183,15 +186,17 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 	}
 
 	nspos = region.ns_res / 2 + region.south + rowcount * region.ns_res;
-	nspos -= y_extent; 
+	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
 	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
-	    ewpos = region.ew_res / 2 + region.west + colcount * region.ew_res;
+	    ewpos =
+		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
 
 	    value = get_raster_value_as_double(out_type, ptr, nullvalue);
-	    fprintf(fp, "%.*f %.*f %.*f\n", dp, ewpos, dp, nspos, dp, value*scale);
+	    fprintf(fp, "%.*f %.*f %.*f\n", dp, ewpos, dp, nspos, dp,
+		    value * scale);
 
 	    colcount++;
 	}
@@ -205,8 +210,9 @@ write_vtk_structured_coordinates(int fd, FILE * fp, char *varname,
 /* ************************************************************************* */
 void
 write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
-			     struct Cell_head region, int out_type,
-			     char *null_value, double scale, int polytype, int dp)
+				struct Cell_head region, int out_type,
+				char *null_value, double scale, int polytype,
+				int dp)
 {
     int ncols = region.cols;
     int nrows = region.rows;
@@ -217,7 +223,8 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
     void *ptr, *raster;
     int i, j, count;
 
-    G_debug(3, _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
+    G_debug(3,
+	    _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
     if (!sscanf(null_value, "%lf", &nullvalue)) {
@@ -240,15 +247,17 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	}
 
 	nspos = region.ns_res / 2 + region.south + rowcount * region.ns_res;
-	nspos -= y_extent; 
+	nspos -= y_extent;
 
 	for (col = 0, ptr = raster; col < ncols;
 	     col++, ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
-	    ewpos = region.ew_res / 2 + region.west + colcount * region.ew_res;
+	    ewpos =
+		region.ew_res / 2 + region.west + colcount * region.ew_res;
 	    ewpos -= x_extent;
 
 	    value = get_raster_value_as_double(out_type, ptr, nullvalue);
-	    fprintf(fp, "%.*f %.*f %.*f\n", dp, ewpos, dp, nspos, dp, value*scale);
+	    fprintf(fp, "%.*f %.*f %.*f\n", dp, ewpos, dp, nspos, dp,
+		    value * scale);
 
 	    colcount++;
 	}
@@ -266,7 +275,8 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 	for (i = 0; i < region.rows - 1; i++) {
 	    for (j = 0; j < region.cols - 1; j++) {
 		fprintf(fp, "4 %i %i %i %i \n", i * region.cols + j,
-			i * region.cols + j + 1, (i + 1) * region.cols + j + 1,
+			i * region.cols + j + 1,
+			(i + 1) * region.cols + j + 1,
 			(i + 1) * region.cols + j);
 	    }
 	}
@@ -318,7 +328,7 @@ write_vtk_polygonal_coordinates(int fd, FILE * fp, char *varname,
 /* ************************************************************************* */
 void
 write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
-	     int out_type, char *null_value, int dp)
+	       int out_type, char *null_value, int dp)
 {
     int ncols = region.cols;
     int nrows = region.rows;
@@ -368,7 +378,8 @@ write_vtk_data(int fd, FILE * fp, char *varname, struct Cell_head region,
 /* ************************************************************************* */
 void
 write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
-		     const char *varname, struct Cell_head region, int out_type, int dp)
+			 const char *varname, struct Cell_head region,
+			 int out_type, int dp)
 {
     int ncols = region.cols;
     int nrows = region.rows;
@@ -420,7 +431,8 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 		fprintf(fp, "0 0 0 \n");
 	    }
 	    else {
-		fprintf(fp, "%.*f %.*f %.*f \n", dp, r / 255, dp, g / 255, dp, b / 255);
+		fprintf(fp, "%.*f %.*f %.*f \n", dp, r / 255, dp, g / 255, dp,
+			b / 255);
 	    }
 	}
     }
@@ -434,7 +446,8 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 /* ************************************************************************* */
 void
 write_vtk_vector_data(int xfd, int yfd, int zfd, FILE * fp,
-		   const char *varname, struct Cell_head region, int out_type, int dp)
+		      const char *varname, struct Cell_head region,
+		      int out_type, int dp)
 {
     int ncols = region.cols;
     int nrows = region.rows;

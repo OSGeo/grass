@@ -1,3 +1,4 @@
+
 /**
  * \file locale.c
  *
@@ -21,23 +22,22 @@
 
 
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
-static char *
-locale_dir(void)
+static char *locale_dir(void)
 {
-	static char localedir[4096];
-	const char *gisbase;
+    static char localedir[4096];
+    const char *gisbase;
 
-	if (*localedir)
-		return localedir;
-
-	gisbase = getenv("GISBASE");
-	if (!gisbase || !*gisbase)
-		return "";
-
-	strcpy(localedir, gisbase);
-	strcat(localedir, "/locale");
-
+    if (*localedir)
 	return localedir;
+
+    gisbase = getenv("GISBASE");
+    if (!gisbase || !*gisbase)
+	return "";
+
+    strcpy(localedir, gisbase);
+    strcat(localedir, "/locale");
+
+    return localedir;
 }
 #endif
 
@@ -50,28 +50,25 @@ locale_dir(void)
  * \retval char * Pointer to string
  */
 
-char *
-G_gettext(const char *package, const char *msgid)
+char *G_gettext(const char *package, const char *msgid)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
-	static char now_bound[4096];
-	static int initialized;
+    static char now_bound[4096];
+    static int initialized;
 
-	if (!initialized)
-	{
-		setlocale(LC_CTYPE, "");
-		setlocale(LC_MESSAGES, "");
-		initialized = 1;
-	}
+    if (!initialized) {
+	setlocale(LC_CTYPE, "");
+	setlocale(LC_MESSAGES, "");
+	initialized = 1;
+    }
 
-	if (strcmp(now_bound, package) != 0)
-	{
-		strcpy(now_bound, package);
-		bindtextdomain(package, locale_dir());
-	}
+    if (strcmp(now_bound, package) != 0) {
+	strcpy(now_bound, package);
+	bindtextdomain(package, locale_dir());
+    }
 
-	return dgettext(package, msgid);
+    return dgettext(package, msgid);
 #else
-	return (char *) msgid;
+    return (char *)msgid;
 #endif
 }

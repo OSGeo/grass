@@ -1,20 +1,20 @@
 /*!
-  \file GS_util.c
- 
-  \brief OGSF library - loading and manipulating surfaces
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \file GS_util.c
+
+   \brief OGSF library - loading and manipulating surfaces
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 #include <math.h>
@@ -24,9 +24,9 @@
 #include <grass/gstypes.h>
 
 /*!
-  \brief Calculate distance between 2 coordinates
+   \brief Calculate distance between 2 coordinates
 
-  Units is one of:
+   Units is one of:
    - "meters",
    - "miles",
    - "kilometers",
@@ -44,14 +44,14 @@
    - "furlongs",
    - "chains"
 
-  Default is meters.
+   Default is meters.
 
-  \param from starting point
-  \param to ending point
-  \param units map units
+   \param from starting point
+   \param to ending point
+   \param units map units
 
-  \return distance between two geographic coordinates in current projection
-*/
+   \return distance between two geographic coordinates in current projection
+ */
 double GS_geodistance(double *from, double *to, const char *units)
 {
     double meters;
@@ -131,13 +131,13 @@ double GS_geodistance(double *from, double *to, const char *units)
 }
 
 /*!
-  \brief Calculate distance
-  
-  \param from 'from' point (X,Y,Z)
-  \param to 'to' point (X,Y,Z)
+   \brief Calculate distance
 
-  \return distance
-*/
+   \param from 'from' point (X,Y,Z)
+   \param to 'to' point (X,Y,Z)
+
+   \return distance
+ */
 float GS_distance(float *from, float *to)
 {
     float x, y, z;
@@ -146,17 +146,17 @@ float GS_distance(float *from, float *to)
     y = from[Y] - to[Y];
     z = from[Z] - to[Z];
 
-    return (float) sqrt(x * x + y * y + z * z);
+    return (float)sqrt(x * x + y * y + z * z);
 }
 
 /*!
-  \brief Calculate distance in plane
+   \brief Calculate distance in plane
 
-  \param from 'from' point (X,Y)
-  \param to 'to' point (X,Y)
+   \param from 'from' point (X,Y)
+   \param to 'to' point (X,Y)
 
-  \return distance
-*/  
+   \return distance
+ */
 float GS_P2distance(float *from, float *to)
 {
     float x, y;
@@ -164,17 +164,17 @@ float GS_P2distance(float *from, float *to)
     x = from[X] - to[X];
     y = from[Y] - to[Y];
 
-    return (float) sqrt(x * x + y * y);
+    return (float)sqrt(x * x + y * y);
 }
 
 /*!
-  \brief Copy vector values
+   \brief Copy vector values
 
-  v1 = v2
+   v1 = v2
 
-  \param[out] v1 first vector
-  \param v2 second vector
-*/
+   \param[out] v1 first vector
+   \param v2 second vector
+ */
 void GS_v3eq(float *v1, float *v2)
 {
     v1[X] = v2[X];
@@ -185,13 +185,13 @@ void GS_v3eq(float *v1, float *v2)
 }
 
 /*!
-  \brief Sum vectors
-  
-  v1 += v2
+   \brief Sum vectors
 
-  \param[in,out] v1 first vector
-  \param v2 second vector
-*/
+   v1 += v2
+
+   \param[in,out] v1 first vector
+   \param v2 second vector
+ */
 void GS_v3add(float *v1, float *v2)
 {
     v1[X] += v2[X];
@@ -202,13 +202,13 @@ void GS_v3add(float *v1, float *v2)
 }
 
 /*!
-  \brief Subtract vectors
+   \brief Subtract vectors
 
-  v1 -= v2
+   v1 -= v2
 
-  \param[in,out] v1 first vector
-  \param v2 second vector
-*/  
+   \param[in,out] v1 first vector
+   \param v2 second vector
+ */
 void GS_v3sub(float *v1, float *v2)
 {
     v1[X] -= v2[X];
@@ -219,13 +219,13 @@ void GS_v3sub(float *v1, float *v2)
 }
 
 /*!
-  \brief Multiple vectors
+   \brief Multiple vectors
 
-  v1 *= k
+   v1 *= k
 
-  \param[in,out] v1 vector
-  \param k multiplicator
-*/
+   \param[in,out] v1 vector
+   \param k multiplicator
+ */
 void GS_v3mult(float *v1, float k)
 {
     v1[X] *= k;
@@ -236,13 +236,13 @@ void GS_v3mult(float *v1, float k)
 }
 
 /*!
-  \brief Change v1 so that it is a unit vector (2D)
+   \brief Change v1 so that it is a unit vector (2D)
 
-  \param[in,out] v1 vector
+   \param[in,out] v1 vector
 
-  \return 0 if magnitude of v1 is zero
-  \return 1 if magnitude of v1 > 0
-*/
+   \return 0 if magnitude of v1 is zero
+   \return 1 if magnitude of v1 > 0
+ */
 int GS_v3norm(float *v1)
 {
     float n;
@@ -261,13 +261,13 @@ int GS_v3norm(float *v1)
 }
 
 /*!
-  \brief Change v1 so that it is a unit vector (3D)
+   \brief Change v1 so that it is a unit vector (3D)
 
-  \param[in,out] v1 vector
+   \param[in,out] v1 vector
 
-  \return 0 if magnitude of v1 is zero
-  \return 1 if magnitude of v1 > 0
-*/
+   \return 0 if magnitude of v1 is zero
+   \return 1 if magnitude of v1 > 0
+ */
 int GS_v2norm(float *v1)
 {
     float n;
@@ -285,13 +285,13 @@ int GS_v2norm(float *v1)
 }
 
 /*!
-  \brief Changes v1 so that it is a unit vector
+   \brief Changes v1 so that it is a unit vector
 
-  \param dv1 vector
+   \param dv1 vector
 
-  \return 0 if magnitude of dv1 is zero
-  \return 1 if magnitude of dv1 > 0
-*/
+   \return 0 if magnitude of dv1 is zero
+   \return 1 if magnitude of dv1 > 0
+ */
 int GS_dv3norm(double *dv1)
 {
     double n;
@@ -311,14 +311,14 @@ int GS_dv3norm(double *dv1)
 
 
 /*!
-  \brief Change v2 so that v1v2 is a unit vector
+   \brief Change v2 so that v1v2 is a unit vector
 
-  \param v1 first vector
-  \param v2[in,out] second vector
+   \param v1 first vector
+   \param v2[in,out] second vector
 
-  \return 0 if magnitude of dx is zero
-  \return 1 if magnitude of dx > 0
-*/
+   \return 0 if magnitude of dx is zero
+   \return 1 if magnitude of dx > 0
+ */
 int GS_v3normalize(float *v1, float *v2)
 {
     float n, dx, dy, dz;
@@ -341,15 +341,15 @@ int GS_v3normalize(float *v1, float *v2)
 
 
 /*!
-  \brief Get a normalized direction from v1 to v2, store in v3
+   \brief Get a normalized direction from v1 to v2, store in v3
 
-  \param v1 first vector
-  \param v2 second vector
-  \param[out] v3 output vector
+   \param v1 first vector
+   \param v2 second vector
+   \param[out] v3 output vector
 
-  \return 0 if magnitude of dx is zero
-  \return 1 if magnitude of dx > 0
-*/
+   \return 0 if magnitude of dx is zero
+   \return 1 if magnitude of dx > 0
+ */
 int GS_v3dir(float *v1, float *v2, float *v3)
 {
     float n, dx, dy, dz;
@@ -373,15 +373,15 @@ int GS_v3dir(float *v1, float *v2, float *v3)
 
 
 /*!
-  \brief Get a normalized direction from v1 to v2, store in v3 (2D)
+   \brief Get a normalized direction from v1 to v2, store in v3 (2D)
 
-  \param v1 first vector
-  \param v2 second vector
-  \param[out] v3 output vector
+   \param v1 first vector
+   \param v2 second vector
+   \param[out] v3 output vector
 
-  \return 0 if magnitude of dx is zero
-  \return 1 if magnitude of dx > 0
-*/
+   \return 0 if magnitude of dx is zero
+   \return 1 if magnitude of dx > 0
+ */
 void GS_v2dir(float *v1, float *v2, float *v3)
 {
     float n, dx, dy;
@@ -397,12 +397,12 @@ void GS_v2dir(float *v1, float *v2, float *v3)
 }
 
 /*!
-  \brief Get the cross product v3 = v1 cross v2
+   \brief Get the cross product v3 = v1 cross v2
 
-  \param v1 first vector
-  \param v2 second vector
-  \param[out] v3 output vector
-*/
+   \param v1 first vector
+   \param v2 second vector
+   \param[out] v3 output vector
+ */
 void GS_v3cross(float *v1, float *v2, float *v3)
 {
     v3[X] = (v1[Y] * v2[Z]) - (v1[Z] * v2[Y]);
@@ -413,11 +413,11 @@ void GS_v3cross(float *v1, float *v2, float *v3)
 }
 
 /*!
-  \brief Magnitude of vector
+   \brief Magnitude of vector
 
-  \param v1 vector
-  \param[out] mag magnitude value
-*/
+   \param v1 vector
+   \param[out] mag magnitude value
+ */
 void GS_v3mag(float *v1, float *mag)
 {
     *mag = sqrt(v1[X] * v1[X] + v1[Y] * v1[Y] + v1[Z] * v1[Z]);
@@ -426,20 +426,20 @@ void GS_v3mag(float *v1, float *mag)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  Initialize by calling with a number nhist to represent number of
-  previous entrys to check, then call with zero as nhist
+   Initialize by calling with a number nhist to represent number of
+   previous entrys to check, then call with zero as nhist
 
-  \param p1 first point
-  \param p2 second point
-  \param nhist ?
+   \param p1 first point
+   \param p2 second point
+   \param nhist ?
 
-  \return -1 on error
-  \return -2
-  \return 1
-  \return 9
-*/
+   \return -1 on error
+   \return -2
+   \return 1
+   \return 9
+ */
 int GS_coordpair_repeats(float *p1, float *p2, int nhist)
 {
     static float *entrys = NULL;
@@ -452,10 +452,10 @@ int GS_coordpair_repeats(float *p1, float *p2, int nhist)
 	    G_free(entrys);
 	}
 
-	entrys = (float *) G_malloc(4 * nhist * sizeof(float));
+	entrys = (float *)G_malloc(4 * nhist * sizeof(float));
 
 	if (!entrys)
-	  return (-1);
+	    return (-1);
 
 	len = nhist;
 	next = 0;

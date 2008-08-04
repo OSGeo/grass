@@ -9,28 +9,27 @@
 /* Utilities */
 
 /* For given type returns pointer to name */
-char *
-get_line_type_name ( int type)
+char *get_line_type_name(int type)
 {
     char *name;
 
-    switch ( type ) {
-        case GV_POINT:
-	    name = G_store ( "point" );
-	    break;
-        case GV_LINE:
-	    name = G_store ( "line" );
-	    break;
-        case GV_BOUNDARY:
-	    name = G_store ( "boundary" );
-	    break;
-        case GV_CENTROID:
-	    name = G_store ( "centroid" );
-	    break;
-        default:
-	    name = G_store ( "unknown type" );
+    switch (type) {
+    case GV_POINT:
+	name = G_store("point");
+	break;
+    case GV_LINE:
+	name = G_store("line");
+	break;
+    case GV_BOUNDARY:
+	name = G_store("boundary");
+	break;
+    case GV_CENTROID:
+	name = G_store("centroid");
+	break;
+    default:
+	name = G_store("unknown type");
     }
-    
+
     return name;
 }
 
@@ -57,7 +56,7 @@ static void end_tool(void)
     Tcl_Eval(Toolbox, ".screen.canvas delete active");
 
     if (tool_end)
-	    (*tool_end)(tool_closure);
+	(*tool_end) (tool_closure);
 
     tool_update = NULL;
     tool_end = NULL;
@@ -72,16 +71,16 @@ void cancel_tool(void)
     end_tool();
 }
 
-int c_update_tool( ClientData cdata, Tcl_Interp *interp, int argc, char *argv[])
+int c_update_tool(ClientData cdata, Tcl_Interp * interp, int argc,
+		  char *argv[])
 {
     char buf[100];
     int x, y, b;
 
-    G_debug (3, "c_update_tool()");
+    G_debug(3, "c_update_tool()");
 
-    if ( argc < 4 )
-    {
-	Tcl_SetResult(interp,"Usage: c_update_tool x y b", TCL_VOLATILE);
+    if (argc < 4) {
+	Tcl_SetResult(interp, "Usage: c_update_tool x y b", TCL_VOLATILE);
 	return (TCL_ERROR);
     }
 
@@ -92,8 +91,7 @@ int c_update_tool( ClientData cdata, Tcl_Interp *interp, int argc, char *argv[])
     Tcl_GetInt(interp, argv[2], &y);
     Tcl_GetInt(interp, argv[3], &b);
 
-    switch (mode)
-    {
+    switch (mode) {
     case MOUSE_POINT:
 	break;
     case MOUSE_LINE:
@@ -106,20 +104,17 @@ int c_update_tool( ClientData cdata, Tcl_Interp *interp, int argc, char *argv[])
 	break;
     }
 
-    if (b < 0)
-    {
+    if (b < 0) {
 	update(x, y);
 	return TCL_OK;
     }
 
-    if (b == 0)
-    {
+    if (b == 0) {
 	end_tool();
 	return TCL_OK;
     }
 
-    if ((*tool_update)(tool_closure, x, y, b))
-    {
+    if ((*tool_update) (tool_closure, x, y, b)) {
 	end_tool();
 	return TCL_OK;
     }
@@ -127,7 +122,8 @@ int c_update_tool( ClientData cdata, Tcl_Interp *interp, int argc, char *argv[])
     return TCL_OK;
 }
 
-void set_tool(tool_func_begin *begin_fn, tool_func_update *update_fn, tool_func_end *end_fn, void *closure)
+void set_tool(tool_func_begin * begin_fn, tool_func_update * update_fn,
+	      tool_func_end * end_fn, void *closure)
 {
     int ret;
 
@@ -135,18 +131,16 @@ void set_tool(tool_func_begin *begin_fn, tool_func_update *update_fn, tool_func_
 	end_tool();
 
     driver_open();
-    ret = (*begin_fn)(closure);
+    ret = (*begin_fn) (closure);
 
-    if (ret)
-    {
+    if (ret) {
 	driver_close();
 	return;
     }
-   
+
     tool_update = update_fn;
     tool_end = end_fn;
     tool_closure = closure;
 
     Tcl_Eval(Toolbox, ".screen.canvas configure -cursor crosshair");
 }
-

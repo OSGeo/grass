@@ -30,7 +30,7 @@ typedef struct
     struct Flag *mask;
 } paramType;
 
-paramType param;	/*param */
+paramType param;		/*param */
 int globalElevMapType;
 
 
@@ -159,7 +159,7 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 	/*Read the input map row */
 	if (!G_get_raster_row(elevfd, elevrast, y, globalElevMapType))
 	    fatal_error(map, elevfd, outfd,
-		       _("Unable to get elevation raster row"));
+			_("Unable to get elevation raster row"));
 
 	for (x = 0, ptr = elevrast; x < cols; x++, ptr =
 	     G_incr_void_ptr(ptr, G_raster_size(globalElevMapType))) {
@@ -226,13 +226,15 @@ void rast3d_cross_section(void *map, G3D_Region region, int elevfd, int outfd)
 	if (typeIntern == FCELL_TYPE) {
 	    check = G_put_f_raster_row(outfd, fcell);
 	    if (check != 1)
-		fatal_error(map, elevfd, outfd, _("Could not write raster row"));
+		fatal_error(map, elevfd, outfd,
+			    _("Could not write raster row"));
 	}
 
 	if (typeIntern == DCELL_TYPE) {
 	    check = G_put_d_raster_row(outfd, dcell);
 	    if (check != 1)
-		fatal_error(map, elevfd, outfd, _("Could not write raster row"));
+		fatal_error(map, elevfd, outfd,
+			    _("Could not write raster row"));
 	}
     }
     G_debug(3, "\nDone\n");
@@ -280,7 +282,8 @@ int main(int argc, char *argv[])
     G_debug(3, "Open 3D raster map %s", param.input->answer);
 
     if (NULL == G_find_grid3(param.input->answer, ""))
-	G3d_fatalError(_("3d raster map <%s> not found"), param.input->answer);
+	G3d_fatalError(_("3d raster map <%s> not found"),
+		       param.input->answer);
 
     /* Figure out the region from the map */
     G3d_initDefaults();
@@ -293,7 +296,8 @@ int main(int argc, char *argv[])
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
 	G_message
-	    (_("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
+	    (_
+	     ("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
 	G_get_set_window(&window2d);
 	window2d.ns_res = region.ns_res;
 	window2d.ew_res = region.ew_res;
@@ -313,7 +317,8 @@ int main(int argc, char *argv[])
 			  G3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-	G3d_fatalError(_("Error opening 3d raster map <%s>"), param.input->answer);
+	G3d_fatalError(_("Error opening 3d raster map <%s>"),
+		       param.input->answer);
 
     /*Get the output type */
     output_type = G3d_fileTypeMap(map);
@@ -351,12 +356,14 @@ int main(int argc, char *argv[])
 	if (output_type == FCELL_TYPE) {
 	    outfd = G_open_raster_new(param.output->answer, FCELL_TYPE);
 	    if (outfd < 0)
-		fatal_error(map, elevfd, -1, _("Unable to create raster map"));
+		fatal_error(map, elevfd, -1,
+			    _("Unable to create raster map"));
 	}
 	else if (output_type == DCELL_TYPE) {
 	    outfd = G_open_raster_new(param.output->answer, DCELL_TYPE);
 	    if (outfd < 0)
-		fatal_error(map, elevfd, -1, _("Unable to create raster map"));
+		fatal_error(map, elevfd, -1,
+			    _("Unable to create raster map"));
 	}
 
 	/*if requested set the Mask on */
@@ -391,13 +398,13 @@ int main(int argc, char *argv[])
     }
     else {
 	fatal_error(map, -1, -1,
-		   _("Wrong G3D Datatype! Cannot create raster map."));
+		    _("Wrong G3D Datatype! Cannot create raster map."));
     }
 
     /* Close files and exit */
     if (!G3d_closeCell(map))
-	G3d_fatalError(_("Could not close G3D map <%s>"), param.input->answer);
+	G3d_fatalError(_("Could not close G3D map <%s>"),
+		       param.input->answer);
 
     return (EXIT_SUCCESS);
 }
-

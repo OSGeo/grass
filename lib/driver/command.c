@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       driver
@@ -33,9 +34,9 @@
 #define SEND(a,b)   _send((a),(b))
 #define SENDTEXT(x)  sendtext((x))
 
-static int rec(void *,int);
-static int rectext(char **,int *);
-static int _send(const void *,int);
+static int rec(void *, int);
+static int rectext(char **, int *);
+static int _send(const void *, int);
 static int sendtext(const char *);
 static int RESULT(int);
 
@@ -50,7 +51,7 @@ static char current_command;
 
 static int ateof;
 
-static PAD *curpad;       /* current selected pad */
+static PAD *curpad;		/* current selected pad */
 
 static unsigned char *blua;
 static unsigned char *grna;
@@ -70,13 +71,12 @@ static char lc;
 
 static void *xalloc(void *buf, int *cur, int new, int len)
 {
-	if (*cur < new)
-	{
-		buf = G_realloc(buf, (size_t) new * len);
-		*cur = new;
-	}
+    if (*cur < new) {
+	buf = G_realloc(buf, (size_t) new * len);
+	*cur = new;
+    }
 
-	return buf;
+    return buf;
 }
 
 void command_init(int rfd, int wfd)
@@ -95,13 +95,13 @@ int LIB_command_get_input(void)
     return _rfd;
 }
 
-static void send_fonts(void (*func)(char ***, int *))
+static void send_fonts(void (*func) (char ***, int *))
 {
     char **fonts;
     int num_fonts;
     int i;
 
-    (*func)(&fonts, &num_fonts);
+    (*func) (&fonts, &num_fonts);
     SEND(&num_fonts, sizeof num_fonts);
     for (i = 0; i < num_fonts; i++)
 	SENDTEXT(fonts[i]);
@@ -128,8 +128,7 @@ int process_command(int c)
     unsigned char ch;
     int src[2][2], dst[2][2];
 
-    switch(c)
-    {
+    switch (c) {
     case BEGIN:
 	ch = 0;
 	for (index = -10; index < BEGIN_SYNC_COUNT; index++)
@@ -230,7 +229,8 @@ int process_command(int c)
 	REC(&x, sizeof x);
 	REC(&y, sizeof y);
 	REC(&index, sizeof index);
-	blua = (unsigned char *) xalloc(blua, &blu_alloc, x * y, sizeof(*blua));
+	blua =
+	    (unsigned char *)xalloc(blua, &blu_alloc, x * y, sizeof(*blua));
 	REC(blua, x * y * sizeof(char));
 	COM_Bitmap(x, y, index, blua);
 	break;
@@ -243,10 +243,10 @@ int process_command(int c)
     case SCALED_RASTER:
 	REC(&x, sizeof x);
 	REC(&y, sizeof y);
-	reda = (unsigned char *) xalloc(reda, &red_alloc, x, sizeof(*reda));
-	grna = (unsigned char *) xalloc(grna, &grn_alloc, x, sizeof(*grna));
-	blua = (unsigned char *) xalloc(blua, &blu_alloc, x, sizeof(*blua));
-	nula = (unsigned char *) xalloc(nula, &nul_alloc, x, sizeof(*nula));
+	reda = (unsigned char *)xalloc(reda, &red_alloc, x, sizeof(*reda));
+	grna = (unsigned char *)xalloc(grna, &grn_alloc, x, sizeof(*grna));
+	blua = (unsigned char *)xalloc(blua, &blu_alloc, x, sizeof(*blua));
+	nula = (unsigned char *)xalloc(nula, &nul_alloc, x, sizeof(*nula));
 	REC(reda, x * sizeof(char));
 	REC(grna, x * sizeof(char));
 	REC(blua, x * sizeof(char));
@@ -260,48 +260,48 @@ int process_command(int c)
 	break;
     case POLYGON_ABS:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polygon_abs(xarray, yarray, number);
 	break;
     case POLYGON_REL:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polygon_rel(xarray, yarray, number);
 	break;
     case POLYLINE_ABS:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polyline_abs(xarray, yarray, number);
 	break;
     case POLYLINE_REL:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polyline_rel(xarray, yarray, number);
 	break;
     case POLYDOTS_ABS:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polydots_abs(xarray, yarray, number);
 	break;
     case POLYDOTS_REL:
 	REC(&number, sizeof number);
-	xarray = (int *) xalloc(xarray, &n_xarray, number, sizeof(*xarray));
-	yarray = (int *) xalloc(yarray, &n_yarray, number, sizeof(*yarray));
+	xarray = (int *)xalloc(xarray, &n_xarray, number, sizeof(*xarray));
+	yarray = (int *)xalloc(yarray, &n_yarray, number, sizeof(*yarray));
 	REC(xarray, number * sizeof(xarray[0]));
 	REC(yarray, number * sizeof(yarray[0]));
 	COM_Polydots_rel(xarray, yarray, number);
@@ -382,10 +382,10 @@ int process_command(int c)
 	break;
     case PAD_CREATE:
 	RECTEXT(text, text_size);
-	if (*text == 0) /* this is scratch pad */
+	if (*text == 0)		/* this is scratch pad */
 	    RESULT(OK);
 	else if (find_pad(text) != NULL)
-	    RESULT(DUPLICATE); /* duplicate pad */
+	    RESULT(DUPLICATE);	/* duplicate pad */
 	else if (create_pad(text))
 	    RESULT(OK);
 	else
@@ -393,13 +393,11 @@ int process_command(int c)
 	break;
 
     case PAD_CURRENT:
-	if (curpad == NULL)
-	{
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    SENDTEXT("");
 	}
-	else
-	{
+	else {
 	    RESULT(OK);
 	    SENDTEXT(curpad->name);
 	}
@@ -410,8 +408,7 @@ int process_command(int c)
 	    RESULT(NO_CUR_PAD);
 	else if (*curpad->name == 0)
 	    RESULT(ILLEGAL);
-	else
-	{
+	else {
 	    delete_pad(curpad);
 	    curpad = NULL;
 	    RESULT(OK);
@@ -431,7 +428,7 @@ int process_command(int c)
 	break;
 
     case PAD_SELECT:
-	RECTEXT(text, text_size); /* pad name */
+	RECTEXT(text, text_size);	/* pad name */
 	curpad = find_pad(text);
 	if (curpad == NULL)
 	    RESULT(NO_PAD);
@@ -440,15 +437,13 @@ int process_command(int c)
 	break;
 
     case PAD_GET_ITEM:
-	RECTEXT(text, text_size); /* item name */
-	if (curpad == NULL)
-	{
+	RECTEXT(text, text_size);	/* item name */
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    break;
 	}
 	item = find_item(curpad, text);
-	if (item == NULL)
-	{
+	if (item == NULL) {
 	    RESULT(NO_ITEM);
 	    break;
 	}
@@ -460,10 +455,9 @@ int process_command(int c)
 	break;
 
     case PAD_SET_ITEM:
-	RECTEXT(name, name_size); /* item name */
-	RECTEXT(text, text_size); /* item value */
-	if (curpad == NULL)
-	{
+	RECTEXT(name, name_size);	/* item name */
+	RECTEXT(text, text_size);	/* item value */
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    break;
 	}
@@ -475,11 +469,10 @@ int process_command(int c)
 	break;
 
     case PAD_APPEND_ITEM:
-	RECTEXT(name, name_size); /* item name */
-	RECTEXT(text, text_size); /* item value */
-	REC(&index, sizeof index); /* replace flag */
-	if (curpad == NULL)
-	{
+	RECTEXT(name, name_size);	/* item name */
+	RECTEXT(text, text_size);	/* item value */
+	REC(&index, sizeof index);	/* replace flag */
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    break;
 	}
@@ -490,9 +483,8 @@ int process_command(int c)
 	break;
 
     case PAD_DELETE_ITEM:
-	RECTEXT(text, text_size); /* item name */
-	if (curpad == NULL)
-	{
+	RECTEXT(text, text_size);	/* item name */
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    break;
 	}
@@ -501,8 +493,7 @@ int process_command(int c)
 	break;
 
     case PAD_LIST_ITEMS:
-	if (curpad == NULL)
-	{
+	if (curpad == NULL) {
 	    RESULT(NO_CUR_PAD);
 	    break;
 	}
@@ -514,7 +505,7 @@ int process_command(int c)
 	break;
 
     default:
-	G_warning( _("Unknown command: %d last: %d"), c, lc);
+	G_warning(_("Unknown command: %d last: %d"), c, lc);
 	break;
     }
     lc = c;
@@ -524,14 +515,13 @@ int process_command(int c)
 
 static int read1(char *c)
 {
-    if (atbuf == n_read)
-    {
-        atbuf = 0;
-        n_read = read(_rfd, inbuf, sizeof inbuf);
+    if (atbuf == n_read) {
+	atbuf = 0;
+	n_read = read(_rfd, inbuf, sizeof inbuf);
 	if (n_read < 0)
 	    perror("Monitor: read1: Error reading input");
-        if (n_read <= 0)
-            return 1;           /* EOF */
+	if (n_read <= 0)
+	    return 1;		/* EOF */
     }
     *c = inbuf[atbuf++];
     return 0;
@@ -541,54 +531,52 @@ int get_command(char *c)
 {
     /* is there a command char pending? */
     if ((*c = current_command)) {
-        current_command = 0;
-        return 0;
+	current_command = 0;
+	return 0;
     }
 
     /*
      * look for 1 (or more) COMMAND_ESC chars
      * followed by a non-zero comamnd token char
      */
-    while (read1(c) == 0)   /* while !EOF */
-    {
-        if (*c != COMMAND_ESC)
-            continue;
-        while (*c == COMMAND_ESC)
-            if (read1(c) != 0)
-	    {
+    while (read1(c) == 0) {	/* while !EOF */
+	if (*c != COMMAND_ESC)
+	    continue;
+	while (*c == COMMAND_ESC)
+	    if (read1(c) != 0) {
 		G_warning(_("Monitor: get_command: Premature EOF"));
-                return 1;               /* EOF */
+		return 1;	/* EOF */
 	    }
-        if (*c)
-            return 0;           /* got the command token */
+	if (*c)
+	    return 0;		/* got the command token */
     }
-    return 1;   /* EOF */
+    return 1;			/* EOF */
 }
 
 static int get1(char *c)
 {
     if (read1(c) != 0)
-        return 1;       /* EOF */
+	return 1;		/* EOF */
     if (*c != COMMAND_ESC)
-        return 0;       /* OK */
+	return 0;		/* OK */
     if (read1(c) != 0)
-        return 1;       /* EOF */
-    if (*c)
-    {
-        current_command = *c;
-        return -1;      /* Got command within data */
+	return 1;		/* EOF */
+    if (*c) {
+	current_command = *c;
+	return -1;		/* Got command within data */
     }
-    *c = COMMAND_ESC;   /* sequence COMMAND_ESC,0 becomes data COMMAND_ESC */
-    return 0;           /* OK */
+    *c = COMMAND_ESC;		/* sequence COMMAND_ESC,0 becomes data COMMAND_ESC */
+    return 0;			/* OK */
 }
 
 static int rec(void *buf, int n)
 {
     char *cbuf = buf;
     int stat;
+
     while (n-- > 0) {
-        if ((stat=get1(cbuf++)) != 0)
-	    return stat; /* EOF or COMMAND_ESC */
+	if ((stat = get1(cbuf++)) != 0)
+	    return stat;	/* EOF or COMMAND_ESC */
     }
     return 0;
 }
@@ -598,16 +586,15 @@ static int rectext(char **buff_p, int *size_p)
     char *buff = *buff_p;
     int size = *size_p;
     int i, stat;
-    for (i = 0; ; i++)
-    {
+
+    for (i = 0;; i++) {
 	char c;
 
 	stat = get1(&c);
 	if (stat != 0)
-	    return stat; /* EOF or COMMAND_ESC */
+	    return stat;	/* EOF or COMMAND_ESC */
 
-	if (i >= size)
-	{
+	if (i >= size) {
 	    *size_p = size = size ? size * 2 : 1000;
 	    *buff_p = buff = G_realloc(buff, size);
 	}
@@ -622,16 +609,14 @@ static int rectext(char **buff_p, int *size_p)
 static int _send(const void *buf, int n)
 {
     int r = write(_wfd, buf, n);
-    if (r < 0)
-    {
+
+    if (r < 0) {
 	perror("Monitor: _send: write");
 	return 1;
     }
-    if (r < n)
-    {
-	G_warning(
-		"Monitor: _send: write returned short count: %d of %d",
-		r, n);
+    if (r < n) {
+	G_warning("Monitor: _send: write returned short count: %d of %d",
+		  r, n);
 	return 1;
     }
     return 0;
@@ -652,4 +637,3 @@ static int RESULT(int n)
 
     return 0;
 }
-

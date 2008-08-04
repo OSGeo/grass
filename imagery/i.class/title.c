@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "local_proto.h"
 
-int display_title ( View *view)
+int display_title(View * view)
 {
     View *title;
     char left[100], center[100];
@@ -12,33 +12,29 @@ int display_title ( View *view)
     *left = 0;
     *center = 0;
 
-    if (view->cell.configured)
-    {
-	sprintf (center, "%s (mag %.1f)",
-	    view->cell.name, magnification (view));
+    if (view->cell.configured) {
+	sprintf(center, "%s (mag %.1f)",
+		view->cell.name, magnification(view));
     }
 
-    if (view == VIEW_MAP1)
-    {
-	sprintf (left, "%s", G_location());
+    if (view == VIEW_MAP1) {
+	sprintf(left, "%s", G_location());
 	title = VIEW_TITLE1;
     }
-    else if (view == VIEW_MAP1_ZOOM)
-    {
+    else if (view == VIEW_MAP1_ZOOM) {
 	title = VIEW_TITLE1_ZOOM;
     }
 
-    Erase_view (title);
-    R_standard_color (BLACK);
+    Erase_view(title);
+    R_standard_color(BLACK);
     size = title->nrows - 4;
-    R_text_size (size, size);
-    Text (left, title->top, title->bottom, title->left, title->right, 2);
-    if (*center)
-    {
-	R_standard_color (RED);
-	Text (center, title->top, title->bottom,
-		(title->left + title->right - Text_width (center)) / 2,
-		title->right, 2);
+    R_text_size(size, size);
+    Text(left, title->top, title->bottom, title->left, title->right, 2);
+    if (*center) {
+	R_standard_color(RED);
+	Text(center, title->top, title->bottom,
+	     (title->left + title->right - Text_width(center)) / 2,
+	     title->right, 2);
     }
 
     return 0;

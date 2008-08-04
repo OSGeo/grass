@@ -23,7 +23,7 @@
 
 int R_screen_left(void)
 {
-	return trans->screen_left();
+    return trans->screen_left();
 }
 
 /*!
@@ -37,7 +37,7 @@ int R_screen_left(void)
 
 int R_screen_rite(void)
 {
-	return trans->screen_rite();
+    return trans->screen_rite();
 }
 
 /*!
@@ -51,7 +51,7 @@ int R_screen_rite(void)
 
 int R_screen_bot(void)
 {
-	return trans->screen_bot();
+    return trans->screen_bot();
 }
 
 
@@ -66,12 +66,12 @@ int R_screen_bot(void)
 
 int R_screen_top(void)
 {
-	return trans->screen_top();
+    return trans->screen_top();
 }
 
 void R_get_num_colors(int *n)
 {
-	trans->get_num_colors(n);
+    trans->get_num_colors(n);
 }
 
 
@@ -89,7 +89,7 @@ void R_get_num_colors(int *n)
 
 void R_standard_color(int index)
 {
-	trans->standard_color(index);
+    trans->standard_color(index);
 }
 
 /*!
@@ -108,7 +108,7 @@ void R_standard_color(int index)
 
 void R_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 {
-	trans->RGB_color(red, grn, blu);
+    trans->RGB_color(red, grn, blu);
 }
 
 /*!
@@ -122,7 +122,7 @@ void R_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 
 void R_line_width(int width)
 {
-	trans->line_width(width);
+    trans->line_width(width);
 }
 
 /*!
@@ -136,7 +136,7 @@ void R_line_width(int width)
 
 void R_erase(void)
 {
-	trans->erase();
+    trans->erase();
 }
 
 /*!
@@ -152,7 +152,7 @@ void R_erase(void)
 
 void R_move_abs(int x, int y)
 {
-	trans->move_abs(x, y);
+    trans->move_abs(x, y);
 }
 
 /*!
@@ -160,8 +160,8 @@ void R_move_abs(int x, int y)
  *
  * Shift the current screen location by the values in <b>dx</b> and <b>dy</b>:
  \code
-   Newx = Oldx + dx;
-   Newy = Oldy + dy;
+ Newx = Oldx + dx;
+ Newy = Oldy + dy;
  \endcode
  * Nothing is drawn on the screen.
  *
@@ -172,7 +172,7 @@ void R_move_abs(int x, int y)
 
 void R_move_rel(int x, int y)
 {
-	trans->move_rel(x, y);
+    trans->move_rel(x, y);
 }
 
 /*!
@@ -189,7 +189,7 @@ void R_move_rel(int x, int y)
 
 void R_cont_abs(int x, int y)
 {
-	trans->cont_abs(x, y);
+    trans->cont_abs(x, y);
 }
 
 /*!
@@ -199,10 +199,10 @@ void R_cont_abs(int x, int y)
  * current color, selected via <i>R_color</i>, from the current location to
  * the relative location specified by <b>x</b> and <b>y.</b> The current
  * location is updated:
-  \code
-   Newx = Oldx + x;
-   Newy = Oldy + y;
-  \endcode
+ \code
+ Newx = Oldx + x;
+ Newy = Oldy + y;
+ \endcode
  *
  *  \param x
  *  \param y
@@ -211,7 +211,7 @@ void R_cont_abs(int x, int y)
 
 void R_cont_rel(int x, int y)
 {
-	trans->cont_rel(x, y);
+    trans->cont_rel(x, y);
 }
 
 /*!
@@ -229,7 +229,7 @@ void R_cont_rel(int x, int y)
 
 void R_polydots_abs(const int *xarray, const int *yarray, int number)
 {
-	trans->polydots_abs(xarray, yarray, number);
+    trans->polydots_abs(xarray, yarray, number);
 }
 
 /*!
@@ -249,7 +249,7 @@ void R_polydots_abs(const int *xarray, const int *yarray, int number)
 
 void R_polydots_rel(const int *xarray, const int *yarray, int number)
 {
-	trans->polydots_rel(xarray, yarray, number);
+    trans->polydots_rel(xarray, yarray, number);
 }
 
 /*!
@@ -270,7 +270,7 @@ void R_polydots_rel(const int *xarray, const int *yarray, int number)
 
 void R_polyline_abs(const int *xarray, const int *yarray, int number)
 {
-	trans->polyline_abs(xarray, yarray, number);
+    trans->polyline_abs(xarray, yarray, number);
 }
 
 /*!
@@ -292,7 +292,7 @@ void R_polyline_abs(const int *xarray, const int *yarray, int number)
 
 void R_polyline_rel(const int *xarray, const int *yarray, int number)
 {
-	trans->polyline_rel(xarray, yarray, number);
+    trans->polyline_rel(xarray, yarray, number);
 }
 
 /*!
@@ -310,7 +310,7 @@ void R_polyline_rel(const int *xarray, const int *yarray, int number)
 
 void R_polygon_abs(const int *xarray, const int *yarray, int number)
 {
-	trans->polygon_abs(xarray, yarray, number);
+    trans->polygon_abs(xarray, yarray, number);
 }
 
 /*!
@@ -330,7 +330,7 @@ void R_polygon_abs(const int *xarray, const int *yarray, int number)
 
 void R_polygon_rel(const int *xarray, const int *yarray, int number)
 {
-	trans->polygon_rel(xarray, yarray, number);
+    trans->polygon_rel(xarray, yarray, number);
 }
 
 /*!
@@ -349,7 +349,7 @@ void R_polygon_rel(const int *xarray, const int *yarray, int number)
 
 void R_box_abs(int x1, int y1, int x2, int y2)
 {
-	trans->box_abs(x1, y1, x2, y2);
+    trans->box_abs(x1, y1, x2, y2);
 }
 
 
@@ -367,7 +367,7 @@ void R_box_abs(int x1, int y1, int x2, int y2)
 
 void R_box_rel(int x, int y)
 {
-	trans->box_rel(x, y);
+    trans->box_rel(x, y);
 }
 
 /*!
@@ -382,12 +382,12 @@ void R_box_rel(int x, int y)
 
 void R_text_size(int width, int height)
 {
-	trans->text_size(width, height);
+    trans->text_size(width, height);
 }
 
 void R_text_rotation(float rotation)
 {
-	trans->text_rotation(rotation);
+    trans->text_rotation(rotation);
 }
 
 /*!
@@ -405,7 +405,7 @@ void R_text_rotation(float rotation)
 
 void R_set_window(int t, int b, int l, int r)
 {
-	trans->set_window(t, b, l, r);
+    trans->set_window(t, b, l, r);
 }
 
 /*!
@@ -420,7 +420,7 @@ void R_set_window(int t, int b, int l, int r)
 
 void R_text(const char *text)
 {
-	trans->text(text);
+    trans->text(text);
 }
 
 /*!
@@ -442,7 +442,7 @@ void R_text(const char *text)
 
 void R_get_text_box(const char *text, int *t, int *b, int *l, int *r)
 {
-	trans->get_text_box(text, t, b, l, r);
+    trans->get_text_box(text, t, b, l, r);
 }
 
 /*!
@@ -479,58 +479,57 @@ void R_get_text_box(const char *text, int *t, int *b, int *l, int *r)
 
 void R_font(const char *name)
 {
-	trans->font(name);
+    trans->font(name);
 }
 
 void R_charset(const char *name)
 {
-	trans->charset(name);
+    trans->charset(name);
 }
 
 void R_font_list(char ***list, int *count)
 {
-	trans->font_list(list, count);
+    trans->font_list(list, count);
 }
 
 void R_font_info(char ***list, int *count)
 {
-	trans->font_info(list, count);
+    trans->font_info(list, count);
 }
 
 void R_panel_save(const char *name, int t, int b, int l, int r)
 {
-	trans->panel_save(name, t, b, l, r);
+    trans->panel_save(name, t, b, l, r);
 }
 
 void R_panel_restore(const char *name)
 {
-	trans->panel_restore(name);
+    trans->panel_restore(name);
 }
 
 void R_panel_delete(const char *name)
 {
-	trans->panel_delete(name);
+    trans->panel_delete(name);
 }
 
 void R_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
 {
-	trans->begin_scaled_raster(mask, src, dst);
+    trans->begin_scaled_raster(mask, src, dst);
 }
 
 int R_scaled_raster(int n, int row,
-	const unsigned char *red, const unsigned char *grn, const unsigned char *blu,
-	const unsigned char *nul)
+		    const unsigned char *red, const unsigned char *grn,
+		    const unsigned char *blu, const unsigned char *nul)
 {
-	return trans->scaled_raster(n, row, red, grn, blu, nul);
+    return trans->scaled_raster(n, row, red, grn, blu, nul);
 }
 
 void R_end_scaled_raster(void)
 {
-	trans->end_scaled_raster();
+    trans->end_scaled_raster();
 }
 
 void R_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
-	trans->bitmap(ncols, nrows, threshold, buf);
+    trans->bitmap(ncols, nrows, threshold, buf);
 }
-

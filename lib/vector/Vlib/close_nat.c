@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       Vector library 
@@ -18,31 +19,30 @@
 #include <stdlib.h>
 
 /* 
-** return 0 on success
-**        non-zero on error
-*/
-int 
-V1_close_nat (struct Map_info *Map)
+ ** return 0 on success
+ **        non-zero on error
+ */
+int V1_close_nat(struct Map_info *Map)
 {
-  struct Coor_info CInfo;
-    
-  G_debug (1, "V1_close_nat(): name = %s mapset= %s", Map->name, Map->mapset);
-  if (!VECT_OPEN (Map))
-    return 1;
+    struct Coor_info CInfo;
 
-  if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW) {
-    Vect_coor_info ( Map, &CInfo);
-    Map->head.size = CInfo.size;
-    dig__write_head (Map);
+    G_debug(1, "V1_close_nat(): name = %s mapset= %s", Map->name,
+	    Map->mapset);
+    if (!VECT_OPEN(Map))
+	return 1;
 
-    Vect__write_head (Map);
-    Vect_write_dblinks ( Map );
-  }
+    if (Map->mode == GV_MODE_WRITE || Map->mode == GV_MODE_RW) {
+	Vect_coor_info(Map, &CInfo);
+	Map->head.size = CInfo.size;
+	dig__write_head(Map);
 
-  /* close coor file */
-  fclose (Map->dig_fp.file);
-  dig_file_free ( &(Map->dig_fp) );
+	Vect__write_head(Map);
+	Vect_write_dblinks(Map);
+    }
 
-  return 0;
+    /* close coor file */
+    fclose(Map->dig_fp.file);
+    dig_file_free(&(Map->dig_fp));
+
+    return 0;
 }
-

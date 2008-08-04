@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       gis library
@@ -22,13 +23,12 @@
 
 int G_remove_colors(const char *name, const char *mapset)
 {
-    char element[GMAPSET_MAX+6];
+    char element[GMAPSET_MAX + 6];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     int stat;
 
-    if (G__name_is_fully_qualified (name, xname, xmapset))
-    {
-	if (strcmp (xmapset, mapset) != 0)
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (strcmp(xmapset, mapset) != 0)
 	    return -1;
 	name = xname;
     }
@@ -38,8 +38,7 @@ int G_remove_colors(const char *name, const char *mapset)
     stat = G_remove(element, name);
 
     if (strcmp(mapset, G_mapset()) == 0)
-	stat = G_remove ("colr", name);
+	stat = G_remove("colr", name);
 
     return stat;
 }
-

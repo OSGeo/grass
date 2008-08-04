@@ -1,6 +1,6 @@
-/*	Alex Shevlakov sixote@yahoo.com 02/2000
-*	function added to handle postgres queries
-*/
+/*      Alex Shevlakov sixote@yahoo.com 02/2000
+ *      function added to handle postgres queries
+ */
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "interface.h"
@@ -14,7 +14,7 @@ int Ninit_view_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
     return (TCL_OK);
 }
 
-/* TODO: Need Nset_to_cmd or use viewdir*/
+/* TODO: Need Nset_to_cmd or use viewdir */
 
 int Nget_to_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 		int argc,	/* Number of arguments. */
@@ -115,20 +115,20 @@ int Nset_focus_gui_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 
     if (argc == 3 && surf_list != NULL) {
 	id = surf_list[0];
-	G_free (surf_list);
+	G_free(surf_list);
 	GS_get_dims(id, &rows, &cols);
 	/* get coordinates from gui (0->1) and convert to screen */
 	GS_get_region(&n, &s, &w, &e);
 	ew_res = (e - w) / cols;
 	ns_res = (n - s) / rows;
-/* EAST TO WEST -- east=1, west=0 */
-	realto[0] = (float) atof(argv[1]);
-	realto[0] = (float) ((e - w) * realto[0]) + w;
-	realto[0] = (float) (realto[0] - w - (ew_res / 2.));
-/* NORTH to SOUTH -- north=0 south=1 */
-	realto[1] = (float) atof(argv[2]);
+	/* EAST TO WEST -- east=1, west=0 */
+	realto[0] = (float)atof(argv[1]);
+	realto[0] = (float)((e - w) * realto[0]) + w;
+	realto[0] = (float)(realto[0] - w - (ew_res / 2.));
+	/* NORTH to SOUTH -- north=0 south=1 */
+	realto[1] = (float)atof(argv[2]);
 	realto[1] = n - ((n - s) * realto[1]);
-	realto[1] = (float) (realto[1] - s - (ns_res / 2.));
+	realto[1] = (float)(realto[1] - s - (ns_res / 2.));
 
 	GS_set_focus(realto);
 	Nquick_draw_cmd(data, interp);
@@ -160,18 +160,18 @@ int Nget_focus_gui_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
     surf_list = GS_get_surf_list(&num_surfs);
     if (surf_list != NULL) {
 	id = surf_list[0];
-	G_free (surf_list);
+	G_free(surf_list);
 	GS_get_dims(id, &rows, &cols);
 	/* get coordinates from gui (0->1) and convert to screen */
 	GS_get_region(&n, &s, &w, &e);
 	ew_res = (e - w) / cols;
 	ns_res = (n - s) / rows;
-/* EAST TO WEST -- east=1, west=0 */
+	/* EAST TO WEST -- east=1, west=0 */
 	realto[0] = realto[0] + (ew_res / 2.);
 	sprintf(east, "%f", (realto[0] / (e - w)));
 	list[0] = east;
 
-/* NORTH to SOUTH -- north=0 south=1 */
+	/* NORTH to SOUTH -- north=0 south=1 */
 	realto[1] = realto[1] + (ns_res / 2.);
 	sprintf(north, "%f", (realto[1] / (n - s)));
 	list[1] = north;
@@ -184,21 +184,21 @@ int Nget_focus_gui_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 }
 
 /************************************************************/
-int Nget_real_position_cmd (Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-		       int argc,	/* Number of arguments. */
-		       char **argv	/* Argument strings. */
+int Nget_real_position_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+			   int argc,	/* Number of arguments. */
+			   char **argv	/* Argument strings. */
     )
 {
-float realto[3];
-int pos_flag;
-char *list[3], east[32], north[32], elev[32];
+    float realto[3];
+    int pos_flag;
+    char *list[3], east[32], north[32], elev[32];
 
     if (argc != 2)
 	return (TCL_ERROR);
     pos_flag = atoi(argv[1]);
 
     if (pos_flag == 1) {
-    /* Get from position in real coords */
+	/* Get from position in real coords */
 	GS_get_from_real(realto);
 
 	sprintf(east, "%f", realto[0]);
@@ -210,20 +210,21 @@ char *list[3], east[32], north[32], elev[32];
 
 	Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_VOLATILE);
 
-      } else {
-      /* Get to position in real coords */
-      GS_get_to_real(realto);
-      	sprintf(east, "%f", realto[0]);
+    }
+    else {
+	/* Get to position in real coords */
+	GS_get_to_real(realto);
+	sprintf(east, "%f", realto[0]);
 	list[0] = east;
 	sprintf(north, "%f", realto[1]);
 	list[1] = north;
 	sprintf(elev, "%f", realto[2]);
 	list[2] = elev;
 
-      Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_VOLATILE);
-      }
+	Tcl_SetResult(interp, Tcl_Merge(3, list), TCL_VOLATILE);
+    }
 
-	return (TCL_OK);
+    return (TCL_OK);
 
 }
 
@@ -236,9 +237,9 @@ int Nset_focus_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
     float realto[3];
 
     if (argc == 4) {
-	realto[0] = (float) atof(argv[1]);
-	realto[1] = (float) atof(argv[2]);
-	realto[2] = (float) atof(argv[3]);
+	realto[0] = (float)atof(argv[1]);
+	realto[1] = (float)atof(argv[2]);
+	realto[2] = (float)atof(argv[3]);
 	GS_set_focus(realto);
     }
 
@@ -248,16 +249,16 @@ int Nset_focus_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
 
 /***********************************/
 int Nset_focus_real_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-		   int argc,	/* Number of arguments. */
-		   char **argv	/* Argument strings. */
+			int argc,	/* Number of arguments. */
+			char **argv	/* Argument strings. */
     )
 {
     float realto[3];
 
     if (argc == 4) {
-	realto[0] = (float) atof(argv[1]);
-	realto[1] = (float) atof(argv[2]);
-	realto[2] = (float) atof(argv[3]);
+	realto[0] = (float)atof(argv[1]);
+	realto[1] = (float)atof(argv[2]);
+	realto[2] = (float)atof(argv[3]);
 	GS_set_focus_real(realto);
     }
 
@@ -266,25 +267,25 @@ int Nset_focus_real_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpre
 }
 
 int Nset_focus_state_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-		      int argc,	/* Number of arguments. */
-		      char **argv	/* Argument strings. */
+			 int argc,	/* Number of arguments. */
+			 char **argv	/* Argument strings. */
     )
 {
-int state_flag=1;
+    int state_flag = 1;
 
-	if (argc != 2)
-		return (TCL_ERROR);
+    if (argc != 2)
+	return (TCL_ERROR);
 
-	state_flag = atoi(argv[1]);
+    state_flag = atoi(argv[1]);
 
-	if (state_flag == 1)
-		GS_set_infocus(); /* return center of view */
-	else if (state_flag == 0)
-		GS_set_nofocus(); /* no center of view -- use viewdir */
-	else {
-		interp->result = "Error: Flag must be either 0|1";
-	        return (TCL_ERROR);
-	}
+    if (state_flag == 1)
+	GS_set_infocus();	/* return center of view */
+    else if (state_flag == 0)
+	GS_set_nofocus();	/* no center of view -- use viewdir */
+    else {
+	interp->result = "Error: Flag must be either 0|1";
+	return (TCL_ERROR);
+    }
 
     return (TCL_OK);
 }
@@ -313,7 +314,7 @@ int Nset_focus_top_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
     surf_list = GS_get_surf_list(&num_surfs);
     if (surf_list != NULL) {
 	id = surf_list[0];
-	G_free (surf_list);
+	G_free(surf_list);
 	GS_get_dims(id, &rows, &cols);
     }
 
@@ -343,45 +344,45 @@ int Nset_focus_map_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
     int id;
 
     if (!GS_num_surfs() && !(GVL_num_vols())) {
-		GS_set_nofocus();
-		return (TCL_OK);
+	GS_set_nofocus();
+	return (TCL_OK);
     }
 
     if (argc == 1) {
-		int *surf_list, num_surfs, *vol_list;
+	int *surf_list, num_surfs, *vol_list;
 
-		if (GS_num_surfs() > 0) {
-			surf_list = GS_get_surf_list(&num_surfs);
-			id = surf_list[0];
-			G_free (surf_list);
+	if (GS_num_surfs() > 0) {
+	    surf_list = GS_get_surf_list(&num_surfs);
+	    id = surf_list[0];
+	    G_free(surf_list);
 
-			GS_set_focus_center_map(id);
-			return (TCL_OK);
-		}
+	    GS_set_focus_center_map(id);
+	    return (TCL_OK);
+	}
 
-		if (GVL_num_vols() > 0) {
-			vol_list = GVL_get_vol_list(&num_surfs);
-			id = vol_list[0];
-			G_free (vol_list);
+	if (GVL_num_vols() > 0) {
+	    vol_list = GVL_get_vol_list(&num_surfs);
+	    id = vol_list[0];
+	    G_free(vol_list);
 
-			GVL_set_focus_center_map(id);
-			return (TCL_OK);
-		}
+	    GVL_set_focus_center_map(id);
+	    return (TCL_OK);
+	}
     }
 
-	if (!strcmp(argv[1], "surf")) {
-		id = atoi(argv[2]);
+    if (!strcmp(argv[1], "surf")) {
+	id = atoi(argv[2]);
 
-		GS_set_focus_center_map(id);
-		return (TCL_OK);
-	}
+	GS_set_focus_center_map(id);
+	return (TCL_OK);
+    }
 
-	if (!strcmp(argv[1], "vol")) {
-		id = atoi(argv[2]);
+    if (!strcmp(argv[1], "vol")) {
+	id = atoi(argv[2]);
 
-		GVL_set_focus_center_map(id);
-		return (TCL_OK);
-	}
+	GVL_set_focus_center_map(id);
+	return (TCL_OK);
+    }
 
     return (TCL_ERROR);
 }
@@ -398,9 +399,9 @@ int Nmove_to_real_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     if (argc != 4)
 	return (TCL_ERROR);
 
-    ftmp[0] = (float) atof(argv[1]);
-    ftmp[1] = (float) atof(argv[2]);
-    ftmp[2] = (float) atof(argv[3]);
+    ftmp[0] = (float)atof(argv[1]);
+    ftmp[1] = (float)atof(argv[2]);
+    ftmp[2] = (float)atof(argv[3]);
     GS_moveto_real(ftmp);
 
     return (TCL_OK);
@@ -418,9 +419,9 @@ int Nmove_to_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     if (argc != 4)
 	return (TCL_ERROR);
 
-    ftmp[0] = (float) atof(argv[1]);
-    ftmp[1] = (float) atof(argv[2]);
-    ftmp[2] = (float) atof(argv[3]);
+    ftmp[0] = (float)atof(argv[1]);
+    ftmp[1] = (float)atof(argv[2]);
+    ftmp[2] = (float)atof(argv[3]);
     GS_moveto(ftmp);
 
     return (TCL_OK);
@@ -437,7 +438,7 @@ int Nset_fov_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     if (argc != 2)
 	return (TCL_ERROR);
     fov = atoi(argv[1]);
-    fov = (int) (fov * 10);
+    fov = (int)(fov * 10);
     GS_set_fov(fov);
 
     return (TCL_OK);
@@ -453,7 +454,7 @@ int Nget_fov_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     int fov;
 
     fov = GS_get_fov();
-    fov = (int) (fov / 10);
+    fov = (int)(fov / 10);
 
     sprintf(fov_name, "%d", fov);
     list[0] = fov_name;
@@ -476,7 +477,7 @@ int Nset_twist_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
 	return (TCL_ERROR);
 
     twist = atoi(argv[1]);
-    twist = (int) (twist * 10);
+    twist = (int)(twist * 10);
     GS_set_twist(twist);
 
     return (TCL_OK);
@@ -492,7 +493,7 @@ int Nget_twist_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
     int twist;
 
     twist = GS_get_twist();
-    twist = (int) (twist / 10);
+    twist = (int)(twist / 10);
 
     sprintf(twist_name, "%d", twist);
     list[0] = twist_name;
@@ -574,13 +575,13 @@ int Nget_point_on_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
 
 }
 
-int Nget_point_on_surf_vect (Nv_data *data, Tcl_Interp *interp, int argc, char **argv)
+int Nget_point_on_surf_vect(Nv_data * data, Tcl_Interp * interp, int argc,
+			    char **argv)
 
 
 	/* Current interpreter. */
 			/* Number of arguments. */
 		/* Argument strings. */
-
 {
     float x, y, z;
     int sx, sy, id;
@@ -614,7 +615,7 @@ int Nget_point_on_surf_vect (Nv_data *data, Tcl_Interp *interp, int argc, char *
     list[1] = cy;
     list[2] = cz;
     list[3] = idname;
-    list[4] = (char *) query_vect(name, x, y);
+    list[4] = (char *)query_vect(name, x, y);
     list[5] = NULL;
 
     interp->result = Tcl_Merge(5, list);
@@ -638,11 +639,11 @@ int Nget_dist_along_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current int
 	return (TCL_ERROR);
 
     id = get_idnum(argv[1]);
-    x = (float) atof(argv[2]);
-    y = (float) atof(argv[3]);
-    px = (float) atof(argv[4]);
-    py = (float) atof(argv[5]);
-    exag = (float) atoi(argv[6]);
+    x = (float)atof(argv[2]);
+    y = (float)atof(argv[3]);
+    px = (float)atof(argv[4]);
+    py = (float)atof(argv[5]);
+    exag = (float)atoi(argv[6]);
 
     if (!GS_get_distance_alongsurf(id, x, y, px, py, &d, exag))
 	return (TCL_ERROR);
@@ -654,8 +655,8 @@ int Nget_dist_along_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current int
 }
 
 /*
-#define DO_TEST
-*/
+   #define DO_TEST
+ */
 
 int Nget_cat_at_xy_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 		       int argc,	/* Number of arguments. */
@@ -672,8 +673,8 @@ int Nget_cat_at_xy_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 
     id = get_idnum(argv[1]);
     att = att_atoi(argv[2]);
-    x = (float) atof(argv[3]);
-    y = (float) atof(argv[4]);
+    x = (float)atof(argv[3]);
+    y = (float)atof(argv[4]);
 
 #ifdef DO_TEST
     GS_set_draw(GSD_FRONT);
@@ -708,8 +709,8 @@ int Nget_val_at_xy_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 
     id = get_idnum(argv[1]);
     att = att_atoi(argv[2]);
-    x = (float) atof(argv[3]);
-    y = (float) atof(argv[4]);
+    x = (float)atof(argv[3]);
+    y = (float)atof(argv[4]);
 
     GS_get_val_at_xy(id, att, valstr, x, y);
 
@@ -864,18 +865,18 @@ int Nset_exag_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. *
 
     if (argc != 2)
 	return (TCL_ERROR);
-    GS_set_global_exag((float) atof(argv[1]));
+    GS_set_global_exag((float)atof(argv[1]));
     return (TCL_OK);
 }
 
 /*
  * Nsave_3dview_cmd --
  *
- *	Syntax: Nsave_3dview file_name
- *	Saves the current orientation of Nviz camera position.
- *	Note that GRASS requires a surface ID to reference
- * 	the view to.  By default we choose the first surface
- *	available or 0 if no surfaces have been loaded.
+ *      Syntax: Nsave_3dview file_name
+ *      Saves the current orientation of Nviz camera position.
+ *      Note that GRASS requires a surface ID to reference
+ *      the view to.  By default we choose the first surface
+ *      available or 0 if no surfaces have been loaded.
  */
 int Nsave_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 		     int argc,	/* Number of arguments. */
@@ -904,9 +905,9 @@ int Nsave_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 	if (!list_count)
 	    first_surf = 0;
 	else
-	    first_surf = (int) atoi(list_space[0]);
+	    first_surf = (int)atoi(list_space[0]);
 
-	Tcl_Free ((char *) list_space);
+	Tcl_Free((char *)list_space);
     }
 
     /* Finally make the GSF library call */
@@ -918,11 +919,11 @@ int Nsave_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 /*
  * Nload_3dview_cmd --
  *
- *	Syntax: Nload_3dview file_name
+ *      Syntax: Nload_3dview file_name
  *      Loads a saved view.
- *	Note that GRASS requires a surface ID to reference
- * 	the view to.  By default we choose the first surface
- *	available or 0 if no surfaces have been loaded.
+ *      Note that GRASS requires a surface ID to reference
+ *      the view to.  By default we choose the first surface
+ *      available or 0 if no surfaces have been loaded.
  */
 int Nload_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 		     int argc,	/* Number of arguments. */
@@ -951,9 +952,9 @@ int Nload_3dview_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 	if (!list_count)
 	    first_surf = 0;
 	else
-	    first_surf = (int) atoi(list_space[0]);
+	    first_surf = (int)atoi(list_space[0]);
 
-	Tcl_Free ((char *) list_space);
+	Tcl_Free((char *)list_space);
     }
     /* Finally make the GSF library call */
     GS_load_3dview(argv[1], first_surf);

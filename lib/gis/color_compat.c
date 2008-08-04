@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       gis library
@@ -36,23 +37,23 @@
 
 int G_make_wave_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "wave", min, max);
+    return G_make_colors(colors, "wave", min, max);
 }
 
 int G_make_wave_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "wave", min, max);
+    return G_make_fp_colors(colors, "wave", min, max);
 }
 
 
 int G_make_ryg_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "ryg", min, max);
+    return G_make_colors(colors, "ryg", min, max);
 }
 
 int G_make_ryg_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "ryg", min, max);
+    return G_make_fp_colors(colors, "ryg", min, max);
 }
 
 /*!
@@ -70,12 +71,12 @@ int G_make_ryg_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 
 int G_make_ramp_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "ramp", min, max);
+    return G_make_colors(colors, "ramp", min, max);
 }
 
 int G_make_ramp_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "ramp", min, max);
+    return G_make_fp_colors(colors, "ramp", min, max);
 }
 
 /*!
@@ -95,23 +96,23 @@ int G_make_ramp_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 
 int G_make_rainbow_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "rainbow", min, max);
+    return G_make_colors(colors, "rainbow", min, max);
 }
 
 int G_make_rainbow_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "rainbow", min, max);
+    return G_make_fp_colors(colors, "rainbow", min, max);
 }
 
 
 int G_make_gyr_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "gyr", min, max);
+    return G_make_colors(colors, "gyr", min, max);
 }
 
 int G_make_gyr_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "gyr", min, max);
+    return G_make_fp_colors(colors, "gyr", min, max);
 }
 
 /*!
@@ -128,42 +129,42 @@ int G_make_gyr_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 
 int G_make_grey_scale_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "grey", min, max);
+    return G_make_colors(colors, "grey", min, max);
 }
 
 int G_make_grey_scale_fp_colors(struct Colors *colors, double min, double max)
 {
-	return G_make_fp_colors(colors, "grey", min, max);
+    return G_make_fp_colors(colors, "grey", min, max);
 }
 
 int G_make_byr_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "byr", min, max);
+    return G_make_colors(colors, "byr", min, max);
 }
 
 int G_make_byr_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "byr", min, max);
+    return G_make_fp_colors(colors, "byr", min, max);
 }
 
 int G_make_bgyr_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "bgyr", min, max);
+    return G_make_colors(colors, "bgyr", min, max);
 }
 
 int G_make_bgyr_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "bgyr", min, max);
+    return G_make_fp_colors(colors, "bgyr", min, max);
 }
 
 int G_make_byg_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "byg", min, max);
+    return G_make_colors(colors, "byg", min, max);
 }
 
 int G_make_byg_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "byg", min, max);
+    return G_make_fp_colors(colors, "byg", min, max);
 }
 
 /*!
@@ -179,11 +180,10 @@ int G_make_byg_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 
 int G_make_aspect_colors(struct Colors *colors, CELL min, CELL max)
 {
-	return G_make_colors(colors, "aspect", min, max);
+    return G_make_colors(colors, "aspect", min, max);
 }
 
 int G_make_aspect_fp_colors(struct Colors *colors, DCELL min, DCELL max)
 {
-	return G_make_fp_colors(colors, "aspect", min, max);
+    return G_make_fp_colors(colors, "aspect", min, max);
 }
-

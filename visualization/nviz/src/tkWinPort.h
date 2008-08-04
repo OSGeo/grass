@@ -1,9 +1,9 @@
 /*
  * tkWinPort.h --
  *
- *	This header file handles porting issues that occur because of
- *	differences between Windows and Unix. It should be the only
- *	file that contains #ifdefs to handle different flavors of OS.
+ *      This header file handles porting issues that occur because of
+ *      differences between Windows and Unix. It should be the only
+ *      file that contains #ifdefs to handle different flavors of OS.
  *
  * Copyright (c) 1995-1996 Sun Microsystems, Inc.
  * Copyright (c) 1998 by Scriptics Corporation.
@@ -122,7 +122,8 @@
  * Define timezone for gettimeofday.
  */
 
-struct timezone {
+struct timezone
+{
     int tz_minuteswest;
     int tz_dsttime;
 };
@@ -134,6 +135,6 @@ extern int gettimeofday(struct timeval *, struct timezone *);
 
 #endif /* ! __MINGW32__ */
 
-EXTERN void		panic _ANSI_ARGS_(TCL_VARARGS(char *,format));
+EXTERN void panic _ANSI_ARGS_(TCL_VARARGS(char *, format));
 
 #endif /* _WINPORT */

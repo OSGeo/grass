@@ -4,20 +4,23 @@
 #define OP_XOR 3
 
 /* Categories */
-typedef struct {
+typedef struct
+{
     double x, y;
-    struct line_cats *cat[2]; /* category in map a and b */
-    char valid; 
-} CENTR; 
+    struct line_cats *cat[2];	/* category in map a and b */
+    char valid;
+} CENTR;
 
 /* Attributes */
-typedef struct {
+typedef struct
+{
     int cat;
     int used;
     char *values;
 } ATTR;
 
-typedef struct {
+typedef struct
+{
     int n;
     char *null_values;
     ATTR *attr;
@@ -25,9 +28,11 @@ typedef struct {
 } ATTRIBUTES;
 
 
-ATTR *find_attr ( ATTRIBUTES *attributes, int cat );
+ATTR *find_attr(ATTRIBUTES * attributes, int cat);
 
-int area_area ( struct Map_info *In, int *field, struct Map_info *Out, struct field_info *Fi,
-	                dbDriver *driver, int operator, int *ofield, ATTRIBUTES *attr );
-int line_area ( struct Map_info *In, int *field, struct Map_info *Out, struct field_info *Fi,
-	                dbDriver *driver, int operator, int *ofield, ATTRIBUTES *attr );
+int area_area(struct Map_info *In, int *field, struct Map_info *Out,
+	      struct field_info *Fi, dbDriver * driver, int operator,
+	      int *ofield, ATTRIBUTES * attr);
+int line_area(struct Map_info *In, int *field, struct Map_info *Out,
+	      struct field_info *Fi, dbDriver * driver, int operator,
+	      int *ofield, ATTRIBUTES * attr);

@@ -5,8 +5,7 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-int 
-datetime_is_between (int x, int a, int b)
+int datetime_is_between(int x, int a, int b)
 {
     if (a <= b)
 	return a <= x && x <= b;

@@ -9,7 +9,7 @@ viz_init_file(args, interp)
      char *args[];
      Tcl_Interp *interp;
 {
-/* compares the suffix to see if .grid3 (returns a 1) or .sds (returns a 2)*/
+    /* compares the suffix to see if .grid3 (returns a 1) or .sds (returns a 2) */
     char buf[200], *p = NULL;
 
     strcpy(buf, args[1]);

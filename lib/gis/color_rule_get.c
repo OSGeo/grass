@@ -1,3 +1,4 @@
+
 /**
  * \file color_rule_get.c
  *
@@ -16,18 +17,18 @@
 #include <grass/gis.h>
 
 /*! 
-  \brief Get both modular and fixed rules count 
+   \brief Get both modular and fixed rules count 
 
-  \param colors pointer to color table structure
-  
-  \return number of rules in color table
-*/
-int G_colors_count ( const struct Colors *colors )
+   \param colors pointer to color table structure
+
+   \return number of rules in color table
+ */
+int G_colors_count(const struct Colors *colors)
 {
     int count = 0;
     struct _Color_Rule_ *rule;
-    
-    if ( colors->fixed.rules ) {
+
+    if (colors->fixed.rules) {
 	count++;
 	rule = colors->fixed.rules;
 
@@ -36,7 +37,7 @@ int G_colors_count ( const struct Colors *colors )
 	    rule = rule->next;
 	}
     }
-    if ( colors->modular.rules ) {
+    if (colors->modular.rules) {
 	count++;
 	rule = colors->modular.rules;
 
@@ -49,23 +50,24 @@ int G_colors_count ( const struct Colors *colors )
 }
 
 /*! 
-  \brief Get color rule from both modular and fixed rules
+   \brief Get color rule from both modular and fixed rules
 
-  Rules are returned in the order as stored in the table (i.e. unexpected, high values first)
+   Rules are returned in the order as stored in the table (i.e. unexpected, high values first)
 
-  \param val1 color value
-  \param[out] r1,g1,b1 color value
-  \param val2 color value
-  \param[out] r2,g2,b2 color value
-  \param colors pointer to color table structure
-  \param rule rule index from 0 to G_color_count()-1
+   \param val1 color value
+   \param[out] r1,g1,b1 color value
+   \param val2 color value
+   \param[out] r2,g2,b2 color value
+   \param colors pointer to color table structure
+   \param rule rule index from 0 to G_color_count()-1
 
-  \return 0 success 
-  \return 1 index out of range  
-*/
-int G_get_f_color_rule ( DCELL *val1, unsigned char *r1, unsigned char *g1, unsigned char *b1,
-			 DCELL *val2, unsigned char *r2, unsigned char *g2, unsigned char *b2, 
-			 const struct Colors *colors, int rule )
+   \return 0 success 
+   \return 1 index out of range  
+ */
+int G_get_f_color_rule(DCELL * val1, unsigned char *r1, unsigned char *g1,
+		       unsigned char *b1, DCELL * val2, unsigned char *r2,
+		       unsigned char *g2, unsigned char *b2,
+		       const struct Colors *colors, int rule)
 {
     int index = -1;
     int found = 0;
@@ -73,32 +75,37 @@ int G_get_f_color_rule ( DCELL *val1, unsigned char *r1, unsigned char *g1, unsi
 
     *val1 = *val2 = 0.0;
     *r1 = *g1 = *b1 = *r2 = *g2 = *b2 = 0;
-    
-    /* Find the rule */
-    if ( colors->fixed.rules ) {
-	rl = colors->fixed.rules;
-        index++;
-	if ( index == rule ) found = 1;
 
-	while ( !found && rl->next) {
+    /* Find the rule */
+    if (colors->fixed.rules) {
+	rl = colors->fixed.rules;
+	index++;
+	if (index == rule)
+	    found = 1;
+
+	while (!found && rl->next) {
 	    rl = rl->next;
 	    index++;
-	    if ( index == rule ) found = 1;
+	    if (index == rule)
+		found = 1;
 	}
-    } 
-    if ( !found && colors->modular.rules ) {
+    }
+    if (!found && colors->modular.rules) {
 	rl = colors->modular.rules;
 	index++;
-	if ( index == rule ) found = 1;
+	if (index == rule)
+	    found = 1;
 
-	while ( !found && rl->next) {
+	while (!found && rl->next) {
 	    rl = rl->next;
 	    index++;
-	    if ( index == rule ) found = 1;
+	    if (index == rule)
+		found = 1;
 	}
     }
 
-    if ( !found ) return 1;
+    if (!found)
+	return 1;
 
     /* Set values */
     *val1 = rl->low.value;

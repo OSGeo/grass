@@ -1,34 +1,34 @@
 /*!
-  \file exag.c
- 
-  \brief Nviz library -- Exaggeration functions
-  
-  COPYRIGHT: (C) 2008 by the GRASS Development Team
+   \file exag.c
 
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+   \brief Nviz library -- Exaggeration functions
 
-  Based on visualization/nviz/src/exag.c
+   COPYRIGHT: (C) 2008 by the GRASS Development Team
 
-  \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
 
-  \date 2008
-*/
+   Based on visualization/nviz/src/exag.c
+
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+
+   \date 2008
+ */
 
 #include <grass/nviz.h>
 
 /*!
-  \brief Get view height
+   \brief Get view height
 
-  Call after initial data has been loaded
+   Call after initial data has been loaded
 
-  \param[out] val height value
-  \param[out] min min value (or NULL)
-  \param[out] max max value (or NULL)
+   \param[out] val height value
+   \param[out] min min value (or NULL)
+   \param[out] max max value (or NULL)
 
-  \return 1
-*/
+   \return 1
+ */
 int Nviz_get_exag_height(float *val, float *min, float *max)
 {
     float longdim, exag, texag, hmin, hmax, fmin, fmax;
@@ -47,7 +47,7 @@ int Nviz_get_exag_height(float *val, float *min, float *max)
 	}
 	if (exag == 0.0)
 	    exag = 1.0;
-	
+
 	fmin = hmin - (2. * longdim / exag);
 	fmax = hmin + (3 * longdim / exag);
     }
@@ -68,12 +68,12 @@ int Nviz_get_exag_height(float *val, float *min, float *max)
 }
 
 /*!
-  \brief Get view z-exag value
+   \brief Get view z-exag value
 
-  Call after initial data has been loaded
+   Call after initial data has been loaded
 
-  \return value
-*/
+   \return value
+ */
 float Nviz_get_exag()
 {
     float exag, texag;

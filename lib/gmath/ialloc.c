@@ -1,3 +1,4 @@
+
 /**
  * \file ialloc.c
  *
@@ -39,7 +40,7 @@
  */
 int *G_alloc_ivector(size_t n)
 {
-    return (int *) G_calloc (n, sizeof(int));
+    return (int *)G_calloc(n, sizeof(int));
 }
 
 /**
@@ -54,15 +55,15 @@ int *G_alloc_ivector(size_t n)
  * \param[in] cols number of columns in matrix
  * \return int ** 
  */
-int **G_alloc_imatrix(int rows,int cols)
+int **G_alloc_imatrix(int rows, int cols)
 {
     int **m;
     int i;
 
-    m = (int **) G_calloc (rows, sizeof(int *));
-    m[0] = (int *) G_calloc (rows*cols, sizeof(int));
+    m = (int **)G_calloc(rows, sizeof(int *));
+    m[0] = (int *)G_calloc(rows * cols, sizeof(int));
     for (i = 1; i < rows; i++)
-	m[i] = m[i-1] + cols;
+	m[i] = m[i - 1] + cols;
 
     return m;
 }
@@ -79,8 +80,8 @@ int **G_alloc_imatrix(int rows,int cols)
  */
 void G_free_ivector(int *v)
 {
-    G_free (v);
-    v= NULL;
+    G_free(v);
+    v = NULL;
 
     return;
 }
@@ -97,8 +98,8 @@ void G_free_ivector(int *v)
  */
 void G_free_imatrix(int **m)
 {
-    G_free (m[0]);
-    G_free (m);
+    G_free(m[0]);
+    G_free(m);
     m = NULL;
 
     return;

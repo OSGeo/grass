@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.thin
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
     opt3->key = "iterations";
     opt3->type = TYPE_INTEGER;
     opt3->required = NO;
-    opt3->answer   = "200";
+    opt3->answer = "200";
     opt3->description = _("Maximal number of iterations");
 
     if (G_parser(argc, argv))

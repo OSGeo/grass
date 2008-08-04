@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       imagery library
@@ -21,44 +22,34 @@
 **********************************************************/
 #include <grass/imagery.h>
 
-FILE *
-I_fopen_group_ref_new (
-    const char *group)
+FILE *I_fopen_group_ref_new(const char *group)
 {
-    return I_fopen_group_file_new (group, "REF");
+    return I_fopen_group_file_new(group, "REF");
 }
 
-FILE *
-I_fopen_group_ref_old (
-    const char *group)
+FILE *I_fopen_group_ref_old(const char *group)
 {
-    return I_fopen_group_file_old (group, "REF");
+    return I_fopen_group_file_old(group, "REF");
 }
 
 /*
-FILE *
-I_fopen_group_ref_append (
-    const char *group)
-{
-    return I_fopen_group_file_append (group, "REF");
-}
-*/
+   FILE *
+   I_fopen_group_ref_append (
+   const char *group)
+   {
+   return I_fopen_group_file_append (group, "REF");
+   }
+ */
 
-FILE *
-I_fopen_subgroup_ref_new (
-    const char *group,
-    const char *subgroup)
+FILE *I_fopen_subgroup_ref_new(const char *group, const char *subgroup)
 {
-    return I_fopen_subgroup_file_new (group, subgroup, "REF");
+    return I_fopen_subgroup_file_new(group, subgroup, "REF");
 }
 
-FILE *
-I_fopen_subgroup_ref_old (
-    const char *group,
-    const char *subgroup)
+FILE *I_fopen_subgroup_ref_old(const char *group, const char *subgroup)
 {
     FILE *fd;
 
-    fd = I_fopen_subgroup_file_old (group, subgroup, "REF");
+    fd = I_fopen_subgroup_file_old(group, subgroup, "REF");
     return fd;
 }

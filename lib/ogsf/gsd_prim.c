@@ -1,20 +1,20 @@
 /*!
-  \file gsd_prim.c
- 
-  \brief OGSF library - primitive drawing functions (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
+   \file gsd_prim.c
 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (January 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - primitive drawing functions (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (January 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -67,10 +67,10 @@ static float ogl_mat_emis[4];
 static float ogl_mat_shin;
 
 /*!
-  \brief Mostly for flushing drawing commands accross a network
+   \brief Mostly for flushing drawing commands accross a network
 
-  glFlush doesn't block, so if blocking is desired use glFinish.
-*/
+   glFlush doesn't block, so if blocking is desired use glFinish.
+ */
 void gsd_flush(void)
 {
     glFlush();
@@ -79,12 +79,12 @@ void gsd_flush(void)
 }
 
 /*!
-  \brief Set color mode
+   \brief Set color mode
 
-  Call glColorMaterial before enabling the GL_COLOR_MATERIAL
+   Call glColorMaterial before enabling the GL_COLOR_MATERIAL
 
-  \param cm color mode value
-*/
+   \param cm color mode value
+ */
 void gsd_colormode(int cm)
 {
     switch (cm) {
@@ -118,9 +118,9 @@ void gsd_colormode(int cm)
     case CM_NULL:
 
 	/* OGLXXX
-	   * lmcolor: if LMC_NULL,  use:
-	   * glDisable(GL_COLOR_MATERIAL);
-	   * LMC_NULL: use glDisable(GL_COLOR_MATERIAL);
+	 * lmcolor: if LMC_NULL,  use:
+	 * glDisable(GL_COLOR_MATERIAL);
+	 * LMC_NULL: use glDisable(GL_COLOR_MATERIAL);
 	 */
 	glDisable(GL_COLOR_MATERIAL);
 	glEnable(GL_LIGHTING);
@@ -136,27 +136,28 @@ void gsd_colormode(int cm)
 }
 
 /*!
-  \brief Print color mode to stderr
-*/
+   \brief Print color mode to stderr
+ */
 void show_colormode(void)
 {
     GLint mat;
 
     glGetIntegerv(GL_COLOR_MATERIAL_PARAMETER, &mat);
-    G_message (_("Color Material: %d"), mat);
+    G_message(_("Color Material: %d"), mat);
 
     return;
 }
 
 /*!
-  \brief ADD
-  
-  \param x,y
-  \param rad
-*/
+   \brief ADD
+
+   \param x,y
+   \param rad
+ */
 void gsd_circ(float x, float y, float rad)
 {
     GLUquadricObj *qobj = gluNewQuadric();
+
     gluQuadricDrawStyle(qobj, GLU_SILHOUETTE);
     glPushMatrix();
     glTranslatef(x, y, 0.);
@@ -168,14 +169,15 @@ void gsd_circ(float x, float y, float rad)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param x,y,z
-  \param rad
-*/
+   \param x,y,z
+   \param rad
+ */
 void gsd_disc(float x, float y, float z, float rad)
 {
     GLUquadricObj *qobj = gluNewQuadric();
+
     gluQuadricDrawStyle(qobj, GLU_FILL);
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -187,11 +189,11 @@ void gsd_disc(float x, float y, float z, float rad)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param center center-point
-  \param siz size value
-*/
+   \param center center-point
+   \param siz size value
+ */
 void gsd_sphere(float *center, float siz)
 {
     static int first = 1;
@@ -212,20 +214,20 @@ void gsd_sphere(float *center, float siz)
 
     glPushMatrix();
     glTranslatef(center[0], center[1], center[2]);
-    gluSphere(QOsphere, (double) siz, 24, 24);
+    gluSphere(QOsphere, (double)siz, 24, 24);
     glPopMatrix();
 
     return;
 }
 
 /*!
-  \brief Write out z-mask
+   \brief Write out z-mask
 
-  Enable or disable writing into the depth buffer
+   Enable or disable writing into the depth buffer
 
-  \param n Specifies whether the depth buffer is enabled for
-  writing
-*/
+   \param n Specifies whether the depth buffer is enabled for
+   writing
+ */
 void gsd_zwritemask(unsigned long n)
 {
     /* OGLXXX glDepthMask is boolean only */
@@ -235,10 +237,10 @@ void gsd_zwritemask(unsigned long n)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param n
-*/
+   \param n
+ */
 void gsd_backface(int n)
 {
     glCullFace(GL_BACK);
@@ -248,10 +250,10 @@ void gsd_backface(int n)
 }
 
 /*!
-  \brief Set width of rasterized lines
+   \brief Set width of rasterized lines
 
-  \param n line width
-*/
+   \param n line width
+ */
 void gsd_linewidth(short n)
 {
     glLineWidth((GLfloat) (n));
@@ -260,8 +262,8 @@ void gsd_linewidth(short n)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_bgnqstrip(void)
 {
     glBegin(GL_QUAD_STRIP);
@@ -270,8 +272,8 @@ void gsd_bgnqstrip(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_endqstrip(void)
 {
     glEnd();
@@ -280,8 +282,8 @@ void gsd_endqstrip(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_bgntmesh(void)
 {
     glBegin(GL_TRIANGLE_STRIP);
@@ -290,8 +292,8 @@ void gsd_bgntmesh(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_endtmesh(void)
 {
     glEnd();
@@ -300,8 +302,8 @@ void gsd_endtmesh(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_bgntstrip(void)
 {
     glBegin(GL_TRIANGLE_STRIP);
@@ -310,8 +312,8 @@ void gsd_bgntstrip(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_endtstrip(void)
 {
     glEnd();
@@ -320,8 +322,8 @@ void gsd_endtstrip(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_bgntfan(void)
 {
     glBegin(GL_TRIANGLE_FAN);
@@ -330,8 +332,8 @@ void gsd_bgntfan(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_endtfan(void)
 {
     glEnd();
@@ -340,8 +342,8 @@ void gsd_endtfan(void)
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_swaptmesh(void)
 {
     /* OGLXXX
@@ -355,8 +357,8 @@ void gsd_swaptmesh(void)
 }
 
 /*!
-  \brief Delimit the vertices of a primitive or a group of like primitives
-*/
+   \brief Delimit the vertices of a primitive or a group of like primitives
+ */
 void gsd_bgnpolygon(void)
 {
     /* OGLXXX
@@ -370,8 +372,8 @@ void gsd_bgnpolygon(void)
 }
 
 /*!
-  \brief Delimit the vertices of a primitive or a group of like primitives
-*/
+   \brief Delimit the vertices of a primitive or a group of like primitives
+ */
 void gsd_endpolygon(void)
 {
     glEnd();
@@ -380,8 +382,8 @@ void gsd_endpolygon(void)
 }
 
 /*!
-  \brief Begin line
-*/
+   \brief Begin line
+ */
 void gsd_bgnline(void)
 {
     /* OGLXXX for multiple, independent line segments: use GL_LINES */
@@ -390,8 +392,8 @@ void gsd_bgnline(void)
 }
 
 /*!
-  \brief End line
-*/
+   \brief End line
+ */
 void gsd_endline(void)
 {
     glEnd();
@@ -400,10 +402,10 @@ void gsd_endline(void)
 }
 
 /*!
-  \brief Set shaded model
+   \brief Set shaded model
 
-  \param bool type non-zero for GL_SMOOTH otherwise GL_FLAT
-*/
+   \param bool type non-zero for GL_SMOOTH otherwise GL_FLAT
+ */
 void gsd_shademodel(int bool)
 {
     Shade = bool;
@@ -419,18 +421,18 @@ void gsd_shademodel(int bool)
 }
 
 /*!
-  \brief Get shaded model
+   \brief Get shaded model
 
-  \return shade
-*/
+   \return shade
+ */
 int gsd_getshademodel(void)
 {
     return (Shade);
 }
 
 /*!
-  \brief ADD
-*/
+   \brief ADD
+ */
 void gsd_bothbuffer(void)
 {
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -440,11 +442,11 @@ void gsd_bothbuffer(void)
 }
 
 /*!
-  \brief Specify which color buffers are to be drawn
-  into
+   \brief Specify which color buffers are to be drawn
+   into
 
-  \param bool non-zero for enable otherwise disable front buffer
-*/
+   \param bool non-zero for enable otherwise disable front buffer
+ */
 void gsd_frontbuffer(int bool)
 {
     /* OGLXXX frontbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -454,11 +456,11 @@ void gsd_frontbuffer(int bool)
 }
 
 /*!
-  \brief Specify which color buffers are to be drawn
-  into
+   \brief Specify which color buffers are to be drawn
+   into
 
-  \param bool non-zero for enable otherwise disable back buffer
-*/
+   \param bool non-zero for enable otherwise disable back buffer
+ */
 void gsd_backbuffer(int bool)
 {
     /* OGLXXX backbuffer: other possibilities include GL_FRONT_AND_BACK */
@@ -467,8 +469,8 @@ void gsd_backbuffer(int bool)
 }
 
 /*!
-  \brief Swap buffers
-*/
+   \brief Swap buffers
+ */
 void gsd_swapbuffers(void)
 {
     /* OGLXXX swapbuffers: 
@@ -481,8 +483,8 @@ void gsd_swapbuffers(void)
 }
 
 /*!
-  \brief Pop the current matrix stack
-*/
+   \brief Pop the current matrix stack
+ */
 void gsd_popmatrix(void)
 {
     glPopMatrix();
@@ -491,8 +493,8 @@ void gsd_popmatrix(void)
 }
 
 /*!
-  \brief Push the current matrix stack
-*/
+   \brief Push the current matrix stack
+ */
 void gsd_pushmatrix(void)
 {
     glPushMatrix();
@@ -501,12 +503,12 @@ void gsd_pushmatrix(void)
 }
 
 /*!
-  \brief Multiply the current matrix by a general scaling matrix
+   \brief Multiply the current matrix by a general scaling matrix
 
-  \param xs x scale value
-  \param ys y scale value
-  \param zs z scale value
-*/
+   \param xs x scale value
+   \param ys y scale value
+   \param zs z scale value
+ */
 void gsd_scale(float xs, float ys, float zs)
 {
     glScalef(xs, ys, zs);
@@ -515,12 +517,12 @@ void gsd_scale(float xs, float ys, float zs)
 }
 
 /*!
-  \brief Multiply the current matrix by a translation matrix
+   \brief Multiply the current matrix by a translation matrix
 
-  \param dx x translation value
-  \param dy y translation value
-  \param dz z translation value
-*/
+   \param dx x translation value
+   \param dy y translation value
+   \param dz z translation value
+ */
 void gsd_translate(float dx, float dy, float dz)
 {
     glTranslatef(dx, dy, dz);
@@ -529,13 +531,13 @@ void gsd_translate(float dx, float dy, float dz)
 }
 
 /*!
-  \brief Get viewport
+   \brief Get viewport
 
-  \param[out] window
-  \param viewport
-  \param modelMatrix model matrix
-  \param projMatrix projection matrix
-*/
+   \param[out] window
+   \param viewport
+   \param modelMatrix model matrix
+   \param projMatrix projection matrix
+ */
 void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
 		   double *projMatrix)
 {
@@ -557,17 +559,17 @@ void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param pt
-  \param widnow
-  \param viewport
-  \param doubleMatrix
-  \param projMatrix
+   \param pt
+   \param widnow
+   \param viewport
+   \param doubleMatrix
+   \param projMatrix
 
-  \return 0
-  \return 1
-*/
+   \return 0
+   \return 1
+ */
 int gsd_checkpoint(float pt[4],
 		   int window[4],
 		   int viewport[4],
@@ -587,11 +589,11 @@ int gsd_checkpoint(float pt[4],
 }
 
 /*!
-  \brief ADD
-  
-  \param angle
-  \param axis
-*/
+   \brief ADD
+
+   \param angle
+   \param axis
+ */
 void gsd_rot(float angle, char axis)
 {
     GLfloat x;
@@ -625,10 +627,9 @@ void gsd_rot(float angle, char axis)
 	break;
     default:
 
-	G_warning (_("gsd_rot(): %c is an invalid axis "
-		     "specification. Rotation ignored. "
-		     "Please advise GRASS developers of this error"),
-		     axis);
+	G_warning(_("gsd_rot(): %c is an invalid axis "
+		    "specification. Rotation ignored. "
+		    "Please advise GRASS developers of this error"), axis);
 	return;
     }
 
@@ -638,12 +639,12 @@ void gsd_rot(float angle, char axis)
 }
 
 /*!
-  \brief Set the current normal vector & specify vertex
+   \brief Set the current normal vector & specify vertex
 
-  \param norm normal vector
-  \param col color value
-  \param pt point (model coordinates)
-*/
+   \param norm normal vector
+   \param col color value
+   \param pt point (model coordinates)
+ */
 void gsd_litvert_func(float *norm, unsigned long col, float *pt)
 {
     glNormal3fv(norm);
@@ -654,12 +655,12 @@ void gsd_litvert_func(float *norm, unsigned long col, float *pt)
 }
 
 /*!
-  \brief ADD
-  
-  \param norm
-  \param col
-  \param pt
-*/
+   \brief ADD
+
+   \param norm
+   \param col
+   \param pt
+ */
 void gsd_litvert_func2(float *norm, unsigned long col, float *pt)
 {
     glNormal3fv(norm);
@@ -669,10 +670,10 @@ void gsd_litvert_func2(float *norm, unsigned long col, float *pt)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param pt
-*/
+   \param pt
+ */
 void gsd_vert_func(float *pt)
 {
     glVertex3fv(pt);
@@ -681,10 +682,10 @@ void gsd_vert_func(float *pt)
 }
 
 /*!
-  \brief Set current color
+   \brief Set current color
 
-  \param col color value
-*/
+   \param col color value
+ */
 void gsd_color_func(unsigned int col)
 {
     GLbyte r, g, b, a;
@@ -704,8 +705,8 @@ void gsd_color_func(unsigned int col)
 }
 
 /*!
-  \brief Initialize model light
-*/
+   \brief Initialize model light
+ */
 void gsd_init_lightmodel(void)
 {
 
@@ -784,12 +785,12 @@ void gsd_init_lightmodel(void)
 }
 
 /*!
-  \brief Set material
-  
-  \param set_shin,set_emis  flags
-  \param sh,em should be 0. - 1. 
-  \param emcolor packed colors to use for emission
-*/
+   \brief Set material
+
+   \param set_shin,set_emis  flags
+   \param sh,em should be 0. - 1. 
+   \param emcolor packed colors to use for emission
+ */
 void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 		      int emcolor)
 {
@@ -801,7 +802,7 @@ void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, ogl_mat_spec);
 
-	ogl_mat_shin = 60. + (int) (sh * 68.);
+	ogl_mat_shin = 60. + (int)(sh * 68.);
 
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, ogl_mat_shin);
     }
@@ -818,11 +819,11 @@ void gsd_set_material(int set_shin, int set_emis, float sh, float em,
 }
 
 /*!
-  \brief Define light
+   \brief Define light
 
-  \param num light id (starts with 1)
-  \param vals position(x,y,z,w), color, ambientm, emission
-*/
+   \param num light id (starts with 1)
+   \param vals position(x,y,z,w), color, ambientm, emission
+ */
 void gsd_deflight(int num, struct lightdefs *vals)
 {
     if (num > 0 && num <= MAX_LIGHTS) {
@@ -859,11 +860,11 @@ void gsd_deflight(int num, struct lightdefs *vals)
 }
 
 /*!
-  \brief Switch light on/off
+   \brief Switch light on/off
 
-  \param num
-  \param on 1 for 'on', 0 turns them off
-*/
+   \param num
+   \param on 1 for 'on', 0 turns them off
+ */
 void gsd_switchlight(int num, int on)
 {
     short defin;
@@ -881,14 +882,14 @@ void gsd_switchlight(int num, int on)
 }
 
 /*!
-  \brief Get image of current GL screen
+   \brief Get image of current GL screen
 
-  \param pixbuf data buffer
-  \param[out] xsize,ysize picture dimension
+   \param pixbuf data buffer
+   \param[out] xsize,ysize picture dimension
 
-  \return 0 on failure
-  \return 1 on success
-*/
+   \return 0 on failure
+   \return 1 on success
+ */
 int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
 		 unsigned int *ysize)
 {
@@ -909,7 +910,7 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
     *xsize = r - l + 1;
     *ysize = t - b + 1;
 
-    *pixbuf = (unsigned char *) G_malloc((*xsize) * (*ysize) * 4); /* G_fatal_error */
+    *pixbuf = (unsigned char *)G_malloc((*xsize) * (*ysize) * 4);	/* G_fatal_error */
 
     if (!*pixbuf)
 	return (0);
@@ -924,13 +925,13 @@ int gsd_getimage(unsigned char **pixbuf, unsigned int *xsize,
 }
 
 /*!
-  \brief Get viewpoint
+   \brief Get viewpoint
 
-  \param tmp
-  \param num
+   \param tmp
+   \param num
 
-  \return 1
-*/
+   \return 1
+ */
 int gsd_getViewport(GLint tmp[4], GLint num[2])
 {
 
@@ -942,17 +943,17 @@ int gsd_getViewport(GLint tmp[4], GLint num[2])
 }
 
 /*!
-  \brief Write view
+   \brief Write view
 
-  \param pixbuf data buffer
-  \param xsize,ysize picture dimension
-*/
+   \param pixbuf data buffer
+   \param xsize,ysize picture dimension
+ */
 int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 		  unsigned int ysize)
 {
 
     /* Malloc Buffer for image */
-    *pixbuf = (unsigned char *) G_malloc(xsize * ysize * 4); /* G_fatal_error */
+    *pixbuf = (unsigned char *)G_malloc(xsize * ysize * 4);	/* G_fatal_error */
     if (!*pixbuf) {
 	return (0);
     }
@@ -966,10 +967,10 @@ int gsd_writeView(unsigned char **pixbuf, unsigned int xsize,
 }
 
 /*!
-  \brief Specify pixel arithmetic
+   \brief Specify pixel arithmetic
 
-  \param yesno turn on/off
-*/
+   \param yesno turn on/off
+ */
 void gsd_blend(int yesno)
 {
     if (yesno) {
@@ -985,11 +986,11 @@ void gsd_blend(int yesno)
 }
 
 /*!
-  \brief Define clip plane
+   \brief Define clip plane
 
-  \param num
-  \param params
-*/
+   \param num
+   \param params
+ */
 void gsd_def_clipplane(int num, double *params)
 {
     int wason = 0;
@@ -1012,11 +1013,11 @@ void gsd_def_clipplane(int num, double *params)
 }
 
 /*!
-  \brief Set clip plane
+   \brief Set clip plane
 
-  \param num
-  \param able
-*/
+   \param num
+   \param able
+ */
 void gsd_set_clipplane(int num, int able)
 {
     /* OGLXXX see man page for glClipPlane equation */
@@ -1031,28 +1032,28 @@ void gsd_set_clipplane(int num, int able)
 }
 
 /*!
-  \brief Finish
+   \brief Finish
 
-  Does nothing, only called from src.contrib/GMSL/NVIZ2.2/src/glwrappers.c
-*/
+   Does nothing, only called from src.contrib/GMSL/NVIZ2.2/src/glwrappers.c
+ */
 void gsd_finish(void)
 {
     return;
 }
 
 /*!
-  \brief Set the viewport
-  
-  <i>l</i>, <i>b</i> specify the lower left corner of the viewport
-  rectangle, in pixels.
+   \brief Set the viewport
 
-  <i>r</i>, <i>t</i> specify the width and height of the viewport.
+   <i>l</i>, <i>b</i> specify the lower left corner of the viewport
+   rectangle, in pixels.
 
-  \param l left
-  \param r right
-  \param b bottom
-  \param t top
-*/
+   <i>r</i>, <i>t</i> specify the width and height of the viewport.
+
+   \param l left
+   \param r right
+   \param b bottom
+   \param t top
+ */
 void gsd_viewport(int l, int r, int b, int t)
 {
     /* Screencoord */
@@ -1062,14 +1063,14 @@ void gsd_viewport(int l, int r, int b, int t)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  First time called, gets a bunch of objects, then hands them back
-  when needed
+   First time called, gets a bunch of objects, then hands them back
+   when needed
 
-  \return -1 on failure
-  \return number of objects
-*/
+   \return -1 on failure
+   \return number of objects
+ */
 int gsd_makelist(void)
 {
     int i;
@@ -1097,11 +1098,11 @@ int gsd_makelist(void)
 }
 
 /*!
-  \brief ADD
-  
-  \param listno
-  \param do_draw
-*/
+   \brief ADD
+
+   \param listno
+   \param do_draw
+ */
 void gsd_bgnlist(int listno, int do_draw)
 {
     if (do_draw) {
@@ -1115,8 +1116,8 @@ void gsd_bgnlist(int listno, int do_draw)
 }
 
 /*!
-  \brief End list
-*/
+   \brief End list
+ */
 void gsd_endlist(void)
 {
     glEndList();
@@ -1125,11 +1126,11 @@ void gsd_endlist(void)
 }
 
 /*!
-  \brief Delete list
+   \brief Delete list
 
-  \param listno
-  \param range
-*/
+   \param listno
+   \param range
+ */
 void gsd_deletelist(GLuint listno, int range)
 {
     unsigned int i;
@@ -1146,10 +1147,10 @@ void gsd_deletelist(GLuint listno, int range)
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param listno
-*/
+   \param listno
+ */
 void gsd_calllist(int listno)
 {
     glCallList(ObjList[listno]);
@@ -1159,10 +1160,10 @@ void gsd_calllist(int listno)
 
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param listno
-*/
+   \param listno
+ */
 void gsd_calllists(int listno)
 {
     int i;

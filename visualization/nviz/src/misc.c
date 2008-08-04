@@ -76,7 +76,7 @@ int Nset_SDscale_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
     if (Tcl_GetDouble(interp, argv[1], &scale1) != TCL_OK)
 	return (TCL_ERROR);
 
-    scale = (float) scale1;
+    scale = (float)scale1;
 
     GS_set_SDscale(scale);
 

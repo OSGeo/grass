@@ -1,10 +1,12 @@
-/****************************************************************/	
-/*								*/
-/*	radians.h	in ~/src/Glos				*/
-/*								*/
-/* 	This header file defines the syntactic sugar to be	*/
-/*	used for some prominent radian measures.                */
+
+/****************************************************************/
 /*                                                              */
+/*      radians.h       in ~/src/Glos                           */
+/*                                                              */
+/*      This header file defines the syntactic sugar to be      */
+/*      used for some prominent radian measures.                */
+/*                                                              */
+
 /****************************************************************/
 
 #include <grass/gis.h>

@@ -175,13 +175,13 @@ int N_get_array_2d_type(N_array_2d * array)
  * \return void
  * */
 
-void
-N_get_array_2d_value(N_array_2d * data, int col, int row, void *value)
+void N_get_array_2d_value(N_array_2d * data, int col, int row, void *value)
 {
 
     if (data->offset == 0) {
 	if (data->type == CELL_TYPE && data->cell_array != NULL) {
-	    *((CELL *) value) = data->cell_array[row * data->cols_intern + col];
+	    *((CELL *) value) =
+		data->cell_array[row * data->cols_intern + col];
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
 	    *((FCELL *) value) =
@@ -235,8 +235,8 @@ int N_is_array_2d_value_null(N_array_2d * data, int col, int row)
 		    col, row);
 	    return G_is_null_value((void *)
 				   &(data->
-				     cell_array[row * data->cols_intern + col]),
-				   CELL_TYPE);
+				     cell_array[row * data->cols_intern +
+						col]), CELL_TYPE);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
 	    G_debug(6,
@@ -338,7 +338,7 @@ CELL N_get_array_2d_c_value(N_array_2d * data, int col, int row)
  * \param col int
  * \param row int
  * \return FCELL
- 
+
  * */
 FCELL N_get_array_2d_f_value(N_array_2d * data, int col, int row)
 {
@@ -405,15 +405,15 @@ DCELL N_get_array_2d_d_value(N_array_2d * data, int col, int row)
  * \param value char *
  * \return void
  * */
-void
-N_put_array_2d_value(N_array_2d * data, int col, int row, char *value)
+void N_put_array_2d_value(N_array_2d * data, int col, int row, char *value)
 {
 
     G_debug(6, "N_put_array_2d_value: put value to array");
 
     if (data->offset == 0) {
 	if (data->type == CELL_TYPE && data->cell_array != NULL) {
-	    data->cell_array[row * data->cols_intern + col] = *((CELL *) value);
+	    data->cell_array[row * data->cols_intern + col] =
+		*((CELL *) value);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
 	    data->fcell_array[row * data->cols_intern + col] =
@@ -463,7 +463,8 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 	if (data->type == CELL_TYPE && data->cell_array != NULL) {
 	    G_set_c_null_value((void *)
 			       &(data->
-				 cell_array[row * data->cols_intern + col]), 1);
+				 cell_array[row * data->cols_intern + col]),
+			       1);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
 	    G_set_f_null_value((void *)
@@ -483,8 +484,9 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
 	    G_set_c_null_value((void *)
 			       &(data->
 				 cell_array[(row +
-					     data->offset) * data->cols_intern +
-					    col + data->offset]), 1);
+					     data->offset) *
+					    data->cols_intern + col +
+					    data->offset]), 1);
 	}
 	else if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
 	    G_set_f_null_value((void *)
@@ -516,26 +518,25 @@ void N_put_array_2d_value_null(N_array_2d * data, int col, int row)
  * \param value CELL
  * \return void
  * */
-void
-N_put_array_2d_c_value(N_array_2d * data, int col, int row, CELL value)
+void N_put_array_2d_c_value(N_array_2d * data, int col, int row, CELL value)
 {
     FCELL fvalue;
     DCELL dvalue;
 
     switch (data->type) {
     case FCELL_TYPE:
-        fvalue = (FCELL)value;
+	fvalue = (FCELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&fvalue);
 	return;
     case DCELL_TYPE:
-        dvalue = (DCELL)value;
+	dvalue = (DCELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&dvalue);
 	return;
     }
 
     N_put_array_2d_value(data, col, row, (char *)&value);
-   
-return;
+
+    return;
 }
 
 /*!
@@ -547,26 +548,25 @@ return;
  * \param value FCELL
  * \return void
  * */
-void
-N_put_array_2d_f_value(N_array_2d * data, int col, int row, FCELL value)
+void N_put_array_2d_f_value(N_array_2d * data, int col, int row, FCELL value)
 {
-    CELL  cvalue;
+    CELL cvalue;
     DCELL dvalue;
 
     switch (data->type) {
     case CELL_TYPE:
-        cvalue = (CELL)value;
+	cvalue = (CELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&cvalue);
 	return;
     case DCELL_TYPE:
-        dvalue = (DCELL)value;
+	dvalue = (DCELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&dvalue);
 	return;
     }
 
     N_put_array_2d_value(data, col, row, (char *)&value);
-   
-return;
+
+    return;
 }
 
 /*!
@@ -578,26 +578,25 @@ return;
  * \param value DCELL
  * \return void
  * */
-void
-N_put_array_2d_d_value(N_array_2d * data, int col, int row, DCELL value)
+void N_put_array_2d_d_value(N_array_2d * data, int col, int row, DCELL value)
 {
-    CELL  cvalue;
+    CELL cvalue;
     FCELL fvalue;
 
     switch (data->type) {
     case CELL_TYPE:
-        cvalue = (CELL)value;
+	cvalue = (CELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&cvalue);
 	return;
     case FCELL_TYPE:
-        fvalue = (FCELL)value;
+	fvalue = (FCELL) value;
 	N_put_array_2d_value(data, col, row, (char *)&fvalue);
 	return;
     }
-   
+
     N_put_array_2d_value(data, col, row, (char *)&value);
-	
-return;
+
+    return;
 }
 
 /*!
@@ -639,7 +638,7 @@ void N_print_array_2d(N_array_2d * data)
     N_print_array_2d_info(data);
 
     for (j = 0 - data->offset; j < data->rows + data->offset; j++) {
-	for (i = 0  - data->offset; i < data->cols  + data->offset; i++) {
+	for (i = 0 - data->offset; i < data->cols + data->offset; i++) {
 	    if (data->type == CELL_TYPE)
 		fprintf(stdout, "%6d ", N_get_array_2d_c_value(data, i, j));
 	    else if (data->type == FCELL_TYPE)
@@ -679,35 +678,35 @@ void N_print_array_2d(N_array_2d * data)
  0  0  0  0  0
  0  0  0  0  0
  0  0  0  0  0
- 
+
  0  0  0  0  0
  0  0  1  2  0
  0  3  4  5  0
  0  6  7  8  0
  0  0  0  0  0
- 
+
  0  0  0  0  0
  0  9 10 11  0
  0 12 13 14  0
  0 15 16 17  0
  0  0  0  0  0
- 
+
  0  0  0  0  0
  0 18 19 20  0
  0 21 22 23  0
  0 24 25 26  0
  0  0  0  0  0
- 
+
  0  0  0  0  0
  0  0  0  0  0
  0  0  0  0  0
  0  0  0  0  0
  0  0  0  0  0
- 
+
  \endverbatim
- 
+
  The depth counts from the bottom to the top.
- 
+
  * <br><br>
  * Internal a one dimensional array is allocated to speed up the memory access.
  * To access the dimensional array with a three dimensional indexing use the provided 
@@ -727,7 +726,8 @@ N_array_3d *N_alloc_array_3d(int cols, int rows, int depths, int offset,
     N_array_3d *data = NULL;
 
     if (rows < 1 || cols < 1 || depths < 1)
-	G_fatal_error("N_alloc_array_3d: depths, cols and rows should be > 0");
+	G_fatal_error
+	    ("N_alloc_array_3d: depths, cols and rows should be > 0");
 
     if (type != DCELL_TYPE && type != FCELL_TYPE)
 	G_fatal_error
@@ -875,8 +875,7 @@ N_get_array_3d_value(N_array_3d * data, int col, int row, int depth,
  * \param depth int
  * \return void
  * */
-int
-N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
+int N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 {
 
     if (data->offset == 0) {
@@ -915,12 +914,10 @@ N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 					fcell_array[(depth +
 						     data->offset) *
 						    (data->rows_intern *
-						     data->cols_intern) + (row +
-									   data->
-									   offset)
-						    * data->cols_intern + (col +
-									   data->
-									   offset)]),
+						     data->cols_intern) +
+						    (row + data->offset)
+						    * data->cols_intern +
+						    (col + data->offset)]),
 				      FCELL_TYPE);
 
 	}
@@ -958,8 +955,7 @@ N_is_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
  * \return float
  *
  * */
-float
-N_get_array_3d_f_value(N_array_3d * data, int col, int row, int depth)
+float N_get_array_3d_f_value(N_array_3d * data, int col, int row, int depth)
 {
     float fvalue = 0.0;
     double dvalue = 0.0;
@@ -988,8 +984,7 @@ N_get_array_3d_f_value(N_array_3d * data, int col, int row, int depth)
  * \return double
  *
  * */
-double
-N_get_array_3d_d_value(N_array_3d * data, int col, int row, int depth)
+double N_get_array_3d_d_value(N_array_3d * data, int col, int row, int depth)
 {
     float fvalue = 0.0;
     double dvalue = 0.0;
@@ -1029,13 +1024,15 @@ N_put_array_3d_value(N_array_3d * data, int col, int row, int depth,
 
     if (data->offset == 0) {
 	if (data->type == FCELL_TYPE && data->fcell_array != NULL) {
-	    data->fcell_array[depth * (data->rows_intern * data->cols_intern) +
+	    data->fcell_array[depth *
+			      (data->rows_intern * data->cols_intern) +
 			      row * data->cols_intern + col]
 		= *((float *)value);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
 
-	    data->dcell_array[depth * (data->rows_intern * data->cols_intern) +
+	    data->dcell_array[depth *
+			      (data->rows_intern * data->cols_intern) +
 			      row * data->cols_intern + col]
 		= *((double *)value);
 	}
@@ -1073,8 +1070,7 @@ N_put_array_3d_value(N_array_3d * data, int col, int row, int depth,
  * \param depth int
  * \return void
  * */
-void
-N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
+void N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 {
 
     G_debug(6,
@@ -1106,12 +1102,14 @@ N_put_array_3d_value_null(N_array_3d * data, int col, int row, int depth)
 	    G3d_setNullValue((void *)
 			     &(data->
 			       fcell_array[(depth +
-					    data->offset) * (data->rows_intern *
-							     data->
-							     cols_intern) +
-					   (row +
-					    data->offset) * data->cols_intern +
-					   (col + data->offset)]), 1,
+					    data->offset) *
+					   (data->rows_intern *
+					    data->cols_intern) + (row +
+								  data->
+								  offset) *
+					   data->cols_intern + (col +
+								data->
+								offset)]), 1,
 			     FCELL_TYPE);
 	}
 	else if (data->type == DCELL_TYPE && data->dcell_array != NULL) {
@@ -1149,11 +1147,12 @@ N_put_array_3d_f_value(N_array_3d * data, int col, int row, int depth,
 {
     double dval;
 
-    if(data->type == DCELL_TYPE) {
-    dval = (double)value;
-    N_put_array_3d_value(data, col, row, depth, (void *)&dval);
-    } else {
-    N_put_array_3d_value(data, col, row, depth, (void *)&value);
+    if (data->type == DCELL_TYPE) {
+	dval = (double)value;
+	N_put_array_3d_value(data, col, row, depth, (void *)&dval);
+    }
+    else {
+	N_put_array_3d_value(data, col, row, depth, (void *)&value);
     }
 
     return;
@@ -1175,11 +1174,12 @@ N_put_array_3d_d_value(N_array_3d * data, int col, int row, int depth,
 {
     float fval;
 
-    if(data->type == FCELL_TYPE) {
-    fval = (double)value;
-    N_put_array_3d_value(data, col, row, depth, (void *)&fval);
-    } else {
-    N_put_array_3d_value(data, col, row, depth, (void *)&value);
+    if (data->type == FCELL_TYPE) {
+	fval = (double)value;
+	N_put_array_3d_value(data, col, row, depth, (void *)&fval);
+    }
+    else {
+	N_put_array_3d_value(data, col, row, depth, (void *)&value);
     }
 
     return;
@@ -1239,4 +1239,3 @@ void N_print_array_3d(N_array_3d * data)
 
     return;
 }
-

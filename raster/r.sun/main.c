@@ -157,9 +157,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *elevin, *aspin, *slopein, *linkein, *lin, *albedo, *alb,
-	    *latin, *lat, *coefbh, *coefdh, *incidout, *beam_rad, *insol_time,
-	    *diff_rad, *refl_rad, *day, *step, *declin, *ltime;
+	struct Option *elevin, *aspin, *slopein, *linkein, *lin, *albedo,
+	    *alb, *latin, *lat, *coefbh, *coefdh, *incidout, *beam_rad,
+	    *insol_time, *diff_rad, *refl_rad, *day, *step, *declin, *ltime;
     }
     parm;
 
@@ -389,7 +389,8 @@ int main(int argc, char *argv[])
 
     flag.shade = G_define_flag();
     flag.shade->key = 's';
-    flag.shade->description = _("Incorporate the shadowing effect of terrain");
+    flag.shade->description =
+	_("Incorporate the shadowing effect of terrain");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -485,7 +486,8 @@ int main(int argc, char *argv[])
 		 ("Can't get projection info of current location: please set latitude via 'lat' or 'latin' option!"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_("Can't get projection units of current location"));
+	    G_fatal_error(_
+			  ("Can't get projection units of current location"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	    G_fatal_error
@@ -499,7 +501,8 @@ int main(int argc, char *argv[])
 	oproj.meters = 1.;
 	sprintf(oproj.proj, "ll");
 	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
+	    G_fatal_error(_
+			  ("Unable to set up lat/long projection parameters"));
 
     }
 
@@ -713,7 +716,8 @@ int INPUT(void)
 		    o[i][j] = 450. - o[i][j];
 		G_debug(3, "o:%f  z:%f  i:%d  j:%d", o[i][j], z[i][j], i, j);
 
-		if (z[i][j] == UNDEFZ || o[i][j] == UNDEFZ || s[i][j] == UNDEFZ)
+		if (z[i][j] == UNDEFZ || o[i][j] == UNDEFZ ||
+		    s[i][j] == UNDEFZ)
 		    z[i][j] = UNDEFZ;
 		if (linkein != NULL && li[i][j] == UNDEFZ)
 		    z[i][j] = UNDEFZ;
@@ -1236,6 +1240,7 @@ int searching(void)
 void calculate(void)
 {
     int i, j, l;
+
     /* double energy; */
     double lum, q1;
 
@@ -1307,8 +1312,10 @@ void calculate(void)
 	for (i = 0; i < n; i++) {
 
 	    xg0 = xx0 = (double)i *stepx;
+
 	    xp = xmin + xx0;
 	    yg0 = yy0 = (double)j *stepy;
+
 	    yp = ymin + yy0;
 	    func = NULL;
 	    length = 0;
@@ -1349,8 +1356,8 @@ void calculate(void)
 			longitude = xp;
 			latitude = yp;
 
-			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) <
-			    0) {
+			if (pj_do_proj(&longitude, &latitude, &iproj, &oproj)
+			    < 0) {
 			    G_fatal_error(_("Error in pj_do_proj"));
 			}
 
@@ -1456,7 +1463,8 @@ void calculate(void)
 		" Sunrise time (hr.):                       %.2f",
 		sunrise_time);
 	sprintf(hist.edhist[hist.edlinecnt + 1],
-		" Sunset time (hr.):                        %.2f", sunset_time);
+		" Sunset time (hr.):                        %.2f",
+		sunset_time);
 	sprintf(hist.edhist[hist.edlinecnt + 2],
 		" Daylight time (hr.):                      %.2f",
 		sunset_time - sunrise_time);
@@ -1486,8 +1494,8 @@ void calculate(void)
 		" Linke turbidity factor:                   %.1f", linke);
     else
 	sprintf(hist.edhist[hist.edlinecnt],
-		" Linke turbidity factor min-max:           %.1f-%.1f", li_min,
-		li_max);
+		" Linke turbidity factor min-max:           %.1f-%.1f",
+		li_min, li_max);
     hist.edlinecnt++;
 
     if (albedo == NULL)
@@ -1495,8 +1503,8 @@ void calculate(void)
 		" Ground albedo:                            %.3f", alb);
     else
 	sprintf(hist.edhist[hist.edlinecnt],
-		" Ground albedo min-max:                    %.3f-%.3f", al_min,
-		al_max);
+		" Ground albedo min-max:                    %.3f-%.3f",
+		al_min, al_max);
     hist.edlinecnt++;
 
     sprintf(hist.edhist[hist.edlinecnt],
@@ -1597,8 +1605,8 @@ double drad(double sh)
 	    fx = r_sky + fg * 0.252271;
 	else if (h0 >= 0.1) {
 	    fx = ((0.00263 - kb * (0.712 + 0.6883 * kb)) * fg + r_sky) * (1. -
-									  kb) +
-		kb * sh / lum_Lz;
+									  kb)
+		+ kb * sh / lum_Lz;
 	}
 	else if (h0 < 0.1)
 	    fx = ((0.00263 - 0.712 * kb - 0.6883 * kb * kb) * fg +

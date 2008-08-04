@@ -1,3 +1,4 @@
+
 /***************************************************************************
 *
 * MODULE: 	g.version
@@ -45,17 +46,18 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
 
-    fprintf (stdout, "GRASS %s (%s) %s\n",
-    	GRASS_VERSION_NUMBER, GRASS_VERSION_DATE, GRASS_VERSION_UPDATE_PKG );
+    fprintf(stdout, "GRASS %s (%s) %s\n",
+	    GRASS_VERSION_NUMBER, GRASS_VERSION_DATE,
+	    GRASS_VERSION_UPDATE_PKG);
 
-    if (copyright->answer){
+    if (copyright->answer) {
 	fprintf(stdout, "\n");
-    	fputs (COPYING, stdout);
+	fputs(COPYING, stdout);
     }
 
-    if (build->answer){
+    if (build->answer) {
 	fprintf(stdout, "\n");
-    	fputs (GRASS_CONFIGURE_PARAMS, stdout);
+	fputs(GRASS_CONFIGURE_PARAMS, stdout);
 	fprintf(stdout, "\n");
     }
 

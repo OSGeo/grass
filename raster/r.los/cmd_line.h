@@ -1,9 +1,11 @@
+
 /****************************************************************/
 /*                                                              */
 /*      This header file declares the global variables and the  */
 /*      structures that are to be used for command line         */
 /*      processing                                              */
 /*                                                              */
+
 /****************************************************************/
 
 #ifdef MAIN

@@ -1,4 +1,4 @@
-     
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -27,8 +27,7 @@ static int r_size, g_size, b_size;
 static int r_scale, g_scale, b_scale;
 
 
-static void
-get_shifts(unsigned long mask, int *pos, int *size, int *scale)
+static void get_shifts(unsigned long mask, int *pos, int *size, int *scale)
 {
     int i, j;
 
@@ -45,12 +44,11 @@ get_shifts(unsigned long mask, int *pos, int *size, int *scale)
 	*scale = 8 - (j - i);
 }
 
-static int
-get_rgb_shifts(void)
+static int get_rgb_shifts(void)
 {
-    get_shifts(use_visual->red_mask,   &r_pos, &r_size, &r_scale);
+    get_shifts(use_visual->red_mask, &r_pos, &r_size, &r_scale);
     get_shifts(use_visual->green_mask, &g_pos, &g_size, &g_scale);
-    get_shifts(use_visual->blue_mask,  &b_pos, &b_size, &b_scale);
+    get_shifts(use_visual->blue_mask, &b_pos, &b_size, &b_scale);
 
     return (1 << r_size) * (1 << g_size) * (1 << b_size);
 }
@@ -79,12 +77,10 @@ find_color_rgb(unsigned int r, unsigned int g, unsigned int b)
     return (rr << r_pos) + (gg << g_pos) + (bb << b_pos);
 }
 
-unsigned long
-find_color(unsigned int r, unsigned int g, unsigned int b)
+unsigned long find_color(unsigned int r, unsigned int g, unsigned int b)
 {
 
-    switch (use_visual->class)
-    {
+    switch (use_visual->class) {
     case StaticGray:
     case GrayScale:
 	return find_color_gray(r, g, b);
@@ -100,21 +96,21 @@ find_color(unsigned int r, unsigned int g, unsigned int b)
     }
 }
 
-static void
-get_max_levels(int n_colors, int *rr, int *gg, int *bb)
+static void get_max_levels(int n_colors, int *rr, int *gg, int *bb)
 {
     int r, g, b, i;
 
-    for (i = 0; i * i * i < n_colors; i++)
-	;
+    for (i = 0; i * i * i < n_colors; i++) ;
 
-    for (r = g = b = i; ; )
-    {
-	if (r * g * b <= n_colors) break;
+    for (r = g = b = i;;) {
+	if (r * g * b <= n_colors)
+	    break;
 	b--;
-	if (r * g * b <= n_colors) break;
+	if (r * g * b <= n_colors)
+	    break;
 	r--;
-	if (r * g * b <= n_colors) break;
+	if (r * g * b <= n_colors)
+	    break;
 	g--;
     }
 
@@ -123,8 +119,7 @@ get_max_levels(int n_colors, int *rr, int *gg, int *bb)
     *bb = b;
 }
 
-static int
-get_fewer_levels(int *rr, int *gg, int *bb)
+static int get_fewer_levels(int *rr, int *gg, int *bb)
 {
     int r = *rr;
     int g = *gg;
@@ -132,13 +127,12 @@ get_fewer_levels(int *rr, int *gg, int *bb)
 
     /* 888 -> 887 -> 787 -> 777 -> ... */
 
-    if (r > b)		/* 887 -> 787 */
+    if (r > b)			/* 887 -> 787 */
 	r--;
-    else
-	if (g > b)	/* 787 -> 777 */
-	    g--;
-	else		/* 888 -> 888 */
-	    b--;
+    else if (g > b)		/* 787 -> 777 */
+	g--;
+    else			/* 888 -> 888 */
+	b--;
 
     *rr = r;
     *gg = g;
@@ -147,31 +141,28 @@ get_fewer_levels(int *rr, int *gg, int *bb)
     return r >= 2 && g >= 2 && b >= 2;
 }
 
-static int
-try_get_colors(Colormap cmap, int nr, int ng, int nb)
+static int try_get_colors(Colormap cmap, int nr, int ng, int nb)
 {
     XColor xcolor;
     int n_pixels;
     int r, g, b;
 
-    xpixels = (unsigned long *) G_realloc(xpixels,
-					  nr * ng * nb * sizeof(unsigned long));
+    xpixels = (unsigned long *)G_realloc(xpixels,
+					 nr * ng * nb *
+					 sizeof(unsigned long));
     n_pixels = 0;
 
     xcolor.flags = DoRed | DoGreen | DoBlue;
 
-    for (r = 0; r < nr; r++)
-    {
-	for (g = 0; g < ng; g++)
-	{
-	    for (b = 0; b < nb; b++)
-	    {
-		xcolor.red   = (unsigned short) (r * 0xFFFF / (nr - 1));
-		xcolor.green = (unsigned short) (g * 0xFFFF / (ng - 1));
-		xcolor.blue  = (unsigned short) (b * 0xFFFF / (nb - 1));
-		if (!XAllocColor(dpy, cmap, &xcolor))
-		{
-		    XFreeColors(dpy, cmap, xpixels, n_pixels, (unsigned long)0);
+    for (r = 0; r < nr; r++) {
+	for (g = 0; g < ng; g++) {
+	    for (b = 0; b < nb; b++) {
+		xcolor.red = (unsigned short)(r * 0xFFFF / (nr - 1));
+		xcolor.green = (unsigned short)(g * 0xFFFF / (ng - 1));
+		xcolor.blue = (unsigned short)(b * 0xFFFF / (nb - 1));
+		if (!XAllocColor(dpy, cmap, &xcolor)) {
+		    XFreeColors(dpy, cmap, xpixels, n_pixels,
+				(unsigned long)0);
 		    return 0;
 		}
 
@@ -183,27 +174,25 @@ try_get_colors(Colormap cmap, int nr, int ng, int nb)
     return 1;
 }
 
-static int
-try_get_grays(Colormap cmap, int ny)
+static int try_get_grays(Colormap cmap, int ny)
 {
     XColor xcolor;
     int n_pixels;
     int y;
 
-    xpixels = (unsigned long *) G_realloc(xpixels, ny * sizeof(unsigned long));
+    xpixels = (unsigned long *)G_realloc(xpixels, ny * sizeof(unsigned long));
     n_pixels = 0;
 
     xcolor.flags = DoRed | DoGreen | DoBlue;
 
-    for (y = 0; y < ny; y++)
-    {
-	unsigned short v = (unsigned short) (y * 0xFFFF / (ny - 1));
-	xcolor.red   = v;
-	xcolor.green = v;
-	xcolor.blue  = v;
+    for (y = 0; y < ny; y++) {
+	unsigned short v = (unsigned short)(y * 0xFFFF / (ny - 1));
 
-	if (!XAllocColor(dpy, cmap, &xcolor))
-	{
+	xcolor.red = v;
+	xcolor.green = v;
+	xcolor.blue = v;
+
+	if (!XAllocColor(dpy, cmap, &xcolor)) {
 	    XFreeColors(dpy, cmap, xpixels, n_pixels, (unsigned long)0);
 	    return y;
 	}
@@ -214,24 +203,22 @@ try_get_grays(Colormap cmap, int ny)
     return ny;
 }
 
-static Colormap
-ramp_colormap(void)
+static Colormap ramp_colormap(void)
 {
     int n_colors = use_visual->map_entries;
     Colormap cmap = XCreateColormap(dpy, RootWindow(dpy, scrn),
 				    use_visual, AllocAll);
     int i;
 
-    for (i = 0; i < n_colors; i++)
-    {
+    for (i = 0; i < n_colors; i++) {
 	unsigned int k = i * 65535 / (n_colors - 1);
 	unsigned int l = i * 255 / (n_colors - 1);
 	XColor xcolor;
 
 	xcolor.flags = DoRed | DoGreen | DoBlue;
-	xcolor.blue  = k;
+	xcolor.blue = k;
 	xcolor.green = k;
-	xcolor.red   = k;
+	xcolor.red = k;
 	xcolor.pixel = find_color_rgb(l, l, l);
 
 	XStoreColor(dpy, cmap, &xcolor);
@@ -240,14 +227,12 @@ ramp_colormap(void)
     return cmap;
 }
 
-Colormap
-InitColorTableFixed(Colormap cmap)
+Colormap InitColorTableFixed(Colormap cmap)
 {
     int n_colors = use_visual->map_entries;
     int r, g, b, y, i;
 
-    switch (use_visual->class)
-    {
+    switch (use_visual->class) {
     case StaticGray:
     case GrayScale:
 	/* determine how many levels of gray we can actually get */
@@ -259,8 +244,8 @@ InitColorTableFixed(Colormap cmap)
 
 	NCOLORS = y;
 
-        for (i = 0; i < 256; i++)
-            Gray[i] = i * y / 256;
+	for (i = 0; i < 256; i++)
+	    Gray[i] = i * y / 256;
 
 	break;
 
@@ -276,12 +261,11 @@ InitColorTableFixed(Colormap cmap)
 
 	NCOLORS = r * g * b;
 
-        for (i = 0; i < 256; i++)
-	{
-            Red[i] = (i * r / 256) * g * b;
-            Grn[i] = (i * g / 256) * b;
-            Blu[i] = (i * b / 256);
-        }
+	for (i = 0; i < 256; i++) {
+	    Red[i] = (i * r / 256) * g * b;
+	    Grn[i] = (i * g / 256) * b;
+	    Blu[i] = (i * b / 256);
+	}
 
 	break;
 
@@ -314,8 +298,7 @@ InitColorTableFixed(Colormap cmap)
 
 int _get_lookup_for_color(unsigned int r, unsigned int g, unsigned int b)
 {
-    switch (use_visual->class)
-    {
+    switch (use_visual->class) {
     case StaticGray:
     case GrayScale:
 	return Gray[(r + g + b) / 3];
@@ -338,4 +321,3 @@ int _get_lookup_for_color(unsigned int r, unsigned int g, unsigned int b)
 
     return -1;
 }
-

@@ -1,3 +1,4 @@
+
 /**
  * \file select.c
  *
@@ -29,13 +30,13 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int mode)
+int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 {
-    cursor   *c;
-    dbTable  *table;
-    char     *str;
+    cursor *c;
+    dbTable *table;
+    char *str;
     const char *rest;
-    int      ret;
+    int ret;
 
     init_error();
 
@@ -48,26 +49,24 @@ int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int mode)
     db_set_cursor_type_readonly(dbc);
 
     /* \ must be escaped, see explanation in db_driver_execute_immediate() */
-    str = G_str_replace ( db_get_string(sel), "\\", "\\\\" );
-    G_debug ( 3, "Escaped SQL: %s", str );
+    str = G_str_replace(db_get_string(sel), "\\", "\\\\");
+    G_debug(3, "Escaped SQL: %s", str);
 
-    ret = sqlite3_prepare ( sqlite, str, -1, 
-			    &(c->statement), &rest );
+    ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
 
-    if ( str )
-	G_free ( str );
+    if (str)
+	G_free(str);
 
-    if ( ret != SQLITE_OK )
-    {
-        append_error("Error in sqlite3_prepare():");
-	append_error(db_get_string(sel) );
-	append_error( "\n" );
-        append_error ((char *) sqlite3_errmsg (sqlite));
-        report_error( );
-        return DB_FAILED;
+    if (ret != SQLITE_OK) {
+	append_error("Error in sqlite3_prepare():");
+	append_error(db_get_string(sel));
+	append_error("\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
     }
 
-    if ( describe_table( c->statement, &table, c) == DB_FAILED ) {
+    if (describe_table(c->statement, &table, c) == DB_FAILED) {
 	append_error("Cannot describe table\n");
 	report_error();
 	return DB_FAILED;

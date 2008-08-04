@@ -23,7 +23,7 @@ static void RunScripts(ClientData);
  *
  * RunScripts
  *
- *	This idle handler is used to run active scripts in background.
+ *      This idle handler is used to run active scripts in background.
  *
  * Results:
  *
@@ -44,16 +44,16 @@ void RunScripts(ClientData clientData)
  *
  * NVIZ_AppInit -- (based on tclAppInit)
  *
- *	This procedure performs application-specific initialization.
- *	Most applications, especially those that incorporate additional
- *	packages, will have their own version of this procedure.
+ *      This procedure performs application-specific initialization.
+ *      Most applications, especially those that incorporate additional
+ *      packages, will have their own version of this procedure.
  *
  * Results:
- *	Returns a standard Tcl completion code, and leaves an error
- *	message in interp->result if an error occurs.
+ *      Returns a standard Tcl completion code, and leaves an error
+ *      message in interp->result if an error occurs.
  *
  * Side effects:
- *	Depends on the startup script.
+ *      Depends on the startup script.
  *
  *----------------------------------------------------------------------
  */
@@ -86,11 +86,11 @@ int NVIZ_AppInit(Tcl_Interp * interp	/* Interpreter for application. */
     /* added 3-12-99 to conform with 8.0.4 */
     Tcl_StaticPackage(interp, "Tk", Tk_Init, Tk_SafeInit);
 
-/*
-  if (TkGLX_Init(interp, mainWindow) == TCL_ERROR) {
-    return TCL_ERROR;
-  }
-*/
+    /*
+       if (TkGLX_Init(interp, mainWindow) == TCL_ERROR) {
+       return TCL_ERROR;
+       }
+     */
 
     if (Togl_Init(interp) == TCL_ERROR) {
 	return TCL_ERROR;
@@ -113,9 +113,9 @@ int NVIZ_AppInit(Tcl_Interp * interp	/* Interpreter for application. */
      * Added 26-Feb-2000 by Philip Warner so we can remove tkSpecialWait
      * Uncomment the line below if you want scripts to run in background...
      */
-/*
-  Tk_DoWhenIdle(RunScripts, interp);
-*/
+    /*
+       Tk_DoWhenIdle(RunScripts, interp);
+     */
 
     /*
      * Specify a user-specific startup file to invoke if the application

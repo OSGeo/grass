@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.tempfile
@@ -21,7 +22,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *pid;
@@ -34,7 +35,7 @@ int main (int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("general");
     module->description =
-		"Creates a temporary file and prints the file name.";
+	"Creates a temporary file and prints the file name.";
 
     pid = G_define_option();
     pid->key = "pid";
@@ -43,20 +44,17 @@ int main (int argc, char *argv[])
     pid->description = "Process id to use when naming the tempfile";
 
     G_disable_interactive();
-    if (G_parser(argc,argv)) exit(1);
+    if (G_parser(argc, argv))
+	exit(1);
 
-    if (sscanf (pid->answer, "%d", &p) != 1)
-    {
+    if (sscanf(pid->answer, "%d", &p) != 1) {
 	G_usage();
 	exit(EXIT_FAILURE);
     }
     tempfile = G__tempfile(p);
 
-/* create tempfile so next run of this program will create a unique name */
-    close(creat(tempfile,0666));
-    fprintf (stdout,"%s\n", tempfile);
+    /* create tempfile so next run of this program will create a unique name */
+    close(creat(tempfile, 0666));
+    fprintf(stdout, "%s\n", tempfile);
     exit(EXIT_SUCCESS);
 }
-
-
-

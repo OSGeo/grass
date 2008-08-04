@@ -15,6 +15,7 @@ int Nresize_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     )
 {
     int w, h;
+
     /* one render  */
     if (argc != 3)
 	return (TCL_ERROR);
@@ -68,6 +69,7 @@ char *int_to_tcl_color(int clr)
 {
     int r, g, b;
     static char c[128];
+
     INT_TO_RED(clr, r);
     INT_TO_GRN(clr, g);
     INT_TO_BLU(clr, b);

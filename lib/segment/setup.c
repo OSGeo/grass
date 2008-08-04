@@ -1,3 +1,4 @@
+
 /**
  * \file setup.c
  *
@@ -31,37 +32,36 @@
  * \return -2 if unable to allocate memory
  */
 
-int segment_setup (SEGMENT *SEG)
+int segment_setup(SEGMENT * SEG)
 {
     int i;
 
     SEG->open = 0;
 
     if (SEG->nrows <= 0 || SEG->ncols <= 0
-    ||  SEG->srows <= 0 || SEG->scols <= 0
-    ||  SEG->len   <= 0 || SEG->nseg  <= 0)
-    {
-	G_warning ("segment_setup: illegal segment file parameters\n");
+	|| SEG->srows <= 0 || SEG->scols <= 0
+	|| SEG->len <= 0 || SEG->nseg <= 0) {
+	G_warning("segment_setup: illegal segment file parameters\n");
 	return -1;
     }
 
     /* This is close to the beginning of the file, so doesn't need to be an off_t */
-    SEG->offset = (int) lseek (SEG->fd, 0L, SEEK_CUR);
+    SEG->offset = (int)lseek(SEG->fd, 0L, SEEK_CUR);
 
-    SEG->spr = SEG->ncols / SEG->scols ;
-    SEG->spill = SEG->ncols % SEG->scols ;
-    if(SEG->spill)
-	SEG->spr++ ;
+    SEG->spr = SEG->ncols / SEG->scols;
+    SEG->spill = SEG->ncols % SEG->scols;
+    if (SEG->spill)
+	SEG->spr++;
 
-    if((SEG->scb =
-        (struct SEGMENT_SCB *) G_malloc (SEG->nseg * sizeof(struct SEGMENT_SCB))) == NULL)
+    if ((SEG->scb =
+	 (struct SEGMENT_SCB *)G_malloc(SEG->nseg *
+					sizeof(struct SEGMENT_SCB))) == NULL)
 	return -2;
 
     SEG->size = SEG->srows * SEG->scols * SEG->len;
 
-    for (i = 0; i < SEG->nseg; i++)
-    {
-	if((SEG->scb[i].buf = G_malloc (SEG->size)) == NULL)
+    for (i = 0; i < SEG->nseg; i++) {
+	if ((SEG->scb[i].buf = G_malloc(SEG->size)) == NULL)
 	    return -2;
 
 	SEG->scb[i].n = -1;	/* mark free */

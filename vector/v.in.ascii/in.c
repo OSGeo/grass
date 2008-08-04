@@ -47,13 +47,15 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, import");
     module->description =
-	_("Creates a vector map from ASCII points file or ASCII vector file.");
+	_
+	("Creates a vector map from ASCII points file or ASCII vector file.");
 
     /************************** Command Parser ************************************/
     old = G_define_standard_option(G_OPT_F_INPUT);
     old->required = NO;
     old->description =
-	_("ASCII file to be imported, if not given reads from standard input");
+	_
+	("ASCII file to be imported, if not given reads from standard input");
     old->guisection = _("Required");
 
     new = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -78,7 +80,8 @@ int main(int argc, char *argv[])
     skip_opt->multiple = NO;
     skip_opt->answer = "0";
     skip_opt->description =
-	_("Number of header lines to skip at top of input file (points mode)");
+	_
+	("Number of header lines to skip at top of input file (points mode)");
 
     columns_opt = G_define_standard_option(G_OPT_COLUMNS);
     columns_opt->multiple = NO;
@@ -143,7 +146,8 @@ int main(int argc, char *argv[])
     e_flag = G_define_flag();
     e_flag->key = 'e';
     e_flag->description =
-	_("Create a new empty vector map and exit. Nothing is read from input");
+	_
+	("Create a new empty vector map and exit. Nothing is read from input");
 
     noheader_flag = G_define_flag();
     noheader_flag->key = 'n';
@@ -211,7 +215,7 @@ int main(int argc, char *argv[])
     if (strcmp(fs, "space") == 0)
 	fs = " ";
     if (strcmp(fs, "comma") == 0)
-        fs = ",";
+	fs = ",";
 
     /* check dimension */
     if (zcoorf->answer) {
@@ -228,7 +232,7 @@ int main(int argc, char *argv[])
     }
 
     if (format == FORMAT_POINT) {
-      int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen, nrows;
+	int i, rowlen, ncols, minncols, *coltype, *coltype2, *collen, nrows;
 	int n_int = 0, n_double = 0, n_string = 0;
 	char buf[1000];
 	struct field_info *Fi;
@@ -244,8 +248,8 @@ int main(int argc, char *argv[])
 	}
 	unlink(tmp);
 
-	points_analyse(ascii, tmpascii, fs, &rowlen, &ncols, &minncols, &nrows,
-		       &coltype, &collen, skip_lines, xcol, ycol,
+	points_analyse(ascii, tmpascii, fs, &rowlen, &ncols, &minncols,
+		       &nrows, &coltype, &collen, skip_lines, xcol, ycol,
 		       region_flag->answer);
 
 	G_message(_("Maximum input row length: %d"), rowlen);
@@ -311,7 +315,8 @@ int main(int argc, char *argv[])
 							     &Map));
 	    if (driver == NULL) {
 		Vect_delete(new->answer);
-		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_
+			      ("Unable to open database <%s> by driver <%s>"),
 			      Vect_subst_var(Fi->database, &Map), Fi->driver);
 	    }
 	    db_begin_transaction(driver);
@@ -330,7 +335,8 @@ int main(int argc, char *argv[])
 		}
 		if (catcol == i && coltype[i] != DB_C_TYPE_INT) {
 		    Vect_delete(new->answer);
-		    G_fatal_error(_("Category column is not of integer type"));
+		    G_fatal_error(_
+				  ("Category column is not of integer type"));
 		}
 
 		switch (coltype[i]) {
@@ -428,7 +434,8 @@ int main(int argc, char *argv[])
 			dbcol = i;
 
 		    column = db_get_table_column(table, dbcol);
-		    ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+		    ctype =
+			db_sqltype_to_Ctype(db_get_column_sqltype(column));
 		    length = db_get_column_length(column);
 		    coltype2[i] = ctype;
 
@@ -439,12 +446,16 @@ int main(int argc, char *argv[])
 		    switch (coltype[i]) {
 		    case DB_C_TYPE_INT:
 			if (ctype == DB_C_TYPE_DOUBLE) {
-			    G_warning(_("Column number %d <%s> defined as double "
-					"has only integer values"), i + 1, db_get_column_name(column));
+			    G_warning(_
+				      ("Column number %d <%s> defined as double "
+				       "has only integer values"), i + 1,
+				      db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_STRING) {
-			    G_warning(_("Column number %d <%s> defined as string "
-					"has only integer values"), i + 1, db_get_column_name(column));
+			    G_warning(_
+				      ("Column number %d <%s> defined as string "
+				       "has only integer values"), i + 1,
+				      db_get_column_name(column));
 			}
 			break;
 		    case DB_C_TYPE_DOUBLE:
@@ -452,11 +463,14 @@ int main(int argc, char *argv[])
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
 					  ("Column number %d <%s> defined as integer "
-					   "has double values"), i + 1, db_get_column_name(column));
+					   "has double values"), i + 1,
+					  db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_STRING) {
-			    G_warning(_("Column number %d <%s> defined as string "
-					"has double values"), i + 1, db_get_column_name(column));
+			    G_warning(_
+				      ("Column number %d <%s> defined as string "
+				       "has double values"), i + 1,
+				      db_get_column_name(column));
 			}
 			break;
 		    case DB_C_TYPE_STRING:
@@ -464,20 +478,23 @@ int main(int argc, char *argv[])
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
 					  ("Column number %d <%s> defined as integer "
-					   "has string values"), i + 1, db_get_column_name(column));
+					   "has string values"), i + 1,
+					  db_get_column_name(column));
 			}
 			else if (ctype == DB_C_TYPE_DOUBLE) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
 					  ("Column number %d <%s> defined as double "
-					   "has string values"), i + 1, db_get_column_name(column));
+					   "has string values"), i + 1,
+					  db_get_column_name(column));
 			}
 			if (length < collen[i]) {
 			    Vect_delete(new->answer);
 			    G_fatal_error(_
 					  ("Length of column %d <%s> (%d) is less than "
 					   "maximum value " "length (%d)"),
-					  i + 1, db_get_column_name(column), length, collen[i]);
+					  i + 1, db_get_column_name(column),
+					  length, collen[i]);
 			}
 			break;
 		    }
@@ -496,7 +513,8 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (db_create_index2(driver, Fi->table, key) != DB_OK)
-		G_warning(_("Unable to create index for table <%s>, key <%s>"),
+		G_warning(_
+			  ("Unable to create index for table <%s>, key <%s>"),
 			  Fi->table, key);
 
 	    Vect_map_del_dblink(&Map, 1);

@@ -9,90 +9,91 @@
 
 /*---------------------------------------------------------------------------*/
 
-int
-G3d_g3dType2cellType  (int g3dType)
-
+int G3d_g3dType2cellType(int g3dType)
 {
-  if (g3dType == FCELL_TYPE) return FCELL_TYPE;
-  return DCELL_TYPE;
+    if (g3dType == FCELL_TYPE)
+	return FCELL_TYPE;
+    return DCELL_TYPE;
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyFloat2Double  (const float *src, int offsSrc, double *dst, int offsDst, int nElts)
-
+G3d_copyFloat2Double(const float *src, int offsSrc, double *dst, int offsDst,
+		     int nElts)
 {
-  int i;
+    int i;
 
-  src += offsSrc;
-  dst += offsDst;
+    src += offsSrc;
+    dst += offsDst;
 
-  for (i = 0; i < nElts; i++)
-    dst[i] = (double) src[i];
+    for (i = 0; i < nElts; i++)
+	dst[i] = (double)src[i];
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyDouble2Float  (const double *src, int offsSrc, float *dst, int offsDst, int nElts)
-
+G3d_copyDouble2Float(const double *src, int offsSrc, float *dst, int offsDst,
+		     int nElts)
 {
-  int i;
+    int i;
 
-  src += offsSrc;
-  dst += offsDst;
+    src += offsSrc;
+    dst += offsDst;
 
-  for (i = 0; i < nElts; i++)
-    dst[i] = (float) src[i];
+    for (i = 0; i < nElts; i++)
+	dst[i] = (float)src[i];
 }
 
 /*---------------------------------------------------------------------------*/
 
 void
-G3d_copyValues  (const void *src, int offsSrc, int typeSrc, void *dst, int offsDst, int typeDst, int nElts)
-
+G3d_copyValues(const void *src, int offsSrc, int typeSrc, void *dst,
+	       int offsDst, int typeDst, int nElts)
 {
-  int eltLength;
+    int eltLength;
 
-  if ((typeSrc == FCELL_TYPE) && (typeDst == DCELL_TYPE)) {
-    G3d_copyFloat2Double (src, offsSrc, dst, offsDst, nElts);
-    return;
-  }
-  
-  if ((typeSrc == DCELL_TYPE) && (typeDst == FCELL_TYPE)) {
-    G3d_copyDouble2Float (src, offsSrc, dst, offsDst, nElts);
-    return;
-  }
+    if ((typeSrc == FCELL_TYPE) && (typeDst == DCELL_TYPE)) {
+	G3d_copyFloat2Double(src, offsSrc, dst, offsDst, nElts);
+	return;
+    }
 
-  eltLength = G3d_length (typeSrc);
+    if ((typeSrc == DCELL_TYPE) && (typeDst == FCELL_TYPE)) {
+	G3d_copyDouble2Float(src, offsSrc, dst, offsDst, nElts);
+	return;
+    }
 
-  src = G_incr_void_ptr(src, eltLength * offsSrc);
-  dst = G_incr_void_ptr(dst, eltLength * offsDst);
+    eltLength = G3d_length(typeSrc);
 
-  memcpy(dst, src, nElts * eltLength);
+    src = G_incr_void_ptr(src, eltLength * offsSrc);
+    dst = G_incr_void_ptr(dst, eltLength * offsDst);
+
+    memcpy(dst, src, nElts * eltLength);
 }
 
 /*---------------------------------------------------------------------------*/
 
-int
-G3d_length  (int t)
-
+int G3d_length(int t)
 {
-  if (! G3D_IS_CORRECT_TYPE (t)) G3d_fatalError ("G3d_length: invalid type");
+    if (!G3D_IS_CORRECT_TYPE(t))
+	G3d_fatalError("G3d_length: invalid type");
 
-  if (t == FCELL_TYPE) return sizeof (float);
-  if (t == DCELL_TYPE) return sizeof (double);
-  return 0;
+    if (t == FCELL_TYPE)
+	return sizeof(float);
+    if (t == DCELL_TYPE)
+	return sizeof(double);
+    return 0;
 }
 
-int
-G3d_externLength  (int t)
-
+int G3d_externLength(int t)
 {
-  if (! G3D_IS_CORRECT_TYPE (t)) G3d_fatalError ("G3d_externLength: invalid type");
+    if (!G3D_IS_CORRECT_TYPE(t))
+	G3d_fatalError("G3d_externLength: invalid type");
 
-  if (t == FCELL_TYPE) return G3D_XDR_FLOAT_LENGTH;
-  if (t == DCELL_TYPE) return G3D_XDR_DOUBLE_LENGTH;
-  return 0;
+    if (t == FCELL_TYPE)
+	return G3D_XDR_FLOAT_LENGTH;
+    if (t == DCELL_TYPE)
+	return G3D_XDR_DOUBLE_LENGTH;
+    return 0;
 }

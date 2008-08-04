@@ -10,4 +10,3 @@ GLOBAL char **rast;
 GLOBAL int nrasts;
 GLOBAL char **name;
 GLOBAL char **mapset;
-

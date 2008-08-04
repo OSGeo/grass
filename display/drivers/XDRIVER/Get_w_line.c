@@ -16,13 +16,11 @@
 #include <grass/glocale.h>
 
 /* Returns: -1  error
-*            0
-*/
-int XD_Get_location_with_line (
-    int cx, int cy,                     /* current x and y */
-    int *nx, int *ny,                   /* new x and y */
-    int *button
-)
+ *            0
+ */
+int XD_Get_location_with_line(int cx, int cy,	/* current x and y */
+			      int *nx, int *ny,	/* new x and y */
+			      int *button)
 {
     int drawn = 0;
     long event_mask;
@@ -33,31 +31,30 @@ int XD_Get_location_with_line (
     unsigned gcMask;
     int done;
 
-    if (redraw_pid)
-    {
-	G_warning( _("Monitor: interactive command in redraw"));
+    if (redraw_pid) {
+	G_warning(_("Monitor: interactive command in redraw"));
 	return -1;
     }
 
-    G_debug (5, "Get_location_with_line()");
+    G_debug(5, "Get_location_with_line()");
 
     /* Get events that track the pointer to resize the RubberBox until
      * ButtonReleased */
     event_mask = ButtonPressMask | PointerMotionMask;
     XSelectInput(dpy, grwin, event_mask);
-	
+
     /* XOR, so double drawing returns pixels to original state */
     gcMask = GCFunction | GCPlaneMask | GCForeground | GCLineWidth;
     gcValues.function = GXxor;
     gcValues.line_width = 1;
-    gcValues.plane_mask = BlackPixel(dpy,scrn)^WhitePixel(dpy,scrn);
+    gcValues.plane_mask = BlackPixel(dpy, scrn) ^ WhitePixel(dpy, scrn);
     gcValues.foreground = 0xffffffff;
-    xor_gc = XCreateGC(dpy,grwin,gcMask,&gcValues);
+    xor_gc = XCreateGC(dpy, grwin, gcMask, &gcValues);
 
     /* Set the crosshair cursor */
     XDefineCursor(dpy, grwin, cur_xh);
 
-    for (done = 0; !done; ) {
+    for (done = 0; !done;) {
 	if (!get_xevent(event_mask, &event))
 	    break;
 
@@ -82,15 +79,14 @@ int XD_Get_location_with_line (
 	    break;
 	}
     }
-    
+
     /* delete old line if any */
-    if (drawn) 
+    if (drawn)
 	XDrawLine(dpy, grwin, xor_gc, cx, cy, oldx, oldy);
     drawn = 0;
-    XUndefineCursor(dpy, grwin);        /* reset cursor */
-    XSelectInput(dpy, grwin, gemask);   /* restore normal events */
+    XUndefineCursor(dpy, grwin);	/* reset cursor */
+    XSelectInput(dpy, grwin, gemask);	/* restore normal events */
     XFreeGC(dpy, xor_gc);
- 
+
     return 0;
 }
-
