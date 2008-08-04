@@ -24,7 +24,7 @@
 #include <iostream>
 using namespace std;
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 
 #include "stats.h"
 #include "option.h"

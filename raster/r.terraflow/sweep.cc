@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 
 #include "option.h"
 #include "stats.h"

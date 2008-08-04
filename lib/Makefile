@@ -53,6 +53,11 @@ ifneq ($(USE_CAIRO),)
     SUBDIRS += cairodriver
 endif
 
+#compile if C++ compiler present:
+ifneq ($(strip $(CXX)),)
+    SUBDIRS += iostream
+endif
+
 #doxygen:
 DOXNAME=grass
 
@@ -66,9 +71,11 @@ headers:
 	if [ ! -d $(GISBASE)/include ]; then $(MKDIR) $(GISBASE)/include; fi
 	if [ ! -d $(GISBASE)/include/grass ]; then $(MKDIR) $(GISBASE)/include/grass; fi
 	if [ ! -d $(GISBASE)/include/grass/vect ]; then $(MKDIR) $(GISBASE)/include/grass/vect; fi
+	if [ ! -d $(GISBASE)/include/grass/iostream ]; then $(MKDIR) $(GISBASE)/include/grass/iostream; fi
 	if [ ! -d $(GISBASE)/include/Make ]; then $(MKDIR) $(GISBASE)/include/Make; fi
 	for file in ../include/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/ ; done
 	for file in ../include/vect/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/vect/ ; done
+	for file in ../include/iostream/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/iostream/ ; done
 	for file in ../include/Make/*.make ; do $(INSTALL_DATA) $$file $(GISBASE)/include/Make/ ; done
 
 clean: cleansubdirs

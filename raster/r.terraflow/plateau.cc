@@ -16,7 +16,7 @@
  *
  *****************************************************************************/
 
-#include <ami.h> /* for queue */
+#include <grass/iostream/ami.h> /* for queue */
 
 #include "plateau.h"
 #include "common.h"

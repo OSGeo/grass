@@ -22,7 +22,7 @@
 #include <iostream>
 using namespace std;
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "types.h"
 
 

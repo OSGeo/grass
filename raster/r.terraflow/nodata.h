@@ -22,7 +22,7 @@
 
 #include <assert.h>
 
-#include <ami.h>
+#include <grass/iostream/ami.h>
 #include "types.h"
 #include "option.h"
 
