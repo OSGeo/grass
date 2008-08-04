@@ -797,7 +797,7 @@ class MultiImportDialog(wx.Dialog):
         gridSizer.Add(item=self.input,
                       flag=wx.EXPAND, pos=(0, 1))
         
-        if type != 'dxf':
+        if self.inputType != 'dxf':
             gridSizer.Add(item=self.formatText,
                           flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
             gridSizer.Add(item=self.format,
