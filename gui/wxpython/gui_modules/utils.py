@@ -100,6 +100,36 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None):
                         
     return mapname
 
+def GetValidLayerName(name):
+    """Make layer name SQL compliant, based on G_str_to_sql()
+    
+    @todo: Better use directly GRASS Python SWIG...
+    """
+    retName = str(name).strip()
+    
+    # check if name is fully qualified
+    if '@' in retName:
+        retName, mapset = retName.split('@')
+    else:
+        mapset = None
+        
+    for c in retName:
+        # c = toascii(c)
+        
+        if not (c >= 'A' and c <= 'Z') and \
+               not (c >= 'a' and c <= 'z') and \
+               not (c >= '0' and c <= '9'):
+            c = '_'
+        
+    if not (retName[0] >= 'A' and retName[0] <= 'Z') and \
+           not (retName[0] >= 'a' and retName[0] <= 'z'):
+        retName = 'x' + retName[1:]
+
+    if mapset:
+        retName = retName + '@' + mapset
+        
+    return retName
+
 def ListOfCatsToRange(cats):
     """Convert list of category number to range(s)
 

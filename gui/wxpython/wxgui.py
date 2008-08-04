@@ -1028,7 +1028,22 @@ class GMFrame(wx.Frame):
                   )
 
     def OnImportDxfFile(self, event):
-        gdialogs.ImportDxfDialog(parent=self).ShowModal()
+        """Convert multiple DXF layers to GRASS vector map layers"""
+        dlg = gdialogs.MultiImportDialog(parent=self, type='dxf',
+                                         title=_("Import DXF layers"))
+        dlg.ShowModal()
+
+    def OnImportGdalLayers(self, event):
+        """Convert multiple GDAL layers to GRASS vector map layers"""
+        dlg = gdialogs.MultiImportDialog(parent=self, type='gdal',
+                                         title=_("Import GDAL layers"))
+        dlg.ShowModal()
+
+    def OnImportOgrLayers(self, event):
+        """Convert multiple OGR layers to GRASS vector map layers"""
+        dlg = gdialogs.MultiImportDialog(parent=self, type='ogr',
+                                         title=_("Import OGR layers"))
+        dlg.ShowModal()
         
     def OnShowAttributeTable(self, event):
         """

@@ -65,10 +65,15 @@ class Data:
                         ("","","", ""),
                         (_("Import raster map"), (
 
-                                (_("Multiple import formats using GDAL"),
+                                (_("Import raster data using GDAL"),
                                  _("Import GDAL supported raster file into a binary raster map layer."),
                                  "self.OnMenuCmd",
                                  "r.in.gdal"),
+                                (_("Multiple raster data import using GDAL"),
+                                 _("Import selected GDAL layers tpo GRASS raster maps using r.in.gdal."),
+                                 "self.OnImportGdalLayers",
+                                 ""),
+
                                 ("","","", ""),
 
                                 (_("Aggregate ASCII xyz import"),
@@ -131,10 +136,15 @@ class Data:
                          ),
                         (_("Import vector map"), (
 
-                                (_("Multiple import formats using OGR"),
+                                (_("Import vector data using OGR"),
                                  _("Convert OGR vector layers to GRASS vector map."),
                                  "self.OnMenuCmd",
                                  "v.in.ogr"),
+                                
+                                (_("Multiple vector data import using OGR"),
+                                 _("Converts selected OGR layers to GRASS vector maps using v.in.ogr."),
+                                 "self.OnImportOgrLayers",
+                                 ""),
                                 ("","","", ""),
 
                                 (_("ASCII points/GRASS ASCII vector import"),
@@ -154,7 +164,7 @@ class Data:
                                  "v.in.dxf"),
 
                                 (_("Multiple DXF layers import"),
-                                 _("Converts selected DXF layers to GRASS vector maps."),
+                                 _("Converts selected DXF layers to GRASS vector maps (using v.in.dxf)."),
                                  "self.OnImportDxfFile",
                                  ""),
                                 ("","","", ""),
