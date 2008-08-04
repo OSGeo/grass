@@ -715,6 +715,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.GetPyData(layer)[0]['cmd'] = cmdValidated
         elif ltype == 'raster':
             cmd = ['d.rast']
+            
             if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
                 cmd.append('-o')
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
@@ -890,7 +891,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             layer = self.GetNextVisible(layer)
 
         # change parameters for item in layers list in render.Map
-        if layer and self.drag == False:
+        if layer == False:
             self.ChangeLayer(layer)
             self.GetPyData(layer)[0]['cmd'] = cmd.split(' ')
             maplayer = self.GetPyData(layer)[0]['maplayer']
@@ -993,9 +994,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # reorder layers in render.Map to match new order after drag and drop
         self.ReorderLayers()
 
+        # redraw map if auto-rendering is enabled
+        if self.mapdisplay.autoRender.GetValue(): 
+            self.mapdisplay.OnRender(None)
+
         # select new item
         self.SelectItem(newItem)
-
+        
     def RecreateItem (self, dragItem, dropTarget, parent=None):
         """
         Recreate item (needed for OnEndDrag())
@@ -1011,7 +1016,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # recreate spin/text control for layer
             btnbmp = Icons["layeropts"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp)
-            newctrl.SetToolTip(_("Click to edit layer settings"))
+            newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
             opacity = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
             windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
@@ -1140,7 +1145,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         itemList = ""
 
-        for item in range(0, self.GetCount()):
+        for item in range(self.GetCount()):
             itemList += self.GetItemText(vislayer) + ','
             if self.GetPyData(vislayer)[0]['type'] != 'group':
                 treelayers.append(self.GetPyData(vislayer)[0]['maplayer'])
