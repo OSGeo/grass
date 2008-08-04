@@ -182,6 +182,9 @@ class GMFrame(wx.Frame):
 
         # redirect stderr to log area    
         self.goutput.Redirect()
+        
+        # start with layer manager on top
+        self.Raise()
 
     def __doLayout(self):
         """Do Layout (unused bacause of aui manager...)"""
