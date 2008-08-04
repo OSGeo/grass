@@ -28,30 +28,28 @@ struct menu
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 } menu[] = {
-    {
-    c_ave, 0, "average", "average value"}, {
-    c_count, 1, "count", "count of non-NULL cells"}, {
-    c_median, 0, "median", "median value"}, {
-    c_mode, 0, "mode", "most frequently occuring value"}, {
-    c_min, 0, "minimum", "lowest value"}, {
-    c_minx, 1, "min_raster", "raster with lowest value"}, {
-    c_max, 0, "maximum", "highest value"}, {
-    c_maxx, 1, "max_raster", "raster with highest value"}, {
-    c_stddev, 0, "stddev", "standard deviation"}, {
-    c_range, 0, "range", "range of values"}, {
-    c_sum, 0, "sum", "sum of values"}, {
-    c_var, 0, "variance", "statistical variance"}, {
-    c_divr, 1, "diversity", "number of different values"}, {
-    c_reg_m, 0, "slope", "linear regression slope"}, {
-    c_reg_c, 0, "offset", "linear regression offset"}, {
-    c_reg_r2, 0, "detcoeff",
-	    "linear regression coefficient of determination"}, {
-    c_quart1, 0, "quart1", "first quartile"}, {
-    c_quart3, 0, "quart3", "third quartile"}, {
-    c_perc90, 0, "perc90", "ninetieth percentile"}, {
-    c_skew, 0, "skewness", "skewness"}, {
-    c_kurt, 0, "kurtosis", "kurtosis"}, {
-    NULL, 0, NULL, NULL}
+    {c_ave,    0, "average",    "average value"},
+    {c_count,  1, "count",      "count of non-NULL cells"},
+    {c_median, 0, "median",     "median value"},
+    {c_mode,   0, "mode",       "most frequently occuring value"},
+    {c_min,    0, "minimum",    "lowest value"},
+    {c_minx,   1, "min_raster", "raster with lowest value"},
+    {c_max,    0, "maximum",    "highest value"},
+    {c_maxx,   1, "max_raster", "raster with highest value"},
+    {c_stddev, 0, "stddev",     "standard deviation"},
+    {c_range,  0, "range",      "range of values"},
+    {c_sum,    0, "sum",        "sum of values"},
+    {c_var,    0, "variance",   "statistical variance"},
+    {c_divr,   1, "diversity",  "number of different values"},
+    {c_reg_m,  0, "slope",      "linear regression slope"},
+    {c_reg_c,  0, "offset",     "linear regression offset"},
+    {c_reg_r2, 0, "detcoeff",   "linear regression coefficient of determination"},
+    {c_quart1, 0, "quart1",     "first quartile"},
+    {c_quart3, 0, "quart3",     "third quartile"},
+    {c_perc90, 0, "perc90",     "ninetieth percentile"},
+    {c_skew,   0, "skewness",   "skewness"},
+    {c_kurt,   0, "kurtosis",   "kurtosis"},
+    {NULL,     0, NULL,         NULL}
 };
 
 struct input

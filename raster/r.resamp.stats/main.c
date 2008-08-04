@@ -27,19 +27,18 @@ static const struct menu
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 } menu[] = {
-    {
-    c_ave, w_ave, "average", "average (mean) value"}, {
-    c_median, w_median, "median", "median value"}, {
-    c_mode, w_mode, "mode", "most frequently occuring value"}, {
-    c_min, NULL, "minimum", "lowest value"}, {
-    c_max, NULL, "maximum", "highest value"}, {
-    c_quart1, w_quart1, "quart1", "first quartile"}, {
-    c_quart3, w_quart3, "quart3", "third quartile"}, {
-    c_perc90, w_perc90, "perc90", "ninetieth percentile"}, {
-    c_sum, w_sum, "sum", "sum of values"}, {
-    c_var, w_var, "variance", "variance value"}, {
-    c_stddev, w_stddev, "stddev", "standard deviation"}, {
-    NULL, NULL, NULL}
+    {c_ave,    w_ave,    "average",  "average (mean) value"},
+    {c_median, w_median, "median",   "median value"},
+    {c_mode,   w_mode,   "mode",     "most frequently occuring value"},
+    {c_min,    NULL,     "minimum",  "lowest value"},
+    {c_max,    NULL,     "maximum",  "highest value"},
+    {c_quart1, w_quart1, "quart1",   "first quartile"},
+    {c_quart3, w_quart3, "quart3",   "third quartile"},
+    {c_perc90, w_perc90, "perc90",   "ninetieth percentile"},
+    {c_sum,    w_sum,    "sum",      "sum of values"},
+    {c_var,    w_var,    "variance", "variance value"},
+    {c_stddev, w_stddev, "stddev",   "standard deviation"},
+    {NULL, NULL, NULL}
 };
 
 static char *build_method_list(void)
