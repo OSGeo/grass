@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            error.c
  *
@@ -22,48 +23,51 @@
  */
 
 #include <stdarg.h>
- 
+
 #include "globals.h"
 
 /*
-	Displays an error message
-*/
-void print_error ( int err_code, char *msg,... ) {
+   Displays an error message
+ */
+void print_error(int err_code, char *msg, ...)
+{
     char buffer[MAXSTR];
     va_list ap;
 
-    va_start(ap,msg);
-    vsprintf(buffer,msg,ap);
+    va_start(ap, msg);
+    vsprintf(buffer, msg, ap);
     va_end(ap);
 
-    fprintf ( stderr, "\033[1;31m\nERROR:\033[0m %s", buffer );
-	
+    fprintf(stderr, "\033[1;31m\nERROR:\033[0m %s", buffer);
+
     ERROR = err_code;
-        
-    exit ( err_code );	
+
+    exit(err_code);
 }
 
 
 /*
-	Displays a warning message
-*/
-void print_warning ( char *msg,... ) {
+   Displays a warning message
+ */
+void print_warning(char *msg, ...)
+{
     char buffer[MAXSTR];
     va_list ap;
 
-    va_start(ap,msg);
-    vsprintf(buffer,msg,ap);
+    va_start(ap, msg);
+    vsprintf(buffer, msg, ap);
     va_end(ap);
 
-    fprintf ( stderr, "\033[0;33m\nWARNING:\033[0m %s", buffer );    
-    
+    fprintf(stderr, "\033[0;33m\nWARNING:\033[0m %s", buffer);
+
     WARNINGS = WARNINGS + 1;
 }
 
 
 /*
-	Prints a fancy "DONE." on the screen
-*/
-void print_done ( void ) {
-	fprintf (stdout, "\033[0;32mDONE.\n\033[0m");
+   Prints a fancy "DONE." on the screen
+ */
+void print_done(void)
+{
+    fprintf(stdout, "\033[0;32mDONE.\n\033[0m");
 }

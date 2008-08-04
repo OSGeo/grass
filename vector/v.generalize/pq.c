@@ -58,6 +58,7 @@ void binary_heap_push(double key, int value, binary_heap * bh)
 int binary_heap_extract_max(binary_heap * bh, int *value)
 {
     int n = bh->items;
+
     if (n == 0)
 	return 0;
     *value = bh->value[1];

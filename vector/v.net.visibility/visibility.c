@@ -314,8 +314,9 @@ void construct_visibility(struct Point *points, int num_points,
 }
 
 
-void visibility_points(struct Point *points, int num_points, struct Line *lines,
-		       int num_lines, struct Map_info *out, int n)
+void visibility_points(struct Point *points, int num_points,
+		       struct Line *lines, int num_lines,
+		       struct Map_info *out, int n)
 {
 
     int i, j, k;
@@ -333,10 +334,11 @@ void visibility_points(struct Point *points, int num_points, struct Line *lines,
 		    segment2(&points[j]) == &lines[k])
 		    continue;
 		if (Vect_segment_intersection
-		    (points[num_points - i - 1].x, points[num_points - i - 1].y,
-		     0, points[j].x, points[j].y, 0, lines[k].p1->x,
-		     lines[k].p1->y, 0, lines[k].p2->x, lines[k].p2->y, 0, &x1,
-		     &y1, &z1, &x2, &y2, &z2, 0) != 0)
+		    (points[num_points - i - 1].x,
+		     points[num_points - i - 1].y, 0, points[j].x,
+		     points[j].y, 0, lines[k].p1->x, lines[k].p1->y, 0,
+		     lines[k].p2->x, lines[k].p2->y, 0, &x1, &y1, &z1, &x2,
+		     &y2, &z2, 0) != 0)
 		    break;
 	    }
 

@@ -14,13 +14,12 @@
  * \return 1 if ok, 0 if EOF
  */
 
-int G_getl ( char *buf, int n, FILE *fd)
+int G_getl(char *buf, int n, FILE * fd)
 {
-    if (!fgets (buf, n, fd))
+    if (!fgets(buf, n, fd))
 	return 0;
 
-    for (; *buf && *buf != '\n'; buf++)
-	    ;
+    for (; *buf && *buf != '\n'; buf++) ;
     *buf = 0;
 
     return 1;
@@ -50,37 +49,38 @@ int G_getl ( char *buf, int n, FILE *fd)
  * \return 1 if ok, 0 if EOF
  */
 
-int G_getl2 ( char *buf, int n, FILE *fd)
+int G_getl2(char *buf, int n, FILE * fd)
 {
     int i = 0;
     int c;
     int ret = 1;
 
-    while ( i < n - 1 ) {
+    while (i < n - 1) {
 	c = fgetc(fd);
 
-	if ( c == EOF ) { 
-	    if ( i == 0 ) { /* Read correctly (return 1) last line in file without '\n' */
-	        ret = 0;
+	if (c == EOF) {
+	    if (i == 0) {	/* Read correctly (return 1) last line in file without '\n' */
+		ret = 0;
 	    }
 	    break;
 	}
-	
-	if ( c == '\n' ) break;               /* UNIX */
 
-	if ( c == '\r' ) {                    /* DOS or MacOS9 */
-            if ( (c = fgetc(fd) ) != EOF ) {     
-		if ( c != '\n' ) {            /* MacOS9 - we have to return the char to stream */
-		    ungetc ( c, fd );
+	if (c == '\n')
+	    break;		/* UNIX */
+
+	if (c == '\r') {	/* DOS or MacOS9 */
+	    if ((c = fgetc(fd)) != EOF) {
+		if (c != '\n') {	/* MacOS9 - we have to return the char to stream */
+		    ungetc(c, fd);
 		}
 	    }
-            break;
+	    break;
 	}
-	
-        buf[i] = c;
+
+	buf[i] = c;
 
 	i++;
-    }	
+    }
     buf[i] = '\0';
 
     return ret;

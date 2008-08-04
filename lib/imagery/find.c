@@ -1,3 +1,4 @@
+
 /**************************************************************
 * I_find_group (group)
 *
@@ -22,17 +23,17 @@ int I_find_group(const char *group)
     if (group == NULL || *group == 0)
 	return 0;
 
-    return G_find_file2 ("group", group, G_mapset()) != NULL ;
+    return G_find_file2("group", group, G_mapset()) != NULL;
 }
 
 int I_find_group_file(const char *group, const char *file)
 {
-    if (!I_find_group (group))
+    if (!I_find_group(group))
 	return 0;
     if (file == NULL || *file == 0)
 	return 0;
 
-    return G_find_file2_misc ("group", file, group, G_mapset()) != NULL ;
+    return G_find_file2_misc("group", file, group, G_mapset()) != NULL;
 }
 
 int I_find_subgroup(const char *group, const char *subgroup)
@@ -44,14 +45,15 @@ int I_find_subgroup(const char *group, const char *subgroup)
     if (subgroup == NULL || *subgroup == 0)
 	return 0;
 
-    sprintf (element, "subgroup/%s", subgroup);
+    sprintf(element, "subgroup/%s", subgroup);
 
-    return G_find_file2_misc ("group", element, group, G_mapset()) != NULL ;
+    return G_find_file2_misc("group", element, group, G_mapset()) != NULL;
 }
 
-int I_find_subgroup_file(const char *group, const char *subgroup, const char *file)
+int I_find_subgroup_file(const char *group, const char *subgroup,
+			 const char *file)
 {
-    char element[GNAME_MAX*2];
+    char element[GNAME_MAX * 2];
 
     if (!I_find_group(group))
 	return 0;
@@ -60,7 +62,7 @@ int I_find_subgroup_file(const char *group, const char *subgroup, const char *fi
     if (file == NULL || *file == 0)
 	return 0;
 
-    sprintf (element, "subgroup/%s/%s", subgroup, file);
+    sprintf(element, "subgroup/%s/%s", subgroup, file);
 
-    return G_find_file2_misc ("group", element, group, G_mapset()) != NULL ;
+    return G_find_file2_misc("group", element, group, G_mapset()) != NULL;
 }

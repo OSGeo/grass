@@ -1,3 +1,4 @@
+
 /**
  * \file tempfile.c
  *
@@ -58,7 +59,7 @@ char *G_tempfile(void)
  * \return Pointer to string path
  */
 
-char *G__tempfile (int pid)
+char *G__tempfile(int pid)
 {
     char path[GPATH_MAX];
     char name[GNAME_MAX];
@@ -69,14 +70,13 @@ char *G__tempfile (int pid)
     if (pid <= 0)
 	pid = getpid();
     G__temp_element(element);
-    do
-    {
-	sprintf (name, "%d.%d", pid, uniq++) ;
-	G__file_name (path, element, name, G_mapset()) ;
+    do {
+	sprintf(name, "%d.%d", pid, uniq++);
+	G__file_name(path, element, name, G_mapset());
     }
-    while (stat(path, &st) == 0) ;
+    while (stat(path, &st) == 0);
 
-    return G_store (path);
+    return G_store(path);
 }
 
 
@@ -91,14 +91,13 @@ int G__temp_element(char *element)
 {
     const char *machine;
 
-    strcpy (element, ".tmp");
+    strcpy(element, ".tmp");
     machine = G__machine_name();
-    if (machine != NULL && *machine != 0)
-    {
-	strcat (element, "/");
-	strcat (element, machine);
+    if (machine != NULL && *machine != 0) {
+	strcat(element, "/");
+	strcat(element, machine);
     }
-    G__make_mapset_element (element);
+    G__make_mapset_element(element);
 
     return 0;
 }

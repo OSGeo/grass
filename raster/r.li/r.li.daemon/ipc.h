@@ -1,3 +1,4 @@
+
 /**
  * \file IPC.h
  *
@@ -30,13 +31,14 @@
  * \member <i>rl</i> area length in rows <br>
  * \member <i>cl</i> area length in columns <br>
  */
-typedef struct fields_area{
-	int aid;
-	int x;
-	int y;
-	int rl;
-	int cl;
-} fields_area ;
+typedef struct fields_area
+{
+    int aid;
+    int x;
+    int y;
+    int rl;
+    int cl;
+} fields_area;
 
 /**
  * \brief fields of message MASKEDAREA
@@ -47,14 +49,15 @@ typedef struct fields_area{
  * \member <i>cl</i> area length in columns <br>
  * \member <i>mask</i> name of area mask <br>
  */
-typedef struct fields_maskedarea{
-	int aid;
-	int x;
-	int y;
-	int rl;
-	int cl;
-	char mask[GNAME_MAX];
-} fields_maskedarea ;
+typedef struct fields_maskedarea
+{
+    int aid;
+    int x;
+    int y;
+    int rl;
+    int cl;
+    char mask[GNAME_MAX];
+} fields_maskedarea;
 
 /**
  * \brief fields of message DONE
@@ -62,28 +65,32 @@ typedef struct fields_maskedarea{
  * \member <i>pid</i> pid of worker <br>
  * \member <i>result</i> result of analysis <br>
  */
-typedef struct fields_done{
-	int aid;
-	int pid;
-	double res;
-} fields_done ;
+typedef struct fields_done
+{
+    int aid;
+    int pid;
+    double res;
+} fields_done;
 
 /**
  * \brief fields of message ERROR
  * \member <i>aid</i> area identifier <br>
  * \member <i>pid</i> pid of worker <br>
  */
-typedef struct fields_error{
-	int aid;
-	int pid;
-} fields_error ;
+typedef struct fields_error
+{
+    int aid;
+    int pid;
+} fields_error;
+
 /**
  * \brief fields of message TERM
  * \member <i>pid</i> pid of daemon <br>
  */
-typedef struct fields_term{
-	int pid;
-} fields_term ;
+typedef struct fields_term
+{
+    int pid;
+} fields_term;
 
 /**
  * \brief field of the generic IPC message
@@ -93,12 +100,13 @@ typedef struct fields_term{
  * \member <i>f_e</i> fields of ERROR message <br>
  * \member <i>f_t</i> fields of TERM message <br>
  */
-typedef union fields {
-	fields_area f_a;
-	fields_maskedarea f_ma;
-	fields_done f_d;
-	fields_error f_e;
-	fields_term f_t;
+typedef union fields
+{
+    fields_area f_a;
+    fields_maskedarea f_ma;
+    fields_done f_d;
+    fields_error f_e;
+    fields_term f_t;
 } fields;
 
 /** 
@@ -106,9 +114,10 @@ typedef union fields {
  * \member <i>type</i> type of message
  * \member <i>fields</i> fields of message
  */
-typedef struct msg {
-	int type;
-	fields f;
+typedef struct msg
+{
+    int type;
+    fields f;
 } msg;
 
 /**
@@ -117,7 +126,7 @@ typedef struct msg {
  * \param m the message to send
  * \return 1 message sent, 0 otherwise
  */
-int send(int pipe, msg* m);
+int send(int pipe, msg * m);
 
 /**
  * \brief receive a message through the pipe channel
@@ -125,7 +134,8 @@ int send(int pipe, msg* m);
  * \param m the message to receive
  * \return 1 message sent, 0 otherwise
  */
-int receive(int pipe, msg* m);
+int receive(int pipe, msg * m);
+
 /**
  * \brief debug function, print a message to STDOUT
  */

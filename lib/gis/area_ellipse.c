@@ -1,3 +1,4 @@
+
 /**
  * \file area_ellipse.c
  *
@@ -46,7 +47,7 @@ static double M;
  * \return always returns 0
  */
 
-int G_begin_zone_area_on_ellipsoid (double a,double e2,double s)
+int G_begin_zone_area_on_ellipsoid(double a, double e2, double s)
 {
     E = sqrt(e2);
     M = s * a * a * M_PI * (1 - e2) / E;
@@ -65,14 +66,13 @@ int G_begin_zone_area_on_ellipsoid (double a,double e2,double s)
  * \return double
  */
 
-double
-G_darea0_on_ellipsoid (double lat)
+double G_darea0_on_ellipsoid(double lat)
 {
     double x;
 
-    x = E * sin (Radians(lat));
+    x = E * sin(Radians(lat));
 
-    return (M * (x / (1.0-x*x) + 0.5 * log((1.0+x) / (1.0-x))));
+    return (M * (x / (1.0 - x * x) + 0.5 * log((1.0 + x) / (1.0 - x))));
 }
 
 
@@ -93,8 +93,7 @@ G_darea0_on_ellipsoid (double lat)
  * \return double
  */
 
-double
-G_area_for_zone_on_ellipsoid (double north, double south)
+double G_area_for_zone_on_ellipsoid(double north, double south)
 {
-    return (G_darea0_on_ellipsoid (north) - G_darea0_on_ellipsoid (south));
+    return (G_darea0_on_ellipsoid(north) - G_darea0_on_ellipsoid(south));
 }

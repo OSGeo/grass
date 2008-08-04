@@ -1,3 +1,4 @@
+
 /**
  * \file maskfd.c
  *
@@ -24,9 +25,9 @@
  * \return file descriptor if MASK
  */
 
-int G_maskfd (void)
+int G_maskfd(void)
 {
-	G__check_for_auto_masking () ;
+    G__check_for_auto_masking();
 
-	return G__.auto_mask > 0 ? G__.mask_fd : -1;
+    return G__.auto_mask > 0 ? G__.mask_fd : -1;
 }

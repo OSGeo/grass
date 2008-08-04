@@ -1,3 +1,4 @@
+
 /**
  * \file squeeze.c
  *
@@ -41,25 +42,25 @@
  * \return Pointer to <b>line</b>
  */
 
-char *G_squeeze (char *line)
+char *G_squeeze(char *line)
 {
     register char *f = line, *t = line;
     int l;
 
     /* skip over space at the beginning of the line. */
-    while (isspace (*f))
-        f++;
+    while (isspace(*f))
+	f++;
 
     while (*f)
-        if (! isspace (*f))
-            *t++ = *f++;
-        else
-            if (*++f)
-                if (! isspace (*f))
-                    *t++ = ' ';
+	if (!isspace(*f))
+	    *t++ = *f++;
+	else if (*++f)
+	    if (!isspace(*f))
+		*t++ = ' ';
     *t = '\0';
-    l=strlen(line)-1;
-    if(*(line+l)=='\n') *(line+l)='\0';
+    l = strlen(line) - 1;
+    if (*(line + l) == '\n')
+	*(line + l) = '\0';
 
     return line;
 }

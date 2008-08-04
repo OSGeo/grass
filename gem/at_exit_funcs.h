@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            at_exit_funcs.h
  *
@@ -20,16 +21,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _AT_EXIT_FUNCS_H
 #define _AT_EXIT_FUNCS_H
 
-void exit_env ( void );
+void exit_env(void);
 
-void exit_tmp ( void );
+void exit_tmp(void);
 
-void exit_db ( void );
+void exit_db(void);
 
-void exit_msg ( void );
+void exit_msg(void);
 
 #endif /* _AT_EXIT_FUNCS_H */

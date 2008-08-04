@@ -117,157 +117,125 @@
 
 
 
-int dgl_add_edge_V2 (
-			dglGraph_s * 	pgraph ,
-			dglInt32_t 		nHead,
-			dglInt32_t 		nTail,
-			dglInt32_t 		nCost,
-			dglInt32_t 		nEdge,
-			void * pvHeadAttr ,	
-			void * pvTailAttr ,	
-			void * pvEdgeAttr ,
-			dglInt32_t 		nFlags
-			);
+int dgl_add_edge_V2(dglGraph_s * pgraph,
+		    dglInt32_t nHead,
+		    dglInt32_t nTail,
+		    dglInt32_t nCost,
+		    dglInt32_t nEdge,
+		    void *pvHeadAttr,
+		    void *pvTailAttr, void *pvEdgeAttr, dglInt32_t nFlags);
 
-int dgl_unflatten_V2( dglGraph_s * pgraph );
-int dgl_flatten_V2( dglGraph_s * pgraph );
-int dgl_initialize_V2( dglGraph_s * pgraph );
-int dgl_release_V2( dglGraph_s * pgraph );
-int dgl_write_V2( dglGraph_s * pgraph , int fd );
-int dgl_read_V2( dglGraph_s * pgraph , int fd , int version );
+int dgl_unflatten_V2(dglGraph_s * pgraph);
+int dgl_flatten_V2(dglGraph_s * pgraph);
+int dgl_initialize_V2(dglGraph_s * pgraph);
+int dgl_release_V2(dglGraph_s * pgraph);
+int dgl_write_V2(dglGraph_s * pgraph, int fd);
+int dgl_read_V2(dglGraph_s * pgraph, int fd, int version);
 
 
-int dgl_sp_cache_initialize_V2( dglGraph_s * pgraph, dglSPCache_s * pCache, dglInt32_t nStart );
-void dgl_sp_cache_release_V2( dglGraph_s * pgraph, dglSPCache_s * pCache );
+int dgl_sp_cache_initialize_V2(dglGraph_s * pgraph, dglSPCache_s * pCache,
+			       dglInt32_t nStart);
+void dgl_sp_cache_release_V2(dglGraph_s * pgraph, dglSPCache_s * pCache);
 
-int dgl_dijkstra_V2_TREE	(
-						dglGraph_s * 		pgraph ,
-						dglSPReport_s **	ppReport ,
-						dglInt32_t *			pDistance ,
-						dglInt32_t 			nStart ,
-						dglInt32_t 			nDestination ,
-						dglSPClip_fn		fnClip,
-						void * 				pvClipArg,
-						dglSPCache_s * 	pCache
-						);
-int dgl_dijkstra_V2_FLAT	(
-						dglGraph_s * 		pgraph ,
-						dglSPReport_s **	ppReport ,
-						dglInt32_t *			pDistance ,
-						dglInt32_t 			nStart ,
-						dglInt32_t 			nDestination ,
-						dglSPClip_fn		fnClip,
-						void * 				pvClipArg,
-						dglSPCache_s * 	pCache
-						);
-int dgl_dijkstra_V2	(
-						dglGraph_s * 		pgraph ,
-						dglSPReport_s **	ppReport ,
-						dglInt32_t *			pDistance ,
-						dglInt32_t 			nStart ,
-						dglInt32_t 			nDestination ,
-						dglSPClip_fn		fnClip,
-						void * 				pvClipArg,
-						dglSPCache_s * 	pCache
-						);
+int dgl_dijkstra_V2_TREE(dglGraph_s * pgraph,
+			 dglSPReport_s ** ppReport,
+			 dglInt32_t * pDistance,
+			 dglInt32_t nStart,
+			 dglInt32_t nDestination,
+			 dglSPClip_fn fnClip,
+			 void *pvClipArg, dglSPCache_s * pCache);
+int dgl_dijkstra_V2_FLAT(dglGraph_s * pgraph,
+			 dglSPReport_s ** ppReport,
+			 dglInt32_t * pDistance,
+			 dglInt32_t nStart,
+			 dglInt32_t nDestination,
+			 dglSPClip_fn fnClip,
+			 void *pvClipArg, dglSPCache_s * pCache);
+int dgl_dijkstra_V2(dglGraph_s * pgraph,
+		    dglSPReport_s ** ppReport,
+		    dglInt32_t * pDistance,
+		    dglInt32_t nStart,
+		    dglInt32_t nDestination,
+		    dglSPClip_fn fnClip,
+		    void *pvClipArg, dglSPCache_s * pCache);
 
 
-int dgl_span_depthfirst_spanning_V2_TREE(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						void * pvVisited ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
-int dgl_span_depthfirst_spanning_V2_FLAT(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						void * pvVisited ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
-int dgl_depthfirst_spanning_V2(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						void * pvVisited ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
+int dgl_span_depthfirst_spanning_V2_TREE(dglGraph_s * pgraphIn,
+					 dglGraph_s * pgraphOut,
+					 dglInt32_t nVertex,
+					 void *pvVisited,
+					 dglSpanClip_fn fnClip,
+					 void *pvClipArg);
+int dgl_span_depthfirst_spanning_V2_FLAT(dglGraph_s * pgraphIn,
+					 dglGraph_s * pgraphOut,
+					 dglInt32_t nVertex,
+					 void *pvVisited,
+					 dglSpanClip_fn fnClip,
+					 void *pvClipArg);
+int dgl_depthfirst_spanning_V2(dglGraph_s * pgraphIn,
+			       dglGraph_s * pgraphOut,
+			       dglInt32_t nVertex,
+			       void *pvVisited,
+			       dglSpanClip_fn fnClip, void *pvClipArg);
 
 
-int dgl_span_minimum_spanning_V2_TREE(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
-int dgl_span_minimum_spanning_V2_FLAT(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
-int dgl_minimum_spanning_V2(
-						dglGraph_s * pgraphIn ,
-						dglGraph_s * pgraphOut ,
-						dglInt32_t nVertex ,
-						dglSpanClip_fn	fnClip ,
-						void *				pvClipArg
-						);
+int dgl_span_minimum_spanning_V2_TREE(dglGraph_s * pgraphIn,
+				      dglGraph_s * pgraphOut,
+				      dglInt32_t nVertex,
+				      dglSpanClip_fn fnClip, void *pvClipArg);
+int dgl_span_minimum_spanning_V2_FLAT(dglGraph_s * pgraphIn,
+				      dglGraph_s * pgraphOut,
+				      dglInt32_t nVertex,
+				      dglSpanClip_fn fnClip, void *pvClipArg);
+int dgl_minimum_spanning_V2(dglGraph_s * pgraphIn,
+			    dglGraph_s * pgraphOut,
+			    dglInt32_t nVertex,
+			    dglSpanClip_fn fnClip, void *pvClipArg);
 
 
-int dgl_add_node_V2(
-						dglGraph_s *  pgraph,
-						dglInt32_t       nId,
-						void * 			pvNodeAttr,	
-						dglInt32_t 		nFlags
-					);
-int dgl_del_node_outedge_V2(dglGraph_s * pgraph, dglInt32_t nNode, dglInt32_t nEdge);
-int dgl_del_node_inedge_V2(dglGraph_s * pgraph, dglInt32_t nNode, dglInt32_t nEdge);
-int dgl_del_node_V2(
-						dglGraph_s *  pgraph,
-						dglInt32_t       nId
-					);
-dglInt32_t * dgl_get_node_V2( dglGraph_s * pgraph , dglInt32_t nId );
+int dgl_add_node_V2(dglGraph_s * pgraph,
+		    dglInt32_t nId, void *pvNodeAttr, dglInt32_t nFlags);
+int dgl_del_node_outedge_V2(dglGraph_s * pgraph, dglInt32_t nNode,
+			    dglInt32_t nEdge);
+int dgl_del_node_inedge_V2(dglGraph_s * pgraph, dglInt32_t nNode,
+			   dglInt32_t nEdge);
+int dgl_del_node_V2(dglGraph_s * pgraph, dglInt32_t nId);
+dglInt32_t *dgl_get_node_V2(dglGraph_s * pgraph, dglInt32_t nId);
 
-dglInt32_t * dgl_get_edge_V2( dglGraph_s * pgraph , dglInt32_t nId );
-int dgl_del_edge_V2( dglGraph_s * pgraph , dglInt32_t nId );
+dglInt32_t *dgl_get_edge_V2(dglGraph_s * pgraph, dglInt32_t nId);
+int dgl_del_edge_V2(dglGraph_s * pgraph, dglInt32_t nId);
 
-dglInt32_t * dgl_getnode_outedgeset_V2( dglGraph_s * pgraph , dglInt32_t * pnode );
-dglInt32_t * dgl_getnode_inedgeset_V2( dglGraph_s * pgraph , dglInt32_t * pnode );
+dglInt32_t *dgl_getnode_outedgeset_V2(dglGraph_s * pgraph,
+				      dglInt32_t * pnode);
+dglInt32_t *dgl_getnode_inedgeset_V2(dglGraph_s * pgraph, dglInt32_t * pnode);
 
 /*
  * Node Traversing
  */
-int			dgl_node_t_initialize_V2( dglGraph_s * pGraph, dglNodeTraverser_s * pT );
-void		dgl_node_t_release_V2( dglNodeTraverser_s * pT );
-dglInt32_t * dgl_node_t_first_V2( dglNodeTraverser_s * pT );
-dglInt32_t * dgl_node_t_next_V2( dglNodeTraverser_s * pT );
-dglInt32_t * dgl_node_t_find_V2( dglNodeTraverser_s * pT , dglInt32_t nId );
+int dgl_node_t_initialize_V2(dglGraph_s * pGraph, dglNodeTraverser_s * pT);
+void dgl_node_t_release_V2(dglNodeTraverser_s * pT);
+dglInt32_t *dgl_node_t_first_V2(dglNodeTraverser_s * pT);
+dglInt32_t *dgl_node_t_next_V2(dglNodeTraverser_s * pT);
+dglInt32_t *dgl_node_t_find_V2(dglNodeTraverser_s * pT, dglInt32_t nId);
 
 
 /*
  * Edgeset Traversing
  */
-int			dgl_edgeset_t_initialize_V2	(
-										dglGraph_s * pGraph ,
-										dglEdgesetTraverser_s * pTraverser ,
-										dglInt32_t * pnEdgeset
-										);
-void		dgl_edgeset_t_release_V2	( dglEdgesetTraverser_s * pTraverser );
-dglInt32_t *	dgl_edgeset_t_first_V2	( dglEdgesetTraverser_s * pTraverser );
-dglInt32_t *	dgl_edgeset_t_next_V2	( dglEdgesetTraverser_s * pTraverser );
+int dgl_edgeset_t_initialize_V2(dglGraph_s * pGraph,
+				dglEdgesetTraverser_s * pTraverser,
+				dglInt32_t * pnEdgeset);
+void dgl_edgeset_t_release_V2(dglEdgesetTraverser_s * pTraverser);
+dglInt32_t *dgl_edgeset_t_first_V2(dglEdgesetTraverser_s * pTraverser);
+dglInt32_t *dgl_edgeset_t_next_V2(dglEdgesetTraverser_s * pTraverser);
 
 
-int 		dgl_edge_t_initialize_V2	( dglGraph_s * pGraph , dglEdgeTraverser_s * pTraverser , dglEdgePrioritizer_s * pEP );
-void 		dgl_edge_t_release_V2		( dglEdgeTraverser_s * pTraverser );
-dglInt32_t * dgl_edge_t_first_V2		( dglEdgeTraverser_s * pT );
-dglInt32_t * dgl_edge_t_next_V2		( dglEdgeTraverser_s * pT );
+int dgl_edge_t_initialize_V2(dglGraph_s * pGraph,
+			     dglEdgeTraverser_s * pTraverser,
+			     dglEdgePrioritizer_s * pEP);
+void dgl_edge_t_release_V2(dglEdgeTraverser_s * pTraverser);
+dglInt32_t *dgl_edge_t_first_V2(dglEdgeTraverser_s * pT);
+dglInt32_t *dgl_edge_t_next_V2(dglEdgeTraverser_s * pT);
 
 
 #endif

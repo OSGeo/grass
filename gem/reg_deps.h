@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            reg_deps.h
  *
@@ -20,18 +21,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _REG_DEPS_H
 #define _REG_DEPS_H
 
-char *depstr ( char *package, char *gisbase);
+char *depstr(char *package, char *gisbase);
 
-void register_extension ( char *gisbase, char *bins, char *pkg_short_name, 
-							int pkg_major, int pkg_minor, int pkg_revision );
-							
-void deregister_extension ( char *package, char *pkg_short_name, char *gisbase );
+void register_extension(char *gisbase, char *bins, char *pkg_short_name,
+			int pkg_major, int pkg_minor, int pkg_revision);
 
-void check_dependencies ( char *package, char *gisbase, char *grass_version );
+void deregister_extension(char *package, char *pkg_short_name, char *gisbase);
+
+void check_dependencies(char *package, char *gisbase, char *grass_version);
 
 
 #endif /* _REG_DEPS_H */

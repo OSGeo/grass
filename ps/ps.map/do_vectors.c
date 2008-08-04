@@ -1,10 +1,10 @@
 /* Function: do_vectors
-**
-** Author: Paul W. Carlson	March 1992
-** Modified by: Janne Soimasuo August 1994 line_cat added
-** Modified by: Radim Blazek Jan 2000 areas added
-** Modified by: Hamish Bowman Jun 2005 points moved to do_vpoints()
-*/
+ **
+ ** Author: Paul W. Carlson     March 1992
+ ** Modified by: Janne Soimasuo August 1994 line_cat added
+ ** Modified by: Radim Blazek Jan 2000 areas added
+ ** Modified by: Hamish Bowman Jun 2005 points moved to do_vpoints()
+ */
 
 #include <string.h>
 #include <grass/gis.h>
@@ -16,57 +16,65 @@
 #include "ps_info.h"
 #include "local_proto.h"
 
-int do_vectors (int after_masking)
+int do_vectors(int after_masking)
 {
     int n, z, lz, dig;
     struct Map_info Map;
     char dashes[100], buf[20], *ptr;
-    
+
     n = vector.count;
     while (n-- > 0) {
-	if( vector.layer[n].type == VPOINTS  ) continue;
-	if ( after_masking &&  vector.layer[n].masked) continue;
-	if (!after_masking && !vector.layer[n].masked) continue;
+	if (vector.layer[n].type == VPOINTS)
+	    continue;
+	if (after_masking && vector.layer[n].masked)
+	    continue;
+	if (!after_masking && !vector.layer[n].masked)
+	    continue;
 
-	G_message (_("Reading vector map <%s in %s> ..."),
-		   vector.layer[n].name, vector.layer[n].mapset);
+	G_message(_("Reading vector map <%s in %s> ..."),
+		  vector.layer[n].name, vector.layer[n].mapset);
 
-	Vect_set_open_level(2); 
-	Vect_set_fatal_error ( GV_FATAL_PRINT );
-	if (2 >  Vect_open_old(&Map, vector.layer[n].name, vector.layer[n].mapset)) {
+	Vect_set_open_level(2);
+	Vect_set_fatal_error(GV_FATAL_PRINT);
+	if (2 >
+	    Vect_open_old(&Map, vector.layer[n].name,
+			  vector.layer[n].mapset)) {
 	    char name[100];
 
-	    sprintf(name, "%s in %s", vector.layer[n].name, vector.layer[n].mapset);
+	    sprintf(name, "%s in %s", vector.layer[n].name,
+		    vector.layer[n].mapset);
 	    error("vector map", name, "can't open");
 	    continue;
 	}
 
-	if ( vector.layer[n].type == VAREAS ) {
-    	    PS_vareas_plot(&Map, n);
-	} else if ( vector.layer[n].type == VLINES ) {
+	if (vector.layer[n].type == VAREAS) {
+	    PS_vareas_plot(&Map, n);
+	}
+	else if (vector.layer[n].type == VLINES) {
 	    fprintf(PS.fp, "[] 0 setdash\n");
-	    if (vector.layer[n].hwidth && vector.layer[n].ref == LINE_REF_CENTER) {
-		set_ps_color( &(vector.layer[n].hcolor) );
-		fprintf(PS.fp, "%.8f W\n",  
-		   vector.layer[n].width + 2. * vector.layer[n].hwidth);
+	    if (vector.layer[n].hwidth &&
+		vector.layer[n].ref == LINE_REF_CENTER) {
+		set_ps_color(&(vector.layer[n].hcolor));
+		fprintf(PS.fp, "%.8f W\n",
+			vector.layer[n].width + 2. * vector.layer[n].hwidth);
 		PS_vlines_plot(&Map, n, LINE_DRAW_HIGHLITE);
-		Vect_rewind(&Map); 
+		Vect_rewind(&Map);
 	    }
 
-	    fprintf(PS.fp, "%.8f W\n", vector.layer[n].width );
-	    set_ps_color( &(vector.layer[n].color) );
+	    fprintf(PS.fp, "%.8f W\n", vector.layer[n].width);
+	    set_ps_color(&(vector.layer[n].color));
 	    dashes[0] = '[';
 	    dashes[1] = 0;
 	    lz = 0;
 	    if (vector.layer[n].linestyle != NULL) {
 		G_strip(vector.layer[n].linestyle);
- 		ptr = vector.layer[n].linestyle;
+		ptr = vector.layer[n].linestyle;
 		while (*ptr && (*ptr < '1' || *ptr > '9')) {
 		    lz++;
 		    ptr++;
 		}
 		if (lz) {
-	    	    sprintf(buf, "%d ", lz);
+		    sprintf(buf, "%d ", lz);
 		    strcat(dashes, buf);
 		}
 		while (*ptr) {
@@ -80,12 +88,11 @@ int do_vectors (int after_masking)
 			strcat(dashes, buf);
 		    }
 		    z = 0;
-	    	    while (*ptr && (*ptr < '1' || *ptr > '9')) {
+		    while (*ptr && (*ptr < '1' || *ptr > '9')) {
 			z++;
 			ptr++;
-	    	    }
-	    	    if (z) 
-		    {
+		    }
+		    if (z) {
 			sprintf(buf, "%d ", z);
 			strcat(dashes, buf);
 		    }
@@ -106,32 +113,38 @@ int do_vectors (int after_masking)
 }
 
 
-int do_vpoints (int after_masking)
+int do_vpoints(int after_masking)
 {
     int n;
     struct Map_info Map;
-    
+
     n = vector.count;
     while (n-- > 0) {
-    	if( vector.layer[n].type != VPOINTS ) continue;
-	if ( after_masking &&  vector.layer[n].masked) continue;
-	if (!after_masking && !vector.layer[n].masked) continue;
+	if (vector.layer[n].type != VPOINTS)
+	    continue;
+	if (after_masking && vector.layer[n].masked)
+	    continue;
+	if (!after_masking && !vector.layer[n].masked)
+	    continue;
 
-	G_message (_("Reading vector points file <%s in %s> ..."),
-		   vector.layer[n].name, vector.layer[n].mapset);
+	G_message(_("Reading vector points file <%s in %s> ..."),
+		  vector.layer[n].name, vector.layer[n].mapset);
 
-	Vect_set_open_level(2); 
-	Vect_set_fatal_error ( GV_FATAL_PRINT );
-	if (2 >  Vect_open_old(&Map, vector.layer[n].name, vector.layer[n].mapset)) {
+	Vect_set_open_level(2);
+	Vect_set_fatal_error(GV_FATAL_PRINT);
+	if (2 >
+	    Vect_open_old(&Map, vector.layer[n].name,
+			  vector.layer[n].mapset)) {
 	    char name[100];
 
-	    sprintf(name, "%s in %s", vector.layer[n].name, vector.layer[n].mapset);
+	    sprintf(name, "%s in %s", vector.layer[n].name,
+		    vector.layer[n].mapset);
 	    error("vector map", name, "can't open");
 	    continue;
 	}
 
 	PS_vpoints_plot(&Map, n, LINE_DRAW_LINE);
-	
+
 	Vect_close(&Map);
 	fprintf(PS.fp, "[] 0 setdash\n");
     }

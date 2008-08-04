@@ -3,14 +3,14 @@
 
 extern float sqrarg;
 extern double dsqrarg;
-extern double dmaxarg1,dmaxarg2;
-extern double dminarg1,dminarg2;
-extern float maxarg1,maxarg2;
-extern float minarg1,minarg2;
-extern long lmaxarg1,lmaxarg2;
-extern long lminarg1,lminarg2;
-extern int imaxarg1,imaxarg2;
-extern int iminarg1,iminarg2;
+extern double dmaxarg1, dmaxarg2;
+extern double dminarg1, dminarg2;
+extern float maxarg1, maxarg2;
+extern float minarg1, minarg2;
+extern long lmaxarg1, lmaxarg2;
+extern long lminarg1, lminarg2;
+extern int imaxarg1, imaxarg2;
+extern int iminarg1, iminarg2;
 
 #define SQR(a) ((sqrarg=(a)) == 0.0 ? 0.0 : sqrarg*sqrarg)
 
@@ -52,7 +52,7 @@ float **matrix(int nrl, int nrh, int ncl, int nch);
 double **dmatrix(int nrl, int nrh, int ncl, int nch);
 int **imatrix(int nrl, int nrh, int ncl, int nch);
 float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch,
-	int newrl, int newcl);
+		  int newrl, int newcl);
 float **convert_matrix(float *a, int nrl, int nrh, int ncl, int nch);
 float ***f3tensor(int nrl, int nrh, int ncl, int nch, int ndl, int ndh);
 void free_vector(float *v, int nl, int nh);
@@ -66,6 +66,6 @@ void free_imatrix(int **m, int nrl, int nrh, int ncl, int nch);
 void free_submatrix(float **b, int nrl, int nrh, int ncl, int nch);
 void free_convert_matrix(float **b, int nrl, int nrh, int ncl, int nch);
 void free_f3tensor(float ***t, int nrl, int nrh, int ncl, int nch,
-	int ndl, int ndh);
+		   int ndl, int ndh);
 
 #endif /* _NR_UTILS_H_ */

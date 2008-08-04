@@ -2,7 +2,7 @@
 #define KNS_GLOBALS_DEFINED
 
 #ifdef MAIN
-#define DECLARATION 
+#define DECLARATION
 #else
 #define DECLARATION extern
 #endif

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       dbmi_base
@@ -33,42 +34,41 @@ static FILE *_send, *_recv;
 
 static ssize_t readn(int fd, void *buf, size_t count)
 {
-	ssize_t total = 0;
+    ssize_t total = 0;
 
-	while (total < count)
-	{
-		ssize_t n = read(fd, (char *) buf + total, count - total);
-		if (n < 0)
-			return n;
-		if (n == 0)
-			break;
-		total += n;
-	}
+    while (total < count) {
+	ssize_t n = read(fd, (char *)buf + total, count - total);
 
-	return total;
+	if (n < 0)
+	    return n;
+	if (n == 0)
+	    break;
+	total += n;
+    }
+
+    return total;
 }
 
 static ssize_t writen(int fd, const void *buf, size_t count)
 {
-	ssize_t total = 0;
+    ssize_t total = 0;
 
-	while (total < count)
-	{
-		ssize_t n = write(fd, (const char *) buf + total, count - total);
-		if (n < 0)
-			return n;
-		if (n == 0)
-			break;
-		total += n;
-	}
+    while (total < count) {
+	ssize_t n = write(fd, (const char *)buf + total, count - total);
 
-	return total;
+	if (n < 0)
+	    return n;
+	if (n == 0)
+	    break;
+	total += n;
+    }
+
+    return total;
 }
 
 #endif
 
-void
-db__set_protocol_fds (FILE *send, FILE *recv)
+void db__set_protocol_fds(FILE * send, FILE * recv)
 {
     _send = send;
     _recv = recv;
@@ -98,4 +98,3 @@ int db__recv(void *buf, size_t size)
     return read(fileno(_recv), buf, size) == size;
 #endif
 }
-

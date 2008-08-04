@@ -1,3 +1,4 @@
+
 /***********************************************************
 * I_get_to_eol (line,len,fd)
 *
@@ -8,15 +9,16 @@
 ***********************************************************/
 #include <grass/imagery.h>
 #include <stdio.h>
-int I_get_to_eol(char *line, int len, FILE *fd)
+int I_get_to_eol(char *line, int len, FILE * fd)
 {
     int c;
     int n;
 
-    n = len-1;
+    n = len - 1;
     while ((c = fgetc(fd)) >= 0 && c != '\n')
 	if (n-- > 0)
 	    *line++ = c;
-    if (len > 0) *line = 0;
+    if (len > 0)
+	*line = 0;
     return c == '\n';
 }

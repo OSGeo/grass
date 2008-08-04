@@ -1,1 +1,1 @@
-void newpoint ( double,double,double);
+void newpoint(double, double, double);

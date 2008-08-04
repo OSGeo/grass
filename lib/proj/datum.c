@@ -1,3 +1,4 @@
+
 /**
    \file datum.c
 
@@ -83,32 +84,30 @@ int GPJ_get_datum_by_name(const char *name, struct gpj_datum *dstruct)
 
 int GPJ_get_default_datum_params_by_name(const char *name, char **params)
 {
-   struct gpj_datum_transform_list *list, *old;
-   int count = 1;
+    struct gpj_datum_transform_list *list, *old;
+    int count = 1;
 
-   list = GPJ_get_datum_transform_by_name( name );
-   
-   if( list == NULL)
-   {
-      *params = NULL;
-      return -1;
-   }
-   
-   /* Take the first parameter set in the list as the default
-    * (will normally be a 3-parameter transformation)        */   
-   *params = G_store( list->params );
-   
-   while(list->next != NULL)
-   {
-        count++;
+    list = GPJ_get_datum_transform_by_name(name);
+
+    if (list == NULL) {
+	*params = NULL;
+	return -1;
+    }
+
+    /* Take the first parameter set in the list as the default
+     * (will normally be a 3-parameter transformation)        */
+    *params = G_store(list->params);
+
+    while (list->next != NULL) {
+	count++;
 	old = list;
 	list = list->next;
-	G_free( old );
-   }
-   
-   G_free( list );
-   return count;
-   
+	G_free(old);
+    }
+
+    G_free(list);
+    return count;
+
 }
 
 /**
@@ -189,14 +188,15 @@ int GPJ__get_datum_params(struct Key_Value *projinfo,
 	returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
-        const char *gisbase = G_gisbase();
-       
+	const char *gisbase = G_gisbase();
+
 	G_asprintf(params, "nadgrids=%s%s/%s", gisbase, GRIDDIR,
 		   G_find_key_value("nadgrids", projinfo));
 	returnval = 2;
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
-	G_asprintf(params, "towgs84=%s", G_find_key_value("towgs84", projinfo));
+	G_asprintf(params, "towgs84=%s",
+		   G_find_key_value("towgs84", projinfo));
 	returnval = 2;
     }
     else if (G_find_key_value("dx", projinfo) != NULL
@@ -241,114 +241,124 @@ int GPJ_ask_datum_params(const char *datumname, char **params)
 {
     char buff[1024], answer[100];
     char *Tmp_file;
-    FILE  *Tmp_fd = NULL;
+    FILE *Tmp_fd = NULL;
     struct gpj_datum_transform_list *list, *listhead, *old;
     int transformcount, currenttransform;
 
-    if( G_strcasecmp(datumname, "custom") != 0)
-    {
-        Tmp_file = G_tempfile ();
-        if (NULL == (Tmp_fd = fopen (Tmp_file, "w"))) {
-            G_warning(_("Unable to open temporary file"));
-        }
+    if (G_strcasecmp(datumname, "custom") != 0) {
+	Tmp_file = G_tempfile();
+	if (NULL == (Tmp_fd = fopen(Tmp_file, "w"))) {
+	    G_warning(_("Unable to open temporary file"));
+	}
 
-        fprintf(Tmp_fd,"Number\tDetails\t\n---\n");
-        listhead = GPJ_get_datum_transform_by_name( datumname );
-        list = listhead;
-        transformcount = 0;
-        while( list != NULL)
-        {	   
+	fprintf(Tmp_fd, "Number\tDetails\t\n---\n");
+	listhead = GPJ_get_datum_transform_by_name(datumname);
+	list = listhead;
+	transformcount = 0;
+	while (list != NULL) {
 	    /* Count how many sets of transformation paramters have been 
 	     * defined for this datum and print them to a temporary file 
 	     * in case the user asks for them to be displayed */
-            fprintf(Tmp_fd,"%d\tUsed in %s\n\t(PROJ.4 Params %s)\n\t%s\n---\n",
-        	   list->count, list->where_used, list->params, list->comment);
-            list = list->next;
-            transformcount++;
-        }      
-        fclose(Tmp_fd);
+	    fprintf(Tmp_fd,
+		    "%d\tUsed in %s\n\t(PROJ.4 Params %s)\n\t%s\n---\n",
+		    list->count, list->where_used, list->params,
+		    list->comment);
+	    list = list->next;
+	    transformcount++;
+	}
+	fclose(Tmp_fd);
 
-        for(;;) {
-            do {
-                fprintf(stderr,("\nNow select Datum Transformation Parameters\n"));
-                fprintf(stderr,("Please think carefully about the area covered by your data\n"
-                                "and the accuracy you require before making your selection.\n"));
-                fprintf(stderr,("\nEnter 'list' to see the list of available Parameter sets\n"));
-                fprintf(stderr,("Enter the corresponding number, or <RETURN> to cancel request\n"));
-                fprintf(stderr,">");
-            } while(!G_gets(answer));
-            G_strip(answer); 
-            if(strlen(answer)==0) 
-            {
-                remove( Tmp_file );
-                G_free( Tmp_file );
-                return -1;
-            }
-            if (strcmp(answer,"list") == 0) {
-                char *pager;
+	for (;;) {
+	    do {
+		fprintf(stderr,
+			("\nNow select Datum Transformation Parameters\n"));
+		fprintf(stderr,
+			("Please think carefully about the area covered by your data\n"
+			 "and the accuracy you require before making your selection.\n"));
+		fprintf(stderr,
+			("\nEnter 'list' to see the list of available Parameter sets\n"));
+		fprintf(stderr,
+			("Enter the corresponding number, or <RETURN> to cancel request\n"));
+		fprintf(stderr, ">");
+	    } while (!G_gets(answer));
+	    G_strip(answer);
+	    if (strlen(answer) == 0) {
+		remove(Tmp_file);
+		G_free(Tmp_file);
+		return -1;
+	    }
+	    if (strcmp(answer, "list") == 0) {
+		char *pager;
 
-                pager = getenv("GRASS_PAGER");
-                if (!pager || strlen(pager) == 0)
-                    pager = "cat";
+		pager = getenv("GRASS_PAGER");
+		if (!pager || strlen(pager) == 0)
+		    pager = "cat";
 
 		/* Always print interactive output to stderr */
-                sprintf(buff,"%s \"%s\" 1>&2", pager, G_convert_dirseps_to_host(Tmp_file));
-                G_system(buff);
-            }
-            else {
-                if ( (sscanf(answer, "%d", &currenttransform) != 1) ||
-                    currenttransform > transformcount || currenttransform < 1) {
+		sprintf(buff, "%s \"%s\" 1>&2", pager,
+			G_convert_dirseps_to_host(Tmp_file));
+		G_system(buff);
+	    }
+	    else {
+		if ((sscanf(answer, "%d", &currenttransform) != 1) ||
+		    currenttransform > transformcount ||
+		    currenttransform < 1) {
 
 		    /* If a number was not typed, was less than 0 or greater
 		     * than the number of sets of parameters, ask again */
-                    fprintf(stderr,("\ninvalid transformation number\n"));
-                }
-                else break;
-            }
+		    fprintf(stderr, ("\ninvalid transformation number\n"));
+		}
+		else
+		    break;
+	    }
 
-        }
-        remove ( Tmp_file );
-        G_free ( Tmp_file );
-   
-        list = listhead;
-        while (list != NULL)
-        {
+	}
+	remove(Tmp_file);
+	G_free(Tmp_file);
+
+	list = listhead;
+	while (list != NULL) {
 	    /* Search through the linked list to find the parameter string
 	     * that corresponds to the number entered */
-            if( list->count == currenttransform )
-                G_asprintf(params, list->params);
-	   
+	    if (list->count == currenttransform)
+		G_asprintf(params, list->params);
+
 	    /* Continue to end of list even after we find it, to free all
 	     * the memory used */
-            old = list;
-            list = old->next;
-            G_free( old );
-        }
+	    old = list;
+	    list = old->next;
+	    G_free(old);
+	}
     }
-    else
-    {
-        /* Here we ask the user to enter customised parameters */
-        for(;;) {
-            do {
-                fprintf(stderr,("\nPlease specify datum transformation parameters in PROJ.4 syntax. Examples:\n"));
-                fprintf(stderr,("\ttowgs84=dx,dy,dz\t(3-parameter transformation)\n"));
-                fprintf(stderr,("\ttowgs84=dx,dy,dz,rx,ry,rz,m\t(7-parameter transformation)\n"));
-                fprintf(stderr,("\tnadgrids=alaska\t(Tables-based grid-shifting transformation)\n"));
-                fprintf (stderr,_("Hit RETURN to cancel request\n"));
-                fprintf(stderr,">");
-            } while(!G_gets(answer));
-            G_strip(answer); 
-            if(strlen(answer)==0)
-                return -1;
+    else {
+	/* Here we ask the user to enter customised parameters */
+	for (;;) {
+	    do {
+		fprintf(stderr,
+			("\nPlease specify datum transformation parameters in PROJ.4 syntax. Examples:\n"));
+		fprintf(stderr,
+			("\ttowgs84=dx,dy,dz\t(3-parameter transformation)\n"));
+		fprintf(stderr,
+			("\ttowgs84=dx,dy,dz,rx,ry,rz,m\t(7-parameter transformation)\n"));
+		fprintf(stderr,
+			("\tnadgrids=alaska\t(Tables-based grid-shifting transformation)\n"));
+		fprintf(stderr, _("Hit RETURN to cancel request\n"));
+		fprintf(stderr, ">");
+	    } while (!G_gets(answer));
+	    G_strip(answer);
+	    if (strlen(answer) == 0)
+		return -1;
 	    G_asprintf(params, answer);
-            sprintf(buff, "Parameters to be used are:\n\"%s\"\nIs this correct?", *params);
-            if (G_yes(buff, 1))
-                break;
+	    sprintf(buff,
+		    "Parameters to be used are:\n\"%s\"\nIs this correct?",
+		    *params);
+	    if (G_yes(buff, 1))
+		break;
 
-        }
+	}
 
     }
-   
+
     return 1;
 
 }
@@ -366,7 +376,7 @@ int GPJ_ask_datum_params(const char *datumname, char **params)
  **/
 
 struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
-								*inputname)
+								 *inputname)
 {
     FILE *fd;
     char *file;
@@ -390,9 +400,10 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 	G_asprintf(&(current->params), "towgs84=%.3f,%.3f,%.3f", dstruct.dx,
 		   dstruct.dy, dstruct.dz);
 	G_asprintf(&(current->where_used), "whole %s region", inputname);
-	G_asprintf(&(current->comment), "Default 3-Parameter Transformation (May not be optimum for "
-		                        "older datums; use this only if no more appropriate options "
-		                        "are available.)");
+	G_asprintf(&(current->comment),
+		   "Default 3-Parameter Transformation (May not be optimum for "
+		   "older datums; use this only if no more appropriate options "
+		   "are available.)");
 	count++;
 	current->count = count;
 	current->next = NULL;
@@ -400,7 +411,7 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
     GPJ_free_datum(&dstruct);
 
     /* Now check for additional parameters in datumtransform.table */
-   
+
     G_asprintf(&file, "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
 
     fd = fopen(file, "r");
@@ -418,7 +429,8 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
 	if (sscanf(buf, "%99s \"%1023[^\"]\" \"%1023[^\"]\" \"%1023[^\"]\"",
 		   name, params, where_used, comment) != 4) {
-	    G_warning(_("Error in datum table file <%s>, line %d"), file, line);
+	    G_warning(_("Error in datum table file <%s>, line %d"), file,
+		      line);
 	    continue;
 	}
 
@@ -482,7 +494,8 @@ struct datum_list *read_datum_table(void)
 
 	if (sscanf(buf, "%s \"%1023[^\"]\" %s dx=%lf dy=%lf dz=%lf",
 		   name, descr, ellps, &dx, &dy, &dz) != 6) {
-	    G_warning(_("Error in datum table file <%s>, line %d"), file, line);
+	    G_warning(_("Error in datum table file <%s>, line %d"), file,
+		      line);
 	    continue;
 	}
 

@@ -73,6 +73,7 @@ inline void point_scalar(POINT a, double k, POINT * res)
 inline void points_copy_last(struct line_pnts *Points, int pos)
 {
     int n = Points->n_points - 1;
+
     Points->x[pos] = Points->x[n];
     Points->y[pos] = Points->y[n];
     Points->z[pos] = Points->z[n];
@@ -103,6 +104,7 @@ inline double point_dist_segment_square(POINT a, POINT b, POINT c, int with_z)
 {
     double px, py, pz, pdist;
     int status;
+
     return dig_distance2_point_to_line(a.x, a.y, a.z, b.x, b.y, b.z,
 				       c.x, c.y, c.z, with_z, &px, &py, &pz,
 				       &pdist, &status);
@@ -127,6 +129,7 @@ POINT_LIST *point_list_new(POINT p)
 void point_list_add(POINT_LIST * l, POINT p)
 {
     POINT_LIST *n;
+
     n = point_list_new(p);
     n->next = l->next;
     l->next = n;
@@ -167,6 +170,7 @@ int point_list_copy_to_line_pnts(POINT_LIST l, struct line_pnts *Points)
 void point_list_free(POINT_LIST l)
 {
     POINT_LIST *p, *n;
+
     p = l.next;
     while (p != NULL) {
 	n = p->next;
@@ -178,6 +182,7 @@ void point_list_free(POINT_LIST l)
 extern void point_list_delete_next(POINT_LIST * p)
 {
     POINT_LIST *t = p->next;
+
     p->next = p->next->next;
     G_free(t);
     return;

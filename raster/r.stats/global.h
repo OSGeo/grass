@@ -7,7 +7,7 @@
 # define INIT(x) =(x)
 #endif
 
-GLOBAL char * no_data_str;
+GLOBAL char *no_data_str;
 GLOBAL int nfiles;
 GLOBAL int nrows;
 GLOBAL int ncols, no_nulls INIT(0), no_nulls_all INIT(0);
@@ -16,15 +16,17 @@ GLOBAL int *is_fp INIT(NULL);
 GLOBAL DCELL *DMAX INIT(NULL), *DMIN INIT(NULL);
 
 GLOBAL CELL NULL_CELL;
-GLOBAL int (*get_row)();
+GLOBAL int (*get_row) ();
 
 GLOBAL char fs[2];
-GLOBAL struct Categories *labels INIT(NULL) ;
+GLOBAL struct Categories *labels INIT(NULL);
 
 /* cell_stats.c */
-int cell_stats(int [], int, int, int, int, char *);
+int cell_stats(int[], int, int, int, int, char *);
+
 /* raw_stats.c */
-int raw_stats(int [], int, int, int);
+int raw_stats(int[], int, int, int);
+
 /* stats.c */
 int initialize_cell_stats(int);
 int allocate_values(void);

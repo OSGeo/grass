@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -18,31 +19,26 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_list_tables  (dbString **tlist, int *tcount, int system)
-
+int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 {
-    dbString 	*list;
-    int 	i;
-    
+    dbString *list;
+    int i;
+
     *tlist = NULL;
     *tcount = 0;
 
-    list = db_alloc_string_array( db.ntables );
+    list = db_alloc_string_array(db.ntables);
     if (list == NULL && db.ntables > 0)
 	return DB_FAILED;
 
-    for ( i = 0; i < db.ntables; i++ )  
-      {
-    	if(db_set_string (&list[i], (char *) db.tables[i].name) != DB_OK)
-	  {
+    for (i = 0; i < db.ntables; i++) {
+	if (db_set_string(&list[i], (char *)db.tables[i].name) != DB_OK) {
 	    return DB_FAILED;
-	  }	
-      }
-    						
+	}
+    }
+
 
     *tlist = list;
     *tcount = db.ntables;
     return DB_OK;
 }
-

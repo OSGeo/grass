@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cats
@@ -23,122 +24,123 @@
 #include <grass/glocale.h>
 
 typedef int FILEDESC;
-static double distance ( double *,double *, double, double, int);
+static double distance(double *, double *, double, double, int);
 
 #ifndef HUGE_VAL
 #define HUGE_VAL        1.7976931348623157e+308
 #endif
 
 
-int main(
-    int argc,
-    char *argv[])
+int main(int argc, char *argv[])
 {
 
     struct GModule *module;
-    struct Option 	*coord, *out_file, *min, *max, *mult;
-    struct Flag         *flag;
-    int			*int_buf;
-    struct Cell_head	w;
+    struct Option *coord, *out_file, *min, *max, *mult;
+    struct Flag *flag;
+    int *int_buf;
+    struct Cell_head w;
     struct History history;
-    FILEDESC    	cellfile = (FILEDESC) NULL;
+    FILEDESC cellfile = (FILEDESC) NULL;
     double east, north, pt[2], cur[2], row, col, fmult;
     double fmin, fmax;
     int binary;
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-		_("Creates a raster map containing concentric "
-		"rings around a given point.");
+	_("Creates a raster map containing concentric "
+	  "rings around a given point.");
 
     out_file = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    coord = G_define_option() ;
-    coord->key        = "coordinate" ;
-    coord->type       = TYPE_STRING ;
-    coord->required   = YES ;
-    coord->key_desc   = "x,y" ;
-    coord->description= _("The coordinate of the center (east,north)") ;
+    coord = G_define_option();
+    coord->key = "coordinate";
+    coord->type = TYPE_STRING;
+    coord->required = YES;
+    coord->key_desc = "x,y";
+    coord->description = _("The coordinate of the center (east,north)");
 
     min = G_define_option();
-    min->key                    = "min";
-    min->type                   = TYPE_DOUBLE;
-    min->required               = NO;
-    min->description            = _("Minimum radius for ring/circle map (in meters)");
+    min->key = "min";
+    min->type = TYPE_DOUBLE;
+    min->required = NO;
+    min->description = _("Minimum radius for ring/circle map (in meters)");
 
     max = G_define_option();
-    max->key                    = "max";
-    max->type                   = TYPE_DOUBLE;
-    max->required               = NO;
-    max->description            = _("Maximum radius for ring/circle map (in meters)");
+    max->key = "max";
+    max->type = TYPE_DOUBLE;
+    max->required = NO;
+    max->description = _("Maximum radius for ring/circle map (in meters)");
 
     mult = G_define_option();
-    mult->key                    = "mult";
-    mult->type                   = TYPE_DOUBLE;
-    mult->required               = NO;
-    mult->description            = _("Data value multiplier");
+    mult->key = "mult";
+    mult->type = TYPE_DOUBLE;
+    mult->required = NO;
+    mult->description = _("Data value multiplier");
 
     flag = G_define_flag();
-    flag->key         = 'b' ;
-    flag->description = _("Generate binary raster map") ;
-            
-    if (G_parser (argc, argv))
-	exit (EXIT_FAILURE);
-    
-    G_scan_easting  (coord->answers[0], &east, G_projection()) ;
-    G_scan_northing (coord->answers[1], &north, G_projection()) ;
+    flag->key = 'b';
+    flag->description = _("Generate binary raster map");
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    G_scan_easting(coord->answers[0], &east, G_projection());
+    G_scan_northing(coord->answers[1], &north, G_projection());
     pt[0] = east;
     pt[1] = north;
 
-    fmult=1.0;
+    fmult = 1.0;
 
-    if(min->answer)
-	sscanf(min->answer,"%lf", &fmin);
+    if (min->answer)
+	sscanf(min->answer, "%lf", &fmin);
     else
-    	fmin=0;
+	fmin = 0;
 
-    if(max->answer)
-	sscanf(max->answer,"%lf", &fmax);
+    if (max->answer)
+	sscanf(max->answer, "%lf", &fmax);
     else
-    	fmax=HUGE_VAL;
+	fmax = HUGE_VAL;
 
     if (fmin > fmax)
 	G_fatal_error(_("Please specify a radius in which min < max"));
 
-    if(mult->answer)
-	if(1 != sscanf(mult->answer,"%lf", &fmult)) fmult=1.0;
+    if (mult->answer)
+	if (1 != sscanf(mult->answer, "%lf", &fmult))
+	    fmult = 1.0;
 
-/* nonsense test */
-    if(flag->answer && (!min->answer && !max->answer) )
-    	G_fatal_error(_("Please specify min and/or max radius when "
-                        "using the binary flag"));
+    /* nonsense test */
+    if (flag->answer && (!min->answer && !max->answer))
+	G_fatal_error(_("Please specify min and/or max radius when "
+			"using the binary flag"));
 
-    if(flag->answer)
-	binary=1; /* generate binary pattern only, useful for MASK */
+    if (flag->answer)
+	binary = 1;		/* generate binary pattern only, useful for MASK */
     else
-        binary=0;
+	binary = 0;
 
-    G_get_set_window (&w); 
+    G_get_set_window(&w);
 
     if ((cellfile = G_open_cell_new(out_file->answer)) == -1)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_file->answer);
+	G_fatal_error(_("Unable to create raster map <%s>"),
+		      out_file->answer);
 
-    int_buf = (int *)G_malloc (w.cols * sizeof (int));
+    int_buf = (int *)G_malloc(w.cols * sizeof(int));
     {
 	int c;
 
 	for (row = 0; row < w.rows; row++) {
 	    G_percent(row, w.rows, 2);
-	    cur[1] = G_row_to_northing(row+0.5,&w);  
-	    for(col=0; col < w.cols; col++){
+	    cur[1] = G_row_to_northing(row + 0.5, &w);
+	    for (col = 0; col < w.cols; col++) {
 		c = col;
-		cur[0] = G_col_to_easting(col+0.5,&w);
-		int_buf[c] = (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
+		cur[0] = G_col_to_easting(col + 0.5, &w);
+		int_buf[c] =
+		    (int)(distance(pt, cur, fmin, fmax, binary) * fmult);
 		if (int_buf[c] == 0)
-		   G_set_null_value(&int_buf[c],1,CELL_TYPE);
+		    G_set_null_value(&int_buf[c], 1, CELL_TYPE);
 	    }
 	    G_put_raster_row(cellfile, int_buf, CELL_TYPE);
 
@@ -149,33 +151,34 @@ int main(
     G_short_history(out_file->answer, "raster", &history);
     G_command_history(&history);
     G_write_history(out_file->answer, &history);
-    
-    return(EXIT_SUCCESS);
+
+    return (EXIT_SUCCESS);
 }
 
 
 
 /*******************************************************************/
 
-static double distance ( double from[2],double to[2], double min, double max, int binary)
+static double distance(double from[2], double to[2], double min, double max,
+		       int binary)
 {
-    static int first=1;
+    static int first = 1;
     double dist;
-   
-    if(first){
-	first=0;
+
+    if (first) {
+	first = 0;
 	G_begin_distance_calculations();
     }
-    
-    dist=G_distance(from[0], from[1], to[0], to[1]);
-    
-    if ( (dist >= min) && (dist <= max) )
-    	if (!binary)
-		return dist;
+
+    dist = G_distance(from[0], from[1], to[0], to[1]);
+
+    if ((dist >= min) && (dist <= max))
+	if (!binary)
+	    return dist;
 	else
-		return 1;
+	    return 1;
     else
-    	return 0;  /* should be NULL ? */
+	return 0;		/* should be NULL ? */
 }
 
 /**********************************************************************/

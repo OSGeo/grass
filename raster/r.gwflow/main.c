@@ -38,11 +38,12 @@ paramType param;		/*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
 void set_params(void);		/*Fill the paramType structure */
-void copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
-		 struct Cell_head *region, N_array_2d * target);
+void copy_result(N_array_2d * status, N_array_2d * phead_start,
+		 double *result, struct Cell_head *region,
+		 N_array_2d * target);
 N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-			N_les_callback_2d * call, const char *solver, int maxit,
-			double error, double sor);
+			N_les_callback_2d * call, const char *solver,
+			int maxit, double error, double sor);
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -61,7 +62,8 @@ void set_params(void)
     param.status->type = TYPE_STRING;
     param.status->required = YES;
     param.status->gisprompt = "old,raster,raster";
-    param.status->description = _("Boundary condition status, 0-inactive, 1-active, 2-dirichlet");
+    param.status->description =
+	_("Boundary condition status, 0-inactive, 1-active, 2-dirichlet");
 
     param.hc_x = G_define_option();
     param.hc_x->key = "hc_x";
@@ -120,15 +122,16 @@ void set_params(void)
     param.output->type = TYPE_STRING;
     param.output->required = YES;
     param.output->gisprompt = "new,raster,raster";
-    param.output->description =	_("The map storing the numerical result [m]");
+    param.output->description = _("The map storing the numerical result [m]");
 
     param.vector = G_define_option();
     param.vector->key = "velocity";
     param.vector->type = TYPE_STRING;
     param.vector->required = NO;
     param.vector->gisprompt = "new,raster,raster";
-    param.vector->description =	_("Calculate the groundwater filter velocity vector field [m/s]\n"
-         "and write the x, and y components to maps named name_[xy]");
+    param.vector->description =
+	_("Calculate the groundwater filter velocity vector field [m/s]\n"
+	  "and write the x, and y components to maps named name_[xy]");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -176,16 +179,17 @@ void set_params(void)
     param.drain_leak->gisprompt = "old,raster,raster";
     param.drain_leak->description =
 	_("The leakage coefficient of the drainage bed in [1/s]");
- 
+
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
     param.error = N_define_standard_option(N_OPT_ITERATION_ERROR);
     param.solver = N_define_standard_option(N_OPT_SOLVER_SYMM);
-    param.sor = N_define_standard_option(N_OPT_SOR_VALUE);   
+    param.sor = N_define_standard_option(N_OPT_SOR_VALUE);
 
     param.sparse = G_define_flag();
     param.sparse->key = 's';
-    param.sparse->description =	_("Use a sparse matrix, only available with iterative solvers");
+    param.sparse->description =
+	_("Use a sparse matrix, only available with iterative solvers");
 
 }
 
@@ -217,7 +221,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("raster");
-    module->description = _("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
+    module->description =
+	_
+	("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
 
     /* Get parameters from user */
     set_params();
@@ -231,8 +237,9 @@ int main(int argc, char *argv[])
 	param.river_head->answer == NULL) {
 	with_river = 0;
     }
-    else if (param.river_leak->answer != NULL && param.river_bed->answer != NULL
-	     && param.river_head->answer != NULL) {
+    else if (param.river_leak->answer != NULL &&
+	     param.river_bed->answer != NULL &&
+	     param.river_head->answer != NULL) {
 	with_river = 1;
     }
     else {
@@ -363,7 +370,8 @@ int main(int argc, char *argv[])
     les = create_solve_les(geom, data, call, solver, maxit, error, sor);
 
     /* copy the result into the phead array for output or unconfined calculation */
-    copy_result(data->status, data->phead_start, les->x, &region, data->phead);
+    copy_result(data->status, data->phead_start, les->x, &region,
+		data->phead);
     N_convert_array_2d_null_to_zero(data->phead);
 
   /****************************************************/
@@ -383,7 +391,8 @@ int main(int argc, char *argv[])
 	inner_count = 0;
 
 	do {
-	    G_message(_("Calculation of unconfined groundwater flow loop %i\n"),
+	    G_message(_
+		      ("Calculation of unconfined groundwater flow loop %i\n"),
 		      inner_count + 1);
 
 	    /* we will allocate a new les for each loop */
@@ -391,7 +400,8 @@ int main(int argc, char *argv[])
 		N_free_les(les);
 
 	    /*assemble the linear equation system  and solve it */
-	    les = create_solve_les(geom, data, call, solver, maxit, error, sor);
+	    les =
+		create_solve_les(geom, data, call, solver, maxit, error, sor);
 
 	    /*calculate the maximum norm of the groundwater height difference */
 	    tmp = 0;
@@ -405,7 +415,8 @@ int main(int argc, char *argv[])
 		tmp_vect[i] = les->x[i];
 	    }
 
-	    G_message(_("Maximum difference between this and last increment: %g"),
+	    G_message(_
+		      ("Maximum difference between this and last increment: %g"),
 		      max_norm);
 
 	    /* copy the result into the phead array */
@@ -509,8 +520,8 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
 /* ***** create and solve the linear equation system ************* */
 /* *************************************************************** */
 N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-			N_les_callback_2d * call, const char *solver, int maxit,
-			double error, double sor)
+			N_les_callback_2d * call, const char *solver,
+			int maxit, double error, double sor)
 {
 
     N_les *les;
@@ -553,7 +564,8 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
 	N_solver_gauss(les);
 
     if (les == NULL)
-	G_fatal_error(_("Unable to create and solve the linear equation system"));
+	G_fatal_error(_
+		      ("Unable to create and solve the linear equation system"));
 
     return les;
 }

@@ -1,3 +1,4 @@
+
 /**
  * \file wind_in.c
  *
@@ -47,12 +48,13 @@ int G_point_in_region(double easting, double northing)
  *
  */
 
-int G_point_in_window(double easting, double northing, const struct Cell_head *window)
+int G_point_in_window(double easting, double northing,
+		      const struct Cell_head *window)
 {
 
-    if ( easting > window->east || easting < window->west ||
-         northing > window->north || northing < window->south)
-      return FALSE;
+    if (easting > window->east || easting < window->west ||
+	northing > window->north || northing < window->south)
+	return FALSE;
 
     return TRUE;
 }

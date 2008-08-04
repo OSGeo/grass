@@ -13,9 +13,9 @@
 #ifdef __MINGW32__
 #include <winsock2.h>
 #define ECONNREFUSED WSAECONNREFUSED
-#define EADDRINUSE   WSAEADDRINUSE  
-#define ENOTSOCK     WSAENOTSOCK    
-#define ETIMEDOUT    WSAETIMEDOUT   
+#define EADDRINUSE   WSAEADDRINUSE
+#define ENOTSOCK     WSAENOTSOCK
+#define ETIMEDOUT    WSAETIMEDOUT
 #endif
 
 #include <grass/gis.h>
@@ -58,65 +58,58 @@ int REM_open_driver(void)
     if (!name)
 	name = G__getenv("MONITOR");
 
-    if (!name)
-    {
-        if (verbose)
-        {
-            G_warning(_("No graphics monitor has been selected for output."));
-            G_warning(_("Please run \"d.mon\" to select a graphics monitor."));
-        }
-        return(NO_MON);
+    if (!name) {
+	if (verbose) {
+	    G_warning(_("No graphics monitor has been selected for output."));
+	    G_warning(_
+		      ("Please run \"d.mon\" to select a graphics monitor."));
+	}
+	return (NO_MON);
     }
 
     /* Get the full path to the unix socket */
-    if ((sockpath = G_sock_get_fname(name)) == NULL)
-    {
-        if (verbose)
-            G_warning(_("Failed to get socket name for monitor <%s>."), name);
-        return (NO_MON);
+    if ((sockpath = G_sock_get_fname(name)) == NULL) {
+	if (verbose)
+	    G_warning(_("Failed to get socket name for monitor <%s>."), name);
+	return (NO_MON);
     }
 
     /* See if the socket exists, if it doesn't no point in trying to
      * connect to it.
      */
-    if (!G_sock_exists(sockpath))
-    {
-        if (verbose)
-            G_warning(_("No socket to connect to for monitor <%s>."), name);
-        return (NO_MON);
+    if (!G_sock_exists(sockpath)) {
+	if (verbose)
+	    G_warning(_("No socket to connect to for monitor <%s>."), name);
+	return (NO_MON);
     }
 
     /** We try to make a connection now **/
 
     _wfd = G_sock_connect(sockpath);
-    if (_wfd > 0) /* success */
-    {
+    if (_wfd > 0) {		/* success */
 	_rfd = dup(_wfd);
 	sync_driver(name);
 	return (OK);
     }
 
-    switch (errno)
-    {
+    switch (errno) {
     case ECONNREFUSED:
     case EADDRINUSE:
-	if (verbose)
-	{
-	    G_warning(_("Socket is already in use or not accepting connections."));
+	if (verbose) {
+	    G_warning(_
+		      ("Socket is already in use or not accepting connections."));
 	    G_warning(_("Use d.mon to select a monitor"));
 	}
 	return (NO_RUN);
     case EBADF:
     case ENOTSOCK:
-	if (verbose)
-	{
+	if (verbose) {
 	    G_warning(_("Trying to connect to something not a socket."));
 	    G_warning(_("Probably program error."));
 	}
 	return (NO_RUN);
     case ETIMEDOUT:
-	if (verbose)
-	{
+	if (verbose) {
 	    G_warning(_("Connect attempt timed out."));
 	    G_warning(_("Probably an error with the server."));
 	}
@@ -127,7 +120,7 @@ int REM_open_driver(void)
 
     if (verbose)
 	G_warning(_("Connection failed."));
-            
+
     /* We couldn't connect... */
     return (NO_RUN);
 }

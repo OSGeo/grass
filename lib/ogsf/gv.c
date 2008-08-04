@@ -1,20 +1,20 @@
 /*!
-  \file gv.c
- 
-  \brief OGSF library - loading and manipulating vector sets (lower level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (November 1993)
-  \author Doxygenized by Martin Landa (June 2008)
-*/
+   \file gv.c
+
+   \brief OGSF library - loading and manipulating vector sets (lower level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (November 1993)
+   \author Doxygenized by Martin Landa (June 2008)
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,13 +27,13 @@
 static geovect *Vect_top = NULL;
 
 /*!
-  \brief Get vector set
+   \brief Get vector set
 
-  \param id vector set id
+   \param id vector set id
 
-  \return pointer to geovect struct
-  \return NULL on failure
-*/
+   \return pointer to geovect struct
+   \return NULL on failure
+ */
 geovect *gv_get_vect(int id)
 {
     geovect *gv;
@@ -50,13 +50,13 @@ geovect *gv_get_vect(int id)
 }
 
 /*!
-  \brief Get previous vector set
+   \brief Get previous vector set
 
-  \param id vector set id
+   \param id vector set id
 
-  \return pointer to geovect struct
-  \return NULL on failure
-*/
+   \return pointer to geovect struct
+   \return NULL on failure
+ */
 geovect *gv_get_prev_vect(int id)
 {
     geovect *pv;
@@ -73,16 +73,16 @@ geovect *gv_get_prev_vect(int id)
 }
 
 /*!
-  \brief Get number of loaded vector sets
+   \brief Get number of loaded vector sets
 
-  \return number of vector sets
-*/
+   \return number of vector sets
+ */
 int gv_num_vects(void)
 {
     geovect *gv;
     int i;
 
-    for (i = 0, gv = Vect_top; gv; gv = gv->next, i++);
+    for (i = 0, gv = Vect_top; gv; gv = gv->next, i++) ;
 
     G_debug(4, "gv_num_vects(): num=%d", i);
 
@@ -90,11 +90,11 @@ int gv_num_vects(void)
 }
 
 /*!
-  \brief Get last loaded vector set
+   \brief Get last loaded vector set
 
-  \return pointer to geovect struct
-  \return NULL on failure (no vector set available)
-*/
+   \return pointer to geovect struct
+   \return NULL on failure (no vector set available)
+ */
 geovect *gv_get_last_vect(void)
 {
     geovect *lv;
@@ -103,19 +103,19 @@ geovect *gv_get_last_vect(void)
 	return (NULL);
     }
 
-    for (lv = Vect_top; lv->next; lv = lv->next);
+    for (lv = Vect_top; lv->next; lv = lv->next) ;
 
     G_debug(4, "gv_get_last_vect(): id=%d", lv->gvect_id);
-    
+
     return (lv);
 }
 
 /*!
-  \brief Allocate memory for new vector set
+   \brief Allocate memory for new vector set
 
-  \return pointer to geovect struct
-  \return NULL on failure
-*/
+   \return pointer to geovect struct
+   \return NULL on failure
+ */
 geovect *gv_get_new_vect(void)
 {
     geovect *nv, *lv;
@@ -143,10 +143,10 @@ geovect *gv_get_new_vect(void)
 }
 
 /*!
-  \brief Update drape surfaces
+   \brief Update drape surfaces
 
-  Call after surface is deleted
-*/
+   Call after surface is deleted
+ */
 void gv_update_drapesurfs(void)
 {
     geovect *gv;
@@ -170,13 +170,13 @@ void gv_update_drapesurfs(void)
 }
 
 /*!
-  \brief Set attributes of vector set to default values
+   \brief Set attributes of vector set to default values
 
-  \param gv pointer to geovect struct
+   \param gv pointer to geovect struct
 
-  \return -1 on error
-  \return 0 on success
-*/
+   \return -1 on error
+   \return 0 on success
+ */
 int gv_set_defaults(geovect * gv)
 {
     int i;
@@ -204,13 +204,13 @@ int gv_set_defaults(geovect * gv)
 }
 
 /*!
-  \brief Initialize geovect struct
+   \brief Initialize geovect struct
 
-  \param gv pointer to geovect struct
+   \param gv pointer to geovect struct
 
-  \return -1 on failure
-  \return 0 on succcess
-*/
+   \return -1 on failure
+   \return 0 on succcess
+ */
 int gv_init_vect(geovect * gv)
 {
     if (!gv) {
@@ -218,15 +218,15 @@ int gv_init_vect(geovect * gv)
     }
 
     G_debug(4, "gv_init_vect() id=%d", gv->gvect_id);
-    
+
     return (0);
 }
 
 /*!
-  \brief Delete vector set (unload)
+   \brief Delete vector set (unload)
 
-  \param id vector set id
-*/
+   \param id vector set id
+ */
 void gv_delete_vect(int id)
 {
     geovect *fv;
@@ -243,13 +243,13 @@ void gv_delete_vect(int id)
 }
 
 /*!
-  \brief Free allocated memory for geovect struct
+   \brief Free allocated memory for geovect struct
 
-  \param fv pointer to geovect struct
+   \param fv pointer to geovect struct
 
-  \return -1 on failure
-  \return 1 on success
-*/
+   \return -1 on failure
+   \return 1 on success
+ */
 int gv_free_vect(geovect * fv)
 {
     geovect *gv;
@@ -294,17 +294,17 @@ int gv_free_vect(geovect * fv)
 }
 
 /*!
-  \brief Free allocated memory
+   \brief Free allocated memory
 
-  \param fv pointer to geovect struct
-*/
+   \param fv pointer to geovect struct
+ */
 void gv_free_vectmem(geovect * fv)
 {
     geoline *gln, *tmpln;
 
-    G_free((void *) fv->filename);
+    G_free((void *)fv->filename);
     fv->filename = NULL;
-    
+
     if (fv->lines) {
 	for (gln = fv->lines; gln;) {
 	    if (gln->dims == 2) {
@@ -330,12 +330,12 @@ void gv_free_vectmem(geovect * fv)
 }
 
 /*!
-  \brief Set drape surfaces for vector set
+   \brief Set drape surfaces for vector set
 
-  \param gv pointer to geovect struct
-  \param hsurfs array of surfaces (id)
-  \param nsurfs number of surfaces
-*/
+   \param gv pointer to geovect struct
+   \param hsurfs array of surfaces (id)
+   \param nsurfs number of surfaces
+ */
 void gv_set_drapesurfs(geovect * gv, int *hsurfs, int nsurfs)
 {
     int i;

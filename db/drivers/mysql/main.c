@@ -1,3 +1,4 @@
+
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
@@ -19,6 +20,6 @@
 
 int main(int argc, char *argv[])
 {
-	init_dbdriver();
-	exit(db_driver(argc, argv));
+    init_dbdriver();
+    exit(db_driver(argc, argv));
 }

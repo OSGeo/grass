@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       OGR driver 
@@ -21,7 +22,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_database( dbHandle *handle )
+int db__driver_open_database(dbHandle * handle)
 {
     const char *name;
     dbConnection connection;
@@ -31,34 +32,34 @@ int db__driver_open_database( dbHandle *handle )
     name = db_get_handle_dbname(handle);
 
     /* if name is empty use connection.databaseName */
-    if ( strlen(name) == 0 ) 
+    if (strlen(name) == 0)
 	name = connection.databaseName;
 
-    G_debug(3, "db_driver_open_database() name = '%s'", name );
+    G_debug(3, "db_driver_open_database() name = '%s'", name);
 
-    OGRRegisterAll ();
+    OGRRegisterAll();
 
-    hDs = OGROpen ( name, FALSE, NULL);
+    hDs = OGROpen(name, FALSE, NULL);
 
-    if ( hDs == NULL) {
-	append_error ( "Cannot open OGR data source" );
-	report_error ();
+    if (hDs == NULL) {
+	append_error("Cannot open OGR data source");
+	report_error();
 	return DB_FAILED;
     }
 
-    G_debug(3, "Datasource opened" );
+    G_debug(3, "Datasource opened");
 
     return DB_OK;
 }
 
 int db__driver_close_database()
 {
-    G_debug(3, "db_driver_close_database()" );
+    G_debug(3, "db_driver_close_database()");
 
     init_error();
-    OGR_DS_Destroy ( hDs );
+    OGR_DS_Destroy(hDs);
 
-    G_debug(3, "Database closed" );
+    G_debug(3, "Database closed");
 
     return DB_OK;
 }

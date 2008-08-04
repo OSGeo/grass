@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *
  * Project:  libgrass
@@ -36,41 +37,42 @@
  * Returns 0 on success.
  * Returns -1 to indicate a system error (check errno).
  */
- 
 
-int G__make_mapset( const char *gisdbase_name, const char *location_name, const char *mapset_name )
+
+int G__make_mapset(const char *gisdbase_name, const char *location_name,
+		   const char *mapset_name)
 {
-    char	path[GPATH_MAX];
+    char path[GPATH_MAX];
     struct Cell_head default_window;
 
     /* Get location */
     if (location_name == NULL)
-        location_name = G_location();
-    
+	location_name = G_location();
+
     /* Get GISDBASE */
     if (gisdbase_name == NULL)
-        gisdbase_name = G_gisdbase();
-        
+	gisdbase_name = G_gisdbase();
+
     /* TODO: Should probably check that user specified location and gisdbase are valid */
-    
+
     /* Make the mapset. */
-    sprintf( path, "%s/%s/%s", gisdbase_name, location_name, mapset_name );
-    if( G_mkdir( path ) != 0 )
-        return -1;
+    sprintf(path, "%s/%s/%s", gisdbase_name, location_name, mapset_name);
+    if (G_mkdir(path) != 0)
+	return -1;
 
     G__create_alt_env();
 
     /* Get PERMANENT default window */
-    G__setenv( "GISDBASE", gisdbase_name );
-    G__setenv( "LOCATION", location_name );
-    G__setenv( "MAPSET", "PERMANENT" );
-    G_get_default_window( &default_window );
+    G__setenv("GISDBASE", gisdbase_name);
+    G__setenv("LOCATION", location_name);
+    G__setenv("MAPSET", "PERMANENT");
+    G_get_default_window(&default_window);
 
     /* Change to the new mapset */
-    G__setenv( "MAPSET", mapset_name );
+    G__setenv("MAPSET", mapset_name);
 
     /* Copy default window/regions to new mapset */
-    G__put_window( &default_window, "", "WIND" );
+    G__put_window(&default_window, "", "WIND");
 
     /* And switch back to original environment */
     G__switch_env();
@@ -99,23 +101,23 @@ int G__make_mapset( const char *gisdbase_name, const char *location_name, const 
  * \return Returns 0 on success, or generates a fatal error on failure.  
  *         The G__make_mapset() function operates the same, but returns a
  *         non-zero error code on failure, instead of terminating. 
-*/
+ */
 
-int G_make_mapset( const char *gisdbase_name, const char *location_name, const char *mapset_name )
+int G_make_mapset(const char *gisdbase_name, const char *location_name,
+		  const char *mapset_name)
 {
-    int	err;
+    int err;
 
-    err = G__make_mapset( gisdbase_name, location_name, mapset_name );
+    err = G__make_mapset(gisdbase_name, location_name, mapset_name);
 
-    if( err == 0 )
-        return 0;
+    if (err == 0)
+	return 0;
 
-    if( err == -1 )
-    {
-        perror( "G_make_mapset" );
+    if (err == -1) {
+	perror("G_make_mapset");
     }
 
-    G_fatal_error( "G_make_mapset failed." );
-    
+    G_fatal_error("G_make_mapset failed.");
+
     return 1;
 }

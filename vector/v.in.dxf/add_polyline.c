@@ -17,9 +17,11 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
     int yflag = 0;		/* indicates if a y value has been found */
     int zflag = 0;		/* indicates if a z value has been found */
     int arr_size = 0;
+
     /* variables to create arcs */
     double bulge = 0.0;		/* for arc curves */
     double prev_bulge = 0.0;	/* for arc curves */
+
     /* variables for polyface mesh */
     int vertex_flag = 0;
     int vertex_idx = 0;
@@ -69,11 +71,12 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 	     ******************************************************************/
 	    /* NOTE: code only exists for flag = 1 (closed polyline) or 0 */
 	    G_debug(1, "polyline_flag: %d", polyline_flag);
-	    if (polyline_flag & 8 || polyline_flag & 16 || polyline_flag & 17 ||
-		polyline_flag & 32)
+	    if (polyline_flag & 8 || polyline_flag & 16 || polyline_flag & 17
+		|| polyline_flag & 32)
 		if (warn_flag70) {
 		    if (!flag_list)
-			G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
+			G_warning(_
+				  ("3-d data in dxf file. Polyline_flag: %d"),
 				  polyline_flag);
 		    warn_flag70 = 0;
 		}
@@ -112,7 +115,8 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 			 * (flag_invert == 1 && is_layer_in_list == 1)
 			 * )
 			 */
-			if (layers && flag_invert == is_layer_in_list(dxf_buf))
+			if (layers &&
+			    flag_invert == is_layer_in_list(dxf_buf))
 			    return 0;
 			strcpy(layer, dxf_buf);
 			layer_flag = 1;
@@ -254,7 +258,8 @@ static void write_pnts(struct Map_info *Map, char *layer, int polyline_flag,
     /* done reading vertices */
     if (polyline_flag & 1) {	/* only dealing with polyline_flag = 1 */
 	/* check to make sure vertex points describe a closed polyline */
-	if (xpnts[0] != xpnts[arr_size - 1] || ypnts[0] != ypnts[arr_size - 1]) {
+	if (xpnts[0] != xpnts[arr_size - 1] ||
+	    ypnts[0] != ypnts[arr_size - 1]) {
 	    /* add on the vertex point to complete closed polyline */
 	    xpnts[arr_size] = xpnts[0];
 	    ypnts[arr_size] = ypnts[0];

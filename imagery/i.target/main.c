@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       i.target
@@ -30,7 +31,7 @@
 #include <grass/imagery.h>
 
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Option *group, *mapset, *loc;
     struct GModule *module;
@@ -38,80 +39,81 @@ int main (int argc, char *argv[])
     char t_mapset[GMAPSET_MAX], t_location[GMAPSET_MAX];
     char group_name[GNAME_MAX], mapset_name[GMAPSET_MAX];
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("imagery");
     module->description =
-        _("Targets an imagery group to a GRASS location and mapset.");
-        	
-    group = G_define_standard_option (G_OPT_I_GROUP);
+	_("Targets an imagery group to a GRASS location and mapset.");
+
+    group = G_define_standard_option(G_OPT_I_GROUP);
     group->gisprompt = "any,group,group";
 
     loc = G_define_option();
-    loc->key             = "location";
-    loc->type            =  TYPE_STRING;
-    loc->required        =  NO;
-    loc->description     = _("Name of imagery target location");
+    loc->key = "location";
+    loc->type = TYPE_STRING;
+    loc->required = NO;
+    loc->description = _("Name of imagery target location");
 
     mapset = G_define_option();
-    mapset->key          = "mapset";
-    mapset->type         =  TYPE_STRING;
-    mapset->required     =  NO;
-    mapset->description  = _("Name of target mapset");
+    mapset->key = "mapset";
+    mapset->type = TYPE_STRING;
+    mapset->required = NO;
+    mapset->description = _("Name of target mapset");
 
     c = G_define_flag();
-    c->key              = 'c';
-    c->description      =
+    c->key = 'c';
+    c->description =
 	_("Set current location and mapset as target for of imagery group");
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
 
     /* check if current mapset:  (imagery libs are very lacking in this dept)
-	- abort if not,
-	- remove @mapset part if it is
-    */
-    if(G__name_is_fully_qualified(group->answer, group_name, mapset_name)) {
-	if(strcmp(mapset_name, G_mapset()))
+       - abort if not,
+       - remove @mapset part if it is
+     */
+    if (G__name_is_fully_qualified(group->answer, group_name, mapset_name)) {
+	if (strcmp(mapset_name, G_mapset()))
 	    G_fatal_error(_("Group must exist in the current mapset"));
     }
     else {
-	strcpy(group_name, group->answer); /* FIXME for buffer overflow (have the parser check that?) */
+	strcpy(group_name, group->answer);	/* FIXME for buffer overflow (have the parser check that?) */
     }
 
     /* if no setting options are given, print the current target info */
-    if( !c->answer && !mapset->answer && !loc->answer ) {
+    if (!c->answer && !mapset->answer && !loc->answer) {
 
-        if (I_get_target (group_name, t_location, t_mapset))
-            G_message (_("Group <%s> targeted for location [%s], mapset [%s]"),
-                        group_name, t_location, t_mapset);
-        else
-            G_message (_("Group <%s> has no target"), group_name);
+	if (I_get_target(group_name, t_location, t_mapset))
+	    G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),
+		      group_name, t_location, t_mapset);
+	else
+	    G_message(_("Group <%s> has no target"), group_name);
 
-        exit (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
     }
 
     /* error if -c is specified with other options, or options are incomplete */
-    if( ( c->answer && ( mapset->answer ||  loc->answer)) ||
-	(!c->answer && (!mapset->answer || !loc->answer)) )
-        G_fatal_error (_("Use either the Current Mapset and "
-             "Location Flag (-c)\n OR\n manually enter the variables"));
+    if ((c->answer && (mapset->answer || loc->answer)) ||
+	(!c->answer && (!mapset->answer || !loc->answer)))
+	G_fatal_error(_("Use either the Current Mapset and "
+			"Location Flag (-c)\n OR\n manually enter the variables"));
 
     if (c->answer) {
-        /* point group target to current mapset and location */
-        I_put_target(group_name, G_location(), G_mapset());
-        G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),
-                group_name, G_location(), G_mapset());
-    } else {
-        /* point group target to specified mapset and location */
+	/* point group target to current mapset and location */
+	I_put_target(group_name, G_location(), G_mapset());
+	G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),
+		  group_name, G_location(), G_mapset());
+    }
+    else {
+	/* point group target to specified mapset and location */
 
-/* TODO: check if it is in current mapset and strip off @mapset part, if present */
+	/* TODO: check if it is in current mapset and strip off @mapset part, if present */
 
-        I_put_target(group_name, loc->answer, mapset->answer);
-        G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),
-                group_name, loc->answer, mapset->answer);
+	I_put_target(group_name, loc->answer, mapset->answer);
+	G_message(_("Group <%s> targeted for location [%s], mapset [%s]"),
+		  group_name, loc->answer, mapset->answer);
     }
 
     G_done_msg(" ");

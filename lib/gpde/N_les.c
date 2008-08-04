@@ -297,12 +297,12 @@ int N_add_spvector_to_les(N_les * les, N_spvector * spvector, int row)
  * <p>
  * Example
  \verbatim
- 
+
  2 1 1 1 * 2 = 0.1
  1 2 0 0 * 3 = 0.2
  1 0 2 0 * 3 = 0.2
  1 0 0 2 * 2 = 0.1
- 
+
  \endverbatim
  *
  * \param les N_les * 

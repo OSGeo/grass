@@ -25,52 +25,50 @@
  *   0: do not clear frame
  */
 
-int dsp_setup (int blank, struct Cell_head *cellhead)
+int dsp_setup(int blank, struct Cell_head *cellhead)
 {
     char name[128];
-    int t,b,l,r;
+    int t, b, l, r;
 
-    if (D_get_cur_wind(name))
-    {
+    if (D_get_cur_wind(name)) {
 	t = R_screen_top();
 	b = R_screen_bot();
 	l = R_screen_left();
 	r = R_screen_rite();
-	strcpy (name, "full_screen");
-	D_new_window (name, t, b, l, r);
+	strcpy(name, "full_screen");
+	D_new_window(name, t, b, l, r);
     }
 
     if (D_set_cur_wind(name))
-	G_fatal_error("Current graphics frame not available") ;
+	G_fatal_error("Current graphics frame not available");
 
     if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error("Getting graphics coordinates") ;
+	G_fatal_error("Getting graphics coordinates");
 
-/* clear the window, if requested to do so */
-    if (blank)
-    {
+    /* clear the window, if requested to do so */
+    if (blank) {
 	D_clear_window();
-	if(!cellmap_present) {
+	if (!cellmap_present) {
 	    R_standard_color(blank);
-	    R_box_abs (l, t, r, b);
+	    R_box_abs(l, t, r, b);
 	}
     }
 
     if (D_check_map_window(cellhead))
-	G_fatal_error("Setting graphics coordinates") ;
+	G_fatal_error("Setting graphics coordinates");
 
-    if(G_set_window (cellhead) < 0)
-	G_fatal_error ("Invalid graphics window coordinates");
+    if (G_set_window(cellhead) < 0)
+	G_fatal_error("Invalid graphics window coordinates");
 
-/* Determine conversion factors */
+    /* Determine conversion factors */
     if (D_do_conversions(cellhead, t, b, l, r))
-	G_fatal_error("Error calculating graphics window conversions") ;
+	G_fatal_error("Error calculating graphics window conversions");
 
-    D_set_clip_window(t,b,l,r);
+    D_set_clip_window(t, b, l, r);
 
-/* set text clipping, for good measure */
-    R_set_window (t, b, l, r);
-    R_move_abs(0,0);
-    D_move_abs(0,0);
+    /* set text clipping, for good measure */
+    R_set_window(t, b, l, r);
+    R_move_abs(0, 0);
+    D_move_abs(0, 0);
     return 0;
 }

@@ -10,7 +10,7 @@
  *  \return int
  */
 
-int rowio_fileno(const ROWIO *R)
+int rowio_fileno(const ROWIO * R)
 {
     return R->fd;
 }

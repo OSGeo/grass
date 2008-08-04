@@ -47,7 +47,8 @@ void driver_plot_icon(double x, double y, const char *icon)
 
     G_plot_where_xy(x, y, &xi, &yi);
 
-    sprintf(buf, ".screen.canvas create bitmap %d %d -bitmap @$vdpath/%s.xbm -foreground %s -anchor center",
+    sprintf(buf,
+	    ".screen.canvas create bitmap %d %d -bitmap @$vdpath/%s.xbm -foreground %s -anchor center",
 	    xi, yi, icon, color);
     if (Tcl_Eval(Toolbox, buf) != TCL_OK)
 	G_warning("driver_plot_icon: %s", Toolbox->result);
@@ -55,13 +56,15 @@ void driver_plot_icon(double x, double y, const char *icon)
 
 static void get_window(int *t, int *b, int *l, int *r)
 {
-    Tcl_Eval(Toolbox, "list 0 [winfo height .screen.canvas] 0 [winfo width .screen.canvas]");
+    Tcl_Eval(Toolbox,
+	     "list 0 [winfo height .screen.canvas] 0 [winfo width .screen.canvas]");
     sscanf(Toolbox->result, "%d %d %d %d", t, b, l, r);
 
     if (*b > 1 || *r > 1)
-	    return;
+	return;
 
-    Tcl_Eval(Toolbox, "list 0 [.screen.canvas cget -height] 0 [.screen.canvas cget -width]");
+    Tcl_Eval(Toolbox,
+	     "list 0 [.screen.canvas cget -height] 0 [.screen.canvas cget -width]");
     sscanf(Toolbox->result, "%d %d %d %d", t, b, l, r);
 }
 
@@ -74,29 +77,29 @@ static void setup(void)
 
     /* Set the map region associated with graphics frame */
     G_get_set_window(&region);
-    if(G_set_window(&region) < 0)
-	G_fatal_error ("Invalid graphics coordinates");
+    if (G_set_window(&region) < 0)
+	G_fatal_error("Invalid graphics coordinates");
 
     /* Determine conversion factors */
     if (D_do_conversions(&region, t, b, l, r))
-	G_fatal_error("Error calculating graphics-region conversions") ;
+	G_fatal_error("Error calculating graphics-region conversions");
 }
 
-int driver_refresh (void)
+int driver_refresh(void)
 {
     setup();
-    G_setup_plot (D_get_d_north(), D_get_d_south(), D_get_d_west(), D_get_d_east(),
-		  driver_move_abs, driver_cont_abs);
+    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
+		 D_get_d_east(), driver_move_abs, driver_cont_abs);
     return 1;
 }
-   
-int driver_open (void)
+
+int driver_open(void)
 {
     double n, s, e, w;
-    
+
     if (Tcl_Eval(Toolbox, "create_screen") != TCL_OK)
 	G_warning("create_screen: %s", Toolbox->result);
-    
+
 
     setup();
 
@@ -105,15 +108,14 @@ int driver_open (void)
     w = D_d_to_u_col(D_get_d_west());
     e = D_d_to_u_col(D_get_d_east());
 
-    Scale = (n - s) / ( D_get_d_south() - D_get_d_north() );
-    
-    G_setup_plot (D_get_d_north(), D_get_d_south(), D_get_d_west(), D_get_d_east(),
-		  driver_move_abs, driver_cont_abs);
+    Scale = (n - s) / (D_get_d_south() - D_get_d_north());
+
+    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
+		 D_get_d_east(), driver_move_abs, driver_cont_abs);
     return 1;
 }
 
-int driver_close (void)
+int driver_close(void)
 {
     return 1;
 }
-

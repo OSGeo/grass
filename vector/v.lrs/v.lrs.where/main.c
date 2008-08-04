@@ -1,7 +1,8 @@
 /*
-*  v.lrs.where - Find line id and real km+offset for given points in vector map
-*                using linear reference system
-*/
+ *  v.lrs.where - Find line id and real km+offset for given points in vector map
+ *                using linear reference system
+ */
+
  /******************************************************************************
  * Copyright (c) 2004, Radim Blazek (blazek@itc.it)
  *
@@ -34,67 +35,69 @@
 
 int main(int argc, char **argv)
 {
-    int    lfield, pfield, n_points, n_outside, n_found, n_no_record, n_many_records;
-    int    line, type, nlines;
+    int lfield, pfield, n_points, n_outside, n_found, n_no_record,
+	n_many_records;
+    int line, type, nlines;
     double thresh, multip;
     struct Option *lines_opt, *points_opt;
     struct Option *lfield_opt, *pfield_opt;
     struct Option *driver_opt, *database_opt, *table_opt, *thresh_opt;
     struct GModule *module;
-    char   *mapset;
+    char *mapset;
     const char *drv, *db;
     struct Map_info LMap, PMap;
-    struct line_cats *LCats, *PCats; 
+    struct line_cats *LCats, *PCats;
     struct line_pnts *LPoints, *PPoints;
     dbDriver *rsdriver;
     dbHandle rshandle;
-    dbString rsstmt;	   
+    dbString rsstmt;
 
-    G_gisinit (argv[0]) ;
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("vector, LRS, networking");
-    module->description = _("Finds line id and real km+offset for given points in vector map "
-			    "using linear reference system.");
+    module->description =
+	_("Finds line id and real km+offset for given points in vector map "
+	  "using linear reference system.");
 
     lines_opt = G_define_standard_option(G_OPT_V_INPUT);
     lines_opt->key = "lines";
     lines_opt->description = _("Input vector map containing lines");
-    
+
     points_opt = G_define_standard_option(G_OPT_V_INPUT);
     points_opt->key = "points";
     points_opt->description = _("Input vector map containing points");
-    
+
     lfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     lfield_opt->key = "llayer";
     lfield_opt->answer = "1";
     lfield_opt->description = _("Line layer");
-    
+
     pfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     pfield_opt->key = "player";
     pfield_opt->answer = "1";
     pfield_opt->description = _("Point layer");
-    
-    driver_opt = G_define_option() ;
-    driver_opt->key         = "rsdriver" ;
-    driver_opt->type        = TYPE_STRING ;
-    driver_opt->required    = NO;
+
+    driver_opt = G_define_option();
+    driver_opt->key = "rsdriver";
+    driver_opt->type = TYPE_STRING;
+    driver_opt->required = NO;
     driver_opt->description = _("Driver name for reference system table");
-    if ( (drv=db_get_default_driver_name()) )
-    driver_opt->answer = drv;
-    
-    database_opt = G_define_option() ;
-    database_opt->key         = "rsdatabase" ;
-    database_opt->type        = TYPE_STRING ;
-    database_opt->required    = NO;
+    if ((drv = db_get_default_driver_name()))
+	driver_opt->answer = drv;
+
+    database_opt = G_define_option();
+    database_opt->key = "rsdatabase";
+    database_opt->type = TYPE_STRING;
+    database_opt->required = NO;
     database_opt->description = _("Database name for reference system table");
-    if ( (db=db_get_default_database_name()) )
-    database_opt->answer = db;
-    
-    table_opt = G_define_option() ;
-    table_opt->key         = "rstable" ;
-    table_opt->type        = TYPE_STRING ;
-    table_opt->required    = YES; 
+    if ((db = db_get_default_database_name()))
+	database_opt->answer = db;
+
+    table_opt = G_define_option();
+    table_opt->key = "rstable";
+    table_opt->type = TYPE_STRING;
+    table_opt->required = YES;
     table_opt->description = _("Name of the reference system table");
 
     thresh_opt = G_define_option();
@@ -103,117 +106,125 @@ int main(int argc, char **argv)
     thresh_opt->required = NO;
     thresh_opt->answer = "1000";
     thresh_opt->description = _("Maximum distance to nearest line");
-    
-    if(G_parser(argc,argv)) exit(EXIT_FAILURE);
 
-    LCats = Vect_new_cats_struct ();
-    PCats = Vect_new_cats_struct ();
-    LPoints = Vect_new_line_struct ();
-    PPoints = Vect_new_line_struct ();
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-    
-    lfield = atoi (lfield_opt->answer);
-    pfield = atoi (pfield_opt->answer);
-    multip = 1000; /* Number of map units per MP unit */
-    thresh = atof( thresh_opt->answer);
+    LCats = Vect_new_cats_struct();
+    PCats = Vect_new_cats_struct();
+    LPoints = Vect_new_line_struct();
+    PPoints = Vect_new_line_struct();
+
+
+    lfield = atoi(lfield_opt->answer);
+    pfield = atoi(pfield_opt->answer);
+    multip = 1000;		/* Number of map units per MP unit */
+    thresh = atof(thresh_opt->answer);
 
     /* Open input lines */
-    mapset = G_find_vector2 (lines_opt->answer, NULL); 
-    if(mapset == NULL)
-	G_fatal_error (_("Vector map <%s> not found"), lines_opt->answer);
-    
-    Vect_set_open_level ( 2 );
-    Vect_open_old (&LMap, lines_opt->answer, mapset); 
+    mapset = G_find_vector2(lines_opt->answer, NULL);
+    if (mapset == NULL)
+	G_fatal_error(_("Vector map <%s> not found"), lines_opt->answer);
+
+    Vect_set_open_level(2);
+    Vect_open_old(&LMap, lines_opt->answer, mapset);
 
     /* Open input points */
-    mapset = G_find_vector2 (points_opt->answer, NULL); 
-    if(mapset == NULL)
-	G_fatal_error (_("Vector map <%s> not found"), points_opt->answer);
+    mapset = G_find_vector2(points_opt->answer, NULL);
+    if (mapset == NULL)
+	G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
-    Vect_set_open_level ( 2 );
-    Vect_open_old (&PMap, points_opt->answer, mapset); 
-    
-    db_init_handle (&rshandle);
-    db_init_string (&rsstmt);
+    Vect_set_open_level(2);
+    Vect_open_old(&PMap, points_opt->answer, mapset);
+
+    db_init_handle(&rshandle);
+    db_init_string(&rsstmt);
     rsdriver = db_start_driver(driver_opt->answer);
-    db_set_handle (&rshandle, database_opt->answer, NULL);
+    db_set_handle(&rshandle, database_opt->answer, NULL);
     if (db_open_database(rsdriver, &rshandle) != DB_OK)
-        G_fatal_error(_("Unable to open database for reference table"));
+	G_fatal_error(_("Unable to open database for reference table"));
 
     n_points = n_outside = n_found = n_no_record = n_many_records = 0;
 
-    nlines = Vect_get_num_lines ( &PMap );
-    G_debug ( 2, "nlines = %d", nlines );
+    nlines = Vect_get_num_lines(&PMap);
+    G_debug(2, "nlines = %d", nlines);
     G_message("pcat|lid|mpost|offset");
-    for ( line = 1; line <= nlines; line++ ) {
+    for (line = 1; line <= nlines; line++) {
 	int nearest, pcat, lcat, lid, ret;
 	double along, mpost, offset;
 
-	G_debug ( 3, "point = %d", line );
-	type = Vect_read_line ( &PMap, PPoints, PCats, line );
-	if ( type != GV_POINT ) continue;
-	Vect_cat_get ( PCats, pfield, &pcat );
-	if ( pcat < 0 ) continue;
+	G_debug(3, "point = %d", line);
+	type = Vect_read_line(&PMap, PPoints, PCats, line);
+	if (type != GV_POINT)
+	    continue;
+	Vect_cat_get(PCats, pfield, &pcat);
+	if (pcat < 0)
+	    continue;
 	n_points++;
-	
-        nearest = Vect_find_line(&LMap, PPoints->x[0], PPoints->y[0], 0.0, GV_LINE, thresh, 0, 0);
 
-	fprintf (stdout, "%d", pcat);
+	nearest =
+	    Vect_find_line(&LMap, PPoints->x[0], PPoints->y[0], 0.0, GV_LINE,
+			   thresh, 0, 0);
 
-	if ( nearest <= 0 ) {
-	    fprintf (stdout, "|-|-  # outside threshold\n");
+	fprintf(stdout, "%d", pcat);
+
+	if (nearest <= 0) {
+	    fprintf(stdout, "|-|-  # outside threshold\n");
 	    n_outside++;
 	    continue;
 	}
 
 	/* Read nearest line */
-	Vect_read_line ( &LMap, LPoints, LCats, nearest );
-	Vect_cat_get ( LCats, lfield, &lcat );
+	Vect_read_line(&LMap, LPoints, LCats, nearest);
+	Vect_cat_get(LCats, lfield, &lcat);
 
-	Vect_line_distance ( LPoints, PPoints->x[0], PPoints->y[0], 0.0, 0,
-                             NULL, NULL, NULL, NULL, NULL, &along);
+	Vect_line_distance(LPoints, PPoints->x[0], PPoints->y[0], 0.0, 0,
+			   NULL, NULL, NULL, NULL, NULL, &along);
 
-	G_debug ( 3, "  nearest = %d lcat = %d along = %f", nearest, lcat, along );
-	   
-	if ( lcat >= 0 ) {
-	    ret = LR_get_milepost( rsdriver, table_opt->answer, "lcat", "lid", 
-		    "start_map", "end_map", "start_mp", "start_off", "end_mp", "end_off",
-		    lcat, along, multip, &lid, &mpost, &offset );
-	} else {
+	G_debug(3, "  nearest = %d lcat = %d along = %f", nearest, lcat,
+		along);
+
+	if (lcat >= 0) {
+	    ret = LR_get_milepost(rsdriver, table_opt->answer, "lcat", "lid",
+				  "start_map", "end_map", "start_mp",
+				  "start_off", "end_mp", "end_off", lcat,
+				  along, multip, &lid, &mpost, &offset);
+	}
+	else {
 	    ret = 0;
 	}
-	
-	if ( ret == 0 ) {
+
+	if (ret == 0) {
 	    n_no_record++;
-	    fprintf (stdout, "|-|-  # no record\n");
+	    fprintf(stdout, "|-|-  # no record\n");
 	    continue;
 	}
-	if ( ret == 2 ) {
+	if (ret == 2) {
 	    n_many_records++;
-	    fprintf (stdout, "|-|-  # too many records\n");
+	    fprintf(stdout, "|-|-  # too many records\n");
 	    continue;
 	}
 
-	G_debug ( 3, "  lid = %d mpost = %f offset = %f", lid, mpost, offset );
+	G_debug(3, "  lid = %d mpost = %f offset = %f", lid, mpost, offset);
 
-	fprintf (stdout, "|%d|%f+%f\n", lid, mpost, offset);
+	fprintf(stdout, "|%d|%f+%f\n", lid, mpost, offset);
 	n_found++;
     }
-    
+
     db_close_database(rsdriver);
 
     /* Free, close ... */
     Vect_close(&LMap);
     Vect_close(&PMap);
 
-    G_message ( _("[%d] points read from input"), n_points);
-    G_message ( _("[%d] positions found"), n_found);
-    if ( n_outside )
-        G_message ( _("[%d] points outside threshold"), n_outside);
-    if ( n_no_record )
-        G_message ( _("[%d] points - no record found"), n_no_record);
-    if ( n_many_records )
-        G_message ( _("[%d] points - too many records found"), n_many_records);
+    G_message(_("[%d] points read from input"), n_points);
+    G_message(_("[%d] positions found"), n_found);
+    if (n_outside)
+	G_message(_("[%d] points outside threshold"), n_outside);
+    if (n_no_record)
+	G_message(_("[%d] points - no record found"), n_no_record);
+    if (n_many_records)
+	G_message(_("[%d] points - too many records found"), n_many_records);
 
     exit(EXIT_SUCCESS);
 }

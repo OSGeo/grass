@@ -16,7 +16,7 @@ fill_cfax(Cube, flag, index, TEMP_VERT, TEMP_NORM)
     cube_info *CUBEFAX;
 
     CUBEFAX = Cube->data;	/* make old code work w/ new structure */
-    G_debug(3, "%d npoly  %d flag\n",CUBEFAX[NTHRESH].npoly,flag);
+    G_debug(3, "%d npoly  %d flag\n", CUBEFAX[NTHRESH].npoly, flag);
 
     CUBEFAX[NTHRESH].npoly = cell_table[index].npolys;
 

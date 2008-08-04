@@ -1,3 +1,4 @@
+
 /**
  * \file unix_sockets.c
  *
@@ -58,7 +59,7 @@
  ** There's not really any difference between PF and AF in practice.
  **/
 
-static char *_get_make_sock_path (void);
+static char *_get_make_sock_path(void);
 
 static void init_sockets(void)
 {
@@ -83,50 +84,43 @@ static void init_sockets(void)
  * ($GIS_LOCK is set in lib/init/init.sh to PID) 
  * ---------------------------------------------------------------------*/
 
-static char *
-_get_make_sock_path (void)
+static char *_get_make_sock_path(void)
 {
     char *path, *user, *lock;
     const char *prefix = "/tmp/grass7";
     int len, status;
     struct stat theStat;
-    
-    user = G_whoami(); /* Don't G_free () return value ever! */
+
+    user = G_whoami();		/* Don't G_free () return value ever! */
     if (user == NULL)
-        return NULL;
-    else if (user[0] == '?') /* why's it do that? */
-    {
-        return NULL;
+	return NULL;
+    else if (user[0] == '?') {	/* why's it do that? */
+	return NULL;
     }
 
-    if ( (lock = getenv ( "GIS_LOCK" )) == NULL )
-	G_fatal_error (_("Unable to get GIS_LOCK enviroment variable value"));
+    if ((lock = getenv("GIS_LOCK")) == NULL)
+	G_fatal_error(_("Unable to get GIS_LOCK enviroment variable value"));
 
     len = strlen(prefix) + strlen(user) + strlen(lock) + 3;
-    path = G_malloc (len);
-    
-    sprintf (path, "%s-%s-%s", prefix, user, lock);
+    path = G_malloc(len);
 
-    if ((status = G_lstat (path, &theStat)) != 0)
-    {
-        status = G_mkdir (path);
+    sprintf(path, "%s-%s-%s", prefix, user, lock);
+
+    if ((status = G_lstat(path, &theStat)) != 0) {
+	status = G_mkdir(path);
     }
-    else 
-    {
-        if (!S_ISDIR (theStat.st_mode))
-        {
-            status = -1;  /* not a directory ?? */
-        }
-        else
-        {
-            status = chmod (path, S_IRWXU); /* fails if we don't own it */
-        }
+    else {
+	if (!S_ISDIR(theStat.st_mode)) {
+	    status = -1;	/* not a directory ?? */
+	}
+	else {
+	    status = chmod(path, S_IRWXU);	/* fails if we don't own it */
+	}
     }
 
-    if (status) /* something's wrong if non-zero */
-    {
-        G_free (path);
-        path = NULL;
+    if (status) {		/* something's wrong if non-zero */
+	G_free(path);
+	path = NULL;
     }
 
     return path;
@@ -172,7 +166,7 @@ static int save_port(int sockfd, const char *name)
     sockaddr_t addr;
     socklen_t size = sizeof(addr);
 
-    if (getsockname(sockfd, (struct sockaddr *) &addr, &size) != 0)
+    if (getsockname(sockfd, (struct sockaddr *)&addr, &size) != 0)
 	return -1;
 
     if (set_port(name, ntohs(addr.sin_port)) < 0)
@@ -181,7 +175,7 @@ static int save_port(int sockfd, const char *name)
     return 0;
 }
 
-static int make_address(sockaddr_t *addr, const char *name, int exists)
+static int make_address(sockaddr_t * addr, const char *name, int exists)
 {
     int port = exists ? get_port(name) : 0;
 
@@ -190,7 +184,7 @@ static int make_address(sockaddr_t *addr, const char *name, int exists)
 
     addr->sin_family = AF_INET;
     addr->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-    addr->sin_port = htons((unsigned short) port);
+    addr->sin_port = htons((unsigned short)port);
 
     return 0;
 }
@@ -200,21 +194,21 @@ static int make_address(sockaddr_t *addr, const char *name, int exists)
 #define PROTO PF_UNIX
 typedef struct sockaddr_un sockaddr_t;
 
-static int make_address(sockaddr_t *addr, const char *name, int exists)
+static int make_address(sockaddr_t * addr, const char *name, int exists)
 {
     addr->sun_family = AF_UNIX;
 
     /* The path to the unix socket must fit in sun_path[] */
     if (sizeof(addr->sun_path) < strlen(name) + 1)
-        return -1;
-    
+	return -1;
+
     strncpy(addr->sun_path, name, sizeof(addr->sun_path) - 1);
 
     return 0;
 }
 
 #endif
-        
+
 /**
  * \brief Builds full path for a UNIX socket.
  *
@@ -226,24 +220,23 @@ static int make_address(sockaddr_t *addr, const char *name, int exists)
  * \return Pointer to string socket path on success
  */
 
-char *
-G_sock_get_fname (const char *name)
+char *G_sock_get_fname(const char *name)
 {
     char *path, *dirpath;
     int len;
 
     if (name == NULL)
-        return NULL;
-    
-    dirpath = _get_make_sock_path();
-    
-    if (dirpath == NULL)
-        return NULL;
+	return NULL;
 
-    len = strlen (dirpath) + strlen(name) + 2;
-    path = G_malloc (len);
-    sprintf (path, "%s/%s", dirpath, name);
-    G_free (dirpath);
+    dirpath = _get_make_sock_path();
+
+    if (dirpath == NULL)
+	return NULL;
+
+    len = strlen(dirpath) + strlen(name) + 2;
+    path = G_malloc(len);
+    sprintf(path, "%s/%s", dirpath, name);
+    G_free(dirpath);
 
     return path;
 }
@@ -257,22 +250,21 @@ G_sock_get_fname (const char *name)
  * \return 0 if <b>name</b> does not exist
  */
 
-int
-G_sock_exists (const char *name)
+int G_sock_exists(const char *name)
 {
     struct stat theStat;
 
-    if (name == NULL || stat (name, &theStat) != 0)
-        return 0;
+    if (name == NULL || stat(name, &theStat) != 0)
+	return 0;
 
 #ifdef USE_TCP
-    if (S_ISREG (theStat.st_mode))
+    if (S_ISREG(theStat.st_mode))
 #else
-    if (S_ISSOCK (theStat.st_mode))
+    if (S_ISSOCK(theStat.st_mode))
 #endif
-        return 1;
+	return 1;
     else
-        return 0;
+	return 0;
 }
 
 
@@ -287,42 +279,40 @@ G_sock_exists (const char *name)
  * \return file descriptor on success
  */
 
-int
-G_sock_bind (const char *name)
+int G_sock_bind(const char *name)
 {
     int sockfd;
     sockaddr_t addr;
     socklen_t size;
 
     if (name == NULL)
-        return -1;
+	return -1;
 
     init_sockets();
-    
+
     /* Bind requires that the file does not exist. Force the caller
      * to make sure the socket is not in use.  The only way to test,
      * is a call to connect().
      */
-    if (G_sock_exists (name))
-    {
-        errno = EADDRINUSE;
-        return -1;
+    if (G_sock_exists(name)) {
+	errno = EADDRINUSE;
+	return -1;
     }
 
     /* must always zero socket structure */
-    memset (&addr, 0, sizeof(addr));
+    memset(&addr, 0, sizeof(addr));
 
     size = sizeof(addr);
 
     if (make_address(&addr, name, 0) < 0)
 	return -1;
 
-    sockfd = socket (PROTO, SOCK_STREAM, 0);
+    sockfd = socket(PROTO, SOCK_STREAM, 0);
     if (sockfd == INVALID_SOCKET)
-	    return -1;
+	return -1;
 
-    if (bind (sockfd, (const struct sockaddr *) &addr, size) != 0)
-        return -1;
+    if (bind(sockfd, (const struct sockaddr *)&addr, size) != 0)
+	return -1;
 
 #ifdef USE_TCP
     if (save_port(sockfd, name) < 0)
@@ -341,10 +331,9 @@ G_sock_bind (const char *name)
  * \return -1 and "errno" set on error
  */
 
-int
-G_sock_listen (int sockfd, unsigned int queue_len)
+int G_sock_listen(int sockfd, unsigned int queue_len)
 {
-    return listen (sockfd, queue_len);
+    return listen(sockfd, queue_len);
 }
 
 
@@ -359,15 +348,14 @@ G_sock_listen (int sockfd, unsigned int queue_len)
  * \return file descriptor on success
  */
 
-int
-G_sock_accept (int sockfd)
+int G_sock_accept(int sockfd)
 {
     sockaddr_t addr;
     socklen_t len = sizeof(addr);
 
-    return accept (sockfd, (struct sockaddr *) &addr, &len);
+    return accept(sockfd, (struct sockaddr *)&addr, &len);
 }
- 
+
 
 /**
  * \brief Tries to connect to the UNIX socket specified by <b>name</b>.
@@ -377,29 +365,28 @@ G_sock_accept (int sockfd)
  * \return file descriptor on success
  */
 
-int
-G_sock_connect (const char *name)
+int G_sock_connect(const char *name)
 {
     int sockfd;
     sockaddr_t addr;
 
     init_sockets();
 
-    if (!G_sock_exists (name))
-        return -1;
+    if (!G_sock_exists(name))
+	return -1;
 
     /* must always zero socket structure */
-    memset (&addr, 0, sizeof(addr));
+    memset(&addr, 0, sizeof(addr));
 
     if (make_address(&addr, name, 1) < 0)
 	return -1;
 
-    sockfd = socket (PROTO, SOCK_STREAM, 0);
+    sockfd = socket(PROTO, SOCK_STREAM, 0);
     if (sockfd == INVALID_SOCKET)
 	return -1;
 
-    if (connect (sockfd, (struct sockaddr *) &addr, sizeof(addr)) != 0)
-        return -1;
+    if (connect(sockfd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+	return -1;
     else
 	return sockfd;
 }

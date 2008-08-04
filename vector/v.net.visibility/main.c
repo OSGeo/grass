@@ -68,7 +68,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    Vect_check_input_output_name(input->answer, output->answer, GV_FATAL_EXIT);
+    Vect_check_input_output_name(input->answer, output->answer,
+				 GV_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -83,8 +84,7 @@ int main(int argc, char *argv[])
 
     if (Vect_open_new(&out, output->answer, WITHOUT_Z) < 0) {
 	Vect_close(&in);
-	G_fatal_error(_("Unable to create vector map <%s>"),
-		      output->answer);
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
     }
 
     if (ovis->answer != NULL) {
@@ -144,6 +144,7 @@ int main(int argc, char *argv[])
 int count_new(char **coor)
 {
     int n, i;
+
     /* first count how many points we are going to add */
     n = 0;
     i = 0;
@@ -338,7 +339,8 @@ void process_boundary(struct line_pnts *sites, struct Point **points,
 	(*points)[*index_point].y = sites->y[i];
 
 	if (i == 0) {
-	    (*points)[*index_point].line1 = &((*lines)[(*index_line) + n - 2]);
+	    (*points)[*index_point].line1 =
+		&((*lines)[(*index_line) + n - 2]);
 	    (*points)[*index_point].line2 = &((*lines)[*index_line]);
 	}
 	else {

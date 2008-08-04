@@ -1,3 +1,4 @@
+
 /**
  * \file zone.c
  *
@@ -24,11 +25,11 @@
  * \return int cartographic zone
  */
 
-int G_zone (void)
+int G_zone(void)
 {
     struct Cell_head window;
 
-    G_get_set_window (&window);
+    G_get_set_window(&window);
 
     return window.zone;
 }

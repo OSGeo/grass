@@ -1,3 +1,4 @@
+
 /**********************************************************************
    std_incs.h       - header file for standard includes
  *********************************************************************/
@@ -5,9 +6,10 @@
 #define STD_INCS_H
 
 #include <X11/Xos.h>
-extern  char *calloc();	/* removed <malloc.h> GRASS930313 parghi 1993-03-30 */
-extern  char *malloc();
-extern  char *realloc();
+extern char *calloc();		/* removed <malloc.h> GRASS930313 parghi 1993-03-30 */
+extern char *malloc();
+extern char *realloc();
+
 #include <ctype.h>
 #include <errno.h>
 #include <math.h>

@@ -1,16 +1,15 @@
 /* Function: make_procs
-**
-** This function creates some commonly used PostScript procedures.
-**
-** Author: Paul W. Carlson	March 1992
-*/
+ **
+ ** This function creates some commonly used PostScript procedures.
+ **
+ ** Author: Paul W. Carlson     March 1992
+ */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "ps_info.h"
 
-int 
-make_procs (void)
+int make_procs(void)
 {
     char filename[1024];
     FILE *fp;
@@ -29,9 +28,9 @@ make_procs (void)
     if (!fp)
 	G_fatal_error(_("Unable to open prolog <%s>"), filename);
 
-    for (;;)
-    {
+    for (;;) {
 	char buff[80];
+
 	if (!fgets(buff, sizeof(buff), fp))
 	    break;
 	fputs(buff, PS.fp);

@@ -1,3 +1,3 @@
-#ifndef _SEARCH_H                                                               
-#define _SEARCH_H                                                               
+#ifndef _SEARCH_H
+#define _SEARCH_H
 #endif

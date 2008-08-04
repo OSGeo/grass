@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -22,72 +23,73 @@
 #include "distance.h"
 #include <grass/glocale.h>
 
-static int cmp (const void *, const void *);
-static int scan_dist (char *, double *);
+static int cmp(const void *, const void *);
+static int scan_dist(char *, double *);
 
 
-int parse_distances (char **zone_list, double to_meters)
+int parse_distances(char **zone_list, double to_meters)
 {
     double dist;
     double ew2 = 0.0;
     int i;
     int count;
 
-    for (count = 0; zone_list[count]; count++)
-	;
-    if (count <= 0) return 0;
+    for (count = 0; zone_list[count]; count++) ;
+    if (count <= 0)
+	return 0;
 
-	/* create an array to hold the distances */
+    /* create an array to hold the distances */
 
-    distances = (struct Distance *) G_calloc (count, sizeof(struct Distance));
+    distances = (struct Distance *)G_calloc(count, sizeof(struct Distance));
 
-	/* scan the command line for the distances */
+    /* scan the command line for the distances */
 
-    if (window.proj != PROJECTION_LL)
-    {
+    if (window.proj != PROJECTION_LL) {
 	ew2 = window.ew_res * window.ew_res;
 	ns_to_ew_squared = window.ns_res * window.ns_res / ew2;
     }
 
-    for (i = 0; i < count; i++)
-    {
-	if (!scan_dist(zone_list[i], &dist))
-	{
+    for (i = 0; i < count; i++) {
+	if (!scan_dist(zone_list[i], &dist)) {
 	    G_warning(_("%s: %s - illegal distance specification"),
-		pgm_name, zone_list[i]);
+		      pgm_name, zone_list[i]);
 	    return 0;
 	}
-	else
-	{
+	else {
 	    dist *= (to_meters * meters_to_grid);
 	    if (window.proj != PROJECTION_LL)
-		dist = dist*dist/ew2;
+		dist = dist * dist / ew2;
 	    distances[i].dist = dist;
 	}
 	distances[i].label = zone_list[i];
     }
 
-	/* sort the distances in increasing order */
+    /* sort the distances in increasing order */
 
-    qsort (distances, count, sizeof(struct Distance), cmp);
+    qsort(distances, count, sizeof(struct Distance), cmp);
 
     return count;
 }
 
-static int cmp (const void *aa, const void *bb)
+static int cmp(const void *aa, const void *bb)
 {
     const struct Distance *a = aa, *b = bb;
-    if (a->dist < b->dist) return -1;
+
+    if (a->dist < b->dist)
+	return -1;
     return a->dist > b->dist;
 }
 
-static int scan_dist (char *s, double *dist)
+static int scan_dist(char *s, double *dist)
 {
     char dummy[2];
 
     *dummy = 0;
-    if (sscanf (s, "%lf%1s", dist, dummy) != 1) return 0;
-    if (*dummy) return 0;
-    if (*dist <= 0.0) return 0;
+    if (sscanf(s, "%lf%1s", dist, dummy) != 1)
+	return 0;
+    if (*dummy)
+	return 0;
+    if (*dist <= 0.0)
+	return 0;
     return 1;
 }

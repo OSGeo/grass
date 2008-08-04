@@ -1,3 +1,4 @@
+
 /**
  * \file debug.c
  *
@@ -23,7 +24,7 @@
 #include <grass/segment.h>
 
 
-static int check(const SEGMENT *,int,int,char *);
+static int check(const SEGMENT *, int, int, char *);
 
 
 /**
@@ -44,19 +45,19 @@ static int check(const SEGMENT *,int,int,char *);
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_get (SEGMENT *SEG,void *buf,int row,int col)
+int segment_get(SEGMENT * SEG, void *buf, int row, int col)
 {
     int index, n;
 
     if (!check(SEG, row, col, "segment_get"))
 	return -1;
 
-    segment_address (SEG, row, col, &n, &index);
-    if((i = segment_pagein (SEG, n)) < 0)
+    segment_address(SEG, row, col, &n, &index);
+    if ((i = segment_pagein(SEG, n)) < 0)
 	return -1;
 
     memcpy(buf, &SEG->scb[i].buf[index], SEG->len);
-    
+
     return 1;
 }
 
@@ -82,15 +83,15 @@ int segment_get (SEGMENT *SEG,void *buf,int row,int col)
  * \return -1 if unable to seek or write segment file
  */
 
-int segment_put (SEGMENT *SEG,const void *buf,int row,int col)
+int segment_put(SEGMENT * SEG, const void *buf, int row, int col)
 {
     int index, n;
 
     if (!check(SEG, row, col, "segment_put"))
 	return -1;
 
-    segment_address (SEG, row, col, &n, &index);
-    if((i = segment_pagein (SEG, n)) < 0)
+    segment_address(SEG, row, col, &n, &index);
+    if ((i = segment_pagein(SEG, n)) < 0)
 	return -1;
 
     SEG->scb[i].dirty = 1;
@@ -101,28 +102,27 @@ int segment_put (SEGMENT *SEG,const void *buf,int row,int col)
 }
 
 
-static int check(const SEGMENT *SEG,int row,int col,char *me)
+static int check(const SEGMENT * SEG, int row, int col, char *me)
 {
     int r = row >= 0 && row < SEG->nrows;
     int c = col >= 0 && col < SEG->ncols;
 
-    if (r && c) return 1;
+    if (r && c)
+	return 1;
 
-    fprintf (stderr, "%s(SEG=%lx,fd=%d,row=%d,col=%d) ",
-	me, (unsigned long int)SEG, SEG->fd, row, col);
-    if (!r)
-    {
-	fprintf (stderr, "bad row ");
+    fprintf(stderr, "%s(SEG=%lx,fd=%d,row=%d,col=%d) ",
+	    me, (unsigned long int)SEG, SEG->fd, row, col);
+    if (!r) {
+	fprintf(stderr, "bad row ");
 	if (row >= SEG->nrows)
-	    fprintf (stderr, "(max %d) ", SEG->nrows-1);
+	    fprintf(stderr, "(max %d) ", SEG->nrows - 1);
     }
-    if (!c)
-    {
-	fprintf (stderr, "bad col ");
+    if (!c) {
+	fprintf(stderr, "bad col ");
 	if (col >= SEG->ncols)
-	    fprintf (stderr, "(max %d) ", SEG->ncols-1);
+	    fprintf(stderr, "(max %d) ", SEG->ncols - 1);
     }
-    fprintf (stderr, "\n");
+    fprintf(stderr, "\n");
 
     return 0;
 }

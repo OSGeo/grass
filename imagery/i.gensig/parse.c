@@ -5,8 +5,7 @@
 #include "parms.h"
 
 
-int 
-parse (int argc, char *argv[], struct parms *parms)
+int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *trainingmap;
 
@@ -36,7 +35,8 @@ parse (int argc, char *argv[], struct parms *parms)
     sigfile->required = YES;
     sigfile->type = TYPE_STRING;
 
-    if (G_parser(argc,argv)) exit(1);
+    if (G_parser(argc, argv))
+	exit(1);
 
     parms->training_map = trainingmap->answer;
     parms->group = group->answer;
@@ -44,14 +44,14 @@ parse (int argc, char *argv[], struct parms *parms)
     parms->sigfile = sigfile->answer;
 
     /* check all the inputs */
-    if(G_find_cell(parms->training_map, "") == NULL)
-        G_fatal_error(_("Raster map <%s> not found"), parms->training_map);
+    if (G_find_cell(parms->training_map, "") == NULL)
+	G_fatal_error(_("Raster map <%s> not found"), parms->training_map);
 
     if (!I_find_group(parms->group))
-        G_fatal_error(_("Group <%s> not found"), parms->group);
+	G_fatal_error(_("Group <%s> not found"), parms->group);
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
-        G_fatal_error(_("Subgroup <%s> not found"), parms->subgroup);
+	G_fatal_error(_("Subgroup <%s> not found"), parms->subgroup);
 
     return 0;
 }

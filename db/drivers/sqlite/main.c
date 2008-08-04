@@ -1,3 +1,4 @@
+
 /***********************************************************
 *
 * MODULE:       SQLite driver 
@@ -19,9 +20,8 @@
 
 sqlite3 *sqlite;
 
-int main (int argc, char *argv[])
-
+int main(int argc, char *argv[])
 {
-	init_dbdriver();
-	exit (db_driver (argc, argv));
+    init_dbdriver();
+    exit(db_driver(argc, argv));
 }

@@ -27,67 +27,63 @@
  *    returns: 0 on error, 1 otherwise
  */
 
-int extend_line (double s, double n, double w, double e,
-  double a, double b, double c, double x, double y,
-  double *c_x, double *c_y, int knownPointAtLeft)
+int extend_line(double s, double n, double w, double e,
+		double a, double b, double c, double x, double y,
+		double *c_x, double *c_y, int knownPointAtLeft)
 {
-  double nx, ny; /* intesection coordinates */
+    double nx, ny;		/* intesection coordinates */
 
-  if (x > w && x < e && y > s && y < n)
-  {
-    /* vertical line? */
-    if(a == 0)
-    {
-        *c_y = c / b;
-        *c_x = knownPointAtLeft ? s : n;
-    }
+    if (x > w && x < e && y > s && y < n) {
+	/* vertical line? */
+	if (a == 0) {
+	    *c_y = c / b;
+	    *c_x = knownPointAtLeft ? s : n;
+	}
 
-    /* horizontal line? */
-    if(b == 0)
-    {
-        *c_x = c / a;
-        *c_y = knownPointAtLeft ? e : w;
-    }
+	/* horizontal line? */
+	if (b == 0) {
+	    *c_x = c / a;
+	    *c_y = knownPointAtLeft ? e : w;
+	}
 
-    /* south */
-    nx = (c - b * s) / a;
-    if(Vect_point_in_box(nx,s,0.0,&Box) &&
-       ((nx >  x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
-    {
-        *c_x = nx;
-        *c_y = s;
-        return 1;
-    }
+	/* south */
+	nx = (c - b * s) / a;
+	if (Vect_point_in_box(nx, s, 0.0, &Box) &&
+	    ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
+	{
+	    *c_x = nx;
+	    *c_y = s;
+	    return 1;
+	}
 
-    /* north */
-    nx = (c - b * n) / a;
-    if( Vect_point_in_box(nx,n,0.0,&Box) &&
-       ((nx >  x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
-    {
-        *c_x = nx;
-        *c_y = n;
-        return 1;
-    }
+	/* north */
+	nx = (c - b * n) / a;
+	if (Vect_point_in_box(nx, n, 0.0, &Box) &&
+	    ((nx > x && knownPointAtLeft) || (nx <= x && !knownPointAtLeft)))
+	{
+	    *c_x = nx;
+	    *c_y = n;
+	    return 1;
+	}
 
-    if(knownPointAtLeft) {
-        /* east */
-        ny = (c - a * e) / b;
-        if(Vect_point_in_box(e,ny,0.0,&Box))
-        {
-            *c_x = e;
-            *c_y = ny;
-            return 1;
-        }
-    } else {
-        /* west */
-        ny = (c - a * w) / b;
-        if(Vect_point_in_box(w,ny,0.0,&Box))
-        {
-            *c_x = w;
-            *c_y = ny;
-            return 1;
-        }
+	if (knownPointAtLeft) {
+	    /* east */
+	    ny = (c - a * e) / b;
+	    if (Vect_point_in_box(e, ny, 0.0, &Box)) {
+		*c_x = e;
+		*c_y = ny;
+		return 1;
+	    }
+	}
+	else {
+	    /* west */
+	    ny = (c - a * w) / b;
+	    if (Vect_point_in_box(w, ny, 0.0, &Box)) {
+		*c_x = w;
+		*c_y = ny;
+		return 1;
+	    }
+	}
     }
-  }
-  return 0;
+    return 0;
 }

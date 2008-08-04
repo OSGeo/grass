@@ -4,15 +4,15 @@
 #include "globals.h"
 
 /* error.c */
-void init_error ( void );
-void append_error ( const char * );
-void report_error ( void );
+void init_error(void);
+void append_error(const char *);
+void report_error(void);
 
 /* cursor.c */
-cursor * alloc_cursor ();
-void free_cursor ( cursor * );
+cursor *alloc_cursor();
+void free_cursor(cursor *);
 
-/* describe.c*/
-int describe_table ( sqlite3_stmt *, dbTable **, cursor * );
+/* describe.c */
+int describe_table(sqlite3_stmt *, dbTable **, cursor *);
 
 #endif /* __SQLITE_PROTO_H__ */

@@ -25,156 +25,154 @@
 #include "proto.h"
 
 /* This function is started from the GUI, it regularly updates GUI and checks GUI requirements. 
-*  If Tool_next is set by GUI, the tool is started by the tool_centre()
-*/
-void
-tool_centre ( void )
+ *  If Tool_next is set by GUI, the tool is started by the tool_centre()
+ */
+void tool_centre(void)
 {
     /* Init variables */
-    var_init ();
+    var_init();
 
     /* Init snap */
-    var_seti ( VAR_SNAP, 1 );
-    var_seti ( VAR_SNAP_MODE, SNAP_SCREEN );
-    var_seti ( VAR_SNAP_SCREEN, 10 );
-    var_setd ( VAR_SNAP_MAP, 10 );
+    var_seti(VAR_SNAP, 1);
+    var_seti(VAR_SNAP_MODE, SNAP_SCREEN);
+    var_seti(VAR_SNAP_SCREEN, 10);
+    var_setd(VAR_SNAP_MAP, 10);
 
     G_get_window(&window);
 
     /* Set tool */
     Tool_next = TOOL_NOTHING;
-    
-    /* Display the map */
-    symb_init ();
-    G_get_window(&window);
-    driver_open ();
-    display_erase ();
-    display_bg ();
-    display_map ();
-    driver_close ();
 
-    symb_init_gui ();
-    i_prompt ( "Select tool");
+    /* Display the map */
+    symb_init();
+    G_get_window(&window);
+    driver_open();
+    display_erase();
+    display_bg();
+    display_map();
+    driver_close();
+
+    symb_init_gui();
+    i_prompt("Select tool");
 }
 
 void next_tool(void)
 {
-    switch ( Tool_next )
-    {
-    case TOOL_EXIT :
-	G_debug (2, "Quit" );
+    switch (Tool_next) {
+    case TOOL_EXIT:
+	G_debug(2, "Quit");
 	end();
 	break;
-    case TOOL_NEW_POINT :
-	/* Tool_next = TOOL_NOTHING; */ /* Commented -> Draw next one once first is done */
-	new_line ( GV_POINT );
+    case TOOL_NEW_POINT:
+	/* Tool_next = TOOL_NOTHING; *//* Commented -> Draw next one once first is done */
+	new_line(GV_POINT);
 	break;
-    case TOOL_NEW_LINE :
-	new_line ( GV_LINE );
+    case TOOL_NEW_LINE:
+	new_line(GV_LINE);
 	break;
-    case TOOL_NEW_BOUNDARY :
-	new_line ( GV_BOUNDARY );
+    case TOOL_NEW_BOUNDARY:
+	new_line(GV_BOUNDARY);
 	break;
-    case TOOL_NEW_CENTROID :
-	new_line ( GV_CENTROID );
+    case TOOL_NEW_CENTROID:
+	new_line(GV_CENTROID);
 	break;
-    case TOOL_MOVE_VERTEX :
+    case TOOL_MOVE_VERTEX:
 	Tool_next = TOOL_NOTHING;
-	move_vertex ();
+	move_vertex();
 	break;
-    case TOOL_ADD_VERTEX :
+    case TOOL_ADD_VERTEX:
 	Tool_next = TOOL_NOTHING;
-	add_vertex ();
+	add_vertex();
 	break;
-    case TOOL_RM_VERTEX :
+    case TOOL_RM_VERTEX:
 	Tool_next = TOOL_NOTHING;
-	rm_vertex ();
+	rm_vertex();
 	break;
-    case TOOL_SPLIT_LINE :
+    case TOOL_SPLIT_LINE:
 	Tool_next = TOOL_NOTHING;
-	split_line ();
+	split_line();
 	break;
-    case TOOL_EDIT_LINE :
+    case TOOL_EDIT_LINE:
 	Tool_next = TOOL_NOTHING;
-	edit_line ();
+	edit_line();
 	break;
-    case TOOL_MOVE_LINE :
+    case TOOL_MOVE_LINE:
 	Tool_next = TOOL_NOTHING;
-	move_line ();
+	move_line();
 	break;
-    case TOOL_DELETE_LINE :
+    case TOOL_DELETE_LINE:
 	Tool_next = TOOL_NOTHING;
-	delete_line ();
+	delete_line();
 	break;
-    case TOOL_DISPLAY_CATS :
+    case TOOL_DISPLAY_CATS:
 	Tool_next = TOOL_NOTHING;
-	display_cats ();
+	display_cats();
 	break;
-    case TOOL_COPY_CATS :
+    case TOOL_COPY_CATS:
 	Tool_next = TOOL_NOTHING;
-	copy_cats ();
+	copy_cats();
 	break;
-    case TOOL_DISPLAY_ATTRIBUTES :
+    case TOOL_DISPLAY_ATTRIBUTES:
 	Tool_next = TOOL_NOTHING;
-	display_attributes ();
+	display_attributes();
 	break;
-    case TOOL_DISPLAY_SETTINGS :
+    case TOOL_DISPLAY_SETTINGS:
 	Tool_next = TOOL_NOTHING;
 	Tcl_Eval(Toolbox, "settings");
 	break;
-    case TOOL_ZOOM_WINDOW :
+    case TOOL_ZOOM_WINDOW:
 	Tool_next = TOOL_NOTHING;
-	zoom_window ();
+	zoom_window();
 	break;
-    case TOOL_ZOOM_OUT_CENTRE :
+    case TOOL_ZOOM_OUT_CENTRE:
 	Tool_next = TOOL_NOTHING;
-	zoom_centre ( 2 );
+	zoom_centre(2);
 	break;
-    case TOOL_ZOOM_PAN :
+    case TOOL_ZOOM_PAN:
 	Tool_next = TOOL_NOTHING;
-	zoom_pan ();
+	zoom_pan();
 	break;
-    case TOOL_ZOOM_DEFAULT :
+    case TOOL_ZOOM_DEFAULT:
 	Tool_next = TOOL_NOTHING;
-	zoom_default ();
+	zoom_default();
 	break;
-    case TOOL_ZOOM_REGION :
+    case TOOL_ZOOM_REGION:
 	Tool_next = TOOL_NOTHING;
-	zoom_region ();
+	zoom_region();
 	break;
-    case TOOL_REDRAW :
+    case TOOL_REDRAW:
 	Tool_next = TOOL_NOTHING;
 	driver_open();
 	display_redraw();
 	driver_close();
 	break;
-    case TOOL_NOTHING :
+    case TOOL_NOTHING:
 	break;
     }
 }
 
 /* This function is regularly called from R_get_location_*() functions to enable GUI to kill running tool */
-void update ( int wx, int wy )
+void update(int wx, int wy)
 {
     double x, y;
-    
-    G_debug (5, "Update function wx = %d wy = %d", wx, wy);
 
-    if ( wx != COOR_NULL && wy != COOR_NULL ) {
-        x = D_d_to_u_col ( wx ); 
-	y = D_d_to_u_row ( wy );
-        i_coor ( x, y);
+    G_debug(5, "Update function wx = %d wy = %d", wx, wy);
+
+    if (wx != COOR_NULL && wy != COOR_NULL) {
+	x = D_d_to_u_col(wx);
+	y = D_d_to_u_row(wy);
+	i_coor(x, y);
     }
 }
 
-void end ( void ) 
+void end(void)
 {
-    G_debug (1, "end()");
-    Vect_build_partial (&Map, GV_BUILD_NONE, NULL);
-    Vect_build ( &Map, stdout );
-    Vect_close (&Map);
+    G_debug(1, "end()");
+    Vect_build_partial(&Map, GV_BUILD_NONE, NULL);
+    Vect_build(&Map, stdout);
+    Vect_close(&Map);
 
-    if( 1 == G_put_window(&GRegion) )
+    if (1 == G_put_window(&GRegion))
 	G_message(_("Region restored to original extent."));
 
     /* clear the screen */

@@ -7,7 +7,7 @@
 #include <grass/datetime.h>
 
 
-static int have(int x, const DateTime *dt)
+static int have(int x, const DateTime * dt)
 {
     return datetime_is_between(x, dt->from, dt->to);
 }
@@ -23,9 +23,7 @@ static int have(int x, const DateTime *dt)
  *  \return int
  */
 
-int datetime_check_timezone (
-    const DateTime *dt,
-    int minutes)
+int datetime_check_timezone(const DateTime * dt, int minutes)
 {
     if (!datetime_is_absolute(dt))
 	return datetime_error(-1, "datetime not absolute");
@@ -48,8 +46,7 @@ int datetime_check_timezone (
  *  \return int
  */
 
-int 
-datetime_get_timezone (const DateTime *dt, int *minutes)
+int datetime_get_timezone(const DateTime * dt, int *minutes)
 {
     int stat;
 
@@ -71,8 +68,7 @@ datetime_get_timezone (const DateTime *dt, int *minutes)
  *  \return int
  */
 
-int 
-datetime_set_timezone (DateTime *dt, int minutes)
+int datetime_set_timezone(DateTime * dt, int minutes)
 {
     int stat;
 
@@ -93,8 +89,7 @@ datetime_set_timezone (DateTime *dt, int minutes)
  *  \return int
  */
 
-int 
-datetime_unset_timezone (DateTime *dt)
+int datetime_unset_timezone(DateTime * dt)
 {
     dt->tz = -9999;
 
@@ -113,8 +108,7 @@ datetime_unset_timezone (DateTime *dt)
  *  \return int
  */
 
-int 
-datetime_is_valid_timezone (int minutes)
+int datetime_is_valid_timezone(int minutes)
 {
     return (minutes >= -720 && minutes <= 780);
 }

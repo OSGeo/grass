@@ -14,18 +14,18 @@
 
 enum signal_action
 {
-	SSA_NONE,
-	SSA_IGNORE,
-	SSA_DEFAULT,
-	SSA_BLOCK,
-	SSA_UNBLOCK,
+    SSA_NONE,
+    SSA_IGNORE,
+    SSA_DEFAULT,
+    SSA_BLOCK,
+    SSA_UNBLOCK,
 };
 
 enum signal_type
 {
-	SST_PRE,
-	SST_POST,
-	SST_CHILD,
+    SST_PRE,
+    SST_POST,
+    SST_CHILD,
 };
 
 extern int G_spawn(const char *command, ...);
@@ -33,4 +33,3 @@ extern int G_spawn_ex(const char *command, ...);
 extern int G_vspawn_ex(const char *command, const char **args);
 
 #endif
-

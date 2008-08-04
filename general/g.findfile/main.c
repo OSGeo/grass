@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.findfile
@@ -20,84 +21,83 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int main( int   argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	char file[1024], name[GNAME_MAX], *mapset;
-	char *search_mapset;
-	struct GModule *module;
-	struct Option *opt1 ;
-	struct Option *opt2 ;
-	struct Option *opt3 ;
+    char file[1024], name[GNAME_MAX], *mapset;
+    char *search_mapset;
+    struct GModule *module;
+    struct Option *opt1;
+    struct Option *opt2;
+    struct Option *opt3;
 
-	module = G_define_module();
-	module->keywords = _("general");
-	module->description =
-		"Searches for GRASS data base files "
-		"and sets variables for the shell.";
+    module = G_define_module();
+    module->keywords = _("general");
+    module->description =
+	"Searches for GRASS data base files "
+	"and sets variables for the shell.";
 
-	G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
-	/* Define the different options */
+    /* Define the different options */
 
-	opt1 = G_define_option() ;
-	opt1->key        = "element";
-	opt1->type       = TYPE_STRING;
-	opt1->required   = YES;
-	opt1->description= "Name of an element" ;
+    opt1 = G_define_option();
+    opt1->key = "element";
+    opt1->type = TYPE_STRING;
+    opt1->required = YES;
+    opt1->description = "Name of an element";
 
-	opt2 = G_define_option() ;
-	opt2->key        = "mapset";
-	opt2->type       = TYPE_STRING;
-	opt2->required   = NO;
-	opt2->description= "Name of a mapset" ;
-	opt2->answer     = "";
+    opt2 = G_define_option();
+    opt2->key = "mapset";
+    opt2->type = TYPE_STRING;
+    opt2->required = NO;
+    opt2->description = "Name of a mapset";
+    opt2->answer = "";
 
-	opt3 = G_define_option() ;
-	opt3->key        = "file";
-	opt3->type       = TYPE_STRING;
-	opt3->required   = YES;
-	opt3->description= "Name of an existing map" ;
+    opt3 = G_define_option();
+    opt3->key = "file";
+    opt3->type = TYPE_STRING;
+    opt3->required = YES;
+    opt3->description = "Name of an existing map";
 
-	if (G_parser(argc, argv))
-		exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-	search_mapset = opt2->answer ;
-	if(strcmp (".", search_mapset) == 0)
-	    search_mapset = G_mapset();
+    search_mapset = opt2->answer;
+    if (strcmp(".", search_mapset) == 0)
+	search_mapset = G_mapset();
 
-	if ( opt2->answer && strlen(opt2->answer) > 0 ){
-	   char **map_mapset = G_tokenize(opt3->answer, "@");
-	   
-	   if ( G_number_of_tokens(map_mapset) > 1 ){
-		if( strcmp(map_mapset[1],opt2->answer) )
-		    G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"), map_mapset[1], opt2->answer);
-		else
-		    strcpy (name, opt3->answer);
-	   }
-	   if ( G_number_of_tokens(map_mapset) == 1 )
-	      strcpy (name, opt3->answer);
-	   G_free_tokens(map_mapset);
-	} else
-	   strcpy (name, opt3->answer);
+    if (opt2->answer && strlen(opt2->answer) > 0) {
+	char **map_mapset = G_tokenize(opt3->answer, "@");
 
-	mapset = G_find_file2 (opt1->answer, name, search_mapset);
-	if (mapset)
-	{
-		fprintf (stdout,"name='%s'\n",name);
-		fprintf (stdout,"mapset='%s'\n",mapset);
-		fprintf (stdout,"fullname='%s'\n",G_fully_qualified_name(name,mapset));
-		G__file_name (file, opt1->answer, name, mapset);
-		fprintf (stdout,"file='%s'\n",file);
+	if (G_number_of_tokens(map_mapset) > 1) {
+	    if (strcmp(map_mapset[1], opt2->answer))
+		G_fatal_error(_
+			      ("Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"),
+			      map_mapset[1], opt2->answer);
+	    else
+		strcpy(name, opt3->answer);
 	}
-	else
-	{
-		fprintf (stdout,"name=\n");
-		fprintf (stdout,"mapset=\n");
-		fprintf (stdout,"fullname=\n");
-		fprintf (stdout,"file=\n");
-	}
-	exit(mapset==NULL);
+	if (G_number_of_tokens(map_mapset) == 1)
+	    strcpy(name, opt3->answer);
+	G_free_tokens(map_mapset);
+    }
+    else
+	strcpy(name, opt3->answer);
+
+    mapset = G_find_file2(opt1->answer, name, search_mapset);
+    if (mapset) {
+	fprintf(stdout, "name='%s'\n", name);
+	fprintf(stdout, "mapset='%s'\n", mapset);
+	fprintf(stdout, "fullname='%s'\n",
+		G_fully_qualified_name(name, mapset));
+	G__file_name(file, opt1->answer, name, mapset);
+	fprintf(stdout, "file='%s'\n", file);
+    }
+    else {
+	fprintf(stdout, "name=\n");
+	fprintf(stdout, "mapset=\n");
+	fprintf(stdout, "fullname=\n");
+	fprintf(stdout, "file=\n");
+    }
+    exit(mapset == NULL);
 }
-
-
-

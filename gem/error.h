@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            tools.h
  *
@@ -20,14 +21,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _ERROR_H
 #define _ERROR_H
 
-void print_error ( int err_code, char *msg,...) __attribute__((format(printf,2,3)));
+void print_error(int err_code, char *msg, ...)
+    __attribute__ ((format(printf, 2, 3)));
 
-void print_warning ( char *msg,...) __attribute__((format(printf,1,2)));
+void print_warning(char *msg, ...) __attribute__ ((format(printf, 1, 2)));
 
-void print_done ( void );
+void print_done(void);
 
 #endif /* _ERROR_H */

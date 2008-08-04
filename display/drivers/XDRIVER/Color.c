@@ -14,19 +14,17 @@ int current_color;
 
 void XD_color(int number)
 {
-	if (number >= NCOLORS || number < 0)
-	{
-		G_warning("Color: can't set color %d\n", number);
-		return;
-	}
+    if (number >= NCOLORS || number < 0) {
+	G_warning("Color: can't set color %d\n", number);
+	return;
+    }
 
+    current_color = number;
+
+    if (use_visual->class >= TrueColor)
 	current_color = number;
+    else
+	current_color = xpixels[number];
 
-	if (use_visual->class >= TrueColor)
-		current_color = number;
-	else
-		current_color = xpixels[number];
-
-	XSetForeground(dpy, gc, current_color);
+    XSetForeground(dpy, gc, current_color);
 }
-

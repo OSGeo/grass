@@ -53,7 +53,8 @@ int main(int argc, char *argv[])
     output->multiple = NO;
     output->gisprompt = "new_file,file,output";
     output->description =
-	_("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
+	_
+	("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
 
     format_opt = G_define_option();
     format_opt->key = "format";
@@ -75,8 +76,8 @@ int main(int argc, char *argv[])
     dp_opt->key = "dp";
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
-    dp_opt->options  = "0-32";
-    dp_opt->answer   = "8"; /*This value is taken from the lib settings in G_format_easting() */
+    dp_opt->options = "0-32";
+    dp_opt->answer = "8";	/*This value is taken from the lib settings in G_format_easting() */
     dp_opt->description =
 	_("Number of significant digits (floating point only)");
 
@@ -85,9 +86,10 @@ int main(int argc, char *argv[])
     verf->description = _("Create old (version 4) ASCII file");
 
     region_flag = G_define_flag();
-    region_flag->key	      = 'r';
-    region_flag->description  =
-      _("Only export points falling within current 3D region (points mode)");
+    region_flag->key = 'r';
+    region_flag->description =
+	_
+	("Only export points falling within current 3D region (points mode)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -110,14 +112,18 @@ int main(int argc, char *argv[])
 
     /* the field separator */
     fs = delim_opt->answer;
-    if ( strcmp(fs,"\\t") == 0 ) fs = "\t";
-    if ( strcmp(fs,"tab") == 0 ) fs = "\t";
-    if ( strcmp(fs,"space") == 0 ) fs = " ";
+    if (strcmp(fs, "\\t") == 0)
+	fs = "\t";
+    if (strcmp(fs, "tab") == 0)
+	fs = "\t";
+    if (strcmp(fs, "space") == 0)
+	fs = " ";
 
     /*The precision of the output */
     if (dp_opt->answer) {
 	if (sscanf(dp_opt->answer, "%d", &dp) != 1)
-	    G_fatal_error(_("Failed to interprete 'dp' parameter as an integer"));
+	    G_fatal_error(_
+			  ("Failed to interprete 'dp' parameter as an integer"));
     }
 
 
@@ -129,7 +135,7 @@ int main(int argc, char *argv[])
 	if (ver == 4) {
 	    ascii = G_fopen_new("dig_ascii", output->answer);
 	}
-	else if( strcmp(output->answer, "-") == 0 ) {
+	else if (strcmp(output->answer, "-") == 0) {
 	    ascii = stdout;
 	}
 	else {

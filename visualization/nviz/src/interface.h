@@ -1,7 +1,8 @@
 #define TRACE_GS_FUNCS
+
 /*----------------- this is the include file section -----------------*/
 /*
-*/
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -23,8 +24,8 @@
 #include <grass/gstypes.h>
 
 /* extern int *GV_get_vect_list(int *);
-extern int *GS_get_surf_list(int *);
-extern int *GP_get_site_list(int *); */
+   extern int *GS_get_surf_list(int *);
+   extern int *GP_get_site_list(int *); */
 
 
 /*-------------- this is the data define section ---------------*/
@@ -40,8 +41,8 @@ extern int *GP_get_site_list(int *); */
 #define VOL  3
 
 /* I don't like this - to be consistant, should really do all scaling
-in library, so can send real world coords. (seems like it would make
-type-ins & sliders easier, too) */
+   in library, so can send real world coords. (seems like it would make
+   type-ins & sliders easier, too) */
 #define RANGE (5 * GS_UNIT_SIZE)
 #define RANGE_OFFSET (2 * GS_UNIT_SIZE)
 #define ZRANGE (3 * GS_UNIT_SIZE)
@@ -71,16 +72,18 @@ extern GLuint FontBase;
 -            this is the data type declaration section                   -
 ------------------------------------------------------------------------*/
 
-typedef struct{
-        int id;
+typedef struct
+{
+    int id;
     float brt;
     float r, g, b;
-    float ar, ag, ab;  /* ambient rgb */
-    float x, y, z, w; /* position */
+    float ar, ag, ab;		/* ambient rgb */
+    float x, y, z, w;		/* position */
 } light_data;
 
-typedef struct {
-        float Zrange, XYrange;
+typedef struct
+{
+    float Zrange, XYrange;
 
     int NumCplanes;
     int CurCplane, Cp_on[MAX_CPLANES];
@@ -97,19 +100,20 @@ typedef struct {
  * between subsequent executions of nviz) when saving set-up info to files.
  */
 
-typedef struct {
-  /* We use logical names to assign textual names to map objects.
-     When Nviz needs to refer to a map object it uses the logical name
-     rather than the map ID.  By setting appropriate logical names, we
-     can reuse names inbetween executions of Nviz.  The Nviz library
-     also provides a mechanism for aliasing between logical names.
-     Thus several logical names may refer to the same map object.
-     Aliases are meant to support the case in which two logical names
-     happen to be the same.  The Nviz library automatically assigns
-     logical names uniquely if they are not specified in the creation
-     of a map object.  When loading a saved file containing several map
-     objects, it is expected that the map 0bjects will be aliased to
-     their previous names.  This ensures that old scripts will work.
+typedef struct
+{
+    /* We use logical names to assign textual names to map objects.
+       When Nviz needs to refer to a map object it uses the logical name
+       rather than the map ID.  By setting appropriate logical names, we
+       can reuse names inbetween executions of Nviz.  The Nviz library
+       also provides a mechanism for aliasing between logical names.
+       Thus several logical names may refer to the same map object.
+       Aliases are meant to support the case in which two logical names
+       happen to be the same.  The Nviz library automatically assigns
+       logical names uniquely if they are not specified in the creation
+       of a map object.  When loading a saved file containing several map
+       objects, it is expected that the map 0bjects will be aliased to
+       their previous names.  This ensures that old scripts will work.
      */
 
     char *logical_name;
@@ -136,12 +140,14 @@ int Nshow_vect_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nshow_vol_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nshow_lab_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nshow_path_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* change_view.c */
 int Nchange_persp_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nchange_position_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nchange_height_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nset_light_to_view_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nchange_exag_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* cutplane_obj.c */
 int Nset_fence_color_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nget_fence_color_cmd(Nv_data *, Tcl_Interp *, int, char **);
@@ -161,6 +167,7 @@ int cp_set_trans(Nv_data *, Tcl_Interp *, int, char **, int);
 int cp_get_rot(Nv_data *, Tcl_Interp *, int, char **, int);
 int cp_get_trans(Nv_data *, Tcl_Interp *, int, char **, int);
 int get_cp_idnum(char *);
+
 /* draw.c */
 void CancelFunc_Hook(void);
 int Nunset_cancel_func_cmd(Nv_data *, Tcl_Interp *, int, char **);
@@ -188,23 +195,29 @@ int Nvol_draw_all_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nready_draw_cmd(void);
 int Ndone_draw_cmd(void);
 int check_blank(Tcl_Interp *, int);
+
 /* exag.c */
 int Nget_first_exag_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nget_height_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* glwrappers.c */
 int tcl_color_to_int(const char *);
 int Nresize_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nfinish_cmd(ClientData, Tcl_Interp *, int, char **);
 int Nset_background_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* init_commands.c */
 int init_commands(Tcl_Interp *, Nv_data *);
+
 /* label.c */
 int Nplace_label_cmd(Nv_data *, Tcl_Interp *, int, char **);
 void G_site_destroy_struct(void *);
+
 /* lights.c */
 int Nlight_obj_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nnew_light_cmd(Nv_data *, Tcl_Interp *);
 int Nlights_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* map_obj.c */
 int Nliteral_from_logical_cmd(Nv_data *, Tcl_Interp *, int, char *[]);
 int Nlogical_from_literal_cmd(Nv_data *, Tcl_Interp *, int, char *[]);
@@ -219,16 +232,19 @@ int get_type(char *);
 int att_atoi(char *);
 int slice(int, int, Tcl_Interp *, int, char *[]);
 int isosurf(int, int, Tcl_Interp *, int, char *[]);
+
 /* misc.c */
 int Nlibinit_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nget_cancel_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nset_SDsurf_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nunset_SDsurf_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nset_SDscale_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* nviz_init.c */
 int Ninit(Tcl_Interp *, Tk_Window);
 int Ninitdata(Tcl_Interp *, Nv_data *);
 int Ngetargs(Tcl_Interp *, const char ***);
+
 /* position.c */
 int Ninit_view_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nget_to_cmd(Nv_data *, Tcl_Interp *, int, char **);
@@ -254,23 +270,30 @@ int Nget_exag_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nset_exag_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nsave_3dview_cmd(Nv_data *, Tcl_Interp *, int, char **);
 int Nload_3dview_cmd(Nv_data *, Tcl_Interp *, int, char **);
+
 /* quick_draw.c */
 int Nquick_draw_cmd(Nv_data *, Tcl_Interp *);
+
 /* script_support.c */
 int ScriptAddString_Cmd(ClientData, Tcl_Interp *, int, char **);
 int CloseScripting_Cmd(ClientData, Tcl_Interp *, int, char **);
 int SetState_Cmd(ClientData, Tcl_Interp *, int, char **);
 int SetScriptFile_Cmd(ClientData, Tcl_Interp *, int, char **);
+
 /* do_zoom.c */
 int Create_OS_Ctx(int, int);
 int Destroy_OS_Ctx(void);
+
 /* query_vect.c */
-char *query_vect( char *, double, double);
+char *query_vect(char *, double, double);
 
 /* togl_flythrough.c */
-int Nset_viewdir_cmd(Nv_data * data, Tcl_Interp * interp, int argc, char **argv);
-int Nget_viewdir_cmd(Nv_data * data, Tcl_Interp * interp, int argc, char **argv);
-int Ndraw_all_together_cmd(Nv_data * data, Tcl_Interp * interp, int argc, char **argv);
+int Nset_viewdir_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
+		     char **argv);
+int Nget_viewdir_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
+		     char **argv);
+int Ndraw_all_together_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
+			   char **argv);
 void togl_flythrough_init_tcl(Tcl_Interp *, Nv_data *);
 void flythrough_postdraw_cb_remove();
 void flythrough_postdraw_cb();
@@ -279,6 +302,7 @@ void flythrough_postdraw_cb();
 GLuint load_font(char *);
 void hide_togl_win(void);
 void show_togl_win(void);
+
 #ifdef OPENGL_X11
 Display *togl_display(void);
 Screen *togl_screen(void);
@@ -288,20 +312,24 @@ int togl_screen_number(void);
 
 /* tkAppInit.c */
 int Tcl_AppInit(Tcl_Interp *);
+
 /* tkBind.c */
 int TkCopyAndGlobalEval(Tcl_Interp *, char *);
+
 /* tkSend.c */
 #if TK_MAJOR_VERSION==8 && TK_MINOR_VERSION > 3
-    CONST char *Tk_SetAppName(Tk_Window, CONST char *);
+CONST char *Tk_SetAppName(Tk_Window, CONST char *);
 #else
-    char *Tk_SetAppName(Tk_Window, char *);
+char *Tk_SetAppName(Tk_Window, char *);
 #endif
 int Tk_SendCmd(ClientData, Tcl_Interp *, int, char **);
 int TkGetInterpNames(Tcl_Interp *, Tk_Window);
+
 /* tkSend_old.c */
 int Tk_RegisterInterp(Tcl_Interp *, char *, Tk_Window);
 int Tk_SendCmd(ClientData, Tcl_Interp *, int, char **);
 int TkGetInterpNames(Tcl_Interp *, Tk_Window);
+
 /* tkSpecial_Wait.c */
 int Tk_Tkspecial_waitCmd(ClientData, Tcl_Interp *, int, char **);
 int update_ranges(Nv_data *);
@@ -329,7 +357,8 @@ int set_att(int, int, Nv_data *, Tcl_Interp *, int, char *[]);
 int get_mask_mode(int, int, Nv_data *, Tcl_Interp *);
 int set_mask_mode(int, int, Nv_data *, Tcl_Interp *, int, char *[]);
 int set_default_wirecolors(Nv_data *, int);
-/* volume.c*/
+
+/* volume.c */
 int isosurf_set_res(int, Tcl_Interp *, int, char *[]);
 int isosurf_get_res(int, Tcl_Interp *, int, char *[]);
 int isosurf_set_drawmode(int, Tcl_Interp *, int, char *[]);
@@ -364,9 +393,12 @@ int slice_set_transp(int, Tcl_Interp *, int, char *[]);
 struct Map_info;
 
 /* site_attr_commands.c */
-int site_attr_open_map(geosite *, int, struct Map_info **, int *, char ***, int **, int **);
-int site_attr_set_color(geosite *, int, int, int, const char**, const char**);
-int site_attr_set_size(geosite *, int, int, int, const char**, const char**);
+int site_attr_open_map(geosite *, int, struct Map_info **, int *, char ***,
+		       int **, int **);
+int site_attr_set_color(geosite *, int, int, int, const char **,
+			const char **);
+int site_attr_set_size(geosite *, int, int, int, const char **,
+		       const char **);
 int site_attr_set_fixed_color(geosite *, int, unsigned int);
 int site_attr_set_fixed_size(geosite *, int, float);
 int site_attr_set_fixed_marker(geosite *, int, int);
@@ -375,19 +407,23 @@ int site_attr_unset(Tcl_Interp *, geosite *, int, char *);
 int site_attr_get(Tcl_Interp *, geosite *, int);
 void site_attr_init_tcl(Tcl_Interp *, Nv_data *);
 void site_attr_init(int);
-int attr_interp_entries(int , const char** , const char** , float **, float **, float **);
-int attr_interp_colors(int , const char** , const char** , float **, float **, float **, float **, float **, float **, float **);
-int attr_get_int_BBGGRR(const char* );
-float attr_get_RRGGBB(const char*, float *, float *, float *);
-int attr_interp_entries_string(int , const char** , float **);
-int attr_interp_colors_string(int , const char** , float **, float **, float **);
-int attr_eval_color(float , int , float *, float *, float *, float *, float *, float *, float *);
-int attr_eval_color_string(const char* , int , const char** , float *, float *, float *);
-float attr_eval_entry_string(const char* , int , const char** , float*);
+int attr_interp_entries(int, const char **, const char **, float **, float **,
+			float **);
+int attr_interp_colors(int, const char **, const char **, float **, float **,
+		       float **, float **, float **, float **, float **);
+int attr_get_int_BBGGRR(const char *);
+float attr_get_RRGGBB(const char *, float *, float *, float *);
+int attr_interp_entries_string(int, const char **, float **);
+int attr_interp_colors_string(int, const char **, float **, float **,
+			      float **);
+int attr_eval_color(float, int, float *, float *, float *, float *, float *,
+		    float *, float *);
+int attr_eval_color_string(const char *, int, const char **, float *, float *,
+			   float *);
+float attr_eval_entry_string(const char *, int, const char **, float *);
 
 /* pick_vect_commands.c */
 void pick_init_tcl(Tcl_Interp *, Nv_data *);
 
 /* site_highlight_commands.c */
 void site_highlight_init_tcl(Tcl_Interp *, Nv_data *);
-	

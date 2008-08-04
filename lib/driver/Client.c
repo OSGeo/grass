@@ -3,13 +3,12 @@
 
 void COM_Client_Open(void)
 {
-	if (driver->Client_Open)
-		(*driver->Client_Open)();
+    if (driver->Client_Open)
+	(*driver->Client_Open) ();
 }
 
 void COM_Client_Close(void)
 {
-	if (driver->Client_Close)
-		(*driver->Client_Close)();
+    if (driver->Client_Close)
+	(*driver->Client_Close) ();
 }
-

@@ -1,3 +1,4 @@
+
 /**
  * \file V_error.c
  *
@@ -40,12 +41,12 @@
 
 void V_error(const char *fmt, ...)
 {
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, fmt);
-	fprintf(stderr,"V_ask error: ");
-	vfprintf(stderr, fmt, ap);
-	va_end(ap);
+    va_start(ap, fmt);
+    fprintf(stderr, "V_ask error: ");
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
 
-	G_sleep(4);
+    G_sleep(4);
 }

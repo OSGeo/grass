@@ -22,9 +22,7 @@
  *  \return void
  */
 
-void
-G3d_skipError  (const char *msg)
-
+void G3d_skipError(const char *msg)
 {
 }
 
@@ -39,13 +37,11 @@ G3d_skipError  (const char *msg)
  *  \return void
  */
 
-void
-G3d_printError  (const char *msg)
-
-{  
-  fprintf (stderr, "ERROR: ");
-  fprintf (stderr, msg);
-  fprintf (stderr, "\n");
+void G3d_printError(const char *msg)
+{
+    fprintf(stderr, "ERROR: ");
+    fprintf(stderr, msg);
+    fprintf(stderr, "\n");
 }
 
 
@@ -59,36 +55,30 @@ G3d_printError  (const char *msg)
  *  \return void
  */
 
-void
-G3d_fatalError  (const char *msg, ...)
-
+void G3d_fatalError(const char *msg, ...)
 {
-    char buffer[2000];  /* No novels to the error logs, OK? */
+    char buffer[2000];		/* No novels to the error logs, OK? */
     va_list ap;
 
-    va_start(ap,msg);
-    vsprintf(buffer,msg,ap);
+    va_start(ap, msg);
+    vsprintf(buffer, msg, ap);
     va_end(ap);
 
-    G_fatal_error ("%s", buffer);
+    G_fatal_error("%s", buffer);
 }
 
-void
-G3d_fatalError_noargs  (const char *msg)
-
+void G3d_fatalError_noargs(const char *msg)
 {
-    G_fatal_error ("%s", msg);
+    G_fatal_error("%s", msg);
 }
 
-void
-G3d_error  (const char *msg, ...)
-
+void G3d_error(const char *msg, ...)
 {
-    char buffer[2000];  /* No novels to the error logs, OK? */
+    char buffer[2000];		/* No novels to the error logs, OK? */
     va_list ap;
 
-    va_start(ap,msg);
-    vsprintf(buffer,msg,ap);
+    va_start(ap, msg);
+    vsprintf(buffer, msg, ap);
     va_end(ap);
 
     (*g3d_error_fun) (buffer);

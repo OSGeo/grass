@@ -5,7 +5,7 @@
 #include "bouman.h"
 
 
-int parse (int argc, char *argv[], struct parms *parms)
+int parse(int argc, char *argv[], struct parms *parms)
 {
     struct Option *group, *subgroup, *sigfile, *output;
     struct Option *blocksize;
@@ -19,7 +19,7 @@ int parse (int argc, char *argv[], struct parms *parms)
     sigfile = G_define_option();
     sigfile->key = "signaturefile";
     sigfile->description = _("Name of imagery signaturefile");
-    sigfile->key_desc     = "name";
+    sigfile->key_desc = "name";
     sigfile->required = YES;
     sigfile->type = TYPE_STRING;
 
@@ -34,13 +34,15 @@ int parse (int argc, char *argv[], struct parms *parms)
 
     ml = G_define_flag();
     ml->key = 'm';
-    ml->description = _("Use maximum likelihood estimation (instead of smap)");
+    ml->description =
+	_("Use maximum likelihood estimation (instead of smap)");
 
     quiet = G_define_flag();
     quiet->key = 'q';
     quiet->description = _("Run quietly");
 
-    if (G_parser(argc,argv)) exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     parms->quiet = quiet->answer;
     parms->ml = ml->answer;
@@ -52,13 +54,14 @@ int parse (int argc, char *argv[], struct parms *parms)
 
     /* check all the inputs */
     if (!I_find_group(parms->group))
-        G_fatal_error(_("Group [%s] not found."), parms->group);
+	G_fatal_error(_("Group [%s] not found."), parms->group);
 
     if (!I_find_subgroup(parms->group, parms->subgroup))
-        G_fatal_error(_("Subgroup [%s] not found."), parms->subgroup);
+	G_fatal_error(_("Subgroup [%s] not found."), parms->subgroup);
 
-    if (sscanf(blocksize->answer,"%d",&parms->blocksize) !=1
-    || parms->blocksize <= 8) parms->blocksize = 8;
+    if (sscanf(blocksize->answer, "%d", &parms->blocksize) != 1
+	|| parms->blocksize <= 8)
+	parms->blocksize = 8;
 
     return 0;
 }

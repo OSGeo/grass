@@ -1,3 +1,4 @@
+
 /**
  * \file list.c
  *
@@ -30,20 +31,19 @@
  * \return pointer to struct ilist
  * \return NULL on error
  */
-struct ilist *
-Vect_new_list (void)
+struct ilist *Vect_new_list(void)
 {
-  struct ilist *p;
+    struct ilist *p;
 
-  p = (struct ilist *) G_malloc (sizeof (struct ilist));
+    p = (struct ilist *)G_malloc(sizeof(struct ilist));
 
-  if (p) {
-    p->value = NULL;
-    p->n_values = 0;
-    p->alloc_values = 0;
-  }
-  
-  return p;
+    if (p) {
+	p->value = NULL;
+	p->n_values = 0;
+	p->alloc_values = 0;
+    }
+
+    return p;
 }
 
 /**
@@ -56,12 +56,11 @@ Vect_new_list (void)
  * 
  * \return 0
  */
-int 
-Vect_reset_list (struct ilist *list)
+int Vect_reset_list(struct ilist *list)
 {
-  list->n_values = 0;
+    list->n_values = 0;
 
-  return 0;
+    return 0;
 }
 
 /**
@@ -72,20 +71,17 @@ Vect_reset_list (struct ilist *list)
  *
  * \return 0
  */
-int 
-Vect_destroy_list (struct ilist *list)
+int Vect_destroy_list(struct ilist *list)
 {
-  if (list)			/* probably a moot test */
-    {
-      if (list->alloc_values)
-	{
-	  G_free ((void *) list->value);
+    if (list) {			/* probably a moot test */
+	if (list->alloc_values) {
+	    G_free((void *)list->value);
 	}
-      G_free ((void *) list);
+	G_free((void *)list);
     }
-  list = NULL;
+    list = NULL;
 
-  return 0;
+    return 0;
 }
 
 /**
@@ -97,29 +93,28 @@ Vect_destroy_list (struct ilist *list)
  * \return 0 on success
  * \return 1 on error
  */
-int
-Vect_list_append ( struct ilist *list, int val )
+int Vect_list_append(struct ilist *list, int val)
 {
     int i;
     size_t size;
-    
-    if ( list == NULL ) 
-        return 1;
-	
-    for ( i = 0; i < list->n_values; i++ ) {
-	if ( val == list->value[i] )
+
+    if (list == NULL)
+	return 1;
+
+    for (i = 0; i < list->n_values; i++) {
+	if (val == list->value[i])
 	    return 0;
     }
-    
-    if ( list->n_values == list->alloc_values ) {
-		size = (list->n_values + 1000) * sizeof(int);
-        list->value = (int *) G_realloc ( (void *) list->value, size );
-        list->alloc_values = list->n_values + 1000;
+
+    if (list->n_values == list->alloc_values) {
+	size = (list->n_values + 1000) * sizeof(int);
+	list->value = (int *)G_realloc((void *)list->value, size);
+	list->alloc_values = list->n_values + 1000;
     }
-    
+
     list->value[list->n_values] = val;
     list->n_values++;
-  
+
     return 0;
 }
 
@@ -132,17 +127,16 @@ Vect_list_append ( struct ilist *list, int val )
  * \return 0 on success
  * \return 1 on error
  */
-int
-Vect_list_append_list ( struct ilist *alist,  struct ilist *blist )
+int Vect_list_append_list(struct ilist *alist, struct ilist *blist)
 {
     int i;
-    
-    if ( alist == NULL || blist == NULL ) 
-        return 1;
-	
-    for ( i = 0; i < blist->n_values; i++ ) 
-        Vect_list_append ( alist, blist->value[i] );
-    
+
+    if (alist == NULL || blist == NULL)
+	return 1;
+
+    for (i = 0; i < blist->n_values; i++)
+	Vect_list_append(alist, blist->value[i]);
+
     return 0;
 }
 
@@ -155,24 +149,23 @@ Vect_list_append_list ( struct ilist *alist,  struct ilist *blist )
  * \return 0 on success
  * \return 1 on error
  */
-int
-Vect_list_delete ( struct ilist *list, int val )
+int Vect_list_delete(struct ilist *list, int val)
 {
     int i, j;
-    
-    if ( list == NULL ) 
-        return 1;
-	
-    for ( i = 0; i < list->n_values; i++ ) {
-	if ( val == list->value[i] ) {
-            for ( j = i + 1; j < list->n_values; j++ ) 
-                list->value[j - 1] = list->value[j];
-		
-            list->n_values--;
+
+    if (list == NULL)
+	return 1;
+
+    for (i = 0; i < list->n_values; i++) {
+	if (val == list->value[i]) {
+	    for (j = i + 1; j < list->n_values; j++)
+		list->value[j - 1] = list->value[j];
+
+	    list->n_values--;
 	    return 0;
 	}
     }
-    
+
     return 0;
 }
 
@@ -185,17 +178,16 @@ Vect_list_delete ( struct ilist *list, int val )
  * \return 0 on success
  * \return 1 on error
  */
-int
-Vect_list_delete_list ( struct ilist *alist,  struct ilist *blist )
+int Vect_list_delete_list(struct ilist *alist, struct ilist *blist)
 {
     int i;
-    
-    if ( alist == NULL || blist == NULL ) 
-        return 1;
-	
-    for ( i = 0; i < blist->n_values; i++ ) 
-        Vect_list_delete ( alist, blist->value[i] );
-    
+
+    if (alist == NULL || blist == NULL)
+	return 1;
+
+    for (i = 0; i < blist->n_values; i++)
+	Vect_list_delete(alist, blist->value[i]);
+
     return 0;
 }
 
@@ -208,18 +200,17 @@ Vect_list_delete_list ( struct ilist *alist,  struct ilist *blist )
  * \return 1 if an item is found
  * \return 0 no found item in the list
 */
-int
-Vect_val_in_list ( struct ilist *list, int val )
+int Vect_val_in_list(struct ilist *list, int val)
 {
     int i;
-    
-    if ( list == NULL ) 
-        return 0;
-	
-    for ( i = 0; i < list->n_values; i++ ) {
-	if ( val == list->value[i] )
+
+    if (list == NULL)
+	return 0;
+
+    for (i = 0; i < list->n_values; i++) {
+	if (val == list->value[i])
 	    return 1;
     }
-    
+
     return 0;
 }

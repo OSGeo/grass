@@ -3,9 +3,9 @@
 /*
  * tkUnixPort.h --
  *
- *	This file is included by all of the Tk C files.  It contains
- *	information that may be configuration-dependent, such as
- *	#includes for system include files and a few other things.
+ *      This file is included by all of the Tk C files.  It contains
+ *      information that may be configuration-dependent, such as
+ *      #includes for system include files and a few other things.
  *
  * Copyright (c) 1991-1993 The Regents of the University of California.
  * Copyright (c) 1994-1996 Sun Microsystems, Inc.
@@ -94,7 +94,7 @@
 #   define SELECT_MASK fd_set
 #else
 #   ifndef _AIX
-	typedef long fd_mask;
+typedef long fd_mask;
 #   endif
 #   if defined(_IBMR2)
 #	define SELECT_MASK void
@@ -182,7 +182,7 @@ extern int errno;
  * in any other header file.
  */
 #if (TCL_MINOR_VERSION) < 2
-extern void		panic _ANSI_ARGS_(TCL_VARARGS(char *, string));
+extern void panic _ANSI_ARGS_(TCL_VARARGS(char *, string));
 #endif
 /*
  * These functions do nothing under Unix, so we just eliminate calls to them.
@@ -207,14 +207,14 @@ extern void		panic _ANSI_ARGS_(TCL_VARARGS(char *, string));
 
 #define TkpPrintWindowId(buf,w) \
 	sprintf((buf), "0x%x", (unsigned int) (w))
-	    
+
 /*
  * TkpScanWindowId is just an alias for Tcl_GetInt on Unix.
  */
 
 #define TkpScanWindowId(i,s,wp) \
 	Tcl_GetInt((i),(s),(wp))
-	    
+
 /*
  * This macro indicates that entry and text widgets should display
  * the selection highlight regardless of which window has the focus.
@@ -227,6 +227,6 @@ extern void		panic _ANSI_ARGS_(TCL_VARARGS(char *, string));
  * that is needed for portability reasons.
  */
 
-EXTERN void		TclpGetTime _ANSI_ARGS_((Tcl_Time *time));
+EXTERN void TclpGetTime _ANSI_ARGS_((Tcl_Time * time));
 
 #endif /* _UNIXPORT */

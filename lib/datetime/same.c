@@ -20,9 +20,8 @@
  *  \return int
  */
 
-int 
-datetime_is_same (const DateTime *src, const DateTime *dst)
+int datetime_is_same(const DateTime * src, const DateTime * dst)
 {
     /* WARNING: doesn't allow for padding */
-    return memcmp (src, dst, sizeof(DateTime)) == 0;
+    return memcmp(src, dst, sizeof(DateTime)) == 0;
 }

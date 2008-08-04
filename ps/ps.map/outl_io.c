@@ -4,7 +4,7 @@
 #include "ps_info.h"
 #include "local_proto.h"
 
-static int blank_line ();
+static int blank_line();
 
 static char *error_prefix;
 static int first_read, last_read;
@@ -14,7 +14,7 @@ static int raster_size, row_length, row_count, n_rows;
 static RASTER_MAP_TYPE map_type;
 
 
-int o_io_init (void)
+int o_io_init(void)
 {
     error_prefix = "ps.map";
     n_rows = PS.w.rows;
@@ -23,27 +23,23 @@ int o_io_init (void)
     return 0;
 }
 
-int o_read_row (void *buf)
+int o_read_row(void *buf)
 {
     void *ptr;
 
     ptr = buf;
     if (last_read)
-	return(0);
-    if (first_read)
-    {
+	return (0);
+    if (first_read) {
 	blank_line(buf);
 	first_read = 0;
     }
-    else
-    {
-	if (row_count >= n_rows)
-	{
+    else {
+	if (row_count >= n_rows) {
 	    last_read = 1;
 	    blank_line(buf);
 	}
-	else
-	{
+	else {
 	    G_set_null_value(ptr, 1, map_type);
 	    ptr = G_incr_void_ptr(ptr, raster_size);
 
@@ -53,29 +49,28 @@ int o_read_row (void *buf)
 	    G_set_null_value(ptr, 1, map_type);
 	}
     }
-    return(row_length + 2);
+    return (row_length + 2);
 }
 
-static int blank_line (void *buf)
+static int blank_line(void *buf)
 {
     G_set_null_value(buf, row_length + 2, map_type);
 
     return 0;
 }
 
-RASTER_MAP_TYPE o_open_file (char *cell)
+RASTER_MAP_TYPE o_open_file(char *cell)
 {
     char *mapset;
 
     /* open raster map */
-    if ((mapset = G_find_cell(cell,"")) == NULL)
-	G_fatal_error (_("Raster map <%s> not found"),
-		       cell);
+    if ((mapset = G_find_cell(cell, "")) == NULL)
+	G_fatal_error(_("Raster map <%s> not found"), cell);
 
-    sscanf(cell,"%s",cell_name);
-    if ((in_file_d = G_open_cell_old(cell_name,mapset)) < 0)
-	G_fatal_error (_("Unable to open raster map <%s> in mapset <%s>"),
-		       cell_name, mapset);
+    sscanf(cell, "%s", cell_name);
+    if ((in_file_d = G_open_cell_old(cell_name, mapset)) < 0)
+	G_fatal_error(_("Unable to open raster map <%s> in mapset <%s>"),
+		      cell_name, mapset);
 
     map_type = G_get_raster_map_type(in_file_d);
     raster_size = G_raster_size(map_type);
@@ -86,7 +81,7 @@ RASTER_MAP_TYPE o_open_file (char *cell)
     return (map_type);
 }
 
-int o_close_file (void)
+int o_close_file(void)
 {
     G_close_cell(in_file_d);
 
@@ -94,29 +89,30 @@ int o_close_file (void)
 }
 
 #ifdef DEBUG
-char *xmalloc (int size, char *label)
+char *xmalloc(int size, char *label)
 {
     char *addr, *G_malloc();
 
     addr = G_malloc(size);
-    fprintf(stdout,"MALLOC:   %8d   %7d          %s\n",addr,size,label);
-    return(addr);
+    fprintf(stdout, "MALLOC:   %8d   %7d          %s\n", addr, size, label);
+    return (addr);
 }
 
-int xfree (char *addr, char *label)
+int xfree(char *addr, char *label)
 {
-    fprintf(stdout,"FREE:     %8d                %s\n",addr,label);
+    fprintf(stdout, "FREE:     %8d                %s\n", addr, label);
     G_free(addr);
 
     return 0;
 }
 
-char *xrealloc (char *addr, int size, char *label)
+char *xrealloc(char *addr, int size, char *label)
 {
     char *addr2, *G_realloc();
 
-    addr2 = G_realloc(addr,size);
-    fprintf(stdout,"REALLOC:  %8d   %7d  (%8d)   %s\n",addr2,size,addr,label);
-    return(addr2);
+    addr2 = G_realloc(addr, size);
+    fprintf(stdout, "REALLOC:  %8d   %7d  (%8d)   %s\n", addr2, size, addr,
+	    label);
+    return (addr2);
 }
 #endif

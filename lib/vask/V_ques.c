@@ -1,3 +1,4 @@
+
 /**
  * \file V_ques.c
  *
@@ -74,52 +75,45 @@
  * \return -1 on error
  */
 
-int V_ques(
-	void *src, int var_type,
-	int row, int col, int length)
+int V_ques(void *src, int var_type, int row, int col, int length)
 {
-	union target targetptr ;
-	targetptr.i = src ;
+    union target targetptr;
 
-	if (V__.NUM_ANSW >= MAX_ANSW ) 
-	{
-		V_error("Too many questions in call to V_ques") ;
-		return(-1) ;
-	}
-	if ((row < 0) || (row >= MAX_LINE))
-	{
-		V_error("Illegal row (%d) in call to V_ques", row) ;
-		return(-1) ;
-	}
-	if ((col < 0) || (col >= 80))
-	{
-		V_error("Illegal column (%d) in call to V_ques", col) ;
-		return(-1) ;
-	}
-	if (length <= 0)
-	{
-		V_error("Negative length in call to V_ques") ;
-		return(-1) ;
-	}
-	if (length + col > 80)
-		length = 80 - col;
+    targetptr.i = src;
 
-	if ((var_type == 's') || (var_type == 'i') || (var_type == 'f')
-	||  (var_type == 'l') || (var_type == 'd'))
-	{
-		V__.usr_answ[V__.NUM_ANSW].targetptr = targetptr ;
-		V__.usr_answ[V__.NUM_ANSW].var_type  = var_type  ;
-		V__.usr_answ[V__.NUM_ANSW].row       = row       ;
-		V__.usr_answ[V__.NUM_ANSW].col       = col       ;
-		V__.usr_answ[V__.NUM_ANSW].length    = length    ;
-		V__.usr_answ[V__.NUM_ANSW].decimal_places    = V__.decimal_places    ;
+    if (V__.NUM_ANSW >= MAX_ANSW) {
+	V_error("Too many questions in call to V_ques");
+	return (-1);
+    }
+    if ((row < 0) || (row >= MAX_LINE)) {
+	V_error("Illegal row (%d) in call to V_ques", row);
+	return (-1);
+    }
+    if ((col < 0) || (col >= 80)) {
+	V_error("Illegal column (%d) in call to V_ques", col);
+	return (-1);
+    }
+    if (length <= 0) {
+	V_error("Negative length in call to V_ques");
+	return (-1);
+    }
+    if (length + col > 80)
+	length = 80 - col;
 
-		V__.NUM_ANSW++ ;
-		return(0) ;
-	}
-	else
-	{
-		V_error("Illegal variable type in call to V_ques") ;
-		return(-1) ;
-	}
+    if ((var_type == 's') || (var_type == 'i') || (var_type == 'f')
+	|| (var_type == 'l') || (var_type == 'd')) {
+	V__.usr_answ[V__.NUM_ANSW].targetptr = targetptr;
+	V__.usr_answ[V__.NUM_ANSW].var_type = var_type;
+	V__.usr_answ[V__.NUM_ANSW].row = row;
+	V__.usr_answ[V__.NUM_ANSW].col = col;
+	V__.usr_answ[V__.NUM_ANSW].length = length;
+	V__.usr_answ[V__.NUM_ANSW].decimal_places = V__.decimal_places;
+
+	V__.NUM_ANSW++;
+	return (0);
+    }
+    else {
+	V_error("Illegal variable type in call to V_ques");
+	return (-1);
+    }
 }

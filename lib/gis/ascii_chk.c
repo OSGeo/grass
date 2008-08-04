@@ -1,3 +1,4 @@
+
 /**
  * \file ascii_chk.c
  *
@@ -30,22 +31,21 @@
  * \return always returns 0
  */
 
-int G_ascii_check (char *string)
+int G_ascii_check(char *string)
 {
-    char *ptr1, *ptr2 ;
+    char *ptr1, *ptr2;
 
-    ptr1 = string ;
-    ptr2 = string ;
+    ptr1 = string;
+    ptr2 = string;
 
-    while(*ptr1)
-    {
+    while (*ptr1) {
 	if ((*ptr1 >= 040) && (*ptr1 <= 0176))
-	    *ptr2++ = *ptr1 ;
+	    *ptr2++ = *ptr1;
 	else if (*ptr1 == TAB)
-	    *ptr2++ = SPACE ;
-	ptr1++ ;
+	    *ptr2++ = SPACE;
+	ptr1++;
     }
-    *ptr2 = 0 ;
+    *ptr2 = 0;
 
     return 0;
 }

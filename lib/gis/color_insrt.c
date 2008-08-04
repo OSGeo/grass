@@ -9,10 +9,9 @@
 
 #define LIMIT(x) if (x < 0) x = 0; else if (x > 255) x = 255;
 
-int G__insert_color_into_lookup (
-    CELL cat,
-    int red,int grn,int blu,
-    struct _Color_Info_ *cp)
+int G__insert_color_into_lookup(CELL cat,
+				int red, int grn, int blu,
+				struct _Color_Info_ *cp)
 {
     long nalloc;
     long i;
@@ -22,9 +21,8 @@ int G__insert_color_into_lookup (
     LIMIT(grn);
     LIMIT(blu);
 
-/* first color? */
-    if (!cp->lookup.active)
-    {
+    /* first color? */
+    if (!cp->lookup.active) {
 	cp->lookup.active = 1;
 	cp->lookup.nalloc = 256;
 	cp->lookup.red = umalloc(cp->lookup.nalloc);
@@ -34,30 +32,27 @@ int G__insert_color_into_lookup (
 	cp->max = cp->min = cat;
     }
 
-/* extend the color table? */
-    else if (cat > cp->max)
-    {
+    /* extend the color table? */
+    else if (cat > cp->max) {
 	curlen = cp->max - cp->min + 1;
 	newlen = cat - cp->min + 1;
 	nalloc = newlen;
-	if (nalloc != (int) nalloc)        /* check for int overflow */
+	if (nalloc != (int)nalloc)	/* check for int overflow */
 	    return -1;
 
-	if (nalloc > cp->lookup.nalloc)
-	{
+	if (nalloc > cp->lookup.nalloc) {
 	    while (cp->lookup.nalloc < nalloc)
 		cp->lookup.nalloc += 256;
 	    nalloc = cp->lookup.nalloc;
 
-	    cp->lookup.red = urealloc ((char *) cp->lookup.red, nalloc);
-	    cp->lookup.grn = urealloc ((char *) cp->lookup.grn, nalloc);
-	    cp->lookup.blu = urealloc ((char *) cp->lookup.blu, nalloc);
-	    cp->lookup.set = urealloc ((char *) cp->lookup.set, nalloc);
+	    cp->lookup.red = urealloc((char *)cp->lookup.red, nalloc);
+	    cp->lookup.grn = urealloc((char *)cp->lookup.grn, nalloc);
+	    cp->lookup.blu = urealloc((char *)cp->lookup.blu, nalloc);
+	    cp->lookup.set = urealloc((char *)cp->lookup.set, nalloc);
 	}
 
 	/* fill in gap with white */
-	for (i = curlen; i < newlen; i++)
-	{
+	for (i = curlen; i < newlen; i++) {
 	    cp->lookup.red[i] = 255;
 	    cp->lookup.grn[i] = 255;
 	    cp->lookup.blu[i] = 255;
@@ -65,48 +60,44 @@ int G__insert_color_into_lookup (
 	}
 	cp->max = cat;
     }
-    else if (cat < cp->min)
-    {
+    else if (cat < cp->min) {
 	curlen = cp->max - cp->min + 1;
 	newlen = cp->max - cat + 1;
-	gap    = newlen - curlen;
+	gap = newlen - curlen;
 	nalloc = newlen;
-	if (nalloc != (int) nalloc)        /* check for int overflow */
+	if (nalloc != (int)nalloc)	/* check for int overflow */
 	    return -1;
 
-	if (nalloc > cp->lookup.nalloc)
-	{
+	if (nalloc > cp->lookup.nalloc) {
 	    while (cp->lookup.nalloc < nalloc)
 		cp->lookup.nalloc += 256;
 	    nalloc = cp->lookup.nalloc;
 
-	    cp->lookup.red = urealloc ((char *) cp->lookup.red, nalloc);
-	    cp->lookup.grn = urealloc ((char *) cp->lookup.grn, nalloc);
-	    cp->lookup.blu = urealloc ((char *) cp->lookup.blu, nalloc);
-	    cp->lookup.set = urealloc ((char *) cp->lookup.set, nalloc);
+	    cp->lookup.red = urealloc((char *)cp->lookup.red, nalloc);
+	    cp->lookup.grn = urealloc((char *)cp->lookup.grn, nalloc);
+	    cp->lookup.blu = urealloc((char *)cp->lookup.blu, nalloc);
+	    cp->lookup.set = urealloc((char *)cp->lookup.set, nalloc);
 	}
 
-    /* shift the table to make room in front */
-	for (i = 1; i <= curlen; i++)
-	{
-	    cp->lookup.red[newlen-i] = cp->lookup.red[curlen-i];
-	    cp->lookup.grn[newlen-i] = cp->lookup.grn[curlen-i];
-	    cp->lookup.blu[newlen-i] = cp->lookup.blu[curlen-i];
-	    cp->lookup.set[newlen-i] = cp->lookup.set[curlen-i];
+	/* shift the table to make room in front */
+	for (i = 1; i <= curlen; i++) {
+	    cp->lookup.red[newlen - i] = cp->lookup.red[curlen - i];
+	    cp->lookup.grn[newlen - i] = cp->lookup.grn[curlen - i];
+	    cp->lookup.blu[newlen - i] = cp->lookup.blu[curlen - i];
+	    cp->lookup.set[newlen - i] = cp->lookup.set[curlen - i];
 	}
 
-    /* fill in gap with white */
-	for (i=1; i < gap; i++)
-	{
-	    cp->lookup.red[i] = 255 ;
-	    cp->lookup.grn[i] = 255 ;
-	    cp->lookup.blu[i] = 255 ;
-	    cp->lookup.set[i] = 0 ;
+	/* fill in gap with white */
+	for (i = 1; i < gap; i++) {
+	    cp->lookup.red[i] = 255;
+	    cp->lookup.grn[i] = 255;
+	    cp->lookup.blu[i] = 255;
+	    cp->lookup.set[i] = 0;
 	}
 	cp->min = cat;
     }
 
-/* set the color! */
+    /* set the color! */
     i = cat - cp->min;
     cp->lookup.red[i] = red;
     cp->lookup.grn[i] = grn;
@@ -115,4 +106,3 @@ int G__insert_color_into_lookup (
 
     return 1;
 }
-

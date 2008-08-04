@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -29,37 +30,39 @@
 #define      COST_LAYER            2
 #define      START_PT              3
 
-struct start_pt{
-     int row;
-     int col;
-     struct start_pt *next;
+struct start_pt
+{
+    int row;
+    int col;
+    struct start_pt *next;
 };
 
 #ifdef MAIN
 
-    struct variables 
+struct variables
+{
+    char *alias;
+    int position;
+}
+
+variables[] = {
     {
-        char *alias;
-        int position;
-    } 
+    "output", CUM_COST_LAYER}, {
+    "input", COST_LAYER}, {
+    "coor", START_PT}
+};
 
-    variables [] = {
-         {"output",CUM_COST_LAYER},
-         {"input",COST_LAYER},
-         {"coor",START_PT}
-    };
+char cum_cost_layer[64];
+char cost_layer[64];
+struct start_pt *head_start_pt = NULL;
+struct start_pt *head_end_pt = NULL;
 
-    char cum_cost_layer[64];
-    char cost_layer[64];
-    struct start_pt *head_start_pt = NULL;
-    struct start_pt *head_end_pt = NULL;
- 
-#else 
+#else
 
-    extern char cum_cost_layer[];
-    extern char cost_layer[];
-    extern struct start_pt *head_start_pt;
-    extern struct start_pt *head_end_pt;
+extern char cum_cost_layer[];
+extern char cost_layer[];
+extern struct start_pt *head_start_pt;
+extern struct start_pt *head_end_pt;
 
 #endif
 

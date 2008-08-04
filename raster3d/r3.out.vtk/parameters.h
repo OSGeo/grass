@@ -39,4 +39,3 @@ extern paramType param;		/*Parameters */
 void set_params();
 
 #endif
-

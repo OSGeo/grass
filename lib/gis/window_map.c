@@ -1,3 +1,4 @@
+
 /**
  * \file window_map.c
  *
@@ -32,7 +33,7 @@
  * \return always returns 0
  */
 
-int G__create_window_mapping (int fd)
+int G__create_window_mapping(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     COLUMN_MAPPING *col;
@@ -41,14 +42,14 @@ int G__create_window_mapping (int fd)
     double C1, C2;
     double west;
 
-    G__init_window () ;
+    G__init_window();
 
-    if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD)  /* open for write? */
-        return 0;
-    if (fcb->open_mode == OPEN_OLD) /* already open ? */
-        G_free (fcb->col_map);
+    if (fcb->open_mode >= 0 && fcb->open_mode != OPEN_OLD)	/* open for write? */
+	return 0;
+    if (fcb->open_mode == OPEN_OLD)	/* already open ? */
+	G_free(fcb->col_map);
 
-    col = fcb->col_map = alloc_index (G__.window.cols) ;
+    col = fcb->col_map = alloc_index(G__.window.cols);
 
     /*
      * for each column in the window, go to center of the cell,
@@ -59,54 +60,54 @@ int G__create_window_mapping (int fd)
      * cellhd west.
      */
     west = G__.window.west;
-    if (G__.window.proj == PROJECTION_LL)
-    {
+    if (G__.window.proj == PROJECTION_LL) {
 	while (west > fcb->cellhd.west + 360.0)
-	    west -=360.0;
+	    west -= 360.0;
 	while (west < fcb->cellhd.west)
 	    west += 360.0;
     }
 
-    C1 = G__.window.ew_res / fcb->cellhd.ew_res ;
-    C2 = (west - fcb->cellhd.west + G__.window.ew_res/2.0) / fcb->cellhd.ew_res; 
-    for (i = 0; i < G__.window.cols; i++)
-    {
+    C1 = G__.window.ew_res / fcb->cellhd.ew_res;
+    C2 = (west - fcb->cellhd.west +
+	  G__.window.ew_res / 2.0) / fcb->cellhd.ew_res;
+    for (i = 0; i < G__.window.cols; i++) {
 	x = C2;
-	if (C2 < x)    /* adjust for rounding of negatives */
+	if (C2 < x)		/* adjust for rounding of negatives */
 	    x--;
-	if (x < 0 || x >= fcb->cellhd.cols) /* not in data file */
+	if (x < 0 || x >= fcb->cellhd.cols)	/* not in data file */
 	    x = -1;
-	*col++ = x+1;
+	*col++ = x + 1;
 	C2 += C1;
     }
 
     /* do wrap around for lat/lon */
-    if (G__.window.proj == PROJECTION_LL)
-    {
+    if (G__.window.proj == PROJECTION_LL) {
 	col = fcb->col_map;
-	C2 = (west - 360.0 - fcb->cellhd.west + G__.window.ew_res/2.0) / fcb->cellhd.ew_res; 
-	for (i = 0; i < G__.window.cols; i++)
-	{
+	C2 = (west - 360.0 - fcb->cellhd.west +
+	      G__.window.ew_res / 2.0) / fcb->cellhd.ew_res;
+	for (i = 0; i < G__.window.cols; i++) {
 	    x = C2;
-	    if (C2 < x)    /* adjust for rounding of negatives */
+	    if (C2 < x)		/* adjust for rounding of negatives */
 		x--;
-	    if (x < 0 || x >= fcb->cellhd.cols) /* not in data file */
+	    if (x < 0 || x >= fcb->cellhd.cols)	/* not in data file */
 		x = -1;
-	    if (*col == 0)  /* only change those not already set */
-		*col = x+1;
+	    if (*col == 0)	/* only change those not already set */
+		*col = x + 1;
 	    col++;
 	    C2 += C1;
 	}
     }
 
-    G_debug (3, "create window mapping (%d cols)", G__.window.cols);
+    G_debug(3, "create window mapping (%d cols)", G__.window.cols);
     for (i = 0; i < G__.window.cols; i++)
-	G_debug(3, "%s%ld", i%15?" ":"\n", (long)fcb->col_map[i]);
-    fprintf (stderr, "\n");
+	G_debug(3, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
+    fprintf(stderr, "\n");
 
     /* compute C1,C2 for row window mapping */
-    fcb->C1 = G__.window.ns_res / fcb->cellhd.ns_res ;
-    fcb->C2 = (fcb->cellhd.north - G__.window.north + G__.window.ns_res/2.0) / fcb->cellhd.ns_res; 
+    fcb->C1 = G__.window.ns_res / fcb->cellhd.ns_res;
+    fcb->C2 =
+	(fcb->cellhd.north - G__.window.north +
+	 G__.window.ns_res / 2.0) / fcb->cellhd.ns_res;
 
     return 0;
 }
@@ -124,8 +125,7 @@ int G__create_window_mapping (int fd)
  * \return row id
  */
 
-double G_northing_to_row (double north,
-    const struct Cell_head *window)
+double G_northing_to_row(double north, const struct Cell_head *window)
 {
     return (window->north - north) / window->ns_res;
 }
@@ -145,11 +145,10 @@ double G_northing_to_row (double north,
  * \return east coordinate
  */
 
-double G_adjust_east_longitude (
-    double east,double west)
+double G_adjust_east_longitude(double east, double west)
 {
     while (east > west + 360.0)
-	east -=360.0;
+	east -= 360.0;
     while (east <= west)
 	east += 360.0;
 
@@ -171,11 +170,9 @@ double G_adjust_east_longitude (
  * \return east coordinate
  */
 
-double G_adjust_easting ( double east,
-    const struct Cell_head *window)
+double G_adjust_easting(double east, const struct Cell_head *window)
 {
-    if (window->proj == PROJECTION_LL)
-    {
+    if (window->proj == PROJECTION_LL) {
 	east = G_adjust_east_longitude(east, window->west);
 	if (east > window->east && east == window->west + 360)
 	    east = window->west;
@@ -197,10 +194,9 @@ double G_adjust_easting ( double east,
  * \return column id
  */
 
-double G_easting_to_col ( double east,
-    const struct Cell_head *window)
+double G_easting_to_col(double east, const struct Cell_head *window)
 {
-    east = G_adjust_easting (east, window);
+    east = G_adjust_easting(east, window);
 
     return (east - window->west) / window->ew_res;
 }
@@ -223,8 +219,7 @@ double G_easting_to_col ( double east,
  * \return north coordinate
  */
 
-double G_row_to_northing ( double row,
-    const struct Cell_head *window)
+double G_row_to_northing(double row, const struct Cell_head *window)
 {
     return window->north - row * window->ns_res;
 }
@@ -244,8 +239,7 @@ double G_row_to_northing ( double row,
  * \return east coordinate
  */
 
-double G_col_to_easting (double col,
-    const struct Cell_head *window)
+double G_col_to_easting(double col, const struct Cell_head *window)
 {
     return window->west + col * window->ew_res;
 }
@@ -275,9 +269,9 @@ double G_col_to_easting (double col,
  *  \return number of rows
  */
 
-int G_window_rows (void)
+int G_window_rows(void)
 {
-    G__init_window () ;
+    G__init_window();
 
     return G__.window.rows;
 }
@@ -308,10 +302,10 @@ int G_window_rows (void)
  * \return number of columns
  */
 
-int G_window_cols (void)
+int G_window_cols(void)
 {
-    G__init_window () ;
-    
+    G__init_window();
+
     return G__.window.cols;
 }
 
@@ -322,12 +316,11 @@ int G_window_cols (void)
  * \return always returns 0
  */
 
-int G__init_window (void)
+int G__init_window(void)
 {
-    if (!G__.window_set)
-    {
-        G__.window_set = 1;
-        G_get_window (&G__.window);
+    if (!G__.window_set) {
+	G__.window_set = 1;
+	G_get_window(&G__.window);
     }
 
     return 0;
@@ -347,7 +340,7 @@ int G__init_window (void)
  * \return number of rows completed
  */
 
-int G_row_repeat_nomask (int fd, int row)
+int G_row_repeat_nomask(int fd, int row)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     double f;
@@ -365,8 +358,7 @@ int G_row_repeat_nomask (int fd, int row)
     if (f < r1)
 	r1--;
 
-    while (++row < G__.window.rows)
-    {
+    while (++row < G__.window.rows) {
 	f = row * fcb->C1 + fcb->C2;
 	r2 = f;
 	if (f < r2)

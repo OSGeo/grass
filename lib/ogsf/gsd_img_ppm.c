@@ -1,28 +1,28 @@
 /*!
-  \file gsd_img_ppm.c
- 
-  \brief OGSF library - PPM stuff
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
+   \file gsd_img_ppm.c
 
-  - added little/big endian test Markus Neteler
-  - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
-  - changed 10/99 Jaro
-  - Created new function GS_write_ppm based on RGB dump 
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois
-  \author Markus Neteler
-  \author Bob Covill
-  \author Jaro Hofierka
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - PPM stuff
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   - added little/big endian test Markus Neteler
+   - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
+   - changed 10/99 Jaro
+   - Created new function GS_write_ppm based on RGB dump 
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois
+   \author Markus Neteler
+   \author Bob Covill
+   \author Jaro Hofierka
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 
@@ -32,13 +32,13 @@
 #include <grass/gstypes.h>
 
 /*!
-  \brief Save current GL screen to ppm file
+   \brief Save current GL screen to ppm file
 
-  \param name file name
+   \param name file name
 
-  \return 1 on failure
-  \return 0 on success
-*/
+   \return 1 on failure
+   \return 0 on success
+ */
 int GS_write_ppm(const char *name)
 {
     unsigned int x;
@@ -50,9 +50,8 @@ int GS_write_ppm(const char *name)
     gsd_getimage(&pixbuf, &xsize, &ysize);
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_warning (_("Unable to open file <%s> for writing"),
-		   name);
-	return(1);
+	G_warning(_("Unable to open file <%s> for writing"), name);
+	return (1);
     }
 
     fprintf(fp, "P6 %d %d 255\n", xsize, ysize);
@@ -63,9 +62,9 @@ int GS_write_ppm(const char *name)
 	    unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
 	    unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
 
-	    fputc((int) r, fp);
-	    fputc((int) g, fp);
-	    fputc((int) b, fp);
+	    fputc((int)r, fp);
+	    fputc((int)g, fp);
+	    fputc((int)b, fp);
 	}
 
     }
@@ -76,14 +75,14 @@ int GS_write_ppm(const char *name)
 }
 
 /*!
-  \brief Write zoom to file
+   \brief Write zoom to file
 
-  \param name file name
-  \param xsize,ysize
+   \param name file name
+   \param xsize,ysize
 
-  \return 1 on failure
-  \return 0 on success
-*/
+   \return 1 on failure
+   \return 0 on success
+ */
 int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
 {
     unsigned int x;
@@ -94,9 +93,8 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
     gsd_writeView(&pixbuf, xsize, ysize);
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_warning (_("Unable to open file <%s> for writing"),
-		   name);
-	return(1);
+	G_warning(_("Unable to open file <%s> for writing"), name);
+	return (1);
     }
 
     fprintf(fp, "P6 %d %d 255\n", xsize, ysize);
@@ -107,9 +105,9 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
 	    unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
 	    unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
 
-	    fputc((int) r, fp);
-	    fputc((int) g, fp);
-	    fputc((int) b, fp);
+	    fputc((int)r, fp);
+	    fputc((int)g, fp);
+	    fputc((int)b, fp);
 	}
 
     }

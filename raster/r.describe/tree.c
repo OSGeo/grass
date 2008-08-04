@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.describe
@@ -29,47 +30,42 @@ typedef struct
     int right;
 } NODE;
 
-static NODE *tree = 0 ;  /* tree of values */
-static int tlen ;               /* allocated tree size */
-static int N;                   /* number of actual nodes in tree */
+static NODE *tree = 0;		/* tree of values */
+static int tlen;		/* allocated tree size */
+static int N;			/* number of actual nodes in tree */
 
 
-int 
-plant_tree (void)
+int plant_tree(void)
 {
     N = 0;
-    if (!tree)
-    {
+    if (!tree) {
 	tlen = INCR;
-	tree = (NODE *) G_malloc (tlen * sizeof (NODE));
+	tree = (NODE *) G_malloc(tlen * sizeof(NODE));
     }
 
     return 0;
 }
 
-int 
-add_node_to_tree (register CELL cat)
+int add_node_to_tree(register CELL cat)
 {
-    register int p,q;
+    register int p, q;
     int idx, offset;
 
-    if (cat < 0)
-    {
-	idx = -(-cat/NCATS) - 1;
-	offset = cat - idx*NCATS - 1;
+    if (cat < 0) {
+	idx = -(-cat / NCATS) - 1;
+	offset = cat - idx * NCATS - 1;
     }
-    else
-    {
-	idx = cat/NCATS;
-	offset = cat - idx*NCATS;
+    else {
+	idx = cat / NCATS;
+	offset = cat - idx * NCATS;
     }
     if (offset < 0 || offset >= NCATS)
-	G_warning ("cat %ld got offset %d - shouldn't happen",(long)cat,offset);
-/* first node is special case */
-    if (N == 0)
-    {
+	G_warning("cat %ld got offset %d - shouldn't happen", (long)cat,
+		  offset);
+    /* first node is special case */
+    if (N == 0) {
 	N = 1;
-	G_zero (tree[N].cat, sizeof (tree[N].cat));
+	G_zero(tree[N].cat, sizeof(tree[N].cat));
 	tree[N].idx = idx;
 	tree[N].cat[offset] = 1;
 	tree[N].left = 0;
@@ -79,59 +75,55 @@ add_node_to_tree (register CELL cat)
     }
 
     q = 1;
-    while (q > 0)
-    {
+    while (q > 0) {
 	p = q;
-	if (tree[q].idx == idx)
-	{
+	if (tree[q].idx == idx) {
 	    tree[q].cat[offset] = 1;
 
-	    return 0;                       /* found */
+	    return 0;		/* found */
 	}
 	if (tree[q].idx > idx)
-	    q = tree[q].left;             /* go left */
+	    q = tree[q].left;	/* go left */
 	else
-	    q = tree[q].right;            /* go right */
+	    q = tree[q].right;	/* go right */
     }
 
-/* new node */
+    /* new node */
     N++;
 
-/* grow the tree? */
+    /* grow the tree? */
     if (N >= tlen)
-	tree = (NODE *) G_realloc (tree, sizeof(NODE) * (tlen += INCR));
+	tree = (NODE *) G_realloc(tree, sizeof(NODE) * (tlen += INCR));
 
-/* add node to tree */
-    G_zero (tree[N].cat, sizeof (tree[N].cat));
+    /* add node to tree */
+    G_zero(tree[N].cat, sizeof(tree[N].cat));
     tree[N].idx = idx;
     tree[N].cat[offset] = 1;
     tree[N].left = 0;
 
-    if (tree[p].idx > idx)
-    {
-	tree[N].right = -p;            /* create thread */
-	tree[p].left  = N;             /* insert left */
+    if (tree[p].idx > idx) {
+	tree[N].right = -p;	/* create thread */
+	tree[p].left = N;	/* insert left */
     }
-    else
-    {
-	tree[N].right = tree[p].right; /* copy right link/thread */
-	tree[p].right = N;             /* add right */
+    else {
+	tree[N].right = tree[p].right;	/* copy right link/thread */
+	tree[p].right = N;	/* add right */
     }
 
     return 0;
 }
 
 static int curp;
+
 #ifdef COMMENT_OUT
 static int curoffset;
 #endif
 
-int 
-first_node (void)
+int first_node(void)
 {
     int q;
 
-/* start at root and go all the way to the left */
+    /* start at root and go all the way to the left */
     curp = 1;
     while ((q = tree[curp].left))
 	curp = q;
@@ -139,61 +131,55 @@ first_node (void)
     return 0;
 }
 
-int 
-next_node (void)
+int next_node(void)
 {
     int q;
 
-/* go to the right */
+    /* go to the right */
     curp = tree[curp].right;
 
-    if (curp == 0)          /* no more */
+    if (curp == 0)		/* no more */
 	return 0;
 
-    if (curp < 0)           /* thread. stop here */
-    {
-	curp = -curp ;
+    if (curp < 0) {		/* thread. stop here */
+	curp = -curp;
 	return 1;
     }
 
-    while ((q = tree[curp].left))   /* now go all the way left */
+    while ((q = tree[curp].left))	/* now go all the way left */
 	curp = q;
 
     return 1;
 }
 
 #ifdef COMMENT_OUT
-int 
-first_cat (CELL *cat)
+int first_cat(CELL * cat)
 {
     first_node();
     curoffset = -1;
 
-    return next_cat (cat);
+    return next_cat(cat);
 }
 
-int 
-next_cat (CELL *cat)
+int next_cat(CELL * cat)
 {
     int idx;
-    for(;;)
-    {
+
+    for (;;) {
 	curoffset++;
-	if (curoffset >= NCATS)
-	{
-	    if(!next_node())
+	if (curoffset >= NCATS) {
+	    if (!next_node())
 		return 0;
 	    curoffset = -1;
 	    continue;
 	}
-	if (tree[curp].cat[curoffset])
-	{
+	if (tree[curp].cat[curoffset]) {
 	    idx = tree[curp].idx;
 
 	    if (idx < 0)
-		*cat = idx*NCATS + curoffset+1;
+		*cat = idx * NCATS + curoffset + 1;
 	    else
-		*cat = idx*NCATS + curoffset;
+		*cat = idx * NCATS + curoffset;
 
 	    return 1;
 	}

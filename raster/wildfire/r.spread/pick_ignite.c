@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *
  *	pick_ignite.c 	pick an ignition based on probability
@@ -14,10 +15,11 @@
 #include <limits.h>
 #include "local_proto.h"
 
-int p[18] = {100, 100, 100, 90, 80, 70, 60, 50, 40,   /*adapt the "average"*/
-	      40,  30,  30, 20, 20, 20, 10, 10, 10};  /*10-50 shading, 80-89F*/
+int p[18] = { 100, 100, 100, 90, 80, 70, 60, 50, 40,	/*adapt the "average" */
+    40, 30, 30, 20, 20, 20, 10, 10, 10
+};				/*10-50 shading, 80-89F */
 
-int pick_ignite (int i)
+int pick_ignite(int i)
 {
-	return ((100.0*rand()/INT_MAX) <= p[i]);
+    return ((100.0 * rand() / INT_MAX) <= p[i]);
 }

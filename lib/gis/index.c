@@ -13,15 +13,13 @@
  *  \return char * 
  */
 
-char *
-G_index  (const char *str, int delim)
-
+char *G_index(const char *str, int delim)
 {
     while (*str && *str != delim)
 	str++;
     if (delim == 0)
-	return (char *) str;
-    return *str ? (char *) str : NULL;
+	return (char *)str;
+    return *str ? (char *)str : NULL;
 }
 
 
@@ -35,20 +33,17 @@ G_index  (const char *str, int delim)
  *  \return char * 
  */
 
-char *
-G_rindex  (const char *str, int delim)
-
+char *G_rindex(const char *str, int delim)
 {
     const char *p;
 
     p = NULL;
-    while (*str)
-    {
+    while (*str) {
 	if (*str == delim)
 	    p = str;
-	str ++;
+	str++;
     }
     if (delim == 0)
-	return (char *) str;
-    return (char *) p;
+	return (char *)str;
+    return (char *)p;
 }

@@ -56,8 +56,8 @@ equal_val_array *alloc_equal_val_array(int count);
 void free_equal_val_array(equal_val_array * vals);
 equal_val_array *add_equal_val_to_array(equal_val_array * array, double val);
 int check_equal_value(equal_val_array * array, double val);
-stat_table *create_stat_table(int nsteps, equal_val_array * values, double min,
-			      double max);
+stat_table *create_stat_table(int nsteps, equal_val_array * values,
+			      double min, double max);
 void free_stat_table(stat_table * stats);
 void print_stat_table(stat_table * stats);
 void update_stat_table(stat_table * stats, G3D_Region * region);
@@ -65,7 +65,7 @@ void heapsort_eqvals(equal_val_array * data, int n);
 static void downheap_eqvals(equal_val_array * data, int n, int k);
 static void check_range_value(stat_table * stats, double value);
 static void tree_search_range(stat_table * stats, int left, int right,
-				     double value);
+			      double value);
 
 /* *************************************************************** */
 /* ***** allocate equal_val_array structure ********************* */
@@ -281,7 +281,8 @@ void update_stat_table(stat_table * stats, G3D_Region * region)
     for (i = 0; i < stats->nsteps; i++) {
 	stats->table[i]->vol = stats->table[i]->count * vol;
 	stats->table[i]->perc =
-	    (double)(100.0 * (double)stats->table[i]->count / (double)cellnum);
+	    (double)(100.0 * (double)stats->table[i]->count /
+		     (double)cellnum);
 	stats->sum_count += stats->table[i]->count;
 	stats->sum_vol += stats->table[i]->vol;
 	stats->sum_perc += stats->table[i]->perc;
@@ -313,9 +314,10 @@ void print_stat_table(stat_table * stats)
 		    stats->table[i]->vol, stats->table[i]->perc,
 		    stats->table[i]->count);
 	}
-	fprintf(stdout, "%7i                    *   %13.3lf   %7.5lf   %10i\n",
-		stats->null->num, stats->null->vol,
-		stats->null->perc, stats->null->count);
+	fprintf(stdout,
+		"%7i                    *   %13.3lf   %7.5lf   %10i\n",
+		stats->null->num, stats->null->vol, stats->null->perc,
+		stats->null->count);
 
 	fprintf(stdout, "\nNumber of groups with equal values: %i",
 		stats->nsteps);
@@ -421,7 +423,8 @@ void tree_search_range(stat_table * stats, int left, int right, double value)
     }
     else if (size == 1) {	/* if the size is one, check directly */
 
-	if (value >= stats->table[left]->min && value < stats->table[left]->max) {
+	if (value >= stats->table[left]->min &&
+	    value < stats->table[left]->max) {
 	    stats->table[left]->count++;
 	}
 	else if (value >= stats->table[right]->min &&
@@ -579,7 +582,8 @@ int main(int argc, char *argv[])
 
     equal = G_define_flag();
     equal->key = 'e';
-    equal->description = _("Calculate statistics based on equal value groups");
+    equal->description =
+	_("Calculate statistics based on equal value groups");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -645,7 +649,8 @@ int main(int argc, char *argv[])
 			if (!G3d_isNullValueNum(&val_d, map_type)) {
 			    /*the first entry */
 			    if (eqvals == NULL)
-				eqvals = add_equal_val_to_array(eqvals, val_d);
+				eqvals =
+				    add_equal_val_to_array(eqvals, val_d);
 			    else
 				check_equal_value(eqvals, val_d);
 

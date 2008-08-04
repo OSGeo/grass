@@ -1,20 +1,20 @@
 /*!
-  \file GSX.c
- 
-  \brief OGSF library - loading and manipulating surfaces
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (December 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \file GSX.c
+
+   \brief OGSF library - loading and manipulating surfaces
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (December 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <grass/gstypes.h>
 
@@ -24,10 +24,10 @@ void (*Swap_func) ();
 static int Cxl = 0;
 
 /*!
-  \brief Check for cancel
+   \brief Check for cancel
 
-  \return code
-*/
+   \return code
+ */
 int GS_check_cancel(void)
 {
     Cxl_func();
@@ -36,8 +36,8 @@ int GS_check_cancel(void)
 }
 
 /*!
-  \brief Set cancel
-*/
+   \brief Set cancel
+ */
 void GS_set_cancel(int c)
 {
     Cxl = c;
@@ -46,10 +46,10 @@ void GS_set_cancel(int c)
 }
 
 /*!
-  \brief Set cxl function
+   \brief Set cxl function
 
-  \param pointer to function
-*/
+   \param pointer to function
+ */
 void GS_set_cxl_func(void (*f) (void))
 {
     Cxl_func = f;
@@ -58,10 +58,10 @@ void GS_set_cxl_func(void (*f) (void))
 }
 
 /*!
-  \brief Set swap function
+   \brief Set swap function
 
-  \param pointer to function
-*/
+   \param pointer to function
+ */
 void GS_set_swap_func(void (*f) (void))
 {
     Swap_func = f;

@@ -1,3 +1,4 @@
+
 /***************************************************************************
 *
 * MODULE:       r.info
@@ -31,11 +32,11 @@
 
 
 /* local prototypes */
-static void format_double (const double, char *);
-static void compose_line (FILE *, const char *, ...);
+static void format_double(const double, char *);
+static void compose_line(FILE *, const char *, ...);
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
     char *name, *mapset;
     char tmp1[100], tmp2[100], tmp3[100];
@@ -77,7 +78,8 @@ int main (int argc, char **argv)
 
     sflag = G_define_flag();
     sflag->key = 's';
-    sflag->description = _("Print raster map resolution (NS-res, EW-res) only");
+    sflag->description =
+	_("Print raster map resolution (NS-res, EW-res) only");
 
     tflag = G_define_flag();
     tflag->key = 't';
@@ -106,10 +108,11 @@ int main (int argc, char **argv)
     timestampflag = G_define_flag();
     timestampflag->key = 'p';
     timestampflag->description =
-	_("Print raster map timestamp (day.month.year hour:minute:seconds) only");
+	_
+	("Print raster map timestamp (day.month.year hour:minute:seconds) only");
 
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     name = G_store(opt1->answer);
     if ((mapset = G_find_cell2(name, "")) == NULL)
@@ -121,42 +124,41 @@ int main (int argc, char **argv)
     is_reclass = G_get_reclass(name, mapset, &reclass);
     data_type = G_raster_map_type(name, mapset);
 
-    if( G_read_raster_units(name, mapset, units) != 0)
+    if (G_read_raster_units(name, mapset, units) != 0)
 	units[0] = '\0';
-    if( G_read_raster_vdatum(name, mapset, vdatum) != 0)
+    if (G_read_raster_vdatum(name, mapset, vdatum) != 0)
 	vdatum[0] = '\0';
 
     /*Check the Timestamp */
     time_ok = G_read_raster_timestamp(name, mapset, &ts) > 0;
     /*Check for valid entries, show none if no timestamp available */
     if (time_ok) {
-        if (ts.count > 0)
-            first_time_ok = 1;
-        if (ts.count > 1)
-            second_time_ok = 1;
+	if (ts.count > 0)
+	    first_time_ok = 1;
+	if (ts.count > 1)
+	    second_time_ok = 1;
     }
 
     if (G_read_fp_range(name, mapset, &range) < 0)
-        G_fatal_error (_("Unable to read range file"));
+	G_fatal_error(_("Unable to read range file"));
     G_get_fp_range_min_max(&range, &zmin, &zmax);
 
     out = stdout;
 
     if (!rflag->answer && !sflag->answer && !tflag->answer &&
 	!gflag->answer && !hflag->answer && !timestampflag->answer &&
-	!mflag->answer && !uflag->answer && !dflag->answer)
-    {
+	!mflag->answer && !uflag->answer && !dflag->answer) {
 	divider('+');
 
 	compose_line(out, "Layer:    %-29.29s  Date: %s", name,
-	     hist_ok ? hist.mapid : "??");
+		     hist_ok ? hist.mapid : "??");
 	compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
-		mapset, hist_ok ? hist.creator : "??");
+		     mapset, hist_ok ? hist.creator : "??");
 	compose_line(out, "Location: %s", G_location());
 	compose_line(out, "DataBase: %s", G_gisdbase());
 	compose_line(out, "Title:    %s ( %s )",
-		cats_ok ? cats.title : "??",
-		hist_ok ? hist.title : "??");
+		     cats_ok ? cats.title : "??",
+		     hist_ok ? hist.title : "??");
 
 	/*This shows the TimeStamp */
 	if (time_ok && (first_time_ok || second_time_ok)) {
@@ -173,20 +175,21 @@ int main (int argc, char **argv)
 	if (cats_ok)
 	    format_double((double)cats.num, tmp1);
 
-	compose_line(out, "  Type of Map:  %-20.20s Number of Categories: %-9s",
-	     hist_ok ? hist.maptype : "??", cats_ok ? tmp1 : "??");
+	compose_line(out,
+		     "  Type of Map:  %-20.20s Number of Categories: %-9s",
+		     hist_ok ? hist.maptype : "??", cats_ok ? tmp1 : "??");
 
 	compose_line(out, "  Data Type:    %s",
-		       (data_type == CELL_TYPE ? "CELL" :
-			(data_type == DCELL_TYPE ? "DCELL" :
-			 (data_type == FCELL_TYPE ? "FCELL" : "??"))));
+		     (data_type == CELL_TYPE ? "CELL" :
+		      (data_type == DCELL_TYPE ? "DCELL" :
+		       (data_type == FCELL_TYPE ? "FCELL" : "??"))));
 
 	/* For now hide these unless they exist to keep the noise low. In
-	  *   future when the two are used more widely they can be printed
-	  *   along with the standard set. */
-	if(units[0] || vdatum[0]) {
+	 *   future when the two are used more widely they can be printed
+	 *   along with the standard set. */
+	if (units[0] || vdatum[0]) {
 	    compose_line(out, "  Data Units:   %-20.20s Vertical datum: %s",
-		units, vdatum);
+			 units, vdatum);
 	}
 
 	if (head_ok) {
@@ -194,55 +197,56 @@ int main (int argc, char **argv)
 	    compose_line(out, "  Columns:      %d", cellhd.cols);
 #ifdef HAVE_LONG_LONG_INT
 	    compose_line(out, "  Total Cells:  %llu",
-			(unsigned long long)cellhd.rows * cellhd.cols);
+			 (unsigned long long)cellhd.rows * cellhd.cols);
 #else
-	    compose_line(out, "  Total Cells:  %lu (accuracy - see r.info manual)",
-			(unsigned long)cellhd.rows * cellhd.cols);
+	    compose_line(out,
+			 "  Total Cells:  %lu (accuracy - see r.info manual)",
+			 (unsigned long)cellhd.rows * cellhd.cols);
 #endif
 
 	    /* This is printed as a guide to what the following eastings and
-	       * northings are printed in. This data is NOT from the values
-	       * stored in the map's Cell_head */
-	    if(G_projection() == PROJECTION_UTM)
-	    {
+	     * northings are printed in. This data is NOT from the values
+	     * stored in the map's Cell_head */
+	    if (G_projection() == PROJECTION_UTM) {
 		compose_line(out, "       Projection: %s (zone %d)",
-				G_database_projection_name(), G_zone());
+			     G_database_projection_name(), G_zone());
 	    }
-	    else
-	    {
+	    else {
 		compose_line(out, "       Projection: %s",
-				G_database_projection_name());
+			     G_database_projection_name());
 	    }
 
 	    G_format_northing(cellhd.north, tmp1, cellhd.proj);
 	    G_format_northing(cellhd.south, tmp2, cellhd.proj);
 	    G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
 	    compose_line(out, "           N: %10s    S: %10s   Res: %5s",
-		tmp1, tmp2, tmp3);
+			 tmp1, tmp2, tmp3);
 
 	    G_format_easting(cellhd.east, tmp1, cellhd.proj);
 	    G_format_easting(cellhd.west, tmp2, cellhd.proj);
 	    G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
 	    compose_line(out, "           E: %10s    W: %10s   Res: %5s",
-			   tmp1, tmp2, tmp3);
+			 tmp1, tmp2, tmp3);
 
 	    if (data_type == CELL_TYPE) {
-		if( 2 == G_read_range(name, mapset, &crange) )
-		    compose_line(out, "  Range of data:    min = NULL  max = NULL");
+		if (2 == G_read_range(name, mapset, &crange))
+		    compose_line(out,
+				 "  Range of data:    min = NULL  max = NULL");
 		else
-		    compose_line(out, "  Range of data:    min = %i  max = %i",
-			(CELL) zmin, (CELL) zmax);
+		    compose_line(out,
+				 "  Range of data:    min = %i  max = %i",
+				 (CELL) zmin, (CELL) zmax);
 	    }
 	    else {
 		compose_line(out, "  Range of data:    min = %f  max = %f",
-			zmin, zmax);
+			     zmin, zmax);
 	    }
 	}
 
 	printline("");
 
 	if (hist_ok) {
-	    if( hist.datsrc_1[0] != '\0' || hist.datsrc_2[0] != '\0') {
+	    if (hist.datsrc_1[0] != '\0' || hist.datsrc_2[0] != '\0') {
 		printline("  Data Source:");
 		compose_line(out, "   %s", hist.datsrc_1);
 		compose_line(out, "   %s", hist.datsrc_2);
@@ -270,7 +274,7 @@ int main (int argc, char **argv)
 	    divider('|');
 
 	    compose_line(out, "  Reclassification of [%s] in mapset [%s]",
-			   reclass.name, reclass.mapset);
+			 reclass.name, reclass.mapset);
 
 	    printline("");
 	    printline("        Category        Original categories");
@@ -278,6 +282,7 @@ int main (int argc, char **argv)
 
 	    for (i = 0; i < reclass.num; i++) {
 		CELL x = reclass.table[i];
+
 		if (G_is_c_null_value(&x))
 		    continue;
 		if (first || x < mincat)
@@ -296,12 +301,13 @@ int main (int argc, char **argv)
 		    if (cat == 0)
 			continue;
 		    if (G_asprintf(&num, "%5ld", (long)cat) < 1)
-		        G_fatal_error(_("Cannot allocate memory for string"));
+			G_fatal_error(_("Cannot allocate memory for string"));
 
 		    next = 0;
 		    do {
 			next = reclass_text(text, cat, &reclass, next);
-			compose_line(out, "     %5s              %s", num, text);
+			compose_line(out, "     %5s              %s", num,
+				     text);
 			*num = 0;
 		    }
 		    while (next >= 0);
@@ -311,11 +317,11 @@ int main (int argc, char **argv)
 
 	fprintf(out, "\n");
     }
-    else {  /* rflag or sflag or tflag or gflag or hflag or mflag */
+    else {			/* rflag or sflag or tflag or gflag or hflag or mflag */
 
 	if (rflag->answer) {
 	    if (data_type == CELL_TYPE) {
-		if( 2 == G_read_range(name, mapset, &crange) ) {
+		if (2 == G_read_range(name, mapset, &crange)) {
 		    fprintf(out, "min=NULL\n");
 		    fprintf(out, "max=NULL\n");
 		}
@@ -359,7 +365,7 @@ int main (int argc, char **argv)
 
 	if (mflag->answer) {
 	    fprintf(out, "title=%s (%s)\n", cats_ok ? cats.title :
-				"??", hist_ok ? hist.title : "??");
+		    "??", hist_ok ? hist.title : "??");
 	}
 
 	if (timestampflag->answer) {
@@ -395,28 +401,28 @@ int main (int argc, char **argv)
 		}
 	    }
 	}
-    }	/* else rflag or sflag or tflag or gflag or hflag or mflag*/
+    }				/* else rflag or sflag or tflag or gflag or hflag or mflag */
 
     return EXIT_SUCCESS;
 }
 
 
-static void format_double (const double value, char *buf)
+static void format_double(const double value, char *buf)
 {
     sprintf(buf, "%.8lf", value);
     G_trim_decimal(buf);
 }
 
 
-static void compose_line(FILE *out, const char *fmt, ...)
+static void compose_line(FILE * out, const char *fmt, ...)
 {
     char *line = NULL;
     va_list ap;
 
     va_start(ap, fmt);
 
-    if (G_vasprintf (&line, fmt, ap) <= 0)
-        G_fatal_error(_("Cannot allocate memory for string"));
+    if (G_vasprintf(&line, fmt, ap) <= 0)
+	G_fatal_error(_("Cannot allocate memory for string"));
 
     va_end(ap);
 

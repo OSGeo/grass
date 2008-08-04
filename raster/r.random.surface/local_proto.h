@@ -5,33 +5,44 @@
 
 /* calcsd.c */
 void CalcSD(void);
+
 /* calcsurf.c */
 void CalcSurface(void);
+
 /* cpfilter.c */
-void CopyFilter(FILTER *FPtr, FILTER Filter);
+void CopyFilter(FILTER * FPtr, FILTER Filter);
+
 /* dd.c */
 double DD(double Dist);
+
 /* decay.c */
 void DistDecay(double *Effect, int R, int C);
+
 /* digits.c */
 int Digits(double Double, int MaxSig);
+
 /* gasdev.c */
 double GasDev(void);
+
 /* gennorm.c */
 void GenNorm(void);
+
 /* init.c */
 void Init(int argc, char **argv);
+
 /* makebigf.c */
 void MakeBigF(void);
+
 /* makepp.c */
 double MakePP(int Row, int Col, int OutRows, int OutCols,
-            double **Randoms, BIGF BigF);
+	      double **Randoms, BIGF BigF);
 /* random.c */
 double ran1(void);
+
 /* save.c */
 void SaveMap(int NumMap, int MapSeed);
+
 /* zero.c */
 void ZeroMapCells(void);
 
 #endif
-

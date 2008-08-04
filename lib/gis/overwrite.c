@@ -1,3 +1,4 @@
+
 /**
  * \file overwrite.c
  *
@@ -33,33 +34,35 @@
  * \return 0 if not overwrite
  */
 
-int G_check_overwrite(int argc, char **argv) 
+int G_check_overwrite(int argc, char **argv)
 {
     char *overstr;
     int overwrite;
 
     overwrite = 0;
     if ((overstr = G__getenv("OVERWRITE"))) {
-	overwrite = atoi (overstr);
+	overwrite = atoi(overstr);
     }
 
     /* check if inherited GRASS_OVERWRITE is 1 */
-    if (!overwrite && (overstr = getenv ("GRASS_OVERWRITE"))) {
-	overwrite = atoi (overstr);
+    if (!overwrite && (overstr = getenv("GRASS_OVERWRITE"))) {
+	overwrite = atoi(overstr);
     }
-    
+
     /* check for --o or --overwrite option */
     if (!overwrite) {
 	int i;
-	for(i = 0; i < argc; i++) {
-	    if (strcmp(argv[i], "--o") == 0 || strcmp(argv[i], "--overwrite") == 0) {
+
+	for (i = 0; i < argc; i++) {
+	    if (strcmp(argv[i], "--o") == 0 ||
+		strcmp(argv[i], "--overwrite") == 0) {
 		overwrite = 1;
 		break;
 	    }
 	}
     }
-    
-    G__setenv ( "OVERWRITE", "1" );
+
+    G__setenv("OVERWRITE", "1");
 
     return overwrite;
 }

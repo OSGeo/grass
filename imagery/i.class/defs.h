@@ -15,7 +15,7 @@ typedef struct
 /* this is a graphics structure */
 typedef struct
 {
-    int top, bottom ,left, right;
+    int top, bottom, left, right;
     int nrows, ncols;
     struct
     {
@@ -23,7 +23,7 @@ typedef struct
 	struct Cell_head head;
 	char name[GNAME_MAX];
 	char mapset[GMAPSET_MAX];
-	int top, bottom ,left, right;
+	int top, bottom, left, right;
 	double ew_res, ns_res;	/* original map resolution */
     } cell;
 } View;
@@ -31,12 +31,12 @@ typedef struct
 
 typedef struct
 {
-    int   type;         /* object type */
-    int (*handler)();	/* routine to handle the event */
-    char *label;	/* label to display if MENU or OPTION */
-    int   binding;      /* OPTION bindings */
-    int  *status;	/* MENU,OPTION status */
-    int top,bottom,left,right;
+    int type;			/* object type */
+    int (*handler) ();		/* routine to handle the event */
+    char *label;		/* label to display if MENU or OPTION */
+    int binding;		/* OPTION bindings */
+    int *status;		/* MENU,OPTION status */
+    int top, bottom, left, right;
 } Objects;
 
 #define MENU_OBJECT 1
@@ -57,8 +57,8 @@ typedef struct
 
 struct signalflag
 {
-	int interrupt;
-	int alarm;
+    int interrupt;
+    int alarm;
 };
 
 #define OVER_WRITE 1
@@ -67,29 +67,29 @@ struct signalflag
 #define MAX_VERTEX 100
 struct region
 {
-        struct
-        {
-                int define;
-                int completed;
-                int filled;
-		int saved;
-        } area;
+    struct
+    {
+	int define;
+	int completed;
+	int filled;
+	int saved;
+    } area;
 
-        int npoints;
-        POINT point[MAX_VERTEX];
-	View *view;
+    int npoints;
+    POINT point[MAX_VERTEX];
+    View *view;
 
-        int saved_npoints;
-        POINT saved_point[MAX_VERTEX];
-	View *saved_view;
+    int saved_npoints;
+    POINT saved_point[MAX_VERTEX];
+    View *saved_view;
 
-        int vertex_npoints;
-        POINT vertex[MAX_VERTEX];
+    int vertex_npoints;
+    POINT vertex[MAX_VERTEX];
 
-        int perimeter_npoints;
-        POINT *perimeter;
+    int perimeter_npoints;
+    POINT *perimeter;
 
-} ;
+};
 extern int edge_order(const void *, const void *);
 
 /* the mouse buttons and the numbers they return */

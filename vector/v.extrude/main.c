@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:     v.extrude
@@ -28,15 +29,14 @@
 
 static int extrude(struct Map_info *, struct Map_info *,
 		   struct line_cats *, struct line_pnts *,
-		   int, int, double, double,
-		   struct Cell_head, int, int);
+		   int, int, double, double, struct Cell_head, int, int);
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     char *mapset;
-    struct Option *old, *new, *zshift, *height, *elevation, *hcolumn, *type_opt,
-	*field_opt;
+    struct Option *old, *new, *zshift, *height, *elevation, *hcolumn,
+	*type_opt, *field_opt;
     struct Flag *t_flag;
 
     struct Map_info In, Out;
@@ -100,8 +100,7 @@ int main(int argc, char *argv[])
     hcolumn = G_define_standard_option(G_OPT_COLUMN);
     hcolumn->key = "hcolumn";
     hcolumn->multiple = NO;
-    hcolumn->description =
-	_("Name of attribute column with object heights");
+    hcolumn->description = _("Name of attribute column with object heights");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->answer = "point,line,boundary,area";
@@ -115,8 +114,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (!height->answer && !hcolumn->answer) {
-	G_fatal_error(_("One of '%s' or '%s' parameters must be set"), height->key,
-		      hcolumn->key);
+	G_fatal_error(_("One of '%s' or '%s' parameters must be set"),
+		      height->key, hcolumn->key);
     }
 
     sscanf(zshift->answer, "%lf", &voffset);
@@ -151,8 +150,8 @@ int main(int argc, char *argv[])
 
     /* opening old vector */
     Vect_open_old(&In, old->answer, mapset);
-    Vect_hist_copy (&In, &Out);
-    Vect_hist_command (&Out);
+    Vect_hist_copy(&In, &Out);
+    Vect_hist_command(&Out);
 
     /* opening database connection, if required */
     if (hcolumn->answer) {
@@ -164,7 +163,8 @@ int main(int argc, char *argv[])
 
 	if ((driver =
 	     db_start_driver_open_database(Fi->driver, Fi->database)) == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"), Fi->database, Fi->driver);
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+			  Fi->database, Fi->driver);
 
     }
 
@@ -179,7 +179,8 @@ int main(int argc, char *argv[])
 
 	/* open the elev raster, and check for error condition */
 	if ((fdrast = G_open_cell_old(elevation->answer, mapset)) < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"), elevation->answer);
+	    G_fatal_error(_("Unable to open raster map <%s>"),
+			  elevation->answer);
     }
 
     /* if area */
@@ -188,7 +189,7 @@ int main(int argc, char *argv[])
 	nelements = Vect_get_num_areas(&In);
 	G_debug(2, "n_areas = %d", nelements);
 	if (nelements > 0)
-	    G_verbose_message (_("Extruding areas..."));
+	    G_verbose_message(_("Extruding areas..."));
 	for (areanum = 1; areanum <= nelements; areanum++) {
 
 	    G_debug(3, "area = %d", areanum);
@@ -198,7 +199,7 @@ int main(int argc, char *argv[])
 
 	    centroid = Vect_get_area_centroid(&In, areanum);
 	    if (!centroid) {
-		G_warning (_("Skipping area %d without centroid"));
+		G_warning(_("Skipping area %d without centroid"));
 		continue;
 	    }
 
@@ -210,7 +211,8 @@ int main(int argc, char *argv[])
 			hcolumn->answer, Fi->table, Fi->key, cat);
 		G_debug(3, "SQL: %s", query);
 		db_append_string(&sql, query);
-		if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL)
+		if (db_open_select_cursor
+		    (driver, &sql, &cursor, DB_SEQUENTIAL)
 		    != DB_OK)
 		    G_fatal_error(_("Cannot select attributes for area %d"),
 				  areanum);
@@ -223,15 +225,16 @@ int main(int argc, char *argv[])
 		value = db_get_column_value(column);
 
 		objheight = db_get_value_as_double(value,
-						   db_get_column_host_type(column));
+						   db_get_column_host_type
+						   (column));
 
 		/* only draw if hcolumn was defined */
 		if (objheight != 0) {
-		    G_debug(3, "area centroid %d: object height: %f", centroid,
-			    objheight);
+		    G_debug(3, "area centroid %d: object height: %f",
+			    centroid, objheight);
 		}
 
-	    } /* if hcolumn->answer */
+	    }			/* if hcolumn->answer */
 
 	    Vect_get_area_points(&In, areanum, Points);
 
@@ -241,10 +244,10 @@ int main(int argc, char *argv[])
 
 	    G_percent(areanum, nelements, 1);
 
-	} /* foreach area */
+	}			/* foreach area */
 
     }
-    
+
     if (only_type > 0) {
 	G_debug(1, "drawing other than areas");
 	i = 1;
@@ -259,7 +262,7 @@ int main(int argc, char *argv[])
 	    if (!Vect_line_alive(&In, line))
 		continue;
 
-	    if(!(type & only_type))
+	    if (!(type & only_type))
 		continue;
 
 	    /* fetch categories */
@@ -272,15 +275,16 @@ int main(int argc, char *argv[])
 	    if (hcolumn->answer) {
 		cat = Vect_get_line_cat(&In, line, Clist->field);
 
-                /* sql init */
+		/* sql init */
 		db_init_string(&sql);
 		sprintf(query, "SELECT %s FROM %s WHERE %s = %d",
 			hcolumn->answer, Fi->table, Fi->key, cat);
 		G_debug(3, "SQL: %s", query);
 		db_append_string(&sql, query);
 
-                /* cursor init */
-		if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL)
+		/* cursor init */
+		if (db_open_select_cursor
+		    (driver, &sql, &cursor, DB_SEQUENTIAL)
 		    != DB_OK)
 		    G_fatal_error(_("Cannot select attributes for area #%d"),
 				  areanum);
@@ -290,26 +294,25 @@ int main(int argc, char *argv[])
 		if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
 		    continue;
 
-                /* objheight value */
+		/* objheight value */
 		value = db_get_column_value(column);
 		/* host_type -> ctype ? 
-		objheight = 
-		    db_get_value_as_double(value,
-					   db_get_column_host_type(column));
-		*/
-		ctype = db_sqltype_to_Ctype (db_get_column_sqltype(column));
+		   objheight = 
+		   db_get_value_as_double(value,
+		   db_get_column_host_type(column));
+		 */
+		ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
 		if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_STRING &&
 		    ctype != DB_C_TYPE_DOUBLE) {
-		  G_fatal_error (_("Column <%s>: invalid data type"),
-				   db_get_column_name (column));
+		    G_fatal_error(_("Column <%s>: invalid data type"),
+				  db_get_column_name(column));
 		}
-		objheight = 
-		  db_get_value_as_double(value, ctype);
-					   
+		objheight = db_get_value_as_double(value, ctype);
+
 		/* only draw if hcolumn was defined */
 		if (objheight != 0) {
-		    G_debug(3, "area centroid %d: object height: %f", centroid,
-			    objheight);
+		    G_debug(3, "area centroid %d: object height: %f",
+			    centroid, objheight);
 		}
 
 	    }
@@ -320,10 +323,10 @@ int main(int argc, char *argv[])
 	    /* progress feedback */
 	    G_percent(line, nelements, 1);
 
-	} /* for each line */
-    } /* else if area */
+	}			/* for each line */
+    }				/* else if area */
 
-    G_percent(1,1,1);
+    G_percent(1, 1, 1);
 
     if (driver) {
 	db_close_database(driver);
@@ -337,10 +340,11 @@ int main(int argc, char *argv[])
 
     /* header */
     char *comment;
-    G_asprintf (&comment, "Generated by %s from vector map <%s>", G_program_name(),
-		G_fully_qualified_name (old->answer, mapset));
+
+    G_asprintf(&comment, "Generated by %s from vector map <%s>",
+	       G_program_name(), G_fully_qualified_name(old->answer, mapset));
     Vect_set_comment(&Out, comment);
-    G_free (comment);
+    G_free(comment);
 
     Vect_close(&In);
     Vect_close(&Out);
@@ -378,28 +382,29 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 		   int fdrast, int trace, double objheight, double voffset,
 		   struct Cell_head window, int type, int centroid)
 {
-    int k; /* Points->n_points */
+    int k;			/* Points->n_points */
     int nlines;
     struct line_pnts *Points_wall, *Points_roof;
 
-    double voffset_dem;  /* minimal offset */
-    double voffset_curr; /* offset of current point */
-    double voffset_next; /* offset of next point */
+    double voffset_dem;		/* minimal offset */
+    double voffset_curr;	/* offset of current point */
+    double voffset_next;	/* offset of next point */
 
     nlines = 0;
-    
+
     if (type != GV_POINT && Points->n_points < 2)
 	return nlines;
-    
+
     Points_wall = Vect_new_line_struct();
     Points_roof = Vect_new_line_struct();
 
     voffset_dem = 0.0;
     /* do not trace -> calculate minumum dem offset */
-    if(fdrast && !trace) {
+    if (fdrast && !trace) {
 	for (k = 0; k < Points->n_points; k++) {
-	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL, 
-					       Points->y[k], Points->x[k], 0, NEAREST);
+	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
+					       Points->y[k], Points->x[k], 0,
+					       NEAREST);
 	    if (k == 0) {
 		voffset_dem = voffset_curr;
 	    }
@@ -409,7 +414,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    }
 	}
     }
-	    
+
     k = 0;
     /* walls */
     while (1) {
@@ -417,11 +422,14 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 
 	/* trace */
 	if (fdrast && trace) {
-	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL, 
-					       Points->y[k], Points->x[k], 0, NEAREST);
+	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
+					       Points->y[k], Points->x[k], 0,
+					       NEAREST);
 	    if (type != GV_POINT) {
-                voffset_next = G_get_raster_sample(fdrast, &window, NULL, 
-						   Points->y[k + 1], Points->x[k + 1], 0, NEAREST);
+		voffset_next = G_get_raster_sample(fdrast, &window, NULL,
+						   Points->y[k + 1],
+						   Points->x[k + 1], 0,
+						   NEAREST);
 	    }
 	}
 
@@ -433,7 +441,7 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    voffset_curr = voffset_dem + voffset;
 	    voffset_next = voffset_dem + voffset;
 	}
-	
+
 	if (type == GV_POINT) {
 	    /* point -> 3d line (vertical) */
 	    Vect_append_point(Points_wall, Points->x[k], Points->y[k],
@@ -468,11 +476,11 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    Vect_write_line(Out, GV_FACE, Points_wall, Cats);
 	    nlines++;
 
-	    if(type == GV_AREA) {
+	    if (type == GV_AREA) {
 		Vect_append_point(Points_roof, Points->x[k], Points->y[k],
 				  Points->z[k] + objheight + voffset_curr);
 	    }
-	    
+
 	    if (k >= Points->n_points - 2)
 		break;
 	}
@@ -482,9 +490,11 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
     if (type & (GV_POINT | GV_LINE)) {
 	Vect_write_line(Out, GV_LINE, Points_wall, Cats);
 	nlines++;
-    } else if (type == GV_AREA && Points_roof->n_points > 3) {
+    }
+    else if (type == GV_AREA && Points_roof->n_points > 3) {
 	Vect_append_point(Points_roof,
-			  Points_roof->x[0], Points_roof->y[0], Points_roof->z[0]);
+			  Points_roof->x[0], Points_roof->y[0],
+			  Points_roof->z[0]);
 	Vect_write_line(Out, GV_FACE, Points_roof, Cats);
 	nlines++;
 
@@ -497,8 +507,8 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	}
     }
 
-    Vect_destroy_line_struct (Points_wall);
-    Vect_destroy_line_struct (Points_roof);
+    Vect_destroy_line_struct(Points_wall);
+    Vect_destroy_line_struct(Points_roof);
 
     return nlines;
 }

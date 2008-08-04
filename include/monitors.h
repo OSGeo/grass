@@ -3,12 +3,12 @@
 
 struct MON_CAP
 {
-  char *name;				/* name of monitor */
-  char *path;				/* full path name to execute monitor */
-  char *comment;			/* like this */
-  char *link;				/* were monitor interfaces to gis */
-  char *tty;				/* where monitor must be run from */
-  char *where;				/* version of above for user */
+    char *name;			/* name of monitor */
+    char *path;			/* full path name to execute monitor */
+    char *comment;		/* like this */
+    char *link;			/* were monitor interfaces to gis */
+    char *tty;			/* where monitor must be run from */
+    char *where;		/* version of above for user */
 };
 
 #define MON_NEXT 1

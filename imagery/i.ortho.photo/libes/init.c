@@ -1,3 +1,4 @@
+
 /***********************************************************
 * I_fopen_group_init_new (group)
 * I_fopen_group_init_old (group)
@@ -8,15 +9,12 @@
 **********************************************************/
 #include <grass/imagery.h>
 
-FILE *
-I_fopen_group_init_new (char *group)
+FILE *I_fopen_group_init_new(char *group)
 {
-    return I_fopen_group_file_new (group, "INIT_EXP");
+    return I_fopen_group_file_new(group, "INIT_EXP");
 }
 
-FILE *
-I_fopen_group_init_old (char *group)
+FILE *I_fopen_group_init_old(char *group)
 {
-    return I_fopen_group_file_old (group, "INIT_EXP");
+    return I_fopen_group_file_old(group, "INIT_EXP");
 }
-

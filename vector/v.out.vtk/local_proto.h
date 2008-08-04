@@ -22,13 +22,13 @@
 double x_extent;
 double y_extent;
 #else
-extern double x_extent; 
-extern double y_extent; 
+extern double x_extent;
+extern double y_extent;
 #endif
 
 /*Write the vtk output */
 int write_vtk(FILE * ascii, struct Map_info *, int layer, int *types,
-	     int typenum, int dp, double scale);
+	      int typenum, int dp, double scale);
 /*Write the VTK header */
 int write_vtk_head(FILE * ascii, struct Map_info *Map);
 

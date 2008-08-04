@@ -200,9 +200,9 @@ void fatal_error(Database db, char *errorMsg)
 void set_params()
 {
 
-    param.input = G_define_standard_option (G_OPT_R_INPUTS);
-    param.elev = G_define_standard_option (G_OPT_R_ELEVS);
-    param.output = G_define_standard_option (G_OPT_R3_OUTPUT);
+    param.input = G_define_standard_option(G_OPT_R_INPUTS);
+    param.elev = G_define_standard_option(G_OPT_R_ELEVS);
+    param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
     param.upper = G_define_option();
     param.upper->key = "upper";
@@ -278,8 +278,8 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 	if (!G_get_raster_row(db.elev, elev_rast, y, db.elevmaptype))
 	    fatal_error(db, _("Could not get raster row from elev map"));
 
-	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols; x++,
-	     input_ptr =
+	for (x = 0, input_ptr = input_rast, elev_ptr = elev_rast; x < cols;
+	     x++, input_ptr =
 	     G_incr_void_ptr(input_ptr, G_raster_size(db.inputmaptype)),
 	     elev_ptr =
 	     G_incr_void_ptr(elev_ptr, G_raster_size(db.elevmaptype))) {
@@ -287,7 +287,8 @@ void elev_raster_to_g3d(Database db, G3D_Region region)
 	    /*Get the elevation and the input map value */
 	    inval =
 		get_raster_value_as_double(db.inputmaptype, input_ptr, null);
-	    height = get_raster_value_as_double(db.elevmaptype, elev_ptr, null);
+	    height =
+		get_raster_value_as_double(db.elevmaptype, elev_ptr, null);
 
 	    G_debug(4,
 		    "Caluclating position in 3d region -> height %g with value %g",
@@ -460,8 +461,8 @@ int main(int argc, char *argv[])
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-	G_message(
-	     _("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
+	G_message(_
+		  ("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
 	G_get_set_window(&window2d);
 	window2d.ns_res = region.ns_res;
 	window2d.ew_res = region.ew_res;
@@ -471,7 +472,8 @@ int main(int argc, char *argv[])
     }
 
     if (G_legal_filename(param.output->answer) < 0)
-	G3d_fatalError(_("<%s> is an illegal file name"), param.output->answer);
+	G3d_fatalError(_("<%s> is an illegal file name"),
+		       param.output->answer);
 
     G_debug(2, "Open 3d raster map %s", param.output->answer);
 
@@ -550,4 +552,3 @@ int main(int argc, char *argv[])
 
     return (EXIT_SUCCESS);
 }
-

@@ -151,7 +151,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
-    module->description = _("Establishes the current working 3D raster mask.");
+    module->description =
+	_("Establishes the current working 3D raster mask.");
 
 
     if (G3d_maskFileExists())

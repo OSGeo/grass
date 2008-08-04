@@ -1,3 +1,4 @@
+
 /**
  * \file execute.c
  *
@@ -28,53 +29,50 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_execute_immediate(dbString *sql)
+int db__driver_execute_immediate(dbString * sql)
 {
     char *s;
-    int  ret;
+    int ret;
     sqlite3_stmt *stmt;
     const char *rest;
 
-    s = db_get_string (sql);
+    s = db_get_string(sql);
 
-    G_debug ( 3, "execute: %s", s );
-    
-    ret = sqlite3_prepare ( sqlite, s, -1, &stmt, &rest );
-    
-    if ( ret != SQLITE_OK )
-    {
-        append_error("Error in sqlite3_prepare():\n");
-	append_error ((char *) sqlite3_errmsg (sqlite));
-        report_error( );
-        return DB_FAILED;
+    G_debug(3, "execute: %s", s);
+
+    ret = sqlite3_prepare(sqlite, s, -1, &stmt, &rest);
+
+    if (ret != SQLITE_OK) {
+	append_error("Error in sqlite3_prepare():\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
     }
 
-    ret = sqlite3_step ( stmt );
+    ret = sqlite3_step(stmt);
 
-    if ( ret != SQLITE_DONE )
-    {
-        append_error("Error in sqlite3_step():\n");
-	append_error ((char *) sqlite3_errmsg (sqlite));
-        report_error( );
-        return DB_FAILED;
+    if (ret != SQLITE_DONE) {
+	append_error("Error in sqlite3_step():\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
     }
 
-     ret = sqlite3_finalize ( stmt );
+    ret = sqlite3_finalize(stmt);
 
-     if ( ret != SQLITE_OK )
-     {
-	 append_error("Error in sqlite3_finalize():\n");
-	 append_error ((char *) sqlite3_errmsg (sqlite));
-	 report_error( );
-	 return DB_FAILED;
-     }
+    if (ret != SQLITE_OK) {
+	append_error("Error in sqlite3_finalize():\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
+    }
 
-     /*
-     if ( rest )
-	 G_free ( rest );
+    /*
+       if ( rest )
+       G_free ( rest );
      */
-     
-     return DB_OK;
+
+    return DB_OK;
 }
 
 
@@ -88,19 +86,19 @@ int db__driver_execute_immediate(dbString *sql)
 
 int db__driver_begin_transaction(void)
 {
-   int  ret;
-   G_debug ( 3, "execute: BEGIN" );
-   
-   ret = sqlite3_exec(sqlite,"BEGIN",NULL,NULL,NULL);
-   if ( ret != SQLITE_OK )
-   {
-      append_error("Cannot 'BEGIN' transaction:\n");
-      append_error ((char *) sqlite3_errmsg (sqlite));
-      report_error( );
-      return DB_FAILED;
-   }
+    int ret;
 
-   return DB_OK;
+    G_debug(3, "execute: BEGIN");
+
+    ret = sqlite3_exec(sqlite, "BEGIN", NULL, NULL, NULL);
+    if (ret != SQLITE_OK) {
+	append_error("Cannot 'BEGIN' transaction:\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
+    }
+
+    return DB_OK;
 }
 
 
@@ -114,17 +112,17 @@ int db__driver_begin_transaction(void)
 
 int db__driver_commit_transaction(void)
 {
-   int  ret;
-   G_debug ( 3, "execute: COMMIT" );
-   
-   ret = sqlite3_exec(sqlite,"COMMIT",NULL,NULL,NULL);
-   if ( ret != SQLITE_OK )
-   {
-       append_error("Cannot 'COMMIT' transaction:\n");
-       append_error ((char *) sqlite3_errmsg (sqlite));
-       report_error( );
-       return DB_FAILED;
-   }
+    int ret;
 
-   return DB_OK;
+    G_debug(3, "execute: COMMIT");
+
+    ret = sqlite3_exec(sqlite, "COMMIT", NULL, NULL, NULL);
+    if (ret != SQLITE_OK) {
+	append_error("Cannot 'COMMIT' transaction:\n");
+	append_error((char *)sqlite3_errmsg(sqlite));
+	report_error();
+	return DB_FAILED;
+    }
+
+    return DB_OK;
 }

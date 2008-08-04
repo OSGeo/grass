@@ -43,13 +43,13 @@
 int main(int argc, char **argv)
 {
     char *mapset;
-    double p1, p2, numbers[1000],numbers2[1000];
+    double p1, p2, numbers[1000], numbers2[1000];
     int (*rng) ();
     int i, verbose;
     int line, nlines, ttype, n, ret, seed;
     struct field_info *Fi, *Fin;
-    double min=0.;
-    int debuglevel=3;
+    double min = 0.;
+    int debuglevel = 3;
 
     struct Map_info In, Out;
 
@@ -71,7 +71,8 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     module->keywords = _("vector");
-    module->description = _("Random location perturbations of GRASS vector points");
+    module->description =
+	_("Random location perturbations of GRASS vector points");
 
     parm.in = G_define_standard_option(G_OPT_V_INPUT);
     parm.in->description = _("Vector points to be spatially perturbed");
@@ -93,9 +94,9 @@ int main(int argc, char **argv)
     parm.pars->multiple = YES;
     parm.pars->description =
 	_("Parameter(s) of distribution. If the distribution "
-	"is uniform, only one parameter, the maximum, is needed. "
-	"For a normal distribution, two parameters, the mean and "
-	"standard deviation, are required.");
+	  "is uniform, only one parameter, the maximum, is needed. "
+	  "For a normal distribution, two parameters, the mean and "
+	  "standard deviation, are required.");
 
     parm.min = G_define_option();
     parm.min->key = "minimum";
@@ -136,14 +137,16 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Error scanning arguments"));
 	}
 	else if (p1 <= 0)
-	    G_fatal_error(_("Maximum of uniform distribution must be >= zero"));
+	    G_fatal_error(_
+			  ("Maximum of uniform distribution must be >= zero"));
     }
     else {
 	if ((i = sscanf(parm.pars->answer, "%lf,%lf", &p1, &p2)) != 2) {
 	    G_fatal_error(_("Error scanning arguments"));
 	}
 	if (p2 <= 0)
-	    G_fatal_error (_("Standard deviation of normal distribution must be >= zero"));
+	    G_fatal_error(_
+			  ("Standard deviation of normal distribution must be >= zero"));
     }
 
     G_get_window(&window);
@@ -156,7 +159,7 @@ int main(int argc, char **argv)
     Vect_open_old(&In, parm.in->answer, mapset);
 
     /* Open output */
-    Vect_open_new(&Out, parm.out->answer, 0); /* TODO add z support ? */
+    Vect_open_new(&Out, parm.out->answer, 0);	/* TODO add z support ? */
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -185,30 +188,35 @@ int main(int argc, char **argv)
 		i = 0;
 	    }
 
-	    G_debug(debuglevel, "x:      %f y:      %f", Points->x[0], Points->y[0]);
+	    G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
+		    Points->y[0]);
 
-	    /* perturb */  /* TODO: tends to concentrate in box corners when min is used */
-	    if ( numbers2[i] >= 0){
-	      if ( numbers[i] >= 0){
-		G_debug(debuglevel, "deltax: %f", numbers[i] + min);
-		Points->x[0] += numbers[i++] + min ;
-	      }else{
-		G_debug(debuglevel, "deltax: %f", numbers[i] - min);
-		Points->x[0] += numbers[i++] - min ;
-	      }
-	      Points->y[0] += numbers2[i++];
-	    }else{
-	      if ( numbers[i] >= 0){
-		G_debug(debuglevel, "deltay: %f", numbers[i] + min);
-		Points->y[0] += numbers[i++] + min ;
-	      }else{ 
-		G_debug(debuglevel, "deltay: %f", numbers[i] - min);
-		Points->y[0] += numbers[i++] - min ;
-	      }
-	      Points->x[0] += numbers2[i++];
+	    /* perturb *//* TODO: tends to concentrate in box corners when min is used */
+	    if (numbers2[i] >= 0) {
+		if (numbers[i] >= 0) {
+		    G_debug(debuglevel, "deltax: %f", numbers[i] + min);
+		    Points->x[0] += numbers[i++] + min;
+		}
+		else {
+		    G_debug(debuglevel, "deltax: %f", numbers[i] - min);
+		    Points->x[0] += numbers[i++] - min;
+		}
+		Points->y[0] += numbers2[i++];
+	    }
+	    else {
+		if (numbers[i] >= 0) {
+		    G_debug(debuglevel, "deltay: %f", numbers[i] + min);
+		    Points->y[0] += numbers[i++] + min;
+		}
+		else {
+		    G_debug(debuglevel, "deltay: %f", numbers[i] - min);
+		    Points->y[0] += numbers[i++] - min;
+		}
+		Points->x[0] += numbers2[i++];
 	    }
 
-	    G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[0], Points->y[0]);
+	    G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[0],
+		    Points->y[0]);
 	}
 
 	Vect_write_line(&Out, type, Points, Cats);

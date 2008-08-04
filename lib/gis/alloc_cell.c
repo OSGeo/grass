@@ -1,3 +1,4 @@
+
 /**
  * \file alloc_cell.c
  *
@@ -20,7 +21,7 @@
 #define F2I(map_type) \
 	(map_type == CELL_TYPE ? 0 : (map_type == FCELL_TYPE ? 1 : 2))
 
-static int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
+static int type_size[3] = { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
 
 
 /**
@@ -34,8 +35,7 @@ static int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
  * \return int
  */
 
-size_t G_raster_size (RASTER_MAP_TYPE data_type)
-
+size_t G_raster_size(RASTER_MAP_TYPE data_type)
 {
     return (type_size[F2I(data_type)]);
 }
@@ -61,10 +61,9 @@ size_t G_raster_size (RASTER_MAP_TYPE data_type)
  * \return Prints error message and calls <i>exit()</i> on error
  */
 
-CELL *
-G_allocate_cell_buf (void)
+CELL *G_allocate_cell_buf(void)
 {
-    return (CELL *) G_calloc (G_window_cols() + 1, sizeof(CELL));
+    return (CELL *) G_calloc(G_window_cols() + 1, sizeof(CELL));
 }
 
 
@@ -79,11 +78,9 @@ G_allocate_cell_buf (void)
  * \return void * 
  */
 
-void *
-G_allocate_raster_buf  (RASTER_MAP_TYPE data_type)
-
+void *G_allocate_raster_buf(RASTER_MAP_TYPE data_type)
 {
-    return (void *) G_calloc (G_window_cols() + 1, G_raster_size(data_type));
+    return (void *)G_calloc(G_window_cols() + 1, G_raster_size(data_type));
 }
 
 
@@ -96,10 +93,9 @@ G_allocate_raster_buf  (RASTER_MAP_TYPE data_type)
  * \return CELL * 
  */
 
-CELL *
-G_allocate_c_raster_buf (void)
+CELL *G_allocate_c_raster_buf(void)
 {
-    return (CELL *) G_calloc (G_window_cols() + 1, sizeof(CELL));
+    return (CELL *) G_calloc(G_window_cols() + 1, sizeof(CELL));
 }
 
 
@@ -112,10 +108,9 @@ G_allocate_c_raster_buf (void)
  * \return FCELL * 
  */
 
-FCELL *
-G_allocate_f_raster_buf (void)
+FCELL *G_allocate_f_raster_buf(void)
 {
-    return (FCELL *) G_calloc (G_window_cols() + 1, sizeof(FCELL));
+    return (FCELL *) G_calloc(G_window_cols() + 1, sizeof(FCELL));
 }
 
 
@@ -128,10 +123,9 @@ G_allocate_f_raster_buf (void)
  * \return DCELL * 
  */
 
-DCELL *
-G_allocate_d_raster_buf (void)
+DCELL *G_allocate_d_raster_buf(void)
 {
-    return (DCELL *) G_calloc (G_window_cols() + 1, sizeof(DCELL));
+    return (DCELL *) G_calloc(G_window_cols() + 1, sizeof(DCELL));
 }
 
 
@@ -144,10 +138,9 @@ G_allocate_d_raster_buf (void)
  * \return char * 
  */
 
-char *
-G_allocate_null_buf (void)
+char *G_allocate_null_buf(void)
 {
-    return (char *) G_calloc (G_window_cols() + 1, sizeof(char));
+    return (char *)G_calloc(G_window_cols() + 1, sizeof(char));
 }
 
 
@@ -160,11 +153,10 @@ G_allocate_null_buf (void)
  * \return unsigned char *
  */
 
-unsigned char *
-G__allocate_null_bits (int cols)
+unsigned char *G__allocate_null_bits(int cols)
 {
-    return (unsigned char *) G_calloc (G__null_bitstream_size(cols)+1, 
-                               sizeof(unsigned char));
+    return (unsigned char *)G_calloc(G__null_bitstream_size(cols) + 1,
+				     sizeof(unsigned char));
 }
 
 
@@ -176,10 +168,10 @@ G__allocate_null_bits (int cols)
  * \return size of null bistream
  */
 
-int
-G__null_bitstream_size (int cols)
+int G__null_bitstream_size(int cols)
 {
-    if (cols <= 0 ) return -1;
+    if (cols <= 0)
+	return -1;
 
-    return (cols/8 + (cols % 8 != 0));
+    return (cols / 8 + (cols % 8 != 0));
 }

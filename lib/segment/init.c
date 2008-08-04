@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       segment
@@ -22,7 +23,7 @@
 #include <grass/segment.h>
 
 
-static int read_int(int,int *);
+static int read_int(int, int *);
 
 /* fd must be open for read and write */
 
@@ -52,36 +53,35 @@ static int read_int(int,int *);
  * \return -2 if out of memory
  */
 
-int segment_init (SEGMENT *SEG,int fd,int nseg)
+int segment_init(SEGMENT * SEG, int fd, int nseg)
 {
     SEG->open = 0;
-    SEG->fd   = fd;
+    SEG->fd = fd;
     SEG->nseg = nseg;
 
-    if (lseek (fd, 0L, SEEK_SET) < 0)
-    {
-	G_warning ("segment_init: %s",strerror(errno));
+    if (lseek(fd, 0L, SEEK_SET) < 0) {
+	G_warning("segment_init: %s", strerror(errno));
 	return -1;
     }
 
     /* read the header */
-    if (!read_int (fd, &SEG->nrows)
-    ||  !read_int (fd, &SEG->ncols)
-    ||  !read_int (fd, &SEG->srows)
-    ||  !read_int (fd, &SEG->scols)
-    ||  !read_int (fd, &SEG->len))
+    if (!read_int(fd, &SEG->nrows)
+	|| !read_int(fd, &SEG->ncols)
+	|| !read_int(fd, &SEG->srows)
+	|| !read_int(fd, &SEG->scols)
+	|| !read_int(fd, &SEG->len))
 	return -1;
 
-    return segment_setup (SEG);
+    return segment_setup(SEG);
 }
 
 
-static int read_int (int fd, int *n)
+static int read_int(int fd, int *n)
 {
     int bytes_read;
 
-    if((bytes_read = read (fd, n, sizeof(int))) == -1)
-        G_warning("read_int: %s",strerror(errno));
+    if ((bytes_read = read(fd, n, sizeof(int))) == -1)
+	G_warning("read_int: %s", strerror(errno));
 
     bytes_read = (bytes_read == sizeof(int));
 

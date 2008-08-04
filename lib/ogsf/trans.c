@@ -1,32 +1,32 @@
 /*!
-  \file trans.c
- 
-  \brief OGSF library - matrix transformation (higher level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file trans.c
 
-  NOTE: This file should be REMOVED and any calls to the functions in this
-  file should be replaced with appropriate OpenGL calls.
+   \brief OGSF library - matrix transformation (higher level functions)
 
-  This routine should be available in GL!
+   GRASS OpenGL gsurf OGSF Library 
 
-  Arguments are same as GL counterparts
-  
-  I threw this code together in January at the beginning of this
-  class.  I was still learning about GL at the time.
-  There are many places where the code could be improved.
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction Engineering Research Lab
-  \author Bill Brown USACERL (November 1993)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   NOTE: This file should be REMOVED and any calls to the functions in this
+   file should be replaced with appropriate OpenGL calls.
+
+   This routine should be available in GL!
+
+   Arguments are same as GL counterparts
+
+   I threw this code together in January at the beginning of this
+   class.  I was still learning about GL at the time.
+   There are many places where the code could be improved.
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Dave Gerdes Jan 1990 All rights reserved, US Army Construction Engineering Research Lab
+   \author Bill Brown USACERL (November 1993)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <math.h>
 
@@ -39,7 +39,7 @@
 
 /* function prototypes */
 static void P__transform(int num_vert, float (*in)[4],
-                float (*out)[4], float (*c)[4]);
+			 float (*out)[4], float (*c)[4]);
 static void P_matrix_copy(float (*from)[4], float (*to)[4], int size);
 
 
@@ -48,11 +48,11 @@ static float c_stack[MAX_STACK][4][4];	/* matrix stack */
 static int stack_ptr = -1;	/* index of curr matrix depth */
 static float d[4][4];		/* tmp matrix */
 
-#define NPI M_PI 
+#define NPI M_PI
 
 /*
-**  Current transformation matrix
-*/
+ **  Current transformation matrix
+ */
 static float trans_mat[4][4] = {
     {1., 0., 0., 0.},
     {0., 1., 0., 0.},
@@ -68,10 +68,10 @@ static float ident[4][4] = {
 };
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param x,y,z
-*/
+   \param x,y,z
+ */
 void P_scale(float x, float y, float z)
 {
     d[0][0] = x;
@@ -92,9 +92,9 @@ void P_scale(float x, float y, float z)
     d[3][3] = 1.;
 
     /*
-    **  will write into 1 down on matrix stack
-    **  and then the popmatrix() will place it as the current T matrix
-    */
+     **  will write into 1 down on matrix stack
+     **  and then the popmatrix() will place it as the current T matrix
+     */
     P_pushmatrix();
     P__transform(4, d, c_stack[stack_ptr], trans_mat);
     P_popmatrix();
@@ -103,17 +103,17 @@ void P_scale(float x, float y, float z)
 }
 
 /*!
-  \brief Transform array of vectors using current T matrix
-  
-  Multiply 'in' matrix (homogenous coordinate generally) by
-  the current transformation matrix, placing the result in 'out'
+   \brief Transform array of vectors using current T matrix
 
-  [in][trans_mat] => [out]
-  
-  \param num_vert
-  \param in
-  \param out
-*/
+   Multiply 'in' matrix (homogenous coordinate generally) by
+   the current transformation matrix, placing the result in 'out'
+
+   [in][trans_mat] => [out]
+
+   \param num_vert
+   \param in
+   \param out
+ */
 void P_transform(int num_vert, float (*in)[4], float (*out)[4])
 {
     P__transform(num_vert, in, out, trans_mat);
@@ -122,19 +122,19 @@ void P_transform(int num_vert, float (*in)[4], float (*out)[4])
 }
 
 /*!
-  \brief Transform array of vectors using current T matrix
-  
-  Multiply 'in' matrix (homogenous coordinate generally) by
-  the current transformation matrix, placing the result in 'out'
+   \brief Transform array of vectors using current T matrix
 
-  [in][trans_mat] => [out]
-  
-  \param num_vert
-  \param in
-  \param out
-*/
+   Multiply 'in' matrix (homogenous coordinate generally) by
+   the current transformation matrix, placing the result in 'out'
+
+   [in][trans_mat] => [out]
+
+   \param num_vert
+   \param in
+   \param out
+ */
 static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
-		  float (*c)[4])
+			 float (*c)[4])
 {
     register int k, j, i;
 
@@ -152,12 +152,12 @@ static void P__transform(int num_vert, float (*in)[4], float (*out)[4],
 }
 
 /*!
-  \brief Copy matrix 
-  
-  \param from 'from' matrix
-  \param to 'to' matrix
-  \param size number of rows (ncols=4)
-*/
+   \brief Copy matrix 
+
+   \param from 'from' matrix
+   \param to 'to' matrix
+   \param size number of rows (ncols=4)
+ */
 static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
 {
     register int i, j;
@@ -172,12 +172,12 @@ static void P_matrix_copy(float (*from)[4], float (*to)[4], int size)
 }
 
 /*!
-  \brief Push current transformation matrix onto matrix stack
-*/
+   \brief Push current transformation matrix onto matrix stack
+ */
 int P_pushmatrix(void)
 {
     if (stack_ptr >= MAX_STACK) {
-	G_warning ("P_pushmatrix(): %s", _("Out of matrix stack space"));
+	G_warning("P_pushmatrix(): %s", _("Out of matrix stack space"));
 
 	return (-1);
     }
@@ -189,15 +189,15 @@ int P_pushmatrix(void)
 }
 
 /*!
-  \brief Pop top of matrix stack, placing it into the current transformation matrix
+   \brief Pop top of matrix stack, placing it into the current transformation matrix
 
-  \return -1 on failure
-  \return 0 on success
-*/
+   \return -1 on failure
+   \return 0 on success
+ */
 int P_popmatrix(void)
 {
     if (stack_ptr < 0) {
-	G_warning ("P_popmatrix(): %s", _("Tried to pop an empty stack"));
+	G_warning("P_popmatrix(): %s", _("Tried to pop an empty stack"));
 
 	return (-1);
     }
@@ -209,11 +209,11 @@ int P_popmatrix(void)
 }
 
 /*!
-  \brief Rotate matrix
+   \brief Rotate matrix
 
-  \param angle angle value
-  \param axis ('x, 'y', 'z')
-*/
+   \param angle angle value
+   \param axis ('x, 'y', 'z')
+ */
 void P_rot(float angle, char axis)
 {
     double theta;

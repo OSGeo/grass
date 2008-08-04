@@ -77,6 +77,7 @@ int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
     double sc;
     POINT p, tmp, s;
     POINT *res;
+
     n = Points->n_points;
     half = look_ahead / 2;
 
@@ -258,6 +259,7 @@ int chaiken(struct line_pnts *Points, double thresh, int with_z)
 void refine_tangent(POINT * p)
 {
     double l = point_dist2(*p);
+
     if (l < GRASS_EPSILON) {
 	point_scalar(*p, 0.0, p);
     }
@@ -445,6 +447,7 @@ int snakes(struct line_pnts *Points, double alpha, double beta, int with_z)
     for (i = 0; i < n + 2 * plus; i++)
 	for (j = 0; j < n + 2 * plus; j++) {
 	    int index = j - i + 2;
+
 	    if (index >= 0 && index <= 4)
 		g.a[i][j] = val[index];
 	    else

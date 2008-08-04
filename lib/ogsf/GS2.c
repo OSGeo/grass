@@ -1,32 +1,32 @@
 /*!
-  \file GS2.c
- 
-  \brief OGSF library - loading and manipulating surfaces (higher level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
+   \file GS2.c
 
-  Plans for handling color maps:
-  NOW:
-  if able to load as unsigned char, make lookup table containing palette
-  otherwise, load directly as packed color, set lookup = NULL
-  MAYBE LATER:
-  if able to load as POSITIVE short, make lookup table containing palette
-  - may want to calculate savings first (ie,  numcells > 32768)
-  (not exactly, it's Friday & time to go home - figure it later)
-  otherwise, load directly as packed color, set lookup = NULL
-  MESSY! - need to fix up!
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (1993)
-  \author Pierre de Mouveaux <p_de_mouveaux hotmail.com> (updated October 1999)
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
-*/
+   \brief OGSF library - loading and manipulating surfaces (higher level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   Plans for handling color maps:
+   NOW:
+   if able to load as unsigned char, make lookup table containing palette
+   otherwise, load directly as packed color, set lookup = NULL
+   MAYBE LATER:
+   if able to load as POSITIVE short, make lookup table containing palette
+   - may want to calculate savings first (ie,  numcells > 32768)
+   (not exactly, it's Friday & time to go home - figure it later)
+   otherwise, load directly as packed color, set lookup = NULL
+   MESSY! - need to fix up!
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (1993)
+   \author Pierre de Mouveaux <p_de_mouveaux hotmail.com> (updated October 1999)
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -63,11 +63,14 @@ int gsd_getViewport(GLint *, GLint *);
 static int Surf_ID[MAX_SURFS];
 static int Next_surf = 0;
 static int SDref_surf = 0;
+
 /* attributes array */
 static float Default_const[MAX_ATTS];
 static float Default_nulls[MAX_ATTS];
+
 /* largest dimension */
 static float Longdim;
+
 /* N, S, W, E */
 static float Region[4];
 static geoview Gv;
@@ -83,12 +86,12 @@ void void_func(void)
 }
 
 /*!
-  \brief Initialize OGSF library
+   \brief Initialize OGSF library
 
-  Get region settings - wind
+   Get region settings - wind
 
-  Set Region (NSWE array) and compute scale
-*/
+   Set Region (NSWE array) and compute scale
+ */
 void GS_libinit(void)
 {
     static int first = 1;
@@ -123,12 +126,12 @@ void GS_libinit(void)
 }
 
 /*!
-  \brief Get largest dimension
+   \brief Get largest dimension
 
-  \param[out] dim dimension
+   \param[out] dim dimension
 
-  \return 1
-*/
+   \return 1
+ */
 int GS_get_longdim(float *dim)
 {
     *dim = Longdim;
@@ -139,12 +142,12 @@ int GS_get_longdim(float *dim)
 }
 
 /*!
-  \brief Get 2D region extent
+   \brief Get 2D region extent
 
-  \param[out] n,s,w,e extent values
+   \param[out] n,s,w,e extent values
 
-  \return 1
-*/
+   \return 1
+ */
 int GS_get_region(float *n, float *s, float *w, float *e)
 {
     *n = Region[0];
@@ -156,16 +159,16 @@ int GS_get_region(float *n, float *s, float *w, float *e)
 }
 
 /*!
-  \brief Set default attributes for map objects
+   \brief Set default attributes for map objects
 
-  \param defs attributes array (dim MAX_ATTS)
-  \param null_defs null attributes array (dim MAX_ATTS)
-*/
+   \param defs attributes array (dim MAX_ATTS)
+   \param null_defs null attributes array (dim MAX_ATTS)
+ */
 void GS_set_att_defaults(float *defs, float *null_defs)
 {
     int i;
 
-    G_debug (3, "GS_set_att_defaults");
+    G_debug(3, "GS_set_att_defaults");
 
     for (i = 0; i < MAX_ATTS; i++) {
 	Default_const[i] = defs[i];
@@ -176,13 +179,13 @@ void GS_set_att_defaults(float *defs, float *null_defs)
 }
 
 /*!
-  Check if surface exists
+   Check if surface exists
 
-  \param id surface id
+   \param id surface id
 
-  \return 0 not found
-  \return 1 found
-*/
+   \return 0 not found
+   \return 1 found
+ */
 int GS_surf_exists(int id)
 {
     int i, found = 0;
@@ -204,15 +207,15 @@ int GS_surf_exists(int id)
 }
 
 /*!
-  \brief Add new surface
+   \brief Add new surface
 
-  Note that origin has 1/2 cell added to represent center of cells
-  because library assumes that east - west = (cols - 1) * ew_res,
-  since left and right columns are on the edges.
+   Note that origin has 1/2 cell added to represent center of cells
+   because library assumes that east - west = (cols - 1) * ew_res,
+   since left and right columns are on the edges.
 
-  \return surface id
-  \return -1 on error (MAX_SURFS exceded)
-*/
+   \return surface id
+   \return -1 on error (MAX_SURFS exceded)
+ */
 int GS_new_surface(void)
 {
     geosurf *ns;
@@ -231,7 +234,7 @@ int GS_new_surface(void)
 	++Next_surf;
 
 	G_debug(3, "GS_new_surface(): id=%d", ns->gsurf_id);
-	
+
 	return (ns->gsurf_id);
     }
 
@@ -241,11 +244,11 @@ int GS_new_surface(void)
 }
 
 /*!
-  \brief Add new model light
+   \brief Add new model light
 
-  \return light model id
-  \return -1 on error (MAX_LIGHTS exceded)
-*/
+   \return light model id
+   \return -1 on error (MAX_LIGHTS exceded)
+ */
 int GS_new_light(void)
 {
     static int first = 1;
@@ -279,14 +282,14 @@ int GS_new_light(void)
 }
 
 /*!
-  \brief Set light position
+   \brief Set light position
 
-  \bug I think lights array doesnt match sgi_light array
-  
-  \param num light id (starts with 1)
-  \param xpos,ypos,zpos coordinates (model)
-  \param local local coordinate (for viewport)
-*/
+   \bug I think lights array doesnt match sgi_light array
+
+   \param num light id (starts with 1)
+   \param xpos,ypos,zpos coordinates (model)
+   \param local local coordinate (for viewport)
+ */
 void GS_setlight_position(int num, float xpos, float ypos, float zpos,
 			  int local)
 {
@@ -296,7 +299,7 @@ void GS_setlight_position(int num, float xpos, float ypos, float zpos,
 	    Gv.lights[num].position[X] = xpos;
 	    Gv.lights[num].position[Y] = ypos;
 	    Gv.lights[num].position[Z] = zpos;
-	    Gv.lights[num].position[W] = (float) local;
+	    Gv.lights[num].position[W] = (float)local;
 
 	    gsd_deflight(num + 1, &(Gv.lights[num]));
 	}
@@ -307,12 +310,12 @@ void GS_setlight_position(int num, float xpos, float ypos, float zpos,
 
 
 /*!
-  \brief Get light position
+   \brief Get light position
 
-  \param num light id (starts with 1?)
-  \param[out] xpos,ypos,zpos coordinates
-  \param[out] local ?
-*/
+   \param num light id (starts with 1?)
+   \param[out] xpos,ypos,zpos coordinates
+   \param[out] local ?
+ */
 void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
 			  int *local)
 {
@@ -322,7 +325,7 @@ void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
 	    *xpos = Gv.lights[num].position[X];
 	    *ypos = Gv.lights[num].position[Y];
 	    *zpos = Gv.lights[num].position[Z];
-	    *local = (int) Gv.lights[num].position[W];
+	    *local = (int)Gv.lights[num].position[W];
 
 	}
     }
@@ -331,11 +334,11 @@ void GS_getlight_position(int num, float *xpos, float *ypos, float *zpos,
 }
 
 /*!
-  \brief Set light color
-  
-  \param num light id (starts with 1?)
-  \param red,green,blue color values (from 0.0 to 1.0)
-*/
+   \brief Set light color
+
+   \param num light id (starts with 1?)
+   \param red,green,blue color values (from 0.0 to 1.0)
+ */
 void GS_setlight_color(int num, float red, float green, float blue)
 {
     if (num) {
@@ -353,11 +356,11 @@ void GS_setlight_color(int num, float red, float green, float blue)
 }
 
 /*!
-  \brief Get light color
+   \brief Get light color
 
-  \param num light id (starts with 1?)
-  \param[out] red,green,blue color values
-*/
+   \param num light id (starts with 1?)
+   \param[out] red,green,blue color values
+ */
 void GS_getlight_color(int num, float *red, float *green, float *blue)
 {
     if (num) {
@@ -373,13 +376,13 @@ void GS_getlight_color(int num, float *red, float *green, float *blue)
 }
 
 /*!
-  \brief Set light ambient
+   \brief Set light ambient
 
-  Red, green, blue from 0.0 to 1.0
+   Red, green, blue from 0.0 to 1.0
 
-  \param num light id (starts with 1?)
-  \param red,green,blue color values
-*/
+   \param num light id (starts with 1?)
+   \param red,green,blue color values
+ */
 void GS_setlight_ambient(int num, float red, float green, float blue)
 {
     if (num) {
@@ -397,11 +400,11 @@ void GS_setlight_ambient(int num, float red, float green, float blue)
 }
 
 /*!
-  \brief Get light ambient
+   \brief Get light ambient
 
-  \param num light id (starts with 1?)
-  \param[out] red,green,blue color values
-*/
+   \param num light id (starts with 1?)
+   \param[out] red,green,blue color values
+ */
 void GS_getlight_ambient(int num, float *red, float *green, float *blue)
 {
     if (num) {
@@ -418,8 +421,8 @@ void GS_getlight_ambient(int num, float *red, float *green, float *blue)
 
 
 /*!
-  \brief Switch off all lights
-*/
+   \brief Switch off all lights
+ */
 void GS_lights_off(void)
 {
     int i;
@@ -432,8 +435,8 @@ void GS_lights_off(void)
 }
 
 /*!
-  \brief Switch on all lights
-*/
+   \brief Switch on all lights
+ */
 void GS_lights_on(void)
 {
     int i;
@@ -446,11 +449,11 @@ void GS_lights_on(void)
 }
 
 /*!
-  \brief Switch on/off light
+   \brief Switch on/off light
 
-  \param num light id (starts with 1?)
-  \param on non-zero for 'on' otherwise 'off'
-*/
+   \param num light id (starts with 1?)
+   \param on non-zero for 'on' otherwise 'off'
+ */
 void GS_switchlight(int num, int on)
 {
     if (num) {
@@ -465,21 +468,21 @@ void GS_switchlight(int num, int on)
 }
 
 /*!
-  \brief Check if transparency is set
+   \brief Check if transparency is set
 
-  \return 0 transparency not set
-  \return 1 transparency is set
-*/
+   \return 0 transparency not set
+   \return 1 transparency is set
+ */
 int GS_transp_is_set(void)
 {
     return (gs_att_is_set(NULL, ATT_TRANSP) || (FC_GREY == gsd_getfc()));
 }
 
 /*!
-  \brief Retrieves coordinates for lighting model position, at center of view
+   \brief Retrieves coordinates for lighting model position, at center of view
 
-  \param pos[out] coordinates
-*/
+   \param pos[out] coordinates
+ */
 void GS_get_modelposition1(float pos[])
 {
     /* TODO: Still needs work to handle other cases */
@@ -493,22 +496,22 @@ void GS_get_modelposition1(float pos[])
     gs_get_datacenter(pos);
     gs_get_data_avg_zmax(&(pos[Z]));
 
-    G_debug (1, "GS_get_modelposition1(): model position: %f %f %f",
-	     pos[X], pos[Y], pos[Z]);
+    G_debug(1, "GS_get_modelposition1(): model position: %f %f %f",
+	    pos[X], pos[Y], pos[Z]);
 
     return;
 }
 
 /*!
-  \brief Retrieves coordinates for lighting model position, at center of view
+   \brief Retrieves coordinates for lighting model position, at center of view
 
-  Position at nearclip * 2: tried nearclip + siz, but since need to
-  know position to calculate size, have two dependent variables
-  (nearclip * 2) from eye.
+   Position at nearclip * 2: tried nearclip + siz, but since need to
+   know position to calculate size, have two dependent variables
+   (nearclip * 2) from eye.
 
-  \param siz[out] size
-  \param pos[out] coordinates (X, Y, Z)
-*/
+   \param siz[out] size
+   \param pos[out] coordinates (X, Y, Z)
+ */
 void GS_get_modelposition(float *siz, float *pos)
 {
     float dist, near_h, dir[3];
@@ -536,16 +539,16 @@ void GS_get_modelposition(float *siz, float *pos)
 
 
 /*!
-  \brief Set decoration, north arrow ??
+   \brief Set decoration, north arrow ??
 
-  \todo scale used to calculate len of arrow still needs work
-  needs go function that returns center / eye distance
-  gsd_get_los function is not working correctly ??
+   \todo scale used to calculate len of arrow still needs work
+   needs go function that returns center / eye distance
+   gsd_get_los function is not working correctly ??
 
-  \param pt point value in true world coordinates (?)
-  \param id surface id
-  \param[out] pos2 output coordinates
-*/
+   \param pt point value in true world coordinates (?)
+   \param id surface id
+   \param[out] pos2 output coordinates
+ */
 void GS_set_Narrow(int *pt, int id, float *pos2)
 {
     geosurf *gs;
@@ -554,67 +557,67 @@ void GS_set_Narrow(int *pt, int id, float *pos2)
     GLint viewport[4];
 
     if (GS_get_selected_point_on_surface(pt[X], pt[Y], &id, &x, &y, &z)) {
-        gs = gs_get_surf(id);
-        if (gs) {
-            z = gs->zmax;
-            pos2[X] = (float)x - gs->ox + gs->x_trans;
-            pos2[Y] = (float)y - gs->oy + gs->y_trans;
-            pos2[Z] = (float)z + gs->z_trans;
+	gs = gs_get_surf(id);
+	if (gs) {
+	    z = gs->zmax;
+	    pos2[X] = (float)x - gs->ox + gs->x_trans;
+	    pos2[Y] = (float)y - gs->oy + gs->y_trans;
+	    pos2[Z] = (float)z + gs->z_trans;
 
-            return;
-        }
+	    return;
+	}
     }
     else {
-        gs = gs_get_surf(id);
-        
-        /* Need to get model matrix, etc 
-         * to run gluUnProject
-         */
-        gsd_pushmatrix();
-        gsd_do_scale(1);
-        glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
-        glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
-        glGetIntegerv(GL_VIEWPORT, viewport);
+	gs = gs_get_surf(id);
 
-        if (gs) {
-        GLdouble out_near[3], out_far[3];
-        GLdouble factor;
-        GLdouble out[3];
+	/* Need to get model matrix, etc 
+	 * to run gluUnProject
+	 */
+	gsd_pushmatrix();
+	gsd_do_scale(1);
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+	glGetDoublev(GL_PROJECTION_MATRIX, projMatrix);
+	glGetIntegerv(GL_VIEWPORT, viewport);
 
-            z = (float)gs->zmax + gs->z_trans;
+	if (gs) {
+	    GLdouble out_near[3], out_far[3];
+	    GLdouble factor;
+	    GLdouble out[3];
 
-            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)0.,
-                            modelMatrix, projMatrix, viewport,
-                            &out_near[X], &out_near[Y], &out_near[Z]);
-            gluUnProject((GLdouble)pt[X], (GLdouble)pt[Y], (GLdouble)1.,
-                            modelMatrix, projMatrix, viewport,
-                            &out_far[X], &out_far[Y], &out_far[Z]);
-                            
-            glPopMatrix();
+	    z = (float)gs->zmax + gs->z_trans;
 
-            factor = (out_near[Z]-z) / (out_near[Z]-out_far[Z]);
+	    gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 0.,
+			 modelMatrix, projMatrix, viewport,
+			 &out_near[X], &out_near[Y], &out_near[Z]);
+	    gluUnProject((GLdouble) pt[X], (GLdouble) pt[Y], (GLdouble) 1.,
+			 modelMatrix, projMatrix, viewport,
+			 &out_far[X], &out_far[Y], &out_far[Z]);
 
-            out[X] = out_near[X]-((out_near[X]-out_far[X])*factor);
-            out[Y] = out_near[Y]-((out_near[Y]-out_far[Y])*factor);
-            out[Z] = z;
+	    glPopMatrix();
 
-            pos2[X] = (float)out[X];
-            pos2[Y] = (float)out[Y];
-            pos2[Z] = (float)out[Z];
+	    factor = (out_near[Z] - z) / (out_near[Z] - out_far[Z]);
 
-            return;
+	    out[X] = out_near[X] - ((out_near[X] - out_far[X]) * factor);
+	    out[Y] = out_near[Y] - ((out_near[Y] - out_far[Y]) * factor);
+	    out[Z] = z;
 
-        }
+	    pos2[X] = (float)out[X];
+	    pos2[Y] = (float)out[Y];
+	    pos2[Z] = (float)out[Z];
+
+	    return;
+
+	}
     }
     return;
 }
 
 /*!
-  \brief ADD
+   \brief ADD
 
-  \param id surface id
-  \param pt point, X, Y value in true world coordinates
-*/
+   \param id surface id
+   \param pt point, X, Y value in true world coordinates
+ */
 void GS_draw_X(int id, float *pt)
 {
     geosurf *gs;
@@ -649,11 +652,11 @@ void GS_draw_X(int id, float *pt)
 }
 
 /*!
-  \brief Draw line on surface
+   \brief Draw line on surface
 
-  \param id surface id
-  \param x1,y1,x2,y2 line nodes
-*/
+   \param id surface id
+   \param x1,y1,x2,y2 line nodes
+ */
 void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 {
     float p1[2], p2[2];
@@ -682,17 +685,17 @@ void GS_draw_line_onsurf(int id, float x1, float y1, float x2, float y2)
 }
 
 /*!
-  \brief Draw multiline on surface
+   \brief Draw multiline on surface
 
-  Like above but limits points in line to n or points found in segment,
-  whichever is smaller.
+   Like above but limits points in line to n or points found in segment,
+   whichever is smaller.
 
-  \param id surface id
-  \param x1,y1,x2,y2 line nodes
-  \param lasp ?
-  \paran n ?
-  \return number of points used
-*/
+   \param id surface id
+   \param x1,y1,x2,y2 line nodes
+   \param lasp ?
+   \paran n ?
+   \return number of points used
+ */
 int GS_draw_nline_onsurf(int id, float x1, float y1, float x2, float y2,
 			 float *lasp, int n)
 {
@@ -723,14 +726,14 @@ int GS_draw_nline_onsurf(int id, float x1, float y1, float x2, float y2,
 }
 
 /*!
-  \brief Draw flow-line on surace
+   \brief Draw flow-line on surace
 
-  This is slow - should be moved to gs_ but GS_ good for testing
-  and useful for app programmer
+   This is slow - should be moved to gs_ but GS_ good for testing
+   and useful for app programmer
 
-  \param id surface id
-  \param x,y coordinates of flow-line
-*/
+   \param id surface id
+   \param x,y coordinates of flow-line
+ */
 void GS_draw_flowline_at_xy(int id, float x, float y)
 {
     geosurf *gs;
@@ -784,46 +787,45 @@ void GS_draw_flowline_at_xy(int id, float x, float y)
 	    p1[Y] = next[Y];
 	}
 
-	G_debug(3, "GS_draw_flowline_at_xy(): dir: %f %f",
-		nv[X], nv[Y]);
+	G_debug(3, "GS_draw_flowline_at_xy(): dir: %f %f", nv[X], nv[Y]);
     }
 
     return;
 }
 
 /*!
-  \brief Draw fringe around data at selected corners
+   \brief Draw fringe around data at selected corners
 
-  \param id surface id
-  \param clr ?
-  \param elev elevation value
-  \param where ?
-*/
+   \param id surface id
+   \param clr ?
+   \param elev elevation value
+   \param where ?
+ */
 void GS_draw_fringe(int id, unsigned long clr, float elev, int *where)
 {
-  geosurf *gs;
+    geosurf *gs;
 
-  if ((gs = gs_get_surf(id)))
-             gsd_display_fringe(gs, clr, elev, where);
+    if ((gs = gs_get_surf(id)))
+	gsd_display_fringe(gs, clr, elev, where);
 
 }
 
 
 /*!
-  \brief Draw legend
+   \brief Draw legend
 
-  \todo add legend from list option
-  make font loading more flexible
+   \todo add legend from list option
+   make font loading more flexible
 
-  \param name legend name
-  \param fontbase font-base
-  \param size ? 
-  \param flags legend flags
-  \param range values range
-  \param pt ?
-*/
+   \param name legend name
+   \param fontbase font-base
+   \param size ? 
+   \param flags legend flags
+   \param range values range
+   \param pt ?
+ */
 int GS_draw_legend(const char *name, GLuint fontbase, int size, int *flags,
-	       float *range, int *pt)
+		   float *range, int *pt)
 {
     int list_no;
 
@@ -833,13 +835,13 @@ int GS_draw_legend(const char *name, GLuint fontbase, int size, int *flags,
 }
 
 /*!
-  \brief Draw pre-defined list
+   \brief Draw pre-defined list
 
-  Uses glFlush() to ensure all drawing is complete
-  before returning
+   Uses glFlush() to ensure all drawing is complete
+   before returning
 
-  \param list_id list id
-*/
+   \param list_id list id
+ */
 void GS_draw_list(GLuint list_id)
 {
     gsd_calllist(list_id);
@@ -848,23 +850,23 @@ void GS_draw_list(GLuint list_id)
 }
 
 /*!
-  \brief Draw all glLists
+   \brief Draw all glLists
 
-  Uses glFlush() to ensure all drawing is complete
-  before returning
-*/
+   Uses glFlush() to ensure all drawing is complete
+   before returning
+ */
 void GS_draw_all_list(void)
 {
-    gsd_calllists(0); /* not sure if 0 is right - MN */
+    gsd_calllists(0);		/* not sure if 0 is right - MN */
     glFlush();
     return;
 }
 
 /*!
-  \brief Delete pre-defined list
+   \brief Delete pre-defined list
 
-  \param list_id list id
-*/
+   \param list_id list id
+ */
 void GS_delete_list(GLuint list_id)
 {
     gsd_deletelist(list_id, 1);
@@ -873,8 +875,8 @@ void GS_delete_list(GLuint list_id)
 }
 
 /*!
-  \brief Draw lighting model
-*/
+   \brief Draw lighting model
+ */
 void GS_draw_lighting_model1(void)
 {
     static float center[3];
@@ -899,7 +901,7 @@ void GS_draw_lighting_model1(void)
 	gsd_scale(1.0, 1.0, 1. / Gv.vert_exag);
     }
 
-    gsd_drawsphere(tcenter, 0xDDDDDD, (float) (Longdim / 10.));
+    gsd_drawsphere(tcenter, 0xDDDDDD, (float)(Longdim / 10.));
     gsd_popmatrix();
     Modelshowing = 1;
 
@@ -910,11 +912,11 @@ void GS_draw_lighting_model1(void)
 }
 
 /*!
-  \brief Draw lighting model
+   \brief Draw lighting model
 
-  Just turn off any cutting planes and draw it just outside near
-  clipping plane, since lighting is infinite now
-*/
+   Just turn off any cutting planes and draw it just outside near
+   clipping plane, since lighting is infinite now
+ */
 void GS_draw_lighting_model(void)
 {
     static float center[3], size;
@@ -962,15 +964,15 @@ void GS_draw_lighting_model(void)
 }
 
 /*!
-  \brief Update current mask
+   \brief Update current mask
 
-  May be called to update total mask for a surface at convenient times
-  instead of waiting until ready to redraw surface
+   May be called to update total mask for a surface at convenient times
+   instead of waiting until ready to redraw surface
 
-  \param id surface id
+   \param id surface id
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_update_curmask(int id)
 {
     geosurf *gs;
@@ -980,15 +982,15 @@ int GS_update_curmask(int id)
 }
 
 /*!
-  \brief Check if point is masked ?
+   \brief Check if point is masked ?
 
-  \param id surface id
-  \param pt point
+   \param id surface id
+   \param pt point
 
-  \return 1 masked
-  \return 0 not masked
-  \return -1 on error, invalid surface id
-*/
+   \return 1 masked
+   \return 0 not masked
+   \return -1 on error, invalid surface id
+ */
 int GS_is_masked(int id, float *pt)
 {
     geosurf *gs;
@@ -1005,8 +1007,8 @@ int GS_is_masked(int id, float *pt)
 }
 
 /*!
-  \brief Unset ?
-*/
+   \brief Unset ?
+ */
 void GS_unset_SDsurf(void)
 {
     gsdiff_set_SDref(NULL);
@@ -1016,13 +1018,13 @@ void GS_unset_SDsurf(void)
 }
 
 /*!
-  \brief Set ?
+   \brief Set ?
 
-  \param id surface id
+   \param id surface id
 
-  \return 1 on success
-  \return 0 on error, invalid surface id
-*/
+   \return 1 on success
+   \return 0 on error, invalid surface id
+ */
 int GS_set_SDsurf(int id)
 {
     geosurf *gs;
@@ -1038,12 +1040,12 @@ int GS_set_SDsurf(int id)
 }
 
 /*!
-  \brief Set ?
-  
-  \param scale scale value
+   \brief Set ?
 
-  \return 1
-*/
+   \param scale scale value
+
+   \return 1
+ */
 int GS_set_SDscale(float scale)
 {
     gsdiff_set_SDscale(scale);
@@ -1052,13 +1054,13 @@ int GS_set_SDscale(float scale)
 }
 
 /*!
-  \brief Get ?
+   \brief Get ?
 
-  \param[out] id ?
+   \param[out] id ?
 
-  \return 1 on success
-  \return 0 on error
-*/
+   \return 1 on success
+   \return 0 on error
+ */
 int GS_get_SDsurf(int *id)
 {
     geosurf *gs;
@@ -1073,12 +1075,12 @@ int GS_get_SDsurf(int *id)
 }
 
 /*!
-  \brief Get ?
+   \brief Get ?
 
-  \param[out] scale value
+   \param[out] scale value
 
-  \return 1
-*/
+   \return 1
+ */
 int GS_get_SDscale(float *scale)
 {
     *scale = gsdiff_get_SDscale();
@@ -1087,12 +1089,12 @@ int GS_get_SDscale(float *scale)
 }
 
 /*!
-  \brief Update normals
+   \brief Update normals
 
-  \param id surface id
+   \param id surface id
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_update_normals(int id)
 {
     geosurf *gs;
@@ -1103,17 +1105,17 @@ int GS_update_normals(int id)
 }
 
 /*!
-  \brief Get attributes
+   \brief Get attributes
 
-  \param id surface id
-  \param att
-  \param[out] set
-  \param[out] constant
-  \param[out] mapname
+   \param id surface id
+   \param att
+   \param[out] set
+   \param[out] constant
+   \param[out] mapname
 
-  \return 1 on success
-  \return -1 on error (invalid surface id)
-*/
+   \return 1 on success
+   \return -1 on error (invalid surface id)
+ */
 int GS_get_att(int id, int att, int *set, float *constant, char *mapname)
 {
     int src;
@@ -1143,20 +1145,20 @@ int GS_get_att(int id, int att, int *set, float *constant, char *mapname)
 #define CATSREADY
 #ifdef CATSREADY
 /*!
-  \brief Print categories on given position
+   \brief Print categories on given position
 
-  prints "no data" or a description (i.e., "coniferous forest") to catstr
-  Usually call after GS_get_selected_point_on_surface
-  att_src must be MAP_ATT
+   prints "no data" or a description (i.e., "coniferous forest") to catstr
+   Usually call after GS_get_selected_point_on_surface
+   att_src must be MAP_ATT
 
-  \param id surface id
-  \param att
-  \param catstr cat string (must be allocated, dim?)
-  \param x,y real coordinates
+   \param id surface id
+   \param att
+   \param catstr cat string (must be allocated, dim?)
+   \param x,y real coordinates
 
-  \return -1 if no category info or point outside of window
-  \return 1 on success
-*/
+   \return -1 if no category info or point outside of window
+   \return 1 on success
+ */
 int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
 {
     int offset, drow, dcol, vrow, vcol;
@@ -1210,17 +1212,17 @@ int GS_get_cat_at_xy(int id, int att, char *catstr, float x, float y)
 }
 
 /*!
-  \brief Get surface normal at x,y (real coordinates)
+   \brief Get surface normal at x,y (real coordinates)
 
-  Usually call after GS_get_selected_point_on_surface()
+   Usually call after GS_get_selected_point_on_surface()
 
-  \param id surface id
-  \param x,y real coordinates
-  \param[out] nv surface normal
-  
-  \return -1 if point outside of window or masked
-  \return 1 on success
-*/
+   \param id surface id
+   \param x,y real coordinates
+   \param[out] nv surface normal
+
+   \return -1 if point outside of window or masked
+   \return 1 on success
+ */
 int GS_get_norm_at_xy(int id, float x, float y, float *nv)
 {
     int offset, drow, dcol, vrow, vcol;
@@ -1270,23 +1272,23 @@ int GS_get_norm_at_xy(int id, float x, float y, float *nv)
 }
 
 /*!
-  \brief Get RGB color  at given point
+   \brief Get RGB color  at given point
 
-  Colors are translated to rgb and returned as Rxxx Gxxx Bxxx
-  Usually call after GS_get_selected_point_on_surface()
-  
-  Prints "NULL" or the value (i.e., "921.5") to valstr
+   Colors are translated to rgb and returned as Rxxx Gxxx Bxxx
+   Usually call after GS_get_selected_point_on_surface()
 
-  Usually call after GS_get_selected_point_on_surface()
+   Prints "NULL" or the value (i.e., "921.5") to valstr
 
-  \param id surface id
-  \param att
-  \param[out] valstr value string (allocated, dim?)
-  \param x,y real coordinates
+   Usually call after GS_get_selected_point_on_surface()
 
-  \return -1 if point outside of window or masked
-  \return 1 on success
-*/
+   \param id surface id
+   \param att
+   \param[out] valstr value string (allocated, dim?)
+   \param x,y real coordinates
+
+   \return -1 if point outside of window or masked
+   \return 1 on success
+ */
 int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
 {
     int offset, drow, dcol, vrow, vcol;
@@ -1317,6 +1319,7 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
     if (CONST_ATT == gs_get_att_src(gs, att)) {
 	if (att == ATT_COLOR) {
 	    int r, g, b, i;
+
 	    i = gs->att[att].constant;
 	    sprintf(valstr, "R%d G%d B%d",
 		    INT_TO_RED(i, r), INT_TO_GRN(i, g), INT_TO_BLU(i, b));
@@ -1343,6 +1346,7 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
     if (GET_MAPATT(buff, offset, ftmp)) {
 	if (att == ATT_COLOR) {
 	    int r, g, b, i;
+
 	    i = gs_mapcolor(gs_get_att_typbuff(gs, ATT_COLOR, 0),
 			    &(gs->att[ATT_COLOR]), offset);
 	    sprintf(valstr, "R%d G%d B%d",
@@ -1363,13 +1367,13 @@ int GS_get_val_at_xy(int id, int att, char *valstr, float x, float y)
 #endif
 
 /*!
-  \brief Unset attribute
+   \brief Unset attribute
 
-  \param id surface id
-  \param att attribute id
+   \param id surface id
+   \param att attribute id
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_unset_att(int id, int att)
 {
     geosurf *gs;
@@ -1381,14 +1385,14 @@ int GS_unset_att(int id, int att)
 }
 
 /*!
-  \brief Set attribute constant
+   \brief Set attribute constant
 
-  \param id surface id
-  \param att attribute id
-  \param constant value
+   \param id surface id
+   \param att attribute id
+   \param constant value
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_set_att_const(int id, int att, float constant)
 {
     geosurf *gs;
@@ -1403,16 +1407,16 @@ int GS_set_att_const(int id, int att, float constant)
 }
 
 /*!
-  \brief Set mask mode
+   \brief Set mask mode
 
-  Mask attribute special: constant is set to indicate invert or no
+   Mask attribute special: constant is set to indicate invert or no
 
-  \param id surface id
-  \param mode id
+   \param id surface id
+   \param mode id
 
-  \return mode id
-  \return -1 on error (invalid surface id)
-*/
+   \return mode id
+   \return -1 on error (invalid surface id)
+ */
 int GS_set_maskmode(int id, int mode)
 {
     geosurf *gs;
@@ -1430,14 +1434,14 @@ int GS_set_maskmode(int id, int mode)
 }
 
 /*!
-  \brief Get mask mode
+   \brief Get mask mode
 
-  \param id surface id
-  \param[out] mode id
+   \param id surface id
+   \param[out] mode id
 
-  \return 1 on success
-  \return -1 on error (invalid surface id)
-*/
+   \return 1 on success
+   \return -1 on error (invalid surface id)
+ */
 int GS_get_maskmode(int id, int *mode)
 {
     geosurf *gs;
@@ -1454,14 +1458,14 @@ int GS_get_maskmode(int id, int *mode)
 }
 
 /*!
-  \brief Set client data
+   \brief Set client data
 
-  \param id surface id
-  \param clientd pointer to client data struct
+   \param id surface id
+   \param clientd pointer to client data struct
 
-  \return 1 on success
-  \return -1 on error (invalid surface id)
-*/
+   \return 1 on success
+   \return -1 on error (invalid surface id)
+ */
 int GS_Set_ClientData(int id, void *clientd)
 {
     geosurf *gs;
@@ -1477,13 +1481,13 @@ int GS_Set_ClientData(int id, void *clientd)
 }
 
 /*!
-  \brief Get client data
+   \brief Get client data
 
-  \param id surface id
+   \param id surface id
 
-  \return pointer to client data
-  \return NULL on error
-*/
+   \return pointer to client data
+   \return NULL on error
+ */
 void *GS_Get_ClientData(int id)
 {
     geosurf *gs;
@@ -1497,25 +1501,25 @@ void *GS_Get_ClientData(int id)
 }
 
 /*!
-  \brief Get number of surfaces
+   \brief Get number of surfaces
 
-  \return number of surfaces
-*/
+   \return number of surfaces
+ */
 int GS_num_surfs(void)
 {
     return (gs_num_surfaces());
 }
 
 /*!
-  \brief Get surface list
-  
-  Must be freed when not neeed!
+   \brief Get surface list
 
-  \param[out] numsurf number of available surfaces
+   Must be freed when not neeed!
 
-  \return pointer to surface array
-  \return NULL on error
-*/
+   \param[out] numsurf number of available surfaces
+
+   \return pointer to surface array
+   \return NULL on error
+ */
 int *GS_get_surf_list(int *numsurfs)
 {
     int i, *ret;
@@ -1523,7 +1527,7 @@ int *GS_get_surf_list(int *numsurfs)
     *numsurfs = Next_surf;
 
     if (Next_surf) {
-	ret = (int *) G_malloc(Next_surf * sizeof(int));
+	ret = (int *)G_malloc(Next_surf * sizeof(int));
 
 	for (i = 0; i < Next_surf; i++) {
 	    ret[i] = Surf_ID[i];
@@ -1536,13 +1540,13 @@ int *GS_get_surf_list(int *numsurfs)
 }
 
 /*!
-  \brief Delete surface
+   \brief Delete surface
 
-  \param id surface id
+   \param id surface id
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GS_delete_surface(int id)
 {
     int i, j, found = 0;
@@ -1575,15 +1579,15 @@ int GS_delete_surface(int id)
 
 
 /*!
-  \brief Load raster map as attribute
+   \brief Load raster map as attribute
 
-  \param id surface id
-  \param filename filename
-  \param att attribute descriptor
+   \param id surface id
+   \param filename filename
+   \param att attribute descriptor
 
-  \return -1 on error (invalid surface id)
-  \return ?
-*/
+   \return -1 on error (invalid surface id)
+   \return ?
+ */
 int GS_load_att_map(int id, const char *filename, int att)
 {
     geosurf *gs;
@@ -1594,7 +1598,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     int reuse = 0, begin, hdata, ret, neg = 0, has_null = 0;
     typbuff *tbuff;
 
-    G_debug (3, "GS_load_att_map(): map=%s", filename);
+    G_debug(3, "GS_load_att_map(): map=%s", filename);
 
     gs = gs_get_surf(id);
 
@@ -1619,8 +1623,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     mapset = G_find_cell2(filename, "");
     if (mapset == NULL) {
 	/* Check for valid filename */
-	G_warning ("Raster map <%s> not found",
-		   filename);
+	G_warning("Raster map <%s> not found", filename);
 	return -1;
     }
     filename = G_fully_qualified_name(filename, mapset);
@@ -1628,11 +1631,10 @@ int GS_load_att_map(int id, const char *filename, int att)
     /* Check to see if map is in Region */
     G_get_cellhd(filename, mapset, &rast_head);
     if (rast_head.north <= wind.south ||
-		    rast_head.south >= wind.north ||
-		    rast_head.east <= wind.west ||
-		    rast_head.west >= wind.east)
-    {
-	G_fatal_error(_("Raster map <%s> is outside of current region. Load failed."),
+	rast_head.south >= wind.north ||
+	rast_head.east <= wind.west || rast_head.west >= wind.east) {
+	G_fatal_error(_
+		      ("Raster map <%s> is outside of current region. Load failed."),
 		      filename);
     }
 
@@ -1641,8 +1643,9 @@ int GS_load_att_map(int id, const char *filename, int att)
 	atty = ATTY_FLOAT | ATTY_CHAR | ATTY_INT | ATTY_SHORT | ATTY_MASK;
 
 	if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
-	    
-	    G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
+
+	    G_debug(3,
+		    "GS_load_att_map(): %s already has data handle %d.CF=%x",
 		    filename, hdata, changed);
 
 	    /* handle found */
@@ -1682,9 +1685,10 @@ int GS_load_att_map(int id, const char *filename, int att)
 		filename, hdata);
     }
     else {
-	G_debug(3, "GS_load_att_map(): %s not loaded in correct form - loading now",
+	G_debug(3,
+		"GS_load_att_map(): %s not loaded in correct form - loading now",
 		filename);
-	
+
 	/* not loaded - need to get new dataset handle */
 	gs->att[att].hdata = gsds_newh(filename);
 
@@ -1711,13 +1715,15 @@ int GS_load_att_map(int id, const char *filename, int att)
 	}
 
 	if (0 > gs_malloc_att_buff(gs, att, ATTY_NULL)) {
-	    G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+	    G_fatal_error(_
+			  ("GS_load_att_map(): Out of memory. Unable to load map"));
 	}
 
 	switch (atty) {
 	case ATTY_MASK:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_MASK)) {
-		G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_
+			      ("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
@@ -1726,7 +1732,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_CHAR:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
-		G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_
+			      ("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb,
@@ -1736,7 +1743,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_SHORT:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
-		G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_
+			      ("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb,
@@ -1746,7 +1754,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_FLOAT:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
-		G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_
+			      ("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb,
@@ -1757,7 +1766,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 	case ATTY_INT:
 	default:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_
+			      ("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib,
@@ -1810,7 +1820,8 @@ int GS_load_att_map(int id, const char *filename, int att)
 	else if (ATTY_FLOAT == atty) {
 	    if (!reuse) {
 		if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		    G_fatal_error (_("GS_load_att_map(): Out of memory. Unable to load map"));
+		    G_fatal_error(_
+				  ("GS_load_att_map(): Out of memory. Unable to load map"));
 		}
 
 		Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib,
@@ -1840,7 +1851,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     }
 
     if (ret < 0) {
-	G_warning (_("Loading failed"));
+	G_warning(_("Loading failed"));
     }
 
     if (-1 == Gs_update_attrange(gs, att)) {
@@ -1851,10 +1862,10 @@ int GS_load_att_map(int id, const char *filename, int att)
 }
 
 /*!
-  \brief Draw surface
+   \brief Draw surface
 
-  \param id surface id
-*/
+   \param id surface id
+ */
 void GS_draw_surf(int id)
 {
     geosurf *gs;
@@ -1884,12 +1895,12 @@ void GS_draw_surf(int id)
 }
 
 /*!
-  \brief Draw surface wire
+   \brief Draw surface wire
 
-  Overrides draw_mode for fast display
+   Overrides draw_mode for fast display
 
-  \param id surface id
-*/
+   \param id surface id
+ */
 void GS_draw_wire(int id)
 {
     geosurf *gs;
@@ -1906,10 +1917,10 @@ void GS_draw_wire(int id)
 }
 
 /*!
-  \brief Draw all wires
+   \brief Draw all wires
 
-  Overrides draw_mode for fast display
-*/
+   Overrides draw_mode for fast display
+ */
 void GS_alldraw_wire(void)
 {
     geosurf *gs;
@@ -1925,8 +1936,8 @@ void GS_alldraw_wire(void)
 }
 
 /*!
-  \brief Draw all surfaces
-*/
+   \brief Draw all surfaces
+ */
 void GS_alldraw_surf(void)
 {
     int i;
@@ -1939,11 +1950,11 @@ void GS_alldraw_surf(void)
 }
 
 /*!
-  \brief Set Z exag for surface
+   \brief Set Z exag for surface
 
-  \param id surface id
-  \param exag z-exag value
-*/
+   \param id surface id
+   \param exag z-exag value
+ */
 void GS_set_exag(int id, float exag)
 {
     geosurf *gs;
@@ -1964,10 +1975,10 @@ void GS_set_exag(int id, float exag)
 }
 
 /*!
-  \brief Set global z-exag value
-  
-  \param exag exag value to be set up
-*/
+   \brief Set global z-exag value
+
+   \param exag exag value to be set up
+ */
 void GS_set_global_exag(float exag)
 {
 
@@ -1979,17 +1990,17 @@ void GS_set_global_exag(float exag)
      * if exag is used in norm equation which
      * it is not! If GL_NORMALIZE is disabled
      * will need to include.
-    gs_setall_norm_needupdate();
-    */
+     gs_setall_norm_needupdate();
+     */
 
     return;
 }
 
 /*!
-  \brief Get global z-exag value
+   \brief Get global z-exag value
 
-  \return value
-*/
+   \return value
+ */
 float GS_global_exag(void)
 {
     G_debug(3, "GS_global_exag(): %g", Gv.vert_exag);
@@ -1998,13 +2009,13 @@ float GS_global_exag(void)
 }
 
 /*!
-  \brief Set wire color
+   \brief Set wire color
 
-  \todo error-handling
+   \todo error-handling
 
-  \param id surface id
-  \param colr color value
-*/
+   \param id surface id
+   \param colr color value
+ */
 void GS_set_wire_color(int id, int colr)
 {
     geosurf *gs;
@@ -2021,14 +2032,14 @@ void GS_set_wire_color(int id, int colr)
 }
 
 /*!
-  \brief Get wire color
+   \brief Get wire color
 
-  \param id surface id
-  \param[out] colr color value
+   \param id surface id
+   \param[out] colr color value
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GS_get_wire_color(int id, int *colr)
 {
     geosurf *gs;
@@ -2045,13 +2056,13 @@ int GS_get_wire_color(int id, int *colr)
 }
 
 /*!
-  \brief Set all draw-modes
+   \brief Set all draw-modes
 
-  \param mode mode id
+   \param mode mode id
 
-  \return 0 on success
-  \return -1 on error
-*/
+   \return 0 on success
+   \return -1 on error
+ */
 int GS_setall_drawmode(int mode)
 {
     int i;
@@ -2066,20 +2077,19 @@ int GS_setall_drawmode(int mode)
 }
 
 /*!
-  \brief Set draw mode
+   \brief Set draw mode
 
-  \param id surface id
-  \param mode mode type(s)
+   \param id surface id
+   \param mode mode type(s)
 
-  \return 0 on success
-  \return -1 on error (invalid surface id)
-*/
+   \return 0 on success
+   \return -1 on error (invalid surface id)
+ */
 int GS_set_drawmode(int id, int mode)
 {
     geosurf *gs;
 
-    G_debug(3, "GS_set_drawmode(): id=%d mode=%d",
-	    id, mode);
+    G_debug(3, "GS_set_drawmode(): id=%d mode=%d", id, mode);
 
     gs = gs_get_surf(id);
 
@@ -2093,14 +2103,14 @@ int GS_set_drawmode(int id, int mode)
 }
 
 /*!
-  \brief Get draw mode
+   \brief Get draw mode
 
-  \param id surface id
-  \param[out] mode mode id
+   \param id surface id
+   \param[out] mode mode id
 
-  \return 1 on success
-  \return -1 on error (invalid surface id)
-*/
+   \return 1 on success
+   \return -1 on error (invalid surface id)
+ */
 int GS_get_drawmode(int id, int *mode)
 {
     geosurf *gs;
@@ -2117,12 +2127,12 @@ int GS_get_drawmode(int id, int *mode)
 }
 
 /*!
-  \brief Set no-zero ?
-  
-  \param id surface id
-  \param att attribute id
-  \param mode mode id
-*/
+   \brief Set no-zero ?
+
+   \param id surface id
+   \param att attribute id
+   \param mode mode id
+ */
 void GS_set_nozero(int id, int att, int mode)
 {
     geosurf *gs;
@@ -2147,15 +2157,15 @@ void GS_set_nozero(int id, int att, int mode)
 }
 
 /*!
-  \brief Get no-zero ?
-  
-  \param id surface id
-  \param att attribute id
-  \param[out] mode mode id
+   \brief Get no-zero ?
 
-  \return -1 on error (invalid surface id)
-  \return 1 on success
-*/
+   \param id surface id
+   \param att attribute id
+   \param[out] mode mode id
+
+   \return -1 on error (invalid surface id)
+   \return 1 on success
+ */
 int GS_get_nozero(int id, int att, int *mode)
 {
     geosurf *gs;
@@ -2182,14 +2192,14 @@ int GS_get_nozero(int id, int att, int *mode)
 }
 
 /*!
-  \brief Set all draw resolutions
+   \brief Set all draw resolutions
 
-  \param xres,yres x/y resolution value
-  \param xwire,ywire x/y wire value
+   \param xres,yres x/y resolution value
+   \param xwire,ywire x/y wire value
 
-  \return 0 on success
-  \return -1 on error
-*/
+   \return 0 on success
+   \return -1 on error
+ */
 int GS_setall_drawres(int xres, int yres, int xwire, int ywire)
 {
     int i;
@@ -2204,15 +2214,15 @@ int GS_setall_drawres(int xres, int yres, int xwire, int ywire)
 }
 
 /*!
-  \brief Set draw resolution for surface
+   \brief Set draw resolution for surface
 
-  \param id surface id
-  \param xres,yres x/y resolution value
-  \param xwire,ywire x/y wire value
+   \param id surface id
+   \param xres,yres x/y resolution value
+   \param xwire,ywire x/y wire value
 
-  \return -1 on error
-  \return 0 on success
-*/
+   \return -1 on error
+   \return 0 on success
+ */
 int GS_set_drawres(int id, int xres, int yres, int xwire, int ywire)
 {
     geosurf *gs;
@@ -2241,12 +2251,12 @@ int GS_set_drawres(int id, int xres, int yres, int xwire, int ywire)
 }
 
 /*!
-  \brief Get draw resolution of surface
+   \brief Get draw resolution of surface
 
-  \param id surface id
-  \param[out] xres,yres x/y resolution value
-  \param[out] xwire,ywire x/y wire value
-*/
+   \param id surface id
+   \param[out] xres,yres x/y resolution value
+   \param[out] xwire,ywire x/y wire value
+ */
 void GS_get_drawres(int id, int *xres, int *yres, int *xwire, int *ywire)
 {
     geosurf *gs;
@@ -2266,11 +2276,11 @@ void GS_get_drawres(int id, int *xres, int *yres, int *xwire, int *ywire)
 }
 
 /*!
-  \brief Get dimension of surface
+   \brief Get dimension of surface
 
-  \param id surface id
-  \param[out] rows,cols number of rows/cols
-*/
+   \param id surface id
+   \param[out] rows,cols number of rows/cols
+ */
 void GS_get_dims(int id, int *rows, int *cols)
 {
     geosurf *gs;
@@ -2286,18 +2296,18 @@ void GS_get_dims(int id, int *rows, int *cols)
 }
 
 /*!
-  \brief Get exag-value guess
+   \brief Get exag-value guess
 
-  Use no_zero range because if zero IS data, then range won't be that
-  much off (it's just a GUESS, after all), but if zero is NO data, could
-  drastically affect guess
+   Use no_zero range because if zero IS data, then range won't be that
+   much off (it's just a GUESS, after all), but if zero is NO data, could
+   drastically affect guess
 
-  \param id surface id
-  \param[out] exag exag value
+   \param id surface id
+   \param[out] exag exag value
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GS_get_exag_guess(int id, float *exag)
 {
     geosurf *gs;
@@ -2307,9 +2317,8 @@ int GS_get_exag_guess(int id, float *exag)
     guess = 1.0;
 
     /* if gs is type const return guess = 1.0 */
-    if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO))
-    {
-	return(1);
+    if (CONST_ATT == gs_get_att_src(gs, ATT_TOPO)) {
+	return (1);
     }
 
     if (gs) {
@@ -2319,21 +2328,18 @@ int GS_get_exag_guess(int id, float *exag)
 	    return (1);
 	}
 
-	G_debug (3, "GS_get_exag_guess(): %f %f",
-		 gs->zrange_nz, Longdim);
+	G_debug(3, "GS_get_exag_guess(): %f %f", gs->zrange_nz, Longdim);
 
 	while (gs->zrange_nz * guess / Longdim >= .25) {
 	    guess *= .1;
 
-	    G_debug (3, "GS_get_exag_guess(): %f",
-		     guess);
+	    G_debug(3, "GS_get_exag_guess(): %f", guess);
 	}
 
 	while (gs->zrange_nz * guess / Longdim < .025) {
 	    guess *= 10.;
 
-	    G_debug (3, "GS_get_exag_guess(): %f",
-		     guess);
+	    G_debug(3, "GS_get_exag_guess(): %f", guess);
 	}
 
 	*exag = guess;
@@ -2345,13 +2351,13 @@ int GS_get_exag_guess(int id, float *exag)
 }
 
 /*!
-  \brief Get Z extents for all loaded surfaces
+   \brief Get Z extents for all loaded surfaces
 
-  Treating zeros as "no data"
+   Treating zeros as "no data"
 
-  \param[out] min min value
-  \param[out] max max value
-*/
+   \param[out] min min value
+   \param[out] max max value
+ */
 void GS_get_zrange_nz(float *min, float *max)
 {
     int i, first = 1;
@@ -2375,18 +2381,17 @@ void GS_get_zrange_nz(float *min, float *max)
 	}
     }
 
-    G_debug (3, "GS_get_zrange_nz(): min=%g max=%g",
-             *min, *max);
+    G_debug(3, "GS_get_zrange_nz(): min=%g max=%g", *min, *max);
 
     return;
 }
 
 /*!
-  \brief Set translation (surface position)
+   \brief Set translation (surface position)
 
-  \param id surface id
-  \param xtrans,ytrans,ztrans translation values
-*/
+   \param id surface id
+   \param xtrans,ytrans,ztrans translation values
+ */
 void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geosurf *gs;
@@ -2406,11 +2411,11 @@ void GS_set_trans(int id, float xtrans, float ytrans, float ztrans)
 }
 
 /*!
-  \brief Get translation values (surface position)
+   \brief Get translation values (surface position)
 
-  \param id surface id
-  \param[out] xtrans,ytrans,ztrans trans values
-*/
+   \param id surface id
+   \param[out] xtrans,ytrans,ztrans trans values
+ */
 void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geosurf *gs;
@@ -2431,33 +2436,33 @@ void GS_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 
 
 /*!
-  \brief Get default draw color
+   \brief Get default draw color
 
-  \return color value
-*/
+   \return color value
+ */
 unsigned int GS_default_draw_color(void)
 {
 
     G_debug(3, "GS_default_draw_color");
 
-    return ((unsigned int) Gd.bgcol);
+    return ((unsigned int)Gd.bgcol);
 }
 
 /*!
-  \brief Get background color
+   \brief Get background color
 
-  \return color value
-*/
+   \return color value
+ */
 unsigned int GS_background_color(void)
 {
-    return ((unsigned int) Gd.bgcol);
+    return ((unsigned int)Gd.bgcol);
 }
 
 /*!
-  \brief Sets which buffer to draw to
+   \brief Sets which buffer to draw to
 
-  \param where GSD_BOTH, GSD_FRONT, GSD_BACK
-*/
+   \param where GSD_BOTH, GSD_FRONT, GSD_BACK
+ */
 void GS_set_draw(int where)
 {
     Buffermode = where;
@@ -2485,8 +2490,8 @@ void GS_set_draw(int where)
 }
 
 /*
-  \brief Ready to draw
-*/
+   \brief Ready to draw
+ */
 void GS_ready_draw(void)
 {
 
@@ -2498,8 +2503,8 @@ void GS_ready_draw(void)
 }
 
 /*!
-  \brief Draw done, swap buffers
-*/
+   \brief Draw done, swap buffers
+ */
 void GS_done_draw(void)
 {
 
@@ -2515,15 +2520,14 @@ void GS_done_draw(void)
 }
 
 /*!
-  \brief Set focus
+   \brief Set focus
 
-  \param realto real coordinates to
-*/
+   \param realto real coordinates to
+ */
 void GS_set_focus(float *realto)
 {
 
-    G_debug(3, "GS_set_focus(): %f,%f,%f",
-	    realto[0], realto[1], realto[2]);
+    G_debug(3, "GS_set_focus(): %f,%f,%f", realto[0], realto[1], realto[2]);
 
     Gv.infocus = 1;
     GS_v3eq(Gv.real_to, realto);
@@ -2534,16 +2538,16 @@ void GS_set_focus(float *realto)
 }
 
 /*!
-  \brief Set real focus
+   \brief Set real focus
 
-  \param realto real coordinates to
-*/
+   \param realto real coordinates to
+ */
 void GS_set_focus_real(float *realto)
 {
 
     G_get_set_window(&wind);
-    realto[X] = realto[X] - wind.west - (wind.ew_res/2.);
-    realto[Y] = realto[Y] - wind.south - (wind.ns_res/2.);
+    realto[X] = realto[X] - wind.west - (wind.ew_res / 2.);
+    realto[Y] = realto[Y] - wind.south - (wind.ns_res / 2.);
 
     Gv.infocus = 1;
     GS_v3eq(Gv.real_to, realto);
@@ -2555,14 +2559,14 @@ void GS_set_focus_real(float *realto)
 
 
 /*!
-  \brief Get focus
+   \brief Get focus
 
-  OK to call with NULL argument if just want to check state
+   OK to call with NULL argument if just want to check state
 
-  \param realto real coordinates to
+   \param realto real coordinates to
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_get_focus(float *realto)
 {
 
@@ -2578,10 +2582,10 @@ int GS_get_focus(float *realto)
 }
 
 /*!
-  \brief Set focus to map center
+   \brief Set focus to map center
 
-  \param id surface id
-*/
+   \param id surface id
+ */
 void GS_set_focus_center_map(int id)
 {
     float center[3];
@@ -2613,10 +2617,10 @@ void GS_set_focus_center_map(int id)
 }
 
 /*!
-  \brief Move viewpoint 
+   \brief Move viewpoint 
 
-  \param pt 'from' model coordinates
-*/
+   \param pt 'from' model coordinates
+ */
 void GS_moveto(float *pt)
 {
     float ft[3];
@@ -2626,8 +2630,8 @@ void GS_moveto(float *pt)
     if (Gv.infocus) {
 	GS_v3eq(Gv.from_to[FROM], pt);
 	/*
-	GS_v3eq(Gv.from_to[TO], Gv.real_to);
-	*/
+	   GS_v3eq(Gv.from_to[TO], Gv.real_to);
+	 */
 	GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
 	/* update inclination, look_dir if we're keeping these */
     }
@@ -2643,10 +2647,10 @@ void GS_moveto(float *pt)
 }
 
 /*!
-  \brief Move position to (real)
+   \brief Move position to (real)
 
-  \param pt point real coordinates
-*/
+   \param pt point real coordinates
+ */
 void GS_moveto_real(float *pt)
 {
     gsd_real2model(pt);
@@ -2656,16 +2660,16 @@ void GS_moveto_real(float *pt)
 }
 
 /*!
-  \brief Get z-extent for a single surface
+   \brief Get z-extent for a single surface
 
-  \param id surface id
-  \param[out] min min z-value
-  \param[out] max max z-value
-  \param[out] mid middle z-value
+   \param id surface id
+   \param[out] min min z-value
+   \param[out] max max z-value
+   \param[out] mid middle z-value
 
-  \return -1 on error (invalid surface id)
-  \return ?
-*/
+   \return -1 on error (invalid surface id)
+   \return ?
+ */
 int GS_get_zextents(int id, float *min, float *max, float *mid)
 {
     geosurf *gs;
@@ -2680,50 +2684,51 @@ int GS_get_zextents(int id, float *min, float *max, float *mid)
 }
 
 /*!
-  \brief Get z-extent for all loaded surfaces
+   \brief Get z-extent for all loaded surfaces
 
-  \param[out] min min z-value
-  \param[out] max max z-value
-  \param doexag use z-exaggeration
+   \param[out] min min z-value
+   \param[out] max max z-value
+   \param doexag use z-exaggeration
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GS_get_zrange(float *min, float *max, int doexag)
 {
     int ret_surf, ret_vol;
     float surf_min, surf_max;
     float vol_min, vol_max;
-    
+
     ret_surf = gs_get_zrange(&surf_min, &surf_max);
     ret_vol = gvl_get_zrange(&vol_min, &vol_max);
-    
+
     if (ret_surf > 0 && ret_vol > 0) {
 	*min = (surf_min < vol_min) ? surf_min : vol_min;
 	*max = (surf_max < vol_max) ? surf_max : vol_max;
-    } else if (ret_surf > 0) {
+    }
+    else if (ret_surf > 0) {
 	*min = surf_min;
 	*max = surf_max;
-    } else if (ret_vol > 0) {
+    }
+    else if (ret_vol > 0) {
 	*min = vol_min;
 	*max = vol_max;
     }
-    
+
     if (doexag) {
 	*min *= Gv.vert_exag;
 	*max *= Gv.vert_exag;
     }
-    
-    G_debug(3, "GS_get_zrange(): min=%g max=%g",
-	    *min, *max);
-    return ((ret_surf > 0 || ret_vol > 0) ? (1) :(-1));
+
+    G_debug(3, "GS_get_zrange(): min=%g max=%g", *min, *max);
+    return ((ret_surf > 0 || ret_vol > 0) ? (1) : (-1));
 }
 
 /*!
-  \brief Get viewpoint 'from' position
+   \brief Get viewpoint 'from' position
 
-  \param[out] fr from model coordinates
-*/
+   \param[out] fr from model coordinates
+ */
 void GS_get_from(float *fr)
 {
     GS_v3eq(fr, Gv.from_to[FROM]);
@@ -2734,10 +2739,10 @@ void GS_get_from(float *fr)
 }
 
 /*!
-  \brief Get viewpoint 'from' real coordinates
+   \brief Get viewpoint 'from' real coordinates
 
-  \param[out] fr 'from' real coordinates
-*/
+   \param[out] fr 'from' real coordinates
+ */
 void GS_get_from_real(float *fr)
 {
     GS_v3eq(fr, Gv.from_to[FROM]);
@@ -2747,18 +2752,18 @@ void GS_get_from_real(float *fr)
 }
 
 /*!
-  \brief Get 'to' real coordinates
+   \brief Get 'to' real coordinates
 
-  \param[out] to 'to' real coordinates
-*/
+   \param[out] to 'to' real coordinates
+ */
 void GS_get_to_real(float *to)
 {
-float realto[3];
+    float realto[3];
 
     G_get_set_window(&wind);
     GS_get_focus(realto);
-    to[X] = realto[X] + wind.west + (wind.ew_res/2.);
-    to[Y] = realto[Y] + wind.south + (wind.ns_res/2.);
+    to[X] = realto[X] + wind.west + (wind.ew_res / 2.);
+    to[Y] = realto[Y] + wind.south + (wind.ns_res / 2.);
     to[Z] = realto[Z];
 
     return;
@@ -2766,15 +2771,16 @@ float realto[3];
 
 
 /*!
-  \brief Get zoom setup
-  
-  \param[out] a,b,c,d current viewport settings
-  \param[out] maxx,maxy max viewport size
-*/
+   \brief Get zoom setup
+
+   \param[out] a,b,c,d current viewport settings
+   \param[out] maxx,maxy max viewport size
+ */
 void GS_zoom_setup(int *a, int *b, int *c, int *d, int *maxx, int *maxy)
 {
     GLint tmp[4];
     GLint num[2];
+
     gsd_getViewport(tmp, num);
     *a = tmp[0];
     *b = tmp[1];
@@ -2787,12 +2793,12 @@ void GS_zoom_setup(int *a, int *b, int *c, int *d, int *maxx, int *maxy)
 }
 
 /*!
-  \brief Get 'to' model coordinates
+   \brief Get 'to' model coordinates
 
-  \todo need set_to? - just use viewdir?
+   \todo need set_to? - just use viewdir?
 
-  \param[out] to 'to' model coordinates
-*/
+   \param[out] to 'to' model coordinates
+ */
 void GS_get_to(float *to)
 {
     G_debug(3, "GS_get_to");
@@ -2803,10 +2809,10 @@ void GS_get_to(float *to)
 }
 
 /*!
-  \brief Get viewdir
+   \brief Get viewdir
 
-  \param[out] dir viewdir value
-*/
+   \param[out] dir viewdir value
+ */
 void GS_get_viewdir(float *dir)
 {
     GS_v3dir(Gv.from_to[FROM], Gv.from_to[TO], dir);
@@ -2815,12 +2821,12 @@ void GS_get_viewdir(float *dir)
 }
 
 /*!
-  \brief Set viewdir
-  
-  Automatically turns off focus
+   \brief Set viewdir
 
-  \param dir viewdir value
-*/
+   Automatically turns off focus
+
+   \param dir viewdir value
+ */
 void GS_set_viewdir(float *dir)
 {
     float tmp[3];
@@ -2837,10 +2843,10 @@ void GS_set_viewdir(float *dir)
 }
 
 /*!
-  \brief Set field of view
+   \brief Set field of view
 
-  \param fov fov value
-*/
+   \param fov fov value
+ */
 void GS_set_fov(int fov)
 {
     Gv.fov = fov;
@@ -2849,32 +2855,32 @@ void GS_set_fov(int fov)
 }
 
 /*!
-  \brief Get fied of view
+   \brief Get fied of view
 
-  \return field of view, in 10ths of degrees
-*/
+   \return field of view, in 10ths of degrees
+ */
 int GS_get_fov(void)
 {
     return (Gv.fov);
 }
 
 /*!
-  \brief Get twist value
+   \brief Get twist value
 
-  10ths of degrees off twelve o'clock
-*/
+   10ths of degrees off twelve o'clock
+ */
 int GS_get_twist(void)
 {
     return (Gv.twist);
 }
 
 /*!
-  \brief Set viewpoint twist value
+   \brief Set viewpoint twist value
 
-  10ths of degrees off twelve o'clock
-  
-  \params t tenths of degrees clockwise from 12:00.
-*/
+   10ths of degrees off twelve o'clock
+
+   \params t tenths of degrees clockwise from 12:00.
+ */
 void GS_set_twist(int t)
 {
     Gv.twist = t;
@@ -2883,8 +2889,8 @@ void GS_set_twist(int t)
 }
 
 /*!
-  \brief Unset focus
-*/
+   \brief Unset focus
+ */
 void GS_set_nofocus(void)
 {
     G_debug(3, "GS_set_nofocus");
@@ -2895,10 +2901,10 @@ void GS_set_nofocus(void)
 }
 
 /*!
-  \brief Set focus
+   \brief Set focus
 
-  Make sure that the center of view is set
-*/
+   Make sure that the center of view is set
+ */
 void GS_set_infocus(void)
 {
     G_debug(3, "GS_set_infocus");
@@ -2909,10 +2915,10 @@ void GS_set_infocus(void)
 }
 
 /*!
-  \brief Set viewport
+   \brief Set viewport
 
-  \param left,right,bottom,top viewport extent values
-*/
+   \param left,right,bottom,top viewport extent values
+ */
 void GS_set_viewport(int left, int right, int bottom, int top)
 {
     G_debug(3, "GS_set_viewport(): left=%d, right=%d, "
@@ -2924,19 +2930,19 @@ void GS_set_viewport(int left, int right, int bottom, int top)
 }
 
 /*!
-  \brief Send screen coords sx and sy, lib traces through surfaces; sets
-  new center to point of nearest intersection.
+   \brief Send screen coords sx and sy, lib traces through surfaces; sets
+   new center to point of nearest intersection.
 
-  If no intersection, uses line of sight with length of current view
-  ray (eye to center) to set new center.
+   If no intersection, uses line of sight with length of current view
+   ray (eye to center) to set new center.
 
-  Reset center of view to screen coordinates sx, sy.
+   Reset center of view to screen coordinates sx, sy.
 
-  \param sx,sy screen coordinates
+   \param sx,sy screen coordinates
 
-  \return 1 on success
-  \return 0 on error (invalid surface id)
-*/
+   \return 1 on success
+   \return 0 on error (invalid surface id)
+ */
 int GS_look_here(int sx, int sy)
 {
     float x, y, z, len, los[2][3];
@@ -2956,7 +2962,7 @@ int GS_look_here(int sx, int sy)
 	}
     }
     else {
-	if (gsd_get_los(los, (short) sx, (short) sy)) {
+	if (gsd_get_los(los, (short)sx, (short)sy)) {
 	    len = GS_distance(Gv.from_to[FROM], Gv.real_to);
 	    GS_v3dir(los[FROM], los[TO], dir);
 	    GS_v3mult(dir, len);
@@ -2973,19 +2979,19 @@ int GS_look_here(int sx, int sy)
 }
 
 /*!
-  \brief Get selected point of surface
+   \brief Get selected point of surface
 
-  Given screen coordinates sx and sy, find closest intersection of
-  view ray with surfaces and return coordinates of intersection in x, y,
-  z, and identifier of surface in id.
+   Given screen coordinates sx and sy, find closest intersection of
+   view ray with surfaces and return coordinates of intersection in x, y,
+   z, and identifier of surface in id.
 
-  \param sx,sy screen coordinates
-  \param[out] id surface id
-  \param[out] x,y,z point on surface (model coordinates?)
+   \param sx,sy screen coordinates
+   \param[out] id surface id
+   \param[out] x,y,z point on surface (model coordinates?)
 
-  \returns 0 if no intersections found
-  \return number of intersections
-*/
+   \returns 0 if no intersections found
+   \return number of intersections
+ */
 int GS_get_selected_point_on_surface(int sx, int sy, int *id, float *x,
 				     float *y, float *z)
 {
@@ -2995,15 +3001,15 @@ int GS_get_selected_point_on_surface(int sx, int sy, int *id, float *x,
     geosurf *gs;
 
     /* returns surface-world coords */
-    gsd_get_los(los, (short) sx, (short) sy);
+    gsd_get_los(los, (short)sx, (short)sy);
 
     if (!gs_setlos_enterdata(los)) {
-	G_debug (3, "gs_setlos_enterdata(los): returns false");
+	G_debug(3, "gs_setlos_enterdata(los): returns false");
 	return (0);
     }
 
     for (i = 0; i < Next_surf; i++) {
-	G_debug (3, "id=%d", i);
+	G_debug(3, "id=%d", i);
 
 	gs = gs_get_surf(Surf_ID[i]);
 
@@ -3049,11 +3055,11 @@ int GS_get_selected_point_on_surface(int sx, int sy, int *id, float *x,
 }
 
 /*!
-  \brief Set cplace rotation
+   \brief Set cplace rotation
 
-  \param num cplace id
-  \param dx,dy,dz rotation values
-*/
+   \param num cplace id
+   \param dx,dy,dz rotation values
+ */
 void GS_set_cplane_rot(int num, float dx, float dy, float dz)
 {
     gsd_cplane_setrot(num, dx, dy, dz);
@@ -3062,11 +3068,11 @@ void GS_set_cplane_rot(int num, float dx, float dy, float dz)
 }
 
 /*!
-  \brief Set cplace trans
-  
-  \param num cplace id
-  \param dx,dy,dz rotation values
-*/
+   \brief Set cplace trans
+
+   \param num cplace id
+   \param dx,dy,dz rotation values
+ */
 void GS_set_cplane_trans(int num, float dx, float dy, float dz)
 {
     gsd_cplane_settrans(num, dx, dy, dz);
@@ -3076,10 +3082,10 @@ void GS_set_cplane_trans(int num, float dx, float dy, float dz)
 
 
 /*!
-  \brief Draw cplace
+   \brief Draw cplace
 
-  \param num cplace id
-*/
+   \param num cplace id
+ */
 void GS_draw_cplane(int num)
 {
     geosurf *gsurfs[MAX_SURFS];
@@ -3099,14 +3105,14 @@ void GS_draw_cplane(int num)
 }
 
 /*!
-  \brief Draw cplace fence ?
+   \brief Draw cplace fence ?
 
-  \param hs1,hs2
-  \param num cplane id
+   \param hs1,hs2
+   \param num cplane id
 
-  \return 0 on error
-  \return 1 on success
-*/
+   \return 0 on error
+   \return 1 on success
+ */
 int GS_draw_cplane_fence(int hs1, int hs2, int num)
 {
     geosurf *gs1, *gs2;
@@ -3125,8 +3131,8 @@ int GS_draw_cplane_fence(int hs1, int hs2, int num)
 }
 
 /*!
-  \brief Draw all cplace fences ?
-*/
+   \brief Draw all cplace fences ?
+ */
 void GS_alldraw_cplane_fences(void)
 {
     int onstate[MAX_CPLANES], i;
@@ -3143,10 +3149,10 @@ void GS_alldraw_cplane_fences(void)
 }
 
 /*!
-  \brief Set cplace
+   \brief Set cplace
 
-  \param num cplane id
-*/
+   \param num cplane id
+ */
 void GS_set_cplane(int num)
 {
     gsd_cplane_on(num);
@@ -3155,10 +3161,10 @@ void GS_set_cplane(int num)
 }
 
 /*!
-  \brief Unset clip place (turn off)
+   \brief Unset clip place (turn off)
 
-  \param num cplane id
-*/
+   \param num cplane id
+ */
 void GS_unset_cplane(int num)
 {
     gsd_cplane_off(num);
@@ -3167,11 +3173,11 @@ void GS_unset_cplane(int num)
 }
 
 /*!
-  \brief Get axis scale
+   \brief Get axis scale
 
-  \param sx,sy,sz x/y/z scale values
-  \param doexag use vertical exaggeration
-*/
+   \param sx,sy,sz x/y/z scale values
+   \param doexag use vertical exaggeration
+ */
 void GS_get_scale(float *sx, float *sy, float *sz, int doexag)
 {
     float zexag;
@@ -3184,10 +3190,10 @@ void GS_get_scale(float *sx, float *sy, float *sz, int doexag)
 }
 
 /*!
-  \brief Set fence color
+   \brief Set fence color
 
-  \param mode mode id
-*/
+   \param mode mode id
+ */
 void GS_set_fencecolor(int mode)
 {
     gsd_setfc(mode);
@@ -3196,26 +3202,26 @@ void GS_set_fencecolor(int mode)
 }
 
 /*!
-  \brief Get fence color
+   \brief Get fence color
 
-  \return color value
-*/
+   \return color value
+ */
 int GS_get_fencecolor(void)
 {
     return gsd_getfc();
 }
 
 /*!
-  \brief Measure distance "as the ball rolls" between two points on surface
+   \brief Measure distance "as the ball rolls" between two points on surface
 
-  \param hs
-  \param x1,y1,x2,y2 distance line nodes
-  \param dist ?
-  \param use_exag use exag ?
+   \param hs
+   \param x1,y1,x2,y2 distance line nodes
+   \param dist ?
+   \param use_exag use exag ?
 
-  \return 0 on error or if one or more points is not in region,
-  \return distance following terrain
-*/
+   \return 0 on error or if one or more points is not in region,
+   \return distance following terrain
+ */
 int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
 			      float *dist, int use_exag)
 {
@@ -3237,26 +3243,26 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
 }
 
 /*!
-  \brief Save 3d view
+   \brief Save 3d view
 
-  \param vname view file name
-  \param surfid surface id
+   \param vname view file name
+   \param surfid surface id
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_save_3dview(const char *vname, int surfid)
 {
     return (Gs_save_3dview(vname, &Gv, &Gd, &wind, gs_get_surf(surfid)));
 }
 
 /*!
-  \brief Load 3d view
+   \brief Load 3d view
 
-  \param vname view file name
-  \param surfid surface id
+   \param vname view file name
+   \param surfid surface id
 
-  \return ?
-*/
+   \return ?
+ */
 int GS_load_3dview(const char *vname, int surfid)
 {
 
@@ -3271,10 +3277,10 @@ int GS_load_3dview(const char *vname, int surfid)
 ************************************************************************/
 
 /*!
-  \brief Init viewpoint
+   \brief Init viewpoint
 
-  \todo allow to set center?
-*/
+   \todo allow to set center?
+ */
 void GS_init_view(void)
 {
     static int first = 1;
@@ -3305,44 +3311,44 @@ void GS_init_view(void)
 	glDepthRange(0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
-    /* } */
+	/* } */
 
-    /* replace these with something meaningful */
-    Gv.fov = 450;
-    Gv.twist = 0;
-    Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] =
-	Gv.from_to[FROM][Z] = GS_UNIT_SIZE / 2.;
+	/* replace these with something meaningful */
+	Gv.fov = 450;
+	Gv.twist = 0;
+	Gv.from_to[FROM][X] = Gv.from_to[FROM][Y] =
+	    Gv.from_to[FROM][Z] = GS_UNIT_SIZE / 2.;
 
-    Gv.from_to[TO][X] = GS_UNIT_SIZE / 2.;
-    Gv.from_to[TO][Y] = GS_UNIT_SIZE / 2.;
-    Gv.from_to[TO][Z] = 0.;
-    Gv.from_to[TO][W] = Gv.from_to[FROM][W] = 1.;
+	Gv.from_to[TO][X] = GS_UNIT_SIZE / 2.;
+	Gv.from_to[TO][Y] = GS_UNIT_SIZE / 2.;
+	Gv.from_to[TO][Z] = 0.;
+	Gv.from_to[TO][W] = Gv.from_to[FROM][W] = 1.;
 
-    Gv.real_to[W] = 1.;
-    Gv.vert_exag = 1.;
+	Gv.real_to[W] = 1.;
+	Gv.vert_exag = 1.;
 
-    GS_v3eq(Gv.real_to, Gv.from_to[TO]);
-    GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
+	GS_v3eq(Gv.real_to, Gv.from_to[TO]);
+	GS_v3normalize(Gv.from_to[FROM], Gv.from_to[TO]);
 
-    /*
-    Gd.nearclip = 50;
-    Gd.farclip = 10000.;
-    */
-    Gd.nearclip = 10.;
-    Gd.farclip = 10000.;
-    Gd.aspect = (float) GS_get_aspect();
+	/*
+	   Gd.nearclip = 50;
+	   Gd.farclip = 10000.;
+	 */
+	Gd.nearclip = 10.;
+	Gd.farclip = 10000.;
+	Gd.aspect = (float)GS_get_aspect();
 
-    GS_set_focus(Gv.real_to);
- }
+	GS_set_focus(Gv.real_to);
+    }
 
     return;
 }
 
 /*!
-  \brief Clear view
+   \brief Clear view
 
-  \param col color value
-*/
+   \param col color value
+ */
 void GS_clear(int col)
 {
     G_debug(3, "GS_clear");
@@ -3359,10 +3365,10 @@ void GS_clear(int col)
      * GLint gdtmp;
      */
     glClearDepth(1.0);
-    glClearColor(((float) ((col) & 0xff)) / 255.,
-		 (float) ((col) >> 8 & 0xff) / 255.,
-		 (float) ((col) >> 16 & 0xff) / 255.,
-		 (float) ((col) >> 24 & 0xff) / 255.);
+    glClearColor(((float)((col) & 0xff)) / 255.,
+		 (float)((col) >> 8 & 0xff) / 255.,
+		 (float)((col) >> 16 & 0xff) / 255.,
+		 (float)((col) >> 24 & 0xff) / 255.);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     Gd.bgcol = col;
@@ -3373,10 +3379,10 @@ void GS_clear(int col)
 }
 
 /*!
-  \brief Get aspect value
+   \brief Get aspect value
 
-  \return aspect value
-*/
+   \return aspect value
+ */
 double GS_get_aspect(void)
 {
     int left, right, bottom, top;
@@ -3395,16 +3401,16 @@ double GS_get_aspect(void)
     G_debug(3, "GS_get_aspect(): left=%d, right=%d, top=%d, bottom=%d",
 	    left, right, top, bottom);
 
-    return ((double) (right - left) / (top - bottom));
+    return ((double)(right - left) / (top - bottom));
 }
 
 /*!
-  \brief Check for transparency
+   \brief Check for transparency
 
-  Disabled.
+   Disabled.
 
-  \return 1
-*/
+   \return 1
+ */
 int GS_has_transparency(void)
 {
     /* OGLXXX

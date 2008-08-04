@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.mkfontcap
@@ -28,8 +29,7 @@
 
 #include "local_proto.h"
 
-static const char *standarddirs[] = 
-{
+static const char *standarddirs[] = {
     /* These are the directories that are searched for Freetype-compatible
      * font files by default. They may contain an environment variable 
      * *at the start* of the string, if enclosed in ${xxx} syntax. */
@@ -37,7 +37,7 @@ static const char *standarddirs[] =
     "/usr/share/X11/fonts",
     "/usr/share/fonts",
     "${HOME}/Library/Fonts",
-    "/Library/Fonts", 
+    "/Library/Fonts",
     "/System/Library/Fonts",
     "${WINDIR}/Fonts",
     NULL
@@ -51,115 +51,110 @@ int main(int argc, char *argv[])
     struct Flag *tostdout, *overwrite;
     struct Option *extradirs;
     struct GModule *module;
-   
+
     FILE *outstream;
-    char *fontcapfile;   
+    char *fontcapfile;
     struct stat status;
     int i;
-   
+
     G_set_program_name(argv[0]);
     G_no_gisinit();
 
     module = G_define_module();
     module->keywords = "general";
     module->description =
-     "Generates the font configuration file by scanning various directories "
-     "for fonts";
-   
+	"Generates the font configuration file by scanning various directories "
+	"for fonts";
+
     overwrite = G_define_flag();
     overwrite->key = 'o';
-    overwrite->description = 
-     "Overwrite font configuration file if already existing";
-     
+    overwrite->description =
+	"Overwrite font configuration file if already existing";
+
     tostdout = G_define_flag();
     tostdout->key = 's';
-    tostdout->description = 
-     "Write font configuration file to standard output instead of "
-     "$GISBASE/etc";
-   
+    tostdout->description =
+	"Write font configuration file to standard output instead of "
+	"$GISBASE/etc";
+
     extradirs = G_define_option();
     extradirs->key = "extradirs";
     extradirs->type = TYPE_STRING;
     extradirs->required = NO;
-    extradirs->description = 
-     "Comma-separated list of extra directories to scan for "
-     "Freetype-compatible fonts as well as the defaults (see documentation)";
-   
+    extradirs->description =
+	"Comma-separated list of extra directories to scan for "
+	"Freetype-compatible fonts as well as the defaults (see documentation)";
+
     if (argc > 1 && G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!tostdout->answer)
-    {
-        const char *gisbase = G_gisbase();
-        const char *alt_file = getenv("GRASS_FONT_CAP");
-       
+    if (!tostdout->answer) {
+	const char *gisbase = G_gisbase();
+	const char *alt_file = getenv("GRASS_FONT_CAP");
+
 	if (alt_file)
 	    fontcapfile = G_store(alt_file);
 	else
-            G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);       
+	    G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
 
-        if ( !stat(fontcapfile, &status) ) /* File exists? */
-        {
-            if (!overwrite->answer)
-                G_fatal_error("Fontcap file %s already exists; use -%c flag if you "
-	 	  	      "wish to overwrite it", fontcapfile, overwrite->key);
-        }
-    }   
+	if (!stat(fontcapfile, &status)) {	/* File exists? */
+	    if (!overwrite->answer)
+		G_fatal_error
+		    ("Fontcap file %s already exists; use -%c flag if you "
+		     "wish to overwrite it", fontcapfile, overwrite->key);
+	}
+    }
 
     searchdirs = NULL;
     numsearchdirs = 0;
-   
+
     /* Prepare list of directories to search */
-    if (extradirs->answer)
-    {
-        char *str = G_store(extradirs->answer);
-       
-        while ((str = strtok(str, ",")))
-	{
+    if (extradirs->answer) {
+	char *str = G_store(extradirs->answer);
+
+	while ((str = strtok(str, ","))) {
 	    add_search_dir(str);
 	    str = NULL;
-	}	       
-    }       
+	}
+    }
     i = -1;
     while (standarddirs[++i])
 	add_search_dir(standarddirs[i]);
 
     totalfonts = maxfonts = 0;
     fontcap = NULL;
-   
-    find_stroke_fonts();   
+
+    find_stroke_fonts();
     find_freetype_fonts();
 
     qsort(fontcap, totalfonts, sizeof(struct GFONT_CAP), compare_fonts);
-     
+
     if (tostdout->answer)
-        outstream = stdout;
-    else
-    {
-        outstream = fopen( fontcapfile, "w" );
-        if( outstream == NULL )
-            G_fatal_error("Cannot open %s for writing: %s", fontcapfile,
-		          strerror(errno) );
-    }   
-    
-    for(i = 0; i < totalfonts; i++)
+	outstream = stdout;
+    else {
+	outstream = fopen(fontcapfile, "w");
+	if (outstream == NULL)
+	    G_fatal_error("Cannot open %s for writing: %s", fontcapfile,
+			  strerror(errno));
+    }
+
+    for (i = 0; i < totalfonts; i++)
 	fprintf(outstream, "%s|%s|%d|%s|%d|%s|\n", fontcap[i].name,
 		fontcap[i].longname, fontcap[i].type, fontcap[i].path,
 		fontcap[i].index, fontcap[i].encoding);
-    
+
     fclose(outstream);
-   
+
     exit(EXIT_SUCCESS);
 
 }
 
 static void add_search_dir(const char *name)
-{   
+{
     char envvar_name[256];
     char *fullname = NULL;
- 	 
-    if (sscanf(name, "${%255[^}]}", envvar_name) == 1)
-    {
+
+    if (sscanf(name, "${%255[^}]}", envvar_name) == 1) {
 	char *envvar_value = getenv(envvar_name);
 
 	/* N.B. If the envvar isn't set, directory is skipped completely */
@@ -169,32 +164,30 @@ static void add_search_dir(const char *name)
     }
     else
 	fullname = G_store(name);
-       
-    if (fullname)	 
-    {	    
-        searchdirs = (char **) G_realloc(searchdirs,
-			       (numsearchdirs + 1) * sizeof(char *));
-        searchdirs[numsearchdirs] = fullname;
-        G_convert_dirseps_to_host(searchdirs[numsearchdirs]);
-        numsearchdirs++;
-    }       
+
+    if (fullname) {
+	searchdirs = (char **)G_realloc(searchdirs,
+					(numsearchdirs + 1) * sizeof(char *));
+	searchdirs[numsearchdirs] = fullname;
+	G_convert_dirseps_to_host(searchdirs[numsearchdirs]);
+	numsearchdirs++;
+    }
 
     return;
 }
 
 static int compare_fonts(const void *a, const void *b)
 {
-    struct GFONT_CAP *aa = (struct GFONT_CAP *) a;
-    struct GFONT_CAP *bb = (struct GFONT_CAP *) b;
-   
-    /* Sort first by type, then by name */    
+    struct GFONT_CAP *aa = (struct GFONT_CAP *)a;
+    struct GFONT_CAP *bb = (struct GFONT_CAP *)b;
+
+    /* Sort first by type, then by name */
     if (aa->type != bb->type)
-        return (aa->type > bb->type);
-    else
-    {
-        const char *na = aa->name;
-        const char *nb = bb->name;
-       
-        return G_strcasecmp(na, nb);
-    }  	   
+	return (aa->type > bb->type);
+    else {
+	const char *na = aa->name;
+	const char *nb = bb->name;
+
+	return G_strcasecmp(na, nb);
+    }
 }

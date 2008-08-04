@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       gis library
@@ -29,12 +30,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-static int G__open_misc (
-    const char *dir,
-    const char *element,
-    const char *name,
-    const char *mapset,
-    int mode)
+static int G__open_misc(const char *dir,
+			const char *element,
+			const char *name, const char *mapset, int mode)
 {
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX], *dummy;
@@ -42,33 +40,31 @@ static int G__open_misc (
 
     G__check_gisinit();
 
-/* READ */
-    if (mode == 0)
-    {
-	if (G__name_is_fully_qualified (name, xname, xmapset))
-	{
-	    if (strcmp (xmapset, mapset) != 0) {
-		fprintf(stderr, "G__open(r): mapset (%s) doesn't match xmapset (%s)\n",
-			mapset,xmapset);
-		    return -1;
+    /* READ */
+    if (mode == 0) {
+	if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	    if (strcmp(xmapset, mapset) != 0) {
+		fprintf(stderr,
+			"G__open(r): mapset (%s) doesn't match xmapset (%s)\n",
+			mapset, xmapset);
+		return -1;
 	    }
 	    name = xname;
 	}
-	if ((dummy = G_find_file2_misc (dir, element, name, mapset)) == NULL)
+	if ((dummy = G_find_file2_misc(dir, element, name, mapset)) == NULL)
 	    return -1;
 
-	G__file_name_misc (path, dir, element, name, mapset);
+	G__file_name_misc(path, dir, element, name, mapset);
 
-	return open (path, 0);
+	return open(path, 0);
     }
-/* WRITE */
-    if (mode == 1 || mode == 2)
-    {
-	if (G__name_is_fully_qualified (name, xname, xmapset))
-	{
-	    if (strcmp (xmapset, G_mapset()) != 0) {
-		fprintf(stderr, "G__open(w): xmapset (%s) != G_mapset() (%s)\n",
-			xmapset,G_mapset());
+    /* WRITE */
+    if (mode == 1 || mode == 2) {
+	if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	    if (strcmp(xmapset, G_mapset()) != 0) {
+		fprintf(stderr,
+			"G__open(w): xmapset (%s) != G_mapset() (%s)\n",
+			xmapset, G_mapset());
 		return -1;
 	    }
 	    name = xname;
@@ -77,14 +73,13 @@ static int G__open_misc (
 	if (G_legal_filename(name) == -1)
 	    return -1;
 
-	G__file_name_misc (path, dir, element, name, G_mapset());
-	if(mode == 1 || access(path,0) != 0)
-	{
-	    G__make_mapset_element_misc (dir, name);
-	    close (creat (path, 0666));
+	G__file_name_misc(path, dir, element, name, G_mapset());
+	if (mode == 1 || access(path, 0) != 0) {
+	    G__make_mapset_element_misc(dir, name);
+	    close(creat(path, 0666));
 	}
 
-	return open (path, mode);
+	return open(path, mode);
     }
     return -1;
 }
@@ -104,9 +99,9 @@ static int G__open_misc (
  *  \return int
  */
 
-int G_open_new_misc (const char *dir,const char *element,const char *name)
+int G_open_new_misc(const char *dir, const char *element, const char *name)
 {
-    return G__open_misc (dir, element, name, G_mapset(), 1);
+    return G__open_misc(dir, element, name, G_mapset(), 1);
 }
 
 
@@ -125,9 +120,10 @@ int G_open_new_misc (const char *dir,const char *element,const char *name)
  *  \return int
  */
 
-int G_open_old_misc (const char *dir,const char *element,const char *name,const char *mapset)
+int G_open_old_misc(const char *dir, const char *element, const char *name,
+		    const char *mapset)
 {
-    return G__open_misc (dir, element, name, mapset, 0);
+    return G__open_misc(dir, element, name, mapset, 0);
 }
 
 
@@ -145,11 +141,13 @@ int G_open_old_misc (const char *dir,const char *element,const char *name,const 
  *  \return int
  */
 
-int G_open_update_misc (const char *dir,const char *element,const char *name)
+int G_open_update_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
-    fd = G__open_misc (dir, element, name, G_mapset(), 2);
-    if (fd >= 0) lseek (fd, 0L, SEEK_END);
+
+    fd = G__open_misc(dir, element, name, G_mapset(), 2);
+    if (fd >= 0)
+	lseek(fd, 0L, SEEK_END);
 
     return fd;
 }
@@ -170,15 +168,15 @@ int G_open_update_misc (const char *dir,const char *element,const char *name)
  *  \return FILE * 
  */
 
-FILE *G_fopen_new_misc (const char *dir,const char *element,const char *name)
+FILE *G_fopen_new_misc(const char *dir, const char *element, const char *name)
 {
     int fd;
 
-    fd = G__open_misc (dir, element, name, G_mapset(), 1);
+    fd = G__open_misc(dir, element, name, G_mapset(), 1);
     if (fd < 0)
 	return (FILE *) 0;
 
-    return fdopen (fd, "w");
+    return fdopen(fd, "w");
 }
 
 
@@ -198,39 +196,40 @@ FILE *G_fopen_new_misc (const char *dir,const char *element,const char *name)
  *  \return FILE * 
  */
 
-FILE *
-G_fopen_old_misc (const char *dir,const char *element,const char *name,const char *mapset)
+FILE *G_fopen_old_misc(const char *dir, const char *element, const char *name,
+		       const char *mapset)
 {
     int fd;
 
-    fd = G__open_misc (dir, element, name, mapset, 0);
+    fd = G__open_misc(dir, element, name, mapset, 0);
     if (fd < 0)
 	return (FILE *) 0;
 
-    return fdopen (fd, "r");
+    return fdopen(fd, "r");
 }
 
-FILE *
-G_fopen_append_misc (const char *dir,const char *element,const char *name)
+FILE *G_fopen_append_misc(const char *dir, const char *element,
+			  const char *name)
 {
     int fd;
 
-    fd = G__open_misc (dir, element, name, G_mapset(), 2);
+    fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
 	return (FILE *) 0;
-    lseek (fd, 0L, SEEK_END);
+    lseek(fd, 0L, SEEK_END);
 
-    return fdopen (fd, "a");
+    return fdopen(fd, "a");
 }
 
-FILE *G_fopen_modify_misc (const char *dir,const char *element,const char *name)
+FILE *G_fopen_modify_misc(const char *dir, const char *element,
+			  const char *name)
 {
     int fd;
 
-    fd = G__open_misc (dir, element, name, G_mapset(), 2);
+    fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
 	return (FILE *) 0;
-    lseek (fd, 0L, SEEK_END);
+    lseek(fd, 0L, SEEK_END);
 
-    return fdopen (fd, "r+");
+    return fdopen(fd, "r+");
 }

@@ -3,7 +3,8 @@
 #include "local_proto.h"
 
 
-int reclass_text (char *text, const CELL cat, struct Reclass *reclass, const int next)
+int reclass_text(char *text, const CELL cat, struct Reclass *reclass,
+		 const int next)
 {
     int i;
     int n;
@@ -35,7 +36,7 @@ int reclass_text (char *text, const CELL cat, struct Reclass *reclass, const int
 }
 
 
-int do_text (char *text, const long first, const long last)
+int do_text(char *text, const long first, const long last)
 {
     char work[40];
 

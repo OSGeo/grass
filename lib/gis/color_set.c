@@ -25,25 +25,22 @@
  *  \return int
  */
 
-int G_set_color (
-    CELL cat,int r,int g, int b,
-    struct Colors *colors)
+int G_set_color(CELL cat, int r, int g, int b, struct Colors *colors)
 {
-    CELL tmp=cat;
+    CELL tmp = cat;
 
-    if(G_is_c_null_value(&tmp))
-       return G_set_null_value_color(r, g, b, colors);
-    return G_add_color_rule (cat, r,g,b, cat, r,g,b, colors);
+    if (G_is_c_null_value(&tmp))
+	return G_set_null_value_color(r, g, b, colors);
+    return G_add_color_rule(cat, r, g, b, cat, r, g, b, colors);
 }
 
-int G_set_d_color  (DCELL val, int  r, int  g, int  b, struct Colors *colors)
-
+int G_set_d_color(DCELL val, int r, int g, int b, struct Colors *colors)
 {
-    DCELL tmp=val;
-    if(G_is_d_null_value(&tmp))
-       return G_set_null_value_color(r, g, b, colors);
-    return G_add_d_raster_color_rule (&val, r,g,b, 
-				      &val, r,g,b, colors);
+    DCELL tmp = val;
+
+    if (G_is_d_null_value(&tmp))
+	return G_set_null_value_color(r, g, b, colors);
+    return G_add_d_raster_color_rule(&val, r, g, b, &val, r, g, b, colors);
 }
 
 
@@ -59,14 +56,13 @@ int G_set_d_color  (DCELL val, int  r, int  g, int  b, struct Colors *colors)
  *  \return int
  */
 
-int G_set_null_value_color (int red, int grn, int blu, struct Colors *colors)
-
+int G_set_null_value_color(int red, int grn, int blu, struct Colors *colors)
 {
-        colors->null_red = red;
-        colors->null_grn = grn;
-        colors->null_blu = blu;
-        colors->null_set = 1;
-        return 1;
+    colors->null_red = red;
+    colors->null_grn = grn;
+    colors->null_blu = blu;
+    colors->null_set = 1;
+    return 1;
 }
 
 
@@ -83,13 +79,11 @@ int G_set_null_value_color (int red, int grn, int blu, struct Colors *colors)
  *  \return int
  */
 
-int G_set_default_color (int red, int grn, int blu, struct Colors *colors)
-
+int G_set_default_color(int red, int grn, int blu, struct Colors *colors)
 {
-        colors->undef_red = red;
-        colors->undef_grn = grn;
-        colors->undef_blu = blu;
-        colors->undef_set = 1;
-        return 1;
+    colors->undef_red = red;
+    colors->undef_grn = grn;
+    colors->undef_blu = blu;
+    colors->undef_set = 1;
+    return 1;
 }
-

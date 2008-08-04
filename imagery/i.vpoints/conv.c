@@ -2,26 +2,22 @@
 /* conversion routines to convert from view x,y to cell col,row
  * as well as cell col,row to cell east,north
  */
-int 
-view_to_col (View *view, int x)
+int view_to_col(View * view, int x)
 {
     return x - view->cell.left;
 }
 
-int 
-view_to_row (View *view, int y)
+int view_to_row(View * view, int y)
 {
     return y - view->cell.top;
 }
 
-int 
-col_to_view (View *view, int col)
+int col_to_view(View * view, int col)
 {
     return view->cell.left + col;
 }
 
-int 
-row_to_view (View *view, int row)
+int row_to_view(View * view, int row)
 {
     return view->cell.top + row;
 }
@@ -32,27 +28,22 @@ row_to_view (View *view, int row)
  * bottom or right edge (location == 1.0)
  */
 
-double 
-row_to_northing (struct Cell_head *cellhd, int row, double location)
+double row_to_northing(struct Cell_head *cellhd, int row, double location)
 {
     return cellhd->north - (row + location) * cellhd->ns_res;
 }
 
-double 
-col_to_easting (struct Cell_head *cellhd, int col, double location)
+double col_to_easting(struct Cell_head *cellhd, int col, double location)
 {
     return cellhd->west + (col + location) * cellhd->ew_res;
 }
 
-double 
-northing_to_row (struct Cell_head *cellhd, double north)
+double northing_to_row(struct Cell_head *cellhd, double north)
 {
-    return  (cellhd->north - north) / cellhd->ns_res;
+    return (cellhd->north - north) / cellhd->ns_res;
 }
 
-double 
-easting_to_col (struct Cell_head *cellhd, double east)
+double easting_to_col(struct Cell_head *cellhd, double east)
 {
-    return  (east - cellhd->west) / cellhd->ew_res;
+    return (east - cellhd->west) / cellhd->ew_res;
 }
-

@@ -24,50 +24,45 @@
  *    1   mask file present, masking on
  *        name, mapset hold mask file name, mapset
  *
- ***************************************************************/ 
+ ***************************************************************/
 
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-char *
-G_mask_info (void)
+char *G_mask_info(void)
 {
     static char text[200];
     char name[GNAME_MAX];
     char mapset[GMAPSET_MAX];
 
-    switch (G__mask_info (name, mapset))
-    {
+    switch (G__mask_info(name, mapset)) {
     case 1:
-	    sprintf (text, _("<%s> in mapset <%s>"), name, mapset);
-	    break;
+	sprintf(text, _("<%s> in mapset <%s>"), name, mapset);
+	break;
     case -1:
-	    strcpy (text, _("none"));
-	    break;
+	strcpy(text, _("none"));
+	break;
     default:
-	    strcpy (text, _("not known"));
-	    break;
+	strcpy(text, _("not known"));
+	break;
     }
 
     return text;
 }
 
-int G__mask_info (
-    char *name,
-    char *mapset)
+int G__mask_info(char *name, char *mapset)
 {
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
 
-    strcpy (name, "MASK");
-    strcpy (mapset, G_mapset());
+    strcpy(name, "MASK");
+    strcpy(mapset, G_mapset());
 
-    if(!G_find_cell (name, mapset))
+    if (!G_find_cell(name, mapset))
 	return -1;
 
-    if(G_is_reclass (name, mapset, rname, rmapset) > 0)
-    {
-	strcpy (name, rname);
-	strcpy (mapset, rmapset);
+    if (G_is_reclass(name, mapset, rname, rmapset) > 0) {
+	strcpy(name, rname);
+	strcpy(mapset, rmapset);
     }
 
     return 1;

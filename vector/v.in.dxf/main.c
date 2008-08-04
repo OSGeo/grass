@@ -121,7 +121,8 @@ int main(int argc, char *argv[])
 	num_layers = 0;
 	layers = NULL;
 	Map = NULL;
-	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
+	G_verbose_message(_
+			  ("Layer number: layer name / GRASS compliant name"));
     }
     else {
 	/* make vector map name SQL compliant */
@@ -148,10 +149,11 @@ int main(int argc, char *argv[])
 	}
 
 	layers = opt.layers->answers;
-	
-	if(!G_check_overwrite(argc, argv) && G_find_vector2(output, G_mapset())) {
-	    G_fatal_error(_("Option <%s>: <%s> exists."),
-			  opt.output->key, output);
+
+	if (!G_check_overwrite(argc, argv) &&
+	    G_find_vector2(output, G_mapset())) {
+	    G_fatal_error(_("Option <%s>: <%s> exists."), opt.output->key,
+			  output);
 	}
 
 	if (Vect_legal_filename(output) < 0)
@@ -195,7 +197,7 @@ int main(int argc, char *argv[])
 	G_free(Map);
     }
 
-    G_done_msg (" ");
+    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }

@@ -28,8 +28,8 @@ int before(struct Point *p, struct Point *q, struct Line *e)
 
     status =
 	Vect_segment_intersection(p->x, p->y, 0, q->x, q->y, 0, e->p1->x,
-				  e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1, &y1,
-				  &z1, &x2, &y2, &z2, 0) == 0;
+				  e->p1->y, 0, e->p2->x, e->p2->y, 0, &x1,
+				  &y1, &z1, &x2, &y2, &z2, 0) == 0;
 
     return status;
 }

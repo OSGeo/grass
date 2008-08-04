@@ -18,10 +18,10 @@
 extern struct Cluster C;
 extern struct Signature in_sig;
 
-extern int maxclass ;
-extern double conv ;
-extern double sep ;
-extern int iters ;
+extern int maxclass;
+extern double conv;
+extern double sep;
+extern int iters;
 extern int mcs;
 extern char *group;
 extern char *subgroup;

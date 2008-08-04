@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.surf.idw
@@ -215,7 +216,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 
     MELEMENT *Rptr;
     EW *search, *ewptr, *current_row,	/* start row for north/south search */
-      *lastrow;			/* last element in search array */
+     *lastrow;			/* last element in search array */
     SHORT row, col;
     NEIGHBOR *nbr_head, *Nptr;
     double sum1, sum2;
@@ -230,7 +231,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 #endif
 
     G_message(_("Interpolating raster map <%s>... %d rows... "), output,
-	    nrows);
+	      nrows);
 
     for (row = 0; row < nrows; row++) {	/*  loop over rows      */
 	G_percent(row, nrows, 2);
@@ -240,7 +241,8 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
 	    G_fatal_error(_("Cannot read row"));
 
 	/* prepare search array for next row of interpolations */
-	for (ewptr = search, Rptr = rowlist; ewptr <= lastrow; Rptr++, ewptr++)
+	for (ewptr = search, Rptr = rowlist; ewptr <= lastrow;
+	     Rptr++, ewptr++)
 	    ewptr->start = Rptr->next;	/* start at first item in row */
 
 	for (col = 0; col < ncols; col++) {	/*  loop over columns   */
@@ -350,14 +352,14 @@ int make_neighbors_list(EW * firstrow, EW * lastrow, EW * curr_row, SHORT row, S
 				 firstrow, -1);
 	    else
 		exhaust(&north, head, row, col);
-        }
+	}
 	if (south) {
 	    if (ssearch)
 		ssearch = search(&south, head, row, col, npoints, &neighbors,
 				 lastrow, 1);
 	    else
 		exhaust(&south, head, row, col);
-        }
+	}
     } while (north || south);
 
     return (1);
@@ -525,7 +527,7 @@ find_neighbors(EW * ewptr, NEIGHBOR * nbr_head, SHORT row, SHORT col,
 		    *Mptr = (*Mptr)->prior;
 		else
 		    *Mptr = (*Mptr)->next;
-            }
+	    }
 	}
 
 	Mptr = &ewptr->east;
@@ -669,8 +671,8 @@ MELEMENT *row_lists(
 {
     int row, col;		/* row and column indices */
     MELEMENT *rowlist,		/* root of rowlist data structure index array */
-            *endlist, *Mptr,	/* pointer to a rowlist element */
-            *Rptr;		/* pointer to a row list dummy */
+     *endlist, *Mptr,		/* pointer to a rowlist element */
+     *Rptr;			/* pointer to a row list dummy */
 
     /* initialize row array (allocated memory set to zero),
      * each dummy points to itself as last element entered in matrix */
@@ -742,8 +744,6 @@ int lookup_tables(SHORT nrows, SHORT ncols)
     nextcol = collook = (double *)G_calloc(ncols, sizeof(double));
     for (i = 0; i < ncols; i++, nextcol++)
 	*nextcol = (double)i *i * ew2;
+
     return 0;
 }
-
-
-

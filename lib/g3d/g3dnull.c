@@ -6,14 +6,12 @@
 
 /*---------------------------------------------------------------------------*/
 
-int
-G3d_isNullValueNum  (const void *n, int type)
-
+int G3d_isNullValueNum(const void *n, int type)
 {
-  if (type == FCELL_TYPE) 
-    return G_is_f_null_value (n);
-  else
-    return G_is_d_null_value (n);
+    if (type == FCELL_TYPE)
+	return G_is_f_null_value(n);
+    else
+	return G_is_d_null_value(n);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -31,14 +29,12 @@ G3d_isNullValueNum  (const void *n, int type)
  *  \return void
  */
 
-void
-G3d_setNullValue  (void *c, int nofElts, int type)
-
+void G3d_setNullValue(void *c, int nofElts, int type)
 {
-  if (type == FCELL_TYPE) {
-    G_set_f_null_value ((float *) c, nofElts);
-    return;
-  }
-    
-  G_set_d_null_value ((double *) c, nofElts);
+    if (type == FCELL_TYPE) {
+	G_set_f_null_value((float *)c, nofElts);
+	return;
+    }
+
+    G_set_d_null_value((double *)c, nofElts);
 }

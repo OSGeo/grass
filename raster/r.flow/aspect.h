@@ -5,5 +5,4 @@
  * globals r: region, parm
  */
 
-DCELL
-aspect_fly(/* n, c, s, d */);
+DCELL aspect_fly( /* n, c, s, d */ );

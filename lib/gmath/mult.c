@@ -19,23 +19,26 @@
  * \return int
  */
 
-int 
-mult (double *v1[2], int size1, double *v2[2], int size2, double *v3[2], int size3)
+int
+mult(double *v1[2], int size1, double *v2[2], int size2, double *v3[2],
+     int size3)
 {
-  int i, n;
+    int i, n;
 
-  n = (size1 < size2 ? size1 : size2); /* get the smaller size */
-  for (i=0; i < n; i++) {
-    *(v3[0]+i) = *(v1[0]+i) * *(v2[0]+i) - *(v1[1]+i) * *(v2[1]+i);
-    *(v3[1]+i) = *(v1[0]+i) * *(v2[1]+i) + *(v2[0]+i) * *(v1[1]+i);
-  }
-
-  /* if unequal size, zero out remaining elements of larger vector */
-  if (size1 != size2)
-    for (i=n; i < size3; i++)   {
-      *(v3[0]+i) = 0.0;
-      *(v3[1]+i) = 0.0;
+    n = (size1 < size2 ? size1 : size2);	/* get the smaller size */
+    for (i = 0; i < n; i++) {
+	*(v3[0] + i) =
+	    *(v1[0] + i) * *(v2[0] + i) - *(v1[1] + i) * *(v2[1] + i);
+	*(v3[1] + i) =
+	    *(v1[0] + i) * *(v2[1] + i) + *(v2[0] + i) * *(v1[1] + i);
     }
 
-  return 0;
+    /* if unequal size, zero out remaining elements of larger vector */
+    if (size1 != size2)
+	for (i = n; i < size3; i++) {
+	    *(v3[0] + i) = 0.0;
+	    *(v3[1] + i) = 0.0;
+	}
+
+    return 0;
 }

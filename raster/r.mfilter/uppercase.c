@@ -1,7 +1,6 @@
-int 
-uppercase (char *s)
+int uppercase(char *s)
 {
-    for ( ; *s; s++)
+    for (; *s; s++)
 	if (*s >= 'a' && *s <= 'z')
 	    *s += 'A' - 'a';
 

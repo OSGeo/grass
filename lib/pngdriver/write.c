@@ -9,29 +9,27 @@
 
 void write_image(void)
 {
-	char *p = file_name + strlen(file_name) - 4;
+    char *p = file_name + strlen(file_name) - 4;
 
-	if (!modified)
-		return;
+    if (!modified)
+	return;
 
-	if (mapped)
-		return;
+    if (mapped)
+	return;
 
-	if (G_strcasecmp(p, ".ppm") == 0)
-	{
-		write_ppm();
-		if (has_alpha)
-			write_pgm();
-	}
-	else if (G_strcasecmp(p, ".bmp") == 0)
-		write_bmp();
+    if (G_strcasecmp(p, ".ppm") == 0) {
+	write_ppm();
+	if (has_alpha)
+	    write_pgm();
+    }
+    else if (G_strcasecmp(p, ".bmp") == 0)
+	write_bmp();
 #ifdef HAVE_PNG_H
-	else if (G_strcasecmp(p, ".png") == 0)
-		write_png();
+    else if (G_strcasecmp(p, ".png") == 0)
+	write_png();
 #endif
-	else
-		G_fatal_error("write_image: unknown file type: %s", p);
+    else
+	G_fatal_error("write_image: unknown file type: %s", p);
 
-	modified = 0;
+    modified = 0;
 }
-

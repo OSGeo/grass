@@ -20,8 +20,8 @@
 
 #define IDX int
 
-GLOBAL ROWCOL row_map[NROWS][NCOLS] ;
-GLOBAL ROWCOL col_map[NROWS][NCOLS] ;
+GLOBAL ROWCOL row_map[NROWS][NCOLS];
+GLOBAL ROWCOL col_map[NROWS][NCOLS];
 GLOBAL ROWCOL row_min[NROWS];
 GLOBAL ROWCOL row_max[NROWS];
 GLOBAL ROWCOL row_left[NROWS];
@@ -43,31 +43,41 @@ GLOBAL double E12[10], N12[10];
 GLOBAL double E21[10], N21[10];
 
 /* DELETED WITH CRS MODIFICATIONS
-GLOBAL double E12a, E12b, E12c, N12a, N12b, N12c;
-GLOBAL double E21a, E21b, E21c, N21a, N21b, N21c;
-*/
+   GLOBAL double E12a, E12b, E12c, N12a, N12b, N12c;
+   GLOBAL double E21a, E21b, E21c, N21a, N21b, N21c;
+ */
 GLOBAL struct Cell_head target_window;
+
 /* cp.c */
 int get_control_points(char *, int);
+
 /* env.c */
 int select_current_env(void);
 int select_target_env(void);
 int show_env(void);
+
 /* exec.c */
 int exec_rectify(int, char *);
+
 /* get_wind.c */
 int get_target_window(int);
 int georef_window(struct Cell_head *, struct Cell_head *, int);
+
 /* matrix.c */
 int compute_georef_matrix(struct Cell_head *, struct Cell_head *, int);
+
 /* perform.c */
 int perform_georef(int, void *);
+
 /* rectify.c */
 int rectify(char *, char *, char *, int);
+
 /* report.c */
 int report(char *, char *, char *, long, long, int);
+
 /* target.c */
 int get_target(char *);
+
 /* write.c */
 int write_matrix(int, int);
 int write_map(char *);

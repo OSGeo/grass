@@ -111,7 +111,8 @@ int test_geom_data(void)
 	    area += N_get_geom_data_area_of_cell(geom, i);
 
 	if (area == 0) {
-	    G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
+	    G_warning
+		("Wrong area calculation in N_get_geom_data_area_of_cell");
 	    sum++;
 	}
     }
@@ -148,7 +149,8 @@ int test_geom_data(void)
 	    area += N_get_geom_data_area_of_cell(geom, i);
 
 	if (area == 0) {
-	    G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
+	    G_warning
+		("Wrong area calculation in N_get_geom_data_area_of_cell");
 	    sum++;
 	}
     }
@@ -159,7 +161,8 @@ int test_geom_data(void)
 	    area += N_get_geom_data_area_of_cell(geom, i);
 
 	if (area == 0) {
-	    G_warning("Wrong area calculation in N_get_geom_data_area_of_cell");
+	    G_warning
+		("Wrong area calculation in N_get_geom_data_area_of_cell");
 	    sum++;
 	}
     }

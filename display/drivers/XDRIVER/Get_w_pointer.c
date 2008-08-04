@@ -16,25 +16,23 @@
 int XD_Get_location_with_pointer(int *wx, int *wy, int *button)
 {
     XEvent bpevent;
-    
-    if (redraw_pid)
-    {
-	G_warning( _("Monitor: interactive command in redraw"));
+
+    if (redraw_pid) {
+	G_warning(_("Monitor: interactive command in redraw"));
 	return -1;
     }
 
-    G_debug (5, "Get_location_with_pointer()"); 
+    G_debug(5, "Get_location_with_pointer()");
 
     /* set the grass cursor on (defined in Graph_Set.c) */
     XDefineCursor(dpy, grwin, cur_xh);
-    
+
     /* wait for a button-push event in the grass window, and return the
      * x,y coord and button number */
 
-    XSelectInput(dpy, grwin, ButtonPressMask | PointerMotionMask );
+    XSelectInput(dpy, grwin, ButtonPressMask | PointerMotionMask);
 
-    do 
-    {
+    do {
 	if (!get_xevent(ButtonPressMask, &bpevent))
 	    break;
     } while (bpevent.type != ButtonPress);

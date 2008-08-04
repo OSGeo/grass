@@ -1,3 +1,4 @@
+
 /**
  * \file is.c
  *
@@ -22,18 +23,19 @@
 static int test_path_file(const char *, const char *);
 
 
-static int test_path_file ( const char *path, const char *file )
+static int test_path_file(const char *path, const char *file)
 {
     int ret;
     char *buf;
 
-    buf = (char *) G_malloc ( strlen(path) + strlen(file) + 2 );
-    sprintf ( buf, "%s/%s", path, file );
+    buf = (char *)G_malloc(strlen(path) + strlen(file) + 2);
+    sprintf(buf, "%s/%s", path, file);
 
-    ret = access(buf,F_OK);
-    G_free ( buf );
+    ret = access(buf, F_OK);
+    G_free(buf);
 
-    if ( ret == 0 ) return 1;
+    if (ret == 0)
+	return 1;
 
     return 0;
 }
@@ -48,9 +50,9 @@ static int test_path_file ( const char *path, const char *file )
  * \return 0 The directory is not GISBASE
  */
 
-int G_is_gisbase (const char *path)    
+int G_is_gisbase(const char *path)
 {
-    return test_path_file ( path, "etc/element_list" );
+    return test_path_file(path, "etc/element_list");
 }
 
 
@@ -62,9 +64,9 @@ int G_is_gisbase (const char *path)
  * \return 0 The directory is not location
  */
 
-int G_is_location (const char *path)    
+int G_is_location(const char *path)
 {
-    return test_path_file ( path, "PERMANENT/DEFAULT_WIND" );
+    return test_path_file(path, "PERMANENT/DEFAULT_WIND");
 }
 
 
@@ -76,8 +78,7 @@ int G_is_location (const char *path)
  * \return 0 The directory is not mapset
  */
 
-int G_is_mapset (const char *path)    
+int G_is_mapset(const char *path)
 {
-    return test_path_file ( path, "WIND" );
+    return test_path_file(path, "WIND");
 }
-

@@ -34,7 +34,7 @@ typedef struct
 paramType param;		/*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);		/*Fill the paramType structure */
+static void set_params(void);	/*Fill the paramType structure */
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -150,10 +150,11 @@ int main(int argc, char *argv[])
 		    if (strcmp(param.integration->answers[i], "gwflow") == 0)
 			returnstat += integration_test_gwflow();
 
-		    if (strcmp(param.integration->answers[i], "heatflow") == 0);	/*nothing to do for now */
+		    if (strcmp(param.integration->answers[i], "heatflow") == 0) ;	/*nothing to do for now */
 
-		    if (strcmp(param.integration->answers[i], "transport") == 0)
-		        returnstat += integration_test_solute_transport();
+		    if (strcmp(param.integration->answers[i], "transport") ==
+			0)
+			returnstat += integration_test_solute_transport();
 
 		    i++;
 		}
@@ -161,10 +162,10 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if(returnstat != 0)
-    	G_warning("Errors detected while testing the gpde lib");
+    if (returnstat != 0)
+	G_warning("Errors detected while testing the gpde lib");
     else
-    	G_message("\n-- gpde lib tests finished successfully --");
+	G_message("\n-- gpde lib tests finished successfully --");
 
     return (returnstat);
 }

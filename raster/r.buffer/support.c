@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -21,39 +22,38 @@
 #include "distance.h"
 
 
-int make_support_files (char *output, char *units)
+int make_support_files(char *output, char *units)
 {
     struct Categories pcats;
 
     CELL cat;
     char label[128];
 
-    G_init_cats ((CELL) 1, "Distance Zones", &pcats);
+    G_init_cats((CELL) 1, "Distance Zones", &pcats);
 
-    G_set_cat (cat=1, "distances calculated from these locations", &pcats);
-    for (cat = 0; cat < ndist; cat++)
-    {
+    G_set_cat(cat = 1, "distances calculated from these locations", &pcats);
+    for (cat = 0; cat < ndist; cat++) {
 	if (cat == 0)
-	  sprintf (label, "0-%s %s", distances[cat].label, units);
-        else
-        {
-         /* improved next, but it would be perfect to achieve (example):
-          * 0-100.55 meters
-          * 100.56-233.33 meters
-          *
-          *now we get:
-          * 0-100.55 meters
-          * 100.55-233.33 meters
-          *
-          *but it's better that the original code. MN 1/2002
-          */
-	  sprintf (label, "%s-%s %s", distances[cat-1].label, distances[cat].label, units);
-	 }
-	  
-	G_set_cat (cat+ZONE_INCR, label, &pcats);
+	    sprintf(label, "0-%s %s", distances[cat].label, units);
+	else {
+	    /* improved next, but it would be perfect to achieve (example):
+	     * 0-100.55 meters
+	     * 100.56-233.33 meters
+	     *
+	     *now we get:
+	     * 0-100.55 meters
+	     * 100.55-233.33 meters
+	     *
+	     *but it's better that the original code. MN 1/2002
+	     */
+	    sprintf(label, "%s-%s %s", distances[cat - 1].label,
+		    distances[cat].label, units);
+	}
+
+	G_set_cat(cat + ZONE_INCR, label, &pcats);
     }
-    
-    G_write_cats (output, &pcats);
+
+    G_write_cats(output, &pcats);
     G_free_cats(&pcats);
 
     return 0;

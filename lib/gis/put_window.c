@@ -29,24 +29,23 @@
  *  \return int
  */
 
-int G_put_window (const struct Cell_head *window )
+int G_put_window(const struct Cell_head *window)
 {
     char *wind = getenv("WIND_OVERRIDE");
 
-    return wind
-	? G__put_window (window, "windows", wind)
-	: G__put_window (window, "", "WIND");
+    return wind ? G__put_window(window, "windows", wind)
+	: G__put_window(window, "", "WIND");
 }
 
-int G__put_window ( const struct Cell_head *window , char *dir, char *name)
+int G__put_window(const struct Cell_head *window, char *dir, char *name)
 {
-    FILE *fd ;
+    FILE *fd;
 
     if (!(fd = G_fopen_new(dir, name)))
-	return -1 ;
+	return -1;
 
-    G__write_Cell_head3 (fd, window, 0);
-    fclose (fd);
+    G__write_Cell_head3(fd, window, 0);
+    fclose(fd);
 
     return 1;
 }

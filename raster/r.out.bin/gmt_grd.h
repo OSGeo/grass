@@ -1,3 +1,4 @@
+
 /*--------------------------------------------------------------------
  *    The GMT-system:	@(#)gmt_grd.h	3.18  01/13/00
  *
@@ -22,11 +23,11 @@
  * first row in file has yvalue = north (ymax).  
  * This is SCANLINE orientation.
  *
- * Author:	Paul Wessel
- * Date:	26-MAY-1990
- * Revised:	21-OCT-1998
+ * Author:      Paul Wessel
+ * Date:        26-MAY-1990
+ * Revised:     21-OCT-1998
  */
- 
+
 /* Nodes that are unconstrained are assumed to be set to NaN */
 
 #define GRD_COMMAND_LEN	320
@@ -34,26 +35,27 @@
 #define GRD_TITLE_LEN	 80
 #define GRD_UNIT_LEN	 80
 
-struct GRD_HEADER {
-	int nx;				/* Number of columns */
-	int ny;				/* Number of rows */
-	int node_offset;		/* 0 for node grids, 1 for pixel grids */
-	double x_min;			/* Minimum x coordinate */
-	double x_max;			/* Maximum x coordinate */
-	double y_min;			/* Minimum y coordinate */
-	double y_max;			/* Maximum y coordinate */
-	double z_min;			/* Minimum z value */
-	double z_max;			/* Maximum z value */
-	double x_inc;			/* x increment */
-	double y_inc;			/* y increment */
-	double z_scale_factor;		/* grd values must be multiplied by this */
-	double z_add_offset;		/* After scaling, add this */
-	char x_units[GRD_UNIT_LEN];	/* units in x-direction */
-	char y_units[GRD_UNIT_LEN];	/* units in y-direction */
-	char z_units[GRD_UNIT_LEN];	/* grid value units */
-	char title[GRD_TITLE_LEN];	/* name of data set */
-	char command[GRD_COMMAND_LEN];	/* name of generating command */
-	char remark[GRD_REMARK_LEN];	/* comments re this data set */
+struct GRD_HEADER
+{
+    int nx;			/* Number of columns */
+    int ny;			/* Number of rows */
+    int node_offset;		/* 0 for node grids, 1 for pixel grids */
+    double x_min;		/* Minimum x coordinate */
+    double x_max;		/* Maximum x coordinate */
+    double y_min;		/* Minimum y coordinate */
+    double y_max;		/* Maximum y coordinate */
+    double z_min;		/* Minimum z value */
+    double z_max;		/* Maximum z value */
+    double x_inc;		/* x increment */
+    double y_inc;		/* y increment */
+    double z_scale_factor;	/* grd values must be multiplied by this */
+    double z_add_offset;	/* After scaling, add this */
+    char x_units[GRD_UNIT_LEN];	/* units in x-direction */
+    char y_units[GRD_UNIT_LEN];	/* units in y-direction */
+    char z_units[GRD_UNIT_LEN];	/* grid value units */
+    char title[GRD_TITLE_LEN];	/* name of data set */
+    char command[GRD_COMMAND_LEN];	/* name of generating command */
+    char remark[GRD_REMARK_LEN];	/* comments re this data set */
 };
 
 /*-----------------------------------------------------------------------------------------

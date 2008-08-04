@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       s.in.ascii
@@ -24,11 +25,10 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static int loop; /* added #cat support for site_list 11/99 M. Neteler
-                  * required for s.to.vect and s.to.rast */
+static int loop;		/* added #cat support for site_list 11/99 M. Neteler
+				 * required for s.to.vect and s.to.rast */
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char *me;
     char *output, *input;
@@ -44,13 +44,13 @@ main (int argc, char *argv[])
 	struct Option *input, *output, *dims, *fs, *date;
     } parm;
 
-    G_gisinit (me = argv[0]);
+    G_gisinit(me = argv[0]);
 
     module = G_define_module();
     module->keywords = _("sites");
-    module->description = 
-      "Convert an ASCII listing of site locations "
-      "into a GRASS site list file.";
+    module->description =
+	"Convert an ASCII listing of site locations "
+	"into a GRASS site list file.";
 
     parm.output = G_define_option();
     parm.output->key = "output";
@@ -86,16 +86,14 @@ main (int argc, char *argv[])
     parm.date->type = TYPE_STRING;
     parm.date->description = "datetime or datetime1/datetime2";
 
-    if (G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(-1);
-	
-    if((input = parm.input->answer))
-    {
-	in_fd = fopen (input, "r");
-	if (NULL == in_fd)
-	{
-	    fprintf (stderr, "%s - ", me);
-	    perror (input);
+
+    if ((input = parm.input->answer)) {
+	in_fd = fopen(input, "r");
+	if (NULL == in_fd) {
+	    fprintf(stderr, "%s - ", me);
+	    perror(input);
 	    exit(1);
 	}
     }
@@ -106,57 +104,55 @@ main (int argc, char *argv[])
     shead.name = G_store(parm.output->answer);
     shead.desc = G_store(G_recreate_command());
     shead.form = shead.labels = shead.stime = (char *)NULL;
-      
+
     /* add here time parameter */
-    if (parm.date->answer)
-    {
-	if(1 == G_scan_timestamp (&ts, parm.date->answer))
+    if (parm.date->answer) {
+	if (1 == G_scan_timestamp(&ts, parm.date->answer))
 	    shead.time = &ts;
 	else
 	    G_fatal_error("Invalid timestamp");
     }
-    else 
-      shead.time = (struct TimeStamp*)NULL; 
-
-    dims=2;
-    loop=1; /* added 11/99 MNeteler*/
-
-    if (parm.dims->answer!=NULL)
-      if ((i = sscanf (parm.dims->answer, "%d", &dims)) != 1)
-        G_fatal_error ("error scanning number of dimensions");
-    if (dims<2)
-      G_fatal_error ("number of dimensions must be greater than 1");
-
-    if ( strlen(parm.fs->answer) < 1 )
-      G_fatal_error ("field separator cannot be empty");
     else
-    {   
-        fs = parm.fs->answer;
-	if(strcmp (fs, "space") == 0)
+	shead.time = (struct TimeStamp *)NULL;
+
+    dims = 2;
+    loop = 1;			/* added 11/99 MNeteler */
+
+    if (parm.dims->answer != NULL)
+	if ((i = sscanf(parm.dims->answer, "%d", &dims)) != 1)
+	    G_fatal_error("error scanning number of dimensions");
+    if (dims < 2)
+	G_fatal_error("number of dimensions must be greater than 1");
+
+    if (strlen(parm.fs->answer) < 1)
+	G_fatal_error("field separator cannot be empty");
+    else {
+	fs = parm.fs->answer;
+	if (strcmp(fs, "space") == 0)
 	    fs = NULL;
-	else if(strcmp (fs, "tab") == 0)
+	else if (strcmp(fs, "tab") == 0)
 	    fs = NULL;
     }
 
-    out_fd = G_fopen_sites_new (output);
+    out_fd = G_fopen_sites_new(output);
     if (out_fd == NULL)
-        G_fatal_error ("can't create sites file [%s].", output);
+	G_fatal_error("can't create sites file [%s].", output);
 
-    G_site_put_head (out_fd, &shead);
-    
-    while ((site = get_site (in_fd, dims, fs, &has_cat)))
-      G_site_put (out_fd, site);
-    
-    G_sites_close (out_fd);
+    G_site_put_head(out_fd, &shead);
+
+    while ((site = get_site(in_fd, dims, fs, &has_cat)))
+	G_site_put(out_fd, site);
+
+    G_sites_close(out_fd);
     exit(0);
 }
-static int 
-format_double (double value, char *buf)
+static int format_double(double value, char *buf)
 {
-  int G_trim_decimal ();
-  sprintf (buf, "%.8f", value);
-  G_trim_decimal (buf);
-  return 0;
+    int G_trim_decimal();
+
+    sprintf(buf, "%.8f", value);
+    G_trim_decimal(buf);
+    return 0;
 }
 
 #define DQUOTE '"'
@@ -169,103 +165,91 @@ format_double (double value, char *buf)
 #define isquote(c) (c==DQUOTE)
 #define isbslash(c) (c==BSLASH)
 
-int 
-G_site_put_new (FILE *fptr, Site *s, int has_cat)
+int G_site_put_new(FILE * fptr, Site * s, int has_cat)
 
 /* Writes a site to file open on fptr. */
 {
-  char ebuf[MAX_SITE_STRING], nbuf[MAX_SITE_STRING];
-  char xbuf[MAX_SITE_STRING], buf[MAX_SITE_LEN];
-  static int format_double ();
-  int fmt, i, j, k;
-  int G_format_northing(), G_format_easting(), G_projection();
+    char ebuf[MAX_SITE_STRING], nbuf[MAX_SITE_STRING];
+    char xbuf[MAX_SITE_STRING], buf[MAX_SITE_LEN];
+    static int format_double();
+    int fmt, i, j, k;
+    int G_format_northing(), G_format_easting(), G_projection();
 
-  fmt = G_projection ();
+    fmt = G_projection();
 
-  G_format_northing (s->north, nbuf, fmt);
-  G_format_easting (s->east, ebuf, fmt);
-  sprintf (buf, "%s|%s|", ebuf, nbuf);
-  for (i = 0; i < s->dim_alloc; ++i)
-  {
-    format_double (s->dim[i], nbuf);
-    sprintf (xbuf, "%s|", nbuf);
-    G_strcat (buf, xbuf);
-  }
-
- if (has_cat)  
-  {
-    switch(s->cattype)
-    {
-     case CELL_TYPE:
-      sprintf (xbuf, "#%d ", s->ccat);
-      G_strcat (buf, xbuf);
-      break;
-     case FCELL_TYPE:
-      sprintf (xbuf, "#%g ", s->fcat);
-      G_strcat (buf, xbuf);
-      break;
-     case DCELL_TYPE:
-      sprintf (xbuf, "#%g ", s->dcat);
-      G_strcat (buf, xbuf);
-      break;
+    G_format_northing(s->north, nbuf, fmt);
+    G_format_easting(s->east, ebuf, fmt);
+    sprintf(buf, "%s|%s|", ebuf, nbuf);
+    for (i = 0; i < s->dim_alloc; ++i) {
+	format_double(s->dim[i], nbuf);
+	sprintf(xbuf, "%s|", nbuf);
+	G_strcat(buf, xbuf);
     }
-  }                                                    
-  else /* no cat there, so data in plain x,y,z format will be imported   12/99 MN */
-  {
-     /* we create a #cat entry in site_list from the current site number 11/99 */
-     sprintf (xbuf, "#%d ", loop);
-     loop++;
-     G_strcat (buf, xbuf);
-  }
 
- /* now import attributes */
-  for (i = 0; i < s->dbl_alloc; ++i)
-  {
-    format_double (s->dbl_att[i], nbuf);
-    sprintf (xbuf, "%%%s ", nbuf);
-    G_strcat (buf, xbuf);
-  }
-  
-  for (i = 0; i < s->str_alloc; ++i)
-  {
-    if (strlen (s->str_att[i]) != 0)
-    {
-      /* escape double quotes */
-      j = k = 0;
-      if (G_index (s->str_att[i], DQUOTE) != (char *) NULL)
-      {
-	while (!isnull(s->str_att[i][j]))
-	{
-	  if (isquote(s->str_att[i][j]))
-	  {
-	    xbuf[k++] = BSLASH;
-	    xbuf[k++] = DQUOTE;
-	  }
-	  else
-	  if (isbslash(s->str_att[i][j]))
-	  {
-	    xbuf[k++] = BSLASH;
-	    xbuf[k++] = BSLASH;
-	  }
-	  else
-	    xbuf[k++] = s->str_att[i][j];
-	  j++;
+    if (has_cat) {
+	switch (s->cattype) {
+	case CELL_TYPE:
+	    sprintf(xbuf, "#%d ", s->ccat);
+	    G_strcat(buf, xbuf);
+	    break;
+	case FCELL_TYPE:
+	    sprintf(xbuf, "#%g ", s->fcat);
+	    G_strcat(buf, xbuf);
+	    break;
+	case DCELL_TYPE:
+	    sprintf(xbuf, "#%g ", s->dcat);
+	    G_strcat(buf, xbuf);
+	    break;
 	}
-	xbuf[k] = (char) NULL;
-      }
-      else
-	G_strcpy (xbuf, s->str_att[i]);
-
-      G_strcpy (s->str_att[i], xbuf);
-
-      if (G_index (s->str_att[i], SPACE) != (char *) NULL)
-	  sprintf (xbuf, "@\"%s\" ", s->str_att[i]);
-        else
-	  sprintf (xbuf, "@%s ", s->str_att[i]);
-
-      G_strcat (buf, xbuf);
     }
-  }
-  fprintf (fptr, "%s\n", buf);
-  return 0;
+    else {			/* no cat there, so data in plain x,y,z format will be imported   12/99 MN */
+
+	/* we create a #cat entry in site_list from the current site number 11/99 */
+	sprintf(xbuf, "#%d ", loop);
+	loop++;
+	G_strcat(buf, xbuf);
+    }
+
+    /* now import attributes */
+    for (i = 0; i < s->dbl_alloc; ++i) {
+	format_double(s->dbl_att[i], nbuf);
+	sprintf(xbuf, "%%%s ", nbuf);
+	G_strcat(buf, xbuf);
+    }
+
+    for (i = 0; i < s->str_alloc; ++i) {
+	if (strlen(s->str_att[i]) != 0) {
+	    /* escape double quotes */
+	    j = k = 0;
+	    if (G_index(s->str_att[i], DQUOTE) != (char *)NULL) {
+		while (!isnull(s->str_att[i][j])) {
+		    if (isquote(s->str_att[i][j])) {
+			xbuf[k++] = BSLASH;
+			xbuf[k++] = DQUOTE;
+		    }
+		    else if (isbslash(s->str_att[i][j])) {
+			xbuf[k++] = BSLASH;
+			xbuf[k++] = BSLASH;
+		    }
+		    else
+			xbuf[k++] = s->str_att[i][j];
+		    j++;
+		}
+		xbuf[k] = (char)NULL;
+	    }
+	    else
+		G_strcpy(xbuf, s->str_att[i]);
+
+	    G_strcpy(s->str_att[i], xbuf);
+
+	    if (G_index(s->str_att[i], SPACE) != (char *)NULL)
+		sprintf(xbuf, "@\"%s\" ", s->str_att[i]);
+	    else
+		sprintf(xbuf, "@%s ", s->str_att[i]);
+
+	    G_strcat(buf, xbuf);
+	}
+    }
+    fprintf(fptr, "%s\n", buf);
+    return 0;
 }

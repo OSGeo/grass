@@ -1,3 +1,4 @@
+
 /**
  * \file plus_line.c
  *
@@ -26,56 +27,67 @@
  *
  * \return -1 on error      
  * \return line id
-*/
-int 
-dig_add_line (struct Plus_head *plus, int type, struct line_pnts *Points, long offset) {
-    int  lineid, node, lp;
+ */
+int
+dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
+	     long offset)
+{
+    int lineid, node, lp;
     P_LINE *line;
     BOUND_BOX box;
-   
+
     /* First look if we have space in array of pointers to lines
-    *  and reallocate if necessary */
-    if ( plus->n_lines >= plus->alloc_lines ) { /* array is full */
-	if ( dig_alloc_lines(plus,1000) == -1 )
+     *  and reallocate if necessary */
+    if (plus->n_lines >= plus->alloc_lines) {	/* array is full */
+	if (dig_alloc_lines(plus, 1000) == -1)
 	    return -1;
     }
-    
+
     /* allocate line structure */
     lineid = plus->n_lines + 1;
     plus->Line[lineid] = dig_alloc_line();
     line = plus->Line[lineid];
-    
-    /* Add nodes */
-    G_debug ( 3, "Register node: type = %d,  %f,%f", type, Points->x[0], Points->y[0]);
 
-    node = dig_find_node ( plus, Points->x[0], Points->y[0], Points->z[0]);
-    G_debug ( 3, "node = %d", node);
-    if ( node == 0 ) {
-	node = dig_add_node ( plus, Points->x[0], Points->y[0], Points->z[0] );
-	G_debug ( 3, "Add new node: %d", node);
-    } else {
-	G_debug ( 3, "Old node found: %d", node);
-    }	
+    /* Add nodes */
+    G_debug(3, "Register node: type = %d,  %f,%f", type, Points->x[0],
+	    Points->y[0]);
+
+    node = dig_find_node(plus, Points->x[0], Points->y[0], Points->z[0]);
+    G_debug(3, "node = %d", node);
+    if (node == 0) {
+	node = dig_add_node(plus, Points->x[0], Points->y[0], Points->z[0]);
+	G_debug(3, "Add new node: %d", node);
+    }
+    else {
+	G_debug(3, "Old node found: %d", node);
+    }
     line->N1 = node;
-    dig_node_add_line (plus, node, lineid, Points, type );
-    if ( plus->do_uplist ) dig_node_add_updated ( plus, node );
-     
-    if ( type & GV_LINES ) {
+    dig_node_add_line(plus, node, lineid, Points, type);
+    if (plus->do_uplist)
+	dig_node_add_updated(plus, node);
+
+    if (type & GV_LINES) {
 	lp = Points->n_points - 1;
-	G_debug ( 3, "Register node %f,%f", Points->x[lp], Points->y[lp]);
-	node = dig_find_node ( plus, Points->x[lp], Points->y[lp], Points->z[lp]);
-	G_debug ( 3, "node = %d", node);
-	if ( node == 0 ) {
-	    node = dig_add_node ( plus, Points->x[lp], Points->y[lp], Points->z[lp]);
-	    G_debug ( 3, "Add new node: %d", node);
-	} else {
-	    G_debug ( 3, "Old node found: %d", node);
+	G_debug(3, "Register node %f,%f", Points->x[lp], Points->y[lp]);
+	node =
+	    dig_find_node(plus, Points->x[lp], Points->y[lp], Points->z[lp]);
+	G_debug(3, "node = %d", node);
+	if (node == 0) {
+	    node =
+		dig_add_node(plus, Points->x[lp], Points->y[lp],
+			     Points->z[lp]);
+	    G_debug(3, "Add new node: %d", node);
 	}
-        line->N2 = node;
-        dig_node_add_line (plus, node, -lineid, Points, type );
-        if ( plus->do_uplist ) dig_node_add_updated ( plus, node );
-    } else {
-        line->N2 = 0;
+	else {
+	    G_debug(3, "Old node found: %d", node);
+	}
+	line->N2 = node;
+	dig_node_add_line(plus, node, -lineid, Points, type);
+	if (plus->do_uplist)
+	    dig_node_add_updated(plus, node);
+    }
+    else {
+	line->N2 = 0;
     }
 
     line->type = type;
@@ -88,33 +100,34 @@ dig_add_line (struct Plus_head *plus, int type, struct line_pnts *Points, long o
     line->W = 0;
     plus->n_lines++;
 
-    switch ( type ) {
-	case GV_POINT:
-            plus->n_plines++;
-	    break;
-	case GV_LINE:
-            plus->n_llines++;
-	    break;
-	case GV_BOUNDARY:
-            plus->n_blines++;
-	    break;
-	case GV_CENTROID:
-            plus->n_clines++;
-	    break;
-	case GV_FACE:
-            plus->n_flines++;
-	    break;
-	case GV_KERNEL:
-            plus->n_klines++;
-	    break;
+    switch (type) {
+    case GV_POINT:
+	plus->n_plines++;
+	break;
+    case GV_LINE:
+	plus->n_llines++;
+	break;
+    case GV_BOUNDARY:
+	plus->n_blines++;
+	break;
+    case GV_CENTROID:
+	plus->n_clines++;
+	break;
+    case GV_FACE:
+	plus->n_flines++;
+	break;
+    case GV_KERNEL:
+	plus->n_klines++;
+	break;
     }
-         
-    dig_line_box ( Points, &box );
-    dig_line_set_box (plus, lineid, &box);
-    dig_spidx_add_line ( plus, lineid, &box );    
-    if ( plus->do_uplist ) dig_line_add_updated ( plus, lineid );
-    
-    return ( lineid );
+
+    dig_line_box(Points, &box);
+    dig_line_set_box(plus, lineid, &box);
+    dig_spidx_add_line(plus, lineid, &box);
+    if (plus->do_uplist)
+	dig_line_add_updated(plus, lineid);
+
+    return (lineid);
 }
 
 /*!
@@ -131,64 +144,71 @@ dig_add_line (struct Plus_head *plus, int type, struct line_pnts *Points, long o
  * \return -1 on error
  * \return  0 OK
  *
-*/
-int 
-dig_del_line (struct Plus_head *plus, int line)
+ */
+int dig_del_line(struct Plus_head *plus, int line)
 {
-    int    i, mv;
+    int i, mv;
     P_LINE *Line;
     P_NODE *Node;
-  
+
     /* TODO: free structures */
-    G_debug (3, "dig_del_line() line =  %d", line);
-    
-    Line = plus->Line[line]; 
-    dig_spidx_del_line ( plus, line );
-    
+    G_debug(3, "dig_del_line() line =  %d", line);
+
+    Line = plus->Line[line];
+    dig_spidx_del_line(plus, line);
+
     /* Delete from nodes (and nodes) */
     Node = plus->Node[Line->N1];
     mv = 0;
-    for ( i = 0; i < Node->n_lines; i++ ) {
-	if ( mv ) {
-	    Node->lines[i-1] = Node->lines[i]; 
-	    Node->angles[i-1] = Node->angles[i]; 
-	} else {
-	    if ( abs(Node->lines[i]) == line ) mv = 1;
+    for (i = 0; i < Node->n_lines; i++) {
+	if (mv) {
+	    Node->lines[i - 1] = Node->lines[i];
+	    Node->angles[i - 1] = Node->angles[i];
+	}
+	else {
+	    if (abs(Node->lines[i]) == line)
+		mv = 1;
 	}
     }
     Node->n_lines--;
-    if ( Node->n_lines == 0 ) {
-        G_debug (3, "    node %d has 0 lines -> delete", Line->N1);
-	dig_spidx_del_node ( plus, Line->N1 );
-	plus->Node[Line->N1] = NULL;	
-    } else {
-        if ( plus->do_uplist ) dig_node_add_updated ( plus, Line->N1 );
+    if (Node->n_lines == 0) {
+	G_debug(3, "    node %d has 0 lines -> delete", Line->N1);
+	dig_spidx_del_node(plus, Line->N1);
+	plus->Node[Line->N1] = NULL;
     }
-    
-    if ( Line->type & GV_LINES ) {
+    else {
+	if (plus->do_uplist)
+	    dig_node_add_updated(plus, Line->N1);
+    }
+
+    if (Line->type & GV_LINES) {
 	Node = plus->Node[Line->N2];
 	mv = 0;
-	for ( i = 0; i < Node->n_lines; i++ ) {
-	    if ( mv ) {
-		Node->lines[i-1] = Node->lines[i]; 
-	        Node->angles[i-1] = Node->angles[i]; 
-	    } else {
-		if ( abs(Node->lines[i]) == line ) mv = 1;
+	for (i = 0; i < Node->n_lines; i++) {
+	    if (mv) {
+		Node->lines[i - 1] = Node->lines[i];
+		Node->angles[i - 1] = Node->angles[i];
+	    }
+	    else {
+		if (abs(Node->lines[i]) == line)
+		    mv = 1;
 	    }
 	}
-        Node->n_lines--;
-        if ( Node->n_lines == 0 ) {
-            G_debug (3, "    node %d has 0 lines -> delete", Line->N2);
-	    dig_spidx_del_node ( plus, Line->N2 );
-	    plus->Node[Line->N2] = NULL;	
-	} else {
-	    if ( plus->do_uplist ) dig_node_add_updated ( plus, Line->N2 );
+	Node->n_lines--;
+	if (Node->n_lines == 0) {
+	    G_debug(3, "    node %d has 0 lines -> delete", Line->N2);
+	    dig_spidx_del_node(plus, Line->N2);
+	    plus->Node[Line->N2] = NULL;
+	}
+	else {
+	    if (plus->do_uplist)
+		dig_node_add_updated(plus, Line->N2);
 	}
     }
-     
-    /* Delete line */ 
-    plus->Line[line] = NULL; 
-    
+
+    /* Delete line */
+    plus->Line[line] = NULL;
+
     return 0;
 }
 
@@ -203,21 +223,23 @@ dig_del_line (struct Plus_head *plus, int line)
  * \return  0 no area
  * \return -1 on error
  */
-plus_t
-dig_line_get_area (struct Plus_head *plus, plus_t line, int side) {
+plus_t dig_line_get_area(struct Plus_head * plus, plus_t line, int side)
+{
     P_LINE *Line;
-    
+
     Line = plus->Line[line];
-    if ( side == GV_LEFT  ) { 
-	G_debug ( 3, "dig_line_get_area(): line = %d, side = %d (left), area = %d", 
-		      line, side, Line->left ); 
-	return (Line->left );
+    if (side == GV_LEFT) {
+	G_debug(3,
+		"dig_line_get_area(): line = %d, side = %d (left), area = %d",
+		line, side, Line->left);
+	return (Line->left);
     }
-    if ( side == GV_RIGHT ) {
-	G_debug ( 3, "dig_line_get_area(): line = %d, side = %d (right), area = %d", 
-		      line, side, Line->right );
-       
-	return (Line->right); 
+    if (side == GV_RIGHT) {
+	G_debug(3,
+		"dig_line_get_area(): line = %d, side = %d (right), area = %d",
+		line, side, Line->right);
+
+	return (Line->right);
     }
 
     return (-1);
@@ -232,14 +254,19 @@ dig_line_get_area (struct Plus_head *plus, plus_t line, int side) {
  * \param[in] area area id
  *
  * \return 1
-*/
+ */
 int
-dig_line_set_area (struct Plus_head *plus, plus_t line, int side, plus_t area ) {
+dig_line_set_area(struct Plus_head *plus, plus_t line, int side, plus_t area)
+{
     P_LINE *Line;
-    
+
     Line = plus->Line[line];
-    if ( side == GV_LEFT  ) { Line->left = area; }
-    else if ( side == GV_RIGHT ) { Line->right = area; }
+    if (side == GV_LEFT) {
+	Line->left = area;
+    }
+    else if (side == GV_RIGHT) {
+	Line->right = area;
+    }
 
     return (1);
 }
@@ -253,12 +280,12 @@ dig_line_set_area (struct Plus_head *plus, plus_t line, int side, plus_t area ) 
  *
  * \return 1
  */
-int
-dig_line_set_box (struct Plus_head *plus, plus_t line, BOUND_BOX *Box ) {
+int dig_line_set_box(struct Plus_head *plus, plus_t line, BOUND_BOX * Box)
+{
     P_LINE *Line;
-    
+
     Line = plus->Line[line];
-    
+
     Line->N = Box->N;
     Line->S = Box->S;
     Line->E = Box->E;
@@ -278,12 +305,12 @@ dig_line_set_box (struct Plus_head *plus, plus_t line, BOUND_BOX *Box ) {
  *
  * \return 1
  */
-int
-dig_line_get_box (struct Plus_head *plus, plus_t line, BOUND_BOX *Box ) {
+int dig_line_get_box(struct Plus_head *plus, plus_t line, BOUND_BOX * Box)
+{
     P_LINE *Line;
-    
+
     Line = plus->Line[line];
-    
+
     Box->N = Line->N;
     Box->S = Line->S;
     Box->E = Line->E;

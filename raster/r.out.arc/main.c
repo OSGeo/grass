@@ -6,34 +6,35 @@
 #include <grass/glocale.h>
 
 /*
-****************************************************************************
-*
-* MODULE:       r.out.arc
-* AUTHOR(S):    Original author: Michael Shapiro (r.out.ascii)
-*               modified to r.out.arc by Markus Neteler, Univ. of Hannover
-*               neteler geog.uni-hannover.de (11/99)
-* PURPOSE:      r.out.arc: writes ARC/INFO ASCII GRID file
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ ****************************************************************************
+ *
+ * MODULE:       r.out.arc
+ * AUTHOR(S):    Original author: Michael Shapiro (r.out.ascii)
+ *               modified to r.out.arc by Markus Neteler, Univ. of Hannover
+ *               neteler geog.uni-hannover.de (11/99)
+ * PURPOSE:      r.out.arc: writes ARC/INFO ASCII GRID file
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *              License (>=v2). Read the file COPYING that comes with GRASS
+ *              for details.
+ *
+ *****************************************************************************/
 
 int main(int argc, char *argv[])
 {
     void *raster, *ptr;
-  /*
-    char  *null_row;
-    */
+
+    /*
+       char  *null_row;
+     */
     RASTER_MAP_TYPE out_type, map_type;
     char *outfile;
     char *mapset;
     char null_str[80];
     char cell_buf[300];
     int fd;
-    int row,col;
+    int row, col;
     int nrows, ncols, dp;
     int do_stdout;
     FILE *fp;
@@ -41,15 +42,15 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *map ;
-	struct Option *output ;
-	struct Option *dp ;
-	struct Option *null ;
+	struct Option *map;
+	struct Option *output;
+	struct Option *dp;
+	struct Option *null;
     } parm;
     struct
     {
-        struct Flag *noheader;
-        struct Flag *singleline;
+	struct Flag *noheader;
+	struct Flag *singleline;
     } flag;
 
     G_gisinit(argv[0]);
@@ -57,29 +58,30 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-		_("Converts a raster map layer into an ESRI ARCGRID file.");
+	_("Converts a raster map layer into an ESRI ARCGRID file.");
 
     /* Define the different options */
-    parm.map = G_define_option() ;
-    parm.map->key        = "input";
-    parm.map->type       = TYPE_STRING;
-    parm.map->required   = YES;
-    parm.map->gisprompt  = "old,cell,raster" ;
-    parm.map->description= _("Name of an existing raster map layer");
+    parm.map = G_define_option();
+    parm.map->key = "input";
+    parm.map->type = TYPE_STRING;
+    parm.map->required = YES;
+    parm.map->gisprompt = "old,cell,raster";
+    parm.map->description = _("Name of an existing raster map layer");
 
-    parm.output = G_define_option() ;
-    parm.output->key        = "output";
-    parm.output->type       = TYPE_STRING;
-    parm.output->required   = YES;
-    parm.output->gisprompt  = "new_file,file,output";
-    parm.output->description= _("Name of an output ARC-GID map (use out=- for stdout)");
+    parm.output = G_define_option();
+    parm.output->key = "output";
+    parm.output->type = TYPE_STRING;
+    parm.output->required = YES;
+    parm.output->gisprompt = "new_file,file,output";
+    parm.output->description =
+	_("Name of an output ARC-GID map (use out=- for stdout)");
 
-    parm.dp = G_define_option() ;
-    parm.dp->key        = "dp";
-    parm.dp->type       = TYPE_INTEGER;
-    parm.dp->required   = NO;
-    parm.dp->answer     = "8";
-    parm.dp->description= _("Number of decimal places");
+    parm.dp = G_define_option();
+    parm.dp->key = "dp";
+    parm.dp->type = TYPE_INTEGER;
+    parm.dp->required = NO;
+    parm.dp->answer = "8";
+    parm.dp->description = _("Number of decimal places");
 
     flag.noheader = G_define_flag();
     flag.noheader->key = 'h';
@@ -88,124 +90,117 @@ int main(int argc, char *argv[])
     /* Added to optionaly produce a single line output.     -- emes -- 12.10.92 */
     flag.singleline = G_define_flag();
     flag.singleline->key = '1';
-    flag.singleline->description = _("List one entry per line instead of full row");
+    flag.singleline->description =
+	_("List one entry per line instead of full row");
 
     if (G_parser(argc, argv))
-       	exit (EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
 
     sscanf(parm.dp->answer, "%d", &dp);
-    if(dp>20 || dp < 0)
-       G_fatal_error("dp has to be from 0 to 20");
+    if (dp > 20 || dp < 0)
+	G_fatal_error("dp has to be from 0 to 20");
 
-    outfile =  parm.output->answer;
-    if((strcmp("-", outfile)) == 0)
-        do_stdout = 1;
-    else 
-        do_stdout = 0;
+    outfile = parm.output->answer;
+    if ((strcmp("-", outfile)) == 0)
+	do_stdout = 1;
+    else
+	do_stdout = 0;
 
-    sprintf(null_str,"-9999");
+    sprintf(null_str, "-9999");
 
-    mapset = G_find_cell (parm.map->answer, "");
+    mapset = G_find_cell(parm.map->answer, "");
     if (mapset == NULL)
-	G_fatal_error (_("Raster map <%s> not found"), parm.map->answer);
+	G_fatal_error(_("Raster map <%s> not found"), parm.map->answer);
 
-    fd = G_open_cell_old (parm.map->answer, mapset);
+    fd = G_open_cell_old(parm.map->answer, mapset);
     if (fd < 0)
-	G_fatal_error (_("Unable to open raster map <%s>"), parm.map->answer);
+	G_fatal_error(_("Unable to open raster map <%s>"), parm.map->answer);
 
     map_type = G_get_raster_map_type(fd);
     out_type = map_type;
 
-   /*
-    null_row = G_allocate_null_buf();
-    */
-    raster =  G_allocate_raster_buf(out_type);
+    /*
+       null_row = G_allocate_null_buf();
+     */
+    raster = G_allocate_raster_buf(out_type);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
 
     /* open arc file for writing */
-    if(do_stdout)
-       fp = stdout;
-    else
-       if(NULL == (fp = fopen(outfile, "w")))
-          G_fatal_error(_("Unable to open file <%s>"), outfile );
+    if (do_stdout)
+	fp = stdout;
+    else if (NULL == (fp = fopen(outfile, "w")))
+	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
-    if (!flag.noheader->answer)
-    {
+    if (!flag.noheader->answer) {
 	struct Cell_head region;
 	char buf[128];
 
-	G_get_window (&region);
-	fprintf (fp, "ncols %d\n", region.cols);
-	fprintf (fp, "nrows %d\n", region.rows);
+	G_get_window(&region);
+	fprintf(fp, "ncols %d\n", region.cols);
+	fprintf(fp, "nrows %d\n", region.rows);
 
-	if(G_projection() != 3)  /* Is Projection != LL (3) */
-	{
-	  G_format_easting (region.west, buf, region.proj);
-	  fprintf (fp, "xllcorner %s\n", buf);
-	  G_format_northing (region.south, buf, region.proj);
-	  fprintf (fp, "yllcorner %s\n", buf);
+	if (G_projection() != 3) {	/* Is Projection != LL (3) */
+	    G_format_easting(region.west, buf, region.proj);
+	    fprintf(fp, "xllcorner %s\n", buf);
+	    G_format_northing(region.south, buf, region.proj);
+	    fprintf(fp, "yllcorner %s\n", buf);
 	}
-	else /* yes, lat/long */
-	{
-	  fprintf (fp, "xllcorner %f\n", region.west);
-	  fprintf (fp, "yllcorner %f\n", region.south);
+	else {			/* yes, lat/long */
+
+	    fprintf(fp, "xllcorner %f\n", region.west);
+	    fprintf(fp, "yllcorner %f\n", region.south);
 	}
 
-	cellsize= fabs(region.east - region.west)/region.cols;
+	cellsize = fabs(region.east - region.west) / region.cols;
 	fprintf(fp, "cellsize %f\n", cellsize);
-        fprintf(fp, "NODATA_value %s\n", null_str);
+	fprintf(fp, "NODATA_value %s\n", null_str);
     }
-    
-    for (row = 0; row < nrows; row++)
-    {
+
+    for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (G_get_raster_row(fd, raster, row, out_type) < 0)
-             exit(EXIT_FAILURE);
+	    exit(EXIT_FAILURE);
 	/*
-	 if (G_get_null_value_row(fd, null_row, row) < 0)
-	     exit(EXIT_FAILURE);
-	*/
-        for (col = 0, ptr = raster; col < ncols; col++, 
-		       ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) 
-        {
-           if(!G_is_null_value(ptr, out_type))
-	   {
-               if(out_type == CELL_TYPE)
-	           fprintf (fp,"%d", *((CELL *) ptr));
+	   if (G_get_null_value_row(fd, null_row, row) < 0)
+	   exit(EXIT_FAILURE);
+	 */
+	for (col = 0, ptr = raster; col < ncols; col++,
+	     ptr = G_incr_void_ptr(ptr, G_raster_size(out_type))) {
+	    if (!G_is_null_value(ptr, out_type)) {
+		if (out_type == CELL_TYPE)
+		    fprintf(fp, "%d", *((CELL *) ptr));
 
-               else if(out_type == FCELL_TYPE)
-	       {
-	           sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
-	           G_trim_decimal (cell_buf);
-	           fprintf (fp,"%s", cell_buf);
-	       }
-               else if(out_type == DCELL_TYPE)
-	       {
-	           sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
-	           G_trim_decimal (cell_buf);
-	           fprintf (fp,"%s", cell_buf);
-	       }
-            }
-            else
-                fprintf (fp,"%s", null_str);
+		else if (out_type == FCELL_TYPE) {
+		    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
+		    G_trim_decimal(cell_buf);
+		    fprintf(fp, "%s", cell_buf);
+		}
+		else if (out_type == DCELL_TYPE) {
+		    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
+		    G_trim_decimal(cell_buf);
+		    fprintf(fp, "%s", cell_buf);
+		}
+	    }
+	    else
+		fprintf(fp, "%s", null_str);
 
-        if(!flag.singleline->answer)          
-	  fprintf (fp, " ");
-        else
-          fprintf (fp,"\n");
-        }
+	    if (!flag.singleline->answer)
+		fprintf(fp, " ");
+	    else
+		fprintf(fp, "\n");
+	}
 
-	if(!flag.singleline->answer)
-          fprintf (fp,"\n");
+	if (!flag.singleline->answer)
+	    fprintf(fp, "\n");
 
 	/*
-        for (col = 0; col < ncols; col++)
-            fprintf (fp,"%d ", null_row[col]);
-	fprintf (fp,"\n");
-	*/
+	   for (col = 0; col < ncols; col++)
+	   fprintf (fp,"%d ", null_row[col]);
+	   fprintf (fp,"\n");
+	 */
     }
 
     /* make sure it got to 100% */

@@ -11,6 +11,7 @@ int add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
     int xflag = 0;		/* indicates if a x value has been found */
     int yflag = 0;		/* indicates if a y value has been found */
     int arr_size = 0;
+
     /* variables to create arcs */
     double bulge = 0.0;		/* for arc curves */
     double prev_bulge = 0.0;	/* for arc curves */
@@ -81,7 +82,8 @@ int add_lwpolyline(struct dxf_file *dxf, struct Map_info *Map)
     }
 
     if (polyline_flag & 1) {
-	if (xpnts[0] != xpnts[arr_size - 1] || ypnts[0] != ypnts[arr_size - 1]) {
+	if (xpnts[0] != xpnts[arr_size - 1] ||
+	    ypnts[0] != ypnts[arr_size - 1]) {
 	    /* close polyline */
 	    xpnts[arr_size] = xpnts[0];
 	    ypnts[arr_size] = ypnts[0];

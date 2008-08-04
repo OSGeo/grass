@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.param.scale
@@ -14,49 +15,53 @@
 #define MAIN
 
 #include <grass/glocale.h>
-#include "param.h"	
+#include "param.h"
 
 int main(int argc, char **argv)
 {
 
     /*--------------------------------------------------------------------------*/
-    /*                                 INITIALISE				*/
-    /*--------------------------------------------------------------------------*/ 
+    /*                                 INITIALISE                               */
+
+    /*--------------------------------------------------------------------------*/
 
 
 
     /*--------------------------------------------------------------------------*/
-    /*                               GET INPUT FROM USER			*/
-    /*--------------------------------------------------------------------------*/
-
-    interface(argc,argv);
-
+    /*                               GET INPUT FROM USER                        */
 
     /*--------------------------------------------------------------------------*/
-    /*                        OPEN INPUT AND OUTPUT RASTER FILES		*/
+
+    interface(argc, argv);
+
+
+    /*--------------------------------------------------------------------------*/
+    /*                        OPEN INPUT AND OUTPUT RASTER FILES                */
+
     /*--------------------------------------------------------------------------*/
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-         G_fatal_error (_("Lat/Long location is not supported"));
+	G_fatal_error(_("Lat/Long location is not supported"));
 
     open_files();
 
 
     /*--------------------------------------------------------------------------*/
-    /*                       PROCESS SURFACE FOR FEATURE DETECTION 		*/
-    /*--------------------------------------------------------------------------*/
-
-    process();   
+    /*                       PROCESS SURFACE FOR FEATURE DETECTION              */
 
     /*--------------------------------------------------------------------------*/
-    /*                     CLOSE ALL OPENED FILES AND FREE MEMORY		*/
+
+    process();
+
+    /*--------------------------------------------------------------------------*/
+    /*                     CLOSE ALL OPENED FILES AND FREE MEMORY               */
+
     /*--------------------------------------------------------------------------*/
 
     close_down();
 
-    if (mparam == FEATURE)
-    {
+    if (mparam == FEATURE) {
 	write_cols();
 	write_cats();
     }

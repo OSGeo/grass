@@ -1,24 +1,21 @@
 #include <grass/dbmi.h>
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-void
-db_interval_range  (int sqltype, int *from, int *to)
-
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+void db_interval_range(int sqltype, int *from, int *to)
 {
-    switch (sqltype)
-    {
+    switch (sqltype) {
     case DB_SQL_TYPE_DATE:
 	*from = DB_YEAR;
-	*to   = DB_DAY;
+	*to = DB_DAY;
 	return;
     case DB_SQL_TYPE_TIME:
 	*from = DB_HOUR;
-	*to   = DB_FRACTION;
+	*to = DB_FRACTION;
 	return;
     }
 

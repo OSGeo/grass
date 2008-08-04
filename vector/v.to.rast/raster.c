@@ -23,31 +23,30 @@ static char **null_flags;
 static char isnull;
 
 /* function prototypes */
-static int configure_plot (void);
-static int cell_dot (int,int);
-static int dcell_dot (int,int);
-static int cont (int,int);
-static int move (int,int);
-static int (*dot)(int,int);
+static int configure_plot(void);
+static int cell_dot(int, int);
+static int dcell_dot(int, int);
+static int cont(int, int);
+static int move(int, int);
+static int (*dot) (int, int);
 
 
-int 
-begin_rasterization (int nrows, int f)
+int begin_rasterization(int nrows, int f)
 {
-    int i,size;
+    int i, size;
     int pages;
 
     /* otherwise get complaints about window changes */
     G_suppress_warnings(1);
-        
+
     format = f;
 
     max_rows = nrows;
     if (max_rows <= 0)
 	max_rows = 512;
 
-    G_get_set_window (&region);
-    G_get_set_window (&page);
+    G_get_set_window(&region);
+    G_get_set_window(&page);
 
     pages = (region.rows + max_rows - 1) / max_rows;
 
@@ -55,21 +54,23 @@ begin_rasterization (int nrows, int f)
 	max_rows = region.rows;
 
     size = max_rows * region.cols;
-    switch (format)
-    {
+    switch (format) {
     case USE_CELL:
-	raster.cell = (CELL **)G_calloc(max_rows * sizeof(char), sizeof(CELL *));
-	raster.cell[0] = (CELL *)G_calloc(size * sizeof(char), sizeof(CELL));
+	raster.cell =
+	    (CELL **) G_calloc(max_rows * sizeof(char), sizeof(CELL *));
+	raster.cell[0] = (CELL *) G_calloc(size * sizeof(char), sizeof(CELL));
 	for (i = 1; i < max_rows; i++)
-	    raster.cell[i] = raster.cell[i-1] + region.cols;
+	    raster.cell[i] = raster.cell[i - 1] + region.cols;
 	dot = cell_dot;
 	break;
 
     case USE_DCELL:
-	raster.dcell = (DCELL **)G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
-	raster.dcell[0] = (DCELL *)G_calloc(size * sizeof(char), sizeof(DCELL));
+	raster.dcell =
+	    (DCELL **) G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
+	raster.dcell[0] =
+	    (DCELL *) G_calloc(size * sizeof(char), sizeof(DCELL));
 	for (i = 1; i < max_rows; i++)
-	    raster.dcell[i] = raster.dcell[i-1] + region.cols;
+	    raster.dcell[i] = raster.dcell[i - 1] + region.cols;
 	dot = dcell_dot;
 	break;
     }
@@ -77,7 +78,7 @@ begin_rasterization (int nrows, int f)
     null_flags = (char **)G_calloc(max_rows * sizeof(char), sizeof(char *));
     null_flags[0] = (char *)G_calloc(size * sizeof(char), sizeof(char));
     for (i = 1; i < max_rows; i++)
-	null_flags[i] = null_flags[i-1] + region.cols;
+	null_flags[i] = null_flags[i - 1] + region.cols;
 
     at_row = 0;
     configure_plot();
@@ -86,10 +87,9 @@ begin_rasterization (int nrows, int f)
 }
 
 
-static int 
-configure_plot (void)
+static int configure_plot(void)
 {
-    int i,j;
+    int i, j;
     int nrows;
     int ncols;
 
@@ -99,12 +99,11 @@ configure_plot (void)
 
     if (nrows > max_rows)
 	nrows = max_rows;
-    
+
     ncols = region.cols;
 
     /* zero the raster */
-    switch (format)
-    {
+    switch (format) {
     case USE_CELL:
 	for (i = 0; i < nrows; i++)
 	    for (j = 0; j < ncols; j++)
@@ -124,39 +123,36 @@ configure_plot (void)
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    G_set_window (&page);
+    G_set_window(&page);
 
     /* configure the plot routines */
-    G_setup_plot (-0.5, page.rows-0.5, -0.5, page.cols-0.5, move, cont);
+    G_setup_plot(-0.5, page.rows - 0.5, -0.5, page.cols - 0.5, move, cont);
 
     return 0;
 }
 
 
-int 
-output_raster (int fd)
+int output_raster(int fd)
 {
     int i;
 
-    for (i = 0; i < page.rows; i++, at_row++)
-    {
-	switch (format)
-	{
+    for (i = 0; i < page.rows; i++, at_row++) {
+	switch (format) {
 	case USE_CELL:
 	    cell = raster.cell[i];
 
 	    /* insert the NULL values */
-	    G_insert_c_null_values (cell, null_flags[i], page.cols);
-	    if (G_put_c_raster_row (fd, cell) < 0)
-                return -1;
+	    G_insert_c_null_values(cell, null_flags[i], page.cols);
+	    if (G_put_c_raster_row(fd, cell) < 0)
+		return -1;
 	    break;
 	case USE_DCELL:
 	    dcell = raster.dcell[i];
 
 	    /* insert the NULL values */
-	    G_insert_d_null_values (dcell, null_flags[i], page.cols);
-	    if (G_put_d_raster_row (fd, dcell) < 0)
-                return -1;
+	    G_insert_d_null_values(dcell, null_flags[i], page.cols);
+	    if (G_put_d_raster_row(fd, dcell) < 0)
+		return -1;
 	    break;
 	}
     }
@@ -164,23 +160,25 @@ output_raster (int fd)
     return configure_plot();
 }
 
-int set_cat (CELL x)
+int set_cat(CELL x)
 {
     cat = x;
-    if ( (isnull = ISNULL(&cat)) ) cat = 0;
+    if ((isnull = ISNULL(&cat)))
+	cat = 0;
 
     return 0;
 }
 
-int set_dcat (DCELL x)
+int set_dcat(DCELL x)
 {
     dcat = x;
-    if ( (isnull = ISDNULL(&dcat)) ) dcat = 0;
+    if ((isnull = ISDNULL(&dcat)))
+	dcat = 0;
 
     return 0;
 }
 
-static int move (int x, int y)
+static int move(int x, int y)
 {
     cur_x = x;
     cur_y = y;
@@ -188,32 +186,32 @@ static int move (int x, int y)
     return 0;
 }
 
-static int cont (int x, int y)
+static int cont(int x, int y)
 {
     if (cur_x < 0 && x < 0) {
-        move (x, y);
-        return 0;
+	move(x, y);
+	return 0;
     }
     if (cur_y < 0 && y < 0) {
-        move (x, y);
-        return 0;
+	move(x, y);
+	return 0;
     }
     if (cur_x >= page.cols && x >= page.cols) {
-        move (x, y);
-        return 0;
+	move(x, y);
+	return 0;
     }
     if (cur_y >= page.rows && y >= page.rows) {
-        move (x, y);
-        return 0;
+	move(x, y);
+	return 0;
     }
 
-    G_bresenham_line (cur_x, cur_y, x, y, dot);
-    move (x, y);
+    G_bresenham_line(cur_x, cur_y, x, y, dot);
+    move(x, y);
 
     return 0;
 }
 
-static int cell_dot (int x, int y)
+static int cell_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows) {
 	raster.cell[y][x] = cat;
@@ -223,7 +221,7 @@ static int cell_dot (int x, int y)
     return 0;
 }
 
-static int dcell_dot (int x, int y)
+static int dcell_dot(int x, int y)
 {
     if (x >= 0 && x < page.cols && y >= 0 && y < page.rows) {
 	raster.dcell[y][x] = dcat;
@@ -232,4 +230,3 @@ static int dcell_dot (int x, int y)
 
     return 0;
 }
-

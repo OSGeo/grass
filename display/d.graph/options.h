@@ -4,9 +4,8 @@
 #define EXTERN extern
 #endif
 
-EXTERN float hsize ;
-EXTERN float vsize ;
-EXTERN int t, b, l, r ;
-EXTERN int mapunits ;
-EXTERN FILE *infile ;
-
+EXTERN float hsize;
+EXTERN float vsize;
+EXTERN int t, b, l, r;
+EXTERN int mapunits;
+EXTERN FILE *infile;

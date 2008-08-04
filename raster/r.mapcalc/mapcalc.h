@@ -45,8 +45,8 @@ extern void setup_region(void);
 extern int map_type(const char *name, int mod);
 extern int open_map(const char *name, int mod, int row, int col);
 extern void setup_maps(void);
-extern void get_map_row(
-	int idx, int mod, int depth, int row, int col, void *buf, int res_type);
+extern void get_map_row(int idx, int mod, int depth, int row, int col,
+			void *buf, int res_type);
 extern void close_maps(void);
 
 extern int open_output_map(const char *name, int res_type);
@@ -57,9 +57,8 @@ extern void unopen_output_map(int fd);
 extern void copy_cats(const char *dst, int idx);
 extern void copy_colors(const char *dst, int idx);
 extern void copy_history(const char *dst, int idx);
-extern void create_history(const char *dst, expression *e);
+extern void create_history(const char *dst, expression * e);
 
 /****************************************************************************/
 
 #endif /* _MAPCALC_H_ */
-

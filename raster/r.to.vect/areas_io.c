@@ -38,13 +38,14 @@ int write_boundary(struct COOR *seed)
     int dir, line_type, n, n1;
 
     point = seed;
-    if ( (dir = at_end(point)) ) {	/* already have one end of line */
+    if ((dir = at_end(point))) {	/* already have one end of line */
 	line_begin = point;
 	line_end = find_end(point, dir, &line_type, &n);
 	if (line_type == OPEN)
 	    return (-1);	/* unfinished line */
 	direction = dir;
-    } else {			/* in middle of a line */
+    }
+    else {			/* in middle of a line */
 	line_end = find_end(point, FORWARD, &line_type, &n);
 	if (line_type == OPEN)	/* line not finished */
 	    return (-1);
@@ -58,7 +59,8 @@ int write_boundary(struct COOR *seed)
 	    }
 	    direction = at_end(line_begin);	/* found both ends now; total length */
 	    n += n1;		/*   is sum of distances to each end */
-	} else {
+	}
+	else {
 	    /* line_type = LOOP by default */
 	    /* already have correct length */
 	    line_begin = line_end;	/* end and beginning are the same */
@@ -90,8 +92,8 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
     n++;			/* %% 6.4.88 */
 
     p = line_begin;
-    y = cell_head.north - (double) p->row * cell_head.ns_res;
-    x = cell_head.west + (double) p->col * cell_head.ew_res;
+    y = cell_head.north - (double)p->row * cell_head.ns_res;
+    x = cell_head.west + (double)p->col * cell_head.ew_res;
 
     Vect_append_point(points, x, y, 0.0);
 
@@ -102,8 +104,8 @@ static int write_bnd(struct COOR *line_begin, struct COOR *line_end,	/* start an
 	if ((p = move(p)) == NULPTR)
 	    G_fatal_error(_("Line terminated unexpectedly\n"
 			    "previous (%d) point %p (%d,%d,%d) %p %p"),
-		    direction, last, last->row, last->col, last->node,
-		    last->fptr, last->bptr);
+			  direction, last, last->row, last->col, last->node,
+			  last->fptr, last->bptr);
 
 	y = cell_head.north - p->row * cell_head.ns_res;
 	x = cell_head.west + p->col * cell_head.ew_res;
@@ -166,8 +168,8 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
     p = line_begin;
     /* allocate the arrays and get the first point */
 
-    y = cell_head.north - (double) p->row * cell_head.ns_res;
-    x = cell_head.west + (double) p->col * cell_head.ew_res;
+    y = cell_head.north - (double)p->row * cell_head.ns_res;
+    x = cell_head.west + (double)p->col * cell_head.ew_res;
     Vect_append_point(points, x, y, 0.0);
 
     /* generate the list of smoothed points, may be duplicate points */
@@ -203,14 +205,14 @@ static int write_smooth_bnd(struct COOR *line_begin, struct COOR *line_end,	/* s
 	/* G_free (last); */
     }				/* end of for i */
 
-    y = cell_head.north - (double) p->row * cell_head.ns_res;
-    x = cell_head.west + (double) p->col * cell_head.ew_res;
+    y = cell_head.north - (double)p->row * cell_head.ns_res;
+    x = cell_head.west + (double)p->col * cell_head.ew_res;
     total++;
     Vect_append_point(points, x, y, 0.0);
 
     /* strip out the duplicate points from the list */
-    y = cell_head.north - (double) p->row * cell_head.ns_res;
-    x = cell_head.west + (double) p->col * cell_head.ew_res;
+    y = cell_head.north - (double)p->row * cell_head.ns_res;
+    x = cell_head.west + (double)p->col * cell_head.ew_res;
     total++;
     Vect_append_point(points, x, y, 0.0);
 
@@ -269,10 +271,11 @@ int write_area(struct area_table *a_list,	/* list of areas */
 
     total_areas = 0;
     if (n_equiv < n_areas) {
-	equivs = (int *) G_malloc(n_areas * sizeof(int));
+	equivs = (int *)G_malloc(n_areas * sizeof(int));
 	n = n_equiv;
-    } else {
-	equivs = (int *) G_malloc(n_equiv * sizeof(int));
+    }
+    else {
+	equivs = (int *)G_malloc(n_equiv * sizeof(int));
 	n = n_areas;
     }
 
@@ -300,7 +303,8 @@ int write_area(struct area_table *a_list,	/* list of areas */
 
 	    if (value_flag) {	/* raster value */
 		cat = (int)p->cat;
-	    } else {		/* sequence */
+	    }
+	    else {		/* sequence */
 		cat = catNum;
 		catNum++;
 	    }
@@ -309,22 +313,22 @@ int write_area(struct area_table *a_list,	/* list of areas */
 				  (p->width / 2.0)) * cell_head.ew_res;
 	    y = cell_head.north - (p->row + 0.5) * cell_head.ns_res;
 
-	    switch(data_type){
+	    switch (data_type) {
 	    case CELL_TYPE:
-		    G_debug(3,
+		G_debug(3,
 			"vector x = %.3f, y = %.3f, cat = %d; raster cat = %d",
-		    	x, y, cat, (int)p->cat);
-		    break;
+			x, y, cat, (int)p->cat);
+		break;
 	    case FCELL_TYPE:
-		    G_debug(3,
+		G_debug(3,
 			"vector x = %.3f, y = %.3f, cat = %d; raster cat = %f",
-		    	x, y, cat, (float)p->cat);
-		    break;
+			x, y, cat, (float)p->cat);
+		break;
 	    case DCELL_TYPE:
-		    G_debug(3,
+		G_debug(3,
 			"vector x = %.3f, y = %.3f, cat = %d; raster cat = %lf",
-		    	x, y, cat, p->cat);
-		    break;
+			x, y, cat, p->cat);
+		break;
 	    }
 
 	    Vect_reset_line(points);
@@ -338,16 +342,16 @@ int write_area(struct area_table *a_list,	/* list of areas */
 	    if (driver != NULL && !value_flag) {
 		sprintf(buf, "insert into %s values (%d, ", Fi->table, cat);
 		db_set_string(&sql, buf);
-		switch(data_type){
+		switch (data_type) {
 		case CELL_TYPE:
-			sprintf(buf, "%d", (int)p->cat);
-			break;
+		    sprintf(buf, "%d", (int)p->cat);
+		    break;
 		case FCELL_TYPE:
-			sprintf(buf, "%f", (float)p->cat);
-			break;
+		    sprintf(buf, "%f", (float)p->cat);
+		    break;
 		case DCELL_TYPE:
-			sprintf(buf, "%lf", p->cat);
-			break;
+		    sprintf(buf, "%lf", p->cat);
+		    break;
 		}
 		db_append_string(&sql, buf);
 
@@ -364,7 +368,8 @@ int write_area(struct area_table *a_list,	/* list of areas */
 		G_debug(3, db_get_string(&sql));
 
 		if (db_execute_immediate(driver, &sql) != DB_OK)
-		    G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
+		    G_fatal_error(_("Cannot insert new row: %s"),
+				  db_get_string(&sql));
 	    }
 	}
     }

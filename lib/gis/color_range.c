@@ -1,15 +1,13 @@
 #include <math.h>
 #include <grass/gis.h>
 
-int G_set_color_range ( CELL min,CELL max, struct Colors *colors)
+int G_set_color_range(CELL min, CELL max, struct Colors *colors)
 {
-    if (min < max)
-    {
+    if (min < max) {
 	colors->cmin = (DCELL) min;
 	colors->cmax = (DCELL) max;
     }
-    else
-    {
+    else {
 	colors->cmin = (DCELL) max;
 	colors->cmax = (DCELL) min;
     }
@@ -17,16 +15,13 @@ int G_set_color_range ( CELL min,CELL max, struct Colors *colors)
     return 0;
 }
 
-int 
-G_set_d_color_range (DCELL min, DCELL max, struct Colors *colors)
+int G_set_d_color_range(DCELL min, DCELL max, struct Colors *colors)
 {
-    if (min < max)
-    {
+    if (min < max) {
 	colors->cmin = min;
 	colors->cmax = max;
     }
-    else
-    {
+    else {
 	colors->cmin = max;
 	colors->cmax = min;
     }
@@ -46,26 +41,22 @@ G_set_d_color_range (DCELL min, DCELL max, struct Colors *colors)
  *  \return int
  */
 
-int 
-G_get_color_range (CELL *min, CELL *max, const struct Colors *colors)
+int G_get_color_range(CELL * min, CELL * max, const struct Colors *colors)
 {
-    if(!colors->is_float)
-    {
-       *min = (CELL) floor(colors->cmin);
-       *max = (CELL) ceil(colors->cmax);
+    if (!colors->is_float) {
+	*min = (CELL) floor(colors->cmin);
+	*max = (CELL) ceil(colors->cmax);
     }
-    else
-    {
-       *min = -255 * 255 * 255;
-       *max = 255 * 255 * 255;
+    else {
+	*min = -255 * 255 * 255;
+	*max = 255 * 255 * 255;
     }
 
     return 0;
 }
 
 /* returns min and max values in the range */
-int 
-G_get_d_color_range (DCELL *min, DCELL *max, const struct Colors *colors)
+int G_get_d_color_range(DCELL * min, DCELL * max, const struct Colors *colors)
 {
     *min = colors->cmin;
     *max = colors->cmax;

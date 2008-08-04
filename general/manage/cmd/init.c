@@ -1,9 +1,9 @@
 #include "list.h"
 #include "local_proto.h"
 
-int init (char *pgm)
+int init(char *pgm)
 {
-    G_gisinit(pgm) ;
+    G_gisinit(pgm);
 
     read_list(0);
 

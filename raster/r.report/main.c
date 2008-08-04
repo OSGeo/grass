@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.report
@@ -16,8 +17,7 @@
 #include <stdlib.h>
 #include "global.h"
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct GModule *module;
 
@@ -25,12 +25,11 @@ main (int argc, char *argv[])
 
     module = G_define_module();
     module->keywords = _("raster, statistics");
-    module->description =
-	_("Reports statistics for raster map layers.");
+    module->description = _("Reports statistics for raster map layers.");
 
-    parse_command_line (argc, argv);
+    parse_command_line(argc, argv);
 
-    G_get_window (&window);
+    G_get_window(&window);
 
     get_stats();
 

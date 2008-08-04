@@ -18,7 +18,6 @@
 #define COLUMNS     9
 
 #define MAX_CVAL 65535
-#define HEXVAL(n) (MAX_CVAL * (n)/15.)   
+#define HEXVAL(n) (MAX_CVAL * (n)/15.)
 #define CHARVAL(n) (MAX_CVAL * (n)/255.)
 #define TOCHARVAL(n) ((n) * 255./MAX_CVAL)
-

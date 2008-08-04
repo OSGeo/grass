@@ -14,9 +14,9 @@
 
 #include <math.h>
 
-# define RpD ((2 * M_PI) / 360.)        /* radians/degree */
-# define D2R(d) (double)(d * RpD)       /* degrees->radians */
-# define R2D(d) (double)(d / RpD)       /* radians->degrees */
+# define RpD ((2 * M_PI) / 360.)	/* radians/degree */
+# define D2R(d) (double)(d * RpD)	/* degrees->radians */
+# define R2D(d) (double)(d / RpD)	/* radians->degrees */
 
 
 
@@ -32,17 +32,18 @@
  * \param[out] Y1  Y component of point to be rotated (variable is modified!)
  * \param angle  in degrees, measured CCW from east
  */
-void G_rotate_around_point(double X0, double Y0, double *X1, double *Y1, double angle)
+void G_rotate_around_point(double X0, double Y0, double *X1, double *Y1,
+			   double angle)
 {
-	double dx = *X1 - X0;
-	double dy = *Y1 - Y0;
-	double c = cos(D2R(angle));
-	double s = sin(D2R(angle));
-	double dx1 = dx * c - dy * s;
-	double dy1 = dx * s + dy * c;
+    double dx = *X1 - X0;
+    double dy = *Y1 - Y0;
+    double c = cos(D2R(angle));
+    double s = sin(D2R(angle));
+    double dx1 = dx * c - dy * s;
+    double dy1 = dx * s + dy * c;
 
-	*X1 = X0 + dx1;
-	*Y1 = Y0 + dy1;
+    *X1 = X0 + dx1;
+    *Y1 = Y0 + dy1;
 }
 
 /*!
@@ -63,10 +64,11 @@ void G_rotate_around_point_int(int X0, int Y0, int *X1, int *Y1, double angle)
     double x = (double)*X1;
     double y = (double)*Y1;
 
-    if( angle == 0.0 ) return;
+    if (angle == 0.0)
+	return;
 
     G_rotate_around_point((double)X0, (double)Y0, &x, &y, angle);
 
-    *X1 = (int)floor( x + 0.5 );
-    *Y1 = (int)floor( y + 0.5 );
+    *X1 = (int)floor(x + 0.5);
+    *Y1 = (int)floor(y + 0.5);
 }

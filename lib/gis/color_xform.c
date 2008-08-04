@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       gis library
@@ -55,10 +56,8 @@
  *  \return int
  */
 
-int G_histogram_eq_colors(
-    struct Colors *dst,
-    struct Colors *src,
-    struct Cell_stats *statf)
+int G_histogram_eq_colors(struct Colors *dst,
+			  struct Colors *src, struct Cell_stats *statf)
 {
     DCELL min, max;
     int red, grn, blu;
@@ -79,7 +78,7 @@ int G_histogram_eq_colors(
     total = 0;
 
     G_rewind_cell_stats(statf);
-    while (G_next_cell_stat (&cat, &count, statf))
+    while (G_next_cell_stat(&cat, &count, statf))
 	if (count > 0)
 	    total += count;
 
@@ -93,15 +92,14 @@ int G_histogram_eq_colors(
     G_get_d_raster_color(&min, &red, &grn, &blu, src);
 
     G_rewind_cell_stats(statf);
-    while (G_next_cell_stat(&cat, &count, statf))
-    {
+    while (G_next_cell_stat(&cat, &count, statf)) {
 	int red2, grn2, blu2;
 	DCELL x;
 
 	if (count <= 0)
 	    continue;
 
-	x = min + (max - min) * (sum + count/2.0) / total;
+	x = min + (max - min) * (sum + count / 2.0) / total;
 	G_get_d_raster_color(&x, &red2, &grn2, &blu2, src);
 
 	if (!first)
@@ -128,10 +126,7 @@ int G_histogram_eq_colors(
  *  \return int
  */
 
-int G_log_colors(
-    struct Colors *dst,
-    struct Colors *src,
-    int samples)
+int G_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;
     double lmin, lmax;
@@ -152,8 +147,7 @@ int G_log_colors(
     G_get_null_value_color(&red, &grn, &blu, src);
     G_set_null_value_color(red, grn, blu, dst);
 
-    for (i = 0; i <= samples; i++)
-    {
+    for (i = 0; i <= samples; i++) {
 	int red2, grn2, blu2;
 	double lx;
 	DCELL x, y;
@@ -165,14 +159,14 @@ int G_log_colors(
 	    x = min;
 	else if (i == samples)
 	    x = max;
-	else
-	{
+	else {
 	    lx = lmin + (lmax - lmin) * i / samples;
 	    x = exp(lx);
 	}
 
 	if (i > 0)
-	    G_add_d_raster_color_rule(&prev, red, grn, blu, &x, red2, grn2, blu2, dst);
+	    G_add_d_raster_color_rule(&prev, red, grn, blu, &x, red2, grn2,
+				      blu2, dst);
 
 	prev = x;
 
@@ -183,4 +177,3 @@ int G_log_colors(
 
     return 0;
 }
-

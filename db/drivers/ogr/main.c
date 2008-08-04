@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       OGR driver 
@@ -20,8 +21,8 @@
 #include "globals.h"
 #include "dbdriver.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-	init_dbdriver();
-	exit (db_driver (argc, argv));
+    init_dbdriver();
+    exit(db_driver(argc, argv));
 }

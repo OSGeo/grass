@@ -1,14 +1,13 @@
 /* Function: show_scale
-**
-** Author: Paul W. Carlson	April 1992
-*/
+ **
+ ** Author: Paul W. Carlson     April 1992
+ */
 #include "ps_info.h"
 
 #define DY		10.0
 #define FONTSIZE	10.0
 
-int 
-show_scale (void)
+int show_scale(void)
 {
     double fontsize;
 

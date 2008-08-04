@@ -1,19 +1,19 @@
 /*!
-  \file gsurf.h
- 
-  \brief OGSF library - main header
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL (January 1993)
-*/
+   \file gsurf.h
+
+   \brief OGSF library - main header
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL (January 1993)
+ */
 
 #ifndef _GSURF_H
 #define _GSURF_H
@@ -27,9 +27,9 @@
 
 /* current maximums */
 #define MAX_SURFS      12
-#define MAX_VECTS      50 
+#define MAX_VECTS      50
 #define MAX_SITES      50
-#define MAX_VOLS       12 /* should match MAX_VOL_FILES below ? */
+#define MAX_VOLS       12	/* should match MAX_VOL_FILES below ? */
 #define MAX_DSP        12
 #define MAX_ATTS        7
 #define MAX_LIGHTS      3
@@ -43,7 +43,7 @@
 
 /* surface display modes */
 #define DM_GOURAUD   0x00000100
-#define DM_FLAT      0x00000200   /* defined for symmetry */
+#define DM_FLAT      0x00000200	/* defined for symmetry */
 
 #define DM_FRINGE    0x00000010
 
@@ -60,7 +60,7 @@
 #define IFLAG unsigned int
 
 /* surface attribute ***descriptors***  */
-#define ATT_NORM      0     /* library use only */
+#define ATT_NORM      0		/* library use only */
 #define ATT_TOPO      1
 #define ATT_COLOR     2
 #define ATT_MASK      3
@@ -86,7 +86,7 @@
 #define ST_CON_TREE   7
 #define ST_ASTER      8
 #define ST_GYRO       9
-/* ACS_MODIFY_One Line site_attr management ***************************************/
+/* ACS_MODIFY_One Line site_attr management ************************************** */
 #define ST_HISTOGRAM  10
 
 /* site attribute modes (what attribute of marker category is used for) */

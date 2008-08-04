@@ -1,4 +1,4 @@
-/* @(#)r.proj.h	v1.2 - 27 Jun 1995 	-emes- */
+/* @(#)r.proj.h v1.2 - 27 Jun 1995      -emes- */
 
 #ifndef R_PROJ_H
 #define R_PROJ_H
@@ -16,33 +16,39 @@ typedef FCELL block[BDIM][BDIM];
 
 struct cache
 {
-	int fd;
-	int stride;
-	int nblocks;
-	block **grid;
-	block *blocks;
-	int *refs;
+    int fd;
+    int stride;
+    int nblocks;
+    block **grid;
+    block *blocks;
+    int *refs;
 };
 
-typedef void (*func)(struct cache *, void *, int, double *, double *, struct Cell_head *);
+typedef void (*func) (struct cache *, void *, int, double *, double *,
+		      struct Cell_head *);
 
 struct menu
 {
-    func method;	/* routine to interpolate new value	 */
-    char *name;  	/* method name				 */
-    char *text;		/* menu display - full description	 */
+    func method;		/* routine to interpolate new value      */
+    char *name;			/* method name                           */
+    char *text;			/* menu display - full description       */
 };
 
-extern void bordwalk(struct Cell_head *, struct Cell_head *, struct pj_info *, struct pj_info *);
+extern void bordwalk(struct Cell_head *, struct Cell_head *, struct pj_info *,
+		     struct pj_info *);
 extern struct cache *readcell(int, const char *);
 extern block *get_block(struct cache *, int);
+
 /* declare resampling methods */
 /* bilinear.c */
-extern void p_bilinear(struct cache *, void *, int, double *, double *, struct Cell_head *);
+extern void p_bilinear(struct cache *, void *, int, double *, double *,
+		       struct Cell_head *);
 /* cubic.c */
-extern void p_cubic(struct cache *, void *, int, double *, double *, struct Cell_head *);
+extern void p_cubic(struct cache *, void *, int, double *, double *,
+		    struct Cell_head *);
 /* nearest.c */
-extern void p_nearest(struct cache *, void *, int, double *, double *, struct Cell_head *);
+extern void p_nearest(struct cache *, void *, int, double *, double *,
+		      struct Cell_head *);
 
 #if 1
 
@@ -55,22 +61,22 @@ extern void p_nearest(struct cache *, void *, int, double *, double *, struct Ce
 
 static inline int BKIDX(const struct cache *c, int y, int x)
 {
-	return y * c->stride + x;
+    return y * c->stride + x;
 }
 
 static inline block *BKPTR(const struct cache *c, int y, int x)
 {
-	return c->grid[BKIDX(c,y,x)];
+    return c->grid[BKIDX(c, y, x)];
 }
 
 static inline block *BLOCK(struct cache *c, int y, int x)
 {
-	return BKPTR(c,y,x) ? BKPTR(c,y,x) : get_block(c,BKIDX(c,y,x));
+    return BKPTR(c, y, x) ? BKPTR(c, y, x) : get_block(c, BKIDX(c, y, x));
 }
 
 static inline FCELL *CPTR(struct cache *c, int y, int x)
 {
-	return &(*BLOCK(c,HI(y),HI(x)))[LO(y)][LO(x)];
+    return &(*BLOCK(c, HI(y), HI(x)))[LO(y)][LO(x)];
 }
 
 #endif

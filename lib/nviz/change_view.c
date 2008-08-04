@@ -1,32 +1,32 @@
 /*!
-  \file change_view.c
- 
-  \brief Change view settings
-  
-  COPYRIGHT: (C) 2008 by the GRASS Development Team
+   \file change_view.c
 
-  This program is free software under the GNU General Public
-  License (>=v2). Read the file COPYING that comes with GRASS
-  for details.
+   \brief Change view settings
 
-  Based on visualization/nviz/src/change_view.c
+   COPYRIGHT: (C) 2008 by the GRASS Development Team
 
-  \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+   This program is free software under the GNU General Public
+   License (>=v2). Read the file COPYING that comes with GRASS
+   for details.
 
-  \date 2008
-*/
+   Based on visualization/nviz/src/change_view.c
+
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008)
+
+   \date 2008
+ */
 
 #include <grass/glocale.h>
 #include <grass/nviz.h>
 
 /*!
-  \brief GL canvas resized
+   \brief GL canvas resized
 
-  \param width window width
-  \param height window height
+   \param width window width
+   \param height window height
 
-  \return 1 on success
-  \return 0 on failure (window resized by dafault to 20x20 px)
+   \return 1 on success
+   \return 0 on failure (window resized by dafault to 20x20 px)
  */
 int Nviz_resize_window(int width, int height)
 {
@@ -52,13 +52,13 @@ int Nviz_resize_window(int width, int height)
 }
 
 /*!
-  \brief Update ranges
+   \brief Update ranges
 
-  Call whenever a new surface is added, deleted, or exag changes
+   Call whenever a new surface is added, deleted, or exag changes
 
-  \return 1
-*/
-int Nviz_update_ranges(nv_data *dc)
+   \return 1
+ */
+int Nviz_update_ranges(nv_data * dc)
 {
     float zmin, zmax, exag;
 
@@ -87,32 +87,30 @@ int Nviz_update_ranges(nv_data *dc)
 }
 
 /*!
-  \brief Change position of view
+   \brief Change position of view
 
-  \param data nviz data
-  \param x_pos,y_pos x,y position (model coordinates)
+   \param data nviz data
+   \param x_pos,y_pos x,y position (model coordinates)
 
-  \return 1
-*/
-int Nviz_set_viewpoint_position(nv_data *data,
-				float x_pos, float y_pos)
+   \return 1
+ */
+int Nviz_set_viewpoint_position(nv_data * data, float x_pos, float y_pos)
 {
     float xpos, ypos, from[3];
     float tempx, tempy;
-    
+
     xpos = x_pos;
     xpos = (xpos < 0) ? 0 : (xpos > 1.0) ? 1.0 : xpos;
     ypos = 1.0 - y_pos;
     ypos = (ypos < 0) ? 0 : (ypos > 1.0) ? 1.0 : ypos;
 
-    if (x_pos < 0.0 || x_pos > 1.0 ||
-	y_pos < 0.0 || y_pos > 1.0) {
-	G_warning (_("Invalid view position coordinates, using %f,%f"),
-		   xpos, 1.0 - ypos);
+    if (x_pos < 0.0 || x_pos > 1.0 || y_pos < 0.0 || y_pos > 1.0) {
+	G_warning(_("Invalid view position coordinates, using %f,%f"),
+		  xpos, 1.0 - ypos);
     }
 
     GS_get_from(from);
-    
+
     tempx = xpos * RANGE - RANGE_OFFSET;
     tempy = ypos * RANGE - RANGE_OFFSET;
 
@@ -130,14 +128,14 @@ int Nviz_set_viewpoint_position(nv_data *data,
 }
 
 /*!
-  \brief Change viewpoint height
+   \brief Change viewpoint height
 
-  \param data nviz data
-  \param height height value (world coordinates)
+   \param data nviz data
+   \param height height value (world coordinates)
 
-  \return 1
-*/
-int Nviz_set_viewpoint_height(nv_data *data, float height)
+   \return 1
+ */
+int Nviz_set_viewpoint_height(nv_data * data, float height)
 {
     float from[3];
 
@@ -151,7 +149,7 @@ int Nviz_set_viewpoint_height(nv_data *data, float height)
 	/*
 	   normalize (from);
 	   GS_setlight_position(1, from[X], from[Y], from[Z], 0);
-	*/
+	 */
 
 	/* Nviz_draw_quick(data); */
     }
@@ -160,18 +158,18 @@ int Nviz_set_viewpoint_height(nv_data *data, float height)
 }
 
 /*!
-  \brief Change viewpoint perspective (field of view)
+   \brief Change viewpoint perspective (field of view)
 
-  \param data nviz data
-  \param persp perspective value (0-100, in degrees)
+   \param data nviz data
+   \param persp perspective value (0-100, in degrees)
 
-  \return 1
-*/
-int Nviz_set_viewpoint_persp(nv_data *data, int persp)
+   \return 1
+ */
+int Nviz_set_viewpoint_persp(nv_data * data, int persp)
 {
     int fov;
 
-    fov = (int) (10 * persp);
+    fov = (int)(10 * persp);
     GS_set_fov(fov);
 
     /* Nviz_draw_quick(data); */
@@ -180,31 +178,31 @@ int Nviz_set_viewpoint_persp(nv_data *data, int persp)
 }
 
 /*!
-  \brief Change viewpoint twist
+   \brief Change viewpoint twist
 
-  \param data nviz data
-  \param persp twist value (-180-180, in degrees)
+   \param data nviz data
+   \param persp twist value (-180-180, in degrees)
 
-  \return 1
-*/
-int Nviz_set_viewpoint_twist(nv_data *data, int twist)
+   \return 1
+ */
+int Nviz_set_viewpoint_twist(nv_data * data, int twist)
 {
     GS_set_twist(10 * twist);
-    
+
     /* Nviz_draw_quick(data); */
 
     return 1;
 }
 
 /*!
-  \brief Change z-exag value
+   \brief Change z-exag value
 
-  \param data nviz data
-  \param exag exag value
+   \param data nviz data
+   \param exag exag value
 
-  \return 1
-*/
-int Nviz_change_exag(nv_data *data, float exag)
+   \return 1
+ */
+int Nviz_change_exag(nv_data * data, float exag)
 {
     float temp;
 
@@ -213,7 +211,7 @@ int Nviz_change_exag(nv_data *data, float exag)
     if (exag != temp) {
 	GS_set_global_exag(exag);
 	Nviz_update_ranges(data);
-	
+
 	/* Nviz_draw_quick(data); */
     }
 

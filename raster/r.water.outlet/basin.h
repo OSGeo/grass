@@ -15,16 +15,15 @@
 #define NOMASK			1
 #define MIN_SLOPE		.00001
 #define MIN_GRADIENT_DEGREES	1
-#define DEG_TO_RAD		.017453293  /* pi / 180 */
+#define DEG_TO_RAD		.017453293	/* pi / 180 */
 #define METER_TO_FOOT		3.281
 #define PAGE_BLOCK		512
 #define RITE			1
 #define LEFT			2
 #define NEITHER			0
 
-NODE
-{
-	int	row, col;
+NODE {
+    int row, col;
 };
 
 #ifdef MAIN
@@ -41,22 +40,24 @@ NODE
 #define DCVAR
 #endif
 
-GLOBAL SHORT	drain[3][3]	DRAINVAR; 
-GLOBAL SHORT	updrain[3][3]	UPDRAINVAR; 
-GLOBAL char dr_mod[9] DRVAR ;
-GLOBAL char dc_mod[9] DCVAR ;
-GLOBAL char	basin_name[GNAME_MAX], swale_name[GNAME_MAX], half_name[GNAME_MAX], elev_name[GNAME_MAX], armsed_name[GNAME_MAX];
-GLOBAL int	nrows, ncols, done, total;
-GLOBAL int	array_size, high_index, do_index;
-GLOBAL char	*drain_ptrs, ha_f, el_f, ar_f;
-GLOBAL RAMSEG	ba_seg, pt_seg, sl_seg;
-GLOBAL int	ncols_less_one, nrows_less_one;
-GLOBAL NODE	*to_do;
-GLOBAL FILE	*arm_fd, *fp;
-GLOBAL FLAG	*doner, *swale, *left;
-GLOBAL CELL	*bas;
-GLOBAL double   half_res, diag, max_length, dep_slope;
+GLOBAL SHORT drain[3][3] DRAINVAR;
+GLOBAL SHORT updrain[3][3] UPDRAINVAR;
+GLOBAL char dr_mod[9] DRVAR;
+GLOBAL char dc_mod[9] DCVAR;
+GLOBAL char basin_name[GNAME_MAX], swale_name[GNAME_MAX],
+    half_name[GNAME_MAX], elev_name[GNAME_MAX], armsed_name[GNAME_MAX];
+GLOBAL int nrows, ncols, done, total;
+GLOBAL int array_size, high_index, do_index;
+GLOBAL char *drain_ptrs, ha_f, el_f, ar_f;
+GLOBAL RAMSEG ba_seg, pt_seg, sl_seg;
+GLOBAL int ncols_less_one, nrows_less_one;
+GLOBAL NODE *to_do;
+GLOBAL FILE *arm_fd, *fp;
+GLOBAL FLAG *doner, *swale, *left;
+GLOBAL CELL *bas;
+GLOBAL double half_res, diag, max_length, dep_slope;
 GLOBAL struct Cell_head window;
+
 /*
-GLOBAL CELL     *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep, *ril_buf;
-*/
+   GLOBAL CELL     *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep, *ril_buf;
+ */

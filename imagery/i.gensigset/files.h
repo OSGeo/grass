@@ -15,7 +15,9 @@ struct files
 
 /* closefiles.c */
 int closefiles(struct files *);
+
 /* read_data.c */
 int read_data(struct files *, struct SigSet *);
+
 /* read_train.c */
 int read_training_map(CELL *, int, int, struct files *);

@@ -33,9 +33,9 @@ double D_d_to_a_row(double);
 double D_d_to_a_col(double);
 double D_get_ns_resolution(void);
 double D_get_ew_resolution(void);
-void D_get_u(double [2][2]);
-void D_get_a(int [2][2]);
-void D_get_d(int [2][2]);
+void D_get_u(double[2][2]);
+void D_get_a(int[2][2]);
+void D_get_d(int[2][2]);
 
 /* color_list.c */
 char *D_color_list(void);
@@ -116,8 +116,10 @@ int D_color_of_type(const void *, struct Colors *, RASTER_MAP_TYPE);
 int D_setup(int);
 
 /* symbol.c */
-void D_symbol(const SYMBOL *, int, int, const RGBA_Color *, const RGBA_Color *);
-void D_symbol2(const SYMBOL *, int, int, const RGBA_Color *, const RGBA_Color *);
+void D_symbol(const SYMBOL *, int, int, const RGBA_Color *,
+	      const RGBA_Color *);
+void D_symbol2(const SYMBOL *, int, int, const RGBA_Color *,
+	       const RGBA_Color *);
 
 /* tran_colr.c */
 int D_translate_color(const char *);

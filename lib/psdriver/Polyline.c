@@ -3,16 +3,15 @@
 
 void PS_Polyline_abs(const int *xarray, const int *yarray, int number)
 {
-	int i;
+    int i;
 
-	if (number < 2)
-		return;
+    if (number < 2)
+	return;
 
-	output("%d %d POLYLINESTART\n", xarray[0], yarray[0]);
+    output("%d %d POLYLINESTART\n", xarray[0], yarray[0]);
 
-	for (i = 1; i < number; i++)
-		output("%d %d POLYLINEVERTEX\n", xarray[i], yarray[i]);
+    for (i = 1; i < number; i++)
+	output("%d %d POLYLINEVERTEX\n", xarray[i], yarray[i]);
 
-	output("POLYLINEEND\n");
+    output("POLYLINEEND\n");
 }
-

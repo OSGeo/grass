@@ -1,3 +1,4 @@
+
 /**
    \file get_proj.c
 
@@ -185,9 +186,9 @@ int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
     /* Workaround to stop PROJ reading values from defaults file when
      * rf (and sometimes ellps) is not specified */
     if (G_find_key_value("no_defs", in_proj_keys) == NULL) {
-        sprintf(buffa, "no_defs");
-        alloc_options(buffa);
-    }	    	    
+	sprintf(buffa, "no_defs");
+	alloc_options(buffa);
+    }
 
     /* If datum parameters are present in the PROJ_INFO keys, pass them on */
     if (GPJ__get_datum_params(in_proj_keys, &datum, &params) == 2) {
@@ -199,7 +200,7 @@ int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
 	 * from the datum.table file */
     }
     else if (datum != NULL) {
-        
+
 	if (GPJ_get_default_datum_params_by_name(datum, &params) > 0) {
 	    sprintf(buffa, params);
 	    alloc_options(buffa);
@@ -225,15 +226,17 @@ int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
     pj_set_finder(FINDERFUNC);
 
     if (!(pj = pj_init(nopt1, opt_in))) {
-	strcpy(buffa, _("Unable to initialise PROJ.4 with the following parameter list:"));
+	strcpy(buffa,
+	       _
+	       ("Unable to initialise PROJ.4 with the following parameter list:"));
 	for (i = 0; i < nopt1; i++) {
 	    char err[50];
-	    sprintf (err, " +%s", opt_in[i]);
-	    strcat (buffa, err);
+
+	    sprintf(err, " +%s", opt_in[i]);
+	    strcat(buffa, err);
 	}
-	G_warning (buffa);
-	G_warning (_("The error message: %s"),
-		   pj_strerrno(pj_errno));
+	G_warning(buffa);
+	G_warning(_("The error message: %s"), pj_strerrno(pj_errno));
 	return -1;
     }
     info->pj = pj;
@@ -246,7 +249,7 @@ static void alloc_options(char *buffa)
     int nsize;
 
     nsize = strlen(buffa);
-    opt_in[nopt1++] = (char *) G_malloc(nsize + 1);
+    opt_in[nopt1++] = (char *)G_malloc(nsize + 1);
     sprintf(opt_in[nopt1 - 1], buffa);
     return;
 }
@@ -271,7 +274,7 @@ int pj_get_string(struct pj_info *info, char *str)
 	sprintf(info->proj, "ll");
 	sprintf(buffa, "proj=latlong ellps=WGS84");
 	nsize = strlen(buffa);
-	opt_in[nopt] = (char *) G_malloc(nsize + 1);
+	opt_in[nopt] = (char *)G_malloc(nsize + 1);
 	sprintf(opt_in[nopt++], buffa);
     }
     else {
@@ -291,7 +294,8 @@ int pj_get_string(struct pj_info *info, char *str)
 		if (nsize = strlen(s), nsize) {
 		    if (nopt >= MAX_PARGS) {
 			fprintf(stderr, "nopt = %d, s=%s\n", nopt, str);
-			G_fatal_error(_("Option input overflowed option table"));
+			G_fatal_error(_
+				      ("Option input overflowed option table"));
 		    }
 
 		    if (strncmp("zone=", s, 5) == 0) {
@@ -310,7 +314,7 @@ int pj_get_string(struct pj_info *info, char *str)
 			sprintf(buffa, s);
 		    }
 		    nsize = strlen(buffa);
-		    opt_in[nopt] = (char *) G_malloc(nsize + 1);
+		    opt_in[nopt] = (char *)G_malloc(nsize + 1);
 		    sprintf(opt_in[nopt++], buffa);
 		}
 	    }
@@ -322,7 +326,8 @@ int pj_get_string(struct pj_info *info, char *str)
     pj_set_finder(FINDERFUNC);
 
     if (!(pj = pj_init(nopt, opt_in))) {
-	G_warning (_("Unable to initialize pj cause: %s"), pj_strerrno(pj_errno));
+	G_warning(_("Unable to initialize pj cause: %s"),
+		  pj_strerrno(pj_errno));
 	return -1;
     }
     info->pj = pj;
@@ -397,9 +402,11 @@ int pj_print_proj_params(struct pj_info *iproj, struct pj_info *oproj)
     if (iproj) {
 	str = pj_get_def(iproj->pj, 1);
 	if (str != NULL) {
-	    fprintf (stderr, "%s: %s\n", _("Input Projection Parameters"), str);
+	    fprintf(stderr, "%s: %s\n", _("Input Projection Parameters"),
+		    str);
 	    G_free(str);
-	    fprintf (stderr, "%s: %.16g\n", _("Input Unit Factor"), iproj->meters);
+	    fprintf(stderr, "%s: %.16g\n", _("Input Unit Factor"),
+		    iproj->meters);
 	}
 	else
 	    return -1;
@@ -408,9 +415,11 @@ int pj_print_proj_params(struct pj_info *iproj, struct pj_info *oproj)
     if (oproj) {
 	str = pj_get_def(oproj->pj, 1);
 	if (str != NULL) {
-	    fprintf (stderr, "%s: %s\n", _("Output Projection Parameters"), str);
+	    fprintf(stderr, "%s: %s\n", _("Output Projection Parameters"),
+		    str);
 	    G_free(str);
-	    fprintf (stderr, "%s: %.16g\n", _("Output Unit Factor"), oproj->meters);
+	    fprintf(stderr, "%s: %.16g\n", _("Output Unit Factor"),
+		    oproj->meters);
 	}
 	else
 	    return -1;

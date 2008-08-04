@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.mode
@@ -26,10 +27,11 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	struct GModule *module;
-    struct {
+    struct GModule *module;
+    struct
+    {
 	struct Option *base, *cover, *output;
     } parm;
     char *basemap, *base_mapset;
@@ -42,14 +44,14 @@ int main (int argc, char *argv[])
     long basecat, covercat, catb, catc;
     double value, max;
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
-	module = G_define_module();
-	module->keywords = _("raster");
+    module = G_define_module();
+    module->keywords = _("raster");
     module->description =
-		_("Finds the mode of values in a cover map within "
-		"areas assigned the same category value in a "
-		"user-specified base map.");
+	_("Finds the mode of values in a cover map within "
+	  "areas assigned the same category value in a "
+	  "user-specified base map.");
 
     parm.base = G_define_option();
     parm.base->key = "base";
@@ -72,87 +74,74 @@ int main (int argc, char *argv[])
     parm.output->type = TYPE_STRING;
     parm.output->gisprompt = "new,cell,raster";
 
-    if(G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(1);
-    
+
     basemap = parm.base->answer;
     covermap = parm.cover->answer;
     outmap = parm.output->answer;
 
-    base_mapset = G_find_cell2 (basemap, "");
-    if (base_mapset == NULL) 
-    {
+    base_mapset = G_find_cell2(basemap, "");
+    if (base_mapset == NULL) {
 	G_fatal_error(_("%s: base raster map not found"), basemap);
     }
 
-    cover_mapset = G_find_cell2 (covermap, "");
-    if (cover_mapset == NULL)
-    {
+    cover_mapset = G_find_cell2(covermap, "");
+    if (cover_mapset == NULL) {
 	G_fatal_error(_("%s: cover raster map not found"), covermap);
     }
-    if (G_legal_filename(outmap) < 0)
-    {
+    if (G_legal_filename(outmap) < 0) {
 	G_fatal_error(_("<%s> is an illegal file name"), outmap);
     }
-    if (strcmp(G_mapset(),base_mapset)==0 && strcmp(basemap, outmap) == 0)
-    {
+    if (strcmp(G_mapset(), base_mapset) == 0 && strcmp(basemap, outmap) == 0) {
 	G_fatal_error(_("%s: base map and output map must be different"),
-		outmap);
+		      outmap);
     }
-    if (G_read_cats (covermap, cover_mapset, &cover_cats) < 0)
-    {
-	G_fatal_error (_( "%s: Unable to read category labels"), covermap);
+    if (G_read_cats(covermap, cover_mapset, &cover_cats) < 0) {
+	G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
-    strcpy (command, "r.stats -an \"");
-    strcat (command, G_fully_qualified_name (basemap, base_mapset));
-    strcat (command, ",");
-    strcat (command, G_fully_qualified_name (covermap, cover_mapset));
-    strcat (command, "\"");
+    strcpy(command, "r.stats -an \"");
+    strcat(command, G_fully_qualified_name(basemap, base_mapset));
+    strcat(command, ",");
+    strcat(command, G_fully_qualified_name(covermap, cover_mapset));
+    strcat(command, "\"");
 
     /* printf(command); */
-    stats = popen (command, "r");
+    stats = popen(command, "r");
 
-    sprintf (command, "r.reclass i=\"%s\" o=\"%s\"",
-	G_fully_qualified_name (basemap, base_mapset), outmap);
+    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"",
+	    G_fully_qualified_name(basemap, base_mapset), outmap);
 
     /* printf(command); */
-    reclass = popen (command, "w");
+    reclass = popen(command, "w");
 
     first = 1;
-    while (read_stats(stats, &basecat, &covercat, &value))
-    {
-	if (first)
-	{
+    while (read_stats(stats, &basecat, &covercat, &value)) {
+	if (first) {
 	    first = 0;
 	    catb = basecat;
 	    catc = covercat;
 	    max = value;
 	}
-	if (basecat != catb)
-	{
-	    write_reclass (reclass, catb, catc, G_get_cat (catc, &cover_cats));
+	if (basecat != catb) {
+	    write_reclass(reclass, catb, catc, G_get_cat(catc, &cover_cats));
 	    catb = basecat;
 	    catc = covercat;
 	    max = value;
 	}
-	if (value > max)
-	{
+	if (value > max) {
 	    catc = covercat;
 	    max = value;
 	}
     }
-    if (first)
-    {
+    if (first) {
 	catb = catc = 0;
     }
-    write_reclass (reclass, catb, catc, G_get_cat (catc, &cover_cats));
+    write_reclass(reclass, catb, catc, G_get_cat(catc, &cover_cats));
 
-    pclose (stats);
-    pclose (reclass);
+    pclose(stats);
+    pclose(reclass);
 
     exit(0);
 }
-
-
-

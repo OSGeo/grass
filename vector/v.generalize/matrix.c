@@ -46,6 +46,7 @@ int matrix_init(int rows, int cols, MATRIX * res)
 void matrix_free(MATRIX m)
 {
     int i;
+
     for (i = 0; i < m.rows; i++)
 	G_free(m.a[i]);
     G_free(m.a);
@@ -62,6 +63,7 @@ int matrix_mult(MATRIX a, MATRIX b, MATRIX * res)
      */
 
     int i, j, k;
+
     for (i = 0; i < a.rows; i++)
 	for (j = 0; j < b.cols; j++) {
 	    res->a[i][j] = 0;
@@ -77,6 +79,7 @@ int matrix_add_identity(double s, MATRIX * m)
     if (m->rows != m->cols)
 	return 0;
     int i;
+
     for (i = 0; i < m->rows; i++)
 	m->a[i][i] += s;
 
@@ -89,8 +92,10 @@ int matrix_add_identity(double s, MATRIX * m)
 void matrix_swap_rows(int x, int y, MATRIX * m)
 {
     int i;
+
     for (i = 0; i < m->cols; i++) {
 	double t;
+
 	t = m->a[x][i];
 	m->a[x][i] = m->a[y][i];
 	m->a[y][i] = t;
@@ -103,6 +108,7 @@ void matrix_swap_rows(int x, int y, MATRIX * m)
 void matrix_row_scalar(int row, double s, MATRIX * m)
 {
     int i;
+
     for (i = 0; i < m->cols; i++)
 	m->a[row][i] *= s;
     return;
@@ -115,6 +121,7 @@ void matrix_row_scalar(int row, double s, MATRIX * m)
 void matrix_row_add_multiple(int ra, int rb, double s, MATRIX * m)
 {
     int i;
+
     for (i = 0; i < m->cols; i++)
 	m->a[ra][i] += m->a[rb][i] * s;
     return;
@@ -154,6 +161,7 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
 
     for (i = 0; i < n; i++) {
 	int found = 0;
+
 	if (percents)
 	    G_percent(i, n, 1);
 	for (j = i; j < n; j++) {
@@ -167,12 +175,14 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
 	if (!found)
 	    return 0;
 	double c = (double)1.0 / a.a[i][i];
+
 	matrix_row_scalar(i, c, &a);
 	matrix_row_scalar(i, c, res);
 	for (j = 0; j < n; j++) {
 	    if (i == j)
 		continue;
 	    double c = -a.a[j][i];
+
 	    if (c == 0.0)
 		continue;
 	    matrix_row_add_multiple(j, i, c, &a);
@@ -186,6 +196,7 @@ int matrix_inverse(MATRIX a, MATRIX * res, int percents)
 void matrix_mult_scalar(double s, MATRIX * m)
 {
     int i, j;
+
     for (i = 0; i < m->rows; i++)
 	for (j = 0; j < m->cols; j++)
 	    m->a[i][j] *= s;
@@ -194,6 +205,7 @@ void matrix_mult_scalar(double s, MATRIX * m)
 void matrix_add(MATRIX a, MATRIX b, MATRIX * res)
 {
     int i, j;
+
     for (i = 0; i < res->rows; i++)
 	for (j = 0; j < res->cols; j++)
 	    res->a[i][j] = a.a[i][j] + b.a[i][j];
@@ -202,8 +214,10 @@ void matrix_add(MATRIX a, MATRIX b, MATRIX * res)
 void matrix_print(MATRIX a)
 {
     int i, j;
+
     for (i = 0; i < a.rows; i++) {
 	double s = 0;
+
 	for (j = 0; j < a.cols; j++) {
 	    printf("%.3lf ", a.a[i][j]);
 	    s += a.a[i][j];

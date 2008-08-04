@@ -1,3 +1,4 @@
+
 /**
  * \file V_support.c
  *
@@ -46,37 +47,36 @@
 
 int V__dump_window(void)
 {
-	int atrow, atcol ;
-	FILE *file ;
-	char home[GPATH_MAX];
-	int curx, cury ;
+    int atrow, atcol;
+    FILE *file;
+    char home[GPATH_MAX];
+    int curx, cury;
 
-	sprintf(home,"%s/visual_ask", G_home()) ;
-    
-	if ((file=fopen(home, "a")) == NULL)
-	{
-		V_error(_("Unable to open file %s"), home);
-		return(-1) ;
+    sprintf(home, "%s/visual_ask", G_home());
+
+    if ((file = fopen(home, "a")) == NULL) {
+	V_error(_("Unable to open file %s"), home);
+	return (-1);
+    }
+
+    getyx(stdscr, cury, curx);
+
+    fprintf(file,
+	    "--------------------------------------------------------\n");
+    for (atrow = 0; atrow < LINES; atrow++) {
+	for (atcol = 0; atcol < COLS - 1; atcol++) {
+	    move(atrow, atcol);
+	    fprintf(file, "%c", (int)(inch() & A_CHARTEXT));
 	}
+	fprintf(file, "\n");
+    }
+    fprintf(file,
+	    "--------------------------------------------------------\n");
+    fprintf(file, "\n\n");
+    fclose(file);
 
-	getyx(stdscr, cury, curx) ;
-
-	fprintf(file,"--------------------------------------------------------\n") ;
-	for (atrow=0; atrow<LINES; atrow++)
-	{
-		for (atcol=0; atcol<COLS-1; atcol++)
-		{
-			move(atrow, atcol) ;
-			fprintf(file,"%c",(int)(inch() & A_CHARTEXT)) ;
-		}
-		fprintf(file,"\n") ;
-	}
-	fprintf(file,"--------------------------------------------------------\n") ;
-	fprintf(file,"\n\n") ;
-	fclose(file) ;
-
-	move(cury, curx) ;
-	return 0;
+    move(cury, curx);
+    return 0;
 }
 
 
@@ -90,21 +90,21 @@ int V__dump_window(void)
  * \return always returns 0;
  */
 
-void V__remove_trail( int ans_col , char *answer )
+void V__remove_trail(int ans_col, char *answer)
 {
-	char *ans_ptr ;
+    char *ans_ptr;
 
-	ans_ptr = answer + ans_col ;
-	while (ans_col>=0) 
-	{
-		int c = *(unsigned char *)ans_ptr;
-		if (c > '\040' && c != '\177' && c != '_')
-			return ;
+    ans_ptr = answer + ans_col;
+    while (ans_col >= 0) {
+	int c = *(unsigned char *)ans_ptr;
 
-		*ans_ptr = '\0' ;
-		ans_col-- ;
-		ans_ptr-- ;
-	}
+	if (c > '\040' && c != '\177' && c != '_')
+	    return;
 
-	return;
+	*ans_ptr = '\0';
+	ans_col--;
+	ans_ptr--;
+    }
+
+    return;
 }

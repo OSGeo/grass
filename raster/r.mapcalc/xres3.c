@@ -12,57 +12,53 @@ nsres() north-south resolution
 tbres() top-bottom resolution
 ****************************************************************/
 
-int 
-f_ewres(int argc, const int *argt, void **args)
+int f_ewres(int argc, const int *argt, void **args)
 {
-	DCELL *res = args[0];
-	int i;
+    DCELL *res = args[0];
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	for (i = 0; i < columns; i++)
-		res[i] = current_region3.ew_res;
+    for (i = 0; i < columns; i++)
+	res[i] = current_region3.ew_res;
 
-	return 0;
+    return 0;
 }
 
-int 
-f_nsres(int argc, const int *argt, void **args)
+int f_nsres(int argc, const int *argt, void **args)
 {
-	DCELL *res = args[0];
-	int i;
+    DCELL *res = args[0];
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	for (i = 0; i < columns; i++)
-		res[i] = current_region3.ns_res;
+    for (i = 0; i < columns; i++)
+	res[i] = current_region3.ns_res;
 
-	return 0;
+    return 0;
 }
 
-int 
-f_tbres(int argc, const int *argt, void **args)
+int f_tbres(int argc, const int *argt, void **args)
 {
-	DCELL *res = args[0];
-	int i;
+    DCELL *res = args[0];
+    int i;
 
-	if (argc > 0)
-		return E_ARG_HI;
+    if (argc > 0)
+	return E_ARG_HI;
 
-	if (argt[0] != DCELL_TYPE)
-		return E_RES_TYPE;
+    if (argt[0] != DCELL_TYPE)
+	return E_RES_TYPE;
 
-	for (i = 0; i < columns; i++)
-		res[i] = current_region3.tb_res;
+    for (i = 0; i < columns; i++)
+	res[i] = current_region3.tb_res;
 
-	return 0;
+    return 0;
 }
-

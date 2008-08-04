@@ -1,3 +1,4 @@
+
 /**
  * \file dalloc.c
  *
@@ -39,7 +40,7 @@
 
 double *G_alloc_vector(size_t n)
 {
-    return (double *) G_calloc (n, sizeof(double));
+    return (double *)G_calloc(n, sizeof(double));
 }
 
 
@@ -56,15 +57,15 @@ double *G_alloc_vector(size_t n)
  * \return double ** 
  */
 
-double **G_alloc_matrix (int rows, int cols)
+double **G_alloc_matrix(int rows, int cols)
 {
     double **m;
     int i;
 
-    m = (double **) G_calloc (rows, sizeof(double *));
-    m[0] = (double *) G_calloc (rows*cols, sizeof(double));
+    m = (double **)G_calloc(rows, sizeof(double *));
+    m[0] = (double *)G_calloc(rows * cols, sizeof(double));
     for (i = 1; i < rows; i++)
-	m[i] = m[i-1] + cols;
+	m[i] = m[i - 1] + cols;
 
     return m;
 }
@@ -83,7 +84,7 @@ double **G_alloc_matrix (int rows, int cols)
 
 float *G_alloc_fvector(size_t n)
 {
-    return (float *) G_calloc (n, sizeof(float));
+    return (float *)G_calloc(n, sizeof(float));
 }
 
 
@@ -100,15 +101,15 @@ float *G_alloc_fvector(size_t n)
  *  \return float ** 
  */
 
-float **G_alloc_fmatrix (int rows, int cols)
+float **G_alloc_fmatrix(int rows, int cols)
 {
     float **m;
     int i;
 
-    m = (float **) G_calloc (rows, sizeof(float *));
-    m[0] = (float *) G_calloc (rows*cols, sizeof(float));
+    m = (float **)G_calloc(rows, sizeof(float *));
+    m[0] = (float *)G_calloc(rows * cols, sizeof(float));
     for (i = 1; i < rows; i++)
-	m[i] = m[i-1] + cols;
+	m[i] = m[i - 1] + cols;
 
     return m;
 }
@@ -125,9 +126,9 @@ float **G_alloc_fmatrix (int rows, int cols)
  *  \return void
  */
 
-void G_free_vector (double *v)
+void G_free_vector(double *v)
 {
-    G_free (v);
+    G_free(v);
     v = NULL;
 
     return;
@@ -145,9 +146,9 @@ void G_free_vector (double *v)
  *  \return void
  */
 
-void G_free_fvector (float *v)
+void G_free_fvector(float *v)
 {
-    G_free (v);
+    G_free(v);
     v = NULL;
 
     return;
@@ -165,10 +166,10 @@ void G_free_fvector (float *v)
  *  \return void 
  */
 
-void G_free_matrix (double **m)
+void G_free_matrix(double **m)
 {
-    G_free (m[0]);
-    G_free (m);
+    G_free(m[0]);
+    G_free(m);
     m = NULL;
 
     return;
@@ -186,10 +187,10 @@ void G_free_matrix (double **m)
  *  \return void
  */
 
-void G_free_fmatrix (float **m)
+void G_free_fmatrix(float **m)
 {
-    G_free (m[0]);
-    G_free (m);
+    G_free(m[0]);
+    G_free(m);
     m = NULL;
 
     return;

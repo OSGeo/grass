@@ -19,17 +19,16 @@
 /* Translation matrices from big endian to native */
 
 /* Double format: */
-static int dbl_cnvrt[] = {7, 6, 5, 4, 3, 2, 1, 0};
+static int dbl_cnvrt[] = { 7, 6, 5, 4, 3, 2, 1, 0 };
 
 /* Float format : */
-static int flt_cnvrt[] = {3, 2, 1, 0};
+static int flt_cnvrt[] = { 3, 2, 1, 0 };
 
 /* Long format  : */
-static int lng_cnvrt[] = {3, 2, 1, 0};
+static int lng_cnvrt[] = { 3, 2, 1, 0 };
 
 /* Int format  : */
-static int int_cnvrt[] = {3, 2, 1, 0};
+static int int_cnvrt[] = { 3, 2, 1, 0 };
 
 /* Short format : */
-static int shrt_cnvrt[] = {1, 0};
-
+static int shrt_cnvrt[] = { 1, 0 };

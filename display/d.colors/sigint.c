@@ -3,6 +3,6 @@
 
 void sigint(int n)
 {
-	signal (n,sigint);
-	signalflag.interrupt = n;
+    signal(n, sigint);
+    signalflag.interrupt = n;
 }

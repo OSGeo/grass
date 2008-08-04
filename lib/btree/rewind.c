@@ -1,6 +1,6 @@
 #include <grass/btree.h>
 
-int btree_rewind (BTREE *B)
+int btree_rewind(BTREE * B)
 {
     B->cur = 0;
 

@@ -36,22 +36,22 @@ static int adjust_lon(double *);
 static double A, B;
 
 
-int G_begin_geodesic_equation(double lon1,double lat1,double lon2,double lat2)
+int G_begin_geodesic_equation(double lon1, double lat1, double lon2,
+			      double lat2)
 {
-    double sin21, tan1,tan2;
+    double sin21, tan1, tan2;
 
-    adjust_lon (&lon1);
-    adjust_lon (&lon2);
-    adjust_lat (&lat1);
-    adjust_lat (&lat2);
-    if (lon1 > lon2)
-    {	
+    adjust_lon(&lon1);
+    adjust_lon(&lon2);
+    adjust_lat(&lat1);
+    adjust_lat(&lat2);
+    if (lon1 > lon2) {
 	register double temp;
-	SWAP(lon1,lon2);
-	SWAP(lat1,lat2);
+
+	SWAP(lon1, lon2);
+	SWAP(lat1, lat2);
     }
-    if (lon1 == lon2)
-    {
+    if (lon1 == lon2) {
 	A = B = 0.0;
 	return 0;
     }
@@ -60,27 +60,27 @@ int G_begin_geodesic_equation(double lon1,double lat1,double lon2,double lat2)
     lat1 = Radians(lat1);
     lat2 = Radians(lat2);
 
-    sin21 = sin (lon2-lon1);
-    tan1  = tan (lat1);
-    tan2  = tan (lat2);
+    sin21 = sin(lon2 - lon1);
+    tan1 = tan(lat1);
+    tan2 = tan(lat2);
 
-    A = ( tan2 * cos(lon1) - tan1 * cos(lon2) ) /sin21;
-    B = ( tan2 * sin(lon1) - tan1 * sin(lon2) ) /sin21;
+    A = (tan2 * cos(lon1) - tan1 * cos(lon2)) / sin21;
+    B = (tan2 * sin(lon1) - tan1 * sin(lon2)) / sin21;
 
     return 1;
 }
 
 /* only works if lon1 < lon < lon2 */
 
-double G_geodesic_lat_from_lon (double lon)
+double G_geodesic_lat_from_lon(double lon)
 {
-    adjust_lon (&lon);
+    adjust_lon(&lon);
     lon = Radians(lon);
 
-    return Degrees (atan(A * sin(lon) - B * cos(lon)));
+    return Degrees(atan(A * sin(lon) - B * cos(lon)));
 }
 
-static int adjust_lon( double *lon)
+static int adjust_lon(double *lon)
 {
     while (*lon > 180.0)
 	*lon -= 360.0;
@@ -90,10 +90,12 @@ static int adjust_lon( double *lon)
     return 0;
 }
 
-static int adjust_lat( double *lat)
+static int adjust_lat(double *lat)
 {
-    if (*lat >  90.0) *lat =  90.0;
-    if (*lat < -90.0) *lat = -90.0;
+    if (*lat > 90.0)
+	*lat = 90.0;
+    if (*lat < -90.0)
+	*lat = -90.0;
 
     return 0;
 }

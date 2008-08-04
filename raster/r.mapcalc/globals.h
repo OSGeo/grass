@@ -10,4 +10,3 @@ extern int current_depth, current_row;
 extern int depths, rows, columns;
 
 #endif /* __GLOBALS_H_ */
-

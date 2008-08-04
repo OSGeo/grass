@@ -1,4 +1,4 @@
-/* zero.c								*/
+/* zero.c                                                               */
 
 #undef TRACE
 #undef DEBUG
@@ -9,11 +9,12 @@
 
 void ZeroMapCells(void)
 {
-	int Row, Col;
-	FUNCTION(ZeroMapCells);
+    int Row, Col;
 
-	for( Row = 0; Row < Rs; Row++) {
-		for( Col = 0; Col < Cs; Col++)
-			Surface[ Row][ Col] = 0.0;
-	}
+    FUNCTION(ZeroMapCells);
+
+    for (Row = 0; Row < Rs; Row++) {
+	for (Col = 0; Col < Cs; Col++)
+	    Surface[Row][Col] = 0.0;
+    }
 }

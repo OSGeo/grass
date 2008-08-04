@@ -33,15 +33,16 @@
 char G_intr_char(void)
 {
     char c = 0;
-#ifndef __MINGW32__    
+
+#ifndef __MINGW32__
     struct TYPE buf;
 
 #ifdef HAVE_TERMIOS_H
-    tcgetattr (2, &buf);
+    tcgetattr(2, &buf);
 #else
-    ioctl (2, GET, &buf);
+    ioctl(2, GET, &buf);
 #endif
     c = buf.C;
-#endif    
+#endif
     return c;
 }

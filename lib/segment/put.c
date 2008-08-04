@@ -1,3 +1,4 @@
+
 /**
  * \file put.c
  *
@@ -40,12 +41,12 @@
  * \return -1 if unable to seek or write segment file
  */
 
-int segment_put (SEGMENT *SEG, const void *buf,int row,int col)
+int segment_put(SEGMENT * SEG, const void *buf, int row, int col)
 {
     int index, n, i;
 
-    segment_address (SEG, row, col, &n, &index);
-    if((i = segment_pagein (SEG, n)) < 0)
+    segment_address(SEG, row, col, &n, &index);
+    if ((i = segment_pagein(SEG, n)) < 0)
 	return -1;
 
     SEG->scb[i].dirty = 1;

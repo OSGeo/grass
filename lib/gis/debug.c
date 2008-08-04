@@ -1,3 +1,4 @@
+
 /**
  * \file debug.c
  *
@@ -42,43 +43,45 @@ static int grass_debug_level = -1;
  * \return 1 on success
  */
 
-int G_debug (int level, const char *msg,...)
+int G_debug(int level, const char *msg, ...)
 {
 #ifdef GDEBUG
-    char    *lstr, *filen;
+    char *lstr, *filen;
     va_list ap;
-    FILE    *fd;
-   
+    FILE *fd;
+
     if (grass_debug_level < 0) {
-        lstr = G__getenv( "DEBUG" );
+	lstr = G__getenv("DEBUG");
 
-        if ( lstr != NULL )
-            grass_debug_level = atoi ( lstr );
-        else
-            grass_debug_level = 0;
+	if (lstr != NULL)
+	    grass_debug_level = atoi(lstr);
+	else
+	    grass_debug_level = 0;
     }
-	
-    if ( grass_debug_level >= level ) {
-        va_start(ap, msg);
 
-	filen =  getenv("GRASS_DEBUG_FILE"); 
-        if ( filen != NULL ) {
-	    fd = fopen (filen,"a");
-            if ( !fd ) {
-		G_warning ( _("Cannot open debug file '%s'"), filen);
+    if (grass_debug_level >= level) {
+	va_start(ap, msg);
+
+	filen = getenv("GRASS_DEBUG_FILE");
+	if (filen != NULL) {
+	    fd = fopen(filen, "a");
+	    if (!fd) {
+		G_warning(_("Cannot open debug file '%s'"), filen);
 		return 0;
 	    }
-	} else {
+	}
+	else {
 	    fd = stderr;
 	}
-        
-	fprintf (fd, "D%d/%d: ", level, grass_debug_level);
-	vfprintf (fd, msg, ap);
-	fprintf (fd, "\n");
-        fflush (fd);
-	
-	if ( filen != NULL ) fclose ( fd );
-	
+
+	fprintf(fd, "D%d/%d: ", level, grass_debug_level);
+	vfprintf(fd, msg, ap);
+	fprintf(fd, "\n");
+	fflush(fd);
+
+	if (filen != NULL)
+	    fclose(fd);
+
 	va_end(ap);
     }
 #endif
@@ -107,7 +110,7 @@ int G_dump(int fd)
     G_message("current window = %p", &G__.window);
     G_message("Flag: window set? %d", G__.window_set);
     G_message("File descriptor for automatic mask %d", G__.mask_fd);
-    G_message("Flag denoting automatic masking %d", G__.auto_mask); 
+    G_message("Flag denoting automatic masking %d", G__.auto_mask);
     G_message("CELL mask buffer %p", G__.mask_buf);
     G_message("buffer for reading null rows %p", G__.null_buf);
     G_message("Pre/post compressed data buffer %p", G__.compressed_buf);
@@ -120,7 +123,7 @@ int G_dump(int fd)
 
     G_message("G_dump: file #%d", fd);
     G_message("open mode = %d", fcb->open_mode);
-    G_message("Cell header %p",&fcb->cellhd);
+    G_message("Cell header %p", &fcb->cellhd);
     G_message("Table reclass %p", &fcb->reclass);
     G_message("Cell stats %p", &fcb->statf);
     G_message("Range structure %p", &fcb->range);
@@ -129,7 +132,7 @@ int G_dump(int fd)
     G_message("Automatic reclass flag %d", fcb->reclass_flag);
     G_message("File row addresses %p", fcb->row_ptr);
     G_message("Data to window col mapping %p", fcb->col_map);
-    G_message("Data to window row constants %f,%f", fcb->C1,fcb->C2);
+    G_message("Data to window row constants %f,%f", fcb->C1, fcb->C2);
     G_message("Current data row in memory %d", fcb->cur_row);
     G_message("Current null row in memory %d", fcb->null_cur_row);
     G_message("nbytes per cell for current row %d", fcb->cur_nbytes);

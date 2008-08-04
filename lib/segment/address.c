@@ -1,3 +1,4 @@
+
 /**
  * \file address.c
  *
@@ -27,12 +28,9 @@
  * \return always returns 0
  */
 
-int segment_address (
-    const SEGMENT *SEG, int row, int col,
-    int *n,
-    int *index)
+int segment_address(const SEGMENT * SEG, int row, int col, int *n, int *index)
 {
-    *n     = row / SEG->srows * SEG->spr + col / SEG->scols;
+    *n = row / SEG->srows * SEG->spr + col / SEG->scols;
     *index = (row % SEG->srows * SEG->scols + col % SEG->scols) * SEG->len;
 
     return 0;

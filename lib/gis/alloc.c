@@ -1,3 +1,4 @@
+
 /**
  * \file alloc.c
  *
@@ -30,16 +31,18 @@
  * \return void * 
  */
 
-void *G_malloc (size_t n)
+void *G_malloc(size_t n)
 {
     void *buf;
 
-    if (n <= 0) n = 1;	/* make sure we get a valid request */
+    if (n <= 0)
+	n = 1;			/* make sure we get a valid request */
 
     buf = malloc(n);
-    if(buf) return buf;
+    if (buf)
+	return buf;
 
-    G_fatal_error (_("G_malloc: out of memory"));
+    G_fatal_error(_("G_malloc: out of memory"));
     return NULL;
 }
 
@@ -60,17 +63,20 @@ void *G_malloc (size_t n)
  * \return void * 
  */
 
-void *G_calloc (size_t m, size_t n)
+void *G_calloc(size_t m, size_t n)
 {
     void *buf;
 
-    if (m <= 0) m = 1;	/* make sure we get a valid requests */
-    if (n <= 0) n = 1;
+    if (m <= 0)
+	m = 1;			/* make sure we get a valid requests */
+    if (n <= 0)
+	n = 1;
 
-    buf = calloc(m,n);
-    if (buf) return buf;
+    buf = calloc(m, n);
+    if (buf)
+	return buf;
 
-    G_fatal_error (_("G_calloc: out of memory"));
+    G_fatal_error(_("G_calloc: out of memory"));
     return NULL;
 }
 
@@ -95,16 +101,20 @@ void *G_calloc (size_t m, size_t n)
  * \return void * 
  */
 
-void *G_realloc (void *buf, size_t n)
+void *G_realloc(void *buf, size_t n)
 {
-    if (n <= 0) n = 1;	/* make sure we get a valid request */
+    if (n <= 0)
+	n = 1;			/* make sure we get a valid request */
 
-    if (!buf) buf = malloc (n);
-    else      buf = realloc(buf,n);
+    if (!buf)
+	buf = malloc(n);
+    else
+	buf = realloc(buf, n);
 
-    if (buf) return buf;
+    if (buf)
+	return buf;
 
-    G_fatal_error (_("G_realloc: out of memory"));
+    G_fatal_error(_("G_realloc: out of memory"));
     return NULL;
 }
 
@@ -117,5 +127,5 @@ void *G_realloc (void *buf, size_t n)
 
 void G_free(void *buf)
 {
-	free(buf);
+    free(buf);
 }

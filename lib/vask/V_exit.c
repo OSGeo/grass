@@ -1,3 +1,4 @@
+
 /**
  * \file V_exit.c
  *
@@ -38,29 +39,29 @@
 void V_exit(void)
 {
 #ifdef HAVE_KEYPAD
-	keypad(stdscr, 0);
+    keypad(stdscr, 0);
 #endif
-	clear() ;
-	refresh() ;
+    clear();
+    refresh();
 
     /* added for Mips' braindead implementation of curses 
      * and the ordering is important
      */
-	echo();
-	nl();
-	noraw();
+    echo();
+    nl();
+    noraw();
 
-	endwin();
-	fflush(stdout);
-	fflush(stderr);
-	fflush(stdin);
+    endwin();
+    fflush(stdout);
+    fflush(stderr);
+    fflush(stdin);
 
     /* Added 17 Sep 1990  dpg.  is a hack we have been using on Sys V 
      * machines it is not the correct way, but it seems to do the job.
      * Fixes the problem with prompts not being displayed after 
      * exitting curses. */
 #ifdef SYSV
-        setvbuf (stderr, NULL, _IONBF, 0);
-        setvbuf (stdout, NULL, _IONBF, 0);
+    setvbuf(stderr, NULL, _IONBF, 0);
+    setvbuf(stdout, NULL, _IONBF, 0);
 #endif
 }

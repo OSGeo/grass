@@ -34,10 +34,12 @@
 /** prototypes ***************************************************************/
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp, int dp);
+static void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
+				int dp);
 
 /*Open the rgb voxel maps and write the data to the output */
-static void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp, int dp);
+static void open_write_vector_maps(input_maps * in, G3D_Region region,
+				   FILE * fp, int dp);
 
 /*opens a raster input map */
 static int open_input_map(char *name, char *mapset);
@@ -162,7 +164,8 @@ void check_input_maps(void)
 	for (i = 0; i < 3; i++) {
 	    if (param.vectormaps->answers[i] != NULL) {
 		if (NULL == G_find_grid3(param.vectormaps->answers[i], ""))
-		    G3d_fatalError(_("Requested g3d vector map <%s> not found"),
+		    G3d_fatalError(_
+				   ("Requested g3d vector map <%s> not found"),
 				   param.vectormaps->answers[i]);
 	    }
 	    else {
@@ -185,7 +188,8 @@ void check_input_maps(void)
 /* ************************************************************************* */
 /* Prepare the VTK RGB voxel data for writing ****************************** */
 /* ************************************************************************* */
-void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp, int dp)
+void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp,
+			 int dp)
 {
     int i, changemask[3] = { 0, 0, 0 };
     void *maprgb = NULL;
@@ -232,7 +236,7 @@ void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp, int dp)
 
 	G_debug(3, "Writing VTK VoxelData");
 	write_vtk_rgb_data(in->map_r, in->map_g, in->map_b, fp, "RGB_Voxel",
-			     region, dp);
+			   region, dp);
 
 	for (i = 0; i < 3; i++) {
 	    if (i == 0)
@@ -268,7 +272,8 @@ void open_write_rgb_maps(input_maps * in, G3D_Region region, FILE * fp, int dp)
 /* ************************************************************************* */
 /* Prepare the VTK vector data for writing ********************************* */
 /* ************************************************************************* */
-void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp, int dp)
+void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp,
+			    int dp)
 {
     int i, changemask[3] = { 0, 0, 0 };
     void *mapvect = NULL;
@@ -284,9 +289,9 @@ void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp, int d
 	    /*Open the map */
 	    mapvect =
 		G3d_openCellOld(param.vectormaps->answers[i],
-				G_find_grid3(param.vectormaps->answers[i], ""),
-				&region, G3D_TILE_SAME_AS_FILE,
-				G3D_USE_CACHE_DEFAULT);
+				G_find_grid3(param.vectormaps->answers[i],
+					     ""), &region,
+				G3D_TILE_SAME_AS_FILE, G3D_USE_CACHE_DEFAULT);
 	    if (mapvect == NULL) {
 		G_warning(_("Error opening 3d raster map <%s>"),
 			  param.vectormaps->answers[i]);
@@ -314,8 +319,8 @@ void open_write_vector_maps(input_maps * in, G3D_Region region, FILE * fp, int d
 
 
 	G_debug(3, "Writing VTK Vector Data");
-	write_vtk_vector_data(in->map_x, in->map_y, in->map_z, fp, "Vector_Data",
-			   region, dp);
+	write_vtk_vector_data(in->map_x, in->map_y, in->map_z, fp,
+			      "Vector_Data", region, dp);
 
 	for (i = 0; i < 3; i++) {
 	    if (i == 0)
@@ -394,19 +399,19 @@ int main(int argc, char *argv[])
 
     /*Check the input */
     check_input_maps();
-   
-    /*Correct the coordinates, so the precision of VTK is not hurt :( */
-    if(param.coorcorr->answer){
-       /*Get the default region for coordiante correction*/
-       G_get_default_window(&default_region);
 
-       /*Use the center of the current region as extent*/
-       y_extent = (default_region.north + default_region.south)/2;
-       x_extent = (default_region.west + default_region.east)/2;
-    } else
-    {
-       x_extent = 0;
-       y_extent = 0;
+    /*Correct the coordinates, so the precision of VTK is not hurt :( */
+    if (param.coorcorr->answer) {
+	/*Get the default region for coordiante correction */
+	G_get_default_window(&default_region);
+
+	/*Use the center of the current region as extent */
+	y_extent = (default_region.north + default_region.south) / 2;
+	x_extent = (default_region.west + default_region.east) / 2;
+    }
+    else {
+	x_extent = 0;
+	y_extent = 0;
     }
 
     /*open the output */
@@ -429,12 +434,12 @@ int main(int argc, char *argv[])
     in = create_input_maps_struct();
 
 
-    /* read and compute the scale factor*/
+    /* read and compute the scale factor */
     sscanf(param.elevscale->answer, "%lf", &scale);
-    /*if LL projection, convert the elevation values to degrees*/
-    if(region.proj == PROJECTION_LL) {
-      llscale = M_PI/(180)*6378137;
-      scale /= llscale;
+    /*if LL projection, convert the elevation values to degrees */
+    if (region.proj == PROJECTION_LL) {
+	llscale = M_PI / (180) * 6378137;
+	scale /= llscale;
     }
 
     /*Open the top and bottom file */
@@ -446,8 +451,8 @@ int main(int argc, char *argv[])
 
 	/*If not equal, set the 2D windows correct */
 	if (rows != region.rows || cols != region.cols) {
-	    G_message(
-		_("The 2d and 3d region settings are different. The g3d settings are used to adjust the 2d region."));
+	    G_message(_
+		      ("The 2d and 3d region settings are different. The g3d settings are used to adjust the 2d region."));
 	    G_get_set_window(&window2d);
 	    window2d.ns_res = region.ns_res;
 	    window2d.ew_res = region.ew_res;
@@ -542,8 +547,8 @@ int main(int argc, char *argv[])
 	    if (!G3d_closeCell(in->map)) {
 		in->map = NULL;
 		fatal_error(_
-			   ("Error closing 3d raster map, the VTK file may be incomplete."),
-			   in);
+			    ("Error closing 3d raster map, the VTK file may be incomplete."),
+			    in);
 	    }
 
 	    in->map = NULL;
@@ -564,4 +569,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-

@@ -40,7 +40,8 @@ void set_params()
 
     param.shell_style = G_define_flag();
     param.shell_style->key = 'g';
-    param.shell_style->description = _("Print the stats in shell script style");
+    param.shell_style->description =
+	_("Print the stats in shell script style");
 
     param.extended = G_define_flag();
     param.extended->key = 'e';
@@ -77,7 +78,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, statistics");
     module->description =
-	_("Calculates univariate statistics from the non-null 3d cells of a raster3d map.");
+	_
+	("Calculates univariate statistics from the non-null 3d cells of a raster3d map.");
 
     /* Define the different options */
     set_params();
@@ -113,10 +115,10 @@ int main(int argc, char *argv[])
     map_type = G3d_tileTypeMap(map);
 
     i = 0;
-    while(param.percentile->answers[i])
+    while (param.percentile->answers[i])
 	i++;
     stats = create_univar_stat_struct(map_type, cols * rows * depths, i);
-    for(i = 0; i < stats->n_perc; i++) {
+    for (i = 0; i < stats->n_perc; i++) {
 	sscanf(param.percentile->answers[i], "%i", &stats->perc[i]);
     }
 

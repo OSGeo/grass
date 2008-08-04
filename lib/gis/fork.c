@@ -2,6 +2,7 @@
 
 #include <unistd.h>
 #include <grass/gis.h>
+
 /*************************************************************
  * G_fork() 
  *
@@ -17,24 +18,24 @@
 int G_fork(void)
 {
 #ifdef __MINGW32__
-  return -1;
+    return -1;
 #else /* __MINGW32__ */
     int pid;
 
     pid = fork();
 
-/*
- * change the process group for the child (pid == 0)
- * note: we use the BSD calling sequence, since
- * it will work ok for ATT call which has no arguments
- */
-    if (pid==0)
+    /*
+     * change the process group for the child (pid == 0)
+     * note: we use the BSD calling sequence, since
+     * it will work ok for ATT call which has no arguments
+     */
+    if (pid == 0)
 #ifdef SETPGRP_VOID
-	setpgrp ();
+	setpgrp();
 #else
-	setpgrp (0, getpid());
+	setpgrp(0, getpid());
 #endif
-    
+
     return pid;
 
 #endif /* __MINGW32__ */

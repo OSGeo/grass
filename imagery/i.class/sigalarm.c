@@ -1,8 +1,8 @@
 #include <signal.h>
 #include "globals.h"
 
-void sigalarm (int n)
+void sigalarm(int n)
 {
-	signal (n,sigalarm);
-	signalflag.alarm = n;
+    signal(n, sigalarm);
+    signalflag.alarm = n;
 }

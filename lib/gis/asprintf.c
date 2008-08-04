@@ -1,3 +1,4 @@
+
 /**
  * \file asprintf.c
  *
@@ -24,7 +25,7 @@
  * \date 2002-2008
  */
 
-#define _GNU_SOURCE /* enable asprintf */
+#define _GNU_SOURCE		/* enable asprintf */
 #include <grass/config.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,11 +54,11 @@
  * \return number of bytes written
  */
 
-#ifdef HAVE_ASPRINTF 
+#ifdef HAVE_ASPRINTF
 
 int G_vasprintf(char **out, const char *fmt, va_list ap)
 {
-    return vasprintf (out, fmt, ap);
+    return vasprintf(out, fmt, ap);
 }
 
 #else
@@ -77,14 +78,14 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
      *          working dir is? */
 #ifdef __MINGW32__
     /* file_name = G_tempfile(); */
-    GetTempPath ( 2000, dir_name );
-    GetTempFileName ( dir_name, "asprintf", 0, file_name );
-    fp = fopen ( file_name, "w+" );
+    GetTempPath(2000, dir_name);
+    GetTempFileName(dir_name, "asprintf", 0, file_name);
+    fp = fopen(file_name, "w+");
 #else
-    fp = tmpfile(); 
+    fp = tmpfile();
 #endif /* __MINGW32__ */
 
-    if ( fp ) {
+    if (fp) {
 	int count;
 
 	count = vfprintf(fp, fmt, ap);
@@ -102,7 +103,7 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
 	}
 	fclose(fp);
 #ifdef __MINGW32__
-	unlink ( file_name );
+	unlink(file_name);
 #endif /* __MINGW32__ */
     }
     *out = work;

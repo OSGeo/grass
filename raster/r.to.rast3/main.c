@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       r.to.rast3 
@@ -38,7 +39,7 @@ int globalG3dMapType;
 void fatal_error(void *map, int *fd, int depths, char *errorMsg);	/*Simple Error message */
 void set_params();		/*Fill the paramType structure */
 void raster_to_g3d(void *map, G3D_Region region, int *fd);	/*Write the raster */
-int  open_input_raster_map(char *name, char *mapset);	/*opens the outputmap */
+int open_input_raster_map(char *name, char *mapset);	/*opens the outputmap */
 void close_input_raster_map(int fd);	/*close the map */
 
 
@@ -80,7 +81,7 @@ void set_params()
     param.mask = G_define_flag();
     param.mask->key = 'm';
     param.mask->description = _("Use G3D mask (if exists) with output map");
-    
+
 }
 
 
@@ -116,7 +117,8 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		fatal_error(map, fd, depths, _("Could not get raster row"));
 
 	    for (x = 0, ptr = rast; x < cols; x++,
-		 ptr = G_incr_void_ptr(ptr, G_raster_size(globalRastMapType))) {
+		 ptr =
+		 G_incr_void_ptr(ptr, G_raster_size(globalRastMapType))) {
 		if (globalRastMapType == CELL_TYPE) {
 		    if (G_is_null_value(ptr, globalRastMapType)) {
 			G3d_setNullValue(&dvalue, 1, DCELL_TYPE);
@@ -124,8 +126,10 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    else {
 			dvalue = *(CELL *) ptr;
 		    }
-		if (G3d_putValue(map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
-				fatal_error(map, fd, depths, "Error writing double data");		    
+		    if (G3d_putValue
+			(map, x, y, z, (char *)&dvalue, DCELL_TYPE) < 0)
+			fatal_error(map, fd, depths,
+				    "Error writing double data");
 		}
 		else if (globalRastMapType == FCELL_TYPE) {
 		    if (G_is_null_value(ptr, globalRastMapType)) {
@@ -134,8 +138,10 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    else {
 			fvalue = *(FCELL *) ptr;
 		    }
-		if (G3d_putValue(map, x, y, z, (char *) &fvalue, FCELL_TYPE) < 0)
-				fatal_error(map, fd, depths, "Error writing float data");		    
+		    if (G3d_putValue
+			(map, x, y, z, (char *)&fvalue, FCELL_TYPE) < 0)
+			fatal_error(map, fd, depths,
+				    "Error writing float data");
 
 		}
 		else if (globalRastMapType == DCELL_TYPE) {
@@ -145,8 +151,10 @@ void raster_to_g3d(void *map, G3D_Region region, int *fd)
 		    else {
 			dvalue = *(DCELL *) ptr;
 		    }
-		if (G3d_putValue(map, x, y, z, (char *) &dvalue, DCELL_TYPE) < 0)
-				fatal_error(map, fd, depths, "Error writing double data");		    
+		    if (G3d_putValue
+			(map, x, y, z, (char *)&dvalue, DCELL_TYPE) < 0)
+			fatal_error(map, fd, depths,
+				    "Error writing double data");
 
 		}
 
@@ -209,9 +217,10 @@ int main(int argc, char *argv[])
 
     G_debug(2, "Check the 2d and 3d region settings");
 
-    /*If not equal, set the 2D windows correct*/
+    /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-	G_message(_("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
+	G_message(_
+		  ("The 2d and 3d region settings are different. I will use the g3d settings to adjust the 2d region."));
 	G_get_set_window(&window2d);
 	window2d.ns_res = region.ns_res;
 	window2d.ew_res = region.ew_res;
@@ -257,7 +266,8 @@ int main(int argc, char *argv[])
 	}
 
 	/*if only one map is given, open it depths - times */
-	G_message(_("Open raster map %s - one time for each depth (%d/%d)"), name, i+1, region.depths );
+	G_message(_("Open raster map %s - one time for each depth (%d/%d)"),
+		  name, i + 1, region.depths);
 	fd[i] = open_input_raster_map(name, mapset);
 	opencells++;
 
@@ -269,8 +279,8 @@ int main(int argc, char *argv[])
 
 	if (maptype_tmp != globalRastMapType) {
 	    fatal_error(map, fd, opencells,
-		       _
-		       ("Input maps have to be from the same type. CELL, FCELL or DCELL!"));
+			_
+			("Input maps have to be from the same type. CELL, FCELL or DCELL!"));
 	}
     }
 
@@ -302,13 +312,13 @@ int main(int argc, char *argv[])
 
     /*if requested set the Mask on */
     if (param.mask->answer) {
-        if (G3d_maskFileExists()) {
-            changemask = 0;
-            if (G3d_maskIsOff(map)) {
-                G3d_maskOn(map);
-                changemask = 1;
-            }
-        }
+	if (G3d_maskFileExists()) {
+	    changemask = 0;
+	    if (G3d_maskIsOff(map)) {
+		G3d_maskOn(map);
+		changemask = 1;
+	    }
+	}
     }
 
     /*Create the G3D Rastermap */
@@ -316,9 +326,9 @@ int main(int argc, char *argv[])
 
     /*We set the Mask off, if it was off before */
     if (param.mask->answer) {
-        if (G3d_maskFileExists())
-            if (G3d_maskIsOn(map) && changemask)
-                G3d_maskOff(map);
+	if (G3d_maskFileExists())
+	    if (G3d_maskIsOn(map) && changemask)
+		G3d_maskOff(map);
     }
 
     /*Loop over all output maps! close */

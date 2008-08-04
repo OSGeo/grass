@@ -15,7 +15,7 @@
  * *               for details.
  * *
  * **************************************************************/
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/glocale.h>
@@ -27,28 +27,28 @@ int remove_zero_line(struct Map_info *Map, int otype, struct Map_info *Err)
 
     struct line_pnts *Points;
     struct line_cats *Cats;
-    
+
     count = 0;
-    Points = Vect_new_line_struct ();
-    Cats = Vect_new_cats_struct ();
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
-    nlines = Vect_get_num_lines (Map);
+    nlines = Vect_get_num_lines(Map);
 
-    G_debug (1, "nlines =  %d", nlines);
+    G_debug(1, "nlines =  %d", nlines);
 
-    for (line = 1; line <= nlines; line++) { 
-	if (!Vect_line_alive (Map, line))
+    for (line = 1; line <= nlines; line++) {
+	if (!Vect_line_alive(Map, line))
 	    continue;
 
-	type = Vect_read_line (Map, Points, Cats, line);
-	
-	if ( !((type & GV_LINES) && (type & otype)) )
+	type = Vect_read_line(Map, Points, Cats, line);
+
+	if (!((type & GV_LINES) && (type & otype)))
 	    continue;
 
-	if (Vect_line_length (Points) > 0.0)
+	if (Vect_line_length(Points) > 0.0)
 	    continue;
 
-	Vect_delete_line (Map, line); 
+	Vect_delete_line(Map, line);
 
 	if (Err) {
 	    Vect_write_line(Err, type, Points, Cats);

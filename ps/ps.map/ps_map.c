@@ -1,9 +1,9 @@
 /* Function: ps_map
-**
-** This function writes the PostScript output file.
-**
-** Author: Paul W. Carlson	March 1992
-*/
+ **
+ ** This function writes the PostScript output file.
+ **
+ ** Author: Paul W. Carlson     March 1992
+ */
 
 #include <stdio.h>
 #include <unistd.h>
@@ -20,7 +20,7 @@ extern int eps_output;
 extern int rotate_plot;
 extern int ps_copies;
 
-int ps_map (void)
+int ps_map(void)
 {
     long current_offset;
     char *date;
@@ -36,38 +36,43 @@ int ps_map (void)
     make_procs();
 
     /* set number of copies */
-    if (ps_copies > 1) fprintf(PS.fp, "/#copies %d def\n", ps_copies);
+    if (ps_copies > 1)
+	fprintf(PS.fp, "/#copies %d def\n", ps_copies);
 
     /* Set page size */
-    if ( !eps_output ) {
-	if(!rotate_plot) {
-	    urx = (int) 72.0 * PS.page_width;
-	    ury = (int) 72.0 * PS.page_height;
-	} else {
-	    urx = (int) 72.0 * PS.page_height;
-	    ury = (int) 72.0 * PS.page_width;
+    if (!eps_output) {
+	if (!rotate_plot) {
+	    urx = (int)72.0 *PS.page_width;
+	    ury = (int)72.0 *PS.page_height;
 	}
-	fprintf(PS.fp, "<< /PageSize [  %d %d ] >> setpagedevice\n", urx, ury);
+	else {
+	    urx = (int)72.0 *PS.page_height;
+	    ury = (int)72.0 *PS.page_width;
+	}
+	fprintf(PS.fp, "<< /PageSize [  %d %d ] >> setpagedevice\n", urx,
+		ury);
     }
-    
+
     /* rotate map? */
-    if (rotate_plot)
-    {
-    	fprintf(PS.fp, "%.2f 0.0 TR\n", 72.0 * PS.page_height);
-    	fprintf(PS.fp, "90 rotate\n");
+    if (rotate_plot) {
+	fprintf(PS.fp, "%.2f 0.0 TR\n", 72.0 * PS.page_height);
+	fprintf(PS.fp, "90 rotate\n");
     }
 
     /* do the map header */
-    if (PS.do_header) do_map_header(date);
+    if (PS.do_header)
+	do_map_header(date);
 
     /* size the map */
     map_setup();
 
     /* do the raster stuff, if any */
-    if (PS.do_raster || grp.do_group) PS_raster_plot();
+    if (PS.do_raster || grp.do_group)
+	PS_raster_plot();
 
     /* do the outline, if requested */
-    if (PS.do_outline) ps_outline();
+    if (PS.do_outline)
+	ps_outline();
 
     /* do the masked vector plots, if any */
     if (vector.count) {
@@ -80,24 +85,27 @@ int ps_map (void)
 
     /* do masking, if required */
     PS_make_mask();
-    if (PS.mask_needed) 
-        do_masking();
+    if (PS.mask_needed)
+	do_masking();
 
     /* do the unmasked vector plots, if any */
-    if (vector.count) do_vectors(1);
+    if (vector.count)
+	do_vectors(1);
 
     /* do the grid, if any */
     if (PS.grid_cross)
-	    do_grid_cross();
+	do_grid_cross();
     else
-	    do_grid();
+	do_grid();
 
     /* do geo-grid, if any */
     do_geogrid();
 
     /* do the grid numbers, if any */
-    if (PS.grid_numbers > 0) do_grid_numbers();
-    if (PS.geogrid_numbers > 0) do_geogrid_numbers();
+    if (PS.grid_numbers > 0)
+	do_grid_numbers();
+    if (PS.geogrid_numbers > 0)
+	do_geogrid_numbers();
 
     /* do the labels from paint/labels, if any */
     do_labels(0);
@@ -106,7 +114,8 @@ int ps_map (void)
     fprintf(PS.fp, "grestore ");
 
     /* do the unmasked vector points, if any */
-    if (vector.count) do_vpoints(1);
+    if (vector.count)
+	do_vpoints(1);
 
     /* do the unmasked points, lines and eps if any */
     do_plt(1);
@@ -115,35 +124,40 @@ int ps_map (void)
     do_labels(1);
 
     /* show the map info */
-    if (do_mapinfo) map_info();
+    if (do_mapinfo)
+	map_info();
 
     /* show the vector legend */
-    if (do_vlegend && vector.count) PS_vlegend();
-   
-   /* Make scalebar */ 
-    if (PS.do_scalebar) do_scalebar();
+    if (do_vlegend && vector.count)
+	PS_vlegend();
+
+    /* Make scalebar */
+    if (PS.do_scalebar)
+	do_scalebar();
 
     /* put border around map */
-    if (PS.do_border && brd.R >= 0.) { /* if color wasn't "none" */
+    if (PS.do_border && brd.R >= 0.) {	/* if color wasn't "none" */
 	fprintf(PS.fp, "%.3f %.3f %.3f C\n", brd.R, brd.G, brd.B);
 	fprintf(PS.fp, "%.8f W\n", brd.width);
-	box_draw(PS.map_top  - 0.5, PS.map_bot   + 0.5,
+	box_draw(PS.map_top - 0.5, PS.map_bot + 0.5,
 		 PS.map_left + 0.5, PS.map_right - 0.5);
     }
 
     /* do the colortable, if requested */
     if (PS.do_colortable) {
-	if ( G_raster_map_is_fp(ct.name, ct.mapset) ) 
-       	    PS_fcolortable();
+	if (G_raster_map_is_fp(ct.name, ct.mapset))
+	    PS_fcolortable();
 	else
-            PS_colortable();
+	    PS_colortable();
     }
 
     /* do comments, if any */
-    if (PS.commentfile != NULL) do_comment();
+    if (PS.commentfile != NULL)
+	do_comment();
 
     /* do any PostScript include files */
-    if (PS.num_psfiles) do_psfiles();
+    if (PS.num_psfiles)
+	do_psfiles();
 
     /* write the bounding box */
     current_offset = ftell(PS.fp);
@@ -157,4 +171,3 @@ int ps_map (void)
 
     return 0;
 }
-

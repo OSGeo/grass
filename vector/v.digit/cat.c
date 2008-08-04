@@ -26,70 +26,67 @@
 
 
 /* Init cats */
-void
-cat_init ( void )
+void cat_init(void)
 {
     int i, line, nlines;
     struct line_cats *Cats;
 
-    G_debug (2, "cat_init()" );
-    Cats = Vect_new_cats_struct (); 
-    
+    G_debug(2, "cat_init()");
+    Cats = Vect_new_cats_struct();
+
     /* Max cats */
     nMaxFieldCat = 0;
-    aMaxFieldCat = 10; /* allocated space */
-    MaxFieldCat = (void *) G_malloc ( (aMaxFieldCat) * sizeof(int) * 2 ); 
+    aMaxFieldCat = 10;		/* allocated space */
+    MaxFieldCat = (void *)G_malloc((aMaxFieldCat) * sizeof(int) * 2);
 
     /* Read the map and set maximum categories */
-    nlines = Vect_get_num_lines ( &Map );
-    for ( line = 1; line <= nlines; line++ ) {
-	Vect_read_line ( &Map, NULL, Cats, line ); 
-	for ( i = 0; i < Cats->n_cats; i++ ) {
-	    if ( (cat_max_get(Cats->field[i])) < Cats->cat[i] ) {
-		cat_max_set(Cats->field[i],Cats->cat[i]);
+    nlines = Vect_get_num_lines(&Map);
+    for (line = 1; line <= nlines; line++) {
+	Vect_read_line(&Map, NULL, Cats, line);
+	for (i = 0; i < Cats->n_cats; i++) {
+	    if ((cat_max_get(Cats->field[i])) < Cats->cat[i]) {
+		cat_max_set(Cats->field[i], Cats->cat[i]);
 	    }
 	}
     }
 }
 
 /* get maximum cat for field */
-int
-cat_max_get ( int field )
+int cat_max_get(int field)
 {
     int i;
-    
-    G_debug (2, "cat_max_get() field = %d", field );
 
-    for ( i = 0; i < nMaxFieldCat; i++ ) {
-	if ( MaxFieldCat[i][0] == field ) {
+    G_debug(2, "cat_max_get() field = %d", field);
+
+    for (i = 0; i < nMaxFieldCat; i++) {
+	if (MaxFieldCat[i][0] == field) {
 	    return (MaxFieldCat[i][1]);
 	}
     }
 
     return 0;
 }
-    
+
 /* set maximum cat for field */
-void
-cat_max_set ( int field, int cat)
+void cat_max_set(int field, int cat)
 {
     int i;
-    
-    G_debug (2, "cat_max_set() field = %d cat = %d", field, cat );
 
-    for ( i = 0; i < nMaxFieldCat; i++ ) {
-	if ( MaxFieldCat[i][0] == field ) {
+    G_debug(2, "cat_max_set() field = %d cat = %d", field, cat);
+
+    for (i = 0; i < nMaxFieldCat; i++) {
+	if (MaxFieldCat[i][0] == field) {
 	    MaxFieldCat[i][1] = cat;
 	    return;
 	}
     }
     /* Field not found -> add new */
-    if ( nMaxFieldCat == aMaxFieldCat ) {
-        aMaxFieldCat += 10;
-        MaxFieldCat = (void *) G_realloc ( MaxFieldCat, (aMaxFieldCat) * sizeof(int) * 2 );
+    if (nMaxFieldCat == aMaxFieldCat) {
+	aMaxFieldCat += 10;
+	MaxFieldCat =
+	    (void *)G_realloc(MaxFieldCat, (aMaxFieldCat) * sizeof(int) * 2);
     }
     MaxFieldCat[nMaxFieldCat][0] = field;
     MaxFieldCat[nMaxFieldCat][1] = cat;
     nMaxFieldCat++;
 }
-

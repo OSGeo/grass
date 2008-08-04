@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *            reg_html.h
  *
@@ -21,14 +22,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _REG_HTML_H
 #define _REG_HTML_H
 
-void register_html ( char *pkg_short_name, char *gisbase, int major, int minor, int revision );
+void register_html(char *pkg_short_name, char *gisbase, int major, int minor,
+		   int revision);
 
-void deregister_html ( char *pkg_short_name, char *gisbase );
+void deregister_html(char *pkg_short_name, char *gisbase);
 
-int restore_html ( char *gisbase );
+int restore_html(char *gisbase);
 
 #endif /* _REG_HTML_H */

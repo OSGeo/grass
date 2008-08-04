@@ -1,3 +1,4 @@
+
 /**
  * \file V_trim_dec.c
  *
@@ -36,7 +37,7 @@
  * \return always returns 0
  */
 
-void V__trim_decimal ( char *buf)
+void V__trim_decimal(char *buf)
 {
     char *mark;
 
@@ -48,8 +49,8 @@ void V__trim_decimal ( char *buf)
     mark = buf;
     while (*++buf)
 	if (*buf != '0')
-	    mark = buf+1;
+	    mark = buf + 1;
 
-    while(*mark)
+    while (*mark)
 	*mark++ = 0;
 }

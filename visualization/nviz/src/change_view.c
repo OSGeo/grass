@@ -6,11 +6,11 @@
 /*
  * added return values and test for position *REALLY* changed
  * in: 
- *	Nchange_position_cmd()
- *	Nchange_height_cmd()
- *	Nchange_height_cmd()
- *	Nchange_exag_cmd()
- *	Pierre de Mouveaux (24 oct. 1999) p_de_mouveaux@hotmail.com
+ *      Nchange_position_cmd()
+ *      Nchange_height_cmd()
+ *      Nchange_height_cmd()
+ *      Nchange_exag_cmd()
+ *      Pierre de Mouveaux (24 oct. 1999) p_de_mouveaux@hotmail.com
  */
 
  /*
@@ -31,11 +31,12 @@ int Nchange_persp_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     )
 {
     int fov, persp;
+
     if (argc != 2)
 	return (TCL_ERROR);
     persp = atoi(argv[1]);
 
-    fov = (int) (10 * persp);
+    fov = (int)(10 * persp);
     GS_set_fov(fov);
     Nquick_draw_cmd(data, interp);
 
@@ -51,11 +52,12 @@ int Nchange_twist_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
     )
 {
     int twist;
+
     if (argc != 2)
 	return (TCL_ERROR);
     twist = atoi(argv[1]);
 
-    twist = (int) (10 * twist);
+    twist = (int)(10 * twist);
     GS_set_twist(twist);
     Nquick_draw_cmd(data, interp);
 
@@ -84,9 +86,9 @@ int Nchange_position_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     float xpos, ypos, from[3];
     float tempx, tempy;
 
-    xpos = (float) atof(argv[1]);
+    xpos = (float)atof(argv[1]);
     xpos = (xpos < 0) ? 0 : (xpos > 1.0) ? 1.0 : xpos;
-    ypos = 1.0 - (float) atof(argv[2]);
+    ypos = 1.0 - (float)atof(argv[2]);
     ypos = (ypos < 0) ? 0 : (ypos > 1.0) ? 1.0 : ypos;
 
 
@@ -132,7 +134,7 @@ int Nchange_height_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 	return (TCL_ERROR);
 
     GS_get_from_real(from);
-    temp = (float) atof(argv[1]);
+    temp = (float)atof(argv[1]);
 
     if (temp != from[Z]) {
 	from[Z] = temp;
@@ -161,6 +163,7 @@ int Nset_light_to_view_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
     )
 {
     float from[3];
+
     GS_get_from_real(from);
     normalize(from);
     GS_setlight_position(1, from[X], from[Y], from[Z], 0);
@@ -211,12 +214,13 @@ int Nchange_exag_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
     /*int i; */
     float val;
     float temp;
-/*  float from[3];*/
+
+    /*  float from[3]; */
     double atof();
 
     if (argc != 2)
 	return (TCL_ERROR);
-    val = (float) atof(argv[1]);
+    val = (float)atof(argv[1]);
 
     temp = GS_global_exag();
     if (val != temp) {

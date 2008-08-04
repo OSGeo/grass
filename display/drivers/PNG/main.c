@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       PNG driver
@@ -22,8 +23,7 @@
 
 int main(int argc, char **argv)
 {
-	LIB_init(PNG_Driver(), argc, argv);
+    LIB_init(PNG_Driver(), argc, argv);
 
-	return LIB_main(argc, argv);
+    return LIB_main(argc, argv);
 }
-

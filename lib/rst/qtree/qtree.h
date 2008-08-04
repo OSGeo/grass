@@ -1,3 +1,4 @@
+
 /*-
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
  * University of Illinois
@@ -16,7 +17,8 @@
 #define VOID_T char
 
 
-struct multfunc { 
+struct multfunc
+{
     int (*compare) ();
     struct quaddata **(*divide_data) ();
     int (*add_data) ();
@@ -25,30 +27,38 @@ struct multfunc {
     int (*get_points) ();
 };
 
-struct tree_info {
-  struct multfunc *functions;
-  double dmin;
-  int kmax;
-  struct multtree *root;
+struct tree_info
+{
+    struct multfunc *functions;
+    double dmin;
+    int kmax;
+    struct multtree *root;
 };
 
-struct multtree {
-  struct quaddata *data;
-  struct multtree **leafs;
-  struct multtree *parent;
-  int    multant;
+struct multtree
+{
+    struct quaddata *data;
+    struct multtree **leafs;
+    struct multtree *parent;
+    int multant;
 };
 
 struct multfunc *MT_functions_new(int (*)(struct triple *, struct quaddata *),
-      struct quaddata **(*)(struct quaddata *, int, double),
-      int (*)(struct triple *, struct quaddata *, double),
-      int (*)(struct quaddata *, struct quaddata *),
-      int (*)(struct quaddata *, int),
-      int (*)(struct quaddata *, struct quaddata *, int));
-struct tree_info *MT_tree_info_new(struct multtree *, struct multfunc *, double, int);
-struct multtree *MT_tree_new(struct quaddata *, struct multtree **, struct multtree *, int);
+				  struct quaddata **(*)(struct quaddata *,
+							int, double),
+				  int (*)(struct triple *, struct quaddata *,
+					  double), int (*)(struct quaddata *,
+							   struct quaddata *),
+				  int (*)(struct quaddata *, int),
+				  int (*)(struct quaddata *,
+					  struct quaddata *, int));
+struct tree_info *MT_tree_info_new(struct multtree *, struct multfunc *,
+				   double, int);
+struct multtree *MT_tree_new(struct quaddata *, struct multtree **,
+			     struct multtree *, int);
 int MT_insert(struct triple *, struct tree_info *, struct multtree *, int);
 int MT_divide(struct tree_info *, struct multtree *, int);
-int MT_region_data(struct tree_info *, struct multtree *, struct quaddata *, int, int);
+int MT_region_data(struct tree_info *, struct multtree *, struct quaddata *,
+		   int, int);
 
 #endif

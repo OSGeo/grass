@@ -1,24 +1,24 @@
 
 #define NCF   411
-#define NG1   602 
+#define NG1   602
 #define NG2   500
 #define NX    131
 
 /* ******************************* */
 #define GRADPARAM1 10
-#define GRADPARAM2 4 
-#define GRADPARAM3 10 
+#define GRADPARAM2 4
+#define GRADPARAM3 10
 /* ********************************** */
 
 
-#define TESTOUT 0 
+#define TESTOUT 0
 /* conv. to integers params */
 /* ******************************* */
 #define sciz 1
 #define scig 1
 #define scio 1
 #define scik1 100000
-#define scik2 100000 
+#define scik2 100000
 #define scik3 100000
 /* ******************************** */
 

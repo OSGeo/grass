@@ -5,7 +5,7 @@
 #include <grass/gis.h>
 
 typedef void stat_func(DCELL *, DCELL *, int);
-typedef void stat_func_w(DCELL *, DCELL (*)[2], int);
+typedef void stat_func_w(DCELL *, DCELL(*)[2], int);
 
 extern stat_func c_ave;
 extern stat_func c_count;
@@ -47,7 +47,6 @@ extern stat_func_w w_skew;
 extern stat_func_w w_kurt;
 
 extern int sort_cell(DCELL *, int);
-extern int sort_cell_w(DCELL (*)[2], int);
+extern int sort_cell_w(DCELL(*)[2], int);
 
 #endif
-

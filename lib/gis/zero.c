@@ -1,3 +1,4 @@
+
 /**
  * \file zero.c
  *
@@ -25,7 +26,7 @@
  * \return always returns 0
  */
 
-int G_zero (void *buf, int i)
+int G_zero(void *buf, int i)
 {
     memset(buf, 0, i);
 

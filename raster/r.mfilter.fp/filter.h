@@ -2,13 +2,13 @@
 #include <grass/rowio.h>
 typedef struct
 {
-    int size;           /* size of filter matrix */
-    double **matrix;    /* filter coefficient matrix */
-    double **dmatrix;   /* divisor coefficient matrix */
-    double divisor;     /* filter scale factor */
-    int type;           /* sequential or parallel */
-    int start;          /* starting corner */
-} FILTER ;
+    int size;			/* size of filter matrix */
+    double **matrix;		/* filter coefficient matrix */
+    double **dmatrix;		/* divisor coefficient matrix */
+    double divisor;		/* filter scale factor */
+    int type;			/* sequential or parallel */
+    int start;			/* starting corner */
+} FILTER;
 
 #define PARALLEL 1
 #define SEQUENTIAL 2
@@ -19,9 +19,12 @@ typedef struct
 
 /* apply.c */
 DCELL apply_filter(FILTER *, DCELL **);
+
 /* getfilt.c */
 FILTER *get_filter(char *, int *, char *);
+
 /* perform.c */
 int perform_filter(char *, char *, char *, FILTER *, int, int);
+
 /* execute.c */
 int execute_filter(ROWIO *, int, FILTER *, DCELL *);

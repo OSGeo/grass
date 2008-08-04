@@ -241,7 +241,8 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 }
 
 
-double class_discont(double *data, int count, int nbreaks, double *classbreaks)
+double class_discont(double *data, int count, int nbreaks,
+		     double *classbreaks)
 {
     int *num, nbclass;
     double *no, *zz, *nz, *xn, *co;

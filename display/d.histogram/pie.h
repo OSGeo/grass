@@ -39,10 +39,10 @@
  *******************************************************************
  */
 
-float rem();  /* remainder function */ 
+float rem();			/* remainder function */
 
 /* normalized coordinates & dimensions of pie-chart components */
- 
+
 /* origin */
 #define ORIGIN_X	0.5
 #define ORIGIN_Y	0.59
@@ -59,9 +59,9 @@ float rem();  /* remainder function */
 #define BAR_HEIGHT	BAR_Y2-BAR_Y1
 
 /* minimum distance between numbered tic-marks on legend */
-#define XTIC_DIST	40	
+#define XTIC_DIST	40
 
-/* sizes of legend tic-marks */ 
+/* sizes of legend tic-marks */
 #define BIG_TIC		0.025
 #define SMALL_TIC	0.015
 
@@ -69,10 +69,10 @@ float rem();  /* remainder function */
 #define LABEL		0.03
 
 /* y-coordinate of legend tic-mark numbers */
-#define XNUMS_Y         0.09     
+#define XNUMS_Y         0.09
 
 /* text width and height */
 #define TEXT_HEIGHT	0.05
-#define TEXT_WIDTH	TEXT_HEIGHT*0.5	
+#define TEXT_WIDTH	TEXT_HEIGHT*0.5
 
 extern struct units tics[];

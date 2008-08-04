@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       d.ask
@@ -21,7 +22,7 @@
 #include <grass/glocale.h>
 #include <grass/raster.h>
 
-int main(int argc,char *argv[])
+int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *element, *prompt;
@@ -34,8 +35,8 @@ int main(int argc,char *argv[])
     module = G_define_module();
     module->keywords = _("display");
     module->description =
-		"Prompts the user to select a GRASS data base file from among "
-		"files displayed in a menu on the graphics monitor.";
+	"Prompts the user to select a GRASS data base file from among "
+	"files displayed in a menu on the graphics monitor.";
 
     element = G_define_option();
     element->key = "element";
@@ -51,46 +52,38 @@ int main(int argc,char *argv[])
     prompt->description = "Short user prompt message";
 
     G_disable_interactive();
-    if (G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(1);
 
-/* make sure we can do graphics */
+    /* make sure we can do graphics */
     if (R_open_driver() != 0)
-	    G_fatal_error ("No graphics device selected");
+	G_fatal_error("No graphics device selected");
     R_close_driver();
 
     tempfile = G_tempfile();
-    unlink (tempfile);
-    sprintf (command, "%s/etc/i.find %s %s %s %s",
-	G_gisbase(), G_location(), G_mapset(), element->answers[0], tempfile);
+    unlink(tempfile);
+    sprintf(command, "%s/etc/i.find %s %s %s %s",
+	    G_gisbase(), G_location(), G_mapset(), element->answers[0],
+	    tempfile);
     system(command);
 
-    if (access(tempfile,0)==0)
-    {
-	if (prompt->answer)
-	{
-	    sprintf (command, "%s/etc/i.ask %s '%s'",
-		G_gisbase(), tempfile, prompt->answer);
+    if (access(tempfile, 0) == 0) {
+	if (prompt->answer) {
+	    sprintf(command, "%s/etc/i.ask %s '%s'",
+		    G_gisbase(), tempfile, prompt->answer);
 	}
-	else
-	{
-	    sprintf (command, "%s/etc/i.ask %s",
-		G_gisbase(), tempfile);
+	else {
+	    sprintf(command, "%s/etc/i.ask %s", G_gisbase(), tempfile);
 	}
 	exit(system(command));
     }
-    else
-    {
-	fd = popen ("d.menu tcolor=red > /dev/null", "w");
-	if (fd)
-	{
-	    fprintf (fd, "** no %s files found **\n", element->answers[1]);
-	    fprintf (fd, "Click here to CONTINUE\n");
-	    pclose (fd);
+    else {
+	fd = popen("d.menu tcolor=red > /dev/null", "w");
+	if (fd) {
+	    fprintf(fd, "** no %s files found **\n", element->answers[1]);
+	    fprintf(fd, "Click here to CONTINUE\n");
+	    pclose(fd);
 	}
 	exit(0);
     }
 }
-
-
-

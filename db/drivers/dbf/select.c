@@ -1,3 +1,4 @@
+
 /*****************************************************************************
 *
 * MODULE:       DBF driver 
@@ -19,43 +20,38 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int mode)
-
+int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 {
-    int ret;	
-    cursor      *c;
-    char        *sql;      
-    dbTable     *table;   
-    
+    int ret;
+    cursor *c;
+    char *sql;
+    dbTable *table;
+
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
 	return DB_FAILED;
 
-    db_set_cursor_mode(dbc,mode);
+    db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
 
     sql = db_get_string(sel);
-    
-    ret = execute ( sql, c); 
-		    
-    if ( ret == DB_FAILED )
-      {
-        append_error("Error in db_open_select_cursor()");
-	report_error( );
+
+    ret = execute(sql, c);
+
+    if (ret == DB_FAILED) {
+	append_error("Error in db_open_select_cursor()");
+	report_error();
 	return DB_FAILED;
-      } 
-		
-    describe_table( c->table, c->cols, c->ncols, &table);
-    
+    }
+
+    describe_table(c->table, c->cols, c->ncols, &table);
+
     /* record table with dbCursor */
     db_set_cursor_table(dbc, table);
-    
+
     /* set dbCursor's token for my cursor */
     db_set_cursor_token(dbc, c->token);
 
     return DB_OK;
 }
-
-

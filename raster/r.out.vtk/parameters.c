@@ -43,9 +43,7 @@ void set_params()
     param.elevationmap->required = NO;
     param.elevationmap->gisprompt = "old,cell,raster";
     param.elevationmap->multiple = NO;
-    param.elevationmap->description =
-	_
-	("Elevation raster map");
+    param.elevationmap->description = _("Elevation raster map");
 
     param.null_val = G_define_option();
     param.null_val->key = "null";
@@ -58,7 +56,8 @@ void set_params()
     param.elev->key = "elevation2d";
     param.elev->type = TYPE_DOUBLE;
     param.elev->required = NO;
-    param.elev->description = _("Elevation (if no elevation map is specified)");
+    param.elev->description =
+	_("Elevation (if no elevation map is specified)");
     param.elev->answer = "0.0";
 
     param.point = G_define_flag();
@@ -133,11 +132,12 @@ void set_params()
     param.origin->description =
 	_("Scale factor effects the origin (if no elevation map is given)");
 
-    param.coorcorr = G_define_flag();                                            
-    param.coorcorr->key = 'c';                                                   
+    param.coorcorr = G_define_flag();
+    param.coorcorr->key = 'c';
     param.coorcorr->guisection = "Advanced options";
-    param.coorcorr->description = _("Correct the coordinates to fit the VTK-OpenGL precision");
-    
+    param.coorcorr->description =
+	_("Correct the coordinates to fit the VTK-OpenGL precision");
+
 
     /* 
      * param.mask = G_define_flag ();

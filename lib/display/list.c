@@ -73,11 +73,11 @@
  *  \return int
  */
 
-int D_set_cell_name(const char *name )
+int D_set_cell_name(const char *name)
 {
-	R_pad_delete_item("cell") ;
+    R_pad_delete_item("cell");
 
-	return(R_pad_set_item ("cell", name)) ;
+    return (R_pad_set_item("cell", name));
 }
 
 
@@ -90,19 +90,19 @@ int D_set_cell_name(const char *name )
  *  \return int
  */
 
-int D_get_cell_name(char *name )
+int D_get_cell_name(char *name)
 {
-	int stat ;
-	char **list ;
-	int count ;
+    int stat;
+    char **list;
+    int count;
 
-	if ((stat = R_pad_get_item ("cell", &list, &count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("cell", &list, &count)))
+	return (-1);
 
-	strcpy(name, list[0]) ;
+    strcpy(name, list[0]);
 
-	R_pad_freelist (list,count) ;
-	return(0) ;
+    R_pad_freelist(list, count);
+    return (0);
 }
 
 
@@ -116,11 +116,11 @@ int D_get_cell_name(char *name )
  *  \return int
  */
 
-int D_set_dig_name(const char *name )
+int D_set_dig_name(const char *name)
 {
-	R_pad_delete_item("dig") ;
+    R_pad_delete_item("dig");
 
-	return(R_pad_set_item ("dig", name)) ;
+    return (R_pad_set_item("dig", name));
 }
 
 
@@ -133,50 +133,50 @@ int D_set_dig_name(const char *name )
  *  \return int
  */
 
-int D_get_dig_name(char *name )
+int D_get_dig_name(char *name)
 {
-	int stat ;
-	char **list ;
-	int count ;
+    int stat;
+    char **list;
+    int count;
 
-	if ((stat = R_pad_get_item ("dig", &list, &count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("dig", &list, &count)))
+	return (-1);
 
-	strcpy(name, list[0]) ;
+    strcpy(name, list[0]);
 
-	R_pad_freelist (list,count) ;
-	return(0) ;
+    R_pad_freelist(list, count);
+    return (0);
 }
 
 
-int D_add_to_cell_list(const char *name )
+int D_add_to_cell_list(const char *name)
 {
-	return(R_pad_append_item ("cell_list", name, 1)) ;
+    return (R_pad_append_item("cell_list", name, 1));
 }
 
-int D_get_cell_list(char ***list, int *count )
+int D_get_cell_list(char ***list, int *count)
 {
-	int stat ;
+    int stat;
 
-	if ((stat = R_pad_get_item ("cell_list", list, count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("cell_list", list, count)))
+	return (-1);
 
-	return(0) ;
+    return (0);
 }
 
-int D_add_to_dig_list(const char *name )
+int D_add_to_dig_list(const char *name)
 {
-	return(R_pad_append_item ("dig_list", name, 1)) ;
+    return (R_pad_append_item("dig_list", name, 1));
 }
 
-int D_get_dig_list(char ***list, int *count )
+int D_get_dig_list(char ***list, int *count)
 {
-	int stat ;
+    int stat;
 
-	if ((stat = R_pad_get_item ("dig_list", list, count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("dig_list", list, count)))
+	return (-1);
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -196,17 +196,17 @@ int D_get_dig_list(char ***list, int *count )
 
 int D_add_to_list(const char *string)
 {
-	return(R_pad_append_item("list", string, 0)) ;
+    return (R_pad_append_item("list", string, 0));
 }
 
-int D_get_list(char ***list, int *count )
+int D_get_list(char ***list, int *count)
 {
-	int stat ;
+    int stat;
 
-	if ((stat = R_pad_get_item ("list", list, count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("list", list, count)))
+	return (-1);
 
-	return(0) ;
+    return (0);
 }
 
 
@@ -220,7 +220,7 @@ int D_get_list(char ***list, int *count )
  *  \return int
  */
 
- 
+
 /*!
  * \brief clear frame display lists
  *
@@ -232,37 +232,37 @@ int D_get_list(char ***list, int *count )
 
 int D_clear_window(void)
 {
-	R_pad_delete_item("list") ;
-	R_pad_delete_item("cell") ;
-	R_pad_delete_item("dig") ;
-	R_pad_delete_item("site") ;
-	R_pad_delete_item("cell_list") ;
-	R_pad_delete_item("dig_list") ;
-	R_pad_delete_item("site_list") ;
-	R_pad_delete_item("m_win") ;
-	R_pad_delete_item("erase");
-	return 0;
+    R_pad_delete_item("list");
+    R_pad_delete_item("cell");
+    R_pad_delete_item("dig");
+    R_pad_delete_item("site");
+    R_pad_delete_item("cell_list");
+    R_pad_delete_item("dig_list");
+    R_pad_delete_item("site_list");
+    R_pad_delete_item("m_win");
+    R_pad_delete_item("erase");
+    return 0;
 }
 
 int D_set_erase_color(const char *colorname)
 {
-	R_pad_delete_item("erase");
+    R_pad_delete_item("erase");
 
-	return(R_pad_set_item("erase", colorname));
+    return (R_pad_set_item("erase", colorname));
 }
 
 
-int D_get_erase_color( char *colorname)
+int D_get_erase_color(char *colorname)
 {
-	int stat ;
-	char **list ;
-	int count ;
+    int stat;
+    char **list;
+    int count;
 
-	if ((stat = R_pad_get_item ("erase", &list, &count)))
-		return(-1) ;
+    if ((stat = R_pad_get_item("erase", &list, &count)))
+	return (-1);
 
-	strcpy(colorname, list[0]) ;
+    strcpy(colorname, list[0]);
 
-	R_pad_freelist (list,count) ;
-	return(0) ;
+    R_pad_freelist(list, count);
+    return (0);
 }

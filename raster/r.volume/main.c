@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.volume
@@ -65,7 +66,8 @@ int main(int argc, char *argv[])
     opt1->required = YES;
     opt1->gisprompt = "old,cell,raster";
     opt1->description =
-	_("Existing raster map representing data that will be summed within clumps");
+	_
+	("Existing raster map representing data that will be summed within clumps");
 
     opt2 = G_define_option();
     opt2->key = "clump";
@@ -203,7 +205,8 @@ int main(int argc, char *argv[])
 
     /* got everything, now do output */
     if (*site_list) {
-	char desc[GNAME_MAX*2+40];
+	char desc[GNAME_MAX * 2 + 40];
+
 	site_info.form = NULL;
 	site_info.time = NULL;
 	site_info.stime = NULL;
@@ -211,8 +214,8 @@ int main(int argc, char *argv[])
 		argv[0], datamap, clumpmap);
 	site_info.desc = G_store(desc);
 	site_info.name = G_store(site_list);
-	site_info.labels = G_store(
-		"centroid east|centroid north|#cat vol avg t n");
+	site_info.labels =
+	    G_store("centroid east|centroid north|#cat vol avg t n");
 	G_site_put_head(fd_sites, &site_info);
     }
     if (out_mode) {
@@ -245,8 +248,9 @@ int main(int argc, char *argv[])
 		G_site_put(fd_sites, mysite);
 	    }
 	    if (out_mode)
-		fprintf(stdout, "%5d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n",
-			i, avg, sum[i], count[i], east, north, vol);
+		fprintf(stdout,
+			"%5d%10.2f%10.0f %7ld  %10.2f  %10.2f %16.2f\n", i,
+			avg, sum[i], count[i], east, north, vol);
 	    else
 		fprintf(stdout, "%d:%.2f:%.0f:%ld:%.2f:%.2f:%.2f\n",
 			i, avg, sum[i], count[i], east, north, vol);
@@ -257,4 +261,3 @@ int main(int argc, char *argv[])
     fprintf(stdout, "\n");
     exit(EXIT_SUCCESS);
 }				/* end of main() */
-

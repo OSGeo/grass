@@ -6,108 +6,101 @@
 #include <grass/dbmi.h>
 #include <grass/gis.h>
 
-static
-char *dbmscap_files[] = {
+static char *dbmscap_files[] = {
     "/etc/dbmscap",
     "/lib/dbmscap",
     "/usr/lib/dbmscap",
     "/usr/local/lib/dbmscap",
     "/usr/local/dbmi/lib/dbmscap",
-    NULL };
+    NULL
+};
 
 static void add_entry();
 
-static char *
-dbmscap_filename(err_flag)
+static char *dbmscap_filename(err_flag)
 {
     char *file;
     int i;
 
-    file = getenv ("DBMSCAP");
+    file = getenv("DBMSCAP");
     if (file)
 	return file;
 
-    for (i = 0; (file = dbmscap_files[i]); i++)
-    {
-	if (access (file, 0) == 0)
+    for (i = 0; (file = dbmscap_files[i]); i++) {
+	if (access(file, 0) == 0)
 	    return file;
     }
-    if(err_flag)
-	db_error ("DBMSCAP not set");
+    if (err_flag)
+	db_error("DBMSCAP not set");
 
     return ((char *)NULL);
 }
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-const char *
-db_dbmscap_filename(void)
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+const char *db_dbmscap_filename(void)
 {
     return dbmscap_filename(1);
 }
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-int
-db_has_dbms(void)
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+int db_has_dbms(void)
 {
     return (dbmscap_filename(0) != NULL);
 }
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-void
-db_copy_dbmscap_entry (dbDbmscap *dst, dbDbmscap *src)
-
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+void db_copy_dbmscap_entry(dbDbmscap * dst, dbDbmscap * src)
 {
-    strcpy (dst->driverName, src->driverName);
-    strcpy (dst->comment, src->comment);
-    strcpy (dst->startup, src->startup);
+    strcpy(dst->driverName, src->driverName);
+    strcpy(dst->comment, src->comment);
+    strcpy(dst->startup, src->startup);
 }
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
 /* dbmscap file was used in grass5.0 but it is not used in
  * grass5.7 until we find it necessary. All code for dbmscap
  * file is commented here. 
  *
  * Instead of in dbmscap file db_read_dbmscap() searches 
- * for available dbmi drivers in $(GISBASE)/driver/db/  */ 
+ * for available dbmi drivers in $(GISBASE)/driver/db/  */
 
-dbDbmscap *
-db_read_dbmscap(void)
+dbDbmscap *db_read_dbmscap(void)
 {
-    /*	
-    FILE *fd;
-    char *file;
-    char name[1024];
-    char startup[1024];
-    char comment[1024];
-    int  line;
-    */
-    char   *dirpath;
-    DIR    *dir;	
-    struct dirent *ent;	
+    /*  
+       FILE *fd;
+       char *file;
+       char name[1024];
+       char startup[1024];
+       char comment[1024];
+       int  line;
+     */
+    char *dirpath;
+    DIR *dir;
+    struct dirent *ent;
 
     dbDbmscap *list = NULL;
 
-/* START OF OLD CODE FOR dbmscap FILE - NOT USED, BUT KEEP IT FOR FUTURE */
+    /* START OF OLD CODE FOR dbmscap FILE - NOT USED, BUT KEEP IT FOR FUTURE */
 #if 0
     /* get the full name of the dbmscap file */
 
@@ -115,113 +108,108 @@ db_read_dbmscap(void)
     if (file == NULL)
 	return (dbDbmscap *) NULL;
 
-    
+
     /* open the dbmscap file */
 
-    fd = fopen (file, "r");
-    if (fd == NULL)
-    {
-	db_syserror (file);
+    fd = fopen(file, "r");
+    if (fd == NULL) {
+	db_syserror(file);
 	return (dbDbmscap *) NULL;
     }
 
-    
+
     /* find all valid entries
      * blank lines and lines with # as first non blank char are ignored
      * format is:
      *   driver name:startup command:comment
      */
 
-    for (line = 1; fgets (buf, sizeof buf, fd); line++)
-    {
-	if (sscanf (buf, "%1s", comment) != 1 || *comment == '#')
+    for (line = 1; fgets(buf, sizeof buf, fd); line++) {
+	if (sscanf(buf, "%1s", comment) != 1 || *comment == '#')
 	    continue;
-	if (sscanf (buf, "%[^:]:%[^:]:%[^:\n]", name, startup, comment) == 3)
-	    add_entry (&list, name, startup, comment);
-	else if (sscanf (buf, "%[^:]:%[^:\n]", name, startup) == 2)
-	    add_entry (&list, name, startup, "");
-	else
-	{
-	    fprintf (stderr, "%s: line %d: invalid entry\n", file, line);
-	    fprintf (stderr,"%d:%s\n", line, buf);
+	if (sscanf(buf, "%[^:]:%[^:]:%[^:\n]", name, startup, comment) == 3)
+	    add_entry(&list, name, startup, comment);
+	else if (sscanf(buf, "%[^:]:%[^:\n]", name, startup) == 2)
+	    add_entry(&list, name, startup, "");
+	else {
+	    fprintf(stderr, "%s: line %d: invalid entry\n", file, line);
+	    fprintf(stderr, "%d:%s\n", line, buf);
 	}
 	if (list == NULL)
 	    break;
     }
-    fclose (fd);
+    fclose(fd);
 #endif
-/* END OF OLD CODE FOR dbmscap FILE */
+    /* END OF OLD CODE FOR dbmscap FILE */
 
-/* START OF NEW CODE FOR SEARCH IN $(GISBASE)/driver/db/ */
-    
+    /* START OF NEW CODE FOR SEARCH IN $(GISBASE)/driver/db/ */
+
     /* opend db drivers directory */
 #ifdef __MINGW32__
-    dirpath = G_malloc ( strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1 );
-    sprintf ( dirpath, "%s\\driver\\db\\", G_gisbase());
+    dirpath = G_malloc(strlen("\\driver\\db\\") + strlen(G_gisbase()) + 1);
+    sprintf(dirpath, "%s\\driver\\db\\", G_gisbase());
 #else
-    G_asprintf (&dirpath, "%s/driver/db/", G_gisbase());
+    G_asprintf(&dirpath, "%s/driver/db/", G_gisbase());
 #endif
 
-    G_debug ( 2, "opendir %s\n", dirpath );
+    G_debug(2, "opendir %s\n", dirpath);
     dir = opendir(dirpath);
-    if (dir == NULL)
-    {
-	db_syserror ("Cannot open drivers directory");
+    if (dir == NULL) {
+	db_syserror("Cannot open drivers directory");
 	return (dbDbmscap *) NULL;
     }
-    G_free (dirpath);
-    
+    G_free(dirpath);
+
     /* read all drivers */
-    while ((ent = readdir (dir)))
-      {
+    while ((ent = readdir(dir))) {
 	char *name;
 
-        if ( (strcmp (ent->d_name, ".") == 0) 
-	    || (strcmp (ent->d_name, "..") == 0) ) continue;	
+	if ((strcmp(ent->d_name, ".") == 0)
+	    || (strcmp(ent->d_name, "..") == 0))
+	    continue;
 
 	/* Remove '.exe' from name (windows extension) */
-	name = G_str_replace ( ent->d_name, ".exe", "" );
-	
+	name = G_str_replace(ent->d_name, ".exe", "");
+
 #ifdef __MINGW32__
-        dirpath = G_malloc ( strlen("\\driver\\db\\") 
-                  + strlen(G_gisbase()) + strlen(ent->d_name) + 1 );
-        sprintf ( dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
+	dirpath = G_malloc(strlen("\\driver\\db\\")
+			   + strlen(G_gisbase()) + strlen(ent->d_name) + 1);
+	sprintf(dirpath, "%s\\driver\\db\\%s", G_gisbase(), ent->d_name);
 #else
-        G_asprintf (&dirpath, "%s/driver/db/%s", G_gisbase(),ent->d_name);
+	G_asprintf(&dirpath, "%s/driver/db/%s", G_gisbase(), ent->d_name);
 #endif
-	add_entry (&list, name, dirpath, "");
-	G_free (name);
-	G_free (dirpath);
-      }
-    
-    closedir (dir);
+	add_entry(&list, name, dirpath, "");
+	G_free(name);
+	G_free(dirpath);
+    }
+
+    closedir(dir);
 
     return list;
 }
 
 static void
-add_entry  (dbDbmscap **list, char *name, char *startup, char *comment)
-
+add_entry(dbDbmscap ** list, char *name, char *startup, char *comment)
 {
     dbDbmscap *head, *cur, *tail;
 
-/* add this entry to the head of a linked list */
+    /* add this entry to the head of a linked list */
     tail = head = *list;
     while (tail && tail->next)
 	tail = tail->next;
     *list = NULL;
 
-    cur = (dbDbmscap *) db_malloc (sizeof(dbDbmscap));
+    cur = (dbDbmscap *) db_malloc(sizeof(dbDbmscap));
     if (cur == NULL)
-	return; /* out of memory */
+	return;			/* out of memory */
     cur->next = NULL;
 
-/* copy each item to the dbmscap structure */
-    strcpy (cur->driverName, name);
-    strcpy (cur->startup, startup);
-    strcpy (cur->comment, comment);
+    /* copy each item to the dbmscap structure */
+    strcpy(cur->driverName, name);
+    strcpy(cur->startup, startup);
+    strcpy(cur->comment, comment);
 
-/* handle the first call (head == NULL) */
+    /* handle the first call (head == NULL) */
     if (tail)
 	tail->next = cur;
     else
@@ -231,20 +219,17 @@ add_entry  (dbDbmscap **list, char *name, char *startup, char *comment)
 }
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-void
-db_free_dbmscap  (dbDbmscap *list)
-
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+void db_free_dbmscap(dbDbmscap * list)
 {
     dbDbmscap *next, *cur;
 
-    for (cur = list; cur; cur = next)
-    {
+    for (cur = list; cur; cur = next) {
 	next = cur->next;
-	free (cur);
+	free(cur);
     }
 }

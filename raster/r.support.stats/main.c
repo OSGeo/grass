@@ -1,19 +1,19 @@
 /*
-**********************************************************************
-*
-* MODULE:        r.support.stats
-*
-* AUTHOR(S):     Brad Douglas <rez touchofmadness com>
-*
-* PURPOSE:       Update raster statistics
-*
-* COPYRIGHT:     (C) 2006 by the GRASS Development Team
-*
-*                This program is free software under the GNU General
-*                Purpose License (>=v2). Read the file COPYING that
-*                comes with GRASS for details.
-*
-***********************************************************************/
+ **********************************************************************
+ *
+ * MODULE:        r.support.stats
+ *
+ * AUTHOR(S):     Brad Douglas <rez touchofmadness com>
+ *
+ * PURPOSE:       Update raster statistics
+ *
+ * COPYRIGHT:     (C) 2006 by the GRASS Development Team
+ *
+ *                This program is free software under the GNU General
+ *                Purpose License (>=v2). Read the file COPYING that
+ *                comes with GRASS for details.
+ *
+ ***********************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -22,12 +22,13 @@
 #include "local_proto.h"
 
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char *mapset;
     struct GModule *module;
-    struct {
-        struct Option *raster;
+    struct
+    {
+	struct Option *raster;
     } parm;
 
     /* Initialize GIS engine */
@@ -40,11 +41,11 @@ int main (int argc, char *argv[])
 
     /* parse command-line options */
     if (G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 
     mapset = G_find_cell2(parm.raster->answer, G_mapset());
     if (mapset == NULL)
-        G_fatal_error(_("Raster map <%s> not found"), parm.raster->answer);
+	G_fatal_error(_("Raster map <%s> not found"), parm.raster->answer);
 
     check_stats(parm.raster->answer, mapset);
 

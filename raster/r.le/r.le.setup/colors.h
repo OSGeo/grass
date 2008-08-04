@@ -1,23 +1,23 @@
 /*
-************************************************************
-* MODULE: r.le.setup/colors.h                              *
-*         Version 5.0beta            Oct. 1, 2001          *
-*				                           *
-* AUTHOR: W.L. Baker, University of Wyoming                *
-*         BAKERWL@UWYO.EDU                                 *
-*                                                          *
-* PURPOSE: To set up sampling areas, which can can then    *
-*         be used to obtain data using the r.le.dist,      *
-*         r.le.patch, and r.le.pixel programs.  The        *
-*         colors.h file defines the colors                 *
-*				                           *
-* COPYRIGHT: (C) 2001 by W.L. Baker                        *
-*                                                          *
-* This program is free software under the GNU General      *
-* Public License(>=v2).  Read the file COPYING that comes  *
-* with GRASS for details                                   *
-*				                           *
-************************************************************/
+ ************************************************************
+ * MODULE: r.le.setup/colors.h                              *
+ *         Version 5.0beta            Oct. 1, 2001          *
+ *                                                         *
+ * AUTHOR: W.L. Baker, University of Wyoming                *
+ *         BAKERWL@UWYO.EDU                                 *
+ *                                                          *
+ * PURPOSE: To set up sampling areas, which can can then    *
+ *         be used to obtain data using the r.le.dist,      *
+ *         r.le.patch, and r.le.pixel programs.  The        *
+ *         colors.h file defines the colors                 *
+ *                                                         *
+ * COPYRIGHT: (C) 2001 by W.L. Baker                        *
+ *                                                          *
+ * This program is free software under the GNU General      *
+ * Public License(>=v2).  Read the file COPYING that comes  *
+ * with GRASS for details                                   *
+ *                                                         *
+ ************************************************************/
 
 #include <grass/config.h>
 #define RED		1

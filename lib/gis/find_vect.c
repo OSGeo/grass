@@ -6,9 +6,9 @@
  *        char *mapset     mapset to search. if mapset is ""
  *                         will search in mapset search list
  *
- *	searches for a vector map from the mapset search list
+ *      searches for a vector map from the mapset search list
  *      or in a specified mapset.
- *	returns the mapset name where the vector map was found.
+ *      returns the mapset name where the vector map was found.
  *
  * NOTE: If the user specifies a fully qualified vector map which exists,
  *       then <i>G_find_vector()</i> modifies <b>name</b> by removing the
@@ -30,9 +30,9 @@
 
 /* \brief searches for a vector map
  *
- *	searches for a vector map from the mapset search list
+ *      searches for a vector map from the mapset search list
  *      or in a specified mapset.
- *	returns the mapset name where the vector map was found.
+ *      returns the mapset name where the vector map was found.
  *
  *  returns:
  *      char *  pointer to a string with name of mapset
@@ -52,11 +52,9 @@
  *  \return char *
  *
  */
-char *
-G_find_vector  (char *name, const char *mapset)
-
+char *G_find_vector(char *name, const char *mapset)
 {
-	return G_find_file ( GRASS_VECT_DIRECTORY, name, mapset);
+    return G_find_file(GRASS_VECT_DIRECTORY, name, mapset);
 }
 
 
@@ -74,9 +72,7 @@ G_find_vector  (char *name, const char *mapset)
  *  \param mapset
  *  \return char *
  */
-char *
-G_find_vector2  (const char *name, const char *mapset)
-
+char *G_find_vector2(const char *name, const char *mapset)
 {
-	return G_find_file2 (GRASS_VECT_DIRECTORY, name, mapset);
+    return G_find_file2(GRASS_VECT_DIRECTORY, name, mapset);
 }

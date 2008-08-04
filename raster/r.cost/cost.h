@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -22,19 +23,21 @@
 
 /***************************************************************/
 /*                                                             */
-/*        cost.h    in   ~/src/Gcost                           */  
+/*        cost.h    in   ~/src/Gcost                           */
 /*                                                             */
-/*      This header file defines the data structure of a       */  
+/*      This header file defines the data structure of a       */
 /*      point structure containing various attributes of       */
 /*      a grid cell.                                           */
 /*                                                             */
+
 /***************************************************************/
 
 #ifndef __COST_H__
 #define __COST_H__
 
-struct cost{
-    double  min_cost;
+struct cost
+{
+    double min_cost;
     int row;
     int col;
     struct cost *lower;

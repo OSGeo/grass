@@ -43,9 +43,10 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     module->keywords = _("vector, paint labels");
-    module->description = _("Create optimally placed labels for vector map(s)");
+    module->description =
+	_("Create optimally placed labels for vector map(s)");
 
-//    fprintf(stderr, "Parsing options and flags\n");
+    //    fprintf(stderr, "Parsing options and flags\n");
     /* parse options and flags */
     if (parse_args(argc, argv, &p))
 	exit(EXIT_FAILURE);
@@ -69,45 +70,45 @@ int main(int argc, char *argv[])
     }
     fclose(labelf);
 
-/* dumping the skyline of the labels */
-/*    {
-	int n=1;
-	char *f;
-	FILE *skyf;
-	f = G_tempfile();
-	skyf = fopen(f, "w");
-	printf("Writing label skylines & label points to file %s", f);
-	fprintf(skyf, "VERTI:\n");
-	printf("\n%d labels:\n", n_labels);
-	for (i = 0; i < n_labels; i++) {
-	    printf("%s has %d candidates\n", labels[i].text, labels[i].n_candidates);
-	    if (labels[i].n_candidates > 0) {
-		int j;
-		label_t *l = &labels[i];
-		j = l->current_candidate;
-//		for(j=0; j < l->n_candidates; j++) {
-		{
-		    int k;
-		    label_candidate_t *cc = &l->candidates[j];
-		    struct line_pnts *sky = skyline_trans_rot(l->skyline,
-							      &cc->point,
-							      cc->rotation);
-		    fprintf(skyf, "L %d 1\n", sky->n_points);
-		    for(k=0;k < sky->n_points; k++) {
-			fprintf(skyf, " %.12f %.12f\n", sky->x[k], sky->y[k]);
-		    }
-		    fprintf(skyf, " %-5d %-10d\n", 1, 1000+n);
-		    // The label point
-		    fprintf(skyf, "P 1 1\n");
-		    fprintf(skyf, " %.12f %.12f\n", cc->point.x, cc->point.y);
-		    fprintf(skyf, " %-5d %-10d\n", 1, 2000+n);
-		    n++;
-		}
-	    }
-    	}
-	free(f);
-    	fclose(skyf);
-    }*/
+    /* dumping the skyline of the labels */
+    /*    {
+       int n=1;
+       char *f;
+       FILE *skyf;
+       f = G_tempfile();
+       skyf = fopen(f, "w");
+       printf("Writing label skylines & label points to file %s", f);
+       fprintf(skyf, "VERTI:\n");
+       printf("\n%d labels:\n", n_labels);
+       for (i = 0; i < n_labels; i++) {
+       printf("%s has %d candidates\n", labels[i].text, labels[i].n_candidates);
+       if (labels[i].n_candidates > 0) {
+       int j;
+       label_t *l = &labels[i];
+       j = l->current_candidate;
+       //           for(j=0; j < l->n_candidates; j++) {
+       {
+       int k;
+       label_candidate_t *cc = &l->candidates[j];
+       struct line_pnts *sky = skyline_trans_rot(l->skyline,
+       &cc->point,
+       cc->rotation);
+       fprintf(skyf, "L %d 1\n", sky->n_points);
+       for(k=0;k < sky->n_points; k++) {
+       fprintf(skyf, " %.12f %.12f\n", sky->x[k], sky->y[k]);
+       }
+       fprintf(skyf, " %-5d %-10d\n", 1, 1000+n);
+       // The label point
+       fprintf(skyf, "P 1 1\n");
+       fprintf(skyf, " %.12f %.12f\n", cc->point.x, cc->point.y);
+       fprintf(skyf, " %-5d %-10d\n", 1, 2000+n);
+       n++;
+       }
+       }
+       }
+       free(f);
+       fclose(skyf);
+       } */
 
     return EXIT_SUCCESS;
 }
@@ -140,7 +141,8 @@ static int parse_args(int argc, char *argv[], struct params *p)
     p->font->key = "font";
     p->font->type = TYPE_STRING;
     p->font->required = YES;
-    p->font->description = _("Name of TrueType font (as listed in the fontcap)");
+    p->font->description =
+	_("Name of TrueType font (as listed in the fontcap)");
     p->font->guisection = _("Font");
     p->font->gisprompt = "font";
 
@@ -179,7 +181,8 @@ static int parse_args(int argc, char *argv[], struct params *p)
     p->hlcolor->description = _("Hilight color for text");
     p->hlcolor->type = TYPE_STRING;
     p->hlcolor->answer = "none";
-    p->hlcolor->options = "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+    p->hlcolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
 	"magenta,orange,purple,red,violet,white,yellow";
     p->hlcolor->guisection = _("Colors");
 
@@ -195,7 +198,8 @@ static int parse_args(int argc, char *argv[], struct params *p)
     p->bgcolor->description = _("Background color");
     p->bgcolor->type = TYPE_STRING;
     p->bgcolor->answer = "none";
-    p->bgcolor->options = "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+    p->bgcolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
 	"magenta,orange,purple,red,violet,white,yellow";
     p->bgcolor->guisection = _("Colors");
 
@@ -214,7 +218,8 @@ static int parse_args(int argc, char *argv[], struct params *p)
     p->bocolor->description = _("Border color");
     p->bocolor->type = TYPE_STRING;
     p->bocolor->answer = "none";
-    p->bocolor->options = "none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+    p->bocolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
 	"magenta,orange,purple,red,violet,white,yellow";
     p->bocolor->guisection = _("Colors");
 
@@ -232,14 +237,15 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
 {
     int cc, hlwidth;
     double size;
+
     cc = label->current_candidate;
     size = atof(p->size->answer);
     hlwidth = atoi(p->hlwidth->answer);
 
     fprintf(labelf, "east: %lf\n", label->candidates[cc].point.x);
     fprintf(labelf, "north: %lf\n", label->candidates[cc].point.y);
-    fprintf(labelf, "xoffset: %lf\n", 0.0); // * (size));
-    fprintf(labelf, "yoffset: %lf\n", 0.0); // * (size));
+    fprintf(labelf, "xoffset: %lf\n", 0.0);	// * (size));
+    fprintf(labelf, "yoffset: %lf\n", 0.0);	// * (size));
     fprintf(labelf, "ref: %s\n", "bottom left");
 
     fprintf(labelf, "font: %s\n", p->font->answer);
@@ -259,4 +265,3 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
 
     return;
 }
-

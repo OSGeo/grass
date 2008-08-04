@@ -13,42 +13,42 @@
 
 /*!
 
- <h3>GRASS Raster Format</h3>
- 
- Small example to illustrate the raster format:
+   <h3>GRASS Raster Format</h3>
 
- A file may contain the following 3x3 floating point matrix:
- \verbatim
+   Small example to illustrate the raster format:
+
+   A file may contain the following 3x3 floating point matrix:
+   \verbatim
    10.000 20.000 30.000
    20.000 40.000 50.000
    30.000 50.000 60.000
- \endverbatim
- 
- The header is a single byte, equal to sizeof(off_t) (typically 4 on a
- 32-bit platform, 8 on a 64-bit platform). Then, NROWS+1 offsets are
- written as off_t's (i.e. 4 or 8 bytes, depending upon platform) in
- big-endian (Motorola) byte order.
- <P>
- Thus, above example is actually interpreted as:
- \verbatim
+   \endverbatim
+
+   The header is a single byte, equal to sizeof(off_t) (typically 4 on a
+   32-bit platform, 8 on a 64-bit platform). Then, NROWS+1 offsets are
+   written as off_t's (i.e. 4 or 8 bytes, depending upon platform) in
+   big-endian (Motorola) byte order.
+   <P>
+   Thus, above example is actually interpreted as:
+   \verbatim
    4               sizeof(off_t)
    0 0 0 17        offset of row 0
    0 0 0 36        offset of row 1
    0 0 0 55        offset of row 2
    0 0 0 74        offset of end of data
- \endverbatim
+   \endverbatim
 
- See G__write_row_ptrs() below for the code which writes this data. 
- However, note that the row offsets are initially zero; 
- they get overwritten later (if you are writing compressed data,
- you don't know how much space it will require until you've compressed
- it).
+   See G__write_row_ptrs() below for the code which writes this data. 
+   However, note that the row offsets are initially zero; 
+   they get overwritten later (if you are writing compressed data,
+   you don't know how much space it will require until you've compressed
+   it).
 
- As for the format of the actual row data, see put_fp_data() in
- src/libes/gis/put_row.c and RFC 1014 (the XDR specification):
- http://www.faqs.org/rfcs/rfc1014.html
- 
-*/
+   As for the format of the actual row data, see put_fp_data() in
+   src/libes/gis/put_row.c and RFC 1014 (the XDR specification):
+   http://www.faqs.org/rfcs/rfc1014.html
+
+ */
 
 /**********************************************************************
  *
@@ -78,12 +78,9 @@ int G__check_format(int fd)
      *   compression flag is 2 - compressed using zlib
      */
 
-    if (fcb->cellhd.compressed < 0)
-    {
-	if (read(fd,compress,3) != 3
-	    || compress[0] != 251
-	    || compress[1] != 255
-	    || compress[2] != 251)
+    if (fcb->cellhd.compressed < 0) {
+	if (read(fd, compress, 3) != 3
+	    || compress[0] != 251 || compress[1] != 255 || compress[2] != 251)
 	    fcb->cellhd.compressed = 0;
     }
 
@@ -111,8 +108,7 @@ int G__read_row_ptrs(int fd)
      * (this makes them machine dependent)
      */
 
-    if (fcb->cellhd.compressed < 0)
-    {
+    if (fcb->cellhd.compressed < 0) {
 	n = (nrows + 1) * sizeof(off_t);
 	if (read(fd, fcb->row_ptr, n) != n)
 	    goto badread;
@@ -133,18 +129,17 @@ int G__read_row_ptrs(int fd)
 
     n = (nrows + 1) * nbytes;
     buf = G_malloc(n);
-    if (read (fd, buf, n) != n)
+    if (read(fd, buf, n) != n)
 	goto badread;
 
-    for (row = 0, b = buf; row <= nrows; row++)
-    {
+    for (row = 0, b = buf; row <= nrows; row++) {
 	off_t v = 0;
 
-	for (n = 0; n < (int) nbytes; n++)
-	{
+	for (n = 0; n < (int)nbytes; n++) {
 	    unsigned char c = *b++;
 
-	    if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)
+	    if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) &&
+		c != 0)
 		goto badread;
 
 	    v <<= 8;
@@ -154,11 +149,11 @@ int G__read_row_ptrs(int fd)
 	fcb->row_ptr[row] = v;
     }
 
-    G_free (buf);
+    G_free(buf);
 
     return 1;
 
-badread:
+  badread:
     G_warning(_("Fail of initial read of compressed file [%s in %s]"),
 	      fcb->name, fcb->mapset);
     return -1;
@@ -178,13 +173,11 @@ int G__write_row_ptrs(int fd)
     b = buf = G_malloc(len);
     *b++ = nbytes;
 
-    for (row = 0; row <= nrows; row++)
-    {
+    for (row = 0; row <= nrows; row++) {
 	off_t v = fcb->row_ptr[row];
 	int i;
 
-	for (i = nbytes - 1; i >= 0; i--)
-	{
+	for (i = nbytes - 1; i >= 0; i--) {
 	    b[i] = v & 0xff;
 	    v >>= 8;
 	}
@@ -197,4 +190,3 @@ int G__write_row_ptrs(int fd)
 
     return result;
 }
-

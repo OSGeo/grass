@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -21,19 +22,21 @@
 #include "coin.h"
 
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  double G_area_of_cell_at_row();
-fill = "                                                                                                                                       ";
-midline = "------------------------------------------------------------------------------------------------------------------------------------";
+    double G_area_of_cell_at_row();
 
-    G_gisinit (argv[0]);
+    fill =
+	"                                                                                                                                       ";
+    midline =
+	"------------------------------------------------------------------------------------------------------------------------------------";
+
+    G_gisinit(argv[0]);
     G_get_window(&window);
     /* now make a temorary region with the same boundaries only 1 x 1 */
     window.rows = 1;
     window.cols = 1;
-    G_adjust_Cell_head (&window, 1, 1);
+    G_adjust_Cell_head(&window, 1, 1);
     G_set_window(&window);
 
     G_begin_cell_area_calculations();
@@ -43,8 +46,8 @@ midline = "---------------------------------------------------------------------
     G_get_window(&window);
     G_set_window(&window);
 
-    dumpname = G_tempfile () ;
-    statname = G_tempfile () ;
+    dumpname = G_tempfile();
+    statname = G_tempfile();
 
     window_cells = G_window_rows() * G_window_cols();
 
@@ -54,8 +57,8 @@ midline = "---------------------------------------------------------------------
     else
 	interactive_version();
 
-    unlink (dumpname);
-    unlink (statname);
+    unlink(dumpname);
+    unlink(statname);
 
     exit(0);
 }

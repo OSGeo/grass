@@ -14,8 +14,7 @@ static int is_int(char *str)
 {
     char *tail;
 
-    if (strtol (str, &tail, 10),
-	tail == str || *tail != '\0') {
+    if (strtol(str, &tail, 10), tail == str || *tail != '\0') {
 	/* doesn't look like a number,
 	   or has extra characters after what looks to be a number */
 	return 0;
@@ -31,8 +30,7 @@ static int is_double(char *str)
 {
     char *tail;
 
-    if (strtod (str, &tail),
-	tail == str || *tail != '\0') {
+    if (strtod(str, &tail), tail == str || *tail != '\0') {
 	/* doesn't look like a number,
 	   or has extra characters after what looks to be a number */
 	return 0;
@@ -54,9 +52,9 @@ static int is_double(char *str)
  */
 
 int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
-		   int *rowlength, int *ncolumns, int *minncolumns, int *nrows,
-		   int **column_type, int **column_length, int skip_lines,
-		   int xcol, int ycol, int region_flag)
+		   int *rowlength, int *ncolumns, int *minncolumns,
+		   int *nrows, int **column_type, int **column_length,
+		   int skip_lines, int xcol, int ycol, int region_flag)
 {
     int i;
     int buflen;			/* buffer length */
@@ -87,14 +85,15 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     G_get_window(&window);
 
     while (1) {
-	len = 0;	/* not really needed, but what the heck */
-	skip = FALSE;	/* reset out-of-region check */
+	len = 0;		/* not really needed, but what the heck */
+	skip = FALSE;		/* reset out-of-region check */
 
 	if (G_getl2(buf, buflen - 1, ascii_in) == 0)
 	    break;		/* EOF */
 
 	if (row <= skip_lines) {
-	    G_debug(3, "skipping header row %d : %d chars", row, (int) strlen(buf));
+	    G_debug(3, "skipping header row %d : %d chars", row,
+		    (int)strlen(buf));
 	    /* this fn is read-only, write to hist with points_to_bin() */
 	    fprintf(ascii, "%s\n", buf);
 	    len = strlen(buf) + 1;
@@ -105,13 +104,14 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 	    continue;
 	}
 
-	if ( (buf[0] == '#') || (buf[0] == '\0') ) {
-	    G_debug(3, "skipping comment row %d : %d chars", row, (int) strlen(buf));
+	if ((buf[0] == '#') || (buf[0] == '\0')) {
+	    G_debug(3, "skipping comment row %d : %d chars", row,
+		    (int)strlen(buf));
 	    continue;
 	}
 
 	/* no G_chop() as first/last column may be empty fs=tab value */
-	G_debug(3, "row %d : %d chars", row, (int) strlen(buf));
+	G_debug(3, "row %d : %d chars", row, (int)strlen(buf));
 
 	/* G_tokenize() will modify the buffer, so we make a copy */
 	strcpy(buf_raw, buf);
@@ -148,20 +148,23 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 		    sprintf(coorbuf, "%s", tokens[i]);
 		    G_debug(4, "token: %s", coorbuf);
 
-		    if (i == xcol) { 
+		    if (i == xcol) {
 			if (G_scan_easting(coorbuf, &easting, window.proj)) {
 			    G_debug(4, "is_latlong east: %f", easting);
 			    sprintf(tmp_token, "%.12f", easting);
 			    /* replace current DMS token by decimal degree */
 			    tokens[i] = tmp_token;
 			    if (region_flag) {
-				if ((window.east < easting) || (window.west > easting))
-				   skip = TRUE;
+				if ((window.east < easting) ||
+				    (window.west > easting))
+				    skip = TRUE;
 			    }
 			}
 			else {
 			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
-			    G_fatal_error(_("Unparsable longitude value in column <%d>: %s"), i, tokens[i]);
+			    G_fatal_error(_
+					  ("Unparsable longitude value in column <%d>: %s"),
+					  i, tokens[i]);
 			}
 		    }
 
@@ -172,16 +175,19 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			    /* replace current DMS token by decimal degree */
 			    tokens[i] = tmp_token;
 			    if (region_flag) {
-				if ((window.north < northing) || (window.south > northing))
-			 	    skip = TRUE;
+				if ((window.north < northing) ||
+				    (window.south > northing))
+				    skip = TRUE;
 			    }
 			}
 			else {
 			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
-			    G_fatal_error(_("Unparsable latitude value in column <%d>: %s"), i, tokens[i]);
+			    G_fatal_error(_
+					  ("Unparsable latitude value in column <%d>: %s"),
+					  i, tokens[i]);
 			}
 		    }
- 		} /* if (x or y) */
+		}		/* if (x or y) */
 
 		if (i == ntokens - 1 && sav_buf != NULL) {
 		    /* Restore original token buffer so free_tokens works */
@@ -189,28 +195,31 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 		    tokens[0] = sav_buf;
 		    sav_buf = NULL;
 		}
-	    }		/* PROJECTION_LL */
+	    }			/* PROJECTION_LL */
 	    else {
 		if (region_flag) {
 		    /* consider z range if -z flag is used? */
 		    /* change to if(>= east,north){skip=1;} to allow correct tiling */
 		    /* don't "continue;" so multiple passes will have the
-			   same column types and length for patching */
+		       same column types and length for patching */
 		    if (i == xcol) {
 			easting = atof(tokens[i]);
-			if ((window.east < easting) || (window.west > easting))
-			   skip = TRUE;
+			if ((window.east < easting) ||
+			    (window.west > easting))
+			    skip = TRUE;
 		    }
 		    if (i == ycol) {
 			northing = atof(tokens[i]);
-			if ((window.north < northing) || (window.south > northing))
-			   skip = TRUE;
+			if ((window.north < northing) ||
+			    (window.south > northing))
+			    skip = TRUE;
 		    }
 		}
 	    }
 
 	    G_debug(4, "row %d col %d: '%s' is_int = %d is_double = %d",
-		    row, i, tokens[i], is_int(tokens[i]), is_double(tokens[i]));
+		    row, i, tokens[i], is_int(tokens[i]),
+		    is_double(tokens[i]));
 
 	    if (is_int(tokens[i])) {
 		continue;	/* integer */
@@ -243,7 +252,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     *minncolumns = minncols;
     *column_type = coltype;
     *column_length = collen;
-    *nrows = row - 1; /* including skipped lines */
+    *nrows = row - 1;		/* including skipped lines */
 
     G_free(buf);
     G_free(buf_raw);
@@ -251,8 +260,9 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     G_free(tmp_token);
 
     if (region_flag)
-	G_message(_("Skipping %d of %d rows falling outside of current region"),
-		  skipped, row-1);
+	G_message(_
+		  ("Skipping %d of %d rows falling outside of current region"),
+		  skipped, row - 1);
 
     return 0;
 }
@@ -267,9 +277,9 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
  * Note: column types (both in header or coldef) must be supported by driver
  */
 int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
-		  dbDriver * driver, char *table, char *fs, int nrows, int ncols,
-		  int *coltype, int xcol, int ycol, int zcol, int catcol,
-		  int skip_lines)
+		  dbDriver * driver, char *table, char *fs, int nrows,
+		  int ncols, int *coltype, int xcol, int ycol, int zcol,
+		  int catcol, int skip_lines)
 {
     char *buf, buf2[4000];
     int cat = 0;
@@ -304,7 +314,7 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 
 	if (row <= skip_lines) {
 	    G_debug(4, "writing skip line %d to hist : %d chars", row,
-		    (int) strlen(buf));
+		    (int)strlen(buf));
 	    Vect_hist_write(Map, buf);
 	    Vect_hist_write(Map, "\n");
 	    row++;
@@ -368,9 +378,9 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 			if (G_projection() == PROJECTION_LL &&
 			    (i == xcol || i == ycol)) {
 			    if (i == xcol)
-			        sprintf(buf2, "%.15g", x);
+				sprintf(buf2, "%.15g", x);
 			    else
-			        sprintf(buf2, "%.15g", y);
+				sprintf(buf2, "%.15g", y);
 			}
 			else
 			    sprintf(buf2, "%s", tokens[i]);

@@ -171,19 +171,19 @@ int main(int argc, char *argv[])
 
     /*Check the input maps */
     check_input_maps();
-    
-    /*Correct the coordinates, so the precision of VTK is not hurt :( */
-    if(param.coorcorr->answer){
-       /*Get the default region for coordiante correction*/
-       G_get_default_window(&default_region);
 
-       /*Use the center of the current region as extent*/
-       y_extent = (default_region.north + default_region.south)/2;
-       x_extent = (default_region.west + default_region.east)/2;
-    } else
-    {
-       x_extent = 0;
-       y_extent = 0;
+    /*Correct the coordinates, so the precision of VTK is not hurt :( */
+    if (param.coorcorr->answer) {
+	/*Get the default region for coordiante correction */
+	G_get_default_window(&default_region);
+
+	/*Use the center of the current region as extent */
+	y_extent = (default_region.north + default_region.south) / 2;
+	x_extent = (default_region.west + default_region.east) / 2;
+    }
+    else {
+	x_extent = 0;
+	y_extent = 0;
     }
 
     /* Figure out the region from the map */
@@ -192,16 +192,16 @@ int main(int argc, char *argv[])
     /*Set the null Value, maybe i have to check this? */
     null_value = param.null_val->answer;
 
-    /*number of significant digits*/
+    /*number of significant digits */
     sscanf(param.decimals->answer, "%i", &digits);
 
-    /* read and compute the scale factor*/
+    /* read and compute the scale factor */
     sscanf(param.elevscale->answer, "%lf", &scale);
     sscanf(param.elev->answer, "%lf", &eleval);
-    /*if LL projection, convert the elevation values to degrees*/
-    if(region.proj == PROJECTION_LL) {
-      llscale = M_PI/(180)*6378137;
-      scale /= llscale;
+    /*if LL projection, convert the elevation values to degrees */
+    if (region.proj == PROJECTION_LL) {
+	llscale = M_PI / (180) * 6378137;
+	scale /= llscale;
     }
 
     /********************* WRITE ELEVATION *************************************/
@@ -228,8 +228,10 @@ int main(int argc, char *argv[])
 
 	/*The write the Coordinates */
 	if (param.usestruct->answer) {
-	    write_vtk_structured_coordinates(fd, fp, param.elevationmap->answer,
-					  region, out_type, null_value, scale, digits);
+	    write_vtk_structured_coordinates(fd, fp,
+					     param.elevationmap->answer,
+					     region, out_type, null_value,
+					     scale, digits);
 	}
 	else {
 	    polytype = QUADS;	/*The default */
@@ -240,8 +242,10 @@ int main(int argc, char *argv[])
 	    if (param.usevertices->answer)
 		polytype = VERTICES;
 
-	    write_vtk_polygonal_coordinates(fd, fp, param.elevationmap->answer,
-					 region, out_type, null_value, scale, polytype, digits);
+	    write_vtk_polygonal_coordinates(fd, fp,
+					    param.elevationmap->answer,
+					    region, out_type, null_value,
+					    scale, polytype, digits);
 	}
 	G_close_cell(fd);
     }
@@ -256,7 +260,7 @@ int main(int argc, char *argv[])
 	if (param.origin->answer)
 	    write_vtk_normal_header(fp, region, scale * eleval, headertype);
 	else
-	    write_vtk_normal_header(fp, region, eleval/llscale, headertype);
+	    write_vtk_normal_header(fp, region, eleval / llscale, headertype);
     }
 
 
@@ -288,7 +292,7 @@ int main(int argc, char *argv[])
 	    out_type = G_get_raster_map_type(fd);
 	    /*Now write the data */
 	    write_vtk_data(fd, fp, param.input->answers[i], region, out_type,
-			 null_value, digits);
+			   null_value, digits);
 	    G_close_cell(fd);
 	}
     }
@@ -302,7 +306,8 @@ int main(int argc, char *argv[])
 
 	    /*Loop over all three rgb input maps! */
 	    for (i = 0; i < 3; i++) {
-		G_debug(3, _("Open Raster file %s"), param.rgbmaps->answers[i]);
+		G_debug(3, _("Open Raster file %s"),
+			param.rgbmaps->answers[i]);
 
 		mapset = NULL;
 
@@ -324,7 +329,8 @@ int main(int argc, char *argv[])
 
 		/*Now write the data */
 		write_vtk_rgb_image_data(rgbfd[0], rgbfd[1], rgbfd[2], fp,
-				     "RGB_Image", region, out_type, digits);
+					 "RGB_Image", region, out_type,
+					 digits);
 	    }
 	    else {
 		G_warning(_
@@ -355,12 +361,12 @@ int main(int argc, char *argv[])
 		mapset = G_find_cell2(param.vectmaps->answers[i], "");
 
 		/* open raster map */
-		vectfd[i] = G_open_cell_old(param.vectmaps->answers[i], mapset);
+		vectfd[i] =
+		    G_open_cell_old(param.vectmaps->answers[i], mapset);
 		if (vectfd[i] < 0)
 		    G_fatal_error(_("Unable to open raster map <%s>"),
 				  param.vectmaps->answers[i]);
-		celltype[i] =
-		    G_get_raster_map_type(vectfd[i]);
+		celltype[i] = G_get_raster_map_type(vectfd[i]);
 	    }
 
 	    /*Maps have to be from the same type */
@@ -371,7 +377,8 @@ int main(int argc, char *argv[])
 
 		/*Now write the data */
 		write_vtk_vector_data(vectfd[0], vectfd[1], vectfd[2], fp,
-				   "Vector_Data", region, out_type, digits);
+				      "Vector_Data", region, out_type,
+				      digits);
 	    }
 	    else {
 		G_warning(_

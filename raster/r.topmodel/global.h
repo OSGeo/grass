@@ -22,29 +22,33 @@
 
 
 /* check_ready.c */
-int	check_ready(void);
-int	check_required(void);
-int	check_names(void);
-int	check_io(void);
+int check_ready(void);
+int check_required(void);
+int check_names(void);
+int check_io(void);
+
 /* misc.c */
-int	run(char *buf);
-void	gregion(void);
-void	depressionless(void);
-void	basin_elevation(void);
-void	top_index(void);
+int run(char *buf);
+void gregion(void);
+void depressionless(void);
+void basin_elevation(void);
+void top_index(void);
+
 /* file_io.c */
-void	get_line(FILE *fp, char *buffer);
-void	read_inputs(void);
-void	write_outputs(void);
+void get_line(FILE * fp, char *buffer);
+void read_inputs(void);
+void write_outputs(void);
+
 /* topmodel.c */
-double	get_lambda(void);
-void	initialize(void);
-void	implement(void);
-double	get_Em(void);
-void	others(void);
-void	topmodel(void);
+double get_lambda(void);
+void initialize(void);
+void implement(void);
+double get_Em(void);
+void others(void);
+void topmodel(void);
+
 /* infiltration.c */
-double	get_f(double t, double R);
+double get_f(double t, double R);
 
 
 #ifdef MAIN
@@ -55,95 +59,94 @@ double	get_f(double t, double R);
 
 
 /* Topographic index statistics file */
-GLOBAL	struct
+GLOBAL struct
 {
-	/* misc.nidxclass's */
-	double	*atb, *Aatb_r;
+    /* misc.nidxclass's */
+    double *atb, *Aatb_r;
 } idxstats;
 
 /* Parameters file */
-GLOBAL	struct
+GLOBAL struct
 {
-	char	*name;
-	double	A, qs0, lnTe, m, Sr0, Srmax, td, vch, vr;
-	int	infex;
-	double	K0, psi, dtheta;
-	int	nch;
-	/* params.nch's */
-	double	*d, *Ad_r;
+    char *name;
+    double A, qs0, lnTe, m, Sr0, Srmax, td, vch, vr;
+    int infex;
+    double K0, psi, dtheta;
+    int nch;
+    /* params.nch's */
+    double *d, *Ad_r;
 } params;
 
 /* Input file */
-GLOBAL	struct
+GLOBAL struct
 {
-	int	ntimestep;
-	double	dt;
-	/* input.ntimestep's */
-	double	*R, *Ep;
+    int ntimestep;
+    double dt;
+    /* input.ntimestep's */
+    double *R, *Ep;
 } input;
 
 /* Map names */
-GLOBAL	struct
+GLOBAL struct
 {
-	char	*basin, *elev, *belev, *fill, *dir, *topidx;
+    char *basin, *elev, *belev, *fill, *dir, *topidx;
 } map;
 
-/* File names */ 
-GLOBAL	struct
+/* File names */
+GLOBAL struct
 {
-	char	*idxstats, *params, *input, *output, *Qobs;
+    char *idxstats, *params, *input, *output, *Qobs;
 } file;
 
 /* Miscellaneous TOPMODEL variables */
-GLOBAL	struct
+GLOBAL struct
 {
-	/* Number of non-null cells */
-	int	ncell;
-	/* Number of topographic index classes */
-	int	nidxclass;
-	/* Model efficiency */
-	double	Em;
-	int	ndelay, nreach;
-	double	lnTe, vch, vr;
-	double	lambda;
-	double	qss, qs0;
-	double	Qobs_peak, Qt_peak, Qobs_mean, Qt_mean;
-	int	tobs_peak, tt_peak;
-	/* params.nch's */
-	double	*tch;
-	/* misc.nreach's */
-	double	*Ad;
-	/* input.ntimestep's */
-	double	*Qobs;
-	double	*Qt;
-	double	*qs;	/* spatially constant? */
-	double	*S_mean;
-	double	*f;
-	double	*fex;
-	/* input.ntimestep * (misc.nidxclass + 1)'s */
-	double	**qt, **qo, **qv;
-	/* input.ntimestep * misc.nidxclass's */
-	double	**Srz, **Suz;
-	double	**S;
-	double	**Ea;
-	double	**ex;
-	/* Miscellaneous variables */
-	int	timestep, idxclass;
+    /* Number of non-null cells */
+    int ncell;
+    /* Number of topographic index classes */
+    int nidxclass;
+    /* Model efficiency */
+    double Em;
+    int ndelay, nreach;
+    double lnTe, vch, vr;
+    double lambda;
+    double qss, qs0;
+    double Qobs_peak, Qt_peak, Qobs_mean, Qt_mean;
+    int tobs_peak, tt_peak;
+    /* params.nch's */
+    double *tch;
+    /* misc.nreach's */
+    double *Ad;
+    /* input.ntimestep's */
+    double *Qobs;
+    double *Qt;
+    double *qs;			/* spatially constant? */
+    double *S_mean;
+    double *f;
+    double *fex;
+    /* input.ntimestep * (misc.nidxclass + 1)'s */
+    double **qt, **qo, **qv;
+    /* input.ntimestep * misc.nidxclass's */
+    double **Srz, **Suz;
+    double **S;
+    double **Ea;
+    double **ex;
+    /* Miscellaneous variables */
+    int timestep, idxclass;
 } misc;
 
 
-GLOBAL	struct
+GLOBAL struct
 {
-	/* Input flag */
-	char	input;
-	/* Overwrite flag */
-	char	overwr;
-	/* Overwrite list */
-	int	overwrlist;
+    /* Input flag */
+    char input;
+    /* Overwrite flag */
+    char overwr;
+    /* Overwrite list */
+    int overwrlist;
 } flg;
 
 
 /* Miscellaneous variables */
-GLOBAL	char	*gisbase, *mapset;
-GLOBAL	char	buf[BUFSIZE];
-
+GLOBAL char *gisbase, *mapset;
+GLOBAL char buf[BUFSIZE];

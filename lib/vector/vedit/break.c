@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/break.c
 
@@ -51,84 +52,82 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
     Cats = Vect_new_cats_struct();
     List_in_box = Vect_new_list();
 
-    for (i = 0; i < List -> n_values; i++) {
-	line = List -> value[i];
-	
-	if (!Vect_line_alive (Map, line))
+    for (i = 0; i < List->n_values; i++) {
+	line = List->value[i];
+
+	if (!Vect_line_alive(Map, line))
 	    continue;
 
-        type = Vect_read_line(Map, Points, Cats, line);
+	type = Vect_read_line(Map, Points, Cats, line);
 
 	if (!(type & GV_LINES))
 	    continue;
 
-	x = Points -> x;
-	y = Points -> y;
-	z = Points -> z;
+	x = Points->x;
+	y = Points->y;
+	z = Points->z;
 
-	for (j = 0; j < coord -> n_points; j++) {
-	    seg = Vect_line_distance (Points, coord->x[j], coord->y[j], coord->z[j],
-				      WITHOUT_Z,
-				      &px, &py, NULL,
-				      &dist, &spdist, &lpdist);
+	for (j = 0; j < coord->n_points; j++) {
+	    seg =
+		Vect_line_distance(Points, coord->x[j], coord->y[j],
+				   coord->z[j], WITHOUT_Z, &px, &py, NULL,
+				   &dist, &spdist, &lpdist);
 
 	    if (dist > thresh) {
 		continue;
 	    }
 
-	    G_debug (3, "Vedit_split_lines(): line=%d, x=%f, y=%f, px=%f, py=%f, seg=%d, "
-		     "dist=%f, spdist=%f, lpdist=%f",
-		     line, coord->x[j], coord->y[j], px, py, seg, dist, spdist, lpdist);
+	    G_debug(3,
+		    "Vedit_split_lines(): line=%d, x=%f, y=%f, px=%f, py=%f, seg=%d, "
+		    "dist=%f, spdist=%f, lpdist=%f", line, coord->x[j],
+		    coord->y[j], px, py, seg, dist, spdist, lpdist);
 
-	    if (spdist <= 0.0 ||
-		spdist >= Vect_line_length(Points))
+	    if (spdist <= 0.0 || spdist >= Vect_line_length(Points))
 		continue;
-	    
-	    G_debug (3, "Vedit_split_lines(): line=%d", line);
+
+	    G_debug(3, "Vedit_split_lines(): line=%d", line);
 
 	    /* copy first line part */
 	    for (l = 0; l < seg; l++) {
-		Vect_append_point(Points2,
-				  x[l], y[l], z[l]);
+		Vect_append_point(Points2, x[l], y[l], z[l]);
 	    }
-	    
+
 	    /* add last vertex */
 	    Vect_append_point(Points2, px, py, 0.0);
-	    
+
 	    /* rewrite the line */
-	    newline = Vect_rewrite_line (Map, line, type, Points2, Cats);
+	    newline = Vect_rewrite_line(Map, line, type, Points2, Cats);
 	    if (newline < 0) {
 		return -1;
 	    }
-   	    if (List_updated)
-		Vect_list_append (List_updated, newline);
-	    Vect_reset_line (Points2);
-	    
+	    if (List_updated)
+		Vect_list_append(List_updated, newline);
+	    Vect_reset_line(Points2);
+
 	    /* add given vertex */
 	    Vect_append_point(Points2, px, py, 0.0);
-	    
+
 	    /* copy second line part */
 	    for (l = seg; l < Points->n_points; l++) {
-		Vect_append_point(Points2, 
-				  x[l], y[l], z[l]);
+		Vect_append_point(Points2, x[l], y[l], z[l]);
 	    }
-	    
+
 	    /* rewrite the line */
-	    newline = Vect_write_line (Map, type, Points2, Cats);
+	    newline = Vect_write_line(Map, type, Points2, Cats);
 	    if (newline < 0) {
 		return -1;
 	    }
-   	    if (List_updated)
-		Vect_list_append (List_updated, newline);
-	    
+	    if (List_updated)
+		Vect_list_append(List_updated, newline);
+
 	    nlines_modified++;
-	} /* for each bounding box */
-    } /* for each selected line */
+	}			/* for each bounding box */
+    }				/* for each selected line */
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_line_struct(Points2);
     Vect_destroy_cats_struct(Cats);
-    Vect_destroy_list (List_in_box);
+    Vect_destroy_list(List_in_box);
 
     return nlines_modified;
 }
@@ -150,15 +149,15 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
    \return number of modified lines
    \return -1 on error
  */
-int Vedit_connect_lines (struct Map_info *Map, struct ilist *List,
-			 double thresh)
+int Vedit_connect_lines(struct Map_info *Map, struct ilist *List,
+			double thresh)
 {
     int nlines_modified;
     int i, j, node[2], n_nodes;
     int line, found;
     double x, y, z;
-    
-    nlines_modified  = 0;
+
+    nlines_modified = 0;
 
     /* collect lines to be modified */
     for (i = 0; i < List->n_values; i++) {
@@ -178,13 +177,11 @@ int Vedit_connect_lines (struct Map_info *Map, struct ilist *List,
 	    /* for each line node find lines in threshold */
 	    Vect_get_node_coor(Map, node[j], &x, &y, &z);
 	    found = Vect_find_line(Map, x, y, z,
-				   GV_LINES, thresh, WITHOUT_Z,
-				   line);
-	    
+				   GV_LINES, thresh, WITHOUT_Z, line);
+
 	    if (found > 0 && Vect_line_alive(Map, found)) {
 		/* try to connect lines (given node) */
-		G_debug(3, "Vedit_connect_lines(): lines=%d,%d",
-			line, found);
+		G_debug(3, "Vedit_connect_lines(): lines=%d,%d", line, found);
 		if (connect_lines(Map, !j, line, found, thresh, List)) {
 		    G_debug(3, "    -> connected");
 		    nlines_modified += 2;
@@ -235,8 +232,8 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	    n_points = Points_from->n_points - 1;
 	    x = Points_from->x[n_points];
 	    y = Points_from->y[n_points];
-	    x1 = Points_from->x[n_points-1];
-	    y1 = Points_from->y[n_points-1];
+	    x1 = Points_from->x[n_points - 1];
+	    y1 = Points_from->y[n_points - 1];
 	}
 	Vect_line_distance(Points_to, x, y, 0.0, WITHOUT_Z,
 			   &px, &py, NULL, &dist, &spdist, &lpdist);
@@ -250,7 +247,8 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 	    if (Vect_point_on_line(Points_from, length,
 				   NULL, NULL, NULL, &angle_n, NULL) > 0) {
 		if (Vect_point_on_line(Points_to, lpdist,
-				       NULL, NULL, NULL, &angle_p, NULL) > 0) {
+				       NULL, NULL, NULL, &angle_p,
+				       NULL) > 0) {
 		    angle = angle_p - angle_n;
 		    dist_p = dist / tan(angle);
 
@@ -268,7 +266,7 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 						 &fx, &fy, NULL, NULL, NULL);
 		    }
 
-		    if(seg > 0) {
+		    if (seg > 0) {
 			/* lines connected -> split line_to */
 			/* update line_from */
 			if (first) {
@@ -282,34 +280,37 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 			    Points_from->y[n_points] = fy;
 			    Points_from->z[n_points] = 0.0;
 			}
-			line_new = Vect_rewrite_line(Map, line_from, type_from,
-						     Points_from, Cats_from);
+			line_new =
+			    Vect_rewrite_line(Map, line_from, type_from,
+					      Points_from, Cats_from);
 			Vect_list_append(List, line_new);
-			
-			/* update line_to  -- first part*/
+
+			/* update line_to  -- first part */
 			Vect_reset_line(Points_final);
-			for(is = 0; is < seg; is++) {
+			for (is = 0; is < seg; is++) {
 			    Vect_append_point(Points_final, Points_to->x[is],
-					      Points_to->y[is], Points_to->z[is]);
+					      Points_to->y[is],
+					      Points_to->z[is]);
 			}
 			Vect_append_point(Points_final, fx, fy, 0.0);
 			line_new = Vect_rewrite_line(Map, line_to, type_to,
 						     Points_final, Cats_to);
 			Vect_list_append(List, line_new);
-			
+
 			/* write second part */
 			Vect_reset_line(Points_final);
 			Vect_append_point(Points_final, fx, fy, 0.0);
-			for(is = seg; is < Points_to->n_points; is++) {
+			for (is = seg; is < Points_to->n_points; is++) {
 			    Vect_append_point(Points_final, Points_to->x[is],
-					      Points_to->y[is], Points_to->z[is]);
+					      Points_to->y[is],
+					      Points_to->z[is]);
 			}
-			
+
 			/* rewrite first part */
 			line_new = Vect_write_line(Map, type_to,
 						   Points_final, Cats_to);
 			Vect_list_append(List, line_new);
-		
+
 		    }
 		}
 	    }

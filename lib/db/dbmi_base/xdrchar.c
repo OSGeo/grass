@@ -1,11 +1,10 @@
 #include "xdr.h"
 
 
-int
-db__send_char(int d)
+int db__send_char(int d)
 {
     int stat = DB_OK;
-    char c = (char) d;
+    char c = (char)d;
 
     if (!db__send(&c, sizeof(c)))
 	stat = DB_PROTOCOL_ERR;
@@ -17,8 +16,7 @@ db__send_char(int d)
 }
 
 
-int
-db__recv_char (char *d)
+int db__recv_char(char *d)
 {
     int stat = DB_OK;
 

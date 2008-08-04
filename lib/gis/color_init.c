@@ -1,3 +1,4 @@
+
 /**********************************************************************
  *
  * G_init_colors (colors)
@@ -19,7 +20,7 @@
  *  \return int
  */
 
-int G_init_colors (struct Colors *colors)
+int G_init_colors(struct Colors *colors)
 {
     colors->version = 0;
     colors->null_set = 0;

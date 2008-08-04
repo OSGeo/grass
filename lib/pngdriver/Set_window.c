@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       PNG driver
@@ -20,9 +21,8 @@
 
 void PNG_Set_window(int t, int b, int l, int r)
 {
-	clip_top  = t > screen_top    ? t : screen_top;
-	clip_bot  = b < screen_bottom ? b : screen_bottom;
-	clip_left = l > screen_left   ? l : screen_left;
-	clip_rite = r < screen_right  ? r : screen_right;
+    clip_top = t > screen_top ? t : screen_top;
+    clip_bot = b < screen_bottom ? b : screen_bottom;
+    clip_left = l > screen_left ? l : screen_left;
+    clip_rite = r < screen_right ? r : screen_right;
 }
-

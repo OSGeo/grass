@@ -48,7 +48,8 @@ int asc_to_bin(FILE * ascii, struct Map_info *Map)
 		G_debug(2, "a2b: skipping commented line");
 		continue;
 	    }
-	    G_fatal_error(_("Error reading ASCII file: (bad type) [%s]"), buff);
+	    G_fatal_error(_("Error reading ASCII file: (bad type) [%s]"),
+			  buff);
 	}
 	if (ctype == '#') {
 	    G_debug(2, "a2b: Skipping commented line");
@@ -112,8 +113,8 @@ int asc_to_bin(FILE * ascii, struct Map_info *Map)
 		G_fatal_error(_("Error reading ASCII file: (bad point) [%s]"),
 			      buff);
 
-	    G_debug(5, "coor in: %s -> x = %f y = %f z = %f", G_chop(buff), *x,
-		    *y, *z);
+	    G_debug(5, "coor in: %s -> x = %f y = %f z = %f", G_chop(buff),
+		    *x, *y, *z);
 
 	    n_points++;
 	    x++;
@@ -157,7 +158,8 @@ int asc_to_bin(FILE * ascii, struct Map_info *Map)
 	}
 
 	/* Allocation is handled for line_pnts */
-	if (0 > Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points))
+	if (0 >
+	    Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, n_points))
 	    G_fatal_error(_("Out of memory"));
 
 	if (type > 0)

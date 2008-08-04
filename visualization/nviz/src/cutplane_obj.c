@@ -7,12 +7,12 @@
    Command to set appropriate fence color
 
    Arguments:
-     one of ABOVE, BELOW, BLEND, GREY, OFF
+   one of ABOVE, BELOW, BLEND, GREY, OFF
    Returns:
-     None
+   None
    Side Effects:
-     Sets appropriate fence color
-*/
+   Sets appropriate fence color
+ */
 int
 Nset_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 		     char **argv)
@@ -56,12 +56,12 @@ Nset_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
    Command to set appropriate fence color
 
    Arguments:
-     None
+   None
    Returns:
-     one of ABOVE, BELOW, BLEND, GREY, OFF
+   one of ABOVE, BELOW, BLEND, GREY, OFF
    Side Effects:
-     None
-*/
+   None
+ */
 int
 Nget_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
 		     char **argv)
@@ -109,24 +109,24 @@ Nget_fence_color_cmd(Nv_data * data, Tcl_Interp * interp, int argc,
    Command to intercept commands for cutplane objects.
 
    Arguments:
-     one of:
-       draw [surf1 surf2]
-       on
-       off
-       set_rot dx dy dz
-       set_trans dx dy dz
-       get_rot
-       get_trans
+   one of:
+   draw [surf1 surf2]
+   on
+   off
+   set_rot dx dy dz
+   set_trans dx dy dz
+   get_rot
+   get_trans
    Returns:
-     get_rot - returns dx dy dz of rotation for current plane
-     get_trans - returns dx dy dz of rotation for current plane
+   get_rot - returns dx dy dz of rotation for current plane
+   get_trans - returns dx dy dz of rotation for current plane
    Side Effects:
-     draw - draws the given cutplane
-     on - sets the cutplane as active
-     off - deactivates the given cutplane
-     set_rot - sets rotation for the current cutplane
-     set_trans - sets the translation for the current cutplane
-*/
+   draw - draws the given cutplane
+   on - sets the cutplane as active
+   off - deactivates the given cutplane
+   set_rot - sets rotation for the current cutplane
+   set_trans - sets the translation for the current cutplane
+ */
 int Ncutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 		      int argc,	/* Number of arguments. */
 		      char **argv	/* Argument strings. */
@@ -162,19 +162,19 @@ int Ncutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
 
 /*
    Nnew_cutplane_obj_cmd --
-   
+
    Creates a cutplane object.
-   
+
    Arguments:
-     id - Id number for the new cutplane, should be unique
+   id - Id number for the new cutplane, should be unique
    Returns:
-     The name of the command for the new cutplane.
+   The name of the command for the new cutplane.
    Side Effects:
-     Cutplanes are implemented as Tcl commands which communicate
-     with the underlying GSF library.  Each time this routine is
-     called a new tcl command is created for the new cutplane.
-     I.e. basically an oops approach.
-*/
+   Cutplanes are implemented as Tcl commands which communicate
+   with the underlying GSF library.  Each time this routine is
+   called a new tcl command is created for the new cutplane.
+   I.e. basically an oops approach.
+ */
 int Nnew_cutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			  int argc,	/* Number of arguments. */
 			  char **argv	/* Argument strings. */
@@ -217,12 +217,12 @@ int Nnew_cutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interp
    Return the number of cutplane objects currently allocated.
 
    Arguments:
-     None
+   None
    Returns:
-     Number of cutplane objects in existence.
+   Number of cutplane objects in existence.
    Side Effects:
-     None
-*/
+   None
+ */
 int Nnum_cutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			  int argc,	/* Number of arguments. */
 			  char **argv	/* Argument strings. */
@@ -236,7 +236,7 @@ int Nnum_cutplane_obj_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interp
 }
 
 /*
-*/
+ */
 int Nset_current_cutplane_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			      int argc,	/* Number of arguments. */
 			      char **argv	/* Argument strings. */
@@ -252,12 +252,12 @@ int Nset_current_cutplane_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current in
    Get the current active cutplane.
 
    Arguments:
-     None
+   None
    Returns:
-     NAME of current cutplane
+   NAME of current cutplane
    Side Effects:
-     None
-*/
+   None
+ */
 int Nget_current_cutplane_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			      int argc,	/* Number of arguments. */
 			      char **argv	/* Argument strings. */
@@ -277,10 +277,10 @@ int Nget_current_cutplane_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current in
 }
 
 /*
-  Nget_map_list type id|name 
-  returns list of all map objects of specified type, 
-  either by name or id.
-*/
+   Nget_map_list type id|name 
+   returns list of all map objects of specified type, 
+   either by name or id.
+ */
 int Nget_cutplane_list_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			   int argc,	/* Number of arguments. */
 			   char **argv	/* Argument strings. */
@@ -295,18 +295,18 @@ int Nget_cutplane_list_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
    Routine to draw all the cutplanes.
 
    Arguments:
-     Current active cutplane
-     Data for Nviz application
-     Boundary surfaces (surf1 and surf2), set to -1 to ignore
+   Current active cutplane
+   Data for Nviz application
+   Boundary surfaces (surf1 and surf2), set to -1 to ignore
    Returns:
-     None
+   None
    Side Effects:
-     Causes all the active cut planes to be drawn
-*/
+   Causes all the active cut planes to be drawn
+ */
 void cp_draw(int current, Nv_data * data, int surf1, int surf2)
 {
     int i, nsurfs;
-    int surf_min=0, surf_max=0, temp;
+    int surf_min = 0, surf_max = 0, temp;
     int *surf_list;
 
     GS_set_draw(GSD_BACK);
@@ -356,12 +356,12 @@ void cp_draw(int current, Nv_data * data, int surf1, int surf2)
    Draw the current cutplane.
 
    Arguments:
-     [Optional] surf1, surf2 - Only draws between surf1 and surf2
+   [Optional] surf1, surf2 - Only draws between surf1 and surf2
    Returns:
-     None
+   None
    Side Effects:
-     None
-*/
+   None
+ */
 int
 draw_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	    int argc)
@@ -406,13 +406,13 @@ draw_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
    Turn on (make current) the given cutplane.
 
    Arguments:
-     None
+   None
    Returns:
-     None
+   None
    Side Effects:
-     Sets the current cutplane as the currently active
-     cutplane in the gsf library.
-*/
+   Sets the current cutplane as the currently active
+   cutplane in the gsf library.
+ */
 int
 on_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
@@ -436,12 +436,12 @@ on_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
    Turn off (make inactive) the given cutplane.
 
    Arguments:
-     None
+   None
    Returns:
-     None
+   None
    Side Effects:
-     Sets the current cutplane as inactive in the gsf library.
-*/
+   Sets the current cutplane as inactive in the gsf library.
+ */
 int
 off_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
@@ -464,12 +464,12 @@ off_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
    Return the state (on/off) of the given cutplane.
 
    Arguments:
-     None
+   None
    Returns:
-     None
+   None
    Side Effects:
-     None
-*/
+   None
+ */
 int
 state_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
@@ -495,12 +495,12 @@ state_cp_obj(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
    Set the rotation for the current cutplane.
 
    Arguments:
-     dx, dy, dz - components of rotation
+   dx, dy, dz - components of rotation
    Returns:
-     None
+   None
    Side Effects:
-     Sets the rotation parameters for the given cutplane.
-*/
+   Sets the rotation parameters for the given cutplane.
+ */
 int
 cp_set_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
@@ -535,9 +535,9 @@ cp_set_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
     }
 
     /* Set internal rotation and call gsf library */
-    data->Cp_rot[id][X] = (float) dx;
-    data->Cp_rot[id][Y] = (float) dy;
-    data->Cp_rot[id][Z] = (float) dz;
+    data->Cp_rot[id][X] = (float)dx;
+    data->Cp_rot[id][Y] = (float)dy;
+    data->Cp_rot[id][Z] = (float)dz;
     GS_set_cplane_rot(id, data->Cp_rot[id][X], data->Cp_rot[id][Y],
 		      data->Cp_rot[id][Z]);
 
@@ -552,12 +552,12 @@ cp_set_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
    Set the translation for the current cutplane.
 
    Arguments:
-     dx, dy, dz - values for setting translation
+   dx, dy, dz - values for setting translation
    Returns:
-     None
+   None
    Side Effects:
-     Sets translation of current cutplane
-*/
+   Sets translation of current cutplane
+ */
 int
 cp_set_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
@@ -593,9 +593,9 @@ cp_set_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
     }
 
     /* Set internal rotation and call gsf library */
-    data->Cp_trans[id][X] = (float) dx;
-    data->Cp_trans[id][Y] = (float) dy;
-    data->Cp_trans[id][Z] = (float) dz;
+    data->Cp_trans[id][X] = (float)dx;
+    data->Cp_trans[id][Y] = (float)dy;
+    data->Cp_trans[id][Z] = (float)dz;
     GS_set_cplane_trans(id, data->Cp_trans[id][X], data->Cp_trans[id][Y],
 			data->Cp_trans[id][Z]);
 
@@ -609,7 +609,7 @@ cp_set_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 
    Get the rotation values for the current cutplane.
 
-*/
+ */
 int
 cp_get_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 {
@@ -636,7 +636,7 @@ cp_get_rot(Nv_data * data, Tcl_Interp * interp, int id, char **argv, int argc)
 
    Get the translation values for the current cutplane.
 
-*/
+ */
 int
 cp_get_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
 	     int argc)
@@ -666,12 +666,12 @@ cp_get_trans(Nv_data * data, Tcl_Interp * interp, int id, char **argv,
    cutplane object.
 
    Arguments:
-     Name of cutplane object
+   Name of cutplane object
    Returns:
-     Integer id of cutplane object
+   Integer id of cutplane object
    Side Effects:
-     None
-*/
+   None
+ */
 int get_cp_idnum(char *name)
 {
     static char comp[] = "Ncutplane";

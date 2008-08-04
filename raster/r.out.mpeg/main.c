@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.out.mpeg
@@ -30,7 +31,7 @@
  * FOR THE SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT
  * LIMITATION, WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A
  * PARTICULAR PURPOSE.
-*/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,36 +47,36 @@
 #define MAXIMAGES 400
 #define DEF_MAX 500
 #define DEF_MIN 200
-#define MAXVIEWS    4 
+#define MAXVIEWS    4
 #define BORDER_W    2
 
 
 /* global variables */
-int     nrows, ncols, numviews, quality, quiet=0;
-char 	*vfiles[MAXVIEWS][MAXIMAGES];
-char 	outfile[BUFSIZ];
-char    encoder[15];
+int nrows, ncols, numviews, quality, quiet = 0;
+char *vfiles[MAXVIEWS][MAXIMAGES];
+char outfile[BUFSIZ];
+char encoder[15];
 
-float 	vscale, scale;  /* resampling scale factors */
-int 	irows, icols, vrows, vcols;
-int 	frames;
+float vscale, scale;		/* resampling scale factors */
+int irows, icols, vrows, vcols;
+int frames;
 
 
 /* function prototypes */
 static int load_files(void);
 static int use_r_out(void);
-static char **gee_wildfiles (char *wildarg, char *element, int *num);
-static void parse_command (int argc, char *argv[],
-                    char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
-                    int *numframes, int *quality, int *convert);
+static char **gee_wildfiles(char *wildarg, char *element, int *num);
+static void parse_command(int argc, char *argv[],
+			  char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
+			  int *numframes, int *quality, int *convert);
 
 
-int main (int argc, char **argv)
+int main(int argc, char **argv)
 {
-/*    int	     	i, j, d; */
-    int       	*sdimp, longdim, r_out;
+    /*    int               i, j, d; */
+    int *sdimp, longdim, r_out;
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
     parse_command(argc, argv, vfiles, &numviews, &frames, &quality, &r_out);
 
     /* find a working encoder */
@@ -84,7 +85,7 @@ int main (int argc, char **argv)
     else if (256 == G_system("mpeg_encode 2> /dev/null"))
 	strcpy(encoder, "mpeg_encode");
     else
-        G_fatal_error(_("Either mpeg_encode or ppmtompeg must be installed"));
+	G_fatal_error(_("Either mpeg_encode or ppmtompeg must be installed"));
 
     G_debug(1, "encoder = [%s]", encoder);
 
@@ -94,10 +95,10 @@ int main (int argc, char **argv)
     ncols = vcols;
 
     /* short dimension */
-    sdimp = nrows>ncols ? &ncols : &nrows;
+    sdimp = nrows > ncols ? &ncols : &nrows;
 
     /* these proportions should work fine for 1 or 4 views, but for
-    2 views, want to double the narrow dim & for 3 views triple it */
+       2 views, want to double the narrow dim & for 3 views triple it */
     if (numviews == 2)
 	*sdimp *= 2;
     else if (numviews == 3)
@@ -107,23 +108,23 @@ int main (int argc, char **argv)
 
     scale = 1.0;
 
-    { /* find animation image size */
-        int max, min;
-        char *p;
+    {				/* find animation image size */
+	int max, min;
+	char *p;
 
-        max = DEF_MAX;
-        min = DEF_MIN;
+	max = DEF_MAX;
+	min = DEF_MIN;
 
-        if ((p = getenv ("GMPEG_SIZE")))
-            max = min = atoi(p);
+	if ((p = getenv("GMPEG_SIZE")))
+	    max = min = atoi(p);
 
-        if (longdim > max)      /* scale down */
-            scale = (float)max / longdim;
-        else if (longdim < min) /* scale up */
-            scale = (float)min / longdim;
+	if (longdim > max)	/* scale down */
+	    scale = (float)max / longdim;
+	else if (longdim < min)	/* scale up */
+	    scale = (float)min / longdim;
     }
     /* TODO: align image size to 16 pixel width & height */
-    
+
     vscale = scale;
     if (numviews == 4)
 	vscale = scale / 2.;
@@ -139,8 +140,8 @@ int main (int argc, char **argv)
     /* irows, icols used for vert/horizontal determination in loop below */
     irows = nrows;
     icols = ncols;
-    nrows += (1 + (nrows/vrows)) * BORDER_W;
-    ncols += (1 + (ncols/vcols)) * BORDER_W;
+    nrows += (1 + (nrows / vrows)) * BORDER_W;
+    ncols += (1 + (ncols / vcols)) * BORDER_W;
 
     if (numviews == 1 && r_out)
 	use_r_out();
@@ -157,8 +158,8 @@ static int load_files(void)
     int rtype;
     register int i, rowoff, row, col, vxoff, vyoff, offset;
     int cnt, ret, fd, size, tsiz, coff;
-    int	vnum;
-    int	y_rows, y_cols;
+    int vnum;
+    int y_rows, y_cols;
     char *pr, *pg, *pb;
     unsigned char *tr, *tg, *tb, *tset;
     char *mpfilename, *mapset, name[BUFSIZ];
@@ -167,61 +168,55 @@ static int load_files(void)
 
     size = nrows * ncols;
 
-    pr = G_malloc (size);
-    pg = G_malloc (size);
-    pb = G_malloc (size);
+    pr = G_malloc(size);
+    pg = G_malloc(size);
+    pb = G_malloc(size);
 
     tsiz = G_window_cols();
 
-    tr = (unsigned char *) G_malloc (tsiz);
-    tg = (unsigned char *) G_malloc (tsiz);
-    tb = (unsigned char *) G_malloc (tsiz);
-    tset = (unsigned char *) G_malloc (tsiz);
+    tr = (unsigned char *)G_malloc(tsiz);
+    tg = (unsigned char *)G_malloc(tsiz);
+    tb = (unsigned char *)G_malloc(tsiz);
+    tset = (unsigned char *)G_malloc(tsiz);
 
-    for (cnt = 0; cnt < frames; cnt++)
-    {
-        if (cnt > MAXIMAGES)
-	{
+    for (cnt = 0; cnt < frames; cnt++) {
+	if (cnt > MAXIMAGES) {
 	    cnt--;
 	    break;
 	}
 
-	for (i=0; i< size; i++)
+	for (i = 0; i < size; i++)
 	    pr[i] = pg[i] = pb[i] = 0;
 
-	for (vnum = 0; vnum < numviews; vnum++)
-        {
-	    if (icols == vcols)
-            {
-		vxoff =  BORDER_W;
-		vyoff = (irows == vrows) ? BORDER_W : 
-			    BORDER_W + vnum*(BORDER_W+vrows);
+	for (vnum = 0; vnum < numviews; vnum++) {
+	    if (icols == vcols) {
+		vxoff = BORDER_W;
+		vyoff = (irows == vrows) ? BORDER_W :
+		    BORDER_W + vnum * (BORDER_W + vrows);
 	    }
-	    else if (irows == vrows)
-            {
-		vxoff = (icols == vcols) ? BORDER_W : 
-			    BORDER_W + vnum*(BORDER_W+vcols);
-		vyoff =  BORDER_W;
+	    else if (irows == vrows) {
+		vxoff = (icols == vcols) ? BORDER_W :
+		    BORDER_W + vnum * (BORDER_W + vcols);
+		vyoff = BORDER_W;
 	    }
-	    else
-            { /* 4 views */
+	    else {		/* 4 views */
 		/* assumes we want:
-		    view1	view2
-		    view3	view4   
-		*/
+		   view1        view2
+		   view3        view4   
+		 */
 		vxoff = vnum % 2 ? BORDER_W : vcols + 2 * BORDER_W;
-		vyoff = vnum > 1 ? vrows + 2 * BORDER_W : BORDER_W; 
+		vyoff = vnum > 1 ? vrows + 2 * BORDER_W : BORDER_W;
 	    }
 
 	    strcpy(name, vfiles[vnum][cnt]);
 	    if (!quiet)
 		G_message("\r%s <%s>", _("Reading file"), name);
 
-	    mapset = G_find_cell2 (name, "");
+	    mapset = G_find_cell2(name, "");
 	    if (mapset == NULL)
-		G_fatal_error (_("Raster map <%s> not found"), name);
+		G_fatal_error(_("Raster map <%s> not found"), name);
 
-	    fd = G_open_cell_old (name, mapset);
+	    fd = G_open_cell_old(name, mapset);
 	    if (fd < 0)
 		exit(EXIT_FAILURE);
 
@@ -229,40 +224,37 @@ static int load_files(void)
 	    if (ret < 0)
 		exit(EXIT_FAILURE);
 
-            rtype = G_get_raster_map_type(fd);
-            if (rtype == CELL_TYPE)
-                voidc = G_allocate_c_raster_buf();
-            else if (rtype == FCELL_TYPE)
-                voidc = G_allocate_f_raster_buf();
-            else if (rtype == DCELL_TYPE)
-                voidc = G_allocate_d_raster_buf();
-            else
-                exit(EXIT_FAILURE);
+	    rtype = G_get_raster_map_type(fd);
+	    if (rtype == CELL_TYPE)
+		voidc = G_allocate_c_raster_buf();
+	    else if (rtype == FCELL_TYPE)
+		voidc = G_allocate_f_raster_buf();
+	    else if (rtype == DCELL_TYPE)
+		voidc = G_allocate_d_raster_buf();
+	    else
+		exit(EXIT_FAILURE);
 
-	    for (row = 0; row < vrows; row++)
-            {
-		if (G_get_raster_row (fd, voidc, 
-                                      (int)(row/vscale), rtype) < 0)
+	    for (row = 0; row < vrows; row++) {
+		if (G_get_raster_row(fd, voidc,
+				     (int)(row / vscale), rtype) < 0)
 		    exit(EXIT_FAILURE);
 
-		rowoff = (vyoff+row)*ncols;
-                G_lookup_raster_colors(voidc, tr, tg, tb,
+		rowoff = (vyoff + row) * ncols;
+		G_lookup_raster_colors(voidc, tr, tg, tb,
 				       tset, tsiz, &colors, rtype);
 
-                for (col = 0; col < vcols; col++)
-                {
-                    coff   = (int)(col / vscale);
+		for (col = 0; col < vcols; col++) {
+		    coff = (int)(col / vscale);
 		    offset = rowoff + col + vxoff;
 
-                    if (!tset[coff])
-                        pr[offset] = pg[offset] = pb[offset] = (char) 255;
-		    else
-                    {
-			pr[offset] = (char) tr[coff];	
-			pg[offset] = (char) tg[coff];	
-			pb[offset] = (char) tb[coff];	
-		    }	
-                }
+		    if (!tset[coff])
+			pr[offset] = pg[offset] = pb[offset] = (char)255;
+		    else {
+			pr[offset] = (char)tr[coff];
+			pg[offset] = (char)tg[coff];
+			pb[offset] = (char)tb[coff];
+		    }
+		}
 	    }
 
 	    G_close_cell(fd);
@@ -278,7 +270,8 @@ static int load_files(void)
     }
 
     mpfilename = G_tempfile();
-    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols, 0);
+    write_params(mpfilename, yfiles, outfile, cnt, quality, y_rows, y_cols,
+		 0);
 
     if (quiet)
 	sprintf(cmd, "%s %s 2> /dev/null > /dev/null", encoder, mpfilename);
@@ -290,16 +283,16 @@ static int load_files(void)
 
     clean_files(mpfilename, yfiles, cnt);
 
-    G_free (voidc);
-    G_free (tset);
-    G_free (tr);
-    G_free (tg);
-    G_free (tb);
-    G_free (pr);
-    G_free (pg);
-    G_free (pb);
+    G_free(voidc);
+    G_free(tset);
+    G_free(tr);
+    G_free(tg);
+    G_free(tb);
+    G_free(pr);
+    G_free(pg);
+    G_free(pb);
 
-    return(cnt);
+    return (cnt);
 }
 
 
@@ -325,9 +318,9 @@ static int use_r_out(void)
 
 
 /* ###################################################### */
-static char **gee_wildfiles (char *wildarg, char *element, int *num)
+static char **gee_wildfiles(char *wildarg, char *element, int *num)
 {
-    int n, cnt=0;
+    int n, cnt = 0;
     char path[1000], *mapset, cmd[1000], buf[512];
     char *p, *tfile;
     static char *newfiles[MAXIMAGES];
@@ -337,35 +330,31 @@ static char **gee_wildfiles (char *wildarg, char *element, int *num)
     tfile = G_tempfile();
 
     /* build list of filenames */
-    for (n=0; (mapset = G__mapset_name (n)); n++)
-    {
-	if (strcmp (mapset,".") == 0)
+    for (n = 0; (mapset = G__mapset_name(n)); n++) {
+	if (strcmp(mapset, ".") == 0)
 	    mapset = G_mapset();
 
-	G__file_name (path, element, "", mapset);
-	if (access(path, 0) == 0)
-        {
-	    sprintf(cmd, "cd %s; \\ls %s >> %s 2> /dev/null", 
-                    path, wildarg, tfile);
+	G__file_name(path, element, "", mapset);
+	if (access(path, 0) == 0) {
+	    sprintf(cmd, "cd %s; \\ls %s >> %s 2> /dev/null",
+		    path, wildarg, tfile);
 	    G_system(cmd);
 	}
     }
 
     if (NULL == (tf = fopen(tfile, "r")))
-        G_warning(_("Error reading wildcard"));
-    else
-    {
-	while (NULL != fgets(buf,512,tf))
-        {
+	G_warning(_("Error reading wildcard"));
+    else {
+	while (NULL != fgets(buf, 512, tf)) {
 	    /* replace newline with null */
 	    if ((p = strchr(buf, '\n')))
 		*p = '\0';
 	    /* replace first space with null */
-	    else if((p = strchr(buf, ' ')))
+	    else if ((p = strchr(buf, ' ')))
 		*p = '\0';
 
 	    if (strlen(buf) > 1)
-		newfiles[cnt++] = G_store (buf);
+		newfiles[cnt++] = G_store(buf);
 	}
 
 	fclose(tf);
@@ -374,104 +363,100 @@ static char **gee_wildfiles (char *wildarg, char *element, int *num)
     *num = cnt;
     sprintf(cmd, "\\rm %s", tfile);
     G_system(cmd);
-    G_free (tfile);
+    G_free(tfile);
 
-    return(newfiles);
+    return (newfiles);
 }
 
 
 /********************************************************************/
-static void parse_command (int argc, char *argv[],
-                    char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
-                    int *numframes, int *quality, int *convert)
+static void parse_command(int argc, char *argv[],
+			  char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
+			  int *numframes, int *quality, int *convert)
 {
     struct GModule *module;
-    struct Option *viewopts[MAXVIEWS], *out, *qual; 
+    struct Option *viewopts[MAXVIEWS], *out, *qual;
     struct Flag *qt, *conv;
     char buf[BUFSIZ], **wildfiles;
-    int i,j,k, numi, wildnum;
+    int i, j, k, numi, wildnum;
 
     module = G_define_module();
     module->keywords = _("raster");
-    module->description =
-		_("Raster File Series to MPEG Conversion Program.");
+    module->description = _("Raster File Series to MPEG Conversion Program.");
 
     *numviews = *numframes = 0;
-    for (i=0; i<MAXVIEWS; i++)
-    {
+    for (i = 0; i < MAXVIEWS; i++) {
 	viewopts[i] = G_define_option();
-	sprintf(buf, "view%d", i+1);
-	viewopts[i]->key		= G_store(buf);
-	viewopts[i]->type 		= TYPE_STRING;
-	viewopts[i]->required 		= (i ? NO : YES);
-	viewopts[i]->multiple 		= YES;
-	viewopts[i]->gisprompt 		= "old,cell,Raster";
-	sprintf(buf, _("Raster file(s) for View%d"), i+1);
-	viewopts[i]->description 	= G_store(buf);
+	sprintf(buf, "view%d", i + 1);
+	viewopts[i]->key = G_store(buf);
+	viewopts[i]->type = TYPE_STRING;
+	viewopts[i]->required = (i ? NO : YES);
+	viewopts[i]->multiple = YES;
+	viewopts[i]->gisprompt = "old,cell,Raster";
+	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
+	viewopts[i]->description = G_store(buf);
     }
 
     out = G_define_option();
-    out->key		= "output";
-    out->type 		= TYPE_STRING;
-    out->required 	= NO;
-    out->multiple 	= NO;
-    out->answer 	= "gmovie.mpg";
-    out->description 	= _("Name for output file");
+    out->key = "output";
+    out->type = TYPE_STRING;
+    out->required = NO;
+    out->multiple = NO;
+    out->answer = "gmovie.mpg";
+    out->description = _("Name for output file");
 
     qual = G_define_option();
-    qual->key		= "qual";
-    qual->type 		= TYPE_INTEGER;
-    qual->required 	= NO;
-    qual->multiple 	= NO;
-    qual->answer 	= "3";
-    qual->options       = "1-5" ;
-    qual->description 	= 
-	    _("Quality factor (1 = highest quality, lowest compression)");
+    qual->key = "qual";
+    qual->type = TYPE_INTEGER;
+    qual->required = NO;
+    qual->multiple = NO;
+    qual->answer = "3";
+    qual->options = "1-5";
+    qual->description =
+	_("Quality factor (1 = highest quality, lowest compression)");
 
-    qt = G_define_flag ();
+    qt = G_define_flag();
     qt->key = 'q';
     qt->description = _("Quiet - suppress progress report");
-   
-    conv = G_define_flag ();
+
+    conv = G_define_flag();
     conv->key = 'c';
-    conv->description = _("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
-   
-    if (G_parser (argc, argv))
-        exit (EXIT_FAILURE);
+    conv->description =
+	_
+	("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
 
-    *convert = 0; 
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    *convert = 0;
     if (qt->answer)
-        quiet = 1;
+	quiet = 1;
     if (conv->answer)
-        *convert = 1;
+	*convert = 1;
 
-    *quality = 3; 
+    *quality = 3;
     if (qual->answer != NULL)
-	sscanf(qual->answer,"%d", quality);
+	sscanf(qual->answer, "%d", quality);
     if (*quality > 5 || *quality < 1)
-	*quality = 3; 
+	*quality = 3;
 
     if (out->answer)
 	strcpy(outfile, out->answer);
     else
 	strcpy(outfile, "gmovie.mpg");
 
-    for (i=0; i<MAXVIEWS; i++)
-    {
-	if (viewopts[i]->answers)
-        {
+    for (i = 0; i < MAXVIEWS; i++) {
+	if (viewopts[i]->answers) {
 	    (*numviews)++;
 
-	    for (j = 0, numi=0; viewopts[i]->answers[j] ; j++)
-            {
-		if ((NULL != strchr(viewopts[i]->answers[j], '*')) || 
-		    (NULL != strchr(viewopts[i]->answers[j], '?')) || 
-		    (NULL != strchr(viewopts[i]->answers[j], '[')))
-                {
+	    for (j = 0, numi = 0; viewopts[i]->answers[j]; j++) {
+		if ((NULL != strchr(viewopts[i]->answers[j], '*')) ||
+		    (NULL != strchr(viewopts[i]->answers[j], '?')) ||
+		    (NULL != strchr(viewopts[i]->answers[j], '['))) {
 		    wildfiles = gee_wildfiles(viewopts[i]->answers[j],
-				"cell", &wildnum);
+					      "cell", &wildnum);
 
-		    for (k=0; k<wildnum; k++)
+		    for (k = 0; k < wildnum; k++)
 			vfiles[i][numi++] = wildfiles[k];
 		}
 		else
@@ -479,10 +464,12 @@ static void parse_command (int argc, char *argv[],
 	    }
 
 	    /* keep track of smallest number of frames */
-	    *numframes = *numframes ? *numframes > numi ? numi : *numframes : numi;
+	    *numframes =
+		*numframes ? *numframes > numi ? numi : *numframes : numi;
 	}
     }
 }
 
 /*********************************************************************/
+
 /*********************************************************************/

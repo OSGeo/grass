@@ -1,19 +1,19 @@
 /*
-*****************************************************************************
-*
-* MODULE:   	Grass Include Files
-* AUTHOR(S):	Original author unknown - probably CERL
-*   	    	Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
-* PURPOSE:  	This file contains definitions of variables and data types
-*   	    	for use with most, if not all, Grass programs. This file is
-*   	    	usually included in every Grass program.
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *****************************************************************************
+ *
+ * MODULE:      Grass Include Files
+ * AUTHOR(S):   Original author unknown - probably CERL
+ *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
+ * PURPOSE:     This file contains definitions of variables and data types
+ *              for use with most, if not all, Grass programs. This file is
+ *              usually included in every Grass program.
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *              License (>=v2). Read the file COPYING that comes with GRASS
+ *              for details.
+ *
+ *****************************************************************************/
 
 #ifndef GRASS_GIS_H
 #define GRASS_GIS_H
@@ -35,8 +35,8 @@
 #define __attribute__(x)
 #endif
 
-static const char *GRASS_copyright __attribute__((unused))
-	= "GRASS GNU GPL licensed Software" ;
+static const char *GRASS_copyright __attribute__ ((unused))
+    = "GRASS GNU GPL licensed Software";
 
 /* Define TRUE and FALSE for boolean comparisons */
 #ifndef TRUE
@@ -73,13 +73,13 @@ static const char *GRASS_copyright __attribute__((unused))
 
 /* define PI and friends */
 #undef M_PI
-#define M_PI    3.14159265358979323846 /* pi */
+#define M_PI    3.14159265358979323846	/* pi */
 
 #undef M_PI_2
-#define M_PI_2  1.57079632679489661923 /* pi/2 */
+#define M_PI_2  1.57079632679489661923	/* pi/2 */
 
 #undef M_PI_4
-#define M_PI_4  0.78539816339744830962 /* pi/4 */
+#define M_PI_4  0.78539816339744830962	/* pi/4 */
 
 /* epsilon (IEEE: 2.220446e-16) */
 #define GRASS_EPSILON 1.0e-15
@@ -89,8 +89,8 @@ static const char *GRASS_copyright __attribute__((unused))
 #define G_VAR_MAPSET   1
 
 /* Where to find/store variables */
-#define G_GISRC_MODE_FILE     0      /* files */
-#define G_GISRC_MODE_MEMORY   1      /* memory only */
+#define G_GISRC_MODE_FILE     0	/* files */
+#define G_GISRC_MODE_MEMORY   1	/* memory only */
 
 /* for G_parser() */
 #define TYPE_INTEGER  1
@@ -148,48 +148,48 @@ static const char *GRASS_copyright __attribute__((unused))
 #  define G_DEV_NULL '/dev/null'
 #endif
 
-/**/
-typedef enum {
-    G_OPT_WHERE,    /* SQL where conditions */
-    G_OPT_COLUMN,   /* one attr column */
-    G_OPT_COLUMNS,  /* one or more attr columns */
+ /**/ typedef enum
+{
+    G_OPT_WHERE,		/* SQL where conditions */
+    G_OPT_COLUMN,		/* one attr column */
+    G_OPT_COLUMNS,		/* one or more attr columns */
 
-    G_OPT_I_GROUP,  /* old input imagery group */
-    G_OPT_R_INPUT,  /* old input raster map */
-    G_OPT_R_INPUTS, /* old input raster maps */
-    G_OPT_R_OUTPUT, /* new output raster map */
-    G_OPT_R_MAP,    /* old input raster map */
-    G_OPT_R_MAPS,   /* old input rasters map */
-    G_OPT_R_BASE,   /* old input base raster map */
-    G_OPT_R_COVER,  /* old input cover raster map */
-    G_OPT_R_ELEV,   /* old input elevation raster map */
-    G_OPT_R_ELEVS,  /* old input elevation raster maps */
+    G_OPT_I_GROUP,		/* old input imagery group */
+    G_OPT_R_INPUT,		/* old input raster map */
+    G_OPT_R_INPUTS,		/* old input raster maps */
+    G_OPT_R_OUTPUT,		/* new output raster map */
+    G_OPT_R_MAP,		/* old input raster map */
+    G_OPT_R_MAPS,		/* old input rasters map */
+    G_OPT_R_BASE,		/* old input base raster map */
+    G_OPT_R_COVER,		/* old input cover raster map */
+    G_OPT_R_ELEV,		/* old input elevation raster map */
+    G_OPT_R_ELEVS,		/* old input elevation raster maps */
 
-    G_OPT_R3_INPUT,  /* old input raster3d map */
-    G_OPT_R3_INPUTS, /* old input raster3d maps */
-    G_OPT_R3_OUTPUT, /* new output raster3d map */
+    G_OPT_R3_INPUT,		/* old input raster3d map */
+    G_OPT_R3_INPUTS,		/* old input raster3d maps */
+    G_OPT_R3_OUTPUT,		/* new output raster3d map */
 
-    G_OPT_V_INPUT,  /* old input vector map */
-    G_OPT_V_INPUTS, /* old input vector maps */
-    G_OPT_V_OUTPUT, /* new output vector map */
-    G_OPT_V_MAP,    /* old input vector map */
-    G_OPT_V_TYPE,   /* primitive type */
-    G_OPT_V_FIELD,  /* field number */
-    G_OPT_V_CAT,    /* one category */
-    G_OPT_V_CATS,   /* more categories */
+    G_OPT_V_INPUT,		/* old input vector map */
+    G_OPT_V_INPUTS,		/* old input vector maps */
+    G_OPT_V_OUTPUT,		/* new output vector map */
+    G_OPT_V_MAP,		/* old input vector map */
+    G_OPT_V_TYPE,		/* primitive type */
+    G_OPT_V_FIELD,		/* field number */
+    G_OPT_V_CAT,		/* one category */
+    G_OPT_V_CATS,		/* more categories */
 
-    G_OPT_F_INPUT,  /* old input file */
-    G_OPT_F_OUTPUT, /* new output file */
-    G_OPT_F_SEP,    /* data field separator */
+    G_OPT_F_INPUT,		/* old input file */
+    G_OPT_F_OUTPUT,		/* new output file */
+    G_OPT_F_SEP,		/* data field separator */
 
-    G_OPT_C_FG,     /* foreground color */
-    G_OPT_C_BG      /* background color */
+    G_OPT_C_FG,			/* foreground color */
+    G_OPT_C_BG			/* background color */
 } STD_OPT;
 
 /* Message format */
-#define G_INFO_FORMAT_STANDARD 0  /* GRASS_MESSAGE_FORMAT=standard or not defined */
-#define G_INFO_FORMAT_GUI      1  /* GRASS_MESSAGE_FORMAT=gui */
-#define G_INFO_FORMAT_SILENT   2  /* GRASS_MESSAGE_FORMAT=silent */
+#define G_INFO_FORMAT_STANDARD 0	/* GRASS_MESSAGE_FORMAT=standard or not defined */
+#define G_INFO_FORMAT_GUI      1	/* GRASS_MESSAGE_FORMAT=gui */
+#define G_INFO_FORMAT_SILENT   2	/* GRASS_MESSAGE_FORMAT=silent */
 
 /* Icon types */
 #define G_ICON_CROSS  0
@@ -202,9 +202,9 @@ typedef enum {
 
 /* for G_get_raster_sample(), INTERP_TYPE */
 #define UNKNOWN	  0
-#define NEAREST   1  /* nearest neighbor interpolation	*/
-#define BILINEAR  2  /* bilinear interpolation 		*/
-#define CUBIC     3  /* cubic interpolation 		*/
+#define NEAREST   1		/* nearest neighbor interpolation  */
+#define BILINEAR  2		/* bilinear interpolation          */
+#define CUBIC     3		/* cubic interpolation             */
 
 /* for raster maps */
 #define GR_FATAL_EXIT    0
@@ -212,11 +212,12 @@ typedef enum {
 #define GR_FATAL_RETURN  2
 
 /* Element types */
-enum {            /* Dir */
-    G_ELEMENT_RASTER = 1, /* cell */
-    G_ELEMENT_VECTOR = 2, /* vector */ 
-    G_ELEMENT_GROUP  = 3, /* group */ 
-    G_ELEMENT_REGION = 4  /* window */
+enum
+{				/* Dir */
+    G_ELEMENT_RASTER = 1,	/* cell */
+    G_ELEMENT_VECTOR = 2,	/* vector */
+    G_ELEMENT_GROUP = 3,	/* group */
+    G_ELEMENT_REGION = 4	/* window */
 };
 
 /*=========================== Typedefs/Structures ==========================*/
@@ -233,21 +234,21 @@ typedef int INTERP_TYPE;
 
 struct Cell_head
 {
-    int format;     	/* max numer of bytes per cell minus 1          */
-    int compressed; 	/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
-    int rows;	    	/* number of rows in the data 2D                */
-    int rows3;	    	/* number of rows in the data 3D                */
-    int cols;	    	/* number of columns in the data 2D             */
-    int cols3;	    	/* number of columns in the data 3D             */
-    int depths;         /* number of depths in data                     */
-    int proj;	    	/* Projection (see #defines above)              */
-    int zone;	    	/* Projection zone                              */
-    double ew_res;  	/* East to West cell size 2D                    */
-    double ew_res3;  	/* East to West cell size 3D                    */
-    double ns_res;  	/* North to South cell size 2D                  */
-    double ns_res3;  	/* North to South cell size 3D                  */
-    double tb_res;  	/* Top to Bottom cell size                      */
-    double north;   	/* coordinates of layer                         */
+    int format;			/* max numer of bytes per cell minus 1          */
+    int compressed;		/* 0 = uncompressed, 1 = compressed, -1 pre 3.0 */
+    int rows;			/* number of rows in the data 2D                */
+    int rows3;			/* number of rows in the data 3D                */
+    int cols;			/* number of columns in the data 2D             */
+    int cols3;			/* number of columns in the data 3D             */
+    int depths;			/* number of depths in data                     */
+    int proj;			/* Projection (see #defines above)              */
+    int zone;			/* Projection zone                              */
+    double ew_res;		/* East to West cell size 2D                    */
+    double ew_res3;		/* East to West cell size 3D                    */
+    double ns_res;		/* North to South cell size 2D                  */
+    double ns_res3;		/* North to South cell size 3D                  */
+    double tb_res;		/* Top to Bottom cell size                      */
+    double north;		/* coordinates of layer                         */
     double south;
     double east;
     double west;
@@ -259,7 +260,7 @@ struct _Color_Rule_
 {
     struct
     {
-    	DCELL value;
+	DCELL value;
 	unsigned char red;
 	unsigned char grn;
 	unsigned char blu;
@@ -276,7 +277,7 @@ struct _Color_Info_
 
     struct
     {
-    	unsigned char *red;
+	unsigned char *red;
 	unsigned char *grn;
 	unsigned char *blu;
 	unsigned char *set;
@@ -286,7 +287,7 @@ struct _Color_Info_
 
     struct
     {
-        DCELL *vals;
+	DCELL *vals;
 	/* pointers to color rules corresponding to the intervals btwn vals */
 	struct _Color_Rule_ **rules;
 	int nalloc;
@@ -298,15 +299,15 @@ struct _Color_Info_
 
 struct Colors
 {
-    int version;	/* set by read_colors: -1=old,1=new */
+    int version;		/* set by read_colors: -1=old,1=new */
     DCELL shift;
     int invert;
-    int is_float;   	    /* defined on floating point raster data? */
-    int null_set;   	    /* the colors for null are set? */
+    int is_float;		/* defined on floating point raster data? */
+    int null_set;		/* the colors for null are set? */
     unsigned char null_red;
     unsigned char null_grn;
     unsigned char null_blu;
-    int undef_set;  	    /* the colors for cells not in range are set? */
+    int undef_set;		/* the colors for cells not in range are set? */
     unsigned char undef_red;
     unsigned char undef_grn;
     unsigned char undef_blu;
@@ -319,8 +320,8 @@ struct Colors
 
 typedef struct
 {
-    unsigned char r, g, b, a;  /* red, green, blue, and alpha */
-} RGBA_Color ;
+    unsigned char r, g, b, a;	/* red, green, blue, and alpha */
+} RGBA_Color;
 
 typedef RGBA_Color RGB_Color;
 
@@ -332,46 +333,46 @@ typedef RGBA_Color RGB_Color;
 
 struct Reclass
 {
-    char *name;  	    /* name of raster map being reclassed    */
-    char *mapset; 	    /* mapset in which "name" is found      */
-    int type;	    	    /* type of reclass                      */
-    int num;	    	    /* size of reclass table                */
-    CELL min;	    	    /* table min    	    	    	    */
-    CELL max;	    	    /* table max    	    	    	    */
-    CELL *table;    	    /* reclass table                        */
-} ;
+    char *name;			/* name of raster map being reclassed    */
+    char *mapset;		/* mapset in which "name" is found      */
+    int type;			/* type of reclass                      */
+    int num;			/* size of reclass table                */
+    CELL min;			/* table min                            */
+    CELL max;			/* table max                            */
+    CELL *table;		/* reclass table                        */
+};
 
 struct FPReclass_table
 {
-    DCELL dLow;     /* domain low */
-    DCELL dHigh;    /* domain high */
-    DCELL rLow;     /* range low */
-    DCELL rHigh;    /* range high */
+    DCELL dLow;			/* domain low */
+    DCELL dHigh;		/* domain high */
+    DCELL rLow;			/* range low */
+    DCELL rHigh;		/* range high */
 };
 
 /* reclass structure from double to double used by r.recode to reclass */
 /* between types: int to double, float to int,... */
 struct FPReclass
 {
-    int defaultDRuleSet;    /* 1 if default domain rule set */
-    int defaultRRuleSet;    /* 1 if default range rule set */
-    int infiniteLeftSet;    /* 1 if negative infinite interval rule exists */
-    int infiniteRightSet;   /* 1 if positive infinite interval rule exists */
-    int rRangeSet;  	    /* 1 if range range (i.e. interval) is set */
-    int maxNofRules; 
+    int defaultDRuleSet;	/* 1 if default domain rule set */
+    int defaultRRuleSet;	/* 1 if default range rule set */
+    int infiniteLeftSet;	/* 1 if negative infinite interval rule exists */
+    int infiniteRightSet;	/* 1 if positive infinite interval rule exists */
+    int rRangeSet;		/* 1 if range range (i.e. interval) is set */
+    int maxNofRules;
     int nofRules;
-    DCELL defaultDMin;      /* default domain minimum value */
-    DCELL defaultDMax;      /* default domain maximum value */
-    DCELL defaultRMin;      /* default range minimum value */
-    DCELL defaultRMax;      /* default range maximum value */
-    DCELL infiniteDLeft;    /* neg infinite rule */
-    DCELL infiniteDRight;   /* neg infinite rule */
-    DCELL infiniteRLeft;    /* pos infinite rule */
-    DCELL infiniteRRight;   /* pos infinite rule */
-    DCELL dMin;     	    /* minimum domain values in rules */
-    DCELL dMax;     	    /* maximum domain values in rules */
-    DCELL rMin;     	    /* minimum range values in rules */
-    DCELL rMax;     	    /* maximum range values in rules */
+    DCELL defaultDMin;		/* default domain minimum value */
+    DCELL defaultDMax;		/* default domain maximum value */
+    DCELL defaultRMin;		/* default range minimum value */
+    DCELL defaultRMax;		/* default range maximum value */
+    DCELL infiniteDLeft;	/* neg infinite rule */
+    DCELL infiniteDRight;	/* neg infinite rule */
+    DCELL infiniteRLeft;	/* pos infinite rule */
+    DCELL infiniteRRight;	/* pos infinite rule */
+    DCELL dMin;			/* minimum domain values in rules */
+    DCELL dMax;			/* maximum domain values in rules */
+    DCELL rMin;			/* minimum range values in rules */
+    DCELL rMax;			/* maximum range values in rules */
     struct FPReclass_table *table;
 };
 
@@ -416,10 +417,10 @@ struct Quant
 	struct Quant_table **rules;
 	int nalloc;
 	int active;
-	DCELL inf_dmin; 
-	DCELL inf_dmax; 
-	CELL inf_min; 
-	CELL inf_max; 
+	DCELL inf_dmin;
+	DCELL inf_dmax;
+	CELL inf_min;
+	CELL inf_max;
 	/* all values smaller than inf_dmin become inf_min */
 	/* all values larger than inf_dmax become inf_max */
 	/* inf_min and/or inf_max can be NULL if there are no inf rules */
@@ -428,20 +429,20 @@ struct Quant
 
 struct Categories
 {
-    CELL ncats;     	    /* total number of categories              */
-    CELL num;	    	    /* the highest cell values. Only exists    
-				 for backwards compatibility = (CELL)
-				 max_fp_values in quant rules          */
-    char *title;    	    /* name of data layer                      */ 
-    char *fmt;	    	    /* printf-like format to generate labels   */
-    float m1;	    	    /* Multiplication coefficient 1            */
-    float a1;	    	    /* Addition coefficient 1                  */
-    float m2;	    	    /* Multiplication coefficient 2            */
-    float a2;	    	    /* Addition coefficient 2                  */
-    struct Quant q; 	    /* rules mapping cell values to index in
-				 list of labels                        */
-    char **labels;  	    /* array of labels of size num             */	
-    int *marks;    	    /* was the value with this label was used? */
+    CELL ncats;			/* total number of categories              */
+    CELL num;			/* the highest cell values. Only exists    
+				   for backwards compatibility = (CELL)
+				   max_fp_values in quant rules          */
+    char *title;		/* name of data layer                      */
+    char *fmt;			/* printf-like format to generate labels   */
+    float m1;			/* Multiplication coefficient 1            */
+    float a1;			/* Addition coefficient 1                  */
+    float m2;			/* Multiplication coefficient 2            */
+    float a2;			/* Addition coefficient 2                  */
+    struct Quant q;		/* rules mapping cell values to index in
+				   list of labels                        */
+    char **labels;		/* array of labels of size num             */
+    int *marks;			/* was the value with this label was used? */
     int nalloc;
     int last_marked_rule;
     /* NOTE: to get a rule corresponfing to cats.labels[i], use */
@@ -454,16 +455,16 @@ struct Categories
 
 struct History
 {
-    char    mapid[RECORD_LEN];
-    char    title[RECORD_LEN];
-    char    mapset[RECORD_LEN];
-    char    creator[RECORD_LEN];
-    char    maptype[RECORD_LEN];
-    char    datsrc_1[RECORD_LEN];
-    char    datsrc_2[RECORD_LEN];
-    char    keywrd[RECORD_LEN];
-    int     edlinecnt;
-    char    edhist[MAXEDLINES][RECORD_LEN];
+    char mapid[RECORD_LEN];
+    char title[RECORD_LEN];
+    char mapset[RECORD_LEN];
+    char creator[RECORD_LEN];
+    char maptype[RECORD_LEN];
+    char datsrc_1[RECORD_LEN];
+    char datsrc_2[RECORD_LEN];
+    char keywrd[RECORD_LEN];
+    int edlinecnt;
+    char edhist[MAXEDLINES][RECORD_LEN];
 };
 
 struct Cell_stats
@@ -474,19 +475,19 @@ struct Cell_stats
 	long *count;
 	int left;
 	int right;
-    } *node ;     /* tree of values */
- 
-    int tlen ;    /* allocated tree size */
-    int N;        /* number of actual nodes in tree */
+    } *node;			/* tree of values */
+
+    int tlen;			/* allocated tree size */
+    int N;			/* number of actual nodes in tree */
     int curp;
-    long null_data_count;   
+    long null_data_count;
     int curoffset;
 };
 
 struct Histogram
 {
     int num;
-    
+
     struct Histogram_list
     {
 	CELL cat;
@@ -498,41 +499,41 @@ struct Range
 {
     CELL min;
     CELL max;
-    int first_time;     /* whether or not range was updated */
+    int first_time;		/* whether or not range was updated */
 };
 
 struct FPRange
 {
     DCELL min;
     DCELL max;
-    int first_time;     /* whether or not range was updated */
+    int first_time;		/* whether or not range was updated */
 };
 
 /*
-** Structure for I/O of 3dview files  (view.c)
-*/
+ ** Structure for I/O of 3dview files  (view.c)
+ */
 struct G_3dview
 {
-    char pgm_id[40];        /* user-provided identifier */
-    float from_to[2][3];    /* eye position & lookat position */
-    float fov;              /* field of view */
-    float twist;            /* right_hand rotation about from_to */
-    float exag;             /* terrain elevation exageration */
-    int mesh_freq;  	    /* cells per grid line */
-    int poly_freq;   	    /* cells per polygon */
-    int display_type;       /* 1 for mesh, 2 for poly, 3 for both */
-    int lightson;   	    /* boolean */
-    int dozero;   	    /* boolean */
-    int colorgrid;   	    /* boolean */
-    int shading;   	    /* boolean */
-    int fringe;   	    /* boolean */
-    int surfonly;   	    /* boolean */
-    int doavg;   	    /* boolean */
-    char grid_col[40];	    /* colors */
-    char bg_col[40];	    /* colors */
-    char other_col[40];     /* colors */
-    float lightpos[4];	    /* east, north, height, 1.0 for local 0.0 infin */
-    float lightcol[3];       /* values between 0.0 to 1.0 for red, grn, blu */
+    char pgm_id[40];		/* user-provided identifier */
+    float from_to[2][3];	/* eye position & lookat position */
+    float fov;			/* field of view */
+    float twist;		/* right_hand rotation about from_to */
+    float exag;			/* terrain elevation exageration */
+    int mesh_freq;		/* cells per grid line */
+    int poly_freq;		/* cells per polygon */
+    int display_type;		/* 1 for mesh, 2 for poly, 3 for both */
+    int lightson;		/* boolean */
+    int dozero;			/* boolean */
+    int colorgrid;		/* boolean */
+    int shading;		/* boolean */
+    int fringe;			/* boolean */
+    int surfonly;		/* boolean */
+    int doavg;			/* boolean */
+    char grid_col[40];		/* colors */
+    char bg_col[40];		/* colors */
+    char other_col[40];		/* colors */
+    float lightpos[4];		/* east, north, height, 1.0 for local 0.0 infin */
+    float lightcol[3];		/* values between 0.0 to 1.0 for red, grn, blu */
     float ambient;
     float shine;
     struct Cell_head vwin;
@@ -546,57 +547,57 @@ struct Key_Value
     char **value;
 };
 
-struct Option                	    /* Structure that stores option info */
+struct Option			/* Structure that stores option info */
 {
-    char *key;                      /* Key word used on command line    */
-    int type;                       /* Option type                      */
-    int required;                   /* REQUIRED or OPTIONAL             */
-    int multiple;                   /* Multiple entries OK              */
-    char *options;                  /* Approved values or range or NULL */
-    char **opts;                    /* NULL or NULL terminated array of parsed options */
-    char *key_desc;                 /* one word describing the key      */
-    char *label;                    /* Optional short label, used in GUI as item label */
-    char *description;              /* String describing option         */
-    char *descriptions;             /* ';' separated pairs of option and option descriptions */
-				    /* For example: (with ->options = "break,rmdupl")
-				     * "break;break lines on intersections;"
-				     * "rmdupl;remove duplicates"
-				     */
-    char **descs;                   /* parsed descriptions, array of either NULL or string */
-                                    /* in the same order as options */
-    char *answer;                   /* Option answer                    */
-    char *def;                      /* Where original answer gets saved */
-    char **answers;                 /* Option answers (for multiple=YES)*/
-    struct Option *next_opt;        /* Pointer to next option struct    */
-    char *gisprompt;                /* Interactive prompt guidance      */
-    char *guisection;               /* GUI Layout guidance: ';' delimited heirarchical tree position */
-    int (*checker)();               /* Routine to check answer or NULL  */
+    char *key;			/* Key word used on command line    */
+    int type;			/* Option type                      */
+    int required;		/* REQUIRED or OPTIONAL             */
+    int multiple;		/* Multiple entries OK              */
+    char *options;		/* Approved values or range or NULL */
+    char **opts;		/* NULL or NULL terminated array of parsed options */
+    char *key_desc;		/* one word describing the key      */
+    char *label;		/* Optional short label, used in GUI as item label */
+    char *description;		/* String describing option         */
+    char *descriptions;		/* ';' separated pairs of option and option descriptions */
+    /* For example: (with ->options = "break,rmdupl")
+     * "break;break lines on intersections;"
+     * "rmdupl;remove duplicates"
+     */
+    char **descs;		/* parsed descriptions, array of either NULL or string */
+    /* in the same order as options */
+    char *answer;		/* Option answer                    */
+    char *def;			/* Where original answer gets saved */
+    char **answers;		/* Option answers (for multiple=YES) */
+    struct Option *next_opt;	/* Pointer to next option struct    */
+    char *gisprompt;		/* Interactive prompt guidance      */
+    char *guisection;		/* GUI Layout guidance: ';' delimited heirarchical tree position */
+    int (*checker) ();		/* Routine to check answer or NULL  */
     int count;
 };
 
-struct Flag                 	    /* Structure that stores flag info  */
+struct Flag			/* Structure that stores flag info  */
 {
-    char key;                       /* Key char used on command line    */
-    char answer;                    /* Stores flag state: 0/1           */
-    char *label;                    /* Optional short label, used in GUI as item label */
-    char *description;              /* String describing flag meaning   */
-    char *guisection;               /* GUI Layout guidance: ';' delimited heirarchical tree position */
-    struct Flag *next_flag;         /* Pointer to next flag struct      */
+    char key;			/* Key char used on command line    */
+    char answer;		/* Stores flag state: 0/1           */
+    char *label;		/* Optional short label, used in GUI as item label */
+    char *description;		/* String describing flag meaning   */
+    char *guisection;		/* GUI Layout guidance: ';' delimited heirarchical tree position */
+    struct Flag *next_flag;	/* Pointer to next flag struct      */
 };
 
-struct GModule                      /* Structure that stores module info  */
+struct GModule			/* Structure that stores module info  */
 {
-    char *label;                    /* Optional short description for GUI */
-    char *description;              /* String describing module */
-    char *keywords;                 /* Keywords describing module */
-	/* further items are possible: author(s), version */
-    int overwrite;                  /* overwrite old files */
-    int verbose;                    /* print all informations about progress and so on */
+    char *label;		/* Optional short description for GUI */
+    char *description;		/* String describing module */
+    char *keywords;		/* Keywords describing module */
+    /* further items are possible: author(s), version */
+    int overwrite;		/* overwrite old files */
+    int verbose;		/* print all informations about progress and so on */
 };
 
 struct TimeStamp
 {
-    DateTime dt[2];   /* two datetimes */
+    DateTime dt[2];		/* two datetimes */
     int count;
 };
 

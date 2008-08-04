@@ -1,6 +1,7 @@
 #include <grass/imagery.h>
 
-struct PS_group {
+struct PS_group
+{
     struct Ref ref;
     struct Colors colors[3];
     char *name[3];

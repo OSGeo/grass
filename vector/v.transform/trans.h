@@ -1,6 +1,6 @@
 /*
-*  Written by the GRASS Team,  02/16/90, -mh .
-*/
+ *  Written by the GRASS Team,  02/16/90, -mh .
+ */
 
 /******************
 *  INCLUDES:       *
@@ -21,7 +21,7 @@
 #define  POINTS_NOT_SPREAD  -1
 #define  NEED_MORE_POINTS  -2
 
-#define  TRANS_MATRIX 0 
+#define  TRANS_MATRIX 0
 #define  TRANS_SHIFT  1
 
 #define  IDX_XSHIFT 0
@@ -55,18 +55,18 @@
 #define GLOBAL extern
 #endif
 
-GLOBAL double	ax[MAX_COOR] ;			/*  current map   */
-GLOBAL double	ay[MAX_COOR] ;
+GLOBAL double ax[MAX_COOR];	/*  current map   */
+GLOBAL double ay[MAX_COOR];
 
-GLOBAL double	bx[MAX_COOR] ;			/*  map we are going to   */
-GLOBAL double	by[MAX_COOR] ;
+GLOBAL double bx[MAX_COOR];	/*  map we are going to   */
+GLOBAL double by[MAX_COOR];
 
-GLOBAL int	use[MAX_COOR] ;		/*  where the coordinate came from */
-GLOBAL double	residuals[MAX_COOR] ;
-GLOBAL double	rms ;
+GLOBAL int use[MAX_COOR];	/*  where the coordinate came from */
+GLOBAL double residuals[MAX_COOR];
+GLOBAL double rms;
 
 /*  this may be used in the future  */
-GLOBAL int	reg_cnt ;		/*  count of registered points */
+GLOBAL int reg_cnt;		/*  count of registered points */
 
 
 /******************
@@ -74,20 +74,20 @@ GLOBAL int	reg_cnt ;		/*  count of registered points */
 *******************/
 
 /*  For GRASS data files  */
-struct  file_info
+struct file_info
 {
-	FILE  *fp ;
-	char  *mapset ;
-	char  name[80] ;
-	char  full_name[256] ;
-} ;
+    FILE *fp;
+    char *mapset;
+    char name[80];
+    char full_name[256];
+};
 
 
 /* general flags that get set from the command line  */
 struct command_flags
 {
-    int    verbose ;	/*  do we print residual info  */
-    int    usage ;
+    int verbose;		/*  do we print residual info  */
+    int usage;
 };
 
 #include <grass/libtrans.h>

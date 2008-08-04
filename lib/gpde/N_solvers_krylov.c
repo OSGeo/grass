@@ -187,7 +187,8 @@ int N_solver_pcg(N_les * L, int maxit, double err, int prec)
 		    ;
 		}
 		else {
-		    G_warning(_("Unable to solve the linear equation system"));
+		    G_warning(_
+			      ("Unable to solve the linear equation system"));
 		    error_break = 1;
 		}
 	    }
@@ -354,7 +355,8 @@ int N_solver_cg(N_les * L, int maxit, double err)
 		    ;
 		}
 		else {
-		    G_warning(_("Unable to solve the linear equation system"));
+		    G_warning(_
+			      ("Unable to solve the linear equation system"));
 		    error_break = 1;
 		}
 	    }
@@ -478,7 +480,8 @@ int N_solver_bicgstab(N_les * L, int maxit, double err)
 		    ;
 		}
 		else {
-		    G_warning(_("Unable to solve the linear equation system"));
+		    G_warning(_
+			      ("Unable to solve the linear equation system"));
 		    error_break = 1;
 		}
 
@@ -861,7 +864,7 @@ int check_symmetry(N_les * L)
 				     j, index, index, L->Asp[index]->index[k],
 				     value1, value2,
 				     fabs(fabs(value1) - fabs(value2)));
-				     symm++;
+				symm++;
 			    }
 			}
 		    }
@@ -884,15 +887,15 @@ int check_symmetry(N_les * L)
 			    ("Matrix unsymmetric: Position [%i][%i] : [%i][%i] \nError: %12.18lf != %12.18lf\ndifference = %12.18lf\nStop symmetry calculation.\n",
 			     i, j, j, i, L->A[i][j], L->A[j][i],
 			     fabs(fabs(L->A[i][j]) - fabs(L->A[j][i])));
-			     symm++;
+			symm++;
 		    }
 		}
 	    }
 	}
     }
 
-    if(symm > 0)
-    return 0;
+    if (symm > 0)
+	return 0;
 
     return 1;
 }

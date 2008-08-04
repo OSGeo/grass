@@ -1,3 +1,4 @@
+
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
@@ -17,8 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int
-db__driver_close_cursor(dbCursor *dbc)
+int db__driver_close_cursor(dbCursor * dbc)
 {
     cursor *c;
 
@@ -36,24 +36,24 @@ db__driver_close_cursor(dbCursor *dbc)
 }
 
 
-cursor * alloc_cursor()
+cursor *alloc_cursor()
 {
-    cursor     *c;
+    cursor *c;
 
     /* allocate the cursor */
     c = (cursor *) db_malloc(sizeof(cursor));
     if (c == NULL) {
-        append_error( _("Cannot allocate cursor.") );
-        return NULL; 
-    } 
+	append_error(_("Cannot allocate cursor."));
+	return NULL;
+    }
 
     c->res = NULL;
-    
+
     /* tokenize it */
     c->token = db_new_token(c);
     if (c->token < 0) {
-        append_error( _("Cannot ad new token.") );
-        return NULL; 
+	append_error(_("Cannot ad new token."));
+	return NULL;
     }
 
     c->cols = NULL;
@@ -62,16 +62,14 @@ cursor * alloc_cursor()
     return c;
 }
 
-void free_cursor( cursor *c)
+void free_cursor(cursor * c)
 {
     db_drop_token(c->token);
 
-    if ( c->res ) 
-    {
-	mysql_free_result ( c->res );
+    if (c->res) {
+	mysql_free_result(c->res);
     }
 
-    G_free ( c->cols );
-    G_free(c);  
+    G_free(c->cols);
+    G_free(c);
 }
-

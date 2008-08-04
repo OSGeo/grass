@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *	spot.c 		in ~/r.spread.fast
  *	
@@ -53,76 +54,80 @@
 #endif
 
 #define DATA(map, r, c)		(map)[(r) * ncols + (c)]
-/*#define DEBUG*/
+/*#define DEBUG */
 
-void
-spot (struct costHa *pres_cell, int dir/* direction of forward ROS */)
+void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
 {
-	extern CELL	*map_max;		/* max ROS (cm/min) */
-	extern CELL	*map_spotdist;		/* max spotting distance (m) */
-	extern CELL	*map_velocity;		/* midflame windspeed (ft/min)*/
-	extern CELL	*map_mois;		/* fuel moisture (%) */
-/*	extern float	PI;*/
-	extern int	nrows, ncols;
-	extern struct 	Cell_head window;
-	float		spot_cost;		/* spotting travel time (min) */
-	float		min_cost;		/* min cumulative time (min) */
-	float		U;			/* wind speed at 6m (m/min) */
-	float		Te;			/* time to reach max ROS (min)*/
-	int		land_dist;		/* stochastic landing dist (m)*/
-	int		land_distc;		/* land_dist in cell counts */
-	int		row, col;
+    extern CELL *map_max;	/* max ROS (cm/min) */
+    extern CELL *map_spotdist;	/* max spotting distance (m) */
+    extern CELL *map_velocity;	/* midflame windspeed (ft/min) */
+    extern CELL *map_mois;	/* fuel moisture (%) */
 
-	/* Find the (cell) location spotting might reach */ 
+    /*      extern float    PI; */
+    extern int nrows, ncols;
+    extern struct Cell_head window;
+    float spot_cost;		/* spotting travel time (min) */
+    float min_cost;		/* min cumulative time (min) */
+    float U;			/* wind speed at 6m (m/min) */
+    float Te;			/* time to reach max ROS (min) */
+    int land_dist;		/* stochastic landing dist (m) */
+    int land_distc;		/* land_dist in cell counts */
+    int row, col;
 
-	land_dist = pick_dist(DATA(map_spotdist, pres_cell->row, pres_cell->col));
+    /* Find the (cell) location spotting might reach */
+
+    land_dist = pick_dist(DATA(map_spotdist, pres_cell->row, pres_cell->col));
 #ifdef DEBUG
-printf ("pres_cell(%d, %d): land_dist=%d\n", pres_cell->row, pres_cell->col, land_dist);
+    printf("pres_cell(%d, %d): land_dist=%d\n", pres_cell->row,
+	   pres_cell->col, land_dist);
 #endif
-	land_distc = land_dist/(window.ns_res/100);	/* 100 fac due to cm */
+    land_distc = land_dist / (window.ns_res / 100);	/* 100 fac due to cm */
 
-	if (land_distc < 2)			/* no need for adjacent cells */
-		return; 			
-	row = pres_cell->row - land_distc*cos((dir%360)*PI/180) + 0.5;
-	col = pres_cell->col + land_distc*sin((dir%360)*PI/180) + 0.5;
- 	if ( row < 0 || row >= nrows) 		/* outside the region */
-		return;
- 	if ( col < 0 || col >= ncols)		/* outside the region */
-		return;
-        if (DATA(map_max, row, col) <= 0) 	/* a barrier*/
-                return;
+    if (land_distc < 2)		/* no need for adjacent cells */
+	return;
+    row = pres_cell->row - land_distc * cos((dir % 360) * PI / 180) + 0.5;
+    col = pres_cell->col + land_distc * sin((dir % 360) * PI / 180) + 0.5;
+    if (row < 0 || row >= nrows)	/* outside the region */
+	return;
+    if (col < 0 || col >= ncols)	/* outside the region */
+	return;
+    if (DATA(map_max, row, col) <= 0)	/* a barrier */
+	return;
 
-	/* check if ignitable based on probs. modified from Rothermel (1983) */
+    /* check if ignitable based on probs. modified from Rothermel (1983) */
 
-        if (DATA(map_mois, row, col) > 17) 	/* too wet*/
-                return;
+    if (DATA(map_mois, row, col) > 17)	/* too wet */
+	return;
 #ifdef DEBUG
-printf ("	pre pick_ignite(): land_distc(%d, %d)=%d dir=%d PI=%.2f (dir\%360)*PI/180=%.2f\n", row, col, land_distc, dir, PI, (dir%360)*PI/180);
+    printf
+	("	pre pick_ignite(): land_distc(%d, %d)=%d dir=%d PI=%.2f (dir\%360)*PI/180=%.2f\n",
+	 row, col, land_distc, dir, PI, (dir % 360) * PI / 180);
 #endif
-	if (pick_ignite(DATA(map_mois, row, col)) == 0)	/* not success */
-		return;
+    if (pick_ignite(DATA(map_mois, row, col)) == 0)	/* not success */
+	return;
 #ifdef DEBUG
-printf ("	post pick_ignite(): land_distc(%d, %d)=%d \n", row, col, land_distc);
+    printf("	post pick_ignite(): land_distc(%d, %d)=%d \n", row, col,
+	   land_distc);
 #endif
-	/* travel time by spotting */
+    /* travel time by spotting */
 
-	U =0.305*DATA(map_velocity, pres_cell->row, pres_cell->col); 
-						/*NOTE: use value at midflame*/
-	spot_cost = land_dist/U; 			
+    U = 0.305 * DATA(map_velocity, pres_cell->row, pres_cell->col);
+    /*NOTE: use value at midflame */
+    spot_cost = land_dist / U;
 
-	/* elapsed time to reach the max ROS, proportional to ROS */
+    /* elapsed time to reach the max ROS, proportional to ROS */
 
-	Te = DATA(map_max, pres_cell->row, pres_cell->col)/1000 + 1; 
+    Te = DATA(map_max, pres_cell->row, pres_cell->col) / 1000 + 1;
 
-	/* cumulative travel time since start */
- 
-        min_cost = pres_cell->min_cost + spot_cost + Te;
+    /* cumulative travel time since start */
 
-	/* update it to the to_cell */
+    min_cost = pres_cell->min_cost + spot_cost + Te;
+
+    /* update it to the to_cell */
 #ifdef DEBUG
-printf ("		min_cost=%.2f: pres=%.2f spot=%.2f Te=%.2f\n", min_cost, pres_cell->min_cost, spot_cost, Te);
+    printf("		min_cost=%.2f: pres=%.2f spot=%.2f Te=%.2f\n",
+	   min_cost, pres_cell->min_cost, spot_cost, Te);
 #endif
 
-	update (pres_cell, row, col, (double)dir, min_cost);
+    update(pres_cell, row, col, (double)dir, min_cost);
 }
-

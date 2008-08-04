@@ -2,19 +2,17 @@
 #include <grass/glocale.h>
 
 
-int
-check_ready(void)
+int check_ready(void)
 {
-	FILE	*fp;
-	int	retval;
+    FILE *fp;
+    int retval;
 
-	retval=0;
+    retval = 0;
 
-	if(!(fp=fopen(file,"r")))
-		retval=1;
-	else
-		fclose(fp);
+    if (!(fp = fopen(file, "r")))
+	retval = 1;
+    else
+	fclose(fp);
 
-	return(retval);
+    return (retval);
 }
-

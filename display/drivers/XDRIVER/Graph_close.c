@@ -5,7 +5,6 @@
 
 void XD_Graph_close(void)
 {
-	XFreePixmap(dpy, bkupmap);
-	XDestroyWindow(dpy, grwin);
+    XFreePixmap(dpy, bkupmap);
+    XDestroyWindow(dpy, grwin);
 }
-

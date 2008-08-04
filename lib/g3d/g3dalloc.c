@@ -21,17 +21,17 @@
 
  */
 
-void *
-G3d_malloc  (int nBytes)
-
+void *G3d_malloc(int nBytes)
 {
-  void *buf;
+    void *buf;
 
-  if (nBytes <= 0) nBytes = 1;
-  if ((buf = malloc (nBytes)) != NULL) return buf;
+    if (nBytes <= 0)
+	nBytes = 1;
+    if ((buf = malloc(nBytes)) != NULL)
+	return buf;
 
-  G3d_error ("G3d_malloc: out of memory");
-  return (void *) NULL;
+    G3d_error("G3d_malloc: out of memory");
+    return (void *)NULL;
 }
 
 
@@ -47,15 +47,15 @@ G3d_malloc  (int nBytes)
  *         NULL ... otherwise.
  */
 
-void *
-G3d_realloc  (void *ptr, int nBytes)
-
+void *G3d_realloc(void *ptr, int nBytes)
 {
-  if (nBytes <= 0) nBytes = 1;
-  if ((ptr = realloc (ptr, nBytes)) != NULL) return ptr;
+    if (nBytes <= 0)
+	nBytes = 1;
+    if ((ptr = realloc(ptr, nBytes)) != NULL)
+	return ptr;
 
-  G3d_error ("G3d_realloc: out of memory");
-  return (void *) NULL;
+    G3d_error("G3d_realloc: out of memory");
+    return (void *)NULL;
 }
 
 
@@ -68,9 +68,7 @@ G3d_realloc  (void *ptr, int nBytes)
  *  \return void
  */
 
-void
-G3d_free  (void *buf)
-
+void G3d_free(void *buf)
 {
-  free (buf);
+    free(buf);
 }

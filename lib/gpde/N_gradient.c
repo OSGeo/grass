@@ -57,7 +57,8 @@ void N_free_gradient_2d(N_gradient_2d * grad)
  * \return N_gradient_2d *
  *
  * */
-N_gradient_2d *N_create_gradient_2d(double NC, double SC, double WC, double EC)
+N_gradient_2d *N_create_gradient_2d(double NC, double SC, double WC,
+				    double EC)
 {
     N_gradient_2d *grad;
 
@@ -183,8 +184,8 @@ void N_free_gradient_3d(N_gradient_3d * grad)
  * \return N_gradient_3d *
  *
  * */
-N_gradient_3d *N_create_gradient_3d(double NC, double SC, double WC, double EC,
-				    double TC, double BC)
+N_gradient_3d *N_create_gradient_3d(double NC, double SC, double WC,
+				    double EC, double TC, double BC)
 {
     N_gradient_3d *grad;
 
@@ -322,12 +323,13 @@ void N_free_gradient_neighbours_x(N_gradient_neighbours_x * grad)
  * \param SWS double - the gradient between south-west and southern cell
  * \param SES double - the gradient between south-east and southern cell
  * \return N_gradient_neighbours_x *
- 
+
  *
  * */
-N_gradient_neighbours_x *N_create_gradient_neighbours_x(double NWN, double NEN,
-							double WC, double EC,
-							double SWS, double SES)
+N_gradient_neighbours_x *N_create_gradient_neighbours_x(double NWN,
+							double NEN, double WC,
+							double EC, double SWS,
+							double SES)
 {
     N_gradient_neighbours_x *grad;
 
@@ -416,12 +418,13 @@ void N_free_gradient_neighbours_y(N_gradient_neighbours_y * grad)
  * \param SWW double - the gradient between south-west and western cell
  * \param SEE double - the gradient between south-east and eastern cell
  * \return N_gradient_neighbours_y *
- 
+
  *
  * */
-N_gradient_neighbours_y *N_create_gradient_neighbours_y(double NWW, double NEE,
-							double NC, double SC,
-							double SWW, double SEE)
+N_gradient_neighbours_y *N_create_gradient_neighbours_y(double NWW,
+							double NEE, double NC,
+							double SC, double SWW,
+							double SEE)
 {
     N_gradient_neighbours_y *grad;
 
@@ -513,7 +516,7 @@ void N_free_gradient_neighbours_z(N_gradient_neighbours_z * grad)
  * \param SZ double - the gradient between upper and lower southern cells
  * \param SEZ double - the gradient between upper and lower south-eastern cells
  * \return N_gradient_neighbours_z *
- 
+
  *
  * */
 N_gradient_neighbours_z *N_create_gradient_neighbours_z(double NWZ, double NZ,
@@ -587,7 +590,8 @@ N_gradient_neighbours_2d *N_alloc_gradient_neighbours_2d(void)
 
     grad =
 	(N_gradient_neighbours_2d *) G_calloc(1,
-					      sizeof(N_gradient_neighbours_2d));
+					      sizeof
+					      (N_gradient_neighbours_2d));
 
     grad->x = N_alloc_gradient_neighbours_x();
     grad->y = N_alloc_gradient_neighbours_y();
@@ -661,7 +665,8 @@ N_copy_gradient_neighbours_2d(N_gradient_neighbours_2d * source,
 {
     int fail = 0;
 
-    G_debug(5, "N_copy_gradient_neighbours_2d: copy N_gradient_neighbours_2d");
+    G_debug(5,
+	    "N_copy_gradient_neighbours_2d: copy N_gradient_neighbours_2d");
 
     if (!source || !target)
 	return 0;
@@ -767,7 +772,8 @@ N_gradient_neighbours_3d *N_alloc_gradient_neighbours_3d(void)
 
     grad =
 	(N_gradient_neighbours_3d *) G_calloc(1,
-					      sizeof(N_gradient_neighbours_3d));
+					      sizeof
+					      (N_gradient_neighbours_3d));
 
     grad->xt = N_alloc_gradient_neighbours_x();
     grad->xc = N_alloc_gradient_neighbours_x();
@@ -812,7 +818,7 @@ void N_free_gradient_neighbours_3d(N_gradient_neighbours_3d * grad)
  * and can be deleted after the initializing
  *
  * \return N_gradient_neighbours_3d * -- if failure NULL is returned
- 
+
  *
  * */
 N_gradient_neighbours_3d
@@ -871,7 +877,8 @@ N_copy_gradient_neighbours_3d(N_gradient_neighbours_3d * source,
 {
     int fail = 0;
 
-    G_debug(5, "N_copy_gradient_neighbours_3d: copy N_gradient_neighbours_3d");
+    G_debug(5,
+	    "N_copy_gradient_neighbours_3d: copy N_gradient_neighbours_3d");
 
     if (!source || !target)
 	return 0;

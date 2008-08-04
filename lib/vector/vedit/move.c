@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/move.c
 
@@ -28,10 +29,9 @@
    \return number of modified primitives
    \return -1 on error
 */
-int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
-		     struct ilist *List,
-		     double move_x, double move_y, double move_z,
-		     int snap, double thresh)
+int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap,
+		     int nbgmaps, struct ilist *List, double move_x,
+		     double move_y, double move_z, int snap, double thresh)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -46,23 +46,23 @@ int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
     Cats = Vect_new_cats_struct();
 
     for (i = 0; i < List->n_values; i++) {
-	line = List -> value[i];
+	line = List->value[i];
 
-	if (!Vect_line_alive (Map, line))
+	if (!Vect_line_alive(Map, line))
 	    continue;
 
-        type = Vect_read_line(Map, Points, Cats, line);
+	type = Vect_read_line(Map, Points, Cats, line);
 
-        G_debug(3, "Vedit_move_lines(): type=%d, line=%d", type, line);
+	G_debug(3, "Vedit_move_lines(): type=%d, line=%d", type, line);
 
 	x = Points->x;
 	y = Points->y;
 	z = Points->z;
 
-        /* move */
-        for (j = 0; j < Points -> n_points; j++) {
+	/* move */
+	for (j = 0; j < Points->n_points; j++) {
 	    x[j] += move_x;
-            y[j] += move_y;
+	    y[j] += move_y;
 	    if (Vect_is_3d(Map))
 		z[j] += move_z;
 
@@ -71,26 +71,28 @@ int Vedit_move_lines(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 				     (snap == SNAPVERTEX) ? 1 : 0) == 0) {
 		    /* check also background maps */
 		    int bgi;
+
 		    for (bgi = 0; bgi < nbgmaps; bgi++) {
-			if (Vedit_snap_point(BgMap[bgi], line, &x[j], &y[j], &z[j], thresh,
-					     (snap == SNAPVERTEX) ? 1 : 0))
-			    break; /* snapped, don't continue */
+			if (Vedit_snap_point
+			    (BgMap[bgi], line, &x[j], &y[j], &z[j], thresh,
+			     (snap == SNAPVERTEX) ? 1 : 0))
+			    break;	/* snapped, don't continue */
 		    }
 		}
 	    }
-        } /* for each point at line */
+	}			/* for each point at line */
 
-	newline = Vect_rewrite_line (Map, line, type, Points, Cats);
+	newline = Vect_rewrite_line(Map, line, type, Points, Cats);
 
-        if (newline < 0)  {
-            return -1;
-        }
+	if (newline < 0) {
+	    return -1;
+	}
 
-        nlines_moved++;
+	nlines_moved++;
     }
-        
-    Vect_destroy_line_struct (Points);
-    Vect_destroy_cats_struct (Cats);
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return nlines_moved;
 }

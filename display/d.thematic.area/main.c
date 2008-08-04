@@ -256,7 +256,8 @@ int main(int argc, char **argv)
     /*Get CatValArray needed for plotting and for legend calculations */
     db_CatValArray_init(&cvarr);
     nrec = db_select_CatValArray(driver, fi->table, fi->key,
-				 column_opt->answer, where_opt->answer, &cvarr);
+				 column_opt->answer, where_opt->answer,
+				 &cvarr);
 
 
     G_debug(3, "nrec (%s) = %d", column_opt->answer, nrec);
@@ -270,9 +271,11 @@ int main(int argc, char **argv)
 		      column_opt->answer);
 
     for (i = 0; i < cvarr.n_values; i++) {
-	G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat, column_opt->answer,
-		(cvarr.ctype == DB_C_TYPE_INT ? cvarr.value[i].val.i :
-		 (int)cvarr.value[i].val.d));
+	G_debug(4, "cat = %d  %s = %d", cvarr.value[i].cat,
+		column_opt->answer,
+		(cvarr.ctype ==
+		 DB_C_TYPE_INT ? cvarr.value[i].val.i : (int)cvarr.value[i].
+		 val.d));
     }
 
     /*Get the list of relevant cats if where option is given */
@@ -450,9 +453,10 @@ int main(int argc, char **argv)
 	    D_line_width(default_width);
 
 
-	    stat = dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
-			      has_color ? &bcolor : NULL, chcat, &window,
-			      default_width);
+	    stat =
+		dareatheme(&Map, Clist, &cvarr, breakpoints, nbreaks, colors,
+			   has_color ? &bcolor : NULL, chcat, &window,
+			   default_width);
 
 
 	    /* reset line width: Do we need to get line width from display
@@ -497,7 +501,8 @@ int main(int argc, char **argv)
 	    if (G_strcasecmp(algo_opt->answer, "dis") == 0)
 		fprintf(stdout, _("Last chi2 = %f\n"), class_info);
 	    if (G_strcasecmp(algo_opt->answer, "std") == 0)
-		fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
+		fprintf(stdout,
+			_("Stdev multiplied by %.4f to define step\n"),
 			class_info);
 	    fprintf(stdout, "\n");
 
@@ -523,10 +528,11 @@ int main(int argc, char **argv)
 	textsize = boxsize / 10;
 	fprintf(fd, "size %i %i\n", textsize, textsize);
 	ypos = 10;
-	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize, ypos,
-		colors[0].r, colors[0].g, colors[0].b);
+	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
+		ypos, colors[0].r, colors[0].g, colors[0].b);
 	fprintf(fd, "move 15 %i \n", ypos - textsize / 2);
-	fprintf(fd, "text %f - %f | %i\n", min, breakpoints[0], frequencies[0]);
+	fprintf(fd, "text %f - %f | %i\n", min, breakpoints[0],
+		frequencies[0]);
 	for (i = 1; i < nbreaks; i++) {
 	    ypos = 10 + i * 10;
 	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
@@ -537,7 +543,8 @@ int main(int argc, char **argv)
 	}
 	ypos = 10 + i * 10;
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
-		ypos, colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
+		ypos, colors[nbreaks].r, colors[nbreaks].g,
+		colors[nbreaks].b);
 	fprintf(fd, "move 15 %i\n", ypos - textsize / 2);
 	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1], max,
 		frequencies[nbreaks]);

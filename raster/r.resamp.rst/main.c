@@ -81,7 +81,7 @@ FCELL *zero_array_cell;
 struct interp_params params;
 
 FILE *fdredinp, *fdzout, *fddxout, *fddyout, *fdxxout, *fdyyout, *fxyout;
-FILE *fd4; /* unused? */
+FILE *fd4;			/* unused? */
 int fdinp, fdsmooth = -1;
 
 /*
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
     parm.slope->required = NO;
     parm.slope->gisprompt = "new,cell,raster";
     parm.slope->description = _("Output slope map (or fx)");
-    parm.slope->guisection  = _("Output_options");
+    parm.slope->guisection = _("Output_options");
 
     parm.aspect = G_define_option();
     parm.aspect->key = "aspect";
@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
     parm.aspect->required = NO;
     parm.aspect->gisprompt = "new,cell,raster";
     parm.aspect->description = _("Output aspect map (or fy)");
-    parm.aspect->guisection  = _("Output_options");
+    parm.aspect->guisection = _("Output_options");
 
     parm.pcurv = G_define_option();
     parm.pcurv->key = "pcurv";
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     parm.pcurv->required = NO;
     parm.pcurv->gisprompt = "new,cell,raster";
     parm.pcurv->description = _("Output profile curvature map (or fxx)");
-    parm.pcurv->guisection  = _("Output_options");
+    parm.pcurv->guisection = _("Output_options");
 
     parm.tcurv = G_define_option();
     parm.tcurv->key = "tcurv";
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
     parm.tcurv->required = NO;
     parm.tcurv->gisprompt = "new,cell,raster";
     parm.tcurv->description = _("Output tangential curvature map (or fyy)");
-    parm.tcurv->guisection  = _("Output_options");
+    parm.tcurv->guisection = _("Output_options");
 
     parm.mcurv = G_define_option();
     parm.mcurv->key = "mcurv";
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     parm.mcurv->required = NO;
     parm.mcurv->gisprompt = "new,cell,raster";
     parm.mcurv->description = _("Output mean curvature map (or fxy)");
-    parm.mcurv->guisection  = _("Output_options");
+    parm.mcurv->guisection = _("Output_options");
 
     parm.smooth = G_define_option();
     parm.smooth->key = "smooth";
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
     parm.smooth->required = NO;
     parm.smooth->gisprompt = "old,cell,raster";
     parm.smooth->description = _("Name of raster map containing smoothing");
-    parm.smooth->guisection  = _("Settings");
+    parm.smooth->guisection = _("Settings");
 
     parm.maskmap = G_define_option();
     parm.maskmap->key = "maskmap";
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
     parm.maskmap->required = NO;
     parm.maskmap->gisprompt = "old,cell,raster";
     parm.maskmap->description = _("Name of raster map to be used as mask");
-    parm.maskmap->guisection  = _("Settings");
+    parm.maskmap->guisection = _("Settings");
 
     parm.overlap = G_define_option();
     parm.overlap->key = "overlap";
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     parm.overlap->required = NO;
     parm.overlap->answer = OVERLAP;
     parm.overlap->description = _("Rows/columns overlap for segmentation");
-    parm.overlap->guisection  = _("Settings");
+    parm.overlap->guisection = _("Settings");
 
     parm.zmult = G_define_option();
     parm.zmult->key = "zmult";
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     parm.zmult->answer = ZMULT;
     parm.zmult->required = NO;
     parm.zmult->description = _("Multiplier for z-values");
-    parm.zmult->guisection  = _("Settings");
+    parm.zmult->guisection = _("Settings");
 
     parm.fi = G_define_option();
     parm.fi->key = "tension";
@@ -263,21 +263,21 @@ int main(int argc, char *argv[])
     parm.fi->answer = TENSION;
     parm.fi->required = NO;
     parm.fi->description = _("Spline tension value");
-    parm.fi->guisection  = _("Settings");
+    parm.fi->guisection = _("Settings");
 
     parm.theta = G_define_option();
     parm.theta->key = "theta";
     parm.theta->type = TYPE_DOUBLE;
     parm.theta->required = NO;
     parm.theta->description = _("Anisotropy angle (in degrees)");
-    parm.theta->guisection  = _("Anisotropy");
+    parm.theta->guisection = _("Anisotropy");
 
     parm.scalex = G_define_option();
     parm.scalex->key = "scalex";
     parm.scalex->type = TYPE_DOUBLE;
     parm.scalex->required = NO;
     parm.scalex->description = _("Anisotropy scaling factor");
-    parm.scalex->guisection  = _("Anisotropy");
+    parm.scalex->guisection = _("Anisotropy");
 
     flag.cprght = G_define_flag();
     flag.cprght->key = 't';
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     flag.deriv->key = 'd';
     flag.deriv->description =
 	_("Output partial derivatives instead of topographic parameters");
-    flag.deriv->guisection  = _("Output_options");
+    flag.deriv->guisection = _("Output_options");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -326,24 +326,25 @@ int main(int argc, char *argv[])
     if (!G_scan_resolution(parm.res_ns->answer, &ns_res, winhd.proj))
 	G_fatal_error(_("Cannot read ns_res value"));
 
-    if( sscanf(parm.fi->answer, "%lf", &fi) != 1)
+    if (sscanf(parm.fi->answer, "%lf", &fi) != 1)
 	G_fatal_error(_("Invalid value for tension"));
 
-    if( sscanf(parm.zmult->answer, "%lf", &zmult) != 1)
+    if (sscanf(parm.zmult->answer, "%lf", &zmult) != 1)
 	G_fatal_error(_("Invalid value for zmult"));
 
-    if( sscanf(parm.overlap->answer, "%d", &overlap) != 1)
+    if (sscanf(parm.overlap->answer, "%d", &overlap) != 1)
 	G_fatal_error(_("Invalid value for overlap"));
 
     if (parm.theta->answer) {
-	if( sscanf(parm.theta->answer, "%lf", &theta) != 1)
+	if (sscanf(parm.theta->answer, "%lf", &theta) != 1)
 	    G_fatal_error(_("Invalid value for theta"));
     }
     if (parm.scalex->answer) {
-	if( sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
+	if (sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
 	    G_fatal_error(_("Invalid value for scalex"));
 	if (!parm.theta->answer)
-	    G_fatal_error(_("When using anisotropy both theta and scalex must be specified"));
+	    G_fatal_error(_
+			  ("When using anisotropy both theta and scalex must be specified"));
     }
 
     /*
@@ -431,7 +432,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("[%s]: Cannot read map header"), input);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
-	G_fatal_error(_("Input map resolution differs from current region resolution!"));
+	G_fatal_error(_
+		      ("Input map resolution differs from current region resolution!"));
 
     if ((fdinp = G_open_cell_old(input, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
@@ -477,7 +479,8 @@ int main(int argc, char *argv[])
 	for (m1 = 0; m1 < inp_rows; m1++) {
 	    ret_val = G_get_f_raster_row(fdinp, cellrow, m1);
 	    if (ret_val < 0)
-		G_fatal_error(_("Cannot get row %d (error = %d)"), m1, ret_val);
+		G_fatal_error(_("Cannot get row %d (error = %d)"), m1,
+			      ret_val);
 
 	    G_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
 	}
@@ -500,9 +503,10 @@ int main(int argc, char *argv[])
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap,
 		      outhd.rows, outhd.cols, az, adx, ady, adxx, adyy, adxy,
 		      fi, MAXPOINTS, SCIK1, SCIK2, SCIK3, smc, elev, slope,
-		      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig, inp_y_orig,
-		      deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy,
-		      Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, NULL, NULL, 0, NULL);
+		      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig,
+		      inp_y_orig, deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx,
+		      Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, NULL, NULL,
+		      0, NULL);
 
     /*  In the above line, the penultimate argument is supposed to be a 
      * deviations file pointer.  None is obvious, so I used NULL. */
@@ -521,7 +525,8 @@ int main(int argc, char *argv[])
     /* change region to initial region */
     G_message(_("Changing back to the original region ..."));
     if (G_set_window(&winhd) < 0)
-	G_fatal_error(_("Cannot set region to back to the initial region !!!"));
+	G_fatal_error(_
+		      ("Cannot set region to back to the initial region !!!"));
 
     ertot = 0.;
     cursegm = 0;
@@ -537,7 +542,7 @@ int main(int argc, char *argv[])
 				       inp_ew_res, dtens);
 
 
-    G_message(_( "dnorm in mainc after grid before out1= %f"), dnorm);
+    G_message(_("dnorm in mainc after grid before out1= %f"), dnorm);
 
     if (NPOINT < 0)
 	clean_fatal_error("split_and_interpolate() failed");
@@ -559,9 +564,10 @@ int main(int argc, char *argv[])
     if (IL_resample_output_2d(&params, zmin, zmax, zminac, zmaxac, c1min,
 			      c1max, c2min, c2max, gmin, gmax, ertot, input,
 			      &dnorm, &outhd, &winhd, smooth, NPOINT) < 0)
-	clean_fatal_error("Can not write raster maps -- try increasing cell size");
+	clean_fatal_error
+	    ("Can not write raster maps -- try increasing cell size");
 
-    G_free (zero_array_cell);
+    G_free(zero_array_cell);
     if (elev != NULL)
 	fclose(Tmp_fd_z);
     if (slope != NULL)
@@ -602,7 +608,7 @@ void create_temp_files(void)
 {
     int i;
 
-    zero_array_cell = (FCELL *) G_malloc (sizeof(FCELL) * nsizc);
+    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * nsizc);
     if (!zero_array_cell)
 	G_fatal_error(_("Not enough memory for zero_array_cell"));
 
@@ -613,7 +619,8 @@ void create_temp_files(void)
     if (elev != NULL) {
 	Tmp_file_z = G_tempfile();
 	if (NULL == (Tmp_fd_z = fopen(Tmp_file_z, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"), Tmp_file_z);
+	    G_fatal_error(_("Unable to open temporary file <%s>"),
+			  Tmp_file_z);
 
 	for (i = 0; i < nsizr; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), nsizc, Tmp_fd_z)))
@@ -624,7 +631,8 @@ void create_temp_files(void)
     if (slope != NULL) {
 	Tmp_file_dx = G_tempfile();
 	if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+"))) {
-	    sprintf(msg, _("Unable to open temporary file <%s>"), Tmp_file_dx);
+	    sprintf(msg, _("Unable to open temporary file <%s>"),
+		    Tmp_file_dx);
 	    clean_fatal_error(msg);
 	}
 	for (i = 0; i < nsizr; i++) {
@@ -636,7 +644,8 @@ void create_temp_files(void)
     if (aspect != NULL) {
 	Tmp_file_dy = G_tempfile();
 	if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+"))) {
-	    sprintf(msg, _("Unable to open temporary file <%s>"), Tmp_file_dy);
+	    sprintf(msg, _("Unable to open temporary file <%s>"),
+		    Tmp_file_dy);
 	    clean_fatal_error(msg);
 	}
 	for (i = 0; i < nsizr; i++) {
@@ -649,7 +658,8 @@ void create_temp_files(void)
     if (pcurv != NULL) {
 	Tmp_file_xx = G_tempfile();
 	if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+"))) {
-	    sprintf(msg, _("Unable to open temporary file <%s>"), Tmp_file_xx);
+	    sprintf(msg, _("Unable to open temporary file <%s>"),
+		    Tmp_file_xx);
 	    clean_fatal_error(msg);
 	}
 	for (i = 0; i < nsizr; i++) {
@@ -661,7 +671,8 @@ void create_temp_files(void)
     if (tcurv != NULL) {
 	Tmp_file_yy = G_tempfile();
 	if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+"))) {
-	    sprintf(msg, _("Unable to open temporary file <%s>"), Tmp_file_yy);
+	    sprintf(msg, _("Unable to open temporary file <%s>"),
+		    Tmp_file_yy);
 	    clean_fatal_error(msg);
 	}
 	for (i = 0; i < nsizr; i++) {
@@ -673,7 +684,8 @@ void create_temp_files(void)
     if (mcurv != NULL) {
 	Tmp_file_xy = G_tempfile();
 	if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+"))) {
-	    sprintf(msg, _("Unable to open temporary file <%s>"), Tmp_file_xy);
+	    sprintf(msg, _("Unable to open temporary file <%s>"),
+		    Tmp_file_xy);
 	    clean_fatal_error(msg);
 	}
 	for (i = 0; i < nsizr; i++) {

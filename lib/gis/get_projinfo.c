@@ -22,28 +22,26 @@
  *
  * \return pointer to Key_Value structure with key/value pairs
  */
-struct Key_Value* G_get_projunits(void) 
+struct Key_Value *G_get_projunits(void)
 {
-	int stat;
-        struct Key_Value *in_units_keys;
-	char path[GPATH_MAX];
+    int stat;
+    struct Key_Value *in_units_keys;
+    char path[GPATH_MAX];
 
-         G__file_name (path, "", UNIT_FILE, PERMANENT);
-         if (access(path,0) != 0)
-         {
-           G_warning (_("<%s> file not found for location <%s>"),
-		      UNIT_FILE, G_location());
-           return NULL;
-         }
-         in_units_keys = G_read_key_value_file(path,&stat);
-         if (stat != 0)
-         { 
-             G_warning (_("ERROR in reading <%s> file for location <%s>"),
-			UNIT_FILE, G_location());
-             return NULL;
-         }
+    G__file_name(path, "", UNIT_FILE, PERMANENT);
+    if (access(path, 0) != 0) {
+	G_warning(_("<%s> file not found for location <%s>"),
+		  UNIT_FILE, G_location());
+	return NULL;
+    }
+    in_units_keys = G_read_key_value_file(path, &stat);
+    if (stat != 0) {
+	G_warning(_("ERROR in reading <%s> file for location <%s>"),
+		  UNIT_FILE, G_location());
+	return NULL;
+    }
 
-         return in_units_keys;
+    return in_units_keys;
 }
 
 /*!
@@ -51,25 +49,23 @@ struct Key_Value* G_get_projunits(void)
  *
  * \return pointer to Key_Value structure with key/value pairs
  */
-struct Key_Value* G_get_projinfo(void) 
+struct Key_Value *G_get_projinfo(void)
 {
-	int stat;
-        struct Key_Value *in_proj_keys;
-	char path[GPATH_MAX];
+    int stat;
+    struct Key_Value *in_proj_keys;
+    char path[GPATH_MAX];
 
-         G__file_name (path, "", PROJECTION_FILE, PERMANENT);
-         if (access(path,0) != 0)
-         {
-	     G_warning (_("<%s> file not found for location <%s>"),
-			PROJECTION_FILE, G_location());
-           return NULL;
-         }
-         in_proj_keys = G_read_key_value_file(path,&stat);
-         if (stat != 0)
-         { 
-             G_warning (_("ERROR in reading <%s> file for location <%s>"),
-			PROJECTION_FILE, G_location());
-           return NULL;
-         }
-         return in_proj_keys;
+    G__file_name(path, "", PROJECTION_FILE, PERMANENT);
+    if (access(path, 0) != 0) {
+	G_warning(_("<%s> file not found for location <%s>"),
+		  PROJECTION_FILE, G_location());
+	return NULL;
+    }
+    in_proj_keys = G_read_key_value_file(path, &stat);
+    if (stat != 0) {
+	G_warning(_("ERROR in reading <%s> file for location <%s>"),
+		  PROJECTION_FILE, G_location());
+	return NULL;
+    }
+    return in_proj_keys;
 }

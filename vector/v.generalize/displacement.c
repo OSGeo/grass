@@ -86,6 +86,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	for (j = 0; j < Points->n_points; j++) {
 	    int q, findex;
 	    POINT cur;
+
 	    point_assign(Points, j, with_z, &cur);
 	    /* check whether we alerady have point with the same
 	     * coordinates */
@@ -121,6 +122,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	    double d =
 		point_dist_segment_square(parray[i], parray[j], parray[j - 1],
 					  with_z);
+
 	    if (d < 4 * threshold2)
 		need[point_index[i]] = 1;
 	}
@@ -130,6 +132,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
      * sides are selected as well */
     for (i = 0; i < index; i++) {
 	int l = line_index[i];
+
 	tmp_index[i] = -1;
 	if (!need[point_index[i]])
 	    continue;
@@ -169,12 +172,15 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     for (i = 0; i < index; i++) {
 	int r = point_index[i];
 	int l = line_index[i];
+
 	if (r == -1)
 	    continue;
 	k.a[r][r] += a;
-	if (i + 1 < index && line_index[i + 1] == l && point_index[i + 1] != -1)
+	if (i + 1 < index && line_index[i + 1] == l &&
+	    point_index[i + 1] != -1)
 	    k.a[r][point_index[i + 1]] += b;
-	if (i + 2 < index && line_index[i + 2] == l && point_index[i + 2] != -1)
+	if (i + 2 < index && line_index[i + 2] == l &&
+	    point_index[i + 2] != -1)
 	    k.a[r][point_index[i + 2]] += c;
 	if (i >= 1 && line_index[i - 1] == l && point_index[i - 1] != -1)
 	    k.a[r][point_index[i - 1]] += b;
@@ -195,6 +201,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     G_message(_("Resolving conflicts..."));
     for (iter = 0; iter < iterations; iter++) {
 	int conflicts = 0;
+
 	G_percent(iter, iterations, 1);
 
 	matrix_mult_scalar(0.0, &fx);
@@ -210,6 +217,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 	for (i = 0; i < index; i++) {
 
 	    double cx, cy, f;
+
 	    if (point_index[i] == -1)
 		continue;
 	    cx = dx.a[point_index[i]][0];
@@ -230,15 +238,18 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
 		double d, pdist;
 		POINT in;
 		int status;
+
 		d = dig_distance2_point_to_line(parray[i].x, parray[i].y,
 						parray[i].z, parray[j].x,
 						parray[j].y, parray[j].z,
 						parray[j - 1].x,
 						parray[j - 1].y,
-						parray[j - 1].z, with_z, &in.x,
-						&in.y, &in.z, &pdist, &status);
+						parray[j - 1].z, with_z,
+						&in.x, &in.y, &in.z, &pdist,
+						&status);
 
 		POINT dir;
+
 		if (d == 0.0 || d > threshold2)
 		    continue;
 		d = sqrt(d);
@@ -277,6 +288,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     index = 0;
     for (i = 1; i <= n_lines; i++) {
 	int type = Vect_read_line(In, Points, Cats, i);
+
 	if (type != GV_LINE || (varray && !varray->c[i])) {
 	    Vect_write_line(Out, type, Points, Cats);
 	    continue;

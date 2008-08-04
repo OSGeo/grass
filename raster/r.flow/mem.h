@@ -1,3 +1,4 @@
+
 /************************** MEMORY MANAGEMENT ***************************/
 
 #include <grass/gis.h>
@@ -8,7 +9,7 @@
 #define SEGROWS ((int)(MB/region.cols/3) <= 1 ? 1 : (int)(MB/region.cols/3))
 
 #ifdef MAIN
-CELL v;			/* address for segment retrieval macros */
+CELL v;				/* address for segment retrieval macros */
 #else
 extern CELL v;
 #endif
@@ -20,19 +21,16 @@ extern CELL v;
  * globals w: fl, density, ew_dist, el, as, ds
  */
 
-void
-allocate_heap();
+void allocate_heap();
 
 /* 
  * deallocate_heap: frees space for other processes, closes cts output files
  * globals r: parm, bitbar, lgfd, el, as, ew_dist
  */
 
-void
-deallocate_heap();
+void deallocate_heap();
 
-void
-put_row_seg(/* l, row */);
+void put_row_seg( /* l, row */ );
 
 #define get_row(l, row) \
     ((parm.seg && (segment_flush(l.seg) < 1 || \
@@ -43,15 +41,15 @@ put_row_seg(/* l, row */);
 	l.buf[row])
 
 /*   This was is Astley's version 12...
-> #define get_cell_row(l, row) \
->     ((parm.seg && (segment_flush(l.seg) < 1 || \
->                  segment_get_row(l.seg, l.buf[row] - l.col_offset, \
->                                         row + l.row_offset) < 1)) ? \
->       (sprintf(string, "r.flow: cannot write segment file for %s", l.name),\
->        G_fatal_error(string), (CELL *) NULL) : \
->       (CELL *)l.buf[row])
-> 
-*/
+   > #define get_cell_row(l, row) \
+   >     ((parm.seg && (segment_flush(l.seg) < 1 || \
+   >                  segment_get_row(l.seg, l.buf[row] - l.col_offset, \
+   >                                         row + l.row_offset) < 1)) ? \
+   >       (sprintf(string, "r.flow: cannot write segment file for %s", l.name),\
+   >        G_fatal_error(string), (CELL *) NULL) : \
+   >       (CELL *)l.buf[row])
+   > 
+ */
 
 #define aspect(row, col) \
     (parm.seg ? \
@@ -82,4 +80,3 @@ put_row_seg(/* l, row */);
 	   G_fatal_error(string)) : \
 	 0) : \
 	(l.buf[row][col] = w))
-

@@ -1,9 +1,10 @@
-#include "png.h"	/* includes zlib.h and setjmp.h */
+#include "png.h"		/* includes zlib.h and setjmp.h */
 #include <grass/version.h>
 
 
-typedef struct _jmpbuf_wrapper {
-  jmp_buf jmpbuf;
+typedef struct _jmpbuf_wrapper
+{
+    jmp_buf jmpbuf;
 } jmpbuf_wrapper;
 
 #ifndef TRUE
@@ -19,7 +20,7 @@ typedef struct _jmpbuf_wrapper {
 #define MAXCOMMENTS 256
 
 /* function prototypes */
-static void pnmtopng_error_handler (png_structp png_ptr, png_const_charp msg);
+static void pnmtopng_error_handler(png_structp png_ptr, png_const_charp msg);
 
 #if 0
 /* unused */

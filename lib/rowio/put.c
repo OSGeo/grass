@@ -24,7 +24,7 @@
  *  \return int
  */
 
-int rowio_put (ROWIO *R, const void *buf, int row)
+int rowio_put(ROWIO * R, const void *buf, int row)
 {
     int i;
 
@@ -32,8 +32,7 @@ int rowio_put (ROWIO *R, const void *buf, int row)
 	return 0;
 
     for (i = 0; i < R->nrows; i++)
-	if (row == R->rcb[i].row)
-	{
+	if (row == R->rcb[i].row) {
 	    memcpy(R->rcb[i].buf, buf, R->len);
 	    R->rcb[i].dirty = 1;
 	    return 1;

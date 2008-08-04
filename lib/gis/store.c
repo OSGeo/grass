@@ -1,3 +1,4 @@
+
 /**
  * \file store.c
  *
@@ -28,13 +29,12 @@
  *  \return pointer to newly allocated string
  */
 
-char *G_store  (const char *s)
-
+char *G_store(const char *s)
 {
     char *buf;
 
-    buf = G_malloc (strlen(s) + 1);
-    strcpy (buf, s);
+    buf = G_malloc(strlen(s) + 1);
+    strcpy(buf, s);
 
     return buf;
 }

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -223,8 +224,10 @@ int main(int argc, char *argv[])
     EW_fac = 1.0;
     NS_fac = window.ns_res / window.ew_res;
     DIAG_fac = (double)sqrt((double)(NS_fac * NS_fac + EW_fac * EW_fac));
-    V_DIAG_fac = (double)sqrt((double)(4 * NS_fac * NS_fac + EW_fac * EW_fac));
-    H_DIAG_fac = (double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
+    V_DIAG_fac =
+	(double)sqrt((double)(4 * NS_fac * NS_fac + EW_fac * EW_fac));
+    H_DIAG_fac =
+	(double)sqrt((double)(NS_fac * NS_fac + 4 * EW_fac * EW_fac));
 
     G_set_d_null_value(&null_cost, 1);
 
@@ -263,16 +266,17 @@ int main(int argc, char *argv[])
     if (sscanf(opt5->answer, "%d", &maxcost) != 1 || maxcost < 0)
 	G_fatal_error(_("Inappropriate maximum cost: %d"), maxcost);
 
-    if (sscanf(opt10->answer, "%d", &maxmem) != 1 || maxmem < 0 || maxmem > 100)
+    if (sscanf(opt10->answer, "%d", &maxmem) != 1 || maxmem < 0 ||
+	maxmem > 100)
 	G_fatal_error(_("Inappropriate percent memory: %d"), maxmem);
 
     if ((opt6->answer == NULL) ||
 	(sscanf(opt6->answer, "%lf", &null_cost) != 1)) {
-        G_message (_("Null cells excluded from cost evaluation."));
+	G_message(_("Null cells excluded from cost evaluation."));
 	G_set_d_null_value(&null_cost, 1);
     }
     else if (keep_nulls)
-	G_message (_("Input null cell will be retained into output map"));
+	G_message(_("Input null cell will be retained into output map"));
 
     if (opt7->answer) {
 	search_mapset = G_find_vector(opt7->answer, "");
@@ -282,7 +286,8 @@ int main(int argc, char *argv[])
 
     if (!G_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
-	    G_warning (_("Warning: assigning negative cost to null cell. Null cells excluded."));
+	    G_warning(_
+		      ("Warning: assigning negative cost to null cell. Null cells excluded."));
 	    G_set_d_null_value(&null_cost, 1);
 	}
     }
@@ -325,23 +330,26 @@ int main(int argc, char *argv[])
 
     switch (data_type) {
     case (CELL_TYPE):
-        G_message(_("Source map is: Integer cell type"));
-        break;
+	G_message(_("Source map is: Integer cell type"));
+	break;
     case (FCELL_TYPE):
-        G_message(_("Source map is: Floating point (float) cell type"));
-        break;
+	G_message(_("Source map is: Floating point (float) cell type"));
+	break;
     case (DCELL_TYPE):
-        G_message(_("Source map is: Floating point (double) cell type"));
-        break;
+	G_message(_("Source map is: Floating point (double) cell type"));
+	break;
     }
     G_message(_(" %d rows, %d cols"), nrows, ncols);
 
     srows = scols = SEGCOLSIZE;
     if (maxmem > 0)
 	segments_in_memory =
-	    2 + maxmem * (1 + nrows / SEGCOLSIZE) * (1 + ncols / SEGCOLSIZE) / 100;
+	    2 + maxmem * (1 + nrows / SEGCOLSIZE) * (1 +
+						     ncols / SEGCOLSIZE) /
+	    100;
     else
-	segments_in_memory = 4 * (nrows / SEGCOLSIZE + ncols / SEGCOLSIZE + 2);
+	segments_in_memory =
+	    4 * (nrows / SEGCOLSIZE + ncols / SEGCOLSIZE + 2);
 
     /*   Create segmented format files for cost layer and output layer  */
 
@@ -376,9 +384,10 @@ int main(int argc, char *argv[])
 	p = 0.0;
 
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 	    if (G_get_raster_row(cost_fd, cell, row, data_type) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), cost_layer, row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      cost_layer, row);
 
 	    /* INPUT NULL VALUES: ??? */
 	    ptr2 = cell;
@@ -430,7 +439,7 @@ int main(int argc, char *argv[])
 
     /*   Initialize segmented output file  */
     G_message(_("Initializing output "));
-    
+
     {
 	double *fbuff;
 	int i;
@@ -438,19 +447,20 @@ int main(int argc, char *argv[])
 	fbuff = (double *)G_malloc(ncols * sizeof(double));
 
 	if (fbuff == NULL)
-	    G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
+	    G_fatal_error(_
+			  ("Unable to allocate memory for segment fbuff == NULL"));
 
 	G_set_d_null_value(fbuff, ncols);
 
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 
 	    for (i = 0; i < ncols; i++) {
 		segment_put(&out_seg, &fbuff[i], row, i);
 	    }
 	}
 	segment_flush(&out_seg);
-        G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
 	G_free(fbuff);
     }
 
@@ -470,9 +480,9 @@ int main(int argc, char *argv[])
 
 	fp = G_fopen_sites_old(opt7->answer, search_mapset);
 
-	if (G_site_describe( fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error( "Failed to guess site file format\n");
-        site = G_site_new_struct(cat, dims, strs, dbls);
+	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
+	    G_fatal_error("Failed to guess site file format\n");
+	site = G_site_new_struct(cat, dims, strs, dbls);
 
 	for (; (G_site_get(fp, site) != EOF);) {
 	    if (!G_site_in_region(site, &window))
@@ -520,8 +530,8 @@ int main(int argc, char *argv[])
 
 	fp = G_fopen_sites_old(opt8->answer, search_mapset);
 
-	if (G_site_describe( fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error( "Failed to guess site file format\n");
+	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
+	    G_fatal_error("Failed to guess site file format\n");
 	site = G_site_new_struct(cat, dims, strs, dbls);
 
 	for (; (G_site_get(fp, site) != EOF);) {
@@ -578,16 +588,18 @@ int main(int argc, char *argv[])
 	if (!cell2)
 	    G_fatal_error(_("Unable to allocate memory"));
 
-        G_message(_("Reading %s"), opt9->answer);
+	G_message(_("Reading %s"), opt9->answer);
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 	    if (G_get_raster_row(fd, cell2, row, data_type2) < 0)
-		G_fatal_error(_("Unable to read raster map <%s> row %d"), opt9->answer, row);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      opt9->answer, row);
 	    ptr2 = cell2;
 	    for (col = 0; col < ncols; col++) {
 		/* Did I understand that concept of cummulative cost map? - (pmx) 12 april 2000 */
 		if (!G_is_null_value(ptr2, data_type2)) {
 		    double cellval;
+
 		    if (start_with_raster_vals == 1) {
 			cellval = G_get_raster_value_d(ptr2, data_type2);
 			new_cell = insert(cellval, row, col);
@@ -603,7 +615,7 @@ int main(int argc, char *argv[])
 		ptr2 = G_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
-        G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
 
 	G_close_cell(fd);
 	G_free(cell2);
@@ -618,6 +630,7 @@ int main(int argc, char *argv[])
      */
     if (head_start_pt) {
 	struct start_pt *top_start_pt = NULL;
+
 	top_start_pt = head_start_pt;
 	while (top_start_pt != NULL) {
 	    value = &zero;
@@ -626,7 +639,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_
 			      ("Specified starting location outside database window"));
 	    new_cell = insert(zero, top_start_pt->row, top_start_pt->col);
-	    segment_put(&out_seg, value, top_start_pt->row, top_start_pt->col);
+	    segment_put(&out_seg, value, top_start_pt->row,
+			top_start_pt->col);
 	    top_start_pt = top_start_pt->next;
 	}
 	/*              printf("--------+++++----------\n"); */
@@ -666,7 +680,7 @@ int main(int argc, char *argv[])
 
 	segment_get(&in_seg, &my_cost, pres_cell->row, pres_cell->col);
 
-        G_percent(++n_processed, total_cells, 1);
+	G_percent(++n_processed, total_cells, 1);
 
 	/*          9    10       Order in which neighbors 
 	 *       13 5  3  6 14    are visited (Knight move).
@@ -864,7 +878,7 @@ int main(int argc, char *argv[])
 
 	pres_cell = get_lowest();
 	if (pres_cell == NULL) {
-            G_message(_("End of map!"));
+	    G_message(_("End of map!"));
 	    goto OUT;
 	}
 	if (ct == pres_cell)
@@ -883,17 +897,17 @@ int main(int argc, char *argv[])
     G_message(_("Writing %s"), cum_cost_layer);
 
     if (keep_nulls) {
-        G_message(_
-                ("Will copy input map null values into output map"));
+	G_message(_("Will copy input map null values into output map"));
 	cell2 = G_allocate_raster_buf(data_type);
     }
 
-     if (data_type == CELL_TYPE) {
+    if (data_type == CELL_TYPE) {
 	int *p;
 	int *p2;
-        G_message(_("Integer cell type.\nWriting..."));
+
+	G_message(_("Integer cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Error getting input null cells"));
@@ -923,9 +937,10 @@ int main(int argc, char *argv[])
     else if (data_type == FCELL_TYPE) {
 	float *p;
 	float *p2;
-        G_message(_("Float cell type.\nWriting..."));
+
+	G_message(_("Float cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Error getting input null cells"));
@@ -955,9 +970,10 @@ int main(int argc, char *argv[])
     else if (data_type == DCELL_TYPE) {
 	double *p;
 	double *p2;
-        G_message(_("Double cell type.\nWriting..."));
+
+	G_message(_("Double cell type.\nWriting..."));
 	for (row = 0; row < nrows; row++) {
-            G_percent(row, nrows, 2);
+	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(cost_fd, cell2, row, data_type) < 0)
 		    G_fatal_error(_("Error getting input null cells"));
@@ -1031,12 +1047,13 @@ process_answers(char **answers, struct start_pt **points,
     for (n = 0; *answers != NULL; answers += 2) {
 	if (!G_scan_easting(*answers, &east, G_projection()))
 	    G_fatal_error(_("Illegal x coordinate <%s>"), *answers);
-	if (!G_scan_northing(*(answers + 1), &north, G_projection())) 
+	if (!G_scan_northing(*(answers + 1), &north, G_projection()))
 	    G_fatal_error(_("Illegal y coordinate <%s>"), *(answers + 1));
 
 	if (east < window.west || east > window.east ||
 	    north < window.south || north > window.north) {
-	    G_warning(_("Warning, ignoring point outside window: %.4f,%.4f"), east, north);
+	    G_warning(_("Warning, ignoring point outside window: %.4f,%.4f"),
+		      east, north);
 	    continue;
 	}
 	else

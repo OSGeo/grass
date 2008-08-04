@@ -35,10 +35,7 @@
  * \return always returns 0
  */
 
-int G_bresenham_line (
-    int x0, int y0 ,
-    int x1,int y1 ,
-    int	(*point)(int,int))
+int G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
 {
     int dx, dy;
     int xinc, yinc;
@@ -48,61 +45,51 @@ int G_bresenham_line (
 
     xinc = 1;
     yinc = 1;
-    if ((dx = x1-x0) < 0) 
-    {
-        xinc = -1;
-        dx = -dx;
+    if ((dx = x1 - x0) < 0) {
+	xinc = -1;
+	dx = -dx;
     }
 
-    if ((dy = y1-y0) < 0) 
-    {
-        yinc = -1;
-        dy = -dy;
+    if ((dy = y1 - y0) < 0) {
+	yinc = -1;
+	dy = -dy;
     }
     res1 = 0;
     res2 = 0;
 
-    if (dx > dy)
-    {
-        while (x0 != x1)
-        {
-            point (x0, y0);
-            if (res1 > res2)
-            {
-                res2 += dx - res1;
-                res1 = 0;
-                y0 += yinc;
-            }
-            res1 += dy;
-            x0 += xinc;
-        }
+    if (dx > dy) {
+	while (x0 != x1) {
+	    point(x0, y0);
+	    if (res1 > res2) {
+		res2 += dx - res1;
+		res1 = 0;
+		y0 += yinc;
+	    }
+	    res1 += dy;
+	    x0 += xinc;
+	}
     }
-    else if (dx < dy)
-    {
-        while (y0 != y1)
-        {
-            point (x0, y0);
-            if (res1 > res2)
-            {
-                res2 += dy - res1;
-                res1 = 0;
-                x0 += xinc;
-            }
-            res1 += dx;
-            y0 += yinc;
-        }
+    else if (dx < dy) {
+	while (y0 != y1) {
+	    point(x0, y0);
+	    if (res1 > res2) {
+		res2 += dy - res1;
+		res1 = 0;
+		x0 += xinc;
+	    }
+	    res1 += dx;
+	    y0 += yinc;
+	}
     }
-    else
-    {
-        while (x0 != x1)
-        {
-            point (x0, y0);
-            y0 += yinc;
-            x0 += xinc;
-        }
+    else {
+	while (x0 != x1) {
+	    point(x0, y0);
+	    y0 += yinc;
+	    x0 += xinc;
+	}
     }
 
-    point (x1, y1);
+    point(x1, y1);
 
     return 0;
 }

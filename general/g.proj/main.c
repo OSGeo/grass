@@ -24,31 +24,31 @@
 
 int main(int argc, char *argv[])
 {
-    struct Flag *printinfo,    	/* Print contents of PROJ_INFO & PROJ_UNITS */
-        *printproj4,		/* Print projection in PROJ.4 format        */
-        *datuminfo,		/* Check if datum information is present    */
-        *create,		/* Create new projection files              */
-        *printwkt,		/* Print projection in WKT format           */
-        *esristyle,		/* Use ESRI-style WKT format                */
-        *dontprettify,		/* Print 'flat' output (no linebreaks)      */
-        *forcedatumtrans,	/* Force override of datumtrans parameters  */
-        *interprompt;		/* Enable interactive prompting             */
+    struct Flag *printinfo,	/* Print contents of PROJ_INFO & PROJ_UNITS */
+     *printproj4,		/* Print projection in PROJ.4 format        */
+     *datuminfo,		/* Check if datum information is present    */
+     *create,			/* Create new projection files              */
+     *printwkt,			/* Print projection in WKT format           */
+     *esristyle,		/* Use ESRI-style WKT format                */
+     *dontprettify,		/* Print 'flat' output (no linebreaks)      */
+     *forcedatumtrans,		/* Force override of datumtrans parameters  */
+     *interprompt;		/* Enable interactive prompting             */
 
     struct Option *location,	/* Name of new location to create           */
-          *inepsg,		/* EPSG projection code                     */
-          *dtrans,		/* index to datum transform option          */
-          *inwkt,	        /* Input file with projection in WKT format */
-          *inproj4,		/* Projection in PROJ.4 format              */
-          *ingeo;		/* Input geo-referenced file readable by 
+     *inepsg,			/* EPSG projection code                     */
+     *dtrans,			/* index to datum transform option          */
+     *inwkt,			/* Input file with projection in WKT format */
+     *inproj4,			/* Projection in PROJ.4 format              */
+     *ingeo;			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
     struct GModule *module;
-   
+
     int importformats;
 
     G_set_program_name(argv[0]);
-    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
-		     * mapset, whereas this module may legitmately be used 
-		     * (to create a new location) when none exists */
+    G_no_gisinit();		/* We don't call G_gisinit() here because it validates the
+				 * mapset, whereas this module may legitmately be used 
+				 * (to create a new location) when none exists */
 
     module = G_define_module();
     module->keywords = _("general");
@@ -61,38 +61,37 @@ int main(int argc, char *argv[])
     printinfo->key = 'p';
     printinfo->guisection = "Printed_Output";
     printinfo->description =
-      _("Print projection information (in conventional GRASS format)");
+	_("Print projection information (in conventional GRASS format)");
 
     datuminfo = G_define_flag();
     datuminfo->key = 'd';
     datuminfo->guisection = "Printed_Output";
     datuminfo->description =
-      _("Verify datum information and print transformation parameters");
+	_("Verify datum information and print transformation parameters");
 
     printproj4 = G_define_flag();
     printproj4->key = 'j';
     printproj4->guisection = "Printed_Output";
     printproj4->description =
-      _("Print projection information in PROJ.4 format");
+	_("Print projection information in PROJ.4 format");
 
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = "Printed_Output";
-    printwkt->description =
-      _("Print projection information in WKT format");
+    printwkt->description = _("Print projection information in WKT format");
 
     esristyle = G_define_flag();
     esristyle->key = 'e';
     esristyle->guisection = "Printed_Output";
     esristyle->description =
-      _("Use ESRI-style format (applies to WKT output only)");
+	_("Use ESRI-style format (applies to WKT output only)");
 
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = "Printed_Output";
     dontprettify->description =
-      _("Print 'flat' output with no linebreaks (applies to WKT and "
-        "PROJ.4 output)");
+	_("Print 'flat' output with no linebreaks (applies to WKT and "
+	  "PROJ.4 output)");
 
     ingeo = G_define_option();
     ingeo->key = "georef";
@@ -101,7 +100,7 @@ int main(int argc, char *argv[])
     ingeo->required = NO;
     ingeo->guisection = "Input";
     ingeo->description = _("Georeferenced data file to read projection "
-		 	   "information from");
+			   "information from");
 
     inwkt = G_define_option();
     inwkt->key = "wkt";
@@ -124,7 +123,7 @@ int main(int argc, char *argv[])
     inepsg->key = "epsg";
     inepsg->type = TYPE_INTEGER;
     inepsg->required = NO;
-    inepsg->options  = "1-1000000";
+    inepsg->options = "1-1000000";
     inepsg->guisection = "Input";
     inepsg->description = _("EPSG projection code");
 
@@ -132,24 +131,25 @@ int main(int argc, char *argv[])
     dtrans->key = "datumtrans";
     dtrans->type = TYPE_INTEGER;
     dtrans->required = NO;
-    dtrans->options  = "-1-100";
-    dtrans->answer   = "0";
+    dtrans->options = "-1-100";
+    dtrans->answer = "0";
     dtrans->guisection = "Datum_Trans";
-    dtrans->description = _("Index number of datum transform parameters, \"0\" "
-	"for unspecified or \"-1\" to list and exit");
+    dtrans->description =
+	_("Index number of datum transform parameters, \"0\" "
+	  "for unspecified or \"-1\" to list and exit");
 
     forcedatumtrans = G_define_flag();
     forcedatumtrans->key = 't';
     forcedatumtrans->guisection = "Datum_Trans";
     forcedatumtrans->description =
-      _("Force override of datum transformation information in input "
-        "co-ordinate system");
+	_("Force override of datum transformation information in input "
+	  "co-ordinate system");
 
     create = G_define_flag();
     create->key = 'c';
     create->guisection = "Create/Edit_Locations";
     create->description = _("Create new projection files (modifies current "
-	"location unless 'location' option specified)");
+			    "location unless 'location' option specified)");
 
     location = G_define_option();
     location->key = "location";
@@ -162,8 +162,8 @@ int main(int argc, char *argv[])
     interprompt = G_define_flag();
     interprompt->key = 'i';
     interprompt->description =
-      _("Enable interactive prompting (for command-line use only)");
-   
+	_("Enable interactive prompting (for command-line use only)");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -171,53 +171,54 @@ int main(int argc, char *argv[])
     /* Initialisation & Validation */
 
     /* -e implies -w */
-    if(esristyle->answer && ! printwkt->answer)
+    if (esristyle->answer && !printwkt->answer)
 	printwkt->answer = 1;
-   
+
     projinfo = NULL;
     projunits = NULL;
-   
-    importformats = ((ingeo->answer? 1 : 0) + (inwkt->answer? 1 : 0) +
-		     (inproj4->answer? 1 : 0) + (inepsg->answer? 1 : 0) );
+
+    importformats = ((ingeo->answer ? 1 : 0) + (inwkt->answer ? 1 : 0) +
+		     (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0));
     if (importformats > 1)
-	G_fatal_error(_("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
+	G_fatal_error(_
+		      ("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
 		      ingeo->key, inwkt->key, inproj4->key, inepsg->key);
 
     /* Input */
     /* We can only have one input source, hence if..else construct */
-   
+
     if (importformats == 0)
-        /* Input is projection of current location */
-        input_currloc();
+	/* Input is projection of current location */
+	input_currloc();
     else if (inwkt->answer)
-        /* Input in WKT format */
-        input_wkt(inwkt->answer);
+	/* Input in WKT format */
+	input_wkt(inwkt->answer);
     else if (inproj4->answer)
-        /* Input in PROJ.4 format */
-        input_proj4(inproj4->answer);
+	/* Input in PROJ.4 format */
+	input_proj4(inproj4->answer);
     else if (inepsg->answer)
 	/* Input from EPSG code */
 	input_epsg(atoi(inepsg->answer));
-    else 
-        /* Input from georeferenced file */
-        input_georef(ingeo->answer);
+    else
+	/* Input from georeferenced file */
+	input_georef(ingeo->answer);
 
 
     /* Consistency Check */
-   
+
     if ((cellhd.proj != PROJECTION_XY)
 	&& (projinfo == NULL || projunits == NULL))
 	G_fatal_error(_("Projection files missing"));
-   
-    /* Set Datum Parameters if necessary or requested */   
-    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer, 
+
+    /* Set Datum Parameters if necessary or requested */
+    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer,
 		   interprompt->answer);
-   
-   
+
+
     /* Output */
     /* We can output the same information in multiple formats if
      * necessary, hence multiple if statements */
-   
+
     if (printinfo->answer)
 	print_projinfo();
 
@@ -227,20 +228,20 @@ int main(int argc, char *argv[])
     if (printproj4->answer)
 	print_proj4(dontprettify->answer);
 
-    if (printwkt->answer) 
+    if (printwkt->answer)
 	print_wkt(esristyle->answer, dontprettify->answer);
-       
+
     if (create->answer)
 	create_location(location->answer, interprompt->answer);
 
 
     /* Tidy Up */
-   
+
     if (projinfo != NULL)
 	G_free_key_value(projinfo);
     if (projunits != NULL)
 	G_free_key_value(projunits);
-   
+
     exit(EXIT_SUCCESS);
 
 }

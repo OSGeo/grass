@@ -1,3 +1,4 @@
+
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
@@ -17,9 +18,9 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_execute_immediate(dbString *sql)
+int db__driver_execute_immediate(dbString * sql)
 {
-    char     *str;
+    char *str;
 
     init_error();
 
@@ -33,38 +34,36 @@ int db__driver_execute_immediate(dbString *sql)
      * result is error. 
      * Because of this, all occurencies of \ in sql must be 
      * escaped by \ */
-    str = G_str_replace ( db_get_string(sql), "\\", "\\\\" );
+    str = G_str_replace(db_get_string(sql), "\\", "\\\\");
 
-    G_debug ( 3, "Escaped SQL: %s", str );
+    G_debug(3, "Escaped SQL: %s", str);
 
-    if ( mysql_query ( connection, str ) != 0 )
-    {
-	append_error( "Cannot execute: \n" );
-	append_error( str );
-	append_error( "\n" );
-	append_error ( mysql_error(connection) );
+    if (mysql_query(connection, str) != 0) {
+	append_error("Cannot execute: \n");
+	append_error(str);
+	append_error("\n");
+	append_error(mysql_error(connection));
 	report_error();
-	if ( str ) 
-	    G_free ( str );
+	if (str)
+	    G_free(str);
 	return DB_FAILED;
     }
-    
-    if ( str ) 
-	G_free ( str );
+
+    if (str)
+	G_free(str);
 
     return DB_OK;
 }
 
 int db__driver_begin_transaction(void)
 {
-    G_debug (2, "mysql: START TRANSACTION");
+    G_debug(2, "mysql: START TRANSACTION");
 
     init_error();
 
-    if ( mysql_query ( connection, "START TRANSACTION" ) != 0 )
-    {
-	append_error( "Cannot start transaction: \n" );
-	append_error ( mysql_error(connection) );
+    if (mysql_query(connection, "START TRANSACTION") != 0) {
+	append_error("Cannot start transaction: \n");
+	append_error(mysql_error(connection));
 	report_error();
 	return DB_FAILED;
     }
@@ -74,14 +73,13 @@ int db__driver_begin_transaction(void)
 
 int db__driver_commit_transaction(void)
 {
-    G_debug (2, "mysql: COMMIT");
+    G_debug(2, "mysql: COMMIT");
 
     init_error();
 
-    if ( mysql_query ( connection, "COMMIT" ) != 0 )
-    {
-	append_error( "Cannot commit transaction: \n" );
-	append_error ( mysql_error(connection) );
+    if (mysql_query(connection, "COMMIT") != 0) {
+	append_error("Cannot commit transaction: \n");
+	append_error(mysql_error(connection));
 	report_error();
 	return DB_FAILED;
     }

@@ -1,6 +1,5 @@
 #include "zufall.h"
-int 
-zufalli (int *seed)
+int zufalli(int *seed)
 {
     static int kl = 9373;
     static int ij = 1802;
@@ -10,9 +9,9 @@ zufalli (int *seed)
     static int ii, jj;
     extern struct klotz0 klotz0_1;
 
-/*  generates initial seed buffer by linear congruential */
-/*  method. Taken from Marsaglia, FSU report FSU-SCRI-87-50 */
-/*  variable seed should be 0 < seed <31328 */
+    /*  generates initial seed buffer by linear congruential */
+    /*  method. Taken from Marsaglia, FSU report FSU-SCRI-87-50 */
+    /*  variable seed should be 0 < seed <31328 */
 
     if (*seed != 0) {
 	ij = *seed;
@@ -35,11 +34,11 @@ zufalli (int *seed)
 		s += t;
 	    }
 	    t *= (float).5;
-/* L2: */
+	    /* L2: */
 	}
-        /*  fprintf (stdout,"DIAG: s %g\n",s); */
+	/*  fprintf (stdout,"DIAG: s %g\n",s); */
 	klotz0_1.buff[ii - 1] = s;
-/* L1: */
+	/* L1: */
     }
     return 0;
-} /* zufalli_ */
+}				/* zufalli_ */

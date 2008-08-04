@@ -29,10 +29,10 @@ int Nplace_label_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
     sprintf(text, "%s", argv[1]);
     sprintf(font, "%s", argv[2]);
 
-    size = (int) atoi(argv[3]);
-    color = (int) tcl_color_to_int(argv[4]);
-    pt[0] = (int) atoi(argv[5]);
-    pt[1] = (int) atoi(argv[6]);
+    size = (int)atoi(argv[3]);
+    color = (int)tcl_color_to_int(argv[4]);
+    pt[0] = (int)atoi(argv[5]);
+    pt[1] = (int)atoi(argv[6]);
 
     /* Print the label */
     FontBase = load_font(font);

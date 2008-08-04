@@ -1,3 +1,4 @@
+
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -28,22 +29,22 @@
 
    \return 1
  */
-int snap_lines(struct Map_info *Map,
-	       struct ilist *List, double thresh) {
-    
-    FILE * output;
+int snap_lines(struct Map_info *Map, struct ilist *List, double thresh)
+{
+
+    FILE *output;
 
     if (G_verbose() > G_verbose_min()) {
-      G_important_message (SEP);
+	G_important_message(SEP);
 	output = stderr;
     }
     else
 	output = NULL;
 
-    Vect_snap_lines_list (Map, List, thresh, NULL, output);
+    Vect_snap_lines_list(Map, List, thresh, NULL, output);
 
     if (G_verbose() > G_verbose_min()) {
-      G_important_message (SEP);
+	G_important_message(SEP);
     }
 
     return 1;
@@ -61,8 +62,7 @@ int snap_lines(struct Map_info *Map,
    \return 0 lines not snapped
    \return -1 on error
 */
-int snap_line2(struct Map_info *Map,
-	       int line1, int line2, double thresh)
+int snap_line2(struct Map_info *Map, int line1, int line2, double thresh)
 {
     struct line_pnts *Points1, *Points2;
     struct line_cats *Cats2;
@@ -70,7 +70,7 @@ int snap_line2(struct Map_info *Map,
     int newline;
     double mindist;
     int mindistidx;
-    
+
     Points1 = Vect_new_line_struct();
     Points2 = Vect_new_line_struct();
     Cats2 = Vect_new_cats_struct();
@@ -79,7 +79,7 @@ int snap_line2(struct Map_info *Map,
     type2 = Vect_read_line(Map, Points2, Cats2, line2);
 
     /* find mininal distance and its indexes */
-    mindist = Vedit_get_min_distance(Points1, Points2, 0, /* TODO 3D */
+    mindist = Vedit_get_min_distance(Points1, Points2, 0,	/* TODO 3D */
 				     &mindistidx);
 
     if (thresh > 0.0 && mindist > thresh) {
@@ -89,44 +89,44 @@ int snap_line2(struct Map_info *Map,
 	return 0;
     }
 
-    switch(mindistidx) {
-    case 0: 
+    switch (mindistidx) {
+    case 0:
 	Points2->x[0] = Points1->x[0];
 	Points2->y[0] = Points1->y[0];
 	Points2->z[0] = Points1->z[0];
 	break;
-    case 1: 
-	Points2->x[Points2->n_points-1] = Points1->x[0];
-	Points2->y[Points2->n_points-1] = Points1->y[0];
-	Points2->z[Points2->n_points-1] = Points1->z[0];
+    case 1:
+	Points2->x[Points2->n_points - 1] = Points1->x[0];
+	Points2->y[Points2->n_points - 1] = Points1->y[0];
+	Points2->z[Points2->n_points - 1] = Points1->z[0];
 	break;
-    case 2: 
-	Points2->x[0] = Points1->x[Points1->n_points-1];
-	Points2->y[0] = Points1->y[Points1->n_points-1];
-	Points2->z[0] = Points1->z[Points1->n_points-1];
+    case 2:
+	Points2->x[0] = Points1->x[Points1->n_points - 1];
+	Points2->y[0] = Points1->y[Points1->n_points - 1];
+	Points2->z[0] = Points1->z[Points1->n_points - 1];
 	break;
-    case 3: 
-	Points2->x[Points2->n_points-1] = Points1->x[Points1->n_points-1];
-	Points2->y[Points2->n_points-1] = Points1->y[Points1->n_points-1];
-	Points2->z[Points2->n_points-1] = Points1->z[Points1->n_points-1];
+    case 3:
+	Points2->x[Points2->n_points - 1] = Points1->x[Points1->n_points - 1];
+	Points2->y[Points2->n_points - 1] = Points1->y[Points1->n_points - 1];
+	Points2->z[Points2->n_points - 1] = Points1->z[Points1->n_points - 1];
 	break;
     default:
 	break;
     }
 
-    newline = Vect_rewrite_line (Map, line2, type2, Points2, Cats2);
+    newline = Vect_rewrite_line(Map, line2, type2, Points2, Cats2);
     if (newline < 0) {
 	G_warning(_("Unable to rewrite line %d"), line2);
-        return -1;
+	return -1;
     }
 
     /*
-    G_message(_("Line %d snapped to line %d"),
-	      line2, line1);
-    */
+       G_message(_("Line %d snapped to line %d"),
+       line2, line1);
+     */
     Vect_destroy_line_struct(Points1);
     Vect_destroy_line_struct(Points2);
     Vect_destroy_cats_struct(Cats2);
-    
+
     return newline;
 }

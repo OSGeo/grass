@@ -1,23 +1,23 @@
 /*
-* Copyright (C) 2000 by the GRASS Development Team
-* Author: Bob Covill <bcovill@tekmap.ns.ca>
-* 
-* This Program is free software under the GPL (>=v2)
-* Read the file COPYING coming with GRASS for details
-*
-*
-*/
+ * Copyright (C) 2000 by the GRASS Development Team
+ * Author: Bob Covill <bcovill@tekmap.ns.ca>
+ * 
+ * This Program is free software under the GPL (>=v2)
+ * Read the file COPYING coming with GRASS for details
+ *
+ *
+ */
 
 /* d.nviv -- interactively create fly-through
  * script for NVIZ
  * Functions ********************************
- * main --	parse parameters and get key frame coorinates
+ * main --      parse parameters and get key frame coorinates
  * do_profile --calculate camera and eye coordinates from
- *     		raster map
- * move -- 	part of screen coords
- * cont --	part of screen coords 
+ *              raster map
+ * move --      part of screen coords
+ * cont --      part of screen coords 
  * read_rast -- return camera and eye coordinates
-***********************************/
+ ***********************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     parm.name->required = NO;
     parm.name->description = _("Prefix of output images (default = NVIZ)");
 
-    parm.route= G_define_option();
+    parm.route = G_define_option();
     parm.route->key = "route";
     parm.route->type = TYPE_STRING;
     parm.route->required = NO;
@@ -126,7 +126,8 @@ int main(int argc, char *argv[])
 
     parm.k = G_define_flag();
     parm.k->key = 'k';
-    parm.k->description = _("Include command in the script to output a KeyFrame file");
+    parm.k->description =
+	_("Include command in the script to output a KeyFrame file");
 
     parm.o = G_define_flag();
     parm.o->key = 'o';
@@ -140,20 +141,21 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-/* check arguments */
+    /* check arguments */
     if ((!parm.i->answer) && (!parm.route->answer))
-	G_fatal_error( _("Either -i flag and/or route parameter must be used"));
+	G_fatal_error(_
+		      ("Either -i flag and/or route parameter must be used"));
 
-/* get GRASS parameters */
+    /* get GRASS parameters */
     G_get_window(&window);
     projection = G_projection();
     D_do_conversions(&window, 0, 1, 0, 1);
 
-/* setup screen coords */
-    screen_x = ((int) D_get_d_west() + (int) D_get_d_east()) / 2;
-    screen_y = ((int) D_get_d_north() + (int) D_get_d_south()) / 2;
+    /* setup screen coords */
+    screen_x = ((int)D_get_d_west() + (int)D_get_d_east()) / 2;
+    screen_y = ((int)D_get_d_north() + (int)D_get_d_south()) / 2;
 
-/* get camera parameters */
+    /* get camera parameters */
     DIST = atof(parm.dist->answer);
     HT = atof(parm.ht->answer);
     no_frames = atoi(parm.frames->answer);
@@ -166,46 +168,46 @@ int main(int argc, char *argv[])
     if (parm.k->answer)
 	key_frames = 1;
     if (parm.o->answer && !parm.f->answer)
-	G_fatal_error( _("Off-screen only available with full render mode"));
+	G_fatal_error(_("Off-screen only available with full render mode"));
     if (parm.o->answer)
 	off_screen = 1;
 
-/* Initialize coords */
+    /* Initialize coords */
     e1 = e2 = n1 = n2 = -9999.;
 
     G_begin_distance_calculations();
 
-/* Open Input File for reading */
+    /* Open Input File for reading */
     name = parm.opt1->answer;
 
-/* Open Raster File*/
+    /* Open Raster File */
     if (NULL == (mapset = G_find_cell2(name, "")))
-	G_fatal_error( _("Raster map <%s> not found"), name);
+	G_fatal_error(_("Raster map <%s> not found"), name);
     if (0 > (fd = G_open_cell_old(name, mapset)))
-	G_fatal_error( _("Unable to open raster map <%s>"), name);
+	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
-/* Set Image name */
+    /* Set Image name */
     if (parm.name->answer)
 	sprintf(img_name, parm.name->answer);
     else
 	sprintf(img_name, "NVIZ");
 
 
-/* Open ASCII file for output */
+    /* Open ASCII file for output */
     /* append ".nvscr" to filename if it doesn't already have it */
-    strncpy(outfile, parm.output->answer, GNAME_MAX-7);
-    outfile[GNAME_MAX-7] = '\0'; /* strncpy() doesn't null terminate the string */
-    if(strcmp(&outfile[strlen(outfile) - 6], ".nvscr") != 0 )
+    strncpy(outfile, parm.output->answer, GNAME_MAX - 7);
+    outfile[GNAME_MAX - 7] = '\0';	/* strncpy() doesn't null terminate the string */
+    if (strcmp(&outfile[strlen(outfile) - 6], ".nvscr") != 0)
 	strcat(outfile, ".nvscr");
 
     if (NULL == (fp = fopen(outfile, "w")))
-	G_fatal_error( _("Unable to open file <%s>"), outfile);
+	G_fatal_error(_("Unable to open file <%s>"), outfile);
 
-/* Get Raster Type */
+    /* Get Raster Type */
     data_type = G_get_raster_map_type(fd);
-/* Done with file */
+    /* Done with file */
 
-/* Output initial startup stuff */
+    /* Output initial startup stuff */
     sprintf(buf1,
 	    "## REGION: n=%f s=%f e=%f w=%f\n## Input=%s Dist=%f Ht=%f\n",
 	    window.north, window.south, window.east, window.west, outfile,
@@ -225,26 +227,27 @@ int main(int argc, char *argv[])
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-/* Use Linear mode for smooth frame transition */
+    /* Use Linear mode for smooth frame transition */
     sprintf(buf1, "\nSendScriptLine \"Nset_interp_mode linear\"");
     sprintf(buf2, "\nSendScriptLine \"Nupdate_frames\"\n\n");
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-/* eanble vector and sites drawing */
+    /* eanble vector and sites drawing */
     if (parm.e->answer) {
-    sprintf(buf1, "\nSendScriptLine \"Nshow_vect on\"");
-    sprintf(buf2, "\nSendScriptLine \"Nshow_sites on\"\n\n");
-    strcat(buf1, buf2);
-    fprintf(fp, "%s", buf1);
+	sprintf(buf1, "\nSendScriptLine \"Nshow_vect on\"");
+	sprintf(buf2, "\nSendScriptLine \"Nshow_sites on\"\n\n");
+	strcat(buf1, buf2);
+	fprintf(fp, "%s", buf1);
     }
 
-/* Get coords */
-/* Select points interactively*/
+    /* Get coords */
+    /* Select points interactively */
     if (parm.i->answer) {
 	int count = 0;
+
 	if (R_open_driver() != 0)
-		G_fatal_error ( _("No graphics device selected"));
+	    G_fatal_error(_("No graphics device selected"));
 	D_setup(0);
 
 	G_setup_plot(D_get_d_north(),
@@ -256,8 +259,8 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "\n\n");
 	fprintf(stderr, "Use mouse to select Start Point\n");
 	R_get_location_with_pointer(&screen_x, &screen_y, &button);
-	e1 = D_d_to_u_col((double) screen_x);
-	n1 = D_d_to_u_row((double) screen_y);
+	e1 = D_d_to_u_col((double)screen_x);
+	n1 = D_d_to_u_row((double)screen_y);
 
 	fprintf(stderr, "\nUse mouse to select route \n");
 	fprintf(stderr, "Buttons:\n");
@@ -267,24 +270,25 @@ int main(int argc, char *argv[])
 
 	while (button != 3) {
 	    count++;
-	    R_get_location_with_line( (int)(0.5+ D_u_to_d_col(e1)),
-		(int)(0.5+ D_u_to_d_row(n1)), &screen_x, &screen_y, &button);
+	    R_get_location_with_line((int)(0.5 + D_u_to_d_col(e1)),
+				     (int)(0.5 + D_u_to_d_row(n1)), &screen_x,
+				     &screen_y, &button);
 	    if (button == 1 || button == 2) {
-		e2 = D_d_to_u_col((double) screen_x);
-		n2 = D_d_to_u_row((double) screen_y);
+		e2 = D_d_to_u_col((double)screen_x);
+		n2 = D_d_to_u_row((double)screen_y);
 	    }
 	    else {
 		if (e2 == -9999. || n2 == -9999.) {
-		    G_fatal_error( _("You must select more than one point"));
-		    
+		    G_fatal_error(_("You must select more than one point"));
+
 		}
 		break;
 	    }
 
-/* draw line from p1 to p2 */
+	    /* draw line from p1 to p2 */
 	    G_plot_line(e1, n1, e2, n2);
 
-/* Get profile info */
+	    /* Get profile info */
 	    do_profile(e1, e2, n1, n2, name, fd, data_type);
 
 	    n1 = n2;
@@ -293,7 +297,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (count < 4) {
-	    G_fatal_error( _("You must select at least four points"));
+	    G_fatal_error(_("You must select at least four points"));
 
 	}
 
@@ -302,15 +306,15 @@ int main(int argc, char *argv[])
     }
     else {
 
-/* Coords from Command Line */
+	/* Coords from Command Line */
 	for (i = 0; parm.route->answers[i]; i += 2) {
 	    /* Test for number coordinate pairs */
 	    k = i;
 	}
 
 	if (k < 6) {
-/* Only one coordinate pair supplied */
-	    G_fatal_error( _("You must provide at least four points %d"), k);
+	    /* Only one coordinate pair supplied */
+	    G_fatal_error(_("You must provide at least four points %d"), k);
 
 	}
 	else {
@@ -319,10 +323,10 @@ int main(int argc, char *argv[])
 		sscanf(parm.route->answers[i + 1], "%lf", &n1);
 		sscanf(parm.route->answers[i + 2], "%lf", &e2);
 		sscanf(parm.route->answers[i + 3], "%lf", &n2);
-/* Get profile info */
+		/* Get profile info */
 		do_profile(e1, e2, n1, n2, name, fd, data_type);
-		
-/* Get last coord */
+
+		/* Get last coord */
 		if (i == k - 2)
 		    do_profile(e2, e2, n2, n2, name, fd, data_type);
 	    }
@@ -330,11 +334,11 @@ int main(int argc, char *argv[])
     }				/* done with coordinates */
 
 
-/* Output final part of script */
-/* generate key-frame script */
+    /* Output final part of script */
+    /* generate key-frame script */
     if (key_frames) {
 	strcpy(buf, outfile);
-	buf[strlen(outfile)-6] = '\0'; /* skip extension */
+	buf[strlen(outfile) - 6] = '\0';	/* skip extension */
 	strcat(buf, ".kanim");
 	fprintf(fp, "\n## The following saves the animation to a format\n");
 	fprintf(fp, "## suitable for editting with the kanimator panel\n");
@@ -342,7 +346,7 @@ int main(int argc, char *argv[])
 	fprintf(fp, "puts \"Saving Key Frame file %s\"\n", buf);
     }
 
-/* output off-screen option */
+    /* output off-screen option */
     if (off_screen) {
 	fprintf(fp, "\n## Off screen rendering enabled \n");
 	fprintf(fp, "## Ensure main window is minimized before running\n");
@@ -353,7 +357,7 @@ int main(int argc, char *argv[])
     fprintf(fp, "\n\nfor {set frame 1} {$frame <= $FRAMES} {incr frame} {");
 
     if (parm.f->answer) {
-/* Full render and save */
+	/* Full render and save */
 	fprintf(fp, "\nset name %s", img_name);
 	fprintf(fp, "\nset num2 [format \"\%%04d\" $num]");
 	fprintf(fp, "\nappend name $num2 \".ppm\"");
@@ -362,8 +366,8 @@ int main(int argc, char *argv[])
 	fprintf(fp, "\nincr num");
     }
     else {
-/* Quick draw wire */
-/* output full variables commented so can be easily changed */
+	/* Quick draw wire */
+	/* output full variables commented so can be easily changed */
 	fprintf(fp, "\nset name %s", img_name);
 	fprintf(fp, "\nset num2 [format \"\%%04d\" $num]");
 	fprintf(fp, "\nappend name $num2 \".ppm\"");
@@ -395,11 +399,10 @@ int main(int argc, char *argv[])
 
 /* ************************************
  * Claculate camera and eye coordinates
-**************************************/
+ **************************************/
 int do_profile
     (double e1,
-     double e2,
-     double n1, double n2, char *name, int fd, int data_type)
+     double e2, double n1, double n2, char *name, int fd, int data_type)
 {
     float rows, cols, LEN;
     double Y, X, AZI;
@@ -409,18 +412,19 @@ int do_profile
 
     LEN = G_distance(e1, n1, e2, n2);
 
-/* Calculate Azimuth of Line */
+    /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {
-/* Special case for no movement */
-/* do nothing */
+	/* Special case for no movement */
+	/* do nothing */
 	return 0;
     }
 
     if (rows >= 0 && cols < 0) {
-/* SE Quad or due east */
+	/* SE Quad or due east */
 	AZI = fabs(atan((rows / cols)));
-	Y = (double)DIST * sin(AZI);
-	X = (double)DIST * cos(AZI);
+	Y = (double)DIST *sin(AZI);
+	X = (double)DIST *cos(AZI);
+
 	if (e != 0.0 && (e != e1 || n != n1)) {
 	    dist -= G_distance(e, n, e1, n1);
 	}
@@ -429,10 +433,11 @@ int do_profile
     }
 
     if (rows < 0 && cols <= 0) {
-/* NE Quad  or due north */
+	/* NE Quad  or due north */
 	AZI = fabs(atan((cols / rows)));
-	X = (double)DIST * sin(AZI);
-	Y = (double)DIST * cos(AZI);
+	X = (double)DIST *sin(AZI);
+	Y = (double)DIST *cos(AZI);
+
 	if (e != 0.0 && (e != e1 || n != n1)) {
 	    dist -= G_distance(e, n, e1, n1);
 	}
@@ -441,10 +446,11 @@ int do_profile
     }
 
     if (rows > 0 && cols >= 0) {
-/* SW Quad or due south */
+	/* SW Quad or due south */
 	AZI = fabs(atan((rows / cols)));
-	X = (double)DIST * cos(AZI);
-	Y = (double)DIST * sin(AZI);
+	X = (double)DIST *cos(AZI);
+	Y = (double)DIST *sin(AZI);
+
 	if (e != 0.0 && (e != e1 || n != n1)) {
 	    dist -= G_distance(e, n, e1, n1);
 	}
@@ -453,10 +459,11 @@ int do_profile
     }
 
     if (rows <= 0 && cols > 0) {
-/* NW Quad  or due west */
+	/* NW Quad  or due west */
 	AZI = fabs(atan((rows / cols)));
-	X = (double)DIST * cos(AZI);
-	Y = (double)DIST * sin(AZI);
+	X = (double)DIST *cos(AZI);
+	Y = (double)DIST *sin(AZI);
+
 	if (e != 0.0 && (e != e1 || n != n1)) {
 	    dist -= G_distance(e, n, e1, n1);
 	}
@@ -464,7 +471,7 @@ int do_profile
 	read_rast(e2, n2, LEN, fd, 0, data_type);
     }
 
-return 0;
+    return 0;
 }				/* done with do_profile */
 
 
@@ -522,13 +529,15 @@ int read_rast
     nrows = window.rows;
     ncols = window.cols;
 
-    row = (int)(0.5+ D_u_to_a_row(north));
-    col = (int)(0.5+ D_u_to_a_col(east));
+    row = (int)(0.5 + D_u_to_a_row(north));
+    col = (int)(0.5 + D_u_to_a_col(east));
 
     if (row < 0 || row > nrows || col < 0 || col > ncols) {
-	G_debug(3, "Fail: row=%d  nrows=%d   col=%d  ncols=%d",row,nrows,col,ncols);
-	G_warning(_("Skipping this point, selected point is outside region. "
-	  "Perhaps the camera setback distance puts it beyond the edge?"));
+	G_debug(3, "Fail: row=%d  nrows=%d   col=%d  ncols=%d", row, nrows,
+		col, ncols);
+	G_warning(_
+		  ("Skipping this point, selected point is outside region. "
+		   "Perhaps the camera setback distance puts it beyond the edge?"));
 	frame++;
 	return 1;
     }
@@ -540,9 +549,9 @@ int read_rast
 	    exit(1);
 
 	if (G_is_c_null_value(&cell[col]))
-	    camera_height = (double) 9999.;
+	    camera_height = (double)9999.;
 	else
-	    camera_height = (double) cell[col];
+	    camera_height = (double)cell[col];
     }
 
     if (data_type == FCELL_TYPE) {
@@ -550,9 +559,9 @@ int read_rast
 	if (G_get_f_raster_row(fd, fcell, row) < 0)
 	    exit(1);
 	if (G_is_f_null_value(&fcell[col]))
-	    camera_height = (double) 9999.;
+	    camera_height = (double)9999.;
 	else
-	    camera_height = (double) fcell[col];
+	    camera_height = (double)fcell[col];
     }
 
     if (data_type == DCELL_TYPE) {
@@ -560,12 +569,13 @@ int read_rast
 	if (G_get_d_raster_row(fd, dcell, row) < 0)
 	    exit(1);
 	if (G_is_d_null_value(&dcell[col]))
-	    camera_height = (double) 9999.;
+	    camera_height = (double)9999.;
 	else
-	    camera_height = (double) dcell[col];
+	    camera_height = (double)dcell[col];
     }
 
-/* Output script commands */
+    /* Output script commands */
+
 /*************************/
 
     /* Set camera Height value */
@@ -588,8 +598,7 @@ int read_rast
 	/* Set Center of View */
 	sprintf(buf2, "\nSendScriptLine \"Nset_focus %f %f %f\"",
 		east - window.west - (window.ew_res / 2),
-		north - window.south - (window.ns_res / 2),
-		camera_height);
+		north - window.south - (window.ns_res / 2), camera_height);
 
 	/* Use frame number for now -- TODO figure even increment
 	 * based on no. of frames and distance */
@@ -600,7 +609,7 @@ int read_rast
 	cnt++;
     }
 
-/* Out to file */
+    /* Out to file */
     fprintf(fp, "%s", buf2);
     OLD_DEPTH = camera_height;
 

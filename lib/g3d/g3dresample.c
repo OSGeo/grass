@@ -21,21 +21,20 @@
  */
 
 void
-G3d_nearestNeighbor  (G3D_Map *map, int row, int col, int depth, void *value, int type)
-
+G3d_nearestNeighbor(G3D_Map * map, int row, int col, int depth, void *value,
+		    int type)
 {
 
-/*AV*/
-/* BEGIN OF ORIGINAL CODE */
-/*
-	G3d_getValueRegion (map, row, col, depth, value, type);
-*/
-/* END OF ORIGINAL CODE */
-
-/*AV*/
-/* BEGIN OF MY CODE*/
-	G3d_getValueRegion (map, col, row, depth, value, type);
-/* END OF MY CODE */
+     /*AV*/
+	/* BEGIN OF ORIGINAL CODE */
+	/*
+	   G3d_getValueRegion (map, row, col, depth, value, type);
+	 */
+	/* END OF ORIGINAL CODE */
+	 /*AV*/
+	/* BEGIN OF MY CODE */
+	G3d_getValueRegion(map, col, row, depth, value, type);
+    /* END OF MY CODE */
 
 
 }
@@ -53,11 +52,9 @@ G3d_nearestNeighbor  (G3D_Map *map, int row, int col, int depth, void *value, in
  *  \return void
  */
 
-void
-G3d_setResamplingFun  (G3D_Map *map, void (*resampleFun)())
-
+void G3d_setResamplingFun(G3D_Map * map, void (*resampleFun) ())
 {
-  map->resampleFun = resampleFun;
+    map->resampleFun = resampleFun;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -73,11 +70,9 @@ G3d_setResamplingFun  (G3D_Map *map, void (*resampleFun)())
  *  \return void
  */
 
-void
-G3d_getResamplingFun  (G3D_Map *map, void (**resampleFun)())
-
+void G3d_getResamplingFun(G3D_Map * map, void (**resampleFun) ())
 {
-  *resampleFun = map->resampleFun;
+    *resampleFun = map->resampleFun;
 }
 
 /*--------------------------------------------------------------------------*/
@@ -92,9 +87,7 @@ G3d_getResamplingFun  (G3D_Map *map, void (**resampleFun)())
  *  \return void
  */
 
-void
-G3d_getNearestNeighborFunPtr  (void (**nnFunPtr)())
-
+void G3d_getNearestNeighborFunPtr(void (**nnFunPtr) ())
 {
-  *nnFunPtr = G3d_nearestNeighbor;
+    *nnFunPtr = G3d_nearestNeighbor;
 }

@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       i.maxlik
@@ -25,7 +26,7 @@
 #include "local_proto.h"
 
 
-int main(int argc,char *argv[])
+int main(int argc, char *argv[])
 {
     struct Categories cats;
     struct Colors colr;
@@ -44,7 +45,7 @@ int main(int argc,char *argv[])
 	struct Flag *quiet;
     } flag;
 
-    G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("imagery");
@@ -61,7 +62,8 @@ int main(int argc,char *argv[])
     parm.subgroup->key = "subgroup";
     parm.subgroup->type = TYPE_STRING;
     parm.subgroup->required = YES;
-    parm.subgroup->description = _("Subgroup containing image files to be classified");
+    parm.subgroup->description =
+	_("Subgroup containing image files to be classified");
 
     parm.sigfile = G_define_option();
     parm.sigfile->key = "sigfile";
@@ -79,7 +81,8 @@ int main(int argc,char *argv[])
     parm.reject->key = "reject";
     parm.reject->type = TYPE_STRING;
     parm.reject->required = NO;
-    parm.reject->description = _("Raster map to hold reject threshold results");
+    parm.reject->description =
+	_("Raster map to hold reject threshold results");
 
     flag.quiet = G_define_flag();
     flag.quiet->key = 'q';
@@ -87,15 +90,15 @@ int main(int argc,char *argv[])
 
     G_disable_interactive();
 
-    if (G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
-    class_name  = parm.class->answer;
+    class_name = parm.class->answer;
     reject_name = parm.reject->answer;
-    group       = parm.group->answer;
-    subgroup    = parm.subgroup->answer;
-    sigfile     = parm.sigfile->answer;
+    group = parm.group->answer;
+    subgroup = parm.subgroup->answer;
+    sigfile = parm.sigfile->answer;
 
     open_files();
 
@@ -103,82 +106,79 @@ int main(int argc,char *argv[])
     ncols = G_window_cols();
 
     if (!flag.quiet->answer)
-	fprintf (stderr, "%s ... ", G_program_name());
+	fprintf(stderr, "%s ... ", G_program_name());
 
-    for (row = 0; row < nrows; row++)
-    {
+    for (row = 0; row < nrows; row++) {
 	if (!flag.quiet->answer)
 	    G_percent(row, nrows, 2);
 
 	for (band = 0; band < Ref.nfiles; band++)
-	    if (G_get_d_raster_row (cellfd[band], cell[band], row) < 0) /*fixed 11/99*/
+	    if (G_get_d_raster_row(cellfd[band], cell[band], row) < 0)	/*fixed 11/99 */
 		exit(EXIT_FAILURE);
 
 	classify(class_cell, reject_cell, ncols);
-	G_put_raster_row (class_fd, class_cell, CELL_TYPE);
+	G_put_raster_row(class_fd, class_cell, CELL_TYPE);
 	if (reject_fd > 0)
-	    G_put_raster_row (reject_fd, reject_cell, CELL_TYPE);
+	    G_put_raster_row(reject_fd, reject_cell, CELL_TYPE);
     }
     if (!flag.quiet->answer)
 	G_percent(row, nrows, 2);
 
-    G_close_cell (class_fd);
+    G_close_cell(class_fd);
     if (reject_fd > 0)
-	G_close_cell (reject_fd);
+	G_close_cell(reject_fd);
 
-    G_init_cats((CELL)S.nsigs,"Maximum Likelihood Classification",&cats);
-    for (i=0; i < S.nsigs; i++)
-    {
-	if(*S.sig[i].desc)
-	    G_set_cat ((CELL)(i+1),S.sig[i].desc, &cats);
+    G_init_cats((CELL) S.nsigs, "Maximum Likelihood Classification", &cats);
+    for (i = 0; i < S.nsigs; i++) {
+	if (*S.sig[i].desc)
+	    G_set_cat((CELL) (i + 1), S.sig[i].desc, &cats);
     }
-    G_write_cats (class_name, &cats);
-    G_free_cats (&cats);
+    G_write_cats(class_name, &cats);
+    G_free_cats(&cats);
 
-    if (reject_fd > 0)
-    {
+    if (reject_fd > 0) {
 	char title[100];
 
-	sprintf (title, "Rejection Probability for %s", class_name);
+	sprintf(title, "Rejection Probability for %s", class_name);
 
-	G_init_cats((CELL)17,title,&cats);
-	G_set_cats_title (title, &cats);
-	G_set_cat ((CELL)0, "no data", &cats);
-	G_set_cat ((CELL)1, "0.1%", &cats);
-	G_set_cat ((CELL)2, "0.5%", &cats);
-	G_set_cat ((CELL)3, "1%", &cats);
-	G_set_cat ((CELL)4, "2%", &cats);
-	G_set_cat ((CELL)5, "5%", &cats);
-	G_set_cat ((CELL)6, "10%", &cats);
-	G_set_cat ((CELL)7, "20%", &cats);
-	G_set_cat ((CELL)8, "30%", &cats);
-	G_set_cat ((CELL)9, "50%", &cats);
-	G_set_cat ((CELL)10, "70%", &cats);
-	G_set_cat ((CELL)11, "80%", &cats);
-	G_set_cat ((CELL)12, "90%", &cats);
-	G_set_cat ((CELL)13, "95%", &cats);
-	G_set_cat ((CELL)14, "98%", &cats);
-	G_set_cat ((CELL)15, "99%", &cats);
-	G_set_cat ((CELL)16, "100%", &cats);
-	G_set_cat ((CELL)17, "bad", &cats);
-	G_write_cats (reject_name, &cats);
-	G_free_cats (&cats);
+	G_init_cats((CELL) 17, title, &cats);
+	G_set_cats_title(title, &cats);
+	G_set_cat((CELL) 0, "no data", &cats);
+	G_set_cat((CELL) 1, "0.1%", &cats);
+	G_set_cat((CELL) 2, "0.5%", &cats);
+	G_set_cat((CELL) 3, "1%", &cats);
+	G_set_cat((CELL) 4, "2%", &cats);
+	G_set_cat((CELL) 5, "5%", &cats);
+	G_set_cat((CELL) 6, "10%", &cats);
+	G_set_cat((CELL) 7, "20%", &cats);
+	G_set_cat((CELL) 8, "30%", &cats);
+	G_set_cat((CELL) 9, "50%", &cats);
+	G_set_cat((CELL) 10, "70%", &cats);
+	G_set_cat((CELL) 11, "80%", &cats);
+	G_set_cat((CELL) 12, "90%", &cats);
+	G_set_cat((CELL) 13, "95%", &cats);
+	G_set_cat((CELL) 14, "98%", &cats);
+	G_set_cat((CELL) 15, "99%", &cats);
+	G_set_cat((CELL) 16, "100%", &cats);
+	G_set_cat((CELL) 17, "bad", &cats);
+	G_write_cats(reject_name, &cats);
+	G_free_cats(&cats);
 
-	G_make_grey_scale_colors (&colr, (CELL) 1, (CELL) 16);
+	G_make_grey_scale_colors(&colr, (CELL) 1, (CELL) 16);
 
-	G_set_color ((CELL)0, 0, 255, 0, &colr);
-	G_set_color ((CELL)17, 255, 0, 0, &colr);
-	G_write_colors (reject_name, G_mapset(), &colr);
-	G_free_colors (&colr);
+	G_set_color((CELL) 0, 0, 255, 0, &colr);
+	G_set_color((CELL) 17, 255, 0, 0, &colr);
+	G_write_colors(reject_name, G_mapset(), &colr);
+	G_free_colors(&colr);
     }
 
-/* associate the output files with the group */
-    I_get_group_ref (group, &group_ref);
-    I_add_file_to_group_ref (class_name, G_mapset(), &group_ref);
+    /* associate the output files with the group */
+    I_get_group_ref(group, &group_ref);
+    I_add_file_to_group_ref(class_name, G_mapset(), &group_ref);
     if (reject_cell)
-	I_add_file_to_group_ref (reject_name, G_mapset(), &group_ref);
+	I_add_file_to_group_ref(reject_name, G_mapset(), &group_ref);
 
-    I_put_group_ref (group, &group_ref);
+    I_put_group_ref(group, &group_ref);
     make_history(class_name, group, subgroup, sigfile);
 
 

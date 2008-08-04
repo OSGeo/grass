@@ -1,12 +1,12 @@
 #include "filter.h"
+
 /**************************************************************
  * apply_filter: apply the filter to a single neighborhood
  *
  *  filter:    filter to be applied
  *  input:     input buffers
  **************************************************************/
-DCELL 
-apply_filter(FILTER *filter, DCELL **input)
+DCELL apply_filter(FILTER * filter, DCELL ** input)
 {
     int size = filter->size;
     double **matrix = filter->matrix;
@@ -16,15 +16,13 @@ apply_filter(FILTER *filter, DCELL **input)
 
     v = 0;
 
-    if (divisor == 0)
-    {
+    if (divisor == 0) {
 	int have_result = 0;
 
 	for (r = 0; r < size; r++)
-	    for (c = 0; c < size; c++)
-	    {
+	    for (c = 0; c < size; c++) {
 		if (G_is_d_null_value(&input[r][c]))
-			continue;
+		    continue;
 		v += input[r][c] * matrix[r][c];
 		divisor += filter->dmatrix[r][c];
 		have_result = 1;
@@ -35,13 +33,10 @@ apply_filter(FILTER *filter, DCELL **input)
 	else
 	    G_set_d_null_value(&v, 1);
     }
-    else
-    {
+    else {
 	for (r = 0; r < size; r++)
-	    for (c = 0; c < size; c++)
-	    {
-		if (G_is_d_null_value(&input[r][c]))
-		{
+	    for (c = 0; c < size; c++) {
+		if (G_is_d_null_value(&input[r][c])) {
 		    G_set_d_null_value(&v, 1);
 		    return v;
 		}

@@ -1,3 +1,4 @@
+
 /**
  * \file whoami.c
  *
@@ -39,37 +40,38 @@
 char *G_whoami(void)
 {
 #ifdef __MINGW32__
-    char *name =  getenv("USERNAME");
-    if (name == NULL){
-        name = "user_name";
+    char *name = getenv("USERNAME");
+
+    if (name == NULL) {
+	name = "user_name";
     }
 #else
     static char *name = NULL;
+
 #ifdef COMMENTED_OUT
     char *getlogin();
     char *ttyname();
 
-    if (name == NULL)
-    {
+    if (name == NULL) {
 	char *x;
+
 	x = ttyname(0);
-	if (x && *x)
-	{
+	if (x && *x) {
 	    x = getlogin();
 	    if (x && *x)
-		name = G_store (x);
+		name = G_store(x);
 	}
     }
 #endif /* COMMENTED_OUT */
 
-    if (name == NULL)
-    {
+    if (name == NULL) {
 	struct passwd *p;
-	if((p = getpwuid (getuid())))
-	    name = G_store (p->pw_name);
+
+	if ((p = getpwuid(getuid())))
+	    name = G_store(p->pw_name);
     }
     if (name == NULL)
-	name = G_store ("?");
+	name = G_store("?");
 
 #endif
 

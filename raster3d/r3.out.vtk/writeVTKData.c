@@ -27,9 +27,10 @@
 #include "errorHandling.h"
 
 /*local prototypes */
-static double get_raster_value_as_double(int maptype, void *ptr, double nullval);
-static double get_g3d_raster_value_as_double(void *map, int x, int y, int z, int type,
-				 double nullval);
+static double get_raster_value_as_double(int maptype, void *ptr,
+					 double nullval);
+static double get_g3d_raster_value_as_double(void *map, int x, int y, int z,
+					     int type, double nullval);
 
 
 /* ************************************************************************* */
@@ -70,8 +71,8 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* ************************************************************************* */
 /* Get the value of the 3d raster map as double *************************** */
 /* ************************************************************************* */
-double get_g3d_raster_value_as_double(void *map, int x, int y, int z, int type,
-				 double nullval)
+double get_g3d_raster_value_as_double(void *map, int x, int y, int z,
+				      int type, double nullval)
 {
     double val = 0;
     float fvalue;
@@ -99,7 +100,7 @@ double get_g3d_raster_value_as_double(void *map, int x, int y, int z, int type,
 /* This function writes the point coordinates ****************************** */
 /* ************************************************************************* */
 void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
-		    int type, double scale)
+		      int type, double scale)
 {
     int x, y, z, status = 0;
     int rows, cols, depths;
@@ -133,7 +134,8 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 		(in->bottom, rast_bottom, y, in->bottomMapType))
 		fatal_error(_("Could not get bottom raster row \n"), in);
 
-	    for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom; x < cols;
+	    for (x = 0, ptr_top = rast_top, ptr_bottom = rast_bottom;
+		 x < cols;
 		 x++, ptr_top =
 		 G_incr_void_ptr(ptr_top, G_raster_size(in->topMapType)),
 		 ptr_bottom =
@@ -141,14 +143,17 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 				 G_raster_size(in->bottomMapType))) {
 
 		/*Get the values */
-		topval = get_raster_value_as_double(in->topMapType, ptr_top, 0.0);
+		topval =
+		    get_raster_value_as_double(in->topMapType, ptr_top, 0.0);
 		bottomval =
-		    get_raster_value_as_double(in->bottomMapType, ptr_bottom, 0.0);
+		    get_raster_value_as_double(in->bottomMapType, ptr_bottom,
+					       0.0);
 
 		if (type == 1) {	/*Structured Grid */
 		    /*Calculate the coordinates */
 		    xcoor =
-			region.west + (region.ew_res / 2 + region.ew_res * (x));
+			region.west + (region.ew_res / 2 +
+				       region.ew_res * (x));
 		    ycoor =
 			region.north - (region.ns_res / 2 +
 					region.ns_res * (y));
@@ -170,12 +175,12 @@ void write_vtk_points(input_maps * in, FILE * fp, G3D_Region region, int dp,
 		     * 3 --- 2
 		     * |     |
 		     * 0 --- 1
-		     
+
 		     * top
 		     * 7 --- 6
 		     * |     |
 		     * 4 --- 5
-		     
+
 		     */
 		    xcoor = region.west + (region.ew_res * (x));	/*0, 3, 4, 7 */
 		    ycoor = region.north - (region.ns_res * (y));	/*2, 3, 6, 7 */
@@ -265,9 +270,9 @@ void write_vtk_unstructured_grid_cells(FILE * fp, G3D_Region region)
 	    for (x = 0; x < cols; x++) {
 		/*Voxel */
 		fprintf(fp, "%i %i %i %i %i %i %i %i %i\n", 8,
-			count * 8, count * 8 + 1, count * 8 + 3, count * 8 + 2,
-			count * 8 + 4, count * 8 + 5, count * 8 + 7,
-			count * 8 + 6);
+			count * 8, count * 8 + 1, count * 8 + 3,
+			count * 8 + 2, count * 8 + 4, count * 8 + 5,
+			count * 8 + 7, count * 8 + 6);
 
 		/*Hexaeder 
 		 * fprintf(fp, "%i %i %i %i %i %i %i %i %i\n", 8,
@@ -308,7 +313,7 @@ void write_vtk_unstructured_grid_cells(FILE * fp, G3D_Region region)
 /* Write the VTK Cell or point data **************************************** */
 /* ************************************************************************* */
 void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
-		  int dp)
+		    int dp)
 {
     double value;
     double nullvalue;
@@ -345,8 +350,8 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
 
 		for (x = 0; x < cols; x++) {
 		    value =
-			get_g3d_raster_value_as_double(map, x, y, z, typeIntern,
-						  nullvalue);
+			get_g3d_raster_value_as_double(map, x, y, z,
+						       typeIntern, nullvalue);
 		    fprintf(fp, "%.*f ", dp, value);
 
 		}
@@ -360,8 +365,8 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
 
 		for (x = 0; x < cols; x++) {
 		    value =
-			get_g3d_raster_value_as_double(map, x, y, z, typeIntern,
-						  nullvalue);
+			get_g3d_raster_value_as_double(map, x, y, z,
+						       typeIntern, nullvalue);
 		    fprintf(fp, "%.*f ", dp, value);
 
 		}
@@ -376,8 +381,8 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
 /* Write the VTK RGB Voxel Data ******************************************** */
 /* ************************************************************************* */
 void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
-			  FILE * fp, const char *varname,
-			  G3D_Region region, int dp)
+			FILE * fp, const char *varname,
+			G3D_Region region, int dp)
 {
     double value = 0;
     int x, y, z, status, k;
@@ -418,7 +423,8 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
 
 			value =
 			    get_g3d_raster_value_as_double(maprgb, x, y, z,
-						      typeIntern[k], 0.0);
+							   typeIntern[k],
+							   0.0);
 			/*Test of value range, the data should be 1 byte gray values */
 			if (value > 255 || value < 0) {
 			    G_warning(_
@@ -451,7 +457,8 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
 
 			value =
 			    get_g3d_raster_value_as_double(maprgb, x, y, z,
-						      typeIntern[k], 0.0);
+							   typeIntern[k],
+							   0.0);
 			/*Test of value range, the data should be 1 byte gray values */
 			if (value > 255 || value < 0) {
 			    G_warning(_
@@ -476,8 +483,8 @@ void write_vtk_rgb_data(void *map_r, void *map_g, void *map_b,
 /* Write the VTK vector Data *********************************************** */
 /* ************************************************************************* */
 void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
-			FILE * fp, const char *varname,
-			G3D_Region region, int dp)
+			   FILE * fp, const char *varname,
+			   G3D_Region region, int dp)
 {
     double value = 0;
     int x, y, z, status, k;
@@ -518,7 +525,8 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
 
 			value =
 			    get_g3d_raster_value_as_double(mapvect, x, y, z,
-						      typeIntern[k], 0.0);
+							   typeIntern[k],
+							   0.0);
 			fprintf(fp, "%.*f ", dp, value);
 		    }
 		    fprintf(fp, "\n");
@@ -542,7 +550,8 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
 
 			value =
 			    get_g3d_raster_value_as_double(mapvect, x, y, z,
-						      typeIntern[k], 0.0);
+							   typeIntern[k],
+							   0.0);
 			fprintf(fp, "%.*f ", dp, value);
 		    }
 		    fprintf(fp, "\n");
@@ -552,4 +561,3 @@ void write_vtk_vector_data(void *map_x, void *map_y, void *map_z,
     }
     return;
 }
-

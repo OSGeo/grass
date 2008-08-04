@@ -1,8 +1,7 @@
 #include "xdr.h"
 
 
-int
-db__send_float(float d)
+int db__send_float(float d)
 {
     int stat = DB_OK;
 
@@ -15,8 +14,7 @@ db__send_float(float d)
     return stat;
 }
 
-int
-db__recv_float (float *d)
+int db__recv_float(float *d)
 {
     int stat = DB_OK;
 
@@ -30,8 +28,7 @@ db__recv_float (float *d)
 }
 
 
-int
-db__send_float_array (const float *x, int n)
+int db__send_float_array(const float *x, int n)
 {
     int stat = DB_OK;
 
@@ -49,8 +46,7 @@ db__send_float_array (const float *x, int n)
 
 /* returns an allocated array of floats */
 /* caller is responsible for free() */
-int
-db__recv_float_array (float **x, int *n)
+int db__recv_float_array(float **x, int *n)
 {
     int stat = DB_OK;
     int count = 0;
@@ -61,7 +57,7 @@ db__recv_float_array (float **x, int *n)
 
     *n = count;
 
-    *x = a = (float *) db_calloc(count, sizeof(*a));
+    *x = a = (float *)db_calloc(count, sizeof(*a));
 
     if (!db__recv(a, count * sizeof(*a)))
 	stat = DB_PROTOCOL_ERR;
@@ -71,4 +67,3 @@ db__recv_float_array (float **x, int *n)
 
     return stat;
 }
-

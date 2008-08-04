@@ -5,39 +5,35 @@
 static struct
 {
     const char *name;
-    float r,g,b;
-}colors[] =
-{
-    {"white",	1.00, 1.00, 1.00},
-    {"black",	0.00, 0.00, 0.00},
-    {"red",	1.00, 0.00, 0.00},
-    {"green",	0.00, 1.00, 0.00},
-    {"blue",	0.00, 0.00, 1.00},
-    {"yellow",	1.00, 1.00, 0.00},
-    {"magenta",	1.00, 0.00, 1.00},
-    {"cyan",	0.00, 1.00, 1.00},
-    {"aqua",    0.00, 0.75, 0.75},
-    {"grey",	0.75, 0.75, 0.75},
-    {"gray",	0.75, 0.75, 0.75},
-    {"orange",	1.00, 0.50, 0.00},
-    {"brown",	0.75, 0.50, 0.25},
-    {"purple",	0.50, 0.00, 1.00},
-    {"violet",	0.50, 0.00, 1.00},
-    {"indigo",  0.00, 0.50, 1.00},
+    float r, g, b;
+} colors[] = {
+    {
+    "white", 1.00, 1.00, 1.00}, {
+    "black", 0.00, 0.00, 0.00}, {
+    "red", 1.00, 0.00, 0.00}, {
+    "green", 0.00, 1.00, 0.00}, {
+    "blue", 0.00, 0.00, 1.00}, {
+    "yellow", 1.00, 1.00, 0.00}, {
+    "magenta", 1.00, 0.00, 1.00}, {
+    "cyan", 0.00, 1.00, 1.00}, {
+    "aqua", 0.00, 0.75, 0.75}, {
+    "grey", 0.75, 0.75, 0.75}, {
+    "gray", 0.75, 0.75, 0.75}, {
+    "orange", 1.00, 0.50, 0.00}, {
+    "brown", 0.75, 0.50, 0.25}, {
+    "purple", 0.50, 0.00, 1.00}, {
+    "violet", 0.50, 0.00, 1.00}, {
+    "indigo", 0.00, 0.50, 1.00}, {
+    "", 0.00, 0.00, 0.00}	/* do not modify this line */
+};
 
-    {"",0.00,0.00,0.00}	/* do not modify this line */
-} ;
-
-int G_color_values (
-    const char *name,
-    float *r,float *g,float *b)
+int G_color_values(const char *name, float *r, float *g, float *b)
 {
     int i;
 
     *r = *g = *b = 0.0;
     for (i = 0; colors[i].name[0]; i++)
-	if (strcmp (name, colors[i].name) == 0)
-	{
+	if (strcmp(name, colors[i].name) == 0) {
 	    *r = colors[i].r;
 	    *g = colors[i].g;
 	    *b = colors[i].b;
@@ -46,7 +42,7 @@ int G_color_values (
     return -1;
 }
 
-const char *G_color_name (int n)
+const char *G_color_name(int n)
 {
     int i;
 

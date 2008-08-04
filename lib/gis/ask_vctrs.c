@@ -41,11 +41,9 @@
  *  \return char * 
  */
 
-char *G_ask_vector_new ( 
-	const char *prompt,
-	char *name)
+char *G_ask_vector_new(const char *prompt, char *name)
 {
-	return G_ask_new (prompt, name, "vector", "vector");
+    return G_ask_new(prompt, name, "vector", "vector");
 }
 
 
@@ -60,18 +58,14 @@ char *G_ask_vector_new (
  *  \return char * 
  */
 
-char *G_ask_vector_old (
-	const char *prompt,
-	char *name)
+char *G_ask_vector_old(const char *prompt, char *name)
 {
-	return G_ask_old (prompt, name, "vector", "vector");
+    return G_ask_old(prompt, name, "vector", "vector");
 }
 
-char *G_ask_vector_any ( 
-	const char *prompt,
-	char *name)
+char *G_ask_vector_any(const char *prompt, char *name)
 {
-	return G_ask_any (prompt, name, "vector", "vector", 1);
+    return G_ask_any(prompt, name, "vector", "vector", 1);
 }
 
 
@@ -86,9 +80,7 @@ char *G_ask_vector_any (
  *  \return char * 
  */
 
-char *G_ask_vector_in_mapset (
-	const char *prompt,
-	char *name)
+char *G_ask_vector_in_mapset(const char *prompt, char *name)
 {
-	return G_ask_in_mapset (prompt, name, "vector", "vector");
+    return G_ask_in_mapset(prompt, name, "vector", "vector");
 }

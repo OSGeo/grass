@@ -1,3 +1,4 @@
+
 /*-
  * Written by H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994
  * University of Illinois
@@ -14,74 +15,64 @@
 #include <stdio.h>
 #include <math.h>
 
-int min1 (int arg1, int arg2)
+int min1(int arg1, int arg2)
 {
-  int res;
+    int res;
 
-  if (arg1 <= arg2)
-  {
-    res = arg1;
-  }
-  else
-  {
-    res = arg2;
-  }
-  return res;
+    if (arg1 <= arg2) {
+	res = arg1;
+    }
+    else {
+	res = arg2;
+    }
+    return res;
 }
 
 
-int max1 (
-/*
- * L. Mitas (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
- *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
- *
- */
-    int arg1,
-    int arg2
-)
+int max1(
+	    /*
+	     * L. Mitas (University of Illinois),
+	     * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+	     *
+	     * modified by McCauley in August 1995
+	     * modified by Mitasova in August 1995  
+	     *
+	     */
+	    int arg1, int arg2)
 {
-  int res;
+    int res;
 
-  if (arg1 >= arg2)
-  {
-    res = arg1;
-  }
-  else
-  {
-    res = arg2;
-  }
-  return res;
+    if (arg1 >= arg2) {
+	res = arg1;
+    }
+    else {
+	res = arg2;
+    }
+    return res;
 }
 
-double amax1 (double arg1, double arg2)
+double amax1(double arg1, double arg2)
 {
-  double res;
+    double res;
 
-  if (arg1 >= arg2)
-  {
-    res = arg1;
-  }
-  else
-  {
-    res = arg2;
-  }
-  return res;
+    if (arg1 >= arg2) {
+	res = arg1;
+    }
+    else {
+	res = arg2;
+    }
+    return res;
 }
 
-double amin1 (double arg1, double arg2)
+double amin1(double arg1, double arg2)
 {
-  double res;
+    double res;
 
-  if (arg1 <= arg2)
-  {
-    res = arg1;
-  }
-  else
-  {
-    res = arg2;
-  }
-  return res;
+    if (arg1 <= arg2) {
+	res = arg1;
+    }
+    else {
+	res = arg2;
+    }
+    return res;
 }

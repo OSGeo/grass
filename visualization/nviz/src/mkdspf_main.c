@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       mkdspf
@@ -22,7 +23,7 @@
    Nvision application by M. Astley.
    Basically, this file just holds a few access routines so our
    Nvision interface can run the program from within tcl/tk
-*/
+ */
 
 /* This program implements the marching cubes surface tiler described by
  * Lorenson & Cline in the Siggraph 87 Conference Proceedings.
@@ -32,23 +33,23 @@
  * 
  * The display file consists of cell_info structures.
  * The cell_info structure:
- *	threshold (specified on commandline)
- *    	number of polygons 
- *	polygon vertice coordinates
- * 	surface or vertex normals (depending on lighting model specified)
+ *      threshold (specified on commandline)
+ *      number of polygons 
+ *      polygon vertice coordinates
+ *      surface or vertex normals (depending on lighting model specified)
  * 
  * The user must specify the data file name and the thresholds and lighting
  * model desired.  
  *
  * To specify the threshold:
- *	r min_threshold max_threshold interval (note: r stands for range)
- *	i num_thresholds threshold_1 threshold_2 etc. (i stands for individual)
+ *      r min_threshold max_threshold interval (note: r stands for range)
+ *      i num_thresholds threshold_1 threshold_2 etc. (i stands for individual)
  *
  * To specify the lighting model:
- *	flat 
- *	grad (for gradient)
+ *      flat 
+ *      grad (for gradient)
  *
-*/
+ */
 
 #define MAIN
 #include "viz.h"
@@ -68,11 +69,11 @@ static struct_copy();
 
    Usage:
    mkdspf in_file out_file [c | r | i] {V} [f | g]
-     if c then interval size
-     if r then {list min_value max_value thresh_interval_size}
-     if i then {list of values}
+   if c then interval size
+   if r then {list min_value max_value thresh_interval_size}
+   if i then {list of values}
 
-*/
+ */
 int mkdspf_main(data, interp, argc, argv)
      Nv_data *data;		/* Local data */
      Tcl_Interp *interp;	/* Current interpreter */
@@ -119,8 +120,8 @@ int mkdspf_main(data, interp, argc, argv)
 
 
     /*create output file name 
-       **will place dspf file in same directory as raw data 
-       **DO WE WANT TO CHANGE THIS ?
+     **will place dspf file in same directory as raw data 
+     **DO WE WANT TO CHANGE THIS ?
      */
 
     /* Here we perform the fork since we are done parsing arguments */
@@ -147,8 +148,8 @@ int mkdspf_main(data, interp, argc, argv)
 	else
 	    exit(0);
     }
-/* write display file header info */
-/* have to adjust dimensions  -dpg */
+    /* write display file header info */
+    /* have to adjust dimensions  -dpg */
     {
 	Headfax.xdim -= 1;
 	Headfax.ydim -= 1;
@@ -182,7 +183,9 @@ int mkdspf_main(data, interp, argc, argv)
 }
 
 /**************************** pr_commandline *********************************/
+
 /**************************** pr_commandline *********************************/
+
 /**************************** pr_commandline *********************************/
 
 pr_commandline(interp)
@@ -208,6 +211,3 @@ static struct_copy(To, From, size)
     for (; size; size--)
 	*To++ = *From++;
 }
-
-
-

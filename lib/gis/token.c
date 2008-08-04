@@ -1,3 +1,4 @@
+
 /**
  * \file token.c
  *
@@ -29,38 +30,37 @@
  * \return Pointer to string token
  */
 
-char **G_tokenize ( const char *buf, const char *delim)
+char **G_tokenize(const char *buf, const char *delim)
 {
-	int i;
-	char **tokens;
-	char *p;
+    int i;
+    char **tokens;
+    char *p;
 
-	i = 0;
-	while (!G_index(delim,*buf) && (*buf == ' ' || *buf == '\t'))  /* needed for G_free () */
-		buf++;
+    i = 0;
+    while (!G_index(delim, *buf) && (*buf == ' ' || *buf == '\t'))	/* needed for G_free () */
+	buf++;
 
-	p = G_store (buf);
+    p = G_store(buf);
 
-	tokens = (char **) G_malloc (sizeof (char *));
+    tokens = (char **)G_malloc(sizeof(char *));
 
-	while (1)
-	{
-		while (!G_index(delim,*p) && (*p == ' ' || *p == '\t'))
-			p++;
-		if (*p == 0)
-			break;
-		tokens[i++] = p;
-		tokens = (char **) G_realloc ((char *) tokens, (i+1) * sizeof (char *));
+    while (1) {
+	while (!G_index(delim, *p) && (*p == ' ' || *p == '\t'))
+	    p++;
+	if (*p == 0)
+	    break;
+	tokens[i++] = p;
+	tokens = (char **)G_realloc((char *)tokens, (i + 1) * sizeof(char *));
 
-		while (*p && (G_index(delim,*p) == NULL))
-			p++;
-		if (*p == 0)
-			break;
-		*p++ = 0;
-	}
-	tokens[i] = NULL;
+	while (*p && (G_index(delim, *p) == NULL))
+	    p++;
+	if (*p == 0)
+	    break;
+	*p++ = 0;
+    }
+    tokens[i] = NULL;
 
-	return (tokens);
+    return (tokens);
 }
 
 
@@ -75,14 +75,13 @@ char **G_tokenize ( const char *buf, const char *delim)
 
 int G_number_of_tokens(char **tokens)
 {
-	int n;
+    int n;
 
-	for (n = 0; tokens[n] != NULL ; n++)
-        {
-         /* nothing */
-        }
+    for (n = 0; tokens[n] != NULL; n++) {
+	/* nothing */
+    }
 
-        return n;
+    return n;
 }
 
 
@@ -96,11 +95,11 @@ int G_number_of_tokens(char **tokens)
  * \return always returns 0
  */
 
-int G_free_tokens (char **tokens)
+int G_free_tokens(char **tokens)
 {
     if (tokens[0] != NULL)
-	G_free (tokens[0]);
-    G_free (tokens);
+	G_free(tokens[0]);
+    G_free(tokens);
 
     return (0);
 }

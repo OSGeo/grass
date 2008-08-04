@@ -4,35 +4,33 @@
 #include "dbstubs.h"
 
 /*!
- \fn 
- \brief 
- \return 
- \param 
-*/
-int
-db_d_drop_table (void)
+   \fn 
+   \brief 
+   \return 
+   \param 
+ */
+int db_d_drop_table(void)
 {
     dbString name;
     int stat;
 
-    db_init_string (&name);
+    db_init_string(&name);
 
-/* get the argument(s) to the procedure */
-    DB_RECV_STRING (&name);
+    /* get the argument(s) to the procedure */
+    DB_RECV_STRING(&name);
 
-/* call the procedure */
-    stat = db_driver_drop_table (&name);
+    /* call the procedure */
+    stat = db_driver_drop_table(&name);
 
-    db_free_string (&name);
+    db_free_string(&name);
 
-/* send the return code */
-    if (stat != DB_OK)
-    {
+    /* send the return code */
+    if (stat != DB_OK) {
 	DB_SEND_FAILURE();
 	return DB_OK;
     }
     DB_SEND_SUCCESS();
 
-/* no results */
+    /* no results */
     return DB_OK;
 }

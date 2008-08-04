@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.digit
@@ -21,31 +22,32 @@
 #include "local_proto.h"
 
 
-int digitize (FILE *fd)
+int digitize(FILE * fd)
 {
     int any;
     struct Categories labels;
 
-    G_init_cats ((CELL)0, "", &labels);
+    G_init_cats((CELL) 0, "", &labels);
     any = 0;
-    for(;;)
-    {
-	switch(get_type())
-	{
-	case 'A':                               /* area */
-		if (get_area(fd, &labels)) any = 1;
-		break;
-	case 'C':                               /* circle */
-		if (get_circle(fd, &labels)) any = 1;
-		break;
-	case 'L':                               /* line */
-		if (get_line(fd, &labels)) any = 1;
-		break;
-	case 'X':                               /* done */
-		return any;
-	case 'Q':				/* exit without saving */
-		if (G_yes(_("Quit without creating a map?? "), 0))
-                return 0;
+    for (;;) {
+	switch (get_type()) {
+	case 'A':		/* area */
+	    if (get_area(fd, &labels))
+		any = 1;
+	    break;
+	case 'C':		/* circle */
+	    if (get_circle(fd, &labels))
+		any = 1;
+	    break;
+	case 'L':		/* line */
+	    if (get_line(fd, &labels))
+		any = 1;
+	    break;
+	case 'X':		/* done */
+	    return any;
+	case 'Q':		/* exit without saving */
+	    if (G_yes(_("Quit without creating a map?? "), 0))
+		return 0;
 	}
     }
 }

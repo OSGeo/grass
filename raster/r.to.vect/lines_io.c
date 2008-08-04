@@ -2,7 +2,7 @@
 /*   Input/output and line tracing routines */
 
 /* Mike Baba */
-/* DBA Systems*/
+/* DBA Systems */
 /* Farfax, VA */
 /* Jan 1990 */
 
@@ -52,14 +52,15 @@ int write_line(struct COOR *seed)
     int dir, line_type, n, n1;
 
     point = seed;
-    if ( (dir = at_end(point)) ) {	/* already have one end of line */
+    if ((dir = at_end(point))) {	/* already have one end of line */
 	begin = point;
 	end = find_end(point, dir, &line_type, &n);
 	if (line_type == OPEN) {
 	    return (-1);	/* unfinished line */
 	}
 	direction = dir;
-    } else {			/* in middle of a line */
+    }
+    else {			/* in middle of a line */
 	end = find_end(point, FORWARD, &line_type, &n);
 	if (line_type == OPEN) {	/* line not finished */
 	    return (-1);
@@ -78,7 +79,8 @@ int write_line(struct COOR *seed)
 
 	    direction = at_end(begin);	/* found both ends now; total length */
 	    n += n1;		/*   is sum of distances to each end */
-	} else {			/* line_type = LOOP by default */
+	}
+	else {			/* line_type = LOOP by default */
 	    /* already have correct length */
 	    begin = end;	/* end and beginning are the same */
 	    direction = FORWARD;	/* direction is arbitrary */
@@ -102,54 +104,54 @@ static int write_ln(struct COOR *begin, struct COOR *end,	/* start and end point
     struct COOR *p, *last;
     int i, cat, field;
     static int count = 1;
-	
+
     field = 1;
     ++n;
 
-    Vect_reset_cats (Cats);
-    
+    Vect_reset_cats(Cats);
+
     p = begin;
-    y = cell_head.north - ((double) p->row + 0.5) * cell_head.ns_res;
-    x = cell_head.west + ((double) p->col + 0.5) * cell_head.ew_res;
+    y = cell_head.north - ((double)p->row + 0.5) * cell_head.ns_res;
+    x = cell_head.west + ((double)p->col + 0.5) * cell_head.ew_res;
 
-    /* value_flag is used only for CELL type */ 
-    cat = (value_flag) ? p -> val : count; 
+    /* value_flag is used only for CELL type */
+    cat = (value_flag) ? p->val : count;
 
-    Vect_cat_set (Cats, field, cat);
+    Vect_cat_set(Cats, field, cat);
     Vect_append_point(points, x, y, 0.0);
 
     for (i = 1; i < n; i++) {
 	last = p;
-	
+
 	/* this should NEVER happen */
 	if ((p = move(p)) == NULL)
 	    G_fatal_error(_("write_line: line terminated unexpectedly\n"
-                    "  previous (%d) point %p (%d,%d,%d) %p %p"),
-		    direction, last, last->row, last->col, last->node,
-		    last->fptr, last->bptr);
+			    "  previous (%d) point %p (%d,%d,%d) %p %p"),
+			  direction, last, last->row, last->col, last->node,
+			  last->fptr, last->bptr);
 
-	y = cell_head.north - ((double) p->row + 0.5) * cell_head.ns_res;
-	x = cell_head.west + ((double) p->col + 0.5) * cell_head.ew_res;
-	
-	if (p -> val != cat && value_flag) {
+	y = cell_head.north - ((double)p->row + 0.5) * cell_head.ns_res;
+	x = cell_head.west + ((double)p->col + 0.5) * cell_head.ew_res;
+
+	if (p->val != cat && value_flag) {
 	    Vect_append_point(points, x, y, 0.0);
 
-	    if ((driver != NULL) && !value_flag ) {
-		insert_value (cat, p -> val, p -> dval);
+	    if ((driver != NULL) && !value_flag) {
+		insert_value(cat, p->val, p->dval);
 	    }
-	    
+
 	    Vect_write_line(&Map, GV_LINE, points, Cats);
-	    Vect_reset_line (points);
-	    Vect_reset_cats (Cats);
-	    cat = (value_flag) ? p -> val : (++count); 
-	    Vect_cat_set (Cats, field, cat);
+	    Vect_reset_line(points);
+	    Vect_reset_cats(Cats);
+	    cat = (value_flag) ? p->val : (++count);
+	    Vect_cat_set(Cats, field, cat);
 	}
-	
+
 	Vect_append_point(points, x, y, 0.0);
     }
 
-    if ((driver != NULL) && !value_flag ) {
-	insert_value (cat, p -> val, p -> dval);
+    if ((driver != NULL) && !value_flag) {
+	insert_value(cat, p->val, p->dval);
     }
 
     Vect_write_line(&Map, GV_LINE, points, Cats);

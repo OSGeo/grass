@@ -21,9 +21,9 @@
 /*    write_area    make table of area mappings and write dlg label file */
 
 #ifdef MAIN
-  #define Global
+#define Global
 #else
-  #define Global extern
+#define Global extern
 #endif
 
 #define BACKWARD 1
@@ -41,7 +41,7 @@
 Global int data_type;
 Global int data_size;
 Global struct Map_info Map;
-Global int input_fd;                 /*    input_fd     input raster map descriptor */
+Global int input_fd;		/*    input_fd     input raster map descriptor */
 Global struct line_cats *Cats;
 Global struct Cell_head cell_head;
 
@@ -51,30 +51,30 @@ Global int input_fd;
 Global int row_length, row_count, n_rows;
 Global int total_areas;
 
-Global int smooth_flag;  /* this is 0 for no smoothing, 1 for smoothing of lines */
-Global int value_flag;    /* use raster values as categories */
+Global int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
+Global int value_flag;		/* use raster values as categories */
 
 Global struct Categories RastCats;
-Global int has_cats;     /* Category labels available */
+Global int has_cats;		/* Category labels available */
 Global struct field_info *Fi;
 Global dbDriver *driver;
 Global dbString sql, label;
 
 struct COOR
 {
-  struct COOR *bptr, *fptr;		/* pointers to neighboring points */
-  int row, col, node;			/* row, column of point; node flag */
-  int val;                              /* CELL value */
-  double dval;                          /* FCELL/DCELL value */
-  double right, left;			/* areas to right and left of line */
+    struct COOR *bptr, *fptr;	/* pointers to neighboring points */
+    int row, col, node;		/* row, column of point; node flag */
+    int val;			/* CELL value */
+    double dval;		/* FCELL/DCELL value */
+    double right, left;		/* areas to right and left of line */
 
 };
 
 struct line_hdr
 {
-  struct COOR *left;
-  struct COOR *right;
-  struct COOR *center;
+    struct COOR *left;
+    struct COOR *right;
+    struct COOR *center;
 };
 
 #define NULPTR ((struct COOR *) NULL)
@@ -84,11 +84,11 @@ struct line_hdr
 
 struct area_table
 {
-  int free;				/* this entry is not taken yet */
-  double cat;				/* category number for this area */
-  int row;				/* row and column of point where the */
-  int col;				/*   area is widest */
-  int width;				/*   and width there */
+    int free;			/* this entry is not taken yet */
+    double cat;			/* category number for this area */
+    int row;			/* row and column of point where the */
+    int col;			/*   area is widest */
+    int width;			/*   and width there */
 };
 
 /* equiv_table - structure in which to compile equivalences between area */
@@ -96,11 +96,11 @@ struct area_table
 
 struct equiv_table
 {
-  int mapped;				/* is this area number mapped? */
-  int where;				/* if so, where */
-  int count;				/* if not, number mapped here */
-  int length;
-  int *ptr;				/*   and pointer to them */
+    int mapped;			/* is this area number mapped? */
+    int where;			/* if so, where */
+    int count;			/* if not, number mapped here */
+    int length;
+    int *ptr;			/*   and pointer to them */
 };
 
 
@@ -119,7 +119,7 @@ int more_equivs(void);
 /* areas_io.c */
 int write_boundary(struct COOR *seed);
 int write_area(struct area_table *, struct equiv_table *, int, int);
-    
+
 /* points.c */
 int extract_points(int);
 
@@ -127,5 +127,5 @@ int extract_points(int);
 struct COOR *move(struct COOR *);
 struct COOR *find_end(struct COOR *, int, int *, int *);
 int at_end(struct COOR *);
-int read_row (void *);
-void insert_value (int, int, double);
+int read_row(void *);
+void insert_value(int, int, double);

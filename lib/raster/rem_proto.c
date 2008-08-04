@@ -27,10 +27,11 @@
 
 int REM_screen_left(void)
 {
-	int l;
-	_send_ident(SCREEN_LEFT);
-	_get_int(&l);
-	return l;
+    int l;
+
+    _send_ident(SCREEN_LEFT);
+    _get_int(&l);
+    return l;
 }
 
 /*!
@@ -44,10 +45,11 @@ int REM_screen_left(void)
 
 int REM_screen_rite(void)
 {
-	int r;
-	_send_ident(SCREEN_RITE);
-	_get_int(&r);
-	return r;
+    int r;
+
+    _send_ident(SCREEN_RITE);
+    _get_int(&r);
+    return r;
 }
 
 
@@ -62,10 +64,11 @@ int REM_screen_rite(void)
 
 int REM_screen_bot(void)
 {
-	int b;
-	_send_ident(SCREEN_BOT);
-	_get_int(&b);
-	return b;
+    int b;
+
+    _send_ident(SCREEN_BOT);
+    _get_int(&b);
+    return b;
 }
 
 
@@ -80,16 +83,17 @@ int REM_screen_bot(void)
 
 int REM_screen_top(void)
 {
-	int t;
-	_send_ident(SCREEN_TOP);
-	_get_int(&t);
-	return t;
+    int t;
+
+    _send_ident(SCREEN_TOP);
+    _get_int(&t);
+    return t;
 }
 
 void REM_get_num_colors(int *n)
 {
-	_send_ident(GET_NUM_COLORS);
-	_get_int(n);
+    _send_ident(GET_NUM_COLORS);
+    _get_int(n);
 }
 
 /*!
@@ -105,8 +109,8 @@ void REM_get_num_colors(int *n)
 
 void REM_standard_color(int index)
 {
-	_send_ident(STANDARD_COLOR);
-	_send_int(&index);
+    _send_ident(STANDARD_COLOR);
+    _send_int(&index);
 }
 
 /*!
@@ -124,10 +128,10 @@ void REM_standard_color(int index)
 
 void REM_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 {
-	_send_ident(RGB_COLOR);
-	_send_char(&red);
-	_send_char(&grn);
-	_send_char(&blu);
+    _send_ident(RGB_COLOR);
+    _send_char(&red);
+    _send_char(&grn);
+    _send_char(&blu);
 }
 
 /*!
@@ -140,8 +144,8 @@ void REM_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 
 void REM_line_width(int width)
 {
-	_send_ident(LINE_WIDTH);
-	_send_int(&width);
+    _send_ident(LINE_WIDTH);
+    _send_int(&width);
 }
 
 /*!
@@ -154,7 +158,7 @@ void REM_line_width(int width)
 
 void REM_erase(void)
 {
-	_send_ident(ERASE);
+    _send_ident(ERASE);
 }
 
 /*!
@@ -169,9 +173,9 @@ void REM_erase(void)
 
 void REM_move_abs(int x, int y)
 {
-	_send_ident(MOVE_ABS);
-	_send_int(&x);
-	_send_int(&y);
+    _send_ident(MOVE_ABS);
+    _send_int(&x);
+    _send_int(&y);
 }
 
 /*!
@@ -179,8 +183,8 @@ void REM_move_abs(int x, int y)
  *
  * Shift the current screen location by the values in <b>dx</b> and <b>dy</b>:
  \code
-   Newx = Oldx + dx;
-   Newy = Oldy + dy;
+ Newx = Oldx + dx;
+ Newy = Oldy + dy;
  \endcode
  * Nothing is drawn on the screen.
  *
@@ -190,9 +194,9 @@ void REM_move_abs(int x, int y)
 
 void REM_move_rel(int x, int y)
 {
-	_send_ident(MOVE_REL);
-	_send_int(&x);
-	_send_int(&y);
+    _send_ident(MOVE_REL);
+    _send_int(&x);
+    _send_int(&y);
 }
 
 /*!
@@ -208,9 +212,9 @@ void REM_move_rel(int x, int y)
 
 void REM_cont_abs(int x, int y)
 {
-	_send_ident(CONT_ABS);
-	_send_int(&x);
-	_send_int(&y);
+    _send_ident(CONT_ABS);
+    _send_int(&x);
+    _send_int(&y);
 }
 
 /*!
@@ -220,10 +224,10 @@ void REM_cont_abs(int x, int y)
  * current color, selected via <i>R_color</i>, from the current location to
  * the relative location specified by <b>x</b> and <b>y.</b> The current
  * location is updated:
-  \code
-   Newx = Oldx + x;
-   Newy = Oldy + y;
-  \endcode
+ \code
+ Newx = Oldx + x;
+ Newy = Oldy + y;
+ \endcode
  *
  *  \param x
  *  \param y
@@ -231,9 +235,9 @@ void REM_cont_abs(int x, int y)
 
 void REM_cont_rel(int x, int y)
 {
-	_send_ident(CONT_REL);
-	_send_int(&x);
-	_send_int(&y);
+    _send_ident(CONT_REL);
+    _send_int(&x);
+    _send_int(&y);
 }
 
 /*!
@@ -250,10 +254,10 @@ void REM_cont_rel(int x, int y)
 
 void REM_polydots_abs(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYDOTS_ABS);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYDOTS_ABS);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -272,10 +276,10 @@ void REM_polydots_abs(const int *xarray, const int *yarray, int number)
 
 void REM_polydots_rel(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYDOTS_REL);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYDOTS_REL);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -295,10 +299,10 @@ void REM_polydots_rel(const int *xarray, const int *yarray, int number)
 
 void REM_polyline_abs(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYLINE_ABS);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYLINE_ABS);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -319,10 +323,10 @@ void REM_polyline_abs(const int *xarray, const int *yarray, int number)
 
 void REM_polyline_rel(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYLINE_REL);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYLINE_REL);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -339,10 +343,10 @@ void REM_polyline_rel(const int *xarray, const int *yarray, int number)
 
 void REM_polygon_abs(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYGON_ABS);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYGON_ABS);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -361,10 +365,10 @@ void REM_polygon_abs(const int *xarray, const int *yarray, int number)
 
 void REM_polygon_rel(const int *xarray, const int *yarray, int number)
 {
-	_send_ident(POLYGON_REL);
-	_send_int(&number);
-	_send_int_array(number, xarray);
-	_send_int_array(number, yarray);
+    _send_ident(POLYGON_REL);
+    _send_int(&number);
+    _send_int_array(number, xarray);
+    _send_int_array(number, yarray);
 }
 
 /*!
@@ -382,11 +386,11 @@ void REM_polygon_rel(const int *xarray, const int *yarray, int number)
 
 void REM_box_abs(int x1, int y1, int x2, int y2)
 {
-	_send_ident(BOX_ABS);
-	_send_int(&x1);
-	_send_int(&y1);
-	_send_int(&x2);
-	_send_int(&y2);
+    _send_ident(BOX_ABS);
+    _send_int(&x1);
+    _send_int(&y1);
+    _send_int(&x2);
+    _send_int(&y2);
 }
 
 
@@ -403,9 +407,9 @@ void REM_box_abs(int x1, int y1, int x2, int y2)
 
 void REM_box_rel(int x, int y)
 {
-	_send_ident(BOX_REL);
-	_send_int(&x);
-	_send_int(&y);
+    _send_ident(BOX_REL);
+    _send_int(&x);
+    _send_int(&y);
 }
 
 /*!
@@ -419,15 +423,15 @@ void REM_box_rel(int x, int y)
 
 void REM_text_size(int width, int height)
 {
-	_send_ident(TEXT_SIZE);
-	_send_int(&width);
-	_send_int(&height);
+    _send_ident(TEXT_SIZE);
+    _send_int(&width);
+    _send_int(&height);
 }
 
 void REM_text_rotation(float rotation)
 {
-	_send_ident(TEXT_ROTATION);
-	_send_float(&rotation);
+    _send_ident(TEXT_ROTATION);
+    _send_float(&rotation);
 }
 
 /*!
@@ -444,11 +448,11 @@ void REM_text_rotation(float rotation)
 
 void REM_set_window(int t, int b, int l, int r)
 {
-	_send_ident(SET_WINDOW);
-	_send_int(&t);
-	_send_int(&b);
-	_send_int(&l);
-	_send_int(&r);
+    _send_ident(SET_WINDOW);
+    _send_int(&t);
+    _send_int(&b);
+    _send_int(&l);
+    _send_int(&r);
 }
 
 /*!
@@ -462,8 +466,8 @@ void REM_set_window(int t, int b, int l, int r)
 
 void REM_text(const char *sometext)
 {
-	_send_ident(TEXT);
-	_send_text(sometext);
+    _send_ident(TEXT);
+    _send_text(sometext);
 }
 
 /*!
@@ -484,12 +488,12 @@ void REM_text(const char *sometext)
 
 void REM_get_text_box(const char *sometext, int *t, int *b, int *l, int *r)
 {
-	_send_ident(GET_TEXT_BOX);
-	_send_text(sometext);
-	_get_int(t);
-	_get_int(b);
-	_get_int(l);
-	_get_int(r);
+    _send_ident(GET_TEXT_BOX);
+    _send_text(sometext);
+    _get_int(t);
+    _get_int(b);
+    _get_int(l);
+    _get_int(r);
 }
 
 /*!
@@ -525,111 +529,111 @@ void REM_get_text_box(const char *sometext, int *t, int *b, int *l, int *r)
 
 void REM_font(const char *name)
 {
-	_send_ident(FONT);
-	_send_text(name);
+    _send_ident(FONT);
+    _send_text(name);
 }
 
 void REM_charset(const char *name)
 {
-	_send_ident(CHARSET);
-	_send_text(name);
+    _send_ident(CHARSET);
+    _send_text(name);
 }
 
 static void font_list(char ***list, int *count, int op)
 {
-	char **fonts;
-	int num_fonts;
-	int i;
+    char **fonts;
+    int num_fonts;
+    int i;
 
-	_send_ident(op);
-	_get_int(&num_fonts);
+    _send_ident(op);
+    _get_int(&num_fonts);
 
-	fonts = G_malloc(num_fonts * sizeof(char *));
-	for (i = 0; i < num_fonts; i++)
-		fonts[i] = G_store(_get_text_2());
+    fonts = G_malloc(num_fonts * sizeof(char *));
+    for (i = 0; i < num_fonts; i++)
+	fonts[i] = G_store(_get_text_2());
 
-	*list = fonts;
-	*count = num_fonts;
+    *list = fonts;
+    *count = num_fonts;
 }
 
 void REM_font_list(char ***list, int *count)
 {
-	font_list(list, count, FONT_LIST);
+    font_list(list, count, FONT_LIST);
 }
 
 void REM_font_info(char ***list, int *count)
 {
-	font_list(list, count, FONT_INFO);
+    font_list(list, count, FONT_INFO);
 }
 
 void REM_panel_save(const char *name, int t, int b, int l, int r)
 {
-	close(creat(name, 0666));
+    close(creat(name, 0666));
 
-	_send_ident(PANEL_SAVE);
-	_send_text(name);
-	_send_int(&t);
-	_send_int(&b);
-	_send_int(&l);
-	_send_int(&r);
-	R_stabilize();
+    _send_ident(PANEL_SAVE);
+    _send_text(name);
+    _send_int(&t);
+    _send_int(&b);
+    _send_int(&l);
+    _send_int(&r);
+    R_stabilize();
 }
 
 void REM_panel_restore(const char *name)
 {
-	_send_ident(PANEL_RESTORE);
-	_send_text(name);
-	R_stabilize();
+    _send_ident(PANEL_RESTORE);
+    _send_text(name);
+    R_stabilize();
 }
 
 void REM_panel_delete(const char *name)
 {
-	_send_ident(PANEL_DELETE);
-	_send_text(name);
-	R_stabilize();
+    _send_ident(PANEL_DELETE);
+    _send_text(name);
+    R_stabilize();
 
-	unlink(name);
+    unlink(name);
 }
 
 void REM_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
 {
-	_send_ident(BEGIN_SCALED_RASTER);
-	_send_int(&mask);
-	_send_int_array(4, &src[0][0]);
-	_send_int_array(4, &dst[0][0]);
+    _send_ident(BEGIN_SCALED_RASTER);
+    _send_int(&mask);
+    _send_int_array(4, &src[0][0]);
+    _send_int_array(4, &dst[0][0]);
 }
 
 int REM_scaled_raster(int n, int row,
-	const unsigned char *red, const unsigned char *grn, const unsigned char *blu,
-	const unsigned char *nul)
+		      const unsigned char *red, const unsigned char *grn,
+		      const unsigned char *blu, const unsigned char *nul)
 {
-	int z = !!nul;
-	int t;
-	_send_ident(SCALED_RASTER);
-	_send_int(&n);
-	_send_int(&row);
-	_send_char_array(n, red);
-	_send_char_array(n, grn);
-	_send_char_array(n, blu);
-	_send_char_array(n, nul ? nul : red);
-	_send_int(&z);
-	_get_int(&t);
-	return t;
+    int z = !!nul;
+    int t;
+
+    _send_ident(SCALED_RASTER);
+    _send_int(&n);
+    _send_int(&row);
+    _send_char_array(n, red);
+    _send_char_array(n, grn);
+    _send_char_array(n, blu);
+    _send_char_array(n, nul ? nul : red);
+    _send_int(&z);
+    _get_int(&t);
+    return t;
 }
 
 void REM_end_scaled_raster(void)
 {
-	_send_ident(END_SCALED_RASTER);
+    _send_ident(END_SCALED_RASTER);
 }
 
 void REM_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
-	_send_ident(BITMAP);
-	_send_int(&ncols);
-	_send_int(&nrows);
-	_send_int(&threshold);
-	_send_char_array(ncols * nrows, buf);
+    _send_ident(BITMAP);
+    _send_int(&ncols);
+    _send_int(&nrows);
+    _send_int(&threshold);
+    _send_char_array(ncols * nrows, buf);
 }
 
 #endif /* HAVE_SOCKET */
-

@@ -18,6 +18,7 @@ extern char **environ;
 void G_putenv(const char *name, const char *value)
 {
     char buf[1024];
+
 #if defined(HAVE_PUTENV)
     sprintf(buf, "%s=%s", name, value);
     putenv(G_store(buf));
@@ -29,11 +30,9 @@ void G_putenv(const char *name, const char *value)
     char **newenv;
     char *env;
 
-    if (first)
-    {
-	for (i = 0; environ[i]; i++)
-		;
-	newenv = (char **) G_malloc ((i + 1) * sizeof (char *));
+    if (first) {
+	for (i = 0; environ[i]; i++) ;
+	newenv = (char **)G_malloc((i + 1) * sizeof(char *));
 	for (i = 0; env = environ[i], env; i++)
 	    newenv[i] = G_store(env);
 	newenv[i] = NULL;
@@ -41,8 +40,7 @@ void G_putenv(const char *name, const char *value)
 	first = 0;
     }
 
-    for (i = 0; env = environ[i], env; i++)
-    {
+    for (i = 0; env = environ[i], env; i++) {
 	char temp[4];
 
 	if (sscanf(env, "%[^=]=%1s", buf, temp) < 1)
@@ -57,10 +55,9 @@ void G_putenv(const char *name, const char *value)
 
 	return;
     }
-    environ = (char **) G_realloc(environ, (i + 2) * sizeof (char *));
+    environ = (char **)G_realloc(environ, (i + 2) * sizeof(char *));
     sprintf(buf, "%s=%s", name, value);
     environ[i++] = G_store(buf);
     environ[i] = NULL;
 #endif
 }
-

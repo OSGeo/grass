@@ -7,8 +7,8 @@
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -32,24 +32,21 @@
 #include <grass/spawn.h>
 #define GEN_HELP	"gen_help"
 
-int G_gishelp( const char *helpfile , const char *request )
+int G_gishelp(const char *helpfile, const char *request)
 {
-    char file[1024] ;
+    char file[1024];
 
     if (request == NULL)
-	request = GEN_HELP ;
+	request = GEN_HELP;
 
-    sprintf(file,"%s/txt/%s/%s",
-	    G_getenv("GISBASE"), helpfile, request) ;
+    sprintf(file, "%s/txt/%s/%s", G_getenv("GISBASE"), helpfile, request);
 
-    if (! access(file, 04))
-    {
-	fprintf(stderr, _("one moment...\n")) ;
+    if (!access(file, 04)) {
+	fprintf(stderr, _("one moment...\n"));
 	G_spawn(getenv("GRASS_PAGER"), getenv("GRASS_PAGER"), file, NULL);
     }
-    else
-    {
-	fprintf(stderr, _("No help available for command [%s]\n"), request) ;
+    else {
+	fprintf(stderr, _("No help available for command [%s]\n"), request);
     }
 
     return 0;

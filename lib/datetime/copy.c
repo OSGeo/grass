@@ -17,8 +17,7 @@
  *  \return void
  */
 
-void 
-datetime_copy (DateTime *dst, const DateTime *src)
+void datetime_copy(DateTime * dst, const DateTime * src)
 {
-    memcpy (dst, src, sizeof(DateTime));
+    memcpy(dst, src, sizeof(DateTime));
 }

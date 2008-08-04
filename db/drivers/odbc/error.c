@@ -1,3 +1,4 @@
+
 /**
  * \file error.c
  *
@@ -26,12 +27,11 @@
  * \param[in] err error message
  */
 
-void
-report_error (char *err)
+void report_error(char *err)
 {
     char *msg = NULL;
 
-    G_asprintf (&msg, "DBMI-ODBC driver error: %s", err);
-    db_error (msg);
+    G_asprintf(&msg, "DBMI-ODBC driver error: %s", err);
+    db_error(msg);
     G_free(msg);
 }

@@ -1,3 +1,4 @@
+
 /**
  * \file short_way.c
  *
@@ -29,15 +30,14 @@
  * \return always returns 0
  */
 
-int G_shortest_way (double *east1,double *east2)
+int G_shortest_way(double *east1, double *east2)
 {
-    if (G_projection() == PROJECTION_LL)
-    {
+    if (G_projection() == PROJECTION_LL) {
 	if (*east1 > *east2)
-	    while ((*east1-*east2) > 180)
+	    while ((*east1 - *east2) > 180)
 		*east2 += 360;
 	else if (*east2 > *east1)
-	    while ((*east2-*east1) > 180)
+	    while ((*east2 - *east1) > 180)
 		*east1 += 360;
     }
 

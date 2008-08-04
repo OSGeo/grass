@@ -12,7 +12,7 @@ typedef struct
 /* this is a graphics structure */
 typedef struct
 {
-    int top, bottom ,left, right;
+    int top, bottom, left, right;
     int nrows, ncols;
     struct
     {
@@ -21,7 +21,7 @@ typedef struct
 	struct Colors colors;
 	char name[GNAME_MAX];
 	char mapset[GMAPSET_MAX];
-	int top, bottom ,left, right;
+	int top, bottom, left, right;
 	double ew_res, ns_res;	/* original map resolution */
     } cell;
 } View;
@@ -38,12 +38,12 @@ typedef struct
 
 typedef struct
 {
-    int   type;         /* object type */
-    int (*handler)();	/* routine to handle the event */
-    char *label;	/* label to display if MENU or OPTION */
-    int   binding;      /* OPTION bindings */
-    int  *status;	/* MENU,OPTION status */
-    int top,bottom,left,right;
+    int type;			/* object type */
+    int (*handler) ();		/* routine to handle the event */
+    char *label;		/* label to display if MENU or OPTION */
+    int binding;		/* OPTION bindings */
+    int *status;		/* MENU,OPTION status */
+    int top, bottom, left, right;
 } Objects;
 
 #define MENU_OBJECT 1

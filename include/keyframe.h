@@ -18,10 +18,10 @@
 
 #define KF_ALL_MASK	0x000000FF
 
-#define KF_NUMFIELDS 8 
+#define KF_NUMFIELDS 8
 
 #define KF_LINEAR 111
 #define KF_SPLINE 222
-#define KF_LEGAL_MODE(m) (m == KF_LINEAR || m == KF_SPLINE) 
+#define KF_LEGAL_MODE(m) (m == KF_LINEAR || m == KF_SPLINE)
 
 #endif /* _KEYFRAME_H */

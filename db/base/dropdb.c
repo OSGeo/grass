@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       db.dropdb
@@ -19,61 +20,60 @@
 #include <grass/glocale.h>
 
 
-struct {
-	char *driver, *database;
+struct
+{
+    char *driver, *database;
 } parms;
 
 
 /* function prototypes */
-static void parse_command_line (int, char **);
+static void parse_command_line(int, char **);
 
 
-int
-main (int argc, char **argv)
+int main(int argc, char **argv)
 {
     dbDriver *driver;
     dbHandle handle;
     int stat;
 
-    parse_command_line (argc, argv);
+    parse_command_line(argc, argv);
 
-    driver = db_start_driver (parms.driver); 
+    driver = db_start_driver(parms.driver);
     if (driver == NULL)
-        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
-    db_init_handle (&handle);
-    db_set_handle (&handle, parms.database, NULL);
-    stat = db_delete_database (driver, &handle);
-    db_shutdown_driver (driver);
+    db_init_handle(&handle);
+    db_set_handle(&handle, parms.database, NULL);
+    stat = db_delete_database(driver, &handle);
+    db_shutdown_driver(driver);
 
     exit(stat == DB_OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
 
-static void
-parse_command_line (int argc, char **argv)
+static void parse_command_line(int argc, char **argv)
 {
     struct Option *driver, *database;
     struct GModule *module;
 
     /* Initialize the GIS calls */
-    G_gisinit(argv[0]) ;
+    G_gisinit(argv[0]);
 
-    driver 		= G_define_standard_option(G_OPT_DRIVER);
-    driver->options     = db_list_drivers();
-    driver->required 	= YES;
+    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver->options = db_list_drivers();
+    driver->required = YES;
 
-    database 		= G_define_standard_option(G_OPT_DATABASE);
-    database->required 	= YES;
+    database = G_define_standard_option(G_OPT_DATABASE);
+    database->required = YES;
 
     /* Set description */
-    module              = G_define_module();
+    module = G_define_module();
     module->keywords = _("database, SQL");
     module->description = _("Removes a database.");
 
-    if(G_parser(argc, argv))
-        exit(EXIT_FAILURE);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-    parms.driver	= driver->answer;
-    parms.database	= database->answer;
+    parms.driver = driver->answer;
+    parms.database = database->answer;
 }

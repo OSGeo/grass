@@ -1,3 +1,4 @@
+
 /****************************************************************************
 * MODULE:       R-Tree library 
 *              
@@ -25,21 +26,23 @@
 
 double sphere_volume(double dimension)
 {
-	double log_gamma, log_volume;
-	log_gamma = lgamma(dimension/2.0 + 1);
-	log_volume = dimension/2.0 * log(M_PI) - log_gamma;
-	return exp(log_volume);
+    double log_gamma, log_volume;
+
+    log_gamma = lgamma(dimension / 2.0 + 1);
+    log_volume = dimension / 2.0 * log(M_PI) - log_gamma;
+    return exp(log_volume);
 }
 
 int main()
 {
-	double dim=0, delta=1;
-	while(ABS(delta) > EP)
-		if(sphere_volume(dim + delta) > sphere_volume(dim))
-			dim += delta;
-		else
-			delta /= -2;
-	fprintf(stdout, "max volume = %.10f at dimension %.10f\n",
-		sphere_volume(dim), dim);
-	return 0;
+    double dim = 0, delta = 1;
+
+    while (ABS(delta) > EP)
+	if (sphere_volume(dim + delta) > sphere_volume(dim))
+	    dim += delta;
+	else
+	    delta /= -2;
+    fprintf(stdout, "max volume = %.10f at dimension %.10f\n",
+	    sphere_volume(dim), dim);
+    return 0;
 }

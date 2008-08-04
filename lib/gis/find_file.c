@@ -2,12 +2,10 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
-static char *find_file (
-    int misc,
-    const char *dir,
-    const char *element,
-    const char *name,
-    const char *mapset)
+static char *find_file(int misc,
+		       const char *dir,
+		       const char *element,
+		       const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -18,97 +16,90 @@ static char *find_file (
 	return NULL;
     *path = 0;
 
-/*
- * if name is in the fully qualified format, split it into
- * name, mapset (overrides what was in mapset)
- */
-    if (G__name_is_fully_qualified(name, xname, xmapset))
-    {
+    /*
+     * if name is in the fully qualified format, split it into
+     * name, mapset (overrides what was in mapset)
+     */
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	pmapset = xmapset;
     }
-    else
-    {
+    else {
 	pname = name;
-        pmapset = mapset;
+	pmapset = mapset;
     }
 
-/*
- * reject illegal names and mapsets
- */
-    if (G_legal_filename (pname) == -1)
-	    return NULL;
+    /*
+     * reject illegal names and mapsets
+     */
+    if (G_legal_filename(pname) == -1)
+	return NULL;
 
-    if (pmapset && *pmapset && G_legal_filename (pmapset) == -1)
-	    return NULL;
+    if (pmapset && *pmapset && G_legal_filename(pmapset) == -1)
+	return NULL;
 
-/*
-* if no specific mapset is to be searched
-* then search all mapsets in the mapset search list
-*/
-    if (pmapset == NULL || *pmapset == 0)
-    {
+    /*
+     * if no specific mapset is to be searched
+     * then search all mapsets in the mapset search list
+     */
+    if (pmapset == NULL || *pmapset == 0) {
 	int cnt = 0;
 	const char *pselmapset = NULL;
-	for (n = 0; (pmapset = G__mapset_name(n)); n++)
-	{
+
+	for (n = 0; (pmapset = G__mapset_name(n)); n++) {
 	    if (misc)
-		G__file_name_misc (path, dir, element, pname, pmapset);
+		G__file_name_misc(path, dir, element, pname, pmapset);
 	    else
-		G__file_name (path, element, pname, pmapset);
+		G__file_name(path, element, pname, pmapset);
 	    if (access(path, 0) == 0) {
-		if ( !pselmapset )
+		if (!pselmapset)
 		    pselmapset = pmapset;
 		else
-		    G_warning ("'%s/%s' was found in more mapsets (also found in %s).", element, pname, pmapset);
+		    G_warning
+			("'%s/%s' was found in more mapsets (also found in %s).",
+			 element, pname, pmapset);
 		cnt++;
 	    }
 	}
-	if ( cnt > 0 ) {
+	if (cnt > 0) {
 	    /* If the same name exists in more mapsets and print a warning */
-	    if ( cnt > 1 ) 
-		G_warning ("using '%s@%s'.", pname, pselmapset);
-	    return (char *) pselmapset;
+	    if (cnt > 1)
+		G_warning("using '%s@%s'.", pname, pselmapset);
+	    return (char *)pselmapset;
 	}
     }
-/*
- * otherwise just look for the file in the specified mapset.
- * since the name may have been qualified, mapset may point
- * to the xmapset, so we must should it to
- * permanent storage via G_store().
- */
-    else
-    {
+    /*
+     * otherwise just look for the file in the specified mapset.
+     * since the name may have been qualified, mapset may point
+     * to the xmapset, so we must should it to
+     * permanent storage via G_store().
+     */
+    else {
 	if (misc)
-	    G__file_name_misc (path, dir, element, pname, pmapset);
+	    G__file_name_misc(path, dir, element, pname, pmapset);
 	else
-	    G__file_name (path, element, pname, pmapset);
-	if (access(path,0) == 0)
-	    return G_store (pmapset);
+	    G__file_name(path, element, pname, pmapset);
+	if (access(path, 0) == 0)
+	    return G_store(pmapset);
     }
     return NULL;
 }
 
 
 
-static char *find_file1 (
-    int misc,
-    const char *dir,
-    const char *element,
-    char *name,
-    const char *mapset)
+static char *find_file1(int misc,
+			const char *dir,
+			const char *element, char *name, const char *mapset)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     const char *pname, *pmapset;
     char *mp;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset))
-    {
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
 	pname = xname;
 	pmapset = xmapset;
     }
-    else
-    {
+    else {
 	pname = name;
 	pmapset = mapset;
     }
@@ -124,7 +115,7 @@ static char *find_file1 (
 /*!
  * \brief searches for a file from the mapset search list
  *      or in a specified mapset.
- *	returns the mapset name where the file was found.
+ *      returns the mapset name where the file was found.
  *
  *  notes:
  *
@@ -144,21 +135,15 @@ static char *find_file1 (
  *
  *  \return char *  pointer to a string with name of mapset
  *              where file was found, or NULL if not found
-*/
+ */
 
-char *G_find_file (
-    const char *element,
-    char *name,
-    const char *mapset)
+char *G_find_file(const char *element, char *name, const char *mapset)
 {
     return find_file1(0, NULL, element, name, mapset);
 }
 
-char *G_find_file_misc (
-    const char *dir,
-    const char *element,
-    char *name,
-    const char *mapset)
+char *G_find_file_misc(const char *dir,
+		       const char *element, char *name, const char *mapset)
 {
     return find_file1(1, dir, element, name, mapset);
 }
@@ -167,7 +152,7 @@ char *G_find_file_misc (
 /*!
  * \brief searches for a file from the mapset search list
  *      or in a specified mapset. (look but don't touch)
- *	returns the mapset name where the file was found.
+ *      returns the mapset name where the file was found.
  *
  *      Exactly the same as G_find_file() except that if <b>name</b> is in
  *      the form "<i>name@mapset</i>", and is found, G_find_file2() will not
@@ -183,20 +168,15 @@ char *G_find_file_misc (
  *
  *  \return char *  pointer to a string with name of mapset
  *              where file was found, or NULL if not found
-*/
-char *G_find_file2 (
-    const char *element,
-    const char *name,
-    const char *mapset)
+ */
+char *G_find_file2(const char *element, const char *name, const char *mapset)
 {
     return find_file(0, NULL, element, name, mapset);
 }
 
-char *G_find_file2_misc (
-    const char *dir,
-    const char *element,
-    const char *name,
-    const char *mapset)
+char *G_find_file2_misc(const char *dir,
+			const char *element,
+			const char *name, const char *mapset)
 {
     return find_file(1, dir, element, name, mapset);
 }

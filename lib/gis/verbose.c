@@ -1,3 +1,4 @@
+
 /**
  * \file verbose.c
  *
@@ -26,7 +27,7 @@
 #define MINLEVEL 0
 
 
-static int verbose = -1; /* current verbosity level */
+static int verbose = -1;	/* current verbosity level */
 
 
 /**
@@ -41,20 +42,18 @@ static int verbose = -1; /* current verbosity level */
  * \return 3 - module will be very verbose. Triggered by "--v" or "--verbose".
  */
 
-int G_verbose (void)
-
+int G_verbose(void)
 {
-    char *verstr; /* string for GRASS_VERBOSE content */
+    char *verstr;		/* string for GRASS_VERBOSE content */
 
-    /* verbose not defined -> get it from env. */ 
-    if ( verbose < 0 ) {
+    /* verbose not defined -> get it from env. */
+    if (verbose < 0) {
 
-        if ( (verstr = getenv ( "GRASS_VERBOSE" )) ) {
-            if ((verbose = atoi ( verstr )))
-                ;
-        }
-        else
-            verbose = STDLEVEL;
+	if ((verstr = getenv("GRASS_VERBOSE"))) {
+	    if ((verbose = atoi(verstr))) ;
+	}
+	else
+	    verbose = STDLEVEL;
     }
     return verbose;
 }
@@ -66,7 +65,7 @@ int G_verbose (void)
  * \return max verbosity level
  */
 
-int G_verbose_max (void)
+int G_verbose_max(void)
 {
     return MAXLEVEL;
 }
@@ -78,7 +77,7 @@ int G_verbose_max (void)
  * \return standard verbosity level
  */
 
-int G_verbose_std (void)
+int G_verbose_std(void)
 {
     return STDLEVEL;
 }
@@ -90,7 +89,7 @@ int G_verbose_std (void)
  * \return min verbosity level
  */
 
-int G_verbose_min (void)
+int G_verbose_min(void)
 {
     return MINLEVEL;
 }
@@ -104,13 +103,12 @@ int G_verbose_min (void)
  * \return 1 - success
  */
 
-int G_set_verbose (int level)
+int G_set_verbose(int level)
 {
-  if (level >= MINLEVEL && level <= MAXLEVEL)
-  {
-      verbose = level;
-      return 1;
-  }
+    if (level >= MINLEVEL && level <= MAXLEVEL) {
+	verbose = level;
+	return 1;
+    }
 
-  return 0;
+    return 0;
 }

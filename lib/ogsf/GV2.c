@@ -1,20 +1,20 @@
 /*!
-  \file GV2.c
- 
-  \brief OGSF library - loading and manipulating vector sets (higher level functions)
- 
-  GRASS OpenGL gsurf OGSF Library 
- 
-  (C) 1999-2008 by the GRASS Development Team
- 
-  This program is free software under the 
-  GNU General Public License (>=v2). 
-  Read the file COPYING that comes with GRASS
-  for details.
-  
-  \author Bill Brown USACERL, GMSL/University of Illinois
-  \author Doxygenized by Martin Landa <landa.martin gmail.com>
-*/
+   \file GV2.c
+
+   \brief OGSF library - loading and manipulating vector sets (higher level functions)
+
+   GRASS OpenGL gsurf OGSF Library 
+
+   (C) 1999-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Bill Brown USACERL, GMSL/University of Illinois
+   \author Doxygenized by Martin Landa <landa.martin gmail.com>
+ */
 
 #include <stdlib.h>
 #include <string.h>
@@ -28,13 +28,13 @@ static int Vect_ID[MAX_VECTS];
 static int Next_vect = 0;
 
 /*!
-  \brief Check if vector set exists
+   \brief Check if vector set exists
 
-  \param id vector set id
+   \param id vector set id
 
-  \return 0 not found
-  \return 1 found
-*/
+   \return 0 not found
+   \return 1 found
+ */
 int GV_vect_exists(int id)
 {
     int i, found = 0;
@@ -55,11 +55,11 @@ int GV_vect_exists(int id)
 }
 
 /*!
-  \brief Register new vector set
+   \brief Register new vector set
 
-  \return vector set id
-  \return -1 on error
-*/
+   \return vector set id
+   \return -1 on error
+ */
 int GV_new_vector(void)
 {
     geovect *nv;
@@ -79,25 +79,25 @@ int GV_new_vector(void)
 }
 
 /*!
-  \brief Get number of available vector sets
+   \brief Get number of available vector sets
 
-  \return number of vector sets
-*/
+   \return number of vector sets
+ */
 int GV_num_vects(void)
 {
     return (gv_num_vects());
 }
 
 /*!
-  \brief Get list of vector sets
+   \brief Get list of vector sets
 
-  Must free when no longer needed!
+   Must free when no longer needed!
 
-  \param numvects number of vector sets
+   \param numvects number of vector sets
 
-  \return pointer to list of point sets
-  \return NULL on error
-*/
+   \return pointer to list of point sets
+   \return NULL on error
+ */
 int *GV_get_vect_list(int *numvects)
 {
     int i, *ret;
@@ -105,15 +105,15 @@ int *GV_get_vect_list(int *numvects)
     *numvects = Next_vect;
 
     if (Next_vect) {
-	ret = (int *) G_malloc(Next_vect * sizeof(int));
+	ret = (int *)G_malloc(Next_vect * sizeof(int));
 	if (!ret) {
 	    return (NULL);
 	}
-	
+
 	for (i = 0; i < Next_vect; i++) {
 	    ret[i] = Vect_ID[i];
 	}
-	
+
 	return (ret);
     }
 
@@ -121,13 +121,13 @@ int *GV_get_vect_list(int *numvects)
 }
 
 /*!
-  \brief Delete vector set from list
+   \brief Delete vector set from list
 
-  \param id vector set id
+   \param id vector set id
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GV_delete_vector(int id)
 {
     int i, j, found = 0;
@@ -157,20 +157,20 @@ int GV_delete_vector(int id)
 }
 
 /*!
-  \brief Load vector set
+   \brief Load vector set
 
-  Check to see if handle already loaded, if so - free before loading
-  new for now, always load to memory
-  
-  \todo Load file handle & ready for reading instead of using
-  memory
+   Check to see if handle already loaded, if so - free before loading
+   new for now, always load to memory
 
-  \param id vector set id
-  \param filename filename
+   \todo Load file handle & ready for reading instead of using
+   memory
 
-  \return -1 on error (invalid vector set id)
-  \return 1 on success
-*/
+   \param id vector set id
+   \param filename filename
+
+   \return -1 on error (invalid vector set id)
+   \return 1 on success
+ */
 int GV_load_vector(int id, const char *filename)
 {
     geovect *gv;
@@ -193,16 +193,16 @@ int GV_load_vector(int id, const char *filename)
 }
 
 /*!
-  \brief Get vector map name
+   \brief Get vector map name
 
-  Note: char array is allocated by G_store()
+   Note: char array is allocated by G_store()
 
-  \param id vector set id
-  \param filename filename
+   \param id vector set id
+   \param filename filename
 
-  \return -1 on error (invalid vector set id)
-  \return 1 on success
-*/
+   \return -1 on error (invalid vector set id)
+   \return 1 on success
+ */
 int GV_get_vectname(int id, char *filename)
 {
     geovect *gv;
@@ -217,17 +217,17 @@ int GV_get_vectname(int id, char *filename)
 }
 
 /*!
-  \brief Set vector set mode
+   \brief Set vector set mode
 
-  \param id vector set id
-  \param mem non-zero for use memory
-  \param color color value
-  \param width line width
-  \param flat non-zero for flat mode
+   \param id vector set id
+   \param mem non-zero for use memory
+   \param color color value
+   \param width line width
+   \param flat non-zero for flat mode
 
-  \return -1 on error (invalid vector set id)
-  \return 1 on success
-*/
+   \return -1 on error (invalid vector set id)
+   \return 1 on success
+ */
 int GV_set_vectmode(int id, int mem, int color, int width, int flat)
 {
     geovect *gv;
@@ -245,17 +245,17 @@ int GV_set_vectmode(int id, int mem, int color, int width, int flat)
 }
 
 /*!
-  \brief Get vector set mode
+   \brief Get vector set mode
 
-  \param id vector set id
-  \param[out] mem
-  \param[out] color color value
-  \param[out] width
-  \param[out] flat
+   \param id vector set id
+   \param[out] mem
+   \param[out] color color value
+   \param[out] width
+   \param[out] flat
 
-  \return -1 on error (invalid vector set id)
-  \return 1 on success
-*/
+   \return -1 on error (invalid vector set id)
+   \return 1 on success
+ */
 int GV_get_vectmode(int id, int *mem, int *color, int *width, int *flat)
 {
     geovect *gv;
@@ -273,11 +273,11 @@ int GV_get_vectmode(int id, int *mem, int *color, int *width, int *flat)
 }
 
 /*!
-  \brief Set trans ?
+   \brief Set trans ?
 
-  \param id vector set id
-  \param xtrans,ytrans,ztrans x/y/z trans values
-*/
+   \param id vector set id
+   \param xtrans,ytrans,ztrans x/y/z trans values
+ */
 void GV_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geovect *gv;
@@ -296,11 +296,11 @@ void GV_set_trans(int id, float xtrans, float ytrans, float ztrans)
 }
 
 /*!
-  \brief Get trans ?
+   \brief Get trans ?
 
-  \param id vector set id
-  \param[out] xtrans,ytrans,ztrans x/y/z trans values
-*/
+   \param id vector set id
+   \param[out] xtrans,ytrans,ztrans x/y/z trans values
+ */
 int GV_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 {
     geovect *gv;
@@ -319,15 +319,15 @@ int GV_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
 }
 
 /*!
-  \brief Select surface identified by hs to have vector identified
-  by hv draped over it
+   \brief Select surface identified by hs to have vector identified
+   by hv draped over it
 
-  \param hv vector set id
-  \param hs surface id
+   \param hv vector set id
+   \param hs surface id
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GV_select_surf(int hv, int hs)
 {
     geovect *gv;
@@ -349,14 +349,14 @@ int GV_select_surf(int hv, int hs)
 }
 
 /*!
-  \brief Unselect surface
+   \brief Unselect surface
 
-  \param hv vector set id
-  \param hs surface id
+   \param hv vector set id
+   \param hs surface id
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GV_unselect_surf(int hv, int hs)
 {
     geovect *gv;
@@ -386,14 +386,14 @@ int GV_unselect_surf(int hv, int hs)
 }
 
 /*!
-  \brief Check if surface is selected
+   \brief Check if surface is selected
 
-  \param hv vector set id
-  \param hs surface id
+   \param hv vector set id
+   \param hs surface id
 
-  \return 1 selected
-  \return 0 not selected
-*/
+   \return 1 selected
+   \return 0 not selected
+ */
 int GV_surf_is_selected(int hv, int hs)
 {
     int i;
@@ -413,10 +413,10 @@ int GV_surf_is_selected(int hv, int hs)
 }
 
 /*!
-  \brief Draw vector set
+   \brief Draw vector set
 
-  \param vid vector set id
-*/
+   \param vid vector set id
+ */
 void GV_draw_vect(int vid)
 {
     geosurf *gs;
@@ -439,8 +439,8 @@ void GV_draw_vect(int vid)
 }
 
 /*!
-  \brief Draw all loaded vector sets
-*/
+   \brief Draw all loaded vector sets
+ */
 void GV_alldraw_vect(void)
 {
     int id;
@@ -453,12 +453,12 @@ void GV_alldraw_vect(void)
 }
 
 /*!
-  \brief Draw vector set (fast mode)
+   \brief Draw vector set (fast mode)
 
-  \todo Seems to be broken, nothing is drawn
+   \todo Seems to be broken, nothing is drawn
 
-  \param vid vector set id
-*/
+   \param vid vector set id
+ */
 void GV_draw_fastvect(int vid)
 {
     geosurf *gs;
@@ -481,8 +481,8 @@ void GV_draw_fastvect(int vid)
 }
 
 /*!
-  \brief Draw all loaded vector sets (fast mode)
-*/
+   \brief Draw all loaded vector sets (fast mode)
+ */
 void GV_alldraw_fastvect(void)
 {
     int id;
@@ -490,19 +490,19 @@ void GV_alldraw_fastvect(void)
     for (id = 0; id < Next_vect; id++) {
 	GV_draw_fastvect(Vect_ID[id]);
     }
-    
+
     return;
 }
 
 /*!
-  \brief Set client data
+   \brief Set client data
 
-  \param id vector set id
-  \param clientd pointer to client data
+   \param id vector set id
+   \param clientd pointer to client data
 
-  \return 1 on success
-  \return -1 on error
-*/
+   \return 1 on success
+   \return -1 on error
+ */
 int GV_Set_ClientData(int id, void *clientd)
 {
     geovect *gv;
@@ -518,13 +518,13 @@ int GV_Set_ClientData(int id, void *clientd)
 }
 
 /*!
-  \brief Get client data
+   \brief Get client data
 
-  \param id vector set id
+   \param id vector set id
 
-  \return pointer to client data
-  \return NULL on error
-*/
+   \return pointer to client data
+   \return NULL on error
+ */
 void *GV_Get_ClientData(int id)
 {
     geovect *gv;

@@ -26,25 +26,24 @@ int I_free(void *b)
     if ((char *)b != NULL)
 	G_free(b);
 
-	return 0;
+    return 0;
 }
 
 
-double **I_alloc_double2(int a,int b)
+double **I_alloc_double2(int a, int b)
 {
     double **x;
     int i;
 
-    x = (double **) I_malloc ((a+1) * sizeof(double *));
+    x = (double **)I_malloc((a + 1) * sizeof(double *));
 
-    for (i = 0; i < a; i++)
-    {
-        int n;
+    for (i = 0; i < a; i++) {
+	int n;
 
-	x[i]= (double *) I_malloc (b * sizeof(double));
+	x[i] = (double *)I_malloc(b * sizeof(double));
 
-        for (n=0; n<b; n++)
-            x[i][n] = 0;
+	for (n = 0; n < b; n++)
+	    x[i][n] = 0;
     }
     x[a] = NULL;
 
@@ -57,7 +56,7 @@ int *I_alloc_int(int a)
     int *x;
     int i;
 
-    x = (int *) I_malloc (a * sizeof(int));
+    x = (int *)I_malloc(a * sizeof(int));
 
     for (i = 0; i < a; i++)
 	x[i] = 0;
@@ -65,19 +64,18 @@ int *I_alloc_int(int a)
     return x;
 }
 
-int **I_alloc_int2 (int a,int b)
+int **I_alloc_int2(int a, int b)
 {
     int **x;
-    int i,n;
+    int i, n;
 
-    x = (int **) I_malloc ((a+1) * sizeof(int *));
+    x = (int **)I_malloc((a + 1) * sizeof(int *));
 
-    for (i = 0; i < a; i++)
-    {
-	x[i]= (int *) I_malloc (b * sizeof(int));
+    for (i = 0; i < a; i++) {
+	x[i] = (int *)I_malloc(b * sizeof(int));
 
-        for (n=0; n<b; n++)
-            x[i][n] = 0;
+	for (n = 0; n < b; n++)
+	    x[i][n] = 0;
     }
     x[a] = NULL;
 
@@ -89,14 +87,13 @@ int I_free_int2(int **x)
 {
     int i;
 
-    if (x != NULL)
-    {
-	for (i=0; x[i] != NULL; i++)
+    if (x != NULL) {
+	for (i = 0; x[i] != NULL; i++)
 	    G_free(x[i]);
 	G_free(x);
     }
 
-	return 0;
+    return 0;
 }
 
 
@@ -104,34 +101,31 @@ int I_free_double2(double **x)
 {
     int i;
 
-    if (x != NULL)
-    {
-	for (i=0; x[i] != NULL; i++)
+    if (x != NULL) {
+	for (i = 0; x[i] != NULL; i++)
 	    G_free(x[i]);
 	G_free(x);
     }
 
-	return 0;
+    return 0;
 }
 
 
-double ***I_alloc_double3 (int a,int b,int c)
+double ***I_alloc_double3(int a, int b, int c)
 {
     double ***x;
-    int i,n;
+    int i, n;
 
-    x = (double ***)G_malloc((a+1) * sizeof(double **));
+    x = (double ***)G_malloc((a + 1) * sizeof(double **));
 
-    for (i = 0; i < a; i++)
-    {
-	x[i] = I_alloc_double2 (b,c);
-	if (x[i] == NULL)
-	{
-	    for (n=0; n<i; n++)
+    for (i = 0; i < a; i++) {
+	x[i] = I_alloc_double2(b, c);
+	if (x[i] == NULL) {
+	    for (n = 0; n < i; n++)
 		G_free(x[n]);
 	    G_free(x);
 
-	    return (double ***) NULL;
+	    return (double ***)NULL;
 	}
     }
     x[a] = NULL;
@@ -140,16 +134,15 @@ double ***I_alloc_double3 (int a,int b,int c)
 }
 
 
-int I_free_double3 (double ***x)
+int I_free_double3(double ***x)
 {
     int i;
 
-    if (x != NULL)
-    {
+    if (x != NULL) {
 	for (i = 0; x[i] != NULL; i++)
-	    I_free_double2 (x[i]);
+	    I_free_double2(x[i]);
 	G_free(x);
     }
 
-	return 0;
+    return 0;
 }

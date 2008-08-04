@@ -1,3 +1,4 @@
+
 /*-
  * from s.qcount - GRASS program to sample a raster map at site locations.
  * Copyright (C) 1993-1995. James Darrell McCauley.
@@ -40,146 +41,163 @@
 #include <grass/glocale.h>
 #include "quaddefs.h"
 
-int main ( int argc, char **argv)
+int main(int argc, char **argv)
 {
-  char *mapset;
-  double radius;
-  double fisher, david, douglas, lloyd, lloydip, morisita;
-  int i, nquads, *counts;
+    char *mapset;
+    double radius;
+    double fisher, david, douglas, lloyd, lloydip, morisita;
+    int i, nquads, *counts;
 
-  struct Cell_head window;
-  struct GModule *module;
-  struct
-  {
-    struct Option *input, *output, *n, *r;
-  } parm;
-  struct
-  {
-    struct Flag *g;
-  } flag;
-  COOR *quads;
+    struct Cell_head window;
+    struct GModule *module;
+    struct
+    {
+	struct Option *input, *output, *n, *r;
+    } parm;
+    struct
+    {
+	struct Flag *g;
+    } flag;
+    COOR *quads;
 
-  struct Map_info Map;
+    struct Map_info Map;
 
-  G_gisinit (argv[0]);
+    G_gisinit(argv[0]);
 
-  module = G_define_module();
-  module->keywords = _("vector, statistics");
-  module->description = _("Indices for quadrat counts of sites lists.");
-                  
-  parm.input = G_define_option ();
-  parm.input->key = "input";
-  parm.input->type = TYPE_STRING;
-  parm.input->required = YES;
-  parm.input->description = _("Vector of points defining sample points");
-  parm.input->gisprompt = "old,vector,vector";
+    module = G_define_module();
+    module->keywords = _("vector, statistics");
+    module->description = _("Indices for quadrat counts of sites lists.");
 
-  parm.output = G_define_option ();
-  parm.output->key = "output";
-  parm.output->type = TYPE_STRING;
-  parm.output->required = NO;
-  parm.output->description = _("Output quadrant centres, number of points is written as category");
-  parm.output->gisprompt = "new,vector,vector";
+    parm.input = G_define_option();
+    parm.input->key = "input";
+    parm.input->type = TYPE_STRING;
+    parm.input->required = YES;
+    parm.input->description = _("Vector of points defining sample points");
+    parm.input->gisprompt = "old,vector,vector";
 
-  parm.n = G_define_option ();
-  parm.n->key = "n";
-  parm.n->type = TYPE_INTEGER;
-  parm.n->required = YES;
-  parm.n->description = _("Number of quadrats");
-  parm.n->options = NULL;
+    parm.output = G_define_option();
+    parm.output->key = "output";
+    parm.output->type = TYPE_STRING;
+    parm.output->required = NO;
+    parm.output->description =
+	_("Output quadrant centres, number of points is written as category");
+    parm.output->gisprompt = "new,vector,vector";
 
-  parm.r = G_define_option ();
-  parm.r->key = "r";
-  parm.r->type = TYPE_DOUBLE;
-  parm.r->required = YES;
-  parm.r->description = _("Quadrat radius");
-  parm.r->options = NULL;
-  
-  flag.g = G_define_flag ();
-  flag.g->key = 'g';
-  flag.g->description = _("Print results in shell script style");
+    parm.n = G_define_option();
+    parm.n->key = "n";
+    parm.n->type = TYPE_INTEGER;
+    parm.n->required = YES;
+    parm.n->description = _("Number of quadrats");
+    parm.n->options = NULL;
 
-  if (G_parser (argc, argv))
-    exit (EXIT_FAILURE);
+    parm.r = G_define_option();
+    parm.r->key = "r";
+    parm.r->type = TYPE_DOUBLE;
+    parm.r->required = YES;
+    parm.r->description = _("Quadrat radius");
+    parm.r->options = NULL;
 
-  sscanf(parm.n->answer,"%d",&nquads);
-  sscanf(parm.r->answer,"%lf",&radius);
+    flag.g = G_define_flag();
+    flag.g->key = 'g';
+    flag.g->description = _("Print results in shell script style");
 
-  G_get_window (&window);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
-  /* Open input */
-  if ((mapset = G_find_vector2 (parm.input->answer, "")) == NULL) {
-    G_fatal_error (_("Vector map <%s> not found"), parm.input->answer);
-  }
-  Vect_set_open_level (2);
-  Vect_open_old (&Map, parm.input->answer, mapset);
+    sscanf(parm.n->answer, "%d", &nquads);
+    sscanf(parm.r->answer, "%lf", &radius);
 
-  /* Get the quadrats */
-  G_message(_("Finding quadrats..."));
-  
-  quads = find_quadrats (nquads, radius, window);
+    G_get_window(&window);
 
-  /* Get the counts per quadrat */
-  G_message(_("Counting sites in quadrats..."));
+    /* Open input */
+    if ((mapset = G_find_vector2(parm.input->answer, "")) == NULL) {
+	G_fatal_error(_("Vector map <%s> not found"), parm.input->answer);
+    }
+    Vect_set_open_level(2);
+    Vect_open_old(&Map, parm.input->answer, mapset);
 
-  counts = (int *) G_malloc (nquads * (sizeof(int)));
-  count_sites (quads, nquads, counts, radius, &Map);
+    /* Get the quadrats */
+    G_message(_("Finding quadrats..."));
 
-  Vect_close ( &Map );
+    quads = find_quadrats(nquads, radius, window);
 
-  /* output if requested */
-  if ( parm.output->answer )
-  {
-    struct Map_info Out;
-    struct line_pnts *Points;
-    struct line_cats *Cats;
+    /* Get the counts per quadrat */
+    G_message(_("Counting sites in quadrats..."));
 
-    Points = Vect_new_line_struct ();
-    Cats = Vect_new_cats_struct ();
+    counts = (int *)G_malloc(nquads * (sizeof(int)));
+    count_sites(quads, nquads, counts, radius, &Map);
 
-    Vect_open_new (&Out, parm.output->answer, 0);
-    Vect_hist_command ( &Out );
+    Vect_close(&Map);
 
-    for (i = 0; i < nquads; i++) {
-      Vect_reset_line ( Points );
-      Vect_reset_cats ( Cats );
-      
-      Vect_append_point ( Points, quads[i].x, quads[i].y, 0.0 );
-      Vect_cat_set ( Cats, 1, counts[i] ); 
+    /* output if requested */
+    if (parm.output->answer) {
+	struct Map_info Out;
+	struct line_pnts *Points;
+	struct line_cats *Cats;
 
-      Vect_write_line ( &Out, GV_POINT, Points, Cats );
+	Points = Vect_new_line_struct();
+	Cats = Vect_new_cats_struct();
+
+	Vect_open_new(&Out, parm.output->answer, 0);
+	Vect_hist_command(&Out);
+
+	for (i = 0; i < nquads; i++) {
+	    Vect_reset_line(Points);
+	    Vect_reset_cats(Cats);
+
+	    Vect_append_point(Points, quads[i].x, quads[i].y, 0.0);
+	    Vect_cat_set(Cats, 1, counts[i]);
+
+	    Vect_write_line(&Out, GV_POINT, Points, Cats);
+	}
+
+	Vect_build(&Out, stderr);
+	Vect_close(&Out);
+
     }
 
-    Vect_build ( &Out, stderr );
-    Vect_close ( &Out );
-    
-  }
+    /* Indices if requested */
+    qindices(counts, nquads, &fisher, &david, &douglas, &lloyd, &lloydip,
+	     &morisita);
 
-  /* Indices if requested */
-  qindices (counts, nquads, &fisher, &david, &douglas, &lloyd, &lloydip, &morisita);
+    if (!flag.g->answer) {
+	fprintf(stdout,
+		"-----------------------------------------------------------\n");
+	fprintf(stdout,
+		"Index                                           Realization\n");
+	fprintf(stdout,
+		"-----------------------------------------------------------\n");
+	fprintf(stdout,
+		"Fisher el al (1922) Relative Variance            %g\n",
+		fisher);
+	fprintf(stdout,
+		"David & Moore (1954) Index of Cluster Size       %g\n",
+		david);
+	fprintf(stdout,
+		"Douglas (1975) Index of Cluster Frequency        %g\n",
+		douglas);
+	fprintf(stdout,
+		"Lloyd (1967) \"mean crowding\"                     %g\n",
+		lloyd);
+	fprintf(stdout,
+		"Lloyd (1967) Index of patchiness                 %g\n",
+		lloydip);
+	fprintf(stdout,
+		"Morisita's (1959) I (variability b/n patches)    %g\n",
+		morisita);
+	fprintf(stdout,
+		"-----------------------------------------------------------\n");
+    }
+    else {
+	fprintf(stdout, "fisher=%g\n", fisher);
+	fprintf(stdout, "david=%g\n", david);
+	fprintf(stdout, "douglas=%g\n", douglas);
+	fprintf(stdout, "lloyd=%g\n", lloyd);
+	fprintf(stdout, "lloydip=%g\n", lloydip);
+	fprintf(stdout, "morisita=%g\n", morisita);
+    }
 
-  if (!flag.g->answer) {
-    fprintf(stdout,"-----------------------------------------------------------\n");
-    fprintf(stdout,"Index                                           Realization\n");
-    fprintf(stdout,"-----------------------------------------------------------\n");
-    fprintf(stdout,"Fisher el al (1922) Relative Variance            %g\n",fisher);
-    fprintf(stdout,"David & Moore (1954) Index of Cluster Size       %g\n",david);
-    fprintf(stdout,"Douglas (1975) Index of Cluster Frequency        %g\n",douglas);
-    fprintf(stdout,"Lloyd (1967) \"mean crowding\"                     %g\n",lloyd);
-    fprintf(stdout,"Lloyd (1967) Index of patchiness                 %g\n",lloydip);
-    fprintf(stdout,"Morisita's (1959) I (variability b/n patches)    %g\n",morisita);
-    fprintf(stdout,"-----------------------------------------------------------\n");
-  }
-  else {
-    fprintf(stdout,"fisher=%g\n",fisher);
-    fprintf(stdout,"david=%g\n",david);
-    fprintf(stdout,"douglas=%g\n",douglas);
-    fprintf(stdout,"lloyd=%g\n",lloyd);
-    fprintf(stdout,"lloydip=%g\n",lloydip);
-    fprintf(stdout,"morisita=%g\n",morisita);
-  }
 
 
-
-  exit (EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }

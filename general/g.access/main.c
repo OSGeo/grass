@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       g.access
@@ -21,12 +22,11 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-int 
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     char path[1024];
-    int perms; /* full mapset permissions */
-    int group, other; /* bool. want group/other permission */
+    int perms;			/* full mapset permissions */
+    int group, other;		/* bool. want group/other permission */
     struct Option *group_opt, *other_opt;
     struct GModule *module;
 
@@ -36,7 +36,8 @@ main (int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("general");
     module->description =
-	_("Controls access to the current mapset for other users on the system.");
+	_
+	("Controls access to the current mapset for other users on the system.");
 
     group_opt = G_define_option();
     group_opt->key = "group";
@@ -56,34 +57,31 @@ main (int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* get the unix file name for the mapset directory */
-    G__file_name (path, "", "", G_mapset());
-    
+    G__file_name(path, "", "", G_mapset());
+
     /* this part is until PERMANENT no longer holds DEFAULT_WIND and MYNAME */
-    if (strcmp (G_mapset(), "PERMANENT") == 0)
-	G_fatal_error(
-	  _("Access to the PERMANENT mapset must be open, nothing changed"));
+    if (strcmp(G_mapset(), "PERMANENT") == 0)
+	G_fatal_error(_
+		      ("Access to the PERMANENT mapset must be open, nothing changed"));
 
     /* get the current permissions */
-    if(get_perms (path, &perms, &group, &other) < 0)
+    if (get_perms(path, &perms, &group, &other) < 0)
 	G_fatal_error(_("Unable to determine mapset permssions"));
 
-    if ( group_opt->answer ) {
-	if ( group_opt->answer[0] == 'g' )
+    if (group_opt->answer) {
+	if (group_opt->answer[0] == 'g')
 	    group = 1;
 	else
 	    group = 0;
     }
-    if ( other_opt->answer ) {
-	if ( other_opt->answer[0] == 'g' )
+    if (other_opt->answer) {
+	if (other_opt->answer[0] == 'g')
 	    other = 1;
 	else
 	    other = 0;
     }
-    
-    set_perms (path, perms, group, other);
+
+    set_perms(path, perms, group, other);
 
     exit(EXIT_SUCCESS);
 }
-
-
-

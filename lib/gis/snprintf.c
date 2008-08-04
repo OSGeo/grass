@@ -1,3 +1,4 @@
+
 /**
  * \file snprintf.c
  *
@@ -47,7 +48,7 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     int count;
 
     va_start(ap, fmt);
-    count = vsnprintf (str, size, fmt, ap);
+    count = vsnprintf(str, size, fmt, ap);
     va_end(ap);
 
     return count;

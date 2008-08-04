@@ -1,12 +1,12 @@
 /*
-* AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
- *			Commission from Faunalia Pontedera (PI) www.faunalia.it
+ * AUTHOR: Serena Pallecchi student of Computer Science University of Pisa (Italy)
+ *                      Commission from Faunalia Pontedera (PI) www.faunalia.it
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the COPYING file that comes with GRASS for details.
- *	 
- *	 BUGS: please send bugs reports to  pallecch@cli.di.unipi.it
-*/
+ *       
+ *       BUGS: please send bugs reports to  pallecch@cli.di.unipi.it
+ */
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -25,21 +25,15 @@ typedef union cella
     CELL c;
     DCELL dc;
     FCELL fc;
-}cella;
+} cella;
 
 typedef struct generic_cell
 {
     int t;
     cella val;
-}generic_cell;
+} generic_cell;
 
 #endif
 
 void printGenericCell(generic_cell c);
-int equalsGenericCell (generic_cell c1, generic_cell c2);
-
-
-
-
-
-
+int equalsGenericCell(generic_cell c1, generic_cell c2);

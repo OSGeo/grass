@@ -108,4 +108,3 @@ void release_input_maps_struct(input_maps * in)
 
     return;
 }
-

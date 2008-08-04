@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:      r.bitpattern
@@ -39,8 +40,7 @@
 
 extern CELL f_c(CELL);
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct Cell_head cellhd;
     char *name, *result, *mapset;
@@ -132,7 +132,8 @@ main(int argc, char *argv[])
 
 	/* read input map */
 	if (G_get_raster_row(infd, inrast, row, data_type) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name, row);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name,
+			  row);
 
 	/*process the data */
 	for (col = 0; col < ncols; col++) {
@@ -140,7 +141,7 @@ main(int argc, char *argv[])
 	    c = ((CELL *) inrast)[col];
 	    /*((CELL *) outrast)[col] = c; */
 	    if ((c & pat) == patv)
-	   	((CELL *) outrast)[col] = 1;
+		((CELL *) outrast)[col] = 1;
 	    else
 		((CELL *) outrast)[col] = 0;
 

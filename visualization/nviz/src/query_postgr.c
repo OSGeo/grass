@@ -11,6 +11,7 @@ char *query_postgr(name, keytable, col, x, y)
 
      char *name, *keytable, *col;
      float x, y;
+
 #if defined(HAVE_LIBPQ_FE_H)
 
 {
@@ -52,11 +53,11 @@ char *query_postgr(name, keytable, col, x, y)
 
 
 
-    qry_str = (char *) getCat(&P_map, x, y, &dbCat);
+    qry_str = (char *)getCat(&P_map, x, y, &dbCat);
     sprintf(long_str, "%s", qry_str);
     if (dbCat > 0) {
-	SQL_stmt = (char *) buildPg(keytable, col, dbCat);
-	qry_str = (char *) runPg(SQL_stmt);
+	SQL_stmt = (char *)buildPg(keytable, col, dbCat);
+	qry_str = (char *)runPg(SQL_stmt);
 	if (qry_str != NULL)
 	    strncat(long_str, qry_str, QRY_LENGTH);
 	else {
@@ -89,6 +90,7 @@ char *query_pg_site(name, xcol, ycol, dist, x, y)
      char *name, *xcol, *ycol;
      int dist;
      float x, y;
+
 #if defined(HAVE_LIBPQ_FE_H)
 
 {
@@ -104,7 +106,7 @@ char *query_pg_site(name, xcol, ycol, dist, x, y)
     memset(buf, '\0', sizeof(buf));
     memset(long_str, '\0', sizeof(long_str));
 
-/* Check DATABASE env variable */
+    /* Check DATABASE env variable */
     if ((dbname = G__getenv("PG_DBASE")) == NULL) {
 	sprintf(buf, "Please run g.select.pg first\n");
 	return buf;
@@ -112,7 +114,7 @@ char *query_pg_site(name, xcol, ycol, dist, x, y)
     SQL_stmt = buildPgSite(name, ycol, xcol);
 
     /* Initialze SQL query structure        */
-    pts = (struct Sql *) G_malloc(sizeof(struct Sql));
+    pts = (struct Sql *)G_malloc(sizeof(struct Sql));
     G_zero(pts, sizeof(struct Sql));
     ret = fillSQLstruct(pts, x, y, dist);
 

@@ -24,11 +24,11 @@
 
 int LOC_screen_left(void)
 {
-	int l;
+    int l;
 
-	COM_Screen_left(&l);
+    COM_Screen_left(&l);
 
-	return l;
+    return l;
 }
 
 /*!
@@ -42,11 +42,11 @@ int LOC_screen_left(void)
 
 int LOC_screen_rite(void)
 {
-	int r;
+    int r;
 
-	COM_Screen_rite(&r);
+    COM_Screen_rite(&r);
 
-	return r;
+    return r;
 }
 
 /*!
@@ -60,11 +60,11 @@ int LOC_screen_rite(void)
 
 int LOC_screen_bot(void)
 {
-	int b;
+    int b;
 
-	COM_Screen_bot(&b);
+    COM_Screen_bot(&b);
 
-	return b;
+    return b;
 }
 
 
@@ -79,16 +79,16 @@ int LOC_screen_bot(void)
 
 int LOC_screen_top(void)
 {
-	int t;
+    int t;
 
-	COM_Screen_top(&t);
+    COM_Screen_top(&t);
 
-	return t;
+    return t;
 }
 
 void LOC_get_num_colors(int *n)
 {
-	COM_Number_of_colors(n);
+    COM_Number_of_colors(n);
 }
 
 /*!
@@ -105,7 +105,7 @@ void LOC_get_num_colors(int *n)
 
 void LOC_standard_color(int index)
 {
-	COM_Standard_color(index);
+    COM_Standard_color(index);
 }
 
 /*!
@@ -124,7 +124,7 @@ void LOC_standard_color(int index)
 
 void LOC_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 {
-	COM_Color_RGB(red, grn, blu);
+    COM_Color_RGB(red, grn, blu);
 }
 
 /*!
@@ -138,7 +138,7 @@ void LOC_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 
 void LOC_line_width(int width)
 {
-	COM_Line_width(width);
+    COM_Line_width(width);
 }
 
 /*!
@@ -152,7 +152,7 @@ void LOC_line_width(int width)
 
 void LOC_erase(void)
 {
-	COM_Erase();
+    COM_Erase();
 }
 
 /*!
@@ -168,7 +168,7 @@ void LOC_erase(void)
 
 void LOC_move_abs(int x, int y)
 {
-	COM_Move_abs(x, y);
+    COM_Move_abs(x, y);
 }
 
 /*!
@@ -176,8 +176,8 @@ void LOC_move_abs(int x, int y)
  *
  * Shift the current screen location by the values in <b>dx</b> and <b>dy</b>:
  \code
-   Newx = Oldx + dx;
-   Newy = Oldy + dy;
+ Newx = Oldx + dx;
+ Newy = Oldy + dy;
  \endcode
  * Nothing is drawn on the screen.
  *
@@ -188,7 +188,7 @@ void LOC_move_abs(int x, int y)
 
 void LOC_move_rel(int x, int y)
 {
-	COM_Move_rel(x, y);
+    COM_Move_rel(x, y);
 }
 
 /*!
@@ -205,7 +205,7 @@ void LOC_move_rel(int x, int y)
 
 void LOC_cont_abs(int x, int y)
 {
-	COM_Cont_abs(x, y);
+    COM_Cont_abs(x, y);
 }
 
 /*!
@@ -215,10 +215,10 @@ void LOC_cont_abs(int x, int y)
  * current color, selected via <i>R_color</i>, from the current location to
  * the relative location specified by <b>x</b> and <b>y.</b> The current
  * location is updated:
-  \code
-   Newx = Oldx + x;
-   Newy = Oldy + y;
-  \endcode
+ \code
+ Newx = Oldx + x;
+ Newy = Oldy + y;
+ \endcode
  *
  *  \param x
  *  \param y
@@ -227,7 +227,7 @@ void LOC_cont_abs(int x, int y)
 
 void LOC_cont_rel(int x, int y)
 {
-	COM_Cont_rel(x, y);
+    COM_Cont_rel(x, y);
 }
 
 /*!
@@ -245,7 +245,7 @@ void LOC_cont_rel(int x, int y)
 
 void LOC_polydots_abs(const int *xarray, const int *yarray, int number)
 {
-	COM_Polydots_abs(xarray, yarray, number);
+    COM_Polydots_abs(xarray, yarray, number);
 }
 
 /*!
@@ -265,7 +265,7 @@ void LOC_polydots_abs(const int *xarray, const int *yarray, int number)
 
 void LOC_polydots_rel(const int *xarray, const int *yarray, int number)
 {
-	COM_Polydots_rel(xarray, yarray, number);
+    COM_Polydots_rel(xarray, yarray, number);
 }
 
 /*!
@@ -286,7 +286,7 @@ void LOC_polydots_rel(const int *xarray, const int *yarray, int number)
 
 void LOC_polyline_abs(const int *xarray, const int *yarray, int number)
 {
-	COM_Polyline_abs(xarray, yarray, number);
+    COM_Polyline_abs(xarray, yarray, number);
 }
 
 /*!
@@ -308,7 +308,7 @@ void LOC_polyline_abs(const int *xarray, const int *yarray, int number)
 
 void LOC_polyline_rel(const int *xarray, const int *yarray, int number)
 {
-	COM_Polyline_rel(xarray, yarray, number);
+    COM_Polyline_rel(xarray, yarray, number);
 }
 
 /*!
@@ -326,7 +326,7 @@ void LOC_polyline_rel(const int *xarray, const int *yarray, int number)
 
 void LOC_polygon_abs(const int *xarray, const int *yarray, int number)
 {
-	COM_Polygon_abs(xarray, yarray, number);
+    COM_Polygon_abs(xarray, yarray, number);
 }
 
 /*!
@@ -346,7 +346,7 @@ void LOC_polygon_abs(const int *xarray, const int *yarray, int number)
 
 void LOC_polygon_rel(const int *xarray, const int *yarray, int number)
 {
-	COM_Polygon_rel(xarray, yarray, number);
+    COM_Polygon_rel(xarray, yarray, number);
 }
 
 /*!
@@ -365,7 +365,7 @@ void LOC_polygon_rel(const int *xarray, const int *yarray, int number)
 
 void LOC_box_abs(int x1, int y1, int x2, int y2)
 {
-	COM_Box_abs(x1, y1, x2, y2);
+    COM_Box_abs(x1, y1, x2, y2);
 }
 
 
@@ -383,7 +383,7 @@ void LOC_box_abs(int x1, int y1, int x2, int y2)
 
 void LOC_box_rel(int x, int y)
 {
-	COM_Box_rel(x, y);
+    COM_Box_rel(x, y);
 }
 
 /*!
@@ -398,12 +398,12 @@ void LOC_box_rel(int x, int y)
 
 void LOC_text_size(int width, int height)
 {
-	COM_Text_size(width, height);
+    COM_Text_size(width, height);
 }
 
 void LOC_text_rotation(float rotation)
 {
-	COM_Text_rotation(rotation);
+    COM_Text_rotation(rotation);
 }
 
 /*!
@@ -421,7 +421,7 @@ void LOC_text_rotation(float rotation)
 
 void LOC_set_window(int t, int b, int l, int r)
 {
-	COM_Set_window(t, b, l, r);
+    COM_Set_window(t, b, l, r);
 }
 
 /*!
@@ -436,7 +436,7 @@ void LOC_set_window(int t, int b, int l, int r)
 
 void LOC_text(const char *text)
 {
-	COM_Text(text);
+    COM_Text(text);
 }
 
 /*!
@@ -458,7 +458,7 @@ void LOC_text(const char *text)
 
 void LOC_get_text_box(const char *text, int *t, int *b, int *l, int *r)
 {
-	COM_Get_text_box(text, t, b, l, r);
+    COM_Get_text_box(text, t, b, l, r);
 }
 
 /*!
@@ -495,65 +495,64 @@ void LOC_get_text_box(const char *text, int *t, int *b, int *l, int *r)
 
 void LOC_font(const char *name)
 {
-	COM_Font_get(name);
+    COM_Font_get(name);
 }
 
 void LOC_charset(const char *name)
 {
-	COM_Font_init_charset(name);
+    COM_Font_init_charset(name);
 }
 
 void LOC_font_list(char ***list, int *count)
 {
-	COM_Font_list(list, count);
+    COM_Font_list(list, count);
 }
 
 void LOC_font_info(char ***list, int *count)
 {
-	COM_Font_info(list, count);
+    COM_Font_info(list, count);
 }
 
 void LOC_panel_save(const char *name, int t, int b, int l, int r)
 {
-	close(creat(name, 0666));
+    close(creat(name, 0666));
 
-	COM_Panel_save(name, t, b, l, r);
-	R_stabilize();
+    COM_Panel_save(name, t, b, l, r);
+    R_stabilize();
 }
 
 void LOC_panel_restore(const char *name)
 {
-	COM_Panel_restore(name);
-	R_stabilize();
+    COM_Panel_restore(name);
+    R_stabilize();
 }
 
 void LOC_panel_delete(const char *name)
 {
-	COM_Panel_delete(name);
-	R_stabilize();
+    COM_Panel_delete(name);
+    R_stabilize();
 
-	remove(name);
+    remove(name);
 }
 
 void LOC_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
 {
-	COM_begin_scaled_raster(mask, src, dst);
+    COM_begin_scaled_raster(mask, src, dst);
 }
 
 int LOC_scaled_raster(int n, int row,
-	const unsigned char *red, const unsigned char *grn, const unsigned char *blu,
-	const unsigned char *nul)
+		      const unsigned char *red, const unsigned char *grn,
+		      const unsigned char *blu, const unsigned char *nul)
 {
-	return COM_scaled_raster(n, row, red, grn, blu, nul);
+    return COM_scaled_raster(n, row, red, grn, blu, nul);
 }
 
 void LOC_end_scaled_raster(void)
 {
-	COM_end_scaled_raster();
+    COM_end_scaled_raster();
 }
 
 void LOC_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
-	COM_Bitmap(ncols, nrows, threshold, buf);
+    COM_Bitmap(ncols, nrows, threshold, buf);
 }
-

@@ -14,7 +14,7 @@
  * FOR THE SOFTWARE AND/OR DOCUMENTATION PROVIDED, INCLUDING, WITHOUT
  * LIMITATION, WARRANTY OF MERCHANTABILITY AND WARRANTY OF FITNESS FOR A
  * PARTICULAR PURPOSE.
-*/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,19 +27,20 @@
 
 
 #ifndef USE_PPM
+
 /*******************************************************/
-void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols, 
-               int *y_rows, int *y_cols, char *filename)
+void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
+	       int *y_rows, int *y_cols, char *filename)
 {
     register int x, y;
     register unsigned char *dy0, *dy1;
     register unsigned char *dcr, *dcb;
     register unsigned char src0[6], src1[6];
     static int rows, cols;
-    static int  first = 1;
-    static float  mult299[256], mult587[256], mult114[256];
-    static float  mult16874[256], mult33126[256], mult5[256];
-    static float  mult41869[256], mult08131[256];
+    static int first = 1;
+    static float mult299[256], mult587[256], mult114[256];
+    static float mult16874[256], mult33126[256], mult5[256];
+    static float mult41869[256], mult08131[256];
     static unsigned char *cy, *cr, *cb;
     FILE *ofp;
 
@@ -50,46 +51,42 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
     *y_rows &= ~0x0f;
     *y_cols &= ~0x0f;
 
-    if (first)
-    {
-        register int index;
+    if (first) {
+	register int index;
 
 	rows = *y_rows;
 	cols = *y_cols;
 
-        for (index = 0; index <= 255; index++ )
-        {
-            mult299[index]   = index*0.29900;
-            mult587[index]   = index*0.58700;
-            mult114[index]   = index*0.11400;
-            mult16874[index] = -0.16874*index;
-            mult33126[index] = -0.33126*index;
-            mult5[index]     = index*0.50000;
-            mult41869[index] = -0.41869*index;
-            mult08131[index] = -0.08131*index;
-        }
+	for (index = 0; index <= 255; index++) {
+	    mult299[index] = index * 0.29900;
+	    mult587[index] = index * 0.58700;
+	    mult114[index] = index * 0.11400;
+	    mult16874[index] = -0.16874 * index;
+	    mult33126[index] = -0.33126 * index;
+	    mult5[index] = index * 0.50000;
+	    mult41869[index] = -0.41869 * index;
+	    mult08131[index] = -0.08131 * index;
+	}
 
-	cy = (unsigned char *)G_malloc (rows*cols*sizeof(unsigned char));
-	cr = (unsigned char *)G_malloc ((rows / 2) * (cols / 2)
-                                        * sizeof(unsigned char));
-	cb = (unsigned char *)G_malloc ((rows / 2) * (cols / 2)
-                                        * sizeof(unsigned char));
+	cy = (unsigned char *)G_malloc(rows * cols * sizeof(unsigned char));
+	cr = (unsigned char *)G_malloc((rows / 2) * (cols / 2)
+				       * sizeof(unsigned char));
+	cb = (unsigned char *)G_malloc((rows / 2) * (cols / 2)
+				       * sizeof(unsigned char));
 
-        first = 0;
+	first = 0;
     }
 
     if (*y_rows != rows || *y_cols != cols)
 	G_fatal_error(_("Size mismatch error!"));
 
-    for (y = 0; y < rows-1; y += 2)
-    {
-	dy0 = &cy[y*cols];
-	dy1 = &cy[(y+1)*cols];
-	dcr = &cr[(cols/2)*(y / 2)];
-	dcb = &cb[(cols/2)*(y / 2)];
+    for (y = 0; y < rows - 1; y += 2) {
+	dy0 = &cy[y * cols];
+	dy1 = &cy[(y + 1) * cols];
+	dcr = &cr[(cols / 2) * (y / 2)];
+	dcb = &cb[(cols / 2) * (y / 2)];
 
-	for (x = 0; x < cols-1; x += 2, dy0 += 2, dy1 += 2, dcr++, dcb++)
-        {
+	for (x = 0; x < cols - 1; x += 2, dy0 += 2, dy1 += 2, dcr++, dcb++) {
 	    src0[0] = tr[y * ncols + x];
 	    src0[1] = tg[y * ncols + x];
 	    src0[2] = tb[y * ncols + x];
@@ -97,28 +94,20 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 	    src0[4] = tg[y * ncols + x + 1];
 	    src0[5] = tb[y * ncols + x + 1];
 
-	    src0[0] = tr[(y+1) * ncols + x];
-	    src0[1] = tg[(y+1) * ncols + x];
-	    src0[2] = tb[(y+1) * ncols + x];
-	    src0[3] = tr[(y+1) * ncols + x + 1];
-	    src0[4] = tg[(y+1) * ncols + x + 1];
-	    src0[5] = tb[(y+1) * ncols + x + 1];
+	    src0[0] = tr[(y + 1) * ncols + x];
+	    src0[1] = tg[(y + 1) * ncols + x];
+	    src0[2] = tb[(y + 1) * ncols + x];
+	    src0[3] = tr[(y + 1) * ncols + x + 1];
+	    src0[4] = tg[(y + 1) * ncols + x + 1];
+	    src0[5] = tb[(y + 1) * ncols + x + 1];
 
-	    *dy0 = (mult299[*src0] +
-		    mult587[src0[1]] +
-		    mult114[src0[2]]);
+	    *dy0 = (mult299[*src0] + mult587[src0[1]] + mult114[src0[2]]);
 
-	    *dy1 = (mult299[*src1] +
-		    mult587[src1[1]] +
-		    mult114[src1[2]]);
+	    *dy1 = (mult299[*src1] + mult587[src1[1]] + mult114[src1[2]]);
 
-	    dy0[1] = (mult299[src0[3]] +
-		      mult587[src0[4]] +
-		      mult114[src0[5]]);
+	    dy0[1] = (mult299[src0[3]] + mult587[src0[4]] + mult114[src0[5]]);
 
-	    dy1[1] = (mult299[src1[3]] +
-		      mult587[src1[4]] +
-		      mult114[src1[5]]);
+	    dy1[1] = (mult299[src1[3]] + mult587[src1[4]] + mult114[src1[5]]);
 
 	    *dcb = ((mult16874[*src0] +
 		     mult33126[src0[1]] +
@@ -130,8 +119,7 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 		     mult33126[src0[4]] +
 		     mult5[src0[5]] +
 		     mult16874[src1[3]] +
-		     mult33126[src1[4]] +
-		     mult5[src1[5]]) / 4) + 128;
+		     mult33126[src1[4]] + mult5[src1[5]]) / 4) + 128;
 
 	    *dcr = ((mult5[*src0] +
 		     mult41869[src0[1]] +
@@ -143,22 +131,21 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 		     mult41869[src0[4]] +
 		     mult08131[src0[5]] +
 		     mult5[src1[3]] +
-		     mult41869[src1[4]] +
-		     mult08131[src1[5]]) / 4) + 128;
+		     mult41869[src1[4]] + mult08131[src1[5]]) / 4) + 128;
 	}
     }
-    
-    if (NULL == (ofp = fopen(filename,"wb")))
+
+    if (NULL == (ofp = fopen(filename, "wb")))
 	G_fatal_error(_("Unable to open output file"));
 
-    for (y=0; y < rows; y++)
-        fwrite(cy+(y*cols), 1, cols, ofp);
+    for (y = 0; y < rows; y++)
+	fwrite(cy + (y * cols), 1, cols, ofp);
 
-    for (y=0; y < rows/2; y++)
-        fwrite(cb+((y/2)*cols), 1, cols/2, ofp);
+    for (y = 0; y < rows / 2; y++)
+	fwrite(cb + ((y / 2) * cols), 1, cols / 2, ofp);
 
-    for (y=0; y < rows/2; y++)
-        fwrite(cr+((y/2)*cols), 1, cols/2, ofp);
+    for (y = 0; y < rows / 2; y++)
+	fwrite(cr + ((y / 2) * cols), 1, cols / 2, ofp);
 
     fclose(ofp);
 }
@@ -166,12 +153,12 @@ void write_ycc(char *tr, char *tg, char *tb, int nrows, int ncols,
 
 
 /*******************************************************/
-void write_ppm (char *tr, char *tg, char *tb, int nrows, int ncols,
-                int *y_rows, int *y_cols, char *filename)
+void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols,
+	       int *y_rows, int *y_cols, char *filename)
 {
     register int x, y;
     static int rows, cols;
-    static int  first = 1;
+    static int first = 1;
     FILE *ofp;
 
     *y_rows = nrows;
@@ -181,82 +168,77 @@ void write_ppm (char *tr, char *tg, char *tb, int nrows, int ncols,
     *y_rows &= ~0x0f;
     *y_cols &= ~0x0f;
 
-    if (first)
-    {
+    if (first) {
 	rows = *y_rows;
 	cols = *y_cols;
-        first = 0;
+	first = 0;
     }
 
     if (*y_rows != rows || *y_cols != cols)
 	G_fatal_error(_("Size mismatch error!"));
 
-    if (NULL == (ofp = fopen(filename,"w")))
+    if (NULL == (ofp = fopen(filename, "w")))
 	G_fatal_error(_("Unable to open output file"));
 
     fprintf(ofp, "P6\n");
     /* Magic number meaning rawbits, 24bit color to ppm format */
-    fprintf(ofp, "%d %d\n",cols,rows);
+    fprintf(ofp, "%d %d\n", cols, rows);
     /* width & height */
     fprintf(ofp, "255\n");
     /* max intensity val */
 
-    for (y = 0; y < rows; y ++)
-    {
-	for ( x = 0; x < cols; x++)
-        {
-	    putc(*tr++,ofp);
-	    putc(*tg++,ofp);
-	    putc(*tb++,ofp);
+    for (y = 0; y < rows; y++) {
+	for (x = 0; x < cols; x++) {
+	    putc(*tr++, ofp);
+	    putc(*tg++, ofp);
+	    putc(*tb++, ofp);
 	}
 
-	tr+=(ncols-cols);
-	tg+=(ncols-cols);
-	tb+=(ncols-cols);
+	tr += (ncols - cols);
+	tg += (ncols - cols);
+	tb += (ncols - cols);
     }
-    
+
     fclose(ofp);
 }
 
 
 /*******************************************************/
-void write_params (char *mpfilename, char *yfiles[], char *outfile,
-                   int frames, int quality, int y_rows, int y_cols, int fly)
+void write_params(char *mpfilename, char *yfiles[], char *outfile,
+		  int frames, int quality, int y_rows, int y_cols, int fly)
 {
     FILE *fp;
     char dir[1000], *enddir;
-    int i, dirlen=0;
+    int i, dirlen = 0;
 
     if (NULL == (fp = fopen(mpfilename, "w")))
 	G_fatal_error(_("Unable to create temporary files."));
-    
-    if (!fly)
-    {
+
+    if (!fly) {
 	strcpy(dir, yfiles[0]);
 	enddir = strrchr(dir, '/');
 
-	if(enddir)
-        {
+	if (enddir) {
 	    *enddir = '\0';
-	    dirlen = strlen(dir)+1;
+	    dirlen = strlen(dir) + 1;
 	}
     }
-    
+
     switch (quality) {
-	case 1:
-	    fprintf(fp, "PATTERN         IBPB\n");
-	    break;
-	case 2:
-	case 3:
-	    fprintf(fp, "PATTERN         IBBPBB\n");
-	    break;
-	case 4:
-	case 5:
-	    fprintf(fp, "PATTERN         IBBPBBPBB\n");
-	    break;
-	default:
-	    fprintf(fp, "PATTERN         IBBPBB\n");
-	    break;
+    case 1:
+	fprintf(fp, "PATTERN         IBPB\n");
+	break;
+    case 2:
+    case 3:
+	fprintf(fp, "PATTERN         IBBPBB\n");
+	break;
+    case 4:
+    case 5:
+	fprintf(fp, "PATTERN         IBBPBBPBB\n");
+	break;
+    default:
+	fprintf(fp, "PATTERN         IBBPBB\n");
+	break;
     }
     fprintf(fp, "FORCE_ENCODE_LAST_FRAME\n");
     fprintf(fp, "OUTPUT          %s\n", outfile);
@@ -269,10 +251,10 @@ void write_params (char *mpfilename, char *yfiles[], char *outfile,
     fprintf(fp, "INPUT\n");
 
     if (!fly)
-	for (i=0; i<frames; i++)
-	    fprintf(fp, "%s\n", yfiles[i]+dirlen);
+	for (i = 0; i < frames; i++)
+	    fprintf(fp, "%s\n", yfiles[i] + dirlen);
     else
-	for (i=0; i<frames; i++)
+	for (i = 0; i < frames; i++)
 	    fprintf(fp, "%s\n", yfiles[i]);
 
     fprintf(fp, "END_INPUT\n");
@@ -308,31 +290,31 @@ void write_params (char *mpfilename, char *yfiles[], char *outfile,
     fprintf(fp, "\n");
 
     switch (quality) {
-	case 1:
-	    fprintf(fp, "IQSCALE         5\n");
-	    fprintf(fp, "PQSCALE         8\n");
-	    fprintf(fp, "BQSCALE         12\n");
-	    break;
-	case 2:
-	    fprintf(fp, "IQSCALE         6\n");
-	    fprintf(fp, "PQSCALE         10\n");
-	    fprintf(fp, "BQSCALE         14\n");
-	    break;
-	case 4:
-	    fprintf(fp, "IQSCALE         8\n");
-	    fprintf(fp, "PQSCALE         14\n");
-	    fprintf(fp, "BQSCALE         20\n");
-	    break;
-	case 5:
-	    fprintf(fp, "IQSCALE         9\n");
-	    fprintf(fp, "PQSCALE         16\n");
-	    fprintf(fp, "BQSCALE         24\n");
-	    break;
-	default:
-	    fprintf(fp, "IQSCALE         7\n");
-	    fprintf(fp, "PQSCALE         12\n");
-	    fprintf(fp, "BQSCALE         16\n");
-	    break;
+    case 1:
+	fprintf(fp, "IQSCALE         5\n");
+	fprintf(fp, "PQSCALE         8\n");
+	fprintf(fp, "BQSCALE         12\n");
+	break;
+    case 2:
+	fprintf(fp, "IQSCALE         6\n");
+	fprintf(fp, "PQSCALE         10\n");
+	fprintf(fp, "BQSCALE         14\n");
+	break;
+    case 4:
+	fprintf(fp, "IQSCALE         8\n");
+	fprintf(fp, "PQSCALE         14\n");
+	fprintf(fp, "BQSCALE         20\n");
+	break;
+    case 5:
+	fprintf(fp, "IQSCALE         9\n");
+	fprintf(fp, "PQSCALE         16\n");
+	fprintf(fp, "BQSCALE         24\n");
+	break;
+    default:
+	fprintf(fp, "IQSCALE         7\n");
+	fprintf(fp, "PQSCALE         12\n");
+	fprintf(fp, "BQSCALE         16\n");
+	break;
     }
     fprintf(fp, "\n");
     fprintf(fp, "REFERENCE_FRAME DECODED\n");
@@ -342,7 +324,7 @@ void write_params (char *mpfilename, char *yfiles[], char *outfile,
 
 
 /*******************************************************/
-void clean_files (char *file, char *files[], int num)
+void clean_files(char *file, char *files[], int num)
 {
     char cmd[1000];
     int i;
@@ -350,12 +332,12 @@ void clean_files (char *file, char *files[], int num)
     sprintf(cmd, "\\rm %s", file);
     G_system(cmd);
 
-    for (i=0; i<num; i++)
-    {
+    for (i = 0; i < num; i++) {
 	sprintf(cmd, "\\rm %s", files[i]);
 	G_system(cmd);
     }
 }
 
 /*******************************************************/
+
 /*******************************************************/

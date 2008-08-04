@@ -30,11 +30,13 @@
 /* max length of color string */
 #define MAX_COLOR_LEN 32
 
-struct color_rgb {
+struct color_rgb
+{
     unsigned char r, g, b;
 };
 
-struct color_name {
+struct color_name
+{
     const char *name;
     int number;
 };
@@ -44,5 +46,4 @@ extern struct color_rgb G_standard_color_rgb(int n);
 extern int G_num_standard_color_names(void);
 extern const struct color_name *G_standard_color_name(int n);
 
-#endif 
-
+#endif

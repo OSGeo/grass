@@ -54,21 +54,22 @@
 #endif
 
 
-extern void *	dglTreeGetAllocator	();
+extern void *dglTreeGetAllocator();
 
 /*
  * Define a node as it is hosted in pNodeTree
  */
 typedef struct _dglTreeNode
 {
-	long 					nKey;
-	void *					pv;
-	void *					pv2;
+    long nKey;
+    void *pv;
+    void *pv2;
 } dglTreeNode_s;
-extern dglTreeNode_s * dglTreeNodeAlloc();
-extern void dglTreeNodeCancel( void * pvNode , void * pvParam );
-extern int dglTreeNodeCompare( const void * pvNodeA , const void * pvNodeB , void * pvParam );
-extern dglTreeNode_s * dglTreeNodeAdd( void * pvAVL, dglInt32_t nKey );
+extern dglTreeNode_s *dglTreeNodeAlloc();
+extern void dglTreeNodeCancel(void *pvNode, void *pvParam);
+extern int dglTreeNodeCompare(const void *pvNodeA, const void *pvNodeB,
+			      void *pvParam);
+extern dglTreeNode_s *dglTreeNodeAdd(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -76,15 +77,16 @@ extern dglTreeNode_s * dglTreeNodeAdd( void * pvAVL, dglInt32_t nKey );
  */
 typedef struct _dglTreeNode2
 {
-	long 					nKey;
-	void *					pv;
-	void *					pv2;
-	void *					pv3;
+    long nKey;
+    void *pv;
+    void *pv2;
+    void *pv3;
 } dglTreeNode2_s;
-extern dglTreeNode2_s * dglTreeNode2Alloc();
-extern void dglTreeNode2Cancel( void * pvNode , void * pvParam );
-extern int dglTreeNode2Compare( const void * pvNodeA , const void * pvNodeB , void * pvParam );
-extern dglTreeNode2_s * dglTreeNode2Add( void * pvAVL, dglInt32_t nKey );
+extern dglTreeNode2_s *dglTreeNode2Alloc();
+extern void dglTreeNode2Cancel(void *pvNode, void *pvParam);
+extern int dglTreeNode2Compare(const void *pvNodeA, const void *pvNodeB,
+			       void *pvParam);
+extern dglTreeNode2_s *dglTreeNode2Add(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -92,13 +94,14 @@ extern dglTreeNode2_s * dglTreeNode2Add( void * pvAVL, dglInt32_t nKey );
  */
 typedef struct _dglTreeEdge
 {
-	dglInt32_t				nKey;
-	void *					pv;
+    dglInt32_t nKey;
+    void *pv;
 } dglTreeEdge_s;
-extern dglTreeEdge_s * dglTreeEdgeAlloc();
-extern void dglTreeEdgeCancel( void * pvEdge , void * pvParam );
-extern int dglTreeEdgeCompare( const void * pvEdgeA , const void * pvEdgeB , void * pvParam );
-extern dglTreeEdge_s * dglTreeEdgeAdd( void * pvAVL, dglInt32_t nKey );
+extern dglTreeEdge_s *dglTreeEdgeAlloc();
+extern void dglTreeEdgeCancel(void *pvEdge, void *pvParam);
+extern int dglTreeEdgeCompare(const void *pvEdgeA, const void *pvEdgeB,
+			      void *pvParam);
+extern dglTreeEdge_s *dglTreeEdgeAdd(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -107,12 +110,13 @@ extern dglTreeEdge_s * dglTreeEdgeAdd( void * pvAVL, dglInt32_t nKey );
  */
 typedef struct _dglTreeTouchI32
 {
-	dglInt32_t				nKey;
+    dglInt32_t nKey;
 } dglTreeTouchI32_s;
-extern dglTreeTouchI32_s * dglTreeTouchI32Alloc();
-extern void dglTreeTouchI32Cancel( void * pvTouchI32 , void * pvParam );
-extern int dglTreeTouchI32Compare( const void * pvTouchI32A , const void * pvTouchI32B , void * pvParam );
-extern dglTreeTouchI32_s * dglTreeTouchI32Add( void * pvAVL, dglInt32_t nKey );
+extern dglTreeTouchI32_s *dglTreeTouchI32Alloc();
+extern void dglTreeTouchI32Cancel(void *pvTouchI32, void *pvParam);
+extern int dglTreeTouchI32Compare(const void *pvTouchI32A,
+				  const void *pvTouchI32B, void *pvParam);
+extern dglTreeTouchI32_s *dglTreeTouchI32Add(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -120,17 +124,18 @@ extern dglTreeTouchI32_s * dglTreeTouchI32Add( void * pvAVL, dglInt32_t nKey );
  */
 typedef struct _dglTreePredist
 {
-	dglInt32_t	nKey;
-	dglInt32_t	nFrom;
-	dglInt32_t	nDistance;
-	dglInt32_t	nCost;
-	dglInt32_t *	pnEdge;
-	dglByte_t	bFlags;
+    dglInt32_t nKey;
+    dglInt32_t nFrom;
+    dglInt32_t nDistance;
+    dglInt32_t nCost;
+    dglInt32_t *pnEdge;
+    dglByte_t bFlags;
 } dglTreePredist_s;
-extern dglTreePredist_s * dglTreePredistAlloc();
-extern void dglTreePredistCancel( void * pvPredist , void * pvParam );
-extern int dglTreePredistCompare( const void * pvPredistA , const void * pvPredistB , void * pvParam );
-extern dglTreePredist_s * dglTreePredistAdd( void * pvAVL, dglInt32_t nKey );
+extern dglTreePredist_s *dglTreePredistAlloc();
+extern void dglTreePredistCancel(void *pvPredist, void *pvParam);
+extern int dglTreePredistCompare(const void *pvPredistA,
+				 const void *pvPredistB, void *pvParam);
+extern dglTreePredist_s *dglTreePredistAdd(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -138,14 +143,15 @@ extern dglTreePredist_s * dglTreePredistAdd( void * pvAVL, dglInt32_t nKey );
  */
 typedef struct _dglTreeNodePri32
 {
-	dglInt32_t	nKey;
-	dglInt32_t	cnVal;
-	dglInt32_t *	pnVal;
+    dglInt32_t nKey;
+    dglInt32_t cnVal;
+    dglInt32_t *pnVal;
 } dglTreeNodePri32_s;
-extern dglTreeNodePri32_s * dglTreeNodePri32Alloc();
-extern void dglTreeNodePri32Cancel( void * pvNodePri32 , void * pvParam );
-extern int dglTreeNodePri32Compare( const void * pvNodePri32A , const void * pvNodePri32B , void * pvParam );
-extern dglTreeNodePri32_s * dglTreeNodePri32Add( void * pvAVL, dglInt32_t nKey );
+extern dglTreeNodePri32_s *dglTreeNodePri32Alloc();
+extern void dglTreeNodePri32Cancel(void *pvNodePri32, void *pvParam);
+extern int dglTreeNodePri32Compare(const void *pvNodePri32A,
+				   const void *pvNodePri32B, void *pvParam);
+extern dglTreeNodePri32_s *dglTreeNodePri32Add(void *pvAVL, dglInt32_t nKey);
 
 
 /*
@@ -153,14 +159,15 @@ extern dglTreeNodePri32_s * dglTreeNodePri32Add( void * pvAVL, dglInt32_t nKey )
  */
 typedef struct _dglTreeEdgePri32
 {
-	dglInt32_t	nKey;
-	dglInt32_t	cnData;
-	dglInt32_t *	pnData;
+    dglInt32_t nKey;
+    dglInt32_t cnData;
+    dglInt32_t *pnData;
 } dglTreeEdgePri32_s;
-extern dglTreeEdgePri32_s * dglTreeEdgePri32Alloc();
-extern void dglTreeEdgePri32Cancel( void * pvEdgePri32 , void * pvParam );
-extern int dglTreeEdgePri32Compare( const void * pvEdgePri32A , const void * pvEdgePri32B , void * pvParam );
-extern dglTreeEdgePri32_s * dglTreeEdgePri32Add( void * pvAVL, dglInt32_t nKey );
+extern dglTreeEdgePri32_s *dglTreeEdgePri32Alloc();
+extern void dglTreeEdgePri32Cancel(void *pvEdgePri32, void *pvParam);
+extern int dglTreeEdgePri32Compare(const void *pvEdgePri32A,
+				   const void *pvEdgePri32B, void *pvParam);
+extern dglTreeEdgePri32_s *dglTreeEdgePri32Add(void *pvAVL, dglInt32_t nKey);
 
 
 #endif

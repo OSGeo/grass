@@ -1,3 +1,4 @@
+
 /****************************************************************************
  *
  * MODULE:       r.example
@@ -85,7 +86,7 @@ int main(int argc, char *argv[])
     module->description = _("My first raster module");
 
     /* Define the different options as defined in gis.h */
-    input  = G_define_standard_option(G_OPT_R_INPUT);
+    input = G_define_standard_option(G_OPT_R_INPUT);
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
 
@@ -150,7 +151,8 @@ int main(int argc, char *argv[])
 
 	/* read input map */
 	if (G_get_raster_row(infd, inrast, row, data_type) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name, row);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"), name,
+			  row);
 
 	/* process the data */
 	for (col = 0; col < ncols; col++) {

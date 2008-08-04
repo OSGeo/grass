@@ -53,16 +53,16 @@ N_les *create_normal_les(int rows)
 {
     N_les *les;
     int i, j;
-    int size =rows;
+    int size = rows;
     double val;
 
     les = N_alloc_les(rows, N_NORMAL_LES);
-    for(i = 0; i < size; i++) {
-    	val = 0.0;
-    	for(j = 0; j < size; j++) {
-		les->A[i][j] = (double)(1.0/(((double)i + 1.0) + 
-				((double)j + 1.0) - 1.0));
-		val += les->A[i][j];
+    for (i = 0; i < size; i++) {
+	val = 0.0;
+	for (j = 0; j < size; j++) {
+	    les->A[i][j] = (double)(1.0 / (((double)i + 1.0) +
+					   ((double)j + 1.0) - 1.0));
+	    val += les->A[i][j];
 	}
 	les->b[i] = val;
     }
@@ -87,9 +87,10 @@ N_les *create_sparse_les(int rows)
 	val = 0;
 
 	for (j = 0; j < rows; j++) {
-		spvector->values[j] = (double)(1.0/(((double)i + 1.0) + ((double)j + 1.0) - 1.0));
-		spvector->index[j] = j;
-		val += spvector->values[j];
+	    spvector->values[j] =
+		(double)(1.0 / (((double)i + 1.0) + ((double)j + 1.0) - 1.0));
+	    spvector->index[j] = j;
+	    val += spvector->values[j];
 	}
 
 	N_add_spvector_to_les(les, spvector, i);
@@ -155,35 +156,37 @@ int test_solvers(void)
     sples = create_sparse_les(TEST_N_NUM_ROWS);
 
     N_solver_pcg(les, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
-    N_print_les(les); 
+    N_print_les(les);
     N_solver_pcg(sples, 100, 0.1e-8, N_DIAGONAL_PRECONDITION);
-    N_print_les(sples); 
+    N_print_les(sples);
 
     N_free_les(les);
     N_free_les(sples);
 
-    G_message("\t * testing pcg solver with N_ROWSCALE_EUKLIDNORM_PRECONDITION\n");
+    G_message
+	("\t * testing pcg solver with N_ROWSCALE_EUKLIDNORM_PRECONDITION\n");
 
     les = create_normal_les(TEST_N_NUM_ROWS);
     sples = create_sparse_les(TEST_N_NUM_ROWS);
 
     N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_EUKLIDNORM_PRECONDITION);
-    N_print_les(les); 
+    N_print_les(les);
     N_solver_pcg(sples, 100, 0.1e-8, N_ROWSCALE_EUKLIDNORM_PRECONDITION);
-    N_print_les(sples); 
+    N_print_les(sples);
 
     N_free_les(les);
     N_free_les(sples);
 
-    G_message("\t * testing pcg solver with N_ROWSCALE_ABSSUMNORM_PRECONDITION\n");
+    G_message
+	("\t * testing pcg solver with N_ROWSCALE_ABSSUMNORM_PRECONDITION\n");
 
     les = create_normal_les(TEST_N_NUM_ROWS);
     sples = create_sparse_les(TEST_N_NUM_ROWS);
 
     N_solver_pcg(les, 100, 0.1e-8, N_ROWSCALE_ABSSUMNORM_PRECONDITION);
-    N_print_les(les); 
+    N_print_les(les);
     N_solver_pcg(sples, 100, 0.1e-8, N_ROWSCALE_ABSSUMNORM_PRECONDITION);
-    N_print_les(sples); 
+    N_print_les(sples);
 
     N_free_les(les);
     N_free_les(sples);
@@ -216,14 +219,14 @@ int test_solvers(void)
     les = create_normal_les(TEST_N_NUM_ROWS);
 
      /*LU*/ N_solver_lu(les);
-    N_print_les(les); 
+    N_print_les(les);
 
     N_free_les(les);
 
     les = create_normal_les(TEST_N_NUM_ROWS);
 
-     /*cholesky*/ N_solver_cholesky(les);
-    N_print_les(les); 
+    /*cholesky */ N_solver_cholesky(les);
+    N_print_les(les);
 
     N_free_les(les);
 

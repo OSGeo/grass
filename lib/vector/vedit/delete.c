@@ -1,3 +1,4 @@
+
 /**
    \file vector/vedit/delete.c
 
@@ -33,14 +34,14 @@ int Vedit_delete_lines(struct Map_info *Map, struct ilist *List)
 
     /* delete */
     for (i = 0; i < List->n_values; i++) {
-	line = List -> value[i];
+	line = List->value[i];
 
 	if (Vect_line_alive(Map, line)) {
-	    if (Vect_delete_line(Map, line) < 0) { 
+	    if (Vect_delete_line(Map, line) < 0) {
 		return -1;
 	    }
 
-	    G_debug (3, "Vedit_delete_lines(): line=%d", line);
+	    G_debug(3, "Vedit_delete_lines(): line=%d", line);
 	    nlines_removed++;
 	}
     }

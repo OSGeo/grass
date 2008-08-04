@@ -26,23 +26,24 @@
  * 
  * **************************************************************/
 #ifdef MAIN
-  #define Global
+#define Global
 #else
-  #define Global extern
+#define Global extern
 #endif
 
 /* transformation, first level is 0 ( called from main ) and transformation 
-*  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first level
-*  (not efective but better readable?) */ 
-typedef struct {
+ *  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first level
+ *  (not efective but better readable?) */
+typedef struct
+{
     double dx, dy, dz;
     double xscale, yscale, zscale;
     double rotang;
 } TRANS;
 
 Global int cat;
-Global int n_elements; /* number of processed elements (only low level elements) */
-Global int n_skipped; /* number of skipped low level elements (different layer name) */
+Global int n_elements;		/* number of processed elements (only low level elements) */
+Global int n_skipped;		/* number of skipped low level elements (different layer name) */
 Global struct Map_info Map;
 Global dbDriver *driver;
 Global dbString sql;
@@ -54,9 +55,10 @@ Global char *Txt;
 Global char *Block;
 Global struct field_info *Fi;
 Global AD_DB_HANDLE dwghandle;
-Global TRANS *Trans;   /* transformation */
-Global int atrans; /* number of allocated levels */
+Global TRANS *Trans;		/* transformation */
+Global int atrans;		/* number of allocated levels */
 Global struct Option *layers_opt;
 Global struct Flag *invert_flag;
 
-void wrentity (PAD_ENT_HDR adenhd,PAD_ENT aden, int level, AD_VMADDR entlist, int circle_as_point);
+void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
+	      int circle_as_point);

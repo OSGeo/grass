@@ -8,11 +8,11 @@
 #define BG_COLOR 0xFF000000
 
 /*
-*  Have to look into why we can't draw to BOTH in OpenGL/tcl
-*  (or if we still need to)
-*  Originally, needed to draw to both due to
-*  implementation of transparency
-*/
+ *  Have to look into why we can't draw to BOTH in OpenGL/tcl
+ *  (or if we still need to)
+ *  Originally, needed to draw to both due to
+ *  implementation of transparency
+ */
 #ifdef GSD_BOTH
 #undef GSD_BOTH
 #define GSD_BOTH GSD_FRONT
@@ -38,14 +38,14 @@ void CancelFunc_Hook(void)
 
 /* Occasionally we want the cancel script ignored,
    this handles such a case.
-   */
+ */
 int Nunset_cancel_func_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
 			   int argc,	/* Number of arguments. */
 			   char **argv	/* Argument strings. */
     )
 {
     if (cancel_script != NULL)
-	G_free (cancel_script);
+	G_free(cancel_script);
 
     cancel_script = NULL;
 
@@ -66,10 +66,10 @@ int Nset_cancel_func_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     }
 
     if (cancel_script != NULL)
-	G_free (cancel_script);
+	G_free(cancel_script);
 
     cancel_interp = interp;
-    cancel_script = (char *) G_malloc (sizeof(char) * (strlen(argv[1]) + 1));
+    cancel_script = (char *)G_malloc(sizeof(char) * (strlen(argv[1]) + 1));
     strcpy(cancel_script, argv[1]);
 
     GS_set_cxl_func(CancelFunc_Hook);
@@ -83,6 +83,7 @@ int Nset_draw_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. *
     )
 {
     int where;
+
     if (argc != 2) {
 	return (TCL_ERROR);
     }
@@ -123,8 +124,8 @@ int Nis_masked_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. 
 	return (TCL_ERROR);
     id = get_idnum(argv[1]);
     type = get_type(argv[1]);
-    pt[0] = (float) atof(argv[2]);
-    pt[1] = (float) atof(argv[3]);
+    pt[0] = (float)atof(argv[2]);
+    pt[1] = (float)atof(argv[3]);
 
     GS_is_masked(id, pt) ? sprintf(masked, "1") : sprintf(masked, "0");
     Tcl_SetResult(interp, masked, TCL_VOLATILE);
@@ -198,8 +199,8 @@ int Ndraw_X_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
     if (argc != 4)
 	return (TCL_ERROR);
     id = get_idnum(argv[1]);
-    pt[0] = (float) atof(argv[2]);
-    pt[1] = (float) atof(argv[3]);
+    pt[0] = (float)atof(argv[2]);
+    pt[1] = (float)atof(argv[3]);
     GS_draw_X(id, pt);
 
     return (TCL_OK);
@@ -210,25 +211,25 @@ int Ndraw_X_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
  * Nset_Narrow 
  * Sets the North position and return world coords
  *****************************************************/
-int Nset_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,        /* Current interpreter. */
-                     int argc,  /* Number of arguments. */
-                     char **argv        /* Argument strings. */
+int Nset_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+		    int argc,	/* Number of arguments. */
+		    char **argv	/* Argument strings. */
     )
 {
     int id;
-    int pt[2]; 
+    int pt[2];
     float coords[3];
     float len;
     char x[32], y[32], z[32];
     char *list[4];
 
     if (argc != 5)
-        return (TCL_ERROR);
-    pt[0] = (int) atoi(argv[1]);
-    pt[1] = (int) atoi(argv[2]);
-    id = (int) atoi(argv[3]);
+	return (TCL_ERROR);
+    pt[0] = (int)atoi(argv[1]);
+    pt[1] = (int)atoi(argv[2]);
+    id = (int)atoi(argv[3]);
     len = (float)atof(argv[4]);
- 
+
     GS_set_Narrow(pt, id, coords);
 
     sprintf(x, "%f", coords[0]);
@@ -251,9 +252,9 @@ int Nset_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,        /* Current inter
  * Ndraw_Narrow 
  * Draws the North Arrow 
  *****************************************************/
-int Ndraw_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,       /* Current interpreter. */
-                     int argc,  /* Number of arguments. */
-                     char **argv        /* Argument strings. */
+int Ndraw_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+		     int argc,	/* Number of arguments. */
+		     char **argv	/* Argument strings. */
     )
 {
     float coords[3];
@@ -261,20 +262,20 @@ int Ndraw_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,       /* Current inter
     int arrow_color, text_color;
 
     if (argc != 7)
-        return (TCL_ERROR);
-    coords[0] = (int) atof(argv[1]); /* X */
-    coords[1] = (int) atof(argv[2]); /* Y */
-    coords[2] = (int) atof(argv[3]); /* Z */
+	return (TCL_ERROR);
+    coords[0] = (int)atof(argv[1]);	/* X */
+    coords[1] = (int)atof(argv[2]);	/* Y */
+    coords[2] = (int)atof(argv[3]);	/* Z */
     len = (atof(argv[4]));
-    arrow_color = (int) tcl_color_to_int(argv[5]);
-    text_color  = (int) tcl_color_to_int(argv[6]);
+    arrow_color = (int)tcl_color_to_int(argv[5]);
+    text_color = (int)tcl_color_to_int(argv[6]);
 
     FontBase = load_font(TOGL_BITMAP_HELVETICA_18);
     if (FontBase)
-            gsd_north_arrow(coords, (float) len, FontBase,
-				arrow_color, text_color);
-     else
-            fprintf(stderr, "Unable to load font\n");
+	gsd_north_arrow(coords, (float)len, FontBase,
+			arrow_color, text_color);
+    else
+	fprintf(stderr, "Unable to load font\n");
 
     return (TCL_OK);
 }
@@ -285,9 +286,9 @@ int Ndraw_Narrow_cmd(Nv_data * data, Tcl_Interp * interp,       /* Current inter
  * Ndraw_ScaleBar
  * Draws the Scalebar. Adaped from Ndraw_Narrow_cmd()
  *****************************************************/
-int Ndraw_ScaleBar_cmd(Nv_data * data, Tcl_Interp * interp, /* Current interpreter. */
-                     int argc,     /* Number of arguments. */
-                     char **argv   /* Argument strings. */
+int Ndraw_ScaleBar_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+		       int argc,	/* Number of arguments. */
+		       char **argv	/* Argument strings. */
     )
 {
     float coords[3];
@@ -296,17 +297,16 @@ int Ndraw_ScaleBar_cmd(Nv_data * data, Tcl_Interp * interp, /* Current interpret
 
     if (argc != 7)
 	return (TCL_ERROR);
-    coords[0] = (int) atof(argv[1]); /* X */
-    coords[1] = (int) atof(argv[2]); /* Y */
-    coords[2] = (int) atof(argv[3]); /* Z */
+    coords[0] = (int)atof(argv[1]);	/* X */
+    coords[1] = (int)atof(argv[2]);	/* Y */
+    coords[2] = (int)atof(argv[3]);	/* Z */
     len = (atof(argv[4]));
-    bar_color  = (int) tcl_color_to_int(argv[5]);
-    text_color = (int) tcl_color_to_int(argv[6]);
+    bar_color = (int)tcl_color_to_int(argv[5]);
+    text_color = (int)tcl_color_to_int(argv[6]);
 
     FontBase = load_font(TOGL_BITMAP_HELVETICA_18);
     if (FontBase)
-	gsd_scalebar(coords, (float) len, FontBase,
-			bar_color, text_color);
+	gsd_scalebar(coords, (float)len, FontBase, bar_color, text_color);
     else
 	fprintf(stderr, "Unable to load font\n");
 
@@ -327,10 +327,10 @@ int Ndraw_line_on_surf_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current inter
     if (argc != 6)
 	return (TCL_ERROR);
     id = get_idnum(argv[1]);
-    x1 = (float) atof(argv[2]);
-    y1 = (float) atof(argv[3]);
-    x2 = (float) atof(argv[4]);
-    y2 = (float) atof(argv[5]);
+    x1 = (float)atof(argv[2]);
+    y1 = (float)atof(argv[3]);
+    x2 = (float)atof(argv[4]);
+    y2 = (float)atof(argv[5]);
 
     GS_draw_line_onsurf(id, x1, y1, x2, y2);
 
@@ -354,7 +354,7 @@ int Nsurf_draw_one_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
     float x, y, z;
     int num, w;
 
-/* Get position for Light 1 */
+    /* Get position for Light 1 */
     num = 1;
     x = data->light[num].x;
     y = data->light[num].y;
@@ -367,7 +367,7 @@ int Nsurf_draw_one_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 	return (TCL_ERROR);
     }
 
-/* re-initialize lights */
+    /* re-initialize lights */
     GS_setlight_position(num, x, y, z, w);
     num = 2;
     GS_setlight_position(num, 0., 0., 1., 0);
@@ -433,8 +433,8 @@ int Nsite_draw_one_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 }
 
 int Nvol_draw_one_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-		       int argc,	/* Number of arguments. */
-		       char **argv	/* Argument strings. */
+		      int argc,	/* Number of arguments. */
+		      char **argv	/* Argument strings. */
     )
 {
 
@@ -507,12 +507,12 @@ int Nsurf_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 /* Sorts surfaces by max elevation, lowest to highest.
    Puts ordered id numbers in id_sort, leaving id_orig unchanged.
    Puts ordered indices of surfaces from id_orig in indices.
-   */
+ */
 int sort_surfs_max(int *surf, int *id_sort, int *indices, int num)
 {
     int i, j;
     float maxvals[MAX_SURFS];
-    float tmp, max=0., tmin, tmax, tmid;
+    float tmp, max = 0., tmin, tmax, tmid;
 
     for (i = 0; i < num; i++) {
 	GS_get_zextents(surf[i], &tmin, &tmax, &tmid);
@@ -547,7 +547,7 @@ int surf_draw_all(Nv_data * dc, Tcl_Interp * interp)
     float x, y, z;
     int num, w;
 
-/* Get position for Light 1 */
+    /* Get position for Light 1 */
     num = 1;
     x = dc->light[num].x;
     y = dc->light[num].y;
@@ -566,14 +566,14 @@ int surf_draw_all(Nv_data * dc, Tcl_Interp * interp)
 
     surf_list = GS_get_surf_list(&nsurfs);
     sort_surfs_max(surf_list, sortSurfs, sorti, nsurfs);
-    G_free (surf_list);
+    G_free(surf_list);
 
     if (doclear == 1)
 	GS_clear(dc->BGcolor);
 
     GS_ready_draw();
 
-/* re-initialize lights */
+    /* re-initialize lights */
     GS_setlight_position(num, x, y, z, w);
     num = 2;
     GS_setlight_position(num, 0., 0., 1., 0);
@@ -633,7 +633,7 @@ int Nvect_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 	    GV_draw_vect(vect_list[i]);
 	}
     }
-    G_free (vect_list);
+    G_free(vect_list);
 
     GS_done_draw();
 
@@ -667,7 +667,7 @@ int Nsite_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 	    GP_draw_site(site_list[i]);
 	}
     }
-    G_free (site_list);
+    G_free(site_list);
 
     G_debug(3, "Done drawing\n");
 
@@ -679,14 +679,14 @@ int Nsite_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpret
 }
 
 int Nvol_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
-		       int argc,	/* Number of arguments. */
-		       char **argv	/* Argument strings. */
+		      int argc,	/* Number of arguments. */
+		      char **argv	/* Argument strings. */
     )
 {
     int i, nvols;
     int *vol_list;
 
-	GS_set_cancel(0);
+    GS_set_cancel(0);
     vol_list = GVL_get_vol_list(&nvols);
 
     /* in case transparency is set */
@@ -699,7 +699,7 @@ int Nvol_draw_all_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interprete
 	    GVL_draw_vol(vol_list[i]);
 	}
     }
-    G_free (vol_list);
+    G_free(vol_list);
 
     GS_done_draw();
 
@@ -723,10 +723,10 @@ int Ndone_draw_cmd(void)
 
 
 /*
-  This function checks if a specific map object should be blanked for
+   This function checks if a specific map object should be blanked for
    a draw.  This option is used by one of the script tools for
    blanking maps during specific frames.
-   */
+ */
 int check_blank(Tcl_Interp * interp, int map_id)
 {
     const char *val, **listArgv;
@@ -754,7 +754,7 @@ int check_blank(Tcl_Interp * interp, int map_id)
 	}
     }
 
-    Tcl_Free ((char *) listArgv);
+    Tcl_Free((char *)listArgv);
     return rval;
 
 }
@@ -777,19 +777,19 @@ int Ndraw_legend_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
     sprintf(name, "%s", argv[1]);
     sprintf(font, "%s", argv[2]);
 
-    size = (int) atoi(argv[3]);
-    flags[0] = (int) atoi(argv[4]);	/* vals */
-    flags[1] = (int) atoi(argv[5]);	/* labels */
-    flags[2] = (int) atoi(argv[6]);	/* invert */
-    flags[3] = (int) atoi(argv[7]);	/* discrete */
-    flags[4] = (int) atoi(argv[8]);	/* range */
-    range[0] = (float) atof(argv[9]);	/* low range */
-    range[1] = (float) atof(argv[10]);	/* high range */
+    size = (int)atoi(argv[3]);
+    flags[0] = (int)atoi(argv[4]);	/* vals */
+    flags[1] = (int)atoi(argv[5]);	/* labels */
+    flags[2] = (int)atoi(argv[6]);	/* invert */
+    flags[3] = (int)atoi(argv[7]);	/* discrete */
+    flags[4] = (int)atoi(argv[8]);	/* range */
+    range[0] = (float)atof(argv[9]);	/* low range */
+    range[1] = (float)atof(argv[10]);	/* high range */
 
-    pt[0] = (int) atoi(argv[11]);
-    pt[1] = (int) atoi(argv[12]);
-    pt[2] = (int) atoi(argv[13]);
-    pt[3] = (int) atoi(argv[14]);
+    pt[0] = (int)atoi(argv[11]);
+    pt[1] = (int)atoi(argv[12]);
+    pt[2] = (int)atoi(argv[13]);
+    pt[3] = (int)atoi(argv[14]);
 
     /* destroy display list of previous legend */
     if (legend_list) {
@@ -818,7 +818,7 @@ int Ndelete_list_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 	return (TCL_ERROR);
 
     sprintf(list_name, "%s", argv[1]);
-/* flag arg determines how list is removed */
+    /* flag arg determines how list is removed */
     flag = atoi(argv[2]);
 
     if (strcmp(list_name, "legend") == 0) {
@@ -840,27 +840,27 @@ int Ndelete_list_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter
 
 
 /**************************************************************/
-int Ndraw_fringe_cmd(Nv_data * data, Tcl_Interp * interp, /* Current interpreter. */
-                     int argc,   /* Number of arguments. */
-                     char **argv /* Argument strings. */
-                     )
+int Ndraw_fringe_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+		     int argc,	/* Number of arguments. */
+		     char **argv	/* Argument strings. */
+    )
 {
-        int id;
-	int color;
-	float elev;
-        int flags[4];
+    int id;
+    int color;
+    float elev;
+    int flags[4];
 
-        id = (int) atoi(argv[1]);
-	color = (int) tcl_color_to_int(argv[2]);	
-	elev = (float) atof(argv[3]);
-        flags[0] = (int) atoi(argv[4]);
-        flags[1] = (int) atoi(argv[5]);
-        flags[2] = (int) atoi(argv[6]);
-        flags[3] = (int) atoi(argv[7]);
+    id = (int)atoi(argv[1]);
+    color = (int)tcl_color_to_int(argv[2]);
+    elev = (float)atof(argv[3]);
+    flags[0] = (int)atoi(argv[4]);
+    flags[1] = (int)atoi(argv[5]);
+    flags[2] = (int)atoi(argv[6]);
+    flags[3] = (int)atoi(argv[7]);
 
-        GS_draw_fringe(id, color, elev, flags);
+    GS_draw_fringe(id, color, elev, flags);
 
-        return (TCL_OK);
+    return (TCL_OK);
 }
 
 
@@ -868,26 +868,25 @@ int Ndraw_fringe_cmd(Nv_data * data, Tcl_Interp * interp, /* Current interpreter
  * Manually set viewport to specified size
  * needed when manually changing canvas size
 ****************************************************/
-int Nset_viewport_cmd(Nv_data * data,
-                Tcl_Interp * interp,        /* Current interpreter. */
-                int argc,  /* Number of arguments. */
-                char **argv)        /* Argument strings. */
-{
-int x, y;
+int Nset_viewport_cmd(Nv_data * data, Tcl_Interp * interp,	/* Current interpreter. */
+		      int argc,	/* Number of arguments. */
+		      char **argv)
+{				/* Argument strings. */
+    int x, y;
 
 
-if (argc != 3) {
-        Tcl_SetResult(interp, "Usage: Nset_viewport width, height", TCL_VOLATILE);
-        return (TCL_ERROR);
+    if (argc != 3) {
+	Tcl_SetResult(interp, "Usage: Nset_viewport width, height",
+		      TCL_VOLATILE);
+	return (TCL_ERROR);
+    }
+
+    x = (int)atoi(argv[1]);
+    y = (int)atoi(argv[2]);
+
+    /* manually set viewport dimension */
+    GS_set_viewport(0, x, 0, y);
+
+    return (TCL_OK);
+
 }
-	    
-	x = (int) atoi(argv[1]);
-	y = (int) atoi(argv[2]);
-
-	/* manually set viewport dimension */
-	GS_set_viewport(0, x, 0, y);
-
-	return (TCL_OK);
-
-}
-

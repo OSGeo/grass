@@ -37,34 +37,35 @@
 
 /* global arrays */
 
-extern void *tmpCompress; /* compression support array */
-extern int tmpCompressLength; /* in bytes */
-extern void *xdr;/* xdr support array */
-extern int xdrLength; /* in bytes */
+extern void *tmpCompress;	/* compression support array */
+extern int tmpCompressLength;	/* in bytes */
+extern void *xdr;		/* xdr support array */
+extern int xdrLength;		/* in bytes */
 
 /*---------------------------------------------------------------------------*/
 
 /* global variables */
 
-extern int g3d_do_compression; /* G3D_NO_COMPRESSION or G3D_COMPRESSION */
-extern int g3d_do_lzw_compression; /* G3D_USE_LZW or G3D_NO_LZW */
-extern int g3d_do_rle_compression; /* G3D_USE_RLE or G3D_NO_RLE */
-extern int g3d_precision; /* G3D_ALLOW_PRECISION or G3D_NO_PRECISION */
-extern int g3d_cache_default; /* in number of tiles; 0 ==> no cache */
-extern int g3d_cache_max; /* in bytes */
-extern int g3d_file_type; /* FCELL_TYPE or DCELL_TYPE */
-extern int g3d_tile_dimension[3]; 
-extern void (*g3d_error_fun)(const char *); 
+extern int g3d_do_compression;	/* G3D_NO_COMPRESSION or G3D_COMPRESSION */
+extern int g3d_do_lzw_compression;	/* G3D_USE_LZW or G3D_NO_LZW */
+extern int g3d_do_rle_compression;	/* G3D_USE_RLE or G3D_NO_RLE */
+extern int g3d_precision;	/* G3D_ALLOW_PRECISION or G3D_NO_PRECISION */
+extern int g3d_cache_default;	/* in number of tiles; 0 ==> no cache */
+extern int g3d_cache_max;	/* in bytes */
+extern int g3d_file_type;	/* FCELL_TYPE or DCELL_TYPE */
+extern int g3d_tile_dimension[3];
+extern void (*g3d_error_fun) (const char *);
 extern char *g3d_unit_default;
 
 extern G3D_Region g3d_window;
 
 /*---------------------------------------------------------------------------*/
 
-extern void G3d_fatalError (const char * /* msg */ , ...);
-extern void G3d_fatalError_noargs (const char * /* msg */);
+extern void G3d_fatalError(const char * /* msg */ , ...);
+extern void G3d_fatalError_noargs(const char * /* msg */ );
 
 /*---------------------------------------------------------------------------*/
+
 /*---------------------------------------------------------------------------*/
 
 #define G3D_REGION_NORTH "North"
@@ -81,7 +82,3 @@ extern void G3d_fatalError_noargs (const char * /* msg */);
 #define G3D_REGION_EWRES "e-w resol"
 #define G3D_REGION_NSRES "n-s resol"
 #define G3D_REGION_TBRES "t-b resol"
-
-
-
-

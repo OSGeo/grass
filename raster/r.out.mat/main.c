@@ -19,27 +19,29 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
-    int i,row,col; /* counters */
+    int i, row, col;		/* counters */
     unsigned long filesize;
 
-    int endianness;  /* 0=little, 1=big */
-    int data_format;    /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
-    int data_type;      /* 0=numbers  1=text */
-    int format_block;  /* combo of endianness, 0, data_format, and type */
-    int realflag = 0;  /* 0=only real values used */
+    int endianness;		/* 0=little, 1=big */
+    int data_format;		/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
+    int data_type;		/* 0=numbers  1=text */
+    int format_block;		/* combo of endianness, 0, data_format, and type */
+    int realflag = 0;		/* 0=only real values used */
+
     /* should type be specifically uint32 ??? */
 
-    char array_name[32];  /* variable names must start with a letter (case 
-			     sensitive) followed by letters, numbers, or 
-			     underscores. 31 chars max. */
+    char array_name[32];	/* variable names must start with a letter (case 
+				   sensitive) followed by letters, numbers, or 
+				   underscores. 31 chars max. */
     int name_len;
-    int mrows, ncols;  /* text/data/map array dimensions*/
+    int mrows, ncols;		/* text/data/map array dimensions */
 
-    int val_i;		/* for misc use */
-    float val_f;	/* for misc use */
-    double val_d;	/* for misc use */
+    int val_i;			/* for misc use */
+    float val_f;		/* for misc use */
+    double val_d;		/* for misc use */
 
     char *infile, *outfile, *mapset, *maptitle, *basename;
     struct Cell_head region;
@@ -57,21 +59,20 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->keywords = _("raster, export");
-    module->description =
-         _("Exports a GRASS raster to a binary MAT-File.");
+    module->description = _("Exports a GRASS raster to a binary MAT-File.");
 
     /* Define the different options */
 
     inputfile = G_define_standard_option(G_OPT_R_INPUT);
 
-    outputfile = G_define_option() ;
-    outputfile->key        = "output";
-    outputfile->type       = TYPE_STRING;
-    outputfile->required   = YES;
-    outputfile->gisprompt  = "new_file,file,output";
-    outputfile->description= _("Name for the output binary MAT-File");
+    outputfile = G_define_option();
+    outputfile->key = "output";
+    outputfile->type = TYPE_STRING;
+    outputfile->required = YES;
+    outputfile->gisprompt = "new_file,file,output";
+    outputfile->description = _("Name for the output binary MAT-File");
 
-    if (G_parser(argc,argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     infile = inputfile->answer;
@@ -82,44 +83,44 @@ int main(int argc, char *argv[]) {
 
     mapset = G_find_cell(infile, "");
     if (mapset == NULL) {
-        G_fatal_error(_("Raster map <%s> not found"), infile);
+	G_fatal_error(_("Raster map <%s> not found"), infile);
     }
 
-    fd = G_open_cell_old (infile, mapset);
+    fd = G_open_cell_old(infile, mapset);
     if (fd < 0)
-        G_fatal_error(_("Unable to open raster map <%s>"), infile);
+	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
     map_type = G_get_raster_map_type(fd);
 
     /* open bin file for writing */
     fp1 = fopen(outfile, "wb");
-    if(NULL == fp1)
-       G_fatal_error(_("Unable to open output file <%s>"), outfile);
+    if (NULL == fp1)
+	G_fatal_error(_("Unable to open output file <%s>"), outfile);
 
 
-    /* Check Endian State of Host Computer*/
+    /* Check Endian State of Host Computer */
     if (G_is_little_endian())
-        endianness = 0;   /* ie little endian */
+	endianness = 0;		/* ie little endian */
     else
-        endianness = 1;   /* ie big endian */
+	endianness = 1;		/* ie big endian */
     G_debug(1, "Machine is %s endian.\n", endianness ? "big" : "little");
 
-    G_get_window (&region);
+    G_get_window(&region);
 
 
     /********** Write map **********/
 
     /** write text element (map name) **/
     strncpy(array_name, "map_name", 31);
-    mrows=1;
-    ncols=strlen(infile);
-    data_format = 5; /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
-    data_type = 1;   /* 0=numbers  1=text */
+    mrows = 1;
+    ncols = strlen(infile);
+    data_format = 5;		/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
+    data_type = 1;		/* 0=numbers  1=text */
 
     G_verbose_message(_("Exporting <%s>"), infile);
 
     /* 4 byte data format */
-    format_block = endianness*1000 + data_format*10 + data_type;
+    format_block = endianness * 1000 + data_format * 10 + data_type;
     fwrite(&format_block, sizeof(int), 1, fp1);
     /* fprintf(stderr, "name data format is [%04ld]\n", format_block); */
 
@@ -142,17 +143,18 @@ int main(int argc, char *argv[]) {
 
 
     /********** Write title (if there is one) **********/
-    maptitle = G_get_cell_title (infile, mapset);
-    if(strlen(maptitle) >= 1) {
+    maptitle = G_get_cell_title(infile, mapset);
+    if (strlen(maptitle) >= 1) {
+
 	/** write text element (map title) **/
 	strncpy(array_name, "map_title", 31);
-	mrows=1;
-	ncols=strlen(maptitle);
-	data_format = 5; /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
-	data_type = 1;   /* 0=numbers  1=text */
+	mrows = 1;
+	ncols = strlen(maptitle);
+	data_format = 5;	/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
+	data_type = 1;		/* 0=numbers  1=text */
 
 	/* 4 byte data format */
-	format_block = endianness*1000 + data_format*10 + data_type;
+	format_block = endianness * 1000 + data_format * 10 + data_type;
 	fwrite(&format_block, sizeof(int), 1, fp1);
 
 	/* 4 byte number of rows & columns */
@@ -186,38 +188,38 @@ int main(int argc, char *argv[]) {
     G_verbose_message(_("cols=%d"), region.cols);
     G_verbose_message("");
 
-    for (i=0; i<4; i++) {
+    for (i = 0; i < 4; i++) {
 	switch (i) {
-	    case 0:
-		strncpy(array_name, "map_northern_edge", 31);
-		val_d = region.north;
-		break;
-	    case 1:
-		strncpy(array_name, "map_southern_edge", 31);
-		val_d = region.south;
-		break;
-	    case 2:
-		strncpy(array_name, "map_eastern_edge", 31);
-		val_d = region.east;
-		break;
-	    case 3:
-		strncpy(array_name, "map_western_edge", 31);
-		val_d = region.west;
-		break;
-	    default:
-	        fclose(fp1);
-		G_fatal_error("please contact development team");
-		break;
+	case 0:
+	    strncpy(array_name, "map_northern_edge", 31);
+	    val_d = region.north;
+	    break;
+	case 1:
+	    strncpy(array_name, "map_southern_edge", 31);
+	    val_d = region.south;
+	    break;
+	case 2:
+	    strncpy(array_name, "map_eastern_edge", 31);
+	    val_d = region.east;
+	    break;
+	case 3:
+	    strncpy(array_name, "map_western_edge", 31);
+	    val_d = region.west;
+	    break;
+	default:
+	    fclose(fp1);
+	    G_fatal_error("please contact development team");
+	    break;
 	}
 
 	/** write data element **/
-	data_format = 0; /* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
-	data_type = 0;   /* 0=numbers  1=text */
+	data_format = 0;	/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int(text) */
+	data_type = 0;		/* 0=numbers  1=text */
 	mrows = 1;
 	ncols = 1;
 
 	/* 4 byte data format */
-	format_block = endianness*1000 + data_format*10 + data_type;
+	format_block = endianness * 1000 + data_format * 10 + data_type;
 	fwrite(&format_block, sizeof(int), 1, fp1);
 	/* fprintf(stderr, "bounds data format is [%04ld]\n", format_block); */
 
@@ -237,6 +239,7 @@ int main(int argc, char *argv[]) {
 
 	/* write array data, by increasing column */
 	fwrite(&val_d, sizeof(double), 1, fp1);
+
 	/** end of data element **/
     }
 
@@ -245,42 +248,41 @@ int main(int argc, char *argv[]) {
     /***** Write map data *****/
     strncpy(array_name, "map_data", 31);
 
-    switch (map_type)
-    {   /* data_format: 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
+    switch (map_type) {		/* data_format: 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
 
-        case CELL_TYPE:
-	    data_format = 2;
-            G_verbose_message(_("Exporting raster as integer values"));
-	    break;
+    case CELL_TYPE:
+	data_format = 2;
+	G_verbose_message(_("Exporting raster as integer values"));
+	break;
 
-	case FCELL_TYPE:
-	    data_format = 1;
-            G_verbose_message(_("Exporting raster as floating point values"));
-	    break;
+    case FCELL_TYPE:
+	data_format = 1;
+	G_verbose_message(_("Exporting raster as floating point values"));
+	break;
 
-	case DCELL_TYPE:
-	    data_format = 0;
-            G_verbose_message(_("Exporting raster as double FP values"));
-	    break;
+    case DCELL_TYPE:
+	data_format = 0;
+	G_verbose_message(_("Exporting raster as double FP values"));
+	break;
 
-	default:
-	    fclose(fp1);
-	    G_fatal_error("Please contact development team");
-	    break;
+    default:
+	fclose(fp1);
+	G_fatal_error("Please contact development team");
+	break;
     }
 
-    data_type = 0;   /* 0=numbers  1=text */
+    data_type = 0;		/* 0=numbers  1=text */
 
     mrows = region.rows;
     ncols = region.cols;
 
     /* 4 byte data format */
-    format_block = (endianness*1000) + (data_format*10) + data_type;
+    format_block = (endianness * 1000) + (data_format * 10) + data_type;
     fwrite(&format_block, sizeof(int), 1, fp1);
 
     G_debug(3, "map data format is [%04d]\n", format_block);
 
-    /* 4 byte number of rows & columns*/
+    /* 4 byte number of rows & columns */
     fwrite(&mrows, sizeof(int), 1, fp1);
     fwrite(&ncols, sizeof(int), 1, fp1);
 
@@ -295,82 +297,93 @@ int main(int argc, char *argv[]) {
     fprintf(fp1, "%s%c", array_name, '\0');
 
     /* data array, by increasing column */
-    raster = G_calloc ((G_window_rows()+1)*(G_window_cols()+1), G_raster_size(map_type));
+    raster =
+	G_calloc((G_window_rows() + 1) * (G_window_cols() + 1),
+		 G_raster_size(map_type));
 
-    G_debug(1, "mem alloc is %d bytes\n", /* I think _cols()+1 is unneeded? */
-    	G_raster_size(map_type)*(G_window_rows()+1)*(G_window_cols()+1) );
+    G_debug(1, "mem alloc is %d bytes\n",	/* I think _cols()+1 is unneeded? */
+	    G_raster_size(map_type) * (G_window_rows() +
+				       1) * (G_window_cols() + 1));
 
     G_verbose_message(_("Reading in map ... "));
 
     /* load entire map into memory */
-    for (row = 0, ptr = raster; row < mrows; row++, 
-      ptr = G_incr_void_ptr(ptr, (G_window_cols()+1)*G_raster_size(map_type))) {
-    	if (G_get_raster_row(fd, ptr, row, map_type) < 0)
-    	    G_fatal_error("reading map");
+    for (row = 0, ptr = raster; row < mrows; row++,
+	 ptr =
+	 G_incr_void_ptr(ptr,
+			 (G_window_cols() + 1) * G_raster_size(map_type))) {
+	if (G_get_raster_row(fd, ptr, row, map_type) < 0)
+	    G_fatal_error("reading map");
 	G_percent(row, mrows, 2);
     }
-    G_percent(row, mrows, 2);  /* finish it off */
+    G_percent(row, mrows, 2);	/* finish it off */
 
-    
+
     G_verbose_message(_("Writing out map..."));
 
     /* then write it to disk */
     /* NoGood: fwrite(raster, G_raster_size(map_type), mrows*ncols, fp1); */
-    for(col=0; col<ncols; col++) {
-    	for(row=0; row<mrows; row++) {
+    for (col = 0; col < ncols; col++) {
+	for (row = 0; row < mrows; row++) {
 
-    	    ptr = raster;
-    	    ptr = G_incr_void_ptr(ptr, (col+row*(ncols+1))*G_raster_size(map_type));
+	    ptr = raster;
+	    ptr =
+		G_incr_void_ptr(ptr,
+				(col +
+				 row * (ncols +
+					1)) * G_raster_size(map_type));
 
-    	    if(!G_is_null_value(ptr, map_type)) {
-    		if(map_type == CELL_TYPE) {
-    		    val_i = *((CELL *) ptr);
-    		    fwrite(&val_i, sizeof(int), 1, fp1);
-    		}
-    		else if(map_type == FCELL_TYPE) {
-    		    val_f = *((FCELL *) ptr);
-    		    fwrite(&val_f, sizeof(float), 1, fp1);
-    		}
-    		else if(map_type == DCELL_TYPE) {
-    		    val_d = *((DCELL *) ptr);
-    		    fwrite(&val_d, sizeof(double), 1, fp1);
-    		}
-    	    }
-    	    else {  /* ie if NULL cell -> write IEEE NaN value */
-    		if(map_type == CELL_TYPE) {
-		    val_i = *((CELL *) ptr); /* int has no NaN value, so use whatever GRASS uses */
-		    fwrite (&val_i, sizeof(int), 1, fp1);
+	    if (!G_is_null_value(ptr, map_type)) {
+		if (map_type == CELL_TYPE) {
+		    val_i = *((CELL *) ptr);
+		    fwrite(&val_i, sizeof(int), 1, fp1);
 		}
-		else if(map_type == FCELL_TYPE) {
-    		    if(endianness)  /* ie big */
-    			fprintf(fp1, "%c%c%c%c", 0xff,0xf8,0,0);
-    		    else  /* ie little */
-    			fprintf(fp1, "%c%c%c%c", 0,0,0xf8,0xff);
+		else if (map_type == FCELL_TYPE) {
+		    val_f = *((FCELL *) ptr);
+		    fwrite(&val_f, sizeof(float), 1, fp1);
 		}
-		else if(map_type == DCELL_TYPE) {
-    		    if(endianness)
-    			fprintf(fp1, "%c%c%c%c%c%c%c%c", 0xff,0xf8,0,0,0,0,0,0);
-    		    else
-    			fprintf(fp1, "%c%c%c%c%c%c%c%c", 0,0,0,0,0,0,0xf8,0xff);
+		else if (map_type == DCELL_TYPE) {
+		    val_d = *((DCELL *) ptr);
+		    fwrite(&val_d, sizeof(double), 1, fp1);
 		}
-    	    }
+	    }
+	    else {		/* ie if NULL cell -> write IEEE NaN value */
+		if (map_type == CELL_TYPE) {
+		    val_i = *((CELL *) ptr);	/* int has no NaN value, so use whatever GRASS uses */
+		    fwrite(&val_i, sizeof(int), 1, fp1);
+		}
+		else if (map_type == FCELL_TYPE) {
+		    if (endianness)	/* ie big */
+			fprintf(fp1, "%c%c%c%c", 0xff, 0xf8, 0, 0);
+		    else	/* ie little */
+			fprintf(fp1, "%c%c%c%c", 0, 0, 0xf8, 0xff);
+		}
+		else if (map_type == DCELL_TYPE) {
+		    if (endianness)
+			fprintf(fp1, "%c%c%c%c%c%c%c%c", 0xff, 0xf8, 0, 0, 0,
+				0, 0, 0);
+		    else
+			fprintf(fp1, "%c%c%c%c%c%c%c%c", 0, 0, 0, 0, 0, 0,
+				0xf8, 0xff);
+		}
+	    }
 	}
-    	G_percent(col, ncols, 2);
+	G_percent(col, ncols, 2);
     }
-    G_percent(col, ncols, 2); /* finish it off */
+    G_percent(col, ncols, 2);	/* finish it off */
 
     /*** end of data element ***/
 
 
     /* done! */
-    filesize=ftell(fp1);
+    filesize = ftell(fp1);
     fclose(fp1);
 
     G_verbose_message(_("%ld bytes written to '%s'"), filesize, outfile);
 
     G_done_msg("");
 
-    G_free(basename);	
+    G_free(basename);
     G_free(outfile);
 
     exit(EXIT_SUCCESS);
