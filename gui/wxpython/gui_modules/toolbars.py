@@ -627,13 +627,16 @@ class VDigitToolbar(AbstractToolbar):
 
         @param enable False for disable
         """
-        if enable:
-            if self.toolbar[0].GetToolEnabled(self.undo) is False:
-                self.toolbar[0].EnableTool(self.undo, True)
-        else:
-            if self.toolbar[0].GetToolEnabled(self.undo) is True:
-                self.toolbar[0].EnableTool(self.undo, False)
-        
+        ### fix undo first...
+
+        #         if enable:
+        #             if self.toolbar[0].GetToolEnabled(self.undo) is False:
+        #                 self.toolbar[0].EnableTool(self.undo, True)
+        #         else:
+        #             if self.toolbar[0].GetToolEnabled(self.undo) is True:
+        #                 self.toolbar[0].EnableTool(self.undo, False)
+        pass
+
     def OnSettings(self, event):
         """Show settings dialog"""
 
