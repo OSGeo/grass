@@ -111,7 +111,7 @@ class Settings:
                     'type' : 'vdigit'
                     }, # vedit, vdigit
                 'iconTheme' : {
-                    'type' : 'silk'
+                    'type' : 'grass'
                     }, # grass, silk
                 },
             #
@@ -864,23 +864,10 @@ class PreferencesDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
 
-        #
-        # show opacily level
-        #
-        row = 0
-        changeOpacityLevel = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                       label=_("Opacity level editable"),
-                                       name='IsChecked')
-        changeOpacityLevel.SetValue(self.settings.Get(group='manager', key='changeOpacityLevel', subkey='enabled'))
-        self.winId['manager:changeOpacityLevel:enabled'] = changeOpacityLevel.GetId()
-
-        gridSizer.Add(item=changeOpacityLevel,
-                      pos=(row, 0), span=(1, 2))
 
         #
         # ask when removing map layer from layer tree
         #
-        row += 1
         askOnRemoveLayer = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                        label=_("Ask when removing map layer from layer tree"),
                                        name='IsChecked')
