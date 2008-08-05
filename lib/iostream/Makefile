@@ -9,4 +9,4 @@ ifneq ($(USE_LARGEFILES),)
 	EXTRA_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
 
-default: lib
+default: stlib
