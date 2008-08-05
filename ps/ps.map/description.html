@@ -1307,7 +1307,7 @@ USAGE:	<B>vlines</B> vectormap
 	<B>offset</B> #
 	<B>coffset</B> #
 	<B>ref</B> left|right
-	<B>style</B>  0-9
+	<B>style</B> 00001111
 	<B>label</B> label
 	<B>lpos</B> #
 	<B>end</B>
@@ -1349,10 +1349,11 @@ for more information on the mask);
 <B>style</B> - the line style allows the vectors
 to be dashed in different patterns.  This is done by typing a
 series of numbers (0's and 1's) in a desired sequence or pattern.
-Blanks and
-non-digit characters are recognized as 0's. Using 0 would allow the
-colors of the raster map layer (or the background color
-if no raster map layer was selected) to show through;
+The first block of repeated zeros or ones represents "draw", the second
+block represents "blank".
+An even number of blocks will repeat the pattern, an odd number of blocks
+will alternate the pattern.
+The default is "solid";
 <P>
 <B>cats</B> - which categories should be plotted (default is all);
 <P>

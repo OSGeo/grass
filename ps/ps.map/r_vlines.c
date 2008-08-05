@@ -24,7 +24,7 @@ static char *help[] = {
     "offset      #",
     "coffset     #",
     "masked      [y|n]",
-    "style       solid|[0-9]...",
+    "style       solid|[0|1]...",
     "line_cat    #",
     "acolor      r g b",
     "label       label",
@@ -132,6 +132,7 @@ int read_vlines(char *name, char *mapset)
 	if (KEY("style")) {
 	    G_strip(data);
 	    if (strcmp(data, "solid") == 0) {
+/* TODO: add "dotted" and "dashed" preset line patterns */
 		vector.layer[vec].linestyle = NULL;
 		continue;
 	    }

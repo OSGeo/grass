@@ -67,6 +67,7 @@ int do_vectors(int after_masking)
 	    dashes[1] = 0;
 	    lz = 0;
 	    if (vector.layer[n].linestyle != NULL) {
+		G_debug(1, "Line style: '%s'", vector.layer[n].linestyle);
 		G_strip(vector.layer[n].linestyle);
 		ptr = vector.layer[n].linestyle;
 		while (*ptr && (*ptr < '1' || *ptr > '9')) {
@@ -102,6 +103,8 @@ int do_vectors(int after_masking)
 	    strcat(dashes, buf);
 	    fprintf(PS.fp, "%s setdash\n", dashes);
 	    vector.layer[n].setdash = G_store(dashes);
+	    if (vector.layer[n].linestyle != NULL)
+		G_debug(1, "Dash style: '%s setdash'", dashes);
 	    PS_vlines_plot(&Map, n, LINE_DRAW_LINE);
 	}
 
