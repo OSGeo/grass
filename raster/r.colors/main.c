@@ -109,7 +109,6 @@ int main(int argc, char **argv)
     char *style, *cmap, *cmapset;
     char *rules;
     int fp;
-    FILE *rules_file;
     struct GModule *module;
     struct
     {
@@ -238,7 +237,6 @@ int main(int argc, char **argv)
     cmap = opt.rast->answer;
     rules = opt.rules->answer;
 
-    rules_file = NULL;
     if (!name)
 	G_fatal_error(_("No map specified"));
 
@@ -246,11 +244,11 @@ int main(int argc, char **argv)
 	G_fatal_error(_
 		      ("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
 
-    if (interactive && ((strcmp(style, "rules") && rules) || cmap))
+    if (interactive && (style || rules || cmap))
 	G_fatal_error(_
 		      ("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
 
-    if ((strcmp(style, "rules") && (cmap || rules)) || (cmap && rules))
+    if ((style && (cmap || rules)) || (cmap && rules))
 	G_fatal_error(_
 		      ("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
@@ -315,11 +313,7 @@ int main(int argc, char **argv)
 					(CELL) max);
 	}
 	else if (strcmp(style, "rules") == 0) {
-	    rules_file = fopen(rules, "r");
-	    if (rules_file == NULL) {
-		G_fatal_error(_("Unable to open rules file <%s>"), rules);
-	    }
-	    if (!read_color_rules(rules_file, &colors, min, max, fp))
+	    if (!read_color_rules(stdin, &colors, min, max, fp))
 		exit(EXIT_FAILURE);
 	}
 	else if (find_rule(style))
