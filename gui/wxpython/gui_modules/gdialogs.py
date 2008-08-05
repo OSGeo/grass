@@ -940,12 +940,8 @@ class MultiImportDialog(wx.Dialog):
         if self.inputType == 'dxf':
             for line in cmd.ReadStdOutput():
                 layerId = line.split(':')[0].split(' ')[1]
-                layer = line.split(':')[1]
-                try:
-                    layerName, grassName = layer.split('/')
-                except ValueError: # trunk/develbranch_6 -> v.in.dxf -l format changed
-                    layerName = layer.strip()
-                    grassName = utils.GetValidLayerName(layerName)
+                layerName = line.split(':')[1].strip()
+                grassName = utils.GetValidLayerName(layerName)
                 data.append((layerId, layerName.strip(), grassName.strip()))
                 
         else: # gdal/ogr (for ogr maybe to use v.in.ogr -l)
