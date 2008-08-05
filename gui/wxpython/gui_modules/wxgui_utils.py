@@ -85,11 +85,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.layer_selected = None # ID of currently selected layer
         self.saveitem = {}         # dictionary to preserve layer attributes for drag and drop
         self.first = True          # indicates if a layer is just added or not
-        self.drag = False          # flag to indicate a drag event is in process
+        self.flag = ''             # flag for drag and drop hittest
         self.disp_idx = kargs['idx']
         self.gismgr = kargs['gismgr']
         self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
-        self.treepg = parent      # notebook page holding layer tree
+        self.treepg = parent        # notebook page holding layer tree
         self.auimgr = kargs['auimgr']       # aui manager
 
         # init associated map display
@@ -183,6 +183,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.Bind(CT.EVT_TREE_ITEM_CHECKED,     self.OnLayerChecked)
         self.Bind(wx.EVT_TREE_DELETE_ITEM,      self.OnDeleteLayer)
         self.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnLayerContextMenu)
+        #self.Bind(wx.EVT_TREE_BEGIN_DRAG,       self.OnDrag)
+        self.Bind(wx.EVT_TREE_END_DRAG,         self.OnEndDrag)
         #self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnChangeLayerName)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
@@ -242,11 +244,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 ltype != "command": # properties
             self.popupMenu.AppendSeparator()
             self.popupMenu.Append(self.popupID8, text=_("Change opacity level"))
-            if self.FindWindowById(self.GetPyData(self.layer_selected)[0]['ctrl']).GetName() == 'spinCtrl':
-                checked = True
-            else:
-                checked = False
-            self.popupMenu.Check(self.popupID8, checked)
             self.Bind(wx.EVT_MENU, self.OnPopupOpacityLevel, id=self.popupID8)
             self.popupMenu.Append(self.popupID3, text=_("Properties"))
             self.Bind(wx.EVT_MENU, self.OnPopupProperties, id=self.popupID3)
@@ -829,7 +826,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item    = event.GetItem()
         checked = item.IsChecked()
         
-        if self.drag == False and self.first == False:
+        if self.first == False:
             # change active parameter for item in layers list in render.Map
             if self.GetPyData(item)[0]['type'] == 'group':
                 child, cookie = self.GetFirstChild(item)
@@ -958,13 +955,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.layer_selected = event.GetItem()
         if self.GetPyData(self.layer_selected)[0]['type'] == 'group':
             self.SetItemImage(self.layer_selected, self.folder_open)
+    
+    def OnEndDrag(self, event):
+        self.StopDragging()
+        dropTarget = event.GetItem()
+        self.flag = self.HitTest(event.GetPoint())[1]
+        if self.IsValidDropTarget(dropTarget):
+            self.UnselectAll()
+            if dropTarget != None:
+                self.SelectItem(dropTarget)
+            self.OnDrop(dropTarget, self._dragItem)
+        elif dropTarget == None:
+            self.OnDrop(dropTarget, self._dragItem)
 
     def OnDrop(self, dropTarget, dragItem):
         # save everthing associated with item to drag
-        dropIndex = self.GetIndexOfItem(dropTarget)
-        dragIndex = self.GetIndexOfItem(dragItem)
-        
-        #Insert copy of layer in new position and delete original at old position
         try:
             old = dragItem  # make sure this member exists
         except:
@@ -973,7 +978,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         Debug.msg (4, "LayerTree.OnDrop(): layer=%s" % \
                    (self.GetItemText(dragItem)))
         
-        # recreate data layer
+        # recreate data layer, insert copy of layer in new position, and delete original at old position
         newItem  = self.RecreateItem (dragItem, dropTarget)
 
         # if recreated layer is a group, also recreate its children
@@ -1045,7 +1050,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             windval = None
             data    = None
             
-        if dropTarget != None:
+        # decide where to put recreated item
+        if dropTarget != None and dropTarget != self.GetRootItem():
             if parent:
                 # new item is a group
                 afteritem = parent
@@ -1066,10 +1072,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                        text=text, ct_type=1, wnd=newctrl, \
                                        image=image, data=data)
         else:
-            # if dragItem not dropped on a layer or group, prepend it to the layer tree
-            newItem = self.PrependItem(self.root, text=text, \
-                                  ct_type=1, wnd=newctrl, image=image, \
-                                  data=data)
+            # if dragItem not dropped on a layer or group, append or prepend it to the layer tree
+            if self.flag & wx.TREE_HITTEST_ABOVE:
+                newItem = self.PrependItem(self.root, text=text, \
+                                      ct_type=1, wnd=newctrl, image=image, \
+                                      data=data)
+            elif (self.flag &  wx.TREE_HITTEST_BELOW) or (self.flag & wx.TREE_HITTEST_NOWHERE) \
+                     or (self.flag & wx.TREE_HITTEST_TOLEFT) or (self.flag & wx.TREE_HITTEST_TORIGHT):
+                newItem = self.AppendItem(self.root, text=text, \
+                                      ct_type=1, wnd=newctrl, image=image, \
+                                      data=data)
 
         #update new layer 
         self.SetPyData(newItem, self.GetPyData(dragItem))
