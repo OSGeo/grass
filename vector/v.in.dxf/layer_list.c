@@ -54,19 +54,9 @@ void init_list(void)
 
 void print_layer(const char *layer_name)
 {
-    char *grass_name;
-
-    grass_name = G_store(layer_name);
-
-    G_str_to_lower(grass_name);
-    G_str_to_sql(grass_name);
-
-    fprintf(stdout, _("Layer %d: %s / %s\n"), num_layers,
-	    layer_name, grass_name);
-
+    fprintf(stdout, _("Layer %d: %s\n"), num_layers,
+	    layer_name);
     fflush(stdout);
-
-    G_free((void *)grass_name);
-
+    
     return;
 }
