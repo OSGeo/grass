@@ -160,46 +160,24 @@ class ProfileFrame(wx.Frame):
 
         self.properties = {}
         self.properties['font'] = {}
-        if UserSettings.Get(group='profile', key='font'):
-            self.properties['font']['prop'] = UserSettings.Get(group='profile', key='font')
-        else:
-            self.properties['font']['prop'] = {'axisSize': 11, 'legendSize': 10, 'titleSize': 12}
+        self.properties['font']['prop'] = UserSettings.Get(group='profile', key='font')
         self.properties['font']['wxfont'] = wx.Font(11, wx.FONTFAMILY_SWISS,
                                                     wx.FONTSTYLE_NORMAL,
                                                     wx.FONTWEIGHT_NORMAL)
         
-        if UserSettings.Get(group='profile', key='marker'):
-            self.properties['marker'] = UserSettings.Get(group='profile', key='marker')
-        else:
-            self.properties['marker'] = {'color': '(0, 0, 0, 255)',
-                                         'fill': 'transparent', 'type': 'triangle',
-                                         'legend': 'Segment break', 'size': 2}
+        self.properties['marker'] = UserSettings.Get(group='profile', key='marker')
 
-        if UserSettings.Get(group='profile', key='grid'):
-            self.properties['grid'] = UserSettings.Get(group='profile', key='grid')
-        else:
-            self.properties['grid'] = {'color': '(200, 200, 200, 255)', 'enabled': True}
+        self.properties['grid'] = UserSettings.Get(group='profile', key='grid')
         self.properties['x-axis'] = {}
         
-        if UserSettings.Get(group='profile', key='x-axis'):
-            self.properties['x-axis']['prop'] = UserSettings.Get(group='profile', key='x-axis')
-        else:
-            self.properties['x-axis']['prop'] = {'max': 0.0, 'type': 'auto',
-                                                 'log': False, 'min': 0.0}
+        self.properties['x-axis']['prop'] = UserSettings.Get(group='profile', key='x-axis')
         self.properties['x-axis']['axis'] = None
 
         self.properties['y-axis'] = {}
-        if UserSettings.Get(group='profile', key='y-axis'):
-            self.properties['y-axis']['prop'] = UserSettings.Get(group='profile', key='y-axis')
-        else:
-            self.properties['y-axis']['prop'] = {'max': 0.0, 'type': 'auto',
-                                                 'log': False, 'min': 0.0}
+        self.properties['y-axis']['prop'] = UserSettings.Get(group='profile', key='y-axis')
         self.properties['y-axis']['axis'] = None
         
-        if UserSettings.Get(group='profile', key='legend'):
-            self.properties['legend'] = UserSettings.Get(group='profile', key='legend')
-        else:
-            self.properties['legend'] = {'enabled': True}
+        self.properties['legend'] = UserSettings.Get(group='profile', key='legend')
         
         # zooming disabled
         self.zoom = False
