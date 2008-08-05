@@ -868,6 +868,7 @@ class PreferencesDialog(wx.Dialog):
         #
         # ask when removing map layer from layer tree
         #
+        row = 0
         askOnRemoveLayer = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                        label=_("Ask when removing map layer from layer tree"),
                                        name='IsChecked')
