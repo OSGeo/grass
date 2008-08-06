@@ -566,6 +566,11 @@ void close_maps(void)
 
 /****************************************************************************/
 
+int check_output_map(const char *name)
+{
+    return !!G_find_grid3(name, G_mapset());
+}
+
 int open_output_map(const char *name, int res_type)
 {
     void *handle;
