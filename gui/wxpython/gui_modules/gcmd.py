@@ -293,7 +293,7 @@ class Command:
     """
     def __init__ (self, cmd, stdin=None,
                   verbose=None, wait=True, rerr=False,
-                  stdout=None, stderr=sys.stderr):
+                  stdout=None, stderr=None):
 
         self.cmd = cmd
         self.stderr = stderr
