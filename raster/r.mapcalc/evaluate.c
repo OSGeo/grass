@@ -269,6 +269,20 @@ void execute(expr_list * ee)
     for (l = ee; l; l = l->next) {
 	expression *e = l->exp;
 	const char *var;
+
+	if (e->type != expr_type_binding)
+	    G_fatal_error("internal error: execute: invalid type: %d",
+			  e->type);
+
+	var = e->data.bind.var;
+
+	if (!overwrite && check_output_map(var))
+	    G_fatal_error(_("output map <%s> exists"), var);
+    }
+
+    for (l = ee; l; l = l->next) {
+	expression *e = l->exp;
+	const char *var;
 	expression *val;
 
 	if (e->type != expr_type_binding)

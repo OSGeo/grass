@@ -26,22 +26,10 @@
 /****************************************************************************/
 
 int overflow_occurred;
+int overwrite;
 
 volatile int floating_point_exception;
 volatile int floating_point_exception_occurred;
-
-/****************************************************************************/
-
-static const char help_text[] =
-    "r.mapcalc - Raster map layer data calculator\n"
-    "\n"
-    "usage: r.mapcalc '<map>=<expression>'\n"
-    "\n"
-    "r.mapcalc performs arithmetic on raster map layers.\n"
-    "\n"
-    "New raster map layers can be created which are arithmetic expressions\n"
-    "involving existing raster map layers, integer or floating point constants,\n"
-    "and functions.\n" "\n" "For more information use 'g.manual r.mapcalc'\n";
 
 /****************************************************************************/
 
@@ -90,50 +78,74 @@ static void post_exec(void)
 
 /****************************************************************************/
 
-static const char *join(int argc, char **argv)
+static expr_list *parse_file(const char *filename)
 {
-    int size = 0;
-    char *buf;
-    int i;
+    expr_list *res;
+    FILE *fp;
 
-    for (i = 0; i < argc; i++)
-	size += strlen(argv[i]) + 1;
+    if (strcmp(filename, "-") == 0)
+	return parse_stream(stdin);
 
-    buf = G_malloc(size);
-    *buf = '\0';
-    for (i = 0; i < argc; i++) {
-	if (i)
-	    strcat(buf, " ");
-	strcat(buf, argv[i]);
-    }
+    fp = fopen(filename, "r");
+    if (!fp)
+	G_fatal_error(_("unable to open input file <%s>"), filename);
 
-    return buf;
+    res = parse_stream(fp);
+
+    fclose(fp);
+
+    return res;
 }
 
 /****************************************************************************/
 
 int main(int argc, char **argv)
 {
+    struct GModule *module;
+    struct Option *expr, *file;
     int all_ok;
-    int overwrite;
 
     G_gisinit(argv[0]);
 
-    if (argc > 1 && (strcmp(argv[1], "help") == 0 ||
-		     strcmp(argv[1], "--help") == 0)) {
-	fputs(help_text, stderr);
-	return EXIT_SUCCESS;
+    module = G_define_module();
+    module->keywords = _("raster");
+    module->description = _("Raster map calculator.");
+    module->overwrite = 1;
+
+    expr = G_define_option();
+    expr->key = "expression";
+    expr->type = TYPE_STRING;
+    expr->required = NO;
+    expr->description = _("Expression to evaluate");
+
+    file = G_define_standard_option(G_OPT_F_INPUT);
+    file->required = NO;
+    file->description = _("File containing expression to evaluate");
+
+    if (argc == 1)
+    {
+	char **p = G_malloc(3 * sizeof(char *));
+	p[0] = argv[0];
+	p[1] = G_store("input=-");
+	p[2] = NULL;
+	argv = p;
+	argc = 2;
     }
 
-    result = (argc >= 2)
-	? parse_string(join(argc - 1, argv + 1))
-	: parse_stream(stdin);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    overwrite = module->overwrite;
+
+    if (expr->answer)
+	result = parse_string(expr->answer);
+    else if (file->answer)
+	result = parse_file(file->answer);
+    else
+	result = parse_stream(stdin);
 
     if (!result)
-	return EXIT_FAILURE;
-
-    overwrite = G_check_overwrite(argc, argv);
-
+	G_fatal_error(_("parse error"));
 
     pre_exec();
     execute(result);

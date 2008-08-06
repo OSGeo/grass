@@ -49,6 +49,7 @@ extern void get_map_row(int idx, int mod, int depth, int row, int col,
 			void *buf, int res_type);
 extern void close_maps(void);
 
+extern int check_output_map(const char *name);
 extern int open_output_map(const char *name, int res_type);
 extern void put_map_row(int fd, void *buf, int res_type);
 extern void close_output_map(int fd);
