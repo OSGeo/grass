@@ -188,8 +188,7 @@ asciiToG3d(FILE * fp, G3D_Region * region, int convertNull, double nullValue)
 	    for (x = 0; x < region->cols; x++) {
 		if (fscanf(fp, "%lf", &value) != 1) {
 		    if (feof(fp))
-			G_warning(_
-				  ("End of file reached while still loading data."));
+			G_warning(_("End of file reached while still loading data."));
 		    G_debug(0,
 			    "missing data at col=%d row=%d depth=%d last_value=[%.4f]",
 			    x + 1, region->rows - y, z + 1, value);

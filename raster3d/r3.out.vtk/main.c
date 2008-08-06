@@ -164,21 +164,18 @@ void check_input_maps(void)
 	for (i = 0; i < 3; i++) {
 	    if (param.vectormaps->answers[i] != NULL) {
 		if (NULL == G_find_grid3(param.vectormaps->answers[i], ""))
-		    G3d_fatalError(_
-				   ("Requested g3d vector map <%s> not found"),
+		    G3d_fatalError(_("Requested g3d vector map <%s> not found"),
 				   param.vectormaps->answers[i]);
 	    }
 	    else {
-		G3d_fatalError(_
-			       ("Please provide three g3d vector maps [x,y,z]"));
+		G3d_fatalError(_("Please provide three g3d vector maps [x,y,z]"));
 	    }
 	}
     }
 
     if (param.input->answers == NULL && param.rgbmaps->answers == NULL &&
 	param.vectormaps->answers == NULL) {
-	G_warning(_
-		  ("No g3d data, RGB or xyz-vector maps are provided! Will only write the geometry."));
+	G_warning(_("No g3d data, RGB or xyz-vector maps are provided! Will only write the geometry."));
     }
 
     return;
@@ -451,8 +448,7 @@ int main(int argc, char *argv[])
 
 	/*If not equal, set the 2D windows correct */
 	if (rows != region.rows || cols != region.cols) {
-	    G_message(_
-		      ("The 2d and 3d region settings are different. The g3d settings are used to adjust the 2d region."));
+	    G_message(_("The 2d and 3d region settings are different. The g3d settings are used to adjust the 2d region."));
 	    G_get_set_window(&window2d);
 	    window2d.ns_res = region.ns_res;
 	    window2d.ew_res = region.ew_res;
@@ -546,8 +542,7 @@ int main(int argc, char *argv[])
 	    /* Close the 3d raster map */
 	    if (!G3d_closeCell(in->map)) {
 		in->map = NULL;
-		fatal_error(_
-			    ("Error closing 3d raster map, the VTK file may be incomplete."),
+		fatal_error(_("Error closing 3d raster map, the VTK file may be incomplete."),
 			    in);
 	    }
 
