@@ -269,8 +269,7 @@ void init_proj(struct pj_info *info_in, struct pj_info *info_out)
     out_proj_keys = G_get_projinfo();
     out_unit_keys = G_get_projunits();
     if (pj_get_kv(info_out, out_proj_keys, out_unit_keys) < 0)
-	G_fatal_error(_
-		      ("Can't get projection key values of current location"));
+	G_fatal_error(_("Can't get projection key values of current location"));
     G_free_key_value(out_proj_keys);
     G_free_key_value(out_unit_keys);
 

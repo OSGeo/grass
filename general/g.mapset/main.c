@@ -143,8 +143,7 @@ int main(int argc, char *argv[])
 	    G_make_mapset(gisdbase_new, location_new, mapset_new);
 	}
 	else
-	    G_fatal_error(_
-			  ("The mapset does not exist. Use -c flag to create it."));
+	    G_fatal_error(_("The mapset does not exist. Use -c flag to create it."));
 	break;
     default:
 	break;
@@ -167,8 +166,7 @@ int main(int argc, char *argv[])
     /* Warning: the value returned by system() is not that returned by exit() in executed program
      *          e.g. exit(1) -> 256 (multiplied by 256) */
     if (ret != 0)
-	G_fatal_error(_
-		      ("%s is currently running GRASS in selected mapset or lock file cannot be checked"),
+	G_fatal_error(_("%s is currently running GRASS in selected mapset or lock file cannot be checked"),
 		      G_whoami());
 
     /* Clean temporary directory */
@@ -187,8 +185,7 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_warning(_
-	      ("Your shell continues to use the history for the old mapset"));
+    G_warning(_("Your shell continues to use the history for the old mapset"));
 
     if ((shell = getenv("SHELL"))) {
 	if (strstr(shell, "bash")) {

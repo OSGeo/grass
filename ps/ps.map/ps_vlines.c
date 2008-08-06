@@ -121,8 +121,7 @@ int PS_vlines_plot(struct Map_info *P_map, int vec, int type)
 		rgbstring = db_get_string(cv_rgb->val.s);
 		if (rgbstring == NULL ||
 		    G_str_to_color(rgbstring, &red, &grn, &blu) != 1) {
-		    G_warning(_
-			      ("Invalid RGB color definition in column <%s> for category [%d]"),
+		    G_warning(_("Invalid RGB color definition in column <%s> for category [%d]"),
 			      vector.layer[vec].rgbcol, cat);
 		    rgbstring = NULL;
 		}

@@ -241,8 +241,7 @@ int read_vpoints(char *name, char *mapset)
 	   remove sizecol test and the warning in GRASS7
 	 */
 	if (KEY("sizecol")) {
-	    G_warning(_
-		      ("The mapping instruction <%s> will be renamed to <%s> "
+	    G_warning(_("The mapping instruction <%s> will be renamed to <%s> "
 		       "in future versions of GRASS. Please use <%s> instead."),
 		      "sizecol", "sizecolumn", "sizecolumn");
 	}

@@ -276,8 +276,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
 	}
 	if (ee != cc)
 	    G_fatal_error
-		(_
-		 ("Number of elevation files does not match number of colors files"));
+		(_("Number of elevation files does not match number of colors files"));
     }
 
     if (elev->answers) {

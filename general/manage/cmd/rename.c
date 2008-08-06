@@ -85,8 +85,7 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	    if (strcmp(old, new) == 0) {
-		G_warning(_
-			  ("%s=%s,%s: files are the same, no rename required"),
+		G_warning(_("%s=%s,%s: files are the same, no rename required"),
 			  parm[n]->key, old, new);
 		continue;
 	    }

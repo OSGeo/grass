@@ -68,8 +68,7 @@ int load_rasters(const struct GParams *params, nv_data * data)
 				      data);
 	    }
 	    else {
-		G_fatal_error(_
-			      ("Missing topography attribute for surface %d"),
+		G_fatal_error(_("Missing topography attribute for surface %d"),
 			      i + 1);
 	    }
 	}
@@ -115,8 +114,7 @@ int load_rasters(const struct GParams *params, nv_data * data)
 	    Nviz_set_attr(id, MAP_OBJ_SURF, ATT_COLOR, MAP_ATT,
 			  G_fully_qualified_name(params->elev_map->answers[i],
 						 mapset), -1.0, data);
-	    G_verbose_message(_
-			      ("Color attribute not defined, using default <%s>"),
+	    G_verbose_message(_("Color attribute not defined, using default <%s>"),
 			      G_fully_qualified_name(params->elev_map->
 						     answers[i], mapset));
 	}

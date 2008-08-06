@@ -71,8 +71,7 @@ int main(int argc, char *argv[])
 
 	if (G_number_of_tokens(map_mapset) > 1) {
 	    if (strcmp(map_mapset[1], opt2->answer))
-		G_fatal_error(_
-			      ("Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"),
+		G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"),
 			      map_mapset[1], opt2->answer);
 	    else
 		strcpy(name, opt3->answer);
