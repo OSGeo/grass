@@ -19,8 +19,7 @@ int add_point(int x, int y)
 	return (1);
 
     if (Region.npoints >= MAX_VERTEX) {
-	G_warning(_
-		  ("Can't mark another point.  Only %d points allowed.  Sorry."),
+	G_warning(_("Can't mark another point.  Only %d points allowed.  Sorry."),
 		  MAX_VERTEX);
 	return (0);
     }

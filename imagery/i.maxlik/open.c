@@ -23,8 +23,7 @@ int open_files(void)
 
     if (Ref.nfiles <= 1) {
 	if (Ref.nfiles <= 0)
-	    G_fatal_error(_
-			  ("Subgroup [%s] of group [%s] doesn't have any files.\n"
+	    G_fatal_error(_("Subgroup [%s] of group [%s] doesn't have any files.\n"
 			   "The subgroup must have at least 2 files."));
 	else
 	    G_fatal_error(_("Subgroup [%s] of group [%s] only has 1 file.\n"

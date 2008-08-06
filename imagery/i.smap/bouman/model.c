@@ -35,8 +35,7 @@ void extract_init(struct SigSet *S)
 	    for (b1 = 0; b1 < nbands; b1++)
 		for (b2 = 0; b2 < nbands; b2++) {
 		    if (SubS->R[b1][b2] != SubS->R[b2][b1])
-			G_warning(_
-				  ("\nNonsymetric covariance for class [%d] subclass [%d]."),
+			G_warning(_("\nNonsymetric covariance for class [%d] subclass [%d]."),
 				  m + 1, i + 1);
 
 		    SubS->Rinv[b1][b2] = SubS->R[b1][b2];
@@ -46,8 +45,7 @@ void extract_init(struct SigSet *S)
 	    eigen(SubS->Rinv, lambda, nbands);
 	    for (b1 = 0; b1 < nbands; b1++) {
 		if (lambda[b1] <= 0.0)
-		    G_warning(_
-			      ("Nonpositive eigenvalues for class [%d] subclass [%d]."),
+		    G_warning(_("Nonpositive eigenvalues for class [%d] subclass [%d]."),
 			      m + 1, i + 1);
 	    }
 

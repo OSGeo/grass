@@ -13,8 +13,7 @@ int openfiles(struct parms *parms, struct files *files)
 
 
     if (!I_get_subgroup_ref(parms->group, parms->subgroup, &Ref))
-	G_fatal_error(_
-		      ("Unable to read REF file for subgroup [%s] in group [%s]."),
+	G_fatal_error(_("Unable to read REF file for subgroup [%s] in group [%s]."),
 		      parms->subgroup, parms->group);
 
     if (Ref.nfiles <= 0)

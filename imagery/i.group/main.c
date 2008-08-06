@@ -121,8 +121,7 @@ int main(int argc, char *argv[])
 	/* Remove files from Group */
 
 	if (I_find_group(group) == 0) {
-	    G_fatal_error(_
-			  ("Specified group does not exist in current mapset"));
+	    G_fatal_error(_("Specified group does not exist in current mapset"));
 	}
 
 	if (sgrp->answer) {
@@ -143,8 +142,7 @@ int main(int argc, char *argv[])
 	    struct Ref ref;
 
 	    if (I_find_group(group) == 0) {
-		G_fatal_error(_
-			      ("Specified group does not exist in current mapset"));
+		G_fatal_error(_("Specified group does not exist in current mapset"));
 	    }
 
 	    if (sgrp->answer) {
@@ -167,8 +165,7 @@ int main(int argc, char *argv[])
 	else {
 	    /* Create or update Group REF */
 	    if (I_find_group(group) == 0)
-		G_verbose_message(_
-				  ("Group <%s> does not yet exist. Creating..."),
+		G_verbose_message(_("Group <%s> does not yet exist. Creating..."),
 				  group);
 
 	    if (sgrp->answer) {
@@ -253,8 +250,7 @@ static int add_or_update_subgroup(char group[INAME_LEN],
 	/* Go through existing files to check for duplicates */
 	for (n = 0; n < ref.nfiles; n++) {
 	    if (strcmp(rasters[m], ref.file[n].name) == 0) {
-		G_message(_
-			  ("Raster map <%s> exists in subgroup. Skipping..."),
+		G_message(_("Raster map <%s> exists in subgroup. Skipping..."),
 			  G_fully_qualified_name(rasters[m], mapset));
 		skip = 1;
 		continue;
