@@ -122,7 +122,7 @@ struct render_window
     GLXPixmap windowId;
     Pixmap pixmap;
 #elif defined(OPENGL_AQUA)
-    AGLPixelFmt pixelFmtId;
+    AGLPixelFmtID pixelFmtId;
     AGLContext contextId;
     AGLPixmap windowId;
     GWorldPtr pixmap;
