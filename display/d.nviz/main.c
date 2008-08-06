@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     char outfile[GNAME_MAX];
     int fd, projection;
     char buf[512], buf1[1024], buf2[1024];
-    int screen_x, screen_y, button;
+    int screen_x, screen_y;
     int i, k;
     int frame_start = 0;
     double e1, e2, n1, n2;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *opt1, *route, *name, *output, *dist, *ht, *frames,
 	    *start;
-	struct Flag *i, *f, *c, *k, *o, *e;
+	struct Flag *f, *c, *k, *o, *e;
     }
     parm;
     struct GModule *module;
@@ -112,10 +112,6 @@ int main(int argc, char *argv[])
     parm.start->description = _("Start frame number (default=0)");
 
 
-    parm.i = G_define_flag();
-    parm.i->key = 'i';
-    parm.i->description = _("Interactively select route");
-
     parm.f = G_define_flag();
     parm.f->key = 'f';
     parm.f->description = _("Full render -- Save images");
@@ -142,7 +138,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* check arguments */
-    if ((!parm.i->answer) && (!parm.route->answer))
+    if (!parm.route->answer)
 	G_fatal_error(_
 		      ("Either -i flag and/or route parameter must be used"));
 
@@ -241,97 +237,32 @@ int main(int argc, char *argv[])
 	fprintf(fp, "%s", buf1);
     }
 
-    /* Get coords */
-    /* Select points interactively */
-    if (parm.i->answer) {
-	int count = 0;
+    /* Coords from Command Line */
+    for (i = 0; parm.route->answers[i]; i += 2) {
+	/* Test for number coordinate pairs */
+	k = i;
+    }
 
-	if (R_open_driver() != 0)
-	    G_fatal_error(_("No graphics device selected"));
-	D_setup(0);
-
-	G_setup_plot(D_get_d_north(),
-		     D_get_d_south(),
-		     D_get_d_west(), D_get_d_east(), move, cont);
-
-	dist = 0;
-
-	fprintf(stderr, "\n\n");
-	fprintf(stderr, "Use mouse to select Start Point\n");
-	R_get_location_with_pointer(&screen_x, &screen_y, &button);
-	e1 = D_d_to_u_col((double)screen_x);
-	n1 = D_d_to_u_row((double)screen_y);
-
-	fprintf(stderr, "\nUse mouse to select route \n");
-	fprintf(stderr, "Buttons:\n");
-	fprintf(stderr, "Left:   Mark next point\n");
-	fprintf(stderr, "Middle: Mark next point\n");
-	fprintf(stderr, "Right:  Finish route and exit\n\n");
-
-	while (button != 3) {
-	    count++;
-	    R_get_location_with_line((int)(0.5 + D_u_to_d_col(e1)),
-				     (int)(0.5 + D_u_to_d_row(n1)), &screen_x,
-				     &screen_y, &button);
-	    if (button == 1 || button == 2) {
-		e2 = D_d_to_u_col((double)screen_x);
-		n2 = D_d_to_u_row((double)screen_y);
-	    }
-	    else {
-		if (e2 == -9999. || n2 == -9999.) {
-		    G_fatal_error(_("You must select more than one point"));
-
-		}
-		break;
-	    }
-
-	    /* draw line from p1 to p2 */
-	    G_plot_line(e1, n1, e2, n2);
-
-	    /* Get profile info */
-	    do_profile(e1, e2, n1, n2, name, fd, data_type);
-
-	    n1 = n2;
-	    e1 = e2;
-	    R_stabilize();
-	}
-
-	if (count < 4) {
-	    G_fatal_error(_("You must select at least four points"));
-
-	}
-
-	R_close_driver();
+    if (k < 6) {
+	/* Only one coordinate pair supplied */
+	G_fatal_error(_("You must provide at least four points %d"), k);
 
     }
     else {
+	for (i = 0; i <= k - 2; i += 2) {
+	    sscanf(parm.route->answers[i], "%lf", &e1);
+	    sscanf(parm.route->answers[i + 1], "%lf", &n1);
+	    sscanf(parm.route->answers[i + 2], "%lf", &e2);
+	    sscanf(parm.route->answers[i + 3], "%lf", &n2);
+	    /* Get profile info */
+	    do_profile(e1, e2, n1, n2, name, fd, data_type);
 
-	/* Coords from Command Line */
-	for (i = 0; parm.route->answers[i]; i += 2) {
-	    /* Test for number coordinate pairs */
-	    k = i;
+	    /* Get last coord */
+	    if (i == k - 2)
+		do_profile(e2, e2, n2, n2, name, fd, data_type);
 	}
-
-	if (k < 6) {
-	    /* Only one coordinate pair supplied */
-	    G_fatal_error(_("You must provide at least four points %d"), k);
-
-	}
-	else {
-	    for (i = 0; i <= k - 2; i += 2) {
-		sscanf(parm.route->answers[i], "%lf", &e1);
-		sscanf(parm.route->answers[i + 1], "%lf", &n1);
-		sscanf(parm.route->answers[i + 2], "%lf", &e2);
-		sscanf(parm.route->answers[i + 3], "%lf", &n2);
-		/* Get profile info */
-		do_profile(e1, e2, n1, n2, name, fd, data_type);
-
-		/* Get last coord */
-		if (i == k - 2)
-		    do_profile(e2, e2, n2, n2, name, fd, data_type);
-	    }
-	}
-    }				/* done with coordinates */
+    }
+	/* done with coordinates */
 
 
     /* Output final part of script */
@@ -474,36 +405,6 @@ int do_profile
     return 0;
 }				/* done with do_profile */
 
-
-static int move(int x, int y)
-{
-    D_move_abs(x, y);
-
-    return 0;
-}
-
-static int cont(int x, int y)
-{
-    if (D_cont_abs(x, y)) {	/* clipped */
-	change_range = 1;
-    }
-    else {			/* keep track of left,right x for lines drawn in window */
-
-	if (change_range) {
-	    which_range++;
-	    min_range[which_range] = max_range[which_range] = x;
-	    change_range = 0;
-	}
-	else {
-	    if (x < min_range[which_range])
-		min_range[which_range] = x;
-	    else if (x > max_range[which_range])
-		max_range[which_range] = x;
-	}
-    }
-
-    return 0;
-}
 
 /*****************************
  * read_rast

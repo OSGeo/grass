@@ -41,7 +41,6 @@
 
 int main(int argc, char **argv)
 {
-    char window_name[64];
     struct GModule *module;
     struct Option *opt1, *opt2;
     struct Flag *mapcoords;
@@ -115,14 +114,7 @@ int main(int argc, char **argv)
     else
 	mapunits = FALSE;
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error(_("Getting screen window"));
+    D_get_screen_window(&t, &b, &l, &r);
 
     /* Finish graphics setup */
     R_set_window(t, b, l, r);
@@ -135,9 +127,6 @@ int main(int argc, char **argv)
 
     R_text_rotation(0.0);	/* reset */
     R_line_width(0);		/* reset */
-
-    if (opt1->answer)
-	D_add_to_list(G_recreate_command());
 
     R_close_driver();
 

@@ -42,7 +42,6 @@ int main(int argc, char **argv)
     struct Option *bg;
     struct Flag *flag_o;
     struct Flag *flag_i;
-    struct Flag *flag_x;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -93,11 +92,6 @@ int main(int argc, char **argv)
     flag_i->key = 'i';
     flag_i->description = _("Invert catlist");
 
-    flag_x = G_define_flag();
-    flag_x->key = 'x';
-    flag_x->description =
-	_("Don't add to list of rasters and commands in monitor");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -132,11 +126,9 @@ int main(int argc, char **argv)
     /* use DCELL even if the map is FCELL */
 
     if (fp)
-	display(name, mapset, overlay, bg->answer, DCELL_TYPE, invert,
-		flag_x->answer);
+	display(name, mapset, overlay, bg->answer, DCELL_TYPE, invert);
     else
-	display(name, mapset, overlay, bg->answer, CELL_TYPE, invert,
-		flag_x->answer);
+	display(name, mapset, overlay, bg->answer, CELL_TYPE, invert);
 
     R_close_driver();
 

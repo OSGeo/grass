@@ -11,15 +11,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define MAIN
 #include "local_proto.h"
 
+int clr;
+struct Colors colors;
+
 static double dist, e, n;
-static int min_range[5], max_range[5];
-static int which_range;
-static int change_range;
-static int move(int, int);
-static int cont(int, int);
 
 
 int main(int argc, char *argv[])
@@ -27,7 +24,6 @@ int main(int argc, char *argv[])
     char *name, *outfile, *mapset;
     int fd, projection;
     FILE *fp;
-    int screen_x, screen_y, button;
     double res;
     char *null_string;
     char ebuf[256], nbuf[256], label[512], formatbuff[256];
@@ -41,7 +37,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Option *opt1, *profile, *res, *output, *null_str;
-	struct Flag *i, *g, *c;
+	struct Flag *g, *c;
     }
     parm;
     struct GModule *module;
@@ -88,10 +84,6 @@ int main(int argc, char *argv[])
     parm.null_str->answer = "*";
     parm.null_str->description = _("Character to represent no data cell");
 
-    parm.i = G_define_flag();
-    parm.i->key = 'i';
-    parm.i->description = _("Interactively select End-Points");
-
     parm.g = G_define_flag();
     parm.g->key = 'g';
     parm.g->description =
@@ -126,8 +118,6 @@ int main(int argc, char *argv[])
 	/* Do average of EW and NS res */
 	res = (window.ew_res + window.ns_res) / 2;
     }
-    screen_x = ((int)D_get_d_west() + (int)D_get_d_east()) / 2;
-    screen_y = ((int)D_get_d_north() + (int)D_get_d_south()) / 2;
 
     G_message(_("Using resolution [%g]"), res);
 
@@ -162,18 +152,6 @@ int main(int argc, char *argv[])
     data_type = G_get_raster_map_type(fd);
     /* Done with file */
 
-    /* Get coords */
-    if (parm.i->answer) {
-	R_open_driver();
-	D_setup(0);
-
-	G_setup_plot(D_get_d_north(),
-		     D_get_d_south(),
-		     D_get_d_west(), D_get_d_east(), move, cont);
-
-	R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
-    }
-
     /* Show message giving output format */
     G_message(_("Output Format:"));
     if (coords == 1)
@@ -186,7 +164,7 @@ int main(int argc, char *argv[])
     G_message(formatbuff);
 
     /* Get Profile Start Coords */
-    if (!parm.profile->answer && !parm.i->answer) {
+    if (!parm.profile->answer) {
 	/* Assume input from stdin */
 	for (n = 1; input(b1, ebuf, b2, nbuf, label); n++) {
 	    G_debug(4, "stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
@@ -201,50 +179,6 @@ int main(int argc, char *argv[])
 	    n1 = n2;
 	    havefirst = TRUE;
 	}
-    }
-    else if (parm.i->answer) {
-	/* Select points interactively */
-
-	dist = 0;
-
-	fprintf(stderr, "\n\n");
-	fprintf(stderr, _("Use mouse to select Start Point\n"));
-	R_get_location_with_pointer(&screen_x, &screen_y, &button);
-	e1 = D_d_to_u_col((double)screen_x);
-	n1 = D_d_to_u_row((double)screen_y);
-
-	fprintf(stderr, _("\nUse mouse to draw profile line\n"));
-	fprintf(stderr, _("Buttons:\n"));
-	fprintf(stderr, _("Left:   Mark next point\n"));
-	fprintf(stderr, _("Middle: Mark next point\n"));
-	fprintf(stderr, _("Right:  Finish profile and exit\n\n"));
-
-	while (button != 3) {
-	    R_get_location_with_line((int)(0.5 + D_u_to_d_col(e1)),
-				     (int)(0.5 + D_u_to_d_row(n1)), &screen_x,
-				     &screen_y, &button);
-
-	    if (button == 1 || button == 2) {
-		e2 = D_d_to_u_col((double)screen_x);
-		n2 = D_d_to_u_row((double)screen_y);
-	    }
-	    else {
-		break;
-	    }
-
-	    /* draw line from p1 to p2 */
-	    G_plot_line(e1, n1, e2, n2);
-
-	    /* Get profile info */
-	    do_profile(e1, e2, n1, n2, name, coords, res, fd, data_type, fp,
-		       null_string);
-
-	    n1 = n2;
-	    e1 = e2;
-	    R_stabilize();
-	}
-
-	R_close_driver();
     }
     else {
 	/* Coords from Command Line */
@@ -402,32 +336,3 @@ int do_profile(double e1, double e2, double n1, double n2, char *name,
     return 0;
 }				/* done with do_profile */
 
-static int move(int x, int y)
-{
-    D_move_abs(x, y);
-
-    return 0;
-}
-
-static int cont(int x, int y)
-{
-    if (D_cont_abs(x, y)) {	/* clipped */
-	change_range = 1;
-    }
-    else {			/* keep track of left,right x for lines drawn in window */
-
-	if (change_range) {
-	    which_range++;
-	    min_range[which_range] = max_range[which_range] = x;
-	    change_range = 0;
-	}
-	else {
-	    if (x < min_range[which_range])
-		min_range[which_range] = x;
-	    else if (x > max_range[which_range])
-		max_range[which_range] = x;
-	}
-    }
-
-    return 0;
-}

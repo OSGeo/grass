@@ -21,10 +21,8 @@
 int main(int argc, char *argv[])
 {
     struct Option *color;
-    struct Flag *eraseframe, *dontaddtolist;
+    struct Flag *eraseframe;
     struct GModule *module;
-    char name[256], buf[128];
-    char *err;
 
     G_gisinit(argv[0]);
 
@@ -48,40 +46,19 @@ int main(int argc, char *argv[])
     eraseframe->key = 'f';
     eraseframe->description = _("Remove all frames and erase the screen");
 
-    dontaddtolist = G_define_flag();
-    dontaddtolist->key = 'x';
-    dontaddtolist->description =
-	_("Don't add to list of commands in monitor");
-
     if (argc > 1 && G_parser(argc, argv))
 	exit(1);
 
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    err = NULL;
-    if (D_get_cur_wind(name))
-	err = _("No current frame");
-    else if (D_set_cur_wind(name))
-	err = _("Current frame not available");
-    else {
-	/* D_setup(1);
-	   R_standard_color(D_translate_color(color->answer));
-	   D_erase_window(); */
-	D_erase(color->answer);
+    D_erase(color->answer);
 
-	if (eraseframe->answer) {
-	    D_full_screen();
-	}
-	if (!dontaddtolist->answer) {
-	    sprintf(buf, "d.erase color=%s", color->answer);
-	    D_add_to_list(buf);
-	}
+    if (eraseframe->answer) {
+	D_full_screen();
     }
 
     R_close_driver();
-    if (err)
-	G_fatal_error(err);
 
     exit(0);
 }

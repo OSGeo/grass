@@ -208,7 +208,6 @@ int main(int argc, char **argv)
 	bar(&dist_stats, &pcolors);
 
     R_flush();
-    D_add_to_list(G_recreate_command());
     R_close_driver();
 
     exit(EXIT_SUCCESS);

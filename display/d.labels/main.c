@@ -27,7 +27,6 @@
 int main(int argc, char **argv)
 {
     struct Cell_head window;
-    char window_name[64];
     char *label_name;
     char *mapset;
     double minreg, maxreg, reg, dx, dy;
@@ -101,7 +100,6 @@ int main(int argc, char **argv)
 	if (reg < minreg) {
 	    G_warning(_
 		      ("Region size is lower than minreg, nothing displayed."));
-	    D_add_to_list(G_recreate_command());
 	    R_close_driver();
 	    exit(0);
 	}
@@ -111,7 +109,6 @@ int main(int argc, char **argv)
 	if (reg > maxreg) {
 	    G_warning(_
 		      ("Region size is greater than maxreg, nothing displayed."));
-	    D_add_to_list(G_recreate_command());
 	    R_close_driver();
 	    exit(0);
 	}
@@ -122,14 +119,7 @@ int main(int argc, char **argv)
     if (infile == NULL)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
-    if (D_check_map_window(&window))
-	G_fatal_error(_("Setting map window"));
+    D_check_map_window(&window);
 
     if (G_set_window(&window) == -1)
 	G_fatal_error(_("Current window not settable"));
@@ -142,8 +132,6 @@ int main(int argc, char **argv)
 
     /* Go draw the raster map */
     do_labels(infile, !horiz_flag->answer);
-
-    D_add_to_list(G_recreate_command());
 
     R_text_rotation(0.0);	/* reset */
     R_close_driver();

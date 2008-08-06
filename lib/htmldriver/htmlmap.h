@@ -32,6 +32,9 @@ struct MapPoly
 extern struct MapPoly *head;
 extern struct MapPoly **tail;
 
+/* Driver.c */
+extern const struct driver *HTML_Driver(void);
+
 /* Graph_Clse.c */
 extern void HTML_Graph_close(void);
 

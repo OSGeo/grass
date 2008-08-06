@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
     struct Option *render_opt;
     struct Flag *verbose_flag;	/* please remove before GRASS 7 released */
-    struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag, *x_flag,
+    struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
 	*zcol_flag;
     struct cat_list *Clist;
     int *cats, ncat;
@@ -363,12 +363,6 @@ int main(int argc, char **argv)
     id_flag->guisection = _("Query");
     id_flag->description = _("Use values from 'cats' option as feature id");
 
-    x_flag = G_define_flag();
-    x_flag->key = 'x';
-    x_flag->description =
-	_("Don't add to list of vectors and commands in monitor "
-	  "(it won't be drawn if the monitor is refreshed)");
-
     zcol_flag = G_define_flag();
     zcol_flag->key = 'z';
     zcol_flag->description = _("Colorize polygons according to z height)");
@@ -413,9 +407,7 @@ int main(int argc, char **argv)
 	minreg = atof(minreg_opt->answer);
 
 	if (reg < minreg) {
-	    G_message(_
-		      ("Region size is lower than minreg, nothing displayed."));
-	    D_add_to_list(G_recreate_command());
+	    G_message(_("Region size is lower than minreg, nothing displayed."));
 	    exit(EXIT_SUCCESS);
 	}
     }
@@ -423,9 +415,7 @@ int main(int argc, char **argv)
 	maxreg = atof(maxreg_opt->answer);
 
 	if (reg > maxreg) {
-	    G_message(_
-		      ("Region size is greater than maxreg, nothing displayed."));
-	    D_add_to_list(G_recreate_command());
+	    G_message(_("Region size is greater than maxreg, nothing displayed."));
 	    exit(EXIT_SUCCESS);
 	}
     }
@@ -735,13 +725,6 @@ int main(int argc, char **argv)
 	    else
 		G_warning(_("Cannot display topology, not available"));
 	}
-    }
-
-    if (!x_flag->answer) {
-	D_add_to_list(G_recreate_command());
-
-	D_set_dig_name(G_fully_qualified_name(map_name, mapset));
-	D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
     }
 
     R_close_driver();

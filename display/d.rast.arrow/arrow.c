@@ -64,7 +64,6 @@ int D_x, D_y;
 double D_ew, D_ns;
 char *mapset;
 char layer_name[128];
-int layer_set;
 int map_type, arrow_color, grid_color, x_color, unknown_color;
 
 
@@ -72,10 +71,8 @@ int main(int argc, char **argv)
 {
     extern double D_ew, D_ns;
     extern int D_x, D_y;
-    char window_name[128];
     struct Cell_head window;
     int t, b, l, r;
-    char full_name[128];
     RASTER_MAP_TYPE raster_type, mag_raster_type = -1;
     int layer_fd;
     void *raster_row, *ptr;
@@ -115,7 +112,7 @@ int main(int argc, char **argv)
     opt1 = G_define_option();
     opt1->key = "map";
     opt1->type = TYPE_STRING;
-    opt1->required = NO;
+    opt1->required = YES;
     opt1->multiple = NO;
     opt1->gisprompt = "old,cell,raster";
     opt1->description = _("Name of raster aspect map to be displayed");
@@ -189,15 +186,9 @@ int main(int argc, char **argv)
 	exit(-1);
 
 
-    if (opt1->answer) {
-	G_strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);
-	if ((mapset = G_find_cell2(layer_name, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), layer_name);
-	layer_set = 1;
-    }
-    else
-	layer_set = 0;
-
+    G_strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);
+    if ((mapset = G_find_cell2(layer_name, "")) == NULL)
+	G_fatal_error(_("Raster map <%s> not found"), layer_name);
 
     arrow_color = D_translate_color(opt3->answer);
     x_color = D_translate_color(opt5->answer);
@@ -245,17 +236,10 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
     /* Read in the map window associated with window */
     G_get_window(&window);
 
-    if (D_check_map_window(&window))
-	G_fatal_error(_("Setting map window"));
+    D_check_map_window(&window);
 
     if (G_set_window(&window) == -1)
 	G_fatal_error(_("Current window not settable"));
@@ -360,19 +344,6 @@ int main(int argc, char **argv)
 	    R_move_abs((int)D_west, D_y);
 	    R_cont_abs((int)D_east, D_y);
 	}
-    }
-
-    /* if we didn't get a layer name from the arg options, then
-       get name of layer that is on the screen */
-    if (!layer_set) {
-	if (D_get_cell_name(full_name))
-	    G_fatal_error(_("No raster map exists in the current window"));
-
-	mapset = G_find_cell(full_name, "");
-	if (mapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), full_name);
-
-	sscanf(full_name, "%s", layer_name);
     }
 
     /* open the raster map */
@@ -596,7 +567,7 @@ int main(int argc, char **argv)
     G_close_cell(layer_fd);
     if (opt7->answer)
 	G_close_cell(mag_fd);
-    D_add_to_list(G_recreate_command());
+
     R_close_driver();
 
     exit(0);

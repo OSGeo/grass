@@ -29,15 +29,9 @@ struct driver
     void (*Client_Open) (void);
     void (*Client_Close) (void);
     void (*Erase) (void);
-    int (*Get_with_box) (int, int, int *, int *, int *);
-    int (*Get_with_line) (int, int, int *, int *, int *);
-    int (*Get_with_pointer) (int *, int *, int *);
     int (*Graph_set) (int, char **);
     void (*Graph_close) (void);
     void (*Line_width) (int);
-    void (*Panel_save) (const char *, int, int, int, int);
-    void (*Panel_restore) (const char *);
-    void (*Panel_delete) (const char *);
     void (*Polydots_abs) (const int *, const int *, int);
     void (*Polydots_rel) (const int *, const int *, int);
     void (*Polyline_abs) (const int *, const int *, int);
@@ -52,8 +46,6 @@ struct driver
 			  const unsigned char *, const unsigned char *);
     void (*End_scaled_raster) (void);
     void (*Respond) (void);
-    int (*Work_stream) (void);
-    void (*Do_work) (int);
 
     int (*lookup_color) (int, int, int);
     void (*color) (int);
@@ -65,14 +57,8 @@ struct driver
 
 /* Library Functions */
 
-/* command.c */
-extern int LIB_command_get_input(void);
-
 /* init.c */
 extern int LIB_init(const struct driver *drv, int argc, char **argv);
-
-/* main.c */
-extern int LIB_main(int argc, char **argv);
 
 /* Commands */
 
@@ -104,11 +90,6 @@ extern void COM_Font_init_charset(const char *);
 extern void COM_Font_list(char ***, int *);
 extern void COM_Font_info(char ***, int *);
 
-/* Get_location.c */
-extern int COM_Get_location_with_box(int, int, int *, int *, int *);
-extern int COM_Get_location_with_line(int, int, int *, int *, int *);
-extern int COM_Get_location_with_pointer(int *, int *, int *);
-
 /* Get_t_box.c */
 extern void COM_Get_text_box(const char *, int *, int *, int *, int *);
 
@@ -122,11 +103,6 @@ extern void COM_Line_width(int);
 /* Move.c */
 extern void COM_Move_abs(int, int);
 extern void COM_Move_rel(int, int);
-
-/* Panel.c */
-extern void COM_Panel_save(const char *, int, int, int, int);
-extern void COM_Panel_restore(const char *);
-extern void COM_Panel_delete(const char *);
 
 /* Polydots.c */
 extern void COM_Polydots_abs(const int *, const int *, int);
@@ -166,11 +142,6 @@ extern void COM_Text(const char *);
 /* Text_size.c */
 extern void COM_Text_size(int, int);
 extern void COM_Text_rotation(double);
-
-/* Work.c */
-extern int COM_Has_work(void);
-extern int COM_Work_stream(void);
-extern void COM_Do_work(int);
 
 /* Driver Operations */
 

@@ -30,7 +30,6 @@
 
 int main(int argc, char **argv)
 {
-    char frame[64];
     struct GModule *module;
     struct
     {
@@ -85,12 +84,6 @@ int main(int argc, char **argv)
 
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
-
-    if (D_get_cur_wind(frame))
-	G_fatal_error(_("No current frame"));
-
-    if (D_set_cur_wind(frame))
-	G_fatal_error(_("Current frame not available"));
 
     color1 = D_translate_color(parm.c1->answer);
     color2 = D_translate_color(parm.c2->answer);

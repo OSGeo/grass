@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *render_opt;
     struct Option *legend_file_opt;
-    struct Flag *legend_flag, *algoinfo_flag, *x_flag, *nodraw_flag;
+    struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
 
     struct cat_list *Clist;
     int *cats, ncat, nrec, ctype;
@@ -184,12 +184,6 @@ int main(int argc, char **argv)
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
     nodraw_flag->description = _("Do not draw map, only output the legend");
-
-    x_flag = G_define_flag();
-    x_flag->key = 'x';
-    x_flag->description =
-	_("Don't add to list of vectors and commands in monitor "
-	  "(it won't be drawn if the monitor is refreshed)");
 
     /* Check command line */
     if (G_parser(argc, argv))
@@ -466,13 +460,6 @@ int main(int argc, char **argv)
 	    R_line_width(0);
 
 	}			/* end window check if */
-
-	if (!x_flag->answer) {
-	    D_add_to_list(G_recreate_command());
-
-	    D_set_dig_name(G_fully_qualified_name(map_name, mapset));
-	    D_add_to_dig_list(G_fully_qualified_name(map_name, mapset));
-	}
 
 	R_close_driver();
 

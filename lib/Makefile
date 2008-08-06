@@ -9,6 +9,7 @@ SUBDIRS = \
 	driver \
 	pngdriver \
 	psdriver \
+	htmldriver \
 	raster \
 	bitmap \
 	btree \

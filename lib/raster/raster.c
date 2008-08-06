@@ -1,20 +1,77 @@
+
 #include <grass/config.h>
 
-#ifdef HAVE_SOCKET
-
+#include <errno.h>
+#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include <grass/raster.h>
-#include <grass/graphics.h>
 
-#include "transport.h"
+#include "driver.h"
+
+
+extern const struct driver *PNG_Driver(void);
+extern const struct driver *PS_Driver(void);
+extern const struct driver *HTML_Driver(void);
+
+static void init(void)
+{
+    const char *fenc = getenv("GRASS_ENCODING");
+    const char *font = getenv("GRASS_FONT");
+    int t = R_screen_top();
+    int b = R_screen_bot();
+    int l = R_screen_left();
+    int r = R_screen_rite();
+
+    R_font(font ? font : "romans");
+
+    if (fenc)
+	R_charset(fenc);
+
+    R_set_window(t, b, l, r);
+}
+
+int R_open_driver(void)
+{
+    const char *p = getenv("GRASS_RENDER_IMMEDIATE");
+    const struct driver *drv =
+	(p && G_strcasecmp(p, "PS") == 0) ? PS_Driver() :
+	(p && G_strcasecmp(p, "HTML") == 0) ? HTML_Driver() :
+	PNG_Driver();
+
+    LIB_init(drv, 0, NULL);
+
+    init();
+
+    COM_Client_Open();
+
+    return 0;
+}
+
+void R__open_quiet(void)
+{
+}
+
+void R_stabilize(void)
+{
+    COM_Respond();
+}
+
+void R_close_driver(void)
+{
+    R_stabilize();
+    COM_Client_Close();
+}
+
+void R_flush(void)
+{
+    R_stabilize();
+}
 
 /*!
  * \brief screen left edge
@@ -25,12 +82,12 @@
  *  \return int
  */
 
-int REM_screen_left(void)
+int R_screen_left(void)
 {
     int l;
 
-    _send_ident(SCREEN_LEFT);
-    _get_int(&l);
+    COM_Screen_left(&l);
+
     return l;
 }
 
@@ -43,15 +100,14 @@ int REM_screen_left(void)
  *  \return int
  */
 
-int REM_screen_rite(void)
+int R_screen_rite(void)
 {
     int r;
 
-    _send_ident(SCREEN_RITE);
-    _get_int(&r);
+    COM_Screen_rite(&r);
+
     return r;
 }
-
 
 /*!
  * \brief bottom of screen
@@ -62,12 +118,12 @@ int REM_screen_rite(void)
  *  \return int
  */
 
-int REM_screen_bot(void)
+int R_screen_bot(void)
 {
     int b;
 
-    _send_ident(SCREEN_BOT);
-    _get_int(&b);
+    COM_Screen_bot(&b);
+
     return b;
 }
 
@@ -81,19 +137,18 @@ int REM_screen_bot(void)
  *  \return int
  */
 
-int REM_screen_top(void)
+int R_screen_top(void)
 {
     int t;
 
-    _send_ident(SCREEN_TOP);
-    _get_int(&t);
+    COM_Screen_top(&t);
+
     return t;
 }
 
-void REM_get_num_colors(int *n)
+void R_get_num_colors(int *n)
 {
-    _send_ident(GET_NUM_COLORS);
-    _get_int(n);
+    COM_Number_of_colors(n);
 }
 
 /*!
@@ -105,12 +160,12 @@ void REM_get_num_colors(int *n)
  * See Display_Graphics_Library.
  *
  *  \param index
+ *  \return int
  */
 
-void REM_standard_color(int index)
+void R_standard_color(int index)
 {
-    _send_ident(STANDARD_COLOR);
-    _send_int(&index);
+    COM_Standard_color(index);
 }
 
 /*!
@@ -124,14 +179,12 @@ void REM_standard_color(int index)
  *  \param red
  *  \param grn
  *  \param blue
+ *  \return int
  */
 
-void REM_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
+void R_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
 {
-    _send_ident(RGB_COLOR);
-    _send_char(&red);
-    _send_char(&grn);
-    _send_char(&blu);
+    COM_Color_RGB(red, grn, blu);
 }
 
 /*!
@@ -140,12 +193,12 @@ void REM_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
  * Changes the <b>width</b> of line to be used in subsequent draw commands.
  *
  *  \param width
+ *  \return int
  */
 
-void REM_line_width(int width)
+void R_line_width(int width)
 {
-    _send_ident(LINE_WIDTH);
-    _send_int(&width);
+    COM_Line_width(width);
 }
 
 /*!
@@ -154,11 +207,12 @@ void REM_line_width(int width)
  * Erases the entire screen to black.
  *
  *  \param void
+ *  \return int
  */
 
-void REM_erase(void)
+void R_erase(void)
 {
-    _send_ident(ERASE);
+    COM_Erase();
 }
 
 /*!
@@ -169,13 +223,12 @@ void REM_erase(void)
  *
  *  \param x
  *  \param y
+ *  \return int
  */
 
-void REM_move_abs(int x, int y)
+void R_move_abs(int x, int y)
 {
-    _send_ident(MOVE_ABS);
-    _send_int(&x);
-    _send_int(&y);
+    COM_Move_abs(x, y);
 }
 
 /*!
@@ -190,13 +243,12 @@ void REM_move_abs(int x, int y)
  *
  *  \param x dx
  *  \param y dy
+ *  \return int
  */
 
-void REM_move_rel(int x, int y)
+void R_move_rel(int x, int y)
 {
-    _send_ident(MOVE_REL);
-    _send_int(&x);
-    _send_int(&y);
+    COM_Move_rel(x, y);
 }
 
 /*!
@@ -208,13 +260,12 @@ void REM_move_rel(int x, int y)
  *
  *  \param x
  *  \param y
+ *  \return int
  */
 
-void REM_cont_abs(int x, int y)
+void R_cont_abs(int x, int y)
 {
-    _send_ident(CONT_ABS);
-    _send_int(&x);
-    _send_int(&y);
+    COM_Cont_abs(x, y);
 }
 
 /*!
@@ -231,13 +282,12 @@ void REM_cont_abs(int x, int y)
  *
  *  \param x
  *  \param y
+ *  \return int
  */
 
-void REM_cont_rel(int x, int y)
+void R_cont_rel(int x, int y)
 {
-    _send_ident(CONT_REL);
-    _send_int(&x);
-    _send_int(&y);
+    COM_Cont_rel(x, y);
 }
 
 /*!
@@ -250,14 +300,12 @@ void REM_cont_rel(int x, int y)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polydots_abs(const int *xarray, const int *yarray, int number)
+void R_polydots_abs(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYDOTS_ABS);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polydots_abs(xarray, yarray, number);
 }
 
 /*!
@@ -272,14 +320,12 @@ void REM_polydots_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polydots_rel(const int *xarray, const int *yarray, int number)
+void R_polydots_rel(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYDOTS_REL);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polydots_rel(xarray, yarray, number);
 }
 
 /*!
@@ -295,14 +341,12 @@ void REM_polydots_rel(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polyline_abs(const int *xarray, const int *yarray, int number)
+void R_polyline_abs(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYLINE_ABS);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polyline_abs(xarray, yarray, number);
 }
 
 /*!
@@ -319,14 +363,12 @@ void REM_polyline_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polyline_rel(const int *xarray, const int *yarray, int number)
+void R_polyline_rel(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYLINE_REL);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polyline_rel(xarray, yarray, number);
 }
 
 /*!
@@ -339,14 +381,12 @@ void REM_polyline_rel(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polygon_abs(const int *xarray, const int *yarray, int number)
+void R_polygon_abs(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYGON_ABS);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polygon_abs(xarray, yarray, number);
 }
 
 /*!
@@ -361,14 +401,12 @@ void REM_polygon_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
+ *  \return int
  */
 
-void REM_polygon_rel(const int *xarray, const int *yarray, int number)
+void R_polygon_rel(const int *xarray, const int *yarray, int number)
 {
-    _send_ident(POLYGON_REL);
-    _send_int(&number);
-    _send_int_array(number, xarray);
-    _send_int_array(number, yarray);
+    COM_Polygon_rel(xarray, yarray, number);
 }
 
 /*!
@@ -382,15 +420,12 @@ void REM_polygon_rel(const int *xarray, const int *yarray, int number)
  *  \param y1
  *  \param x2
  *  \param y2
+ *  \return int
  */
 
-void REM_box_abs(int x1, int y1, int x2, int y2)
+void R_box_abs(int x1, int y1, int x2, int y2)
 {
-    _send_ident(BOX_ABS);
-    _send_int(&x1);
-    _send_int(&y1);
-    _send_int(&x2);
-    _send_int(&y2);
+    COM_Box_abs(x1, y1, x2, y2);
 }
 
 
@@ -403,13 +438,12 @@ void REM_box_abs(int x1, int y1, int x2, int y2)
  *
  *  \param x
  *  \param y
+ *  \return int
  */
 
-void REM_box_rel(int x, int y)
+void R_box_rel(int x, int y)
 {
-    _send_ident(BOX_REL);
-    _send_int(&x);
-    _send_int(&y);
+    COM_Box_rel(x, y);
 }
 
 /*!
@@ -419,19 +453,17 @@ void REM_box_rel(int x, int y)
  *
  *  \param width
  *  \param height
+ *  \return int
  */
 
-void REM_text_size(int width, int height)
+void R_text_size(int width, int height)
 {
-    _send_ident(TEXT_SIZE);
-    _send_int(&width);
-    _send_int(&height);
+    COM_Text_size(width, height);
 }
 
-void REM_text_rotation(float rotation)
+void R_text_rotation(float rotation)
 {
-    _send_ident(TEXT_ROTATION);
-    _send_float(&rotation);
+    COM_Text_rotation(rotation);
 }
 
 /*!
@@ -444,15 +476,12 @@ void REM_text_rotation(float rotation)
  *  \param b bottom
  *  \param l left
  *  \param r right
+ *  \return int
  */
 
-void REM_set_window(int t, int b, int l, int r)
+void R_set_window(int t, int b, int l, int r)
 {
-    _send_ident(SET_WINDOW);
-    _send_int(&t);
-    _send_int(&b);
-    _send_int(&l);
-    _send_int(&r);
+    COM_Set_window(t, b, l, r);
 }
 
 /*!
@@ -462,12 +491,12 @@ void REM_set_window(int t, int b, int l, int r)
  * width and height, starting at the current screen location.
  *
  *  \param sometext
+ *  \return int
  */
 
-void REM_text(const char *sometext)
+void R_text(const char *text)
 {
-    _send_ident(TEXT);
-    _send_text(sometext);
+    COM_Text(text);
 }
 
 /*!
@@ -484,156 +513,61 @@ void REM_text(const char *sometext)
  *  \param b bottom
  *  \param l left
  *  \param r right
+ *  \return int
  */
 
-void REM_get_text_box(const char *sometext, int *t, int *b, int *l, int *r)
+void R_get_text_box(const char *text, int *t, int *b, int *l, int *r)
 {
-    _send_ident(GET_TEXT_BOX);
-    _send_text(sometext);
-    _get_int(t);
-    _get_int(b);
-    _get_int(l);
-    _get_int(r);
+    COM_Get_text_box(text, t, b, l, r);
 }
 
 /*!
  * \brief choose font
  *
- * Set current font to <b>font name</b>. Available fonts are:
+ * Set current font to <b>font name</b>.
  * 
- <table>
- <tr><td><b>Font Name</b></td><td><b>Description</b></td></tr>
- <tr><td>cyrilc </td><td> cyrillic</td></tr>
- <tr><td>gothgbt </td><td> Gothic Great Britain triplex</td></tr>
- <tr><td>gothgrt </td><td>  Gothic German triplex</td></tr>
- <tr><td>gothitt </td><td>  Gothic Italian triplex</td></tr>
- <tr><td>greekc </td><td> Greek complex</td></tr>
- <tr><td>greekcs </td><td> Greek complex script</td></tr>
- <tr><td>greekp </td><td> Greek plain</td></tr>
- <tr><td>greeks </td><td> Greek simplex</td></tr>
- <tr><td>italicc </td><td>  Italian complex</td></tr>
- <tr><td>italiccs </td><td> Italian complex small</td></tr>
- <tr><td>italict </td><td> Italian triplex</td></tr>
- <tr><td>romanc </td><td> Roman complex</td></tr>
- <tr><td>romancs </td><td> Roman complex small</td></tr>
- <tr><td>romand </td><td> Roman duplex</td></tr>
- <tr><td>romanp </td><td> Roman plain</td></tr>
- <tr><td>romans </td><td> Roman simplex</td></tr>
- <tr><td>romant </td><td> Roman triplex</td></tr>
- <tr><td>scriptc </td><td> Script complex</td></tr>
- <tr><td>scripts </td><td> Script simplex</td></tr>
- </table>
- *
  *  \param name
+ *  \return int
  */
 
-void REM_font(const char *name)
+void R_font(const char *name)
 {
-    _send_ident(FONT);
-    _send_text(name);
+    COM_Font_get(name);
 }
 
-void REM_charset(const char *name)
+void R_charset(const char *name)
 {
-    _send_ident(CHARSET);
-    _send_text(name);
+    COM_Font_init_charset(name);
 }
 
-static void font_list(char ***list, int *count, int op)
+void R_font_list(char ***list, int *count)
 {
-    char **fonts;
-    int num_fonts;
-    int i;
-
-    _send_ident(op);
-    _get_int(&num_fonts);
-
-    fonts = G_malloc(num_fonts * sizeof(char *));
-    for (i = 0; i < num_fonts; i++)
-	fonts[i] = G_store(_get_text_2());
-
-    *list = fonts;
-    *count = num_fonts;
+    COM_Font_list(list, count);
 }
 
-void REM_font_list(char ***list, int *count)
+void R_font_info(char ***list, int *count)
 {
-    font_list(list, count, FONT_LIST);
+    COM_Font_info(list, count);
 }
 
-void REM_font_info(char ***list, int *count)
+void R_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
 {
-    font_list(list, count, FONT_INFO);
+    COM_begin_scaled_raster(mask, src, dst);
 }
 
-void REM_panel_save(const char *name, int t, int b, int l, int r)
-{
-    close(creat(name, 0666));
-
-    _send_ident(PANEL_SAVE);
-    _send_text(name);
-    _send_int(&t);
-    _send_int(&b);
-    _send_int(&l);
-    _send_int(&r);
-    R_stabilize();
-}
-
-void REM_panel_restore(const char *name)
-{
-    _send_ident(PANEL_RESTORE);
-    _send_text(name);
-    R_stabilize();
-}
-
-void REM_panel_delete(const char *name)
-{
-    _send_ident(PANEL_DELETE);
-    _send_text(name);
-    R_stabilize();
-
-    unlink(name);
-}
-
-void REM_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
-{
-    _send_ident(BEGIN_SCALED_RASTER);
-    _send_int(&mask);
-    _send_int_array(4, &src[0][0]);
-    _send_int_array(4, &dst[0][0]);
-}
-
-int REM_scaled_raster(int n, int row,
+int R_scaled_raster(int n, int row,
 		      const unsigned char *red, const unsigned char *grn,
 		      const unsigned char *blu, const unsigned char *nul)
 {
-    int z = !!nul;
-    int t;
-
-    _send_ident(SCALED_RASTER);
-    _send_int(&n);
-    _send_int(&row);
-    _send_char_array(n, red);
-    _send_char_array(n, grn);
-    _send_char_array(n, blu);
-    _send_char_array(n, nul ? nul : red);
-    _send_int(&z);
-    _get_int(&t);
-    return t;
+    return COM_scaled_raster(n, row, red, grn, blu, nul);
 }
 
-void REM_end_scaled_raster(void)
+void R_end_scaled_raster(void)
 {
-    _send_ident(END_SCALED_RASTER);
+    COM_end_scaled_raster();
 }
 
-void REM_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
+void R_bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 {
-    _send_ident(BITMAP);
-    _send_int(&ncols);
-    _send_int(&nrows);
-    _send_int(&threshold);
-    _send_char_array(ncols * nrows, buf);
+    COM_Bitmap(ncols, nrows, threshold, buf);
 }
-
-#endif /* HAVE_SOCKET */

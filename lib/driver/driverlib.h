@@ -34,15 +34,6 @@ const char *font_get_freetype_name(void);
 const char *font_get_charset(void);
 int font_get_index(void);
 
-/* connect_sock.c */
-int get_connection_sock(int, int *, int *, int);
-int prepare_connection_sock(const char *);
-
-/* command.c */
-void command_init(int, int);
-int get_command(char *);
-int process_command(int);
-
 /* parse_ftcap.c */
 extern int font_exists(const char *name);
 extern struct GFONT_CAP *parse_freetypecap(void);

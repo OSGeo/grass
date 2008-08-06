@@ -72,7 +72,7 @@ struct rectinfo
 
 static void set_color(char *);
 static int get_coordinates(int *, int *, double *, double *,
-			   struct rectinfo, char **, char, char, char);
+			   struct rectinfo, char **, char, char);
 static void draw_text(char *, int *, int *, int, char *, double, char);
 
 int main(int argc, char **argv)
@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 	struct Option *font;
 	struct Option *path;
 	struct Option *charset;
+	struct Option *input;
     } opt;
     struct
     {
@@ -99,7 +100,6 @@ int main(int argc, char **argv)
 	struct Flag *b;
 	struct Flag *r;
 	struct Flag *s;
-	struct Flag *m;
 	struct Flag *c;
     } flag;
 
@@ -115,12 +115,10 @@ int main(int argc, char **argv)
     char bold;
 
     /* window info */
-    char win_name[64];
     struct rectinfo win;
 
     /* command file */
     FILE *cmd_fp;
-    char *cmd_file;
 
     char buf[512];
 
@@ -138,8 +136,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("display");
     module->description =
-	_
-	("Draws text in the active display frame on the graphics monitor using the current font.");
+	_("Draws text in the active display frame on the graphics monitor using the current font.");
 
     opt.text = G_define_option();
     opt.text->key = "text";
@@ -225,9 +222,9 @@ int main(int argc, char **argv)
     opt.charset->description =
 	_("Text encoding (only applicable to TrueType fonts)");
 
-    flag.m = G_define_flag();
-    flag.m->key = 'm';
-    flag.m->description = _("Use mouse to interactively place text");
+    opt.input = G_define_standard_option(G_OPT_F_INPUT);
+    opt.input->required = NO;
+    opt.input->description = _("Input file");
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
@@ -260,8 +257,6 @@ int main(int argc, char **argv)
     /* parse and check options and flags */
 
     if ((opt.line->answer && opt.at->answer) ||
-	(opt.line->answer && flag.m->answer) ||
-	(opt.at->answer && flag.m->answer) ||
 	(flag.p->answer && flag.g->answer))
 	G_fatal_error(_("Please choose only one placement method"));
 
@@ -296,12 +291,6 @@ int main(int argc, char **argv)
 
     D_setup(0);
 
-    if (D_get_cur_wind(win_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(win_name))
-	G_fatal_error(_("Current window not available"));
-
     /* figure out where to put text */
     D_get_screen_window(&win.t, &win.b, &win.l, &win.r);
     R_set_window(win.t, win.b, win.l, win.r);
@@ -321,9 +310,9 @@ int main(int argc, char **argv)
 
     orig_x = orig_y = 0;
 
-    if (opt.at->answer || flag.m->answer) {
+    if (opt.at->answer) {
 	if (get_coordinates(&x, &y, &east, &north,
-			    win, opt.at->answers, flag.m->answer,
+			    win, opt.at->answers,
 			    flag.p->answer, flag.g->answer))
 	    G_fatal_error(_("Invalid coordinates"));
 	orig_x = x;
@@ -348,38 +337,6 @@ int main(int argc, char **argv)
 
 	if (text[0])
 	    draw_text(text, &x2, &y2, size, align, rotation, bold);
-	if (opt.at->answer || opt.line->answer)
-	    D_add_to_list(G_recreate_command());
-	else {
-	    if (flag.m->answer) {
-		if (flag.p->answer)
-		    sprintf(buf, "%s -p at=%d,%d", argv[0], x, y);
-		else if (flag.g->answer)
-		    sprintf(buf, "%s -g at=%f,%f", argv[0], east, north);
-		else
-		    sprintf(buf, "%s at=%f,%f", argv[0],
-			    (double)(x * 100.0 / (double)(win.r - win.l)),
-			    (double)((win.b - y) * 100.0 / (double)(win.b -
-								    win.t)));
-
-		sprintf(buf, "%s text=\"%s\"", buf, opt.text->answer);
-		sprintf(buf, "%s size=%s", buf, opt.size->answer);
-		sprintf(buf, "%s color=%s", buf, opt.color->answer);
-		sprintf(buf, "%s align=%s", buf, opt.align->answer);
-		sprintf(buf, "%s rotation=%s", buf, opt.rotation->answer);
-		sprintf(buf, "%s linespacing=%s", buf,
-			opt.linespacing->answer);
-		if (flag.b->answer)
-		    strcat(buf, " -b");
-		if (flag.r->answer)
-		    strcat(buf, " -r");
-		if (flag.s->answer)
-		    strcat(buf, " -s");
-	    }
-	    else
-		sprintf(buf, "%s line=1", G_recreate_command());
-	    D_add_to_list(buf);
-	}
 
 	/* reset */
 	R_text_size(5, 5);
@@ -390,24 +347,25 @@ int main(int argc, char **argv)
 	exit(EXIT_SUCCESS);
     }
 
-    if (isatty(0))
-	fprintf(stdout,
-		_
-		("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n"));
+    if (!opt.input->answer || strcmp(opt.input->answer, "-") == 0)
+	cmd_fp = stdin;
+    else {
+	cmd_fp = fopen(opt.input->answer, "r");
+	if (!cmd_fp)
+	    G_fatal_error(_("Unable to open input file <%s>"), opt.input->answer);
+    }
 
-    cmd_file = G_tempfile();
-    if ((cmd_fp = fopen(cmd_file, "w")) == NULL)
-	G_fatal_error(_("Unable to open temporary file <%s>"), cmd_file);
+    if (isatty(fileno(cmd_fp)))
+	fprintf(stderr,
+		_("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n"));
 
     set_x = set_y = set_l = 0;
     first_text = 1;
     linefeed = 1;
     /* do the plotting */
-    while (fgets(buf, 512, stdin)) {
+    while (fgets(buf, sizeof(buf), cmd_fp)) {
 	int buf_len;
 	char *buf_ptr, *ptr;
-
-	fprintf(cmd_fp, "%s", buf);
 
 	buf_len = strlen(buf) - 1;
 	for (; buf[buf_len] == '\r' || buf[buf_len] == '\n'; buf_len--) ;
@@ -559,10 +517,8 @@ int main(int argc, char **argv)
 	}
     }
 
-    fclose(cmd_fp);
-
-    sprintf(buf, "%s < %s", G_recreate_command(), cmd_file);
-    D_add_to_list(buf);
+    if (cmd_fp != stdin)
+	fclose(cmd_fp);
 
     /* reset */
     R_text_size(5, 5);
@@ -599,25 +555,12 @@ static void set_color(char *tcolor)
 
 static int
 get_coordinates(int *x, int *y, double *east, double *north,
-		struct rectinfo win, char **at, char mouse, char pixel,
+		struct rectinfo win, char **at, char pixel,
 		char geocoor)
 {
-    int i;
     double e, n;
 
-    if (mouse) {
-	fprintf(stderr, _("Click!\n"));
-	fprintf(stderr, _(" Left:    Place text here\n"));
-	fprintf(stderr, _(" Right:   Quit\n"));
-
-	R_get_location_with_pointer(x, y, &i);
-	i &= 0x0f;
-	if (i != 1)
-	    return 1;
-	e = D_d_to_u_col((double)*x);
-	n = D_d_to_u_row((double)*y);
-    }
-    else if (at) {
+    if (at) {
 	e = atof(at[0]);
 	n = atof(at[1]);
 	if (pixel) {

@@ -59,7 +59,7 @@ static const struct scale
     "5000 miles", 8046720.000, 20000000., 5},}
 };
 
-int draw_scale(char *save, int toptext)
+int draw_scale(int toptext)
 {
     double meters;
     double line_len;
@@ -92,9 +92,6 @@ int draw_scale(char *save, int toptext)
 	pt = y_pos;
 	pr = x_pos + w + 2;	/* 1 pixel margin for both sides */
 	pb = y_pos + h + 2;	/* 1 pixel margin for both sides */
-
-	if (save)
-	    R_panel_save(save, pt, pb, pl, pr);
 
 	if (do_background) {
 	    D_raster_use_color(color1);
@@ -168,9 +165,6 @@ int draw_scale(char *save, int toptext)
     pr = pr;
     if (pr > r)
 	pr = r;
-
-    if (save)
-	R_panel_save(save, pt, pb, pl, pr);
 
     if (do_background) {
 	D_raster_use_color(color1);

@@ -37,15 +37,6 @@ int main(int argc, char **argv)
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
-    /* Try to get default raster name, don't fail so --interface-description works */
-    /* don't let R_open_driver() kill us */
-    R__open_quiet();
-    if (R_open_driver() == 0) {
-	if (D_get_cell_name(name) < 0)
-	    *name = 0;
-	R_close_driver();
-    }
-
     module = G_define_module();
     module->keywords = _("display");
     module->description =
