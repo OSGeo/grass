@@ -681,7 +681,7 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         digitToolbar = self.parent.toolbars['vdigit']
         if renderVector and digitToolbar and \
-                digitToolbar.layerSelectedID != None:
+                digitToolbar.GetLayer():
             # set region
             self.parent.digit.driver.UpdateRegion()
             # re-calculate threshold for digitization tool
@@ -689,7 +689,9 @@ class BufferedWindow(MapWindow, wx.Window):
             # draw map
             self.pdcVector.Clear()
             self.pdcVector.RemoveAll()
-            self.parent.digit.driver.DrawMap()
+            item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
+            if self.tree.IsItemChecked(item):
+                self.parent.digit.driver.DrawMap()
 
         #
         # render overlays
@@ -1075,13 +1077,12 @@ class BufferedWindow(MapWindow, wx.Window):
             east, north = self.Pixel2Cell(self.mouse['begin'])
 
             try:
-                map = digitToolbar.layers[digitToolbar.layerSelectedID].name
+                map = digitToolbar.GetLayer().GetName()
             except:
                 map = None
-                dlg = wx.MessageDialog(self, _("No vector map selected for editing."),
-                                       _("Error"), wx.OK | wx.ICON_ERROR)
-                dlg.ShowModal()
-                dlg.Destroy()
+                wx.MessageBox(parent=self,
+                              message=_("No vector map selected for editing."),
+                              caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 event.Skip()
                 return
 
@@ -1706,14 +1707,13 @@ class BufferedWindow(MapWindow, wx.Window):
                     digitToolbar.type in ["line", "boundary"]:
                 # -> add new line / boundary
                 try:
-                    map = digitToolbar.layers[digitToolbar.layerSelectedID].name
+                    map = digitToolbar.GetLayer().GetName()
                 except:
                     map = None
-                    dlg = wx.MessageDialog(self, _("No vector map selected for editing."),
-                                           _("Error"), wx.OK | wx.ICON_ERROR)
-                    dlg.ShowModal()
-                    dlg.Destroy()
-
+                    wx.MessageBox(parent=self,
+                                  message=_("No vector map selected for editing."),
+                                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                    
                 if map:
                     # mapcoords = []
                     # xy -> EN

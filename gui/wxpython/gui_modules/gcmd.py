@@ -62,12 +62,13 @@ class GException(Exception):
         self.title = title
         
     def __str__(self):
-        wx.MessageBox(parent=self.parent,
-                      caption=self.title,
-                      message=self.message,
-                      style=wx.ICON_ERROR | wx.CENTRE)
-
-        # return 'GException: %s' % self.message
+        dlg = wx.MessageDialog(parent=self.parent,
+                               caption=self.title,
+                               message=self.message,
+                               style=wx.ICON_ERROR | wx.CENTRE)
+        dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
+        dlg.ShowModal()
+        
         return ''
 
 class GStdError(GException):
@@ -429,7 +430,7 @@ class Command:
                     content = ""
                 
                 if type:
-                    content += line.split(':')[1].strip()
+                    content += line.split(':', 1)[1].strip()
             else: # stderr
                 msg.append((None, line.strip()))
 

@@ -132,7 +132,8 @@ class Layer(object):
                 gcmd.Command(['d.mon',
                               'start=cairo'], stderr=None)
         else:
-            os.environ["GRASS_PNGFILE"] = self.mapfile
+            if self.mapfile:
+                os.environ["GRASS_PNGFILE"] = self.mapfile
 
         #
         # execute command
@@ -189,10 +190,22 @@ class Layer(object):
         
         return int (self.opacity * 100)
 
-    def GetName(self):
-        """Get map layer name"""
-        return self.name
-    
+    def GetName(self, fullyQualified=True):
+        """Get map layer name
+
+        @param fullyQualified if True return 'name@mapset' otherwise
+        ('name', 'mapset')
+        """
+        if fullyQualified:
+            return self.name
+        else:
+            if '@' in self.name:
+                return { 'name' : self.name.split('@')[0],
+                         'mapset' : self.name.split('@')[1] }
+            else:
+                return { 'name' : self.name,
+                         'mapset' : '' }
+        
     def IsActive(self):
         """Check if layer is activated for rendering"""
         return self.active
