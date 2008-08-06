@@ -235,8 +235,7 @@ CELL clump(int in_fd, int out_fd)
 			G_set_null_value(&out_cell[column], 1, CELL_TYPE);
 		}
 		if (G_put_raster_row(out_fd, out_cell, CELL_TYPE) < 0)
-		    G_fatal_error(_
-				  ("Unable to properly write output raster map"));
+		    G_fatal_error(_("Unable to properly write output raster map"));
 	    }
 
 	    /* switch the buffers so that the current buffer becomes the previous */

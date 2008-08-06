@@ -100,8 +100,7 @@ int main(int argc, char *argv[])
 
     if (E < window.west || E > window.east || N < window.south ||
 	N > window.north) {
-	G_warning(_
-		  ("Warning, ignoring point outside window: \n    %.4f,%.4f\n"),
+	G_warning(_("Warning, ignoring point outside window: \n    %.4f,%.4f\n"),
 		  E, N);
     }
 

@@ -343,8 +343,7 @@ int main(int argc, char *argv[])
 	if (sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
 	    G_fatal_error(_("Invalid value for scalex"));
 	if (!parm.theta->answer)
-	    G_fatal_error(_
-			  ("When using anisotropy both theta and scalex must be specified"));
+	    G_fatal_error(_("When using anisotropy both theta and scalex must be specified"));
     }
 
     /*
@@ -432,8 +431,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("[%s]: Cannot read map header"), input);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
-	G_fatal_error(_
-		      ("Input map resolution differs from current region resolution!"));
+	G_fatal_error(_("Input map resolution differs from current region resolution!"));
 
     if ((fdinp = G_open_cell_old(input, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
@@ -525,8 +523,7 @@ int main(int argc, char *argv[])
     /* change region to initial region */
     G_message(_("Changing back to the original region ..."));
     if (G_set_window(&winhd) < 0)
-	G_fatal_error(_
-		      ("Cannot set region to back to the initial region !!!"));
+	G_fatal_error(_("Cannot set region to back to the initial region !!!"));
 
     ertot = 0.;
     cursegm = 0;

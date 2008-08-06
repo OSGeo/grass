@@ -1018,8 +1018,7 @@ int main(int argc, char *argv[])
 	G_set_raster_cats_title
 	    ("Aspect counterclockwise in degrees from east", &cats);
 
-	G_verbose_message(_
-			  ("Min computed aspect %.4f, max computed aspect %.4f"),
+	G_verbose_message(_("Min computed aspect %.4f, max computed aspect %.4f"),
 			  min_asp, max_asp);
 	/* the categries quant intervals are 1.0 long, plus
 	   we are using reverse order so that the label looked up
@@ -1123,8 +1122,7 @@ int main(int argc, char *argv[])
 	else if (perc)
 	    G_set_raster_cats_title("percent slope", &cats);
 
-	G_verbose_message(_
-			  ("Min computed slope %.4f, max computed slope %.4f"),
+	G_verbose_message(_("Min computed slope %.4f, max computed slope %.4f"),
 			  min_slp, max_slp);
 	/* the categries quant intervals are 1.0 long, plus
 	   we are using reverse order so that the label looked up

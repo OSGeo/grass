@@ -145,14 +145,12 @@ int main(int argc, char *argv[])
 	patt_flag = TRUE;
 
     if ((G_projection() == PROJECTION_LL))
-	G_fatal_error(_
-		      ("Lat/Long support is not (yet) implemented for this module."));
+	G_fatal_error(_("Lat/Long support is not (yet) implemented for this module."));
 
     /* check if specified observer location inside window   */
     if (east < window.west || east > window.east
 	|| north > window.north || north < window.south)
-	G_fatal_error(_
-		      ("Specified observer coordinate is outside current region bounds."));
+	G_fatal_error(_("Specified observer coordinate is outside current region bounds."));
 
     search_mapset = "";
     old_mapset = G_find_cell2(elev_layer, search_mapset);
@@ -242,8 +240,7 @@ int main(int argc, char *argv[])
 	G_get_ellipsoid_parameters(&aa, &e2);
 	if (aa == 0) {
 	    /* since there was a problem, take a hardcoded radius :( */
-	    G_warning(_
-		      ("Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"));
+	    G_warning(_("Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"));
 	    aa = 6370997.00;
 	}
 	G_debug(3, "radius: %f", aa);

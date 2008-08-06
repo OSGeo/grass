@@ -136,8 +136,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 	    ad->mask_name = mask_preprocessing(toReceive.f.f_ma.mask,
 					       raster, ad->rl, ad->cl);
 	    if (ad->mask_name == NULL) {
-		G_message(_
-			  ("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
+		G_message(_("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
 			  pid, toReceive.f.f_ma.mask);
 		ad->mask = -1;
 	    }
@@ -147,8 +146,7 @@ void worker(char *raster, int f(int, char **, area_des, double *),
 		    erease_mask = 1;
 		ad->mask = open(ad->mask_name, O_WRONLY, 0755);
 		if (ad->mask == -1) {
-		    G_message(_
-			      ("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
+		    G_message(_("CHILD[pid = %i]: unable to open %s mask ... continue without!!!"),
 			      pid, toReceive.f.f_ma.mask);
 		}
 

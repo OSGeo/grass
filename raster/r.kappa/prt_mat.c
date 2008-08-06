@@ -36,8 +36,7 @@ void prn_error_mat(int out_cols, int hdr)
 	fd = stdout;
 
     if (fd == NULL) {
-	G_fatal_error(_
-		      ("Cannot open file <%s> to write cats and counts (error matrix)"),
+	G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
 		      output);
 	return;
     }

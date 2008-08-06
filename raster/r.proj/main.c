@@ -213,16 +213,13 @@ int main(int argc, char **argv)
 
     /* Get projection info for output mapset */
     if ((out_proj_info = G_get_projinfo()) == NULL)
-	G_fatal_error(_
-		      ("Unable to get projection info of output raster map"));
+	G_fatal_error(_("Unable to get projection info of output raster map"));
 
     if ((out_unit_info = G_get_projunits()) == NULL)
-	G_fatal_error(_
-		      ("Unable to get projection units of output raster map"));
+	G_fatal_error(_("Unable to get projection units of output raster map"));
 
     if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-	G_fatal_error(_
-		      ("Unable to get projection key values of output raster map"));
+	G_fatal_error(_("Unable to get projection key values of output raster map"));
 
     /* Change the location           */
     G__create_alt_env();
@@ -249,8 +246,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Required parameter <%s> not set"), inmap->key);
 
     if (!G_find_cell(inmap->answer, setname))
-	G_fatal_error(_
-		      ("Raster map <%s> in location <%s> in mapset <%s> not found"),
+	G_fatal_error(_("Raster map <%s> in location <%s> in mapset <%s> not found"),
 		      inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
@@ -278,8 +274,7 @@ int main(int argc, char **argv)
     G_set_window(&incellhd);
 
     if (G_projection() == PROJECTION_XY)
-	G_fatal_error(_
-		      ("Unable to work with unprojected data (xy location)"));
+	G_fatal_error(_("Unable to work with unprojected data (xy location)"));
 
     /* Save default borders so we can show them later */
     inorth = incellhd.north;

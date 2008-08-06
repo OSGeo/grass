@@ -127,8 +127,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (!levels->answers && !step->answer) {
-	G_fatal_error(_
-		      ("Neither \"levels\" nor \"step\" parameter specified."));
+	G_fatal_error(_("Neither \"levels\" nor \"step\" parameter specified."));
     }
 
     name = map->answer;

@@ -251,8 +251,7 @@ int main(int argc, char *argv[])
 	    count++;
 
 	if (count != 1)
-	    G_fatal_error(_
-			  ("Must specify exactly one of start_points, start_rast or coordinate"));
+	    G_fatal_error(_("Must specify exactly one of start_points, start_rast or coordinate"));
     }
 
     if (opt3->answers)
@@ -286,8 +285,7 @@ int main(int argc, char *argv[])
 
     if (!G_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
-	    G_warning(_
-		      ("Warning: assigning negative cost to null cell. Null cells excluded."));
+	    G_warning(_("Warning: assigning negative cost to null cell. Null cells excluded."));
 	    G_set_d_null_value(&null_cost, 1);
 	}
     }
@@ -447,8 +445,7 @@ int main(int argc, char *argv[])
 	fbuff = (double *)G_malloc(ncols * sizeof(double));
 
 	if (fbuff == NULL)
-	    G_fatal_error(_
-			  ("Unable to allocate memory for segment fbuff == NULL"));
+	    G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
 
 	G_set_d_null_value(fbuff, ncols);
 
@@ -575,8 +572,7 @@ int main(int argc, char *argv[])
 
 	fd = G_open_cell_old(opt9->answer, search_mapset);
 	if (fd < 0)
-	    G_fatal_error(_
-			  ("can't open raster map [%s] needed for input coordinates"),
+	    G_fatal_error(_("can't open raster map [%s] needed for input coordinates"),
 			  opt9->answer);
 
 	data_type2 = G_get_raster_map_type(fd);
@@ -636,8 +632,7 @@ int main(int argc, char *argv[])
 	    value = &zero;
 	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
-		G_fatal_error(_
-			      ("Specified starting location outside database window"));
+		G_fatal_error(_("Specified starting location outside database window"));
 	    new_cell = insert(zero, top_start_pt->row, top_start_pt->col);
 	    segment_put(&out_seg, value, top_start_pt->row,
 			top_start_pt->col);

@@ -153,8 +153,7 @@ int main(int argc, char *argv[])
 	    G_init_raster_cats("", &cats);
 
 	    if (0 > G_read_cats(parm.raster->answer, cmapset, &cats))
-		G_fatal_error(_
-			      ("Unable to read category file of raster map <%s@%s>"),
+		G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 			      parm.raster->answer, cmapset);
 
 	    if (G_write_cats(name, &cats) >= 0)
@@ -212,8 +211,7 @@ int main(int argc, char *argv[])
 	    G_init_raster_cats("", &cats);
 
 	    if (0 > G_read_cats(name, G_mapset(), &cats))
-		G_warning(_
-			  ("Unable to read category file of raster map <%s@%s>"),
+		G_warning(_("Unable to read category file of raster map <%s@%s>"),
 			  name, G_mapset());
 
 	    if (parm.fmt_str->answer) {
@@ -252,8 +250,7 @@ int main(int argc, char *argv[])
     }
     else {
 	if (G_read_cats(name, mapset, &cats) < 0)
-	    G_fatal_error(_
-			  ("Unable to read category file of raster map <%s> in <%s>"),
+	    G_fatal_error(_("Unable to read category file of raster map <%s> in <%s>"),
 			  name, mapset);
     }
 
@@ -269,8 +266,7 @@ int main(int argc, char *argv[])
     }
     else {
 	if (map_type != CELL_TYPE)
-	    G_warning(_
-		      ("The map is floating point! Ignoring cats list, using vals list"));
+	    G_warning(_("The map is floating point! Ignoring cats list, using vals list"));
 	else {			/* integer map */
 
 	    for (i = 0; parm.cats->answers[i]; i++)

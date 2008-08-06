@@ -205,8 +205,7 @@ int main(int argc, char *argv[])
 
     if (a && c && corr && v && idm && sa && sv && se && e && dv && de && moc1
 	&& moc2 && mcc)
-	G_fatal_error(_
-		      ("Nothing to compute. Use at least one of the flags."));
+	G_fatal_error(_("Nothing to compute. Use at least one of the flags."));
 
     /* find map in mapset */
     mapset = G_find_cell2(name, "");
@@ -339,8 +338,7 @@ int main(int argc, char *argv[])
 		    for (j = 0; j < (size / 2); j++)
 			if (G_put_raster_row(outfd, outrast, out_data_type) <
 			    0)
-			    G_fatal_error(_
-					  ("Failed writing raster map <%s> row %d"),
+			    G_fatal_error(_("Failed writing raster map <%s> row %d"),
 					  result, row);
 
 		if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
@@ -351,13 +349,11 @@ int main(int argc, char *argv[])
 	    if ((row >= nrows - (size - 1)) && (row < nrows))
 		for (j = 0; j < (size / 2); j++)
 		    if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
-			G_fatal_error(_
-				      ("Failed writing raster map <%s> row %d"),
+			G_fatal_error(_("Failed writing raster map <%s> row %d"),
 				      result, row);
 
 	    G_close_cell(outfd);
-	    G_important_message(_
-				("Calculated measure #%d (56 measures available)"),
+	    G_important_message(_("Calculated measure #%d (56 measures available)"),
 				(t_measure + 1));
 	}
     G_free(outrast);

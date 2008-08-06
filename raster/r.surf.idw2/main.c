@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-	G_fatal_error(_
-		      ("Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"));
+	G_fatal_error(_("Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"));
 
     if (G_legal_filename(parm.output->answer) < 0)
 	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);

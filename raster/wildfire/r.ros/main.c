@@ -422,26 +422,22 @@ int main(int argc, char *argv[])
 
     /*check if the output layer names EXIST */
     if (G_find_cell2(name_base, G_mapset()))
-	G_fatal_error(_
-		      ("Raster map <%s> already exists in mapset <%s>, select another name"),
+	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
 		      name_base, G_mapset());
 
     if (G_find_cell2(name_max, G_mapset()))
-	G_fatal_error(_
-		      ("Raster map <%s> already exists in mapset <%s>, select another name"),
+	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
 		      name_max, G_mapset());
 
     if (G_find_cell2(name_maxdir, G_mapset()))
-	G_fatal_error(_
-		      ("Raster map <%s> already exists in mapset <%s>, select another name"),
+	G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
 		      name_maxdir, G_mapset());
 
     /*assign a name to output SPOTTING distance layer */
     if (spotting) {
 	sprintf(name_spotdist, "%s.spotdist", parm.output->answer);
 	if (G_find_cell2(name_spotdist, G_mapset()))
-	    G_fatal_error(_
-			  ("Raster map <%s> already exists in mapset <%s>, select another name"),
+	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>, select another name"),
 			  name_spotdist, G_mapset());
     }
 

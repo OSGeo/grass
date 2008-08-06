@@ -107,8 +107,7 @@ int main(int argc, char *argv[])
     G_get_window(&cell_head);
 
     if (value_flag && data_type != CELL_TYPE) {
-	G_warning(_
-		  ("Raster is not CELL, '-v' flag ignored, raster values will be written to the table."));
+	G_warning(_("Raster is not CELL, '-v' flag ignored, raster values will be written to the table."));
 	value_flag = 0;
     }
 

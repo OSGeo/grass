@@ -382,8 +382,7 @@ int main(int argc, char *argv[])
 	if (pth_opt->answer != NULL)
 	    pth = atoi(pth_opt->answer);
 	else
-	    G_fatal_error(_
-			  ("Unable to calculate percentile without the pth option specified!"));
+	    G_fatal_error(_("Unable to calculate percentile without the pth option specified!"));
 	method = METHOD_PERCENTILE;
 	bin_index = TRUE;
     }
@@ -395,8 +394,7 @@ int main(int argc, char *argv[])
 	if (trim_opt->answer != NULL)
 	    trim = atof(trim_opt->answer) / 100.0;
 	else
-	    G_fatal_error(_
-			  ("Unable to calculate trimmed mean without the trim option specified!"));
+	    G_fatal_error(_("Unable to calculate trimmed mean without the trim option specified!"));
 	method = METHOD_TRIMMEAN;
 	bin_index = TRUE;
     }
@@ -472,8 +470,7 @@ int main(int argc, char *argv[])
 
     /* can't rewind() non-files */
     if (!can_seek && npasses != 1) {
-	G_warning(_
-		  ("If input is not from a file it is only possible to perform a single pass."));
+	G_warning(_("If input is not from a file it is only possible to perform a single pass."));
 	npasses = 1;
     }
 

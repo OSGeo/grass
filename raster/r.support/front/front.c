@@ -227,8 +227,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open raster map <%s>"), infile);
 	G_init_cats((CELL) 0, "", &cats);
 	if (0 > G_read_cats(map_opt->answer, cmapset, &cats))
-	    G_fatal_error(_
-			  ("Unable to read category file of raster map <%s@%s>"),
+	    G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
 			  map_opt->answer, cmapset);
 
 	if (G_write_cats(infile, &cats) >= 0)

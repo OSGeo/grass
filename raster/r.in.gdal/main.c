@@ -159,8 +159,7 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     if (parm.target->answer && parm.outloc->answer
 	&& strcmp(parm.target->answer, parm.outloc->answer) == 0) {
-	G_fatal_error(_
-		      ("You have to specify a target location different from output location"));
+	G_fatal_error(_("You have to specify a target location different from output location"));
     }
 
 
@@ -211,8 +210,7 @@ int main(int argc, char *argv[])
     if (!parm.outloc->answer) {	/* Check if the map exists */
 	if (G_find_cell2(output, G_mapset())) {
 	    if (overwrite)
-		G_warning(_
-			  ("Raster map <%s> already exists and will be overwritten"),
+		G_warning(_("Raster map <%s> already exists and will be overwritten"),
 			  output);
 	    else
 		G_fatal_error(_("Raster map <%s> already exists"), output);
@@ -306,8 +304,7 @@ int main(int argc, char *argv[])
 	/* Projection only required for checking so convert non-interactively */
 	if (GPJ_wkt_to_grass(&cellhd, &proj_info,
 			     &proj_units, GDALGetProjectionRef(hDS), 0) < 0)
-	    G_warning(_
-		      ("Unable to convert input raster map projection information to "
+	    G_warning(_("Unable to convert input raster map projection information to "
 		       "GRASS format for checking"));
 	else {
 	    /* -------------------------------------------------------------------- */
@@ -409,8 +406,7 @@ int main(int argc, char *argv[])
 		G_fatal_error(error_msg);
 	    }
 	    else {
-		G_message(_
-			  ("Projection of input dataset and current location "
+		G_message(_("Projection of input dataset and current location "
 			   "appear to match"));
 	    }
 	}
@@ -615,8 +611,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     GPJ_wkt_to_grass(&cellhd, &proj_info, &proj_units, pszSrcWKT, 0);
 
     if (pj_get_kv(iproj, proj_info, proj_units) < 0)
-	G_fatal_error(_
-		      ("Unable to translate projection key values of input GCPs"));
+	G_fatal_error(_("Unable to translate projection key values of input GCPs"));
 
     /* -------------------------------------------------------------------- */
     /*      Get the projection of the target location.                      */
@@ -632,14 +627,11 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 
 	/* Get projection info from target location */
 	if ((out_proj_info = G_get_projinfo()) == NULL)
-	    G_fatal_error(_
-			  ("Unable to get projection info of target location"));
+	    G_fatal_error(_("Unable to get projection info of target location"));
 	if ((out_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_
-			  ("Unable to get projection units of target location"));
+	    G_fatal_error(_("Unable to get projection units of target location"));
 	if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
-	    G_fatal_error(_
-			  ("Unable to get projection key values of target location"));
+	    G_fatal_error(_("Unable to get projection key values of target location"));
     }
     else {			/* can't access target mapset */
 	sprintf(errbuf, _("Mapset <%s> in target location <%s> - "),
@@ -912,8 +904,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    /* found 0..255 data: we set to grey scale: */
 	    struct Colors colors;
 
-	    G_verbose_message(_
-			      ("Setting grey color table for <%s> (8bit, full range)"),
+	    G_verbose_message(_("Setting grey color table for <%s> (8bit, full range)"),
 			      output);
 
 	    G_init_colors(&colors);
@@ -926,8 +917,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    struct Range range;
 	    CELL min, max;
 
-	    G_verbose_message(_
-			      ("Setting grey color table for <%s> (16bit, image range)"),
+	    G_verbose_message(_("Setting grey color table for <%s> (16bit, image range)"),
 			      output);
 	    G_read_range((char *)output, G_mapset(), &range);
 	    G_get_range_min_max(&range, &min, &max);

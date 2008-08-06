@@ -64,8 +64,7 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
     G_debug(3, "rulemin=%.1f rulemax=%.1f", rulemin, rulemax);
 
     if (rulemin > min || rulemax < max)
-	G_warning(_
-		  ("Your color rules do not cover the whole range of data!\n (rules %f to %f but data %f to %f)"),
+	G_warning(_("Your color rules do not cover the whole range of data!\n (rules %f to %f but data %f to %f)"),
 		  rulemin, rulemax, min, max);
 
     return 1;

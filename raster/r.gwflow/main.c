@@ -269,14 +269,11 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct LU solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct Gauss solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct cholesky solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
 
 
     /*get the current region */
@@ -391,8 +388,7 @@ int main(int argc, char *argv[])
 	inner_count = 0;
 
 	do {
-	    G_message(_
-		      ("Calculation of unconfined groundwater flow loop %i\n"),
+	    G_message(_("Calculation of unconfined groundwater flow loop %i\n"),
 		      inner_count + 1);
 
 	    /* we will allocate a new les for each loop */
@@ -415,8 +411,7 @@ int main(int argc, char *argv[])
 		tmp_vect[i] = les->x[i];
 	    }
 
-	    G_message(_
-		      ("Maximum difference between this and last increment: %g"),
+	    G_message(_("Maximum difference between this and last increment: %g"),
 		      max_norm);
 
 	    /* copy the result into the phead array */
@@ -564,8 +559,7 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
 	N_solver_gauss(les);
 
     if (les == NULL)
-	G_fatal_error(_
-		      ("Unable to create and solve the linear equation system"));
+	G_fatal_error(_("Unable to create and solve the linear equation system"));
 
     return les;
 }

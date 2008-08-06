@@ -493,8 +493,7 @@ int main(int argc, char *argv[])
 
     if (!G_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
-	    G_warning(_
-		      ("Warning: assigning negative cost to null cell. Null cells excluded."));
+	    G_warning(_("Warning: assigning negative cost to null cell. Null cells excluded."));
 	    G_set_d_null_value(&null_cost, 1);
 	}
     }
@@ -819,8 +818,7 @@ int main(int argc, char *argv[])
 	fbuff = (double *)G_malloc((unsigned int)(ncols * sizeof(double)));
 
 	if (fbuff == NULL)
-	    G_fatal_error(_
-			  ("Unable to allocate memory for segment fbuff == NULL"));
+	    G_fatal_error(_("Unable to allocate memory for segment fbuff == NULL"));
 
 	G_set_d_null_value(fbuff, ncols);
 
@@ -849,8 +847,7 @@ int main(int argc, char *argv[])
 	cum_cost_mapset = G_find_cell2(cum_cost_layer, search_mapset);
 
 	if (cum_cost_mapset == NULL)
-	    G_fatal_error(_
-			  ("Raster output map <%s> not found (no start_points given)"),
+	    G_fatal_error(_("Raster output map <%s> not found (no start_points given)"),
 			  cum_cost_layer);
 
 	cum_fd = G_open_cell_old(cum_cost_layer, cum_cost_mapset);
@@ -865,8 +862,7 @@ int main(int argc, char *argv[])
 	cell2 = G_allocate_raster_buf(data_type2);
 
 	if (cell2 == NULL)
-	    G_fatal_error(_
-			  ("Memory allocation error on reading start points from raster map %s"),
+	    G_fatal_error(_("Memory allocation error on reading start points from raster map %s"),
 			  cum_cost_layer);
 
 	G_message(_("Reading %s... "), cum_cost_layer);
@@ -916,8 +912,7 @@ int main(int argc, char *argv[])
 	    value_start_pt = &zero;
 	    if (top_start_pt->row < 0 || top_start_pt->row >= nrows
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
-		G_fatal_error(_
-			      ("Specified starting location outside database window"));
+		G_fatal_error(_("Specified starting location outside database window"));
 	    new_cell = insert(zero, top_start_pt->row, top_start_pt->col);
 	    segment_put(&out_seg, value_start_pt, top_start_pt->row,
 			top_start_pt->col);
@@ -1416,8 +1411,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
-		    G_fatal_error(_
-				  ("Unable to read raster map <%s> row %d"),
+		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
 	    p = cum_cell;
@@ -1452,8 +1446,7 @@ int main(int argc, char *argv[])
 	    G_percent(row, nrows, 2);
 	    if (keep_nulls) {
 		if (G_get_raster_row(dtm_fd, cell2, row, dtm_data_type) < 0)
-		    G_fatal_error(_
-				  ("Unable to read raster map <%s> row %d"),
+		    G_fatal_error(_("Unable to read raster map <%s> row %d"),
 				  dtm_layer, row);
 	    }
 	    p = cum_cell;

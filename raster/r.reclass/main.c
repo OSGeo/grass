@@ -136,8 +136,7 @@ int main(int argc, char *argv[])
 
     if (!any) {
 	if (tty)
-	    G_fatal_error(_
-			  ("No rules specified. Raster map <%s> not created"),
+	    G_fatal_error(_("No rules specified. Raster map <%s> not created"),
 			  parm.output->answer);
 	else
 	    G_fatal_error(_("No rules specified"));

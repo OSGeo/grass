@@ -239,16 +239,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No map specified"));
 
     if (!cmap && !style && !rules && !interactive && !remove)
-	G_fatal_error(_
-		      ("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
+	G_fatal_error(_("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
 
     if (interactive && (style || rules || cmap))
-	G_fatal_error(_
-		      ("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
+	G_fatal_error(_("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
 
     if ((style && (cmap || rules)) || (cmap && rules))
-	G_fatal_error(_
-		      ("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
+	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
 
     mapset = G_find_cell2(name, "");
@@ -289,22 +286,19 @@ int main(int argc, char **argv)
 	 */
 	if (strcmp(style, "random") == 0) {
 	    if (fp)
-		G_fatal_error(_
-			      ("Can't make random color table for floating point map"));
+		G_fatal_error(_("Can't make random color table for floating point map"));
 	    G_make_random_colors(&colors, (CELL) min, (CELL) max);
 	}
 	else if (strcmp(style, "grey.eq") == 0) {
 	    if (fp)
-		G_fatal_error(_
-			      ("Can't make grey.eq color table for floating point map"));
+		G_fatal_error(_("Can't make grey.eq color table for floating point map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
 	    G_make_histogram_eq_colors(&colors, &statf);
 	}
 	else if (strcmp(style, "grey.log") == 0) {
 	    if (fp)
-		G_fatal_error(_
-			      ("Can't make logarithmic color table for floating point map"));
+		G_fatal_error(_("Can't make logarithmic color table for floating point map"));
 	    if (!have_stats)
 		have_stats = get_stats(name, mapset, &statf);
 	    G_make_histogram_log_colors(&colors, &statf, (CELL) min,

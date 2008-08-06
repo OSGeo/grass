@@ -85,8 +85,7 @@ int init_vars(int argc, char *argv[])
     if (bas_thres > 0)
 	tot_parts++;
 
-    G_message(_
-	      ("SECTION 1 beginning: Initiating Variables. %d sections total."),
+    G_message(_("SECTION 1 beginning: Initiating Variables. %d sections total."),
 	      tot_parts);
 
     this_mapset = G_mapset();

@@ -336,14 +336,12 @@ int import_band(GDALDatasetH hMEMDS, int band, const char *name,
 
     if (n_nulls > 0) {
 	if (maptype == CELL_TYPE)
-	    G_warning(_
-		      ("Input raster map constains cells with NULL-value (no-data). "
+	    G_warning(_("Input raster map constains cells with NULL-value (no-data). "
 		       "The value %d was used to represent no-data values in the input map."
 		       "You can specify nodata value by %s parameter."),
 		      (int)nodataval, nodatakey);
 	else
-	    G_warning(_
-		      ("Input raster map constains cells with NULL-value (no-data). "
+	    G_warning(_("Input raster map constains cells with NULL-value (no-data). "
 		       "The value %g was used to represent no-data values in the input map."
 		       "You can specify nodata value by %s parameter."),
 		      nodataval, nodatakey);
@@ -686,8 +684,7 @@ int main(int argc, char *argv[])
 	    GDALCreate(hDriver, output->answer, cellhead.cols, cellhead.rows,
 		       ref.nfiles, datatype, papszOptions);
 	if (hDstDS == NULL)
-	    G_fatal_error(_
-			  ("Unable to create <%s> dataset using <%s> driver"),
+	    G_fatal_error(_("Unable to create <%s> dataset using <%s> driver"),
 			  output->answer, format->answer);
 	hCurrDS = hDstDS;
     }
@@ -738,8 +735,7 @@ int main(int argc, char *argv[])
 	    GDALCreateCopy(hDriver, output->answer, hMEMDS, FALSE,
 			   papszOptions, NULL, NULL);
 	if (hDstDS == NULL)
-	    G_fatal_error(_
-			  ("Unable to create raster map <%s> using driver <%s>"),
+	    G_fatal_error(_("Unable to create raster map <%s> using driver <%s>"),
 			  output->answer, format->answer);
     }
 

@@ -490,8 +490,7 @@ int main(int argc, char *argv[])
 
     if ((depth == NULL) && (disch == NULL) && (err == NULL) &&
 	(outwalk == NULL))
-	G_warning(_
-		  ("You are not outputting any raster or vector points maps"));
+	G_warning(_("You are not outputting any raster or vector points maps"));
     ret_val = input_data();
     if (ret_val != 1)
 	G_fatal_error(_("Input failed"));

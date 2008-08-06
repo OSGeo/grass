@@ -408,8 +408,7 @@ int input_data(void)
 		cchez[row_rev][j] = (float)manin_val;
 	    }
 	    else {
-		G_fatal_error(_
-			      ("Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"),
+		G_fatal_error(_("Raster map <%s> not found, and manin_val undefined, choose one to be allowed to process"),
 			      manin);
 	    }
 	    if (detin != NULL) {
@@ -592,8 +591,7 @@ int grad_check(void)
 	}
     }
     if (inf != NULL && smax < infmax)
-	G_warning(_
-		  ("Infiltration exceeds the rainfall rate everywhere! No overland flow."));
+	G_warning(_("Infiltration exceeds the rainfall rate everywhere! No overland flow."));
 
     cc = (double)mx *my;
 
@@ -619,8 +617,7 @@ int grad_check(void)
     fprintf(stderr, "\n");
     G_message(_("Min elevation \t= %.2f m\nMax elevation \t= %.2f m\n"), zmin,
 	      zmax);
-    G_message(_
-	      ("Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"),
+    G_message(_("Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"),
 	      si0);
     G_message(_("Mean flow velocity \t= %f m/s\n"), vmean);
     G_message(_("Mean Mannings \t= %f\n"), 1.0 / chmean);

@@ -449,8 +449,7 @@ int main(int argc, char *argv[])
 		    break;
 		default:
 		    G_close_cell(cf);
-		    G_fatal_error(_
-				  ("Please contact the GRASS development team"));
+		    G_fatal_error(_("Please contact the GRASS development team"));
 		}
 	    }
 	    rastline_ptr =

@@ -83,13 +83,11 @@ int main(int argc, char *argv[])
     /* Make sure map is not reclassed */
     if (G_is_reclass(name, mapset, rname, rmapset) > 0) {
 	if (strcmp(mapset, rmapset) == 0)
-	    G_fatal_error(_
-			  ("[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."),
+	    G_fatal_error(_("[%s] is a reclass of [%s] - cannot edit header! Run support on [%s]."),
 			  name, rname, rname);
 
 	/* ELSE */
-	G_fatal_error(_
-		      ("[%s] is a reclass of [%s in %s] - cannot edit header!"),
+	G_fatal_error(_("[%s] is a reclass of [%s in %s] - cannot edit header!"),
 		      name, rname, rmapset);
     }
 
@@ -206,8 +204,7 @@ int main(int argc, char *argv[])
 	if ((compressed_new || compressed_old) && G_yes(buffer, -1)) {
 	    if (compressed_new && compressed_old) {
 		while (1) {
-		    G_message(_
-			      ("Please indicate the type of compression:\n"));
+		    G_message(_("Please indicate the type of compression:\n"));
 		    G_message(_("  1. Pre 3.0 compression\n"));
 		    G_message(_("  2. 3.0 compression\n"));
 		    if (!G_gets(buffer))
@@ -245,12 +242,10 @@ int main(int argc, char *argv[])
 	    cellhd.compressed = 0;
 
 	if ((cellhd.compressed == 0) && compressed_new) {
-	    G_warning(_
-		      ("The header for [%s] says the file is not compressed. "),
+	    G_warning(_("The header for [%s] says the file is not compressed. "),
 		      name);
 	    G_warning(_("The file appears to be compressed.\n"));
-	    G_warning(_
-		      ("Most likely the header is wrong, but I want you to decide.\n"));
+	    G_warning(_("Most likely the header is wrong, but I want you to decide.\n"));
 
 	    if (G_yes("Is the file compressed? ", -1))
 		cellhd.compressed = 1;
@@ -259,8 +254,7 @@ int main(int argc, char *argv[])
 	    G_warning(_("The header for [%s] says the file is compressed. "),
 		      name);
 	    G_warning(_("The file does NOT appear to be compressed.\n"));
-	    G_warning(_
-		      ("Most likely the header is wrong, but I want you to decide.\n"));
+	    G_warning(_("Most likely the header is wrong, but I want you to decide.\n"));
 
 	    if (!G_yes("Is the file really compressed? ", -1))
 		cellhd.compressed = 0;
