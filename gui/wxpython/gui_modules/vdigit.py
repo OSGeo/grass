@@ -21,6 +21,7 @@ Classes:
  - VDigitCategoryDialog
  - VDigitZBulkDialog
  - VDigitDuplicatesDialog
+ - VDigitVBuildDialog
 
 (C) 2007-2008 by the GRASS Development Team
 
@@ -146,14 +147,18 @@ class AbstractDigit:
         
         if map and ret == -1:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message=_('Unable to open vector map <%s> for editing. '
+                                  message=_('Unable to open vector map <%s> for editing.\n\n'
                                             'Data are probably corrupted, '
-                                            'try to run v.build for rebuilding the topology.') % map)
+                                            'try to run v.build to rebuild '
+                                            'the topology (Vector->Develop vector map->'
+                                            'Create/rebuild topology).') % map)
         if not map and ret != 0:
             raise gcmd.DigitError(parent=self.mapWindow.parent,
-                                  message=_('Unable to open vector map <%s> for editing. '
+                                  message=_('Unable to open vector map <%s> for editing.\n\n'
                                             'Data are probably corrupted, '
-                                            'try to run v.build for rebuilding the topology.') % map)
+                                            'try to run v.build to rebuild '
+                                            'the topology (Vector->Develop vector map->'
+                                            'Create/rebuild topology).') % map)
             
         if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') != 'v.edit':
             try:

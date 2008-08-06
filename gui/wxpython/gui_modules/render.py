@@ -691,6 +691,7 @@ class Map(object):
                     projinfo[key] = val
                 elif "XY location (unprojected)" in line:
                     projinfo['proj'] = "xy"
+                    projinfo['units'] = ''
             return projinfo
         else:
             return None
