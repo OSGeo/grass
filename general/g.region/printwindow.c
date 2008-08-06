@@ -240,16 +240,13 @@ int print_window(struct Cell_head *window, int print_flag)
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
-		G_fatal_error(_
-			      ("Can't get projection info of current location"));
+		G_fatal_error(_("Can't get projection info of current location"));
 
 	    if ((in_unit_info = G_get_projunits()) == NULL)
-		G_fatal_error(_
-			      ("Can't get projection units of current location"));
+		G_fatal_error(_("Can't get projection units of current location"));
 
 	    if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-		G_fatal_error(_
-			      ("Can't get projection key values of current location"));
+		G_fatal_error(_("Can't get projection key values of current location"));
 
 	    G_free_key_value(in_proj_info);
 	    G_free_key_value(in_unit_info);
@@ -259,8 +256,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    oproj.meters = 1.;
 	    sprintf(oproj.proj, "ll");
 	    if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-		G_fatal_error(_
-			      ("Unable to update lat/long projection parameters"));
+		G_fatal_error(_("Unable to update lat/long projection parameters"));
 
 	    /* for DEBUG
 	       pj_print_proj_params(&iproj,&oproj);
@@ -278,8 +274,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->north;
 	    longitude = window->west;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo1 = longitude;
 	    la1 = latitude;
@@ -287,8 +282,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->north;
 	    longitude = window->east;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo2 = longitude;
 	    la2 = latitude;
@@ -296,8 +290,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->south;
 	    longitude = window->east;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo3 = longitude;
 	    la3 = latitude;
@@ -305,8 +298,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->south;
 	    longitude = window->west;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo4 = longitude;
 	    la4 = latitude;
@@ -411,11 +403,9 @@ int print_window(struct Cell_head *window, int print_flag)
 	else {			/* in lat/long already */
 
 	    if (window->proj != 0)
-		G_message(_
-			  ("You are already in Lat/Long. Use the -p flag instead."));
+		G_message(_("You are already in Lat/Long. Use the -p flag instead."));
 	    else
-		G_message(_
-			  ("You are in a simple XY location, projection to Lat/Lon "
+		G_message(_("You are in a simple XY location, projection to Lat/Lon "
 			   "is not possible. Use the -p flag instead."));
 	}
     }
@@ -494,16 +484,13 @@ int print_window(struct Cell_head *window, int print_flag)
 
 	    /* read current projection info */
 	    if ((in_proj_info = G_get_projinfo()) == NULL)
-		G_fatal_error(_
-			      ("Can't get projection info of current location"));
+		G_fatal_error(_("Can't get projection info of current location"));
 
 	    if ((in_unit_info = G_get_projunits()) == NULL)
-		G_fatal_error(_
-			      ("Can't get projection units of current location"));
+		G_fatal_error(_("Can't get projection units of current location"));
 
 	    if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-		G_fatal_error(_
-			      ("Can't get projection key values of current location"));
+		G_fatal_error(_("Can't get projection key values of current location"));
 
 	    /*  output projection to lat/long  and wgs84 ellipsoid */
 	    out_proj_info = G_create_key_value();
@@ -512,8 +499,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    G_set_key_value("proj", "ll", out_proj_info);
 
 	    if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-		G_fatal_error(_
-			      ("WGS84 output not possible as this location does not contain "
+		G_fatal_error(_("WGS84 output not possible as this location does not contain "
 			       "datum transformation parameters. Try running g.setproj."));
 	    else
 		G_set_key_value("datum", "wgs84", out_proj_info);
@@ -523,8 +509,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    G_set_key_value("meters", "1.0", out_unit_info);
 
 	    if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-		G_fatal_error(_
-			      ("Unable to update lat/long projection parameters"));
+		G_fatal_error(_("Unable to update lat/long projection parameters"));
 
 	    G_free_key_value(in_proj_info);
 	    G_free_key_value(in_unit_info);
@@ -553,8 +538,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->north;
 	    longitude = window->west;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo1 = longitude;
 	    la1 = latitude;
@@ -562,8 +546,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->north;
 	    longitude = window->east;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo2 = longitude;
 	    la2 = latitude;
@@ -571,8 +554,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->south;
 	    longitude = window->east;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo3 = longitude;
 	    la3 = latitude;
@@ -580,8 +562,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	    latitude = window->south;
 	    longitude = window->west;
 	    if (pj_do_proj(&longitude, &latitude, &iproj, &oproj) < 0)
-		G_fatal_error(_
-			      ("Error in pj_do_proj (projection of input coordinate pair)"));
+		G_fatal_error(_("Error in pj_do_proj (projection of input coordinate pair)"));
 
 	    lo4 = longitude;
 	    la4 = latitude;
@@ -664,8 +645,7 @@ int print_window(struct Cell_head *window, int print_flag)
 	     */
 	}
 	else {
-	    G_warning(_
-		      ("Lat/Long calculations are not possible from a simple XY system"));
+	    G_warning(_("Lat/Long calculations are not possible from a simple XY system"));
 	}
     }
 

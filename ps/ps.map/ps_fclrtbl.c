@@ -55,8 +55,7 @@ int PS_fcolortable(void)
     }
 
     if (dmin == dmax) {		/* if step==0 all sorts of infinite loops and DIV by 0 errors follow */
-	G_warning(_
-		  ("A floating point colortable must contain a range of values"));
+	G_warning(_("A floating point colortable must contain a range of values"));
 	return 1;
     }
 

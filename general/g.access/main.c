@@ -61,8 +61,7 @@ int main(int argc, char *argv[])
 
     /* this part is until PERMANENT no longer holds DEFAULT_WIND and MYNAME */
     if (strcmp(G_mapset(), "PERMANENT") == 0)
-	G_fatal_error(_
-		      ("Access to the PERMANENT mapset must be open, nothing changed"));
+	G_fatal_error(_("Access to the PERMANENT mapset must be open, nothing changed"));
 
     /* get the current permissions */
     if (get_perms(path, &perms, &group, &other) < 0)

@@ -38,8 +38,7 @@ static int check_reclass(const char *name, const char *mapset, int force)
 		G_warning(_("[%s@%s] is a base map for [%s]. Remove forced."),
 			  name, mapset, *rmaps);
 	    else
-		G_warning(_
-			  ("[%s@%s] is a base map. Remove reclassed map first: %s"),
+		G_warning(_("[%s@%s] is a base map. Remove reclassed map first: %s"),
 			  name, mapset, *rmaps);
 	}
 
@@ -61,8 +60,7 @@ static int check_reclass(const char *name, const char *mapset, int force)
 	if (nrmaps == 1 && !G_strcasecmp(rmaps[0], qname)) {
 
 	    if (remove(path) < 0)
-		G_warning(_
-			  ("Removing information about reclassed map from [%s@%s] failed"),
+		G_warning(_("Removing information about reclassed map from [%s@%s] failed"),
 			  rname, rmapset);
 	}
 	else {
@@ -75,8 +73,7 @@ static int check_reclass(const char *name, const char *mapset, int force)
 		fclose(fp);
 	    }
 	    else
-		G_warning(_
-			  ("Removing information about reclassed map from [%s@%s] failed"),
+		G_warning(_("Removing information about reclassed map from [%s@%s] failed"),
 			  rname, rmapset);
 
 	}

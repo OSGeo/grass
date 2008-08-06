@@ -158,8 +158,7 @@ int do_label(FILE * fd, int font_override)
 
 	    /* set font size if given in map units and not given by fontsize */
 	    if (fontsize && size > 0)
-		G_warning(_
-			  ("Text labels: 'fontsize' given so ignoring 'size'"));
+		G_warning(_("Text labels: 'fontsize' given so ignoring 'size'"));
 
 	    if (!fontsize)
 		fontsize = size * PS.ns_to_y;

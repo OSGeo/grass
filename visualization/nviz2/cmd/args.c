@@ -519,8 +519,7 @@ void check_parameters(const struct GParams *params)
     /* mask */
     nmaps = opt_get_num_answers(params->mask_map);
     if (nmaps > 0 && nelevs != nmaps)
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 		      params->elev_map->key, params->elev_const->key, nelevs,
 		      params->mask_map->key, nmaps);
 
@@ -550,43 +549,37 @@ void check_parameters(const struct GParams *params)
     if (!params->mode_all->answer) {	/* use one mode for all surfaces */
 	nconsts = opt_get_num_answers(params->mode);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->mode->key, nconsts);
 
 	nconsts = opt_get_num_answers(params->res_fine);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->res_fine->key, nconsts);
 
 	nconsts = opt_get_num_answers(params->res_coarse);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->res_coarse->key, nconsts);
 
 	nconsts = opt_get_num_answers(params->style);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->style->key, nconsts);
 
 	nconsts = opt_get_num_answers(params->shade);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->shade->key, nconsts);
 
 	nconsts = opt_get_num_answers(params->wire_color);
 	if (nconsts > 0 && nconsts != nelevs)
-	    G_fatal_error(_
-			  ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
+	    G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d)"),
 			  params->elev_map->key, params->elev_const->key,
 			  nelevs, params->wire_color->key, nconsts);
     }
@@ -599,32 +592,28 @@ void check_parameters(const struct GParams *params)
     /* width */
     nconsts = opt_get_num_answers(params->vline_width);
     if (nvects > 0 && nconsts != nvects)
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 		      params->vlines->key, nvects, params->vline_width->key,
 		      nconsts);
 
     /* color */
     nconsts = opt_get_num_answers(params->vline_color);
     if (nvects > 0 && nconsts != nvects)
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s> %d: <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d"),
 		      params->vlines->key, nvects, params->vline_color->key,
 		      nconsts);
 
     /* mode */
     nconsts = opt_get_num_answers(params->vline_mode);
     if (nvects > 0 && nconsts != nvects)
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 		      params->vlines->key, nvects, params->vline_mode->key,
 		      nconsts);
 
     /* height */
     nconsts = opt_get_num_answers(params->vline_height);
     if (nvects > 0 && nconsts != nvects)
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s> %d: <%s> %d)"),
 		      params->vlines->key, nvects, params->vline_height->key,
 		      nconsts);
 
@@ -636,8 +625,7 @@ void print_error(int nmaps, int nconsts, int nelevs,
 		 const char *map_name, const char *const_name)
 {
     if ((nmaps > 0 && nelevs != nmaps) || (nconsts > 0 && nelevs != nconsts))
-	G_fatal_error(_
-		      ("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"),
+	G_fatal_error(_("Inconsistent number of attributes (<%s/%s> %d: <%s> %d, <%s> %d"),
 		      elev_map, elev_const, nelevs, map_name, nmaps,
 		      const_name, nconsts);
 

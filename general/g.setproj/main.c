@@ -84,8 +84,7 @@ int main(int argc, char *argv[])
 
 
     if (strcmp(G_mapset(), "PERMANENT") != 0)
-	G_fatal_error(_
-		      ("You must be in the PERMANENT mapset to run g.setproj"));
+	G_fatal_error(_("You must be in the PERMANENT mapset to run g.setproj"));
 
 	/***
          * no longer necessary, table is a static struct 
@@ -195,8 +194,7 @@ int main(int argc, char *argv[])
 
     proj_parms = get_proj_parms(proj_out);
     if (!proj_parms)
-	G_fatal_error(_
-		      ("Projection %s is not specified in the file 'proj-parms.table'"),
+	G_fatal_error(_("Projection %s is not specified in the file 'proj-parms.table'"),
 		      proj_out);
 
     G_set_key_value("name", proj_name, out_proj_keys);
@@ -215,8 +213,7 @@ int main(int argc, char *argv[])
 		G_message(_("The current datum is %s (%s)"),
 			  G_datum_name(i), G_datum_description(i));
 		if (G_yes
-		    (_
-		     ("Do you wish to change the datum (or datum transformation parameters)?"),
+		    (_("Do you wish to change the datum (or datum transformation parameters)?"),
 		     0))
 		    sph_check = ask_datum(datum, dat_ellps, dat_params);
 		else {
@@ -224,8 +221,7 @@ int main(int argc, char *argv[])
 		    sprintf(dat_params, lbufa);
 		    sprintf(dat_ellps, G_datum_ellipsoid(i));
 		    sph_check = 1;
-		    G_message(_
-			      ("The datum information has not been changed"));
+		    G_message(_("The datum information has not been changed"));
 		}
 	    }
 	    else
@@ -294,8 +290,7 @@ int main(int argc, char *argv[])
 			     0))
 			    sph_check = G_ask_ellipse_name(spheroid);
 			else {
-			    G_message(_
-				      ("The ellipse information has not been changed"));
+			    G_message(_("The ellipse information has not been changed"));
 			    sph_check = 1;
 			}
 		    }		/* the val is legal */
@@ -315,15 +310,13 @@ int main(int argc, char *argv[])
 			G_message(_("The radius is currently %f"), radius);
 			if (G_yes(_("Do you want to change the radius?"), 0))
 			    radius =
-				prompt_num_double(_
-						  ("Enter radius for the sphere in meters"),
+				prompt_num_double(_("Enter radius for the sphere in meters"),
 						  RADIUS_DEF, 1);
 		    }
 		}
 		else
 		    radius =
-			prompt_num_double(_
-					  ("Enter radius for the sphere in meters"),
+			prompt_num_double(_("Enter radius for the sphere in meters"),
 					  RADIUS_DEF, 1);
 	    }			/* end ask radius */
 	}
@@ -454,20 +447,17 @@ int main(int argc, char *argv[])
 				  old_zone);
 			if (!G_yes
 			    (_("Do you want to change the UTM zone?"), 0)) {
-			    G_message(_
-				      ("UTM zone information has not been updated"));
+			    G_message(_("UTM zone information has not been updated"));
 			    zone = old_zone;
 			    break;
 			}
 			else {
-			    G_message(_
-				      ("But if you change zone, all the existing "
+			    G_message(_("But if you change zone, all the existing "
 				       "data will be interpreted by projection software. "
 				       "GRASS will not automatically re-project or even "
 				       "change the headers for existing maps."));
 			    if (!G_yes
-				(_
-				 ("Would you still like to change the UTM zone?"),
+				(_("Would you still like to change the UTM zone?"),
 				 0)) {
 				zone = old_zone;
 				break;
@@ -655,8 +645,7 @@ int main(int argc, char *argv[])
 	    _
 	    ("\nProjection information has been recorded for this location\n\n"));
     if ((old_zone != zone) | (old_proj != cellhd.proj)) {
-	G_message(_
-		  ("The geographic region information in WIND is now obsolete"));
+	G_message(_("The geographic region information in WIND is now obsolete"));
 	G_message(_("Run g.region -d to update it"));
     }
     leave(0);

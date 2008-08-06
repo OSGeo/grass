@@ -450,8 +450,7 @@ int main(int argc, char *argv[])
 	    if (!mapset)
 		G_fatal_error(_("Raster map <%s> not found"), rast_name);
 	    if (G_get_cellhd(rast_name, mapset, &temp_window) < 0)
-		G_fatal_error(_
-			      ("Unable to read header of raster map <%s@%s>"),
+		G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
 			      rast_name, mapset);
 	    if (!first) {
 		G_copy(&window, &temp_window, sizeof(window));

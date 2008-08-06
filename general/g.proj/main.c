@@ -174,8 +174,7 @@ int main(int argc, char *argv[])
     importformats = ((ingeo->answer ? 1 : 0) + (inwkt->answer ? 1 : 0) +
 		     (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0));
     if (importformats > 1)
-	G_fatal_error(_
-		      ("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
+	G_fatal_error(_("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
 		      ingeo->key, inwkt->key, inproj4->key, inepsg->key);
 
     /* Input */

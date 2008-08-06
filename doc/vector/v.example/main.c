@@ -173,8 +173,7 @@ int main(int argc, char *argv[])
 		/* Let's output every columns name and value */
 		while (1) {
 		    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-			G_warning(_
-				  ("Error while retreiving database record for cat %d"),
+			G_warning(_("Error while retreiving database record for cat %d"),
 				  cat);
 			break;
 		    }
