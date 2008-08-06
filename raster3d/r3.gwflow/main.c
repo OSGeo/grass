@@ -190,14 +190,11 @@ int main(int argc, char *argv[])
     solver = param.solver->answer;
 
     if (strcmp(solver, N_SOLVER_DIRECT_LU) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct LU solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct LU solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_GAUSS) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct Gauss solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct Gauss solver do not work with sparse matrices"));
     if (strcmp(solver, N_SOLVER_DIRECT_CHOLESKY) == 0 && param.sparse->answer)
-	G_fatal_error(_
-		      ("The direct cholesky solver do not work with sparse matrices"));
+	G_fatal_error(_("The direct cholesky solver do not work with sparse matrices"));
 
 
 
@@ -299,8 +296,7 @@ int main(int argc, char *argv[])
 	N_solver_cholesky(les);
 
     if (les == NULL)
-	G_fatal_error(_
-		      ("Unable to create and solve the linear equation system"));
+	G_fatal_error(_("Unable to create and solve the linear equation system"));
 
 
     /*write the result to the output file and copy the values to the data->phead array */

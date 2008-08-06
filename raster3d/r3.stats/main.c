@@ -603,8 +603,7 @@ int main(int argc, char *argv[])
 
     /* break if the wrong number of subranges are given */
     if (nsteps <= 0)
-	G_fatal_error(_
-		      ("The number of subranges has to be equal or greater than 1"));
+	G_fatal_error(_("The number of subranges has to be equal or greater than 1"));
 
     infile = inputfile->answer;
 
