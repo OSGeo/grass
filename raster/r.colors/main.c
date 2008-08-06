@@ -41,12 +41,11 @@ static void scan_rules(void)
 
     rules = G__ls(path, &nrules);
 
-    rules = G_realloc(rules, (nrules + 4) * sizeof(const char *));
+    rules = G_realloc(rules, (nrules + 3) * sizeof(const char *));
 
     rules[nrules++] = G_store("random");
     rules[nrules++] = G_store("grey.eq");
     rules[nrules++] = G_store("grey.log");
-    rules[nrules++] = G_store("rules");
 }
 
 static char *rules_list(void)
@@ -164,7 +163,6 @@ int main(int argc, char **argv)
 	  "rainbow;rainbow color table;"
 	  "ramp;color ramp;"
 	  "random;random color table;"
-	  "rules;create new color table based on user-specified rules;"
 	  "ryb;red through yellow to blue colors;"
 	  "ryg;red through yellow to green colors;"
 	  "slope;r.slope.aspect-type slope colors for raster values 0-90;"
@@ -311,10 +309,6 @@ int main(int argc, char **argv)
 		have_stats = get_stats(name, mapset, &statf);
 	    G_make_histogram_log_colors(&colors, &statf, (CELL) min,
 					(CELL) max);
-	}
-	else if (strcmp(style, "rules") == 0) {
-	    if (!read_color_rules(stdin, &colors, min, max, fp))
-		exit(EXIT_FAILURE);
 	}
 	else if (find_rule(style))
 	    G_make_fp_colors(&colors, style, min, max);
