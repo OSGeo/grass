@@ -63,7 +63,7 @@ int report_range(void)
     return 0;
 }
 
-int read_rules(void)
+int read_rules(const char *filename)
 {
     char buf[256];
     DCELL dLow, dHigh;
@@ -72,18 +72,26 @@ int read_rules(void)
     int first = 1;
     DCELL dmin, dmax;
     CELL cmin, cmax;
-    char *prompt = "Add more quant rules?";
+    FILE *fp;
+
+    if (strcmp(filename, "-") == 0)
+	fp = stdin;
+    else {
+	fp = fopen(filename, "r");
+	if (!fp)
+	    G_fatal_error(_("unable to open input file <%s>"), filename);
+    }
 
     read_range();
     report_range();
-    fprintf(stderr,
-	    "\nEnter the rule or 'help' for the format description or 'end' to exit:\n");
+    if (isatty(fileno(fp)))
+	fprintf(stderr, _("\nEnter the rule or 'help' for the format description or 'end' to exit:\n"));
     G_quant_init(&quant_struct);
     for (line = 1;; line++) {
-	if (isatty(0))
-	    fprintf(stdout, "> ");
-	if (!fgets(buf, 1024, stdin))
-	    return 0;
+	if (isatty(fileno(fp)))
+	    fprintf(stderr, "> ");
+	if (!G_getl2(buf, sizeof(buf), fp))
+	    break;
 	for (n = 0; buf[n]; n++)
 	    if (buf[n] == ',')
 		buf[n] = ' ';
@@ -99,23 +107,17 @@ int read_rules(void)
 
 	    /* give warning when quant rules do not cover the whole range of map */
 	    G_quant_get_limits(&quant_struct, &dmin, &dmax, &cmin, &cmax);
-	    if ((dmin > old_dmin || dmax < old_dmax) && !first) {
-		fprintf(stdout,
-			"Warning: quant rules do not cover the whole range map\n");
-		if (G_yes(prompt, 1))
-		    continue;
-	    }
+	    if ((dmin > old_dmin || dmax < old_dmax) && !first)
+		G_warning(_("quant rules do not cover the whole range map"));
 	    break;
 	}
 
 	if (strcmp(buf, "help") == 0) {
-	    fprintf(stdout, "Enter a rule in one of these formats:\n");
-	    fprintf(stdout, "float_low:float_high:int_low:int_high\n");
-	    fprintf(stdout,
-		    "float_low:float_high:int_val  (i.e. int_high == int_low)\n");
-	    fprintf(stdout,
-		    "*:float_val:int_val           (interval [inf, float_val])\n");
-	    fprintf(stdout,
+	    fprintf(stderr,
+		    "Enter a rule in one of these formats:\n"
+		    "float_low:float_high:int_low:int_high\n"
+		    "float_low:float_high:int_val  (i.e. int_high == int_low)\n"
+		    "*:float_val:int_val           (interval [inf, float_val])\n"
 		    "float_val:*:int_val           (interval [float_val, inf])\n");
 	}
 
@@ -152,10 +154,13 @@ int read_rules(void)
 		break;
 
 	    else
-		fprintf(stderr, "%s is not a valid rule\n", buf);
+		G_warning(_("%s is not a valid rule"), buf);
 	    break;
 	}			/* switch */
     }				/* loop */
+
+    if (fp != stdin)
+	fclose(fp);
 
     return nrules;
 }
