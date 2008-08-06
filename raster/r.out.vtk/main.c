@@ -83,8 +83,7 @@ void check_input_maps(void)
 	    }
 	}
 	else {
-	    G_fatal_error(_
-			  ("Cannot create RGB data, please provide three maps [r,g,b]"));
+	    G_fatal_error(_("Cannot create RGB data, please provide three maps [r,g,b]"));
 	}
     }
 
@@ -107,8 +106,7 @@ void check_input_maps(void)
 	    }
 	}
 	else {
-	    G_fatal_error(_
-			  ("Cannot create vector data, please provide three maps [x,y,z]"));
+	    G_fatal_error(_("Cannot create vector data, please provide three maps [x,y,z]"));
 	}
     }
 
@@ -333,8 +331,7 @@ int main(int argc, char *argv[])
 					 digits);
 	    }
 	    else {
-		G_warning(_
-			  ("Wrong RGB maps. Maps should have the same type! RGB output not added!"));
+		G_warning(_("Wrong RGB maps. Maps should have the same type! RGB output not added!"));
 		/*do nothing */
 	    }
 
@@ -381,8 +378,7 @@ int main(int argc, char *argv[])
 				      digits);
 	    }
 	    else {
-		G_warning(_
-			  ("Wrong vector maps. Maps should have the same type! Vector output not added!"));
+		G_warning(_("Wrong vector maps. Maps should have the same type! Vector output not added!"));
 		/*do nothing */
 	    }
 

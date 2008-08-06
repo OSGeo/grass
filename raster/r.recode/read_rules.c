@@ -79,12 +79,9 @@ int read_rules(FILE * fp)
 	if (strcmp(buf, "help") == 0) {
 	    G_message(_("Enter a rule in one of these formats:"));
 	    G_message(_("old_low:old_high:new_low:new_high"));
-	    G_message(_
-		      ("old_low:old_high:new_val      (i.e. new_high == new_low)"));
-	    G_message(_
-		      ("*:old_val:new_val             (interval [inf, old_val])"));
-	    G_message(_
-		      ("old_val:*:new_val             (interval [old_val, inf])"));
+	    G_message(_("old_low:old_high:new_val      (i.e. new_high == new_low)"));
+	    G_message(_("*:old_val:new_val             (interval [inf, old_val])"));
+	    G_message(_("old_val:*:new_val             (interval [old_val, inf])"));
 	    continue;
 	}
 

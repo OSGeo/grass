@@ -530,8 +530,7 @@ int main(int argc, char *argv[])
     parm.mem = fmem->answer;
 
     if (!pflout->answer && !plgout->answer && !pdsout->answer)
-	G_fatal_error(_
-		      ("You must select one or more output maps (flout, lgout, dsout)"));
+	G_fatal_error(_("You must select one or more output maps (flout, lgout, dsout)"));
 
     if (parm.seg)
 	parm.mem = '\0';

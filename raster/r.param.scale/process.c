@@ -69,8 +69,7 @@ void process(void)
 
     if ((region.ew_res / region.ns_res >= 1.01) ||	/* If EW and NS resolns are    */
 	(region.ns_res / region.ew_res >= 1.01)) {	/* >1% different, warn user.      */
-	G_warning(_
-		  ("E-W and N-S grid resolutions are different. Taking average."));
+	G_warning(_("E-W and N-S grid resolutions are different. Taking average."));
 	resoln = (region.ns_res + region.ew_res) / 2;
     }
     else

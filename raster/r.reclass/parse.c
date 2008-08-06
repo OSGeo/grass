@@ -55,8 +55,7 @@ int parse(char *line, RULE ** rules, RULE ** tail, struct Categories *cats)
 	    if (!scan_value(&v))
 		return -1;
 	    if (G_is_c_null_value(&v)) {
-		G_warning(_
-			  ("Can't have null on the left-hand side of the rule"));
+		G_warning(_("Can't have null on the left-hand side of the rule"));
 		return -1;
 	    }
 	    state = 1;
@@ -85,8 +84,7 @@ int parse(char *line, RULE ** rules, RULE ** tail, struct Categories *cats)
 	    if (strncmp(cur, "thru", 4) != 0)
 		continue;
 	    if (last_null) {
-		G_warning(_
-			  ("Can't have null on the right-hand side of the rule"));
+		G_warning(_("Can't have null on the right-hand side of the rule"));
 		return -1;
 	    }
 	    cur += 4;
@@ -98,8 +96,7 @@ int parse(char *line, RULE ** rules, RULE ** tail, struct Categories *cats)
 	    if (!scan_value(&v))
 		return -1;
 	    if (G_is_c_null_value(&v)) {
-		G_warning(_
-			  ("Can't have null on the right-hand side of the rule"));
+		G_warning(_("Can't have null on the right-hand side of the rule"));
 		return -1;
 	    }
 

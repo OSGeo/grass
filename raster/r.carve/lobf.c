@@ -71,8 +71,7 @@ void pg_addpt(PointGrp * pg, Point2 pt)
 	/* check for divide by zero */
 	if (0 ==
 	    (denom = DET2_2(pg->sum_x_sq, pg->sum_x, pg->sum_x, pg->npts))) {
-	    G_warning(_
-		      ("trying to divide by zero...no unique solution for "
+	    G_warning(_("trying to divide by zero...no unique solution for "
 		       "system...skipping..."));
 	    pg->slope = pg->yinter = 0.0;
 	}

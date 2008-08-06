@@ -97,8 +97,7 @@ int main(int argc, char *argv[])
 
     if (!read_rules(srcfp)) {
 	if (isatty(fileno(srcfp)))
-	    G_fatal_error(_
-			  ("No rules specified. Raster map <%s> not created."),
+	    G_fatal_error(_("No rules specified. Raster map <%s> not created."),
 			  result);
 	else
 	    G_fatal_error(_("No rules specified"));

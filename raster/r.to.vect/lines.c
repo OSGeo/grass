@@ -490,8 +490,7 @@ static int update_list(int count)
 	break;
     default:
 	G_debug(1, "Crowded cell %xH (%d,%d)", count, row, col);
-	G_fatal_error(_
-		      ("Raster map is not thinned properly.\nPlease run r.thin."));
+	G_fatal_error(_("Raster map is not thinned properly.\nPlease run r.thin."));
     }				/* switch count */
 
     return 0;

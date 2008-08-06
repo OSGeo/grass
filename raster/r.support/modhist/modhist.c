@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
 
     if (argc < 2) {
 	mapset =
-	    G_ask_cell_in_mapset(_
-				 ("Which raster map needs an updated history? "),
+	    G_ask_cell_in_mapset(_("Which raster map needs an updated history? "),
 				 name);
 	if (mapset == NULL)
 	    return EXIT_SUCCESS;

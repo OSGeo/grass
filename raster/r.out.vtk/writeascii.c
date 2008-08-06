@@ -426,8 +426,7 @@ write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE * fp,
 
 	    /*Test of valuerange, the data should be 1 byte gray values */
 	    if (r > 255 || g > 255 || b > 255 || r < 0 || g < 0 || b < 0) {
-		G_warning(_
-			  ("Wrong map values! Values should in between 0 and 255!\n"));
+		G_warning(_("Wrong map values! Values should in between 0 and 255!\n"));
 		fprintf(fp, "0 0 0 \n");
 	    }
 	    else {

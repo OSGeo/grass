@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
 	if (input.fast) {
 	    if (G_system(input.com_line_ram)) {
 		if (input.slow) {
-		    G_message(_
-			      ("Slow version of water analysis program starting now"));
+		    G_message(_("Slow version of water analysis program starting now"));
 
 		    if (G_system(input.com_line_seg)) {
 			free_input(&input);

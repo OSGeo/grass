@@ -227,8 +227,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	send(child[j].channel, &m);
 	wait(&status);
 	if (!(WIFEXITED(status)))
-	    G_message(_
-		      ("r.li.worker (pid %i) exited with abnormal status %i"),
+	    G_message(_("r.li.worker (pid %i) exited with abnormal status %i"),
 		      donePid, status);
 	else
 	    G_message(_("r.li.worker (pid %i) terminated"), donePid);
@@ -249,8 +248,7 @@ int calculateIndex(char *file, int f(int, char **, area_des, double *),
 	send(child[i].channel, &m);
 	wait(&status);
 	if (!(WIFEXITED(status)))
-	    G_message(_
-		      ("r.li.worker (pid %i) exited with abnormal status %i"),
+	    G_message(_("r.li.worker (pid %i) exited with abnormal status %i"),
 		      child[i].pid, status);
 	else
 	    G_message(_("r.li.worker (pid %i) terminated"), child[i].pid);

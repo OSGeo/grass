@@ -79,15 +79,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Raster map <%s> not found"), basemap->answer);
 
     if (G_raster_map_is_fp(basemap->answer, mapset) != 0)
-	G_fatal_error(_
-		      ("This module currently only works for integer (CELL) maps"));
+	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
     if ((mapset = G_find_cell2(covermap->answer, "")) == 0)
 	G_fatal_error(_("Raster map <%s> not found"), covermap->answer);
 
     if (G_raster_map_is_fp(covermap->answer, mapset) != 0)
-	G_fatal_error(_
-		      ("This module currently only works for integer (CELL) maps"));
+	G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
     if (G_read_cats(covermap->answer, mapset, &cats) < 0) {
 	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
@@ -186,8 +184,7 @@ int main(int argc, char **argv)
 static int is_ok(char *method, char *map)
 {
     if (map == NULL)
-	G_fatal_error(_
-		      ("An output raster map needs to be defined with method '%s'"),
+	G_fatal_error(_("An output raster map needs to be defined with method '%s'"),
 		      method);
 
     return 0;

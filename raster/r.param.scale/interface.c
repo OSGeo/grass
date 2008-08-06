@@ -160,8 +160,7 @@ void interface(int argc, char **argv)
     else if (!strcmp(parameter->answer, "feature"))
 	mparam = FEATURE;
     else {
-	G_warning(_
-		  ("Morphometric parameter not recognised. Assuming 'Elevation'"));
+	G_warning(_("Morphometric parameter not recognised. Assuming 'Elevation'"));
 	mparam = ELEV;
     }
 

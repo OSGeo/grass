@@ -79,8 +79,7 @@ void read_input_files(void)
     fd = open_existing_cell_file(parm.elevin, &hd);
     if (!((region.ew_res == hd.ew_res)
 	  && (region.ns_res == hd.ns_res)))
-	G_fatal_error(_
-		      ("Elevation file's resolution differs from current region resolution"));
+	G_fatal_error(_("Elevation file's resolution differs from current region resolution"));
 
     for (row = 0; row < region.rows; row++) {
 	G_get_d_raster_row(fd, el.buf[row], row);

@@ -189,8 +189,7 @@ int main(int argc, char **argv)
 
 	    if (start_row < 0 || start_row > nrows ||
 		start_col < 0 || start_col > ncols) {
-		G_warning(_
-			  ("Starting point %d is outside the current region"),
+		G_warning(_("Starting point %d is outside the current region"),
 			  i + 1);
 		continue;
 	    }
@@ -245,8 +244,7 @@ int main(int argc, char **argv)
 
 	    /* only catches maps out of range until something is found, not after */
 	    if (!have_points) {
-		G_warning(_
-			  ("Starting vector map <%s> contains no points in the current region"),
+		G_warning(_("Starting vector map <%s> contains no points in the current region"),
 			  vpointopt->answers[i]);
 	    }
 	}

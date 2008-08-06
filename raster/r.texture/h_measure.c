@@ -924,8 +924,7 @@ void hessenberg(float **a, int n, float wr[], float wi[])
 		}
 		else {
 		    if (its == 30)
-			G_fatal_error(_
-				      ("Too many iterations to required to find %s - giving up"),
+			G_fatal_error(_("Too many iterations to required to find %s - giving up"),
 				      F14), exit(1);
 		    if (its == 10 || its == 20) {
 			t += x;

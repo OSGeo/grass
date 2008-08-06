@@ -197,8 +197,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Seed map or seed coordinates must be set!"));
 
     if (sdxy_opt->answer && !lake_opt->answer)
-	G_fatal_error(_
-		      ("Seed coordinates and output map lake= must be set!"));
+	G_fatal_error(_("Seed coordinates and output map lake= must be set!"));
 
     if (lake_opt->answer && overwrite_flag->answer)
 	G_fatal_error(_("Both lake and overwrite cannot be specifed"));
@@ -289,8 +288,7 @@ int main(int argc, char *argv[])
     if (sdxy_opt->answer)
 	/* Check is water level higher than seed point */
 	if (in_terran[start_row][start_col] >= water_level)
-	    G_fatal_error(_
-			  ("Given water level at seed point is below earth surface. "
+	    G_fatal_error(_("Given water level at seed point is below earth surface. "
 			   "Increase water level or move seed point."));
     out_water[start_row][start_col] = 1;
 
@@ -376,8 +374,7 @@ int main(int argc, char *argv[])
     G_message(_("Lake depth from %f to %f"), min_depth, max_depth);
     G_message(_("Lake area %f square meters"), area);
     G_message(_("Lake volume %f cubic meters"), volume);
-    G_warning(_
-	      ("Volume is correct only if lake depth (terrain raster map) is in meters"));
+    G_warning(_("Volume is correct only if lake depth (terrain raster map) is in meters"));
 
     /* Close all files. Lake map gets written only now. */
     G_close_cell(in_terran_fd);

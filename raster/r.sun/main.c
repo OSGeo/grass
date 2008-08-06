@@ -425,15 +425,13 @@ int main(int argc, char *argv[])
     if (parm.ltime->answer != NULL) {
 	if (insol_time != NULL)
 	    G_fatal_error(_("time and insol_time are incompatible options"));
-	G_message(_
-		  ("Mode 1: instantaneous solar incidence angle & irradiance given a set local time"));
+	G_message(_("Mode 1: instantaneous solar incidence angle & irradiance given a set local time"));
 	sscanf(parm.ltime->answer, "%lf", &timo);
     }
     else {
 	if (incidout != NULL)
 	    G_fatal_error(_("incidout requires time parameter to be set"));
-	G_message(_
-		  ("Mode 2: integrated daily irradiation for a given day of the year"));
+	G_message(_("Mode 2: integrated daily irradiation for a given day of the year"));
     }
 
     if (parm.linkein->answer == NULL)
@@ -482,12 +480,10 @@ int main(int argc, char *argv[])
 
 	if ((in_proj_info = G_get_projinfo()) == NULL)
 	    G_fatal_error
-		(_
-		 ("Can't get projection info of current location: please set latitude via 'lat' or 'latin' option!"));
+		(_("Can't get projection info of current location: please set latitude via 'lat' or 'latin' option!"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_
-			  ("Can't get projection units of current location"));
+	    G_fatal_error(_("Can't get projection units of current location"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
 	    G_fatal_error
@@ -501,8 +497,7 @@ int main(int argc, char *argv[])
 	oproj.meters = 1.;
 	sprintf(oproj.proj, "ll");
 	if ((oproj.pj = pj_latlong_from_proj(iproj.pj)) == NULL)
-	    G_fatal_error(_
-			  ("Unable to set up lat/long projection parameters"));
+	    G_fatal_error(_("Unable to set up lat/long projection parameters"));
 
     }
 

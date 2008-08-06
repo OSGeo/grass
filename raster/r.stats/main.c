@@ -287,24 +287,21 @@ int main(int argc, char *argv[])
 	    G_quant_init(&q);
 	    if (cat_ranges) {
 		if (!G_quant_nof_rules(&labels[nfiles].q)) {
-		    G_warning(_
-			      ("Cats for raster map <%s> are either missing or have no explicit labels. "
+		    G_warning(_("Cats for raster map <%s> are either missing or have no explicit labels. "
 			       "Using %s=%d."), G_fully_qualified_name(name,
 								       mapset),
 			      option.nsteps->key, nsteps);
 		    cat_ranges = 0;
 		}
 		else if (nsteps != 255)
-		    G_warning(_
-			      ("Flag '-%c' was given, using cats fp ranges of raster map <%s>, "
+		    G_warning(_("Flag '-%c' was given, using cats fp ranges of raster map <%s>, "
 			       "ignoring '%s' option"), flag.C->key,
 			      G_fully_qualified_name(name, mapset),
 			      option.nsteps->key);
 	    }
 	    if (!cat_ranges) {	/* DO NOT use else here, cat_ranges can change */
 		if (G_read_fp_range(name, mapset, &fp_range) < 0)
-		    G_fatal_error(_
-				  ("Unable to read fp range of raster map <%s>"),
+		    G_fatal_error(_("Unable to read fp range of raster map <%s>"),
 				  G_fully_qualified_name(name, mapset));
 		G_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
 				       &DMAX[nfiles]);

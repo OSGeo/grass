@@ -190,8 +190,7 @@ int main(int argc, char *argv[])
     nrows = G_window_rows();
     ncols = G_window_cols();
     if (nrows > YMAX || ncols > XMAX)
-	G_fatal_error(_
-		      ("Raster map is too big! Exceeds %d columns or %d rows"),
+	G_fatal_error(_("Raster map is too big! Exceeds %d columns or %d rows"),
 		      XMAX, YMAX);
 
 

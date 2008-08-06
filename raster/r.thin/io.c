@@ -112,8 +112,7 @@ int open_file(char *name)
     close(creat(work_file_name, 0666));
     if ((work_file = open(work_file_name, 2)) < 0) {
 	unlink(work_file_name);
-	G_fatal_error(_
-		      ("%s: Unable to create temporary file <%s> -- errno = %d"),
+	G_fatal_error(_("%s: Unable to create temporary file <%s> -- errno = %d"),
 		      error_prefix, work_file_name, errno);
     }
     buf = (CELL *) G_malloc(buf_len = n_cols * sizeof(CELL));
@@ -129,8 +128,7 @@ int open_file(char *name)
     for (row = 0; row < n_rows; row++) {
 	if (G_get_map_row(cell_file, buf + PAD, row) < 0) {
 	    unlink(work_file_name);
-	    G_fatal_error(_
-			  ("%s: Error reading from raster map <%s> in mapset <%s>"),
+	    G_fatal_error(_("%s: Error reading from raster map <%s> in mapset <%s>"),
 			  error_prefix, cell, mapset);
 	}
 	if (write(work_file, buf, buf_len) != buf_len) {

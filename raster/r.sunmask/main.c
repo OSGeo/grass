@@ -286,23 +286,19 @@ int main(int argc, char *argv[])
 	locparms = 0;
 
     if (solparms && locparms)	/* both defined */
-	G_fatal_error(_
-		      ("Either define sun position or location/date/time parameters."));
+	G_fatal_error(_("Either define sun position or location/date/time parameters."));
 
     if (!solparms && !locparms)	/* nothing defined */
-	G_fatal_error(_
-		      ("Neither sun position nor east/north, date/time/timezone definition are complete."));
+	G_fatal_error(_("Neither sun position nor east/north, date/time/timezone definition are complete."));
 
     /* if here, one definition was complete */
     if (locparms) {
-	G_message(_
-		  ("Calculating sun position... (using solpos (V. %s) from NREL)\n"),
+	G_message(_("Calculating sun position... (using solpos (V. %s) from NREL)\n"),
 		  SOLPOSVERSION);
 	use_solpos = 1;
     }
     else {
-	G_message(_
-		  ("Using user defined sun azimuth, altitude settings (ignoring eventual other values)\n"));
+	G_message(_("Using user defined sun azimuth, altitude settings (ignoring eventual other values)\n"));
 	use_solpos = 0;
     }
 
@@ -383,8 +379,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 		else {
-		    G_message(_
-			      (" %d.%02d.%02d, daynum %d, time: %02i:%02i:%02i (decimal time: %f)\n"),
+		    G_message(_(" %d.%02d.%02d, daynum %d, time: %02i:%02i:%02i (decimal time: %f)\n"),
 			      pdat->year, pdat->month, pdat->day,
 			      pdat->daynum, pdat->hour, pdat->minute,
 			      pdat->second,
@@ -394,16 +389,13 @@ int main(int argc, char *argv[])
 		    G_message(_(" long: %f, lat: %f, timezone: %f\n"),
 			      pdat->longitude, pdat->latitude,
 			      pdat->timezone);
-		    G_message(_
-			      (" Solar position: sun azimuth: %f,\n   sun angle above horz.(refraction corrected): %f\n"),
+		    G_message(_(" Solar position: sun azimuth: %f,\n   sun angle above horz.(refraction corrected): %f\n"),
 			      pdat->azim, pdat->elevref);
 
 		    if (sretr / 60 <= 24.0) {
-			G_message(_
-				  (" Sunrise time (without refraction): %02d:%02d:%02d\n"),
+			G_message(_(" Sunrise time (without refraction): %02d:%02d:%02d\n"),
 				  sretr / 60, sretr % 60, sretr_sec);
-			G_message(_
-				  (" Sunset time  (without refraction): %02d:%02d:%02d\n"),
+			G_message(_(" Sunset time  (without refraction): %02d:%02d:%02d\n"),
 				  ssetr / 60, ssetr % 60, ssetr_sec);
 		    }
 		}
@@ -428,8 +420,7 @@ int main(int argc, char *argv[])
 	G_debug(3, "current_time:%f sunrise:%f", current_time, sunrise);
 	if ((current_time < sunrise)) {
 	    if (sretr / 60 <= 24.0)
-		G_message(_
-			  ("Time (%02i:%02i:%02i) is before sunrise (%02d:%02d:%02d)!\n"),
+		G_message(_("Time (%02i:%02i:%02i) is before sunrise (%02d:%02d:%02d)!\n"),
 			  pdat->hour, pdat->minute, pdat->second, sretr / 60,
 			  sretr % 60, sretr_sec);
 	    else
@@ -440,8 +431,7 @@ int main(int argc, char *argv[])
 	}
 	if ((current_time > sunset)) {
 	    if (sretr / 60 <= 24.0)
-		G_message(_
-			  ("Time (%02i:%02i:%02i) is after sunset (%02d:%02d:%02d)!\n"),
+		G_message(_("Time (%02i:%02i:%02i) is after sunset (%02d:%02d:%02d)!\n"),
 			  pdat->hour, pdat->minute, pdat->second, ssetr / 60,
 			  ssetr % 60, ssetr_sec);
 	    else

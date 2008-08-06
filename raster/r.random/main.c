@@ -171,18 +171,15 @@ int main(int argc, char *argv[])
     else {
 	if (targets > count) {
 	    if (myState.use_nulls)
-		G_fatal_error(_
-			      ("There aren't [%ld] cells in the current region"),
+		G_fatal_error(_("There aren't [%ld] cells in the current region"),
 			      targets);
 	    else
-		G_fatal_error(_
-			      ("There aren't [%ld] non-NULL cells in the current region"),
+		G_fatal_error(_("There aren't [%ld] non-NULL cells in the current region"),
 			      targets);
 	}
 
 	if (targets <= 0)
-	    G_fatal_error(_
-			  ("There are no valid locations in the current region"));
+	    G_fatal_error(_("There are no valid locations in the current region"));
 
 	myState.nRand = targets;
     }

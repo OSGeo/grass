@@ -290,8 +290,7 @@ int main(int argc, char *argv[])
 	if (no_coord == 0 && no_dim == 0) {	/* Get all parmameters */
 	    if (!parm.north->answer || !parm.south->answer ||
 		!parm.west->answer || !parm.east->answer)
-		G_fatal_error(_
-			      ("You have to provide all limits of geographic region (n,s,e,w)"));
+		G_fatal_error(_("You have to provide all limits of geographic region (n,s,e,w)"));
 	    if (!G_scan_northing
 		(parm.north->answer, &cellhd.north, cellhd.proj))
 		return 1;

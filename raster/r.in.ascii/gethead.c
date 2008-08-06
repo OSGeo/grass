@@ -37,8 +37,7 @@ int getgrdhead(FILE * fd, struct Cell_head *cellhd)
 
     /* read the row and column dimensions */
     if (fscanf(fd, "%d %d \n", &nc, &nr) != 2) {
-	G_warning(_
-		  ("error reading the column and row dimension from the Surfer grid file"));
+	G_warning(_("error reading the column and row dimension from the Surfer grid file"));
 	return 0;
     }
 
@@ -167,8 +166,7 @@ int gethead(FILE * fd,
 		}
 	    }
 	    else
-		G_warning(_
-			  ("ignoring type filed in header, type is set on command line"));
+		G_warning(_("ignoring type filed in header, type is set on command line"));
 	    continue;
 	}
 
@@ -180,8 +178,7 @@ int gethead(FILE * fd,
 		}
 	    }
 	    else
-		G_warning(_
-			  ("ignoring multiplier filed in header, multiplier is set on command line"));
+		G_warning(_("ignoring multiplier filed in header, multiplier is set on command line"));
 	    continue;
 	}
 
@@ -189,8 +186,7 @@ int gethead(FILE * fd,
 	    if (!(*nval))	/* if null val string not set on command line */
 		*nval = G_store(value);
 	    else
-		G_warning(_
-			  ("ignoring null filed in header, null string is set on command line"));
+		G_warning(_("ignoring null filed in header, null string is set on command line"));
 	    continue;
 	}
 

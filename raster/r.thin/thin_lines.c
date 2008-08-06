@@ -173,8 +173,7 @@ int thin_lines(int iterations)
     if ((deleted == 0) && (i <= iterations))
 	G_message(_("Thinning completed successfully."));
     else
-	G_message(_
-		  ("Thinning not completed, consider to increase 'iterations' parameter."));
+	G_message(_("Thinning not completed, consider to increase 'iterations' parameter."));
 
     return 0;
 }

@@ -241,8 +241,7 @@ int do_profile(double e1, double e2, double n1, double n2, char *name,
     G_message(_("Approx. transect length [%f] m"), LEN);
 
     if (!G_point_in_region(e2, n2))
-	G_warning(_
-		  ("Endpoint coordinates are outside of current region settings"));
+	G_warning(_("Endpoint coordinates are outside of current region settings"));
 
     /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {

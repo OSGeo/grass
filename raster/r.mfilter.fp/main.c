@@ -120,8 +120,7 @@ int main(int argc, char **argv)
     /* make sure filter matrix won't extend outside the raster map */
     for (i = 0; i < nfilters; i++) {
 	if (filter[i].size > ncols || filter[i].size > nrows)
-	    G_fatal_error(_
-			  ("Raster map too small for the size of the filter"));
+	    G_fatal_error(_("Raster map too small for the size of the filter"));
     }
 
 

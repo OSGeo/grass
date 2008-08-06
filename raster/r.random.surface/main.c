@@ -70,8 +70,7 @@ int main(int argc, char **argv)
 
 	for (DoFilter = 0; DoFilter < NumFilters; DoFilter++) {
 	    CopyFilter(&Filter, AllFilters[DoFilter]);
-	    G_message(_
-		      ("Starting filter #%d, distance: %.*lf, exponent: %.*lf, flat: %.*lf"),
+	    G_message(_("Starting filter #%d, distance: %.*lf, exponent: %.*lf, flat: %.*lf"),
 		      DoFilter, Digits(2.0 * Filter.MaxDist, 6),
 		      2.0 * Filter.MaxDist, Digits(1.0 / Filter.Exp, 6),
 		      1.0 / Filter.Exp, Digits(Filter.Mult, 6), Filter.Mult);

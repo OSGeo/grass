@@ -95,8 +95,7 @@ int interface(int argc,		/* Number of command line arguments     */
     /*--------------------------------------------------------------------*/
 
     if ((H <= 0) || (H >= 1)) {
-	G_fatal_error(_
-		      ("Fractal dimension of [%.2lf] must be between 2 and 3."),
+	G_fatal_error(_("Fractal dimension of [%.2lf] must be between 2 and 3."),
 		      3.0 - H);
     }
 
