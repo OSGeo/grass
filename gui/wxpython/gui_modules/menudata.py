@@ -70,7 +70,7 @@ class Data:
                                  "self.OnMenuCmd",
                                  "r.in.gdal"),
                                 (_("Multiple raster data import using GDAL"),
-                                 _("Import selected GDAL layers tpo GRASS raster maps using r.in.gdal."),
+                                 _("Converts selected GDAL layers to GRASS raster maps using r.in.gdal."),
                                  "self.OnImportGdalLayers",
                                  ""),
 
