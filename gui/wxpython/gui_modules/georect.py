@@ -672,8 +672,11 @@ class GCP(wx.Frame):
         self.SetTarget(self.xygroup, self.currentlocation, self.currentmapset)
 
         #
-        # toolbar
+        # toolbar and display for xy map
         #
+        self.toolbar = toolbars.GCPToolbar(parent=self, tbframe=self).GetToolbar()
+        self.SetToolBar(self.toolbar)
+        
         self.SetMapDisplay(self.mapdisp)
 
         #
@@ -697,6 +700,11 @@ class GCP(wx.Frame):
                                        choices=[_('1st order'), _('2nd order'), _('3rd order')],
                                        majorDimension=wx.RA_SPECIFY_COLS)
         sizer.Add(item=self.rb_grmethod, proportion=0,
+                       flag=wx.EXPAND | wx.ALL, border=5)
+        
+        self.clip_to_region = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                label=_("clip to computational region in target location"))
+        sizer.Add(item=self.clip_to_region, proportion=0,
                        flag=wx.EXPAND | wx.ALL, border=5)
 
         box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
@@ -729,12 +737,7 @@ class GCP(wx.Frame):
     def SetMapDisplay(self, win):
         self.mapdisp = win
         if self.mapdisp:
-            self.toolbar = toolbars.GCPToolbar(parent=self, mapdisplay=self.mapdisp, map=self.mapdisp.Map).GetToolbar()
-            self.SetToolBar(self.toolbar)
-
-            self.list.LoadData()
-        else:
-            self.toolbar = None
+             self.list.LoadData()
 
     def SetTarget(self, tgroup, tlocation, tmapset):
         """
@@ -931,8 +934,9 @@ class GCP(wx.Frame):
         #
         # calculate RMS
         #
-        if self.CheckGCPcount():
-            self.RMSError(self.xygroup, self.gr_order)
+        # FIXME auto calculation on load is not working
+        #if self.CheckGCPcount():
+        #    self.RMSError(self.xygroup, self.gr_order)
 
     def ReloadGCPs(self, event):
         """Reload data from file"""
@@ -954,7 +958,7 @@ class GCP(wx.Frame):
         are active for the selected transformation order
         """
         if (self.GCPcount < 3 and self.gr_order == 1) or \
-            (self.GCPcount < 6 and self.gr_order == 2) or \
+            (self.GCPcount < 7 and self.gr_order == 2) or \
             (self.GCPcount < 10 and self.gr_order == 3):
             if msg:
                 wx.MessageBox(parent=self,
@@ -962,7 +966,7 @@ class GCP(wx.Frame):
                               message=_('Insufficient points defined and active (checked) '
                                         'for selected rectification method.\n'
                                         '3+ points needed for 1st order,\n'
-                                        '6+ points for 2nd order, and\n'
+                                        '7+ points for 2nd order, and\n'
                                         '10+ points for 3rd order.'),
                               style=wx.ICON_INFORMATION | wx.ID_OK | wx.CENTRE)
                 return False
@@ -981,12 +985,12 @@ class GCP(wx.Frame):
                 
         if maptype == 'cell':
             self.grwiz.SwitchEnv('new')
-
-            self.parent.goutput.RunCmd(['i.rectify',
-                                        '-ca',
-                                        'group=%s' % self.xygroup,
-                                        'extension=%s' % self.extension,
-                                        'order=%s' % self.gr_order])
+            cmdlist = ['i.rectify','-a','group=%s' % self.xygroup,
+                       'extension=%s' % self.extension,'order=%s' % self.gr_order]
+            if self.clip_to_region:
+                cmdlist.append('-c')
+            
+            self.parent.goutput.RunCmd(cmdlist)
 
             self.grwiz.SwitchEnv('original')
 
