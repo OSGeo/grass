@@ -1022,7 +1022,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.GetPyData(dragItem)[0]['ctrl']:
             # recreate spin/text control for layer
             btnbmp = Icons["layeropts"].GetBitmap((16,16))
-            newctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp)
+            newctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
             opacity = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
