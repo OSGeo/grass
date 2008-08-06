@@ -34,13 +34,10 @@
  * \param force       Force editing of parameters even if current co-ordinate
  *                    system already contains fully specified parameters.
  * 
- * \param interactive Interactively prompt user for parameters, ignoring
- *                    value of datumtrans variable.
- * 
  * \return            1 if a change was made, 0 if not.
  **/
 
-int set_datumtrans(int datumtrans, int force, int interactive)
+int set_datumtrans(int datumtrans, int force)
 {
     char *params, *datum = NULL;
     int paramsets, status;
@@ -81,15 +78,9 @@ int set_datumtrans(int datumtrans, int force, int interactive)
 	struct Key_Value *temp_projinfo;
 	int i;
 
-	/* First of all obtain the new parameters either interactively
-	 * or through the supplied transform number index */
-	if (interactive) {
-	    /* Print to stderr here as the function call will also */
-	    fprintf(stderr, "Datum name: %s (%s)", dstruct.name,
-		    dstruct.longname);
-	    GPJ_ask_datum_params(datum, &chosenparams);
-	}
-	else {
+	/* First of all obtain the new parameters 
+	 * through the supplied transform number index */
+	{
 	    struct gpj_datum_transform_list *list;
 
 	    if (datumtrans > paramsets)

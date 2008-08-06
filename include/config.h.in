@@ -20,12 +20,6 @@
 /* define for Windows static build */
 #undef STATIC_BUILD
 
-/* define if curses.h exists */
-#undef HAVE_CURSES_H
-
-/* define if keypad in lib[n]curses */
-#undef HAVE_KEYPAD
-
 /* define if limits.h exists */
 #undef HAVE_LIMITS_H
 
@@ -94,9 +88,6 @@
 
 /* Define the return type of signal handlers */
 #define RETSIGTYPE int
-
-/* define curses.h WINDOW structure component */
-#define CURSES_MAXY @CURSES_MAXY@
 
 /* define if ftime() exists */
 #undef HAVE_FTIME

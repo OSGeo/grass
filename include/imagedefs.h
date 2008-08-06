@@ -13,9 +13,6 @@ int I_free_double2(double **);
 double ***I_alloc_double3(int, int, int);
 int I_free_double3(double ***);
 
-/* ask_group.c */
-int I_ask_group_old(char *, char *);
-
 /* eol.c */
 int I_get_to_eol(char *, int, FILE *);
 

@@ -52,10 +52,7 @@ int main(int argc, char *argv[])
     window_cells = G_window_rows() * G_window_cols();
 
 
-    if (argc > 1)
-	command_version(argc, argv);
-    else
-	interactive_version();
+    command_version(argc, argv);
 
     unlink(dumpname);
     unlink(statname);

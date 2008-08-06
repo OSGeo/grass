@@ -23,20 +23,11 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 START_UP=grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
 EXTRA_CFLAGS = -DD_LOCATION_NAME=\"$(DEFAULT_LOCATION)\" -DD_GISDBASE=\"$(DEFAULT_DATABASE)\" -DGRASS_VERSION_NUMBER=\"'$(GRASS_VERSION_NUMBER)'\" -DGRASS_VERSION_UPDATE_PKG=\"'$(GRASS_VERSION_UPDATE_PKG)'\"
-SET_DATA = $(OBJDIR)/set_data.o $(OBJDIR)/mke_mapset.o \
-	   $(OBJDIR)/mke_loc.o $(OBJDIR)/chk_dbase.o $(OBJDIR)/other.o
-
-ifdef USE_CURSES
-SET_DATA_PROG = $(ETC)/set_data$(EXE)
-else
-SET_DATA_PROG =
-endif
 
 FILES = \
 	$(ARCH_BINDIR)/$(START_UP) \
 	$(ETC)/Init.sh \
 	$(ETC)/prompt.sh \
-	$(SET_DATA_PROG) \
 	$(ETC)/clean_temp$(EXE) \
 	$(ETC)/lock$(EXE) \
 	$(ETC)/run$(EXE) \
@@ -117,9 +108,6 @@ $(ETC)/Init.bat: init.bat
 	-e \"s#CONFIG_PROJSHARE#$(PROJSHARE)#\" \
 	$< > $@"
 	chmod +x $@
-
-$(ETC)/set_data$(EXE): $(SET_DATA)
-	$(CC) $(LDFLAGS) -o $@ $(SET_DATA) $(EDITLIB) $(GISLIB) $(DATETIMELIB) $(VASKLIB) $(CURSES) $(MATHLIB) $(XDRLIB)
 
 $(ETC)/echo$(EXE): $(OBJDIR)/echo.o
 	$(CC) $(LDFLAGS) $(OBJDIR)/echo.o -o $@

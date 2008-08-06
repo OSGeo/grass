@@ -196,7 +196,6 @@ LOC_ARG_WITH(glw, GLw, no)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
-LOC_ARG_WITH(curses, Curses, yes)
 AC_ARG_WITH(python,
 [  --with-python[=path/python-config] enable support for Python SWIG bindings (python-config with path, \
 e.g. '--with-python=/usr/bin/python2.5-config', default: no)],, with_python="no")
@@ -418,49 +417,6 @@ fi
 AC_SUBST(XLIB)
 AC_SUBST(XTLIB)
 AC_SUBST(USE_X11)
-
-# Enable Curses option
-
-LOC_CHECK_USE(curses,Curses,USE_CURSES)
-
-if test -n "$USE_CURSES"; then
-
-LOC_CHECK_INCLUDES(curses.h,curses,)
-
-AC_MSG_CHECKING(curses.h WINDOW structure component)
-CURSES_MAXY=NONE
-AC_TRY_COMPILE([
-#include <curses.h>
-  ],[WINDOW w; w.maxy = 0;],
-  CURSES_MAXY=maxy)
-AC_TRY_COMPILE([
-#include <curses.h>
-  ],[WINDOW w; w._maxy = 0;],
-  CURSES_MAXY=_maxy)
-AC_DEFINE_UNQUOTED(CURSES_MAXY,$CURSES_MAXY)
-AC_SUBST(CURSES_MAXY)
-AC_MSG_RESULT($CURSES_MAXY)
-
-AC_CHECK_LIB(ncurses, initscr, CURSESLIB=-lncurses, [
-AC_CHECK_LIB(curses, initscr, CURSESLIB=-lcurses, [
-    AC_MSG_ERROR([*** Unable to locate curses library.])
-    CURSESLIB=
-])])
-AC_SUBST(CURSESLIB)
-AC_SUBST(USE_CURSES)
-
-AC_CHECK_LIB(ncurses, keypad, [AC_DEFINE(HAVE_KEYPAD)], [
-AC_CHECK_LIB(curses, keypad, [AC_DEFINE(HAVE_KEYPAD)], [
-])])
-
-fi # $USE_CURSES
-
-AC_CHECK_LIB(compat, gtty, COMPATLIB=-lcompat, [
-AC_CHECK_LIB(bsd-compat, gtty, COMPATLIB=-lbsd-compat, [
-AC_CHECK_LIB(bsd, gtty, COMPATLIB=-lbsd, [
-    COMPATLIB=
-])])])
-AC_SUBST(COMPATLIB)
 
 # Note that some systems (FreeBSD for example) need an extra library for
 # cuserid

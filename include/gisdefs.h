@@ -81,33 +81,6 @@ double G_area_for_zone_on_sphere(double, double);
 /* ascii_chk.c */
 int G_ascii_check(char *);
 
-/* ask.c */
-char *G_ask_new(const char *, char *, char *, char *);
-char *G_ask_new_ext(const char *, char *, char *, char *, char *, int (*)());
-char *G_ask_old(const char *, char *, char *, char *);
-char *G_ask_old_ext(const char *, char *, char *, char *, char *, int (*)());
-char *G_ask_any(const char *, char *, char *, char *, int);
-char *G_ask_any_ext(const char *, char *, char *, char *, int, char *,
-		    int (*)());
-char *G_ask_in_mapset(const char *, char *, char *, char *);
-char *G_ask_in_mapset_ext(const char *, char *, char *, char *, char *,
-			  int (*)());
-char *G_ask_new_file(const char *, char *, char *, char *);
-char *G_ask_old_file(const char *, char *, char *, char *);
-int G_set_ask_return_msg(const char *);
-char *G_get_ask_return_msg(void);
-
-/* ask_cell.c */
-char *G_ask_cell_new(const char *, char *);
-char *G_ask_cell_old(const char *, char *);
-char *G_ask_cell_in_mapset(const char *, char *);
-char *G_ask_cell_any(const char *, char *);
-
-/* ask_vctrs.c */
-char *G_ask_vector_new(const char *, char *);
-char *G_ask_vector_old(const char *, char *);
-char *G_ask_vector_any(const char *, char *);
-char *G_ask_vector_in_mapset(const char *, char *);
 
 /* asprintf.c */
 /* Do it better if you know how */
@@ -563,12 +536,6 @@ double G_geodesic_distance(double, double, double, double);
 /* get_cellhd.c */
 int G_get_cellhd(const char *, const char *, struct Cell_head *);
 
-/* get_datum_name.c */
-int G_ask_datum_name(char *, char *);
-
-/* get_ell_name.c */
-int G_ask_ellipse_name(char *);
-
 /* get_ellipse.c */
 int G_get_ellipsoid_parameters(double *, double *);
 int G_get_spheroid_by_name(const char *, double *, double *, double *);
@@ -579,9 +546,6 @@ char *G_ellipsoid_description(int);
 /* get_projinfo.c */
 struct Key_Value *G_get_projunits(void);
 struct Key_Value *G_get_projinfo(void);
-
-/* get_projname.c */
-int G_ask_proj_name(char *, char *);
 
 /* get_row.c */
 int G_get_map_row_nomask(int, CELL *, int);
@@ -610,9 +574,6 @@ char *G__get_window(struct Cell_head *, const char *, const char *,
 /* getl.c */
 int G_getl(char *, int, FILE *);
 int G_getl2(char *, int, FILE *);
-
-/* gets.c */
-int G_gets(char *);
 
 /* gisbase.c */
 char *G_gisbase(void);
@@ -779,9 +740,6 @@ int G_lzw_transfer_expand(int, int, int);
 
 /* mach_name.c */
 char *G__machine_name(void);
-
-/* make_colr.c */
-int G_ask_colors(const char *, const char *, struct Colors *);
 
 /* make_loc.c */
 int G__make_location(const char *, struct Cell_head *, struct Key_Value *,
@@ -1270,9 +1228,6 @@ int G__write_Cell_head3(FILE *, const struct Cell_head *, int);
 
 /* writ_zeros.c */
 int G_write_zeros(int, size_t);
-
-/* yes.c */
-int G_yes(const char *, int);
 
 /* zero.c */
 int G_zero(void *, int);

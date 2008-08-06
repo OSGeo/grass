@@ -130,10 +130,6 @@ static int check_required(void);
 static int split_opts(void);
 static int check_multiple_opts(void);
 static int check_overwrite(void);
-static int interactive(const char *);
-static int interactive_flag(struct Flag *);
-static int interactive_option(struct Option *);
-static int gis_prompt(struct Option *, char *);
 static int split_gisprompt(const char *, char *, char *, char *);
 
 static void G_gui(void);
@@ -807,15 +803,8 @@ int G_parser(int argc, char **argv)
     /* If there are NO arguments, go interactive */
 
     if (argc < 2 && interactive_ok && isatty(0)) {
-	if (getenv("GRASS_UI_TERM")) {
-	    interactive(argv[0]);
-	    opt_checked = 1;
-	    /* all options have been already checked interactively */
-	}
-	else {
-	    G_gui();
-	    return -1;
-	}
+	G_gui();
+	return -1;
     }
     else if (argc < 2 && isatty(0)) {
 	G_usage();
@@ -2564,134 +2553,6 @@ static int check_overwrite(void)
     return (error);
 }
 
-static int interactive(const char *command)
-{
-    struct Item *item;
-
-    /* Query for flags */
-
-    if (!n_items) {
-	fprintf(stderr, "PROGRAMMER ERROR: no flags or options\n");
-	exit(EXIT_FAILURE);
-    }
-
-    for (item = &first_item;;) {
-	if (item->flag)
-	    interactive_flag(item->flag);
-	else if (item->option)
-	    interactive_option(item->option);
-	else
-	    break;
-
-	item = item->next_item;
-
-	if (item == NULL)
-	    break;
-    }
-
-    return 0;
-}
-
-static int interactive_flag(struct Flag *flag)
-{
-    char buff[1024];
-
-    fprintf(stderr, _("\nFLAG: Set the following flag?\n"));
-    sprintf(buff, "    %s?", flag->description);
-    flag->answer = G_yes(buff, 0);
-
-    return 0;
-}
-
-static int interactive_option(struct Option *opt)
-{
-    char buff[1024], *bptr;
-    char buff2[1024];
-    int set_one;
-    int no_prompt;
-
-    fprintf(stderr, _("\nOPTION:   %s\n"), opt->description);
-    fprintf(stderr, _("     key: %s\n"), opt->key);
-    if (opt->key_desc)
-	fprintf(stderr, _("  format: %s\n"), opt->key_desc);
-    if (opt->def)
-	fprintf(stderr, _(" default: %s\n"), opt->def);
-    fprintf(stderr, _("required: %s\n"), opt->required ? "YES" : "NO");
-    if (opt->multiple)
-	fprintf(stderr, _("multiple: %s\n"), opt->multiple ? "YES" : "NO");
-    if (opt->options)
-	fprintf(stderr, _(" options: %s\n"), opt->options);
-    /*
-       show_options(0, opt->options) ;
-     */
-
-    set_one = 0;
-    for (;;) {
-	*buff = '\0';
-	if (opt->gisprompt)
-	    no_prompt = gis_prompt(opt, buff);
-	else
-	    no_prompt = -1;
-	if (no_prompt) {
-	    fprintf(stderr, _("enter option > "));
-	    if (fgets(buff, 1024, stdin) == 0)
-		exit(EXIT_SUCCESS);;
-	    bptr = buff;	/* strip newline  */
-	    while (*bptr) {
-		if (*bptr == '\n')
-		    *bptr = '\0';
-		bptr++;
-	    }
-
-	}
-
-	if (strlen(buff) != 0) {
-	    if (opt->options)
-		/* then check option */
-	    {
-		if (check_an_opt(opt->key, opt->type, opt->options, buff)) {
-		    if (G_yes(_("   Try again? "), 1))
-			continue;
-		    else
-			exit(EXIT_FAILURE);
-		}
-	    }
-	    if (opt->checker)
-		if (opt->checker(buff)) {
-		    fprintf(stderr, _("Sorry, %s is not accepted.\n"), buff);
-		    *buff = '\0';
-		    if (G_yes(_("   Try again? "), 1))
-			continue;
-		    else
-			exit(EXIT_FAILURE);
-		}
-
-	    sprintf(buff2, "%s=%s", opt->key, buff);
-	    if (!opt->gisprompt) {
-		fprintf(stderr, _("\nYou have chosen:\n  %s\n"), buff2);
-		if (G_yes(_("Is this correct? "), 1)) {
-		    set_option(buff2);
-		    set_one++;
-		}
-	    }
-	    else {
-		set_option(buff2);
-		set_one++;
-	    }
-	}			/* if strlen(buf ) !=0 */
-
-	if ((strlen(buff) == 0) && opt->required && (set_one == 0))
-	    exit(EXIT_FAILURE);
-	if ((strlen(buff) == 0) && (set_one > 0) && opt->multiple)
-	    break;
-	if ((strlen(buff) == 0) && !opt->required)
-	    break;
-	if ((set_one == 1) && !opt->multiple)
-	    break;
-    }
-    return (0);
-}
-
 static int split_gisprompt(const char *gisprompt, char *age, char *element,
 			   char *desc)
 {
@@ -2718,52 +2579,6 @@ static int split_gisprompt(const char *gisprompt, char *age, char *element,
 	*ptr2 = *ptr1;
     }
     *ptr2 = '\0';
-
-    return 0;
-}
-
-static int gis_prompt(struct Option *opt, char *buff)
-{
-    char age[KEYLENGTH];
-    char element[KEYLENGTH];
-    char desc[KEYLENGTH];
-    char *ptr1;
-
-    split_gisprompt(opt->gisprompt, age, element, desc);
-
-	/*********ptr1 points to current mapset description***********/
-
-    if (opt->answer)
-	G_set_ask_return_msg(_("to accept the default"));
-    if (!strcmp("old", age)) {
-	ptr1 = G_ask_old("", buff, element, desc);
-	if (ptr1) {
-	    strcpy(buff, G_fully_qualified_name(buff, ptr1));
-	}
-    }
-    else if (!strcmp("new", age))
-	ptr1 = G_ask_new("", buff, element, desc);
-    else if (!strcmp("mapset", age))
-	ptr1 = G_ask_in_mapset("", buff, element, desc);
-    else if (!strcmp("any", age))
-	ptr1 = G_ask_any("", buff, element, desc, 1);
-    else if (!strcmp("old_file", age))	/* file must exist */
-	ptr1 = G_ask_old_file("", buff, element, desc);
-    else if (!strcmp("new_file", age))	/* file shouldn't exist unless overwrite is enabled */
-	ptr1 = G_ask_new_file("", buff, element, desc);
-    else if (!strcmp("color", age))
-	/* These prompts are only implemented in the gui */
-	/* The data can still be entered in the console */
-	return -1;
-    else {
-	fprintf(stderr,
-		"\nPROGRAMMER ERROR: first item in gisprompt is <%s>\n", age);
-	fprintf(stderr,
-		"        Must be either new, old, mapset, any, old_file, new_file, or color\n");
-	return -1;
-    }
-    if (ptr1 == '\0')
-	*buff = '\0';
 
     return 0;
 }

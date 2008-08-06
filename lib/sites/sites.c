@@ -249,34 +249,6 @@ int G_site_get_head(struct Map_info *Map, Site_head * head)
 }
 
 /*-************************************************************************
- *   char *
- *   G_ask_sites_new(prompt, name))
- *       asks user to input name of a new site list file
- *
- *   char *
- *   G_ask_sites_old(prompt, name)
- *       asks user to input name of an existing site list file
- *
- *   char *
- *   G_ask_sites_any(prompt, name)
- *       asks user to input any site list name
- *
- *   char *
- *   G_ask_sites_in_mapset(prompt, name)
- *       asks user to input name of an existing site list file in
- *       current mapset
- *
- *   parms:
- *      char *prompt    optional prompt for user
- *      char *name      buffer to hold name of map found
- *
- *   returns:
- *      char *pointer to a string with name of mapset
- *       where file was found, or NULL if not found
- *
- *   note:
- *      rejects all names that begin with .
- **********************************************************************
  *
  *  struct Map_info *
  *  G_sites_open_old (name, mapset)
@@ -301,30 +273,6 @@ char *G_find_sites(char *name, const char *mapset)
 char *G_find_sites2(const char *name, const char *mapset)
 {
     return G_find_vector2(name, mapset);
-}
-
-
-char *G_ask_sites_new(const char *prompt, char *name)
-{
-    return G_ask_new(prompt, name, "vector", "vector");
-}
-
-
-char *G_ask_sites_old(const char *prompt, char *name)
-{
-    return G_ask_old(prompt, name, "vector", "vector");
-}
-
-
-char *G_ask_sites_any(const char *prompt, char *name)
-{
-    return G_ask_any(prompt, name, "vector", "vector", 1);
-}
-
-
-char *G_ask_sites_in_mapset(const char *prompt, char *name)
-{
-    return G_ask_in_mapset(prompt, name, "vector", "vector");
 }
 
 

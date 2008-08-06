@@ -89,6 +89,7 @@ int main(int argc, char *argv[])
     out->key = "dspf";
     out->type = TYPE_STRING;
     out->required = YES;
+    out->gisprompt = "new_file,file,output";
     out->description = _("Name of output display file");
 
     levels = G_define_option();
