@@ -52,18 +52,15 @@ int parse_conn(const char *str, PGCONN * pgconn)
 	    else if (strncmp(tokens[i], "dbname", 6) == 0)
 		pgconn->dbname = G_store(tokens[i] + 7);
 	    else if (strncmp(tokens[i], "user", 4) == 0)
-		G_warning(_
-			  ("'user' in database definition is not supported, use db.login"));
+		G_warning(_("'user' in database definition is not supported, use db.login"));
 	    /* pgconn->user = G_store ( tokens[i] + 5 ); */
 	    else if (strncmp(tokens[i], "password", 8) == 0)
 		/* pgconn->password = G_store ( tokens[i] + 9 ); */
-		G_warning(_
-			  ("'password' in database definition is not supported, use db.login"));
+		G_warning(_("'password' in database definition is not supported, use db.login"));
 	    else if (strncmp(tokens[i], "schema", 6) == 0)
 		pgconn->schema = G_store(tokens[i] + 7);
 	    else {
-		append_error(_
-			     ("Unknown option in database definition for PostgreSQL: "));
+		append_error(_("Unknown option in database definition for PostgreSQL: "));
 		append_error(tokens[i]);
 		return DB_FAILED;
 	    }

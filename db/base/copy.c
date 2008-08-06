@@ -107,8 +107,7 @@ int main(int argc, char **argv)
     /* Check options and copy tables */
     if (from_table->answer) {
 	if (select->answer)
-	    G_fatal_error(_
-			  ("Cannot combine 'from_table' and 'select' options"));
+	    G_fatal_error(_("Cannot combine 'from_table' and 'select' options"));
 
 	if (where->answer) {
 	    ret =
@@ -126,8 +125,7 @@ int main(int argc, char **argv)
     }
     else {
 	if (!select->answer)
-	    G_fatal_error(_
-			  ("Either 'from_table' or 'select' option must be given."));
+	    G_fatal_error(_("Either 'from_table' or 'select' option must be given."));
 
 	if (where->answer)
 	    G_fatal_error(_("Cannot combine 'select' and 'where' options"));

@@ -156,8 +156,7 @@ int describe_table(sqlite3_stmt * statement, dbTable ** table, cursor * c)
 
 	if (sqltype == DB_SQL_TYPE_UNKNOWN) {
 	    /* Warn, ignore and continue */
-	    G_warning(_
-		      ("SQLite driver: column '%s', SQLite type %d  is not supported"),
+	    G_warning(_("SQLite driver: column '%s', SQLite type %d  is not supported"),
 		      fname, litetype);
 	    continue;
 	}

@@ -100,35 +100,30 @@ int describe_table(PGresult * res, dbTable ** table, cursor * c)
 	/* PG types defined in globals.h (and pg_type.h) */
 	if (sqltype == DB_SQL_TYPE_UNKNOWN) {
 	    if (gpgtype == PG_TYPE_POSTGIS_GEOM) {
-		G_warning(_
-			  ("pg driver: PostGIS column '%s', type 'geometry'  will not be converted"),
+		G_warning(_("pg driver: PostGIS column '%s', type 'geometry'  will not be converted"),
 			  fname);
 		continue;
 	    }
 	    else {
 		/* Warn, ignore and continue */
-		G_warning(_
-			  ("pg driver: column '%s', type %d  is not supported"),
+		G_warning(_("pg driver: column '%s', type %d  is not supported"),
 			  fname, pgtype);
 		continue;
 	    }
 	}
 
 	if (gpgtype == PG_TYPE_INT8)
-	    G_warning(_
-		      ("column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
+	    G_warning(_("column '%s' : type int8 (bigint) is stored as integer (4 bytes) "
 		       "some data may be damaged"), fname);
 
 	if (gpgtype == PG_TYPE_VARCHAR && fsize < 0) {
-	    G_warning(_
-		      ("column '%s' : type character varying is stored as varchar(250) "
+	    G_warning(_("column '%s' : type character varying is stored as varchar(250) "
 		       "some data may be lost"), fname);
 	    fsize = 250;
 	}
 
 	if (gpgtype == PG_TYPE_BOOL)
-	    G_warning(_
-		      ("column '%s' : type bool (boolean) is stored as char(1), values: 0 (false), "
+	    G_warning(_("column '%s' : type bool (boolean) is stored as char(1), values: 0 (false), "
 		       "1 (true)"), fname);
 
 	column = db_get_table_column(*table, kcols);
