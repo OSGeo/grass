@@ -249,8 +249,7 @@ int main(int argc, char **argv)
 
     if (Along_flag->answer && !fontsize &&
 	(size / space >= 2 || size / space <= 0.5))
-	G_warning(_
-		  ("size and space options vary significantly which may lead to crummy output"));
+	G_warning(_("size and space options vary significantly which may lead to crummy output"));
 
 
     /* parse reference answers */

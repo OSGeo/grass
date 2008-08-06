@@ -274,15 +274,13 @@ int update_labels(char *rast_name, char *vector_map, int field,
 
 	    db_CatValArray_init(&cvarr);
 	    if (!(Fi = Vect_get_field(&Map, field)))
-		G_fatal_error(_
-			      ("Database connection not defined for layer %d"),
+		G_fatal_error(_("Database connection not defined for layer %d"),
 			      field);
 
 	    if (!
 		(Driver =
 		 db_start_driver_open_database(Fi->driver, Fi->database)))
-		G_fatal_error(_
-			      ("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Fi->database, Fi->driver);
 
 	    /* get number of records in label_column */
@@ -304,8 +302,7 @@ int update_labels(char *rast_name, char *vector_map, int field,
 
 	    /* get column type */
 	    if (!label_column) {
-		G_warning(_
-			  ("Label column was not specified, no labels will be written"));
+		G_warning(_("Label column was not specified, no labels will be written"));
 		break;
 	    }
 	    else {

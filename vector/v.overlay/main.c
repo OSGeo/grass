@@ -279,8 +279,7 @@ int main(int argc, char *argv[])
 	    in_driver =
 		db_start_driver_open_database(inFi->driver, inFi->database);
 	    if (in_driver == NULL) {
-		G_fatal_error(_
-			      ("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      inFi->database, inFi->driver);
 	    }
 

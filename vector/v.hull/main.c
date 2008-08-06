@@ -329,8 +329,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Error loading vector points map <%s>"), sitefile);
 
     if (numSitePoints < 3)
-	G_fatal_error(_
-		      ("Convex hull calculation requires at least three points"));
+	G_fatal_error(_("Convex hull calculation requires at least three points"));
 
 
     /* create a 2D or a 3D hull? */

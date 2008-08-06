@@ -134,8 +134,7 @@ int main(int argc, char **argv)
 	if (flag.B->answer)
 	    method = BILINEAR;
 	if (flag.B->answer && flag.C->answer)
-	    G_fatal_error(_
-			  ("Flags -b & -c are mutually exclusive. Choose only one."));
+	    G_fatal_error(_("Flags -b & -c are mutually exclusive. Choose only one."));
     }
     else {
 	method = NEAREST;
@@ -174,8 +173,7 @@ int main(int argc, char **argv)
 
     ctype = cvarr.ctype;
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	G_fatal_error(_
-		      ("Column type <%s> not supported (must be integer or double precision)"),
+	G_fatal_error(_("Column type <%s> not supported (must be integer or double precision)"),
 		      db_sqltype_name(ctype));
 
     if (nrecords < 0)

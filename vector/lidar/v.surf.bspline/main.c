@@ -201,8 +201,7 @@ int main(int argc, char *argv[])
 
 	driver = db_start_driver_open_database(dvr, db);
 	if (driver == NULL)
-	    G_fatal_error(_
-			  ("No database connection for driver <%s> is defined. "
+	    G_fatal_error(_("No database connection for driver <%s> is defined. "
 			   "Run db.connect."), dvr);
 
 	db_init_string(&sql);
@@ -229,8 +228,7 @@ int main(int argc, char *argv[])
 
     Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
-	G_fatal_error(_
-		      ("Unable to open vector map <%s> at the topological level"),
+	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
 
     /* Open input ext vector */
@@ -250,8 +248,7 @@ int main(int argc, char *argv[])
 
 	Vect_set_open_level(1);	/* WITHOUT TOPOLOGY */
 	if (1 > Vect_open_old(&In_ext, in_ext_opt->answer, mapset))
-	    G_fatal_error(_
-			  ("Unable to open vector map <%s> at the topological level"),
+	    G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 			  in_opt->answer);
     }
 
@@ -259,8 +256,7 @@ int main(int argc, char *argv[])
     /* vector output */
     if (vector && !map) {
 	if (strcmp(dvr, "dbf") == 0)
-	    G_fatal_error(_
-			  ("Sorry, <%s> driver is not allowed for vector output in this module. "
+	    G_fatal_error(_("Sorry, <%s> driver is not allowed for vector output in this module. "
 			   "Try with a raster output or other driver."), dvr);
 
 	Vect_check_input_output_name(in_opt->answer, out_opt->answer,
@@ -382,8 +378,7 @@ int main(int argc, char *argv[])
 	nrows_ncols = (double)nrows *ncols;
 
 	if ((nrows_ncols) > 30000000)	/* about 5500x5500 cells */
-	    G_fatal_error(_
-			  ("Interpolation: The region resolution is too high: %d cells. "
+	    G_fatal_error(_("Interpolation: The region resolution is too high: %d cells. "
 			   "Consider to change it."), nrows_ncols);
 
 	/*raster_matrix = G_alloc_fmatrix (nrows, ncols);  Is it neccesary a double precision?? */
@@ -545,8 +540,7 @@ int main(int argc, char *argv[])
 			    obs_mean[i] = dval;
 			}
 			if (ret != DB_OK) {
-			    G_warning(_
-				      ("Interpolation: (%d,%d): No record for point (cat = %d)"),
+			    G_warning(_("Interpolation: (%d,%d): No record for point (cat = %d)"),
 				      subregion_row, subregion_col, cat);
 			    continue;
 			}

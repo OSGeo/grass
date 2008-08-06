@@ -452,8 +452,7 @@ int main(int argc, char *argv[])
 			db_CatValArray_get_value_int(&cvarr, cat,
 						     &size_val_int);
 		    if (ret != DB_OK) {
-			G_warning(_
-				  ("No record for category %d in table <%s>"),
+			G_warning(_("No record for category %d in table <%s>"),
 				  cat, Fi->table);
 			continue;
 		    }
@@ -465,16 +464,14 @@ int main(int argc, char *argv[])
 			db_CatValArray_get_value_double(&cvarr, cat,
 							&size_val);
 		    if (ret != DB_OK) {
-			G_warning(_
-				  ("No record for category %d in table <%s>"),
+			G_warning(_("No record for category %d in table <%s>"),
 				  cat, Fi->table);
 			continue;
 		    }
 		}
 
 		if (size_val < 0.0) {
-		    G_warning(_
-			      ("Attribute is of invalid size (%.3f) for category %d"),
+		    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
 			      size_val, cat);
 		    continue;
 		}
@@ -493,8 +490,7 @@ int main(int argc, char *argv[])
 		G_debug(2, "Minimum tolerance = %f", dtmp);
 		if (tolerance > dtmp) {
 		    tolerance = dtmp;
-		    G_warning(_
-			      ("The tolerance was reset to %g (map units). [category %d]"),
+		    G_warning(_("The tolerance was reset to %g (map units). [category %d]"),
 			      tolerance, cat);
 		}
 	    }
@@ -533,8 +529,7 @@ int main(int argc, char *argv[])
 			db_CatValArray_get_value_int(&cvarr, cat,
 						     &size_val_int);
 		    if (ret != DB_OK) {
-			G_warning(_
-				  ("No record for category %d in table <%s>"),
+			G_warning(_("No record for category %d in table <%s>"),
 				  cat, Fi->table);
 			continue;
 		    }
@@ -546,16 +541,14 @@ int main(int argc, char *argv[])
 			db_CatValArray_get_value_double(&cvarr, cat,
 							&size_val);
 		    if (ret != DB_OK) {
-			G_warning(_
-				  ("No record for category %d in table <%s>"),
+			G_warning(_("No record for category %d in table <%s>"),
 				  cat, Fi->table);
 			continue;
 		    }
 		}
 
 		if (size_val < 0.0) {
-		    G_warning(_
-			      ("Attribute is of invalid size (%.3f) for category %d"),
+		    G_warning(_("Attribute is of invalid size (%.3f) for category %d"),
 			      size_val, cat);
 		    continue;
 		}
@@ -574,8 +567,7 @@ int main(int argc, char *argv[])
 		G_debug(2, "Minimum tolerance = %f", dtmp);
 		if (tolerance > dtmp) {
 		    tolerance = dtmp;
-		    G_warning(_
-			      ("The tolerance was reset to %g (map units). [category %d]"),
+		    G_warning(_("The tolerance was reset to %g (map units). [category %d]"),
 			      tolerance, cat);
 		}
 	    }

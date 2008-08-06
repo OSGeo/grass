@@ -321,8 +321,7 @@ int main(int argc, char *argv[])
 	if (layer < 1)
 	    G_fatal_error(_("'%s' must be > 0 for '%s'"), "layer", "where");
 	if (cat_opt->answer)
-	    G_warning(_
-		      ("'where' and 'cats' parameters were supplied, cat will be ignored"));
+	    G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
 	chcat = 1;
 	varray = Vect_new_varray(Vect_get_num_lines(&In));
 	if (Vect_set_varray_from_db

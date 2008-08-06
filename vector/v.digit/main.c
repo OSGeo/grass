@@ -155,8 +155,7 @@ int main(int argc, char *argv[])
 	    Vect_open_update(&Map, map_opt->answer, G_mapset());
 	}
 	else {
-	    G_fatal_error(_
-			  ("Map <%s> does not exist in current mapset. Add flag -n to create a new map."),
+	    G_fatal_error(_("Map <%s> does not exist in current mapset. Add flag -n to create a new map."),
 			  map_opt->answer);
 	}
     }

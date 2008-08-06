@@ -101,8 +101,7 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 			|| db_test_value_isnull(&val)) {
 			trans_params[j] = trans_params_def[j];
 
-			G_warning(_
-				  ("Unable to select value for category %d from table <%s>, column <%s>. "
+			G_warning(_("Unable to select value for category %d from table <%s>, column <%s>. "
 				   "For category %d using default transformation parameter %.3f."),
 				  cat, table, columns[j], cat,
 				  trans_params[j]);
@@ -113,8 +112,7 @@ transform_digit_file(struct Map_info *Old, struct Map_info *New,
 		}
 	    }
 	    else {
-		G_warning(_
-			  ("No category number defined. Using default transformation parameters."));
+		G_warning(_("No category number defined. Using default transformation parameters."));
 
 		for (j = 0; j <= IDX_ZROT; j++) {
 		    trans_params[j] = trans_params_def[j];

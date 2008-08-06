@@ -66,8 +66,7 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
 
 	ctype = cvarr.ctype;
 	if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_
-			  ("Column type (%s) not supported (did you mean 'labelcolumn'?)"),
+	    G_fatal_error(_("Column type (%s) not supported (did you mean 'labelcolumn'?)"),
 			  db_sqltype_name(ctype));
 
 	if (nrec < 0)
@@ -162,8 +161,7 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
 	    if (do_areas
 		(&Map, Points, &cvarr, ctype, field, use, value,
 		 value_type) < 0) {
-		G_warning(_
-			  ("Problem processing areas from vector map <%s>, continuing..."),
+		G_warning(_("Problem processing areas from vector map <%s>, continuing..."),
 			  vector_map);
 		stat = -1;
 		break;
@@ -174,8 +172,7 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
 	    if ((nlines =
 		 do_lines(&Map, Points, &cvarr, ctype, field, use, value,
 			  value_type, ftype, &nplines_all)) < 0) {
-		G_warning(_
-			  ("Problem processing lines from vector map <%s>, continuing..."),
+		G_warning(_("Problem processing lines from vector map <%s>, continuing..."),
 			  vector_map);
 		stat = -1;
 		break;
@@ -209,8 +206,7 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
     /* colors */
     if (rgbcolumn) {
 	if (use != USE_ATTR) {
-	    G_warning(_
-		      ("Color can be updated from database only if use=attr"));
+	    G_warning(_("Color can be updated from database only if use=attr"));
 	    update_colors(raster_map);
 	}
 

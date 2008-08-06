@@ -107,26 +107,22 @@ int main(int argc, char *argv[])
     case 'a':
 	use = USE_ATTR;
 	if (!col->answer)
-	    G_fatal_error(_
-			  ("Column parameter missing (or use value parameter)"));
+	    G_fatal_error(_("Column parameter missing (or use value parameter)"));
 	break;
     case 'c':
 	use = USE_CAT;
 	if (col->answer)
-	    G_fatal_error(_
-			  ("Column parameter cannot be combined with use of category values option"));
+	    G_fatal_error(_("Column parameter cannot be combined with use of category values option"));
 	break;
     case 'v':
 	use = USE_VAL;
 	if (col->answer || label_opt->answer || rgbcol_opt->answer)
-	    G_fatal_error(_
-			  ("Column parameter cannot be combined with use of value option"));
+	    G_fatal_error(_("Column parameter cannot be combined with use of value option"));
 	break;
     case 'z':
 	use = USE_Z;
 	if (col->answer || label_opt->answer || rgbcol_opt->answer)
-	    G_fatal_error(_
-			  ("Column parameter cannot be combined with use of z coordinate"));
+	    G_fatal_error(_("Column parameter cannot be combined with use of z coordinate"));
 	break;
     case 'd':
 	use = USE_D;

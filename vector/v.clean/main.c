@@ -368,8 +368,7 @@ int main(int argc, char *argv[])
 	    G_message(_("%d modifications done"), count);
 	    break;
 	case TOOL_RMLINE:
-	    G_message(_
-		      ("Tool: Remove all lines and boundaries of zero length"));
+	    G_message(_("Tool: Remove all lines and boundaries of zero length"));
 	    count = remove_zero_line(&Out, otype, pErr);
 	    G_message(_("%d lines / boundaries removed"), count);
 	    break;
@@ -379,8 +378,7 @@ int main(int argc, char *argv[])
     }
 
     if (!no_build_flag->answer) {
-	G_important_message(_
-			    ("Rebuilding topology for output vector map..."));
+	G_important_message(_("Rebuilding topology for output vector map..."));
 	Vect_build_partial(&Out, GV_BUILD_NONE, NULL);
 	Vect_build(&Out, output);
     }

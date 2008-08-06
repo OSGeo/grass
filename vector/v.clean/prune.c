@@ -217,13 +217,11 @@ prune(struct Map_info *Out, int otype, double thresh, struct Map_info *Err)
 	fflush(stderr);
     }
 
-    G_important_message(_
-			("\n%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
+    G_important_message(_("\n%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"),
 			nremoved, nvertices, 100.0 * nremoved / nvertices);
 
     if (not_pruned_lines > 0)
-	G_message(_
-		  ("%d boundaries not pruned because pruning would damage topology"),
+	G_message(_("%d boundaries not pruned because pruning would damage topology"),
 		  not_pruned_lines);
 
     Vect_destroy_line_struct(Points);

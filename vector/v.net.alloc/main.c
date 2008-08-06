@@ -337,8 +337,7 @@ int main(int argc, char **argv)
 		    /* First segment */
 		    ret = Vect_line_segment(Points, 0, l1, SPoints);
 		    if (ret == 0) {
-			G_warning(_
-				  ("Cannot get line segment, segment out of line"));
+			G_warning(_("Cannot get line segment, segment out of line"));
 		    }
 		    else {
 			cat = Centers[centre1].cat;
@@ -349,8 +348,7 @@ int main(int argc, char **argv)
 		    /* Second segment */
 		    ret = Vect_line_segment(Points, l1, l, SPoints);
 		    if (ret == 0) {
-			G_warning(_
-				  ("Cannot get line segment, segment out of line"));
+			G_warning(_("Cannot get line segment, segment out of line"));
 		    }
 		    else {
 			Vect_reset_cats(Cats);

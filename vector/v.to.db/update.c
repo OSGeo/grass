@@ -23,8 +23,7 @@ int update(struct Map_info *Map)
     db_init_string(&stmt);
 
     if ((Fi = Vect_get_field(Map, options.field)) == NULL)
-	G_fatal_error(_
-		      ("Database connection not defined for layer %d. Use v.db.connect first."),
+	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.field);
 
     /* Open driver */
@@ -96,8 +95,7 @@ int update(struct Map_info *Map)
 	case O_START:
 	case O_END:
 	    if (Values[i].count1 > 1) {
-		G_warning(_
-			  ("More elements of category [%d], nothing loaded to DB"),
+		G_warning(_("More elements of category [%d], nothing loaded to DB"),
 			  Values[i].cat);
 		vstat.dupl++;
 		continue;

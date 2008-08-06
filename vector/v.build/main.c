@@ -82,8 +82,7 @@ int main(int argc, char *argv[])
     if (build) {
 	/* open input vector */
 	if (G_find_vector2(map_opt->answer, G_mapset()) == NULL)
-	    G_fatal_error(_
-			  ("Vector map <%s> not found in the current mapset"),
+	    G_fatal_error(_("Vector map <%s> not found in the current mapset"),
 			  map_opt->answer);
 
 	Vect_set_open_level(1);

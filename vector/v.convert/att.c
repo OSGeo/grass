@@ -33,8 +33,7 @@ int attributes(char *in, struct Map_info *Out)
 
     /* Find dig_cats if exists */
     if (NULL == G_find_file("dig_cats", in, mapset)) {
-	G_message(_
-		  ("No category labels (dig_cats) found, no table created.\n"));
+	G_message(_("No category labels (dig_cats) found, no table created.\n"));
 	return 0;
     }
 

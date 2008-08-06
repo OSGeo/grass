@@ -332,8 +332,7 @@ int main(int argc, char *argv[])
     if (!outloc_opt->answer) {	/* Check if the map exists */
 	if (G_find_vector2(out_opt->answer, G_mapset())) {
 	    if (overwrite)
-		G_warning(_
-			  ("Vector map <%s> already exists and will be overwritten"),
+		G_warning(_("Vector map <%s> already exists and will be overwritten"),
 			  out_opt->answer);
 	    else
 		G_fatal_error(_("Vector map <%s> already exists"),
@@ -377,8 +376,7 @@ int main(int argc, char *argv[])
 
     if (region_flag->answer) {
 	if (spat_opt->answer)
-	    G_fatal_error(_
-			  ("Select either the current region flag or the spatial option, not both"));
+	    G_fatal_error(_("Select either the current region flag or the spatial option, not both"));
 
 	G_get_window(&cur_wind);
 	xmin = cur_wind.west;
@@ -485,8 +483,7 @@ int main(int argc, char *argv[])
 	/* Projection only required for checking so convert non-interactively */
 	if (GPJ_osr_to_grass(&cellhd, &proj_info,
 			     &proj_units, Ogr_projection, 0) < 0)
-	    G_warning(_
-		      ("Unable to convert input map projection information to "
+	    G_warning(_("Unable to convert input map projection information to "
 		       "GRASS format for checking"));
 
 	/* Does the projection of the current location match the dataset? */
@@ -709,8 +706,7 @@ int main(int argc, char *argv[])
 		    /* hack: treat as string */
 		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
 			    OFTIntegerListlength);
-		    G_warning(_
-			      ("Writing column <%s> with fixed length %d chars (may be truncated)"),
+		    G_warning(_("Writing column <%s> with fixed length %d chars (may be truncated)"),
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else if (Ogr_ftype == OFTReal) {
@@ -733,8 +729,7 @@ int main(int argc, char *argv[])
 		    fwidth = OGR_Fld_GetWidth(Ogr_field);
 		    /* TODO: read all records first and find the longest string length */
 		    if (fwidth == 0) {
-			G_warning(_
-				  ("Width for column %s set to 255 (was not specified by OGR), "
+			G_warning(_("Width for column %s set to 255 (was not specified by OGR), "
 				   "some strings may be truncated!"),
 				  Ogr_fieldname);
 			fwidth = 255;
@@ -746,8 +741,7 @@ int main(int argc, char *argv[])
 		    /* hack: treat as string */
 		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
 			    OFTIntegerListlength);
-		    G_warning(_
-			      ("Writing column %s with fixed length %d chars (may be truncated)"),
+		    G_warning(_("Writing column %s with fixed length %d chars (may be truncated)"),
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else {
@@ -1077,8 +1071,7 @@ int main(int argc, char *argv[])
 	G_message("%s", separator);
 
 	if (n_overlaps > 0) {
-	    G_warning(_
-		      ("%d areas represent more (overlapping) features, because polygons overlap "
+	    G_warning(_("%d areas represent more (overlapping) features, because polygons overlap "
 		       "in input layer(s). Such areas are linked to more than 1 row in attribute table. "
 		       "The number of features for those areas is stored as category in layer %d"),
 		      n_overlaps, nlayers + 1);
@@ -1133,8 +1126,7 @@ int main(int argc, char *argv[])
     }
 
     if (with_z && !z_flag->answer)
-	G_warning(_
-		  ("Input data contains 3D features. Created vector is 2D only, "
+	G_warning(_("Input data contains 3D features. Created vector is 2D only, "
 		   "use -z flag to import 3D vector"));
 
     exit(EXIT_SUCCESS);

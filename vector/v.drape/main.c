@@ -153,15 +153,13 @@ int main(int argc, char *argv[])
     if (in_bbox.W < region_bbox.W ||
 	in_bbox.E > region_bbox.E ||
 	in_bbox.S < region_bbox.S || in_bbox.N > region_bbox.N) {
-	G_warning(_
-		  ("Current region does not include the entire input vector map <%s>"),
+	G_warning(_("Current region does not include the entire input vector map <%s>"),
 		  in_opt->answer);
     }
     if (in_bbox.W < rast_bbox.W ||
 	in_bbox.E > rast_bbox.E ||
 	in_bbox.S < rast_bbox.S || in_bbox.N > rast_bbox.N) {
-	G_warning(_
-		  ("Elevation raster map <%s> does not cover the entire area "
+	G_warning(_("Elevation raster map <%s> does not cover the entire area "
 		   "of the input vector map <%s>. "), rast_opt->answer,
 		  in_opt->answer);
     }

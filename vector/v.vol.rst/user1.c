@@ -104,8 +104,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
     G_debug(3, "nrec = %d", nrec);
 
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	G_fatal_error(_
-		      ("Column type of wcolumn is not supported (must be integer or double)"));
+	G_fatal_error(_("Column type of wcolumn is not supported (must be integer or double)"));
 
     if (nrec < 0)
 	G_fatal_error("Unable to select data from table");
@@ -124,8 +123,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 	    G_fatal_error
 		("Column type of smooth column (datetime) is not supported");
 	if (sctype != DB_C_TYPE_INT && sctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_
-			  ("Column type of smooth column is not supported (must be integer or double)"));
+	    G_fatal_error(_("Column type of smooth column is not supported (must be integer or double)"));
     }
 
     Points = Vect_new_line_struct();

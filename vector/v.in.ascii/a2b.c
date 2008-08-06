@@ -99,8 +99,7 @@ int asc_to_bin(FILE * ascii, struct Map_info *Map)
 	/* Collect the points */
 	for (i = 0; i < n_coors; i++) {
 	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0)
-		G_fatal_error(_
-			      ("End of ASCII file reached before end of coordinates"));
+		G_fatal_error(_("End of ASCII file reached before end of coordinates"));
 
 	    if (buff[0] == '\0') {
 		G_debug(3, "a2b: skipping blank line while reading vertices");
@@ -141,8 +140,7 @@ int asc_to_bin(FILE * ascii, struct Map_info *Map)
 	/* Collect the cats */
 	for (i = 0; i < n_cats; i++) {
 	    if (G_getl2(buff, BUFFSIZE - 1, ascii) == 0)
-		G_fatal_error(_
-			      ("End of ASCII file reached before end of categories"));
+		G_fatal_error(_("End of ASCII file reached before end of categories"));
 
 	    if (buff[0] == '\0') {
 		G_debug(3,

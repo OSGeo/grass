@@ -125,14 +125,12 @@ int main(int argc, char *argv[])
 	compatible = 0;
 
     if (!compatible) {
-	G_warning(_
-		  ("Incompatible vector type(s) specified, only number of features, minimum, maximum and range "
+	G_warning(_("Incompatible vector type(s) specified, only number of features, minimum, maximum and range "
 		   "can be calculated"));
     }
 
     if (extended->answer && !(otype & GV_POINTS)) {
-	G_warning(_
-		  ("Extended statistics is currently supported only for points/centroids"));
+	G_warning(_("Extended statistics is currently supported only for points/centroids"));
     }
 
     /* Read attributes */

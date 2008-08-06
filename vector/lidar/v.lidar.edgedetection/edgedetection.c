@@ -237,14 +237,12 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			if (Select
 			    (&gradient[0], &gradient[1], &interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate
 			    (gradient[0], gradient[1], interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
@@ -256,8 +254,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			    (gradient[0] * weight, gradient[1] * weight,
 			     interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
@@ -267,8 +264,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			    (gradient[0] * weight, gradient[1] * weight,
 			     interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 
 		}
@@ -286,8 +282,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			if (Select
 			    (&gradient[0], &gradient[1], &interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 			edge =
@@ -318,14 +313,12 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			if (Select
 			    (&gradient[0], &gradient[1], &interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate
 			    (gradient[0], gradient[1], interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(2) */
@@ -338,8 +331,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			if (Select
 			    (&gradient[0], &gradient[1], &interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 			edge =
@@ -370,8 +362,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			if (Select
 			    (&gradient[0], &gradient[1], &interpolation,
 			     line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 			edge =
@@ -396,8 +387,7 @@ void classification(struct Map_info *Out, struct Cell_head Elaboration,
 			    (gradient[0] * weight, gradient[1] * weight,
 			     interpolation * weight, line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }		/*else (1) */
 		}		/*else */

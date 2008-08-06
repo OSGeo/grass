@@ -130,8 +130,7 @@ int main(int argc, char *argv[])
 	break;
     case ('c'):
 	option = O_CHFIELD;
-	G_warning(_
-		  ("Database connection and attribute tables for concerned layers are not changed"));
+	G_warning(_("Database connection and attribute tables for concerned layers are not changed"));
 	break;
     case ('s'):
 	option = O_SUM;

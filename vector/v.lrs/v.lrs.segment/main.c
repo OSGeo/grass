@@ -279,8 +279,7 @@ int main(int argc, char **argv)
 	    }
 	    /* Check if both points are at the same line */
 	    if (lcat1 != lcat2) {
-		G_warning(_
-			  ("Segment over 2 (or more) segments, not yet supported"));
+		G_warning(_("Segment over 2 (or more) segments, not yet supported"));
 		break;
 	    }
 	    G_debug(2, "segment: lcat = %d : %f -  %f", lcat1, map_offset1,

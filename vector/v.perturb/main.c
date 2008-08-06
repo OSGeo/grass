@@ -137,16 +137,14 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Error scanning arguments"));
 	}
 	else if (p1 <= 0)
-	    G_fatal_error(_
-			  ("Maximum of uniform distribution must be >= zero"));
+	    G_fatal_error(_("Maximum of uniform distribution must be >= zero"));
     }
     else {
 	if ((i = sscanf(parm.pars->answer, "%lf,%lf", &p1, &p2)) != 2) {
 	    G_fatal_error(_("Error scanning arguments"));
 	}
 	if (p2 <= 0)
-	    G_fatal_error(_
-			  ("Standard deviation of normal distribution must be >= zero"));
+	    G_fatal_error(_("Standard deviation of normal distribution must be >= zero"));
     }
 
     G_get_window(&window);

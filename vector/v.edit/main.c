@@ -111,8 +111,7 @@ int main(int argc, char *argv[])
     else {			/* open selected vector file */
 	mapset = G_find_vector2(params.map->answer, G_mapset());
 	if (mapset == NULL) {
-	    G_fatal_error(_
-			  ("Vector map <%s> not found in the current mapset"),
+	    G_fatal_error(_("Vector map <%s> not found in the current mapset"),
 			  params.map->answer);
 	}
 	else if (action_mode == MODE_ADD) {	/* write */
@@ -123,8 +122,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (ret < 2)
-	    G_fatal_error(_
-			  ("Unable to open vector map <%s> at topological level %d"),
+	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 			  params.map->answer, 2);
     }
 
@@ -147,8 +145,7 @@ int main(int argc, char *argv[])
 		 ((const char *)params.map->answer, (const char *)G_mapset()),
 		 G_fully_qualified_name((const char *)bmap,
 					(const char *)mapset)) == 0) {
-		G_fatal_error(_
-			      ("Unable to open vector map <%s> as the backround map. "
+		G_fatal_error(_("Unable to open vector map <%s> as the backround map. "
 			       "It is given as vector map to be edited."),
 			      bmap);
 	    }
@@ -222,8 +219,7 @@ int main(int argc, char *argv[])
 	    /* reopen the map for updating */
 	    if (action_mode == MODE_ZBULK && !Vect_is_3d(&Map)) {
 		Vect_close(&Map);
-		G_fatal_error(_
-			      ("Vector map <%s> is not 3D. Tool '%s' requires 3D vector map. "
+		G_fatal_error(_("Vector map <%s> is not 3D. Tool '%s' requires 3D vector map. "
 			       "Please convert the vector map "
 			       "to 3D using e.g. %s."), params.map->answer,
 			      params.tool->answer, "v.extrude");

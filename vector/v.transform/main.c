@@ -198,27 +198,23 @@ int main(int argc, char *argv[])
 
     /* please remove in GRASS7 */
     if (shift_flag->answer)
-	G_warning(_
-		  ("The '%c' flag is deprecated and will be removed in future. "
+	G_warning(_("The '%c' flag is deprecated and will be removed in future. "
 		   "Transformation parameters are used automatically when no pointsfile is given."),
 		  shift_flag->key);
 
     if (quiet_flag->answer) {
-	G_warning(_
-		  ("The '%c' flag is deprecated and will be removed in future. "
+	G_warning(_("The '%c' flag is deprecated and will be removed in future. "
 		   "Please use '--quiet' instead."), quiet_flag->key);
 	G_putenv("GRASS_VERBOSE", "0");
     }
 
     if (!table->answer && columns->answer) {
-	G_fatal_error(_
-		      ("Table name is not defined. Please use '%s' parameter."),
+	G_fatal_error(_("Table name is not defined. Please use '%s' parameter."),
 		      table->key);
     }
 
     if (table->answer && strcmp(vnew->answer, table->answer) == 0) {
-	G_fatal_error(_
-		      ("Name of table and name for output vector map must be different. "
+	G_fatal_error(_("Name of table and name for output vector map must be different. "
 		       "Otherwise the table is overwritten."));
     }
 

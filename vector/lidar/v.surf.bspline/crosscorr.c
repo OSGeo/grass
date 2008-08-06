@@ -117,8 +117,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 		    Fi->database);
 
 	    if (driver_cats == NULL)
-		G_fatal_error(_
-			      ("CrossCorrelation: Cannot open database %s by driver %s"),
+		G_fatal_error(_("CrossCorrelation: Cannot open database %s by driver %s"),
 			      Fi->database, Fi->driver);
 
 	    nrec =
@@ -128,12 +127,10 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	    ctype = cvarr.ctype;
 	    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_
-			      ("CrossCorrelation: Column type not supported"));
+		G_fatal_error(_("CrossCorrelation: Column type not supported"));
 
 	    if (nrec < 0)
-		G_fatal_error(_
-			      ("CrossCorrelation: Cannot select data from table"));
+		G_fatal_error(_("CrossCorrelation: Cannot select data from table"));
 
 	    G_message(_("CrossCorrelation: %d records selected from table"),
 		      nrec);
@@ -216,8 +213,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 			    obs_mean[i] = dval;
 			}
 			if (ret != DB_OK) {
-			    G_warning(_
-				      ("CrossCorrelation: No record for point (cat = %d)"),
+			    G_warning(_("CrossCorrelation: No record for point (cat = %d)"),
 				      cat);
 			    continue;
 			}
@@ -333,8 +329,7 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 	G_free_vector(rms);
     }				/* ENDIF (ndata > 0) */
     else
-	G_warning(_
-		  ("CrossCorrelation: No point lies into the current region"));
+	G_warning(_("CrossCorrelation: No point lies into the current region"));
 
     G_free(observ);
     return TRUE;

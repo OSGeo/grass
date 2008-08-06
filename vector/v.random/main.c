@@ -134,8 +134,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (flag.z->answer && parm.zcol->answer) {
-	G_fatal_error(_
-		      ("v.random can't create 3D vector and attribute table at same time"));
+	G_fatal_error(_("v.random can't create 3D vector and attribute table at same time"));
     }
 
     output = parm.output->answer;
@@ -218,8 +217,7 @@ int main(int argc, char *argv[])
 	    db_close_database(driver);
 	    db_shutdown_driver(driver);
 	    Vect_delete(parm.output->answer);
-	    G_fatal_error(_
-			  ("You have created unsupported column type. This module supports only INTEGER"
+	    G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
 			   " and DOUBLE PRECISION column types."));
 	}
     }
