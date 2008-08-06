@@ -32,15 +32,9 @@ const struct driver *Cairo_Driver(void)
     drv.Client_Open = NULL;
     drv.Client_Close = Cairo_Client_Close;
     drv.Erase = Cairo_Erase;
-    drv.Get_with_box = NULL;
-    drv.Get_with_line = NULL;
-    drv.Get_with_pointer = NULL;
     drv.Graph_set = Cairo_Graph_set;
     drv.Graph_close = Cairo_Graph_close;
     drv.Line_width = Cairo_Line_width;
-    drv.Panel_save = NULL;
-    drv.Panel_restore = NULL;
-    drv.Panel_delete = NULL;
     drv.Polydots_abs = NULL;
     drv.Polydots_rel = NULL;
     drv.Polyline_abs = Cairo_Polyline_abs;
@@ -52,8 +46,6 @@ const struct driver *Cairo_Driver(void)
     drv.Scaled_raster = Cairo_scaled_raster;
     drv.End_scaled_raster = Cairo_end_scaled_raster;
     drv.Respond = Cairo_Respond;
-    drv.Work_stream = NULL;
-    drv.Do_work = NULL;
     drv.lookup_color = Cairo_lookup_color;
     drv.color = Cairo_color;
     drv.draw_line = Cairo_draw_line;

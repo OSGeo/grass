@@ -2,17 +2,10 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
-	drivers \
-	d.ask \
 	d.barscale \
 	d.colorlist \
-	d.colors \
 	d.colortable \
 	d.erase \
-	d.extend \
-	d.extract \
-	d.font \
-	d.frame \
 	d.geodesic \
 	d.graph \
 	d.grid \
@@ -22,27 +15,29 @@ SUBDIRS = \
 	d.labels \
 	d.legend \
 	d.linegraph \
-	d.measure \
-	d.menu \
-	d.mon \
 	d.nviz \
 	d.path \
-	d.profile \
 	d.rast \
 	d.rast.arrow \
 	d.rast.num \
 	d.rgb \
 	d.rhumbline \
-	d.save \
 	d.text.new \
 	d.title \
 	d.vect \
 	d.vect.chart \
 	d.thematic.area \
-	d.what.rast \
-	d.what.vect \
-	d.where \
-	d.zoom
+
+#	d.colors \
+#	d.extract \
+#	d.font \
+#	d.measure \
+#	d.profile \
+#	d.what.rast \
+#	d.what.vect \
+#	d.where \
+#	d.zoom \
+#	drivers
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 

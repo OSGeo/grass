@@ -59,22 +59,15 @@
 int D_setup(int clear)
 {
     struct Cell_head region;
-    char name[128];
     int t, b, l, r;
 
-    if (D_get_cur_wind(name)) {
-	t = R_screen_top();
-	b = R_screen_bot();
-	l = R_screen_left();
-	r = R_screen_rite();
-	strcpy(name, "full_screen");
-	D_new_window(name, t, b, l, r);
-    }
+    t = R_screen_top();
+    b = R_screen_bot();
+    l = R_screen_left();
+    r = R_screen_rite();
+    D_new_window("full_screen", t, b, l, r);
 
-    if (D_set_cur_wind(name))
-	G_fatal_error("Current graphics frame not available");
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error("Getting graphics coordinates");
+    D_get_screen_window(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
     if (clear) {
@@ -85,8 +78,7 @@ int D_setup(int clear)
 
     /* Set the map region associated with graphics frame */
     G_get_set_window(&region);
-    if (D_check_map_window(&region))
-	G_fatal_error("Setting graphics coordinates");
+    D_check_map_window(&region);
     if (G_set_window(&region) < 0)
 	G_fatal_error("Invalid graphics coordinates");
 

@@ -132,7 +132,6 @@ int main(int argc, char **argv)
 	R_charset(opt3->answer);
 
     /* add this command to the list */
-    D_add_to_list(G_recreate_command());
     R_close_driver();
 
     exit(EXIT_SUCCESS);

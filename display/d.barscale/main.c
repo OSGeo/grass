@@ -41,12 +41,11 @@ int draw = 0;
 
 int main(int argc, char **argv)
 {
-    char window_name[64];
     struct Cell_head window;
     int t, b, l, r;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3;
-    struct Flag *mouse, *feet, *top, *linescale, *northarrow, *scalebar;
+    struct Flag *feet, *top, *linescale, *northarrow, *scalebar;
     struct Cell_head W;
 
     /* Initialize the GIS calls */
@@ -55,10 +54,6 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("display, cartography");
     module->description = _("Displays a barscale on the graphics monitor.");
-
-    mouse = G_define_flag();
-    mouse->key = 'm';
-    mouse->description = _("Use mouse to interactively place scale");
 
     feet = G_define_flag();
     feet->key = 'f';
@@ -139,13 +134,6 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
-
     /* Parse and select background color */
     color1 = D_parse_color(opt1->answer, 1);
     if (color1 == 0)
@@ -158,46 +146,19 @@ int main(int argc, char **argv)
     /* Read in the map window associated with window */
     G_get_window(&window);
 
-    if (D_check_map_window(&window))
-	G_fatal_error(_("Setting map window"));
+    D_check_map_window(&window);
 
     if (G_set_window(&window) == -1)
 	G_fatal_error(_("Current window not settable"));
 
     /* Determine conversion factors */
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error(_("Getting screen window"));
+    D_get_screen_window(&t, &b, &l, &r);
+
     if (D_do_conversions(&window, t, b, l, r))
 	G_fatal_error(_("Error in calculating conversions"));
 
-    if (!mouse->answer) {
-	/* Draw the scale */
-	draw_scale(NULL, top->answer);
-
-	/* Add this command to list */
-	D_add_to_list(G_recreate_command());
-    }
-    else if (mouse_query(top->answer)) {
-	char cmdbuf[255];
-
-	sprintf(cmdbuf, "%s at=%f,%f", argv[0], east, north);
-
-	sprintf(cmdbuf, "%s bcolor=%s", cmdbuf, opt1->answer);
-	sprintf(cmdbuf, "%s tcolor=%s", cmdbuf, opt2->answer);
-	if (top->answer)
-	    strcat(cmdbuf, " -t");
-	if (feet->answer)
-	    strcat(cmdbuf, " -f");
-	if (linescale->answer)
-	    strcat(cmdbuf, " -l");
-	if (northarrow->answer)
-	    strcat(cmdbuf, " -n");
-	if (scalebar->answer)
-	    strcat(cmdbuf, " -s");
-
-	/* Add this command to list */
-	D_add_to_list(cmdbuf);
-    }
+    /* Draw the scale */
+    draw_scale(top->answer);
 
     R_close_driver();
 

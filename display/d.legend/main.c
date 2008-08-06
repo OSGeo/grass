@@ -40,7 +40,6 @@ int main(int argc, char **argv)
     char *mapset;
     char buff[512];
     char *map_name;
-    char window_name[64];
     int black;
     int cats_num;
     int color;
@@ -52,7 +51,7 @@ int main(int argc, char **argv)
     int lines, steps;
     int new_colr, fp;
     int t, b, l, r;
-    int hide_catnum, hide_catstr, hide_nodata, do_smooth, use_mouse;
+    int hide_catnum, hide_catstr, hide_nodata, do_smooth;
     char *cstr;
     int white;
     int x_box[5];
@@ -61,7 +60,7 @@ int main(int argc, char **argv)
     struct Colors colors;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt4, *opt5, *opt6, *opt7, *opt8, *opt9;
-    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *mouse, *flipit;
+    struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit;
     struct Range range;
     struct FPRange fprange;
     CELL min_ind, max_ind, null_cell;
@@ -156,10 +155,6 @@ int main(int argc, char **argv)
     opt9->guisection = _("Advanced");
 
 
-    mouse = G_define_flag();
-    mouse->key = 'm';
-    mouse->description = _("Use mouse to size & place legend");
-
     hidestr = G_define_flag();
     hidestr->key = 'v';
     hidestr->description = _("Do not show category labels");
@@ -196,7 +191,6 @@ int main(int argc, char **argv)
     hide_catnum = hidenum->answer;
     hide_nodata = hidenodata->answer;
     do_smooth = smooth->answer;
-    use_mouse = mouse->answer;
     flip = flipit->answer;
 
     color = 0;			/* if only to get rid of the compiler warning  */
@@ -274,12 +268,6 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);
 
@@ -287,38 +275,23 @@ int main(int argc, char **argv)
     D_get_screen_window(&t, &b, &l, &r);
     R_set_window(t, b, l, r);
 
-    if (use_mouse) {
-	if (!get_legend_box(&x0, &x1, &y0, &y1))
-	    exit(EXIT_SUCCESS);
-	G_debug(1, "mouse placement as percentage of display window "
-		"[bottom,top,left,right]:\n  \"at=%.1f,%.1f,%.1f,%.1f\"",
-		100. * (b - y1) / (b - t), 100. * (b - y0) / (b - t),
-		100. * x0 / (r - l), 100. * x1 / (r - l));
-
-	Y1 = 100. - (y1 - t) * 100. / (b - t);
-	Y0 = 100. - (y0 - t) * 100. / (b - t);
-	X0 = (x0 - l) * 100. / (r - l);
-	X1 = (x1 - l) * 100. / (r - l);
+    if (opt7->answer != NULL) {
+	sscanf(opt7->answers[0], "%lf", &Y1);
+	sscanf(opt7->answers[1], "%lf", &Y0);
+	sscanf(opt7->answers[2], "%lf", &X0);
+	sscanf(opt7->answers[3], "%lf", &X1);
     }
-    else {
-	if (opt7->answer != NULL) {
-	    sscanf(opt7->answers[0], "%lf", &Y1);
-	    sscanf(opt7->answers[1], "%lf", &Y0);
-	    sscanf(opt7->answers[2], "%lf", &X0);
-	    sscanf(opt7->answers[3], "%lf", &X1);
-	}
-	else {			/* default */
-	    Y1 = 12;
-	    Y0 = 88;
-	    X0 = 3;
-	    X1 = 7;
-	}
-
-	x0 = l + (int)((r - l) * X0 / 100.);
-	x1 = l + (int)((r - l) * X1 / 100.);
-	y0 = t + (int)((b - t) * (100. - Y0) / 100.);	/* make lower left the origin */
-	y1 = t + (int)((b - t) * (100. - Y1) / 100.);
+    else {			/* default */
+	Y1 = 12;
+	Y0 = 88;
+	X0 = 3;
+	X1 = 7;
     }
+
+    x0 = l + (int)((r - l) * X0 / 100.);
+    x1 = l + (int)((r - l) * X1 / 100.);
+    y0 = t + (int)((b - t) * (100. - Y0) / 100.);	/* make lower left the origin */
+    y1 = t + (int)((b - t) * (100. - Y1) / 100.);
 
     if (y0 > y1) {		/* allow for variety in order of corner */
 	flip = !flip;		/*   selection without broken output    */
@@ -496,7 +469,7 @@ int main(int argc, char **argv)
 	}
 
 	/* center really tiny legends */
-	if (!use_mouse && opt7->answer == NULL) {	/* if defualt scaling */
+	if (opt7->answer == NULL) {	/* if defualt scaling */
 	    if (!do_smooth && (dots_per_line < 4))	/* if so small that there's no box */
 		if ((b - (dots_per_line * lines)) / (b * 1.0) > 0.15)	/* if there's more than a 15% blank at the bottom */
 		    y0 = ((b - t) - (dots_per_line * lines)) / 2;
@@ -687,7 +660,7 @@ int main(int argc, char **argv)
 
 	    /* scale text to fit in window if position not manually set */
 	    /* usually not needed, except when frame is really narrow   */
-	    if (!use_mouse && opt7->answer == NULL) {	/* ie defualt scaling */
+	    if (opt7->answer == NULL) {	/* ie defualt scaling */
 		ScaleFactor = ((r - x1) / ((MaxLabelLen + 1) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 		if (ScaleFactor < 1.0) {
 		    txsiz = (int)(txsiz * ScaleFactor);
@@ -775,7 +748,7 @@ int main(int argc, char **argv)
 	txsiz = (int)((y1 - y0) / (2.0 * lines));
 
 	/* scale text to fit in window if position not manually set */
-	if (!use_mouse && opt7->answer == NULL) {	/* ie defualt scaling */
+	if (opt7->answer == NULL) {	/* ie defualt scaling */
 	    ScaleFactor = ((true_r - true_l) / ((MaxLabelLen + 3) * txsiz * 0.81));	/* ?? txsiz*.81=actual text width. */
 	    if (ScaleFactor < 1.0) {
 		txsiz = (int)floor(txsiz * ScaleFactor);
@@ -917,16 +890,6 @@ int main(int argc, char **argv)
 	    R_text(buff);
 	}
     }
-    if (use_mouse) {
-	char buf[512];
-
-	mouse->answer = 0;
-	sprintf(buf, "%s at=%.1f,%.1f,%.1f,%.1f", G_recreate_command(),
-		Y1, Y0, X0, X1);
-	D_add_to_list(buf);
-    }
-    else
-	D_add_to_list(G_recreate_command());
 
     R_close_driver();
     exit(EXIT_SUCCESS);

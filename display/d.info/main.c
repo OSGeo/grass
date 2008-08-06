@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Flag *rflag, *dflag, *cflag, *fflag, *bflag, *gflag;
     int l, r, t, b;
-    char window_name[128];
     struct Cell_head window;
 
     G_gisinit(argv[0]);
@@ -99,18 +98,11 @@ int main(int argc, char *argv[])
     }
 
     if (bflag->answer) {
-	if (D_get_cur_wind(window_name))
-	    G_fatal_error(_("No current window"));
-	if (D_set_cur_wind(window_name))
-	    G_fatal_error(_("Current window not available"));
-
 	/* Read in the map window associated with window */
 	G_get_window(&window);
 
-	if (D_check_map_window(&window))
-	    G_fatal_error(_("Setting map window"));
-	if (D_get_screen_window(&t, &b, &l, &r))
-	    G_fatal_error(_("Getting screen window"));
+	D_check_map_window(&window);
+	D_get_screen_window(&t, &b, &l, &r);
 	if (D_do_conversions(&window, t, b, l, r))
 	    G_fatal_error(_("Error in calculating conversions"));
 
@@ -123,11 +115,6 @@ int main(int argc, char *argv[])
     }
 
     if (gflag->answer) {
-	if (D_get_cur_wind(window_name))
-	    G_fatal_error(_("No current window"));
-	if (D_set_cur_wind(window_name))
-	    G_fatal_error(_("Current window not available"));
-
 	/* Read in the map window associated with window */
 	G_get_window(&window);
 	fprintf(stdout, "w=%f\n", window.west);

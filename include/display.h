@@ -68,26 +68,10 @@ void D_polygon(const double *, const double *, int);
 void D_box(double, double, double, double);
 void D_line_width(double);
 
-/* get_win.c */
-int get_win_w_mouse(float *, float *, float *, float *);
-
-/* ident_win.c */
-int ident_win(char *);
-
 /* list.c */
-int D_set_cell_name(const char *);
-int D_get_cell_name(char *);
-int D_set_dig_name(const char *);
-int D_get_dig_name(char *);
-int D_add_to_cell_list(const char *);
-int D_get_cell_list(char ***, int *);
-int D_add_to_dig_list(const char *);
-int D_get_dig_list(char ***, int *);
-int D_add_to_list(const char *);
-int D_get_list(char ***, int *);
-int D_clear_window(void);
-int D_set_erase_color(const char *);
-int D_get_erase_color(char *);
+void D_clear_window(void);
+void D_set_erase_color(const char *);
+void D_get_erase_color(char *);
 
 /* popup.c */
 int D_popup(int, int, int, int, int, int, char *[]);
@@ -130,15 +114,12 @@ int D_raster_use_color(int);
 int D_color_number_to_RGB(int, int *, int *, int *);
 
 /* window.c */
-int D_new_window(char *, int, int, int, int);
-int D_new_window_percent(char *, float, float, float, float);
-int D_set_cur_wind(const char *);
-int D_get_cur_wind(char *);
-int D_show_window(int);
+void D_new_window(char *, int, int, int, int);
+void D_new_window_percent(char *, float, float, float, float);
+void D_show_window(int);
 int D_get_screen_window(int *, int *, int *, int *);
-int D_check_map_window(struct Cell_head *);
-int D_reset_screen_window(int, int, int, int);
-int D_timestamp(void);
+void D_check_map_window(struct Cell_head *);
+void D_reset_screen_window(int, int, int, int);
 void D_remove_window(void);
 void D_erase_window(void);
 void D_erase(const char *);

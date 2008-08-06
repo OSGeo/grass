@@ -54,7 +54,6 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt_h, *opt_i, *opt_s, *brighten;
     struct Flag *nulldraw;
-    char window_name[64];
     int t, b, l, r;
     double bright_mult;
 
@@ -115,14 +114,6 @@ int main(int argc, char **argv)
 
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
-
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current graphics window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current graphics window not available"));
-
-    D_set_cell_name("his result");
 
     /* Prepare the raster cell drawing functions */
     D_get_screen_window(&t, &b, &l, &r);
@@ -267,7 +258,6 @@ int main(int argc, char **argv)
     D_cell_draw_end();
 
     /* Close down connection to display driver */
-    D_add_to_list(G_recreate_command());
     R_close_driver();
 
     /* Close the raster maps */

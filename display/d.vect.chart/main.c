@@ -279,12 +279,6 @@ int main(int argc, char **argv)
 	       sizecol_opt->answer, size, scale,
 	       &ocolor, colors, y_center, max_reference);
 
-    if (ret == 0) {
-	D_add_to_list(G_recreate_command());
-	D_set_dig_name(G_fully_qualified_name(map_opt->answer, mapset));
-	D_add_to_dig_list(G_fully_qualified_name(map_opt->answer, mapset));
-    }
-
     R_close_driver();
 
     Vect_close(&Map);

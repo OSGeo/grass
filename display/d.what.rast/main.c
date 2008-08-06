@@ -30,7 +30,6 @@
 int main(int argc, char **argv)
 {
     struct Cell_head window;
-    char temp[128];
     int t, b, l, r;
     int i, j;
     int width, mwidth;
@@ -49,27 +48,13 @@ int main(int argc, char **argv)
 	  "within the current geographic region.");
 
 
-    /* Don't fail initially if driver open fails, and don't let call kill
-     * us -- set quiet mode
-     */
-    R__open_quiet();
-    if (R_open_driver() == 0) {
-	if (D_get_cell_list(&rast, &nrasts) < 0)
-	    rast = NULL;
-	else {
-	    rast = (char **)G_realloc(rast, (nrasts + 1) * sizeof(char *));
-	    rast[nrasts] = NULL;
-	}
-	R_close_driver();
-    }
+    rast = NULL;
 
     opt1 = G_define_option();
     opt1->key = "map";
     opt1->type = TYPE_STRING;
-    opt1->required = NO;
+    opt1->required = YES;
     opt1->multiple = YES;
-    if (rast)
-	opt1->answers = rast;
     opt1->gisprompt = "old,cell,raster";
     opt1->description = _("Name of existing raster map(s)");
     opt1->key_desc = "name";
@@ -96,10 +81,7 @@ int main(int argc, char **argv)
 	_
 	("Print out col/row for the entire map in grid resolution of the region");
 
-    if (!rast)
-	opt1->required = YES;
-
-    if ((argc > 1 || !rast) && G_parser(argc, argv))
+    if (argc > 1 && G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
@@ -109,17 +91,10 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (D_get_cur_wind(temp))
-	G_fatal_error(_("No current graphics window"));
-
-    if (D_set_cur_wind(temp))
-	G_fatal_error(_("Current graphics window not available"));
-
     /* Read in the map window associated with window */
     G_get_window(&window);
 
-    if (D_check_map_window(&window))
-	G_fatal_error(_("Setting graphics window"));
+    D_check_map_window(&window);
 
     if (G_set_window(&window) == -1)
 	G_fatal_error(_("Can't set current graphics window"));

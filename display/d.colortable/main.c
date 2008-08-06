@@ -35,7 +35,6 @@ int main(int argc, char **argv)
     int cols;
 
     char buff[256];
-    char window_name[64];
     char *mapset;
     struct FPRange fp_range;
     struct Colors colors;
@@ -146,11 +145,6 @@ int main(int argc, char **argv)
 	G_fatal_error("Range file for [%s] not available", map_name);
     if (R_open_driver() != 0)
 	G_fatal_error("No graphics device selected");
-
-    if (D_get_cur_wind(window_name))
-	G_fatal_error("No current frame");
-    if (D_set_cur_wind(window_name))
-	G_fatal_error("Current frame not available");
 
     /* Figure out where to put boxes */
     D_get_screen_window(&t, &b, &l, &r);
@@ -269,8 +263,6 @@ int main(int argc, char **argv)
 	    R_polygon_rel(x_box, y_box, 5);
 	}
     }
-
-    D_add_to_list(G_recreate_command());
 
     R_close_driver();
 

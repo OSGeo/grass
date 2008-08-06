@@ -218,8 +218,6 @@ int main(int argc, char **argv)
 	plot_border(size, east, north);
     }
 
-    D_add_to_list(G_recreate_command());
-
     R_close_driver();
 
     exit(EXIT_SUCCESS);

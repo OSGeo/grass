@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 #ifdef QUIET
     struct Flag *quiet;
 #endif
-    struct Flag *just, *full, *hand, *pan, *last;
+    struct Flag *full, *hand, *pan, *last;
     struct Option *rmap, *vmap, *zoom;
     struct GModule *module;
     double magnify;
@@ -59,32 +59,13 @@ int main(int argc, char **argv)
 	_("Allows the user to change the current geographic "
 	  "region settings interactively, with a mouse.");
 
-    /* Conditionalize R_open_driver() so "help" works, open quiet as well */
-    R__open_quiet();
-    if (R_open_driver() == 0) {
-	if (D_get_cell_list(&rast, &nrasts) < 0)
-	    rast = NULL;
-	else {
-	    rast = (char **)G_realloc(rast, (nrasts + 1) * sizeof(char *));
-	    rast[nrasts] = NULL;
-	}
-
-	if (D_get_dig_list(&vect, &nvects) < 0)
-	    vect = NULL;
-	else {
-	    vect = (char **)G_realloc(vect, (nvects + 1) * sizeof(char *));
-	    vect[nvects] = NULL;
-	}
-
-	R_close_driver();
-    }
+    rast = NULL;
+    vect = NULL;
 
     rmap = G_define_option();
     rmap->key = "rast";
     rmap->type = TYPE_STRING;
     rmap->multiple = YES;
-    if (rast)
-	rmap->answers = rast;
     rmap->required = NO;
     rmap->gisprompt = "old,cell,raster";
     rmap->description = _("Name of raster map");
@@ -93,8 +74,6 @@ int main(int argc, char **argv)
     vmap->key = "vector";
     vmap->type = TYPE_STRING;
     vmap->multiple = YES;
-    if (vect)
-	vmap->answers = vect;
     vmap->required = NO;
     vmap->gisprompt = "old,dig,vector";
     vmap->description = _("Name of vector map");
@@ -125,20 +104,11 @@ int main(int argc, char **argv)
     hand->key = 'h';
     hand->description = _("Handheld mode");
 
-    just = G_define_flag();
-    just->key = 'j';
-    just->description = _("Just redraw given maps using default colors");
-
     last = G_define_flag();
     last->key = 'r';
     last->description = _("Return to previous zoom");
 
-    if (!rast && !vect) {
-	rmap->required = YES;
-	just->answer = 1;
-    }
-
-    if ((argc > 1 || (!rast && !vect)) && G_parser(argc, argv))
+    if (argc > 1 && G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if ((full->answer + pan->answer + hand->answer) > 1)
@@ -153,48 +123,8 @@ int main(int argc, char **argv)
 #endif
 
     cmd = NULL;
-    if (!just->answer) {
-	if (R_open_driver() != 0)
-	    G_fatal_error(_("No graphics device selected"));
-	stat = R_pad_get_item("list", &list, &nlists);
-	R_close_driver();
-	if (stat || !nlists) {
-	    G_message(_("ERROR: can not get \"list\" items"));
-	    G_message(_("-j flag forced"));
-	    just->answer = 1;
-	}
-	else {
-	    cmd = (char *)G_malloc(strlen(list[0]) + 1);
-	    strcpy(cmd, list[0]);
-	    for (i = 1; i < nlists; i++) {
-		cmd =
-		    (char *)G_realloc(cmd, strlen(cmd) + strlen(list[i]) + 2);
-		strcat(cmd, "\n");
-		strcat(cmd, list[i]);
-	    }
-	}
-    }
-
-    if (just->answer) {
-	if (rmap->answers && rmap->answers[0])
-	    rast = rmap->answers;
-	else {
-	    rast = NULL;
-	    nrasts = 0;
-	}
-	if (vmap->answers && vmap->answers[0])
-	    vect = vmap->answers;
-	else {
-	    vect = NULL;
-	    nvects = 0;
-	}
-    }
-
-
-    /* Make sure map is available */
-    if (rmap->required == YES && rmap->answers == NULL)
-	G_fatal_error(_("No map is displayed in GRASS monitor"));
-
+    rast = rmap->answers;
+    vect = vmap->answers;
 
     if (rast) {
 	struct Cell_head window;
@@ -228,9 +158,6 @@ int main(int argc, char **argv)
 	    }
 	}
     }
-
-    if (vmap->required == YES && vmap->answers == NULL)
-	exit(EXIT_SUCCESS);
 
     if (vect) {
 	struct Map_info Map;
@@ -342,12 +269,6 @@ int main(int argc, char **argv)
     }
 
     R_close_driver();
-
-    if (rast)
-	R_pad_freelist(rast, nrasts);
-
-    if (vect)
-	R_pad_freelist(vect, nvects);
 
     G_message(_("Zooming complete."));
     exit(stat);

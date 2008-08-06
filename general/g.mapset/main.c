@@ -22,8 +22,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/display.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
@@ -39,8 +37,7 @@ int main(int argc, char *argv[])
     char *mapset_old_path, *mapset_new_path;
     char *lock_prog;
     char path[GPATH_MAX];
-    char *shell, *monitor;
-    struct MON_CAP *cap;
+    char *shell;
 
     G_gisinit(argv[0]);
 
@@ -92,7 +89,6 @@ int main(int argc, char *argv[])
     mapset_old = G__getenv("MAPSET");
     G_asprintf(&mapset_old_path, "%s/%s/%s", gisdbase_old, location_old,
 	       mapset_old);
-    monitor = G__getenv("MONITOR");
 
     /* New values */
     if (gisdbase_opt->answer)
@@ -174,21 +170,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_
 		      ("%s is currently running GRASS in selected mapset or lock file cannot be checked"),
 		      G_whoami());
-
-    /* Erase monitors */
-    G_message(_("Erasing monitors..."));
-    while ((cap = R_parse_monitorcap(MON_NEXT, "")) != NULL) {
-	G__setenv("MONITOR", cap->name);
-	R__open_quiet();
-	if (R_open_driver() == 0) {
-	    D_erase(DEFAULT_BG_COLOR);
-	    D_add_to_list("d.erase");
-	    R_close_driver();
-	    R_release_driver();
-	}
-    }
-    if (monitor)
-	G_setenv("MONITOR", monitor);
 
     /* Clean temporary directory */
     sprintf(path, "%s/etc/clean_temp", G_gisbase());

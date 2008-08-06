@@ -45,7 +45,6 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct GModule *module;
     struct Flag *flag_o;
-    struct Flag *flag_x;
     int t, b, l, r;
     int i;
 
@@ -60,10 +59,6 @@ int main(int argc, char **argv)
     flag_o = G_define_flag();
     flag_o->key = 'o';
     flag_o->description = _("Overlay (non-null values only)");
-
-    flag_x = G_define_flag();
-    flag_x->key = 'x';
-    flag_x->description = _("Don't add to list of commands in monitor");
 
     for (i = 0; i < 3; i++) {
 	char buff[80];
@@ -137,10 +132,6 @@ int main(int argc, char **argv)
     }
     G_percent(window.rows, window.rows, 5);
     D_cell_draw_end();
-
-    /* Close down connection to window driver */
-    if (!flag_x->answer)
-	D_add_to_list(G_recreate_command());
 
     R_close_driver();
 

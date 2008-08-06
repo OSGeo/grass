@@ -53,7 +53,6 @@ int main(int argc, char **argv)
     DCELL *cell;
     char *mapset;
     char full_name[128];
-    char window_name[64];
     double D_north, D_east;
     double D_south, D_west;
     double U_east, U_north;
@@ -87,7 +86,6 @@ int main(int argc, char **argv)
 	  "displayed to the graphics monitor.");
 
     opt1 = G_define_standard_option(G_OPT_R_MAP);
-    opt1->required = NO;
 
     opt2 = G_define_option();
     opt2->key = "grid_color";
@@ -127,12 +125,7 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (opt1->answer)
-	strcpy(full_name, opt1->answer);
-    else {
-	if (D_get_cell_name(full_name))
-	    G_fatal_error(_("No raster map exists in current window"));
-    }
+    strcpy(full_name, opt1->answer);
 
     if (strcmp("none", opt2->answer) == 0)
 	grid_color = -1;
@@ -158,18 +151,11 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
 
-    if (D_get_cur_wind(window_name))
-	G_fatal_error(_("No current window"));
-
-    if (D_set_cur_wind(window_name))
-	G_fatal_error(_("Current window not available"));
-
     /* Read in the map window associated with window */
 
     G_get_window(&window);
 
-    if (D_check_map_window(&window))
-	G_fatal_error(_("Setting map window"));
+    D_check_map_window(&window);
 
     if (G_set_window(&window) == -1)
 	G_fatal_error(_("Current window not settable"));
@@ -303,7 +289,7 @@ int main(int argc, char **argv)
     }
 
     G_close_cell(layer_fd);
-    D_add_to_list(G_recreate_command());
+
     R_close_driver();
 
     exit(EXIT_SUCCESS);

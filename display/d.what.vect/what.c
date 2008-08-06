@@ -15,7 +15,7 @@ static int nlines = 50;
 
 #define WDTH 5
 
-int what(int once, int txt, int terse, int flash, int width, int mwidth,
+int what(int once, int txt, int terse, int width, int mwidth,
 	 int topo, int edit)
 {
     int type, edit_mode;
@@ -32,7 +32,6 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
     double maxdist;
     int getz = 0;
     struct field_info *Fi;
-    int flash_basecolr, flash_colr;
 
     plus_t line, area = 0, centroid;
     int i;
@@ -41,17 +40,11 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
     char buf[1000], *str, title[500];
     dbString html;
     char *form;
-    char *panell;
 
     if (terse)
 	txt = 1;		/* force text for terse */
 
     G_get_set_window(&window);
-
-    if (flash)
-	G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		     D_get_d_east(), D_move_abs, D_cont_abs);
-
 
     G_begin_polygon_area_calculations();
     nrows = window.rows;
@@ -69,32 +62,15 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
     else
 	notty = 0;
 
-    if (flash) {
-	panell = G_tempfile();
-	flash_basecolr = YELLOW;
-    }
-
     do {
-	if (flash)
-	    R_panel_save(panell, R_screen_top(), R_screen_bot(),
-			 R_screen_left(), R_screen_rite());
-
 	if (!terse)
-	    show_buttons(once, flash);
+	    show_buttons(once);
 	R_get_location_with_pointer(&screen_x, &screen_y, &button);
 	if (!once) {
 	    if (button == 3) {
-		if (flash)
-		    R_panel_delete(panell);
 		break;
 	    }
 	    if (button == 2) {
-		if (flash) {
-		    R_panel_delete(panell);
-		    flash_basecolr++;
-		    if (flash_basecolr >= G_num_standard_colors())
-			flash_basecolr = 1;
-		}
 		continue;
 	    }
 	}
@@ -123,8 +99,6 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
 	    maxdist = y1;
 	G_debug(1, "Maximum distance in map units = %f\n", maxdist);
 
-	if (flash)
-	    flash_colr = flash_basecolr;
 	F_clear();
 	for (i = 0; i < nvects; i++) {
 	    Vect_reset_cats(Cats);
@@ -325,11 +299,6 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
 			}
 		    }
 		}
-
-		if (flash) {
-		    flash_line(&Map[i], line, Points, BLACK);
-		    flash_line(&Map[i], line, Points, flash_colr);
-		}
 	    }
 
 	    if (area > 0) {
@@ -408,11 +377,6 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
 		if (centroid > 0) {
 		    Vect_read_line(&Map[i], Points, Cats, centroid);
 		}
-
-		if (flash) {
-		    flash_area(&Map[i], area, Points, BLACK);
-		    flash_area(&Map[i], area, Points, flash_colr);
-		}
 	    }
 
 	    if (Cats->n_cats > 0) {
@@ -490,17 +454,6 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
 		G_debug(3, db_get_string(&html));
 		F_open(title, db_get_string(&html));
 	    }
-
-	    if (flash) {
-		flash_colr++;
-		if (flash_colr >= G_num_standard_colors())
-		    flash_colr = 1;
-	    }
-	}
-
-	if (flash) {
-	    R_panel_restore(panell);
-	    R_panel_delete(panell);
 	}
 
     } while (!once);
@@ -510,7 +463,7 @@ int what(int once, int txt, int terse, int flash, int width, int mwidth,
 }
 
 /* TODO */
-int show_buttons(int once, int flash)
+int show_buttons(int once)
 {
     if (once) {
 	fprintf(stderr, _("\nClick mouse button on desired location\n\n"));
@@ -520,13 +473,8 @@ int show_buttons(int once, int flash)
 	fprintf(stderr, "\n");
 	fprintf(stderr, _("Buttons\n"));
 	fprintf(stderr, _(" Left:  what's here\n"));
-	if (flash) {
-	    fprintf(stderr, _(" Middle: toggle flash color\n"));
-	    nlines = 5;
-	}
-	else
-	    nlines = 4;
 	fprintf(stderr, _(" Right: quit\n"));
+	nlines = 4;
     }
 
     return 0;

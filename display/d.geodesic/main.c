@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 {
     int line_color;
     int text_color;
-    int use_mouse;
     double lon1, lat1, lon2, lat2;
     char msg[100];
     char *deftcolor;
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
     parm.coor->key = "coor";
     parm.coor->key_desc = "lon1,lat1,lon2,lat2";
     parm.coor->type = TYPE_STRING;
-    parm.coor->required = NO;
+    parm.coor->required = YES;
     parm.coor->description = "Starting and ending coordinates";
 
     parm.lcolor = G_define_option();
@@ -81,28 +80,24 @@ int main(int argc, char *argv[])
 	exit(1);
     }
 
-    use_mouse = 1;
-    if (parm.coor->answer) {
-	if (parm.coor->answers[0] == NULL)
-	    G_fatal_error("No coordinates given");
+    if (parm.coor->answers[0] == NULL)
+	G_fatal_error("No coordinates given");
 
-	if (!G_scan_easting(parm.coor->answers[0], &lon1, G_projection())) {
-	    G_usage();
-	    G_fatal_error("%s - illegal longitude", parm.coor->answers[0]);
-	}
-	if (!G_scan_northing(parm.coor->answers[1], &lat1, G_projection())) {
-	    G_usage();
-	    G_fatal_error("%s - illegal longitude", parm.coor->answers[1]);
-	}
-	if (!G_scan_easting(parm.coor->answers[2], &lon2, G_projection())) {
-	    G_usage();
-	    G_fatal_error("%s - illegal longitude", parm.coor->answers[2]);
-	}
-	if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection())) {
-	    G_usage();
-	    G_fatal_error("%s - illegal longitude", parm.coor->answers[3]);
-	}
-	use_mouse = 0;
+    if (!G_scan_easting(parm.coor->answers[0], &lon1, G_projection())) {
+	G_usage();
+	G_fatal_error("%s - illegal longitude", parm.coor->answers[0]);
+    }
+    if (!G_scan_northing(parm.coor->answers[1], &lat1, G_projection())) {
+	G_usage();
+	G_fatal_error("%s - illegal longitude", parm.coor->answers[1]);
+    }
+    if (!G_scan_easting(parm.coor->answers[2], &lon2, G_projection())) {
+	G_usage();
+	G_fatal_error("%s - illegal longitude", parm.coor->answers[2]);
+    }
+    if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection())) {
+	G_usage();
+	G_fatal_error("%s - illegal longitude", parm.coor->answers[3]);
     }
 
     if (R_open_driver() != 0)
@@ -126,13 +121,7 @@ int main(int argc, char *argv[])
 	text_color = D_translate_color(parm.tcolor->answer);
 
     setup_plot();
-    if (use_mouse)
-	mouse(line_color, text_color);
-    else
-	plot(lon1, lat1, lon2, lat2, line_color, text_color);
-
-    if (!use_mouse)
-	D_add_to_list(G_recreate_command());
+    plot(lon1, lat1, lon2, lat2, line_color, text_color);
 
     R_close_driver();
     exit(0);

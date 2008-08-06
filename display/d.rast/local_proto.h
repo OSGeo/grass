@@ -3,7 +3,7 @@ char *color_list(void);
 int get_rgb(char *, int *, int *, int *);
 
 /* display.c */
-int display(char *, char *, int, char *, RASTER_MAP_TYPE, int, int);
+int display(char *, char *, int, char *, RASTER_MAP_TYPE, int);
 int mask_raster_array(void *, int, int, RASTER_MAP_TYPE);
 
 /* main.c */

@@ -12,7 +12,7 @@ static int cell_draw(char *, char *, struct Colors *, int, int,
 int display(char *name,
 	    char *mapset,
 	    int overlay,
-	    char *bg, RASTER_MAP_TYPE data_type, int invert, int nocmd)
+	    char *bg, RASTER_MAP_TYPE data_type, int invert)
 {
     struct Colors colors;
     int r, g, b;
@@ -39,14 +39,6 @@ int display(char *name,
 
     /* release the colors now */
     G_free_colors(&colors);
-
-    /* record the raster map */
-    if (!nocmd) {
-	D_set_cell_name(G_fully_qualified_name(name, mapset));
-	D_add_to_cell_list(G_fully_qualified_name(name, mapset));
-
-	D_add_to_list(G_recreate_command());
-    }
 
     return 0;
 }
