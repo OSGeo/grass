@@ -81,13 +81,11 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Correction
 			    (interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
 		    else if ((*points->y < Overlap.S)) {	/*(1) */
@@ -98,8 +96,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }
 		    else {	/*(1) */
@@ -108,8 +105,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 		}
 		else if ((*points->x < Overlap.W)) {
@@ -121,8 +117,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			interpolation *= weight;
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
 			class =
@@ -144,13 +139,11 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Correction
 			    (interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 		    }
 		    else {	/*(2) */
 			weight = (Overlap.W - *points->x) / overlap;
@@ -158,8 +151,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
 			class =
@@ -182,8 +174,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 
 			if (Select_Correction
 			    (&interpolation, line_num[i], driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			Vect_cat_get(cats, F_CLASSIFICATION, &class);
 			class =
@@ -203,8 +194,7 @@ P_Sparse_Correction(struct Map_info *In, struct Map_info *Out,
 			if (Insert_Correction
 			    (interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 		}
 	    }

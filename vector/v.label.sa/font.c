@@ -51,8 +51,7 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
     fp = NULL;
     if ((capfile = getenv("GRASS_FONT_CAP"))) {
 	if ((fp = fopen(capfile, "r")) == NULL)
-	    G_warning(_
-		      ("%s: Unable to read font definition file; use the default"),
+	    G_warning(_("%s: Unable to read font definition file; use the default"),
 		      capfile);
     }
     if (fp == NULL) {

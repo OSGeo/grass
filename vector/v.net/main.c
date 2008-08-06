@@ -170,8 +170,7 @@ int main(int argc, char **argv)
 	Vect_set_fatal_error(GV_FATAL_PRINT);
 	if (1 > Vect_open_new(&Out, output->answer, is3d)) {
 	    Vect_close(&In);
-	    G_fatal_error(_
-			  ("Unable to open vector map <%s> at topology level %d"),
+	    G_fatal_error(_("Unable to open vector map <%s> at topology level %d"),
 			  output->answer, 2);
 	}
 

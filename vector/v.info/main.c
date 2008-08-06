@@ -185,15 +185,13 @@ int main(int argc, char *argv[])
 	if (columns->answer) {
 	    num_dblinks = Vect_get_num_dblinks(&Map);
 	    if (num_dblinks <= 0) {
-		G_fatal_error(_
-			      ("Database connection for map <%s> is not defined in DB file"),
+		G_fatal_error(_("Database connection for map <%s> is not defined in DB file"),
 			      in_opt->answer);
 	    }
 	    else {		/* num_dblinks > 0 */
 
 		field = atoi(fieldopt->answer);
-		G_message(_
-			  ("Displaying column types/names for database connection of layer %d:"),
+		G_message(_("Displaying column types/names for database connection of layer %d:"),
 			  field);
 		if ((fi = Vect_get_field(&Map, field)) == NULL)
 		    G_fatal_error("Database connection not defined");

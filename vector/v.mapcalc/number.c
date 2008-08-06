@@ -210,8 +210,7 @@ double numop(int op, SYMBOL * opd1, SYMBOL * opd2)
     func = getsym(buf);
     if (!func) {
 	if (opd1->itype == st_num)
-	    G_warning(_
-		      ("No function defined to perform ``number %c number''"),
+	    G_warning(_("No function defined to perform ``number %c number''"),
 		      op);
 	else if (opd1->itype == st_pnt)
 	    G_warning(_("No function defined to perform ``point %c point''"),

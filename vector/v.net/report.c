@@ -64,12 +64,10 @@ int report(struct Map_info *In, int afield, int nfield, int action)
 		    nnodes++;
 		}
 		if (nnodes == 0)
-		    G_warning(_
-			      ("Point not found: %.3lf %.3lf %.3lf line category: %d"),
+		    G_warning(_("Point not found: %.3lf %.3lf %.3lf line category: %d"),
 			      x, y, z, cat_line);
 		else if (nnodes > 1)
-		    G_warning(_
-			      ("%d points found: %.3lf %.3lf %.3lf line category: %d"),
+		    G_warning(_("%d points found: %.3lf %.3lf %.3lf line category: %d"),
 			      nnodes, x, y, z, cat_line);
 	    }
 	    fprintf(stdout, "%d %d %d\n", cat_line, cat_node[0], cat_node[1]);

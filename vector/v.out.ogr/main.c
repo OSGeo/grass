@@ -309,8 +309,7 @@ int main(int argc, char *argv[])
 	doatt = 1;		/* do attributes */
 	Fi = Vect_get_field(&In, field);
 	if (Fi == NULL) {
-	    G_warning(_
-		      ("No attribute table found -> using only category numbers as attributes"));
+	    G_warning(_("No attribute table found -> using only category numbers as attributes"));
 
 	    Ogr_field = OGR_Fld_Create("cat", OFTInteger);
 	    OGR_L_CreateField(Ogr_layer, Ogr_field, 0);
@@ -325,8 +324,7 @@ int main(int argc, char *argv[])
 	    db_init_handle(&handle);
 	    db_set_handle(&handle, Fi->database, NULL);
 	    if (db_open_database(Driver, &handle) != DB_OK)
-		G_fatal_error(_
-			      ("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Fi->database, Fi->driver);
 
 	    db_set_string(&dbstring, Fi->table);
@@ -396,15 +394,13 @@ int main(int argc, char *argv[])
 
     if (Vect_get_num_primitives(&In, GV_BOUNDARY) > 0 &&
 	!(otype & GV_BOUNDARY) && !(otype & GV_AREA))
-	G_warning(_
-		  ("%d boundary(ies) found, but not requested to be exported. "
+	G_warning(_("%d boundary(ies) found, but not requested to be exported. "
 		   "Verify 'type' parameter."), Vect_get_num_primitives(&In,
 									GV_BOUNDARY));
 
     if (Vect_get_num_primitives(&In, GV_CENTROID) > 0 &&
 	!(otype & GV_CENTROID) && !(otype & GV_AREA))
-	G_warning(_
-		  ("%d centroid(s) found, but not requested to be exported. "
+	G_warning(_("%d centroid(s) found, but not requested to be exported. "
 		   "Verify 'type' parameter."), Vect_get_num_primitives(&In,
 									GV_CENTROID));
 

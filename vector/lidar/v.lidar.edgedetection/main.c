@@ -187,13 +187,11 @@ int main(int argc, char *argv[])
     /* Start driver and open db */
     driver = db_start_driver_open_database(dvr, db);
     if (driver == NULL)
-	G_fatal_error(_
-		      ("No database connection for driver <%s> is defined. Run db.connect."),
+	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
 
     if (Create_Interpolation_Table(out_opt->answer, driver) != DB_OK)
-	G_fatal_error(_
-		      ("It was impossible to create <%s> interpolation table in database."),
+	G_fatal_error(_("It was impossible to create <%s> interpolation table in database."),
 		      out_opt->answer);
 
     /* Setting regions and boxes */

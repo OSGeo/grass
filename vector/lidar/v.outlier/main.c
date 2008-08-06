@@ -164,8 +164,7 @@ int main(int argc, char *argv[])
     Vect_set_open_level(1);
     /* Open input vector */
     if (1 > Vect_open_old(&In, in_opt->answer, mapset))
-	G_fatal_error(_
-		      ("Unable to open vector map <%s> at the topological level"),
+	G_fatal_error(_("Unable to open vector map <%s> at the topological level"),
 		      in_opt->answer);
 
     /* Copy vector Head File */
@@ -186,8 +185,7 @@ int main(int argc, char *argv[])
     /* Start driver and open db */
     driver = db_start_driver_open_database(dvr, db);
     if (driver == NULL)
-	G_fatal_error(_
-		      ("No database connection for driver <%s> is defined. Run db.connect."),
+	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
 
     /* Setting regions and boxes */
@@ -317,8 +315,7 @@ int main(int argc, char *argv[])
 			    "Creating auxiliar table for archiving overlaping zones");
 		    if ((flag_auxiliar =
 			 P_Create_Aux_Table(driver, table_name)) == FALSE)
-			G_fatal_error(_
-				      ("It was impossible to create <Auxiliar_outlier_table>."));
+			G_fatal_error(_("It was impossible to create <Auxiliar_outlier_table>."));
 		}
 
 		if (qgis_opt->answer)

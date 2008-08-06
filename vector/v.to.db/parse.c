@@ -155,14 +155,12 @@ int parse_command_line(int argc, char *argv[])
     }
 
     if (options.option == O_QUERY && !parms.qcol->answers)
-	G_fatal_error(_
-		      ("Parameter 'qcolumn' must be specified for 'option=query'"));
+	G_fatal_error(_("Parameter 'qcolumn' must be specified for 'option=query'"));
 
     options.qcol = parms.qcol->answer;
 
     if (options.option == O_SIDES && !(options.type | GV_BOUNDARY))
-	G_fatal_error(_
-		      ("The 'sides' option makes sense only for boundaries"));
+	G_fatal_error(_("The 'sides' option makes sense only for boundaries"));
 
     if (options.option == O_SINUOUS && !(options.type | GV_LINES))
 	G_fatal_error(_("The 'sinuous' option makes sense only for lines"));

@@ -69,8 +69,7 @@ double L(double smooth)
 
     /* resL = (1./(pow(n,2.)*pow(smooth,dimension))) * (resL + n*( gaussianFunction(0.,2.,dimension) - 2. * gaussianKernel(0.,term)) ) + (2./(n*pow(smooth,dimension)))*gaussianKernel(0.,term);   */
     G_debug(3, "smooth = %e resL = %e", smooth, resL);
-    G_message(_
-	      ("\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"),
+    G_message(_("\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"),
 	      resL, smooth);
 
     return (resL);
@@ -273,8 +272,7 @@ int main(int argc, char **argv)
     /* valutazione distanza ottimale */
     if (flag_o->answer) {
 	/* Note: sigmaOptimal calculates using ALL points (also those outside the region) */
-	G_message(_
-		  ("Automatic choose of smoothing parameter (standard deviation), maximum possible "
+	G_message(_("Automatic choose of smoothing parameter (standard deviation), maximum possible "
 		   "value of standard deviation is was set to %f"), sigma);
 
 	/* maximum distance 4*sigma (3.9*sigma ~ 1.0000), keep it small, otherwise it takes 

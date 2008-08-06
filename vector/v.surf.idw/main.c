@@ -249,8 +249,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create raster map <%s>"),
 		      parm.output->answer);
 
-    G_important_message(_
-			("Interpolating raster map <%s> (%d rows, %d cols)... "),
+    G_important_message(_("Interpolating raster map <%s> (%d rows, %d cols)... "),
 			parm.output->answer, window.rows, window.cols);
 
     north = window.north + window.ns_res / 2.0;

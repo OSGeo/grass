@@ -119,8 +119,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
     }
 
     if (no_contour > 0)
-	G_warning(_
-		  ("%d lines with varying height were not written to raster"),
+	G_warning(_("%d lines with varying height were not written to raster"),
 		  no_contour);
 
     Vect_destroy_cats_struct(Cats);

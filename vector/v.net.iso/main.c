@@ -175,8 +175,7 @@ int main(int argc, char **argv)
 
     /* Should not happen: */
     if (niso < 2)
-	G_warning(_
-		  ("Not enough costs, everything reachable falls to first band"));
+	G_warning(_("Not enough costs, everything reachable falls to first band"));
 
     if (geo_f->answer)
 	geo = 1;
@@ -210,8 +209,7 @@ int main(int argc, char **argv)
 	    if (Vect_cat_in_cat_list(cat, catlist)) {
 		Vect_net_get_node_cost(&Map, node, &n1cost);
 		if (n1cost == -1) {	/* closed */
-		    G_warning(_
-			      ("Centre at closed node (costs = -1) ignored"));
+		    G_warning(_("Centre at closed node (costs = -1) ignored"));
 		}
 		else {
 		    if (acentres == ncentres) {
@@ -233,8 +231,7 @@ int main(int argc, char **argv)
     G_message(_("Number of centres: [%d] (nlayer: [%d])"), ncentres, nfield);
 
     if (ncentres == 0)
-	G_warning(_
-		  ("Not enough centres for selected nlayer. Nothing will be allocated."));
+	G_warning(_("Not enough centres for selected nlayer. Nothing will be allocated."));
 
     /* alloc and reset space for all nodes */
     Nodes = (NODE *) G_calloc((nnodes + 1), sizeof(NODE));
@@ -513,8 +510,7 @@ int main(int argc, char **argv)
 		    Vect_line_segment(Points, pnts1[i - 1].distance,
 				      pnts1[i].distance, SPoints);
 		if (ret == 0) {
-		    G_warning(_
-			      ("Cannot get line segment, segment out of line"));
+		    G_warning(_("Cannot get line segment, segment out of line"));
 		}
 		else {
 		    Vect_reset_cats(Cats);

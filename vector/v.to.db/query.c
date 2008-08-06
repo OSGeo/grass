@@ -79,8 +79,7 @@ int query(struct Map_info *Map)
     db_init_string(&value_string);
 
     if ((Fi = Vect_get_field(Map, options.qfield)) == NULL)
-	G_fatal_error(_
-		      ("Database connection not defined for layer %d. Use v.db.connect first."),
+	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.qfield);
 
     /* Open driver */
@@ -105,8 +104,7 @@ int query(struct Map_info *Map)
 	/* Skip if cat is zero and large number of query categories (many features without category).
 	 * It would cause problems on server side and take long time. Postgres limit is 10000 */
 	if (Values[i].cat == 0 && Values[i].nqcats > 1000) {
-	    G_warning(_
-		      ("Query for category '0' (no category) was not executed because of too many "
+	    G_warning(_("Query for category '0' (no category) was not executed because of too many "
 		       "(%d) query categories. All later reported values for cat 0 are not valid."),
 		      Values[i].nqcats);
 	    continue;
@@ -143,8 +141,7 @@ int query(struct Map_info *Map)
 
 	    if (nrows != 1) {
 		if (nrows > 1) {
-		    G_warning(_
-			      ("Multiple query results, output value set to NULL (category [%d])"),
+		    G_warning(_("Multiple query results, output value set to NULL (category [%d])"),
 			      Values[i].cat);
 		}
 		Values[i].null = 1;

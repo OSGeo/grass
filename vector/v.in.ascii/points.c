@@ -162,8 +162,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			}
 			else {
 			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
-			    G_fatal_error(_
-					  ("Unparsable longitude value in column <%d>: %s"),
+			    G_fatal_error(_("Unparsable longitude value in column <%d>: %s"),
 					  i, tokens[i]);
 			}
 		    }
@@ -182,8 +181,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			}
 			else {
 			    fprintf(stderr, "Current row: '%s'\n", buf_raw);
-			    G_fatal_error(_
-					  ("Unparsable latitude value in column <%d>: %s"),
+			    G_fatal_error(_("Unparsable latitude value in column <%d>: %s"),
 					  i, tokens[i]);
 			}
 		    }
@@ -260,8 +258,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     G_free(tmp_token);
 
     if (region_flag)
-	G_message(_
-		  ("Skipping %d of %d rows falling outside of current region"),
+	G_message(_("Skipping %d of %d rows falling outside of current region"),
 		  skipped, row - 1);
 
     return 0;

@@ -163,8 +163,7 @@ int main(int argc, char *argv[])
 	G_warning(_("Raster type is integer and column type is float"));
 
     if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
-	G_warning(_
-		  ("Raster type is float and column type is integer, some data lost!!"));
+	G_warning(_("Raster type is float and column type is integer, some data lost!!"));
 
     /* Read vector points to cache */
     Cache_size = Vect_get_num_primitives(&Map, GV_POINT);
@@ -302,8 +301,7 @@ int main(int argc, char *argv[])
 
     for (point = 0; point < point_cnt; point++) {
 	if (cache[point].count > 1) {
-	    G_warning(_
-		      ("More points (%d) of category %d, value set to 'NULL'"),
+	    G_warning(_("More points (%d) of category %d, value set to 'NULL'"),
 		      cache[point].count, cache[point].cat);
 	    dupl_cnt++;
 	}

@@ -163,8 +163,7 @@ int main(int argc, char *argv[])
 
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
-	G_warning(_
-		  ("The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."));
+	G_warning(_("The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."));
 
     /*output to be piped to other modules ? */
     if (shell_flag->answer) {

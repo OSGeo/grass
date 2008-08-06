@@ -317,8 +317,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 		Vect_write_line(Map, otype, Points, Cats);
 	    }
 	    else {		/* 0 points */
-		G_warning(_
-			  ("No centroid written for polygon with 0 vertices"));
+		G_warning(_("No centroid written for polygon with 0 vertices"));
 	    }
 	}
 

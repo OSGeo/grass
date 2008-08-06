@@ -130,8 +130,7 @@ int main(int argc, char *argv[])
 		    db_start_driver_open_database(fi_out->driver,
 						  fi_out->database);
 		if (!driver_out) {
-		    G_fatal_error(_
-				  ("Unable to open database <%s> by driver <%s>"),
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_out->database, fi_out->driver);
 		}
 
@@ -161,8 +160,7 @@ int main(int argc, char *argv[])
 		    db_start_driver_open_database(fi_in->driver,
 						  fi_in->database);
 		if (!driver_in) {
-		    G_fatal_error(_
-				  ("Unable to open database <%s> by driver <%s>"),
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_in->database, fi_in->driver);
 		}
 
@@ -274,8 +272,7 @@ int main(int argc, char *argv[])
 		db_start_driver_open_database(fi_out->driver,
 					      fi_out->database);
 	    if (!driver_out) {
-		G_fatal_error(_
-			      ("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      fi_out->database, fi_out->driver);
 	    }
 	    db_begin_transaction(driver_out);
@@ -333,8 +330,7 @@ int main(int argc, char *argv[])
 		    db_start_driver_open_database(fi_in->driver,
 						  fi_in->database);
 		if (!driver_in) {
-		    G_fatal_error(_
-				  ("Unable to open database <%s> by driver <%s>"),
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_in->database, fi_in->driver);
 		}
 

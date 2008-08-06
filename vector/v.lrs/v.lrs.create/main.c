@@ -474,8 +474,7 @@ int main(int argc, char **argv)
 	    if (floor(mp_tmp) != mp_tmp) {
 		mp_tmp2 = floor(mp_tmp);
 		off_tmp2 = off_tmp + multip * (mp_tmp - mp_tmp2);
-		G_warning(_
-			  ("Milepost (start) %f+%f used as %f+%f (change MP to integer)"),
+		G_warning(_("Milepost (start) %f+%f used as %f+%f (change MP to integer)"),
 			  mp_tmp, off_tmp, mp_tmp2, off_tmp2);
 	    }
 	    else {
@@ -497,8 +496,7 @@ int main(int argc, char **argv)
 	    if (floor(mp_tmp) != mp_tmp) {
 		mp_tmp2 = floor(mp_tmp);
 		off_tmp2 = off_tmp + multip * (mp_tmp - mp_tmp2);
-		G_warning(_
-			  ("Milepost (end) %f+%f used as %f+%f (change MP to integer)"),
+		G_warning(_("Milepost (end) %f+%f used as %f+%f (change MP to integer)"),
 			  mp_tmp, off_tmp, mp_tmp2, off_tmp2);
 	    }
 	    else {
@@ -571,8 +569,7 @@ int main(int argc, char **argv)
 		else {
 		    mposts[mpost].line_idx = PORT_INT_MAX;
 		    mposts[mpost].err = ERR_THRESHOLD;
-		    G_warning(_
-			      ("Point [%d] cat [%d] is out of threshold (distance = %f)"),
+		    G_warning(_("Point [%d] cat [%d] is out of threshold (distance = %f)"),
 			      point, cat, distance_to);
 		}
 	    }
@@ -721,8 +718,7 @@ int main(int argc, char **argv)
 						 mposts[k + 1].end_mp,
 						 mposts[k + 1].end_off);
 			    if (ret > -1) {	/* start >= end */
-				G_warning(_
-					  ("Start of 1. MP >= end of 2. MP for points' "
+				G_warning(_("Start of 1. MP >= end of 2. MP for points' "
 					   "cats %[d], [%d]"), mposts[k].cat,
 					  mposts[k + 1].cat);
 				mposts[k].err = ERR_END_GT_START;
@@ -739,8 +735,7 @@ int main(int argc, char **argv)
 						 mposts[k + 1].start_mp,
 						 mposts[k + 1].start_off);
 			    if (ret > -1) {	/* start > end */
-				G_warning(_
-					  ("Start of 1. MP >= start of 2. MP for points' "
+				G_warning(_("Start of 1. MP >= start of 2. MP for points' "
 					   "cats [%d], [%d]"), mposts[k].cat,
 					  mposts[k + 1].cat);
 				mposts[k].err = ERR_END_GT_START;
@@ -750,8 +745,7 @@ int main(int argc, char **argv)
 			}
 			/* 4) For 2 MPs must be distance along line different (duplicate points) */
 			if (mposts[k].dist_along == mposts[k + 1].dist_along) {
-			    G_warning(_
-				      ("Distance along line identical for points' "
+			    G_warning(_("Distance along line identical for points' "
 				       "cats [%d], [%d]"), mposts[k].cat,
 				      mposts[k + 1].cat);
 			    mposts[k].err = ERR_IDENT;
@@ -765,19 +759,16 @@ int main(int argc, char **argv)
 	    /* Write errors if any ( and continue ) */
 	    if (!order) {	/* something is wrong */
 		if (rlines[j].nmposts < 2) {	/* Impossible to get reference/direction */
-		    G_warning(_
-			      ("Not enough points (%d) attached to the line (cat %d), "
+		    G_warning(_("Not enough points (%d) attached to the line (cat %d), "
 			       "line skip."), rlines[j].nmposts,
 			      rlines[j].cat);
 		}
 		else if (rlines[j].direction == DIR_UNKNOWN) {	/* Unknown direction */
-		    G_warning(_
-			      ("Unable to guess direction for the line (cat %d), "
+		    G_warning(_("Unable to guess direction for the line (cat %d), "
 			       "line skip."), rlines[j].cat);
 		}
 		else {
-		    G_warning(_
-			      ("Incorrect order of points along line cat [%d]"),
+		    G_warning(_("Incorrect order of points along line cat [%d]"),
 			      rlines[j].cat);
 		    rlines[j].err = ERR_LINE_ORDER;
 		}

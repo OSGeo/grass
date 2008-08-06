@@ -358,8 +358,7 @@ int main(int argc, char *argv[])
 		    }
 		}
 		if (over > 0)
-		    G_warning(_
-			      ("%d previously set categories overwritten by new category %d"),
+		    G_warning(_("%d previously set categories overwritten by new category %d"),
 			      over, cat);
 
 		for (i = 0; i < ncats; i++) {

@@ -75,8 +75,7 @@ int add_polyline(struct dxf_file *dxf, struct Map_info *Map)
 		|| polyline_flag & 32)
 		if (warn_flag70) {
 		    if (!flag_list)
-			G_warning(_
-				  ("3-d data in dxf file. Polyline_flag: %d"),
+			G_warning(_("3-d data in dxf file. Polyline_flag: %d"),
 				  polyline_flag);
 		    warn_flag70 = 0;
 		}

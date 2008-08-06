@@ -184,8 +184,7 @@ int write_vtk_points(FILE * ascii, struct Map_info *Map, VTKInfo * info,
      */
     /*break if nothing to generate */
     if (info->maxnumpoints == 0)
-	G_fatal_error(_
-		      ("No coordinates to generate the output! Maybe an empty vector type chosen?"));
+	G_fatal_error(_("No coordinates to generate the output! Maybe an empty vector type chosen?"));
 
 
     /************************************************/

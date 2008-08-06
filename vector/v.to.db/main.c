@@ -44,8 +44,7 @@ int main(int argc, char *argv[])
     Fi = Vect_get_field(&Map, options.field);
 
     if (!options.print && Fi == NULL) {
-	G_fatal_error(_
-		      ("Database connection not defined for layer %d. Use v.db.connect first."),
+	G_fatal_error(_("Database connection not defined for layer %d. Use v.db.connect first."),
 		      options.field);
     }
 

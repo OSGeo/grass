@@ -167,8 +167,7 @@ int main(int argc, char *argv[])
 	/* Make sure map is available */
 	mapset = G_find_vector2(map_name, iset_name);
 	if (mapset == NULL)
-	    G_fatal_error(_
-			  ("Vector map <%s> in location <%s> mapset <%s> not found"),
+	    G_fatal_error(_("Vector map <%s> in location <%s> mapset <%s> not found"),
 			  map_name, iloc_name, iset_name);
 
 	 /*** Get projection info for input mapset ***/
@@ -192,8 +191,7 @@ int main(int argc, char *argv[])
     {				/* allow 0 (i.e. denied permission) */
 	/* need to be able to read from others */
 	if (stat == 0)
-	    G_fatal_error(_
-			  ("Mapset <%s> in input location <%s> - permission denied"),
+	    G_fatal_error(_("Mapset <%s> in input location <%s> - permission denied"),
 			  iset_name, iloc_name);
 	else
 	    G_fatal_error(_("Mapset <%s> in input location <%s> not found"),

@@ -86,14 +86,12 @@ int old2new(char *in, char *out, int endian)
 		}
 	    }
 	    if (sline == -1) {
-		G_warning(_
-			  ("Failed to attach an attribute (category %d) to a line."),
+		G_warning(_("Failed to attach an attribute (category %d) to a line."),
 			  cats[i].cat);
 	    }
 	    else {
 		if (lines[sline].cat > -1) {
-		    G_warning(_
-			      ("Line %d label: %d matched another label: %d."),
+		    G_warning(_("Line %d label: %d matched another label: %d."),
 			      sline, lines[sline].cat, cats[i].cat);
 		}
 		lines[sline].cat = cats[i].cat;

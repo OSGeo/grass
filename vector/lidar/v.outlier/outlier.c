@@ -70,13 +70,11 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			if (Select_Outlier(&gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Outlier(gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
 		    else if ((*point->y < Overlap.S) && (*point->y != General.S)) {	/*(1) */
@@ -87,8 +85,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			if (Insert_Outlier
 			    (interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(1) */
@@ -97,8 +94,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			if (Insert_Outlier
 			    (interpolation * weight, line_num[i],
 			     driver) != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 		    }
 
 		}
@@ -115,8 +111,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			if (Select_Outlier(&gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 
@@ -143,13 +138,11 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			if (Select_Outlier(&gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			if (UpDate_Outlier(gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to update the database"));
+			    G_fatal_error(_("Impossible to update the database"));
 
 		    }
 		    else if ((*point->y <= Overlap.N) && (*point->y >= Overlap.S)) {	/*(2) */
@@ -161,8 +154,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			if (Select_Outlier(&gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 
@@ -189,8 +181,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 
 			if (Select_Outlier(&gradient[0], line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to read the database"));
+			    G_fatal_error(_("Impossible to read the database"));
 
 			residual = *point->z - interpolation;
 
@@ -212,8 +203,7 @@ void P_Outlier(struct Map_info *Out, struct Map_info *Outlier,
 			if (Insert_Outlier
 			    (interpolation * weight, line_num[i], driver)
 			    != DB_OK)
-			    G_fatal_error(_
-					  ("Impossible to write in the database"));
+			    G_fatal_error(_("Impossible to write in the database"));
 
 		    }		/*else (1) */
 		}		/*else */

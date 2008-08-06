@@ -294,8 +294,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Vector map <%s> not found"), from_opt->answer);
 
     if (!print_flag->answer && strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_
-		      ("Vector map <%s> is not in user mapset and cannot be updated"),
+	G_fatal_error(_("Vector map <%s> is not in user mapset and cannot be updated"),
 		      from_opt->answer);
 
     Vect_set_open_level(2);
@@ -348,14 +347,12 @@ int main(int argc, char *argv[])
 	if (!all) {
 	    Fi = Vect_get_field(&From, from_field);
 	    if (Fi == NULL)
-		G_fatal_error(_
-			      ("Database connection not defined for layer %d"),
+		G_fatal_error(_("Database connection not defined for layer %d"),
 			      from_field);
 
 	    driver = db_start_driver_open_database(Fi->driver, Fi->database);
 	    if (driver == NULL)
-		G_fatal_error(_
-			      ("Unable to open database <%s> by driver <%s>"),
+		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      Fi->database, Fi->driver);
 
 	    /* check if column exists */
@@ -709,8 +706,7 @@ int main(int argc, char *argv[])
 		for (j = 0; j < TCats->n_cats; j++) {
 		    if (TCats->field[j] == to_field) {
 			if (tmp_tcat >= 0)
-			    G_warning(_
-				      ("More cats found in to_layer (area=%d)"),
+			    G_warning(_("More cats found in to_layer (area=%d)"),
 				      area);
 			tmp_tcat = TCats->cat[j];
 		    }
@@ -851,8 +847,7 @@ int main(int argc, char *argv[])
 	G_debug(3, "selected values = %d", nrec);
 
 	if (cvarr.ctype == DB_C_TYPE_DATETIME) {
-	    G_warning(_
-		      ("DATETIME type not yet supported, no attributes will be uploaded"));
+	    G_warning(_("DATETIME type not yet supported, no attributes will be uploaded"));
 	}
 	db_close_database_shutdown_driver(to_driver);
     }
@@ -1119,8 +1114,7 @@ int main(int argc, char *argv[])
 	    G_message(_("%d categories exist in the table"), ncatexist);
 	    G_message(_("%d categories read from the map exist in the table"),
 		      update_exist);
-	    G_message(_
-		      ("%d categories read from the map don't exist in the table"),
+	    G_message(_("%d categories read from the map don't exist in the table"),
 		      update_notexist);
 	    G_message(_("%d records updated"), update_ok);
 	    G_message(_("%d update errors"), update_err);

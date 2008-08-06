@@ -95,12 +95,10 @@ int main(int argc, char *argv[])
 		      dims, strs, dbls);
 
     if (map_type == FCELL_TYPE || map_type == DCELL_TYPE) {
-	G_message(_
-		  ("Floating point category values, using sequential integer for category"));
+	G_message(_("Floating point category values, using sequential integer for category"));
     }
     else if (map_type != CELL_TYPE) {
-	G_message(_
-		  ("No category values, using sequential integer for category"));
+	G_message(_("No category values, using sequential integer for category"));
     }
 
     clen = (int *)G_calloc(strs, sizeof(int));

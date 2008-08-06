@@ -134,8 +134,7 @@ int main(int argc, char *argv[])
 
     Vect_set_open_level(2);
     if (Vect_open_old(&In, in_opt->answer, mapset) < 2) {
-	G_fatal_error(_
-		      ("Unable to open vector map <%s> at topological level %d"),
+	G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
 		      in_opt->answer, 2);
     }
 

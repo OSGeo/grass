@@ -154,8 +154,7 @@ int main(int argc, char **argv)
 				   NULL);
 	    if (ret == 0) {
 		len = Vect_line_length(LPoints);
-		G_warning(_
-			  ("Unable to get point on line: cat = %d offset = %f "
+		G_warning(_("Unable to get point on line: cat = %d offset = %f "
 			   "(line length = %.15g)\n%s"), lcat, offset1, len,
 			  buf);
 		break;

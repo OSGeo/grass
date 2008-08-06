@@ -132,16 +132,14 @@ int main(int argc, char **argv)
 	Vect_open_old(&Map, inopt->answer, mapset);
     else {
 	if (Vect_open_update_head(&Map, inopt->answer, G_mapset()) < 1)
-	    G_fatal_error(_
-			  ("Unable to modify vector map stored in other mapset"));
+	    G_fatal_error(_("Unable to modify vector map stored in other mapset"));
 	Vect_hist_command(&Map);
     }
 
     if (print->answer || shell_print->answer || columns->answer) {
 	num_dblinks = Vect_get_num_dblinks(&Map);
 	if (num_dblinks <= 0)
-	    G_fatal_error(_
-			  ("Database connection for map <%s> is not defined in DB file"),
+	    G_fatal_error(_("Database connection for map <%s> is not defined in DB file"),
 			  G_fully_qualified_name(input, mapset));
 	else {			/* num_dblinks > 0 */
 
@@ -178,8 +176,7 @@ int main(int argc, char **argv)
 	    else {		/* columns */
 
 		if ((fi = Vect_get_field(&Map, field)) == NULL)
-		    G_fatal_error(_
-				  ("Database connection not defined for layer %d"),
+		    G_fatal_error(_("Database connection not defined for layer %d"),
 				  field);
 		driver = db_start_driver(fi->driver);
 		if (driver == NULL)
@@ -189,8 +186,7 @@ int main(int argc, char **argv)
 		db_init_handle(&handle);
 		db_set_handle(&handle, fi->database, NULL);
 		if (db_open_database(driver, &handle) != DB_OK)
-		    G_fatal_error(_
-				  ("Unable to open database <%s> by driver <%s>"),
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi->database, fi->driver);
 		db_init_string(&table_name);
 		db_set_string(&table_name, fi->table);
@@ -241,8 +237,7 @@ int main(int argc, char **argv)
 			if (db_table_exists
 			    (dbdriver->answer, dbdatabase->answer,
 			     dbtable->answer) < 1)
-			    G_fatal_error(_
-					  ("Table <%s> does not exist in database <%s>"),
+			    G_fatal_error(_("Table <%s> does not exist in database <%s>"),
 					  dbtable->answer,
 					  dbdatabase->answer);
 
@@ -257,23 +252,20 @@ int main(int argc, char **argv)
 			db_get_column(driver, dbtable->answer, dbkey->answer,
 				      &column);
 			if (!column)
-			    G_fatal_error(_
-					  ("Missing column <%s> in table <%s>"),
+			    G_fatal_error(_("Missing column <%s> in table <%s>"),
 					  dbkey->answer, dbtable->answer);
 
 			if (db_column_Ctype
 			    (driver, dbtable->answer,
 			     dbkey->answer) != DB_C_TYPE_INT)
-			    G_fatal_error(_
-					  ("Data type of key column must be integer"));
+			    G_fatal_error(_("Data type of key column must be integer"));
 
 			ret = Vect_map_del_dblink(&Map, field);
 			if (Vect_map_add_dblink(&Map, field,
 						fi->name, fi->table, fi->key,
 						fi->database,
 						fi->driver) == 0) {
-			    G_important_message(_
-						("The table <%s> is now part of vector map <%s> "
+			    G_important_message(_("The table <%s> is now part of vector map <%s> "
 						 "and may be deleted "
 						 "or overwritten by GRASS modules"),
 						dbtable->answer, input);
@@ -285,15 +277,13 @@ int main(int argc, char **argv)
 		    if (db_table_exists
 			(dbdriver->answer, dbdatabase->answer,
 			 dbtable->answer) < 1)
-			G_warning(_
-				  ("Table <%s> does not exist in database <%s>"),
+			G_warning(_("Table <%s> does not exist in database <%s>"),
 				  dbtable->answer, dbdatabase->answer);
 
 		    if (Vect_map_add_dblink(&Map, field,
 					    fi->name, fi->table, fi->key,
 					    fi->database, fi->driver) == 0) {
-			G_important_message(_
-					    ("The table <%s> is now part of vector map <%s> "
+			G_important_message(_("The table <%s> is now part of vector map <%s> "
 					     "and may be deleted "
 					     "or overwritten by GRASS modules"),
 					    dbtable->answer, input);
@@ -304,8 +294,7 @@ int main(int argc, char **argv)
 								&Map));
 
 			if (!driver)
-			    G_fatal_error(_
-					  ("Unable to open database <%s> by driver <%s>"),
+			    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 					  fi->database, fi->driver);
 
 			if (db_create_index2(driver, fi->table, fi->key) !=
@@ -315,12 +304,10 @@ int main(int argc, char **argv)
 			if (db_grant_on_table
 			    (driver, fi->table, DB_PRIV_SELECT,
 			     DB_GROUP | DB_PUBLIC) != DB_OK)
-			    G_warning(_
-				      ("Cannot grant privileges on table %s"),
+			    G_warning(_("Cannot grant privileges on table %s"),
 				      fi->table);
 
-			G_important_message(_
-					    ("Select privileges were granted on the table"));
+			G_important_message(_("Select privileges were granted on the table"));
 
 			db_close_database_shutdown_driver(driver);
 		    }

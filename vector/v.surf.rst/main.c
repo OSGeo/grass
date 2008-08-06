@@ -417,12 +417,10 @@ int main(int argc, char *argv[])
     cv = flag.cv->answer;
 
     if ((cv && cvdev == NULL) || (!(cv) && cvdev != NULL))
-	G_fatal_error(_
-		      ("Both cross-validation options (-c flag and cvdev vector output) must be specified"));
+	G_fatal_error(_("Both cross-validation options (-c flag and cvdev vector output) must be specified"));
 
     if ((elev != NULL || cond1 || cond2 || devi != NULL) && cv)
-	G_fatal_error(_
-		      ("The cross-validation cannot be computed simultaneously with output raster or devi file"));
+	G_fatal_error(_("The cross-validation cannot be computed simultaneously with output raster or devi file"));
 
     ertre = 0.1;
     sscanf(parm.dmax->answer, "%lf", &dmax);
@@ -440,8 +438,7 @@ int main(int argc, char *argv[])
     if (parm.scalex->answer) {
 	sscanf(parm.scalex->answer, "%lf", &scalex);
 	if (!parm.theta->answer)
-	    G_fatal_error(_
-			  ("Using anisotropy - both theta and scalex have to be specified"));
+	    G_fatal_error(_("Using anisotropy - both theta and scalex have to be specified"));
     }
 
     if (parm.rsm->answer) {
@@ -449,8 +446,7 @@ int main(int argc, char *argv[])
 	if (rsm < 0.0)
 	    G_fatal_error("Smoothing must be a positive value");
 	if (scol != NULL)
-	    G_warning(_
-		      ("Both smatt and smooth options specified - using constant"));
+	    G_warning(_("Both smatt and smooth options specified - using constant"));
     }
     else {
 	sscanf(SMOOTH, "%lf", &rsm);
@@ -460,8 +456,7 @@ int main(int argc, char *argv[])
 
 
     if (npmin > MAXPOINTS - 50) {
-	G_warning(_
-		  ("The computation will last too long - lower npmin is suggested"));
+	G_warning(_("The computation will last too long - lower npmin is suggested"));
 	KMAX2 = 2 * npmin;	/* was: KMAX2 = npmin + 50; */
     }
     else
@@ -608,8 +603,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_z);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_z)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_dx != NULL) {
@@ -618,8 +612,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_dx);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dx)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_dy != NULL) {
@@ -628,8 +621,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_dy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dy)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
 
@@ -639,8 +631,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_xx);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xx)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_yy != NULL) {
@@ -649,8 +640,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_yy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_yy)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
     if (Tmp_file_xy != NULL) {
@@ -659,8 +649,7 @@ int main(int argc, char *argv[])
 			  Tmp_file_xy);
 	for (i = 0; i < n_rows; i++) {
 	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xy)))
-		G_fatal_error(_
-			      ("Not enough disk space -- cannot write files"));
+		G_fatal_error(_("Not enough disk space -- cannot write files"));
 	}
     }
 
