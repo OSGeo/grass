@@ -244,8 +244,7 @@ static int close_new(int fd, int ok)
 	    int cell_fd;
 
 	    if (G__write_fp_format(fd) != 0) {
-		G_warning(_
-			  ("Error writing floating point format file for map %s"),
+		G_warning(_("Error writing floating point format file for map %s"),
 			  fcb->name);
 		stat = -1;
 	    }

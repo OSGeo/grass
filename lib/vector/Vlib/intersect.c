@@ -319,8 +319,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
 	}
 
 	/* should not be reached */
-	G_warning(_
-		  ("Vect_segment_intersection() ERROR (collinear vertical segments)"));
+	G_warning(_("Vect_segment_intersection() ERROR (collinear vertical segments)"));
 	G_warning("%.15g %.15g", ax1, ay1);
 	G_warning("%.15g %.15g", ax2, ay2);
 	G_warning("x");
@@ -446,8 +445,7 @@ int Vect_segment_intersection(double ax1, double ay1, double az1, double ax2,
     }
 
     /* should not be reached */
-    G_warning(_
-	      ("Vect_segment_intersection() ERROR (collinear non vertical segments)"));
+    G_warning(_("Vect_segment_intersection() ERROR (collinear non vertical segments)"));
     G_warning("%.15g %.15g", ax1, ay1);
     G_warning("%.15g %.15g", ax2, ay2);
     G_warning("x");

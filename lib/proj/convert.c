@@ -381,8 +381,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	G_set_key_value("proj", pszProj, *projinfo);
     }
     else
-	G_warning(_
-		  ("No projection name! Projection parameters likely to be meaningless."));
+	G_warning(_("No projection name! Projection parameters likely to be meaningless."));
 
 
     /* -------------------------------------------------------------------- */
@@ -418,8 +417,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    if (datum == NULL) {
 		if (paramspresent < 2)
 		    /* Only give warning if no parameters present */
-		    G_warning(_
-			      ("Datum <%s> not recognised by GRASS and no parameters found"),
+		    G_warning(_("Datum <%s> not recognised by GRASS and no parameters found"),
 			      pszDatumName);
 	    }
 	    else {
@@ -435,13 +433,11 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 			GPJ_get_default_datum_params_by_name(datum, &params);
 
 		    if (paramsets < 0)
-			G_warning(_
-				  ("Datum <%s> apparently recognised by GRASS but no parameters found. "
+			G_warning(_("Datum <%s> apparently recognised by GRASS but no parameters found. "
 				   "You may want to look into this."), datum);
 		    else if (datumtrans > paramsets) {
 
-			G_warning(_
-				  ("Invalid tranformation number %d; valid range is 1 to %d. "
+			G_warning(_("Invalid tranformation number %d; valid range is 1 to %d. "
 				   "Leaving datum transform parameters unspecified."),
 				  datumtrans, paramsets);
 			datumtrans = 0;

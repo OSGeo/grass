@@ -294,8 +294,7 @@ int pj_get_string(struct pj_info *info, char *str)
 		if (nsize = strlen(s), nsize) {
 		    if (nopt >= MAX_PARGS) {
 			fprintf(stderr, "nopt = %d, s=%s\n", nopt, str);
-			G_fatal_error(_
-				      ("Option input overflowed option table"));
+			G_fatal_error(_("Option input overflowed option table"));
 		    }
 
 		    if (strncmp("zone=", s, 5) == 0) {

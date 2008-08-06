@@ -272,8 +272,7 @@ void GK_update_frames(void)
 	Views = gk_make_linear_framesfromkeys(Keys, Numkeys, Viewsteps, loop);
 
 	if (!Views) {
-	    G_warning(_
-		      ("Check no. of frames requested and keyframes marked"));
+	    G_warning(_("Check no. of frames requested and keyframes marked"));
 	}
     }
     else if (Numkeys > 2) {
@@ -286,8 +285,7 @@ void GK_update_frames(void)
 	    (Keys, Numkeys, Viewsteps, loop, 1.0 - Tension);
 
 	if (!Views) {
-	    G_warning(_
-		      ("Check no. of frames requested and keyframes marked"));
+	    G_warning(_("Check no. of frames requested and keyframes marked"));
 	}
     }
 

@@ -640,8 +640,7 @@ int Gs_build_256lookup(const char *filename, int *buff)
     G_get_color_range(&min, &max, &colrules);
 
     if (min < 0 || max > 255) {
-	G_warning(_
-		  ("Color table range doesn't match data (mincol=%d, maxcol=%d"),
+	G_warning(_("Color table range doesn't match data (mincol=%d, maxcol=%d"),
 		  min, max);
 
 	min = min < 0 ? 0 : min;

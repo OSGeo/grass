@@ -103,8 +103,7 @@ Vect_read_line(struct Map_info *Map,
 	G_fatal_error("Vect_read_line(): %s", _("vector map is not opened"));
 
     if (line < 1 || line > Map->plus.n_lines)
-	G_fatal_error(_
-		      ("Vect_read_line(): line %d is not reasonable (max line in vector map: %d)"),
+	G_fatal_error(_("Vect_read_line(): line %d is not reasonable (max line in vector map: %d)"),
 		      line, Map->plus.n_lines);
 
     return (*V2_read_line_array[Map->format]) (Map, line_p, line_c, line);

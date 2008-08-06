@@ -176,8 +176,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     Map->gisdbase = G_store(G_gisdbase());
 
     if (update && (0 != strcmp(Map->mapset, G_mapset()))) {
-	G_warning(_
-		  ("Vector map which is not in the current mapset cannot be opened for update"));
+	G_warning(_("Vector map which is not in the current mapset cannot be opened for update"));
 	return -1;
     }
 
@@ -233,8 +232,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 	    level = 1;
 	}
 	else if (ret == -1) {
-	    G_fatal_error(_
-			  ("Unable to open topology file for vector map <%s>"),
+	    G_fatal_error(_("Unable to open topology file for vector map <%s>"),
 			  Vect_get_full_name(Map));
 	}
 	/* open spatial index, not needed for head_only */
@@ -260,8 +258,7 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 		level = 1;
 	    }
 	    else if (ret == -1) {	/* file exists, but cannot be opened */
-		G_fatal_error(_
-			      ("Unable to open category index file for vector map <%s>"),
+		G_fatal_error(_("Unable to open category index file for vector map <%s>"),
 			      Vect_get_full_name(Map));
 	    }
 	}
@@ -728,8 +725,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
     /* do checks */
     err = 0;
     if (CInfo.size != Plus->coor_size) {
-	G_warning(_
-		  ("Size of 'coor' file differs from value saved in topology file"));
+	G_warning(_("Size of 'coor' file differs from value saved in topology file"));
 	err = 1;
     }
     /* Do not check mtime because mtime is changed by copy */

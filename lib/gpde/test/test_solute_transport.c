@@ -51,8 +51,7 @@ int integration_test_solute_transport(void)
     if (sum > 0)
 	G_warning(_("\n-- solute_transport integration tests failure --"));
     else
-	G_message(_
-		  ("\n-- solute_transport integration tests finished successfully --"));
+	G_message(_("\n-- solute_transport integration tests finished successfully --"));
 
     return sum;
 }

@@ -144,14 +144,12 @@ int V2_open_old_ogr(struct Map_info *Map)
     /* check version numbers */
     if (Version_Major > 5 || Version_Minor > 0) {
 	if (Back_Major > 5 || Back_Minor > 0) {
-	    G_fatal_error(_
-			  ("Feature index format version %d.%d is not supported by this release."
+	    G_fatal_error(_("Feature index format version %d.%d is not supported by this release."
 			   " Try to rebuild topology or upgrade GRASS."),
 			  Version_Major, Version_Minor);
 	    return (-1);
 	}
-	G_warning(_
-		  ("Your GRASS version does not fully support feature index format %d.%d of the vector."
+	G_warning(_("Your GRASS version does not fully support feature index format %d.%d of the vector."
 		   " Consider to rebuild topology or upgrade GRASS."),
 		  Version_Major, Version_Minor);
     }

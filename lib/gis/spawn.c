@@ -355,8 +355,7 @@ static void do_redirects(struct redirect *redirects, int num_redirects)
 	    }
 
 	    if (dup2(r->src_fd, r->dst_fd) < 0) {
-		G_warning(_
-			  ("G_spawn: unable to duplicate descriptor %d to %d"),
+		G_warning(_("G_spawn: unable to duplicate descriptor %d to %d"),
 			  r->src_fd, r->dst_fd);
 		_exit(127);
 	    }
@@ -365,8 +364,7 @@ static void do_redirects(struct redirect *redirects, int num_redirects)
 	}
 	else if (r->src_fd >= 0) {
 	    if (dup2(r->src_fd, r->dst_fd) < 0) {
-		G_warning(_
-			  ("G_spawn: unable to duplicate descriptor %d to %d"),
+		G_warning(_("G_spawn: unable to duplicate descriptor %d to %d"),
 			  r->src_fd, r->dst_fd);
 		_exit(127);
 	    }

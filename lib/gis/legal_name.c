@@ -74,8 +74,7 @@ int G_check_input_output_name(const char *input, const char *output,
 	return 0;		/* don't die on undefined parameters */
     if (G_legal_filename(output) == -1) {
 	if (error == GR_FATAL_EXIT) {
-	    G_fatal_error(_
-			  ("Output raster map name <%s> is not valid map name"),
+	    G_fatal_error(_("Output raster map name <%s> is not valid map name"),
 			  output);
 	}
 	else if (error == GR_FATAL_PRINT) {

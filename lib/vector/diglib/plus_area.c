@@ -301,8 +301,7 @@ int dig_area_del_isle(struct Plus_head *plus, int area, int isle)
 	Area->n_isles--;
     }
     else {
-	G_fatal_error(_
-		      ("Attempt to delete not registered isle %d from area %d"),
+	G_fatal_error(_("Attempt to delete not registered isle %d from area %d"),
 		      isle, area);
     }
 
@@ -380,8 +379,7 @@ int dig_del_area(struct Plus_head *plus, int area)
     if (line > 0) {
 	Line = plus->Line[line];
 	if (!Line) {
-	    G_warning(_
-		      ("Dead centroid %d registered for area (bug in the vector library)"),
+	    G_warning(_("Dead centroid %d registered for area (bug in the vector library)"),
 		      line);
 	}
 	else {
@@ -405,8 +403,7 @@ int dig_del_area(struct Plus_head *plus, int area)
     for (i = 0; i < Area->n_isles; i++) {
 	Isle = plus->Isle[Area->isles[i]];
 	if (Isle == NULL) {
-	    G_fatal_error(_
-			  ("Attempt to delete area %d info from dead isle %d"),
+	    G_fatal_error(_("Attempt to delete area %d info from dead isle %d"),
 			  area, Area->isles[i]);
 	}
 	else {
@@ -749,8 +746,7 @@ int dig_del_isle(struct Plus_head *plus, int isle)
     G_debug(3, "  area outside isle = %d", Isle->area);
     if (Isle->area > 0) {
 	if (plus->Area[Isle->area] == NULL) {
-	    G_fatal_error(_
-			  ("Attempt to delete isle %d info from dead area %d"),
+	    G_fatal_error(_("Attempt to delete isle %d info from dead area %d"),
 			  isle, Isle->area);
 	}
 	else {

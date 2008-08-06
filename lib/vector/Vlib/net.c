@@ -193,8 +193,7 @@ Vect_net_build_graph(struct Map_info *Map,
 	fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
 
 	if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_
-			  ("Data type of column <%s> not supported (must be numeric)"),
+	    G_fatal_error(_("Data type of column <%s> not supported (must be numeric)"),
 			  afcol);
 
 	db_CatValArray_init(&fvarr);
@@ -211,8 +210,7 @@ Vect_net_build_graph(struct Map_info *Map,
 	    bctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
 
 	    if (bctype != DB_C_TYPE_INT && bctype != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_
-			      ("Data type of column <%s> not supported (must be numeric)"),
+		G_fatal_error(_("Data type of column <%s> not supported (must be numeric)"),
 			      abcol);
 
 	    db_CatValArray_init(&bvarr);
@@ -365,8 +363,7 @@ Vect_net_build_graph(struct Map_info *Map,
 	fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
 
 	if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_
-			  ("Data type of column <%s> not supported (must be numeric)"),
+	    G_fatal_error(_("Data type of column <%s> not supported (must be numeric)"),
 			  ncol);
 
 	db_CatValArray_init(&fvarr);
@@ -402,8 +399,7 @@ Vect_net_build_graph(struct Map_info *Map,
 							    &dcost);
 		    }
 		    if (ret != DB_OK) {
-			G_warning(_
-				  ("Database record for node %d (cat = %d) not found "
+			G_warning(_("Database record for node %d (cat = %d) not found "
 				   "(cost set to 0)"), i, cat);
 		    }
 		    cfound = 1;

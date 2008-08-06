@@ -121,8 +121,7 @@ void *G3d_openCellOld(const char *name, const char *mapset,
 	window = G3d_windowPtr();
 
     if (proj != window->proj) {
-	G3d_error(_
-		  ("G3d_openCellOld: projection does not match window projection"));
+	G3d_error(_("G3d_openCellOld: projection does not match window projection"));
 	return (void *)NULL;
     }
     if (zone != window->zone) {
@@ -144,8 +143,7 @@ void *G3d_openCellOld(const char *name, const char *mapset,
 
 	/* if our long is to short to store offsets we can't read the file */
 	if (map->indexNbytesUsed > sizeof(long))
-	    G3d_fatalError(_
-			   ("G3d_openCellOld: index does not fit into long"));
+	    G3d_fatalError(_("G3d_openCellOld: index does not fit into long"));
 
 	ltmp = G3d_malloc(map->indexLongNbytes);
 	if (ltmp == NULL) {

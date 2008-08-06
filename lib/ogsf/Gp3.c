@@ -201,8 +201,7 @@ geopoint *Gp_load_sites(const char *grassname, int *nsites, int *has_z,
     Vect_close(&map);
 
     if (!np) {
-	G_warning(_
-		  ("No points from vector map <%s> fall within current region"),
+	G_warning(_("No points from vector map <%s> fall within current region"),
 		  G_fully_qualified_name(grassname, mapset));
 	return (NULL);
     }

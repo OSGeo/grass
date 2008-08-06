@@ -43,8 +43,7 @@ static int compute_window_row(int fd, int row, int *cellRow)
 
     /* check for row in window */
     if (row < 0 || row >= G__.window.rows) {
-	G_warning(_
-		  ("Reading raster map <%s@%s> request for row %d is outside region"),
+	G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
 		  fcb->name, fcb->mapset, row);
 
 	return -1;
@@ -299,8 +298,7 @@ static void cell_values_float(int fd, const unsigned char *data,
 
 	while (cmapold++ != cmap[i])	/* skip */
 	    if (!xdr_float(xdrs, &c[i]))
-		G_fatal_error(_
-			      ("cell_values_float: xdr_float failed for index %d"),
+		G_fatal_error(_("cell_values_float: xdr_float failed for index %d"),
 			      i);
 
 	cmapold--;
@@ -341,8 +339,7 @@ static void cell_values_double(int fd, const unsigned char *data,
 
 	while (cmapold++ != cmap[i])	/* skip */
 	    if (!xdr_double(xdrs, &c[i]))
-		G_fatal_error(_
-			      ("cell_values_double: xdr_double failed for index %d"),
+		G_fatal_error(_("cell_values_double: xdr_double failed for index %d"),
 			      i);
 
 	cmapold--;
@@ -489,8 +486,7 @@ static int get_map_row_nomask(int fd, void *rast, int row,
 
 	    if (!fcb->io_error) {
 		if (fcb->cellhd.compressed)
-		    G_warning(_
-			      ("Error reading compressed map <%s@%s>, row %d"),
+		    G_warning(_("Error reading compressed map <%s@%s>, row %d"),
 			      fcb->name, fcb->mapset, r);
 		else
 		    G_warning(_("Error reading map <%s@%s>, row %d"),
@@ -918,8 +914,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
     int i, j, null_fd;
 
     if (row > G__.window.rows || row < 0) {
-	G_warning(_
-		  ("Reading raster map <%s@%s> request for row %d is outside region"),
+	G_warning(_("Reading raster map <%s@%s> request for row %d is outside region"),
 		  fcb->name, fcb->mapset, row);
     }
 
