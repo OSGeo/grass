@@ -836,32 +836,32 @@ class VDigit(AbstractDigit):
         """
         if len(coords) < 2:
             return
-
+        
         if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 2:
             layer = -1 # -> no category
             cat   = -1
         else:
             layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
             cat   = self.SetCategory()
-
+        
         if line:
             type = wxvdigit.GV_LINE
         else:
             type = wxvdigit.GV_BOUNDARY
-
+        
         listCoords = []
         for c in coords:
             for x in c:
                 listCoords.append(x)
-
+        
         snap, thresh = self.__getSnapThreshold()
-
+        
         ret = self.digit.AddLine(type, listCoords, layer, cat,
                                  str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
-
+        
         if ret == -1:
             raise gcmd.DigitError, _("Adding new feature to vector map <%s> failed.") % map
-
+        
         self.toolbar.EnableUndo()
         
     def DeleteSelectedLines(self):
@@ -870,7 +870,7 @@ class VDigit(AbstractDigit):
         @return number of deleted lines
         """
         nlines = self.digit.DeleteLines(UserSettings.Get(group='vdigit', key='delRecord', subkey='enabled'))
-
+        
         if nlines > 0:
             self.toolbar.EnableUndo()
             
@@ -882,13 +882,13 @@ class VDigit(AbstractDigit):
         @param move direction (x, y)
         """
         snap, thresh = self.__getSnapThreshold()
-
+        
         nlines = self.digit.MoveLines(move[0], move[1], 0.0, # TODO 3D
                                       str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
-
+        
         if nlines > 0:
             self.toolbar.EnableUndo()
-            
+        
         return nlines
 
     def MoveSelectedVertex(self, coords, move):

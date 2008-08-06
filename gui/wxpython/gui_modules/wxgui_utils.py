@@ -273,14 +273,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
             layer = self.GetPyData(self.layer_selected)[0]['maplayer']
             # enable editing only for vector map layers available in the current mapset
-            digit = self.mapdisplay.toolbars['vdigit']
+            digitToolbar = self.mapdisplay.toolbars['vdigit']
             if layer.GetMapset() != grassenv.GetGRASSVariable("MAPSET"):
                 # only vector map in current mapset can be edited
                 self.popupMenu.Enable (self.popupID5, False)
                 self.popupMenu.Enable (self.popupID6, False)
-            elif digit and digit.layerSelectedID != None:
+            elif digitToolbar and digitToolbar.GetLayer():
                 # vector map already edited
-                if digit.layers[digit.layerSelectedID] == layer:
+                if digitToolbar.GetLayer() is layer:
                     self.popupMenu.Enable (self.popupID5, False)
                     self.popupMenu.Enable(self.popupID6, True)
                     self.popupMenu.Enable(self.popupID1, False)
@@ -535,7 +535,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, ctrl)
         # add layer to the layer tree
         if self.layer_selected and self.layer_selected != self.GetRootItem():
-            
             if self.GetPyData(self.layer_selected)[0]['type'] == 'group' \
                 and self.IsExpanded(self.layer_selected):
                 # add to group (first child of self.layer_selected) if group expanded
@@ -550,6 +549,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif lgroup is True:
                     # -> last child of group (loading from workspace)
                     parent = self.GetItemParent(self.layer_selected)
+                    if parent is self.root: # first item in group
+                        parent=self.layer_selected
                     layer = self.AppendItem(parentId=parent,
                                             text='', ct_type=1, wnd=ctrl)
                 elif lgroup is None:
@@ -573,7 +574,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # select new item
         self.SelectItem(layer, select=True)
         self.layer_selected = layer
-
+        
         # add text and icons for each layer ltype
         if ltype == 'raster':
             self.SetItemImage(layer, self.rast_icon)
@@ -673,10 +674,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # use predefined layer name if given
         if lname:
-            if ltype != 'command':
-                if opacity:
-                    name = lname + ' (opacity: ' + str(opacity) + '%)'
-                self.SetItemText(layer, name )
+            if ltype == 'group':
+                self.SetItemText(layer, lname)
+            elif ltype != 'command':
+                name = lname + ' (opacity: ' + \
+                       str(self.GetPyData(layer)[0]['maplayer'].GetOpacity()) + '%)'
+                self.SetItemText(layer, name)
             else:
                 ctrl.SetValue(lname)
 
@@ -825,17 +828,26 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Enable/disable data layer"""
         item    = event.GetItem()
         checked = item.IsChecked()
-        
+
+        digitToolbar = self.mapdisplay.toolbars['vdigit']
         if self.first == False:
             # change active parameter for item in layers list in render.Map
             if self.GetPyData(item)[0]['type'] == 'group':
                 child, cookie = self.GetFirstChild(item)
                 while child:
                     self.CheckItem(child, checked)
-                    self.Map.ChangeLayerActive(self.GetPyData(child)[0]['maplayer'], checked)
+                    mapLayer = self.GetPyData(child)[0]['maplayer']
+                    if not digitToolbar or \
+                           (digitToolbar and digitToolbar.GetLayer() != mapLayer):
+                        # ignore when map layer is edited
+                        self.Map.ChangeLayerActive(mapLayer, checked)
                     child = self.GetNextSibling(child)
             else:
-                self.Map.ChangeLayerActive(self.GetPyData(item)[0]['maplayer'], checked)
+                mapLayer = self.GetPyData(item)[0]['maplayer']
+                if not digitToolbar or \
+                       (digitToolbar and digitToolbar.GetLayer() != mapLayer):
+                    # ignore when map layer is edited
+                    self.Map.ChangeLayerActive(mapLayer, checked)
 
         # update progress bar range (mapwindow statusbar)
         self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))

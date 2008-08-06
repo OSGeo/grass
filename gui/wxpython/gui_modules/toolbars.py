@@ -358,9 +358,10 @@ class VDigitToolbar(AbstractToolbar):
         self.parent        = parent    # MapFrame
         self.layerTree     = layerTree # reference to layer tree associated to map display
 
-        # selected map to digitize
-        self.layerSelectedID  = None
-        self.layers     = []
+        # currently selected map layer for editing (reference to MapLayer instance)
+        self.mapLayer = None
+        # list of vector layers from Layer Manager (only in the current mapset)
+        self.layers   = [] 
 
         # default action (digitize new point, line, etc.)
         self.action     = "addLine"
@@ -536,10 +537,8 @@ class VDigitToolbar(AbstractToolbar):
     def OnExit (self, event=None):
         """Quit digitization tool"""
         # stop editing of the currently selected map layer
-        try:
-            self.StopEditing(self.layers[self.layerSelectedID])
-        except:
-            pass
+        if self.mapLayer:
+            self.StopEditing()
 
         # close dialogs if still open
         if self.settingsDialog:
@@ -765,8 +764,8 @@ class VDigitToolbar(AbstractToolbar):
         selected map layer activated for editing.
         """
         if event.GetSelection() == 0: # create new vector map layer
-            if self.layerSelectedID is not None:
-                openVectorMap = self.layers[self.layerSelectedID].name.split('@')[0]
+            if self.mapLayer:
+                openVectorMap = self.mapLayer.GetName(fullyQualified=False)['name']
             else:
                 openVectorMap = None
             mapName = gdialogs.CreateNewVector(self.parent,
@@ -790,115 +789,110 @@ class VDigitToolbar(AbstractToolbar):
         else:
             selection = event.GetSelection() - 1 # first option is 'New vector map'
 
-        if self.layerSelectedID == selection:
+        # skip currently selected map
+        if self.layers[selection] == self.mapLayer:
             return False
 
-        if self.layerSelectedID != None: # deactive map layer for editing
-            self.StopEditing(self.layers[self.layerSelectedID])
+        if self.mapLayer:
+            # deactive map layer for editing
+            self.StopEditing()
 
         # select the given map layer for editing
-        self.layerSelectedID = selection
-        self.StartEditing(self.layers[self.layerSelectedID])
+        self.StartEditing(self.layers[selection])
 
         event.Skip()
 
         return True
-    def StartEditing (self, layerSelected):
+    
+    def StartEditing (self, mapLayer):
         """
-        Start editing of selected vector map layer.
+        Start editing selected vector map layer.
 
-        @param layerSelectedId id of layer to be edited
-        
-        @return True on success
-        @return False on error
+        @param mapLayer reference to MapLayer instance
         """
+        # reload vdigit module
         reload(vdigit)
         from vdigit import Digit as Digit
         self.parent.digit = Digit(mapwindow=self.parent.MapWindow)
+        
+        self.mapLayer = mapLayer
+        
+        # open vector map
         try:
-            self.layerSelectedID = self.layers.index(layerSelected)
-            mapLayer = self.layers[self.layerSelectedID]
-        except:
-            return False
-
-        try:
-            self.parent.digit.SetMapName(mapLayer.name)
+            self.parent.digit.SetMapName(mapLayer.GetName())
         except gcmd.DigitError, e:
-            self.layerSelectedID = None
+            self.mapLayer = None
             print >> sys.stderr, e # wxMessageBox
             return False
-
+        
         # update toolbar
-        self.combo.SetValue (layerSelected.name)
+        self.combo.SetValue(mapLayer.GetName())
         self.parent.toolbars['map'].combo.SetValue ('Digitize')
-        # set initial category number for new features (layer=1), etc.
-
-        Debug.msg (4, "VDigitToolbar.StartEditing(): layerSelectedID=%d layer=%s" % \
-                   (self.layerSelectedID, mapLayer.name))
-
-
+        
+        Debug.msg (4, "VDigitToolbar.StartEditing(): layer=%s" % mapLayer.GetName())
+        
         # deactive layer
         self.mapcontent.ChangeLayerActive(mapLayer, False)
 
         # change cursor
         if self.parent.MapWindow.mouse['use'] == 'pointer':
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
-
+        
         # create pseudoDC for drawing the map
         self.parent.MapWindow.pdcVector = wx.PseudoDC()
         self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
         # self.parent.MapWindow.UpdateMap()
         if not self.parent.MapWindow.resize:
             self.parent.MapWindow.UpdateMap(render=True)
-
+        
         return True
 
-    def StopEditing (self, layerSelected):
+    def StopEditing (self):
+        """Stop editing of selected vector map layer.
+
+        @return True on success
+        @return False on failure
         """
-        Stop editing of selected vector map layer.
-        """
-
-        if self.layers[self.layerSelectedID] == layerSelected:
-            self.layerSelectedID = None
-            Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % \
-                       (layerSelected.name))
-            self.combo.SetValue (_('Select vector map'))
-
-            # save changes (only for vdigit)
-            if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
-                if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
-                    if self.parent.digit.GetUndoLevel() > 0:
-                        dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
-                                                                             "in vector map <%s>?") % layerSelected.name,
-                                               caption=_("Save changes?"),
-                                               style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                        if dlg.ShowModal() == wx.ID_NO:
-                            # revert changes
-                            self.parent.digit.Undo(0)
-                        dlg.Destroy()
-
-            self.parent.digit.SetMapName(None) # -> close map
-
-            # re-active layer 
-            item = self.parent.tree.FindItemByData('maplayer', layerSelected)
-            if item and self.parent.tree.IsItemChecked(item):
-                self.mapcontent.ChangeLayerActive(layerSelected, True)
-
-            # change cursor
-            self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
-
-            # disable pseudodc for vector map layer
-            self.parent.MapWindow.pdcVector = None
-            self.parent.digit.driver.SetDevice(None)
-
-            self.parent.digit.__del__() # FIXME: destructor is not called here (del)
-            self.parent.digit = None
-
-            return True
-
+        if not self.mapLayer:
+            return False
         
-        return False
-
+        Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
+        self.combo.SetValue (_('Select vector map'))
+        
+        # save changes (only for vdigit)
+        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
+            if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
+                if self.parent.digit.GetUndoLevel() > 0:
+                    dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
+                                                                         "in vector map <%s>?") % self.mapLayer.GetName(),
+                                           caption=_("Save changes?"),
+                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    if dlg.ShowModal() == wx.ID_NO:
+                        # revert changes
+                        self.parent.digit.Undo(0)
+                    dlg.Destroy()
+        
+        self.parent.digit.SetMapName(None) # -> close map
+        
+        # re-active layer 
+        item = self.parent.tree.FindItemByData('maplayer', self.mapLayer)
+        if item and self.parent.tree.IsItemChecked(item):
+            self.mapcontent.ChangeLayerActive(self.mapLayer, True)
+        
+        # change cursor
+        self.parent.MapWindow.SetCursor(self.parent.cursors["default"])
+        
+        # disable pseudodc for vector map layer
+        self.parent.MapWindow.pdcVector = None
+        self.parent.digit.driver.SetDevice(None)
+        
+        self.parent.digit.__del__() # FIXME: destructor is not called here (del)
+        self.parent.digit = None
+        
+        self.mapLayer = None
+        
+        return True
+    
     def UpdateListOfLayers (self, updateTool=False):
         """
         Update list of available vector map layers.
@@ -911,8 +905,9 @@ class VDigitToolbar(AbstractToolbar):
                    updateTool)
 
         layerNameSelected = None
-        if self.layerSelectedID != None: # name of currently selected layer
-            layerNameSelected = self.layers[self.layerSelectedID].name
+         # name of currently selected layer
+        if self.mapLayer:
+            layerNameSelected = self.mapLayer.GetName()
 
         # select vector map layer in the current mapset
         layerNameList = []
@@ -920,10 +915,10 @@ class VDigitToolbar(AbstractToolbar):
                                                       l_mapset=grassenv.GetGRASSVariable('MAPSET'))
         for layer in self.layers:
             if not layer.name in layerNameList: # do not duplicate layer
-                layerNameList.append (layer.name)
+                layerNameList.append (layer.GetName())
 
         if updateTool: # update toolbar
-            if self.layerSelectedID == None:
+            if not self.mapLayer:
                 value = _('Select vector map')
             else:
                 value = layerNameSelected
@@ -937,16 +932,14 @@ class VDigitToolbar(AbstractToolbar):
             else:
                 self.combo.SetItems([_('New vector map'), ] + layerNameList)
             
-            # update layer index
-            try:
-                self.layerSelectedID = layerNameList.index(value)
-            except ValueError:
-                self.layerSelectedID = None
-
             self.toolbar[self.numOfRows-1].Realize()
 
         return layerNameList
 
+    def GetLayer(self):
+        """Get selected layer for editing -- MapLayer instance"""
+        return self.mapLayer
+    
 class ProfileToolbar(AbstractToolbar):
     """
     Toolbar for profiling raster map
@@ -1018,7 +1011,7 @@ class ProfileToolbar(AbstractToolbar):
              wx.ITEM_NORMAL, Icons["quit"].GetLabel(), Icons["quit"].GetDesc(),
              self.parent.OnQuit),
             )
-
+    
 class NvizToolbar(AbstractToolbar):
     """
     Nviz toolbar
