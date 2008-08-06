@@ -14,8 +14,6 @@ SUBDIRS = \
 	btree \
 	display \
 	db \
-	vask \
-	edit \
 	external \
 	fonts \
 	gtcltk \

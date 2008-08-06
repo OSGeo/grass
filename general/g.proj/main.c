@@ -31,8 +31,7 @@ int main(int argc, char *argv[])
      *printwkt,			/* Print projection in WKT format           */
      *esristyle,		/* Use ESRI-style WKT format                */
      *dontprettify,		/* Print 'flat' output (no linebreaks)      */
-     *forcedatumtrans,		/* Force override of datumtrans parameters  */
-     *interprompt;		/* Enable interactive prompting             */
+     *forcedatumtrans;		/* Force override of datumtrans parameters  */
 
     struct Option *location,	/* Name of new location to create           */
      *inepsg,			/* EPSG projection code                     */
@@ -159,11 +158,6 @@ int main(int argc, char *argv[])
     location->guisection = "Create/Edit_Locations";
     location->description = _("Name of new location to create");
 
-    interprompt = G_define_flag();
-    interprompt->key = 'i';
-    interprompt->description =
-	_("Enable interactive prompting (for command-line use only)");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -211,8 +205,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Projection files missing"));
 
     /* Set Datum Parameters if necessary or requested */
-    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer,
-		   interprompt->answer);
+    set_datumtrans(atoi(dtrans->answer), forcedatumtrans->answer);
 
 
     /* Output */
@@ -232,7 +225,7 @@ int main(int argc, char *argv[])
 	print_wkt(esristyle->answer, dontprettify->answer);
 
     if (create->answer)
-	create_location(location->answer, interprompt->answer);
+	create_location(location->answer);
 
 
     /* Tidy Up */

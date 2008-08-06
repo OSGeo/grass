@@ -80,12 +80,13 @@ int main(int argc, char *argv[])
 #endif
 	    do {
 		fprintf(stderr,
-			_
-			("\nEnter database password for connection\n<%s:%s:user=%s>\n"),
+			_("\nEnter database password for connection\n<%s:%s:user=%s>\n"),
 			driver->answer, database->answer, user->answer);
 		fprintf(stderr, _("Hit RETURN to cancel request\n"));
 		fprintf(stderr, ">");
-	    } while (!G_gets(answer));
+		*answer = '\0';
+		G_getl(answer, sizeof(answer), stdin);
+	    } while (0);
 #ifdef HAVE_TERMIOS_H
 	    tcsetattr(STDIN_FILENO, TCSANOW, &tios);
 #endif

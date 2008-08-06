@@ -3,7 +3,6 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	g.access \
-	g.ask \
 	g.dirseps \
 	g.filename \
 	g.findetc \

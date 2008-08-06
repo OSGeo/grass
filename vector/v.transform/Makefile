@@ -5,12 +5,6 @@ PGM=v.transform
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-ifdef MINGW
-EXTRA_LIB=
-else
-EXTRA_LIB=$(VASKLIB) $(CURSES)
-endif
-
 DEPENDENCIES = $(VECTDEP) $(DBMIDEP) $(GISDEP)
 LIBES     = $(VECTLIB) $(DBMILIB) $(TRANSLIB) $(EXTRA_LIB) $(GISLIB)
 EXTRA_INC = $(VECT_INC)

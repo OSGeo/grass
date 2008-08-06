@@ -95,7 +95,6 @@ int GPJ_get_default_datum_params_by_name(const char *, char **);
 int GPJ_get_datum_params(char **, char **);
 int GPJ__get_datum_params(struct Key_Value *, char **, char **);
 void GPJ_free_datum(struct gpj_datum *);
-int GPJ_ask_datum_params(const char *, char **);
 struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 								 *inputname);
 

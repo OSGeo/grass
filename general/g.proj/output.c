@@ -143,7 +143,7 @@ void print_wkt(int esristyle, int dontprettify)
     return;
 }
 
-void create_location(char *location, int interactive)
+void create_location(char *location)
 {
     int ret;
 
@@ -165,7 +165,6 @@ void create_location(char *location, int interactive)
 	/* Create flag given but no location specified; overwrite
 	 * projection files for current location */
 
-	int go_ahead = 0;
 	char *mapset = G_mapset();
 	struct Key_Value *old_projinfo = NULL, *old_projunits = NULL;
 	struct Cell_head old_cellhd;
@@ -184,43 +183,9 @@ void create_location(char *location, int interactive)
 	    old_projunits = G_get_projunits();
 	}
 
-	if (old_projinfo && old_projunits) {
-	    if (interactive) {
-		/* Warn as in g.setproj before overwriting current location */
-		fprintf(stderr,
-			_
-			("\n\nWARNING!  A projection file already exists for this location\n"));
-		fprintf(stderr,
-			"\nThis file contains all the parameters for the\nlocation's projection: %s\n",
-			G_find_key_value("proj", old_projinfo));
-		fprintf(stderr,
-			"\n    Overriding this information implies that the old projection parameters\n");
-		fprintf(stderr,
-			"    were incorrect.  If you change the parameters, all existing data will be\n");
-		fprintf(stderr,
-			"    interpreted differently by the projection software.\n%c%c%c",
-			7, 7, 7);
-		fprintf(stderr,
-			"    GRASS will not re-project your data automatically\n\n");
-
-		if (G_yes
-		    (_
-		     ("Would you still like to overwrite the current projection information "),
-		     0))
-		    go_ahead = 1;
-	    }
-	    else
-		go_ahead = 1;
-	}
-	else {
-	    /* Projection files missing for some reason;
-	     * go ahead and update */
-	    go_ahead = 1;
-	}
-
-	if (go_ahead) {
+	{
 	    int out_stat;
-	    char path[4096];
+	    char path[GPATH_MAX];
 
 	    /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
 	    if (projinfo != NULL) {
@@ -250,9 +215,6 @@ void create_location(char *location, int interactive)
 	    }
 	    G_message(_("Projection information updated!"));
 	}
-	else
-	    G_message(_("The projection information will not be updated."));
-
     }
 
     return;

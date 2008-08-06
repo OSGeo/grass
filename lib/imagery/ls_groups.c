@@ -71,9 +71,6 @@ int I_list_groups(int full)
     fclose(temp);
     G_spawn(getenv("GRASS_PAGER"), getenv("GRASS_PAGER"), tempfile, NULL);
     remove(tempfile);
-    fprintf(stdout, "hit RETURN to continue -->");
-    fflush(stdout);
-    G_gets(buf);
 
     return 0;
 }
@@ -129,9 +126,6 @@ int I_list_subgroups(const char *group, int full)
     fclose(temp);
     G_spawn(getenv("GRASS_PAGER"), getenv("GRASS_PAGER"), tempfile, NULL);
     remove(tempfile);
-    fprintf(stdout, "hit RETURN to continue -->");
-    fflush(stdout);
-    G_gets(buf);
 
     return 0;
 }

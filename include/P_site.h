@@ -36,10 +36,6 @@ struct Map_info *G_sites_open_new(const char *name);
 void G_sites_close(struct Map_info *);
 char *G_find_sites(char *name, const char *mapset);
 char *G_find_sites2(const char *name, const char *mapset);
-char *G_ask_sites_new(const char *prompt, char *name);
-char *G_ask_sites_old(const char *prompt, char *name);
-char *G_ask_sites_any(const char *prompt, char *name);
-char *G_ask_sites_in_mapset(const char *prompt, char *name);
 int G__site_put(struct Map_info *, Site *, int);
 
 struct Map_info *G_fopen_sites_old(const char *, const char *);
