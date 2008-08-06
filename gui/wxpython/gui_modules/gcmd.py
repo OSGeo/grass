@@ -100,14 +100,14 @@ class DigitError(GException):
     """Exception raised during digitization session"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
-                            title=_("Error in digitization tool"),
+                            title=_("Vector digitizer error"),
                             parent=parent)
 
 class DBMError(GException):
     """Attribute Table Manager exception class"""
     def __init__(self, message, parent=None):
         GException.__init__(self, message,
-                            title=_("Error in Attribute Table Manager"),
+                            title=_("Attribute table manager error"),
                             parent=parent)
 
 class NvizError(GException):
