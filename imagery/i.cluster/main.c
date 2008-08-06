@@ -310,8 +310,7 @@ int main(int argc, char *argv[])
 	    for (n = 0; n < ref.nfiles; n++)
 		x[n] = cell[n][col];
 	    if (I_cluster_point(&C, x) < 0)
-		G_fatal_error(_
-			      ("Out of Memory. Please run again and choose a smaller sample size"));
+		G_fatal_error(_("Out of Memory. Please run again and choose a smaller sample size"));
 	}
     }
     if (verbose)

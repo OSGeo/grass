@@ -47,14 +47,12 @@ int init_sig_routines(size_t nbands)
 	(Band_sum = (float *)G_calloc(nbands, sizeof(float))) == NULL ||
 	(Band_product = (float **)G_calloc(nbands, sizeof(float *))) == NULL
 	|| (Band_histo = (int **)G_calloc(nbands, sizeof(int *))) == NULL)
-	G_fatal_error(_
-		      ("Unable to allocate space for signature statistics."));
+	G_fatal_error(_("Unable to allocate space for signature statistics."));
     for (i = 0; i < nbands; i++) {
 	if ((Band_product[i] =
 	     (float *)G_calloc(nbands, sizeof(float))) == NULL ||
 	    (Band_histo[i] = (int *)G_calloc(MAX_CATS, sizeof(int))) == NULL)
-	    G_fatal_error(_
-			  ("Unable to allocate space for signature statistics."));
+	    G_fatal_error(_("Unable to allocate space for signature statistics."));
     }
 
     return 0;
@@ -112,8 +110,7 @@ int prepare_signature(int nbands)
 
 	y = P[i].y;
 	if (y != P[i - 1].y) {
-	    G_warning(_
-		      ("prepare_signature: scan line %d has odd number of points."),
+	    G_warning(_("prepare_signature: scan line %d has odd number of points."),
 		      (i + 1) / 2);
 	    return (0);
 	}
@@ -278,8 +275,7 @@ int display_signature(void)
 	if ((fd = G_open_cell_new(MASK)) < 0)
 	    G_fatal_error(_("Unable to open the cell map MASK."));
 	if ((buffer = G_allocate_cell_buf()) == NULL)
-	    G_fatal_error(_
-			  ("Unable to allocate the cell buffer in display_signature()."));
+	    G_fatal_error(_("Unable to allocate the cell buffer in display_signature()."));
 	nrows = G_window_rows();
 	ncols = G_window_cols();
 

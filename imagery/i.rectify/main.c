@@ -116,8 +116,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Group <%s> does not exist"), grp->answer);
 
     if (ref.nfiles <= 0) {
-	G_important_message(_
-			    ("Group <%s> contains no raster maps; run i.group"),
+	G_important_message(_("Group <%s> contains no raster maps; run i.group"),
 			    grp->answer);
 	exit(EXIT_SUCCESS);
     }

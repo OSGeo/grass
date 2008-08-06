@@ -203,8 +203,7 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
 	    if (*scale_min == 0)
 		*scale = 0;
 	    else {
-		G_warning(_
-			  ("Scale range length should be > 0. Using default values: 0,255"));
+		G_warning(_("Scale range length should be > 0. Using default values: 0,255"));
 		*scale_min = 0;
 		*scale_max = 255;
 	    }
@@ -422,8 +421,7 @@ write_pca(double **eigmat, int *inp_fd, char *out_basename,
 		    if (rowbuf)
 			G_free(rowbuf);
 		    if (!(rowbuf = G_allocate_raster_buf(maptype)))
-			G_fatal_error(_
-				      ("Cannot allocate memory for row buffer"));
+			G_fatal_error(_("Cannot allocate memory for row buffer"));
 
 		    if (G_get_raster_row(inp_fd[j], rowbuf, row, maptype) < 0)
 			G_fatal_error(_("Cannot read raster row [%d]"), row);

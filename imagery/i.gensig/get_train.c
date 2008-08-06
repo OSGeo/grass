@@ -50,8 +50,7 @@ int get_training_classes(struct files *files, struct Signature *S)
 	    n++;
 	}
 	else
-	    G_warning(_
-		      ("Training class [%d] only has one cell - this class will be ignored."),
+	    G_warning(_("Training class [%d] only has one cell - this class will be ignored."),
 		      cat);
     }
 

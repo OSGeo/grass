@@ -94,8 +94,7 @@ int main(int argc, char *argv[])
     if ((realfp =
 	 G_fopen_old_misc("cell_misc", "fftreal", Cellmap_real,
 			  realmapset)) == NULL)
-	G_fatal_error(_
-		      ("Unable to open real-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
+	G_fatal_error(_("Unable to open real-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
 
     if ((imagmapset = G_find_cell(Cellmap_imag, "")) == NULL)
 	G_fatal_error(_("%s: %s - Unable to find the imaginary-image."),
@@ -104,8 +103,7 @@ int main(int argc, char *argv[])
     if ((imagfp =
 	 G_fopen_old_misc("cell_misc", "fftimag", Cellmap_imag,
 			  imagmapset)) == NULL)
-	G_fatal_error(_
-		      ("Unable to open imaginary-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
+	G_fatal_error(_("Unable to open imaginary-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
 
     /* check command line args for validity */
     if (G_legal_filename(Cellmap_orig) < 0)
@@ -135,8 +133,7 @@ int main(int argc, char *argv[])
     data[0] = (double *)G_malloc((rows * cols) * sizeof(double));
     data[1] = (double *)G_malloc((rows * cols) * sizeof(double));
     if (data[0] == NULL || data[1] == NULL)
-	G_fatal_error(_
-		      ("Insufficent memory for allocation of data structure"));
+	G_fatal_error(_("Insufficent memory for allocation of data structure"));
 
     /* Initialize real & complex components to zero */
     G_message(_("Reading the raster maps..."));

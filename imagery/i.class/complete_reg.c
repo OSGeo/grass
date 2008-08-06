@@ -9,8 +9,7 @@
 int complete_region(void)
 {
     if (Region.npoints < 3)
-	G_warning(_
-		  ("Too few points for region.  Must have at least 3 points."));
+	G_warning(_("Too few points for region.  Must have at least 3 points."));
     else if (Region.area.completed)
 	G_warning(_("Area already completed."));
     else {

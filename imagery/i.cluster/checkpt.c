@@ -37,8 +37,7 @@ int checkpoint(struct Cluster *X, int n)
 	if (verbose) {
 	    cur_time = time(NULL);
 	    elapsed_time = cur_time - start_time;
-	    G_message(_
-		      ("Iteration %d: %% Convergence: %.2f (%s elapsed, %s left)"),
+	    G_message(_("Iteration %d: %% Convergence: %.2f (%s elapsed, %s left)"),
 		      X->iteration, (double)X->percent_stable,
 		      print_time(elapsed_time),
 		      print_time(iters * elapsed_time / (X->iteration + 1) -

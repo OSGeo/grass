@@ -25,12 +25,10 @@ int invert_signatures(void)
 	stat = invert(s = &S.sig[c], S.nbands, ik, jk, &det);
 	if (stat != 1) {
 	    if (stat)
-		G_warning(_
-			  ("signature %d is not valid (ill-conditioned) - ignored."),
+		G_warning(_("signature %d is not valid (ill-conditioned) - ignored."),
 			  c + 1);
 	    else
-		G_warning(_
-			  ("signature %d is not valid (singular) - ignored."),
+		G_warning(_("signature %d is not valid (singular) - ignored."),
 			  c + 1);
 
 	    bad = 1;
