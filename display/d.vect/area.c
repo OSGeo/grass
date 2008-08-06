@@ -274,15 +274,13 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 			}
 			else {
 			    rgb = 0;
-			    G_warning(_
-				      ("Error in color definition column (%s), area %d "
+			    G_warning(_("Error in color definition column (%s), area %d "
 				       "with cat %d: colorstring [%s]"),
 				      rgb_column, area, cat, colorstring);
 			}
 		    }
 		    else {
-			G_warning(_
-				  ("Error in color definition column (%s), area %d with cat %d"),
+			G_warning(_("Error in color definition column (%s), area %d with cat %d"),
 				  rgb_column, area, cat);
 			rgb = 0;
 		    }
@@ -343,8 +341,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 				       DB_C_TYPE_INT ? cv_width->val.
 				       i : (int)cv_width->val.d);
 		    if (width < 0) {
-			G_warning(_
-				  ("Error in line width column (%s), element %d "
+			G_warning(_("Error in line width column (%s), element %d "
 				   "with cat %d: line width [%d]"),
 				  width_column, area, cat, width);
 			width = default_width;

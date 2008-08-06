@@ -103,8 +103,7 @@ int main(int argc, char **argv)
 	d_mapname = dmap->answer;
 	d_mapset = G_find_cell2(d_mapname, "");
 	if (d_mapset == NULL) {
-	    G_warning(_
-		      ("Display raster [%s] not found. Using profile raster."),
+	    G_warning(_("Display raster [%s] not found. Using profile raster."),
 		      d_mapname);
 	    d_mapname = old_mapname;
 	    d_mapset = old_mapset;
@@ -285,8 +284,7 @@ int main(int argc, char **argv)
 		    else if (err == -3)
 			G_fatal_error(_("Error reading from cell-file"));
 		    else if (err == -4)
-			G_fatal_error(_
-				      ("Mysterious window inconsistancy error"));
+			G_fatal_error(_("Mysterious window inconsistancy error"));
 		    else {
 			/* draw profile line on cell-file */
 			black_and_white_line(screen_x, screen_y, cur_screen_x,

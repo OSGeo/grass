@@ -134,11 +134,9 @@ int main(int argc, char **argv)
     if (wgs84->answer)
 	geogrid->answer = 1;	/* -w implies -g */
     if (geogrid->answer && G_projection() == PROJECTION_LL)
-	G_fatal_error(_
-		      ("Geo-Grid option is not available for LL projection"));
+	G_fatal_error(_("Geo-Grid option is not available for LL projection"));
     if (geogrid->answer && G_projection() == PROJECTION_XY)
-	G_fatal_error(_
-		      ("Geo-Grid option is not available for XY projection"));
+	G_fatal_error(_("Geo-Grid option is not available for XY projection"));
 
     if (notext->answer)
 	do_text = FALSE;

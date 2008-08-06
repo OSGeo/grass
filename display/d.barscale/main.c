@@ -111,8 +111,7 @@ int main(int argc, char **argv)
 
     G_get_window(&W);
     if (W.proj == PROJECTION_LL && !northarrow->answer)
-	G_fatal_error(_
-		      ("%s does not work with a latitude-longitude location"),
+	G_fatal_error(_("%s does not work with a latitude-longitude location"),
 		      argv[0]);
 
     if (linescale->answer)
