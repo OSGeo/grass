@@ -1,13 +1,8 @@
-/* ask_trans.c */
-int ask_transform_coor(int);
 
 /* command.c */
 int set_default_options(struct file_info *, struct file_info *,
 			struct file_info *, struct command_flags *);
 /* creat_trans.c */
-int create_transform_conversion(struct file_info *, int);
-int create_transform_from_user(void);
-int yes_no_quest(char *);
 int create_transform_from_file(struct file_info *, int);
 
 /* get_coor.c */
