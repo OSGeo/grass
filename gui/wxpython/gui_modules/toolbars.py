@@ -222,7 +222,7 @@ class MapToolbar(AbstractToolbar):
 
 class GRToolbar(AbstractToolbar):
     """
-    Georectify Display toolbar
+    Georectification Display toolbar
     """
 
     def __init__(self, mapdisplay, map):
@@ -282,23 +282,23 @@ class GRToolbar(AbstractToolbar):
             (self.zoommenu, "zoommenu", Icons["zoommenu"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["zoommenu"].GetLabel(), Icons["zoommenu"].GetDesc(),
              self.mapdisplay.OnZoomMenu),
+            ("", "", "", "", "", "", ""),
             )
 
 class GCPToolbar(AbstractToolbar):
     """
-    Toolbar for digitization
+    Toolbar for managing ground control points during georectification
     """
-    def __init__(self, parent, mapdisplay, map):
-        self.parent     = parent # GCP
-        self.mapcontent = map
-        self.mapdisplay = mapdisplay
+    def __init__(self, parent, tbframe):
+        self.parent  = parent # GCP
+        self.tbframe = tbframe
 
-        self.toolbar = wx.ToolBar(parent=self.mapdisplay, id=wx.ID_ANY)
+        self.toolbar = wx.ToolBar(parent=self.tbframe, id=wx.ID_ANY)
 
         # self.SetToolBar(self.toolbar)
         self.toolbar.SetToolBitmapSize(globalvar.toolbarSize)
 
-        self.InitToolbar(self.mapdisplay, self.toolbar, self.ToolbarData())
+        self.InitToolbar(self.tbframe, self.toolbar, self.ToolbarData())
 
         # realize the toolbar
         self.toolbar.Realize()
@@ -377,7 +377,7 @@ class VDigitToolbar(AbstractToolbar):
         self.numOfRows = 1 # number of rows for toolbar
         for row in range(0, self.numOfRows):
             self.toolbar.append(wx.ToolBar(parent=self.parent, id=wx.ID_ANY))
-	    self.toolbar[row].SetToolBitmapSize(globalvar.toolbarSize)
+            self.toolbar[row].SetToolBitmapSize(globalvar.toolbarSize)
             self.toolbar[row].Bind(wx.EVT_TOOL, self.OnTool)
             
             # create toolbar
