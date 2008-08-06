@@ -73,8 +73,7 @@ int G_set_window(struct Cell_head *window)
 		G__.fileinfo[i].cellhd.proj == window->proj)
 		continue;
 	    if (i != maskfd) {
-		G_warning(_
-			  ("G_set_window(): projection/zone differs from that of "
+		G_warning(_("G_set_window(): projection/zone differs from that of "
 			   "currently open raster maps"));
 		return -1;
 	    }

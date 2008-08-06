@@ -289,8 +289,7 @@ Vect_set_varray_from_db(struct Map_info *Map, int field, const char *where,
     db_close_database_shutdown_driver(driver);
 
     if (ncats == -1) {
-	G_warning(_
-		  ("Unable to select record from table <%s> (key %s, where %s)"),
+	G_warning(_("Unable to select record from table <%s> (key %s, where %s)"),
 		  Fi->table, Fi->key, where);
 	return -1;
     }

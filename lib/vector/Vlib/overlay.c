@@ -120,12 +120,10 @@ Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
 
     /* TODO: support all types; at present only point x point, area x point and point x area supported  */
     if ((atype & GV_LINES) || (btype & GV_LINES))
-	G_warning(_
-		  ("Overlay: line/boundary types not supported by AND operator"));
+	G_warning(_("Overlay: line/boundary types not supported by AND operator"));
 
     if ((atype & GV_AREA) && (btype & GV_AREA))
-	G_warning(_
-		  ("Overlay: area x area types not supported by AND operator"));
+	G_warning(_("Overlay: area x area types not supported by AND operator"));
 
     /* TODO: more points in one node in one map */
 

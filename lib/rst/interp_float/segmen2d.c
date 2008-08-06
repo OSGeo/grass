@@ -110,8 +110,7 @@ int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	
 	while ((npt < MINPTS) || (npt > params->KMAX2)) {
 	    if (i >= 70) {
 		fprintf(stderr, "\n");
-		G_warning(_
-			  ("taking too long to find points for interpolation--"
+		G_warning(_("taking too long to find points for interpolation--"
 			   "please change the region to area where your points are. "
 			   "Continuing calculations..."));
 		break;

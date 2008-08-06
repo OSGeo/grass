@@ -36,8 +36,7 @@ static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
 
     Area = Map->plus.Area[area];
     if (!Area)
-	G_fatal_error(_
-		      ("BUG (delete_area_cats_from_cidx): Area %d does not exist"),
+	G_fatal_error(_("BUG (delete_area_cats_from_cidx): Area %d does not exist"),
 		      area);
 
     if (Area->centroid == 0)
@@ -64,8 +63,7 @@ static void add_area_cats_to_cidx(struct Map_info *Map, int area)
 
     Area = Map->plus.Area[area];
     if (!Area)
-	G_fatal_error(_
-		      ("BUG (add_area_cats_to_cidx): Area %d does not exist"),
+	G_fatal_error(_("BUG (add_area_cats_to_cidx): Area %d does not exist"),
 		      area);
 
     if (Area->centroid == 0)

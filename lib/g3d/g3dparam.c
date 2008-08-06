@@ -146,8 +146,7 @@ int G3d_getStandard3dParams(int *useTypeDefault, int *type,
     if (strcmp(param->dimension->answer, "default") != 0) {
 	if (sscanf(param->dimension->answer, "%dx%dx%d",
 		   tileX, tileY, tileZ) != 3) {
-	    G3d_error(_
-		      ("G3d_getStandard3dParams: tile dimension value invalid"));
+	    G3d_error(_("G3d_getStandard3dParams: tile dimension value invalid"));
 	    return 0;
 	}
     }

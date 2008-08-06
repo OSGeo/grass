@@ -246,8 +246,7 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
     Vect_close(&map);
 
     if (!nl) {
-	G_warning(_
-		  ("No features from vector map <%s> fall within current region"),
+	G_warning(_("No features from vector map <%s> fall within current region"),
 		  G_fully_qualified_name(grassname, mapset));
 	return (NULL);
     }

@@ -45,16 +45,14 @@ int Vect_legal_filename(const char *s)
     sprintf(buf, "%s", s);
 
     if (*s == '.' || *s == 0) {
-	G_warning(_
-		  ("Illegal vector map name <%s>. May not contain '.' or 'NULL'."),
+	G_warning(_("Illegal vector map name <%s>. May not contain '.' or 'NULL'."),
 		  buf);
 	return -1;
     }
 
     /* file name must start with letter */
     if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z'))) {
-	G_warning(_
-		  ("Illegal vector map name <%s>. Must start with a letter."),
+	G_warning(_("Illegal vector map name <%s>. Must start with a letter."),
 		  buf);
 	return -1;
     }
@@ -62,16 +60,14 @@ int Vect_legal_filename(const char *s)
     for (s++; *s; s++)
 	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
 	      (*s >= '0' && *s <= '9') || *s == '_' || *s == '@')) {
-	    G_warning(_
-		      ("Illegal vector map name <%s>. Character '%c' not allowed."),
+	    G_warning(_("Illegal vector map name <%s>. Character '%c' not allowed."),
 		      buf, *s);
 	    return -1;
 	}
 
     for (i = 0; keywords[i]; i++)
 	if (G_strcasecmp(buf, keywords[i]) == 0) {
-	    G_warning(_
-		      ("Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."),
+	    G_warning(_("Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."),
 		      buf);
 	    return -1;
 	}
@@ -102,8 +98,7 @@ int Vect_check_input_output_name(const char *input, const char *output,
 
     if (Vect_legal_filename(output) == -1) {
 	if (error == GV_FATAL_EXIT) {
-	    G_fatal_error(_
-			  ("Output vector map name <%s> is not valid map name"),
+	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
 			  output);
 	}
 	else if (error == GV_FATAL_PRINT) {

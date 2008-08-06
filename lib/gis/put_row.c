@@ -212,8 +212,7 @@ int G_put_map_row(int fd, const CELL * buf)
     struct fileinfo *fcb = &G__.fileinfo[fd];
 
     if (fcb->map_type != CELL_TYPE) {
-	G_fatal_error(_
-		      ("G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"),
+	G_fatal_error(_("G_put_map_row: %s is not integer! Use G_put_[f/d]_raster_row()!"),
 		      fcb->name);
 	return -1;
     }
@@ -257,16 +256,14 @@ static int check_open(const char *me, int fd, int random)
 	if (!random)
 	    return 1;
 
-	G_warning(_
-		  ("%s: map [%s] not open for random write - request ignored"),
+	G_warning(_("%s: map [%s] not open for random write - request ignored"),
 		  me, fcb->name);
 	break;
     case OPEN_NEW_RANDOM:
 	if (random)
 	    return 1;
 
-	G_warning(_
-		  ("%s: map [%s] not open for sequential write - request ignored"),
+	G_warning(_("%s: map [%s] not open for sequential write - request ignored"),
 		  me, fcb->name);
 	break;
     default:

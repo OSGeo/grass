@@ -143,8 +143,7 @@ int G_get_reclass(const char *name, const char *mapset,
 	    G_warning(_("Too many reclass categories for [%s in %s]"),
 		      name, mapset);
 	else
-	    G_warning(_
-		      ("Illegal reclass format in header file for [%s in %s]"),
+	    G_warning(_("Illegal reclass format in header file for [%s in %s]"),
 		      name, mapset);
 	stat = -1;
     }

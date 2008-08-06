@@ -303,8 +303,7 @@ int gsd_init_mpeg(const char *filename)
     /* auto detect the output format from the name. default is mpeg. */
     fmt = guess_format(NULL, filename, NULL);
     if (!fmt) {
-	G_warning(_
-		  ("Unable to deduce output format from file extension: using MPEG"));
+	G_warning(_("Unable to deduce output format from file extension: using MPEG"));
 	fmt = guess_format("mpeg", NULL, NULL);
     }
     if (!fmt) {

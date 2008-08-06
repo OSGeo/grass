@@ -142,13 +142,11 @@ int check_coor(struct Map_info *Map)
 	    Map->head.size, CInfo.size);
 
     if (dif > 0) {
-	G_warning(_
-		  ("Coor files of vector map <%s@%s> is larger than it should be "
+	G_warning(_("Coor files of vector map <%s@%s> is larger than it should be "
 		   "(%ld bytes excess)"), Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
-	G_warning(_
-		  ("Coor files of vector <%s@%s> is shorter than it should be "
+	G_warning(_("Coor files of vector <%s@%s> is shorter than it should be "
 		   "(%ld bytes missing)."), Map->name, Map->mapset, -dif);
     }
     return 1;

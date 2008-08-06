@@ -258,8 +258,7 @@ int G__open_cell_old(const char *name, const char *mapset)
 	r_name = reclass.name;
 	r_mapset = reclass.mapset;
 	if (G_find_cell2(r_name, r_mapset) == NULL) {
-	    G_warning(_
-		      ("unable to open [%s] in [%s] since it is a reclass of [%s] in [%s] which does not exist"),
+	    G_warning(_("unable to open [%s] in [%s] since it is a reclass of [%s] in [%s] which does not exist"),
 		      name, mapset, r_name, r_mapset);
 	    return -1;
 	}
@@ -282,23 +281,20 @@ int G__open_cell_old(const char *name, const char *mapset)
     {
 	CELL_nbytes = cellhd.format + 1;
 	if (CELL_nbytes < 1) {
-	    G_warning(_
-		      ("[%s] in mapset [%s]-format field in header file invalid"),
+	    G_warning(_("[%s] in mapset [%s]-format field in header file invalid"),
 		      r_name, r_mapset);
 	    return -1;
 	}
     }
 
     if (cellhd.proj != G__.window.proj) {
-	G_warning(_
-		  ("[%s] in mapset [%s] - in different projection than current region:\n found map [%s] in: <%s>, should be <%s> "),
+	G_warning(_("[%s] in mapset [%s] - in different projection than current region:\n found map [%s] in: <%s>, should be <%s> "),
 		  name, mapset, name, G__projection_name(cellhd.proj),
 		  G__projection_name(G__.window.proj));
 	return -1;
     }
     if (cellhd.zone != G__.window.zone) {
-	G_warning(_
-		  ("[%s] in mapset [%s] - in different zone [%d] than current region [%d]"),
+	G_warning(_("[%s] in mapset [%s] - in different zone [%d] than current region [%d]"),
 		  name, mapset, cellhd.zone, G__.window.zone);
 	return -1;
     }
@@ -689,8 +685,7 @@ static int G__open_raster_new(const char *name, int open_mode)
 	}
 
 	if (open_mode == OPEN_NEW_RANDOM) {
-	    G_warning(_
-		      ("Can't write embedded null values for map open for random access"));
+	    G_warning(_("Can't write embedded null values for map open for random access"));
 	    if (fcb->map_type == CELL_TYPE)
 		G_write_zeros(fd,
 			      (long)WRITE_NBYTES * fcb->cellhd.cols *

@@ -260,8 +260,7 @@ int G_command_history(struct History *hist)
     cmdlen = strlen(cmdlin);
 
     if (hist->edlinecnt > MAXEDLINES - 2) {
-	G_warning(_
-		  ("Not enough room in history file to record command line."));
+	G_warning(_("Not enough room in history file to record command line."));
 	return 1;
     }
 
@@ -283,8 +282,7 @@ int G_command_history(struct History *hist)
 	    j += 68;
 	    hist->edlinecnt++;
 	    if (hist->edlinecnt > MAXEDLINES - 2) {
-		G_warning(_
-			  ("Not enough room in history file for command line (truncated)."));
+		G_warning(_("Not enough room in history file for command line (truncated)."));
 		return 2;
 	    }
 	}

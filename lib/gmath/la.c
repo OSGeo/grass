@@ -527,8 +527,7 @@ G_matrix_LU_solve(const mat_struct * mt1, mat_struct ** xmat0,
 	    G_matrix_free(mtx);
 
 	    if (res_info > 0) {
-		G_warning(_
-			  ("Matrix (or submatrix is singular). Solution undetermined"));
+		G_warning(_("Matrix (or submatrix is singular). Solution undetermined"));
 		return 1;
 	    }
 	    else if (res_info < 0) {
@@ -539,8 +538,7 @@ G_matrix_LU_solve(const mat_struct * mt1, mat_struct ** xmat0,
 	}
     default:
 	{
-	    G_warning(_
-		      ("Procedure not yet available for selected matrix type"));
+	    G_warning(_("Procedure not yet available for selected matrix type"));
 	    return -1;
 	}
     }				/* end switch */

@@ -217,8 +217,7 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
     }
 
     if (j < (*nbreaks)) {
-	G_warning(_
-		  ("There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."),
+	G_warning(_("There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."),
 		  j + 1, *nbreaks + 1);
 	G_realloc(classbreaks, j * sizeof(double));
 	for (i = 0; i < j; i++)

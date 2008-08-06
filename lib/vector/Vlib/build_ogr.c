@@ -345,8 +345,7 @@ int Vect_build_ogr(struct Map_info *Map, int build, FILE * msgout)
 
     /* test layer capabilities */
     if (!OGR_L_TestCapability(Map->fInfo.ogr.layer, OLCRandomRead)) {
-	G_warning(_
-		  ("Random read is not supported by OGR for this layer, cannot build support"));
+	G_warning(_("Random read is not supported by OGR for this layer, cannot build support"));
 	return 0;
     }
 

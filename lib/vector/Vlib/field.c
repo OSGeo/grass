@@ -91,8 +91,7 @@ Vect_map_add_dblink(struct Map_info *Map, int number, const char *name,
     }
 
     if (Map->mode != GV_MODE_WRITE && Map->mode != GV_MODE_RW) {
-	G_warning(_
-		  ("Unable to add database link, map is not opened in WRITE mode"));
+	G_warning(_("Unable to add database link, map is not opened in WRITE mode"));
 	return -1;
     }
 
@@ -544,8 +543,7 @@ int Vect_read_dblinks(struct Map_info *Map)
 		    if (db_open_select_cursor
 			(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
 			/* neither FID nor ogc_fid nor ogr_fid nor gid available */
-			G_warning(_
-				  ("All FID tests failed. Neither 'FID' nor 'ogc_fid' "
+			G_warning(_("All FID tests failed. Neither 'FID' nor 'ogc_fid' "
 				   "nor 'ogr_fid' nor 'gid' available in OGR DB table"));
 			db_close_database_shutdown_driver(driver);
 			return 0;
@@ -773,8 +771,7 @@ char *Vect_subst_var(const char *in, struct Map_info *Map)
 void Vect_set_db_updated(struct Map_info *Map)
 {
     if (strcmp(Map->mapset, G_mapset()) != 0) {
-	G_fatal_error(_
-		      ("Bug: attempt to update map which is not in current mapset"));
+	G_fatal_error(_("Bug: attempt to update map which is not in current mapset"));
     }
 
     Vect_write_dblinks(Map);

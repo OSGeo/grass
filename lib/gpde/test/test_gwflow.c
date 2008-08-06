@@ -51,8 +51,7 @@ int integration_test_gwflow(void)
     if (sum > 0)
 	G_warning(_("\n-- gwflow integration tests failure --"));
     else
-	G_message(_
-		  ("\n-- gwflow integration tests finished successfully --"));
+	G_message(_("\n-- gwflow integration tests finished successfully --"));
 
     return sum;
 }

@@ -354,8 +354,7 @@ static int get_ellipsoid_parameters(struct Key_Value *proj_keys, double *a,
 	    str = G_find_key_value("a", proj_keys);
 	    if (str != NULL) {
 		if (sscanf(str, "%lf", a) != 1) {
-		    G_fatal_error(_
-				  ("Invalid a: field '%s' in file %s in <%s>"),
+		    G_fatal_error(_("Invalid a: field '%s' in file %s in <%s>"),
 				  str, PROJECTION_FILE, PERMANENT);
 		}
 	    }

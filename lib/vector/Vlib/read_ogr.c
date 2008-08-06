@@ -375,8 +375,7 @@ V2_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 		Map->fInfo.ogr.feature_cache =
 		    OGR_L_GetFeature(Map->fInfo.ogr.layer, FID);
 		if (Map->fInfo.ogr.feature_cache == NULL) {
-		    G_fatal_error(_
-				  ("Unable to get feature geometry, FID %ld"),
+		    G_fatal_error(_("Unable to get feature geometry, FID %ld"),
 				  FID);
 		}
 		Map->fInfo.ogr.feature_cache_id = FID;

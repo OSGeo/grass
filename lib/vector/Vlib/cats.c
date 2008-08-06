@@ -126,8 +126,7 @@ int Vect_cat_set(struct line_cats *Cats, int field, int cat)
     /* field was not found so we shall append new cat */
     /* test if space exist */
     if (n >= GV_NCATS_MAX) {
-	G_fatal_error(_
-		      ("Too many categories (%d), unable to set cat %d (layer %d)"),
+	G_fatal_error(_("Too many categories (%d), unable to set cat %d (layer %d)"),
 		      Cats->n_cats, cat, field);
     }
 
@@ -374,8 +373,7 @@ int Vect_str_to_cat_list(const char *str, struct cat_list *list)
 	    max = min;
 	else {			/* error */
 
-	    G_warning(_
-		      ("Unable to convert category string '%s' (from '%s') to category range"),
+	    G_warning(_("Unable to convert category string '%s' (from '%s') to category range"),
 		      buf, str);
 	    err++;
 	    continue;

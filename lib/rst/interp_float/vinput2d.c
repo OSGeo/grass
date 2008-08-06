@@ -89,12 +89,10 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	zctype = db_column_Ctype(driver, Fi->table, zcol);
 	G_debug(3, " zcol C type = %d", zctype);
 	if (zctype == -1)
-	    G_fatal_error(_
-			  ("Cannot find z column <%s> (please verify name, e.g. with v.info)"),
+	    G_fatal_error(_("Cannot find z column <%s> (please verify name, e.g. with v.info)"),
 			  zcol);
 	if (zctype != DB_C_TYPE_INT && zctype != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_
-			  ("Column type of z column is not supported (must be integer or double)"));
+	    G_fatal_error(_("Column type of z column is not supported (must be integer or double)"));
 
 	db_CatValArray_init(&zarray);
 	G_debug(3, "RST SQL WHERE: %s", params->wheresql);
@@ -107,11 +105,9 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 	    if (sctype == -1)
 		G_fatal_error(_("Cannot read column type of smooth column"));
 	    if (sctype == DB_C_TYPE_DATETIME)
-		G_fatal_error(_
-			      ("Column type of smooth column (datetime) is not supported"));
+		G_fatal_error(_("Column type of smooth column (datetime) is not supported"));
 	    if (sctype != DB_C_TYPE_INT && sctype != DB_C_TYPE_DOUBLE)
-		G_fatal_error(_
-			      ("Column type of s column is not supported (must be integer or double)"));
+		G_fatal_error(_("Column type of s column is not supported (must be integer or double)"));
 
 	    db_CatValArray_init(&sarray);
 	    db_select_CatValArray(driver, Fi->table, Fi->key, scol,
@@ -332,16 +328,14 @@ int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	
 
     fprintf(stderr, "\n");
     if (OUTRANGE > 0)
-	G_warning(_
-		  ("there are points outside specified 2D/3D region--ignored %d points"),
+	G_warning(_("there are points outside specified 2D/3D region--ignored %d points"),
 		  OUTRANGE);
     if (npoint > 0)
 	G_warning(_("ignoring %d points -- too dense"), npoint);
     npoint = k - npoint - OUTRANGE;
     if (npoint < params->kmin) {
 	if (npoint != 0) {
-	    G_warning(_
-		      ("%d points given for interpolation (after thinning) is less than given NPMIN=%d"),
+	    G_warning(_("%d points given for interpolation (after thinning) is less than given NPMIN=%d"),
 		      npoint, params->kmin);
 	    params->kmin = npoint;
 	}

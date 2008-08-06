@@ -251,8 +251,7 @@ SYMBOL *S_read(char *sname)
     strcpy(group, sname);
     c = strchr(group, '/');
     if (c == NULL) {
-	G_warning(_
-		  ("Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"),
+	G_warning(_("Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"),
 		  sname);
 	return NULL;
     }
@@ -376,8 +375,7 @@ SYMBOL *S_read(char *sname)
 	    }
 	    else if (sscanf(data, "%d %d %d", &r, &g, &b) == 3) {
 		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		    G_warning(_
-			      ("Incorrect symbol color: '%s', using default."),
+		    G_warning(_("Incorrect symbol color: '%s', using default."),
 			      buf);
 		else {
 		    fr = r / 255.0;
@@ -405,8 +403,7 @@ SYMBOL *S_read(char *sname)
 	    }
 	    else if (sscanf(data, "%d %d %d", &r, &g, &b) == 3) {
 		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		    G_warning(_
-			      ("Incorrect symbol color: '%s', using default."),
+		    G_warning(_("Incorrect symbol color: '%s', using default."),
 			      buf);
 		else {
 		    fr = r / 255.0;

@@ -214,8 +214,7 @@ float dig_node_line_angle(struct Plus_head *plus, int nodeid, int lineid)
 	    return (node->angles[i]);
     }
 
-    G_fatal_error(_
-		  ("Attempt to read line angle for the line which is not connected to the node: "
+    G_fatal_error(_("Attempt to read line angle for the line which is not connected to the node: "
 		   "node %d, line %d"), nodeid, lineid);
 
     return 0.0;			/* not reached */

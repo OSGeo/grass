@@ -76,8 +76,7 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 	if (cellhd->north > 90.0) {
 	    if (((cellhd->north - 90.0) < epsilon_ns) &&
 		((cellhd->north - 90.0) > GRASS_EPSILON)) {
-		G_warning(_
-			  ("Fixing subtle input data rounding error of north boundary (%g>%g)"),
+		G_warning(_("Fixing subtle input data rounding error of north boundary (%g>%g)"),
 			  cellhd->north - 90.0, epsilon_ns);
 		cellhd->north = 90.0;
 	    }
@@ -88,8 +87,7 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 	if (cellhd->south < -90.0) {
 	    if (((cellhd->south + 90.0) < epsilon_ns) &&
 		((cellhd->south + 90.0) < GRASS_EPSILON)) {
-		G_warning(_
-			  ("Fixing subtle input data rounding error of south boundary (%g>%g)"),
+		G_warning(_("Fixing subtle input data rounding error of south boundary (%g>%g)"),
 			  cellhd->south + 90.0, epsilon_ns);
 		cellhd->south = -90.0;
 	    }
@@ -106,8 +104,7 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
 	if ((cellhd->west < -180.0) && ((cellhd->west + 180.0) < epsilon_ew)
 	    && ((cellhd->west + 180.0) < GRASS_EPSILON)) {
-	    G_warning(_
-		      ("Fixing subtle input data rounding error of west boundary (%g>%g)"),
+	    G_warning(_("Fixing subtle input data rounding error of west boundary (%g>%g)"),
 		      cellhd->west + 180.0, epsilon_ew);
 	    cellhd->west = -180.0;
 	}
@@ -118,8 +115,7 @@ char *G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 
 	if ((cellhd->east > 180.0) && ((cellhd->east - 180.0) > epsilon_ew)
 	    && ((cellhd->east - 180.0) > GRASS_EPSILON)) {
-	    G_warning(_
-		      ("Fixing subtle input data rounding error of east boundary (%g>%g)"),
+	    G_warning(_("Fixing subtle input data rounding error of east boundary (%g>%g)"),
 		      cellhd->east - 180.0, epsilon_ew);
 	    cellhd->east = 180.0;
 	}
@@ -248,8 +244,7 @@ char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	if (cellhd->north > 90.0) {
 	    if (((cellhd->north - 90.0) < epsilon_ns) &&
 		((cellhd->north - 90.0) > GRASS_EPSILON)) {
-		G_warning(_
-			  ("Fixing subtle input data rounding error of north boundary (%g>%g)"),
+		G_warning(_("Fixing subtle input data rounding error of north boundary (%g>%g)"),
 			  cellhd->north - 90.0, epsilon_ns);
 		cellhd->north = 90.0;
 	    }
@@ -260,8 +255,7 @@ char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 	if (cellhd->south < -90.0) {
 	    if (((cellhd->south + 90.0) < epsilon_ns) &&
 		((cellhd->south + 90.0) < GRASS_EPSILON)) {
-		G_warning(_
-			  ("Fixing subtle input data rounding error of south boundary (%g>%g)"),
+		G_warning(_("Fixing subtle input data rounding error of south boundary (%g>%g)"),
 			  cellhd->south + 90.0, epsilon_ns);
 		cellhd->south = -90.0;
 	    }
@@ -278,8 +272,7 @@ char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
 	if ((cellhd->west < -180.0) && ((cellhd->west + 180.0) < epsilon_ew)
 	    && ((cellhd->west + 180.0) < GRASS_EPSILON)) {
-	    G_warning(_
-		      ("Fixing subtle input data rounding error of west boundary (%g>%g)"),
+	    G_warning(_("Fixing subtle input data rounding error of west boundary (%g>%g)"),
 		      cellhd->west + 180.0, epsilon_ew);
 	    cellhd->west = -180.0;
 	}
@@ -290,8 +283,7 @@ char *G_adjust_Cell_head3(struct Cell_head *cellhd, int row_flag,
 
 	if ((cellhd->east > 180.0) && ((cellhd->east - 180.0) > epsilon_ew)
 	    && ((cellhd->east - 180.0) > GRASS_EPSILON)) {
-	    G_warning(_
-		      ("Fixing subtle input data rounding error of east boundary (%g>%g)"),
+	    G_warning(_("Fixing subtle input data rounding error of east boundary (%g>%g)"),
 		      cellhd->east - 180.0, epsilon_ew);
 	    cellhd->east = 180.0;
 	}

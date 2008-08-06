@@ -263,8 +263,7 @@ Vect_copy(const char *in, const char *mapset, const char *out, FILE * msgout)
 	}
 	else {
 	    if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK)
-		G_warning(_
-			  ("Unable to create index for table <%s>, key <%s>"),
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
 			  Fi->table, Fi->key);
 
 	    db_close_database_shutdown_driver(driver);
@@ -399,8 +398,7 @@ int Vect_rename(const char *in, const char *out, FILE * msgout)
 	}
 	else {
 	    if (db_create_index2(driver, Fout->table, Fin->key) != DB_OK)
-		G_warning(_
-			  ("Unable to create index for table <%s>, key <%s>"),
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
 			  Fout->table, Fout->key);
 
 	    db_close_database_shutdown_driver(driver);
@@ -460,8 +458,7 @@ int Vect_delete(const char *map)
 	    for (i = 0; i < n; i++) {
 		Fi = Vect_get_dblink(&Map, i);
 		if (Fi == NULL) {
-		    G_warning(_
-			      ("Database connection not defined for layer %d"),
+		    G_warning(_("Database connection not defined for layer %d"),
 			      Map.dblnk->field[i].number);
 		    Vect_close(&Map);
 		    return -1;
@@ -471,8 +468,7 @@ int Vect_delete(const char *map)
 
 		ret = db_table_exists(Fi->driver, Fi->database, Fi->table);
 		if (ret == -1) {
-		    G_warning(_
-			      ("Unable to find table <%s> linked to vector map <%s>"),
+		    G_warning(_("Unable to find table <%s> linked to vector map <%s>"),
 			      Fi->table, map);
 		    Vect_close(&Map);
 		    return -1;
@@ -488,8 +484,7 @@ int Vect_delete(const char *map)
 		    }
 		}
 		else {
-		    G_warning(_
-			      ("Table <%s> linked to vector map <%s> does not exist"),
+		    G_warning(_("Table <%s> linked to vector map <%s> does not exist"),
 			      Fi->table, map);
 		}
 	    }
@@ -615,8 +610,7 @@ int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
 	}
 	else {
 	    if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK)
-		G_warning(_
-			  ("Unable to create index for table <%s>, key <%s>"),
+		G_warning(_("Unable to create index for table <%s>, key <%s>"),
 			  Fin->table, Fin->key);
 
 	    db_close_database_shutdown_driver(driver);

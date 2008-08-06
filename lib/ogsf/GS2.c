@@ -1633,8 +1633,7 @@ int GS_load_att_map(int id, const char *filename, int att)
     if (rast_head.north <= wind.south ||
 	rast_head.south >= wind.north ||
 	rast_head.east <= wind.west || rast_head.west >= wind.east) {
-	G_fatal_error(_
-		      ("Raster map <%s> is outside of current region. Load failed."),
+	G_fatal_error(_("Raster map <%s> is outside of current region. Load failed."),
 		      filename);
     }
 
@@ -1715,15 +1714,13 @@ int GS_load_att_map(int id, const char *filename, int att)
 	}
 
 	if (0 > gs_malloc_att_buff(gs, att, ATTY_NULL)) {
-	    G_fatal_error(_
-			  ("GS_load_att_map(): Out of memory. Unable to load map"));
+	    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	}
 
 	switch (atty) {
 	case ATTY_MASK:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_MASK)) {
-		G_fatal_error(_
-			      ("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
@@ -1732,8 +1729,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_CHAR:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
-		G_fatal_error(_
-			      ("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb,
@@ -1743,8 +1739,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_SHORT:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_SHORT)) {
-		G_fatal_error(_
-			      ("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb,
@@ -1754,8 +1749,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    break;
 	case ATTY_FLOAT:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
-		G_fatal_error(_
-			      ("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb,
@@ -1766,8 +1760,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	case ATTY_INT:
 	default:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		G_fatal_error(_
-			      ("GS_load_att_map(): Out of memory. Unable to load map"));
+		G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 	    }
 
 	    ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib,
@@ -1820,8 +1813,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	else if (ATTY_FLOAT == atty) {
 	    if (!reuse) {
 		if (0 > gs_malloc_att_buff(gs, att, ATTY_INT)) {
-		    G_fatal_error(_
-				  ("GS_load_att_map(): Out of memory. Unable to load map"));
+		    G_fatal_error(_("GS_load_att_map(): Out of memory. Unable to load map"));
 		}
 
 		Gs_pack_colors_float(filename, tbuff->fb, tbuff->ib,
