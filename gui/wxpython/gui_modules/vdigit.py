@@ -1631,7 +1631,9 @@ class VDigitSettingsDialog(wx.Dialog):
         mainSizer.Add(item=notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(item=btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-
+        
+        self.Bind(wx.EVT_CLOSE, self.OnCancel)
+        
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
 
@@ -2117,6 +2119,8 @@ class VDigitSettingsDialog(wx.Dialog):
         self.parent.toolbars['vdigit'].settingsDialog = None
         self.Close()
 
+        event.Skip()
+        
     def UpdateSettings(self):
         """Update UserSettings"""
 
