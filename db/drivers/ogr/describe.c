@@ -90,8 +90,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 
 	if (ogrType != OFTInteger && ogrType != OFTReal &&
 	    ogrType != OFTString) {
-	    G_warning(_
-		      ("OGR driver: column '%s', OGR type %d  is not supported"),
+	    G_warning(_("OGR driver: column '%s', OGR type %d  is not supported"),
 		      fieldName, ogrType);
 	    cols[i] = 0;
 	}
@@ -151,8 +150,7 @@ int describe_table(OGRLayerH hLayer, dbTable ** table, cursor * c)
 	    sqlType = DB_SQL_TYPE_CHARACTER;
 	    size = OGR_Fld_GetWidth(hFieldDefn);
 	    if (size == 0) {
-		G_warning(_
-			  ("column '%s', type 'string': unknown width -> stored as varchar(250) "
+		G_warning(_("column '%s', type 'string': unknown width -> stored as varchar(250) "
 			   "some data may be lost"), fieldName);
 		size = 250;
 	    }
