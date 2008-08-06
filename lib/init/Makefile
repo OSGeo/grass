@@ -47,7 +47,8 @@ ICONS = $(ETC)/grass.ico \
 	$(ETC)/grass_map.ico \
 	$(ETC)/grass_dialog.ico \
 	$(ETC)/grass_sql.ico \
-	$(ETC)/grass_nviz.ico
+	$(ETC)/grass_nviz.ico \
+	$(ETC)/grass_error.ico
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
@@ -154,7 +155,7 @@ $(ETC)/gintro.gif: gintro.gif
 	rm -f $@
 	$(INSTALL_DATA) gintro.gif $@
 
-$(ICONS): grass.ico grass_map.ico grass_sql.ico grass_dialog.ico grass_nviz.ico
+$(ICONS): grass.ico grass_map.ico grass_sql.ico grass_dialog.ico grass_nviz.ico grass_error.ico
 	rm -f $@
 	$(INSTALL_DATA) $< $@
 
