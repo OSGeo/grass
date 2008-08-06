@@ -93,20 +93,17 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Can't get projection info of current location"));
 
 	if ((in_unit_info = G_get_projunits()) == NULL)
-	    G_fatal_error(_
-			  ("Can't get projection units of current location"));
+	    G_fatal_error(_("Can't get projection units of current location"));
 
 	if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-	    G_fatal_error(_
-			  ("Can't get projection key values of current location"));
+	    G_fatal_error(_("Can't get projection key values of current location"));
 
 
 	if (!wgs84->answer) {
 	    /* Set output to same ellipsoid as input if we're not looking
 	     * for the WGS84 values */
 	    if (GPJ_get_equivalent_latlong(&oproj, &iproj) < 0)
-		G_fatal_error(_
-			      ("Unable to set up lat/long projection parameters"));
+		G_fatal_error(_("Unable to set up lat/long projection parameters"));
 
 	}
 	else {
@@ -122,8 +119,7 @@ int main(int argc, char **argv)
 	     * the WGS84 values would be meaningless), and if they are set the 
 	     * output datum to WGS84 */
 	    if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-		G_fatal_error(_
-			      ("WGS84 output not possible as this location does not contain\n"
+		G_fatal_error(_("WGS84 output not possible as this location does not contain\n"
 			       "datum transformation parameters. Try running g.setproj."));
 	    else
 		G_set_key_value("datum", "wgs84", out_proj_info);
@@ -133,8 +129,7 @@ int main(int argc, char **argv)
 	    G_set_key_value("meters", "1.0", out_unit_info);
 
 	    if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-		G_fatal_error(_
-			      ("Unable to set up lat/long projection parameters"));
+		G_fatal_error(_("Unable to set up lat/long projection parameters"));
 
 	    G_free_key_value(out_proj_info);
 	    G_free_key_value(out_unit_info);

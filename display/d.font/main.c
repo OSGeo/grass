@@ -123,8 +123,7 @@ int main(int argc, char **argv)
 	    i++;
 	}
 	if (i >= num_fonts)
-	    G_fatal_error(_
-			  ("Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"),
+	    G_fatal_error(_("Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"),
 			  opt1->answer);
     }
 

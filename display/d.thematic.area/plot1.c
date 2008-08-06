@@ -362,16 +362,14 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			}
 			else {
 			    custom_rgb = FALSE;
-			    G_warning(_
-				      ("Error in color definition column (%s), element %d "
+			    G_warning(_("Error in color definition column (%s), element %d "
 				       "with cat %d: colorstring [%s]"),
 				      rgb_column, line, cat, colorstring);
 			}
 		    }
 		    else {
 			custom_rgb = FALSE;
-			G_warning(_
-				  ("Error in color definition column (%s), element %d with cat %d"),
+			G_warning(_("Error in color definition column (%s), element %d with cat %d"),
 				  rgb_column, line, cat);
 		    }
 		}
@@ -439,8 +437,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 				       DB_C_TYPE_INT ? cv_width->val.
 				       i : (int)cv_width->val.d);
 		    if (width < 0) {
-			G_warning(_
-				  ("Error in line width column (%s), element %d "
+			G_warning(_("Error in line width column (%s), element %d "
 				   "with cat %d: line width [%d]"),
 				  width_column, line, cat, width);
 			width = default_width;

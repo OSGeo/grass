@@ -43,8 +43,7 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     mode = M_START;
     G_message(_("Select vector(s) with mouse"));
     G_message(_(" - L: draw box with left mouse button to select"));
-    G_message(_
-	      (" - M: draw box with middle mouse button to remove from display"));
+    G_message(_(" - M: draw box with middle mouse button to remove from display"));
     G_message(_(" - R: quit and save selected vectors to new map\n"));
     while (1) {
 	G_message(_("L: add  M: remove  R: quit and save\n"));

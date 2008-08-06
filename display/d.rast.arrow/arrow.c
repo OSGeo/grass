@@ -221,8 +221,7 @@ int main(int argc, char **argv)
 
     if (opt7->answer) {
 	if (map_type != 1 && map_type != 4)
-	    G_fatal_error(_
-			  ("Magnitude is only supported for GRASS and compass aspect maps."));
+	    G_fatal_error(_("Magnitude is only supported for GRASS and compass aspect maps."));
 
 	mag_map = opt7->answer;
 	if ((mag_mapset = G_find_cell2(mag_map, "")) == NULL)

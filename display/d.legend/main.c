@@ -311,8 +311,7 @@ int main(int argc, char **argv)
 	y1++;
 
     if ((x0 < l) || (x1 > r) || (y0 < t) || (y1 > b))	/* for mouse or at= 0- or 100+; needs to be after order check */
-	G_warning(_
-		  ("Legend box lies outside of frame. Text may not display properly."));
+	G_warning(_("Legend box lies outside of frame. Text may not display properly."));
 
     horiz = (x1 - x0 > y1 - y0);
     if (horiz)
@@ -327,8 +326,7 @@ int main(int argc, char **argv)
     /* How many categories to show */
     if (!fp) {
 	if (G_read_range(map_name, mapset, &range) == -1)
-	    G_fatal_error(_
-			  ("Range information for <%s> not available (run r.support)"),
+	    G_fatal_error(_("Range information for <%s> not available (run r.support)"),
 			  map_name);
 
 	G_get_range_min_max(&range, &min_ind, &max_ind);
@@ -344,15 +342,13 @@ int main(int argc, char **argv)
 		min_ind =
 		    UserRangeMin <
 		    min_colr ? min_colr : (int)ceil(UserRangeMin);
-		G_warning(_
-			  ("Color range exceeds lower limit of actual data"));
+		G_warning(_("Color range exceeds lower limit of actual data"));
 	    }
 	    if (max_ind < UserRangeMax) {
 		max_ind =
 		    UserRangeMax >
 		    max_colr ? max_colr : (int)floor(UserRangeMax);
-		G_warning(_
-			  ("Color range exceeds upper limit of actual data"));
+		G_warning(_("Color range exceeds upper limit of actual data"));
 	    }
 	}
 
@@ -409,8 +405,7 @@ int main(int argc, char **argv)
 	    maxCat = 0;		/* reset */
 	    for (i = 0, k = 0; i < catlistCount; i++) {
 		if ((catlist[i] < min_ind) || (catlist[i] > max_ind)) {
-		    G_fatal_error(_
-				  ("use=%s out of range [%d,%d] (extend with range= ?)"),
+		    G_fatal_error(_("use=%s out of range [%d,%d] (extend with range= ?)"),
 				  opt8->answers[i], min_ind, max_ind);
 		}
 
@@ -451,8 +446,7 @@ int main(int argc, char **argv)
 	/* following covers both the above if(do_cats == cats_num) and k++ loop */
 	if (lines < 1) {
 	    lines = 1;		/* ward off the dpl floating point exception */
-	    G_fatal_error(_
-			  ("Nothing to draw! (no categories with labels? out of range?)"));
+	    G_fatal_error(_("Nothing to draw! (no categories with labels? out of range?)"));
 	}
 
 	/* Figure number of lines, number of pixles per line and text size */
@@ -462,8 +456,7 @@ int main(int argc, char **argv)
 	/*  an alternate solution is to set   dots_per_line=1         */
 	if ((dots_per_line == 0) && (do_smooth == 0)) {
 	    if (!use_catlist) {
-		G_message(_
-			  ("Forcing a smooth legend: too many categories for current window height"));
+		G_message(_("Forcing a smooth legend: too many categories for current window height"));
 		do_smooth = 1;
 	    }
 	}
@@ -507,21 +500,18 @@ int main(int argc, char **argv)
 		dmax = UserRangeMax;
 	    if (dmin > UserRangeMin) {
 		dmin = UserRangeMin < min_dcolr ? min_dcolr : UserRangeMin;
-		G_warning(_
-			  ("Color range exceeds lower limit of actual data"));
+		G_warning(_("Color range exceeds lower limit of actual data"));
 	    }
 	    if (dmax < UserRangeMax) {
 		dmax = UserRangeMax > max_dcolr ? max_dcolr : UserRangeMax;
-		G_warning(_
-			  ("Color range exceeds upper limit of actual data"));
+		G_warning(_("Color range exceeds upper limit of actual data"));
 	    }
 	}
 
 	if (use_catlist) {
 	    for (i = 0; i < catlistCount; i++) {
 		if ((catlist[i] < dmin) || (catlist[i] > dmax)) {
-		    G_fatal_error(_
-				  ("use=%s out of range [%.3f, %.3f] (extend with range= ?)"),
+		    G_fatal_error(_("use=%s out of range [%.3f, %.3f] (extend with range= ?)"),
 				  opt8->answers[i], dmin, dmax);
 		}
 		if (strlen(opt8->answers[i]) > MaxLabelLen)

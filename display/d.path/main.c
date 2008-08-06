@@ -176,8 +176,7 @@ int main(int argc, char **argv)
     if (geo_f->answer) {
 	geo = 1;
 	if (G_projection() != PROJECTION_LL)
-	    G_fatal_error(_
-			  ("The current projection is not longitude-latitude"));
+	    G_fatal_error(_("The current projection is not longitude-latitude"));
     }
     else
 	geo = 0;

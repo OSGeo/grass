@@ -288,8 +288,7 @@ int main(int argc, char **argv)
 	    }
 	}
 	if ((i > 0) && (in[0].num_pnts != in[i].num_pnts)) {
-	    G_warning(_
-		      ("Y input file <%s> contains %s data points than the X input file"),
+	    G_warning(_("Y input file <%s> contains %s data points than the X input file"),
 		      in[i].name,
 		      ((in[i].num_pnts < in[0].num_pnts) ? "fewer" : "more"));
 
