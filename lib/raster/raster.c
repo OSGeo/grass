@@ -18,6 +18,9 @@
 extern const struct driver *PNG_Driver(void);
 extern const struct driver *PS_Driver(void);
 extern const struct driver *HTML_Driver(void);
+#ifdef USE_CAIRO
+extern const struct driver *Cairo_Driver(void);
+#endif
 
 static void init(void)
 {
@@ -42,6 +45,9 @@ int R_open_driver(void)
     const struct driver *drv =
 	(p && G_strcasecmp(p, "PS") == 0) ? PS_Driver() :
 	(p && G_strcasecmp(p, "HTML") == 0) ? HTML_Driver() :
+#ifdef USE_CAIRO
+	(p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver() :
+#endif
 	PNG_Driver();
 
     LIB_init(drv, 0, NULL);
