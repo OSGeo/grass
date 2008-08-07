@@ -1,6 +1,21 @@
+/*!
+ * \file db/dbmi_client/copy_tab.c
+ * 
+ * \brief DBMI Library (client) - copy table
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 #include "macros.h"
 
 static int cmp(const void *pa, const void *pb)
@@ -15,25 +30,36 @@ static int cmp(const void *pa, const void *pb)
     return 0;
 }
 
-/* Copy table, used by various db_copy_table* 
+/*!
+  \brief Copy table, used by various db_copy_table*
+  
+  Use either 'where' or 'select' or 'selcol'+'ivals'+'nvals' but
+  never more than one.
 
-   Parameters: 
-   where: WHERE SQL condition (without where key word) or NULL
-   select: full select statement
-   selcol: name of column used to select records by values in ivals or NULL
-   ivals: pointer to array of integer values or NULL
-   nvals: number of values in ivals
+  Warning: driver opened as second must be closed as first, otherwise
+  it hangs, not sure why.
 
-   Use either 'where' or 'select' or 'selcol'+'ivals'+'nvals' but never more than one
+  \param from_dvrname name of driver from table is copied
+  \param from_dbname name of database from table is copied
+  \param from_tbl_name name of table to be copied
+  \param to_dvrname name of driver to - where table is copied to
+  \param to_dbname name of database to - where table is copied to
+  \param to_dbname name of copied table
+  \param where WHERE SQL condition (without where key word) or NULL
+  \param select full select statement
+  \param selcol name of column used to select records by values in ivals or NULL
+  \param ivals pointer to array of integer values or NULL
+  \param nvals number of values in ivals
 
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
-/* Warning, driver opened as second must be closed as first, otherwise it hangs, not sure why */
-int
-db__copy_table(const char *from_drvname, const char *from_dbname,
-	       const char *from_tblname, const char *to_drvname,
-	       const char *to_dbname, const char *to_tblname,
-	       const char *where, const char *select, const char *selcol,
-	       int *ivals, int nvals)
+
+int db__copy_table(const char *from_drvname, const char *from_dbname,
+		   const char *from_tblname, const char *to_drvname,
+		   const char *to_dbname, const char *to_tblname,
+		   const char *where, const char *select, const char *selcol,
+		   int *ivals, int nvals)
 {
     int col, ncols, sqltype, ctype, more, selcol_found;
     char buf[1000];
@@ -71,12 +97,13 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
     /* Open input driver and database */
     from_driver = db_start_driver(from_drvname);
     if (from_driver == NULL) {
-	G_warning("Cannot open driver '%s'", from_drvname);
+	G_warning(_("Unable to start driver <%s>"), from_drvname);
 	return DB_FAILED;
     }
     db_set_handle(&from_handle, from_dbname, NULL);
     if (db_open_database(from_driver, &from_handle) != DB_OK) {
-	G_warning("Cannot open database '%s'", from_dbname);
+	G_warning(_("Unable to open database <%s> by driver <%s>"),
+		  from_drvname, from_dbname);
 	db_close_database_shutdown_driver(from_driver);
 	return DB_FAILED;
     }
@@ -90,13 +117,14 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
     else {
 	to_driver = db_start_driver(to_drvname);
 	if (to_driver == NULL) {
-	    G_warning("Cannot open driver '%s'", to_drvname);
+	    G_warning(_("Unable to start driver <%s>"), to_drvname);
 	    db_close_database_shutdown_driver(from_driver);
 	    return DB_FAILED;
 	}
 	db_set_handle(&to_handle, to_dbname, NULL);
 	if (db_open_database(to_driver, &to_handle) != DB_OK) {
-	    G_warning("Cannot open database '%s'", to_dbname);
+	    G_warning(_("Unable to open database <%s> by driver <%s>"),
+		      to_drvname, to_dbname);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver) {
 		db_close_database_shutdown_driver(from_driver);
@@ -113,7 +141,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 
     /* test if the table exists */
     if (db_list_tables(to_driver, &tblnames, &count, 0) != DB_OK) {
-	G_warning("Cannot list tables in database '%s'", to_dbname);
+	G_warning(_("Unable to get list tables in database <%s>"),
+		  to_dbname);
 	db_close_database_shutdown_driver(to_driver);
 	if (from_driver != to_driver)
 	    db_close_database_shutdown_driver(from_driver);
@@ -125,7 +154,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 	const char *tblname = db_get_string(&tblnames[i]);
 
 	if (strcmp(to_tblname, tblname) == 0) {
-	    G_warning("Table '%s' already exists", to_dbname);
+	    G_warning(_("Table <%s> already existsin database <%s>"),
+		      to_dbname, to_dbname);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver)
 		db_close_database_shutdown_driver(from_driver);
@@ -166,7 +196,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
     G_debug(3, db_get_string(&sql));
     if (db_open_select_cursor(from_driver, &sql, &cursor, DB_SEQUENTIAL) !=
 	DB_OK) {
-	G_warning("Cannot open select cursor: '%s'", db_get_string(&sql));
+	G_warning(_("Unable to open select cursor: '%s'"),
+		  db_get_string(&sql));
 	db_close_database_shutdown_driver(to_driver);
 	if (from_driver != to_driver) {
 	    db_close_database_shutdown_driver(from_driver);
@@ -197,7 +228,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 
 	if (selcol && G_strcasecmp(colname, selcol) == 0) {
 	    if (ctype != DB_C_TYPE_INT)
-		G_fatal_error("Column '%s' is not integer", colname);
+		G_fatal_error(_("Column <%s> is not integer"),
+			      colname);
 	    selcol_found = 1;
 	}
 
@@ -213,10 +245,11 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
     db_close_cursor(&cursor);
 
     if (selcol && !selcol_found)
-	G_fatal_error("Column '%s' not found", selcol);
+	G_fatal_error(_("Column <%s> not found"), selcol);
 
     if (db_create_table(to_driver, out_table) != DB_OK) {
-	G_warning("Cannot create new table");
+	G_warning(_("Unable to create table <%s>"),
+		  out_table);
 	db_close_database_shutdown_driver(to_driver);
 	if (from_driver != to_driver) {
 	    db_close_database_shutdown_driver(from_driver);
@@ -240,7 +273,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
     G_debug(3, db_get_string(&sql));
     if (db_open_select_cursor(from_driver, &sql, &cursor, DB_SEQUENTIAL) !=
 	DB_OK) {
-	G_warning("Cannot open select cursor: '%s'", db_get_string(&sql));
+	G_warning(_("Unable to open select cursor: '%s'"),
+		  db_get_string(&sql));
 	db_close_database_shutdown_driver(to_driver);
 	if (from_driver != to_driver) {
 	    db_close_database_shutdown_driver(from_driver);
@@ -258,7 +292,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 	int select;
 
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-	    G_warning("Cannot fetch row");
+	    G_warning(_("Unable to fetch data from table <%s>"),
+		      from_tblname);
 	    db_close_cursor(&cursor);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver) {
@@ -313,7 +348,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 		}
 		break;
 	    default:
-		G_warning("Unknown column type (%s)", colname);
+		G_warning(_("Unknown column type (column <%s>)"),
+			  colname);
 		db_close_cursor(&cursor);
 		db_close_database_shutdown_driver(to_driver);
 		if (from_driver != to_driver) {
@@ -327,7 +363,8 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 	db_append_string(&sql, ")");
 	G_debug(3, db_get_string(&sql));
 	if (db_execute_immediate(to_driver, &sql) != DB_OK) {
-	    G_warning("Cannot insert new record: '%s'", db_get_string(&sql));
+	    G_warning("Unable to insert new record: '%s'",
+		      db_get_string(&sql));
 	    db_close_cursor(&cursor);
 	    db_close_database_shutdown_driver(to_driver);
 	    if (from_driver != to_driver) {
@@ -351,16 +388,21 @@ db__copy_table(const char *from_drvname, const char *from_dbname,
 }
 
 /*!
-   \fn int db_copy_table (const char *from_drvname, const char *from_dbname, const char *from_tblname,
-   const char *to_drvname, const char *to_dbname, const char *to_tblname )
-   \brief Copy a table
-   \return 
-   \param
+  \brief Copy a table
+ 
+  \param from_dvrname name of driver from table is copied
+  \param from_dbname name of database from table is copied
+  \param from_tbl_name name of table to be copied
+  \param to_dvrname name of driver to - where table is copied to
+  \param to_dbname name of database to - where table is copied to
+  \param to_dbname name of copied table
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
-int
-db_copy_table(const char *from_drvname, const char *from_dbname,
-	      const char *from_tblname, const char *to_drvname,
-	      const char *to_dbname, const char *to_tblname)
+int db_copy_table(const char *from_drvname, const char *from_dbname,
+		  const char *from_tblname, const char *to_drvname,
+		  const char *to_dbname, const char *to_tblname)
 {
     return db__copy_table(from_drvname, from_dbname, from_tblname,
 			  to_drvname, to_dbname, to_tblname,
@@ -368,17 +410,23 @@ db_copy_table(const char *from_drvname, const char *from_dbname,
 }
 
 /*!
-   \fn int db_copy_table_where (const char *from_drvname, const char *from_dbname, const char *from_tblname,
-   const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *where )
-   \brief Copy a table
-   \return 
-   \param where WHERE SQL condition (without where key word) or NULL
- */
-int
-db_copy_table_where(const char *from_drvname, const char *from_dbname,
-		    const char *from_tblname, const char *to_drvname,
-		    const char *to_dbname, const char *to_tblname,
-		    const char *where)
+  \brief Copy a table (by where statement)
+
+  \param from_dvrname name of driver from table is copied
+  \param from_dbname name of database from table is copied
+  \param from_tbl_name name of table to be copied
+  \param to_dvrname name of driver to - where table is copied to
+  \param to_dbname name of database to - where table is copied to
+  \param to_dbname name of copied table
+  \param where WHERE SQL condition (without where key word)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_copy_table_where(const char *from_drvname, const char *from_dbname,
+			const char *from_tblname, const char *to_drvname,
+			const char *to_dbname, const char *to_tblname,
+			const char *where)
 {
     return db__copy_table(from_drvname, from_dbname, from_tblname,
 			  to_drvname, to_dbname, to_tblname,
@@ -386,17 +434,23 @@ db_copy_table_where(const char *from_drvname, const char *from_dbname,
 }
 
 /*!
-   \fn int db_copy_table_select ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
-   const char *to_drvname, const char *to_dbname, const char *to_tblname, const char *select )
-   \brief Copy a table
-   \return 
-   \param select is full select statement or NULL
- */
-int
-db_copy_table_select(const char *from_drvname, const char *from_dbname,
-		     const char *from_tblname, const char *to_drvname,
-		     const char *to_dbname, const char *to_tblname,
-		     const char *select)
+  \brief Copy a table (by select statement)
+
+  \param from_dvrname name of driver from table is copied
+  \param from_dbname name of database from table is copied
+  \param from_tbl_name name of table to be copied
+  \param to_dvrname name of driver to - where table is copied to
+  \param to_dbname name of database to - where table is copied to
+  \param to_dbname name of copied table
+  \param select full select statement
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_copy_table_select(const char *from_drvname, const char *from_dbname,
+			 const char *from_tblname, const char *to_drvname,
+			 const char *to_dbname, const char *to_tblname,
+			 const char *select)
 {
     return db__copy_table(from_drvname, from_dbname, from_tblname,
 			  to_drvname, to_dbname, to_tblname,
@@ -404,21 +458,25 @@ db_copy_table_select(const char *from_drvname, const char *from_dbname,
 }
 
 /*!
-   \fn int db_copy_table_by_ints ( const char *from_drvname, const char *from_dbname, const char *from_tblname,
-   const char *to_drvname, const char *to_dbname, const char *to_tblname,
-   const char *selcol, int *ivals, int nvals )
-   \brief Copy a table, but only records where value of column 'selcol'
-   is in 'ivals' 
-   \return 
-   \param selcol name of column used to select records by values in ivals or NULL
-   \param ivals pointer to array of integer values or NULL
-   \param nvals number of values in ivals
- */
-int
-db_copy_table_by_ints(const char *from_drvname, const char *from_dbname,
-		      const char *from_tblname, const char *to_drvname,
-		      const char *to_dbname, const char *to_tblname,
-		      const char *selcol, int *ivals, int nvals)
+  \brief Copy a table (by keys)
+
+  \param from_dvrname name of driver from table is copied
+  \param from_dbname name of database from table is copied
+  \param from_tbl_name name of table to be copied
+  \param to_dvrname name of driver to - where table is copied to
+  \param to_dbname name of database to - where table is copied to
+  \param to_dbname name of copied table
+  \param selcol name of column used to select records by values in ivals or NULL
+  \param ivals pointer to array of integer values or NULL
+  \param nvals number of values in ivals
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_copy_table_by_ints(const char *from_drvname, const char *from_dbname,
+			  const char *from_tblname, const char *to_drvname,
+			  const char *to_dbname, const char *to_tblname,
+			  const char *selcol, int *ivals, int nvals)
 {
     return db__copy_table(from_drvname, from_dbname, from_tblname,
 			  to_drvname, to_dbname, to_tblname,

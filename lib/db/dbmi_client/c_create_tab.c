@@ -1,11 +1,28 @@
+/*!
+ * \file db/dbmi_client/c_create_tab.c
+ * 
+ * \brief DBMI Library (client) - create table
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_create_table (dbDriver *driver, dbTable *table)
-   \brief 
-   \return 
-   \param 
+  \brief Create table
+
+  \param driver db driver
+  \param table table description (pointer to dbTable structure)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_create_table(dbDriver * driver, dbTable * table)
 {

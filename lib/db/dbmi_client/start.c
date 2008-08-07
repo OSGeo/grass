@@ -1,3 +1,17 @@
+/*!
+ * \file db/dbmi_client/start.c
+ * 
+ * \brief DBMI Library (client) - open database connection
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -14,18 +28,17 @@
 #define WRITE 1
 
 
-/**
- * \fn dbDriver *db_start_driver (const char *name)
- *
- * \brief Initialize a new dbDriver for db transaction.
- *
- * If <b>name</b> is NULL, the db name will be assigned 
- * connection.driverName.
- *
- * \param[in] const char * driver name
- * \return NULL on error
- */
-
+/*!
+  \brief Initialize a new dbDriver for db transaction.
+ 
+  If <i>name</i> is NULL, the db name will be assigned 
+  connection.driverName.
+  
+  \param name driver name
+  
+  \return pointer to dbDriver structure
+  \return NULL on error
+*/
 dbDriver *db_start_driver(const char *name)
 {
     dbDriver *driver;

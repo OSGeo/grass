@@ -1,3 +1,17 @@
+/*!
+ * \file db/dbmi_client/c_list_tabs.c
+ * 
+ * \brief DBMI Library (client) - list tables
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
@@ -12,12 +26,15 @@ static int cmp_dbstr(const void *pa, const void *pb)
 }
 
 /*!
-   \fn int db_list_tables (dbDriver *driver, dbString **names, int *count, int system)
-   \brief list available tables for given connection
-   \return names of tables, success: DB_OK; DB_FAILED otherwise
-   \param names: names of tables
-   \param
-   \param
+   \brief List available tables for given connection
+
+   \param driver db driver
+   \param[out] names list of table names
+   \param[out] count number of items in the list
+   \param system ?
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int
 db_list_tables(dbDriver * driver, dbString ** names, int *count, int system)

@@ -1,13 +1,30 @@
+/*!
+ * \file db/dbmi_client/c_create_idx.c
+ * 
+ * \brief DBMI Library (client) - create index
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <string.h>
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_create_index (dbDriver *driver, dbIndex *index)
-   \brief 
-   \return 
-   \param 
- */
+  \brief Create index
+
+  \param driver db driver
+  \param index index info (pointer to dbIndex structure)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
 int db_create_index(dbDriver * driver, dbIndex * index)
 {
     int ret_code;
@@ -32,13 +49,17 @@ int db_create_index(dbDriver * driver, dbIndex * index)
 }
 
 /*!
-   \brief  Create unique index
-   \return 
-   \param 
+  \brief Create unique index
+
+  \param driver db driver
+  \param table_name table name
+  \param column_name column name (where to create index)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
-int
-db_create_index2(dbDriver * driver, const char *table_name,
-		 const char *column_name)
+int db_create_index2(dbDriver * driver, const char *table_name,
+		     const char *column_name)
 {
     int ret;
     dbIndex index;

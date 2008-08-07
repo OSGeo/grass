@@ -1,15 +1,34 @@
+/*!
+ * \file db/dbmi_client/c_listdb.c
+ * 
+ * \brief DBMI Library (client) - list databases
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_list_databases (dbDriver *driver, dbString *path, int npaths, dbHandle **handles, int *count)
-   \brief 
-   \return 
-   \param 
- */
-int
-db_list_databases(dbDriver * driver, dbString * path, int npaths,
-		  dbHandle ** handles, int *count)
+  \brief List databases
+  
+  \param driver db driver
+  \param path db path
+  \param npaths number of given paths
+  \param[out] handles handle infos
+  \param[out] number of handle infos
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_list_databases(dbDriver * driver, dbString * path, int npaths,
+		      dbHandle ** handles, int *count)
 {
     int ret_code;
     int i;

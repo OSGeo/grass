@@ -1,11 +1,28 @@
+/*!
+ * \file db/dbmi_client/c_execute.c
+ * 
+ * \brief DBMI Library (client) - execute SQL statements
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_execute_immediate (dbDriver *driver, dbString *SQLstatement)
-   \brief 
-   \return 
-   \param 
+  \brief Execute SQL statements
+
+  \param driver db driver
+  \param SQLstatement SQL statement (alter, update, ...)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_execute_immediate(dbDriver * driver, dbString * SQLstatement)
 {
@@ -29,10 +46,12 @@ int db_execute_immediate(dbDriver * driver, dbString * SQLstatement)
 }
 
 /*!
-   \fn int db_begin_transaction (dbDriver *driver)
-   \brief 
-   \return 
-   \param 
+  \brief Begin transaction
+
+  \return driver db driver
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_begin_transaction(dbDriver * driver)
 {
@@ -53,10 +72,12 @@ int db_begin_transaction(dbDriver * driver)
 }
 
 /*!
-   \fn int db_commit_transaction (dbDriver *driver)
-   \brief 
-   \return 
-   \param 
+  \brief Commit transaction
+  
+  \param driver db driver
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_commit_transaction(dbDriver * driver)
 {

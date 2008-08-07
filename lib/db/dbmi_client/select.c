@@ -1,7 +1,22 @@
+/*!
+ * \file db/dbmi_client/select.c
+ * 
+ * \brief DBMI Library (client) - select records from table
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 static int cmp(const void *pa, const void *pb)
 {
@@ -74,16 +89,17 @@ static int cmpvaluestring(const void *pa, const void *pb)
 }
 
 /*!
-   \fn db_select_int (dbDriver *driver, const char *tab, const char *col, const char *where, int **pval)
-   \brief Select array of ordered integers from table/column
-   \return number of selected values, -1 on error
-   \param driver DB driver
-   \param tab table name
-   \param col column name
-   \param where where statement
-   \param pval array of ordered integer values
- */
+  \brief Select array of ordered integers from table/column
 
+  \param driver DB driver
+  \param tab table name
+  \param col column name
+  \param where where statement
+  \param[out] pval array of ordered integer values
+
+  \return number of selected values
+  \return -1 on error
+*/
 int db_select_int(dbDriver * driver, const char *tab, const char *col,
 		  const char *where, int **pval)
 {
@@ -164,15 +180,17 @@ int db_select_int(dbDriver * driver, const char *tab, const char *col,
 }
 
 /*!
-   \fn db_select_value (dbDriver *driver, const char *tab, const char *key, int id, const char *col, dbValue *val) 
-   \brief Select one (first) value from table/column for key/id
-   \return number of selected values, -1 on error
-   \param driver DB driver
-   \param tab table name
-   \param key key column name
-   \param id identifier in key column
-   \param col name of column to select the value from
-   \param val dbValue to store within
+  \brief Select one (first) value from table/column for key/id
+
+  \param driver DB driver
+  \param tab table name
+  \param key key column name
+  \param id identifier in key column
+  \param col name of column to select the value from
+  \param[out] val dbValue to store within
+
+  \return number of selected values
+  \return -1 on error
  */
 int db_select_value(dbDriver * driver, const char *tab, const char *key,
 		    int id, const char *col, dbValue * val)
@@ -215,14 +233,16 @@ int db_select_value(dbDriver * driver, const char *tab, const char *key,
 }
 
 /*!
-   \fn int db_select_CatValArray (dbDriver *driver, const char *tab, const char *key, const char *col, const char *where, dbCatValArray *cvarr)
-   \brief Select pairs key/value to array, values are sorted by key (must be integer)
-   \return number of selected values, -1 on error
-   \param driver DB driver
-   \param tab table name
-   \param key key column name
-   \param col value column name
-   \param cvarr dbCatValArray to store within
+  \brief Select pairs key/value to array, values are sorted by key (must be integer)
+
+  \param driver DB driver
+  \param tab table name
+  \param key key column name
+  \param col value column name
+  \param[out] cvarr dbCatValArray to store within
+
+  \return number of selected values
+  \return -1 on error
  */
 int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 			  const char *col, const char *where,
@@ -256,7 +276,7 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
     nrows = db_get_num_rows(&cursor);
     G_debug(3, "  %d rows selected", nrows);
     if (nrows < 0)
-	G_fatal_error("Cannot select rows from database");
+	G_fatal_error(_("Unable select records from table <%s>"), tab);
 
     db_CatValArray_alloc(cvarr, nrows);
 
@@ -343,20 +363,21 @@ int db_select_CatValArray(dbDriver * driver, const char *tab, const char *key,
 }
 
 /*!
-   \fn void db_CatValArray_sort (dbCatValArray *arr)
-   \brief Sort key/value array by key
-   \param arr dbCatValArray (key/value array)
- */
+  \brief Sort key/value array by key
+  \param[in,out] arr dbCatValArray (key/value array)
+*/
 void db_CatValArray_sort(dbCatValArray * arr)
 {
     qsort((void *)arr->value, arr->n_values, sizeof(dbCatVal), cmpcat);
 }
 
 /*!
-   \fn int db_CatValArray_sort_by_value (dbCatValArray *arr)
-   \brief Sort key/value array by value
-   \return DB_OK on success, DB_FAILED on error
-   \param arr dbCatValArray (key/value array)
+  \brief Sort key/value array by value
+  
+  \param[in,out] arr dbCatValArray (key/value array)
+  
+  \return DB_OK on success
+  \return DB_FAILED on error
  */
 int db_CatValArray_sort_by_value(dbCatValArray * arr)
 {
@@ -385,12 +406,14 @@ int db_CatValArray_sort_by_value(dbCatValArray * arr)
 }
 
 /*!
-   \fn int db_CatValArray_get_value (dbCatValArray *arr, int key, dbCatVal **cv)
-   \brief Find value by key
-   \return DB_OK on success, DB_FAILED on error
-   \param arr dbCatValArray (key/value array)
-   \param key key value
-   \param cv dbCatVal structure (key/value) to store within
+  \brief Find value by key
+
+  \param arr dbCatValArray (key/value array)
+  \param key key value
+  \param[out] cv dbCatVal structure (key/value) to store within
+
+  \return DB_OK on success
+  \return DB_FAILED on error
  */
 int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
 {
@@ -409,12 +432,14 @@ int db_CatValArray_get_value(dbCatValArray * arr, int key, dbCatVal ** cv)
 }
 
 /*!
-   \fn int db_CatValArray_get_value_int (dbCatValArray *arr, int key, int *val)
-   \brief Find value (integer) by key
-   \return DB_OK on success, DB_FAILED on error
-   \param arr dbCatValArray (key/value array)
-   \param key key value
-   \param val found value (integer)
+  \brief Find value (integer) by key
+
+  \param arr dbCatValArray (key/value array)
+  \param key key value
+  \param[out] val found value (integer)
+
+  \return DB_OK on success
+  \return DB_FAILED on error
  */
 int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
 {
@@ -433,13 +458,15 @@ int db_CatValArray_get_value_int(dbCatValArray * arr, int key, int *val)
 }
 
 /*!
-   \fn int db_CatValArray_get_value_double (dbCatValArray *arr, int key, double *val)
-   \brief Find value (double) by key
-   \return DB_OK on success, DB_FAILED on error
-   \param arr dbCatValArray (key/value array)
-   \param key key value
-   \param val found value (double)
- */
+  \brief Find value (double) by key
+  
+  \param arr dbCatValArray (key/value array)
+  \param key key value
+  \param[out] val found value (double)
+
+  \return DB_OK on success
+  \return DB_FAILED on error
+*/
 int db_CatValArray_get_value_double(dbCatValArray * arr, int key, double *val)
 {
     dbCatVal *catval;

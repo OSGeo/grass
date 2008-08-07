@@ -9,16 +9,17 @@ http://grass.osgeo.org
 The attribute management was completely changed in GRASS 6 to achieve
 multi-attribute capabilities managed within external databases.  The former
 dig_cats/ files are not used any more and all vector attributes are stored
-in external database. Connection with database is done through DBMI library
+in external database. Connection with database is done through <b>DBMI library</b>
 (DataBase Management Interface) with its integrated drivers. At time of this
 writing following DBMI drivers for attribute storage are available:
 
 <ul>
 <li> DBF: xBase files (default)
-<li> ODBC: to interface from www.unixodbc.org
+<li> ODBC: to interface from http://www.unixodbc.org
 <li> PostgreSQL driver (note that PostgreSQL can also be accessed through
-     ODBC)
-<li> mySQL
+     ODBC): http://www.postgresql.org
+<li> mySQL: http://mysql.com/
+<li> SQLite: http://www.sqlite.org/
 </ul>
 
 These drivers are compiled depending on present DB related libraries and
@@ -35,12 +36,13 @@ The flexibility of this approach even supports the extreme case, that one
 vector entity may be linked to attributes in different tables in different
 databases connected by different drivers at the same time.
 
-The DBMI library contains drivers such as DBF, ODBC, MySQL and PostgreSQL.
-The functionality of the database support varies with the
-capabilities of the underlying RDBMS. Main features are multi-attributes
-support for various data types, also multiple tables may optionally be
-linked to one or many vector entity/ies. SQL (Structured Query Language) is
-used for all drivers, but in a limited implementation.
+The DBMI library contains drivers such as DBF, SQLite, ODBC, MySQL and
+PostgreSQL.  The functionality of the database support varies with the
+capabilities of the underlying RDBMS. Main features are
+multi-attributes support for various data types, also multiple tables
+may optionally be linked to one or many vector entity/ies. SQL
+(Structured Query Language) is used for all drivers, but in a limited
+implementation.
 
 For DBMI architecture details please read Blazek et al. 2002 (see below).
 
@@ -63,8 +65,117 @@ See details here:<br>
 
 \section dbmi_client DBMI CLIENT functions
 
-[ to be moved here from below list ]
+ - db_add_column()
 
+ - db_begin_transaction()
+
+ - db_bind_update()
+
+ - db_CatValArray_get_value()
+
+ - db_CatValArray_get_value_double()
+
+ - db_CatValArray_get_value_int()
+
+ - db_CatValArray_sort()
+
+ - db_CatValArray_sort_by_value()
+
+ - db_close_cursor()
+ 
+ - db_close_database()
+
+ - db_close_database_shutdown_driver()
+ 
+ - db_column_Ctype()
+
+ - db_column_sqltype()
+
+ - db_commit_transaction()
+
+ - db_copy_table()
+
+ - db_copy_table_where()
+ 
+ - db_copy_table_select()
+
+ - db_copy_table_by_ints()
+ 
+ - db_create_database()
+
+ - db_create_index()
+
+ - db_create_table()
+
+ - db_delete()
+
+ - db_delete_database()
+
+ - db_delete_table()
+ 
+ - db_describe_table()
+
+ - db_drop_column()
+
+ - db_drop_index()
+
+ - db_drop_table()
+
+ - db_execute_immediate()
+
+ - db_fetch()
+
+ - db_find_database()
+
+ - db_get_column()
+ 
+ - db_get_num_rows()
+
+ - db_get_table_number_of_rows()
+ 
+ - db_grant_on_table()
+
+ - db_gversion()
+ 
+ - db_insert()
+
+ - db_list_databases()
+
+ - db_list_drivers()
+
+ - db_list_indexes()
+
+ - db_list_tables()
+
+ - db_open_database()
+
+ - db_open_insert_cursor()
+
+ - db_open_select_cursor()
+ 
+ - db_open_update_cursor()
+
+ - db_print_column_definition()
+ 
+ - db_print_table_definition()
+
+ - db_start_driver_open_database()
+
+ - db_select_CatValArray()
+
+ - db_select_int()
+
+ - db_select_value()
+
+ - db_shutdown_driver()
+
+ - db_start_driver()
+ 
+ - db_table_exists()
+
+ - db_update()
+
+ - db__copy_table()
 \section dbmi_driver DBMI DRIVER functions
 
 [ to be moved here from below list ]
