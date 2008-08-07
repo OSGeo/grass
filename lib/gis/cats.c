@@ -61,8 +61,8 @@
  **********************************************************************
  *
  *  G_read_[raster]_cats (name, mapset, pcats)
- *      char *name                   name of cell file
- *      char *mapset                 mapset that cell file belongs to
+ *      const char *name                   name of cell file
+ *      const char *mapset                 mapset that cell file belongs to
  *      struct Categories *pcats     structure to hold category info
  *
  *  Reads the category information associated with cell file "name"
@@ -88,8 +88,8 @@
  **********************************************************************
  *
  *  G_read_vector_cats (name, mapset, pcats)
- *      char *name                   name of vector map
- *      char *mapset                 mapset that vector map belongs to
+ *      const char *name                   name of vector map
+ *      const char *mapset                 mapset that vector map belongs to
  *      struct Categories *pcats     structure to hold category info
  *
  *
@@ -164,7 +164,7 @@
  *
  * G_init_cats (ncats, title, pcats)
  *      CELL ncats                   number of categories
- *      char *title                  cell title
+ *      const char *title            cell title
  *      struct Categories *pcats     structure to hold category info
  *
  * Initializes the cats structure for subsequent calls to G_set_cat()
@@ -229,7 +229,7 @@
  **********************************************************************
  *
  * G_init_raster_cats (title, pcats)
- *      char *title                  cell title
+ *      const char *title            cell title
  *      struct Categories *pcats     structure to hold category info
  *
  * Initializes the cats structure for subsequent calls to G_set_cat()
@@ -237,7 +237,7 @@
  **********************************************************************
  *
  * G_set_[raster]_cats_fmt (fmt, m1, a1, m2, a2, pcats)
- *      char *fmt                    user form of the equation format
+ *      const char *fmt              user form of the equation format
  *      float m1,a1,m2,a2            coefficients
  *      struct Categories *pcats     structure to hold category info
  *
@@ -247,7 +247,7 @@
  **********************************************************************
  *
  * G_set_[raster]_cats_title (title, pcats)
- *      char *title                  cell file title
+ *      const char *title            cell file title
  *      struct Categories *pcats     structure holding category info
  *
  * Store title as cell file in cats structure
@@ -257,7 +257,7 @@
  *
  * G_set_cat (num, label, pcats)
  *      CELL num                     category number
- *      char *label                  category label
+ *      const char *label            category label
  *      struct Categories *pcats     structure to hold category info
  *
  * Adds the string buff to represent category "num" in category structure
@@ -269,7 +269,7 @@
  *
  * G_set_[f/d/c]_raster_cat (&val1, &val2, label, pcats)
  *      [D/F]CELL *val1, *val2;      pointers to raster values
- *      char *label                  category label
+ *      const char *label            category label
  *      struct Categories *pcats     structure to hold category info
  *
  * Adds the label for range val1 through val2 in category structure
@@ -281,7 +281,7 @@
  *
  * G_set_raster_cat (val1, val2, label, pcats, data_type)
  *      void *val1, *val2;           pointers to raster values
- *      char *label                  category label
+ *      const char *label            category label
  *      struct Categories *pcats     structure to hold category info
  *      RASTER_MAP_TYPE data_type    type of raster cell
  *
@@ -293,7 +293,7 @@
  **********************************************************************
  *
  *  G_write_[raster]_cats (name, pcats)
- *      char *name                   name of cell file
+ *      const char *name             name of cell file
  *      struct Categories *pcats     structure holding category info
  *
  *  Writes the category information associated with cell file "name"
@@ -304,7 +304,7 @@
  **********************************************************************
  *
  *  G_write_vector_cats (name, pcats)
- *      char *name                   name of vector map
+ *      const char *name             name of vector map
  *      struct Categories *pcats     structure holding category info
  *
  *  Writes the category information associated with vector map "name"
@@ -750,7 +750,7 @@ int G_unmark_raster_cats(struct Categories *pcats)
  *  \return int
  */
 
-int G_mark_c_raster_cats(CELL * rast_row,	/* raster row to update stats */
+int G_mark_c_raster_cats(const CELL * rast_row,	/* raster row to update stats */
 			 int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, CELL_TYPE);
@@ -772,7 +772,7 @@ int G_mark_c_raster_cats(CELL * rast_row,	/* raster row to update stats */
  *  \return int
  */
 
-int G_mark_f_raster_cats(FCELL * rast_row,	/* raster row to update stats */
+int G_mark_f_raster_cats(const FCELL * rast_row,	/* raster row to update stats */
 			 int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, FCELL_TYPE);
@@ -794,7 +794,7 @@ int G_mark_f_raster_cats(FCELL * rast_row,	/* raster row to update stats */
  *  \return int
  */
 
-int G_mark_d_raster_cats(DCELL * rast_row,	/* raster row to update stats */
+int G_mark_d_raster_cats(const DCELL * rast_row,	/* raster row to update stats */
 			 int ncols, struct Categories *pcats)
 {				/* structure to hold category info */
     G_mark_raster_cats(rast_row, ncols, pcats, DCELL_TYPE);
@@ -818,7 +818,7 @@ int G_mark_d_raster_cats(DCELL * rast_row,	/* raster row to update stats */
  *  \return int
  */
 
-int G_mark_raster_cats(void *rast_row,	/* raster row to update stats */
+int G_mark_raster_cats(const void *rast_row,	/* raster row to update stats */
 		       int ncols, struct Categories *pcats,	/* structure to hold category info */
 		       RASTER_MAP_TYPE data_type)
 {
@@ -996,11 +996,9 @@ static int get_cond(char **f, char *value, DCELL val)
  *  \return int
  */
 
-int G_set_cat(CELL num, char *label, struct Categories *pcats)
+int G_set_cat(CELL num, const char *label, struct Categories *pcats)
 {
-    CELL tmp = num;
-
-    return G_set_c_raster_cat(&tmp, &tmp, label, pcats);
+    return G_set_c_raster_cat(&num, &num, label, pcats);
 }
 
 
@@ -1016,8 +1014,8 @@ int G_set_cat(CELL num, char *label, struct Categories *pcats)
  *  \return int
  */
 
-int G_set_c_raster_cat(CELL * rast1, CELL * rast2,
-		       char *label, struct Categories *pcats)
+int G_set_c_raster_cat(const CELL * rast1, const CELL * rast2,
+		       const char *label, struct Categories *pcats)
 {
     return G_set_raster_cat(rast1, rast2, label, pcats, CELL_TYPE);
 }
@@ -1035,8 +1033,8 @@ int G_set_c_raster_cat(CELL * rast1, CELL * rast2,
  *  \return int
  */
 
-int G_set_f_raster_cat(FCELL * rast1, FCELL * rast2,
-		       char *label, struct Categories *pcats)
+int G_set_f_raster_cat(const FCELL * rast1, const FCELL * rast2,
+		       const char *label, struct Categories *pcats)
 {
     return G_set_raster_cat(rast1, rast2, label, pcats, FCELL_TYPE);
 }
@@ -1054,8 +1052,8 @@ int G_set_f_raster_cat(FCELL * rast1, FCELL * rast2,
  *  \return int
  */
 
-int G_set_d_raster_cat(DCELL * rast1, DCELL * rast2,
-		       char *label, struct Categories *pcats)
+int G_set_d_raster_cat(const DCELL * rast1, const DCELL * rast2,
+		       const char *label, struct Categories *pcats)
 {
     long len;
     DCELL dtmp1, dtmp2;
@@ -1155,8 +1153,8 @@ int G_set_d_raster_cat(DCELL * rast1, DCELL * rast2,
  *  \return int
  */
 
-int G_set_raster_cat(void *rast1, void *rast2,
-		     char *label,
+int G_set_raster_cat(const void *rast1, const void *rast2,
+		     const char *label,
 		     struct Categories *pcats, RASTER_MAP_TYPE data_type)
 {
     DCELL val1, val2;
@@ -1180,7 +1178,7 @@ int G_set_raster_cat(void *rast1, void *rast2,
  *  \return int
  */
 
-int G_write_cats(char *name, struct Categories *cats)
+int G_write_cats(const char *name, struct Categories *cats)
 {
     return G__write_cats("cats", name, cats);
 }
@@ -1196,7 +1194,7 @@ int G_write_cats(char *name, struct Categories *cats)
  *  \return int
  */
 
-int G_write_raster_cats(char *name, struct Categories *cats)
+int G_write_raster_cats(const char *name, struct Categories *cats)
 {
     return G__write_cats("cats", name, cats);
 }
@@ -1216,12 +1214,12 @@ int G_write_raster_cats(char *name, struct Categories *cats)
  *  \return int
  */
 
-int G_write_vector_cats(char *name, struct Categories *cats)
+int G_write_vector_cats(const char *name, struct Categories *cats)
 {
     return G__write_cats("dig_cats", name, cats);
 }
 
-int G__write_cats(char *element, char *name, struct Categories *cats)
+int G__write_cats(const char *element, const char *name, struct Categories *cats)
 {
     FILE *fd;
     int i, fp_map;

@@ -121,10 +121,10 @@ char *G_get_f_raster_cat(FCELL *, struct Categories *);
 char *G_get_d_raster_cat(DCELL *, struct Categories *);
 char *G_get_raster_cat(void *, struct Categories *, RASTER_MAP_TYPE);
 int G_unmark_raster_cats(struct Categories *);
-int G_mark_c_raster_cats(CELL *, int, struct Categories *);
-int G_mark_f_raster_cats(FCELL *, int, struct Categories *);
-int G_mark_d_raster_cats(DCELL *, int, struct Categories *);
-int G_mark_raster_cats(void *, int, struct Categories *, RASTER_MAP_TYPE);
+int G_mark_c_raster_cats(const CELL *, int, struct Categories *);
+int G_mark_f_raster_cats(const FCELL *, int, struct Categories *);
+int G_mark_d_raster_cats(const DCELL *, int, struct Categories *);
+int G_mark_raster_cats(const void *, int, struct Categories *, RASTER_MAP_TYPE);
 int G_rewind_raster_cats(struct Categories *);
 char *G_get_next_marked_d_raster_cat(struct Categories *, DCELL *, DCELL *,
 				     long *);
@@ -134,16 +134,16 @@ char *G_get_next_marked_f_raster_cat(struct Categories *, FCELL *, FCELL *,
 				     long *);
 char *G_get_next_marked_raster_cat(struct Categories *, void *, void *,
 				   long *, RASTER_MAP_TYPE);
-int G_set_cat(CELL, char *, struct Categories *);
-int G_set_c_raster_cat(CELL *, CELL *, char *, struct Categories *);
-int G_set_f_raster_cat(FCELL *, FCELL *, char *, struct Categories *);
-int G_set_d_raster_cat(DCELL *, DCELL *, char *, struct Categories *);
-int G_set_raster_cat(void *, void *, char *, struct Categories *,
+int G_set_cat(CELL, const char *, struct Categories *);
+int G_set_c_raster_cat(const CELL *, const CELL *, const char *, struct Categories *);
+int G_set_f_raster_cat(const FCELL *, const FCELL *, const char *, struct Categories *);
+int G_set_d_raster_cat(const DCELL *, const DCELL *, const char *, struct Categories *);
+int G_set_raster_cat(const void *, const void *, const char *, struct Categories *,
 		     RASTER_MAP_TYPE);
-int G_write_cats(char *, struct Categories *);
-int G_write_raster_cats(char *, struct Categories *);
-int G_write_vector_cats(char *, struct Categories *);
-int G__write_cats(char *, char *, struct Categories *);
+int G_write_cats(const char *, struct Categories *);
+int G_write_raster_cats(const char *, struct Categories *);
+int G_write_vector_cats(const char *, struct Categories *);
+int G__write_cats(const char *, const char *, struct Categories *);
 char *G_get_ith_d_raster_cat(const struct Categories *, int, DCELL *,
 			     DCELL *);
 char *G_get_ith_f_raster_cat(const struct Categories *, int, void *, void *);
