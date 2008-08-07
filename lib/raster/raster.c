@@ -66,9 +66,14 @@ void R_flush(void)
 
 void R_close_driver(void)
 {
+    char *cmd = getenv("GRASS_NOTIFY");
+
     COM_Respond();
     COM_Client_Close();
     COM_Graph_close();
+
+    if (cmd)
+	system(cmd);
 }
 
 /*!
