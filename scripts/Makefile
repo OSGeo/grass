@@ -5,7 +5,6 @@ SUBDIRS = \
 	d.monsize \
 	d.mvmon \
 	d.out.gpsdrive \
-	d.out.file \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
