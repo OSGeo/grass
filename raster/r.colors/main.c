@@ -236,10 +236,10 @@ int main(int argc, char **argv)
     if (!cmap && !style && !rules && !remove)
 	G_fatal_error(_("One of \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
 
-    if (!!style + !!cmap + !!rules != 1)
+    if (!!style + !!cmap + !!rules > 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
-    interactive = strcmp(rules, "-") == 0;
+    interactive = rules && strcmp(rules, "-") == 0;
     if (interactive)
 	rules = NULL;
 
