@@ -65,12 +65,19 @@ static void D_set_window(int t, int b, int l, int r)
 int D_get_screen_window(int *t, int *b, int *l, int *r)
 {
     if (!screen_window_set)
-	return -1;
+    {
+	screen_window.t = R_screen_top();
+	screen_window.b = R_screen_bot();
+	screen_window.l = R_screen_left();
+	screen_window.r = R_screen_rite();
+	screen_window_set = 1;
+    }
 
     *t = screen_window.t;
     *b = screen_window.b;
     *l = screen_window.l;
     *r = screen_window.r;
+
     return 0;
 }
 
