@@ -14,19 +14,21 @@
 int read_rast(double east, double north, double dist, int fd, int coords,
 	      RASTER_MAP_TYPE data_type, FILE * fp, char *null_string)
 {
-    int row, col, nrows, ncols;
-    struct Cell_head window;
-    CELL *cell, nullcell;
-    char buf[1024] = "";
-    char cbuf[80];
-    int red, green, blue;
-    FCELL *fcell;
-    DCELL *dcell;
+    static DCELL *dcell;
+    static int cur_row = -1;
+    static CELL nullcell;
+    static int nrows, ncols;
+    static struct Cell_head window;
+    int row, col;
     int outofbounds = FALSE;
 
-    G_get_window(&window);
-    nrows = window.rows;
-    ncols = window.cols;
+    if (!dcell) {
+	G_set_c_null_value(&nullcell, 1);
+	dcell = G_allocate_d_raster_buf();
+	G_get_window(&window);
+	nrows = window.rows;
+	ncols = window.cols;
+    }
 
     row = (window.north - north) / window.ns_res;
     col = (east - window.west) / window.ew_res;
@@ -35,93 +37,39 @@ int read_rast(double east, double north, double dist, int fd, int coords,
     if ((row < 0) || (row >= nrows) || (col < 0) || (col >= ncols))
 	outofbounds = TRUE;
 
-    /* set dummy CELL value to null for out-of-region color */
-    G_set_c_null_value(&nullcell, 1);
-
-    if (data_type == CELL_TYPE) {
-	cell = G_allocate_c_raster_buf();
-
-	if (!outofbounds && G_get_c_raster_row(fd, cell, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), cell,
-			  row);
-
-	if (outofbounds || G_is_c_null_value(&cell[col]))
-	    sprintf(buf, null_string);
-	else
-	    sprintf(buf, "%d", cell[col]);
-
-	if (clr) {
-	    if (outofbounds)
-		G_get_color(nullcell, &red, &green, &blue, &colors);
-	    else
-		G_get_c_raster_color(&cell[col], &red, &green, &blue,
-				     &colors);
-
-	    sprintf(cbuf, " %03d:%03d:%03d", red, green, blue);
-	    strcat(buf, cbuf);
-	}
-
-	if (coords == 1)
-	    fprintf(fp, "%f %f %f %s\n", east, north, dist, buf);
-	else
-	    fprintf(fp, "%f %s\n", dist, buf);
+    if (!outofbounds) {
+	if (row != cur_row && G_get_d_raster_row(fd, dcell, row) < 0)
+	    G_fatal_error(_("Unable to read raster map row %d"), row);
+	cur_row = row;
     }
 
-    if (data_type == FCELL_TYPE) {
-	fcell = G_allocate_f_raster_buf();
-	if (!outofbounds && G_get_f_raster_row(fd, fcell, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), fcell,
-			  row);
+    if (coords)
+	fprintf(fp, "%f %f", east, north);
 
-	if (outofbounds || G_is_f_null_value(&fcell[col]))
-	    sprintf(buf, null_string);
+    fprintf(fp, " %f", dist);
+
+    if (outofbounds || G_is_d_null_value(&dcell[col]))
+	fprintf(fp, " %s", null_string);
+    else {
+	if (data_type == CELL_TYPE)
+	    fprintf(fp, " %d", (int) dcell[col]);
 	else
-	    sprintf(buf, "%f", fcell[col]);
-
-	if (clr) {
-	    if (outofbounds)
-		G_get_color(nullcell, &red, &green, &blue, &colors);
-	    else
-		G_get_f_raster_color(&fcell[col], &red, &green, &blue,
-				     &colors);
-
-	    sprintf(cbuf, " %03d:%03d:%03d", red, green, blue);
-	    strcat(buf, cbuf);
-	}
-
-	if (coords == 1)
-	    fprintf(fp, "%f %f %f %s\n", east, north, dist, buf);
-	else
-	    fprintf(fp, "%f %s\n", dist, buf);
+	    fprintf(fp, " %f", dcell[col]);
     }
 
-    if (data_type == DCELL_TYPE) {
-	dcell = G_allocate_d_raster_buf();
-	if (!outofbounds && G_get_d_raster_row(fd, dcell, row) < 0)
-	    G_fatal_error(_("Unable to read raster map <%s> row %d"), dcell,
-			  row);
+    if (clr) {
+	int red, green, blue;
 
-	if (outofbounds || G_is_d_null_value(&dcell[col]))
-	    sprintf(buf, null_string);
+	if (outofbounds)
+	    G_get_color(nullcell, &red, &green, &blue, &colors);
 	else
-	    sprintf(buf, "%f", dcell[col]);
+	    G_get_d_raster_color(&dcell[col], &red, &green, &blue,
+				 &colors);
 
-	if (clr) {
-	    if (outofbounds)
-		G_get_color(nullcell, &red, &green, &blue, &colors);
-	    else
-		G_get_d_raster_color(&dcell[col], &red, &green, &blue,
-				     &colors);
-
-	    sprintf(cbuf, " %03d:%03d:%03d", red, green, blue);
-	    strcat(buf, cbuf);
-	}
-
-	if (coords == 1)
-	    fprintf(fp, "%f %f %f %s\n", east, north, dist, buf);
-	else
-	    fprintf(fp, "%f %s\n", dist, buf);
+	fprintf(fp, " %03d:%03d:%03d", red, green, blue);
     }
+
+    fprintf(fp, "\n");
 
     return 0;
 }
