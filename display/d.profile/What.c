@@ -44,7 +44,7 @@ int What(char *name,
 	else
 	    sprintf(txt_buf, "(%d) %s", buf[col], G_get_cat(buf[col], &cat));
 	DrawText(22, 4, 1, txt_buf);
-	R_stabilize();
+	R_flush();
     }
     G_unopen_cell(fd);
 

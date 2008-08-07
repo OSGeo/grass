@@ -73,7 +73,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	R_move_abs(text_x, text_y);
 	R_standard_color(text_color);
 	R_text(buf);
-	R_stabilize();
+	R_flush();
     }
 
     return 0;

@@ -177,7 +177,7 @@ int main(int argc, char **argv)
 	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
 	DrawText(15, 4, 1, "BUTTON  | Middle: Set FIRST point");
 	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
-	R_stabilize();
+	R_flush();
 
 	/* LOOP to get first point of line */
 	do {
@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 		D_erase_window();
 		R_standard_color(D_translate_color("red"));
 		DrawText(25, 1, 1, "OUTSIDE CURRENT WINDOW");
-		R_stabilize();
+		R_flush();
 		button = 1;
 	    }
 	    else {
@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
 	DrawText(15, 4, 1, "BUTTON  | Middle: Set SECOND point");
 	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
-	R_stabilize();
+	R_flush();
 
 	/* move graphics position to first point chosen */
 	R_move_abs(screen_x, screen_y);
@@ -372,7 +372,7 @@ int main(int argc, char **argv)
 		    }
 		}
 	    }
-	    R_stabilize();
+	    R_flush();
 	} while (button != 3 && button != 2);
 
 	/* display mouse-menu in mouse-menu window */
@@ -385,7 +385,7 @@ int main(int argc, char **argv)
 	DrawText(15, 3, 1, "MOUSE   | Left:   DO ANOTHER");
 	DrawText(15, 4, 1, "BUTTON  | Middle: CLEAR DISPLAY");
 	DrawText(15, 5, 1, "MENU    | Right:  QUIT");
-	R_stabilize();
+	R_flush();
 
 	R_get_location_with_pointer(&screen_x, &screen_y, &button);
 	if (button == 3) {
