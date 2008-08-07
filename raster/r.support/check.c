@@ -9,7 +9,7 @@
  *
  * RETURN: EXIT_SUCCESS / EXIT_FAILURE
  */
-int check_stats(char *name, char *mapset)
+int check_stats(const char *name, const char *mapset)
 {
     RASTER_MAP_TYPE data_type;
     struct Histogram histogram;
@@ -19,18 +19,8 @@ int check_stats(char *name, char *mapset)
     int i;
     int cats_ok;
     int max;
-    char question[100];
-
-    /* NOTE: G_yes() return value 1 = hitreturn(), 0 otherwise */
 
     data_type = G_raster_map_type(name, mapset);
-
-    /* Exit if not updating statistics */
-    G_snprintf(question, sizeof(question), _("Update the statistics "
-					     "(histogram, range) for [%s]? "),
-	       name);
-    if (!G_yes(question, 0))
-	return EXIT_FAILURE;
 
     G_message(_("\n  Updating statistics for [%s]"), name);
     if (!do_histogram(name, mapset))
