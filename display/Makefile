@@ -7,6 +7,7 @@ SUBDIRS = \
 	d.colortable \
 	d.erase \
 	d.font \
+	d.fontlist \
 	d.geodesic \
 	d.graph \
 	d.grid \
