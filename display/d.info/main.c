@@ -85,12 +85,8 @@ int main(int argc, char *argv[])
     if (dflag->answer)
 	fprintf(stdout, "dimensions: %d %d\n", r - l, b - t);
 
-    if (cflag->answer) {
-	int colors;
-
-	R_get_num_colors(&colors);
-	fprintf(stdout, "colors: %d\n", colors);
-    }
+    if (cflag->answer)
+	fprintf(stdout, "colors: %d\n", R_get_num_colors());
 
     if (fflag->answer) {
 	D_get_screen_window(&t, &b, &l, &r);

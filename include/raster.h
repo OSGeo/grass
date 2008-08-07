@@ -3,15 +3,13 @@
 
 void R_flush(void);
 int R_open_driver(void);
-void R__open_quiet(void);
-void R_stabilize(void);
 void R_close_driver(void);
 
 int R_screen_left(void);
 int R_screen_rite(void);
 int R_screen_bot(void);
 int R_screen_top(void);
-void R_get_num_colors(int *);
+int R_get_num_colors(void);
 
 void R_standard_color(int);
 void R_RGB_color(unsigned char, unsigned char, unsigned char);
