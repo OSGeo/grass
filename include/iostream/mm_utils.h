@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -16,13 +16,12 @@
  *
  *****************************************************************************/
 
-
 #ifndef MM_UTIL_H
 #define MM_UTIL_H
 
-
 #include "mm.h"
 #include <string>
+
 
 void  LOG_avail_memo();
 

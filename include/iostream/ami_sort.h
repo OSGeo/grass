@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -76,8 +76,9 @@
 template<class T, class Compare>
 AMI_err 
 AMI_sort(AMI_STREAM<T> *instream, AMI_STREAM<T> **outstream, Compare *cmp, 
-	 int deleteInputStream = 0) {
-  char* name;
+	 int deleteInputStream = 0)
+{
+  char* name=NULL;
   queue<char*>* runList;
   int instreamLength;
 
@@ -102,18 +103,30 @@ AMI_sort(AMI_STREAM<T> *instream, AMI_STREAM<T> **outstream, Compare *cmp,
   
   //run formation
   runList = runFormation(instream, cmp);
-  assert(runList && runList->length() > 0); 
+  assert(runList); 
 
   if (deleteInputStream) {
     delete instream;
   }
 
-  if (runList->length() == 1) {
+  if(runList->length() == 0) {
+    /* self-check */
+    fprintf(stderr, "ami_sort: Error - no runs created!\n");
+    instream->name(&name);
+    cout << "ami_sort: instream = " << name << endl;
+    exit(1);
+    /* no input... */
+    /* *outstream = new AMI_STREAM<T>(); */
+
+  } else if(runList->length() == 1) {    
     //if 1 run only
     runList->dequeue(&name);
+    //printf("SORT: %s\n", name); fflush(stdout); 
     *outstream = new AMI_STREAM<T>(name);
     delete name; //should be safe, stream makes its own copy
-  } else {
+    
+  } else {						
+    /* many runs */
     *outstream = multiMerge<T,Compare>(runList,  cmp);
     //i thought the templates are not needed in the call, but seems to
     //help the compiler..laura

@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -65,16 +65,16 @@ typedef unsigned int HeapIndex;
 
 template <class T>
 class BasicMinMaxHeap {
-
 protected:  
   HeapIndex maxsize;
   HeapIndex lastindex;			// last used position (0 unused) (?)
   T *A;
+
+protected:
   /* couple of memory mgt functions to keep things consistent */
   static T *allocateHeap(HeapIndex n);
   static void freeHeap(T *);
-  virtual void grow()=0;
-  
+
 public:
   BasicMinMaxHeap(HeapIndex size) : maxsize(size) { 
     char str[100];
@@ -93,7 +93,10 @@ public:
   };
 
   bool empty(void) const { return size() == 0; };
-  HeapIndex size() const;
+  HeapIndex size() const { 
+	assert(A ||  !lastindex);
+    return lastindex; 
+  };
 
   T get(HeapIndex i) const { assert(i <= size()); return A[i]; }
    
@@ -111,8 +114,10 @@ public:
   bool extract_all_min(T& elt);
 
   void reset();
+  void clear();		/* mark all the data as deleted, but don't do free */
 
   void destructiveVerify();
+
   void verify();
   
   void print() const;
@@ -127,17 +132,18 @@ public:
     return s;
   }
 
+protected:
+  virtual void grow()=0;
 
 private:
-  // Changed log2() to log2_() just in case log2() macro was already
-  // defined in math.h: e.g., log2() is defined in Cygwin gcc by default.
-  long log2_(long n) const;
-  int isOnMaxLevel(HeapIndex i) const { return (log2_(i) % 2); };
+  long log2(long n) const;
+  int isOnMaxLevel(HeapIndex i) const { return (log2(i) % 2); };
   int isOnMinLevel(HeapIndex i) const { return !isOnMaxLevel(i); };
 
   HeapIndex leftChild(HeapIndex i) const { return 2*i; };
   HeapIndex rightChild(HeapIndex i) const { return 2*i + 1; };
   int hasRightChild(HeapIndex i) const { return (rightChild(i) <= size()); };
+  int hasRightChild(HeapIndex i, HeapIndex *c) const { return ((*c=rightChild(i)) <= size()); };
   HeapIndex parent(HeapIndex i) const { return (i/2); };
   HeapIndex grandparent(HeapIndex i) const { return (i/4); };
   int hasChildren(HeapIndex i) const { return (2*i) <= size(); }; // 1 or more
@@ -164,20 +170,12 @@ private:
 // index 0 is invalid
 // index <= size
 
-
-// ----------------------------------------------------------------------
-template <class T>
-HeapIndex BasicMinMaxHeap<T>::size() const { 
-	assert(A || !lastindex);
-  return lastindex; 
-}
-
 // ----------------------------------------------------------------------
 
 template <class T> 
-long BasicMinMaxHeap<T>::log2_(long n) const {
+long BasicMinMaxHeap<T>::log2(long n) const {
   long i=-1;
-  // let log2_(0)==-1
+  // let log2(0)==-1
   while(n) {
 	n = n >> 1;
 	i++;
@@ -262,8 +260,8 @@ HeapIndex BasicMinMaxHeap<T>::smallestChildGrandchild(HeapIndex i) const {
   // p is smallest of left child, its grandchildren
   minpos = p;
 
-  if(hasRightChild(i)) {
-	p = rightChild(i);
+  if(hasRightChild(i,&p)) {
+	//p = rightChild(i);
 	if(hasChildren(p)) {
 	  q = smallestChild(p);
 	  if(A[p] > A[q]) p = q;
@@ -291,8 +289,8 @@ HeapIndex BasicMinMaxHeap<T>::largestChildGrandchild(HeapIndex i) const {
   // p is smallest of left child, its grandchildren
   maxpos = p;
 
-  if(hasRightChild(i)) {
-	p = rightChild(i);
+  if(hasRightChild(i,&p)) {
+	//p = rightChild(i);
 	if(hasChildren(p)) {
 	  q = largestChild(p);
 	  if(A[p] < A[q]) p = q;
@@ -624,6 +622,14 @@ void BasicMinMaxHeap<T>::reset() {
 }
 
 // ----------------------------------------------------------------------
+
+template <class T> 
+void
+BasicMinMaxHeap<T>::clear() {
+  lastindex = 0;
+}
+
+// ----------------------------------------------------------------------
 template <class T> 
 T *
 BasicMinMaxHeap<T>::allocateHeap(HeapIndex n) {
@@ -708,17 +714,11 @@ BasicMinMaxHeap<T>::verify() {
 }
 
 
-
 // ----------------------------------------------------------------------
 // ----------------------------------------------------------------------
 
 template <class T>
 class MinMaxHeap : public BasicMinMaxHeap<T> {
-
-//using BasicMinMaxHeap<T>::maxsize;
-//using BasicMinMaxHeap<T>::lastindex;
-//using BasicMinMaxHeap<T>::size;
-
 public:
   MinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size) {};
   virtual ~MinMaxHeap() {};
@@ -727,7 +727,7 @@ public:
   HeapIndex fill(T* arr, HeapIndex n);
   
 protected:
-  virtual void grow() { assert(0); exit(1); };
+  virtual void grow() { fprintf(stderr, "MinMaxHeap::grow: not implemented\n"); assert(0); exit(1); };
 };
 
 // ----------------------------------------------------------------------
@@ -738,12 +738,12 @@ template <class T>
 HeapIndex MinMaxHeap<T>::fill(T* arr, HeapIndex n) {
   HeapIndex i;
   //heap must be empty
-  assert(get_maxsize()==0);
+  assert(this->size()==0);
   for (i = 0; !full() && i<n; i++) {
     insert(arr[i]);
   }
   if (i < n) {
-    assert(i == get_maxsize());
+    assert(i == this->maxsize);
     return n - i;
   } else {
     return 0;
@@ -756,13 +756,9 @@ HeapIndex MinMaxHeap<T>::fill(T* arr, HeapIndex n) {
 
 template <class T>
 class UnboundedMinMaxHeap : public BasicMinMaxHeap<T> {
-
-using BasicMinMaxHeap<T>::A;
-using BasicMinMaxHeap<T>::maxsize;
-using BasicMinMaxHeap<T>::size;
-
 public:
   UnboundedMinMaxHeap() : BasicMinMaxHeap<T>(MMHEAP_INITIAL_SIZE) {};
+  UnboundedMinMaxHeap(HeapIndex size) : BasicMinMaxHeap<T>(size) {};
   virtual ~UnboundedMinMaxHeap() {};
 protected:
   virtual void grow();
@@ -770,14 +766,18 @@ protected:
 
 template <class T>
 void UnboundedMinMaxHeap<T>::grow() {
-  T *old = A;
-  maxsize *= 2;
+  T *old = this->A;
+  this->maxsize *= 2;
+
+  assert(this->maxsize > 0);
 
   if(old) {
-	A = allocateHeap(maxsize);	/* allocate a new array */
+	HeapIndex n = this->size();
+	this->A = allocateHeap(this->maxsize);	/* allocate a new array */
 	/* copy over the old values */
-	for(int i=0; i<size()+1; i++) {
-	  A[i] = old[i];
+	assert(this->maxsize > n);
+	for(HeapIndex i=0; i<=n; i++) {	/* why extra value? -RW */
+	  this->A[i] = old[i];
 	}	
 	freeHeap(old);				/* free up old storage */
   }

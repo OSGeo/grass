@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -19,19 +20,10 @@
 #ifndef __EMPQ_IMPL_H
 #define __EMPQ_IMPL_H
 
-#include <stdio.h>
-
-#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 #include <ostream>
-#else
-#include <ostream.h>
-#endif
-
 using namespace std;
 
 #include "empq.h"
-
-
 
 #if(0)
 #include "option.H"
@@ -136,10 +128,12 @@ template<class T, class Key>
   //ESTIMATE AVAILABLE MEMORY BEFORE ALLOCATION
   AMI_err ae;
   size_t mm_avail = getAvailableMemory();
-  printf("EM_PQUEUE:available memory before allocation: %.2fMB\n", 
-	       mm_avail/(float)(1<<20));
-  printf("EM_PQUEUE:available memory before allocation: %ldB\n", 
-	       mm_avail);
+  printf("EM_PQUEUE:available memory before allocation: %.2fMB\n",
+ 	       mm_avail/(float)(1<<20));
+  printf("EM_PQUEUE:available memory before allocation: %ldB\n",
+		 mm_avail);
+
+
   //____________________________________________________________
   //ALLOCATE STRUCTURE
    //some dummy checks..
@@ -357,51 +351,59 @@ em_pqueue<T,Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis) {
   assert(im && amis);
 
   pqcapacity = im->get_maxsize()/2; // we think this memory is now available
+  pqsize = pqcapacity + 1; //truncate errors  
   pqcurrentsize = im->size();
-  pqsize = pqcapacity;
-
+  //assert( pqcurrentsize <= pqsize); 
+  if(!(pqcurrentsize <= pqsize)) {
+    cout << "EMPQ: pq maxsize=" << pqsize <<", pq crtsize=" << pqcurrentsize
+	 << "\n";
+    assert(0);
+    exit(1);
+  }
+  
+  
   LOG_avail_memo();
- 
+  
   /* at this point im is allocated all memory, but it is only at most
      half full; we need to relocate im to half space and to allocate
      buff_0 the other half; since we use new, there is no realloc, so
      we will copy to a file...*/
-
+  
   {
-	//copy im to a stream and free its memory
-	T x;
-	AMI_STREAM<T> tmpstr;
-	for (unsigned int i=0; i<pqcurrentsize; i++) {
-	  im->extract_min(x);
-    ae = tmpstr.write_item(x);
+    //copy im to a stream and free its memory
+    T x;
+    AMI_STREAM<T> tmpstr;
+    for (unsigned int i=0; i<pqcurrentsize; i++) {
+      im->extract_min(x);
+      ae = tmpstr.write_item(x);
+      assert(ae == AMI_ERROR_NO_ERROR);
+    }
+    delete im; im = NULL;
+    LOG_avail_memo();
+    
+    //allocate pq and buff_0 half size
+    bufsize = pqcapacity;
+    cout << "EM_PQUEUE: allocating im_buffer size=" << bufsize
+	 << " total " << (float)bufsize*sizeof(T)/(1<<20) << "MB\n"; 
+    cout.flush();
+    buff_0 = new im_buffer<T>(bufsize);
+    assert(buff_0);
+    cout << "EM_PQUEUE: allocating pq size=" << pqsize
+	 << " total " << (float)pqcapacity*sizeof(T)/(1<<20)  << "MB\n"; 
+    cout.flush();
+    pq = new MinMaxHeap<T>(pqsize);
+    assert(pq);
+    
+    //fill pq from tmp stream
+    ae =  tmpstr.seek(0);
     assert(ae == AMI_ERROR_NO_ERROR);
-	}
-	delete im;
-	LOG_avail_memo();
-	
-	//allocate pq and buff_0 half size
-	bufsize = pqcapacity;
-	cout << "EM_PQUEUE: allocating im_buffer size=" << bufsize
-		 << " total " << (float)bufsize*sizeof(T)/(1<<20) << "MB\n"; 
-	cout.flush();
-	buff_0 = new im_buffer<T>(bufsize);
-	assert(buff_0);
-	cout << "EM_PQUEUE: allocating pq size=" << pqcapacity
-		 << " total " << (float)pqcapacity*sizeof(T)/(1<<20)  << "MB\n"; 
-	cout.flush();
-	pq = new MinMaxHeap<T>(pqcapacity);
-	assert(pq);
-	
-	//fill pq from tmp stream
-	ae =  tmpstr.seek(0);
-	assert(ae == AMI_ERROR_NO_ERROR);
-	T *elt;
-	for (unsigned int i=0; i<pqcurrentsize; i++) {
-	  ae = tmpstr.read_item(&elt);
-	  assert(ae == AMI_ERROR_NO_ERROR);
-	  pq->insert(*elt);
-	}
-	assert(pq->size() == pqcurrentsize);
+    T *elt;
+    for (unsigned int i=0; i<pqcurrentsize; i++) {
+      ae = tmpstr.read_item(&elt);
+      assert(ae == AMI_ERROR_NO_ERROR);
+      pq->insert(*elt);
+    }
+    assert(pq->size() == pqcurrentsize);
   }
 
   //estimate buf_arity
@@ -428,6 +430,11 @@ em_pqueue<T,Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis) {
      buf_arity -= 3;
    } else {
      buf_arity = 1;
+   }
+
+   //added on 05/16/2005 by Laura
+   if (buf_arity > MAX_STREAMS_OPEN) {
+	 buf_arity = MAX_STREAMS_OPEN;
    }
 
   //allocate ext memory buffer array
@@ -475,9 +482,13 @@ em_pqueue<T,Key>::em_pqueue(MinMaxHeap<T> *im, AMI_STREAM<T> *amis) {
 template<class T, class Key>
 em_pqueue<T,Key>::~em_pqueue() {
   //delete in memory pqueue
-  if (pq) delete pq;
+  if (pq) {
+	delete pq; pq = NULL;
+  }
   //delete in memory buffer
-  if (buff_0) delete buff_0;
+  if (buff_0) {
+	delete buff_0; buff_0 = NULL;
+  }
   //delete ext memory buffers
   for (unsigned short i=0; i< crt_buf; i++) {
     if (buff[i]) delete buff[i];
@@ -582,10 +593,9 @@ bool em_pqueue<T,Key>::fillpq() {
   }
   //merge pqsize smallest elements from each buffer into a new stream
   ExtendedMergeStream** outstreams;
-  //gcc-3.4 doesn't allows (TYPE*)[SIZE] declarations
-  //use TYPE*[SIZE]
-  outstreams = new ExtendedMergeStream*[crt_buf];
+  outstreams = new ExtendedMergeStream* [crt_buf];
 
+  /* gets stream of smallest pqsize elts from each level */
   for (unsigned short i=0; i< crt_buf; i++) {
     MY_LOG_DEBUG_ID(crt_buf);
 	outstreams[i] = new ExtendedMergeStream();
@@ -596,6 +606,7 @@ bool em_pqueue<T,Key>::fillpq() {
     //print_stream(outstreams[i]); cout.flush();
   }
   
+  /* merge above streams into pqsize elts in minstream */
   if (crt_buf == 1) {
     //just one level; make common case faster :)
     merge_bufs2pq(outstreams[0]);
@@ -607,20 +618,21 @@ bool em_pqueue<T,Key>::fillpq() {
     //cout << "merging streams\n";
     ae = merge_streams(outstreams, crt_buf, minstream, pqsize);
     assert(ae == AMI_ERROR_NO_ERROR);
-	for (unsigned short i=0; i< crt_buf; i++) {
+	for (int i=0; i< crt_buf; i++) {
 	  delete outstreams[i];
 	}
     delete [] outstreams;
-    
+
     //copy the minstream in the internal pqueue while merging with buff_0;
     //the smallest <pqsize> elements between minstream and buff_0 will be
     //inserted in internal pqueue;
     //also, the elements from minstram which are inserted in pqueue must be
     //marked as deleted in the source streams;
     merge_bufs2pq(minstream);
-	delete minstream;
+	delete minstream; minstream = NULL;
     //cout << "after merge_bufs2pq: \n" << *this << "\n";
   }
+
   XXX assert(pq->size());
   XXX cerr << "fillpq done" << endl;
   return true;
@@ -969,7 +981,7 @@ bool em_pqueue<T,Key>::insert(const T& x) {
 #endif
   T val = x;
 
-  MY_LOG_DEBUG_ID("\n\n\nEM_PQUEUE::INSERT");
+  MY_LOG_DEBUG_ID("\nEM_PQUEUE::INSERT");
   //if structure is empty insert x in pq; not worth the trouble..
   if ((crt_buf == 0) && (buff_0->is_empty())) {
     if (!pq->full()) {
@@ -1244,6 +1256,7 @@ em_pqueue<T,Key>::merge_buffer(em_buffer<T,Key> *buf,
     assert(instreams[i]);
     //rewind stream
     if ((ami_err = instreams[i]->seek(bos[i])) != AMI_ERROR_NO_ERROR) {
+	  cerr << "WARNING!!! EARLY EXIT!!!" << endl;
       return ami_err;
     }
     /* read first item */
@@ -1261,6 +1274,7 @@ em_pqueue<T,Key>::merge_buffer(em_buffer<T,Key> *buf,
       j++; 
 	  break;
 	default:
+	  cerr << "WARNING!!! EARLY EXIT!!!" << endl;
 	  return ami_err;
 	}
   }
@@ -1283,6 +1297,7 @@ em_pqueue<T,Key>::merge_buffer(em_buffer<T,Key> *buf,
     //write min item to output stream
 	out = ExtendedEltMergeType<T,Key>(*in_objects[i], bufid, i);
     if ((ami_err = outstream->write_item(out)) != AMI_ERROR_NO_ERROR) {
+	  cerr << "WARNING!!! EARLY EXIT!!!" << endl;
       return ami_err;
     }
     //cout << "wrote " << out << "\n";
@@ -1302,6 +1317,7 @@ em_pqueue<T,Key>::merge_buffer(em_buffer<T,Key> *buf,
 	  }
 	  break;
 	default:
+	  cerr << "WARNING!!! early breakout!!!" << endl;
 	  return ami_err;
     }
     //cout << "PQ: " << mergeheap << "\n";
@@ -1341,68 +1357,80 @@ em_pqueue<T,Key>::merge_streams(ExtendedMergeStream** instreams,
   assert(arity> 1);
     
   //Pointers to current leading elements of streams
-  ExtendedEltMergeType<T,Key>* in_objects[arity];
+  ExtendedEltMergeType<T,Key> in_objects[arity];
+
   AMI_err ami_err;
-  unsigned int i;
+  //unsigned int i;
   unsigned int nonEmptyRuns=0;   //count number of non-empty runs
  
   //array initialized with first element from each stream (only non-null keys 
   //must be included)
   MEMORY_LOG("em_pqueue::merge_streams: allocate keys array\n");
+
   merge_key<Key>* keys = new merge_key<Key> [arity];
   assert(keys);
 
   //rewind and read the first item from every stream
-  for (i = 0; i < arity ; i++ ) {
+  for (int i = 0; i < arity ; i++ ) {
     //rewind stream
     if ((ami_err = instreams[i]->seek(0)) != AMI_ERROR_NO_ERROR) {
       return ami_err;
     }
     //read first item
-	ami_err = instreams[i]->read_item(&(in_objects[i]));
+	ExtendedEltMergeType<T,Key> *objp;
+	ami_err = instreams[i]->read_item(&objp);
 	switch(ami_err) {
 	case AMI_ERROR_NO_ERROR:
-      keys[nonEmptyRuns] = merge_key<Key>(in_objects[i]->getPriority(), i);
+	  in_objects[i] = *objp;
+      keys[nonEmptyRuns] = merge_key<Key>(in_objects[i].getPriority(), i);
 	  nonEmptyRuns++; 
 	  break;
 	case AMI_ERROR_END_OF_STREAM:
-	  in_objects[i] = NULL;
 	  break;
 	default:
 	  return ami_err;
 	}
   }
-
+ assert(nonEmptyRuns <= arity); 
+ 
   //build heap from the array of keys 
-  pqheap_t1<merge_key<Key> > mergeheap(keys, nonEmptyRuns);
+  pqheap_t1<merge_key<Key> > mergeheap(keys, nonEmptyRuns);	/* takes ownership of keys */
 
   //repeatedly extract_min from heap and insert next item from same stream
   long extracted = 0;
   //rewind output buffer
   ami_err = outstream->seek(0);
   assert(ami_err == AMI_ERROR_NO_ERROR);
+
   while (!mergeheap.empty() && (extracted < K)) {
     //find min key and id of stream it comes from
-    i = mergeheap.min().stream_id();
+    int id = mergeheap.min().stream_id();
     //write min item to output stream
-    if ((ami_err = outstream->write_item(*in_objects[i])) 
-		!= AMI_ERROR_NO_ERROR) {
+	assert(id < nonEmptyRuns);
+	assert(id >= 0);
+	assert(mergeheap.size() == nonEmptyRuns);
+	ExtendedEltMergeType<T,Key> obj = in_objects[id];
+    if ((ami_err = outstream->write_item(obj)) != AMI_ERROR_NO_ERROR) {
       return ami_err;
     }
     //cout << "wrote " << *in_objects[i] << "\n";
 
     //extract the min from the heap and insert next key from same stream
-    ami_err = instreams[i]->read_item(&(in_objects[i]));
+	assert(id < nonEmptyRuns);
+	assert(id >= 0);
+	ExtendedEltMergeType<T,Key> *objp;
+    ami_err = instreams[id]->read_item(&objp);
 	switch(ami_err) {
 	case AMI_ERROR_NO_ERROR:
       {
-		merge_key<Key> tmp = merge_key<Key>(in_objects[i]->getPriority(), i);
+		in_objects[id] = *objp;
+		merge_key<Key> tmp = merge_key<Key>(in_objects[id].getPriority(), id);
 		mergeheap.delete_min_and_insert(tmp);
 	  }
 	  extracted++;    //update nb of extracted elements
 	  break;
 	case AMI_ERROR_END_OF_STREAM:
-	  in_objects[i] = NULL;
+	  mergeheap.delete_min();
 	  break;
 	default:
 	  return ami_err;
@@ -1415,9 +1443,24 @@ em_pqueue<T,Key>::merge_streams(ExtendedMergeStream** instreams,
   //IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
   //DESTRUCTOR, AND EVERYTHING SCREWS UP..
 
-
   MY_LOG_DEBUG_ID("merge_streams: done");
   return AMI_ERROR_NO_ERROR;
+}
+
+
+//************************************************************/
+template<class T, class Key>
+void
+em_pqueue<T,Key>::clear() {
+  pq->clear();
+  buff_0->clear();
+  
+  for(int i=0; i<crt_buf; i++) {
+    if(buff[i]) {
+      delete buff[i]; buff[i] = NULL;
+    }
+  }
+  crt_buf = 0;
 }
 
 

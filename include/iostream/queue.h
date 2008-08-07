@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,8 +15,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
-
 
 #ifndef QUEUE_H
 #define QUEUE_H
@@ -48,6 +46,9 @@ public:
 
 template<class T> 
 queue<T>::queue(int vsize) : size(vsize) {
+
+  if(size <= 0) size = 64;		/* default */
+
   data = new T[size];
   head = 0;
   tail = 0;

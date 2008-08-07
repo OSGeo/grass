@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,7 +15,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
 
 #ifndef REPLACEMENT_HEAPBLOCK_H
 #define REPLACEMENT_HEAPBLOCK_H
@@ -97,7 +96,7 @@ public:
   ReplacementHeapBlock<T,Compare>(queue <MEM_STREAM<T>*> *runList); 
   
   //delete array mergeHeap 
-  ~ReplacementHeapBlock();
+  ~ReplacementHeapBlock<T,Compare>();
   
   //is heap empty?
   int empty() const { 
@@ -375,4 +374,3 @@ ReplacementHeapBlock<T,Compare>::extract_min() {
 
 
 #endif
-

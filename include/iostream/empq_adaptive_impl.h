@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+
 #ifndef __EMPQ_ADAPTIVE_IMPL_H
 #define __EMPQ_ADAPTIVE_IMPL_H
 
@@ -28,10 +29,10 @@
 #include "mm_utils.h"
 #include "empq_adaptive.h"
 
+#include "ami_sort.h"
 
 
-//defined in "empqAdaptive.H"
-//#define EMPQAD_DEBUG if(0)
+// EMPQAD_DEBUG defined in "empqAdaptive.H"
 
 
 
@@ -39,7 +40,29 @@
 //------------------------------------------------------------
 //allocate an internal pqueue of size precisely twice 
 //the size of the pqueue within the em_pqueue;
+//
+//This constructor uses a user defined amount of memory
 
+template<class T, class Key> 
+EMPQueueAdaptive<T,Key>::EMPQueueAdaptive(size_t inMem) {
+  regim = INMEM;
+  EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: starting in-memory pqueue" 
+		    << endl;
+  
+  //------------------------------------------------------------
+  //set the size precisely as in empq constructor since we cannot 
+  //really call the em__pqueue constructor, because we don't want 
+  //the space allocated; we just want the sizes;
+  //AMI_err ae;
+  EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: desired memory: " 
+		    << ( (float)inMem/ (1<< 20)) << "MB" << endl;
+  
+  initPQ(inMem);
+};
+
+
+//------------------------------------------------------------
+// This more resembles the original constuctor which is greedy
 template<class T, class Key> 
 EMPQueueAdaptive<T,Key>::EMPQueueAdaptive() {
   regim = INMEM;
@@ -50,10 +73,25 @@ EMPQueueAdaptive<T,Key>::EMPQueueAdaptive() {
   //set the size precisely as in empq constructor since we cannot 
   //really call the em__pqueue constructor, because we don't want 
   //the space allocated; we just want the sizes;
-  AMI_err ae;
   size_t mm_avail = getAvailableMemory();
   EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: available memory: " 
 		    << ( (float)mm_avail/ (1<< 20)) << "MB" << endl;
+  
+
+  initPQ(mm_avail);
+
+};
+
+
+//------------------------------------------------------------
+// This metod initialized the PQ based on the memory passed 
+// into it
+template<class T, class Key>
+void
+EMPQueueAdaptive<T,Key>::initPQ(size_t initMem) {
+  AMI_err ae;
+  EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: desired memory: " 
+		    << ( (float)initMem/ (1<< 20)) << "MB" << endl;
   
   /* same calculations as empq constructor in order to estimate
      overhead memory; this is because we want to allocate a pqueue of
@@ -70,26 +108,35 @@ EMPQueueAdaptive<T,Key>::EMPQueueAdaptive() {
     cerr << "EMPQueueAdaptive constr: failing to get stream_usage\n";
     exit(1);
   }  
+
+
   //account for temporary memory usage
   unsigned short max_nbuf = 2;
-  unsigned int buf_arity = mm_avail/(2 * sz_stream);
+  unsigned int buf_arity = initMem/(2 * sz_stream);
+  if (buf_arity > MAX_STREAMS_OPEN) buf_arity = MAX_STREAMS_OPEN; 
   unsigned long mm_overhead = buf_arity*sizeof(merge_key<Key>) + 
     max_nbuf * sizeof(em_buffer<T,Key>) +
     2*sz_stream + max_nbuf*sz_stream;
   mm_overhead *= 8; //overestimate..this should be fixed with
   //a precise accounting of the extra memory required
+
+  EMPQAD_DEBUG cout << "sz_stream: " << sz_stream << " buf_arity: " << buf_arity <<
+    " mm_overhead: " << mm_overhead << " mm_avail: " << initMem << ".\n";
+
+
+
   EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: memory overhead set to " 
 		    << ((float)mm_overhead / (1 << 20)) << "MB" << endl;
-  if (mm_overhead > mm_avail) {
-    cerr << "overhead bigger than available memory ("<< mm_avail << "); "
+  if (mm_overhead > initMem) {
+    cerr << "overhead bigger than available memory ("<< initMem << "); "
 	 << "increase -m and try again\n";
     exit(1);
   }
-  mm_avail -= mm_overhead;
+  initMem -= mm_overhead;
   //------------------------------------------------------------
 
 
-  long pqsize = mm_avail/sizeof(T);
+  long pqsize = initMem/sizeof(T);
   EMPQAD_DEBUG cout << "EMPQUEUEADAPTIVE: pqsize set to " << pqsize << endl;
 
   //initialize in memory pqueue and set em to NULL
@@ -97,8 +144,6 @@ EMPQueueAdaptive<T,Key>::EMPQueueAdaptive() {
   assert(im);
   em = NULL;
 };
-
-
 
 
 template<class T, class Key> 
@@ -123,7 +168,7 @@ EMPQueueAdaptive<T,Key>::~EMPQueueAdaptive() {
 template<class T, class Key> 
 long 
 EMPQueueAdaptive<T,Key>::maxlen() const {
-  long m;
+  long m=-1;
   switch(regim) {
   case INMEM:
 	assert(im);
@@ -213,6 +258,24 @@ EMPQueueAdaptive<T,Key>::min(T& elt) {
   return v;
 };
 
+/* switch over to using an external priority queue */
+template<class T, class Key> 
+void
+EMPQueueAdaptive<T,Key>::clear() {
+  switch(regim) {
+  case INMEM:
+    im->clear();
+    break;
+  case EXTMEM:
+    em->clear();
+    break;
+  case EXTMEM_DEBUG:
+    dim->clear();
+    break;
+  }
+}
+
+
 template<class T, class Key> 
 void
 EMPQueueAdaptive<T,Key>::verify() {
@@ -246,7 +309,7 @@ EMPQueueAdaptive<T,Key>::extract_all_min(T& elt) {
   case EXTMEM_DEBUG:
 	v1 =  dim->extract_all_min(tmp);
 	v = em->extract_all_min(elt);
-	assert(dim->BasicMinMaxHeap<T>::size() == em->size());
+	assert(dim->size() == em->size());
 	assert(v == v1);
 	assert(tmp == elt);
 	break;
@@ -269,7 +332,7 @@ EMPQueueAdaptive<T,Key>::size() const {
 	v = em->size();
 	break;
   case EXTMEM_DEBUG:
-	v1 = dim->BasicMinMaxHeap<T>::size();
+	v1 = dim->size();
 	v = em->size();
 	assert(v == v1);
 	break;
@@ -300,7 +363,7 @@ EMPQueueAdaptive<T,Key>::extract_min(T& elt) {
 	  v = em->extract_min(elt);
 	  assert(v == v1);
 	  assert(tmp == elt);
-	  assert(dim->BasicMinMaxHeap<T>::size() == em->size());
+	  assert(dim->size() == em->size());
 	  break;
     }
 	return v;
@@ -334,7 +397,7 @@ EMPQueueAdaptive<T,Key>::insert(const T& elt) {
   case EXTMEM_DEBUG:
 	dim->insert(elt);
 	v = em->insert(elt);
-	assert(dim->BasicMinMaxHeap<T>::size() == em->size());
+	assert(dim->size() == em->size());
 	break;
   }
   return v;

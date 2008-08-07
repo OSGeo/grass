@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,7 +16,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
 
 #ifndef _AMI_H
 #define _AMI_H

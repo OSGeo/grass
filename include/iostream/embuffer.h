@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -21,9 +22,9 @@
 
 
 #include <stdio.h>
-#include <math.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "ami_config.h" //for SAVE_MEMORY
 #include "ami_stream.h"
@@ -293,7 +294,7 @@ public:
   unsigned long get_stream_maxlen() const {
     return (unsigned long)pow((double)arity,(double)level-1)*basesize;
   }
-
+  
   //return the actual size of stream i; i must be the index of a valid
   //stream
   unsigned long get_stream_len(unsigned int i) {
@@ -439,9 +440,7 @@ em_buffer<T,Key>::em_buffer(const unsigned short i, const unsigned long bs,
 	  arity, (long)(arity*sizeof(AMI_STREAM<T>*)));
   MEMORY_LOG(str);
   //allocate STREAM* array
-  //GCC-3.4 does not allow (TYPE)[array] 
-  //use TYPE[array]
-  data = new AMI_STREAM<T>*[arity];
+  data = new AMI_STREAM<T>* [arity];
    
   //allocate deleted array
   sprintf(str, "em_buffer: allocate deleted array: %ld\n",
@@ -460,10 +459,7 @@ em_buffer<T,Key>::em_buffer(const unsigned short i, const unsigned long bs,
   sprintf(str, "em_buffer: allocate name array: %ld\n",
 		  (long)(arity*sizeof(char*)));
   MEMORY_LOG(str);
-  //GCC-3.4 does not allow (TYPE)[array] 
-  //use TYPE[array]
-  //name = new (char*)[arity];
-  name = new char*[arity];
+  name = new char* [arity];
   assert(name);
 #endif
 
@@ -805,6 +801,7 @@ void em_buffer<T,Key>::cleanup() {
       
 #ifdef SAVE_MEMORY
       //stream is empty ==> delete its name 
+	  assert(name[i]);
       delete name[i];
       name[i] = NULL;
 #endif
@@ -831,27 +828,28 @@ void em_buffer<T,Key>::cleanup() {
     for (i=0; i<index; i++) {
       //if i'th stream is not empty, shift it left if necessary
       if (data[i]) {
-	if (i!=j) {
-	  //set j'th stream to point to i'th stream
-	  //cout << j << " set to " << i << endl; cout.flush();
-	  data[j] = data[i];
-	  deleted[j] = deleted[i];
-	  streamsize[j] = streamsize[i];
-	  //set i'th stream to point to NULL
-	  data[i] = NULL;
-	  deleted[i] = 0;
-	  streamsize[i] = 0;
+		if (i!=j) {
+		  //set j'th stream to point to i'th stream
+		  //cout << j << " set to " << i << endl; cout.flush();
+		  data[j] = data[i];
+		  deleted[j] = deleted[i];
+		  streamsize[j] = streamsize[i];
+		  //set i'th stream to point to NULL
+		  data[i] = NULL;
+		  deleted[i] = 0;
+		  streamsize[i] = 0;
 #ifdef SAVE_MEMORY
-	  //fix the names
-	  delete name[j];
-	  name[j] = name[i];
-	  name[i] = NULL;
-	  check_name(j);
+		  //fix the names
+/* 	already done	  assert(name[j]); */
+/* 		  delete name[j]; */
+		  name[j] = name[i];
+		  name[i] = NULL;
+		  check_name(j);
 #endif
-	}  else {
-	  //cout << i << " left the same" << endl;
-	}
-	j++;
+		}  else {
+		  //cout << i << " left the same" << endl;
+		}
+		j++;
       } //if data[i] != NULL
     }//for i
 
@@ -896,6 +894,7 @@ void em_buffer<T,Key>::reset() {
     assert(streamsize[i] == data[i]->stream_len()); 
 #ifdef SAVE_MEMORY   
     check_name(i);
+	assert(name[i]);
     delete name[i];
     name[i] = NULL;
 #endif
@@ -918,12 +917,13 @@ void em_buffer<T,Key>::reset() {
 //all streams of the buffer in sorted ascending order of 
 //their keys  (priorities); 
 template<class T, class Key>
-AMI_STREAM<T>* em_buffer<T,Key>::sort() {
+AMI_STREAM<T>* 
+em_buffer<T,Key>::sort() {
   
   //create stream
   MEMORY_LOG("em_buffer::sort: allocate new AMI_STREAM\n");
 
-  AMI_STREAM<T>* sorted_stream = new AMI_STREAM<T>();
+  AMI_STREAM<T>* sorted_stream = new AMI_STREAM<T>();  /* will be deleteed in insert() */
   assert(sorted_stream);
   
   //merge the streams into sorted stream

@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -16,7 +16,6 @@
  *
  *****************************************************************************/
 
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -26,7 +25,25 @@
 #include <errno.h>
 #include <unistd.h>
 
+//#include <ami_stream.h>
 #include <grass/iostream/ami_stream.h>
+
+
+char *ami_str_error[] = {
+  "AMI_ERROR_NO_ERROR",
+  "AMI_ERROR_IO_ERROR",
+  "AMI_ERROR_END_OF_STREAM",
+  "AMI_ERROR_OUT_OF_RANGE",
+  "AMI_ERROR_READ_ONLY",
+  "AMI_ERROR_OS_ERROR",
+  "AMI_ERROR_MM_ERROR",
+  "AMI_ERROR_OBJECT_INITIALIZATION",
+  "AMI_ERROR_PERMISSION_DENIED",
+  "AMI_ERROR_INSUFFICIENT_MAIN_MEMORY",
+  "AMI_ERROR_INSUFFICIENT_AVAILABLE_STREAMS",
+  "AMI_ERROR_ENV_UNDEFINED",
+  "AMI_ERROR_NO_MAIN_MEMORY_OPERATION",
+};
 
 /**********************************************************************/
 /* creates a random file name, opens the file for reading and writing
@@ -39,9 +56,13 @@ ami_single_temp_name(const std::string& base, char* tmp_path) {
 
   // get the dir
   base_dir = getenv(STREAM_TMPDIR);
-  assert(base_dir);
-
+  if(!base_dir) {
+	fprintf(stderr, "ami_stream: %s not set\n", STREAM_TMPDIR);
+	assert(base_dir);
+	exit(1);
+  }
   sprintf(tmp_path, "%s/%s_XXXXXX", base_dir, base.c_str());
+
 #ifdef __MINGW32__
   fd = mktemp(tmp_path) ? open(tmp_path, O_CREAT|O_EXCL|O_RDWR, 0600) : -1;
 #else
@@ -73,16 +94,22 @@ open_stream(int fd, AMI_stream_type st) {
   case   AMI_WRITE_STREAM:
     fp = fdopen(fd, "wb");
     break;
+  case AMI_APPEND_WRITE_STREAM:
+    fp = fdopen(fd, "ab");
+    break;
   case AMI_APPEND_STREAM:
     fp = fdopen(fd, "ab+");
     break;
   case AMI_READ_WRITE_STREAM: 
-      fp = fdopen(fd, "rb+");
-      if (!fp) {
-	//if file does not exist, create it
-	fp = fdopen(fd, "wb+");
-      }
-      break;
+	fp = fdopen(fd, "rb+");
+	if (!fp) {
+	  //if file does not exist, create it
+	  fp = fdopen(fd, "wb+");
+	}
+	break;
+  }
+  if(!fp) {
+    perror("fdopen");
   }
   assert(fp);
 
@@ -105,6 +132,9 @@ open_stream(char* pathname, AMI_stream_type st) {
   case   AMI_WRITE_STREAM:
     fp = fopen(pathname, "wb");
     break;
+  case AMI_APPEND_WRITE_STREAM:
+    fp = fopen(pathname, "ab");
+    break;
   case AMI_APPEND_STREAM:
     fp = fopen(pathname, "ab+");
     assert(fp);
@@ -121,7 +151,7 @@ open_stream(char* pathname, AMI_stream_type st) {
       break;
   }
   if (!fp) {
-    perror("cannot open stream");
+    perror(pathname);
     assert(0);
     exit(1);
   }

@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -78,7 +78,7 @@ typedef struct {
         perror("rusage/gettimeofday");			\
         exit(1);								\
   }
-	
+
 
 #define rt_u_useconds(rt)							\
 	(((double)rt.rut2.ru_utime.tv_usec +			\
@@ -98,16 +98,21 @@ typedef struct {
 	  - ((double)rt.tv1.tv_usec +			\
 		 (double)rt.tv1.tv_sec*1000000))
 
+
 #endif /* __MINGW32__ */
+
+
+
 
 /* not required to be called, but makes values print as 0. 
    obviously a hack */
 #define rt_zero(rt) bzero(&(rt),sizeof(Rtimer));
-
+	
 #define rt_seconds(rt) (rt_w_useconds(rt)/1000000)
 
 #define rt_sprint(buf, rt) rt_sprint_safe(buf,rt)
 
 char * rt_sprint_safe(char *buf, Rtimer rt);
+
 
 #endif /* RTIMER_H */

@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
+
 
 #ifndef __EMPQ_H
 #define __EMPQ_H
@@ -201,6 +202,9 @@ public:
 
   //return maximum capacity of em_pqueue
   long maxlen();
+
+  // delete all the data in the pq; reset to empty but don't free memory
+  void clear();
 
   //print structure
   void print_range();

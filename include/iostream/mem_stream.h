@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -84,7 +85,7 @@ off_t MEM_STREAM<T>::stream_len(void) {
 template<class T>
 AMI_err MEM_STREAM<T>::name(char **stream_name)  {
 
-  char const* path = "dummy";
+  const char *path = "dummy";
 
   *stream_name = new char [strlen(path) + 1];
   strcpy(*stream_name, path);
