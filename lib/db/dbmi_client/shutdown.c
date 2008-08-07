@@ -9,7 +9,7 @@
  * License (>=v2). Read the file COPYING that comes with GRASS
  * for details.
  *
- * \author Radim Blazek
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
 
 #include <stdlib.h>
