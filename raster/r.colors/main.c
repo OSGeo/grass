@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct
     {
-	struct Flag *r, *w, *l, *g, *e, *i, *n;
+	struct Flag *r, *w, *l, *g, *e, *n;
     } flag;
     struct
     {
@@ -130,6 +130,20 @@ int main(int argc, char **argv)
     opt.map = G_define_standard_option(G_OPT_R_MAP);
     opt.map->required = NO;
     opt.map->guisection = _("Required");
+
+    opt.rast = G_define_option();
+    opt.rast->key = "raster";
+    opt.rast->type = TYPE_STRING;
+    opt.rast->required = NO;
+    opt.rast->gisprompt = "old,cell,raster";
+    opt.rast->description =
+	_("Raster map name from which to copy color table");
+
+    opt.rules = G_define_standard_option(G_OPT_F_INPUT);
+    opt.rules->key = "rules";
+    opt.rules->required = NO;
+    opt.rules->description = _("Path to rules file (\"-\" to read rules from stdin)");
+    opt.rules->guisection = _("Colors");
 
     scan_rules();
 
@@ -171,20 +185,6 @@ int main(int argc, char **argv)
 	  "wave;color wave;");
     opt.colr->guisection = _("Colors");
 
-    opt.rast = G_define_option();
-    opt.rast->key = "raster";
-    opt.rast->type = TYPE_STRING;
-    opt.rast->required = NO;
-    opt.rast->gisprompt = "old,cell,raster";
-    opt.rast->description =
-	_("Raster map name from which to copy color table");
-
-    opt.rules = G_define_standard_option(G_OPT_F_INPUT);
-    opt.rules->key = "rules";
-    opt.rules->required = NO;
-    opt.rules->description = _("Path to rules file");
-    opt.rules->guisection = _("Colors");
-
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->description = _("Remove existing color table");
@@ -213,10 +213,6 @@ int main(int argc, char **argv)
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Colors");
 
-    flag.i = G_define_flag();
-    flag.i->key = 'i';
-    flag.i->description = _("Enter rules interactively");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -226,7 +222,6 @@ int main(int argc, char **argv)
     }
 
     overwrite = !flag.w->answer;
-    interactive = flag.i->answer;
     remove = flag.r->answer;
 
     name = opt.map->answer;
@@ -238,15 +233,15 @@ int main(int argc, char **argv)
     if (!name)
 	G_fatal_error(_("No map specified"));
 
-    if (!cmap && !style && !rules && !interactive && !remove)
-	G_fatal_error(_("One of \"-i\" or \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
+    if (!cmap && !style && !rules && !remove)
+	G_fatal_error(_("One of \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
 
-    if (interactive && (style || rules || cmap))
-	G_fatal_error(_("Interactive mode is incompatible with \"color\", \"rules\", and \"raster\" options"));
-
-    if ((style && (cmap || rules)) || (cmap && rules))
+    if (!!style + !!cmap + !!rules != 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
+    interactive = strcmp(rules, "-") == 0;
+    if (interactive)
+	rules = NULL;
 
     mapset = G_find_cell2(name, "");
     if (mapset == NULL)
