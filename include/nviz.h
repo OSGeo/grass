@@ -172,6 +172,7 @@ int Nviz_new_map_obj(int, const char *, float, nv_data *);
 int Nviz_set_attr(int, int, int, int, const char *, float, nv_data *);
 void Nviz_set_surface_attr_default();
 int Nviz_set_vpoint_attr_default();
+int Nviz_set_volume_attr_default();
 int Nviz_unset_attr(int, int, int);
 
 /* nviz.c */

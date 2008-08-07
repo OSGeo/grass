@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 	       params->format->answer);
 
     GS_libinit();
-    /* GVL_libinit(); TODO */
+    GVL_libinit();
 
     GS_set_swap_func(swap_gl);
 
@@ -109,6 +109,11 @@ int main(int argc, char *argv[])
 	load_vector_points(params, &data);
 	/* set attributes for 2d lines */
 	vpoints_set_attrb(params);
+    }
+
+    /* load volumes */
+    if (params->volume->answer) {
+	load_volume(params, &data);
     }
 
     /* focus on loaded data */

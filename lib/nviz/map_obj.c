@@ -143,6 +143,29 @@ int Nviz_new_map_obj(int type, const char *name, float value, nv_data * data)
 	}
 	G_free(surf_list);
     }
+    /* 3d raster map -> volume */
+    else if (type == MAP_OBJ_VOL) {
+	if (GVL_num_vols() >= MAX_VOLS) {
+	    G_warning(_("Maximum volumes loaded!"));
+	    return -1;
+	}
+	
+	new_id = GVL_new_vol();
+
+	/* load volume */
+	if (0 > GVL_load_vol(new_id, name)) {
+	    GVL_delete_vol(new_id);
+	    G_warning(_("Error loading 3d raster map <%s>"), name);
+	    return -1;
+	}
+
+	/* initilaze volume attributes */
+	Nviz_set_volume_attr_default(new_id);
+    }
+    else {
+	G_warning(_("Nviz_new_map_obj(): unsupported data type"));
+	return -1;
+    }
 
     /* initialize the client data filled for the new map object */
     client_data = (nv_clientdata *) G_malloc(sizeof(nv_clientdata));
@@ -319,6 +342,44 @@ int Nviz_set_vpoint_attr_default(int id)
 
     for (i = 0; i < GPT_MAX_ATTR; i++)
 	gp->use_attr[i] = ST_ATT_NONE;
+
+    return 1;
+}
+
+/*!
+   \brief Set default volume attributes
+
+   \param id volume set id
+
+   \return 1 on success
+   \return 0 on failure
+ */
+int Nviz_set_volume_attr_default(int id)
+{
+    int rows, cols, depths;
+    int max;
+
+    GVL_get_dims(id, &rows, &cols, &depths);
+    max = (rows > cols) ? rows : cols;
+    max = (depths > max) ? depths : max;
+    max = max / 35;
+    if (max < 1)
+	max = 1;
+    
+    if (max > cols)
+	max = cols / 2;
+    if (max > rows)
+	max = rows / 2;
+    if (max > depths)
+	max = depths / 2;
+    
+    /* set default drawres and drawmode for isosurfaces */
+    GVL_isosurf_set_drawres(id, max, max, max);
+    GVL_isosurf_set_drawmode(id, DM_GOURAUD);
+    
+    /* set default drawres and drawmode for slices */
+    GVL_slice_set_drawres(id, 1, 1, 1);
+    GVL_slice_set_drawmode(id, DM_GOURAUD | DM_POLY);
 
     return 1;
 }

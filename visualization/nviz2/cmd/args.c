@@ -3,7 +3,7 @@
 
    \brief Parse command
 
-   COPYRIGHT: (C) 2008 by the GRASS Development Team
+   (C) 2008 by the GRASS Development Team
 
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
@@ -30,6 +30,7 @@ static void args_surface(struct GParams *);
 static void args_vline(struct GParams *);
 static void args_vpoint(struct GParams *);
 static void args_viewpoint(struct GParams *);
+static void args_volume(struct GParams *);
 
 /*!
    \brief Parse command
@@ -47,35 +48,26 @@ void parse_command(int argc, char *argv[], struct GParams *params)
     params->mode_all->description =
 	_("Use draw mode for all loaded surfaces");
 
-    /*
-       surface attributes
-     */
+    /*** surface attributes ***/
     args_surface(params);
 
-    /*
-       vector lines
-     */
+    /*** vector lines ***/
     args_vline(params);
 
-    /*
-       vector points
-     */
+    /*** vector points ***/
     args_vpoint(params);
 
-    /*
-       misc
-     */
+    /*** volumes ***/
+    args_volume(params);
+
+    /*** misc ***/
     /* background color */
     params->bgcolor = G_define_standard_option(G_OPT_C_BG);
 
-    /*
-       viewpoint
-     */
+    /*** viewpoint ***/
     args_viewpoint(params);
 
-    /*
-       image
-     */
+    /*** output image ***/
     /* output */
     params->output = G_define_standard_option(G_OPT_F_OUTPUT);
     params->output->description =
@@ -461,6 +453,16 @@ void args_viewpoint(struct GParams *params)
     params->exag->required = NO;
     params->exag->multiple = NO;
     params->exag->description = _("Vertical exaggeration");
+
+    return;
+}
+
+void args_volume(struct GParams *params)
+{
+    params->volume = G_define_standard_option(G_OPT_R3_MAPS);
+    params->volume->required = NO;
+    params->volume->guisection = _("Volume");
+    params->volume->key = "rast3d";
 
     return;
 }

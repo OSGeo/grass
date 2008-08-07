@@ -181,6 +181,25 @@ int Nviz_draw_all_site(nv_data * dc)
  */
 int Nviz_draw_all_vol(nv_data * dc)
 {
+    int *vol_list, nvols, i;
+
+    vol_list = GVL_get_vol_list(&nvols);
+
+    /* in case transparency is set */
+    GS_set_draw(GSD_BOTH);
+
+    GS_ready_draw();
+
+    for (i = 0; i < nvols; i++) {
+	GVL_draw_vol(vol_list[i]);
+    }
+
+    G_free(vol_list);
+
+    GS_done_draw();
+
+    GS_set_draw(GSD_BACK);
+
     return 1;
 }
 
@@ -198,7 +217,8 @@ int Nviz_draw_all(nv_data * data)
     draw_surf = 1;
     draw_vect = 1;
     draw_site = 1;
-    draw_vol = 0;
+    draw_vol = 1;
+    /*
     draw_north_arrow = 0;
     arrow_x = 0;
     draw_label = 0;
@@ -206,7 +226,8 @@ int Nviz_draw_all(nv_data * data)
     draw_fringe = 0;
     draw_scalebar = 0;
     draw_bar_x = 0;
-
+    */
+    
     GS_set_draw(GSD_BACK);	/* needs to be BACK to avoid flickering */
 
     GS_ready_draw();
