@@ -21,6 +21,10 @@ ifneq ($(strip $(XMLIB)),)
     SUBDIRS += xganim
 endif
 
+ifneq ($(USE_X11),)
+    SUBDIRS += ximgview
+endif
+
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
