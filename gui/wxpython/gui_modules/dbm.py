@@ -503,7 +503,8 @@ class AttributeManager(wx.Frame):
             panel = wx.Panel(parent=self.browsePage, id=wx.ID_ANY)
             self.layerPage[layer] = {'browsePage': panel.GetId()}
 
-            self.browsePage.AddPage(page=panel, text=" %d / %s %s" % (layer, _("Table"), self.mapDBInfo.layers[layer]['table']))
+            self.browsePage.AddPage(page=panel, text=" %d / %s %s" % \
+                                        (layer, _("Table"), self.mapDBInfo.layers[layer]['table']))
 
             pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -512,28 +513,6 @@ class AttributeManager(wx.Frame):
                                    label=" %s " % _("Attribute data - right-click to edit/manage records"))
             listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
             
-            # display or extract selected records buttons
-            #btnDisplay = wx.Button(parent=panel, id=wx.ID_ANY,
-            #                       label=_("Display selected"),
-            #                       size=(150, -1))
-            #btnDisplay.SetToolTip(wx.ToolTip (_("Display selected objects in highlight color")))
-            #btnDisplay.SetDefault()
-            #btnDisplay.Bind(wx.EVT_BUTTON, self.OnDataDrawSelected)
-            #if not self.map:
-            #    btnDisplay.Enable(False)
-            #
-            #btnExtract = wx.Button(parent=panel, id=wx.ID_ANY,
-            #                       label=_("Extract selected"),
-            #                       size=(150, -1))
-            #btnExtract.SetToolTip(wx.ToolTip (_("Extract selected objects to "
-            #                                    "new vector map layer")))
-            #btnExtract.Bind(wx.EVT_BUTTON, self.OnExtractSelected)
-            #
-            #btnsizer = wx.BoxSizer(wx.HORIZONTAL)
-            #btnsizer.Add(btnDisplay, 0, wx.ALIGN_LEFT | wx.EXPAND)
-            #btnsizer.Add((10,10), 1, wx.ALIGN_CENTRE_HORIZONTAL | wx.EXPAND)
-            #btnsizer.Add(btnExtract, 0, wx.ALIGN_RIGHT | wx.EXPAND)
-
             sqlBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
                                   label=" %s " % _("SQL Query"))
 
@@ -555,11 +534,6 @@ class AttributeManager(wx.Frame):
             listSizer.Add(item=win, proportion=1,
                           flag=wx.EXPAND | wx.ALL,
                           border=3)
-            #listSizer.Add(item=btnsizer,
-            #              flag=wx.ALIGN_CENTRE_HORIZONTAL |
-            #              wx.EXPAND |
-            #              wx.ALL,
-            #              border=3)
 
             # sql statement box
             btnApply = wx.Button(parent=panel, id=wx.ID_APPLY)
@@ -614,17 +588,17 @@ class AttributeManager(wx.Frame):
 
             sqlSizer.Add(item=sqlFlexSizer,
                          flag=wx.ALL | wx.EXPAND,
-                         border=0)
+                         border=3)
 
             pageSizer.Add(item=listSizer,
                           proportion=1,
                           flag=wx.ALL | wx.EXPAND,
-                          border=3)
+                          border=5)
 
             pageSizer.Add(item=sqlSizer,
                           proportion=0,
                           flag=wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.EXPAND,
-                          border=3)
+                          border=5)
 
             panel.SetSizer(pageSizer)
 
@@ -651,14 +625,16 @@ class AttributeManager(wx.Frame):
         for layer in self.mapDBInfo.layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
-
+            
             panel = wx.Panel(parent=self.manageTablePage, id=wx.ID_ANY)
             self.layerPage[layer]['tablePage'] = panel.GetId()
             self.manageTablePage.AddPage(page=panel, text=" %d / %s %s" % (layer, _("Table"), self.mapDBInfo.layers[layer]['table']))
-
+            
             pageSizer = wx.BoxSizer(wx.VERTICAL)
-
+            
+            #
             # dbInfo
+            #
             infoCollapse = wx.CollapsiblePane(parent=panel,
                                               label=self.infoCollapseLabelExp,
                                               style=wx.CP_DEFAULT_STYLE |
@@ -666,23 +642,32 @@ class AttributeManager(wx.Frame):
             self.MakeInfoPaneContent(layer, infoCollapse.GetPane())
             infoCollapse.Collapse(False)
             self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnInfoPaneChanged, infoCollapse)
-
+            
+            #
             # table description
+            #
             table = self.mapDBInfo.layers[layer]['table']
             tableBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
-                                    label=" %s " % _("Table %s - right-click to delete records") % table)
-
+                                    label=" %s " % _("Table <%s> - right-click to delete column(s)") % table)
+            
             tableSizer = wx.StaticBoxSizer(tableBox, wx.VERTICAL)
-
+            
             list = self.__createTableDesc(panel, table)
             list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnTableRightUp) #wxMSW
             list.Bind(wx.EVT_RIGHT_UP,            self.OnTableRightUp) #wxGTK
             self.layerPage[layer]['tableData'] = list.GetId()
-
-            addSizer = wx.FlexGridSizer (cols=5, hgap=5, vgap=5)
-            addSizer.AddGrowableCol(3)
-
+            
+            #
             # add column
+            #
+            columnBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                                     label=" %s " % _("Manage columns"))
+            
+            columnSizer = wx.StaticBoxSizer(columnBox, wx.VERTICAL)
+            
+            addSizer = wx.FlexGridSizer (cols=5, hgap=3, vgap=3)
+            addSizer.AddGrowableCol(3)
+            
             label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Column name"))
             column = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value='',
                                  size=(150, -1), style=wx.TE_PROCESS_ENTER)
@@ -697,7 +682,7 @@ class AttributeManager(wx.Frame):
             label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Data type"))
             addSizer.Add(item=label,
                          flag=wx.ALIGN_CENTER_VERTICAL)
-
+            
             subSizer = wx.BoxSizer(wx.HORIZONTAL)
             type = wx.Choice (parent=panel, id=wx.ID_ANY,
                               choices = ["integer",
@@ -723,11 +708,11 @@ class AttributeManager(wx.Frame):
             subSizer.Add(item=length,
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                          border=3)
-
+            
             addSizer.Add(item=subSizer,
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                          border=3)
-
+            
             btnAddCol = wx.Button(parent=panel, id=wx.ID_ADD)
             btnAddCol.Bind(wx.EVT_BUTTON, self.OnTableItemAdd)
             btnAddCol.Enable(False)
@@ -736,7 +721,7 @@ class AttributeManager(wx.Frame):
                          proportion=0,
                          flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.FIXED_MINSIZE |
                          wx.ALIGN_CENTER_VERTICAL )
-
+            
             # rename col
             label  = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Rename column"))
             column = wx.ComboBox(parent=panel, id=wx.ID_ANY, size=(150, -1),
@@ -762,42 +747,45 @@ class AttributeManager(wx.Frame):
             btnRenameCol.Bind(wx.EVT_BUTTON, self.OnTableItemChange)
             btnRenameCol.Enable(False)
             self.layerPage[layer]['renameColButton'] = btnRenameCol.GetId()
-
+            
             addSizer.Add(item=btnRenameCol,
                          proportion=0,
                          flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.FIXED_MINSIZE |
-                         wx.ALIGN_CENTER_VERTICAL )
+                         wx.ALIGN_CENTER_VERTICAL)
 
+            columnSizer.Add(item=addSizer, proportion=1,
+                            flag=wx.ALL | wx.EXPAND, border=3)
+            
             tableSizer.Add(item=list,
                            flag=wx.ALL | wx.EXPAND,
                            proportion=1,
                            border=3)
-
-            tableSizer.Add(item=addSizer,
-                           flag=wx.ALL | wx.EXPAND,
-                           proportion=0,
-                           border=3)
-
+            
             pageSizer.Add(item=infoCollapse,
                           flag=wx.ALL | wx.EXPAND,
                           proportion=0,
                           border=3)
-
+            
             pageSizer.Add(item=tableSizer,
                           flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                           proportion=1,
-                          border=3)
-
+                          border=5)
+ 
+            pageSizer.Add(item=columnSizer,
+                          flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                          proportion=0,
+                          border=5)
+            
             panel.SetSizer(pageSizer)
-
+            
             self.layerPage[layer]['dbinfo'] = infoCollapse.GetId()
-
+        
         self.manageTablePage.SetSelection(0) # select first layer
         try:
             self.layer = self.mapDBInfo.layers.keys()[0]
         except IndexError:
             self.layer = None
-
+        
     def __createTableDesc(self, parent, table):
         """Create list with table description"""
         list = TableListCtrl(parent=parent, id=wx.ID_ANY,
