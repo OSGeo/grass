@@ -9,7 +9,7 @@
  * License (>=v2). Read the file COPYING that comes with GRASS
  * for details.
  *
- * \author Radim Blazek
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
  * \author Update by Glynn Clement <glynn gclements.plus.com>
  * and Martin Landa <landa.martin gmail.com>
  */
