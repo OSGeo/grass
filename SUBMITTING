@@ -410,7 +410,7 @@ following rules:
     List of mime-type:
       C++ files (.cpp): text/x-c++src
       C files (.c): text/x-csrc
-      DTD files (.dtd): application/xml-dtd
+      DTD files (.dtd): text/xml-dtd
       GIF files (.gif): image/gif
       Header files (.h): text/x-chdr
       HTML files (.html): text/html
@@ -419,7 +419,7 @@ following rules:
       PNG files (.png): image/png
       Python files (.py): text/x-python
       Text files (.txt): text/plain
-      XML files (.xml): application/xml
+      XML files (.xml): text/xml
       
       (please update the list...)
 
