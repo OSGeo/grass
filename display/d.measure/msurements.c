@@ -95,7 +95,8 @@ int measurements(int color1, int color2, int s_flag, int m_flag, int k_flag)
 		cur_uy = uy;
 	    }
 	} while (button != 3);
-	R_stabilize();
+
+	R_flush();
 
 	if (!s_flag)
 	    G_clear_screen();

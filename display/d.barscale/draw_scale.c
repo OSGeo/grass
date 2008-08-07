@@ -120,8 +120,6 @@ int draw_scale(int toptext)
 	R_move_abs((int)(pl + w / 2 - 7 * .81), pt + 14);
 	R_text("N");
 
-	R_stabilize();
-
 	return 0;
     }
 
@@ -245,8 +243,6 @@ int draw_scale(int toptext)
 	R_move_abs(x_pos + 35 - draw * 10 + (int)line_len, y_pos + 20);
 	R_text(scales[incr].name);
     }
-
-    R_stabilize();
 
     return (0);
 }

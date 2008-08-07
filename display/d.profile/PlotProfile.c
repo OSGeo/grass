@@ -134,7 +134,7 @@ int PlotProfile(struct Profile profile, char *letter, int min, int max)
     R_move_abs((int)(l + TEXT_COLUMN * (r - l) - .5 * (tr - tl)),
 	       (int)(y_line[0] + .5 * (tb - tt)));
     R_text(txt_buf);
-    R_stabilize();
+    R_flush();
 
     return 0;
 }
