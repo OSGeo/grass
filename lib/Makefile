@@ -10,6 +10,7 @@ SUBDIRS = \
 	pngdriver \
 	psdriver \
 	htmldriver \
+	cairodriver \
 	raster \
 	bitmap \
 	btree \
@@ -46,10 +47,6 @@ OPENGLBASED = \
 #compile if OPENGLBASED present:
 ifneq ($(strip $(OPENGLLIB)),)
     SUBDIRS += $(OPENGLBASED)
-endif
-
-ifneq ($(USE_CAIRO),)
-    SUBDIRS += cairodriver
 endif
 
 #compile if C++ compiler present:
