@@ -219,7 +219,7 @@ void gvl_file_get_min_max(geovol_file * vf, double *min, double *max)
 }
 
 /*!
-   \brief Open volume file
+   \brief Open 3d raster file
 
    \param name file name
    \param file_type file type
@@ -367,7 +367,7 @@ int gvl_file_free_datah(int id)
     int i, j, found = -1;
     geovol_file *fvf;
 
-    G_debug(3, "gvl_file_free_datah");
+    G_debug(5, "gvl_file_free_datah(): id=%d", id);
 
     for (i = 0; i < Numfiles; i++) {
 	if (Data[i]->data_id == id) {
@@ -406,7 +406,7 @@ int gvl_file_free_datah(int id)
 /******************************************************************/
 
 /*!
-   \brief Open g3d file
+   \brief Open 3d raster file
 
    \param filename file name
    \param type data type
@@ -440,7 +440,7 @@ void *open_g3d_file(const char *filename, IFLAG * type, double *min,
 
     /* load range into range structure of map */
     if (!G3d_range_load(map)) {
-	G_warning("Unable to read range of 3D raster map <%s>", filename);
+	G_warning(_("Unable to read range of 3D raster map <%s>"), filename);
 	return (NULL);
     }
 
@@ -1109,7 +1109,7 @@ int gvl_file_is_null_value(geovol_file * vf, void *value)
    \brief Set read mode
 
    \param vf pointer to geovol_file struct
-   \param mode
+   \param mode read mode
 
    \return -1 on failure
    \return 1 on success

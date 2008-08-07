@@ -142,7 +142,7 @@ int gs_calc_normals(geosurf * gs)
 
     init_vars(gs);
 
-    G_debug(4, "gs_calc_normals(): id=%d", gs->gsurf_id);
+    G_debug(5, "gs_calc_normals(): id=%d", gs->gsurf_id);
 
     /* first row - just use single cell */
     /* first col - use bottom & right neighbors */
@@ -159,7 +159,7 @@ int gs_calc_normals(geosurf * gs)
     /* now use four neighboring points for rows 1 - (n-1) */
     for (row = 1; row < ycnt; row++) {
 	if (!(row % 100))
-	    G_debug(4, "gs_calc_normals(): row=%d", row);
+	    G_debug(5, "gs_calc_normals(): row=%d", row);
 
 	/* turn off left neighbor for first col */
 	calc_norm(gs, row * ymod, 0, ~NLFT);

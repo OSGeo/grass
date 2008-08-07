@@ -29,7 +29,7 @@
 static geovol *Vol_top = NULL;
 
 /*!
-   \brief Get volume
+   \brief Get volume set structure
 
    \param id volume set id
 
@@ -40,10 +40,11 @@ geovol *gvl_get_vol(int id)
 {
     geovol *gvl;
 
-    G_debug(3, "gvl_get_vol");
+    G_debug(5, "gvl_get_vol():");
 
     for (gvl = Vol_top; gvl; gvl = gvl->next) {
 	if (gvl->gvol_id == id) {
+	    G_debug(5, "    id=%d", id);
 	    return (gvl);
 	}
     }
@@ -63,7 +64,7 @@ geovol *gvl_get_prev_vol(int id)
 {
     geovol *pv;
 
-    G_debug(3, "gvl_get_prev_vol");
+    G_debug(5, "gvl_get_prev_vol");
 
     for (pv = Vol_top; pv; pv = pv->next) {
 	if (pv->gvol_id == id - 1) {
@@ -86,7 +87,7 @@ int gvl_getall_vols(geovol ** gvols)
     geovol *gvl;
     int i;
 
-    G_debug(3, "gvl_getall_vols");
+    G_debug(5, "gvl_getall_vols");
 
     for (i = 0, gvl = Vol_top; gvl; gvl = gvl->next, i++) {
 	gvols[i] = gvl;
@@ -96,7 +97,7 @@ int gvl_getall_vols(geovol ** gvols)
 }
 
 /*!
-   \brief Get number of registrated volume sets
+   \brief Get number of loaded volume sets
 
    \return number of volumes
  */
@@ -105,15 +106,15 @@ int gvl_num_vols(void)
     geovol *gvl;
     int i;
 
-    G_debug(3, "gvl_num_vols");
-
     for (i = 0, gvl = Vol_top; gvl; gvl = gvl->next, i++) ;
+
+    G_debug(5, "gvl_num_vols(): num=%d", i);
 
     return (i);
 }
 
 /*!
-   \brief Get last volume
+   \brief Get last volume set from the list
 
    \return pointer to geovol struct
    \return NULL on failure
@@ -122,7 +123,7 @@ geovol *gvl_get_last_vol(void)
 {
     geovol *lvl;
 
-    G_debug(3, "gvl_get_last_vol");
+    G_debug(5, "gvl_get_last_vol");
 
     if (!Vol_top) {
 	return (NULL);
@@ -130,7 +131,7 @@ geovol *gvl_get_last_vol(void)
 
     for (lvl = Vol_top; lvl->next; lvl = lvl->next) ;
 
-    G_debug(3, "  last vol id: %d", lvl->gvol_id);
+    G_debug(5, "  last vol id: %d", lvl->gvol_id);
 
     return (lvl);
 }
@@ -138,14 +139,14 @@ geovol *gvl_get_last_vol(void)
 /*!
    \brief Allocate new volume set and add it to the list
 
-   \return pointer to new geovol struct
+   \return pointer to geovol struct
    \return NULL on failure
  */
 geovol *gvl_get_new_vol(void)
 {
     geovol *nvl, *lvl;
 
-    G_debug(3, "gvl_get_new_vol");
+    G_debug(5, "gvl_get_new_vol()");
 
     nvl = (geovol *) G_malloc(sizeof(geovol));	/* G_fatal_error */
     if (!nvl) {
@@ -163,11 +164,13 @@ geovol *gvl_get_new_vol(void)
 
     nvl->next = NULL;
 
+    G_debug(5, "    id=%d", nvl->gvol_id);
+    
     return (nvl);
 }
 
 /*!
-   \brief Initialize volume
+   \brief Initialize geovol structure
 
    \param gvl pointer to geovol struct
    \param ox,oy,oz
@@ -182,7 +185,7 @@ int gvl_init_vol(geovol * gvl, double ox, double oy, double oz,
 		 int rows, int cols, int depths, double xres, double yres,
 		 double zres)
 {
-    G_debug(3, "gvl_init_vol");
+    G_debug(5, "gvl_init_vol() id=%d", gvl->gvol_id);
 
     if (!gvl) {
 	return (-1);
@@ -199,26 +202,30 @@ int gvl_init_vol(geovol * gvl, double ox, double oy, double oz,
     gvl->zres = zres;
 
     gvl->xmin = ox;
-    gvl->xmax = ox + cols * xres;
+    gvl->xmax = ox + (cols - 1) * xres;
     gvl->xrange = gvl->xmax - gvl->xmin;
     gvl->ymin = oy;
-    gvl->ymax = oy + rows * yres;
+    gvl->ymax = oy + (rows - 1) * yres;
     gvl->yrange = gvl->ymax - gvl->ymin;
     gvl->zmin = oz;
-    gvl->zmax = oz + depths * zres;
+    gvl->zmax = oz + (depths - 1) * zres;
     gvl->zrange = gvl->zmax - gvl->zmin;
 
     gvl->x_trans = gvl->y_trans = gvl->z_trans = 0.0;
 
     gvl->n_isosurfs = 0;
+    G_zero(gvl->isosurf, sizeof(geovol_isosurf *) * MAX_ISOSURFS);
     gvl->isosurf_x_mod = 1;
     gvl->isosurf_y_mod = 1;
     gvl->isosurf_z_mod = 1;
+    gvl->isosurf_draw_mode = DM_GOURAUD;
 
     gvl->n_slices = 0;
+    G_zero(gvl->slice, sizeof(geovol_slice *) * MAX_SLICES);
     gvl->slice_x_mod = 1;
     gvl->slice_y_mod = 1;
     gvl->slice_z_mod = 1;
+    gvl->slice_draw_mode = DM_GOURAUD;
 
     gvl->hfile = -1;
     gvl->clientdata = NULL;
@@ -235,7 +242,7 @@ void gvl_delete_vol(int id)
 {
     geovol *fvl;
 
-    G_debug(3, "gvl_delete_vol");
+    G_debug(5, "gvl_delete_vol");
 
     fvl = gvl_get_vol(id);
 
@@ -259,7 +266,7 @@ int gvl_free_vol(geovol * fvl)
     geovol *gvl;
     int found = 0;
 
-    G_debug(3, "gvl_free_vol");
+    G_debug(5, "gvl_free_vol");
 
     if (Vol_top) {
 	if (fvl == Vol_top) {
@@ -318,15 +325,15 @@ void gvl_free_volmem(geovol * fvl)
  */
 void print_vol_fields(geovol * gvl)
 {
-    G_debug(4, "ID: %d", gvl->gvol_id);
-    G_debug(4, "cols: %d rows: %d depths: %d", gvl->cols, gvl->rows,
+    G_debug(5, "ID: %d", gvl->gvol_id);
+    G_debug(5, "cols: %d rows: %d depths: %d", gvl->cols, gvl->rows,
 	    gvl->depths);
-    G_debug(4, "ox: %lf oy: %lf oz: %lf", gvl->ox, gvl->oy, gvl->oz);
-    G_debug(4, "xres: %lf yres: %lf zres: %lf", gvl->xres, gvl->yres,
+    G_debug(5, "ox: %lf oy: %lf oz: %lf", gvl->ox, gvl->oy, gvl->oz);
+    G_debug(5, "xres: %lf yres: %lf zres: %lf", gvl->xres, gvl->yres,
 	    gvl->zres);
-    G_debug(4, "xmin: %f ymin: %f zmin: %f", gvl->xmin, gvl->ymin, gvl->zmin);
-    G_debug(4, "xmax: %f ymax: %f zmax: %f", gvl->xmax, gvl->ymax, gvl->zmax);
-    G_debug(4, "x_trans: %f y_trans: %f z_trans: %f", gvl->x_trans,
+    G_debug(5, "xmin: %f ymin: %f zmin: %f", gvl->xmin, gvl->ymin, gvl->zmin);
+    G_debug(5, "xmax: %f ymax: %f zmax: %f", gvl->xmax, gvl->ymax, gvl->zmax);
+    G_debug(5, "x_trans: %f y_trans: %f z_trans: %f", gvl->x_trans,
 	    gvl->y_trans, gvl->z_trans);
 
     return;
@@ -511,7 +518,7 @@ int gvl_isosurf_init(geovol_isosurf * isosurf)
 {
     int i;
 
-    G_debug(3, "gvl_isosurf_init");
+    G_debug(5, "gvl_isosurf_init");
 
     if (!isosurf)
 	return (-1);
@@ -541,7 +548,7 @@ int gvl_isosurf_freemem(geovol_isosurf * isosurf)
 {
     int i;
 
-    G_debug(3, "gvl_isosurf_freemem");
+    G_debug(5, "gvl_isosurf_freemem");
 
     if (!isosurf)
 	return (-1);
@@ -591,7 +598,7 @@ geovol_isosurf *gvl_isosurf_get_isosurf(int id, int isosurf_id)
  */
 int gvl_isosurf_get_att_src(geovol_isosurf * isosurf, int desc)
 {
-    G_debug(3, "isosurf_get_att_src");
+    G_debug(5, "isosurf_get_att_src");
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -616,7 +623,7 @@ int gvl_isosurf_get_att_src(geovol_isosurf * isosurf, int desc)
  */
 int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
 {
-    G_debug(3, "gvl_isosurf_set_att_src");
+    G_debug(5, "gvl_isosurf_set_att_src");
 
     /* check if old source was MAP_ATT, deattach volfile */
     if (MAP_ATT == gvl_isosurf_get_att_src(isosurf, desc)) {
@@ -650,7 +657,7 @@ int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
 int gvl_isosurf_set_att_const(geovol_isosurf * isosurf, int desc,
 			      float constant)
 {
-    G_debug(3, "gvl_isosurf_set_att_const");
+    G_debug(5, "gvl_isosurf_set_att_const");
 
     if (isosurf) {
 	isosurf->att[desc].constant = constant;
@@ -678,7 +685,7 @@ int gvl_isosurf_set_att_map(geovol_isosurf * isosurf, int desc,
 {
     int hfile;
 
-    G_debug(3, "gvl_isosurf_set_att_map(): att_map: %s", filename);
+    G_debug(5, "gvl_isosurf_set_att_map(): att_map: %s", filename);
 
     if (isosurf) {
 	if (0 > (hfile = gvl_file_newh(filename, VOL_FTYPE_G3D)))
@@ -710,7 +717,7 @@ int gvl_isosurf_set_att_changed(geovol_isosurf * isosurf, int desc)
 {
     int i;
 
-    G_debug(3, "gvl_isosurf_set_att_changed");
+    G_debug(5, "gvl_isosurf_set_att_changed");
 
     if (isosurf && LEGAL_ATT(desc)) {
 	isosurf->att[desc].changed = 1;
@@ -741,7 +748,7 @@ int gvl_isosurf_set_att_changed(geovol_isosurf * isosurf, int desc)
  */
 int gvl_slice_init(geovol_slice * slice)
 {
-    G_debug(3, "gvl_slice_init");
+    G_debug(5, "gvl_slice_init");
 
     if (!slice)
 	return (-1);
@@ -767,7 +774,7 @@ int gvl_slice_init(geovol_slice * slice)
  */
 int gvl_slice_freemem(geovol_slice * slice)
 {
-    G_debug(3, "gvl_slice_freemem");
+    G_debug(5, "gvl_slice_freemem");
 
     if (!slice)
 	return (-1);

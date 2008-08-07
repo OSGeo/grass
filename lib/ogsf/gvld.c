@@ -27,22 +27,22 @@
 #define READ() gvl_read_char(pos[i]++, gvl->isosurf[i]->data)
 
 /*!
-   \brief ADD
+   \brief Draw volume set (slices and isosurfaces)
 
    \param gvl pointer to geovol struct
 
    \return -1 on failure
    \return 1 on success
  */
-int gvld_vol(geovol * gvl)
+int gvld_vol(geovol *gvl)
 {
-    G_debug(3, "gvld_vol");
+    G_debug(5, "gvld_vol(): id=%d", gvl->gvol_id);
 
     /* SLICES */
     /* calculate slices data, if slices changed */
     if (0 > gvl_slices_calc(gvl))
 	return (-1);
-    /* draw isosurfaces */
+    /* draw slices */
     if (0 > gvld_slices(gvl))
 	return (-1);
 
@@ -67,7 +67,7 @@ int gvld_vol(geovol * gvl)
  */
 int gvld_wire_vol(geovol * gvl)
 {
-    G_debug(3, "gvld_vol");
+    G_debug(5, "gvld_vol");
 
     gvld_wind3_box(gvl);
 
@@ -133,9 +133,9 @@ int gvld_isosurf(geovol * gvl)
     nz = G_malloc(n_i * sizeof(int));
     e_dl = G_malloc(n_i * sizeof(int));
 
-    G_debug(3, "gvld_isosurf():");
+    G_debug(5, "gvld_isosurf():");
     for (i = 0; i < gvl->n_isosurfs; i++) {
-	G_debug(4, "  start : gvl: %s isosurf : %d\n",
+	G_debug(5, "  start : gvl: %s isosurf : %d\n",
 		gvl_file_get_name(gvl->hfile), i);
     }
 
@@ -239,14 +239,14 @@ int gvld_isosurf(geovol * gvl)
 	nz[i] = 0;
     }
 
-    G_debug(3, "  intialize OK");
+    G_debug(5, "  intialize OK");
 
     for (z = 0; z < depths - 1; z++) {
 	zc = z * zres;
 
 	if (GS_check_cancel()) {
 	    for (i = 0; i < gvl->n_isosurfs; i++) {
-		G_debug(4, "  break : isosurf : %d datalength : %d B\n",
+		G_debug(5, "  break : isosurf : %d datalength : %d B\n",
 			i, pos[i]);
 	    }
 
@@ -388,7 +388,7 @@ int gvld_isosurf(geovol * gvl)
     }
 
     for (i = 0; i < gvl->n_isosurfs; i++) {
-	G_debug(4, "  end : isosurf : %d datalength : %d B\n", i, pos[i]);
+	G_debug(5, "  end : isosurf : %d datalength : %d B\n", i, pos[i]);
     }
 
     gsd_set_material(1, 1, 0., 0., 0x0);
@@ -434,7 +434,7 @@ int gvld_slices(geovol * gvl)
     GLint viewport[4];
     GLint window[4];
 
-    G_debug(3, "gvld_slices");
+    G_debug(5, "gvld_slices");
 
     /* shade */
     gsd_shademodel(gvl->slice_draw_mode & DM_GOURAUD);
@@ -668,7 +668,7 @@ int gvld_wire_slices(geovol * gvl)
 
     geovol_slice *slice;
 
-    G_debug(3, "gvld_wire_slices");
+    G_debug(5, "gvld_wire_slices");
 
     gsd_pushmatrix();
 
@@ -767,7 +767,7 @@ int gvld_wind3_box(geovol * gvl)
 {
     float pt[3];
 
-    G_debug(3, "gvld_wind3_box");
+    G_debug(5, "gvld_wind3_box");
 
     gsd_pushmatrix();
 

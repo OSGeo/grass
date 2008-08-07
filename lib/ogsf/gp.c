@@ -37,7 +37,7 @@ geosite *gp_get_site(int id)
 {
     geosite *gp;
 
-    G_debug(4, "gp_get_site");
+    G_debug(5, "gp_get_site");
 
     for (gp = Site_top; gp; gp = gp->next) {
 	if (gp->gsite_id == id) {
@@ -60,7 +60,7 @@ geosite *gp_get_prev_site(int id)
 {
     geosite *pp;
 
-    G_debug(4, "gp_get_prev_site");
+    G_debug(5, "gp_get_prev_site");
 
     for (pp = Site_top; pp; pp = pp->next) {
 	if (pp->gsite_id == id - 1) {
@@ -83,7 +83,7 @@ int gp_num_sites(void)
 
     for (i = 0, gp = Site_top; gp; gp = gp->next, i++) ;
 
-    G_debug(4, "gp_num_sites(): n=%d", i);
+    G_debug(5, "gp_num_sites(): n=%d", i);
 
     return (i);
 }
@@ -98,7 +98,7 @@ geosite *gp_get_last_site(void)
 {
     geosite *lp;
 
-    G_debug(4, "gp_get_last_site");
+    G_debug(5, "gp_get_last_site");
 
     if (!Site_top) {
 	return (NULL);
@@ -106,7 +106,7 @@ geosite *gp_get_last_site(void)
 
     for (lp = Site_top; lp->next; lp = lp->next) ;
 
-    G_debug(4, " last site id: %d", lp->gsite_id);
+    G_debug(5, " last site id: %d", lp->gsite_id);
 
     return (lp);
 }
@@ -121,7 +121,7 @@ geosite *gp_get_new_site(void)
 {
     geosite *np, *lp;
 
-    G_debug(4, "gp_get_new_site");
+    G_debug(5, "gp_get_new_site");
 
     np = (geosite *) G_malloc(sizeof(geosite));	/* G_fatal_error */
     if (!np) {
@@ -185,7 +185,7 @@ int gp_set_defaults(geosite * gp)
     int i;
     float dim;
 
-    G_debug(4, "gp_set_defaults");
+    G_debug(5, "gp_set_defaults");
 
     if (!gp) {
 	return (-1);
@@ -249,7 +249,7 @@ void print_site_fields(geosite * gp)
  */
 int gp_init_site(geosite * gp)
 {
-    G_debug(4, "gp_init_site");
+    G_debug(5, "gp_init_site");
 
     if (!gp) {
 	return (-1);
@@ -267,7 +267,7 @@ void gp_delete_site(int id)
 {
     geosite *fp;
 
-    G_debug(4, "gp_delete_site");
+    G_debug(5, "gp_delete_site");
 
     fp = gp_get_site(id);
 
@@ -291,7 +291,7 @@ int gp_free_site(geosite * fp)
     geosite *gp;
     int found = 0;
 
-    G_debug(4, "gp_free_site");
+    G_debug(5, "gp_free_site");
 
     if (Site_top) {
 	if (fp == Site_top) {

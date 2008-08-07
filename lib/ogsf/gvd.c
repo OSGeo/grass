@@ -89,7 +89,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     int npts, src, check;
     geoline *gln;
 
-    G_debug(4, "gvd_vect(): id=%d", gv->gvect_id);
+    G_debug(5, "gvd_vect(): id=%d", gv->gvect_id);
 
     if (GS_check_cancel()) {
 	return (0);
@@ -139,7 +139,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
     }
 
     for (; gln; gln = gln->next) {
-	G_debug(4, "gvd_vect(): type = %d dims = %d", gln->type, gln->dims);
+	G_debug(5, "gvd_vect(): type = %d dims = %d", gln->type, gln->dims);
 
 	if (!(++check % CHK_FREQ)) {
 	    if (GS_check_cancel()) {
@@ -152,7 +152,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 
 	if (gln->type == OGSF_LINE) {	/* line */
 	    if (gln->dims == 2) {	/* 2d line */
-		G_debug(4, "gvd_vect(): 2D vector line");
+		G_debug(5, "gvd_vect(): 2D vector line");
 		for (k = 0; k < gln->npts - 1; k++) {
 		    bgn[X] = gln->p2[k][X] + gv->x_trans - gs->ox;
 		    bgn[Y] = gln->p2[k][Y] + gv->y_trans - gs->oy;
@@ -202,7 +202,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 	    }
 	    else {		/* 3D line */
 
-		G_debug(4, "gvd_vect(): 3D vector line");
+		G_debug(5, "gvd_vect(): 3D vector line");
 		points = (Point3 *) malloc(sizeof(Point3));
 
 		gsd_color_func(gv->color);
@@ -222,7 +222,7 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 	}
 	else if (gln->type == OGSF_POLYGON) {	/* polygon */
 	    if (gln->dims == 3) {	/* 3D polygon */
-		G_debug(4, "gvd_vect(): draw 3D polygon");
+		G_debug(5, "gvd_vect(): draw 3D polygon");
 
 		/* We want at least 3 points */
 		if (gln->npts >= 3) {
