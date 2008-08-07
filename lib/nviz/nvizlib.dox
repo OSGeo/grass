@@ -61,6 +61,10 @@ wxGUI Nviz extension and CLI-based Nviz module.
 
  - Nviz_set_surface_attr_default()
 
+ - Nviz_set_vpoint_attr_default()
+
+ - Nviz_set_volume_attr_default()
+
  - Nviz_unset_attr()
 
 \subsection nvizLights Lights settings
