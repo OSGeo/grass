@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
-    char buf[512];
+    struct Flag *stats_flag, *null_flag, *del_flag;
     int cellhd_ok;		/* Is cell header OK? */
     int is_reclass;		/* Is raster reclass? */
     char *infile, *cmapset;
@@ -113,6 +113,17 @@ int main(int argc, char *argv[])
     map_opt->gisprompt = "old,cell,raster";
     map_opt->description = _("Raster map from which to copy category table");
 
+    stats_flag = G_define_flag();
+    stats_flag->key = 's';
+    stats_flag->description = _("Update statistics (histogram, range)");
+
+    null_flag = G_define_flag();
+    null_flag->key = 'n';
+    null_flag->description = _("Create/reset the null file");
+
+    del_flag = G_define_flag();
+    del_flag->key = 'd';
+    del_flag->description = _("Delete the null file");
 
     /* Parse command-line options */
     if (G_parser(argc, argv))
@@ -244,71 +255,12 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
 
 
-    /* Cell header */
-    sprintf(buf, _("Edit header for [%s]? "), raster->answer);
-    if (is_reclass) {
-	G_message(_("\nNOTE: [%s] is a reclass of [%s in %s]"),
-		  raster->answer, rname, rmapset);
-    }
-    else if (G_yes(buf, cellhd_ok ? 0 : 1)) {
-	G_clear_screen();
-
-	run_etc_support("modhead",
-			G_fully_qualified_name(raster->answer, mapset));
-
-	if ((cellhd_ok = G_get_cellhd(raster->answer, mapset, &cellhd) > 0)) {
-	    hitreturn();
-	    G_clear_screen();
-	}
-	else if (!cellhd_ok)
-	    G_fatal_error(_("Canceling from edit header."));
-    }
-
     /* Check the histogram and range */
-    check_stats(raster->answer, mapset);
-
-    /* Category file */
-    sprintf(buf, _("Edit the category file for [%s]? "), raster->answer);
-    if (G_yes(buf, 0)) {
-	G_clear_screen();
-	run_etc_support("modcats",
-			G_fully_qualified_name(raster->answer, mapset));
-	hitreturn();
-	G_clear_screen();
-    }
-
-    /* Color table */
-    sprintf(buf, _("Create/Update the color table for [%s]? "),
-	    raster->answer);
-    if (G_yes(buf, 0)) {
-	G_clear_screen();
-	run_etc_support("modcolr",
-			G_fully_qualified_name(raster->answer, mapset));
-	hitreturn();
-	G_clear_screen();
-    }
-
-    /* History file */
-    sprintf(buf, _("Edit the history file for [%s]? "), raster->answer);
-    if (G_yes(buf, 0)) {
-	G_clear_screen();
-	run_etc_support("modhist",
-			G_fully_qualified_name(raster->answer, mapset));
-	hitreturn();
-	G_clear_screen();
-    }
+    if (stats_flag->answer)
+	check_stats(raster->answer, mapset);
 
     /* null file */
-    G_message(_("\nThe null file for [%s] may indicate that some "
-		"cells contain\n no data. If the null file for [%s] "
-		"doesn't exist, zero cells in\n it are treated by "
-		"GRASS application programs as no data."),
-	      raster->answer, raster->answer);
-
-    sprintf(buf, _("\nDo you want to create/reset the null file "
-		   "for [%s] so that null cell values are considered valid data? "),
-	    raster->answer);
-    if (G_yes(buf, 0)) {
+    if (null_flag->answer) {
 	unsigned char *null_bits;
 	int row, col;
 	int null_fd;
@@ -317,7 +269,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("[%s] is a reclass of another map. Exiting."),
 			  raster->answer);
 
-	G_clear_screen();
 	/* Create a file of no-nulls */
 	null_bits = G__allocate_null_bits(cellhd.cols);
 	for (col = 0; col < G__null_bitstream_size(cellhd.cols); col++)
@@ -338,23 +289,15 @@ int main(int argc, char *argv[])
 	/* Cleanup */
 	close(null_fd);
 	G_free(null_bits);
-
-	hitreturn();
-	G_clear_screen();
     }
 
-    sprintf(buf, _("\nDo you want to delete the null file for [%s]\n"
-		   "(all zero cells will then be considered no data)? "),
-	    raster->answer);
-    if (G_yes(buf, 0)) {
+    if (del_flag->answer) {
 	int null_fd;
 	char path[GPATH_MAX];
 
 	if (is_reclass)
 	    G_fatal_error(_("[%s] is a reclass of another map. Exiting."),
 			  raster->answer);
-
-	G_clear_screen();
 
 	/* Write a file of no-nulls */
 	G_message(_("Removing null file for [%s]...\n"), raster->answer);
