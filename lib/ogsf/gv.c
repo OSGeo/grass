@@ -38,7 +38,7 @@ geovect *gv_get_vect(int id)
 {
     geovect *gv;
 
-    G_debug(4, "gv_get_vect() id=%d", id);
+    G_debug(5, "gv_get_vect() id=%d", id);
 
     for (gv = Vect_top; gv; gv = gv->next) {
 	if (gv->gvect_id == id) {
@@ -61,7 +61,7 @@ geovect *gv_get_prev_vect(int id)
 {
     geovect *pv;
 
-    G_debug(4, "gv_get_prev_vect(): id=%d", id);
+    G_debug(5, "gv_get_prev_vect(): id=%d", id);
 
     for (pv = Vect_top; pv; pv = pv->next) {
 	if (pv->gvect_id == id - 1) {
@@ -84,7 +84,7 @@ int gv_num_vects(void)
 
     for (i = 0, gv = Vect_top; gv; gv = gv->next, i++) ;
 
-    G_debug(4, "gv_num_vects(): num=%d", i);
+    G_debug(5, "gv_num_vects(): num=%d", i);
 
     return (i);
 }
@@ -105,7 +105,7 @@ geovect *gv_get_last_vect(void)
 
     for (lv = Vect_top; lv->next; lv = lv->next) ;
 
-    G_debug(4, "gv_get_last_vect(): id=%d", lv->gvect_id);
+    G_debug(5, "gv_get_last_vect(): id=%d", lv->gvect_id);
 
     return (lv);
 }
@@ -137,7 +137,7 @@ geovect *gv_get_new_vect(void)
 
     nv->next = NULL;
 
-    G_debug(4, "gv_get_new_vect() id=%d", nv->gvect_id);
+    G_debug(5, "gv_get_new_vect() id=%d", nv->gvect_id);
 
     return (nv);
 }
@@ -181,7 +181,7 @@ int gv_set_defaults(geovect * gv)
 {
     int i;
 
-    G_debug(4, "gv_set_defaults() id=%d", gv->gvect_id);
+    G_debug(5, "gv_set_defaults() id=%d", gv->gvect_id);
 
     if (!gv) {
 	return (-1);
@@ -217,7 +217,7 @@ int gv_init_vect(geovect * gv)
 	return (-1);
     }
 
-    G_debug(4, "gv_init_vect() id=%d", gv->gvect_id);
+    G_debug(5, "gv_init_vect() id=%d", gv->gvect_id);
 
     return (0);
 }
@@ -231,7 +231,7 @@ void gv_delete_vect(int id)
 {
     geovect *fv;
 
-    G_debug(4, "gv_delete_vect(): id=%d", id);
+    G_debug(5, "gv_delete_vect(): id=%d", id);
 
     fv = gv_get_vect(id);
 
@@ -281,7 +281,7 @@ int gv_free_vect(geovect * fv)
 	}
 
 	if (found) {
-	    G_debug(4, "gv_free_vect(): id=%d", fv->gvect_id);
+	    G_debug(5, "gv_free_vect(): id=%d", fv->gvect_id);
 	    gv_free_vectmem(fv);
 	    G_free(fv);
 	    fv = NULL;

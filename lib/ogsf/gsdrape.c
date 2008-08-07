@@ -164,7 +164,7 @@ static Point3 *_gsdrape_get_segments(geosurf * gs, float *bgn, float *end,
     *num = order_intersects(gs, f, l, vi, hi, di);
     /* fills in return values, eliminates dupes (corners) */
 
-    G_debug(4, "_gsdrape_get_segments vi=%d, hi=%d, di=%d, num=%d",
+    G_debug(5, "_gsdrape_get_segments vi=%d, hi=%d, di=%d, num=%d",
 	    vi, hi, di, *num);
 
     return (I3d);
@@ -837,10 +837,10 @@ int order_intersects(geosurf * gs, Point3 first, Point3 last, int vi, int hi,
 	}
 
 	if (i == cv + ch + cd) {
-	    G_debug(4, "order_intersects(): stuck on %d", cnum);
-	    G_debug(4, "order_intersects(): cv = %d, ch = %d, cd = %d", cv,
+	    G_debug(5, "order_intersects(): stuck on %d", cnum);
+	    G_debug(5, "order_intersects(): cv = %d, ch = %d, cd = %d", cv,
 		    ch, cd);
-	    G_debug(4, "order_intersects(): dv = %f, dh = %f, dd = %f", dv,
+	    G_debug(5, "order_intersects(): dv = %f, dh = %f, dd = %f", dv,
 		    dh, dd);
 
 	    break;

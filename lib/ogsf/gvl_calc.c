@@ -1008,17 +1008,19 @@ int slice_calc(geovol * gvl, int ndx_slc, void *colors)
 }
 
 /*!
-   \brief Calculate slices
+   \brief Calculate slices for given volume set
 
    \param gvol pointer to geovol struct
 
    \return 1
  */
-int gvl_slices_calc(geovol * gvol)
+int gvl_slices_calc(geovol *gvol)
 {
     int i;
     void *colors;
 
+    G_debug(5, "gvl_slices_calc(): id=%d", gvol->gvol_id);
+    
     /* set current resolution */
     ResX = gvol->slice_x_mod;
     ResY = gvol->slice_y_mod;

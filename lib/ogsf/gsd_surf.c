@@ -82,7 +82,7 @@ int gsd_surf(geosurf * surf)
 {
     int desc, ret;
 
-    G_debug(4, "gsd_surf(): id=%d", surf->gsurf_id);
+    G_debug(5, "gsd_surf(): id=%d", surf->gsurf_id);
 
     desc = ATT_TOPO;
 
@@ -706,8 +706,8 @@ int gsd_surf_map_old(geosurf * surf)
     show_colormode();
 
 #ifdef CALC_AREA
-    G_debug(4, "  Surface Area: %.12lf", asurf);
-    G_debug(4, "  Exaggerated Surface Area: %.12lf", axsurf);
+    G_debug(5, "  Surface Area: %.12lf", asurf);
+    G_debug(5, "  Exaggerated Surface Area: %.12lf", axsurf);
 #endif
 
     return (0);
@@ -747,7 +747,7 @@ int gsd_surf_const(geosurf * surf, float k)
 
     unsigned int ktrans = 255;
 
-    G_debug(4, "gsd_surf_const(): id=%d", surf->gsurf_id);
+    G_debug(5, "gsd_surf_const(): id=%d", surf->gsurf_id);
 
     if (GS_check_cancel()) {
 	return (-1);
@@ -1513,7 +1513,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							&tx, &ty)) {
 				    /* crossing going up */
 
-				    G_debug(4,
+				    G_debug(5,
 					    "crossing going up at surf %d no. %d",
 					    n, i);
 
@@ -1550,7 +1550,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 							     [Z], &tx, &ty)) {
 				    /* crossing going down */
 
-				    G_debug(4,
+				    G_debug(5,
 					    "crossing going down at surf %d no. %d",
 					    n, i);
 
@@ -1599,7 +1599,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 					lower = 1;
 				    }
 #endif
-				    G_debug(4,
+				    G_debug(5,
 					    "lower crossing at surf %d no. %d between surfs %d & %d",
 					    n, i, bn, bnl);
 
@@ -1629,16 +1629,16 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 #ifdef CPDEBUG
 			    {
 				if (!upper && !lower) {
-				    G_debug(4,
+				    G_debug(5,
 					    "Crossing NOT found or masked:");
-				    G_debug(4,
+				    G_debug(5,
 					    "  current surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f",
 					    n, points[n][i - 1][X],
 					    points[n][i - 1][Y],
 					    points[n][i - 1][Z],
 					    points[n][i][X], points[n][i][Y],
 					    points[n][i][Z]);
-				    G_debug(4,
+				    G_debug(5,
 					    "  below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
 					    bn, points[bn][i - 1][X],
 					    points[bn][i - 1][Y],
@@ -1646,7 +1646,7 @@ int gsd_ortho_wall(int np, int ns, geosurf ** gsurfs, Point3 ** points,
 					    points[bn][i][X],
 					    points[bn][i][Y],
 					    points[bn][i][Z]);
-				    G_debug(4,
+				    G_debug(5, gs
 					    "  last below surf: %d [ %.2f %.2f %.2f -> %.2f %.2f %f\n",
 					    bnl, points[bnl][i - 1][X],
 					    points[bnl][i - 1][Y],

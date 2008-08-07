@@ -19,6 +19,7 @@
 #include <grass/gis.h>
 #include <grass/G3d.h>
 #include <grass/gstypes.h>
+#include <grass/glocale.h>
 #include "gsget.h"
 
 static int Vol_ID[MAX_VOLS];
@@ -107,7 +108,7 @@ int GVL_vol_exists(int id)
 }
 
 /*!
-   \brief Add new volume set
+   \brief Create new volume set
 
    \return volume set id
    \return -1 on error
@@ -116,18 +117,21 @@ int GVL_new_vol(void)
 {
     geovol *nvl;
 
-    G_debug(3, "GVL_new_vol");
+    G_debug(3, "GVL_new_vol():");
 
     if (Next_vol < MAX_VOLS) {
 	nvl = gvl_get_new_vol();
 
-	gvl_init_vol(nvl, wind3.west, wind3.south, wind3.bottom,
+	gvl_init_vol(nvl, wind3.west + wind3.ew_res / 2.,
+		     wind3.south + wind3.ns_res / 2., wind3.bottom,
 		     wind3.rows, wind3.cols, wind3.depths,
 		     wind3.ew_res, wind3.ns_res, wind3.tb_res);
 
 	Vol_ID[Next_vol] = nvl->gvol_id;
 	++Next_vol;
 
+	G_debug(3, "    id=%d", nvl->gvol_id);
+	
 	return (nvl->gvol_id);
     }
 
@@ -135,7 +139,7 @@ int GVL_new_vol(void)
 }
 
 /*!
-   \brief Get number of available volume sets
+   \brief Get number of loaded volume sets
 
    \return number of volume sets
  */
@@ -145,7 +149,7 @@ int GVL_num_vols(void)
 }
 
 /*!
-   \brief Get list volume sets
+   \brief Get list of loaded volume sets
 
    Must be freed if not needed!
 
@@ -221,10 +225,10 @@ int GVL_delete_vol(int id)
 }
 
 /*!
-   \brief Load volume
+   \brief Load 3d raster map to volume set
 
    \param id volume set id
-   \param filename filename
+   \param filename 3d raster map name
 
    \return -1 on error
    \return 0 on success
@@ -234,9 +238,14 @@ int GVL_load_vol(int id, const char *filename)
     geovol *gvl;
     int handle;
 
+    G_debug(3, "GVL_load_vol(): id=%d, name=%s",
+	    id, filename);
+
     if (NULL == (gvl = gvl_get_vol(id))) {
 	return (-1);
     }
+
+    G_message(_("Loading 3d raster map <%s>..."), filename);
 
     if (0 > (handle = gvl_file_newh(filename, VOL_FTYPE_G3D)))
 	return (-1);
@@ -273,16 +282,14 @@ int GVL_get_volname(int id, char *filename)
 }
 
 /*!
-   \brief Get dimension
+   \brief Get volume dimensions
 
    \param id volume set id
-   \param[out] rows,cols,depths number of rows, cols, depth
+   \param[out] rows,cols,depths number of rows, cols, depths
  */
 void GVL_get_dims(int id, int *rows, int *cols, int *depths)
 {
     geovol *gvl;
-
-    G_debug(3, "GVL_get_dims");
 
     gvl = gvl_get_vol(id);
 
@@ -292,6 +299,9 @@ void GVL_get_dims(int id, int *rows, int *cols, int *depths)
 	*depths = gvl->depths;
     }
 
+    G_debug(3, "GVL_get_dims() id=%d, rows=%d, cols=%d, depths=%d",
+	    gvl->gvol_id, gvl->rows, gvl->cols, gvl->depths);
+    
     return;
 }
 
@@ -511,7 +521,7 @@ void GVL_isosurf_get_drawres(int id, int *xres, int *yres, int *zres)
 }
 
 /*!
-   \brief Set draw resolution of isosurface
+   \brief Set isosurface draw resolution
 
    \param id volume set id
    \param xres,yres,zres x/y/z resolution value
@@ -524,7 +534,7 @@ int GVL_isosurf_set_drawres(int id, int xres, int yres, int zres)
     geovol *gvl;
     int i;
 
-    G_debug(3, "GVL_isosurf_set_drawres");
+    G_debug(3, "GVL_isosurf_set_drawres(): id=%d", id);
 
     if (xres < 1 || yres < 1 || zres < 1) {
 	return (-1);
@@ -548,7 +558,7 @@ int GVL_isosurf_set_drawres(int id, int xres, int yres, int zres)
 }
 
 /*!
-   \brief Get draw-mode of isosurface
+   \brief Get isosurface draw mode
 
    \param id volume set id
    \param[out] mode draw-mode
@@ -572,10 +582,10 @@ int GVL_isosurf_get_drawmode(int id, int *mode)
 }
 
 /*!
-   \brief Set draw-mode of isosurface
+   \brief Set isosurface draw mode
 
    \param id volume set id
-   \param mode draw-mode
+   \param mode draw mode
 
    \return 0 on success
    \return -1 on error (invalid volume set id)
@@ -584,7 +594,7 @@ int GVL_isosurf_set_drawmode(int id, int mode)
 {
     geovol *gvl;
 
-    G_debug(3, "GVL_isosurf_set_drawmode");
+    G_debug(3, "GVL_isosurf_set_drawmode(): id=%d mode=%d", id, mode);
 
     gvl = gvl_get_vol(id);
 
@@ -1020,7 +1030,7 @@ void GVL_slice_get_drawres(int id, int *xres, int *yres, int *zres)
 }
 
 /*!
-   \brief Set draw resolution of slice
+   \brief Set slice draw resolution
 
    \param id volume set id
    \param xres,yres,zres x/y/z resolution value
@@ -1033,7 +1043,7 @@ int GVL_slice_set_drawres(int id, int xres, int yres, int zres)
     geovol *gvl;
     int i;
 
-    G_debug(3, "GVL_slice_set_drawres");
+    G_debug(3, "GVL_slice_set_drawres(): id=%d", id);
 
     if (xres < 1 || yres < 1 || zres < 1) {
 	return (-1);
@@ -1093,7 +1103,7 @@ int GVL_slice_set_drawmode(int id, int mode)
 {
     geovol *gvl;
 
-    G_debug(3, "GVL_slice_set_drawmode");
+    G_debug(3, "GVL_slice_set_drawmode(): id=%d, mode=%d", id, mode);
 
     gvl = gvl_get_vol(id);
 

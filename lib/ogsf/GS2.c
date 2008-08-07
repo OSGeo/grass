@@ -220,6 +220,8 @@ int GS_new_surface(void)
 {
     geosurf *ns;
 
+    G_debug(3, "GS_new_surface():");
+
     if (Next_surf < MAX_SURFS) {
 	ns = gs_get_new_surface();
 	gs_init_surf(ns, wind.west + wind.ew_res / 2.,
@@ -233,7 +235,7 @@ int GS_new_surface(void)
 	Surf_ID[Next_surf] = ns->gsurf_id;
 	++Next_surf;
 
-	G_debug(3, "GS_new_surface(): id=%d", ns->gsurf_id);
+	G_debug(3, "    id=%d", ns->gsurf_id);
 
 	return (ns->gsurf_id);
     }
@@ -1626,15 +1628,15 @@ int GS_load_att_map(int id, const char *filename, int att)
 	G_warning("Raster map <%s> not found", filename);
 	return -1;
     }
-    filename = G_fully_qualified_name(filename, mapset);
-
+    
     /* Check to see if map is in Region */
     G_get_cellhd(filename, mapset, &rast_head);
     if (rast_head.north <= wind.south ||
 	rast_head.south >= wind.north ||
 	rast_head.east <= wind.west || rast_head.west >= wind.east) {
-	G_fatal_error(_("Raster map <%s> is outside of current region. Load failed."),
-		      filename);
+
+	G_fatal_error(_("Raster map <%s@%s> is outside of current region. Load failed."),
+		      filename, mapset);
     }
 
     while (!reuse && (0 < hdata)) {
@@ -1643,8 +1645,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	if (0 < (hdata = gsds_findh(filename, &changed, &atty, begin))) {
 
-	    G_debug(3,
-		    "GS_load_att_map(): %s already has data handle %d.CF=%x",
+	    G_debug(3, "GS_load_att_map(): %s already has data handle %d.CF=%x",
 		    filename, hdata, changed);
 
 	    /* handle found */
@@ -1684,8 +1685,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 		filename, hdata);
     }
     else {
-	G_debug(3,
-		"GS_load_att_map(): %s not loaded in correct form - loading now",
+	G_debug(3, "GS_load_att_map(): %s not loaded in correct form - loading now",
 		filename);
 
 	/* not loaded - need to get new dataset handle */
@@ -1700,7 +1700,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 	}
 	else {
 	    atty = Gs_numtype(filename, &neg);
-	    filename = G_fully_qualified_name(filename, mapset);
 	}
 
 #ifdef MAYBE_LATER
@@ -1724,8 +1723,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    }
 
 	    ret = Gs_loadmap_as_bitmap(&wind, filename, tbuff->bm);
-	    filename = G_fully_qualified_name(filename, mapset);
-
+	    
 	    break;
 	case ATTY_CHAR:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_CHAR)) {
@@ -1734,7 +1732,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	    ret = Gs_loadmap_as_char(&wind, filename, tbuff->cb,
 				     tbuff->nm, &has_null);
-	    filename = G_fully_qualified_name(filename, mapset);
 
 	    break;
 	case ATTY_SHORT:
@@ -1744,8 +1741,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	    ret = Gs_loadmap_as_short(&wind, filename, tbuff->sb,
 				      tbuff->nm, &has_null);
-	    filename = G_fully_qualified_name(filename, mapset);
-
 	    break;
 	case ATTY_FLOAT:
 	    if (0 > gs_malloc_att_buff(gs, att, ATTY_FLOAT)) {
@@ -1754,7 +1749,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	    ret = Gs_loadmap_as_float(&wind, filename, tbuff->fb,
 				      tbuff->nm, &has_null);
-	    filename = G_fully_qualified_name(filename, mapset);
 
 	    break;
 	case ATTY_INT:
@@ -1765,8 +1759,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 
 	    ret = Gs_loadmap_as_int(&wind, filename, tbuff->ib,
 				    tbuff->nm, &has_null);
-	    filename = G_fully_qualified_name(filename, mapset);
-
 	    break;
 
 	}			/* Done with switch */
@@ -1793,12 +1785,10 @@ int GS_load_att_map(int id, const char *filename, int att)
 	    Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
 	    gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
 	    gs->att[att].lookup = NULL;
-	    filename = G_fully_qualified_name(filename, mapset);
 	}
 	else {
 	    gs_malloc_lookup(gs, att);
 	    Gs_build_lookup(filename, gs->att[att].lookup);
-	    filename = G_fully_qualified_name(filename, mapset);
 	}
 #else
 
@@ -1807,7 +1797,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 		/* might already exist if reusing */
 		gs_malloc_lookup(gs, att);
 		Gs_build_256lookup(filename, gs->att[att].lookup);
-		filename = G_fully_qualified_name(filename, mapset);
 	    }
 	}
 	else if (ATTY_FLOAT == atty) {
@@ -1821,7 +1810,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 		gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
 		gsds_free_data_buff(gs->att[att].hdata, ATTY_FLOAT);
 		gs->att[att].lookup = NULL;
-		filename = G_fully_qualified_name(filename, mapset);
 	    }
 	}
 	else {
@@ -1829,7 +1817,6 @@ int GS_load_att_map(int id, const char *filename, int att)
 		Gs_pack_colors(filename, tbuff->ib, gs->rows, gs->cols);
 		gsds_set_changed(gs->att[att].hdata, CF_COLOR_PACKED);
 		gs->att[att].lookup = NULL;
-		filename = G_fully_qualified_name(filename, mapset);
 	    }
 	}
 #endif

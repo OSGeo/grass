@@ -63,11 +63,11 @@ geosurf *gs_get_surf(int id)
 {
     geosurf *gs;
 
-    G_debug(4, "gs_get_surf():");
+    G_debug(5, "gs_get_surf():");
 
     for (gs = Surf_top; gs; gs = gs->next) {
 	if (gs->gsurf_id == id) {
-	    G_debug(4, "  id=%d", id);
+	    G_debug(5, "  id=%d", id);
 	    return (gs);
 	}
     }
@@ -87,7 +87,7 @@ geosurf *gs_get_prev_surface(int id)
 {
     geosurf *ps;
 
-    G_debug(4, "gs_get_prev_surface");
+    G_debug(5, "gs_get_prev_surface");
 
     for (ps = Surf_top; ps; ps = ps->next) {
 	if (ps->gsurf_id == id - 1) {
@@ -114,7 +114,7 @@ int gs_getall_surfaces(geosurf ** gsurfs)
 	gsurfs[i] = gs;
     }
 
-    G_debug(4, "gs_num_surfaces(): num=%d", i);
+    G_debug(5, "gs_num_surfaces(): num=%d", i);
 
     return (i);
 }
@@ -131,7 +131,7 @@ int gs_num_surfaces(void)
 
     for (i = 0, gs = Surf_top; gs; gs = gs->next, i++) ;
 
-    G_debug(4, "gs_num_surfaces(): num=%d", i);
+    G_debug(5, "gs_num_surfaces(): num=%d", i);
 
     return (i);
 }
@@ -179,7 +179,7 @@ geosurf *gs_get_last_surface(void)
 
     for (ls = Surf_top; ls->next; ls = ls->next) ;
 
-    G_debug(4, "gs_get_last_surface(): last surface id=%d", ls->gsurf_id);
+    G_debug(5, "gs_get_last_surface(): last surface id=%d", ls->gsurf_id);
 
     return (ls);
 }
@@ -210,7 +210,7 @@ geosurf *gs_get_new_surface(void)
 
     ns->next = NULL;
 
-    G_debug(4, "gs_get_new_surface(): id=%d", ns->gsurf_id);
+    G_debug(5, "gs_get_new_surface(): id=%d", ns->gsurf_id);
 
     return (ns);
 }
@@ -235,7 +235,7 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     geosurf *ps;
     int i;
 
-    G_debug(4, "gs_init_surf() id=%d", gs->gsurf_id);
+    G_debug(5, "gs_init_surf() id=%d", gs->gsurf_id);
 
     if (!gs) {
 	return (-1);
@@ -245,6 +245,12 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     for (i = 0; i < MAX_ATTS; i++) {
 	gs->att[i].att_src = NOTSET_ATT;
 	gs->att[i].att_type = ATTY_INT;
+	gs->att[i].hdata = -1;
+	gs->att[i].user_func = NULL;
+	gs->att[i].constant = 0.;
+	gs->att[i].lookup = NULL;
+	gs->att[i].min_nz = gs->att[i].max_nz = gs->att[i].range_nz = 0;
+	gs->att[i].default_null = 0.;
     }
 
     /* default values */
@@ -264,6 +270,9 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     gs->ymin = oy;
     gs->ymax = oy + (rows - 1) * yres;
     gs->yrange = gs->ymax - gs->ymin;
+    gs->zmin = gs->zmin_nz = gs->zminmasked = 0;
+    gs->zmax = gs->zmax_nz = 0;
+    gs->zrange = gs->zrange_nz = 0;
     gs->wire_color = 0x00888888;
     gs->x_trans = gs->y_trans = gs->z_trans = 0.0;
     gs->nz_topo = gs->nz_color = 0;
@@ -272,6 +281,8 @@ int gs_init_surf(geosurf * gs, double ox, double oy, int rows, int cols,
     gs->curmask = NULL;
     gs->norms = NULL;
 
+    gs->draw_mode = DM_GOURAUD;
+    
     /* default z_exag value */
     if (gs->gsurf_id == FIRST_SURF_ID) {
 	gs->z_exag = 1.0;
@@ -431,7 +442,7 @@ void gs_set_defaults(geosurf * gs, float *defs, float *null_defs)
 {
     int i;
 
-    G_debug(4, "gs_set_defaults(): id=%d", gs->gsurf_id);
+    G_debug(5, "gs_set_defaults(): id=%d", gs->gsurf_id);
 
     for (i = 0; i < MAX_ATTS; i++) {
 	gs->att[i].constant = defs[i];
@@ -453,7 +464,7 @@ void gs_delete_surf(int id)
 {
     geosurf *fs;
 
-    G_debug(4, "gs_delete_surf");
+    G_debug(5, "gs_delete_surf");
 
     fs = gs_get_surf(id);
 
@@ -478,7 +489,7 @@ int gs_free_surf(geosurf * fs)
     geosurf *gs;
     int found = 0;
 
-    G_debug(4, "gs_free_surf");
+    G_debug(5, "gs_free_surf");
 
     if (Surf_top) {
 	if (fs == Surf_top) {
@@ -549,7 +560,7 @@ void gs_free_unshared_buffs(geosurf * fs)
     int i, j, same;
     int old_datah;
 
-    G_debug(4, "gs_free_unshared_buffs");
+    G_debug(5, "gs_free_unshared_buffs");
 
     /* for each attribute 
        if !same, free buff   
@@ -588,7 +599,7 @@ int gs_num_datah_reused(int dh)
     geosurf *gs;
     int ref, j;
 
-    G_debug(4, "gs_num_datah_reused");
+    G_debug(5, "gs_num_datah_reused");
 
     /* for each attribute 
        if same, ++reference
@@ -618,7 +629,7 @@ int gs_num_datah_reused(int dh)
  */
 int gs_get_att_type(geosurf * gs, int desc)
 {
-    G_debug(4, "gs_get_att_type");
+    G_debug(5, "gs_get_att_type");
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -644,7 +655,7 @@ int gs_get_att_type(geosurf * gs, int desc)
  */
 int gs_get_att_src(geosurf * gs, int desc)
 {
-    G_debug(4, "gs_get_att_src(): id=%d desc=%d", gs->gsurf_id, desc);
+    G_debug(5, "gs_get_att_src(): id=%d desc=%d", gs->gsurf_id, desc);
 
     if (!LEGAL_ATT(desc)) {
 	return (-1);
@@ -672,7 +683,7 @@ typbuff *gs_get_att_typbuff(geosurf * gs, int desc, int to_write)
     typbuff *tb;
     geosurf *gsref;
 
-    G_debug(4, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
+    G_debug(5, "gs_get_att_typbuff(): id=%d desc=%d to_write=%d",
 	    gs->gsurf_id, desc, to_write);
 
     if (gs) {
@@ -708,7 +719,7 @@ int gs_malloc_att_buff(geosurf * gs, int desc, int type)
 {
     int hdata, dims[2], ndims;
 
-    G_debug(4, "gs_malloc_att_buff");
+    G_debug(5, "gs_malloc_att_buff");
 
     if (gs) {
 	if (0 < (hdata = gs->att[desc].hdata)) {
@@ -737,7 +748,7 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 {
     int size;
 
-    G_debug(4, "gs_malloc_lookup");
+    G_debug(5, "gs_malloc_lookup");
 
     if (gs) {
 	if (gs->att[desc].lookup) {
@@ -793,7 +804,7 @@ int gs_malloc_lookup(geosurf * gs, int desc)
 int gs_set_att_type(geosurf * gs, int desc, int type)
 {
 
-    G_debug(4, "gs_set_att_type(): desc=%d, type=%d", desc, type);
+    G_debug(5, "gs_set_att_type(): desc=%d, type=%d", desc, type);
 
     if (gs && LEGAL_TYPE(type)) {
 	gs->att[desc].att_type = type;
@@ -816,14 +827,14 @@ int gs_set_att_type(geosurf * gs, int desc, int type)
  */
 int gs_set_att_src(geosurf * gs, int desc, int src)
 {
-    G_debug(4, "gs_set_att_src(): id=%d desc=%d src=%d",
+    G_debug(5, "gs_set_att_src(): id=%d desc=%d src=%d",
 	    gs->gsurf_id, desc, src);
 
     /* check if old source was MAP_ATT, free buff */
     if (MAP_ATT == gs_get_att_src(gs, desc)) {
 	if (1 == gs_num_datah_reused(gs->att[desc].hdata)) {
 	    /* only reference */
-	    G_debug(4, "gs_set_att_src(): replacing existing map");
+	    G_debug(5, "gs_set_att_src(): replacing existing map");
 	    gsds_free_datah(gs->att[desc].hdata);
 	}
 
@@ -860,7 +871,7 @@ int gs_set_att_src(geosurf * gs, int desc, int src)
  */
 int gs_set_att_const(geosurf * gs, int desc, float constant)
 {
-    G_debug(4, "gs_set_att_const(): id=%d, desc=%d, const=%f",
+    G_debug(5, "gs_set_att_const(): id=%d, desc=%d, const=%f",
 	    gs->gsurf_id, desc, constant);
 
     if (gs) {
