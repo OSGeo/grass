@@ -6,6 +6,7 @@ SUBDIRS = \
 	d.colorlist \
 	d.colortable \
 	d.erase \
+	d.font \
 	d.geodesic \
 	d.graph \
 	d.grid \
@@ -30,7 +31,6 @@ SUBDIRS = \
 
 #	d.colors \
 #	d.extract \
-#	d.font \
 #	d.measure \
 #	d.profile \
 #	d.what.rast \
