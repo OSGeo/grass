@@ -1,15 +1,13 @@
 /*!
-   \file get_cellhd.c
-
-   \brief GIS library - Read raster header
-
-   (C) 2001-2008 by the GRASS Development Team
-
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
-
+  \file gis/get_cellhd.c
+  
+  \brief GIS library - Read raster map header
+  
+  (C) 2001-2008 by the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2).  Read the file COPYING that comes with GRASS for details.
+  
    \author Original author CERL
  */
 
@@ -19,29 +17,29 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Read the raster header
- *
- * The raster header for the raster map <b>name</b> in the specified
- * <b>mapset</b> is read into the <b>cellhd</b> structure.  If there
- * is an error reading the raster header file, a diagnostic message is
- * printed and -1 is returned. Otherwise, 0 is returned.
- *
- * <b>Note</b>:a warning message for errors encountered.
- *
- * Cell header files may contain either grid cell header 
- * information or reclass information.   If it is a reclass
- * file, it will specify the map and mapset names of the actual
- * grid cell file being reclassed.  G_get_cellhd(), upon 
- * reading reclass information will go read the cell header
- * information for the referenced file.  Only one reference is 
- * allowed.
- *
- * \param name name of map
- * \param mapset mapset that map belongs to
- * \param cellhd structure to hold cell header info
- *
- * \return 0 on success
- * \return -1 on error
+  \brief Read the raster header
+  
+  The raster header for the raster map <i>name</i> in the specified
+  <i>mapset</i> is read into the <i>cellhd</i> structure.  If there is
+  an error reading the raster header file, a diagnostic message is
+  printed and -1 is returned. Otherwise, 0 is returned.
+  
+  <b>Note</b>:a warning message for errors encountered.
+  
+  Cell header files may contain either grid cell header 
+  information or reclass information.   If it is a reclass
+  file, it will specify the map and mapset names of the actual
+  grid cell file being reclassed.  G_get_cellhd(), upon 
+  reading reclass information will go read the cell header
+  information for the referenced file.  Only one reference is 
+  allowed.
+  
+  \param name name of map
+  \param mapset mapset that map belongs to
+  \param cellhd structure to hold cell header info
+  
+  \return 0 on success
+  \return -1 on error
  */
 
 int G_get_cellhd(const char *name, const char *mapset,
@@ -87,10 +85,8 @@ int G_get_cellhd(const char *name, const char *mapset,
     else {
 	fd = G_fopen_old("cellhd", name, mapset);
 	if (fd == NULL) {
-	    sprintf(buf,
-		    _("Unable to open header file for raster map <%s@%s>"),
-		    name, mapset);
-	    G_warning(buf);
+	    G_warning(_("Unable to open header file for raster map <%s@%s>"),
+		      name, mapset);
 	    return -1;
 	}
     }
