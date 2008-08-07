@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -16,14 +16,13 @@
  *
  *****************************************************************************/
 
-
 #ifndef _PQHEAP_H
 #define _PQHEAP_H
 
 #include <assert.h>
 #include <stdlib.h>
 
-#define PQHEAP_MEM_DEBUG 0
+#define PQHEAP_MEM_DEBUG if(0)
 
 
 //HEAPSTATUS can be defined at compile time
@@ -126,9 +125,7 @@ public:
   inline unsigned int num_elts(void);
   
   // How many elements? sorry - i could never remember num_elts
-  inline unsigned int size(void) {
-    return cur_elts;
-  }
+  inline unsigned int size(void) const { return cur_elts; };
   
   // Min
   inline bool min(T& elt);
@@ -192,13 +189,12 @@ pqheap_t1<T>::pqheap_t1(unsigned int size) {
   elements = new T [size];
   cout << "pqheap_t1: register memory\n"; 
   cout.flush();
-#if PQHEAP_MEM_DEBUG
-  cout << "pqheap_t1::pq_heap_t1: allocate\n";
-  MMmanager.print();
-#endif
+  PQHEAP_MEM_DEBUG cout << "pqheap_t1::pq_heap_t1: allocate\n";
+  //  PQHEAP_MEM_DEBUG MMmanager.print();
+
   
   if (!elements) {
-    cout << "could not allocate priority queue: insufficient memory..\n";
+	cerr << "could not allocate priority queue: insufficient memory..\n";
     exit(1);
   }
   assert(elements);
@@ -223,6 +219,13 @@ pqheap_t1<T>::pqheap_t1(unsigned int size) {
 template <class T>
 inline 
 pqheap_t1<T>::pqheap_t1(T* a, unsigned int size) {
+  {
+	static int flag = 0;
+	if(!flag) {
+	  cerr << "Using slow build in pqheap_t1" << endl;
+	  flag = 1;
+	}
+  }
 
   elements = a;
   max_elts = size;
@@ -503,6 +506,7 @@ pqheap_t1<T>::heapify(unsigned int root) {
 template <class T>
 inline void
 pqheap_t1<T>::delete_min_and_insert(const T &x) {
+  assert(cur_elts);
   elements[0] = x;
   heapify(0);
 }

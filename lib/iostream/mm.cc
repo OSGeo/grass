@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -24,6 +24,8 @@
 #include <assert.h>
 #include <iostream>
 using namespace std;
+
+//#include <mm.h>
 #include <grass/iostream/mm.h>
 
 #define MM_DEBUG if(0)
@@ -254,6 +256,57 @@ MM_err MM_register::register_deallocation(size_t sz) {
 
  
 /* ************************************************************ */
+void* operator new[] (size_t sz) {
+  void *p;
+  
+  MM_DEBUG cout << "new: sz=" << sz << ", register " 
+		<< sz+SIZE_SPACE << "B ,"; 
+
+  if (MM_manager.register_allocation (sz + SIZE_SPACE) != MM_ERROR_NO_ERROR){
+    //must be MM_ERROR_INSUF_SPACE
+    switch(MM_manager.register_new) {
+      
+    case MM_ABORT_ON_MEMORY_EXCEEDED:
+      cerr << "MM error: limit ="<< MM_manager.memory_limit() <<"B. " 
+	   << "allocating " << sz << "B. " 
+	   << "limit exceeded by " 
+	   <<  MM_manager.memory_used() -  MM_manager.memory_limit()<<"B."
+	   << endl;
+      assert (0);		// core dump if debugging
+      exit (1);
+      break;
+      
+    case MM_WARN_ON_MEMORY_EXCEEDED:
+      cerr << "MM warning: limit="<<MM_manager.memory_limit() <<"B. " 
+	   << "allocating " << sz << "B. " 
+	   << " limit exceeded by " 
+	   <<  MM_manager.memory_used() -  MM_manager.memory_limit()<<"B."
+	   << endl;
+      break;
+      
+    case MM_IGNORE_MEMORY_EXCEEDED:
+      break;
+    }
+  }
+  
+  p = malloc(sz + SIZE_SPACE);
+  
+  if (!p) {
+    cerr << "new: out of memory while allocating " << sz << "B" << endl;
+    assert(0);
+    exit (1);
+  }
+  
+  *((size_t *) p) = sz;
+  
+  MM_DEBUG cout << "ptr=" << (void*) (((char *) p) + SIZE_SPACE) << endl;
+  
+  return ((char *) p) + SIZE_SPACE;
+}
+
+
+ 
+/* ************************************************************ */
 void* operator new (size_t sz) {
   void *p;
   
@@ -319,7 +372,8 @@ void operator delete (void *ptr)  {
     //destructor for something that was not allocated with new
     //e.g. ofstream str(name) ---- ~ofstream() called ==> ptr=NULL
     
-    //assert(0); 
+	//who wrote the above comment? -RW
+    assert(0); 
     //exit(1);
     return;
   }

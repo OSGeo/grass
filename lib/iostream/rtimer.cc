@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -16,12 +16,13 @@
  *
  *****************************************************************************/
 
-
 #include <sys/time.h>
+#include <sys/resource.h>
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
 
+//#include <rtimer.h>
 #include <grass/iostream/rtimer.h>
 
 char *

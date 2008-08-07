@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,6 +15,7 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
+
 
 #ifndef __IMBUFFER_H
 #define __IMBUFFER_H
@@ -144,6 +145,12 @@ public:
     delete [] data;   
     data = NULL;
 #endif
+  }
+
+  //reset buffer (delete all data); don't delete memory
+  void clear() { 
+    size = 0; 
+    sorted = false;
   }
 
   //reset buffer: keep n elements starting at position start

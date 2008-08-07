@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -27,7 +28,7 @@
 
 
 
-#define EMPQAD_DEBUG if(0)
+#define EMPQAD_DEBUG if(1)
 
 
 enum regim_type {
@@ -45,11 +46,13 @@ private:
   MinMaxHeap<T> *im;
   em_pqueue<T,Key> *em;
   UnboundedMinMaxHeap<T> *dim;	// debug, internal memory pq
+  void initPQ(size_t);
 public:
   /* start in INMEM regim by allocating im of size precisely twice the
      size of the (pqueue within) the em_pqueue; */
   EMPQueueAdaptive(long N) : EMPQueueAdaptive() {};
   EMPQueueAdaptive();
+  EMPQueueAdaptive(size_t inMem);
   ~EMPQueueAdaptive();
 
   void makeExternal();
@@ -73,6 +76,8 @@ public:
   bool insert(const T& elt);  
 
   long size() const; //return the nb of elements in the structure
+
+  void clear();			/* delete all contents of pq */
 
   void verify();
 };

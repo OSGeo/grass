@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,7 +15,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
 
 #ifndef _MM_H
 #define _MM_H
@@ -83,8 +82,10 @@ private:
   // flag indicates how we are keeping track of memory 
   static MM_mode register_new;
 
-protected: 
-  // private methods, only called by operators new and delete.
+//protected: 
+//  // private methods, only called by operators new and delete.
+
+public: //  Need to be accessible from pqueue constructor
   MM_err register_allocation  (size_t sz);
   MM_err register_deallocation(size_t sz);
 
@@ -110,6 +111,7 @@ public:
 
   friend class mm_register_init;
   friend void * operator new(size_t);
+  friend void * operator new[](size_t);
   friend void operator delete(void *);
   friend void operator delete[](void *);
 };

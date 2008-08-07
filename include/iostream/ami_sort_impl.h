@@ -1,6 +1,7 @@
+
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -36,7 +37,6 @@
 #define BLOCKED_RUN 
 
 
-
 /* ---------------------------------------------------------------------- */
 //set run_size, last_run_size and nb_runs depending on how much memory
 //is available
@@ -45,16 +45,18 @@ static void
 initializeRunFormation(AMI_STREAM<T> *instream,
 		       size_t &run_size, size_t &last_run_size, 
 		       unsigned int &nb_runs) {
-  
-  off_t strlen = instream->stream_len();  
+
   size_t mm_avail = MM_manager.memory_available();
+  off_t strlen;
+
 #ifdef BLOCKED_RUN
   // not in place, can only use half memory 
   mm_avail = mm_avail/2;
 #endif
-  
   run_size = mm_avail/sizeof(T);
 
+  
+  strlen = instream->stream_len();  
   if (strlen == 0) {
     nb_runs = last_run_size = 0;
   } else {
@@ -66,6 +68,7 @@ initializeRunFormation(AMI_STREAM<T> *instream,
       last_run_size = strlen % run_size;
     }
   }
+
   SDEBUG cout << "nb_runs=" << nb_runs 
 	      << ", run_size=" << run_size 
 	      << ", last_run_size=" << last_run_size
@@ -78,17 +81,19 @@ initializeRunFormation(AMI_STREAM<T> *instream,
 /* data is allocated; read run_size elements from stream into data and
    sort them using quicksort */
 template<class T, class Compare>
-void makeRun_Block(AMI_STREAM<T> *instream, T* data, 
+size_t makeRun_Block(AMI_STREAM<T> *instream, T* data, 
 		   unsigned int run_size, Compare *cmp) {
   AMI_err err;
-  
+  off_t new_run_size;
+
   //read next run from input stream
-  err = instream->read_array(data, run_size); 
-  assert(err == AMI_ERROR_NO_ERROR);
-  
+  err = instream->read_array(data, run_size, &new_run_size); 
+  assert(err == AMI_ERROR_NO_ERROR || err == AMI_ERROR_END_OF_STREAM);
+
   //sort it in memory in place
-  quicksort(data, run_size, *cmp);
+  quicksort(data, new_run_size, *cmp);
   
+  return new_run_size;
 }
 
 
@@ -104,6 +109,7 @@ void makeRun(AMI_STREAM<T> *instream, T* &data,
 	     int run_size, Compare *cmp) {
   
   unsigned int nblocks, last_block_size, crt_block_size, block_size; 
+
 
   block_size = STREAM_BUFFER_SIZE;
 
@@ -178,16 +184,18 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
   SDEBUG cout << "runFormation: ";
   SDEBUG MM_manager.print();
   
+  /* leave this in for now, in case some file-based implementations do
+     anything funny... -RW */
   //rewind file
   instream->seek(0); //should check error xxx
-  
+
   //estimate run_size, last_run_size and nb_runs
   initializeRunFormation(instream, run_size, last_run_size, nb_runs);
-  
-  //create runList
+
+  //create runList (if 0 size, queue uses default)
   runList = new queue<char*>(nb_runs);
-  
-  //allocate space for a run
+
+  /* allocate space for a run */
   if (nb_runs <= 1) {
     //don't waste space if input stream is smaller than run_size
     data = new T[last_run_size];
@@ -195,18 +203,20 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
     data = new T[run_size];
   }
   SDEBUG MM_manager.print();
-  
-  for (size_t i=0; i< nb_runs; i++) {
-    
-    crt_run_size = (i == nb_runs-1) ? last_run_size: run_size;
+ 
+  //for (size_t i=0; i< nb_runs; i++) {
+  while(!instream->eof()) {
+    //crt_run_size = (i == nb_runs-1) ? last_run_size: run_size;
     
     //SDEBUG cout << "i=" << i << ":  runsize=" << crt_run_size << ", ";  
 
-#ifdef BLOCKED_RUN
-    makeRun(instream, data, crt_run_size, cmp);
-#else        
-    makeRun_Block(instream, data, crt_run_size, cmp);
-#endif
+    crt_run_size = makeRun_Block(instream, data, run_size, cmp);
+/* #ifdef BLOCKED_RUN */
+/*     makeRun(instream, data, crt_run_size, cmp); */
+/* #else         */
+/*     makeRun_Block(instream, data, crt_run_size, cmp); */
+/* #endif */
+
     SDEBUG MM_manager.print();
 
     //read next run from input stream
@@ -214,19 +224,21 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
     //assert(err == AMI_ERROR_NO_ERROR);
     //sort it in memory in place
     //quicksort(data, crt_run_size, *cmp);
+
+    if(crt_run_size > 0) {
+      //create a new stream to hold this run 
+      str = new AMI_STREAM<T>();
+      str->write_array(data, crt_run_size);
+      assert(str->stream_len() == crt_run_size);
     
-    //create a new stream to hold this run 
-    str = new AMI_STREAM<T>();
-    str->write_array(data, crt_run_size);
-    assert(str->stream_len() == crt_run_size);
-    
-    //remember this run's name
-    str->name(&strname);
-    runList->enqueue(strname);
-    
-    //delete the stream -- should not keep too many streams open
-    str->persist(PERSIST_PERSISTENT);
-    delete str;
+      //remember this run's name
+      str->name(&strname);	/* deleted after we dequeue */
+      runList->enqueue(strname);
+      //delete the stream -- should not keep too many streams open
+      str->persist(PERSIST_PERSISTENT);
+      delete str;
+    }
+
   };
   SDEBUG MM_manager.print();
   //release the run memory!
@@ -263,7 +275,8 @@ runFormation(AMI_STREAM<T> *instream, Compare *cmp) {
 
 template<class T, class Compare>
 AMI_STREAM<T>* 
-singleMerge(queue<char*>* streamList, Compare *cmp) {
+singleMerge(queue<char*>* streamList, Compare *cmp)
+{
   AMI_STREAM<T>* mergedStr;
   size_t mm_avail, blocksize;
   unsigned int arity, max_arity; 
@@ -275,18 +288,26 @@ singleMerge(queue<char*>* streamList, Compare *cmp) {
 
   //estimate max possible merge arity with available memory (approx M/B)
   mm_avail = MM_manager.memory_available();
-  blocksize = getpagesize();
+  //blocksize = getpagesize();
   //should use AMI function, but there's no stream at this point
-  // AMI_STREAM<T>::main_memory_usage(&blocksize, MM_STREAM_USAGE_BUFFER);
-  max_arity = mm_avail/blocksize;
+  //now use static mtd -RW 5/05
+  AMI_STREAM<T>::main_memory_usage(&blocksize, MM_STREAM_USAGE_MAXIMUM);
+  max_arity = mm_avail / blocksize;
+  if(max_arity < 2) {
+	cerr << __FILE__ ":" << __LINE__ << ": OUT OF MEMORY in singleMerge (going over limit)" << endl;
+	max_arity = 2;
+  } else if(max_arity > MAX_STREAMS_OPEN) {
+	max_arity = MAX_STREAMS_OPEN;
+  }
   arity = (streamList->length() < max_arity) ? 
     streamList->length() :  max_arity;
 
   SDEBUG cout << "arity=" << arity << " (max_arity=" <<max_arity<< ")\n"; 
-  
+
+  /* create the output stream. if this is a complete merge, use finalpath */
   //create output stream
   mergedStr = new AMI_STREAM<T>();
-  
+
   ReplacementHeap<T,Compare> rheap(arity, streamList);
   SDEBUG rheap.print(cerr);
 
@@ -325,7 +346,8 @@ singleMerge(queue<char*>* streamList, Compare *cmp) {
 
 template<class T, class Compare>
 AMI_STREAM<T>* 
-multiMerge(queue<char*>* runList, Compare *cmp) {
+multiMerge(queue<char*>* runList, Compare *cmp)
+{
   AMI_STREAM<T> * mergedStr= NULL;
   char* path;
   

@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -41,11 +41,13 @@ void partition(T *data, size_t n, size_t &pivot, CMPR &cmp) {
     
     // Try to get a good partition value and avoid being bitten by already
     // sorted input.
+    //ptpart = data + (random() % n);
 #ifdef __MINGW32__
     ptpart = data + (rand() % n);
 #else
     ptpart = data + (random() % n);
 #endif
+
     tpart = *ptpart;
     *ptpart = data[0];
     data[0] = tpart;

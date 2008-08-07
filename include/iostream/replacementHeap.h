@@ -1,6 +1,6 @@
 /****************************************************************************
  * 
- *  MODULE:	r.terraflow
+ *  MODULE:	iostream
  *
  *  COPYRIGHT (C) 2007 Laura Toma
  *   
@@ -15,7 +15,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
 
 #ifndef REPLACEMENT_QUEUE_H
 #define REPLACEMENT_QUEUE_H 
@@ -95,7 +94,7 @@ public:
   ReplacementHeap<T,Compare>(size_t arity, queue<char*>* runList);
   
   //delete array mergeHeap 
-  ~ReplacementHeap();
+  ~ReplacementHeap<T,Compare>();
   
   //is heap empty?
   int empty() const { 
@@ -131,7 +130,7 @@ public:
 /*****************************************************************/
 template<class T,class Compare>
 ReplacementHeap<T,Compare>::ReplacementHeap(size_t g_arity, 
-						       queue<char*>* runList) {
+					    queue<char*>* runList) {
   char* name=NULL;
   
   assert(runList && g_arity > 0);
@@ -399,4 +398,3 @@ ReplacementHeap<T,Compare>::extract_min() {
 
 
 #endif
-
