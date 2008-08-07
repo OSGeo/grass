@@ -59,24 +59,16 @@ int R_open_driver(void)
     return 0;
 }
 
-void R__open_quiet(void)
-{
-}
-
-void R_stabilize(void)
+void R_flush(void)
 {
     COM_Respond();
 }
 
 void R_close_driver(void)
 {
-    R_stabilize();
+    COM_Respond();
     COM_Client_Close();
-}
-
-void R_flush(void)
-{
-    R_stabilize();
+    COM_Graph_close();
 }
 
 /*!
@@ -152,9 +144,13 @@ int R_screen_top(void)
     return t;
 }
 
-void R_get_num_colors(int *n)
+int R_get_num_colors(void)
 {
-    COM_Number_of_colors(n);
+    int c;
+
+    COM_Number_of_colors(&c);
+
+    return c;
 }
 
 /*!
