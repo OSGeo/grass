@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
+    struct Option *load_opt, *save_opt;
     struct Flag *stats_flag, *null_flag, *del_flag;
     int cellhd_ok;		/* Is cell header OK? */
     int is_reclass;		/* Is raster reclass? */
@@ -113,6 +114,16 @@ int main(int argc, char *argv[])
     map_opt->gisprompt = "old,cell,raster";
     map_opt->description = _("Raster map from which to copy category table");
 
+    load_opt = G_define_standard_option(G_OPT_F_INPUT);
+    load_opt->key = "loadhistory";
+    load_opt->required = NO;
+    load_opt->description = _("Text file from which to load history");
+
+    save_opt = G_define_standard_option(G_OPT_F_OUTPUT);
+    save_opt->key = "savehistory";
+    save_opt->required = NO;
+    save_opt->description = _("Text file in which to save history");
+
     stats_flag = G_define_flag();
     stats_flag->key = 's';
     stats_flag->description = _("Update statistics (histogram, range)");
@@ -145,6 +156,46 @@ int main(int argc, char *argv[])
 	G_strip(title);
 	G_debug(3, "map title= [%s]  (%d chars)", title, strlen(title));
 	G_put_cell_title(raster->answer, title);
+    }
+
+    if (save_opt->answer) {
+	FILE *fp = fopen(save_opt->answer, "w");
+	int i;
+
+	if (!fp)
+	    G_fatal_error(_("Unable to open output file <%s>"), save_opt->answer);
+
+	G_read_history(raster->answer, mapset, &hist);
+
+	for (i = 0; i < hist.edlinecnt; i++)
+	    fprintf(fp, "%s\n", hist.edhist[i]);
+
+	fclose(fp);
+    }
+
+    if (load_opt->answer) {
+	FILE *fp = fopen(load_opt->answer, "r");
+	int i;
+
+	if (!fp)
+	    G_fatal_error(_("Unable to open input file <%s>"), load_opt->answer);
+
+	G_read_history(raster->answer, mapset, &hist);
+
+	for (i = 0; ; i++) {
+	    if (i >= MAXEDLINES) {
+		G_warning(_("Not enough room in history file"));
+		break;
+	    }
+	    if (!G_getl2(hist.edhist[i], RECORD_LEN - 2, fp))
+		break;
+	}
+
+	fclose(fp);
+
+	hist.edlinecnt = i;
+
+	G_write_history(raster->answer, &hist);
     }
 
     if (history_opt->answer) {
