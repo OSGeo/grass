@@ -1,15 +1,35 @@
+/*!
+ * \file db/dbmi_client/c_openupdate.c
+ * 
+ * \brief DBMI Library (client) - open update cursor
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Open update cursor
+
+  \param driver db driver
+  \param table_name table name
+  \param select SQL update statement (?)
+  \param cursor db cursor to be opened
+  \param mode open mode (?)
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
-int
-db_open_update_cursor(dbDriver * driver, dbString * table_name,
-		      dbString * select, dbCursor * cursor, int mode)
+
+int db_open_update_cursor(dbDriver * driver, dbString * table_name,
+			  dbString * select, dbCursor * cursor, int mode)
 {
     int ret_code;
 

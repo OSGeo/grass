@@ -1,21 +1,19 @@
+/*!
+ * \file db/dbmi_client/column.c
+ * 
+ * \brief DBMI Library (client) - column info
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ * \author Update by Glynn Clement <glynn gclements.plus.com>
+ * and Martin Landa <landa.martin gmail.com>
+ */
 
-/****************************************************************************
-*
-* MODULE:       DBMI Library - dbmi_client column lib
-*   	    	
-* AUTHOR(S):    Radim Blazek (original contributor)
-*               Glynn Clement <glynn gclements.plus.com>,
-*               Martin Landa <landa.martin gmail.com>
-*
-* PURPOSE:      Higher level functions for DBMI DataBase Management Interface
-*
-* COPYRIGHT:    (C) 2001-2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -23,15 +21,17 @@
 #include <grass/glocale.h>
 
 /*!
-   \fn int db_column_sqltype (dbDriver *driver, const char *tab, const char *col)
-   \brief Get column sqltype
+  \brief Get column sqltype
 
-   See db_sqltype_name ()
-   \return column sqltype or -1 on error
-   \param driver DB driver
-   \param tab table name
-   \param col column name
- */
+  See db_sqltype_name().
+
+  \param driver DB driver
+  \param tab table name
+  \param col column name
+
+  \return column sqltype
+  \return -1 on error
+*/
 int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
 {
     dbTable *table;
@@ -59,14 +59,16 @@ int db_column_sqltype(dbDriver * driver, const char *tab, const char *col)
 }
 
 /*!
-   \fn int db_column_Ctype (dbDriver *driver, const char *tab, const char *col)
-   \brief Get column Ctype
+  \brief Get column ctype
 
-   See db_sqltype_to_Ctype()
-   \return column Ctype or -1 on error
-   \param driver DB driver
-   \param tab table name
-   \param col column name
+  See db_sqltype_to_Ctype().
+
+  \param driver DB driver
+  \param tab table name
+  \param col column name
+
+  \return column Ctype
+  \return -1 on error
  */
 int db_column_Ctype(dbDriver * driver, const char *tab, const char *col)
 {
@@ -81,19 +83,20 @@ int db_column_Ctype(dbDriver * driver, const char *tab, const char *col)
 }
 
 /*!
-   \fn int db_get_column ( dbDriver *Driver, const char *tname, const char *cname, dbColumn **Column )
-   \brief Get column structure by table and column name.
+  \brief Get column structure by table and column name.
 
-   Column is set to new dbColumn structure or NULL if column was not found
-   \return DB_OK on success, DB_FAILED on error
-   \param Driver DB driver
-   \param tname table name
-   \param cname column name
-   \param Column column structure to store within
- */
-int
-db_get_column(dbDriver * Driver, const char *tname, const char *cname,
-	      dbColumn ** Column)
+  Column is set to new dbColumn structure or NULL if column was not found
+  
+  \param Driver DB driver
+  \param tname table name
+  \param cname column name
+  \param[out] Column column structure to store within
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_get_column(dbDriver * Driver, const char *tname, const char *cname,
+		  dbColumn ** Column)
 {
     int i, ncols;
     dbTable *Table;
@@ -104,7 +107,7 @@ db_get_column(dbDriver * Driver, const char *tname, const char *cname,
     db_set_string(&tabname, tname);
 
     if (db_describe_table(Driver, &tabname, &Table) != DB_OK) {
-	G_warning(_("Cannot describe table <%s>"), tname);
+      G_warning(_("Unable to describe table <%s>"), tname);
 	return DB_FAILED;
     }
 

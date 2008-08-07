@@ -1,14 +1,28 @@
+/*!
+ * \file db/dbmi_client/printtab.c
+ * 
+ * \brief DBMI Library (client) - print table description info
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <string.h>
 #include <grass/dbmi.h>
 
 static void print_priv();
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Print table definition info
+
+  \param fd file descriptor
+  \param table table info
+*/
 void db_print_table_definition(FILE * fd, dbTable * table)
 {
     int ncols, col;
@@ -28,6 +42,12 @@ void db_print_table_definition(FILE * fd, dbTable * table)
     }
 }
 
+/*!
+  \brief Print column definition info
+
+  \param fd file descriptor
+  \param column column info
+*/
 void db_print_column_definition(FILE * fd, dbColumn * column)
 {
     dbString value_string;

@@ -1,10 +1,23 @@
+/*!
+ * \file db/dbmi_client/c_list_drivers.c
+ * 
+ * \brief DBMI Library (client) - list drivers
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 
 /*!
-   \fn char *db_list_drivers(void)
-   \brief return comma separated list of existing DB drivers, used for driver parameter options
-   \return return char
-   \param void
+  \brief Return comma separated list of existing DB drivers, used for driver parameter options
+
+  \return list of db drivers
  */
 const char *db_list_drivers(void)
 {

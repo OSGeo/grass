@@ -1,14 +1,29 @@
+/*!
+ * \file db/dbmi_client/c_close_cur.c
+ * 
+ * \brief DBMI Library (client) - close cursor
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "macros.h"
 
-
 /*!
-   \fn int db_close_cursor (dbCursor *cursor)
-   \brief 
-   \return 
-   \param 
- */
+  \brief Close cursor
+  
+  \param cursor cursor to be close
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
 int db_close_cursor(dbCursor * cursor)
 {
     int ret_code;

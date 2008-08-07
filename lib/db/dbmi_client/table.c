@@ -1,19 +1,35 @@
+/*!
+ * \file db/dbmi_client/table.c
+ * 
+ * \brief DBMI Library (client) - table management
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 /*!
-   \fn int db_table_exists ( const char *, const char *, const char *)
-   \brief check if table exists
-   \param drvname: driver name
-   \param dbname: database name
-   \param tabname: table name
-   \return: 1 exist, 0 doesn't exist, -1 error
-   \param 
- */
-int
-db_table_exists(const char *drvname, const char *dbname, const char *tabname)
+  \brief Check if table exists
+
+  \param drvname driver name
+  \param dbname database name
+  \param tabname table name
+
+  \return 1 exist
+  \return 0 doesn't exist
+  \return -1 error
+*/
+int db_table_exists(const char *drvname, const char *dbname, const char *tabname)
 {
     dbDriver *driver;
     dbString *names;
@@ -27,7 +43,7 @@ db_table_exists(const char *drvname, const char *dbname, const char *tabname)
 
     driver = db_start_driver_open_database(drvname, dbname);
     if (driver == NULL) {
-	G_warning("Cannot open database '%s' by driver '%s'", dbname,
+	G_warning(_("Unable open database <%s> by driver <%s>"), dbname,
 		  drvname);
 	return -1;
     }
@@ -77,20 +93,23 @@ db_table_exists(const char *drvname, const char *dbname, const char *tabname)
 }
 
 /*!
-   \fn
-   \brief return number of rows of table
-   \return
-   \param
- */
+  \brief Get number of rows of table
+
+  \param driver db driver
+  \param sql SQL statement
+
+  \return number of records
+  \return -1
+*/
 int db_get_table_number_of_rows(dbDriver * driver, dbString * sql)
 {
     int nrows;
     dbCursor cursor;
 
     if (db_open_select_cursor(driver, sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-	G_warning("Cannot open select cursor: '%s'", db_get_string(sql));
+	G_warning(_("Unable to open select cursor: '%s'"), db_get_string(sql));
 	db_close_database_shutdown_driver(driver);
-	return DB_FAILED;
+	return -1;
     }
 
     nrows = db_get_num_rows(&cursor);

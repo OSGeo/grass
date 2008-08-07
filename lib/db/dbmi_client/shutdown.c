@@ -1,3 +1,17 @@
+/*!
+ * \file db/dbmi_client/shutdown.c
+ * 
+ * \brief DBMI Library (client) - shutdown database connection
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <stdlib.h>
 
 #ifdef __MINGW32__
@@ -9,19 +23,19 @@
 #include "macros.h"
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
-/* closedown the driver, and free the driver structure */
-/* NOTE: the management of the memory for the driver structure
- * probably should be handled differently.
- *
- * db_start_driver() could take a pointer to driver structure as
- * an argument, instead of returning the pointer to allocated
- * then there would be no hidden free required
- */
+  \brief Closedown the driver, and free the driver structure
+
+  <b>Note:</b> the management of the memory for the driver structure
+  probably should be handled differently.
+ 
+  db_start_driver() could take a pointer to driver structure as
+  an argument, instead of returning the pointer to allocated
+  then there would be no hidden free required
+
+  \param driver db driver
+
+  \return status (?)
+*/
 int db_shutdown_driver(dbDriver * driver)
 {
 #ifndef __MINGW32__

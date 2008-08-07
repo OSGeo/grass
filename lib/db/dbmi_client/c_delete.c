@@ -1,11 +1,27 @@
+/*!
+ * \file db/dbmi_client/c_delete.c
+ * 
+ * \brief DBMI Library (client) - delete record
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_delete (dbCursor *cursor)
-   \brief 
-   \return 
-   \param 
+  \brief Delete record (?)
+
+  \param cursor db cursor
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_delete(dbCursor * cursor)
 {

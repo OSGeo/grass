@@ -1,12 +1,29 @@
+/*!
+ * \file db/dbmi_client/c_drop_index.c
+ * 
+ * \brief DBMI Library (client) - drop index
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 
 /*!
-   \fn int db_drop_index (dbDriver *driver, dbString *name)
-   \brief 
-   \return 
-   \param 
- */
+  \brief Drop index
+
+  \param driver db driver
+  \param name index name
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
 int db_drop_index(dbDriver * driver, dbString * name)
 {
     int ret_code;
