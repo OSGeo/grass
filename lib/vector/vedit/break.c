@@ -1,4 +1,3 @@
-
 /**
    \file vector/vedit/break.c
 
@@ -258,14 +257,14 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 						  fx, fy, 0.0, WITHOUT_Z);
 		    dist_2 = Vect_points_distance(x1, y1, 0.0,
 						  x, y, 0.0, WITHOUT_Z);
-		    dist_3 = Vect_points_distance(x1, x1, 0.0,
+		    dist_3 = Vect_points_distance(x1, y1, 0.0,
 						  fx, fy, 0.0, WITHOUT_Z);
-
+		    
 		    if (dist_3 < dist_1 + dist_2) {
 			seg = Vect_point_on_line(Points_to, lpdist - dist_p,
 						 &fx, &fy, NULL, NULL, NULL);
 		    }
-
+		    
 		    if (seg > 0) {
 			/* lines connected -> split line_to */
 			/* update line_from */
@@ -280,9 +279,8 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 			    Points_from->y[n_points] = fy;
 			    Points_from->z[n_points] = 0.0;
 			}
-			line_new =
-			    Vect_rewrite_line(Map, line_from, type_from,
-					      Points_from, Cats_from);
+			line_new = Vect_rewrite_line(Map, line_from, type_from,
+			 			     Points_from, Cats_from);
 			Vect_list_append(List, line_new);
 
 			/* update line_to  -- first part */
