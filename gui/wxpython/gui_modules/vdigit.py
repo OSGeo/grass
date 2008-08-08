@@ -2124,7 +2124,8 @@ class VDigitSettingsDialog(wx.Dialog):
         self.parent.toolbars['vdigit'].settingsDialog = None
         self.Close()
 
-        event.Skip()
+        if event:
+            event.Skip()
         
     def UpdateSettings(self):
         """Update UserSettings"""
