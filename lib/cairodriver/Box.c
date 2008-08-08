@@ -2,7 +2,7 @@
 
 /* Box_abs: Draw a (filled) rectangle */
 
-void Cairo_Box_abs(int x1, int y1, int x2, int y2)
+void Cairo_Box(int x1, int y1, int x2, int y2)
 {
     G_debug(3, "Cairo_Box_abs %d %d %d %d\n", x1, y1, x2, y2);
 

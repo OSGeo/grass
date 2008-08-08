@@ -27,20 +27,14 @@ const struct driver *PNG_Driver(void)
     if (initialized)
 	return &drv;
 
-    drv.Box_abs = PNG_Box_abs;
-    drv.Box_rel = NULL;
-    drv.Client_Open = NULL;
-    drv.Client_Close = PNG_Client_Close;
+    drv.Box = PNG_Box;
     drv.Erase = PNG_Erase;
     drv.Graph_set = PNG_Graph_set;
     drv.Graph_close = PNG_Graph_close;
     drv.Line_width = PNG_Line_width;
-    drv.Polydots_abs = NULL;
-    drv.Polydots_rel = NULL;
-    drv.Polyline_abs = NULL;
-    drv.Polyline_rel = NULL;
-    drv.Polygon_abs = NULL;
-    drv.Polygon_rel = NULL;
+    drv.Polydots = NULL;
+    drv.Polyline = NULL;
+    drv.Polygon = NULL;
     drv.Set_window = PNG_Set_window;
     drv.Begin_scaled_raster = PNG_begin_scaled_raster;
     drv.Scaled_raster = PNG_scaled_raster;

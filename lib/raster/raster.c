@@ -54,8 +54,6 @@ int R_open_driver(void)
 
     init();
 
-    COM_Client_Open();
-
     return 0;
 }
 
@@ -69,7 +67,6 @@ void R_close_driver(void)
     char *cmd = getenv("GRASS_NOTIFY");
 
     COM_Respond();
-    COM_Client_Close();
     COM_Graph_close();
 
     if (cmd)

@@ -1,7 +1,7 @@
 
 #include "psdriver.h"
 
-void PS_Polygon_abs(const int *xarray, const int *yarray, int number)
+void PS_Polygon(const int *xarray, const int *yarray, int number)
 {
     int i;
 

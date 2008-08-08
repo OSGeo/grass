@@ -44,7 +44,7 @@ extern void get_pixel(unsigned int, int *, int *, int *, int *);
 
 extern const struct driver *PNG_Driver(void);
 
-extern void PNG_Box_abs(int, int, int, int);
+extern void PNG_Box(int, int, int, int);
 extern void PNG_Client_Close(void);
 extern void PNG_Erase(void);
 extern void PNG_Graph_close(void);
