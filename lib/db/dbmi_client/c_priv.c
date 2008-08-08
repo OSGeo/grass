@@ -16,7 +16,7 @@
 #include "macros.h"
 
 /*!
-  \brief Grant privileges 
+  \brief Grant privileges on table
 
   \param driver db driver
   \param tableName table name

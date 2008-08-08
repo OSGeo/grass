@@ -1,15 +1,29 @@
+/*!
+ * \file db/dbmi_driver/d_create_idx.c
+ * 
+ * \brief DBMI Library (driver) - create index
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "macros.h"
 #include "dbstubs.h"
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
-int db_d_create_index()
+  \brief Create index
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_d_create_index(void)
 {
     dbIndex index;
     int stat;
