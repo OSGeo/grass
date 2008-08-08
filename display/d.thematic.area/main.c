@@ -210,7 +210,7 @@ int main(int argc, char **argv)
 
     /* Read map options */
 
-    G_strcpy(map_name, map_opt->answer);
+    strcpy(map_name, map_opt->answer);
 
 
     /* Make sure map is available */

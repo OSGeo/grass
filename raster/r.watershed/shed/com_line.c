@@ -417,14 +417,14 @@ int com_line_Gwater(INPUT * input, OUTPUT * output)
 
 int com_line_add(char **com_line, char *prompt, char *map_layer, char *mapset)
 {
-    G_strcat(*com_line, prompt);
-    G_strcat(*com_line, "\"");
-    G_strcat(*com_line, map_layer);
+    strcat(*com_line, prompt);
+    strcat(*com_line, "\"");
+    strcat(*com_line, map_layer);
     if (mapset) {
-	G_strcat(*com_line, "@");
-	G_strcat(*com_line, mapset);
+	strcat(*com_line, "@");
+	strcat(*com_line, mapset);
     }
-    G_strcat(*com_line, "\"");
+    strcat(*com_line, "\"");
 
     return 0;
 }
@@ -439,7 +439,7 @@ int basin_com_add(char **com_line, double d, double modifier,
     if (i < 1)
 	i = 1;
     sprintf(buf, " t=%d", i);
-    G_strcat(*com_line, buf);
+    strcat(*com_line, buf);
 
     return 0;
 }
@@ -448,9 +448,9 @@ int com_add(char **com_line, char *prompt, int ril_value)
 {
     char buf[20];
 
-    G_strcat(*com_line, prompt);
+    strcat(*com_line, prompt);
     sprintf(buf, "%d", ril_value);
-    G_strcat(*com_line, buf);
+    strcat(*com_line, buf);
 
     return 0;
 }

@@ -16,7 +16,7 @@ int G__random_d_initialize_0(int fd, int nofRows, int nofCols)
     struct fileinfo *fcb = &G__.fileinfo[fd];
     int row, col;
     double zeroVal, *zeroValP;
-    register XDR *xdrs;
+    XDR *xdrs;
 
     xdrs = &fcb->xdrstream;	/* xdr stream is initialized to write into */
     xdr_setpos(xdrs, 0);	/* G__.work_buf in 'opencell.c' */
@@ -56,7 +56,7 @@ int G__random_f_initialize_0(int fd, int nofRows, int nofCols)
     struct fileinfo *fcb = &G__.fileinfo[fd];
     int row, col;
     float zeroVal, *zeroValP;
-    register XDR *xdrs;
+    XDR *xdrs;
 
 
     xdrs = &fcb->xdrstream;	/* xdr stream is initialized to write into */

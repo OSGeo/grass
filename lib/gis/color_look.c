@@ -237,7 +237,7 @@ int G__lookup_colors(const void *raster, unsigned char *red,
     struct _Color_Rule_ *rule;
     DCELL dmin, dmax, val, dmod = 0L, shift;
     CELL cat, min, max;
-    register const void *ptr, *last_ptr = NULL;
+    const void *ptr, *last_ptr = NULL;
     int invert;
     int found, r, g, b;
     int cell_type;

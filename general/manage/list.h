@@ -26,15 +26,9 @@ extern struct list *list;
 #define COPY   3
 #define LIST   4
 
-char *ask_in_mapset();
 
 /* add_elem.c */
 int add_element(char *, char *);
-
-/* ask.c */
-char *ask_old(int, char *, char *);
-char *ask_new(int, char *, char *);
-char *ask_in_mapset(int, char *, char *);
 
 /* copyfile.c */
 int copyfile(char *, char *, char *, char *);

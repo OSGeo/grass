@@ -90,8 +90,8 @@ int G_begin_cell_area_calculations(void)
 
 double G_area_of_cell_at_row(int row)
 {
-    register double south_value;
-    register double cell_area;
+    double south_value;
+    double cell_area;
 
     if (projection != PROJECTION_LL)
 	return square_meters;

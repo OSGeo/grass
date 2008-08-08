@@ -56,11 +56,11 @@ int main(int argc, char *argv[])
 
     for (n = 0; n < nlist; n++) {
 	if (n) {
-	    G_strcat(str, ",");
-	    G_strcat(str, list[n].alias);
+	    strcat(str, ",");
+	    strcat(str, list[n].alias);
 	}
 	else
-	    G_strcpy(str, list[n].alias);
+	    strcpy(str, list[n].alias);
     }
     element->options = str;
 

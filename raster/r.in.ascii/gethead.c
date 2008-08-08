@@ -110,7 +110,7 @@ int gethead(FILE * fd,
 	len = strlen(buf);
 
 	*label = *value = '\0';
-	if (NULL == G_strstr(buf, ":"))
+	if (NULL == strstr(buf, ":"))
 	    break;
 	if (sscanf(buf, "%[^:]:%s", label, value) != 2)
 	    break;

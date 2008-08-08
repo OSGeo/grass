@@ -106,10 +106,10 @@ int read_vpoints(char *name, char *mapset)
 	    G_strip(data);
 	    vector.layer[vec].ltype = 0;
 
-	    if (G_strstr(data, "point"))
+	    if (strstr(data, "point"))
 		vector.layer[vec].ltype |= GV_POINT;
 
-	    if (G_strstr(data, "centroid"))
+	    if (strstr(data, "centroid"))
 		vector.layer[vec].ltype |= GV_CENTROID;
 
 	    continue;

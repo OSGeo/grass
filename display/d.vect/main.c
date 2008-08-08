@@ -420,7 +420,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    G_strcpy(map_name, map_opt->answer);
+    strcpy(map_name, map_opt->answer);
 
     default_width = atoi(width_opt->answer);
     if (default_width < 0)

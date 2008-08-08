@@ -28,8 +28,6 @@
  */
 
 
-#define SWAP(a,b) temp=a;a=b;b=temp
-
 static int adjust_lat(double *);
 static int adjust_lon(double *);
 
@@ -46,10 +44,9 @@ int G_begin_geodesic_equation(double lon1, double lat1, double lon2,
     adjust_lat(&lat1);
     adjust_lat(&lat2);
     if (lon1 > lon2) {
-	register double temp;
-
-	SWAP(lon1, lon2);
-	SWAP(lat1, lat2);
+	double temp;
+	temp = lon1; lon1 = lon2; lon2 = temp;
+	temp = lat1; lat1 = lat2; lat2 = temp;
     }
     if (lon1 == lon2) {
 	A = B = 0.0;

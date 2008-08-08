@@ -40,7 +40,7 @@ int G_bresenham_line(int x0, int y0, int x1, int y1, int (*point) (int, int))
     int dx, dy;
     int xinc, yinc;
 
-    register int res1;
+    int res1;
     int res2;
 
     xinc = 1;

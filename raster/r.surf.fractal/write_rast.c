@@ -52,7 +52,7 @@ int write_rast(double *data[2],	/* Array holding complex data.          */
     if (Steps != step)
 	sprintf(file_name, "%s.%d", rast_out_name, step);
     else
-	G_strcpy(file_name, rast_out_name);
+	strcpy(file_name, rast_out_name);
 
     if ((fd_out = G_open_raster_new(file_name, DCELL_TYPE)) < 0) {
 	G_fatal_error(_("ERROR: Problem opening output file."));

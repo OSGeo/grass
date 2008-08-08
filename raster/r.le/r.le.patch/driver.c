@@ -2644,35 +2644,35 @@ void unit_driver()
 	    }
 
 	    if (i == 0)
-		G_strcpy(istr, "1");
+		strcpy(istr, "1");
 	    else if (i == 1)
-		G_strcpy(istr, "2");
+		strcpy(istr, "2");
 	    else if (i == 2)
-		G_strcpy(istr, "3");
+		strcpy(istr, "3");
 	    else if (i == 3)
-		G_strcpy(istr, "4");
+		strcpy(istr, "4");
 	    else if (i == 4)
-		G_strcpy(istr, "5");
+		strcpy(istr, "5");
 	    else if (i == 5)
-		G_strcpy(istr, "6");
+		strcpy(istr, "6");
 	    else if (i == 6)
-		G_strcpy(istr, "7");
+		strcpy(istr, "7");
 	    else if (i == 7)
-		G_strcpy(istr, "8");
+		strcpy(istr, "8");
 	    else if (i == 8)
-		G_strcpy(istr, "9");
+		strcpy(istr, "9");
 	    else if (i == 9)
-		G_strcpy(istr, "10");
+		strcpy(istr, "10");
 	    else if (i == 10)
-		G_strcpy(istr, "11");
+		strcpy(istr, "11");
 	    else if (i == 11)
-		G_strcpy(istr, "12");
+		strcpy(istr, "12");
 	    else if (i == 12)
-		G_strcpy(istr, "13");
+		strcpy(istr, "13");
 	    else if (i == 13)
-		G_strcpy(istr, "14");
+		strcpy(istr, "14");
 	    else if (i == 14)
-		G_strcpy(istr, "15");
+		strcpy(istr, "15");
 	    else if (i > 14) {
 		fprintf(stderr, "\n");
 		fprintf(stderr,
@@ -2700,8 +2700,8 @@ void unit_driver()
 	/* if a map of the sampling units
 	   was requested */
 	if (choice->units) {
-	    G_strcpy(unitname, "units_");
-	    G_strcat(unitname, istr);
+	    strcpy(unitname, "units_");
+	    strcat(unitname, istr);
 	    fd = G_open_raster_new(unitname, CELL_TYPE);
 	    unit_buf = G_allocate_raster_buf(CELL_TYPE);
 	    for (k = 1; k < wind.rows + 1; k++) {

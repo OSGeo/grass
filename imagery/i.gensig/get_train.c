@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 #include "signature.h"
@@ -43,7 +44,7 @@ int get_training_classes(struct files *files, struct Signature *S)
 	    I_new_signature(S);
 	    S->sig[n].status = 1;
 	    S->sig[n].npoints = count;
-	    G_strncpy(S->sig[n].desc,
+	    strncpy(S->sig[n].desc,
 		      G_get_cat(cat, &files->training_labels),
 		      sizeof(S->sig[n].desc)
 		);

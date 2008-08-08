@@ -63,7 +63,7 @@ static int translate_or_add_color(const char *str)
     char lowerstr[MAX_COLOR_LEN];
 
     /* Make the color string lowercase for display colors */
-    G_strcpy(lowerstr, str);
+    strcpy(lowerstr, str);
     G_chop(lowerstr);
     G_tolcase(lowerstr);
 

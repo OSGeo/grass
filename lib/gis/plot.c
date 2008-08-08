@@ -660,7 +660,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 
 static int edge(double x0, double y0, double x1, double y1)
 {
-    register double m;
+    double m;
     double dy, x;
     int ystart, ystop;
 

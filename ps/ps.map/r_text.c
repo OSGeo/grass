@@ -74,7 +74,7 @@ int read_text(char *east, char *north, char *text)
     rotate = 0.0;
     xref = CENTER;
     yref = CENTER;
-    G_strcpy(fontname, "Helvetica");
+    strcpy(fontname, "Helvetica");
 
     while (*text == ' ' || *text == '\t')
 	text++;

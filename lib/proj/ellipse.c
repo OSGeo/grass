@@ -232,8 +232,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 	    err++;
 	    sprintf(buf, " %d", line);
 	    if (*badlines)
-		G_strcat(badlines, ",");
-	    G_strcat(badlines, buf);
+		strcat(badlines, ",");
+	    strcat(badlines, buf);
 	    continue;
 	}
 
@@ -256,8 +256,8 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 	    err++;
 	    sprintf(buf, " %d", line);
 	    if (*badlines)
-		G_strcat(badlines, ",");
-	    G_strcat(badlines, buf);
+		strcat(badlines, ",");
+	    strcat(badlines, buf);
 	    continue;
 	}
     }

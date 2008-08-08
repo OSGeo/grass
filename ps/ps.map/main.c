@@ -162,11 +162,11 @@ int main(int argc, char *argv[])
     /* set default paper */
     set_paper("a4");
 
-    G_strcpy(buf, "black");
+    strcpy(buf, "black");
     BLACK = get_color_number(buf);
-    G_strcpy(buf, "white");
+    strcpy(buf, "white");
     WHITE = get_color_number(buf);
-    G_strcpy(buf, "grey");
+    strcpy(buf, "grey");
     GREY = get_color_number(buf);
 
     /* initialize */
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
 		  "scale", "scale", "scale");
 	can_reset_scale = isatty(0);
 	if (check_scale(map_scale->answer))
-	    G_strcpy(PS.scaletext, map_scale->answer);
+	    strcpy(PS.scaletext, map_scale->answer);
 	else
 	    error(map_scale->answer, "", "illegal scale request");
     }
@@ -447,7 +447,7 @@ int main(int argc, char *argv[])
 	    }
 	    PS.do_scalebar = 1;
 	    if (sscanf(data, "%s", sb.type) != 1)
-		G_strcpy(sb.type, "f");	/* default to fancy scalebar */
+		strcpy(sb.type, "f");	/* default to fancy scalebar */
 	    read_scalebar();
 	    if (sb.length <= 0.) {
 		error(key, data, "Bad scalebar length");

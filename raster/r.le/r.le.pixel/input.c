@@ -151,7 +151,7 @@ void user_input(int argc, char **argv)
     /* record the user inputs for map,
        sam, run, and out parameters */
 
-    G_strcpy(choice->fn, name->answer);
+    strcpy(choice->fn, name->answer);
 
     choice->wrum = sampling_method->answer[0];
 
@@ -217,7 +217,7 @@ void user_input(int argc, char **argv)
 
     if (!strcmp(sampling_method->answer, "r")) {
 	if (region->answer)
-	    G_strcpy(choice->reg, region->answer);
+	    strcpy(choice->reg, region->answer);
 	else {
 	    fprintf(stdout, "\n");
 	    fprintf(stdout,
