@@ -191,11 +191,12 @@ class AbstractDigit:
         Used by SelectLinesByBox() and SelectLinesByPoint()"""
 
         type = 0
-        for feature in (('Point', wxvdigit.GV_POINT),
-                        ('Line', wxvdigit.GV_LINE),
-                        ('Centroid', wxvdigit.GV_CENTROID),
-                        ('Boundary', wxvdigit.GV_BOUNDARY)):
-            if UserSettings.Get(group='vdigit', key='selectFeature'+feature[0], subkey='enabled') is True:
+        for feature in (('point', wxvdigit.GV_POINT),
+                        ('line', wxvdigit.GV_LINE),
+                        ('centroid', wxvdigit.GV_CENTROID),
+                        ('boundary', wxvdigit.GV_BOUNDARY)):
+            if UserSettings.Get(group='vdigit', key='selectType',
+                                subkey=[feature[0], 'enabled']) is True:
                 type |= feature[1]
 
         return type
@@ -1521,81 +1522,75 @@ class CDisplayDriver(AbstractDisplayDriver):
         if not self.__display:
             return
         
-        self.__display.UpdateSettings (wx.Color(UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='checkForDupl', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolHighlightDupl', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolPoint', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolPoint', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolPoint', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolPoint', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolLine', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolLine', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolLine', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolLine', subkey='color')[2],
-                                           255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolBoundaryNo', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolBoundaryNo', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryNo', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryNo', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolBoundaryOne', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolBoundaryOne', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryOne', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryOne', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolBoundaryTwo', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolBoundaryTwo', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryTwo', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolBoundaryTwo', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolCentroidIn', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolCentroidIn', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidIn', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidIn', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolCentroidOut', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolCentroidOut', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidOut', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidOut', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolCentroidDup', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolCentroidDup', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidDup', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolCentroidDup', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolNodeOne', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolNodeOne', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolNodeOne', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolNodeOne', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolNodeTwo', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolNodeTwo', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolNodeTwo', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolNodeTwo', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolVertex', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolVertex', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolVertex', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolVertex', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolArea', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolArea', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolArea', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolArea', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='symbolDirection', subkey='enabled'),
-                                       wx.Color(UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[0],
-                                                UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[1],
-                                                UserSettings.Get(group='vdigit', key='symbolDirection', subkey='color')[2],
-                                                255).GetRGB(),
-                                       UserSettings.Get(group='vdigit', key='lineWidth', subkey='value'))
+        color = {}
+        for symbol in ("highlight",
+                       "highlightDupl",
+                       "point",
+                       "line",
+                       "boundaryNo",
+                       "boundaryOne",
+                       "boundaryTwo",
+                       "centroidIn",
+                       "centroidOut",
+                       "centroidDup",
+                       "nodeOne",
+                       "nodeTwo",
+                       "vertex",
+                       "area",
+                       "direction"):
+            color[symbol] = wx.Color(UserSettings.Get(group='vdigit', key='symbol',
+                                                      subkey=[symbol, 'color'])[0],
+                                     UserSettings.Get(group='vdigit', key='symbol',
+                                                      subkey=[symbol, 'color'])[1],
+                                     UserSettings.Get(group='vdigit', key='symbol',
+                                                      subkey=[symbol, 'color'])[2],
+                                     255).GetRGB()
+        
+        self.__display.UpdateSettings (color['highlight'],
+                                       UserSettings.Get(group='vdigit', key='checkForDupl',
+                                                        subkey='enabled'),
+                                       color['highlightDupl'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['point', 'enabled']),
+                                       color['point'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['line', 'enabled']),
+                                       color['line'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['boundaryNo', 'enabled']),
+                                       color['boundaryNo'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['boundaryOne', 'enabled']),
+                                       color['boundaryOne'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['boundaryTwo', 'enabled']),
+                                       color['boundaryTwo'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['centroidIn', 'enabled']),
+                                       color['centroidIn'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['centroidOut', 'enabled']),
+                                       color['centroidOut'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['centroidDup', 'enabled']),
+                                       color['centroidDup'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['nodeOne', 'enabled']),
+                                       color['nodeOne'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['nodeTwo', 'enabled']),
+                                       color['nodeTwo'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['vertex', 'enabled']),
+                                       color['vertex'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['area', 'enabled']),
+                                       color['area'],
+                                       UserSettings.Get(group='vdigit', key='symbol',
+                                                        subkey=['direction', 'enabled']),
+                                       color['direction'],
+                                       UserSettings.Get(group='vdigit', key='lineWidth',
+                                                        subkey='value'))
 
 class VDigitSettingsDialog(wx.Dialog):
     """
@@ -1661,8 +1656,10 @@ class VDigitSettingsDialog(wx.Dialog):
         for label, key in self.__SymbologyData():
             textLabel = wx.StaticText(panel, wx.ID_ANY, label)
             color = csel.ColourSelect(panel, id=wx.ID_ANY,
-                                      colour=UserSettings.Get(group='vdigit', key=key, subkey='color'), size=(25, 25))
-            isEnabled = UserSettings.Get(group='vdigit', key=key, subkey='enabled')
+                                      colour=UserSettings.Get(group='vdigit', key='symbol',
+                                                              subkey=[key, 'color']), size=(25, 25))
+            isEnabled = UserSettings.Get(group='vdigit', key='symbol',
+                                         subkey=[key, 'enabled'])
             if isEnabled is not None:
                 enabled = wx.CheckBox(panel, id=wx.ID_ANY, label="")
                 enabled.SetValue(isEnabled)
@@ -1782,11 +1779,12 @@ class VDigitSettingsDialog(wx.Dialog):
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         inSizer = wx.BoxSizer(wx.HORIZONTAL)
         self.selectFeature = {}
-        for feature in ('Point', 'Line',
-                        'Centroid', 'Boundary'):
+        for feature in ('point', 'line',
+                        'centroid', 'boundary'):
             chkbox = wx.CheckBox(parent=panel, label=feature)
             self.selectFeature[feature] = chkbox.GetId()
-            chkbox.SetValue(UserSettings.Get(group='vdigit', key='selectFeature'+feature, subkey='enabled'))
+            chkbox.SetValue(UserSettings.Get(group='vdigit', key='selectType',
+                                             subkey=[feature, 'enabled']))
             inSizer.Add(item=chkbox, proportion=0,
                         flag=wx.EXPAND | wx.ALL, border=5)
         sizer.Add(item=inSizer, proportion=0, flag=wx.EXPAND)
@@ -2025,21 +2023,21 @@ class VDigitSettingsDialog(wx.Dialog):
 
         return (
             #            ("Background", "symbolBackground"),
-            (_("Highlight"), "symbolHighlight"),
-            (_("Highlight (duplicates)"), "symbolHighlightDupl"),
-            (_("Point"), "symbolPoint"),
-            (_("Line"), "symbolLine"),
-            (_("Boundary (no area)"), "symbolBoundaryNo"),
-            (_("Boundary (one area)"), "symbolBoundaryOne"),
-            (_("Boundary (two areas)"), "symbolBoundaryTwo"),
-            (_("Centroid (in area)"), "symbolCentroidIn"),
-            (_("Centroid (outside area)"), "symbolCentroidOut"),
-            (_("Centroid (duplicate in area)"), "symbolCentroidDup"),
-            (_("Node (one line)"), "symbolNodeOne"),
-            (_("Node (two lines)"), "symbolNodeTwo"),
-            (_("Vertex"), "symbolVertex"),
-            (_("Area (closed boundary + centroid)"), "symbolArea"),
-            (_("Direction"), "symbolDirection"),)
+            (_("Highlight"), "highlight"),
+            (_("Highlight (duplicates)"), "highlightDupl"),
+            (_("Point"), "point"),
+            (_("Line"), "line"),
+            (_("Boundary (no area)"), "boundaryNo"),
+            (_("Boundary (one area)"), "boundaryOne"),
+            (_("Boundary (two areas)"), "boundaryTwo"),
+            (_("Centroid (in area)"), "centroidIn"),
+            (_("Centroid (outside area)"), "centroidOut"),
+            (_("Centroid (duplicate in area)"), "centroidDup"),
+            (_("Node (one line)"), "nodeOne"),
+            (_("Node (two lines)"), "nodeTwo"),
+            (_("Vertex"), "vertex"),
+            (_("Area (closed boundary + centroid)"), "area"),
+            (_("Direction"), "direction"),)
 
     def OnChangeCategoryMode(self, event):
         """Change category mode"""
@@ -2132,11 +2130,14 @@ class VDigitSettingsDialog(wx.Dialog):
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['vdigit'] = UserSettings.Get(group='vdigit')
+        
         file = UserSettings.SaveToFile(fileSettings)
         self.parent.gismanager.goutput.WriteLog(_('Vector digitizer settings saved to file <%s>.') % file)
+        
+        self.Destroy()
 
-        self.Close()
-
+        event.Skip()
+        
     def OnApply(self, event):
         """Button 'Apply' clicked"""
         self.UpdateSettings()
@@ -2144,7 +2145,7 @@ class VDigitSettingsDialog(wx.Dialog):
     def OnCancel(self, event):
         """Button 'Cancel' clicked"""
         self.parent.toolbars['vdigit'].settingsDialog = None
-        self.Close()
+        self.Destroy()
 
         if event:
             event.Skip()
@@ -2155,12 +2156,15 @@ class VDigitSettingsDialog(wx.Dialog):
         # symbology
         for key, (enabled, color) in self.symbology.iteritems():
             if enabled:
-                UserSettings.Set(group='vdigit', key=key, subkey='enabled',
+                UserSettings.Set(group='vdigit', key='symbol',
+                                 subkey=[key, 'enabled'],
                                  value=enabled.IsChecked())
-                UserSettings.Set(group='vdigit', key=key, subkey='color',
+                UserSettings.Set(group='vdigit', key='symbol',
+                                 subkey=[key, 'color'],
                                  value=tuple(color.GetColour()))
             else:
-                UserSettings.Set(group='vdigit', key=key, subkey='color',
+                UserSettings.Set(group='vdigit', key='symbol',
+                                 subkey=[key, 'color'],
                                  value=tuple(color.GetColour()))
         # display
         UserSettings.Set(group='vdigit', key="lineWidth", subkey='value',
@@ -2210,10 +2214,11 @@ class VDigitSettingsDialog(wx.Dialog):
                          value=int(self.queryDangleValue.GetValue()))
 
         # select features
-        for feature in ('Point', 'Line',
-                        'Centroid', 'Boundary'):
-            UserSettings.Set(group='vdigit', key='selectFeature'+feature, subkey='enabled',
-                                           value=self.FindWindowById(self.selectFeature[feature]).IsChecked())
+        for feature in ('point', 'line',
+                        'centroid', 'boundary'):
+            UserSettings.Set(group='vdigit', key='selectType',
+                             subkey=[feature, 'enabled'],
+                             value=self.FindWindowById(self.selectFeature[feature]).IsChecked())
         UserSettings.Set(group='vdigit', key="selectThresh", subkey='value',
                          value=int(self.selectThreshValue.GetValue()))
         UserSettings.Set(group='vdigit', key="checkForDupl", subkey='enabled',

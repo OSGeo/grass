@@ -380,12 +380,13 @@ class AttributeManager(wx.Frame):
     """
     def __init__(self, parent, id, title, vectmap,
                  size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE,
-                 pointdata=None):
+                 pointdata=None, log=None):
 
         self.vectmap   = vectmap
         self.pointdata = pointdata
         self.parent    = parent # GMFrame
-
+        self.cmdLog    = log    # self.parent.goutput
+        
         wx.Frame.__init__(self, parent, id, title, style=style)
 
         # icon
@@ -1721,32 +1722,16 @@ class AttributeManager(wx.Frame):
             wx.MessageBox(parent=self,
                           message=_('Nothing to extract.'),
                           caption=_('Extract selected'), style=wx.CENTRE)
-            return False
+            return
         else:
             # dialog to get file name
-            dlg = gdialogs.NewVectorDialog(parent=self, id=wx.ID_ANY, title=_('Extract selected'))
-
-            if dlg.ShowModal() == wx.ID_OK:
-                outmap, overwrite = dlg.GetName()
-
-                if outmap == '': # should not happen
-                    return False
-
-                cmd = ["v.extract",
-                       "input=%s" % self.vectmap,
-                       "output=%s" % outmap,
-                       "list=%s" % utils.ListOfCatsToRange(cats)]
-                
-                if overwrite is True:
-                    cmd.append('--overwrite')
-                    
-                p = gcmd.Command(cmd, stderr=None)
+            gdialogs.CreateNewVector(parent=self, title=_('Extract selected'),
+                                     log=self.cmdLog,
+                                     cmdDef=(["v.extract",
+                                              "input=%s" % self.vectmap,
+                                              "list=%s" % utils.ListOfCatsToRange(cats)],
+                                             "output"))
         
-                if p.returncode == 0:
-                    return True
-
-        return False
-
     def AddQueryMapLayer(self):
         """Redraw a map
 

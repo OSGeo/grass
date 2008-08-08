@@ -377,9 +377,9 @@ int DisplayDriver::DrawLine(int line)
     }
     
     dc->SetId(dcId); /* 0 | 1 (selected) */
-    dc->SetPen(*pen);
-
+   
     if (draw) {
+	dc->SetPen(*pen);
 	if (type & GV_POINTS) {
 	    DrawCross(line, (const wxPoint *) pointsScreen->GetFirst()->GetData());
 	}
@@ -821,13 +821,13 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   int lineWidth)
 {
     settings.highlight.Set(highlight);
-    
+
     settings.highlightDupl.enabled = ehighlightDupl;
     settings.highlightDupl.color.Set(chighlightDupl);
 
     settings.point.enabled = ePoint;
     settings.point.color.Set(cPoint);
-
+    
     settings.line.enabled = eLine;
     settings.line.color.Set(cLine);
 
@@ -865,7 +865,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
     settings.direction.color.Set(cDirection);
 
     settings.lineWidth = lineWidth;
-
+    
     return;
 }
 

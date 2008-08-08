@@ -193,14 +193,14 @@ class GMConsole(wx.Panel):
         """
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
-            sys.stdout = self.cmd_stdout
-            sys.stderr = self.cmd_stderr
+            #sys.stdout = self.cmd_stdout
+            #sys.stderr = self.cmd_stderr
             
             return True
 
         return False
 
-    def WriteLog(self, line, style=None, wrap=None):
+    def WriteLog(self, text, style=None, wrap=None):
         """Generic method for writing log message in 
         given style
 
@@ -210,21 +210,24 @@ class GMConsole(wx.Panel):
         """
         if not style:
             style = self.cmd_output.StyleDefault
-
-        self.cmd_output.GotoPos(self.cmd_output.GetLength())
-        p1 = self.cmd_output.GetCurrentPos()
         
-        # fill space
-        if len(line) < self.lineWidth:
-            diff = 80 - len(line) 
+        # p1 = self.cmd_output.GetCurrentPos()
+        p1 = self.cmd_output.GetEndStyled()
+        self.cmd_output.GotoPos(p1)
+        
+        for line in text.split('\n'):
+            # fill space
+            if len(line) < self.lineWidth:
+                diff = 80 - len(line) 
             line += diff * ' '
-
-        self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds os.linesep
-
-        p2 = self.cmd_output.GetCurrentPos()
-        self.cmd_output.StartStyling(p1, 0xff)
-        self.cmd_output.SetStyling(p2 - p1, style)
-
+            
+            self.cmd_output.AddTextWrapped(line, wrap=wrap) # adds os.linesep
+            
+            p2 = self.cmd_output.GetCurrentPos()
+            
+            self.cmd_output.StartStyling(p1, 0xff)
+            self.cmd_output.SetStyling(p2 - p1, style)
+        
         self.cmd_output.EnsureCaretVisible()
         
     def WriteCmdLog(self, line, pid=None):
@@ -372,14 +375,16 @@ class GMConsole(wx.Panel):
         # switch to 'Command output'
         if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
             self.parent.notebook.SetSelection(self.parent.goutput.pageid)
-
+        
         # message prefix
         if type == 'warning':
             messege = 'WARNING: ' + message
         elif type == 'error':
             message = 'ERROR: ' + message
-            
-        p1 = self.cmd_output.GetCurrentPos()
+        
+        # p1 = self.cmd_output.GetCurrentPos()
+        p1 = self.cmd_output.GetEndStyled()
+        self.cmd_output.GotoPos(p1)
         self.linePos = self.cmd_output.GetCurrentPos()
         
         pc = -1
@@ -409,16 +414,17 @@ class GMConsole(wx.Panel):
                 self.cmd_output.AddTextWrapped(message, wrap=None)
         
         p2 = self.cmd_output.GetCurrentPos()
+
         self.cmd_output.StartStyling(p1, 0xff)
         
         if type == 'error':
-            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleError)
+            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleError)
         elif type == 'warning':
-            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleWarning)
+            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleWarning)
         elif type == 'message':
-            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleMessage)
+            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleMessage)
         else: # unknown
-            self.cmd_output.SetStyling(p2 - p1 + 1, self.cmd_output.StyleUnknown)
+            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleUnknown)
 
         if pc > 0:
             self.cmd_output.SetCurrentPos(pc)
@@ -435,7 +441,7 @@ class GMConsole(wx.Panel):
 
     def OnCmdRun(self, event):
         """Run command"""
-        self.WriteCmdLog('%s' % ' '.join(event.cmd), pid=event.pid)
+        self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)))
 
     def OnCmdDone(self, event):
         """Command done (or aborted)"""
@@ -443,13 +449,16 @@ class GMConsole(wx.Panel):
             # Thread aborted (using our convention of None return)
             self.WriteLog(_('Please note that the data are left in incosistent stage '
                             'and can be corrupted'), self.cmd_output.StyleWarning)
-            self.WriteCmdLog(_('Command aborted'),
-                             pid=self.cmdThread.requestId)
+            self.WriteCmdLog('(%s) %s' % (str(time.ctime()),
+                                          _('Command aborted')))
+            # pid=self.cmdThread.requestId)
         else:
             try:
                 # Process results here
-                self.WriteCmdLog(_('Command finished (%d sec)') % (time.time() - event.time),
-                                 pid=event.pid)
+                self.WriteCmdLog('(%s) %s (%d sec)' % (str(time.ctime()),
+                                                       _('Command finished'),
+                                                       (time.time() - event.time)))
+                # pid=event.pid)
             except KeyError:
                 # stopped deamon
                 pass
@@ -704,6 +713,3 @@ class GMStc(wx.stc.StyledTextCtrl):
         else:
             self.parent.linePos = self.GetCurrentPos()
             self.AddText(txt)
-        
-            
-            

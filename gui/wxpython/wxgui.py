@@ -456,9 +456,8 @@ class GMFrame(wx.Frame):
 
     def OnNewVector(self, event):
         """Create new vector map layer"""
-        name = gdialogs.CreateNewVector(self)
-        if name:
-            self.goutput.WriteCmdLog('New vector map <%s> created' % name)
+        name = gdialogs.CreateNewVector(self, log=self.goutput,
+                                        cmdDef=(['v.edit', 'tool=create'], "map"))
             
     def OnAboutGRASS(self, event):
         """Display 'About GRASS' dialog"""
@@ -1101,7 +1100,7 @@ class GMFrame(wx.Frame):
                                               title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
                                                                    mapname),
                                               size=wx.Size(500,300), vectmap=mapname,
-                                              pointdata=pointdata)
+                                              pointdata=pointdata, log=self.goutput)
 
         busy.Destroy()
 

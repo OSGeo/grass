@@ -60,12 +60,7 @@ class NewVectorDialog(wx.Dialog):
                                       type='vector', mapsets=[grassenv.GetGRASSVariable('MAPSET'),])
 
         self.mapName.Bind(wx.EVT_TEXT, self.OnMapName)
-
-        # TODO remove (see Preferences dialog)
-        self.overwrite = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
-                                     label=_("Allow output files to overwrite existing files"))
-        self.overwrite.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
-
+        
         self.__Layout()
 
         self.SetMinSize(self.GetSize())
@@ -86,9 +81,7 @@ class NewVectorDialog(wx.Dialog):
                       flag=wx.ALL, border=1)
         dataSizer.Add(self.mapName, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=1)
-        dataSizer.Add(self.overwrite, proportion=0,
-                      flag=wx.ALL, border=1)
-
+        
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -108,45 +101,63 @@ class NewVectorDialog(wx.Dialog):
         """Return (mapName, overwrite)"""
         mapName = self.mapName.GetValue().split('@', 1)[0]
 
-        return (mapName,
-                self.overwrite.IsChecked())
-
-def CreateNewVector(parent, title=_('Create new vector map'),
-                    exceptMap=None):
+        return mapName
+    
+def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
+                    exceptMap=None, log=None):
     """Create new vector map layer
 
+    @cmdList tuple/list (cmd list, output paramater)
+    
     @return name of create vector map
     @return None of failure
     """
+    cmd = cmdDef[0]
     dlg = NewVectorDialog(parent=parent, id=wx.ID_ANY, title=title)
     if dlg.ShowModal() == wx.ID_OK:
-        outmap, overwrite = dlg.GetName()
+        outmap = dlg.GetName()
         if outmap == exceptMap:
             wx.MessageBox(parent=parent,
                           message=_("Unable to create vector map <%s>.") % outmap,
                           caption=_("Error"),
                           style=wx.ID_OK | wx.ICON_ERROR | wx.CENTRE)
             return False
-
+        
         if outmap == '': # should not happen
             return False
         
-        cmd = ["v.edit",
-               "map=%s" % outmap,
-               "tool=create"]
-                
-        if overwrite is True:
+        cmd.append("%s=%s" % (cmdDef[1], outmap))
+        
+        if not UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') and \
+                outmap in grass.list_grouped('vect')[grass.gisenv()['MAPSET']]:
+            dlg = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
+                                                     "in the current mapset. "
+                                                     "Do you want to overwrite it?") % outmap,
+                                   caption=_("Overwrite?"),
+                                   style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlg.ShowModal() == wx.ID_YES:
+                cmd.append('--overwrite')
+            else:
+                dlg.Destroy()
+                return False
+
+        if UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') is True:
             cmd.append('--overwrite')
-            
+        
         try:
-            p = gcmd.Command(cmd, stderr=None)
+            gcmd.Command(cmd)
         except gcmd.CmdError, e:
             print >> sys.stderr, e
             return None
 
-        if p.returncode == 0:
-            # return fully qualified map name
-            return outmap + '@' + grassenv.GetGRASSVariable('MAPSET')
+        # return fully qualified map name
+        if '@' not in outmap:
+            outmap += '@' + grassenv.GetGRASSVariable('MAPSET')
+
+        if log:
+            log.WriteLog(_("New vector map <%s> created") % outmap)
+
+        return outmap
 
     return None
 
