@@ -1,22 +1,19 @@
-
-/****************************************************************************
+/*!
+ * \file db/dbmi_driver/driver.c
+ * 
+ * \brief DBMI Library (driver) - drivers
  *
- * MODULE:       DBMI library - drivers
- * AUTHOR(S):    Joel Jones (CERL/UIUC) <jjones zorro.cecer.army.mil>
- *               (overall original contributor of db libraries)
- *               This file (and driver directory) originates with GRASS 5.0:
- *               Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>,
- *               Markus Neteler <neteler itc.it>,
- *               Huidae Cho <grass4u gmail.com>,
- * PURPOSE:      database management driver functions 
- * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
+ * (C) 1999-2008 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
  *
- *****************************************************************************/
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
+ * \author Modified by Glynn Clements <glynn gclements.plus.com>,
+ * Markus Neteler <neteler itc.it>,
+ * Huidae Cho <grass4u gmail.com>
+ */
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -31,11 +28,12 @@
 extern char *getenv();
 
 /*!
-   \fn int db_driver (int argc,
-   char *argv[])
-   \brief 
-   \return 
-   \param 
+  \brief Get driver (?)
+
+  \param argc, argv arguments
+
+  \return 0 on success
+  \return 1 on failure
  */
 int db_driver(int argc, char *argv[])
 {

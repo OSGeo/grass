@@ -176,9 +176,88 @@ See details here:<br>
  - db_update()
 
  - db__copy_table()
+
 \section dbmi_driver DBMI DRIVER functions
 
-[ to be moved here from below list ]
+ - db_driver()
+
+ - db_driver_mkdir()
+
+ - db_d_add_column()
+
+ - db_d_begin_transaction()
+
+ - db_d_bind_update()
+
+ - db_d_close_cursor()
+
+ - db_d_close_database()
+
+ - db_d_commit_transaction()
+
+ - db_d_create_database()
+
+ - db_d_create_index()
+
+ - db_d_create_table()
+
+ - db_d_delete()
+
+ - db_d_delete_database()
+
+ - db_d_describe_table()
+
+ - db_d_drop_column()
+
+ - db_d_drop_index()
+
+ - db_d_drop_table()
+
+ - db_d_execute_immediate()
+
+ - db_d_fetch()
+
+ - db_d_find_database()
+
+ - db_d_get_num_rows()
+
+ - db_driver_mkdir()
+
+ - db_d_grant_on_table()
+
+ - db_d_insert()
+
+ - db_d_list_databases()
+
+ - db_d_list_indexes()
+
+ - db_d_list_tables()
+
+ - db_d_open_database()
+
+ - db_d_open_insert_cursor()
+
+ - db_d_open_select_cursor()
+
+ - db_d_open_update_cursor()
+
+ - db_d_update()
+
+ - db_d_update()
+ 
+ - db__add_cursor_to_driver_state()
+
+ - db__close_all_cursors()
+
+ - db__drop_cursor_from_driver_state()
+  
+ - db__init_driver_state()
+
+ - db__mark_database_closed()
+
+ - db__mark_database_open()
+
+ - db__test_database_open()
 
 \section dbmi_functions DBMI functions list (incomplete)
 

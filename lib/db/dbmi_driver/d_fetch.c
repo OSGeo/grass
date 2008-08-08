@@ -1,3 +1,17 @@
+/*!
+ * \file db/dbmi_driver/d_fetch.c
+ * 
+ * \brief DBMI Library (driver) - fetch data
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
+ */
+
 #include <grass/dbmi.h>
 #include "macros.h"
 #include "dbstubs.h"
@@ -5,12 +19,11 @@
 
 static int valid_cursor(dbCursor * cursor, int position);
 
-
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Fetch data
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
 int db_d_fetch(void)
 {

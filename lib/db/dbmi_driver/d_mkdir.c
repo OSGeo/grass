@@ -1,3 +1,17 @@
+/*!
+ * \file db/dbmi_driver/d_mkdir.c
+ * 
+ * \brief DBMI Library (driver) - creare directories
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
+ */
+
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -12,11 +26,15 @@ static int make_dir(const char *path, int mode);
 
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
- */
+  \brief Create db directory
+
+  \param path full path
+  \param mode mode
+  \param parentdirs parent directories
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
 int db_driver_mkdir(const char *path, int mode, int parentdirs)
 {
     if (parentdirs) {

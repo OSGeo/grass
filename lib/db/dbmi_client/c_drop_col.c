@@ -16,7 +16,7 @@
 #include "macros.h"
 
 /*!
-  \brief driver db driver
+  \brief Drop column
 
   \param driver db driver
   \param tableName table name

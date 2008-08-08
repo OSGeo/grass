@@ -1,15 +1,29 @@
+/*!
+ * \file db/dbmi_driver/d_drop_col.c
+ * 
+ * \brief DBMI Library (driver) - drop column
+ *
+ * (C) 1999-2008 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public
+ * License (>=v2). Read the file COPYING that comes with GRASS
+ * for details.
+ *
+ * \author Joel Jones (CERL/UIUC), Radim Blazek
+ */
+
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "macros.h"
 #include "dbstubs.h"
 
 /*!
-   \fn 
-   \brief 
-   \return 
-   \param 
+  \brief Drop column
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
  */
-int db_d_drop_column()
+int db_d_drop_column(void)
 {
     dbString tableName;
     dbString columnName;

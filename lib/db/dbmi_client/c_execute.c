@@ -48,7 +48,7 @@ int db_execute_immediate(dbDriver * driver, dbString * SQLstatement)
 /*!
   \brief Begin transaction
 
-  \return driver db driver
+  \param driver db driver
 
   \return DB_OK on success
   \return DB_FAILED on failure
