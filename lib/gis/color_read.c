@@ -64,7 +64,7 @@ int G_read_colors(const char *name, const char *mapset, struct Colors *colors)
     int fp;
     char buf[GNAME_MAX];
     char *err;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX];
     struct Range range;
     struct FPRange drange;
     CELL min, max;
@@ -72,11 +72,10 @@ int G_read_colors(const char *name, const char *mapset, struct Colors *colors)
 
     fp = G_raster_map_is_fp(name, mapset);
     G_init_colors(colors);
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
-	    return -1;
-	name = xname;
-    }
+
+    strcpy(xname, name);
+    mapset = G_find_cell(xname, mapset);
+    name = xname;
 
     if (fp)
 	G_mark_colors_as_fp(colors);
@@ -114,9 +113,8 @@ int G_read_colors(const char *name, const char *mapset, struct Colors *colors)
 	return 1;
     }
 
-    sprintf(buf, _("color support for [%s] in mapset [%s] %s"), name, mapset,
-	    err);
-    G_warning(buf);
+    G_warning(_("color support for [%s] in mapset [%s] %s"), name, mapset,
+	      err);
     return -1;
 }
 
