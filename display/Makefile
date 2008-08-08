@@ -29,6 +29,8 @@ SUBDIRS = \
 	d.vect \
 	d.vect.chart \
 	d.thematic.area \
+	d.where \
+
 
 #	d.colors \
 #	d.extract \
@@ -36,7 +38,6 @@ SUBDIRS = \
 #	d.profile \
 #	d.what.rast \
 #	d.what.vect \
-#	d.where \
 #	d.zoom \
 #	drivers
 

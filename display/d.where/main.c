@@ -32,8 +32,10 @@ struct pj_info iproj, oproj;
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Flag *once, *decimal, *latlong, *wgs84, *dcoord;
+    struct Option *coords, *file;
+    struct Flag *decimal, *latlong, *wgs84, *dcoord;
     int have_spheroid = 0;
+    FILE *fp;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -42,11 +44,21 @@ int main(int argc, char **argv)
     module->keywords = _("display");
     module->description =
 	_("Identifies the geographic coordinates associated with "
-	  "point locations in the active frame on the graphics monitor.");
+	  "point locations given in display coordinates.");
 
-    once = G_define_flag();
-    once->key = '1';
-    once->description = _("One mouse click only");
+    coords = G_define_option();
+    coords->key = "coordinates";
+    coords->key_desc = "x,y";
+    coords->type = TYPE_DOUBLE;
+    coords->required = NO;
+    coords->multiple = YES;
+    coords->description =
+	_("Display coordinates to convert");
+
+    file = G_define_standard_option(G_OPT_F_INPUT);
+    file->required = NO;
+    file->description =
+	_("File from which to read coordinates (\"-\" to read from stdin)");
 
     decimal = G_define_flag();
     decimal->key = 'd';
@@ -140,11 +152,22 @@ int main(int argc, char **argv)
 
     }
 
+    if (file->answer) {
+	if (strcmp(file->answer, "-") == 0)
+	    fp = stdin;
+	else {
+	    fp = fopen(file->answer, "r");
+	    if (!fp)
+		G_fatal_error(_("Unable to open input file <%s>"), file->answer);
+	}
+    }
+    else
+	fp = NULL;
+
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
     D_setup(0);
-    where_am_i(once->answer, have_spheroid, decimal->answer, wgs84->answer,
-	       dcoord->answer);
+    where_am_i(coords->answers, fp, have_spheroid, decimal->answer, dcoord->answer);
     R_close_driver();
 
     exit(EXIT_SUCCESS);
