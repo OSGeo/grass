@@ -1070,7 +1070,7 @@ class VDigit(AbstractDigit):
 
         return ret
         
-    def CopyLine(self, ids=None):
+    def CopyLine(self, ids=[]):
         """Copy features from (background) vector map
 
         @param ids list of line ids to be copied
@@ -1078,7 +1078,11 @@ class VDigit(AbstractDigit):
         @return number of copied features
         @return -1 on error
         """
-        ret = self.digit.CopyLines(ids, str(UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value')))
+        bgmap = str(UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'))
+        if len(bgmap) > 0:
+            ret = self.digit.CopyLines(ids, bgmap)
+        else:
+            ret = self.digit.CopyLines(ids, None)
 
         if ret > 0:
             self.toolbar.EnableUndo()
