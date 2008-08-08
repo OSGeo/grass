@@ -291,6 +291,9 @@ class Settings:
                 'checkForDupl' : {
                     'enabled' : False
                     },
+                'selectInside' : {
+                    'enabled' : False
+                    },
                 # exit
                 'saveOnExit' : {
                     'enabled' : False
