@@ -41,8 +41,8 @@ extern void HTML_Graph_close(void);
 /* Graph_Set.c */
 extern int HTML_Graph_set(int, char **);
 
-/* Polygn_abs.c */
-extern void HTML_Polygon_abs(const int *, const int *, int);
+/* Polygon.c */
+extern void HTML_Polygon(const int *, const int *, int);
 
 /* Text.c */
 extern void HTML_Text(const char *);

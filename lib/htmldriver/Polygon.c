@@ -57,7 +57,7 @@ static double find_azimuth(double x1, double y1, double x2, double y2)
 }
 
 
-void HTML_Polygon_abs(const int *px, const int *py, int n)
+void HTML_Polygon(const int *px, const int *py, int n)
 {
     struct MapPoly *new;
     int i;

@@ -121,8 +121,8 @@ static void fill_polygon(const int *xarray, const int *yarray, int count)
 
 void COM_Polygon_abs(const int *xarray, const int *yarray, int number)
 {
-    if (driver->Polygon_abs) {
-	(*driver->Polygon_abs) (xarray, yarray, number);
+    if (driver->Polygon) {
+	(*driver->Polygon) (xarray, yarray, number);
 	return;
     }
 
@@ -134,11 +134,6 @@ void COM_Polygon_rel(const int *xarray, const int *yarray, int number)
     static int *xa, *ya;
     static int nalloc;
     int i;
-
-    if (driver->Polygon_rel) {
-	(*driver->Polygon_rel) (xarray, yarray, number);
-	return;
-    }
 
     if (number > nalloc) {
 	nalloc = number;

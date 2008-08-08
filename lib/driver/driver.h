@@ -24,20 +24,14 @@ extern struct GFONT_CAP *ftcap;
 
 struct driver
 {
-    void (*Box_abs) (int, int, int, int);
-    void (*Box_rel) (int, int);
-    void (*Client_Open) (void);
-    void (*Client_Close) (void);
+    void (*Box) (int, int, int, int);
     void (*Erase) (void);
     int (*Graph_set) (int, char **);
     void (*Graph_close) (void);
     void (*Line_width) (int);
-    void (*Polydots_abs) (const int *, const int *, int);
-    void (*Polydots_rel) (const int *, const int *, int);
-    void (*Polyline_abs) (const int *, const int *, int);
-    void (*Polyline_rel) (const int *, const int *, int);
-    void (*Polygon_abs) (const int *, const int *, int);
-    void (*Polygon_rel) (const int *, const int *, int);
+    void (*Polydots) (const int *, const int *, int);
+    void (*Polyline) (const int *, const int *, int);
+    void (*Polygon) (const int *, const int *, int);
     void (*Set_window) (int, int, int, int);
     void (*Begin_scaled_raster) (int, int[2][2], int[2][2]);
     int (*Scaled_raster) (int, int,
@@ -68,10 +62,6 @@ extern void COM_Bitmap(int, int, int, const unsigned char *);
 /* Box.c */
 extern void COM_Box_abs(int, int, int, int);
 extern void COM_Box_rel(int, int);
-
-/* Client.c */
-extern void COM_Client_Open(void);
-extern void COM_Client_Close(void);
 
 /* Color.c */
 extern void COM_Color_RGB(unsigned char, unsigned char, unsigned char);

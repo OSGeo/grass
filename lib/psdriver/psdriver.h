@@ -21,7 +21,7 @@ extern void init_color_table(void);
 
 extern const struct driver *PS_Driver(void);
 
-extern void PS_Box_abs(int, int, int, int);
+extern void PS_Box(int, int, int, int);
 extern void PS_Client_Close(void);
 extern void PS_Erase(void);
 extern void PS_Graph_close(void);
@@ -39,7 +39,7 @@ extern int PS_scaled_raster(int, int, const unsigned char *,
 			    const unsigned char *, const unsigned char *,
 			    const unsigned char *);
 extern void PS_end_scaled_raster(void);
-extern void PS_Polygon_abs(const int *, const int *, int);
-extern void PS_Polyline_abs(const int *, const int *, int);
+extern void PS_Polygon(const int *, const int *, int);
+extern void PS_Polyline(const int *, const int *, int);
 
 #endif /* __PSDRIVER_H__ */

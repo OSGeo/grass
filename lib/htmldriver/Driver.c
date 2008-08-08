@@ -25,20 +25,14 @@ const struct driver *HTML_Driver(void)
     if (initialized)
 	return &drv;
 
-    drv.Box_abs = NULL;
-    drv.Box_rel = NULL;
-    drv.Client_Open = NULL;
-    drv.Client_Close = NULL;
+    drv.Box = NULL;
     drv.Erase = NULL;
     drv.Graph_set = HTML_Graph_set;
     drv.Graph_close = HTML_Graph_close;
     drv.Line_width = NULL;
-    drv.Polydots_abs = NULL;
-    drv.Polydots_rel = NULL;
-    drv.Polyline_abs = NULL;
-    drv.Polyline_rel = NULL;
-    drv.Polygon_abs = HTML_Polygon_abs;
-    drv.Polygon_rel = NULL;
+    drv.Polydots = NULL;
+    drv.Polyline = NULL;
+    drv.Polygon = HTML_Polygon;
     drv.Set_window = NULL;
     drv.Begin_scaled_raster = NULL;
     drv.Scaled_raster = NULL;

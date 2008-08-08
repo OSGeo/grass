@@ -1,7 +1,7 @@
 
 #include "psdriver.h"
 
-void PS_Polyline_abs(const int *xarray, const int *yarray, int number)
+void PS_Polyline(const int *xarray, const int *yarray, int number)
 {
     int i;
 

@@ -27,20 +27,14 @@ const struct driver *Cairo_Driver(void)
     if (initialized)
 	return &drv;
 
-    drv.Box_abs = Cairo_Box_abs;
-    drv.Box_rel = NULL;
-    drv.Client_Open = NULL;
-    drv.Client_Close = Cairo_Client_Close;
+    drv.Box = Cairo_Box;
     drv.Erase = Cairo_Erase;
     drv.Graph_set = Cairo_Graph_set;
     drv.Graph_close = Cairo_Graph_close;
     drv.Line_width = Cairo_Line_width;
-    drv.Polydots_abs = NULL;
-    drv.Polydots_rel = NULL;
-    drv.Polyline_abs = Cairo_Polyline_abs;
-    drv.Polyline_rel = NULL;
-    drv.Polygon_abs = Cairo_Polygon_abs;
-    drv.Polygon_rel = NULL;
+    drv.Polydots = NULL;
+    drv.Polyline = Cairo_Polyline;
+    drv.Polygon = Cairo_Polygon;
     drv.Set_window = Cairo_Set_window;
     drv.Begin_scaled_raster = Cairo_begin_scaled_raster;
     drv.Scaled_raster = Cairo_scaled_raster;

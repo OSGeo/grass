@@ -5,8 +5,8 @@ void COM_Box_abs(int x1, int y1, int x2, int y2)
 {
     int x[4], y[4];
 
-    if (driver->Box_abs) {
-	(*driver->Box_abs) (x1, y1, x2, y2);
+    if (driver->Box) {
+	(*driver->Box) (x1, y1, x2, y2);
 	return;
     }
 
@@ -24,10 +24,5 @@ void COM_Box_abs(int x1, int y1, int x2, int y2)
 
 void COM_Box_rel(int x, int y)
 {
-    if (driver->Box_rel) {
-	(*driver->Box_rel) (x, y);
-	return;
-    }
-
     COM_Box_abs(cur_x, cur_y, cur_x + x, cur_y + y);
 }

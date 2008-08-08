@@ -49,7 +49,7 @@ extern const struct driver *Cairo_Driver(void);
 extern void Cairo_Client_Close(void);
 extern int Cairo_Graph_set(int, char **);
 extern void Cairo_Graph_close(void);
-extern void Cairo_Box_abs(int, int, int, int);
+extern void Cairo_Box(int, int, int, int);
 extern void Cairo_Set_window(int, int, int, int);
 extern void Cairo_draw_line(int, int, int, int);
 extern void Cairo_draw_bitmap(int, int, int, const unsigned char *);
@@ -63,8 +63,8 @@ extern int Cairo_scaled_raster(int, int,
 			       const unsigned char *, const unsigned char *);
 extern void Cairo_end_scaled_raster(void);
 extern void Cairo_Line_width(int);
-extern void Cairo_Polygon_abs(const int *, const int *, int);
-extern void Cairo_Polyline_abs(const int *, const int *, int);
+extern void Cairo_Polygon(const int *, const int *, int);
+extern void Cairo_Polyline(const int *, const int *, int);
 extern void Cairo_Respond(void);
 
 /* read.c */

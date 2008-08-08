@@ -1,7 +1,7 @@
 
 #include "pngdriver.h"
 
-void PNG_Box_abs(int x1, int y1, int x2, int y2)
+void PNG_Box(int x1, int y1, int x2, int y2)
 {
     int tmp;
     int x, y;

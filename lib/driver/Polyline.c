@@ -5,8 +5,8 @@ void COM_Polyline_abs(const int *xarray, const int *yarray, int number)
 {
     int i;
 
-    if (driver->Polyline_abs) {
-	(*driver->Polyline_abs) (xarray, yarray, number);
+    if (driver->Polyline) {
+	(*driver->Polyline) (xarray, yarray, number);
 	return;
     }
 
@@ -19,11 +19,6 @@ void COM_Polyline_abs(const int *xarray, const int *yarray, int number)
 void COM_Polyline_rel(const int *xarray, const int *yarray, int number)
 {
     int i;
-
-    if (driver->Polyline_rel) {
-	(*driver->Polyline_rel) (xarray, yarray, number);
-	return;
-    }
 
     COM_Move_rel(xarray[0], yarray[0]);
 
