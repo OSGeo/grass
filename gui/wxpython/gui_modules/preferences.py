@@ -142,8 +142,30 @@ class Settings:
                 'verbosity' : {
                     'selection' : 'grassenv'
                     },
+                # d.rast
                 'rasterOverlay' : {
                     'enabled' : False
+                    },
+                # d.vect
+                'showType': {
+                    'point' : {
+                        'enabled' : True
+                        },
+                    'line' : {
+                        'enabled' : True
+                        },
+                    'centroid' : {
+                        'enabled' : True
+                        },
+                    'boundary' : {
+                        'enabled' : True
+                        },
+                    'area' : {
+                        'enabled' : True
+                        },
+                    'face' : {
+                        'enabled' : True
+                        },
                     },
                 'addNewLayer' : {
                     'enabled' : False
@@ -165,66 +187,68 @@ class Settings:
             #
             'vdigit' : {
                 # symbology
-                'symbolHighlight' : {
-                    'enabled' : None,
-                    'color' : (255, 255, 0, 255)
-                    }, # yellow
-                'symbolHighlightDupl' : {
-                    'enabled' : None,
-                    'color' : (255, 72, 0, 255)
-                    }, # red
-                'symbolPoint' : {
-                    'enabled' : True,
-                    'color' : (0, 0, 0, 255)
-                    }, # black
-                'symbolLine' : {
-                    'enabled' : True,
-                    'color' : (0, 0, 0, 255)
-                    }, # black
-                'symbolBoundaryNo' : {
-                    'enabled' : True,
-                    'color' : (126, 126, 126, 255)
-                    }, # grey
-                'symbolBoundaryOne' : {
-                    'enabled' : True,
-                    'color' : (0, 255, 0, 255)
-                    }, # green
-                'symbolBoundaryTwo' : {
-                    'enabled' : True,
-                    'color' : (255, 135, 0, 255)
-                    }, # orange
-                'symbolCentroidIn' : {
-                    'enabled' : True,
-                    'color' : (0, 0, 255, 255)
-                    }, # blue
-                'symbolCentroidOut' : {
-                    'enabled' : True,
-                    'color' : (165, 42, 42, 255)
-                    }, # brown
-                'symbolCentroidDup' : {
-                    'enabled' : True,
-                    'color' : (156, 62, 206, 255)
-                    }, # violet
-                'symbolNodeOne' : {
-                    'enabled' : True,
-                    'color' : (255, 0, 0, 255)
-                    }, # red
-                'symbolNodeTwo' : {
-                    'enabled' : True,
-                    'color' : (0, 86, 45, 255)
-                    }, # dark green
-                'symbolVertex' : {
-                    'enabled' : False,
-                    'color' : (255, 20, 147, 255)
-                    }, # deep pink
-                'symbolArea' : {
-                    'enabled' : False,
-                    'color' : (217, 255, 217, 255)
-                    }, # green
-                'symbolDirection' : {
-                    'enabled' : False,
-                    'color' : (255, 0, 0, 255)
-                    }, # red
+                'symbol' : {
+                    'highlight' : {
+                        'enabled' : None,
+                        'color' : (255, 255, 0, 255)
+                        }, # yellow
+                    'highlightDupl' : {
+                        'enabled' : None,
+                        'color' : (255, 72, 0, 255)
+                        }, # red
+                    'point' : {
+                        'enabled' : True,
+                        'color' : (0, 0, 0, 255)
+                        }, # black
+                    'line' : {
+                        'enabled' : True,
+                        'color' : (0, 0, 0, 255)
+                        }, # black
+                    'boundaryNo' : {
+                        'enabled' : True,
+                        'color' : (126, 126, 126, 255)
+                        }, # grey
+                    'boundaryOne' : {
+                        'enabled' : True,
+                        'color' : (0, 255, 0, 255)
+                        }, # green
+                    'boundaryTwo' : {
+                        'enabled' : True,
+                        'color' : (255, 135, 0, 255)
+                        }, # orange
+                    'centroidIn' : {
+                        'enabled' : True,
+                        'color' : (0, 0, 255, 255)
+                        }, # blue
+                    'centroidOut' : {
+                        'enabled' : True,
+                        'color' : (165, 42, 42, 255)
+                        }, # brown
+                    'centroidDup' : {
+                        'enabled' : True,
+                        'color' : (156, 62, 206, 255)
+                        }, # violet
+                    'nodeOne' : {
+                        'enabled' : True,
+                        'color' : (255, 0, 0, 255)
+                        }, # red
+                    'nodeTwo' : {
+                        'enabled' : True,
+                        'color' : (0, 86, 45, 255)
+                        }, # dark green
+                    'vertex' : {
+                        'enabled' : False,
+                        'color' : (255, 20, 147, 255)
+                        }, # deep pink
+                    'area' : {
+                        'enabled' : False,
+                        'color' : (217, 255, 217, 255)
+                        }, # green
+                    'direction' : {
+                        'enabled' : False,
+                        'color' : (255, 0, 0, 255)
+                        }, # red
+                    },
                 # display
                 'lineWidth' : {
                     'value' : 2,
@@ -272,17 +296,19 @@ class Settings:
                     'thresh' : 0
                     },
                 # select feature (point, line, centroid, boundary)
-                'selectFeaturePoint' : {
-                    'enabled' : True
-                    },
-                'selectFeatureLine' : {
-                    'enabled' : True
-                    },
-                'selectFeatureCentroid' : {
-                    'enabled' : True
-                    },
-                'selectFeatureBoundary' : {
-                    'enabled' : True
+                'selectType': {
+                    'point' : {
+                        'enabled' : True
+                        },
+                    'line' : {
+                        'enabled' : True
+                        },
+                    'centroid' : {
+                        'enabled' : True
+                        },
+                    'boundary' : {
+                        'enabled' : True
+                        },
                     },
                 'selectThresh' : {
                     'value' : 10,
@@ -613,7 +639,7 @@ class Settings:
                                                                               'detail' : e })
         
         file.close()
-
+        
         return filePath
 
     def __parseValue(self, value, read=False):
@@ -676,8 +702,10 @@ class Settings:
                     return settings[group][key][subkey]  
 
         except KeyError:
-            raise gcmd.SettingsError("%s %s:%s:%s." % (_("Unable to get value"),
-                                                       group, key, subkey))
+            #raise gcmd.SettingsError("%s %s:%s:%s." % (_("Unable to get value"),
+            #                                           group, key, subkey))
+            print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % \
+                (group, key, subkey)
         
     def Set(self, group, value, key=None, subkey=None, internal=False):
         """Set value of key/subkey
@@ -1013,14 +1041,14 @@ class PreferencesDialog(wx.Dialog):
         """Create notebook page for commad dialog settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Command"))
-
+        
         border = wx.BoxSizer(wx.VERTICAL)
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Command dialog settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
+        
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
-
+        
         #
         # command dialog settings
         #
@@ -1031,7 +1059,7 @@ class PreferencesDialog(wx.Dialog):
                                 name="IsChecked")
         overwrite.SetValue(self.settings.Get(group='cmd', key='overwrite', subkey='enabled'))
         self.winId['cmd:overwrite:enabled'] = overwrite.GetId()
-
+        
         gridSizer.Add(item=overwrite,
                       pos=(row, 0), span=(1, 2))
         row += 1
@@ -1041,7 +1069,7 @@ class PreferencesDialog(wx.Dialog):
                             name="IsChecked")
         close.SetValue(self.settings.Get(group='cmd', key='closeDlg', subkey='enabled'))
         self.winId['cmd:closeDlg:enabled'] = close.GetId()
-
+        
         gridSizer.Add(item=close,
                       pos=(row, 0), span=(1, 2))
         row += 1
@@ -1051,7 +1079,7 @@ class PreferencesDialog(wx.Dialog):
                           name="IsChecked")
         add.SetValue(self.settings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
         self.winId['cmd:addNewLayer:enabled'] = add.GetId()
-
+        
         gridSizer.Add(item=add,
                       pos=(row, 0), span=(1, 2))
         row += 1
@@ -1066,22 +1094,22 @@ class PreferencesDialog(wx.Dialog):
                               name="GetStringSelection")
         verbosity.SetStringSelection(self.settings.Get(group='cmd', key='verbosity', subkey='selection'))
         self.winId['cmd:verbosity:selection'] = verbosity.GetId()
-
+        
         gridSizer.Add(item=verbosity,
                       pos=(row, 1))
-
+        
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
-
+        
         #
         # raster settings
         #
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Raster settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
+        
         gridSizer = wx.GridBagSizer (hgap=3, vgap=3)
         gridSizer.AddGrowableCol(0)
-
+        
         #
         # raster overlay
         #
@@ -1091,13 +1119,33 @@ class PreferencesDialog(wx.Dialog):
                                     name='IsChecked')
         rasterOverlay.SetValue(self.settings.Get(group='cmd', key='rasterOverlay', subkey='enabled'))
         self.winId['cmd:rasterOverlay:enabled'] = rasterOverlay.GetId()
-
+        
         gridSizer.Add(item=rasterOverlay,
                       pos=(row, 0), span=(1, 2))
         
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+        
+        #
+        # vector settings
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Vector settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        
+        gridSizer = wx.FlexGridSizer (cols=6, hgap=3, vgap=3)
+        
+        for type in ('point', 'line', 'centroid', 'boundary',
+                        'area', 'face'):
+            chkbox = wx.CheckBox(parent=panel, label=type)
+            checked = self.settings.Get(group='cmd', key='showType',
+                                        subkey=[type, 'enabled'])
+            chkbox.SetValue(checked)
+            self.winId['cmd:showType:%s:enabled' % type] = chkbox.GetId()
+            gridSizer.Add(item=chkbox)
 
+        sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=3)
+        
         panel.SetSizer(border)
         
         return panel
@@ -1407,7 +1455,12 @@ class PreferencesDialog(wx.Dialog):
     def __UpdateSettings(self):
         """Update user settings"""
         for item in self.winId.keys():
-            group, key, subkey = item.split(':')
+            try:
+                group, key, subkey = item.split(':')
+                subkey1 = None
+            except ValueError:
+                group, key, subkey, subkey1 = item.split(':')
+            
             id = self.winId[item]
             win = self.FindWindowById(id)
             if win.GetName() == 'GetValue':
@@ -1422,8 +1475,11 @@ class PreferencesDialog(wx.Dialog):
                 value = tuple(win.GetValue())
             else:
                 value = win.GetValue()
-
-            self.settings.Set(group, value, key, subkey)
+            
+            if subkey1:
+                self.settings.Set(group, value, key, [subkey, subkey1])
+            else:
+                self.settings.Set(group, value, key, subkey)
             
         #
         # update default window dimension

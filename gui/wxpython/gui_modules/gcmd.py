@@ -67,6 +67,11 @@ class GException(Exception):
                                message=self.message,
                                style=wx.ICON_ERROR | wx.CENTRE)
         dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
+        if self.parent:
+            dlg.CentreOnParent()
+        else:
+            dlg.CentreOnScreen()
+
         dlg.ShowModal()
         
         return ''

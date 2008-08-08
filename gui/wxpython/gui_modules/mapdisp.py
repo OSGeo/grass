@@ -626,7 +626,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
         # if len(self.Map.GetListOfLayers()) == 0:
         #    return False
-
+        
         if self.img is None:
             render = True
 
@@ -689,8 +689,12 @@ class BufferedWindow(MapWindow, wx.Window):
             # draw map
             self.pdcVector.Clear()
             self.pdcVector.RemoveAll()
-            item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
-            if self.tree.IsItemChecked(item):
+            try:
+                item = self.tree.FindItemByData('maplayer', digitToolbar.GetLayer())
+            except TypeError:
+                item = None
+
+            if item and self.tree.IsItemChecked(item):
                 self.parent.digit.driver.DrawMap()
 
         #
@@ -1156,7 +1160,9 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.moveIds   = [] 
                 if digitToolbar.action in ["moveVertex", "editLine"]:
                     # set pen
-                    self.pen = self.polypen = wx.Pen(colour=UserSettings.Get(group='vdigit', key="symbolHighlight", subkey='color'),
+                    pcolor = UserSettings.Get(group='vdigit', key="symbol",
+                                              subkey=["highlight", "color"])
+                    self.pen = self.polypen = wx.Pen(colour=pcolor,
                                                      width=2, style=wx.SHORT_DASH)
                     self.pdcTmp.SetPen(self.polypen)
 
@@ -1549,7 +1555,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     # copy features from background map
                     self.copyIds = digitClass.SelectLinesFromBackgroundMap(pos1, pos2)
                     if len(self.copyIds) > 0:
-                        color = UserSettings.Get(group='vdigit', key='symbolHighlight', subkey='color')
+                        color = UserSettings.Get(group='vdigit', key='symbol',
+                                                 subkey=['highlight', 'color'])
                         colorStr = str(color[0]) + ":" + \
                             str(color[1]) + ":" + \
                             str(color[2]) + ":"
@@ -2573,7 +2580,9 @@ class MapFrame(wx.Frame):
                               CloseButton(False).Layer(2))
         # vector digitizer
         elif name == "vdigit":
-            self.toolbars['vdigit'] = toolbars.VDigitToolbar(self, self.Map, self.tree)
+            self.toolbars['vdigit'] = toolbars.VDigitToolbar(parent=self, map=self.Map,
+                                                             layerTree=self.tree,
+                                                             log=self.gismanager.goutput)
 
             for toolRow in range(0, self.toolbars['vdigit'].numOfRows):
                 self._mgr.AddPane(self.toolbars['vdigit'].toolbar[toolRow],

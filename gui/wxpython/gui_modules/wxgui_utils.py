@@ -742,8 +742,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             menuform.GUI().ParseCommand(['d.rast.num'], completed=(self.GetOptData,layer,params),
                                         parentframe=self)
         elif ltype == 'vector':
-            menuform.GUI().ParseCommand(['d.vect'], completed=(self.GetOptData,layer,params),
-                                        parentframe=self)
+            types = ''
+            for type in UserSettings.Get(group='cmd', key='showType').keys():
+                if UserSettings.Get(group='cmd', key='showType', subkey=[type, 'enabled']):
+                    types += type + ','
+            types = types.rstrip(',')
+            
+            menuform.GUI().ParseCommand(['d.vect', 'type=%s' % types],
+                                         completed=(self.GetOptData,layer,params),
+                                         parentframe=self)
         elif ltype == 'thememap':
             # -s flag requested, otherwise only first thematic category is displayed
             # should be fixed by C-based d.thematic.* modules

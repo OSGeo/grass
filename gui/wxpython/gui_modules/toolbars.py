@@ -353,11 +353,12 @@ class VDigitToolbar(AbstractToolbar):
     Toolbar for digitization
     """
 
-    def __init__(self, parent, map, layerTree=None):
+    def __init__(self, parent, map, layerTree=None, log=None):
         self.mapcontent    = map       # Map class instance
         self.parent        = parent    # MapFrame
         self.layerTree     = layerTree # reference to layer tree associated to map display
-
+        self.log           = log       # log area
+        
         # currently selected map layer for editing (reference to MapLayer instance)
         self.mapLayer = None
         # list of vector layers from Layer Manager (only in the current mapset)
@@ -769,7 +770,8 @@ class VDigitToolbar(AbstractToolbar):
             else:
                 openVectorMap = None
             mapName = gdialogs.CreateNewVector(self.parent,
-                                               exceptMap=openVectorMap)
+                                               exceptMap=openVectorMap, log=self.log,
+                                               cmdDef=(['v.edit', 'tool=create'], "map"))
             if mapName:
                 # add layer to map layer tree
                 if self.layerTree:
