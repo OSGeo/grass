@@ -171,7 +171,8 @@ public:
     int DrawMap(bool);
 
     /* select */
-    int SelectLinesByBox(double, double, double, double, double, double, int);
+    int SelectLinesByBox(double, double, double, double,
+			 double, double, int, bool);
     std::vector<double> SelectLineByPoint(double, double, double,
 					  double, int, int);
 

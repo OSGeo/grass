@@ -1375,7 +1375,7 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         nselected = self.__display.SelectLinesByBox(x1, y1, -1.0 * wxvdigit.PORT_DOUBLE_MAX,
                                                     x2, y2, wxvdigit.PORT_DOUBLE_MAX,
-                                                    type)
+                                                    type, UserSettings.Get(group='vdigit', key='selectInside', subkey='enabled'))
         
         Debug.msg(4, "CDisplayDriver.SelectLinesByBox(): selected=%d" % \
                       nselected)
@@ -1718,10 +1718,9 @@ class VDigitSettingsDialog(wx.Dialog):
         #
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Snapping"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        flexSizer1 = wx.FlexGridSizer (cols=3, hgap=5, vgap=5)
-        flexSizer1.AddGrowableCol(0)
-        flexSizer2 = wx.FlexGridSizer (cols=2, hgap=5, vgap=5)
-        flexSizer2.AddGrowableCol(0)
+        flexSizer = wx.FlexGridSizer (cols=3, hgap=5, vgap=5)
+        flexSizer.AddGrowableCol(0)
+
         # snapping
         text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Snapping threshold"))
         self.snappingValue = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(75, -1),
@@ -1732,18 +1731,9 @@ class VDigitSettingsDialog(wx.Dialog):
                                       choices=["screen pixels", "map units"])
         self.snappingUnit.SetStringSelection(UserSettings.Get(group='vdigit', key="snapping", subkey='units'))
         self.snappingUnit.Bind(wx.EVT_CHOICE, self.OnChangeSnappingUnits)
-        flexSizer1.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer1.Add(self.snappingValue, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
-        flexSizer1.Add(self.snappingUnit, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
-        # background map
-        text = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Background vector map"))
-        self.backgroundMap = gselect.Select(parent=panel, id=wx.ID_ANY, size=(200,-1),
-                                           type="vector", exceptOf=[self.parent.digit.map])
-        self.backgroundMap.SetValue(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value'))
-        self.backgroundMap.Bind(wx.EVT_TEXT, self.OnChangeBackgroundMap)
-        flexSizer2.Add(text, proportion=1, flag=wx.ALIGN_CENTER_VERTICAL)
-        flexSizer2.Add(self.backgroundMap, proportion=1, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
-        #flexSizer.Add(self.snappingUnit, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
+        flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(self.snappingValue, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
+        flexSizer.Add(self.snappingUnit, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         vertexSizer = wx.BoxSizer(wx.VERTICAL)
         self.snapVertex = wx.CheckBox(parent=panel, id=wx.ID_ANY,
@@ -1758,11 +1748,32 @@ class VDigitSettingsDialog(wx.Dialog):
         vertexSizer.Add(item=self.snappingInfo, proportion=0,
                         flag=wx.ALL | wx.EXPAND, border=1)
 
-        sizer.Add(item=flexSizer1, proportion=1, flag=wx.TOP | wx.LEFT | wx.EXPAND, border=1)
-        sizer.Add(item=flexSizer2, proportion=1, flag=wx.TOP | wx.LEFT | wx.EXPAND, border=1)
-        sizer.Add(item=vertexSizer, proportion=1, flag=wx.BOTTOM | wx.LEFT | wx.EXPAND, border=1)
+        sizer.Add(item=flexSizer, proportion=1, flag=wx.EXPAND)
+        sizer.Add(item=vertexSizer, proportion=1, flag=wx.EXPAND)
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
+        #
+        # background vector map
+        #
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Background vector map"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        boxSizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.backgroundMap = gselect.Select(parent=panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
+                                           type="vector", exceptOf=[self.parent.digit.map])
+        self.backgroundMap.SetValue(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value'))
+        self.backgroundMap.Bind(wx.EVT_TEXT, self.OnChangeBackgroundMap)
+        boxSizer.Add(item=self.backgroundMap, proportion=0,
+                     flag=wx.EXPAND | wx.ALL, border=5)
+        boxSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                        label=_("This vector map is used for snapping and copying features.")),
+                     proportion=0,
+                     flag=wx.EXPAND | wx.ALL, border=5)
+
+        sizer.Add(item=boxSizer, proportion=1, flag=wx.TOP | wx.LEFT | wx.EXPAND, border=1)
+        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
+        
         #
         # select box
         #
@@ -1794,12 +1805,19 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(units, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                       border=10)
 
+        self.selectIn = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                    label=_("Select only features inside of selection bounding box"))
+        self.selectIn.SetValue(UserSettings.Get(group='vdigit', key="selectInside", subkey='enabled'))
+        self.selectIn.SetToolTipString(_("By default are selected all features overlapping selection bounding box "))
+        
         self.checkForDupl = wx.CheckBox(parent=panel, id=wx.ID_ANY,
                                         label=_("Check for duplicates"))
         self.checkForDupl.SetValue(UserSettings.Get(group='vdigit', key="checkForDupl", subkey='enabled'))
-        flexSizer.Add(item=self.checkForDupl, proportion=0, flag=wx.EXPAND)
+
 
         sizer.Add(item=flexSizer, proportion=0, flag=wx.EXPAND)
+        sizer.Add(item=self.selectIn, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
+        sizer.Add(item=self.checkForDupl, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)        
         border.Add(item=sizer, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
 
         #
@@ -2200,6 +2218,8 @@ class VDigitSettingsDialog(wx.Dialog):
                          value=int(self.selectThreshValue.GetValue()))
         UserSettings.Set(group='vdigit', key="checkForDupl", subkey='enabled',
                          value=self.checkForDupl.IsChecked())
+        UserSettings.Set(group='vdigit', key="selectInside", subkey='enabled',
+                         value=self.selectIn.IsChecked())
 
         # on-exit
         UserSettings.Set(group='vdigit', key="saveOnExit", subkey='enabled',

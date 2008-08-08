@@ -734,7 +734,7 @@ class VDigitToolbar(AbstractToolbar):
     def OnQuery(self, event):
         """Query selected lines/boundaries"""
         Debug.msg(2, "Digittoolbar.OnQuery(): %s" % \
-                      UserSettings.Get(group='vdigit', key='query', subkey='type'))
+                      UserSettings.Get(group='vdigit', key='query', subkey='selection'))
         self.action="queryLine"
         self.parent.MapWindow.mouse['box'] = 'box'
 

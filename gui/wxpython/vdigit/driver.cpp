@@ -930,13 +930,15 @@ void DisplayDriver::PrintIds()
 
    \param[in] x1,y1,z1,x2,y2,z3 bounding box definition
    \param[in] type feature type
+   \param[in] onlyInside if true select only features inside
+   of bounding box (not overlapping)
 
    \return number of selected features
    \return -1 on error
 */
 int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1, 
 				    double x2, double y2, double z2,
-				    int type)
+				    int type, bool onlyInside)
 {
     if (!mapInfo)
 	return -1;
@@ -964,6 +966,21 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
 
     for (int i = 0; i < list->n_values; i++) {
 	line = list->value[i];
+	if (onlyInside) {
+	    bool inside;
+	    inside = true;
+	    Vect_read_line(mapInfo, points, cats, line);
+	    for (int p = 0; p < points->n_points; p++) {
+		if (!Vect_point_in_poly(points->x[p], points->y[p],
+					bbox)) {
+		    inside = false;
+		    break;
+		}
+	    }
+	    if (!inside)
+		continue; /* skip lines just overlapping bbox */
+	}
+	
 	if (!IsSelected(line)) {
 	    Vect_list_append(selected, line);
 	}
