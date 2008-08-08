@@ -1270,7 +1270,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.mouse['box'] = 'box'
 
             elif digitToolbar.action == "copyLine":
-                self.copyIds = None
+                self.copyIds = []
                 self.layerTmp = None
 
             elif digitToolbar.action == "zbulkLine":
