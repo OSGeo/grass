@@ -728,7 +728,7 @@ char *G_get_raster_cat(void *rast,
 
 int G_unmark_raster_cats(struct Categories *pcats)
 {				/* structure to hold category info */
-    register int i;
+    int i;
 
     for (i = 0; i < pcats->ncats; i++)
 	pcats->marks[i] = 0;

@@ -145,7 +145,7 @@ static int get_stmt(FILE * fd, dbString * stmt)
 	G_chop(buf2);
 	len = strlen(buf2);
 
-	G_strncpy(buf3, buf2, 6);
+	strncpy(buf3, buf2, 6);
 	if (G_strcasecmp(buf3, "select") == 0)
 	    G_fatal_error(_("Use db.select for SELECT SQL statements"));
 

@@ -188,7 +188,7 @@ label_t *labels_init(struct params *p, int *n_labels)
 	if (strlen(db_get_string(&value)) == 0)
 	    continue;
 
-	labels[i].text = G_strdup(db_get_string(&value));
+	labels[i].text = G_store(db_get_string(&value));
 	labels[i].cat = cat;
 	labels[i].type = type;
 	labels[i].shape = Points;

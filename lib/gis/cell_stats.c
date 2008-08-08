@@ -67,11 +67,11 @@ int G_init_cell_stats(struct Cell_stats *s)
 int G_update_cell_stats(const CELL * cell, int n, struct Cell_stats *s)
 {
     CELL cat;
-    register int p, q;
+    int p, q;
     int idx, offset;
     int N;
-    register NODE *node, *pnode;
-    register NODE *new_node;
+    NODE *node, *pnode;
+    NODE *new_node;
 
     if (n <= 0)
 	return 1;
@@ -163,8 +163,8 @@ int G_update_cell_stats(const CELL * cell, int n, struct Cell_stats *s)
 
 static int init_node(NODE * node, int idx, int offset)
 {
-    register long *count;
-    register int i;
+    long *count;
+    int i;
 
     count = node->count = (long *)G_calloc(i = NCATS, sizeof(long));
     while (i--)
@@ -203,8 +203,8 @@ static int init_node(NODE * node, int idx, int offset)
 
 int G_find_cell_stat(CELL cat, long *count, const struct Cell_stats *s)
 {
-    register int q;
-    register int idx;
+    int q;
+    int idx;
     int offset;
 
     *count = 0;

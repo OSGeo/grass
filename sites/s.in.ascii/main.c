@@ -183,22 +183,22 @@ int G_site_put_new(FILE * fptr, Site * s, int has_cat)
     for (i = 0; i < s->dim_alloc; ++i) {
 	format_double(s->dim[i], nbuf);
 	sprintf(xbuf, "%s|", nbuf);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
     }
 
     if (has_cat) {
 	switch (s->cattype) {
 	case CELL_TYPE:
 	    sprintf(xbuf, "#%d ", s->ccat);
-	    G_strcat(buf, xbuf);
+	    strcat(buf, xbuf);
 	    break;
 	case FCELL_TYPE:
 	    sprintf(xbuf, "#%g ", s->fcat);
-	    G_strcat(buf, xbuf);
+	    strcat(buf, xbuf);
 	    break;
 	case DCELL_TYPE:
 	    sprintf(xbuf, "#%g ", s->dcat);
-	    G_strcat(buf, xbuf);
+	    strcat(buf, xbuf);
 	    break;
 	}
     }
@@ -207,14 +207,14 @@ int G_site_put_new(FILE * fptr, Site * s, int has_cat)
 	/* we create a #cat entry in site_list from the current site number 11/99 */
 	sprintf(xbuf, "#%d ", loop);
 	loop++;
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
     }
 
     /* now import attributes */
     for (i = 0; i < s->dbl_alloc; ++i) {
 	format_double(s->dbl_att[i], nbuf);
 	sprintf(xbuf, "%%%s ", nbuf);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
     }
 
     for (i = 0; i < s->str_alloc; ++i) {
@@ -238,16 +238,16 @@ int G_site_put_new(FILE * fptr, Site * s, int has_cat)
 		xbuf[k] = (char)NULL;
 	    }
 	    else
-		G_strcpy(xbuf, s->str_att[i]);
+		strcpy(xbuf, s->str_att[i]);
 
-	    G_strcpy(s->str_att[i], xbuf);
+	    strcpy(s->str_att[i], xbuf);
 
 	    if (G_index(s->str_att[i], SPACE) != (char *)NULL)
 		sprintf(xbuf, "@\"%s\" ", s->str_att[i]);
 	    else
 		sprintf(xbuf, "@%s ", s->str_att[i]);
 
-	    G_strcat(buf, xbuf);
+	    strcat(buf, xbuf);
 	}
     }
     fprintf(fptr, "%s\n", buf);

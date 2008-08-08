@@ -191,8 +191,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    G_strcpy(Current.name, vold->answer);
-    G_strcpy(Trans.name, vnew->answer);
+    strcpy(Current.name, vold->answer);
+    strcpy(Trans.name, vnew->answer);
 
     Vect_check_input_output_name(vold->answer, vnew->answer, GV_FATAL_EXIT);
 
@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
     }
 
     if (pointsfile->answer != NULL && !shift_flag->answer) {
-	G_strcpy(Coord.name, pointsfile->answer);
+	strcpy(Coord.name, pointsfile->answer);
     }
     else {
 	Coord.name[0] = '\0';

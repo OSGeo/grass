@@ -124,13 +124,13 @@ Site *get_site(FILE * fd, int dims, char *fs, int *has_cat)
 	case '#':		/* category field */
 	    if (n == 0) {
 		sscanf(buf, "#%s ", ebuf);
-		if (G_strstr(ebuf, ".") == NULL &&
+		if (strstr(ebuf, ".") == NULL &&
 		    sscanf(ebuf, "%d", &itmp) == 1) {
 		    site->cattype = CELL_TYPE;
 		    site->ccat = itmp;
 		    n++;
 		}
-		else if (G_strstr(ebuf, ".") != NULL &&
+		else if (strstr(ebuf, ".") != NULL &&
 			 sscanf(ebuf, "%f", &ftmp) == 1) {
 		    site->cattype = FCELL_TYPE;
 		    site->fcat = ftmp;
@@ -180,7 +180,7 @@ Site *get_site(FILE * fd, int dims, char *fs, int *has_cat)
 		}
 
 		if ((err = cleanse_string(buf)) > 0) {
-		    G_strncpy(site->str_att[c++], buf, err);
+		    strncpy(site->str_att[c++], buf, err);
 		    buf += err;
 		}
 		else
@@ -209,7 +209,7 @@ Site *get_site(FILE * fd, int dims, char *fs, int *has_cat)
 	       }
 
 	       if ((err = cleanse_string (buf)) > 0) {
-	       G_strncpy (site->str_att[c++], buf, err);
+	       strncpy (site->str_att[c++], buf, err);
 	       buf += err;
 	       }
 	       else *buf = '\0';
@@ -258,7 +258,7 @@ Site *get_site(FILE * fd, int dims, char *fs, int *has_cat)
 		}
 
 		if ((err = cleanse_string(buf)) > 0) {
-		    G_strncpy(site->str_att[c++], buf, err);
+		    strncpy(site->str_att[c++], buf, err);
 		    buf += err;
 		}
 		else

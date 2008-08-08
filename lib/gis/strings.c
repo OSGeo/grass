@@ -26,157 +26,6 @@
 #define NULL		0
 #endif
 
-static char *G_strend(const char *S)
-{
-    while (*S)
-	S++;
-    return (char *)S;
-}
-
-/*!
- * \brief Copies characters from the string F into the string T.
- *
- * This function has undefined results if the strings overlap.
- *
- * \param[out] T target string 
- * \param[in] F source string
- *
- * \return pointer to T
- */
-char *G_strcpy(char *T, const char *F)
-{
-    char *d = T;
-
-    while ((*d++ = *F++)) ;
-    return (T);
-}
-
-/*!
- * \brief Copies characters from the string F into the string T.
- * 
- * Copies just the first n characters from the string F. At the end
- * the null terminator is written into the string T.
- *
- * \param[out] T target string
- * \param[in] F source string
- * \param[in] n number of characters to copy
- *
- * \return T value 
- */
-char *G_chrcpy(char *T, const char *F, int n)
-{
-    char *d = T;
-
-    while (n--)
-	*d++ = *F++;
-    *d = '\0';
-    return (T);
-}
-
-/*!
- * \brief This function is similar to G_chrcpy() but always copies at least
- * n characters into the string T.
- * 
- * If the length of F is more than n, then copies just the first n
- * characters. At the end the null terminator is written into the
- * string T.
- *
- * \param[out] T target string
- * \param[in] F source string
- * \param[in] n number of characters to copy
- *
- * \return T value
- */
-char *G_strncpy(char *T, const char *F, int n)
-{
-    char *d = T;
-
-    while (n-- && *F)
-	*d++ = *F++;
-    *d = '\0';
-    return (T);
-}
-
-/*!
- * \brief Copies characters from the string F (not including the
- * terminating null character) into the string T.
- *
- * \param[out] T target string
- * \param[in] F source string
- *
- * \return T value
- */
-char *G_strmov(char *T, const char *F)
-{
-    char *d = T;
-
-    while (*F)
-	*d++ = *F++;
-    return (T);
-}
-
-/*!
- * \brief This copies characters from the string F (exactly n
- * characters) into the string T.
- *
- * The terminating null character is not explicitly written into the
- * string T.
- *
- * \param[out] T target string
- * \param[in] F source string
- * \param[in] n number of characters to copy
- *
- * \return T value
- */
-char *G_chrmov(char *T, const char *F, int n)
-{
-    char *d = T;
-
-    while (n--)
-	*d++ = *F++;
-    return (T);
-}
-
-/*!
- * \brief This copies characters from the string F into the string T.
- *
- * This function is similar to G_strcpy(), except that the
- * characters from F are concatenated or appended to the end of
- * T, instead of overwriting it.  That is, the first character from
- * F overwrites the null character marking the end of T.
- *
- * \param[out] T target string
- * \param[in] F source string
- *
- * \return T value
- */
-char *G_strcat(char *T, const char *F)
-{
-    G_strcpy(G_strend(T), F);
-    return (T);
-}
-
-/*!
- * \brief This function is like G_strcat() except that not more than n
- * characters from F are appended to the end of T.
- *
- * This function is similar to G_strcpy(), except that the
- * characters from F are concatenated or appended to the end of
- * T, instead of overwriting it.  That is, the first character from
- * F overwrites the null character marking the end of T.
- *
- * \param[out] T target string
- * \param[in] F source string
- * \param[in] n number of character to copy
- *
- * \return T value
- */
-char *G_chrcat(char *T, const char *F, int n)
-{
-    G_chrcpy(G_strend(T), F, n);
-    return (T);
-}
-
 /*!
  * \brief String compare ignoring case (upper or lower)
  *
@@ -216,63 +65,25 @@ int G_strcasecmp(const char *x, const char *y)
     return 0;
 }
 
-/*!
- * \brief Finds the first occurrence of the character C in the
- * null-terminated string beginning at mainString
+/**
+ * \brief Copy string to allocated memory.
  *
- * \param[in] mainString string where to find sub-string
- * \param[in] subString sub-string
- *
- * \return a pointer to the first occurrence of subString in
- * mainString
- * \return NULL if no occurrences are found
+ * This routine allocates enough memory to hold the string <b>s</b>,
+ * copies <b>s</b> to the allocated memory, and returns a pointer
+ * to the allocated memory.
+ * 
+ *  \param[in] s string
+ *  \return pointer to newly allocated string
  */
-char *G_strstr(const char *mainString, const char *subString)
+
+char *G_store(const char *s)
 {
-    const char *p;
-    const char *q;
-    int length;
+    char *buf;
 
-    p = subString;
-    q = mainString;
-    length = strlen(subString);
+    buf = G_malloc(strlen(s) + 1);
+    strcpy(buf, s);
 
-    do {
-	while (*q != '\0' && *q != *p) {	/* match 1st subString char */
-	    q++;
-	}
-    } while (*q != '\0' && strncmp(p, q, length) != 0 && q++);
-    /* Short-circuit evaluation is your friend */
-
-    if (*q == '\0') {		/* ran off end of mainString */
-	return NULL;
-    }
-    else {
-	return (char *)q;
-    }
-}
-
-/*!
- * \brief Copies the null-terminated string into a newly
- * allocated string. The string is allocated using G_malloc().
- *
- * \param[in] string the string to duplicate
- *
- * \return pointer to a string that is a duplicate of the string
- *  given to G_strdup().
- * \return NULL if unable to allocate the required space
- */
-char *G_strdup(const char *string)
-{
-    char *p;
-
-    p = G_malloc(strlen(string) + 1);
-
-    if (p != NULL) {
-	strcpy(p, string);
-    }
-
-    return p;
+    return buf;
 }
 
 /*!
@@ -323,7 +134,7 @@ char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
 
     /* Make sure old_str and new_str are not NULL */
     if (old_str == NULL || new_str == NULL)
-	return G_strdup(buffer);
+	return G_store(buffer);
     /* Make sure buffer is not NULL */
     if (buffer == NULL)
 	return NULL;
@@ -332,7 +143,7 @@ char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
     B = strstr(buffer, old_str);
     if (B == NULL)
 	/* return NULL; */
-	return G_strdup(buffer);
+	return G_store(buffer);
 
     if (strlen(new_str) > strlen(old_str)) {
 	/* Count occurences of old_str */
@@ -340,7 +151,7 @@ char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
 	len = strlen(old_str);
 	B = buffer;
 	while (B != NULL && *B != '\0') {
-	    B = G_strstr(B, old_str);
+	    B = strstr(B, old_str);
 	    if (B != NULL) {
 		B += len;
 		count++;
@@ -388,7 +199,7 @@ char *G_str_replace(char *buffer, const char *old_str, const char *new_str)
  */
 int G_strip(char *buf)
 {
-    register char *a, *b;
+    char *a, *b;
 
     /* remove leading white space */
     for (a = b = buf; *a == ' ' || *a == '\t'; a++) ;
@@ -417,7 +228,7 @@ int G_strip(char *buf)
  */
 char *G_chop(char *line)
 {
-    register char *f = line, *t = line;
+    char *f = line, *t = line;
 
     while (isspace(*f))		/* go to first non white-space char */
 	f++;
@@ -512,4 +323,39 @@ int G_str_to_sql(char *str)
     }
 
     return count;
+}
+
+/**
+ * \brief Remove superfluous white space.
+ *
+ * Leading and trailing white space is removed from the string 
+ * <b>line</b> and internal white space which is more than one character 
+ * is reduced to a single space character. White space here means 
+ * spaces, tabs, linefeeds, newlines, and formfeeds.
+ *
+ * \param[in,out] line
+ * \return Pointer to <b>line</b>
+ */
+
+char *G_squeeze(char *line)
+{
+    char *f = line, *t = line;
+    int l;
+
+    /* skip over space at the beginning of the line. */
+    while (isspace(*f))
+	f++;
+
+    while (*f)
+	if (!isspace(*f))
+	    *t++ = *f++;
+	else if (*++f)
+	    if (!isspace(*f))
+		*t++ = ' ';
+    *t = '\0';
+    l = strlen(line) - 1;
+    if (*(line + l) == '\n')
+	*(line + l) = '\0';
+
+    return line;
 }

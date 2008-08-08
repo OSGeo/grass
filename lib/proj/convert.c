@@ -156,8 +156,8 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
     else
 	ellpslong = G_store(ellps);
 
-    startmod = G_strstr(wkt, "GEOGCS");
-    lastpart = G_strstr(wkt, "PRIMEM");
+    startmod = strstr(wkt, "GEOGCS");
+    lastpart = strstr(wkt, "PRIMEM");
     len = strlen(wkt) - strlen(startmod);
     wkt[len] = '\0';
     if (haveparams == 2) {
@@ -199,7 +199,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(struct Key_Value * proj_info,
 
 	    G_asprintf(&buff, ",UNIT[\"%s\",", osrunit);
 
-	    startmod = G_strstr(lastpart, buff);
+	    startmod = strstr(lastpart, buff);
 	    len = strlen(lastpart) - strlen(startmod);
 	    lastpart[len] = '\0';
 

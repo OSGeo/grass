@@ -96,13 +96,13 @@ int G_site_get(struct Map_info *Map, Site * s)
 		for (i = 0; i < Map->n_site_dbl; i++)
 		    s->dbl_att[i] = 0;
 		for (i = 0; i < Map->n_site_str; i++)
-		    G_strncpy(s->str_att[i], "", MAX_SITE_STRING);
+		    strncpy(s->str_att[i], "", MAX_SITE_STRING);
 	    }
 	    else {
 		for (i = 0; i < Map->n_site_dbl; i++)
 		    s->dbl_att[i] = sa->dbl[i];
 		for (i = 0; i < Map->n_site_str; i++)
-		    G_strncpy(s->str_att[i], sa->str[i], MAX_SITE_STRING);
+		    strncpy(s->str_att[i], sa->str[i], MAX_SITE_STRING);
 	    }
 	}
 
@@ -713,7 +713,7 @@ int G__oldsite_get(FILE * ptr, Site * s, int fmt)
 	    /* allow both prefixed and unprefixed strings */
 	    if (c < s->str_alloc) {
 		if ((tmp = cleanse_string(buf)) > 0) {
-		    G_strncpy(s->str_att[c++], buf, tmp);
+		    strncpy(s->str_att[c++], buf, tmp);
 		    buf += tmp;
 		}
 		else
@@ -818,9 +818,9 @@ int G_oldsite_describe(FILE * ptr, int *dims, int *cat, int *strs, int *dbls)
 	switch (*buf) {
 	case '#':		/* category field */
 	    sscanf(buf, "#%s ", ebuf);
-	    if (G_strstr(ebuf, ".") == NULL && sscanf(ebuf, "%d", &itmp) == 1)
+	    if (strstr(ebuf, ".") == NULL && sscanf(ebuf, "%d", &itmp) == 1)
 		*cat = CELL_TYPE;
-	    else if (G_strstr(ebuf, ".") != NULL &&
+	    else if (strstr(ebuf, ".") != NULL &&
 		     sscanf(ebuf, "%f", &ftmp) == 1)
 		*cat = FCELL_TYPE;
 	    else
@@ -1065,7 +1065,7 @@ char *G_site_format(const Site * s, const char *fs, int id)
     for (i = 0; i < s->dim_alloc; ++i) {
 	format_double(s->dim[i], nbuf);
 	sprintf(xbuf, "%s%s", nfs, nbuf);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
     }
 
     nfs = (fs == NULL) ? " " : fs;
@@ -1073,19 +1073,19 @@ char *G_site_format(const Site * s, const char *fs, int id)
     switch (s->cattype) {
     case CELL_TYPE:
 	sprintf(xbuf, "%s%s%d ", nfs, ((id == 0) ? "" : "#"), (int)s->ccat);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
 	break;
     case FCELL_TYPE:
     case DCELL_TYPE:
 	sprintf(xbuf, "%s%s%g ", nfs, ((id == 0) ? "" : "#"), (float)s->fcat);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
 	break;
     }
 
     for (i = 0; i < s->dbl_alloc; ++i) {
 	format_double(s->dbl_att[i], nbuf);
 	sprintf(xbuf, "%s%s%s", nfs, ((id == 0) ? "" : "%"), nbuf);
-	G_strcat(buf, xbuf);
+	strcat(buf, xbuf);
     }
 
     for (i = 0; i < s->str_alloc; ++i) {
@@ -1114,9 +1114,9 @@ char *G_site_format(const Site * s, const char *fs, int id)
 	     else
 	     */
 
-	    G_strcpy(xbuf, s->str_att[i]);
+	    strcpy(xbuf, s->str_att[i]);
 
-	    G_strcpy(s->str_att[i], xbuf);
+	    strcpy(s->str_att[i], xbuf);
 
 	    if (G_index(s->str_att[i], SPACE) != (char *)NULL)
 		sprintf(xbuf, "%s%s\"%s\"", nfs, ((id == 0) ? "" : "@"),
@@ -1124,7 +1124,7 @@ char *G_site_format(const Site * s, const char *fs, int id)
 	    else
 		sprintf(xbuf, "%s%s%s", nfs, ((id == 0) ? "" : "@"),
 			s->str_att[i]);
-	    G_strcat(buf, xbuf);
+	    strcat(buf, xbuf);
 	}
     }
     return buf;

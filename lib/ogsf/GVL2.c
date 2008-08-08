@@ -16,6 +16,7 @@
    Tomas Paudits (February 2004)
  */
 
+#include <string.h>
 #include <grass/gis.h>
 #include <grass/G3d.h>
 #include <grass/gstypes.h>
@@ -276,7 +277,7 @@ int GVL_get_volname(int id, char *filename)
 	return (-1);
     }
 
-    G_strcpy(filename, gvl_file_get_name(gvl->hfile));
+    strcpy(filename, gvl_file_get_name(gvl->hfile));
 
     return (1);
 }
@@ -781,7 +782,7 @@ int GVL_isosurf_get_att(int id, int isosurf_id,
 		*constant = isosurf->att[att].constant;
 	    }
 	    else if (src == MAP_ATT) {
-		G_strcpy(mapname, gvl_file_get_name(isosurf->att[att].hfile));
+		strcpy(mapname, gvl_file_get_name(isosurf->att[att].hfile));
 	    }
 
 	    return (1);

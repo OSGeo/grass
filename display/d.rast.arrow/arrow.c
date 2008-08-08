@@ -186,7 +186,7 @@ int main(int argc, char **argv)
 	exit(-1);
 
 
-    G_strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);
+    strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);
     if ((mapset = G_find_cell2(layer_name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), layer_name);
 

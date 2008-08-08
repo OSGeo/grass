@@ -112,9 +112,9 @@ int main(int argc, char *argv[])
     name = parm.input->answer;
 
     if (parm.output->answer)
-	G_strncpy(outfile, parm.output->answer, sizeof(outfile) - 1);
+	strncpy(outfile, parm.output->answer, sizeof(outfile) - 1);
     else {
-	G_strncpy(outfile, name, sizeof(outfile) - 1 - 4);
+	strncpy(outfile, name, sizeof(outfile) - 1 - 4);
 	strcat(outfile, ".bin");
     }
 

@@ -650,7 +650,7 @@ int main(int argc, char *argv[])
 		}
 		else {
 		    /* Change column names to [A-Za-z][A-Za-z0-9_]* */
-		    Ogr_fieldname = G_strdup(OGR_Fld_GetNameRef(Ogr_field));
+		    Ogr_fieldname = G_store(OGR_Fld_GetNameRef(Ogr_field));
 		    G_debug(3, "Ogr_fieldname: '%s'", Ogr_fieldname);
 
 		    G_str_to_sql(Ogr_fieldname);

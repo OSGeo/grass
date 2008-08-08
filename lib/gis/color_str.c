@@ -115,7 +115,7 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
     int num_names = G_num_standard_color_names();
     int i;
 
-    G_strcpy(buf, str);
+    strcpy(buf, str);
     G_chop(buf);
 
     G_debug(3, "G_str_to_color(): str = '%s'", buf);

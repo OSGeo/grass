@@ -54,12 +54,12 @@ void user_input(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
 
-    G_strcpy(choice->fn, name->answer);
+    strcpy(choice->fn, name->answer);
 
     if (out->answer)
-	G_strcpy(choice->out, out->answer);
+	strcpy(choice->out, out->answer);
     else
-	G_strcpy(choice->out, "");
+	strcpy(choice->out, "");
 
     /* if the 4 neighbor tracing flag -t
        is specified, then set the 

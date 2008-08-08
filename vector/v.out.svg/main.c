@@ -378,7 +378,7 @@ static int mk_attribs(int cat, struct field_info *Fi, dbDriver * Driver,
 	    Column = db_get_table_column(Table, attr_cols[i]);
 	    Value = db_get_column_value(Column);
 	    db_convert_column_value_to_string(Column, &dbstring);
-	    G_strcpy(buf, db_get_column_name(Column));
+	    strcpy(buf, db_get_column_name(Column));
 	    fprintf(fpsvg, "gg:%s=\"", G_tolcase(buf));
 	    print_escaped_for_xml(db_get_string(&dbstring));
 	    fprintf(fpsvg, "\" ");

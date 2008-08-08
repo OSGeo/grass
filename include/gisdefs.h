@@ -1086,29 +1086,17 @@ void G_sleep(unsigned int);
 int G_snprintf(char *, size_t, const char *, ...)
     __attribute__ ((format(printf, 3, 4)));
 
-/* squeeze.c */
-char *G_squeeze(char *);
-
-/* store.c */
-char *G_store(const char *);
-
 /* strings.c */
-char *G_strcpy(char *, const char *);
-char *G_chrcpy(char *, const char *, int);
-char *G_strncpy(char *, const char *, int);
-char *G_strcat(char *, const char *);
-char *G_chrcat(char *, const char *, int);
-char *G_strmov(char *, const char *);
-char *G_chrmov(char *, const char *, int);
 int G_strcasecmp(const char *, const char *);
-char *G_strstr(const char *, const char *);
-char *G_strdup(const char *);
+char *G_store(const char *);
 char *G_strchg(char *, char, char);
 char *G_str_replace(char *, const char *, const char *);
+int G_strip(char *);
+char *G_chop(char *);
 void G_str_to_upper(char *);
 void G_str_to_lower(char *);
 int G_str_to_sql(char *);
-int G_strip(char *);
+char *G_squeeze(char *);
 
 /* svd.c */
 int G_svdcmp(double **, int, int, double *, double **);
@@ -1153,14 +1141,6 @@ int G_trim_decimal(char *);
 
 /* unctrl.c */
 char *G_unctrl(int);
-
-/* unix_socks.c */
-char *G_sock_get_fname(const char *);
-int G_sock_exists(const char *);
-int G_sock_bind(const char *);
-int G_sock_listen(int, unsigned int);
-int G_sock_accept(int);
-int G_sock_connect(const char *);
 
 /* verbose.c */
 int G_verbose(void);

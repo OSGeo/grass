@@ -102,10 +102,10 @@ int read_vlines(char *name, char *mapset)
 	    G_strip(data);
 	    vector.layer[vec].ltype = 0;
 
-	    if (G_strstr(data, "line"))
+	    if (strstr(data, "line"))
 		vector.layer[vec].ltype |= GV_LINE;
 
-	    if (G_strstr(data, "boundary"))
+	    if (strstr(data, "boundary"))
 		vector.layer[vec].ltype |= GV_BOUNDARY;
 
 	    continue;

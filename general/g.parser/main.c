@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 		option->answer ? option->answer : "");
 	putenv(G_store(buff));
 
-	G_strcpy(upper, option->key);
+	strcpy(upper, option->key);
 	G_str_to_upper(upper);
 	sprintf(buff, "GIS_OPT_%s=%s", upper,
 		option->answer ? option->answer : "");

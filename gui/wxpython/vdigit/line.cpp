@@ -835,7 +835,7 @@ struct Map_info** Digit::OpenBackgroundVectorMap(const char *bgmap)
     BgMap = NULL;
 
     if (!G__name_is_fully_qualified(bgmap, name, mapset)) {
-	G_strncpy(name, bgmap, GNAME_MAX);
+	strncpy(name, bgmap, GNAME_MAX);
 	mapset[0] = '\0';
     }
     if (strcmp(G_fully_qualified_name((const char*) display->mapInfo->name, (const char*) G_mapset()),
