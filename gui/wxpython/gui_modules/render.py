@@ -95,6 +95,10 @@ class Layer(object):
         """
         if len(self.cmdlist) == 0:
             return None
+        
+        # ignore in 2D
+        if self.type == '3d-raster':
+            return None
 
         Debug.msg (3, "Layer.Render(): type=%s, name=%s" % \
                        (self.type, self.name))

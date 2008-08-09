@@ -64,6 +64,8 @@ public:
     int UnloadSurface(int);
     int LoadVector(const char *, bool);
     int UnloadVector(int, bool);
+    int LoadVolume(const char*, const char *, const char *);
+    int UnloadVolume(int);
 
     /* draw.cpp */
     void Draw(bool, bool, bool);

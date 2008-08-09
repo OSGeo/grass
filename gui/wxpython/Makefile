@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs
+SUBDIRS = docs scripts
 
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 

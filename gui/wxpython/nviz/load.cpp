@@ -19,6 +19,7 @@
 #include "nviz.h"
 
 extern "C" {
+#include <grass/G3d.h>
 #include <grass/glocale.h>
 }
 
@@ -185,3 +186,85 @@ int Nviz::UnloadVector(int id, bool points)
 
     return 1;
 }
+
+/*!
+  \brief Load 3d raster map (volume)
+
+  \param name 3d raster map name
+  \param color_name 3d raster map for color (NULL for color_value)
+  \param color_value color string (named color or RGB triptet)
+
+  \return object id
+  \return -1 on failure
+*/
+int Nviz::LoadVolume(const char* name, const char *color_name, const char *color_value)
+{
+    char *mapset;
+    int id;
+
+    mapset = G_find_grid3(name, "");
+    if (mapset == NULL) {
+	G_warning(_("3d raster map <%s> not found"),
+		  name);
+	return -1;
+    }
+	    
+    /* topography */
+    id = Nviz_new_map_obj(MAP_OBJ_VOL,
+			  G_fully_qualified_name(name, mapset), 0.0,
+			  data);
+
+    if (color_name) { /* check for color map */
+	mapset = G_find_grid3(color_name, "");
+	if (mapset == NULL) {
+	    G_warning(_("3d raster map <%s> not found"),
+		      color_name);
+	    GVL_delete_vol(id);
+	    return -1;
+	}
+
+	Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
+		      G_fully_qualified_name(color_name, mapset), -1.0,
+		      data);
+    }
+    else if (color_value) { /* check for color value */
+	Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, CONST_ATT,
+		      NULL, Nviz_color_from_str(color_value),
+		      data);
+    }
+    else { /* use by default elevation map for coloring */
+	Nviz_set_attr(id, MAP_OBJ_VOL, ATT_COLOR, MAP_ATT,
+		      G_fully_qualified_name(name, mapset), -1.0,
+		      data);
+    }
+	    
+    /* focus on loaded data */
+    Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1);
+
+    G_debug(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id);
+
+    return id;
+}
+
+/*!
+  \brief Unload volume
+
+  \param id volume id
+
+  \return 1 on success
+  \return 0 on failure
+*/
+int Nviz::UnloadVolume(int id)
+{
+    if (!GVL_vol_exists(id)) {
+	return 0;
+    }
+
+    G_debug(1, "Nviz::UnloadVolume(): id=%d", id);
+
+    if (GVL_delete_vol(id) < 0)
+      return 0;
+
+    return 1;
+}
+

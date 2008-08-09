@@ -86,7 +86,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         # list of loaded map layers
         self.layers = {}
-        for type in ('raster', 'vlines', 'vpoints'):
+        for type in ('raster', 'vlines', 'vpoints', '3d-raster'):
             self.layers[type] = {}
             self.layers[type]['name'] = []
             self.layers[type]['id'] = []
@@ -122,7 +122,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.Bind(wx.EVT_MOTION, self.OnMouseAction)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseAction)
-
+        
     def OnEraseBackground(self, event):
         pass # do nothing, to avoid flashing on MSW
 
@@ -331,7 +331,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         while item and item.IsOk():
             type = self.tree.GetPyData(item)[0]['type']
             if not item.IsChecked() or \
-                    type not in ('raster', 'vector'):
+                    type not in ('raster', 'vector', '3d-raster'):
                 item = self.tree.GetNextSibling(item)
                 continue
 
@@ -348,6 +348,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             try:
                 if type == 'raster':
                     self.LoadRaster(item)
+                elif type == '3d-raster':
+                    self.LoadRaster3d(item)
             except gcmd.NvizError, e:
                 print >> sys.stderr, "Nviz:" + e.message
 
@@ -400,6 +402,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
                 # reset to default properties (lines/points)
                 self.SetVectorDefaultProp(data['vector'])
+
+            elif type == '3d-raster':
+                data[nvizType] = {}
+
+                # reset to default properties 
+                self.SetVolumeDefaultProp(data[nvizType])
         
         else:
             # check data
@@ -428,73 +436,131 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return data
 
     def LoadRaster(self, item):
-        """Load raster map and set surface attributes
+        """Load 2d raster map and set surface attributes
+
+        @param layer item
+        """
+        return self._loadRaster(item)
+
+    def LoadRaster3d(self, item):
+        """Load 3d raster map and set surface attributes
+
+        @param layer item
+        """
+        return self._loadRaster(item)
+
+    def _loadRaster(self, item):
+        """Load 2d/3d raster map and set its attributes
 
         @param layer item
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
 
-        if layer.type != 'raster':
+        if layer.type not in ('raster', '3d-raster'):
             return
 
-        id = self.nvizClass.LoadSurface(str(layer.name), None, None)
-        if id < 0:
-            print >> sys.stderr, "Nviz:" + _("Loading raster map <%s> failed") % layer.name
+        if layer.type == 'raster':
+            id = self.nvizClass.LoadSurface(str(layer.name), None, None)
+            nvizType = 'surface'
+            errorMsg = _("Loading raster map")
+        elif layer.type == '3d-raster':
+            id = self.nvizClass.LoadVolume(str(layer.name), None, None)
+            nvizType = 'volume'
+            errorMsg = _("Loading 3d raster map")
+        else:
+            id = -1
         
-        self.layers['raster']['name'].append(layer.name)
-        self.layers['raster']['id'].append(id)
+        if id < 0:
+            if layer.type in ('raster', '3d-raster'):
+                print >> sys.stderr, "Nviz:" + "%s <%s> %s" % (errorMsg, layer.name, _("failed"))
+            else:
+                print >> sys.stderr, "Nviz:" + _("Unsupported layer type '%s'") % layer.type
+        
+        self.layers[layer.type]['name'].append(layer.name)
+        self.layers[layer.type]['id'].append(id)
 
         # set default/workspace layer properties
-        data = self.SetLayerData(item, id, 'surface')
-
+        data = self.SetLayerData(item, id, nvizType)
+        
         # update properties
         self.UpdateLayerProperties(item)
-
+        
         # update tools window
         if hasattr(self.parent, "nvizToolWin") and \
-                item == self.GetSelectedLayer(type='item'):
+                item == self.GetSelectedLayer(type='item') and \
+                layer.type == 'raster':
             toolWin = self.parent.nvizToolWin
             win = toolWin.FindWindowById( \
                 toolWin.win['vector']['lines']['surface'])
-            win.SetItems(self.layers['raster']['name'])
+            win.SetItems(self.layers[layer.type]['name'])
 
-            toolWin.UpdatePage('surface')
-            toolWin.SetPage('surface')
+            toolWin.UpdatePage(nvizType)
+            toolWin.SetPage(nvizType)
             
         return id
 
     def UnloadRaster(self, item):
-        """Unload raster map
+        """Unload 2d raster map
+
+        @param layer item
+        """
+        return self._unloadRaster(item)
+
+    def UnloadRaster3d(self, item):
+        """Unload 3d raster map
+
+        @param layer item
+        """
+        return self._unloadRaster(item)
+
+    def _unloadRaster(self, item):
+        """Unload 2d/3d raster map
 
         @param item layer item
         """
         layer = self.tree.GetPyData(item)[0]['maplayer']
+
+        if layer.type not in ('raster', '3d-raster'):
+            return
+
         data = self.tree.GetPyData(item)[0]['nviz']
 
-        id = data['surface']['object']['id']
-
-        if self.nvizClass.UnloadSurface(id) == 0:
-            print >> sys.stderr, "Nviz:" + _("Unable to unload raster map <%s>") % layer.name
+        if layer.type == 'raster':
+            nvizType = 'surface'
+            unloadFn = self.nvizClass.UnloadSurface
+            errorMsg = _("Unable to unload raster map")
+            successMsg = _("Raster map")
         else:
-            print "Nviz:" + _("Raster map <%s> unloaded successfully") % layer.name
+            nvizType = 'volume'
+            unloadFn = self.nvizClass.UnloadVolume
+            errorMsg = _("Unable to unload 3d raster map")
+            successMsg = _("3d raster map")
 
-        data['surface'].pop('object')
+        id = data[nvizType]['object']['id']
 
-        idx = self.layers['raster']['id'].index(id)
-        del self.layers['raster']['name'][idx]
-        del self.layers['raster']['id'][idx]
+        if unloadFn(id) == 0:
+            print >> sys.stderr, "Nviz:" + "%s <%s>" % (errorMsg, layer.name)
+        else:
+            print "Nviz:" + "%s <%s> %s" % (successMsg, layer.name, _("unloaded successfully"))
+
+        data[nvizType].pop('object')
+
+        idx = self.layers[layer.type]['id'].index(id)
+        del self.layers[layer.type]['name'][idx]
+        del self.layers[layer.type]['id'][idx]
 
         # update tools window
-        if hasattr(self.parent, "nvizToolWin"):
+        if hasattr(self.parent, "nvizToolWin") and \
+                layer.type == 'raster':
             toolWin = self.parent.nvizToolWin
             win = toolWin.FindWindowById( \
                 toolWin.win['vector']['lines']['surface'])
-            win.SetItems(self.layers['raster']['name'])
+            win.SetItems(self.layers[layer.type]['name'])
 
             # remove surface page
-            if toolWin.notebook.GetSelection() == toolWin.page['surface']['id']:
-                toolWin.notebook.RemovePage(toolWin.page['surface']['id'])
-                toolWin.page['surface']['id'] = -1
+            if toolWin.notebook.GetSelection() == toolWin.page[nvizType]['id']:
+                toolWin.notebook.RemovePage(toolWin.page[nvizType]['id'])
+                toolWin.page[nvizType]['id'] = -1
                 toolWin.page['settings']['id'] = 1
         
     def GetSurfaceMode(self, mode, style, shade, string=False):
@@ -785,6 +851,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.update.append('vector:points:color')
             self.update.append('vector:points:surface')
             self.update.append('vector:points:height')
+
+    def SetVolumeDefaultProp(self, data):
+        """Set default volume properties"""
+        pass
         
     def Reset(self):
         """Reset (unload data)"""
@@ -1066,6 +1136,8 @@ class NvizToolWindow(wx.Frame):
         size = (size[0] + 25, size[0] + 20)
         # vector page
         self.__createVectorPage()
+        # volume page
+        self.__createVolumePage()
         # settings page
         self.__createSettingsPage()
         self.page['settings'] = { 'id' : 1 }
@@ -1713,6 +1785,103 @@ class NvizToolWindow(wx.Frame):
 
         return panel.GetBestSize()
 
+    def __createVolumePage(self):
+        """Create view settings page"""
+        panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
+        self.page['volume'] = {}
+        self.page['volume']['id'] = -1
+        self.page['volume']['panel'] = panel.GetId()
+        
+        pageSizer = wx.BoxSizer(wx.VERTICAL)
+        
+        self.win['volume'] = {}
+        
+        #
+        # volume attributes
+        #
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Volume attributes")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
+
+        self.win['volume']['attr'] = {}
+        row = 0
+        for code, attrb in (('topo', _("Topography level")),
+                            ('color', _("Color")),
+                            ('mask', _("Mask")),
+                            ('transp', _("Transparency")),
+                            ('shine', _("Shininess")),
+                            ('emit', _("Emission"))):
+            self.win['volume'][code] = {} 
+            gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                             label=attrb + ':'),
+                          pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+            use = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                             choices = [_("map")])
+            if code not in ('topo', 'color', 'shine'):
+                use.Insert(item=_("unset"), pos=0)
+                self.win['volume'][code]['required'] = False
+            else:
+                self.win['surface'][code]['required'] = True
+            if code != 'mask':
+                use.Append(item=_('constant'))
+            self.win['surface'][code]['use'] = use.GetId()
+            use.Bind(wx.EVT_CHOICE, self.OnSurfaceUse)
+            gridSizer.Add(item=use, flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(row, 1))
+            
+            map = gselect.Select(parent=panel, id=wx.ID_ANY,
+                                 # size=globalvar.DIALOG_GSELECT_SIZE,
+                                 size=(200, -1),
+                                 type="raster")
+            self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
+            map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
+            # changing map topography not allowed
+            if code == 'topo':
+                map.Enable(False)
+            gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL,
+                          pos=(row, 2))
+            
+            if code == 'color':
+                value = csel.ColourSelect(panel, id=wx.ID_ANY,
+                                          colour=UserSettings.Get(group='nviz', key='volume',
+                                                                  subkey=['color', 'value']))
+                value.Bind(csel.EVT_COLOURSELECT, self.OnSurfaceMap)
+            elif code == 'mask':
+                value = None
+            else:
+                value = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                                    initial=0)
+                if code == 'topo':
+                    value.SetRange(minVal=-1e9, maxVal=1e9)
+                elif code in ('shine', 'transp', 'emit'):
+                    value.SetRange(minVal=0, maxVal=255)
+                else:
+                    value.SetRange(minVal=0, maxVal=100)
+                value.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
+            
+            if value:
+                self.win['volume'][code]['const'] = value.GetId()
+                value.Enable(False)
+                gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                              pos=(row, 3))
+            else:
+                self.win['volume'][code]['const'] = None
+            
+            ### self.SetSurfaceUseMap(code) # -> enable map / disable constant
+                
+            row += 1
+        
+        boxSizer.Add(item=gridSizer, proportion=1,
+                     flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL,
+                      border=5)
+        
+        panel.SetSizer(pageSizer)
+        
+        return panel.GetBestSize()
+    
     def __createSettingsPage(self):
         """Create settings page"""
         panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
@@ -1835,7 +2004,7 @@ class NvizToolWindow(wx.Frame):
         hstep = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
                            initial=hvals['step'],
                            min=1,
-                           max=hvals['max']-1)
+                           max=1e6)
         self.win['settings']['view']['height']['step'] = hstep.GetId()
         gridSizer.Add(item=hstep, pos=(2, 2),
                       flag=wx.ALIGN_CENTER_VERTICAL)
@@ -2761,26 +2930,43 @@ class NvizToolWindow(wx.Frame):
                                          page=panel,
                                          text=" %s " % _("Layer properties"),
                                          select=True)
-
+            
             self.UpdateSurfacePage(layer, data['surface'])
-
+        
         elif pageId == 'vector':
             if self.notebook.GetSelection() != self.page['vector']['id']:
                 if self.page['surface']['id'] > -1:
                     self.notebook.RemovePage(self.page['surface']['id'])
                     self.page['surface']['id'] = -1
-
+                    
                 self.page['vector']['id'] = 1
                 self.page['settings']['id'] = 2
-
+                
                 panel = wx.FindWindowById(self.page['vector']['panel'])
                 self.notebook.InsertPage(n=self.page['vector']['id'],
                                          page=panel,
                                          text=" %s " % _("Layer properties"),
                                          select=True)
-
+                
             self.UpdateVectorPage(layer, data['vector'])
-        
+            
+        elif pageId == 'volume':
+            if self.notebook.GetSelection() != self.page['volume']['id']:
+                if self.page['volume']['id'] > -1:
+                    self.notebook.RemovePage(self.page['volume']['id'])
+                    self.page['volume']['id'] = -1
+                    
+                self.page['volume']['id'] = 1
+                self.page['settings']['id'] = 2
+
+                panel = wx.FindWindowById(self.page['volume']['panel'])
+                self.notebook.InsertPage(n=self.page['volume']['id'],
+                                         page=panel,
+                                         text=" %s " % _("Layer properties"),
+                                         select=True)
+                
+            self.UpdateVolumePage(layer, data['volume'])
+            
         self.pageChanging = False
         
     def UpdateSurfacePage(self, layer, data):
@@ -2962,6 +3148,10 @@ class NvizToolWindow(wx.Frame):
             win = self.FindWindowById(self.win['vector']['points']['height'][type])
             win.SetValue(data['points']['height'])
 
+    def UpdateVolumePage(self, layer, data):
+        """Update volume layer properties page"""
+        pass
+    
     def SetPage(self, name):
         """Get named page"""
         self.notebook.SetSelection(self.page[name]['id'])
