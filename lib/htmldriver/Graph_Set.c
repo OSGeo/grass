@@ -32,7 +32,7 @@ int BBOX_MINIMUM;
 int MAX_POINTS;
 int MINIMUM_DIST;
 
-int HTML_Graph_set(int argc, char **argv)
+int HTML_Graph_set(void)
 {
     char *p;
 

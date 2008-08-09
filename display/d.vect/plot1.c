@@ -35,46 +35,14 @@ struct rgb_color palette[16] = {
     {0, 139, 139}		/* 16: dark cyan */
 };
 
-/*local functions */
-static void local_plot_poly(double *xf, double *yf, int n, int type);
-
 /*global render switch */
 int render;
-
-/* *************************************************************** */
-/* function to plot polygons and polylines       ***************** */
-/* the parameter type switches render mode       ***************** */
-/* *************************************************************** */
-static void local_plot_poly(double *xf, double *yf, int n, int type)
-{
-    static int *xi, *yi;
-    static int nalloc;
-    int i;
-
-    if (nalloc < n) {
-	nalloc = n;
-	xi = G_realloc(xi, nalloc * sizeof(int));
-	yi = G_realloc(yi, nalloc * sizeof(int));
-    }
-
-    for (i = 0; i < n; i++) {
-	xi[i] = (int)floor(0.5 + D_u_to_d_col(xf[i]));
-	yi[i] = (int)floor(0.5 + D_u_to_d_row(yf[i]));
-    }
-
-    if (type == RENDER_POLYGON)
-	R_polygon_abs(xi, yi, n);
-    else
-	R_polyline_abs(xi, yi, n);
-}
 
 /* *************************************************************** */
 /* function to use different render methods for polylines ******** */
 /* *************************************************************** */
 void plot_polyline(double *xf, double *yf, int n)
 {
-    int i;
-
     switch (render) {
     case RENDER_DP:
 	D_polyline(xf, yf, n);
@@ -85,14 +53,6 @@ void plot_polyline(double *xf, double *yf, int n)
     case RENDER_DPL:
 	D_polyline_cull(xf, yf, n);
 	break;
-    case RENDER_RPA:
-	local_plot_poly(xf, yf, n, RENDER_POLYLINE);
-	break;
-    case RENDER_GPP:
-    default:
-	for (i = 1; i < n; i++)
-	    G_plot_line(xf[i - 1], yf[i - 1], xf[i], yf[i]);
-	break;
     }
 }
 
@@ -102,9 +62,6 @@ void plot_polyline(double *xf, double *yf, int n)
 void plot_polygon(double *xf, double *yf, int n)
 {
     switch (render) {
-    case RENDER_GPP:
-	G_plot_polygon(xf, yf, n);
-	break;
     case RENDER_DP:
 	D_polygon(xf, yf, n);
 	break;
@@ -113,12 +70,6 @@ void plot_polygon(double *xf, double *yf, int n)
 	break;
     case RENDER_DPL:
 	D_polygon_cull(xf, yf, n);
-	break;
-    case RENDER_RPA:
-	local_plot_poly(xf, yf, n, RENDER_POLYGON);
-	break;
-    default:
-	G_plot_polygon(xf, yf, n);
 	break;
     }
 }
@@ -138,7 +89,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     struct line_pnts *Points, *PPoints;
     struct line_cats *Cats;
     double msize;
-    int x0, y0;
+    double x0, y0;
 
     struct field_info *fi = NULL;
     dbDriver *driver = NULL;
@@ -479,7 +430,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    if (!(color || fcolor || custom_rgb))
 		continue;
 
-	    G_plot_where_xy(x[0], y[0], &x0, &y0);
+	    x0 = D_u_to_d_col(x[0]);
+	    y0 = D_u_to_d_row(y[0]);
 
 	    /* skip if the point is outside of the display window */
 	    /*      xy<0 tests make it go ever-so-slightly faster */

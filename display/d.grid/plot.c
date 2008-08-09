@@ -27,9 +27,6 @@ int plot_grid(double grid_size, double east, double north, int do_text,
     window.south = window.south + row_dist;
     window.east = window.east - colm_dist;
 
-    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		 D_get_d_east(), D_move_abs, D_cont_abs);
-
 
     /* Draw vertical grids */
     if (window.west > east)
@@ -41,7 +38,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
 	if (mark_type == MARK_GRID) {
 	    D_raster_use_color(gcolor);
-	    G_plot_line(x, window.north, x, window.south);
+	    D_line(x, window.north, x, window.south);
 	}
 
 	if (do_text) {
@@ -83,9 +80,9 @@ int plot_grid(double grid_size, double east, double north, int do_text,
     while (y <= window.north) {
 	if (mark_type == MARK_GRID) {
 	    D_raster_use_color(gcolor);
-	    G_plot_line(window.east, y, e1, y);
-	    G_plot_line(e1, y, e2, y);
-	    G_plot_line(e2, y, window.west, y);
+	    D_line(window.east, y, e1, y);
+	    D_line(e1, y, e2, y);
+	    D_line(e2, y, window.west, y);
 	}
 
 	if (do_text) {
@@ -170,9 +167,6 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
     G_debug(3, "REGION BOUNDS N=%f S=%f E=%f W=%f", north, south, east, west);
 
-    G_setup_plot(D_get_d_north(), D_get_d_south(),
-		 D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
-
 
     /* Lines of Latitude */
     g = floor(north / size) * size;
@@ -205,7 +199,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 		start_coord = n1;
 		font_angle = get_heading((e1 - e2), (n1 - n2));
 	    }
-	    G_plot_line(e1, n1, e2, n2);
+	    D_line(e1, n1, e2, n2);
 	}
 
 	if (do_text) {
@@ -258,7 +252,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 		start_coord = e1;
 	    }
 
-	    G_plot_line(e1, n1, e2, n2);
+	    D_line(e1, n1, e2, n2);
 	}
 	if (do_text) {
 	    /* Set text color */

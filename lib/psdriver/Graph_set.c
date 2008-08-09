@@ -169,7 +169,7 @@ static void get_paper(void)
     screen_bottom = screen_top + height;
 }
 
-int PS_Graph_set(int argc, char **argv)
+int PS_Graph_set(void)
 {
     const char *p;
 

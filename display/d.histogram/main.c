@@ -51,8 +51,8 @@ int main(int argc, char **argv)
     struct Colors pcolors;
     int bgcolor;
     char title[512];
-    int tt, tb, tl, tr;
-    int t, b, l, r;
+    double tt, tb, tl, tr;
+    double t, b, l, r;
     int quiet;
     struct GModule *module;
     struct Option *opt1;
@@ -196,8 +196,8 @@ int main(int argc, char **argv)
     text_width = (r - l) * 0.05 * 0.50;
     R_text_size(text_width, text_height);
     R_get_text_box(title, &tt, &tb, &tl, &tr);
-    R_move_abs((int)(l + (r - l) / 2 - (tr - tl) / 2),
-	       (int)(t + (b - t) * 0.07));
+    R_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
+	       t + (b - t) * 0.07);
     D_raster_use_color(color);
     R_text(title);
 

@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     int R, G, B;
     int layer_fd;
     int nrows, ncols, row, col;
-    int t, b, l, r;
+    double t, b, l, r;
     int digits;
     struct Cell_head window;
     struct Colors colors;
@@ -242,17 +242,17 @@ int main(int argc, char **argv)
 	/* Draw vertical grids */
 	U_start = U_east;
 	for (U_x = U_start; U_x >= U_west; U_x -= ew_res) {
-	    D_x = (int)((U_x - U_west) * U_to_D_xconv + D_west);
-	    R_move_abs(D_x, (int)D_south);
-	    R_cont_abs(D_x, (int)D_north);
+	    D_x = (U_x - U_west) * U_to_D_xconv + D_west;
+	    R_move_abs(D_x, D_south);
+	    R_cont_abs(D_x, D_north);
 	}
 
 	/* Draw horizontal grids */
 	U_start = U_north;
 	for (U_y = U_start; U_y >= U_south; U_y -= ns_res) {
-	    D_y = (int)((U_south - U_y) * U_to_D_yconv + D_south);
-	    R_move_abs((int)D_west, D_y);
-	    R_cont_abs((int)D_east, D_y);
+	    D_y = (U_south - U_y) * U_to_D_yconv + D_south;
+	    R_move_abs(D_west, D_y);
+	    R_cont_abs(D_east, D_y);
 	}
     }
 
@@ -303,13 +303,13 @@ int draw_number(double number, int prec, RASTER_MAP_TYPE map_type)
     extern double D_ew, D_ns;
     extern int D_x, D_y;
     int len, text_size, rite;
-    int tt, tb, tl, tr;
-    char *itoa(), no[10];
+    double tt, tb, tl, tr;
+    char no[32];
     double dots_per_line, factor = 0.8;
     DCELL dcell = number;
     CELL cell = (int)number;
 
-    R_set_window(D_y, D_y + (int)(D_ns * 0.9), D_x, D_x + (int)(D_ew * 0.9));
+    R_set_window(D_y, D_y + D_ns * 0.9, D_x, D_x + D_ew * 0.9);
 
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
@@ -327,12 +327,12 @@ int draw_number(double number, int prec, RASTER_MAP_TYPE map_type)
     len = strlen(no);
 
     dots_per_line = factor * D_ns;
-    text_size = (int)(factor * (float)dots_per_line);
+    text_size = factor * dots_per_line;
     rite = text_size * len;
 
     while (rite > D_ew) {
 	factor = factor - 0.01;
-	text_size = (int)(factor * (float)dots_per_line);
+	text_size = factor * dots_per_line;
 	rite = text_size * len;
     }
 
@@ -343,8 +343,7 @@ int draw_number(double number, int prec, RASTER_MAP_TYPE map_type)
        R_move_abs(D_x+(int)(D_ew*0.1),D_y+(int)(D_ns*0.5)) ;
        R_move_abs(D_x,D_y+(int)(dots_per_line - 1)) ;
      */
-    R_move_abs((int)(D_x + ((float)D_ew / 2) - ((float)(tr - tl) / 2)),
-	       (int)(D_y + D_ns * 0.7));
+    R_move_abs(D_x + D_ew / 2 - (tr - tl) / 2, D_y + D_ns * 0.7);
     R_text(no);
 
     return 0;

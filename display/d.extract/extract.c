@@ -143,12 +143,12 @@ display(struct Map_info *Map, struct ilist *List,
 	type = Vect_read_line(Map, Points, NULL, line);
 
 	if (type & GV_POINTS)
-	    G_plot_icon(Points->x[0], Points->y[0], G_ICON_CROSS, 0.0, msize);
+	    D_plot_icon(Points->x[0], Points->y[0], G_ICON_CROSS, 0.0, msize);
 	else
-	    for (j = 0; j < Points->n_points - 1; j++)
-		G_plot_line(Points->x[j], Points->y[j], Points->x[j + 1],
-			    Points->y[j + 1]);
-
+	    for (j = 0; j < Points->n_points - 1; j++) {
+		D_move(Points->x[j], Points->y[j]);
+		D_cont(Points->x[j + 1], Points->y[j + 1]);
+	    }
     }
 
     R_flush();

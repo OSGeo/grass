@@ -26,10 +26,10 @@ void display_points(struct line_pnts *Points, int flsh)
     G_debug(2, "display_points()");
 
     driver_line_width(var_geti(VAR_LINEWIDTH));
-    for (i = 1; i < Points->n_points; i++) {
-	G_plot_line(Points->x[i - 1], Points->y[i - 1], Points->x[i],
-		    Points->y[i]);
-    }
+    driver_move(Points->x[0], Points->y[0]);
+    for (i = 1; i < Points->n_points; i++)
+	driver_cont(Points->x[i], Points->y[i]);
+
     driver_line_width(0);
 }
 
@@ -38,18 +38,12 @@ void display_icon(double x, double y, int icon, double angle, int size,
 		  int flsh)
 {
     G_debug(2, "display_icon()");
-#if 0
-    driver_line_width(var_geti(VAR_LINEWIDTH));
-    G_plot_icon(x, y, icon, angle, Scale * size);
-    driver_line_width(0);
-#else
     if (icon == G_ICON_CROSS && angle == 0)
 	driver_plot_icon(x, y, "cross");
     else if (icon == G_ICON_CROSS)
 	driver_plot_icon(x, y, "cross45");
     else if (icon == G_ICON_BOX)
 	driver_plot_icon(x, y, "box");
-#endif
 }
 
 /* Display vector line 

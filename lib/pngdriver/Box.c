@@ -1,8 +1,13 @@
 
+#include <math.h>
 #include "pngdriver.h"
 
-void PNG_Box(int x1, int y1, int x2, int y2)
+void PNG_Box(double fx1, double fy1, double fx2, double fy2)
 {
+    int x1 = (int) floor(fx1 + 0.5);
+    int y1 = (int) floor(fy1 + 0.5);
+    int x2 = (int) floor(fx2 + 0.5);
+    int y2 = (int) floor(fy2 + 0.5);
     int tmp;
     int x, y;
 

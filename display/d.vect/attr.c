@@ -14,7 +14,9 @@ int attr(struct Map_info *Map, int type, char *attrcol,
     double xl, yl;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
+    int X, Y, Xoffset, Yoffset;
+    double xarr[5], yarr[5];
+    double T, B, L, R;
     int cat;
     char buf[2000];
     struct field_info *fi;

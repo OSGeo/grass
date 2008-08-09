@@ -1,27 +1,27 @@
 #include "driver.h"
 #include "driverlib.h"
 
-void COM_Screen_left(int *index)
+double COM_Screen_left(void)
 {
-    *index = screen_left;
+    return screen_left;
 }
 
-void COM_Screen_rite(int *index)
+double COM_Screen_rite(void)
 {
-    *index = screen_right;
+    return screen_right;
 }
 
-void COM_Screen_bot(int *index)
+double COM_Screen_bot(void)
 {
-    *index = screen_bottom;
+    return screen_bottom;
 }
 
-void COM_Screen_top(int *index)
+double COM_Screen_top(void)
 {
-    *index = screen_top;
+    return screen_top;
 }
 
-void COM_Number_of_colors(int *ncolors)
+int COM_Number_of_colors(void)
 {
-    *ncolors = NCOLORS;
+    return NCOLORS;
 }

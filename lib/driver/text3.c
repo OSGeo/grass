@@ -295,7 +295,7 @@ void soft_text_ext_freetype(int x, int y,
     fdont_draw = 0;
 }
 
-void get_text_ext_freetype(int *top, int *bot, int *left, int *rite)
+void get_text_ext_freetype(double *top, double *bot, double *left, double *rite)
 {
     *top = ft;
     *bot = fb;

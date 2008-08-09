@@ -23,9 +23,7 @@ int setup_plot(void)
     D_setup(0);
 
     /* set D clip window */
-    D_set_clip_window((int)D_get_d_north(),
-		      (int)D_get_d_south(),
-		      (int)D_get_d_west(), (int)D_get_d_east());
+    D_clip_to_display();
 
     /* setup the G plot to use the D routines */
     G_setup_plot(D_get_d_north(),
@@ -81,7 +79,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 
 static int cont(int x, int y)
 {
-    if (D_cont_abs(x, y)) {	/* clipped */
+    if (D_cont_abs_clip(x, y)) {	/* clipped */
 	change_range = 1;
     }
     else {			/* keep track of left,right x for lines drawn in window */
@@ -104,7 +102,7 @@ static int cont(int x, int y)
 
 static int move(int x, int y)
 {
-    D_move_abs(x, y);
+    D_move_abs_clip(x, y);
 
     return 0;
 }

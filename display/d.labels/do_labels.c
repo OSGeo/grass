@@ -167,19 +167,19 @@ int show_it(void)
     char line[256];
     char *lptr, *tptr;
     double line_size;
-    int text_size;
-    int X, Y, Y0;
-    int T, B, L, R;
-    int t, b, l, r;
-    int xarr[5];
-    int yarr[5];
-    int Xoffset, Yoffset;	/* in XY plane */
-    int X_just_offset, Y_just_offset;	/* in rotated label plane */
-    int ll_x, ll_y, ul_x, ul_y, lr_x, lr_y, ur_x, ur_y, text_x, text_y;
+    double text_size;
+    double X, Y, Y0;
+    double T, B, L, R;
+    double t, b, l, r;
+    double xarr[5];
+    double yarr[5];
+    double Xoffset, Yoffset;	/* in XY plane */
+    double X_just_offset, Y_just_offset;	/* in rotated label plane */
+    double ll_x, ll_y, ul_x, ul_y, lr_x, lr_y, ur_x, ur_y, text_x, text_y;
 
     G_debug(3, "Doing '%s'", text);
-    X = (int)(D_u_to_d_col(east));
-    Y0 = (int)(D_u_to_d_row(north));
+    X  = D_u_to_d_col(east);
+    Y0 = D_u_to_d_row(north);
 
     /* Set font */
     R_font(font);
@@ -286,15 +286,15 @@ int show_it(void)
     ll_y = lr_y = B + Y_just_offset;
     ll_x = ul_x = L + X_just_offset;
     lr_x = ur_x = R + X_just_offset;
-    G_rotate_around_point_int(X, Y0, &ll_x, &ll_y, -1 * rotation);
-    G_rotate_around_point_int(X, Y0, &ul_x, &ul_y, -1 * rotation);
-    G_rotate_around_point_int(X, Y0, &ur_x, &ur_y, -1 * rotation);
-    G_rotate_around_point_int(X, Y0, &lr_x, &lr_y, -1 * rotation);
+    G_rotate_around_point(X, Y0, &ll_x, &ll_y, -1 * rotation);
+    G_rotate_around_point(X, Y0, &ul_x, &ul_y, -1 * rotation);
+    G_rotate_around_point(X, Y0, &ur_x, &ur_y, -1 * rotation);
+    G_rotate_around_point(X, Y0, &lr_x, &lr_y, -1 * rotation);
 
     /* rotate lower starting corner of text */
     text_x = X + X_just_offset;
     text_y = Y + Y_just_offset;
-    G_rotate_around_point_int(X, Y0, &text_x, &text_y, -1 * rotation);
+    G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
     /* define rotated bounding box */
     xarr[0] = ll_x + Xoffset;
@@ -370,7 +370,7 @@ int show_it(void)
 		      (north - (line_size * 1.2) - ((i - 1) * line_size)));
 	    text_x = X + X_just_offset;	/* reset after G_rotate_around_point_int() */
 	    text_y = Y + Y_just_offset;
-	    G_rotate_around_point_int(X, Y0, &text_x, &text_y, -1 * rotation);
+	    G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
 	    for (j = 1; j <= highlight_width; j++) {
 		/* smear it around. probably a better way (knight's move? rand?) */
@@ -427,7 +427,7 @@ int show_it(void)
 		  (north - (line_size * 1.2) - ((i - 1) * line_size)));
 	text_x = X + X_just_offset;	/* reset after G_rotate_around_point_int() */
 	text_y = Y + Y_just_offset;
-	G_rotate_around_point_int(X, Y0, &text_x, &text_y, -1 * rotation);
+	G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
 	R_move_abs(text_x + Xoffset, text_y + Yoffset);
 	R_text(line);

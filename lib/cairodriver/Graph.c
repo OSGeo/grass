@@ -192,7 +192,7 @@ static int init_file(void)
     return 0;
 }
 
-int Cairo_Graph_set(int argc, char **argv)
+int Cairo_Graph_set(void)
 {
     char *p;
 

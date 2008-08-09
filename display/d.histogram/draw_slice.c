@@ -9,10 +9,10 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
 	       double a1, double a2	/* in degrees */
     )
 {
-    int tt, tb, tr, tl;
+    double tt, tb, tr, tl;
     int height, width;
-    int yoffset, xoffset;
-    int x[1000], y[1000];
+    double yoffset, xoffset;
+    double x[1000], y[1000];
     int lx, ly;
     int i = 1;
     char txt[512];
@@ -29,8 +29,8 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
     while (a2 / arc_incr > 998)
 	arc_incr *= 2;
 
-    x[0] = (int)((double)xoffset + cx * (double)width);
-    y[0] = (int)((double)yoffset - cy * (double)height);
+    x[0] = (xoffset + cx * width);
+    y[0] = (yoffset - cy * height);
 
     arc = a1;
     if (fill_flag && fill_color1 != fill_color2) {
@@ -73,8 +73,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
     if (a2 > 15.0) {
 	/* draw a label */
 	arc = a1 + a2 / 2;
-	sprintf(txt, "%2.0f%s", (double)(a2 / (double)360.0) * (double)100.0,
-		percent);
+	sprintf(txt, "%2.0f%s", (a2 / 360.0) * 100.0, percent);
 	R_get_text_box(txt, &tt, &tb, &tl, &tr);
 	lx = x[0] + (r + 0.03) * (width) * cos(arc / 57.296) - (tr - tl) / 2;
 	ly = y[0] - (r + 0.03) * (height) * sin(arc / 57.296) + (tb - tt) / 2;

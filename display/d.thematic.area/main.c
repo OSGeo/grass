@@ -157,9 +157,7 @@ int main(int argc, char **argv)
     render_opt->options = "g,r,d,c,l";
     render_opt->description = _("Rendering method for filled polygons");
     render_opt->descriptions =
-	_("g;use the libgis render functions (features: clipping);"
-	  "r;use the raster graphics library functions (features: polylines);"
-	  "d;use the display library basic functions (features: polylines);"
+	_("d;use the display library basic functions (features: polylines);"
 	  "c;use the display library clipping functions (features: clipping);"
 	  "l;use the display library culling functions (features: culling, polylines)");
 
@@ -189,19 +187,14 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_strcasecmp(render_opt->answer, "g") == 0)
-	render = RENDER_GPP;
-    else if (G_strcasecmp(render_opt->answer, "r") == 0)
-	render = RENDER_RPA;
-    else if (G_strcasecmp(render_opt->answer, "d") == 0)
+    if (G_strcasecmp(render_opt->answer, "d") == 0)
 	render = RENDER_DP;
     else if (G_strcasecmp(render_opt->answer, "c") == 0)
 	render = RENDER_DPC;
     else if (G_strcasecmp(render_opt->answer, "l") == 0)
 	render = RENDER_DPL;
     else
-	render = RENDER_GPP;
-
+	G_fatal_error(_("Invalid rendering method <%s>"), render_opt->answer);
 
     if (G_verbose() > G_verbose_std())
 	verbose = TRUE;
@@ -412,9 +405,6 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("No graphics device selected"));
 
 	D_setup(0);
-
-	G_setup_plot(D_get_d_north(), D_get_d_south(),
-		     D_get_d_west(), D_get_d_east(), D_move_abs, D_cont_abs);
 
 	if (verbose)
 	    G_message(_("Plotting ..."));

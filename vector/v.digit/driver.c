@@ -1,3 +1,4 @@
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
@@ -19,25 +20,45 @@ void driver_line_width(int w)
 }
 
 static int curx, cury;
+static double lastx;
 
-static int driver_move_abs(int x, int y)
+static void convert(double x, double y, int *xi, int *yi)
 {
-    curx = x;
-    cury = y;
-    return 0;
+    if (D_is_lat_lon()) {
+	double d = x - lastx;
+	if (fabs(d) > 180)
+	    x -= 360 * floor(d / 360 + 0.5);
+    }
+
+    *xi = (int)floor(D_u_to_d_col(x));
+    *yi = (int)floor(D_u_to_d_row(y));
 }
 
-static int driver_cont_abs(int x, int y)
+void driver_cont(double x, double y)
 {
     char buf[1024];
+    int xi, yi;
+
+    convert(x, y, &xi, &yi);
 
     sprintf(buf, ".screen.canvas create line %d %d %d %d -width %d -fill %s",
-	    curx, cury, x, y, width, color);
+	    curx, cury, xi, yi, width, color);
     Tcl_Eval(Toolbox, buf);
+
+    curx = xi;
+    cury = yi;
+    lastx = x;
+}
+
+void driver_move(double x, double y)
+{
+    int xi, yi;
+
+    convert(x, y, &xi, &yi);
 
     curx = x;
     cury = y;
-    return 0;
+    lastx = x;
 }
 
 void driver_plot_icon(double x, double y, const char *icon)
@@ -45,7 +66,8 @@ void driver_plot_icon(double x, double y, const char *icon)
     char buf[1024];
     int xi, yi;
 
-    G_plot_where_xy(x, y, &xi, &yi);
+    xi = (int) floor(D_u_to_d_col(x));
+    yi = (int) floor(D_u_to_d_row(y));
 
     sprintf(buf,
 	    ".screen.canvas create bitmap %d %d -bitmap @$vdpath/%s.xbm -foreground %s -anchor center",
@@ -88,8 +110,6 @@ static void setup(void)
 int driver_refresh(void)
 {
     setup();
-    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		 D_get_d_east(), driver_move_abs, driver_cont_abs);
     return 1;
 }
 
@@ -110,8 +130,6 @@ int driver_open(void)
 
     Scale = (n - s) / (D_get_d_south() - D_get_d_north());
 
-    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		 D_get_d_east(), driver_move_abs, driver_cont_abs);
     return 1;
 }
 

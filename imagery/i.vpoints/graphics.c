@@ -81,7 +81,7 @@ int Outline_box(int top, int bottom, int left, int right)
 
 int Text_width(char *text)
 {
-    int top, bottom, left, right;
+    double top, bottom, left, right;
 
     R_get_text_box(text, &top, &bottom, &left, &right);
 

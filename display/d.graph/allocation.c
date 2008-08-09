@@ -1,37 +1,11 @@
 #include <grass/gis.h>
 
-char *falloc(int nelem, int elsize)
+void *falloc(int nelem, int elsize)
 {
-    char *ptr;
-
-    ptr = G_calloc(nelem, elsize);
-
-    if (!ptr)
-	G_fatal_error("ERROR: no more memory available");
-
-    return (ptr);
+    return G_calloc(nelem, elsize);
 }
 
-char *frealloc(char *oldptr, int nelem, int elsize, int oldnelem)
+void *frealloc(void *oldptr, int nelem, int elsize)
 {
-    char *ptr;
-
-    ptr = G_calloc(nelem, elsize);
-    if (!ptr)
-	G_fatal_error("ERROR: no more memory available");
-
-    {
-	register char *a;
-	register char *b;
-	register int n;
-
-	n = oldnelem * elsize;
-	a = ptr;
-	b = oldptr;
-	while (n--)
-	    *a++ = *b++;
-    }
-
-    G_free(oldptr);
-    return (ptr);
+    return G_realloc(oldptr, nelem * elsize);
 }

@@ -904,7 +904,6 @@ int G_plot_line2(double, double, double, double);
 int G_plot_polygon(const double *, const double *, int);
 int G_plot_area(double *const *, double *const *, int *, int);
 int G_plot_fx(double (*)(double), double, double);
-int G_plot_icon(double, double, int, double, double);
 
 /* pole_in_poly.c */
 int G_pole_in_polygon(const double *, const double *, int);

@@ -12,7 +12,9 @@ int label(struct Map_info *Map, int type, int do_area,
     double xl, yl;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
+    int X, Y, Xoffset, Yoffset;
+    double xarr[5], yarr[5];
+    double T, B, L, R;
     int cat;
     char text[100];
 

@@ -65,11 +65,11 @@ int draw_scale(int toptext)
     double line_len;
     int incr;
     int x_pos, y_pos;
-    int t, b, l, r;
+    double t, b, l, r;
     int pt, pb, pl, pr;
     int i;
     int size;
-    int xarr[5], yarr[5];
+    double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
 

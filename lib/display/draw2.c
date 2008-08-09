@@ -1,34 +1,4 @@
 
-/*******************************************************************
- * Line drawing in the current window.
- *
- * Clip window:
- *   D_set_clip_window (top, bottom ,left, right)
- *      establish clipping region for subseqent line drawing.
- *   D_set_clip_window_to_map_window ()
- *     set clipping to pixels corresponding to the current map region
- *     (default)
- *   D_set_clip_window_to_screen_window ()
- *     set clipping to full extent of the window (ie disables clipping on screen)
- *
- * Moves.
- *   D_move_abs(x,y)   move to x,y.
- *   D_move_rel(x,y)   move to +x,+y.
- *      Set current position. Position is not clipped.
- *
- * Draw line 
- *   D_cont_abs(x,y)   draw to x,y.
- *   D_cont_rel(x,y)   draw to +x,+y.
- *      Line draw from current position. New postion is not clipped.
- *      The lines drawn are clipped however.
- *      Return values indicate the nature of the clipping:
- *        0 no clipping
- *        1 part of the line is drawn
- *       -1 none of the line is drawn
- *   
- *
- */
-
 #include <math.h>
 #include <string.h>
 
@@ -68,26 +38,24 @@ static int window_set;
 #define min(x,y) ((x) < (y) ? (x) : (y))
 #define max(x,y) ((x) > (y) ? (x) : (y))
 
-#define round(x) ((int) floor(0.5 + (x)))
-
-static int *xi, *yi;
+static double *xi, *yi;
 static int nalloc_i;
 
 static double *xf, *yf;
 static int nalloc_f;
 
-static void alloc_int(int n)
+static void alloc_dst(int n)
 {
 
     if (nalloc_i >= n)
 	return;
 
     nalloc_i = n;
-    xi = G_realloc(xi, nalloc_i * sizeof(int));
-    yi = G_realloc(yi, nalloc_i * sizeof(int));
+    xi = G_realloc(xi, nalloc_i * sizeof(double));
+    yi = G_realloc(yi, nalloc_i * sizeof(double));
 }
 
-static void alloc_float(int n)
+static void alloc_src(int n)
 {
 
     if (nalloc_f >= n)
@@ -98,7 +66,7 @@ static void alloc_float(int n)
     yf = G_realloc(yf, nalloc_f * sizeof(double));
 }
 
-static void dealloc_float(const double **x, const double **y, int release)
+static void dealloc_src(const double **x, const double **y, int release)
 {
     if (release) {
 	G_free(*(double **)x);
@@ -114,45 +82,29 @@ static void dealloc_float(const double **x, const double **y, int release)
     yf = NULL;
 }
 
-static int do_filter(int *x, int *y, int n)
+static int do_convert(const double *x, const double *y, int n)
 {
+    static double eps = 0.5;
     int i, j;
 
+    alloc_dst(n);
+
+    for (i = 0; i < n; i++) {
+	xi[i] = D_u_to_d_col(x[i]);
+	yi[i] = D_u_to_d_row(y[i]);
+    }
+
     for (i = 0, j = 1; j < n; j++) {
-	if (x[j] == x[i] && y[j] == y[i])
+	if (fabs(xi[j] - xi[i]) < eps && fabs(yi[j] - yi[i]) < eps)
 	    continue;
 	i++;
 	if (i == j)
 	    continue;
-	x[i] = x[j];
-	y[i] = y[j];
+	xi[i] = xi[j];
+	yi[i] = yi[j];
     }
 
     return i + 1;
-}
-
-static void do_round(const double *x, const double *y, int n)
-{
-    int i;
-
-    alloc_int(n);
-
-    for (i = 0; i < n; i++) {
-	xi[i] = round(D_u_to_d_col(x[i]));
-	yi[i] = round(D_u_to_d_row(y[i]));
-    }
-}
-
-static void do_floor(const double *x, const double *y, int n)
-{
-    int i;
-
-    alloc_int(n);
-
-    for (i = 0; i < n; i++) {
-	xi[i] = floor(D_u_to_d_col(x[i]));
-	yi[i] = floor(D_u_to_d_row(y[i]));
-    }
 }
 
 static double dist_plane(double x, double y, const struct plane *p)
@@ -332,12 +284,47 @@ void D_set_clip(double t, double b, double l, double r)
  * current database region. This is the default.
  *
  *  \param ~
+ *  \return void
+ */
+
+void D_clip_to_display(void)
+{
+    D_set_clip(D_get_d_north(), D_get_d_south(),
+	       D_get_d_west(), D_get_d_east());
+}
+
+/*!
+ * \brief set clipping window to screen window
+ *
+ * Sets the clipping window to the pixel window that corresponds to the
+ * full screen window. Off screen rendering is still clipped.
+ *
+ *  \param ~
+ *  \return int
+ */
+
+void D_clip_to_screen(void)
+{
+    double t, b, l, r;
+
+    D_get_screen_window(&t, &b, &l, &r);
+    D_set_clip(t, b, l, r);
+}
+
+
+/*!
+ * \brief set clipping window to map window
+ *
+ * Sets the clipping window to the pixel window that corresponds to the
+ * current database region. This is the default.
+ *
+ *  \param ~
  */
 
 void D_clip_to_map(void)
 {
-    D_set_clip(D_get_u_north(),
-	       D_get_u_south(), D_get_u_west(), D_get_u_east());
+    D_set_clip(D_get_u_north(), D_get_u_south(),
+	       D_get_u_west(), D_get_u_east());
 }
 
 /*!
@@ -351,6 +338,12 @@ void D_clip_to_map(void)
  */
 
 void D_move_clip(double x, double y)
+{
+    cur.x = x;
+    cur.y = y;
+}
+
+void D_move_abs_clip(double x, double y)
 {
     cur.x = x;
     cur.y = y;
@@ -385,10 +378,10 @@ static int line_clip(double x1, double y1, double x2, double y2)
     clipped = do_clip(&a, &b);
 
     if (clipped >= 0) {
-	int x1 = round(D_u_to_d_col(a.x));
-	int y1 = round(D_u_to_d_row(a.y));
-	int x2 = round(D_u_to_d_col(b.x));
-	int y2 = round(D_u_to_d_row(b.y));
+	double x1 = D_u_to_d_col(a.x);
+	double y1 = D_u_to_d_row(a.y);
+	double x2 = D_u_to_d_col(b.x);
+	double y2 = D_u_to_d_row(b.y);
 
 	R_move_abs(x1, y1);
 	R_cont_abs(x2, y2);
@@ -421,6 +414,32 @@ static int line_clip_ll(double ax, double ay, double bx, double by)
     return ret;
 }
 
+static int line_clip_abs(double x1, double y1, double x2, double y2)
+{
+    struct vector a, b;
+    int clipped;
+
+    a.x = x1;
+    a.y = y1;
+
+    b.x = x2;
+    b.y = y2;
+
+    clipped = do_clip(&a, &b);
+
+    if (clipped >= 0) {
+	double x1 = a.x;
+	double y1 = a.y;
+	double x2 = b.x;
+	double y2 = b.y;
+
+	R_move_abs(x1, y1);
+	R_cont_abs(x2, y2);
+    }
+
+    return clipped;
+}
+
 int D_cont_clip(double x, double y)
 {
     int ret;
@@ -439,6 +458,33 @@ int D_cont_clip(double x, double y)
     return ret;
 }
 
+int D_line_clip(double x1, double y1, double x2, double y2)
+{
+    D_move_clip(x1, y1);
+    return D_cont_clip(x2, y2);
+}
+
+int D_cont_abs_clip(double x, double y)
+{
+    int ret;
+
+    if (!window_set)
+	D_clip_to_display();
+
+    ret = line_clip_abs(cur.x, cur.y, x, y);
+
+    cur.x = x;
+    cur.y = y;
+
+    return ret;
+}
+
+int D_line_abs_clip(double x1, double y1, double x2, double y2)
+{
+    D_move_abs_clip(x1, y1);
+    return D_cont_abs_clip(x2, y2);
+}
+
 void D_polydots_clip(const double *x, const double *y, int n)
 {
     double ux0 = clip.left;
@@ -447,7 +493,7 @@ void D_polydots_clip(const double *x, const double *y, int n)
     if (!window_set)
 	D_clip_to_map();
 
-    alloc_float(n);
+    alloc_src(n);
 
     for (i = j = 0; i < n; i++) {
 	double xx = x[i];
@@ -466,8 +512,7 @@ void D_polydots_clip(const double *x, const double *y, int n)
 	j++;
     }
 
-    do_floor(xf, yf, n);
-    n = do_filter(xi, yi, n);
+    do_convert(xf, yf, n);
 
     R_polydots_abs(xi, yi, j);
 }
@@ -491,7 +536,7 @@ static int cull_polyline_plane(int *pn, const double *x, const double *y,
 	int in1 = d1 <= 0;
 
 	if (!in0 && in1 && last != prev) {	/* entering */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = x0;
 	    yf[j] = y0;
 	    j++;
@@ -499,7 +544,7 @@ static int cull_polyline_plane(int *pn, const double *x, const double *y,
 	}
 
 	if (in1 || in0) {	/* inside or leaving */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = x1;
 	    yf[j] = y1;
 	    j++;
@@ -519,30 +564,29 @@ static int cull_polyline_plane(int *pn, const double *x, const double *y,
 
 static void polyline_cull(const double *x, const double *y, int n)
 {
-    alloc_float(n + 10);
+    alloc_src(n + 10);
 
     if (cull_polyline_plane(&n, x, y, &pl_left))
 	return;
 
-    dealloc_float(&x, &y, 0);
+    dealloc_src(&x, &y, 0);
 
     if (cull_polyline_plane(&n, x, y, &pl_rite))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (cull_polyline_plane(&n, x, y, &pl_bot))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (cull_polyline_plane(&n, x, y, &pl_top))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
-    do_floor(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
 
     R_polyline_abs(xi, yi, n);
 }
@@ -602,7 +646,7 @@ static int cull_polygon_plane(int *pn, const double *x, const double *y,
 	int in1 = d1 <= 0;
 
 	if (!in0 && in1 && last != prev) {	/* entering */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = x0;
 	    yf[j] = y0;
 	    j++;
@@ -610,7 +654,7 @@ static int cull_polygon_plane(int *pn, const double *x, const double *y,
 	}
 
 	if (in1 || in0) {	/* inside or leaving */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = x1;
 	    yf[j] = y1;
 	    j++;
@@ -630,30 +674,29 @@ static int cull_polygon_plane(int *pn, const double *x, const double *y,
 
 static void polygon_cull(const double *x, const double *y, int n)
 {
-    alloc_float(n + 10);
+    alloc_src(n + 10);
 
     if (cull_polygon_plane(&n, x, y, &pl_left))
 	return;
 
-    dealloc_float(&x, &y, 0);
+    dealloc_src(&x, &y, 0);
 
     if (cull_polygon_plane(&n, x, y, &pl_rite))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (cull_polygon_plane(&n, x, y, &pl_bot))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (cull_polygon_plane(&n, x, y, &pl_top))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
-    do_round(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
 
     R_polygon_abs(xi, yi, n);
 }
@@ -686,14 +729,14 @@ static int clip_polygon_plane(int *pn, const double *x, const double *y,
 	int in1 = d1 <= 0;
 
 	if (in0 != in1) {	/* edge crossing */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = interpolate(x0, x1, d0, d1);
 	    yf[j] = interpolate(y0, y1, d0, d1);
 	    j++;
 	}
 
 	if (in1) {		/* point inside */
-	    alloc_float(j + 1);
+	    alloc_src(j + 1);
 	    xf[j] = x[i];
 	    yf[j] = y[i];
 	    j++;
@@ -711,30 +754,29 @@ static int clip_polygon_plane(int *pn, const double *x, const double *y,
 
 static void polygon_clip(const double *x, const double *y, int n)
 {
-    alloc_float(n + 10);
+    alloc_src(n + 10);
 
     if (clip_polygon_plane(&n, x, y, &pl_left))
 	return;
 
-    dealloc_float(&x, &y, 0);
+    dealloc_src(&x, &y, 0);
 
     if (clip_polygon_plane(&n, x, y, &pl_rite))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (clip_polygon_plane(&n, x, y, &pl_bot))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
     if (clip_polygon_plane(&n, x, y, &pl_top))
 	return;
 
-    dealloc_float(&x, &y, 1);
+    dealloc_src(&x, &y, 1);
 
-    do_round(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
 
     R_polygon_abs(xi, yi, n);
 }
@@ -753,17 +795,17 @@ void D_polygon_clip(const double *x, const double *y, int n)
 static void box_clip(double x1, double y1, double x2, double y2)
 {
     double t, b, l, r;
-    int ti, bi, li, ri;
+    double ti, bi, li, ri;
 
     l = max(clip.left, min(x1, x2));
     r = min(clip.rite, max(x1, x2));
     b = max(clip.bot, min(y1, y2));
     t = min(clip.top, max(y1, y2));
 
-    li = round(D_u_to_d_col(l));
-    ri = round(D_u_to_d_col(r));
-    bi = round(D_u_to_d_row(b));
-    ti = round(D_u_to_d_row(t));
+    li = D_u_to_d_col(l);
+    ri = D_u_to_d_col(r);
+    bi = D_u_to_d_row(b);
+    ti = D_u_to_d_row(t);
 
     R_box_abs(li, ti, ri, bi);
 }
@@ -796,38 +838,57 @@ void D_box_clip(double x1, double y1, double x2, double y2)
 
 void D_move(double x, double y)
 {
-    int xi = round(D_u_to_d_col(x));
-    int yi = round(D_u_to_d_row(y));
+    double dx = D_u_to_d_col(x);
+    double dy = D_u_to_d_row(y);
 
-    R_move_abs(xi, yi);
+    R_move_abs(dx, dy);
 }
 
 void D_cont(double x, double y)
 {
-    int xi = round(D_u_to_d_col(x));
-    int yi = round(D_u_to_d_row(y));
+    double dx = D_u_to_d_col(x);
+    double dy = D_u_to_d_row(y);
 
-    R_cont_abs(xi, yi);
+    R_cont_abs(dx, dy);
+}
+
+void D_line(double x1, double y1, double x2, double y2)
+{
+    D_move(x1, y1);
+    D_cont(x2, y2);
+}
+
+void D_move_abs(double x, double y)
+{
+    R_move_abs(x, y);
+}
+
+void D_cont_abs(double x, double y)
+{
+    R_cont_abs(x, y);
+}
+
+void D_line_abs(double x1, double y1, double x2, double y2)
+{
+    D_move_abs(x1, y1);
+    D_cont_abs(x2, y2);
 }
 
 void D_polydots(const double *x, const double *y, int n)
 {
-    do_floor(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
     R_polydots_abs(xi, yi, n);
 }
 
 void D_polyline(const double *x, const double *y, int n)
 {
-    do_floor(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
     R_polyline_abs(xi, yi, n);
 }
 
 void D_polygon(const double *x, const double *y, int n)
 {
-    do_round(x, y, n);
-    n = do_filter(xi, yi, n);
+    do_convert(x, y, n);
     R_polygon_abs(xi, yi, n);
 }
 
@@ -837,20 +898,16 @@ void D_box(double x1, double y1, double x2, double y2)
     double r = max(x1, x2);
     double b = min(y1, y2);
     double t = max(y1, y2);
-    int li = round(D_u_to_d_col(l));
-    int ri = round(D_u_to_d_col(r));
-    int bi = round(D_u_to_d_row(b));
-    int ti = round(D_u_to_d_row(t));
+    double li = D_u_to_d_col(l);
+    double ri = D_u_to_d_col(r);
+    double bi = D_u_to_d_row(b);
+    double ti = D_u_to_d_row(t);
 
     R_box_abs(li, ti, ri, bi);
 }
 
 void D_line_width(double d)
 {
-    int w = round(d);
-
-    if (w < 0)
-	w = 0;
-
-    R_line_width(w);
+    R_line_width(d > 0 ? d : 0);
 }
+

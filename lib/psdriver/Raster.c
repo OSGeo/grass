@@ -5,7 +5,7 @@
 
 static int masked;
 
-void PS_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
+void PS_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
     const char *type = true_color ? (mask ? "RASTERRGBMASK" : "RASTERRGB")
 	: (mask ? "RASTERGRAYMASK" : "RASTERGRAY");
@@ -15,15 +15,15 @@ void PS_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
     int sox = src[0][0];
     int soy = src[1][0];
 
-    int dsx = dst[0][1] - dst[0][0];
-    int dsy = dst[1][1] - dst[1][0];
-    int dox = dst[0][0];
-    int doy = dst[1][0];
+    double dsx = dst[0][1] - dst[0][0];
+    double dsy = dst[1][1] - dst[1][0];
+    double dox = dst[0][0];
+    double doy = dst[1][0];
 
     masked = mask;
 
     output("gsave\n");
-    output("%d %d translate %d %d scale\n", dox, doy, dsx, dsy);
+    output("%f %f translate %f %f scale\n", dox, doy, dsx, dsy);
     output("%d %d [%d 0 0 %d %d %d] %s\n", ssx, ssy, ssx, ssy, sox, soy,
 	   type);
 }

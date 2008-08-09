@@ -51,7 +51,7 @@ static int cell_draw(char *name,
     int cellfile;
     void *xarray;
     int cur_A_row;
-    int t, b, l, r;
+    double t, b, l, r;
     int ncols, nrows;
 
     ncols = G_window_cols();

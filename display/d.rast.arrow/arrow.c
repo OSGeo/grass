@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     extern double D_ew, D_ns;
     extern int D_x, D_y;
     struct Cell_head window;
-    int t, b, l, r;
+    double t, b, l, r;
     RASTER_MAP_TYPE raster_type, mag_raster_type = -1;
     int layer_fd;
     void *raster_row, *ptr;

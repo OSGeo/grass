@@ -12,8 +12,8 @@
 #define CHUNK	128
 
 static int coors_allocated = 0;
-static int *xarray;
-static int *yarray;
+static double *xarray;
+static double *yarray;
 
 static float xincr;
 static float yincr;
@@ -39,9 +39,9 @@ int set_graph_stuff(void)
 int set_text_size(void)
 {
     if (hsize >= 0. && vsize >= 0. && hsize <= 100. && vsize <= 100.) {
-	R_text_size((int)(hsize * xincr), (int)(vsize * yincr));
-	G_debug(3, "text size initialized to [%d,%d] pixels",
-		(int)(hsize * xincr), (int)(vsize * yincr));
+	R_text_size(hsize * xincr, vsize * yincr);
+	G_debug(3, "text size initialized to [%.1f,%.1f]",
+		hsize * xincr, vsize * yincr);
     }
     return (0);
 }
@@ -63,13 +63,12 @@ int do_draw(char *buff)
 	   yper > D_get_u_north() )
 	   return(-1);
 	 */
-	R_cont_abs((int)(D_u_to_d_col(xper) + 0.5),
-		   (int)(D_u_to_d_row(yper) + 0.5));
+	R_cont_abs(D_u_to_d_col(xper), D_u_to_d_row(yper));
     }
     else {
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	    return (-1);
-	R_cont_abs(l + (int)(xper * xincr), b - (int)(yper * yincr));
+	R_cont_abs(l + xper * xincr, b - yper * yincr);
     }
 
     return (0);
@@ -85,12 +84,11 @@ int do_move(char *buff)
     }
 
     if (mapunits)
-	R_move_abs((int)(D_u_to_d_col(xper) + 0.5),
-		   (int)(D_u_to_d_row(yper) + 0.5));
+	R_move_abs(D_u_to_d_col(xper), D_u_to_d_row(yper));
     else {
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	    return (-1);
-	R_move_abs(l + (int)(xper * xincr), b - (int)(yper * yincr));
+	R_move_abs(l + xper * xincr, b - yper * yincr);
     }
 
     return (0);
@@ -130,15 +128,15 @@ int do_color(char *buff)
 
 int do_linewidth(char *buff)
 {
-    int width;			/* in pixels */
+    double width;
 
-    if (1 != sscanf(buff, "%*s %d", &width)) {
+    if (1 != sscanf(buff, "%*s %lf", &width)) {
 	G_warning(_("Problem parsing command [%s]"), buff);
 	return (-1);
     }
 
     D_line_width(width);
-    G_debug(3, "line width set to %d pixels", width);
+    G_debug(3, "line width set to %.1f", width);
 
     return (0);
 }
@@ -149,7 +147,6 @@ int do_poly(char *buff, FILE * infile)
     int num;
     char origcmd[64];
     float xper, yper;
-    char *fgets();
     int to_return;
 
     sscanf(buff, "%s", origcmd);
@@ -179,12 +176,12 @@ int do_poly(char *buff, FILE * infile)
 	check_alloc(num + 1);
 
 	if (mapunits) {
-	    xarray[num] = (int)(D_u_to_d_col(xper) + 0.5);
-	    yarray[num] = (int)(D_u_to_d_row(yper) + 0.5);
+	    xarray[num] = D_u_to_d_col(xper);
+	    yarray[num] = D_u_to_d_row(yper);
 	}
 	else {
-	    xarray[num] = l + (int)(xper * xincr);
-	    yarray[num] = b - (int)(yper * yincr);
+	    xarray[num] = l + xper * xincr;
+	    yarray[num] = b - yper * yincr;
 	}
 
 	num++;
@@ -221,9 +218,9 @@ int do_size(char *buff)
     if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	return (-1);
 
-    R_text_size((int)(xper * xincr), (int)(yper * yincr));
-    G_debug(3, "text size set to [%d,%d] pixels",
-	    (int)(xper * xincr), (int)(yper * yincr));
+    R_text_size(xper * xincr, yper * yincr);
+    G_debug(3, "text size set to [%.1f,%.1f]",
+	    xper * xincr, yper * yincr);
 
     return (0);
 }
@@ -266,14 +263,12 @@ int check_alloc(int num)
 	to_alloc += CHUNK;
 
     if (coors_allocated == 0) {
-	xarray = (int *)falloc(to_alloc, sizeof(int));
-	yarray = (int *)falloc(to_alloc, sizeof(int));
+	xarray = falloc(to_alloc, sizeof(double));
+	yarray = falloc(to_alloc, sizeof(double));
     }
     else {
-	xarray = (int *)frealloc((char *)xarray,
-				 to_alloc, sizeof(int), coors_allocated);
-	yarray = (int *)frealloc((char *)yarray,
-				 to_alloc, sizeof(int), coors_allocated);
+	xarray = frealloc(xarray, to_alloc, sizeof(double));
+	yarray = frealloc(yarray, to_alloc, sizeof(double));
     }
 
     coors_allocated = to_alloc;
@@ -285,17 +280,17 @@ int do_icon(char *buff)
 {
     double xper, yper;
     char type;
-    int size;
-    int ix, iy;
+    double size;
+    double ix, iy;
 
-    if (4 != sscanf(buff, "%*s %c %d %lf %lf", &type, &size, &xper, &yper)) {
+    if (4 != sscanf(buff, "%*s %c %lf %lf %lf", &type, &size, &xper, &yper)) {
 	G_warning(_("Problem parsing command [%s]"), buff);
 	return (-1);
     }
 
     if (mapunits) {
-	ix = (int)(D_u_to_d_col(xper) + 0.5);
-	iy = (int)(D_u_to_d_row(yper) + 0.5);
+	ix = D_u_to_d_col(xper);
+	iy = D_u_to_d_row(yper);
 	/* size in map units too? currently in percentage.
 	   use "size * D_get_u_to_d_yconv()" to convert? */
     }
@@ -303,8 +298,8 @@ int do_icon(char *buff)
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	    return (-1);
 
-	ix = l + (int)(xper * xincr);
-	iy = b - (int)(yper * yincr);
+	ix = l + xper * xincr;
+	iy = b - yper * yincr;
     }
 
     switch (type & 0177) {
@@ -335,8 +330,8 @@ int do_icon(char *buff)
 int do_symbol(char *buff)
 {
     double xper, yper;
-    int size;
-    int ix, iy;
+    double size;
+    double ix, iy;
     char *symb_name;
     SYMBOL *Symb;
     char *line_color_str, *fill_color_str;
@@ -358,23 +353,23 @@ int do_symbol(char *buff)
     strcpy(fill_color_str, "grey");
 
     if (sscanf
-	(buff, "%*s %s %d %lf %lf %s %s", symb_name, &size, &xper, &yper,
+	(buff, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
 	 line_color_str, fill_color_str) < 4) {
 	G_warning(_("Problem parsing command [%s]"), buff);
 	return (-1);
     }
 
     if (mapunits) {
-	ix = (int)(D_u_to_d_col(xper) + 0.5);
-	iy = (int)(D_u_to_d_row(yper) + 0.5);
+	ix = D_u_to_d_col(xper);
+	iy = D_u_to_d_row(yper);
 	/* consider size in map units too? maybe as percentage of display?
 	   perhaps use "size * D_get_u_to_d_yconv()" to convert */
     }
     else {
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	    return (-1);
-	ix = l + (int)(xper * xincr);
-	iy = b - (int)(yper * yincr);
+	ix = l + xper * xincr;
+	iy = b - yper * yincr;
     }
 
     /* parse line color */

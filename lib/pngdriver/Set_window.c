@@ -17,12 +17,18 @@
  *
  *****************************************************************************/
 
+#include <math.h>
 #include "pngdriver.h"
 
-void PNG_Set_window(int t, int b, int l, int r)
+void PNG_Set_window(double ft, double fb, double fl, double fr)
 {
-    clip_top = t > screen_top ? t : screen_top;
-    clip_bot = b < screen_bottom ? b : screen_bottom;
-    clip_left = l > screen_left ? l : screen_left;
-    clip_rite = r < screen_right ? r : screen_right;
+    int t = (int) floor(ft + 0.5);
+    int b = (int) floor(fb + 0.5);
+    int l = (int) floor(fl + 0.5);
+    int r = (int) floor(fr + 0.5);
+
+    clip_top  = t > screen_top    ? t : screen_top;
+    clip_bot  = b < screen_bottom ? b : screen_bottom;
+    clip_left = l > screen_left   ? l : screen_left;
+    clip_rite = r < screen_right  ? r : screen_right;
 }

@@ -14,8 +14,6 @@
 
 int plot(char *name, char *mapset, struct line_pnts *Points)
 {
-    double *x, *y;
-    int i, np;
     int line, nlines, ltype;
     struct Cell_head window;
     struct Map_info P_map;
@@ -32,9 +30,6 @@ int plot(char *name, char *mapset, struct line_pnts *Points)
     }
 
     G_get_set_window(&window);
-
-    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		 D_get_d_east(), D_move_abs, D_cont_abs);
 
     nlines = Vect_get_num_lines(&P_map);
 
@@ -72,16 +67,7 @@ int plot(char *name, char *mapset, struct line_pnts *Points)
 
 
 	if (ltype & GV_LINES) {	/* GV_ plural: both lines and boundaries */
-
-	    np = Points->n_points;
-	    x = Points->x;
-	    y = Points->y;
-
-	    for (i = 1; i < np; i++) {
-		G_plot_line(x[0], y[0], x[1], y[1]);
-		x++;
-		y++;
-	    }
+	    D_polyline(Points->x, Points->y, Points->n_points);
 	}
     }
 
@@ -114,9 +100,6 @@ int plot_warp(char *name, char *mapset, struct line_pnts *Points,
     }
 
     G_get_set_window(&window);
-
-    G_setup_plot(D_get_d_north(), D_get_d_south(), D_get_d_west(),
-		 D_get_d_east(), D_move_abs, D_cont_abs);
 
     nlines = Vect_get_num_lines(&P_map);
 
@@ -157,21 +140,16 @@ int plot_warp(char *name, char *mapset, struct line_pnts *Points,
 	    D_symbol(Symb, ix, iy, linecolor_rgb, fillcolor_rgb);
 	}
 
-
 	if (ltype & GV_LINES) {	/* GV_ plural: both lines and boundaries */
 
 	    np = Points->n_points;
 	    x = Points->x;
 	    y = Points->y;
 
-	    CRS_georef(x[0], y[0], &x[0], &y[0], E, N, trans_order);
+	    for (i = 1; i < np; i++)
+		CRS_georef(x[i], y[i], &x[i], &y[i], E, N, trans_order);
 
-	    for (i = 1; i < np; i++) {
-		CRS_georef(x[1], y[1], &x[1], &y[1], E, N, trans_order);
-		G_plot_line(x[0], y[0], x[1], y[1]);
-		x++;
-		y++;
-	    }
+	    D_polyline(x, y, np);
 	}
     }
 

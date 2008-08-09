@@ -63,7 +63,7 @@ static void map_file(void)
 #endif
 }
 
-int PNG_Graph_set(int argc, char **argv)
+int PNG_Graph_set(void)
 {
     unsigned int red, grn, blu;
     int do_read = 0;

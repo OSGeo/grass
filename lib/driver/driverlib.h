@@ -13,15 +13,15 @@ int font_is_freetype(void);
 
 /* Text2.c */
 void drawchar(double, double, double, double, unsigned char);
-void soft_text_ext(int x, int, double, double, double, const char *);
-void get_text_ext(int *, int *, int *, int *);
+void soft_text_ext(int, int, double, double, double, const char *);
+void get_text_ext(double *, double *, double *, double *);
 void soft_text(int, int, double, double, double, const char *);
 void onechar(int, int, double, double, double, unsigned char);
 
 /* Text3.c */
 void soft_text_freetype(int, int, double, double, double, const char *);
 void soft_text_ext_freetype(int, int, double, double, double, const char *);
-void get_text_ext_freetype(int *, int *, int *, int *);
+void get_text_ext_freetype(double *, double *, double *, double *);
 
 /* font2.c */
 int font_init(const char *);
@@ -35,7 +35,7 @@ const char *font_get_charset(void);
 int font_get_index(void);
 
 /* parse_ftcap.c */
-extern int font_exists(const char *name);
+extern int font_exists(const char *);
 extern struct GFONT_CAP *parse_freetypecap(void);
-extern void free_freetypecap(struct GFONT_CAP *ftcap);
-extern void free_font_list(char **fonts, int num_fonts);
+extern void free_freetypecap(struct GFONT_CAP *);
+extern void free_font_list(char **, int);

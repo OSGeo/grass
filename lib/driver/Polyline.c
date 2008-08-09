@@ -1,7 +1,7 @@
 #include "driver.h"
 #include "driverlib.h"
 
-void COM_Polyline_abs(const int *xarray, const int *yarray, int number)
+void COM_Polyline_abs(const double *xarray, const double *yarray, int number)
 {
     int i;
 
@@ -16,7 +16,7 @@ void COM_Polyline_abs(const int *xarray, const int *yarray, int number)
 	COM_Cont_abs(xarray[i], yarray[i]);
 }
 
-void COM_Polyline_rel(const int *xarray, const int *yarray, int number)
+void COM_Polyline_rel(const double *xarray, const double *yarray, int number)
 {
     int i;
 

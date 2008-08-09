@@ -1,7 +1,7 @@
 
 #include "psdriver.h"
 
-void PS_Box(int x1, int y1, int x2, int y2)
+void PS_Box(double x1, double y1, double x2, double y2)
 {
-    output("%d %d %d %d BOX\n", x1, y1, x2, y2);
+    output("%f %f %f %f BOX\n", x1, y1, x2, y2);
 }

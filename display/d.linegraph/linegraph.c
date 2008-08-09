@@ -63,13 +63,13 @@ int main(int argc, char **argv)
     int title_color;
     int num_y_files;
     int tic_unit;
-    int t, b, l, r;
-    int tt, tb, tl, tr;
+    double t, b, l, r;
+    double tt, tb, tl, tr;
     int prev_x, prev_y[11];
     int new_x, new_y[11];
     int line;
-    int x_line[3];
-    int y_line[3];
+    double x_line[3];
+    double y_line[3];
     int err;
 
     struct in_file

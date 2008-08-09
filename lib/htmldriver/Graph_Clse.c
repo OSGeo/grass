@@ -9,11 +9,6 @@
 #include "htmlmap.h"
 
 /* sreen dimensions defined in Graph_Set.c */
-extern int screen_top;
-extern int screen_left;
-extern int screen_right;
-extern int screen_bottom;
-
 
 /* point in polygon test by Randolph Franklin */
 /* http://www.ecse.rpi.edu/Homepages/wrf/     */

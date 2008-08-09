@@ -1,6 +1,6 @@
 /* allocation.c */
-char *falloc(int, int);
-char *frealloc(char *, int, int, int);
+void *falloc(int, int);
+void *frealloc(void *, int, int);
 
 /* do_graph.c */
 int set_graph_stuff(void);

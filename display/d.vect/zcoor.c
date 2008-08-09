@@ -12,7 +12,7 @@ int zcoor(struct Map_info *Map, int type, LATTR * lattr)
     double xl, yl, zl;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
+    double X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
     char text[50];
 
     G_debug(1, "display zcoor:");
@@ -39,8 +39,8 @@ int zcoor(struct Map_info *Map, int type, LATTR * lattr)
 	Vect_get_node_coor(Map, el, &xl, &yl, &zl);
 	G_debug(3, "node = %d", el);
 
-	X = (int)(D_u_to_d_col(xl));
-	Y = (int)(D_u_to_d_row(yl));
+	X = D_u_to_d_col(xl);
+	Y = D_u_to_d_row(yl);
 
 	X = X + 0.5 * lattr->size;
 	Y = Y + 1.5 * lattr->size;

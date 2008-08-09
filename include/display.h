@@ -5,7 +5,7 @@
 #include <grass/symbol.h>
 
 /* cnversions.c */
-int D_do_conversions(const struct Cell_head *, int, int, int, int);
+int D_do_conversions(const struct Cell_head *, double, double, double, double);
 int D_is_lat_lon(void);
 double D_get_u_to_d_xconv(void);
 double D_get_u_to_d_yconv(void);
@@ -35,25 +35,22 @@ double D_get_ns_resolution(void);
 double D_get_ew_resolution(void);
 void D_get_u(double[2][2]);
 void D_get_a(int[2][2]);
-void D_get_d(int[2][2]);
+void D_get_d(double[2][2]);
 
 /* color_list.c */
 char *D_color_list(void);
 
-/* draw.c */
-int D_set_clip_window(int, int, int, int);
-int D_set_clip_window_to_map_window(void);
-int D_set_clip_window_to_screen_window(void);
-int D_cont_abs(int, int);
-int D_cont_rel(int, int);
-int D_move_abs(int, int);
-int D_move_rel(int, int);
-
 /* draw2.c */
 void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
+void D_clip_to_display(void);
+void D_clip_to_screen(void);
 void D_move_clip(double, double);
 int D_cont_clip(double, double);
+int D_line_clip(double, double, double, double);
+void D_move_abs_clip(double, double);
+int D_cont_abs_clip(double, double);
+int D_line_abs_clip(double, double, double, double);
 void D_polydots_clip(const double *, const double *, int);
 void D_polyline_cull(const double *, const double *, int);
 void D_polyline_clip(const double *, const double *, int);
@@ -62,19 +59,23 @@ void D_polygon_clip(const double *, const double *, int);
 void D_box_clip(double, double, double, double);
 void D_move(double, double);
 void D_cont(double, double);
+void D_line(double, double, double, double);
 void D_polydots(const double *, const double *, int);
 void D_polyline(const double *, const double *, int);
 void D_polygon(const double *, const double *, int);
 void D_box(double, double, double, double);
 void D_line_width(double);
+void D_move_abs(double, double);
+void D_cont_abs(double, double);
+void D_line_abs(double, double, double, double);
+
+/* icon.c */
+void D_plot_icon(double, double, int, double, double);
 
 /* list.c */
 void D_clear_window(void);
 void D_set_erase_color(const char *);
 void D_get_erase_color(char *);
-
-/* popup.c */
-int D_popup(int, int, int, int, int, int, char *[]);
 
 /* raster.c */
 int D_draw_raster(int, const void *, struct Colors *, RASTER_MAP_TYPE);
@@ -82,7 +83,7 @@ int D_draw_d_raster(int, const DCELL *, struct Colors *);
 int D_draw_f_raster(int, const FCELL *, struct Colors *);
 int D_draw_c_raster(int, const CELL *, struct Colors *);
 int D_draw_cell(int, const CELL *, struct Colors *);
-int D_cell_draw_setup(int, int, int, int);
+int D_cell_draw_setup(double, double, double, double);
 int D_draw_raster_RGB(int, const void *, const void *, const void *,
 		      struct Colors *, struct Colors *, struct Colors *,
 		      RASTER_MAP_TYPE, RASTER_MAP_TYPE, RASTER_MAP_TYPE);
@@ -100,9 +101,9 @@ int D_color_of_type(const void *, struct Colors *, RASTER_MAP_TYPE);
 int D_setup(int);
 
 /* symbol.c */
-void D_symbol(const SYMBOL *, int, int, const RGBA_Color *,
+void D_symbol(const SYMBOL *, double, double, const RGBA_Color *,
 	      const RGBA_Color *);
-void D_symbol2(const SYMBOL *, int, int, const RGBA_Color *,
+void D_symbol2(const SYMBOL *, double, double, const RGBA_Color *,
 	       const RGBA_Color *);
 
 /* tran_colr.c */
@@ -114,12 +115,12 @@ int D_raster_use_color(int);
 int D_color_number_to_RGB(int, int *, int *, int *);
 
 /* window.c */
-void D_new_window(char *, int, int, int, int);
-void D_new_window_percent(char *, float, float, float, float);
+void D_new_window(char *, double, double, double, double);
+void D_new_window_percent(char *, double, double, double, double);
 void D_show_window(int);
-int D_get_screen_window(int *, int *, int *, int *);
+int D_get_screen_window(double *, double *, double *, double *);
 void D_check_map_window(struct Cell_head *);
-void D_reset_screen_window(int, int, int, int);
+void D_reset_screen_window(double, double, double, double);
 void D_remove_window(void);
 void D_erase_window(void);
 void D_erase(const char *);

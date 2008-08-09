@@ -6,13 +6,13 @@
 #define MAX(a,b) ((a)>(b)?(a):(b))
 #endif
 
-static int previous_width = -1;
+static double previous_width = -1;
 
-void Cairo_Line_width(int width)
+void Cairo_Line_width(double width)
 {
-    G_debug(1, "Cairo_Line_width: %d", width);
+    G_debug(1, "Cairo_Line_width: %f", width);
 
     width = MAX(MIN_WIDTH, width);
     if (width != previous_width)
-	cairo_set_line_width(cairo, (double)width);
+	cairo_set_line_width(cairo, width);
 }
