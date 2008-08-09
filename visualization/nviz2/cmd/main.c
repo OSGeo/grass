@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("visualization, raster, vector");
+    module->keywords = _("visualization, raster, vector, raster3d");
     module->description = _("Experimental NVIZ CLI prototype.");
 
     params = (struct GParams *)G_malloc(sizeof(struct GParams));
@@ -99,21 +99,26 @@ int main(int argc, char *argv[])
 
     /* load line vector maps */
     if (params->vlines->answer) {
-	load_vector_lines(params, &data);
+	load_vlines(params, &data);
 	/* set attributes of 2d lines */
 	vlines_set_attrb(params);
     }
 
     /* load point vector maps */
     if (params->vpoints->answer) {
-	load_vector_points(params, &data);
+	load_vpoints(params, &data);
 	/* set attributes for 2d lines */
 	vpoints_set_attrb(params);
     }
 
     /* load volumes */
     if (params->volume->answer) {
-	load_volume(params, &data);
+	load_rasters3d(params, &data);
+    }
+
+    /* define isosurfaces for displaying volumes */
+    if (params->isosurf_level->answer) {
+	add_isosurfs(params, &data);
     }
 
     /* focus on loaded data */

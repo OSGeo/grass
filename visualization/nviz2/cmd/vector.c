@@ -32,7 +32,7 @@ static int load_vectors(const struct Option *, const struct Option *,
 
    \return number of loaded vectors
  */
-int load_vector_lines(const struct GParams *params, nv_data * data)
+int load_vlines(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
 			params->vlines, MAP_OBJ_VECT, data);
@@ -46,7 +46,7 @@ int load_vector_lines(const struct GParams *params, nv_data * data)
 
    \return number of loaded vectors
  */
-int load_vector_points(const struct GParams *params, nv_data * data)
+int load_vpoints(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
 			params->vpoints, MAP_OBJ_SITE, data);

@@ -289,7 +289,7 @@ void args_vline(struct GParams *params)
     params->vlines->required = NO;
     params->vlines->description = _("Name of line vector overlay map(s)");
     params->vlines->guisection = _("Vector lines");
-    params->vlines->key = "vlines";
+    params->vlines->key = "vline";
 
     /* line width */
     params->vline_width = G_define_option();
@@ -346,7 +346,7 @@ void args_vpoint(struct GParams *params)
     params->vpoints->required = NO;
     params->vpoints->description = _("Name of point vector overlay map(s)");
     params->vpoints->guisection = _("Vector points");
-    params->vpoints->key = "vpoints";
+    params->vpoints->key = "vpoint";
 
     /* point width */
     params->vpoint_size = G_define_option();
@@ -462,7 +462,63 @@ void args_volume(struct GParams *params)
     params->volume = G_define_standard_option(G_OPT_R3_MAPS);
     params->volume->required = NO;
     params->volume->guisection = _("Volume");
-    params->volume->key = "rast3d";
+    params->volume->key = "volume";
+
+    /* mode */
+    params->volume_mode = G_define_option();
+    params->volume_mode->key = "volume_mode";
+    params->volume_mode->key_desc = "string";
+    params->volume_mode->type = TYPE_STRING;
+    params->volume_mode->required = YES;
+    params->volume_mode->multiple = YES;
+    params->volume_mode->description = _("Volume draw mode");
+    params->volume_mode->options = "isosurface,slice";
+    params->volume_mode->answer = "isosurface";
+    params->volume_mode->guisection = _("Draw");
+
+    /* shading */
+    params->volume_shade = G_define_option();
+    params->volume_shade->key = "volume_shading";
+    params->volume_shade->key_desc = "string";
+    params->volume_shade->type = TYPE_STRING;
+    params->volume_shade->required = YES;
+    params->volume_shade->multiple = YES;
+    params->volume_shade->description = _("Volume shading");
+    params->volume_shade->options = "flat,gouraud";
+    params->volume_shade->answer = "gouraud";
+    params->volume_shade->guisection = _("Draw");
+
+    /* position */
+    params->volume_pos = G_define_option();
+    params->volume_pos->key = "volume_position";
+    params->volume_pos->key_desc = "x,y,z";
+    params->volume_pos->type = TYPE_INTEGER;
+    params->volume_pos->required = YES;
+    params->volume_pos->multiple = YES;
+    params->volume_pos->description = _("Volume position");
+    params->volume_pos->guisection = _("Volume");
+    params->volume_pos->answer = "0,0,0";
+    
+    /* resolution  */
+    params->volume_res = G_define_option();
+    params->volume_res->key = "volume_resolution";
+    params->volume_res->key_desc = "value";
+    params->volume_res->type = TYPE_INTEGER;
+    params->volume_res->required = YES;
+    params->volume_res->multiple = YES;
+    params->volume_res->description = _("Volume resolution");
+    params->volume_res->answer = "3";
+    params->volume_res->guisection = _("Volume");
+
+    /* isosurface level */
+    params->isosurf_level = G_define_option();
+    params->isosurf_level->key = "isosurf_level";
+    params->isosurf_level->key_desc = "volume:value";
+    params->isosurf_level->type = TYPE_STRING;
+    params->isosurf_level->required = NO;
+    params->isosurf_level->multiple = YES;
+    params->isosurf_level->description = _("Isosurface level");
+    params->isosurf_level->guisection = _("Volume");
 
     return;
 }

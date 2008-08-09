@@ -751,10 +751,14 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
    \param pos position index
    \param data data buffer
 
-   \param char
+   \return char on success
+   \return NULL on failure
  */
 unsigned char gvl_read_char(int pos, const unsigned char *data)
 {
+    if (!data)
+	return NULL;
+    
     return data[pos];
 }
 
