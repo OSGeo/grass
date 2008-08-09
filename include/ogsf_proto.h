@@ -264,6 +264,7 @@ int GVL_get_trans(int, float *, float *, float *);
 void GVL_draw_vol(int);
 void GVL_draw_wire(int);
 void GVL_alldraw_vol(void);
+void GVL_alldraw_wire(void);
 int GVL_Set_ClientData(int, void *);
 void *GVL_Get_ClientData(int);
 void GVL_get_dims(int, int *, int *, int *);

@@ -26,7 +26,8 @@
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceTopo(int id, bool map, const char *value)
 {
@@ -41,7 +42,8 @@ int Nviz::SetSurfaceTopo(int id, bool map, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceColor(int id, bool map, const char *value)
 {
@@ -58,7 +60,8 @@ int Nviz::SetSurfaceColor(int id, bool map, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceMask(int id, bool invert, const char *value)
 {
@@ -75,7 +78,8 @@ int Nviz::SetSurfaceMask(int id, bool invert, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceTransp(int id, bool map, const char *value)
 {
@@ -90,7 +94,8 @@ int Nviz::SetSurfaceTransp(int id, bool map, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceShine(int id, bool map, const char *value)
 {
@@ -105,7 +110,8 @@ int Nviz::SetSurfaceShine(int id, bool map, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceEmit(int id, bool map, const char *value)
 {
@@ -121,14 +127,15 @@ int Nviz::SetSurfaceEmit(int id, bool map, const char *value)
   \param value map name of value
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceAttr(int id, int attr, bool map, const char *value)
 {
     int ret;
 
     if (!GS_surf_exists(id)) {
-	return 0;
+	return -1;
     }
 
     if (map) {
@@ -152,7 +159,7 @@ int Nviz::SetSurfaceAttr(int id, int attr, bool map, const char *value)
     G_debug(1, "Nviz::SetSurfaceAttr(): id=%d, attr=%d, map=%d, value=%s",
 	    id, attr, map, value);
 
-    return ret;
+    return ret ? 1 : -2;
 }
 
 /*!
@@ -161,7 +168,9 @@ int Nviz::SetSurfaceAttr(int id, int attr, bool map, const char *value)
   \param id surface id
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
+  \return -1 on failure
 */
 
 int Nviz::UnsetSurfaceMask(int id)
@@ -175,7 +184,8 @@ int Nviz::UnsetSurfaceMask(int id)
   \param id surface id
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 
 int Nviz::UnsetSurfaceTransp(int id)
@@ -189,7 +199,8 @@ int Nviz::UnsetSurfaceTransp(int id)
   \param id surface id
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 
 int Nviz::UnsetSurfaceEmit(int id)
@@ -204,18 +215,23 @@ int Nviz::UnsetSurfaceEmit(int id)
   \param attr attribute descriptor
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::UnsetSurfaceAttr(int id, int attr)
 {
+    int ret;
+    
     if (!GS_surf_exists(id)) {
-	return 0;
+	return -1;
     }
 
     G_debug(1, "Nviz::UnsetSurfaceAttr(): id=%d, attr=%d",
 	    id, attr);
     
-    return Nviz_unset_attr(id, MAP_OBJ_SURF, attr);
+    ret = Nviz_unset_attr(id, MAP_OBJ_SURF, attr);
+    
+    return ret ? 1 : -2;
 }
 
 /*!
@@ -225,8 +241,9 @@ int Nviz::UnsetSurfaceAttr(int id, int attr)
   \param fine x/y fine resolution
   \param coarse x/y coarse resolution
 
-  \return 0 on error
   \return 1 on success
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 {
@@ -236,11 +253,11 @@ int Nviz::SetSurfaceRes(int id, int fine, int coarse)
 
     if (id > 0) {
 	if (!GS_surf_exists(id)) {
-	    return 0;
+	    return -1;
 	}
 
 	if (GS_set_drawres(id, fine, fine, coarse, coarse) < 0) {
-	    return 0;
+	    return -2;
 	}
     }
     else {
@@ -268,7 +285,8 @@ int Nviz::SetSurfaceRes(int id, int fine, int coarse)
   \param style draw style
 
   \return 1 on success
-  \return 0 on error
+  \return -1 surface not found
+  \return -2 setting attributes failed
 */
 int Nviz::SetSurfaceStyle(int id, int style)
 {
@@ -277,17 +295,17 @@ int Nviz::SetSurfaceStyle(int id, int style)
 
     if (id > 0) {
 	if (!GS_surf_exists(id)) {
-	    return 0;
+	    return -1;
 	}
 	
 	if (GS_set_drawmode(id, style) < 0) {
-	    return 0;
+	    return -2;
 	}
 	return 1;
     }
 
     if (GS_setall_drawmode(style) < 0) {
-	return 0;
+	return -2;
     }
 
     return 1;
@@ -302,6 +320,9 @@ int Nviz::SetSurfaceStyle(int id, int style)
   \param color color string (R:G:B)
 
   \return 1 on success
+  \return -1 surface not found
+  \return -2 setting attributes failed
+  \return 1 on success
   \return 0 on failure
 */
 int Nviz::SetWireColor(int id, const char* color_str)
@@ -315,7 +336,7 @@ int Nviz::SetWireColor(int id, const char* color_str)
 
     if (id > 0) {
 	if (!GS_surf_exists(id)) {
-	    return 0;
+	    return -1;
 	}
 	GS_set_wire_color(id, color);
     }
@@ -370,12 +391,13 @@ std::vector<double> Nviz::GetSurfacePosition(int id)
   \param x,y,z translation values
 
   \return 1 on success
-  \return 0 on failure
+  \return -1 surface not found
+  \return -2 setting position failed
 */
 int Nviz::SetSurfacePosition(int id, float x, float y, float z)
 {
     if (!GS_surf_exists(id)) {
-	return 0;
+	return -1;
     }
     
     G_debug(1, "Nviz::SetSurfacePosition(): id=%d, x=%f, y=%f, z=%f",

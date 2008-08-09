@@ -43,7 +43,7 @@ Nviz::Nviz(PyObject *log)
     // G_set_percent_routine(&print_percent);
 
     GS_libinit();
-    /* GVL_libinit(); TODO */
+    GVL_libinit();
 
     GS_set_swap_func(swap_gl);
 

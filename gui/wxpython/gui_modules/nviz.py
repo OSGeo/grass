@@ -7,6 +7,7 @@ List of classes:
  - GLWindow
  - NvizToolWindow
  - ViewPositionWindow
+ - IsoSurfList
 
 (C) 2008 by the GRASS Development Team
 
@@ -264,12 +265,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if self.render['quick'] is False:
             self.parent.onRenderGauge.SetValue(1)
             wx.Yield()
-            self.nvizClass.Draw(False, False, False)
+            self.nvizClass.Draw(False, -1)
         elif self.render['quick'] is True:
             # quick
-            self.nvizClass.Draw(True,
-                                self.render['vlines'],
-                                self.render['vpoints'])
+            mode = wxnviz.DRAW_QUICK_SURFACE | wxnviz.DRAW_QUICK_VOLUME
+            if self.render['vlines']:
+                mode |= wxnviz.DRAW_QUICK_VLINES
+            if self.render['vpoints']:
+                mode |= wxnviz.DRAW_QUICK_VPOINTS
+            self.nvizClass.Draw(True, mode)
         else: # None -> reuse last rendered image
             pass # TODO
 
@@ -405,6 +409,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
             elif type == '3d-raster':
                 data[nvizType] = {}
+                for sec in ('attribute', 'draw', 'position'):
+                    data[nvizType][sec] = {}
 
                 # reset to default properties 
                 self.SetVolumeDefaultProp(data[nvizType])
@@ -426,7 +432,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         # set id
         if id > 0:
-            if type == 'raster':
+            if type in ('raster', '3d-raster'):
                data[nvizType]['object'] = { 'id' : id,
                                             'init' : False }
             elif type == 'vector':
@@ -487,12 +493,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # update tools window
         if hasattr(self.parent, "nvizToolWin") and \
-                item == self.GetSelectedLayer(type='item') and \
-                layer.type == 'raster':
+                item == self.GetSelectedLayer(type='item'):
             toolWin = self.parent.nvizToolWin
-            win = toolWin.FindWindowById( \
-                toolWin.win['vector']['lines']['surface'])
-            win.SetItems(self.layers[layer.type]['name'])
+            if layer.type == 'raster':
+                win = toolWin.FindWindowById( \
+                    toolWin.win['vector']['lines']['surface'])
+                win.SetItems(self.layers[layer.type]['name'])
 
             toolWin.UpdatePage(nvizType)
             toolWin.SetPage(nvizType)
@@ -632,17 +638,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # draw
         #
+        data['draw']['all'] = False # apply only for current surface
         for control, value in UserSettings.Get(group='nviz', key='surface', subkey='draw').iteritems():
             if control[:3] == 'res':
-                if not data['draw'].has_key('resolution'):
-                    data['draw']['resolution'] = { 'all' : False }
                 if 'surface:draw:%s' % 'resolution' not in self.update:
                     self.update.append('surface:draw:%s' % 'resolution')
-                    data['draw']['resolution'] = { 'all' : False,
-                                                   control[4:] : value }
-                else:
-                    data['draw']['resolution'][control[4:]] = value
+                data['draw']['resolution'][control[4:]] = value
                 continue
+            
             elif control not in ('style', 'shading'):
                 self.update.append('surface:draw:%s' % control)
 
@@ -653,17 +656,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     data['draw']['mode'] = {}
                 continue
 
-            data['draw'][control] = { 'value' : value,
-                                      'all' : False }
-        
+            data['draw'][control] = { 'value' : value }
+            
         value, desc = self.GetSurfaceMode(UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'mode']),
                                           UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'style']),
                                           UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading']))
 
         data['draw']['mode'] = { 'value' : value,
-                                 'desc' : desc,
-                                 'all' : False }
-
+                                 'desc' : desc, }
+        
     def LoadVector(self, item, vecType=None):
         """Load 2D or 3D vector map overlay
 
@@ -854,7 +855,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
     def SetVolumeDefaultProp(self, data):
         """Set default volume properties"""
-        pass
+        #
+        # draw
+        #
+        data['draw']['all'] = False # apply only for current volume set
+        for control, value in UserSettings.Get(group='nviz', key='volume', subkey='draw').iteritems():
+            if 'volume:draw:%s' % control not in self.update:
+                self.update.append('volume:draw:%s' % control)
+            data['draw'][control] = { 'value' : value }
         
     def Reset(self):
         """Reset (unload data)"""
@@ -968,7 +976,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             coarse = data['draw']['resolution']['coarse']
             fine   = data['draw']['resolution']['fine']
 
-            if data['draw']['resolution']['all']:
+            if data['draw']['all']:
                 self.nvizClass.SetSurfaceRes(-1, fine, coarse)
             else:
                 self.nvizClass.SetSurfaceRes(id, fine, coarse)
@@ -983,7 +991,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                         shade=data['draw']['mode']['desc']['shading'],
                                         string=True)
             style = data['draw']['mode']['value']
-            if data['draw']['mode']['all']:
+            if data['draw']['all']:
                 self.nvizClass.SetSurfaceStyle(-1, style)
             else:
                 self.nvizClass.SetSurfaceStyle(id, style)
@@ -992,7 +1000,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # wire color
         if 'surface:draw:wire-color' in self.update:
             color = data['draw']['wire-color']['value']
-            if data['draw']['wire-color']['all']:
+            if data['draw']['all']:
                 self.nvizClass.SetWireColor(-1, str(color))
             else:
                 self.nvizClass.SetWireColor(id, str(color))
@@ -1215,7 +1223,7 @@ class NvizToolWindow(wx.Frame):
                            range=(0, 1),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         self.CreateControl(panel, dict=self.win['view'], name='z-exag', sliderHor=False,
-                           range=(0, 1),
+                           range=(1, 1),
                            bind=(self.OnViewChange, self.OnViewChanged, self.OnViewChangedSpin))
         heightSizer = wx.GridBagSizer(vgap=3, hgap=3)
         heightSizer.Add(item=wx.StaticText(panel, id=wx.ID_ANY, label=_("Height:")),
@@ -1301,17 +1309,6 @@ class NvizToolWindow(wx.Frame):
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
-        # labels
-        # col = 0
-        #         for type in (_("Attribute"),
-        #                      _("Use"),
-        #                      _("Map"),
-        #                      _("Constant")):
-        #             gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-        #                                              label=type),
-        #                           pos=(0, col))
-        #             col += 1
-
         # type 
         self.win['surface']['attr'] = {}
         row = 0
@@ -1377,7 +1374,8 @@ class NvizToolWindow(wx.Frame):
             else:
                 self.win['surface'][code]['const'] = None
 
-            self.SetSurfaceUseMap(code) # -> enable map / disable constant
+            self.SetMapObjUseMap(nvizType='surface',
+                                 attrb=code) # -> enable map / disable constant
                 
             row += 1
 
@@ -1795,12 +1793,105 @@ class NvizToolWindow(wx.Frame):
         pageSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.win['volume'] = {}
-        
+
         #
-        # volume attributes
+        # draw
+        #
+        self.win['volume']['draw'] = {}
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Draw")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
+        gridSizer.AddGrowableCol(4)
+
+        # mode
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Mode:")),
+                      pos=(0, 0), flag=wx.ALIGN_CENTER_VERTICAL)
+        mode = wx.Choice (parent=panel, id=wx.ID_ANY, size=(150, -1),
+                          choices = [_("isosurfaces"),
+                                     _("slides")])
+        mode.SetSelection(0)
+        mode.SetName("selection")
+        # mode.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
+        self.win['volume']['draw']['mode'] = mode.GetId()
+        gridSizer.Add(item=mode, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0, 1))
+
+        # shading
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Shading:")),
+                      pos=(0, 2), flag=wx.ALIGN_CENTER_VERTICAL)
+        shade = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                           choices = [_("flat"),
+                                      _("gouraud")])
+        shade.SetName("selection")
+        self.win['volume']['draw']['shading'] = shade.GetId()
+        # shade.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
+        gridSizer.Add(item=shade, flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(0, 3))
+
+        # resolution (mode)
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Resolution:")),
+                      pos=(0, 4), flag=wx.ALIGN_CENTER_VERTICAL)
+        resol = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                            initial=1,
+                            min=1,
+                            max=100)
+        resol.SetName("value")
+        self.win['volume']['draw']['resolution'] = resol.GetId()
+        # resC.Bind(wx.EVT_SPINCTRL, self.OnSurfaceResolution)
+        gridSizer.Add(item=resol, pos=(0, 5))
+        
+        boxSizer.Add(item=gridSizer, proportion=1,
+                     flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL,
+                      border=5)
+
+        #
+        # manage isosurfaces
         #
         box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
-                            label=" %s " % (_("Volume attributes")))
+                            label=" %s " % (_("List of isosurfaces")))
+        boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
+
+        # list
+        isolevel = IsoSurfList(parent=panel, size=(300, 150))
+        self.win['volume']['isosurfs'] = isolevel.GetId()
+        gridSizer.Add(item=isolevel, pos=(0, 0), span=(4, 1))
+        
+        # buttons (add, delete, move up, move down)
+        btnAdd = wx.Button(parent=panel, id=wx.ID_ADD)
+        btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfAdd)
+        gridSizer.Add(item=btnAdd,
+                      pos=(0, 1))
+        btnDelete = wx.Button(parent=panel, id=wx.ID_DELETE)
+        btnDelete.Enable(False)
+        gridSizer.Add(item=btnDelete,
+                      pos=(1, 1))
+        btnMoveUp = wx.Button(parent=panel, id=wx.ID_UP)
+        btnMoveUp.Enable(False)
+        gridSizer.Add(item=btnMoveUp,
+                      pos=(2, 1))
+        btnMoveDown = wx.Button(parent=panel, id=wx.ID_DOWN)
+        btnMoveDown.Enable(False)
+        gridSizer.Add(item=btnMoveDown,
+                      pos=(3, 1))
+
+        boxSizer.Add(item=gridSizer, proportion=1,
+                     flag=wx.ALL | wx.EXPAND, border=3)
+        pageSizer.Add(item=boxSizer, proportion=0,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
+                      border=5)
+        
+        #
+        # isosurface attributes
+        #
+        box = wx.StaticBox (parent=panel, id=wx.ID_ANY,
+                            label=" %s " % (_("Isosurface attributes")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=3, hgap=3)
 
@@ -1813,34 +1904,40 @@ class NvizToolWindow(wx.Frame):
                             ('shine', _("Shininess")),
                             ('emit', _("Emission"))):
             self.win['volume'][code] = {} 
+            # label
             gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
                                              label=attrb + ':'),
                           pos=(row, 0), flag=wx.ALIGN_CENTER_VERTICAL)
-            use = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
-                             choices = [_("map")])
-            if code not in ('topo', 'color', 'shine'):
+            if code != 'topo':
+                use = wx.Choice (parent=panel, id=wx.ID_ANY, size=(100, -1),
+                                 choices = [_("map")])
+            else:
+                use = None
+            # check for required properties
+            if code not in ('topo', 'color'):
                 use.Insert(item=_("unset"), pos=0)
                 self.win['volume'][code]['required'] = False
             else:
-                self.win['surface'][code]['required'] = True
-            if code != 'mask':
+                self.win['volume'][code]['required'] = True
+            if use and code != 'mask':
                 use.Append(item=_('constant'))
-            self.win['surface'][code]['use'] = use.GetId()
-            use.Bind(wx.EVT_CHOICE, self.OnSurfaceUse)
-            gridSizer.Add(item=use, flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(row, 1))
+            if use:
+                self.win['volume'][code]['use'] = use.GetId()
+                use.Bind(wx.EVT_CHOICE, self.OnSurfaceUse)
+                gridSizer.Add(item=use, flag=wx.ALIGN_CENTER_VERTICAL,
+                              pos=(row, 1))
             
-            map = gselect.Select(parent=panel, id=wx.ID_ANY,
-                                 # size=globalvar.DIALOG_GSELECT_SIZE,
-                                 size=(200, -1),
-                                 type="raster")
-            self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
-            map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
-            # changing map topography not allowed
-            if code == 'topo':
-                map.Enable(False)
-            gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL,
-                          pos=(row, 2))
+            if code != 'topo':
+                map = gselect.Select(parent=panel, id=wx.ID_ANY,
+                                     # size=globalvar.DIALOG_GSELECT_SIZE,
+                                     size=(200, -1),
+                                     type="raster")
+                self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
+                map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
+                gridSizer.Add(item=map, flag=wx.ALIGN_CENTER_VERTICAL,
+                              pos=(row, 2))
+            else:
+                map = None
             
             if code == 'color':
                 value = csel.ColourSelect(panel, id=wx.ID_ANY,
@@ -1850,7 +1947,11 @@ class NvizToolWindow(wx.Frame):
             elif code == 'mask':
                 value = None
             else:
-                value = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),
+                if code == 'topo':
+                    size = (200, -1)
+                else:
+                    size = (65, -1)
+                value = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=size,
                                     initial=0)
                 if code == 'topo':
                     value.SetRange(minVal=-1e9, maxVal=1e9)
@@ -1862,20 +1963,26 @@ class NvizToolWindow(wx.Frame):
             
             if value:
                 self.win['volume'][code]['const'] = value.GetId()
-                value.Enable(False)
-                gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
-                              pos=(row, 3))
+                if code == 'topo':
+                    gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                                  pos=(row, 2))
+                else:
+                    value.Enable(False)
+                    gridSizer.Add(item=value, flag=wx.ALIGN_CENTER_VERTICAL,
+                                  pos=(row, 3))
             else:
                 self.win['volume'][code]['const'] = None
             
-            ### self.SetSurfaceUseMap(code) # -> enable map / disable constant
+            if code != 'topo':
+                self.SetMapObjUseMap(nvizType='volume',
+                                     attrb=code) # -> enable map / disable constant
                 
             row += 1
         
         boxSizer.Add(item=gridSizer, proportion=1,
                      flag=wx.ALL | wx.EXPAND, border=3)
         pageSizer.Add(item=boxSizer, proportion=0,
-                      flag=wx.EXPAND | wx.ALL,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                       border=5)
         
         panel.SetSizer(pageSizer)
@@ -2493,7 +2600,8 @@ class NvizToolWindow(wx.Frame):
             else:
                 value = self.FindWindowById(self.win['surface'][attrb]['const']).GetValue()
 
-        self.SetSurfaceUseMap(attrb, useMap)
+        self.SetMapObjUseMap(nvizType='surface',
+                             attrb=attrb, map=useMap)
         
         self.mapWindow.update.append('surface:attribute:%s' % attrb)
         data = self.mapWindow.GetSelectedLayer(type='nviz')
@@ -2505,7 +2613,7 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
-    def SetSurfaceUseMap(self, attrb, map=None):
+    def SetMapObjUseMap(self, nvizType, attrb, map=None):
         if attrb in ('topo', 'color', 'shine'):
             incSel = -1 # decrement selection (no 'unset')
         else:
@@ -2513,20 +2621,21 @@ class NvizToolWindow(wx.Frame):
 
         if map is True: # map
             if attrb != 'topo': # changing map topography not allowed
-                self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(True) # FIXME
-            if self.win['surface'][attrb]['const']:
-                self.FindWindowById(self.win['surface'][attrb]['const']).Enable(False)
-            self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(1 + incSel)
+                # not sure why, but here must be disabled both ids, should be fixed!
+                self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(True)
+            if self.win[nvizType][attrb]['const']:
+                self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(False)
+            self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(1 + incSel)
         elif map is False: # const
-            self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(False)
-            if self.win['surface'][attrb]['const']:
-                self.FindWindowById(self.win['surface'][attrb]['const']).Enable(True)
-            self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(2 + incSel)
+            self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(False)
+            if self.win[nvizType][attrb]['const']:
+                self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(True)
+            self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(2 + incSel)
         else: # unset
-            self.FindWindowById(self.win['surface'][attrb]['map'] + 1).Enable(False)
-            if self.win['surface'][attrb]['const']:
-                self.FindWindowById(self.win['surface'][attrb]['const']).Enable(False)
-            self.FindWindowById(self.win['surface'][attrb]['use']).SetSelection(0)
+            self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(False)
+            if self.win[nvizType][attrb]['const']:
+                self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(False)
+            self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(0)
 
     def OnSurfaceMap(self, event):
         """Set surface attribute"""
@@ -2574,7 +2683,7 @@ class NvizToolWindow(wx.Frame):
         if apply and self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
-    def SetSurfaceResolution(self, all=False):
+    def SetSurfaceResolution(self):
         """Set draw resolution"""
         coarse = self.FindWindowById(self.win['surface']['draw']['res-coarse']).GetValue()
         fine = self.FindWindowById(self.win['surface']['draw']['res-fine']).GetValue()
@@ -2582,12 +2691,11 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.update.append('surface:draw:resolution')
         data = self.mapWindow.GetSelectedLayer(type='nviz')
         data['surface']['draw']['resolution'] = { 'coarse' : coarse,
-                                                  'fine' : fine,
-                                                  'all' : all } 
-
+                                                  'fine' : fine }
+        
         self.mapWindow.UpdateLayerProperties()
 
-    def SetSurfaceMode(self, all=False):
+    def SetSurfaceMode(self):
         """Set draw mode
 
         @param apply allow auto-rendering
@@ -2618,7 +2726,6 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.update.append('surface:draw:mode')
         data = self.mapWindow.GetSelectedLayer(type='nviz')
         data['surface']['draw']['mode'] = { 'value' : value,
-                                            'all' : False,
                                             'desc' : desc }
 
         self.mapWindow.UpdateLayerProperties()
@@ -2646,8 +2753,8 @@ class NvizToolWindow(wx.Frame):
 
         self.mapWindow.update.append('surface:draw:wire-color')
         data = self.mapWindow.GetSelectedLayer(type='nviz')
-        data['surface']['draw']['wire-color'] = { 'value' : value,
-                                                  'all' : all }
+        data['surface']['draw']['wire-color'] = { 'value' : value }
+        
         self.mapWindow.UpdateLayerProperties()
 
         if self.parent.autoRender.IsChecked():
@@ -2900,6 +3007,24 @@ class NvizToolWindow(wx.Frame):
                 
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
+
+    def OnVolumeIsosurfAdd(self, event):
+        """Add new isosurface to the list"""
+        list = self.FindWindowById(self.win['volume']['isosurfs'])
+        level = self.FindWindowById(self.win['volume']['topo']['const']).GetValue()
+        
+        list.Append("%s %s" % (_("Level"), str(level)))
+        list.Check(list.GetCount()-1)
+        
+        # add isosurface
+        layer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
+        id = data['object']['id']
+        
+        self.mapWindow.nvizClass.AddIsosurface(id, level)
+        self.mapWindow.nvizClass.SetIsosurfaceColor(id, 0, True, str(layer.name))
+
+        event.Skip()
         
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
@@ -2912,15 +3037,16 @@ class NvizToolWindow(wx.Frame):
             hmin = self.mapWindow.iview['height']['min']
             hmax = self.mapWindow.iview['height']['max']
             for control in ('spin', 'slider'):
-                self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(0,
+                self.FindWindowById(self.win['view']['z-exag'][control]).SetRange(1,
                                                                                   max)
                 self.FindWindowById(self.win['view']['height'][control]).SetRange(hmin,
                                                                                   hmax)
         elif pageId == 'surface':
             if self.notebook.GetSelection() != self.page['surface']['id']:
-                if self.page['vector']['id'] > -1:
-                    self.notebook.RemovePage(self.page['vector']['id'])
-                    self.page['vector']['id'] = -1
+                for page in ('vector', 'volume'):
+                    if self.page[page]['id'] > -1:
+                        self.notebook.RemovePage(self.page[page]['id'])
+                        self.page[page]['id'] = -1
 
                 self.page['surface']['id'] = 1
                 self.page['settings']['id'] = 2
@@ -2935,9 +3061,10 @@ class NvizToolWindow(wx.Frame):
         
         elif pageId == 'vector':
             if self.notebook.GetSelection() != self.page['vector']['id']:
-                if self.page['surface']['id'] > -1:
-                    self.notebook.RemovePage(self.page['surface']['id'])
-                    self.page['surface']['id'] = -1
+                for page in ('surface', 'volume'):
+                    if self.page[page]['id'] > -1:
+                        self.notebook.RemovePage(self.page[page]['id'])
+                        self.page[page]['id'] = -1
                     
                 self.page['vector']['id'] = 1
                 self.page['settings']['id'] = 2
@@ -2952,9 +3079,10 @@ class NvizToolWindow(wx.Frame):
             
         elif pageId == 'volume':
             if self.notebook.GetSelection() != self.page['volume']['id']:
-                if self.page['volume']['id'] > -1:
-                    self.notebook.RemovePage(self.page['volume']['id'])
-                    self.page['volume']['id'] = -1
+                for page in ('surface', 'vector'):
+                    if self.page[page]['id'] > -1:
+                        self.notebook.RemovePage(self.page[page]['id'])
+                        self.page[page]['id'] = -1
                     
                 self.page['volume']['id'] = 1
                 self.page['settings']['id'] = 2
@@ -2978,7 +3106,8 @@ class NvizToolWindow(wx.Frame):
                 self.FindWindowById(self.win['surface'][attr]['map']).SetValue(layer.name)
             else:
                 self.FindWindowById(self.win['surface'][attr]['map']).SetValue('')
-            self.SetSurfaceUseMap(attr, True) # -> map
+            self.SetMapObjUseMap(nvizType='surface',
+                                 attrb=attr, map=True) # -> map
 
         if data['attribute'].has_key('color'):
             value = data['attribute']['color']['value']
@@ -2987,9 +3116,11 @@ class NvizToolWindow(wx.Frame):
             else: # constant
                 color = map(int, value.split(':'))
                 self.FindWindowById(self.win['surface']['color']['const']).SetColour(color)
-            self.SetSurfaceUseMap(attr, data['attribute']['color']['map'])
+            self.SetMapObjUseMap(nvizType='surface',
+                                 attrb=attr, map=data['attribute']['color']['map'])
 
-        self.SetSurfaceUseMap('shine', data['attribute']['shine']['map'])
+        self.SetMapObjUseMap(nvizType='surface',
+                             attrb='shine', map=data['attribute']['shine']['map'])
         value = data['attribute']['shine']['value']
         if data['attribute']['shine']['map']:
             self.FindWindowById(self.win['surface']['shine']['map']).SetValue(value)
@@ -3000,6 +3131,8 @@ class NvizToolWindow(wx.Frame):
         # draw
         #
         for control, dict in data['draw'].iteritems():
+            if control == 'all': # skip 'all' property
+                continue
             if control == 'resolution':
                 self.FindWindowById(self.win['surface']['draw']['res-coarse']).SetValue(dict['coarse'])
                 self.FindWindowById(self.win['surface']['draw']['res-fine']).SetValue(dict['fine'])
@@ -3150,8 +3283,21 @@ class NvizToolWindow(wx.Frame):
 
     def UpdateVolumePage(self, layer, data):
         """Update volume layer properties page"""
-        pass
-    
+        #
+        # draw
+        #
+        for control, dict in data['draw'].iteritems():
+            if control == 'all': # skip 'all' property
+                continue
+
+            win = self.FindWindowById(self.win['volume']['draw'][control])
+            if win.GetName() == "selection":
+                win.SetSelection(dict['value'])
+            else:
+                win.SetValue(dict['value'])
+
+        self.FindWindowById(self.win['volume']['color']['map']).SetValue("precip3d.500z50@PERMANENT")
+        
     def SetPage(self, name):
         """Get named page"""
         self.notebook.SetSelection(self.page[name]['id'])
@@ -3226,3 +3372,9 @@ class ViewPositionWindow(wx.Window):
             self.mapWindow.Refresh(eraseBackground=False)
         
         event.Skip()
+
+class IsoSurfList(wx.CheckListBox):
+    """List of loaded volume isosurfaces (volume properties page)"""
+    def __init__(self, parent, id=wx.ID_ANY, size=wx.DefaultSize):
+        wx.CheckListBox.__init__(self, parent, id, size=size)
+    

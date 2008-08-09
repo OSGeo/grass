@@ -172,9 +172,7 @@ int Nviz_draw_all_site(nv_data * dc)
 
 /*!
    \brief Draw all loaded volume sets
-
-   \todo To be implement
-
+   
    \param dc nviz data
 
    \return 1
@@ -253,44 +251,45 @@ int Nviz_draw_all(nv_data * data)
 }
 
 /*!
-   \brief Draw all surfaces in wireframe
+   \brief Draw all surfaces in wireframe (quick mode)
 
-   \param dc nviz data
+   Draw modes:
+    - DRAW_QUICK_SURFACE
+    - DRAW_QUICK_VLINES
+    - DRAW_QUICK_VPOINTS
+    - DRAW_QUICK_VOLUME
 
+   \param data nviz data
+   \param draw_mode draw mode
+   
    \return 1
  */
-int Nviz_draw_quick(nv_data * data, int draw_vlines, int draw_vpoints)
+int Nviz_draw_quick(nv_data * data, int draw_mode)
 {
     GS_set_draw(GSD_BACK);
-
+    
     GS_ready_draw();
-
+    
     GS_clear(data->bgcolor);
-
+    
     /* draw surfaces */
-    GS_alldraw_wire();
-
+    if (draw_mode & DRAW_QUICK_SURFACE)
+	GS_alldraw_wire();
+    
     /* draw vector lines */
-    if (draw_vlines)
+    if (draw_mode & DRAW_QUICK_VLINES)
 	GV_alldraw_vect();
-
+    
     /* draw vector points */
-    if (draw_vpoints)
+    if (draw_mode & DRAW_QUICK_VPOINTS)
 	GP_alldraw_site();
-
-    /*
-       vol_list = GVL_get_vol_list(&max);
-       max = GVL_num_vols();
-       for (i = 0; i < max; i++) {
-       if (check_blank(interp, vol_list[i]) == 0) {
-       GVL_draw_wire(vol_list[i]);
-       }
-       }
-     */
-
+    
+    /* draw volumes */
+    if (draw_mode & DRAW_QUICK_VOLUME) {
+	GVL_alldraw_wire();
+    }
+    
     GS_done_draw();
-
-    // flythrough_postdraw_cb();
-
+    
     return 1;
 }

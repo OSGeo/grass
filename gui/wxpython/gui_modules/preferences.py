@@ -450,6 +450,15 @@ class Settings:
                         'map' : True,
                         'value' : (0, 0, 0, 255), # constant: black
                         },
+                    'draw' : {
+                        'mode' : 0, # isosurfaces
+                        'shading' : 1, # gouraud
+                        'resolution' : 3, # polygon resolution
+                        },
+                    'shine': {
+                        'map' : False,
+                        'value' : 60.0,
+                        },
                     },
                 'settings': {
                     'general' : {

@@ -47,3 +47,10 @@
 #define ST_ASTER      8
 #define ST_GYRO       9
 #define ST_HISTOGRAM  10
+
+/* extracted from include/nviz.h */
+/* quick draw mode */
+#define DRAW_QUICK_SURFACE 0x01
+#define DRAW_QUICK_VLINES  0x02
+#define DRAW_QUICK_VPOINTS 0x04
+#define DRAW_QUICK_VOLUME  0x08

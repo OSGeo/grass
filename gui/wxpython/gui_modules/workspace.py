@@ -185,8 +185,8 @@ class ProcessWorkspaceFile(HandlerBase):
         elif name == 'draw':
             if self.inTag['nviz'] and self.inTag['surface']:
                 tagName = str(name)
+                self.layerNviz['surface'][tagName]['all'] = False
                 self.layerNviz['surface'][tagName]['mode'] = {}
-                self.layerNviz['surface'][tagName]['mode']['all'] = False
                 self.layerNviz['surface'][tagName]['mode']['value'] = -1 # to be calculated
                 self.layerNviz['surface'][tagName]['mode']['desc'] = {}
                 self.layerNviz['surface'][tagName]['mode']['desc']['shading'] = \
@@ -269,14 +269,12 @@ class ProcessWorkspaceFile(HandlerBase):
 
         elif name == 'resolution':
             if self.inTag['nviz'] and self.inTag['surface']:
-                self.layerNviz['surface']['draw']['resolution']['all'] = False
                 self.layerNviz['surface']['draw']['resolution'][self.resolutionType] = int(self.value)
                 del self.resolutionType
 
         elif name == 'wire_color':
             if self.inTag['nviz'] and self.inTag['surface']:
                 self.layerNviz['surface']['draw']['wire-color'] = {}
-                self.layerNviz['surface']['draw']['wire-color']['all'] = False
                 self.layerNviz['surface']['draw']['wire-color']['value'] = str(self.value)
 
         elif name == 'x':

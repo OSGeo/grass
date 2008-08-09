@@ -237,10 +237,7 @@ int Nviz::LoadVolume(const char* name, const char *color_name, const char *color
 		      G_fully_qualified_name(name, mapset), -1.0,
 		      data);
     }
-	    
-    /* focus on loaded data */
-    Nviz_set_focus_map(MAP_OBJ_UNDEFINED, -1);
-
+    
     G_debug(1, "Nviz::LoadVolume(): name=%s -> id=%d", name, id);
 
     return id;

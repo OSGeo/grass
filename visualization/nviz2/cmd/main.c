@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     }
     else {
 	z_exag = Nviz_get_exag();
-	G_message(_("Vertical exaggeration not given, using calculated value %f"),
+	G_message(_("Vertical exaggeration not given, using calculated value %.0f"),
 		  z_exag);
     }
     Nviz_change_exag(&data, z_exag);
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     }
     else {
 	Nviz_get_exag_height(&vp_height, NULL, NULL);
-	G_message(_("Viewpoint height not given, using calculated value %f"),
+	G_message(_("Viewpoint height not given, using calculated value %.0f"),
 		  vp_height);
     }
     Nviz_set_viewpoint_height(&data, vp_height);

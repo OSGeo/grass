@@ -374,7 +374,7 @@ void GVL_draw_vol(int vid)
 }
 
 /*!
-   \brief Draw volume wire mode
+   \brief Draw volume in wire mode
 
    \param id volume set id
  */
@@ -382,7 +382,7 @@ void GVL_draw_wire(int id)
 {
     geovol *gvl;
 
-    G_debug(3, "GVL_draw_wire");
+    G_debug(3, "GVL_draw_wire(): id=%d", id);
 
     gvl = gvl_get_vol(id);
 

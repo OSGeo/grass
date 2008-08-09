@@ -2627,7 +2627,7 @@ class MapFrame(wx.Frame):
                         "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
             if not nviz.haveNviz:
                 msg = _("Unable to start Nviz. Python extension "
-                        "for Nviz was not found. "
+                        "for Nviz was not found or loaded properly. "
                         "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
 
             if msg:
