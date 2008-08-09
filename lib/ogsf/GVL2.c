@@ -621,7 +621,7 @@ int GVL_isosurf_add(int id)
     geovol *gvl;
     geovol_isosurf *isosurf;
 
-    G_debug(3, "GVL_isosurf_add");
+    G_debug(3, "GVL_isosurf_add() id=%d", id);
 
     gvl = gvl_get_vol(id);
 
@@ -631,8 +631,8 @@ int GVL_isosurf_add(int id)
     if (gvl->n_isosurfs == MAX_ISOSURFS)
 	return (-1);
 
-    if (NULL ==
-	(isosurf = (geovol_isosurf *) G_malloc(sizeof(geovol_isosurf)))) {
+    isosurf = (geovol_isosurf *) G_malloc(sizeof(geovol_isosurf));
+    if (!isosurf) {
 	return (-1);
     }
 
@@ -822,19 +822,29 @@ int GVL_isosurf_unset_att(int id, int isosurf_id, int att)
 /*!
    \brief Set constant isosurface attribute
 
+   Attributes:
+    - ATT_NORM
+    - ATT_TOPO topography (level) constant
+    - ATT_COLOR color map/constant
+    - ATT_MASK mask map
+    - ATT_TRANSP transparency map/constant
+    - ATT_SHINE shininess map/constant
+    - ATT_EMIT emission map/constant
+
    \param id volume set id
-   \param isosurf_id isosurface id
-   \param att attribute id
+   \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+   \param att attribute descriptor
    \param constant constant value
 
-   \return ?
+   \return 1 on success
    \return -1 on error
  */
 int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
 {
     geovol_isosurf *isosurf;
 
-    G_debug(3, "GVL_isosurf_set_att_const");
+    G_debug(3, "GVL_isosurf_set_att_const() id=%d isosurf_id=%d "
+	    "att=%d const=%f", id, isosurf_id, att, constant);
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 
@@ -848,12 +858,21 @@ int GVL_isosurf_set_att_const(int id, int isosurf_id, int att, float constant)
 /*!
    \brief Set isosurface map attribute
 
+   Attributes:
+    - ATT_NORM
+    - ATT_TOPO topography (level) constant
+    - ATT_COLOR color map/constant
+    - ATT_MASK mask map
+    - ATT_TRANSP transparency map/constant
+    - ATT_SHINE shininess map/constant
+    - ATT_EMIT emission map/constant
+
    \param id volume set id
-   \param isosurf_id isosurface id
-   \param att attribute id
+   \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+   \param att attribute descriptor
    \param filename map name
 
-   \return ?
+   \return 1 on success
    \return -1 on error
  */
 int GVL_isosurf_set_att_map(int id, int isosurf_id, int att,
@@ -861,7 +880,8 @@ int GVL_isosurf_set_att_map(int id, int isosurf_id, int att,
 {
     geovol_isosurf *isosurf;
 
-    G_debug(3, "GVL_isosurf_set_att_map");
+    G_debug(3, "GVL_isosurf_set_att_map(): id=%d, isosurf_id=%d "
+	    "att=%d map=%s", id, isosurf_id, att, filename);
 
     isosurf = gvl_isosurf_get_isosurf(id, isosurf_id);
 

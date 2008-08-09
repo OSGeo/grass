@@ -20,7 +20,7 @@ struct GParams
     /* vector points */
       *vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width,
     /* volumes */
-      *volume,
+      *volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
     /* misc */
       *exag, *bgcolor,
     /* viewpoint */
@@ -40,13 +40,14 @@ int load_rasters(const struct GParams *, nv_data *);
 void surface_set_draw_mode(const struct GParams *);
 
 /* vector.c */
-int load_vector_lines(const struct GParams *, nv_data *);
-int load_vector_points(const struct GParams *, nv_data *);
+int load_vlines(const struct GParams *, nv_data *);
+int load_vpoints(const struct GParams *, nv_data *);
 int vlines_set_attrb(const struct GParams *);
 int vpoints_set_attrb(const struct GParams *);
 
 /* volume.c */
-int load_volume(const struct GParams *, nv_data *);
+int load_rasters3d(const struct GParams *, nv_data *);
+int add_isosurfs(const struct GParams *, nv_data *);
 
 /* write_img.c */
 int write_img(const char *, int);

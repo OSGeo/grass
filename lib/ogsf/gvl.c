@@ -527,6 +527,9 @@ int gvl_isosurf_init(geovol_isosurf * isosurf)
 	isosurf->att[i].att_src = NOTSET_ATT;
 	isosurf->att[i].constant = 0.;
 	isosurf->att[i].hfile = -1;
+	isosurf->att[i].user_func = NULL;
+	isosurf->att[i].att_data = NULL;
+	isosurf->att[i].changed = 0;
     }
 
     isosurf->data = NULL;
@@ -563,10 +566,10 @@ int gvl_isosurf_freemem(geovol_isosurf * isosurf)
 }
 
 /*!
-   \brief Get geovol_isosurf struct of given volume set
+   \brief Get isosurface of given volume set
 
    \param id volume set id
-   \param isosurf_id isosurface id
+   \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
 
    \return pointer to geovol_isosurf struct
    \return NULL on failure
@@ -575,6 +578,9 @@ geovol_isosurf *gvl_isosurf_get_isosurf(int id, int isosurf_id)
 {
     geovol *gvl;
 
+    G_debug(5, "gvl_isosurf_get_isosurf(): id=%d isosurf=%d",
+	    id, isosurf_id);
+    
     gvl = gvl_get_vol(id);
 
     if (gvl) {
@@ -645,10 +651,10 @@ int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
 }
 
 /*!
-   \brief Set attribute constant
+   \brief Set isosurface attribute constant
 
    \param isosurf pointer to geovol_isosurf struct
-   \param desc attribute id
+   \param desc attribute descriptor
    \param constant attribute value
 
    \return -1 on failure
@@ -657,7 +663,8 @@ int gvl_isosurf_set_att_src(geovol_isosurf * isosurf, int desc, int src)
 int gvl_isosurf_set_att_const(geovol_isosurf * isosurf, int desc,
 			      float constant)
 {
-    G_debug(5, "gvl_isosurf_set_att_const");
+    G_debug(5, "gvl_isosurf_set_att_const(): att=%d, const=%f",
+	    desc, constant);
 
     if (isosurf) {
 	isosurf->att[desc].constant = constant;
@@ -685,7 +692,7 @@ int gvl_isosurf_set_att_map(geovol_isosurf * isosurf, int desc,
 {
     int hfile;
 
-    G_debug(5, "gvl_isosurf_set_att_map(): att_map: %s", filename);
+    G_debug(5, "gvl_isosurf_set_att_map(): att=%d map=%s", desc, filename);
 
     if (isosurf) {
 	if (0 > (hfile = gvl_file_newh(filename, VOL_FTYPE_G3D)))
