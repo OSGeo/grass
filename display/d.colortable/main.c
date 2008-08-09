@@ -51,10 +51,10 @@ int main(int argc, char **argv)
     int atcol;
     int atline;
     int count;
-    int t, b, l, r;
+    double t, b, l, r;
     int fp, new_colr;
-    int x_box[5];
-    int y_box[5];
+    double x_box[5];
+    double y_box[5];
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3, *opt4;
 

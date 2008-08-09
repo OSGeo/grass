@@ -64,15 +64,15 @@ int dir(struct Map_info *Map, int type, struct cat_list *Clist, int chcat)
 
 	Vect_point_on_line(Points, len * 0.25, &x, &y, NULL, &angle, NULL);
 	G_debug(3, "plot direction: %f, %f", x, y);
-	G_plot_icon(x, y, G_ICON_ARROW, angle, msize);
+	D_plot_icon(x, y, G_ICON_ARROW, angle, msize);
 
 	Vect_point_on_line(Points, len * 0.5, &x, &y, NULL, &angle, NULL);
 	G_debug(3, "plot direction: %f, %f", x, y);
-	G_plot_icon(x, y, G_ICON_ARROW, angle, msize);
+	D_plot_icon(x, y, G_ICON_ARROW, angle, msize);
 
 	Vect_point_on_line(Points, len * 0.75, &x, &y, NULL, &angle, NULL);
 	G_debug(3, "plot direction: %f, %f", x, y);
-	G_plot_icon(x, y, G_ICON_ARROW, angle, msize);
+	D_plot_icon(x, y, G_ICON_ARROW, angle, msize);
     }
 
 

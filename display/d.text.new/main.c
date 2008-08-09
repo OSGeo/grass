@@ -67,13 +67,13 @@
 
 struct rectinfo
 {
-    int t, b, l, r;
+    double t, b, l, r;
 };
 
 static void set_color(char *);
-static int get_coordinates(int *, int *, double *, double *,
+static int get_coordinates(double *, double *, double *, double *,
 			   struct rectinfo, char **, char, char);
-static void draw_text(char *, int *, int *, int, char *, double, char);
+static void draw_text(char *, double *, double *, double, char *, double, char);
 
 int main(int argc, char **argv)
 {
@@ -105,8 +105,8 @@ int main(int argc, char **argv)
 
     /* options and flags */
     char *text;
-    int size;
-    int x, y;
+    double size;
+    double x, y;
     int line;
     double rotation;
     char align[3];
@@ -125,9 +125,9 @@ int main(int argc, char **argv)
     int first_text;
     int linefeed;
     int set_l;
-    int orig_x, orig_y;
-    int prev_x, prev_y;
-    int set_x, set_y;
+    double orig_x, orig_y;
+    double prev_x, prev_y;
+    double set_x, set_y;
     double east, north;
 
     /* initialize the GIS calls */
@@ -296,14 +296,12 @@ int main(int argc, char **argv)
     R_set_window(win.t, win.b, win.l, win.r);
 
     if (flag.s->answer)
-	size = (int)atof(opt.size->answer);
+	size = atof(opt.size->answer);
     else
 #ifdef BACKWARD_COMPATIBILITY
-	size =
-	    (int)(atof(opt.size->answer) / 100.0 * (win.b - win.t) /
-		  linespacing);
+	size = atof(opt.size->answer) / 100.0 * (win.b - win.t) / linespacing;
 #else
-	size = (int)(atof(opt.size->answer) / 100.0 * (win.b - win.t));
+	size = atof(opt.size->answer) / 100.0 * (win.b - win.t);
 #endif
 
     set_color(opt.color->answer);
@@ -319,18 +317,18 @@ int main(int argc, char **argv)
 	orig_y = y;
     }
     else {
-	x = win.l + (int)(size * linespacing + 0.5) - size;	/* d.text: +5 */
-	y = win.t + line * (int)(size * linespacing + 0.5);
+	x = win.l + (size * linespacing + 0.5) - size;	/* d.text: +5 */
+	y = win.t + line * (size * linespacing + 0.5);
     }
 
     prev_x = x;
     prev_y = y;
 
     R_text_size(size, size);
-    R_text_rotation((float)(rotation * 180.0 / M_PI));
+    R_text_rotation(rotation * 180.0 / M_PI);
 
     if (text) {
-	int x2, y2;
+	double x2, y2;
 
 	x2 = x;
 	y2 = y;
@@ -400,11 +398,11 @@ int main(int argc, char **argv)
 		d = atof(buf_ptr);
 		if (buf_ptr[buf_len - 1] != 'p')
 #ifdef BACKWARD_COMPATIBILITY
-		    d *= (double)(win.b - win.t) / 100.0 / linespacing;
+		    d *= (win.b - win.t) / 100.0 / linespacing;
 #else
-		    d *= (double)(win.b - win.t) / 100.0;
+		    d *= (win.b - win.t) / 100.0;
 #endif
-		size = (int)d + (i ? size : 0);
+		size = d + (i ? size : 0);
 		R_text_size(size, size);
 		break;
 	    case 'B':
@@ -427,7 +425,7 @@ int main(int argc, char **argv)
 		rotation = fmod(d, 2.0 * M_PI);
 		if (rotation < 0.0)
 		    rotation += 2.0 * M_PI;
-		R_text_rotation((float)(rotation * 180.0 / M_PI));
+		R_text_rotation(rotation * 180.0 / M_PI);
 		break;
 	    case 'I':
 		/* linespacing */
@@ -443,11 +441,11 @@ int main(int argc, char **argv)
 		d = atof(buf_ptr);
 		if (buf_ptr[buf_len - 1] == '%')
 		    /* percentage */
-		    d *= (double)(win.r - win.l) / 100.0;
+		    d *= (win.r - win.l) / 100.0;
 		else if (buf_ptr[buf_len - 1] != 'p')
 		    /* column */
 		    d = (d - 1) * size * linespacing + 0.5;
-		x = prev_x = (int)d + (i ? x : orig_x);
+		x = prev_x = d + (i ? x : orig_x);
 		break;
 	    case 'Y':
 		/* y */
@@ -459,11 +457,11 @@ int main(int argc, char **argv)
 		d = atof(buf_ptr);
 		if (buf_ptr[buf_len - 1] == '%')
 		    /* percentage */
-		    d = win.b - d * (double)(win.b - win.t) / 100.0;
+		    d = win.b - d * (win.b - win.t) / 100.0;
 		else if (buf_ptr[buf_len - 1] != 'p')
 		    /* row */
 		    d *= size * linespacing + 0.5;
-		y = prev_y = (int)d + (i ? y : orig_y);
+		y = prev_y = d + (i ? y : orig_y);
 		break;
 	    case 'L':
 		/* linefeed */
@@ -476,10 +474,10 @@ int main(int argc, char **argv)
 		    i = 1;
 		d = atof(buf_ptr);
 		if (buf_ptr[buf_len - 1] == '%')
-		    d *= (double)(win.r - win.l) / 100.0;
+		    d *= (win.r - win.l) / 100.0;
 		else if (buf_ptr[buf_len - 1] != 'p')
 		    d = D_u_to_d_col(d);
-		x = prev_x = orig_x = (int)d + (i ? orig_x : win.l);
+		x = prev_x = orig_x = d + (i ? orig_x : win.l);
 		break;
 	    case 'N':
 		i = 0;
@@ -487,10 +485,10 @@ int main(int argc, char **argv)
 		    i = 1;
 		d = atof(buf_ptr);
 		if (buf_ptr[buf_len - 1] == '%')
-		    d *= (double)(win.b - win.t) / 100.0;
+		    d *= (win.b - win.t) / 100.0;
 		else if (buf_ptr[buf_len - 1] != 'p')
 		    d = D_u_to_d_row(d);
-		y = prev_y = orig_y = (int)d + (i ? orig_y : win.t);
+		y = prev_y = orig_y = d + (i ? orig_y : win.t);
 		break;
 	    }
 	}
@@ -503,11 +501,11 @@ int main(int argc, char **argv)
 		/* if x is not given, increment x */
 		if (!set_x)
 		    x = prev_x +
-			(int)((size * linespacing + 0.5) * sin(rotation));
+			(size * linespacing + 0.5) * sin(rotation);
 		/* if y is not given, increment y */
 		if (!set_y)
 		    y = prev_y +
-			(int)((size * linespacing + 0.5) * cos(rotation));
+			(size * linespacing + 0.5) * cos(rotation);
 		prev_x = x;
 		prev_y = y;
 	    }
@@ -554,7 +552,7 @@ static void set_color(char *tcolor)
 }
 
 static int
-get_coordinates(int *x, int *y, double *east, double *north,
+get_coordinates(double *x, double *y, double *east, double *north,
 		struct rectinfo win, char **at, char pixel,
 		char geocoor)
 {
@@ -566,18 +564,18 @@ get_coordinates(int *x, int *y, double *east, double *north,
 	if (pixel) {
 	    *x = e + win.l;
 	    *y = n + win.t;
-	    e = D_d_to_u_col((double)*x);
-	    n = D_d_to_u_row((double)*y);
+	    e = D_d_to_u_col(*x);
+	    n = D_d_to_u_row(*y);
 	}
 	else if (geocoor) {
-	    *x = (int)D_u_to_d_col(e);
-	    *y = (int)D_u_to_d_row(n);
+	    *x = D_u_to_d_col(e);
+	    *y = D_u_to_d_row(n);
 	}
 	else {
-	    *x = win.l + (int)((win.r - win.l) * e / 100.0);
-	    *y = win.t + (int)((win.b - win.t) * (100.0 - n) / 100.0);
-	    e = D_d_to_u_col((double)*x);
-	    n = D_d_to_u_row((double)*y);
+	    *x = win.l + (win.r - win.l) * e / 100.0;
+	    *y = win.t + (win.b - win.t) * (100.0 - n) / 100.0;
+	    e = D_d_to_u_col(*x);
+	    n = D_d_to_u_row(*y);
 	}
     }
     else
@@ -591,11 +589,11 @@ get_coordinates(int *x, int *y, double *east, double *north,
     return 0;
 }
 
-static void draw_text(char *text, int *x, int *y, int size, char *align,
+static void draw_text(char *text, double *x, double *y, double size, char *align,
 		      double rotation, char bold)
 {
-    int w, h;
-    int t, b, l, r;
+    double w, h;
+    double t, b, l, r;
     double c, s;
 
     /* TODO: get text dimension */
@@ -607,7 +605,7 @@ static void draw_text(char *text, int *x, int *y, int size, char *align,
     R_get_text_box(text, &t, &b, &l, &r);
 
     if (rotation != 0.0)
-	R_text_rotation((float)(rotation * 180.0 / M_PI));
+	R_text_rotation(rotation * 180.0 / M_PI);
     w = r - l;
     h = b - t;
     if (w > 0)
@@ -662,8 +660,8 @@ static void draw_text(char *text, int *x, int *y, int size, char *align,
 	R_text(text);
     }
 
-    *x += (int)(w * c);
-    *y -= (int)(w * s);
+    *x += w * c;
+    *y -= w * s;
 
     return;
 }

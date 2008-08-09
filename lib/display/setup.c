@@ -59,7 +59,7 @@
 int D_setup(int clear)
 {
     struct Cell_head region;
-    int t, b, l, r;
+    double t, b, l, r;
 
     t = R_screen_top();
     b = R_screen_bot();

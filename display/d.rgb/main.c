@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct GModule *module;
     struct Flag *flag_o;
-    int t, b, l, r;
+    double t, b, l, r;
     int i;
 
     G_gisinit(argv[0]);

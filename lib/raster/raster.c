@@ -50,7 +50,7 @@ int R_open_driver(void)
 #endif
 	PNG_Driver();
 
-    LIB_init(drv, 0, NULL);
+    LIB_init(drv);
 
     init();
 
@@ -79,16 +79,12 @@ void R_close_driver(void)
  * Returns the coordinate of the left edge of the screen.
  *
  *  \param void
- *  \return int
+ *  \return double
  */
 
-int R_screen_left(void)
+double R_screen_left(void)
 {
-    int l;
-
-    COM_Screen_left(&l);
-
-    return l;
+    return COM_Screen_left();
 }
 
 /*!
@@ -97,16 +93,12 @@ int R_screen_left(void)
  * Returns the coordinate of the right edge of the screen.
  *
  *  \param void
- *  \return int
+ *  \return double
  */
 
-int R_screen_rite(void)
+double R_screen_rite(void)
 {
-    int r;
-
-    COM_Screen_rite(&r);
-
-    return r;
+    return COM_Screen_rite();
 }
 
 /*!
@@ -115,16 +107,12 @@ int R_screen_rite(void)
  * Returns the coordinate of the bottom of the screen.
  *
  *  \param void
- *  \return int
+ *  \return double
  */
 
-int R_screen_bot(void)
+double R_screen_bot(void)
 {
-    int b;
-
-    COM_Screen_bot(&b);
-
-    return b;
+    return COM_Screen_bot();
 }
 
 
@@ -134,25 +122,17 @@ int R_screen_bot(void)
  * Returns the coordinate of the top of the screen.
  *
  *  \param void
- *  \return int
+ *  \return double
  */
 
-int R_screen_top(void)
+double R_screen_top(void)
 {
-    int t;
-
-    COM_Screen_top(&t);
-
-    return t;
+    return COM_Screen_top();
 }
 
 int R_get_num_colors(void)
 {
-    int c;
-
-    COM_Number_of_colors(&c);
-
-    return c;
+    return COM_Number_of_colors();
 }
 
 /*!
@@ -164,7 +144,7 @@ int R_get_num_colors(void)
  * See Display_Graphics_Library.
  *
  *  \param index
- *  \return int
+ *  \return void
  */
 
 void R_standard_color(int index)
@@ -183,10 +163,10 @@ void R_standard_color(int index)
  *  \param red
  *  \param grn
  *  \param blue
- *  \return int
+ *  \return void
  */
 
-void R_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
+void R_RGB_color(int red, int grn, int blu)
 {
     COM_Color_RGB(red, grn, blu);
 }
@@ -197,10 +177,10 @@ void R_RGB_color(unsigned char red, unsigned char grn, unsigned char blu)
  * Changes the <b>width</b> of line to be used in subsequent draw commands.
  *
  *  \param width
- *  \return int
+ *  \return void
  */
 
-void R_line_width(int width)
+void R_line_width(double width)
 {
     COM_Line_width(width);
 }
@@ -211,7 +191,7 @@ void R_line_width(int width)
  * Erases the entire screen to black.
  *
  *  \param void
- *  \return int
+ *  \return void
  */
 
 void R_erase(void)
@@ -227,10 +207,10 @@ void R_erase(void)
  *
  *  \param x
  *  \param y
- *  \return int
+ *  \return void
  */
 
-void R_move_abs(int x, int y)
+void R_move_abs(double x, double y)
 {
     COM_Move_abs(x, y);
 }
@@ -247,10 +227,10 @@ void R_move_abs(int x, int y)
  *
  *  \param x dx
  *  \param y dy
- *  \return int
+ *  \return void
  */
 
-void R_move_rel(int x, int y)
+void R_move_rel(double x, double y)
 {
     COM_Move_rel(x, y);
 }
@@ -264,10 +244,10 @@ void R_move_rel(int x, int y)
  *
  *  \param x
  *  \param y
- *  \return int
+ *  \return void
  */
 
-void R_cont_abs(int x, int y)
+void R_cont_abs(double x, double y)
 {
     COM_Cont_abs(x, y);
 }
@@ -286,10 +266,10 @@ void R_cont_abs(int x, int y)
  *
  *  \param x
  *  \param y
- *  \return int
+ *  \return void
  */
 
-void R_cont_rel(int x, int y)
+void R_cont_rel(double x, double y)
 {
     COM_Cont_rel(x, y);
 }
@@ -304,10 +284,10 @@ void R_cont_rel(int x, int y)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polydots_abs(const int *xarray, const int *yarray, int number)
+void R_polydots_abs(const double *xarray, const double *yarray, int number)
 {
     COM_Polydots_abs(xarray, yarray, number);
 }
@@ -324,10 +304,10 @@ void R_polydots_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polydots_rel(const int *xarray, const int *yarray, int number)
+void R_polydots_rel(const double *xarray, const double *yarray, int number)
 {
     COM_Polydots_rel(xarray, yarray, number);
 }
@@ -345,10 +325,10 @@ void R_polydots_rel(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polyline_abs(const int *xarray, const int *yarray, int number)
+void R_polyline_abs(const double *xarray, const double *yarray, int number)
 {
     COM_Polyline_abs(xarray, yarray, number);
 }
@@ -367,10 +347,10 @@ void R_polyline_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polyline_rel(const int *xarray, const int *yarray, int number)
+void R_polyline_rel(const double *xarray, const double *yarray, int number)
 {
     COM_Polyline_rel(xarray, yarray, number);
 }
@@ -385,10 +365,10 @@ void R_polyline_rel(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polygon_abs(const int *xarray, const int *yarray, int number)
+void R_polygon_abs(const double *xarray, const double *yarray, int number)
 {
     COM_Polygon_abs(xarray, yarray, number);
 }
@@ -405,10 +385,10 @@ void R_polygon_abs(const int *xarray, const int *yarray, int number)
  *  \param xarray x
  *  \param yarray y
  *  \param number
- *  \return int
+ *  \return void
  */
 
-void R_polygon_rel(const int *xarray, const int *yarray, int number)
+void R_polygon_rel(const double *xarray, const double *yarray, int number)
 {
     COM_Polygon_rel(xarray, yarray, number);
 }
@@ -424,10 +404,10 @@ void R_polygon_rel(const int *xarray, const int *yarray, int number)
  *  \param y1
  *  \param x2
  *  \param y2
- *  \return int
+ *  \return void
  */
 
-void R_box_abs(int x1, int y1, int x2, int y2)
+void R_box_abs(double x1, double y1, double x2, double y2)
 {
     COM_Box_abs(x1, y1, x2, y2);
 }
@@ -442,10 +422,10 @@ void R_box_abs(int x1, int y1, int x2, int y2)
  *
  *  \param x
  *  \param y
- *  \return int
+ *  \return void
  */
 
-void R_box_rel(int x, int y)
+void R_box_rel(double x, double y)
 {
     COM_Box_rel(x, y);
 }
@@ -457,15 +437,15 @@ void R_box_rel(int x, int y)
  *
  *  \param width
  *  \param height
- *  \return int
+ *  \return void
  */
 
-void R_text_size(int width, int height)
+void R_text_size(double width, double height)
 {
     COM_Text_size(width, height);
 }
 
-void R_text_rotation(float rotation)
+void R_text_rotation(double rotation)
 {
     COM_Text_rotation(rotation);
 }
@@ -480,10 +460,10 @@ void R_text_rotation(float rotation)
  *  \param b bottom
  *  \param l left
  *  \param r right
- *  \return int
+ *  \return void
  */
 
-void R_set_window(int t, int b, int l, int r)
+void R_set_window(double t, double b, double l, double r)
 {
     COM_Set_window(t, b, l, r);
 }
@@ -495,7 +475,7 @@ void R_set_window(int t, int b, int l, int r)
  * width and height, starting at the current screen location.
  *
  *  \param sometext
- *  \return int
+ *  \return void
  */
 
 void R_text(const char *text)
@@ -517,10 +497,10 @@ void R_text(const char *text)
  *  \param b bottom
  *  \param l left
  *  \param r right
- *  \return int
+ *  \return void
  */
 
-void R_get_text_box(const char *text, int *t, int *b, int *l, int *r)
+void R_get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
     COM_Get_text_box(text, t, b, l, r);
 }
@@ -531,7 +511,7 @@ void R_get_text_box(const char *text, int *t, int *b, int *l, int *r)
  * Set current font to <b>font name</b>.
  * 
  *  \param name
- *  \return int
+ *  \return void
  */
 
 void R_font(const char *name)
@@ -554,7 +534,7 @@ void R_font_info(char ***list, int *count)
     COM_Font_info(list, count);
 }
 
-void R_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
+void R_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
     COM_begin_scaled_raster(mask, src, dst);
 }

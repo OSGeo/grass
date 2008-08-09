@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     char *mapset;
     double minreg, maxreg, reg, dx, dy;
     FILE *infile;
-    int t, b, l, r;
+    double t, b, l, r;
     struct Option *opt1;
     struct Option *maxreg_opt, *minreg_opt;
     struct Flag *horiz_flag;

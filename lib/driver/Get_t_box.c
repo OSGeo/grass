@@ -1,7 +1,7 @@
 #include "driver.h"
 #include "driverlib.h"
 
-void COM_Get_text_box(const char *text, int *t, int *b, int *l, int *r)
+void COM_Get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
     if (!font_is_freetype()) {
 	soft_text_ext(cur_x, cur_y,

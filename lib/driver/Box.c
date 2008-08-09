@@ -1,9 +1,9 @@
 #include "driver.h"
 #include "driverlib.h"
 
-void COM_Box_abs(int x1, int y1, int x2, int y2)
+void COM_Box_abs(double x1, double y1, double x2, double y2)
 {
-    int x[4], y[4];
+    double x[4], y[4];
 
     if (driver->Box) {
 	(*driver->Box) (x1, y1, x2, y2);
@@ -22,7 +22,7 @@ void COM_Box_abs(int x1, int y1, int x2, int y2)
     COM_Polygon_abs(x, y, 4);
 }
 
-void COM_Box_rel(int x, int y)
+void COM_Box_rel(double x, double y)
 {
     COM_Box_abs(cur_x, cur_y, cur_x + x, cur_y + y);
 }

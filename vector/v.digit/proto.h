@@ -1,11 +1,13 @@
+
 /* Driver */
 int driver_open(void);
 int driver_close(void);
 int driver_refresh(void);
 void driver_rgb_color(int r, int g, int b);
 void driver_line_width(int w);
-void driver_plot_line(double x1, double y1, double x2, double y2);
 void driver_plot_icon(double x, double y, const char *icon);
+void driver_move(double x, double y);
+void driver_cont(double x, double y);
 
 /* Miscellaneous */
 void tool_centre(void);

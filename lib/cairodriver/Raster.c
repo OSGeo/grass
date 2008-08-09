@@ -1,7 +1,7 @@
 #include "cairodriver.h"
 
 static int src_t, src_b, src_l, src_r, src_w, src_h;
-static int dst_t, dst_b, dst_l, dst_r, dst_w, dst_h;
+static double dst_t, dst_b, dst_l, dst_r, dst_w, dst_h;
 
 static cairo_surface_t *src_surf;
 static unsigned char *src_data;
@@ -9,11 +9,12 @@ static int src_stride;
 
 static int masked;
 
-void Cairo_begin_scaled_raster(int mask, int s[2][2], int d[2][2])
+void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
 {
-    G_debug(1, "Cairo_begin_scaled_raster: %d %d %d %d %d %d %d %d %d",
-	    mask, s[0][0], s[0][1], s[1][0], s[1][1], d[0][0], d[0][1],
-	    d[1][0], d[1][1]);
+    G_debug(1, "Cairo_begin_scaled_raster: %d, %d %d %d %d, %f %f %f %f",
+	    mask,
+	    s[0][0], s[0][1], s[1][0], s[1][1],
+	    d[0][0], d[0][1], d[1][0], d[1][1]);
 
     masked = mask;
 
@@ -35,7 +36,7 @@ void Cairo_begin_scaled_raster(int mask, int s[2][2], int d[2][2])
     dst_w = dst_r - dst_l;
     dst_h = dst_b - dst_t;
 
-    G_debug(1, " src (TBLR): %d %d %d %d, dst (TBLR) %d %d %d %d",
+    G_debug(1, " src (TBLR): %d %d %d %d, dst (TBLR) %f %f %f %f",
 	    src_t, src_b, src_l, src_r, dst_t, dst_b, dst_l, dst_r);
 
     /* create source surface */
@@ -77,8 +78,7 @@ void Cairo_end_scaled_raster(void)
     /* paint source surface onto dstination (scaled) */
     cairo_save(cairo);
     cairo_translate(cairo, dst_l, dst_t);
-    cairo_scale(cairo, (double)dst_w / (double)src_w,
-		(double)dst_h / (double)src_h);
+    cairo_scale(cairo, dst_w / src_w, dst_h / src_h);
     cairo_set_source_surface(cairo, src_surf, 0, 0);
     cairo_paint(cairo);
     cairo_restore(cairo);

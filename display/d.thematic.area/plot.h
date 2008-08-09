@@ -15,8 +15,6 @@ extern struct rgb_color palette[16];
 #define DISP_ATTR  0x10
 #define DISP_ZCOOR 0x20
 
-#define RENDER_GPP	0
-#define RENDER_RPA	1
 #define RENDER_DP	2
 #define RENDER_DPC	3
 #define RENDER_DPL	4

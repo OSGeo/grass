@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt_h, *opt_i, *opt_s, *brighten;
     struct Flag *nulldraw;
-    int t, b, l, r;
+    double t, b, l, r;
     double bright_mult;
 
 

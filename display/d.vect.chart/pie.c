@@ -58,10 +58,9 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 	}
 
 	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	for (j = 1; j < Points->n_points; j++) {
-	    G_plot_line(Points->x[j], Points->y[j], Points->x[j - 1],
-			Points->y[j - 1]);
-	}
+	D_move(Points->x[0], Points->y[0]);
+	for (j = 1; j < Points->n_points; j++)
+	    D_cont(Points->x[j], Points->y[j]);
     }
 
     Vect_destroy_line_struct(Points);

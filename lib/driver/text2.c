@@ -125,7 +125,7 @@ void soft_text_ext(int x, int y,
     dont_draw = 0;
 }
 
-void get_text_ext(int *top, int *bot, int *left, int *rite)
+void get_text_ext(double *top, double *bot, double *left, double *rite)
 {
     *top = t;
     *bot = b;

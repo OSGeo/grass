@@ -1,6 +1,6 @@
 #include "psdriver.h"
 
-void PS_draw_point(int x, int y)
+void PS_draw_point(double x, double y)
 {
-    output("%d %d POINT\n", x, y);
+    output("%f %f POINT\n", x, y);
 }

@@ -31,7 +31,8 @@
 
 extern int D__overlay_mode;
 
-static int src[2][2], dst[2][2];
+static int src[2][2];
+static double dst[2][2];
 
 static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
 
@@ -129,7 +130,7 @@ static int draw_cell(int A_row,
  *  \return int
  */
 
-int D_cell_draw_setup(int t, int b, int l, int r)
+int D_cell_draw_setup(double t, double b, double l, double r)
 {
     struct Cell_head window;
 

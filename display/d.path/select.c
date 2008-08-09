@@ -32,8 +32,10 @@ int display(struct Map_info *Map, struct line_pnts *Points,
 	D_line_width(2);
 
     for (i = from; i < to - 1; i++)
-	G_plot_line(Points->x[i], Points->y[i], Points->x[i + 1],
-		    Points->y[i + 1]);
+    {
+	D_move(Points->x[i], Points->y[i]);
+	D_cont(Points->x[i + 1], Points->y[i + 1]);
+    }
 
     if (be_bold)
 	R_line_width(0);
@@ -95,7 +97,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
 	fy = start_y;
     }
     R_RGB_color(hcolor->r, hcolor->g, hcolor->b);
-    G_plot_icon(fx, fy, G_ICON_BOX, 0.0, msize);
+    D_plot_icon(fx, fy, G_ICON_BOX, 0.0, msize);
 
 
     end_node = Vect_find_node(Map, end_x, end_y, 0.0, maxdist, 0);
@@ -112,7 +114,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
 	ty = end_y;
     }
     R_RGB_color(hcolor->r, hcolor->g, hcolor->b);
-    G_plot_icon(tx, ty, G_ICON_CROSS, 0.0, msize);
+    D_plot_icon(tx, ty, G_ICON_CROSS, 0.0, msize);
 
 
     G_debug(2, "find path %f %f -> %f %f", fx, fy, tx, ty);

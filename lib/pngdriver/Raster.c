@@ -57,9 +57,15 @@ static void alloc_buffers(void)
     trans = G_realloc(trans, nalloc * sizeof(int));
 }
 
-void PNG_begin_scaled_raster(int mask, int s[2][2], int d[2][2])
+void PNG_begin_scaled_raster(int mask, int s[2][2], double fd[2][2])
 {
+    int d[2][2];
     int i;
+
+    d[0][0] = (int) floor(fd[0][0] + 0.5);
+    d[0][1] = (int) floor(fd[0][1] + 0.5);
+    d[1][0] = (int) floor(fd[1][0] + 0.5);
+    d[1][1] = (int) floor(fd[1][1] + 0.5);
 
     ncols = d[0][1] - d[0][0];
 

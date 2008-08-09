@@ -25,7 +25,7 @@ void display_init(void)
 {
     extern struct Cell_head window;
     extern int nrows, ncols;	/*numbers of rows and columns in file */
-    int t, b, l, r;		/*top, bottom, left and right of frame */
+    double t, b, l, r;		/*top, bottom, left and right of frame */
     int width, height;
 
 

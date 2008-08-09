@@ -35,9 +35,14 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#define MAIN
 #include "options.h"
 #include "local_proto.h"
+
+float hsize;
+float vsize;
+double t, b, l, r;
+int mapunits;
+FILE *infile;
 
 int main(int argc, char **argv)
 {

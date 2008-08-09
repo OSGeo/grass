@@ -11,7 +11,7 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
     double xl, yl;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    int X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
+    double X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
     char text[50];
 
     G_debug(1, "display topo:");
@@ -51,19 +51,19 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
 	if ((ltype & GV_POINTS) || Points->n_points == 1)
 	    /* point/centroid or line/boundary with one coor */
 	{
-	    X = (int)(D_u_to_d_col(Points->x[0]));
-	    Y = (int)(D_u_to_d_row(Points->y[0]));
+	    X = D_u_to_d_col(Points->x[0]);
+	    Y = D_u_to_d_row(Points->y[0]);
 	}
 	else if (Points->n_points == 2) {	/* line with two coors */
 	    xl = (Points->x[0] + Points->x[1]) / 2;
 	    yl = (Points->y[0] + Points->y[1]) / 2;
-	    X = (int)(D_u_to_d_col(xl));
-	    Y = (int)(D_u_to_d_row(yl));
+	    X = D_u_to_d_col(xl);
+	    Y = D_u_to_d_row(yl);
 	}
 	else {
 	    i = Points->n_points / 2;
-	    X = (int)(D_u_to_d_col(Points->x[i]));
-	    Y = (int)(D_u_to_d_row(Points->y[i]));
+	    X = D_u_to_d_col(Points->x[i]);
+	    Y = D_u_to_d_row(Points->y[i]);
 	}
 
 	X = X + 0.5 * lattr->size;
@@ -124,8 +124,8 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
 	Vect_get_node_coor(Map, el, &xl, &yl, NULL);
 	G_debug(3, "node = %d", el);
 
-	X = (int)(D_u_to_d_col(xl));
-	Y = (int)(D_u_to_d_row(yl));
+	X = D_u_to_d_col(xl);
+	Y = D_u_to_d_row(yl);
 
 	X = X + 0.5 * lattr->size;
 	Y = Y + 1.5 * lattr->size;
@@ -176,7 +176,7 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
 
 	R_move_abs(X + Xoffset, Y + Yoffset);
 	R_text(text);
-	G_plot_icon(xl, yl, G_ICON_BOX, 0, 10);
+	D_plot_icon(xl, yl, G_ICON_BOX, 0, 10);
     }
 
     Vect_destroy_line_struct(Points);

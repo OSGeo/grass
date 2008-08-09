@@ -5,26 +5,29 @@
 
 struct point
 {
-    int x, y;
+    double x, y;
 };
 
-static int cmp_int(const void *aa, const void *bb)
+static int cmp_double(const void *aa, const void *bb)
 {
-    const int *a = aa;
-    const int *b = bb;
+    const double *a = aa;
+    const double *b = bb;
 
-    return *a - *b;
+    return
+	*a > *b ?  1 :
+	*a < *b ? -1 :
+	0;
 }
 
-static void fill(int x0, int x1, int y)
+static void fill(double x0, double x1, double y)
 {
     COM_Box_abs(x0, y, x1, y + 1);
 }
 
-static void line(const struct point *p, int n, int y)
+static void line(const struct point *p, int n, double y)
 {
-    static int *xs;
-    static int max_x;
+    static double *xs;
+    static double max_x;
     int num_x = 0;
     int i;
 
@@ -54,13 +57,13 @@ static void line(const struct point *p, int n, int y)
 
 	if (num_x >= max_x) {
 	    max_x += 20;
-	    xs = G_realloc(xs, max_x * sizeof(int));
+	    xs = G_realloc(xs, max_x * sizeof(double));
 	}
 
 	xs[num_x++] = x;
     }
 
-    qsort(xs, num_x, sizeof(int), cmp_int);
+    qsort(xs, num_x, sizeof(double), cmp_double);
 
     for (i = 0; i + 1 < num_x; i += 2)
 	fill(xs[i], xs[i + 1], y);
@@ -68,8 +71,8 @@ static void line(const struct point *p, int n, int y)
 
 static void poly(const struct point *p, int n)
 {
-    int y0, y1;
-    int i, y;
+    double y0, y1, y;
+    int i;
 
     if (n < 3)
 	return;
@@ -97,7 +100,7 @@ static void poly(const struct point *p, int n)
 	line(p, n, y);
 }
 
-static void fill_polygon(const int *xarray, const int *yarray, int count)
+static void fill_polygon(const double *xarray, const double *yarray, int count)
 {
     static struct point *points;
     static int max_points;
@@ -119,7 +122,7 @@ static void fill_polygon(const int *xarray, const int *yarray, int count)
     poly(points, count);
 }
 
-void COM_Polygon_abs(const int *xarray, const int *yarray, int number)
+void COM_Polygon_abs(const double *xarray, const double *yarray, int number)
 {
     if (driver->Polygon) {
 	(*driver->Polygon) (xarray, yarray, number);
@@ -129,16 +132,16 @@ void COM_Polygon_abs(const int *xarray, const int *yarray, int number)
     fill_polygon(xarray, yarray, number);
 }
 
-void COM_Polygon_rel(const int *xarray, const int *yarray, int number)
+void COM_Polygon_rel(const double *xarray, const double *yarray, int number)
 {
-    static int *xa, *ya;
+    static double *xa, *ya;
     static int nalloc;
     int i;
 
     if (number > nalloc) {
 	nalloc = number;
-	xa = G_realloc(xa, (size_t) nalloc * sizeof(int));
-	ya = G_realloc(ya, (size_t) nalloc * sizeof(int));
+	xa = G_realloc(xa, (size_t) nalloc * sizeof(double));
+	ya = G_realloc(ya, (size_t) nalloc * sizeof(double));
     }
 
     xa[0] = xarray[0] + cur_x;

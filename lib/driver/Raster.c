@@ -10,7 +10,7 @@
  ******************************************************************************
  */
 
-void COM_begin_scaled_raster(int mask, int src[2][2], int dst[2][2])
+void COM_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
     if (driver->Begin_scaled_raster)
 	(*driver->Begin_scaled_raster) (mask, src, dst);

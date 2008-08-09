@@ -44,14 +44,14 @@
  *  \return void
  */
 
-void D_symbol(const SYMBOL * Symb, int x0, int y0,
+void D_symbol(const SYMBOL * Symb, double x0, double y0,
 	      const RGBA_Color * line_color, const RGBA_Color * fill_color)
 {
     int i, j, k;
     const SYMBPART *part;
     const SYMBCHAIN *chain;
-    int xp, yp;
-    int *x, *y;
+    double xp, yp;
+    double *x, *y;
 
 
     G_debug(2, "D_symbol(): %d parts", Symb->count);
@@ -75,8 +75,8 @@ void D_symbol(const SYMBOL * Symb, int x0, int y0,
 		for (j = 0; j < part->count; j++) {	/* for each component polygon */
 		    chain = part->chain[j];
 
-		    x = G_malloc(sizeof(int) * chain->scount);
-		    y = G_malloc(sizeof(int) * chain->scount);
+		    x = G_malloc(sizeof(double) * chain->scount);
+		    y = G_malloc(sizeof(double) * chain->scount);
 
 		    for (k = 0; k < chain->scount; k++) {
 			x[k] = x0 + chain->sx[k];
@@ -156,7 +156,7 @@ void D_symbol(const SYMBOL * Symb, int x0, int y0,
  *  \param secondary_color  Secondary draw color
  *  \return void
  */
-void D_symbol2(const SYMBOL * Symb, int x0, int y0,
+void D_symbol2(const SYMBOL * Symb, double x0, double y0,
 	       const RGBA_Color * primary_color,
 	       const RGBA_Color * secondary_color)
 {
@@ -164,8 +164,8 @@ void D_symbol2(const SYMBOL * Symb, int x0, int y0,
     int i, j, k;
     const SYMBPART *part;
     const SYMBCHAIN *chain;
-    int xp, yp;
-    int *x, *y;
+    double xp, yp;
+    double *x, *y;
 
 
     G_debug(2, "D_symbol(): %d parts", Symb->count);
@@ -190,8 +190,8 @@ void D_symbol2(const SYMBOL * Symb, int x0, int y0,
 		for (j = 0; j < part->count; j++) {	/* for each component polygon */
 		    chain = part->chain[j];
 
-		    x = G_malloc(sizeof(int) * chain->scount);
-		    y = G_malloc(sizeof(int) * chain->scount);
+		    x = G_malloc(sizeof(double) * chain->scount);
+		    y = G_malloc(sizeof(double) * chain->scount);
 
 		    for (k = 0; k < chain->scount; k++) {
 			x[k] = x0 + chain->sx[k];

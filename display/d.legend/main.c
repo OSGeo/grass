@@ -50,12 +50,12 @@ int main(int argc, char **argv)
     int i, j, k;
     int lines, steps;
     int new_colr, fp;
-    int t, b, l, r;
+    double t, b, l, r;
     int hide_catnum, hide_catstr, hide_nodata, do_smooth;
     char *cstr;
     int white;
-    int x_box[5];
-    int y_box[5];
+    double x_box[5];
+    double y_box[5];
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;

@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Flag *rflag, *dflag, *cflag, *fflag, *bflag, *gflag;
-    int l, r, t, b;
+    double t, b, l, r;
     struct Cell_head window;
 
     G_gisinit(argv[0]);
@@ -80,17 +80,17 @@ int main(int argc, char *argv[])
     }
 
     if (rflag->answer)
-	fprintf(stdout, "rectangle: %d %d %d %d\n", l, r, t, b);
+	fprintf(stdout, "rectangle: %f %f %f %f\n", l, r, t, b);
 
     if (dflag->answer)
-	fprintf(stdout, "dimensions: %d %d\n", r - l, b - t);
+	fprintf(stdout, "dimensions: %f %f\n", r - l, b - t);
 
     if (cflag->answer)
 	fprintf(stdout, "colors: %d\n", R_get_num_colors());
 
     if (fflag->answer) {
 	D_get_screen_window(&t, &b, &l, &r);
-	fprintf(stdout, "frame: %d %d %d %d\n", l, r, t, b);
+	fprintf(stdout, "frame: %f %f %f %f\n", l, r, t, b);
     }
 
     if (bflag->answer) {
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 	t = D_get_d_north();
 	b = D_get_d_south();
 
-	fprintf(stdout, "region: %d %d %d %d\n", l, r, t, b);
+	fprintf(stdout, "region: %f %f %f %f\n", l, r, t, b);
     }
 
     if (gflag->answer) {

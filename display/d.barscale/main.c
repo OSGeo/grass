@@ -42,7 +42,7 @@ int draw = 0;
 int main(int argc, char **argv)
 {
     struct Cell_head window;
-    int t, b, l, r;
+    double t, b, l, r;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3;
     struct Flag *feet, *top, *linescale, *northarrow, *scalebar;

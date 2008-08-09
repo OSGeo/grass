@@ -19,8 +19,8 @@
 
 #include "psdriver.h"
 
-void PS_Set_window(int t, int b, int l, int r)
+void PS_Set_window(double t, double b, double l, double r)
 {
-    output("%d %d %d %d %s\n", t, b, l, r,
+    output("%f %f %f %f %s\n", t, b, l, r,
 	   encapsulated ? "EPSWINDOW" : "WINDOW");
 }

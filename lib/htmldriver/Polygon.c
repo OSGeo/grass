@@ -57,7 +57,7 @@ static double find_azimuth(double x1, double y1, double x2, double y2)
 }
 
 
-void HTML_Polygon(const int *px, const int *py, int n)
+void HTML_Polygon(const double *px, const double *py, int n)
 {
     struct MapPoly *new;
     int i;
@@ -69,8 +69,10 @@ void HTML_Polygon(const int *px, const int *py, int n)
     int *x = G_malloc(n * sizeof(int));
     int *y = G_malloc(n * sizeof(int));
 
-    memcpy(x, px, n * sizeof(int));
-    memcpy(y, py, n * sizeof(int));
+    for (i = 0; i < n; i++) {
+	x[i] = (int) floor(px[i] + 0.5);
+	y[i] = (int) floor(py[i] + 0.5);
+    }
 
     /* 
      * remove points that have adjacent duplicates or have differences of

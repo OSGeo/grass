@@ -56,12 +56,12 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     long int num_cats;
     long int tic_every;		/* spacing, in units of category value, of tics */
     long int tic_unit;
-    int t, b, l, r;
-    int tt, tb, tl, tr;
-    int x_line[5];		/* for border of histogram */
-    int y_line[5];
-    int x_box[6];		/* for histogram bar coordinates */
-    int y_box[6];
+    double t, b, l, r;
+    double tt, tb, tl, tr;
+    double x_line[5];		/* for border of histogram */
+    double y_line[5];
+    double x_box[6];		/* for histogram bar coordinates */
+    double y_box[6];
     double height, width;
     double xscale;		/* scaling factors */
     double yscale;

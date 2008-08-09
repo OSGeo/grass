@@ -1,10 +1,10 @@
 #include "driver.h"
 #include "driverlib.h"
 
-int COM_Graph_set(int argc, char **argv)
+int COM_Graph_set(void)
 {
     if (driver->Graph_set)
-	return (*driver->Graph_set) (argc, argv);
+	return (*driver->Graph_set) ();
     return 0;
 }
 

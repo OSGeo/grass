@@ -33,14 +33,14 @@ int screen_right;
 int screen_bottom;
 int screen_top;
 
-int cur_x;
-int cur_y;
+double cur_x;
+double cur_y;
 
 double text_size_x;
 double text_size_y;
 double text_rotation;
 
-int LIB_init(const struct driver *drv, int argc, char **argv)
+int LIB_init(const struct driver *drv)
 {
     const char *p;
 
@@ -57,7 +57,7 @@ int LIB_init(const struct driver *drv, int argc, char **argv)
     screen_top = 0;
     screen_bottom = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
-    if (COM_Graph_set(argc, argv) < 0)
+    if (COM_Graph_set() < 0)
 	exit(1);
 
     return 0;

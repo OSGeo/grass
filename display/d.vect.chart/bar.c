@@ -60,10 +60,9 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 
 	    /* the outline color : default is black */
 	    R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	    for (j = 1; j < max_Points->n_points; j++) {
-		G_plot_line(max_Points->x[j], max_Points->y[j],
-			    max_Points->x[j - 1], max_Points->y[j - 1]);
-	    }
+	    D_move(max_Points->x[j], max_Points->y[j]);
+	    for (j = 1; j < max_Points->n_points; j++)
+		D_cont(max_Points->x[j], max_Points->y[j]);
 	}
     }
 
@@ -84,10 +83,9 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 	}
 
 	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	for (j = 1; j < Points->n_points; j++) {
-	    G_plot_line(Points->x[j], Points->y[j], Points->x[j - 1],
-			Points->y[j - 1]);
-	}
+	D_move(Points->x[0], Points->y[0]);
+	for (j = 1; j < Points->n_points; j++)
+	    D_cont(Points->x[j], Points->y[j]);
     }
 
     /* tidy up */

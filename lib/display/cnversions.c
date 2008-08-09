@@ -66,17 +66,17 @@ static struct vector resolution;
  *  \return int
  */
 
-int D_do_conversions(const struct Cell_head *window, int t, int b, int l,
-		     int r)
+int D_do_conversions(const struct Cell_head *window,
+		     double t, double b, double l, double r)
 {
     struct vector ARRAY_SIZE;
     struct rectangle WIND;
     struct vector D_size, U_size;
 
-    WIND.north = (double)t;
-    WIND.south = (double)b;
-    WIND.west = (double)l;
-    WIND.east = (double)r;
+    WIND.north = t;
+    WIND.south = b;
+    WIND.west  = l;
+    WIND.east  = r;
 
     is_lat_lon = (window->proj == PROJECTION_LL);
 
@@ -124,16 +124,16 @@ int D_do_conversions(const struct Cell_head *window, int t, int b, int l,
     D_size.x = D.east - D.west;
     D_size.y = D.south - D.north;
 
-    ARRAY_SIZE.x = window->cols;
-    ARRAY_SIZE.y = window->rows;
+    ARRAY_SIZE.x = (double)window->cols;
+    ARRAY_SIZE.y = (double)window->rows;
 
-    A.west = 0.0;
+    A.west  = 0.0;
     A.north = 0.0;
-    A.east = (double)ARRAY_SIZE.x;
-    A.south = (double)ARRAY_SIZE.y;
+    A.east  = ARRAY_SIZE.x;
+    A.south = ARRAY_SIZE.y;
 
-    D_to_A_conv.x = (double)ARRAY_SIZE.x / D_size.x;
-    D_to_A_conv.y = (double)ARRAY_SIZE.y / D_size.y;
+    D_to_A_conv.x = ARRAY_SIZE.x / D_size.x;
+    D_to_A_conv.y = ARRAY_SIZE.y / D_size.y;
 
 #ifdef DEBUG
     fprintf(stderr,
@@ -146,9 +146,9 @@ int D_do_conversions(const struct Cell_head *window, int t, int b, int l,
 	    " U_w %10.1f  U_e %10.1f  U_s %10.1f  U_n %10.1f\n",
 	    U.west, U.east, U.south, U.north);
     fprintf(stderr,
-	    " ARRAY_ROWS %d  resolution_ns %10.2f\n", ARRAY_SIZE.y,
+	    " ARRAY_ROWS %d  resolution_ns %10.2f\n", (int)ARRAY_SIZE.y,
 	    window->ns_res);
-    fprintf(stderr, " ARRAY_COLS %d  resolution_ew %10.2f\n", ARRAY_SIZE.x,
+    fprintf(stderr, " ARRAY_COLS %d  resolution_ew %10.2f\n", (int)ARRAY_SIZE.x,
 	    window->ew_res);
     fprintf(stderr, " D_to_A_conv.x %10.1f D_to_A_conv.y %10.1f \n",
 	    D_to_A_conv.x, D_to_A_conv.y);
@@ -249,12 +249,12 @@ void D_get_a(int x[2][2])
     x[1][1] = (int)A.south;
 }
 
-void D_get_d(int x[2][2])
+void D_get_d(double x[2][2])
 {
-    x[0][0] = (int)D.west;
-    x[0][1] = (int)D.east;
-    x[1][0] = (int)D.north;
-    x[1][1] = (int)D.south;
+    x[0][0] = D.west;
+    x[0][1] = D.east;
+    x[1][0] = D.north;
+    x[1][1] = D.south;
 }
 
 /*!

@@ -33,14 +33,14 @@
 #include <grass/raster.h>
 
 static struct {
-    int t, b, l, r;
+    double t, b, l, r;
 } screen_window;
 static int screen_window_set;
 
 static struct Cell_head map_window;
 static int map_window_set;
 
-static void D_set_window(int t, int b, int l, int r)
+static void D_set_window(double t, double b, double l, double r)
 {
     screen_window.t = t;
     screen_window.b = b;
@@ -62,7 +62,7 @@ static void D_set_window(int t, int b, int l, int r)
  *  \return int
  */
 
-int D_get_screen_window(int *t, int *b, int *l, int *r)
+int D_get_screen_window(double *t, double *b, double *l, double *r)
 {
     if (!screen_window_set)
     {
@@ -95,10 +95,10 @@ int D_get_screen_window(int *t, int *b, int *l, int *r)
  *  \param bottom
  *  \param left
  *  \param right
- *  \return int
+ *  \return void
  */
 
-void D_new_window(char *name, int t, int b, int l, int r)
+void D_new_window(char *name, double t, double b, double l, double r)
 {
     screen_window_set = 0;
     map_window_set = 0;
@@ -121,20 +121,20 @@ void D_new_window(char *name, int t, int b, int l, int r)
  *  \param top
  *  \param left
  *  \param right
- *  \return int
+ *  \return void
  */
 
-void D_new_window_percent(char *name, float b, float t, float l, float r)
+void D_new_window_percent(char *name, double b, double t, double l, double r)
 {
-    int scr_t = R_screen_top();
-    int scr_b = R_screen_bot();
-    int scr_l = R_screen_left();
-    int scr_r = R_screen_rite();
+    double scr_t = R_screen_top();
+    double scr_b = R_screen_bot();
+    double scr_l = R_screen_left();
+    double scr_r = R_screen_rite();
 
-    int win_t = 0.5 + scr_t + (scr_b - scr_t) * (100. - t) / 100.0;
-    int win_b = 0.5 + scr_t + (scr_b - scr_t) * (100. - b) / 100.0;
-    int win_l = 0.5 + scr_l + (scr_r - scr_l) * l / 100.0;
-    int win_r = 0.5 + scr_l + (scr_r - scr_l) * r / 100.0;
+    double win_t = 0.5 + scr_t + (scr_b - scr_t) * (100. - t) / 100.0;
+    double win_b = 0.5 + scr_t + (scr_b - scr_t) * (100. - b) / 100.0;
+    double win_l = 0.5 + scr_l + (scr_r - scr_l) * l / 100.0;
+    double win_r = 0.5 + scr_l + (scr_r - scr_l) * r / 100.0;
 
     if (win_t < scr_t)
 	win_t = scr_t;
@@ -159,12 +159,12 @@ void D_new_window_percent(char *name, float b, float t, float l, float r)
  * with lowercase letters.
  *
  *  \param color
- *  \return int
+ *  \return void
  */
 
 void D_show_window(int color)
 {
-    int t, b, l, r;
+    double t, b, l, r;
 
     D_get_screen_window(&t, &b, &l, &r);
 
@@ -193,7 +193,7 @@ void D_show_window(int color)
  * Note this routine is called by <i>D_setup.</i>
  *
  *  \param region
- *  \return int
+ *  \return void
  */
 
 void D_check_map_window(struct Cell_head *wind)
@@ -218,10 +218,10 @@ void D_check_map_window(struct Cell_head *wind)
  *  \param bottom
  *  \param left
  *  \param right
- *  \return int
+ *  \return void
  */
 
-void D_reset_screen_window(int t, int b, int l, int r)
+void D_reset_screen_window(double t, double b, double l, double r)
 {
     D_show_window(D_translate_color(DEFAULT_BG_COLOR));
 
@@ -256,7 +256,7 @@ void D_remove_window(void)
 
 void D_erase_window(void)
 {
-    int t, b, l, r;
+    double t, b, l, r;
 
     D_get_screen_window(&t, &b, &l, &r);
     R_box_abs(l, t, r, b);
@@ -265,7 +265,7 @@ void D_erase_window(void)
 
 void D_erase(const char *color)
 {
-    int t, b, l, r;
+    double t, b, l, r;
     int colorindex;
 
     D_get_screen_window(&t, &b, &l, &r);

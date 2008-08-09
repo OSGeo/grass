@@ -39,10 +39,10 @@ extern const struct driver *HTML_Driver(void);
 extern void HTML_Graph_close(void);
 
 /* Graph_Set.c */
-extern int HTML_Graph_set(int, char **);
+extern int HTML_Graph_set(void);
 
 /* Polygon.c */
-extern void HTML_Polygon(const int *, const int *, int);
+extern void HTML_Polygon(const double *, const double *, int);
 
 /* Text.c */
 extern void HTML_Text(const char *);

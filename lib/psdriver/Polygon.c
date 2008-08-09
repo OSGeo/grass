@@ -1,17 +1,17 @@
 
 #include "psdriver.h"
 
-void PS_Polygon(const int *xarray, const int *yarray, int number)
+void PS_Polygon(const double *xarray, const double *yarray, int number)
 {
     int i;
 
     if (number < 2)
 	return;
 
-    output("%d %d POLYGONSTART\n", xarray[0], yarray[0]);
+    output("%f %f POLYGONSTART\n", xarray[0], yarray[0]);
 
     for (i = 1; i < number; i++)
-	output("%d %d POLYGONVERTEX\n", xarray[i], yarray[i]);
+	output("%f %f POLYGONVERTEX\n", xarray[i], yarray[i]);
 
     output("POLYGONEND\n");
 }
