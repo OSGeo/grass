@@ -58,7 +58,7 @@ int gvld_vol(geovol *gvl)
 }
 
 /*!
-   \brief ADD
+   \brief Draw volume in wire mode (bounding box)
 
    \param gvl pointer to geovol struct
 
@@ -67,7 +67,7 @@ int gvld_vol(geovol *gvl)
  */
 int gvld_wire_vol(geovol * gvl)
 {
-    G_debug(5, "gvld_vol");
+    G_debug(5, "gvld_vol(): id=%d", gvl->gvol_id);
 
     gvld_wind3_box(gvl);
 
@@ -81,7 +81,7 @@ int gvld_wire_vol(geovol * gvl)
 }
 
 /*!
-   \brief ADD
+   \brief Draw volume isosurfaces
 
    \param gvl pointer to geovol struct
 
@@ -400,7 +400,7 @@ int gvld_isosurf(geovol * gvl)
 }
 
 /*!
-   \brief ADD
+   \brief Draw volume isosurface in draw mode
 
    \param gvl pointer to geovol struct
 
@@ -757,7 +757,7 @@ int gvld_wire_slices(geovol * gvl)
 }
 
 /*!
-   \brief Draw wind3 box
+   \brief Draw volume bounding box
 
    \param gvl pointer to geovol struct
 
@@ -767,7 +767,7 @@ int gvld_wind3_box(geovol * gvl)
 {
     float pt[3];
 
-    G_debug(5, "gvld_wind3_box");
+    G_debug(5, "gvld_wind3_box(): id=%d", gvl->gvol_id);
 
     gsd_pushmatrix();
 

@@ -74,15 +74,15 @@ int Nviz_new_map_obj(int type, const char *name, float value, nv_data * data)
 
 	if (name) {
 	    /* map */
-	    if (!Nviz_set_attr
-		(new_id, MAP_OBJ_SURF, ATT_TOPO, MAP_ATT, name, -1.0, data)) {
+	    if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO,
+			       MAP_ATT, name, -1.0, data)) {
 		return -1;
 	    }
 	}
 	else {
 	    /* constant */
-	    if (!Nviz_set_attr
-		(new_id, MAP_OBJ_SURF, ATT_TOPO, CONST_ATT, NULL, value,
+	    if (!Nviz_set_attr(new_id, MAP_OBJ_SURF, ATT_TOPO,
+			       CONST_ATT, NULL, value,
 		 data)) {
 		return -1;
 	    }

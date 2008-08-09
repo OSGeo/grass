@@ -22,14 +22,21 @@
 /*!
   \brief Draw map
 
-  \param quick true for forcing coarse draw mode 
+  Draw quick mode:
+   - DRAW_QUICK_SURFACE
+   - DRAW_QUICK_VLINES
+   - DRAW_QUICK_VPOINTS
+   - DRAW_QUICK_VOLUME
+   
+  \param quick if true draw in wiremode
+  \param quick_mode quick mode
 */
-void Nviz::Draw(bool quick, bool quick_vlines, bool quick_vpoints)
+void Nviz::Draw(bool quick, int quick_mode)
 {
     Nviz_draw_cplane(data, -1, -1); // ?
 
     if (quick) {
-	Nviz_draw_quick(data, quick_vlines, quick_vpoints); 
+	Nviz_draw_quick(data, quick_mode);
     }
     else {
 	Nviz_draw_all (data); 

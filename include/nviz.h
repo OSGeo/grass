@@ -46,6 +46,12 @@
 #define DRAW_FINE 1
 #define DRAW_BOTH 2
 
+/* quick draw mode */
+#define DRAW_QUICK_SURFACE 0x01
+#define DRAW_QUICK_VLINES  0x02
+#define DRAW_QUICK_VPOINTS 0x04
+#define DRAW_QUICK_VOLUME  0x08
+
 #define RANGE (5 * GS_UNIT_SIZE)
 #define RANGE_OFFSET (2 * GS_UNIT_SIZE)
 #define ZRANGE (3 * GS_UNIT_SIZE)
@@ -153,7 +159,7 @@ int Nviz_draw_all_vect(nv_data *);
 int Nviz_draw_all_site(nv_data *);
 int Nviz_draw_all_vol(nv_data *);
 int Nviz_draw_all(nv_data *);
-int Nviz_draw_quick(nv_data *, int, int);
+int Nviz_draw_quick(nv_data *, int);
 
 /* exag.c */
 int Nviz_get_exag_height(float *, float *, float *);

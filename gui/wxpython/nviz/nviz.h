@@ -36,6 +36,10 @@ private:
     int SetSurfaceAttr(int, int, bool, const char *);
     int UnsetSurfaceAttr(int, int);
 
+    /* volume.cpp */
+    int SetIsosurfaceAttr(int, int, int, bool, const char *);
+    int UnsetIsosurfaceAttr(int, int, int);
+
 public:
     /* constructor */
     Nviz(PyObject *);
@@ -68,7 +72,7 @@ public:
     int UnloadVolume(int);
 
     /* draw.cpp */
-    void Draw(bool, bool, bool);
+    void Draw(bool, int);
     void EraseMap();
 
     /* surface.cpp */
@@ -94,6 +98,10 @@ public:
     int SetVectorPointMode(int, const char*, int, float, int);
     int SetVectorPointHeight(int, float);
     int SetVectorPointSurface(int, int);
+
+    /* volume */
+    int AddIsosurface(int, int);
+    int SetIsosurfaceColor(int, int, bool, const char *);
 };
 
 #endif /* WXNVIZ_H */
