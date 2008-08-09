@@ -445,6 +445,12 @@ class Settings:
                         'height' : 0,
                         }
                     },
+                'volume' : {
+                    'color' : {
+                        'map' : True,
+                        'value' : (0, 0, 0, 255), # constant: black
+                        },
+                    },
                 'settings': {
                     'general' : {
                         'bgcolor' : (255, 255, 255, 255), # white
@@ -1132,10 +1138,14 @@ class PreferencesDialog(wx.Dialog):
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Vector settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         
-        gridSizer = wx.FlexGridSizer (cols=6, hgap=3, vgap=3)
+        gridSizer = wx.FlexGridSizer (cols=7, hgap=3, vgap=3)
+        
+        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                         label=_("Display:")),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
         
         for type in ('point', 'line', 'centroid', 'boundary',
-                        'area', 'face'):
+                     'area', 'face'):
             chkbox = wx.CheckBox(parent=panel, label=type)
             checked = self.settings.Get(group='cmd', key='showType',
                                         subkey=[type, 'enabled'])
@@ -1439,8 +1449,12 @@ class PreferencesDialog(wx.Dialog):
         
         # update widgets
         for gks in self.winId.keys():
-            group, key, subkey = gks.split(':')
-            value = self.settings.Get(group, key, subkey)
+            try:
+                group, key, subkey = gks.split(':')
+                value = self.settings.Get(group, key, subkey)
+            except ValueError:
+                group, key, subkey, subkey1 = gks.split(':')
+                value = self.settings.Get(group, key, [subkey, subkey1])
             win = self.FindWindowById(self.winId[gks])
             if win.GetName() in ('GetValue', 'IsChecked'):
                 value = win.SetValue(value)

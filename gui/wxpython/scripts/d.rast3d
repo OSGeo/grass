@@ -18,10 +18,10 @@
 
 #%Module
 #%  description: Displays 3d raster data in the active frame on the graphics monitor.
-#%  keywords: display, raster3d, voxel
+#%  keywords: display, raster3d
 #%End
 #%option
-#% key: input
+#% key: map
 #% type: string
 #% gisprompt: old,grid3,3d-raster
 #% description: 3D raster map to be displayed

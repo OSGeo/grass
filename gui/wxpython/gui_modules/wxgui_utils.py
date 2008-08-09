@@ -1,23 +1,23 @@
 """
-MODULE:     wxgui_utils.py
+@package wxgui_utils.py
 
-CLASSES:
-    * AbstractLayer
-    * Layer
-    * LayerTree
+@brief Utility classes for GRASS wxPython GUI. Main functions include
+tree control for GIS map layer management, command console, and
+command parsing.
 
-PURPOSE:    Utility classes for GRASS wxPython GUI. Main functions include tree control
-            for GIS map layer management, command console, and command parsing.
+Classes:
+ - AbstractLayer
+ - Layer
+ - LayerTree
 
-AUTHORS:    The GRASS Development Team
-            Michael Barton (Arizona State University)
-            Jachym Cepicky (Mendel University of Agriculture)
-            Martin Landa <landa.martin gmail.com>
-
-COPYRIGHT:  (C) 2007-2008 by the GRASS Development Team
-            This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+(C) 2007-2008 by the GRASS Development Team
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
+ 
+@author Michael Barton (Arizona State University)
+@author Jachym Cepicky (Mendel University of Agriculture)
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -663,7 +663,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # run properties dialog if no properties given
             if len(cmd) == 0:
                 self.PropertiesDialog(layer, show=True)
-
+                
+            if ltype == '3d-raster' and \
+                    not self.mapdisplay.toolbars['nviz']:
+                self.EnableItem(layer, False)
+            
         else: # group
             self.SetPyData(layer, ({'cmd': None,
                                     'type' : ltype,
@@ -682,7 +686,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.SetItemText(layer, name)
             else:
                 ctrl.SetValue(lname)
-
+            
         # updated progress bar range (mapwindow statusbar)
         if checked is True:
             self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
@@ -869,6 +873,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if checked: # enable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.LoadRaster(item)
+                elif mapLayer.type == '3d-raster':
+                    self.mapdisplay.MapWindow.LoadRaster3d(item)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.LoadVector(item)
 
@@ -877,6 +883,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.UnloadRaster(item)
+                elif mapLayer.type == '3d-raster':
+                    self.mapdisplay.MapWindow.UnloadRaster3d(item)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.UnloadVector(item)
                     
@@ -952,8 +960,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif type == 'vector':
                     self.mapdisplay.nvizToolWin.UpdatePage('vector')
                     self.mapdisplay.nvizToolWin.SetPage('vector')
+                elif type == '3d-raster':
+                    self.mapdisplay.nvizToolWin.UpdatePage('volume')
+                    self.mapdisplay.nvizToolWin.SetPage('volume')
             else:
-                for page in ('surface', 'vector'):
+                for page in ('surface', 'vector', 'volume'):
                     pageId = self.mapdisplay.nvizToolWin.page[page]['id']
                     if pageId > -1:
                         self.mapdisplay.nvizToolWin.notebook.RemovePage(pageId)
@@ -1148,6 +1159,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         mapWin.UnloadRaster(layer)
                     
                     mapWin.LoadRaster(layer)
+                    
+                elif mapLayer.type == '3d-raster':
+                    if mapWin.IsLoaded(layer):
+                        mapWin.UnloadRaster3d(layer)
+                    
+                    mapWin.LoadRaster3d(layer)
+                    
                 elif mapLayer.type == 'vector':
                     if mapWin.IsLoaded(layer):
                         mapWin.UnloadVector(layer)
@@ -1239,6 +1257,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         item = self.GetFirstChild(self.root)[0]
         return self.__FindSubItemByData(item, key, value)
 
+    def EnableItemType(self, type, enable=True):
+        """Enable/disable items in layer tree"""
+        item = self.GetFirstChild(self.root)[0]
+        while item and item.IsOk():
+            ltype = self.GetPyData(item)[0]['maplayer'].type
+            if type == ltype:
+                self.EnableItem(item, enable)
+            item = self.GetNextSibling(item)
+        
     def __FindSubItemByData(self, item, key, value):
         """Support method for FindItemByValue"""
         while item and item.IsOk():

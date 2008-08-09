@@ -2643,6 +2643,11 @@ class MapFrame(wx.Frame):
             self.toolbars['map'].Enable2D(False)
 
             #
+            # update layer tree (-> enable 3d-rasters)
+            #
+            self.tree.EnableItemType(type='3d-raster', enable=True)
+            
+            #
             # update status bar
             #
             self.toggleStatus.Enable(False)
@@ -2727,7 +2732,12 @@ class MapFrame(wx.Frame):
                               CloseButton(False).DestroyOnClose(True).
                               Layer(0))
             self.MapWindow = self.MapWindow2D
-        
+  
+            #
+            # update layer tree (-> disable 3d-rasters)
+            #
+            self.tree.EnableItemType(type='3d-raster', enable=False)
+            
         self.toolbars['map'].combo.SetValue ("Tools")
         self.toolbars['map'].Enable2D(True)
         self.toggleStatus.Enable(True)
