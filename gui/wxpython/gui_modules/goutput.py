@@ -382,53 +382,50 @@ class GMConsole(wx.Panel):
         elif type == 'error':
             message = 'ERROR: ' + message
         
-        # p1 = self.cmd_output.GetCurrentPos()
         p1 = self.cmd_output.GetEndStyled()
         self.cmd_output.GotoPos(p1)
-        self.linePos = self.cmd_output.GetCurrentPos()
-        
-        pc = -1
         
         if '\b' in message:
-            pc = p1
+            if self.linepos < 0:
+                self.linepos = p1
             last_c = ''
             for c in message:
                 if c == '\b':
-                    pc -= 1
+                   self.linepos -= 1
                 else:
                     if c == '\r':
-                        self.cmd_output.SetCurrentPos(self.linePos)
+                        pos = self.cmd_output.GetCurLine()[1]
+                        # self.cmd_output.SetCurrentPos(pos)
                     else:
-                        self.cmd_output.SetCurrentPos(pc)
+                        self.cmd_output.SetCurrentPos(self.linepos)
                     self.cmd_output.ReplaceSelection(c)
-                    pc = self.cmd_output.GetCurrentPos()
+                    self.linepos = self.cmd_output.GetCurrentPos()
                     if c != ' ':
                         last_c = c
             if last_c not in ('0123456789'):
                 self.cmd_output.AddTextWrapped('\n', wrap=None)
-                pc = -1
+                self.linepos = -1
         else:
+            self.linepos = -1 # don't force position
             if os.linesep not in message:
                 self.cmd_output.AddTextWrapped(message, wrap=60)
             else:
                 self.cmd_output.AddTextWrapped(message, wrap=None)
         
         p2 = self.cmd_output.GetCurrentPos()
-
-        self.cmd_output.StartStyling(p1, 0xff)
         
-        if type == 'error':
-            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleError)
-        elif type == 'warning':
-            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleWarning)
-        elif type == 'message':
-            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleMessage)
-        else: # unknown
-            self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleUnknown)
-
-        if pc > 0:
-            self.cmd_output.SetCurrentPos(pc)
-            
+        if p2 >= p1:
+            self.cmd_output.StartStyling(p1, 0xff)
+        
+            if type == 'error':
+                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleError)
+            elif type == 'warning':
+                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleWarning)
+            elif type == 'message':
+                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleMessage)
+            else: # unknown
+                self.cmd_output.SetStyling(p2 - p1, self.cmd_output.StyleUnknown)
+        
         self.cmd_output.EnsureCaretVisible()
         
     def OnCmdProgress(self, event):
