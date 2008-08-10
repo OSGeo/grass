@@ -25,6 +25,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+#include <cstring>
+
 //#include <ami_stream.h>
 #include <grass/iostream/ami_stream.h>
 
