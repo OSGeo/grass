@@ -17,6 +17,8 @@ for details.
 import os
 import sys
 
+import grass
+
 import globalvar
 import gcmd
 import grassenv
@@ -57,12 +59,16 @@ def GetTempfile(pref=None):
     except:
         return None
 
-def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None):
+def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
+                        layerType=None):
     """Get map name from GRASS command
 
     @param dcmd GRASS command (given as list)
     @param fullyQualified change map name to be fully qualified
     @param force parameter otherwise 'input'/'map'
+    @param update change map name in command
+    @param layerType check also layer type ('raster', 'vector', '3d-raster', ...)
+    
     @return map name
     @return '' if no map name found in command
     """
@@ -94,10 +100,23 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None):
         if idx < len(dcmd):
             mapname = dcmd[idx].split('=')[1]
             if fullyQualified and '@' not in mapname:
-                dcmd[idx] = dcmd[idx].split('=')[0] + '=' + \
-                    mapname +  '@' + grassenv.GetGRASSVariable('MAPSET')
-                mapname = dcmd[idx].split('=')[1]
-                        
+                if layerType in ('raster', 'vector', '3d-raster'):
+                    try:
+                        if layerType == 'raster':
+                            findType = 'cell'
+                        else:
+                            findType = layerType
+                        result = grass.find_file(mapname, element=findType)
+                    except AttributeError, e: # not found
+                        return ''
+                    if result:
+                        mapname = result['fullname']
+                    else:
+                        mapname += '@' + grassenv.GetGRASSVariable('MAPSET')
+                else:
+                    mapname += '@' + grassenv.GetGRASSVariable('MAPSET')
+                dcmd[idx] = dcmd[idx].split('=')[0] + '=' + mapname
+                
     return mapname
 
 def GetValidLayerName(name):
