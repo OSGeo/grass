@@ -55,6 +55,7 @@ static void initialize_function(expression * e)
 
     allocate_buf(e);
 
+    e->data.func.argv = G_malloc((e->data.func.argc + 1) * sizeof(void *));
     e->data.func.argv[0] = e->buf;
 
     for (i = 1; i <= e->data.func.argc; i++) {
