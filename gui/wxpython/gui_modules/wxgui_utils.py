@@ -1131,8 +1131,18 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # set layer text to map name
         if dcmd:
-            opacity = int(self.GetPyData(layer)[0]['maplayer'].GetOpacity(float=True) * 100)
-            mapname = utils.GetLayerNameFromCmd(dcmd, fullyQualified=True)
+            mapLayer = self.GetPyData(layer)[0]['maplayer']
+            opacity = int(mapLayer.GetOpacity(float=True) * 100)
+            mapname = utils.GetLayerNameFromCmd(dcmd, layerType=mapLayer.type,
+                                                fullyQualified=True)
+            if not mapname:
+                wx.MessageBox(parent=self,
+                              message=_("Map <%s> not found.") % utils.GetLayerNameFromCmd(dcmd),
+                              caption=_("Error"),
+                              style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+
+                return
+            
             self.SetItemText(layer, mapname + ' (opacity: ' + str(opacity) + '%)')
 
         # update layer data
@@ -1142,12 +1152,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.GetPyData(layer)[0]['cmd'] = dcmd
         self.GetPyData(layer)[0]['propwin'] = propwin
         
-        # check layer as active
-        # self.CheckItem(layer, checked=True)
-
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
-
+        
         if self.mapdisplay.toolbars['nviz'] and dcmd:
             # update nviz session
             mapLayer = self.GetPyData(layer)[0]['maplayer']
