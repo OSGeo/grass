@@ -53,7 +53,6 @@ static expression *to_int(expression * e1)
     expression *e = allocate(expr_type_function, CELL_TYPE);
     expression **args = G_malloc(2 * sizeof(expression *));
     int *argt = G_malloc(2 * sizeof(int));
-    void **argv = G_malloc(2 * sizeof(void *));
 
     argt[0] = CELL_TYPE;
 
@@ -66,7 +65,7 @@ static expression *to_int(expression * e1)
     e->data.func.argc = 1;
     e->data.func.args = args;
     e->data.func.argt = argt;
-    e->data.func.argv = argv;
+    e->data.func.argv = NULL;
     return e;
 }
 
@@ -75,7 +74,6 @@ static expression *to_float(expression * e1)
     expression *e = allocate(expr_type_function, FCELL_TYPE);
     expression **args = G_malloc(2 * sizeof(expression *));
     int *argt = G_malloc(2 * sizeof(int));
-    void **argv = G_malloc(2 * sizeof(void *));
 
     argt[0] = FCELL_TYPE;
 
@@ -88,7 +86,7 @@ static expression *to_float(expression * e1)
     e->data.func.argc = 1;
     e->data.func.args = args;
     e->data.func.argt = argt;
-    e->data.func.argv = argv;
+    e->data.func.argv = NULL;
     return e;
 }
 
@@ -97,7 +95,6 @@ static expression *to_double(expression * e1)
     expression *e = allocate(expr_type_function, DCELL_TYPE);
     expression **args = G_malloc(2 * sizeof(expression *));
     int *argt = G_malloc(2 * sizeof(int));
-    void **argv = G_malloc(2 * sizeof(void *));
 
     argt[0] = DCELL_TYPE;
 
@@ -110,7 +107,7 @@ static expression *to_double(expression * e1)
     e->data.func.argc = 1;
     e->data.func.args = args;
     e->data.func.argt = argt;
-    e->data.func.argv = argv;
+    e->data.func.argv = NULL;
     return e;
 }
 
@@ -243,7 +240,6 @@ expression *operator(const char *name, const char *oper, int prec,
     int argc = list_length(arglist);
     expression **args = G_malloc((argc + 1) * sizeof(expression *));
     int *argt = G_malloc((argc + 1) * sizeof(int));
-    void **argv = G_malloc((argc + 1) * sizeof(void *));
     expression *e;
     expr_list *l;
     int i;
@@ -296,7 +292,7 @@ expression *operator(const char *name, const char *oper, int prec,
     e->data.func.argc = argc;
     e->data.func.args = args;
     e->data.func.argt = argt;
-    e->data.func.argv = argv;
+    e->data.func.argv = NULL;
     return e;
 }
 
