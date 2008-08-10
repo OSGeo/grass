@@ -34,7 +34,7 @@ static void init(void)
     R_font(font ? font : "romans");
 
     if (fenc)
-	R_charset(fenc);
+	R_encoding(fenc);
 
     R_set_window(t, b, l, r);
 }
@@ -43,12 +43,15 @@ int R_open_driver(void)
 {
     const char *p = getenv("GRASS_RENDER_IMMEDIATE");
     const struct driver *drv =
+	(p && G_strcasecmp(p, "PNG") == 0) ? PNG_Driver() :
 	(p && G_strcasecmp(p, "PS") == 0) ? PS_Driver() :
 	(p && G_strcasecmp(p, "HTML") == 0) ? HTML_Driver() :
 #ifdef USE_CAIRO
 	(p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver() :
-#endif
+	Cairo_Driver();
+#else
 	PNG_Driver();
+#endif
 
     LIB_init(drv);
 
@@ -64,7 +67,7 @@ void R_flush(void)
 
 void R_close_driver(void)
 {
-    char *cmd = getenv("GRASS_NOTIFY");
+    const char *cmd = getenv("GRASS_NOTIFY");
 
     COM_Respond();
     COM_Graph_close();
@@ -516,12 +519,12 @@ void R_get_text_box(const char *text, double *t, double *b, double *l, double *r
 
 void R_font(const char *name)
 {
-    COM_Font_get(name);
+    COM_Set_font(name);
 }
 
-void R_charset(const char *name)
+void R_encoding(const char *name)
 {
-    COM_Font_init_charset(name);
+    COM_Set_encoding(name);
 }
 
 void R_font_list(char ***list, int *count)

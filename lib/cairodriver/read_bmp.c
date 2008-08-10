@@ -64,7 +64,7 @@ static int read_bmp_header(const unsigned char *p)
     return 1;
 }
 
-void read_bmp(void)
+void cairo_read_bmp(void)
 {
     char header[HEADER_SIZE];
     FILE *input;

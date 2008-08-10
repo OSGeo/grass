@@ -287,7 +287,7 @@ int main(int argc, char **argv)
 	R_font(opt.path->answer);
 
     if (opt.charset->answer)
-	R_charset(opt.charset->answer);
+	R_encoding(opt.charset->answer);
 
     D_setup(0);
 
@@ -384,7 +384,7 @@ int main(int argc, char **argv)
 		    *ptr = 0;
 		R_font(buf_ptr);
 		if (ptr)
-		    R_charset(ptr + 1);
+		    R_encoding(ptr + 1);
 		break;
 	    case 'C':
 		/* color */

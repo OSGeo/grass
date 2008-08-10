@@ -4,5 +4,5 @@
 void Cairo_Respond(void)
 {
     if (auto_write)
-	write_image();
+	cairo_write_image();
 }

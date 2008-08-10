@@ -46,6 +46,10 @@ const struct driver *PNG_Driver(void)
     drv.draw_point = PNG_draw_point;
     drv.draw_bitmap = PNG_draw_bitmap;
     drv.draw_text = NULL;
+    drv.text_box = NULL;
+    drv.Set_font = NULL;
+    drv.Font_list = NULL;
+    drv.Font_info = NULL;
 
     initialized = 1;
 

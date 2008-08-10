@@ -38,7 +38,7 @@ void R_text(const char *);
 void R_get_text_box(const char *, double *, double *, double *, double *);
 
 void R_font(const char *);
-void R_charset(const char *);
+void R_encoding(const char *);
 void R_font_list(char ***, int *);
 void R_font_info(char ***, int *);
 

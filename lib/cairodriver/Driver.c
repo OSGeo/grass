@@ -32,7 +32,7 @@ const struct driver *Cairo_Driver(void)
     drv.Graph_set = Cairo_Graph_set;
     drv.Graph_close = Cairo_Graph_close;
     drv.Line_width = Cairo_Line_width;
-    drv.Polydots = NULL;
+    drv.Polydots = Cairo_Polydots;
     drv.Polyline = Cairo_Polyline;
     drv.Polygon = Cairo_Polygon;
     drv.Set_window = Cairo_Set_window;
@@ -45,7 +45,11 @@ const struct driver *Cairo_Driver(void)
     drv.draw_line = Cairo_draw_line;
     drv.draw_point = Cairo_draw_point;
     drv.draw_bitmap = Cairo_draw_bitmap;
-    drv.draw_text = NULL;
+    drv.draw_text = Cairo_draw_text;
+    drv.text_box = Cairo_text_box;
+    drv.Set_font = Cairo_set_font;
+    drv.Font_list = Cairo_font_list;
+    drv.Font_info = Cairo_font_info;
 
     initialized = 1;
 

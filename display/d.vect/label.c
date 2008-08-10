@@ -40,7 +40,7 @@ int label(struct Map_info *Map, int type, int do_area,
 	if (lattr->font)
 	    R_font(lattr->font);
 	if (lattr->enc)
-	    R_charset(lattr->enc);
+	    R_encoding(lattr->enc);
 
 	if (chcat) {
 	    int found = 0;

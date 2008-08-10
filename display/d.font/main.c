@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     }
 
     if (opt3->answer)		/* Set character encoding */
-	R_charset(opt3->answer);
+	R_encoding(opt3->answer);
 
     /* add this command to the list */
     R_close_driver();

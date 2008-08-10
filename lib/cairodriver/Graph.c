@@ -109,7 +109,7 @@ static int init_file(void)
     stride = width * 4;
 
     /* get file name */
-    p = getenv("GRASS_CAIROFILE");
+    p = getenv("GRASS_PNGFILE");
     if (!p || strlen(p) == 0)
 	p = DEFAULT_FILE_NAME;
 
@@ -149,10 +149,10 @@ static int init_file(void)
 	break;
     }
 
-    p = getenv("GRASS_CAIRO_MAPPED");
+    p = getenv("GRASS_PNG_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0 && ends_with(file_name, ".bmp");
 
-    p = getenv("GRASS_CAIRO_READ");
+    p = getenv("GRASS_PNG_READ");
     do_read = p && strcmp(p, "TRUE") == 0;
 
     if (is_vector) {
@@ -181,10 +181,10 @@ static int init_file(void)
     }
 
     if (do_read && !mapped)
-	read_image();
+	cairo_read_image();
 
     if (do_map && !mapped) {
-	write_image();
+	cairo_write_image();
 	map_file();
 	init_cairo();
     }
@@ -222,7 +222,7 @@ int Cairo_Graph_set(void)
     else
 	bgcolor_a = 1.0;
 
-    p = getenv("GRASS_AUTO_WRITE");
+    p = getenv("GRASS_PNG_AUTO_WRITE");
     auto_write = p && strcmp(p, "TRUE") == 0;
 
 #if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
@@ -237,7 +237,7 @@ void Cairo_Graph_close(void)
 {
     G_debug(1, "Cairo_Graph_close");
 
-    write_image();
+    cairo_write_image();
 
     if (cairo) {
 	cairo_destroy(cairo);

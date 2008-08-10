@@ -22,3 +22,13 @@ void Cairo_Polyline(const double *xarray, const double *yarray, int count)
     do_polygon(xarray, yarray, count);
     cairo_stroke(cairo);
 }
+
+void Cairo_Polydots(const double *xarray, const double *yarray, int count)
+{
+    int i;
+
+    G_debug(3, "Cairo_Polydots (%d points)", count);
+    for (i = 1; i < count; i++)
+	Cairo_draw_point(xarray[0], yarray[0]);
+}
+
