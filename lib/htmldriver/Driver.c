@@ -44,6 +44,10 @@ const struct driver *HTML_Driver(void)
     drv.draw_point = NULL;
     drv.draw_bitmap = NULL;
     drv.draw_text = HTML_Text;
+    drv.text_box = NULL;
+    drv.Set_font = NULL;
+    drv.Font_list = NULL;
+    drv.Font_info = NULL;
 
     initialized = 1;
 

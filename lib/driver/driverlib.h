@@ -29,9 +29,7 @@ int get_char_vects(unsigned char, int *, unsigned char **, unsigned char **);
 
 /* font_freetype.c */
 int font_init_freetype(const char *, int);
-int font_init_charset(const char *);
 const char *font_get_freetype_name(void);
-const char *font_get_charset(void);
 int font_get_index(void);
 
 /* parse_ftcap.c */

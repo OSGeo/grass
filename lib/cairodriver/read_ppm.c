@@ -1,6 +1,6 @@
 #include "cairodriver.h"
 
-void read_ppm(void)
+void cairo_read_ppm(void)
 {
     char *mask_name = G_store(file_name);
     FILE *input, *mask;

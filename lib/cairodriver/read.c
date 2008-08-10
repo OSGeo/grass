@@ -1,6 +1,6 @@
 #include "cairodriver.h"
 
-void read_image(void)
+void cairo_read_image(void)
 {
     G_debug(1, "read_image");
 
@@ -9,11 +9,11 @@ void read_image(void)
 
     if (file_type == FTYPE_PPM) {
 	G_debug(1, "Reading image from %s", file_name);
-	read_ppm();
+	cairo_read_ppm();
     }
     else if (file_type == FTYPE_BMP) {
 	G_debug(1, "Reading image from %s", file_name);
-	read_bmp();
+	cairo_read_bmp();
     }
 #if CAIRO_HAS_PNG_FUNCTIONS
     else if (file_type == FTYPE_PNG) {

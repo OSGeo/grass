@@ -39,6 +39,7 @@ double cur_y;
 double text_size_x;
 double text_size_y;
 double text_rotation;
+int matrix_valid;
 
 int LIB_init(const struct driver *drv)
 {

@@ -48,7 +48,7 @@ static void make_bmp_header(unsigned char *p)
     p = put_4(p, 0);
 }
 
-void write_bmp(void)
+void cairo_write_bmp(void)
 {
     char header[HEADER_SIZE];
     FILE *output;

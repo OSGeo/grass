@@ -65,16 +65,22 @@ extern void Cairo_end_scaled_raster(void);
 extern void Cairo_Line_width(double);
 extern void Cairo_Polygon(const double *, const double *, int);
 extern void Cairo_Polyline(const double *, const double *, int);
+extern void Cairo_Polydots(const double *, const double *, int);
 extern void Cairo_Respond(void);
+extern void Cairo_draw_text(const char *);
+extern void Cairo_text_box(const char *, double *, double *, double *, double *);
+extern void Cairo_set_font(const char *);
+extern void Cairo_font_list(char ***, int *);
+extern void Cairo_font_info(char ***, int *);
 
 /* read.c */
-extern void read_image(void);
-extern void read_ppm(void);
-extern void read_bmp(void);
+extern void cairo_read_image(void);
+extern void cairo_read_ppm(void);
+extern void cairo_read_bmp(void);
 
 /* write.c */
-extern void write_image(void);
-extern void write_ppm(void);
-extern void write_bmp(void);
+extern void cairo_write_image(void);
+extern void cairo_write_ppm(void);
+extern void cairo_write_bmp(void);
 
 #endif /* __CAIRODRIVER_H__ */

@@ -5,7 +5,7 @@
 #include <cairo-xlib.h>
 #endif
 
-void write_image(void)
+void cairo_write_image(void)
 {
     G_debug(1, "write_image");
 
@@ -20,11 +20,11 @@ void write_image(void)
 
     if (file_type == FTYPE_PPM) {
 	G_debug(1, "Writing image to %s", file_name);
-	write_ppm();
+	cairo_write_ppm();
     }
     else if (file_type == FTYPE_BMP) {
 	G_debug(1, "Writing image to %s", file_name);
-	write_bmp();
+	cairo_write_bmp();
     }
 #if CAIRO_HAS_PNG_FUNCTIONS
     else if (file_type == FTYPE_PNG) {

@@ -40,6 +40,13 @@ static void set_text_box(FT_Bitmap *, FT_Int, FT_Int);
 static int fdont_draw = 0;
 static int ft, fb, fl, fr;
 
+static const char *font_get_encoding(void)
+{
+    if (!encoding)
+	encoding = G_store("ISO-8859-1");
+    return encoding;
+}
+
 static void draw_main(int x, int y,
 		      double text_size_x, double text_size_y,
 		      double text_rotation, const char *string)
@@ -53,14 +60,14 @@ static void draw_main(int x, int y,
     FT_Vector pen;
     FT_Error ans;
     const char *filename;
-    const char *charset;
+    const char *encoding;
     int font_index;
     unsigned char *out;
     int outlen;
 
     /* get file name */
     filename = font_get_freetype_name();
-    charset = font_get_charset();
+    encoding = font_get_encoding();
     font_index = font_get_index();
 
     /* set freetype */
@@ -106,8 +113,8 @@ static void draw_main(int x, int y,
     /* pen.y = 0; */
     pen.y = (screen_bottom - y) * 64;
 
-    /* convert string to:shift-jis from:charset */
-    outlen = convert_str(charset, string, &out);
+    /* convert string to:shift-jis from:encoding */
+    outlen = convert_str(encoding, string, &out);
 
     /* set matrix */
     set_matrix(&matrix, D2R(text_rotation));

@@ -24,7 +24,7 @@ int zcoor(struct Map_info *Map, int type, LATTR * lattr)
     if (lattr->font)
 	R_font(lattr->font);
     if (lattr->enc)
-	R_charset(lattr->enc);
+	R_encoding(lattr->enc);
 
     Vect_rewind(Map);
 

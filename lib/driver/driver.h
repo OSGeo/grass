@@ -17,8 +17,10 @@ extern double cur_y;
 extern double text_size_x;
 extern double text_size_y;
 extern double text_rotation;
+extern int matrix_valid;
 
 extern struct GFONT_CAP *ftcap;
+extern char *encoding;
 
 struct driver
 {
@@ -45,6 +47,10 @@ struct driver
     void (*draw_point) (double, double);
     void (*draw_bitmap) (int, int, int, const unsigned char *);
     void (*draw_text) (const char *);
+    void (*text_box)(const char *, double *, double *, double *, double *);
+    void (*Set_font)(const char *);
+    void (*Font_list)(char ***, int *);
+    void (*Font_info)(char ***, int *);
 };
 
 /* Library Functions */
@@ -73,8 +79,8 @@ extern void COM_Cont_rel(double, double);
 extern void COM_Erase(void);
 
 /* Font.c */
-extern void COM_Font_get(const char *);
-extern void COM_Font_init_charset(const char *);
+extern void COM_Set_font(const char *);
+extern void COM_Set_encoding(const char *);
 extern void COM_Font_list(char ***, int *);
 extern void COM_Font_info(char ***, int *);
 

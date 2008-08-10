@@ -3,6 +3,11 @@
 
 void COM_Get_text_box(const char *text, double *t, double *b, double *l, double *r)
 {
+    if (driver->text_box) {
+	(*driver->text_box)(text, t, b, l, r);
+	return;
+    }
+
     if (!font_is_freetype()) {
 	soft_text_ext(cur_x, cur_y,
 		      text_size_x, text_size_y, text_rotation, text);
