@@ -99,7 +99,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
     def GetStringValue(self):
         str = ""
         for value in self.value:
-            str += self.seltree.GetItemText(value) + ","
+            str += value + ","
         str = str.rstrip(',')
         return str
 
@@ -110,9 +110,13 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.GetElementList(self.type, self.mapsets, self.exceptOf)
 
         if len(self.value) > 0:
-            self.seltree.EnsureVisible(self.value[0])
-            self.seltree.SelectItem(self.value[0])
-
+            root = self.seltree.GetRootItem()
+            if not root:
+                return
+            item = self.FindItem(root, self.value[0])
+            self.seltree.EnsureVisible(item)
+            self.seltree.SelectItem(item)
+            
     def SetStringValue(self, value):
         # this assumes that item strings are unique...
         root = self.seltree.GetRootItem()
@@ -242,7 +246,7 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
             if self.seltree.ItemHasChildren(item):
                 item = self.FindItem(item, text)
             item, cookie = self.seltree.GetNextChild(parentItem, cookie)
-        return wx.TreeItemId();
+        return wx.TreeItemId()
 
 
     def AddItem(self, value, parent=None):
@@ -273,9 +277,10 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
                 self.value = [] # cannot select mapset item
             else:
                 if self.multiple is True:
-                    self.value.append(item)
+                    # text item should be unique
+                    self.value.append(self.seltree.GetItemText(item))
                 else:
-                    self.value = [item, ]
+                    self.value = [self.seltree.GetItemText(item), ]
 
             self.Dismiss()
 
