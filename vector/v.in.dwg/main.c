@@ -28,8 +28,6 @@
 #define AD_VM_PC
 #define OD_GENERIC_READ
 
-#define MAIN
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,6 +41,25 @@
 #include "ad2.h"
 #include "io/odio.h"
 #include "global.h"
+
+int cat;
+int n_elements;		/* number of processed elements (only low level elements) */
+int n_skipped;		/* number of skipped low level elements (different layer name) */
+struct Map_info Map;
+dbDriver *driver;
+dbString sql;
+dbString str;
+struct line_pnts *Points;
+struct line_cats *Cats;
+PAD_LAY Layer;
+char *Txt;
+char *Block;
+struct field_info *Fi;
+AD_DB_HANDLE dwghandle;
+TRANS *Trans;		/* transformation */
+int atrans;		/* number of allocated levels */
+struct Option *layers_opt;
+struct Flag *invert_flag;
 
 int main(int argc, char *argv[])
 {

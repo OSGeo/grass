@@ -22,12 +22,24 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#define MAIN
 #include "contour.h"
 #include <unistd.h>
-#undef MAIN
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+int nrows;
+int ncols;
+int minc;
+int minr;
+int maxc;
+int maxr;
+int array_size;
+double i_val_l_f;
+CSEG con;
+FLAG *seen, *mask;
+BSEG bseen, bmask;
+NODE *zero;
+CELL on, off;
 
 int main(int argc, char *argv[])
 {

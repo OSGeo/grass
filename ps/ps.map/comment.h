@@ -13,8 +13,4 @@ struct comment
     int color;
 };
 
-#ifdef MAIN
-struct comment cmt;
-#else
 extern struct comment cmt;
-#endif

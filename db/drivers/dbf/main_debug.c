@@ -3,7 +3,6 @@
 * just a test for debugging purpose, imitating dbf driver -a.sh.
 *****************************************************************************/
 
-#define MAIN
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include <grass/gis.h>

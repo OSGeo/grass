@@ -37,9 +37,24 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#define MAIN
+
 #include "options.h"
 #include "dhist.h"
+
+struct stat_list dist_stats;
+struct Categories cats;
+struct FPRange fp_range;
+int is_fp;
+
+char *map_name;
+int color;
+float size;
+int style;
+int type;
+int is_fp;
+int nodata;
+int nsteps;
+int cat_ranges;
 
 int main(int argc, char **argv)
 {

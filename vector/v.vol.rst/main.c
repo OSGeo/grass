@@ -32,8 +32,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#define USERMAIN
-
 #include <grass/gis.h>
 #include <grass/site.h>
 #include <grass/Vect.h>
@@ -49,6 +47,45 @@
 #include <grass/bitmap.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+
+double /* pargr */ xmin, xmax, ymin, ymax, zmin, zmax, wmin, wmax;
+double /* norm */ xmin0, xmax0, ymin0, ymax0, zmin0, zmax0, wmin0, wmax0,
+    delt, dnorm;
+double /* MAT */ *A;
+double /* PRISP */ fi, rsm, fstar2, alphat, betat;
+
+double /* out */ *b, *w;
+double /* orig */ x0utm, y0utm, z0utm;
+double /* gcmax */ gmin, gmax, c1min, c1max, c2min, c2max, c3min, c3max;
+double /* gcmax */ a1min, a1max, a2min, a2max;
+float *zero_array1, *zero_array2, *zero_array3, *zero_array4, *zero_array5,
+    *zero_array6, *zero_array7;
+int out_cond1, out_cond2;
+double xmn, xmx, ymn, ymx, zmn, zmx;
+double z_orig_in, tb_res_in;
+int cursegm;
+int totsegm;
+int iw2;
+int n_rows_in;			/* fix by JH 04/24/02 */
+int cv;
+int sig1;
+
+char msg[80];
+
+struct Map_info Map;
+dbString sql;
+dbDriver *driver;
+dbHandle handle;
+struct field_info *f;
+struct line_pnts *Pnts;
+struct line_cats *Cats;
+char buf[1024];
+int count;
+
+FILE *dev, *cvdevf;
+FCELL *zero_array_cell;
+G3D_Region current_region;
+
 
 /* pargr */
 double ns_res, ew_res, tb_res;

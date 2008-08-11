@@ -2,8 +2,23 @@
 #include <float.h>
 #include <math.h>
 #include <grass/gis.h>
-#define TINF_MAIN
 #include "tinf.h"
+
+int (*is_null) (void *);
+void (*set_null_value) (void *, int);
+int (*bpe) ();
+void *(*get_max) (void *, void *);
+void *(*get_min) (void *, void *);
+int (*get_row) (int, void *, int);
+void *(*get_buf) ();
+int (*put_row) (int, void *);
+double (*slope) (void *, void *, double);
+void (*set_min) (void *);
+void (*set_max) (void *);
+void (*diff) (void *, void *);
+void (*sum) (void *, void *);
+void (*quot) (void *, void *);
+void (*prod) (void *, void *);
 
 /* To add a new multitype function, use the function below to initialize
  * the function pointer to each of the three typed functions.  The function

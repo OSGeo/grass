@@ -14,8 +14,4 @@ struct border
     double width;
 };
 
-#ifdef MAIN
-struct border brd;
-#else
 extern struct border brd;
-#endif

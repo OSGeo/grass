@@ -17,11 +17,21 @@
  *
  *****************************************************************************/
 
-#define  MAIN  1
 #include <stdlib.h>
 #include <string.h>
 #include "globals.h"
 
+char Data_Loaded;	/* is there data in memory */
+
+			/* used for abnormal exit logic */
+char Files_Open;	/* is there data in memory */
+
+struct Ortho_Image_Group group;
+
+/* hold the names of files etc.  mostly used by main.c */
+char *N_path;
+char *N_name;
+char *N_camera;
 
 int main(int argc, char *argv[])
 {

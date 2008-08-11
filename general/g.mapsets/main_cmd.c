@@ -17,7 +17,6 @@
  *
  *****************************************************************************/
 
-#define MAIN
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -26,6 +25,13 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "externs.h"
+
+char *mapset_name[GMAPSET_MAX];
+int nmapsets;
+int choice[GMAPSET_MAX];
+int nchoices;
+int curr_mapset[GMAPSET_MAX];
+int ncurr_mapsets;
 
 static char Path[GPATH_MAX];
 

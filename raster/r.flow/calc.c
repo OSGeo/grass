@@ -26,8 +26,6 @@
  **  Update MN: commented line 387
  */
 
-#define MAIN
-
 #include <stdlib.h>		/* for the random number generation */
 #include <time.h>
 #include <grass/gis.h>
@@ -47,6 +45,20 @@
 #define ROW	1		/* |            */
 #define COL	0		/* /            */
 
+CELL v;				/* address for segment retrieval macros */
+
+/* heap memory */
+struct Cell_head region;	/* resolution and boundaries            */
+struct Map_info fl;		/* output vector file header            */
+struct BM *bitbar;		/* space-efficient barrier matrix       */
+int lgfd;			/* output length file descriptor        */
+char string[1024];		/* space for strings                    */
+layer el, as, ds;		/* elevation, aspect, density           */
+double *ew_dist;		/* east-west distances for rows         */
+double *epsilon[2];		/* quantization errors for rows         */
+
+/* command-line parameters */
+params parm;
 
 typedef struct
 {

@@ -14,8 +14,4 @@ struct header
     FILE *fp;
 };
 
-#ifdef MAIN
-struct header hdr;
-#else
 extern struct header hdr;
-#endif

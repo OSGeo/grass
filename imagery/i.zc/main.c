@@ -19,8 +19,6 @@
  *
  *****************************************************************************/
 
-#define MAIN
-
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -45,7 +43,6 @@ int main(int argc, char *argv[])
     int size;			/* the length of one side */
     long totsize;		/* the Total number of data points */
     double *data[2];		/* Data structure containing real & complex values of FFT */
-    int save_args();		/* function to stash the command line arguments */
     struct GModule *module;
     struct Option *input_map, *output_map, *width, *threshold, *orientations;
     const char *me;
@@ -67,7 +64,6 @@ int main(int argc, char *argv[])
     input_map->multiple = NO;
     input_map->gisprompt = "old,cell,raster";
     input_map->description = _("Name of input raster map");
-#define INPUT_MAP input_map->answer
 
     output_map = G_define_option();
     output_map->key = "output";
@@ -76,7 +72,6 @@ int main(int argc, char *argv[])
     output_map->multiple = NO;
     output_map->gisprompt = "new,cell,raster";
     output_map->description = _("Zero crossing raster map");
-#define OUTPUT_MAP output_map->answer
 
     width = G_define_option();
     width->key = "width";
@@ -107,16 +102,16 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* open input cell map */
-    if ((inmapset = G_find_cell(INPUT_MAP, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), INPUT_MAP);
+    if ((inmapset = G_find_cell(input_map->answer, "")) == NULL)
+	G_fatal_error(_("Raster map <%s> not found"), input_map->answer);
 
-    inputfd = G_open_cell_old(INPUT_MAP, inmapset);
+    inputfd = G_open_cell_old(input_map->answer, inmapset);
     if (inputfd < 0)
 	exit(EXIT_FAILURE);
 
     /* check command line args for validity */
-    if (G_legal_filename(OUTPUT_MAP) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), OUTPUT_MAP);
+    if (G_legal_filename(output_map->answer) < 0)
+	G_fatal_error(_("<%s> is an illegal file name"), output_map->answer);
 
     sscanf(threshold->answer, "%1lf", &Thresh);
     if (Thresh <= 0.0)
@@ -188,7 +183,7 @@ int main(int argc, char *argv[])
 
     /* open the output cell maps and allocate cell row buffers */
     G_message(_("Writing transformed data to file..."));
-    if ((zcfd = G_open_cell_new(OUTPUT_MAP)) < 0)
+    if ((zcfd = G_open_cell_new(output_map->answer)) < 0)
 	exit(EXIT_FAILURE);
 
     cell_row = G_allocate_cell_buf();

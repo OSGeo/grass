@@ -24,7 +24,6 @@
  *
  */
 
-#define MAIN
 #include <stdlib.h>
 #include <string.h>
 #include <grass/glocale.h>
@@ -35,6 +34,10 @@
 #include "what.h"
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+
+char **vect;
+int nvects;
+struct Map_info *Map;
 
 /* Vector map grabbing taken from d.zoom */
 

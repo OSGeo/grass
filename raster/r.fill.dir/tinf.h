@@ -65,22 +65,6 @@ void prod_d(void *, void *);
 /* to add a new multitype function, add a pointer for the function and
  * its argument list to the list below */
 
-#ifdef TINF_MAIN
-int (*is_null) (void *);
-int (*bpe) ();
-void *(*get_max) (void *, void *);
-void *(*get_min) (void *, void *);
-int (*get_row) (int, void *, int);
-void *(*get_buf) ();
-int (*put_row) (int, void *);
-double (*slope) (void *, void *, double);
-void (*set_min) (void *);
-void (*set_max) (void *);
-void (*diff) (void *, void *);
-void (*sum) (void *, void *);
-void (*quot) (void *, void *);
-void (*prod) (void *, void *);
-#else
 extern int (*is_null) (void *);
 extern int (*bpe) ();
 extern void *(*get_max) (void *, void *);
@@ -95,7 +79,6 @@ extern void (*diff) (void *, void *);
 extern void (*sum) (void *, void *);
 extern void (*quot) (void *, void *);
 extern void (*prod) (void *, void *);
-#endif
 
 /* probably not something of general interest */
 

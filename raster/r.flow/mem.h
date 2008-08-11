@@ -8,11 +8,7 @@
 #define SEGCOLS ((int) (region.cols/3) + 1)
 #define SEGROWS ((int)(MB/region.cols/3) <= 1 ? 1 : (int)(MB/region.cols/3))
 
-#ifdef MAIN
-CELL v;				/* address for segment retrieval macros */
-#else
 extern CELL v;
-#endif
 
 
 /*

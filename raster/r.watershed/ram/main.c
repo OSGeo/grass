@@ -13,14 +13,47 @@
  *               for details.
  *
  *****************************************************************************/
-#define MAIN
+
 #include <stdlib.h>
 #include <unistd.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#undef MAIN
 
+struct Cell_head window;
+
+int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+SHORT nrows, ncols;
+double half_res, diag, max_length, dep_slope;
+int bas_thres, tot_parts;
+FLAG *worked, *in_list, *s_b, *swale;
+RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
+RAMSEG r_h_seg, dep_seg;
+RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
+POINT *astar_pts;
+CELL *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep;
+CELL *ril_buf;
+int ril_fd;
+double *s_l, *s_g, *l_s;
+CELL one, zero;
+double ril_value, dzero;
+SHORT sides;
+SHORT drain[3][3]	= {{ 7,6,5 },{ 8,0,4 },{ 1,2,3 }};
+SHORT updrain[3][3]	= {{ 3,2,1 },{ 4,0,8 },{ 5,6,7 }};
+SHORT nextdr[8]	= { 1,-1,0,0,-1,1,1,-1 };
+SHORT nextdc[8]	= { 0,0,-1,1,1,-1,1,-1 };
+char ele_name[GNAME_MAX], *ele_mapset, pit_name[GNAME_MAX], *pit_mapset;
+char run_name[GNAME_MAX], *run_mapset, ob_name[GNAME_MAX], *ob_mapset;
+char ril_name[GNAME_MAX], *ril_mapset, dep_name[GNAME_MAX], *dep_mapset;
+char *this_mapset;
+char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
+char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
+char wat_name[GNAME_MAX], asp_name[GNAME_MAX], arm_name[GNAME_MAX], dis_name[GNAME_MAX];
+char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
+char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
+char bas_flag, seg_flag, haf_flag, er_flag;
+char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
+FILE *fp;
 
 int main(int argc, char *argv[])
 {

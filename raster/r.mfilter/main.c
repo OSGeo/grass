@@ -14,7 +14,7 @@
  *               for details.
  *
  *****************************************************************************/
-#define MAIN
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -22,6 +22,12 @@
 #include <grass/glocale.h>
 #include "filter.h"
 #include "glob.h"
+
+int nrows, ncols;
+int buflen;
+int direction;
+int zero_only;
+int preserve_edges;
 
 int main(int argc, char *argv[])
 {

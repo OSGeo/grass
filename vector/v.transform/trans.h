@@ -49,24 +49,18 @@
 * Yah, I made them global.  So shoot me.
 **/
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
+extern double ax[MAX_COOR];	/*  current map   */
+extern double ay[MAX_COOR];
 
-GLOBAL double ax[MAX_COOR];	/*  current map   */
-GLOBAL double ay[MAX_COOR];
+extern double bx[MAX_COOR];	/*  map we are going to   */
+extern double by[MAX_COOR];
 
-GLOBAL double bx[MAX_COOR];	/*  map we are going to   */
-GLOBAL double by[MAX_COOR];
-
-GLOBAL int use[MAX_COOR];	/*  where the coordinate came from */
-GLOBAL double residuals[MAX_COOR];
-GLOBAL double rms;
+extern int use[MAX_COOR];	/*  where the coordinate came from */
+extern double residuals[MAX_COOR];
+extern double rms;
 
 /*  this may be used in the future  */
-GLOBAL int reg_cnt;		/*  count of registered points */
+extern int reg_cnt;		/*  count of registered points */
 
 
 /******************

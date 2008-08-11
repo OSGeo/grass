@@ -18,7 +18,6 @@
  *
  *****************************************************************************/
 
-#define MAIN
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -38,6 +37,22 @@
 #include "ps_info.h"
 #include "group.h"
 #include "local_proto.h"
+
+struct border brd;
+struct map_info m_info;
+struct labels labels;
+struct colortable ct;
+struct PS_data PS;
+int WHITE = 0;
+int BLACK = 1;
+int GREY = 9;
+int sec_draw;
+struct vector vector;
+struct header hdr;
+struct scalebar sb;
+struct comment cmt;
+struct PS_group grp;
+
 
 #define KEY(x) (strcmp(key,x)==0)
 

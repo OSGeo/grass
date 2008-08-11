@@ -19,8 +19,10 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define G_PROJ_MAIN
 #include "local_proto.h"
+
+struct Key_Value *projinfo, *projunits;
+struct Cell_head cellhd;
 
 int main(int argc, char *argv[])
 {

@@ -22,6 +22,7 @@ int run(char *cmd)
 
 void gregion(void)
 {
+    char buf[GPATH_MAX];
     char *hdmap;
 
 
@@ -48,6 +49,7 @@ void gregion(void)
 
 void depressionless(void)
 {
+    char buf[GPATH_MAX];
     sprintf(buf, "%s/bin/r.fill.dir "
 	    "input=%s elev=%s dir=%s type=grass > /dev/null",
 	    gisbase, map.elev, map.fill, map.dir);
@@ -66,6 +68,7 @@ void depressionless(void)
 
 void basin_elevation(void)
 {
+    char buf[GPATH_MAX];
     sprintf(buf, "%s/bin/r.mapcalc "
 	    "'%s = if(%s == 0 || isnull(%s), null(), %s)' > /dev/null",
 	    gisbase, map.belev, map.basin, map.basin, map.elev);
@@ -82,6 +85,7 @@ void basin_elevation(void)
 
 void top_index(void)
 {
+    char buf[GPATH_MAX];
     if (map.belev) {
 	sprintf(buf, "%s/bin/r.topidx "
 		"input=%s output=%s > /dev/null",

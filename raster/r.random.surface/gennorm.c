@@ -3,7 +3,6 @@
 #undef TRACE
 #undef DEBUG
 
-#undef MAIN
 #include <math.h>
 #include <grass/gis.h>
 #include "ransurf.h"

@@ -51,22 +51,15 @@ void topmodel(void);
 double get_f(double t, double R);
 
 
-#ifdef MAIN
-#	define	GLOBAL
-#else
-#	define	GLOBAL	extern
-#endif
-
-
 /* Topographic index statistics file */
-GLOBAL struct
+struct idxstats
 {
     /* misc.nidxclass's */
     double *atb, *Aatb_r;
-} idxstats;
+};
 
 /* Parameters file */
-GLOBAL struct
+struct params
 {
     char *name;
     double A, qs0, lnTe, m, Sr0, Srmax, td, vch, vr;
@@ -78,28 +71,28 @@ GLOBAL struct
 } params;
 
 /* Input file */
-GLOBAL struct
+struct input
 {
     int ntimestep;
     double dt;
     /* input.ntimestep's */
     double *R, *Ep;
-} input;
+};
 
 /* Map names */
-GLOBAL struct
+struct map
 {
     char *basin, *elev, *belev, *fill, *dir, *topidx;
-} map;
+};
 
 /* File names */
-GLOBAL struct
+struct file
 {
     char *idxstats, *params, *input, *output, *Qobs;
-} file;
+};
 
 /* Miscellaneous TOPMODEL variables */
-GLOBAL struct
+struct misc
 {
     /* Number of non-null cells */
     int ncell;
@@ -133,10 +126,9 @@ GLOBAL struct
     double **ex;
     /* Miscellaneous variables */
     int timestep, idxclass;
-} misc;
+};
 
-
-GLOBAL struct
+struct flg
 {
     /* Input flag */
     char input;
@@ -144,9 +136,16 @@ GLOBAL struct
     char overwr;
     /* Overwrite list */
     int overwrlist;
-} flg;
+};
 
+extern struct idxstats idxstats;
+extern struct params params;
+extern struct input input;
+extern struct map map;
+extern struct file file;
+extern struct misc misc;
+extern struct flg flg;
 
 /* Miscellaneous variables */
-GLOBAL char *gisbase, *mapset;
-GLOBAL char buf[BUFSIZE];
+extern char *gisbase, *mapset;
+extern char buf[BUFSIZE];

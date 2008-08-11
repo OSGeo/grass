@@ -1,4 +1,5 @@
-#ifdef MAIN
+#include "viz.h"
+
 CELL_ENTRY cell_table[256] = {
     {0, {0, 0, 0, 0, 0, 0, 0, 0}
      ,
@@ -2305,6 +2306,4 @@ CELL_ENTRY cell_table[256] = {
      }
     ,
 };
-#else
-extern CELL_ENTRY cell_table[256];
-#endif
+

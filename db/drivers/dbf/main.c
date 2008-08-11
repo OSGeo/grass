@@ -15,13 +15,15 @@
 *
 *****************************************************************************/
 
-#define MAIN
 #include <stdlib.h>
 #include <string.h>
 #include <grass/dbmi.h>
 #include "globals.h"
 #include "proto.h"
 #include "dbdriver.h"
+
+DATABASE db;
+dbString *errMsg = NULL;
 
 int main(int argc, char *argv[])
 {

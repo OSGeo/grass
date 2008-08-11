@@ -78,10 +78,5 @@ typedef struct
     int *order;			/* array of row indexes (sorted by ORDER BY) */
 } cursor;
 
-#ifdef MAIN
-DATABASE db;
-dbString *errMsg = NULL;
-#else
 extern DATABASE db;
 extern dbString *errMsg;
-#endif

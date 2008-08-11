@@ -11,28 +11,22 @@
 #define SEED_MIN		0
 #define PI       		M_PI
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
 #define CELLSORTER struct cell_sorter_
 CELLSORTER {
     int R, C;
     double Value;
 };
 
-GLOBAL double NS, EW;
-GLOBAL int CellCount, Rs, Cs;
-GLOBAL double MaxDist, MaxDistSq;
-GLOBAL FLAG *Cells;
-GLOBAL CELLSORTER *DoNext;
-GLOBAL CELL **Out, *CellBuffer;
-GLOBAL int Seed, OutFD;
-GLOBAL struct Flag *Verbose;
-GLOBAL struct Option *Distance;
-GLOBAL struct Option *Output;
+extern double NS, EW;
+extern int CellCount, Rs, Cs;
+extern double MaxDist, MaxDistSq;
+extern FLAG *Cells;
+extern CELLSORTER *DoNext;
+extern CELL **Out, *CellBuffer;
+extern int Seed, OutFD;
+extern struct Flag *Verbose;
+extern struct Option *Distance;
+extern struct Option *Output;
 
 #ifdef DEBUG
 #define INDX(a,b) (printf("(a)[%d]:%lf ",(b),(a)[(b)]))

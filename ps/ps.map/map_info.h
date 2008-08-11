@@ -11,8 +11,4 @@ struct map_info
     int color, bgcolor, border;
 };
 
-#ifdef MAIN
-struct map_info m_info;
-#else
 extern struct map_info m_info;
-#endif

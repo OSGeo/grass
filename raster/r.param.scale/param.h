@@ -81,10 +81,8 @@ DCELL feature(double *coeff);	/* Set of six quadratic coefficents.    */
 
 /* ------ Global variables ------ */
 
-#ifndef MAIN
-extern				/* Externally defined if not main()     */
-#endif
- char *rast_in_name,		/* Name of the raster file to process.  */
+extern char
+ *rast_in_name,			/* Name of the raster file to process.  */
  *rast_out_name,		/* Name of the raster output file.      */
  *mapset_in,			/* If no problems, these will be names  */
  *mapset_out,			/* of mapsets containing the files to   */
@@ -93,19 +91,15 @@ extern				/* Externally defined if not main()     */
 
 				/* the central cell of the window.      */
 
-#ifndef MAIN
-extern				/* Externally defined if not main()     */
-#endif
- int fd_in,			/* File descriptor for input and        */
+extern int
+  fd_in,			/* File descriptor for input and        */
   fd_out,			/* output raster files.                 */
   wsize,			/* Size of local processing window.     */
   mparam;			/* Morphometric parameter to calculate. */
 
 
-#ifndef MAIN
-extern				/* Externally defined if not main()     */
-#endif
- double resoln,			/* Planimetric resolution.              */
+extern double
+  resoln,			/* Planimetric resolution.              */
   exponent,			/* Distance weighting exponent.         */
   zscale,			/* Vertical scaling factor.             */
   slope_tol,			/* Vertical tolerences for surface      */

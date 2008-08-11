@@ -23,8 +23,6 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#define MAIN
-
 /* Finder function for datum conversion lookup tables */
 #define FINDERFUNC set_proj_lib
 #define PERMANENT "PERMANENT"

@@ -18,8 +18,6 @@
  *               for details.
  *
  *****************************************************************************/
-#define MAIN
-#define GLOBAL
 
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +27,46 @@
 #include "globals.h"
 #include "local_proto.h"
 
+Window *PROMPT_WINDOW;
+
+int SCREEN_TOP;
+int SCREEN_BOTTOM;
+int SCREEN_LEFT;
+int SCREEN_RIGHT;
+
+View *VIEW_MAP1;
+View *VIEW_TITLE1;
+View *VIEW_MAP1_ZOOM;
+View *VIEW_TITLE1_ZOOM;
+
+View *VIEW_MASK1;
+View *VIEW_MENU;
+View *VIEW_HISTO;
+
+int THE_COLORS[10];
+
+struct Color_table Color_table[10] = {
+    {0,0,0},		/*black*/
+    {50,50,255},	/*blue*/ 
+    {170,200,70},	/*brown*/
+    {0,255,0},		/*green*/
+    {150,150,150},	/*grey*/ 
+    {220,170,0},	/*orange*/
+    {200,0,200},	/*purple*/
+    {255,0,0},		/*red*/	 
+    {255,255,255},	/*white*/
+    {255,255,0}		/*yellow */
+};
+
+struct Ref Refer;
+FILE *outsig_fd;
+struct Signature Sigs;
+struct Cell_head Band_cellhd;
+
+int *Bandfd;
+struct region Region;
+struct signalflag signalflag;
+CELL **Bandbuf;
 
 /* function prototypes */
 static int check_files(char *, char *, char *, char *);

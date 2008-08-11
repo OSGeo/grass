@@ -51,8 +51,11 @@
  *
  */
 
-#define MAIN
 #include "viz.h"
+
+file_info Headfax;	/* contains info about data itself */
+Cube_data CUBE;		/* and the data for a single cube */
+int NTHRESH;
 
 /* Nvision includes */
 #include "interface.h"

@@ -17,25 +17,19 @@ NODE {
     double d;
 };
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-GLOBAL int nrows;
-GLOBAL int ncols;
-GLOBAL int minc;
-GLOBAL int minr;
-GLOBAL int maxc;
-GLOBAL int maxr;
-GLOBAL int array_size;
-GLOBAL double i_val_l_f;
-GLOBAL CSEG con;
-GLOBAL FLAG *seen, *mask;
-GLOBAL BSEG bseen, bmask;
-GLOBAL NODE *zero;
-GLOBAL CELL on, off;
+extern int nrows;
+extern int ncols;
+extern int minc;
+extern int minr;
+extern int maxc;
+extern int maxr;
+extern int array_size;
+extern double i_val_l_f;
+extern CSEG con;
+extern FLAG *seen, *mask;
+extern BSEG bseen, bmask;
+extern NODE *zero;
+extern CELL on, off;
 
 /* add_in.c */
 NODE *add_in_slow(int, int, int, int, NODE *, int *);

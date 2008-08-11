@@ -26,9 +26,10 @@
 #include <grass/glocale.h>
 
 #include <grass/config.h>
-#define MAIN
+
 #include "patch.h"
 
+jmp_buf jmp;
 
 struct CHOICE *choice;
 

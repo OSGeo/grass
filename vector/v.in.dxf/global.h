@@ -19,20 +19,14 @@ struct dxf_file
 #define ARR_INCR 256
 #define DXF_BUF_SIZE 256
 
-#ifdef _MAIN_C_
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-GLOBAL int flag_list, flag_extent, flag_table, flag_topo, flag_invert,
+extern int flag_list, flag_extent, flag_table, flag_topo, flag_invert,
     flag_one_layer, flag_frame;
-GLOBAL int num_layers, found_layers;
-GLOBAL char **layers;
-GLOBAL char dxf_buf[DXF_BUF_SIZE], entity[DXF_BUF_SIZE];
-GLOBAL int ARR_MAX;
-GLOBAL double *xpnts, *ypnts, *zpnts;
-GLOBAL struct line_pnts *Points;
+extern int num_layers, found_layers;
+extern char **layers;
+extern char dxf_buf[DXF_BUF_SIZE], entity[DXF_BUF_SIZE];
+extern int ARR_MAX;
+extern double *xpnts, *ypnts, *zpnts;
+extern struct line_pnts *Points;
 
 /* dxf_to_vect.c */
 int dxf_to_vect(struct dxf_file *, struct Map_info *);

@@ -8,16 +8,10 @@
 
 /****************************************************************/
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-GLOBAL double east;
-GLOBAL double north;
-GLOBAL double obs_elev;
-GLOBAL double max_dist;
-GLOBAL char *elev_layer;
-GLOBAL char *patt_layer;
-GLOBAL char *out_layer;
+extern double east;
+extern double north;
+extern double obs_elev;
+extern double max_dist;
+extern char *elev_layer;
+extern char *patt_layer;
+extern char *out_layer;

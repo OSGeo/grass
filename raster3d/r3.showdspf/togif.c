@@ -15,8 +15,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "togif.h"
 #include <stdlib.h>
+#include <grass/gis.h>
+#include "togif.h"
 #define GIFGAMMA	(1.5)	/* smaller makes output image darker */
 #define MAXCOLORS 256
 #define CBITS    12

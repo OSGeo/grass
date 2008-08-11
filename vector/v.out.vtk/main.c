@@ -23,8 +23,10 @@
 #include <grass/glocale.h>
 #include <string.h>
 
-#define MAIN
 #include "local_proto.h"
+
+double x_extent;
+double y_extent;
 
 int main(int argc, char *argv[])
 {

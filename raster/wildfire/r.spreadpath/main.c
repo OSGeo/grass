@@ -33,11 +33,27 @@
 #include <fcntl.h>
 #include <grass/segment.h>
 #include <grass/gis.h>
-#define MAIN
+
 #include "stash.h"
 #include <grass/glocale.h>
 #include "local_proto.h"
 
+
+struct variables
+{
+    char *alias;
+    int position;
+} variables[] = {
+    {"x_input", BACKCOL_LAYER},
+    {"y_input", BACKROW_LAYER},
+    {"coor", START_PT},
+    {"output", PATH_LAYER}
+};
+
+char path_layer[64];
+char backrow_layer[64];
+char backcol_layer[64];
+struct point *head_start_pt = NULL;
 
 char *value;
 int nrows, ncols;

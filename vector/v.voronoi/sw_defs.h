@@ -46,27 +46,6 @@ struct Halfedge
     struct Halfedge *PQnext;
 };
 
-#ifdef MAIN
-int triangulate, sorted, plot, debug, mode3d;
-struct Site *sites;
-int nsites;
-int siteidx;
-int sqrt_nsites;
-int nvertices;
-struct Freelist sfl;
-struct Site *bottomsite;
-int nedges;
-struct Freelist efl;
-double xmin, xmax, ymin, ymax, deltax, deltay;
-struct Freelist hfl;
-struct Halfedge *ELleftend, *ELrightend;
-int ELhashsize;
-struct Halfedge **ELhash;
-int PQhashsize;
-struct Halfedge *PQhash;
-int PQcount;
-int PQmin;
-#else
 extern int triangulate, sorted, plot, debug, mode3d;
 extern struct Site *sites;
 extern int nsites;
@@ -86,7 +65,6 @@ extern int PQhashsize;
 extern struct Halfedge *PQhash;
 extern int PQcount;
 extern int PQmin;
-#endif
 
 /* sw_edgelist.c */
 int ELinitialize(void);

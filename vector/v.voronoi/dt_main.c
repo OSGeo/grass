@@ -18,7 +18,6 @@
 ** 4 2008: Benjamin Ducke - 3D support + better memory management
 **/
 
-#define MAIN
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

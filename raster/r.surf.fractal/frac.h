@@ -23,22 +23,15 @@
 
 /* ------ Global variables ------ */
 
-#ifndef MAIN
-extern				/* Externally defined if not main()     */
-#endif
- char *rast_out_name,		/* Name of the raster output file.      */
+extern char
+ *rast_out_name,		/* Name of the raster output file.      */
  *mapset_out;
 
-#ifndef MAIN
-extern
-#endif
- int fd_out,			/* File descriptor of output raster     */
+extern int
+  fd_out,			/* File descriptor of output raster     */
   Steps;			/* Number of intermediate images.       */
 
-#ifndef MAIN
-extern
-#endif
-double H;			/* Hausdorff-Besickovitch dimension.    */
+extern double H;		/* Hausdorff-Besickovitch dimension.    */
 
 /* interface.c */
 int interface(int, char *[]);

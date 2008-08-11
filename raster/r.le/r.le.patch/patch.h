@@ -39,11 +39,7 @@
 #define  BIG   1000000000.0
 #define  PI    M_PI
 
-#ifdef MAIN
-jmp_buf jmp;
-#else
 extern jmp_buf jmp;
-#endif
 
 typedef struct __dirdesc
 {

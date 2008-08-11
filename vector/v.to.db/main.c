@@ -15,9 +15,12 @@
  *
  *****************************************************************************/
 
-#define MAIN
 #include <grass/glocale.h>
 #include "global.h"
+
+struct value *Values;
+struct options options;
+struct vstat vstat;
 
 int main(int argc, char *argv[])
 {
@@ -59,7 +62,7 @@ int main(int argc, char *argv[])
 	n = 0;
     }
     G_debug(2, "%d unique cats", n);
-    Values = (VALUE *) G_calloc(n + 1, sizeof(VALUE));
+    Values = (struct value *) G_calloc(n + 1, sizeof(struct value));
     vstat.rcat = 0;
 
     /* Read values from map */

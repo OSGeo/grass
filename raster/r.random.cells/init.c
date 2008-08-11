@@ -3,7 +3,6 @@
 #undef TRACE
 #undef DEBUG
 
-#undef MAIN
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>

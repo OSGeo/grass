@@ -14,8 +14,6 @@
  *
  *****************************************************************************/
 
-#define G_MKFONTCAP_MAIN 1
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +26,13 @@
 #include <grass/freetypecap.h>
 
 #include "local_proto.h"
+
+char **searchdirs;
+int numsearchdirs;
+
+struct GFONT_CAP *fontcap;
+int totalfonts;
+int maxfonts;
 
 static const char *standarddirs[] = {
     /* These are the directories that are searched for Freetype-compatible

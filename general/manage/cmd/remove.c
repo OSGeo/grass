@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/glocale.h>
-#define MAIN
+
 #include "list.h"
 #include "local_proto.h"
 

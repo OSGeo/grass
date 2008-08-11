@@ -26,18 +26,8 @@ struct units
     long int every;		/* tic_mark number interval */
 };
 
-#ifdef MAIN
-
-struct stat_list dist_stats;
-struct Categories cats;
-struct FPRange fp_range;
-int is_fp;
-
-#else
 extern struct Categories cats;
 extern struct FPRange fp_range;
-
-#endif
 
 /* bar.c */
 int bar(struct stat_list *, struct Colors *);

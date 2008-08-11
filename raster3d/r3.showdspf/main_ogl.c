@@ -21,7 +21,6 @@
 
 #define TOGGLE(x) ((x) = (x) ? 0 : 1)
 
-#define MAIN
 #include <Xm/Xm.h>
 #include <Xm/Form.h>
 
@@ -53,6 +52,18 @@
 #ifndef WAIT_ANY
 #define WAIT_ANY ((pid_t) -1)
 #endif
+
+GLuint Material_1_Dlist;
+OGLMotifWindowData MainOGLWindow;
+OGLMotifWindowData ColormapWindow;
+GLuint MainDlist;
+XtAppContext App_context;
+
+file_info Headfax;	/* contains info about data itself */
+file_info G3header;	/* contains info about data itself */
+int G_sign;
+int X_sign;
+long D_offset;		/*offset to data in grid3 file */
 
 void set_threshold_button(int i);
 char *check_get_any_dspname();

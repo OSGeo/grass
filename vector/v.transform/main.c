@@ -29,7 +29,6 @@
  *- Modified by Radim Blazek to work on binary files 2002
  *- Interactive functionality disabled, 2007
  */
-#define MAIN
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +40,18 @@
 #include "trans.h"
 #include "local_proto.h"
 
+double ax[MAX_COOR];	/*  current map   */
+double ay[MAX_COOR];
+
+double bx[MAX_COOR];	/*  map we are going to   */
+double by[MAX_COOR];
+
+int use[MAX_COOR];	/*  where the coordinate came from */
+double residuals[MAX_COOR];
+double rms;
+
+/*  this may be used in the future  */
+int reg_cnt;		/*  count of registered points */
 
 int main(int argc, char *argv[])
 {

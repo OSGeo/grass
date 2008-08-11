@@ -3,30 +3,23 @@
 
 #include "defs.h"
 
-#ifndef GLOBAL
-#  define GLOBAL extern
-#  define INIT(x)
-#else
-#  define INIT(x) = x
-#endif
+extern Window *PROMPT_WINDOW;
 
-GLOBAL Window *PROMPT_WINDOW;
+extern int SCREEN_TOP;
+extern int SCREEN_BOTTOM;
+extern int SCREEN_LEFT;
+extern int SCREEN_RIGHT;
 
-GLOBAL int SCREEN_TOP;
-GLOBAL int SCREEN_BOTTOM;
-GLOBAL int SCREEN_LEFT;
-GLOBAL int SCREEN_RIGHT;
+extern View *VIEW_MAP1;
+extern View *VIEW_TITLE1;
+extern View *VIEW_MAP1_ZOOM;
+extern View *VIEW_TITLE1_ZOOM;
 
-GLOBAL View *VIEW_MAP1;
-GLOBAL View *VIEW_TITLE1;
-GLOBAL View *VIEW_MAP1_ZOOM;
-GLOBAL View *VIEW_TITLE1_ZOOM;
+extern View *VIEW_MASK1;
+extern View *VIEW_MENU;
+extern View *VIEW_HISTO;
 
-GLOBAL View *VIEW_MASK1;
-GLOBAL View *VIEW_MENU;
-GLOBAL View *VIEW_HISTO;
-
-GLOBAL int THE_COLORS[10];
+extern int THE_COLORS[10];
 
 #define BLACK	THE_COLORS[0]
 #define BLUE	THE_COLORS[1]
@@ -49,6 +42,7 @@ GLOBAL int THE_COLORS[10];
 #define NUM_RED 	7
 #define NUM_WHITE	8
 #define NUM_YELLOW	9
+
 #define NAME_BLACK	"Black"
 #define NAME_BLUE	"Blue"
 #define NAME_BROWN	"Brown"
@@ -59,35 +53,25 @@ GLOBAL int THE_COLORS[10];
 #define NAME_RED 	"Red"
 #define NAME_WHITE	"White"
 #define NAME_YELLOW	"Yellow"
-#define MY_COLORS {{0,0,0},         /*black*/ \
-		     {50,50,255},     /*blue*/  \
-		     {170,200,70}, /*brown*/ \
-		     {0,255,0},     /*green*/ \
-		     {150,150,150}, /*grey*/  \
-		     {220,170,0},   /*orange*/\
-		     {200,0,200},   /*purple*/\
-		     {255,0,0},     /*red*/   \
-		     {255,255,255}, /*white*/ \
-		     {255,255,0}}	/*yellow */
-GLOBAL struct
+
+struct Color_table
 {
     int red, grn, blue;
-} Color_table[10] INIT(MY_COLORS);
+};
 
-GLOBAL struct Ref Refer;
-GLOBAL FILE *outsig_fd;
-GLOBAL struct Signature Sigs;
-GLOBAL struct Cell_head Band_cellhd;
+extern struct Color_table Color_table[10];
 
-double row_to_northing();
-double col_to_easting();
+extern struct Ref Refer;
+extern FILE *outsig_fd;
+extern struct Signature Sigs;
+extern struct Cell_head Band_cellhd;
 
-GLOBAL int *Bandfd;
-GLOBAL struct region Region;
-GLOBAL struct signalflag signalflag;
-GLOBAL CELL **Bandbuf;
+extern int *Bandfd;
+extern struct region Region;
+extern struct signalflag signalflag;
+extern CELL **Bandbuf;
 
-
-#undef INIT
+extern double row_to_northing(struct Cell_head *, int, double);
+extern double col_to_easting(struct Cell_head *, int, double);
 
 #endif /* __GLOBALS_H__ */

@@ -26,37 +26,23 @@ NODE {
     int row, col;
 };
 
-#ifdef MAIN
-#define GLOBAL
-#define DRAINVAR	= {{ 7,6,5 },{ 8,-17,4 },{ 1,2,3 }}
-#define UPDRAINVAR	= {{ 3,2,1 },{ 4,-17,8 },{ 5,6,7 }}
-#define DRVAR	={0,1,1,1,0,-1,-1,-1,0}
-#define DCVAR	={0,1,0,-1,-1,-1,0,1,1}
-#else
-#define GLOBAL extern
-#define DRAINVAR
-#define UPDRAINVAR
-#define DRVAR
-#define DCVAR
-#endif
-
-GLOBAL SHORT drain[3][3] DRAINVAR;
-GLOBAL SHORT updrain[3][3] UPDRAINVAR;
-GLOBAL char dr_mod[9] DRVAR;
-GLOBAL char dc_mod[9] DCVAR;
-GLOBAL char basin_name[GNAME_MAX], swale_name[GNAME_MAX],
+extern SHORT drain[3][3];
+extern SHORT updrain[3][3];
+extern char dr_mod[9];
+extern char dc_mod[9];
+extern char basin_name[GNAME_MAX], swale_name[GNAME_MAX],
     half_name[GNAME_MAX], elev_name[GNAME_MAX], armsed_name[GNAME_MAX];
-GLOBAL int nrows, ncols, done, total;
-GLOBAL int array_size, high_index, do_index;
-GLOBAL char *drain_ptrs, ha_f, el_f, ar_f;
-GLOBAL RAMSEG ba_seg, pt_seg, sl_seg;
-GLOBAL int ncols_less_one, nrows_less_one;
-GLOBAL NODE *to_do;
-GLOBAL FILE *arm_fd, *fp;
-GLOBAL FLAG *doner, *swale, *left;
-GLOBAL CELL *bas;
-GLOBAL double half_res, diag, max_length, dep_slope;
-GLOBAL struct Cell_head window;
+extern int nrows, ncols, done, total;
+extern int array_size, high_index, do_index;
+extern char *drain_ptrs, ha_f, el_f, ar_f;
+extern RAMSEG ba_seg, pt_seg, sl_seg;
+extern int ncols_less_one, nrows_less_one;
+extern NODE *to_do;
+extern FILE *arm_fd, *fp;
+extern FLAG *doner, *swale, *left;
+extern CELL *bas;
+extern double half_res, diag, max_length, dep_slope;
+extern struct Cell_head window;
 
 /*
    GLOBAL CELL     *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep, *ril_buf;

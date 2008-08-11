@@ -38,59 +38,40 @@ POINT {
     int nxt;
 };
 
-#ifdef MAIN
-#define GLOBAL
-#define DRAINVAR	= {{ 7,6,5 },{ 8,0,4 },{ 1,2,3 }}
-#define UPDRAINVAR	= {{ 3,2,1 },{ 4,0,8 },{ 5,6,7 }}
-#define NEXTDRVAR	= { 1,-1,0,0,-1,1,1,-1 }
-#define NEXTDCVAR	= { 0,0,-1,1,1,-1,1,-1 }
-#else
-#define GLOBAL extern
-#define DRAINVAR
-#define UPDRAINVAR
-#define NEXTDRVAR
-#define NEXTDCVAR
-#endif
+extern struct Cell_head window;
 
-GLOBAL struct Cell_head window;
-
-GLOBAL int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
-GLOBAL SHORT nrows, ncols;
-GLOBAL double half_res, diag, max_length, dep_slope;
-GLOBAL int bas_thres, tot_parts;
-GLOBAL FLAG *worked, *in_list, *s_b, *swale;
-GLOBAL RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
-GLOBAL RAMSEG r_h_seg, dep_seg;
-GLOBAL RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
-GLOBAL POINT *astar_pts;
-GLOBAL CELL *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep;
-GLOBAL CELL *ril_buf;
-GLOBAL int ril_fd;
-GLOBAL double *s_l, *s_g, *l_s;
-GLOBAL CELL one, zero;
-GLOBAL double ril_value, dzero;
-GLOBAL SHORT sides;
-GLOBAL SHORT drain[3][3] DRAINVAR;
-GLOBAL SHORT updrain[3][3] UPDRAINVAR;
-GLOBAL SHORT nextdr[8] NEXTDRVAR;
-GLOBAL SHORT nextdc[8] NEXTDCVAR;
-GLOBAL char ele_name[GNAME_MAX], *ele_mapset, pit_name[GNAME_MAX],
-    *pit_mapset;
-GLOBAL char run_name[GNAME_MAX], *run_mapset, ob_name[GNAME_MAX], *ob_mapset;
-GLOBAL char ril_name[GNAME_MAX], *ril_mapset, dep_name[GNAME_MAX],
-    *dep_mapset;
-GLOBAL char *this_mapset;
-GLOBAL char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
-    thr_name[8];
-GLOBAL char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
-    sg_name[GNAME_MAX];
-GLOBAL char wat_name[GNAME_MAX], asp_name[GNAME_MAX], arm_name[GNAME_MAX],
-    dis_name[GNAME_MAX];
-GLOBAL char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
-GLOBAL char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
-GLOBAL char bas_flag, seg_flag, haf_flag, er_flag;
-GLOBAL char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
-GLOBAL FILE *fp;
+extern int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+extern SHORT nrows, ncols;
+extern double half_res, diag, max_length, dep_slope;
+extern int bas_thres, tot_parts;
+extern FLAG *worked, *in_list, *s_b, *swale;
+extern RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
+extern RAMSEG r_h_seg, dep_seg;
+extern RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
+extern POINT *astar_pts;
+extern CELL *dis, *alt, *wat, *asp, *bas, *haf, *r_h, *dep;
+extern CELL *ril_buf;
+extern int ril_fd;
+extern double *s_l, *s_g, *l_s;
+extern CELL one, zero;
+extern double ril_value, dzero;
+extern SHORT sides;
+extern SHORT drain[3][3];
+extern SHORT updrain[3][3];
+extern SHORT nextdr[8];
+extern SHORT nextdc[8];
+extern char ele_name[GNAME_MAX], *ele_mapset, pit_name[GNAME_MAX], *pit_mapset;
+extern char run_name[GNAME_MAX], *run_mapset, ob_name[GNAME_MAX], *ob_mapset;
+extern char ril_name[GNAME_MAX], *ril_mapset, dep_name[GNAME_MAX], *dep_mapset;
+extern char *this_mapset;
+extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
+extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
+extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], arm_name[GNAME_MAX], dis_name[GNAME_MAX];
+extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
+extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
+extern char bas_flag, seg_flag, haf_flag, er_flag;
+extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
+extern FILE *fp;
 
 /* close_maps.c */
 int close_maps(void);

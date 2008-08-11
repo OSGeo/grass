@@ -52,14 +52,7 @@ typedef enum
 } PG_TYPES;
 
 
-#ifdef MAIN
-PGconn *pg_conn;		/* Database connection */
-int (*pg_types)[2] = NULL;	/* array of types, first is internal code, second PG_TYPE_* */
-int pg_ntypes = 0;
-dbString *errMsg = NULL;	/* error message */
-#else
 extern PGconn *pg_conn;
 extern dbString *errMsg;
 extern int (*pg_types)[2];
 extern int pg_ntypes;
-#endif

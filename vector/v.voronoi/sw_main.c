@@ -6,6 +6,32 @@
 #include "sw_defs.h"
 #include "defs.h"
 
+int triangulate, sorted, plot, debug, mode3d;
+struct Site *sites;
+int nsites;
+int siteidx;
+int sqrt_nsites;
+int nvertices;
+struct Freelist sfl;
+struct Site *bottomsite;
+int nedges;
+struct Freelist efl;
+double xmin, xmax, ymin, ymax, deltax, deltay;
+struct Freelist hfl;
+struct Halfedge *ELleftend, *ELrightend;
+int ELhashsize;
+struct Halfedge **ELhash;
+int PQhashsize;
+struct Halfedge *PQhash;
+int PQcount;
+int PQmin;
+
+struct Cell_head Window;
+BOUND_BOX Box;
+struct Map_info In, Out;
+int Type;
+int All;
+
 /* sort sites on y, then x, coord */
 int scomp(const void *v1, const void *v2)
 {

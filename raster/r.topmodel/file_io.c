@@ -21,6 +21,7 @@ void get_line(FILE * fp, char *buffer)
 
 void read_inputs(void)
 {
+    char buf[1024];
     FILE *fp;
     int i, j;
     double x;

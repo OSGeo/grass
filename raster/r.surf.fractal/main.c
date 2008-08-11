@@ -12,26 +12,22 @@
  *
  *****************************************************************************/
 
-#define MAIN
-
 #include "frac.h"
+
+char
+ *rast_out_name,		/* Name of the raster output file.      */
+ *mapset_out;
+
+int
+  fd_out,			/* File descriptor of output raster     */
+  Steps;			/* Number of intermediate images.       */
+
+double H;			/* Hausdorff-Besickovitch dimension.    */
 
 int main(int argc, char *argv[])
 {
 
-    /*----------------------------------------------------------------------*/
-    /*                     GET INPUT FROM USER                              */
-
-    /*----------------------------------------------------------------------*/
-
     interface(argc, argv);
-
-
-    /*----------------------------------------------------------------------*/
-    /*                    PROCESS RASTER FILES                              */
-
-    /*----------------------------------------------------------------------*/
-
     process();
 
     return EXIT_SUCCESS;

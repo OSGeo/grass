@@ -38,7 +38,6 @@
 #include <string.h>
 #include <math.h>
 
-#define MAIN
 #include <grass/imagery.h>
 #include <grass/gmath.h>
 #include <grass/glocale.h>

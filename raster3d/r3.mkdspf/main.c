@@ -40,7 +40,6 @@
  *     to use new GRASS 3dgrid data files & API
  */
 
-#define MAIN
 #include <stdlib.h>
 #include <math.h>
 #include "vizual.h"
@@ -48,6 +47,10 @@
 #include <grass/G3d.h>
 #include "local_proto.h"
 #include <grass/glocale.h>
+
+file_info Headfax;	/* contains info about command line */
+Cube_data CUBE;		/* and the data for a single cube */
+int NTHRESH;
 
 int main(int argc, char *argv[])
 {

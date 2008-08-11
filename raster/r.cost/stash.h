@@ -37,34 +37,10 @@ struct start_pt
     struct start_pt *next;
 };
 
-#ifdef MAIN
-
-struct variables
-{
-    char *alias;
-    int position;
-}
-
-variables[] = {
-    {
-    "output", CUM_COST_LAYER}, {
-    "input", COST_LAYER}, {
-    "coor", START_PT}
-};
-
-char cum_cost_layer[64];
-char cost_layer[64];
-struct start_pt *head_start_pt = NULL;
-struct start_pt *head_end_pt = NULL;
-
-#else
-
 extern char cum_cost_layer[];
 extern char cost_layer[];
 extern struct start_pt *head_start_pt;
 extern struct start_pt *head_end_pt;
-
-#endif
 
 int process_answers(char **, struct start_pt **, struct start_pt **);
 int time_to_stop(int, int);

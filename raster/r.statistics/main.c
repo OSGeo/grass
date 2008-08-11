@@ -20,8 +20,26 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define MAIN
 #include "method.h"
+
+/* modify this table to add new methods */
+struct menu menu[] = {
+    {"diversity", DIV, "diversity of values in specified objects in %%"},
+    {"distribution", DISTRIB,
+     "distribution of values in specified objects in %%"},
+    {"average", AVERAGE, "average of values in specified objects"},
+    {"mode", MODE, "mode of values in specified objects"},
+    {"median", MEDIAN, "median of values in specified objects"},
+    {"avedev", ADEV, "Average deviation of values in specified objects"},
+    {"stddev", SDEV, "Standard deviation of values in specified objects"},
+    {"variance", VARIANC, "Variance of values in specified objects"},
+    {"skewness", SKEWNES, "Skewnes of values in specified objects"},
+    {"kurtosis", KURTOSI, "Kurtosis of values in specified objects"},
+    {"min", MIN, "Minimum of values in specified objects"},
+    {"max", MAX, "Maximum of values in specified objects"},
+    {"sum", SUM, "Sum of values in specified objects"},
+    {0, 0, 0}
+};
 
 /* function prototypes */
 static int is_ok(char *, char *);

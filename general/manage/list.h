@@ -13,11 +13,6 @@ struct list
     char *maindesc;		/* main element description */
 };
 
-#ifdef MAIN
-int nlist;
-struct list *list;
-#endif
-
 extern int nlist;
 extern struct list *list;
 

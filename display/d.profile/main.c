@@ -20,7 +20,6 @@
 
 
 #define DEBUG
-#define MAIN
 #define USE_OLD_CODE		/* Frame set-up still needs old code ATM. */
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +29,20 @@
 #include <grass/display.h>
 #include <grass/glocale.h>
 #include "profile.h"
+
+struct windows windows[] = {
+    {"mou", 85, 100, 0, 50},
+    {"sta", 85, 100, 50, 100},
+    {"map", 0, 85, 0, 50},
+    {"orig", 0, 100, 0, 1009}
+};
+
+struct windows profiles[] = {
+    {"pro1", 64, 85, 50, 100},
+    {"pro2", 43, 64, 50, 100},
+    {"pro3", 22, 43, 50, 100},
+    {"pro4", 0, 22, 50, 100}
+};
 
 struct Profile profile;
 

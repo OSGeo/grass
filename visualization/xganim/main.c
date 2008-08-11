@@ -26,7 +26,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "gui.h"
-#define MAIN
 #include "local_proto.h"
 
 #define COLOR_OFFSET 0
@@ -65,6 +64,7 @@ int frames;
 
 unsigned int depth;
 
+Visual *use_visual;
 
 int main(int argc, char **argv)
 {

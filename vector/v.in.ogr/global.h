@@ -24,12 +24,7 @@
 #define __GLOBAL_H__
 
 
-#ifdef MAIN
-int n_polygons = 0;
-#else
 extern int n_polygons;
-#endif
-
 
 /* centroid structure */
 typedef struct

@@ -18,10 +18,5 @@ typedef struct
     unsigned int port;
 } CONNPAR;
 
-#ifdef MAIN
-MYSQL *connection;		/* Database connection */
-dbString *errMsg = NULL;	/* error message */
-#else
 extern MYSQL *connection;
 extern dbString *errMsg;
-#endif

@@ -17,8 +17,5 @@ struct scalebar
     int color, bgcolor;
 };
 
-#ifdef MAIN
-struct scalebar sb;
-#else
 extern struct scalebar sb;
-#endif
+

@@ -47,11 +47,7 @@ typedef struct
     struct Flag *shell_style, *extended;
 } param_type;
 
-#ifdef MAIN
-param_type param;
-#else
 extern param_type param;
-#endif
 
 /* fn prototypes */
 void heapsort_double(double *data, int n);

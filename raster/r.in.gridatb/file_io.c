@@ -4,8 +4,9 @@
 #include "local_proto.h"
 
 
-void rdwr_gridatb()
+void rdwr_gridatb(void)
 {
+    char buf[1024];
     FILE *fp;
     int fd, i, j, retval;
     float idx;
