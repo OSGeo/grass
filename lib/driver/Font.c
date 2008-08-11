@@ -69,7 +69,7 @@ int font_is_freetype(void)
     return font_type == GFONT_FREETYPE;
 }
 
-static void font_list(char ***list, int *count, int verbose)
+void font_list(char ***list, int *count, int verbose)
 {
     char **fonts;
     int num_fonts;
