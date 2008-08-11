@@ -62,11 +62,7 @@
 #define SV_ATT_MAP      -6
 #define SV_ATT_FLAT     -7
 
-#ifdef FontBase_MAIN
-GLuint FontBase;
-#else
 extern GLuint FontBase;
-#endif
 
 /*------------------------------------------------------------------------
 -            this is the data type declaration section                   -

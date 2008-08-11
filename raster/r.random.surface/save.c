@@ -3,7 +3,6 @@
 #undef TRACE
 #undef DEBUG
 
-#undef MAIN
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -175,8 +174,7 @@ void SaveMap(int NumMap, int MapSeed)
 	    CellBuffer[Col] = (CELL) Surface[Row][Col];
 	}
 	G_put_raster_row(OutFD, CellBuffer, CELL_TYPE);
-	if (!Verbose->answer)
-	    G_percent(Row + 1, Rs, 1);
+	G_percent(Row + 1, Rs, 1);
     }
 
     G_close_cell(OutFD);

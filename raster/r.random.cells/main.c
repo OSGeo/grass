@@ -19,13 +19,22 @@
 #undef TRACE
 #undef DEBUG
 
-#define MAIN
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "ransurf.h"
 #include "local_proto.h"
-#undef MAIN
+
+double NS, EW;
+int CellCount, Rs, Cs;
+double MaxDist, MaxDistSq;
+FLAG *Cells;
+CELLSORTER *DoNext;
+CELL **Out, *CellBuffer;
+int Seed, OutFD;
+struct Flag *Verbose;
+struct Option *Distance;
+struct Option *Output;
 
 int main(int argc, char *argv[])
 {

@@ -20,12 +20,6 @@
 /*    write_boundary  write a line out to the digit files */
 /*    write_area    make table of area mappings and write dlg label file */
 
-#ifdef MAIN
-#define Global
-#else
-#define Global extern
-#endif
-
 #define BACKWARD 1
 #define FORWARD 2
 #define OPEN 1
@@ -38,27 +32,27 @@
 #define CATNUM 0
 #define CATLABEL 1
 
-Global int data_type;
-Global int data_size;
-Global struct Map_info Map;
-Global int input_fd;		/*    input_fd     input raster map descriptor */
-Global struct line_cats *Cats;
-Global struct Cell_head cell_head;
+extern int data_type;
+extern int data_size;
+extern struct Map_info Map;
+extern int input_fd;		/*    input_fd     input raster map descriptor */
+extern struct line_cats *Cats;
+extern struct Cell_head cell_head;
 
-Global int direction;
-Global int first_read, last_read;
-Global int input_fd;
-Global int row_length, row_count, n_rows;
-Global int total_areas;
+extern int direction;
+extern int first_read, last_read;
+extern int input_fd;
+extern int row_length, row_count, n_rows;
+extern int total_areas;
 
-Global int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
-Global int value_flag;		/* use raster values as categories */
+extern int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
+extern int value_flag;		/* use raster values as categories */
 
-Global struct Categories RastCats;
-Global int has_cats;		/* Category labels available */
-Global struct field_info *Fi;
-Global dbDriver *driver;
-Global dbString sql, label;
+extern struct Categories RastCats;
+extern int has_cats;		/* Category labels available */
+extern struct field_info *Fi;
+extern dbDriver *driver;
+extern dbString sql, label;
 
 struct COOR
 {

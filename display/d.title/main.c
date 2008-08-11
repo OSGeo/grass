@@ -22,9 +22,14 @@
 #include <grass/raster.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
-#define MAIN
+
 #include "options.h"
 #include "local_proto.h"
+
+char map_name[GNAME_MAX];
+char color[128];
+float size;
+int type;
 
 int main(int argc, char **argv)
 {

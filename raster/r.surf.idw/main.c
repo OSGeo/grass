@@ -35,9 +35,44 @@ Further modifications tracked by CVS
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
-#define MAIN
-#include "main.h"
 #include <grass/glocale.h>
+
+#include "main.h"
+
+struct Cell_head window;
+CELL *cell, *mask;
+double *rowlook, *collook, *lat_diff,	/* distances between latitudes */
+  ew2;
+
+short ll;			/* TRUE if latitude-longitude projection */
+
+/* function pointers for LL function substitutes */
+
+int first_west(EW *, SHORT);
+int first_west_LL(EW *, SHORT);
+int (*init_row_search) (EW *, SHORT);	/* function pointer */
+
+int completed_row(EW *);
+int completed_row_LL(EW *);
+
+ /* function pointer */
+int (*comp_row_search) (EW *);
+
+int find_neighbors(EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
+int find_neighbors_LL(EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
+
+ /* function pointer */
+int (*locate_neighbors) (EW *, NEIGHBOR *, SHORT, SHORT, int, SHORT *);
+
+int exhaust_search(EW *, NEIGHBOR *, SHORT, SHORT);
+int exhaust_search_LL(EW *, NEIGHBOR *, SHORT, SHORT);
+
+/* function pointer */
+int (*exhaust_row) (EW *, NEIGHBOR *, SHORT, SHORT);
+
+double offset_distance(SHORT);
+double offset_distance_LL(SHORT);
+double (*check_offset) (SHORT);	/* function pointer */
 
 static int error_flag = 0;
 static char *input;

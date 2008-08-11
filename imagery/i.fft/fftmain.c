@@ -33,8 +33,6 @@
 
  */
 
-#define MAIN
-
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -44,12 +42,13 @@
 #include "globals.h"
 #include "local_proto.h"
 
+char Cellmap_real[GNAME_MAX], Cellmap_imag[GNAME_MAX];
 
 int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
     int Range;
-    char Cellmap_orig[50];
+    char Cellmap_orig[GNAME_MAX];
     int inputfd, realfd, imagfd;	/* the input and output file descriptors */
     char *inmapset;		/* the input mapset name */
     struct Cell_head window;

@@ -39,8 +39,6 @@
  *                    but it's somewhat slow with non-CELL maps
  *********************************************************************/
 
-#define MAIN
-
 #include "global.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +47,9 @@
 #include <grass/gis.h>
 #include "solpos00.h"
 #include <grass/glocale.h>
+
+float asol, phi0, sun_zenith, sun_azimuth;	/* from nadir, from north */
+int sunset;
 
 /* to be displayed in r.sunmask */
 static char *SOLPOSVERSION = "11 April 2001";

@@ -34,7 +34,6 @@
 **             this together from stuff he found on netlib (see the manpage).
 **/
 
-#define MAIN
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

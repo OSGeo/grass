@@ -29,13 +29,9 @@ typedef struct
 
 
 /*global structs */
-#ifdef MAIN
-paramType param;		/*Parameters */
-#else
 extern paramType param;		/*Parameters */
-#endif
 
 /*prototype */
-void set_params();
+void set_params(void);
 
 #endif

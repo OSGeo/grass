@@ -9,8 +9,4 @@ struct labels
     char *other;
 };
 
-#ifdef MAIN
-struct labels labels;
-#else
 extern struct labels labels;
-#endif

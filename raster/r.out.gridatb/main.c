@@ -16,12 +16,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define	MAIN
-#include "local_proto.h"
-#undef	MAIN
-
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#include "local_proto.h"
+
+struct Cell_head cellhd;
+FCELL *cell;
+char *file;
+char *mapset, *iname;
+char overwr;
 
 int main(int argc, char **argv)
 {

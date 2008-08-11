@@ -29,11 +29,21 @@
 #undef TRACE
 #undef DEBUG
 
-#define MAIN
 #include "ransurf.h"
 #include "local_proto.h"
-#undef MAIN
 
+BIGF BigF;
+double **Surface, NS, EW, FilterSD, AllMaxDist, *Norm;
+int MapCount, FDM, Rs, Cs, Theory;
+CELL *CellBuffer;
+FILTER *AllFilters, Filter;
+CATINFO CatInfo;
+int *Seeds, Seed, NumSeeds, Low, High, NumMaps, NumFilters, OutFD;
+char Buf[240], **OutNames, *TheoryName, *Mapset;
+struct Flag *Uniform;
+
+    /* please, remove before GRASS 7 released */
+struct Option *Distance, *Exponent, *Weight;
 
 int main(int argc, char **argv)
 {

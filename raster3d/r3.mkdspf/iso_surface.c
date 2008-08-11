@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "vizual.h"
-#include "cell_table.h"
 #include <grass/gis.h>
 #include <grass/G3d.h>
 #include "local_proto.h"

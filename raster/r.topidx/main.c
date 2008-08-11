@@ -18,9 +18,13 @@
  *
  *****************************************************************************/
 
-#define	MAIN
 #include <grass/glocale.h>
 #include "global.h"
+
+char *mapset, *iname, *oname;
+struct Cell_head window;
+DCELL **cell;
+DCELL **atb, **a;
 
 int main(int argc, char **argv)
 {

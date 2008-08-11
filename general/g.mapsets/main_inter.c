@@ -15,7 +15,6 @@
  *
  *****************************************************************************/
 
-#define MAIN
 #include "externs.h"
 #include "local_proto.h"
 #include <grass/gis.h>

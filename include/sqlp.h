@@ -141,8 +141,4 @@ SQLPNODE *sqpNewValueNode(char *strval, int intval, double dblval, int type);
 
 void sqpFreeNode(SQLPNODE *);
 
-#ifdef SQLP_MAIN
-SQLPSTMT *sqlpStmt;
-#else
 extern SQLPSTMT *sqlpStmt;
-#endif

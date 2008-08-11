@@ -8,14 +8,14 @@
 #define INSIDE  0
 #define OUTSIDE 1
 
-GLOBAL file_info Headfax;	/* contains info about data itself */
+extern file_info Headfax;	/* contains info about data itself */
 
-GLOBAL file_info G3header;	/* contains info about data itself */
+extern file_info G3header;	/* contains info about data itself */
 
-GLOBAL int G_sign;
-GLOBAL int X_sign;
+extern int G_sign;
+extern int X_sign;
 
-GLOBAL long D_offset;		/*offset to data in grid3 file */
+extern long D_offset;		/*offset to data in grid3 file */
 
 struct poly_info
 {

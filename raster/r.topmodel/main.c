@@ -14,12 +14,19 @@
  *
  */
 
-#define	MAIN
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/glocale.h>
 #include "global.h"
 
+struct idxstats idxstats;
+struct params params;
+struct input input;
+struct map map;
+struct file file;
+struct misc misc;
+struct flg flg;
+char *gisbase, *mapset;
 
 int main(int argc, char **argv)
 {

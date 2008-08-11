@@ -21,8 +21,4 @@ struct colortable
     int range_override;
 };
 
-#ifdef MAIN
-struct colortable ct;
-#else
 extern struct colortable ct;
-#endif

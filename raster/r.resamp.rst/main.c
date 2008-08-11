@@ -35,8 +35,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define MAIN
-
 #include <grass/dbmi.h>
 #include <grass/gis.h>
 #include <grass/linkm.h>

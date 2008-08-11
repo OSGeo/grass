@@ -34,7 +34,7 @@
 #include <math.h>
 #include <fcntl.h>
 #include <grass/gis.h>
-#define MAIN
+
 #include <grass/segment.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
@@ -49,6 +49,14 @@
 #define	  NEXT_SEARCH_PT		SEARCH_PT->next
 
 struct Cell_head window;	/*      database window         */
+
+double east;
+double north;
+double obs_elev;
+double max_dist;
+char *elev_layer;
+char *patt_layer;
+char *out_layer;
 
 int main(int argc, char *argv[])
 {

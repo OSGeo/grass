@@ -28,14 +28,14 @@
 *
 *****************************************************************************/
 
-#define SQLP_MAIN
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
 #include <grass/sqlp.h>
+
+SQLPSTMT *sqlpStmt;
 
 /* save string to value */
 int sqpSaveStr(SQLPVALUE * val, char *c)

@@ -3,7 +3,6 @@
 #undef TRACE
 #undef DEBUG
 
-#undef MAIN
 #include "ransurf.h"
 
 

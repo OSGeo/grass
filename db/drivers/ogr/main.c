@@ -14,12 +14,15 @@
 *   	    	for details.
 *
 *****************************************************************************/
-#define MAIN
+
 #include <stdlib.h>
 #include <grass/dbmi.h>
 #include "ogr_api.h"
 #include "globals.h"
 #include "dbdriver.h"
+
+OGRDataSourceH hDs;
+dbString *errMsg = NULL;	/* error message */
 
 int main(int argc, char *argv[])
 {

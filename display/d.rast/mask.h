@@ -22,10 +22,5 @@ typedef struct _d_mask
     d_Interval *list;
 } d_Mask;
 
-#ifdef MAIN
-d_Mask d_mask;
-Mask mask;
-#else
 extern d_Mask d_mask;
 extern Mask mask;
-#endif

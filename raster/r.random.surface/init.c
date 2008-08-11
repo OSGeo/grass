@@ -11,7 +11,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#undef MAIN
 #include "ransurf.h"
 #include "local_proto.h"
 

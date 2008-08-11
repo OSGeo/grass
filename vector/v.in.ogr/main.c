@@ -19,7 +19,7 @@
  * TODO: - make fixed field length of OFTIntegerList dynamic
  *       - several other TODOs below
 **************************************************************/
-#define MAIN
+
 #include <grass/config.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +36,8 @@
 #  define MIN(a,b)      ((a<b) ? a : b)
 #  define MAX(a,b)      ((a>b) ? a : b)
 #endif
+
+int n_polygons;
 
 int geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	 double min_area, int type, int mk_centr);

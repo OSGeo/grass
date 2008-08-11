@@ -42,7 +42,6 @@
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
-#define MAIN
 int draw_number(double, int, RASTER_MAP_TYPE);
 
 int D_x, D_y;

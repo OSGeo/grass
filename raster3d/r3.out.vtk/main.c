@@ -22,7 +22,6 @@
 #include <grass/G3d.h>
 #include <grass/glocale.h>
 
-#define MAIN
 #include "globalDefs.h"
 #include "parameters.h"
 
@@ -30,6 +29,11 @@
 #include "writeVTKData.h"
 #include "writeVTKHead.h"
 #include "errorHandling.h"
+
+paramType param;		/*Parameters */
+
+double x_extent;
+double y_extent;
 
 /** prototypes ***************************************************************/
 

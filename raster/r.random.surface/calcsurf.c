@@ -3,7 +3,6 @@
 #undef TRACE
 #undef DEBUG
 
-#undef MAIN
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "ransurf.h"
@@ -99,7 +98,6 @@ void CalcSurface(void)
 		for (Col = Cs - 1; Col >= 0; Col--) {
 		    Surface[Row][Col] =
 			MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
-		    if (!Verbose->answer)
 			G_percent(++Count, MapCount, 1);
 		}
 	    }
@@ -107,7 +105,6 @@ void CalcSurface(void)
 		for (Col = 0; Col < Cs; Col++) {
 		    Surface[Row][Col] =
 			MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
-		    if (!Verbose->answer)
 			G_percent(++Count, MapCount, 1);
 		}
 	    }
@@ -123,8 +120,6 @@ void CalcSurface(void)
 		    else {
 			Surface[Row][Col] =
 			    MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
-
-			if (!Verbose->answer)
 			    G_percent(++Count, MapCount, 1);
 		    }
 		}
@@ -136,8 +131,6 @@ void CalcSurface(void)
 		    else {
 			Surface[Row][Col] =
 			    MakePP(Row, Col, OutRows, OutCols, Randoms, BigF);
-
-			if (!Verbose->answer)
 			    G_percent(++Count, MapCount, 1);
 		    }
 		}

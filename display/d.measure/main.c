@@ -25,7 +25,6 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
-#define MAIN
 #include "local_proto.h"
 
 int main(int argc, char **argv)

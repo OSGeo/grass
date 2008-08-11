@@ -25,11 +25,6 @@
  * from your version.
  * 
  * **************************************************************/
-#ifdef MAIN
-#define Global
-#else
-#define Global extern
-#endif
 
 /* transformation, first level is 0 ( called from main ) and transformation 
  *  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first level
@@ -41,24 +36,24 @@ typedef struct
     double rotang;
 } TRANS;
 
-Global int cat;
-Global int n_elements;		/* number of processed elements (only low level elements) */
-Global int n_skipped;		/* number of skipped low level elements (different layer name) */
-Global struct Map_info Map;
-Global dbDriver *driver;
-Global dbString sql;
-Global dbString str;
-Global struct line_pnts *Points;
-Global struct line_cats *Cats;
-Global PAD_LAY Layer;
-Global char *Txt;
-Global char *Block;
-Global struct field_info *Fi;
-Global AD_DB_HANDLE dwghandle;
-Global TRANS *Trans;		/* transformation */
-Global int atrans;		/* number of allocated levels */
-Global struct Option *layers_opt;
-Global struct Flag *invert_flag;
+extern int cat;
+extern int n_elements;		/* number of processed elements (only low level elements) */
+extern int n_skipped;		/* number of skipped low level elements (different layer name) */
+extern struct Map_info Map;
+extern dbDriver *driver;
+extern dbString sql;
+extern dbString str;
+extern struct line_pnts *Points;
+extern struct line_cats *Cats;
+extern PAD_LAY Layer;
+extern char *Txt;
+extern char *Block;
+extern struct field_info *Fi;
+extern AD_DB_HANDLE dwghandle;
+extern TRANS *Trans;		/* transformation */
+extern int atrans;		/* number of allocated levels */
+extern struct Option *layers_opt;
+extern struct Flag *invert_flag;
 
 void wrentity(PAD_ENT_HDR adenhd, PAD_ENT aden, int level, AD_VMADDR entlist,
 	      int circle_as_point);

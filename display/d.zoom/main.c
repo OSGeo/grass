@@ -26,9 +26,14 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 #include <grass/Vect.h>
-#define	MAIN
+
 #include "local_proto.h"
 #include <grass/glocale.h>
+
+char *cmd;
+char **rast, **vect, **list;
+int nrasts, nvects, nlists;
+double U_east, U_west, U_south, U_north;
 
 int main(int argc, char **argv)
 {

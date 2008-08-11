@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include "togl.h"
 
-#define FontBase_MAIN
 #include "interface.h"
 
 #define BG_COLOR 0xFF000000
@@ -22,6 +21,8 @@
 char *cancel_script = NULL;
 Tcl_Interp *cancel_interp;
 static GLuint legend_list = 0;
+
+GLuint FontBase;
 
 int auto_draw(Nv_data *, Tcl_Interp *);
 

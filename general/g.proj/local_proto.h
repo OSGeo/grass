@@ -1,11 +1,5 @@
-#ifdef G_PROJ_MAIN
-#  define G_PROJ_GLOBAL
-#else
-#  define G_PROJ_GLOBAL extern
-#endif
-
-G_PROJ_GLOBAL struct Key_Value *projinfo, *projunits;
-G_PROJ_GLOBAL struct Cell_head cellhd;
+extern struct Key_Value *projinfo, *projunits;
+extern struct Cell_head cellhd;
 
 /* input.c */
 void input_currloc(void);

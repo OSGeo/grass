@@ -40,13 +40,7 @@ int set_win(struct Cell_head *, double, double, double, double, int);
 /* quit.c */
 int quit(struct Cell_head *, struct Cell_head *);
 
-#ifdef MAIN
-#define	GLOBAL
-#else
-#define	GLOBAL	extern
-#endif
-
-GLOBAL char *cmd;
-GLOBAL char **rast, **vect, **list;
-GLOBAL int nrasts, nvects, nlists;
-GLOBAL double U_east, U_west, U_south, U_north;
+extern char *cmd;
+extern char **rast, **vect, **list;
+extern int nrasts, nvects, nlists;
+extern double U_east, U_west, U_south, U_north;

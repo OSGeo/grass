@@ -21,12 +21,7 @@
 #define TRIANGLE_STRIPS 1
 #define VERTICES 2
 
-#ifdef MAIN
-double x_extent;
-double y_extent;
-#else
 extern double x_extent;
 extern double y_extent;
-#endif
 
 #endif

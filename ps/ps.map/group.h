@@ -11,8 +11,4 @@ struct PS_group
     int do_group;
 };
 
-#ifdef MAIN
-struct PS_group grp;
-#else
 extern struct PS_group grp;
-#endif

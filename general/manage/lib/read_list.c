@@ -17,6 +17,9 @@ read the element list file
 	  .
 ******************************************************************/
 
+int nlist;
+struct list *list;
+
 static int format_error(char *, int, char *);
 
 int read_list(int check_if_empty)

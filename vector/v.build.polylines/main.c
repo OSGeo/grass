@@ -68,7 +68,6 @@
    1) Portable
 
    ********************************************************************** */
-#define MAIN
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -77,6 +76,10 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 #include "walk.h"
+
+int gCopy_atts;
+int gAsciiout;
+char gAscii_type;
 
 int main(int argc, char **argv)
 {

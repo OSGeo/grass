@@ -24,12 +24,29 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#define MAIN
-#include "basin.h"
-#include "outletP.h"
-#undef MAIN
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
+#include "basin.h"
+#include "outletP.h"
+
+SHORT drain[3][3]	= {{ 7,6,5 },{ 8,-17,4 },{ 1,2,3 }};
+SHORT updrain[3][3]	= {{ 3,2,1 },{ 4,-17,8 },{ 5,6,7 }};
+char dr_mod[9]	= {0,1,1,1,0,-1,-1,-1,0};
+char dc_mod[9]	= {0,1,0,-1,-1,-1,0,1,1};
+char basin_name[GNAME_MAX], swale_name[GNAME_MAX],
+  half_name[GNAME_MAX], elev_name[GNAME_MAX], armsed_name[GNAME_MAX];
+int nrows, ncols, done, total;
+int array_size, high_index, do_index;
+char *drain_ptrs, ha_f, el_f, ar_f;
+RAMSEG ba_seg, pt_seg, sl_seg;
+int ncols_less_one, nrows_less_one;
+NODE *to_do;
+FILE *arm_fd, *fp;
+FLAG *doner, *swale, *left;
+CELL *bas;
+double half_res, diag, max_length, dep_slope;
+struct Cell_head window;
 
 int main(int argc, char *argv[])
 {

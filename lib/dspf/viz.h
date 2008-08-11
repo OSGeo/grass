@@ -98,10 +98,4 @@ int print_head_info(file_info *);
 /* struct_copy.c */
 int struct_copy(char *, char *, int);
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-#include "cell_table.h"
+extern CELL_ENTRY cell_table[];

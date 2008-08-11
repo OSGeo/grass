@@ -2,12 +2,6 @@
 #include <tk.h>
 #include <grass/Vect.h>
 
-#ifdef MAIN
-#define Global
-#else
-#define Global extern
-#endif
-
 /*      tool in c:         name in Tk */
 typedef enum
 {
@@ -117,59 +111,38 @@ typedef struct
 #define VAR_LINEWIDTH   11
 #define VARN_LINEWIDTH   "linewidth"	/* Width for lines and boundaries */
 
-#ifdef MAIN
-VAR Variable[] = {
-    {VAR_CAT, VARN_CAT, VART_INT, 0, 0, NULL},
-    {VAR_FIELD, VARN_FIELD, VART_INT, 0, 0, NULL},
-    {VAR_CAT_MODE, VARN_CAT_MODE, VART_INT, 0, 0, NULL},
-    {VAR_INSERT, VARN_INSERT, VART_INT, 0, 0, NULL},
-    {VAR_MESSAGE, VARN_MESSAGE, VART_CHAR, 0, 0, NULL},
-    {VAR_SNAP, VARN_SNAP, VART_INT, 0, 0, NULL},
-    {VAR_SNAP_MODE, VARN_SNAP_MODE, VART_INT, 0, 0, NULL},
-    {VAR_SNAP_SCREEN, VARN_SNAP_SCREEN, VART_INT, 0, 0, NULL},
-    {VAR_SNAP_MAP, VARN_SNAP_MAP, VART_DOUBLE, 0, 0, NULL},
-    {VAR_ZOOM_REGION, VARN_ZOOM_REGION, VART_CHAR, 0, 0, NULL},
-    {VAR_ANSWER, VARN_ANSWER, VART_INT, 0, 0, NULL},
-    {VAR_LINEWIDTH, VARN_LINEWIDTH, VART_INT, 2, 0, NULL},
-    {0, NULL, 0, 0, 0, NULL}
-};
-#else
 extern VAR Variable[];
-#endif
 
 /* Category and field set for current line to be written */
 #define CAT_MODE_NO   0		/* No category */
 #define CAT_MODE_MAN  1		/* Manual imput */
 #define CAT_MODE_NEXT 2		/* Next not yet used category of given field */
 #define CAT_MODE_COUNT 3	/* Count of modes */
-#ifdef MAIN
-char *CatModeLab[] = { "No category", "Manual entry", "Next not used" };
-#else
+
 extern char *CatModeLab[];
-#endif
 
 /* Maximum value for field */
-Global int (*MaxFieldCat)[2];
-Global int nMaxFieldCat, aMaxFieldCat;
+extern int (*MaxFieldCat)[2];
+extern int nMaxFieldCat, aMaxFieldCat;
 
-Global SYMB Symb[SYMB_COUNT];
+extern SYMB Symb[SYMB_COUNT];
 
-Global struct Map_info Map;
-Global struct Cell_head GRegion;	/* Current region (synchronized with GRASS WIND) */
-Global Tcl_Interp *Toolbox;
-Global int Tool_next;		/* Next tool to be run */
-Global double Xscale, Yscale;	/* Scale factors = size_in_map / size_on_screen */
+extern struct Map_info Map;
+extern struct Cell_head GRegion;	/* Current region (synchronized with GRASS WIND) */
+extern Tcl_Interp *Toolbox;
+extern int Tool_next;		/* Next tool to be run */
+extern double Xscale, Yscale;	/* Scale factors = size_in_map / size_on_screen */
 
-Global struct Cell_head window;
+extern struct Cell_head window;
 
-Global double Scale;		/* Map / xdriver */
+extern double Scale;		/* Map / xdriver */
 
 
 /* Display symbology for lines and nodes */
-Global int *LineSymb;		/* array of line symbology codes, starts from index 1 */
-Global int aLineSymb;		/* number of lines / allocated space (array size + 1) */
-Global int *NodeSymb;		/* array of nodes' symbology codes, start from index 1 */
-Global int aNodeSymb;		/* number of nodes / allocated space (array size + 1) */
+extern int *LineSymb;		/* array of line symbology codes, starts from index 1 */
+extern int aLineSymb;		/* number of lines / allocated space (array size + 1) */
+extern int *NodeSymb;		/* array of nodes' symbology codes, start from index 1 */
+extern int aNodeSymb;		/* number of nodes / allocated space (array size + 1) */
 
 /* Background commands */
 typedef struct
@@ -178,15 +151,9 @@ typedef struct
     int on;			/* 1 display, 0 do not display */
 } BGCMD;
 
-#ifdef MAIN
-BGCMD *Bgcmd = NULL;
-int nbgcmd = 0;
-int abgcmd = 0;
-#else
 extern BGCMD *Bgcmd;
 extern int nbgcmd;
 extern int abgcmd;
-#endif
 
 #define MOUSE_POINT	1
 #define MOUSE_LINE	2

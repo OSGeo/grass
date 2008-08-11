@@ -4,14 +4,8 @@
 #include <stdio.h>
 #include <grass/glocale.h>
 
-#ifdef _MAIN_C_
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
-
-GLOBAL FILE *dxf_fp;
-GLOBAL int overwrite;
+extern FILE *dxf_fp;
+extern int overwrite;
 
 /* write_dxf.c */
 int dxf_open(char *);

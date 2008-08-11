@@ -24,11 +24,19 @@
  *               for details.
  */
 
-#define _MAIN_C_
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
+
+int flag_list, flag_extent, flag_table, flag_topo, flag_invert,
+    flag_one_layer, flag_frame;
+int num_layers, found_layers;
+char **layers;
+char dxf_buf[DXF_BUF_SIZE], entity[DXF_BUF_SIZE];
+int ARR_MAX;
+double *xpnts, *ypnts, *zpnts;
+struct line_pnts *Points;
 
 int main(int argc, char *argv[])
 {

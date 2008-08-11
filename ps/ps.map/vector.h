@@ -99,8 +99,4 @@ struct vector
     LAYER *layer;
 };
 
-#ifdef MAIN
-struct vector vector;
-#else
 extern struct vector vector;
-#endif

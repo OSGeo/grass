@@ -9,7 +9,6 @@
  *               for details.
  **************************************************************/
 
-#define MAIN
 #include <stdio.h>
 #include <stdlib.h>
 #include <tcl.h>
@@ -21,6 +20,50 @@
 #include <grass/glocale.h>
 #include "global.h"
 #include "proto.h"
+
+VAR Variable[] = {
+    {VAR_CAT, VARN_CAT, VART_INT, 0, 0, NULL},
+    {VAR_FIELD, VARN_FIELD, VART_INT, 0, 0, NULL},
+    {VAR_CAT_MODE, VARN_CAT_MODE, VART_INT, 0, 0, NULL},
+    {VAR_INSERT, VARN_INSERT, VART_INT, 0, 0, NULL},
+    {VAR_MESSAGE, VARN_MESSAGE, VART_CHAR, 0, 0, NULL},
+    {VAR_SNAP, VARN_SNAP, VART_INT, 0, 0, NULL},
+    {VAR_SNAP_MODE, VARN_SNAP_MODE, VART_INT, 0, 0, NULL},
+    {VAR_SNAP_SCREEN, VARN_SNAP_SCREEN, VART_INT, 0, 0, NULL},
+    {VAR_SNAP_MAP, VARN_SNAP_MAP, VART_DOUBLE, 0, 0, NULL},
+    {VAR_ZOOM_REGION, VARN_ZOOM_REGION, VART_CHAR, 0, 0, NULL},
+    {VAR_ANSWER, VARN_ANSWER, VART_INT, 0, 0, NULL},
+    {VAR_LINEWIDTH, VARN_LINEWIDTH, VART_INT, 2, 0, NULL},
+    {0, NULL, 0, 0, 0, NULL}
+};
+
+BGCMD *Bgcmd = NULL;
+int nbgcmd = 0;
+int abgcmd = 0;
+
+char *CatModeLab[] = { "No category", "Manual entry", "Next not used" };
+
+/* Maximum value for field */
+int (*MaxFieldCat)[2];
+int nMaxFieldCat, aMaxFieldCat;
+
+SYMB Symb[SYMB_COUNT];
+
+struct Map_info Map;
+struct Cell_head GRegion;	/* Current region (synchronized with GRASS WIND) */
+Tcl_Interp *Toolbox;
+int Tool_next;		/* Next tool to be run */
+double Xscale, Yscale;	/* Scale factors = size_in_map / size_on_screen */
+
+struct Cell_head window;
+
+double Scale;		/* Map / xdriver */
+
+/* Display symbology for lines and nodes */
+int *LineSymb;		/* array of line symbology codes, starts from index 1 */
+int aLineSymb;		/* number of lines / allocated space (array size + 1) */
+int *NodeSymb;		/* array of nodes' symbology codes, start from index 1 */
+int aNodeSymb;		/* number of nodes / allocated space (array size + 1) */
 
 int Tcl_AppInit(Tcl_Interp * interp)
 {

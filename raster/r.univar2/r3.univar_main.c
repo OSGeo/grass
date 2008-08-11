@@ -15,16 +15,14 @@
  *
  */
 
-#define MAIN
 #include "globals.h"
 
-/* local proto */
-void set_params();
+param_type param;
 
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
     param.inputfile = G_define_standard_option(G_OPT_R3_INPUT);
 

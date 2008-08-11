@@ -1,8 +1,11 @@
-#define SIG_MAIN
+
 #include "externs.h"
 #include <signal.h>
+#include <grass/config.h>
 
-void sigint();
+struct signalflag signalflag;
+
+extern RETSIGTYPE sigint(int);
 
 int set_signals(void)
 {

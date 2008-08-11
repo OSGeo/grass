@@ -48,8 +48,6 @@
  * if "output" doesn't exist, but is expected (this is bad design).
  */
 
-#define MAIN
-
 #define SEGCOLSIZE 	256
 
 #include <stdlib.h>
@@ -68,6 +66,21 @@
 #include <grass/glocale.h>
 
 struct Cell_head window;
+
+struct variables
+{
+    char *alias;
+    int position;
+} variables[] = {
+    {"output", CUM_COST_LAYER},
+    {"input", COST_LAYER},
+    {"coor", START_PT}
+};
+
+char cum_cost_layer[64];
+char cost_layer[64];
+struct start_pt *head_start_pt = NULL;
+struct start_pt *head_end_pt = NULL;
 
 
 int main(int argc, char *argv[])

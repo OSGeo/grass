@@ -18,10 +18,23 @@
 /* select_camera */
 /* select a camera reference file for a given imagery group */
 
-#define  MAIN   1
 #include <stdlib.h>
 #include "orthophoto.h"
 #include "globals.h"
+
+char Data_Loaded;	/* is there data in memory */
+
+ 			/* used for abnormal exit logic */
+char Files_Open;	/* is there data in memory */
+
+struct Ortho_Camera_File_Ref cam_info;
+
+char *camera;
+
+/* hold the names of files etc.  mostly used by main.c */
+char *N_path;
+char *N_name;
+char *N_camera;
 
 int main(int argc, char *argv[])
 {

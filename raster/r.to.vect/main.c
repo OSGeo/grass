@@ -16,8 +16,6 @@
  *
  *****************************************************************************/
 
-#define MAIN
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
@@ -34,6 +32,28 @@
  *
  * 2007/2: attributes for lines supported
  */
+
+int data_type;
+int data_size;
+struct Map_info Map;
+int input_fd;		/*    input_fd     input raster map descriptor */
+struct line_cats *Cats;
+struct Cell_head cell_head;
+
+int direction;
+int first_read, last_read;
+int input_fd;
+int row_length, row_count, n_rows;
+int total_areas;
+
+int smooth_flag;		/* this is 0 for no smoothing, 1 for smoothing of lines */
+int value_flag;		/* use raster values as categories */
+
+struct Categories RastCats;
+int has_cats;		/* Category labels available */
+struct field_info *Fi;
+dbDriver *driver;
+dbString sql, label;
 
 int main(int argc, char *argv[])
 {

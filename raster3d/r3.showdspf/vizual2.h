@@ -80,10 +80,5 @@ typedef struct
 } CELL_ENTRY;			/* for writing out in condensed format */
 
 
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
+extern CELL_ENTRY cell_table[256];
 
-#include "cell_table.h"

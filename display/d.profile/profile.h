@@ -48,24 +48,8 @@ struct Profile
     UCAT MinCat, MaxCat;
 };
 
-#ifdef MAIN
-struct windows windows[] = {
-    {"mou", 85, 100, 0, 50},
-    {"sta", 85, 100, 50, 100},
-    {"map", 0, 85, 0, 50},
-    {"orig", 0, 100, 0, 1009}
-};
-
-struct windows profiles[] = {
-    {"pro1", 64, 85, 50, 100},
-    {"pro2", 43, 64, 50, 100},
-    {"pro3", 22, 43, 50, 100},
-    {"pro4", 0, 22, 50, 100}
-};
-#else
 extern struct windows windows[];
 extern struct windows profiles[];
-#endif
 
 #define MOU     windows[0]
 #define STA     windows[1]

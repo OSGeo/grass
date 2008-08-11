@@ -26,10 +26,5 @@ typedef struct
     int ncols;			/* num columns */
 } cursor;
 
-#ifdef MAIN
-OGRDataSourceH hDs;
-dbString *errMsg = NULL;	/* error message */
-#else
 extern OGRDataSourceH hDs;
 extern dbString *errMsg;
-#endif

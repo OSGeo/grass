@@ -1,18 +1,13 @@
-#ifdef MAIN
-#define GLOBAL
-#else
-#define GLOBAL extern
-#endif
 
-GLOBAL char *map_name;
-GLOBAL int color;
-GLOBAL float size;
-GLOBAL int style;
-GLOBAL int type;
-GLOBAL int is_fp;
-GLOBAL int nodata;
-GLOBAL int nsteps;
-GLOBAL int cat_ranges;
+extern char *map_name;
+extern int color;
+extern float size;
+extern int style;
+extern int type;
+extern int is_fp;
+extern int nodata;
+extern int nsteps;
+extern int cat_ranges;
 
 #define PIE	1
 #define BAR	2

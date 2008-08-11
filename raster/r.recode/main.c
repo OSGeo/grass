@@ -13,7 +13,7 @@
  *               for details.
  *
  *****************************************************************************/
-#define MAIN
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +21,15 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "global.h"
+
+RASTER_MAP_TYPE in_type;
+RASTER_MAP_TYPE out_type;
+struct FPReclass rcl_struct;
+CELL old_min, old_max;
+DCELL old_dmin, old_dmax;
+int in_fd, out_fd, no_mask, align_wind, make_dcell, nrules, rule_size;
+char *name, *mapset, *result, *title;
+char **rules;
 
 int main(int argc, char *argv[])
 {

@@ -12,8 +12,6 @@
 
  */
 
-#define MAIN
-
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -23,11 +21,12 @@
 #include "globals.h"
 #include "local_proto.h"
 
+char Cellmap_real[GNAME_MAX], Cellmap_imag[GNAME_MAX];
 
 int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
-    char Cellmap_orig[50];
+    char Cellmap_orig[GNAME_MAX];
     FILE *realfp, *imagfp;	/* the input and output file descriptors */
     int outputfd, maskfd;	/* the input and output file descriptors */
     char *realmapset, *imagmapset;	/* the input mapset names */

@@ -46,7 +46,6 @@
 # define RpD ((2 * M_PI) / 360.)	/* radians/degree */
 # define D2R(d) (double)(d * RpD)	/* degrees->radians */
 
-#define MAIN
 static void arrow_mag(double, double);
 static void arrow_360(double);
 static void arrow_se(void);

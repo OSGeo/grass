@@ -23,9 +23,13 @@
 #include <grass/config.h>
 #include "writeascii.h"
 
-#define MAIN
 #include "parameters.h"
 #include "globaldefs.h"
+
+paramType param;		/*Parameters */
+
+double x_extent;
+double y_extent;
 
 /*local protos */
 static void check_input_maps(void);

@@ -15,8 +15,10 @@
 #include <grass/dbmi.h>
 #include "dbdriver.h"
 
-#define MAIN
 #include "globals.h"
+
+MYSQL *connection;		/* Database connection */
+dbString *errMsg = NULL;	/* error message */
 
 int main(int argc, char *argv[])
 {
