@@ -104,6 +104,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define YES           1
 #define NO            0
 #define GISPROMPT_COLOR "color,grass,color"
+#define GISPROMPT_DBCOLUMN "dbcolumn,grass,dbcolumn"
 
 /* File/directory name lengths */
 #define GNAME_MAX 256

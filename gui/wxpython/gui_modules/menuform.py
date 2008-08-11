@@ -1125,7 +1125,8 @@ class cmdPanel(wx.Panel):
                 which_sizer.Add(item=txt, proportion=0,
                                 flag=wx.ADJUST_MINSIZE | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
                 # element selection tree combobox (maps, icons, regions, etc.)
-                if p.get('prompt','') != 'color' and p.get('element', '') != 'file':
+                if p.get('prompt','') not in ('color', 'dbcolumn') and \
+                       p.get('element', '') != 'file':
                     if p.get('multiple','no') == 'yes':
                         multiple = True
                     else:
@@ -1146,6 +1147,18 @@ class cmdPanel(wx.Panel):
                     # we target the textctl here
                     p['wxId'] = selection.GetChildren()[0].GetId()
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
+                # dbcolumn entry
+                elif p.get('prompt','') == 'dbcolumn':
+                    columns = wx.ComboBox(parent=which_panel, id=wx.ID_ANY,
+                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
+                                          style=wx.CB_SIMPLE | wx.CB_READONLY,
+                                          choices=[])
+                    p['wxId'] = columns.GetId()
+                    p['wxGetValue'] = columns.GetStringSelection
+                    columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbColumn)
+                    columns.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    this_sizer.Add(item=columns, proportion=0,
+                                   flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
                 # color entry
                 elif p.get('prompt','') == 'color':
                     # Heuristic way of finding whether transparent is allowed
@@ -1349,10 +1362,50 @@ class cmdPanel(wx.Panel):
         me = wx.FindWindowById( myId )
         for porf in self.task.params + self.task.flags:
             if 'wxId' in porf and type( porf[ 'wxId' ] ) == type( 1 ) and porf['wxId'] == myId:
-                porf[ 'value' ] = me.GetValue()
-
+                if porf.has_key('wxGetValue') and porf['wxGetValue']:
+                    porf['value'] = porf['wxGetValue']()
+                else:
+                    porf['value'] = me.GetValue()
+        
         self.OnUpdateValues()
 
+        event.Skip()
+        
+    def OnDbColumn(self, event):
+        """Get list of table columns"""
+        choices = []
+        
+        mapName = utils.GetLayerNameFromCmd(self.task.getCmd(ignoreErrors=True))
+        if mapName !=  _('<required>'):
+            layer = 1
+            for p in self.task.params:
+                if p.get('name', '') == 'layer':
+                    value = p.get('value', '1')
+                    if value:
+                        layer = int(value)
+                    break
+                
+            cmd = ['v.info',
+                   'map=%s' % mapName,
+                   'layer=%d' % layer,
+                   '-c', '--q']
+
+            try:
+                for line in gcmd.Command(cmd).ReadStdOutput():
+                    type, name = line.split('|')
+                    choices.append(name.strip())
+            except gcmd.CmdError:
+                pass
+            
+        win = self.FindWindowById(event.GetId())
+
+        win.SetItems(choices)
+
+        if len(choices) < 1:
+            win.SetValue('')
+        
+        event.Skip()
+        
     def createCmd( self, ignoreErrors = False ):
         """
         Produce a command line string (list) or feeding into GRASS.
