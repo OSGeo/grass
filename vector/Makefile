@@ -6,6 +6,7 @@ SUBDIRS = \
 	v.build \
 	v.build.polylines \
 	v.category \
+	v.class \
 	v.clean \
 	v.convert \
 	v.db.connect \
