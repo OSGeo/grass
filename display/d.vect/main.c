@@ -194,13 +194,11 @@ int main(int argc, char **argv)
     width_opt->guisection = _("Lines");
     width_opt->description = _("Line width");
 
-    wcolumn_opt = G_define_option();
+    wcolumn_opt = G_define_standard_option(G_OPT_COLUMN);
     wcolumn_opt->key = "wcolumn";
-    wcolumn_opt->type = TYPE_STRING;
     wcolumn_opt->guisection = _("Lines");
     wcolumn_opt->description =
-	_
-	("Name of column for line widths (these values will be scaled by wscale)");
+	_("Name of column for line widths (these values will be scaled by wscale)");
 
     wscale_opt = G_define_option();
     wscale_opt->key = "wscale";
@@ -229,10 +227,8 @@ int main(int argc, char **argv)
     size_opt->description = _("Symbol size");
 
     /* Labels */
-    attrcol_opt = G_define_option();
+    attrcol_opt = G_define_standard_option(G_OPT_COLUMN);
     attrcol_opt->key = "attrcol";
-    attrcol_opt->type = TYPE_STRING;
-    attrcol_opt->required = NO;
     attrcol_opt->multiple = NO;	/* or fix attr.c, around line 102 */
     attrcol_opt->guisection = _("Labels");
     attrcol_opt->description = _("Name of column to be displayed");
