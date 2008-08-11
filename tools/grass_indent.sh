@@ -9,4 +9,9 @@ else
  indent -bad -bap -bbb -br -bli0 -bls -cli0 -ncs -fc1 -hnl -i4 \
       -nbbo -nbc -nbfda -nbfde -ncdb -ncdw -nce -nfca -npcs -nprs \
       -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss -ts8 -ut "$@"
+
+ # fix broken gettext macros:
+ ls "$@" | xargs grep -l '(_$' | \
+       while read file ; do sed -i -e '/(_$/{;N;s/\n[ \t]*//;}' $file ; done
+
 fi
