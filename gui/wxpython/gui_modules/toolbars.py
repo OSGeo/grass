@@ -364,11 +364,6 @@ class VDigitToolbar(AbstractToolbar):
         # list of vector layers from Layer Manager (only in the current mapset)
         self.layers   = [] 
 
-        # default action (digitize new point, line, etc.)
-        self.action     = "addLine"
-        self.type       = "point"
-        self.addString  = ""
-
         self.comboid    = None
 
         # only one dialog can be open
@@ -389,6 +384,11 @@ class VDigitToolbar(AbstractToolbar):
                 rowdata = row
             self.InitToolbar(self.parent, self.toolbar[row], self.ToolbarData(rowdata))
 
+        # default action (digitize new point, line, etc.)
+        self.action = { 'desc' : 'addLine',
+                        'type' : 'point',
+                        'id'   : self.addPoint }
+        
         # list of available vector maps
         self.UpdateListOfLayers(updateTool=True)
 
@@ -430,49 +430,49 @@ class VDigitToolbar(AbstractToolbar):
 
             data = [("", "", "", "", "", "", ""),
                     (self.addPoint, "digAddPoint", Icons["digAddPoint"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAddPoint"].GetLabel(), Icons["digAddPoint"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digAddPoint"].GetLabel(), Icons["digAddPoint"].GetDesc(),
                      self.OnAddPoint),
                     (self.addLine, "digAddLine", Icons["digAddLine"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAddLine"].GetLabel(), Icons["digAddLine"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digAddLine"].GetLabel(), Icons["digAddLine"].GetDesc(),
                      self.OnAddLine),
                     (self.addBoundary, "digAddBoundary", Icons["digAddBoundary"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAddBoundary"].GetLabel(), Icons["digAddBoundary"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digAddBoundary"].GetLabel(), Icons["digAddBoundary"].GetDesc(),
                      self.OnAddBoundary),
                     (self.addCentroid, "digAddCentroid", Icons["digAddCentroid"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAddCentroid"].GetLabel(), Icons["digAddCentroid"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digAddCentroid"].GetLabel(), Icons["digAddCentroid"].GetDesc(),
                      self.OnAddCentroid),
                     (self.moveVertex, "digMoveVertex", Icons["digMoveVertex"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digMoveVertex"].GetLabel(), Icons["digMoveVertex"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digMoveVertex"].GetLabel(), Icons["digMoveVertex"].GetDesc(),
                      self.OnMoveVertex),
                     (self.addVertex, "digAddVertex", Icons["digAddVertex"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAddVertex"].GetLabel(), Icons["digAddVertex"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digAddVertex"].GetLabel(), Icons["digAddVertex"].GetDesc(),
                      self.OnAddVertex),
                     (self.removeVertex, "digRemoveVertex", Icons["digRemoveVertex"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digRemoveVertex"].GetLabel(), Icons["digRemoveVertex"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digRemoveVertex"].GetLabel(), Icons["digRemoveVertex"].GetDesc(),
                      self.OnRemoveVertex),
                     (self.splitLine, "digSplitLine", Icons["digSplitLine"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digSplitLine"].GetLabel(), Icons["digSplitLine"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digSplitLine"].GetLabel(), Icons["digSplitLine"].GetDesc(),
                      self.OnSplitLine),
                     (self.editLine, "digEditLine", Icons["digEditLine"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digEditLine"].GetLabel(), Icons["digEditLine"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digEditLine"].GetLabel(), Icons["digEditLine"].GetDesc(),
                      self.OnEditLine),
                     (self.moveLine, "digMoveLine", Icons["digMoveLine"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digMoveLine"].GetLabel(), Icons["digMoveLine"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digMoveLine"].GetLabel(), Icons["digMoveLine"].GetDesc(),
                      self.OnMoveLine),
                     (self.deleteLine, "digDeleteLine", Icons["digDeleteLine"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digDeleteLine"].GetLabel(), Icons["digDeleteLine"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digDeleteLine"].GetLabel(), Icons["digDeleteLine"].GetDesc(),
                      self.OnDeleteLine),
                     (self.displayCats, "digDispCats", Icons["digDispCats"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digDispCats"].GetLabel(), Icons["digDispCats"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digDispCats"].GetLabel(), Icons["digDispCats"].GetDesc(),
                      self.OnDisplayCats),
                     (self.copyCats, "digCopyCats", Icons["digCopyCats"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digCopyCats"].GetLabel(), Icons["digCopyCats"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digCopyCats"].GetLabel(), Icons["digCopyCats"].GetDesc(),
                      self.OnCopyCats),
                     (self.displayAttr, "digDispAttr", Icons["digDispAttr"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digDispAttr"].GetLabel(), Icons["digDispAttr"].GetDesc(),
+                     wx.ITEM_CHECK, Icons["digDispAttr"].GetLabel(), Icons["digDispAttr"].GetDesc(),
                      self.OnDisplayAttr),
                     (self.additionalTools, "digAdditionalTools", Icons["digAdditionalTools"].GetBitmap(),
-                     wx.ITEM_RADIO, Icons["digAdditionalTools"].GetLabel(),
+                     wx.ITEM_CHECK, Icons["digAdditionalTools"].GetLabel(),
                      Icons["digAdditionalTools"].GetDesc(),
                      self.OnAdditionalToolMenu)]
 
@@ -502,37 +502,50 @@ class VDigitToolbar(AbstractToolbar):
         id = self.parent.toolbars['map'].pointer
         self.parent.toolbars['map'].toolbar.ToggleTool(id, True)
         self.parent.toolbars['map'].mapdisplay.OnPointer(event)
+
         if event:
+            # deselect previously selected tool
+            if self.action.has_key('id'):
+                self.toolbar[0].ToggleTool(self.action['id'], False)
+        
+            self.action['id'] = event.GetId()
             event.Skip()
+        else:
+            # initialize toolbar
+            self.toolbar[0].ToggleTool(self.action['id'], True)
         
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
         Debug.msg (2, "VDigitToolbar.OnAddPoint()")
-        self.action = "addLine"
-        self.type   = "point"
+        self.action = { 'desc' : "addLine",
+                        'type' : "point",
+                        'id'   : self.addPoint }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnAddLine(self, event):
         """Add line to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddLine()")
-        self.action = "addLine"
-        self.type   = "line"
+        self.action = { 'desc' : "addLine",
+                        'type' : "line",
+                        'id'   : self.addLine }
         self.parent.MapWindow.mouse['box'] = 'line'
         self.parent.MapWindow.polycoords = [] # reset temp line
 
     def OnAddBoundary(self, event):
         """Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
-        self.action = "addLine"
-        self.type   = "boundary"
+        self.action = { 'desc' : "addLine",
+                        'type' : "boundary",
+                        'id'   : self.addBoundary }
         self.parent.MapWindow.mouse['box'] = 'line'
         self.parent.MapWindow.polycoords = [] # reset temp line
 
     def OnAddCentroid(self, event):
         """Add centroid to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
-        self.action = "addLine"
-        self.type   = "centroid"
+        self.action = { 'desc' : "addLine",
+                        'type' : "centroid",
+                        'id'   : self.addCentroid }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnExit (self, event=None):
@@ -557,63 +570,73 @@ class VDigitToolbar(AbstractToolbar):
     def OnMoveVertex(self, event):
         """Move line vertex"""
         Debug.msg(2, "Digittoolbar.OnMoveVertex():")
-        self.action = "moveVertex"
+        self.action = { 'desc' : "moveVertex",
+                        'id'   : self.moveVertex }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnAddVertex(self, event):
         """Add line vertex"""
         Debug.msg(2, "Digittoolbar.OnAddVertex():")
-        self.action = "addVertex"
+        self.action = { 'desc' : "addVertex",
+                        'id'   : self.addVertex }
         self.parent.MapWindow.mouse['box'] = 'point'
 
 
     def OnRemoveVertex(self, event):
         """Remove line vertex"""
         Debug.msg(2, "Digittoolbar.OnRemoveVertex():")
-        self.action = "removeVertex"
+        self.action = { 'desc' : "removeVertex",
+                        'id'   : self.removeVertex }
         self.parent.MapWindow.mouse['box'] = 'point'
 
 
     def OnSplitLine(self, event):
         """Split line"""
         Debug.msg(2, "Digittoolbar.OnSplitLine():")
-        self.action = "splitLine"
+        self.action = { 'desc' : "splitLine",
+                        'id'   : self.splitLine }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnEditLine(self, event):
         """Edit line"""
         Debug.msg(2, "Digittoolbar.OnEditLine():")
-        self.action="editLine"
+        self.action = { 'desc' : "editLine",
+                        'id'   : self.editLine }
         self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnMoveLine(self, event):
         """Move line"""
         Debug.msg(2, "Digittoolbar.OnMoveLine():")
-        self.action = "moveLine"
+        self.action = { 'desc' : "moveLine",
+                        'id'   : self.moveLine }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnDeleteLine(self, event):
         """Delete line"""
         Debug.msg(2, "Digittoolbar.OnDeleteLine():")
-        self.action = "deleteLine"
+        self.action = { 'desc' : "deleteLine",
+                        'id'   : self.deleteLine }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnDisplayCats(self, event):
         """Display/update categories"""
         Debug.msg(2, "Digittoolbar.OnDisplayCats():")
-        self.action="displayCats"
+        self.action = { 'desc' : "displayCats",
+                        'id'   : self.displayCats }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnDisplayAttr(self, event):
         """Display/update attributes"""
         Debug.msg(2, "Digittoolbar.OnDisplayAttr():")
-        self.action="displayAttrs"
+        self.action = { 'desc' : "displayAttrs",
+                        'id'   : self.displayAttr }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnCopyCats(self, event):
         """Copy categories"""
         Debug.msg(2, "Digittoolbar.OnCopyCats():")
-        self.action="copyCats"
+        self.action = { 'desc' : "copyCats",
+                        'id'   : self.copyCats }
         self.parent.MapWindow.mouse['box'] = 'point'
 
     def OnUndo(self, event):
@@ -655,94 +678,181 @@ class VDigitToolbar(AbstractToolbar):
         point = wx.GetMousePosition()
         toolMenu = wx.Menu()
         # Add items to the menu
-        copy = wx.MenuItem(toolMenu, wx.ID_ANY, _('Copy features from (background) vector map'))
+        copy = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                           text=_('Copy features from (background) vector map'),
+                           kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(copy)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopy, copy)
+        if self.action['desc'] == "copyLine":
+            copy.Check(True)
 
-        flip = wx.MenuItem(toolMenu, wx.ID_ANY, _('Flip selected lines/boundaries'))
+        flip = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                           text=_('Flip selected lines/boundaries'),
+                           kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(flip)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnFlip, flip)
+        if self.action['desc'] == "flipLine":
+            flip.Check(True)
 
-        merge = wx.MenuItem(toolMenu, wx.ID_ANY, _('Merge selected lines/boundaries'))
+        merge = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                            text=_('Merge selected lines/boundaries'),
+                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(merge)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnMerge, merge)
+        if self.action['desc'] == "mergeLine":
+            merge.Check(True)
 
-        breakL = wx.MenuItem(toolMenu, wx.ID_ANY, _('Break selected lines/boundaries at intersection'))
+        breakL = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                             text=_('Break selected lines/boundaries at intersection'),
+                             kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(breakL)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnBreak, breakL)
+        if self.action['desc'] == "breakLine":
+            breakL.Check(True)
 
-        snap = wx.MenuItem(toolMenu, wx.ID_ANY, _('Snap selected lines/boundaries (only to nodes)'))
+        snap = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                           text=_('Snap selected lines/boundaries (only to nodes)'),
+                           kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(snap)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnSnap, snap)
+        if self.action['desc'] == "snapLine":
+            snap.Check(True)
 
-        connect = wx.MenuItem(toolMenu, wx.ID_ANY, _('Connect selected lines/boundaries'))
+        connect = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                              text=_('Connect selected lines/boundaries'),
+                              kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(connect)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnConnect, connect)
+        if self.action['desc'] == "connectLine":
+            connect.Check(True)
 
-        query = wx.MenuItem(toolMenu, wx.ID_ANY, _('Query tool'))
+        query = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                            text=_('Query features'),
+                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(query)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnQuery, query)
+        if self.action['desc'] == "queryLine":
+            query.Check(True)
 
-        zbulk = wx.MenuItem(toolMenu, wx.ID_ANY, _('Z bulk-labeling of 3D lines'))
+        zbulk = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                            text=_('Z bulk-labeling of 3D lines'),
+                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(zbulk)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnZBulk, zbulk)
+        if self.action['desc'] == "zbulkLine":
+            zbulk.Check(True)
 
-        typeconv = wx.MenuItem(toolMenu, wx.ID_ANY, _('Feature type conversion'))
+        typeconv = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                               text=_('Feature type conversion'),
+                               kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(typeconv)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnTypeConversion, typeconv)
+        if self.action['desc'] == "typeConv":
+            typeconv.Check(True)
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
         self.parent.MapWindow.PopupMenu(toolMenu)
         toolMenu.Destroy()
 
+        id = self.parent.toolbars['vdigit'].additionalTools
+        self.parent.toolbars['vdigit'].toolbar[0].ToggleTool(id, True)
+        
     def OnCopy(self, event):
         """Copy selected features from (background) vector map"""
+        if self.action['desc'] == 'copyLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnCopy():")
-        self.action="copyLine"
+        self.action = { 'desc' : "copyLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnFlip(self, event):
         """Flip selected lines/boundaries"""
+        if self.action['desc'] == 'flipLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnFlip():")
-        self.action="flipLine"
+        self.action = { 'desc' : "flipLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnMerge(self, event):
         """Merge selected lines/boundaries"""
+        if self.action['desc'] == 'mergeLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnMerge():")
-        self.action="mergeLine"
+        self.action = { 'desc' : "mergeLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnBreak(self, event):
         """Break selected lines/boundaries"""
+        if self.action['desc'] == 'breakLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnBreak():")
-        self.action="breakLine"
+        self.action = { 'desc' : "breakLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnSnap(self, event):
         """Snap selected features"""
+        if self.action['desc'] == 'snapLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnSnap():")
-        self.action="snapLine"
+        self.action = { 'desc' : "snapLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnConnect(self, event):
         """Connect selected lines/boundaries"""
+        if self.action['desc'] == 'connectLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnConnect():")
-        self.action="connectLine"
+        self.action = { 'desc' : "connectLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnQuery(self, event):
         """Query selected lines/boundaries"""
+        if self.action['desc'] == 'queryLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnQuery(): %s" % \
                       UserSettings.Get(group='vdigit', key='query', subkey='selection'))
-        self.action="queryLine"
+        self.action = { 'desc' : "queryLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnZBulk(self, event):
         """Z bulk-labeling selected lines/boundaries"""
+        if self.action['desc'] == 'zbulkLine': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnZBulk():")
-        self.action="zbulkLine"
+        self.action = { 'desc' : "zbulkLine",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'line'
 
     def OnTypeConversion(self, event):
@@ -752,8 +862,14 @@ class VDigitToolbar(AbstractToolbar):
          - point <-> centroid
          - line <-> boundary
         """
+        if self.action['desc'] == 'typeConv': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnTypeConversion():")
-        self.action="typeConv"
+        self.action = { 'desc' : "typeConv",
+                        'id'   : self.additionalTools }
         self.parent.MapWindow.mouse['box'] = 'box'
 
     def OnSelectMap (self, event):
@@ -941,6 +1057,10 @@ class VDigitToolbar(AbstractToolbar):
     def GetLayer(self):
         """Get selected layer for editing -- MapLayer instance"""
         return self.mapLayer
+
+    def GetAction(self, type='desc'):
+        """Get current action info"""
+        return self.action[type]
     
 class ProfileToolbar(AbstractToolbar):
     """
