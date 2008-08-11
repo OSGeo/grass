@@ -1,11 +1,14 @@
 #include <grass/glocale.h>
 #include "cairodriver.h"
 
+#if CAIRO_HAS_FT_FONT
+#include <cairo-ft.h>
+#include <fontconfig/fontconfig.h>
+#endif
+
 #ifdef HAVE_ICONV_H
 #include <iconv.h>
 #endif
-
-static cairo_matrix_t mat;
 
 static char *convert(const char *in)
 {
@@ -64,6 +67,8 @@ static char *convert(const char *in)
 
 static void set_matrix(void)
 {
+    static cairo_matrix_t mat;
+
     if (matrix_valid)
 	return;
 
@@ -84,6 +89,7 @@ void Cairo_draw_text(const char *str)
 	return;
 
     set_matrix();
+
     cairo_move_to(cairo, cur_x, cur_y);
     cairo_show_text(cairo, utf8);
 
@@ -112,7 +118,7 @@ void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
     *b = cur_x + ext.y_bearing + ext.height;
 }
 
-void Cairo_set_font(const char *name)
+static void set_font_toy(const char *name)
 {
     char *font = G_store(name);
     cairo_font_weight_t weight = CAIRO_FONT_WEIGHT_NORMAL;
@@ -140,6 +146,74 @@ void Cairo_set_font(const char *name)
     G_free(font);
 }
 
+#if CAIRO_HAS_FT_FONT
+
+static void set_font_fc(const char *name)
+{
+    static cairo_font_face_t *face;
+    static int initialized;
+    FcPattern *pattern;
+    FcResult result;
+
+    if (!initialized) {
+	FcInit();
+	initialized = 1;
+    }
+
+    if (face) {
+	cairo_font_face_destroy(face);
+	face = NULL;
+    }
+
+    pattern = FcNameParse(name);
+    FcDefaultSubstitute(pattern);
+    FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
+    pattern = FcFontMatch(FcConfigGetCurrent(), pattern, &result);
+    face = cairo_ft_font_face_create_for_pattern(pattern);
+    cairo_set_font_face(cairo, face);
+}
+
+#endif
+
+static const char *toy_fonts[12] = {
+    "sans",
+    "sans-italic",
+    "sans-bold",
+    "sans-bold-italic",
+    "serif",
+    "serif-italic",
+    "serif-bold",
+    "serif-bold-italic",
+    "mono",
+    "mono-italic",
+    "mono-bold",
+    "mono-bold-italic",
+};
+static const int num_toy_fonts = 12;
+
+static int is_toy_font(const char *name)
+{
+    int i;
+
+    for (i = 0; i < num_toy_fonts; i++)
+	if (G_strcasecmp(name, toy_fonts[i]) == 0)
+	    return 1;
+
+    return 0;
+}
+
+void Cairo_set_font(const char *name)
+{
+#if CAIRO_HAS_FT_FONT
+    if (is_toy_font(name))
+	set_font_toy(name);
+    else
+	set_font_fc(name);
+#else
+    set_font_toy(name);
+#endif
+}
+
 void Cairo_set_encoding(const char *enc)
 {
     if (encoding)
@@ -161,31 +235,35 @@ void Cairo_text_rotation(double angle)
     matrix_valid = 0;
 }
 
-void Cairo_font_list(char ***list, int *count)
+static void font_list_toy(char ***list, int *count, int verbose)
 {
-    char **fonts;
-    int num_fonts;
+    char **fonts = *list;
+    int num_fonts = *count;
+    int i;
 
-    num_fonts = 1;
+    fonts = G_realloc(fonts, (num_fonts + num_toy_fonts) * sizeof(char *));
 
-    fonts = G_malloc(num_fonts * sizeof(char *));
-    fonts[0] = G_store("serif");
+    for (i = 0; i < num_toy_fonts; i++) {
+	char buf[256];
+	sprintf(buf, "%s%s",
+		toy_fonts[i],
+		verbose ? "||1||0|utf-8|" : "");
+	fonts[num_fonts++] = G_store(buf);
+    }
 
     *list = fonts;
     *count = num_fonts;
 }
 
+void Cairo_font_list(char ***list, int *count)
+{
+    font_list(list, count, 0);
+    font_list_toy(list, count, 0);
+}
+
 void Cairo_font_info(char ***list, int *count)
 {
-    char **fonts;
-    int num_fonts;
-
-    num_fonts = 1;
-
-    fonts = G_malloc(num_fonts * sizeof(char *));
-    fonts[0] = G_store("serif|serif|1||0|utf-8|");
-
-    *list = fonts;
-    *count = num_fonts;
+    font_list(list, count, 1);
+    font_list_toy(list, count, 1);
 }
 

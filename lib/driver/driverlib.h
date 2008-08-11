@@ -10,6 +10,7 @@ extern const struct driver *driver;
 
 /* Font.c */
 int font_is_freetype(void);
+void font_list(char ***, int *, int);
 
 /* Text2.c */
 void drawchar(double, double, double, double, unsigned char);

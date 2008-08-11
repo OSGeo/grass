@@ -11,6 +11,7 @@
 #include <grass/gis.h>
 
 #include "driver.h"
+#include "driverlib.h"
 
 #define DEFAULT_FILE_NAME "map.png"
 
