@@ -1157,7 +1157,7 @@ class cmdPanel(wx.Panel):
                     p['wxGetValue'] = columns.GetStringSelection
                     columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbColumn)
                     columns.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    this_sizer.Add(item=columns, proportion=0,
+                    which_sizer.Add(item=columns, proportion=0,
                                    flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
                 # color entry
                 elif p.get('prompt','') == 'color':
