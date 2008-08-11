@@ -171,14 +171,10 @@ int main(int argc, char **argv)
     fcolor_opt->guisection = _("Colors");
     fcolor_opt->gisprompt = GISPROMPT_COLOR;
 
-    rgbcol_opt = G_define_option();
+    rgbcol_opt = G_define_standard_option(G_OPT_COLUMN);
     rgbcol_opt->key = "rgb_column";
-    rgbcol_opt->type = TYPE_STRING;
-    rgbcol_opt->required = NO;
-    rgbcol_opt->multiple = NO;
     rgbcol_opt->guisection = _("Colors");
-    rgbcol_opt->description =
-	_("Name of color definition column (for use with -a flag)");
+    rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
     rgbcol_opt->answer = "GRASSRGB";
 
     zcol_opt = G_define_option();
