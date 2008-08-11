@@ -2739,7 +2739,6 @@ class DisplayAttributesDialog(wx.Dialog):
                           {'vector' : self.map, 'msg' : label},
                           caption=_("Message"), style=wx.OK | wx.ICON_EXCLAMATION | wx.CENTRE)
             self.mapDBInfo = None
-            return
 
         wx.Dialog.__init__(self, parent=self.parent, id=wx.ID_ANY,
                            title="", style=style, pos=pos)
