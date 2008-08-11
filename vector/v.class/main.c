@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
     algo_opt->descriptions = _("int;simple intervals;"
 			       "std;standard deviations;"
 			       "qua;quantiles;"
-			       "equ;equiprobable (normal distribution);"
-			       "dis;discontinuities");
+			       "equ;equiprobable (normal distribution);");
+/*			       "dis;discontinuities"); currently disabled because of bugs*/
 
     nbclass_opt = G_define_option();
     nbclass_opt->key = "nbclasses";

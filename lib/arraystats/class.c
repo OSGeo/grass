@@ -17,7 +17,8 @@ double class_apply_algorithm(char *algo, double *data, int nrec, int *nbreaks,
     else if (G_strcasecmp(algo, "equ") == 0)
 	finfo = class_equiprob(data, nrec, nbreaks, classbreaks);
     else if (G_strcasecmp(algo, "dis") == 0)
-	finfo = class_discont(data, nrec, *nbreaks, classbreaks);
+	    /*	finfo = class_discont(data, nrec, *nbreaks, classbreaks); disabled because of bugs */
+        G_fatal_error(_("Discont algorithm currently not available because of bugs"));
     else
 	G_fatal_error(_("%s: Unknown algorithm"), algo);
 
@@ -239,7 +240,7 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
     return (1);
 }
 
-
+/* FixMe: there seems to a problem with array overflow, probably due to the fact that the code was ported from fortran which has 1-based arrays*/
 double class_discont(double *data, int count, int nbreaks,
 		     double *classbreaks)
 {

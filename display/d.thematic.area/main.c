@@ -107,8 +107,8 @@ int main(int argc, char **argv)
     algo_opt->descriptions = _("int;simple intervals;"
 			       "std;standard deviations;"
 			       "qua;quantiles;"
-			       "equ;equiprobable (normal distribution);"
-			       "dis;discontinuities");
+			       "equ;equiprobable (normal distribution);");
+/*currently disabled because of bugs       "dis;discontinuities");*/
 
     nbclass_opt = G_define_option();
     nbclass_opt->key = "nbclasses";
@@ -354,6 +354,8 @@ int main(int argc, char **argv)
 		max = cvarr.value[cvarr.n_values - 1].val.d;
 	    }
 
+	    db_CatValArray_sort(&cvarr);
+
 	    nclass = atoi(nbclass_opt->answer);
 	    nbreaks = nclass - 1;	/* we need one less classbreaks (min and 
 					 * max exluded) than classes */
@@ -455,11 +457,13 @@ int main(int argc, char **argv)
 	frequencies[i] = 0.0;
     class_frequencies(data, nrec, nbreaks, breakpoints, frequencies);
 
+    /*Get basic statistics about the data*/
+    basic_stats(data, nrec, &stats);
+
     if (legend_flag->answer) {
 
 	if (algoinfo_flag->answer) {
 
-	    basic_stats(data, nrec, &stats);
 
 	    fprintf(stdout, _("\nTotal number of records: %.0f\n"),
 		    stats.count);
@@ -481,7 +485,7 @@ int main(int argc, char **argv)
 	}
 
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		min, breakpoints[0], frequencies[0], colors[0].r, colors[0].g,
+		stats.min, breakpoints[0], frequencies[0], colors[0].r, colors[0].g,
 		colors[0].b);
 
 	for (i = 1; i < nbreaks; i++) {
@@ -490,7 +494,7 @@ int main(int argc, char **argv)
 		    colors[i].r, colors[i].g, colors[i].b);
 	}
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		breakpoints[nbreaks - 1], max, frequencies[nbreaks],
+		breakpoints[nbreaks - 1], stats.max, frequencies[nbreaks],
 		colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b);
     }
 

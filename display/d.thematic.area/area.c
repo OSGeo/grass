@@ -33,11 +33,6 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
     IPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* We need to sort the CatValArray by cat for the bsearch in 
-     * db_CatValArray_get_value 
-     */
-    db_CatValArray_sort(cvarr);
-
     num = Vect_get_num_areas(Map);
     G_debug(2, "n_areas = %d", num);
 
@@ -150,6 +145,13 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 		    (cvarr->ctype == DB_C_TYPE_INT ? cv->val.i : cv->val.d);
 	    }
 	}
+
+        /* find out into which class breakval falls */
+        i = 0;
+        while (breakval > breaks[i] && i < nbreaks)
+        i++;
+
+
 
 	/* plot polygon in class color */
 	R_RGB_color(colors[i].r, colors[i].g, colors[i].b);
