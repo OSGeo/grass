@@ -171,14 +171,19 @@ int report(void)
 
 int print_stat(void)
 {
-    G_message(_("%d categories read from map"), vstat.rcat);
-    G_message(_("%d records selected from table"), vstat.select);
-    G_message(_("%d categories read from map exist in selection from table"),
-	      vstat.exist);
-    G_message(_("%d categories read from map don't exist in selection from table"),
-	      vstat.notexist);
+    if (vstat.rcat > 0)
+	G_message(_("%d categories read from map"), vstat.rcat);
+    if (vstat.select > 0)
+	G_message(_("%d records selected from table"), vstat.select);
+    if (vstat.exist > 0)
+	G_message(_("%d categories read from map exist in selection from table"),
+		  vstat.exist);
+    if (vstat.notexist > 0)
+	G_message(_("%d categories read from map don't exist in selection from table"),
+		  vstat.notexist);
     G_message(_("%d records updated/inserted"), vstat.update);
-    G_message(_("%d update/insert errors"), vstat.error);
+    if (vstat.error > 0)
+	G_message(_("%d update/insert errors"), vstat.error);
     if (vstat.dupl > 0)
 	G_message(_("%d categories with more points (coordinates not loaded)"),
 		  vstat.dupl);

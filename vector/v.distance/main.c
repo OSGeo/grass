@@ -1095,9 +1095,12 @@ int main(int argc, char *argv[])
 	db_commit_transaction(driver);
 
     /* print stats */
-    G_message(_("%d categories with more than 1 feature in vector map <%s>"),
-	      update_dupl, from_opt->answer);
-    G_message(_("%d categories - no nearest feature found"), update_notfound);
+    if (update_dupl > 0)
+	G_message(_("%d categories with more than 1 feature in vector map <%s>"),
+		  update_dupl, from_opt->answer);
+    if (update_notfound > 0)
+	G_message(_("%d categories - no nearest feature found"),
+		  update_notfound);
 
     if (!print_flag->answer) {
 	db_close_database_shutdown_driver(driver);
@@ -1107,17 +1110,23 @@ int main(int argc, char *argv[])
 	if (all && table_opt->answer) {
 	    G_message(_("%d distances calculated"), count);
 	    G_message(_("%d records inserted"), update_ok);
-	    G_message(_("%d insert errors"), update_err);
+	    if (update_err > 0)
+		G_message(_("%d insert errors"), update_err);
 	}
 	else if (!all) {
-	    G_message(_("%d categories read from the map"), nfcats);
-	    G_message(_("%d categories exist in the table"), ncatexist);
-	    G_message(_("%d categories read from the map exist in the table"),
-		      update_exist);
-	    G_message(_("%d categories read from the map don't exist in the table"),
-		      update_notexist);
+	    if (nfcats > 0)
+		G_message(_("%d categories read from the map"), nfcats);
+	    if (ncatexist > 0)
+		G_message(_("%d categories exist in the table"), ncatexist);
+	    if (update_exist > 0)
+		G_message(_("%d categories read from the map exist in the table"),
+			  update_exist);
+	    if (update_notexist > 0)
+		G_message(_("%d categories read from the map don't exist in the table"),
+			  update_notexist);
 	    G_message(_("%d records updated"), update_ok);
-	    G_message(_("%d update errors"), update_err);
+	    if (update_err > 0)
+		G_message(_("%d update errors"), update_err);
 
 	    G_free(catexist);
 	}
