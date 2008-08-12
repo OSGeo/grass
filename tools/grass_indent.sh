@@ -11,7 +11,7 @@ else
       -npsl -nsc -nsob -saf -sai -saw -sbi0 -ss -ts8 -ut "$@"
 
  # fix broken gettext macros:
- ls "$@" | xargs grep -l '(_$' | \
-       while read file ; do sed -i -e '/(_$/{;N;s/\n[ \t]*//;}' $file ; done
+ grep -l '\<_$' "$@" | \
+     while read file ; do sed -i -e '/[( \t]_$/{;N;s/\n[ \t]*//;}' $file ; done
 
 fi
