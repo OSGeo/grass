@@ -16,9 +16,6 @@ default: python_grass7.so
 clean:
 	-rm -f *.o *.so python_grass7_wrap.c python_grass7.pyc python_grass7.py
 
-distclean: clean
-	-rm -f Makefile
-
 python_grass7_wrap.c: python_grass7.i
 	$(MAKE) -C interfaces
 	$(SWIG) -python -shadow $<
