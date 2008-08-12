@@ -101,6 +101,7 @@ public:
 
     /* volume */
     int AddIsosurface(int, int);
+    int DeleteIsosurface(int, int);
     int SetIsosurfaceColor(int, int, bool, const char *);
 };
 

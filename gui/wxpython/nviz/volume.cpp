@@ -45,6 +45,33 @@ int Nviz::AddIsosurface(int id, int level)
 				     ATT_TOPO, level);
 }
 
+/**
+   \brief Delete isosurface
+
+   \param id volume id
+   \param isosurf_id isosurface id
+
+   \return 1 on success
+   \return -1 volume not found
+   \return -2 isosurface not found
+   \return -3 on failure
+*/
+
+int Nviz::DeleteIsosurface(int id, int isosurf_id)
+{
+    int ret;
+    
+    if (!GVL_vol_exists(id))
+	return -1;
+
+    if (isosurf_id > GVL_isosurf_num_isosurfs(id))
+	return -2;
+    
+    ret = GVL_isosurf_del(id, isosurf_id);
+
+    return ret < 0 ? -3 : 1;
+}
+
 /*!
   \brief Set surface color
 
