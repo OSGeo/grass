@@ -1813,7 +1813,7 @@ class Data:
                                  "v.db.addtable"),
 
                                 (_("Remove table"),
-                                 _("Sets user/password for driver/database."),
+                                 _("Drops an attribute table."),
                                  "self.OnMenuCmd",
                                  "db.droptable"),
                                 ("","","", ""),
