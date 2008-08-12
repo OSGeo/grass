@@ -259,34 +259,28 @@ static void init_cairo(void)
     case FTYPE_BMP:
     case FTYPE_PNG:
 	surface =
-	    (cairo_surface_t *) cairo_image_surface_create_for_data(grid,
-								    CAIRO_FORMAT_ARGB32,
-								    width,
-								    height,
-								    stride);
+	    (cairo_surface_t *) cairo_image_surface_create_for_data(
+		grid, CAIRO_FORMAT_ARGB32, width, height, stride);
 	break;
 #if CAIRO_HAS_PDF_SURFACE
     case FTYPE_PDF:
 	surface =
-	    (cairo_surface_t *) cairo_pdf_surface_create(file_name,
-							 (double)width,
-							 (double)height);
+	    (cairo_surface_t *) cairo_pdf_surface_create(
+		file_name, (double) width, (double) height);
 	break;
 #endif
 #if CAIRO_HAS_PS_SURFACE
     case FTYPE_PS:
 	surface =
-	    (cairo_surface_t *) cairo_ps_surface_create(file_name,
-							(double)width,
-							(double)height);
+	    (cairo_surface_t *) cairo_ps_surface_create(
+		file_name, (double) width, (double) height);
 	break;
 #endif
 #if CAIRO_HAS_SVG_SURFACE
     case FTYPE_SVG:
 	surface =
-	    (cairo_surface_t *) cairo_svg_surface_create(file_name,
-							 (double)width,
-							 (double)height);
+	    (cairo_surface_t *) cairo_svg_surface_create(
+		file_name, (double) width, (double) height);
 	break;
 #endif
     default:
