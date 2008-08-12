@@ -157,12 +157,12 @@ static int load_files(void)
     void *voidc;
     int rtype;
     register int i, rowoff, row, col, vxoff, vyoff, offset;
-    int cnt, ret, fd, size, tsiz, coff;
+    int cnt, fd, size, tsiz, coff;
     int vnum;
     int y_rows, y_cols;
     char *pr, *pg, *pb;
     unsigned char *tr, *tg, *tb, *tset;
-    char *mpfilename, *mapset, name[BUFSIZ];
+    char *mpfilename, *name;
     char cmd[1000], *yfiles[MAXIMAGES];
     struct Colors colors;
 
@@ -208,36 +208,24 @@ static int load_files(void)
 		vyoff = vnum > 1 ? vrows + 2 * BORDER_W : BORDER_W;
 	    }
 
-	    strcpy(name, vfiles[vnum][cnt]);
+	    name = vfiles[vnum][cnt];
 	    if (!quiet)
 		G_message("\r%s <%s>", _("Reading file"), name);
 
-	    mapset = G_find_cell2(name, "");
-	    if (mapset == NULL)
+	    fd = G_open_cell_old(name, "");
+	    if (fd < 0)
 		G_fatal_error(_("Raster map <%s> not found"), name);
 
-	    fd = G_open_cell_old(name, mapset);
-	    if (fd < 0)
-		exit(EXIT_FAILURE);
-
-	    ret = G_read_colors(name, mapset, &colors);
-	    if (ret < 0)
-		exit(EXIT_FAILURE);
+	    if (G_read_colors(name, "", &colors) < 0)
+		G_fatal_error(_("Unable to read color table for <%s>"), name);
 
 	    rtype = G_get_raster_map_type(fd);
-	    if (rtype == CELL_TYPE)
-		voidc = G_allocate_c_raster_buf();
-	    else if (rtype == FCELL_TYPE)
-		voidc = G_allocate_f_raster_buf();
-	    else if (rtype == DCELL_TYPE)
-		voidc = G_allocate_d_raster_buf();
-	    else
-		exit(EXIT_FAILURE);
+	    voidc = G_allocate_raster_buf(rtype);
 
 	    for (row = 0; row < vrows; row++) {
 		if (G_get_raster_row(fd, voidc,
 				     (int)(row / vscale), rtype) < 0)
-		    exit(EXIT_FAILURE);
+		    G_fatal_error(_("Error reading row <%d>"), row);
 
 		rowoff = (vyoff + row) * ncols;
 		G_lookup_raster_colors(voidc, tr, tg, tb,
@@ -321,7 +309,7 @@ static int use_r_out(void)
 static char **gee_wildfiles(char *wildarg, char *element, int *num)
 {
     int n, cnt = 0;
-    char path[1000], *mapset, cmd[1000], buf[512];
+    char path[GPATH_MAX], *mapset, cmd[GPATH_MAX], buf[512];
     char *p, *tfile;
     static char *newfiles[MAXIMAGES];
     FILE *tf;

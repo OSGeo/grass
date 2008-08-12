@@ -1,5 +1,5 @@
 /* check.c */
-int check_stats(const char *, const char *);
+int check_stats(const char *);
 
 /* histo.c */
-int do_histogram(const char *, const char *);
+int do_histogram(const char *);
