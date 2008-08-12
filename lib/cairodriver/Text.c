@@ -222,19 +222,6 @@ void Cairo_set_encoding(const char *enc)
     encoding = G_store(enc);
 }
 
-void Cairo_text_size(double width, double height)
-{
-    text_size_x = width;
-    text_size_y = height;
-    matrix_valid = 0;
-}
-
-void Cairo_text_rotation(double angle)
-{
-    text_rotation = angle;
-    matrix_valid = 0;
-}
-
 static void font_list_toy(char ***list, int *count, int verbose)
 {
     char **fonts = *list;
