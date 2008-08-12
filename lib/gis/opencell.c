@@ -158,9 +158,17 @@ int G__open_cell_old(const char *name, const char *mapset)
     int MAP_NBYTES;
     RASTER_MAP_TYPE MAP_TYPE;
     struct Reclass reclass;
+    const char *xmapset;
 
     /* make sure window is set    */
     G__init_window();
+
+    xmapset = G_find_cell2(name, mapset);
+    if (!xmapset) {
+	G_warning(_("Unable to find <%s@%s>"), name, mapset);
+	return -1;
+    }
+    mapset = xmapset;
 
     /* Check for reclassification */
     reclass_flag = G_get_reclass(name, mapset, &reclass);
@@ -943,15 +951,17 @@ int G_set_fp_type(RASTER_MAP_TYPE map_type)
 int G_raster_map_is_fp(const char *name, const char *mapset)
 {
     char path[GPATH_MAX];
+    const char *xmapset;
 
-    if (G_find_cell2(name, mapset) == NULL) {
-	G_warning(_("Unable to find <%s@%s>"), name, mapset);
+    xmapset = G_find_cell2(name, mapset);
+    if (!xmapset) {
+	G_warning(_("Unable to find '%s' in '%s'"), name, mapset);
 	return -1;
     }
-    G__file_name(path, "fcell", name, mapset);
+    G__file_name(path, "fcell", name, xmapset);
     if (access(path, 0) == 0)
 	return 1;
-    G__file_name(path, "g3dcell", name, mapset);
+    G__file_name(path, "g3dcell", name, xmapset);
     if (access(path, 0) == 0)
 	return 1;
     
@@ -964,8 +974,6 @@ int G_raster_map_is_fp(const char *name, const char *mapset)
   Determines if the raster map is floating point or integer. Returns
   DCELL_TYPE for double maps, FCELL_TYPE for float maps, CELL_TYPE for 
   integer maps, -1 if error has occured
-  
-  This function just calls G_raster_map_type()!
 
   \param name map name 
   \param mapset mapset where map <i>name</i> lives
@@ -974,38 +982,23 @@ int G_raster_map_is_fp(const char *name, const char *mapset)
 */
 RASTER_MAP_TYPE G_raster_map_type(const char *name, const char *mapset)
 {
-    return G_raster_map_type2(name, mapset);
-}
-
-/*!
-  \brief Determine raster type (look but don't touch)
-
-  See G_raster_map_type().
-
-  \param name map name
-  \param mapset mapset where map <i>name</i> lives
-  
-  \return raster data type
-*/
-RASTER_MAP_TYPE G_raster_map_type2(const char *name, const char *mapset)
-{
     char path[GPATH_MAX];
+    const char *xmapset;
 
-    if (G_find_cell2(name, mapset) == NULL) {
-	if (mapset) {
+    xmapset = G_find_cell2(name, mapset);
+    if (!xmapset) {
+	if (mapset && *mapset)
 	    G_warning(_("Raster map <%s> not found in mapset <%s>"), name, mapset);
-	}
-	else {
+	else
 	    G_warning(_("Raster map <%s> not found"), name);
-	}
 	return -1;
     }
-    G__file_name(path, "fcell", name, mapset);
+    G__file_name(path, "fcell", name, xmapset);
 
     if (access(path, 0) == 0)
-	return G__check_fp_type(name, mapset);
+	return G__check_fp_type(name, xmapset);
 
-    G__file_name(path, "g3dcell", name, mapset);
+    G__file_name(path, "g3dcell", name, xmapset);
 
     if (access(path, 0) == 0)
 	return DCELL_TYPE;
@@ -1046,8 +1039,14 @@ RASTER_MAP_TYPE G__check_fp_type(const char *name, const char *mapset)
     int in_stat;
     char *str, *str1;
     RASTER_MAP_TYPE map_type;
+    const char *xmapset;
 
-    G__file_name_misc(path, "cell_misc", FORMAT_FILE, name, mapset);
+    xmapset = G_find_cell2(name, mapset);
+    if (!xmapset) {
+	G_warning(_("Unable to find '%s' in '%s'"), name, mapset);
+	return -1;
+    }
+    G__file_name_misc(path, "cell_misc", FORMAT_FILE, name, xmapset);
 
     if (access(path, 0) != 0) {
 	G_warning(_("Unable to find '%s'"), path);

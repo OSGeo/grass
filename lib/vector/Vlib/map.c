@@ -166,6 +166,7 @@ Vect_copy(const char *in, const char *mapset, const char *out, FILE * msgout)
 	GV_TOPO_ELEMENT, GV_SIDX_ELEMENT, GV_CIDX_ELEMENT,
 	NULL
     };
+    const char *xmapset;
 
     dbDriver *driver;
 
@@ -174,13 +175,20 @@ Vect_copy(const char *in, const char *mapset, const char *out, FILE * msgout)
     if (Vect_legal_filename(out) < 0)
 	G_fatal_error(_("Vector map name is not SQL compliant"));
 
+    xmapset = G_find_vector2(in, mapset);
+    if (!xmapset) {
+	G_warning(_("Unable to find vector map <%s> in <%s>"), in, mapset);
+	return -1;
+    }
+    mapset = xmapset;
+
     /* Delete old vector if it exists */
     if (G_find_vector2(out, G_mapset())) {
 	G_warning(_("Vector map <%s> already exists and will be overwritten"),
 		  out);
 	ret = Vect_delete(out);
 	if (ret != 0) {
-	    G_warning(_("Unable to delete vector map <%s>"), in);
+	    G_warning(_("Unable to delete vector map <%s>"), out);
 	    return -1;
 	}
     }
