@@ -519,7 +519,7 @@ static Boolean do_run(XtPointer p)
 static char **gee_wildfiles(char *wildarg, char *element, int *num)
 {
     int n, cnt = 0;
-    char path[1000], *mapset, cmd[1000], buf[512];
+    char path[GPATH_MAX], *mapset, cmd[GPATH_MAX], buf[512];
     char *p, *tfile;
     static char *newfiles[MAXIMAGES];
     FILE *tf;
