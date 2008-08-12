@@ -7,7 +7,7 @@ char *find(int n, char *name, char *mapsets)
 
     mapset = G_find_file(list[n].element[0], name, mapsets);
     if (mapset) {
-	char temp[100];
+	char temp[GNAME_MAX];
 
 	sscanf(name, "%s", temp);
 	strcpy(name, temp);
