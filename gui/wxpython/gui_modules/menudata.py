@@ -1815,7 +1815,7 @@ class Data:
                                 (_("Remove table"),
                                  _("Sets user/password for driver/database."),
                                  "self.OnMenuCmd",
-                                 "db.login"),
+                                 "db.droptable"),
                                 ("","","", ""),
 
                                 (_("Add columns"),
