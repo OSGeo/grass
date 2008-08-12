@@ -68,7 +68,7 @@ struct params
     int nch;
     /* params.nch's */
     double *d, *Ad_r;
-} params;
+};
 
 /* Input file */
 struct input
