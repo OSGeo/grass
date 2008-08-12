@@ -3,7 +3,9 @@
 # wxpython by Martin Landa
 
 MODULE_TOPDIR = ..
-include $(MODULE_TOPDIR)/include/Make/Module.make
+include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 default:
 	@if [ "$(HAVE_NLS)" != "" ] ; then echo "Creating translations (= 'make mo')" ; $(MAKE) mo ; else echo "NLS disabled, cannot translate (re-configure GRASS first)." ; fi
