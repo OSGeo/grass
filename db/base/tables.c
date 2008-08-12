@@ -76,11 +76,11 @@ static void parse_command_line(int argc, char **argv)
     driver = G_define_standard_option(G_OPT_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
-	driver->answer = drv;
+	driver->answer = (char *) drv;
 
     database = G_define_standard_option(G_OPT_DATABASE);
     if ((db = db_get_default_database_name()))
-	database->answer = db;
+	database->answer = (char *) db;
 
     p = G_define_flag();
     p->key = 'p';
@@ -92,7 +92,7 @@ static void parse_command_line(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("database, SQL");
+    module->keywords = _("database, attribute table");
     module->description = _("Lists all tables for a given database.");
 
     if (G_parser(argc, argv))

@@ -32,6 +32,7 @@
 #% key_desc : name
 #% description: Table from which to drop attribute column
 #% required : yes
+#% gisprompt: old,dbtable,dbtable
 #%end
 
 #%option
@@ -39,6 +40,7 @@
 #% type: string
 #% description: Name of the column
 #% required : yes
+#% gisprompt: old,dbcolumn,dbcolumn
 #%end
 
 

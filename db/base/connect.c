@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("database, SQL");
+    module->keywords = _("database, attribute table");
     module->description =
 	_("Prints/sets general DB connection for current mapset and exits.");
 
@@ -58,17 +58,17 @@ int main(int argc, char *argv[])
 
     driver = G_define_standard_option(G_OPT_DRIVER);
     driver->options = db_list_drivers();
-    driver->answer = db_get_default_driver_name();
+    driver->answer = (char *) db_get_default_driver_name();
 
     database = G_define_standard_option(G_OPT_DATABASE);
-    database->answer = db_get_default_database_name();
+    database->answer = (char *) db_get_default_database_name();
 
     schema = G_define_option();
     schema->key = "schema";
     schema->type = TYPE_STRING;
     schema->required = NO;
     schema->multiple = NO;
-    schema->answer = db_get_default_schema_name();
+    schema->answer = (char *) db_get_default_schema_name();
     schema->label = _("Database schema");
     schema->description = _("Do not use this option if schemas "
 			    "are not supported by driver/database server");
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     group->type = TYPE_STRING;
     group->required = NO;
     group->multiple = NO;
-    group->answer = db_get_default_group_name();
+    group->answer = (char*) db_get_default_group_name();
     group->description = _("Default group of database users to which "
 			   "select privilege is granted");
 
