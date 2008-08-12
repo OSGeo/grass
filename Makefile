@@ -53,15 +53,10 @@ DIRS = \
 	vector \
 	visualization \
 	man \
-	macosx
+	macosx \
+	locale
 
 SUBDIRS = $(DIRS)
-
-ifneq ($(strip $(HAVE_NLS)),)
-	LOCALE=1
-else
-	LOCALE=0
-endif
 
 FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT
 
@@ -89,7 +84,6 @@ default: builddemolocation
 	for subdir in $$list; do \
 		$(MAKE) -C $$subdir; \
 	done
-	if [ ${LOCALE} -eq 1 ] ; then $(MAKE) -C locale; fi
 	-cp -f $(FILES) ${ARCH_DISTDIR}/
 	-cp -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp
 	@(cd tools ; sh -c "./build_html_index.sh")
@@ -265,7 +259,7 @@ endif
 	-cd ${GISBASE} ; tar cBf - fonts | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - man | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	-cd ${GISBASE} ; tar cBf - scripts | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
-	if [ ${LOCALE} -eq 1 ] ; then cd ${GISBASE} ; tar cBf - locale | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null ; fi
+	-cd ${GISBASE} ; tar cBf - locale | (cd ${INST_DIR} ; tar xBf - ) 2>/dev/null
 	@ # The man, include, and lib could go to ${PREFIX}/ BUT if this is
 	@ # done, then the corresponding uninstall instructions must delete
 	@ # the grass files BY FILENAME NOT DIRECTORY!! Otherwise there is a
