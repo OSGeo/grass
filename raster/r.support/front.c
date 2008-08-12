@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     struct Flag *stats_flag, *null_flag, *del_flag;
     int cellhd_ok;		/* Is cell header OK? */
     int is_reclass;		/* Is raster reclass? */
-    char *infile, *cmapset;
+    char *infile;
     char title[MAX_TITLE_LEN + 1], datasrc[RECORD_LEN + 1];
     struct History hist;
 
@@ -143,12 +143,11 @@ int main(int argc, char *argv[])
     /* Make sure raster exists and set mapset */
     infile = raster->answer;
     mapset = G_find_cell2(infile, G_mapset());	/* current mapset only for editing */
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found in current mapset"),
-		      infile);
+    if (!mapset || strcmp(mapset, G_mapset()) != 0)
+	G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 
-    cellhd_ok = (G_get_cellhd(raster->answer, mapset, &cellhd) >= 0);
-    is_reclass = (G_is_reclass(raster->answer, mapset, rname, rmapset) > 0);
+    cellhd_ok = (G_get_cellhd(raster->answer, "", &cellhd) >= 0);
+    is_reclass = (G_is_reclass(raster->answer, "", rname, rmapset) > 0);
 
     if (title_opt->answer) {
 	strncpy(title, title_opt->answer, MAX_TITLE_LEN);
@@ -165,7 +164,7 @@ int main(int argc, char *argv[])
 	if (!fp)
 	    G_fatal_error(_("Unable to open output file <%s>"), save_opt->answer);
 
-	G_read_history(raster->answer, mapset, &hist);
+	G_read_history(raster->answer, "", &hist);
 
 	for (i = 0; i < hist.edlinecnt; i++)
 	    fprintf(fp, "%s\n", hist.edhist[i]);
@@ -180,7 +179,7 @@ int main(int argc, char *argv[])
 	if (!fp)
 	    G_fatal_error(_("Unable to open input file <%s>"), load_opt->answer);
 
-	G_read_history(raster->answer, mapset, &hist);
+	G_read_history(raster->answer, "", &hist);
 
 	for (i = 0; ; i++) {
 	    if (i >= MAXEDLINES) {
@@ -199,7 +198,7 @@ int main(int argc, char *argv[])
     }
 
     if (history_opt->answer) {
-	G_read_history(raster->answer, mapset, &hist);
+	G_read_history(raster->answer, "", &hist);
 
 	if (hist.edlinecnt >= MAXEDLINES)
 	    G_fatal_error(_("Not enough room in history file"));
@@ -246,7 +245,7 @@ int main(int argc, char *argv[])
 	G_write_raster_vdatum(raster->answer, vdatum_opt->answer);
 
     if (datasrc1_opt->answer || datasrc2_opt->answer || datadesc_opt->answer) {
-	G_read_history(raster->answer, mapset, &hist);
+	G_read_history(raster->answer, "", &hist);
 
 	if (datasrc1_opt->answer) {
 	    strncpy(datasrc, datasrc1_opt->answer, RECORD_LEN);
@@ -281,16 +280,12 @@ int main(int argc, char *argv[])
 	int fd;
 	struct Categories cats;
 
-	cmapset = G_find_cell2(map_opt->answer, "");
-	if (cmapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), map_opt->answer);
-
-	if ((fd = G_open_cell_old(infile, mapset)) < 0)
+	if ((fd = G_open_cell_old(infile, "")) < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), infile);
 	G_init_cats((CELL) 0, "", &cats);
-	if (0 > G_read_cats(map_opt->answer, cmapset, &cats))
-	    G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-			  map_opt->answer, cmapset);
+	if (G_read_cats(map_opt->answer, "", &cats) < 0)
+	    G_fatal_error(_("Unable to read category file of raster map <%s>"),
+			  map_opt->answer);
 
 	if (G_write_cats(infile, &cats) >= 0)
 	    G_message(_("cats table for [%s] set to %s"), infile,
@@ -308,7 +303,7 @@ int main(int argc, char *argv[])
 
     /* Check the histogram and range */
     if (stats_flag->answer)
-	check_stats(raster->answer, mapset);
+	check_stats(raster->answer);
 
     /* null file */
     if (null_flag->answer) {
@@ -354,7 +349,7 @@ int main(int argc, char *argv[])
 	G_message(_("Removing null file for [%s]...\n"), raster->answer);
 
 	null_fd = G_open_new_misc("cell_misc", "null", raster->answer);
-	G__file_name_misc(path, "cell_misc", "null", raster->answer, mapset);
+	G__file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
 	unlink(path);
 	close(null_fd);
 

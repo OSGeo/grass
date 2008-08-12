@@ -1,13 +1,14 @@
 #include <stdlib.h>
 #include <grass/gis.h>
-
+#include <grass/glocale.h>
+#include "local_proto.h"
 
 /* 
  * do_histogram() - Creates histogram for CELL
  *
  * RETURN: EXIT_SUCCESS / EXIT_FAILURE
  */
-int do_histogram(const char *name, const char *mapset)
+int do_histogram(const char *name)
 {
     CELL *cell;
     struct Cell_head cellhd;
@@ -16,12 +17,12 @@ int do_histogram(const char *name, const char *mapset)
     int row;
     int fd;
 
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
-	return EXIT_FAILURE;
+    if (G_get_cellhd(name, "", &cellhd) < 0)
+	G_fatal_error(_("Unable to read header for <%s>"), name);
 
     G_set_window(&cellhd);
-    if ((fd = G_open_cell_old(name, mapset)) < 0)
-	return EXIT_FAILURE;
+    if ((fd = G_open_cell_old(name, "")) < 0)
+	G_fatal_error(_("Unable to open <%s>"), name);
 
     nrows = G_window_rows();
     ncols = G_window_cols();
