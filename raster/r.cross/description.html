@@ -2,7 +2,7 @@
 
 <em>r.cross</em> creates an <em>output</em> raster map layer representing
 all unique combinations of category values in the raster input layers
-(input=</b><em>name,name,name</em>, ...).  At least two, but not more than
+(<b>input=</b><em>name,name,name</em>, ...).  At least two, but not more than
 ten, <em>input</em> map layers must be specified.  The user must also
 specify a name to be assigned to the <em>output</em> raster map layer
 created by <em>r.cross</em>.
@@ -39,7 +39,7 @@ layers.
 For example, suppose that, using two raster map layers, 
 the following combinations occur: 
 
-<pre>
+<div class="code"><pre>
           map1   map2
           ___________
            0      1
@@ -47,12 +47,12 @@ the following combinations occur:
            1      1
            1      2
            2      4
-</pre>
+</pre></div>
 
 
 <em>r.cross</em> would produce a new raster map layer with 5 categories: 
 
-<pre>
+<div class="code"><pre>
           map1   map2   output
           ____________________
            0      1       1
@@ -60,7 +60,7 @@ the following combinations occur:
            1      1       3
            1      2       4
            2      4       5
-</pre>
+</pre></div>
 
 Note: The actual category value assigned to a particular combination 
 in the <em>result</em> map layer is 
@@ -76,7 +76,7 @@ combinations of input map layer category values which generated
 each category. 
 In the above example, the category labels would be: 
 
-<pre>
+<div class="code"><pre>
           category   category
           value      label
           ______________________________
@@ -85,7 +85,7 @@ In the above example, the category labels would be:
              3       layer1(1) layer2(1)
              4       layer1(1) layer2(2)
              5       layer1(2) layer2(4)
-</pre>
+</pre></div>
 
 A random color table is also generated for the <em>output</em> map layer. 
 
@@ -105,4 +105,5 @@ be overwritten by the new <em>r.cross</em> output.
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

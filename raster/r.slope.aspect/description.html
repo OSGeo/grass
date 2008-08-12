@@ -30,12 +30,13 @@ Profile and tangential curvatures are the curvatures in the direction of
 steepest slope and in the direction of the contour tangent respectively. The
 curvatures are expressed as 1/metres, e.g. a curvature of 0.05 corresponds to a
 radius of curvature of 20m.
+
 <p>
 <table width="100%" border="0">
  <tr valign="baseline">
   <td>
   <div align="center">
-    <img src="dem.png" border="1"></a>
+    <img src="dem.png" border="1">
     <P>
     Example DEM
     <BR><BR>
@@ -48,7 +49,7 @@ radius of curvature of 20m.
  <tr valign="baseline">
   <td>
   <div align="center">
-    <img src="slope.png" border="1"></a>
+    <img src="slope.png" border="1">
     <P>
     Slope (degree) from example DEM
     <BR><BR>
@@ -56,7 +57,7 @@ radius of curvature of 20m.
   </td>
   <td>
   <div align="center">
-    <img src="aspect.png" border="1"></a>
+    <img src="aspect.png" border="1">
     <P>
     Aspect (degree) from example DEM
     <BR><BR>
@@ -67,7 +68,7 @@ radius of curvature of 20m.
  <tr valign="baseline">
   <td>
   <div align="center">
-    <img src="tcurv.png" border="1"></a>
+    <img src="tcurv.png" border="1">
     <P>
     Tangential curvature (m<sup>-1</sup>) from example DEM
     <BR><BR>
@@ -75,7 +76,7 @@ radius of curvature of 20m.
   </td>
   <td>
   <div align="center">
-    <img src="pcurv.png" border="1"></a>
+    <img src="pcurv.png" border="1">
     <P>
     Profile curvature (m<sup>-1</sup>) from example DEM
     <BR><BR>
@@ -91,30 +92,30 @@ For some applications, the user will wish to use a reclassified raster map
 of slope that groups slope values into ranges of slope. This can be done using
 <i><a href="r.reclass.html">r.reclass</a></i>. An example of a useful
 reclassification is given below:
-<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; category&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; range&nbsp;&nbsp; category labels
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in degrees)&nbsp;&nbsp;&nbsp; (in percent)
+<div class="code"><pre>          category      range   category labels
+                     (in degrees)    (in percent)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0-&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0-&nbsp; 2%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2-&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3-&nbsp; 5%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4-&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6- 10%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6-&nbsp; 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11- 15%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9- 11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16- 20%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12- 14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21- 25%
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15- 90&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 26% and higher
+             1         0-  1             0-  2%
+             2         2-  3             3-  5%
+             3         4-  5             6- 10%
+             4         6-  8            11- 15%
+             5         9- 11            16- 20%
+             6        12- 14            21- 25%
+             7        15- 90            26% and higher
 
-&nbsp;&nbsp;&nbsp;&nbsp; The following color table works well with the above
-&nbsp;&nbsp;&nbsp;&nbsp; reclassification.
+     The following color table works well with the above
+     reclassification.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; category&nbsp;&nbsp; red&nbsp;&nbsp; green&nbsp;&nbsp; blue
+          category   red   green   blue
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp;&nbsp; 179
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 102&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 153&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128&nbsp;&nbsp;&nbsp; 153&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 204&nbsp;&nbsp;&nbsp; 179&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 128&nbsp;&nbsp;&nbsp;&nbsp; 51&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 51
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 255&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</pre>
+             0       179    179     179
+             1         0    102       0
+             2         0    153       0
+             3       128    153       0
+             4       204    179       0
+             5       128     51      51
+             6       255      0       0
+             7         0      0       0</pre></div>
 
 <h2>NOTES</h2>
 
@@ -126,22 +127,27 @@ and west) are shifted, if necessary, to line up along edges of the nearest
 cells in the elevation map. If the user really wants the elevation map
 resampled to the current region resolution, the -a flag should be specified.
 
-<p>The current mask is ignored.
+<p>
+The current mask is ignored.
 
-<p>The algorithm used to determine slope and aspect uses a 3x3 neighborhood
+<p>
+The algorithm used to determine slope and aspect uses a 3x3 neighborhood
 around each cell in the elevation file. Thus, it is not possible to determine
 slope and aspect for the cells adjacent to the edges in the elevation map
 layer. These cells are assigned a "zero slope" value (category 0) in both
 the slope and aspect raster map layers.
 
-<p>Horn's formula is used to find the derivatives in x and y directions.
+<p>
+Horn's formula is used to find the derivatives in x and y directions.
 
-<p>Only when using integer elevation models, the aspect is biased in 0,
+<p>
+Only when using integer elevation models, the aspect is biased in 0,
 45, 90, 180, 225, 270, 315, and 360 directions; i.e., the distribution
 of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
 
-<p>Because most cells with a very small slope end up having category 0,
+<p>
+Because most cells with a very small slope end up having category 0,
 45, ..., 360, it is sometimes possible to reduce the bias in these directions
 by filtering out the aspect in areas where the terrain is almost flat. A new
 option <i>min_slp_allowed</i> was added to specify the minimum slope for which
@@ -150,6 +156,7 @@ aspect is computed. The aspect for all cells with slope &lt;
 
 
 <h2>REFERENCE</h2>
+
 Horn, B. K. P. (1981). Hill Shading and the Reflectance Map, Proceedings
 of the IEEE, 69(1):14-47.
 
@@ -160,7 +167,8 @@ of the IEEE, 69(1):14-47.
 <em><a href="r.rescale.html">r.rescale</a></em>
 
 <h2>AUTHORS</h2>
-Michael Shapiro, U.S.Army Construction Engineering Research Laboratory
-<p>Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
+Michael Shapiro, U.S.Army Construction Engineering Research Laboratory<BR>
+Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
