@@ -232,7 +232,7 @@ probably in clean_parallel() in lib/vector/Vlib/buffer.c.
 
 v.pack/v.unpack
 ---------------
-Write it. New modules to pack/unpack a vector to/from signle file
+Write it. New modules to pack/unpack a vector to/from single file
 (probably tar). I am not sure about format. Originaly I was thinking
 about ASCII+DBF as it can be read also without GRASS but ASCII and DBF
 can lose precision and DBF has other limitations. It whould be
