@@ -48,6 +48,9 @@
 #define ST_GYRO       9
 #define ST_HISTOGRAM  10
 
+#define MAX_ISOSURFS   12
+#define MAX_SLICES     12
+
 /* extracted from include/nviz.h */
 /* quick draw mode */
 #define DRAW_QUICK_SURFACE 0x01

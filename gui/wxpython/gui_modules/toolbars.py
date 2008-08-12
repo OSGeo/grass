@@ -502,7 +502,7 @@ class VDigitToolbar(AbstractToolbar):
         id = self.parent.toolbars['map'].pointer
         self.parent.toolbars['map'].toolbar.ToggleTool(id, True)
         self.parent.toolbars['map'].mapdisplay.OnPointer(event)
-
+        
         if event:
             # deselect previously selected tool
             if self.action.has_key('id'):
@@ -754,9 +754,9 @@ class VDigitToolbar(AbstractToolbar):
         # will be called before PopupMenu returns.
         self.parent.MapWindow.PopupMenu(toolMenu)
         toolMenu.Destroy()
-
-        id = self.parent.toolbars['vdigit'].additionalTools
-        self.parent.toolbars['vdigit'].toolbar[0].ToggleTool(id, True)
+        
+        if self.action['desc'] == 'addPoint':
+            self.toolbar[0].ToggleTool(self.additionalTools, True)
         
     def OnCopy(self, event):
         """Copy selected features from (background) vector map"""

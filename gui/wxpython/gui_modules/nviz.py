@@ -1865,18 +1865,25 @@ class NvizToolWindow(wx.Frame):
         
         # buttons (add, delete, move up, move down)
         btnAdd = wx.Button(parent=panel, id=wx.ID_ADD)
+        self.win['volume']['btnIsoSurfAdd'] = btnAdd.GetId()
         btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfAdd)
         gridSizer.Add(item=btnAdd,
                       pos=(0, 1))
         btnDelete = wx.Button(parent=panel, id=wx.ID_DELETE)
+        self.win['volume']['btnIsosurfDelete'] = btnDelete.GetId()
+        btnDelete.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfDelete)
         btnDelete.Enable(False)
         gridSizer.Add(item=btnDelete,
                       pos=(1, 1))
         btnMoveUp = wx.Button(parent=panel, id=wx.ID_UP)
+        self.win['volume']['btnIsosurfMoveUp'] = btnMoveUp.GetId()
+        btnMoveUp.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfMoveUp)
         btnMoveUp.Enable(False)
         gridSizer.Add(item=btnMoveUp,
                       pos=(2, 1))
         btnMoveDown = wx.Button(parent=panel, id=wx.ID_DOWN)
+        self.win['volume']['btnIsosurfMoveDown'] = btnMoveDown.GetId()
+        btnMoveDown.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfMoveDown)
         btnMoveDown.Enable(False)
         gridSizer.Add(item=btnMoveDown,
                       pos=(3, 1))
@@ -3024,8 +3031,42 @@ class NvizToolWindow(wx.Frame):
         self.mapWindow.nvizClass.AddIsosurface(id, level)
         self.mapWindow.nvizClass.SetIsosurfaceColor(id, 0, True, str(layer.name))
 
+        # disable add button on max
+        if list.GetCount() >= wxnviz.MAX_ISOSURFS:
+            self.FindWindowById(event.GetId()).Enable(False)
+        
+        # enable delete & move buttons
+        btnDelete = self.FindWindowById(self.win['volume']['btnIsosurfDelete'])
+        if not btnDelete.IsEnabled():
+            btnDelete.Enable(True)
+        if list.GetCount() > 1:
+            btnMoveUp = self.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
+            btnMoveDown = self.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
+            if not btnMoveUp.IsEnabled():
+                btnMoveUp.Enable(True)
+                btnMoveDown.Enable(True)
+        
         event.Skip()
         
+    def OnVolumeIsosurfDelete(self, event):
+        """Remove isosurface from list"""
+        list = self.FindWindowById(self.win['volume']['isosurfs'])
+        btn = self.FindWindowById(event.GetId())
+        
+        if list.GetCount() < 1:
+            btn.Enable(False)
+        elif list.GetCount() < 2:
+            self.FindWindowById(self.win['volume']['btnIsosurfMoveUp']).Enable(False)
+            self.FindWindowById(self.win['volume']['btnIsosurfMoveDown']).Enable(False)
+        
+    def OnVolumeIsosurfMoveUp(self, event):
+        """Move isosurface up in the list"""
+        pass
+
+    def OnVolumeIsosurfMoveDown(self, event):
+        """Move isosurface dowm in the list"""
+        pass
+
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
         self.pageChanging = True
