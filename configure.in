@@ -1692,7 +1692,7 @@ AC_SUBST(STRIPFLAG)
 GRASS_HOME=${DSTDIR}
 AC_SUBST(GRASS_HOME)
 
-AC_OUTPUT(include/Make/Grass.make include/Make/Platform.make include/version.h include/winname.h swig/perl/Makefile.PL swig/perl2/make.pl swig/python/Makefile grass.pc)
+AC_OUTPUT(include/Make/Platform.make include/version.h swig/perl/Makefile.PL swig/perl2/make.pl grass.pc)
 
 LOC_MSG([Copying config.status to config.status.${ARCH}])
 cp -f config.status config.status.${ARCH}
