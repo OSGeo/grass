@@ -176,8 +176,7 @@ int main(int argc, char **argv)
     opt.at->type = TYPE_DOUBLE;
     opt.at->required = NO;
     opt.at->description =
-	_
-	("Screen position at which text will begin to be drawn (percentage, [0,0] is lower left)");
+	_("Screen position at which text will begin to be drawn (percentage, [0,0] is lower left)");
 
     opt.align = G_define_option();
     opt.align->key = "align";

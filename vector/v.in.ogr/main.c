@@ -575,12 +575,10 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    sprintf(error_msg + strlen(error_msg),
-		    _
-		    ("\nYou can use the -o flag to %s to override this projection check.\n"),
+		    _("\nYou can use the -o flag to %s to override this projection check.\n"),
 		    G_program_name());
 	    strcat(error_msg,
-		   _
-		   ("Consider generating a new location with 'location' parameter"
+		   _("Consider generating a new location with 'location' parameter"
 		    " from input data set.\n"));
 	    G_fatal_error(error_msg);
 	}

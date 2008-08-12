@@ -114,8 +114,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, database, attribute table");
     module->description =
-	_
-	("Finds the nearest element in vector map 'to' for elements in vector map 'from'.");
+	_("Finds the nearest element in vector map 'to' for elements in vector map 'from'.");
 
     from_opt = G_define_standard_option(G_OPT_V_INPUT);
     from_opt->key = "from";
@@ -191,8 +190,7 @@ int main(int argc, char *argv[])
     column_opt->required = YES;
     column_opt->multiple = YES;
     column_opt->description =
-	_
-	("Column name(s) where values specified by 'upload' option will be uploaded");
+	_("Column name(s) where values specified by 'upload' option will be uploaded");
     column_opt->guisection = _("From_map");
 
     to_column_opt = G_define_standard_option(G_OPT_COLUMN);
@@ -203,16 +201,14 @@ int main(int argc, char *argv[])
 
     table_opt = G_define_standard_option(G_OPT_TABLE);
     table_opt->description =
-	_
-	("Name of table created for output when the distance to all flag is used");
+	_("Name of table created for output when the distance to all flag is used");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->label =
 	_("Print output to stdout, don't update attribute table");
     print_flag->description =
-	_
-	("First column is always category of 'from' feature called from_cat");
+	_("First column is always category of 'from' feature called from_cat");
 
     all_flag = G_define_flag();
     all_flag->key = 'a';

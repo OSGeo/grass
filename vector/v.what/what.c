@@ -133,8 +133,7 @@ int what(double east, double north, double maxdist, int width,
 		fprintf(stdout, "Looking for features within: %f \n",
 			maxdist);
 		fprintf(stdout,
-			_
-			("Line: %d  \nType: %s  \nLeft: %d  \nRight: %d  \n"),
+			_("Line: %d  \nType: %s  \nLeft: %d  \nRight: %d  \n"),
 			line, buf, left, right);
 		if (type & GV_LINES) {
 		    nnodes = 2;
@@ -154,8 +153,7 @@ int what(double east, double north, double maxdist, int width,
 
 		    Vect_get_node_coor(&(Map[i]), node[n], &nx, &ny, &nz);
 		    fprintf(stdout,
-			    _
-			    ("Node[%d]: %d  \nNumber of lines: %d  \nCoordinates: %.6f, %.6f, %.6f\n"),
+			    _("Node[%d]: %d  \nNumber of lines: %d  \nCoordinates: %.6f, %.6f, %.6f\n"),
 			    n, node[n], nnlines, nx, ny, nz);
 
 		    for (nli = 0; nli < nnlines; nli++) {
@@ -197,8 +195,7 @@ int what(double east, double north, double maxdist, int width,
 		    }
 		    else {
 			fprintf(stdout,
-				_
-				("Line height min: %f \nLine height max: %f\n"),
+				_("Line height min: %f \nLine height max: %f\n"),
 				min, max);
 		    }
 		}
@@ -270,8 +267,7 @@ int what(double east, double north, double maxdist, int width,
 		    int format = F_TXT, edit_mode = F_VIEW;
 
 		    fprintf(stdout,
-			    _
-			    ("\nDriver: %s\nDatabase: %s\nTable: %s\nKey column: %s\n"),
+			    _("\nDriver: %s\nDatabase: %s\nTable: %s\nKey column: %s\n"),
 			    Fi->driver, Fi->database, Fi->table, Fi->key);
 		    F_generate(Fi->driver, Fi->database, Fi->table, Fi->key,
 			       Cats->cat[j], NULL, NULL, edit_mode, format,

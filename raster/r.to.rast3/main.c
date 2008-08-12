@@ -278,8 +278,7 @@ int main(int argc, char *argv[])
 
 	if (maptype_tmp != globalRastMapType) {
 	    fatal_error(map, fd, opencells,
-			_
-			("Input maps have to be from the same type. CELL, FCELL or DCELL!"));
+			_("Input maps have to be from the same type. CELL, FCELL or DCELL!"));
 	}
     }
 

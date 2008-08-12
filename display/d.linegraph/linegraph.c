@@ -112,8 +112,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("display");
     module->description =
-	_
-	("Generates and displays simple line graphs in the active graphics monitor display frame.");
+	_("Generates and displays simple line graphs in the active graphics monitor display frame.");
 
     x_opt = G_define_option();
     x_opt->key = "x_file";

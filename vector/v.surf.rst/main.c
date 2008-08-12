@@ -203,8 +203,7 @@ int main(int argc, char *argv[])
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD);
     parm.field->description =
-	_
-	("Field value. If set to 0, z coordinates are used. (3D vector only)");
+	_("Field value. If set to 0, z coordinates are used. (3D vector only)");
     parm.field->answer = "1";
 
     parm.zcol = G_define_option();
@@ -212,8 +211,7 @@ int main(int argc, char *argv[])
     parm.zcol->type = TYPE_STRING;
     parm.zcol->required = NO;
     parm.zcol->description =
-	_
-	("Name of the attribute column with values to be used for approximation (if layer>0)");
+	_("Name of the attribute column with values to be used for approximation (if layer>0)");
 
     parm.wheresql = G_define_standard_option(G_OPT_WHERE);
 
@@ -294,8 +292,7 @@ int main(int argc, char *argv[])
     parm.npmin->answer = MINPOINTS;
     parm.npmin->required = NO;
     parm.npmin->description =
-	_
-	("Minimum number of points for approximation in a segment (>segmax)");
+	_("Minimum number of points for approximation in a segment (>segmax)");
     parm.npmin->guisection = _("Settings");
 
     parm.dmin = G_define_option();
@@ -304,8 +301,7 @@ int main(int argc, char *argv[])
     parm.dmin->required = NO;
     parm.dmin->answer = dminchar;
     parm.dmin->description =
-	_
-	("Minimum distance between points (to remove almost identical points)");
+	_("Minimum distance between points (to remove almost identical points)");
     parm.dmin->guisection = _("Settings");
 
     parm.dmax = G_define_option();
@@ -314,8 +310,7 @@ int main(int argc, char *argv[])
     parm.dmax->required = NO;
     parm.dmax->answer = dmaxchar;
     parm.dmax->description =
-	_
-	("Maximum distance between points on isoline (to insert additional points)");
+	_("Maximum distance between points on isoline (to insert additional points)");
     parm.dmax->guisection = _("Settings");
 
     parm.zmult = G_define_option();

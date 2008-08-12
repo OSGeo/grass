@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     parm.from->type = TYPE_INTEGER;
     parm.from->required = NO;
     parm.from->description =
-	_
-	("The input data range to be rescaled (default: full range of input map)");
+	_("The input data range to be rescaled (default: full range of input map)");
 
     parm.output = G_define_option();
     parm.output->key = "output";

@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector");
     module->description =
-	_
-	("Outputs basic information about a user-specified vector map layer.");
+	_("Outputs basic information about a user-specified vector map layer.");
 
     /* get G_OPT_ from include/gis.h */
     in_opt = G_define_standard_option(G_OPT_V_MAP);
@@ -78,8 +77,7 @@ int main(int argc, char *argv[])
     columns = G_define_flag();
     columns->key = 'c';
     columns->description =
-	_
-	("Print types/names of table columns for specified layer instead of info");
+	_("Print types/names of table columns for specified layer instead of info");
 
     gflag = G_define_flag();
     gflag->key = 'g';
@@ -254,26 +252,22 @@ int main(int argc, char *argv[])
 	    if (Vect_level(&Map) > 1) {
 		printline("");
 		sprintf(line,
-			_
-			("  Number of points:       %-9ld       Number of areas:      %-9ld"),
+			_("  Number of points:       %-9ld       Number of areas:      %-9ld"),
 			(long)Vect_get_num_primitives(&Map, GV_POINT),
 			(long)Vect_get_num_areas(&Map));
 		printline(line);
 		sprintf(line,
-			_
-			("  Number of lines:        %-9ld       Number of islands:    %-9ld"),
+			_("  Number of lines:        %-9ld       Number of islands:    %-9ld"),
 			(long)Vect_get_num_primitives(&Map, GV_LINE),
 			(long)Vect_get_num_islands(&Map));
 		printline(line);
 		sprintf(line,
-			_
-			("  Number of boundaries:   %-9ld       Number of faces:      %-9ld"),
+			_("  Number of boundaries:   %-9ld       Number of faces:      %-9ld"),
 			(long)Vect_get_num_primitives(&Map, GV_BOUNDARY),
 			(long)Vect_get_num_primitives(&Map, GV_FACE));
 		printline(line);
 		sprintf(line,
-			_
-			("  Number of centroids:    %-9ld       Number of kernels:    %-9ld"),
+			_("  Number of centroids:    %-9ld       Number of kernels:    %-9ld"),
 			(long)Vect_get_num_primitives(&Map, GV_CENTROID),
 			(long)Vect_get_num_primitives(&Map, GV_KERNEL));
 		printline(line);

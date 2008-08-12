@@ -96,8 +96,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("vector, networking");
     module->label =
-	_
-	("Creates a cycle connecting given nodes (Traveling salesman problem).");
+	_("Creates a cycle connecting given nodes (Traveling salesman problem).");
     module->description =
 	_("Note that TSP is NP-hard, heuristic algorithm is used by "
 	  "this module and created cycle may be sub optimal");

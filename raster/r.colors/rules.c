@@ -39,8 +39,7 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
 
     if (isatty(fileno(fp))) {
 	fprintf(stderr,
-		_
-		("Enter rules, \"end\" when done, \"help\" if you need it.\n"));
+		_("Enter rules, \"end\" when done, \"help\" if you need it.\n"));
 
 	if (is_fp) {
 	    char minstr[64], maxstr[64];

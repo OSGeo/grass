@@ -287,8 +287,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("vector, geometry");
     module->description =
-	_
-	("Uses a GRASS vector points map to produce a convex hull vector map.");
+	_("Uses a GRASS vector points map to produce a convex hull vector map.");
 
     input = G_define_standard_option(G_OPT_V_INPUT);
     input->description = _("Name of input vector points map");

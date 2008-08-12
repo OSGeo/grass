@@ -55,8 +55,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->answer = "cg";
 	Opt->options = "gauss,lu,cholesky,jacobi,sor,cg,bicgstab,pcg";
 	Opt->description =
-	    _
-	    ("The type of solver which should solve the symmetric linear equation system");
+	    _("The type of solver which should solve the symmetric linear equation system");
 	break;
 	/*solver for unsymmetric linear equation systems */
     case N_OPT_SOLVER_UNSYMM:
@@ -67,8 +66,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->answer = "bicgstab";
 	Opt->options = "gauss,lu,jacobi,sor,bicgstab";
 	Opt->description =
-	    _
-	    ("The type of solver which should solve the linear equation system");
+	    _("The type of solver which should solve the linear equation system");
 	break;
     case N_OPT_MAX_ITERATIONS:
 	Opt->key = "maxit";
@@ -76,8 +74,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->answer = "100000";
 	Opt->description =
-	    _
-	    ("Maximum number of iteration used to solver the linear equation system");
+	    _("Maximum number of iteration used to solver the linear equation system");
 	break;
     case N_OPT_ITERATION_ERROR:
 	Opt->key = "error";
@@ -85,8 +82,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->answer = "0.0000000001";
 	Opt->description =
-	    _
-	    ("Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)");
+	    _("Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)");
 	break;
     case N_OPT_SOR_VALUE:
 	Opt->key = "relax";
@@ -94,8 +90,7 @@ struct Option *N_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->answer = "1";
 	Opt->description =
-	    _
-	    ("The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing");
+	    _("The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing");
 	break;
     case N_OPT_CALC_TIME:
 	Opt->key = "dt";

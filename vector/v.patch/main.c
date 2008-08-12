@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
     bbox->required = NO;
     bbox->key = "bbox";
     bbox->description =
-	_
-	("Name for output vector map where bounding boxes of input vector maps are written to");
+	_("Name for output vector map where bounding boxes of input vector maps are written to");
 
     append = G_define_flag();
     append->key = 'a';

@@ -108,8 +108,7 @@ int main(int argc, char **argv)
     timestampflag = G_define_flag();
     timestampflag->key = 'p';
     timestampflag->description =
-	_
-	("Print raster map timestamp (day.month.year hour:minute:seconds) only");
+	_("Print raster map timestamp (day.month.year hour:minute:seconds) only");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

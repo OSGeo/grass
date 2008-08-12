@@ -65,8 +65,7 @@ int main(int argc, char *argv[])
     gisdbase_opt->required = NO;
     gisdbase_opt->multiple = NO;
     gisdbase_opt->description =
-	_
-	("New GISDBASE (full path to the directory where the new location is)");
+	_("New GISDBASE (full path to the directory where the new location is)");
 
     f_add = G_define_flag();
     f_add->key = 'c';

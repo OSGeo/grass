@@ -422,8 +422,7 @@ static void parse_command(int argc, char *argv[],
     conv = G_define_flag();
     conv->key = 'c';
     conv->description =
-	_
-	("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
+	_("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

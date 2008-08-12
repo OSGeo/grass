@@ -81,8 +81,7 @@ int main(int argc, char **argv)
     opt1->answer = DEFAULT_BG_COLOR;
     opt1->required = NO;
     opt1->description =
-	_
-	("Background color, either a standard GRASS color, R:G:B triplet, or \"none\"");
+	_("Background color, either a standard GRASS color, R:G:B triplet, or \"none\"");
     opt1->gisprompt = GISPROMPT_COLOR;
 
     opt2 = G_define_option();
@@ -102,8 +101,7 @@ int main(int argc, char **argv)
     opt3->options = "0-100";
     opt3->required = NO;
     opt3->description =
-	_
-	("The screen coordinates for top-left corner of label ([0,0] is top-left of frame)");
+	_("The screen coordinates for top-left corner of label ([0,0] is top-left of frame)");
 
     if (G_parser(argc, argv) < 0)
 	exit(EXIT_FAILURE);

@@ -76,8 +76,7 @@ int main(int argc, char *argv[])
 
     col_opt = G_define_standard_option(G_OPT_COLUMN);
     col_opt->label =
-	_
-	("The name of the column whose values are to be used as new categories");
+	_("The name of the column whose values are to be used as new categories");
     col_opt->description = _("The column must be type integer or string");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);

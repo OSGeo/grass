@@ -113,8 +113,7 @@ int main(int argc, char *argv[])
     parm.zcol->required = NO;
     parm.zcol->multiple = NO;
     parm.zcol->label =
-	_
-	("Column name and type (i.e. INTEGER, DOUBLE PRECISION) for z values");
+	_("Column name and type (i.e. INTEGER, DOUBLE PRECISION) for z values");
     parm.zcol->description =
 	_("Writes Z data to column instead of 3D vector");
 

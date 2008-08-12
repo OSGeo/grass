@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
     module->description =
-	_
-	("Creates a display file from an existing grid3 file according to specified threshold levels.");
+	_("Creates a display file from an existing grid3 file according to specified threshold levels.");
 
     name = G_define_option();
     name->key = "input";

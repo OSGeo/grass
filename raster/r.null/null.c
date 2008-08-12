@@ -79,8 +79,7 @@ int main(int argc, char *argv[])
     flags.n = G_define_flag();
     flags.n->key = 'n';
     flags.n->description =
-	_
-	("Only do the work if the map doesn't have a NULL-value bitmap file");
+	_("Only do the work if the map doesn't have a NULL-value bitmap file");
 
     flags.c = G_define_flag();
     flags.c->key = 'c';

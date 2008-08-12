@@ -39,8 +39,7 @@ int zoomwindow(struct Cell_head *window, int quiet, double magnify)
     if (!quiet) {
 	fprintf(stderr, _("This region now saved as current region.\n\n"));
 	fprintf(stderr,
-		_
-		("Note: run 'd.erase' for the new region to affect the graphics.\n"));
+		_("Note: run 'd.erase' for the new region to affect the graphics.\n"));
     }
 #endif
     return (0);

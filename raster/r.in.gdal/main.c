@@ -78,8 +78,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster, import");
     module->description =
-	_
-	("Import GDAL supported raster file into a binary raster map layer.");
+	_("Import GDAL supported raster file into a binary raster map layer.");
 
     /* -------------------------------------------------------------------- */
     /*      Setup and fetch parameters.                                     */
@@ -396,12 +395,10 @@ int main(int argc, char *argv[])
 				cellhd.proj, cellhd.zone);
 		}
 		strcat(error_msg,
-		       _
-		       ("\nYou can use the -o flag to r.in.gdal to override this check and "
+		       _("\nYou can use the -o flag to r.in.gdal to override this check and "
 			"use the location definition for the dataset.\n"));
 		strcat(error_msg,
-		       _
-		       ("Consider generating a new location from the input dataset using "
+		       _("Consider generating a new location from the input dataset using "
 			"the 'location' parameter.\n"));
 		G_fatal_error(error_msg);
 	    }
@@ -522,8 +519,7 @@ int main(int argc, char *argv[])
 	    if (GDALGetGCPProjection(hDS) != NULL
 		&& strlen(GDALGetGCPProjection(hDS)) > 0) {
 		G_message("%s:\n%s",
-			  _
-			  ("GCPs have the following OpenGIS WKT Coordinate System:"),
+			  _("GCPs have the following OpenGIS WKT Coordinate System:"),
 			  GDALGetGCPProjection(hDS));
 	    }
 

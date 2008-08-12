@@ -72,8 +72,7 @@ int main(int argc, char **argv)
     module->label = _("Split net by cost isolines");
     module->keywords = _("vector, networking");
     module->description =
-	_
-	("Splits net to bands between cost isolines (direction from centre). "
+	_("Splits net to bands between cost isolines (direction from centre). "
 	 "Centre node must be opened (costs >= 0). "
 	 "Costs of centre node are used in calculation.");
 

@@ -87,8 +87,7 @@ static void setParams()
     param.nv->multiple = NO;
     param.nv->answer = "none";
     param.nv->description =
-	_
-	("String representing NULL value data cell (use 'none' if no such value)");
+	_("String representing NULL value data cell (use 'none' if no such value)");
 }
 
 /*---------------------------------------------------------------------------*/
@@ -240,8 +239,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, voxel, import");
     module->description =
-	_
-	("Convert a 3D ASCII raster text file into a (binary) 3D raster map layer");
+	_("Convert a 3D ASCII raster text file into a (binary) 3D raster map layer");
 
     setParams();
     G3d_setStandard3dInputParams();

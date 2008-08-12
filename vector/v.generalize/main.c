@@ -76,8 +76,7 @@ int main(int argc, char *argv[])
     /* initialize module */
     module = G_define_module();
     module->keywords =
-	_
-	("vector, generalization, simplification, smoothing, displacement, network generalization");
+	_("vector, generalization, simplification, smoothing, displacement, network generalization");
     module->description = _("Vector based generalization.");
 
     /* Define the different options as defined in gis.h */
@@ -135,8 +134,7 @@ int main(int argc, char *argv[])
     reduction_opt->answer = "50";
     reduction_opt->options = "0-100";
     reduction_opt->description =
-	_
-	("Percentage of the points in the output of 'douglas_reduction' algorithm");
+	_("Percentage of the points in the output of 'douglas_reduction' algorithm");
 
     slide_opt = G_define_option();
     slide_opt->key = "slide";

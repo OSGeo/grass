@@ -94,8 +94,7 @@ int main(int argc, char *argv[])
     coord = G_define_flag();
     coord->key = 'g';
     coord->description =
-	_
-	("Output easting and northing in first two columns of four column output");
+	_("Output easting and northing in first two columns of four column output");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

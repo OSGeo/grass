@@ -44,8 +44,7 @@ void set_params()
     param.point = G_define_flag();
     param.point->key = 'p';
     param.point->description =
-	_
-	("Create VTK pointdata instead of VTK celldata (celldata is default)");
+	_("Create VTK pointdata instead of VTK celldata (celldata is default)");
 
     param.top = G_define_option();
     param.top->key = "top";
@@ -69,8 +68,7 @@ void set_params()
     param.structgrid->key = 's';
     param.structgrid->guisection = "Surface options";
     param.structgrid->description =
-	_
-	("Create 3d elevation output with a top and a bottom surface, both raster maps are required.");
+	_("Create 3d elevation output with a top and a bottom surface, both raster maps are required.");
 
 
     param.rgbmaps = G_define_option();
@@ -81,8 +79,7 @@ void set_params()
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
     param.rgbmaps->description =
-	_
-	("Three (r,g,b) 3d raster maps to create rgb values [redmap,greenmap,bluemap]");
+	_("Three (r,g,b) 3d raster maps to create rgb values [redmap,greenmap,bluemap]");
 
     param.vectormaps = G_define_option();
     param.vectormaps->key = "vectormaps";
@@ -92,8 +89,7 @@ void set_params()
     param.vectormaps->multiple = YES;
     param.vectormaps->guisection = "Advanced options";
     param.vectormaps->description =
-	_
-	("Three (x,y,z) 3d raster maps to create vector values [xmap,ymap,zmap]");
+	_("Three (x,y,z) 3d raster maps to create vector values [xmap,ymap,zmap]");
 
 
     param.elevscale = G_define_option();

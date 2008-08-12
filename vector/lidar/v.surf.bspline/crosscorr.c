@@ -304,12 +304,10 @@ int cross_correlation(struct Map_info *Map, double passWE, double passNS)
 
 	/* Writing some output */
 	fprintf(stdout,
-		_
-		("CrossCorrelation: Different number of splines and lambda_i values have "
+		_("CrossCorrelation: Different number of splines and lambda_i values have "
 		 "been taken for the cross correlation\n"));
 	fprintf(stdout,
-		_
-		("CrossCorrelation: The minimum value for the test (rms=%lf) was obtained with:\n"),
+		_("CrossCorrelation: The minimum value for the test (rms=%lf) was obtained with:\n"),
 		rms_min);
 	fprintf(stdout, _("CrossCorrelation: lambda_i = %.3f\n"),
 		lambda[lbd_min]);

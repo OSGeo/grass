@@ -623,8 +623,7 @@ int main(int argc, char **argv)
     if (level >= 2 && (window.north < box.S || window.south > box.N ||
 		       window.east < box.W ||
 		       window.west > G_adjust_easting(box.E, &window))) {
-	G_message(_
-		  ("The bounding box of the map is outside the current region, "
+	G_message(_("The bounding box of the map is outside the current region, "
 		   "nothing drawn."));
 	stat = 0;
     }
@@ -663,8 +662,7 @@ int main(int argc, char **argv)
 
 	if (display & DISP_SHAPE) {
 	    if (id_flag->answer && level < 2) {
-		G_warning(_
-			  ("Cannot display lines by id, topology not available"));
+		G_warning(_("Cannot display lines by id, topology not available"));
 	    }
 	    else {
 		stat = plot1(&Map, type, area, Clist,

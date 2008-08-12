@@ -80,8 +80,7 @@ int main(int argc, char *argv[])
     layer_opt->required = NO;
     layer_opt->multiple = NO;
     layer_opt->description =
-	_
-	("OGR layer name. If not given, available layers are printed only. Examples:\n"
+	_("OGR layer name. If not given, available layers are printed only. Examples:\n"
 	 "\t\tESRI Shapefile: shapefile name\n"
 	 "\t\tMapInfo File: mapinfo file name");
 

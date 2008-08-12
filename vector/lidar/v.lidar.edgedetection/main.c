@@ -339,8 +339,7 @@ int main(int argc, char *argv[])
 
 		if (flag_auxiliar == FALSE) {
 		    G_debug(1,
-			    _
-			    ("Creating auxiliar table for archiving overlaping zones"));
+			    _("Creating auxiliar table for archiving overlaping zones"));
 		    if ((flag_auxiliar =
 			 Create_AuxEdge_Table(driver)) == FALSE)
 			G_fatal_error(_("It was impossible to create <%s>."),

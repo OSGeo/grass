@@ -34,8 +34,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     module->description =
-	_
-	("Calculates coefficient of variation of patch area on a raster map");
+	_("Calculates coefficient of variation of patch area on a raster map");
     module->keywords = _("raster, landscape structure analysis, patch index");
 
     /* define options */

@@ -102,8 +102,7 @@ int main(int argc, char *argv[])
 
     if (tty) {
 	fprintf(stdout,
-		_
-		("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
+		_("Enter rule(s), \"end\" when done, \"help\" if you need it\n"));
 	if (fp)
 	    fprintf(stdout, _("fp: Data range is %.25f to %.25f\n"),
 		    (double)min, (double)max);

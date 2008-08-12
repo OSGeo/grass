@@ -222,8 +222,7 @@ int what(int once, int txt, int terse, int width, int mwidth,
 
 			Vect_get_node_coor(&(Map[i]), node[n], &nx, &ny, &nz);
 			fprintf(stdout,
-				_
-				("  Node[%d]: %d  Number of lines: %d  Coordinates: %.6f, %.6f, %.6f\n"),
+				_("  Node[%d]: %d  Number of lines: %d  Coordinates: %.6f, %.6f, %.6f\n"),
 				n, node[n], nnlines, nx, ny, nz);
 
 			for (nli = 0; nli < nnlines; nli++) {
@@ -356,13 +355,11 @@ int what(int once, int txt, int terse, int width, int mwidth,
 			    ((sq_meters * 10.763649) / 43560.) / 640.);
 		    if (notty) {
 			fprintf(stderr,
-				_
-				("Size - Sq Meters: %.3f\t\tHectares: %.3f\n"),
+				_("Size - Sq Meters: %.3f\t\tHectares: %.3f\n"),
 				sq_meters, (sq_meters / 10000.));
 
 			fprintf(stderr,
-				_
-				("           Acres: %.3f\t\tSq Miles: %.4f\n"),
+				_("           Acres: %.3f\t\tSq Miles: %.4f\n"),
 				((sq_meters * 10.763649) / 43560.),
 				((sq_meters * 10.763649) / 43560.) / 640.);
 		    }
@@ -411,8 +408,7 @@ int what(int once, int txt, int terse, int width, int mwidth,
 
 			if (txt) {
 			    fprintf(stdout,
-				    _
-				    ("driver: %s\ndatabase: %s\ntable: %s\nkey column: %s\n"),
+				    _("driver: %s\ndatabase: %s\ntable: %s\nkey column: %s\n"),
 				    Fi->driver, Fi->database, Fi->table,
 				    Fi->key);
 			}

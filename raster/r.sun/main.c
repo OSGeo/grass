@@ -175,8 +175,7 @@ int main(int argc, char *argv[])
     module->keywords = _("raster");
     module->label = _("Solar irradiance and irradiation model.");
     module->description =
-	_
-	("Computes direct (beam), diffuse and reflected solar irradiation raster "
+	_("Computes direct (beam), diffuse and reflected solar irradiation raster "
 	 "maps for given day, latitude, surface and atmospheric conditions. Solar "
 	 "parameters (e.g. sunrise, sunset times, declination, extraterrestrial "
 	 "irradiance, daylight length) are saved in the map history file. "
@@ -215,8 +214,7 @@ int main(int argc, char *argv[])
     parm.aspin->required = YES;
     parm.aspin->gisprompt = "old,cell,raster";
     parm.aspin->description =
-	_
-	("Name of the input aspect map (terrain aspect or azimuth of the solar panel) [decimal degrees]");
+	_("Name of the input aspect map (terrain aspect or azimuth of the solar panel) [decimal degrees]");
     parm.aspin->guisection = _("Input_options");
 
 
@@ -226,8 +224,7 @@ int main(int argc, char *argv[])
     parm.slopein->required = YES;
     parm.slopein->gisprompt = "old,cell,raster";
     parm.slopein->description =
-	_
-	("Name of the input slope raster map (terrain slope or solar panel inclination) [decimal degrees]");
+	_("Name of the input slope raster map (terrain slope or solar panel inclination) [decimal degrees]");
     parm.slopein->guisection = _("Input_options");
 
     parm.linkein = G_define_option();
@@ -236,8 +233,7 @@ int main(int argc, char *argv[])
     parm.linkein->required = NO;
     parm.linkein->gisprompt = "old,cell,raster";
     parm.linkein->description =
-	_
-	("Name of the Linke atmospheric turbidity coefficient input raster map [-]");
+	_("Name of the Linke atmospheric turbidity coefficient input raster map [-]");
     parm.linkein->guisection = _("Input_options");
 
     if (parm.linkein->answer == NULL) {
@@ -248,8 +244,7 @@ int main(int argc, char *argv[])
 	parm.lin->required = NO;
 	parm.lin->guisection = _("Input_options");
 	parm.lin->description =
-	    _
-	    ("A single value of the Linke atmospheric turbidity coefficient [-]");
+	    _("A single value of the Linke atmospheric turbidity coefficient [-]");
     }
 
     parm.albedo = G_define_option();
@@ -324,8 +319,7 @@ int main(int argc, char *argv[])
     parm.beam_rad->required = NO;
     parm.beam_rad->gisprompt = "new,cell,raster";
     parm.beam_rad->description =
-	_
-	("Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
+	_("Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.beam_rad->guisection = _("Output_options");
 
     parm.insol_time = G_define_option();
@@ -343,8 +337,7 @@ int main(int argc, char *argv[])
     parm.diff_rad->required = NO;
     parm.diff_rad->gisprompt = "new,cell,raster";
     parm.diff_rad->description =
-	_
-	("Output diffuse irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
+	_("Output diffuse irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.diff_rad->guisection = _("Output_options");
 
     parm.refl_rad = G_define_option();
@@ -353,8 +346,7 @@ int main(int argc, char *argv[])
     parm.refl_rad->required = NO;
     parm.refl_rad->gisprompt = "new,cell,raster";
     parm.refl_rad->description =
-	_
-	("Output ground reflected irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
+	_("Output ground reflected irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)");
     parm.refl_rad->guisection = _("Output_options");
 
     parm.day = G_define_option();
@@ -376,8 +368,7 @@ int main(int argc, char *argv[])
     parm.declin->type = TYPE_DOUBLE;
     parm.declin->required = NO;
     parm.declin->description =
-	_
-	("Declination value (overriding the internally computed value) [radians]");
+	_("Declination value (overriding the internally computed value) [radians]");
 
     parm.ltime = G_define_option();
     parm.ltime->key = "time";

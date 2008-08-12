@@ -81,8 +81,7 @@ int main(int argc, char *argv[])
     parm.file->key = "rules";
     parm.file->required = NO;
     parm.file->description =
-	_
-	("File containing category label rules (or \"-\" to read from stdin)");
+	_("File containing category label rules (or \"-\" to read from stdin)");
 
     parm.fmt_str = G_define_option();
     parm.fmt_str->key = "format";

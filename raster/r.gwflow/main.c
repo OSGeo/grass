@@ -222,8 +222,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
+	_("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
 
     /* Get parameters from user */
     set_params();

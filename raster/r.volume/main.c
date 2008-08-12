@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
     opt1->required = YES;
     opt1->gisprompt = "old,cell,raster";
     opt1->description =
-	_
-	("Existing raster map representing data that will be summed within clumps");
+	_("Existing raster map representing data that will be summed within clumps");
 
     opt2 = G_define_option();
     opt2->key = "clump";

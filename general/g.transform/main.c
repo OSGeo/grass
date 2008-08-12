@@ -248,8 +248,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("general, transformation, GCP");
     module->description =
-	_
-	("Computes a coordinate transformation based on the control points.");
+	_("Computes a coordinate transformation based on the control points.");
 
     grp = G_define_standard_option(G_OPT_I_GROUP);
 

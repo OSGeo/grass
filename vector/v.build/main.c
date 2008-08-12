@@ -39,8 +39,7 @@ int main(int argc, char *argv[])
     err_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     err_opt->key = "error";
     err_opt->description =
-	_
-	("Name for vector map where erroneous vector features are written to");
+	_("Name for vector map where erroneous vector features are written to");
     err_opt->required = NO;
 
     opt = G_define_option();

@@ -60,8 +60,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Interactive tool used to setup the sampling and analysis framework "
+	_("Interactive tool used to setup the sampling and analysis framework "
 	 "that will be used by the other r.le programs.");
 
     input = G_define_standard_option(G_OPT_R_MAP);

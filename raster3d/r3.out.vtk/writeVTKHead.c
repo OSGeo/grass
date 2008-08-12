@@ -36,8 +36,7 @@ void write_vtk_structured_point_header(FILE * fp, char *vtkFile,
 				       double scale)
 {
     G_debug(3,
-	    _
-	    ("write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"));
+	    _("write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"));
 
     /*Simple vtk ASCII header */
 
@@ -93,8 +92,7 @@ void write_vtk_structured_grid_header(FILE * fp, char *vtkFile,
 				      G3D_Region region)
 {
     G_debug(3,
-	    _
-	    ("write_vtk_structured_grid_header: Writing VTKStructuredGrid-Header"));
+	    _("write_vtk_structured_grid_header: Writing VTKStructuredGrid-Header"));
     fprintf(fp, "# vtk DataFile Version 3.0\n");
     fprintf(fp, "GRASS 6 Export\n");
     fprintf(fp, "ASCII\n");
@@ -115,8 +113,7 @@ void write_vtk_unstructured_grid_header(FILE * fp, char *vtkFile,
 					G3D_Region region)
 {
     G_debug(3,
-	    _
-	    ("write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"));
+	    _("write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"));
     fprintf(fp, "# vtk DataFile Version 3.0\n");
     fprintf(fp, "GRASS 6 Export\n");
     fprintf(fp, "ASCII\n");

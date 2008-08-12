@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, LIDAR");
     module->description =
-	_
-	("Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering.");
+	_("Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description =

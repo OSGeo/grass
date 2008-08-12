@@ -33,8 +33,7 @@ int main(int argc, char *argv[])
     module->label =
 	_("Prints a message, warning, or fatal error the GRASS way.");
     module->description =
-	_
-	("This module should be used in scripts for messages served to user.");
+	_("This module should be used in scripts for messages served to user.");
 
     warning = G_define_flag();
     warning->key = 'w';

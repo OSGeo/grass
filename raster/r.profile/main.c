@@ -48,8 +48,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Outputs the raster map layer values lying on user-defined line(s).");
+	_("Outputs the raster map layer values lying on user-defined line(s).");
 
     parm.opt1 = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -87,8 +86,7 @@ int main(int argc, char *argv[])
     parm.g = G_define_flag();
     parm.g->key = 'g';
     parm.g->description =
-	_
-	("Output easting and northing in first two columns of four column output");
+	_("Output easting and northing in first two columns of four column output");
 
     parm.c = G_define_flag();
     parm.c->key = 'c';

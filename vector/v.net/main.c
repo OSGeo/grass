@@ -92,8 +92,7 @@ int main(int argc, char **argv)
     thresh_opt->multiple = NO;
     thresh_opt->label = "Threshold";
     thresh_opt->description =
-	_
-	("Required for operation 'connect'. Connect points in given threshold.");
+	_("Required for operation 'connect'. Connect points in given threshold.");
 
     cats_flag = G_define_flag();
     cats_flag->key = 'c';

@@ -76,8 +76,7 @@ int main(int argc, char *argv[])
     module = G_define_module(); {
 	module->keywords = _("vector, interpolation");
 	module->description =
-	    _
-	    ("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
+	    _("Bicubic or bilinear spline interpolation with Tykhonov regularization.");
     }
 
     cross_corr_flag = G_define_flag(); {
@@ -143,8 +142,7 @@ int main(int argc, char *argv[])
 
     dfield_opt = G_define_standard_option(G_OPT_V_FIELD); {
 	dfield_opt->description =
-	    _
-	    ("Field value. If set to 0, z coordinates are used. (3D vector only)");
+	    _("Field value. If set to 0, z coordinates are used. (3D vector only)");
 	dfield_opt->answer = "0";
 	dfield_opt->guisection = _("Settings");
     }
@@ -154,8 +152,7 @@ int main(int argc, char *argv[])
 	col_opt->type = TYPE_STRING;
 	col_opt->required = NO;
 	col_opt->description =
-	    _
-	    ("Attribute table column with values to interpolate (if layer>0)");
+	    _("Attribute table column with values to interpolate (if layer>0)");
 	col_opt->guisection = _("Settings");
     }
 

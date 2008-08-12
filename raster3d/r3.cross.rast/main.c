@@ -269,8 +269,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
     module->description =
-	_
-	("Creates cross section 2D raster map from 3d raster map based on 2D elevation map");
+	_("Creates cross section 2D raster map from 3d raster map based on 2D elevation map");
 
     /* Get parameters from user */
     set_params();

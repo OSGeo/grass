@@ -102,8 +102,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->label =
-	_
-	("Simulates elliptically anisotropic spread on a graphics window and "
+	_("Simulates elliptically anisotropic spread on a graphics window and "
 	 "generates a raster map of the cumulative time of spread, "
 	 "given raster maps containing the rates of spread (ROS), the ROS "
 	 "directions and the spread origins.");
@@ -153,8 +152,7 @@ int main(int argc, char *argv[])
     parm.spotdist->gisprompt = "old,cell,raster";
     parm.spotdist->guisection = _("Input_maps");
     parm.spotdist->description =
-	_
-	("Name of raster map containing max SPOTting DISTance (m) (required w/ -s)");
+	_("Name of raster map containing max SPOTting DISTance (m) (required w/ -s)");
 
     parm.velocity = G_define_option();
     parm.velocity->key = "w_speed";
@@ -162,8 +160,7 @@ int main(int argc, char *argv[])
     parm.velocity->gisprompt = "old,cell,raster";
     parm.velocity->guisection = _("Input_maps");
     parm.velocity->description =
-	_
-	("Name of raster map containing midflame Wind SPEED (ft/min) (required w/ -s)");
+	_("Name of raster map containing midflame Wind SPEED (ft/min) (required w/ -s)");
 
     parm.mois = G_define_option();
     parm.mois->key = "f_mois";
@@ -171,8 +168,7 @@ int main(int argc, char *argv[])
     parm.mois->gisprompt = "old,cell,raster";
     parm.mois->guisection = _("Input_maps");
     parm.mois->description =
-	_
-	("Name of raster map containing fine Fuel MOISture of the cell receiving a spotting firebrand (%) (required w/ -s)");
+	_("Name of raster map containing fine Fuel MOISture of the cell receiving a spotting firebrand (%) (required w/ -s)");
 
     parm.least = G_define_option();
     parm.least->key = "least_size";
@@ -187,8 +183,7 @@ int main(int argc, char *argv[])
     parm.comp_dens->type = TYPE_STRING;
     parm.comp_dens->key_desc = "decimal";
     parm.comp_dens->description =
-	_
-	("Sampling DENSity for additional COMPutin (range: 0.0 - 1.0 (0.5))");
+	_("Sampling DENSity for additional COMPutin (range: 0.0 - 1.0 (0.5))");
 
     parm.init_time = G_define_option();
     parm.init_time->key = "init_time";
@@ -415,8 +410,7 @@ int main(int argc, char *argv[])
     }
     if (G_find_cell2(out_layer, G_mapset())) {
 	sprintf(buf,
-		_
-		("Raster map <%s> already exists in mapset <%s>, select another name"),
+		_("Raster map <%s> already exists in mapset <%s>, select another name"),
 		out_layer, G_mapset());
 	G_fatal_error(buf);
 	exit(EXIT_FAILURE);
@@ -430,8 +424,7 @@ int main(int argc, char *argv[])
 	}
 	if (G_find_cell2(x_out_layer, G_mapset())) {
 	    sprintf(buf,
-		    _
-		    ("Raster map <%s> already exists in mapset <%s>, select another name"),
+		    _("Raster map <%s> already exists in mapset <%s>, select another name"),
 		    x_out_layer, G_mapset());
 	    G_fatal_error(buf);
 	    exit(EXIT_FAILURE);
@@ -446,8 +439,7 @@ int main(int argc, char *argv[])
 	}
 	if (G_find_cell2(y_out_layer, G_mapset())) {
 	    sprintf(buf,
-		    _
-		    ("Raster map <%s> already exists in mapset <%s>, select another name"),
+		    _("Raster map <%s> already exists in mapset <%s>, select another name"),
 		    y_out_layer, G_mapset());
 	    G_fatal_error(buf);
 	    exit(EXIT_FAILURE);

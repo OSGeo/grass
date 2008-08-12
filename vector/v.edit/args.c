@@ -185,8 +185,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->snap->type = TYPE_STRING;
     params->snap->options = "no,node,vertex";
     params->snap->description =
-	_
-	("Snap added or modified features in the given threshold to the nearest existing feature");
+	_("Snap added or modified features in the given threshold to the nearest existing feature");
     params->snap->descriptions =
 	_("no;Not apply snapping;" "node;Snap only to node;"
 	  "vertex;Allow snapping also to vertex");

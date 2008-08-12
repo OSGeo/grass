@@ -157,8 +157,7 @@ int main(int argc, char *argv[])
     bgcmd_opt->multiple = NO;
     bgcmd_opt->answer = "";
     bgcmd_opt->description =
-	_
-	("Display commands to be used for canvas backdrop (separated by ';')");
+	_("Display commands to be used for canvas backdrop (separated by ';')");
 
     new_f = G_define_flag();
     new_f->key = 'n';

@@ -183,8 +183,7 @@ int main(int argc, char *argv[])
     parm.rain->key = "rain";
     parm.rain->required = NO;
     parm.rain->description =
-	_
-	("Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]");
+	_("Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]");
     parm.rain->guisection = _("Input_options");
 
     parm.rainval = G_define_option();
@@ -314,8 +313,7 @@ int main(int argc, char *argv[])
     parm.hmax->answer = HMAX;
     parm.hmax->required = NO;
     parm.hmax->description =
-	_
-	("Threshold water depth [m] (diffusion increases after this water depth is reached)");
+	_("Threshold water depth [m] (diffusion increases after this water depth is reached)");
     parm.hmax->guisection = _("Parameters");
 
     parm.halpha = G_define_option();

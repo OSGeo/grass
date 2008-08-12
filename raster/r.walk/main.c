@@ -295,8 +295,7 @@ int main(int argc, char *argv[])
     opt11->multiple = NO;
     opt11->answer = "1.0";
     opt11->description =
-	_
-	("Lambda coefficients for combining walking energy and friction cost");
+	_("Lambda coefficients for combining walking energy and friction cost");
 
     opt13 = G_define_option();
     opt13->key = "slope_factor";

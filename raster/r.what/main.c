@@ -91,8 +91,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Queries raster map layers on their category values and category labels.");
+	_("Queries raster map layers on their category values and category labels.");
 
     opt1 = G_define_option();
     opt1->key = "input";

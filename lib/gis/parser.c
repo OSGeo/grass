@@ -2379,8 +2379,7 @@ static int check_required(void)
     while (opt != NULL) {
 	if (opt->required && opt->answer == NULL) {
 	    fprintf(stderr,
-		    _
-		    ("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
+		    _("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
 		    opt->key, opt->description);
 	    err++;
 	}
@@ -2475,8 +2474,7 @@ static int check_multiple_opts(void)
 	    /* if not correct multiple of items */
 	    if (n % n_commas) {
 		fprintf(stderr,
-			_
-			("\nERROR: option <%s> must be provided in multiples of %d\n"),
+			_("\nERROR: option <%s> must be provided in multiples of %d\n"),
 			opt->key, n_commas);
 		fprintf(stderr, _("       You provided %d items:\n"), n);
 		fprintf(stderr, "       %s\n", opt->answer);
