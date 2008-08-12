@@ -857,7 +857,6 @@ int G__reallocate_temp_buf(void);
 int G_set_fp_type(RASTER_MAP_TYPE);
 int G_raster_map_is_fp(const char *, const char *);
 RASTER_MAP_TYPE G_raster_map_type(const char *, const char *);
-RASTER_MAP_TYPE G_raster_map_type2(const char *, const char *);
 RASTER_MAP_TYPE G__check_fp_type(const char *, const char *);
 RASTER_MAP_TYPE G_get_raster_map_type(int);
 int G_open_raster_new(const char *, RASTER_MAP_TYPE);
