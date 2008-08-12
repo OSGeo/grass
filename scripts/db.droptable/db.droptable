@@ -15,7 +15,7 @@
 
 
 #%Module
-#%  description: Drops an attribute table
+#%  description: Drops an attribute table.
 #%  keywords: database, attribute table
 #%End
 
@@ -30,6 +30,7 @@
 #% key_desc : name
 #% description: Table to drop
 #% required : yes
+#% gisprompt: old,dbtable,dbtable
 #%end
 
 if  [ -z "$GISBASE" ] ; then

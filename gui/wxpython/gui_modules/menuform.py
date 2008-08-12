@@ -192,16 +192,17 @@ class grassTask:
         if grassModule is not None:
             xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
 
-    def get_param( self, aParam ):
-        """
-        Find and return a param by name.
-        """
+    def get_param(self, aParam, raiseError=True):
+        """Find and return a param by name."""
         for p in self.params:
             lparam = len(aParam)
             if p['name'] == aParam or \
                     p['name'][:lparam] == aParam:
                 return p
-        raise ValueError, _("Parameter not found: %s") % aParam
+        if raiseError:
+            raise ValueError, _("Parameter not found: %s") % aParam
+        else:
+            return None
 
     def set_param(self, aParam, aValue):
         """
@@ -1125,7 +1126,7 @@ class cmdPanel(wx.Panel):
                 which_sizer.Add(item=txt, proportion=0,
                                 flag=wx.ADJUST_MINSIZE | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
                 # element selection tree combobox (maps, icons, regions, etc.)
-                if p.get('prompt','') not in ('color', 'dbcolumn') and \
+                if p.get('prompt','') not in ('color', 'dbcolumn', 'dbtable') and \
                        p.get('element', '') != 'file':
                     if p.get('multiple','no') == 'yes':
                         multiple = True
@@ -1148,17 +1149,24 @@ class cmdPanel(wx.Panel):
                     p['wxId'] = selection.GetChildren()[0].GetId()
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
                 # dbcolumn entry
-                elif p.get('prompt','') == 'dbcolumn':
+                elif p.get('prompt','') in ('dbcolumn', 'dbtable'):
+                    if p.get('age', 'old') == 'old':
+                        style = wx.CB_SIMPLE | wx.CB_READONLY
+                    else:
+                        style = wx.CB_SIMPLE
                     columns = wx.ComboBox(parent=which_panel, id=wx.ID_ANY,
                                           size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                          style=wx.CB_SIMPLE | wx.CB_READONLY,
+                                          style=style,
                                           choices=[])
                     p['wxId'] = columns.GetId()
                     p['wxGetValue'] = columns.GetStringSelection
-                    columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbColumn)
+                    if p.get('prompt', '') == 'dbcolumn':
+                        columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbColumn)
+                    else:
+                        columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbTable)
                     columns.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     which_sizer.Add(item=columns, proportion=0,
-                                   flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
+                                    flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
                 # color entry
                 elif p.get('prompt','') == 'color':
                     # Heuristic way of finding whether transparent is allowed
@@ -1374,28 +1382,40 @@ class cmdPanel(wx.Panel):
     def OnDbColumn(self, event):
         """Get list of table columns"""
         choices = []
-        
-        mapName = utils.GetLayerNameFromCmd(self.task.getCmd(ignoreErrors=True))
-        if mapName !=  _('<required>'):
-            layer = 1
-            for p in self.task.params:
-                if p.get('name', '') == 'layer':
-                    value = p.get('value', '1')
-                    if value:
-                        layer = int(value)
-                    break
-                
-            cmd = ['v.info',
-                   'map=%s' % mapName,
-                   'layer=%d' % layer,
-                   '-c', '--q']
 
+        p = self.task.get_param('table', raiseError=False)
+        if p and p.get('prompt', '') == 'dbtable':
+            cmd = ['db.columns',
+                   'table=%s' % p.get('value')]
             try:
-                for line in gcmd.Command(cmd).ReadStdOutput():
-                    type, name = line.split('|')
-                    choices.append(name.strip())
+                choices = gcmd.Command(cmd).ReadStdOutput()
             except gcmd.CmdError:
-                pass
+                choices = []
+        if not p:
+            p = self.task.get_param('map', raiseError=False)
+            if not p:
+                p = self.task.get_param('input', raiseError=False)
+            if p:
+                mapName = utils.GetLayerNameFromCmd(self.task.getCmd(ignoreErrors=True))
+                if mapName !=  _('<required>'):
+                    layer = 1
+                    p = self.task.get_param('layer')
+                    if p:
+                        value = p.get('value', '1')
+                        if value:
+                            layer = int(value)
+                    
+                    cmd = ['v.info',
+                           'map=%s' % mapName,
+                           'layer=%d' % layer,
+                           '-c', '--q']
+                    
+                    try:
+                        for line in gcmd.Command(cmd).ReadStdOutput():
+                            type, name = line.split('|')
+                            choices.append(name.strip())
+                    except gcmd.CmdError:
+                        choices = []
             
         win = self.FindWindowById(event.GetId())
 
@@ -1406,6 +1426,33 @@ class cmdPanel(wx.Panel):
         
         event.Skip()
         
+    def OnDbTable(self, event):
+        """Get list of tables"""
+        # TODO: add driver/database
+        cmd = ['db.tables',
+               '-p', '--q']
+
+        for p in self.task.params:
+            if p.get('name', '') == 'driver' and \
+               len(p.get('value', '')) > 0:
+                cmd.append('driver=%s' % p.get('value'))
+            elif p.get('name', '') == 'database' and \
+                 len(p.get('value', '')) > 0:
+                cmd.append('database=%s' % p.get('value'))
+        
+        try:
+            choices = gcmd.Command(cmd).ReadStdOutput()
+        except gcmd.CmdError:
+            choices = []
+            
+        win = self.FindWindowById(event.GetId())
+        win.SetItems(choices)
+
+        if len(choices) < 1:
+            win.SetValue('')
+        
+        event.Skip()
+
     def createCmd( self, ignoreErrors = False ):
         """
         Produce a command line string (list) or feeding into GRASS.

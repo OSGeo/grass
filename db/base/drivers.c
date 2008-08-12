@@ -71,7 +71,7 @@ static void parse_command_line(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("database, SQL");
+    module->keywords = _("database, attribute table");
     module->description = _("List all database drivers.");
 
     if (G_parser(argc, argv))

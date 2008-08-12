@@ -331,6 +331,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->multiple = NO;
 	Opt->description = _("Table name");
+	Opt->gisprompt = GISPROMPT_DBTABLE;
 	break;
     case G_OPT_DRIVER:
 	Opt->key = "driver";

@@ -176,12 +176,12 @@ static void parse_command_line(int argc, char **argv)
 
     database = G_define_standard_option(G_OPT_DATABASE);
     if ((db = db_get_default_database_name()))
-	database->answer = db;
+	database->answer = (char *) db;
 
     driver = G_define_standard_option(G_OPT_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
-	driver->answer = drv;
+	driver->answer = (char *) drv;
 
     sql = G_define_option();
     sql->key = "sql";
@@ -227,7 +227,7 @@ static void parse_command_line(int argc, char **argv)
 
     /* Set description */
     module = G_define_module();
-    module->keywords = _("database, SQL");
+    module->keywords = _("database, attribute table, SQL");
     module->description = _("Selects data from table.");
 
     if (G_parser(argc, argv))
