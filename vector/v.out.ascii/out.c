@@ -53,8 +53,7 @@ int main(int argc, char *argv[])
     output->multiple = NO;
     output->gisprompt = "new_file,file,output";
     output->description =
-	_
-	("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
+	_("Path to resulting ASCII file or ASCII vector name if '-o' is defined");
 
     format_opt = G_define_option();
     format_opt->key = "format";
@@ -88,8 +87,7 @@ int main(int argc, char *argv[])
     region_flag = G_define_flag();
     region_flag->key = 'r';
     region_flag->description =
-	_
-	("Only export points falling within current 3D region (points mode)");
+	_("Only export points falling within current 3D region (points mode)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

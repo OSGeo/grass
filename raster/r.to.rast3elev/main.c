@@ -399,8 +399,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster, raster3d, voxel, conversion");
     module->description =
-	_
-	("Creates a 3D volume map based on 2D elevation and value raster maps.");
+	_("Creates a 3D volume map based on 2D elevation and value raster maps.");
 
     /* Get parameters from user */
     set_params();

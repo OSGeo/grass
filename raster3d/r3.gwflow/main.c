@@ -60,8 +60,7 @@ void set_params(void)
     param.status->required = YES;
     param.status->gisprompt = "old,grid3,3d-raster";
     param.status->description =
-	_
-	("The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
+	_("The status for each cell, = 0 - inactive, 1 - active, 2 - dirichlet");
 
     param.hc_x = G_define_option();
     param.hc_x->key = "hc_x";
@@ -114,8 +113,7 @@ void set_params(void)
     param.output->required = YES;
     param.output->gisprompt = "new,grid3,3d-raster";
     param.output->description =
-	_
-	("The piezometric head result of the numerical calculation will be written to this map");
+	_("The piezometric head result of the numerical calculation will be written to this map");
 
     param.vector = G_define_option();
     param.vector->key = "velocity";
@@ -123,8 +121,7 @@ void set_params(void)
     param.vector->required = NO;
     param.vector->gisprompt = "new,grid3,3d-raster";
     param.vector->description =
-	_
-	("Calculate the groundwater distance velocity vector field and write the x, y, and z components to maps named name_[xyz]. Name is basename for the new raster3d maps");
+	_("Calculate the groundwater distance velocity vector field and write the x, y, and z components to maps named name_[xyz]. Name is basename for the new raster3d maps");
 
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
@@ -140,8 +137,7 @@ void set_params(void)
     param.sparse = G_define_flag();
     param.sparse->key = 's';
     param.sparse->description =
-	_
-	("Use a sparse linear equation system, only available with iterative solvers");
+	_("Use a sparse linear equation system, only available with iterative solvers");
 }
 
 /* ************************************************************************* */
@@ -171,8 +167,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
     module->description =
-	_
-	("Numerical calculation program for transient, confined groundwater flow in three dimensions");
+	_("Numerical calculation program for transient, confined groundwater flow in three dimensions");
 
     /* Get parameters from user */
     set_params();

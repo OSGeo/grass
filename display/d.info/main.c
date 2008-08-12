@@ -53,8 +53,7 @@ int main(int argc, char *argv[])
     gflag = G_define_flag();
     gflag->key = 'g';
     gflag->description =
-	_
-	("Display screen rectangle coordinates and resolution (west, east, north, south, ewres, nsres)");
+	_("Display screen rectangle coordinates and resolution (west, east, north, south, ewres, nsres)");
 
     cflag = G_define_flag();
     cflag->key = 'c';

@@ -115,8 +115,7 @@ int main(int argc, char *argv[])
     cmdhist->type = TYPE_STRING;
     cmdhist->required = NO;
     cmdhist->description =
-	_
-	("Command line to store into vector map history file (used for vector scripts)");
+	_("Command line to store into vector map history file (used for vector scripts)");
 
     r_flag = G_define_flag();
     r_flag->key = 'r';

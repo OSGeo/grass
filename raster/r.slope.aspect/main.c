@@ -218,8 +218,7 @@ int main(int argc, char *argv[])
     parm.dx->answer = NULL;
     parm.dx->gisprompt = "new,cell,raster";
     parm.dx->description =
-	_
-	("Name for output first order partial derivative dx (E-W slope) raster map");
+	_("Name for output first order partial derivative dx (E-W slope) raster map");
     parm.dx->guisection = _("Advanced");
 
     parm.dy = G_define_option();
@@ -229,8 +228,7 @@ int main(int argc, char *argv[])
     parm.dy->answer = NULL;
     parm.dy->gisprompt = "new,cell,raster";
     parm.dy->description =
-	_
-	("Name for output first order partial derivative dy (N-S slope) raster map");
+	_("Name for output first order partial derivative dy (N-S slope) raster map");
     parm.dy->guisection = _("Advanced");
 
     parm.dxx = G_define_option();

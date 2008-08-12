@@ -35,8 +35,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     module->description =
-	_
-	("Calculates edge density index on a raster map, using a 4 neighbour algorithm");
+	_("Calculates edge density index on a raster map, using a 4 neighbour algorithm");
     module->keywords = _("raster, landscape structure analysis, patch index");
 
     /* define options */

@@ -63,8 +63,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, statistics");
     module->description =
-	_
-	("Calculates univariate statistics for attribute. Variance and standard "
+	_("Calculates univariate statistics for attribute. Variance and standard "
 	 "deviation is calculated only for points if specified.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);

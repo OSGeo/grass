@@ -155,8 +155,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster, import, LIDAR");
     module->description =
-	_
-	("Create a raster map from an assemblage of many coordinates using univariate statistics.");
+	_("Create a raster map from an assemblage of many coordinates using univariate statistics.");
 
     input_opt = G_define_standard_option(G_OPT_F_INPUT);
     input_opt->description =
@@ -246,8 +245,7 @@ int main(int argc, char *argv[])
     trim_opt->required = NO;
     trim_opt->options = "0-50";
     trim_opt->description =
-	_
-	("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
+	_("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
     trim_opt->guisection = _("Statistic");
 
     scan_flag = G_define_flag();

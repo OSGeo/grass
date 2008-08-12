@@ -210,8 +210,7 @@ int main(int argc, char *argv[])
     parm.timezone->type = TYPE_INTEGER;
     parm.timezone->required = NO;
     parm.timezone->description =
-	_
-	("B: timezone (east positive, offset from GMT, also use to adjust daylight savings)");
+	_("B: timezone (east positive, offset from GMT, also use to adjust daylight savings)");
     parm.timezone->guisection = _("By_time");
 
     parm.east = G_define_option();

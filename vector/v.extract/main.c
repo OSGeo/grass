@@ -108,8 +108,7 @@ int main(int argc, char **argv)
     newopt->required = NO;
     newopt->answer = "-1";
     newopt->label =
-	_
-	("Enter -1 to keep original categories or the desired NEW category value");
+	_("Enter -1 to keep original categories or the desired NEW category value");
     newopt->description = _("If new >= 0, table is not copied");
 
     listopt = G_define_standard_option(G_OPT_V_CATS);
@@ -119,8 +118,7 @@ int main(int argc, char **argv)
     fileopt->key = "file";
     fileopt->required = NO;
     fileopt->label =
-	_
-	("Input text file with category numbers/number ranges to be extracted");
+	_("Input text file with category numbers/number ranges to be extracted");
     fileopt->description = _("If '-' given reads from standard input");
 
     whereopt = G_define_standard_option(G_OPT_WHERE);

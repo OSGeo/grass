@@ -105,11 +105,9 @@ static int process(char *name, int uncompress)
     if (G_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
 	G_warning(uncompress
 		  ?
-		  _
-		  ("[%s] is a reclass file of map <%s> in mapset <%s> - can't uncompress")
+		  _("[%s] is a reclass file of map <%s> in mapset <%s> - can't uncompress")
 		  :
-		  _
-		  ("[%s] is a reclass file of map <%s> in mapset <%s> - can't compress"),
+		  _("[%s] is a reclass file of map <%s> in mapset <%s> - can't compress"),
 		  name, rname, rmapset);
 	return 1;
     }

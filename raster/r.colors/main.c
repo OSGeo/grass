@@ -124,8 +124,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster, color table");
     module->description =
-	_
-	("Creates/modifies the color table associated with a raster map layer.");
+	_("Creates/modifies the color table associated with a raster map layer.");
 
     opt.map = G_define_standard_option(G_OPT_R_MAP);
     opt.map->required = NO;

@@ -166,8 +166,7 @@ int main(int argc, char **argv)
 		    }
 		    else {
 			fprintf(stdout,
-				_
-				("layer <%d> table <%s> in database <%s> through driver "
+				_("layer <%d> table <%s> in database <%s> through driver "
 				 "<%s> with key <%s>\n"), fi->number,
 				fi->table, fi->database, fi->driver, fi->key);
 		    }

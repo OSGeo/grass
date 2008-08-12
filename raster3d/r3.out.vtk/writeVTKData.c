@@ -331,8 +331,7 @@ void write_vtk_data(FILE * fp, void *map, G3D_Region region, char *varname,
     }
 
     G_debug(3,
-	    _
-	    ("write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"),
+	    _("write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"),
 	    varname, rows, cols, depths);
 
     fprintf(fp, "SCALARS %s float 1\n", varname);

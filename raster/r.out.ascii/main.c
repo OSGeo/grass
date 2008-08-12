@@ -89,8 +89,7 @@ int main(int argc, char *argv[])
     parm.width->type = TYPE_INTEGER;
     parm.width->required = NO;
     parm.width->description =
-	_
-	("Number of values printed before wrapping a line (only SURFER or MODFLOW format)");
+	_("Number of values printed before wrapping a line (only SURFER or MODFLOW format)");
 
     parm.null = G_define_option();
     parm.null->key = "null";

@@ -63,8 +63,7 @@ void set_params()
     param.point = G_define_flag();
     param.point->key = 'p';
     param.point->description =
-	_
-	("Create VTK point data instead of VTK cell data (if no elevation map is given)");
+	_("Create VTK point data instead of VTK cell data (if no elevation map is given)");
 
     param.rgbmaps = G_define_option();
     param.rgbmaps->key = "rgbmaps";
@@ -74,8 +73,7 @@ void set_params()
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
     param.rgbmaps->description =
-	_
-	("Three (r,g,b) raster maps to create rgb values [redmap,greenmap,bluemap]");
+	_("Three (r,g,b) raster maps to create rgb values [redmap,greenmap,bluemap]");
 
     param.vectmaps = G_define_option();
     param.vectmaps->key = "vectormaps";
@@ -85,8 +83,7 @@ void set_params()
     param.vectmaps->multiple = YES;
     param.vectmaps->guisection = "Advanced options";
     param.vectmaps->description =
-	_
-	("Three (x,y,z) raster maps to create vector values [xmap,ymap,zmap]");
+	_("Three (x,y,z) raster maps to create vector values [xmap,ymap,zmap]");
 
     param.elevscale = G_define_option();
     param.elevscale->key = "elevscale";
@@ -123,8 +120,7 @@ void set_params()
     param.usevertices->key = 'v';
     param.usevertices->guisection = "Advanced options";
     param.usevertices->description =
-	_
-	("Use polydata-vertices for elevation grid creation (to use with vtkDelauny2D)");
+	_("Use polydata-vertices for elevation grid creation (to use with vtkDelauny2D)");
 
     param.origin = G_define_flag();
     param.origin->key = 'o';

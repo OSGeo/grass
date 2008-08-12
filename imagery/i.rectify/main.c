@@ -80,8 +80,7 @@ int main(int argc, char *argv[])
     c = G_define_flag();
     c->key = 'c';
     c->description =
-	_
-	("Use curr. region settings in target location (def.=calculate smallest area)");
+	_("Use curr. region settings in target location (def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';

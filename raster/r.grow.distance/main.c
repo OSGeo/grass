@@ -119,8 +119,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Generates a raster map layer of distance to features in input layer.");
+	_("Generates a raster map layer of distance to features in input layer.");
 
     opt.in = G_define_standard_option(G_OPT_R_INPUT);
 

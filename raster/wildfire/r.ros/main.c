@@ -278,8 +278,7 @@ int main(int argc, char *argv[])
     parm.aspect->type = TYPE_STRING;
     parm.aspect->gisprompt = "old,cell,raster";
     parm.aspect->description =
-	_
-	("Name of raster map containing ASPECT (degree, anti-clockwise from E)");
+	_("Name of raster map containing ASPECT (degree, anti-clockwise from E)");
 
     parm.elev = G_define_option();
     parm.elev->key = "elevation";

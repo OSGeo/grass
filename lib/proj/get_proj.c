@@ -225,8 +225,7 @@ int pj_get_kv(struct pj_info *info, struct Key_Value *in_proj_keys,
 
     if (!(pj = pj_init(nopt1, opt_in))) {
 	strcpy(buffa,
-	       _
-	       ("Unable to initialise PROJ.4 with the following parameter list:"));
+	       _("Unable to initialise PROJ.4 with the following parameter list:"));
 	for (i = 0; i < nopt1; i++) {
 	    char err[50];
 

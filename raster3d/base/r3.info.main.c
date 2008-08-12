@@ -77,8 +77,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster3d, voxel");
     module->description =
-	_
-	("Outputs basic information about a user-specified 3D raster map layer.");
+	_("Outputs basic information about a user-specified 3D raster map layer.");
 
     opt1 = G_define_option();
     opt1->key = "map";
@@ -111,8 +110,7 @@ int main(int argc, char *argv[])
     timestampflag = G_define_flag();
     timestampflag->key = 'p';
     timestampflag->description =
-	_
-	("Print 3D raster map timestamp (day.month.year hour:minute:seconds) only");
+	_("Print 3D raster map timestamp (day.month.year hour:minute:seconds) only");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

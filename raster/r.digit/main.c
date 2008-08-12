@@ -43,8 +43,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Interactive tool used to draw and save vector features on a graphics"
+	_("Interactive tool used to draw and save vector features on a graphics"
 	 " monitor using a pointing device (mouse) and save to a raster map.");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -53,8 +52,7 @@ int main(int argc, char **argv)
     bgcmd->key = "bgcmd";
     bgcmd->type = TYPE_STRING;
     bgcmd->description =
-	_
-	("Display commands to be used for canvas backdrop (separated by ';')");
+	_("Display commands to be used for canvas backdrop (separated by ';')");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

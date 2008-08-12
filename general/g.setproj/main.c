@@ -607,8 +607,7 @@ int main(int argc, char *argv[])
 			}
 			while (1) {
 			    fprintf(stderr,
-				    _
-				    ("Enter conversion factor from %s to meters: "),
+				    _("Enter conversion factor from %s to meters: "),
 				    answer);
 			    G_gets(answer2);
 			    G_strip(answer2);
@@ -642,8 +641,7 @@ int main(int argc, char *argv[])
     if (G__put_window(&cellhd, "", "DEFAULT_WIND") < 0)
 	G_fatal_error(_("Unable to write to DEFAULT_WIND region file"));
     fprintf(stderr,
-	    _
-	    ("\nProjection information has been recorded for this location\n\n"));
+	    _("\nProjection information has been recorded for this location\n\n"));
     if ((old_zone != zone) | (old_proj != cellhd.proj)) {
 	G_message(_("The geographic region information in WIND is now obsolete"));
 	G_message(_("Run g.region -d to update it"));

@@ -36,8 +36,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("general");
     module->description =
-	_
-	("Controls access to the current mapset for other users on the system.");
+	_("Controls access to the current mapset for other users on the system.");
 
     group_opt = G_define_option();
     group_opt->key = "group";

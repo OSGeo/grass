@@ -47,15 +47,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, import");
     module->description =
-	_
-	("Creates a vector map from ASCII points file or ASCII vector file.");
+	_("Creates a vector map from ASCII points file or ASCII vector file.");
 
     /************************** Command Parser ************************************/
     old = G_define_standard_option(G_OPT_F_INPUT);
     old->required = NO;
     old->description =
-	_
-	("ASCII file to be imported, if not given reads from standard input");
+	_("ASCII file to be imported, if not given reads from standard input");
     old->guisection = _("Required");
 
     new = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -80,8 +78,7 @@ int main(int argc, char *argv[])
     skip_opt->multiple = NO;
     skip_opt->answer = "0";
     skip_opt->description =
-	_
-	("Number of header lines to skip at top of input file (points mode)");
+	_("Number of header lines to skip at top of input file (points mode)");
 
     columns_opt = G_define_standard_option(G_OPT_COLUMNS);
     columns_opt->multiple = NO;
@@ -99,8 +96,7 @@ int main(int argc, char *argv[])
     xcol_opt->answer = "1";
     xcol_opt->guisection = _("Columns");
     xcol_opt->description =
-	_
-	("Number of column used as x coordinate (first column is 1) for points mode");
+	_("Number of column used as x coordinate (first column is 1) for points mode");
 
     ycol_opt = G_define_option();
     ycol_opt->key = "y";
@@ -110,8 +106,7 @@ int main(int argc, char *argv[])
     ycol_opt->answer = "2";
     ycol_opt->guisection = _("Columns");
     ycol_opt->description =
-	_
-	("Number of column used as y coordinate (first column is 1) for points mode");
+	_("Number of column used as y coordinate (first column is 1) for points mode");
 
     zcol_opt = G_define_option();
     zcol_opt->key = "z";
@@ -133,11 +128,9 @@ int main(int argc, char *argv[])
     catcol_opt->answer = "0";
     catcol_opt->guisection = _("Columns");
     catcol_opt->label =
-	_
-	("Number of column used as category (first column is 1) for points mode");
+	_("Number of column used as category (first column is 1) for points mode");
     catcol_opt->description =
-	_
-	("If 0, unique category is assigned to each row and written to new column 'cat'");
+	_("If 0, unique category is assigned to each row and written to new column 'cat'");
 
     zcoorf = G_define_flag();
     zcoorf->key = 'z';
@@ -146,8 +139,7 @@ int main(int argc, char *argv[])
     e_flag = G_define_flag();
     e_flag->key = 'e';
     e_flag->description =
-	_
-	("Create a new empty vector map and exit. Nothing is read from input");
+	_("Create a new empty vector map and exit. Nothing is read from input");
 
     noheader_flag = G_define_flag();
     noheader_flag->key = 'n';

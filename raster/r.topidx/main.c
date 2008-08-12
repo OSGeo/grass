@@ -40,8 +40,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Creates topographic index [ln(a/tan(beta))] map from elevation map.");
+	_("Creates topographic index [ln(a/tan(beta))] map from elevation map.");
 
     params.input = G_define_standard_option(G_OPT_R_INPUT);
     params.input->description = _("Input elevation map");

@@ -79,14 +79,12 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, raster, attribute table");
     module->description =
-	_
-	("Uploads raster values at positions of vector points to the table.");
+	_("Uploads raster values at positions of vector points to the table.");
 
     vect_opt = G_define_standard_option(G_OPT_V_INPUT);
     vect_opt->key = "vector";
     vect_opt->description =
-	_
-	("Name of input vector points map for which to edit attribute table");
+	_("Name of input vector points map for which to edit attribute table");
 
     rast_opt = G_define_standard_option(G_OPT_R_INPUT);
     rast_opt->key = "raster";

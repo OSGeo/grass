@@ -22,8 +22,7 @@ int db_legal_tablename(const char *s)
 
     if (*s == '.' || *s == 0) {
 	fprintf(stderr,
-		_
-		("Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"),
+		_("Illegal table map name <%s>. May not contain '.' or 'NULL'.\n"),
 		buf);
 	return DB_FAILED;
     }
@@ -41,8 +40,7 @@ int db_legal_tablename(const char *s)
 	    ((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
 	     (*s >= '0' && *s <= '9') || *s == '_' || *s == '@')) {
 	    fprintf(stderr,
-		    _
-		    ("Illegal table map name <%s>. Character <%c> not allowed.\n"),
+		    _("Illegal table map name <%s>. Character <%c> not allowed.\n"),
 		    buf, *s);
 	    return DB_FAILED;
 	}

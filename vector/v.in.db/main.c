@@ -51,8 +51,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector, import");
     module->description =
-	_
-	("Creates new vector (points) map from database table containing coordinates.");
+	_("Creates new vector (points) map from database table containing coordinates.");
 
     table_opt = G_define_standard_option(G_OPT_TABLE);
     table_opt->required = YES;

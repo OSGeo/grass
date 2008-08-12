@@ -56,8 +56,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Displays the boundary of each r.le patch and shows how the boundary "
+	_("Displays the boundary of each r.le patch and shows how the boundary "
 	 "is traced, displays the attribute, size, perimeter and shape "
 	 "indices for each patch and saves the data in an output file.");
 

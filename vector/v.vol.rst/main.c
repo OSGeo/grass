@@ -352,8 +352,7 @@ int main(int argc, char *argv[])
     parm.npmin->answer = MINPOINTS;
     parm.npmin->required = NO;
     parm.npmin->description =
-	_
-	("Minimum number of points for approximation in a segment (>segmax)");
+	_("Minimum number of points for approximation in a segment (>segmax)");
     parm.npmin->guisection = _("Settings");
 
     parm.dmin1 = G_define_option();
@@ -362,8 +361,7 @@ int main(int argc, char *argv[])
     parm.dmin1->answer = dminchar;
     parm.dmin1->required = NO;
     parm.dmin1->description =
-	_
-	("Minimum distance between points (to remove almost identical points)");
+	_("Minimum distance between points (to remove almost identical points)");
     parm.dmin1->guisection = _("Settings");
 
     parm.wmult = G_define_option();
@@ -457,8 +455,7 @@ int main(int argc, char *argv[])
     flag.cv = G_define_flag();
     flag.cv->key = 'c';
     flag.cv->description =
-	_
-	("Perform a cross-validation procedure without volume interpolation");
+	_("Perform a cross-validation procedure without volume interpolation");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

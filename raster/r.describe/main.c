@@ -55,8 +55,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("raster");
     module->description =
-	_
-	("Prints terse list of category values found in a raster map layer.");
+	_("Prints terse list of category values found in a raster map layer.");
 
     /* define different options */
     option.map = G_define_standard_option(G_OPT_R_MAP);

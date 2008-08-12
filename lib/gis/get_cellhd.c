@@ -102,8 +102,7 @@ int G_get_cellhd(const char *name, const char *mapset,
     tail = buf + strlen(buf);
     if (is_reclass) {
 	sprintf(tail,
-		_
-		(" It is a reclass of raster map <%s@%s> whose header file is invalid."),
+		_(" It is a reclass of raster map <%s@%s> whose header file is invalid."),
 		real_name, real_mapset);
     }
     else

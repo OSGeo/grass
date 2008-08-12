@@ -33,8 +33,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("database, SQL");
     module->description =
-	_
-	("Copy a table. Either 'from_table' (optionaly with 'where') can be used "
+	_("Copy a table. Either 'from_table' (optionaly with 'where') can be used "
 	 "or 'select' option, but not 'from_table' and 'select' at the same time.");
 
     from_driver = G_define_option();
@@ -97,8 +96,7 @@ int main(int argc, char **argv)
     select->type = TYPE_STRING;
     select->required = NO;
     select->description =
-	_
-	("Full select statement (only, if 'from_table' and 'where' is not used), e.g.:\n"
+	_("Full select statement (only, if 'from_table' and 'where' is not used), e.g.:\n"
 	 "\t\tSELECT dedek FROM starobince WHERE obec = 'Frimburg'");
 
     if (G_parser(argc, argv))

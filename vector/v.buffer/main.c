@@ -253,8 +253,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("vector");
     module->description =
-	_
-	("Creates a buffer around features of given type (areas must contain centroid).");
+	_("Creates a buffer around features of given type (areas must contain centroid).");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);

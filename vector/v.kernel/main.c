@@ -108,8 +108,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("vector, kernel density");
     module->description =
-	_
-	("Generates a raster density map from vector points data using a moving 2D isotropic Gaussian kernel or "
+	_("Generates a raster density map from vector points data using a moving 2D isotropic Gaussian kernel or "
 	 "optionally generates a vector density map on vector network with a 1D kernel.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
@@ -164,14 +163,12 @@ int main(int argc, char **argv)
     flag_o = G_define_flag();
     flag_o->key = 'o';
     flag_o->description =
-	_
-	("Try to calculate an optimal standard deviation with 'stddeviation' taken as maximum (experimental)");
+	_("Try to calculate an optimal standard deviation with 'stddeviation' taken as maximum (experimental)");
 
     flag_q = G_define_flag();
     flag_q->key = 'q';
     flag_q->description =
-	_
-	("Only calculate optimal standard deviation and exit (no map is written)");
+	_("Only calculate optimal standard deviation and exit (no map is written)");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
