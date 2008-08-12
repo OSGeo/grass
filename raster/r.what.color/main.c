@@ -126,7 +126,7 @@ int main(int argc, char **argv)
     if (!mapset)
 	G_fatal_error("Raster map <%s> not found", name);
 
-    type = G_raster_map_type2(name, mapset);
+    type = G_raster_map_type(name, mapset);
     if (type < 0)
 	G_fatal_error("Unable to determine type of input map %s", name);
 
