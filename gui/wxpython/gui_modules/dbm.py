@@ -390,7 +390,7 @@ class AttributeManager(wx.Frame):
         wx.Frame.__init__(self, parent, id, title, style=style)
 
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
 
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 

@@ -1141,7 +1141,7 @@ class NvizToolWindow(wx.Frame):
         #
         # icon
         #
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_nviz.ico'), wx.BITMAP_TYPE_ICO))
 
         #
         # dialog body

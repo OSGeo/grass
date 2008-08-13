@@ -64,7 +64,7 @@ class GRASSStartup(wx.Frame):
         #
         # image
         try:
-            name = os.path.join(globalvar.ETCDIR, "gintro.gif")
+            name = os.path.join(globalvar.ETCDIR, "gui", "images", "gintro.gif")
             self.hbitmap = wx.StaticBitmap(self.panel, wx.ID_ANY,
                                            wx.Bitmap(name=name,
                                                      type=wx.BITMAP_TYPE_GIF))
@@ -170,7 +170,7 @@ class GRASSStartup(wx.Frame):
     def _set_properties(self):
         """Set frame properties"""
         self.SetTitle(_("Welcome to GRASS GIS"))
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, "grass.ico"),
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, "grass.ico"),
                              wx.BITMAP_TYPE_ICO))
 
         self.lwelcome.SetForegroundColour(wx.Colour(35, 142, 35))

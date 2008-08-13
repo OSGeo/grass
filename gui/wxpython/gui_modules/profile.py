@@ -84,7 +84,7 @@ class ProfileFrame(wx.Frame):
         #
         # Icon
         #
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
         
         #
         # Add toolbar

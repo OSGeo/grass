@@ -607,7 +607,7 @@ class GCP(wx.Frame):
 
         wx.Frame.__init__(self, parent, id, title, size=(625, 300))
 
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_map.ico'), wx.BITMAP_TYPE_ICO))
         
         #
         # init variables

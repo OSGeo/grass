@@ -39,16 +39,8 @@ FILES = \
 	$(ETC)/gis_set.tcl \
 	$(ETC)/epsg_option.tcl \
 	$(ETC)/file_option.tcl \
-	$(ETC)/gintro.gif \
 	$(ETC)/grass-run.sh \
 	$(ETC)/grass-xterm-wrapper
-
-ICONS = $(ETC)/grass.ico \
-	$(ETC)/grass_map.ico \
-	$(ETC)/grass_dialog.ico \
-	$(ETC)/grass_sql.ico \
-	$(ETC)/grass_nviz.ico \
-	$(ETC)/grass_error.ico
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
@@ -63,7 +55,7 @@ ifneq ($(strip $(MINGW)),)
 		$(ETC)/grass-run.bat
 endif
 
-default: $(FILES) $(ICONS)
+default: $(FILES)
 	$(MKDIR) $(GISBASE)/docs/html
 	$(INSTALL_DATA) variables.html $(GISBASE)/docs/html/variables.html
 	$(INSTALL_DATA) grass7.html $(GISBASE)/docs/html/grass7.html
@@ -150,14 +142,6 @@ $(ETC)/msgs: msgs
 	rm -rf $@
 	$(MKDIR) $@
 	$(INSTALL_DATA) msgs/*.msg $@	
-
-$(ETC)/gintro.gif: gintro.gif
-	rm -f $@
-	$(INSTALL_DATA) gintro.gif $@
-
-$(ICONS): grass.ico grass_map.ico grass_sql.ico grass_dialog.ico grass_nviz.ico grass_error.ico
-	rm -f $@
-	$(INSTALL_DATA) $< $@
 
 $(ETC)/gis_set.tcl: gis_set.tcl
 	rm -f $@

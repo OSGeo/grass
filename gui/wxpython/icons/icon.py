@@ -1,20 +1,21 @@
 """
-MODULE: icon
+@package icon
 
-CLASSES:
- * MetaIcon
+@brief Icon themes
 
-PURPOSE: Icon themes
+@code
+from icons import Icons as Icons
+@endcode
 
-         from icons import Icons as Icons
+Classes:
+ - MetaIcon
 
-AUTHORS: The GRASS Development Team
-         Martin Landa <landa.martin gmail.com>
+(C) 2007-2008 by the GRASS Development Team
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS
+for details.
 
-COPYRIGHT: (C) 2007 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -34,11 +35,11 @@ from preferences import globalSettings as UserSettings
 #    iconpath = os.getenv("GRASS_ICONPATH")
 iconTheme = UserSettings.Get(group='advanced', key='iconTheme', subkey='type')
 if iconTheme and iconTheme == 'silk':
-    iconpath = os.path.join(os.getenv("GISBASE"), "docs", "html", "icons", "silk")
+    iconpath = os.path.join(globalvar.ETCDIR, "gui", "icons", "silk")
 else:
     iconpath = None
 
-iconpath_default = os.path.join(globalvar.ETCDIR, "gui", "icons")
+iconpath_default = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass")
 iconpath_vdigit  = os.path.join(globalvar.ETCDIR, "v.digit")
 
 icons_default = {
