@@ -102,7 +102,10 @@ public:
     /* volume */
     int AddIsosurface(int, int);
     int DeleteIsosurface(int, int);
+    int MoveIsosurface(int, int, bool);
     int SetIsosurfaceColor(int, int, bool, const char *);
+    int SetIsosurfaceMode(int, int);
+    int SetIsosurfaceRes(int, int);
 };
 
 #endif /* WXNVIZ_H */

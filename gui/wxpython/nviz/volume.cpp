@@ -73,6 +73,36 @@ int Nviz::DeleteIsosurface(int id, int isosurf_id)
 }
 
 /*!
+  \brief Move isosurface up/down in the list
+
+  \param id volume id
+  \param isosurf_id isosurface id
+  \param up if true move up otherwise down
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 on failure
+*/
+int Nviz::MoveIsosurface(int id, int isosurf_id, bool up)
+{
+    int ret;
+    
+    if (!GVL_vol_exists(id))
+	return -1;
+
+    if (isosurf_id > GVL_isosurf_num_isosurfs(id))
+	return -2;
+    
+    if (up)
+	ret = GVL_isosurf_move_up(id, isosurf_id);
+    else
+	ret = GVL_isosurf_move_down(id, isosurf_id);
+
+    return ret < 0 ? -3 : 1;
+}
+
+/*!
   \brief Set surface color
 
   \param id surface id
@@ -170,4 +200,48 @@ int Nviz::UnsetIsosurfaceAttr(int id, int isosurf_id,
     ret = GVL_isosurf_unset_att(id, isosurf_id, attr);
     
     return ret > 0 ? 1 : -2;
+}
+
+/*!
+  \brief Set draw mode for isosurfaces
+
+  \param mode
+  
+  \return 1 on success
+  \return -1 volume set not found
+  \return -2 on failure
+*/
+int Nviz::SetIsosurfaceMode(int id, int mode)
+{
+    int ret;
+    
+    if (!GVL_vol_exists(id)) {
+	return -1;
+    }
+
+    ret = GVL_isosurf_set_drawmode(id, mode);
+    
+    return ret < 0 ? -2 : 1;
+}
+
+/*!
+  \brief Set draw resolution for isosurfaces
+
+  \param res resolution value
+  
+  \return 1 on success
+  \return -1 volume set not found
+  \return -2 on failure
+*/
+int Nviz::SetIsosurfaceRes(int id, int res)
+{
+    int ret;
+
+    if (!GVL_vol_exists(id)) {
+	return -1;
+    }
+
+    ret = GVL_isosurf_set_drawres(id, res, res, res);
+
+    return ret < 0 ? -2 : 1;
 }
