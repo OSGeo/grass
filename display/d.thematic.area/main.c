@@ -499,28 +499,28 @@ int main(int argc, char **argv)
 
     if (legend_file_opt->answer) {
 	fd = fopen(legend_file_opt->answer, "w");
-	boxsize = 100 / nclass;
+	boxsize = 25;
 	textsize = boxsize / 10;
 	fprintf(fd, "size %i %i\n", textsize, textsize);
 	ypos = 10;
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		ypos, colors[0].r, colors[0].g, colors[0].b);
-	fprintf(fd, "move 15 %i \n", ypos - textsize / 2);
+	fprintf(fd, "move 8 %f \n", ypos - textsize / 2.5);
 	fprintf(fd, "text %f - %f | %i\n", min, breakpoints[0],
 		frequencies[0]);
 	for (i = 1; i < nbreaks; i++) {
-	    ypos = 10 + i * 10;
+	    ypos = 10 + i * 6;
 	    fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		    ypos, colors[i].r, colors[i].g, colors[i].b);
-	    fprintf(fd, "move 15 %i\n", ypos - textsize / 2);
+	    fprintf(fd, "move 8 %f\n", ypos - textsize / 2.5);
 	    fprintf(fd, "text %f - %f | %i\n", breakpoints[i - 1],
 		    breakpoints[i], frequencies[i]);
 	}
-	ypos = 10 + i * 10;
+	ypos = 10 + i * 6;
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		ypos, colors[nbreaks].r, colors[nbreaks].g,
 		colors[nbreaks].b);
-	fprintf(fd, "move 15 %i\n", ypos - textsize / 2);
+	fprintf(fd, "move 8 %f\n", ypos - textsize / 2.5);
 	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1], max,
 		frequencies[nbreaks]);
 	fclose(fd);
