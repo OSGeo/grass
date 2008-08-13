@@ -2,17 +2,10 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	d.correlate \
-	d.monsize \
-	d.mvmon \
-	d.out.gpsdrive \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
-	d.redraw \
-	d.resize \
 	d.shadedmap \
-	d.slide.show \
-	d.split \
 	d.vect.thematic \
 	db.dropcol \
 	db.droptable \
@@ -27,7 +20,6 @@ SUBDIRS = \
 	i.in.spotvgt \
 	i.landsat.rgb \
 	i.oif \
-	i.spectral \
 	i.tasscap \
 	m.proj \
 	r.blend \
@@ -69,6 +61,9 @@ SUBDIRS = \
 	v.rast.stats \
 	v.report \
 	v.what.vect
+
+#	d.out.gpsdrive \
+#	i.spectral \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
