@@ -17,11 +17,12 @@ SUBDIRS = \
 	g.proj \
 	g.pnmcomp \
 	g.region \
-	g.setproj \
 	g.tempfile \
 	g.transform \
 	g.version \
 	manage
+
+#	g.setproj \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
