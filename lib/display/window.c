@@ -102,8 +102,6 @@ void D_new_window(char *name, double t, double b, double l, double r)
 {
     screen_window_set = 0;
     map_window_set = 0;
-    /* Display outline of new window */
-    D_show_window(GRAY);
     D_set_window(t, b, l, r);
 }
 
@@ -168,17 +166,12 @@ void D_show_window(int color)
 
     D_get_screen_window(&t, &b, &l, &r);
 
-    D_set_window(t - 1, b + 1, l - 1, r + 1);
-
     R_standard_color(color);
-    R_move_abs(l - 1, b);
-    R_cont_abs(l - 1, t - 1);
-    R_cont_abs(r, t - 1);
+    R_move_abs(l, b);
+    R_cont_abs(l, t);
+    R_cont_abs(r, t);
     R_cont_abs(r, b);
-    R_cont_abs(l - 1, b);
-    R_flush();
-
-    D_set_window(t, b, l, r);
+    R_cont_abs(l, b);
 }
 
 
@@ -223,11 +216,7 @@ void D_check_map_window(struct Cell_head *wind)
 
 void D_reset_screen_window(double t, double b, double l, double r)
 {
-    D_show_window(D_translate_color(DEFAULT_BG_COLOR));
-
     D_set_window(t, b, l, r);
-
-    D_show_window(D_translate_color(DEFAULT_FG_COLOR));
 }
 
 /*!
