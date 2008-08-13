@@ -106,7 +106,7 @@ class GMFrame(wx.Frame):
                           style=wx.DEFAULT_FRAME_STYLE)
         self.SetTitle(self.baseTitle)
 
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self._auimgr = wx.aui.AuiManager(self)
 

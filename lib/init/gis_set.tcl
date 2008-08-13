@@ -187,7 +187,7 @@ proc gisSetWindow {} {
 
     set titlefrm [frame .frame0.intro -borderwidth 2 ]
     set introimg  [label $titlefrm.img -image [image create photo -file \
-    	"$env(GISBASE)/etc/gintro.gif"]]
+    	"$env(GISBASE)/etc/gui/images/gintro.gif"]]
     set introtitle [text $titlefrm.msg -height 5 \
     	-relief flat -fg darkgreen \
     	-bg #dddddd \

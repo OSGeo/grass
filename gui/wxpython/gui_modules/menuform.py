@@ -588,7 +588,7 @@ class mainFrame(wx.Frame):
         self.CreateStatusBar()
 
         # icon
-        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
 
         # menu
         #         menu = wx.Menu()

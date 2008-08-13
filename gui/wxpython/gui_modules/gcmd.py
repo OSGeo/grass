@@ -66,7 +66,7 @@ class GException(Exception):
                                caption=self.title,
                                message=self.message,
                                style=wx.ICON_ERROR | wx.CENTRE)
-        dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
+        dlg.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_error.ico'), wx.BITMAP_TYPE_ICO))
         if self.parent:
             dlg.CentreOnParent()
         else:

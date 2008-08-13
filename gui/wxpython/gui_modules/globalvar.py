@@ -71,6 +71,7 @@ QUERYLAYER = 'qlayer'
 
 # path to python scripts
 ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
+ETCICONDIR = os.path.join(os.getenv("GISBASE"), "etc", "gui", "icons")
 ETCWXDIR = os.path.join(ETCDIR, "wxpython")
 
 """Style definition for FlatNotebook pages"""
