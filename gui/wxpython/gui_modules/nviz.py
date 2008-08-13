@@ -409,9 +409,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
             elif type == '3d-raster':
                 data[nvizType] = {}
-                for sec in ('attribute', 'draw', 'position',
-                            'isosurface', 'slice'):
+                for sec in ('attribute', 'draw', 'position'):
                     data[nvizType][sec] = {}
+                for sec in ('isosurface', 'slice'):
+                    data[nvizType][sec] = []
+                
 
                 # reset to default properties 
                 self.SetVolumeDefaultProp(data[nvizType])
@@ -932,6 +934,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             # -> initialized
             data['surface']['object']['init'] = True
 
+        elif mapLayer.type == '3d-raster':
+            id = data['volume']['object']['id']
+            self.UpdateVolumeProperties(id, data['volume'])
+            # -> initialized
+            data['volume']['object']['init'] = True
+
         elif mapLayer.type == 'vector':
             for type in ('lines', 'points'):
                 if data['vector'][type].has_key('object'):
@@ -941,8 +949,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     data['vector'][type]['object']['init'] = True
 
     def UpdateRasterProperties(self, id, data):
-        """Apply changes for surfaces"""
-
+        """Update surface layer properties"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
@@ -1022,7 +1029,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             z = data['position']['z']
             self.nvizClass.SetSurfacePosition(id, x, y, z)
             self.update.remove('surface:position')
-
+            
+    def UpdateRasterProperties(self, id, data):
+        """Apply volume layer properties"""
+        pass
+    
     def UpdateVectorProperties(self, id, data, type):
         """Update vector layer properties
 
@@ -1836,7 +1847,7 @@ class NvizToolWindow(wx.Frame):
                                       _("gouraud")])
         shade.SetName("selection")
         self.win['volume']['draw']['shading'] = shade.GetId()
-        # shade.Bind(wx.EVT_CHOICE, self.OnSurfaceMode)
+        shade.Bind(wx.EVT_CHOICE, self.OnVolumeIsosurfMode)
         gridSizer.Add(item=shade, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 3))
 
@@ -1850,7 +1861,7 @@ class NvizToolWindow(wx.Frame):
                             max=100)
         resol.SetName("value")
         self.win['volume']['draw']['resolution'] = resol.GetId()
-        # resC.Bind(wx.EVT_SPINCTRL, self.OnSurfaceResolution)
+        resol.Bind(wx.EVT_SPINCTRL, self.OnVolumeIsosurfResolution)
         gridSizer.Add(item=resol, pos=(0, 5))
         
         boxSizer.Add(item=gridSizer, proportion=1,
@@ -1875,7 +1886,7 @@ class NvizToolWindow(wx.Frame):
         
         # buttons (add, delete, move up, move down)
         btnAdd = wx.Button(parent=panel, id=wx.ID_ADD)
-        self.win['volume']['btnIsoSurfAdd'] = btnAdd.GetId()
+        self.win['volume']['btnIsosurfAdd'] = btnAdd.GetId()
         btnAdd.Bind(wx.EVT_BUTTON, self.OnVolumeIsosurfAdd)
         gridSizer.Add(item=btnAdd,
                       pos=(0, 1))
@@ -1931,7 +1942,7 @@ class NvizToolWindow(wx.Frame):
             else:
                 use = None
             # check for required properties
-            if code not in ('topo', 'color'):
+            if code not in ('topo', 'color', 'shine'):
                 use.Insert(item=_("unset"), pos=0)
                 self.win['volume'][code]['required'] = False
             else:
@@ -3028,40 +3039,121 @@ class NvizToolWindow(wx.Frame):
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
+    def UpdateIsosurfButtons(self, list):
+        """Enable/disable buttons 'add', 'delete',
+        'move up', 'move down'"""
+        nitems = list.GetCount()
+        add = self.parent.FindWindowById(self.win['volume']['btnIsosurfAdd'])
+        delete = self.parent.FindWindowById(self.win['volume']['btnIsosurfDelete'])
+        moveDown = self.parent.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
+        moveUp = self.parent.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
+        if nitems >= wxnviz.MAX_ISOSURFS:
+            # disable add button on max
+            add.Enable(False)
+        else:
+            add.Enable(True)
+
+        if nitems < 1:
+            # disable 'delete' if only one item in the lis
+            delete.Enable(False)
+        else:
+            delete.Enable(True)
+
+        if list.GetSelection() >= nitems - 1:
+            # disable 'move-down' if last
+            moveDown.Enable(False)
+        else:
+            moveDown.Enable(True)
+
+        if list.GetSelection() < 1:
+            # disable 'move-up' if first
+            moveUp.Enable(False)
+        else:
+            moveUp.Enable(True)
+        
+    def OnVolumeIsosurfMode(self, event):
+        """Set isosurface draw mode"""
+        layer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
+        id = data['object']['id']
+
+        mode = 0
+        value = event.GetSelection()
+        if value == 0:
+            mode |= wxnviz.DM_FLAT
+        else:
+            mode |= wxnviz.DM_GOURAUD
+        
+        self.mapWindow.nvizClass.SetIsosurfaceMode(id, mode)
+        
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+        
+    def OnVolumeIsosurfResolution(self, event):
+        """Set isosurface draw resolution"""
+        layer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
+        id = data['object']['id']
+        self.mapWindow.nvizClass.SetIsosurfaceRes(id, event.GetInt())
+        
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+        
     def OnVolumeIsosurfAdd(self, event):
         """Add new isosurface to the list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
         level = self.FindWindowById(self.win['volume']['topo']['const']).GetValue()
         
-        list.Append("%s %s" % (_("Level"), str(level)))
-        list.Check(list.GetCount()-1)
-        list.SetSelection(list.GetCount()-1)
+        sel = list.GetSelection()
+        if sel < 0 or sel >= list.GetCount() - 1:
+            item = list.Append(item="%s %s" % (_("Level"), str(level)))
+        else:
+            list.Insert(item="%s %s" % (_("Level"), str(level)),
+                        pos=sel+1) # append
+            item = sel + 1
+        print item
+        list.Check(item)
+        list.SetSelection(item)
         
-        # add isosurface
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
         id = data['object']['id']
         
+        # collect properties
+        isosurfData = {}
+        for attrb in ('topo', 'color', 'mask',
+                      'transp', 'shine', 'emit'):
+            if attrb == 'topo':
+                isosurfData[attrb] = {}
+                win = self.FindWindowById(self.win['volume'][attrb]['const'])
+                isosurfData[attrb]['value'] = win.GetValue()
+            else:
+                uwin = self.FindWindowById(self.win['volume'][attrb]['use'])
+                sel = uwin.GetSelection()
+                if self.win['volume'][attrb]['required']:
+                    sel += 1
+                if sel == 0: # unset
+                    continue
+
+                isosurfData[attrb] = {}
+                if sel == 1: # map
+                    isosurfData[attrb]['map'] = True
+                    vwin = self.FindWindowById(self.win['volume'][attrb]['map'])
+                else: # const
+                    isosurfData[attrb]['map'] = False
+                    vwin = self.FindWindowById(self.win['volume'][attrb]['const'])
+                isosurfData[attrb]['value'] = vwin.GetValue()
+
+        data['isosurface'].insert(item, isosurfData)
+        print '#', data
+
+        # add isosurface        
         self.mapWindow.nvizClass.AddIsosurface(id, level)
         self.mapWindow.nvizClass.SetIsosurfaceColor(id, 0, True, str(layer.name))
 
-        # disable add button on max
-        if list.GetCount() >= wxnviz.MAX_ISOSURFS:
-            self.FindWindowById(event.GetId()).Enable(False)
-        # disable 'move-down'
-        moveDown = self.parent.FindWindowById(self.win['volume']['btnIsosurfMoveDown'])
-        if not moveDown.IsEnabled():
-            moveDown.Enable(False)
-        
-        # enable delete & move buttons
-        btnDelete = self.FindWindowById(self.win['volume']['btnIsosurfDelete'])
-        if not btnDelete.IsEnabled():
-            btnDelete.Enable(True)
-        if list.GetCount() > 1:
-            btnMoveUp = self.FindWindowById(self.win['volume']['btnIsosurfMoveUp'])
-            if not btnMoveUp.IsEnabled():
-                btnMoveUp.Enable(True)
-            
+        # update buttons
+        self.UpdateIsosurfButtons(list)
+
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
 
@@ -3070,7 +3162,6 @@ class NvizToolWindow(wx.Frame):
     def OnVolumeIsosurfDelete(self, event):
         """Remove isosurface from list"""
         list = self.FindWindowById(self.win['volume']['isosurfs'])
-        btn = self.FindWindowById(event.GetId())
         
         # remove item from list
         isosurfId = list.GetSelection()
@@ -3079,20 +3170,18 @@ class NvizToolWindow(wx.Frame):
         if list.GetCount() > 0:
             list.SetSelection(list.GetCount()-1)
         
-        # delete isosurface
         layer = self.mapWindow.GetSelectedLayer()
         data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
         id = data['object']['id']
 
+        # delete isosurface
+        del data['isosurface'][isosurfId]
+        print '#', data
         self.mapWindow.nvizClass.DeleteIsosurface(id, isosurfId)
 
         # update buttons
-        if list.GetCount() < 1:
-            btn.Enable(False)
-        elif list.GetCount() < 2:
-            self.FindWindowById(self.win['volume']['btnIsosurfMoveUp']).Enable(False)
-            self.FindWindowById(self.win['volume']['btnIsosurfMoveDown']).Enable(False)
-
+        self.UpdateIsosurfButtons(list)
+        
         if self.parent.autoRender.IsChecked():
             self.mapWindow.Refresh(False)
         
@@ -3100,12 +3189,68 @@ class NvizToolWindow(wx.Frame):
         
     def OnVolumeIsosurfMoveUp(self, event):
         """Move isosurface up in the list"""
-        pass
+        list = self.FindWindowById(self.win['volume']['isosurfs'])
+        sel = list.GetSelection()
 
+        if sel < 1:
+            return # this should not happen
+
+        layer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
+        id = data['object']['id']
+
+        # move item up
+        text = list.GetStringSelection()
+        list.Insert(item=text, pos=sel-1)
+        list.Check(sel-1)
+        list.SetSelection(sel-1)
+        list.Delete(sel+1)
+        data['isosurface'].insert(sel-1, data['isosurface'][sel])
+        del data['isosurface'][sel+1]
+        self.mapWindow.nvizClass.MoveIsosurface(id, sel, True)
+
+        print '#', data
+        
+        # update buttons
+        self.UpdateIsosurfButtons(list)
+        
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+        
+        event.Skip()
+        
     def OnVolumeIsosurfMoveDown(self, event):
         """Move isosurface dowm in the list"""
-        pass
+        list = self.FindWindowById(self.win['volume']['isosurfs'])
+        sel = list.GetSelection()
 
+        if sel >= list.GetCount() - 1:
+            return # this should not happen
+
+        layer = self.mapWindow.GetSelectedLayer()
+        data = self.mapWindow.GetSelectedLayer(type='nviz')['volume']
+        id = data['object']['id']
+
+        # move item up
+        text = list.GetStringSelection()
+        list.Insert(item=text, pos=sel+2)
+        list.Check(sel+2)
+        list.SetSelection(sel+2)
+        list.Delete(sel)
+        data['isosurface'].insert(sel+2, data['isosurface'][sel])
+        del data['isosurface'][sel]
+        self.mapWindow.nvizClass.MoveIsosurface(id, sel, False)
+
+        print '#', data
+        
+        # update buttons
+        self.UpdateIsosurfButtons(list)
+        
+        if self.parent.autoRender.IsChecked():
+            self.mapWindow.Refresh(False)
+        
+        event.Skip()
+        
     def UpdatePage(self, pageId):
         """Update dialog (selected page)"""
         self.pageChanging = True
@@ -3375,7 +3520,9 @@ class NvizToolWindow(wx.Frame):
                 win.SetSelection(dict['value'])
             else:
                 win.SetValue(dict['value'])
-
+        #self.SetIsosurfaceMode()
+        #self.SetIsosurfaceResolution()
+                
         #
         # isosurface attributes
         #
