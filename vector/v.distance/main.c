@@ -78,12 +78,12 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *from_opt, *to_opt, *from_type_opt, *to_type_opt,
 	*from_field_opt, *to_field_opt;
-    struct Option *out_opt, *max_opt, *table_opt;
+    struct Option *out_opt, *max_opt, *min_opt, *table_opt;
     struct Option *upload_opt, *column_opt, *to_column_opt;
     struct Flag *print_flag, *all_flag;
     struct Map_info From, To, Out, *Outp;
     int from_type, to_type, from_field, to_field;
-    double max;
+    double max, min;
     struct line_pnts *FPoints, *TPoints;
     struct line_cats *FCats, *TCats;
     NEAR *Near, *near;
@@ -163,6 +163,13 @@ int main(int argc, char *argv[])
     max_opt->answer = "-1";
     max_opt->description = _("Maximum distance or -1 for no limit");
 
+    min_opt = G_define_option();
+    min_opt->key = "dmin";
+    min_opt->type = TYPE_DOUBLE;
+    min_opt->required = NO;
+    min_opt->answer = "-1";
+    min_opt->description = _("Minimum distance or -1 for no limit");
+
     upload_opt = G_define_option();
     upload_opt->key = "upload";
     upload_opt->type = TYPE_STRING;
@@ -226,6 +233,7 @@ int main(int argc, char *argv[])
     to_field = atoi(to_field_opt->answer);
 
     max = atof(max_opt->answer);
+    min = atof(min_opt->answer);
 
     if (all_flag->answer)
 	all = 1;
@@ -539,7 +547,7 @@ int main(int argc, char *argv[])
 		Vect_point_on_line(TPoints, tmp_talong, NULL, NULL, NULL,
 				   &tmp_tangle, NULL);
 
-		if (tmp_dist > max)
+		if (tmp_dist > max || tmp_dist < min)
 		    continue;	/* not in threshold */
 
 		/* TODO: more cats of the same field */
