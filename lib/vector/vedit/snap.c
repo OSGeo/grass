@@ -192,7 +192,7 @@ int Vedit_snap_lines(struct Map_info *Map, struct Map_info **BgMap,
 	line = List->value[i];
 	type = Vect_read_line(Map, Points, Cats, line);
 
-	if (!(type & GV_LINES)) {
+	if (!(type & (GV_POINT | GV_LINES))) {
 	    continue;
 	}
 
