@@ -120,9 +120,6 @@ CXXBASED = r.terraflow
 
 TIFFBASED = r.out.tiff
 
-XMONBASED = r.digit
-
-
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 
 #compile if GDAL present:
@@ -148,11 +145,6 @@ endif
 #compile if TIFF present:
 ifneq ($(strip $(TIFFLIB)),)
     SUBDIRS += $(TIFFBASED)
-endif
-
-#compile if interactive Xmons are present:
-ifneq ($(USE_X11),)
-    SUBDIRS += $(XMONBASED)
 endif
 
 
