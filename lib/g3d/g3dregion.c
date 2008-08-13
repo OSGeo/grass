@@ -276,7 +276,10 @@ G3d_readRegionMap(const char *name, const char *mapset, G3D_Region * region)
 
     if (G__name_is_fully_qualified(name, xname, xmapset))
 	G3d_filename(fullName, G3D_HEADER_ELEMENT, xname, xmapset);
-    else
+    else {
+	if (!mapset || !*mapset)
+	    mapset = G_find_grid3(name, "");
 	G3d_filename(fullName, G3D_HEADER_ELEMENT, name, mapset);
+    }
     return G3d_readWindow(region, fullName);
 }
