@@ -757,7 +757,7 @@ void gvl_write_char(int pos, unsigned char **data, unsigned char c)
 unsigned char gvl_read_char(int pos, const unsigned char *data)
 {
     if (!data)
-	return NULL;
+	return '\0';
     
     return data[pos];
 }
