@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     build->key = 'b';
     build->description = _("Print the GRASS build information");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 

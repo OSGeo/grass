@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
     cflag->key = 'c';
     cflag->description = _("Display number of colors");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (!rflag->answer && !dflag->answer && !cflag->answer &&

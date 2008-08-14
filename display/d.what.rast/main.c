@@ -30,7 +30,7 @@
 int main(int argc, char **argv)
 {
     struct Cell_head window;
-    int t, b, l, r;
+    double t, b, l, r;
     int i, j;
     int width, mwidth;
     struct Flag *once, *terse, *colrow;
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     colrow->description =
 	_("Print out col/row for the entire map in grid resolution of the region");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 

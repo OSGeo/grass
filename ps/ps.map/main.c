@@ -158,10 +158,8 @@ int main(int argc, char *argv[])
     copies->description = _("Number of copies to print");
     copies->required = NO;
 
-    if (!isatty(0))
-	G_disable_interactive();
     if (G_parser(argc, argv))
-	usage(0);
+	exit(EXIT_FAILURE);
 
     /* Print papers */
     if (pflag->answer) {
@@ -277,7 +275,8 @@ int main(int argc, char *argv[])
     else {
 	G_message(_("\nERROR: Required parameter <%s> not set:\n    (%s).\n"),
 		  output_file->key, output_file->description);
-	usage(1);
+	G_usage();
+	exit(EXIT_FAILURE);
     }
 
     /* get current mapset */
@@ -753,10 +752,3 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-int usage(int full)
-{
-    if (full)
-	G_usage();
-    exit(EXIT_FAILURE);
-}

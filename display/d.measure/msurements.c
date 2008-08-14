@@ -18,7 +18,7 @@ int measurements(int color1, int color2, int s_flag, int m_flag, int k_flag)
     int cur_screen_x, cur_screen_y;
     int screen_x, screen_y;
     struct Cell_head window;
-    int t, b, l, r;
+    double t, b, l, r;
 
     nalloc = 128;
     x = (double *)G_calloc(nalloc, sizeof(double));

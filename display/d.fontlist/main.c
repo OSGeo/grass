@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     flagL->key = 'L';
     flagL->description = _("List fonts verbosely");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (R_open_driver() != 0)

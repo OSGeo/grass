@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     struct Flag *once, *terse, *txt, *topo_flag, *edit_flag;
     struct Option *opt1;
     struct GModule *module;
-    char *mapset, *openvect();
+    char *mapset;
     char *str;
     int i, j, level, width = 0, mwidth = 0;
 
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     edit_flag->key = 'e';
     edit_flag->description = _("Open form in edit mode");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (opt1->answers && opt1->answers[0])

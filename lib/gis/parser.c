@@ -90,10 +90,11 @@
 #define KEYLENGTH 64
 
 static int interactive_ok = 1;
-static int n_opts = 0;
-static int n_flags = 0;
-static int overwrite = 0;
-static int quiet = 0;
+static int n_opts;
+static int n_flags;
+static int overwrite;
+static int quiet;
+static int has_required;
 
 static struct Flag first_flag;	/* First flag in a linked list      */
 static struct Flag *current_flag;	/* Pointer for traversing list      */
@@ -723,6 +724,9 @@ int G_parser(int argc, char **argv)
 
     opt = &first_option;
     while (opt != NULL) {
+	if (opt->required)
+	    has_required = 1;
+
 	/* Parse options */
 	if (opt->options) {
 	    int cnt = 0;
@@ -803,11 +807,11 @@ int G_parser(int argc, char **argv)
 
     /* If there are NO arguments, go interactive */
 
-    if (argc < 2 && interactive_ok && isatty(0)) {
+    if (argc < 2 && has_required && interactive_ok && isatty(0)) {
 	G_gui();
 	return -1;
     }
-    else if (argc < 2 && isatty(0)) {
+    else if (argc < 2 && has_required && isatty(0)) {
 	G_usage();
 	return -1;
     }

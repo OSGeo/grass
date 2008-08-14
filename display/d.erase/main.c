@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     eraseframe->key = 'f';
     eraseframe->description = _("Remove all frames and erase the screen");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(1);
 
     if (R_open_driver() != 0)

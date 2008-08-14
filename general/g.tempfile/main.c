@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     G_disable_interactive();
     if (G_parser(argc, argv))
-	exit(1);
+	exit(EXIT_FAILURE);
 
     if (sscanf(pid->answer, "%d", &p) != 1) {
 	G_usage();

@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     printattributes->key = 'a';
     printattributes->description = _("Print attribute information");
 
-    if ((argc > 1 || !vect) && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (opt1->answers && opt1->answers[0])

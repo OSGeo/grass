@@ -88,8 +88,6 @@ int main(int argc, char *argv[])
     flag.quiet->key = 'q';
     flag.quiet->description = _("Run quietly");
 
-    G_disable_interactive();
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 

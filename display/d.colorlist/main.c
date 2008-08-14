@@ -45,10 +45,8 @@ int main(int argc, char **argv)
     sep->description = "character for separation of list items";
     sep->answer = ",";
 
-    G_disable_interactive();
-
-    if (argc > 1 && G_parser(argc, argv))
-	exit(1);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     colorlist = G_store(D_color_list());
 
@@ -60,5 +58,5 @@ int main(int argc, char **argv)
     }
 
     fprintf(stdout, "%s\n", colorlist);
-    return (0);
+    return 0;
 }

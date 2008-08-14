@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     oneoff->key = 'u';
     oneoff->description = _("Update default GUI setting");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
