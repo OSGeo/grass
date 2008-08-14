@@ -40,6 +40,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include <cstring>
 #include <iostream>
 using namespace std;
 
