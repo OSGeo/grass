@@ -87,7 +87,6 @@ int main(int argc, char *argv[])
     parm.title->required = NO;
     parm.title->description = _("Title for new raster map");
 
-    G_disable_interactive();
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 

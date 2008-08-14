@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     last->key = 'r';
     last->description = _("Return to previous zoom");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if ((full->answer + pan->answer + hand->answer) > 1)

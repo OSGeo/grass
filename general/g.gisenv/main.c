@@ -25,9 +25,9 @@
 int main(int argc, char *argv[])
 {
     int n, store;
-    int tty;
     char *name, *value, *ptr;
     struct Option *get, *set, *store_opt;
+    struct Flag *flag_s, *flag_n;
     struct GModule *module;
 
     G_set_program_name(argv[0]);
@@ -60,15 +60,34 @@ int main(int argc, char *argv[])
     store_opt->description = _("Where GRASS variable is stored");
     store_opt->required = NO;
 
-    if (argc > 1 && G_parser(argc, argv) < 0)
+    flag_s = G_define_flag();
+    flag_s->key = 's';
+    flag_s->description = _("Use shell syntax (for \"eval\")");
+
+    flag_n = G_define_flag();
+    flag_n->key = 'n';
+    flag_n->description = _("Don't Use shell syntax");
+
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (flag_s->answer && flag_n->answer)
+	G_fatal_error(_("-s and -n are mutually exclusive"));
 
     /* Print or optionally set environment variables */
     if (!get->answer && !set->answer) {
-	tty = isatty(1);
 	for (n = 0; (name = G__env_name(n)); n++) {
+	    int quote;
+
+	    if (flag_s->answer)
+		quote = 1;
+	    else if (flag_n->answer)
+		quote = 0;
+	    else
+		quote = !isatty(fileno(stdout));
+
 	    if ((value = G__getenv(name))) {
-		if (tty)
+		if (!quote)
 		    fprintf(stdout, "%s=%s\n", name, value);
 		else
 		    fprintf(stdout, "%s='%s';\n", name, value);

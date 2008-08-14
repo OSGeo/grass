@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	"Comma-separated list of extra directories to scan for "
 	"Freetype-compatible fonts as well as the defaults (see documentation)";
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (!tostdout->answer) {

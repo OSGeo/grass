@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
 
     /* if (G_parser(argc,argv)) */
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (latlong->answer && wgs84->answer)
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 	}
     }
     else
-	fp = NULL;
+	fp = stdin;
 
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));

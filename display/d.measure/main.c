@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     parm.k->key = 'k';
     parm.k->description = _("Output in kilometers as well");
 
-    if (argc > 1 && G_parser(argc, argv))
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (R_open_driver() != 0)
