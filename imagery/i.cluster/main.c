@@ -172,12 +172,6 @@ int main(int argc, char *argv[])
     subgroup = parm.subgroup_name->answer;	/* required */
 
     outsigfile = parm.out_sig->answer;
-    if (G_legal_filename(outsigfile) < 0) {
-	G_warning(_("\n<%s> -- illegal result signature file name"),
-		  outsigfile);
-	G_usage();
-	exit(EXIT_FAILURE);
-    }
 
     if (sscanf(parm.class->answer, "%d", &maxclass) != 1 || maxclass < 1
 	|| maxclass > 255) {
