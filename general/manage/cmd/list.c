@@ -69,40 +69,37 @@ int main(int argc, char *argv[])
     mapset->required = NO;
     mapset->multiple = NO;
     mapset->description = _("Mapset to list (default: current search path)");
-#define MAPSET mapset->answer
 
     full = G_define_flag();
     full->key = 'f';
     full->description = _("Verbose listing (also list map titles)");
-#define FULL full->answer
 
-    if (G_parser(argc, argv)) {
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    }
 
-    if (MAPSET == NULL)
-	MAPSET = "";
+    if (mapset->answer == NULL)
+	mapset->answer = "";
 
-    if (G_strcasecmp(MAPSET, ".") == 0)
-	MAPSET = G_mapset();
+    if (G_strcasecmp(mapset->answer, ".") == 0)
+	mapset->answer = G_mapset();
 
     i = 0;
     while (element->answers[i]) {
 	n = parse(element->answers[i]);
 
-	if (FULL) {
-	    char lister[300];
+	if (full->answer) {
+	    char lister[GPATH_MAX];
 
 	    sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
 		    list[n].element[0]);
 	    G_debug(3, "lister CMD: %s", lister);
 	    if (access(lister, 1) == 0)	/* execute permission? */
-		G_spawn(lister, lister, MAPSET, NULL);
+		G_spawn(lister, lister, mapset->answer, NULL);
 	    else
-		do_list(n, MAPSET);
+		do_list(n, mapset->answer);
 	}
 	else {
-	    do_list(n, MAPSET);
+	    do_list(n, mapset->answer);
 	}
 
 	i++;

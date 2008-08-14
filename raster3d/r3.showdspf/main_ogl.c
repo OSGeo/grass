@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     colr->description = "Name of existing color table";
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     /* set-up for select() */
     if (pipe(fdes))
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 
 	if (NULL == (dsp =
 		     check_get_any_dspname(dspf->answer, g3->answer, NULL)))
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 
 
 	/* TODO - check color file */
@@ -206,13 +206,13 @@ int main(int argc, char **argv)
 	if ((Headfax.dspfinfp = G_fopen_old(buff, dsp, mapset)) == NULL) {
 	    fprintf(stderr, "ERROR: unable to open %s for reading\n",
 		    Headfax.dspfinfp);
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
 
 	/* read header info from dspf file into GLOBAL variable Headfax */
 	if (dfread_header(&Headfax) < 0) {
 	    fprintf(stderr, "ERROR:  while reading dspf file header\n");
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	}
 
 	/* set 3dmap for data in Headfax */

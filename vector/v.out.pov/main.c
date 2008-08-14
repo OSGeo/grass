@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 	"\t\tExample: \"pigment { color red 0 green 1 blue 0 }\"";
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     /* Check output type */
     otype = Vect_option_to_types(type_opt);

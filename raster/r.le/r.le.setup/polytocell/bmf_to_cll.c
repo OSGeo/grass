@@ -40,7 +40,7 @@ int main(argc, argv)
     char *mapset;
 
     if (argc != 2)
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     G_gisinit("bmif_to_cell");
 
@@ -134,5 +134,5 @@ int quit(void)
 {
     fprintf(stderr,
 	    "    You drew a region outside the mask; restart REGIONS setup\n");
-    exit(-1);
+    exit(EXIT_FAILURE);
 }

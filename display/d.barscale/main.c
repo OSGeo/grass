@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     opt3->description =
 	_("The screen coordinates for top-left corner of label ([0,0] is top-left of frame)");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 

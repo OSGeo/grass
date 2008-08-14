@@ -39,7 +39,7 @@ int create_transform_from_file(struct file_info *Coord, int quiet)
     n_points = 0;
     /*  Get the coordinates from the file.  */
     if ((n_points = get_coor_from_file(Coord->fp)) < 0)
-	exit(-1);
+	G_fatal_error(_("Error reading coordinates file"));
 
     status = setup_transform(n_points);
 
@@ -47,7 +47,7 @@ int create_transform_from_file(struct file_info *Coord, int quiet)
 	G_message(_("Number of points that have been entered [%d]"),
 		  n_points);
 	print_transform_error(status);
-	exit(-1);
+	G_fatal_error(_("Error creating transformation"));
     }
 
     if (!quiet)

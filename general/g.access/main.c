@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     other_opt->options = "grant,revoke";
     other_opt->description = _("Access for others");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /* get the unix file name for the mapset directory */

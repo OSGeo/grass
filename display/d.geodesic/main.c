@@ -71,14 +71,10 @@ int main(int argc, char *argv[])
     /*    parm.tcolor->options    = D_color_list(); */
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
-    if (G_projection() != PROJECTION_LL) {
-	sprintf(msg, "%s: database is not a %s\n",
-		argv[0], G__projection_name(PROJECTION_LL));
-	G_fatal_error(msg);
-	exit(1);
-    }
+    if (G_projection() != PROJECTION_LL)
+	G_fatal_error(_("Database is not a %s"), G__projection_name(PROJECTION_LL));
 
     if (parm.coor->answers[0] == NULL)
 	G_fatal_error("No coordinates given");

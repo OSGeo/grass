@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     out_opt = G_define_standard_option(G_OPT_R_OUTPUT);
     out_opt->description = _("Output raster map prefix name");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     if (G_legal_filename(grp_opt->answer) < 0)

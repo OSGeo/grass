@@ -333,8 +333,8 @@ int main(int argc, char *argv[])
     opt.bg->type = TYPE_STRING;
     opt.bg->description = _("Background color");
 
-    if (G_parser(argc, argv) < 0)
-	return 1;
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     width = atoi(opt.width->answer);
     height = atoi(opt.height->answer);

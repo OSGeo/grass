@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     cellmap = G_find_file2("cell", rast->answer, "");
     if (!cellmap) {

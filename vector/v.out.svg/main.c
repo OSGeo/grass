@@ -104,9 +104,8 @@ int main(int argc, char *argv[])
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
-    if (G_parser(argc, argv)) {
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    }
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

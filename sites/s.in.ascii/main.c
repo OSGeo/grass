@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     parm.date->description = "datetime or datetime1/datetime2";
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     if ((input = parm.input->answer)) {
 	in_fd = fopen(input, "r");

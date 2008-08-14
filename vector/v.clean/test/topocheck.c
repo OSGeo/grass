@@ -36,6 +36,8 @@ int main(int argc, char *argv[])
     int nareas1, nareas2;
     double tarea1, tarea2, darea, pdarea;
 
+    G_gisinit(argv[0]);
+
     module = G_define_module();
     module->keywords = _("vector");
     module->description = "Break lines at intersections.";
@@ -48,9 +50,8 @@ int main(int argc, char *argv[])
     poly_f->description =
 	"Write areas and isles as closed polygons instead of topo check";
 
-    G_gisinit(argv[0]);
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE));
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

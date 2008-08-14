@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 #endif
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     if (G_projection() != PROJECTION_LL)
 	G_fatal_error("%s: database is not a %s database",

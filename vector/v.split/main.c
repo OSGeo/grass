@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     vertices_opt->description = "Maximum number of vertices in segment.";
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     /* layer = atoi ( layer_opt->answer ); */
 

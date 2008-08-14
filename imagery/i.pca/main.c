@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     opt_scale->description =
 	_("Rescaling range output (For no rescaling use 0,0)");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /* determine number of bands passed in */

@@ -169,9 +169,8 @@ int main(int argc, char **argv)
     flag.input->key = 'i';
     flag.input->description = _("Input data given for (o/i)");
 
-    if (G_parser(argc, argv)) {
-	exit(-1);
-    }
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     /* Store given parameters and flags */
     map.basin = param.basin->answer;

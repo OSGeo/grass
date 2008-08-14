@@ -49,9 +49,8 @@ int main(int argc, char **argv)
     params.output->key = "output";
     params.output->description = _("Output topographic index map");
 
-    if (G_parser(argc, argv)) {
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    }
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))

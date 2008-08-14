@@ -25,7 +25,7 @@
  * @param argv The command line arguments.
  * @param p The parameters structure.
  */
-static int parse_args(int argc, char *argv[], struct params *p);
+static void parse_args(int argc, char *argv[], struct params *p);
 
 /**
  * The main function controls the program flow.
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 
     //    fprintf(stderr, "Parsing options and flags\n");
     /* parse options and flags */
-    if (parse_args(argc, argv, &p))
-	exit(EXIT_FAILURE);
+    parse_args(argc, argv, &p);
+
     /* initialize labels (get text from database, and get features) */
     labels = labels_init(&p, &n_labels);
     /* start algorithm */
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     return EXIT_SUCCESS;
 }
 
-static int parse_args(int argc, char *argv[], struct params *p)
+static void parse_args(int argc, char *argv[], struct params *p)
 {
     p->map = G_define_standard_option(G_OPT_V_MAP);
 
@@ -230,7 +230,8 @@ static int parse_args(int argc, char *argv[], struct params *p)
     p->bowidth->answer = "0";
     p->bowidth->guisection = _("Colors");
 
-    return G_parser(argc, argv);
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 }
 
 void print_label(FILE * labelf, label_t * label, struct params *p)

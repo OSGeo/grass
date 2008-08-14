@@ -414,7 +414,7 @@ int Ngetargs(Tcl_Interp * interp,	/* Current interpreter. */
     }
 
     if (TCL_ERROR == Tcl_SplitList(interp, tmp2, &argc, args))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     return (argc);
 }
