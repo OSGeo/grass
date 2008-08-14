@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     /* Save map name */
     label_name = opt1->answer;

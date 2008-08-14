@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
 
     strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);

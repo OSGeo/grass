@@ -8,7 +8,7 @@
 
 #define MAXLINE	 90
 #define FGET	    fgets(buff,MAXLINE,stdin)
-#define READLINE	if (FGET==NULL) exit(-1) ;\
+#define READLINE	if (FGET==NULL) exit(EXIT_FAILURE) ;\
 					sscanf (buff,"%1c %lf %lf %d\n", &type, &U_y, &U_x, &code)
 #define XADJ(x)	 (x * U_to_A_xconv + U_to_A_xadd) ;
 #define YADJ(y)	 (y * U_to_A_yconv + U_to_A_yadd) ;
@@ -38,7 +38,7 @@ int main(void)
     /* read through Grips Header to pick up coordinate conversion factors */
     do {
 	if (FGET == NULL)
-	    exit(-1);
+	    exit(EXIT_FAILURE);
 	sscanf(buff, "%s\n", word);
 	incr = strcmp("ENDT\0", word);
     }
@@ -109,7 +109,7 @@ int main(void)
 			"  number of vertices read: %d   allowed: %d\n",
 			num_verticies, MAX_VERTICIES);
 		fprintf(stderr, "ABORTING\n");
-		exit(-1);
+		exit(EXIT_FAILURE);
 	    }
 	    READLINE;
 	}

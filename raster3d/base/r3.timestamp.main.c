@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     date->type = TYPE_STRING;
     date->description = _("Datetime, datetime1/datetime2, or none");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     name = map->answer;

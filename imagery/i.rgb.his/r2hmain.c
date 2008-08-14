@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     opt_sat->key = "saturation_output";
     opt_sat->description = _("Output saturation raster map");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /* get dimension of the image */

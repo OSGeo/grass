@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     map_name = opt1->answer;
     mapset = G_find_cell2(map_name, "");

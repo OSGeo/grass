@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     in_sig->required = NO;
     in_sig->description = _("File containing input signatures (seed)");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 

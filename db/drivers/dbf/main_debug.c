@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     driver = db_start_driver("dbf");
     if (driver == NULL)
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     db_init_handle(&handle);
     db_set_handle(&handle, "dbf_catalog", NULL);

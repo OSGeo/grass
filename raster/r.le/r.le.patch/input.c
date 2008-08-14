@@ -199,9 +199,9 @@ void user_input(int argc, char **argv)
     out->required = NO;
 
 
-    if (G_parser(argc, argv)) {
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    }
+
     /* record the user inputs for map,
        sam and out parameters */
 

@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
     if (translate_output)
 	return EXIT_SUCCESS;
 
-    if (G_parser(argc - 1, argv + 1) < 0)
+    if (G_parser(argc - 1, argv + 1))
 	return 1;
 
     /* Because shell from MINGW and CygWin converts all variables

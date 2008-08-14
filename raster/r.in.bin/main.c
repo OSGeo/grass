@@ -359,7 +359,7 @@ int main(int argc, char *argv[])
     if (fd == NULL) {
 	perror(input);
 	G_usage();
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     /* Read binary GMT style header */

@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     opt_blue->key = "blue_output";
     opt_blue->description = _("Output map representing the blue");
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     /* get dimension of the image */

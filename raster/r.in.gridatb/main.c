@@ -58,9 +58,8 @@ int main(int argc, char **argv)
     params.output->required = YES;
     params.output->gisprompt = "new,cell,raster";
 
-    if (G_parser(argc, argv)) {
-	exit(-1);
-    }
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     file = params.input->answer;
     oname = params.output->answer;

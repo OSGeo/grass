@@ -36,7 +36,7 @@ int get_target_window(void)
 #endif
 
     if (G_get_cellhd(name, mapset, &cellhd) < 0)
-	exit(-1);
+	exit(EXIT_FAILURE);
 
 #ifdef DEBUG3
     fprintf(Bugsr, "current window: n s = %f %f, \n", cellhd.north,

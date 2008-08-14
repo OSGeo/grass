@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     opt4->description = _("Name for the resultant watershed partition file");
     opt4->gisprompt = "new,cell,raster";
 
-    if (G_parser(argc, argv) < 0)
+    if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     sscanf(opt1->answer, "%d", &tpass);

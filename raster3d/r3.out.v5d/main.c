@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 
     /* Have GRASS get inputs */
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     /* Parse input parameters */
     getParams(&input, &output, &decim);

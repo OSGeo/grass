@@ -41,7 +41,7 @@ void *dig_alloc_space(int n_wanted,
     if (p == NULL) {
 	fprintf(stderr, "\nERROR: out of memory.  memory asked for: %d\n",
 		n_wanted);
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
 
     return (p);
@@ -95,7 +95,7 @@ void *dig_falloc(int nelem, int elsize)
     if ((ret = dig__falloc(nelem, elsize)) == NULL) {
 	fprintf(stderr, "Out of Memory.\n");
 	G_sleep(2);
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
     return (ret);
 }
@@ -107,7 +107,7 @@ void *dig_frealloc(void *oldptr, int nelem, int elsize, int oldnelem)
     if ((ret = dig__frealloc(oldptr, nelem, elsize, oldnelem)) == NULL) {
 	fprintf(stderr, "\nOut of Memory on realloc.\n");
 	G_sleep(2);
-	exit(-1);
+	exit(EXIT_FAILURE);
     }
     return (ret);
 }
