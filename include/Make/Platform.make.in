@@ -163,10 +163,8 @@ TIFFLIB             = @TIFFLIB@
 
 #openGL files for NVIZ/r3.showdspf
 OPENGLINC           = @OPENGLINC@
-OPENGLWINC          = @OPENGLWINC@
 OPENGLLIB           = @OPENGLLIB@
 OPENGLULIB          = @OPENGLULIB@
-OPENGLWM            = @OPENGLWM@
 OPENGL_X11          = @OPENGL_X11@
 OPENGL_AQUA         = @OPENGL_AQUA@
 OPENGL_WINDOWS      = @OPENGL_WINDOWS@
