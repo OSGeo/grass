@@ -144,7 +144,7 @@ class Settings:
                     },
                 # d.rast
                 'rasterOverlay' : {
-                    'enabled' : False
+                    'enabled' : True
                     },
                 # d.vect
                 'showType': {
