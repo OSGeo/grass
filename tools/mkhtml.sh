@@ -21,8 +21,6 @@ fi
 
 if test -f ${PGM}.html ; then
     cat ${PGM}.html >> ${PGM}.tmp.html
-elif test -f description.html ; then
-    cat description.html >> ${PGM}.tmp.html
 fi
 
 if ! grep -i '<html>' ${PGM}.tmp.html > /dev/null ; then

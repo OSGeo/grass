@@ -6,7 +6,7 @@ EXTRA_CFLAGS=$(GETHOSTNAME) $(ZLIBINCPATH) $(PNGINC) -I../driver
 
 EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(PNGLIB)
 LIB_NAME = $(PNGDRIVER_LIBNAME)
-PGM = cairodriver
+PGM = pngdriver
 
 LIB_OBJS =	\
 	Box.o			\
