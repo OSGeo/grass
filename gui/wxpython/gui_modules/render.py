@@ -216,7 +216,10 @@ class Layer(object):
 
     def SetType(self, type):
         """Set layer type"""
-        if type not in ('raster', '3d-raster', 'vector', 'overlay', 'command'):
+        if type not in ('raster', '3d-raster', 'vector',
+                        'overlay', 'command',
+                        'shaded', 'rgb', 'his', 'rastarrow',
+                        'thememap', 'themechart'):
             raise gcmd.GStdError(_("Unsupported map layer type '%s'") % str(type))
         
         self.type = type
