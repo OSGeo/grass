@@ -344,18 +344,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Set computational region from selected raster/vector map"""
         mapLayer = self.GetPyData(self.layer_selected)[0]['maplayer']
         mltype = self.GetPyData(self.layer_selected)[0]['type']
-
-        cmd = ['g.region',
-               '-p'] # print by default
-
+        
+        cmd = ['g.region']
+        
         # TODO: other elements
         if mltype == 'raster':
             cmd.append('rast=%s' % mapLayer.name)
         elif mltype == 'vector':
             cmd.append('vect=%s' % mapLayer.name)
+        elif mltype == '3d-raster':
+            cmd.append('rast3d=%s' % mapLayer.name)
 
         # print output to command log area
-        self.gismgr.goutput.RunCmd(cmd)
+        if len(cmd) > 1:
+            cmd.append('-p')
+            self.gismgr.goutput.RunCmd(cmd)
         
     def OnProfile(self, event):
         """Plot profile of given raster map layer"""

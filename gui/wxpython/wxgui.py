@@ -85,6 +85,7 @@ import gui_modules.dbm as dbm
 import gui_modules.workspace as workspace
 import gui_modules.goutput as goutput
 import gui_modules.gdialogs as gdialogs
+import gui_modules.colorrules as colorrules
 from   gui_modules.debug import Debug as Debug
 from   icons.icon import Icons as Icons
 
@@ -868,6 +869,7 @@ class GMFrame(wx.Frame):
 
         self.disp_idx = 0
         self.curr_page = None
+        
 
     def RulesCmd(self, event):
         """
@@ -875,32 +877,31 @@ class GMFrame(wx.Frame):
         input and processes rules
         """
         command = self.GetMenuCmd(event)
-
-        dlg = rules.RulesText(self, cmd=command)
-        if dlg.ShowModal() == wx.ID_OK:
-            gtemp = utils.GetTempfile()
-            output = open(gtemp, "w")
-            try:
-                output.write(dlg.rules)
-            finally:
-                output.close()
-
-            if command[0] == 'r.colors':
-                cmdlist = [command[0],
-                           'map=%s' % dlg.inmap,
-                           'rules=%s' % gtemp]
-            else:
+        
+        if command[0] == 'r.colors':
+            ctable = colorrules.ColorTable(self, cmd=command)
+            ctable.Show()      
+        else:
+            dlg = rules.RulesText(self, cmd=command)
+            if dlg.ShowModal() == wx.ID_OK:
+                gtemp = utils.GetTempfile()
+                output = open(gtemp, "w")
+                try:
+                    output.write(dlg.rules)
+                finally:
+                    output.close()
+    
                 cmdlist = [command[0],
                            'input=%s' % dlg.inmap,
                            'output=%s' % dlg.outmap,
                            'rules=%s' % gtemp]
-
-            if dlg.overwrite == True:
-                cmdlist.append('--o')
-
-            dlg.Destroy()
-
-            self.goutput.RunCmd(cmdlist)
+    
+                if dlg.overwrite == True:
+                    cmdlist.append('--o')
+    
+                dlg.Destroy()
+    
+                self.goutput.RunCmd(cmdlist)
 
     def OnXTerm(self, event):
         """

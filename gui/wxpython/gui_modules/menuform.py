@@ -44,7 +44,6 @@ Classes:
  - verify option value types
  - use DOM instead of SAX
 """
-__version__ ="$Revision$"
 
 import sys
 import re
@@ -589,22 +588,7 @@ class mainFrame(wx.Frame):
 
         # icon
         self.SetIcon(wx.Icon(os.path.join(globalvar.ETCICONDIR, 'grass_dialog.ico'), wx.BITMAP_TYPE_ICO))
-
-        # menu
-        #         menu = wx.Menu()
-        #         menu.Append(wx.ID_ABOUT, _("&About GrassGUI"),
-        #             _("Information about GrassGUI") )
-        #         menu.Append(ID_ABOUT_COMMAND, _("&About %s") % self.task.name,
-        #             _("Short descripton of GRASS command %s") % self.task.name)
-        #         menu.AppendSeparator()
-        #         menu.Append(wx.ID_EXIT, _("E&xit"), _("Terminate the program") )
-        #         menuBar = wx.MenuBar()
-        #         menuBar.Append(menu, "&File");
-        #         self.SetMenuBar(menuBar)
-        #wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
-        #wx.EVT_MENU(self, ID_ABOUT_COMMAND, self.OnAboutCommand)
-        #wx.EVT_MENU(self, wx.ID_EXIT,  self.OnCancel)
-
+        
         guisizer = wx.BoxSizer(wx.VERTICAL)
 
         # set apropriate output window
@@ -857,25 +841,7 @@ class mainFrame(wx.Frame):
             self.notebookpanel.OnPageChange(None)
             
         event.Skip()
-
-    def OnAbout(self, event):
-        """General 'about' information"""
-        dlg = wx.MessageDialog(self, _("This is a sample program for\n"
-                                       "GRASS command interface parsing\n"
-                                       "and automatic GUI building.\n%s") %(__version__),
-                               _("About wxPython GRASS GUI"), wx.OK | wx.ICON_INFORMATION)
-        dlg.ShowModal()
-        dlg.Destroy()
-
-    def OnAboutCommand(self, event):
-        """About command"""
-        dlg = wx.MessageDialog(self,
-            self.task.name+": "+self.task.description,
-            "About " + self.task.name,
-            wx.OK | wx.ICON_INFORMATION)
-        dlg.ShowModal()
-        dlg.Destroy()
-
+        
     def createCmd(self, ignoreErrors = False):
         """Create command string (python list)"""
         return self.notebookpanel.createCmd(ignoreErrors=ignoreErrors)
