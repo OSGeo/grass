@@ -59,8 +59,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    gui_type_env = G__getenv("GRASS_GUI");
+    
     if (!type->answer) {
-	gui_type_env = G__getenv("GRASS_GUI");
 	if (gui_type_env && strcmp(gui_type_env, "text")) {
 	    type->answer = G_store(gui_type_env);
 	}
