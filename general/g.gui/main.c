@@ -41,18 +41,12 @@ int main(int argc, char *argv[])
     type->key = "gui";
     type->type = TYPE_STRING;
     type->required = YES;
-    type->description = _("GUI type");
+    type->label = _("GUI type");
+    type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
     type->descriptions = _("tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);"
 			   "oldtcltk;Old Tcl/Tk based GUI - Display Manager (d.m);"
 			   "wxpython;wxPython based next generation GUI");
     type->options = "tcltk,oldtcltk,wxpython";
-    gui_type_env = G__getenv("GRASS_GUI");
-    if (gui_type_env && strcmp(gui_type_env, "text")) {
-	type->answer = G_store(gui_type_env);
-    }
-    else {
-	type->answer = "tcltk";
-    }
 
     rc_file = G_define_standard_option(G_OPT_F_INPUT);
     rc_file->key = "workspace";
@@ -66,6 +60,15 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (!type->answer) {
+	gui_type_env = G__getenv("GRASS_GUI");
+	if (gui_type_env && strcmp(gui_type_env, "text")) {
+	    type->answer = G_store(gui_type_env);
+	}
+	else {
+	    type->answer = "wxpython";
+	}
+    }
 
     if (((gui_type_env && oneoff->answer) &&
 	 strcmp(gui_type_env, type->answer) != 0) || !gui_type_env) {
