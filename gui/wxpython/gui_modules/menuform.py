@@ -570,7 +570,7 @@ class mainFrame(wx.Frame):
         self.get_dcmd = get_dcmd
         self.layer = layer
         self.task = task_description
-        self.parent = parent
+        self.parent = parent # LayerTree | None
 
         # module name + keywords
         title = self.task.name
@@ -842,7 +842,11 @@ class mainFrame(wx.Frame):
         """Cancel button pressed"""
         self.MakeModal(False)
         if self.get_dcmd:
-            self.Hide()
+            if len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
+                self.parent.Delete(self.layer)
+                self.Destroy()
+            else:
+                self.Hide()
         else:
             self.Destroy()
 
@@ -1464,7 +1468,10 @@ class cmdPanel(wx.Panel):
         try:
             cmd = self.task.getCmd( ignoreErrors=ignoreErrors )
         except ValueError, err:
-            dlg = wx.MessageDialog(self, str(err), _("Error"), wx.OK | wx.ICON_ERROR)
+            dlg = wx.MessageDialog(parent=self,
+                                   message=str(err),
+                                   caption=_("Error in %s") % self.task.name,
+                                   style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             dlg.ShowModal()
             dlg.Destroy()
             cmd = None
