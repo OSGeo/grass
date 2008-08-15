@@ -18,27 +18,26 @@ htmlmulti:
 
 else
 
-htmlgen = \
-	$(MODULE_TOPDIR)/tools/mkhtml.sh $(PGM) ; \
-	$(MKDIR) $(HTMLDIR) ; \
-	$(INSTALL_DATA) $(PGM).tmp.html $(HTMLDIR)/$(PGM).html ; \
-	for file in  *.png *.jpg ; do \
+$(HTMLDIR)/$(PGM).html: $(PGM).html $(PGM).tmp.html
+	-$(MKDIR) $(HTMLDIR)
+	$(MODULE_TOPDIR)/tools/mkhtml.sh $(PGM)
+	$(INSTALL_DATA) $(PGM).tmp.html $@
+	-for file in  *.png *.jpg ; do \
 		head -n 1 $$file | grep '^\#!' > /dev/null ; \
 		if [ $$? -ne 0 ] ; then \
 		   $(INSTALL_DATA) $$file $(HTMLDIR) ; \
 		fi \
 		done 2> /dev/null ; true
 
-htmldesc = \
-	GISRC=$(RUN_GISRC) \
-	GISBASE=$(RUN_GISBASE) \
-	PATH="$(BIN):$$PATH" \
-	$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
-	LC_ALL=C $(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(PGM).tmp.html ; true
-
-$(HTMLDIR)/$(PGM).html: $(HTMLSRC)
-	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<) ; fi
-	$(call htmlgen)
+$(PGM).tmp.html: $(HTMLSRC)
+	if [ "$(HTMLSRC)" != "" ] ; then \
+		GISRC=$(RUN_GISRC) \
+		GISBASE=$(RUN_GISBASE) \
+		PATH="$(BIN):$$PATH" \
+		$(LD_LIBRARY_PATH_VAR)="$(BIN):$(ARCH_LIBDIR):$($(LD_LIBRARY_PATH_VAR))" \
+		LC_ALL=C \
+		$(HTMLSRC) --html-description < /dev/null | grep -v '</body>\|</html>' > $@ ; \
+	fi
 
 # html rules for cmd commands
 htmlcmd:

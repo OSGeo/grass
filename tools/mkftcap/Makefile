@@ -10,3 +10,6 @@ default: script
 
 $(CAPFILE): $(SCRIPTDIR)/$(PGM)
 	$< > $@
+
+htmlscript:
+	@true
