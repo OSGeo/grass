@@ -878,8 +878,8 @@ class GMFrame(wx.Frame):
         """
         command = self.GetMenuCmd(event)
         
-        if command[0] == 'r.colors':
-            ctable = colorrules.ColorTable(self, cmd=command)
+        if command[0] == 'r.colors' or command[0] == 'vcolors':
+            ctable = colorrules.ColorTable(self, cmd=command[0])
             ctable.Show()      
         else:
             dlg = rules.RulesText(self, cmd=command)
