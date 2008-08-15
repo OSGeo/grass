@@ -23,8 +23,7 @@ SUBDIRS = r.li.daemon $(SUBDIRS1)
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: parsubdirs
-	$(INSTALL_DATA) description.html $(GISBASE)/docs/html/r.li.html
+default: parsubdirs htmldir
 
 clean: cleansubdirs
 

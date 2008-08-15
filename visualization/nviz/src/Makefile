@@ -63,7 +63,3 @@ nvwish$(EXE): $(ARCH_OBJS) $(VECTDEP) $(BITMAPDEP) $(LINKMDEP) $(FORMDEP) $(DBMI
 		$(G3DLIB) $(GISLIB) $(XDRLIB) \
 		$(DATETIMELIB) $(TIFFLIBPATH) $(TIFFLIB) \
 		$(MATHLIB)
-	-$(MKDIR) $(GISBASE)/docs/html
-	-$(INSTALL_DATA) description.html $(GISBASE)/docs/html/nviz.html
-	-$(INSTALL) *.png *.jpg $(GISBASE)/docs/html 2> /dev/null ; true
-
