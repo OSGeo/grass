@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     struct Option *catlist;
     struct Option *vallist;
     struct Option *bg;
-    struct Flag *flag_o;
+    struct Flag *flag_n;
     struct Flag *flag_i;
 
     /* Initialize the GIS calls */
@@ -87,9 +87,9 @@ int main(int argc, char **argv)
     bg->options = color_list();
     bg->description = _("Background color (for null)");
 
-    flag_o = G_define_flag();
-    flag_o->key = 'o';
-    flag_o->description = _("Overlay (non-null values only)");
+    flag_n = G_define_flag();
+    flag_n->key = 'n';
+    flag_n->description = _("Make null cells opaque");
 
     flag_i = G_define_flag();
     flag_i->key = 'i';
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     name = map->answer;
-    overlay = flag_o->answer;
+    overlay = !flag_n->answer;
     invert = flag_i->answer;
 
     /* Make sure map is available */
