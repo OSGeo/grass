@@ -115,6 +115,8 @@ def GetGRASSCmds(bin=True, scripts=True, gui_scripts=True):
     list = []
     if bin is True:
         list = os.listdir(os.path.join(gisbase, 'bin'))
+        # add special call for setting vector colors
+        list.append('vcolors')
     if scripts is True:
         list = list + os.listdir(os.path.join(gisbase, 'scripts')) 
     if gui_scripts is True:

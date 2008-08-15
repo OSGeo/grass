@@ -1290,6 +1290,12 @@ class Data:
                          ),
                         ("","","", ""),
 
+                        (_("Manage colors"),
+                         _("Set colors interactively by entering color rules"),
+                         "self.RulesCmd",
+                         "vcolors"),
+                        ("","","", ""),
+
                         (_("Query with attributes"),
                          _("Selects vector objects from an existing vector map and creates a new map containing only the selected objects."),
                          "self.OnMenuCmd",
