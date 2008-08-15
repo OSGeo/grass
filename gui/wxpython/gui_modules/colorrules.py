@@ -26,9 +26,10 @@ import wx
 import wx.lib.colourselect as  csel
 import wx.lib.scrolledpanel as scrolled
 
+import dbm
 import gcmd
-import gselect
 import globalvar
+import gselect
 import render
 import utils
 
@@ -52,16 +53,31 @@ class ColorTable(wx.Frame):
         self.inmap = '' # input map to change
         self.rastmin = '' # min cat in raster map
         self.rastmax = '' # max cat in raster map
+        self.layerchoices = ['1'] # list of database layers for vector (minimum of 1)
+        self.columnchoices = [] # list of database columns for vector
+        self.vlayer = 1 # vector layer for attribute table to use for setting color
+        self.vtable = '' # vector attribute table used for setting color
+        self.vcolumn = '' # vector attribute column for assigning colors
+        self.vrgb = '' # vector attribute column to use for storing colors
         self.old_colrtable = '' # existing color table of raster map
-        self.vals = '' # raster category values for assigning colors
+        self.vals = '' # raster category or vector attribute values for assigning colors
         self.rgb_string = '' # r:g:b color string for assigning colors to cats
         self.ruleslines = {} # rules for creating colortable
         self.overwrite = True
-
-
         self.Map   = render.Map()  # instance of render.Map to be associated with display
-        self.layer = None          # reference to layer with histogram
+        self.layer = None          # reference to layer with preview
         self.mapname = ''
+                
+        if self.cmd == 'r.colors':
+            title = 'Create new color table for raster map'
+            maplabel = 'Select raster map:'
+            elem = 'cell'
+            crlabel = 'Enter raster cat values or percents'
+        elif self.cmd == 'vcolors':
+            title = 'Create new color table for vector map'
+            maplabel = 'Select vector map:'
+            elem = 'vector'
+            crlabel = 'Enter vector attribute values or ranges (n or n1 to n2)'
 
         #
         # Set the size & cursor
@@ -69,21 +85,41 @@ class ColorTable(wx.Frame):
         self.SetClientSize(size)
 
         # set window frame title
-        self.SetTitle('Create new color table for raster map')
+        self.SetTitle(title)
         
         # top controls
-        self.map_label=wx.StaticText(parent=self, id=wx.ID_ANY, label='Select raster map:')
+        self.map_label = wx.StaticText(parent=self, id=wx.ID_ANY, label=maplabel)
         self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY,
                                              size=globalvar.DIALOG_GSELECT_SIZE,
-                                             type='cell')
+                                             type=elem)
+        
         self.ovrwrtcheck = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                       label=_('replace existing color table'))
+                                   label=_('replace existing color table'))
         self.ovrwrtcheck.SetValue(self.overwrite)
         self.helpbtn = wx.Button(parent=self, id=wx.ID_HELP)
-        
+
+        if self.cmd == 'vcolors':
+            self.cb_vl_label = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                   label='Layer:')
+            self.cb_vlayer = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(50, -1),
+                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
+                                 choices=self.layerchoices)
+            self.cb_vlayer.SetSelection(0)
+            self.cb_vlayer.SetValue('1')
+            self.cb_vc_label = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                   label='Attribute column:')
+            self.cb_vcol = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
+                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
+                                 choices=self.columnchoices)
+            self.cb_vrgb_label = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                   label='RGB color column:')
+            self.cb_vrgb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
+                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
+                                 choices=self.columnchoices)
+
         # color table and preview window
         self.cr_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                    label=_('Enter raster cat values or percents'))
+                    label=crlabel)
         self.cr_panel = self.__colorrulesPanel()
         self.InitDisplay() # initialize preview display
         self.preview = BufferedWindow(self, id = wx.ID_ANY, size=(400,300), Map=self.Map)
@@ -115,6 +151,13 @@ class ColorTable(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.OnPreview, self.preview_btn)
         self.Bind(wx.EVT_CLOSE,  self.OnCloseWindow)
 
+        # additional bindings for vector color management
+        if self.cmd == 'vcolors':
+            self.Bind(wx.EVT_COMBOBOX, self.OnLayerSelection, self.cb_vlayer)
+            self.Bind(wx.EVT_COMBOBOX, self.OnColumnSelection, self.cb_vcol)
+            self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_vrgb)
+
+
         # layout
         self.__doLayout()
         self.Show()
@@ -122,45 +165,63 @@ class ColorTable(wx.Frame):
     def __doLayout(self):
         sizer =  wx.GridBagSizer(hgap=5, vgap=5)
         sizer.AddGrowableCol(2)
-        sizer.AddGrowableRow(4)
-        sizer.Add(self.map_label, pos=(0,0),
+
+        row = 0
+        sizer.Add(self.map_label, pos=(row,0),
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL, border=5)
-        sizer.Add(item=self.selectionInput, pos=(1,0), span=(1,3),
+        row += 1 # row 1
+        sizer.Add(item=self.selectionInput, pos=(row,0), span=(1,3),
                   flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND | wx.ALL, border=5)
-        sizer.Add(item=self.ovrwrtcheck, pos=(2, 0), span=(1,2),
+        row += 1 # row 2
+        sizer.Add(item=self.ovrwrtcheck, pos=(row, 0), span=(1,2),
                   flag=wx.ALL, border=5)        
-        sizer.Add(item=self.helpbtn, pos=(2,2), flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
-        sizer.Add(item=self.cr_label, pos=(3,0), span=(1,2), flag=wx.ALL, border=5)
-        sizer.Add(item=self.cr_panel, pos=(4,0),
+        sizer.Add(item=self.helpbtn, pos=(row,2), flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        if self.cmd == 'vcolors':
+            row += 1
+            sizer.Add(self.cb_vl_label, pos=(row,0),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
+            sizer.Add(self.cb_vc_label, pos=(row,1),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
+            sizer.Add(self.cb_vrgb_label, pos=(row,2),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
+            row += 1            
+            sizer.Add(self.cb_vlayer, pos=(row,0),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
+            sizer.Add(self.cb_vcol, pos=(row,1),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
+            sizer.Add(self.cb_vrgb, pos=(row,2),
+                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
+
+        row += 1 # row 3
+        sizer.Add(item=self.cr_label, pos=(row,0), span=(1,2), flag=wx.ALL, border=5)
+        row += 1 # row 4
+        sizer.AddGrowableRow(row)
+        sizer.Add(item=self.cr_panel, pos=(row,0),
                   flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)        
-        sizer.Add(item=self.preview, pos=(4,1), span=(1,2),
+        sizer.Add(item=self.preview, pos=(row,1), span=(1,2),
                   flag=wx.ALIGN_LEFT|wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)
-        sizer.Add(item=self.line, pos=(5,0), span=(1,3),
+        row += 1 # row 5
+        sizer.Add(item=self.line, pos=(row,0), span=(1,3),
                   flag=wx.GROW|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|
                   wx.TOP|wx.BOTTOM, border=5)
-        sizer.Add(self.btnsizer, pos=(6,0), span=(1,2),
+        row += 1 # row 6
+        sizer.Add(self.btnsizer, pos=(row,0), span=(1,2),
                   flag=wx.ALIGN_CENTER|wx.FIXED_MINSIZE)
-        sizer.Add(self.preview_btn, pos=(6,2),
+        sizer.Add(self.preview_btn, pos=(row,2),
                   flag=wx.ALIGN_BOTTOM|wx.ALIGN_CENTER|wx.FIXED_MINSIZE|wx.ALL, border=5)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
-            
-    def __previewPanel(self):
-        preview = wx.Panel(self, -1, pos=(-1,-1), size=(-1,-1), style=wx.SUNKEN_BORDER)
-        preview.SetBackgroundColour(wx.WHITE)
-        #preview.SetAutoLayout(1)
-        return preview
-        
+                    
     def __colorrulesPanel(self):
-        cr_panel = scrolled.ScrolledPanel(self, -1, size=(150,300),
+        cr_panel = scrolled.ScrolledPanel(self, -1, size=(180,300),
                                           style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER,
                                           name="cr_panel" )
         cr_sizer = wx.GridBagSizer(vgap=2, hgap=4)
 
         for num in range(100):
             txt_ctrl = wx.TextCtrl(parent=cr_panel, id=num, value='',
-                                   pos=wx.DefaultPosition, size=(50,-1),
+                                   pos=wx.DefaultPosition, size=(100,-1),
                                    style=wx.TE_NOHIDESEL)
             self.Bind(wx.EVT_TEXT, self.OnVals, txt_ctrl)
             color_ctrl = csel.ColourSelect(cr_panel, id=num)
@@ -207,33 +268,92 @@ class ColorTable(wx.Frame):
         
     def OnSelectionInput(self, event):
         self.inmap = event.GetString()
-        try:
-            cmdlist = ['r.info', 'map=%s' % self.inmap, '-r']
-            
-            p = gcmd.Command(cmdlist)
-            output = p.ReadStdOutput()
-            for line in output:
-                line = line.strip('\n ')
-                if 'min' in line:
-                    self.rastmin = line.split('=')[1].strip('\n ')
-                if 'max' in line:
-                    self.rastmax = line.split('=')[1].strip('\n ')
-            
-            self.cr_label.SetLabel('Enter raster cat values or percents (range = %s-%s)' %
-                                     (self.rastmin,self.rastmax))
-        except:
-            pass
+        if self.inmap == '': return
+        
+        if self.cmd == 'r.colors':
+            try:
+                cmdlist = ['r.info', 'map=%s' % self.inmap, '-r']
+                
+                p = gcmd.Command(cmdlist)
+                output = p.ReadStdOutput()
+                for line in output:
+                    line = line.strip('\n ')
+                    if 'min' in line:
+                        self.rastmin = line.split('=')[1].strip('\n ')
+                    if 'max' in line:
+                        self.rastmax = line.split('=')[1].strip('\n ')
+                
+                self.cr_label.SetLabel('Enter raster cat values or percents (range = %s-%s)' %
+                                         (self.rastmin,self.rastmax))
+            except:
+                pass
+        elif self.cmd == 'vcolors':
+            self.mapDBInfo = dbm.VectorDBInfo(self.inmap)
+            self.layerchoices = self.mapDBInfo.layers.keys()
+            for n in range(len(self.layerchoices)):
+                self.cb_vlayer.Insert(str(self.layerchoices[n]), n)
+
+            # initialize column selection combox boxes for layer 1
+            try:
+                self.vtable = self.mapDBInfo.layers[self.vlayer]['table']
+                for n in range(len(self.mapDBInfo.GetColumns(self.vtable))):
+                    self.cb_vcol.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+                    self.cb_vrgb.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+                self.Update()
+            except:
+                pass
+                
+    def OnLayerSelection(self, event):
+        self.vlayer = int(event.GetString())
+        
+        # reset choices in column selection comboboxes if layer changes
+        self.vtable = self.mapDBInfo.layers[self.vlayer]['table']
+        for n in range(len(self.mapDBInfo.GetColumns(self.vtable))):
+            self.cb_vcol.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+            self.cb_vrgb.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+        self.Update()
+        
+    def OnColumnSelection(self, event):
+        self.vcolumn = event.GetString()
+    
+    def OnRGBColSelection(self, event):
+        self.vrgb = event.GetString()
                         
     def OnVals(self, event):
         num = event.GetId()
+        tc = self.FindWindowById(num)
         vals = event.GetString().strip()
-        self.ruleslines[num][0] = vals
+        if vals == '': return
+        if self.cmd == 'r.colors':
+            self.ruleslines[num][0] = vals
+        elif self.cmd == 'vcolors':
+            if self.vcolumn == '' or self.vrgb == '':
+                tc.SetValue('')
+                wx.MessageBox("Please select attribute column and RGB color column first")
+            else:
+                self.ruleslines[num][0] = self.SQLConvert(vals)
 
     def OnSelectColor(self, event):
         num = event.GetId()
         rgba_color = event.GetValue()
         rgb_string = str(rgba_color[0]) + ':' + str(rgba_color[1]) + ':' + str(rgba_color[2])
-        self.ruleslines[num][1] = rgb_string 
+        self.ruleslines[num][1] = rgb_string
+        
+    def SQLConvert(self, vals):
+        valslist = []
+        valslist = vals.split('to')
+        try:
+            if len(valslist) == 1:
+                sqlrule = '%s=%s' % (self.vcolumn, float(valslist[0]))
+            elif len(valslist) > 1:
+                sqlrule = '%s>=%s AND %s<=%s' % (self.vcolumn, float(valslist[0]),
+                                                 self.vcolumn, float(valslist[1]))
+            else:
+                return ""
+        except:
+            return ""
+        
+        return sqlrule
         
     def OnApply(self, event):
         self.CreateColorTable()
@@ -248,32 +368,39 @@ class ColorTable(wx.Frame):
     def OnPreview(self, event):
         # Add layer to the map for preview
         #
-        cmd = ['d.rast', 'map=%s' % self.inmap]
-        self.layer = self.Map.AddLayer(type="command", name='raster', command=cmd,
-                                       l_active=True, l_hidden=False, l_opacity=1, l_render=False)        
         
-        # Find existing color table and copy to temp file
-        p = gcmd.Command(['g.findfile', 'element=colr', 'file=%s' % self.inmap])
-        output = p.ReadStdOutput()
-        for line in output:
-            if 'file=' in line:
-                old_colrtable = line.split('=')[1].strip("'")
-        try:
-            colrtemp = utils.GetTempfile()
-            shutil.copyfile(old_colrtable,colrtemp)
-        except:
+        if self.cmd == 'r.colors':
+            cmdlist = ['d.rast', 'map=%s' % self.inmap]
+            # Find existing color table and copy to temp file
+            p = gcmd.Command(['g.findfile', 'element=colr', 'file=%s' % self.inmap])
+            output = p.ReadStdOutput()
+            for line in output:
+                if 'file=' in line:
+                    old_colrtable = line.split('=')[1].strip("'")
+            try:
+                colrtemp = utils.GetTempfile()
+                shutil.copyfile(old_colrtable,colrtemp)
+            except:
+                return
+        elif self.cmd == 'vcolors':
+            cmdlist = ['d.vect', '-a', 'map=%s' % self.inmap, 'rgb_column=%s' % self.vrgb,
+                       'type=point,line,boundary,area,face']
+        else:
             return
+        
+        self.layer = self.Map.AddLayer(type="command", name='raster', command=cmdlist,
+                                       l_active=True, l_hidden=False, l_opacity=1, l_render=False)        
         
         # apply new color table and display preview
         self.CreateColorTable()
         self.preview.UpdatePreview()
         
-        shutil.copyfile(colrtemp, old_colrtable)
-        
-        try:
-            os.remove(colrtemp)
-        except:
-            pass
+        if self.cmd == 'r.colors':
+            shutil.copyfile(colrtemp, old_colrtable)
+            try:
+                os.remove(colrtemp)
+            except:
+                pass
 
     def OnHelp(self, event):
         gcmd.Command(['g.manual',
@@ -285,25 +412,39 @@ class ColorTable(wx.Frame):
         
     def CreateColorTable(self):
         rulestxt = ''
+        
         for num in self.ruleslines:
             if self.ruleslines[num][0] != "":
-                rulestxt += self.ruleslines[num][0] + ' ' + self.ruleslines[num][1] + '\n'
+                if self.cmd == 'r.colors':
+                    rulestxt += self.ruleslines[num][0] + ' ' + self.ruleslines[num][1] + '\n'
+                elif self.cmd == 'vcolors':
+                    rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.vtable,
+                        self.vrgb,self.ruleslines[num][1], self.ruleslines[num][0])
+                
         if rulestxt == '': return
-            
+
         gtemp = utils.GetTempfile()
         output = open(gtemp, "w")
         try:
             output.write(rulestxt)
         finally:
             output.close()
+        
+        if self.cmd == 'r.colors':        
+            cmdlist = ['r.colors', 'map=%s' % self.inmap, 'rules=%s' % gtemp]
             
-        cmdlist = ['r.colors', 'map=%s' % self.inmap, 'rules=%s' % gtemp]
+            if self.overwrite == False:
+                cmdlist.append('-w')
+        elif self.cmd == 'vcolors':
+            cmdlist = ['db.execute', 'input=%s' % gtemp]
+                
+        try:
+            p = gcmd.Command(cmdlist)
+            output = p.ReadStdOutput()
+            error = p.ReadErrOutput()
+        except:
+            pass
         
-        if self.overwrite == False:
-            cmdlist.append('-w')
-        
-        gcmd.Command(cmdlist)
-
 class BufferedWindow(wx.Window):
     """
     A Buffered window class.
