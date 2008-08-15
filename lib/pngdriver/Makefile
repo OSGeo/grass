@@ -2,12 +2,11 @@ MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Platform.make
 
-PACKAGE ="libpngdriver"
-DEFS=-DPACKAGE=\"$(PACKAGE)\"
-EXTRA_CFLAGS=$(GETHOSTNAME) $(ZLIBINCPATH) $(PNGINC) -I../driver $(PICFLAGS) $(DEFS)
+EXTRA_CFLAGS=$(GETHOSTNAME) $(ZLIBINCPATH) $(PNGINC) -I../driver
 
 EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(PNGLIB)
 LIB_NAME = $(PNGDRIVER_LIBNAME)
+PGM = cairodriver
 
 LIB_OBJS =	\
 	Box.o			\
@@ -37,4 +36,4 @@ endif
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib
+default: lib htmldir

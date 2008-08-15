@@ -1,6 +1,7 @@
 MODULE_TOPDIR = ../../..
 
 LIB_NAME = $(SQLP_LIBNAME)
+PGM = sql
 
 LIB_OBJS = \
 	alloc.o \
@@ -14,9 +15,7 @@ EXTRA_HEADERS = y.tab.h
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib
-	$(MKDIR) $(GISBASE)/docs/html
-	$(INSTALL_DATA) description.html $(GISBASE)/docs/html/sql.html
+default: lib htmldir
 
 y.tab.c y.tab.h: yac.y
 	$(YACC) -d -v yac.y

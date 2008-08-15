@@ -6,8 +6,10 @@ include $(MODULE_TOPDIR)/include/Make/Grass.make
 
 VER=2.2
 NV_VER=nviz$(VER)
-PROG=nviz
+PGM=nviz
 INSTALL_DIR=$(GISBASE)/etc/$(NV_VER)
+
+include $(MODULE_TOPDIR)/include/Make/Html.make
 
 SCRIPTS := \
 	scripts/script_get_line \
@@ -23,13 +25,13 @@ default:
 	$(MAKE) -C src
 	$(MAKE) install
 	$(MAKE) -C html
-	$(MAKE) docs
+	$(MAKE) htmldir
 
 # Install the scripts in the appropriate directory
 install:
 	-$(MKDIR) $(INSTALL_DIR)
-	$(INSTALL) src/nvwish$(EXE) $(INSTALL_DIR)/$(PROG)$(EXE)
-	$(INSTALL) scripts/$(PROG) $(GISBASE)/bin
+	$(INSTALL) src/nvwish$(EXE) $(INSTALL_DIR)/$(PGM)$(EXE)
+	$(INSTALL) scripts/$(PGM) $(GISBASE)/bin
 ifneq ($(strip $(MINGW)),)
 	$(INSTALL) scripts/nviz.bat $(GISBASE)/bin
 endif
@@ -39,10 +41,6 @@ endif
 	-$(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough
 	find -L bitmaps -path '*/.svn' -prune -o -type f -print | \
 		while read file ; do $(INSTALL_DATA) $$file $(INSTALL_DIR)/$$file ; done
-
-docs:
-	-$(MKDIR) $(ARCH_DISTDIR)/docs/html
-	$(INSTALL_DATA) description.html $(ARCH_DISTDIR)/docs/html/$(PROG).html
 
 clean: 
 	$(MAKE) -C src clean
