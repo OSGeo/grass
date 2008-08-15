@@ -722,8 +722,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'raster':
             cmd = ['d.rast']
             
-            if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
-                cmd.append('-o')
+            if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
+                cmd.append('-n')
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
                                         parentframe=self)
         elif ltype == '3d-raster':

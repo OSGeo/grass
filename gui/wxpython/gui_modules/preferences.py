@@ -87,9 +87,9 @@ class Settings:
                 'displayFont' : {
                     'value' : ''
                     },
-                'driver': {
-                    'type': 'default'
-                    },
+                # 'driver': {
+                #    'type': 'default'
+                #    },
                 'compResolution' : {
                     'enabled' : False
                     },
@@ -143,8 +143,8 @@ class Settings:
                     'selection' : 'grassenv'
                     },
                 # d.rast
-                'rasterOverlay' : {
-                    'enabled' : True
+                'rasterOpaque' : {
+                    'enabled' : False
                     },
                 # d.vect
                 'showType': {
@@ -972,29 +972,28 @@ class PreferencesDialog(wx.Dialog):
         #
         # display driver
         #
-        row = 0
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Display driver:")),
-                      flag=wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 0))
-        listOfDrivers = self.settings.Get(group='display', key='driver', subkey='choices', internal=True)
-        # check if cairo is available
-        if 'cairo' not in listOfDrivers:
-            for line in gcmd.Command(['d.mon', '-l']).ReadStdOutput():
-                if 'cairo' in line:
-                    listOfDrivers.append('cairo')
-                    break
-        driver = wx.Choice(parent=panel, id=wx.ID_ANY, size=(150, -1),
-                           choices=listOfDrivers,
-                           name="GetStringSelection")
-        driver.SetStringSelection(self.settings.Get(group='display', key='driver', subkey='type'))
-        self.winId['display:driver:type'] = driver.GetId()
-
-        gridSizer.Add(item=driver,
-                      flag=wx.ALIGN_RIGHT,
-                      pos=(row, 1))
-
+        #         row = 0
+        #         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
+        #                                          label=_("Display driver:")),
+        #                       flag=wx.ALIGN_LEFT |
+        #                       wx.ALIGN_CENTER_VERTICAL,
+        #                       pos=(row, 0))
+        #         listOfDrivers = self.settings.Get(group='display', key='driver', subkey='choices', internal=True)
+        #         # check if cairo is available
+        #         if 'cairo' not in listOfDrivers:
+        #             for line in gcmd.Command(['d.mon', '-l']).ReadStdOutput():
+        #                 if 'cairo' in line:
+        #                     listOfDrivers.append('cairo')
+        #                     break
+        #         driver = wx.Choice(parent=panel, id=wx.ID_ANY, size=(150, -1),
+        #                            choices=listOfDrivers,
+        #                            name="GetStringSelection")
+        #         driver.SetStringSelection(self.settings.Get(group='display', key='driver', subkey='type'))
+        #         self.winId['display:driver:type'] = driver.GetId()
+        
+        #         gridSizer.Add(item=driver,
+        #                       flag=wx.ALIGN_RIGHT,
+        #                       pos=(row, 1))
 
         #
         # Statusbar mode
@@ -1129,13 +1128,13 @@ class PreferencesDialog(wx.Dialog):
         # raster overlay
         #
         row = 0
-        rasterOverlay = wx.CheckBox(parent=panel, id=wx.ID_ANY,
-                                    label=_("Overlay raster maps"),
+        rasterOpaque = wx.CheckBox(parent=panel, id=wx.ID_ANY,
+                                    label=_("Make null cells opaque"),
                                     name='IsChecked')
-        rasterOverlay.SetValue(self.settings.Get(group='cmd', key='rasterOverlay', subkey='enabled'))
-        self.winId['cmd:rasterOverlay:enabled'] = rasterOverlay.GetId()
+        rasterOpaque.SetValue(self.settings.Get(group='cmd', key='rasterOpaque', subkey='enabled'))
+        self.winId['cmd:rasterOpaque:enabled'] = rasterOpaque.GetId()
         
-        gridSizer.Add(item=rasterOverlay,
+        gridSizer.Add(item=rasterOpaque,
                       pos=(row, 0), span=(1, 2))
         
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
