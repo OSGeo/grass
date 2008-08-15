@@ -40,7 +40,6 @@ int main(int argc, char *argv[])
     type = G_define_option();
     type->key = "gui";
     type->type = TYPE_STRING;
-    type->required = YES;
     type->label = _("GUI type");
     type->description = _("Default value: GRASS_GUI if defined otherwise wxpython");
     type->descriptions = _("tcltk;Tcl/Tk based GUI - GIS Manager (gis.m);"
