@@ -88,7 +88,7 @@ int ps_copies = 1;
 int main(int argc, char *argv[])
 {
     char buf[1024];
-    char name[100], mapset[50];
+    char name[GNAME_MAX], mapset[GMAPSET_MAX];
     int i;
     int iflag;
     int can_reset_scale;

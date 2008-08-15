@@ -29,7 +29,7 @@ int read_colortable(void)
 {
     char buf[1024];
     char *key, *data;
-    char name[100], mapset[50];
+    char name[GNAME_MAX], mapset[GMAPSET_MAX];
     int color, fontsize, cols, nodata, tickbar;
     double w, h, x, y;
     int range_override;
