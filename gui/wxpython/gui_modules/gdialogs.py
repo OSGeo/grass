@@ -374,24 +374,23 @@ class DecorationDialog(wx.Dialog):
         self.parent.MapWindow.overlays[self.ovlId]['propwin'] = propwin
 
         # change parameters for item in layers list in render.Map
-        # "Use mouse..." (-m) flag causes GUI freeze, trac #119
+        # "Use mouse..." (-m) flag causes GUI freeze and is pointless here, trac #119
+        
         try:
             self.parent.MapWindow.overlays[self.ovlId]['cmd'].remove('-m')
         except ValueError:
             pass
-        
+            
         self.parent.Map.ChangeOverlay(id=self.ovlId, type=self.name,
                                       command=self.parent.MapWindow.overlays[self.ovlId]['cmd'],
                                       l_active=self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive(),
                                       l_render=False, l_hidden=True)
-
-        if self.name == 'legend' and \
-                params and \
-                not self.btnOK.IsEnabled():
-            self.btnOK.Enable()
+        if  self.name == 'legend':
+            if params and not self.btnOK.IsEnabled():
+                self.btnOK.Enable()
         
-        self.SetTitle(_('Legend of raster map <%s>') % \
-                      utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd']))
+            #self.SetTitle(_('Legend of raster map <%s>') % \
+            #              utils.GetLayerNameFromCmd(self.parent.MapWindow.overlays[self.ovlId]['cmd']))
             
 class TextLayerDialog(wx.Dialog):
     """
