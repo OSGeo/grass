@@ -6,7 +6,7 @@ SUBDIRS = \
 	r.bitpattern \
 	r.buffer \
 	r.carve \
-	r.cats \
+	r.category \
 	r.circle \
 	r.clump \
 	r.coin \
@@ -24,7 +24,7 @@ SUBDIRS = \
 	r.fill.dir \
 	r.flow \
 	r.grow.distance \
-	r.grow2 \
+	r.grow \
 	r.gwflow \
 	r.his \
 	r.in.arc \
@@ -61,7 +61,7 @@ SUBDIRS = \
 	r.param.scale \
 	r.patch \
 	r.profile \
-	r.proj.seg \
+	r.proj \
 	r.quant \
 	r.quantile \
 	r.random \
@@ -101,7 +101,7 @@ SUBDIRS = \
 	r.topidx \
 	r.topmodel \
 	r.transect \
-	r.univar2 \
+	r.univar \
 	r.volume \
 	r.walk \
 	r.water.outlet \
