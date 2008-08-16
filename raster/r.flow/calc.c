@@ -416,44 +416,12 @@ int main(int argc, char *argv[])
     /* Initialize GIS engine */
     G_gisinit(argv[0]);
 
-    if (G_get_set_window(&region) == -1)
-	G_fatal_error(_("Unable to get current region"));
-
     module = G_define_module();
     module->keywords = "raster";
     module->description =
 	_("Construction of slope curves (flowlines), flowpath lengths, "
 	  "and flowline densities (upslope areas) from a raster "
 	  "digital elevation model (DEM)");
-
-    larger = ((region.cols < region.rows) ? region.rows : region.cols);
-    default_skip = (larger < 50) ? 1 : (int)(larger / 50);
-
-    default_skip_ans =
-	G_calloc((int)log10((double)default_skip) + 2, sizeof(char));
-    skip_opt = G_calloc((int)log10((double)larger) + 4, sizeof(char));
-
-    sprintf(default_skip_ans, "%d", default_skip);
-    sprintf(skip_opt, "1-%d", larger);
-
-    default_bound = (int)(4. * hypot((double)region.rows,
-				     (double)region.cols));
-    default_bound_ans =
-	G_calloc((int)log10((double)default_bound) + 4, sizeof(char));
-    sprintf(default_bound_ans, "0-%d", default_bound);
-
-#ifdef OFFSET
-    /* below fix changed from 0.0 to 1.0 and its effect disabled in 
-     * calc.c, Helena June 2005 */
-
-    default_offset = 1.0;	/* fixed 20. May 2001 Helena */
-    default_offset_ans =
-	G_calloc((int)log10(default_offset) + 2, sizeof(char));
-    sprintf(default_offset_ans, "%f", default_offset);
-
-    offset_opt = G_calloc((int)log10(default_offset) + 4, sizeof(char));
-    sprintf(offset_opt, "0.0-500.0");
-#endif
 
     pelevin = G_define_option();
     pelevin->key = "elevin";
@@ -482,7 +450,6 @@ int main(int argc, char *argv[])
     pskip->required = NO;
     pskip->options = skip_opt;
     pskip->description = _("Number of cells between flowlines");
-    pskip->answer = default_skip_ans;
 
     pbound = G_define_option();
     pbound->key = "bound";
@@ -490,7 +457,6 @@ int main(int argc, char *argv[])
     pbound->required = NO;
     pbound->options = default_bound_ans;
     pbound->description = _("Maximum number of segments per flowline");
-    pbound->answer = default_bound_ans + 2;
 
     pflout = G_define_option();
     pflout->key = "flout";
@@ -528,6 +494,45 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+
+    if (G_get_set_window(&region) == -1)
+	G_fatal_error(_("Unable to get current region"));
+
+    larger = ((region.cols < region.rows) ? region.rows : region.cols);
+    default_skip = (larger < 50) ? 1 : (int)(larger / 50);
+
+    default_skip_ans =
+	G_calloc((int)log10((double)default_skip) + 2, sizeof(char));
+    skip_opt = G_calloc((int)log10((double)larger) + 4, sizeof(char));
+
+    sprintf(default_skip_ans, "%d", default_skip);
+    sprintf(skip_opt, "1-%d", larger);
+
+    default_bound = (int)(4. * hypot((double)region.rows,
+				     (double)region.cols));
+    default_bound_ans =
+	G_calloc((int)log10((double)default_bound) + 4, sizeof(char));
+    sprintf(default_bound_ans, "0-%d", default_bound);
+
+#ifdef OFFSET
+    /* below fix changed from 0.0 to 1.0 and its effect disabled in 
+     * calc.c, Helena June 2005 */
+
+    default_offset = 1.0;	/* fixed 20. May 2001 Helena */
+    default_offset_ans =
+	G_calloc((int)log10(default_offset) + 2, sizeof(char));
+    sprintf(default_offset_ans, "%f", default_offset);
+
+    offset_opt = G_calloc((int)log10(default_offset) + 4, sizeof(char));
+    sprintf(offset_opt, "0.0-500.0");
+#endif
+
+    if (!pskip->answer)
+	pskip->answer = default_skip_ans;
+
+    if (!pbound->answer)
+	pbound->answer = default_bound_ans + 2;
 
     parm.elevin = pelevin->answer;
     parm.aspin = paspin->answer;

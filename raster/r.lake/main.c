@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct History history;
 
+    G_gisinit(argv[0]);
+
     module = G_define_module();
     module->keywords = _("raster");
     module->description = _("Fills lake from seed at given level.");
@@ -187,8 +189,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))	/* Returns 0 if successful, non-zero otherwise */
 	exit(EXIT_FAILURE);
-
-    G_gisinit(argv[0]);
 
     if (smap_opt->answer && sdxy_opt->answer)
 	G_fatal_error(_("Both seed map and coordinates cannot be specifed"));

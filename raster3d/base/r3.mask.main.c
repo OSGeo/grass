@@ -31,26 +31,6 @@ typedef struct
 } paramType;
 
 static paramType params;
-extern void *G3d_openNewParam();
-
-static void setParams()
-{
-    params.map = G_define_option();
-    params.map->key = "map";
-    params.map->type = TYPE_STRING;
-    params.map->required = YES;
-    params.map->multiple = NO;
-    params.map->gisprompt = "old,grid3,3d-raster";
-    params.map->description = _("3d raster map with reference values");
-
-    params.maskVals = G_define_option();
-    params.maskVals->key = "maskvalues";
-    params.maskVals->key_desc = "val[-val]";
-    params.maskVals->type = TYPE_STRING;
-    params.maskVals->required = NO;
-    params.maskVals->multiple = YES;
-    params.maskVals->description = _("List of cell values to be masked out");
-}
 
 /*--------------------------------------------------------------------------*/
 
@@ -154,13 +134,28 @@ int main(int argc, char *argv[])
     module->description =
 	_("Establishes the current working 3D raster mask.");
 
+    params.map = G_define_option();
+    params.map->key = "map";
+    params.map->type = TYPE_STRING;
+    params.map->required = YES;
+    params.map->multiple = NO;
+    params.map->gisprompt = "old,grid3,3d-raster";
+    params.map->description = _("3d raster map with reference values");
 
-    if (G3d_maskFileExists())
-	G_fatal_error(_("Cannot create mask file: G3D_MASK already exists!\n Use 'g.remove rast3d=G3D_MASK' to remove the existing mask."));
+    params.maskVals = G_define_option();
+    params.maskVals->key = "maskvalues";
+    params.maskVals->key_desc = "val[-val]";
+    params.maskVals->type = TYPE_STRING;
+    params.maskVals->required = NO;
+    params.maskVals->multiple = YES;
+    params.maskVals->description = _("List of cell values to be masked out");
 
-    setParams();
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (G3d_maskFileExists())
+	G_fatal_error(_("Cannot create mask file: G3D_MASK already exists"));
+
     getParams(&name, &maskRules);
 
     makeMask(name, maskRules);

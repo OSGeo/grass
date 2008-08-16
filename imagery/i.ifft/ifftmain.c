@@ -41,10 +41,8 @@ int main(int argc, char *argv[])
     double *data[2];		/* Data structure containing real & complex values of FFT */
     struct Option *op1, *op2, *op3;
     struct GModule *module;
-    const char *me;
 
     G_gisinit(argv[0]);
-    me = G_program_name();
 
     /* Set description */
     module = G_define_module();
@@ -87,8 +85,8 @@ int main(int argc, char *argv[])
 
     /* open input raster map */
     if ((realmapset = G_find_cell(Cellmap_real, "")) == NULL)
-	G_fatal_error(_("%s: %s - Unable to find the real-image map."),
-		      me, Cellmap_real);
+	G_fatal_error(_("Unable to find the real-image map <%s>"),
+		      Cellmap_real);
 
     if ((realfp =
 	 G_fopen_old_misc("cell_misc", "fftreal", Cellmap_real,
@@ -96,8 +94,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open real-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
 
     if ((imagmapset = G_find_cell(Cellmap_imag, "")) == NULL)
-	G_fatal_error(_("%s: %s - Unable to find the imaginary-image."),
-		      me, Cellmap_imag);
+	G_fatal_error(_("Unable to find the imaginary-image <%s>"),
+		      Cellmap_imag);
 
     if ((imagfp =
 	 G_fopen_old_misc("cell_misc", "fftimag", Cellmap_imag,

@@ -63,11 +63,9 @@ int main(int argc, char *argv[])
     int save_args();		/* function to stash the command line arguments */
     struct GModule *module;
     struct Option *op1, *op2, *op3, *op4;
-    const char *me;
     int maskfd;
 
     G_gisinit(argv[0]);
-    me = G_program_name();
 
     module = G_define_module();
     module->keywords = _("imagery");

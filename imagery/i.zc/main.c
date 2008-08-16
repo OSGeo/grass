@@ -45,10 +45,8 @@ int main(int argc, char *argv[])
     double *data[2];		/* Data structure containing real & complex values of FFT */
     struct GModule *module;
     struct Option *input_map, *output_map, *width, *threshold, *orientations;
-    const char *me;
 
     G_gisinit(argv[0]);
-    me = G_program_name();
 
     module = G_define_module();
     module->keywords = _("imagery");

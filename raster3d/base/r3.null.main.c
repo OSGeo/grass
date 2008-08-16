@@ -43,9 +43,6 @@ static void getParams(char **name, d_Mask ** maskRules, int *changeNull,
 static void modifyNull(char *name, d_Mask * maskRules, int changeNull,
 		       double newNullVal);
 
-extern void *G3d_openNewParam();
-
-
 static void setParams(void)
 {
     params.map = G_define_option();

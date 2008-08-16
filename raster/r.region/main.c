@@ -21,7 +21,6 @@
 
 static int nsew(const char *, const char *, const char *, const char *);
 static void die(struct Option *);
-static char *llinfo(const char *, const char *, int);
 
 
 int main(int argc, char *argv[])
@@ -33,7 +32,6 @@ int main(int argc, char *argv[])
     char *name;
     char *mapset;
     char *err;
-    int projection;
 
     struct GModule *module;
     struct
@@ -54,10 +52,6 @@ int main(int argc, char *argv[])
     module->keywords = _("raster");
     module->description =
 	_("Sets the boundary definitions for a raster map.");
-
-    G_get_window(&window);
-
-    projection = window.proj;
 
     /* flags */
 
@@ -118,9 +112,7 @@ int main(int argc, char *argv[])
     parm.north->required = NO;
     parm.north->multiple = NO;
     parm.north->type = TYPE_STRING;
-    parm.north->description =
-	llinfo(_("Value for the northern edge"), G_lat_format_string(),
-	       window.proj);
+    parm.north->description = _("Value for the northern edge");
 
     parm.south = G_define_option();
     parm.south->key = "s";
@@ -128,9 +120,7 @@ int main(int argc, char *argv[])
     parm.south->required = NO;
     parm.south->multiple = NO;
     parm.south->type = TYPE_STRING;
-    parm.south->description =
-	llinfo(_("Value for the southern edge"), G_lat_format_string(),
-	       window.proj);
+    parm.south->description = _("Value for the southern edge");
 
     parm.east = G_define_option();
     parm.east->key = "e";
@@ -138,9 +128,7 @@ int main(int argc, char *argv[])
     parm.east->required = NO;
     parm.east->multiple = NO;
     parm.east->type = TYPE_STRING;
-    parm.east->description =
-	llinfo(_("Value for the eastern edge"), G_lon_format_string(),
-	       window.proj);
+    parm.east->description = _("Value for the eastern edge");
 
     parm.west = G_define_option();
     parm.west->key = "w";
@@ -148,9 +136,7 @@ int main(int argc, char *argv[])
     parm.west->required = NO;
     parm.west->multiple = NO;
     parm.west->type = TYPE_STRING;
-    parm.west->description =
-	llinfo(_("Value for the western edge"), G_lon_format_string(),
-	       window.proj);
+    parm.west->description = _("Value for the western edge");
 
     parm.align = G_define_option();
     parm.align->key = "align";
@@ -162,6 +148,8 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    G_get_window(&window);
 
     name = parm.map->answer;
 
@@ -393,13 +381,3 @@ static int nsew(const char *value, const char *a, const char *b,
     return 0;
 }
 
-static char *llinfo(const char *msg, const char *llformat, int proj)
-{
-    char buf[256];
-
-    if (proj != PROJECTION_LL)
-	return (char *)msg;
-
-    sprintf(buf, "%s (format %s)", msg, llformat);
-    return G_store(buf);
-}

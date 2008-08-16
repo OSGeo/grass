@@ -119,51 +119,6 @@ int main(int argc, char *argv[])
 	_("Overland flow hydrologic simulation using "
 	  "path sampling method (SIMWE)");
 
-    if (G_get_set_window(&cellhd) == -1)
-	exit(EXIT_FAILURE);
-
-    conv = G_database_units_to_meters_factor();
-
-    mixx = conv * cellhd.west;
-    maxx = conv * cellhd.east;
-    miyy = conv * cellhd.south;
-    mayy = conv * cellhd.north;
-
-    stepx = cellhd.ew_res * conv;
-    stepy = cellhd.ns_res * conv;
-    /*  step = amin1(stepx,stepy); */
-    step = (stepx + stepy) / 2.;
-    mx = cellhd.cols;
-    my = cellhd.rows;
-    x_orig = cellhd.west * conv;
-    y_orig = cellhd.south * conv;	/* do we need this? */
-    xmin = 0.;
-    ymin = 0.;
-    xp0 = xmin + stepx / 2.;
-    yp0 = ymin + stepy / 2.;
-    xmax = xmin + stepx * (float)mx;
-    ymax = ymin + stepy * (float)my;
-    /*      
-       bxmi=2093113. * conv;
-       bymi=731331. * conv;
-       bxma=2093461. * conv;
-       byma=731529. * conv;
-       bresx=2. * conv;
-       bresy=2. * conv;
-       maxwab=100000;
-
-       mx2o= (int)((bxma-bxmi)/bresx);
-       my2o= (int)((byma-bymi)/bresy);
-     */
-    /* relative small box coordinates: leave 1 grid layer for overlap */
-    /*
-       bxmi = bxmi - mixx + stepx;
-       bymi = bymi - miyy + stepy;
-       bxma = bxma - mixx - stepx;
-       byma = byma - miyy - stepy;
-       mx2 = mx2o - 2*((int) (stepx / bresx));
-       my2 = my2o - 2*((int) (stepy / bresy)); 
-     */
     parm.elevin = G_define_standard_option(G_OPT_R_INPUT);
     parm.elevin->key = "elevin";
     parm.elevin->description = _("Name of the elevation raster map [m]");
@@ -232,7 +187,6 @@ int main(int argc, char *argv[])
 	_("Name of the flow controls raster map (permeability ratio 0-1)");
     parm.traps->guisection = _("Input_options");
 
-    /* needs to be updated to GRASS 6 vector format !! */
     parm.sfile = G_define_standard_option(G_OPT_V_INPUT);
     parm.sfile->key = "vector";
     parm.sfile->required = NO;
@@ -268,7 +222,6 @@ int main(int argc, char *argv[])
     parm.nwalk = G_define_option();
     parm.nwalk->key = "nwalk";
     parm.nwalk->type = TYPE_INTEGER;
-    /*      parm.nwalk->answer = NWALK; */
     parm.nwalk->required = NO;
     parm.nwalk->description =
 	_("Number of walkers, default is twice the no. of cells");
@@ -332,11 +285,7 @@ int main(int argc, char *argv[])
     parm.hbeta->description =
 	_("Weighting factor for water flow velocity vector");
     parm.hbeta->guisection = _("Parameters");
-    /*
-       flag.mscale = G_define_flag ();
-       flag.mscale->key = 'm';
-       flag.mscale->description = _("Multiscale simulation");
-     */
+
     flag.tserie = G_define_flag();
     flag.tserie->key = 't';
     flag.tserie->description = _("Time-series output");
@@ -345,13 +294,36 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* mscale=flag.mscale->answer; */
+    if (G_get_set_window(&cellhd) == -1)
+	exit(EXIT_FAILURE);
+
+    conv = G_database_units_to_meters_factor();
+
+    mixx = conv * cellhd.west;
+    maxx = conv * cellhd.east;
+    miyy = conv * cellhd.south;
+    mayy = conv * cellhd.north;
+
+    stepx = cellhd.ew_res * conv;
+    stepy = cellhd.ns_res * conv;
+    /*  step = amin1(stepx,stepy); */
+    step = (stepx + stepy) / 2.;
+    mx = cellhd.cols;
+    my = cellhd.rows;
+    x_orig = cellhd.west * conv;
+    y_orig = cellhd.south * conv;	/* do we need this? */
+    xmin = 0.;
+    ymin = 0.;
+    xp0 = xmin + stepx / 2.;
+    yp0 = ymin + stepy / 2.;
+    xmax = xmin + stepx * (float)mx;
+    ymax = ymin + stepy * (float)my;
+
     ts = flag.tserie->answer;
 
     elevin = parm.elevin->answer;
     dxin = parm.dxin->answer;
     dyin = parm.dyin->answer;
-    /*  maskmap = parm.maskmap->answer; */
     rain = parm.rain->answer;
     infil = parm.infil->answer;
     traps = parm.traps->answer;

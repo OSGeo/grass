@@ -414,6 +414,7 @@ int G3d_isNullValueNum(const void *, int);
 void G3d_setNullValue(void *, int, int);
 
 /* grass/src/libes/g3d/g3dopen2.c */
+void *G3d_openNewParam(const char *, int , int, G3D_Region *, int, int, int, int, int, int, int);
 /* grass/src/libes/g3d/g3dopen.c */
 void *G3d_openCellOldNoHeader(const char *, const char *);
 void *G3d_openCellOld(const char *, const char *, G3D_Region *, int, int);

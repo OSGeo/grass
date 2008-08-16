@@ -24,7 +24,6 @@
 
 static int nsew(char *, char *, char *, char *);
 static void die(struct Option *);
-static char *llinfo(char *, char *, int);
 
 int main(int argc, char *argv[])
 {
@@ -39,7 +38,6 @@ int main(int argc, char *argv[])
     char *name;
     char *mapset;
     char *err;
-    int projection;
     char **rast_ptr, **vect_ptr;
 
     struct GModule *module;
@@ -62,12 +60,6 @@ int main(int argc, char *argv[])
     } parm;
 
     G_gisinit(argv[0]);
-
-    /* get current region.
-     * if current region not valid, set it from default
-     * note: G_get_default_window() dies upon error
-     */
-    G_get_default_window(&window);
 
     module = G_define_module();
     module->keywords = _("general");
@@ -193,8 +185,7 @@ int main(int argc, char *argv[])
     parm.north->required = NO;
     parm.north->multiple = NO;
     parm.north->type = TYPE_STRING;
-    parm.north->description = llinfo(_("Value for the northern edge"),
-				     G_lat_format_string(), window.proj);
+    parm.north->description = _("Value for the northern edge");
     parm.north->guisection = _("Bounds");
 
     parm.south = G_define_option();
@@ -203,8 +194,7 @@ int main(int argc, char *argv[])
     parm.south->required = NO;
     parm.south->multiple = NO;
     parm.south->type = TYPE_STRING;
-    parm.south->description = llinfo(_("Value for the southern edge"),
-				     G_lat_format_string(), window.proj);
+    parm.south->description = _("Value for the southern edge");
     parm.south->guisection = _("Bounds");
 
     parm.east = G_define_option();
@@ -213,8 +203,7 @@ int main(int argc, char *argv[])
     parm.east->required = NO;
     parm.east->multiple = NO;
     parm.east->type = TYPE_STRING;
-    parm.east->description = llinfo(_("Value for the eastern edge"),
-				    G_lon_format_string(), window.proj);
+    parm.east->description = _("Value for the eastern edge");
     parm.east->guisection = _("Bounds");
 
     parm.west = G_define_option();
@@ -223,8 +212,7 @@ int main(int argc, char *argv[])
     parm.west->required = NO;
     parm.west->multiple = NO;
     parm.west->type = TYPE_STRING;
-    parm.west->description = llinfo(_("Value for the western edge"),
-				    G_lon_format_string(), window.proj);
+    parm.west->description = _("Value for the western edge");
     parm.west->guisection = _("Bounds");
 
     parm.top = G_define_option();
@@ -289,8 +277,7 @@ int main(int argc, char *argv[])
     parm.nsres->required = NO;
     parm.nsres->multiple = NO;
     parm.nsres->type = TYPE_STRING;
-    parm.nsres->description = llinfo(_("North-south grid resolution 2D"),
-				     G_llres_format_string(), window.proj);
+    parm.nsres->description = _("North-south grid resolution 2D");
     parm.nsres->guisection = _("Resolution");
 
     parm.ewres = G_define_option();
@@ -299,8 +286,7 @@ int main(int argc, char *argv[])
     parm.ewres->required = NO;
     parm.ewres->multiple = NO;
     parm.ewres->type = TYPE_STRING;
-    parm.ewres->description = llinfo(_("East-west grid resolution 2D"),
-				     G_llres_format_string(), window.proj);
+    parm.ewres->description = _("East-west grid resolution 2D");
     parm.ewres->guisection = _("Resolution");
 
     parm.tbres = G_define_option();
@@ -348,7 +334,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    projection = window.proj;
+    G_get_default_window(&window);
 
     set_flag = !flag.update->answer;
 
@@ -842,13 +828,3 @@ static int nsew(char *value, char *a, char *b, char *c)
     return 0;
 }
 
-static char *llinfo(char *msg, char *llformat, int proj)
-{
-    char buf[256];
-
-    if (proj != PROJECTION_LL)
-	return msg;
-
-    sprintf(buf, "%s (%s %s)", msg, _("format"), llformat);
-    return G_store(buf);
-}

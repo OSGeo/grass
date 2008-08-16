@@ -41,7 +41,7 @@ static int load_files();
 static Boolean do_run(XtPointer);
 static char **gee_wildfiles(char *wildarg, char *element, int *num);
 static void change_label(Widget wid, char *str);
-static void parse_command(int argc, char **argv,
+static void parse_command(struct Option **viewopts,
 			  char *vfiles[MAXVIEWS][MAXIMAGES],
 			  int *numviews, int *numframes);
 
@@ -85,15 +85,28 @@ int main(int argc, char **argv)
     Arg wargs[15];
     unsigned int n;
 
-
-    toplevel = XtAppInitialize(&AppC, "xganimate", NULL, 0,
-			       &argc, argv, NULL, wargs, 0);
-
-    theDisplay = XtDisplay(toplevel);
-
+    struct Option *viewopts[MAXVIEWS];
 
     G_gisinit(argv[0]);
-    parse_command(argc, argv, vfiles, &numviews, &frames);
+
+
+    for (i = 0; i < MAXVIEWS; i++) {
+	char buf[BUFSIZ];
+	viewopts[i] = G_define_option();
+	sprintf(buf, "view%d", i + 1);
+	viewopts[i]->key = G_store(buf);
+	viewopts[i]->type = TYPE_STRING;
+	viewopts[i]->required = (i ? NO : YES);
+	viewopts[i]->multiple = YES;
+	viewopts[i]->gisprompt = "old,cell,Raster";;
+	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
+	viewopts[i]->description = G_store(buf);
+    }
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    parse_command(viewopts, vfiles, &numviews, &frames);
 
     /* debug */
     if (G_verbose() > G_verbose_std()) {
@@ -159,6 +172,10 @@ int main(int argc, char **argv)
     nrows += (1 + (nrows / vrows)) * BORDER_W;
     ncols += (1 + (ncols / vcols)) * BORDER_W;
 
+    toplevel = XtAppInitialize(&AppC, "xganimate", NULL, 0,
+			       &argc, argv, NULL, wargs, 0);
+
+    theDisplay = XtDisplay(toplevel);
 
     n = 0;
     if (ncols > nrows) {
@@ -580,40 +597,26 @@ static void change_label(Widget wid, char *str)
 
 
 /********************************************************************/
-static void parse_command(int argc, char **argv,
+static void parse_command(struct Option **viewopts,
 			  char *vfiles[MAXVIEWS][MAXIMAGES],
 			  int *numviews, int *numframes)
 {
-    struct Option *viewopts[MAXVIEWS];
-    char buf[BUFSIZ], **wildfiles;
-    int i, j, k, numi, wildnum;
+    int i, j, k;
 
     *numviews = *numframes = 0;
-    for (i = 0; i < MAXVIEWS; i++) {
-	viewopts[i] = G_define_option();
-	sprintf(buf, "view%d", i + 1);
-	viewopts[i]->key = G_store(buf);
-	viewopts[i]->type = TYPE_STRING;
-	viewopts[i]->required = (i ? NO : YES);
-	viewopts[i]->multiple = YES;
-	viewopts[i]->gisprompt = "old,cell,Raster";;
-	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
-	viewopts[i]->description = G_store(buf);
-    }
-
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
 
     for (i = 0; i < MAXVIEWS; i++) {
 	if (viewopts[i]->answers) {
+	    int numi, wildnum;
+
 	    (*numviews)++;
 
 	    for (j = 0, numi = 0; viewopts[i]->answers[j]; j++) {
 		if ((NULL != strchr(viewopts[i]->answers[j], '*')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '?')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '['))) {
-		    wildfiles = gee_wildfiles(viewopts[i]->answers[j],
-					      "cell", &wildnum);
+		    char **wildfiles = gee_wildfiles(viewopts[i]->answers[j],
+						     "cell", &wildnum);
 
 		    for (k = 0; k < wildnum; k++)
 			vfiles[i][numi++] = wildfiles[k];

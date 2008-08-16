@@ -20,14 +20,6 @@
 #define DEFAULT_CHARSET "UTF-8"
 
 /**
- * This function defines the parameters and calls the command-line parser
- * @param argc Count of command line arguments
- * @param argv The command line arguments.
- * @param p The parameters structure.
- */
-static void parse_args(int argc, char *argv[], struct params *p);
-
-/**
  * The main function controls the program flow.
  */
 int main(int argc, char *argv[])
@@ -41,6 +33,7 @@ int main(int argc, char *argv[])
     srand((unsigned int)time(NULL));
 
     G_gisinit(argv[0]);
+
     module = G_define_module();
     module->keywords = _("vector, paint labels");
     module->description =
@@ -48,7 +41,123 @@ int main(int argc, char *argv[])
 
     //    fprintf(stderr, "Parsing options and flags\n");
     /* parse options and flags */
-    parse_args(argc, argv, &p);
+    p.map = G_define_standard_option(G_OPT_V_MAP);
+
+    p.type = G_define_standard_option(G_OPT_V_TYPE);
+    p.type->options = "point,line,area";
+    p.type->answer = "point,line,area";
+
+    p.layer = G_define_standard_option(G_OPT_V_FIELD);
+
+    p.column = G_define_option();
+    p.column->key = "column";
+    p.column->type = TYPE_STRING;
+    p.column->required = YES;
+    p.column->description =
+	_("Name of attribute column to be used for labels");
+
+    p.labels = G_define_option();
+    p.labels->key = "labels";
+    p.labels->description = _("Name for new paint-label file");
+    p.labels->type = TYPE_STRING;
+    p.labels->required = YES;
+    p.labels->key_desc = "name";
+
+    p.font = G_define_option();
+    p.font->key = "font";
+    p.font->type = TYPE_STRING;
+    p.font->required = YES;
+    p.font->description =
+	_("Name of TrueType font (as listed in the fontcap)");
+    p.font->guisection = _("Font");
+    p.font->gisprompt = "font";
+
+    p.size = G_define_option();
+    p.size->key = "size";
+    p.size->description = _("Label size (in map-units)");
+    p.size->type = TYPE_DOUBLE;
+    p.size->answer = "100";
+    p.size->guisection = _("Font");
+
+    p.isize = G_define_option();
+    p.isize->key = "isize";
+    p.isize->description = _("Icon size of point features (in map-units)");
+    p.isize->type = TYPE_DOUBLE;
+    p.isize->answer = "10";
+
+    p.charset = G_define_option();
+    p.charset->key = "charset";
+    p.charset->type = TYPE_STRING;
+    p.charset->required = NO;
+    p.charset->answer = DEFAULT_CHARSET;
+    p.charset->description =
+	"Character encoding (default: " DEFAULT_CHARSET ")";
+
+    p.color = G_define_option();
+    p.color->key = "color";
+    p.color->description = _("Text color");
+    p.color->type = TYPE_STRING;
+    p.color->answer = "black";
+    p.color->options = "aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+	"magenta,orange,purple,red,violet,white,yellow";
+    p.color->guisection = _("Colors");
+
+    p.hlcolor = G_define_option();
+    p.hlcolor->key = "hcolor";
+    p.hlcolor->description = _("Hilight color for text");
+    p.hlcolor->type = TYPE_STRING;
+    p.hlcolor->answer = "none";
+    p.hlcolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+	"magenta,orange,purple,red,violet,white,yellow";
+    p.hlcolor->guisection = _("Colors");
+
+    p.hlwidth = G_define_option();
+    p.hlwidth->key = "hwidth";
+    p.hlwidth->description = _("Width of highlight coloring");
+    p.hlwidth->type = TYPE_DOUBLE;
+    p.hlwidth->answer = "0";
+    p.hlwidth->guisection = _("Colors");
+
+    p.bgcolor = G_define_option();
+    p.bgcolor->key = "background";
+    p.bgcolor->description = _("Background color");
+    p.bgcolor->type = TYPE_STRING;
+    p.bgcolor->answer = "none";
+    p.bgcolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+	"magenta,orange,purple,red,violet,white,yellow";
+    p.bgcolor->guisection = _("Colors");
+
+    p.opaque = G_define_option();
+    p.opaque->key = "opaque";
+    p.opaque->description =
+	_("Opaque to vector (only relevant if background color is selected)");
+    p.opaque->type = TYPE_STRING;
+    p.opaque->answer = "yes";
+    p.opaque->options = "yes,no";
+    p.opaque->key_desc = "yes|no";
+    p.opaque->guisection = _("Colors");
+
+    p.bocolor = G_define_option();
+    p.bocolor->key = "border";
+    p.bocolor->description = _("Border color");
+    p.bocolor->type = TYPE_STRING;
+    p.bocolor->answer = "none";
+    p.bocolor->options =
+	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
+	"magenta,orange,purple,red,violet,white,yellow";
+    p.bocolor->guisection = _("Colors");
+
+    p.bowidth = G_define_option();
+    p.bowidth->key = "width";
+    p.bowidth->description = _("Border width (only for ps.map output)");
+    p.bowidth->type = TYPE_DOUBLE;
+    p.bowidth->answer = "0";
+    p.bowidth->guisection = _("Colors");
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
 
     /* initialize labels (get text from database, and get features) */
     labels = labels_init(&p, &n_labels);
@@ -70,168 +179,7 @@ int main(int argc, char *argv[])
     }
     fclose(labelf);
 
-    /* dumping the skyline of the labels */
-    /*    {
-       int n=1;
-       char *f;
-       FILE *skyf;
-       f = G_tempfile();
-       skyf = fopen(f, "w");
-       printf("Writing label skylines & label points to file %s", f);
-       fprintf(skyf, "VERTI:\n");
-       printf("\n%d labels:\n", n_labels);
-       for (i = 0; i < n_labels; i++) {
-       printf("%s has %d candidates\n", labels[i].text, labels[i].n_candidates);
-       if (labels[i].n_candidates > 0) {
-       int j;
-       label_t *l = &labels[i];
-       j = l->current_candidate;
-       //           for(j=0; j < l->n_candidates; j++) {
-       {
-       int k;
-       label_candidate_t *cc = &l->candidates[j];
-       struct line_pnts *sky = skyline_trans_rot(l->skyline,
-       &cc->point,
-       cc->rotation);
-       fprintf(skyf, "L %d 1\n", sky->n_points);
-       for(k=0;k < sky->n_points; k++) {
-       fprintf(skyf, " %.12f %.12f\n", sky->x[k], sky->y[k]);
-       }
-       fprintf(skyf, " %-5d %-10d\n", 1, 1000+n);
-       // The label point
-       fprintf(skyf, "P 1 1\n");
-       fprintf(skyf, " %.12f %.12f\n", cc->point.x, cc->point.y);
-       fprintf(skyf, " %-5d %-10d\n", 1, 2000+n);
-       n++;
-       }
-       }
-       }
-       free(f);
-       fclose(skyf);
-       } */
-
     return EXIT_SUCCESS;
-}
-
-static void parse_args(int argc, char *argv[], struct params *p)
-{
-    p->map = G_define_standard_option(G_OPT_V_MAP);
-
-    p->type = G_define_standard_option(G_OPT_V_TYPE);
-    p->type->options = "point,line,area";
-    p->type->answer = "point,line,area";
-
-    p->layer = G_define_standard_option(G_OPT_V_FIELD);
-
-    p->column = G_define_option();
-    p->column->key = "column";
-    p->column->type = TYPE_STRING;
-    p->column->required = YES;
-    p->column->description =
-	_("Name of attribute column to be used for labels");
-
-    p->labels = G_define_option();
-    p->labels->key = "labels";
-    p->labels->description = _("Name for new paint-label file");
-    p->labels->type = TYPE_STRING;
-    p->labels->required = YES;
-    p->labels->key_desc = "name";
-
-    p->font = G_define_option();
-    p->font->key = "font";
-    p->font->type = TYPE_STRING;
-    p->font->required = YES;
-    p->font->description =
-	_("Name of TrueType font (as listed in the fontcap)");
-    p->font->guisection = _("Font");
-    p->font->gisprompt = "font";
-
-    p->size = G_define_option();
-    p->size->key = "size";
-    p->size->description = _("Label size (in map-units)");
-    p->size->type = TYPE_DOUBLE;
-    p->size->answer = "100";
-    p->size->guisection = _("Font");
-
-    p->isize = G_define_option();
-    p->isize->key = "isize";
-    p->isize->description = _("Icon size of point features (in map-units)");
-    p->isize->type = TYPE_DOUBLE;
-    p->isize->answer = "10";
-
-    p->charset = G_define_option();
-    p->charset->key = "charset";
-    p->charset->type = TYPE_STRING;
-    p->charset->required = NO;
-    p->charset->answer = DEFAULT_CHARSET;
-    p->charset->description =
-	"Character encoding (default: " DEFAULT_CHARSET ")";
-
-    p->color = G_define_option();
-    p->color->key = "color";
-    p->color->description = _("Text color");
-    p->color->type = TYPE_STRING;
-    p->color->answer = "black";
-    p->color->options = "aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
-    p->color->guisection = _("Colors");
-
-    p->hlcolor = G_define_option();
-    p->hlcolor->key = "hcolor";
-    p->hlcolor->description = _("Hilight color for text");
-    p->hlcolor->type = TYPE_STRING;
-    p->hlcolor->answer = "none";
-    p->hlcolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
-    p->hlcolor->guisection = _("Colors");
-
-    p->hlwidth = G_define_option();
-    p->hlwidth->key = "hwidth";
-    p->hlwidth->description = _("Width of highlight coloring");
-    p->hlwidth->type = TYPE_DOUBLE;
-    p->hlwidth->answer = "0";
-    p->hlwidth->guisection = _("Colors");
-
-    p->bgcolor = G_define_option();
-    p->bgcolor->key = "background";
-    p->bgcolor->description = _("Background color");
-    p->bgcolor->type = TYPE_STRING;
-    p->bgcolor->answer = "none";
-    p->bgcolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
-    p->bgcolor->guisection = _("Colors");
-
-    p->opaque = G_define_option();
-    p->opaque->key = "opaque";
-    p->opaque->description =
-	_("Opaque to vector (only relevant if background color is selected)");
-    p->opaque->type = TYPE_STRING;
-    p->opaque->answer = "yes";
-    p->opaque->options = "yes,no";
-    p->opaque->key_desc = "yes|no";
-    p->opaque->guisection = _("Colors");
-
-    p->bocolor = G_define_option();
-    p->bocolor->key = "border";
-    p->bocolor->description = _("Border color");
-    p->bocolor->type = TYPE_STRING;
-    p->bocolor->answer = "none";
-    p->bocolor->options =
-	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,"
-	"magenta,orange,purple,red,violet,white,yellow";
-    p->bocolor->guisection = _("Colors");
-
-    p->bowidth = G_define_option();
-    p->bowidth->key = "width";
-    p->bowidth->description = _("Border width (only for ps.map output)");
-    p->bowidth->type = TYPE_DOUBLE;
-    p->bowidth->answer = "0";
-    p->bowidth->guisection = _("Colors");
-
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
 }
 
 void print_label(FILE * labelf, label_t * label, struct params *p)

@@ -241,31 +241,6 @@ int main(int argc, char *argv[])
 	_("Interpolates point data to a G3D grid volume using "
 	  "regularized spline with tension (RST) algorithm.");
 
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
-
-    G3d_getWindow(&current_region);
-    G3d_readWindow(&current_region, NULL);
-
-    ew_res = current_region.ew_res;
-    ns_res = current_region.ns_res;
-    n_cols = current_region.cols;
-    n_rows = current_region.rows;
-    x_orig = current_region.west;
-    y_orig = current_region.south;
-    n_levs = current_region.depths;
-    tb_res = current_region.tb_res;
-    z_orig = current_region.bottom;
-
-    dmin = amin1(ew_res, ns_res) / 2;
-    disk = n_rows * n_cols * sizeof(float);
-    sprintf(dminchar, "%lf", dmin);
-
-    nsizr = n_rows;
-    nsizc = n_cols;
-    nsizl = n_levs;
-    n_rows_in = n_rows;		/* fix by JH 04/24/02 */
-
     parm.input = G_define_option();
     parm.input->key = "input";
     parm.input->type = TYPE_STRING;
@@ -358,7 +333,6 @@ int main(int argc, char *argv[])
     parm.dmin1 = G_define_option();
     parm.dmin1->key = "dmin";
     parm.dmin1->type = TYPE_DOUBLE;
-    parm.dmin1->answer = dminchar;
     parm.dmin1->required = NO;
     parm.dmin1->description =
 	_("Minimum distance between points (to remove almost identical points)");
@@ -459,6 +433,34 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (G_get_set_window(&cellhd) == -1)
+	G_fatal_error("G_get_set_window() failed");
+
+    G3d_getWindow(&current_region);
+    G3d_readWindow(&current_region, NULL);
+
+    ew_res = current_region.ew_res;
+    ns_res = current_region.ns_res;
+    n_cols = current_region.cols;
+    n_rows = current_region.rows;
+    x_orig = current_region.west;
+    y_orig = current_region.south;
+    n_levs = current_region.depths;
+    tb_res = current_region.tb_res;
+    z_orig = current_region.bottom;
+
+    dmin = amin1(ew_res, ns_res) / 2;
+    disk = n_rows * n_cols * sizeof(float);
+    sprintf(dminchar, "%lf", dmin);
+
+    nsizr = n_rows;
+    nsizc = n_cols;
+    nsizl = n_levs;
+    n_rows_in = n_rows;		/* fix by JH 04/24/02 */
+
+    if (!parm.dmin1->answer)
+	parm.dmin1->answer = dminchar;
 
     per = 1;			/*flag.per->answer; */
     iw2 = 1;
