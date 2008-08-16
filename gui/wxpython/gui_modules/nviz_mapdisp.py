@@ -1,12 +1,9 @@
 """
-@package nviz_mapdisp.py (core)
+@package nviz_mapdisp.py
 
 @brief Nviz extension for wxGUI
 
-This module enables to visualize data in 2.5/3D space.
-
-Map Display supports standard 2D mode ('mapdisp' module) and
-the 2.5/3D mode ('nviz_mapdisp' module).
+This module adds to Map Display 2.5/3D visualization mode.
 
 List of classes:
  - GLWindow
@@ -42,6 +39,7 @@ sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 import grass6_wxnviz as wxnviz
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
+wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()
 
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
@@ -62,7 +60,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
 
         self.parent = parent # MapFrame
-        self.update = []
         
         self.init = False
         # render mode 
@@ -109,7 +106,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.Bind(wx.EVT_MOTION, self.OnMouseAction)
         self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouseAction)
 
-        self.Bind(EVT_UPDATE_PROP, self.UpdateLayerProperties)
+        self.Bind(EVT_UPDATE_PROP, self.UpdateMapObjProperties)
+        self.Bind(EVT_UPDATE_VIEW, self.UpdateView)
         
     def OnEraseBackground(self, event):
         pass # do nothing, to avoid flashing on MSW
@@ -204,6 +202,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
     def OnLeftUp(self, event):
         self.ReleaseMouse()
 
+    def UpdateView(self, event):
+        """Change view settings"""
+        self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
+                               self.iview['height']['value'],
+                               self.view['persp']['value'],
+                               self.view['twist']['value'])
+
+        if event.zExag:
+            self.nvizClass.SetZExag(self.view['z-exag']['value'])
+        
+        event.Skip()
+        
     def UpdateMap(self, render=True):
         """
         Updates the canvas anytime there is a change to the
@@ -214,41 +224,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         start = time.clock()
 
         self.resize = False
-
-        # if self.size is None:
-        #    self.size = self.GetClientSize()
         
-        #         w, h = self.size
-        #         w = float(max(w, 1.0))
-        #         h = float(max(h, 1.0))
-        #         d = float(min(w, h))
-        #         xScale = d / w
-        #         yScale = d / h
-        # print w, h, d, xScale, yScale
-        # print self.y, self.lastY, self.x, self.lastX
-        # print (self.y - self.lastY) * yScale, (self.x - self.lastX) * xScale 
-        # print self.x * xScale
-        
-        #glRotatef((self.y - self.lastY) * yScale, 1.0, 0.0, 0.0);
-        #glRotatef((self.x - self.lastX) * xScale, 0.0, 1.0, 0.0);
-
         if self.render['quick'] is False:
             self.parent.onRenderGauge.Show()
             self.parent.onRenderGauge.SetRange(2)
             self.parent.onRenderGauge.SetValue(0)
-
-        if 'view' in self.update:
-            if 'z-exag' in self.update:
-                self.nvizClass.SetZExag(self.view['z-exag']['value'])
-                self.update.remove('z-exag')
             
-            self.nvizClass.SetView(self.view['pos']['x'], self.view['pos']['y'],
-                                   self.iview['height']['value'],
-                                   self.view['persp']['value'],
-                                   self.view['twist']['value'])
-
-            self.update.remove('view')
-
         if self.render['quick'] is False:
             self.parent.onRenderGauge.SetValue(1)
             wx.Yield()
@@ -362,8 +343,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         # print stop - start
 
-    def SetLayerData(self, item, id, nvizType):
+    def SetMapObjProperties(self, item, id, nvizType):
         """Set map object properties
+
+        Properties must be afterwards updated by
+        UpdateMapObjProperties().
 
         @param item layer item
         @param id nviz layer id (or -1)
@@ -372,7 +356,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         type = self.tree.GetPyData(item)[0]['maplayer'].type
         # reference to original layer properties (can be None)
         data = self.tree.GetPyData(item)[0]['nviz']
-
+        
         if data is None:
             # init data structure
             self.tree.GetPyData(item)[0]['nviz'] = {}
@@ -390,7 +374,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['vector'] = {}
                 for sec in ('lines', 'points'):
                     data['vector'][sec] = {}
-
+                
                 # reset to default properties (lines/points)
                 self.SetVectorDefaultProp(data['vector'])
 
@@ -400,7 +384,6 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     data[nvizType][sec] = {}
                 for sec in ('isosurface', 'slice'):
                     data[nvizType][sec] = []
-                
 
                 # reset to default properties 
                 self.SetVolumeDefaultProp(data[nvizType])
@@ -418,10 +401,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 for sec1 in data[sec].keys():
                     for sec2 in data[sec][sec1].keys():
                         if sec2 not in ('object'):
-                            event = wxUpdateProperties(type='mapobj',
-                                                       data={'nvizType' : sec,
-                                                             'key' : sec1,
-                                                             'subkey' : sec2})
+                            data[sec][sec1][sec2]['update'] = None
+
+            event = wxUpdateProperties(data=data)
+            wx.PostEvent(self, event)
                             
         # set id
         if id > 0:
@@ -479,10 +462,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.layers[layer.type]['id'].append(id)
 
         # set default/workspace layer properties
-        data = self.SetLayerData(item, id, nvizType)
-        print data
+        data = self.SetMapObjProperties(item, id, nvizType)
+
         # update properties
-        event = wxUpdateProperties(layer=item)
+        event = wxUpdateProperties(data=data)
         wx.PostEvent(self, event)
         
         # update tools window
@@ -583,8 +566,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     vecType.append(v)
 
         # set default properties
-        self.SetLayerData(item, -1, 'lines')
-        self.SetLayerData(item, -1, 'points')
+        self.SetMapObjProperties(item, -1, 'lines')
+        self.SetMapObjProperties(item, -1, 'points')
 
         id = -1
         for type in vecType:
@@ -599,13 +582,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 continue
 
             # update layer properties
-            self.SetLayerData(item, id, type)
+            self.SetMapObjProperties(item, id, type)
         
             self.layers['v' + type]['name'].append(layer.name)
             self.layers['v'  + type]['id'].append(id)
         
         # update properties
-        event = wxUpdateProperties(layer=item)
+        data = self.tree.GetPyData(item)[0]['nviz']
+        event = wxUpdateProperties(data=data)
         wx.PostEvent(self, event)
         
         # update tools window
@@ -732,7 +716,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         return (value, desc)
     
     def SetSurfaceDefaultProp(self, data):
-        """Set default surface properties, add actions to update list"""
+        """Set default surface data properties"""
         #
         # attributes
         #
@@ -741,7 +725,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             for key, value in UserSettings.Get(group='nviz', key='volume',
                                                subkey=attrb).iteritems():
                 data['attribute'][attrb][key] = value
-            self.update.append('surface:attribute:%s' % attrb)
+            data['attribute'][attrb]['update'] = None
         
         #
         # draw
@@ -751,14 +735,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if control[:3] == 'res':
                 if not data['draw'].has_key('resolution'):
                     data['draw']['resolution'] = {}
-                if 'surface:draw:%s' % 'resolution' not in self.update:
-                    self.update.append('surface:draw:%s' % 'resolution')
+                if not data['draw']['resolution'].has_key('update'):
+                    data['draw']['resolution']['update'] = None
                 data['draw']['resolution'][control[4:]] = value
                 continue
             
-            elif control not in ('style', 'shading'):
-                self.update.append('surface:draw:%s' % control)
-
             if control == 'wire-color':
                 value = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
             elif control in ('mode', 'style', 'shading'):
@@ -767,24 +748,24 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 continue
 
             data['draw'][control] = { 'value' : value }
+            data['draw'][control]['update'] = None
             
         value, desc = self.GetDrawMode(UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'mode']),
                                        UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'style']),
                                        UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading']))
 
         data['draw']['mode'] = { 'value' : value,
-                                 'desc' : desc, }
+                                 'desc' : desc, 
+                                 'update': None }
 
     def SetVolumeDefaultProp(self, data):
-        """Set default volume properties and add actions to update list"""
+        """Set default volume data properties"""
         #
         # draw
         #
         for control, value in UserSettings.Get(group='nviz', key='volume', subkey='draw').iteritems():
             if control == 'mode':
                 continue
-            if 'volume:draw:%s' % control not in self.update:
-                self.update.append('volume:draw:%s' % control)
             if control == 'shading':
                 sel = UserSettings.Get(group='nviz', key='surface', subkey=['draw', 'shading'])
                 value, desc = self.GetDrawMode(shade=sel, string=False)
@@ -801,6 +782,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                          'desc' : desc, }
             else:
                 data['draw'][control] = { 'value' : value }
+
+            if not data['draw'][control].has_key('update'):
+                data['draw'][control]['update'] = None
         
         #
         # isosurface attributes
@@ -812,21 +796,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 data['attribute'][attrb][key] = value
         
     def SetVectorDefaultProp(self, data):
-        """Set default vector properties, add actions to update list"""
+        """Set default vector data properties"""
         self.SetVectorLinesDefaultProp(data['lines'])
         self.SetVectorPointsDefaultProp(data['points'])
 
     def SetVectorLinesDefaultProp(self, data):
         """Set default vector properties -- lines"""
         # width
-        data['width'] = UserSettings.Get(group='nviz', key='vector',
-                                                  subkey=['lines', 'width'])
+        data['width'] = {'value' : UserSettings.Get(group='nviz', key='vector',
+                                                    subkey=['lines', 'width']) }
         
         # color
         value = UserSettings.Get(group='nviz', key='vector',
                                  subkey=['lines', 'color'])
         color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = color
+        data['color'] = { 'value' : color }
 
         # mode
         if UserSettings.Get(group='nviz', key='vector',
@@ -843,57 +827,53 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         data['mode'] = {}
         data['mode']['type'] = type
+        data['mode']['update'] = None
         if map:
             data['mode']['surface'] = map
 
         # height
-        data['height'] = UserSettings.Get(group='nviz', key='vector',
-                                                   subkey=['lines', 'height'])
+        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['lines', 'height']) }
 
         if data.has_key('object'):
-            self.update.append('vector:lines:color')
-            self.update.append('vector:lines:width')
-            self.update.append('vector:lines:mode')
-            self.update.append('vector:lines:height')
-
+            for attrb in ('color', 'width', 'mode', 'height'):
+                data[attrb]['update'] = None
+        
     def SetVectorPointsDefaultProp(self, data):
         """Set default vector properties -- points"""
         # size
-        data['size'] = UserSettings.Get(group='nviz', key='vector',
-                                        subkey=['points', 'size'])
+        data['size'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                    subkey=['points', 'size']) }
 
         # width
-        data['width'] = UserSettings.Get(group='nviz', key='vector',
-                                         subkey=['points', 'width'])
+        data['width'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                     subkey=['points', 'width']) }
 
         # marker
-        data['marker'] = UserSettings.Get(group='nviz', key='vector',
-                                          subkey=['points', 'marker'])
+        data['marker'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'marker']) }
 
         # color
         value = UserSettings.Get(group='nviz', key='vector',
                                  subkey=['points', 'color'])
         color = str(value[0]) + ':' + str(value[1]) + ':' + str(value[2])
-        data['color'] = color
+        data['color'] = { 'value' : color }
 
         # mode
         data['mode'] = { 'type' : 'surface',
-                         'surface' : '' }
+                         'surface' : '', }
         if len(self.layers['raster']['name']) > 0:
             data['mode']['surface'] = self.layers['raster']['name'][0]
         
         # height
-        data['height'] = UserSettings.Get(group='nviz', key='vector',
-                                          subkey=['points', 'height'])
+        data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
+                                                      subkey=['points', 'height']) }
 
         if data.has_key('object'):
-            self.update.append('vector:points:size')
-            self.update.append('vector:points:width')
-            self.update.append('vector:points:marker')
-            self.update.append('vector:points:color')
-            self.update.append('vector:points:surface')
-            self.update.append('vector:points:height')
-
+            for attrb in ('size', 'width', 'marker',
+                          'color', 'surface', 'height'):
+                data[attrb]['update'] = None
+        
     def Reset(self):
         """Reset (unload data)"""
         self.nvizClass.Reset()
@@ -933,83 +913,77 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.view['twist']['value'] = UserSettings.Get(group='nviz', key='view',
                                                        subkey=('twist', 'value'))
 
-        self.update.append('view')
-
-    def UpdateLayerProperties(self, event):
-        """Update data layer properties"""
-        print self.update
-        if not hasattr(event, "layer"):
-            mapLayer = self.GetSelectedLayer()
-            data = self.GetSelectedLayer(type='nviz')
-        else:
-            mapLayer = self.tree.GetPyData(event.layer)[0]['maplayer']
-            data = self.tree.GetPyData(event.layer)[0]['nviz']
-
-        if mapLayer.type == 'raster':
+        event = wxUpdateView(zExag=False)
+        wx.PostEvent(self, event)
+        
+    def UpdateMapObjProperties(self, event):
+        """Generic method to update data layer properties"""
+        data = event.data
+        
+        if data.has_key('surface'):
             id = data['surface']['object']['id']
             self.UpdateSurfaceProperties(id, data['surface'])
             # -> initialized
             data['surface']['object']['init'] = True
 
-        elif mapLayer.type == '3d-raster':
+        elif data.has_key('volume'):
             id = data['volume']['object']['id']
-            if hasattr(event, "isoSurfId"):
-                self.UpdateVolumeProperties(id, data['volume'], isosurfId)
-            else:
-                self.UpdateVolumeProperties(id, data['volume'])
+            self.UpdateVolumeProperties(id, data['volume'])
             # -> initialized
             data['volume']['object']['init'] = True
 
-        elif mapLayer.type == 'vector':
+        elif data.has_key('vector'):
             for type in ('lines', 'points'):
                 if data['vector'][type].has_key('object'):
                     id = data['vector'][type]['object']['id']
                     self.UpdateVectorProperties(id, data['vector'], type)
                     # -> initialized
                     data['vector'][type]['object']['init'] = True
-        print self.update
+        
     def UpdateSurfaceProperties(self, id, data):
-        """Update surface layer properties"""
+        """Update surface map object properties"""
         # surface attributes
         for attrb in ('topo', 'color', 'mask',
                      'transp', 'shine', 'emit'):
-            attrb, 'surface:attribute:%s' % attrb in self.update
-            if 'surface:attribute:%s' % attrb in self.update:
-                map = data['attribute'][attrb]['map']
-                value = data['attribute'][attrb]['value']
+            if not data['attribute'].has_key(attrb) or \
+                    not data['attribute'][attrb].has_key('update'):
+                continue
 
-                if map is None: # unset
-                    # only optional attributes
-                    if attrb == 'mask':
-                        # TODO: invert mask
-                        # TODO: broken in NVIZ
-                        self.nvizClass.UnsetSurfaceMask(id)
-                    elif attrb == 'transp':
-                        self.nvizClass.UnsetSurfaceTransp(id)
-                    elif attrb == 'emit':
-                        self.nvizClass.UnsetSurfaceEmit(id) 
-                else:
-                    if type(value) == type('') and \
-                            len(value) <= 0: # ignore empty values (TODO: warning)
-                        continue
-                    if attrb == 'topo':
-                        self.nvizClass.SetSurfaceTopo(id, map, str(value)) 
-                    elif attrb == 'color':
-                        self.nvizClass.SetSurfaceColor(id, map, str(value))
-                    elif attrb == 'mask':
-                        # TODO: invert mask
-                        # TODO: broken in NVIZ
-                        self.nvizClass.SetSurfaceMask(id, False, str(value))
-                    elif attrb == 'transp':
-                        self.nvizClass.SetSurfaceTransp(id, map, str(value)) 
-                    elif attrb == 'shine':
-                        self.nvizClass.SetSurfaceShine(id, map, str(value)) 
-                    elif attrb == 'emit':
-                        self.nvizClass.SetSurfaceEmit(id, map, str(value)) 
-                self.update.remove('surface:attribute:%s' % attrb)
+            map = data['attribute'][attrb]['map']
+            value = data['attribute'][attrb]['value']
+
+            if map is None: # unset
+                # only optional attributes
+                if attrb == 'mask':
+                    # TODO: invert mask
+                    # TODO: broken in NVIZ
+                    self.nvizClass.UnsetSurfaceMask(id)
+                elif attrb == 'transp':
+                    self.nvizClass.UnsetSurfaceTransp(id)
+                elif attrb == 'emit':
+                    self.nvizClass.UnsetSurfaceEmit(id) 
+            else:
+                if type(value) == type('') and \
+                        len(value) <= 0: # ignore empty values (TODO: warning)
+                    continue
+                if attrb == 'topo':
+                    self.nvizClass.SetSurfaceTopo(id, map, str(value)) 
+                elif attrb == 'color':
+                    self.nvizClass.SetSurfaceColor(id, map, str(value))
+                elif attrb == 'mask':
+                    # TODO: invert mask
+                    # TODO: broken in NVIZ
+                    self.nvizClass.SetSurfaceMask(id, False, str(value))
+                elif attrb == 'transp':
+                    self.nvizClass.SetSurfaceTransp(id, map, str(value)) 
+                elif attrb == 'shine':
+                    self.nvizClass.SetSurfaceShine(id, map, str(value)) 
+                elif attrb == 'emit':
+                    self.nvizClass.SetSurfaceEmit(id, map, str(value)) 
+            data['attribute'][attrb].pop('update')
 
         # draw res
-        if 'surface:draw:resolution' in self.update:
+        if data['draw']['resolution'].has_key('update'):
             coarse = data['draw']['resolution']['coarse']
             fine   = data['draw']['resolution']['fine']
 
@@ -1017,10 +991,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.nvizClass.SetSurfaceRes(-1, fine, coarse)
             else:
                 self.nvizClass.SetSurfaceRes(id, fine, coarse)
-            self.update.remove('surface:draw:resolution')
-
+            data['draw']['resolution'].pop('update')
+        
         # draw style
-        if 'surface:draw:mode' in self.update:
+        if data['draw']['mode'].has_key('update'):
             if data['draw']['mode']['value'] < 0: # need to calculate
                 data['draw']['mode']['value'] = \
                     self.GetDrawMode(mode=data['draw']['mode']['desc']['mode'],
@@ -1032,49 +1006,53 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 self.nvizClass.SetSurfaceStyle(-1, style)
             else:
                 self.nvizClass.SetSurfaceStyle(id, style)
-            self.update.remove('surface:draw:mode')
+            data['draw']['mode'].pop('update')
 
         # wire color
-        if 'surface:draw:wire-color' in self.update:
+        if data['draw']['wire-color'].has_key('update'):
             color = data['draw']['wire-color']['value']
             if data['draw']['all']:
                 self.nvizClass.SetWireColor(-1, str(color))
             else:
                 self.nvizClass.SetWireColor(id, str(color))
-                self.update.remove('surface:draw:wire-color')
+            data['draw']['wire-color'].pop('update')
         
         # position
-        if 'surface:position' in self.update:
+        if data['position'].has_key('update'):
             x = data['position']['x']
             y = data['position']['y']
             z = data['position']['z']
             self.nvizClass.SetSurfacePosition(id, x, y, z)
-            self.update.remove('surface:position')
-            
+            data['position'].pop('update')
+        
     def UpdateVolumeProperties(self, id, data, isosurfId=None):
-        """Apply volume layer properties"""
+        """Update volume (isosurface/slice) map object properties"""
         #
         # draw
         #
-        if 'volume:draw:resolution' in self.update:
+        if data['draw']['resolution'].has_key('update'):
             self.nvizClass.SetIsosurfaceRes(id, data['draw']['resolution']['value'])
-            self.update.remove('volume:draw:resolution')
+            data['draw']['resolution'].pop('update')
         
-        if 'volume:draw:shading' in self.update:
+        if data['draw']['shading'].has_key('update'):
             if data['draw']['shading']['value'] < 0: # need to calculate
                 data['draw']['shading']['value'] = \
                     self.GetDrawMode(shade=data['draw']['shading'],
                                      string=False)
-            self.update.remove('volume:draw:shading')
-            
+            data['draw']['shading'].pop('update')
+        
         #
         # isosurface attributes
         #
-        for attrb in ('color', 'mask',
-                      'transp', 'shine', 'emit'):
-            if 'volume:attribute:%s' % attrb in self.update:
-                map = data['attribute'][attrb]['map']
-                value = data['attribute'][attrb]['value']
+        isosurfId = 0
+        for isosurf in data['isosurface']:
+            for attrb in ('color', 'mask',
+                          'transp', 'shine', 'emit'):
+                if not isosurf.has_key(attrb) or \
+                    not isosurf[attrb].has_key('update'):
+                    continue
+                map = isosurf[attrb]['map']
+                value = isosurf[attrb]['value']
 
                 if map is None: # unset
                     # only optional attributes
@@ -1093,7 +1071,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     if type(value) == type('') and \
                             len(value) <= 0: # ignore empty values (TODO: warning)
                         continue
-                    elif attrb == 'color' and isosurfId:
+                    elif attrb == 'color':
                         self.nvizClass.SetIsosurfaceColor(id, isosurfId, map, str(value))
                     elif attrb == 'mask':
                         # TODO: invert mask
@@ -1109,8 +1087,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif attrb == 'emit':
                         # self.nvizClass.SetSurfaceEmit(id, map, str(value)) 
                         pass
-                self.update.remove('volume:attribute:%s' % attrb)
-
+                isosurf[attrb].pop('update')
+            isosurfId += 1
+        
     def UpdateVectorProperties(self, id, data, type):
         """Update vector layer properties
 
@@ -1124,11 +1103,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             self.UpdateVectorLinesProperties(id, data[type])
     
     def UpdateVectorLinesProperties(self, id, data):
-        """Apply changes for vector line layer"""
+        """Update vector line map object properties"""
         # mode
-        if 'vector:lines:color' in self.update or \
-                'vector:lines:width' in self.update or \
-                'vector:lines:mode' in self.update:
+        if data['color'].has_key('update') or \
+                data['width'].has_key('update') or \
+                data['mode'].has_key('update'):
             width = data['width']
             color = data['color']
             if data['mode']['type'] == 'flat':
@@ -1137,40 +1116,41 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     data.pop('surface')
             else:
                 flat = False
-                if not 'vector:lines:surface' in self.update:
-                    self.update.append('vector:lines:surface')
+                if not 'vector:lines:surface' in update:
+                    update.append('vector:lines:surface')
 
             self.nvizClass.SetVectorLineMode(id, color,
                                              width, flat)
-            if 'vector:lines:color' in self.update:
-                self.update.remove('vector:lines:color')
-            if 'vector:lines:width' in self.update:
-                self.update.remove('vector:lines:width')
-            if 'vector:lines:mode' in self.update:
-                self.update.remove('vector:lines:mode')
+            if data['color'].has_key('update'):
+                data['color'].pop('update')
+            if data['width'].has_key('update'):
+                data['width'].pop('update')
+            if data['mode'].has_key('update'):
+                data['mode'].pop('update')
+        
         # height
-        if 'vector:lines:height' in self.update:
+        if data['height'].has_key('update'):
             self.nvizClass.SetVectorLineHeight(id,
                                                data['height'])
-            self.update.remove('vector:lines:height')
-
+            data['height'].pop('update')
+        
         # surface
-        if 'vector:lines:surface' in self.update:
+        if data['mode'].has_key('update'):
             idx = self.layers['raster']['name'].index(data['mode']['surface'])
             if idx > -1:
                 self.nvizClass.SetVectorLineSurface(id,
                                                     self.layers['raster']['id'][idx])
-            self.update.remove('vector:lines:surface')
-
+            data['mode'].pop('update')
+        
     def UpdateVectorPointsProperties(self, id, data):
-        """Apply changes for vector point layer"""
-        if 'vector:points:size' in self.update or \
-                'vector:points:width' in self.update or \
-                'vector:points:marker' in self.update or \
-                'vector:points:color' in self.update:
-            ret = self.nvizClass.SetVectorPointMode(id, data['color'],
-                                                    data['width'], float(data['size']),
-                                                    data['marker'] + 1)
+        """Update vector point map object properties"""
+        if data['size'].has_key('update') or \
+                data['width'].has_key('update') or \
+                data['marker'].has_key('update') or \
+                data['color'].has_key('update'):
+            ret = self.nvizClass.SetVectorPointMode(id, data['color']['value'],
+                                                    data['width']['value'], float(data['size']['value']),
+                                                    data['marker']['value'] + 1)
 
             error = None
             if ret == -1:
@@ -1183,19 +1163,19 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                                      message=_("Setting data layer properties failed.\n\n%s") % error)
 
             for prop in ('size', 'width', 'marker', 'color'):
-                if 'vector:points:%s' % prop in self.update:
-                    self.update.remove('vector:points:%s' % prop)
+                if data[prop].has_key('update'):
+                    data[prop].pop('update')
         
         # height
-        if 'vector:points:height' in self.update:
+        if data['height'].has_key('update'):
             self.nvizClass.SetVectorPointHeight(id,
-                                                data['height'])
-            self.update.remove('vector:points:height')
-
+                                                data['height']['value'])
+            data['height'].pop('update')
+        
         # surface
-        if 'vector:points:surface' in self.update:
+        if data['mode'].has_key('update'):
             idx = self.layers['raster']['name'].index(data['mode']['surface'])
             if idx > -1:
                 self.nvizClass.SetVectorPointSurface(id,
                                                      self.layers['raster']['id'][idx])
-            self.update.remove('vector:points:surface')
+            data['mode'].pop('update')
