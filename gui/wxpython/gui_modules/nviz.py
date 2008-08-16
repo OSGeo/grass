@@ -1,15 +1,12 @@
 """
-@package nviz_mapdisp.py (core)
+@package nviz.py
 
 @brief Nviz extension for wxGUI
 
 This module enables to visualize data in 2.5/3D space.
 
-Map Display supports standard 2D mode ('mapdisp' module) and
-the 2.5/3D mode ('nviz_mapdisp' module).
-
-List of classes:
- - GLWindow
+Map Display supports standard 2D mode ('mapdisp' module) and 2.5/3D
+mode ('nviz_mapdisp' module).
 
 (C) 2008 by the GRASS Development Team
 
