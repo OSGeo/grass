@@ -826,10 +826,11 @@ class mainFrame(wx.Frame):
         """Cancel button pressed"""
         self.MakeModal(False)
         if self.get_dcmd:
-            if len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
-                self.parent.Delete(self.layer)
-                self.Destroy()
-            else:
+            try:
+                if len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
+                    self.parent.Delete(self.layer)
+                    self.Destroy()
+            except:
                 self.Hide()
         else:
             self.Destroy()
