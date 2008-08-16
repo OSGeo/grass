@@ -98,11 +98,8 @@ int main(int argc, char *argv[])
 
     G_gisinit(argv[0]);
 
-    G_begin_polygon_area_calculations();	/* Used in geom() */
-
     module = G_define_module();
     module->keywords = _("vector, import");
-    /* module->description = G_store (buf); */
     module->description = _("Convert OGR vector layers to GRASS vector map.");
 
     dsn_opt = G_define_option();
@@ -244,6 +241,8 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    G_begin_polygon_area_calculations();	/* Used in geom() */
 
     OGRRegisterAll();
 

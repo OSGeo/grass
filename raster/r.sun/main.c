@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
     flag;
 
     G_gisinit(argv[0]);
-    module = G_define_module();
 
+    module = G_define_module();
     module->keywords = _("raster");
     module->label = _("Solar irradiance and irradiation model.");
     module->description =
@@ -182,22 +182,6 @@ int main(int argc, char *argv[])
 	 "Alternatively, a local time can be specified to compute solar "
 	 "incidence angle and/or irradiance raster maps. The shadowing effect of "
 	 "the topography is optionally incorporated.");
-
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
-
-    stepx = cellhd.ew_res;
-    stepy = cellhd.ns_res;
-    invstepx = 1. / stepx;
-    invstepy = 1. / stepy;
-    n /*n_cols */  = cellhd.cols;
-    m /*n_rows */  = cellhd.rows;
-    xmin = cellhd.west;
-    ymin = cellhd.south;
-    xmax = cellhd.east;
-    ymax = cellhd.north;
-    deltx = fabs(cellhd.east - cellhd.west);
-    delty = fabs(cellhd.north - cellhd.south);
 
     parm.elevin = G_define_option();
     parm.elevin->key = "elevin";
@@ -217,7 +201,6 @@ int main(int argc, char *argv[])
 	_("Name of the input aspect map (terrain aspect or azimuth of the solar panel) [decimal degrees]");
     parm.aspin->guisection = _("Input_options");
 
-
     parm.slopein = G_define_option();
     parm.slopein->key = "slopein";
     parm.slopein->type = TYPE_STRING;
@@ -236,16 +219,14 @@ int main(int argc, char *argv[])
 	_("Name of the Linke atmospheric turbidity coefficient input raster map [-]");
     parm.linkein->guisection = _("Input_options");
 
-    if (parm.linkein->answer == NULL) {
-	parm.lin = G_define_option();
-	parm.lin->key = "lin";
-	parm.lin->type = TYPE_DOUBLE;
-	parm.lin->answer = LINKE;
-	parm.lin->required = NO;
-	parm.lin->guisection = _("Input_options");
-	parm.lin->description =
-	    _("A single value of the Linke atmospheric turbidity coefficient [-]");
-    }
+    parm.lin = G_define_option();
+    parm.lin->key = "lin";
+    parm.lin->type = TYPE_DOUBLE;
+    parm.lin->answer = LINKE;
+    parm.lin->required = NO;
+    parm.lin->guisection = _("Input_options");
+    parm.lin->description =
+	_("A single value of the Linke atmospheric turbidity coefficient [-]");
 
     parm.albedo = G_define_option();
     parm.albedo->key = "albedo";
@@ -256,16 +237,14 @@ int main(int argc, char *argv[])
 	_("Name of the ground albedo coefficient input raster map [-]");
     parm.albedo->guisection = _("Input_options");
 
-    if (parm.albedo->answer == NULL) {
-	parm.alb = G_define_option();
-	parm.alb->key = "alb";
-	parm.alb->type = TYPE_DOUBLE;
-	parm.alb->answer = ALB;
-	parm.alb->required = NO;
-	parm.alb->guisection = _("Input_options");
-	parm.alb->description =
-	    _("A single value of the ground albedo coefficient [-]");
-    }
+    parm.alb = G_define_option();
+    parm.alb->key = "alb";
+    parm.alb->type = TYPE_DOUBLE;
+    parm.alb->answer = ALB;
+    parm.alb->required = NO;
+    parm.alb->guisection = _("Input_options");
+    parm.alb->description =
+	_("A single value of the ground albedo coefficient [-]");
 
     parm.latin = G_define_option();
     parm.latin->key = "latin";
@@ -276,15 +255,13 @@ int main(int argc, char *argv[])
 	_("Name of the latitudes input raster map [decimal degrees]");
     parm.latin->guisection = _("Input_options");
 
-    if (parm.latin->answer == NULL) {
-	parm.lat = G_define_option();
-	parm.lat->key = "lat";
-	parm.lat->type = TYPE_DOUBLE;
-	parm.lat->required = NO;
-	parm.lat->guisection = _("Input_options");
-	parm.lat->description =
-	    _("A single value of latitude [decimal degrees]");
-    }
+    parm.lat = G_define_option();
+    parm.lat->key = "lat";
+    parm.lat->type = TYPE_DOUBLE;
+    parm.lat->required = NO;
+    parm.lat->guisection = _("Input_options");
+    parm.lat->description =
+	_("A single value of latitude [decimal degrees]");
 
     parm.coefbh = G_define_option();
     parm.coefbh->key = "coefbh";
@@ -385,6 +362,22 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (G_get_set_window(&cellhd) == -1)
+	G_fatal_error("G_get_set_window() failed");
+
+    stepx = cellhd.ew_res;
+    stepy = cellhd.ns_res;
+    invstepx = 1. / stepx;
+    invstepy = 1. / stepy;
+    n /*n_cols */  = cellhd.cols;
+    m /*n_rows */  = cellhd.rows;
+    xmin = cellhd.west;
+    ymin = cellhd.south;
+    xmax = cellhd.east;
+    ymax = cellhd.north;
+    deltx = fabs(cellhd.east - cellhd.west);
+    delty = fabs(cellhd.north - cellhd.south);
 
     shd = flag.shade->answer;
 

@@ -54,9 +54,6 @@ int main(int argc, char *argv[])
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
-    /* must run in a term window */
-    G_putenv("GRASS_UI_TERM", "1");
-
     module = G_define_module();
     module->keywords = _("raster");
     module->description =

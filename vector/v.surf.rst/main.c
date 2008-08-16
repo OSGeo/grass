@@ -163,26 +163,6 @@ int main(int argc, char *argv[])
 	  "point or isoline data in vector format to floating point "
 	  "raster format using regularized spline with tension.");
 
-    if (G_get_set_window(&cellhd) == -1)
-	G_fatal_error("G_get_set_window() failed");
-    ew_res = cellhd.ew_res;
-    ns_res = cellhd.ns_res;
-    n_cols = cellhd.cols;
-    n_rows = cellhd.rows;
-    x_orig = cellhd.west;
-    y_orig = cellhd.south;
-    xm = cellhd.east;
-    ym = cellhd.north;
-    if (ew_res < ns_res)
-	dmin = ew_res / 2;
-    else
-	dmin = ns_res / 2;
-    disk = n_rows * n_cols * sizeof(int);
-    sdisk = n_rows * n_cols * sizeof(short int);
-    sprintf(dmaxchar, "%f", dmin * 5);
-    sprintf(dminchar, "%f", dmin);
-
-
     flag.cv = G_define_flag();
     flag.cv->key = 'c';
     flag.cv->description =
@@ -299,7 +279,6 @@ int main(int argc, char *argv[])
     parm.dmin->key = "dmin";
     parm.dmin->type = TYPE_DOUBLE;
     parm.dmin->required = NO;
-    parm.dmin->answer = dminchar;
     parm.dmin->description =
 	_("Minimum distance between points (to remove almost identical points)");
     parm.dmin->guisection = _("Settings");
@@ -308,7 +287,6 @@ int main(int argc, char *argv[])
     parm.dmax->key = "dmax";
     parm.dmax->type = TYPE_DOUBLE;
     parm.dmax->required = NO;
-    parm.dmax->answer = dmaxchar;
     parm.dmax->description =
 	_("Maximum distance between points on isoline (to insert additional points)");
     parm.dmax->guisection = _("Settings");
@@ -366,10 +344,33 @@ int main(int argc, char *argv[])
     parm.scalex->description = _("Anisotropy scaling factor");
     parm.scalex->guisection = _("Anisotropy");
 
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (G_get_set_window(&cellhd) == -1)
+	G_fatal_error("G_get_set_window() failed");
+
+    ew_res = cellhd.ew_res;
+    ns_res = cellhd.ns_res;
+    n_cols = cellhd.cols;
+    n_rows = cellhd.rows;
+    x_orig = cellhd.west;
+    y_orig = cellhd.south;
+    xm = cellhd.east;
+    ym = cellhd.north;
+    if (ew_res < ns_res)
+	dmin = ew_res / 2;
+    else
+	dmin = ns_res / 2;
+    disk = n_rows * n_cols * sizeof(int);
+    sdisk = n_rows * n_cols * sizeof(short int);
+    sprintf(dmaxchar, "%f", dmin * 5);
+    sprintf(dminchar, "%f", dmin);
+
+    if (!parm.dmin->answer)
+	parm.dmin->answer = dminchar;
+    if (!parm.dmax->answer)
+	parm.dmax->answer = dmaxchar;
 
     per = 1;
     input = parm.input->answer;

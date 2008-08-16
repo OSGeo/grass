@@ -54,8 +54,8 @@
 /* global variables */
 int nrows, ncols, numviews, quality, quiet = 0;
 char *vfiles[MAXVIEWS][MAXIMAGES];
-char outfile[BUFSIZ];
-char encoder[15];
+char outfile[GPATH_MAX];
+const char *encoder;
 
 float vscale, scale;		/* resampling scale factors */
 int irows, icols, vrows, vcols;
@@ -66,24 +66,93 @@ int frames;
 static int load_files(void);
 static int use_r_out(void);
 static char **gee_wildfiles(char *wildarg, char *element, int *num);
-static void parse_command(int argc, char *argv[],
-			  char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
-			  int *numframes, int *quality, int *convert);
+static void parse_command(struct Option **viewopts,
+			  char *vfiles[MAXVIEWS][MAXIMAGES],
+			  int *numviews, int *numframes);
 
 
 int main(int argc, char **argv)
 {
-    /*    int               i, j, d; */
+    struct GModule *module;
+    struct Option *viewopts[MAXVIEWS], *out, *qual;
+    struct Flag *qt, *conv;
+    int i;
     int *sdimp, longdim, r_out;
 
     G_gisinit(argv[0]);
-    parse_command(argc, argv, vfiles, &numviews, &frames, &quality, &r_out);
+
+    module = G_define_module();
+    module->keywords = _("raster");
+    module->description = _("Raster File Series to MPEG Conversion Program.");
+
+    for (i = 0; i < MAXVIEWS; i++) {
+	char buf[BUFSIZ];
+	viewopts[i] = G_define_option();
+	sprintf(buf, "view%d", i + 1);
+	viewopts[i]->key = G_store(buf);
+	viewopts[i]->type = TYPE_STRING;
+	viewopts[i]->required = (i ? NO : YES);
+	viewopts[i]->multiple = YES;
+	viewopts[i]->gisprompt = "old,cell,Raster";
+	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
+	viewopts[i]->description = G_store(buf);
+    }
+
+    out = G_define_option();
+    out->key = "output";
+    out->type = TYPE_STRING;
+    out->required = NO;
+    out->multiple = NO;
+    out->answer = "gmovie.mpg";
+    out->description = _("Name for output file");
+
+    qual = G_define_option();
+    qual->key = "qual";
+    qual->type = TYPE_INTEGER;
+    qual->required = NO;
+    qual->multiple = NO;
+    qual->answer = "3";
+    qual->options = "1-5";
+    qual->description =
+	_("Quality factor (1 = highest quality, lowest compression)");
+
+    qt = G_define_flag();
+    qt->key = 'q';
+    qt->description = _("Quiet - suppress progress report");
+
+    conv = G_define_flag();
+    conv->key = 'c';
+    conv->description =
+	_("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
+    parse_command(viewopts, vfiles, &numviews, &frames);
+
+    if (qt->answer)
+	quiet = 1;
+
+    r_out = 0;
+    if (conv->answer)
+	r_out = 1;
+
+    quality = 3;
+    if (qual->answer != NULL)
+	sscanf(qual->answer, "%d", &quality);
+    if (quality > 5 || quality < 1)
+	quality = 3;
+
+    if (out->answer)
+	strcpy(outfile, out->answer);
+    else
+	strcpy(outfile, "gmovie.mpg");
 
     /* find a working encoder */
     if (256 == G_system("ppmtompeg 2> /dev/null"))
-	strcpy(encoder, "ppmtompeg");
+	encoder = "ppmtompeg";
     else if (256 == G_system("mpeg_encode 2> /dev/null"))
-	strcpy(encoder, "mpeg_encode");
+	encoder = "mpeg_encode";
     else
 	G_fatal_error(_("Either mpeg_encode or ppmtompeg must be installed"));
 
@@ -358,90 +427,26 @@ static char **gee_wildfiles(char *wildarg, char *element, int *num)
 
 
 /********************************************************************/
-static void parse_command(int argc, char *argv[],
-			  char *vfiles[MAXVIEWS][MAXIMAGES], int *numviews,
-			  int *numframes, int *quality, int *convert)
+static void parse_command(struct Option **viewopts,
+			  char *vfiles[MAXVIEWS][MAXIMAGES],
+			  int *numviews, int *numframes)
 {
-    struct GModule *module;
-    struct Option *viewopts[MAXVIEWS], *out, *qual;
-    struct Flag *qt, *conv;
-    char buf[BUFSIZ], **wildfiles;
-    int i, j, k, numi, wildnum;
-
-    module = G_define_module();
-    module->keywords = _("raster");
-    module->description = _("Raster File Series to MPEG Conversion Program.");
+    int i, j, k;
 
     *numviews = *numframes = 0;
-    for (i = 0; i < MAXVIEWS; i++) {
-	viewopts[i] = G_define_option();
-	sprintf(buf, "view%d", i + 1);
-	viewopts[i]->key = G_store(buf);
-	viewopts[i]->type = TYPE_STRING;
-	viewopts[i]->required = (i ? NO : YES);
-	viewopts[i]->multiple = YES;
-	viewopts[i]->gisprompt = "old,cell,Raster";
-	sprintf(buf, _("Raster file(s) for View%d"), i + 1);
-	viewopts[i]->description = G_store(buf);
-    }
-
-    out = G_define_option();
-    out->key = "output";
-    out->type = TYPE_STRING;
-    out->required = NO;
-    out->multiple = NO;
-    out->answer = "gmovie.mpg";
-    out->description = _("Name for output file");
-
-    qual = G_define_option();
-    qual->key = "qual";
-    qual->type = TYPE_INTEGER;
-    qual->required = NO;
-    qual->multiple = NO;
-    qual->answer = "3";
-    qual->options = "1-5";
-    qual->description =
-	_("Quality factor (1 = highest quality, lowest compression)");
-
-    qt = G_define_flag();
-    qt->key = 'q';
-    qt->description = _("Quiet - suppress progress report");
-
-    conv = G_define_flag();
-    conv->key = 'c';
-    conv->description =
-	_("Convert on the fly, use less disk space\n\t(requires r.out.ppm with stdout option)");
-
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
-    *convert = 0;
-    if (qt->answer)
-	quiet = 1;
-    if (conv->answer)
-	*convert = 1;
-
-    *quality = 3;
-    if (qual->answer != NULL)
-	sscanf(qual->answer, "%d", quality);
-    if (*quality > 5 || *quality < 1)
-	*quality = 3;
-
-    if (out->answer)
-	strcpy(outfile, out->answer);
-    else
-	strcpy(outfile, "gmovie.mpg");
 
     for (i = 0; i < MAXVIEWS; i++) {
 	if (viewopts[i]->answers) {
+	    int numi, wildnum;
+
 	    (*numviews)++;
 
 	    for (j = 0, numi = 0; viewopts[i]->answers[j]; j++) {
 		if ((NULL != strchr(viewopts[i]->answers[j], '*')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '?')) ||
 		    (NULL != strchr(viewopts[i]->answers[j], '['))) {
-		    wildfiles = gee_wildfiles(viewopts[i]->answers[j],
-					      "cell", &wildnum);
+		    char **wildfiles = gee_wildfiles(viewopts[i]->answers[j],
+						     "cell", &wildnum);
 
 		    for (k = 0; k < wildnum; k++)
 			vfiles[i][numi++] = wildfiles[k];
