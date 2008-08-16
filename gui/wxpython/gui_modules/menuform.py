@@ -581,7 +581,7 @@ class mainFrame(wx.Frame):
         wx.Frame.__init__(self, parent=parent, id=ID, title=title,
                           pos=wx.DefaultPosition, style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
-	self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         # statusbar
         self.CreateStatusBar()
@@ -826,13 +826,18 @@ class mainFrame(wx.Frame):
         """Cancel button pressed"""
         self.MakeModal(False)
         if self.get_dcmd:
-            try:
-                if len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
-                    self.parent.Delete(self.layer)
-                    self.Destroy()
-            except:
+            # display decorations
+            if self.task.name == 'd.barscale' or self.task.name == 'd.legend':
                 self.Hide()
+            # canceled layer with nothing set
+            elif len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
+                self.parent.Delete(self.layer)
+                self.Destroy()
+            # pressing OK after setting layer properties
+            else:
+                self.Destroy()
         else:
+            # cancel for non-display commands
             self.Destroy()
 
     def OnHelp(self, event):
@@ -1488,7 +1493,8 @@ class GUI:
         self.parent = parent
         self.grass_task = None
 
-    def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None, show=True, modal=False):
+    def ParseCommand(self, cmd, gmpath=None, completed=None, parentframe=None,
+                     show=True, modal=False):
         """
         Parse command
 
