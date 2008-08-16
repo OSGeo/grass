@@ -1,16 +1,17 @@
 """
-MODULE:     rules.py
+MODULE:      colorrules.py
 
 CLASSES:
-    * RulesText
+    * ColorTable
+    * BuferedWindow
 
-PURPOSE:    Dialog for interactive entry of rules for r.colors,
-            r.reclass, r.recode, and v.reclass
+PURPOSE:    Dialog for interactive management of raster color tables and vector
+            rgb_column
 
 AUTHORS:    The GRASS Development Team
             Michael Barton (Arizona State University)
 
-COPYRIGHT:  (C) 2007 by the GRASS Development Team
+COPYRIGHT:  (C) 2008 by the GRASS Development Team
             This program is free software under the GNU General Public
             License (>=v2). Read the file COPYING that comes with GRASS
             for details.
