@@ -82,9 +82,6 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (G_legal_filename(result) < 0)
-	G_fatal_error("<%s> is an illegal file name", result);
-
     hist_ok = G_read_history(name, mapset, &hist) >= 0;
     colr_ok = G_read_colors(name, mapset, &colr) > 0;
     cats_ok = G_read_cats(name, mapset, &cats) >= 0;

@@ -69,10 +69,6 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);	/* Returns a 0 if sucessful */
 
 
-    if (G_legal_filename(out->answer) != 1)
-	G_fatal_error("Illegal file name. Please try another.");
-
-
     randsurf(out->answer, atoi(min->answer), atoi(max->answer),
 	     i_flag->answer);
 

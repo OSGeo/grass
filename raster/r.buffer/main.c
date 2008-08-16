@@ -99,9 +99,6 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), input);
 
-    if (G_legal_filename(output) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), output);
-
     /* parse units */
     if (opt4->answer == NULL)
 	units = "meters";

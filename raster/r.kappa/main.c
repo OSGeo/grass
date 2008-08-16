@@ -95,15 +95,7 @@ int main(int argc, char **argv)
     for (i = 0; i < 2; i++)
 	layer(maps[i]);
 
-    if (parms.output->answer) {
-	output = parms.output->answer;
-	if (G_legal_filename(output) < 0) {
-	    G_fatal_error(_("Illegal output file name <%s>"),
-			  parms.output->answer);
-	}
-    }
-    else
-	output = NULL;
+    output = parms.output->answer;
 
     title = parms.titles->answer;
 

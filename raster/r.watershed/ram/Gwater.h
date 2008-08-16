@@ -99,7 +99,6 @@ int haf_basin_side(SHORT, SHORT, SHORT);
 
 /* init_vars.c */
 int init_vars(int, char *[]);
-int do_legal(char *);
 char *do_exist(char *);
 
 /* no_stream.c */

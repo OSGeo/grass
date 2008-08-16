@@ -110,10 +110,6 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (G_legal_filename(result) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), result);
-
-
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     data_type = G_raster_map_type(name, mapset);
 

@@ -136,16 +136,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Note: one (or both) of %s and %s must be specified"),
 		      parm.raster->key, parm.sites->key);
 
-    if (myState.outraster)
-	if (G_legal_filename(myState.outraster) < 0)
-	    G_fatal_error(_("<%s> is an illegal file name"),
-			  myState.outraster);
-
-    if (myState.outvector)
-	if (G_legal_filename(myState.outvector) < 0)
-	    G_fatal_error(_("<%s> is an illegal file name"),
-			  myState.outvector);
-
     /* look for n[%] */
     percent = has_percent(parm.npoints->answer);
     if (percent) {

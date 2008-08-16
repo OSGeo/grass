@@ -100,9 +100,6 @@ int main(int argc, char *argv[])
     if (mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    if (G_legal_filename(result) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), result);
-
     /*if Gispf() error */
     if ((infd = G_open_cell_old(name, mapset)) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);

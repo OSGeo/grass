@@ -83,20 +83,6 @@ int init_vars(int argc, char *argv[])
 	tot_parts++;
     G_message(_("SECTION 1a (of %1d): Initiating Memory."), tot_parts);
     this_mapset = G_mapset();
-    if (asp_flag)
-	do_legal(asp_name);
-    if (bas_flag)
-	do_legal(bas_name);
-    if (seg_flag)
-	do_legal(seg_name);
-    if (haf_flag)
-	do_legal(haf_name);
-    if (sl_flag)
-	do_legal(sl_name);
-    if (sg_flag)
-	do_legal(sg_name);
-    if (ls_flag)
-	do_legal(ls_name);
     if (sl_flag || sg_flag || ls_flag)
 	er_flag = 1;
     ele_mapset = do_exist(ele_name);
@@ -378,14 +364,6 @@ int init_vars(int argc, char *argv[])
     }
 
     G_percent(r, nrows, 3);	/* finish it */
-
-    return 0;
-}
-
-int do_legal(char *file_name)
-{
-    if (G_legal_filename(file_name) == -1)
-	G_fatal_error(_("<%s> is an illegal file name"), file_name);
 
     return 0;
 }

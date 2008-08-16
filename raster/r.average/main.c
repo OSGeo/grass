@@ -74,9 +74,6 @@ int main(int argc, char *argv[])
     if (!(mapset = G_find_cell(covermap->answer, "")))
 	G_fatal_error(_("Raster map <%s> not found"), covermap->answer);
 
-    if (G_legal_filename(outputmap->answer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), outputmap->answer);
-
     if ((usecats = flag_c->answer)) {
 	if (G_read_cats(covermap->answer, mapset, &cats) < 0)
 	    G_fatal_error(_("Error reading category file for <%s>"),

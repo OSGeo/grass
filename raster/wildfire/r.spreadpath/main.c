@@ -274,13 +274,6 @@ int main(int argc, char **argv)
     else
 	flag = 3;		/* output layer does not previously exist */
 
-
-    /*  Check if specified output layer name is legal   */
-    if (flag == 3) {
-	if (G_legal_filename(path_layer) < 0)
-	    G_fatal_error("%s - illegal name", path_layer);
-    }
-
     /* If the output layer containing the starting positions */
     /* create a linked list of of them  */
     if (flag == 1) {

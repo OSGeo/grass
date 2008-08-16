@@ -195,16 +195,11 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (!input) {
+    if (!input)
 	G_fatal_error(_("Required parameter <%s> not set"), parm.input->key);
-    }
 
-    if (!output) {
+    if (!output)
 	G_fatal_error(_("Name for output raster map not specified"));
-    }
-
-    if (G_legal_filename(output) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), output);
 
     if (!parm.outloc->answer) {	/* Check if the map exists */
 	if (G_find_cell2(output, G_mapset())) {

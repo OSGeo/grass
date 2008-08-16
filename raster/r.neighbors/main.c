@@ -176,9 +176,6 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Raster map <%s> not found"), p);
     }
     p = ncb.newcell.name = parm.output->answer;
-    if (G_legal_filename(p) < 0) {
-	G_fatal_error(_("<%s> is an illegal file name"), p);
-    }
     ncb.newcell.mapset = G_mapset();
 
     if (!flag.align->answer) {

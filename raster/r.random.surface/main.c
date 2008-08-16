@@ -42,14 +42,15 @@ int *Seeds, Seed, NumSeeds, Low, High, NumMaps, NumFilters, OutFD;
 char Buf[240], **OutNames, *TheoryName, *Mapset;
 struct Flag *Uniform;
 
-    /* please, remove before GRASS 7 released */
 struct Option *Distance, *Exponent, *Weight;
+struct Option *Output;
+struct Option *range_high_stuff;
+struct Option *SeedStuff;
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
     int DoMap, DoFilter, MapSeed;
-    double ran1();
 
     FUNCTION(main);
 
@@ -60,7 +61,59 @@ int main(int argc, char **argv)
     module->description =
 	_("Generates random surface(s) with spatial dependence.");
 
-    Init(argc, argv);
+    Output = G_define_option();
+    Output->key = "output";
+    Output->type = TYPE_STRING;
+    Output->required = YES;
+    Output->multiple = YES;
+    Output->description = "Names of the resulting maps";
+    Output->gisprompt = "new,cell,raster";
+
+    Distance = G_define_option();
+    Distance->key = "distance";
+    Distance->type = TYPE_DOUBLE;
+    Distance->required = NO;
+    Distance->multiple = NO;
+    Distance->description =
+	"Input value: max. distance of spatial correlation (value >= 0.0, default [0.0])";
+
+    Exponent = G_define_option();
+    Exponent->key = "exponent";
+    Exponent->type = TYPE_DOUBLE;
+    Exponent->multiple = NO;
+    Exponent->required = NO;
+    Exponent->description =
+	"Input value: distance decay exponent (value > 0.0), default [1.0])";
+
+    Weight = G_define_option();
+    Weight->key = "flat";
+    Weight->type = TYPE_DOUBLE;
+    Weight->multiple = NO;
+    Weight->required = NO;
+    Weight->description =
+	"Input value: distance filter remains flat before beginning exponent, default [0.0]";
+
+    SeedStuff = G_define_option();
+    SeedStuff->key = "seed";
+    SeedStuff->type = TYPE_INTEGER;
+    SeedStuff->required = NO;
+    SeedStuff->description =
+	"Input value: random seed (SEED_MIN >= value >= SEED_MAX), default [random]";
+
+    range_high_stuff = G_define_option();
+    range_high_stuff->key = "high";
+    range_high_stuff->type = TYPE_INTEGER;
+    range_high_stuff->required = NO;
+    range_high_stuff->description =
+	"Input value: maximum cell value of distribution, default [255]";
+
+    Uniform = G_define_flag();
+    Uniform->key = 'u';
+    Uniform->description = "Uniformly distributed cell values";
+
+    if (G_parser(argc, argv))
+	exit(EXIT_FAILURE);
+
     if (Uniform->answer)
 	GenNorm();
     CalcSD();

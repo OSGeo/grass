@@ -368,8 +368,6 @@ int main(int argc, char *argv[])
     }
 
     G_strip(map_name);		/* remove leading and trailing whitespace */
-    if (G_legal_filename(map_name) != 1)
-	G_fatal_error(_("<%s> is an illegal file name"), map_name);
 
 
     /* set region info */

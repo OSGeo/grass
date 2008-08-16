@@ -82,11 +82,6 @@ int main(int argc, char *argv[])
     if (action_mode == MODE_CREATE) {
 	int overwrite;
 
-	if (G_legal_filename(params.map->answer) == -1) {
-	    G_fatal_error(_("<%s> is an illegal file name"),
-			  params.map->answer);
-	}
-
 	overwrite = G_check_overwrite(argc, argv);
 	if (G_find_vector2(params.map->answer, G_mapset())) {
 	    if (!overwrite)

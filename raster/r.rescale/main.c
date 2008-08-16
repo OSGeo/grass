@@ -94,10 +94,6 @@ int main(int argc, char *argv[])
 	sprintf(buf, "%s - not found\n", old_name);
 	G_fatal_error(buf);
     }
-    if (G_legal_filename(new_name) < 0) {
-	sprintf(buf, "%s - illegal map name\n", new_name);
-	G_fatal_error(buf);
-    }
 
     if (parm.from->answer) {
 	sscanf(parm.from->answers[0], "%ld", &old_min);

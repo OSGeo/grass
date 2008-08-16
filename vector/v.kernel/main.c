@@ -246,10 +246,6 @@ int main(int argc, char **argv)
     else {
 	/* check and open the name of output map */
 	if (!flag_q->answer) {
-	    if (G_legal_filename(out_opt->answer) < 0)
-		G_fatal_error(_("<%s> is an illegal file name"),
-			      out_opt->answer);
-
 	    G_set_fp_type(DCELL_TYPE);
 	    if ((fdout = G_open_raster_new(out_opt->answer, DCELL_TYPE)) < 0)
 		G_fatal_error(_("Unable to create raster map <%s>"),
