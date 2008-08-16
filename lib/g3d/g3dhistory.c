@@ -60,28 +60,16 @@ void SimpleErrorMessage(FILE * fd, const char *name, const char *mapset)
  *  \return int
  */
 
-int G3d_readHistory(const char *name, const char *mapset,
-		    struct History *hist)
+int G3d_readHistory(const char *name, const char *mapset, struct History *hist)
 /* This function is adapted from G_read_history */
 {
     FILE *fd;
-    char buff[1024], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G_zero(hist, sizeof(struct History));
 
-    /*this construct takes care of the correct history file path */
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buff, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_HISTORY_ELEMENT, xmapset);	/* == hist@mapset */
-    }
-    else {
-	sprintf(buff, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_HISTORY_ELEMENT);
-    }
-
-    if (!(fd = G_fopen_old(buff, buf2, mapset)))
+    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name, mapset);
+    if (!fd)
 	return -2;
-
 
     if (!G_getl(hist->mapid, sizeof(hist->mapid), fd)) {
 	SimpleErrorMessage(fd, name, mapset);
@@ -164,18 +152,9 @@ int G3d_writeHistory(const char *name, struct History *hist)
 {
     FILE *fd;
     int i;
-    char buf[200], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_HISTORY_ELEMENT, xmapset);	/* == hist@mapset */
-    }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_HISTORY_ELEMENT);
-    }
-
-    if (!(fd = G_fopen_new(buf, buf2)))
+    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_HISTORY_ELEMENT, name);
+    if (!fd)
 	return -1;
 
     fprintf(fd, "%s\n", hist->mapid);

@@ -8,10 +8,10 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "G3d_intern.h"
 
-static int read_colors(const char *, const char *, const char *,
-		       struct Colors *);
+static int read_colors(const char *, const char *, struct Colors *);
 static int read_new_colors(FILE *, struct Colors *);
 static int read_old_colors(FILE *, struct Colors *);
 
@@ -20,25 +20,7 @@ static int read_old_colors(FILE *, struct Colors *);
 int G3d_removeColor(const char *name)
  /* adapted from G_remove_colr */
 {
-    char buf[200], secondary[500], buf2[200], xname[GNAME_MAX],
-	xmapset[GMAPSET_MAX];
-
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_COLOR_ELEMENT, xmapset);	/* == color@mapset */
-    }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_COLOR_ELEMENT);
-    }
-
-    G_remove(buf, buf2);
-
-    sprintf(secondary, "%s/%s/%s",
-	    G3D_DIRECTORY, G3D_COLOR2_DIRECTORY, G_mapset());
-    G_remove(secondary, name);
-
-    return 0;
+    return G_remove_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -47,37 +29,15 @@ int
 G3d_readColors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from G_read_colors */
 {
-    char buf[512], buf2[200];
     const char *err;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     struct FPRange drange;
     DCELL dmin, dmax;
 
     G_init_colors(colors);
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
-	    return -1;
-	name = xname;
-    }
-
-    sprintf(buf, "%s/%s/%s", G3D_DIRECTORY, G3D_COLOR2_DIRECTORY, mapset);
-    if (read_colors(buf, name, G_mapset(), colors) >= 0)
-	return 1;
-
     G_mark_colors_as_fp(colors);
 
-    /* now look for the regular color table */
-    /*if (G__name_is_fully_qualified (name, xname, xmapset)) {
-       sprintf (buf, "%s/%s", G3D_DIRECTORY, xname);
-       sprintf (buf2, "%s@%s", G3D_COLOR_ELEMENT, xmapset); // == color@mapset
-       //} else { */
-    sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-    sprintf(buf2, "%s", G3D_COLOR_ELEMENT);
-    /*//}
-     */
-
-    switch (read_colors(buf, buf2, mapset, colors)) {
+    switch (read_colors(name, mapset, colors)) {
     case -2:
 	if (G3d_readRange(name, mapset, &drange) >= 0) {
 	    G_get_fp_range_min_max(&drange, &dmin, &dmax);
@@ -98,14 +58,15 @@ G3d_readColors(const char *name, const char *mapset, struct Colors *colors)
     return -1;
 }
 
-static int read_colors(const char *element, const char *name,
-		       const char *mapset, struct Colors *colors)
+static int read_colors(const char *name, const char *mapset,
+		       struct Colors *colors)
 {
     FILE *fd;
     int stat;
     char buf[1024];
 
-    if (!(fd = G_fopen_old(element, name, mapset)))
+    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name, mapset);
+    if (!fd)
 	return -2;
 
     /*
@@ -364,46 +325,21 @@ int
 G3d_writeColors(const char *name, const char *mapset, struct Colors *colors)
  /* adapted from G_write_colors */
 {
-    char element[512], buf[512], buf2[200];
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
     FILE *fd;
     int stat;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, mapset) != 0)
-	    return -1;
-	name = xname;
+    if (strcmp(mapset, G_mapset()) != 0) {
+	G_warning(_("mapset <%s> is not the current mapset"), mapset);
+	return -1;
     }
 
-    /*
-     * if mapset is current mapset, remove colr2 file (created by pre 3.0 grass)
-     *    and then write original color table
-     * else write secondary color table
-     */
-
-    sprintf(element, "%s/%s/%s", G3D_DIRECTORY, G3D_COLOR2_DIRECTORY, mapset);
-    if (strcmp(mapset, G_mapset()) == 0) {
-	G_remove(element, name);	/* get rid of existing colr2, if any */
-
-	if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	    sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	    sprintf(buf2, "%s@%s", G3D_COLOR_ELEMENT, xmapset);	/* == color@mapset */
-	}
-	else {
-	    sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	    sprintf(buf2, "%s", G3D_COLOR_ELEMENT);
-	}
-
-	if (!(fd = G_fopen_new(buf, buf2)))
-	    return -1;
-    }
-    else {
-	if (!(fd = G_fopen_new(element, name)))
-	    return -1;
-    }
+    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_COLOR_ELEMENT, name);
+    if (!fd)
+	return -1;
 
     stat = G__write_colors(fd, colors);
     fclose(fd);
+
     return stat;
 }
 

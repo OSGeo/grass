@@ -12,7 +12,7 @@
 void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
 {
     G3D_Map *map;
-    char buf[200], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     G3d_initDefaults();
 
@@ -27,20 +27,12 @@ void *G3d_openCellOldNoHeader(const char *name, const char *mapset)
 	return (void *)NULL;
     }
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_CELL_ELEMENT, xmapset);	/* == cell@mapset */
-	map->fileName = G_store(xname);
-    }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_CELL_ELEMENT);
-	map->fileName = G_store(name);
-    }
+    G__unqualified_name(name, mapset, xname, xmapset);
 
-    map->mapset = G_store(mapset);
+    map->fileName = G_store(xname);
+    map->mapset = G_store(xmapset);
 
-    map->data_fd = G_open_old(buf, buf2, mapset);
+    map->data_fd = G_open_old_misc(G3D_DIRECTORY, G3D_CELL_ELEMENT, xname, xmapset);
     if (map->data_fd < 0) {
 	G3d_error(_("G3d_openCellOldNoHeader: error in G_open_old"));
 	return (void *)NULL;
@@ -233,11 +225,13 @@ void *G3d_openCellNew(const char *name, int typeIntern, int cache,
 	return (void *)NULL;
     }
 
-    if (G__name_is_fully_qualified(name, xname, xmapset))
-	map->fileName = G_store(xname);
-    else
-	map->fileName = G_store(name);
-    map->mapset = G_store(G_mapset());
+    if (G__unqualified_name(name, G_mapset(), xname, xmapset) < 0) {
+	G_warning(_("map <%s> is not in the current mapset"), name);
+	return (void *)NULL;
+    }
+
+    map->fileName = G_store(xname);
+    map->mapset = G_store(xmapset);
 
     map->tempName = G_tempfile();
     map->data_fd = open(map->tempName, O_RDWR | O_CREAT | O_TRUNC, 0666);
