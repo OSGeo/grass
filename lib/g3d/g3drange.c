@@ -5,6 +5,7 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "G3d_intern.h"
 
 /*---------------------------------------------------------------------------*/
@@ -58,9 +59,6 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
  /* adapted from G_read_fp_range */
 {
     int fd;
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2],
-	buf2[GMAPSET_MAX + sizeof(G3D_RANGE_ELEMENT) + 2];
     char xdr_buf[100];
     DCELL dcell1, dcell2;
     XDR xdr_str;
@@ -69,42 +67,32 @@ G3d_readRange(const char *name, const char *mapset, struct FPRange *drange)
 
     fd = -1;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_RANGE_ELEMENT, xmapset);	/* == range@mapset */
-    }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_RANGE_ELEMENT);
+    fd = G_open_old_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name, mapset);
+    if (fd < 0) {
+	G_warning(_("Unable to open range file for [%s in %s]"), name, mapset);
+	return -1;
     }
 
-    if (G_find_file2(buf, buf2, mapset)) {
-	fd = G_open_old(buf, buf2, mapset);
-	if (fd < 0)
-	    goto error;
-
-	if (read(fd, xdr_buf, 2 * G3D_XDR_DOUBLE_LENGTH) !=
-	    2 * G3D_XDR_DOUBLE_LENGTH)
-	    return 2;
-
-	xdrmem_create(&xdr_str, xdr_buf, (u_int) G3D_XDR_DOUBLE_LENGTH * 2,
-		      XDR_DECODE);
-
-	/* if the f_range file exists, but empty */
-	if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2))
-	    goto error;
-
-	G_update_fp_range(dcell1, drange);
-	G_update_fp_range(dcell2, drange);
+    if (read(fd, xdr_buf, 2 * G3D_XDR_DOUBLE_LENGTH) != 2 * G3D_XDR_DOUBLE_LENGTH) {
 	close(fd);
-	return 1;
+	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
+	return 2;
     }
 
-  error:
-    if (fd > 0)
+    xdrmem_create(&xdr_str, xdr_buf, (u_int) G3D_XDR_DOUBLE_LENGTH * 2,
+		  XDR_DECODE);
+
+    /* if the f_range file exists, but empty */
+    if (!xdr_double(&xdr_str, &dcell1) || !xdr_double(&xdr_str, &dcell2)) {
 	close(fd);
-    G_warning("can't read range file for [%s in %s]", name, mapset);
-    return -1;
+	G_warning(_("Error reading range file for [%s in %s]"), name, mapset);
+	return -1;
+    }
+
+    G_update_fp_range(dcell1, drange);
+    G_update_fp_range(dcell2, drange);
+    close(fd);
+    return 1;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -156,25 +144,15 @@ void G3d_range_min_max(G3D_Map * map, double *min, double *max)
 static int writeRange(const char *name, struct FPRange *range)
  /* adapted from G_write_fp_range */
 {
-    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    char buf[GNAME_MAX + sizeof(G3D_DIRECTORY) + 2],
-	buf2[GMAPSET_MAX + sizeof(G3D_RANGE_ELEMENT) + 2];
     char xdr_buf[100];
     int fd;
     XDR xdr_str;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_RANGE_ELEMENT, xmapset);	/* == range@mapset */
+    fd = G_open_new_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name);
+    if (fd < 0) {
+	G_warning(_("Unable to open range file for <%s>"), name);
+	return -1;
     }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_RANGE_ELEMENT);
-    }
-
-    fd = G_open_new(buf, buf2);
-    if (fd < 0)
-	goto error;
 
     if (range->first_time) {
 	/* if range hasn't been updated, write empty file meaning NULLs */
@@ -190,14 +168,16 @@ static int writeRange(const char *name, struct FPRange *range)
     if (!xdr_double(&xdr_str, &(range->max)))
 	goto error;
 
-    write(fd, xdr_buf, G3D_XDR_DOUBLE_LENGTH * 2);
+    if (write(fd, xdr_buf, G3D_XDR_DOUBLE_LENGTH * 2) != G3D_XDR_DOUBLE_LENGTH * 2)
+	goto error;
+
     close(fd);
     return 0;
 
   error:
-    G_remove(buf, buf2);	/* remove the old file with this name */
-    sprintf(buf, "can't write range file for [%s in %s]", name, G_mapset());
-    G_warning(buf);
+    close(fd);
+    G_remove_misc(G3D_DIRECTORY, G3D_RANGE_ELEMENT, name);	/* remove the old file with this name */
+    G_warning("can't write range file for [%s in %s]", name, G_mapset());
     return -1;
 }
 

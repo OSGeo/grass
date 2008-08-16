@@ -30,19 +30,10 @@ int G3d_writeCats(const char *name, struct Categories *cats)
     int i;
     const char *descr;
     DCELL val1, val2;
-    char str1[100], str2[100], buf[200], buf2[200], xname[GNAME_MAX],
-	xmapset[GMAPSET_MAX];
+    char str1[100], str2[100];
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_CATS_ELEMENT, xmapset);	/* == cats@mapset */
-    }
-    else {
-	sprintf(buf, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_CATS_ELEMENT);
-    }
-
-    if (!(fd = G_fopen_new(buf, buf2)))
+    fd = G_fopen_new_misc(G3D_DIRECTORY, G3D_CATS_ELEMENT, name);
+    if (!fd)
 	return -1;
 
     /* write # cats - note # indicate 3.0 or later */
@@ -86,22 +77,14 @@ read_cats(const char *name, const char *mapset, struct Categories *pcats)
  /* adapted from G__read_cats */
 {
     FILE *fd;
-    char buff[1024], buf2[200], xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    char buff[1024];
     CELL cat;
     DCELL val1, val2;
     int old;
     long num = -1;
 
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	sprintf(buff, "%s/%s", G3D_DIRECTORY, xname);
-	sprintf(buf2, "%s@%s", G3D_CATS_ELEMENT, xmapset);	/* == cats@mapset */
-    }
-    else {
-	sprintf(buff, "%s/%s", G3D_DIRECTORY, name);
-	sprintf(buf2, "%s", G3D_CATS_ELEMENT);
-    }
-
-    if (!(fd = G_fopen_old(buff, buf2, mapset)))
+    fd = G_fopen_old_misc(G3D_DIRECTORY, G3D_CATS_ELEMENT, name, mapset);
+    if (!fd)
 	return -2;
 
     /* Read the number of categories */

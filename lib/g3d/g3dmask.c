@@ -61,19 +61,16 @@ int G3d_maskClose()
  *  \return int
  */
 
-int G3d_maskFileExists()
+int G3d_maskFileExists(void)
 {
-    char buf[200];
-
-    sprintf(buf, "%s/%s", G3D_DIRECTORY, G3D_MASK_MAP);
-    return (G_find_file(buf, G3D_CELL_ELEMENT, G_mapset()) != NULL);
+    return G_find_file_misc(G3D_DIRECTORY, G3D_CELL_ELEMENT, G3D_MASK_MAP, G_mapset()) != NULL;
 }
 
 /*--------------------------------------------------------------------------*/
 
 static int maskOpenOldCacheDefault = G3D_USE_CACHE_DEFAULT;
 
-int G3d_maskOpenOld()
+int G3d_maskOpenOld(void)
 {
     G3D_Region region;
 
