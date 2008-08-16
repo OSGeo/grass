@@ -158,17 +158,19 @@ int G__open_cell_old(const char *name, const char *mapset)
     int MAP_NBYTES;
     RASTER_MAP_TYPE MAP_TYPE;
     struct Reclass reclass;
-    const char *xmapset;
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     /* make sure window is set    */
     G__init_window();
 
-    xmapset = G_find_cell2(name, mapset);
-    if (!xmapset) {
+    G__unqualified_name(name, mapset, xname, xmapset);
+    name = xname;
+    mapset = xmapset;
+
+    if (!G_find_cell2(name, mapset)) {
 	G_warning(_("Unable to find <%s@%s>"), name, mapset);
 	return -1;
     }
-    mapset = xmapset;
 
     /* Check for reclassification */
     reclass_flag = G_get_reclass(name, mapset, &reclass);
@@ -273,14 +275,7 @@ int G__open_cell_old(const char *name, const char *mapset)
     fcb->open_mode = -1;
 
     /* save name and mapset */
-    {
-	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-
-	if (G__name_is_fully_qualified(name, xname, xmapset))
-	    fcb->name = G_store(xname);
-	else
-	    fcb->name = G_store(name);
-    }
+    fcb->name = G_store(name);
     fcb->mapset = G_store(mapset);
 
     /* mark no data row in memory  */
@@ -577,37 +572,6 @@ int G_open_fp_cell_new_uncompressed(const char *name)
     return G__open_raster_new(name, OPEN_NEW_UNCOMPRESSED);
 }
 
-static int
-clean_check_raster_name(const char *inmap, char **outmap, char **outmapset)
-{
-    /* Remove mapset part of name if exists.  Also, if mapset
-     * part exists, make sure it matches current mapset.
-     */
-    int status = 0;
-    char *ptr;
-    char *buf;
-
-    buf = G_store(inmap);
-    if ((ptr = strpbrk(buf, "@")) != NULL) {
-	*ptr = '\0';
-	ptr++;
-	*outmapset = G_store(G_mapset());
-	if ((status = strcmp(ptr, *outmapset))) {
-	    G_free(buf);
-	    G_free(*outmapset);
-	}
-	else {
-	    *outmap = G_store(buf);
-	    G_free(buf);
-	}
-    }
-    else {
-	*outmap = buf;
-	*outmapset = G_store(G_mapset());
-    }
-    return status;
-}
-
 /* opens a f-cell or cell file depending on WRITE_MAP_TYPE */
 static int G__open_raster_new(const char *name, int open_mode)
 {
@@ -618,23 +582,15 @@ static int G__open_raster_new(const char *name, int open_mode)
     char *map;
     char *mapset;
 
-    /* check for fully-qualfied name */
-    if (G__name_is_fully_qualified(name, xname, xmapset)) {
-	if (strcmp(xmapset, G_mapset()) != 0)
-	    G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
-			    name, G_mapset());
-	name = xname;
-    }
+    if (G__unqualified_name(name, G_mapset(), xname, xmapset) < 0)
+	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
+		      name, G_mapset());
+    map = G_store(xname);
+    mapset = G_store(xmapset);
 
     /* check for legal grass name */
-    if (G_legal_filename(name) < 0) {
-	G_warning(_("<%s> is an illegal file name"),
-		  name);
-	return -1;
-    }
-
-    if (clean_check_raster_name(name, &map, &mapset) != 0) {
-	G_warning(_("<%s>: bad mapset"), name);
+    if (G_legal_filename(map) < 0) {
+	G_warning(_("<%s> is an illegal file name"), map);
 	return -1;
     }
 
@@ -646,9 +602,9 @@ static int G__open_raster_new(const char *name, int open_mode)
     fd = creat(tempname, 0666);
     if (fd < 0) {
 	G_warning(_("G__open_raster_new(): no temp files available"));
+	G_free(mapset);
 	G_free(tempname);
 	G_free(map);
-	G_free(mapset);
 	return -1;
     }
 
