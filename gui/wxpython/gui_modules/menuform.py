@@ -826,15 +826,14 @@ class mainFrame(wx.Frame):
         """Cancel button pressed"""
         self.MakeModal(False)
         if self.get_dcmd:
-            # display decorations
-            if self.task.name == 'd.barscale' or self.task.name == 'd.legend':
+            # display decorations and 
+            # pressing OK or cancel after setting layer properties
+            if self.task.name == 'd.barscale' or self.task.name == 'd.legend' \
+                or len(self.parent.GetPyData(self.layer)[0]['cmd']) >= 1:
                 self.Hide()
             # canceled layer with nothing set
             elif len(self.parent.GetPyData(self.layer)[0]['cmd']) < 1:
                 self.parent.Delete(self.layer)
-                self.Destroy()
-            # pressing OK after setting layer properties
-            else:
                 self.Destroy()
         else:
             # cancel for non-display commands
