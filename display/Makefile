@@ -24,7 +24,7 @@ SUBDIRS = \
 	d.rast.num \
 	d.rgb \
 	d.rhumbline \
-	d.text.new \
+	d.text \
 	d.title \
 	d.vect \
 	d.vect.chart \
