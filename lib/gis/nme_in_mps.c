@@ -126,3 +126,18 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
 
     return G_store(fullname);
 }
+
+int G__unqualified_name(const char *name, const char *mapset,
+			char *xname, char *xmapset)
+{
+    if (G__name_is_fully_qualified(name, xname, xmapset)) {
+	if (mapset && *mapset && strcmp(mapset, xmapset) != 0)
+	    return -1;
+	return 1;
+    }
+
+    strcpy(xname, name);
+    strcpy(xmapset, mapset);
+
+    return 0;
+}
