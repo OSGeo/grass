@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     dr_f = ba_f = N_f = E_f = errr = 0;
 
     drain_mapset = do_exist(drain_name);
-    do_legal(basin_name);
+
     nrows = G_window_rows();
     ncols = G_window_cols();
     total = nrows * ncols;

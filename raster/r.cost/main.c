@@ -316,11 +316,6 @@ int main(int argc, char *argv[])
     if (cost_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), cost_layer);
 
-    /*  Check if specified output layer name is legal   */
-
-    if (G_legal_filename(cum_cost_layer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), cum_cost_layer);
-
     /*  Find number of rows and columns in window    */
 
     nrows = G_window_rows();

@@ -77,9 +77,6 @@ int main(int argc, char *argv[])
     if (old_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), parm.input->answer);
 
-    if (G_legal_filename(parm.output->answer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);
-
     if (strcmp(parm.input->answer, parm.output->answer) == 0 &&
 	strcmp(old_mapset, G_mapset()) == 0)
 	G_fatal_error(_("Input map can NOT be the same as output map"));

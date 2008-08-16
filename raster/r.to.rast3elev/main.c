@@ -468,10 +468,6 @@ int main(int argc, char *argv[])
 	G_set_window(&window2d);
     }
 
-    if (G_legal_filename(param.output->answer) < 0)
-	G3d_fatalError(_("<%s> is an illegal file name"),
-		       param.output->answer);
-
     G_debug(2, "Open 3d raster map %s", param.output->answer);
 
     /*open G3D output map */

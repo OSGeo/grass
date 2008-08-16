@@ -72,10 +72,6 @@ int main(int argc, char *argv[])
     sscanf(mean->answer, "%lf", &gauss_mean);
     sscanf(sigma->answer, "%lf", &gauss_sigma);
 
-    /****** CHECK THE CELL FILE (OUT) DOES NOT ALREADY EXIST******/
-    if (G_legal_filename(out->answer) == '\0')
-	G_fatal_error(_("<%s> is an illegal file name"), out->answer);
-
     /****** CREATE THE RANDOM CELL FILE  ******/
     gaussurf(out->answer, gauss_mean, gauss_sigma);
 

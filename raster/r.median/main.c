@@ -73,8 +73,7 @@ int main(int argc, char *argv[])
     cover_mapset = G_find_cell2(covermap, "");
     if (cover_mapset == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), covermap);
-    if (G_legal_filename(outmap) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), outmap);
+
     if (strcmp(G_mapset(), base_mapset) == 0 && strcmp(basemap, outmap) == 0)
 	G_fatal_error(_("Base map and output map <%s> must be different"),
 		      outmap);

@@ -298,9 +298,6 @@ int main(int argc, char *argv[])
     if (fd == NULL)
 	fatal_error(map, NULL, 0, _("Out of memory"));
 
-    if (G_legal_filename(param.output->answer) < 0)
-	fatal_error(map, NULL, 0, _("Illegal output file name"));
-
     G_message(_("Creating %i raster maps"), region.depths);
 
     /*Loop over all output maps! open */

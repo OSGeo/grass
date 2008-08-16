@@ -50,6 +50,9 @@ extern struct Flag *Uniform;
     /* please, remove before GRASS 7 released */
 extern struct Flag *Verbose;
 extern struct Option *Distance, *Exponent, *Weight;
+extern struct Option *Output;
+extern struct Option *range_high_stuff;
+extern struct Option *SeedStuff;
 
 #ifdef DEBUG
 #define INDX(a,b) (printf("(a)[%d]:%lf ",(b),(a)[(b)]))

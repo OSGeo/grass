@@ -35,9 +35,6 @@ char *check_get_any_dspname(dspf, g3f, mset)
     char element[200], question[200];
     static char dspout[200];
 
-    if (!G_legal_filename(dspf))
-	return (NULL);
-
     if (!G_find_grid3(g3f, "")) {
 	fprintf(stderr, "[%s] 3D raster map not found\n", g3f);
 	return (NULL);

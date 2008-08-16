@@ -98,10 +98,6 @@ int main(int argc, char *argv[])
 	sprintf(buf, "%s - not found\n", old_name);
 	G_fatal_error(buf);
     }
-    if (G_legal_filename(new_name) < 0) {
-	sprintf(buf, "%s - illegal map name\n", new_name);
-	G_fatal_error(buf);
-    }
 
     get_stats(old_name, mapset, &statf);
     if (parm.from->answer) {

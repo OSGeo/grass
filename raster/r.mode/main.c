@@ -90,9 +90,7 @@ int main(int argc, char *argv[])
     if (cover_mapset == NULL) {
 	G_fatal_error(_("%s: cover raster map not found"), covermap);
     }
-    if (G_legal_filename(outmap) < 0) {
-	G_fatal_error(_("<%s> is an illegal file name"), outmap);
-    }
+
     if (strcmp(G_mapset(), base_mapset) == 0 && strcmp(basemap, outmap) == 0) {
 	G_fatal_error(_("%s: base map and output map must be different"),
 		      outmap);

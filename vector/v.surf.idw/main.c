@@ -119,9 +119,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_legal_filename(parm.output->answer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);
-
     if (sscanf(parm.npoints->answer, "%d", &search_points) != 1 ||
 	search_points < 1)
 	G_fatal_error(_("%s=%s - illegal number of interpolation points"),

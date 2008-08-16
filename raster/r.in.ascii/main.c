@@ -199,8 +199,6 @@ int main(int argc, char *argv[])
 
     rast_ptr = G_allocate_raster_buf(data_type);
     rast = rast_ptr;
-    if (G_legal_filename(output) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), output);
     cf = G_open_raster_new(output, data_type);
     if (cf < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), output);

@@ -79,9 +79,6 @@ int main(int argc, char *argv[])
     if ((G_projection() == PROJECTION_LL))
 	G_fatal_error(_("Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"));
 
-    if (G_legal_filename(parm.output->answer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), parm.output->answer);
-
     if (sscanf(parm.npoints->answer, "%d", &search_points) != 1 ||
 	search_points < 1)
 	G_fatal_error(_("%s=%s - illegal number of interpolation points"),

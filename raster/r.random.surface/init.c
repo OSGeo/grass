@@ -15,17 +15,9 @@
 #include "local_proto.h"
 
 
-/* function prototypes */
-static void IsLegal(char *Name);
 
-
-void Init(int argc, char **argv)
+void Init(void)
 {
-    struct Option *Output;
-
-    /*    struct Option     *TheoryS; */
-    struct Option *range_high_stuff;
-    struct Option *SeedStuff;
     struct Cell_head Region;
     int row, col, i, j, NumWeight, NumDist, NumExp;
     char *Name, *Number, String[80];
@@ -33,69 +25,6 @@ void Init(int argc, char **argv)
     double MinRes;
 
     FUNCTION(Init);
-
-    Output = G_define_option();
-    Output->key = "output";
-    Output->type = TYPE_STRING;
-    Output->required = YES;
-    Output->multiple = YES;
-    Output->description = "Names of the resulting maps";
-    Output->gisprompt = "new,cell,raster";
-
-    /*
-       TheoryS              = G_define_option() ;
-       TheoryS->key         = "theoretical_correlogram";
-       TheoryS->type        = TYPE_STRING;
-       TheoryS->required    = NO;
-       TheoryS->multiple    = NO;
-       TheoryS->description = "Name of the resulting theoretical correlogram map";
-       TheoryS->gisprompt  = "new,cell,raster" ;
-     */
-
-    Distance = G_define_option();
-    Distance->key = "distance";
-    Distance->type = TYPE_DOUBLE;
-    Distance->required = NO;
-    Distance->multiple = NO;
-    Distance->description =
-	"Input value: max. distance of spatial correlation (value >= 0.0, default [0.0])";
-
-    Exponent = G_define_option();
-    Exponent->key = "exponent";
-    Exponent->type = TYPE_DOUBLE;
-    Exponent->multiple = NO;
-    Exponent->required = NO;
-    Exponent->description =
-	"Input value: distance decay exponent (value > 0.0), default [1.0])";
-
-    Weight = G_define_option();
-    Weight->key = "flat";
-    Weight->type = TYPE_DOUBLE;
-    Weight->multiple = NO;
-    Weight->required = NO;
-    Weight->description =
-	"Input value: distance filter remains flat before beginning exponent, default [0.0]";
-
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description =
-	"Input value: random seed (SEED_MIN >= value >= SEED_MAX), default [random]";
-
-    range_high_stuff = G_define_option();
-    range_high_stuff->key = "high";
-    range_high_stuff->type = TYPE_INTEGER;
-    range_high_stuff->required = NO;
-    range_high_stuff->description =
-	"Input value: maximum cell value of distribution, default [255]";
-
-    Uniform = G_define_flag();
-    Uniform->key = 'u';
-    Uniform->description = "Uniformly distributed cell values";
-
-    if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
 
     Rs = G_window_rows();
     Cs = G_window_cols();
@@ -153,7 +82,6 @@ void Init(int argc, char **argv)
     NumMaps = 0;
     OutNames = (char **)G_malloc(sizeof(char *));
     for (i = 0; (Name = Output->answers[i]); i++) {
-	IsLegal(Name);
 	for (j = i - 1; j >= 0; j--) {
 	    if (strcmp(OutNames[j], Name) == 0)
 		G_fatal_error
@@ -170,12 +98,6 @@ void Init(int argc, char **argv)
 	G_fatal_error("%s: requires an output map", G_program_name());
 
     Theory = 0;
-    /*
-       TheoryName = TheoryS->answer;
-       if (G_legal_filename (TheoryName) != -1) {
-       Theory++;
-       }
-     */
     NumSeeds = 0;
     Seeds = (int *)G_malloc(NumMaps * sizeof(int));
     if (!SeedStuff->answers) {
@@ -412,10 +334,3 @@ void Init(int argc, char **argv)
     AllMaxDist *= 2.0;
 }
 
-
-static void IsLegal(char *Name)
-{
-    if (G_legal_filename(Name) == -1)
-	G_fatal_error("%s: map name [%s] not legal for GRASS",
-		      G_program_name(), Name);
-}

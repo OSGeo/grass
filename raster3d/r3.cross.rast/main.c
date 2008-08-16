@@ -344,10 +344,6 @@ int main(int argc, char *argv[])
 
 	/**********************/
 
-	/*Filename check for output map */
-	if (G_legal_filename(param.output->answer) < 0)
-	    fatal_error(map, elevfd, -1, _("Illegal output file name"));
-
 	if (G_find_cell2(param.output->answer, ""))
 	    G_message(_("Output map already exists. Will be overwritten!"));
 

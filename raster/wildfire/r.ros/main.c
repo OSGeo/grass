@@ -410,10 +410,6 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /*  Check if specified output layer name IS LEGAL  */
-    if (G_legal_filename(parm.output->answer) < 0)
-	G_fatal_error("%s - illegal name", parm.output->answer);
-
     /*assign names of the three output ROS layers */
     sprintf(name_base, "%s.base", parm.output->answer);
     sprintf(name_max, "%s.max", parm.output->answer);

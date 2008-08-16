@@ -28,7 +28,7 @@ double GasDev(void);
 void GenNorm(void);
 
 /* init.c */
-void Init(int argc, char **argv);
+void Init(void);
 
 /* makebigf.c */
 void MakeBigF(void);

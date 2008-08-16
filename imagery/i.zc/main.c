@@ -107,10 +107,6 @@ int main(int argc, char *argv[])
     if (inputfd < 0)
 	exit(EXIT_FAILURE);
 
-    /* check command line args for validity */
-    if (G_legal_filename(output_map->answer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), output_map->answer);
-
     sscanf(threshold->answer, "%1lf", &Thresh);
     if (Thresh <= 0.0)
 	G_fatal_error(_("Threshold less than or equal to zero not allowed"));

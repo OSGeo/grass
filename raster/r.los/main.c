@@ -174,10 +174,6 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Raster map <%s> not found"), patt_layer);
     }
 
-    /* check if specified output layer name is legal    */
-    if (G_legal_filename(out_layer) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), out_layer);
-
     /*  read header info for elevation layer        */
     if (G_get_cellhd(elev_layer, old_mapset, &cellhd_elev) < 0)
 	G_fatal_error(_("[%s]: Cannot read map header"), elev_layer);

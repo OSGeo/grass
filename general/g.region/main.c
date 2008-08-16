@@ -778,8 +778,6 @@ int main(int argc, char *argv[])
 
     /* save= */
     if ((name = parm.save->answer)) {
-	if (G_legal_filename(name) < 0)
-	    G_fatal_error(_("<%s> is an illegal region name"), name);
 	G_copy(&temp_window, &window, sizeof(window));
 	adjust_window(&temp_window, 0, 0, 0);
 	if (G__put_window(&temp_window, "windows", name) < 0)

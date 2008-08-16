@@ -13,7 +13,6 @@
 
 /* function prototypes */
 static int comp_array(const void *p1, const void *p2);
-static void IsLegal(char *Name);
 
 
 void Init(int argc, char **argv)
@@ -98,13 +97,6 @@ void Init(int argc, char **argv)
 	CellCount = Rs * Cs;
     }
 
-    if (!Output->answer) {
-	G_fatal_error("There should be an output map");
-    }
-    else {
-	IsLegal(Output->answer);
-    }
-
     sscanf(Distance->answer, "%lf", &MaxDist);
     if (MaxDist < 0.0)
 	G_fatal_error("distance must be >= 0.0");
@@ -157,10 +149,3 @@ static int comp_array(const void *q1, const void *q2)
     return (0);
 }
 
-
-static void IsLegal(char *Name)
-{
-    if (G_legal_filename(Name) == -1)
-	G_fatal_error("%s: map name [%s] not legal for GRASS",
-		      G_program_name(), Name);
-}

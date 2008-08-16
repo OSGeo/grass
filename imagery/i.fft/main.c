@@ -125,15 +125,6 @@ int main(int argc, char *argv[])
 	G_warning(_("Raster MASK found, consider to remove "
 		    "(see man-page). Will continue..."));
 
-
-    /* check command line args for validity */
-    if (G_legal_filename(Cellmap_real) < 0)
-	G_fatal_error(_("Illegal file name for real part: %s"), Cellmap_real);
-
-    if (G_legal_filename(Cellmap_imag) < 0)
-	G_fatal_error(_("Illegal file name for imaginary part: %s"),
-		      Cellmap_imag);
-
     sscanf(op4->answer, "%d", &Range);
     if (Range <= 0)
 	G_fatal_error(_("Range less than or equal to zero not allowed."));

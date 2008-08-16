@@ -102,10 +102,6 @@ int main(int argc, char *argv[])
 			  imagmapset)) == NULL)
 	G_fatal_error(_("Unable to open imaginary-image in the cell_misc directory.\nInput map probably wasn't created by i.fft"));
 
-    /* check command line args for validity */
-    if (G_legal_filename(Cellmap_orig) < 0)
-	G_fatal_error(_("<%s> is an illegal file name"), Cellmap_orig);
-
     /* get and compare the original window data */
     get_orig_window(&orig_wind, realmapset, imagmapset);
 

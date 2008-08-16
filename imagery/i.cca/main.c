@@ -103,18 +103,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_legal_filename(grp_opt->answer) < 0)
-	G_fatal_error(_("Illegal group name <%s>"), grp_opt->answer);
-
-    if (G_legal_filename(subgrp_opt->answer) < 0)
-	G_fatal_error(_("Illegal subgroup name <%s>"), subgrp_opt->answer);
-
-    if (G_legal_filename(sig_opt->answer) < 0)
-	G_fatal_error(_("Illegal signature file name <%s>"), sig_opt->answer);
-
-    if (G_legal_filename(out_opt->answer) < 0)
-	G_fatal_error(_("Illegal output file name <%s>"), out_opt->answer);
-
     /* check group, subgroup */
     I_init_group_ref(&refs);
     if (I_find_group(grp_opt->answer) <= 0)
