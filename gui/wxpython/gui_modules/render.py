@@ -219,7 +219,8 @@ class Layer(object):
         if type not in ('raster', '3d-raster', 'vector',
                         'overlay', 'command',
                         'shaded', 'rgb', 'his', 'rastarrow',
-                        'thememap', 'themechart'):
+                        'thememap', 'themechart', 'grid', 'labels',
+                        'geodesic','rhumb'):
             raise gcmd.GStdError(_("Unsupported map layer type '%s'") % str(type))
         
         self.type = type
