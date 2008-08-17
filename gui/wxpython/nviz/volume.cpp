@@ -103,9 +103,9 @@ int Nviz::MoveIsosurface(int id, int isosurf_id, bool up)
 }
 
 /*!
-  \brief Set surface color
+  \brief Set isosurface color
 
-  \param id surface id
+  \param id volume id
   \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
   \param map if true use map otherwise constant
   \param value map name of value
@@ -113,12 +113,90 @@ int Nviz::MoveIsosurface(int id, int isosurf_id, bool up)
   \return 1 on success
   \return -1 volume not found
   \return -2 isosurface not found
-  \return -3 setting attributes failed
+  \return -3 on failure
 */
 int Nviz::SetIsosurfaceColor(int id, int isosurf_id,
 			     bool map, const char *value)
 {
     return SetIsosurfaceAttr(id, isosurf_id, ATT_COLOR, map, value);
+}
+
+/*!
+  \brief Set isosurface mask
+
+  @todo invert
+  
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+  \param invert true for invert mask
+  \param value map name to be used for mask
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 on failure
+*/
+int Nviz::SetIsosurfaceMask(int id, int isosurf_id,
+			    bool invert, const char *value)
+{
+    return SetIsosurfaceAttr(id, isosurf_id, ATT_MASK, true, value);
+}
+
+/*!
+  \brief Set isosurface transparency
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+  \param map if true use map otherwise constant
+  \param value map name of value
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 on failure
+*/
+int Nviz::SetIsosurfaceTransp(int id, int isosurf_id,
+			      bool map, const char *value)
+{
+    return SetIsosurfaceAttr(id, isosurf_id, ATT_TRANSP, map, value);
+}
+
+/*!
+  \brief Set isosurface shininess
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+  \param map if true use map otherwise constant
+  \param value map name of value
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 on failure
+*/
+int Nviz::SetIsosurfaceShine(int id, int isosurf_id,
+			     bool map, const char *value)
+{
+    return SetIsosurfaceAttr(id, isosurf_id, ATT_SHINE, map, value);
+}
+
+/*!
+  \brief Set isosurface emission
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+  \param map if true use map otherwise constant
+  \param value map name of value
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 on failure
+*/
+int Nviz::SetIsosurfaceEmit(int id, int isosurf_id,
+			    bool map, const char *value)
+{
+    return SetIsosurfaceAttr(id, isosurf_id, ATT_EMIT, map, value);
 }
 
 /*!
@@ -168,6 +246,54 @@ int Nviz::SetIsosurfaceAttr(int id, int isosurf_id,
 	    id, isosurf_id, attr, map, value);
 
     return ret > 0 ? 1 : -2;
+}
+
+/*!
+  \brief Unset isosurface mask
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 setting attributes failed
+*/
+int Nviz::UnsetIsosurfaceMask(int id, int isosurf_id)
+{
+    return UnsetIsosurfaceAttr(id, isosurf_id, ATT_MASK);
+}
+
+/*!
+  \brief Unset isosurface transparency
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 setting attributes failed
+*/
+int Nviz::UnsetIsosurfaceTransp(int id, int isosurf_id)
+{
+    return UnsetIsosurfaceAttr(id, isosurf_id, ATT_TRANSP);
+}
+
+/*!
+  \brief Unset isosurface emission
+
+  \param id volume id
+  \param isosurf_id isosurface id (0 - MAX_ISOSURFS)
+
+  \return 1 on success
+  \return -1 volume not found
+  \return -2 isosurface not found
+  \return -3 setting attributes failed
+*/
+int Nviz::UnsetIsosurfaceEmit(int id, int isosurf_id)
+{
+    return UnsetIsosurfaceAttr(id, isosurf_id, ATT_EMIT);
 }
 
 /*!

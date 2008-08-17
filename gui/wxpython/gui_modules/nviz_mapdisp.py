@@ -400,7 +400,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             for sec in data.keys():
                 for sec1 in data[sec].keys():
                     for sec2 in data[sec][sec1].keys():
-                        if sec2 not in ('object'):
+                        if sec2 not in ('object', 'all'):
                             data[sec][sec1][sec2]['update'] = None
 
             event = wxUpdateProperties(data=data)
@@ -1059,14 +1059,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     if attrb == 'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
-                        # self.nvizClass.UnsetSurfaceMask(id)
-                        pass
+                        self.nvizClass.UnsetIsosurfaceMask(id, isosurfId)
                     elif attrb == 'transp':
-                        # self.nvizClass.UnsetSurfaceTransp(id)
-                        pass
+                        self.nvizClass.UnsetIsosurfaceTransp(id, isosurfId)
                     elif attrb == 'emit':
-                        # self.nvizClass.UnsetSurfaceEmit(id) 
-                        pass
+                        self.nvizClass.UnsetIsosurfaceEmit(id, isosurfId) 
                 else:
                     if type(value) == type('') and \
                             len(value) <= 0: # ignore empty values (TODO: warning)
@@ -1076,17 +1073,13 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                     elif attrb == 'mask':
                         # TODO: invert mask
                         # TODO: broken in NVIZ
-                        # self.nvizClass.SetSurfaceMask(id, False, str(value))
-                        pass
+                        self.nvizClass.SetIsosurfaceMask(id, isosurfId, False, str(value))
                     elif attrb == 'transp':
-                        # self.nvizClass.SetSurfaceTransp(id, map, str(value)) 
-                        pass
+                        self.nvizClass.SetIsosurfaceTransp(id, isosurfId, map, str(value)) 
                     elif attrb == 'shine':
-                        # self.nvizClass.SetSurfaceShine(id, map, str(value)) 
-                        pass
+                        self.nvizClass.SetIsosurfaceShine(id, isosurfId, map, str(value)) 
                     elif attrb == 'emit':
-                        # self.nvizClass.SetSurfaceEmit(id, map, str(value)) 
-                        pass
+                        self.nvizClass.SetIsosurfaceEmit(id, isosurfId, map, str(value)) 
                 isosurf[attrb].pop('update')
             isosurfId += 1
         
