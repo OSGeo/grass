@@ -19,9 +19,8 @@ htmlmulti:
 else
 
 $(HTMLDIR)/$(PGM).html: $(PGM).html $(PGM).tmp.html
-	-$(MKDIR) $(HTMLDIR)
-	$(MODULE_TOPDIR)/tools/mkhtml.sh $(PGM)
-	$(INSTALL_DATA) $(PGM).tmp.html $@
+	-test -d $(HTMLDIR) || $(MKDIR) $(HTMLDIR)
+	$(MODULE_TOPDIR)/tools/mkhtml.sh $(PGM) > $@
 	-for file in  *.png *.jpg ; do \
 		head -n 1 $$file | grep '^\#!' > /dev/null ; \
 		if [ $$? -ne 0 ] ; then \

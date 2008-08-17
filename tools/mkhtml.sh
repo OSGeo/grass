@@ -15,16 +15,9 @@
 
 PGM=$1
 
-if ! grep -i '<html>' ${PGM}.tmp.html > /dev/null 2>&1 ; then
-    echo > ${PGM}.tmp.html
-fi
-
-if test -f ${PGM}.html ; then
-    cat ${PGM}.html >> ${PGM}.tmp.html
-fi
-
-if ! grep -i '<html>' ${PGM}.tmp.html > /dev/null ; then
-    cat > ${PGM}.tmp.html.header <<-EOF
+if ! grep -i '<html>' "${PGM}.html" > /dev/null 2>&1 ; then
+    if ! grep -i '<html>' "${PGM}.tmp.html" > /dev/null 2>&1 ; then
+	cat <<-EOF
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 	<html>
 	<head>
@@ -37,34 +30,46 @@ if ! grep -i '<html>' ${PGM}.tmp.html > /dev/null ; then
 	<h2>NAME</h2>
 	<em><b>${PGM}</b></em>
 	EOF
-    grep -iv '</body>\|</html>' ${PGM}.tmp.html >> ${PGM}.tmp.html.header
-    mv -f ${PGM}.tmp.html.header ${PGM}.tmp.html
+    fi
+    if [ -f "${PGM}.tmp.html" ] ; then
+	grep -iv '</body>\|</html>' "${PGM}.tmp.html"
+    fi
+else
+    if [ -f "${PGM}.tmp.html" ] ; then
+	echo '***' "${PGM}.tmp.html" >&2
+	exit 1
+    fi
 fi
+
+cat "${PGM}.html"
 
 # if </html> is found, suppose a complete html is provided.
 # otherwise, generate module class reference:
-if ! grep -i '</html>' ${PGM}.tmp.html > /dev/null ; then
-    MODCLASS=`echo ${PGM} | cut -d'.' -f1`
-    case $MODCLASS in
-	d)  INDEXNAME=display	;;
-	db) INDEXNAME=database	;;
-	g)  INDEXNAME=general	;;
-	i)  INDEXNAME=imagery	;;
-	m)  INDEXNAME=misc	;;
-	pg) INDEXNAME=postGRASS	;;
-	ps) INDEXNAME=postscript ;;
-	p)  INDEXNAME=paint	;;
-	r)  INDEXNAME=raster	;;
-	r3) INDEXNAME=raster3D	;;
-	s)  INDEXNAME=sites	;;
-	v)  INDEXNAME=vector	;;
-	*)  INDEXNAME=$MODCLASS	;;
-    esac
-    cat >> ${PGM}.tmp.html <<-EOF
-	<HR>
-	<P><a href="index.html">Main index</a> - <a href="$INDEXNAME.html">$INDEXNAME index</a> - <a href="full_index.html">Full index</a></P>
-	<P>&copy; 2003-2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
+if grep -i '</html>' "${PGM}.html" > /dev/null 2>&1 ; then
+    exit 0
+fi
+
+MODCLASS=`echo ${PGM} | cut -d'.' -f1`
+case $MODCLASS in
+    d)  INDEXNAME=display   ;;
+    db) INDEXNAME=database  ;;
+    g)  INDEXNAME=general   ;;
+    i)  INDEXNAME=imagery   ;;
+    m)  INDEXNAME=misc      ;;
+    pg) INDEXNAME=postGRASS ;;
+    ps) INDEXNAME=postscript ;;
+    p)  INDEXNAME=paint     ;;
+    r)  INDEXNAME=raster    ;;
+    r3) INDEXNAME=raster3D  ;;
+    s)  INDEXNAME=sites     ;;
+    v)  INDEXNAME=vector    ;;
+    *)  INDEXNAME=$MODCLASS ;;
+esac
+
+cat <<-EOF
+	<hr>
+	<p><a href="index.html">Main index</a> - <a href="$INDEXNAME.html">$INDEXNAME index</a> - <a href="full_index.html">Full index</a></p>
+	<p>&copy; 2003-2008 <a href="http://grass.osgeo.org">GRASS Development Team</a></p>
 	</body>
 	</html>
-	EOF
-fi
+EOF

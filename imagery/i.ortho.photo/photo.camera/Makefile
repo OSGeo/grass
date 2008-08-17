@@ -11,5 +11,5 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: etc
 
-$(PGM).tmp.html: $(PGM).html
-	$(INSTALL_DATA) $< $@
+$(PGM).tmp.html:
+	> $@
