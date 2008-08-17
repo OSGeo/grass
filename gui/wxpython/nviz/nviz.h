@@ -104,6 +104,13 @@ public:
     int DeleteIsosurface(int, int);
     int MoveIsosurface(int, int, bool);
     int SetIsosurfaceColor(int, int, bool, const char *);
+    int SetIsosurfaceMask(int, int, bool, const char *);
+    int SetIsosurfaceTransp(int, int, bool, const char *);
+    int SetIsosurfaceShine(int, int, bool, const char *);
+    int SetIsosurfaceEmit(int, int, bool, const char *);
+    int UnsetIsosurfaceMask(int, int);
+    int UnsetIsosurfaceTransp(int, int);
+    int UnsetIsosurfaceEmit(int, int);
     int SetIsosurfaceMode(int, int);
     int SetIsosurfaceRes(int, int);
 };
