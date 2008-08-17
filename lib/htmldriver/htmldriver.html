@@ -52,13 +52,13 @@ of HTMLMAP.
 <UL>
   <LI><B>GRASS_WIDTH=xxx</B><BR>the width of the image map (default is 
     640).
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HEIGHT=yyy</B><BR>the height of the image map (default is 
     480).
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HTMLTYPE=type</B><BR>the type of image mape to create (default is 
     CLIENT): 
-    <UL>
+    <DL>
       <DD><TT><B>CLIENT</B></TT> &nbsp;&nbsp; Netscape/IE client-side image map. 
 	(NAME="map")<BR>
       <DD><TT><B>APACHE</B></TT> &nbsp;&nbsp; Apache/NCSA server-side image 
@@ -67,8 +67,8 @@ of HTMLMAP.
 	and polygon vertices ( <I>url&nbsp; x1&nbsp; y1&nbsp; x2&nbsp; y2&nbsp; 
 	  ..... </I>), suitable for conversion to CERN server format, or any other 
 	format with user supplied conversion program.</DD>
-    </UL>
-  </LI><BR>
+    </DL>
+  </LI>
   <LI><B>GRASS_HTMLFILE=filename</B><BR>
     specifies the resulting file to store 
     the html image map, default is <tt>htmlmap</tt>. Files without absolute path 
@@ -76,26 +76,26 @@ of HTMLMAP.
     <BR>
     <em>Any existing file of the same name is overwritten without 
       warning.</em>
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HTMLMINDIST=n</B><BR>specifies the minimum distance in pixels
   that a point must change from the previous point to keep in the list of
   vertices for a polygon.  The default is <tt>2</tt>, which means that a
   point's x and y difference from the previous point must change by a number
   of pixels greater than this value.  This parameter helps to eliminate
   closely spaced points.
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HTMLMINBBOX=n</B><BR>specifies the minimum bounding box
   dimensions to record a polygon as a clickable area.
   The default is <tt>2</tt>, which means that a polygon with a bounding box
   of less than this value is not included. This parameter helps to eliminate
   polygons than are a point or line.
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HTMLMAXPOINTS=n</B><BR>specifies the maximum number of
   vertices included in a polygon's clickable area.
   The default is <tt>99</tt>.  Some browsers can only accomodate polygons of
   100 vertices or less.  The HTMLMAP driver automatically ensures that a
   polygon is closed by making the last point the same as the first
-  point.</LI><BR>
+  point.</LI>
 </UL>
 
 <H3>Typical usage</H3>

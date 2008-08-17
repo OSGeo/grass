@@ -81,12 +81,11 @@ r.in.wms output=elevation_feet mapserver=http://wms.jpl.nasa.gov/wms.cgi \
          layers=us_ned styles=feet_real -o region=panhandle-90ft -d method=cubic
 </pre></div>
 
-<dd><b>-d</b> skips ahead to downloading. This could be used to try
+<b>-d</b> skips ahead to downloading. This could be used to try
 downloading again (if some files failed last time) or to import the data
 differently. Since downloaded files are remembered those already received
 successfully are not re-requested. In this case we are reimporting the
 data using the cubic interpolation method instead of nearest neighbor.
-</dd>
 
 <H3>LANDSAT from OnEarth server download</H3>
 

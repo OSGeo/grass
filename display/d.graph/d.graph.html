@@ -43,6 +43,7 @@ If the <B>-m</B> flag is given, geographic coordinates will be used instead.
 <P>
 The graphics language is simple, and uses the following commands: 
 <BR>
+<DL>
 <DD>[
 <a href="#comment">#</a>&nbsp;|
 <a href="#move">move</a>&nbsp;|
@@ -57,15 +58,14 @@ The graphics language is simple, and uses the following commands:
 <a href="#icon">icon</a>&nbsp;|
 <a href="#width">width</a>
 ]</DD>
+</DL>
 
 
 <DL>
-<a name="comment"></a>
-<DT><B>#</B> <EM>comment</EM> 
+<DT><a name="comment"></a><B>#</B> <EM>comment</EM> 
 <DD>A line of comment which is ignored in the processing. 
 
-<a name="move"></a>
-<DT><B>move</B> <EM>xpos ypos</EM> 
+<DT><a name="move"></a><B>move</B> <EM>xpos ypos</EM> 
 <DD>The current location is updated to <EM>xpos ypos</EM>. 
 
 Unless the <B>-m</B> flag is used,
@@ -74,8 +74,7 @@ horizontal (<EM>xpos</EM>) and vertical (<EM>ypos</EM>) size,
 and may be floating point values. Values are between 0-100. 
 <B>Note.</B> A space must separate <EM>xpos</EM> and <EM>ypos</EM>.
 
-<a name="draw"></a>
-<DT><B>draw</B> <EM>xpos ypos</EM> 
+<DT><a name="draw"></a><B>draw</B> <EM>xpos ypos</EM> 
 <DD>A line is drawn in the current color from the current location to the new 
 location <EM>xpos ypos</EM>, which then becomes the current location. 
 Unless the <B>-m</B> flag is used,
@@ -84,8 +83,7 @@ horizontal (<EM>xpos</EM>) and vertical (<EM>ypos</EM>) size,
 and may be floating point values. Values are between 0-100. 
 <B>Note.</B> A space must separate <EM>xpos</EM> and <EM>ypos</EM>. 
 
-<a name="polygon"></a>
-<DT><B>polygon</B> 
+<DT><a name="polygon"></a><B>polygon</B> 
 <BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
 <BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
 <BR>&nbsp;&nbsp;... 
@@ -94,8 +92,7 @@ and may be floating point values. Values are between 0-100.
 one pair per line, 
 circumscribe a polygon that is to be filled with the current color. 
 
-<a name="polyline"></a>
-<DT><B>polyline</B> 
+<DT><a name="polyline"></a><B>polyline</B> 
 <BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
 <BR>&nbsp;&nbsp;<EM> xpos ypos</EM> 
 <BR>&nbsp;&nbsp;... 
@@ -104,8 +101,7 @@ circumscribe a polygon that is to be filled with the current color.
 one pair per line, 
 circumscribe a polygon that is not to be filled with color. 
 
-<a name="color"></a>
-<DT><B>color</B> <EM>color</EM> 
+<DT><a name="color"></a><B>color</B> <EM>color</EM> 
 <DD>Sets the current color to that stated; subsequent graphics will be drawn 
 in the stated color, until the current color is set to a different color. 
 Options are <EM>red</EM>, 
@@ -123,8 +119,7 @@ Options are <EM>red</EM>,
 an R:G:B triplet (separated by colons),
 or the word "none" (draws in the default background color).
 
-<a name="text"></a>
-<DT><B>text</B> <EM>line-of-text</EM> 
+<DT><a name="text"></a><B>text</B> <EM>line-of-text</EM> 
 <DD>The stated text is drawn at the current location using the current color, 
 and the new current location is then positioned at the end of the text string. 
 
@@ -139,8 +134,7 @@ scaling.
 <BR>
 <B>Note.</B> A space must separate <EM>xper</EM> and <EM>yper</EM>.
 
-<a name="symbol"></a>
-<DT><B>symbol</B> <EM>type size xper yper [line_color [fill_color]]</EM>
+<DT><a name="symbol"></a><B>symbol</B> <EM>type size xper yper [line_color [fill_color]]</EM>
 <DD>A symbol is drawn at the given size on the display monitor. The
 <EM>xper</EM> and <EM>yper</EM> options define the center of the icon and
 are given as a percentage of the display frame (<tt>0,0</tt> is lower left).
@@ -152,20 +146,17 @@ or "none". If using an R:G:B triplet, each color value can range from 0-255.
 If not specified the default <EM>line_color</EM> is black and the default 
 <EM>fill_color</EM> is grey.
 
-<a name="rotation"></a>
-<DT><B>rotation</B> <EM>angle</EM> 
+<DT><a name="rotation"></a><B>rotation</B> <EM>angle</EM> 
 <DD>Subsequent text and symbols will be drawn such that they are rotated 
 <em>angle</em> degrees counter-clockwise from east.
 
-<a name="icon"></a>
-<DT><B>icon</B> <EM>type size x y</EM> 
+<DT><a name="icon"></a><B>icon</B> <EM>type size x y</EM> 
 <DD>Draws an icon of types <EM>o</EM>, <EM>x</EM>, or <EM>+</EM> 
 with specified <EM>size</EM> (in %) at location <EM>x,y</EM>. 
 Note: type <EM>o</EM> designates a square.
 <BR>
 
-<a name="width"></a>
-<DT><B>width</B> <EM>value</EM> 
+<DT><a name="width"></a><B>width</B> <EM>value</EM> 
 <DD>Subsequent lines (including non-FreeType text) will be drawn with
 the given pixel thickness.
 <BR>The default value is 0.

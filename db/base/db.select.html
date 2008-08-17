@@ -32,7 +32,7 @@ db.select -c driver=odbc database=g51test table=roads input=file.sql > result.cs
 
 <em>Select some string attribute, exclude others:</em><br>
 <div class="code"><pre>
-echo "SELECT * FROM archsites WHERE str1 <> 'No Name'" | db.select
+echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 </pre></div>
 
 <P>

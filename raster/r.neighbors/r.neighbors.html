@@ -129,7 +129,7 @@ The result is rounded to the nearest integer (in this case 64).
 <br>
 
 <em>Neighborhood Size:</em>
-<dd>The neighborhood <b>size</b> specifies which cells surrounding any given
+The neighborhood <b>size</b> specifies which cells surrounding any given
 cell fall into the neighborhood for that cell.
 The <b>size</b> must be an odd integer.
 For example,
@@ -140,11 +140,10 @@ For example,
                              |_|_|_|
 
 </pre>
-</dd>
 <p>
 
 <em>Matrix weights:</em>
-<dd>A custom matrix can be used if none of the neighborhood operation
+A custom matrix can be used if none of the neighborhood operation
 methods are desirable by using the <b>weight</b>.  This option must
 be used in conjunction with the <b>size</b> option to specify the
 matrix size.  The weights desired are to be entered into a text file.
@@ -175,7 +174,7 @@ This corresponds to the following 3x3 matrix:
 <p>
 
 <h3>FLAGS</h3>
-
+<dl>
 <dt><b>-a</b> 
 
 <dd>If specified, <em><b>r.neighbors</b></em> will not align the output
@@ -226,7 +225,7 @@ The exact masks for the first few neighborhood sizes are as follows:
 (i.e., without printing to standard output notes on the program's progress).
 If unspecified, the program will print messages to standard output by default.
 </dd>
-
+</dl>
 
 <h2>NOTES</h2>
 

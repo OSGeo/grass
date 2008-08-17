@@ -36,10 +36,10 @@ Several environment variables affect the operation of the Cairo driver:
 <UL>
   <LI><B>GRASS_WIDTH=xxx</B><BR>
      the width of the image.
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_HEIGHT=yyy</B><BR>
     the height of the image.
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_CAIROFILE=filename</B><BR>
      the name and format of the resulting image file, default is
      <tt>map.png</tt>.<BR>
@@ -58,26 +58,26 @@ Several environment variables affect the operation of the Cairo driver:
      </UL>
      (Note: Some formats may not be available, depending on your platform and
      the Cairo library that GRASS was built with.)
-  </LI><BR> 
+  </LI> 
   <LI><B>GRASS_BACKGROUNDCOLOR=RRGGBB</B><BR>
      specifies the background color to use in RGB
     notation (hex values). Default is <b>FFFFFF</b> (white).
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
     sets transparent background on (TRUE) or off (FALSE, default).
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_AUTO_WRITE=[TRUE|FALSE]</B><BR>
     if set to <tt>TRUE</tt>, the image file will be written after each 
     operation (i.e. whenever a client disconnects), rather than
     only being written out when the driver terminates.<BR>
     (Note: This only applies to bitmap formats - vector formats
     are always written directly to file).
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_CAIRO_READ</B><BR>
      if <tt>TRUE</tt>, the Cairo driver will initialize the image from
     the contents of GRASS_CAIROFILE.<BR>
     (Note: This is only supported for bitmap formats)
-  </LI><BR>
+  </LI>
   <LI><B>GRASS_CAIRO_MAPPED</B><BR>
     if <tt>TRUE</tt>, the Cairo driver will map GRASS_CAIROFILE as its framebuffer,
     rather than using memory. This only works with BMP files.
