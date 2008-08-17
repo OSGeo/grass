@@ -18,7 +18,7 @@ match three criteria and to define the lake:
 <p>The water level must be in DEM units.</p>
 
 <h2>NOTES</h2>
-
+<p>
 The seed (starting) point can be a raster map with at least one
 cell value greater than zero, or a seed point can be specified as an E,
 N coordinate pair. If the seed is specified as a coordinate pair, an additional
@@ -63,7 +63,7 @@ if( if( isnull(${seedmap}),0,${seedmap}>0), ${wlevel}-${dem}, \
   if(isnull(${seedmap}[-1,-1]),0, ${seedmap}[-1,-1]>0 && ${wlevel}>${dem}),\
  ${wlevel}-${dem}, null() )))
 </pre></div>
-
+<p>
 The ${seedmap} variable is replaced by seed map names, ${dem} with DEM map name, and
 ${wlevel} with target water level.  To get single water level, this code block is
 called with same level numerous times (in a loop) as the lake grows by single cells
