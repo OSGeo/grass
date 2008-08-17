@@ -1649,7 +1649,7 @@ static void G_usage_html(void)
 
 	    if (opt->label) {
 		fprintf(stdout, "<DD>");
-		fprintf(stdout, "%s", opt->label);
+		print_escaped_for_html(stdout, opt->label);
 		fprintf(stdout, "</DD>\n");
 	    }
 	    if (opt->description) {
@@ -1660,13 +1660,13 @@ static void G_usage_html(void)
 
 	    if (opt->options) {
 		fprintf(stdout, "<DD>%s: <em>", _("Options"));
-		fprintf(stdout, "%s", opt->options);
+		print_escaped_for_html(stdout, opt->options);
 		fprintf(stdout, "</em></DD>\n");
 	    }
 
 	    if (opt->def) {
 		fprintf(stdout, "<DD>%s: <em>", _("Default"));
-		fprintf(stdout, "%s", opt->def);
+		print_escaped_for_html(stdout, opt->def);
 		fprintf(stdout, "</em></DD>\n");
 	    }
 
@@ -1674,9 +1674,13 @@ static void G_usage_html(void)
 		int i = 0;
 
 		while (opt->opts[i]) {
-		    if (opt->descs[i])
-			fprintf(stdout, "<DD><b>%s</b>: %s</DD>\n",
-				opt->opts[i], opt->descs[i]);
+		    if (opt->descs[i]) {
+			fprintf(stdout, "<DD><b>");
+			print_escaped_for_html(stdout, opt->opts[i]);
+			fprintf(stdout, "</b>: ");
+			print_escaped_for_html(stdout, opt->descs[i]);
+			fprintf(stdout, "</DD>\n");
+		    }
 		    i++;
 		}
 	    }
