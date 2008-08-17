@@ -33,7 +33,7 @@ v.db.select myfields
 Type cast (type conversion) of strings to double precision (unsupported by DBF driver):
 <div class="code"><pre>
 v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
-            where="z_value <> 'N/A'"
+            where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
 <h2>SEE ALSO</h2>

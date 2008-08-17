@@ -182,10 +182,10 @@ e.g.:
 
 <div class="code"><pre>
 # Print out the column number for each field, supposing the file has a header
-head -1 input_file | tr '<the_field_separator_character>' '\n' | cat -n
+head -1 input_file | tr '&lt;the_field_separator_character&gt;' '\n' | cat -n
 # From the listing, select the columns you want and feed them to v.in.ascii
 # do not use the input= option
-cut -d<the_field_separator_character> -f<comma-separated_list_of_columns> input_file | v.in.ascii <your_options>
+cut -d&lt;the_field_separator_character&gt; -f&lt;comma-separated_list_of_columns&gt; input_file | v.in.ascii &lt;your_options&gt;
 </pre></div>
 
 

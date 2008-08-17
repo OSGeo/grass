@@ -105,38 +105,31 @@ text
   <dd>directory where GRASS lives. This is set automatically by the
     startup script.</dd>
   
-  <br>
   <dt>GISRC</dt>
   <dd>name of <tt>.grassrc7</tt> file. Defines the system wide value
     while in a GRASS session.</dd>
   
-  <br>
   <dt>GRASS_ADDON_PATH</dt>
   <dd>[grass startup script]<br>
     allows to specify additional paths to local GRASS modules extra
     to standard distribution.</dd>
   
-  <br>
   <dt>GRASS_ADDON_ETC</dt>
   <dd>[libgis, g.findetc]<br>
     specify paths where support files (etc/) may be found external to
     standard distribution.</dd>
   
-  <br>
   <dt>GRASS_BATCH_JOB</dt>
   <dd>defines the name (path) of a shell script to be processed as batch job.</dd>
   
-  <br>
   <dt>GRASS_ERROR_MAIL</dt>
   <dd>set to any value to send user mail on an error or warning that 
     happens while stderr is being redirected.</dd>
   
-  <br>
   <dt>GRASS_GNUPLOT</dt>
   <dd>[<!-- m.svfit, s.probplt, s.sv -->i.spectral]<br>
     program to use for plotting <em>gnuplot</em> data.</dd>
   
-  <br>
   <dt>GRASS_GUI</dt>
   <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
     <br><br>
@@ -148,18 +141,15 @@ text
     startup, it will determine the GUI used. If it is not defined startup
     will default to the last GUI used.</dd>
   
-  <br>
   <dt>GRASS_FONT_CAP</dt>
   <dd>[g.mkfontcap, d.font, display drivers]<br>
     specifies an alternative location (to $GISBASE/etc/fontcap) for 
     the font configuration file.</dd>
   
-  <br>
   <dt>GRASS_HEIGHT</dt>
   <dd>[d.mon]<br>
     defines the height of GRASS monitor, see also GRASS_WIDTH.</dd>
   
-  <br>
   <dt>GRASS_HTML_BROWSER</dt>
   <dd>[init.sh, d.m, gis.m]<br>
     defines name of HTML browser. For most platforms this should be
@@ -174,7 +164,6 @@ text
     &nbsp; The signature is the &lt;string&gt; following the &lt;key&gt;,
     without the bracketing &lt;string&gt; tags.</dd>
   
-  <br>
   <dt>GRASS_INT_ZLIB</dt>
   <dd>[libgis]<br>
     if the environment variable GRASS_INT_ZLIB exists, new compressed
@@ -186,13 +175,11 @@ text
     raster's <tt>compressed</tt> value, not the environment variable.
   </dd>
   
-  <br>
   <dt>GRASS_MESSAGE_FORMAT</dt>
   <dd>[various modules]<br>
     maybe set to either <tt>standard</tt> or <tt>gui</tt> (normally
     GRASS takes care).</dd>
   
-  <br>
   <dt>GRASS_MOUSE_BUTTON</dt>
   <dd>[various modules]<br>
     swaps mouse buttons for two-button or left-handed mice. Its value
@@ -201,17 +188,14 @@ text
     that this variable should be set before a display driver is initialized (e.g.,
     <tt>d.mon x0</tt>).</dd>
   
-  <br>
   <dt>GRASS_PAGER</dt>
   <dd>[various modules]<br>
     maybe set to either <tt>less</tt> or <tt>more</tt>.</dd>
   
-  <br>
   <dt>GRASS_PERL</dt>
   <dd>[used during install process for generating man pages]<br>
     set Perl with path.</dd>
   
-  <br>
   <dt>GRASS_RND_SEED</dt>
   <dd>set random seed
     for <em><a href="r.mapcalc.html">r.mapcalc</a></em> rand()
@@ -221,22 +205,18 @@ text
        <p>GRASS_STDERR
 	 <br>&nbsp; set to any value to prevent user mail on error
 	 -->
-  <br>
   <dt>GRASS_SH</dt>
   <dd>[shell scripts on Windows]<br>
     path to bourne shell interpreter used to run shell scripts.</dd>
   
-  <br>
   <dt>GRASS_PYTHON</dt>
   <dd>[wxGUI, Python SWIG]<br>
     set to override Python executable.</dd>
   
-  <br>
   <dt>GRASS_TCLSH</dt>
   <dd>[nviz]<br>
     set tclsh shell name to override 'tclsh'.</dd>
   
-  <br>
   <dt>GRASS_XTERM</dt>
   <dd>lib/init/grass-xterm-wrapper<br>
     lib/init/grass-xterm-mac<br>
@@ -246,31 +226,25 @@ text
     which emulates the necessary xterm functionality in
     Terminal.app.</dd>
   
-  <br>
   <dt>GRASS_UI_TERM</dt>
   <dd>set to any value to use the terminal based parser.</dd>
 
-  <br>
   <dt>GRASS_VERSION</dt>
   <dd>reports the current version number (used by R-stats interface etc);
     should not be changed by user.</dd>
   
-  <br>
   <dt>GRASS_WIDTH</dt>
   <dd>[d.mon]<br>
     defines the width of GRASS monitor, see also GRASS_HEIGHT.</dd>
   
-  <br>
   <dt>GRASS_WISH</dt>
   <dd>[d.m, nviz]<br>
     set wish shell name to override 'wish'.</dd>
   
-  <br>
   <dt>GRASS_NO_GLX_PBUFFERS</dt>
   <dd>[nviz]<br>
     set to any value to disable the use of GLX Pbuffers.</dd>
   
-  <br>
   <dt>GRASS_NO_GLX_PIXMAPS</dt>
   <dd>[nviz]<br>
     Set to any value to disable the use of GLX Pixmaps.</dd>
@@ -287,7 +261,7 @@ See <a href="pngdriver.html">PNG driver</a> manual page for detailed
 list of the variables.
 
 <!--
-    2008/03 -- variables are described in PNG driver manual
+    2008/03 -- -- variables are described in PNG driver manual
    page. The link should be enough here.
 
    <P></P>
@@ -338,7 +312,7 @@ See <a href="psdriver.html">PS driver</a> manual page for detailed
 list of the variables.
 
 <!--
-    2008/03 -- variables are described in PS driver manual
+    2008/03 -- -- variables are described in PS driver manual
    page. The link should be enough here.
 
 <P></P>
@@ -410,13 +384,11 @@ detailed list of the variables.
     GRASS_RENDER_IMMEDIATE=TRUE is set, there is no need to run 
     <tt>d.mon&nbsp;start=PNG</tt>.</dd>
   
-  <br>
   <dt>GRASS_FONT</dt>
   <dd>specifies the font as either the name of a font from
     $GISBASE/etc/fontcap (or alternative fontcap file specified by GRASS_FONT_CAP),
     or alternatively the full path to a FreeType font file.</dd>
   
-  <br>
   <dt>GRASS_ENCODING</dt>
   <dd>the encoding to be assumed for text which is drawn using a
     freetype font; may be any encoding know to <em>iconv</em>.</dd>
@@ -448,7 +420,6 @@ detailed list of the variables.
     GRASS_OVERWRITE environment variable or the OVERWRITE gisenv variable detailed
     below will cause maps with identical names to be overwritten.</dd>
   
-  <br>
   <dt>GRASS_VERBOSE</dt>
   <dd>[all modules]<br>
     toggles verbosity level
@@ -462,14 +433,12 @@ detailed list of the variables.
     so that the <tt>--verbose</tt> or <tt>--quiet</tt> flags will be inherited
     by dependant modules as the script runs.</dd>
   
-  <br>
   <dt>GRASS_REGION</dt>
   <dd>[libgis]<br>
     override region settings, separate parameters with a ";". Format
     is the same as in the WIND region settings file. Otherwise use is the same as
     WIND_OVERRIDE.</dd>
   
-  <br>
   <dt>WIND_OVERRIDE</dt>
   <dd>[libgis]<br>
     it causes programs to use the specified named region (created with
@@ -496,26 +465,21 @@ detailed list of the variables.
 	g.gisenv set=DEBUG=0
     </pre></div>
   
-  <br>
   <dt>DM_FORM_MODE</dt>
   <dd>[d.m]<br>
     sets default form mode (<tt>txt</tt> or <tt>gui</tt>)</dd>
   
-  <br>
   <dt>GISDBASE</dt>
   <dd>initial database</dd>
 
-  <br>
   <dt>GIS_LOCK</dt>
   <dd>lock ID to prevent parallel GRASS use,
     <br>process id of the start-up shell script</dd>
   
-  <br>
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[d.what.vect/forms library]<br>
     encoding of query form (utf-8, ascii, iso8859-1, koi8-r)</dd>
   
-  <br>
   <dt>GRASS_GUI</dt>
   <dd>either <tt>text</tt> or <tt>gui</tt> to define non-/graphical startup.
     <br><br> Can also specify the name of the GUI to use,
@@ -527,19 +491,15 @@ detailed list of the variables.
     startup, it will determine the GUI used. If it is not defined
     startup will default to the last GUI used.</dd>
   
-  <br>
   <dt>LOCATION</dt>
   <dd>full path to location directory</dd>
   
-  <br>
   <dt>LOCATION_NAME</dt>
   <dd>initial location name</dd>
   
-  <br>
   <dt>MAPSET</dt>
   <dd>initial mapset</dd>
   
-  <br>
   <dt>OVERWRITE</dt>
   <dd>[all modules]<br>
     toggles map overwrite.
@@ -562,18 +522,15 @@ detailed list of the variables.
   <dt>$HOME/.grassrc7</dt>
   <dd>stores the GRASS variables (but not environment variables)</dd>
   
-  <br>
   <dt>$HOME/.grasslogin7</dt>
   <dd>stores the DBMI passwords in this hidden file.
     Only the file owner can access this file.</dd>
 
-  <br>
   <dt>$HOME/GIS_ERROR_LOG</dt>
   <dd>if this file exists then all GRASS error and warning messages are 
     logged here. Applies to current user. To generate the file, use:
     <tt>touch $HOME/GIS_ERROR_LOG</tt></dd>
   
-  <br>
   <dt>$GISBASE/GIS_ERROR_LOG</dt>
   <dd>if this file exists then all GRASS error and warning messages are 
     logged here. Applies to all users. (proper write permissions must be in place)

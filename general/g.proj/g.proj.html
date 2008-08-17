@@ -13,6 +13,7 @@ by proprietary GIS. In addition, if one of the parameters <em>georef</em>,
 <em>wkt</em>, <em>proj4</em> or <em>epsg</em> is specified, rather than the 
 projection information being read from the current location it is imported 
 from an external source as follows:
+</P>
 <dl>
 <dt>georef=<em>filename</em></dt>
 <dd><em>g.proj</em> attempts to invoke GDAL and OGR in turn to read a
@@ -41,7 +42,6 @@ co-ordinate system and datum information files, stored in the directory
 ${GISBASE}/etc/ogr_csv. These can be updated if necessary to support future
 revisions of the EPSG database.</dd>
 </dl>
-</P>
 
 <P>The -p, -j, -w, etc. flags are all functional when importing projection
 information from an external source, meaning that <em>g.proj</em> can be

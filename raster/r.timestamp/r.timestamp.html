@@ -45,9 +45,9 @@ To remove the timestamp from a raster map, use <b>date=</b><em>none</em>.
 <p>
 <b>Absolute</b><p>
 	  The general format for absolute values is:
-<p><tt>
+<tt>
 	     day month year [bc] hour:minute:seconds timezone
-<p>
+<br>
 	     day is 1-31<br>
 	     month is jan,feb,...,dec<br>
 	     year is 4 digit year<br>
@@ -56,16 +56,15 @@ To remove the timestamp from a raster map, use <b>date=</b><em>none</em>.
 	     mintue is 0-59<br>
 	     second is 0-59.9999 (fractions of second allowed)<br>
 	     timezone is +hhmm or -hhmm (eg, -0600)<br>
-<p>
+</tt><p>
 	  parts can be missing
-<p>
+<p><tt>
 	     1994 [bc]<br>
 	     Jan 1994 [bc]<br>
 	     15 jan 1000 [bc]<br>
 	     15 jan 1994 [bc] 10 [+0000]<br>
 	     15 jan 1994 [bc] 10:00 [+0100]<br>
 	     15 jan 1994 [bc] 10:00:23.34 [-0500]<br>
-<p>
 </tt>
 <b>Relative</b><p>
 	  There are two types of relative datetime values, year-

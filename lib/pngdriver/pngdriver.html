@@ -27,9 +27,9 @@ Several environment variables effect the operation
 of the PNG driver. 
 <UL>
   <LI><B>GRASS_WIDTH=xxx</B><BR>
-     the width of the image map (default is 640).</LI><BR>
+     the width of the image map (default is 640).</LI>
   <LI><B>GRASS_HEIGHT=yyy</B><BR>
-    the height of the image map (default is 480).</LI><BR>
+    the height of the image map (default is 480).</LI>
   <LI><B>GRASS_PNGFILE=filename</B><BR>
      the filename to put the resulting image in, default is <tt>map.png</tt>.
      If you set GRASS_PNGFILE to a filename which ends in ".ppm", a PPM 
@@ -38,21 +38,21 @@ of the PNG driver.
      specifies the background color to use in RGB
      notation (hex values). Default is <b>000000</b> (black).<br><br>
   <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
-    sets transparent background on (TRUE) or off (FALSE, default).</LI><BR>
+    sets transparent background on (TRUE) or off (FALSE, default).</LI>
   <LI><B>GRASS_TRUECOLOR=[TRUE|FALSE]</B><BR>
-    sets true-color support</LI><BR>
+    sets true-color support</LI>
   <LI><B>GRASS_PNG_COMPRESSION=[0|1|9]</B><BR>
-    compression level of PNG files (0 = none, 1 = fastest, 9 = best, default is 6)</LI><BR>
+    compression level of PNG files (0 = none, 1 = fastest, 9 = best, default is 6)</LI>
   <LI><B>GRASS_PNG_AUTO_WRITE=[TRUE|FALSE]</B><BR>
      if set to <tt>TRUE</tt>, the image file will be written after each 
      operation (i.e. whenever a client disconnects), rather than
-     only being written out when the driver terminates.</LI><BR>
+     only being written out when the driver terminates.</LI>
   <LI><B>GRASS_PNG_READ</B><BR>
      if <tt>TRUE</tt>, the PNG driver will initialize the image from
-     the contents of GRASS_PNGFILE.</LI><BR>
+     the contents of GRASS_PNGFILE.</LI>
   <LI><B>GRASS_PNG_MAPPED</B><BR>
      if <tt>TRUE</tt>, the PNG driver will map GRASS_PNGFILE as its framebuffer,
-     rather than using memory. This only works with BMP files.</LI><BR>
+     rather than using memory. This only works with BMP files.</LI>
   <LI><B>GRASS_RENDER_IMMEDIATE=[TRUE|FALSE]</B><BR>
      tells the raster library to use its built-in PNG driver rather
      than connecting to an external monitor process using sockets. If

@@ -71,7 +71,7 @@ d.vect map where="individual='juvenile' and area='beach'"
 Display all vector points except for LAMAR valley and <i>extensive trapping</i> (brackets are superfluous in this example):
 <div class="code"><pre>
 d.vect trapping_sites_points fcol=black icon=basic/diamond col=white size=13 \
-    where="valley <> 'LAMAR' OR (valley = 'LAMAR' AND description = 'extensive trapping')"
+    where="valley &lt;&gt; 'LAMAR' OR (valley = 'LAMAR' AND description = 'extensive trapping')"
 </pre></div>
 
 <p>
@@ -138,8 +138,8 @@ d.vect roads where="cat&gt;exprtest"
 
 <a href="databaseintro.html">Database management in GRASS GIS</a>,<BR>
 <a href="database.html">Help pages for database modules</a>,<BR>
-<a href=http://www.redhat.com/docs/manuals/database/RHDB-2.1-Manual/sql/sqlreference.html>SQL
-    Guide and Reference</a> (Red Hat)
+<a href="http://www.redhat.com/docs/manuals/database/RHDB-2.1-Manual/sql/sqlreference.html">
+SQL Guide and Reference</a> (Red Hat)
 
 
 <p><i>Last changed: $Date$</i></p>

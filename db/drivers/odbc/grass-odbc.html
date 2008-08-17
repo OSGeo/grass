@@ -25,11 +25,11 @@ Communication between GRASS and ODBC database for attribute management: <br>
       <td align="center" bgcolor="#ffbb99" valign="top">RDBMS</td>
     </tr>
     <tr>
-      <td rowspan="3" align="center" bgcolor="#bbffbb" valign="center"><i><b>GRASS</b></i></td>
+      <td rowspan="3" align="center" bgcolor="#bbffbb" valign="middle"><i><b>GRASS</b></i></td>
 
-      <td rowspan="3" align="center" bgcolor="#bbffbb" valign="center"><i><b>DBMI driver</b></i></td>
-      <td rowspan="3" align="center" valign="center"><i><b>unixODBC</b></i></td>
-      <td rowspan="3" align="center" valign="center"><i><b>ODBC driver</b></i></td>
+      <td rowspan="3" align="center" bgcolor="#bbffbb" valign="middle"><i><b>DBMI driver</b></i></td>
+      <td rowspan="3" align="center" valign="middle"><i><b>unixODBC</b></i></td>
+      <td rowspan="3" align="center" valign="middle"><i><b>ODBC driver</b></i></td>
       <td align="center" bgcolor="#ffffbb" valign="top"><i><b>PostgreSQL</b></i></td>
     </tr>
     <tr>
@@ -62,7 +62,7 @@ DBMS.
 Configure ODBC driver for selected database (manually or with 'ODBCConfig').
 ODBC drivers are defined in /etc/odbcinst.ini. Here is example:</li>
 
-<div class="code"><pre>
+<li><div class="code"><pre>
 &nbsp;[PostgreSQL]
 &nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp; = ODBC for PostgreSQL
 &nbsp;Driver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/lib/libodbcpsql.so
@@ -75,7 +75,7 @@ modules. Then DSN must be defined in $HOME/.odbc.ini (for this user only) or in
 appears twice and also for the PostgreSQL protocol version]. Omit blanks at
 the beginning of lines:</li>
 
-<div class="code"><pre>
+<li><div class="code"><pre>
 &nbsp;[grass6test]
 &nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = PostgreSQL
 &nbsp;Driver&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = PostgreSQL
