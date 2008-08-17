@@ -327,6 +327,9 @@ class DecorationDialog(wx.Dialog):
                                                            'coords': (10, 10),
                                                            'pdcType': 'image' }
         else:
+            if self.parent.MapWindow.overlays[self.ovlId]['propwin'] == None:
+                return
+
             self.parent.MapWindow.overlays[self.ovlId]['propwin'].get_dcmd = self.GetOptData
 
 
