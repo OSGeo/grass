@@ -8,8 +8,9 @@ VER=2.2
 NV_VER=nviz$(VER)
 PGM=nviz
 INSTALL_DIR=$(GISBASE)/etc/$(NV_VER)
+CLEAN_SUBDIRS = src
 
-include $(MODULE_TOPDIR)/include/Make/Html.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 SCRIPTS := \
 	scripts/script_get_line \
@@ -41,6 +42,3 @@ endif
 	-$(MKDIR) $(INSTALL_DIR)/bitmaps/flythrough
 	find -L bitmaps -path '*/.svn' -prune -o -type f -print | \
 		while read file ; do $(INSTALL_DATA) $$file $(INSTALL_DIR)/$$file ; done
-
-clean: 
-	$(MAKE) -C src clean
