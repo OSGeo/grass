@@ -448,14 +448,12 @@ int main(int argc, char *argv[])
     pskip->key = "skip";
     pskip->type = TYPE_INTEGER;
     pskip->required = NO;
-    pskip->options = skip_opt;
     pskip->description = _("Number of cells between flowlines");
 
     pbound = G_define_option();
     pbound->key = "bound";
     pbound->type = TYPE_INTEGER;
     pbound->required = NO;
-    pbound->options = default_bound_ans;
     pbound->description = _("Maximum number of segments per flowline");
 
     pflout = G_define_option();
