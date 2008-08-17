@@ -30,6 +30,7 @@ except:
     compatPath = os.path.join(globalvar.ETCWXDIR, "compat")
     sys.path.append(compatPath)
     import subprocess
+import tempfile
 
 import wx
 
@@ -80,8 +81,15 @@ class Layer(object):
                         self.opacity, self.hidden))
 
         # generated file for layer
-        self.gtemp = utils.GetTempfile()
+        #self.gtemp = utils.GetTempfile()
+        #self.gtemp = os.tmpfile()
+        #self.maskfile = self.gtemp + ".pgm"
+        self.gtemp = tempfile.mkstemp()[1]
         self.maskfile = self.gtemp + ".pgm"
+        if self.type == 'overlay':
+            self.mapfile  = self.gtemp + ".png"
+        else:
+            self.mapfile  = self.gtemp + ".ppm"
 
     def __del__(self):
         Debug.msg (3, "Layer.__del__(): layer=%s, cmd='%s'" %
@@ -106,13 +114,14 @@ class Layer(object):
         #
         # to be sure, set temporary file with layer and mask
         #
-        if not self.gtemp:
-            gtemp = utils.GetTempfile()
-            self.maskfile = gtemp + ".pgm"
-            if self.type == 'overlay':
-                self.mapfile  = gtemp + ".png"
-            else:
-                self.mapfile  = gtemp + ".ppm"
+        #if not self.gtemp:
+        #gtemp = utils.GetTempfile()
+        #gtemp = tempfile.mkstemp()[1]
+        #self.maskfile = gtemp + ".pgm"
+        #if self.type == 'overlay':
+        #    self.mapfile  = gtemp + ".png"
+        #else:
+        #    self.mapfile  = gtemp + ".ppm"
 
         #
         # prepare command for each layer
@@ -138,7 +147,7 @@ class Layer(object):
         else:
             if self.mapfile:
                 os.environ["GRASS_PNGFILE"] = self.mapfile
-
+                
         #
         # execute command
         #
@@ -274,7 +283,7 @@ class MapLayer(Layer):
         Layer.__init__(self, type, cmd, name,
                        active, hidden, opacity)
 
-        self.mapfile = self.gtemp + ".ppm"
+        #self.mapfile = self.gtemp + ".ppm"
 
     def GetMapset(self):
         """
@@ -308,7 +317,7 @@ class Overlay(Layer):
                        active, hidden, opacity)
 
         self.id = id
-        self.mapfile = self.gtemp + ".png"
+        #self.mapfile = self.gtemp + ".png"
 
 class Map(object):
     """
@@ -838,31 +847,31 @@ class Map(object):
                 
             Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
 
-	# ugly hack for MSYS
-	if not subprocess.mswindows:
-	    mapstr = ",".join(maps)
-	    maskstr = ",".join(masks)
+        # ugly hack for MSYS
+        if not subprocess.mswindows:
+            mapstr = ",".join(maps)
+            maskstr = ",".join(masks)
             mapoutstr = self.mapfile
-	else:
-	    mapstr = ""
-	    for item in maps:
+        else:
+            mapstr = ""
+            for item in maps:
                 mapstr += item.replace('\\', '/')		
-	    mapstr = mapstr.rstrip(',')
-	    maskstr = ""
+            mapstr = mapstr.rstrip(',')
+            maskstr = ""
             for item in masks:
-		maskstr += item.replace('\\', '/')
-	    maskstr = maskstr.rstrip(',')
-	    mapoutstr = self.mapfile.replace('\\', '/')
+                maskstr += item.replace('\\', '/')
+            maskstr = maskstr.rstrip(',')
+            mapoutstr = self.mapfile.replace('\\', '/')
 
         # compose command
         complist = ["g.pnmcomp",
-                   "in=%s" % ",".join(maps),
-	           "mask=%s" % ",".join(masks),
-                   "opacity=%s" % ",".join(opacities),
-                   "background=255:255:255",
-                   "width=%s" % str(self.width),
-                   "height=%s" % str(self.height),
-                   "output=%s" % self.mapfile]
+                    "in=%s" % ",".join(maps),
+                    "mask=%s" % ",".join(masks),
+                    "opacity=%s" % ",".join(opacities),
+                    "background=255:255:255",
+                    "width=%s" % str(self.width),
+                    "height=%s" % str(self.height),
+                    "output=%s" % self.mapfile]
 
 
         # render overlays
