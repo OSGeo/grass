@@ -159,17 +159,21 @@ int main(int argc, char **argv)
     color_opt->key = "color";
     color_opt->type = TYPE_STRING;
     color_opt->answer = DEFAULT_FG_COLOR;
-    color_opt->description = _("Line color");
+    color_opt->label = _("Line color");
     color_opt->guisection = _("Colors");
     color_opt->gisprompt = GISPROMPT_COLOR;
+    color_opt->description =
+	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
     fcolor_opt = G_define_option();
     fcolor_opt->key = "fcolor";
     fcolor_opt->type = TYPE_STRING;
     fcolor_opt->answer = "200:200:200";
-    fcolor_opt->description = _("Area fill color");
+    fcolor_opt->label = _("Area fill color");
     fcolor_opt->guisection = _("Colors");
     fcolor_opt->gisprompt = GISPROMPT_COLOR;
+    fcolor_opt->description =
+	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
     rgbcol_opt = G_define_standard_option(G_OPT_COLUMN);
     rgbcol_opt->key = "rgb_column";
@@ -244,25 +248,30 @@ int main(int argc, char **argv)
     lcolor_opt->key = "lcolor";
     lcolor_opt->type = TYPE_STRING;
     lcolor_opt->answer = "red";
-    lcolor_opt->description = _("Label color");
+    lcolor_opt->label = _("Label color");
     lcolor_opt->guisection = _("Labels");
     lcolor_opt->gisprompt = GISPROMPT_COLOR;
+    lcolor_opt->description = _("Either a standard color name or R:G:B triplet");
 
     bgcolor_opt = G_define_option();
     bgcolor_opt->key = "bgcolor";
     bgcolor_opt->type = TYPE_STRING;
     bgcolor_opt->answer = "none";
     bgcolor_opt->guisection = _("Labels");
-    bgcolor_opt->description = _("Label background color");
+    bgcolor_opt->label = _("Label background color");
     bgcolor_opt->gisprompt = GISPROMPT_COLOR;
+    bgcolor_opt->description =
+	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
     bcolor_opt = G_define_option();
     bcolor_opt->key = "bcolor";
     bcolor_opt->type = TYPE_STRING;
     bcolor_opt->answer = "none";
     bcolor_opt->guisection = _("Labels");
-    bcolor_opt->description = _("Label border color");
+    bcolor_opt->label = _("Label border color");
     bcolor_opt->gisprompt = GISPROMPT_COLOR;
+    bcolor_opt->description =
+	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
     lsize_opt = G_define_option();
     lsize_opt->key = "lsize";

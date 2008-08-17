@@ -1145,7 +1145,7 @@ class cmdPanel(wx.Panel):
                 # color entry
                 elif p.get('prompt','') == 'color':
                     # Heuristic way of finding whether transparent is allowed
-                    handle_transparency =  'none' in title
+                    handle_transparency =  'none' in p.get('description', '')
                     default_color = (200,200,200)
                     label_color = _("Select Color")
                     if p.get('default','') != '':
