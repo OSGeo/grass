@@ -644,6 +644,9 @@ class BufferedWindow(MapWindow, wx.Window):
         # render background image if needed
         #
         if render:
+            # walk layer tree and update current layers
+            self.tree.ReorderLayers()
+            # update display size
             self.Map.ChangeMapSize(self.GetClientSize())
             windres = False
             if self.parent.compResolution.GetValue():

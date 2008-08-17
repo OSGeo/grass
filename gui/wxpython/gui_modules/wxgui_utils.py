@@ -725,8 +725,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == 'raster':
             cmd = ['d.rast']
             
-            if UserSettings.Get(group='cmd', key='rasterOpaque', subkey='enabled'):
-                cmd.append('-n')
+            if UserSettings.Get(group='cmd', key='rasterOverlay', subkey='enabled'):
+                cmd.append('-o')
             menuform.GUI().ParseCommand(cmd, completed=(self.GetOptData,layer,params),
                                         parentframe=self)
         elif ltype == '3d-raster':
@@ -1197,7 +1197,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         vislayer = self.GetFirstVisibleItem()
 
-        if not vislayer:
+        if not vislayer or self.GetPyData(vislayer) is None:
             return
 
         itemList = ""
