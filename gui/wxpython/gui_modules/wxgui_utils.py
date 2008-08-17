@@ -496,7 +496,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Rename layer"""
         self.EditLabel(self.layer_selected)
 
-    def AddLayer(self, ltype, lname=None, lchecked=None, \
+    def AddLayer(self, ltype, lname=None, lchecked=None,
                  lopacity=None, lcmd=None, lgroup=None, lnviz=None):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
@@ -658,7 +658,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     'propwin' : None}, 
                                    None))
 
-            maplayer = self.Map.AddLayer(type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
+            # find previous map layer instance 
+            prevItem = self.GetFirstChild(self.root)[0]
+            prevMapLayer = None 
+            pos = -1
+            while prevItem and prevItem.IsOk() and prevItem != layer: 
+                if self.GetPyData(prevItem)[0]['maplayer']: 
+                    prevMapLayer = self.GetPyData(prevItem)[0]['maplayer'] 
+                
+                prevItem = self.GetNextSibling(prevItem) 
+                
+                if prevMapLayer: 
+                    pos = self.Map.GetLayerIndex(prevMapLayer)
+                else: 
+                    pos = -1
+            
+            maplayer = self.Map.AddLayer(pos=pos,
+                                         type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
                                          l_active=checked, l_hidden=False,
                                          l_opacity=opacity, l_render=render)
             self.GetPyData(layer)[0]['maplayer'] = maplayer
