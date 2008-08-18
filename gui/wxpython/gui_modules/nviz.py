@@ -19,6 +19,7 @@ for details.
 
 errorMsg = ''
 
+import os
 import sys
 
 import wx
