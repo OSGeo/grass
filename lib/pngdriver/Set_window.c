@@ -20,15 +20,11 @@
 #include <math.h>
 #include "pngdriver.h"
 
-void PNG_Set_window(double ft, double fb, double fl, double fr)
+void PNG_Set_window(double t, double b, double l, double r)
 {
-    int t = (int) floor(ft + 0.5);
-    int b = (int) floor(fb + 0.5);
-    int l = (int) floor(fl + 0.5);
-    int r = (int) floor(fr + 0.5);
-
-    clip_top  = t > screen_top    ? t : screen_top;
-    clip_bot  = b < screen_bottom ? b : screen_bottom;
-    clip_left = l > screen_left   ? l : screen_left;
-    clip_rite = r < screen_right  ? r : screen_right;
+    clip_top  = t > 0      ? t : 0;
+    clip_bot  = b < height ? b : height;
+    clip_left = l > 0      ? l : 0;
+    clip_rite = r < width  ? r : width;
 }
+

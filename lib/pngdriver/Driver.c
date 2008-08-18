@@ -34,7 +34,7 @@ const struct driver *PNG_Driver(void)
     drv.Line_width = PNG_Line_width;
     drv.Polydots = NULL;
     drv.Polyline = NULL;
-    drv.Polygon = NULL;
+    drv.Polygon = PNG_Polygon;
     drv.Set_window = PNG_Set_window;
     drv.Begin_scaled_raster = PNG_begin_scaled_raster;
     drv.Scaled_raster = PNG_scaled_raster;

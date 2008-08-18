@@ -30,7 +30,7 @@ int auto_write;
 int has_alpha;
 int mapped;
 
-int clip_top, clip_bot, clip_left, clip_rite;
+double clip_top, clip_bot, clip_left, clip_rite;
 int width, height;
 void *image;
 unsigned int *grid;
@@ -103,13 +103,13 @@ int PNG_Graph_set(void)
     if (do_read && access(file_name, 0) != 0)
 	do_read = 0;
 
-    width = screen_right - screen_left;
-    height = screen_bottom - screen_top;
+    width = screen_width;
+    height = screen_height;
 
-    clip_top = screen_top;
-    clip_bot = screen_bottom;
-    clip_left = screen_left;
-    clip_rite = screen_right;
+    clip_top = 0;
+    clip_bot = height;
+    clip_left = 0;
+    clip_rite = width;
 
     p = getenv("GRASS_TRANSPARENT");
     has_alpha = p && strcmp(p, "TRUE") == 0;

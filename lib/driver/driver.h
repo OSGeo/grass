@@ -6,10 +6,8 @@
 
 extern int NCOLORS;
 
-extern int screen_left;
-extern int screen_right;
-extern int screen_bottom;
-extern int screen_top;
+extern int screen_width;
+extern int screen_height;
 
 extern double cur_x;
 extern double cur_y;
@@ -56,7 +54,7 @@ struct driver
 /* Library Functions */
 
 /* init.c */
-extern int LIB_init(const struct driver *drv);
+extern void LIB_init(const struct driver *drv);
 
 /* Commands */
 
@@ -121,14 +119,11 @@ extern void COM_end_scaled_raster(void);
 extern void COM_Respond(void);
 
 /* Returns.c */
-extern double COM_Screen_left(void);
-extern double COM_Screen_rite(void);
-extern double COM_Screen_bot(void);
-extern double COM_Screen_top(void);
 extern int COM_Number_of_colors(void);
 
 /* Set_window.c */
 extern void COM_Set_window(double, double, double, double);
+extern void COM_Get_window(double *, double *, double *, double *);
 
 /* Text.c */
 extern void COM_Text(const char *);

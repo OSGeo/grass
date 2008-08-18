@@ -20,6 +20,7 @@ LIB_OBJS =	\
 	Graph_close.o		\
 	Graph_set.o		\
 	Line_width.o		\
+	Polygon.o		\
 	Raster.o		\
 	Respond.o		\
 	Set_window.o		\

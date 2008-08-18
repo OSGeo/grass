@@ -17,7 +17,7 @@ extern int auto_write;
 extern int has_alpha;
 extern int mapped;
 
-extern int clip_top, clip_bot, clip_left, clip_rite;
+extern double clip_top, clip_bot, clip_left, clip_rite;
 extern int width, height;
 extern unsigned int *grid;
 extern unsigned char png_palette[256][4];
@@ -50,6 +50,7 @@ extern void PNG_Erase(void);
 extern void PNG_Graph_close(void);
 extern int PNG_Graph_set(void);
 extern void PNG_Line_width(double);
+extern void PNG_Polygon(const double *, const double *, int);
 extern void PNG_begin_scaled_raster(int, int[2][2], double[2][2]);
 extern int PNG_scaled_raster(int, int, const unsigned char *,
 			     const unsigned char *, const unsigned char *,
