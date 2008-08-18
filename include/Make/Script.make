@@ -17,9 +17,14 @@ endif
 
 script: $(SCRIPT_ACTIONS)
 
-$(SCRIPT): $(PGM)
+$(SCRIPTDIR)/%: %.py
 	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
-	$(INSTALL) $(PGM) $(SCRIPT)
+	$(INSTALL) $< $@
+	$(MAKE) htmlscript scriptstrings
+
+$(SCRIPTDIR)/%: %
+	if [ ! -d $(SCRIPTDIR) ]; then $(MKDIR) $(SCRIPTDIR); fi
+	$(INSTALL) $< $@
 	$(MAKE) htmlscript scriptstrings
 
 $(BIN)/$(PGM).bat: $(MODULE_TOPDIR)/scripts/windows_launch.bat
