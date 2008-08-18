@@ -1,10 +1,265 @@
 <h2>DESCRIPTION</h2>
 
-TODO
+<b>Note:</b> <em>wxGUI Nviz extension is currently under development. Not
+all functionality is implemented.</em>
+
+<p>
+<b>wxGUI Nviz extension</b> allows users to realistically render multiple
+<em>surfaces</em> (raster data) in a 3D space, optionally using
+thematic coloring, draping 2D <em>vector</em> data over the surfaces,
+displaying 3D vector data in the space, and visualization
+of <em>volume</em> data (3D raster data).
+
+<p>
+Nviz is emphasized on the ease and speed of viewer positioning and
+provided flexibility for using a wide range of data. A low resolution
+surface or wire grid (optional) provides real-time viewer positioning
+capabilities. Coarse and fine resolution controls allow the user to
+further refine drawing speed and detail as needed. Continuous scaling
+of elevation provides the ability to use various data types for the
+vertical dimension.
+
+<p>
+For each session of Nviz, you might want the same set of 2D/3D raster
+and vector data, view parameters, or other attributes. For consistency
+between sessions, you can store this information in
+the <em>workspace</em> file (gxw). Workspace file contains information
+to restore "state" of the system in 2D and if Nviz is enabled also in
+the 3D display mode.
+
+<h2>Data visualization</h2>
+
+<h3>Surfaces</h3>
+
+Each active raster map layer from the current layer tree is displayed
+as surface in the 3D space. Separate raster data or constants can be
+used for various attributes of the surface:
+
+<ul>
+  <li><b>topography</b> - raster map or constant values used as elevation (z
+    values) for the current surface.</li>
+  <li><b>color</b> - raster map or constant color to drape over the current
+    surface. This option is useful for draping imagery such as aerial
+    photography over a DEM.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current surface.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current surface. The default is completely
+    opaque. Range from 0 (opaque) to 255 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current surface. Range from 0 to
+    255.</li>
+  <li><b>emission</b> - raster map or constant value that controls the
+    light emitted from the current surface. Range from 0 to 255.</li>
+</ul>
+
+<h3>Vector data</h3>
+
+2D vector data can be draped on the selected surfaces with various
+markers to represent point data; you can use attribute of vector
+features to determine size, color, shape of glyph.
+
+3D vector data including volumes (closed group of faces with one
+kernel inside) is also supported.
+
+<h3>Volumes</h3>
+
+Volumes can be displayed either as isosurfaces or slices. Various
+attributes of the isosurface can be defined, similarly to surface
+attributes:
+
+<ul>
+  <li><b>level</b> - reference isosurface level (height in map
+  units).</li>
+  <li><b>color</b> - raster map or constant color to drape over the
+  current volume.</li>
+  <li><b>mask</b> - raster map that controls the areas displayed from
+    the current volume.</li>
+  <li><b>transparency</b> - raster map or constant value that controls
+    the transparency of the current volume. The default is completely
+    opaque. Range from 0 (opaque) to 255 (transparent).</li>
+  <li><b>shininess</b> - raster map or constant value that controls
+    the shininess (reflectivity) of the current volume. Range from 0 to
+    255.</li>
+  <li><b>emission</b> - raster map or constant value that controls the
+    light emitted from the current volume. Range from 0 to 255.</li>
+</ul>
+
+<h2>Nviz Toolbox Window</h2>
+
+The toolbox window has currently three tabs:
+
+<ul>
+  <li>View<li>
+  <li>Layer properties<li>
+  <li>Settings</li>
+</ul>
+
+<h3>View</h3>
+
+You can use this panel to set the <em>position, direction, and
+  perspective</em> of the view. The position box shows a puck with a
+direction line pointing to the center. The direction line indicates
+the look direction (azimuth). You click and drag the puck to change
+the current eye position. The box annotations are North, South,
+East, and West. You can also set exact position using <em>Look
+  at</em> choice control.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_view.jpg" border="1"><br><br>
+</center>
+
+You can adjust the viewer's height above the scene, angle of view or
+twist value to rotate the scene about the horizontal axis. An angle of
+0 is flat. The scene rotates between -90 and 90 degrees.
+
+<p>
+  You can also adjusts the vertical exaggeration of the surface. As an
+  example, if the easting and northing are in meters and the elevation
+  in feet, a vertical exaggeration of 0.305 would produce a true
+  (unexaggerated) surface.
+  
+<p>
+  <em>Reset</em> returns all current settings to their default values.
+
+<h3>Surface properties</h3>
+
+This panel controls how loaded surfaces are drawn. The top half of the
+panel has options to set, unset or modify attributes of the current
+surface.The bottom half has drawing style options, masking or changing
+surface position in the space.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_surface.jpg" border="1"><br><br>
+</center>
+
+Surface can be drawn as a wire mesh or using filled polygons (most
+realistic). You can set draw <b>mode</b> to <em>coarse</em> (fast
+display mode), <em>fine</em> (draws surface as filled polygons with
+fine resolution) or <em>both</em> (which combines coarse and fine
+mode). Additionally set coarse <b>style</b> to <em>wire</em> to draw
+the surface as wire mesh (you can also choose color of the
+wire) or <em>surface</em> to draw the surface using coarse resolution
+filled polygons.  This is a low resolution version of the polygon
+surface style.
+
+E.g. surface is drawn as a wire mesh if you set <b>mode</b>
+to <em>coarse</em> and <b>style</b> to <em>wire</em>. Note that it
+differs from the mesh drawn in fast display mode because hidden lines
+are not drawn. To draw the surface using filled polygons, but with
+wire mesh draped over it, choose <b>mode</b> <em>both</em>
+and <b>style</b> <em>wire</em>.
+
+Beside mode and style you can also choose style of <b>shading</b> used
+for the surface. <em>Gouraud</em> style draws the surfaces with a
+smooth shading to blend individual cell colors together, <em>flat</em>
+draws the surfaces with flat shading with one color for every two
+cells. The surface appears faceted.
+
+<p>
+  To set given draw settings for all loaded surfaces press button
+  "All".
+
+<h3>Vector properties</h3>
+
+This panel controls how loaded 2D or 3D vector data are drawn.
+
+<p>
+You can define the width (in pixels) of the line features, the color
+used for lines or point markers.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_vector.jpg" border="1"><br><br>
+</center>
+
+If vector map is 2D you can display vector features as flat at a
+specified elevation or drape it over a surface(s) at a specified
+height. Use the height control to set the flat elevation or the drape
+height above the surface(s).
+
+<p>
+For display purposes, it is better to set the height slightly above
+the surface. If the height is set at zero, portions of the vector may
+disappear into the surface(s).
+
+<p>
+For 2D/3D vector points you can also set the size of the markers and
+the width (in pixels) of the line used to draw the point markers (only
+applies to wire-frame markers). Currently are implemented these
+markers:
+
+<ul>
+  <li><b>x</b> sets the current points markers to a 2D "X";</li>
+  <li><b>sphere</b> - solid 3D sphere;</li>
+  <li><b>diamond</b> - solid 3D diamond;</li>
+  <li><b>cube</b> - solid 3D cube;</li>
+  <li><b>box</b> - hollow 3D cube;</li>
+  <li><b>gyroscope</b> - hollow 3D sphere;</li>
+  <li><b>asterisk</b> - 3D line-star;</li>
+</ul>
+ 
+<h3>Volume properties</h3>
+
+This panel controls how loaded volumes are drawn. Volume can be drawn
+in two different modes: <b>isosurface</b> or <b>slice</b>. The top
+part of the panel has drawing style options. The middle part has
+controls to add, delete, move up/down selected isosurface or
+slices. The bottom part has options to set, unset or modify attributes
+of the current isosurface or slice.
+
+<center>
+  <br><img src="wxGUI_nviz_tools_volume.jpg" border="1"><br><br>
+</center>
+
+Similarly to surface panel you can define draw <b>shading</b>
+- <em>gouraud</em> (draws the volumes with a smooth shading to blend
+individual cell colors together) and <em>flat</em> (draws the volumes
+with flat shading with one color for every two cells. The volume
+appears faceted). As mentioned above currently are supported two
+visualization modes:
+
+<ul>
+  <li><b>isosurface</b> - the levels of values for drawing the
+  volume(s) as isosurfaces;</li>
+  <li>and <b>slice</b> - the levels of values for drawing the volume
+  as cross-sections.</li>
+</ul>
+
+<h2>Settings</h2>
+
+This panel has controls which allows user to set default surface,
+vector and volume data attributes. You can also modify default view
+parameters, or to set the background color of the Map Display Window
+(the default color is white).
+
+
+<h2>To be implement</h2>
+
+<ul>
+  <li>Improve intuitive navigation (mouse, fly mode)</li>
+  <li>Interactive lighting controls</li>
+  <li>Animation capabilities</li>
+  <li>Data querying and measuring</li>
+  <li>Arbitrary cutting planes</li>
+  <li>Labels, decoration, etc.</li>
+  <li>Scripting capabilities</li>
+  <li>Better workspace support (view settings, lighting)
+  <li>Image Dump</li>
+  <li>Surface - mask by zero/elevation, more interactive positioning</li>
+  <li>Vector points - implement display mode flat/surface for 2D points</li>
+  <li>Volume - slice draw mode</li>
+  <li>...</li>
+</ul>
 
 <h2>SEE ALSO</h2>
 
 See also <a href="http://grass.osgeo.org/wiki/WxNVIZ">Wiki</a> page.
+<br><br>
+
+Command-line module <em><a href="nviz_cmd.html">nviz_cmd</a></em>.
+<br><br>
+
+Original <a href="nviz.html">TCL/TK-based</a> Nviz.
 
 <h2>AUTHORS</h2>
 
