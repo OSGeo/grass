@@ -86,6 +86,17 @@ if test -n "$with_$1_share" ; then
 fi
 ])
 
+AC_DEFUN([LOC_CHECK_LDFLAGS],[
+AC_MSG_CHECKING(for $2 linking flags)
+case "$with_$1_ldflags" in
+y | ye | yes | n | no)
+	AC_MSG_ERROR([*** You must supply a directory to --with-$1-ldflags.])
+	;;
+esac
+AC_MSG_RESULT($with_$1_ldflags)
+$3="$$3 $with_$1_ldflags"
+])
+
 AC_DEFUN([LOC_CHECK_INCLUDES],[
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$3 $CPPFLAGS"
@@ -266,6 +277,11 @@ LOC_PAD([  --with-$1-includes=DIRS])[$2 include files are in DIRS])
 AC_DEFUN([LOC_ARG_WITH_LIB],[
 AC_ARG_WITH($1-libs,
 LOC_PAD([  --with-$1-libs=DIRS])[$2 library files are in DIRS])
+])
+
+AC_DEFUN([LOC_ARG_WITH_LDFLAGS],[
+AC_ARG_WITH($1-ldflags,
+LOC_PAD([  --with-$1-ldflags=FLAGS])[$2 needs FLAGS when linking])
 ])
 
 AC_DEFUN([LOC_ARG_WITH_SHARE],[
