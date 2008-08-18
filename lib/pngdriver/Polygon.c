@@ -26,10 +26,10 @@ static void fill(double x0, double x1, double y)
     int yi = (int) floor(y);
     int xi0 = (int) floor(x0 + 0.5);
     int xi1 = (int) floor(x1 + 0.5);
-    unsigned int *p = &grid[yi * width + xi1];
+    unsigned int *p;
     int x;
 
-    if (yi < clip_bot || yi >= clip_top)
+    if (yi >= clip_bot || yi < clip_top)
 	return;
 
     if (xi0 > clip_rite)
@@ -44,7 +44,7 @@ static void fill(double x0, double x1, double y)
     if (xi1 > clip_rite)
 	xi1 = clip_rite;
 
-    p = &grid[yi * width + xi1];
+    p = &grid[yi * width + xi0];
 
     for (x = xi0; x < xi1; x++)
 	*p++ = currentColor;
@@ -53,7 +53,7 @@ static void fill(double x0, double x1, double y)
 static void line(const struct point *p, int n, double y)
 {
     static double *xs;
-    static double max_x;
+    static int max_x;
     int num_x = 0;
     int i;
 
@@ -118,6 +118,8 @@ static void poly(const struct point *p, int n)
 
     if (y1 > clip_bot)
 	y1 = clip_bot;
+
+    y0 = floor(y0 + 0.5) + 0.5;
 
     for (y = y0; y < y1; y++)
 	line(p, n, y + 0.5);
