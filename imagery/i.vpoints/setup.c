@@ -42,8 +42,7 @@ int dsp_setup(int blank, struct Cell_head *cellhead)
     if (D_set_cur_wind(name))
 	G_fatal_error("Current graphics frame not available");
 
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error("Getting graphics coordinates");
+    D_get_screen_window(&t, &b, &l, &r);
 
     /* clear the window, if requested to do so */
     if (blank) {
