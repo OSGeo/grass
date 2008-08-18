@@ -108,7 +108,7 @@ class SQLFrame(wx.Frame):
         #
         # List Boxes
         #
-        self.list_columns = wx.ListBox(self, -1, wx.DefaultPosition, (-1, -1), self.column_names, wx.LB_MULTIPLE|wx.LB_SORT)
+        self.list_columns = wx.ListBox(self, -1, wx.DefaultPosition, (-1, -1), self.columns.keys(), wx.LB_MULTIPLE|wx.LB_SORT)
         self.list_values = wx.ListBox(self, -1, wx.DefaultPosition, (-1, -1), self.colvalues, wx.LB_MULTIPLE|wx.LB_SORT)
 
         #
