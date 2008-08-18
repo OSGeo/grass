@@ -58,6 +58,12 @@ def read_command(*args, **kwargs):
     ps = pipe_command(*args, **kwargs)
     return ps.communicate()[0]
 
+def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
+    args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    if env == None:
+	env = os.environ
+    os.execvpe(prog, args, env)
+
 # interface to g.message
 
 def message(msg, flag = None):
