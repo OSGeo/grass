@@ -80,10 +80,7 @@ class Layer(object):
                        (self.type, self.GetCmd(string=True), self.name, self.active,
                         self.opacity, self.hidden))
 
-        # generated file for layer
-        #self.gtemp = utils.GetTempfile()
-        #self.gtemp = os.tmpfile()
-        #self.maskfile = self.gtemp + ".pgm"
+        # generated file for each layer
         self.gtemp = tempfile.mkstemp()[1]
         self.maskfile = self.gtemp + ".pgm"
         if self.type == 'overlay':
@@ -111,17 +108,6 @@ class Layer(object):
         Debug.msg (3, "Layer.Render(): type=%s, name=%s" % \
                        (self.type, self.name))
 
-        #
-        # to be sure, set temporary file with layer and mask
-        #
-        #if not self.gtemp:
-        #gtemp = utils.GetTempfile()
-        #gtemp = tempfile.mkstemp()[1]
-        #self.maskfile = gtemp + ".pgm"
-        #if self.type == 'overlay':
-        #    self.mapfile  = gtemp + ".png"
-        #else:
-        #    self.mapfile  = gtemp + ".ppm"
 
         #
         # prepare command for each layer
@@ -154,12 +140,21 @@ class Layer(object):
         try:
             runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
                                   stderr=None)
+
             if runcmd.returncode != 0:
+                #clean up after probley
+                os.remove(self.mapfile)
+                os.remove(self.maskfile)
+                os.remove(self.gtemp)
                 self.mapfile = None
                 self.maskfile = None
 
         except gcmd.CmdError, e:
             print >> sys.stderr, e
+            #clean up after probley
+            os.remove(self.mapfile)
+            os.remove(self.maskfile)
+            os.remove(self.gtemp)
             self.mapfile = None
             self.maskfile = None
 
@@ -349,9 +344,10 @@ class Map(object):
         self.gisrc = gisrc
         
         # 
-        # generated file for rendering the map
+        # generated file for g.pnmcomp output for rendering the map
         #
-        self.mapfile   = utils.GetTempfile()
+        #self.mapfile   = utils.GetTempfile()
+        self.mapfile = tempfile.mkstemp(suffix='.ppm')[1]
 
         # setting some initial env. variables
         self.InitGisEnv() # g.gisenv
@@ -837,7 +833,7 @@ class Map(object):
             if mapWindow is not None:
                 mapWindow.onRenderCounter += 1
 
-            wx.Yield()
+            wx.SafeYield()
             
             # add image to compositing list
             if layer.type != "overlay":
@@ -1215,22 +1211,26 @@ class Map(object):
         @return None on success
         """
         try:
+            dir = os.path.dirname(self.mapfile)
+            base = os.path.basename(self.mapfile).split('.')[0]
+            removepath = os.path.join(dir,base)+r'*'
+            for f in glob.glob(removepath):
+                os.remove(f)
             for layer in self.layers:
                 if layer.mapfile:
-                    base = os.path.split(layer.mapfile)[0]
-                    mapfile = os.path.split(layer.mapfile)[1]
-                    tempbase = mapfile.split('.')[0]
-                    basefile = os.path.join(base,tempbase)+r'.*'
-                    for f in glob.glob(basefile):
+                    dir = os.path.dirname(layer.mapfile)
+                    base = os.path.basename(layer.mapfile).split('.')[0]
+                    removepath = os.path.join(dir,base)+r'*'
+                    for f in glob.glob(removepath):
                         os.remove(f)
                 self.layers.remove(layer)
+                
             for overlay in self.overlays:
-                if overlay.ovlfile:
-                    base = os.path.split(overlay.ovlfile)[0]
-                    mapfile = os.path.split(overlay.ovlfile)[1]
-                    tempbase = mapfile.split('.')[0]
-                    basefile = os.path.join(base,tempbase)+r'.*'
-                    for f in glob.glob(basefile):
+                if overlay.mapfile:
+                    dir = os.path.dirname(overlay.mapfile)
+                    base = os.path.basename(overlay.mapfile).split('.')[0]
+                    removepath = os.path.join(dir,base)+r'*'
+                    for f in glob.glob(removepath):
                         os.remove(f)
                 self.overlays.remove(overlay)
             return None
