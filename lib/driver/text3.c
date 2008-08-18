@@ -111,7 +111,7 @@ static void draw_main(int x, int y,
     /* init point */
     pen.x = x * 64;
     /* pen.y = 0; */
-    pen.y = (screen_bottom - y) * 64;
+    pen.y = (screen_height - y) * 64;
 
     /* convert string to:shift-jis from:encoding */
     outlen = convert_str(encoding, string, &out);
@@ -207,10 +207,10 @@ static void draw_text(FT_Face face, FT_Vector * pen, FT_Matrix * matrix,
 	/* draw bitmap */
 	if (!fdont_draw)
 	    draw_bitmap(&slot->bitmap, slot->bitmap_left,
-			screen_bottom - slot->bitmap_top);
+			screen_height - slot->bitmap_top);
 	else
 	    set_text_box(&slot->bitmap, slot->bitmap_left,
-			 screen_bottom - slot->bitmap_top);
+			 screen_height - slot->bitmap_top);
 
 	/* increment pen position */
 	pen->x += slot->advance.x;

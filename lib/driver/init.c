@@ -28,10 +28,8 @@ struct GFONT_CAP *ftcap;
 
 int NCOLORS;
 
-int screen_left;
-int screen_right;
-int screen_bottom;
-int screen_top;
+int screen_width;
+int screen_height;
 
 double cur_x;
 double cur_y;
@@ -41,7 +39,7 @@ double text_size_y;
 double text_rotation;
 int matrix_valid;
 
-int LIB_init(const struct driver *drv)
+void LIB_init(const struct driver *drv)
 {
     const char *p;
 
@@ -51,15 +49,13 @@ int LIB_init(const struct driver *drv)
     /* initialize graphics */
 
     p = getenv("GRASS_WIDTH");
-    screen_left = 0;
-    screen_right = (p && atoi(p)) ? atoi(p) : DEF_WIDTH;
+    screen_width = (p && atoi(p)) ? atoi(p) : DEF_WIDTH;
 
     p = getenv("GRASS_HEIGHT");
-    screen_top = 0;
-    screen_bottom = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
+    screen_height = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
     if (COM_Graph_set() < 0)
 	exit(1);
 
-    return 0;
+    COM_Set_window(0, screen_height, 0, screen_width);
 }

@@ -105,7 +105,7 @@ int HTML_Graph_set(void)
 
 
     G_message("HTMLMAP: collecting to file: %s\n width = %d, height = %d, ",
-	      file_name, screen_right, screen_bottom);
+	      file_name, screen_width, screen_height);
 
     /*
      * check type of map wanted

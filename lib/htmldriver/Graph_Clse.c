@@ -147,7 +147,7 @@ void HTML_Graph_close(void)
     case CLIENT:
 	fprintf(output,
 		"<AREA SHAPE=\"RECT\" NOHREF COORDS=\"%d,%d %d,%d\">\n",
-		screen_left, screen_top, screen_right, screen_bottom);
+		0, 0, screen_width, screen_height);
 	fprintf(output, "</MAP>\n");
 	break;
 

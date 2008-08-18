@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <time.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include "psdriver.h"
@@ -23,12 +24,12 @@
 const char *file_name;
 FILE *outfp;
 int true_color;
-int width, height;
 int encapsulated;
 int no_header, no_trailer;
+double left, right, bot, top;
 
+static double width, height;
 static int landscape;
-static int left, right, bot, top;
 
 struct paper
 {
@@ -76,7 +77,9 @@ static void write_prolog(void)
     output("%%%%Title: %s\n", file_name);
     output("%%%%For: %s\n", G_whoami());
     output("%%%%Orientation: %s\n", landscape ? "Landscape" : "Portrait");
-    output("%%%%BoundingBox: %d %d %d %d\n", left, bot, right, top);
+    output("%%%%BoundingBox: %d %d %d %d\n",
+	   (int)floor(left), (int)floor(bot),
+	   (int)ceil(right), (int)ceil(top));
     output("%%%%CreationDate: %s\n", date_str);
     output("%%%%EndComments\n");
 
@@ -98,27 +101,27 @@ void write_setup(void)
 {
     output("%%%%BeginSetup\n");
 
-    output("%d %d translate\n", left, bot);
+    output("%.1f %.1f translate\n", left, bot);
 
     if (landscape)
 	output("90 rotate 0 1 -1 scale\n");
     else
-	output("0 %d translate 1 -1 scale\n", height);
+	output("0 %.1f translate 1 -1 scale\n", height);
 
-    output("%d %d BEGIN\n", width, height);
+    output("%.1f %.1f BEGIN\n", width, height);
 
     output("%%%%EndSetup\n");
     output("%%%%Page: 1 1\n");
 }
 
-static int in2pt(double x)
+static double in2pt(double x)
 {
-    return (int)(x * 72);
+    return x * 72;
 }
 
-static void swap(int *x, int *y)
+static void swap(double *x, double *y)
 {
-    int tmp = *x;
+    double tmp = *x;
 
     *x = *y;
     *y = tmp;
@@ -130,8 +133,8 @@ static void get_paper(void)
     const struct paper *paper;
     int i;
 
-    width = screen_right - screen_left;
-    height = screen_bottom - screen_top;
+    width = screen_width;
+    height = screen_height;
 
     left = 0;
     right = width;
@@ -165,8 +168,8 @@ static void get_paper(void)
     if (landscape)
 	swap(&width, &height);
 
-    screen_right = screen_left + width;
-    screen_bottom = screen_top + height;
+    right = left + width;
+    bot = top + height;
 }
 
 int PS_Graph_set(void)
@@ -212,8 +215,8 @@ int PS_Graph_set(void)
 	write_setup();
     }
 
-    G_message
-	("PS: collecting to file: %s,\n     GRASS_WIDTH=%d, GRASS_HEIGHT=%d",
+    G_message(
+	"PS: collecting to file: %s,\nGRASS_WIDTH=%.1f, GRASS_HEIGHT=%.1f",
 	 file_name, width, height);
 
     fflush(outfp);

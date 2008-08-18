@@ -52,9 +52,8 @@ int main(int argc, char *argv[])
 
     D_erase(color->answer);
 
-    if (eraseframe->answer) {
-	D_full_screen();
-    }
+    if (eraseframe->answer)
+	R_erase();
 
     R_close_driver();
 

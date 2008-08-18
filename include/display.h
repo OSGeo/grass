@@ -72,11 +72,6 @@ void D_line_abs(double, double, double, double);
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);
 
-/* list.c */
-void D_clear_window(void);
-void D_set_erase_color(const char *);
-void D_get_erase_color(char *);
-
 /* raster.c */
 int D_draw_raster(int, const void *, struct Colors *, RASTER_MAP_TYPE);
 int D_draw_d_raster(int, const DCELL *, struct Colors *);
@@ -98,7 +93,7 @@ int D_f_color(FCELL, struct Colors *);
 int D_color_of_type(const void *, struct Colors *, RASTER_MAP_TYPE);
 
 /* setup.c */
-int D_setup(int);
+void D_setup(int);
 
 /* symbol.c */
 void D_symbol(const SYMBOL *, double, double, const RGBA_Color *,
@@ -115,16 +110,9 @@ int D_raster_use_color(int);
 int D_color_number_to_RGB(int, int *, int *, int *);
 
 /* window.c */
-void D_new_window(char *, double, double, double, double);
-void D_new_window_percent(char *, double, double, double, double);
-void D_show_window(int);
-int D_get_screen_window(double *, double *, double *, double *);
+void D_set_window(double, double, double, double);
+void D_get_screen_window(double *, double *, double *, double *);
 void D_check_map_window(struct Cell_head *);
-void D_reset_screen_window(double, double, double, double);
-void D_remove_window(void);
-void D_erase_window(void);
 void D_erase(const char *);
-void D_remove_windows(void);
-void D_full_screen(void);
 
 #endif /* GRASS_DISPLAY_H */

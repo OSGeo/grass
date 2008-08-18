@@ -4,9 +4,6 @@
  *   if "name" is an empty string, the routine returns a unique
  *   string in "name"
  *
- * D_reset_screen_window(t, b, l, r)
- *   resets the edges of the current window
- *
  * D_show_window(color)
  *   outlines current window in color (from ../colors.h)
  *
@@ -18,9 +15,6 @@
  *       map window is read into the struct "wind"
  *   else
  *       struct "wind" is written to map window (m_win)
- *
- * D_remove_window()
- *   remove any trace of window
  *
  * D_erase_window()
  *   Erases the window on scree.  Does not affect window contents list.
@@ -40,13 +34,14 @@ static int screen_window_set;
 static struct Cell_head map_window;
 static int map_window_set;
 
-static void D_set_window(double t, double b, double l, double r)
+void D_set_window(double t, double b, double l, double r)
 {
     screen_window.t = t;
     screen_window.b = b;
     screen_window.l = l;
     screen_window.r = r;
     screen_window_set = 1;
+    R_set_window(t, b, l, r);
 }
 
 /*!
@@ -62,14 +57,12 @@ static void D_set_window(double t, double b, double l, double r)
  *  \return int
  */
 
-int D_get_screen_window(double *t, double *b, double *l, double *r)
+void D_get_screen_window(double *t, double *b, double *l, double *r)
 {
-    if (!screen_window_set)
-    {
-	screen_window.t = R_screen_top();
-	screen_window.b = R_screen_bot();
-	screen_window.l = R_screen_left();
-	screen_window.r = R_screen_rite();
+    if (!screen_window_set) {
+	R_get_window(
+	    &screen_window.t, &screen_window.b,
+	    &screen_window.l, &screen_window.r);
 	screen_window_set = 1;
     }
 
@@ -77,101 +70,6 @@ int D_get_screen_window(double *t, double *b, double *l, double *r)
     *b = screen_window.b;
     *l = screen_window.l;
     *r = screen_window.r;
-
-    return 0;
-}
-
-
-/*!
- * \brief create new graphics frame
- *
- * Creates a new frame <b>name</b> with
- * coordinates <b>top, bottom, left</b>, and <b>right.</b> If <b>name</b>
- * is the empty string '''' (i.e., *<b>name</b> = = 0), the routine returns a
- * unique string in <b>name.</b>
- *
- *  \param name
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
- *  \return void
- */
-
-void D_new_window(char *name, double t, double b, double l, double r)
-{
-    screen_window_set = 0;
-    map_window_set = 0;
-    D_set_window(t, b, l, r);
-}
-
-
-/*!
- * \brief create new graphics frame, with coordinates in percent
- *
- * Creates a new frame <b>name</b> with coordinates <b>top, bottom,
- * left</b>, and <b>right</b> as percentages of the screen size.
- * If <b>name</b> is the empty string "" (i.e., *<b>name</b> == 0),
- * the routine returns a unique string in <b>name.</b>
- *
- *  \param name
- *  \param bottom
- *  \param top
- *  \param left
- *  \param right
- *  \return void
- */
-
-void D_new_window_percent(char *name, double b, double t, double l, double r)
-{
-    double scr_t = R_screen_top();
-    double scr_b = R_screen_bot();
-    double scr_l = R_screen_left();
-    double scr_r = R_screen_rite();
-
-    double win_t = 0.5 + scr_t + (scr_b - scr_t) * (100. - t) / 100.0;
-    double win_b = 0.5 + scr_t + (scr_b - scr_t) * (100. - b) / 100.0;
-    double win_l = 0.5 + scr_l + (scr_r - scr_l) * l / 100.0;
-    double win_r = 0.5 + scr_l + (scr_r - scr_l) * r / 100.0;
-
-    if (win_t < scr_t)
-	win_t = scr_t;
-    if (win_b > scr_b)
-	win_b = scr_b;
-    if (win_l < scr_l)
-	win_l = scr_l;
-    if (win_r > scr_r)
-	win_r = scr_r;
-
-    D_new_window(name, win_t, win_b, win_l, win_r);
-}
-
-
-/*!
- * \brief outlines current frame
- *
- * Outlines
- * current frame in <b>color.</b> Appropriate colors are found in
- * $GISBASE/src/D/libes/colors.h\remarks{$GISBASE is the directory where GRASS
- * is installed. See UNIX_Environment for details.} and are spelled
- * with lowercase letters.
- *
- *  \param color
- *  \return void
- */
-
-void D_show_window(int color)
-{
-    double t, b, l, r;
-
-    D_get_screen_window(&t, &b, &l, &r);
-
-    R_standard_color(color);
-    R_move_abs(l, b);
-    R_cont_abs(l, t);
-    R_cont_abs(r, t);
-    R_cont_abs(r, b);
-    R_cont_abs(l, b);
 }
 
 
@@ -200,40 +98,6 @@ void D_check_map_window(struct Cell_head *wind)
     }
 }
 
-
-/*!
- * \brief resets current frame position
- *
- * Re-establishes the screen position of a
- * frame at the location specified by <b>top, bottom, left, and right.</b>
- *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
- *  \return void
- */
-
-void D_reset_screen_window(double t, double b, double l, double r)
-{
-    D_set_window(t, b, l, r);
-}
-
-/*!
- * \brief remove a frame
- *
- * Removes any trace of the
- * current frame.
- *
- *  \param ~
- */
-
-void D_remove_window(void)
-{
-    screen_window_set = 0;
-    map_window_set = 0;
-}
-
 /*!
  * \brief erase current frame
  *
@@ -243,22 +107,12 @@ void D_remove_window(void)
  *  \param ~
  */
 
-void D_erase_window(void)
-{
-    double t, b, l, r;
-
-    D_get_screen_window(&t, &b, &l, &r);
-    R_box_abs(l, t, r, b);
-    R_flush();
-}
-
 void D_erase(const char *color)
 {
     double t, b, l, r;
     int colorindex;
 
     D_get_screen_window(&t, &b, &l, &r);
-    D_clear_window();
 
     /* Parse and select background color */
     colorindex = D_parse_color(color, 0);
@@ -266,24 +120,5 @@ void D_erase(const char *color)
 
     /* Do the plotting */
     R_box_abs(l, t, r, b);
-
-    /* Add erase item to the pad */
-    D_set_erase_color(color);
-}
-
-void D_remove_windows(void)
-{
-    screen_window_set = 0;
-    map_window_set = 0;
-}
-
-void D_full_screen(void)
-{
-    D_remove_windows();
-
-    D_new_window_percent("full_screen", 0.0, 100.0, 0.0, 100.0);
-
-    R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
-    R_erase();
 }
 

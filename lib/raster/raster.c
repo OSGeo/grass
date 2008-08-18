@@ -26,17 +26,28 @@ static void init(void)
 {
     const char *fenc = getenv("GRASS_ENCODING");
     const char *font = getenv("GRASS_FONT");
-    int t = R_screen_top();
-    int b = R_screen_bot();
-    int l = R_screen_left();
-    int r = R_screen_rite();
+    const char *line_width = getenv("GRASS_LINE_WIDTH");
+    const char *text_size = getenv("GRASS_TEXT_SIZE");
+    const char *frame = getenv("GRASS_FRAME");
 
     R_font(font ? font : "romans");
 
     if (fenc)
 	R_encoding(fenc);
 
-    R_set_window(t, b, l, r);
+    if (line_width)
+	R_line_width(atof(line_width));
+
+    if (text_size) {
+	double s = atof(text_size);
+	R_text_size(s, s);
+    }
+
+    if (frame) {
+	double t, b, l, r;
+	sscanf(frame, "%lf,%lf,%lf,%lf", &t, &b, &l, &r);
+	R_set_window(t, b, l, r);
+    }
 }
 
 int R_open_driver(void)
@@ -74,63 +85,6 @@ void R_close_driver(void)
 
     if (cmd)
 	system(cmd);
-}
-
-/*!
- * \brief screen left edge
- *
- * Returns the coordinate of the left edge of the screen.
- *
- *  \param void
- *  \return double
- */
-
-double R_screen_left(void)
-{
-    return COM_Screen_left();
-}
-
-/*!
- * \brief screen right edge
- *
- * Returns the coordinate of the right edge of the screen.
- *
- *  \param void
- *  \return double
- */
-
-double R_screen_rite(void)
-{
-    return COM_Screen_rite();
-}
-
-/*!
- * \brief bottom of screen
- *
- * Returns the coordinate of the bottom of the screen.
- *
- *  \param void
- *  \return double
- */
-
-double R_screen_bot(void)
-{
-    return COM_Screen_bot();
-}
-
-
-/*!
- * \brief top of screen
- *
- * Returns the coordinate of the top of the screen.
- *
- *  \param void
- *  \return double
- */
-
-double R_screen_top(void)
-{
-    return COM_Screen_top();
 }
 
 int R_get_num_colors(void)
@@ -454,10 +408,10 @@ void R_text_rotation(double rotation)
 }
 
 /*!
- * \brief set text clipping frame
+ * \brief set clipping frame
  *
- * Subsequent calls to <i>R_text</i> will have text strings
- * clipped to the screen frame defined by <b>top, bottom, left, right.</b>
+ * Subsequent drawing operations will be clipped to the screen frame
+ * defined by <b>top, bottom, left, right.</b>
  *
  *  \param t top
  *  \param b bottom
@@ -469,6 +423,23 @@ void R_text_rotation(double rotation)
 void R_set_window(double t, double b, double l, double r)
 {
     COM_Set_window(t, b, l, r);
+}
+
+/*!
+ * \brief get clipping frame
+ *
+ * Retrieve clipping frame
+ *
+ *  \param t top
+ *  \param b bottom
+ *  \param l left
+ *  \param r right
+ *  \return void
+ */
+
+void R_get_window(double *t, double *b, double *l, double *r)
+{
+    return COM_Get_window(t, b, l, r);
 }
 
 /*!

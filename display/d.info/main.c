@@ -71,12 +71,8 @@ int main(int argc, char *argv[])
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    if (rflag->answer || dflag->answer) {
-	l = R_screen_left();
-	r = R_screen_rite();
-	t = R_screen_top();
-	b = R_screen_bot();
-    }
+    if (rflag->answer || dflag->answer)
+	R_get_window(&t, &b, &l, &r);
 
     if (rflag->answer)
 	fprintf(stdout, "rectangle: %f %f %f %f\n", l, r, t, b);

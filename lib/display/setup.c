@@ -56,25 +56,16 @@
  *  \return int
  */
 
-int D_setup(int clear)
+void D_setup(int clear)
 {
     struct Cell_head region;
     double t, b, l, r;
 
-    t = R_screen_top();
-    b = R_screen_bot();
-    l = R_screen_left();
-    r = R_screen_rite();
-    D_new_window("full_screen", t, b, l, r);
-
     D_get_screen_window(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
-    if (clear) {
-	D_clear_window();
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
-	R_box_abs(l, t, r, b);
-    }
+    if (clear)
+	D_erase(DEFAULT_BG_COLOR);
 
     /* Set the map region associated with graphics frame */
     G_get_set_window(&region);
@@ -88,7 +79,4 @@ int D_setup(int clear)
 
     /* set text clipping, for good measure */
     R_set_window(t, b, l, r);
-    R_move_abs(0, 0);
-    D_move_abs(0, 0);
-    return 0;
 }

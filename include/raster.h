@@ -5,12 +5,9 @@ void R_flush(void);
 int R_open_driver(void);
 void R_close_driver(void);
 
-double R_screen_left(void);
-double R_screen_rite(void);
-double R_screen_bot(void);
-double R_screen_top(void);
-
 int R_get_num_colors(void);
+void R_set_window(double, double, double, double);
+void R_get_window(double *, double *, double *, double *);
 
 void R_standard_color(int);
 void R_RGB_color(int, int, int);
@@ -33,7 +30,6 @@ void R_box_rel(double, double);
 
 void R_text_size(double, double);
 void R_text_rotation(double);
-void R_set_window(double, double, double, double);
 void R_text(const char *);
 void R_get_text_box(const char *, double *, double *, double *, double *);
 

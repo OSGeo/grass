@@ -104,8 +104,8 @@ static int init_file(void)
     char *p;
 
     /* set image properties */
-    width = screen_right - screen_left;
-    height = screen_bottom - screen_top;
+    width = screen_width;
+    height = screen_height;
     stride = width * 4;
 
     /* get file name */
