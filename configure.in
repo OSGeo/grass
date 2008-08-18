@@ -263,6 +263,10 @@ LOC_ARG_WITH_LIB(lapack, LAPACK)
 LOC_ARG_WITH_INC(motif, Motif)
 LOC_ARG_WITH_LIB(motif, Motif)
 
+LOC_ARG_WITH_INC(cairo, cairo)
+LOC_ARG_WITH_LIB(cairo, cairo)
+LOC_ARG_WITH_LDFLAGS(cairo, cairo)
+
 LOC_ARG_WITH_INC(freetype, FreeType)
 LOC_ARG_WITH_LIB(freetype, FreeType)
 
@@ -1377,13 +1381,20 @@ if test -n "$USE_CAIRO"; then
 
 CAIROINC=`pkg-config --cflags cairo`
 
+LOC_CHECK_INC_PATH(cairo,cairo,CAIROINC)
+
 LOC_CHECK_INCLUDES(cairo.h,Cairo,$CAIROINC)
 
 # With Cairo library directory
 
 CAIROLIB=`pkg-config --libs cairo`
 
+LOC_CHECK_LIB_PATH(cairo,cairo,CAIROLIB)
+LOC_CHECK_LDFLAGS(cairo,cairo,CAIROLIB)
+
 LOC_CHECK_FUNC(cairo_create,,,,,$CAIROLIB,[:])
+
+CAIROLIB="$CAIROLIB $CAIROLDFLAGS"
 
 fi # $USE_CAIRO
 
