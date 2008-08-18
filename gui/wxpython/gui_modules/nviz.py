@@ -19,6 +19,8 @@ for details.
 
 errorMsg = ''
 
+import sys
+
 import wx
 try:
     from wx import glcanvas
