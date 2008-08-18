@@ -318,7 +318,9 @@ class Map(object):
     """
     Map composition (stack of map layers and overlays)
     """
-    def __init__(self, gisrc=None):
+    def __init__(self, gisrc=None, window=None):
+        self.window = window # used for wx.SafeYield()
+        
         # 
         # region/extent settigns
         #
@@ -833,7 +835,7 @@ class Map(object):
             if mapWindow is not None:
                 mapWindow.onRenderCounter += 1
 
-            wx.SafeYield()
+            wx.SafeYield(self.window)
             
             # add image to compositing list
             if layer.type != "overlay":

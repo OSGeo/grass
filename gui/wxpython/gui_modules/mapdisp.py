@@ -2399,6 +2399,7 @@ class MapFrame(wx.Frame):
 
         self.gismanager = gismgr    # GIS Manager object
         self.Map        = Map       # instance of render.Map
+        self.Map.window = self
         self.tree       = tree      # GIS Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # GIS Manager layer tree notebook
