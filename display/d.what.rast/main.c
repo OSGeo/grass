@@ -99,8 +99,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Can't set current graphics window"));
 
     /* Determine conversion factors */
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error(_("Getting graphics window coordinates"));
+    D_get_screen_window(&t, &b, &l, &r);
     if (D_do_conversions(&window, t, b, l, r))
 	G_fatal_error(_("Error in calculating conversions"));
 

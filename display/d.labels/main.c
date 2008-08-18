@@ -123,8 +123,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Current window not settable"));
 
     /* Determine conversion factors */
-    if (D_get_screen_window(&t, &b, &l, &r))
-	G_fatal_error(_("Getting screen window"));
+    D_get_screen_window(&t, &b, &l, &r);
     if (D_do_conversions(&window, t, b, l, r))
 	G_fatal_error(_("Error in calculating conversions"));
 
