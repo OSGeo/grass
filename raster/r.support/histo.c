@@ -30,8 +30,10 @@ int do_histogram(const char *name)
 
     G_init_cell_stats(&statf);
     for (row = 0; row < nrows; row++) {
-	if (G_get_map_row_nomask(fd, cell, row) < 0)
+	if (G_get_map_row_nomask(fd, cell, row) < 0) {
+	    G_warning(_("Unable to read row %d"), row);
 	    break;
+	}
 
 	G_update_cell_stats(cell, ncols, &statf);
     }
@@ -43,8 +45,8 @@ int do_histogram(const char *name)
     G_close_cell(fd);
     G_free(cell);
 
-    if (row == nrows)
-	return EXIT_SUCCESS;
+    if (row < nrows)
+	return -1;
 
-    return EXIT_FAILURE;
+    return 0;
 }

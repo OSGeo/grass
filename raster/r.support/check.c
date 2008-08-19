@@ -23,10 +23,11 @@ int check_stats(const char *name)
     data_type = G_raster_map_type(name, "");
 
     G_message(_("\n  Updating statistics for [%s]"), name);
-    if (!do_histogram(name))
-	return EXIT_SUCCESS;
+    if (do_histogram(name) < 0)
+	return 0;
+
     if (G_read_histogram(name, "", &histogram) <= 0)
-	return EXIT_SUCCESS;
+	return 0;
 
     /* Init histogram range */
     if (data_type == CELL_TYPE)
@@ -72,5 +73,5 @@ int check_stats(const char *name)
     G_free_histogram(&histogram);
     G_free_cats(&cats);
 
-    return EXIT_SUCCESS;
+    return 0;
 }
