@@ -33,12 +33,15 @@ except:
 import tempfile
 
 import wx
+from wx.lib.newevent import NewEvent
 
 import globalvar
 import utils
 import gcmd
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
+
+wxUpdateProgressBar, EVT_UPDATE_PRGBAR = NewEvent()
 
 #
 # use g.pnmcomp for creating image composition or
@@ -318,9 +321,7 @@ class Map(object):
     """
     Map composition (stack of map layers and overlays)
     """
-    def __init__(self, gisrc=None, window=None):
-        self.window = window # used for wx.SafeYield()
-        
+    def __init__(self, gisrc=None):
         # 
         # region/extent settigns
         #
@@ -818,6 +819,7 @@ class Map(object):
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
 
         # render map layers
+        ilayer = 1
         for layer in self.layers + self.overlays:
             # skip dead or disabled map layers
             if layer == None or layer.active == False:
@@ -832,10 +834,9 @@ class Map(object):
                     continue
             
             # update progress bar
-            if mapWindow is not None:
-                mapWindow.onRenderCounter += 1
-
-            wx.SafeYield(self.window)
+            wx.SafeYield(mapWindow)
+            event = wxUpdateProgressBar(value=ilayer)
+            wx.PostEvent(mapWindow, event)
             
             # add image to compositing list
             if layer.type != "overlay":
@@ -844,7 +845,8 @@ class Map(object):
                 opacities.append(str(layer.opacity))
                 
             Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
-
+            ilayer += 1
+        
         # ugly hack for MSYS
         if not subprocess.mswindows:
             mapstr = ",".join(maps)
