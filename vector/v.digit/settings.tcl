@@ -13,6 +13,7 @@ proc color2rgb { color } {
 proc set_color { col color } {
     set clr [ color2rgb $color] 
     c_set_color $col [lindex $clr 0]  [lindex $clr 1]  [lindex $clr 2]
+    if {$col == "background"} {.screen.canvas configure -background $color}
 }
 
 proc set_on { code on } {
