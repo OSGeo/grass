@@ -91,6 +91,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
         self.treepg = parent        # notebook page holding layer tree
         self.auimgr = kargs['auimgr']       # aui manager
+        self.rerender = False       # layer change requires a reordering and rerendering (if auto render)
 
         # init associated map display
         self.mapdisplay = mapdisp.MapFrame(self,
@@ -188,7 +189,21 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         #self.Bind(wx.EVT_TREE_END_LABEL_EDIT,   self.OnChangeLayerName)
         self.Bind(wx.EVT_KEY_UP,                self.OnKeyUp)
         # self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
+        self.Bind(wx.EVT_IDLE,                  self.OnIdle)
                 
+    def OnIdle(self, event):
+        """
+        Only re-order and re-render a composite map image from GRASS during
+        idle time instead of multiple times during layer changing.
+        """
+        if self.rerender:
+            if self.mapdisplay.autoRender.GetValue():
+                self.mapdisplay.MapWindow.UpdateMap(render=True)
+            self.rerender = False
+
+        event.Skip()
+
+
     def OnKeyUp(self, event):
         """Key pressed"""
         key = event.GetKeyCode()
@@ -479,8 +494,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                              layerbase + ' (opacity: ' + str(opacity_pct) + '%)')
             
             # redraw map if auto-rendering is enabled
-            if self.mapdisplay.autoRender.GetValue(): 
-                self.mapdisplay.OnRender(None)
+            self.rerender = True
+            #if self.mapdisplay.autoRender.GetValue():
+            #    print "*** Opacity OnRender *****"
+            #    self.mapdisplay.OnRender(None)
 
     def OnNvizProperties(self, event):
         """Nviz-related properties (raster/vector/volume)
@@ -843,8 +860,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             pass
 
         # redraw map if auto-rendering is enabled
-        if self.mapdisplay.autoRender.GetValue(): 
-            self.mapdisplay.OnRender(None)
+        self.rerender = True
+        #if self.mapdisplay.autoRender.GetValue():
+        #    print "*** Delete OnRender *****"
+        #    self.mapdisplay.OnRender(None)
 
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers (updateTool=True)
@@ -918,8 +937,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.SetStatusText("", 0)
 
         # redraw map if auto-rendering is enabled
-        if self.mapdisplay.autoRender.GetValue(): 
-            self.mapdisplay.OnRender(None)
+        self.rerender = True
+        #if self.mapdisplay.autoRender.GetValue():
+        #    print "*** Checked OnRender *****"
+        #    self.mapdisplay.OnRender(None)
 
     def OnCmdChanged(self, event):
         """Change command string"""
@@ -1048,11 +1069,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             pass
 
         # reorder layers in render.Map to match new order after drag and drop
-        self.ReorderLayers()
+        #self.ReorderLayers()
 
         # redraw map if auto-rendering is enabled
-        if self.mapdisplay.autoRender.GetValue(): 
-            self.mapdisplay.OnRender(None)
+        self.rerender = True
+        #if self.mapdisplay.autoRender.GetValue():
+        #    print "*** Drop OnRender *****"
+        #    self.mapdisplay.OnRender(None)
 
         # select new item
         self.SelectItem(newItem)
@@ -1069,13 +1092,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         image   = self.GetItemImage(dragItem, 0)
         text    = self.GetItemText(dragItem)
         if self.GetPyData(dragItem)[0]['ctrl']:
-            # recreate spin/text control for layer
+            # recreate data layer
             btnbmp = Icons["layeropts"].GetBitmap((16,16))
             newctrl = buttons.GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
             newctrl.SetToolTipString(_("Click to edit layer settings"))
             self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenu, newctrl)
-            opacity = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
-            windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
             data    = self.GetPyData(dragItem)
         
         elif self.GetPyData(dragItem)[0]['type'] == 'command':
@@ -1090,13 +1111,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 pass
             newctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
             newctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
-            windval = self.GetPyData(dragItem)[0]['maplayer'].GetOpacity()
             data    = self.GetPyData(dragItem)
 
         elif self.GetPyData(dragItem)[0]['type'] == 'group':
-            #recreate group
+            # recreate group
             newctrl = None
-            windval = None
             data    = None
             
         # decide where to put recreated item
@@ -1139,7 +1158,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             self.GetPyData(newItem)[0]['ctrl'] = None
             
-        self.CheckItem(newItem, checked=checked)
+        self.CheckItem(newItem, checked=checked) # causes a new render
 
         # newItem.SetHeight(TREE_ITEM_HEIGHT)
 
@@ -1228,7 +1247,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             else:
                 vislayer = self.GetNextVisible(vislayer)
 
-        Debug.msg (4, "LayerTree.ReoderLayers(): items=%s" % \
+        Debug.msg (4, "LayerTree.ReorderLayers(): items=%s" % \
                    (itemList))
 
         # reorder map layers
@@ -1268,8 +1287,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)
 
         # redraw map if auto-rendering is enabled
-        if self.mapdisplay.autoRender.GetValue(): 
-            self.mapdisplay.OnRender(None)
+        self.rerender = True
+        #if self.mapdisplay.autoRender.GetValue():
+        #    print "*** Change OnRender *****"
+        #    self.mapdisplay.OnRender(None)
 
         # item.SetHeight(TREE_ITEM_HEIGHT)
 
