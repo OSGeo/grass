@@ -135,7 +135,7 @@ icons_default = {
     "grGcpReload"  : 'gui-redraw.gif',
     "grSettings"   : 'edit-color.gif', 
     # nviz 
-    "nvizSettings" : 'settings.gif',   
+    "nvizSettings" : 'edit-color.gif',   
     }
 
 # merge icons dictionaries, join paths
