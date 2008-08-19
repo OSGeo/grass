@@ -248,7 +248,7 @@ produce a floating-point result, as will using float():
       r.mapcalc "ndvi=float(lsat.4 - lsat.3) / (lsat.4 + lsat.3)"
 </PRE></div>
 <H2>NULL support</H2>
-<menu>
+<ul>
 <li>Division by zero should result in NULL. 
 <li>Modulus by zero should result in NULL. 
 <li>     NULL-values in any arithmetic or logical operation should result
@@ -285,7 +285,7 @@ log(-2)
 sqrt(-2) 
 pow(a,b) where a is negative and b is not an integer 
 </PRE></div>
-</menu>
+</ul>
 <P>
 NULL support: Please note that any math performed with NULL cells always
 results in a NULL value for these cells. If you want to replace a NULL cell
