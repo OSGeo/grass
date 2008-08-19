@@ -128,8 +128,13 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
         
         cmd.append("%s=%s" % (cmdDef[1], outmap))
         
+        try:
+            listOfVector = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
+        except KeyError:
+            listOfVectors = []
+        
         if not UserSettings.Get(group='cmd', key='overwrite', subkey='enabled') and \
-                outmap in grass.list_grouped('vect')[grass.gisenv()['MAPSET']]:
+                outmap in listOfVectors:
             dlg = wx.MessageDialog(parent, message=_("Vector map <%s> already exists "
                                                      "in the current mapset. "
                                                      "Do you want to overwrite it?") % outmap,
