@@ -1409,6 +1409,7 @@ class AttributeManager(wx.Frame):
 
     def OnTableItemAdd(self, event):
         """Add new column to the table"""
+	table = self.mapDBInfo.layers[self.layer]['table']
         name = self.FindWindowById(self.layerPage[self.layer]['addColName']).GetValue()
 
         if not name:
@@ -1454,9 +1455,13 @@ class AttributeManager(wx.Frame):
 
         # apply changes
         self.ApplyCommands()
-
+        
         # update widgets
         self.FindWindowById(self.layerPage[self.layer]['addColName']).SetValue('')
+	self.FindWindowById(self.layerPage[self.layer]['renameCol']).SetItems(self.mapDBInfo.GetColumns(table))
+        self.FindWindowById(self.layerPage[self.layer]['renameCol']).SetSelection(0)
+        
+        event.Skip()
         
     def OnLayerPageChanged(self, event):
         """Layer tab changed"""
