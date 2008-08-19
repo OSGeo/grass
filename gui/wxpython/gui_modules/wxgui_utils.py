@@ -91,7 +91,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.notebook = kargs['notebook']   # GIS Manager notebook for layer tree
         self.treepg = parent        # notebook page holding layer tree
         self.auimgr = kargs['auimgr']       # aui manager
-        self.rerender = False       # layer change requires a reordering and rerendering (if auto render)
+        self.rerender = False       # layer change requires a rerendering if auto render
+        self.reorder = False        # layer change requires a reordering
 
         # init associated map display
         self.mapdisplay = mapdisp.MapFrame(self,
@@ -199,7 +200,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.rerender:
             if self.mapdisplay.autoRender.GetValue():
                 self.mapdisplay.MapWindow.UpdateMap(render=True)
-            self.rerender = False
 
         event.Skip()
 
@@ -495,6 +495,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
             # redraw map if auto-rendering is enabled
             self.rerender = True
+            self.reorder = True
             #if self.mapdisplay.autoRender.GetValue():
             #    print "*** Opacity OnRender *****"
             #    self.mapdisplay.OnRender(None)
@@ -861,6 +862,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
+        self.reorder = True
         #if self.mapdisplay.autoRender.GetValue():
         #    print "*** Delete OnRender *****"
         #    self.mapdisplay.OnRender(None)
@@ -938,6 +940,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
+        self.reorder = True
         #if self.mapdisplay.autoRender.GetValue():
         #    print "*** Checked OnRender *****"
         #    self.mapdisplay.OnRender(None)
@@ -1073,6 +1076,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
+        self.reorder = True
         #if self.mapdisplay.autoRender.GetValue():
         #    print "*** Drop OnRender *****"
         #    self.mapdisplay.OnRender(None)
@@ -1253,6 +1257,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # reorder map layers
         treelayers.reverse()
         self.Map.ReorderLayers(treelayers)
+        self.reorder = False
 
     def ChangeLayer(self, item):
         """Change layer"""
@@ -1288,6 +1293,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # redraw map if auto-rendering is enabled
         self.rerender = True
+        self.reorder = True
         #if self.mapdisplay.autoRender.GetValue():
         #    print "*** Change OnRender *****"
         #    self.mapdisplay.OnRender(None)
