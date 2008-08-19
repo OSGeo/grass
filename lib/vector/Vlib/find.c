@@ -209,11 +209,12 @@ Vect_find_line_list(struct Map_info *map,
 	Vect_line_distance(Points, ux, uy, uz, with_z, NULL, NULL, NULL,
 			   &new_dist, NULL, NULL);
 	G_debug(3, " line = %d distance = %f", line, new_dist);
-	if ((++gotone == 1) || (new_dist <= cur_dist)) {
-	    if (found) {
-		Vect_list_append(found, line);
-	    }
 
+	if (found && new_dist <= maxdist) {
+	    Vect_list_append(found, line);
+	}
+
+	if ((++gotone == 1) || (new_dist <= cur_dist)) {
 	    if (new_dist == cur_dist) {
 		/* TODO */
 		/* choice = dig_center_check (map->Line, choice, a, ux, uy); */
