@@ -170,19 +170,19 @@ map's edges.  To perform the latter function, use the
 <h2>EXAMPLES</h2>
 
 <dl>
-<dt>
-<div class="code"><pre>
+<dt><span class="code"><tt>
 g.region n=7360100 e=699000
-</pre></div>
+</tt></span>
+
 <dd> will reset the northing and easting for the current
 region, but leave the south edge, west edge, and the region
 cell resolutions unchanged.
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region n=51:36:05N e=10:10:05E s=51:29:55N w=9:59:55E res=0:00:01
-</pre></div>
+</tt></span>
 
 <dd> will reset the northing, easting, southing, westing and resolution
 for the current region, here in DMS latitude-longitude style
@@ -190,9 +190,9 @@ for the current region, here in DMS latitude-longitude style
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -dp s=698000
-</pre></div>
+</tt></span>
 
 <dd> will set the current region from the default region
 for the GRASS data base location, reset the south edge to
@@ -200,9 +200,9 @@ for the GRASS data base location, reset the south edge to
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region n=n+1000 w=w-500
-</pre></div>
+</tt></span>
 
 <dd> The n=<em>value</em> may also be specified as a
 function of its current value:  n=n+<em>value</em>
@@ -215,9 +215,9 @@ decreased by 500 units.
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region n=s+1000 e=w+1000
-</pre></div>
+</tt></span>
 
 <dd> This form allows the user to set the region boundary
 values relative to one another.  Here, the northern
@@ -234,9 +234,9 @@ region's southern and western boundaries, relative to the
 northern and eastern boundary values.
 
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region rast=soils
-</pre></div>
+</tt></span>
 
 <dd> This form will make the current region settings
 exactly the same as those given in the cell header file for
@@ -245,9 +245,9 @@ the raster map layer <em>soils</em>.
 <p>
 
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region rast=soils zoom=soils
-</pre></div>
+</tt></span>
 
 <dd> This form will first look up the cell header file for
 the raster map layer <em>soils</em>, use this as the
@@ -262,9 +262,9 @@ settings.
 <p>
 
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -up rast=soils
-</pre></div>
+</tt></span>
 
 <dd> The <b>-u</b> option suppresses the re-setting of the
 current region definition.  This can be useful when it is
@@ -274,9 +274,9 @@ without changing the current region settings.
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -up zoom=soils save=soils
-</pre></div>
+</tt></span>
 
 <dd> This will zoom into the smallest region which
 encompasses all non-NULL soils data values, and save the
@@ -287,10 +287,10 @@ changed.
 <p>
 
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region b=0 t=3000 tbres=200 res3=100
 g.region -p3
-</pre></div>
+</tt></span>
 
 <dd> This will define the 3D region for voxel computations.
 In this example a volume with bottom (0m) to top (3000m)
@@ -299,9 +299,9 @@ is defined.
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -p
-</pre></div>
+</tt></span>
 
 <dd> This will print the current region in the format:
 
@@ -322,9 +322,9 @@ cols:       950
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -p3
-</pre></div>
+</tt></span>
 
 <dd> This will print the current region and the 3D region (used for voxels)
 in the format:
@@ -354,9 +354,9 @@ depths:     1
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -g
-</pre></div>
+</tt></span>
 
 <dd> The <b>-g</b> option prints the region in the
 following script style (key=value) format:
@@ -374,9 +374,9 @@ cols=950
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -bg
-</pre></div>
+</tt></span>
 
 <dd> The <b>-bg</b> option prints the region in the
 following script style (key=value) format plus the
@@ -399,9 +399,9 @@ LL_S=44.37302019
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -l
-</pre></div>
+</tt></span>
 
 <dd> The <b>-l</b> option prints the region in the
 following format:
@@ -419,9 +419,9 @@ Center latitude:  44:26:14.439781N [44.43734]
 
 <p>
 
-<dt><div class="code"><pre>
+<dt><span class="code"><tt>
 g.region -pm
-</pre></div>
+</tt></span>
 
 <dd> This will print the current region in the format
  (latitude-longitude location):

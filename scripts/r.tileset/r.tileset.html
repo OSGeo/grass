@@ -14,9 +14,9 @@ Each tile is listed on a seperate line in the output. The lines are formatted as
 
 <dl>
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 5|125|45|175|80|100
-</pre></div>
+</tt></span>
 
 <dd>
 This is the default output format. It is the tile's minimum x coordinate, minimum y coordinate, maximum x coordinate, maximum y coordinate, width in cells, and height in cells seperated by the "|" character. The fields can be seperated by a different character by changing the fs option.
@@ -24,9 +24,9 @@ This is the default output format. It is the tile's minimum x coordinate, minimu
 <p>
 
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 w=5;s=125;e=45;n=175;cols=80;rows=100;
-</pre></div>
+</tt></span>
 
 <dd>
 This is output in a format convinent for setting variables in a shell script.
@@ -34,9 +34,9 @@ This is output in a format convinent for setting variables in a shell script.
 <p>
 
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 bbox=5,125,45,175&amp;width=80&amp;height=100
-</pre></div>
+</tt></span>
 
 <dd>
 This is output in a format convinent for requesting data from some http services.
@@ -49,25 +49,25 @@ This is output in a format convinent for requesting data from some http services
 
 <dl>
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 r.tileset sourceproj=+init=epsg:4326 maxrows=1024 maxcols=2048
-</pre></div>
+</tt></span>
 <dd> Generates tiles in latitude longitude that cover the current region, each tile will be less than 1024 cells high and 2048 cells across. The bounds and sizes of tiles in the output are seperated by |
 
 <p>
 
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 r.tileset sourceproj=+init=epsg:4326 overlap=2 -w region=ne-rio
-</pre></div>
+</tt></span>
 <dd>Generates tiles in latitude longitude projection that cover the named region "ne-rio". The tiles will have 2 cells of overlap. The output format will be strings like the bbox requests for WMS servers.
 
 <p>
 
 <dt>
-<div class="code"><pre>
+<span class="code"><tt>
 r.tileset sourceproj=`g.proj -j location=IrishGrid` maxrows=400 maxcols=300 overlap=3 -g
-</pre></div>
+</tt></span>
 <dd>Generates tiles in the projection of the location "IrishGrid". Each tile will be less than 300x400 cells in size, with 3 cells of overlap in the top and right sides of each tile. The output is in a format where each line is in shell script style. The substitution <code>`g.proj -j location=IrishGrid`</code> will only work in a unix style shell.
 
 </dl>
