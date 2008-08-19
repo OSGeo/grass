@@ -29,7 +29,7 @@ downslope neighbors.
 <table width="80%" align=center>
  <tr>
   <th><img src="rterraflow_dir2.png" alt="[SFD]" border=0></th>
-  <th><img src="rterraflow_dir3.png" alt="[SFD]" border=0></th>
+  <th><img src="rterraflow_dir3.png" alt="[MFD]" border=0></th>
  </tr>
  <tr>
   <th>Flow direction to steepest<br> downslope neighbor (SFD).</th>
@@ -76,7 +76,7 @@ If flow accumulation of a cell is larger than the value given by the
 <b>d8cut</b> option, then
 the flow of this cell is routed to its neighbors using the SFD (D8)
 model. This option affects only the flow accumulation raster and is
-meaningfull only for MFD flow (i.e. if the -s flag is not used); If
+meaningful only for MFD flow (i.e. if the -s flag is not used); If
 this option is used for SFD flow it is ignored. The default value of
 <b>d8cut</b> is <i>infinity</i>.
 
@@ -148,7 +148,7 @@ case precision may be lost and artificial flat areas may be created.
 For instance, if <em>r.terraflow.short</em> is used with floating
 point raster data (FCELL or DCELL), the values of the elevation will
 be truncated as shorts. This may create artificial flat areas, and the
-outpus of <em>r.terraflow.short</em> may be less realistic than those
+output of <em>r.terraflow.short</em> may be less realistic than those
 of <em>r.terraflow</em> on floating point raster data.
 
 The outputs of <em>r.terraflow.short</em> and <em>r.terraflow</em> are
@@ -199,20 +199,20 @@ href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke Univ
   <dt>Original version of program: The <a
 	   href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project,
 	1999, Duke University.
-	<dd><a href="http://www.cs.duke.edu/~large/">Lars Arge</a>,
+	<dd><a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
 		<a href="http://www.cs.duke.edu/~chase/">Jeff Chase</a>,
         <a href="http://www.env.duke.edu/faculty/bios/halpin.html">Pat Halpin</a>,
-        <a href="http://www.cs.duke.edu/~laura/">Laura Toma</a>,
+        <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>,
         <a href="http://www.env.duke.edu/faculty/bios/urban.html">Dean Urban</a>,
-        <a href="http://www.cs.duke.edu/~jsv/">Jeff Vitter</a>,
-        <a href="http://www.cs.duke.edu/~rajiv/">Rajiv Wickremesinghe</a>.
+        <a href="http://www.science.purdue.edu/jsv/">Jeff Vitter</a>,
+        Rajiv Wickremesinghe.
        
   <dt>Porting for GRASS, 2002:
-    <dd> <a href="http://www.cs.duke.edu/~large/">Lars Arge</a>,
+    <dd> <a href="http://www.daimi.au.dk/~large/">Lars Arge</a>,
 	     <a href="http://skagit.meas.ncsu.edu/~helena/index.html">Helena Mitasova,</a>
-		 <a href="http://www.cs.duke.edu/~laura/">Laura Toma</a>. 
+		 <a href="http://www.bowdoin.edu/~ltoma/">Laura Toma</a>. 
 	   
-	<dt>Contact: <a href="mailto:laura@cs.duke.edu"> Laura Toma</a></dt>
+	<dt>Contact: <a href="mailto:ltoma@bowdoin.edu "> Laura Toma</a></dt>
 </dl>
 
 
@@ -239,9 +239,9 @@ href="http://www.cs.duke.edu/geo*/terraflow/">TerraFlow</a> project at Duke Univ
        Flow computation on massive grid terrains</a>.
        Lars Arge, Jeffrey S. Chase, Patrick N. Halpin, Laura Toma,
        Jeffrey S. Vitter, Dean Urban and Rajiv Wickremesinghe.
-       To appear in <em>GeoInformatica, International Journal on
+       In <em>GeoInformatica, International Journal on
        Advances of Computer Science for Geographic Information
-       Systems</em>.
+       Systems</em>, 7(4):283-313, December 2003.
        
 </ol>
 
