@@ -34,13 +34,16 @@ the output file.
 Several environment variables affect the operation of the Cairo driver:
 
 <UL>
+  <LI><B>GRASS_RENDER_IMMEDIATE=[FALSE|TRUE|PNG|PS|HTML|cairo]</B><BR>
+     tells the raster library which driver to use. If
+     <tt>TRUE</tt>, the cairo driver is used if it is enabled, otherwise the PNG driver is used.
   <LI><B>GRASS_WIDTH=xxx</B><BR>
      the width of the image.
   </LI>
   <LI><B>GRASS_HEIGHT=yyy</B><BR>
     the height of the image.
   </LI>
-  <LI><B>GRASS_CAIROFILE=filename</B><BR>
+  <LI><B>GRASS_PNGFILE=filename</B><BR>
      the name and format of the resulting image file, default is
      <tt>map.png</tt>.<BR>
      The image format is determined from the file extension.<BR>
@@ -73,14 +76,27 @@ Several environment variables affect the operation of the Cairo driver:
     (Note: This only applies to bitmap formats - vector formats
     are always written directly to file).
   </LI>
-  <LI><B>GRASS_CAIRO_READ</B><BR>
+  <LI><B>GRASS_PNG_READ</B><BR>
      if <tt>TRUE</tt>, the Cairo driver will initialize the image from
-    the contents of GRASS_CAIROFILE.<BR>
+    the contents of GRASS_PNGFILE.<BR>
     (Note: This is only supported for bitmap formats)
   </LI>
-  <LI><B>GRASS_CAIRO_MAPPED</B><BR>
-    if <tt>TRUE</tt>, the Cairo driver will map GRASS_CAIROFILE as its framebuffer,
+  <LI><B>GRASS_PNG_MAPPED</B><BR>
+    if <tt>TRUE</tt>, the Cairo driver will map GRASS_PNGFILE as its framebuffer,
     rather than using memory. This only works with BMP files.
+  </LI>
+  <LI><B>GRASS_ANTIALIAS</B><BR> can be <em>default</em>,
+    <em>none</em>, <em>gray</em>, or <em>subpixel</em>, corresponding to
+    <a href="http://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
+  </LI>
+  <LI><B>GRASS_LINE_WIDTH</B><BR>
+    the default line width.
+  </LI>
+  <LI><B>GRASS_TEXT_SIZE</B><BR>
+    the default text size.
+  </LI>
+  <LI><B>GRASS_FRAME</B><BR>
+    contains 4 coordinates, <em>top,bottom,left,right</em>, defining the initial frame.
   </LI>
 </UL>
 
@@ -88,7 +104,7 @@ Several environment variables affect the operation of the Cairo driver:
 
 Example using the driver directly (bash-syntax):
 <div class="code"><PRE>
-export GRASS_CAIROFILE=spearfish.png
+export GRASS_PNGFILE=spearfish.png
 export GRASS_WIDTH=800
 export GRASS_HEIGHT=800
 
