@@ -643,6 +643,9 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # render background image if needed
         #
+        
+        if self.tree.rerender == True:
+            self.tree.ReorderLayers()
         if render:
             # update display size
             self.Map.ChangeMapSize(self.GetClientSize())
@@ -2817,7 +2820,7 @@ class MapFrame(wx.Frame):
         """
         Re-render map composition (each map layer)
         """
-        # detele tmp map layers (queries)
+        # delete tmp map layers (queries)
         qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)

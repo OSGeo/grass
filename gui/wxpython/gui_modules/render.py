@@ -831,7 +831,7 @@ class Map(object):
                 if not layer.Render():
                     continue
             
-            # update process bar
+            # update progress bar
             if mapWindow is not None:
                 mapWindow.onRenderCounter += 1
 
