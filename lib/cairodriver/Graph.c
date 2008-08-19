@@ -36,14 +36,15 @@ double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
 /* cairo objects */
 cairo_surface_t *surface;
 cairo_t *cairo;
+cairo_antialias_t antialias;
 
 static void init_cairo(void);
 static int ends_with(const char *string, const char *suffix);
 static void map_file(void);
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
-static int init_xlib(void)
+static void init_xlib(void)
 {
+#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
     Display *dpy;
     Drawable win;
     unsigned long xid;
@@ -92,12 +93,10 @@ static int init_xlib(void)
 
     screen_right = screen_left + width;
     screen_bottom = screen_top + height;
-
-    return 0;
-}
 #endif
+}
 
-static int init_file(void)
+static void init_file(void)
 {
     int do_read = 0;
     int do_map = 0;
@@ -188,8 +187,6 @@ static int init_file(void)
 	map_file();
 	init_cairo();
     }
-
-    return 0;
 }
 
 int Cairo_Graph_set(void)
@@ -225,12 +222,26 @@ int Cairo_Graph_set(void)
     p = getenv("GRASS_PNG_AUTO_WRITE");
     auto_write = p && strcmp(p, "TRUE") == 0;
 
-#if defined(USE_X11) && CAIRO_HAS_XLIB_SURFACE
+    antialias = CAIRO_ANTIALIAS_DEFAULT;
+    p = getenv("GRASS_ANTIALIAS");
+    if (p && G_strcasecmp(p, "default") == 0)
+	antialias = CAIRO_ANTIALIAS_DEFAULT;
+    if (p && G_strcasecmp(p, "none") == 0)
+	antialias = CAIRO_ANTIALIAS_NONE;
+    if (p && G_strcasecmp(p, "gray") == 0)
+	antialias = CAIRO_ANTIALIAS_GRAY;
+    if (p && G_strcasecmp(p, "subpixel") == 0)
+	antialias = CAIRO_ANTIALIAS_SUBPIXEL;
+
     p = getenv("GRASS_CAIRO_DRAWABLE");
     if (p)
-	return init_xlib();
-#endif
-    return init_file();
+	init_xlib();
+    else
+	init_file();
+
+    cairo_set_antialias(cairo, antialias);
+
+    return 0;
 }
 
 void Cairo_Graph_close(void)
