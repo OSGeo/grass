@@ -34,6 +34,7 @@ import tempfile
 
 import wx
 import wx.aui
+
 from threading import Thread
 
 import globalvar
@@ -128,13 +129,13 @@ class MapWindow(object):
     Parent for BufferedWindow class (2D display mode) and
     GLWindow (3D display mode)
     """
-    def __init__(self, parent, id,
+    def __init__(self, parent, id=wx.ID_ANY,
                  pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style=wx.NO_FULL_REPAINT_ON_RESIZE,
                  Map=None, tree=None, gismgr=None):
-        pass
-
+        self.parent = parent # MapFrame
+        
     def EraseMap(self):
         """
         Erase the canvas (virtual method)
@@ -212,7 +213,6 @@ class BufferedWindow(MapWindow, wx.Window):
                            Map, tree, gismgr)
         wx.Window.__init__(self, parent, id, pos, size, style)
 
-        self.parent = parent
         self.Map = Map
         self.tree = tree
         self.gismanager = gismgr
@@ -637,9 +637,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.parent.onRenderGauge.Show()
             if self.parent.onRenderGauge.GetRange() > 0:
                 self.parent.onRenderGauge.SetValue(1)
-                self.parent.onRenderTimer.Start(100)
-            self.parent.onRenderCounter = 0
-
+        
         #
         # render background image if needed
         #
@@ -736,8 +734,6 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # hide process bar
         #
-        if self.parent.onRenderGauge.GetRange() > 0:
-            self.parent.onRenderTimer.Stop()
         self.parent.onRenderGauge.Hide()
 
         #
@@ -2402,7 +2398,6 @@ class MapFrame(wx.Frame):
 
         self.gismanager = gismgr    # GIS Manager object
         self.Map        = Map       # instance of render.Map
-        self.Map.window = self
         self.tree       = tree      # GIS Manager layer tree object
         self.page       = page      # Notebook page holding the layer tree
         self.layerbook  = notebook  # GIS Manager layer tree notebook
@@ -2493,9 +2488,7 @@ class MapFrame(wx.Frame):
         self.onRenderGauge = wx.Gauge(parent=self.statusbar, id=wx.ID_ANY,
                                       range=0, style=wx.GA_HORIZONTAL)
         self.onRenderGauge.Hide()
-        self.Bind(wx.EVT_TIMER, self.TimerOnRender)
-        self.onRenderTimer = wx.Timer(self)
-
+        
         self.StatusbarReposition() # reposition statusbar
 
         #
@@ -2520,7 +2513,8 @@ class MapFrame(wx.Frame):
         #
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
-
+        self.Bind(render.EVT_UPDATE_PRGBAR, self.OnUpdateProgress)
+        
         #
         # Update fancy gui style
         #
@@ -2761,6 +2755,12 @@ class MapFrame(wx.Frame):
         self.Map.region = self.Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
+    def OnUpdateProgress(self, event):
+        """Update progress bar info"""
+        self.onRenderGauge.SetValue(event.value)
+        
+        event.Skip()
+        
     def OnFocus(self, event):
         """
         Change choicebook page to match display.
@@ -2811,11 +2811,7 @@ class MapFrame(wx.Frame):
         Re-display current map composition
         """
         self.MapWindow.UpdateMap(render=False)
-
-    def TimerOnRender(self, event):
-        """Update process bar"""
-        self.onRenderGauge.SetValue(self.onRenderCounter)
-
+        
     def OnRender(self, event):
         """
         Re-render map composition (each map layer)
