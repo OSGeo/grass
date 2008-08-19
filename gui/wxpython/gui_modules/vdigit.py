@@ -1208,8 +1208,9 @@ class VDigit(AbstractDigit):
 
     def UpdateSettings(self):
         """Update digit settigs"""
-        self.digit.UpdateSettings(UserSettings.Get(group='vdigit', key='breakLines',
-                                                   subkey='enabled'))
+        if self.digit:
+            self.digit.UpdateSettings(UserSettings.Get(group='vdigit', key='breakLines',
+                                                       subkey='enabled'))
         
     def __getSnapThreshold(self):
         """Get snap mode and threshold value
