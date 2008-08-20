@@ -80,7 +80,10 @@ int main(int argc, char *argv[])
     skip_opt->description =
 	_("Number of header lines to skip at top of input file (points mode)");
 
-    columns_opt = G_define_standard_option(G_OPT_COLUMNS);
+    columns_opt = G_define_option();
+    columns_opt->key = "columns";
+    columns_opt->type = TYPE_STRING;
+    columns_opt->required = NO;
     columns_opt->multiple = NO;
     columns_opt->guisection = _("Columns");
     columns_opt->label = _("Column definition in SQL style (points mode)");
