@@ -20,12 +20,15 @@ care of following rules:
 
 
 2. Module manual page:
-   Place the documentation in HTML format into 'description.html'.
+   Place the documentation in HTML format into '<module>.html', where
+   <module> is the name of the module. E.g. if the module is named
+   r.example, the documentation file should be named r.example.html.
+
    The easiest way to do this is to study an existing HTML page
-   (to get the page style, e.g. vector/v.to.db/description.html).
+   (to get the page style, e.g. vector/v.to.db/v.to.db.html).
    With a few exceptions header and footer are NOT allowed.
    You can add figures (PNG format), the figure name prefix should be the 
-   module name. See raster/r.terraflow/description.html for an example.
+   module name. See raster/r.terraflow/r.terraflow.html for an example.
 
    Note that the parameter information is auto-generated upon
    compilation. This is done by running module in a virtual session
