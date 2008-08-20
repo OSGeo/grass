@@ -1419,6 +1419,10 @@ class CDisplayDriver(AbstractDisplayDriver):
             
         return selected
 
+    def GetRegionSelected(self):
+        """Get minimal region extent of selected features (ids/cats)"""
+        return self.__display.GetRegionSelected()
+    
     def GetDuplicates(self):
         """Return ids of (selected) duplicated vector features
         """
@@ -1465,15 +1469,16 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         return id 
 
-    def SetSelected(self, id):
+    def SetSelected(self, id, cats=False):
         """Set selected vector features
 
         @param id line id to be selected
+        @param cats if True expect categories instead of feature ids
         """
         Debug.msg(4, "CDisplayDriver.SetSelected(): id=%s" % \
                   ",".join(["%d" % v for v in id]))
 
-        self.__display.SetSelected(id)
+        self.__display.SetSelected(id, cats)
 
     def UnSelect(self, id):
         """Unselect vector features

@@ -34,6 +34,7 @@ import globalvar
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 from mapdisp import MapWindow as MapWindow
+from goutput import wxCmdOutput as wxCmdOutput
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
 import grass6_wxnviz as wxnviz
@@ -41,6 +42,22 @@ import grass6_wxnviz as wxnviz
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()
 
+class NvizThread(Thread):
+    def __init__(self, log, progressbar, window):
+        Thread.__init__(self)
+        
+        self.log = log
+        self.progressbar = progressbar
+        self.window = window
+        
+        self.nvizClass = None
+        
+        self.setDaemon(True)
+        
+    def run(self):
+        self.nvizClass = wxnviz.Nviz(self.log, self.progressbar,
+                                     self.window, wxCmdOutput)
+        
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
     def __init__(self, parent, id,
@@ -78,7 +95,12 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         #
         # create nviz instance
         #
-        self.nvizClass = wxnviz.Nviz(sys.stderr)
+        self.nvizThread = NvizThread(self.gismgr.goutput.cmd_stderr,
+                                     self.parent.onRenderGauge,
+                                     self.gismgr.goutput.cmd_output)
+        self.nvizThread.start()
+        time.sleep(.1)
+        self.nvizClass =  self.nvizThread.nvizClass
 
         #
         # set current display

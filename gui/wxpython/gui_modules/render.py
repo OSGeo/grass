@@ -76,6 +76,8 @@ class Layer(object):
         self.hidden  = hidden
         self.opacity = opacity
 
+        self._region = None # produced by `d.vect -r`
+        
         self.force_render = True
         
         Debug.msg (3, "Layer.__init__(): type=%s, cmd='%s', name=%s, " \
@@ -95,12 +97,16 @@ class Layer(object):
         Debug.msg (3, "Layer.__del__(): layer=%s, cmd='%s'" %
                    (self.name, self.GetCmd(string=True)))
 
-    def Render(self):
+    def Render(self, zoom):
         """Render layer to image
 
+        @param zoom if True zoom to extent given by 'd.vect -r'
+        
         @return rendered image filename
         @return None on error
         """
+        self._region = None # reset region
+
         if len(self.cmdlist) == 0:
             return None
         
@@ -144,20 +150,32 @@ class Layer(object):
             runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
                                   stderr=None)
 
+            if zoom:
+                self._region = {}
+                for line in runcmd.ReadStdOutput():
+                    key, value = line.split('=')
+                    self._region[key] = float(value)
+                    
             if runcmd.returncode != 0:
                 #clean up after probley
-                os.remove(self.mapfile)
-                os.remove(self.maskfile)
-                os.remove(self.gtemp)
+                try:
+                    os.remove(self.mapfile)
+                    os.remove(self.maskfile)
+                    os.remove(self.gtemp)
+                except (OSError, TypeError):
+                    pass
                 self.mapfile = None
                 self.maskfile = None
 
         except gcmd.CmdError, e:
             print >> sys.stderr, e
-            #clean up after probley
-            os.remove(self.mapfile)
-            os.remove(self.maskfile)
-            os.remove(self.gtemp)
+            # clean up after problems
+            try:
+                os.remove(self.mapfile)
+                os.remove(self.maskfile)
+                os.remove(self.gtemp)
+            except (OSError, TypeError):
+                pass
             self.mapfile = None
             self.maskfile = None
 
@@ -264,7 +282,11 @@ class Layer(object):
 
         # for re-rendering
         self.force_render = True
-        
+
+    def GetRegion(self):
+        """Get layer region or None"""
+        return self._region
+    
 class MapLayer(Layer):
     """Represents map layer in the map canvas"""
     def __init__(self, type, cmd, name=None,
@@ -536,7 +558,8 @@ class Map(object):
             return False
 
     def GetRegion(self, rast=None, zoom=False, vect=None,
-                  n=None, s=None, e=None, w=None, default=False):
+                  n=None, s=None, e=None, w=None, default=False,
+                  update=False):
         """
         Get region settings (g.region -upgc)
 
@@ -547,6 +570,7 @@ class Map(object):
         @param zoom zoom to raster (ignore NULLs)
         @param n,s,e,w force extent
         @param default force default region settings
+        @param update if True update current display region settings
         
         @return region settings as directory, e.g. {
         'n':'4928010', 's':'4913700', 'w':'589980',...}
@@ -615,6 +639,9 @@ class Map(object):
             os.environ["GRASS_REGION"] = tmpreg
 
         Debug.msg (3, "Map.GetRegion(): %s" % region)
+        
+        if update:
+            self.region = region
         
         return region
 
@@ -782,7 +809,48 @@ class Map(object):
 
         return selected
 
-    def Render(self, force=False, mapWindow=None, windres=False):
+    def _renderLayers(self, force, zoom, mapWindow, maps, masks, opacities):
+        # render map layers
+        ilayer = 1
+        for layer in self.layers + self.overlays:
+            # skip dead or disabled map layers
+            if layer == None or layer.active == False:
+                continue
+            
+            # render if there is no mapfile
+            if force or \
+               layer.force_render or \
+               layer.mapfile == None or \
+               (not os.path.isfile(layer.mapfile) or not os.path.getsize(layer.mapfile)):
+                if not layer.Render(zoom):
+                    continue
+            
+            zoomToRegion = layer.GetRegion()
+            if zoomToRegion:
+                self.GetRegion(n=zoomToRegion['n'], s=zoomToRegion['s'],
+                               w=zoomToRegion['w'], e=zoomToRegion['e'],
+                               update=True)
+                self.AdjustRegion() # resolution
+                print self.region
+                return False
+            
+            # update progress bar
+            wx.SafeYield(mapWindow)
+            event = wxUpdateProgressBar(value=ilayer)
+            wx.PostEvent(mapWindow, event)
+            
+            # add image to compositing list
+            if layer.type != "overlay":
+                maps.append(layer.mapfile)
+                masks.append(layer.maskfile)
+                opacities.append(str(layer.opacity))
+                
+            Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
+            ilayer += 1
+
+        return True
+    
+    def Render(self, force=False, mapWindow=None, windres=False, zoom=False):
         """
         Creates final image composite
 
@@ -792,10 +860,10 @@ class Map(object):
         @param force force rendering
         @param reference for MapFrame instance (for progress bar)
         @param windres use region resolution (True) otherwise display resolution
-
+        @param zoom zoom to region given by 'd.vect -r'
+        
         @return name of file with rendered image or None
         """
-
         maps = []
         masks =[]
         opacities = []
@@ -817,35 +885,10 @@ class Map(object):
             os.environ["GRASS_COMPRESSION"] = "0"
             os.environ["GRASS_TRUECOLOR"] = "TRUE"
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
-
-        # render map layers
-        ilayer = 1
-        for layer in self.layers + self.overlays:
-            # skip dead or disabled map layers
-            if layer == None or layer.active == False:
-                continue
-            
-            # render if there is no mapfile
-            if force or \
-               layer.force_render or \
-               layer.mapfile == None or \
-               (not os.path.isfile(layer.mapfile) or not os.path.getsize(layer.mapfile)):
-                if not layer.Render():
-                    continue
-            
-            # update progress bar
-            wx.SafeYield(mapWindow)
-            event = wxUpdateProgressBar(value=ilayer)
-            wx.PostEvent(mapWindow, event)
-            
-            # add image to compositing list
-            if layer.type != "overlay":
-                maps.append(layer.mapfile)
-                masks.append(layer.maskfile)
-                opacities.append(str(layer.opacity))
-                
-            Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
-            ilayer += 1
+        
+        if not self._renderLayers(force, zoom, mapWindow, maps, masks, opacities):
+            os.environ["GRASS_REGION"] = self.SetRegion(windres)
+            self._renderLayers(True, False, mapWindow, maps, masks, opacities)
         
         # ugly hack for MSYS
         if not subprocess.mswindows:

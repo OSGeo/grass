@@ -612,13 +612,14 @@ class BufferedWindow(MapWindow, wx.Window):
 
         return img
 
-    def UpdateMap(self, render=True, renderVector=True):
+    def UpdateMap(self, render=True, renderVector=True, zoom=False):
         """
         Updates the canvas anytime there is a change to the
         underlaying images or to the geometry of the canvas.
 
         @param render re-render map composition
         @param renderVector re-render vector map layer enabled for editing (used for digitizer)
+        @param zoom zoom to region given by 'd.vect -r'
         """
         start = time.clock()
 
@@ -656,9 +657,11 @@ class BufferedWindow(MapWindow, wx.Window):
             if self.parent.compResolution.GetValue():
                 # use computation region resolution for rendering
                 windres = True
-            self.mapfile = self.Map.Render(force=True, mapWindow=self.parent, windres=windres)
+            self.mapfile = self.Map.Render(force=True, mapWindow=self.parent,
+                                           windres=windres, zoom=zoom)
         else:
-            self.mapfile = self.Map.Render(force=False, mapWindow=self.parent)
+            self.mapfile = self.Map.Render(force=False, mapWindow=self.parent,
+                                           zoom=zoom)
             
         self.img = self.GetImage() # id=99
             
@@ -3369,6 +3372,7 @@ class MapFrame(wx.Frame):
         str(color[2])
 
         cmd = ["d.vect",
+               #               "-r", # print minimal region extent
                "map=%s" % name,
                "color=%s" % colorStr,
                "fcolor=%s" % colorStr,
