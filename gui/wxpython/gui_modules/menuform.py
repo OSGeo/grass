@@ -1205,7 +1205,7 @@ class cmdPanel(wx.Panel):
                     if p.get('value','') != '':
                         fbb.SetValue(p['value']) # parameter previously set
                     which_sizer.Add(item=fbb, proportion=0,
-                                    flag=wx.ADJUST_MINSIZE | wx.LEFT | wx.TOP | wx.RIGHT, border=-3)
+                                    flag=wx.EXPAND | wx.RIGHT, border=5)
                     # A file browse button is a combobox with two children:
                     # a textctl and a button;
                     # we have to target the button here
