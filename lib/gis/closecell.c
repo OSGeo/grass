@@ -133,6 +133,11 @@ static int close_old(int fd)
        This is obsolete since now the mask_bus is always allocated
      */
 
+#ifdef GDAL_LINK
+    if (fcb->gdal)
+	G_close_gdal_link(fcb->gdal);
+#endif
+
     for (i = 0; i < NULL_ROWS_INMEM; i++)
 	G_free(fcb->NULL_ROWS[i]);
     G_free(fcb->null_work_buf);

@@ -44,6 +44,9 @@ struct fileinfo			/* Information for opened cell files */
     unsigned char *null_work_buf;	/* data buffer for reading null rows    */
     int min_null_row;		/* Minimum row null row number in memory */
     struct Quant quant;
+#ifdef GDAL_LINK
+    struct GDAL_link *gdal;
+#endif
 };
 
 struct G__			/*  Structure of library globals */

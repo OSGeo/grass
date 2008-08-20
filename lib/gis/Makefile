@@ -15,6 +15,11 @@ COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 ifneq ($(USE_LARGEFILES),)
 	EXTRA_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
+ifneq ($(GDAL_LINK),)
+EXTRA_CFLAGS += -DGDAL_LINK
+EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
+EXTRA_LIBS += $(GDALLIBS)
+endif
 
 default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES)
 
