@@ -1,15 +1,13 @@
 
 /****************************************************************************
  *
- * MODULE:       r.in.gdal
+ * MODULE:       r.external
  *               
- * AUTHOR(S):    Frank Warmerdam (copyright of this file)
- *               Added optional GCP transformation: Markus Neteler 10/2001
+ * AUTHOR(S):    Glynn Clements, based on r.in.gdal
  *
- * PURPOSE:      Imports many GIS/image formats into GRASS utilizing the GDAL
- *               library.
+ * PURPOSE:      Link raster map into GRASS utilizing the GDAL library.
  *
- * COPYRIGHT:    (C) 2001 by Frank Warmerdam
+ * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -173,7 +171,7 @@ static void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int ove
 			    cellhd->proj, cellhd->zone);
 	    }
 	    strcat(error_msg,
-		   _("\nYou can use the -o flag to r.in.gdal to override this check and "
+		   _("\nYou can use the -o flag to r.external to override this check and "
 		     "use the location definition for the dataset.\n"));
 	    strcat(error_msg,
 		   _("Consider generating a new location from the input dataset using "
