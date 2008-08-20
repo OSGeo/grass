@@ -159,6 +159,9 @@ int G__open_cell_old(const char *name, const char *mapset)
     RASTER_MAP_TYPE MAP_TYPE;
     struct Reclass reclass;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+#ifdef GDAL_LINK
+    struct GDAL_link *gdal;
+#endif
 
     /* make sure window is set    */
     G__init_window();
@@ -252,6 +255,13 @@ int G__open_cell_old(const char *name, const char *mapset)
 	MAP_NBYTES = CELL_nbytes;
     }
 
+#ifdef GDAL_LINK
+    gdal = G_get_gdal_link(name, mapset);
+    if (gdal)
+	/* dummy descriptor to reserve the fileinfo slot */
+	fd = open("/dev/null", O_RDONLY);
+    else
+#endif
     /* now actually open file for reading */
     fd = G_open_old(cell_dir, r_name, r_mapset);
     if (fd < 0)
@@ -287,6 +297,11 @@ int G__open_cell_old(const char *name, const char *mapset)
     if ((fcb->reclass_flag = reclass_flag))
 	G_copy(&fcb->reclass, &reclass, sizeof(reclass));
 
+#ifdef GDAL_LINK
+    if (gdal)
+	fcb->gdal = gdal;
+    else
+#endif
     /* check for compressed data format, making initial reads if necessary */
     if (G__check_format(fd) < 0) {
 	close(fd);		/* warning issued by check_format() */
