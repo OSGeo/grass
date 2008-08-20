@@ -143,17 +143,18 @@ def normalize_whitespace(text):
     """Remove redundant whitespace from a string"""
     return string.join( string.split(text), ' ')
 
-def text_beautify( someString ):
+def text_beautify( someString , width=70):
     """
     Make really long texts shorter, clean up whitespace and
     remove trailing punctuation.
     """
-    # TODO: remove magic number (calculate a correct value from
-    # pixelSize of text and the magic number for maximum size)
-    return escape_ampersand( string.strip(
-        os.linesep.join( textwrap.wrap( normalize_whitespace(someString), 70 ) ),
-        ".,;:" ) )
-
+    if width > 0:
+        return escape_ampersand( string.strip(
+                os.linesep.join( textwrap.wrap( normalize_whitespace(someString), width ) ),
+                ".,;:" ) )
+    else:
+        return escape_ampersand( string.strip(normalize_whitespace(someString ), ".,;:" ))
+    
 def escape_ampersand(text):
     """Escapes ampersands with additional ampersand for GUI"""
     return string.replace(text, "&", "&&")
@@ -861,12 +862,16 @@ class cmdPanel(wx.Panel):
         self.parent = mainFrame
         self.task = task
         fontsize = 10
-
+        
         # Determine tab layout
         sections = []
         is_section = {}
         not_hidden = [ p for p in self.task.params + self.task.flags if not p.get( 'hidden','no' ) == 'yes' ]
 
+        self.label_id = [] # wrap titles on resize
+
+        self.Bind(wx.EVT_SIZE, self.OnSize)
+        
         for task in not_hidden:
             if task.get( 'required','no' ) == 'yes':
                 # All required go into Main, even if they had defined another guisection
@@ -933,12 +938,13 @@ class cmdPanel(wx.Panel):
             which_panel = tab[ f['guisection'] ]
             # if label is given: description -> tooltip
             if f.get('label','') != '':
-                title = text_beautify( f['label'] )
-                tooltip = text_beautify ( f['description'] )
+                title = text_beautify( f['label'])
+                tooltip = text_beautify ( f['description'], width=-1)
             else:
                 title = text_beautify( f['description'] )
                 tooltip = None
             chk = wx.CheckBox(parent=which_panel, label = title, style = wx.NO_BORDER)
+            self.label_id.append(chk.GetId())
             if tooltip:
                 chk.SetToolTipString(tooltip)
             if 'value' in f:
@@ -970,7 +976,7 @@ class cmdPanel(wx.Panel):
             # otherwise description -> lavel
             if p.get('label','') != '':
                 title = text_beautify( p['label'] )
-                tooltip = text_beautify ( p['description'] )
+                tooltip = text_beautify ( p['description'], width = -1)
             else:
                 title = text_beautify( p['description'] )
                 tooltip = None
@@ -994,6 +1000,7 @@ class cmdPanel(wx.Panel):
                 if p.get('multiple', 'no') == 'yes' and \
                         p.get('type', '') == 'string':
                     txt = wx.StaticBox (parent=which_panel, id=0, label=" " + title + ": ")
+                    self.label_id.append(txt.GetId())
                     if len(valuelist) > 6:
                         hSizer=wx.StaticBoxSizer ( box=txt, orient=wx.VERTICAL )
                     else:
@@ -1023,6 +1030,7 @@ class cmdPanel(wx.Panel):
                         txt = wx.StaticText(parent=which_panel,
                                             label = "%s. %s %s" % (title, _('Valid range'),
                                                                    str(valuelist[0]) + ':'))
+                        self.label_id.append(txt.GetId())
                         which_sizer.Add(item=txt, proportion=0,
                                         flag=wx.ADJUST_MINSIZE | wx.TOP | wx.RIGHT | wx.LEFT, border=5)
 
@@ -1043,13 +1051,14 @@ class cmdPanel(wx.Panel):
                         if p.get('value','') != '':
                             txt2.SetValue(p['value']) # parameter previously set
                         which_sizer.Add(item=txt2, proportion=0,
-                                        flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
+                                        flag=wx.EXPAND | wx.BOTTOM | wx.LEFT, border=5)
 
                         p['wxId'] = txt2.GetId()
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
                         # list of values (combo)
                         txt = wx.StaticText(parent=which_panel, label = title + ':' )
+                        self.label_id.append(txt.GetId())
                         which_sizer.Add(item=txt, proportion=0,
                                         flag=wx.ADJUST_MINSIZE | wx.TOP | wx.RIGHT | wx.LEFT, border=5)
                         cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
@@ -1069,8 +1078,9 @@ class cmdPanel(wx.Panel):
                 and p.get('prompt','') != 'color'):
 
                 txt = wx.StaticText(parent=which_panel, label = title + ':' )
+                self.label_id.append(txt.GetId())
                 which_sizer.Add(item=txt, proportion=0,
-                                flag=wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND, border=5)
+                                flag=wx.EXPAND | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
 
                 if p.get('multiple','yes') == 'yes' or \
                         p.get('type', 'string') in ('string', 'float') or \
@@ -1081,6 +1091,7 @@ class cmdPanel(wx.Panel):
                         txt3.SetValue(str(p['value'])) # parameter previously set
 
                     txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                 else:
                     minValue = -1e9
                     maxValue = 1e9
@@ -1092,12 +1103,15 @@ class cmdPanel(wx.Panel):
 
                     txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
                     txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
-                    
-                which_sizer.Add(item=txt3, proportion=0, flag=wx.BOTTOM | wx.LEFT, border=5)
+                    style = wx.BOTTOM | wx.LEFT | wx.RIGHT
+                
+                which_sizer.Add(item=txt3, proportion=0,
+                                flag=style, border=5)
                 p['wxId'] = txt3.GetId()
 
             if p.get('type','string') == 'string' and p.get('gisprompt',False) == True:
                 txt = wx.StaticText(parent=which_panel, label = title + ':')
+                self.label_id.append(txt.GetId())
                 which_sizer.Add(item=txt, proportion=0,
                                 flag=wx.ADJUST_MINSIZE | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
                 # element selection tree combobox (maps, icons, regions, etc.)
@@ -1449,7 +1463,21 @@ class cmdPanel(wx.Panel):
 
         return cmd
     
-
+    def OnSize(self, event):
+        width = event.GetSize()[0]
+        fontsize = self.GetFont().GetPointSize()
+        text_width = width / (fontsize - 3)
+        if text_width < 70:
+            text_width = 70
+        
+        for id in self.label_id:
+            win = self.FindWindowById(id)
+            label = win.GetLabel()
+            label_new = '\n'.join(textwrap.wrap(label, text_width ))
+            win.SetLabel(label_new)
+            
+        event.Skip()
+        
 def getInterfaceDescription( cmd ):
     """
     Returns the XML description for the GRASS cmd.
