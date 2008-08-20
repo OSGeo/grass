@@ -329,6 +329,8 @@ int main(int argc, char **argv)
 			  map_name);
 
 	G_get_range_min_max(&range, &min_ind, &max_ind);
+	if (G_is_c_null_value(&min_ind))
+	    G_fatal_error(_("Input map contains no data"));
 
 	G_get_color_range(&min_colr, &max_colr, &colors);
 
