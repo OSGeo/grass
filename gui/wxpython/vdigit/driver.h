@@ -44,17 +44,7 @@ private:
      * segments with unique id (starting with '1')
      * are drawn only when line was selected using SelectLineByPoint()
      */
-    /*
-    struct lineDesc {
-	int      npoints;
-	long int startId;
-    };
     
-    typedef std::map<int, lineDesc> ids_map;
-    
-    ids_map ids; // gId : {dcIds, ...}
-    */
-
     struct _selected {
 	struct ilist *values;
 	struct ilist *valuesDupl;
