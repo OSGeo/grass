@@ -259,7 +259,7 @@ static void update_default_window(struct Cell_head *cellhd)
     G__put_window(&def_wind, "../PERMANENT", "DEFAULT_WIND");
 }
 
-static void query_band(GDALRasterBandH hBand, const char *output,
+static void query_band(GDALRasterBandH hBand, const char *output, int exact_range,
 		       struct Cell_head *cellhd, struct band_info *info)
 {
     int bGotMin, bGotMax;
@@ -306,7 +306,7 @@ static void query_band(GDALRasterBandH hBand, const char *output,
     info->range[0] = GDALGetRasterMinimum(hBand, &bGotMin);
     info->range[1] = GDALGetRasterMaximum(hBand, &bGotMax);
     if(!(bGotMin && bGotMax))
-	GDALComputeRasterMinMax(hBand, TRUE, info->range);
+	GDALComputeRasterMinMax(hBand, !exact_range, info->range);
 
     G_init_colors(&info->colors);
 
@@ -453,7 +453,7 @@ int main(int argc, char *argv[])
     struct {
 	struct Option *input, *output, *band, *title;
     } parm;
-    struct Flag *flag_o, *flag_f, *flag_e;
+    struct Flag *flag_o, *flag_f, *flag_e, *flag_r;
     int band;
     struct band_info info;
 
@@ -496,6 +496,10 @@ int main(int argc, char *argv[])
     flag_e = G_define_flag();
     flag_e->key = 'e';
     flag_e->description = _("Extend location extents based on new dataset");
+
+    flag_r = G_define_flag();
+    flag_r->key = 'r';
+    flag_r->description = _("Require exact range");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
@@ -551,7 +555,7 @@ int main(int argc, char *argv[])
     if (G_set_window(&cellhd) < 0)
 	G_fatal_error(_("Unable to set window"));
 
-    query_band(hBand, output, &cellhd, &info);
+    query_band(hBand, output, flag_r->answer, &cellhd, &info);
     create_map(input, band, output, &cellhd, &info, title);
 
     if (flag_e->answer)
