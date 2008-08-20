@@ -55,8 +55,13 @@ private:
     ids_map ids; // gId : {dcIds, ...}
     */
 
-    struct ilist *selected;
-    struct ilist *selectedDupl;
+    struct _selected {
+	struct ilist *values;
+	struct ilist *valuesDupl;
+	
+	bool isId; /* id or cat ? */
+    } selected;
+    
     bool drawSelected;
 
     bool drawSegments;         // draw segments of selected line
@@ -178,7 +183,8 @@ public:
 
     std::vector<int> GetSelected(bool);
     std::map<int, std::vector <int> > GetDuplicates();
-    int SetSelected(std::vector<int>);
+    std::vector<int> GetRegionSelected();
+    int SetSelected(std::vector<int>, bool);
     int UnSelect(std::vector<int>);
     std::vector<int> GetSelectedVertex(double, double, double);
     void DrawSelected(bool);

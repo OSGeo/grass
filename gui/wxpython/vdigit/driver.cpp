@@ -41,8 +41,8 @@ DisplayDriver::DisplayDriver(void *device)
     pointsScreen = new wxList();
     cats = Vect_new_cats_struct();
     
-    selected = Vect_new_list();
-    selectedDupl = Vect_new_list();
+    selected.values = Vect_new_list();
+    selected.valuesDupl = Vect_new_list();
 
     drawSegments = false;
 
@@ -68,8 +68,8 @@ DisplayDriver::~DisplayDriver()
     Vect_destroy_line_struct(points);
     delete pointsScreen;
     Vect_destroy_cats_struct(cats);
-    Vect_destroy_list(selected);
-    Vect_destroy_list(selectedDupl);
+    Vect_destroy_list(selected.values);
+    Vect_destroy_list(selected.valuesDupl);
 }
 
 /**
@@ -913,8 +913,8 @@ void DisplayDriver::PrintIds()
 
     std::cerr << "selected: ";
 
-    for (int i = 0; i < selected->n_values; i++) {
-	std::cerr << selected->value[i] << " ";
+    for (int i = 0; i < selected.values->n_values; i++) {
+	std::cerr << selected.values->value[i] << " ";
     }
     std::cerr << std::endl;
 
@@ -951,6 +951,8 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
     drawSegments = false;
     drawSelected = true;
 
+    selected.isId = true;
+
     list = Vect_new_list();
     bbox = Vect_new_line_struct();
 
@@ -982,10 +984,10 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
 	}
 	
 	if (!IsSelected(line)) {
-	    Vect_list_append(selected, line);
+	    Vect_list_append(selected.values, line);
 	}
 	else {
-	    Vect_list_delete(selected, line);
+	    Vect_list_delete(selected.values, line);
 	}
     }
 
@@ -1018,15 +1020,17 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
 
     drawSelected = true;
 
+    selected.isId = true;
+
     line = Vect_find_line(mapInfo, x, y, z,
 			  type, thresh, with_z, 0);
 
     if (line > 0) {
 	if (!IsSelected(line)) {
-	    Vect_list_append(selected, line);
+	    Vect_list_append(selected.values, line);
 	}
 	else {
-	    Vect_list_delete(selected, line);
+	    Vect_list_delete(selected.values, line);
 	}
 
 	type = Vect_read_line (mapInfo, points, cats, line);
@@ -1055,9 +1059,18 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
 */
 bool DisplayDriver::IsSelected(int line)
 {
-    if (Vect_val_in_list(selected, line))
-	return true;
-
+    if (selected.isId) {
+	if (Vect_val_in_list(selected.values, line))
+	    return true;
+    }
+    else {
+	for (int i = 0; i < cats->n_cats; i++) {
+	    if (cats->field[i] == 1 &&
+		Vect_val_in_list(selected.values, cats->cat[i])) 
+		return true;
+	}
+    }
+    
     return false;
 }
 
@@ -1072,7 +1085,7 @@ bool DisplayDriver::IsSelected(int line)
 std::vector<int> DisplayDriver::GetSelected(bool grassId)
 {
     if (grassId)
-	return ListToVector(selected);
+	return ListToVector(selected.values);
 
     std::vector<int> dc_ids;
 
@@ -1081,7 +1094,7 @@ std::vector<int> DisplayDriver::GetSelected(bool grassId)
     }
     else {
 	int npoints;
-	Vect_read_line(mapInfo, points, NULL, selected->value[0]);
+	Vect_read_line(mapInfo, points, NULL, selected.values->value[0]);
 	npoints = points->n_points;
 	for (int i = 1; i < 2 * npoints; i++) {
 	  dc_ids.push_back(i);
@@ -1107,29 +1120,29 @@ std::map<int, std::vector <int> > DisplayDriver::GetDuplicates()
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
 
-    Vect_reset_list(selectedDupl);
+    Vect_reset_list(selected.valuesDupl);
 
-    for (int i = 0; i < selected->n_values; i++) {
-	line = selected->value[i];
+    for (int i = 0; i < selected.values->n_values; i++) {
+	line = selected.values->value[i];
 	if (IsDuplicated(line))
 	    continue;
 	
 	Vect_read_line(mapInfo, APoints, NULL, line);
 	
-	for (int j = 0; j < selected->n_values; j++) {
-	    if (i == j || IsDuplicated(selected->value[j]))
+	for (int j = 0; j < selected.values->n_values; j++) {
+	    if (i == j || IsDuplicated(selected.values->value[j]))
 		continue;
 	    
-	    Vect_read_line(mapInfo, BPoints, NULL, selected->value[j]);
+	    Vect_read_line(mapInfo, BPoints, NULL, selected.values->value[j]);
 	    
 	    if (Vect_line_check_duplicate (APoints, BPoints, WITHOUT_Z)) {
 		if (ids.find(i) == ids.end()) {
 		    ids[i] = std::vector<int> ();
-		    ids[i].push_back(selected->value[i]);
-		    Vect_list_append(selectedDupl, selected->value[i]);
+		    ids[i].push_back(selected.values->value[i]);
+		    Vect_list_append(selected.valuesDupl, selected.values->value[i]);
 		}
-		ids[i].push_back(selected->value[j]);
-		Vect_list_append(selectedDupl, selected->value[j]);
+		ids[i].push_back(selected.values->value[j]);
+		Vect_list_append(selected.valuesDupl, selected.values->value[j]);
 	    }
 	}
     }
@@ -1150,7 +1163,7 @@ std::map<int, std::vector <int> > DisplayDriver::GetDuplicates()
 */
 bool DisplayDriver::IsDuplicated(int line)
 {
-    if (Vect_val_in_list(selectedDupl, line))
+    if (Vect_val_in_list(selected.valuesDupl, line))
 	return true;
     
     return false;
@@ -1160,16 +1173,19 @@ bool DisplayDriver::IsDuplicated(int line)
    \brief Set selected vector objects
    
    \param[in] list of GRASS ids to be set
+   \param[in] cat if True expect categories instead of feature ids
 
    \return 1
 */
-int DisplayDriver::SetSelected(std::vector<int> id)
+int DisplayDriver::SetSelected(std::vector<int> id, bool cat)
 {
     drawSelected = true;
 
-    VectorToList(selected, id);
+    VectorToList(selected.values, id);
+    
+    selected.isId = !cat;
 
-    if (selected->n_values <= 0)
+    if (selected.values->n_values <= 0)
 	drawSegments = false;
 
     return 1;
@@ -1191,7 +1207,7 @@ int DisplayDriver::UnSelect(std::vector<int> id)
     for (std::vector<int>::const_iterator i = id.begin(), e = id.end();
 	 i != e; ++i) {
 	if (IsSelected(*i)) {
-	    Vect_list_delete(selected, *i);
+	    Vect_list_delete(selected.values, *i);
 	}
 	if (settings.highlightDupl.enabled && IsDuplicated(*i)) {
 	    checkForDupl = true;
@@ -1202,7 +1218,7 @@ int DisplayDriver::UnSelect(std::vector<int> id)
 	GetDuplicates();
     }
 
-    return selected->n_values;
+    return selected.values->n_values;
 }
 
 /**
@@ -1230,11 +1246,11 @@ std::vector<int> DisplayDriver::GetSelectedVertex(double x, double y, double thr
     std::vector<int> returnId;
 
     // only one object can be selected
-    if (selected->n_values != 1 || !drawSegments) 
+    if (selected.values->n_values != 1 || !drawSegments) 
 	return returnId;
 
     startId = 1;
-    line = selected->value[0];
+    line = selected.values->value[0];
 
     type = Vect_read_line (mapInfo, points, cats, line);
 
@@ -1524,4 +1540,77 @@ int DisplayDriver::DrawArrow(double x0, double y0,
     dc->DrawLine((wxCoord) x0, (wxCoord) y0, (wxCoord) x, (wxCoord) y);
 
     return 1;
+}
+
+/*!
+  \brief Get minimal region extent of selected features
+
+  \return n,s,w,e
+*/
+std::vector<int> DisplayDriver::GetRegionSelected()
+{
+    std::vector<int> region;
+
+    BOUND_BOX region_box, line_box;
+    struct ilist *list, *list_tmp;
+
+    list = list_tmp = NULL;
+
+    G_zero(&region_box, sizeof(region_box));
+    
+    if (!selected.isId) { /* -> cats */
+	list = Vect_new_list();
+	list_tmp = Vect_new_list();
+	/* can't use here
+	 *
+	  Vect_cidx_find_all(mapInfo, 1, GV_POINTS | GV_LINES,
+	  selected.values->value[i],
+	  list_tmp);
+	*/
+	int type;
+	bool found;
+	for (int line = 1; line < Vect_get_num_lines(mapInfo); line++) {
+	    type = Vect_read_line (mapInfo, NULL, cats, line);
+	    if (!(type & (GV_POINTS | GV_LINES)))
+		continue;
+	    
+	    found = false;
+	    for (int i = 0; i < cats->n_cats && !found; i++) {
+		for (int j = 0; j < selected.values->n_values && !found; j++) {
+		    if (cats->cat[i] == selected.values->value[j])
+			found = true;
+		}
+	    }
+	    if (found)
+		Vect_list_append(list, line);
+	}
+    }
+    else {
+	list = selected.values;
+    }
+    
+    for (int i = 0; i < list->n_values; i++) {
+	if (!Vect_get_line_box(mapInfo, list->value[i], &line_box))
+	    continue;
+
+	if (i == 0) {
+	    Vect_box_copy(&region_box, &line_box);
+	}
+	else {
+	    Vect_box_extend(&region_box, &line_box);
+	}
+    }
+
+    if (list && list != selected.values) {
+	Vect_destroy_list(list);
+    }
+    if (list_tmp)
+	Vect_destroy_list(list_tmp);
+	
+    region.push_back(region_box.N);
+    region.push_back(region_box.S);
+    region.push_back(region_box.W);
+    region.push_back(region_box.E);
+
+    return region;
 }

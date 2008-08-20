@@ -894,6 +894,7 @@ class AttributeManager(wx.Frame):
             self.popupDataID7 = wx.NewId()
             self.popupDataID8 = wx.NewId()
             self.popupDataID9 = wx.NewId()
+            self.popupDataID10 = wx.NewId()
 
             self.Bind(wx.EVT_MENU, self.OnDataItemEdit,       id=self.popupDataID1)
             self.Bind(wx.EVT_MENU, self.OnDataItemAdd,        id=self.popupDataID2)
@@ -902,8 +903,9 @@ class AttributeManager(wx.Frame):
             self.Bind(wx.EVT_MENU, self.OnDataSelectAll,      id=self.popupDataID5)
             self.Bind(wx.EVT_MENU, self.OnDataSelectNone,     id=self.popupDataID6)
             self.Bind(wx.EVT_MENU, self.OnDataDrawSelected,   id=self.popupDataID7)
-            self.Bind(wx.EVT_MENU, self.OnExtractSelected,    id=self.popupDataID8)
-            self.Bind(wx.EVT_MENU, self.OnDataReload,         id=self.popupDataID9)
+            self.Bind(wx.EVT_MENU, self.OnDataDrawSelectedZoom, id=self.popupDataID8)
+            self.Bind(wx.EVT_MENU, self.OnExtractSelected,    id=self.popupDataID9)
+            self.Bind(wx.EVT_MENU, self.OnDataReload,         id=self.popupDataID10)
 
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
         # generate popup-menu
@@ -920,14 +922,16 @@ class AttributeManager(wx.Frame):
         menu.Append(self.popupDataID6, _("Deselect all"))
         menu.AppendSeparator()
         menu.Append(self.popupDataID7, _("Display selected"))
+        menu.Append(self.popupDataID8, _("Display selected and zoom"))
         if not self.map or len(list.GetSelectedItems()) == 0:
             menu.Enable(self.popupDataID7, False)
-        menu.Append(self.popupDataID8, _("Extract selected"))
+            menu.Enable(self.popupDataID8, False)
+        menu.Append(self.popupDataID9, _("Extract selected"))
         if list.GetFirstSelected() == -1:
             menu.Enable(self.popupDataID3, False)
-            menu.Enable(self.popupDataID8, False)
+            menu.Enable(self.popupDataID9, False)
         menu.AppendSeparator()
-        menu.Append(self.popupDataID9, _("Reload"))
+        menu.Append(self.popupDataID10, _("Reload"))
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -1025,15 +1029,40 @@ class AttributeManager(wx.Frame):
         
         event.Skip()
 
-    def OnDataDrawSelected(self, event):
-        """Reload table description"""
-        if self.map and self.mapdisplay:
+    def _drawSelected(self, zoom):
+        """Highlight selected features"""
+        if not self.map or not self.mapdisplay:
+            return
+
+        digitToolbar = self.mapdisplay.toolbars['vdigit']
+        if digitToolbar and \
+                digitToolbar.GetLayer().GetName() == self.vectmap:
+            list = self.FindWindowById(self.layerPage[self.layer]['data'])
+            cats = map(int, list.GetSelectedItems())
+            self.mapdisplay.digit.driver.SetSelected(cats, cats=True)
+            if zoom:
+                n, s, w, e = self.mapdisplay.digit.driver.GetRegionSelected()
+                self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e,
+                                              update=True)
+                self.mapdisplay.Map.AdjustRegion() # resolution
+                self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
+            else:
+                self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=True)
+        else:
             # add map layer with higlighted vector features
             self.AddQueryMapLayer()
-            self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=False)
-
+            self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=False,
+                                                zoom=zoom)
+        
+    def OnDataDrawSelected(self, event):
+        """Reload table description"""
+        self._drawSelected(zoom=False)
         event.Skip()
 
+    def OnDataDrawSelectedZoom(self, event):
+        self._drawSelected(zoom=True)
+        event.Skip()
+        
     def OnDataItemAdd(self, event):
         """Add new record to the attribute table"""
         list      = self.FindWindowById(self.layerPage[self.layer]['data'])
