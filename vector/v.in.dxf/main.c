@@ -69,10 +69,6 @@ int main(int argc, char *argv[])
     module->description =
 	_("Converts files in DXF format to GRASS vector map format.");
 
-    flag.list = G_define_flag();
-    flag.list->key = 'l';
-    flag.list->description = _("List available layers and exit");
-
     flag.extent = G_define_flag();
     flag.extent->key = 'e';
     flag.extent->description = _("Ignore the map extent of DXF file");
@@ -85,18 +81,25 @@ int main(int argc, char *argv[])
     flag.topo->key = 'b';
     flag.topo->description = _("Do not build topology");
 
+    flag.frame = G_define_flag();
+    flag.frame->key = 'f';
+    flag.frame->description = _("Import polyface meshes as 3D wire frame");
+
+    flag.list = G_define_flag();
+    flag.list->key = 'l';
+    flag.list->description = _("List available layers and exit");
+    flag.list->guisection = _("DXF layers");
+
     flag.invert = G_define_flag();
     flag.invert->key = 'i';
     flag.invert->description =
 	_("Invert selection by layers (don't import layers in list)");
+    flag.invert->guisection = _("DXF layers");
 
     flag.one_layer = G_define_flag();
     flag.one_layer->key = '1';
     flag.one_layer->description = _("Import all objects into one layer");
-
-    flag.frame = G_define_flag();
-    flag.frame->key = 'f';
-    flag.frame->description = _("Import polyface meshes as 3D wire frame");
+    flag.one_layer->guisection = _("DXF layers");
 
     opt.input = G_define_standard_option(G_OPT_F_INPUT);
     opt.input->description = _("Name of input DXF file");
@@ -110,6 +113,7 @@ int main(int argc, char *argv[])
     opt.layers->required = NO;
     opt.layers->multiple = YES;
     opt.layers->description = _("List of layers to import");
+    opt.layers->guisection = _("DXF layers");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
