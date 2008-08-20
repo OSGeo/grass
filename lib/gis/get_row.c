@@ -1130,6 +1130,29 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
 /*--------------------------------------------------------------------------*/
 
+#ifdef GDAL_LINK
+
+static void get_null_value_row_gdal(int fd, char *flags, int row)
+{
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+    DCELL *tmp_buf = G_allocate_d_raster_buf();
+    int i;
+
+    if (get_map_row_nomask(fd, tmp_buf, row, DCELL_TYPE) <= 0) {
+	memset(flags, 1, G__.window.cols);
+	G_free(tmp_buf);
+	return;
+    }
+
+    for (i = 0; i < G__.window.cols; i++)
+	/* note: using == won't work if the null value is NaN */
+	flags[i] = memcmp(&tmp_buf[i], &fcb->gdal->null_val, sizeof(DCELL)) == 0;
+
+    G_free(tmp_buf);
+}
+
+#endif
+
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/
@@ -1154,6 +1177,12 @@ static void embed_mask(char *flags, int row)
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
 {
+#ifdef GDAL_LINK
+    struct fileinfo *fcb = &G__.fileinfo[fd];
+    if (fcb->gdal)
+	get_null_value_row_gdal(fd, flags, row);
+    else
+#endif
     get_null_value_row_nomask(fd, flags, row);
 
     if (with_mask)
