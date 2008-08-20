@@ -27,12 +27,10 @@
 #include "gdal.h"
 #include "ogr_srs_api.h"
 
-#ifndef MIN
-#  define MIN(a,b)      ((a<b) ? a : b)
-#endif
-#ifndef MAX
-#  define MAX(a,b)      ((a>b) ? a : b)
-#endif
+#undef MIN
+#undef MAX
+#define MIN(a,b)      ((a) < (b) ? (a) : (b))
+#define MAX(a,b)      ((a) > (b) ? (a) : (b))
 
 struct band_info
 {
