@@ -364,7 +364,7 @@ int main(int argc, char **argv)
 
     zcol_flag = G_define_flag();
     zcol_flag->key = 'z';
-    zcol_flag->description = _("Colorize polygons according to z height)");
+    zcol_flag->description = _("Colorize polygons according to z height");
 
     /* Check command line */
     if (G_parser(argc, argv))
