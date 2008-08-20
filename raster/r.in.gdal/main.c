@@ -29,10 +29,10 @@
 #include "gdal.h"
 #include "ogr_srs_api.h"
 
-#ifndef MAX
-#  define MIN(a,b)      ((a<b) ? a : b)
-#  define MAX(a,b)      ((a>b) ? a : b)
-#endif
+#undef MIN
+#undef MAX
+#define MIN(a,b)      ((a) < (b) ? (a) : (b))
+#define MAX(a,b)      ((a) > (b) ? (a) : (b))
 
 static void ImportBand(GDALRasterBandH hBand, const char *output,
 		       struct Ref *group_ref);
