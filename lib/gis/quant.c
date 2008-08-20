@@ -290,9 +290,12 @@ static int double_comp(const void *, const void *);
 
 #define USE_LOOKUP 1
 #define MAX_LOOKUP_TABLE_SIZE 2048
-#define MIN(a,b) (a < b ? a : b)
-#define MAX(a,b) (a > b ? a : b)
 #define NO_DATA (G_set_c_null_value (&tmp, 1), (CELL) tmp)
+
+#undef MIN
+#undef MAX
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
 
 #define NO_LEFT_INFINITE_RULE (! q->infiniteLeftSet)
 #define NO_RIGHT_INFINITE_RULE (! q->infiniteRightSet)
