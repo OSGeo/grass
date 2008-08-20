@@ -23,7 +23,7 @@ if {[catch {set env(MAPSET) [exec g.gisenv get=MAPSET]} error]} {
 
 set dlg 0
 set path {}
-set iconpath $env(GISBASE)/etc/gui/icons/
+set iconpath $env(GISBASE)/etc/gui/icons/grass
 
 
 ################################################################################
