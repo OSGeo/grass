@@ -156,15 +156,15 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
    \return true if vector object is selected
    \return false if vector object is not selected
 */
-bool DisplayDriver::IsSelected(int line)
+bool DisplayDriver::IsSelected(int line, bool force)
 {
-    if (selected.isId) {
+    if (selected.isId || force) {
 	if (Vect_val_in_list(selected.values, line))
 	    return true;
     }
     else {
 	for (int i = 0; i < cats->n_cats; i++) {
-	    if (cats->field[i] == 1 &&
+	    if (cats->field[i] == 1 && /* TODO: field */
 		Vect_val_in_list(selected.values, cats->cat[i])) 
 		return true;
 	}
@@ -415,6 +415,8 @@ std::vector<int> DisplayDriver::GetSelectedVertex(double x, double y, double thr
 */
 std::vector<int> DisplayDriver::GetRegionSelected()
 {
+    int line, area;
+    
     std::vector<int> region;
 
     BOUND_BOX region_box, line_box;
@@ -454,11 +456,20 @@ std::vector<int> DisplayDriver::GetRegionSelected()
     else {
 	list = selected.values;
     }
-    
-    for (int i = 0; i < list->n_values; i++) {
-	if (!Vect_get_line_box(mapInfo, list->value[i], &line_box))
-	    continue;
 
+    for (int i = 0; i < list->n_values; i++) {
+	line = list->value[i];
+	area = Vect_get_centroid_area(mapInfo, line);
+
+	if (area > 0) {
+	    if (!Vect_get_area_box(mapInfo, area, &line_box))
+		continue;
+	}
+	else {
+	    if (!Vect_get_line_box(mapInfo, line, &line_box))
+		continue;
+	}
+	
 	if (i == 0) {
 	    Vect_box_copy(&region_box, &line_box);
 	}
@@ -466,7 +477,7 @@ std::vector<int> DisplayDriver::GetRegionSelected()
 	    Vect_box_extend(&region_box, &line_box);
 	}
     }
-
+    
     if (list && list != selected.values) {
 	Vect_destroy_list(list);
     }

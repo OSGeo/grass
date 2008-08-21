@@ -148,7 +148,7 @@ private:
     void PrintIds();
 
     /* select feature */
-    bool IsSelected(int);
+    bool IsSelected(int, bool force=false);
     bool IsDuplicated(int);
 
     std::vector<int> ListToVector(struct ilist *);

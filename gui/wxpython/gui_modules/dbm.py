@@ -921,8 +921,8 @@ class AttributeManager(wx.Frame):
         menu.Append(self.popupDataID5, _("Select all"))
         menu.Append(self.popupDataID6, _("Deselect all"))
         menu.AppendSeparator()
-        menu.Append(self.popupDataID7, _("Display selected"))
-        menu.Append(self.popupDataID8, _("Display selected and zoom"))
+        menu.Append(self.popupDataID7, _("Highlight selected"))
+        menu.Append(self.popupDataID8, _("Highlight selected and zoom"))
         if not self.map or len(list.GetSelectedItems()) == 0:
             menu.Enable(self.popupDataID7, False)
             menu.Enable(self.popupDataID8, False)
@@ -2598,7 +2598,7 @@ class LayerBook(wx.Notebook):
                                    'table=%s' % table,
                                    'key=%s' % key,
                                    'layer=%d' % layer])
-
+        
         if connectCmd.returncode == 0:
             # update dialog (only for new layer)
             self.parentDialog.UpdateDialog(layer=layer) 
