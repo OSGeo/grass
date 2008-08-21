@@ -129,7 +129,7 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
         cmd.append("%s=%s" % (cmdDef[1], outmap))
         
         try:
-            listOfVector = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
+            listOfVectors = grass.list_grouped('vect')[grass.gisenv()['MAPSET']]
         except KeyError:
             listOfVectors = []
         
