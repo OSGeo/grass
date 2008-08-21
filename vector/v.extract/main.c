@@ -244,7 +244,7 @@ int main(int argc, char **argv)
 	db_set_handle(&handle, Fi->database, NULL);
 	if (db_open_database(driver, &handle) != DB_OK)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			  Fi->database, driver);
+			  Fi->database, Fi->driver);
 
 	ncats =
 	    db_select_int(driver, Fi->table, Fi->key, whereopt->answer,
