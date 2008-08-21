@@ -9,7 +9,7 @@ from htmlentitydefs import entitydefs
 from StringIO import StringIO
 
 try:
-    version = os.environ['GRASS_VERSION_NUMBER']
+    version = os.environ['VERSION_NUMBER']
 except:
     version = ""
 
@@ -354,6 +354,7 @@ if __name__ == "__main__":
     # strip excess whitespace
     blank_re = re.compile("[ \t\n]*\n[ \t\n]*")
     s = blank_re.sub('\n', s)
+    s = s.lstrip()
 
     # write groff
     outf = file(sys.argv[2], 'w')
