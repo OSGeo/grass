@@ -700,7 +700,7 @@ class mainFrame(wx.Frame):
                 if p.get('name', '') == 'output':
                     self.outputType = p.get('prompt', None)
                     break
-            if self.outputType:
+            if self.outputType in ('raster', 'vector', '3d-raster'):
                 # add newly created map into layer tree
                 self.addbox = wx.CheckBox(parent=self.panel,
                                           label=_('Add created map into layer tree'), style = wx.NO_BORDER)
