@@ -62,9 +62,10 @@ int DisplayDriver::DrawMap(bool force)
 	struct ilist *listAreas, *listCentroids;
 	struct line_pnts *points, *ipoints, **isles;
 
-	wxBrush *fillArea, *fillIsle;
+	wxBrush *fillArea, *fillAreaSelected, *fillIsle;
 
 	fillArea = new wxBrush(settings.area.color);
+	fillAreaSelected = new wxBrush(settings.highlight);
 	fillIsle = new wxBrush(*wxWHITE_BRUSH);
 	
 	listAreas = Vect_new_list();
@@ -123,7 +124,14 @@ int DisplayDriver::DrawMap(bool force)
 		}
 		
 		if (draw) {
-		    dc->SetBrush(*fillArea);
+		    int cat;
+		    cat = Vect_get_area_cat(mapInfo, area, 1); /* TODO: field */
+		    if (cat > -1 && IsSelected(cat, true)) {
+			dc->SetBrush(*fillAreaSelected);
+		    }
+		    else {
+			dc->SetBrush(*fillArea);
+		    }
 		    dc->SetPen(*wxTRANSPARENT_PEN);
 		    DrawArea(points);
 
