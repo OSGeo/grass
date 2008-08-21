@@ -38,7 +38,6 @@
 
 #define DATA(map, r, c) (map)[(r) * ncols + (c)]
 #define	DEG2RAD		0.017453292
-#define	max(a, b)	(b) < (a) ? (a):(b)
 /*#define DEBUG */
 
 
