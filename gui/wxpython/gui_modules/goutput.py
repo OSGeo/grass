@@ -106,7 +106,7 @@ class GMConsole(wx.Panel):
 
         # initialize variables
         self.Map             = None
-        self.parent          = parent # GMFrame
+        self.parent          = parent # GMFrame | CmdPanel
         self.lineWidth       = 80
         self.pageid          = pageid
         # remember position of line begining (used for '\r')
@@ -489,7 +489,7 @@ class GMConsole(wx.Panel):
                     # add layer into layer tree
                     cmd = dialog.notebookpanel.createCmd(ignoreErrors = True)
                     name = utils.GetLayerNameFromCmd(cmd, fullyQualified=True, param='output')
-                    mapTree = self.parent.parent.parent.parent.curr_page.maptree
+                    mapTree = self.parent.parent.parent.curr_page.maptree
                     if dialog.outputType == 'raster':
                         lcmd = ['d.rast',
                                 'map=%s' % name]
