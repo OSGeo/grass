@@ -442,6 +442,7 @@ static void create_map(const char *input, int band, const char *output,
 int main(int argc, char *argv[])
 {
     char *input;
+    char *source;
     char *output;
     char *title;
     struct Cell_head cellhd;
@@ -449,7 +450,7 @@ int main(int argc, char *argv[])
     GDALRasterBandH hBand;
     struct GModule *module;
     struct {
-	struct Option *input, *output, *band, *title;
+	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct Flag *flag_o, *flag_f, *flag_e, *flag_r;
     int band;
@@ -464,8 +465,14 @@ int main(int argc, char *argv[])
 
     parm.input = G_define_standard_option(G_OPT_F_INPUT);
     parm.input->description = _("Raster file to be linked");
-    parm.input->required = NO;	/* not required because of -f flag */
+    parm.input->required = NO;
     parm.input->guisection = _("Required");
+
+    parm.source = G_define_option();
+    parm.source->key = "source";
+    parm.source->description = _("Name of non-file GDAL data source");
+    parm.source->required = NO;
+    parm.source->type = TYPE_STRING;
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->required = NO;	/* not required because of -f flag */
@@ -515,7 +522,7 @@ int main(int argc, char *argv[])
     }
 
     input = parm.input->answer;
-
+    source = parm.source->answer;
     output = parm.output->answer;
 
     if (parm.title->answer) {
@@ -530,11 +537,25 @@ int main(int argc, char *argv[])
     else
 	band = 1;
 
-    if (!input)
-	G_fatal_error(_("Name for input raster map not specified"));
+    if (!input && !source)
+	G_fatal_error(_("Name for input source not specified"));
+
+    if (input && source)
+	G_fatal_error(_("input= and source= are mutually exclusive"));
 
     if (!output)
 	G_fatal_error(_("Name for output raster map not specified"));
+
+    if (input && !G_is_absolute_path(input)) {
+	char path[GPATH_MAX];
+	getcwd(path, sizeof(path));
+	strcat(path, "/");
+	strcat(path, input);
+	input = G_store(path);
+    }
+
+    if (!input)
+	input = source;
 
     hDS = GDALOpen(input, GA_ReadOnly);
     if (hDS == NULL)
