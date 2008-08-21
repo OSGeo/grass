@@ -763,7 +763,7 @@ class MultiImportDialog(wx.Dialog):
                                                      buttonText=_('Browse'),
                                                      startDirectory=os.getcwd(),
                                                      changeCallback=self.OnSetInput)
-            self.formatText = wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Choose file extension:"))
+            self.formatText = wx.StaticText(self.panel, id=wx.ID_ANY, label=_("Select file extension:"))
             self.format = wx.TextCtrl(parent=self.panel, id=wx.ID_ANY, size=(100, -1),
                                       value="")
             if self.inputType == 'gdal':
@@ -808,22 +808,22 @@ class MultiImportDialog(wx.Dialog):
         inputBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
                                 label=" %s " % self.inputTitle)
         inputSizer = wx.StaticBoxSizer(inputBox, wx.HORIZONTAL)
-        gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
         
+        gridSizer = wx.FlexGridSizer(cols=2, vgap=5, hgap=5)
+       
         gridSizer.Add(item=self.inputText,
-                      flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 0))
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        gridSizer.AddGrowableCol(1)
         gridSizer.Add(item=self.input,
-                      flag=wx.EXPAND, pos=(0, 1))
+                      flag=wx.EXPAND | wx.ALL)
         
         if self.inputType != 'dxf':
             gridSizer.Add(item=self.formatText,
-                          flag=wx.ALIGN_CENTER_VERTICAL, pos=(1, 0))
-            gridSizer.Add(item=self.format,
-                          pos=(1, 1))
+                          flag=wx.ALIGN_CENTER_VERTICAL)
+            gridSizer.Add(item=self.format)
         
-        gridSizer.AddGrowableCol(1)
-        inputSizer.Add(item=gridSizer, proportion=0,
-                       flag=wx.EXPAND)
+        inputSizer.Add(item=gridSizer, proportion=1,
+                       flag=wx.EXPAND | wx.ALL)
         
         dialogSizer.Add(item=inputSizer, proportion=0,
                         flag=wx.ALL | wx.EXPAND, border=5)
