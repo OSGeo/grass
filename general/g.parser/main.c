@@ -276,15 +276,10 @@ int main(int argc, char *argv[])
 	translate_output = 1;
     }
 
-    if ((argc < 2 + translate_output) || (argc >= 2 && ((strcmp
-							 (argv[1],
-							  "help") == 0) ||
-							(strcmp
-							 (argv[1],
-							  "-help") == 0) ||
-							(strcmp
-							 (argv[1],
-							  "--help") == 0)))) {
+    if ((argc < 2 + translate_output) || (argc >= 2 &&
+					  ((strcmp(argv[1], "help") == 0) ||
+					   (strcmp(argv[1], "-help") == 0) ||
+					   (strcmp(argv[1], "--help") == 0)))) {
 	fprintf(stderr, "Usage: %s [-t] <filename> [<argument> ...]\n",
 		argv[0]);
 	return 1;
