@@ -193,20 +193,20 @@ int main(int argc, char *argv[])
     /*  "from_y - y coordinate of the nearest point on 'from' feature;" */
     /* "from_along - distance to the nearest point on 'from' feature along linear feature;" */
 
-    column_opt = G_define_standard_option(G_OPT_COLUMN);
+    column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     column_opt->required = YES;
     column_opt->multiple = YES;
     column_opt->description =
 	_("Column name(s) where values specified by 'upload' option will be uploaded");
     column_opt->guisection = _("From_map");
 
-    to_column_opt = G_define_standard_option(G_OPT_COLUMN);
+    to_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     to_column_opt->key = "to_column";
     to_column_opt->description =
 	_("Column name of nearest feature (used with upload=to_attr)");
     to_column_opt->guisection = _("To_map");
 
-    table_opt = G_define_standard_option(G_OPT_TABLE);
+    table_opt = G_define_standard_option(G_OPT_DB_TABLE);
     table_opt->description =
 	_("Name of table created for output when the distance to all flag is used");
 

@@ -110,12 +110,12 @@ static void parse_command_line(int argc, char **argv)
     input->required = NO;
     input->description = _("Name of file containing SQL statements");
 
-    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
 	driver->answer = (char *) drv;
 
-    database = G_define_standard_option(G_OPT_DATABASE);
+    database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
 	database->answer = (char *) db;
 

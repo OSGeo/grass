@@ -158,7 +158,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->poly->description = _("Polygon for selecting features");
     params->poly->guisection = _("Query");
 
-    params->where = G_define_standard_option(G_OPT_WHERE);
+    params->where = G_define_standard_option(G_OPT_DB_WHERE);
     params->where->guisection = _("Query");
 
     params->query = G_define_option();

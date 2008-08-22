@@ -184,12 +184,12 @@ int main(int argc, char *argv[])
     zrot->answer = "0.0";
     zrot->guisection = _("Custom");
 
-    table = G_define_standard_option(G_OPT_TABLE);
+    table = G_define_standard_option(G_OPT_DB_TABLE);
     table->description =
 	_("Name of table containing transformation parameters");
     table->guisection = _("Custom");
 
-    columns = G_define_standard_option(G_OPT_COLUMNS);
+    columns = G_define_standard_option(G_OPT_DB_COLUMNS);
     columns->label =
 	_("Name of attribute column(s) used as transformation parameters");
     columns->description =

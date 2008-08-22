@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
     Vectfile = G_define_standard_option(G_OPT_V_MAP);
 
-    Colopt = G_define_standard_option(G_OPT_COLUMN);
+    Colopt = G_define_standard_option(G_OPT_DB_COLUMN);
     Colopt->required = YES;
     Colopt->description = _("Name of attribute column to be used for labels");
 
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
     Typopt->answer = "point,line,boundary,centroid";
 
     Fieldopt = G_define_standard_option(G_OPT_V_FIELD);
-    whereopt = G_define_standard_option(G_OPT_WHERE);
+    whereopt = G_define_standard_option(G_OPT_DB_WHERE);
 
     Along_flag = G_define_flag();
     Along_flag->key = 'a';

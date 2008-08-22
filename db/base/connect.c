@@ -56,11 +56,11 @@ int main(int argc, char *argv[])
     check_set_default->description =
 	_("Check connection parameters, set if uninitialized, and exit");
 
-    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->answer = (char *) db_get_default_driver_name();
 
-    database = G_define_standard_option(G_OPT_DATABASE);
+    database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->answer = (char *) db_get_default_database_name();
 
     schema = G_define_option();

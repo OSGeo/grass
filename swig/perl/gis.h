@@ -150,9 +150,9 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
  /**/ typedef enum
 {
-    G_OPT_WHERE,		/* SQL where conditions */
-    G_OPT_COLUMN,		/* one attr column */
-    G_OPT_COLUMNS,		/* one or more attr columns */
+    G_OPT_DB_WHERE,		/* SQL where conditions */
+    G_OPT_DB_COLUMN,		/* one attr column */
+    G_OPT_DB_COLUMNS,		/* one or more attr columns */
 
     G_OPT_I_GROUP,		/* old input imagery group */
     G_OPT_R_INPUT,		/* old input raster map */

@@ -53,18 +53,18 @@ int main(int argc, char **argv)
 
     inopt = G_define_standard_option(G_OPT_V_MAP);
 
-    dbdriver = G_define_standard_option(G_OPT_DRIVER);
+    dbdriver = G_define_standard_option(G_OPT_DB_DRIVER);
     dbdriver->options = db_list_drivers();
     if ((drv = G__getenv2("DB_DRIVER", G_VAR_MAPSET)))
 	dbdriver->answer = G_store(drv);
 
-    dbdatabase = G_define_standard_option(G_OPT_DATABASE);
+    dbdatabase = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
 	dbdatabase->answer = G_store(db);
 
-    dbtable = G_define_standard_option(G_OPT_TABLE);
+    dbtable = G_define_standard_option(G_OPT_DB_TABLE);
 
-    dbkey = G_define_standard_option(G_OPT_COLUMN);
+    dbkey = G_define_standard_option(G_OPT_DB_COLUMN);
     dbkey->key = "key";
     dbkey->answer = "cat";
     dbkey->label = _("Key column name");

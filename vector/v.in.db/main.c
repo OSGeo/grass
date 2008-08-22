@@ -53,38 +53,38 @@ int main(int argc, char *argv[])
     module->description =
 	_("Creates new vector (points) map from database table containing coordinates.");
 
-    table_opt = G_define_standard_option(G_OPT_TABLE);
+    table_opt = G_define_standard_option(G_OPT_DB_TABLE);
     table_opt->required = YES;
     table_opt->description = _("Input table name");
 
-    driver_opt = G_define_standard_option(G_OPT_DRIVER);
+    driver_opt = G_define_standard_option(G_OPT_DB_DRIVER);
     driver_opt->options = db_list_drivers();
     driver_opt->answer = db_get_default_driver_name();
 
-    database_opt = G_define_standard_option(G_OPT_DATABASE);
+    database_opt = G_define_standard_option(G_OPT_DB_DATABASE);
     database_opt->answer = db_get_default_database_name();
 
-    xcol_opt = G_define_standard_option(G_OPT_COLUMN);
+    xcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     xcol_opt->key = "x";
     xcol_opt->required = YES;
     xcol_opt->description = _("Name of column containing x coordinate");
 
-    ycol_opt = G_define_standard_option(G_OPT_COLUMN);
+    ycol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     ycol_opt->key = "y";
     ycol_opt->required = YES;
     ycol_opt->description = _("Name of column containing y coordinate");
 
-    zcol_opt = G_define_standard_option(G_OPT_COLUMN);
+    zcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     zcol_opt->key = "z";
     zcol_opt->description = _("Name of column containing z coordinate");
 
-    keycol_opt = G_define_standard_option(G_OPT_COLUMN);
+    keycol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     keycol_opt->key = "key";
     keycol_opt->required = YES;
     keycol_opt->description = _("Name of column containing category number");
     keycol_opt->description = _("Must refer to an integer column");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     outvect = G_define_standard_option(G_OPT_V_OUTPUT);
 

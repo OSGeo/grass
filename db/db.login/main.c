@@ -43,12 +43,12 @@ int main(int argc, char *argv[])
     module->keywords = _("database, SQL");
     module->description = _("Sets user/password for driver/database.");
 
-    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->required = YES;
     driver->answer = db_get_default_driver_name();
 
-    database = G_define_standard_option(G_OPT_DATABASE);
+    database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->required = YES;
     database->answer = db_get_default_database_name();
 

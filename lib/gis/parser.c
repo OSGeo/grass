@@ -294,15 +294,46 @@ struct Option *G_define_option(void)
  * If an invalid parameter was specified a empty Option structure will 
  * be returned (not NULL).
  *
- *  - general: G_OPT_WHERE, G_OPT_COLUMN, G_OPT_COLUMNS, G_OPT_TABLE, G_OPT_DRIVER, G_OPT_DATABASE
+ *  - general:
+ *   - G_OPT_DB_WHERE
+ *   - G_OPT_DB_COLUMN
+ *   - G_OPT_DB_COLUMNS
+ *   - G_OPT_DB_TABLE
+ *   - G_OPT_DB_DRIVER
+ *   - G_OPT_DB_DATABASE
  *
- *  - imagery: G_OPT_I_GROUP, G_OPT_I_SUBGROUP
+ *  - imagery:
+ *   - G_OPT_I_GROUP
+ *   - G_OPT_I_SUBGROUP
  *
- *  - raster: G_OPT_R_INPUT, G_OPT_R_INPUTS, G_OPT_R_OUTPUT, G_OPT_R_MAP, G_OPT_R_MAPS, G_OPT_R_BASE, G_OPT_R_COVER, G_OPT_R_ELEV, G_OPT_R_ELEVS
+ *  - raster:
+ *   - G_OPT_R_INPUT
+ *   - G_OPT_R_INPUTS
+ *   - G_OPT_R_OUTPUT
+ *   - G_OPT_R_MAP
+ *   - G_OPT_R_MAPS
+ *   - G_OPT_R_BASE
+ *   - G_OPT_R_COVER
+ *   - G_OPT_R_ELEV
+ *   - G_OPT_R_ELEVS
  *
- *  - raster3d: G_OPT_R3_INPUT, G_OPT_R3_INPUTS, G_OPT_R3_OUTPUT, G_OPT_R3_MAP, G_OPT_R3_MAPS
+ *  - raster3d:
+ *   - G_OPT_R3_INPUT
+ *   - G_OPT_R3_INPUTS
+ *   - G_OPT_R3_OUTPUT
+ *   - G_OPT_R3_MAP
+ *   - G_OPT_R3_MAPS
  *
- *  - vector: G_OPT_V_INPUT, G_OPT_V_INPUTS, G_OPT_V_OUTPUT, G_OPT_V_MAP, G_OPT_V_MAPS, G_OPT_V_TYPE, G_OPT_V_FIELD, G_OPT_V_CAT, G_OPT_V_CATS
+ *  - vector:
+ *   - G_OPT_V_INPUT
+ *   - G_OPT_V_INPUTS
+ *   - G_OPT_V_OUTPUT
+ *   - G_OPT_V_MAP
+ *   - G_OPT_V_MAPS
+ *   - G_OPT_V_TYPE
+ *   - G_OPT_V_FIELD
+ *   - G_OPT_V_CAT
+ *   - G_OPT_V_CATS
  *
  * \param[in] opt Type of Option struct to create
  *
@@ -316,8 +347,7 @@ struct Option *G_define_standard_option(int opt)
     Opt = G_define_option();
 
     switch (opt) {
-	/* Database options (change to G_OPT_DB_*?) */
-    case G_OPT_WHERE:
+    case G_OPT_DB_WHERE:
 	Opt->key = "where";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "sql_query";
@@ -325,7 +355,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("WHERE conditions of SQL statement without 'where' keyword");
 	Opt->description = _("Example: income < 1000 and inhab >= 10000");
 	break;
-    case G_OPT_TABLE:
+    case G_OPT_DB_TABLE:
 	Opt->key = "table";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
@@ -334,7 +364,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Table name");
 	Opt->gisprompt = GISPROMPT_DBTABLE;
 	break;
-    case G_OPT_DRIVER:
+    case G_OPT_DB_DRIVER:
 	Opt->key = "driver";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
@@ -342,7 +372,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = NO;
 	Opt->description = _("Driver name");
 	break;
-    case G_OPT_DATABASE:
+    case G_OPT_DB_DATABASE:
 	Opt->key = "database";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
@@ -350,7 +380,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->multiple = NO;
 	Opt->description = _("Database name");
 	break;
-    case G_OPT_COLUMN:
+    case G_OPT_DB_COLUMN:
 	Opt->key = "column";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
@@ -359,7 +389,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->description = _("Name of attribute column");
 	Opt->gisprompt = GISPROMPT_DBCOLUMN;
 	break;
-    case G_OPT_COLUMNS:
+    case G_OPT_DB_COLUMNS:
 	Opt->key = "columns";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";

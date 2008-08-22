@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
     spat_opt->description =
 	_("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Query");
 
     min_area_opt = G_define_option();

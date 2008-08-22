@@ -130,7 +130,7 @@ int main(int argc, char **argv)
     field_opt->description =
 	_("Layer number. If -1, all layers are displayed.");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Query");
 
     bwidth_opt = G_define_option();

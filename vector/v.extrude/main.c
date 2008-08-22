@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     height->multiple = NO;
     height->description = _("Fixed height for 3D vector objects");
 
-    hcolumn = G_define_standard_option(G_OPT_COLUMN);
+    hcolumn = G_define_standard_option(G_OPT_DB_COLUMN);
     hcolumn->key = "hcolumn";
     hcolumn->multiple = NO;
     hcolumn->description = _("Name of attribute column with object heights");

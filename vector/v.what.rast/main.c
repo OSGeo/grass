@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     col_opt->description =
 	_("Column name (will be updated by raster values)");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

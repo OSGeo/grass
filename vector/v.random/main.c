@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	_("Maximum z height (needs -z flag or column name)");
     parm.zmax->answer = "0.0";
 
-    parm.zcol = G_define_standard_option(G_OPT_COLUMN);
+    parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->key = "column";
     parm.zcol->required = NO;
     parm.zcol->multiple = NO;

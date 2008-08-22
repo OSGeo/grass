@@ -172,13 +172,13 @@ static void parse_command_line(int argc, char **argv)
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
-    table = G_define_standard_option(G_OPT_TABLE);
+    table = G_define_standard_option(G_OPT_DB_TABLE);
 
-    database = G_define_standard_option(G_OPT_DATABASE);
+    database = G_define_standard_option(G_OPT_DB_DATABASE);
     if ((db = db_get_default_database_name()))
 	database->answer = (char *) db;
 
-    driver = G_define_standard_option(G_OPT_DRIVER);
+    driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if ((drv = db_get_default_driver_name()))
 	driver->answer = (char *) drv;

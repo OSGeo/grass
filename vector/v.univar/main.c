@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     col_opt->multiple = NO;
     col_opt->description = _("Column name");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 

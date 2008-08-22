@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
 	_("Name of the column with smoothing parameters");
     parm.scol->guisection = _("Settings");
 
-    parm.wheresql = G_define_standard_option(G_OPT_WHERE);
+    parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
 
     parm.devi = G_define_option();
     parm.devi->key = "devi";

@@ -51,9 +51,9 @@ int main(int argc, char **argv)
     map_opt = G_define_standard_option(G_OPT_V_MAP);
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
-    col_opt = G_define_standard_option(G_OPT_COLUMNS);
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMNS);
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
     fs_opt->description = _("Output field separator");
