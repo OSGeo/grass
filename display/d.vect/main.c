@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
     cat_opt->guisection = _("Query");
 
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Query");
 
     /* Colors */
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
     fcolor_opt->description =
 	_("Either a standard GRASS color, R:G:B triplet, or \"none\"");
 
-    rgbcol_opt = G_define_standard_option(G_OPT_COLUMN);
+    rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rgbcol_opt->key = "rgb_column";
     rgbcol_opt->guisection = _("Colors");
     rgbcol_opt->description = _("Name of color definition column (for use with -a flag)");
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
     width_opt->guisection = _("Lines");
     width_opt->description = _("Line width");
 
-    wcolumn_opt = G_define_standard_option(G_OPT_COLUMN);
+    wcolumn_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     wcolumn_opt->key = "wcolumn";
     wcolumn_opt->guisection = _("Lines");
     wcolumn_opt->description =
@@ -231,7 +231,7 @@ int main(int argc, char **argv)
     size_opt->description = _("Symbol size");
 
     /* Labels */
-    attrcol_opt = G_define_standard_option(G_OPT_COLUMN);
+    attrcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     attrcol_opt->key = "attrcol";
     attrcol_opt->multiple = NO;	/* or fix attr.c, around line 102 */
     attrcol_opt->guisection = _("Labels");

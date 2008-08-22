@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	_("Input text file with category numbers/number ranges to be extracted");
     fileopt->description = _("If '-' given reads from standard input");
 
-    whereopt = G_define_standard_option(G_OPT_WHERE);
+    whereopt = G_define_standard_option(G_OPT_DB_WHERE);
 
     /* heeeerrrrrre's the   PARSER */
     if (G_parser(argc, argv))

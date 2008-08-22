@@ -83,9 +83,9 @@ int parse_command_line(int argc, char *argv[])
     parms.units->description =
 	_("mi(les),f(eet),me(ters),k(ilometers),a(cres),h(ectares)");
 
-    parms.col = G_define_standard_option(G_OPT_COLUMNS);
+    parms.col = G_define_standard_option(G_OPT_DB_COLUMNS);
 
-    parms.qcol = G_define_standard_option(G_OPT_COLUMN);
+    parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parms.qcol->key = "qcolumn";
     parms.qcol->label = _("Name of attribute column used for 'query' option");
     parms.qcol->description = _("E.g. 'cat', 'count(*)', 'sum(val)'");

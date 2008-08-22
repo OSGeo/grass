@@ -38,7 +38,7 @@
 #define NO            0
 
 typedef enum {
-    G_OPT_WHERE,   
+    G_OPT_DB_WHERE,   
     G_OPT_R_INPUT, 
     G_OPT_R_OUTPUT,
     G_OPT_R_MAP,   

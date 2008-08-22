@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     /* for GRASS 7, IMHO this should be changed to "attrcolumn" */
-    col = G_define_standard_option(G_OPT_COLUMN);
+    col = G_define_standard_option(G_OPT_DB_COLUMN);
     col->description =
 	_("Name of column for attr parameter (data type must be numeric)");
     col->guisection = _("Attributes");
@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
     rows->answer = "4096";
     rows->description = _("Number of rows to hold in memory");
 
-    rgbcol_opt = G_define_standard_option(G_OPT_COLUMN);
+    rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     rgbcol_opt->key = "rgbcolumn";
     rgbcol_opt->description =
 	_("Name of color definition column (with RRR:GGG:BBB entries)");
     rgbcol_opt->guisection = _("Attributes");
 
-    label_opt = G_define_standard_option(G_OPT_COLUMN);
+    label_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     label_opt->key = "labelcolumn";
     label_opt->description =
 	_("Name of column used as raster category labels");

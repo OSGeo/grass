@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     rules_opt->required = NO;
     rules_opt->description = _("Full path to the reclass rule file");
 
-    col_opt = G_define_standard_option(G_OPT_COLUMN);
+    col_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     col_opt->label =
 	_("The name of the column whose values are to be used as new categories");
     col_opt->description = _("The column must be type integer or string");

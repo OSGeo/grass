@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     cat_opt = G_define_standard_option(G_OPT_V_CATS);
-    where_opt = G_define_standard_option(G_OPT_WHERE);
+    where_opt = G_define_standard_option(G_OPT_DB_WHERE);
 
 
     ca_flag = G_define_flag();

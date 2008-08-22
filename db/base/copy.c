@@ -37,25 +37,25 @@ int main(int argc, char **argv)
 	_("Either 'from_table' (optionaly with 'where') can be used "
 	  "or 'select' option, but not 'from_table' and 'select' at the same time.");
     
-    from_driver = G_define_standard_option(G_OPT_DRIVER);
+    from_driver = G_define_standard_option(G_OPT_DB_DRIVER);
     from_driver->key = "from_driver";
     from_driver->options = db_list_drivers();
     from_driver->description = _("Input driver name");
     if ((drv = db_get_default_driver_name()))
       from_driver->answer = (char *) drv;
 
-    from_database = G_define_standard_option(G_OPT_DATABASE);
+    from_database = G_define_standard_option(G_OPT_DB_DATABASE);
     from_database->key = "from_database";
     from_database->description = _("Input database name");
     if ((db = db_get_default_database_name()))
       from_database->answer = (char *) db;
 
-    from_table = G_define_standard_option(G_OPT_TABLE);
+    from_table = G_define_standard_option(G_OPT_DB_TABLE);
     from_table->key = "from_table";
     from_table->description =
 	_("Input table name (only, if 'select' is not used)");
 
-    to_driver = G_define_standard_option(G_OPT_DRIVER);
+    to_driver = G_define_standard_option(G_OPT_DB_DRIVER);
     to_driver->key = "to_driver";
     to_driver->options = db_list_drivers();
     to_driver->required = NO;
@@ -63,19 +63,19 @@ int main(int argc, char **argv)
     if ((drv = db_get_default_driver_name()))
       to_driver->answer = (char *) drv;
 
-    to_database = G_define_standard_option(G_OPT_DATABASE);
+    to_database = G_define_standard_option(G_OPT_DB_DATABASE);
     to_database->key = "to_database";
     to_database->description = _("Output database name");
     if ((db = db_get_default_database_name()))
       to_database->answer = (char *) db;
 
-    to_table = G_define_standard_option(G_OPT_TABLE);
+    to_table = G_define_standard_option(G_OPT_DB_TABLE);
     to_table->key = "to_table";
     to_table->required = YES;
     to_table->description = _("Output table name");
     to_table->gisprompt = "new,dbtable,dbtable";
 
-    where = G_define_standard_option(G_OPT_WHERE);
+    where = G_define_standard_option(G_OPT_DB_WHERE);
 
     select = G_define_option();
     select->key = "select";

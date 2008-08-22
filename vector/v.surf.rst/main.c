@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
     parm.zcol->description =
 	_("Name of the attribute column with values to be used for approximation (if layer>0)");
 
-    parm.wheresql = G_define_standard_option(G_OPT_WHERE);
+    parm.wheresql = G_define_standard_option(G_OPT_DB_WHERE);
 
     parm.elev = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.elev->key = "elev";
