@@ -61,9 +61,9 @@ GRASS_VERSION_FILE    = $(ETC)/VERSION
 GRASS_BUILD_FILE      = $(ETC)/BUILD
 
 ##################### other #############################################
-CFLAGS      =  $(INC) $(COMPILE_FLAGS) $(USE_TERMIO)
-CXXFLAGS    =  $(INC) $(COMPILE_FLAGS_CXX) $(USE_TERMIO)
-LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH) $(USE_TERMIO)
+CFLAGS      =  $(INC) $(COMPILE_FLAGS)
+CXXFLAGS    =  $(INC) $(COMPILE_FLAGS_CXX)
+LDFLAGS     =  $(LIBPATH) $(LINK_FLAGS) $(LD_SEARCH_FLAGS) $(PQLIBPATH)
 VECT_CFLAGS =  $(GDALCFLAGS) 
 
 # Object with _fmode which must be linked to each executable on Windows
