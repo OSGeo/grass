@@ -26,7 +26,7 @@ default:
 	$(MAKE) -C src
 	$(MAKE) install
 	$(MAKE) -C html
-	$(MAKE) htmldir
+	$(MAKE) html
 
 # Install the scripts in the appropriate directory
 install:

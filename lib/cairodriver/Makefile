@@ -1,7 +1,5 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
 EXTRA_CFLAGS=-I../driver $(CAIROINC)
 EXTRA_LIBS=$(DRIVERLIB) $(GISLIB) $(CAIROLIB)
 
@@ -12,7 +10,7 @@ PGM = cairodriver
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 ifneq ($(USE_CAIRO),)
-default: lib htmldir
+default: lib
 else
 default:
 endif

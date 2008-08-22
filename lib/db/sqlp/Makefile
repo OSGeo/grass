@@ -15,7 +15,7 @@ EXTRA_HEADERS = y.tab.h
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib htmldir
+default: lib
 
 y.tab.c y.tab.h: yac.y
 	$(YACC) -d -v yac.y

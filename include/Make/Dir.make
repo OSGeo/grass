@@ -19,7 +19,9 @@ cleansubdirs:
 	    $(MAKE) -C $$subdir clean; \
 	done
 
-.PHONY: subdirs cleansubdirs parsubdirs $(SUBDIRS)
+htmldir: html
+
+.PHONY: subdirs cleansubdirs parsubdirs htmldir $(SUBDIRS)
 
 parsubdirs: $(SUBDIRS)
 

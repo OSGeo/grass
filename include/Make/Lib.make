@@ -8,7 +8,7 @@ include $(MODULE_TOPDIR)/include/Make/Platform.make
 include $(MODULE_TOPDIR)/include/Make/Grass.make
 
 ifndef LIB_OBJS
-LIB_OBJS = $(subst .c,.o,$(wildcard *.c))
+LIB_OBJS := $(subst .c,.o,$(wildcard *.c))
 endif
 
 ARCH_LIB_OBJS := $(foreach obj,$(LIB_OBJS),$(OBJDIR)/$(obj))
@@ -23,4 +23,4 @@ include $(MODULE_TOPDIR)/include/Make/Stlib.make
 include $(MODULE_TOPDIR)/include/Make/Shlib.make
 
 lib: $(GRASS_LIBRARY_TYPE)
-
+	if [ "$(PGM)" != "" -a -f "$(PGM)".html ] ; then $(MAKE) html ; fi

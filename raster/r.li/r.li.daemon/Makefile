@@ -9,4 +9,4 @@ DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib htmldir
+default: lib

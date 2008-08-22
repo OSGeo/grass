@@ -54,7 +54,6 @@ ARCH_OBJS := $(foreach obj,$(OBJS),$(OBJDIR)/$(obj))
 
 EXTRA_CLEAN_FILES = nvwish$(EXE)
 
-#default: $(BIN)/$(PGM) htmlcmd
 default: nvwish$(EXE)
 
 nvwish$(EXE): $(ARCH_OBJS) $(VECTDEP) $(BITMAPDEP) $(LINKMDEP) $(FORMDEP) $(DBMIDEP $(GISDEP)

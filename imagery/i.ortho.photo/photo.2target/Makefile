@@ -7,6 +7,6 @@ EXTRA_CFLAGS = -I../libes
 LIBES     = $(IMAGERYLIB) $(DISPLAYLIB) $(RASTERLIB) $(GISLIB) $(IORTHOLIB) $(VASKLIB) $(CURSES) $(GMATHLIB)
 DEPENDENCIES= $(IMAGERYDEP) $(DISPLAYDEP) $(RASTERDEP) $(IORTHODEP) $(GISDEP) $(VASKDEP) $(GMATHDEP)
 
-include $(MODULE_TOPDIR)/include/Make/Module.make
+include $(MODULE_TOPDIR)/include/Make/Etc.make
 
 default: etc
