@@ -197,7 +197,7 @@ static void do_label_overlap(label_t * label, int cc, int nc)
 	if (ol->current_candidate == oc) {
 	    ol->current_score -= LABEL_OVERLAP_WEIGHT;
 	    label->current_score -= LABEL_OVERLAP_WEIGHT;
-	    //          ol->candidates[oc].score -= LABEL_OVERLAP_WEIGHT;
+	    /* ol->candidates[oc].score -= LABEL_OVERLAP_WEIGHT; */
 	    overlaps_removed++;
 	}
     }
@@ -212,7 +212,7 @@ static void do_label_overlap(label_t * label, int cc, int nc)
 	if (ol->current_candidate == oc) {
 	    ol->current_score += LABEL_OVERLAP_WEIGHT;
 	    label->current_score += LABEL_OVERLAP_WEIGHT;
-	    //          ol->candidates[oc]->score += 40;
+	    /* ol->candidates[oc]->score += 40; */
 	    overlaps_created++;
 	}
     }

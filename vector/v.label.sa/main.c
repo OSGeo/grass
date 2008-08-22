@@ -39,7 +39,6 @@ int main(int argc, char *argv[])
     module->description =
 	_("Create optimally placed labels for vector map(s)");
 
-    //    fprintf(stderr, "Parsing options and flags\n");
     /* parse options and flags */
     p.map = G_define_standard_option(G_OPT_V_MAP);
 
@@ -193,8 +192,8 @@ void print_label(FILE * labelf, label_t * label, struct params *p)
 
     fprintf(labelf, "east: %lf\n", label->candidates[cc].point.x);
     fprintf(labelf, "north: %lf\n", label->candidates[cc].point.y);
-    fprintf(labelf, "xoffset: %lf\n", 0.0);	// * (size));
-    fprintf(labelf, "yoffset: %lf\n", 0.0);	// * (size));
+    fprintf(labelf, "xoffset: %lf\n", 0.0);	/*  * (size)); */
+    fprintf(labelf, "yoffset: %lf\n", 0.0);	/*  * (size)); */
     fprintf(labelf, "ref: %s\n", "bottom left");
 
     fprintf(labelf, "font: %s\n", p->font->answer);
