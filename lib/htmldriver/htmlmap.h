@@ -14,12 +14,6 @@
 #define CLIENT 1		/* write output in netscape client side image map format */
 #define RAW    2		/* write output in raw format */
 
-extern char *last_text;
-extern int last_text_len;
-extern char *file_name;
-extern int html_type;
-extern FILE *output;
-
 struct MapPoly
 {
     char *url;
@@ -29,8 +23,20 @@ struct MapPoly
     struct MapPoly *next_poly;
 };
 
-extern struct MapPoly *head;
-extern struct MapPoly **tail;
+struct html_state
+{
+    char *last_text;
+    int last_text_len;
+    int type;
+    FILE *output;
+    struct MapPoly *head;
+    struct MapPoly **tail;
+    int MAX_POINTS;
+    int BBOX_MINIMUM;
+    int MINIMUM_DIST;
+};
+
+extern struct html_state html;
 
 /* Driver.c */
 extern const struct driver *HTML_Driver(void);

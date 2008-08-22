@@ -9,7 +9,7 @@ void PS_color(int number)
 	return;
     }
 
-    if (true_color) {
+    if (ps.true_color) {
 	int r = (number >> 16) & 0xFF;
 	int g = (number >> 8) & 0xFF;
 	int b = (number >> 0) & 0xFF;

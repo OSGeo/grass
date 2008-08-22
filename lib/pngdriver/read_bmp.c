@@ -31,7 +31,7 @@ static int read_bmp_header(const unsigned char *p)
     if (*p++ != 'M')
 	return 0;
 
-    if (get_4(&p) != HEADER_SIZE + width * height * 4)
+    if (get_4(&p) != HEADER_SIZE + png.width * png.height * 4)
 	return 0;
 
     get_4(&p);
@@ -42,9 +42,9 @@ static int read_bmp_header(const unsigned char *p)
     if (get_4(&p) != 40)
 	return 0;
 
-    if (get_4(&p) != width)
+    if (get_4(&p) != png.width)
 	return 0;
-    if (get_4(&p) != -height)
+    if (get_4(&p) != -png.height)
 	return 0;
 
     get_2(&p);
@@ -53,7 +53,7 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
 	return 0;
-    if (get_4(&p) != width * height * 4)
+    if (get_4(&p) != png.width * png.height * 4)
 	return 0;
 
     get_4(&p);
@@ -71,21 +71,21 @@ void read_bmp(void)
     int x, y;
     unsigned int *p;
 
-    if (!true_color)
+    if (!png.true_color)
 	G_fatal_error("PNG: cannot use BMP with indexed color");
 
-    input = fopen(file_name, "rb");
+    input = fopen(png.file_name, "rb");
     if (!input)
-	G_fatal_error("PNG: couldn't open input file %s", file_name);
+	G_fatal_error("PNG: couldn't open input file %s", png.file_name);
 
     if (fread(header, sizeof(header), 1, input) != 1)
-	G_fatal_error("PNG: invalid input file %s", file_name);
+	G_fatal_error("PNG: invalid input file %s", png.file_name);
 
     if (!read_bmp_header(header))
-	G_fatal_error("PNG: invalid BMP header for %s", file_name);
+	G_fatal_error("PNG: invalid BMP header for %s", png.file_name);
 
-    for (y = 0, p = grid; y < height; y++) {
-	for (x = 0; x < width; x++, p++) {
+    for (y = 0, p = png.grid; y < png.height; y++) {
+	for (x = 0; x < png.width; x++, p++) {
 	    int b = fgetc(input);
 	    int g = fgetc(input);
 	    int r = fgetc(input);

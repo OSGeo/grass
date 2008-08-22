@@ -8,5 +8,5 @@ void Cairo_Box(double x1, double y1, double x2, double y2)
 
     cairo_rectangle(cairo, x1, y1, x2 - x1, y2 - y1);
     cairo_fill(cairo);
-    modified = 1;
+    ca.modified = 1;
 }

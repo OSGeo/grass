@@ -30,33 +30,33 @@ void write_png(void)
     if (setjmp(png_jmpbuf(png_ptr)))
 	G_fatal_error("error writing PNG file");
 
-    output = fopen(file_name, "wb");
+    output = fopen(png.file_name, "wb");
     if (!output)
-	G_fatal_error("PNG: couldn't open output file %s", file_name);
+	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
     png_init_io(png_ptr, output);
 
     png_set_IHDR(png_ptr, info_ptr,
-		 width, height, 8,
-		 true_color ? PNG_COLOR_TYPE_RGB_ALPHA :
+		 png.width, png.height, 8,
+		 png.true_color ? PNG_COLOR_TYPE_RGB_ALPHA :
 		 PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
 		 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
-    if (true_color)
+    if (png.true_color)
 	png_set_invert_alpha(png_ptr);
     else {
 	png_color png_pal[256];
 	int i;
 
 	for (i = 0; i < 256; i++) {
-	    png_pal[i].red = png_palette[i][0];
-	    png_pal[i].green = png_palette[i][1];
-	    png_pal[i].blue = png_palette[i][2];
+	    png_pal[i].red   = png.palette[i][0];
+	    png_pal[i].green = png.palette[i][1];
+	    png_pal[i].blue  = png.palette[i][2];
 	}
 
 	png_set_PLTE(png_ptr, info_ptr, png_pal, 256);
 
-	if (has_alpha) {
+	if (png.has_alpha) {
 	    png_byte trans = (png_byte) 0;
 
 	    png_set_tRNS(png_ptr, info_ptr, &trans, 1, NULL);
@@ -69,13 +69,13 @@ void write_png(void)
 
     png_write_info(png_ptr, info_ptr);
 
-    line = G_malloc(width * 4);
+    line = G_malloc(png.width * 4);
 
-    for (y = 0, p = grid; y < height; y++) {
+    for (y = 0, p = png.grid; y < png.height; y++) {
 	png_bytep q = line;
 
-	if (true_color)
-	    for (x = 0; x < width; x++, p++) {
+	if (png.true_color)
+	    for (x = 0; x < png.width; x++, p++) {
 		unsigned int c = *p;
 		int r, g, b, a;
 
@@ -86,7 +86,7 @@ void write_png(void)
 		*q++ = (png_byte) a;
 	    }
 	else
-	    for (x = 0; x < width; x++, p++, q++)
+	    for (x = 0; x < png.width; x++, p++, q++)
 		*q = (png_byte) * p;
 
 	png_write_row(png_ptr, line);

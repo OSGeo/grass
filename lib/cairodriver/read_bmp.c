@@ -31,7 +31,7 @@ static int read_bmp_header(const unsigned char *p)
     if (*p++ != 'M')
 	return 0;
 
-    if (get_4(&p) != HEADER_SIZE + width * height * 4)
+    if (get_4(&p) != HEADER_SIZE + ca.width * ca.height * 4)
 	return 0;
 
     get_4(&p);
@@ -42,9 +42,9 @@ static int read_bmp_header(const unsigned char *p)
     if (get_4(&p) != 40)
 	return 0;
 
-    if (get_4(&p) != width)
+    if (get_4(&p) != ca.width)
 	return 0;
-    if (get_4(&p) != -height)
+    if (get_4(&p) != -ca.height)
 	return 0;
 
     get_2(&p);
@@ -53,7 +53,7 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
 	return 0;
-    if (get_4(&p) != width * height * 4)
+    if (get_4(&p) != ca.width * ca.height * 4)
 	return 0;
 
     get_4(&p);
@@ -69,17 +69,17 @@ void cairo_read_bmp(void)
     char header[HEADER_SIZE];
     FILE *input;
 
-    input = fopen(file_name, "rb");
+    input = fopen(ca.file_name, "rb");
     if (!input)
-	G_fatal_error("cairo:: couldn't open input file %s", file_name);
+	G_fatal_error("cairo:: couldn't open input file %s", ca.file_name);
 
     if (fread(header, sizeof(header), 1, input) != 1)
-	G_fatal_error("cairo:: invalid input file %s", file_name);
+	G_fatal_error("cairo:: invalid input file %s", ca.file_name);
 
     if (!read_bmp_header(header))
-	G_fatal_error("cairo:: invalid BMP header for %s", file_name);
+	G_fatal_error("cairo:: invalid BMP header for %s", ca.file_name);
 
-    fread(grid, stride, height, input);
+    fread(ca.grid, ca.stride, ca.height, input);
 
     fclose(input);
 }

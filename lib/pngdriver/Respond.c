@@ -3,6 +3,6 @@
 
 void PNG_Respond(void)
 {
-    if (auto_write)
+    if (png.auto_write)
 	write_image();
 }

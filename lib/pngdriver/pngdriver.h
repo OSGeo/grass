@@ -10,21 +10,26 @@
 
 #define HEADER_SIZE 54
 
-extern char *file_name;
-extern int currentColor;
-extern int true_color;
-extern int auto_write;
-extern int has_alpha;
-extern int mapped;
+struct png_state
+{
+    char *file_name;
+    int current_color;
+    int true_color;
+    int auto_write;
+    int has_alpha;
+    int mapped;
 
-extern double clip_top, clip_bot, clip_left, clip_rite;
-extern int width, height;
-extern unsigned int *grid;
-extern unsigned char png_palette[256][4];
-extern unsigned int background;
-extern int modified;
+    double clip_top, clip_bot, clip_left, clip_rite;
+    int width, height;
+    unsigned int *grid;
+    unsigned char palette[256][4];
+    unsigned int background;
+    int modified;
 
-extern int linewidth;
+    int linewidth;
+};
+
+extern struct png_state png;
 
 extern void read_image(void);
 extern void read_ppm(void);

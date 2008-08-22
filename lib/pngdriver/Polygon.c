@@ -29,25 +29,25 @@ static void fill(double x0, double x1, double y)
     unsigned int *p;
     int x;
 
-    if (yi >= clip_bot || yi < clip_top)
+    if (yi >= png.clip_bot || yi < png.clip_top)
 	return;
 
-    if (xi0 > clip_rite)
+    if (xi0 > png.clip_rite)
 	return;
 
-    if (xi1 < clip_left)
+    if (xi1 < png.clip_left)
 	return;
 
-    if (xi0 < clip_left)
-	xi0 = clip_left;
+    if (xi0 < png.clip_left)
+	xi0 = png.clip_left;
 
-    if (xi1 > clip_rite)
-	xi1 = clip_rite;
+    if (xi1 > png.clip_rite)
+	xi1 = png.clip_rite;
 
-    p = &grid[yi * width + xi0];
+    p = &png.grid[yi * png.width + xi0];
 
     for (x = xi0; x < xi1; x++)
-	*p++ = currentColor;
+	*p++ = png.current_color;
 }
 
 static void line(const struct point *p, int n, double y)
@@ -110,14 +110,14 @@ static void poly(const struct point *p, int n)
 	    y1 = p[i].y;
     }
 
-    if (y0 > clip_bot || y1 < clip_top)
+    if (y0 > png.clip_bot || y1 < png.clip_top)
 	return;
 
-    if (y0 < clip_top)
-	y0 = clip_top;
+    if (y0 < png.clip_top)
+	y0 = png.clip_top;
 
-    if (y1 > clip_bot)
-	y1 = clip_bot;
+    if (y1 > png.clip_bot)
+	y1 = png.clip_bot;
 
     y0 = floor(y0 + 0.5) + 0.5;
 

@@ -8,12 +8,6 @@
 
 #define RAD_DEG 57.29578
 
-/* max points & bbox minimum dimension defined in Graph_Set.c */
-extern int MAX_POINTS;
-extern int BBOX_MINIMUM;
-extern int MINIMUM_DIST;
-
-
 static void delete_point(int *x, int *y, int count)
 {
     int i;
@@ -91,7 +85,7 @@ void HTML_Polygon(const double *px, const double *py, int n)
 	    delta_y = -delta_y;
 
 	if ((x[i] == x[i + 1] && y[i] == y[i + 1]) ||
-	    (delta_x <= MINIMUM_DIST && delta_y <= MINIMUM_DIST)) {
+	    (delta_x <= html.MINIMUM_DIST && delta_y <= html.MINIMUM_DIST)) {
 	    delete_point(&x[i + 1], &y[i + 1], n - i - 1);
 	    --n;
 	}
@@ -110,7 +104,7 @@ void HTML_Polygon(const double *px, const double *py, int n)
 	    delta_y = -delta_y;
 
 	if ((x[0] == x[n - 1] && y[0] == y[n - 1]) ||
-	    (delta_x <= MINIMUM_DIST && delta_y <= MINIMUM_DIST)) {
+	    (delta_x <= html.MINIMUM_DIST && delta_y <= html.MINIMUM_DIST)) {
 	    --n;
 	}
 	else {
@@ -140,7 +134,7 @@ void HTML_Polygon(const double *px, const double *py, int n)
     }
     delta_x = max_x - min_x;
     delta_y = max_y - min_y;
-    if (delta_x < BBOX_MINIMUM || delta_y < BBOX_MINIMUM) {
+    if (delta_x < html.BBOX_MINIMUM || delta_y < html.BBOX_MINIMUM) {
 	n = 0;
     }
 
@@ -149,7 +143,7 @@ void HTML_Polygon(const double *px, const double *py, int n)
      * remove points in excess of MAX_POINTS vertices
      */
 
-    while (n > MAX_POINTS) {
+    while (n > html.MAX_POINTS) {
 
 	for (i = 0; i < (n - 2); i++) {
 
@@ -195,12 +189,12 @@ void HTML_Polygon(const double *px, const double *py, int n)
 	new = (struct MapPoly *)G_malloc(sizeof(struct MapPoly));
 
 	/* grab the last text string written as url */
-	new->url = G_store(last_text);
+	new->url = G_store(html.last_text);
 
 	/* hook up new MapPoly into list */
 	new->next_poly = NULL;
-	*tail = new;
-	tail = &(new->next_poly);
+	*html.tail = new;
+	html.tail = &(new->next_poly);
 
 	new->num_pts = n;
 	new->x_pts = x;

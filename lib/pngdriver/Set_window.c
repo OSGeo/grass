@@ -22,9 +22,9 @@
 
 void PNG_Set_window(double t, double b, double l, double r)
 {
-    clip_top  = t > 0      ? t : 0;
-    clip_bot  = b < height ? b : height;
-    clip_left = l > 0      ? l : 0;
-    clip_rite = r < width  ? r : width;
+    png.clip_top  = t > 0          ? t : 0;
+    png.clip_bot  = b < png.height ? b : png.height;
+    png.clip_left = l > 0          ? l : 0;
+    png.clip_rite = r < png.width  ? r : png.width;
 }
 

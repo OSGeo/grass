@@ -14,7 +14,7 @@ void Cairo_Polygon(const double *xarray, const double *yarray, int count)
     G_debug(3, "Cairo_Polygon (%d points)", count);
     do_polygon(xarray, yarray, count);
     cairo_fill(cairo);
-    modified = 1;
+    ca.modified = 1;
 }
 
 void Cairo_Polyline(const double *xarray, const double *yarray, int count)
@@ -22,7 +22,7 @@ void Cairo_Polyline(const double *xarray, const double *yarray, int count)
     G_debug(3, "Cairo_Polyline (%d points)", count);
     do_polygon(xarray, yarray, count);
     cairo_stroke(cairo);
-    modified = 1;
+    ca.modified = 1;
 }
 
 void Cairo_Polydots(const double *xarray, const double *yarray, int count)
@@ -32,6 +32,6 @@ void Cairo_Polydots(const double *xarray, const double *yarray, int count)
     G_debug(3, "Cairo_Polydots (%d points)", count);
     for (i = 1; i < count; i++)
 	Cairo_draw_point(xarray[0], yarray[0]);
-    modified = 1;
+    ca.modified = 1;
 }
 

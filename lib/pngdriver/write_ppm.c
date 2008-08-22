@@ -12,14 +12,14 @@ void write_ppm(void)
     int x, y;
     unsigned int *p;
 
-    output = fopen(file_name, "wb");
+    output = fopen(png.file_name, "wb");
     if (!output)
-	G_fatal_error("PNG: couldn't open output file %s", file_name);
+	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
-    fprintf(output, "P6\n%d %d\n255\n", width, height);
+    fprintf(output, "P6\n%d %d\n255\n", png.width, png.height);
 
-    for (y = 0, p = grid; y < height; y++) {
-	for (x = 0; x < width; x++, p++) {
+    for (y = 0, p = png.grid; y < png.height; y++) {
+	for (x = 0; x < png.width; x++, p++) {
 	    unsigned int c = *p;
 	    int r, g, b, a;
 
@@ -36,7 +36,7 @@ void write_ppm(void)
 
 void write_pgm(void)
 {
-    char *mask_name = G_store(file_name);
+    char *mask_name = G_store(png.file_name);
     FILE *output;
     int x, y;
     unsigned int *p;
@@ -49,10 +49,10 @@ void write_pgm(void)
 
     G_free(mask_name);
 
-    fprintf(output, "P5\n%d %d\n255\n", width, height);
+    fprintf(output, "P5\n%d %d\n255\n", png.width, png.height);
 
-    for (y = 0, p = grid; y < height; y++) {
-	for (x = 0; x < width; x++, p++) {
+    for (y = 0, p = png.grid; y < png.height; y++) {
+	for (x = 0; x < png.width; x++, p++) {
 	    unsigned int c = *p;
 	    int r, g, b, a;
 

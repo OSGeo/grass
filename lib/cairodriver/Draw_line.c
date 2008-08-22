@@ -13,5 +13,5 @@ void Cairo_draw_line(double x1, double y1, double x2, double y2)
     cairo_move_to(cairo, x1, y1);
     cairo_line_to(cairo, x2, y2);
     cairo_stroke(cairo);
-    modified = 1;
+    ca.modified = 1;
 }

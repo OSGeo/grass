@@ -42,9 +42,9 @@ void HTML_Graph_close(void)
      *
      */
 
-    for (poly = head; poly != NULL; poly = poly->next_poly) {
+    for (poly = html.head; poly != NULL; poly = poly->next_poly) {
 
-	for (test_poly = head; test_poly != NULL;
+	for (test_poly = html.head; test_poly != NULL;
 	     test_poly = test_poly->next_poly) {
 	    if (poly == test_poly) {
 		continue;	/* don't check ourselves */
@@ -69,17 +69,17 @@ void HTML_Graph_close(void)
      * write any beginning prologue appropriate for the map type
      */
 
-    switch (html_type) {
+    switch (html.type) {
 
     case APACHE:
-	fprintf(output, "#base _base_\n#default _default_\n");
+	fprintf(html.output, "#base _base_\n#default _default_\n");
 	break;
 
     case RAW:
 	break;
 
     case CLIENT:
-	fprintf(output, "<MAP NAME=\"map\">\n");
+	fprintf(html.output, "<MAP NAME=\"map\">\n");
 	break;
     }
 
@@ -87,45 +87,45 @@ void HTML_Graph_close(void)
      * write the polygons in a specific format
      */
 
-    for (poly = head; poly != NULL; poly = poly->next_poly) {
+    for (poly = html.head; poly != NULL; poly = poly->next_poly) {
 	if (poly->num_pts >= 3) {
 
-	    switch (html_type) {
+	    switch (html.type) {
 
 	    case APACHE:
-		fprintf(output, "poly %s", poly->url);
+		fprintf(html.output, "poly %s", poly->url);
 		for (i = 0; i < poly->num_pts; i++) {
-		    fprintf(output, " %d,%d", poly->x_pts[i], poly->y_pts[i]);
+		    fprintf(html.output, " %d,%d", poly->x_pts[i], poly->y_pts[i]);
 		}
-		fprintf(output, " %d,%d", poly->x_pts[0], poly->y_pts[0]);
-		fprintf(output, "\n");
+		fprintf(html.output, " %d,%d", poly->x_pts[0], poly->y_pts[0]);
+		fprintf(html.output, "\n");
 		break;
 
 	    case RAW:
-		fprintf(output, "%s", poly->url);
+		fprintf(html.output, "%s", poly->url);
 		for (i = 0; i < poly->num_pts; i++) {
-		    fprintf(output, " %d %d", poly->x_pts[i], poly->y_pts[i]);
+		    fprintf(html.output, " %d %d", poly->x_pts[i], poly->y_pts[i]);
 		}
-		fprintf(output, " %d %d", poly->x_pts[0], poly->y_pts[0]);
-		fprintf(output, "\n");
+		fprintf(html.output, " %d %d", poly->x_pts[0], poly->y_pts[0]);
+		fprintf(html.output, "\n");
 		break;
 
 	    case CLIENT:
-		fprintf(output,
+		fprintf(html.output,
 			"<AREA SHAPE=\"POLY\"\n HREF=\"%s\"\n  ALT=\"%s\"\n  COORDS=\"",
 			poly->url, poly->url);
 		for (i = 0; i < poly->num_pts; i++) {
 		    if (i > 0)
-			fprintf(output, ", ");
+			fprintf(html.output, ", ");
 		    /* 
 		     * don't add newlines, which confuses the weak-minded
 		     * i.e., ms internet exploder :-(
-		     * was: if (i % 8 == 0 && i != 0) fprintf(output,"\n  ");
+		     * was: if (i % 8 == 0 && i != 0) fprintf(html.output,"\n  ");
 		     */
-		    fprintf(output, "%d,%d", poly->x_pts[i], poly->y_pts[i]);
+		    fprintf(html.output, "%d,%d", poly->x_pts[i], poly->y_pts[i]);
 		}
-		fprintf(output, ", %d,%d", poly->x_pts[0], poly->y_pts[0]);
-		fprintf(output, "\">\n");
+		fprintf(html.output, ", %d,%d", poly->x_pts[0], poly->y_pts[0]);
+		fprintf(html.output, "\">\n");
 		break;
 
 	    }
@@ -136,7 +136,7 @@ void HTML_Graph_close(void)
 
     /* final stuff, if needed */
 
-    switch (html_type) {
+    switch (html.type) {
 
     case APACHE:
 	break;
@@ -145,10 +145,10 @@ void HTML_Graph_close(void)
 	break;
 
     case CLIENT:
-	fprintf(output,
+	fprintf(html.output,
 		"<AREA SHAPE=\"RECT\" NOHREF COORDS=\"%d,%d %d,%d\">\n",
 		0, 0, screen_width, screen_height);
-	fprintf(output, "</MAP>\n");
+	fprintf(html.output, "</MAP>\n");
 	break;
 
     }
@@ -157,5 +157,5 @@ void HTML_Graph_close(void)
      * close file 
      */
 
-    fclose(output);
+    fclose(html.output);
 }

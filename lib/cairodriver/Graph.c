@@ -20,23 +20,11 @@
 #include <X11/Xutil.h>
 #endif
 
-/* globals */
-char *file_name;
-int file_type;
-int is_vector;
-int width, height, stride;
-unsigned char *grid;
-int modified;
-int auto_write;
-int mapped;
-
-/* background color */
-double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
+struct cairo_state ca;
 
 /* cairo objects */
 cairo_surface_t *surface;
 cairo_t *cairo;
-cairo_antialias_t antialias;
 
 static void init_cairo(void);
 static int ends_with(const char *string, const char *suffix);
@@ -88,59 +76,60 @@ static void init_xlib(void)
 
     cairo = cairo_create(surface);
 
-    file_name = "<X11>";
+    ca.file_name = "<X11>";
     file_type = FTYPE_X11;
 
-    screen_right = screen_left + width;
-    screen_bottom = screen_top + height;
+    screen_right = screen_left + ca.width;
+    screen_bottom = screen_top + ca.height;
 #endif
 }
 
 static void init_file(void)
 {
+    int is_vector;
     int do_read = 0;
     int do_map = 0;
     char *p;
 
     /* set image properties */
-    width = screen_width;
-    height = screen_height;
-    stride = width * 4;
+    ca.width = screen_width;
+    ca.height = screen_height;
+    ca.stride = ca.width * 4;
 
     /* get file name */
     p = getenv("GRASS_PNGFILE");
     if (!p || strlen(p) == 0)
 	p = DEFAULT_FILE_NAME;
 
-    file_name = p;
+    ca.file_name = p;
 
     /* get file type (from extension) */
-    if (file_type == FTYPE_X11) ;	/* skip */
-    else if (ends_with(file_name, ".ppm"))
-	file_type = FTYPE_PPM;
-    else if (ends_with(file_name, ".bmp"))
-	file_type = FTYPE_BMP;
+    if (ca.file_type == FTYPE_X11) ;	/* skip */
+    else if (ends_with(ca.file_name, ".ppm"))
+	ca.file_type = FTYPE_PPM;
+    else if (ends_with(ca.file_name, ".bmp"))
+	ca.file_type = FTYPE_BMP;
 #if CAIRO_HAS_PNG_FUNCTIONS
-    else if (ends_with(file_name, ".png"))
-	file_type = FTYPE_PNG;
+    else if (ends_with(ca.file_name, ".png"))
+	ca.file_type = FTYPE_PNG;
 #endif
 #if CAIRO_HAS_PDF_SURFACE
-    else if (ends_with(file_name, ".pdf"))
-	file_type = FTYPE_PDF;
+    else if (ends_with(ca.file_name, ".pdf"))
+	ca.file_type = FTYPE_PDF;
 #endif
 #if CAIRO_HAS_PS_SURFACE
-    else if (ends_with(file_name, ".ps"))
-	file_type = FTYPE_PS;
+    else if (ends_with(ca.file_name, ".ps"))
+	ca.file_type = FTYPE_PS;
 #endif
 #if CAIRO_HAS_SVG_SURFACE
-    else if (ends_with(file_name, ".svg"))
-	file_type = FTYPE_SVG;
+    else if (ends_with(ca.file_name, ".svg"))
+	ca.file_type = FTYPE_SVG;
 #endif
     else
 	G_fatal_error("Unknown file extension: %s", p);
-    G_debug(1, "File type: %s (%d)", file_name, file_type);
+    G_debug(1, "File type: %s (%d)", ca.file_name, ca.file_type);
 
-    switch (file_type) {
+    switch (ca.file_type) {
     case FTYPE_PDF:
     case FTYPE_PS:
     case FTYPE_SVG:
@@ -149,40 +138,40 @@ static void init_file(void)
     }
 
     p = getenv("GRASS_PNG_MAPPED");
-    do_map = p && strcmp(p, "TRUE") == 0 && ends_with(file_name, ".bmp");
+    do_map = p && strcmp(p, "TRUE") == 0 && ends_with(ca.file_name, ".bmp");
 
     p = getenv("GRASS_PNG_READ");
     do_read = p && strcmp(p, "TRUE") == 0;
 
     if (is_vector) {
 	do_read = do_map = 0;
-	bgcolor_a = 1.0;
+	ca.bgcolor_a = 1.0;
     }
 
-    if (do_read && access(file_name, 0) != 0)
+    if (do_read && access(ca.file_name, 0) != 0)
 	do_read = 0;
 
     G_message
 	("cairo: collecting to file: %s,\n     GRASS_WIDTH=%d, GRASS_HEIGHT=%d",
-	 file_name, width, height);
+	 ca.file_name, ca.width, ca.height);
 
     if (do_read && do_map)
 	map_file();
 
-    if (!mapped && !is_vector)
-	grid = G_malloc(height * stride);
+    if (!ca.mapped && !is_vector)
+	ca.grid = G_malloc(ca.height * ca.stride);
 
     init_cairo();
 
     if (!do_read && !is_vector) {
 	Cairo_Erase();
-	modified = 1;
+	ca.modified = 1;
     }
 
-    if (do_read && !mapped)
+    if (do_read && !ca.mapped)
 	cairo_read_image();
 
-    if (do_map && !mapped) {
+    if (do_map && !ca.mapped) {
 	cairo_write_image();
 	map_file();
 	init_cairo();
@@ -191,6 +180,7 @@ static void init_file(void)
 
 int Cairo_Graph_set(void)
 {
+    cairo_antialias_t antialias;
     char *p;
 
     G_gisinit("Cairo driver");
@@ -202,25 +192,25 @@ int Cairo_Graph_set(void)
 	unsigned int red, green, blue;
 
 	if (sscanf(p, "%02x%02x%02x", &red, &green, &blue) == 3) {
-	    bgcolor_r = CAIROCOLOR(red);
-	    bgcolor_g = CAIROCOLOR(green);
-	    bgcolor_b = CAIROCOLOR(blue);
+	    ca.bgcolor_r = CAIROCOLOR(red);
+	    ca.bgcolor_g = CAIROCOLOR(green);
+	    ca.bgcolor_b = CAIROCOLOR(blue);
 	}
 	else
 	    G_fatal_error("Unknown background color: %s", p);
     }
     else
-	bgcolor_r = bgcolor_g = bgcolor_b = 1.0;
+	ca.bgcolor_r = ca.bgcolor_g = ca.bgcolor_b = 1.0;
 
     /* get background transparency setting */
     p = getenv("GRASS_TRANSPARENT");
     if (p && strcmp(p, "TRUE") == 0)
-	bgcolor_a = 0.0;
+	ca.bgcolor_a = 0.0;
     else
-	bgcolor_a = 1.0;
+	ca.bgcolor_a = 1.0;
 
     p = getenv("GRASS_PNG_AUTO_WRITE");
-    auto_write = p && strcmp(p, "TRUE") == 0;
+    ca.auto_write = p && strcmp(p, "TRUE") == 0;
 
     antialias = CAIRO_ANTIALIAS_DEFAULT;
     p = getenv("GRASS_ANTIALIAS");
@@ -265,33 +255,33 @@ static void init_cairo(void)
     G_debug(1, "init_cairo");
 
     /* create cairo surface */
-    switch (file_type) {
+    switch (ca.file_type) {
     case FTYPE_PPM:
     case FTYPE_BMP:
     case FTYPE_PNG:
 	surface =
 	    (cairo_surface_t *) cairo_image_surface_create_for_data(
-		grid, CAIRO_FORMAT_ARGB32, width, height, stride);
+		ca.grid, CAIRO_FORMAT_ARGB32, ca.width, ca.height, ca.stride);
 	break;
 #if CAIRO_HAS_PDF_SURFACE
     case FTYPE_PDF:
 	surface =
 	    (cairo_surface_t *) cairo_pdf_surface_create(
-		file_name, (double) width, (double) height);
+		ca.file_name, (double) ca.width, (double) ca.height);
 	break;
 #endif
 #if CAIRO_HAS_PS_SURFACE
     case FTYPE_PS:
 	surface =
 	    (cairo_surface_t *) cairo_ps_surface_create(
-		file_name, (double) width, (double) height);
+		ca.file_name, (double) ca.width, (double) ca.height);
 	break;
 #endif
 #if CAIRO_HAS_SVG_SURFACE
     case FTYPE_SVG:
 	surface =
 	    (cairo_surface_t *) cairo_svg_surface_create(
-		file_name, (double) width, (double) height);
+		ca.file_name, (double) ca.width, (double) ca.height);
 	break;
 #endif
     default:
@@ -318,11 +308,11 @@ static int ends_with(const char *string, const char *suffix)
 static void map_file(void)
 {
 #ifndef __MINGW32__
-    size_t size = HEADER_SIZE + width * height * sizeof(unsigned int);
+    size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
-    fd = open(file_name, O_RDWR);
+    fd = open(ca.file_name, O_RDWR);
     if (fd < 0)
 	return;
 
@@ -330,15 +320,15 @@ static void map_file(void)
     if (ptr == MAP_FAILED)
 	return;
 
-    if (grid) {
+    if (ca.grid) {
 	cairo_destroy(cairo);
 	cairo_surface_destroy(surface);
-	G_free(grid);
+	G_free(ca.grid);
     }
-    grid = (char *)ptr + HEADER_SIZE;
+    ca.grid = (char *)ptr + HEADER_SIZE;
 
     close(fd);
 
-    mapped = 1;
+    ca.mapped = 1;
 #endif
 }

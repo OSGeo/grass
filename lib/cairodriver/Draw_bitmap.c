@@ -43,5 +43,5 @@ void Cairo_draw_bitmap(int ncols, int nrows, int threshold,
     cairo_mask_surface(cairo, surf, cur_x, cur_y);
 
     cairo_surface_destroy(surf);
-    modified = 1;
+    ca.modified = 1;
 }

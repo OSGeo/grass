@@ -8,7 +8,7 @@
 
 void init_color_table(void)
 {
-    NCOLORS = true_color ? (1 << 24) : (1 << 8);
+    NCOLORS = ps.true_color ? (1 << 24) : (1 << 8);
 }
 
 static int get_color_rgb(int r, int g, int b)
@@ -23,6 +23,6 @@ static int get_color_gray(int r, int g, int b)
 
 int PS_lookup_color(int r, int g, int b)
 {
-    return true_color ? get_color_rgb(r, g, b)
+    return ps.true_color ? get_color_rgb(r, g, b)
 	: get_color_gray(r, g, b);
 }

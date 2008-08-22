@@ -11,10 +11,10 @@ static int Red[256], Grn[256], Blu[256];
 
 static void set_color(int i, int red, int grn, int blu)
 {
-    png_palette[i][0] = red;
-    png_palette[i][1] = grn;
-    png_palette[i][2] = blu;
-    png_palette[i][3] = 0;
+    png.palette[i][0] = red;
+    png.palette[i][1] = grn;
+    png.palette[i][2] = blu;
+    png.palette[i][3] = 0;
 }
 
 static void init_colors_rgb(void)
@@ -45,7 +45,7 @@ static void init_colors_indexed(void)
 
     n_pixels = 0;
 
-    if (has_alpha)
+    if (png.has_alpha)
 	/* transparent color should be the first!
 	 * Its RGB value doesn't matter since we fake RGB-to-index. */
 	set_color(n_pixels++, 0, 0, 0);
@@ -76,7 +76,7 @@ static void init_colors_indexed(void)
 
 void init_color_table(void)
 {
-    if (true_color)
+    if (png.true_color)
 	init_colors_rgb();
     else
 	init_colors_indexed();
@@ -89,10 +89,10 @@ static int get_color_rgb(int r, int g, int b, int a)
 
 static int get_color_indexed(int r, int g, int b, int a)
 {
-    if (has_alpha && a >= 128)
+    if (png.has_alpha && a >= 128)
 	return 0;
 
-    return Red[r] + Grn[g] + Blu[b] + has_alpha;
+    return Red[r] + Grn[g] + Blu[b] + png.has_alpha;
 }
 
 static void get_pixel_rgb(unsigned int pixel, int *r, int *g, int *b, int *a)
@@ -106,16 +106,16 @@ static void get_pixel_rgb(unsigned int pixel, int *r, int *g, int *b, int *a)
 static void get_pixel_indexed(unsigned int pixel, int *r, int *g, int *b,
 			      int *a)
 {
-    *r = png_palette[pixel][0];
-    *g = png_palette[pixel][1];
-    *b = png_palette[pixel][2];
-    *a = png_palette[pixel][3];
+    *r = png.palette[pixel][0];
+    *g = png.palette[pixel][1];
+    *b = png.palette[pixel][2];
+    *a = png.palette[pixel][3];
 }
 
 
 void get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 {
-    if (true_color)
+    if (png.true_color)
 	get_pixel_rgb(pixel, r, g, b, a);
     else
 	get_pixel_indexed(pixel, r, g, b, a);
@@ -123,12 +123,12 @@ void get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 
 unsigned int get_color(int r, int g, int b, int a)
 {
-    return true_color ? get_color_rgb(r, g, b, a)
+    return png.true_color ? get_color_rgb(r, g, b, a)
 	: get_color_indexed(r, g, b, a);
 }
 
 int PNG_lookup_color(int r, int g, int b)
 {
-    return true_color ? ((r << 16) | (g << 8) | (b << 0))
-	: Red[r] + Grn[g] + Blu[b] + has_alpha;
+    return png.true_color ? ((r << 16) | (g << 8) | (b << 0))
+	: Red[r] + Grn[g] + Blu[b] + png.has_alpha;
 }

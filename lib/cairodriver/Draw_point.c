@@ -11,5 +11,5 @@ void Cairo_draw_point(double x, double y)
 		    x - HALFPOINTSIZE, y - HALFPOINTSIZE,
 		    POINTSIZE, POINTSIZE);
     cairo_fill(cairo);
-    modified = 1;
+    ca.modified = 1;
 }

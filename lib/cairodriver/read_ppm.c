@@ -2,24 +2,24 @@
 
 void cairo_read_ppm(void)
 {
-    char *mask_name = G_store(file_name);
+    char *mask_name = G_store(ca.file_name);
     FILE *input, *mask;
     int x, y;
     int i_width, i_height, maxval;
 
-    input = fopen(file_name, "rb");
+    input = fopen(ca.file_name, "rb");
     if (!input)
-	G_fatal_error("cairo: couldn't open input file %s", file_name);
+	G_fatal_error("cairo: couldn't open input file %s", ca.file_name);
 
     if (fscanf(input, "P6 %d %d %d", &i_width, &i_height, &maxval) != 3)
-	G_fatal_error("cairo: invalid input file %s", file_name);
+	G_fatal_error("cairo: invalid input file %s", ca.file_name);
 
     fgetc(input);
 
-    if (i_width != width || i_height != height)
+    if (i_width != ca.width || i_height != ca.height)
 	G_fatal_error
 	    ("cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d",
-	     width, height, i_width, i_height);
+	     ca.width, ca.height, i_width, i_height);
 
     mask_name[strlen(mask_name) - 2] = 'g';
 
@@ -32,17 +32,17 @@ void cairo_read_ppm(void)
 
     fgetc(input);
 
-    if (i_width != width || i_height != height)
+    if (i_width != ca.width || i_height != ca.height)
 	G_fatal_error
 	    ("cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d",
-	     width, height, i_width, i_height);
+	     ca.width, ca.height, i_width, i_height);
 
     G_free(mask_name);
 
-    for (y = 0; y < height; y++) {
-	unsigned int *row = (unsigned int *)(grid + y * stride);
+    for (y = 0; y < ca.height; y++) {
+	unsigned int *row = (unsigned int *)(ca.grid + y * ca.stride);
 
-	for (x = 0; x < width; x++) {
+	for (x = 0; x < ca.width; x++) {
 	    int r = fgetc(input);
 	    int g = fgetc(input);
 	    int b = fgetc(input);
