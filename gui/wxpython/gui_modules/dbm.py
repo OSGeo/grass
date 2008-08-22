@@ -620,7 +620,6 @@ class AttributeManager(wx.Frame):
         except IndexError:
             self.layer = None
         
-        
     def __createManageTablePage(self, onlyLayer=-1):
         """Create manage page (create/link and alter tables)"""
         for layer in self.mapDBInfo.layers.keys():
@@ -714,7 +713,7 @@ class AttributeManager(wx.Frame):
                          flag=wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT,
                          border=3)
             
-            btnAddCol = wx.Button(parent=panel, id=wx.ID_ADD)
+            btnAddCol = wx.Button(parent=panel, id=wx.ID_ANY, label=_("Add"))
             btnAddCol.Bind(wx.EVT_BUTTON, self.OnTableItemAdd)
             btnAddCol.Enable(False)
             self.layerPage[layer]['addColButton'] = btnAddCol.GetId()
