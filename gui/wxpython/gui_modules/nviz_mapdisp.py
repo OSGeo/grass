@@ -55,8 +55,7 @@ class NvizThread(Thread):
         self.setDaemon(True)
         
     def run(self):
-        self.nvizClass = wxnviz.Nviz(self.log, self.progressbar,
-                                     self.window, wxCmdOutput)
+        self.nvizClass = wxnviz.Nviz(self.log)
         
 class GLWindow(MapWindow, glcanvas.GLCanvas):
     """OpenGL canvas for Map Display Window"""
