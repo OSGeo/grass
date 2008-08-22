@@ -25,8 +25,7 @@ VORONOI_ARCH_OBJS := $(foreach obj,$(VORONOI_OBJS),$(OBJDIR)/$(obj))
 
 DELAUNAY_ARCH_OBJS := $(foreach obj,$(DELAUNAY_OBJS),$(OBJDIR)/$(obj))
 
-default: $(BIN)/$(DELAUNAY)$(EXE) $(BIN)/$(VORONOI)$(EXE)
-	$(MAKE) htmlmulti
+default: multi
 
 $(BIN)/$(VORONOI)$(EXE): $(VORONOI_ARCH_OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^ $(FMODE_OBJ) $(LIBES) $(MATHLIB) $(XDRLIB)

@@ -7,7 +7,7 @@ PROGRAMS = $(PGM2) $(PGM3)
 EXTRA_HEADERS = y.tab.h
 EXTRA_CLEAN_FILES = y.tab.c y.tab.h lex.yy.c y.output lex.backup
 
-include $(MODULE_TOPDIR)/include/Make/Module.make
+include $(MODULE_TOPDIR)/include/Make/Multi.make
 
 COMMON = \
 	$(OBJDIR)/y.tab.o \
@@ -85,7 +85,7 @@ EXTRA_CFLAGS = $(READLINEINCPATH)
 LIBES2 = $(GISLIB) $(BTREELIB) $(ROWIOLIB) $(READLINELIBPATH) $(READLINELIB) $(HISTORYLIB)
 LIBES3 = $(G3DLIB) $(GISLIB) $(BTREELIB) $(READLINELIBPATH) $(READLINELIB) $(HISTORYLIB)
 
-default: $(BIN)/$(PGM2)$(EXE) $(BIN)/$(PGM3)$(EXE) htmlmulti
+default: multi
 
 $(BIN)/$(PGM2)$(EXE): $(LIST2) $(DEPLIBS2)
 	$(CC) $(LDFLAGS) -o $@ $(LIST2) $(FMODE_OBJ) $(LIBES2) $(MATHLIB) $(XDRLIB)

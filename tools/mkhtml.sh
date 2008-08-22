@@ -34,11 +34,6 @@ if ! grep -i '<html>' "${PGM}.html" > /dev/null 2>&1 ; then
     if [ -f "${PGM}.tmp.html" ] ; then
 	grep -iv '</body>\|</html>' "${PGM}.tmp.html"
     fi
-else
-    if [ -f "${PGM}.tmp.html" ] ; then
-	echo '***' "${PGM}.tmp.html" >&2
-	exit 1
-    fi
 fi
 
 cat "${PGM}.html"

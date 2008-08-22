@@ -2,7 +2,13 @@ MODULE_TOPDIR = ../..
 
 PGM = r.terraflow
 
-include $(MODULE_TOPDIR)/include/Make/Multi.make
+PACKAGE = "grassmods"
+
+HTMLSRC = $(BIN)/$(PGM)$(EXE)
+
+include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 SOURCES = main.cc common.cc stats.cc fill.cc types.cc ccforest.cc \
 	nodata.cc plateau.cc direction.cc water.cc  \
@@ -37,8 +43,7 @@ $(OBJARCH)/SHORT/%.o: %.cc $(LOCAL_HEADERS) | $(OBJARCH)/SHORT
 endif
 	$(CXX) -c $(CXXFLAGS) $(NLS_CFLAGS) -DELEV_SHORT $< -o $@
 
-default: $(BIN)/$(PGM)$(EXE) $(BIN)/$(PGM).short$(EXE)
-	$(MAKE) htmlcmd
+default: $(BIN)/$(PGM)$(EXE) $(BIN)/$(PGM).short$(EXE) html
 
 $(OBJARCH)/FLOAT:
 	$(MKDIR) $@

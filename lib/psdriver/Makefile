@@ -1,7 +1,5 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
 EXTRA_CFLAGS=-I../driver
 
 EXTRA_LIBS=$(DRIVERLIB) $(GISLIB)
@@ -10,7 +8,7 @@ PGM = psdriver
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib htmldir $(ETC)/psdriver.ps
+default: lib $(ETC)/psdriver.ps
 
 $(ETC)/psdriver.ps: psdriver.ps
 	$(INSTALL_DATA) $< $@
