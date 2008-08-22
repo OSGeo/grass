@@ -2,6 +2,7 @@ MODULE_TOPDIR = ../..
 
 PGM2 = r.mapcalc
 PGM3 = r3.mapcalc
+PROGRAMS = $(PGM2) $(PGM3)
 
 EXTRA_HEADERS = y.tab.h
 EXTRA_CLEAN_FILES = y.tab.c y.tab.h lex.yy.c y.output lex.backup
@@ -84,7 +85,7 @@ EXTRA_CFLAGS = $(READLINEINCPATH)
 LIBES2 = $(GISLIB) $(BTREELIB) $(ROWIOLIB) $(READLINELIBPATH) $(READLINELIB) $(HISTORYLIB)
 LIBES3 = $(G3DLIB) $(GISLIB) $(BTREELIB) $(READLINELIBPATH) $(READLINELIB) $(HISTORYLIB)
 
-default: $(BIN)/$(PGM2)$(EXE) $(BIN)/$(PGM3)$(EXE) html
+default: $(BIN)/$(PGM2)$(EXE) $(BIN)/$(PGM3)$(EXE) htmlmulti
 
 $(BIN)/$(PGM2)$(EXE): $(LIST2) $(DEPLIBS2)
 	$(CC) $(LDFLAGS) -o $@ $(LIST2) $(FMODE_OBJ) $(LIBES2) $(MATHLIB) $(XDRLIB)
@@ -97,8 +98,3 @@ y.tab.c y.tab.h: mapcalc.y
 
 lex.yy.c: mapcalc.l y.tab.h
 	$(LEX) -t mapcalc.l > $@
-
-html:
-	$(MKDIR) $(GISBASE)/docs/html
-	$(INSTALL_DATA) $(PGM2).html $(GISBASE)/docs/html/
-	$(INSTALL_DATA) $(PGM3).html $(GISBASE)/docs/html/
