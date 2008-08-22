@@ -1,14 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<title>r.mapcalc</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link rel="stylesheet" href="grassdocs.css" type="text/css">
-</head>
-<body bgcolor="white">
-<img src="grass_logo.png" alt="GRASS logo"><hr align=center size=6 noshade>
-<h2>NAME</h2>
-<em><b>r.mapcalc</b></em>
 <h2>DESCRIPTION</h2>
 <em>r.mapcalc</em> performs arithmetic on raster map layers.
 New raster map layers can be created which are arithmetic expressions
@@ -174,16 +163,16 @@ For example, suppose that the raster map layer <em>soil.ph</em>
 (representing soil pH values) has a category file with labels as follows:
 <p>
 <div class="code"><pre>
-cat	label
+cat     label
 ------------------
-0	no data
-1	1.4
-2	2.4
-3	3.5
-4	5.8
-5	7.2
-6	8.8
-7	9.4
+0       no data
+1       1.4
+2       2.4
+3       3.5
+4       5.8
+5       7.2
+6       8.8
+7       9.4
 </pre></div>
 <p>
 Then the expression:
@@ -292,41 +281,41 @@ indicates that the result is float if any of the arguments to the function
 are floating point values and integer if all arguments are integer.
 <p>
 <div class="code"><pre>
-function		description					type
+function                description                                     type
 ---------------------------------------------------------------------------
-abs(x)			return absolute value of x			*
-acos(x)			inverse cosine of x (result is in degrees)	F
-asin(x)			inverse sine of x (result is in degrees)	F
-atan(x)			inverse tangent of x (result is in degrees)	F
-atan(x,y)		inverse tangent of y/x (result is in degrees)	F
-cos(x)			cosine of x (x is in degrees)			F
-double(x)		convert x to double-precision floating point	F
-eval([x,y,...,]z)	evaluate values of listed expr, pass results to z
-exp(x)			exponential function of x			F
-exp(x,y)		x to the power y				F
-float(x)		convert x to single-precision floating point	F
-graph(x,x1,y1[x2,y2..])	convert the x to a y based on points in a graph	F
-if			decision options:				*
-if(x)			1 if x not zero, 0 otherwise
-if(x,a)			a if x not zero, 0 otherwise
-if(x,a,b)		a if x not zero, b otherwise
-if(x,a,b,c)		a if x &gt; 0, b if x is zero, c if x &lt; 0
-int(x)			convert x to integer [ truncates ]		I
+abs(x)                  return absolute value of x                      *
+acos(x)                 inverse cosine of x (result is in degrees)      F
+asin(x)                 inverse sine of x (result is in degrees)        F
+atan(x)                 inverse tangent of x (result is in degrees)     F
+atan(x,y)               inverse tangent of y/x (result is in degrees)   F
+cos(x)                  cosine of x (x is in degrees)                   F
+double(x)               convert x to double-precision floating point    F
+eval([x,y,...,]z)       evaluate values of listed expr, pass results to z
+exp(x)                  exponential function of x                       F
+exp(x,y)                x to the power y                                F
+float(x)                convert x to single-precision floating point    F
+graph(x,x1,y1[x2,y2..]) convert the x to a y based on points in a graph F
+if                      decision options:                               *
+if(x)                   1 if x not zero, 0 otherwise
+if(x,a)                 a if x not zero, 0 otherwise
+if(x,a,b)               a if x not zero, b otherwise
+if(x,a,b,c)             a if x &gt; 0, b if x is zero, c if x &lt; 0
+int(x)                  convert x to integer [ truncates ]              I
 isnull(x)               check if x = NULL
-log(x)			natural log of x				F
-log(x,b)		log of x base b					F
-max(x,y[,z...])		largest value of those listed			*
-median(x,y[,z...])	median value of those listed			*
-min(x,y[,z...])		smallest value of those listed			*
+log(x)                  natural log of x                                F
+log(x,b)                log of x base b                                 F
+max(x,y[,z...])         largest value of those listed                   *
+median(x,y[,z...])      median value of those listed                    *
+min(x,y[,z...])         smallest value of those listed                  *
 mode(x,y[,z...])        mode value of those listed                      *
-not(x)			1 if x is zero, 0 otherwise
-pow(x,y)		x to the power y				*
-rand(a,b)		random value x : a &lt;= x &lt; b
-round(x)		round x to nearest integer			I
-sin(x)			sine of x (x is in degrees)			F
-sqrt(x)			square root of x				F
-tan(x)			tangent of x (x is in degrees)			F
-xor(x,y)		exclusive-or (XOR) of x and y			I
+not(x)                  1 if x is zero, 0 otherwise
+pow(x,y)                x to the power y                                *
+rand(a,b)               random value x : a &lt;= x &lt; b
+round(x)                round x to nearest integer                      I
+sin(x)                  sine of x (x is in degrees)                     F
+sqrt(x)                 square root of x                                F
+tan(x)                  tangent of x (x is in degrees)                  F
+xor(x,y)                exclusive-or (XOR) of x and y                   I
 </pre></div>
 <div class="code"><pre>
 Internal variables:
@@ -367,19 +356,19 @@ produce a floating-point result, as will using float():
 <ul>
 <li>Division by zero should result in NULL. 
 <li>Modulus by zero should result in NULL. 
-<li>     NULL-values in any arithmetic or logical operation should result
-         in NULL. (however, &amp;&amp;&amp; and ||| are treated specially, as described below).
-<li>	 The &amp;&amp;&amp; and ||| operators observe the following axioms even when x is NULL:
+<li>NULL-values in any arithmetic or logical operation should result
+in NULL. (however, &amp;&amp;&amp; and ||| are treated specially, as described below).
+<li>The &amp;&amp;&amp; and ||| operators observe the following axioms even when x is NULL:
 <div class="code"><pre>
 	x &&& false == false
 	false &&& x == false
 	x ||| true == true
 	true ||| x == true
 </pre></div>
-<li>     NULL-values in function arguments should result in NULL (however,
-         if(), eval() and isnull() are treated specially, as described below).
-<li>	 The eval() function always returns its last argument
-<li>	 The situation for if() is:
+<li>NULL-values in function arguments should result in NULL (however,
+if(), eval() and isnull() are treated specially, as described below).
+<li>The eval() function always returns its last argument
+<li>The situation for if() is:
 <div class="code"><pre>
 if(x) 
 	NULL if x is NULL; 0 if x is zero; 1 otherwise 
@@ -391,9 +380,9 @@ if(x,n,z,p)
 	NULL if x is NULL; n if x is negative; 
 z if x is zero; p if x is positive 
 </pre></div>
-<li>     The (new) function isnull(x) returns: 1 if x is NULL; 
-         0 otherwise. The (new) function null() 
-         (which has no arguments) returns an integer NULL. 
+<li>The (new) function isnull(x) returns: 1 if x is NULL; 
+0 otherwise. The (new) function null() 
+(which has no arguments) returns an integer NULL. 
 <li>Non-NULL, but invalid, arguments to functions should result in NULL. 
 <div class="code"><pre>
 Examples: 
