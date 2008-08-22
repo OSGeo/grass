@@ -3,6 +3,7 @@ MODULE_TOPDIR = ../..
 LIB_NAME = $(GIS_LIBNAME)
 EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(INTLLIB) $(MATHLIB)
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections gui.tcl
+EXTRA_INC = $(ZLIBINCPATH)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
@@ -15,6 +16,7 @@ COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 ifneq ($(USE_LARGEFILES),)
 	EXTRA_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
+
 ifneq ($(GDAL_LINK),)
 EXTRA_CFLAGS += -DGDAL_LINK
 EXTRA_INC += $(PROJINC) $(GDALCFLAGS)

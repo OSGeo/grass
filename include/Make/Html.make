@@ -19,7 +19,7 @@ htmldesc = \
 	LC_ALL=C \
 	$(1) --html-description < /dev/null | grep -v '</body>\|</html>' > $(2)
 
-$(HTMLDIR)/%.html: %.html %.tmp.html
+$(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC)
 	-test -d $(HTMLDIR) || $(MKDIR) $(HTMLDIR)
 	$(MODULE_TOPDIR)/tools/mkhtml.sh $* > $@
 	-for file in  *.png *.jpg ; do \

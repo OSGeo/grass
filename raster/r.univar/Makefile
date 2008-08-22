@@ -6,12 +6,9 @@ DEPENDENCIES = $(G3DDEP) $(GISDEP)
 
 PROGRAMS = r.univar r3.univar
 
+r_univar_OBJS = r.univar_main.o sort.o stats.o
+r3_univar_OBJS = r3.univar_main.o sort.o stats.o
+
 include $(MODULE_TOPDIR)/include/Make/Multi.make
 
-R3UNIVAR = $(BIN)/r3.univar$(EXE)
-RUNIVAR = $(BIN)/r.univar$(EXE)
-
 default: multi
-
-$(BIN)/%$(EXE): $(OBJDIR)/%_main.o $(OBJDIR)/sort.o $(OBJDIR)/stats.o
-	$(CC) $(LDFLAGS) -o $@ $^ $(FMODE_OBJ) $(LIBES) $(XDRLIB) $(MATHLIB)

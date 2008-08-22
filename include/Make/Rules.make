@@ -10,19 +10,11 @@ endif
 
 # for i18N support
 DEFS=-DPACKAGE=\"$(PACKAGE)\"
-NLS_CFLAGS=$(ZLIBINCPATH) $(PICFLAGS) $(DEFS)
+NLS_CFLAGS=$(DEFS)
 
-ifndef MOD_OBJS
-MOD_OBJS := $(subst .c,.o,$(wildcard *.c))
-endif
-
-ifndef CMD_OBJS
-CMD_OBJS := $(MOD_OBJS)
-endif
-
-ifndef ARCH_CMD_OBJS
-ARCH_CMD_OBJS := $(foreach obj,$(CMD_OBJS),OBJ.$(ARCH)/$(obj))
-endif
+MOD_OBJS := $(subst .c,.o,$(wildcard *.c)) $(subst .cpp,.o,$(wildcard *.cpp)) $(subst .cc,.o,$(wildcard *.cc))
+CMD_OBJS = $(MOD_OBJS)
+ARCH_CMD_OBJS = $(patsubst %.o,$(OBJDIR)/%.o,$(CMD_OBJS))
 
 $(OBJDIR):
 	-test -d $(OBJDIR) || $(MKDIR) $(OBJDIR)
@@ -32,6 +24,8 @@ ifneq ($(MAKE_VERSION),3.81)
 BROKEN_MAKE=1
 endif
 endif
+
+LINK = $(CC)
 
 # default cc rules
 ifeq ($(BROKEN_MAKE),)

@@ -7,8 +7,6 @@ DEPENDENCIES= $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-default: cmd
+HTMLSRC=
 
-#hardcoded here, this is an exeption due to the g.parser specialities:
-$(PGM).tmp.html:
-	> $@
+default: cmd
