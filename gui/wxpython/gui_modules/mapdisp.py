@@ -3183,13 +3183,24 @@ class MapFrame(wx.Frame):
         """
         pgnum = None
         self.Map.Clean()
+        
+        # close edited map properly
+        digitToolbar = self.toolbars['vdigit']
+        if digitToolbar:
+            maplayer = digitToolbar.GetLayer()
+            if maplayer:
+                self.toolbars['vdigit'].OnExit()
+                self.imgVectorMap = None
+        
         if self.page:
             pgnum = self.layerbook.GetPageIndex(self.page)
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
-
+        
         #self.Destroy()
 
+        event.Skip()
+        
     def GetRender(self):
         """
         Returns the current instance of render.Map()
