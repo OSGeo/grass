@@ -2438,7 +2438,8 @@ class NvizToolWindow(wx.Frame):
         else:
             desc = _("Vector map <%s> is 2D") % layer.name
             enable = True
-        desc += " - " + _("%d primitives (%d points)") % (nprimitives, npoints)
+        desc += " - " + _("%(primitives)d primitives (%(points)d points)") % \
+            { 'primitives' : nprimitives, 'points' : npoints }
 
         self.FindWindowById(self.win['vector']['lines']['flat']).Enable(enable)
         for v in ('lines', 'points'):
