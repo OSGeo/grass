@@ -16,13 +16,13 @@ void PNG_color(int number)
 	return;
     }
 
-    if (true_color) {
+    if (png.true_color) {
 	int r = (number >> 16) & 0xFF;
 	int g = (number >> 8) & 0xFF;
 	int b = (number >> 0) & 0xFF;
 
-	currentColor = get_color(r, g, b, 0);
+	png.current_color = get_color(r, g, b, 0);
     }
     else
-	currentColor = number;
+	png.current_color = number;
 }

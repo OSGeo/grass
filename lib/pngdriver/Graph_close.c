@@ -17,15 +17,15 @@
 static void unmap_file(void)
 {
 #ifndef __MINGW32__
-    size_t size = HEADER_SIZE + width * height * sizeof(unsigned int);
-    void *ptr = (char *)grid - HEADER_SIZE;
+    size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
+    void *ptr = (char *)png.grid - HEADER_SIZE;
 
-    if (!mapped)
+    if (!png.mapped)
 	return;
 
     munmap(ptr, size);
 
-    mapped = 0;
+    png.mapped = 0;
 #endif
 }
 
@@ -33,8 +33,8 @@ void PNG_Graph_close(void)
 {
     write_image();
 
-    if (mapped)
+    if (png.mapped)
 	unmap_file();
     else
-	G_free(grid);
+	G_free(png.grid);
 }

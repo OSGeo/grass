@@ -7,7 +7,7 @@ static int masked;
 
 void PS_begin_scaled_raster(int mask, int src[2][2], double dst[2][2])
 {
-    const char *type = true_color ? (mask ? "RASTERRGBMASK" : "RASTERRGB")
+    const char *type = ps.true_color ? (mask ? "RASTERRGBMASK" : "RASTERRGB")
 	: (mask ? "RASTERGRAYMASK" : "RASTERGRAY");
 
     int ssx = src[0][1] - src[0][0];
@@ -35,7 +35,7 @@ int PS_scaled_raster(int n, int row,
     int i;
 
     for (i = 0; i < n; i++) {
-	if (true_color) {
+	if (ps.true_color) {
 	    if (masked)
 		output("%02X%02X%02X%02X", (nul && nul[i]) ? 0xFF : 0x00,
 		       red[i], grn[i], blu[i]);

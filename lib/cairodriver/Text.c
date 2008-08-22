@@ -95,7 +95,7 @@ void Cairo_draw_text(const char *str)
 
     G_free(utf8);
 
-    modified = 1;
+    ca.modified = 1;
 }
 
 void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)

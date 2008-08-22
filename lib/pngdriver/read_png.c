@@ -30,9 +30,9 @@ void read_png(void)
     if (setjmp(png_jmpbuf(png_ptr)))
 	G_fatal_error("error reading PNG file");
 
-    input = fopen(file_name, "rb");
+    input = fopen(png.file_name, "rb");
     if (!input)
-	G_fatal_error("PNG: couldn't open output file %s", file_name);
+	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
 
     png_init_io(png_ptr, input);
 
@@ -44,12 +44,12 @@ void read_png(void)
     if (depth != 8)
 	G_fatal_error("PNG: input file is not 8-bit");
 
-    if (i_width != width || i_height != height)
+    if (i_width != png.width || i_height != png.height)
 	G_fatal_error
 	    ("PNG: input file has incorrect dimensions: expected: %dx%d got: %lux%lu",
-	     width, height, i_width, i_height);
+	     png.width, png.height, i_width, i_height);
 
-    if (true_color) {
+    if (png.true_color) {
 	if (color_type != PNG_COLOR_TYPE_RGB_ALPHA)
 	    G_fatal_error("PNG: input file is not RGBA");
     }
@@ -58,7 +58,7 @@ void read_png(void)
 	    G_fatal_error("PNG: input file is not indexed color");
     }
 
-    if (!true_color && has_alpha) {
+    if (!png.true_color && png.has_alpha) {
 	png_bytep trans;
 	int num_trans;
 
@@ -68,7 +68,7 @@ void read_png(void)
 	    G_fatal_error("PNG: input file has invalid palette");
     }
 
-    if (true_color)
+    if (png.true_color)
 	png_set_invert_alpha(png_ptr);
     else {
 	png_colorp png_pal;
@@ -81,21 +81,21 @@ void read_png(void)
 	    num_palette = 256;
 
 	for (i = 0; i < num_palette; i++) {
-	    png_palette[i][0] = png_pal[i].red;
-	    png_palette[i][1] = png_pal[i].green;
-	    png_palette[i][2] = png_pal[i].blue;
+	    png.palette[i][0] = png_pal[i].red;
+	    png.palette[i][1] = png_pal[i].green;
+	    png.palette[i][2] = png_pal[i].blue;
 	}
     }
 
-    line = G_malloc(width * 4);
+    line = G_malloc(png.width * 4);
 
-    for (y = 0, p = grid; y < height; y++) {
+    for (y = 0, p = png.grid; y < png.height; y++) {
 	png_bytep q = line;
 
 	png_read_row(png_ptr, q, NULL);
 
-	if (true_color)
-	    for (x = 0; x < width; x++, p++) {
+	if (png.true_color)
+	    for (x = 0; x < png.width; x++, p++) {
 		int r = *q++;
 		int g = *q++;
 		int b = *q++;
@@ -105,7 +105,7 @@ void read_png(void)
 		*p = c;
 	    }
 	else
-	    for (x = 0; x < width; x++, p++, q++)
+	    for (x = 0; x < png.width; x++, p++, q++)
 		*p = (png_byte) * q;
     }
 

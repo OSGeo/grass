@@ -17,30 +17,30 @@ void PNG_Box(double fx1, double fy1, double fx2, double fy2)
     if (y1 > y2)
 	tmp = y1, y1 = y2, y2 = tmp;
 
-    if (x2 < 0 || x1 > width)
+    if (x2 < 0 || x1 > png.width)
 	return;
 
-    if (y2 < 0 || y1 > height)
+    if (y2 < 0 || y1 > png.height)
 	return;
 
-    if (x1 < clip_left)
-	x1 = clip_left;
+    if (x1 < png.clip_left)
+	x1 = png.clip_left;
 
-    if (x2 > clip_rite)
-	x2 = clip_rite;
+    if (x2 > png.clip_rite)
+	x2 = png.clip_rite;
 
-    if (y1 < clip_top)
-	y1 = clip_top;
+    if (y1 < png.clip_top)
+	y1 = png.clip_top;
 
-    if (y2 > clip_bot)
-	y2 = clip_bot;
+    if (y2 > png.clip_bot)
+	y2 = png.clip_bot;
 
     for (y = y1; y < y2; y++) {
-	unsigned int *p = &grid[y * width + x1];
+	unsigned int *p = &png.grid[y * png.width + x1];
 
 	for (x = x1; x < x2; x++)
-	    *p++ = currentColor;
+	    *p++ = png.current_color;
     }
 
-    modified = 1;
+    png.modified = 1;
 }

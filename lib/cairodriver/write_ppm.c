@@ -2,13 +2,13 @@
 
 void cairo_write_ppm(void)
 {
-    char *mask_name = G_store(file_name);
+    char *mask_name = G_store(ca.file_name);
     FILE *output, *mask;
     int x, y;
 
-    output = fopen(file_name, "wb");
+    output = fopen(ca.file_name, "wb");
     if (!output)
-	G_fatal_error("cairo: couldn't open output file %s", file_name);
+	G_fatal_error("cairo: couldn't open output file %s", ca.file_name);
 
     mask_name[strlen(mask_name) - 2] = 'g';
 
@@ -18,13 +18,13 @@ void cairo_write_ppm(void)
 
     G_free(mask_name);
 
-    fprintf(output, "P6\n%d %d\n255\n", width, height);
-    fprintf(mask, "P5\n%d %d\n255\n", width, height);
+    fprintf(output, "P6\n%d %d\n255\n", ca.width, ca.height);
+    fprintf(mask, "P5\n%d %d\n255\n", ca.width, ca.height);
 
-    for (y = 0; y < height; y++) {
-	const unsigned int *row = (const unsigned int *)(grid + y * stride);
+    for (y = 0; y < ca.height; y++) {
+	const unsigned int *row = (const unsigned int *)(ca.grid + y * ca.stride);
 
-	for (x = 0; x < width; x++) {
+	for (x = 0; x < ca.width; x++) {
 	    unsigned int c = row[x];
 	    int a = (c >> 24) & 0xFF;
 	    int r = (c >> 16) & 0xFF;

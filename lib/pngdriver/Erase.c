@@ -2,11 +2,11 @@
 
 void PNG_Erase(void)
 {
-    int n = width * height;
+    int n = png.width * png.height;
     int i;
 
     for (i = 0; i < n; i++)
-	grid[i] = background;
+	png.grid[i] = png.background;
 
-    modified = 1;
+    png.modified = 1;
 }

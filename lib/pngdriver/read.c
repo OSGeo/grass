@@ -9,11 +9,11 @@
 
 void read_image(void)
 {
-    char *p = file_name + strlen(file_name) - 4;
+    char *p = png.file_name + strlen(png.file_name) - 4;
 
     if (G_strcasecmp(p, ".ppm") == 0) {
 	read_ppm();
-	if (has_alpha)
+	if (png.has_alpha)
 	    read_pgm();
     }
     else if (G_strcasecmp(p, ".bmp") == 0)
@@ -25,5 +25,5 @@ void read_image(void)
     else
 	G_fatal_error("read_image: unknown file type: %s", p);
 
-    modified = 0;
+    png.modified = 0;
 }

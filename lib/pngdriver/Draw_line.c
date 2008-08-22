@@ -13,10 +13,10 @@
 
 static void store_xy(int x, int y)
 {
-    if (x < clip_left || x >= clip_rite || y < clip_top || y >= clip_bot)
+    if (x < png.clip_left || x >= png.clip_rite || y < png.clip_top || y >= png.clip_bot)
 	return;
 
-    grid[y * width + x] = currentColor;
+    png.grid[y * png.width + x] = png.current_color;
 }
 
 static void draw_line(int x1, int y1, int x2, int y2)
@@ -108,17 +108,17 @@ void PNG_draw_line(double fx1, double fy1, double fx2, double fy2)
     int dx, dy;
     int i;
 
-    if (linewidth <= 1) {
+    if (png.linewidth <= 1) {
 	draw_line(x1, y1, x2, y2);
-	modified = 1;
+	png.modified = 1;
 	return;
     }
 
     dx = abs(x2 - x1);
     dy = abs(y2 - y1);
 
-    for (i = 0; i < linewidth; i++) {
-	int k = i - linewidth / 2;
+    for (i = 0; i < png.linewidth; i++) {
+	int k = i - png.linewidth / 2;
 
 	if (dy > dx)
 	    draw_line(x1 + k, y1, x2 + k, y2);
@@ -126,5 +126,5 @@ void PNG_draw_line(double fx1, double fy1, double fx2, double fy2)
 	    draw_line(x1, y1 + k, x2, y2 + k);
     }
 
-    modified = 1;
+    png.modified = 1;
 }

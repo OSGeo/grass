@@ -85,5 +85,5 @@ void Cairo_end_scaled_raster(void)
 
     /* cleanup */
     cairo_surface_destroy(src_surf);
-    modified = 1;
+    ca.modified = 1;
 }

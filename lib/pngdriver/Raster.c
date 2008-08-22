@@ -86,10 +86,10 @@ int PNG_scaled_raster(int n, int row,
     int d_y0 = scale_fwd_y(row + 0);
     int d_y1 = scale_fwd_y(row + 1);
     int d_rows = d_y1 - d_y0;
-    int x0 = max(clip_left - dst[0][0], 0);
-    int x1 = min(clip_rite - dst[0][0], ncols);
-    int y0 = max(clip_top - d_y0, 0);
-    int y1 = min(clip_bot - d_y0, d_rows);
+    int x0 = max(png.clip_left - dst[0][0], 0);
+    int x1 = min(png.clip_rite - dst[0][0], ncols);
+    int y0 = max(png.clip_top - d_y0, 0);
+    int y1 = min(png.clip_bot - d_y0, d_rows);
     int x, y;
 
     if (y1 <= y0)
@@ -108,11 +108,11 @@ int PNG_scaled_raster(int n, int row,
 	for (y = y0; y < y1; y++) {
 	    int yy = d_y0 + y;
 
-	    grid[yy * width + xx] = c;
+	    png.grid[yy * png.width + xx] = c;
 	}
     }
 
-    modified = 1;
+    png.modified = 1;
 
     return next_row(row, d_y1);
 }

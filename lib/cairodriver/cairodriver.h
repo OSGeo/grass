@@ -34,16 +34,18 @@
 extern cairo_surface_t *surface;
 extern cairo_t *cairo;
 
-extern char *file_name;
-extern int file_type;
-extern int width, height, stride;
-extern unsigned char *grid;
-extern double clip_left, clip_right, clip_top, clip_bottom;
-extern int auto_write;
-extern double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
-extern int modified;
-extern int auto_write;
-extern int mapped;
+struct cairo_state {
+    char *file_name;
+    int file_type;
+    int width, height, stride;
+    unsigned char *grid;
+    int auto_write;
+    double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
+    int modified;
+    int mapped;
+};
+
+extern struct cairo_state ca;
 
 extern const struct driver *Cairo_Driver(void);
 

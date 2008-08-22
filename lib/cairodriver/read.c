@@ -7,21 +7,21 @@ void cairo_read_image(void)
     if (!cairo || !surface)
 	return;
 
-    if (file_type == FTYPE_PPM) {
-	G_debug(1, "Reading image from %s", file_name);
+    if (ca.file_type == FTYPE_PPM) {
+	G_debug(1, "Reading image from %s", ca.file_name);
 	cairo_read_ppm();
     }
-    else if (file_type == FTYPE_BMP) {
-	G_debug(1, "Reading image from %s", file_name);
+    else if (ca.file_type == FTYPE_BMP) {
+	G_debug(1, "Reading image from %s", ca.file_name);
 	cairo_read_bmp();
     }
 #if CAIRO_HAS_PNG_FUNCTIONS
-    else if (file_type == FTYPE_PNG) {
+    else if (ca.file_type == FTYPE_PNG) {
 	cairo_surface_t *img_surf;
 
-	G_debug(1, "Reading image from %s", file_name);
+	G_debug(1, "Reading image from %s", ca.file_name);
 
-	img_surf = cairo_image_surface_create_from_png(file_name);
+	img_surf = cairo_image_surface_create_from_png(ca.file_name);
 	if (!img_surf)
 	    return;
 
@@ -35,5 +35,5 @@ void cairo_read_image(void)
 #endif
     /* vector format files are written directly to file */
 
-    modified = 0;
+    ca.modified = 0;
 }

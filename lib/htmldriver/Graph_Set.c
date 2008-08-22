@@ -19,21 +19,11 @@
 #include "driver.h"
 #include "htmlmap.h"
 
-char *last_text;
-int last_text_len;
-char *file_name;
-int html_type;
-FILE *output;
-
-struct MapPoly *head;
-struct MapPoly **tail;
-
-int BBOX_MINIMUM;
-int MAX_POINTS;
-int MINIMUM_DIST;
+struct html_state html;
 
 int HTML_Graph_set(void)
 {
+    char *file_name;
     char *p;
 
     G_gisinit("HTMLMAP driver");
@@ -45,13 +35,13 @@ int HTML_Graph_set(void)
      */
 
     if (NULL != (p = getenv("GRASS_HTMLMINBBOX"))) {
-	BBOX_MINIMUM = atoi(p);
-	if (BBOX_MINIMUM <= 0) {
-	    BBOX_MINIMUM = DEF_MINBBOX;
+	html.BBOX_MINIMUM = atoi(p);
+	if (html.BBOX_MINIMUM <= 0) {
+	    html.BBOX_MINIMUM = DEF_MINBBOX;
 	}
     }
     else {
-	BBOX_MINIMUM = DEF_MINBBOX;
+	html.BBOX_MINIMUM = DEF_MINBBOX;
     }
 
     /*
@@ -59,13 +49,13 @@ int HTML_Graph_set(void)
      */
 
     if (NULL != (p = getenv("GRASS_HTMLMAXPOINTS"))) {
-	MAX_POINTS = atoi(p);
-	if (MAX_POINTS <= 0) {
-	    MAX_POINTS = DEF_MAXPTS;
+	html.MAX_POINTS = atoi(p);
+	if (html.MAX_POINTS <= 0) {
+	    html.MAX_POINTS = DEF_MAXPTS;
 	}
     }
     else {
-	MAX_POINTS = DEF_MAXPTS;
+	html.MAX_POINTS = DEF_MAXPTS;
     }
 
     /*
@@ -73,13 +63,13 @@ int HTML_Graph_set(void)
      */
 
     if (NULL != (p = getenv("GRASS_HTMLMINDIST"))) {
-	MINIMUM_DIST = atoi(p);
-	if (MINIMUM_DIST <= 0) {
-	    MINIMUM_DIST = DEF_MINDIST;
+	html.MINIMUM_DIST = atoi(p);
+	if (html.MINIMUM_DIST <= 0) {
+	    html.MINIMUM_DIST = DEF_MINDIST;
 	}
     }
     else {
-	MINIMUM_DIST = DEF_MINDIST;
+	html.MINIMUM_DIST = DEF_MINDIST;
     }
 
 
@@ -97,8 +87,8 @@ int HTML_Graph_set(void)
     }
     file_name = p;
 
-    output = fopen(file_name, "w");
-    if (output == NULL) {
+    html.output = fopen(file_name, "w");
+    if (html.output == NULL) {
 	G_fatal_error("HTMLMAP: couldn't open output file %s", file_name);
 	exit(EXIT_FAILURE);
     }
@@ -116,17 +106,17 @@ int HTML_Graph_set(void)
     }
 
     if (strcmp(p, "APACHE") == 0) {
-	html_type = APACHE;
+	html.type = APACHE;
 	fprintf(stdout, "type = APACHE\n");
 
     }
     else if (strcmp(p, "RAW") == 0) {
-	html_type = RAW;
+	html.type = RAW;
 	fprintf(stdout, "type = RAW\n");
 
     }
     else {
-	html_type = CLIENT;
+	html.type = CLIENT;
 	fprintf(stdout, "type = CLIENT\n");
     }
 
@@ -135,12 +125,12 @@ int HTML_Graph_set(void)
      * initialize text memory and list pointers
      */
 
-    last_text = (char *)G_malloc(INITIAL_TEXT + 1);
-    last_text[0] = '\0';
-    last_text_len = INITIAL_TEXT;
+    html.last_text = (char *)G_malloc(INITIAL_TEXT + 1);
+    html.last_text[0] = '\0';
+    html.last_text_len = INITIAL_TEXT;
 
-    head = NULL;
-    tail = &head;
+    html.head = NULL;
+    html.tail = &html.head;
 
     return 0;
 }

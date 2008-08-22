@@ -8,12 +8,16 @@
 
 #define FILE_NAME  "map.ps"
 
-extern const char *file_name;
-extern FILE *outfp;
-extern int true_color;
-extern int encapsulated;
-extern int no_header, no_trailer;
-extern double left, right, bot, top;
+struct ps_state
+{
+    FILE *outfp;
+    int true_color;
+    int encapsulated;
+    int no_header, no_trailer;
+    double left, right, bot, top;
+};
+
+extern struct ps_state ps;
 
 extern void output(const char *, ...);
 

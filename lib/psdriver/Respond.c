@@ -3,5 +3,5 @@
 
 void PS_Respond(void)
 {
-    fflush(outfp);
+    fflush(ps.outfp);
 }
