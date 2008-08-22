@@ -1417,16 +1417,12 @@ class GMFrame(wx.Frame):
             if self.curr_page.maptree.GetPyData(layer)[0]['type'] == 'group':
                 self.curr_page.maptree.DeleteChildren(layer)
             self.curr_page.maptree.Delete(layer)
-
-    #Misc methods
+        
     def OnCloseWindow(self, event):
         """Cleanup when wxgui.py is quit"""
-        try:
-            for page in range(self.gm_cb.GetPageCount()):
-                self.gm_cb.GetPage(page).maptree.Map.Clean()
-            self.DeleteAllPages()
-        except:
-            pass
+        for page in range(self.gm_cb.GetPageCount()):
+            self.gm_cb.GetPage(page).maptree.mapdisplay.OnCloseWindow(event)
+        self.gm_cb.DeleteAllPages()
         # self.DestroyChildren()
         self._auimgr.UnInit()
         self.Destroy()
