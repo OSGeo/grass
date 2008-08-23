@@ -3,11 +3,11 @@
 <em>v.db.select</em> prints attributes of a vector map from one or several
 user selected attribute table columns.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 Select and show entire table:
 <div class="code"><pre>
-v.db.select roads
+v.db.select map=roads
 cat|label
 0|no data
 1|interstate
@@ -17,10 +17,10 @@ cat|label
 5|unimproved road
 </pre></div>
 
-<p>
-Select and show single column from table (multiple columns can be specified as comma separated list):
+Select and show single column from table (multiple columns can be
+specified as comma separated list):
 <div class="code"><pre>
-v.db.select roads col=label
+v.db.select map=roads column=label
 label
 no data
 interstate
@@ -30,6 +30,15 @@ light-duty road, improved surface
 unimproved road
 </pre></div>
 
+Print region extent of selected vector features:
+
+<div class="code"><pre>
+v.db.select -r map=roads where="label ~ 'highway'"
+n=4928063.398015
+s=4914089.153930
+w=589532.054964
+e=609527.210215
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
@@ -37,6 +46,9 @@ unimproved road
 
 <h2>AUTHOR</h2>
 
-Radim Blazek, ITC-Irst, Trento, Italy
+Radim Blazek, ITC-Irst, Trento, Italy<br>
+Minimal region extent added by Martin Landa,
+FBK-irst (formerly ITC-irst), Trento, Italy (2008/08)
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

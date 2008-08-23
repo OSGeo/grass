@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *map_opt, *field_opt, *fs_opt, *vs_opt, *nv_opt, *col_opt,
 	*where_opt;
-    struct Flag *c_flag, *v_flag;
+    struct Flag *c_flag, *v_flag, *r_flag;
     dbDriver *driver;
     dbString sql, value_string;
     dbCursor cursor;
@@ -43,6 +43,10 @@ int main(int argc, char **argv)
     struct Map_info Map;
     char *mapset;
     char query[1024];
+    struct ilist *list_lines;
+
+    BOUND_BOX *min_box, *line_box;
+    int i, line, area, init_box, cat;
 
     module = G_define_module();
     module->keywords = _("vector, database, attribute table");
@@ -57,25 +61,35 @@ int main(int argc, char **argv)
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
     fs_opt->description = _("Output field separator");
+    fs_opt->guisection = _("Format");
 
     vs_opt = G_define_standard_option(G_OPT_F_SEP);
     vs_opt->key = "vs";
     vs_opt->description = _("Output vertical record separator");
     vs_opt->answer = NULL;
+    vs_opt->guisection = _("Format");
 
     nv_opt = G_define_option();
     nv_opt->key = "nv";
     nv_opt->type = TYPE_STRING;
     nv_opt->required = NO;
     nv_opt->description = _("Null value indicator");
+    nv_opt->guisection = _("Format");
+
+    r_flag = G_define_flag();
+    r_flag->key = 'r';
+    r_flag->description =
+	_("Print minimal region extent of selected vector features instead");
 
     c_flag = G_define_flag();
     c_flag->key = 'c';
     c_flag->description = _("Do not include column names in output");
+    c_flag->guisection = _("Format");
 
     v_flag = G_define_flag();
     v_flag->key = 'v';
     v_flag->description = _("Vertical output (instead of horizontal)");
+    v_flag->guisection = _("Format");
 
     G_gisinit(argv[0]);
 
@@ -85,6 +99,18 @@ int main(int argc, char **argv)
     /* set input vector map name and mapset */
     field = atoi(field_opt->answer);
 
+    if (r_flag->answer) {
+	min_box = (BOUND_BOX *) G_malloc(sizeof(BOUND_BOX));
+	G_zero((void *)min_box, sizeof(BOUND_BOX));
+
+	line_box = (BOUND_BOX *) G_malloc(sizeof(BOUND_BOX));
+	list_lines = Vect_new_list();
+    }
+    else {
+      min_box = line_box = NULL;
+      list_lines = NULL;
+    }
+
     db_init_string(&sql);
     db_init_string(&value_string);
 
@@ -93,7 +119,18 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
     }
 
-    Vect_open_old_head(&Map, map_opt->answer, mapset);
+    if (!r_flag) {
+	Vect_open_old_head(&Map, map_opt->answer, mapset);
+    }
+    else {
+	if (2 > Vect_open_old(&Map, map_opt->answer, mapset)) {
+	    Vect_close(&Map);
+	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "
+			   "Flag '%c' requires topology level."),
+			  G_fully_qualified_name(map_opt->answer, mapset),
+			  r_flag->key);
+	}
+    }
 
     if ((Fi = Vect_get_field(&Map, field)) == NULL)
 	G_fatal_error(_("Database connection not defined for layer %d"),
@@ -128,8 +165,8 @@ int main(int argc, char **argv)
     table = db_get_cursor_table(&cursor);
     ncols = db_get_table_number_of_columns(table);
 
-    /* column names if horizontal output */
-    if (!v_flag->answer && !c_flag->answer) {
+    /* column names if horizontal output (ignore for -r) */
+    if (!v_flag->answer && !c_flag->answer && !r_flag->answer) {
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    if (col)
@@ -138,6 +175,8 @@ int main(int argc, char **argv)
 	}
 	fprintf(stdout, "\n");
     }
+
+    init_box = 1;
 
     /* fetch the data */
     while (1) {
@@ -148,9 +187,20 @@ int main(int argc, char **argv)
 	if (!more)
 	    break;
 
+	cat = -1;
 	for (col = 0; col < ncols; col++) {
 	    column = db_get_table_column(table, col);
 	    value = db_get_column_value(column);
+
+	    if (cat < 0 && strcmp(Fi->key, db_get_column_name(column)) == 0) {
+		cat = db_get_value_int(value);
+		if (r_flag->answer)
+		    break;
+	    }
+
+	    if (r_flag->answer)
+		continue;
+
 	    db_convert_column_value_to_string(column, &value_string);
 
 	    if (!c_flag->answer && v_flag->answer)
@@ -168,10 +218,55 @@ int main(int argc, char **argv)
 	    if (v_flag->answer)
 		fprintf(stdout, "\n");
 	}
-	if (!v_flag->answer)
-	    fprintf(stdout, "\n");
-	else if (vs_opt->answer)
-	    fprintf(stdout, "%s\n", vs_opt->answer);
+
+	if (r_flag->answer) {
+	    /* get minimal region extent */
+	    Vect_cidx_find_all(&Map, field, -1, cat, list_lines);
+	    for (i = 0; i < list_lines->n_values; i++) {
+		line = list_lines->value[i];
+		area = Vect_get_centroid_area(&Map, line);
+		if (area > 0) {
+		    if (!Vect_get_area_box(&Map, area, line_box))
+			G_fatal_error(_("Unable to get bounding box of area %d"),
+				      area);
+		}
+		else {
+		    if (!Vect_get_line_box(&Map, line, line_box))
+			G_fatal_error(_("Unable to get bounding box of line %d"),
+				      line);
+		}
+		if (init_box) {
+		    Vect_box_copy(min_box, line_box);
+		    init_box = 0;
+		}
+		else {
+		    Vect_box_extend(min_box, line_box);
+		}
+	    }
+	}
+	else {
+	    if (!v_flag->answer)
+		fprintf(stdout, "\n");
+	    else if (vs_opt->answer)
+		fprintf(stdout, "%s\n", vs_opt->answer);
+	}
+    }
+
+    if (r_flag->answer) {
+	fprintf(stdout, "n=%f\n", min_box->N);
+	fprintf(stdout, "s=%f\n", min_box->S);
+	fprintf(stdout, "w=%f\n", min_box->W);
+	fprintf(stdout, "e=%f\n", min_box->E);
+	if (Vect_is_3d(&Map)) {
+	    fprintf(stdout, "t=%f\n", min_box->T);
+	    fprintf(stdout, "b=%f\n", min_box->B);
+	}
+	fflush(stdout);
+
+	G_free((void *)min_box);
+	G_free((void *)line_box);
+
+	Vect_destroy_list(list_lines);
     }
 
     if (!driver)
