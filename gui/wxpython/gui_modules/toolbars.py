@@ -39,9 +39,9 @@ sys.path.append(gmpath)
 
 class AbstractToolbar(object):
     """Abstract toolbar class"""
-    def __init__():
+    def __init__(self):
         pass
-        
+    
     def InitToolbar(self, parent, toolbar, toolData):
         """Initialize toolbar, i.e. add tools to the toolbar
 
@@ -56,7 +56,6 @@ class AbstractToolbar(object):
         
     def ToolbarData(self):
         """Toolbar data"""
-
         return None
 
     def CreateTool(self, parent, toolbar, tool, label, bitmap, kind,
@@ -95,13 +94,43 @@ class AbstractToolbar(object):
                 self._toolbar.SetToolLongHelp(tool[0], tool[5])
             else:
                 self._toolbar.SetToolLongHelp(tool[0], "")
-                
+
+    def OnTool(self, event):
+        """Tool selected"""
+        if event:
+            # deselect previously selected tool
+            id = self.action.get('id', -1)
+            if id != event.GetId():
+                self._toolbar.ToggleTool(self.action['id'], False)
+            else:
+                self._toolbar.ToggleTool(self.action['id'], True)
+            
+            self.action['id'] = event.GetId()
+            
+            event.Skip()
+        else:
+            # initialize toolbar
+            self._toolbar.ToggleTool(self.action['id'], True)
+    
+    def GetAction(self, type='desc'):
+        """Get current action info"""
+        return self.action.get(type, '')
+
+    def SelectDefault(self, event):
+        """Select default tool"""
+        self._toolbar.ToggleTool(self.defaultAction['id'], True)
+        self.defaultAction['bind'](event)
+        self.action = { 'id' : self.defaultAction['id'],
+                        'desc' : self.defaultAction.get('desc', '') }
+        
 class MapToolbar(AbstractToolbar):
     """
     Main Map Display toolbar
     """
 
     def __init__(self, mapdisplay, map):
+        AbstractToolbar.__init__(self)
+
         self.mapcontent = map
         self.mapdisplay = mapdisplay
 
@@ -120,10 +149,16 @@ class MapToolbar(AbstractToolbar):
         # realize the toolbar
         self.toolbar.Realize()
         
-        #workaround for Mac bug. May be fixed by 2.8.8, but not before then.
+        # workaround for Mac bug. May be fixed by 2.8.8, but not before then.
         self.combo.Hide()
         self.combo.Show()
-            
+
+        # default action
+        self.action = { 'id' : self.pointer }
+        self.defaultAction = { 'id' : self.pointer,
+                               'bind' : self.mapdisplay.OnPointer }
+        self.OnTool(None)
+        
     def ToolbarData(self):
         """Toolbar data"""
 
@@ -155,19 +190,19 @@ class MapToolbar(AbstractToolbar):
              self.mapdisplay.OnErase),
             ("", "", "", "", "", "", ""),
             (self.pointer, "pointer", Icons["pointer"].GetBitmap(),
-             wx.ITEM_RADIO, Icons["pointer"].GetLabel(), Icons["pointer"].GetDesc(),
+             wx.ITEM_CHECK, Icons["pointer"].GetLabel(), Icons["pointer"].GetDesc(),
              self.mapdisplay.OnPointer),
             (self.query, "queryDisplay", Icons["queryDisplay"].GetBitmap(),
-             wx.ITEM_RADIO, Icons["queryDisplay"].GetLabel(), Icons["queryDisplay"].GetDesc(),
+             wx.ITEM_CHECK, Icons["queryDisplay"].GetLabel(), Icons["queryDisplay"].GetDesc(),
              self.mapdisplay.OnQuery),
             (self.pan, "pan", Icons["pan"].GetBitmap(),
-             wx.ITEM_RADIO, Icons["pan"].GetLabel(), Icons["pan"].GetDesc(),
+             wx.ITEM_CHECK, Icons["pan"].GetLabel(), Icons["pan"].GetDesc(),
              self.mapdisplay.OnPan),
             (self.zoomin, "zoom_in", Icons["zoom_in"].GetBitmap(),
-             wx.ITEM_RADIO, Icons["zoom_in"].GetLabel(), Icons["zoom_in"].GetDesc(),
+             wx.ITEM_CHECK, Icons["zoom_in"].GetLabel(), Icons["zoom_in"].GetDesc(),
              self.mapdisplay.OnZoomIn),
             (self.zoomout, "zoom_out", Icons["zoom_out"].GetBitmap(),
-             wx.ITEM_RADIO, Icons["zoom_out"].GetLabel(), Icons["zoom_out"].GetDesc(),
+             wx.ITEM_CHECK, Icons["zoom_out"].GetLabel(), Icons["zoom_out"].GetDesc(),
              self.mapdisplay.OnZoomOut),
             (self.zoomback, "zoom_back", Icons["zoom_back"].GetBitmap(),
              wx.ITEM_NORMAL, Icons["zoom_back"].GetLabel(), Icons["zoom_back"].GetDesc(),
@@ -502,12 +537,16 @@ class VDigitToolbar(AbstractToolbar):
         id = self.parent.toolbars['map'].pointer
         self.parent.toolbars['map'].toolbar.ToggleTool(id, True)
         self.parent.toolbars['map'].mapdisplay.OnPointer(event)
+
         
         if event:
             # deselect previously selected tool
-            if self.action.has_key('id'):
+            id = self.action.get('id', -1)
+            if id != event.GetId():
                 self.toolbar[0].ToggleTool(self.action['id'], False)
-        
+            else:
+                self.toolbar[0].ToggleTool(self.action['id'], True)
+            
             self.action['id'] = event.GetId()
             event.Skip()
         else:
@@ -683,7 +722,7 @@ class VDigitToolbar(AbstractToolbar):
                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(copy)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopy, copy)
-        if self.action['desc'] == "copyLine":
+        if self.toolbars['map'].GetAction() == "copyLine":
             copy.Check(True)
 
         flip = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
@@ -691,7 +730,7 @@ class VDigitToolbar(AbstractToolbar):
                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(flip)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnFlip, flip)
-        if self.action['desc'] == "flipLine":
+        if self.toolbars['map'].GetAction() == "flipLine":
             flip.Check(True)
 
         merge = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
@@ -1058,10 +1097,6 @@ class VDigitToolbar(AbstractToolbar):
         """Get selected layer for editing -- MapLayer instance"""
         return self.mapLayer
 
-    def GetAction(self, type='desc'):
-        """Get current action info"""
-        return self.action[type]
-    
 class ProfileToolbar(AbstractToolbar):
     """
     Toolbar for profiling raster map

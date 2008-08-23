@@ -2835,10 +2835,12 @@ class MapFrame(wx.Frame):
 
     def OnPointer(self, event):
         """Pointer button clicked"""
-
+        self.toolbars['map'].OnTool(event)
+        self.toolbars['map'].action['desc'] = ''
+        
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
-
+        
         # change the cursor
         if self.toolbars['vdigit']:
             # digitization tool activated
@@ -2866,11 +2868,14 @@ class MapFrame(wx.Frame):
         Zoom in the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
+        self.toolbars['map'].OnTool(event)
+        self.toolbars['map'].action['desc'] = ''
+        
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = 1
         self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-
+        
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
 
@@ -2879,11 +2884,14 @@ class MapFrame(wx.Frame):
         Zoom out the map.
         Set mouse cursor, zoombox attributes, and zoom direction
         """
+        self.toolbars['map'].OnTool(event)
+        self.toolbars['map'].action['desc'] = ''
+        
         self.MapWindow.mouse['use'] = "zoom"
         self.MapWindow.mouse['box'] = "box"
         self.MapWindow.zoomtype = -1
         self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
-
+        
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
 
@@ -2897,11 +2905,13 @@ class MapFrame(wx.Frame):
         """
         Panning, set mouse to drag
         """
+        self.toolbars['map'].OnTool(event)
+        self.toolbars['map'].action['desc'] = ''
+        
         self.MapWindow.mouse['use'] = "pan"
         self.MapWindow.mouse['box'] = "pan"
         self.MapWindow.zoomtype = 0
-#        event.Skip()
-
+                
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["hand"])
 
@@ -3211,6 +3221,12 @@ class MapFrame(wx.Frame):
         """
         Query currrent raster/vector map layers (display mode)
         """
+        if self.toolbars['map'].GetAction() == 'displayAttrb': # select previous action
+            self.toolbars['map'].SelectDefault(event)
+            return
+
+        self.toolbars['map'].action['desc'] = 'displayAttrb'
+        
         # switch GIS Manager to output console to show query results
         self.gismanager.notebook.SetSelection(1)
 
@@ -3225,6 +3241,12 @@ class MapFrame(wx.Frame):
         """
         Query vector map layer (edit mode)
         """
+        if self.toolbars['map'].GetAction() == 'modifyAttrb': # select previous action
+            self.toolbars['map'].SelectDefault(event)
+            return
+        
+        self.toolbars['map'].action['desc'] = 'modifyAttrb'
+        
         self.MapWindow.mouse['use'] = "queryVector"
         self.MapWindow.mouse['box'] = "point"
         self.MapWindow.zoomtype = 0
@@ -3355,16 +3377,27 @@ class MapFrame(wx.Frame):
 
     def OnQuery(self, event):
         """Query tools menu"""
+        self.toolbars['map'].OnTool(event)
+        action = self.toolbars['map'].GetAction()
+        
         point = wx.GetMousePosition()
         toolsmenu = wx.Menu()
         # Add items to the menu
-        display = wx.MenuItem(toolsmenu, wx.ID_ANY, Icons["queryDisplay"].GetLabel())
+        display = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
+                              text=Icons["queryDisplay"].GetLabel(),
+                              kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(display)
         self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
-
-        modify = wx.MenuItem(toolsmenu, wx.ID_ANY, Icons["queryModify"].GetLabel())
+        if action == "displayAttrb":
+            display.Check(True)
+        
+        modify = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
+                             text=Icons["queryModify"].GetLabel(),
+                             kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(modify)
         self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
+        if action == "modifyAttrb":
+            modify.Check(True)
 
         self.PopupMenu(toolsmenu)
         toolsmenu.Destroy()
