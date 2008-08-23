@@ -555,7 +555,7 @@ class GMFrame(wx.Frame):
 
         # delete current layer tree content
         self.OnWorkspaceClose()
-
+        
         self.LoadWorkspaceFile(filename)
 
         self.workspaceFile = filename
@@ -863,10 +863,10 @@ class GMFrame(wx.Frame):
         displays = []
         for page in range(0, self.gm_cb.GetPageCount()):
             displays.append(self.gm_cb.GetPage(page).maptree.mapdisplay)
-            
+        
         for display in displays:
-            display.Close()
-
+            display.OnCloseWindow(event)
+        
         self.disp_idx = 0
         self.curr_page = None
         
