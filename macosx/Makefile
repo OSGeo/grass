@@ -1,6 +1,13 @@
 MODULE_TOPDIR = ..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
+SUBDIRS = 
+ifeq ($(MACOSX_APP),1)
+SUBDIRS = app modbuild
+endif
+
+include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 MACOSX_APP_NAME = GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app
 MACOSX_APPDIR = ${MACOSX_APP_NAME}/Contents/MacOS
@@ -23,13 +30,6 @@ XCODE_VER = xcode2
 PACKAGEMAKER = /Developer/Tools/packagemaker
 PKG_INST_DIR = ${prefix}/${MACOSX_APP_NAME}
 endif
-
-SUBDIRS = 
-ifeq ($(MACOSX_APP),1)
-SUBDIRS = app modbuild
-endif
-
-include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: subdirs
 
@@ -120,7 +120,3 @@ macosx-support-dir:
 	${MAKE_DIR_CMD} ${MACOSX_SUPPDIR}/Modules/docs/html
 	${MAKE_DIR_CMD} ${MACOSX_SUPPDIR}/Modules/etc
 	${MAKE_DIR_CMD} ${MACOSX_SUPPDIR}/Modules/lib
-
-clean: cleansubdirs
-	-rm -rf ${ARCH_DISTDIR}/${MACOSX_APP_NAME}/ 2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/modbuild/ 2>/dev/null

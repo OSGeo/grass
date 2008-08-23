@@ -19,8 +19,7 @@
 
 MODULE_TOPDIR = .
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 # Install directories
 exec_prefix=            ${prefix}
@@ -121,41 +120,9 @@ libs:
 	-cp -f $(FILES) ${ARCH_DISTDIR}/
 	-cp -fr --parents include ${ARCH_DISTDIR}/
 
-#we leave this target for a while so that people can easily upgrade (11/2004):
-mix:
-	@echo "NOTE: 'make mix' is no longer needed (changed 9 Nov 2004)"
-
-mixclean:
-	list='$(SUBDIRS)'; \
-	find include -type l -exec rm {} \; 2>/dev/null; \
-	for subdir in $$list; do \
-		find $$subdir -type l -exec rm {} \; 2>/dev/null; \
-	done
-	-rm -f MIX 
-
-# Any target that has a dependency on this target will be forced to be made.
-# If we switch to GNU Make then this feature can be replaced with .PHONY
-FORCE:
-
 cleandistdirs: 
-	-rm -rf ${ARCH_DISTDIR}/bin/         2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/bwidget/     2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/docs/        2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/driver/      2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/etc/         2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/fonts/       2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/include/     2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/lib/         2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/locale/      2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/man/         2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/scripts/     2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/demolocation/ 2>/dev/null
-	-rm -rf ${ARCH_DISTDIR}/tcltkgrass/ 2>/dev/null
-	-rm -f ${ARCH_DISTDIR}/AUTHORS ${ARCH_DISTDIR}/CHANGES ${ARCH_DISTDIR}/REQUIREMENTS.html ${ARCH_DISTDIR}/COPYING ${ARCH_DISTDIR}/GPL.TXT ${ARCH_DISTDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp 2>/dev/null
-	-rmdir ${ARCH_DISTDIR}
-	-rm -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} 2>/dev/null
-	-rm -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.bat 2>/dev/null
-	-rmdir ${ARCH_BINDIR}
+	-rm -rf ${ARCH_DISTDIR}
+	-rm -rf ${ARCH_BINDIR}
 
 # Clean out the strings extracted from scripts for translation
 cleanscriptstrings:

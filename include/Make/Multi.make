@@ -1,9 +1,10 @@
 
 PACKAGE = "grassmods"
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Html.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 PROGFILES = $(patsubst %,$(BIN)/%$(EXE),$(PROGRAMS))
 HTMLFILES = $(patsubst %,$(HTMLDIR)/%.html,$(PROGRAMS))
@@ -15,7 +16,7 @@ progs: $(PROGFILES)
 htmlmulti: $(HTMLFILES)
 
 $(BIN)/%$(EXE): $(DEPENDENCIES)
-	$(LINK) $(LDFLAGS) $(XTRA_LDFLAGS) -o $@ $(filter %.o,$^) $(FMODE_OBJ) $(LIBES) $(MATHLIB) $(XDRLIB)
+	$(call linker)
 
 define objs_rule
 $(BIN)/$(1)$(EXE): $$(patsubst %.o,$(OBJDIR)/%.o,$$($$(subst .,_,$(1)_OBJS)))

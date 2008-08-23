@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 EXTRA_CFLAGS=$(FTINC)
 EXTRA_LIBS=$(GISLIB) $(FTLIB) $(ICONVLIB)

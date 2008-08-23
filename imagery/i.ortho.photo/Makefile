@@ -19,5 +19,4 @@ $(SUBDIRS1): libes
 
 default: parsubdirs
 
-clean: cleansubdirs
 

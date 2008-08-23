@@ -1,6 +1,8 @@
 
 MODULE_TOPDIR = ..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
 SUBDIRS = \
 	v.buffer \
 	v.build \
@@ -71,8 +73,6 @@ SUBDIRS = \
 	v.vol.rst \
 	lidar
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
 OGRBASED = v.out.ogr v.in.ogr v.external
 
 #compile if OGR present:
@@ -103,4 +103,3 @@ default: htmldir
 
 htmldir: parsubdirs
 
-clean: cleansubdirs

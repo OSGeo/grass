@@ -15,7 +15,7 @@
 
 #include "mapcalc.h"
 
-#include "y.tab.h"
+#include "mapcalc.tab.h"
 
 #ifndef YY_NULL
 #define YY_NULL 0

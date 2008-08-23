@@ -2,17 +2,17 @@ MODULE_TOPDIR = ..
 
 SUBDIRS =
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #compile if OpenGL and Tcl/Tk present:
-ifneq ($(strip $(OPENGLLIB)),)
+ifneq ($(USE_OPENGL),)
 ifneq ($(strip $(TCLTKLIBS)),)
     SUBDIRS += nviz
 endif
 endif
 
 #compile if OpenGL present
-ifneq ($(strip $(OPENGLLIB)),)
+ifneq ($(USE_OPENGL),)
     SUBDIRS += nviz2
 endif
 
@@ -29,5 +29,4 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
 
-clean: cleansubdirs
 

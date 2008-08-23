@@ -1,5 +1,4 @@
 # common dependencies and rules for building libraries
-include $(MODULE_TOPDIR)/include/Make/Platform.make
 
 DOXINPUT=$(DOXNAME)lib.dox
 DOXOUTPUT=$(DOXNAME)lib

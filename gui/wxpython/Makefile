@@ -2,7 +2,7 @@ MODULE_TOPDIR = ../..
 
 SUBDIRS = docs scripts
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #compile if wxWidgets, Python, CXX present
 ifneq ($(USE_WXWIDGETS),)
@@ -35,5 +35,3 @@ install_scripts:
 	$(INSTALL_DATA) gis_set.py wxgui.py README $(ETCDIR)/
 	$(INSTALL) scripts/* $(ETCDIR)/scripts/	
 	$(INSTALL) wxgui $(ETCDIR)/scripts/
-
-clean: cleansubdirs

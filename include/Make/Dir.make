@@ -1,9 +1,9 @@
 
 # common dependencies and rules for building subdirs
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Html.make
 
 subdirs:
 	@list='$(SUBDIRS)'; \
@@ -18,6 +18,8 @@ cleansubdirs:
 	    echo $$subdir ; \
 	    $(MAKE) -C $$subdir clean; \
 	done
+
+clean: cleansubdirs
 
 htmldir: html
 

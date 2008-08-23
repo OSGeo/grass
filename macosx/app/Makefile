@@ -2,22 +2,18 @@
 
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+MOD_OBJS = Info.plist GRASS.scpt grass.sh main.o
 
 EXTRA_INC = 
 EXTRA_CFLAGS = 
-XTRA_LDFLAGS = -framework Cocoa -framework AppleScriptKit
+EXTRA_LDFLAGS = -framework Cocoa -framework AppleScriptKit
 ifndef MACOSX_APP_NAME
 MACOSX_APP_NAME = GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app
 endif
 APPDIR = $(ARCH_DISTDIR)/${MACOSX_APP_NAME}/Contents
 MAKE_DIR_CMD = mkdir -p -m 755
 GRASS_VERSION_BUILD = `/bin/date "+%y%m%d"`
-
-OBJS = Info.plist GRASS.scpt grass.sh main.o
-
-ARCH_OBJS := $(foreach obj,$(OBJS),$(OBJDIR)/$(obj)) 
 
 # ugly hack - assume gdal prefix starts with -L flag
 ifndef GDAL_BIN
@@ -49,7 +45,7 @@ $(OBJDIR)/main.o: main.m
 
 $(APPDIR)/MacOS/GRASS: $(OBJDIR)/main.o
 	-$(MAKE_DIR_CMD) ${APPDIR}/MacOS
-	$(CC) $(LDFLAGS) -o ${APPDIR}/MacOS/GRASS $(OBJDIR)/main.o $(XTRA_LDFLAGS)
+	$(CC) $(LDFLAGS) -o ${APPDIR}/MacOS/GRASS $(OBJDIR)/main.o $(EXTRA_LDFLAGS)
 
 $(OBJDIR)/Info.plist: Info.plist.in
 	$(MAKE_DIR_CMD) $(OBJDIR)

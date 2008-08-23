@@ -13,3 +13,6 @@ void field_info(MYSQL_FIELD *, int *, int *);
 
 /* parse.c */
 int parse_conn(char *, CONNPAR *);
+
+/* replace.c */
+int replace_variables(char *, char **, char **);

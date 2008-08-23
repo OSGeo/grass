@@ -1,5 +1,7 @@
 MODULE_TOPDIR = ..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
 #order is relevant:
 SUBDIRS = \
 	datetime \
@@ -36,18 +38,9 @@ SUBDIRS = \
 	cdhc \
 	stats \
 	arraystats \
-	python
-
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
-OPENGLBASED = \
+	python \
 	ogsf \
 	nviz
-
-#compile if OPENGLBASED present:
-ifneq ($(strip $(OPENGLLIB)),)
-    SUBDIRS += $(OPENGLBASED)
-endif
 
 #compile if C++ compiler present:
 ifneq ($(strip $(CXX)),)
@@ -73,5 +66,3 @@ headers:
 	for file in ../include/vect/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/vect/ ; done
 	for file in ../include/iostream/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/iostream/ ; done
 	for file in ../include/Make/*.make ; do $(INSTALL_DATA) $$file $(GISBASE)/include/Make/ ; done
-
-clean: cleansubdirs

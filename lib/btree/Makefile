@@ -1,19 +1,11 @@
-
 MODULE_TOPDIR = ../..
 
-LIB_NAME = $(BTREE_LIBNAME)
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
-LIB_OBJS = \
-	create.o\
-	find.o\
-	free.o\
-	next.o\
-	rewind.o\
-	update.o
+MOD_OBJS := $(filter-out try.o,$(AUTO_OBJS))
+
+LIB_NAME = $(BTREE_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 default: lib
-
-try: $(OBJDIR)/try.o $(BTREELIB)
-	$(CC) $(LDFLAGS) $(OBJDIR)/try.o $(BTREELIB) -o $(OBJDIR)/try

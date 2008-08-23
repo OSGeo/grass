@@ -3,9 +3,7 @@
 # wxpython by Martin Landa
 
 MODULE_TOPDIR = ..
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
-include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Other.make
 
 default:
 	@if [ "$(HAVE_NLS)" != "" ] ; then \

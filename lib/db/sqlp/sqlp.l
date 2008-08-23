@@ -22,7 +22,7 @@
 
 %{
 #include <grass/sqlp.h>
-#include "y.tab.h"
+#include "sqlp.tab.h"
 #include <string.h>
 
 #undef YY_INPUT

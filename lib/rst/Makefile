@@ -9,7 +9,6 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
 
-clean: cleansubdirs
 
 interp_float: data qtree
 

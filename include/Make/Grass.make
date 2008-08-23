@@ -51,6 +51,8 @@ BIN             = $(ARCH_DISTDIR)/bin
 ETC             = $(ARCH_DISTDIR)/etc
 DRIVERDIR       = $(ARCH_DISTDIR)/driver
 DBDRIVERDIR     = $(ARCH_DISTDIR)/driver/db
+DOCSDIR         = $(ARCH_DISTDIR)/docs
+HTMLDIR         = $(ARCH_DISTDIR)/docs/html
 
 FONTDIR         = $(ARCH_DISTDIR)/fonts
 
@@ -70,6 +72,12 @@ VECT_CFLAGS =  $(GDALCFLAGS)
 ifdef MINGW
   FMODE_OBJ = $(MODULE_TOPDIR)/lib/gis/$(OBJDIR)/fmode.o
 endif
+
+# lexical analyzer and default options
+LFLAGS      = -d -i -s -t
+
+# parser generator and default options
+YFLAGS      = -d -v -t
 
 ##################### library names #####################################
 
@@ -172,7 +180,7 @@ LRS_LIBNAME           = grass_lrs
 
 ##################### library switches ##################################
 
-ARRAYSTATSLIB      = -l$(ARRAYSTATS_LIBNAME) $(GISLIB) 
+ARRAYSTATSLIB = -l$(ARRAYSTATS_LIBNAME) $(GISLIB) 
 BITMAPLIB     = -l$(BITMAP_LIBNAME) $(LINKMLIB) 
 BTREELIB      = -l$(BTREE_LIBNAME)
 CLUSTERLIB    = -l$(CLUSTER_LIBNAME) $(IMAGERYLIB) $(GISLIB)
@@ -185,7 +193,7 @@ DSPFLIB       = -l$(DSPF_LIBNAME)
 DRIVERLIB     = -l$(DRIVER_LIBNAME) $(GISLIB) $(FTLIB) $(ICONVLIB) 
 PNGDRIVERLIB  = -l$(PNGDRIVER_LIBNAME) $(DRIVERLIB) $(GISLIB) $(PNGLIB) 
 PSDRIVERLIB   = -l$(PSDRIVER_LIBNAME) $(DRIVERLIB) $(GISLIB) 
-CAIRODRIVERLIB = -l$(CAIRODRIVER_LIBNAME) $(DRIVERLIB) $(GISLIB)
+CAIRODRIVERLIB= -l$(CAIRODRIVER_LIBNAME) $(DRIVERLIB) $(GISLIB)
 HTMLDRIVERLIB = -l$(HTMLDRIVER_LIBNAME) $(DRIVERLIB) $(GISLIB)
 EDITLIB       = -l$(EDIT_LIBNAME) $(GISLIB) $(VASKLIB) 
 G3DLIB        = -l$(G3D_LIBNAME) $(GISLIB) 
@@ -363,54 +371,4 @@ SITESDEP    = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(SITES_LIBNAME)$(LIB_SUFFIX)
 
 # LRS
 LRSDEP      = $(ARCH_LIBDIR)/$(LIB_PREFIX)$(LRS_LIBNAME)$(LIB_SUFFIX)
-
-##################### rules #############################################
-# first found target
-first: pre default
-	@if test -n "$(INST_NOW)" ; then \
-		$(MAKE) inst_now ; \
-	fi
-
-# This helps compile and install modules directly into $(INST_DIR)
-# without having to install whole distribution even after modifying only
-# one module. It will update both $(GRASS_HOME)/dist.$(ARCH) and $(INST_DIR).
-# Usage:
-#	INST_NOW=y make
-# alias gmake='INST_NOW=y make' will be useful.
-ifdef INST_NOW
-ARCH_DISTDIR = $(INST_DIR)
-ARCH_BINDIR = $(UNIX_BIN)
-endif
-
-inst_now:
-	INST_NOW= $(MAKE)
-
-# create platform dirs 
-pre: $(ARCH_BINDIR) $(ARCH_INCDIR) $(ARCH_LIBDIR) \
-	$(BIN) $(ETC) \
-	$(DRIVERDIR) $(DBDRIVERDIR) $(FONTDIR)
-
-$(ARCH_BINDIR):
-	mkdir -p $(ARCH_BINDIR)
-
-$(ARCH_INCDIR):
-	mkdir -p $(ARCH_INCDIR)
-
-$(ARCH_LIBDIR):
-	mkdir -p $(ARCH_LIBDIR)
-
-$(BIN):
-	mkdir -p $(BIN)
-
-$(ETC):
-	mkdir -p $(ETC)
-
-$(DRIVERDIR):
-	mkdir -p $(DRIVERDIR)
-
-$(DBDRIVERDIR):
-	mkdir -p $(DBDRIVERDIR)
-
-$(FONTDIR):
-	mkdir -p $(FONTDIR)
 

@@ -14,4 +14,3 @@ default: htmldir
 
 htmldir: subdirs
 
-clean: cleansubdirs

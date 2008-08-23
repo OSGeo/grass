@@ -36,32 +36,49 @@ int db__driver_open_database(dbHandle * handle)
     G_debug(3, "db_driver_open_database() mysql: database definition = '%s'",
 	    name);
 
+    /* Embedded version */
     {
-	/* Client version */
-	char *user, *password;
-	CONNPAR connpar;
+	char *datadir, *database;
+	char *server_args[4];
+	char *buf;
 
-	if (parse_conn(name, &connpar) == DB_FAILED) {
+	if (!replace_variables(name, &datadir, &database)) {
+	    append_error(_("Cannot parse MySQL embedded database name"));
+	    append_error(mysql_error(connection));
 	    report_error();
 	    return DB_FAILED;
 	}
 
-	G_debug(3, "host = %s, port = %d, dbname = %s, "
-		"user = %s, password = %s",
-		connpar.host, connpar.port, connpar.dbname,
-		connpar.user, connpar.password);
+	server_args[0] = "mesql";	/* this string is not used */
+	G_asprintf(&buf, "--datadir=%s", datadir);
+	server_args[1] = buf;
+	/* With InnoDB it is very slow to close the database */
+	server_args[2] = "--skip-innodb";	/* OK? */
+	/* Without --bootstrap it complains about missing 
+	 * mysql.time_zone_leap_second table */
+	server_args[3] = "--bootstrap";	/* OK? */
 
-	db_get_login("mysql", name, &user, &password);
+	if (mysql_server_init(4, server_args, NULL)) {
+	    append_error(_("Cannot initialize MySQL embedded server"));
+	    append_error(mysql_error(connection));
+	    report_error();
+	    free(datadir);
+	    free(database);
+	    return DB_FAILED;
+	}
 
 	connection = mysql_init(NULL);
-	res = mysql_real_connect(connection, connpar.host, user, password,
-				 connpar.dbname, connpar.port, NULL, 0);
+	mysql_options(connection, MYSQL_OPT_USE_EMBEDDED_CONNECTION, NULL);
 
-	G_free(user);
-	G_free(password);
+	res =
+	    mysql_real_connect(connection, NULL, NULL, NULL, database, 0,
+			       NULL, 0);
+
+	free(datadir);
+	free(database);
 
 	if (res == NULL) {
-	    append_error(_("Cannot connect to MySQL: "));
+	    append_error(_("Cannot connect to MySQL embedded server: "));
 	    append_error(mysql_error(connection));
 	    report_error();
 	    return DB_FAILED;
@@ -76,6 +93,7 @@ int db__driver_close_database(void)
     init_error();
     mysql_close(connection);	/* this will also release connection */
 
+    mysql_server_end();
+
     return DB_OK;
 }
-
