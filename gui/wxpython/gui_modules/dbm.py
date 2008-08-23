@@ -87,8 +87,8 @@ class VirtualAttributeList(wx.ListCtrl,
         self.mapDBInfo = mapDBInfo
         self.layer   = layer
 
-        self.columns              = {} # <- LoadData()
-
+        self.columns = {} # <- LoadData()
+        
         # self.selectedCats         = []
         # self.lastTurnSelectedCats = [] # just temporary, for comparation
 
@@ -137,61 +137,51 @@ class VirtualAttributeList(wx.ListCtrl,
         self.mapDBInfo = mapDBInfo
         self.LoadData(self.layer)
 
-    def LoadData(self, layer, sql=None):
+    def LoadData(self, layer, columns=None, where=None):
         """Load data into list
 
         @param layer layer number
-        @param sql SQL select statement (if None 'SELECT * FROM table)
-
+        @param columns list of columns for output
+        @param where where statement
+        
         @return id of key column 
         @return -1 if key column is not displayed
         """
-
         self.log.write(_("Loading data..."))
-
-        # These two should probably be passed to init more cleanly
-        # setting the numbers of items = number of elements in the dictionary
-        self.itemDataMap  = {}
-        self.itemIndexMap = []
-        self.itemCatsMap  = {}
-
-        self.DeleteAllItems()
-
-        # self.ClearAll()
-        for i in range(self.GetColumnCount()):
-            self.DeleteColumn(0)
-
+        
         tableName    = self.mapDBInfo.layers[layer]['table']
         keyColumn    = self.mapDBInfo.layers[layer]['key']
         self.columns = self.mapDBInfo.tables[tableName]
-
-        if sql is None:
-            sql = "SELECT * FROM %s" % tableName
-
-        if sql[7] != '*':
-            columnNames = sql[7:].split(' ')[0].split(',')
+        
+        cmd = ["v.db.select",
+               "-c", "--q",
+               "map=%s" % self.mapDBInfo.map,
+               "layer=%d" % layer]
+               
+        if not columns:
+            columns = self.mapDBInfo.GetColumns(tableName)
         else:
-            columnNames = self.mapDBInfo.GetColumns(tableName)
+            all = self.mapDBInfo.GetColumns(tableName)
+            cmd.append("columns=%s" % ','.join(columns))
+            for col in columns:
+                if col not in all:
+                    wx.MessageBox(parent=self,
+                                  message=_("Column <%(column)s> not found in "
+                                            "in the table <%(table)s>.") % \
+                                      { 'column' : col, 'table' : tableName },
+                                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                    return
 
+
+        if where:
+            cmd.append("where=%s" % where)
+        
         try:
             # for maps connected via v.external
-            keyId = columnNames.index(keyColumn)
+            keyId = columns.index(keyColumn)
         except:
             keyId = -1
-
-        i = 0
-        info = wx.ListItem()
-        info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
-        info.m_image = -1
-        info.m_format = 0
-        for column in columnNames:
-            info.m_text = column
-            self.InsertColumnInfo(i, info)
-            i += 1
-
-            if i >= 256:
-                self.log.write(_("Can display only 256 columns."))
-
+        
         #
         # read data
         #
@@ -200,31 +190,57 @@ class VirtualAttributeList(wx.ListCtrl,
         # stdout can be very large, do not use PIPE, redirect to temp file
         # TODO: more effective way should be implemented...
         outFile = tempfile.NamedTemporaryFile(mode='w+b')
-        selectCommand = gcmd.Command(["db.select", "-c", "--q",
-                                      "sql=%s" % sql,
-                                      "database=%s" % self.mapDBInfo.layers[layer]["database"],
-                                      "driver=%s"   % self.mapDBInfo.layers[layer]["driver"],
-                                      "fs=|"],
+        
+        selectCommand = gcmd.Command(cmd,
                                      stdout=outFile)
+
+        # These two should probably be passed to init more cleanly
+        # setting the numbers of items = number of elements in the dictionary
+        self.itemDataMap  = {}
+        self.itemIndexMap = []
+        self.itemCatsMap  = {}
+        
+        self.DeleteAllItems()
+        
+        # self.ClearAll()
+        for i in range(self.GetColumnCount()):
+            self.DeleteColumn(0)
+        
+        i = 0
+        info = wx.ListItem()
+        info.m_mask = wx.LIST_MASK_TEXT | wx.LIST_MASK_IMAGE | wx.LIST_MASK_FORMAT
+        info.m_image = -1
+        info.m_format = 0
+        for column in columns:
+            info.m_text = column
+            self.InsertColumnInfo(i, info)
+            i += 1
+            
+            if i >= 256:
+                self.log.write(_("Can display only 256 columns."))
+        
         i = 0
         outFile.seek(0)
+        
         while True:
             # os.linesep doesn't work here (MSYS)
             record = outFile.readline().replace('\n', '')
             if not record:
                 break
+            
             self.itemDataMap[i] = []
             j = 0
+            
             for value in record.split('|'):
                 # casting ...
                 try:
-                    self.itemDataMap[i].append(self.columns[columnNames[j]]['ctype'] (value))
+                    self.itemDataMap[i].append(self.columns[columns[j]]['ctype'] (value))
                 except:
                     self.itemDataMap[i].append('')
 
                 if keyId > -1 and keyId == j:
                     try:
-                        cat = self.columns[columnNames[j]]['ctype'] (value)
+                        cat = self.columns[columns[j]]['ctype'] (value)
                     except ValueError, e:
                         cat = -1
                         wx.MessageBox(parent=self,
@@ -255,9 +271,9 @@ class VirtualAttributeList(wx.ListCtrl,
                 break
 
         self.SetItemCount(i)
-
+        
         i = 0
-        for col in columnNames:
+        for col in columns:
             width = self.columns[col]['length'] * 6 # FIXME
             if width < 60:
                 width = 60
@@ -1032,26 +1048,56 @@ class AttributeManager(wx.Frame):
         """Highlight selected features"""
         if not self.map or not self.mapdisplay:
             return
+        
+        list = self.FindWindowById(self.layerPage[self.layer]['data'])
+        cats = map(int, list.GetSelectedItems())
 
         digitToolbar = self.mapdisplay.toolbars['vdigit']
         if digitToolbar and \
                 digitToolbar.GetLayer().GetName() == self.vectmap:
-            list = self.FindWindowById(self.layerPage[self.layer]['data'])
-            cats = map(int, list.GetSelectedItems())
+
             self.mapdisplay.digit.driver.SetSelected(cats, cats=True)
             if zoom:
                 n, s, w, e = self.mapdisplay.digit.driver.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e,
                                               update=True)
-                self.mapdisplay.Map.AdjustRegion() # resolution
-                self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
-            else:
-                self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=True)
         else:
             # add map layer with higlighted vector features
             self.AddQueryMapLayer()
-            self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=False,
-                                                zoom=zoom)
+            if zoom:
+                keyColumn = self.mapDBInfo.layers[self.layer]['key']
+                where = ''
+                for range in utils.ListOfCatsToRange(cats).split(','):
+                    if '-' in range:
+                        min, max = range.split('-')
+                        where += '%s >= %d and %s <= %d or ' % \
+                            (keyColumn, int(min),
+                             keyColumn, int(max))
+                    else:
+                        where += '%s = %d or ' % (keyColumn, int(range))
+                where = where.rstrip('or ')
+                
+                cmd = gcmd.Command(["v.db.select",
+                                    "-r", "--q",
+                                    "map=%s" % self.mapDBInfo.map,
+                                    "layer=%d" % self.layer,
+                                    "where=%s" % where])
+                
+                region = {}
+                for line in cmd.ReadStdOutput():
+                    key, value = line.split('=')
+                    region[key] = float(value)
+                
+                self.mapdisplay.Map.GetRegion(n=region['n'], s=region['s'],
+                                              w=region['w'], e=region['e'],
+                                              update=True)
+        
+        if zoom:
+            self.mapdisplay.Map.AdjustRegion() # adjust resolution
+            self.mapdisplay.Map.AlignExtentFromDisplay() # adjust extent
+            self.mapdisplay.MapWindow.UpdateMap(render=True, renderVector=True)
+        else:
+            self.mapdisplay.MapWindow.UpdateMap(render=False, renderVector=True)
         
     def OnDataDrawSelected(self, event):
         """Reload table description"""
@@ -1576,44 +1622,38 @@ class AttributeManager(wx.Frame):
             where = self.FindWindowById(self.layerPage[self.layer]['where']).GetValue().strip()
             try:
                 if len(where) > 0:
-                    sql = "SELECT * FROM %s WHERE %s" % (self.mapDBInfo.layers[self.layer]['table'],
-                                                         where)
-                    keyColumn = listWin.LoadData(self.layer, sql=sql)
+                    keyColumn = listWin.LoadData(self.layer, where=where)
                 else:
                     keyColumn = listWin.LoadData(self.layer)
-            except gcmd.CmdError:
+            except gcmd.CmdError, e:
                 wx.MessageBox(parent=self,
-                              message=_("Loading attribute data failed. "
-                                        "Invalid SQL 'select' statement.\n\n"
-                                        "'%s'") % sql,
+                              message=_("Loading attribute data failed.\n\n%s") % e.message,
                               caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                keyColumn = listWin.LoadData(self.layer)
                 self.FindWindowById(self.layerPage[self.layer]['where']).SetValue('')
         else:
             # advanced sql statement
-            # valid, cols, where = \
-            #    self.ValidateSelectStatement( \
-            #    self.FindWindowById(self.layerPage[self.layer]['statement']).GetValue().strip())
-            #
-            #Debug.msg(4, "AttributeManager.OnApplySqlStatament(): valid=%s, cols=%s, where=%s" %
-            #          (valid, cols, where))
-            sql = self.FindWindowById(self.layerPage[self.layer]['statement']).GetValue()
+            win = self.FindWindowById(self.layerPage[self.layer]['statement'])
             try:
-                # if valid is True:
-                keyColumn = listWin.LoadData(self.layer,
-                                             sql=sql)
-                # else:
-                # raise gcmd.GException('')
-            except gcmd.CmdError:
+                cols, where = self.ValidateSelectStatement(win.GetValue())
+            except TypeError:
                 wx.MessageBox(parent=self,
-                              message=_("Loading attribute data failed. "
-                                        "Invalid SQL 'select' statement.\n\n"
-                                        "'%s'") % sql,
+                              message=_("Loading attribute data failed.\n"
+                                        "Invalid SQL select statement.\n\n%s") % win.GetValue(),
                               caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
-                keyColumn = listWin.LoadData(self.layer)
-                self.FindWindowById(self.layerPage[self.layer]['statement']).\
-                    SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
-
+                win.SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
+                cols = None
+                where = None
+            print cols, where
+            if cols or where:
+                try:
+                    keyColumn = listWin.LoadData(self.layer, columns=cols,
+                                                 where=where)
+                except gcmd.CmdError, e:
+                    wx.MessageBox(parent=self,
+                                  message=_("Loading attribute data failed.\n\n%s") % e.message,
+                                  caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+                    win.SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
+        
         # sort by key column
         if keyColumn > -1:
             listWin.SortListItems(col=keyColumn, ascending=True)
@@ -1625,18 +1665,14 @@ class AttributeManager(wx.Frame):
                            self.FindWindowById(self.layerPage[self.layer]['data']).GetItemCount())
 
     def ValidateSelectStatement(self, statement):
-        """Validate Select SQL statement
+        """Validate SQL select statement
 
-        TODO: check list of columns and where statement
-
-        Return True if valid, False if not
-        Return list of columns (or '*' for all columns)
-        Return where statement
+        @return (columns, where)
+        @return None on error
         """
-
         if statement[0:7].lower() != 'select ':
-            return (False, '', '')
-
+            return None
+        
         cols = ''
         index = 7
         for c in statement[index:]:
@@ -1644,25 +1680,29 @@ class AttributeManager(wx.Frame):
                 break
             cols += c
             index += 1
-
+        if cols == '*':
+            cols = None
+        else:
+            cols = cols.split(',')
+        
         tablelen = len(self.mapDBInfo.layers[self.layer]['table'])
-
+        
         if statement[index+1:index+6].lower() != 'from ' or \
                 statement[index+6:index+6+tablelen] != '%s' % \
                 (self.mapDBInfo.layers[self.layer]['table']):
-            return (False, '', '')
-
+            return None
+        
         if len(statement[index+7+tablelen:]) > 0:
             index = statement.lower().find('where ')
             if index > -1:
                 where = statement[index+6:]
             else:
-                where = ''
+                return None
         else:
-            where = ''
-
-        return (True, cols, where)
-
+            where = None
+        
+        return (cols, where)
+    
     def OnInfoPaneChanged(self, event):
         """Collapse database connection info box"""
 

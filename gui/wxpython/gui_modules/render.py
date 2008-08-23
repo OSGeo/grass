@@ -97,11 +97,9 @@ class Layer(object):
         Debug.msg (3, "Layer.__del__(): layer=%s, cmd='%s'" %
                    (self.name, self.GetCmd(string=True)))
 
-    def Render(self, zoom):
+    def Render(self):
         """Render layer to image
 
-        @param zoom if True zoom to extent given by 'd.vect -r'
-        
         @return rendered image filename
         @return None on error
         """
@@ -150,12 +148,6 @@ class Layer(object):
             runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
                                   stderr=None)
 
-            if zoom:
-                self._region = {}
-                for line in runcmd.ReadStdOutput():
-                    key, value = line.split('=')
-                    self._region[key] = float(value)
-                    
             if runcmd.returncode != 0:
                 #clean up after probley
                 try:
@@ -809,7 +801,7 @@ class Map(object):
 
         return selected
 
-    def _renderLayers(self, force, zoom, mapWindow, maps, masks, opacities):
+    def _renderLayers(self, force, mapWindow, maps, masks, opacities):
         # render map layers
         ilayer = 1
         for layer in self.layers + self.overlays:
@@ -822,17 +814,8 @@ class Map(object):
                layer.force_render or \
                layer.mapfile == None or \
                (not os.path.isfile(layer.mapfile) or not os.path.getsize(layer.mapfile)):
-                if not layer.Render(zoom):
+                if not layer.Render():
                     continue
-            
-            zoomToRegion = layer.GetRegion()
-            if zoomToRegion:
-                self.GetRegion(n=zoomToRegion['n'], s=zoomToRegion['s'],
-                               w=zoomToRegion['w'], e=zoomToRegion['e'],
-                               update=True)
-                self.AdjustRegion() # resolution
-                print self.region
-                return False
             
             # update progress bar
             wx.SafeYield(mapWindow)
@@ -850,7 +833,7 @@ class Map(object):
 
         return True
     
-    def Render(self, force=False, mapWindow=None, windres=False, zoom=False):
+    def Render(self, force=False, mapWindow=None, windres=False):
         """
         Creates final image composite
 
@@ -860,7 +843,6 @@ class Map(object):
         @param force force rendering
         @param reference for MapFrame instance (for progress bar)
         @param windres use region resolution (True) otherwise display resolution
-        @param zoom zoom to region given by 'd.vect -r'
         
         @return name of file with rendered image or None
         """
@@ -886,7 +868,7 @@ class Map(object):
             os.environ["GRASS_TRUECOLOR"] = "TRUE"
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
         
-        if not self._renderLayers(force, zoom, mapWindow, maps, masks, opacities):
+        if not self._renderLayers(force, mapWindow, maps, masks, opacities):
             os.environ["GRASS_REGION"] = self.SetRegion(windres)
             self._renderLayers(True, False, mapWindow, maps, masks, opacities)
         
