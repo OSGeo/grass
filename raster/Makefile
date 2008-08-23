@@ -121,7 +121,7 @@ CXXBASED = r.terraflow
 
 TIFFBASED = r.out.tiff
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 #compile if GDAL present:
 ifneq ($(USE_GDAL),)
@@ -157,4 +157,3 @@ default: htmldir
 
 htmldir: parsubdirs 
 
-clean: cleansubdirs

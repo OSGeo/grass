@@ -6,13 +6,18 @@ include $(MODULE_TOPDIR)/include/Make/Script.make
 
 default: script install_scripts
 
-install_scripts:
-	if [ ! -d $(GISBASE)/etc/gm ] ; then $(MKDIR) $(GISBASE)/etc/gm; fi
-	for file in *.tcl ; do $(INSTALL) $$file $(GISBASE)/etc/gm/ ; done
-	for file in *.gif ; do $(INSTALL_DATA) $$file $(GISBASE)/etc/gm/ ; done
-	for file in docs/gm_*.html ; do $(INSTALL_DATA) $$file $(GISBASE)/docs/html/ ; done
-	for file in docs/gm_*.png ; do $(INSTALL_DATA) $$file $(GISBASE)/docs/html/ ; done
-	for file in docs/gm_*.jpg ; do $(INSTALL_DATA) $$file $(GISBASE)/docs/html/ ; done
+TCLFILES = $(patsubst %,$(ETC)/gm/%,$(wildcard *.tcl))
+GIFFILES = $(patsubst %,$(ETC)/gm/%,$(wildcard *.gif))
+DOCFILES = $(patsubst docs/%,$(HTMLDIR)/%,$(wildcard docs/gm_*.*))
+
+$(HTMLDIR)/%: docs/%
+	$(INSTALL_DATA) $< $@
+
+$(ETC)/gm/%: %
+	-test -d $(ETC)/gm || $(MKDIR) $(ETC)/gm
+	$(INSTALL_DATA) $< $@
+
+install_scripts: $(TCLFILES) $(GIFFILES) $(DOCFILES)
 
 $(BIN)/$(PGM).bat: $(PGM).bat
 	$(INSTALL_DATA) $< $@

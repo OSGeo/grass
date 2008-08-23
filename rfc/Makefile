@@ -1,5 +1,6 @@
 MODULE_TOPDIR = ..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 all:

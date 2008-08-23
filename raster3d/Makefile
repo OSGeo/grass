@@ -13,8 +13,6 @@ SUBDIRS = \
 	r3.to.rast \
 	base
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
 PGM = raster3dintro
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
@@ -23,4 +21,3 @@ default: htmldir
 
 htmldir: parsubdirs
 
-clean: cleansubdirs

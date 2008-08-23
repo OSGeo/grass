@@ -1,5 +1,7 @@
 MODULE_TOPDIR = ..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
 SUBDIRS = \
 	i.atcorr \
 	i.cluster \
@@ -16,8 +18,6 @@ SUBDIRS = \
 	i.pca \
 	i.cca
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-
 FFTWBASED = i.fft i.ifft i.zc
 
 #compile if FFTW present:
@@ -33,4 +33,3 @@ default: htmldir
 
 htmldir: parsubdirs
 
-clean: cleansubdirs

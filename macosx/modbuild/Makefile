@@ -2,8 +2,7 @@
 
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Other.make
 
 ifndef MACOSX_APP_NAME
 	MACOSX_APP_NAME = GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.app
@@ -58,6 +57,3 @@ modbuild: ReadMe.rtf
 	mkdir -p $(ARCH_DISTDIR)/modbuild/tools/g.html2man
 	-cp $(MODULE_TOPDIR)/tools/g.html2man/g.html2man $(ARCH_DISTDIR)/modbuild/tools/g.html2man/
 	-cp $(MODULE_TOPDIR)/tools/mkhtml.sh $(ARCH_DISTDIR)/modbuild/tools/
-
-clean: 
-	

@@ -1,48 +1,39 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(GISLIB) $(DBMILIB)
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
+MOD_OBJS = generate.o open.o
 
 LIB_NAME = $(FORM_LIBNAME)
 
-FORMDIR=$(GISBASE)/etc/form
+include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-HTMLLIB=$(FORMDIR)/html_library.tcl
-FORM=$(FORMDIR)/form.tcl
-FORMPROG=$(FORMDIR)/form
+EXTRA_LIBS=$(GISLIB) $(DBMILIB)
 EXTRA_CFLAGS = $(XCFLAGS) $(TCLINCDIR) $(TKINCDIR)
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+FORMDIR=$(GISBASE)/etc/form
+FORM=$(FORMDIR)/form.tcl
+FORMPROG=$(FORMDIR)/form
+HTMLLIB=$(FORMDIR)/html_library.tcl
 
-LIB_OBJS = generate.o open.o
 ifneq ($(TCLTKLIBS),)
     GTCLTKFORM = $(HTMLLIB) $(FORM) $(FORMPROG) 
 endif
-
-include $(MODULE_TOPDIR)/include/Make/Lib.make
 
 default: lib $(GTCLTKFORM)
 
 $(FORMDIR):
 	if [ ! -d $@ ]; then $(MKDIR) $@; fi
 
-ifneq ($(BROKEN_MAKE),)
-$(HTMLLIB): html_library_grass.tcl $(FORMDIR)
-else
-$(HTMLLIB): html_library_grass.tcl | $(FORMDIR)
-endif
+$(HTMLLIB): html_library_grass.tcl
+	$(MAKE) $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
-ifneq ($(BROKEN_MAKE),)
-$(FORM): form.tcl $(FORMDIR)
-else
-$(FORM): form.tcl | $(FORMDIR)
-endif
+$(FORM): form.tcl
+	$(MAKE) $(FORMDIR)
 	$(INSTALL_DATA) $< $@
 
-ifneq ($(BROKEN_MAKE),)
-$(FORMPROG): $(OBJDIR)/form.o $(FORMDIR)
-else
-$(FORMPROG): $(OBJDIR)/form.o | $(FORMDIR)
-endif
+$(FORMPROG): $(OBJDIR)/form.o
+	$(MAKE) $(FORMDIR)
 	$(CC) $(LDFLAGS) -o $@ $(OBJDIR)/form.o $(DBMILIB) $(GISLIB) $(DATETIMELIB) \
 				$(TCLTKLIBPATH) $(TCLTKLIBS) $(MATHLIB) $(XDRLIB)

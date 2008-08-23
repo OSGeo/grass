@@ -3,9 +3,10 @@
 
 MODULE_TOPDIR = ../../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
-include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+MOD_OBJS := $(filter-out mkdspf_%.o,$(AUTO_OBJS))
+include $(MODULE_TOPDIR)/include/Make/Other.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 # These should be set by the doconfigure script
 NVWISH_VER=NVWISH2.2
@@ -22,10 +23,6 @@ endif
 
 SURFLIB = $(OGSFLIB)
 
-# Stuff for mkdspf - not yet implemented
-# DSPLIB = $(LIBDIR)/libes/dspf/libdsp3.a
-# DSPINC = -I$(LIBDIR)/libes/dspf
-
 EXTRA_INC = $(VECT_INC)
 EXTRA_CFLAGS= $(TCLINCDIR) $(TKINCDIR) \
 	$(INC) \
@@ -36,29 +33,18 @@ ifeq ($(OPENGL_X11),1)
 EXTRA_CFLAGS += $(XCFLAGS)
 endif
 
-XTRA_LDFLAGS=$(TCLTKLIBPATH) $(TCLTKLIBS) $(OGL_LIBS)
+EXTRA_LDFLAGS=$(TCLTKLIBPATH) $(TCLTKLIBS) $(OGL_LIBS)
 
-OBJS = nvizAppInit.o change_view.o draw.o exag.o glwrappers.o \
-	init_commands.o lights.o map_obj.o misc.o nviz_init.o \
-	position.o quick_draw.o anim_support.o cutplane_obj.o \
-	script_support.o do_zoom.o \
-	label.o nvizMain.o togl.o togl_cb.o\
-	query_vect.o \
-	volume.o \
-	togl_flythrough.o pick_vect_commands.o site_attr_commands.o site_highlight_commands.o
+LIBES = $(SURFLIB) \
+	$(BITMAPLIB) $(LINKMLIB) $(VECTLIB) $(SITESLIB) $(FORMLIB) $(DBMILIB) \
+	$(G3DLIB) $(GISLIB) \
+	$(DATETIMELIB) $(TIFFLIBPATH) $(TIFFLIB)
 
-# mkdspf_calc_linefax.o mkdspf_init_file.o mkdspf_main.o \
-# mkdspf_fill_cfax.o mkdspf_iso_surface.o
-
-ARCH_OBJS := $(foreach obj,$(OBJS),$(OBJDIR)/$(obj)) 
+DEPENDENCIES = $(VECTDEP) $(BITMAPDEP) $(LINKMDEP) $(FORMDEP) $(DBMIDEP) $(GISDEP)
 
 EXTRA_CLEAN_FILES = nvwish$(EXE)
 
 default: nvwish$(EXE)
 
-nvwish$(EXE): $(ARCH_OBJS) $(VECTDEP) $(BITMAPDEP) $(LINKMDEP) $(FORMDEP) $(DBMIDEP $(GISDEP)
-	$(CC) $(LDFLAGS) $(XTRA_LDFLAGS) -o $@ $(ARCH_OBJS) $(FMODE_OBJ) $(SURFLIB) \
-		$(BITMAPLIB) $(LINKMLIB) $(VECTLIB) $(SITESLIB) $(FORMLIB) $(DBMILIB) \
-		$(G3DLIB) $(GISLIB) $(XDRLIB) \
-		$(DATETIMELIB) $(TIFFLIBPATH) $(TIFFLIB) \
-		$(MATHLIB)
+nvwish$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
+	$(call linker)

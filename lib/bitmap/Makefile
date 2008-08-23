@@ -1,14 +1,14 @@
 MODULE_TOPDIR = ../..
 
-EXTRA_LIBS=$(LINKMLIB)
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
+MOD_OBJS := bitmap.o sparse.o
 
 LIB_NAME = $(BITMAP_LIBNAME)
 
-LIB_OBJS = \
-	bitmap.o\
-	sparse.o
-
 include $(MODULE_TOPDIR)/include/Make/Lib.make
+
+EXTRA_LIBS = $(LINKMLIB)
 
 default: lib
 

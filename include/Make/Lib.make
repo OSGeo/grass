@@ -4,21 +4,16 @@
 #for i18N support
 PACKAGE ="grasslibs"
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
-
-ifndef LIB_OBJS
-LIB_OBJS := $(subst .c,.o,$(wildcard *.c))
-endif
-
-ARCH_LIB_OBJS := $(foreach obj,$(LIB_OBJS),$(OBJDIR)/$(obj))
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Html.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 STLIB_NAME = $(LIB_NAME)
-STLIB_OBJS = $(ARCH_LIB_OBJS)
+STLIB_OBJS = $(ARCH_OBJS)
 SHLIB_NAME = $(LIB_NAME)
-SHLIB_OBJS = $(ARCH_LIB_OBJS)
+SHLIB_OBJS = $(ARCH_OBJS)
 
-include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Stlib.make
 include $(MODULE_TOPDIR)/include/Make/Shlib.make
 

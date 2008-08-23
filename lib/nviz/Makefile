@@ -15,7 +15,11 @@ EXTRA_INC = $(VECT_INC) $(OPENGLINC) $(TIFFINCPATH) $(FFMPEGINCPATH)
 
 EXTRA_CFLAGS = $(VECT_CFLAGS) $(XCFLAGS)
 
+ifneq ($(USE_OPENGL),)
 default: lib
+else
+default:
+endif
 
 # doxygen
 DOXNAME=nviz

@@ -1,17 +1,13 @@
 MODULE_TOPDIR = ../..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
 PGM2 = r.mapcalc
 PGM3 = r3.mapcalc
 PROGRAMS = $(PGM2) $(PGM3)
 
-EXTRA_HEADERS = y.tab.h
-EXTRA_CLEAN_FILES = y.tab.c y.tab.h lex.yy.c y.output lex.backup
-
-OBJS1 := y.tab.o lex.yy.o
-OBJS2 := $(filter-out $(OBJS1), $(patsubst %.c,%.o,$(wildcard *.c)))
-OBJS := $(OBJS1) $(OBJS2)
-r_mapcalc_OBJS  := $(filter-out map3.o xcoor3.o xres3.o, $(OBJS))
-r3_mapcalc_OBJS := $(filter-out map.o xcoor.o xres.o, $(OBJS))
+r_mapcalc_OBJS  := $(filter-out map3.o xcoor3.o xres3.o, $(AUTO_OBJS))
+r3_mapcalc_OBJS := $(filter-out map.o xcoor.o xres.o, $(AUTO_OBJS))
 
 include $(MODULE_TOPDIR)/include/Make/Multi.make
 
@@ -24,8 +20,8 @@ default: multi
 $(BIN)/$(PGM2)$(EXE): LIBES = $(LIBES2)
 $(BIN)/$(PGM3)$(EXE): LIBES = $(LIBES3)
 
-y.tab.c y.tab.h: mapcalc.y
-	$(YACC) -b y -d mapcalc.y
+$(OBJDIR)/mapcalc.yy.o: mapcalc.tab.h
 
-lex.yy.c: mapcalc.l y.tab.h
-	$(LEX) -t mapcalc.l > $@
+.INTERMEDIATE: mapcalc.tab.c mapcalc.tab.h mapcalc.output
+
+.INTERMEDIATE: mapcalc.yy.c

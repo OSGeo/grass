@@ -8,9 +8,9 @@ SCRIPT = $(SCRIPTDIR)/$(PGM)
 
 HTMLSRC = $(SCRIPT)
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Html.make
 
 SCRIPT_ACTIONS = $(SCRIPT) html scriptstrings
 ifdef MINGW

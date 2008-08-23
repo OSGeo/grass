@@ -1,6 +1,3 @@
-#NOTE: parts of the header are generated in ../../lib/gis/parser.c
-
-HTMLDIR = $(ARCH_DISTDIR)/docs/html
 
 # generic html rules for all commands
 

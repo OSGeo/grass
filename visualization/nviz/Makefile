@@ -1,16 +1,14 @@
 
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
+PGM=nviz
+
+include $(MODULE_TOPDIR)/include/Make/Other.make
 
 VER=2.2
 NV_VER=nviz$(VER)
-PGM=nviz
 INSTALL_DIR=$(GISBASE)/etc/$(NV_VER)
 CLEAN_SUBDIRS = src
-
-include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 SCRIPTS := \
 	scripts/script_get_line \

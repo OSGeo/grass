@@ -1,16 +1,10 @@
 MODULE_TOPDIR = ../../..
 
-LIB_NAME = $(GRAPH_LIBNAME)
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
-LIB_OBJS = \
-	avl.o \
-	tavl.o \
-	graph.o \
-	heap.o \
-	tree.o \
-	helpers.o \
-	graph_v1.o \
-	graph_v2.o
+MOD_OBJS := $(filter-out %-template.o,$(AUTO_OBJS))
+
+LIB_NAME = $(GRAPH_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make

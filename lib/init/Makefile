@@ -16,13 +16,18 @@
 
 MODULE_TOPDIR = ../..
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
-include $(MODULE_TOPDIR)/include/Make/Grass.make
-include $(MODULE_TOPDIR)/include/Make/Rules.make
+include $(MODULE_TOPDIR)/include/Make/Other.make
+include $(MODULE_TOPDIR)/include/Make/Compile.make
 
 START_UP=grass$(GRASS_VERSION_MAJOR)$(GRASS_VERSION_MINOR)
 
-EXTRA_CFLAGS = -DD_LOCATION_NAME=\"$(DEFAULT_LOCATION)\" -DD_GISDBASE=\"$(DEFAULT_DATABASE)\" -DGRASS_VERSION_NUMBER=\"'$(GRASS_VERSION_NUMBER)'\" -DGRASS_VERSION_UPDATE_PKG=\"'$(GRASS_VERSION_UPDATE_PKG)'\"
+EXTRA_CFLAGS = \
+	-DD_LOCATION_NAME=\"$(DEFAULT_LOCATION)\" \
+	-DD_GISDBASE=\"$(DEFAULT_DATABASE)\" \
+	-DGRASS_VERSION_NUMBER=\"'$(GRASS_VERSION_NUMBER)'\" \
+	-DGRASS_VERSION_UPDATE_PKG=\"'$(GRASS_VERSION_UPDATE_PKG)'\"
+
+LIBES = $(GISLIB) $(DATETIMELIB)
 
 FILES = \
 	$(ARCH_BINDIR)/$(START_UP) \
@@ -39,28 +44,23 @@ FILES = \
 	$(ETC)/gis_set.tcl \
 	$(ETC)/epsg_option.tcl \
 	$(ETC)/file_option.tcl \
-	$(ETC)/grass-run.sh \
-	$(ETC)/grass-xterm-wrapper
+	$(HTMLDIR)/variables.html \
+	$(HTMLDIR)/grass7.html \
+	$(HTMLDIR)/helptext.html \
+	$(HTMLDIR)/help_loc_struct.png
 
 ifeq ($(findstring darwin,$(ARCH)),darwin)
 	FILES += \
-		$(ETC)/grass-xterm-mac \
 		$(ETC)/html_browser_mac.sh
 endif
 
 ifneq ($(strip $(MINGW)),)
 	FILES += \
 		$(ARCH_BINDIR)/$(START_UP).bat \
-		$(ETC)/Init.bat \
-		$(ETC)/grass-run.bat
+		$(ETC)/Init.bat
 endif
 
 default: $(FILES)
-	$(MKDIR) $(GISBASE)/docs/html
-	$(INSTALL_DATA) variables.html $(GISBASE)/docs/html/variables.html
-	$(INSTALL_DATA) grass7.html $(GISBASE)/docs/html/grass7.html
-	$(INSTALL_DATA) helptext.html $(GISBASE)/docs/html/helptext.html
-	$(INSTALL_DATA) help_loc_struct.png $(GISBASE)/docs/html/help_loc_struct.png
 
 $(ARCH_BINDIR)/$(START_UP): init.sh grass.src
 	@test -d $(ARCH_BINDIR) || (echo 'ARCH_DISTDIR($(ARCH_BINDIR))' not found; exit 1)
@@ -102,79 +102,25 @@ $(ETC)/Init.bat: init.bat
 	$< > $@"
 	chmod +x $@
 
-$(ETC)/echo$(EXE): $(OBJDIR)/echo.o
-	$(CC) $(LDFLAGS) $(OBJDIR)/echo.o -o $@
+$(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
+	$(CC) $(LDFLAGS) $< -o $@
 
-$(ETC)/clean_temp$(EXE): $(OBJDIR)/clean_temp.o  
-	$(CC) $(LDFLAGS) $(OBJDIR)/clean_temp.o $(GISLIB) $(DATETIMELIB) $(MATHLIB) $(XDRLIB) -o $@
-
-$(ETC)/run$(EXE): $(OBJDIR)/run.o
-	$(CC) $(LDFLAGS) $(OBJDIR)/run.o -o $@
-
-$(ETC)/lock$(EXE): $(OBJDIR)/lock.o
-	$(CC) $(LDFLAGS) $(OBJDIR)/lock.o $(GISLIB) $(DATETIMELIB) $(MATHLIB) $(XDRLIB) -o $@
-
-$(BIN)/exit:
-	touch $@
-	chmod 600 $@
+$(ETC)/clean_temp$(EXE) $(ETC)/lock$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
+	$(call linker)
 
 $(ETC)/VERSIONNUMBER:
 	rm -f $@
 	echo "$(GRASS_VERSION_NUMBER)" > $@
 	chmod +r $@
 
-$(ETC)/grass_intro: grass_intro.txt version.sed 
+$(ETC)/grass_intro $(ETC)/license $(ETC)/welcome: $(ETC)/%: %.txt version.sed 
 	rm -f $@
-	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" grass_intro.txt > $@
+	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" $< > $@
 	chmod +r $@
 
-$(ETC)/license: license.txt version.sed
-	rm -f $@
-	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" license.txt > $@
-	chmod +r $@
+$(HTMLDIR)/%: %
+	$(INSTALL_DATA) $< $@
 
-$(ETC)/welcome: welcome.txt version.sed
-	rm -f $@
-	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" welcome.txt > $@
-	chmod +r $@
-
-$(ETC)/msgs: msgs
-	rm -rf $@
-	$(MKDIR) $@
-	$(INSTALL_DATA) msgs/*.msg $@	
-
-$(ETC)/gis_set.tcl: gis_set.tcl
-	rm -f $@
-	$(INSTALL) gis_set.tcl $(ETC)
-
-$(ETC)/epsg_option.tcl: epsg_option.tcl
-	rm -f $@
-	$(INSTALL) epsg_option.tcl $(ETC)
-
-$(ETC)/file_option.tcl: file_option.tcl
-	rm -f $@
-	$(INSTALL) file_option.tcl $(ETC)
-
-$(ETC)/grass-run.sh: grass-run.src
-	rm -f $@
-	$(SHELL) -c "sed \
-	-e \"s#LD_LIBRARY_PATH_VAR#$(LD_LIBRARY_PATH_VAR)#g\" \
-	grass-run.src > $@"
-	chmod +x $@
-
-$(ETC)/grass-run.bat: grass-run.bat
-	$(INSTALL) grass-run.bat $(ETC)
-
-$(ETC)/grass-xterm-wrapper: grass-xterm-wrapper
-	$(INSTALL) grass-xterm-wrapper $(ETC)
-
-$(ETC)/grass-xterm-mac: grass-xterm-mac
-	$(INSTALL) grass-xterm-mac $(ETC)
-
-$(ETC)/prompt.sh: prompt.sh
-	rm -f $@
-	$(INSTALL) prompt.sh $(ETC)
-
-$(ETC)/html_browser_mac.sh: html_browser_mac.sh
-	$(INSTALL) html_browser_mac.sh $(ETC)
+$(ETC)/%: %
+	$(INSTALL) $< $@
 

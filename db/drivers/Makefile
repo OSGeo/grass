@@ -4,7 +4,7 @@ MODULE_TOPDIR = ../..
 #always compile dialog lib and dbf driver:
 SUBDIRS1 = dbf
 
-include $(MODULE_TOPDIR)/include/Make/Platform.make
+include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 # add odbc:
 ifneq ($(strip $(ODBCLIB)),)
@@ -36,5 +36,3 @@ SUBDIRS =  $(SUBDIRS1) $(SUBDIRS2) $(SUBDIRS3) $(SUBDIRS4) $(SUBDIRS5) $(SUBDIRS
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
-
-clean: cleansubdirs

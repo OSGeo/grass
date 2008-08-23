@@ -25,7 +25,6 @@ include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs htmldir
 
-clean: cleansubdirs
 
 $(SUBDIRS1): r.li.daemon
 

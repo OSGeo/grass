@@ -17,7 +17,6 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 default: parsubdirs
 
-clean: cleansubdirs
 
 stubs: dbmi_base
 

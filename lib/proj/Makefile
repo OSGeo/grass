@@ -2,17 +2,14 @@ MODULE_TOPDIR = ../..
 
 LIB_NAME = $(GPROJ_LIBNAME)
 
-PACKAGE ="libgproj"
-DEFS=-DPACKAGE=\"$(PACKAGE)\"
+include $(MODULE_TOPDIR)/include/Make/Lib.make 
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 EXTRA_LIBS=$(GISLIB) $(PROJLIB) $(GDALLIBS)
 EXTRA_CFLAGS = $(GETHOSTNAME) $(ZLIBINCPATH) $(PICFLAGS) $(GDALCFLAGS) $(DEFS)
 EXTRA_INC = $(PROJINC)
 
-LIB_OBJS = get_proj.o do_proj.o convert.o datum.o ellipse.o
-
-NAD_TABLES = FL.lla MD.lla TN.lla WI.lla WO.lla alaska.lla conus.lla \
-             hawaii.lla prvi.lla stgeorge.lla stlrnc.lla stpaul.lla
+NAD_TABLES := $(wildcard *.lla)
 
 NT_TABLES = ntv1_can.dat nzgd2kgrid0005.gsb
 
@@ -21,9 +18,6 @@ CSV_FILES := $(wildcard *.csv)
 NAD_DIR = $(GISBASE)/etc/nad
 NAD2BIN = nad2bin
 CSV_DIR = $(GISBASE)/etc/ogr_csv
-
-include $(MODULE_TOPDIR)/include/Make/Lib.make 
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 default: lib $(NAD_DIR) $(CSV_DIR)
 
