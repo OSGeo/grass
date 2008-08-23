@@ -39,11 +39,9 @@ SUBDIRS = \
 #	d.what.rast \
 #	d.what.vect \
 #	d.zoom \
-#	drivers
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: parsubdirs
 
-clean: cleansubdirs
 
