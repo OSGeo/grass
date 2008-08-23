@@ -506,7 +506,7 @@ class Settings:
         self.internalSettings['cmd']['verbosity']['choices'] = ('grassenv',
                                                                 'verbose',
                                                                 'quiet')
-        self.internalSettings['display']['driver']['choices'] = ['default']
+#        self.internalSettings['display']['driver']['choices'] = ['default']
         self.internalSettings['display']['statusbarMode']['choices'] = globalvar.MAP_DISPLAY_STATUSBAR_MODE
 
         self.internalSettings['nviz']['view'] = {}
