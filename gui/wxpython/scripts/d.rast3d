@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env python
 #
 ############################################################################
 #
@@ -16,25 +16,21 @@
 #
 #############################################################################
 
-#%Module
+#%module
 #%  description: Displays 3d raster data in the active frame on the graphics monitor.
 #%  keywords: display, raster3d
-#%End
+#%end
+
 #%option
 #% key: map
 #% type: string
 #% gisprompt: old,grid3,3d-raster
 #% description: 3D raster map to be displayed
 #% required : yes
-#%END
+#%end
 
-if  [ -z "$GISBASE" ] ; then
- echo "You must be in GRASS GIS to run this program." >&2
- exit 1
-fi
+import grass
 
-if [ "$1" != "@ARGS_PARSED@" ] ; then
-  exec g.parser "$0" "$@"
-fi
-
-exit 0
+if __name__ == "__main__":
+    options, flags = grass.parser()
+    main()
