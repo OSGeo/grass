@@ -1139,7 +1139,8 @@ class cmdPanel(wx.Panel):
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
                 # dbcolumn entry
                 elif p.get('prompt','') in ('dbcolumn', 'dbtable'):
-                    if p.get('age', 'old') == 'old':
+                    if p.get('age', 'old') == 'old' and \
+                            p.get('multiple', 'no') == 'no':
                         style = wx.CB_SIMPLE | wx.CB_READONLY
                     else:
                         style = wx.CB_SIMPLE
@@ -1371,7 +1372,7 @@ class cmdPanel(wx.Panel):
     def OnDbColumn(self, event):
         """Get list of table columns"""
         choices = []
-
+        
         p = self.task.get_param('table', raiseError=False)
         if p and p.get('prompt', '') == 'dbtable':
             cmd = ['db.columns',
