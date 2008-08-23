@@ -444,7 +444,7 @@ class ItemList(wx.ListCtrl,
                              wx.LC_HRULES |
                              wx.LC_VRULES |
                              wx.LC_SINGLE_SEL |
-                             wx.LC_SORT_ASCENDING, size=(400, 100))
+                             wx.LC_SORT_ASCENDING, size=(550, 125))
 
         # original data or None
         self.sourceData = data
