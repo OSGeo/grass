@@ -3208,8 +3208,8 @@ class MapFrame(wx.Frame):
                 self.layerbook.DeletePage(pgnum)
         
         #self.Destroy()
-
-        event.Skip()
+        if event:
+            event.Skip()
         
     def GetRender(self):
         """
