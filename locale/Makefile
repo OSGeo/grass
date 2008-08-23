@@ -8,7 +8,12 @@ include $(MODULE_TOPDIR)/include/Make/Grass.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 default:
-	@if [ "$(HAVE_NLS)" != "" ] ; then echo "Creating translations (= 'make mo')" ; $(MAKE) mo ; else echo "NLS disabled, cannot translate (re-configure GRASS first)." ; fi
+	@if [ "$(HAVE_NLS)" != "" ] ; then \
+		echo "Creating translations (= 'make mo')" >&2 ; \
+		$(MAKE) mo ; \
+	else \
+		echo "NLS disabled." ; \
+	fi
 
 all:
 	@echo 'Usage:'
@@ -68,21 +73,21 @@ update-po:
 		done
 	@echo "Be careful with SVN commits as .po file updates must be syncronized with the individual translators."
 
+define dom_rule
+$(1)_FILES := $$(patsubst po/grass$(1)_%.po,$$(MO_DIR)/%/LC_MESSAGES/grass$(1).mo,$$(wildcard po/grass$(1)_*.po))
+$$(MO_DIR)/%/LC_MESSAGES/grass$(1).mo: po/grass$(1)_%.po
+	@ [ -d $$(MO_DIR)/$$*/LC_MESSAGES ] || $(MKDIR) $$(MO_DIR)/$$*/LC_MESSAGES
+	msgfmt --statistics -o $$@ $$<
+endef
+$(foreach domain,libs mods wxpy,$(eval $(call dom_rule,$(domain))))
+
+$(MSG_DIR)/%.msg: po/grasstcl_%.po
+	@ [ -d $(MSG_DIR) ] || $(MKDIR) $(MSG_DIR)
+	msgfmt --statistics --tcl -l $* -d $(MSG_DIR)/ $<
+
+MSGFILES := $(patsubst po/grasstcl_%.po,$(MSG_DIR)/%.msg,$(wildcard po/grasstcl_*.po))
+
 #create binary messages files
-mo:
-	@(cd ./po/ ; for po in `ls *_*.po 2>/dev/null` ; do\
-		suffix=`echo $$po | cut -d'_' -f2-`; \
-		lingua=`basename $$suffix .po`; \
-		prefix=`echo $$po | cut -d'_' -f1`; \
-		$(INSTALL) -d $(MO_DIR)/$$lingua/LC_MESSAGES/ ; \
-		echo -n $$po": "; \
-		if [ $$prefix = $(TCLDOMAIN) ]; then\
-		$(INSTALL) -d $(MSG_DIR) ; \
-		msgfmt --statistics --tcl -l $$lingua \
-			-d $(MSG_DIR)/ $$po ;\
-		else \
-		msgfmt --statistics \
-			-o $(MO_DIR)/$$lingua/LC_MESSAGES/$$prefix.mo $$po ;\
-		fi \
-	done \
-	)
+mo: $(libs_FILES) $(mods_FILES) $(wxpy_FILES) $(MSGFILES)
+
+.PHONY: mo
