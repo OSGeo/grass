@@ -830,8 +830,6 @@ class Map(object):
                 
             Debug.msg (3, "Map.Render() type=%s, layer=%s " % (layer.type, layer.name))
             ilayer += 1
-
-        return True
     
     def Render(self, force=False, mapWindow=None, windres=False):
         """
@@ -868,10 +866,8 @@ class Map(object):
             os.environ["GRASS_TRUECOLOR"] = "TRUE"
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
         
-        if not self._renderLayers(force, mapWindow, maps, masks, opacities):
-            os.environ["GRASS_REGION"] = self.SetRegion(windres)
-            self._renderLayers(True, False, mapWindow, maps, masks, opacities)
-        
+        self._renderLayers(force, mapWindow, maps, masks, opacities)
+            
         # ugly hack for MSYS
         if not subprocess.mswindows:
             mapstr = ",".join(maps)
