@@ -1,3 +1,19 @@
+/*!
+  \file cairodriver/read_ppm.c
+
+  \brief GRASS cairo display driver - read PPM image (lower level functions)
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
+#include <grass/glocale.h>
+
 #include "cairodriver.h"
 
 void cairo_read_ppm(void)
@@ -9,33 +25,37 @@ void cairo_read_ppm(void)
 
     input = fopen(ca.file_name, "rb");
     if (!input)
-	G_fatal_error("cairo: couldn't open input file %s", ca.file_name);
+	G_fatal_error(_("Cairo: unable to open input file <%s>"),
+		      ca.file_name);
 
     if (fscanf(input, "P6 %d %d %d", &i_width, &i_height, &maxval) != 3)
-	G_fatal_error("cairo: invalid input file %s", ca.file_name);
+	G_fatal_error(_("Cairo: invalid input file <%s>"),
+		      ca.file_name);
 
     fgetc(input);
 
     if (i_width != ca.width || i_height != ca.height)
-	G_fatal_error
-	    ("cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d",
-	     ca.width, ca.height, i_width, i_height);
+	G_fatal_error(_("Cairo: input file has incorrect dimensions: "
+			"expected: %dx%d got: %dx%d"),
+		      ca.width, ca.height, i_width, i_height);
 
     mask_name[strlen(mask_name) - 2] = 'g';
 
     input = fopen(mask_name, "rb");
     if (!input)
-	G_fatal_error("cairo: couldn't open input mask file %s", mask_name);
+	G_fatal_error(_("Cairo: unable to open input mask file <%s>"),
+		      mask_name);
 
     if (fscanf(input, "P5 %d %d %d", &i_width, &i_height, &maxval) != 3)
-	G_fatal_error("cairo: invalid input mask file %s", mask_name);
+	G_fatal_error(_("Cairo: invalid input mask file <%s>"),
+		      mask_name);
 
     fgetc(input);
 
     if (i_width != ca.width || i_height != ca.height)
-	G_fatal_error
-	    ("cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d",
-	     ca.width, ca.height, i_width, i_height);
+	G_fatal_error(_("Cairo: input mask file has incorrect dimensions: "
+			"expected: %dx%d got: %dx%d"),
+		      ca.width, ca.height, i_width, i_height);
 
     G_free(mask_name);
 

@@ -1,9 +1,23 @@
+/*!
+  \file cairodriver/write_bmp.c
+
+  \brief GRASS cairo display driver - write bitmap (lower level functions)
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "cairodriver.h"
 
 static unsigned char *put_2(unsigned char *p, unsigned int n)
@@ -55,7 +69,8 @@ void cairo_write_bmp(void)
 
     output = fopen(ca.file_name, "wb");
     if (!output)
-	G_fatal_error("cairo: couldn't open output file %s", ca.file_name);
+	G_fatal_error(_("Cairo: unable to open output file <%s>"),
+		      ca.file_name);
 
     make_bmp_header(header);
     fwrite(header, sizeof(header), 1, output);

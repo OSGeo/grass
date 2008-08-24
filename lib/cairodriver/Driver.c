@@ -1,24 +1,24 @@
+/*!
+  \file cairodriver/Driver.c
 
-/****************************************************************************
- *
- * MODULE:       Cairo driver
- * AUTHOR(S):    Lars Ahlzen <lars@ahlzen.com>
- * COPYRIGHT:    (C) 2007 Lars Ahlzen
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *****************************************************************************/
+  \brief GRASS cairo display driver - driver initialization
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
 
 #include "cairodriver.h"
 
+/*!
+  \brief Initialize display driver
+
+  \return pointer driver structure
+*/
 const struct driver *Cairo_Driver(void)
 {
     static struct driver drv;

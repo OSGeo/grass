@@ -1,3 +1,17 @@
+/*!
+  \file cairodriver/cairodriver.h
+
+  \brief GRASS cairo display driver - header file
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
 #ifndef __CAIRODRIVER_H__
 #define __CAIRODRIVER_H__
 

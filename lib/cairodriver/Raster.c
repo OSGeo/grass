@@ -1,3 +1,19 @@
+/*!
+  \file cairodriver/Raster.c
+
+  \brief GRASS cairo display driver - draw raster
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
+#include <grass/glocale.h>
+
 #include "cairodriver.h"
 
 static int src_t, src_b, src_l, src_r, src_w, src_h;
@@ -9,6 +25,13 @@ static int src_stride;
 
 static int masked;
 
+/*!
+  \brief Start drawing raster
+
+  \param mask
+  \param s
+  \param d
+*/
 void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
 {
     G_debug(1, "Cairo_begin_scaled_raster: %d, %d %d %d %d, %f %f %f %f",
@@ -42,12 +65,23 @@ void Cairo_begin_scaled_raster(int mask, int s[2][2], double d[2][2])
     /* create source surface */
     src_surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, src_w, src_h);
     if (cairo_surface_status(src_surf) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error("Cairo_begin_scaled_raster: Failed to create surface");
+	G_fatal_error(_("Cairo_begin_scaled_raster: Failed to create surface"));
 
     src_data = cairo_image_surface_get_data(src_surf);
     src_stride = cairo_image_surface_get_stride(src_surf);
+
+    return;
 }
 
+/*!
+  \brief Draw raster row
+
+  \param n number of cell
+  \param row raster row
+  \param red,grn,blu,nul red,green,blue and null value
+
+  \return next row
+*/
 int Cairo_scaled_raster(int n, int row,
 			const unsigned char *red, const unsigned char *grn,
 			const unsigned char *blu, const unsigned char *nul)
@@ -71,6 +105,9 @@ int Cairo_scaled_raster(int n, int row,
     return row + 1;
 }
 
+/*!
+  \brief Finish drawing raster
+*/
 void Cairo_end_scaled_raster(void)
 {
     G_debug(1, "Cairo_end_scaled_raster");
@@ -86,4 +123,6 @@ void Cairo_end_scaled_raster(void)
     /* cleanup */
     cairo_surface_destroy(src_surf);
     ca.modified = 1;
+
+    return;
 }

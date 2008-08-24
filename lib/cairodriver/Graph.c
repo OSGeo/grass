@@ -1,3 +1,17 @@
+/*!
+  \file cairodriver/Graph.c
+
+  \brief GRASS cairo display driver - driver settings
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
 #include "cairodriver.h"
 #include <cairo-ps.h>
 #include <cairo-pdf.h>
@@ -19,6 +33,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
+
+#include <grass/glocale.h>
 
 struct cairo_state ca;
 
@@ -48,31 +64,31 @@ static void init_xlib(void)
 
     p = getenv("GRASS_CAIRO_DRAWABLE");
     if (!p || sscanf(p, "%li", &xid) != 1)
-	G_fatal_error("invalid Drawable XID: %s", p);
+	G_fatal_error(_("Invalid Drawable XID: %s"), p);
     win = xid;
 
     dpy = XOpenDisplay(NULL);
     if (!dpy)
-	G_fatal_error("Unable to open display");
+	G_fatal_error(_("Unable to open display"));
 
     p = getenv("GRASS_CAIRO_VISUAL");
     if (!p || sscanf(p, "%li", &xid) != 1)
-	G_fatal_error("invalid Visual XID: %s", p);
+	G_fatal_error(_("invalid Visual XID: %s"), p);
     templ.visualid = xid;
 
     vinfo = XGetVisualInfo(dpy, VisualIDMask, &templ, &count);
     if (!vinfo || !count)
-	G_fatal_error("Unable to obtain visual");
+	G_fatal_error(_("Unable to obtain visual"));
     visual = vinfo[0].visual;
 
     if (!XGetGeometry
 	(dpy, win, &root, &si, &si, &width, &height, &ui, &depth))
-	G_fatal_error("Unable to query drawable");
+	G_fatal_error(_("Unable to query drawable"));
 
     surface = cairo_xlib_surface_create(dpy, win, visual, width, height);
 
     if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error("Failed to initialize Xlib surface");
+	G_fatal_error(_("Failed to initialize Xlib surface"));
 
     cairo = cairo_create(surface);
 
@@ -126,7 +142,7 @@ static void init_file(void)
 	ca.file_type = FTYPE_SVG;
 #endif
     else
-	G_fatal_error("Unknown file extension: %s", p);
+	G_fatal_error(_("Unknown file extension: %s"), p);
     G_debug(1, "File type: %s (%d)", ca.file_name, ca.file_type);
 
     switch (ca.file_type) {
@@ -151,10 +167,11 @@ static void init_file(void)
     if (do_read && access(ca.file_name, 0) != 0)
 	do_read = 0;
 
-    G_message
-	("cairo: collecting to file: %s,\n     GRASS_WIDTH=%d, GRASS_HEIGHT=%d",
-	 ca.file_name, ca.width, ca.height);
-
+    G_message(_("cairo: collecting to file: %s"),
+	      ca.file_name);
+    G_message(_("GRASS_WIDTH=%d, GRASS_HEIGHT=%d"),
+	     ca.width, ca.height);
+    
     if (do_read && do_map)
 	map_file();
 
@@ -178,6 +195,13 @@ static void init_file(void)
     }
 }
 
+/*!
+  \brief Initialize driver
+
+  Set background color, transparency, drawable, antialias mode, etc.
+
+  \return 0
+*/
 int Cairo_Graph_set(void)
 {
     cairo_antialias_t antialias;
@@ -234,6 +258,9 @@ int Cairo_Graph_set(void)
     return 0;
 }
 
+/*!
+  \brief Close driver
+*/
 void Cairo_Graph_close(void)
 {
     G_debug(1, "Cairo_Graph_close");
@@ -285,12 +312,12 @@ static void init_cairo(void)
 	break;
 #endif
     default:
-	G_fatal_error("Unknown Cairo surface type");
+	G_fatal_error(_("Unknown Cairo surface type"));
 	break;
     }
 
     if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error("Failed to initialize Cairo surface");
+	G_fatal_error(_("Failed to initialize Cairo surface"));
 
     cairo = cairo_create(surface);
 }
