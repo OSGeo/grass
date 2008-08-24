@@ -3,7 +3,7 @@
  *
  * D_cell_draw_setup(t, b, l, r)
  *    int t, b, l, r    (pixle extents of display window)
- *                      (obtainable via D_get_screen_window(&t, &b, &l, &r)
+ *                      (obtainable via D_get_dst(&t, &b, &l, &r)
  *   Sets up the environment for D_draw_cell
  *
  * D_draw_cell(A_row, xarray, colors)
@@ -121,7 +121,7 @@ static int draw_cell(int A_row,
  * The raster display subsystem establishes
  * conversion parameters based on the screen extent defined by <b>top,
  * bottom, left</b>, and <b>right</b>, all of which are obtainable from
- * <i>D_get_screen_window for the current frame.</i>
+ * <i>D_get_dst for the current frame.</i>
  *
  *  \param top
  *  \param bottom
@@ -136,8 +136,8 @@ int D_cell_draw_setup(double t, double b, double l, double r)
 
     if (G_get_set_window(&window) == -1)
 	G_fatal_error("Current window not available");
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error("Error in calculating conversions");
+
+    D_do_conversions(&window, t, b, l, r);
 
     /* Set up the screen for drawing map */
     D_get_a(src);

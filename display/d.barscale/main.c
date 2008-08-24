@@ -41,8 +41,6 @@ int draw = 0;
 
 int main(int argc, char **argv)
 {
-    struct Cell_head window;
-    double t, b, l, r;
     struct GModule *module;
     struct Option *opt1, *opt2, *opt3;
     struct Flag *feet, *top, *linescale, *northarrow, *scalebar;
@@ -131,6 +129,8 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
+    D_setup(0);
+
     /* Parse and select background color */
     color1 = D_parse_color(opt1->answer, 1);
     if (color1 == 0)
@@ -138,21 +138,6 @@ int main(int argc, char **argv)
 
     /* Parse and select foreground color */
     color2 = D_parse_color(opt2->answer, 0);
-
-
-    /* Read in the map window associated with window */
-    G_get_window(&window);
-
-    D_check_map_window(&window);
-
-    if (G_set_window(&window) == -1)
-	G_fatal_error(_("Current window not settable"));
-
-    /* Determine conversion factors */
-    D_get_screen_window(&t, &b, &l, &r);
-
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error(_("Error in calculating conversions"));
 
     /* Draw the scale */
     draw_scale(top->answer);

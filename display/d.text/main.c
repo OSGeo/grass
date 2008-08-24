@@ -291,8 +291,7 @@ int main(int argc, char **argv)
     D_setup(0);
 
     /* figure out where to put text */
-    D_get_screen_window(&win.t, &win.b, &win.l, &win.r);
-    R_set_window(win.t, win.b, win.l, win.r);
+    D_get_dst(&win.t, &win.b, &win.l, &win.r);
 
     if (flag.s->answer)
 	size = atof(opt.size->answer);

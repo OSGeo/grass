@@ -10,7 +10,7 @@ int
 bar(double cx, double cy, int size, double scale, double *val, int ncols,
     COLOR * ocolor, COLOR * colors, int y_center, double *max_reference)
 {
-    int i, j;
+    int i;
     double max;
     double x0, y0;
     double bw;			/* bar width */
@@ -60,9 +60,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 
 	    /* the outline color : default is black */
 	    R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	    D_move(max_Points->x[j], max_Points->y[j]);
-	    for (j = 1; j < max_Points->n_points; j++)
-		D_cont(max_Points->x[j], max_Points->y[j]);
+	    D_polyline(max_Points->x, max_Points->y, max_Points->n_points);
 	}
     }
 
@@ -83,9 +81,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 	}
 
 	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	D_move(Points->x[0], Points->y[0]);
-	for (j = 1; j < Points->n_points; j++)
-	    D_cont(Points->x[j], Points->y[j]);
+	D_polyline(Points->x, Points->y, Points->n_points);
     }
 
     /* tidy up */

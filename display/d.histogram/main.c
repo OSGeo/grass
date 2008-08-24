@@ -64,7 +64,6 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Range range;
     struct Colors pcolors;
-    int bgcolor;
     char title[512];
     double tt, tb, tl, tr;
     double t, b, l, r;
@@ -145,7 +144,6 @@ int main(int argc, char **argv)
     map_name = opt1->answer;
 
     color = D_parse_color(opt2->answer, FALSE);
-    bgcolor = D_parse_color(bg_opt->answer, TRUE);
 
     type = COUNT;
 #ifdef CAN_DO_AREAS
@@ -196,14 +194,11 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);			/* 0 = don't clear frame */
-    D_get_screen_window(&t, &b, &l, &r);
+    D_get_dst(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
-    if (strcmp(bg_opt->answer, "none")) {
-	/*          D_clear_window(); *//* clears d.save history: but also any font setting! */
-	D_raster_use_color(bgcolor);
-	R_box_abs(l, t, r, b);
-    }
+    if (strcmp(bg_opt->answer, "none") != 0)
+	D_erase(bg_opt->answer);
 
     /* draw a title for */
     sprintf(title, "%s in mapset %s", map_name, mapset);

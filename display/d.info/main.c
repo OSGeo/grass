@@ -84,18 +84,12 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "colors: %d\n", R_get_num_colors());
 
     if (fflag->answer) {
-	D_get_screen_window(&t, &b, &l, &r);
+	R_get_window(&t, &b, &l, &r);
 	fprintf(stdout, "frame: %f %f %f %f\n", l, r, t, b);
     }
 
     if (bflag->answer) {
-	/* Read in the map window associated with window */
-	G_get_window(&window);
-
-	D_check_map_window(&window);
-	D_get_screen_window(&t, &b, &l, &r);
-	if (D_do_conversions(&window, t, b, l, r))
-	    G_fatal_error(_("Error in calculating conversions"));
+	D_setup(0);
 
 	l = D_get_d_west();
 	r = D_get_d_east();

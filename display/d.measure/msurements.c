@@ -36,7 +36,7 @@ int measurements(int color1, int color2, int s_flag, int m_flag, int k_flag)
     G_begin_distance_calculations();
 
     G_get_window(&window);
-    D_get_screen_window(&t, &b, &l, &r);
+    D_get_dst(&t, &b, &l, &r);
     D_do_conversions(&window, t, b, l, r);
 
     for (;;) {

@@ -36,37 +36,27 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
-int draw_number(double, int, RASTER_MAP_TYPE);
+int draw_number(int, int, double, int, RASTER_MAP_TYPE);
 
-int D_x, D_y;
-double D_ew, D_ns;
+static double D_ew, D_ns;
 
 int main(int argc, char **argv)
 {
     DCELL *cell;
     char *mapset;
     char full_name[128];
-    double D_north, D_east;
-    double D_south, D_west;
-    double U_east, U_north;
-    double U_start;
-    double U_to_D_xconv, U_to_D_yconv;
-    double U_west, U_south;
-    double U_x, U_y;
     double ew_res, ns_res;
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
     int fixed_color, grid_color;
     int R, G, B;
     int layer_fd;
     int nrows, ncols, row, col;
-    double t, b, l, r;
     int digits;
     struct Cell_head window;
     struct Colors colors;
@@ -121,9 +111,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (R_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
     strcpy(full_name, opt1->answer);
 
     if (strcmp("none", opt2->answer) == 0)
@@ -150,40 +137,22 @@ int main(int argc, char **argv)
 
     /* Setup driver and check important information */
 
+    if (R_open_driver() != 0)
+	G_fatal_error(_("No graphics device selected"));
+
+    D_setup(0);
+
+    D_ns = fabs(D_get_a_to_d_yconv());
+    D_ew = fabs(D_get_a_to_d_xconv());
+
     /* Read in the map window associated with window */
 
     G_get_window(&window);
 
-    D_check_map_window(&window);
-
-    if (G_set_window(&window) == -1)
-	G_fatal_error(_("Current window not settable"));
-
-    /* Determine conversion factors */
-
-    D_get_screen_window(&t, &b, &l, &r);
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error(_("Error in calculating conversions"));
-
-    /* where are we, both geographically and on the screen? */
-
-    D_south = D_get_d_south();
-    D_north = D_get_d_north();
-    D_east = D_get_d_east();
-    D_west = D_get_d_west();
-
-    U_west = D_get_u_west();
-    U_east = D_get_u_east();
-    U_south = D_get_u_south();
-    U_north = D_get_u_north();
-
-    U_to_D_xconv = D_get_u_to_d_xconv();
-    U_to_D_yconv = D_get_u_to_d_yconv();
-
-    /* number of rows and cols in window */
-
     nrows = window.rows;
     ncols = window.cols;
+
+    /* number of rows and cols in window */
 
     if ((nrows > 75) || (ncols > 75)) {
 	G_warning("!!!");
@@ -204,53 +173,23 @@ int main(int argc, char **argv)
     ew_res = window.ew_res;
     ns_res = window.ns_res;
 
-    /* how many screen units of distance for each cell */
-    D_ew = (D_east - D_west) / ncols;
-    D_ns = (D_south - D_north) / nrows;
-
     /*set the number of significant digits */
     sscanf(prec->answer, "%i", &digits);
-
-	/*-- DEBUG ----------------------------------------
-	fprintf (stdout,"ew_res:  %.2f\n", window.ew_res);
-	fprintf (stdout,"ns_res:  %.2f\n", window.ns_res);
-	fprintf (stdout,"D_ew:  %f D_ns:  %f \n", D_ew, D_ns); 
-	fprintf (stdout,"nrows:    %d\n", nrows);
-	fprintf (stdout,"ncols:    %d\n", ncols);
-	fprintf (stdout,"t:  %d\n", t);
-	fprintf (stdout,"b:  %d\n", b);
-	fprintf (stdout,"l:  %d\n", l);
-	fprintf (stdout,"r:  %d\n", r);
-	fprintf (stdout,"U_west:    %f\n", U_west);
-	fprintf (stdout,"U_east:    %f\n", U_east);
-	fprintf (stdout,"U_south:   %f\n", U_south);
-	fprintf (stdout,"U_north:   %f\n", U_north);
-	fprintf (stdout,"D_west:    %f\n", D_west);
-	fprintf (stdout,"D_east:    %f\n", D_east);
-	fprintf (stdout,"D_south:   %f\n", D_south);
-	fprintf (stdout,"D_north:   %f\n", D_north);
-	fprintf (stdout,"U_to_D_xconv:      %f\n", U_to_D_xconv);
-	fprintf (stdout,"U_to_D_yconv:      %f\n", U_to_D_yconv);
-	--------------------------------------------------------*/
 
     if (grid_color > 0) {	/* ie not "none" */
 	/* Set grid color */
 	R_standard_color(grid_color);
 
 	/* Draw vertical grids */
-	U_start = U_east;
-	for (U_x = U_start; U_x >= U_west; U_x -= ew_res) {
-	    D_x = (U_x - U_west) * U_to_D_xconv + D_west;
-	    R_move_abs(D_x, D_south);
-	    R_cont_abs(D_x, D_north);
+	for (col = 0; col < ncols; col++) {
+	    D_move_abs(col, 0);
+	    D_cont_abs(col, nrows);
 	}
 
 	/* Draw horizontal grids */
-	U_start = U_north;
-	for (U_y = U_start; U_y >= U_south; U_y -= ns_res) {
-	    D_y = (U_south - U_y) * U_to_D_yconv + D_south;
-	    R_move_abs(D_west, D_y);
-	    R_cont_abs(D_east, D_y);
+	for (row = 0; row < nrows; row++) {
+	    D_move_abs(0,     row);
+	    D_cont_abs(ncols, row);
 	}
     }
 
@@ -269,20 +208,14 @@ int main(int argc, char **argv)
     for (row = 0; row < nrows; row++) {
 	G_get_raster_row(layer_fd, cell, row, map_type);
 
-	/* determine screen y coordinate of top of current cell */
-
-	D_y = (int)(row * D_ns + D_north);
-
 	for (col = 0; col < ncols; col++) {
-	    /* determine screen x coordinate of west side of current cell */
-	    D_x = (int)(col * D_ew + D_west);
 
 	    if (fixed_color == 0) {
 		G_get_raster_color(&cell[col], &R, &G, &B, &colors, map_type);
 		R_RGB_color(R, G, B);
 	    }
 
-	    draw_number(cell[col], digits, inmap_type);
+	    draw_number(row, col, cell[col], digits, inmap_type);
 	}
     }
 
@@ -296,18 +229,15 @@ int main(int argc, char **argv)
 /* --- end of main --- */
 
 
-int draw_number(double number, int prec, RASTER_MAP_TYPE map_type)
+int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_type)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
     int len, text_size, rite;
     double tt, tb, tl, tr;
     char no[32];
     double dots_per_line, factor = 0.8;
     DCELL dcell = number;
     CELL cell = (int)number;
-
-    R_set_window(D_y, D_y + D_ns * 0.9, D_x, D_x + D_ew * 0.9);
+    double x, y;
 
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
@@ -341,7 +271,9 @@ int draw_number(double number, int prec, RASTER_MAP_TYPE map_type)
        R_move_abs(D_x+(int)(D_ew*0.1),D_y+(int)(D_ns*0.5)) ;
        R_move_abs(D_x,D_y+(int)(dots_per_line - 1)) ;
      */
-    R_move_abs(D_x + D_ew / 2 - (tr - tl) / 2, D_y + D_ns * 0.7);
+    x = D_a_to_d_col(col + 0.5);
+    y = D_a_to_d_row(row + 0.7);
+    R_move_abs(x - (tr - tl) / 2, y);
     R_text(no);
 
     return 0;

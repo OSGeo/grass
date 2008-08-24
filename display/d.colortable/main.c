@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	G_fatal_error("No graphics device selected");
 
     /* Figure out where to put boxes */
-    D_get_screen_window(&t, &b, &l, &r);
+    R_get_window(&t, &b, &l, &r);
 
     G_get_fp_range_min_max(&fp_range, &dmin, &dmax);
     if (G_is_d_null_value(&dmin) || G_is_d_null_value(&dmax))

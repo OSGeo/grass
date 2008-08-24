@@ -18,12 +18,16 @@ static int cont(int, int);
 int setup_plot(void)
 {
     double a, e2;
+    double t, b, l, r;
 
     /* establish the current graphics window */
     D_setup(0);
 
+    D_get_dst(&t, &b, &l, &r);
+    D_set_src(t, b, l, r);
+    D_update_conversions();
     /* set D clip window */
-    D_clip_to_display();
+    D_clip_to_map();
 
     /* setup the G plot to use the D routines */
     G_setup_plot(D_get_d_north(),
@@ -102,7 +106,7 @@ static int cont(int x, int y)
 
 static int move(int x, int y)
 {
-    D_move_abs_clip(x, y);
+    D_move_abs(x, y);
 
     return 0;
 }

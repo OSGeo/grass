@@ -65,11 +65,9 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     char ylabel[1024];
     char txt[1024];
     char tic_name[80];
-    extern int stash_away();
 
     /* get coordinates of current screen window, in pixels */
-    D_get_screen_window(&t, &b, &l, &r);
-    R_set_window(t, b, l, r);
+    D_get_dst(&t, &b, &l, &r);
 
     /* create axis lines, to be drawn later */
     height = b - t;

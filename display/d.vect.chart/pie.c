@@ -58,9 +58,7 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 	}
 
 	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
-	D_move(Points->x[0], Points->y[0]);
-	for (j = 1; j < Points->n_points; j++)
-	    D_cont(Points->x[j], Points->y[j]);
+	D_polyline(Points->x, Points->y, Points->n_points);
     }
 
     Vect_destroy_line_struct(Points);

@@ -249,8 +249,8 @@ int main(int argc, char **argv)
     /* get coordinates of current screen window, in pixels */
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
-    D_get_screen_window(&t, &b, &l, &r);
-    R_set_window(t, b, l, r);
+    D_setup(0);
+    D_get_dst(&t, &b, &l, &r);
 
     /* create axis lines, to be drawn later */
     height = b - t;

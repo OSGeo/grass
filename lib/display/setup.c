@@ -61,7 +61,7 @@ void D_setup(int clear)
     struct Cell_head region;
     double t, b, l, r;
 
-    D_get_screen_window(&t, &b, &l, &r);
+    R_get_window(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
     if (clear)
@@ -69,14 +69,9 @@ void D_setup(int clear)
 
     /* Set the map region associated with graphics frame */
     G_get_set_window(&region);
-    D_check_map_window(&region);
     if (G_set_window(&region) < 0)
 	G_fatal_error("Invalid graphics coordinates");
 
     /* Determine conversion factors */
-    if (D_do_conversions(&region, t, b, l, r))
-	G_fatal_error("Error calculating graphics-region conversions");
-
-    /* set text clipping, for good measure */
-    R_set_window(t, b, l, r);
+    D_do_conversions(&region, t, b, l, r);
 }

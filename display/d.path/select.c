@@ -15,7 +15,7 @@
 int display(struct Map_info *Map, struct line_pnts *Points,
 	    const struct color_rgb *color, int first, int last, int be_bold)
 {
-    int i, from, to;
+    int from, to;
 
     R_RGB_color(color->r, color->g, color->b);
 
@@ -31,11 +31,7 @@ int display(struct Map_info *Map, struct line_pnts *Points,
     if (be_bold)
 	D_line_width(2);
 
-    for (i = from; i < to - 1; i++)
-    {
-	D_move(Points->x[i], Points->y[i]);
-	D_cont(Points->x[i + 1], Points->y[i + 1]);
-    }
+    D_polyline(&Points->x[from], &Points->y[from], to - from);
 
     if (be_bold)
 	R_line_width(0);

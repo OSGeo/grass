@@ -19,7 +19,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
     double arc, arc_incr = 0.01;
     DCELL fill_color;
 
-    D_get_screen_window(&tt, &tb, &tl, &tr);
+    D_get_dst(&tt, &tb, &tl, &tr);
 
     height = tb - tt;
     width = tr - tl;

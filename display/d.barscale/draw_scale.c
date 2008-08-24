@@ -74,7 +74,7 @@ int draw_scale(int toptext)
     const struct scale *scales = all_scales[use_feet];
 
     /* Establish text size */
-    D_get_screen_window(&t, &b, &l, &r);
+    D_get_dst(&t, &b, &l, &r);
     R_set_window(t, b, l, r);
     size = 14;
     R_text_size(size, size);

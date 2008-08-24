@@ -29,8 +29,6 @@
 
 int main(int argc, char **argv)
 {
-    struct Cell_head window;
-    double t, b, l, r;
     int i, j;
     int width, mwidth;
     struct Flag *once, *terse, *colrow;
@@ -90,18 +88,7 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    /* Read in the map window associated with window */
-    G_get_window(&window);
-
-    D_check_map_window(&window);
-
-    if (G_set_window(&window) == -1)
-	G_fatal_error(_("Can't set current graphics window"));
-
-    /* Determine conversion factors */
-    D_get_screen_window(&t, &b, &l, &r);
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error(_("Error in calculating conversions"));
+    D_setup(0);
 
     if (rast) {
 	for (i = 0; rast[i]; i++) ;

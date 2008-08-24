@@ -83,7 +83,8 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    D_get_screen_window(&t, &b, &l, &r);
+    D_setup(0);
+    D_get_dst(&t, &b, &l, &r);
     D_set_overlay_mode(flag_o->answer);
     D_cell_draw_setup(t, b, l, r);
 

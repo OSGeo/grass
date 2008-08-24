@@ -119,11 +119,8 @@ int main(int argc, char **argv)
     else
 	mapunits = FALSE;
 
-    D_get_screen_window(&t, &b, &l, &r);
-
-    /* Finish graphics setup */
-    R_set_window(t, b, l, r);
     D_setup(0);
+    D_get_dst(&t, &b, &l, &r);
 
     /* Do the graphics */
     set_graph_stuff();

@@ -71,8 +71,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     DCELL dmin, dmax, range_dmin, range_dmax, dval;
 
     /* get coordinates of current screen window, in pixels */
-    D_get_screen_window(&t, &b, &l, &r);
-    R_set_window(t, b, l, r);
+    D_get_dst(&t, &b, &l, &r);
 
     /* create legend box border, to be drawn later */
     height = b - t;
