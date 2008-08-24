@@ -119,10 +119,8 @@ static void poly(const struct point *p, int n)
     if (y1 > png.clip_bot)
 	y1 = png.clip_bot;
 
-    y0 = floor(y0 + 0.5) + 0.5;
-
-    for (y = y0; y < y1; y++)
-	line(p, n, y + 0.5);
+    for (y = floor(y0 + 0.5) + 0.5; y < y1; y++)
+	line(p, n, y);
 }
 
 void PNG_Polygon(const double *xarray, const double *yarray, int count)
@@ -145,5 +143,7 @@ void PNG_Polygon(const double *xarray, const double *yarray, int count)
     points[count].y = yarray[0];
 
     poly(points, count);
+
+    png.modified = 1;
 }
 

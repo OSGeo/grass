@@ -86,7 +86,7 @@ static void init_xlib(void)
 
 static void init_file(void)
 {
-    int is_vector;
+    int is_vector = 0;
     int do_read = 0;
     int do_map = 0;
     char *p;
