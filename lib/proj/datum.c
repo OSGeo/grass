@@ -304,6 +304,7 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 	}
     }
 
+    fclose(fd);
 
     return outputlist;
 
@@ -365,6 +366,8 @@ struct datum_list *read_datum_table(void)
 
 	count++;
     }
+
+    fclose(fd);
 
     return outputlist;
 }
