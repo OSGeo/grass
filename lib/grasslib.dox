@@ -63,7 +63,7 @@ from GRASS 5 Programmer's manual) or are simply undocumented.</I>
 <li>arraystats: Library of statistics for arrays of doubles - \ref arraystats (new, under development)
 <li>bitmap:	Bitmap library for X Window Bitmaps - \ref bitmap
 <li>btree:	Binary tree library - \ref btree
-<li>cairodriver: <a href="http://cairographics.org">Cairo</a> display driver library - \ref cairodriver
+<li>cairodriver: \ref cairodriver
 <li>cdhc:	Library for testing normality and exponentiality - \ref cdhc 
 <li>cluster:    Library for cluster analysis (image processing) - \ref cluster
 <li>datetime:	DateTime library - \ref datetime

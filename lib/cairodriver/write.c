@@ -1,3 +1,17 @@
+/*!
+  \file cairodriver/write.c
+
+  \brief GRASS cairo display driver - write image (lower level functions)
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
 #include "cairodriver.h"
 
 #if CAIRO_HAS_XLIB_SURFACE

@@ -1,3 +1,19 @@
+/*!
+  \file cairodriver/write_ppm.c
+
+  \brief GRASS cairo display driver - write PPM image (lower level functions)
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
+#include <grass/glocale.h>
+
 #include "cairodriver.h"
 
 void cairo_write_ppm(void)
@@ -8,13 +24,15 @@ void cairo_write_ppm(void)
 
     output = fopen(ca.file_name, "wb");
     if (!output)
-	G_fatal_error("cairo: couldn't open output file %s", ca.file_name);
+	G_fatal_error(_("Cairo: unable to open output file <%s>"),
+			ca.file_name);
 
     mask_name[strlen(mask_name) - 2] = 'g';
 
     mask = fopen(mask_name, "wb");
     if (!mask)
-	G_fatal_error("cairo: couldn't open mask file %s", mask_name);
+	G_fatal_error(_("Cairo: unable to open mask file <%s>"),
+		      mask_name);
 
     G_free(mask_name);
 

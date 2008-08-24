@@ -1,9 +1,23 @@
+/*!
+  \file cairodriver/read_bmp.c
+
+  \brief GRASS cairo display driver - read bitmap (lower level functions)
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "cairodriver.h"
 
 static unsigned int get_2(const unsigned char **q)
@@ -71,13 +85,16 @@ void cairo_read_bmp(void)
 
     input = fopen(ca.file_name, "rb");
     if (!input)
-	G_fatal_error("cairo:: couldn't open input file %s", ca.file_name);
+	G_fatal_error(_("Cairo: unable to open input file <%s>"),
+		      ca.file_name);
 
     if (fread(header, sizeof(header), 1, input) != 1)
-	G_fatal_error("cairo:: invalid input file %s", ca.file_name);
+	G_fatal_error(_("Cairo: invalid input file <%s>"),
+		      ca.file_name);
 
     if (!read_bmp_header(header))
-	G_fatal_error("cairo:: invalid BMP header for %s", ca.file_name);
+	G_fatal_error(_("Cairo: Invalid BMP header for <%s>"),
+		      ca.file_name);
 
     fread(ca.grid, ca.stride, ca.height, input);
 

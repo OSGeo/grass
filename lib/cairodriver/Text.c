@@ -1,3 +1,17 @@
+/*!
+  \file cairodriver/Text.c
+
+  \brief GRASS cairo display driver - text subroutines
+
+  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+  \author Glynn Clements  
+*/
+
 #include <grass/glocale.h>
 #include "cairodriver.h"
 
@@ -31,7 +45,8 @@ static char *convert(const char *in)
 	    encoding = G_store("US-ASCII");
 
 	if ((cd = iconv_open("UTF-8", encoding)) < 0)
-	    G_fatal_error(_("Unable to convert from <%s> to UTF-8"));
+	    G_fatal_error(_("Unable to convert from <%s> to UTF-8"),
+			  encoding);
 
 	ret = iconv(cd, &p1, &ilen, &p2, &olen);
 
@@ -81,6 +96,11 @@ static void set_matrix(void)
     matrix_valid = 1;
 }
 
+/*!
+  \brief Draw text
+  
+  \param str string to be drawn
+*/
 void Cairo_draw_text(const char *str)
 {
     char *utf8 = convert(str);
@@ -96,8 +116,16 @@ void Cairo_draw_text(const char *str)
     G_free(utf8);
 
     ca.modified = 1;
+
+    return;
 }
 
+/*
+  \brief Get text bounding box
+
+  \param str string
+  \param[out] t,b,l,r top, bottom, left, right corner
+*/
 void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
 {
     char *utf8 = convert(str);
@@ -116,6 +144,8 @@ void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
     *r = cur_x + ext.x_bearing + ext.width;
     *t = cur_x + ext.y_bearing;
     *b = cur_x + ext.y_bearing + ext.height;
+
+    return;
 }
 
 static void set_font_toy(const char *name)
@@ -202,6 +232,11 @@ static int is_toy_font(const char *name)
     return 0;
 }
 
+/*!
+  \brief Set font
+
+  \param name font name
+*/
 void Cairo_set_font(const char *name)
 {
 #if CAIRO_HAS_FT_FONT
@@ -212,14 +247,23 @@ void Cairo_set_font(const char *name)
 #else
     set_font_toy(name);
 #endif
+
+    return;
 }
 
+/*!
+  \brief Set font encoding
+
+  \param enc encoding name
+*/
 void Cairo_set_encoding(const char *enc)
 {
     if (encoding)
 	G_free(encoding);
 
     encoding = G_store(enc);
+
+    return;
 }
 
 static void font_list_toy(char ***list, int *count, int verbose)
@@ -242,15 +286,31 @@ static void font_list_toy(char ***list, int *count, int verbose)
     *count = num_fonts;
 }
 
+/*!
+  \brief Get list of fonts
+
+  \param[out] list font list
+  \param[out] number of items in the list
+*/
 void Cairo_font_list(char ***list, int *count)
 {
     font_list(list, count, 0);
     font_list_toy(list, count, 0);
+
+    return;
 }
 
+/*!
+  \brief Get fonts into
+
+  \param[out] list font list
+  \param[out] number of items in the list
+*/
 void Cairo_font_info(char ***list, int *count)
 {
     font_list(list, count, 1);
     font_list_toy(list, count, 1);
+
+    return;
 }
 
