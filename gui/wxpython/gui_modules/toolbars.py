@@ -722,7 +722,7 @@ class VDigitToolbar(AbstractToolbar):
                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(copy)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopy, copy)
-        if self.toolbars['map'].GetAction() == "copyLine":
+        if self.action['desc'] == "copyLine":
             copy.Check(True)
 
         flip = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
@@ -730,7 +730,7 @@ class VDigitToolbar(AbstractToolbar):
                            kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(flip)
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnFlip, flip)
-        if self.toolbars['map'].GetAction() == "flipLine":
+        if self.action['desc'] == "flipLine":
             flip.Check(True)
 
         merge = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
