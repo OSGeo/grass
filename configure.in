@@ -895,6 +895,8 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    AC_LANG_SAVE
+    AC_LANG_CPLUSPLUS
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
@@ -902,6 +904,8 @@ if test -n "$USE_MYSQL"; then
     AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
                   AC_MSG_WARN([libmysqld not found])] )
     LIBS=$ac_save_libs
+    AC_LANG_C
+    AC_LANG_RESTORE
   fi
 
 fi # $USE_MYSQL
