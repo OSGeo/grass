@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     r_flag = G_define_flag();
     r_flag->key = 'r';
     r_flag->description =
-	_("Print minimal region extent of selected vector features instead");
+	_("Print minimal region extent of selected vector features instead of attributes");
 
     c_flag = G_define_flag();
     c_flag->key = 'c';
