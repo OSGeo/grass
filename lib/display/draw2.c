@@ -82,10 +82,26 @@ static void dealloc_src(const double **x, const double **y, int release)
     yf = NULL;
 }
 
-static int do_convert(const double *x, const double *y, int n)
+static int do_reduce(double *x, double *y, int n)
 {
     static double eps = 0.5;
     int i, j;
+
+    for (i = 0, j = 1; j < n; j++) {
+	if (fabs(x[j] - x[i]) < eps && fabs(y[j] - y[i]) < eps)
+	    continue;
+	i++;
+	if (i == j)
+	    continue;
+	x[i] = x[j];
+	y[i] = y[j];
+    }
+    return i + 1;
+}
+
+static int do_convert(const double *x, const double *y, int n)
+{
+    int i;
 
     alloc_dst(n);
 
@@ -94,16 +110,7 @@ static int do_convert(const double *x, const double *y, int n)
 	yi[i] = D_u_to_d_row(y[i]);
     }
 
-    for (i = 0, j = 1; j < n; j++) {
-	if (fabs(xi[j] - xi[i]) < eps && fabs(yi[j] - yi[i]) < eps)
-	    continue;
-	i++;
-	if (i == j)
-	    continue;
-	xi[i] = xi[j];
-	yi[i] = yi[j];
-    }
-    return i + 1;
+    return do_reduce(xi, yi, n);
 }
 
 static double dist_plane(double x, double y, const struct plane *p)
@@ -283,85 +290,20 @@ void D_set_clip(double t, double b, double l, double r)
  * current database region. This is the default.
  *
  *  \param ~
- *  \return void
- */
-
-void D_clip_to_display(void)
-{
-    D_set_clip(D_get_d_north(), D_get_d_south(),
-	       D_get_d_west(), D_get_d_east());
-}
-
-/*!
- * \brief set clipping window to screen window
- *
- * Sets the clipping window to the pixel window that corresponds to the
- * full screen window. Off screen rendering is still clipped.
- *
- *  \param ~
- *  \return int
- */
-
-void D_clip_to_screen(void)
-{
-    double t, b, l, r;
-
-    D_get_screen_window(&t, &b, &l, &r);
-    D_set_clip(t, b, l, r);
-}
-
-
-/*!
- * \brief set clipping window to map window
- *
- * Sets the clipping window to the pixel window that corresponds to the
- * current database region. This is the default.
- *
- *  \param ~
  */
 
 void D_clip_to_map(void)
 {
-    D_set_clip(D_get_u_north(), D_get_u_south(),
-	       D_get_u_west(), D_get_u_east());
+    double t, b, l, r;
+
+    D_get_src(&t, &b, &l, &r);
+    D_set_clip(t, b, l, r);
 }
 
-/*!
- * \brief move to pixel
- *
- * Move without drawing to
- * pixel location <b>x,y</b>, even if it falls outside the clipping window.
- *
- *  \param x
- *  \param y
- */
-
-void D_move_clip(double x, double y)
+void D_line_width(double d)
 {
-    cur.x = x;
-    cur.y = y;
+    R_line_width(d > 0 ? d : 0);
 }
-
-void D_move_abs_clip(double x, double y)
-{
-    cur.x = x;
-    cur.y = y;
-}
-
-/*!
- * \brief line to x,y
- *
- * Draws a line from the
- * current position to pixel location <b>x,y.</b> Any part of the line that
- * falls outside the clipping window is not drawn.
- * <b>Note.</b> The new position is <b>x,y</b>, even if it falls outside the
- * clipping window. Returns 0 if the line was contained entirely in the clipping
- * window, 1 if the line had to be clipped to draw it.
- *
- *  \param x
- *  \param y
- *  \return int
- */
 
 static int line_clip(double x1, double y1, double x2, double y2)
 {
@@ -411,109 +353,6 @@ static int line_clip_ll(double ax, double ay, double bx, double by)
 	ret |= line_clip(ax + i * 360, ay, bx + i * 360, by);
 
     return ret;
-}
-
-static int line_clip_abs(double x1, double y1, double x2, double y2)
-{
-    struct vector a, b;
-    int clipped;
-
-    a.x = x1;
-    a.y = y1;
-
-    b.x = x2;
-    b.y = y2;
-
-    clipped = do_clip(&a, &b);
-
-    if (clipped >= 0) {
-	double x1 = a.x;
-	double y1 = a.y;
-	double x2 = b.x;
-	double y2 = b.y;
-
-	R_move_abs(x1, y1);
-	R_cont_abs(x2, y2);
-    }
-
-    return clipped;
-}
-
-int D_cont_clip(double x, double y)
-{
-    int ret;
-
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	ret = line_clip_ll(cur.x, cur.y, x, y);
-    else
-	ret = line_clip(cur.x, cur.y, x, y);
-
-    cur.x = x;
-    cur.y = y;
-
-    return ret;
-}
-
-int D_line_clip(double x1, double y1, double x2, double y2)
-{
-    D_move_clip(x1, y1);
-    return D_cont_clip(x2, y2);
-}
-
-int D_cont_abs_clip(double x, double y)
-{
-    int ret;
-
-    if (!window_set)
-	D_clip_to_display();
-
-    ret = line_clip_abs(cur.x, cur.y, x, y);
-
-    cur.x = x;
-    cur.y = y;
-
-    return ret;
-}
-
-int D_line_abs_clip(double x1, double y1, double x2, double y2)
-{
-    D_move_abs_clip(x1, y1);
-    return D_cont_abs_clip(x2, y2);
-}
-
-void D_polydots_clip(const double *x, const double *y, int n)
-{
-    double ux0 = clip.left;
-    int i, j;
-
-    if (!window_set)
-	D_clip_to_map();
-
-    alloc_src(n);
-
-    for (i = j = 0; i < n; i++) {
-	double xx = x[i];
-	double yy = y[i];
-
-	if (D_is_lat_lon())
-	    xx -= shift_angle(x[i] - ux0);
-
-	if (xx < clip.left || xx > clip.rite)
-	    continue;
-	if (yy < clip.bot || yy > clip.top)
-	    continue;
-
-	xf[j] = xx;
-	yf[j] = yy;
-	j++;
-    }
-
-    n = do_convert(xf, yf, n);
-
-    R_polydots_abs(xi, yi, j);
 }
 
 static int cull_polyline_plane(int *pn, const double *x, const double *y,
@@ -590,40 +429,12 @@ static void polyline_cull(const double *x, const double *y, int n)
     R_polyline_abs(xi, yi, n);
 }
 
-void D_polyline_cull(const double *x, const double *y, int n)
-{
-    if (n < 2)
-	return;
-
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	do_ll_wrap(x, y, n, polyline_cull);
-    else
-	polyline_cull(x, y, n);
-}
-
 static void polyline_clip(const double *x, const double *y, int n)
 {
     int i;
 
     for (i = 1; i < n; i++)
 	line_clip(x[i - 1], y[i - 1], x[i], y[i]);
-}
-
-void D_polyline_clip(const double *x, const double *y, int n)
-{
-    if (n < 2)
-	return;
-
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	do_ll_wrap(x, y, n, polyline_clip);
-    else
-	polyline_clip(x, y, n);
 }
 
 static int cull_polygon_plane(int *pn, const double *x, const double *y,
@@ -700,17 +511,6 @@ static void polygon_cull(const double *x, const double *y, int n)
     R_polygon_abs(xi, yi, n);
 }
 
-void D_polygon_cull(const double *x, const double *y, int n)
-{
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	do_ll_wrap(x, y, n, polygon_cull);
-    else
-	polygon_cull(x, y, n);
-}
-
 static int clip_polygon_plane(int *pn, const double *x, const double *y,
 			      const struct plane *p)
 {
@@ -780,33 +580,19 @@ static void polygon_clip(const double *x, const double *y, int n)
     R_polygon_abs(xi, yi, n);
 }
 
-void D_polygon_clip(const double *x, const double *y, int n)
-{
-    if (!window_set)
-	D_clip_to_map();
-
-    if (D_is_lat_lon())
-	do_ll_wrap(x, y, n, polygon_clip);
-    else
-	polygon_clip(x, y, n);
-}
-
 static void box_clip(double x1, double y1, double x2, double y2)
 {
-    double t, b, l, r;
-    double ti, bi, li, ri;
+    x1 = max(clip.left, min(clip.rite, x1));
+    x2 = max(clip.left, min(clip.rite, x2));
+    y1 = max(clip.top, min(clip.bot, y1));
+    y2 = max(clip.top, min(clip.bot, y2));
 
-    l = max(clip.left, min(x1, x2));
-    r = min(clip.rite, max(x1, x2));
-    b = max(clip.bot, min(y1, y2));
-    t = min(clip.top, max(y1, y2));
+    x1 = D_u_to_d_col(x1);
+    x2 = D_u_to_d_col(x2);
+    y1 = D_u_to_d_row(y1);
+    y2 = D_u_to_d_row(y2);
 
-    li = D_u_to_d_col(l);
-    ri = D_u_to_d_col(r);
-    bi = D_u_to_d_row(b);
-    ti = D_u_to_d_row(t);
-
-    R_box_abs(li, ti, ri, bi);
+    R_box_abs(x1, y1, x2, y2);
 }
 
 static void box_clip_ll(double x1, double y1, double x2, double y2)
@@ -824,6 +610,250 @@ static void box_clip_ll(double x1, double y1, double x2, double y2)
 	box_clip(x1 + i * 360, y1, x2 + i * 360, y2);
 }
 
+static void box_cull(double x1, double y1, double x2, double y2)
+{
+    if (x1 > clip.rite && x2 > clip.rite)
+	return;
+    if (x1 < clip.left && x2 < clip.left)
+	return;
+    if (y1 > clip.bot && y2 > clip.bot)
+	return;
+    if (y1 < clip.top && y2 < clip.top)
+	return;
+
+    x1 = D_u_to_d_col(x1);
+    y1 = D_u_to_d_row(y1);
+    x2 = D_u_to_d_col(x2);
+    y2 = D_u_to_d_row(y2);
+
+    R_box_abs(x1, y1, x2, y2);
+}
+
+static void box_cull_ll(double x1, double y1, double x2, double y2)
+{
+    double ux0 = clip.left;
+    double ux1 = clip.rite;
+    int lo, hi, i;
+
+    x2 = x1 + coerce(x2 - x1);
+
+    lo = -shift_count(ux1 - x1);
+    hi = shift_count(x2 - ux0);
+
+    for (i = lo; i <= hi; i++)
+	box_clip(x1 + i * 360, y1, x2 + i * 360, y2);
+}
+
+static void polydots_cull(const double *x, const double *y, int n)
+{
+    double ux0 = clip.left;
+    int i, j;
+
+    alloc_src(n);
+
+    for (i = j = 0; i < n; i++) {
+	double xx = x[i];
+	double yy = y[i];
+
+	if (D_is_lat_lon())
+	    xx -= shift_angle(x[i] - ux0);
+
+	if (xx < clip.left || xx > clip.rite)
+	    continue;
+	if (yy < clip.bot || yy > clip.top)
+	    continue;
+
+	xf[j] = xx;
+	yf[j] = yy;
+	j++;
+    }
+
+    n = do_convert(xf, yf, n);
+
+    R_polydots_abs(xi, yi, j);
+}
+
+static int line_cull(double x1, double y1, double x2, double y2)
+{
+    if (x1 > clip.rite && x2 > clip.rite)
+	return 1;
+    if (x1 < clip.left && x2 < clip.left)
+	return 1;
+    if (y1 > clip.bot && y2 > clip.bot)
+	return 1;
+    if (y1 < clip.top && y2 < clip.top)
+	return 1;
+
+    x1 = D_u_to_d_col(x1);
+    y1 = D_u_to_d_row(y1);
+    x2 = D_u_to_d_col(x2);
+    y2 = D_u_to_d_row(y2);
+
+    R_move_abs(x1, y1);
+    R_cont_abs(x2, y2);
+
+    return 0;
+}
+
+static int line_cull_ll(double ax, double ay, double bx, double by)
+{
+    double ux0 = clip.left;
+    double ux1 = clip.rite;
+    double x0, x1;
+    int lo, hi, i;
+    int ret;
+
+    bx = ax + coerce(bx - ax);
+
+    x0 = min(ax, bx);
+    x1 = max(ax, bx);
+
+    lo = -shift_count(ux1 - x0);
+    hi = shift_count(x1 - ux0);
+
+    ret = 1;
+
+    for (i = lo; i <= hi; i++)
+	ret &= line_cull(ax + i * 360, ay, bx + i * 360, by);
+
+    return ret;
+}
+
+int D_cont_abs_cull(double x, double y)
+{
+    int ret;
+
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	ret = line_cull_ll(cur.x, cur.y, x, y);
+    else
+	ret = line_cull(cur.x, cur.y, x, y);
+
+    cur.x = x;
+    cur.y = y;
+
+    return ret;
+}
+
+int D_cont_rel_cull(double x, double y)
+{
+    return D_cont_abs_cull(cur.x + x, cur.y + y);
+}
+
+int D_line_cull(double x1, double y1, double x2, double y2)
+{
+    D_move_abs(x1, y1);
+    return D_cont_abs_cull(x2, y2);
+}
+
+void D_polydots_cull(const double *x, const double *y, int n)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    polydots_cull(x, y, n);
+}
+
+void D_polyline_cull(const double *x, const double *y, int n)
+{
+    if (n < 2)
+	return;
+
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	do_ll_wrap(x, y, n, polyline_cull);
+    else
+	polyline_cull(x, y, n);
+}
+
+void D_polygon_cull(const double *x, const double *y, int n)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	do_ll_wrap(x, y, n, polygon_cull);
+    else
+	polygon_cull(x, y, n);
+}
+
+void D_box_cull(double x1, double y1, double x2, double y2)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	box_cull_ll(x1, y1, x2, y2);
+    else
+	box_cull(x1, y1, x2, y2);
+}
+
+int D_cont_abs_clip(double x, double y)
+{
+    int ret;
+
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	ret = line_clip_ll(cur.x, cur.y, x, y);
+    else
+	ret = line_clip(cur.x, cur.y, x, y);
+
+    cur.x = x;
+    cur.y = y;
+
+    return ret;
+}
+
+int D_cont_rel_clip(double x, double y)
+{
+    return D_cont_abs_clip(cur.x + x, cur.y + y);
+}
+
+int D_line_clip(double x1, double y1, double x2, double y2)
+{
+    D_move_abs(x1, y1);
+    return D_cont_abs_clip(x2, y2);
+}
+
+void D_polydots_clip(const double *x, const double *y, int n)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    polydots_cull(x, y, n);
+}
+
+void D_polyline_clip(const double *x, const double *y, int n)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    if (n < 2)
+	return;
+
+    if (D_is_lat_lon())
+	do_ll_wrap(x, y, n, polyline_clip);
+    else
+	polyline_clip(x, y, n);
+}
+
+void D_polygon_clip(const double *x, const double *y, int n)
+{
+    if (!window_set)
+	D_clip_to_map();
+
+    if (D_is_lat_lon())
+	do_ll_wrap(x, y, n, polygon_clip);
+    else
+	polygon_clip(x, y, n);
+}
+
 void D_box_clip(double x1, double y1, double x2, double y2)
 {
     if (!window_set)
@@ -835,39 +865,39 @@ void D_box_clip(double x1, double y1, double x2, double y2)
 	box_clip(x1, y1, x2, y2);
 }
 
-void D_move(double x, double y)
-{
-    double dx = D_u_to_d_col(x);
-    double dy = D_u_to_d_row(y);
-
-    R_move_abs(dx, dy);
-}
-
-void D_cont(double x, double y)
-{
-    double dx = D_u_to_d_col(x);
-    double dy = D_u_to_d_row(y);
-
-    R_cont_abs(dx, dy);
-}
-
-void D_line(double x1, double y1, double x2, double y2)
-{
-    D_move(x1, y1);
-    D_cont(x2, y2);
-}
-
 void D_move_abs(double x, double y)
 {
+    cur.x = x;
+    cur.y = y;
+
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
     R_move_abs(x, y);
+}
+
+void D_move_rel(double x, double y)
+{
+    D_move_abs(cur.x + x, cur.y + y);
 }
 
 void D_cont_abs(double x, double y)
 {
+    cur.x = x;
+    cur.y = y;
+
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
     R_cont_abs(x, y);
 }
 
-void D_line_abs(double x1, double y1, double x2, double y2)
+void D_cont_rel(double x, double y)
+{
+    D_cont_abs(cur.x + x, cur.y + y);
+}
+
+void D_line(double x1, double y1, double x2, double y2)
 {
     D_move_abs(x1, y1);
     D_cont_abs(x2, y2);
@@ -893,20 +923,11 @@ void D_polygon(const double *x, const double *y, int n)
 
 void D_box(double x1, double y1, double x2, double y2)
 {
-    double l = min(x1, x2);
-    double r = max(x1, x2);
-    double b = min(y1, y2);
-    double t = max(y1, y2);
-    double li = D_u_to_d_col(l);
-    double ri = D_u_to_d_col(r);
-    double bi = D_u_to_d_row(b);
-    double ti = D_u_to_d_row(t);
+    x1 = D_u_to_d_col(x1);
+    x2 = D_u_to_d_col(x2);
+    y1 = D_u_to_d_row(y1);
+    y2 = D_u_to_d_row(y2);
 
-    R_box_abs(li, ti, ri, bi);
-}
-
-void D_line_width(double d)
-{
-    R_line_width(d > 0 ? d : 0);
+    R_box_abs(x1, y1, x2, y2);
 }
 

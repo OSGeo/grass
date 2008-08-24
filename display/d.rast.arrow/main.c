@@ -59,33 +59,20 @@ static void arrow_n(void);
 static void draw_x(void);
 static void unknown_(void);
 
-int D_x, D_y;
-double D_ew, D_ns;
-char *mapset;
-char layer_name[128];
-int map_type, arrow_color, grid_color, x_color, unknown_color;
-
+static char *mapset;
+static char layer_name[128];
+static int map_type, arrow_color, grid_color, x_color, unknown_color;
+static int row, col;
 
 int main(int argc, char **argv)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
     struct Cell_head window;
-    double t, b, l, r;
     RASTER_MAP_TYPE raster_type, mag_raster_type = -1;
     int layer_fd;
     void *raster_row, *ptr;
-    int nrows, ncols, row, col;
+    int nrows, ncols;
     int aspect_c = -1;
     float aspect_f = -1.0;
-    double ew_res, ns_res;
-    double D_south, D_west;
-    double D_north, D_east;
-    double U_to_D_xconv, U_to_D_yconv;
-    double U_west, U_south;
-    double U_east, U_north;
-    double U_start;
-    double U_x, U_y;
 
     double scale;
     int skip, no_arrow;
@@ -234,59 +221,16 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
+    D_setup(0);
+
     /* Read in the map window associated with window */
     G_get_window(&window);
 
-    D_check_map_window(&window);
-
-    if (G_set_window(&window) == -1)
-	G_fatal_error(_("Current window not settable"));
-
-    /* Determine conversion factors */
-    D_get_screen_window(&t, &b, &l, &r);
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error(_("Error in calculating conversions"));
-
-    /* where are we, both geographically and on the screen? */
-    D_south = D_get_d_south();
-    D_north = D_get_d_north();
-    D_east = D_get_d_east();
-    D_west = D_get_d_west();
-
-    U_west = D_get_u_west();
-    U_east = D_get_u_east();
-    U_south = D_get_u_south();
-    U_north = D_get_u_north();
-
-    U_to_D_xconv = D_get_u_to_d_xconv();
-    U_to_D_yconv = D_get_u_to_d_yconv();
-
-    /* number of rows and cols in window */
     nrows = window.rows;
     ncols = window.cols;
 
-    /*
-       if ((nrows > 75) || (ncols > 75)){ 
-       fprintf (stdout,"\n"); 
-       fprintf (stdout,"Current window size:\n"); 
-       fprintf (stdout,"rows:    %d\n", nrows);
-       fprintf (stdout,"columns: %d\n", ncols);
-       fprintf (stdout,"\n"); 
-       fprintf (stdout,"Your current window setting may be too large.\n"); 
-       fprintf (stdout,"Cells displayed on your graphics window may be too\n"); 
-       fprintf (stdout,"small for arrows to be visible.\n\n"); 
-       if (!G_yes("Do you wish to continue", 0))
-       exit(0);
-       }
-     */
-
-    /* resolutions */
-    ew_res = window.ew_res;
-    ns_res = window.ns_res;
-
-    /* how many screen units of distance for each cell */
-    D_ew = (D_east - D_west) / ncols;
-    D_ns = (D_south - D_north) / nrows;
+    D_set_src(0, nrows, 0, ncols);
+    D_update_conversions();
 
     /* figure out arrow scaling if using a magnitude map */
     if (opt7->answer) {
@@ -295,51 +239,24 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Problem reading range file"));
 	G_get_fp_range_min_max(&range, &mag_min, &mag_max);
 
-	scale *= 1.5 * ((D_ew < D_ns) ? D_ew : D_ns) / fabs(mag_max);
-	G_debug(3, "scaling=%.2f  rast_max=%.2f  D_ew=%.2f", scale, mag_max,
-		D_ew);
+	scale *= 1.5 / fabs(mag_max);
+	G_debug(3, "scaling=%.2f  rast_max=%.2f", scale, mag_max);
     }
-
-/*------------------------------------------
-    fprintf (stdout,"ew_res:  %.2f\n", window.ew_res);
-    fprintf (stdout,"ns_res:  %.2f\n", window.ns_res);
-    fprintf (stdout,"D_ew:  %f D_ns:  %f \n", D_ew, D_ns); 
-    fprintf (stdout,"nrows:    %d\n", nrows);
-    fprintf (stdout,"ncols:    %d\n", ncols);
-    fprintf (stdout,"t:  %d\n", t);
-    fprintf (stdout,"b:  %d\n", b);
-    fprintf (stdout,"l:  %d\n", l);
-    fprintf (stdout,"r:  %d\n", r);
-    fprintf (stdout,"U_west:	%f\n", U_west);
-    fprintf (stdout,"U_east:	%f\n", U_east);
-    fprintf (stdout,"U_south:	%f\n", U_south);
-    fprintf (stdout,"U_north:	%f\n", U_north);
-    fprintf (stdout,"D_west:	%f\n", D_west);
-    fprintf (stdout,"D_east:	%f\n", D_east);
-    fprintf (stdout,"D_south:	%f\n", D_south);
-    fprintf (stdout,"D_north:	%f\n", D_north);
-    fprintf (stdout,"U_to_D_xconv:	%f\n", U_to_D_xconv);
-    fprintf (stdout,"U_to_D_yconv:	%f\n", U_to_D_yconv);
---------------------------------------------------------*/
 
     if (grid_color > 0) {	/* ie not "none" */
 	/* Set color */
 	R_standard_color(grid_color);
 
 	/* Draw vertical grids */
-	U_start = U_east;
-	for (U_x = U_start; U_x >= U_west; U_x -= ew_res) {
-	    D_x = (int)((U_x - U_west) * U_to_D_xconv + D_west);
-	    R_move_abs(D_x, (int)D_south);
-	    R_cont_abs(D_x, (int)D_north);
+	for (col = 0; col < ncols; col++) {
+	    D_move_abs(col, 0);
+	    D_cont_abs(col, nrows);
 	}
 
 	/* Draw horizontal grids */
-	U_start = U_north;
-	for (U_y = U_start; U_y >= U_south; U_y -= ns_res) {
-	    D_y = (int)((U_south - U_y) * U_to_D_yconv + D_south);
-	    R_move_abs((int)D_west, D_y);
-	    R_cont_abs((int)D_east, D_y);
+	for (row = 0; row < nrows; row++) {
+	    D_move_abs(0,     row);
+	    D_cont_abs(ncols, row);
 	}
     }
 
@@ -379,9 +296,6 @@ int main(int argc, char **argv)
 	    mag_ptr = mag_raster_row;
 	}
 
-	/* determine screen y coordinate of top of current cell */
-	D_y = (int)(row * D_ns + D_north);
-
 	for (col = 0; col < ncols; col++) {
 
 	    if (row % skip != 0)
@@ -391,9 +305,6 @@ int main(int argc, char **argv)
 
 	    if (col % skip != 0)
 		no_arrow = TRUE;
-
-	    /* determine screen x coordinate of west side of current cell */
-	    D_x = (int)(col * D_ew + D_west);
 
 	    /* find aspect direction based on cell value */
 	    if (raster_type == CELL_TYPE)
@@ -577,242 +488,199 @@ int main(int argc, char **argv)
 
 static void arrow_mag(double theta, double length)
 {				/* angle is measured in degrees counter-clockwise from east */
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y, dx, dy, mid_x, mid_y;
+    double x, y, dx, dy, mid_x, mid_y;
     double theta_offset;
 
     theta *= -1;		/* display coords use inverse y */
 
     /* find the display coordinates of the middle of the cell */
-    mid_x = D_x + (int)(D_ew * .5);
-    mid_y = D_y + (int)(D_ns * .5);
+    mid_x = col + (.5);
+    mid_y = row + (.5);
 
     /* tail */
-    R_move_abs(mid_x, mid_y);
+    D_move_abs(mid_x, mid_y);
 
     /* head */
-    x = mid_x + (int)(length * cos(D2R(theta)));
-    y = mid_y + (int)(length * sin(D2R(theta)));
-    R_cont_abs(x, y);
+    x = mid_x + (length * cos(D2R(theta)));
+    y = mid_y + (length * sin(D2R(theta)));
+    D_cont_abs(x, y);
 
     /* fin 1 */
     theta_offset = theta + 20;
-    dx = mid_x + (int)(0.6 * length * cos(D2R(theta_offset)));
-    dy = mid_y + (int)(0.6 * length * sin(D2R(theta_offset)));
-    R_cont_abs(dx, dy);
+    dx = mid_x + (0.6 * length * cos(D2R(theta_offset)));
+    dy = mid_y + (0.6 * length * sin(D2R(theta_offset)));
+    D_cont_abs(dx, dy);
 
     /* fin 2 */
-    R_move_abs(x, y);
+    D_move_abs(x, y);
     theta_offset = theta - 20;
-    dx = mid_x + (int)(0.6 * length * cos(D2R(theta_offset)));
-    dy = mid_y + (int)(0.6 * length * sin(D2R(theta_offset)));
-    R_cont_abs(dx, dy);
+    dx = mid_x + (0.6 * length * cos(D2R(theta_offset)));
+    dy = mid_y + (0.6 * length * sin(D2R(theta_offset)));
+    D_cont_abs(dx, dy);
 }
 
 
 static void arrow_360(double theta)
 {				/* angle is measured in degrees counter-clockwise from east */
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y, dx, dy, mid_x, mid_y;
+    double x, y, dx, dy, mid_x, mid_y;
     double max_radius, theta_offset;
 
     theta *= -1;		/* display coords use inverse y */
-    max_radius = ((D_ew < D_ns) ? D_ew : D_ns) * 0.8 / 2;
+    max_radius = 0.8 / 2;
 
     /* find the display coordinates of the middle of the cell */
-    mid_x = D_x + (int)(D_ew * 0.5);
-    mid_y = D_y + (int)(D_ns * 0.5);
+    mid_x = col + (0.5);
+    mid_y = row + (0.5);
 
     /* head */
-    x = mid_x + (int)(max_radius * cos(D2R(theta)));
-    y = mid_y + (int)(max_radius * sin(D2R(theta)));
-    R_move_abs(x, y);
+    x = mid_x + (max_radius * cos(D2R(theta)));
+    y = mid_y + (max_radius * sin(D2R(theta)));
+    D_move_abs(x, y);
 
     /* tail */
-    dx = -2 * (int)(max_radius * cos(D2R(theta)));
-    dy = -2 * (int)(max_radius * sin(D2R(theta)));
-    R_cont_rel(dx, dy);
+    dx = -2 * (max_radius * cos(D2R(theta)));
+    dy = -2 * (max_radius * sin(D2R(theta)));
+    D_cont_rel(dx, dy);
 
     /* fin 1 */
-    R_move_abs(x, y);
+    D_move_abs(x, y);
     theta_offset = theta + 90;
-    dx = mid_x + (int)(0.5 * max_radius * cos(D2R(theta_offset)));
-    dy = mid_y + (int)(0.5 * max_radius * sin(D2R(theta_offset)));
-    R_cont_abs(dx, dy);
+    dx = mid_x + (0.5 * max_radius * cos(D2R(theta_offset)));
+    dy = mid_y + (0.5 * max_radius * sin(D2R(theta_offset)));
+    D_cont_abs(dx, dy);
 
     /* fin 2 */
-    R_move_abs(x, y);
+    D_move_abs(x, y);
     theta_offset = theta - 90;
-    dx = mid_x + (int)(0.5 * max_radius * cos(D2R(theta_offset)));
-    dy = mid_y + (int)(0.5 * max_radius * sin(D2R(theta_offset)));
-    R_cont_abs(dx, dy);
+    dx = mid_x + (0.5 * max_radius * cos(D2R(theta_offset)));
+    dy = mid_y + (0.5 * max_radius * sin(D2R(theta_offset)));
+    D_cont_abs(dx, dy);
 
 }
 
 static void arrow_se(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .8);
-    y = D_y + (int)(D_ns * .8);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.6)), ((int)(D_ns * (-.6))));
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (-.4)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.4)), 0);
+    double x = col + (.8);
+    double y = row + (.8);
+    D_move_abs(x, y);
+    D_cont_rel(((-.6)), (((-.6))));
+    D_move_abs(x, y);
+    D_cont_rel(0, ((-.4)));
+    D_move_abs(x, y);
+    D_cont_rel(((-.4)), 0);
 
 }
 
 static void arrow_ne(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .8);
-    y = D_y + (int)(D_ns * .2);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.6)), ((int)(D_ns * (.6))));
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (.4)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.4)), 0);
+    double x = col + (.8);
+    double y = row + (.2);
+    D_move_abs(x, y);
+    D_cont_rel(((-.6)), (((.6))));
+    D_move_abs(x, y);
+    D_cont_rel(0, ((.4)));
+    D_move_abs(x, y);
+    D_cont_rel(((-.4)), 0);
 
 }
 
 static void arrow_nw(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .2);
-    y = D_y + (int)(D_ns * .2);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.6)), ((int)(D_ns * (.6))));
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (.4)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.4)), 0);
+    double x = col + (.2);
+    double y = row + (.2);
+    D_move_abs(x, y);
+    D_cont_rel(((.6)), (((.6))));
+    D_move_abs(x, y);
+    D_cont_rel(0, ((.4)));
+    D_move_abs(x, y);
+    D_cont_rel(((.4)), 0);
 
 }
 
 static void arrow_sw(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .2);
-    y = D_y + (int)(D_ns * .8);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.6)), ((int)(D_ns * (-.6))));
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (-.4)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.4)), 0);
+    double x = col + (.2);
+    double y = row + (.8);
+    D_move_abs(x, y);
+    D_cont_rel(((.6)), (((-.6))));
+    D_move_abs(x, y);
+    D_cont_rel(0, ((-.4)));
+    D_move_abs(x, y);
+    D_cont_rel(((.4)), 0);
 
 }
 static void arrow_e(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .9);
-    y = D_y + (int)(D_ns * .5);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.8)), 0);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.3)), (int)(D_ns * (-.3)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.3)), (int)(D_ns * (.3)));
+    double x = col + (.9);
+    double y = row + (.5);
+    D_move_abs(x, y);
+    D_cont_rel(((-.8)), 0);
+    D_move_abs(x, y);
+    D_cont_rel(((-.3)), ((-.3)));
+    D_move_abs(x, y);
+    D_cont_rel(((-.3)), ((.3)));
 
 }
 static void arrow_w(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .1);
-    y = D_y + (int)(D_ns * .5);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.8)), 0);
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.3)), (int)(D_ns * (-.3)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.3)), (int)(D_ns * (.3)));
+    double x = col + (.1);
+    double y = row + (.5);
+    D_move_abs(x, y);
+    D_cont_rel(((.8)), 0);
+    D_move_abs(x, y);
+    D_cont_rel(((.3)), ((-.3)));
+    D_move_abs(x, y);
+    D_cont_rel(((.3)), ((.3)));
 
 }
 static void arrow_s(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .5);
-    y = D_y + (int)(D_ns * .9);
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (-.8)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.3)), (int)(D_ns * (-.3)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.3)), (int)(D_ns * (-.3)));
+    double x = col + (.5);
+    double y = row + (.9);
+    D_move_abs(x, y);
+    D_cont_rel(0, ((-.8)));
+    D_move_abs(x, y);
+    D_cont_rel(((.3)), ((-.3)));
+    D_move_abs(x, y);
+    D_cont_rel(((-.3)), ((-.3)));
 
 }
 static void arrow_n(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x + (int)(D_ew * .5);
-    y = D_y + (int)(D_ns * .1);
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (.8)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (.3)), (int)(D_ns * (.3)));
-    R_move_abs(x, y);
-    R_cont_rel((int)(D_ew * (-.3)), (int)(D_ns * (.3)));
+    double x = col + (.5);
+    double y = row + (.1);
+    D_move_abs(x, y);
+    D_cont_rel(0, ((.8)));
+    D_move_abs(x, y);
+    D_cont_rel(((.3)), ((.3)));
+    D_move_abs(x, y);
+    D_cont_rel(((-.3)), ((.3)));
 
 }
 static void draw_x(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
-
-    x = D_x;
-    y = D_y;
-    R_move_abs(x, y);
-    R_cont_rel((int)D_ew, (int)D_ns);
-    y = D_y + (int)D_ns;
-    R_move_abs(x, y);
-    R_cont_rel((int)D_ew, (int)(D_ns * -1));
+    double x = col;
+    double y = row;
+    D_move_abs(x, y);
+    D_cont_rel(1, 1);
+    y = row + 1;
+    D_move_abs(x, y);
+    D_cont_rel(1, (-1));
 }
 static void unknown_(void)
 {
-    extern double D_ew, D_ns;
-    extern int D_x, D_y;
-    int x, y;
+    double x = col + (.3);
+    double y = row + (.4);
 
-    x = D_x + (int)(D_ew * .3);
-    y = D_y + (int)(D_ns * .4);
-    R_move_abs(x, y);
-    R_cont_rel(0, (int)(D_ns * (-.15)));
-    R_cont_rel((int)(D_ew * (.1)), (int)(D_ns * (-.1)));
-    R_cont_rel((int)(D_ew * (.2)), 0);
-    R_cont_rel((int)(D_ew * (.1)), (int)(D_ns * (.1)));
-    R_cont_rel(0, (int)(D_ns * (.2)));
-    R_cont_rel((int)(D_ew * (-.1)), (int)(D_ns * (.1)));
-    R_cont_rel((int)(D_ew * (-.1)), 0);
-    R_cont_rel(0, (int)(D_ns * (.25)));
-    R_move_rel(0, (int)(D_ns * (.1)));
-    R_cont_rel(0, (int)(D_ns * (.1)));
+    D_move_abs(x, y);
+    D_cont_rel(0, ((-.15)));
+    D_cont_rel(((.1)), ((-.1)));
+    D_cont_rel(((.2)), 0);
+    D_cont_rel(((.1)), ((.1)));
+    D_cont_rel(0, ((.2)));
+    D_cont_rel(((-.1)), ((.1)));
+    D_cont_rel(((-.1)), 0);
+    D_cont_rel(0, ((.25)));
+    D_move_rel(0, ((.1)));
+    D_cont_rel(0, ((.1)));
 }

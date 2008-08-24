@@ -63,7 +63,7 @@ int do_draw(char *buff)
 	   yper > D_get_u_north() )
 	   return(-1);
 	 */
-	R_cont_abs(D_u_to_d_col(xper), D_u_to_d_row(yper));
+	D_cont_abs(xper, yper);
     }
     else {
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
@@ -84,7 +84,7 @@ int do_move(char *buff)
     }
 
     if (mapunits)
-	R_move_abs(D_u_to_d_col(xper), D_u_to_d_row(yper));
+	D_move_abs(xper, yper);
     else {
 	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
 	    return (-1);

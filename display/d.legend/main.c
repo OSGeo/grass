@@ -271,8 +271,8 @@ int main(int argc, char **argv)
     black = D_translate_color(DEFAULT_BG_COLOR);
 
     /* Figure out where to put text */
-    D_get_screen_window(&t, &b, &l, &r);
-    R_set_window(t, b, l, r);
+    D_setup(0);
+    D_get_dst(&t, &b, &l, &r);
 
     if (opt7->answer != NULL) {
 	sscanf(opt7->answers[0], "%lf", &Y1);

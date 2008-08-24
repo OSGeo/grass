@@ -5,10 +5,30 @@
 #include <grass/symbol.h>
 
 /* cnversions.c */
-int D_do_conversions(const struct Cell_head *, double, double, double, double);
+void D_update_conversions(void);
+void D_fit_d_to_u(void);
+void D_show_conversions(void);
+
+void D_do_conversions(const struct Cell_head *, double, double, double, double);
+
 int D_is_lat_lon(void);
+
+double D_get_d_to_a_xconv(void);
+double D_get_d_to_a_yconv(void);
+double D_get_d_to_u_xconv(void);
+double D_get_d_to_u_yconv(void);
+double D_get_a_to_u_xconv(void);
+double D_get_a_to_u_yconv(void);
+double D_get_a_to_d_xconv(void);
+double D_get_a_to_d_yconv(void);
 double D_get_u_to_d_xconv(void);
 double D_get_u_to_d_yconv(void);
+double D_get_u_to_a_xconv(void);
+double D_get_u_to_a_yconv(void);
+
+double D_get_ns_resolution(void);
+double D_get_ew_resolution(void);
+
 double D_get_u_west(void);
 double D_get_u_east(void);
 double D_get_u_north(void);
@@ -21,21 +41,31 @@ double D_get_d_west(void);
 double D_get_d_east(void);
 double D_get_d_north(void);
 double D_get_d_south(void);
-double D_u_to_a_row(double);
-double D_u_to_a_col(double);
+
+void D_set_region(const struct Cell_head *);
+void D_set_src(double, double, double, double);
+void D_get_src(double *, double *, double *, double *);
+void D_set_grid(int, int, int, int);
+void D_get_grid(int *, int *, int *, int *);
+void D_set_dst(double, double, double, double);
+void D_get_dst(double *, double *, double *, double *);
+
+void D_get_u(double [2][2]);
+void D_get_a(int [2][2]);
+void D_get_d(double [2][2]);
+
+double D_d_to_a_row(double);
+double D_d_to_a_col(double);
+double D_d_to_u_row(double);
+double D_d_to_u_col(double);
+double D_a_to_u_row(double);
+double D_a_to_u_col(double);
 double D_a_to_d_row(double);
 double D_a_to_d_col(double);
 double D_u_to_d_row(double);
 double D_u_to_d_col(double);
-double D_d_to_u_row(double);
-double D_d_to_u_col(double);
-double D_d_to_a_row(double);
-double D_d_to_a_col(double);
-double D_get_ns_resolution(void);
-double D_get_ew_resolution(void);
-void D_get_u(double[2][2]);
-void D_get_a(int[2][2]);
-void D_get_d(double[2][2]);
+double D_u_to_a_row(double);
+double D_u_to_a_col(double);
 
 /* color_list.c */
 char *D_color_list(void);
@@ -43,31 +73,34 @@ char *D_color_list(void);
 /* draw2.c */
 void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
-void D_clip_to_display(void);
-void D_clip_to_screen(void);
-void D_move_clip(double, double);
-int D_cont_clip(double, double);
-int D_line_clip(double, double, double, double);
-void D_move_abs_clip(double, double);
-int D_cont_abs_clip(double, double);
-int D_line_abs_clip(double, double, double, double);
-void D_polydots_clip(const double *, const double *, int);
+
+void D_line_width(double);
+
+int D_cont_abs_cull(double, double);
+int D_cont_rel_cull(double, double);
+int D_line_cull(double, double, double, double);
+void D_polydots_cull(const double *, const double *, int);
 void D_polyline_cull(const double *, const double *, int);
-void D_polyline_clip(const double *, const double *, int);
 void D_polygon_cull(const double *, const double *, int);
+void D_box_cull(double, double, double, double);
+
+int D_cont_abs_clip(double, double);
+int D_cont_rel_clip(double, double);
+int D_line_clip(double, double, double, double);
+void D_polydots_clip(const double *, const double *, int);
+void D_polyline_clip(const double *, const double *, int);
 void D_polygon_clip(const double *, const double *, int);
 void D_box_clip(double, double, double, double);
-void D_move(double, double);
-void D_cont(double, double);
+
+void D_move_abs(double, double);
+void D_move_rel(double, double);
+void D_cont_abs(double, double);
+void D_cont_rel(double, double);
 void D_line(double, double, double, double);
 void D_polydots(const double *, const double *, int);
 void D_polyline(const double *, const double *, int);
 void D_polygon(const double *, const double *, int);
 void D_box(double, double, double, double);
-void D_line_width(double);
-void D_move_abs(double, double);
-void D_cont_abs(double, double);
-void D_line_abs(double, double, double, double);
 
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);
@@ -110,9 +143,6 @@ int D_raster_use_color(int);
 int D_color_number_to_RGB(int, int *, int *, int *);
 
 /* window.c */
-void D_set_window(double, double, double, double);
-void D_get_screen_window(double *, double *, double *, double *);
-void D_check_map_window(struct Cell_head *);
 void D_erase(const char *);
 
 #endif /* GRASS_DISPLAY_H */

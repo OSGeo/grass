@@ -9,18 +9,10 @@ static int cont(int, int);
 
 #define METERS_TO_MILES(x) ((x) * 6.213712e-04)
 
-static int min_range[5], max_range[5];
-static int which_range;
-static int change_range;
-
 int setup_plot(void)
 {
-
     /* establish the current graphics window */
     D_setup(0);
-
-    /* set D clip window */
-    D_clip_to_display();
 
     /* setup the G plot to use the D routines */
     G_setup_plot(D_get_d_north(),
@@ -37,8 +29,6 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 {
     int text_x, text_y;
 
-    which_range = -1;
-    change_range = 1;
     R_standard_color(line_color);
     if (lon1 != lon2) {
 	G_shortest_way(&lon1, &lon2);
@@ -56,30 +46,14 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 
 static int cont(int x, int y)
 {
-    if (D_cont_abs_clip(x, y)) {	/* clipped */
-	change_range = 1;
-    }
-    else {			/* keep track of left,right x for lines drawn in window */
-
-	if (change_range) {
-	    which_range++;
-	    min_range[which_range] = max_range[which_range] = x;
-	    change_range = 0;
-	}
-	else {
-	    if (x < min_range[which_range])
-		min_range[which_range] = x;
-	    else if (x > max_range[which_range])
-		max_range[which_range] = x;
-	}
-    }
+    R_cont_abs(x, y);
 
     return 0;
 }
 
 static int move(int x, int y)
 {
-    D_move_abs_clip(x, y);
+    R_move_abs(x, y);
 
     return 0;
 }

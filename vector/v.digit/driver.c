@@ -103,8 +103,7 @@ static void setup(void)
 	G_fatal_error("Invalid graphics coordinates");
 
     /* Determine conversion factors */
-    if (D_do_conversions(&region, t, b, l, r))
-	G_fatal_error("Error calculating graphics-region conversions");
+    D_do_conversions(&region, t, b, l, r);
 }
 
 int driver_refresh(void)

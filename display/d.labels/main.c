@@ -31,7 +31,6 @@ int main(int argc, char **argv)
     char *mapset;
     double minreg, maxreg, reg, dx, dy;
     FILE *infile;
-    double t, b, l, r;
     struct Option *opt1;
     struct Option *maxreg_opt, *minreg_opt;
     struct Flag *horiz_flag;
@@ -85,9 +84,6 @@ int main(int argc, char **argv)
     if (mapset == NULL)
 	G_fatal_error(_("Label file <%s> not found"), label_name);
 
-    if (R_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
     /* Read in the map window associated with window */
     G_get_window(&window);
 
@@ -117,20 +113,14 @@ int main(int argc, char **argv)
     if (infile == NULL)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 
-    D_check_map_window(&window);
+    if (R_open_driver() != 0)
+	G_fatal_error(_("No graphics device selected"));
 
-    if (G_set_window(&window) == -1)
-	G_fatal_error(_("Current window not settable"));
-
-    /* Determine conversion factors */
-    D_get_screen_window(&t, &b, &l, &r);
-    if (D_do_conversions(&window, t, b, l, r))
-	G_fatal_error(_("Error in calculating conversions"));
+    D_setup(0);
 
     /* Go draw the raster map */
     do_labels(infile, !horiz_flag->answer);
 
-    R_text_rotation(0.0);	/* reset */
     R_close_driver();
 
     exit(0);
