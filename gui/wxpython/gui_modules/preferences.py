@@ -322,7 +322,7 @@ class Settings:
                     },
                 # exit
                 'saveOnExit' : {
-                    'enabled' : False
+                    'enabled' : True
                     },
                 # break lines on intersection
                 'breakLines' : {
