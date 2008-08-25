@@ -231,7 +231,7 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 								 *inputname)
 {
     FILE *fd;
-    char *file;
+    char file[GPATH_MAX];
     char buf[1024];
     int line;
     struct gpj_datum_transform_list *current = NULL, *outputlist = NULL;
@@ -264,7 +264,7 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 
     /* Now check for additional parameters in datumtransform.table */
 
-    G_asprintf(&file, "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
+    sprintf(file, "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {
@@ -323,13 +323,13 @@ struct gpj_datum_transform_list *GPJ_get_datum_transform_by_name(const char
 struct datum_list *read_datum_table(void)
 {
     FILE *fd;
-    char *file;
+    char file[GPATH_MAX];
     char buf[4096];
     int line;
     struct datum_list *current = NULL, *outputlist = NULL;
     int count = 0;
 
-    G_asprintf(&file, "%s%s", G_gisbase(), DATUMTABLE);
+    sprintf(file, "%s%s", G_gisbase(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {
