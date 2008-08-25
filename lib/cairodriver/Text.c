@@ -142,8 +142,8 @@ void Cairo_text_box(const char *str, double *t, double *b, double *l, double *r)
 
     *l = cur_x + ext.x_bearing;
     *r = cur_x + ext.x_bearing + ext.width;
-    *t = cur_x + ext.y_bearing;
-    *b = cur_x + ext.y_bearing + ext.height;
+    *t = cur_y + ext.y_bearing;
+    *b = cur_y + ext.y_bearing + ext.height;
 
     return;
 }
