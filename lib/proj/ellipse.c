@@ -261,6 +261,9 @@ struct ellps_list *read_ellipsoid_table(int fatal)
 	    continue;
 	}
     }
+
+    fclose(fd);
+
     if (!err)
 	return outputlist;
 
