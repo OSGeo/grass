@@ -324,6 +324,18 @@ void D_line_width(double d)
     R_line_width(d > 0 ? d : 0);
 }
 
+void D_get_text_box(const char *text, double *t, double *b, double *l, double *r)
+{
+    double T, B, L, R;
+
+    R_get_text_box(text, &T, &B, &L, &R);
+
+    *t = D_d_to_u_row(T);
+    *b = D_d_to_u_row(B);
+    *l = D_d_to_u_col(L);
+    *r = D_d_to_u_col(R);
+}
+
 static int line_clip(double x1, double y1, double x2, double y2)
 {
     struct vector a, b;

@@ -75,6 +75,7 @@ void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
 
 void D_line_width(double);
+void D_get_text_box(const char *, double *, double *, double *, double *);
 
 int D_cont_abs_cull(double, double);
 int D_cont_rel_cull(double, double);
