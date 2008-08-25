@@ -38,7 +38,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
 	if (mark_type == MARK_GRID) {
 	    D_raster_use_color(gcolor);
-	    D_line(x, window.north, x, window.south);
+	    D_line_abs(x, window.north, x, window.south);
 	}
 
 	if (do_text) {
@@ -52,9 +52,9 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	       y: End of text is 7 pixels up from bottom of screen, +.5 rounding.
 	       fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
 	     */
-	    R_move_abs((int)(D_u_to_d_col(x) + 4 + .5),
-		       (int)(D_get_d_south() -
-			     (strlen(text) * fontsize * 0.81) - 7 + 0.5));
+	    D_move_abs(x + 4.5 * D_get_d_to_u_xconv(),
+		       D_get_u_south()
+		       - D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81) - 7.5);
 
 	    R_text(text);
 	}
@@ -80,9 +80,9 @@ int plot_grid(double grid_size, double east, double north, int do_text,
     while (y <= window.north) {
 	if (mark_type == MARK_GRID) {
 	    D_raster_use_color(gcolor);
-	    D_line(window.east, y, e1, y);
-	    D_line(e1, y, e2, y);
-	    D_line(e2, y, window.west, y);
+	    D_line_abs(window.east, y, e1, y);
+	    D_line_abs(e1, y, e2, y);
+	    D_line_abs(e2, y, window.west, y);
 	}
 
 	if (do_text) {
@@ -95,9 +95,10 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	       fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
 	       y: 4 pixels above each grid line, +.5 rounding.
 	     */
-	    R_move_abs((int)
-		       (D_get_d_east() - (strlen(text) * fontsize * 0.81) -
-			7 + 0.5), (int)(D_u_to_d_row(y) - 4 + .5));
+	    D_move_abs(
+		D_get_u_east()
+		- D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 - 7.5),
+		y + D_get_d_to_u_yconv() * 4.5);
 
 	    R_text(text);
 	}
@@ -199,7 +200,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 		start_coord = n1;
 		font_angle = get_heading((e1 - e2), (n1 - n2));
 	    }
-	    D_line(e1, n1, e2, n2);
+	    D_line_abs(e1, n1, e2, n2);
 	}
 
 	if (do_text) {
@@ -209,8 +210,8 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    G_format_northing(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);
 	    R_text_size(fontsize, fontsize);
-	    R_move_abs((int)(D_get_d_west() + border_off),
-		       (int)(D_u_to_d_row(start_coord) - grid_off));
+	    D_move_abs(D_get_u_west() + D_get_d_to_u_xconv() * border_off,
+		       start_coord - D_get_d_to_u_yconv() * grid_off);
 	    R_text(text);
 	}
     }
@@ -252,7 +253,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 		start_coord = e1;
 	    }
 
-	    D_line(e1, n1, e2, n2);
+	    D_line_abs(e1, n1, e2, n2);
 	}
 	if (do_text) {
 	    /* Set text color */
@@ -261,8 +262,8 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    G_format_easting(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);
 	    R_text_size(fontsize, fontsize);
-	    R_move_abs((int)(D_u_to_d_col(start_coord) + grid_off + 1.5),
-		       (int)(D_get_d_north() + border_off));
+	    D_move_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
+		       D_get_u_north() + D_get_d_to_u_yconv() * border_off);
 	    R_text(text);
 	}
     }

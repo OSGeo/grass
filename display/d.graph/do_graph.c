@@ -22,14 +22,22 @@ static double rotation;		/* degrees counter-clockwise from east */
 
 static RGBA_Color last_color;
 
+static double t, b, l, r;
+
 int set_graph_stuff(void)
 {
-    xincr = (float)(r - l) / 100.;
-    if (xincr < 0.0)
-	xincr = -xincr;		/* mod: shapiro 13 jun 1991 */
-    yincr = (float)(b - t) / 100.;
-    if (yincr < 0.0)
-	yincr = -yincr;		/* mod: shapiro 13 jun 1991 */
+    D_get_dst(&t, &b, &l, &r);
+
+    if (mapunits) {
+	xincr = (r - l) / 100.;
+	if (xincr < 0.0)
+	    xincr = -xincr;		/* mod: shapiro 13 jun 1991 */
+	yincr = (b - t) / 100.;
+	if (yincr < 0.0)
+	    yincr = -yincr;		/* mod: shapiro 13 jun 1991 */
+    }
+    else
+	xincr = yincr = 1;
 
     rotation = 0.0;		/* init */
 
@@ -55,21 +63,7 @@ int do_draw(char *buff)
 	return (-1);
     }
 
-    if (mapunits) {
-	/* skip check: clips segments if map coordinate is out of region.
-	   if( xper < D_get_u_west() ||
-	   yper < D_get_u_south() ||
-	   xper > D_get_u_east() ||
-	   yper > D_get_u_north() )
-	   return(-1);
-	 */
-	D_cont_abs(xper, yper);
-    }
-    else {
-	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
-	    return (-1);
-	R_cont_abs(l + xper * xincr, b - yper * yincr);
-    }
+    D_cont_abs(xper, yper);
 
     return (0);
 }
@@ -83,13 +77,7 @@ int do_move(char *buff)
 	return (-1);
     }
 
-    if (mapunits)
-	D_move_abs(xper, yper);
-    else {
-	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
-	    return (-1);
-	R_move_abs(l + xper * xincr, b - yper * yincr);
-    }
+    D_move_abs(xper, yper);
 
     return (0);
 }
@@ -169,20 +157,10 @@ int do_poly(char *buff, FILE * infile)
 	    break;
 	}
 
-	if (!mapunits) {
-	    if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
-		break;
-	}
 	check_alloc(num + 1);
 
-	if (mapunits) {
-	    xarray[num] = D_u_to_d_col(xper);
-	    yarray[num] = D_u_to_d_row(yper);
-	}
-	else {
-	    xarray[num] = l + xper * xincr;
-	    yarray[num] = b - yper * yincr;
-	}
+	xarray[num] = xper;
+	yarray[num] = yper;
 
 	num++;
     }
@@ -191,9 +169,9 @@ int do_poly(char *buff, FILE * infile)
 	/* this check is here so you can use the "polyline" command 
 	   to make an unfilled polygon */
 	if (!strcmp(origcmd, "polygon"))
-	    R_polygon_abs(xarray, yarray, num);
+	    D_polygon_abs(xarray, yarray, num);
 	else
-	    R_polyline_abs(xarray, yarray, num);
+	    D_polyline_abs(xarray, yarray, num);
     }
 
     return (to_return);
@@ -232,7 +210,7 @@ int do_rotate(char *buff)
 	return (-1);
     }
 
-    R_text_rotation((float)rotation);
+    R_text_rotation(rotation);
     G_debug(3, "rotation set to %.1f degrees", rotation);
 
     return (0);
@@ -259,17 +237,11 @@ int check_alloc(int num)
 	return 0;
 
     to_alloc = coors_allocated;
-    while (num >= to_alloc)
-	to_alloc += CHUNK;
+    if (num >= to_alloc)
+	to_alloc = num + CHUNK;
 
-    if (coors_allocated == 0) {
-	xarray = falloc(to_alloc, sizeof(double));
-	yarray = falloc(to_alloc, sizeof(double));
-    }
-    else {
-	xarray = frealloc(xarray, to_alloc, sizeof(double));
-	yarray = frealloc(yarray, to_alloc, sizeof(double));
-    }
+    xarray = G_realloc(xarray, to_alloc * sizeof(double));
+    yarray = G_realloc(yarray, to_alloc * sizeof(double));
 
     coors_allocated = to_alloc;
 
@@ -288,40 +260,30 @@ int do_icon(char *buff)
 	return (-1);
     }
 
-    if (mapunits) {
-	ix = D_u_to_d_col(xper);
-	iy = D_u_to_d_row(yper);
-	/* size in map units too? currently in percentage.
-	   use "size * D_get_u_to_d_yconv()" to convert? */
-    }
-    else {
-	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
-	    return (-1);
-
-	ix = l + xper * xincr;
-	iy = b - yper * yincr;
-    }
+    ix = xper;
+    iy = yper;
+    size *= yincr;
 
     switch (type & 0177) {
     case 'o':
-	R_move_abs(ix - size, iy - size);
-	R_cont_abs(ix - size, iy + size);
-	R_cont_abs(ix + size, iy + size);
-	R_cont_abs(ix + size, iy - size);
-	R_cont_abs(ix - size, iy - size);
+	D_move_abs(ix - size, iy - size);
+	D_cont_abs(ix - size, iy + size);
+	D_cont_abs(ix + size, iy + size);
+	D_cont_abs(ix + size, iy - size);
+	D_cont_abs(ix - size, iy - size);
 	break;
     case 'x':
-	R_move_abs(ix - size, iy - size);
-	R_cont_abs(ix + size, iy + size);
-	R_move_abs(ix - size, iy + size);
-	R_cont_abs(ix + size, iy - size);
+	D_move_abs(ix - size, iy - size);
+	D_cont_abs(ix + size, iy + size);
+	D_move_abs(ix - size, iy + size);
+	D_cont_abs(ix + size, iy - size);
 	break;
     case '+':
     default:
-	R_move_abs(ix, iy - size);
-	R_cont_abs(ix, iy + size);
-	R_move_abs(ix - size, iy);
-	R_cont_abs(ix + size, iy);
+	D_move_abs(ix, iy - size);
+	D_cont_abs(ix, iy + size);
+	D_move_abs(ix - size, iy);
+	D_cont_abs(ix + size, iy);
 	break;
     }
     return (0);
@@ -359,18 +321,9 @@ int do_symbol(char *buff)
 	return (-1);
     }
 
-    if (mapunits) {
-	ix = D_u_to_d_col(xper);
-	iy = D_u_to_d_row(yper);
-	/* consider size in map units too? maybe as percentage of display?
-	   perhaps use "size * D_get_u_to_d_yconv()" to convert */
-    }
-    else {
-	if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
-	    return (-1);
-	ix = l + xper * xincr;
-	iy = b - yper * yincr;
-    }
+    ix = D_u_to_d_col(xper);
+    iy = D_u_to_d_row(yper);
+    size *= yincr;
 
     /* parse line color */
     ret = G_str_to_color(line_color_str, &R, &G, &B);

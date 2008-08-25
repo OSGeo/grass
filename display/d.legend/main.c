@@ -271,8 +271,8 @@ int main(int argc, char **argv)
     black = D_translate_color(DEFAULT_BG_COLOR);
 
     /* Figure out where to put text */
-    D_setup(0);
-    D_get_dst(&t, &b, &l, &r);
+    D_setup_unity(0);
+    D_get_src(&t, &b, &l, &r);
 
     if (opt7->answer != NULL) {
 	sscanf(opt7->answers[0], "%lf", &Y1);
@@ -583,10 +583,10 @@ int main(int argc, char **argv)
 	    }
 
 	    if (dx < dy)
-		R_box_abs(x0 + k, y0, x0 + k + (dx ? -dx : 1),
+		D_box_abs(x0 + k, y0, x0 + k + (dx ? -dx : 1),
 			  y0 - (dy ? -dy : 1));
 	    else
-		R_box_abs(x0, y0 + k, x0 - (dx ? -dx : 1),
+		D_box_abs(x0, y0 + k, x0 - (dx ? -dx : 1),
 			  y0 + k + (dy ? -dy : 1));
 	}
 
@@ -668,23 +668,23 @@ int main(int argc, char **argv)
 
 	    if (!horiz) {
 		if (!k)		/* first  */
-		    R_move_abs(x1 + 4, y0 + txsiz);
+		    D_move_abs(x1 + 4, y0 + txsiz);
 		else if (k == steps - 1)	/* last */
-		    R_move_abs(x1 + 4, y1);
+		    D_move_abs(x1 + 4, y1);
 		else
-		    R_move_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
+		    D_move_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
 	    }
 	    else {
 		/* text width is 0.81 of text height? so even though we set width 
 		   to txsiz with R_text_size(), we still have to reduce.. hmmm */
 		if (!k)		/* first  */
-		    R_move_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
+		    D_move_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 		else if (k == steps - 1)	/* last */
-		    R_move_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
+		    D_move_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 		else
-		    R_move_abs(x0 + ppl * k -
+		    D_move_abs(x0 + ppl * k -
 			       (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 	    }
@@ -698,19 +698,19 @@ int main(int argc, char **argv)
 
 	/* Black box */
 	R_standard_color(black);
-	R_move_abs(x0 + 1, y0 + 1);
-	R_cont_rel(0, lleg - 2);
-	R_cont_rel(wleg - 2, 0);
-	R_cont_rel(0, 2 - lleg);
-	R_cont_rel(2 - wleg, 0);
+	D_move_abs(x0 + 1, y0 + 1);
+	D_cont_rel(0, lleg - 2);
+	D_cont_rel(wleg - 2, 0);
+	D_cont_rel(0, 2 - lleg);
+	D_cont_rel(2 - wleg, 0);
 
 	/* White box */
 	R_standard_color(white);
-	R_move_abs(x0, y0);
-	R_cont_rel(0, lleg);
-	R_cont_rel(wleg, 0);
-	R_cont_rel(0, -lleg);
-	R_cont_rel(-wleg, 0);
+	D_move_abs(x0, y0);
+	D_cont_rel(0, lleg);
+	D_cont_rel(wleg, 0);
+	D_cont_rel(0, -lleg);
+	D_cont_rel(-wleg, 0);
 
     }
     else {			/* non FP, no smoothing */
@@ -726,7 +726,7 @@ int main(int argc, char **argv)
 	r = x1;
 	b = y1;
 
-	R_move_abs(x0, y0);
+	D_move_abs(x0, y0);
 
 	/* figure out box height  */
 	if (do_cats == cats_num)
@@ -797,19 +797,19 @@ int main(int argc, char **argv)
 	    /* White box */
 	    R_standard_color(white);
 	    cur_dot_row += dots_per_line;
-	    R_move_abs(l + 2, (cur_dot_row - 1));
-	    R_cont_rel(0, (2 - dots_per_line));
-	    R_cont_rel((dots_per_line - 2), 0);
-	    R_cont_rel(0, (dots_per_line - 2));
-	    R_cont_rel((2 - dots_per_line), 0);
+	    D_move_abs(l + 2, (cur_dot_row - 1));
+	    D_cont_rel(0, (2 - dots_per_line));
+	    D_cont_rel((dots_per_line - 2), 0);
+	    D_cont_rel(0, (dots_per_line - 2));
+	    D_cont_rel((2 - dots_per_line), 0);
 
 	    /* Black box */
 	    R_standard_color(black);
-	    R_move_abs(l + 3, (cur_dot_row - 2));
-	    R_cont_rel(0, (4 - dots_per_line));
-	    R_cont_rel((dots_per_line - 4), 0);
-	    R_cont_rel(0, (dots_per_line - 4));
-	    R_cont_rel((4 - dots_per_line), 0);
+	    D_move_abs(l + 3, (cur_dot_row - 2));
+	    D_cont_rel(0, (4 - dots_per_line));
+	    D_cont_rel((dots_per_line - 4), 0);
+	    D_cont_rel(0, (dots_per_line - 4));
+	    D_cont_rel((4 - dots_per_line), 0);
 
 	    /* Color solid box */
 	    if (!fp) {
@@ -826,8 +826,8 @@ int main(int argc, char **argv)
 		    D_d_color(catlist[catlistCount - i - 1], &colors);
 	    }
 
-	    R_move_abs(l + 4, (cur_dot_row - 2));
-	    R_polygon_rel(x_box, y_box, 5);
+	    D_move_abs(l + 4, (cur_dot_row - 2));
+	    D_polygon_rel(x_box, y_box, 5);
 
 	    /* Draw text */
 	    R_standard_color(color);
@@ -855,7 +855,7 @@ int main(int argc, char **argv)
 		    sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
 	    }
 
-	    R_move_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
+	    D_move_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
 	    R_text(buff);
 	}
 
@@ -877,7 +877,7 @@ int main(int argc, char **argv)
 		R_text_size(txsiz, txsiz);
 	    }
 	    R_standard_color(white);
-	    R_move_abs((l + 3 + dots_per_line), (cur_dot_row));
+	    D_move_abs((l + 3 + dots_per_line), (cur_dot_row));
 	    R_text(buff);
 	}
     }

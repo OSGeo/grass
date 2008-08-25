@@ -23,23 +23,6 @@
 #include <grass/display.h>
 #include <grass/raster.h>
 
-
-/*!
- * \brief initialize/create a frame
- *
- * This routine
- * performs a series of initialization steps for the current frame. It also
- * creates a full screen frame if there is no current frame. The <b>clear</b>
- * flag, if set to 1, tells this routine to clear any information associated with
- * the frame: graphics as well as region information.
- * This routine relieves the programmer of having to perform the following
- * idiomatic function call sequence
- *
- *  \param clear
- *  \return int
- */
-
-
 /*!
  * \brief graphics frame setup
  *
@@ -59,19 +42,50 @@
 void D_setup(int clear)
 {
     struct Cell_head region;
-    double t, b, l, r;
+    double dt, db, dl, dr;
 
-    R_get_window(&t, &b, &l, &r);
+    R_get_window(&dt, &db, &dl, &dr);
 
-    /* clear the frame, if requested to do so */
-    if (clear)
-	D_erase(DEFAULT_BG_COLOR);
-
-    /* Set the map region associated with graphics frame */
     G_get_set_window(&region);
     if (G_set_window(&region) < 0)
 	G_fatal_error("Invalid graphics coordinates");
 
-    /* Determine conversion factors */
-    D_do_conversions(&region, t, b, l, r);
+    D_do_conversions(&region, dt, db, dl, dr);
+
+    if (clear)
+	D_erase(DEFAULT_BG_COLOR);
 }
+
+void D_setup_unity(int clear)
+{
+    double dt, db, dl, dr;
+
+    R_get_window(&dt, &db, &dl, &dr);
+
+    D_set_src(dt, db, dl, dr);
+    D_set_dst(dt, db, dl, dr);
+
+    D_update_conversions();
+
+    if (clear)
+	D_erase(DEFAULT_BG_COLOR);
+}
+
+void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
+{
+    double dt, db, dl, dr;
+
+    R_get_window(&dt, &db, &dl, &dr);
+
+    D_set_src(st, sb, sl, sr);
+    D_set_dst(dt, db, dl, dr);
+
+    if (fit)
+	D_fit_d_to_u();
+
+    D_update_conversions();
+
+    if (clear)
+	D_erase(DEFAULT_BG_COLOR);
+}
+

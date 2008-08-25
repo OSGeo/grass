@@ -51,10 +51,10 @@ int default_y_colors[] = {
 
 int main(int argc, char **argv)
 {
-    int xoffset;		/* offset for x-axis */
-    int yoffset;		/* offset for y-axis */
-    int text_height;
-    int text_width;
+    double xoffset;		/* offset for x-axis */
+    double yoffset;		/* offset for y-axis */
+    double text_height;
+    double text_width;
     int i;
     int j;
     int c;
@@ -65,8 +65,8 @@ int main(int argc, char **argv)
     int tic_unit;
     double t, b, l, r;
     double tt, tb, tl, tr;
-    int prev_x, prev_y[11];
-    int new_x, new_y[11];
+    double prev_x, prev_y[11];
+    double new_x, new_y[11];
     int line;
     double x_line[3];
     double y_line[3];
@@ -249,18 +249,18 @@ int main(int argc, char **argv)
     /* get coordinates of current screen window, in pixels */
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
-    D_setup(0);
-    D_get_dst(&t, &b, &l, &r);
+    D_setup_unity(0);
+    D_get_src(&t, &b, &l, &r);
 
     /* create axis lines, to be drawn later */
     height = b - t;
     width = r - l;
-    x_line[0] = x_line[1] = l + (int)(ORIGIN_X * width);
-    x_line[2] = l + (int)(XAXIS_END * width);
-    y_line[0] = b - (int)(YAXIS_END * height);
-    y_line[1] = y_line[2] = b - (int)(ORIGIN_Y * height);
-    text_height = (int)(b - t) * TEXT_HEIGHT;
-    text_width = (int)(r - l) * TEXT_WIDTH;
+    x_line[0] = x_line[1] = l + (ORIGIN_X * width);
+    x_line[2] = l + (XAXIS_END * width);
+    y_line[0] = b - (YAXIS_END * height);
+    y_line[1] = y_line[2] = b - (ORIGIN_Y * height);
+    text_height = (b - t) * TEXT_HEIGHT;
+    text_width = (r - l) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
 
     /* read thru each data file in turn, find max and min values for
@@ -380,18 +380,18 @@ int main(int argc, char **argv)
 
 		if (min_y >= 0)
 		    new_y[i] =
-			(int)(yoffset - yscale * (in[i].value - min_y));
+			(yoffset - yscale * (in[i].value - min_y));
 
 		/* if our minimum value of y is negative, then we have two
 		   cases:  our current value to plot is pos or neg */
 
 		else {
 		    if (in[i].value < 0)
-			new_y[i] = (int)(yoffset - yscale * (-1 *
+			new_y[i] = (yoffset - yscale * (-1 *
 							     (min_y -
 							      in[i].value)));
 		    else
-			new_y[i] = (int)(yoffset - yscale * (in[i].value +
+			new_y[i] = (yoffset - yscale * (in[i].value +
 							     (min_y * -1)));
 		}
 
@@ -400,8 +400,8 @@ int main(int argc, char **argv)
 		    prev_x = xoffset;
 		    prev_y[i] = yoffset;
 		}
-		R_move_abs(prev_x, prev_y[i]);
-		R_cont_abs(new_x, new_y[i]);
+		D_move_abs(prev_x, prev_y[i]);
+		D_cont_abs(new_x, new_y[i]);
 		prev_y[i] = new_y[i];
 	    }
 	}
@@ -414,9 +414,9 @@ int main(int argc, char **argv)
 	    /* draw a numbered tic-mark */
 
 	    R_standard_color(title_color);
-	    R_move_abs((int)(xoffset + line * xscale),
-		       (int)(b - ORIGIN_Y * (b - t)));
-	    R_cont_rel((int)0, (int)(BIG_TIC * (b - t)));
+	    D_move_abs((xoffset + line * xscale),
+		       (b - ORIGIN_Y * (b - t)));
+	    D_cont_rel(0, (BIG_TIC * (b - t)));
 	    if ((in[0].value >= 1) || (in[0].value <= -1) ||
 		(in[0].value == 0))
 		sprintf(txt, "%.0f", (in[0].value / tic_unit));
@@ -432,8 +432,8 @@ int main(int argc, char **argv)
 		R_text_size(text_width, text_height);
 		R_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
-	    R_move_abs((int)(xoffset + (line * xscale - (tr - tl) / 2)),
-		       (int)(b - XNUMS_Y * (b - t)));
+	    D_move_abs((xoffset + (line * xscale - (tr - tl) / 2)),
+		       (b - XNUMS_Y * (b - t)));
 	    R_text(txt);
 	}
 	else if (rem(line, tic_unit) == (float)0) {
@@ -441,9 +441,9 @@ int main(int argc, char **argv)
 	    /* draw a tic-mark */
 
 	    R_standard_color(title_color);
-	    R_move_abs((int)(xoffset + line * xscale),
-		       (int)(b - ORIGIN_Y * (b - t)));
-	    R_cont_rel((int)0, (int)(SMALL_TIC * (b - t)));
+	    D_move_abs((xoffset + line * xscale),
+		       (b - ORIGIN_Y * (b - t)));
+	    D_cont_rel(0, (SMALL_TIC * (b - t)));
 	}
     }
 
@@ -461,8 +461,8 @@ int main(int argc, char **argv)
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     R_text_size(text_width, text_height);
     R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
-    R_move_abs((int)(l + (r - l) / 2 - (tr - tl) / 2),
-	       (int)(b - LABEL_1 * (b - t)));
+    D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
+	       (b - LABEL_1 * (b - t)));
     R_standard_color(title_color);
     R_text(xlabel);
 
@@ -492,8 +492,8 @@ int main(int argc, char **argv)
 	if (rem(i, tic_every) == (float)0) {
 	    /* draw a tic-mark */
 
-	    R_move_abs((int)x_line[0], (int)(yoffset - yscale * (i - min_y)));
-	    R_cont_rel((int)(-(r - l) * BIG_TIC), (int)0);
+	    D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
+	    D_cont_rel((-(r - l) * BIG_TIC), 0);
 
 	    /* draw a tic-mark number */
 
@@ -508,16 +508,16 @@ int main(int argc, char **argv)
 		R_text_size(text_width, text_height);
 		R_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
-	    R_move_abs((int)(l + (r - l) * YNUMS_X - (tr - tl) / 2),
-		       (int)(yoffset -
+	    D_move_abs((l + (r - l) * YNUMS_X - (tr - tl) / 2),
+		       (yoffset -
 			     (yscale * (i - min_y) + 0.5 * (tt - tb))));
 	    R_text(txt);
 	}
 	else if (rem(i, tic_unit) == (float)0) {
 	    /* draw a tic-mark */
 
-	    R_move_abs((int)x_line[0], (int)(yoffset - yscale * (i - min_y)));
-	    R_cont_rel((int)(-(r - l) * SMALL_TIC), (int)0);
+	    D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
+	    D_cont_rel((-(r - l) * SMALL_TIC), 0);
 	}
     }
 
@@ -530,8 +530,8 @@ int main(int argc, char **argv)
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     R_text_size(text_width, text_height);
     R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
-    R_move_abs((int)(l + (r - l) / 2 - (tr - tl) / 2),
-	       (int)(b - LABEL_2 * (b - t)));
+    D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
+	       (b - LABEL_2 * (b - t)));
     R_standard_color(title_color);
     R_text(xlabel);
 
@@ -545,8 +545,8 @@ int main(int argc, char **argv)
        R_move_abs((int)(((r-l)/2)-(tr-tl)/2),
        (int) (t+ (b-t)*.07) );
      */
-    R_move_abs((int)(l + (r - l) / 2 - (tr - tl) / 2),
-	       (int)(t + (b - t) * .07));
+    D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
+	       (t + (b - t) * .07));
     R_standard_color(title_color);
     R_text(xlabel);
 

@@ -12,7 +12,7 @@ static int cont(int, int);
 int setup_plot(void)
 {
     /* establish the current graphics window */
-    D_setup(0);
+    D_setup_unity(0);
 
     /* setup the G plot to use the D routines */
     G_setup_plot(D_get_d_north(),
@@ -46,14 +46,14 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 
 static int cont(int x, int y)
 {
-    R_cont_abs(x, y);
+    D_cont_abs(x, y);
 
     return 0;
 }
 
 static int move(int x, int y)
 {
-    R_move_abs(x, y);
+    D_move_abs(x, y);
 
     return 0;
 }

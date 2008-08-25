@@ -31,7 +31,7 @@ int display(struct Map_info *Map, struct line_pnts *Points,
     if (be_bold)
 	D_line_width(2);
 
-    D_polyline(&Points->x[from], &Points->y[from], to - from);
+    D_polyline_abs(&Points->x[from], &Points->y[from], to - from);
 
     if (be_bold)
 	R_line_width(0);

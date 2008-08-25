@@ -18,20 +18,15 @@ static int cont(int, int);
 int setup_plot(void)
 {
     double a, e2;
-    double t, b, l, r;
 
     /* establish the current graphics window */
-    D_setup(0);
-
-    D_get_dst(&t, &b, &l, &r);
-    D_set_src(t, b, l, r);
-    D_update_conversions();
-    /* set D clip window */
+    D_setup_unity(0);
     D_clip_to_map();
 
     /* setup the G plot to use the D routines */
-    G_setup_plot(D_get_d_north(),
-		 D_get_d_south(), D_get_d_west(), D_get_d_east(), move, cont);
+    G_setup_plot(D_get_d_north(), D_get_d_south(),
+		 D_get_d_west(), D_get_d_east(),
+		 move, cont);
 
     G_get_ellipsoid_parameters(&a, &e2);
     G_begin_geodesic_distance(a, e2);
@@ -72,7 +67,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	    text_y = D_get_d_north() - 10;
 	if (text_x + 10 * strlen(buf) >= D_get_d_east())
 	    text_x = D_get_d_east() - 10 * strlen(buf);
-	R_move_abs(text_x, text_y);
+	D_move_abs(text_x, text_y);
 	R_standard_color(text_color);
 	R_text(buf);
 	R_flush();

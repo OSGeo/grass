@@ -26,7 +26,7 @@ static void line(double m[2][3], double x0, double y0, double x1, double y1)
 	double tx1 = m[0][0] * x1 + m[0][1] * y1 + m[0][2];
 	double ty1 = m[1][0] * x1 + m[1][1] * y1 + m[1][2];
 
-	D_line(tx0, ty0, tx1, ty1);
+	D_line_abs(tx0, ty0, tx1, ty1);
 }
 
 /**

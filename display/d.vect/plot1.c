@@ -45,13 +45,13 @@ void plot_polyline(double *xf, double *yf, int n)
 {
     switch (render) {
     case RENDER_DP:
-	D_polyline(xf, yf, n);
+	D_polyline_abs(xf, yf, n);
 	break;
     case RENDER_DPC:
-	D_polyline_clip(xf, yf, n);
+	D_polyline_abs_clip(xf, yf, n);
 	break;
     case RENDER_DPL:
-	D_polyline_cull(xf, yf, n);
+	D_polyline_abs_cull(xf, yf, n);
 	break;
     }
 }
@@ -63,13 +63,13 @@ void plot_polygon(double *xf, double *yf, int n)
 {
     switch (render) {
     case RENDER_DP:
-	D_polygon(xf, yf, n);
+	D_polygon_abs(xf, yf, n);
 	break;
     case RENDER_DPC:
-	D_polygon_clip(xf, yf, n);
+	D_polygon_abs_clip(xf, yf, n);
 	break;
     case RENDER_DPL:
-	D_polygon_cull(xf, yf, n);
+	D_polygon_abs_cull(xf, yf, n);
 	break;
     }
 }
@@ -466,7 +466,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 
 	    /* Plot the lines */
 	    if (Points->n_points == 1)	/* line with one coor */
-		D_polydots_clip(x, y, Points->n_points);
+		D_polydots_abs_clip(x, y, Points->n_points);
 	    else		/*use different user defined render methods */
 		plot_polyline(x, y, Points->n_points);
 	}

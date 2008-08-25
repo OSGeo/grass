@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
     int line_color;
     int text_color;
     double lon1, lat1, lon2, lat2;
-    char msg[100];
     char *deftcolor;
     struct GModule *module;
     struct

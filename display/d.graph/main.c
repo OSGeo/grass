@@ -40,7 +40,6 @@
 
 float hsize;
 float vsize;
-double t, b, l, r;
 int mapunits;
 FILE *infile;
 
@@ -114,21 +113,19 @@ int main(int argc, char **argv)
 	    set_last_color(0, 0, 0, RGBA_COLOR_NONE);
     }
 
-    if (mapcoords->answer)
+    if (mapcoords->answer) {
 	mapunits = TRUE;
-    else
+	D_setup(0);
+    }
+    else {
+	D_setup2(0, 0, 0, 100, 0, 100);
 	mapunits = FALSE;
-
-    D_setup(0);
-    D_get_dst(&t, &b, &l, &r);
+    }
 
     /* Do the graphics */
     set_graph_stuff();
     set_text_size();
     graphics(infile);
-
-    R_text_rotation(0.0);	/* reset */
-    R_line_width(0);		/* reset */
 
     R_close_driver();
 
