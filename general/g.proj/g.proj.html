@@ -2,13 +2,18 @@
 
 <P><em>g.proj</em> provides a means of converting a co-ordinate system
 description (i.e. projection information) between various formats.
-It requires <A HREF="http://www.gdal.org/ogr/">OGR</A> to compile. The basic
-functionality of the module is to report the projection information for the
-current location, either in conventional GRASS (-p flag) or PROJ.4 (-j flag) 
-format.</P>
+If compiled without <A HREF="http://www.gdal.org/ogr/">OGR</A> present, the 
+functionality is limited to:
+<ul>
+<li>Reporting the projection information for the current location, 
+either in conventional GRASS (-p flag) or PROJ.4 (-j flag) format</li>
+<li>Reporting and modifying the datum transformation parameters for
+the current location</li>
+</ul>
+</P>
 
-<P>Projection information may also be output in the Well-Known Text (WKT) 
-format popularised
+<P>When compiled with OGR, functionality is increased and allows output of 
+the projection information in the Well-Known Text (WKT) format popularised 
 by proprietary GIS. In addition, if one of the parameters <em>georef</em>, 
 <em>wkt</em>, <em>proj4</em> or <em>epsg</em> is specified, rather than the 
 projection information being read from the current location it is imported 
@@ -54,8 +59,7 @@ create new GRASS projection files (PROJ_INFO, PROJ_UNITS, WIND and
 DEFAULT_WIND) based on the imported information. If the <em>location</em> 
 parameter is specified in addition to -c, then a new location will be created. 
 Otherwise the projection information files in the current location will be
-overwritten. The program will warn before doing this only if command-line
-interactive mode (<em>-i</em> flag) is selected.</P>
+overwritten. The program will <strong>not</strong> warn before doing this.</P>
 
 <P>The final mode of operation of g.proj is to report on the datum
 information and datum transformation parameters associated with the
@@ -77,14 +81,11 @@ used when creating a location, other GRASS modules will use the "default"
 <strong>Any other number less than or equal to the number of parameter sets
 available for this datum:</strong> Choose this parameter set and add it to the
 co-ordinate system description.<br>
-If the module is being used from the command-line through an interactive
-terminal, the <em>-i</em> flag can be specified to enable interactive
-selection of the parameter set, and the value of <em>datumtrans</em> (if 
-specified) is ignored.<br>
 If the <em>-t</em> flag is specified, the module will attempt to change the
 datum transformation parameters using one of the above two methods 
 <strong>even if</strong> a valid parameter set is already specified in the 
-input co-ordinate system.</P>
+input co-ordinate system. This can be useful to change the datum information
+for an existing location.</P>
 
 <P>Output is simply based on the input projection information. g.proj does 
 <strong>not</strong> attempt to verify that the co-ordinate system thus 
@@ -155,18 +156,17 @@ g.proj -c epsg=29900 datumtrans=2 location=irish_grid
 
 <p>
 Create a new location with the same co-ordinate system as the current
-location:<br>
+location, but forcing a change to datum transformation parameter set no. 1:<br>
 
 <div class="code"><pre>
-g.proj -c location=newloc
+g.proj -c location=newloc -t datumtrans=1
 </pre></div>
 
 <p>
-Interactively change/update the datum transformation parameters for the
-current location:<br>
+List the possible datum transformation parameters for the current location:<br>
 
 <div class="code"><pre>
-g.proj -itc
+g.proj -t datumtrans=-1
 </pre></div>
 
 <p>

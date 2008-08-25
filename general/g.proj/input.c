@@ -22,15 +22,22 @@
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
-#include <gdal.h>
-#include <ogr_api.h>
-#include <cpl_csv.h>
+#include <grass/config.h>
+
+#ifdef HAVE_OGR
+#  include <gdal.h>
+#  include <ogr_api.h>
+#  include <cpl_csv.h>
+#endif
 
 #include "local_proto.h"
 
 static void set_default_region(void);
+
+#ifdef HAVE_OGR
 static void set_gdal_region(GDALDatasetH);
 static void set_ogr_region(OGRLayerH);
+#endif
 
 /**
  * \brief Read projection and region information from current location
@@ -49,6 +56,8 @@ void input_currloc(void)
 
     return;
 }
+
+#ifdef HAVE_OGR
 
 /**
  * \brief Read projection information in WKT format from stdin or a file
@@ -254,6 +263,7 @@ int input_georef(char *geofile)
     return ret;
 
 }
+#endif /* HAVE_OGR */
 
 /**
  * \brief Populates global cellhd with "default" region settings
@@ -282,6 +292,8 @@ static void set_default_region(void)
 
     return;
 }
+
+#ifdef HAVE_OGR
 
 /**
  * \brief Populates global cellhd with region settings based on 
@@ -365,3 +377,4 @@ static void set_ogr_region(OGRLayerH Ogr_layer)
 
     return;
 }
+#endif /* HAVE_OGR */
