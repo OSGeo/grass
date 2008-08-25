@@ -2080,18 +2080,27 @@ class VDigitSettingsDialog(wx.Dialog):
         value = self.snappingValue.GetValue()
         
         if value < 0:
-            self.snappingInfo.SetLabel(_("No limit for snapping"))
-            return
-        
-        if self.snappingUnit.GetStringSelection() == "map units":
-            threshold = value
+            region = self.parent.MapWindow.Map.GetRegion()
+            res = (region['nsres'] + region['ewres']) / 2.
+            threshold = self.parent.digit.driver.GetThreshold(value=res)
         else:
-            threshold = self.parent.digit.driver.GetThreshold(value=value)
-
-        self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s") % 
-                                   {'value' : threshold,
-                                    'units' : self.mapUnits})
-
+            if self.snappingUnit.GetStringSelection() == "map units":
+                threshold = value
+            else:
+                threshold = self.parent.digit.driver.GetThreshold(value=value)
+            
+        if value == 0:
+            self.snappingInfo.SetLabel(_("Snapping disabled"))
+        elif value < 0:
+            self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s "
+                                         "(based on computation resolution)") % 
+                                       {'value' : threshold,
+                                        'units' : self.mapUnits.lower()})
+        else:
+            self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s") % 
+                                       {'value' : threshold,
+                                        'units' : self.mapUnits.lower()})
+        
         event.Skip()
 
     def OnChangeSnappingUnits(self, event):
