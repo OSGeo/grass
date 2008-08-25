@@ -20,6 +20,7 @@
 #include <grass/gis.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <grass/config.h>
 
 #include "local_proto.h"
 
@@ -124,6 +125,7 @@ void print_proj4(int dontprettify)
     return;
 }
 
+#ifdef HAVE_OGR
 void print_wkt(int esristyle, int dontprettify)
 {
     char *outwkt;
@@ -142,6 +144,7 @@ void print_wkt(int esristyle, int dontprettify)
 
     return;
 }
+#endif
 
 void create_location(char *location)
 {

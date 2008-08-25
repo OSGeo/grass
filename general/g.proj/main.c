@@ -18,6 +18,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <grass/config.h>
 
 #include "local_proto.h"
 
@@ -44,7 +45,7 @@ int main(int argc, char *argv[])
 				 * GDAL or OGR                              */
     struct GModule *module;
 
-    int importformats;
+    int formats;
 
     G_set_program_name(argv[0]);
     G_no_gisinit();		/* We don't call G_gisinit() here because it validates the
@@ -54,9 +55,13 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("general");
     module->description =
+#ifdef HAVE_OGR
 	_("Converts co-ordinate system descriptions (i.e. projection "
 	  "information) between various formats (including GRASS format). "
 	  "Can also be used to create GRASS locations.");
+#else
+	_("Prints and manipulates GRASS projection information files.");
+#endif
 
     printinfo = G_define_flag();
     printinfo->key = 'p';
@@ -76,6 +81,17 @@ int main(int argc, char *argv[])
     printproj4->description =
 	_("Print projection information in PROJ.4 format");
 
+    dontprettify = G_define_flag();
+    dontprettify->key = 'f';
+    dontprettify->guisection = "Printed_Output";
+    dontprettify->description =
+	_("Print 'flat' output with no linebreaks (applies to "
+#ifdef HAVE_OGR
+	  "WKT and "
+#endif
+	  "PROJ.4 output)");
+
+#ifdef HAVE_OGR
     printwkt = G_define_flag();
     printwkt->key = 'w';
     printwkt->guisection = "Printed_Output";
@@ -86,13 +102,6 @@ int main(int argc, char *argv[])
     esristyle->guisection = "Printed_Output";
     esristyle->description =
 	_("Use ESRI-style format (applies to WKT output only)");
-
-    dontprettify = G_define_flag();
-    dontprettify->key = 'f';
-    dontprettify->guisection = "Printed_Output";
-    dontprettify->description =
-	_("Print 'flat' output with no linebreaks (applies to WKT and "
-	  "PROJ.4 output)");
 
     ingeo = G_define_option();
     ingeo->key = "georef";
@@ -127,6 +136,7 @@ int main(int argc, char *argv[])
     inepsg->options = "1-1000000";
     inepsg->guisection = "Input";
     inepsg->description = _("EPSG projection code");
+#endif
 
     dtrans = G_define_option();
     dtrans->key = "datumtrans";
@@ -166,25 +176,25 @@ int main(int argc, char *argv[])
 
     /* Initialisation & Validation */
 
+#ifdef HAVE_OGR
     /* -e implies -w */
     if (esristyle->answer && !printwkt->answer)
 	printwkt->answer = 1;
 
-    projinfo = NULL;
-    projunits = NULL;
-
-    importformats = ((ingeo->answer ? 1 : 0) + (inwkt->answer ? 1 : 0) +
-		     (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0));
-    if (importformats > 1)
+    formats = ((ingeo->answer ? 1 : 0) + (inwkt->answer ? 1 : 0) +
+	       (inproj4->answer ? 1 : 0) + (inepsg->answer ? 1 : 0));
+    if (formats > 1)
 	G_fatal_error(_("Only one of '%s', '%s', '%s' or '%s' options may be specified"),
 		      ingeo->key, inwkt->key, inproj4->key, inepsg->key);
 
     /* Input */
     /* We can only have one input source, hence if..else construct */
 
-    if (importformats == 0)
+    if (formats == 0)
+#endif
 	/* Input is projection of current location */
 	input_currloc();
+#ifdef HAVE_OGR
     else if (inwkt->answer)
 	/* Input in WKT format */
 	input_wkt(inwkt->answer);
@@ -197,7 +207,7 @@ int main(int argc, char *argv[])
     else
 	/* Input from georeferenced file */
 	input_georef(ingeo->answer);
-
+#endif
 
     /* Consistency Check */
 
@@ -210,23 +220,39 @@ int main(int argc, char *argv[])
 
 
     /* Output */
-    /* We can output the same information in multiple formats if
-     * necessary, hence multiple if statements */
+    /* Only allow one output format at a time, to reduce confusion */
+    formats = ((printinfo->answer ? 1 : 0) + (datuminfo->answer ? 1 : 0) +
+	       (printproj4->answer ? 1 : 0) +
+#ifdef HAVE_OGR
+	       (printwkt->answer ? 1 : 0) +
+#endif
+	       (create->answer ? 1 : 0));
+    if (formats > 1)
+	G_fatal_error(_("Only one of -%c, -%c, -%c"
+#ifdef HAVE_OGR
+			", -%c"
+#endif
+			" or -%c flags may be specified"),
+		      printinfo->key, datuminfo->key, printproj4->key,
+#ifdef HAVE_OGR
+		      printwkt->key,
+#endif
+		      create->key);
 
     if (printinfo->answer)
 	print_projinfo();
-
-    if (datuminfo->answer)
+    else if (datuminfo->answer)
 	print_datuminfo();
-
-    if (printproj4->answer)
+    else if (printproj4->answer)
 	print_proj4(dontprettify->answer);
-
-    if (printwkt->answer)
+#ifdef HAVE_OGR
+    else if (printwkt->answer)
 	print_wkt(esristyle->answer, dontprettify->answer);
-
-    if (create->answer)
+#endif
+    else if (create->answer)
 	create_location(location->answer);
+    else
+	G_warning(_("No output! Please specify an output option."));
 
 
     /* Tidy Up */
