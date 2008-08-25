@@ -1,5 +1,9 @@
+
+#ifndef PLOT_H_
+#define PLOT_H_
 /* TODO: should use 24bit instead of 16 colors, maybe implement
    predefined color tables? */
+
 struct rgb_color
 {
     unsigned char R, G, B;
@@ -39,3 +43,6 @@ typedef struct
 #define RENDER_DPL	4
 
 extern int render;
+
+#endif
+

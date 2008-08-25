@@ -193,8 +193,8 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    D_setup(0);			/* 0 = don't clear frame */
-    D_get_dst(&t, &b, &l, &r);
+    D_setup_unity(0);			/* 0 = don't clear frame */
+    D_get_src(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
     if (strcmp(bg_opt->answer, "none") != 0)
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
     text_width = (r - l) * 0.05 * 0.50;
     R_text_size(text_width, text_height);
     R_get_text_box(title, &tt, &tb, &tl, &tr);
-    R_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
+    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
 	       t + (b - t) * 0.07);
     D_raster_use_color(color);
     R_text(title);

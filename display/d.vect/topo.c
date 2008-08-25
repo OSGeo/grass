@@ -2,17 +2,19 @@
 #include <grass/Vect.h>
 #include <grass/display.h>
 #include <grass/raster.h>
-#include "plot.h"
 #include <grass/glocale.h>
+#include "local_proto.h"
+#include "plot.h"
 
-int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
+int topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
 {
-    int i, ltype, num, el;
-    double xl, yl;
+    int ltype, num, el;
     struct line_pnts *Points;
     struct line_cats *Cats;
-    double X, Y, T, B, L, R, Xoffset, Yoffset, xarr[5], yarr[5];
     char text[50];
+    LATTR lattr2 = *lattr;
+
+    lattr2.xref = lattr->xref == LRIGHT ? LLEFT : LRIGHT;
 
     G_debug(1, "display topo:");
     Points = Vect_new_line_struct();
@@ -47,71 +49,8 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
 	if (!(type & ltype))
 	    continue;		/* used for both lines and labels */
 
-
-	if ((ltype & GV_POINTS) || Points->n_points == 1)
-	    /* point/centroid or line/boundary with one coor */
-	{
-	    X = D_u_to_d_col(Points->x[0]);
-	    Y = D_u_to_d_row(Points->y[0]);
-	}
-	else if (Points->n_points == 2) {	/* line with two coors */
-	    xl = (Points->x[0] + Points->x[1]) / 2;
-	    yl = (Points->y[0] + Points->y[1]) / 2;
-	    X = D_u_to_d_col(xl);
-	    Y = D_u_to_d_row(yl);
-	}
-	else {
-	    i = Points->n_points / 2;
-	    X = D_u_to_d_col(Points->x[i]);
-	    Y = D_u_to_d_row(Points->y[i]);
-	}
-
-	X = X + 0.5 * lattr->size;
-	Y = Y + 1.5 * lattr->size;
-
-	R_move_abs(X, Y);
 	sprintf(text, "%d", el);
-	R_get_text_box(text, &T, &B, &L, &R);
-
-	/* Expand border 1/2 of text size */
-	T = T - lattr->size / 2;
-	B = B + lattr->size / 2;
-	L = L - lattr->size / 2;
-	R = R + lattr->size / 2;
-
-	Xoffset = 0;
-	Yoffset = 0;
-	if (lattr->xref == LCENTER)
-	    Xoffset = -(R - L) / 2;
-	if (lattr->xref == LRIGHT)
-	    Xoffset = -(R - L);
-	if (lattr->yref == LCENTER)
-	    Yoffset = -(B - T) / 2;
-	if (lattr->yref == LBOTTOM)
-	    Yoffset = -(B - T);
-
-	if (lattr->has_bgcolor || lattr->has_bcolor) {
-	    xarr[0] = xarr[1] = xarr[4] = L + Xoffset;
-	    xarr[2] = xarr[3] = R + Xoffset;
-	    yarr[0] = yarr[3] = yarr[4] = B + Yoffset;
-	    yarr[1] = yarr[2] = T + Yoffset;
-
-	    if (lattr->has_bgcolor) {
-		R_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G,
-			    lattr->bgcolor.B);
-		R_polygon_abs(xarr, yarr, 5);
-	    }
-
-	    if (lattr->has_bcolor) {
-		R_RGB_color(lattr->bcolor.R, lattr->bcolor.G,
-			    lattr->bcolor.B);
-		R_polyline_abs(xarr, yarr, 5);
-	    }
-	    R_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
-	}
-
-	R_move_abs(X + Xoffset, Y + Yoffset);
-	R_text(text);
+	show_label_line(Points, ltype, lattr, text);
     }
 
     num = Vect_get_num_nodes(Map);
@@ -119,64 +58,16 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR * lattr)
 
     /* Nodes */
     for (el = 1; el <= num; el++) {
+	double X, Y;
 	if (!Vect_node_alive(Map, el))
 	    continue;
-	Vect_get_node_coor(Map, el, &xl, &yl, NULL);
+	Vect_get_node_coor(Map, el, &X, &Y, NULL);
 	G_debug(3, "node = %d", el);
-
-	X = D_u_to_d_col(xl);
-	Y = D_u_to_d_row(yl);
-
-	X = X + 0.5 * lattr->size;
-	Y = Y + 1.5 * lattr->size;
-
-	R_move_abs(X, Y);
 	sprintf(text, "n%d", el);
-	R_get_text_box(text, &T, &B, &L, &R);
 
-	/* Expand border 1/2 of text size */
-	T = T - lattr->size / 2;
-	B = B + lattr->size / 2;
-	L = L - lattr->size / 2;
-	R = R + lattr->size / 2;
+	show_label(&X, &Y, &lattr2, text);
 
-	Xoffset = 0;
-	Yoffset = 0;
-
-	/*      
-	   if (lattr->xref == LCENTER) Xoffset = -(R - L) / 2 ;
-	   if (lattr->xref == LRIGHT ) Xoffset = -(R - L) ;
-	 */
-	Xoffset = -(R - L);
-	if (lattr->yref == LCENTER)
-	    Yoffset = -(B - T) / 2;
-	if (lattr->yref == LBOTTOM)
-	    Yoffset = -(B - T);
-
-
-	if (lattr->has_bgcolor || lattr->has_bcolor) {
-	    xarr[0] = xarr[1] = xarr[4] = L + Xoffset;
-	    xarr[2] = xarr[3] = R + Xoffset;
-	    yarr[0] = yarr[3] = yarr[4] = B + Yoffset;
-	    yarr[1] = yarr[2] = T + Yoffset;
-
-	    if (lattr->has_bgcolor) {
-		R_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G,
-			    lattr->bgcolor.B);
-		R_polygon_abs(xarr, yarr, 5);
-	    }
-
-	    if (lattr->has_bcolor) {
-		R_RGB_color(lattr->bcolor.R, lattr->bcolor.G,
-			    lattr->bcolor.B);
-		R_polyline_abs(xarr, yarr, 5);
-	    }
-	    R_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
-	}
-
-	R_move_abs(X + Xoffset, Y + Yoffset);
-	R_text(text);
-	D_plot_icon(xl, yl, G_ICON_BOX, 0, 10);
+	D_plot_icon(X, Y, G_ICON_BOX, 0, 10);
     }
 
     Vect_destroy_line_struct(Points);
