@@ -432,7 +432,7 @@ class MyHTMLParser(HTMLParser):
 	    if self.pop() == tag:
 		break
 
-if __name__ == "__main__":
+def main():
     # parse HTML
     inf = file(sys.argv[1])
     p = MyHTMLParser()
@@ -456,3 +456,9 @@ if __name__ == "__main__":
     outf = file(sys.argv[2], 'w')
     outf.write(s)
     outf.close()
+
+if __name__ == "__main__":
+    try:
+	main()
+    except:
+	sys.exit(1)
