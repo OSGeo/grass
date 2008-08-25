@@ -288,10 +288,10 @@ int main(int argc, char **argv)
     if (opt.charset->answer)
 	R_encoding(opt.charset->answer);
 
-    D_setup(0);
+    D_setup_unity(0);
 
     /* figure out where to put text */
-    D_get_dst(&win.t, &win.b, &win.l, &win.r);
+    D_get_src(&win.t, &win.b, &win.l, &win.r);
 
     if (flag.s->answer)
 	size = atof(opt.size->answer);
@@ -648,13 +648,13 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
 	}
     }
 
-    R_move_abs(*x, *y);
+    D_move_abs(*x, *y);
     R_text(text);
 
     if (bold) {
-	R_move_abs(*x, *y + 1);
+	D_move_abs(*x, *y + 1);
 	R_text(text);
-	R_move_abs(*x + 1, *y);
+	D_move_abs(*x + 1, *y);
 	R_text(text);
     }
 

@@ -25,12 +25,12 @@ int plot_border(double grid_size, double east, double north)
     /* plot boundary lines: */
 
     /* horizontal : */
-    D_line(window.west, window.south, window.east, window.south);
-    D_line(window.west, window.north, window.east, window.north);
+    D_line_abs(window.west, window.south, window.east, window.south);
+    D_line_abs(window.west, window.north, window.east, window.north);
 
     /* vertical : */
-    D_line(window.west, window.south, window.west, window.north);
-    D_line(window.east, window.south, window.east, window.north);
+    D_line_abs(window.west, window.south, window.west, window.north);
+    D_line_abs(window.east, window.south, window.east, window.north);
 
     /* Draw vertical border marks */
     if (window.west < east)
@@ -42,16 +42,16 @@ int plot_border(double grid_size, double east, double north)
 	loop = 0;
 	for (i = 0; i <= grid_size; i = i + steps) {
 	    if (loop == 0) {
-		D_line(x + i, window.south + (window.north - window.south) / longmark, x + i, window.south);
-		D_line(x + i, window.north, x + i, window.north - (window.north - window.south) / longmark);
+		D_line_abs(x + i, window.south + (window.north - window.south) / longmark, x + i, window.south);
+		D_line_abs(x + i, window.north, x + i, window.north - (window.north - window.south) / longmark);
 	    }
 	    if (loop == 5) {
-		D_line(x + i,window.south + (window.north - window.south) / middlemark, x + i, window.south);
-		D_line(x + i, window.north, x + i, window.north - (window.north - window.south) / middlemark);
+		D_line_abs(x + i,window.south + (window.north - window.south) / middlemark, x + i, window.south);
+		D_line_abs(x + i, window.north, x + i, window.north - (window.north - window.south) / middlemark);
 	    }
 	    else {
-		D_line(x + i, window.south + (window.north - window.south) / shortmark, x + i, window.south);
-		D_line(x + i, window.north, x + i, window.north - (window.north - window.south) / shortmark);
+		D_line_abs(x + i, window.south + (window.north - window.south) / shortmark, x + i, window.south);
+		D_line_abs(x + i, window.north, x + i, window.north - (window.north - window.south) / shortmark);
 	    }
 	    loop++;
 	}
@@ -69,16 +69,16 @@ int plot_border(double grid_size, double east, double north)
 	loop = 0;
 	for (i = 0; i <= grid_size; i = i + steps) {
 	    if (loop == 0) {
-		D_line(window.west, y + i, window.west + (window.east - window.west) / longmark, y + i);
-		D_line(window.east - (window.east - window.west) / longmark, y + i, window.east, y + i);
+		D_line_abs(window.west, y + i, window.west + (window.east - window.west) / longmark, y + i);
+		D_line_abs(window.east - (window.east - window.west) / longmark, y + i, window.east, y + i);
 	    }
 	    if (loop == 5) {
-		D_line(window.west, y + i, window.west + (window.east - window.west) / middlemark, y + i);
-		D_line(window.east - (window.east - window.west) / middlemark, y + i, window.east, y + i);
+		D_line_abs(window.west, y + i, window.west + (window.east - window.west) / middlemark, y + i);
+		D_line_abs(window.east - (window.east - window.west) / middlemark, y + i, window.east, y + i);
 	    }
 	    else {
-		D_line(window.west, y + i, window.west + (window.east - window.west) / shortmark, y + i);
-		D_line(window.east - (window.east - window.west) / shortmark, y + i, window.east, y + i);
+		D_line_abs(window.west, y + i, window.west + (window.east - window.west) / shortmark, y + i);
+		D_line_abs(window.east - (window.east - window.west) / shortmark, y + i, window.east, y + i);
 	    }
 	    loop++;
 	}

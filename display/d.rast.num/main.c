@@ -271,9 +271,9 @@ int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_t
        R_move_abs(D_x+(int)(D_ew*0.1),D_y+(int)(D_ns*0.5)) ;
        R_move_abs(D_x,D_y+(int)(dots_per_line - 1)) ;
      */
-    x = D_a_to_d_col(col + 0.5);
-    y = D_a_to_d_row(row + 0.7);
-    R_move_abs(x - (tr - tl) / 2, y);
+    x = D_a_to_u_col(col + 0.5);
+    y = D_a_to_u_row(row + 0.7);
+    D_move_abs(x - (tr - tl) / 2, y);
     R_text(no);
 
     return 0;

@@ -78,29 +78,44 @@ void D_line_width(double);
 
 int D_cont_abs_cull(double, double);
 int D_cont_rel_cull(double, double);
-int D_line_cull(double, double, double, double);
-void D_polydots_cull(const double *, const double *, int);
-void D_polyline_cull(const double *, const double *, int);
-void D_polygon_cull(const double *, const double *, int);
-void D_box_cull(double, double, double, double);
+int D_line_abs_cull(double, double, double, double);
+int D_line_rel_cull(double, double, double, double);
+void D_polydots_abs_cull(const double *, const double *, int);
+void D_polydots_rel_cull(const double *, const double *, int);
+void D_polyline_abs_cull(const double *, const double *, int);
+void D_polyline_rel_cull(const double *, const double *, int);
+void D_polygon_abs_cull(const double *, const double *, int);
+void D_polygon_rel_cull(const double *, const double *, int);
+void D_box_abs_cull(double, double, double, double);
+void D_box_rel_cull(double, double);
 
 int D_cont_abs_clip(double, double);
 int D_cont_rel_clip(double, double);
-int D_line_clip(double, double, double, double);
-void D_polydots_clip(const double *, const double *, int);
-void D_polyline_clip(const double *, const double *, int);
-void D_polygon_clip(const double *, const double *, int);
-void D_box_clip(double, double, double, double);
+int D_line_abs_clip(double, double, double, double);
+int D_line_rel_clip(double, double, double, double);
+void D_polydots_abs_clip(const double *, const double *, int);
+void D_polydots_rel_clip(const double *, const double *, int);
+void D_polyline_abs_clip(const double *, const double *, int);
+void D_polyline_rel_clip(const double *, const double *, int);
+void D_polygon_abs_clip(const double *, const double *, int);
+void D_polygon_rel_clip(const double *, const double *, int);
+void D_box_abs_clip(double, double, double, double);
+void D_box_rel_clip(double, double);
 
 void D_move_abs(double, double);
 void D_move_rel(double, double);
 void D_cont_abs(double, double);
 void D_cont_rel(double, double);
-void D_line(double, double, double, double);
-void D_polydots(const double *, const double *, int);
-void D_polyline(const double *, const double *, int);
-void D_polygon(const double *, const double *, int);
-void D_box(double, double, double, double);
+void D_line_abs(double, double, double, double);
+void D_line_rel(double, double, double, double);
+void D_polydots_abs(const double *, const double *, int);
+void D_polydots_rel(const double *, const double *, int);
+void D_polyline_abs(const double *, const double *, int);
+void D_polyline_rel(const double *, const double *, int);
+void D_polygon_abs(const double *, const double *, int);
+void D_polygon_rel(const double *, const double *, int);
+void D_box_abs(double, double, double, double);
+void D_box_rel(double, double);
 
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);
@@ -127,6 +142,8 @@ int D_color_of_type(const void *, struct Colors *, RASTER_MAP_TYPE);
 
 /* setup.c */
 void D_setup(int);
+void D_setup_unity(int);
+void D_setup2(int, int, double, double, double, double);
 
 /* symbol.c */
 void D_symbol(const SYMBOL *, double, double, const RGBA_Color *,

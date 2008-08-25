@@ -273,34 +273,99 @@ void D_get_d(double x[2][2])
 }
 
 /*!
- * \brief earth to array (north)
+ * \brief screen to array (y)
  *
  * Returns a <i>row</i> value in the array coordinate system when provided the
- * corresponding <b>north</b> value in the earth coordinate system.
+ * corresponding <b>y</b> value in the screen coordinate system.
  *
- *  \param north
+ *  \param y
  *  \return double
  */
 
-double D_u_to_a_row(double U_row)
+double D_d_to_a_row(double D_row)
 {
-    return A.north + (U_row - U.north) / A_to_U_conv.y;
+    return A.north + (D_row - D.north) * D_to_A_conv.y;
 }
 
 
 /*!
- * \brief earth to array (east
+ * \brief screen to array (x)
  *
  * Returns a <i>column</i> value in the array coordinate system when provided the
- * corresponding <b>east</b> value in the earth coordinate system.
+ * corresponding <b>x</b> value in the screen coordinate system.
  *
- *  \param east
+ *  \param x
  *  \return double
  */
 
-double D_u_to_a_col(double U_col)
+double D_d_to_a_col(double D_col)
 {
-    return A.west + (U_col - U.west) / A_to_U_conv.x;
+    return A.west + (D_col - D.west) * D_to_A_conv.x;
+}
+
+
+/*!
+ * \brief screen to earth (y)
+ *
+ * Returns a <i>north</i> value in the earth coordinate system when provided the
+ * corresponding <b>y</b> value in the screen coordinate system.
+ *
+ *  \param y
+ *  \return double
+ */
+
+double D_d_to_u_row(double D_row)
+{
+    return U.north + (D_row - D.north) / U_to_D_conv.y;
+}
+
+
+/*!
+ * \brief screen to earth (x)
+ *
+ * Returns an <i>east</i> value in the earth coordinate system when provided the
+ * corresponding <b>x</b> value in the screen coordinate system.
+ *
+ *  \param x
+ *  \return double
+ */
+
+double D_d_to_u_col(double D_col)
+{
+    return U.west + (D_col - D.west) / U_to_D_conv.x;
+}
+
+
+/*!
+ * \brief array to earth (row)
+ *
+ * Returns a <i>y</i> value in the earth coordinate system when provided the
+ * corresponding <b>row</b> value in the array coordinate system.
+ *
+ *  \param row
+ *  \return double
+ */
+
+double D_a_to_u_row(double A_row)
+{
+    return U.north + (A_row - A.north) * A_to_U_conv.y;
+}
+
+
+/*!
+ * \brief array to earth (column)
+ *
+ * Returns an <i>x</i> value in the earth coordinate system when
+ * provided the corresponding <b>column</b> value in the array coordinate
+ * system.
+ *
+ *  \param column
+ *  \return double
+ */
+
+double D_a_to_u_col(double A_col)
+{
+    return U.west + (A_col - A.west) * A_to_U_conv.x;
 }
 
 
@@ -370,64 +435,32 @@ double D_u_to_d_col(double U_col)
 
 
 /*!
- * \brief screen to earth (y)
- *
- * Returns a <i>north</i> value in the earth coordinate system when provided the
- * corresponding <b>y</b> value in the screen coordinate system.
- *
- *  \param y
- *  \return double
- */
-
-double D_d_to_u_row(double D_row)
-{
-    return U.north + (D_row - D.north) / U_to_D_conv.y;
-}
-
-
-/*!
- * \brief screen to earth (x)
- *
- * Returns an <i>east</i> value in the earth coordinate system when provided the
- * corresponding <b>x</b> value in the screen coordinate system.
- *
- *  \param x
- *  \return double
- */
-
-double D_d_to_u_col(double D_col)
-{
-    return U.west + (D_col - D.west) / U_to_D_conv.x;
-}
-
-
-/*!
- * \brief screen to array (y)
+ * \brief earth to array (north)
  *
  * Returns a <i>row</i> value in the array coordinate system when provided the
- * corresponding <b>y</b> value in the screen coordinate system.
+ * corresponding <b>north</b> value in the earth coordinate system.
  *
- *  \param y
+ *  \param north
  *  \return double
  */
 
-double D_d_to_a_row(double D_row)
+double D_u_to_a_row(double U_row)
 {
-    return A.north + (D_row - D.north) * D_to_A_conv.y;
+    return A.north + (U_row - U.north) / A_to_U_conv.y;
 }
 
 
 /*!
- * \brief screen to array (x)
+ * \brief earth to array (east
  *
  * Returns a <i>column</i> value in the array coordinate system when provided the
- * corresponding <b>x</b> value in the screen coordinate system.
+ * corresponding <b>east</b> value in the earth coordinate system.
  *
- *  \param x
+ *  \param east
  *  \return double
  */
 
-double D_d_to_a_col(double D_col)
+double D_u_to_a_col(double U_col)
 {
-    return A.west + (D_col - D.west) * D_to_A_conv.x;
+    return A.west + (U_col - U.west) / A_to_U_conv.x;
 }

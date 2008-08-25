@@ -146,8 +146,8 @@ int main(int argc, char **argv)
     if (R_open_driver() != 0)
 	G_fatal_error("No graphics device selected");
 
-    /* Figure out where to put boxes */
-    R_get_window(&t, &b, &l, &r);
+    D_setup_unity(0);
+    D_get_src(&t, &b, &l, &r);
 
     G_get_fp_range_min_max(&fp_range, &dmin, &dmax);
     if (G_is_d_null_value(&dmin) || G_is_d_null_value(&dmax))
@@ -176,16 +176,11 @@ int main(int argc, char **argv)
     dots_per_line = (b - t) / lines;
     dots_per_col = (r - l) / cols;
 
-    x_box[0] = 0;
-    y_box[0] = 0;
-    x_box[1] = 0;
-    y_box[1] = (6 - dots_per_line);
-    x_box[2] = (dots_per_col - 6);
-    y_box[2] = 0;
-    x_box[3] = 0;
-    y_box[3] = (dots_per_line - 6);
-    x_box[4] = (6 - dots_per_col);
-    y_box[4] = 0;
+    x_box[0] = 0;			y_box[0] = 0;
+    x_box[1] = 0;			y_box[1] = (6 - dots_per_line);
+    x_box[2] = (dots_per_col - 6);	y_box[2] = 0;
+    x_box[3] = 0;			y_box[3] = (dots_per_line - 6);
+    x_box[4] = (6 - dots_per_col);	y_box[4] = 0;
 
     white = D_translate_color("white");
     black = D_translate_color("black");
@@ -199,22 +194,22 @@ int main(int argc, char **argv)
 		cur_dot_row += dots_per_line;
 		/* Draw white box */
 		R_standard_color(color);
-		R_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
-		R_cont_rel(0, (2 - dots_per_line));
-		R_cont_rel((dots_per_col - 2), 0);
-		R_cont_rel(0, (dots_per_line - 2));
-		R_cont_rel((2 - dots_per_col), 0);
+		D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
+		D_cont_rel(0, (2 - dots_per_line));
+		D_cont_rel((dots_per_col - 2), 0);
+		D_cont_rel(0, (dots_per_line - 2));
+		D_cont_rel((2 - dots_per_col), 0);
 		/* Draw black box */
 		R_standard_color(black);
-		R_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
-		R_cont_rel(0, (4 - dots_per_line));
-		R_cont_rel((dots_per_col - 4), 0);
-		R_cont_rel(0, (dots_per_line - 4));
-		R_cont_rel((4 - dots_per_col), 0);
+		D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
+		D_cont_rel(0, (4 - dots_per_line));
+		D_cont_rel((dots_per_col - 4), 0);
+		D_cont_rel(0, (dots_per_line - 4));
+		D_cont_rel((4 - dots_per_col), 0);
 		/* Color box */
 		D_color((CELL) atcat, &colors);
-		R_move_abs(cur_dot_col + 4, (cur_dot_row - 3));
-		R_polygon_rel(x_box, y_box, 5);
+		D_move_abs(cur_dot_col + 4, (cur_dot_row - 3));
+		D_polygon_rel(x_box, y_box, 5);
 
 		count++;
 		/* first cat number is null value */
@@ -233,18 +228,18 @@ int main(int argc, char **argv)
 	cur_dot_col = l;
 	/* Draw white box */
 	R_standard_color(color);
-	R_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
-	R_cont_rel(0, (2 - dots_per_line));
-	R_cont_rel((dots_per_col - 2), 0);
-	R_cont_rel(0, (dots_per_line - 2));
-	R_cont_rel((2 - dots_per_col), 0);
+	D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
+	D_cont_rel(0, (2 - dots_per_line));
+	D_cont_rel((dots_per_col - 2), 0);
+	D_cont_rel(0, (dots_per_line - 2));
+	D_cont_rel((2 - dots_per_col), 0);
 	/* Draw black box */
 	R_standard_color(black);
-	R_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
-	R_cont_rel(0, (4 - dots_per_line));
-	R_cont_rel((dots_per_col - 4), 0);
-	R_cont_rel(0, (dots_per_line - 4));
-	R_cont_rel((4 - dots_per_col), 0);
+	D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
+	D_cont_rel(0, (4 - dots_per_line));
+	D_cont_rel((dots_per_col - 4), 0);
+	D_cont_rel(0, (dots_per_line - 4));
+	D_cont_rel((4 - dots_per_col), 0);
 	/* Color ramp box */
 
 	/* get separate color for each pixel */
@@ -259,8 +254,8 @@ int main(int argc, char **argv)
 		dval =
 		    dmin + (r - 1) * (dmax - dmin) / (dots_per_line - 6 - 5);
 	    D_d_color(dval, &colors);
-	    R_move_abs(cur_dot_col + 4, (cur_dot_row - 3) - r);
-	    R_polygon_rel(x_box, y_box, 5);
+	    D_move_abs(cur_dot_col + 4, (cur_dot_row - 3) - r);
+	    D_polygon_rel(x_box, y_box, 5);
 	}
     }
 
