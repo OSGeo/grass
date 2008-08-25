@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/display.h>
 #include <grass/raster.h>
@@ -167,6 +168,7 @@ int show_it(void)
     char line[256];
     char *lptr, *tptr;
     double line_size;
+    double d_text_size;
     double text_size;
     double X, Y, Y0;
     double T, B, L, R;
@@ -178,30 +180,31 @@ int show_it(void)
     double ll_x, ll_y, ul_x, ul_y, lr_x, lr_y, ur_x, ur_y, text_x, text_y;
 
     G_debug(3, "Doing '%s'", text);
-    X  = D_u_to_d_col(east);
-    Y0 = D_u_to_d_row(north);
+    X  = east;
+    Y0 = north;
 
     /* Set font */
     R_font(font);
 
     /* Set text size */
     if (fontsize) {
-	text_size = fontsize;
-	line_size =
-	    (D_d_to_u_row(0.0) - D_d_to_u_row((double)fontsize)) * 1.2;
+	d_text_size = fontsize;
+	text_size = fontsize * D_get_d_to_u_yconv();
     }
     else {
-	text_size = D_u_to_d_row(0.0) - D_u_to_d_row(size);
-	line_size = size * 1.2;
+	d_text_size = fabs(size * D_get_u_to_d_yconv());
+	text_size = size;
     }
 
-    R_text_size(text_size, text_size);
+    line_size = text_size * 1.2;
+
+    R_text_size(d_text_size, d_text_size);
 
     /* Find extent of all text (assume ref point is upper left) */
-    T = 999999;
-    B = 0;
-    L = 999999;
-    R = 0;
+    T = -1e300;
+    B = 1e300;
+    L = 1e300;
+    R = -1e300;
 
     /* Scan to beginning of text string */
     for (tptr = text; *tptr != ':'; tptr++) ;
@@ -232,19 +235,18 @@ int show_it(void)
 
 	G_debug(3, "line %d ='%s'", n_lines, line);
 
-	Y = (int)(D_u_to_d_row
-		  (north - (line_size * 1.2) - ((n_lines - 1) * line_size)));
-	R_move_abs(X, Y);
+	Y = north - (line_size * 1.2) - ((n_lines - 1) * line_size);
+	D_move_abs(X, Y);
 	R_text_rotation(0.0);	/* reset */
-	R_get_text_box(line, &t, &b, &l, &r);
+	D_get_text_box(line, &t, &b, &l, &r);
 
-	if (t < T)
+	if (T < t)
 	    T = t;
-	if (b > B)
+	if (B > b)
 	    B = b;
-	if (l < L)
+	if (L > l)
 	    L = l;
-	if (r > R)
+	if (R < r)
 	    R = r;
 
 	if ((*tptr == '\0') || (*tptr == NL))
@@ -261,13 +263,13 @@ int show_it(void)
 	width = 0.;
 
     /* Expand border 1/2 of text size */
-    T = T - (text_size * 0.2) - .5;
-    B = B + (text_size * 0.2) + .5;
-    L = L - (text_size * 0.2) - .5;
-    R = R + (text_size * 0.2) + .5;
+    T = T + (text_size * 0.2);
+    B = B - (text_size * 0.2);
+    L = L - (text_size * 0.2);
+    R = R + (text_size * 0.2);
 
-    Xoffset = xoffset;
-    Yoffset = -yoffset;
+    Xoffset =  D_get_d_to_u_xconv() * xoffset;
+    Yoffset = -D_get_d_to_u_yconv() * yoffset;
     X_just_offset = 0;
     Y_just_offset = 0;
 
@@ -310,37 +312,33 @@ int show_it(void)
 
     /* skip labels which will go offscreen (even partially) */
     for (i = 0; i < 5; i++) {
-	if ((xarr[i] > D_get_d_east()) || (xarr[i] < D_get_d_west()))
+	if ((xarr[i] > D_get_u_east()) || (xarr[i] < D_get_u_west()))
 	    return 0;
-	if ((yarr[i] < D_get_d_north()) || (yarr[i] > D_get_d_south()))
-	    return 0;
-	if ((xarr[i] < 0) || (yarr[i] < 0))
+	if ((yarr[i] > D_get_u_north()) || (yarr[i] < D_get_u_south()))
 	    return 0;
     }
 
 #ifdef OUTPUT_ASCII
     fprintf(stdout, "L 5\n");
-    for (i = 0; i < 5; i++) {
-	fprintf(stdout, " %f %f\n", D_d_to_u_col(xarr[i]),
-		D_d_to_u_row(yarr[i]));
-    }
+    for (i = 0; i < 5; i++)
+	fprintf(stdout, " %f %f\n", xarr[i], yarr[i]);
     /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
 #endif
 
     /* draw boxes */
     if (RGBA_has_color(&background)) {
 	set_color_from_RGBA(&background);
-	R_polygon_abs(xarr, yarr, 5);
+	D_polygon_abs(xarr, yarr, 5);
     }
     if (RGBA_has_color(&border)) {
 	set_color_from_RGBA(&border);
-	R_line_width((int)(width + 0.5));
-	R_polyline_abs(xarr, yarr, 5);
-	R_line_width(1);	/* reset to default. note a value of 0 is valid and slightly thinner and 1 can be ugly */
+	R_line_width(width);
+	D_polyline_abs(xarr, yarr, 5);
+	R_line_width(0);
     }
 
     /* Set font rotation */
-    R_text_rotation((float)rotation);
+    R_text_rotation(rotation);
     G_debug(3, "  rotation = %.2f", rotation);
 
     /**** draw highlighted text background ****/
@@ -366,30 +364,29 @@ int show_it(void)
 	    *lptr = '\0';
 
 	    /* figure out text placement */
-	    Y = (int)(D_u_to_d_row
-		      (north - (line_size * 1.2) - ((i - 1) * line_size)));
+	    Y = north - (line_size * 1.2) - ((i - 1) * line_size);
 	    text_x = X + X_just_offset;	/* reset after G_rotate_around_point_int() */
 	    text_y = Y + Y_just_offset;
 	    G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
 	    for (j = 1; j <= highlight_width; j++) {
 		/* smear it around. probably a better way (knight's move? rand?) */
-		R_move_abs(text_x + Xoffset, text_y + Yoffset + j);
+		D_move_abs(text_x + Xoffset, text_y + Yoffset + j);
 		R_text(line);
-		R_move_abs(text_x + Xoffset, text_y + Yoffset - j);
+		D_move_abs(text_x + Xoffset, text_y + Yoffset - j);
 		R_text(line);
-		R_move_abs(text_x + Xoffset + j, text_y + Yoffset);
+		D_move_abs(text_x + Xoffset + j, text_y + Yoffset);
 		R_text(line);
-		R_move_abs(text_x + Xoffset - j, text_y + Yoffset);
+		D_move_abs(text_x + Xoffset - j, text_y + Yoffset);
 		R_text(line);
 
-		R_move_abs(text_x + Xoffset + j, text_y + Yoffset + j);
+		D_move_abs(text_x + Xoffset + j, text_y + Yoffset + j);
 		R_text(line);
-		R_move_abs(text_x + Xoffset - j, text_y + Yoffset - j);
+		D_move_abs(text_x + Xoffset - j, text_y + Yoffset - j);
 		R_text(line);
-		R_move_abs(text_x + Xoffset + j, text_y + Yoffset - j);
+		D_move_abs(text_x + Xoffset + j, text_y + Yoffset - j);
 		R_text(line);
-		R_move_abs(text_x + Xoffset - j, text_y + Yoffset + j);
+		D_move_abs(text_x + Xoffset - j, text_y + Yoffset + j);
 		R_text(line);
 	    }
 
@@ -423,13 +420,12 @@ int show_it(void)
 	*lptr = '\0';
 
 	/* figure out text placement */
-	Y = (int)(D_u_to_d_row
-		  (north - (line_size * 1.2) - ((i - 1) * line_size)));
+	Y = north - (line_size * 1.2) - ((i - 1) * line_size);
 	text_x = X + X_just_offset;	/* reset after G_rotate_around_point_int() */
 	text_y = Y + Y_just_offset;
 	G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
-	R_move_abs(text_x + Xoffset, text_y + Yoffset);
+	D_move_abs(text_x + Xoffset, text_y + Yoffset);
 	R_text(line);
 
 	if ((*tptr == '\0') || (*tptr == NL))

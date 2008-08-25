@@ -1,5 +1,6 @@
 #include <grass/symbol.h>
 #include <grass/colors.h>
+#include "plot.h"
 
 FILE *open_vect(char *, char *);
 int close_vect(FILE *);
@@ -17,3 +18,5 @@ int zcoor(struct Map_info *, int, LATTR *);
 int test_bg_color(const char *);
 void plot_polygon(double *, double *, int);
 void plot_polyline(double *, double *, int);
+void show_label(double *, double *, LATTR *, const char *);
+void show_label_line(const struct line_pnts *, int, LATTR *, const char *);
