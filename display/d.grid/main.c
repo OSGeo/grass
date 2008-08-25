@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:       d.grid
@@ -9,7 +8,7 @@
  * PURPOSE:      Draw the coordinate grid the user wants displayed on
  *               top of the current image
  *               
- * COPYRIGHT:    (C) 1999, 2005 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -74,15 +73,18 @@ int main(int argc, char **argv)
     opt1 = G_define_standard_option(G_OPT_C_FG);
     opt1->answer = "gray";
     opt1->label = _("Grid color");
+    opt1->guisection = _("Color");
 
     opt4 = G_define_standard_option(G_OPT_C_FG);
     opt4->key = "bordercolor";
     opt4->label = _("Border color");
+    opt4->guisection = _("Color");
 
     tcolor = G_define_standard_option(G_OPT_C_FG);
     tcolor->key = "textcolor";
     tcolor->answer = "gray";
     tcolor->label = _("Text color");
+    tcolor->guisection = _("Color");
 
     fsize = G_define_option();
     fsize->key = "fontsize";
@@ -113,15 +115,17 @@ int main(int argc, char **argv)
     nogrid = G_define_flag();
     nogrid->key = 'n';
     nogrid->description = _("Disable grid drawing");
+    nogrid->guisection = _("Disable");
 
     noborder = G_define_flag();
     noborder->key = 'b';
     noborder->description = _("Disable border drawing");
+    noborder->guisection = _("Disable");
 
     notext = G_define_flag();
     notext->key = 't';
     notext->description = _("Disable text drawing");
-
+    notext->guisection = _("Disable");
 
     /* Check command line */
     if (G_parser(argc, argv))
