@@ -25,18 +25,6 @@
 #include <grass/glocale.h>
 
 /* prototypes */
-static double raster_sample_nearest(int fd,
-				    const struct Cell_head *window,
-				    struct Categories *cats,
-				    double north, double east, int usedesc);
-static double raster_sample_bilinear(int fd,
-				     const struct Cell_head *window,
-				     struct Categories *cats,
-				     double north, double east, int usedesc);
-static double raster_sample_cubic(int fd,
-				  const struct Cell_head *window,
-				  struct Categories *cats,
-				  double north, double east, int usedesc);
 static double scancatlabel(const char *);
 static void raster_row_error(const struct Cell_head *window, double north,
 			     double east);
@@ -59,25 +47,24 @@ static void raster_row_error(const struct Cell_head *window, double north,
  *  \return cell value at given position
  */
 
-double G_get_raster_sample(int fd,
-			   const struct Cell_head *window,
-			   struct Categories *cats,
-			   double north, double east,
-			   int usedesc, INTERP_TYPE itype)
+DCELL G_get_raster_sample(
+    int fd,
+    const struct Cell_head *window,
+    struct Categories *cats,
+    double north, double east,
+    int usedesc, INTERP_TYPE itype)
 {
     double retval;
 
     switch (itype) {
     case NEAREST:
-	retval =
-	    raster_sample_nearest(fd, window, cats, north, east, usedesc);
+	retval = G_get_raster_sample_nearest(fd, window, cats, north, east, usedesc);
 	break;
     case BILINEAR:
-	retval =
-	    raster_sample_bilinear(fd, window, cats, north, east, usedesc);
+	retval = G_get_raster_sample_bilinear(fd, window, cats, north, east, usedesc);
 	break;
     case CUBIC:
-	retval = raster_sample_cubic(fd, window, cats, north, east, usedesc);
+	retval = G_get_raster_sample_cubic(fd, window, cats, north, east, usedesc);
 	break;
     default:
 	G_fatal_error("G_get_raster_sample: %s",
@@ -88,103 +75,89 @@ double G_get_raster_sample(int fd,
 }
 
 
-static double raster_sample_nearest(int fd,
-				    const struct Cell_head *window,
-				    struct Categories *cats,
-				    double north, double east, int usedesc)
+DCELL G_get_raster_sample_nearest(
+    int fd,
+    const struct Cell_head *window,
+    struct Categories *cats,
+    double north, double east, int usedesc)
 {
     int row, col;
-    double predicted;
+    DCELL result;
     DCELL *maprow = G_allocate_d_raster_buf();
 
     /* convert northing and easting to row and col, resp */
-    row = (int)G_northing_to_row(north, window);
-    col = (int)G_easting_to_col(east, window);
+    row = (int)floor(G_northing_to_row(north, window));
+    col = (int)floor(G_easting_to_col(east, window));
+
+    if (row < 0 || row >= G_window_rows() ||
+	col < 0 || col >= G_window_cols()) {
+	G_set_d_null_value(&result, 1);
+	goto done;
+    }
 
     if (G_get_d_raster_row(fd, maprow, row) < 0)
 	raster_row_error(window, north, east);
 
-    if (G_is_d_null_value(&(maprow[col]))) {
-	predicted = 0.0;
+    if (G_is_d_null_value(&maprow[col])) {
+	G_set_d_null_value(&result, 1);
+	goto done;
     }
-    else if (usedesc) {
+
+    if (usedesc) {
 	char *buf = G_get_cat(maprow[col], cats);
 
 	G_squeeze(buf);
-	predicted = scancatlabel(buf);
+	result = scancatlabel(buf);
     }
-    else {
-	predicted = maprow[col];
-    }
+    else
+	result = maprow[col];
 
+done:
     G_free(maprow);
 
-    return predicted;
+    return result;
 }
 
 
-static double raster_sample_bilinear(int fd,
-				     const struct Cell_head *window,
-				     struct Categories *cats,
-				     double north, double east, int usedesc)
+DCELL G_get_raster_sample_bilinear(
+    int fd,
+    const struct Cell_head *window,
+    struct Categories *cats,
+    double north, double east, int usedesc)
 {
-    int i, row, col;
-    double grid[2][2], tmp1, tmp2;
+    int row, col;
+    double grid[2][2];
     DCELL *arow = G_allocate_d_raster_buf();
     DCELL *brow = G_allocate_d_raster_buf();
+    double frow, fcol, trow, tcol;
+    DCELL result;
+
+    frow = G_northing_to_row(north, window);
+    fcol = G_easting_to_col(east, window);
 
     /* convert northing and easting to row and col, resp */
-    row = (int)G_northing_to_row(north, window);
-    col = (int)G_easting_to_col(east, window);
+    row = (int)floor(frow - 0.5);
+    col = (int)floor(fcol - 0.5);
+
+    trow = frow - row - 0.5;
+    tcol = fcol - col - 0.5;
+
+    if (row < 0 || row + 1 >= G_window_rows() ||
+	col < 0 || col + 1 >= G_window_cols()) {
+	G_set_d_null_value(&result, 1);
+	goto done;
+    }
 
     if (G_get_d_raster_row(fd, arow, row) < 0)
 	raster_row_error(window, north, east);
+    if (G_get_d_raster_row(fd, brow, row + 1) < 0)
+	raster_row_error(window, north, east);
 
-    /*-
-     * we need 2x2 pixels to do the interpolation. First we decide if we
-     * need the previous or next map row
-     */
-    if (row == 0) {
-	/* arow is at top, must get row below */
-	if (G_get_d_raster_row(fd, brow, row + 1) < 0)
-	    raster_row_error(window, north, east);
+    if (G_is_d_null_value(&arow[col]) || G_is_d_null_value(&arow[col + 1]) ||
+	G_is_d_null_value(&brow[col]) || G_is_d_null_value(&brow[col + 1])) {
+	G_set_d_null_value(&result, 1);
+	goto done;
     }
-    else if (row + 1 == G_window_rows()) {
-	/* amaprow is at bottom, get the one above it */
-	/* brow = arow; */
-	for (i = 0; i < G_window_cols(); ++i)
-	    brow[i] = arow[i];
-
-	row--;
-
-	if (G_get_d_raster_row(fd, arow, row) < 0)
-	    raster_row_error(window, north, east);
-    }
-    else if (north - G_row_to_northing((double)row + 0.5, window) > 0) {
-	/* north is above a horizontal centerline going through arow */
-	/* brow = arow; */
-	for (i = 0; i < G_window_cols(); ++i)
-	    brow[i] = arow[i];
-
-	row--;
-
-	if (G_get_d_raster_row(fd, arow, row) < 0)
-	    raster_row_error(window, north, east);
-    }
-    else {
-	/* north is below a horizontal centerline going through arow */
-	if (G_get_d_raster_row(fd, brow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-    }
-
-    /*-
-     * next, we decide if we need the column to the right or left of the
-     * current column using a procedure similar to above
-     */
-    if (col + 1 == G_window_cols())
-	col--;
-    else if (east - G_col_to_easting((double)col + 0.5, window) < 0)
-	col--;
 
     /*-
      * now were ready to do bilinear interpolation over
@@ -205,171 +178,63 @@ static double raster_sample_bilinear(int fd,
 	grid[1][1] = scancatlabel(buf);
     }
     else {
-	grid[0][0] = (double)arow[col];
-	grid[0][1] = (double)arow[col + 1];
-	grid[1][0] = (double)brow[col];
-	grid[1][1] = (double)brow[col + 1];
+	grid[0][0] = arow[col];
+	grid[0][1] = arow[col + 1];
+	grid[1][0] = brow[col];
+	grid[1][1] = brow[col + 1];
     }
 
-    /* Treat NULL's as zero */
-    if (G_is_d_null_value(&(arow[col])))
-	grid[0][0] = 0.0;
-    if (G_is_d_null_value(&(arow[col + 1])))
-	grid[0][1] = 0.0;
-    if (G_is_d_null_value(&(brow[col])))
-	grid[1][0] = 0.0;
-    if (G_is_d_null_value(&(brow[col + 1])))
-	grid[1][1] = 0.0;
+    result = G_interp_bilinear(tcol, trow,
+			       grid[0][0], grid[0][1], grid[1][0], grid[1][1]);
 
-    east = fabs(G_col_to_easting((double)col, window) - east);
-    while (east > window->ew_res)
-	east -= window->ew_res;
-
-    north = fabs(G_row_to_northing((double)row, window) - north);
-    while (north > window->ns_res)
-	north -= window->ns_res;
-
-    /* we do two linear interpolations along the rows */
-    tmp1 = G_interp_linear(east / window->ew_res, grid[0][0], grid[0][1]);
-    tmp2 = G_interp_linear(east / window->ew_res, grid[1][0], grid[1][1]);
-
-    G_debug(3, "DIAG: r=%d c=%d t1=%g t2=%g\te=%g n=%g",
-	    row, col, tmp1, tmp2, east, north);
-    G_debug(3, "DIAG: %g %g\n      %g %g",
-	    grid[0][0], grid[0][1], grid[1][0], grid[1][1]);
-
-    /*-
-     * Now we interpolate along a line parallel to columns
-     * and passing through easting
-     */
+done:
     G_free(arow);
     G_free(brow);
 
-    return G_interp_linear(north / window->ns_res, tmp1, tmp2);
+    return result;
 }
 
-
-static double raster_sample_cubic(int fd,
-				  const struct Cell_head *window,
-				  struct Categories *cats,
-				  double north, double east, int usedesc)
+DCELL G_get_raster_sample_cubic(
+    int fd,
+    const struct Cell_head *window,
+    struct Categories *cats,
+    double north, double east, int usedesc)
 {
-    int i, row, col;
-    double grid[4][4], tmp[4];
-    DCELL *arow = G_allocate_d_raster_buf();
-    DCELL *brow = G_allocate_d_raster_buf();
-    DCELL *crow = G_allocate_d_raster_buf();
-    DCELL *drow = G_allocate_d_raster_buf();
+    int i, j, row, col;
+    double grid[4][4];
+    DCELL *rows[4];
+    double frow, fcol, trow, tcol;
+    DCELL result;
+
+    for (i = 0; i < 4; i++)
+	rows[i] = G_allocate_d_raster_buf();
+
+    frow = G_northing_to_row(north, window);
+    fcol = G_easting_to_col(east, window);
 
     /* convert northing and easting to row and col, resp */
-    row = G_northing_to_row(north, window);
-    col = G_easting_to_col(east, window);
+    row = (int)floor(frow - 1.5);
+    col = (int)floor(fcol - 1.5);
 
-    if (G_get_d_raster_row(fd, arow, row) < 0)
-	raster_row_error(window, north, east);
+    trow = frow - row - 1.5;
+    tcol = fcol - col - 1.5;
 
-    /* we need 4x4 pixels to do the interpolation. */
-    if (row == 0) {
-	/* row containing sample is at top, must get three rows below */
-	if (G_get_d_raster_row(fd, brow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, crow, row + 2) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, drow, row + 3) < 0)
-	    raster_row_error(window, north, east);
-    }
-    else if (row == 1) {
-	/* must get row above and tow rows below */
-	for (i = 0; i < G_window_cols(); ++i)
-	    brow[i] = arow[i];
-
-	if (G_get_d_raster_row(fd, arow, row - 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, crow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, drow, row + 2) < 0)
-	    raster_row_error(window, north, east);
-
-	row--;
-    }
-    else if (row + 1 == G_window_rows()) {
-	/* arow is at bottom, get the three above it */
-	for (i = 0; i < G_window_cols(); ++i)
-	    drow[i] = arow[i];
-
-	if (G_get_d_raster_row(fd, arow, row - 3) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, brow, row - 2) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, crow, row - 1) < 0)
-	    raster_row_error(window, north, east);
-
-	row -= 3;
-    }
-    else if (row + 2 == G_window_rows()) {
-	/* arow is next to bottom, get the one below and two above it */
-	for (i = 0; i < G_window_cols(); ++i)
-	    crow[i] = arow[i];
-
-	if (G_get_d_raster_row(fd, arow, row - 2) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, brow, row - 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, drow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-
-	row -= 2;
-    }
-    else if (north - G_row_to_northing((double)row + 0.5, window) > 0) {
-	/*
-	 * north is above a horizontal centerline going through arow. need two
-	 * above and one below
-	 */
-	for (i = 0; i < G_window_cols(); ++i)
-	    crow[i] = arow[i];
-
-	if (G_get_d_raster_row(fd, arow, row - 2) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, brow, row - 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, drow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-
-	row -= 2;
-    }
-    else {
-	/*
-	 * north is below a horizontal centerline going through arow need one
-	 * above and two below
-	 */
-	for (i = 0; i < G_window_cols(); ++i)
-	    brow[i] = arow[i];
-
-	if (G_get_d_raster_row(fd, arow, row - 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, crow, row + 1) < 0)
-	    raster_row_error(window, north, east);
-	if (G_get_d_raster_row(fd, drow, row + 2) < 0)
-	    raster_row_error(window, north, east);
-
-	row--;
+    if (row < 0 || row + 3 >= G_window_rows() ||
+	col < 0 || col + 3 >= G_window_cols()) {
+	G_set_d_null_value(&result, 1);
+	goto done;
     }
 
-    /*
-     * Next, we decide if we need columns to the right and/or left of the
-     * current column using a procedure similar to above
-     */
-    if (col == 0 || col == 1)
-	col = 0;
-    else if (col + 1 == G_window_cols())
-	col -= 3;
-    else if (col + 2 == G_window_cols())
-	col -= 2;
-    else if (east - G_col_to_easting((double)col + 0.5, window) < 0)
-	/* east is left of center */
-	col -= 2;
-    else
-	col--;
+    for (i = 0; i < 4; i++)
+	if (G_get_d_raster_row(fd, rows[i], row + i) < 0)
+	    raster_row_error(window, north, east);
+
+    for (i = 0; i < 4; i++)
+	for (j = 0; j < 4; j++)
+	    if (G_is_d_null_value(&rows[i][col + j])) {
+		G_set_d_null_value(&result, 1);
+		goto done;
+	    }
 
     /*
      * now were ready to do cubic interpolation over
@@ -382,66 +247,30 @@ static double raster_sample_cubic(int fd,
     if (usedesc) {
 	char *buf;
 
-	for (i = 0; i < 4; ++i) {
-	    G_squeeze(buf = G_get_cat(arow[col + i], cats));
-	    grid[0][i] = scancatlabel(buf);
-	    G_squeeze(buf = G_get_cat(brow[col + i], cats));
-	    grid[1][i] = scancatlabel(buf);
-	    G_squeeze(buf = G_get_cat(crow[col + i], cats));
-	    grid[2][i] = scancatlabel(buf);
-	    G_squeeze(buf = G_get_cat(drow[col + i], cats));
-	    grid[3][i] = scancatlabel(buf);
+	for (i = 0; i < 4; i++) {
+	    for (j = 0; j < 4; j++) {
+		G_squeeze(buf = G_get_cat(rows[i][col + j], cats));
+		grid[i][j] = scancatlabel(buf);
+	    }
 	}
     }
     else {
-	for (i = 0; i < 4; ++i) {
-	    grid[0][i] = (double)arow[col + i];
-	    grid[1][i] = (double)brow[col + i];
-	    grid[2][i] = (double)crow[col + i];
-	    grid[3][i] = (double)drow[col + i];
-	}
+	for (i = 0; i < 4; i++)
+	    for (j = 0; j < 4; j++)
+		grid[i][j] = rows[i][col + j];
     }
 
-    /* Treat NULL cells as 0.0 */
-    for (i = 0; i < 4; i++) {
-	if (G_is_d_null_value(&(arow[col + i])))
-	    grid[0][i] = 0.0;
-	if (G_is_d_null_value(&(brow[col + i])))
-	    grid[1][i] = 0.0;
-	if (G_is_d_null_value(&(crow[col + i])))
-	    grid[2][i] = 0.0;
-	if (G_is_d_null_value(&(drow[col + i])))
-	    grid[3][i] = 0.0;
-    }
+    result = G_interp_bicubic(tcol, trow,
+			      grid[0][0], grid[0][1], grid[0][2], grid[0][3],
+			      grid[1][0], grid[1][1], grid[1][2], grid[1][3],
+			      grid[2][0], grid[2][1], grid[2][2], grid[2][3],
+			      grid[3][0], grid[3][1], grid[3][2], grid[3][3]);
 
-    /* this needs work here */
-    east = fabs(G_col_to_easting((double)col + 1, window) - east);
-    while (east > window->ew_res)
-	east -= window->ew_res;
-    east /= window->ew_res;
+done:
+    for (i = 0; i < 4; i++)
+	G_free(rows[i]);
 
-    north = fabs(G_row_to_northing((double)row + 1, window) - north);
-    while (north > window->ns_res)
-	north -= window->ns_res;
-    north /= window->ns_res;
-
-    /* we do four cubic convolutions along the rows */
-    for (i = 0; i < 4; ++i)
-	tmp[i] =
-	    G_interp_cubic(east, grid[i][0], grid[i][1], grid[i][2],
-			   grid[i][3]);
-
-    G_debug(3,
-	    "raster_sample_cubic(): DIAG: (%d,%d) 1=%3.2g 2=%3.2g 3=%3.2g 4=%3.2g\te=%g n=%g",
-	    row, col, tmp[0], tmp[1], tmp[2], tmp[3], east, north);
-
-    G_free(arow);
-    G_free(brow);
-    G_free(crow);
-    G_free(drow);
-
-    /* user horner's method again for the final interpolation */
-    return G_interp_cubic(north, tmp[0], tmp[1], tmp[2], tmp[3]);
+    return result;
 }
 
 
