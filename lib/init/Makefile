@@ -32,6 +32,7 @@ LIBES = $(GISLIB) $(DATETIMELIB)
 FILES = \
 	$(ARCH_BINDIR)/$(START_UP) \
 	$(ETC)/Init.sh \
+	$(ETC)/functions.sh \
 	$(ETC)/prompt.sh \
 	$(ETC)/clean_temp$(EXE) \
 	$(ETC)/lock$(EXE) \
@@ -84,13 +85,10 @@ $(ARCH_BINDIR)/$(START_UP).bat: init.bat grass.bat
 $(ETC)/Init.sh: init.sh
 	rm -f $@
 	$(SHELL) -c "sed \
-	-e \"s#GRASS_VERSION_NUMBER#$(GRASS_VERSION_NUMBER)#\" \
-	-e \"s#GRASS_VERSION_DATE#$(GRASS_VERSION_DATE)#\" \
-	-e \"s#GRASS_VERSION_UPDATE_PKG#$(GRASS_VERSION_UPDATE)#\" \
-	-e \"s#LD_LIBRARY_PATH_VAR#$(LD_LIBRARY_PATH_VAR)#g\" \
-	-e \"s#PERL_COMMAND#$(PERL)#\" \
-	-e \"s#START_UP#$(START_UP)#\" \
-	-e \"s#CONFIG_PROJSHARE#$(PROJSHARE)#\" \
+	-e \"s#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#\" \
+	-e \"s#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#g\" \
+	-e \"s#@START_UP@#$(START_UP)#\" \
+	-e \"s#@CONFIG_PROJSHARE@#$(PROJSHARE)#\" \
 	init.sh > $@"
 	chmod +x $@
 
@@ -101,6 +99,9 @@ $(ETC)/Init.bat: init.bat
 	-e \"s#CONFIG_PROJSHARE#$(PROJSHARE)#\" \
 	$< > $@"
 	chmod +x $@
+
+$(ETC)/functions.sh: functions.sh
+	$(INSTALL_DATA) $< $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 	$(CC) $(LDFLAGS) $< -o $@
