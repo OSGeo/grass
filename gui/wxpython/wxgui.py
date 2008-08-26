@@ -424,11 +424,19 @@ class GMFrame(wx.Frame):
         """Get GRASS command from menu item
 
         Return command as a list"""
+        layer = None
+        
         cmd = self.menucmd[event.GetId()]
+        
         try:
             cmdlist = cmd.split(' ')
         except: # already list?
             cmdlist = cmd
+            
+        # check list of dummy commands for GUI modules that do not have GRASS
+        # bin modules or scripts. 
+        if cmd in ['vcolors']:
+            return cmdlist
 
         try:
             layer = self.curr_page.maptree.layer_selected
@@ -877,7 +885,7 @@ class GMFrame(wx.Frame):
         input and processes rules
         """
         command = self.GetMenuCmd(event)
-        
+                
         if command[0] == 'r.colors' or command[0] == 'vcolors':
             ctable = colorrules.ColorTable(self, cmd=command[0])
             ctable.Show()      
