@@ -146,7 +146,7 @@ distclean: clean
 	-rm -f include/config.h include/version.h include/Make/Platform.make 2>/dev/null
 	-rm -f swig/perl/Makefile.PL swig/perl2/make.pl 2>/dev/null
 
-strip: FORCE
+strip:
 	@ if [ ! -f ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} ] ; then \
 		echo "ERROR: GRASS has not been compiled. Try \"make\" first."; \
 		echo "  Strip aborted, exiting Make."; \
@@ -154,7 +154,7 @@ strip: FORCE
 	fi; \
 	cd ${ARCH_DISTDIR} ; find . -type f -perm +111 -exec strip {} \;
 
-install: FORCE
+install:
 	@ # The following action MUST be a single action. That is, all lines
 	@ # except the last line must have a backslash (\) at the end to
 	@ # continue the statement. The reason for this is that Make does not
@@ -207,7 +207,7 @@ install: FORCE
 	fi; \
 	${MAKE} real-install
 
-real-install: FORCE
+real-install:
 	test -d ${INST_DIR} || ${MAKE_DIR_CMD} ${INST_DIR}
 	test -d ${BINDIR} || ${MAKE_DIR_CMD} ${BINDIR}
 	-sed -e "s#^GISBASE.*#GISBASE=${INST_DIR}#" ${ARCH_BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR} > ${BINDIR}/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}
@@ -226,11 +226,11 @@ endif
 	@if [ "`cat include/Make/Platform.make | grep -i '^ARCH.*darwin'`" ] ; then /bin/ln -sfh "${INST_DIR}/docs/html" /Library/Documentation/Help/GRASS-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} ; fi
 
 
-install-strip: FORCE
+install-strip:
 	${MAKE} strip
 	${MAKE} install
 
-install-macosx: FORCE
+install-macosx:
 	${MAKE} -C macosx install-macosx
 
 bindist:  
@@ -245,7 +245,7 @@ real-bindist:
 	    cp -f ${MODULE_TOPDIR}/lib/proj/*.lla ${ARCH_DISTDIR}/etc/nad/src ; true
 	( date=`date '+%d_%m_%Y'`; cd ${ARCH_DISTDIR}; tar cBf - ${BIN_DIST_FILES} | gzip -fc > ../grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}-${ARCH}-$$date.tar.gz)
 	-date=`date '+%d_%m_%Y'`; name=grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}-${ARCH}-$$date.tar.gz; \
-            size=`ls -l $$name | awk '{print $$5}'`; \
+	    size=`ls -l $$name | awk '{print $$5}'`; \
 	    sed -e "s/BIN_DIST_VERSION/${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}-${ARCH}-$$date/" \
 	    -e "s/GRASSPRG_NAME/grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}/" \
 	    -e "s/SIZE_TAR_FILE/$$size/" -e "s#BIN_DIST_DIR#'${INST_DIR}'#" \
@@ -261,7 +261,7 @@ bindist-macosx:
 	${MAKE} -C macosx bindist-macosx
 
 # make a source package for distribution:
-srcdist: FORCE distclean
+srcdist: distclean
 	-${MAKE_DIR_CMD} ./grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}
 
 	@ # needed to store code in package with grass-version path:
@@ -277,7 +277,7 @@ srcdist: FORCE distclean
 	md5sum grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}.tar.gz > grass-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}.md5sum
 
 # make a source package for library distribution:
-srclibsdist: FORCE distclean
+srclibsdist: distclean
 	-${MAKE_DIR_CMD} ./grass-lib-${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}
 
 	@ # needed to store code in package with grass-version path:
@@ -395,3 +395,9 @@ builddemolocation:
 	@ echo "GRASS_DB_ENCODING: utf-8" >> ${RUN_GISRC}
 	@ echo "DEBUG: 0" >> ${RUN_GISRC}
 	@ echo "GRASS_GUI: text" >> ${RUN_GISRC}
+
+.PHONY: default libs cleandistdirs cleanscriptstrings clean libsclean
+.PHONY: distclean strip install real-install install-strip install-macosx
+.PHONY: bindist real-bindist bindist-macosx srcdist srclibsdist
+.PHONY: htmldocs-single htmldocs packagehtmldocs pdfdocs cleandocs html2pdfdoc
+.PHONY: html2pdfdoccomplete changelog builddemolocation
