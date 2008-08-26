@@ -6,8 +6,8 @@ DCELL G_interp_linear(double u, DCELL c0, DCELL c1)
     return u * (c1 - c0) + c0;
 }
 
-DCELL G_interp_bilinear(double u, double v, DCELL c00, DCELL c01, DCELL c10,
-			DCELL c11)
+DCELL G_interp_bilinear(double u, double v,
+			DCELL c00, DCELL c01, DCELL c10, DCELL c11)
 {
     DCELL c0 = G_interp_linear(u, c00, c01);
     DCELL c1 = G_interp_linear(u, c10, c11);
@@ -17,9 +17,7 @@ DCELL G_interp_bilinear(double u, double v, DCELL c00, DCELL c01, DCELL c10,
 
 DCELL G_interp_cubic(double u, DCELL c0, DCELL c1, DCELL c2, DCELL c3)
 {
-    return (u *
-	    (u *
-	     (u * (c3 - 3 * c2 + 3 * c1 - c0) +
+    return (u * (u * (u * (c3 - 3 * c2 + 3 * c1 - c0) +
 	      (-c3 + 4 * c2 - 5 * c1 + 2 * c0)) + (c2 - c0)) + 2 * c1) / 2;
 }
 
