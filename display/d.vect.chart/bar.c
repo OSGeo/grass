@@ -59,7 +59,7 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 	    Vect_append_point(max_Points, x0 + i * bw, y0, 0);
 
 	    /* the outline color : default is black */
-	    R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
+	    D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
 	    D_polyline_abs(max_Points->x, max_Points->y, max_Points->n_points);
 	}
     }
@@ -76,11 +76,11 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 	Vect_append_point(Points, x0 + i * bw, y0, 0);
 
 	if (!colors[i].none) {
-	    R_RGB_color(colors[i].r, colors[i].g, colors[i].b);
+	    D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
 	    D_polygon_abs(Points->x, Points->y, Points->n_points);
 	}
 
-	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
+	D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
 	D_polyline_abs(Points->x, Points->y, Points->n_points);
     }
 

@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->answer = "green";
-    opt3->options = D_COLOR_LIST;
+    opt3->gisprompt = GISPROMPT_COLOR;
     opt3->description = _("Color for drawing arrows");
 
     opt4 = G_define_option();
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     opt4->type = TYPE_STRING;
     opt4->required = NO;
     opt4->answer = "gray";
-    opt4->options = D_COLOR_LIST ",none";
+    opt4->gisprompt = GISPROMPT_COLOR;
     opt4->description = _("Color for drawing grid or \"none\"");
 
     opt5 = G_define_option();
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
     opt5->type = TYPE_STRING;
     opt5->required = NO;
     opt5->answer = DEFAULT_FG_COLOR;
-    opt5->options = D_COLOR_LIST;
+    opt5->gisprompt = GISPROMPT_COLOR;
     opt5->description = _("Color for drawing X's (Null values)");
 
     opt6 = G_define_option();
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     opt6->type = TYPE_STRING;
     opt6->required = NO;
     opt6->answer = "red";
-    opt6->options = D_COLOR_LIST;
+    opt6->gisprompt = GISPROMPT_COLOR;
     opt6->description = _("Color for showing unknown information");
 
     opt9 = G_define_option();
@@ -245,7 +245,7 @@ int main(int argc, char **argv)
 
     if (grid_color > 0) {	/* ie not "none" */
 	/* Set color */
-	R_standard_color(grid_color);
+	D_use_color(grid_color);
 
 	/* Draw vertical grids */
 	for (col = 0; col < ncols; col++) {
@@ -362,12 +362,12 @@ int main(int argc, char **argv)
 	    /* case switch for standard GRASS aspect map 
 	       measured in degrees counter-clockwise from east */
 	    if (map_type == 1) {
-		R_standard_color(arrow_color);
+		D_use_color(arrow_color);
 
 		if (G_is_null_value(ptr, raster_type)) {
-		    R_standard_color(x_color);
+		    D_use_color(x_color);
 		    draw_x();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 		else if (aspect_f >= 0.0 && aspect_f <= 360.0) {
 		    if (opt7->answer)
@@ -376,21 +376,21 @@ int main(int argc, char **argv)
 			arrow_360(aspect_f);
 		}
 		else {
-		    R_standard_color(unknown_color);
+		    D_use_color(unknown_color);
 		    unknown_();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 	    }
 
 
 	    /* case switch for AGNPS type aspect map */
 	    else if (map_type == 2) {
-		R_standard_color(arrow_color);
+		D_use_color(arrow_color);
 		switch (aspect_c) {
 		case 0:
-		    R_standard_color(x_color);
+		    D_use_color(x_color);
 		    draw_x();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		    break;
 		case 1:
 		    arrow_n();
@@ -417,9 +417,9 @@ int main(int argc, char **argv)
 		    arrow_nw();
 		    break;
 		default:
-		    R_standard_color(unknown_color);
+		    D_use_color(unknown_color);
 		    unknown_();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		    break;
 		}
 	    }
@@ -427,30 +427,30 @@ int main(int argc, char **argv)
 
 	    /* case switch for ANSWERS type aspect map */
 	    else if (map_type == 3) {
-		R_standard_color(arrow_color);
+		D_use_color(arrow_color);
 		if (aspect_c >= 15 && aspect_c <= 360)	/* start at zero? */
 		    arrow_360((double)aspect_c);
 		else if (aspect_c == 400) {
-		    R_standard_color(unknown_color);
+		    D_use_color(unknown_color);
 		    unknown_();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 		else {
-		    R_standard_color(x_color);
+		    D_use_color(x_color);
 		    draw_x();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 	    }
 
 	    /* case switch for compass type aspect map
 	       measured in degrees clockwise from north */
 	    else if (map_type == 4) {
-		R_standard_color(arrow_color);
+		D_use_color(arrow_color);
 
 		if (G_is_null_value(ptr, raster_type)) {
-		    R_standard_color(x_color);
+		    D_use_color(x_color);
 		    draw_x();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 		else if (aspect_f >= 0.0 && aspect_f <= 360.0) {
 		    if (opt7->answer)
@@ -459,9 +459,9 @@ int main(int argc, char **argv)
 			arrow_360(90 - aspect_f);
 		}
 		else {
-		    R_standard_color(unknown_color);
+		    D_use_color(unknown_color);
 		    unknown_();
-		    R_standard_color(arrow_color);
+		    D_use_color(arrow_color);
 		}
 	    }
 

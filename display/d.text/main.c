@@ -532,7 +532,7 @@ static void set_color(char *tcolor)
     if (sscanf(tcolor, "%d:%d:%d", &r, &g, &b) == 3 ||
 	sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
 	if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
-	    R_RGB_color(r, g, b);
+	    D_RGB_color(r, g, b);
 	}
     }
     else {
@@ -542,7 +542,7 @@ static void set_color(char *tcolor)
 		      DEFAULT_COLOR);
 	    color = D_translate_color(DEFAULT_COLOR);
 	}
-	R_standard_color(color);
+	D_use_color(color);
     }
 
 
@@ -600,7 +600,7 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
     if (rotation != 0.0)
 	R_text_rotation(0.0);
 
-    R_get_text_box(text, &t, &b, &l, &r);
+    D_get_text_box(text, &t, &b, &l, &r);
 
     if (rotation != 0.0)
 	R_text_rotation(rotation * 180.0 / M_PI);

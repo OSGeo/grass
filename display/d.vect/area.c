@@ -357,16 +357,16 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
 	if (fcolor || (z_color_flag && Vect_is_3d(Map))) {
 	    if (!table_colors_flag && !cats_color_flag && !z_color_flag) {
-		R_RGB_color(fcolor->r, fcolor->g, fcolor->b);
+		D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 		plot_polygon(Points->x, Points->y, Points->n_points);
 	    }
 	    else {
 		if (rgb) {
-		    R_RGB_color((unsigned char)red, (unsigned char)grn,
+		    D_RGB_color((unsigned char)red, (unsigned char)grn,
 				(unsigned char)blu);
 		}
 		else {
-		    R_RGB_color(fcolor->r, fcolor->g, fcolor->b);
+		    D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 		}
 		if (cat >= 0) {
 		    plot_polygon(Points->x, Points->y, Points->n_points);
@@ -380,11 +380,11 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 
 	    Vect_get_area_points(Map, area, Points);
 	    if (rgb) {
-		R_RGB_color((unsigned char)red, (unsigned char)grn,
+		D_RGB_color((unsigned char)red, (unsigned char)grn,
 			    (unsigned char)blu);
 	    }
 	    else {
-		R_RGB_color(bcolor->r, bcolor->g, bcolor->b);
+		D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    }
 	    /*use different user defined render methods */
 	    plot_polyline(Points->x, Points->y, Points->n_points);

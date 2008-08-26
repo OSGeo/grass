@@ -53,11 +53,11 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 	    Vect_append_point(Points, cx, cy, 0);
 
 	if (!colors[i].none) {
-	    R_RGB_color(colors[i].r, colors[i].g, colors[i].b);
+	    D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
 	    D_polygon_abs(Points->x, Points->y, Points->n_points);
 	}
 
-	R_RGB_color(ocolor->r, ocolor->g, ocolor->b);
+	D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
 	D_polyline_abs(Points->x, Points->y, Points->n_points);
     }
 

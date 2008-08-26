@@ -95,11 +95,11 @@ int draw_scale(int toptext)
 	pb = y_pos + h + 2;	/* 1 pixel margin for both sides */
 
 	if (do_background) {
-	    D_raster_use_color(color1);
+	    D_use_color(color1);
 	    D_box_abs(pl, pt, pr, pb);
 	}
 	/* Draw legend */
-	D_raster_use_color(color2);
+	D_use_color(color2);
 
 	D_move_abs(pl + w / 2 + 1, pt + 17 + 1);
 	D_cont_rel(-0.5 * w,  2.0 * w);
@@ -160,12 +160,12 @@ int draw_scale(int toptext)
 	pr = r;
 
     if (do_background) {
-	D_raster_use_color(color1);
+	D_use_color(color1);
 	D_box_abs(pl, pt, pr, pb);
     }
 
     /* Draw legend */
-    D_raster_use_color(color2);
+    D_use_color(color2);
 
     if (draw != 2) {
 	D_move_abs(x_pos + 5, y_pos + 20);

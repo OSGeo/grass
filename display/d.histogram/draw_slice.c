@@ -19,7 +19,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
     double arc, arc_incr = 0.01;
     DCELL fill_color;
 
-    D_get_dst(&tt, &tb, &tl, &tr);
+    D_get_src(&tt, &tb, &tl, &tr);
 
     height = tb - tt;
     width = tr - tl;
@@ -42,7 +42,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
 	    y[i] = y[0] - r * (height) * sin(arc / 57.296);
 	    if (i == 2) {
 		D_d_color(fill_color, colors);
-		R_polygon_abs(x + i - 2, y + i - 2, 3);
+		D_polygon_abs(x + i - 2, y + i - 2, 3);
 		x[i - 1] = x[i];
 		y[i - 1] = y[i];
 	    }
@@ -61,12 +61,12 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
 	}
 
 	if (!fill_flag) {
-	    R_standard_color(txt_color);
-	    R_polyline_abs(x, y, i);
+	    D_use_color(txt_color);
+	    D_polyline_abs(x, y, i);
 	}
 	else {
 	    D_d_color(fill_color1, colors);
-	    R_polygon_abs(x, y, i);
+	    D_polygon_abs(x, y, i);
 	}
     }
 
@@ -74,11 +74,11 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1, DCELL fi
 	/* draw a label */
 	arc = a1 + a2 / 2;
 	sprintf(txt, "%2.0f%s", (a2 / 360.0) * 100.0, percent);
-	R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	lx = x[0] + (r + 0.03) * (width) * cos(arc / 57.296) - (tr - tl) / 2;
 	ly = y[0] - (r + 0.03) * (height) * sin(arc / 57.296) + (tb - tt) / 2;
-	R_move_abs(lx, ly);
-	R_standard_color(txt_color);
+	D_move_abs(lx, ly);
+	D_use_color(txt_color);
 	R_text(txt);
     }
 

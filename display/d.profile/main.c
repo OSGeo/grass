@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 
     /* Make sure screen is clear */
     D_remove_windows();
-    R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+    D_use_color(D_translate_color(DEFAULT_BG_COLOR));
     R_erase();
 
     /* Establish windows on screen */
@@ -182,11 +182,11 @@ int main(int argc, char **argv)
     for (;;) {
 	/* display mouse-menu in mouse-menu window */
 	D_set_cur_wind(MOU.name);
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 	D_erase_window();
-	R_standard_color(D_translate_color("red"));
+	D_use_color(D_translate_color("red"));
 	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
 	DrawText(15, 4, 1, "BUTTON  | Middle: Set FIRST point");
 	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
@@ -220,9 +220,9 @@ int main(int argc, char **argv)
 	    if (cur_ux > window.east || cur_ux < window.west ||
 		cur_uy > window.north || cur_uy < window.south) {
 		D_set_cur_wind(STA.name);
-		R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+		D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 		D_erase_window();
-		R_standard_color(D_translate_color("red"));
+		D_use_color(D_translate_color("red"));
 		DrawText(25, 1, 1, "OUTSIDE CURRENT WINDOW");
 		R_flush();
 		button = 1;
@@ -237,11 +237,11 @@ int main(int argc, char **argv)
 
 	/* display mouse-menu in mouse-menu window */
 	D_set_cur_wind(MOU.name);
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 	D_erase_window();
-	R_standard_color(D_translate_color("red"));
+	D_use_color(D_translate_color("red"));
 	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
 	DrawText(15, 4, 1, "BUTTON  | Middle: Set SECOND point");
 	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
@@ -267,9 +267,9 @@ int main(int argc, char **argv)
 	    if (ux > window.east || ux < window.west ||
 		uy > window.north || uy < window.south) {
 		D_set_cur_wind(STA.name);
-		R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+		D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 		D_erase_window();
-		R_standard_color(D_translate_color("red"));
+		D_use_color(D_translate_color("red"));
 		DrawText(25, 1, 1, "OUTSIDE CURRENT WINDOW");
 		button = 1;
 	    }
@@ -286,9 +286,9 @@ int main(int argc, char **argv)
 			 ExtractProfile(&profile, old_mapname,
 					old_mapset)) == -1) {
 			D_set_cur_wind(STA.name);
-			R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 			D_erase_window();
-			R_standard_color(D_translate_color("red"));
+			D_use_color(D_translate_color("red"));
 			DrawText(25, 1, 1, "ERROR: end-point outside");
 			DrawText(25, 2, 1, "       of current window");
 		    }
@@ -340,10 +340,10 @@ int main(int argc, char **argv)
 			    R_move_rel(-(text_width + 2), 2);
 			else if (screen_x > cur_screen_x)
 			    R_move_rel(3, 0);
-			R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 			R_text_size(text_width, text_height);
 			R_text(ltr);
-			R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
+			D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 
 			/* plot label in white */
 			R_move_abs(screen_x, screen_y);
@@ -357,15 +357,15 @@ int main(int argc, char **argv)
 			    R_move_rel(3, 0);
 			R_move_rel(1, 1);
 			R_text(ltr);
-			R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 
 			/*length = hypot(cur_ux - ux, cur_uy - uy); */
 
 			/* tell user about profile being plotted */
 			D_set_cur_wind(STA.name);
-			R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 			D_erase_window();
-			R_standard_color(D_translate_color("red"));
+			D_use_color(D_translate_color("red"));
 			DrawText(25, 1, 1, "PLOTTING PROFILE");
 
 			/* plot profile data in profile window */
@@ -390,11 +390,11 @@ int main(int argc, char **argv)
 
 	/* display mouse-menu in mouse-menu window */
 	D_set_cur_wind(MOU.name);
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 	D_erase_window();
-	R_standard_color(D_translate_color("red"));
+	D_use_color(D_translate_color("red"));
 	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 	DrawText(15, 3, 1, "MOUSE   | Left:   DO ANOTHER");
 	DrawText(15, 4, 1, "BUTTON  | Middle: CLEAR DISPLAY");
 	DrawText(15, 5, 1, "MENU    | Right:  QUIT");

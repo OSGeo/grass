@@ -217,7 +217,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     /* Is it necessary to reset line/label color in each loop ? */
 
     if (color && !table_colors_flag && !cats_color_flag)
-	R_RGB_color(color->r, color->g, color->b);
+	D_RGB_color(color->r, color->g, color->b);
 
     if (Vect_level(Map) >= 2)
 	nlines = Vect_get_num_lines(Map);
@@ -452,13 +452,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	}
 	else if (color || custom_rgb || (z_color_flag && Vect_is_3d(Map))) {
 	    if (!table_colors_flag && !cats_color_flag && !z_color_flag)
-		R_RGB_color(color->r, color->g, color->b);
+		D_RGB_color(color->r, color->g, color->b);
 	    else {
 		if (custom_rgb)
-		    R_RGB_color((unsigned char)red, (unsigned char)grn,
+		    D_RGB_color((unsigned char)red, (unsigned char)grn,
 				(unsigned char)blu);
 		else
-		    R_RGB_color(color->r, color->g, color->b);
+		    D_RGB_color(color->r, color->g, color->b);
 	    }
 
 	    /* Plot the lines */

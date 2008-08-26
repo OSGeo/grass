@@ -45,7 +45,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 
     which_range = -1;
     change_range = 1;
-    R_standard_color(line_color);
+    D_use_color(line_color);
     if (lon1 != lon2) {
 	G_shortest_way(&lon1, &lon2);
 	G_begin_geodesic_equation(lon1, lat1, lon2, lat2);
@@ -68,7 +68,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	if (text_x + 10 * strlen(buf) >= D_get_d_east())
 	    text_x = D_get_d_east() - 10 * strlen(buf);
 	D_move_abs(text_x, text_y);
-	R_standard_color(text_color);
+	D_use_color(text_color);
 	R_text(buf);
 	R_flush();
     }

@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("[%s]: No such color"), opt2->answer);
 
 	if (color == 1) {
-	    R_RGB_color(R, G, B);
+	    D_RGB_color(R, G, B);
 	    set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
 	}
 	else			/* (color==2) is "none" */

@@ -17,7 +17,7 @@ int display(struct Map_info *Map, struct line_pnts *Points,
 {
     int from, to;
 
-    R_RGB_color(color->r, color->g, color->b);
+    D_RGB_color(color->r, color->g, color->b);
 
     if (first)
 	from = 0;
@@ -34,7 +34,7 @@ int display(struct Map_info *Map, struct line_pnts *Points,
     D_polyline_abs(&Points->x[from], &Points->y[from], to - from);
 
     if (be_bold)
-	R_line_width(0);
+	D_line_width(0);
 
     return 0;
 }
@@ -92,7 +92,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
 	fx = start_x;
 	fy = start_y;
     }
-    R_RGB_color(hcolor->r, hcolor->g, hcolor->b);
+    D_RGB_color(hcolor->r, hcolor->g, hcolor->b);
     D_plot_icon(fx, fy, G_ICON_BOX, 0.0, msize);
 
 
@@ -109,7 +109,7 @@ int coor_path(struct Map_info *Map, const struct color_rgb *hcolor,
 	tx = end_x;
 	ty = end_y;
     }
-    R_RGB_color(hcolor->r, hcolor->g, hcolor->b);
+    D_RGB_color(hcolor->r, hcolor->g, hcolor->b);
     D_plot_icon(tx, ty, G_ICON_CROSS, 0.0, msize);
 
 

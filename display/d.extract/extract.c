@@ -136,7 +136,7 @@ display(struct Map_info *Map, struct ilist *List,
     G_debug(1, "msize = %f\n", msize);
 
     Points = Vect_new_line_struct();
-    R_RGB_color(color->r, color->g, color->b);
+    D_RGB_color(color->r, color->g, color->b);
 
     for (i = 0; i < List->n_values; i++) {
 	line = abs(List->value[i]);

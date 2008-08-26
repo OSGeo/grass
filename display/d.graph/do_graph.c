@@ -101,13 +101,13 @@ int do_color(char *buff)
 	return (-1);
     }
     if (color == 1) {
-	R_RGB_color(R, G, B);
+	D_RGB_color(R, G, B);
 	/* store for backup */
 	set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
     }
     if (color == 2) {		/* color == 'none' */
 	R = D_translate_color(DEFAULT_BG_COLOR);
-	R_standard_color(R);
+	D_use_color(R);
 	/* store for backup */
 	set_last_color(0, 0, 0, RGBA_COLOR_NONE);
     }
@@ -370,11 +370,11 @@ int do_symbol(char *buff)
 
     /* restore previous d.graph draw color */
     if (last_color.a == RGBA_COLOR_OPAQUE)
-	R_RGB_color(last_color.r, last_color.g, last_color.b);
+	D_RGB_color(last_color.r, last_color.g, last_color.b);
     else if (last_color.a == RGBA_COLOR_NONE)
-	D_raster_use_color(D_parse_color(DEFAULT_BG_COLOR, 0));
+	D_use_color(D_parse_color(DEFAULT_BG_COLOR, 0));
     else			/* unset or bad */
-	R_RGB_color(line_color->r, line_color->g, line_color->b);
+	D_RGB_color(line_color->r, line_color->g, line_color->b);
 
     G_free(symb_name);
     G_free(line_color_str);

@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     parm.c1->description = _("Line color 1");
     parm.c1->type = TYPE_STRING;
     parm.c1->required = NO;
-    parm.c1->options = D_color_list();
+    parm.c1->gisprompt = GISPROMPT_COLOR;
     parm.c1->answer = DEFAULT_BG_COLOR;
 
     parm.c2 = G_define_option();
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     parm.c2->description = _("Line color 2");
     parm.c2->type = TYPE_STRING;
     parm.c2->required = NO;
-    parm.c2->options = D_color_list();
+    parm.c2->gisprompt = GISPROMPT_COLOR;
     parm.c2->answer = DEFAULT_FG_COLOR;
 
     parm.s = G_define_flag();

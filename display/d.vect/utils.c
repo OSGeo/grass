@@ -43,17 +43,17 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
 	yarr[1] = yarr[2] = T + Yoffset;
 
 	if (lattr->has_bgcolor) {
-	    R_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G,
+	    D_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G,
 			lattr->bgcolor.B);
 	    D_polygon_abs(xarr, yarr, 5);
 	}
 
 	if (lattr->has_bcolor) {
-	    R_RGB_color(lattr->bcolor.R, lattr->bcolor.G,
+	    D_RGB_color(lattr->bcolor.R, lattr->bcolor.G,
 			lattr->bcolor.B);
 	    D_polyline_abs(xarr, yarr, 5);
 	}
-	R_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
+	D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     }
 
     D_move_abs(X + Xoffset, Y + Yoffset);

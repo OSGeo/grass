@@ -332,9 +332,9 @@ int show_it(void)
     }
     if (RGBA_has_color(&border)) {
 	set_color_from_RGBA(&border);
-	R_line_width(width);
+	D_line_width(width);
 	D_polyline_abs(xarr, yarr, 5);
-	R_line_width(0);
+	D_line_width(0);
     }
 
     /* Set font rotation */

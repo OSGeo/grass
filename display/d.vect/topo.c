@@ -20,7 +20,7 @@ int topo(struct Map_info *Map, int type, int do_area, LATTR *lattr)
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    R_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
+    D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     R_text_size(lattr->size, lattr->size);
     if (lattr->font)
 	R_font(lattr->font);

@@ -687,7 +687,7 @@ int main(int argc, char **argv)
 	}
 
 	if (has_color) {
-	    R_RGB_color(color.r, color.g, color.b);
+	    D_RGB_color(color.r, color.g, color.b);
 	    if (display & DISP_DIR)
 		stat = dir(&Map, type, Clist, chcat);
 	}
@@ -697,7 +697,7 @@ int main(int argc, char **argv)
 	 * width (not just 0) determined by another module (e.g.,
 	 * d.linewidth). */
 	if (!wcolumn_opt->answer)
-	    R_line_width(0);
+	    D_line_width(0);
 
 	if (display & DISP_CAT)
 	    stat = label(&Map, type, area, Clist, &lattr, chcat);

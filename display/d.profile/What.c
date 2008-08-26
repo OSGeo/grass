@@ -28,13 +28,13 @@ int What(char *name,
     if (G_get_map_row(fd, buf, row) < 0)
 	G_fatal_error(_("Error reading raster map"));
     else {
-	R_standard_color(D_translate_color(DEFAULT_BG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
 	D_erase_window();
-	R_standard_color(D_translate_color("red"));
+	D_use_color(D_translate_color("red"));
 	R_flush();
 	sprintf(txt_buf, "%s in mapset %s", name, mapset);
 	DrawText(22, 1, 1, txt_buf);
-	R_standard_color(D_translate_color(DEFAULT_FG_COLOR));
+	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 	sprintf(txt_buf, "EAST: %10.2f", east);
 	DrawText(22, 2, 1, txt_buf);
 	sprintf(txt_buf, "NORTH: %10.2f", north);

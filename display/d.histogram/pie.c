@@ -284,7 +284,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		     */
 		    draw = NO;
 		    bar_color = D_translate_color("black");
-		    R_standard_color(bar_color);
+		    D_use_color(bar_color);
 		}
 		else
 		    draw = NO;
@@ -347,7 +347,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 	     ((i == dist_stats->mincat) && nodata))
 	    && !(nodata && i == dist_stats->mincat + 1)) {
 	    /* draw a numbered tic-mark */
-	    R_standard_color(color);
+	    D_use_color(color);
 	    D_move_abs((int)
 		       (xoffset + (i - dist_stats->mincat) * xscale -
 			0.5 * xscale), (int)(b - BAR_Y1 * (height)));
@@ -361,12 +361,12 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 	    text_height = (height) * TEXT_HEIGHT;
 	    text_width = (width) * TEXT_WIDTH;
 	    R_text_size(text_width, text_height);
-	    R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tr - tl) > XTIC_DIST) {
 		text_width *= 0.95;
 		text_height *= 0.95;
 		R_text_size(text_width, text_height);
-		R_get_text_box(txt, &tt, &tb, &tl, &tr);
+		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_move_abs((int)
 		       (xoffset + (i - dist_stats->mincat) * xscale -
@@ -376,7 +376,7 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 	}
 	else if (rem(i, tic_unit) == (float)0) {
 	    /* draw a tic-mark */
-	    R_standard_color((int)color);
+	    D_use_color((int)color);
 	    D_move_abs((int)
 		       (xoffset + (i - dist_stats->mincat) * xscale -
 			0.5 * xscale), (int)(b - BAR_Y1 * (height)));
@@ -385,13 +385,13 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     }
 
     /* draw border around pie */
-    R_standard_color((int)color);
+    D_use_color((int)color);
     draw_slice_unfilled(colors, (int)color, (double)ORIGIN_X,
 			(double)ORIGIN_Y, (double)RADIUS, (double)0,
 			(double)360);
 
     /* draw border around legend bar */
-    R_standard_color((int)color);
+    D_use_color((int)color);
     D_polyline_abs(x_line, y_line, 5);
 
     /* draw the x-axis label */
@@ -402,10 +402,10 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_height = (height) * TEXT_HEIGHT;
     text_width = (width) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
-    R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_move_abs((int)(l + (width) / 2 - (tr - tl) / 2),
 	       (int)(b - LABEL * (height)));
-    R_standard_color((int)color);
+    D_use_color((int)color);
     R_text(xlabel);
 
     return 0;
