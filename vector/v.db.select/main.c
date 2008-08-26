@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
     }
 
-    if (!r_flag) {
+    if (!r_flag->answer) {
 	Vect_open_old_head(&Map, map_opt->answer, mapset);
     }
     else {
