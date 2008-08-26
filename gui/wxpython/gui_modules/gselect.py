@@ -292,3 +292,173 @@ class TreeCtrlComboPopup(wx.combo.ComboPopup):
         self.mapsets = mapsets
         self.exceptOf = exceptOf
         self.multiple = multiple
+        
+class VectorDBInfo:
+    """Class providing information about attribute tables
+    linked to a vector map"""
+    def __init__(self, map):
+        self.map = map
+        # {layer number : {table, database, driver})
+        self.layers = {}
+        # {table : {column name : type, length, values, ids}}
+        self.tables = {}
+
+        if not self.__CheckDBConnection(): # -> self.layers
+            return
+
+        self.__DescribeTables() # -> self.tables
+
+    def __CheckDBConnection(self):
+        """Check DB connection"""
+        layerCommand = gcmd.Command(cmd=["v.db.connect",
+                                         "-g", "--q",
+                                         "map=%s" % self.map],
+                                    rerr=None, stderr=None)
+        if layerCommand.returncode != 0:
+            return False
+
+        # list of available layers & (table, database, driver)
+        for line in layerCommand.ReadStdOutput():
+            lineList = line.split(' ')
+            layer = lineList[0]
+            if '/' in layer:
+                layer, layer_name = lineList[0].split('/')
+            else:
+                layer_name = None
+            # database can contain ' ' in it's path
+            if len(lineList) > 5:
+                database = ''.join(lineList[3:-1])
+            else:
+                database = lineList[3]
+            self.layers[int(layer)] = {
+                "name"     : layer_name,
+                "table"    : lineList[1],
+                "key"      : lineList[2],
+                "database" : database,
+                "driver"   : lineList[-1]
+                }
+            
+        if (len(self.layers.keys()) == 0):
+            return False
+
+        return True
+
+    def __DescribeTables(self):
+        """Describe linked tables"""
+        for layer in self.layers.keys():
+            # determine column names and types
+            table = self.layers[layer]["table"]
+            columnsCommand = gcmd.Command (cmd=["db.describe",
+                                                "-c", "--q",
+                                                "table=%s" % self.layers[layer]["table"],
+                                                "driver=%s" % self.layers[layer]["driver"],
+                                                "database=%s" % self.layers[layer]["database"]])
+
+
+            columns = {} # {name: {type, length, [values], [ids]}}
+
+            if columnsCommand.returncode == 0:
+                # skip nrows and ncols
+                i = 0
+                for line in columnsCommand.ReadStdOutput()[2:]:
+                    num, name, type, length = line.strip().split(':')
+                    # FIXME: support more datatypes
+                    if type.lower() == "integer":
+                        ctype = int
+                    elif type.lower() == "double precision":
+                        ctype = float
+                    else:
+                        ctype = str
+
+                    columns[name.strip()] = { 'index'  : i,
+                                              'type'   : type.lower(),
+                                              'ctype'  : ctype,
+                                              'length' : int(length),
+                                              'values' : [],
+                                              'ids'    : []}
+                    i += 1
+            else:
+                return False
+
+            # check for key column
+            # v.db.connect -g/p returns always key column name lowercase
+            if self.layers[layer]["key"] not in columns.keys():
+                for col in columns.keys():
+                    if col.lower() == self.layers[layer]["key"]:
+                        self.layers[layer]["key"] = col.upper()
+                        break
+            
+            self.tables[table] = columns
+            #print 'self tables =', self.tables[table]
+
+        return True
+    
+    def Reset(self):
+        """Reset"""
+        for layer in self.layers:
+            table = self.layers[layer]["table"] # get table desc
+            columns = self.tables[table]
+            for name in self.tables[table].keys():
+                self.tables[table][name]['values'] = []
+                self.tables[table][name]['ids']    = []
+
+class LayerSelect(wx.ComboBox):
+    """
+    Creates combo box for selecting data layers defined for vector.
+    The 'layer' terminology is likely to change for GRASS 7
+    """
+    def __init__(self, parent,
+                 id=wx.ID_ANY, value='1', pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, choices=['1'], **kargs):
+
+        super(LayerSelect, self).__init__(parent, id, value, pos, size, choices)
+
+        self.vector = kargs['vector'] # vector map to check for attribute tables
+
+        if self.vector == '':
+            return
+        else:
+            self.InsertLayers(self.vector)
+        
+    def InsertLayers(self, vector):
+        """insert layers for a vector into the layer combobox"""
+        layerchoices = VectorDBInfo(vector).layers.keys()
+        self.Clear()
+        for n in range(len(layerchoices)):
+            self.Insert(str(layerchoices[n]), n)
+
+        self.SetSelection(0)
+        self.SetValue('1') # all vectors have a layer 1 by default
+
+class ColumnSelect(wx.ComboBox):
+    """
+    Creates combo box for selecting columns in the attribute table for a vector.
+    The 'layer' terminology is likely to change for GRASS 7
+    """
+    def __init__(self, parent,
+                 id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, choices=[''], **kargs):
+
+        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices)
+
+        self.vector = kargs['vector'] # vector map to check for attribute tables
+        self.layer = kargs['layer'] # data layer connected to attribute table
+
+        if self.vector == '' or self.layer == '':
+            return
+        else:
+            self.InsertColumns(self.vector, self.layer)
+                
+    def InsertColumns(self, vector, layer):
+        """Return list of columns names for a vector layer"""
+        if vector == '' or layer == '': return
+        
+        table = VectorDBInfo(vector).layers[layer]["table"]
+        columnchoices = VectorDBInfo(vector).tables[table].keys()
+        columnchoices.sort()
+        self.Clear()
+        for n in range(len(columnchoices)):
+            self.Insert(columnchoices[n], n)
+            
+        self.SetSelection(0)
+        self.SetValue(columnchoices[0]) #set the combobox to the first column 

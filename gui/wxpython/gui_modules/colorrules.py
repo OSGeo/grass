@@ -102,21 +102,13 @@ class ColorTable(wx.Frame):
         if self.cmd == 'vcolors':
             self.cb_vl_label = wx.StaticText(parent=self, id=wx.ID_ANY,
                                    label='Layer:')
-            self.cb_vlayer = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(50, -1),
-                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                 choices=self.layerchoices)
-            self.cb_vlayer.SetSelection(0)
-            self.cb_vlayer.SetValue('1')
             self.cb_vc_label = wx.StaticText(parent=self, id=wx.ID_ANY,
                                    label='Attribute column:')
-            self.cb_vcol = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
-                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                 choices=self.columnchoices)
             self.cb_vrgb_label = wx.StaticText(parent=self, id=wx.ID_ANY,
                                    label='RGB color column:')
-            self.cb_vrgb = wx.ComboBox(parent=self, id=wx.ID_ANY, size=(200, -1),
-                                 style=wx.CB_SIMPLE | wx.CB_READONLY,
-                                 choices=self.columnchoices)
+            self.cb_vlayer = gselect.LayerSelect(self, vector='')
+            self.cb_vcol = gselect.ColumnSelect(self, vector='', layer='')
+            self.cb_vrgb = gselect.ColumnSelect(self, vector='', layer='')
 
         # color table and preview window
         self.cr_label = wx.StaticText(parent=self, id=wx.ID_ANY,
@@ -289,29 +281,26 @@ class ColorTable(wx.Frame):
             except:
                 pass
         elif self.cmd == 'vcolors':
-            self.mapDBInfo = dbm.VectorDBInfo(self.inmap)
-            self.layerchoices = self.mapDBInfo.layers.keys()
-            for n in range(len(self.layerchoices)):
-                self.cb_vlayer.Insert(str(self.layerchoices[n]), n)
+            self.cb_vlayer.InsertLayers(self.inmap)
+            #self.mapDBInfo = dbm.VectorDBInfo(self.inmap)
+            #self.layerchoices = self.mapDBInfo.layers.keys()
+            #for n in range(len(self.layerchoices)):
+            #    self.cb_vlayer.Insert(str(self.layerchoices[n]), n)
 
             # initialize column selection combox boxes for layer 1
+
             try:
-                self.vtable = self.mapDBInfo.layers[self.vlayer]['table']
-                for n in range(len(self.mapDBInfo.GetColumns(self.vtable))):
-                    self.cb_vcol.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
-                    self.cb_vrgb.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+                self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
+                self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
                 self.Update()
             except:
                 pass
                 
     def OnLayerSelection(self, event):
-        self.vlayer = int(event.GetString())
-        
         # reset choices in column selection comboboxes if layer changes
-        self.vtable = self.mapDBInfo.layers[self.vlayer]['table']
-        for n in range(len(self.mapDBInfo.GetColumns(self.vtable))):
-            self.cb_vcol.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
-            self.cb_vrgb.Insert(self.mapDBInfo.GetColumns(self.vtable)[n], n)
+        self.vlayer = int(event.GetString())
+        self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
+        self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
         self.Update()
         
     def OnColumnSelection(self, event):
