@@ -9,45 +9,47 @@ SYSTEMOSX=`uname -s | grep "Darwin"`
 if [ "$SYSTEMOSX" ] ; then
     # manually transfer the necessary env vars
     TMPSCRIPT="/tmp/grassxterm_$$"
-    touch "$TMPSCRIPT.sh"
-    chmod +x "$TMPSCRIPT.sh"
-    echo "#!/bin/sh" > "$TMPSCRIPT.sh"
-    
-    echo "DISPLAY=$DISPLAY" >> "$TMPSCRIPT.sh"
-    echo "PATH=\"$PATH\"" >> "$TMPSCRIPT.sh"
-    echo "GIS_LOCK=\"$GIS_LOCK\"" >> "$TMPSCRIPT.sh"
-    echo "GISRC=\"$GISRC\"" >> "$TMPSCRIPT.sh"
-    echo "GISBASE=\"$GISBASE\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_VERSION=\"$GRASS_VERSION\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_PAGER=$GRASS_PAGER" >> "$TMPSCRIPT.sh"
-    echo "DYLD_LIBRARY_PATH=\"$DYLD_LIBRARY_PATH\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_LD_LIBRARY_PATH=\"$GRASS_LD_LIBRARY_PATH\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_WISH=\"$GRASS_WISH\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_TCLSH=\"$GRASS_TCLSH\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_HTML_BROWSER=\"$GRASS_HTML_BROWSER\"" >> "$TMPSCRIPT.sh"
-    echo "GRASS_HTML_BROWSER_MACOSX=\"$GRASS_HTML_BROWSER_MACOSX\"" >> "$TMPSCRIPT.sh"
-    echo "export DISPLAY PATH GIS_LOCK GISRC GISBASE GRASS_VERSION GRASS_PAGER DYLD_LIBRARY_PATH GRASS_LD_LIBRARY_PATH GRASS_WISH GRASS_TCLSH GRASS_HTML_BROWSER GRASS_HTML_BROWSER_MACOSX" >> "$TMPSCRIPT.sh"
-    if [ "$GRASS_ADDON_PATH" ] ; then
-        echo "GRASS_ADDON_PATH=\"$GRASS_ADDON_PATH\"" >> "$TMPSCRIPT.sh"
-        echo "export GRASS_ADDON_PATH" >> "$TMPSCRIPT.sh"
-    fi
-    if [ "$TCL_LIBRARY" ] ; then
-        echo "TCL_LIBRARY=\"$TCL_LIBRARY\"" >> "$TMPSCRIPT.sh"
-        echo "export TCL_LIBRARY" >> "$TMPSCRIPT.sh"
-    fi
-    if [ "$TK_LIBRARY" ] ; then
-        echo "TK_LIBRARY=\"$TK_LIBRARY\"" >> "$TMPSCRIPT.sh"
-        echo "export TK_LIBRARY" >> "$TMPSCRIPT.sh"
-    fi
+    (
+	cat <<-EOF
+	#!/bin/sh
+	DISPLAY="$DISPLAY"
+	PATH="$PATH"
+	GIS_LOCK="$GIS_LOCK"
+	GISRC="$GISRC"
+	GISBASE="$GISBASE"
+	GRASS_VERSION="$GRASS_VERSION"
+	GRASS_PAGER="$GRASS_PAGER"
+	DYLD_LIBRARY_PATH="$DYLD_LIBRARY_PATH"
+	GRASS_WISH="$GRASS_WISH"
+	GRASS_TCLSH="$GRASS_TCLSH"
+	GRASS_HTML_BROWSER="$GRASS_HTML_BROWSER"
+	GRASS_HTML_BROWSER_MACOSX="$GRASS_HTML_BROWSER_MACOSX"
+	export DISPLAY PATH GIS_LOCK GISRC GISBASE GRASS_VERSION GRASS_PAGER DYLD_LIBRARY_PATH GRASS_LD_LIBRARY_PATH GRASS_WISH GRASS_TCLSH GRASS_HTML_BROWSER GRASS_HTML_BROWSER_MACOSX
+	EOF
 
-    # get command, ignore all other xterm flags
-    while true ; do
-        if [ "$1" = "-e" ] ; then break ; fi
-        shift
-    done
-    shift
-    # and add it to end of script
-    echo "$@" >> "$TMPSCRIPT.sh"
+	if [ "$GRASS_ADDON_PATH" ] ; then
+	    echo "GRASS_ADDON_PATH=\"$GRASS_ADDON_PATH\""
+	    echo "export GRASS_ADDON_PATH"
+	fi
+	if [ "$TCL_LIBRARY" ] ; then
+	    echo "TCL_LIBRARY=\"$TCL_LIBRARY\""
+	    echo "export TCL_LIBRARY"
+	fi
+	if [ "$TK_LIBRARY" ] ; then
+	    echo "TK_LIBRARY=\"$TK_LIBRARY\""
+	    echo "export TK_LIBRARY"
+	fi
+
+	# get command, ignore all other xterm flags
+	while true ; do
+	    if [ "$1" = "-e" ] ; then break ; fi
+	    shift
+	done
+	shift
+	# and add it to end of script
+	echo "$@"
+    ) > "$TMPSCRIPT.sh"
+    chmod +x "$TMPSCRIPT.sh"
 
     # execute
     # save current active app/window, return to it when script finishes.
