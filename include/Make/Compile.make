@@ -44,7 +44,7 @@ endif
 
 # default parser generation rules, include prefix for files/vars
 %.yy.c: %.l
-	$(LEX) $(LFLAGS) $< > $@
+	$(LEX) $(LFLAGS) -t $< > $@
 
 %.output %.tab.h %.tab.c: %.y
 	$(YACC) -b$* $(YFLAGS) $<

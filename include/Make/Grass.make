@@ -74,10 +74,10 @@ ifdef MINGW
 endif
 
 # lexical analyzer and default options
-LFLAGS      = -d -i -s -t
+LFLAGS      = -s
 
 # parser generator and default options
-YFLAGS      = -d -v -t
+YFLAGS      = -d -v
 
 ##################### library names #####################################
 
