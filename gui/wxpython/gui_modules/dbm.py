@@ -54,6 +54,7 @@ import grassenv
 import gcmd
 import utils
 import gdialogs
+import gselect
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
@@ -3125,105 +3126,12 @@ class DisplayAttributesDialog(wx.Dialog):
 
         return True
 
-class VectorDBInfo:
+class VectorDBInfo(gselect.VectorDBInfo):
     """Class providing information about attribute tables
     linked to the vector map"""
     def __init__(self, map):
-        self.map = map
-        # {layer number : {table, database, driver})
-        self.layers = {}
-        # {table : {column name : type, length, values, ids}}
-        self.tables = {}
-
-        if not self.__CheckDBConnection(): # -> self.layers
-            return
-
-        self.__DescribeTables() # -> self.tables
-
-    def __CheckDBConnection(self):
-        """Check DB connection"""
-        layerCommand = gcmd.Command(cmd=["v.db.connect",
-                                         "-g", "--q",
-                                         "map=%s" % self.map],
-                                    rerr=None, stderr=None)
-        if layerCommand.returncode != 0:
-            return False
-
-        # list of available layers & (table, database, driver)
-        for line in layerCommand.ReadStdOutput():
-            lineList = line.split(' ')
-            layer = lineList[0]
-            if '/' in layer:
-                layer, layer_name = lineList[0].split('/')
-            else:
-                layer_name = None
-            # database can contain ' ' in it's path
-            if len(lineList) > 5:
-                database = ''.join(lineList[3:-1])
-            else:
-                database = lineList[3]
-            self.layers[int(layer)] = {
-                "name"     : layer_name,
-                "table"    : lineList[1],
-                "key"      : lineList[2],
-                "database" : database,
-                "driver"   : lineList[-1]
-                }
-            
-        if (len(self.layers.keys()) == 0):
-            return False
-
-        return True
-
-    def __DescribeTables(self):
-        """Describe linked tables"""
-        for layer in self.layers.keys():
-            # determine column names and types
-            table = self.layers[layer]["table"]
-            columnsCommand = gcmd.Command (cmd=["db.describe",
-                                                "-c", "--q",
-                                                "table=%s" % self.layers[layer]["table"],
-                                                "driver=%s" % self.layers[layer]["driver"],
-                                                "database=%s" % self.layers[layer]["database"]])
-
-
-            columns = {} # {name: {type, length, [values], [ids]}}
-
-            if columnsCommand.returncode == 0:
-                # skip nrows and ncols
-                i = 0
-                for line in columnsCommand.ReadStdOutput()[2:]:
-                    num, name, type, length = line.strip().split(':')
-                    # FIXME: support more datatypes
-                    if type.lower() == "integer":
-                        ctype = int
-                    elif type.lower() == "double precision":
-                        ctype = float
-                    else:
-                        ctype = str
-
-                    columns[name.strip()] = { 'index'  : i,
-                                              'type'   : type.lower(),
-                                              'ctype'  : ctype,
-                                              'length' : int(length),
-                                              'values' : [],
-                                              'ids'    : []}
-                    i += 1
-            else:
-                return False
-
-            # check for key column
-            # v.db.connect -g/p returns always key column name lowercase
-            if self.layers[layer]["key"] not in columns.keys():
-                for col in columns.keys():
-                    if col.lower() == self.layers[layer]["key"]:
-                        self.layers[layer]["key"] = col.upper()
-                        break
-            
-            self.tables[table] = columns
-
-        return True
-
+        gselect.VectorDBInfo.__init__(self, map)
+        
     def GetColumns(self, table):
         """Return list of columns names (based on their index)"""
         names = [''] * len(self.tables[table].keys())
@@ -3307,15 +3215,6 @@ class VectorDBInfo:
                 nselected = 1
 
         return nselected
-
-    def Reset(self):
-        """Reset"""
-        for layer in self.layers:
-            table = self.layers[layer]["table"] # get table desc
-            columns = self.tables[table]
-            for name in self.tables[table].keys():
-                self.tables[table][name]['values'] = []
-                self.tables[table][name]['ids']    = []
 
 class ModifyTableRecord(wx.Dialog):
     """Dialog for inserting/updating table record"""
