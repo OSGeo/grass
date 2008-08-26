@@ -238,7 +238,11 @@ int main(int argc, char *argv[])
 
     flag.display = G_define_flag();
     flag.display->key = 'd';
+#if 0
     flag.display->description = _("DISPLAY 'live' spread process on screen");
+#else
+    flag.display->description = _("Live display - currently DISABLED");
+#endif
 
     flag.spotting = G_define_flag();
     flag.spotting->key = 's';
@@ -258,8 +262,11 @@ int main(int argc, char *argv[])
 		    "in future. Please use '--verbose' instead."));
     }
 
-
     display = flag.display->answer;
+#if 1
+    if (display)
+	G_fatal_error(_("The display feature is disabled"));
+#endif
     spotting = flag.spotting->answer;
 
     max_layer = parm.max->answer;
@@ -351,8 +358,10 @@ int main(int argc, char *argv[])
     window.ew_res = 100 * window.ew_res;
 
     /* Initialize display screens */
+#if 0
     if (display)
 	display_init();
+#endif
 
     /*  Check if input layers exists in data base  */
 
@@ -561,8 +570,10 @@ int main(int argc, char *argv[])
     }
 
     /* close graphics */
+#if 0
     if (display)
 	display_close();
+#endif
 
     exit(EXIT_SUCCESS);
 }

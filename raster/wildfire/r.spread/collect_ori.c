@@ -81,8 +81,10 @@ void collect_ori(int start_fd)
 		if (y_out)
 		    DATA(map_y_out, row, col) = row;
 		/*DEBUG printf("\norigin: row=%d col=%d\n", row, col); */
+#if 0
 		if (display)
 		    draw_a_burning_cell(row, col);
+#endif
 	    }
 	    else {
 		DATA(map_out, row, col) = neg;
