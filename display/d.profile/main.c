@@ -19,8 +19,6 @@
  *****************************************************************************/
 
 
-#define DEBUG
-#define USE_OLD_CODE		/* Frame set-up still needs old code ATM. */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -28,43 +26,158 @@
 #include <grass/raster.h>
 #include <grass/display.h>
 #include <grass/glocale.h>
-#include "profile.h"
 
-struct windows windows[] = {
-    {"mou", 85, 100, 0, 50},
-    {"sta", 85, 100, 50, 100},
-    {"map", 0, 85, 0, 50},
-    {"orig", 0, 100, 0, 1009}
+static char *mapname;
+static double min, max;
+
+struct point
+{
+    double x, y;
+    double d;
 };
 
-struct windows profiles[] = {
-    {"pro1", 64, 85, 50, 100},
-    {"pro2", 43, 64, 50, 100},
-    {"pro3", 22, 43, 50, 100},
-    {"pro4", 0, 22, 50, 100}
-};
+static void get_region_range(int fd)
+{
+    DCELL *buf = G_allocate_d_raster_buf();
+    int nrows = G_window_rows();
+    int ncols = G_window_cols();
+    int row, col;
 
-struct Profile profile;
+    min = 1e300;
+    max = -1e300;
 
-void myDcell(char *name, char *mapset, int overlay);
+    for (row = 0; row < nrows; row++) {
+	G_get_d_raster_row(fd, buf, row);
+	for (col = 0; col < ncols; col++) {
+	    if (min > buf[col])
+		min = buf[col];
+	    if (max < buf[col])
+		max = buf[col];
+	}
+    }
+}
+
+static void get_map_range(void)
+{
+    if (G_raster_map_type(mapname, "") == CELL_TYPE) {
+	struct Range range;
+	CELL xmin, xmax;
+
+	if (G_read_range(mapname, "", &range) <= 0)
+	    G_fatal_error(_("Unable to read range for %s"), mapname);
+
+	G_get_range_min_max(&range, &xmin, &xmax);
+
+	max = xmax;
+	min = xmin;
+    }
+    else {
+	struct FPRange fprange;
+
+	if (G_read_fp_range(mapname, "", &fprange) <= 0)
+	    G_fatal_error(_("Unable to read FP range for %s"), mapname);
+
+	G_get_fp_range_min_max(&fprange, &min, &max);
+    }
+}
+
+static void plot_axes(void)
+{
+    char str[64];
+    double scale;
+    double t, b, l, r;
+
+    D_use_color(D_translate_color("red"));
+
+    D_move_abs(0, 1);
+    D_cont_abs(0, 0);
+    D_cont_abs(1, 0);
+
+    D_use_color(D_translate_color(DEFAULT_FG_COLOR));
+
+    /* set text size for y-axis labels */
+    scale = fabs(D_get_u_to_d_yconv());
+    R_text_size(scale * 0.04, scale * 0.05);
+
+    /* plot y-axis label (bottom) */
+    sprintf(str, "%.1f", min);
+    D_get_text_box(str, &t, &b, &l, &r);
+    D_move_abs(-0.02 - (r - l), 0 - (t - b) / 2);
+    R_text(str);
+
+    /* plot y-axis label (top) */
+    sprintf(str, "%.1f", max);
+    D_get_text_box(str, &t, &b, &l, &r);
+    D_move_abs(-0.02 - (r - l), 1 - (t - b) / 2);
+    R_text(str);
+}
+
+static int get_cell(DCELL *result, int fd, double x, double y)
+{
+    static DCELL *row1, *row2;
+    static int cur_row = -1;
+    static int row, col;
+    DCELL *tmp;
+
+    if (!row1) {
+	row1 = G_allocate_d_raster_buf();
+	row2 = G_allocate_d_raster_buf();
+    }
+
+    col = (int)floor(x - 0.5);
+    row = (int)floor(y - 0.5);
+    x -= col + 0.5;
+    y -= row + 0.5;
+
+    if (row < 0 || row + 1 >= G_window_rows() ||
+	col < 0 || col + 1 >= G_window_cols()) {
+	G_set_d_null_value(result, 1);
+	return 0;
+    }
+
+    if (cur_row != row) {
+	if (cur_row == row + 1) {
+	    tmp = row1; row1 = row2; row2 = tmp;
+	    G_get_d_raster_row(fd, row1, row);
+	}
+	else if (cur_row == row - 1) {
+	    tmp = row1; row1 = row2; row2 = tmp;
+	    G_get_d_raster_row(fd, row2, row + 1);
+	}
+	else {
+	    G_get_d_raster_row(fd, row1, row);
+	    G_get_d_raster_row(fd, row2, row + 1);
+	}
+	cur_row = row;
+    }
+
+    if (G_is_d_null_value(&row1[col]) || G_is_d_null_value(&row1[col+1]) ||
+	G_is_d_null_value(&row2[col]) || G_is_d_null_value(&row2[col+1])) {
+	G_set_d_null_value(result, 1);
+	return 0;
+    }
+
+    *result = G_interp_bilinear(x, y,
+				row1[col], row1[col+1],
+				row2[col], row2[col+1]);
+
+    return 1;
+}
 
 int main(int argc, char **argv)
 {
-    char *old_mapset, *old_mapname, *d_mapset, *d_mapname;
-    double cur_ux, cur_uy;
-    double ux, uy;
-    char ltr[10];
-    int text_width, text_height;
-    int err, doplot;
-    int button;
-    int cur_screen_x, cur_screen_y;
-    int screen_x, screen_y;
-    struct Cell_head window;
-    int t, b, l, r;
-    int i, CurrentWin = 0;
-    long min, max;
-    struct Option *map, *dmap, *plotfile;
     struct GModule *module;
+    struct Option *map, *profile;
+    struct Flag *stored;
+    struct Cell_head window;
+    struct point *points = NULL;
+    int num_points, max_points = 0;
+    double length;
+    double t, b, l, r;
+    int fd;
+    int i;
+    double sx;
+    int last;
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -72,395 +185,128 @@ int main(int argc, char **argv)
     /* Set description */
     module = G_define_module();
     module->keywords = _("display");
-    module->description =
-	_("Interactive profile plotting utility with optional output.");
+    module->description = _("Plots profile of a transect.");
 
     /* set up command line */
-    map = G_define_option();
-    map->key = "rast";
-    map->type = TYPE_STRING;
-    map->required = YES;
-    map->gisprompt = "old,cell,raster";
+    map = G_define_standard_option(G_OPT_R_INPUT);
     map->description = _("Raster map to be profiled");
 
-    dmap = G_define_option();
-    dmap->key = "drast";
-    dmap->type = TYPE_STRING;
-    dmap->required = NO;
-    dmap->gisprompt = "old,cell,raster";
-    dmap->description = _("Optional display raster");
+    profile = G_define_option();
+    profile->key = "profile";
+    profile->type = TYPE_DOUBLE;
+    profile->required = YES;
+    profile->multiple = YES;
+    profile->key_desc = "east,north";
+    profile->description = _("Profile coordinate pairs");
 
-    plotfile = G_define_option();
-    plotfile->key = "plotfile";
-    plotfile->type = TYPE_STRING;
-    plotfile->required = NO;
-    plotfile->description =
-	_("Output profile data to file(s) with prefix 'name'");
+    stored = G_define_flag();
+    stored->key = 'r';
+    stored->description = _("Use map's range recorded range");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    old_mapname = map->answer;
+    mapname = map->answer;
 
-    old_mapset = G_find_cell2(old_mapname, "");
-    if (old_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), old_mapname);
+    fd = G_open_cell_old(mapname, "");
+    if (fd < 0)
+	G_fatal_error(_("Unable to open raster map <%s>"), mapname);
 
-    if (plotfile->answer != NULL)
-	doplot = 1;
+    if (stored->answer)
+	get_map_range();
     else
-	doplot = 0;
+	get_region_range(fd);
 
-    /* If the user wants to display a different raster */
-    if (dmap->answer != NULL) {
-	d_mapname = dmap->answer;
-	d_mapset = G_find_cell2(d_mapname, "");
-	if (d_mapset == NULL) {
-	    G_warning(_("Display raster [%s] not found. Using profile raster."),
-		      d_mapname);
-	    d_mapname = old_mapname;
-	    d_mapset = old_mapset;
+    G_get_window(&window);
+
+    num_points = 0;
+    length = 0;
+    for (i = 0; profile->answers[i]; i += 2) {
+	struct point *p;
+	double x, y;
+
+	if (num_points >= max_points) {
+	    max_points = num_points + 100;
+	    points = G_realloc(points, max_points * sizeof(struct point));
 	}
+
+	p = &points[num_points];
+
+	G_scan_easting( profile->answers[i+0], &x, G_projection());
+	G_scan_northing(profile->answers[i+1], &y, G_projection());
+
+	p->x = G_easting_to_col (x, &window);
+	p->y = G_northing_to_row(y, &window);
+
+	if (num_points > 0) {
+	    const struct point *prev = &points[num_points-1];
+	    double dx = fabs(p->x - prev->x);
+	    double dy = fabs(p->y - prev->y);
+	    double d = sqrt(dx * dx + dy * dy);
+	    length += d;
+	    p->d = length;
+	}
+
+	num_points++;
     }
-    else {
-	d_mapname = old_mapname;
-	d_mapset = old_mapset;
-    }
+    points[0].d = 0;
 
-    /* get cell-file range */
-    WindowRange(old_mapname, old_mapset, &min, &max);
-
-    /* the following code should not be used to get fp range correctly.
-       if (!quick_range(old_mapname,old_mapset,&min,&max))
-       {
-       if (!slow_range(old_mapname,old_mapset,&min,&max))
-       G_fatal_error(_("Unable to read from cell-file"));
-       }
-       if (min > 0) min = 0;
-       if (max < 0) max = 0;
-     */
-
-    G_message(_("\n\nUse mouse to choose action"));
+    if (num_points < 2)
+	G_fatal_error(_("At least two points are required"));
 
     /* establish connection with graphics driver */
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    /* Make sure screen is clear */
-    D_remove_windows();
-    D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-    R_erase();
+    D_setup2(1, 0, 1.05, -0.05, -0.15, 1.05);
 
-    /* Establish windows on screen */
-#ifdef USE_OLD_CODE
-    D_new_window_percent(MOU.name, MOU.bot, MOU.top, MOU.left, MOU.right);
-    D_new_window_percent(STA.name, STA.bot, STA.top, STA.left, STA.right);
-    D_new_window_percent(MAP.name, MAP.bot, MAP.top, MAP.left, MAP.right);
-    D_new_window_percent(ORIG.name, ORIG.bot, ORIG.top, ORIG.left,
-			 ORIG.right);
-    for (i = 0; i <= 3; i++)
-	D_new_window_percent(profiles[i].name, profiles[i].bot,
-			     profiles[i].top, profiles[i].left,
-			     profiles[i].right);
-#else
-    /* This operates different than above, expect real world coords ? */
-    D_new_window(MOU.name, MOU.top, MOU.bot, MOU.left, MOU.right);
-    D_new_window(STA.name, STA.top, STA.bot, STA.left, STA.right);
-    D_new_window(MAP.name, MAP.top, MAP.bot, MAP.left, MAP.right);
-    D_new_window(ORIG.name, ORIG.top, ORIG.bot, ORIG.left, ORIG.right);
-    for (i = 0; i < 4; i++)
-	D_new_window(profiles[i].name, profiles[i].top,
-		     profiles[i].bot, profiles[i].left, profiles[i].right);
-#endif
+    plot_axes();
 
-    /* Plot cell-file in map window */
-    D_set_cur_wind(MAP.name);
-    myDcell(d_mapname, d_mapset, 1);
+    D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 
+    D_get_src(&t, &b, &l, &r);
+    t -= 0.1 * (t - b);
+    b += 0.1 * (t - b);
+    l += 0.1 * (r - l);
+    r -= 0.1 * (r - l);
 
-    /* loop until user wants to quit */
-    for (;;) {
-	/* display mouse-menu in mouse-menu window */
-	D_set_cur_wind(MOU.name);
-	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-	D_erase_window();
-	D_use_color(D_translate_color("red"));
-	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
-	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
-	DrawText(15, 4, 1, "BUTTON  | Middle: Set FIRST point");
-	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
-	R_flush();
+    i = 0;
+    last = 0;
+    for (sx = 0; sx < 1; sx += D_get_d_to_u_xconv()) {
+	double d = length * (sx - l);
+	const struct point *p, *next;
+	double k, sy, x, y;
+	DCELL v;
 
-	/* LOOP to get first point of line */
-	do {
-
-	    /* choose map window and set up conversion factors */
-	    D_set_cur_wind(MAP.name);
-	    G_get_set_window(&window);
-	    D_get_screen_window(&t, &b, &l, &r);
-	    screen_y = (t + b) / 2;
-	    screen_x = (l + r) / 2;
-	    D_do_conversions(&window, t, b, l, r);
-
-	    /* get a point from the mouse */
-	    R_get_location_with_pointer(&screen_x, &screen_y, &button);
-
-	    /* exit if user hit left mouse button */
-	    if (button == 3) {
-		D_set_cur_wind(ORIG.name);
-		G_message(_("Use 'd.frame -e' to remove left over frames"));
-		exit(EXIT_SUCCESS);
-	    }
-
-	    /* convert to (easting,northing) coordinates */
-	    cur_uy = D_d_to_u_row((double)screen_y);
-	    cur_ux = D_d_to_u_col((double)screen_x);
-
-	    if (cur_ux > window.east || cur_ux < window.west ||
-		cur_uy > window.north || cur_uy < window.south) {
-		D_set_cur_wind(STA.name);
-		D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-		D_erase_window();
-		D_use_color(D_translate_color("red"));
-		DrawText(25, 1, 1, "OUTSIDE CURRENT WINDOW");
-		R_flush();
-		button = 1;
-	    }
-	    else {
-		/* print "earth" coords. and category info. in status window */
-		D_set_cur_wind(STA.name);
-		What(old_mapname, old_mapset, window, cur_ux, cur_uy);
-	    }
-
-	} while (button != 2);
-
-	/* display mouse-menu in mouse-menu window */
-	D_set_cur_wind(MOU.name);
-	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-	D_erase_window();
-	D_use_color(D_translate_color("red"));
-	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
-	DrawText(15, 3, 1, "MOUSE   | Left:   Where am I?");
-	DrawText(15, 4, 1, "BUTTON  | Middle: Set SECOND point");
-	DrawText(15, 5, 1, "MENU    | Right:  Quit this\n");
-	R_flush();
-
-	/* move graphics position to first point chosen */
-	R_move_abs(screen_x, screen_y);
-	cur_screen_x = screen_x;
-	cur_screen_y = screen_y;
-
-	/* LOOP to get second point of line */
-	do {
-	    /* choose map window and set up conversion factors */
-	    D_set_cur_wind(MAP.name);
-	    G_get_window(&window);
-	    D_get_screen_window(&t, &b, &l, &r);
-	    D_do_conversions(&window, t, b, l, r);
-
-	    R_get_location_with_line(cur_screen_x, cur_screen_y,
-				     &screen_x, &screen_y, &button);
-	    uy = D_d_to_u_row((double)screen_y);
-	    ux = D_d_to_u_col((double)screen_x);
-	    if (ux > window.east || ux < window.west ||
-		uy > window.north || uy < window.south) {
-		D_set_cur_wind(STA.name);
-		D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-		D_erase_window();
-		D_use_color(D_translate_color("red"));
-		DrawText(25, 1, 1, "OUTSIDE CURRENT WINDOW");
-		button = 1;
-	    }
-	    else {
-		if (button == 1) {
-		    /* print "earth" coords. and category info. in status window */
-		    D_set_cur_wind(STA.name);
-		    What(old_mapname, old_mapset, window, ux, uy);
-		}
-		else if (button == 2) {
-		    /* get profile data */
-		    InitProfile(&profile, window, cur_uy, cur_ux, uy, ux);
-		    if ((err =
-			 ExtractProfile(&profile, old_mapname,
-					old_mapset)) == -1) {
-			D_set_cur_wind(STA.name);
-			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-			D_erase_window();
-			D_use_color(D_translate_color("red"));
-			DrawText(25, 1, 1, "ERROR: end-point outside");
-			DrawText(25, 2, 1, "       of current window");
-		    }
-		    else if (err == -2)
-			G_fatal_error(_("Error opening cell-file"));
-		    else if (err == -3)
-			G_fatal_error(_("Error reading from cell-file"));
-		    else if (err == -4)
-			G_fatal_error(_("Mysterious window inconsistancy error"));
-		    else {
-			/* draw profile line on cell-file */
-			black_and_white_line(screen_x, screen_y, cur_screen_x,
-					     cur_screen_y);
-
-			/* select letter for current profile label */
-			switch (CurrentWin) {
-			case 0:
-			    ltr[0] = 'A';
-			    ltr[1] = 0;
-			    break;
-			case 1:
-			    ltr[0] = 'B';
-			    ltr[1] = 0;
-			    break;
-			case 2:
-			    ltr[0] = 'C';
-			    ltr[1] = 0;
-			    break;
-			case 3:
-			    ltr[0] = 'D';
-			    ltr[1] = 0;
-			    break;
-			default:
-			    ltr[0] = '?';
-			    ltr[1] = 0;
-			    break;
-			}
-
-			/* plot label in black */
-			text_height = (int)(0.03 * (b - t));
-			text_width = (int)(0.03 * (r - l));
-			D_set_cur_wind(MAP.name);
-			R_move_abs(screen_x, screen_y);
-			if (screen_x <= cur_screen_x &&
-			    screen_y >= cur_screen_y)
-			    R_move_rel(-(text_width + 2), (text_height + 2));
-			else if (screen_x < cur_screen_x &&
-				 screen_y <= cur_screen_y)
-			    R_move_rel(-(text_width + 2), 2);
-			else if (screen_x > cur_screen_x)
-			    R_move_rel(3, 0);
-			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-			R_text_size(text_width, text_height);
-			R_text(ltr);
-			D_use_color(D_translate_color(DEFAULT_FG_COLOR));
-
-			/* plot label in white */
-			R_move_abs(screen_x, screen_y);
-			if (screen_x <= cur_screen_x &&
-			    screen_y >= cur_screen_y)
-			    R_move_rel(-(text_width + 2), (text_height + 2));
-			else if (screen_x < cur_screen_x &&
-				 screen_y <= cur_screen_y)
-			    R_move_rel(-(text_width + 2), 2);
-			else if (screen_x > cur_screen_x)
-			    R_move_rel(3, 0);
-			R_move_rel(1, 1);
-			R_text(ltr);
-			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-
-			/*length = hypot(cur_ux - ux, cur_uy - uy); */
-
-			/* tell user about profile being plotted */
-			D_set_cur_wind(STA.name);
-			D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-			D_erase_window();
-			D_use_color(D_translate_color("red"));
-			DrawText(25, 1, 1, "PLOTTING PROFILE");
-
-			/* plot profile data in profile window */
-			D_set_cur_wind(profiles[CurrentWin++].name);
-			/* dump profile if requested */
-			if (doplot)
-			    WriteProfile(old_mapname, old_mapset,
-					 plotfile->answer, ltr[0], &profile);
-			PlotProfile(profile, ltr, min, max);
-			if (CurrentWin > 3)
-			    CurrentWin = 0;
-
-			cur_screen_x = screen_x;
-			cur_screen_y = screen_y;
-			cur_ux = ux;
-			cur_uy = uy;
-		    }
-		}
-	    }
-	    R_flush();
-	} while (button != 3 && button != 2);
-
-	/* display mouse-menu in mouse-menu window */
-	D_set_cur_wind(MOU.name);
-	D_use_color(D_translate_color(DEFAULT_BG_COLOR));
-	D_erase_window();
-	D_use_color(D_translate_color("red"));
-	DrawText(25, 1, 1, "GRASS PROGRAM: profile");
-	D_use_color(D_translate_color(DEFAULT_FG_COLOR));
-	DrawText(15, 3, 1, "MOUSE   | Left:   DO ANOTHER");
-	DrawText(15, 4, 1, "BUTTON  | Middle: CLEAR DISPLAY");
-	DrawText(15, 5, 1, "MENU    | Right:  QUIT");
-	R_flush();
-
-	R_get_location_with_pointer(&screen_x, &screen_y, &button);
-	if (button == 3) {
-	    D_set_cur_wind(ORIG.name);
-	    G_message(_("Use 'd.frame -e' to remove left over frames"));
-	    exit(EXIT_SUCCESS);
+	for (;;) {
+	    p = &points[i];
+	    next = &points[i + 1];
+	    k = (d - p->d) / (next->d - p->d);
+	    if (k < 1)
+		break;
+	    i++;
 	}
-	else if (button == 2) {
-	    D_set_cur_wind(MAP.name);
-	    D_erase(DEFAULT_BG_COLOR);
-	    myDcell(d_mapname, d_mapset, 1);
-	    for (i = 0; i <= 3; i++) {
-		D_set_cur_wind(profiles[i].name);
-		D_erase(DEFAULT_BG_COLOR);
-	    }
-	    CurrentWin = 0;
+
+	x = p->x * (1 - k) + next->x * k;
+	y = p->y * (1 - k) + next->y * k;
+
+	if (!get_cell(&v, fd, x, y)) {
+	    last = 0;
+	    continue;
 	}
-	else {
-	    G_free(profile.ptr);
-	}
+
+	sy = (v - min) / (max - min);
+
+	if (last)
+	    D_cont_abs(sx, sy);
+	else
+	    D_move_abs(sx, sy);
+
+	last = 1;
     }
+
+    R_close_driver();
 
     exit(EXIT_SUCCESS);
 }
 
-void myDcell(char *name, char *mapset, int overlay)
-{
-    int fd, i, code;
-    CELL *cell;
-    struct Colors clr;
-
-    D_setup(!overlay);
-    D_set_overlay_mode(overlay);
-
-    cell = G_allocate_c_raster_buf();
-
-    if ((fd = G_open_cell_old(name, mapset)) < 0)
-	G_fatal_error(_("%s: Couldn't open raster <%s@%s>"),
-		      G_program_name(), name, mapset);
-
-    if (G_read_colors(name, mapset, &clr) < 0)
-	G_fatal_error(_("%s: Couldn't read color table for <%s@%s>"),
-		      G_program_name(), name, mapset);
-
-    D_cell_draw_begin();
-    for (i = 0; i >= 0;) {
-	code = G_get_c_raster_row(fd, cell, i);
-	if (code < 0)
-	    break;
-	else if (code == 0) {
-	    i++;
-	    continue;
-	}
-	i = D_draw_cell(i, cell, &clr);
-    }
-    D_cell_draw_end();
-
-    /* Only one cell, always set the name */
-    D_set_cell_name(G_fully_qualified_name(name, mapset));
-
-    G_close_cell(fd);
-    G_free(cell);
-}
-
-/* vim: set softtabstop=4 shiftwidth=4 expandtab: */
