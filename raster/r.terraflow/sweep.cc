@@ -117,10 +117,12 @@ sweepOutput::compute(elevation_type elev,
 #ifdef OUTPUT_TCI
     correct_tci = log(flow.get()*weight.dx()*weight.dy()/weight.totalContour());
     /* assert(correct_tci > 0); //is this true? */
-    if (correct_tci < 0) {
-      fprintf(stderr, "warning: tci negative, [flow=%f,dx=%f,dy=%f,cont=%f]\n",
-	      flow.get(), weight.dx(), weight.dy(), weight.totalContour());
-    }
+    /* there is no need for this warning. tci can be negative if the flow is small. */
+    /* if (correct_tci < 0) {
+       fprintf(stderr, "warning: tci negative, [flow=%f,dx=%f,dy=%f,cont=%f]\n",
+       flow.get(), weight.dx(), weight.dy(), weight.totalContour());
+       }
+    */
     tci = (tci_type)correct_tci;
 #endif
   }
