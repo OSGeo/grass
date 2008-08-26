@@ -127,9 +127,11 @@ void spread(void)
 
 	/*mark a visited cell */
 	DATA(map_visit, pres_cell->row, pres_cell->col) = YES;
+#if 0
 	if (display)
 	    draw_a_cell(pres_cell->row, pres_cell->col,
 			(int)pres_cell->min_cost);
+#endif
 
 	cell_count++;
 	if ((100 * cell_count / ncells) % 2 == 0 &&
@@ -258,8 +260,10 @@ update(struct costHa *pres_cell, int row, int col, double angle,
 	    DATA(map_y_out, row, col) = pres_cell->row;
 
 	insertHa(min_cost, angle, row, col, heap, &heap_len);
+#if 0
 	if (display && min_cost < init_time + time_lag + 1.0)
 	    draw_a_burning_cell(row, col);
+#endif
     }
     else {
 	if (DATA(map_out, row, col) > min_cost + 0.001) {
@@ -272,8 +276,10 @@ update(struct costHa *pres_cell, int row, int col, double angle,
 		DATA(map_y_out, row, col) = pres_cell->row;
 
 	    replaceHa(min_cost, angle, row, col, heap, &heap_len);
+#if 0
 	    if (display && min_cost < init_time + time_lag + 1.0)
 		draw_a_burning_cell(row, col);
+#endif
 	}
     }
 }
