@@ -262,9 +262,12 @@ int main(int argc, char **argv)
 	G_debug(4, "actual = %e", actual);
 
 	/* find predicted value */
-	predicted =
-	    scale * G_get_raster_sample(fdrast, &window, NULL, Points->y[0],
+	predicted = G_get_raster_sample(fdrast, &window, NULL, Points->y[0],
 					Points->x[0], 0, method);
+	if (G_is_d_null_value(&predicted))
+	    continue;
+
+	predicted *= scale;
 
 	G_debug(4, "predicted = %e", predicted);
 
