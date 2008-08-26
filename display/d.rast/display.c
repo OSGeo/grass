@@ -51,17 +51,14 @@ static int cell_draw(char *name,
     int cellfile;
     void *xarray;
     int cur_A_row;
-    double t, b, l, r;
     int ncols, nrows;
 
     ncols = G_window_cols();
     nrows = G_window_rows();
 
     /* Set up the screen, conversions, and graphics */
-    D_get_dst(&t, &b, &l, &r);
+    D_setup(0);
     D_set_overlay_mode(overlay);
-    if (D_cell_draw_setup(t, b, l, r))
-	G_fatal_error(_("Cannot use current window"));
 
     /* Make sure map is available */
     if ((cellfile = G_open_cell_old(name, mapset)) == -1)
@@ -69,6 +66,8 @@ static int cell_draw(char *name,
 
     /* Allocate space for cell buffer */
     xarray = G_allocate_raster_buf(data_type);
+
+    D_cell_draw_begin();
 
     /* loop for array rows */
     for (cur_A_row = 0; cur_A_row != -1;) {

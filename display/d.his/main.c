@@ -54,7 +54,6 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt_h, *opt_i, *opt_s, *brighten;
     struct Flag *nulldraw;
-    double t, b, l, r;
     double bright_mult;
 
 
@@ -117,9 +116,7 @@ int main(int argc, char **argv)
 
     /* Prepare the raster cell drawing functions */
     D_setup(0);
-    D_get_dst(&t, &b, &l, &r);
     D_set_overlay_mode(nulldraw->answer ? 1 : 0);
-    D_cell_draw_setup(t, b, l, r);
 
     /* Get name of layer to be used for hue */
     name_h = opt_h->answer;
@@ -201,6 +198,8 @@ int main(int argc, char **argv)
     /* Now do the work */
     intensity = 255;		/* default is to not change intensity */
     saturation = 255;		/* default is to not change saturation */
+
+    D_cell_draw_begin();
 
     next_row = 0;
     for (atrow = 0; atrow < window.rows;) {

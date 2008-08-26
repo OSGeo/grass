@@ -130,22 +130,12 @@ static int draw_cell(int A_row,
  *  \return int
  */
 
-int D_cell_draw_setup(double t, double b, double l, double r)
+void D_cell_draw_begin(void)
 {
-    struct Cell_head window;
-
-    if (G_get_set_window(&window) == -1)
-	G_fatal_error("Current window not available");
-
-    D_do_conversions(&window, t, b, l, r);
-
     /* Set up the screen for drawing map */
     D_get_a(src);
     D_get_d(dst);
-
     R_begin_scaled_raster(D__overlay_mode, src, dst);
-
-    return 0;
 }
 
 int D_draw_raster_RGB(int A_row,

@@ -45,7 +45,6 @@ int main(int argc, char **argv)
     struct Cell_head window;
     struct GModule *module;
     struct Flag *flag_o;
-    double t, b, l, r;
     int i;
 
     G_gisinit(argv[0]);
@@ -84,9 +83,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No graphics device selected"));
 
     D_setup(0);
-    D_get_dst(&t, &b, &l, &r);
     D_set_overlay_mode(flag_o->answer);
-    D_cell_draw_setup(t, b, l, r);
 
     for (i = 0; i < 3; i++) {
 	/* Get name of layer to be used */
@@ -111,6 +108,8 @@ int main(int argc, char **argv)
 
     /* read in current window */
     G_get_window(&window);
+
+    D_cell_draw_begin();
 
     next_row = 0;
     for (row = 0; row < window.rows;) {

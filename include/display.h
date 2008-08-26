@@ -124,7 +124,7 @@ int D_draw_d_raster(int, const DCELL *, struct Colors *);
 int D_draw_f_raster(int, const FCELL *, struct Colors *);
 int D_draw_c_raster(int, const CELL *, struct Colors *);
 int D_draw_cell(int, const CELL *, struct Colors *);
-int D_cell_draw_setup(double, double, double, double);
+void D_cell_draw_begin(void);
 int D_draw_raster_RGB(int, const void *, const void *, const void *,
 		      struct Colors *, struct Colors *, struct Colors *,
 		      RASTER_MAP_TYPE, RASTER_MAP_TYPE, RASTER_MAP_TYPE);
