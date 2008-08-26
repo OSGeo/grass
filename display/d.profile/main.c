@@ -426,16 +426,12 @@ int main(int argc, char **argv)
 
 void myDcell(char *name, char *mapset, int overlay)
 {
-    int fd, i, t, b, l, r, code;
+    int fd, i, code;
     CELL *cell;
     struct Colors clr;
 
     D_setup(!overlay);
-
-    D_get_screen_window(&t, &b, &l, &r);
-
     D_set_overlay_mode(overlay);
-    D_cell_draw_setup(t, b, l, r);
 
     cell = G_allocate_c_raster_buf();
 
@@ -447,6 +443,7 @@ void myDcell(char *name, char *mapset, int overlay)
 	G_fatal_error(_("%s: Couldn't read color table for <%s@%s>"),
 		      G_program_name(), name, mapset);
 
+    D_cell_draw_begin();
     for (i = 0; i >= 0;) {
 	code = G_get_c_raster_row(fd, cell, i);
 	if (code < 0)
