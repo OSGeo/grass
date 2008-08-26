@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     opt2->key = "color";
     opt2->type = TYPE_STRING;
     opt2->answer = DEFAULT_FG_COLOR;
-    opt2->options = D_color_list();
+    opt2->gisprompt = GISPROMPT_COLOR;
     opt2->description = _("Sets the legend's text color");
 
     opt4 = G_define_option();
@@ -662,7 +662,7 @@ int main(int argc, char **argv)
 		txsiz = 0;	/* keep it sane */
 
 	    R_text_size(txsiz, txsiz);
-	    R_standard_color(color);
+	    D_use_color(color);
 
 	    ppl = (lleg) / (steps - 1);
 
@@ -697,7 +697,7 @@ int main(int argc, char **argv)
 	wleg = x1 - x0;
 
 	/* Black box */
-	R_standard_color(black);
+	D_use_color(black);
 	D_move_abs(x0 + 1, y0 + 1);
 	D_cont_rel(0, lleg - 2);
 	D_cont_rel(wleg - 2, 0);
@@ -705,7 +705,7 @@ int main(int argc, char **argv)
 	D_cont_rel(2 - wleg, 0);
 
 	/* White box */
-	R_standard_color(white);
+	D_use_color(white);
 	D_move_abs(x0, y0);
 	D_cont_rel(0, lleg);
 	D_cont_rel(wleg, 0);
@@ -795,7 +795,7 @@ int main(int argc, char **argv)
 	    k++;		/* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
 
 	    /* White box */
-	    R_standard_color(white);
+	    D_use_color(white);
 	    cur_dot_row += dots_per_line;
 	    D_move_abs(l + 2, (cur_dot_row - 1));
 	    D_cont_rel(0, (2 - dots_per_line));
@@ -804,7 +804,7 @@ int main(int argc, char **argv)
 	    D_cont_rel((2 - dots_per_line), 0);
 
 	    /* Black box */
-	    R_standard_color(black);
+	    D_use_color(black);
 	    D_move_abs(l + 3, (cur_dot_row - 2));
 	    D_cont_rel(0, (4 - dots_per_line));
 	    D_cont_rel((dots_per_line - 4), 0);
@@ -830,7 +830,7 @@ int main(int argc, char **argv)
 	    D_polygon_rel(x_box, y_box, 5);
 
 	    /* Draw text */
-	    R_standard_color(color);
+	    D_use_color(color);
 
 	    if (!fp) {
 		/* nothing, box only */
@@ -876,7 +876,7 @@ int main(int argc, char **argv)
 		txsiz = (int)floor(txsiz * ScaleFactor);
 		R_text_size(txsiz, txsiz);
 	    }
-	    R_standard_color(white);
+	    D_use_color(white);
 	    D_move_abs((l + 3 + dots_per_line), (cur_dot_row));
 	    R_text(buff);
 	}

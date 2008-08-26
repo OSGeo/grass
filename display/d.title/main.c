@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->answer = DEFAULT_FG_COLOR;
     opt2->required = NO;
-    opt2->options = D_color_list();
+    opt2->gisprompt = GISPROMPT_COLOR;
     opt2->description = _("Sets the text color");
 
     opt3 = G_define_option();

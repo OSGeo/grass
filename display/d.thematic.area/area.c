@@ -154,7 +154,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 
 
 	/* plot polygon in class color */
-	R_RGB_color(colors[i].r, colors[i].g, colors[i].b);
+	D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
 	plot_polygon(Points->x, Points->y, Points->n_points);
 
 	/* XXX rewrite boundary */
@@ -162,7 +162,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 	    int i;
 
 	    Vect_get_area_points(Map, area, Points);
-	    R_RGB_color(bcolor->r, bcolor->g, bcolor->b);
+	    D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    /*use different user defined render methods */
 	    plot_polyline(Points->x, Points->y, Points->n_points);
 	    for (i = 0; i < n_isles; i++) {

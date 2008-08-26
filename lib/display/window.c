@@ -18,7 +18,7 @@ void D_erase(const char *color)
 
     /* Parse and select background color */
     colorindex = D_parse_color(color, 0);
-    D_raster_use_color(colorindex);
+    D_use_color(colorindex);
 
     /* Do the plotting */
     R_box_abs(l, t, r, b);

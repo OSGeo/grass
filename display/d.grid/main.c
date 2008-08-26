@@ -214,7 +214,7 @@ int main(int argc, char **argv)
     /* Draw border */
     if (!noborder->answer) {
 	/* Set border color */
-	D_raster_use_color(colorb);
+	D_use_color(colorb);
 
 	/* Do the border plotting */
 	plot_border(size, east, north);

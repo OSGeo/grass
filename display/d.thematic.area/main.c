@@ -443,7 +443,7 @@ int main(int argc, char **argv)
 	     * driver (not implemented)?  It will help restore previous line
 	     * width (not just 0) determined by another module (e.g.,
 	     * d.linewidth). */
-	    R_line_width(0);
+	    D_line_width(0);
 
 	}			/* end window check if */
 

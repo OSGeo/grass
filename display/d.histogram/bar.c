@@ -298,7 +298,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	     ((i == dist_stats->mincat) && nodata))
 	    && !(nodata && i == dist_stats->mincat + 1)) {
 	    /* draw a numbered tic-mark */
-	    D_raster_use_color(color);
+	    D_use_color(color);
 	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale,
 		       b - ORIGIN_Y * (b - t));
 	    D_cont_rel(0, BIG_TIC * (b - t));
@@ -315,12 +315,12 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
 	    R_text_size(text_width, text_height);
-	    R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tr - tl) > XTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
 		R_text_size(text_width, text_height);
-		R_get_text_box(txt, &tt, &tb, &tl, &tr);
+		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale - (tr - tl) / 2,
 		       b - XNUMS_Y * (b - t));
@@ -328,7 +328,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	}
 	else if (rem(i, tic_unit) == (float)0) {
 	    /* draw a tic-mark */
-	    D_raster_use_color(color);
+	    D_use_color(color);
 	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale,
 		       b - ORIGIN_Y * (b - t));
 	    D_cont_rel(0, SMALL_TIC * (b - t));
@@ -343,10 +343,10 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
-    R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
 	       b - LABEL_1 * (b - t));
-    D_raster_use_color(color);
+    D_use_color(color);
     R_text(xlabel);
 
     /* DRAW Y-AXIS TIC-MARKS AND NUMBERS
@@ -385,12 +385,12 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
 	    R_text_size(text_width, text_height);
-	    R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tt - tb) > YTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
 		R_text_size(text_width, text_height);
-		R_get_text_box(txt, &tt, &tb, &tl, &tr);
+		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_move_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
 		       yoffset - (yscale * i + 0.5 * (tt - tb)));
@@ -420,14 +420,14 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
-    R_get_text_box(ylabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(ylabel, &tt, &tb, &tl, &tr);
     D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
 	       b - LABEL_2 * (b - t));
-    D_raster_use_color(color);
+    D_use_color(color);
     R_text(ylabel);
 
     /* draw x and y axis lines */
-    D_raster_use_color(color);
+    D_use_color(color);
     D_polyline_abs(x_line, y_line, 3);
 
     return 0;

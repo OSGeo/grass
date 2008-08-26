@@ -37,12 +37,12 @@ int plot_grid(double grid_size, double east, double north, int do_text,
     while (x <= window.east) {
 
 	if (mark_type == MARK_GRID) {
-	    D_raster_use_color(gcolor);
+	    D_use_color(gcolor);
 	    D_line_abs(x, window.north, x, window.south);
 	}
 
 	if (do_text) {
-	    D_raster_use_color(tcolor);
+	    D_use_color(tcolor);
 	    G_format_easting(x, text, G_projection());
 	    R_text_rotation(270.0);
 	    R_text_size(fontsize, fontsize);
@@ -79,14 +79,14 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 
     while (y <= window.north) {
 	if (mark_type == MARK_GRID) {
-	    D_raster_use_color(gcolor);
+	    D_use_color(gcolor);
 	    D_line_abs(window.east, y, e1, y);
 	    D_line_abs(e1, y, e2, y);
 	    D_line_abs(e2, y, window.west, y);
 	}
 
 	if (do_text) {
-	    D_raster_use_color(tcolor);
+	    D_use_color(tcolor);
 	    G_format_northing(y, text, G_projection());
 	    R_text_size(fontsize, fontsize);
 
@@ -178,7 +178,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    continue;
 
 	/* Set grid color */
-	D_raster_use_color(gcolor);
+	D_use_color(gcolor);
 
 	for (ll = 0; ll < SEGS; ll++) {
 	    n1 = n2 = g;
@@ -205,7 +205,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
 	if (do_text) {
 	    /* Set text color */
-	    D_raster_use_color(tcolor);
+	    D_use_color(tcolor);
 
 	    G_format_northing(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);
@@ -225,7 +225,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    continue;
 
 	/* Set grid color */
-	D_raster_use_color(gcolor);
+	D_use_color(gcolor);
 
 	for (ll = 0; ll < SEGS; ll++) {
 	    e1 = e2 = g;
@@ -257,7 +257,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	}
 	if (do_text) {
 	    /* Set text color */
-	    D_raster_use_color(tcolor);
+	    D_use_color(tcolor);
 
 	    G_format_easting(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);

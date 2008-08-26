@@ -67,9 +67,6 @@ double D_u_to_d_col(double);
 double D_u_to_a_row(double);
 double D_u_to_a_col(double);
 
-/* color_list.c */
-char *D_color_list(void);
-
 /* draw2.c */
 void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
@@ -157,8 +154,9 @@ int D_translate_color(const char *);
 int D_translate_or_add_color(const char *, int);
 int D_allocate_color(void);
 int D_parse_color(const char *, int);
-int D_raster_use_color(int);
+int D_use_color(int);
 int D_color_number_to_RGB(int, int *, int *, int *);
+void D_RGB_color(int, int, int);
 
 /* window.c */
 void D_erase(const char *);

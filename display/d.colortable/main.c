@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     opt2->key = "color";
     opt2->type = TYPE_STRING;
     opt2->answer = DEFAULT_FG_COLOR;
-    opt2->options = D_color_list();
+    opt2->gisprompt = GISPROMPT_COLOR;
     opt2->description =
 	"Color of lines separating the colors of the color table";
 
@@ -193,14 +193,14 @@ int main(int argc, char **argv)
 	    for (atline = 0; atline < lines; atline++) {
 		cur_dot_row += dots_per_line;
 		/* Draw white box */
-		R_standard_color(color);
+		D_use_color(color);
 		D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
 		D_cont_rel(0, (2 - dots_per_line));
 		D_cont_rel((dots_per_col - 2), 0);
 		D_cont_rel(0, (dots_per_line - 2));
 		D_cont_rel((2 - dots_per_col), 0);
 		/* Draw black box */
-		R_standard_color(black);
+		D_use_color(black);
 		D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
 		D_cont_rel(0, (4 - dots_per_line));
 		D_cont_rel((dots_per_col - 4), 0);
@@ -227,14 +227,14 @@ int main(int argc, char **argv)
 	cur_dot_row = t + dots_per_line;
 	cur_dot_col = l;
 	/* Draw white box */
-	R_standard_color(color);
+	D_use_color(color);
 	D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
 	D_cont_rel(0, (2 - dots_per_line));
 	D_cont_rel((dots_per_col - 2), 0);
 	D_cont_rel(0, (dots_per_line - 2));
 	D_cont_rel((2 - dots_per_col), 0);
 	/* Draw black box */
-	R_standard_color(black);
+	D_use_color(black);
 	D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
 	D_cont_rel(0, (4 - dots_per_line));
 	D_cont_rel((dots_per_col - 4), 0);

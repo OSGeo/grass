@@ -75,7 +75,7 @@ int measurements(int color1, int color2, int s_flag, int m_flag, int k_flag)
 	length = 0.0;
 
 	do {
-	    R_standard_color(color1);
+	    D_use_color(color1);
 	    R_get_location_with_line(cur_screen_x, cur_screen_y, &screen_x,
 				     &screen_y, &button);
 	    uy = D_d_to_u_row((double)screen_y);

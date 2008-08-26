@@ -29,7 +29,7 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 {
     int text_x, text_y;
 
-    R_standard_color(line_color);
+    D_use_color(line_color);
     if (lon1 != lon2) {
 	G_shortest_way(&lon1, &lon2);
 	G_begin_rhumbline_equation(lon1, lat1, lon2, lat2);

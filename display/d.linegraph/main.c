@@ -140,16 +140,16 @@ int main(int argc, char **argv)
     y_color_opt->type = TYPE_STRING;
     y_color_opt->required = NO;
     y_color_opt->multiple = YES;
+    y_color_opt->gisprompt = GISPROMPT_COLOR;
     y_color_opt->answers = NULL;
-    y_color_opt->options = D_COLOR_LIST;
 
     t_color_opt = G_define_option();
     t_color_opt->key = "title_color";
     t_color_opt->description = _("Color for axis, tics, numbers, and title");
     t_color_opt->type = TYPE_STRING;
     t_color_opt->required = NO;
+    t_color_opt->gisprompt = GISPROMPT_COLOR;
     t_color_opt->answer = DEFAULT_FG_COLOR;
-    t_color_opt->options = D_COLOR_LIST;
 
     title[0] = G_define_option();
     title[0]->key = "x_title";
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 
 		/* draw increment of each Y file's data */
 
-		R_standard_color(in[i].color);
+		D_use_color(in[i].color);
 
 		/* find out position of where Y should be drawn. */
 		/* if our minimum value of y is not negative, this is easy */
@@ -413,7 +413,7 @@ int main(int argc, char **argv)
 
 	    /* draw a numbered tic-mark */
 
-	    R_standard_color(title_color);
+	    D_use_color(title_color);
 	    D_move_abs((xoffset + line * xscale),
 		       (b - ORIGIN_Y * (b - t)));
 	    D_cont_rel(0, (BIG_TIC * (b - t)));
@@ -425,12 +425,12 @@ int main(int argc, char **argv)
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
 	    R_text_size(text_width, text_height);
-	    R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tr - tl) > XTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
 		R_text_size(text_width, text_height);
-		R_get_text_box(txt, &tt, &tb, &tl, &tr);
+		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_move_abs((xoffset + (line * xscale - (tr - tl) / 2)),
 		       (b - XNUMS_Y * (b - t)));
@@ -440,7 +440,7 @@ int main(int argc, char **argv)
 
 	    /* draw a tic-mark */
 
-	    R_standard_color(title_color);
+	    D_use_color(title_color);
 	    D_move_abs((xoffset + line * xscale),
 		       (b - ORIGIN_Y * (b - t)));
 	    D_cont_rel(0, (SMALL_TIC * (b - t)));
@@ -460,10 +460,10 @@ int main(int argc, char **argv)
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     R_text_size(text_width, text_height);
-    R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
 	       (b - LABEL_1 * (b - t)));
-    R_standard_color(title_color);
+    D_use_color(title_color);
     R_text(xlabel);
 
     /* DRAW Y-AXIS TIC-MARKS AND NUMBERS
@@ -501,12 +501,12 @@ int main(int argc, char **argv)
 	    text_height = (b - t) * TEXT_HEIGHT;
 	    text_width = (r - l) * TEXT_WIDTH;
 	    R_text_size(text_width, text_height);
-	    R_get_text_box(txt, &tt, &tb, &tl, &tr);
+	    D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    while ((tt - tb) > YTIC_DIST) {
 		text_width *= 0.75;
 		text_height *= 0.75;
 		R_text_size(text_width, text_height);
-		R_get_text_box(txt, &tt, &tb, &tl, &tr);
+		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
 	    D_move_abs((l + (r - l) * YNUMS_X - (tr - tl) / 2),
 		       (yoffset -
@@ -529,10 +529,10 @@ int main(int argc, char **argv)
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     R_text_size(text_width, text_height);
-    R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
 	       (b - LABEL_2 * (b - t)));
-    R_standard_color(title_color);
+    D_use_color(title_color);
     R_text(xlabel);
 
     /* top label */
@@ -540,19 +540,19 @@ int main(int argc, char **argv)
     text_height = (b - t) * TEXT_HEIGHT;
     text_width = (r - l) * TEXT_WIDTH * 2.0;
     R_text_size(text_width, text_height);
-    R_get_text_box(xlabel, &tt, &tb, &tl, &tr);
+    D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
     /*
        R_move_abs((int)(((r-l)/2)-(tr-tl)/2),
        (int) (t+ (b-t)*.07) );
      */
     D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
 	       (t + (b - t) * .07));
-    R_standard_color(title_color);
+    D_use_color(title_color);
     R_text(xlabel);
 
     /* draw x and y axis lines */
-    R_standard_color(title_color);
-    R_polyline_abs(x_line, y_line, 3);
+    D_use_color(title_color);
+    D_polyline_abs(x_line, y_line, 3);
 
     R_flush();
     R_close_driver();

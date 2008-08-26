@@ -52,7 +52,6 @@ int main(int argc, char **argv)
     DCELL *cell;
     char *mapset;
     char full_name[128];
-    double ew_res, ns_res;
     int fixed_color, grid_color;
     int R, G, B;
     int layer_fd;
@@ -81,7 +80,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->answer = "gray";
-    opt2->options = D_COLOR_LIST ",none";
+    opt2->gisprompt = GISPROMPT_COLOR;
     opt2->key_desc = "color";
     opt2->description = _("Color for drawing grid, or \"none\"");
 
@@ -90,7 +89,7 @@ int main(int argc, char **argv)
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->answer = DEFAULT_FG_COLOR;
-    opt3->options = D_COLOR_LIST;
+    opt3->gisprompt = GISPROMPT_COLOR;
     opt3->key_desc = "color";
     opt3->description = _("Color for drawing text");
 
@@ -135,16 +134,6 @@ int main(int argc, char **argv)
     inmap_type = G_get_raster_map_type(layer_fd);
     map_type = DCELL_TYPE;
 
-    /* Setup driver and check important information */
-
-    if (R_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected"));
-
-    D_setup(0);
-
-    D_ns = fabs(D_get_a_to_d_yconv());
-    D_ew = fabs(D_get_a_to_d_xconv());
-
     /* Read in the map window associated with window */
 
     G_get_window(&window);
@@ -169,25 +158,31 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Aborting."));
     }
 
-    /* resolutions */
-    ew_res = window.ew_res;
-    ns_res = window.ns_res;
+    /* Setup driver and check important information */
+
+    if (R_open_driver() != 0)
+	G_fatal_error(_("No graphics device selected"));
+
+    D_setup2(0, 0, 0, nrows, 0, ncols);
+
+    D_ns = fabs(D_get_u_to_d_yconv());
+    D_ew = fabs(D_get_u_to_d_xconv());
 
     /*set the number of significant digits */
     sscanf(prec->answer, "%i", &digits);
 
     if (grid_color > 0) {	/* ie not "none" */
 	/* Set grid color */
-	R_standard_color(grid_color);
+	D_use_color(grid_color);
 
 	/* Draw vertical grids */
-	for (col = 0; col < ncols; col++) {
+	for (col = 0; col <= ncols; col++) {
 	    D_move_abs(col, 0);
 	    D_cont_abs(col, nrows);
 	}
 
 	/* Draw horizontal grids */
-	for (row = 0; row < nrows; row++) {
+	for (row = 0; row <= nrows; row++) {
 	    D_move_abs(0,     row);
 	    D_cont_abs(ncols, row);
 	}
@@ -202,7 +197,7 @@ int main(int argc, char **argv)
 
     /* fixed text color */
     if (fixed_color == 1)
-	R_standard_color(D_translate_color(opt3->answer));
+	D_use_color(D_translate_color(opt3->answer));
 
     /* loop through cells, find value, and draw text for value */
     for (row = 0; row < nrows; row++) {
@@ -212,7 +207,7 @@ int main(int argc, char **argv)
 
 	    if (fixed_color == 0) {
 		G_get_raster_color(&cell[col], &R, &G, &B, &colors, map_type);
-		R_RGB_color(R, G, B);
+		D_RGB_color(R, G, B);
 	    }
 
 	    draw_number(row, col, cell[col], digits, inmap_type);
@@ -231,13 +226,14 @@ int main(int argc, char **argv)
 
 int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_type)
 {
-    int len, text_size, rite;
+    int len;
+    double text_size, rite;
     double tt, tb, tl, tr;
     char no[32];
     double dots_per_line, factor = 0.8;
     DCELL dcell = number;
     CELL cell = (int)number;
-    double x, y;
+    double dx;
 
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
@@ -265,15 +261,12 @@ int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_t
     }
 
     R_text_size(text_size, text_size);
-    R_get_text_box(no, &tt, &tb, &tl, &tr);
-    /*
-       R_get_text_box(num,&tt,&tb,&tl,&tr);
-       R_move_abs(D_x+(int)(D_ew*0.1),D_y+(int)(D_ns*0.5)) ;
-       R_move_abs(D_x,D_y+(int)(dots_per_line - 1)) ;
-     */
-    x = D_a_to_u_col(col + 0.5);
-    y = D_a_to_u_row(row + 0.7);
-    D_move_abs(x - (tr - tl) / 2, y);
+
+    D_move_abs(col, row + 0.7);
+    D_get_text_box(no, &tt, &tb, &tl, &tr);
+
+    dx = (tr + tl) / 2 - (col + 0.5);
+    D_move_abs(col - dx, row + 0.7);
     R_text(no);
 
     return 0;

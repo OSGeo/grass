@@ -91,7 +91,7 @@ void set_color_from_RGBA(const RGBA_Color * color)
 	G_debug(5, "setting display color to [%d:%d:%d]",
 		color->r, color->g, color->b);
 
-	R_RGB_color(color->r, color->g, color->b);
+	D_RGB_color(color->r, color->g, color->b);
     }
     else
 	G_debug(5, "skipped setting display color as it was set to \"none\"");

@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     parm.lcolor->type = TYPE_STRING;
     parm.lcolor->required = NO;
     parm.lcolor->description = "Line color";
-    parm.lcolor->options = D_color_list();
+    parm.lcolor->gisprompt = GISPROMPT_COLOR;
     parm.lcolor->answer = DEFAULT_FG_COLOR;
 
 #ifdef CAN_DO_DISTANCES
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     parm.tcolor->type = TYPE_STRING;
     parm.tcolor->required = NO;
     parm.tcolor->description = "Text color";
-    parm.tcolor->options = D_color_list();
+    parm.tcolor->gisprompt = GISPROMPT_COLOR;
 #endif
 
     if (G_parser(argc, argv))
