@@ -405,6 +405,9 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
+	    if (G_is_d_null_value(&voffset_curr))
+		continue;
+
 	    if (k == 0) {
 		voffset_dem = voffset_curr;
 	    }
@@ -415,9 +418,9 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	}
     }
 
-    k = 0;
+    
     /* walls */
-    while (1) {
+    for (k = 0; ; k++) {
 	voffset_curr = voffset_next = 0.0;
 
 	/* trace */
@@ -425,11 +428,16 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    voffset_curr = G_get_raster_sample(fdrast, &window, NULL,
 					       Points->y[k], Points->x[k], 0,
 					       NEAREST);
+	    if (G_is_d_null_value(&voffset_curr))
+		continue;
+
 	    if (type != GV_POINT) {
 		voffset_next = G_get_raster_sample(fdrast, &window, NULL,
 						   Points->y[k + 1],
 						   Points->x[k + 1], 0,
 						   NEAREST);
+		if (G_is_d_null_value(&voffset_next))
+		    continue;
 	    }
 	}
 
@@ -484,7 +492,6 @@ static int extrude(struct Map_info *In, struct Map_info *Out,
 	    if (k >= Points->n_points - 2)
 		break;
 	}
-	k++;
     }
 
     if (type & (GV_POINT | GV_LINE)) {
