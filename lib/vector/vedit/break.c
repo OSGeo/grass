@@ -266,10 +266,14 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 				       NULL, NULL, NULL, &angle_t,
 				       NULL) > 0) {
 		    angle = angle_t - angle_f;
-		    dist_p = dist / sin(angle);
+		    dist_p = fabs(dist / sin(angle));
 		    
-		    if (first)
-			angle_f -= M_PI;
+		    if (first) {
+			if (angle_f < 0)
+			    angle_f -= M_PI;
+			else
+			    angle_f += M_PI;
+		    }
 
 		    x1 = x + dist_p * cos(angle_f);
 		    y1 = y + dist_p * sin(angle_f);
