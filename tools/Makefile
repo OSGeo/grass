@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ..
 
-SUBDIRS = timer mkftcap
+SUBDIRS = timer
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
