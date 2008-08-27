@@ -829,7 +829,7 @@ class mainFrame(wx.Frame):
         if self.get_dcmd:
             # display decorations and 
             # pressing OK or cancel after setting layer properties
-            if self.task.name == 'd.barscale' or self.task.name == 'd.legend' \
+            if self.task.name in ['d.barscale','d.legend','d.histogram'] \
                 or len(self.parent.GetPyData(self.layer)[0]['cmd']) >= 1:
                 self.Hide()
             # canceled layer with nothing set
