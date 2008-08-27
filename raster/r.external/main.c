@@ -399,7 +399,7 @@ static void make_link(const char *input, const char *output, int band,
     fclose(fp);
 }
 
-void write_fp_format(const char *output, const struct band_info *info)
+static void write_fp_format(const char *output, const struct band_info *info)
 {
     struct Key_Value *key_val;
     const char *type;
@@ -427,6 +427,16 @@ void write_fp_format(const char *output, const struct band_info *info)
     G_free_key_value(key_val);
 }
 
+static void write_fp_quant(const char *output)
+{
+    struct Quant quant;
+
+    G_quant_round(&quant);
+
+    if (G_write_quant(output, G_mapset(), &quant) < 0)
+	G_warning(_("Unable to write quant file"));
+}
+
 static void create_map(const char *input, int band, const char *output,
 		       struct Cell_head *cellhd, struct band_info *info,
 		       const char *title)
@@ -451,6 +461,7 @@ static void create_map(const char *input, int band, const char *output,
 	fprange.max = info->range[1];
 	G_write_fp_range(output, &fprange);
 	write_fp_format(output, info);
+	write_fp_quant(output);
     }
 
     G_verbose_message(_("Creating support files for %s"), output);
