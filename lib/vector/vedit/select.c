@@ -14,6 +14,7 @@
    \date 2007-2008
 */
 
+#include <grass/glocale.h>
 #include <grass/vedit.h>
 
 static int select_by_query(struct Map_info *, int, int, double,
