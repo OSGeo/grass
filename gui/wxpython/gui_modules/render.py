@@ -850,7 +850,13 @@ class Map(object):
 	os.environ["GRASS_PNG_AUTO_WRITE"] = "TRUE"
 	os.environ["GRASS_COMPRESSION"] = "0"
 	os.environ["GRASS_TRUECOLOR"] = "TRUE"
-	os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
+        driver = UserSettings.Get(group='display', key='driver', subkey='type')
+        if driver == 'cairo':
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        elif driver == 'png':
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
+        else:
+            os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
         
         self._renderLayers(force, mapWindow, maps, masks, opacities)
             
