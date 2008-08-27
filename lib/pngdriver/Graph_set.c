@@ -66,7 +66,7 @@ int PNG_Graph_set(void)
     png.file_name = p;
 
     p = getenv("GRASS_TRUECOLOR");
-    png.true_color = p && strcmp(p, "TRUE") == 0;
+    png.true_color = !p || strcmp(p, "FALSE") != 0;
 
     G_message("PNG: GRASS_TRUECOLOR status: %s",
 	      png.true_color ? "TRUE" : "FALSE");
