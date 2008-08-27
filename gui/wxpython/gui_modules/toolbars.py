@@ -1100,18 +1100,17 @@ class VDigitToolbar(AbstractToolbar):
 class ProfileToolbar(AbstractToolbar):
     """
     Toolbar for profiling raster map
-    """
-    def __init__(self, parent, mapdisplay, map):
-        self.parent     = parent
-        self.mapcontent = map
-        self.mapdisplay = mapdisplay
+    """ 
+    def __init__(self, parent, tbframe):
+        self.parent  = parent # GCP
+        self.tbframe = tbframe
 
-        self.toolbar = wx.ToolBar(parent=self.mapdisplay, id=wx.ID_ANY)
+        self.toolbar = wx.ToolBar(parent=self.tbframe, id=wx.ID_ANY)
 
         # self.SetToolBar(self.toolbar)
         self.toolbar.SetToolBitmapSize(globalvar.toolbarSize)
 
-        self.InitToolbar(self.mapdisplay, self.toolbar, self.ToolbarData())
+        self.InitToolbar(self.tbframe, self.toolbar, self.ToolbarData())
 
         # realize the toolbar
         self.toolbar.Realize()

@@ -89,8 +89,8 @@ class ProfileFrame(wx.Frame):
         #
         # Add toolbar
         #
-        toolbar = toolbars.ProfileToolbar(parent=self, mapdisplay=self.mapwin, map=self.Map).GetToolbar()
-        self.SetToolBar(toolbar)
+        self.toolbar = toolbars.ProfileToolbar(parent=self, tbframe=self).GetToolbar()
+        self.SetToolBar(self.toolbar)
         
         #
         # Set the size & cursor
