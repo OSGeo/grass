@@ -20,21 +20,22 @@
 #include <stdio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 #include "filter.h"
 #include "glob.h"
 
 int nrows, ncols;
 int buflen;
 int direction;
-int zero_only;
+int null_only;
 int preserve_edges;
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     FILTER *filter;
     int nfilters;
     int repeat;
-    char *in_name, *in_mapset;
+    char *in_name;
     char *filt_name;
     char *out_name;
     char title[1024];
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
 
     flag2 = G_define_flag();
     flag2->key = 'z';
-    flag2->description = _("Apply filter only to zero data values");
+    flag2->description = _("Apply filter only to null data values");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -97,7 +98,7 @@ int main(int argc, char *argv[])
     /*
        preserve_edges = flag3->answer;
      */
-    zero_only = flag2->answer;
+    null_only = flag2->answer;
 
     sscanf(opt4->answer, "%d", &repeat);
     out_name = opt2->answer;
@@ -105,13 +106,9 @@ int main(int argc, char *argv[])
 
     in_name = opt1->answer;
 
-    in_mapset = G_find_cell2(in_name, "");
-    if (in_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), in_name);
-
     nrows = G_window_rows();
     ncols = G_window_cols();
-    buflen = ncols * sizeof(CELL);
+    buflen = ncols * sizeof(DCELL);
 
     /* get the filter */
     filter = get_filter(filt_name, &nfilters, temp);
@@ -132,7 +129,7 @@ int main(int argc, char *argv[])
 	sprintf(title, "%s filtered using %s", in_name, temp);
     }
 
-    perform_filter(in_name, in_mapset, out_name, filter, nfilters, repeat);
+    perform_filter(in_name, out_name, filter, nfilters, repeat);
 
     G_put_cell_title(out_name, title);
 

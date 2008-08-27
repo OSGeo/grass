@@ -6,7 +6,7 @@
 #include "filter.h"
 #include "local_proto.h"
 
-int perform_filter(char *in_name, char *in_mapset, char *out_name,
+int perform_filter(const char *in_name, const char *out_name,
 		   FILTER * filter, int nfilters, int repeat)
 {
     int in;
@@ -17,10 +17,10 @@ int perform_filter(char *in_name, char *in_mapset, char *out_name,
     char *tmp1, *tmp2;
     int count;
     int row;
-    CELL *cell;
+    DCELL *cell;
 
 
-    cell = G_allocate_cell_buf();
+    cell = G_allocate_d_raster_buf();
 
     count = 0;
     for (pass = 0; pass < repeat; pass++) {
@@ -29,10 +29,9 @@ int perform_filter(char *in_name, char *in_mapset, char *out_name,
 	    G_debug(1, "Filter %d", n + 1);
 
 	    if (count == 0) {
-		in = G_open_cell_old(in_name, in_mapset);
+		in = G_open_cell_old(in_name, "");
 
-		G_debug(1, "Open raster map %s in %s = %d", in_name,
-			in_mapset, in);
+		G_debug(1, "Open raster map %s = %d", in_name, in);
 
 		if (in < 0) {
 		    G_fatal_error(_("Cannot open raster map <%s>"), in_name);
@@ -79,7 +78,7 @@ int perform_filter(char *in_name, char *in_mapset, char *out_name,
 
     /* copy final result to output raster map */
     in = out;
-    out = G_open_cell_new(out_name);
+    out = G_open_fp_cell_new(out_name);
     if (out < 0) {
 	G_fatal_error(_("Cannot create raster map <%s>"), out_name);
     }
@@ -87,7 +86,7 @@ int perform_filter(char *in_name, char *in_mapset, char *out_name,
     G_message(_("Writing raster map <%s>"), out_name);
     for (row = 0; row < nrows; row++) {
 	getrow(in, cell, row, buflen);
-	G_put_raster_row(out, cell, CELL_TYPE);
+	G_put_d_raster_row(out, cell);
     }
 
     /* remove the temporary files before closing so that the G_close_cell()

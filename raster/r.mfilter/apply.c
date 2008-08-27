@@ -6,49 +6,45 @@
  *  filter:    filter to be applied
  *  input:     input buffers
  **************************************************************/
-CELL apply_filter(FILTER * filter, CELL ** input)
+DCELL apply_filter(FILTER * filter, DCELL ** input)
 {
-    int **matrix;
-    int size;
-    int divisor;
-    int round;
-    register int r, c;
-    register CELL v;
-
-    size = filter->size;
-    divisor = filter->divisor;
-    matrix = filter->matrix;
+    int size = filter->size;
+    double **matrix = filter->matrix;
+    double divisor = filter->divisor;
+    int r, c;
+    DCELL v;
 
     v = 0;
-    for (r = 0; r < size; r++)
-	for (c = 0; c < size; c++)
-	    v += input[r][c] * matrix[r][c];
-    /* zero divisor means compute a divisor. this is done by adding the
-       numbers is the divisor matrix where the corresponding cell value
-       is not zero.
-     */
-    if (divisor == 0) {
-	matrix = filter->dmatrix;
-	for (r = 0; r < size; r++)
-	    for (c = 0; c < size; c++)
-		if (input[r][c])
-		    divisor += matrix[r][c];
-    }
 
-    /* now round the result to nearest integer. negative numbers are rounded
-       a little differently than non-negative numbers
-     */
-    if (divisor) {
-	if (round = divisor / 2) {
-	    if ((round > 0 && v > 0) || (round < 0 && v < 0))
-		v += round;
-	    else
-		v -= round;
-	}
+    if (divisor == 0) {
+	int have_result = 0;
+
+	for (r = 0; r < size; r++)
+	    for (c = 0; c < size; c++) {
+		if (G_is_d_null_value(&input[r][c]))
+		    continue;
+		v += input[r][c] * matrix[r][c];
+		divisor += filter->dmatrix[r][c];
+		have_result = 1;
+	    }
+
+	if (have_result)
+	    v /= divisor;
+	else
+	    G_set_d_null_value(&v, 1);
+    }
+    else {
+	for (r = 0; r < size; r++)
+	    for (c = 0; c < size; c++) {
+		if (G_is_d_null_value(&input[r][c])) {
+		    G_set_d_null_value(&v, 1);
+		    return v;
+		}
+		v += input[r][c] * matrix[r][c];
+	    }
+
 	v /= divisor;
     }
-    else
-	v = 0;
 
     return v;
 }
