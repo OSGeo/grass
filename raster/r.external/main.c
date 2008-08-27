@@ -399,6 +399,34 @@ static void make_link(const char *input, const char *output, int band,
     fclose(fp);
 }
 
+void write_fp_format(const char *output, const struct band_info *info)
+{
+    struct Key_Value *key_val;
+    const char *type;
+    FILE *fp;
+
+    if (info->data_type == CELL_TYPE)
+	return;
+
+    key_val = G_create_key_value();
+
+    type = (info->data_type == FCELL_TYPE)
+	? "float"
+	: "double";
+    G_set_key_value("type", type, key_val);
+
+    G_set_key_value("byte_order", "xdr", key_val);
+
+    fp = G_fopen_new_misc("cell_misc", "f_format", output);
+    if (!fp)
+	G_fatal_error(_("Unable to create cell_misc/%s/f_format file"), output);
+
+    if (G_fwrite_key_value(fp, key_val) < 0)
+	G_fatal_error(_("Error writing cell_misc/%s/f_format file"), output);
+
+    G_free_key_value(key_val);
+}
+
 static void create_map(const char *input, int band, const char *output,
 		       struct Cell_head *cellhd, struct band_info *info,
 		       const char *title)
@@ -422,6 +450,7 @@ static void create_map(const char *input, int band, const char *output,
 	fprange.min = info->range[0];
 	fprange.max = info->range[1];
 	G_write_fp_range(output, &fprange);
+	write_fp_format(output, info);
     }
 
     G_verbose_message(_("Creating support files for %s"), output);
