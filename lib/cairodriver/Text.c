@@ -251,21 +251,6 @@ void Cairo_set_font(const char *name)
     return;
 }
 
-/*!
-  \brief Set font encoding
-
-  \param enc encoding name
-*/
-void Cairo_set_encoding(const char *enc)
-{
-    if (encoding)
-	G_free(encoding);
-
-    encoding = G_store(enc);
-
-    return;
-}
-
 static void font_list_toy(char ***list, int *count, int verbose)
 {
     char **fonts = *list;

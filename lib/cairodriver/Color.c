@@ -14,10 +14,6 @@
 
 #include "cairodriver.h"
 
-/* "cached" color (to avoid more color change calls than necessary) */
-/* TODO: find a proper solution for initialization */
-int previous_color = 0x7FFFFFFF;
-
 /*!
   \brief Set source color (opaque)
   
@@ -28,6 +24,8 @@ int previous_color = 0x7FFFFFFF;
 */
 void Cairo_color(int color)
 {
+    static int previous_color = 0x7FFFFFFF;
+
     G_debug(3, "Cairo_color: %d", color);
 
     if (color != previous_color) {
