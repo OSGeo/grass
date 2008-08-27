@@ -3,7 +3,6 @@
 
 #include <grass/gis.h>
 #include <grass/Vect.h>
-#include <grass/glocale.h>
 
 #define NO_SNAP    0		/* snapping disabled */
 #define SNAP       1		/* snapping enabled for nodes */
