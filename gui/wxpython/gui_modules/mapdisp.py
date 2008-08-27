@@ -3205,9 +3205,9 @@ class MapFrame(wx.Frame):
             if pgnum > -1:
                 self.layerbook.DeletePage(pgnum)
         
-        #self.Destroy()
-        if event:
-            event.Skip()
+        ### self.Destroy()
+        # if event:
+        #    event.Skip() <- causes application crash
         
     def GetRender(self):
         """
