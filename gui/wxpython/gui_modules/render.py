@@ -132,14 +132,8 @@ class Layer(object):
         #
         # start monitor
         #
-        if UserSettings.Get(group='display', key='driver', subkey='type') == 'cairo':
-            os.environ["GRASS_CAIROFILE"] = self.mapfile
-            if 'cairo' not in gcmd.Command(['d.mon', '-p']).ReadStdOutput()[0]:
-                gcmd.Command(['d.mon',
-                              'start=cairo'], stderr=None)
-        else:
-            if self.mapfile:
-                os.environ["GRASS_PNGFILE"] = self.mapfile
+	if self.mapfile:
+	    os.environ["GRASS_PNGFILE"] = self.mapfile
                 
         #
         # execute command
@@ -174,12 +168,7 @@ class Layer(object):
         #
         # stop monitor
         #
-        if UserSettings.Get(group='display', key='driver', subkey='type') == 'cairo':
-            gcmd.Command(['d.mon',
-                          'stop=cairo'], stderr=None)
-            os.unsetenv("GRASS_CAIROFILE")
-        else:
-            os.unsetenv("GRASS_PNGFILE")
+	os.unsetenv("GRASS_PNGFILE")
 
         self.force_render = False
         
@@ -857,14 +846,10 @@ class Map(object):
         os.environ["GRASS_REGION"] = self.SetRegion(windres)
         os.environ["GRASS_WIDTH"]  = str(self.width)
         os.environ["GRASS_HEIGHT"] = str(self.height)
-        if UserSettings.Get(group='display', key='driver', subkey='type') == 'cairo':
-            os.environ["GRASS_AUTO_WRITE"] = "TRUE"
-            os.unsetenv("GRASS_RENDER_IMMEDIATE")
-        else:
-            os.environ["GRASS_PNG_AUTO_WRITE"] = "TRUE"
-            os.environ["GRASS_COMPRESSION"] = "0"
-            os.environ["GRASS_TRUECOLOR"] = "TRUE"
-            os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
+	os.environ["GRASS_PNG_AUTO_WRITE"] = "TRUE"
+	os.environ["GRASS_COMPRESSION"] = "0"
+	os.environ["GRASS_TRUECOLOR"] = "TRUE"
+	os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
         
         self._renderLayers(force, mapWindow, maps, masks, opacities)
             

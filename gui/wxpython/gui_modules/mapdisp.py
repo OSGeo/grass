@@ -3865,9 +3865,6 @@ if __name__ == "__main__":
                                 grassenv.GetGRASSVariable("LOCATION_NAME"))
     gm_map.MainLoop()
 
-    if grassenv.env.has_key("MONITOR"):
-        os.system("d.mon sel=%s" % grassenv.GetGRASSVariable("MONITOR"))
-
     os.remove(cmdfilename)
     os.system("""g.gisenv set="GRASS_PYCMDFILE" """)
 
