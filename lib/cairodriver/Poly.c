@@ -14,7 +14,7 @@
 
 #include "cairodriver.h"
 
-void do_polygon(const double *xarray, const double *yarray, int count)
+static void do_polygon(const double *xarray, const double *yarray, int count)
 {
     int i;
 
