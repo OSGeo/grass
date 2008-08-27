@@ -329,6 +329,10 @@ static int get_cond(char **, char *, DCELL);
 static int get_fmt(char **, char *, int *);
 static int cmp(const void *, const void *);
 
+static int write_cats(const char *element, const char *name, struct Categories *cats);
+static CELL read_cats(const char *element,
+		      const char *name,
+		      const char *mapset, struct Categories * pcats, int full);
 
 /*!
  * \brief read raster category file
@@ -367,7 +371,7 @@ int G_read_raster_cats(const char *name,
 {
     char *type;
 
-    switch (G__read_cats("cats", name, mapset, pcats, 1)) {
+    switch (read_cats("cats", name, mapset, pcats, 1)) {
     case -2:
 	type = "missing";
 	break;
@@ -403,7 +407,7 @@ int G_read_vector_cats(const char *name,
 {
     char *type;
 
-    switch (G__read_cats("dig_cats", name, mapset, pcats, 1)) {
+    switch (read_cats("dig_cats", name, mapset, pcats, 1)) {
     case -2:
 	type = "missing";
 	break;
@@ -433,9 +437,9 @@ CELL G_number_of_cats(const char *name, const char *mapset)
     return max;
 }
 
-CELL G__read_cats(const char *element,
-		  const char *name,
-		  const char *mapset, struct Categories * pcats, int full)
+static CELL read_cats(const char *element,
+		      const char *name,
+		      const char *mapset, struct Categories * pcats, int full)
 {
     FILE *fd;
     char buff[1024];
@@ -1180,7 +1184,7 @@ int G_set_raster_cat(const void *rast1, const void *rast2,
 
 int G_write_cats(const char *name, struct Categories *cats)
 {
-    return G__write_cats("cats", name, cats);
+    return write_cats("cats", name, cats);
 }
 
 
@@ -1196,7 +1200,7 @@ int G_write_cats(const char *name, struct Categories *cats)
 
 int G_write_raster_cats(const char *name, struct Categories *cats)
 {
-    return G__write_cats("cats", name, cats);
+    return write_cats("cats", name, cats);
 }
 
 
@@ -1216,10 +1220,10 @@ int G_write_raster_cats(const char *name, struct Categories *cats)
 
 int G_write_vector_cats(const char *name, struct Categories *cats)
 {
-    return G__write_cats("dig_cats", name, cats);
+    return write_cats("dig_cats", name, cats);
 }
 
-int G__write_cats(const char *element, const char *name, struct Categories *cats)
+static int write_cats(const char *element, const char *name, struct Categories *cats)
 {
     FILE *fd;
     int i, fp_map;
@@ -1227,7 +1231,6 @@ int G__write_cats(const char *element, const char *name, struct Categories *cats
     DCELL val1, val2;
     char str1[100], str2[100];
 
-    /* DEBUG fprintf(stderr,"G__write_cats(*element = '%s', name = '%s', cats = %p\n",element,name,cats); */
     if (!(fd = G_fopen_new(element, name)))
 	return -1;
 
@@ -1247,7 +1250,6 @@ int G__write_cats(const char *element, const char *name, struct Categories *cats
 	fp_map = 0;
     else
 	fp_map = G_raster_map_is_fp(name, G_mapset());
-    /* DEBUG fprintf(stderr,"G__write_cats(): fp_map = %d\n",fp_map); */
     if (!fp_map)
 	G_sort_cats(cats);
 
@@ -1272,7 +1274,6 @@ int G__write_cats(const char *element, const char *name, struct Categories *cats
 	}
     }
     fclose(fd);
-    /* DEBUG fprintf(stderr,"G__write_cats(): done\n"); */
     return (1);
 }
 

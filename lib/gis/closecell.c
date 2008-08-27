@@ -43,6 +43,7 @@ static int close_old(int);
 static int close_new(int, int);
 static char CELL_DIR[100];
 
+static int write_fp_format(int fd);
 
 /*!
  * \brief close a raster map
@@ -248,7 +249,7 @@ static int close_new(int fd, int ok)
 	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
 	    int cell_fd;
 
-	    if (G__write_fp_format(fd) != 0) {
+	    if (write_fp_format(fd) != 0) {
 		G_warning(_("Error writing floating point format file for map %s"),
 			  fcb->name);
 		stat = -1;
@@ -397,7 +398,7 @@ static int close_new(int fd, int ok)
 }
 
 /* returns 0 on success, 1 on failure */
-int G__write_fp_format(int fd)
+static int write_fp_format(int fd)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
     struct Key_Value *format_kv;
