@@ -16,6 +16,7 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
     int have_type;
     int have_start;
     int count;
+    double div;
 
     f = filter = 0;
     count = *nfilters = 0;
@@ -61,18 +62,18 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
 	    have_type = 0;
 	    have_start = 0;
 
-	    f->matrix = (int **)G_malloc(n * sizeof(int *));
+	    f->matrix = (DCELL **) G_malloc(n * sizeof(DCELL *));
 	    for (row = 0; row < n; row++)
-		f->matrix[row] = (int *)G_malloc(n * sizeof(int));
+		f->matrix[row] = (DCELL *) G_malloc(n * sizeof(DCELL));
 
 	    for (row = 0; row < n; row++)
 		for (col = 0; col < n; col++)
-		    if (fscanf(fd, "%d", &f->matrix[row][col]) != 1) {
+		    if (fscanf(fd, "%lf", &f->matrix[row][col]) != 1) {
 			G_fatal_error(_("Illegal filter matrix"));
 		    }
 	    continue;
 	}
-	if (sscanf(buf, "DIVISOR %d", &n) == 1)
+	if (sscanf(buf, "DIVISOR %lf", &div) == 1)
 	    if (sscanf(buf, "%s", label) == 1 &&
 		strcmp(label, "DIVISOR") == 0) {
 		if (!filter) {
@@ -82,20 +83,21 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
 		    G_fatal_error(_("Duplicate filter divisor specified"));
 		}
 		have_divisor = 1;
-		if (sscanf(buf, "DIVISOR %d", &n) == 1) {
-		    f->divisor = n;
+		if (sscanf(buf, "DIVISOR %lf", &div) == 1) {
+		    f->divisor = div;
 		    if (n == 0)
 			f->dmatrix = f->matrix;
 		    continue;
 		}
 		f->divisor = 0;
-		f->dmatrix = (int **)G_malloc(f->size * sizeof(int *));
+		f->dmatrix = (DCELL **) G_malloc(f->size * sizeof(DCELL *));
 		for (row = 0; row < f->size; row++)
-		    f->dmatrix[row] = (int *)G_malloc(f->size * sizeof(int));
+		    f->dmatrix[row] =
+			(DCELL *) G_malloc(f->size * sizeof(DCELL));
 
 		for (row = 0; row < f->size; row++)
 		    for (col = 0; col < f->size; col++)
-			if (fscanf(fd, "%d", &f->dmatrix[row][col]) != 1) {
+			if (fscanf(fd, "%lf", &f->dmatrix[row][col]) != 1) {
 			    G_fatal_error(_("Illegal divisor matrix"));
 			}
 		continue;

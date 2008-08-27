@@ -1,17 +1,17 @@
 <h2>DESCRIPTION</h2>
 
 
-<em>r.mfilter</em> filters the raster <em>input</em> to produce the
+<em>r.mfilter.fp</em> filters the raster <em>input</em> to produce the
 raster <em>output</em> according to the matrix <em>filter</em> designed
 by the user (see <em>FILTERS</em> below).
 The filter is applied <em>repeat</em> times (default <em>value</em> is 1).
 The <em>output</em> raster map layer can be given a <em>TITLE</em> if desired.
 (This TITLE should be put in quotes if it contains more than one word.)
 
-With <b>-z</b> flag the filter is applied only to zero category values in
-the input raster map layer.  The non-zero category values are not changed.
+With <b>-z</b> flag the filter is applied only to null values in
+the input raster map layer.  The non-null category values are not changed.
 Note that if there is more than one filter step, this rule is applied to the
-intermediate raster map layer -- only zero category values which result from
+intermediate raster map layer -- only null category values which result from
 the first filter will be changed.  In most cases this will NOT be the
 desired result. Hence -z should be used only with single step filters.
 <p>
@@ -33,7 +33,7 @@ It has the following format:
      TITLE      TITLE
      MATRIX     n
                   .
-     n lines of n integers
+     n lines of n values
                   .
      DIVISOR    d
      TYPE        S/P
@@ -51,8 +51,8 @@ layer.  It should be a one-line description of the filter.
 
 <dd>The matrix (n x n) follows on the next n lines.  <em>n</em> must be
 an odd integer greater than or equal to 3.
-The matrix itself consists of n rows of n integers.
-The integers must be separated from each other by at least 1 blank.
+The matrix itself consists of n rows of n values.
+The values must be separated from each other by at least 1 blank.
 
 <dt>DIVISOR 
 
@@ -92,7 +92,7 @@ For example, the following describes two filters:
 <h2>EXAMPLE FILTER FILE</h2>
 
 <pre>
-      TITLE     3x3 average, non-zero data only, followed by 5x5 average
+      TITLE     3x3 average, non-null data only, followed by 5x5 average
      MATRIX    3
      1 1 1
      1 1 1
@@ -116,11 +116,10 @@ The filter process produces a new category value for each cell
 in the input raster map layer by multiplying the category values of the
 cells in the n x n neighborhood around the center cell
 by the corresponding matrix value and adding them together.
-If a divisor is specified, the sum is divided by this divisor,
-rounding to the nearest integer.
+If a divisor is specified, the sum is divided by this divisor.
 (If a zero divisor was specified, then
 the divisor is computed for each cell as the sum of the MATRIX
-values where the corresponding input cell is non-zero.)
+values where the corresponding input cell is non-null.)
 
 
 <p>
@@ -146,10 +145,12 @@ is set properly.
 <em><a href="g.region.html">g.region</a></em>,
 <em><a href="r.clump.html">r.clump</a></em>,
 <em><a href="r.neighbors.html">r.neighbors</a></em>
+<em><a href="r.mfilter.html">r.mfilter</a></em>
 
 <h2>AUTHOR</h2>
 
-Michael Shapiro,
+Glynn Clements.
+Based upon r.mfilter, by Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
 <p>

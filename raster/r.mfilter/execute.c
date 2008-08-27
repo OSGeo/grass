@@ -3,7 +3,7 @@
 #include "glob.h"
 #include "filter.h"
 
-int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
+int execute_filter(ROWIO * r, int out, FILTER * filter, DCELL * cell)
 {
     int i;
     int count;
@@ -13,13 +13,12 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
     int startx, starty;
     int dx, dy;
     int mid;
-    CELL **bufs, **box, *cp;
-    CELL apply_filter();
+    DCELL **bufs, **box, *cp;
 
     size = filter->size;
     mid = size / 2;
-    bufs = (CELL **) G_malloc(size * sizeof(CELL *));
-    box = (CELL **) G_malloc(size * sizeof(CELL *));
+    bufs = (DCELL **) G_malloc(size * sizeof(DCELL *));
+    box = (DCELL **) G_malloc(size * sizeof(DCELL *));
 
     switch (filter->start) {
     case UR:
@@ -61,7 +60,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
     /* copy border rows to output */
     row = starty;
     for (i = 0; i < mid; i++) {
-	cp = (CELL *) rowio_get(r, row);
+	cp = (DCELL *) rowio_get(r, row);
 	write(out, cp, buflen);
 	row += dy;
     }
@@ -73,7 +72,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
 	starty += dy;
 	/* get "size" rows */
 	for (i = 0; i < size; i++) {
-	    bufs[i] = (CELL *) rowio_get(r, row);
+	    bufs[i] = (DCELL *) rowio_get(r, row);
 	    box[i] = bufs[i] + startx;
 	    row += dy;
 	}
@@ -87,8 +86,8 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
 	/* filter row */
 	col = ccount;
 	while (col--) {
-	    if (zero_only) {
-		if (!box[mid][mid])
+	    if (null_only) {
+		if (G_is_d_null_value(&box[mid][mid]))
 		    *cp++ = apply_filter(filter, box);
 		else
 		    *cp++ = box[mid][mid];
@@ -112,7 +111,7 @@ int execute_filter(ROWIO * r, int out, FILTER * filter, CELL * cell)
     /* copy border rows to output */
     row = starty + mid * dy;
     for (i = 0; i < mid; i++) {
-	cp = (CELL *) rowio_get(r, row);
+	cp = (DCELL *) rowio_get(r, row);
 	write(out, cp, buflen);
 	row += dy;
     }

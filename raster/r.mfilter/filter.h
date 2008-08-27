@@ -1,10 +1,11 @@
 #include <grass/gis.h>
+#include <grass/rowio.h>
 typedef struct
 {
     int size;			/* size of filter matrix */
-    int **matrix;		/* filter coefficient matrix */
-    int **dmatrix;		/* divisor coefficient matrix */
-    int divisor;		/* filter scale factor */
+    double **matrix;		/* filter coefficient matrix */
+    double **dmatrix;		/* divisor coefficient matrix */
+    double divisor;		/* filter scale factor */
     int type;			/* sequential or parallel */
     int start;			/* starting corner */
 } FILTER;
@@ -17,15 +18,13 @@ typedef struct
 #define LR 4
 
 /* apply.c */
-CELL apply_filter(FILTER *, CELL **);
+DCELL apply_filter(FILTER *, DCELL **);
 
 /* getfilt.c */
 FILTER *get_filter(char *, int *, char *);
 
 /* perform.c */
-int perform_filter(char *, char *, char *, FILTER *, int, int);
+int perform_filter(const char *, const char *, FILTER *, int, int);
 
-#ifdef GRASS_ROWIO_H
 /* execute.c */
-int execute_filter(ROWIO *, int, FILTER *, CELL *);
-#endif
+int execute_filter(ROWIO *, int, FILTER *, DCELL *);
