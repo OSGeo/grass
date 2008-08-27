@@ -806,10 +806,11 @@ class Map(object):
                 if not layer.Render():
                     continue
             
-            # update progress bar
-            wx.SafeYield(mapWindow)
-            event = wxUpdateProgressBar(value=ilayer)
-            wx.PostEvent(mapWindow, event)
+            if mapWindow:
+                # update progress bar
+                wx.SafeYield(mapWindow)
+                event = wxUpdateProgressBar(value=ilayer)
+                wx.PostEvent(mapWindow, event)
             
             # add image to compositing list
             if layer.type != "overlay":
