@@ -117,19 +117,19 @@ int main(int argc, char **argv)
     if ((mapset = G_find_cell2(name, "")) == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    head_ok = G_get_cellhd(name, mapset, &cellhd) >= 0;
-    cats_ok = G_read_cats(name, mapset, &cats) >= 0;
-    hist_ok = G_read_history(name, mapset, &hist) >= 0;
-    is_reclass = G_get_reclass(name, mapset, &reclass);
-    data_type = G_raster_map_type(name, mapset);
+    head_ok = G_get_cellhd(name, "", &cellhd) >= 0;
+    cats_ok = G_read_cats(name, "", &cats) >= 0;
+    hist_ok = G_read_history(name, "", &hist) >= 0;
+    is_reclass = G_get_reclass(name, "", &reclass);
+    data_type = G_raster_map_type(name, "");
 
-    if (G_read_raster_units(name, mapset, units) != 0)
+    if (G_read_raster_units(name, "", units) != 0)
 	units[0] = '\0';
-    if (G_read_raster_vdatum(name, mapset, vdatum) != 0)
+    if (G_read_raster_vdatum(name, "", vdatum) != 0)
 	vdatum[0] = '\0';
 
     /*Check the Timestamp */
-    time_ok = G_read_raster_timestamp(name, mapset, &ts) > 0;
+    time_ok = G_read_raster_timestamp(name, "", &ts) > 0;
     /*Check for valid entries, show none if no timestamp available */
     if (time_ok) {
 	if (ts.count > 0)
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 	    second_time_ok = 1;
     }
 
-    if (G_read_fp_range(name, mapset, &range) < 0)
+    if (G_read_fp_range(name, "", &range) < 0)
 	G_fatal_error(_("Unable to read range file"));
     G_get_fp_range_min_max(&range, &zmin, &zmax);
 
@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 			 tmp1, tmp2, tmp3);
 
 	    if (data_type == CELL_TYPE) {
-		if (2 == G_read_range(name, mapset, &crange))
+		if (2 == G_read_range(name, "", &crange))
 		    compose_line(out,
 				 "  Range of data:    min = NULL  max = NULL");
 		else
@@ -320,7 +320,7 @@ int main(int argc, char **argv)
 
 	if (rflag->answer) {
 	    if (data_type == CELL_TYPE) {
-		if (2 == G_read_range(name, mapset, &crange)) {
+		if (2 == G_read_range(name, "", &crange)) {
 		    fprintf(out, "min=NULL\n");
 		    fprintf(out, "max=NULL\n");
 		}

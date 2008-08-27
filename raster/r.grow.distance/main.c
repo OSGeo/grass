@@ -102,7 +102,6 @@ int main(int argc, char **argv)
     } opt;
     char *in_name;
     char *out_name;
-    char *mapset;
     int in_fd;
     int out_fd;
     char *temp_name;
@@ -139,10 +138,6 @@ int main(int argc, char **argv)
     in_name = opt.in->answer;
     out_name = opt.out->answer;
 
-    mapset = G_find_cell(in_name, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), in_name);
-
     if (strcmp(opt.met->answer, "euclidian") == 0)
 	distance = &distance_euclidian_squared;
     else if (strcmp(opt.met->answer, "squared") == 0)
@@ -154,7 +149,7 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
 
-    in_fd = G_open_cell_old(in_name, mapset);
+    in_fd = G_open_cell_old(in_name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 

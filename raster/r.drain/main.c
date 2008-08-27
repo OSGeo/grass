@@ -74,9 +74,8 @@ int main(int argc, char **argv)
     int nrows, ncols, points_row[MAX_POINTS], points_col[MAX_POINTS], npoints;
     int cell_open(), cell_open_new();
     int map_id;
-    char map_name[GNAME_MAX], *map_mapset, new_map_name[GNAME_MAX];
+    char map_name[GNAME_MAX], new_map_name[GNAME_MAX];
     char *tempfile1, *tempfile2;
-    char *search_mapset;
     struct History history;
 
     struct Cell_head window;
@@ -147,13 +146,8 @@ int main(int argc, char **argv)
     strcpy(map_name, opt1->answer);
     strcpy(new_map_name, opt2->answer);
 
-    /* get the name of the elevation map layer for filling */
-    map_mapset = G_find_cell(map_name, "");
-    if (!map_mapset)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
-
     /*      allocate cell buf for the map layer */
-    in_type = G_raster_map_type(map_name, map_mapset);
+    in_type = G_raster_map_type(map_name, "");
 
     /* set the pointers for multi-typed functions */
     set_func_pointers(in_type);
@@ -210,12 +204,7 @@ int main(int argc, char **argv)
 	    int dims, strs, dbls;
 	    RASTER_MAP_TYPE cat;
 
-	    search_mapset = G_find_sites(vpointopt->answers[i], "");
-	    if (search_mapset == NULL)
-		G_fatal_error(_("Vector map <%s> not found"),
-			      vpointopt->answers[i]);
-
-	    fp = G_fopen_sites_old(vpointopt->answers[i], search_mapset);
+	    fp = G_fopen_sites_old(vpointopt->answers[i], "");
 
 	    if (0 != G_site_describe(fp, &dims, &cat, &strs, &dbls))
 		G_fatal_error(_("Failed to guess site file format"));
@@ -294,7 +283,7 @@ int main(int argc, char **argv)
     in_buf = get_buf();
 
     /* open the original map and get its file id  */
-    map_id = G_open_cell_old(map_name, map_mapset);
+    map_id = G_open_cell_old(map_name, "");
 
     /* get some temp files */
     tempfile1 = G_tempfile();

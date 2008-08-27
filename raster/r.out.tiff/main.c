@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
     struct GModule *module;
     int col, tfw, palette, tiled;
-    char *mapset, *basename, *filename;
+    char *basename, *filename;
     struct Colors colors;
     int red, grn, blu, mapsize, isfp;
 
@@ -144,22 +144,18 @@ int main(int argc, char *argv[])
     palette = pflag->answer;
     tfw = tflag->answer;
 
-    mapset = G_find_cell(inopt->answer, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), inopt->answer);
-
-    if ((G_get_cellhd(inopt->answer, mapset, &cellhd) < 0))
+    if ((G_get_cellhd(inopt->answer, "", &cellhd) < 0))
 	G_fatal_error(_("Unable to read header of raster map <%s>"),
 		      inopt->answer);
 
     if ((G_get_window(&cellhd) < 0))
 	G_fatal_error(_("Can't set window"));
 
-    G_read_colors(inopt->answer, mapset, &colors);
-    if ((isfp = G_raster_map_is_fp(inopt->answer, mapset)))
-	G_warning(_("Raster map <%s> in mapset <%s> is a floating point "
-		    "map. Decimal values will be rounded to integer!"),
-		  inopt->answer, mapset);
+    G_read_colors(inopt->answer, "", &colors);
+    if ((isfp = G_raster_map_is_fp(inopt->answer, "")))
+	G_warning(_("Raster map <%s>> is a floating point "
+		    "map. Fractional values will be rounded to integer"),
+		  inopt->answer);
 
     G_set_null_value_color(255, 255, 255, &colors);
     if (palette && (colors.cmax - colors.cmin > 255))
@@ -167,7 +163,7 @@ int main(int argc, char *argv[])
 			"than 256 colors for the available range of data"));
 
     cell = G_allocate_cell_buf();
-    if ((in = G_open_cell_old(inopt->answer, mapset)) < 0)
+    if ((in = G_open_cell_old(inopt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), inopt->answer);
 
     basename = G_store(outopt->answer);

@@ -112,7 +112,6 @@ int main(int argc, char **argv)
     double radius;
     int oldval = 0;
     int newval = 0;
-    char *mapset;
     RASTER_MAP_TYPE type;
     int in_fd;
     int out_fd;
@@ -181,10 +180,6 @@ int main(int argc, char **argv)
 
     verbose = !flag.q->answer;
 
-    mapset = G_find_cell(in_name, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), in_name);
-
     nrows = G_window_rows();
     ncols = G_window_cols();
 
@@ -197,7 +192,7 @@ int main(int argc, char **argv)
     else
 	G_fatal_error(_("Unknown metric: [%s]."), opt.met->answer);
 
-    in_fd = G_open_cell_old(in_name, mapset);
+    in_fd = G_open_cell_old(in_name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), in_name);
 
@@ -207,12 +202,12 @@ int main(int argc, char **argv)
     if (out_fd < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
 
-    if (G_read_cats(in_name, mapset, &cats) == -1) {
+    if (G_read_cats(in_name, "", &cats) == -1) {
 	G_warning(_("Error reading category file for <%s>"), in_name);
 	G_init_cats(0, "", &cats);
     }
 
-    if (G_read_colors(in_name, mapset, &colr) == -1) {
+    if (G_read_colors(in_name, "", &colr) == -1) {
 	G_warning(_("Error in reading color file for <%s>"), in_name);
 	colrfile = 0;
     }

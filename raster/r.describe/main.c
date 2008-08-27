@@ -31,8 +31,6 @@ int main(int argc, char *argv[])
     int range;
     int windowed;
     int nsteps;
-    char name[GNAME_MAX];
-    char *mapset;
     char *no_data_str;
     struct GModule *module;
     struct
@@ -111,15 +109,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("%s = %s -- must be greater than zero"),
 		      option.nsteps->key, option.nsteps->answer);
 
-    strcpy(name, option.map->answer);
-
-    if ((mapset = G_find_cell2(name, ""))) {
-	describe(name, mapset, compact, no_data_str,
-		 range, windowed, nsteps, as_int, flag.n->answer);
-	exit(EXIT_SUCCESS);
-    }
-
-    G_fatal_error(_("%s: [%s] not found"), G_program_name(), name);
+    describe(option.map->answer, compact, no_data_str,
+	     range, windowed, nsteps, as_int, flag.n->answer);
 
     return EXIT_SUCCESS;
 }

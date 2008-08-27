@@ -97,22 +97,16 @@ int main(int argc, char **argv)
     for (i = 0; i < 3; i++) {
 	/* Get name of layer */
 	char *name = B[i].opt->answer;
-	char *mapset;
-
-	/* Get mapset of layer */
-	mapset = G_find_cell2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
 
 	/* Open raster map */
-	if ((B[i].file = G_open_cell_old(name, mapset)) == -1)
+	if ((B[i].file = G_open_cell_old(name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	/* Get map type (CELL/FCELL/DCELL) */
 	B[i].type = G_get_raster_map_type(B[i].file);
 
 	/* Get color table */
-	if (G_read_colors(name, mapset, &B[i].colors) == -1)
+	if (G_read_colors(name, "", &B[i].colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
 	/* Allocate input buffer */

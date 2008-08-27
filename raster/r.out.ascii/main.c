@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
 {
     RASTER_MAP_TYPE out_type, map_type;
     char *name;
-    char *mapset;
     char *null_str;
     char surfer_null_str[13] = { "1.70141e+038" };
     int fd;
@@ -140,13 +139,9 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Use -M or -s, not both"));
 
     name = parm.map->answer;
-    mapset = G_find_cell2(name, "");
-
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), name);
 
     /* open raster map */
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
@@ -177,7 +172,7 @@ int main(int argc, char *argv[])
     /* process the requested output format */
     if (flag.surfer->answer) {
 	if (!flag.noheader->answer) {
-	    if (writeGSheader(fp, name, mapset))
+	    if (writeGSheader(fp, name))
 		G_fatal_error(_("Unable to read fp range for <%s>"), name);
 	}
 	rc = write_GSGRID(fd, fp, nrows, ncols, out_type, dp, surfer_null_str,

@@ -20,7 +20,7 @@
 #define __LOCAL_PROTO_H__
 
 /* read_map.c */
-CELL *read_map(char *, char *, int, int, int);
+CELL *read_map(const char *, int, int, int);
 
 
 #endif /* __LOCAL_PROTO_H__ */

@@ -59,7 +59,6 @@ int main(int argc, char **argv)
     CELL *out_array;
     struct Colors out_colors;
     int levels;
-    char *mapset;
     int atrow, atcol;
     struct Cell_head window;
     unsigned char *dummy, *nulls;
@@ -152,12 +151,8 @@ int main(int argc, char **argv)
 	/* Get name of layer to be used */
 	b->name = b->opt_name->answer;
 
-	mapset = G_find_cell2(b->name, "");
-	if (mapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), b->name);
-
 	/* Make sure map is available */
-	if ((b->file = G_open_cell_old(b->name, mapset)) == -1)
+	if ((b->file = G_open_cell_old(b->name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), b->name);
 
 	b->type = G_get_raster_map_type(b->file);
@@ -165,7 +160,7 @@ int main(int argc, char **argv)
 	b->size = G_raster_size(b->type);
 
 	/* Reading color lookup table */
-	if (G_read_colors(b->name, mapset, &b->colors) == -1)
+	if (G_read_colors(b->name, "", &b->colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), b->name);
 
 	for (j = 0; j < 3; j++)
@@ -185,10 +180,6 @@ int main(int argc, char **argv)
 
     /* open output files */
     out_name = opt_out->answer;
-
-    mapset = G_find_cell2(out_name, "");
-    if (mapset != NULL)
-	G_remove("cell", out_name);
 
     if ((out_file = G_open_cell_new(out_name)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), out_name);

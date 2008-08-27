@@ -171,15 +171,11 @@ int main(int argc, char *argv[])
     if (parm.weight->answer && flag.circle->answer)
 	G_fatal_error(_("weight= and -c are mutually exclusive"));
 
-    p = ncb.oldcell.name = parm.input->answer;
-    if (NULL == (ncb.oldcell.mapset = G_find_cell2(p, ""))) {
-	G_fatal_error(_("Raster map <%s> not found"), p);
-    }
-    p = ncb.newcell.name = parm.output->answer;
-    ncb.newcell.mapset = G_mapset();
+    ncb.oldcell = parm.input->answer;
+    ncb.newcell = parm.output->answer;
 
     if (!flag.align->answer) {
-	if (G_get_cellhd(ncb.oldcell.name, ncb.oldcell.mapset, &cellhd) < 0)
+	if (G_get_cellhd(ncb.oldcell, "", &cellhd) < 0)
 	    exit(EXIT_FAILURE);
 	G_get_window(&window);
 	G_align_window(&window, &cellhd);
@@ -190,9 +186,9 @@ int main(int argc, char *argv[])
     ncols = G_window_cols();
 
     /* open raster maps */
-    if ((in_fd = G_open_cell_old(ncb.oldcell.name, ncb.oldcell.mapset)) < 0)
-	G_fatal_error(_("Unable to open raster map <%s> in mapset <%s>"),
-		      ncb.oldcell.name, ncb.oldcell.mapset);
+    if ((in_fd = G_open_cell_old(ncb.oldcell, "")) < 0)
+	G_fatal_error(_("Unable to open raster map <%s>"),
+		      ncb.oldcell);
 
     map_type = G_get_raster_map_type(in_fd);
 
@@ -218,7 +214,7 @@ int main(int argc, char *argv[])
     if (copycolr) {
 	G_suppress_warnings(1);
 	copycolr =
-	    (G_read_colors(ncb.oldcell.name, ncb.oldcell.mapset, &colr) > 0);
+	    (G_read_colors(ncb.oldcell, "", &colr) > 0);
 	G_suppress_warnings(0);
     }
 
@@ -240,7 +236,7 @@ int main(int argc, char *argv[])
 	strcpy(ncb.title, parm.title->answer);
     else
 	sprintf(ncb.title, "%dx%d neighborhood: %s of %s",
-		ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell.name);
+		ncb.nsize, ncb.nsize, menu[method].name, ncb.oldcell);
 
 
     /* initialize the cell bufs with 'dist' rows of the old cellfile */
@@ -250,12 +246,12 @@ int main(int argc, char *argv[])
 	readcell(in_fd, readrow++, nrows, ncols);
 
     /* open raster map */
-    in_fd = G_open_cell_old(ncb.oldcell.name, ncb.oldcell.mapset);
+    in_fd = G_open_cell_old(ncb.oldcell, "");
     if (in_fd < 0)
 	exit(EXIT_FAILURE);
 
     /*open the new raster map */
-    out_fd = G_open_raster_new(ncb.newcell.name, map_type);
+    out_fd = G_open_raster_new(ncb.newcell, map_type);
     if (out_fd < 0)
 	exit(EXIT_FAILURE);
 
@@ -303,14 +299,14 @@ int main(int argc, char *argv[])
     if ((cat_names = menu[method].cat_names))
 	cat_names();
 
-    G_write_cats(ncb.newcell.name, &ncb.cats);
+    G_write_cats(ncb.newcell, &ncb.cats);
 
     if (copycolr)
-	G_write_colors(ncb.newcell.name, ncb.newcell.mapset, &colr);
+	G_write_colors(ncb.newcell, G_mapset(), &colr);
 
-    G_short_history(ncb.newcell.name, "raster", &history);
+    G_short_history(ncb.newcell, "raster", &history);
     G_command_history(&history);
-    G_write_history(ncb.newcell.name, &history);
+    G_write_history(ncb.newcell, &history);
 
 
     exit(EXIT_SUCCESS);

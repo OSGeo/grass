@@ -31,100 +31,6 @@ paramType param;		/*Parameters */
 double x_extent;
 double y_extent;
 
-/*local protos */
-static void check_input_maps(void);
-
-
-/* ************************************************************************* */
-/* Check the input maps **************************************************** */
-/* ************************************************************************* */
-void check_input_maps(void)
-{
-    char *mapset = NULL;
-    int i;
-
-    /*Check for elevation map */
-    if (param.elevationmap->answer) {
-
-	mapset = G_find_cell2(param.elevationmap->answer, "");
-	if (mapset == NULL) {
-	    G_fatal_error(_("Raster map <%s> not found"),
-			  param.elevationmap->answer);
-	    exit(EXIT_FAILURE);
-	}
-    }
-
-    /*Check for normal input map */
-    if (param.input->answers != NULL) {
-	for (i = 0; param.input->answers[i] != NULL; i++) {
-
-	    mapset = NULL;
-	    mapset = G_find_cell2(param.input->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Raster map <%s> not found"),
-			      param.input->answers[i]);
-		exit(EXIT_FAILURE);
-	    }
-	}
-    }
-
-    /*RGB raster maps */
-    if (param.rgbmaps->answers != NULL) {
-	if (param.rgbmaps->answers[0] != NULL &&
-	    param.rgbmaps->answers[1] != NULL &&
-	    param.rgbmaps->answers[2] != NULL) {
-
-	    /*Loop over all input maps! */
-	    for (i = 0; i < 3; i++) {
-
-		mapset = NULL;
-		mapset = G_find_cell2(param.rgbmaps->answers[i], "");
-		if (mapset == NULL) {
-		    G_fatal_error(_("RGB raster map <%s> not found"),
-				  param.rgbmaps->answers[i]);
-		    exit(EXIT_FAILURE);
-		}
-	    }
-	}
-	else {
-	    G_fatal_error(_("Cannot create RGB data, please provide three maps [r,g,b]"));
-	}
-    }
-
-    /*Vector raster maps */
-    if (param.vectmaps->answers != NULL) {
-	if (param.vectmaps->answers[0] != NULL &&
-	    param.vectmaps->answers[1] != NULL &&
-	    param.vectmaps->answers[2] != NULL) {
-
-	    /*Loop over all input maps! */
-	    for (i = 0; i < 3; i++) {
-
-		mapset = NULL;
-		mapset = G_find_cell2(param.vectmaps->answers[i], "");
-		if (mapset == NULL) {
-		    G_fatal_error(_("Vector cell map <%s> not found"),
-				  param.vectmaps->answers[i]);
-		    exit(EXIT_FAILURE);
-		}
-	    }
-	}
-	else {
-	    G_fatal_error(_("Cannot create vector data, please provide three maps [x,y,z]"));
-	}
-    }
-
-    /*Give a warning if no output cell/point or rgb data was specified */
-    if (param.input->answers == NULL && param.rgbmaps->answers == NULL &&
-	param.vectmaps->answers == NULL) {
-	G_warning
-	    ("No g3d data, RGB or vector maps are provided! Will only write the geometry.");
-    }
-
-    return;
-}
-
-
 /* ************************************************************************* */
 /* MAIN ******************************************************************** */
 /* ************************************************************************* */
@@ -135,7 +41,7 @@ int main(int argc, char *argv[])
     FILE *fp = NULL;
     struct GModule *module;
     int i = 0, polytype = 0;
-    char *null_value, *mapset;
+    char *null_value;
     int out_type;
     int fd;			/*Normale maps ;) */
     int rgbfd[3];
@@ -170,9 +76,6 @@ int main(int argc, char *argv[])
     }
     else
 	fp = stdout;
-
-    /*Check the input maps */
-    check_input_maps();
 
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
     if (param.coorcorr->answer) {
@@ -218,10 +121,8 @@ int main(int argc, char *argv[])
 
 	G_debug(3, _("Open Raster file %s"), param.elevationmap->answer);
 
-	mapset = G_find_cell2(param.elevationmap->answer, "");
-
 	/* open raster map */
-	fd = G_open_cell_old(param.elevationmap->answer, mapset);
+	fd = G_open_cell_old(param.elevationmap->answer, "");
 	if (fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  param.elevationmap->answer);
@@ -283,11 +184,8 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, _("Open Raster file %s"), param.input->answers[i]);
 
-	    mapset = NULL;
-	    mapset = G_find_cell2(param.input->answers[i], "");
-
 	    /* open raster map */
-	    fd = G_open_cell_old(param.input->answers[i], mapset);
+	    fd = G_open_cell_old(param.input->answers[i], "");
 	    if (fd < 0)
 		G_fatal_error(_("Unable to open raster map <%s>"),
 			      param.input->answers[i]);
@@ -311,12 +209,8 @@ int main(int argc, char *argv[])
 		G_debug(3, _("Open Raster file %s"),
 			param.rgbmaps->answers[i]);
 
-		mapset = NULL;
-
-		mapset = G_find_cell2(param.rgbmaps->answers[i], "");
-
 		/* open raster map */
-		rgbfd[i] = G_open_cell_old(param.rgbmaps->answers[i], mapset);
+		rgbfd[i] = G_open_cell_old(param.rgbmaps->answers[i], "");
 		if (rgbfd[i] < 0)
 		    G_fatal_error(_("Unable to open raster map <%s>"),
 				  param.rgbmaps->answers[i]);
@@ -357,13 +251,9 @@ int main(int argc, char *argv[])
 		G_debug(3, _("Open Raster file %s"),
 			param.vectmaps->answers[i]);
 
-		mapset = NULL;
-
-		mapset = G_find_cell2(param.vectmaps->answers[i], "");
-
 		/* open raster map */
 		vectfd[i] =
-		    G_open_cell_old(param.vectmaps->answers[i], mapset);
+		    G_open_cell_old(param.vectmaps->answers[i], "");
 		if (vectfd[i] < 0)
 		    G_fatal_error(_("Unable to open raster map <%s>"),
 				  param.vectmaps->answers[i]);
