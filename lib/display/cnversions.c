@@ -90,18 +90,18 @@ static void fit_aspect(struct rectangle *rect, const struct rectangle *ref)
 
     if (fabs(conv.y) > fabs(conv.x)) {
 	scale = fabs(conv.y) / fabs(conv.x);
-	size = rect->size.x * scale;
+	size = rect->size.x / scale;
 	delta = rect->size.x - size;
-	rect->west -= delta/2;
-	rect->east += delta/2;
+	rect->west += delta/2;
+	rect->east -= delta/2;
 	rect->size.x = size;
     }
     else {
 	scale = fabs(conv.x) / fabs(conv.y);
-	size = rect->size.y * scale;
+	size = rect->size.y / scale;
 	delta = rect->size.y - size;
-	rect->north -= delta/2;
-	rect->south += delta/2;
+	rect->north += delta/2;
+	rect->south -= delta/2;
 	rect->size.y = size;
     }
 }
