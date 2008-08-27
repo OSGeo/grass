@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
     {
 	struct Option *base, *cover, *output;
     } parm;
-    char *basemap, *base_mapset;
-    char *covermap, *cover_mapset;
+    char *basemap;
+    char *covermap;
     char *outmap;
     char command[1024];
     struct Categories cover_cats;
@@ -81,35 +81,16 @@ int main(int argc, char *argv[])
     covermap = parm.cover->answer;
     outmap = parm.output->answer;
 
-    base_mapset = G_find_cell2(basemap, "");
-    if (base_mapset == NULL) {
-	G_fatal_error(_("%s: base raster map not found"), basemap);
-    }
-
-    cover_mapset = G_find_cell2(covermap, "");
-    if (cover_mapset == NULL) {
-	G_fatal_error(_("%s: cover raster map not found"), covermap);
-    }
-
-    if (strcmp(G_mapset(), base_mapset) == 0 && strcmp(basemap, outmap) == 0) {
-	G_fatal_error(_("%s: base map and output map must be different"),
-		      outmap);
-    }
-    if (G_read_cats(covermap, cover_mapset, &cover_cats) < 0) {
+    if (G_read_cats(covermap, "", &cover_cats) < 0) {
 	G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
-    strcpy(command, "r.stats -an \"");
-    strcat(command, G_fully_qualified_name(basemap, base_mapset));
-    strcat(command, ",");
-    strcat(command, G_fully_qualified_name(covermap, cover_mapset));
-    strcat(command, "\"");
+    sprintf(command, "r.stats -an \"%s,%s\"", basemap, covermap);
 
     /* printf(command); */
     stats = popen(command, "r");
 
-    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"",
-	    G_fully_qualified_name(basemap, base_mapset), outmap);
+    sprintf(command, "r.reclass i=\"%s\" o=\"%s\"", basemap, outmap);
 
     /* printf(command); */
     reclass = popen(command, "w");

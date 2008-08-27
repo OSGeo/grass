@@ -49,8 +49,8 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *rast, *png_file;
-    char *cellmap, *map, *p, *basename = NULL, *ofile;
-    char rastermap[1024];
+    char *rastermap;
+    char *basename = NULL, *ofile;
     unsigned char *set, *ored, *ogrn, *oblu;
     CELL *cell_buf;
     FCELL *fcell_buf;
@@ -108,15 +108,14 @@ int main(int argc, char *argv[])
     rast->required = YES;
     rast->multiple = NO;
     rast->gisprompt = "old,cell,Raster";
-    rast->description = "Raster file to be converted.";
+    rast->description = _("Raster file to be converted.");
 
     png_file = G_define_option();
     png_file->key = "output";
     png_file->type = TYPE_STRING;
-    png_file->required = NO;
+    png_file->required = YES;
     png_file->multiple = NO;
-    png_file->answer = "<rasterfilename>.png";
-    png_file->description = "Name for new PNG file. (use out=- for stdout)";
+    png_file->description = _("Name for new PNG file. (use out=- for stdout)");
 
     /* see what can be done to convert'em -A.Sh.
      * gscale = G_define_flag ();
@@ -132,23 +131,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    strncpy(rastermap, rast->answer, 1024 * sizeof(char));
+    rastermap = rast->answer;
 
-    if (strcmp(png_file->answer, "<rasterfilename>.png")) {
-	if (strcmp(png_file->answer, "-"))
-	    basename = G_store(png_file->answer);
-	else
-	    do_stdout = 1;
-    }
-    else {
-	map = p = rast->answer;
-	/* knock off any GRASS location suffix */
-	if ((char *)NULL != (p = strrchr(map, '@'))) {
-	    if (p != map)
-		*p = '\0';
-	}
-	basename = G_store(map);
-    }
+    if (strcmp(png_file->answer, "-") != 0)
+	basename = G_store(png_file->answer);
+    else
+	do_stdout = 1;
 
     if (basename) {
 	G_basename(basename, "png");
@@ -163,23 +151,17 @@ int main(int argc, char *argv[])
     G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
 
     /* open raster map for reading */
-    {
-	cellmap = G_find_file2("cell", rastermap, "");
-	if (!cellmap)
-	    G_fatal_error("Couldn't find raster map %s", rastermap);
-
-	if ((cellfile = G_open_cell_old(rast->answer, cellmap)) == -1)
-	    G_fatal_error("Not able to open cellfile for [%s]", rastermap);
-    }
+    if ((cellfile = G_open_cell_old(rast->answer, "")) == -1)
+	G_fatal_error(_("Unable to open cellfile for <%s>"), rastermap);
 
     cell_buf = G_allocate_c_raster_buf();
     fcell_buf = G_allocate_f_raster_buf();
     dcell_buf = G_allocate_d_raster_buf();
 
-    ored = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    ogrn = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    oblu = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    set = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
+    ored = G_malloc(w.cols);
+    ogrn = G_malloc(w.cols);
+    oblu = G_malloc(w.cols);
+    set  = G_malloc(w.cols);
 
     /* open png file for writing */
     {
@@ -239,7 +221,7 @@ int main(int argc, char *argv[])
     {
 	struct Colors colors;
 
-	G_read_colors(rast->answer, cellmap, &colors);
+	G_read_colors(rast->answer, "", &colors);
 
 	rtype = G_get_raster_map_type(cellfile);
 	if (rtype == CELL_TYPE)

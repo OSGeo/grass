@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     float val_f;		/* for misc use */
     double val_d;		/* for misc use */
 
-    char *infile, *outfile, *mapset, *maptitle, *basename;
+    char *infile, *outfile, *maptitle, *basename;
     struct Cell_head region;
     void *raster, *ptr;
     RASTER_MAP_TYPE map_type;
@@ -81,12 +81,7 @@ int main(int argc, char *argv[])
     outfile = G_malloc(strlen(basename) + 5);
     sprintf(outfile, "%s.mat", basename);
 
-    mapset = G_find_cell(infile, "");
-    if (mapset == NULL) {
-	G_fatal_error(_("Raster map <%s> not found"), infile);
-    }
-
-    fd = G_open_cell_old(infile, mapset);
+    fd = G_open_cell_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
@@ -143,7 +138,7 @@ int main(int argc, char *argv[])
 
 
     /********** Write title (if there is one) **********/
-    maptitle = G_get_cell_title(infile, mapset);
+    maptitle = G_get_cell_title(infile, "");
     if (strlen(maptitle) >= 1) {
 
 	/** write text element (map title) **/

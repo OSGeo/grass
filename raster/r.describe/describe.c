@@ -17,10 +17,11 @@
  ***************************************************************************/
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "local_proto.h"
 
 
-int describe(char *name, char *mapset, int compact, char *no_data_str,
+int describe(const char *name, int compact, char *no_data_str,
 	     int range, int windowed, int nsteps, int as_int, int skip_nulls)
 {
     int fd;
@@ -35,23 +36,19 @@ int describe(char *name, char *mapset, int compact, char *no_data_str,
     struct Quant q;
     struct FPRange r;
     DCELL dmin, dmax;
-    int (*get_row) ();
+    int (*get_row)(int, CELL *, int);
 
     if (windowed) {
 	get_row = G_get_c_raster_row;
     }
     else {
-	char msg[100];
+	if (G_get_cellhd(name, "", &window) < 0)
+	    G_fatal_error(_("Unable to get cell header for <%s>"), name);
 
-	if (G_get_cellhd(name, mapset, &window) < 0) {
-	    sprintf(msg, "can't get cell header for [%s] in [%s]", name,
-		    mapset);
-	    G_fatal_error(msg);
-	}
 	G_set_window(&window);
 	get_row = G_get_c_raster_row_nomask;
     }
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0)
 	return 0;
 
@@ -87,7 +84,7 @@ int describe(char *name, char *mapset, int compact, char *no_data_str,
     /* set up quantization rules */
     if (map_type != CELL_TYPE) {
 	G_quant_init(&q);
-	G_read_fp_range(name, mapset, &r);
+	G_read_fp_range(name, "", &r);
 	G_get_fp_range_min_max(&r, &dmin, &dmax);
 	G_quant_add_rule(&q, dmin, dmax, 1, nsteps);
 	G_set_quant_rules(fd, &q);
@@ -96,7 +93,7 @@ int describe(char *name, char *mapset, int compact, char *no_data_str,
     nrows = G_window_rows();
     ncols = G_window_cols();
 
-    G_verbose_message("Reading [%s in %s] ...", name, mapset);
+    G_verbose_message(_("Reading <%s> ..."), name);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if ((*get_row) (fd, b = buf, row) < 0)

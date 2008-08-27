@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE out_type, map_type;
     char *name;
     char outfile[GNAME_MAX];
-    char *mapset;
     int null_str = 0;
     char buf[128];
     int fd;
@@ -123,12 +122,7 @@ int main(int argc, char *argv[])
 
     G_get_window(&region);
 
-    mapset = G_find_cell(name, "");
-
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
@@ -159,7 +153,7 @@ int main(int argc, char *argv[])
 
     /* Set up Parameters for GMT header */
     if (flag.gmt_hd->answer) {
-	G_read_fp_range(name, mapset, &range);
+	G_read_fp_range(name, "", &range);
 	G_get_fp_range_min_max(&range, &Z_MIN, &Z_MAX);
 
 	header.nx = region.cols;

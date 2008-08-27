@@ -101,7 +101,6 @@ int main(int argc, char *argv[])
 
     CELL *cell;
     char *name;
-    char *mapset;
     int fd;
     int nrows, ncols;
     double bias;
@@ -169,11 +168,8 @@ int main(int argc, char *argv[])
 	sscanf(parm.scaleFactor->answer, "%lf", &verticalScale);
 
     name = parm.map->answer;
-    mapset = G_find_cell2(name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
 
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
@@ -208,7 +204,7 @@ int main(int argc, char *argv[])
     southMost = region.south;
 
     G_init_range(&range);
-    G_read_range(name, mapset, &range);
+    G_read_range(name, "", &range);
     G_get_range_min_max(&range, &range_min, &range_max);
     if (range.min < 0 || range.max < 0)
 	G_warning(_("Negative elevation values in input"));

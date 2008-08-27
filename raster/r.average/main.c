@@ -34,7 +34,6 @@ static int out(FILE *, DCELL, DCELL, double, double);
 int main(int argc, char *argv[])
 {
     char command[1024];
-    char *mapset;
     struct GModule *module;
     struct Option *basemap, *covermap, *outputmap;
     struct Flag *flag_c;
@@ -68,14 +67,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!G_find_cell(basemap->answer, ""))
-	G_fatal_error(_("Raster map <%s> not found"), basemap->answer);
-
-    if (!(mapset = G_find_cell(covermap->answer, "")))
-	G_fatal_error(_("Raster map <%s> not found"), covermap->answer);
-
     if ((usecats = flag_c->answer)) {
-	if (G_read_cats(covermap->answer, mapset, &cats) < 0)
+	if (G_read_cats(covermap->answer, "", &cats) < 0)
 	    G_fatal_error(_("Error reading category file for <%s>"),
 			  covermap->answer);
     }

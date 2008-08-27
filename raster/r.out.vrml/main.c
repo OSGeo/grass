@@ -30,11 +30,10 @@ int main(int argc, char *argv[])
 
     struct Option *rast_el, *rast_co, *out;
     struct Option *exag_opt;
-    char *t_mapset;
     FILEDESC elevfd = 0, colorfd = 0;
     FILE *vout = NULL;
     struct Colors colr;
-    char errbuf[100], outfile[256];
+    char outfile[GPATH_MAX];
     int shh, color_ok;
     double exag, min, max;
     struct GModule *module;
@@ -81,17 +80,8 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&W);
 
-    t_mapset = NULL;
-    t_mapset = G_find_file2("cell", rast_el->answer, "");
-    if (!t_mapset) {
-	sprintf(errbuf, "Couldn't find raster map %s", rast_el->answer);
-	G_fatal_error(errbuf);
-    }
-    if ((elevfd = G_open_cell_old(rast_el->answer, t_mapset)) == -1) {
-	sprintf(errbuf, "Not able to open cellfile for [%s]",
-		rast_el->answer);
-	G_fatal_error(errbuf);
-    }
+    if ((elevfd = G_open_cell_old(rast_el->answer, "")) == -1)
+	G_fatal_error("Unable to open cellfile for <%s>", rast_el->answer);
 
     {
 	CELL cmin, cmax;
@@ -100,24 +90,20 @@ int main(int argc, char *argv[])
 	DCELL dmin, dmax;
 	struct FPRange fp_range;
 
-	is_fp = G_raster_map_is_fp(rast_el->answer, t_mapset);
+	is_fp = G_raster_map_is_fp(rast_el->answer, "");
 	if (is_fp) {
-	    if (G_read_fp_range(rast_el->answer, t_mapset, &fp_range) != 1) {
-		sprintf(errbuf,
-			"Range info for [%s] not available (run r.support)\n",
-			rast_el->answer);
-		G_fatal_error(errbuf);
+	    if (G_read_fp_range(rast_el->answer, "", &fp_range) != 1) {
+		G_fatal_error(_("Range info for [%s] not available (run r.support)"),
+			      rast_el->answer);
 	    }
 	    G_get_fp_range_min_max(&fp_range, &dmin, &dmax);
 	    min = dmin;
 	    max = dmax;
 	}
 	else {
-	    if (G_read_range(rast_el->answer, t_mapset, &range) == -1) {
-		sprintf(errbuf,
-			"Range info for [%s] not available (run r.support)\n",
-			rast_el->answer);
-		G_fatal_error(errbuf);
+	    if (G_read_range(rast_el->answer, "", &range) == -1) {
+		G_fatal_error(_("Range info for <%s> not available (run r.support)"),
+			      rast_el->answer);
 	    }
 	    G_get_range_min_max(&range, &cmin, &cmax);
 	    min = cmin;
@@ -126,19 +112,10 @@ int main(int argc, char *argv[])
     }
 
     if (rast_co->answer) {
-	t_mapset = NULL;
-	t_mapset = G_find_file2("cell", rast_co->answer, "");
-	if (!t_mapset) {
-	    sprintf(errbuf, "Couldn't find raster map %s", rast_co->answer);
-	    G_warning(errbuf);
-	}
-	else if ((colorfd = G_open_cell_old(rast_co->answer, t_mapset)) == -1) {
-	    sprintf(errbuf, "Not able to open cellfile for [%s]",
-		    rast_co->answer);
-	    G_warning(errbuf);
-	}
+	if ((colorfd = G_open_cell_old(rast_co->answer, "")) == -1)
+	    G_warning(_("Unable to open cellfile for <%s>"), rast_co->answer);
 	else {
-	    G_read_colors(rast_co->answer, t_mapset, &colr);
+	    G_read_colors(rast_co->answer, "", &colr);
 	    color_ok = 1;
 	}
     }
@@ -162,8 +139,7 @@ int main(int argc, char *argv[])
 	/* open file for writing VRML */
 	G_message(_("Opening %s for writing... "), outfile);
 	if (NULL == (vout = fopen(outfile, "w"))) {
-	    sprintf(errbuf, "Couldn't open output file %s", outfile);
-	    G_fatal_error(errbuf);
+	    G_fatal_error(_("Unable to open output file <%s>"), outfile);
 	}
     }
 

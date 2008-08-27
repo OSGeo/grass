@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
      */
     RASTER_MAP_TYPE out_type, map_type;
     char *outfile;
-    char *mapset;
     char null_str[80];
     char cell_buf[300];
     int fd;
@@ -109,11 +108,7 @@ int main(int argc, char *argv[])
 
     sprintf(null_str, "-9999");
 
-    mapset = G_find_cell(parm.map->answer, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), parm.map->answer);
-
-    fd = G_open_cell_old(parm.map->answer, mapset);
+    fd = G_open_cell_old(parm.map->answer, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.map->answer);
 

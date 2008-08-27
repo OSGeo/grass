@@ -126,14 +126,14 @@ int write_MODFLOW(int fd,
 }
 
 /* write the Surfer grid heading */
-int writeGSheader(FILE * fp, char *name, char *mapset)
+int writeGSheader(FILE * fp, const char *name)
 {
     struct Cell_head region;
     char fromc[128], toc[128];
     struct FPRange range;
     DCELL Z_MIN, Z_MAX;
 
-    if (G_read_fp_range(name, mapset, &range) < 0)
+    if (G_read_fp_range(name, "", &range) < 0)
 	return 1;
 
     fprintf(fp, "DSAA \n");

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *rast, *ppm_file;
     struct Flag *gscale;
-    char *cellmap, *map, *p, ofile[1000];
+    char *map, *p, ofile[1000];
     unsigned char *set, *ored, *ogrn, *oblu;
     CELL *cell_buf;
     FCELL *fcell_buf;
@@ -95,25 +95,17 @@ int main(int argc, char *argv[])
     G_message(_("rows = %d, cols = %d"), w.rows, w.cols);
 
     /* open raster map for reading */
-    {
-	cellmap = G_find_file2("cell", rast->answer, "");
-	if (!cellmap) {
-	    G_fatal_error(_("Raster map <%s> not found"), rast->answer);
-	}
-
-	if ((cellfile = G_open_cell_old(rast->answer, cellmap)) == -1) {
-	    G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
-	}
-    }
+    if ((cellfile = G_open_cell_old(rast->answer, "")) == -1)
+	G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
 
     cell_buf = G_allocate_c_raster_buf();
     fcell_buf = G_allocate_f_raster_buf();
     dcell_buf = G_allocate_d_raster_buf();
 
-    ored = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    ogrn = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    oblu = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
-    set = (unsigned char *)G_malloc(w.cols * sizeof(unsigned char));
+    ored = G_malloc(w.cols);
+    ogrn = G_malloc(w.cols);
+    oblu = G_malloc(w.cols);
+    set  = G_malloc(w.cols);
 
     /* open ppm file for writing */
     {
@@ -154,7 +146,7 @@ int main(int argc, char *argv[])
     {
 	struct Colors colors;
 
-	G_read_colors(rast->answer, cellmap, &colors);
+	G_read_colors(rast->answer, "", &colors);
 
 	rtype = G_get_raster_map_type(cellfile);
 	if (rtype == CELL_TYPE)

@@ -131,7 +131,7 @@ void load_window_values(FCELL ** in_rows, FCELL window[][3],
 
 int main(int argc, char *argv[])
 {
-    char *terrainmap, *seedmap, *lakemap, *mapset;
+    char *terrainmap, *seedmap, *lakemap;
     int rows, cols, in_terran_fd, out_fd, lake_fd, row, col, pases, pass;
     int lastcount, curcount, start_col, start_row;
     double east, north, area = 0, volume = 0;
@@ -237,25 +237,15 @@ int main(int argc, char *argv[])
     }
 
     /* Open terran map */
-    mapset = G_find_cell2(terrainmap, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), terrainmap);
-
-    in_terran_fd = G_open_cell_old(terrainmap, mapset);
+    in_terran_fd = G_open_cell_old(terrainmap, "");
     if (in_terran_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"),
-		      G_fully_qualified_name(terrainmap, mapset));
+	G_fatal_error(_("Unable to open raster map <%s>"), terrainmap);
 
     /* Open seed map */
     if (smap_opt->answer) {
-	mapset = G_find_cell2(seedmap, "");
-	if (mapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), seedmap);
-
-	out_fd = G_open_cell_old(seedmap, mapset);
+	out_fd = G_open_cell_old(seedmap, "");
 	if (out_fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  G_fully_qualified_name(seedmap, mapset));
+	    G_fatal_error(_("Unable to open raster map <%s>"), seedmap);
     }
 
     /* Pointers to rows. Row = ptr to 'col' size array. */

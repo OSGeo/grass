@@ -28,16 +28,15 @@ int main(int argc, char *argv[])
     struct Colors colr;
     struct Range range;
     CELL min, max;
-    char *mapset;
     int in_fd, out_fd;
     char title[512];
     char name[GNAME_MAX];
     char *OUTPUT;
     char *INPUT;
     struct GModule *module;
-    struct Option *opt1;
-    struct Option *opt2;
-    struct Option *opt3;
+    struct Option *opt_in;
+    struct Option *opt_out;
+    struct Option *opt_title;
 
     G_gisinit(argv[0]);
 
@@ -49,30 +48,26 @@ int main(int argc, char *argv[])
 	_("Recategorizes data in a raster map layer by grouping cells "
 	  "that form physically discrete areas into unique categories.");
 
-    opt1 = G_define_standard_option(G_OPT_R_INPUT);
+    opt_in = G_define_standard_option(G_OPT_R_INPUT);
 
-    opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
+    opt_out = G_define_standard_option(G_OPT_R_OUTPUT);
 
-    opt3 = G_define_option();
-    opt3->key = "title";
-    opt3->key_desc = "\"string\"";
-    opt3->type = TYPE_STRING;
-    opt3->required = NO;
-    opt3->description = _("Title, in quotes");
+    opt_title = G_define_option();
+    opt_title->key = "title";
+    opt_title->type = TYPE_STRING;
+    opt_title->required = NO;
+    opt_title->description = _("Title");
 
     /* parse options */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    INPUT = opt1->answer;
-    OUTPUT = opt2->answer;
+    INPUT = opt_in->answer;
+    OUTPUT = opt_out->answer;
 
     strcpy(name, INPUT);
-    mapset = G_find_cell2(name, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), INPUT);
 
-    in_fd = G_open_cell_old(name, mapset);
+    in_fd = G_open_cell_old(name, "");
     if (in_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), INPUT);
 
@@ -89,10 +84,10 @@ int main(int argc, char *argv[])
 
 
     /* build title */
-    if (opt3->answer != NULL)
-	strcpy(title, opt3->answer);
+    if (opt_title->answer != NULL)
+	strcpy(title, opt_title->answer);
     else
-	sprintf(title, "clump of %s in %s", name, mapset);
+	sprintf(title, "clump of %s", name);
 
     G_put_cell_title(OUTPUT, title);
     G_read_range(OUTPUT, G_mapset(), &range);

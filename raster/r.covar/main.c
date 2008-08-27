@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 {
     int nrows, ncols;
     DCELL **dcell;
-    char *name, *mapset;
+    char *name;
     double *sum, **sum2;
     double count;
     double ii, jj;
@@ -75,10 +75,7 @@ int main(int argc, char *argv[])
 	sum2[i] = (double *)G_calloc(nfiles, sizeof(double));
 	dcell[i] = G_allocate_d_raster_buf();
 	name = maps->answers[i];
-	mapset = G_find_cell(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	fd[i] = G_open_cell_old(name, mapset);
+	fd[i] = G_open_cell_old(name, "");
 	if (fd[i] < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
     }

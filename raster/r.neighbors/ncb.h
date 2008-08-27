@@ -10,12 +10,8 @@ struct ncb			/* neighborhood control block */
     FILE *out;
     char **mask;
     DCELL **weights;
-    struct
-    {
-	char *name;
-	char *mapset;
-    }
-    oldcell, newcell;
+    const char *oldcell;
+    const char *newcell;
 };
 
 extern struct ncb ncb;
