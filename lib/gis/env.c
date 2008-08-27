@@ -500,34 +500,6 @@ int G__read_env(void)
 }
 
 /**
-   \brief Sets filename for gisrc
-
-   \param name filename
-
-   \return 0
-*/
-int G__set_gisrc_file(const char *name)
-{
-    gisrc = NULL;
-    if (name && *name)
-	gisrc = G_store(name);
-
-    return 0;
-}
-
-/**
-   \brief Get gisrc filename
-
-   \param
-   
-   \return char pointer to filename
-*/
-char *G__get_gisrc_file(void)
-{
-    return gisrc;
-}
-
-/**
    \brief Set up alternative environment variables
 
    \param

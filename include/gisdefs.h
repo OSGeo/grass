@@ -111,8 +111,6 @@ int G_read_cats(const char *, const char *, struct Categories *);
 int G_read_raster_cats(const char *, const char *, struct Categories *);
 int G_read_vector_cats(const char *, const char *, struct Categories *);
 CELL G_number_of_cats(const char *, const char *);
-CELL G__read_cats(const char *, const char *, const char *,
-		  struct Categories *, int);
 char *G_get_cats_title(const struct Categories *);
 char *G_get_raster_cats_title(const struct Categories *);
 char *G_get_cat(CELL, struct Categories *);
@@ -143,7 +141,6 @@ int G_set_raster_cat(const void *, const void *, const char *, struct Categories
 int G_write_cats(const char *, struct Categories *);
 int G_write_raster_cats(const char *, struct Categories *);
 int G_write_vector_cats(const char *, struct Categories *);
-int G__write_cats(const char *, const char *, struct Categories *);
 char *G_get_ith_d_raster_cat(const struct Categories *, int, DCELL *,
 			     DCELL *);
 char *G_get_ith_f_raster_cat(const struct Categories *, int, void *, void *);
@@ -192,7 +189,6 @@ int G_clicker(void);
 /* closecell.c */
 int G_close_cell(int);
 int G_unopen_cell(int);
-int G__write_fp_format(int);
 
 /* color_compat.c */
 int G_make_ryg_colors(struct Colors *, CELL, CELL);
@@ -425,8 +421,6 @@ char *G__env_name(int);
 int G__read_env(void);
 void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
-int G__set_gisrc_file(const char *);
-char *G__get_gisrc_file(void);
 int G__create_alt_env(void);
 int G__switch_env(void);
 
@@ -474,9 +468,6 @@ int G_zlib_expand(const unsigned char *, int, unsigned char *, int);
 int G_zlib_write(int, const unsigned char *, int);
 int G_zlib_read(int, int, unsigned char *, int);
 int G_zlib_write_noCompress(int, const unsigned char *, int);
-
-/* fork.c */
-int G_fork(void);
 
 /* format.c */
 int G__check_format(int);
@@ -586,9 +577,6 @@ char *G_gisbase(void);
 /* gisdbase.c */
 char *G_gisdbase(void);
 
-/* gishelp.c */
-int G_gishelp(const char *, const char *);
-
 /* gisinit.c */
 int G__gisinit(const char *, const char *);
 int G__no_gisinit(const char *);
@@ -690,7 +678,6 @@ double G_distance2_point_to_line(double, double, double, double, double,
 				 double);
 
 /* list.c */
-int G_set_list_hit_return(int);
 int G_list_element(const char *, const char *, const char *,
 		   int (*)(const char *, const char *, const char *));
 char **G_list(int, const char *, const char *, const char *);
@@ -1149,9 +1136,6 @@ int G_free_tokens(char **);
 
 /* trim_dec.c */
 int G_trim_decimal(char *);
-
-/* unctrl.c */
-char *G_unctrl(int);
 
 /* verbose.c */
 int G_verbose(void);

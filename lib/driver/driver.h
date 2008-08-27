@@ -134,10 +134,6 @@ extern void COM_Text_rotation(double);
 
 /* Driver Operations */
 
-/* Color.c */
-extern int DRV_lookup_color(int, int, int);
-extern void DRV_color(int);
-
 /* Draw.c */
 extern void DRV_draw_bitmap(int, int, int, const unsigned char *);
 extern void DRV_draw_line(double, double, double, double);

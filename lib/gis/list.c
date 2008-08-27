@@ -24,16 +24,9 @@
 #include <grass/glocale.h>
 
 static int broken_pipe;
-static int hit_return = 0;
 static int list_element(FILE *, const char *, const char *, const char *,
 			int (*)(const char *, const char *, const char *));
 static void sigpipe_catch(int);
-
-int G_set_list_hit_return(int flag)
-{
-    hit_return = flag;
-    return 0;
-}
 
 /**
    \brief General purpose list function.
@@ -130,10 +123,6 @@ int G_list_element(const char *element,
 #ifdef SIGPIPE
     signal(SIGPIPE, sigpipe);
 #endif
-    if (hit_return && isatty(1)) {
-	fprintf(stderr, _("hit RETURN to continue -->"));
-	while (getchar() != '\n') ;
-    }
 
     return 0;
 }
