@@ -16,7 +16,7 @@
 /**  ??? move these into libgis ??? (libraster for set_color_from_RGBA()) **/
 
 #include <grass/gis.h>
-#include <grass/raster.h>
+#include <grass/display.h>
 #include <grass/glocale.h>
 
 /* fill RGBA array from RGB components (0-255) */
