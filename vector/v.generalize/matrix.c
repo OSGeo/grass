@@ -17,6 +17,7 @@
  *
  ****************************************************************/
 
+#include <string.h>
 #include "matrix.h"
 
 int matrix_init(int rows, int cols, MATRIX * res)
