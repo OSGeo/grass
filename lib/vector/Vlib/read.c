@@ -29,7 +29,7 @@ static int read_next_dummy()
 #ifndef HAVE_OGR
 static int format()
 {
-    G_fatal_error(_("Requested format is not compiled in this version") x);
+    G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
