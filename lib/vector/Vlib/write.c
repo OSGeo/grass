@@ -46,6 +46,13 @@ static int format()
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
+
+static long format_l()
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
 #endif
 
 static long (*Write_line_array[][3]) () = {
@@ -56,7 +63,7 @@ static long (*Write_line_array[][3]) () = {
     write_dummy, write_dummy, write_dummy}
 #else
     , {
-    write_dummy, format, format}
+    write_dummy, format_l, format_l}
 #endif
 };
 
