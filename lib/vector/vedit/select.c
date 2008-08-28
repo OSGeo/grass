@@ -14,6 +14,7 @@
    \date 2007-2008
 */
 
+#include <math.h>
 #include <grass/glocale.h>
 #include <grass/vedit.h>
 

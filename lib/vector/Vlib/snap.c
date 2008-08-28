@@ -17,6 +17,7 @@
  * \date 2001
  */
 
+#include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
