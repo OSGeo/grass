@@ -52,7 +52,7 @@ paramType param;		/*params */
 void fatal_error(Database db, char *errorMsg);	/*Simple Error message */
 void set_params();		/*Fill the paramType structure */
 void elev_raster_to_g3d(Database db, G3D_Region region);	/*Write the raster */
-int open_input_raster_map(char *name, char *mapset);	/*opens the outputmap */
+int open_input_raster_map(const char *name);	/*opens the outputmap */
 void close_input_raster_map(int fd);	/*close the map */
 double get_raster_value_as_double(int maptype, void *ptr, double nullval);
 void check_input_maps(Database * db);	/*Check input maps */
@@ -63,34 +63,15 @@ void check_input_maps(Database * db);	/*Check input maps */
 /* ************************************************************************* */
 double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 {
-    double val = nullval;
+    if (G_is_null_value(ptr, MapType))
+	return nullval;
 
-    if (MapType == CELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
-	    val = nullval;
-	}
-	else {
-	    val = *(CELL *) ptr;
-	}
+    switch (MapType) {
+    case CELL_TYPE:	return *(CELL *) ptr;
+    case FCELL_TYPE:	return *(FCELL *) ptr;
+    case DCELL_TYPE:	return *(DCELL *) ptr;
+    default:		return nullval;
     }
-    if (MapType == FCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
-	    val = nullval;
-	}
-	else {
-	    val = *(FCELL *) ptr;
-	}
-    }
-    if (MapType == DCELL_TYPE) {
-	if (G_is_null_value(ptr, MapType)) {
-	    val = nullval;
-	}
-	else {
-	    val = *(DCELL *) ptr;
-	}
-    }
-
-    return val;
 }
 
 /* ************************************************************************* */
@@ -98,46 +79,23 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 /* ************************************************************************* */
 void check_input_maps(Database * db)
 {
-    char *mapset = NULL;
     int i;
     int elevcount = 0, inputcount = 0;
 
     G_debug(2, "Checking input maps");
 
     /*Check elev maps */
-    if (param.elev->answers != NULL) {
-	for (i = 0; param.elev->answers[i] != NULL; i++) {
-
-	    mapset = NULL;
-	    mapset = G_find_cell2(param.elev->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Raster map <%s> not found"),
-			      param.elev->answers[i]);
-		exit(EXIT_FAILURE);
-	    }
+    if (param.elev->answers != NULL)
+	for (i = 0; param.elev->answers[i] != NULL; i++)
 	    elevcount++;
-	}
-    }
 
     /*Check input maps */
-    if (param.input->answers != NULL) {
-	for (i = 0; param.input->answers[i] != NULL; i++) {
-
-	    mapset = NULL;
-	    mapset = G_find_cell2(param.input->answers[i], "");
-	    if (mapset == NULL) {
-		G_fatal_error(_("Raster map <%s> not found"),
-			      param.input->answers[i]);
-		exit(EXIT_FAILURE);
-	    }
+    if (param.input->answers != NULL)
+	for (i = 0; param.input->answers[i] != NULL; i++)
 	    inputcount++;
-	}
-    }
 
-    if (elevcount != inputcount) {
+    if (elevcount != inputcount)
 	G_fatal_error(_("The number of input and elevation maps is not equal"));
-	exit(EXIT_FAILURE);
-    }
 
     db->mapnum = inputcount;
 
@@ -147,14 +105,14 @@ void check_input_maps(Database * db)
 /* ************************************************************************* */
 /* Open the raster input map *********************************************** */
 /* ************************************************************************* */
-int open_input_raster_map(char *name, char *mapset)
+int open_input_raster_map(const char *name)
 {
     int fd;
 
-    G_debug(3, "Open Raster file %s in Mapset %s", name, mapset);
+    G_debug(3, "Open Raster file %s", name);
 
     /* open raster map */
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
@@ -382,7 +340,6 @@ int main(int argc, char *argv[])
     struct GModule *module;
     int cols, rows, i;
     char *name = NULL;
-    char *mapset = NULL;
     int changemask = 0;
     Database db;
 
@@ -501,22 +458,16 @@ int main(int argc, char *argv[])
 
 	db.count = i;
 	/*Open input map */
-	mapset = NULL;
-	name = NULL;
 	name = param.input->answers[i];
-	mapset = G_find_cell2(name, "");
-	db.input = open_input_raster_map(name, mapset);
-	db.inputmaptype = G_raster_map_type(name, mapset);
+	db.input = open_input_raster_map(name);
+	db.inputmaptype = G_raster_map_type(name, "");
 
 	G_debug(2, "Open elev raster map %s", param.elev->answers[i]);
 
 	/*Open elev map */
-	mapset = NULL;
-	name = NULL;
 	name = param.elev->answers[i];
-	mapset = G_find_cell2(name, "");
-	db.elev = open_input_raster_map(name, mapset);
-	db.elevmaptype = G_raster_map_type(name, mapset);
+	db.elev = open_input_raster_map(name);
+	db.elevmaptype = G_raster_map_type(name, "");
 
 	/****************************************/
 	/*Write the data into the G3D Rastermap */

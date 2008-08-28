@@ -26,7 +26,7 @@
  *
  * RETURN: 0 on success / 1 on failure
  */
-int check_stats(char *name, char *mapset)
+int check_stats(const char *name)
 {
     RASTER_MAP_TYPE data_type;
     struct Histogram histogram;
@@ -37,13 +37,13 @@ int check_stats(char *name, char *mapset)
     int cats_ok;
     int max;
 
-    data_type = G_raster_map_type(name, mapset);
+    data_type = G_raster_map_type(name, "");
 
     G_message(_("Updating statistics for [%s]..."), name);
 
-    if (!do_histogram(name, mapset))
+    if (!do_histogram(name))
 	return 1;
-    if (G_read_histogram(name, mapset, &histogram) <= 0)
+    if (G_read_histogram(name, "", &histogram) <= 0)
 	return 1;
 
     /* Init histogram range */
@@ -71,7 +71,7 @@ int check_stats(char *name, char *mapset)
 	G_write_fp_range(name, &fprange);
 
     /* Get category status and max */
-    cats_ok = (G_read_cats(name, mapset, &cats) >= 0);
+    cats_ok = (G_read_cats(name, "", &cats) >= 0);
     max = (data_type == CELL_TYPE ? range.max : fprange.max);
 
     /* Further category checks */

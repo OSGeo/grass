@@ -26,7 +26,7 @@ struct map map;
 struct file file;
 struct misc misc;
 struct flg flg;
-char *gisbase, *mapset;
+char *mapset;
 
 int main(int argc, char **argv)
 {
@@ -198,10 +198,7 @@ int main(int argc, char **argv)
     flg.input = flag.input->answer;
     flg.overwr = module->overwrite;
 
-
-    gisbase = G_gisbase();
     mapset = G_mapset();
-
 
     /* Check run conditions */
     if (check_ready())

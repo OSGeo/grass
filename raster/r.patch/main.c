@@ -93,19 +93,12 @@ int main(int argc, char *argv[])
 
     for (i = 0; i < nfiles; i++) {
 	const char *name = names[i];
-	const char *mapset = G_find_cell2(name, "");
 	int fd;
-
-	if (mapset == NULL) {
-	    G_warning(_("Raster map <%s> not found"), name);
-	    G_sleep(3);
-	    ok = 0;
-	}
 
 	if (!ok)
 	    continue;
 
-	fd = G_open_cell_old(name, mapset);
+	fd = G_open_cell_old(name, "");
 	if (fd < 0) {
 	    ok = 0;
 	    continue;

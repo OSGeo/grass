@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd, window;
     char *value;
     char *name;
-    char *mapset;
     char *err;
 
     struct GModule *module;
@@ -153,12 +152,8 @@ int main(int argc, char *argv[])
 
     name = parm.map->answer;
 
-    mapset = G_find_cell2(name, "");
-    if (!mapset)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
-	G_fatal_error(_("Unable to read header of raster map <%s@%s>"), name,
-		      mapset);
+    if (G_get_cellhd(name, G_mapset(), &cellhd) < 0)
+	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     G_copy(&window, &cellhd, sizeof(window));
 
@@ -169,12 +164,8 @@ int main(int argc, char *argv[])
 	G_get_window(&window);
 
     if ((name = parm.region->answer)) {	/* region= */
-	mapset = G_find_file("windows", name, "");
-	if (!mapset)
-	    G_fatal_error(_("Region <%s> not found"), name);
-	if (G__get_window(&window, "windows", name, mapset) != NULL)
-	    G_fatal_error(_("Unable to read region <%s> in <%s>"), name,
-			  mapset);
+	if (G__get_window(&window, "windows", name, "") != NULL)
+	    G_fatal_error(_("Unable to read region <%s>"), name);
     }
 
     if ((name = parm.view->answer)) {	/* 3dview= */
@@ -182,24 +173,17 @@ int main(int argc, char *argv[])
 	FILE *fp;
 	int ret;
 
-	mapset = G_find_file2("3d.view", name, "");
-	if (!mapset)
-	    G_fatal_error(_("3dview file <%s> not found"), name);
-
 	G_3dview_warning(0);	/* suppress boundary mismatch warning */
 
-	fp = G_fopen_old("3d.view", name, mapset);
+	fp = G_fopen_old("3d.view", name, "");
 	if (!fp)
-	    G_fatal_error(_("Unable to open 3dview file <%s> in <%s>"), name,
-			  mapset);
+	    G_fatal_error(_("Unable to open 3dview file <%s>"), name);
 
-	ret = G_get_3dview(name, mapset, &v);
+	ret = G_get_3dview(name, "", &v);
 	if (ret < 0)
-	    G_fatal_error(_("Unable to read 3dview file <%s> in <%s>"), name,
-			  mapset);
+	    G_fatal_error(_("Unable to read 3dview file <%s>"), name);
 	if (ret == 0)
-	    G_fatal_error(_("Old 3dview file. Region <%s> not found in <%s>"),
-			  name, mapset);
+	    G_fatal_error(_("Old 3dview file. Region <%s> not found"), name);
 
 
 	window.north = v.vwin.north;
@@ -212,26 +196,17 @@ int main(int argc, char *argv[])
     }
 
     if ((name = parm.raster->answer)) {	/* raster= */
-	mapset = G_find_cell2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	if (G_get_cellhd(name, mapset, &window) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
-			  name, mapset);
+	if (G_get_cellhd(name, "", &window) < 0)
+	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
     }
 
     if ((name = parm.vect->answer)) {	/* vect= */
 	struct Map_info Map;
 	BOUND_BOX box;
 
-	mapset = G_find_vector2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Vector map <%s> not found"), name);
-
 	Vect_set_open_level(1);
-	if (Vect_open_old(&Map, name, mapset) != 1)
-	    G_fatal_error(_("Unable to open vector map <%s> in <%s>"), name,
-			  mapset);
+	if (Vect_open_old(&Map, name, "") != 1)
+	    G_fatal_error(_("Unable to open vector map <%s>"), name);
 
 	Vect_get_map_box(&Map, &box);
 	window.north = box.N;
@@ -335,14 +310,10 @@ int main(int argc, char *argv[])
     if ((name = parm.align->answer)) {	/* align= */
 	struct Cell_head temp_window;
 
-	mapset = G_find_cell2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-	if (G_get_cellhd(name, mapset, &temp_window) < 0)
-	    G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
-			  name, mapset);
+	if (G_get_cellhd(name, "", &temp_window) < 0)
+	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 	if ((err = G_align_window(&window, &temp_window)))
-	    G_fatal_error("%s in %s: %s", name, mapset, err);
+	    G_fatal_error("%s: %s", name, err);
     }
 
     window.rows = cellhd.rows;

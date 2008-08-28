@@ -13,7 +13,7 @@ static int a_dev(double *, int, double *);
 
 
 int
-o_adev(char *basemap, char *covermap, char *outputmap, int usecats,
+o_adev(const char *basemap, const char *covermap, const char *outputmap, int usecats,
        struct Categories *cats)
 {
     char command[1024];

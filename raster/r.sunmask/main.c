@@ -86,7 +86,6 @@ double raster_value(union RASTER_PTR buf, int data_type, int col);
 
 int main(int argc, char *argv[])
 {
-    char *mapset;
     extern struct Cell_head window;
     union RASTER_PTR elevbuf, tmpbuf, outbuf;
     CELL min, max;
@@ -451,10 +450,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    /* Search for output layer in all mapsets ? yes. */
-    mapset = G_find_cell2(name, "");
-
-    if ((elev_fd = G_open_cell_old(name, mapset)) < 0)
+    if ((elev_fd = G_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
     if ((output_fd = G_open_cell_new(outname)) < 0)
 	G_fatal_error(_("Unable to create raster map <%s>"), outname);
@@ -465,14 +461,14 @@ int main(int argc, char *argv[])
     outbuf.v = G_allocate_raster_buf(CELL_TYPE);	/* binary map */
 
     if (data_type == CELL_TYPE) {
-	if ((G_read_range(name, mapset, &range)) < 0)
+	if ((G_read_range(name, "", &range)) < 0)
 	    G_fatal_error(_("Can't open range file for %s"), name);
 	G_get_range_min_max(&range, &min, &max);
 	dmin = (double)min;
 	dmax = (double)max;
     }
     else {
-	G_read_fp_range(name, mapset, &fprange);
+	G_read_fp_range(name, "", &fprange);
 	G_get_fp_range_min_max(&fprange, &dmin, &dmax);
     }
 

@@ -28,7 +28,7 @@ struct FPReclass rcl_struct;
 CELL old_min, old_max;
 DCELL old_dmin, old_dmax;
 int in_fd, out_fd, no_mask, align_wind, make_dcell, nrules, rule_size;
-char *name, *mapset, *result, *title;
+char *name, *result, *title;
 char **rules;
 
 int main(int argc, char *argv[])
@@ -85,13 +85,6 @@ int main(int argc, char *argv[])
     title = parm.title->answer;
     align_wind = parm.a->answer;
     make_dcell = parm.d->answer;
-
-    mapset = G_find_cell2(name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
-    if (strcmp(name, result) == 0 && strcmp(mapset, G_mapset()) == 0)
-	G_fatal_error(_("Input map can NOT be the same as output map"));
 
     srcfp = stdin;
     if (parm.rules->answer) {

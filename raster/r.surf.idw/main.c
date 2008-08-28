@@ -80,7 +80,6 @@ static char *output;
 
 int main(int argc, char **argv)
 {
-    char *layer_mapset, *current_mapset;
     MELEMENT *rowlist;
     SHORT nrows, ncols;
     SHORT datarows;
@@ -132,16 +131,9 @@ int main(int argc, char **argv)
     input = parm.input->answer;
     output = parm.output->answer;
 
-    current_mapset = G_mapset();
-
     /*  Get database window parameters                              */
     if (G_get_window(&window) < 0)
 	G_fatal_error(_("Unable to read current region parameters"));
-
-    /* Make sure layer_map is available                                     */
-    layer_mapset = G_find_cell(input, "");
-    if (layer_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), input);
 
     /*  find number of rows and columns in window                   */
     nrows = G_window_rows();
@@ -155,14 +147,14 @@ int main(int argc, char **argv)
     cell = G_allocate_cell_buf();
     if ((maskfd = G_maskfd()) >= 0 || error_flag) {	/* apply mask to output */
 	if (error_flag)		/* use input as mask when -e option chosen */
-	    maskfd = G_open_cell_old(input, layer_mapset);
+	    maskfd = G_open_cell_old(input, "");
 	mask = G_allocate_cell_buf();
     }
     else
 	mask = NULL;
 
     /*  Open input cell layer for reading                           */
-    fd = G_open_cell_old(input, layer_mapset);
+    fd = G_open_cell_old(input, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), input);
 

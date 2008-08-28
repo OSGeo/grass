@@ -38,7 +38,7 @@ void gregion(void)
     }
 
     if (hdmap) {
-	sprintf(buf, "%s/bin/g.region rast=%s > /dev/null", gisbase, hdmap);
+	sprintf(buf, "g.region rast=%s > /dev/null", hdmap);
 	G_message("g.region rast=%s ... ", hdmap);
 
 	if (run(buf))
@@ -50,9 +50,8 @@ void gregion(void)
 void depressionless(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "%s/bin/r.fill.dir "
-	    "input=%s elev=%s dir=%s type=grass > /dev/null",
-	    gisbase, map.elev, map.fill, map.dir);
+    sprintf(buf, "r.fill.dir input=%s elev=%s dir=%s type=grass > /dev/null",
+	    map.elev, map.fill, map.dir);
     G_message("r.fill.dir input=%s elev=%s dir=%s type=grass ... ",
 	      map.elev, map.fill, map.dir);
 
@@ -69,9 +68,8 @@ void depressionless(void)
 void basin_elevation(void)
 {
     char buf[GPATH_MAX];
-    sprintf(buf, "%s/bin/r.mapcalc "
-	    "'%s = if(%s == 0 || isnull(%s), null(), %s)' > /dev/null",
-	    gisbase, map.belev, map.basin, map.basin, map.elev);
+    sprintf(buf, "r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)' > /dev/null",
+	    map.belev, map.basin, map.basin, map.elev);
     G_message("r.mapcalc '%s = if(%s == 0 || isnull(%s), null(), %s)'"
 	      " ... ", map.belev, map.basin, map.basin, map.elev);
 
@@ -87,9 +85,8 @@ void top_index(void)
 {
     char buf[GPATH_MAX];
     if (map.belev) {
-	sprintf(buf, "%s/bin/r.topidx "
-		"input=%s output=%s > /dev/null",
-		gisbase, map.belev, map.topidx);
+	sprintf(buf, "r.topidx input=%s output=%s > /dev/null",
+		map.belev, map.topidx);
 	G_message("r.topidx input=%s output=%s ... ", map.belev, map.topidx);
 
 	if (run(buf))
@@ -97,9 +94,9 @@ void top_index(void)
     }
 
     if (map.topidx) {
-	sprintf(buf, "%s/bin/r.stats -Anc "
+	sprintf(buf, "r.stats -Anc "
 		"input=%s nsteps=%d > %s",
-		gisbase, map.topidx, misc.nidxclass, file.idxstats);
+		map.topidx, misc.nidxclass, file.idxstats);
 	G_message("r.stats -Anc input=%s nsteps=%d > %s ... ",
 		  map.topidx, misc.nidxclass, file.idxstats);
 

@@ -4,7 +4,7 @@
 #include "method.h"
 
 int
-o_min(char *basemap, char *covermap, char *outputmap, int usecats,
+o_min(const char *basemap, const char *covermap, const char *outputmap, int usecats,
       struct Categories *cats)
 {
     char command[1024];

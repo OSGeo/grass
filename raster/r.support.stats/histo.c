@@ -24,7 +24,7 @@
  *
  * RETURN: 0 on success / 1 on failure
  */
-int do_histogram(char *name, char *mapset)
+int do_histogram(const char *name)
 {
     CELL *cell;
     struct Cell_head cellhd;
@@ -33,11 +33,11 @@ int do_histogram(char *name, char *mapset)
     int row;
     int fd;
 
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
+    if (G_get_cellhd(name, "", &cellhd) < 0)
 	return 1;
 
     G_set_window(&cellhd);
-    if ((fd = G_open_cell_old(name, mapset)) < 0)
+    if ((fd = G_open_cell_old(name, "")) < 0)
 	return 1;
 
     nrows = G_window_rows();

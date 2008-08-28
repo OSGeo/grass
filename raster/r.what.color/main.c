@@ -78,7 +78,6 @@ int main(int argc, char **argv)
 	struct Flag *i;
     } flag;
     const char *name;
-    const char *mapset;
     struct Colors colors;
     RASTER_MAP_TYPE type;
 
@@ -121,16 +120,12 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Either \"-i\" or \"value=\" must be given"));
 
     name = opt.input->answer;
-    mapset = G_find_cell2(name, "");
 
-    if (!mapset)
-	G_fatal_error("Raster map <%s> not found", name);
-
-    type = G_raster_map_type(name, mapset);
+    type = G_raster_map_type(name, "");
     if (type < 0)
 	G_fatal_error("Unable to determine type of input map %s", name);
 
-    if (G_read_colors(name, mapset, &colors) < 0)
+    if (G_read_colors(name, "", &colors) < 0)
 	G_fatal_error("Unable to read colors for input map %s", name);
 
     fmt = opt.format->answer;

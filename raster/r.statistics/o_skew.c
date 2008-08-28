@@ -13,7 +13,7 @@ static int skew(double *, int, double *);
 
 
 int
-o_skew(char *basemap, char *covermap, char *outputmap, int usecats,
+o_skew(const char *basemap, const char *covermap, const char *outputmap, int usecats,
        struct Categories *cats)
 {
     char command[1024];

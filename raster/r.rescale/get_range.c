@@ -3,7 +3,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-int get_range(char *name, char *mapset, long *min, long *max)
+int get_range(const char *name, long *min, long *max)
 {
     struct Range range;
     int nrows, ncols, row, col;
@@ -12,12 +12,12 @@ int get_range(char *name, char *mapset, long *min, long *max)
     CELL cmin, cmax;
     struct Cell_head cellhd;
 
-    if (G_read_range(name, mapset, &range) < 0) {
+    if (G_read_range(name, "", &range) < 0) {
 	G_init_range(&range);	/* read the file to get the range */
-	G_get_cellhd(name, mapset, &cellhd);
+	G_get_cellhd(name, "", &cellhd);
 	G_set_window(&cellhd);
 	cell = G_allocate_cell_buf();
-	fd = G_open_cell_old(name, mapset);
+	fd = G_open_cell_old(name, "");
 	if (fd < 0)
 	    exit(1);
 	nrows = G_window_rows();

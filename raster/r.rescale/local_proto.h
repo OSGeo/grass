@@ -1,2 +1,2 @@
 /* get_range.c */
-int get_range(char *, char *, long *, long *);
+int get_range(const char *, long *, long *);

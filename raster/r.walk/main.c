@@ -115,8 +115,6 @@ struct variables
     {"coor", START_PT}
 };
 
-char cum_cost_layer[64];
-char cost_layer[64], dtm_layer[64];
 struct start_pt *head_start_pt = NULL;
 struct start_pt *head_end_pt = NULL;
 
@@ -128,13 +126,11 @@ struct Cell_head window;
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
+    const char *cum_cost_layer;
+    const char *start_layer, *cost_layer, *dtm_layer;
     void *dtm_cell, *cost_cell, *cum_cell, *cell2 = NULL;
     SEGMENT dtm_in_seg, cost_in_seg, out_seg;
-    char *dtm_mapset, *cost_mapset;
-    char *cum_cost_mapset;
-    char *current_mapset;
     char *dtm_in_file, *cost_in_file, *out_file;
-    char *search_mapset;
     double *dtm_value, *cost_value, *value_start_pt;
     char buf[400];
     extern struct Cell_head window;
@@ -214,6 +210,14 @@ int main(int argc, char *argv[])
     opt1->required = YES;
     opt1->gisprompt = "new,cell,raster";
     opt1->description = _("Name of raster map to contain results");
+
+    opt14 = G_define_option();
+    opt14->key = "start_map";
+    opt14->type = TYPE_STRING;
+    opt14->required = NO;
+    opt14->gisprompt = "old,cell,raster";
+    opt14->description =
+	_("Name of input raster map containing starting points");
 
     opt7 = G_define_option();
     opt7->key = "start_points";
@@ -416,15 +420,10 @@ int main(int argc, char *argv[])
 	Site *site = NULL;	/* pointer to Site */
 	int dims, strs, dbls;
 
-	search_mapset = "";
-	search_mapset = G_find_sites(opt7->answer, "");
-	if (search_mapset == NULL)
-	    G_fatal_error(_("Unable to find starting vector <%s> "),
-			  opt7->answer);
-	fp = G_fopen_sites_old(opt7->answer, search_mapset);
+	fp = G_fopen_sites_old(opt7->answer, "");
 
 	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
-	    G_fatal_error("Failed to guess site file format\n");
+	    G_fatal_error("Failed to guess site file format");
 	site = G_site_new_struct(cat, dims, strs, dbls);
 
 	for (; (G_site_get(fp, site) != EOF);) {
@@ -463,11 +462,7 @@ int main(int argc, char *argv[])
 	Site *site = NULL;	/* pointer to Site */
 	int dims, strs, dbls;
 
-	search_mapset = "";
-	search_mapset = G_find_sites(opt8->answer, "");
-	if (search_mapset == NULL)
-	    G_fatal_error(_("Unable to find stop vector <%s>"), opt8->answer);
-	fp = G_fopen_sites_old(opt8->answer, search_mapset);
+	fp = G_fopen_sites_old(opt8->answer, "");
 
 	if (G_site_describe(fp, &dims, &cat, &strs, &dbls))
 	    G_fatal_error("Failed to guess site file format\n");
@@ -513,30 +508,10 @@ int main(int argc, char *argv[])
 	keep_nulls = 0;		/* handled automagically... */
     }
 
-    strcpy(cum_cost_layer, opt1->answer);
-    current_mapset = G_mapset();
-
-    /*  Search for output layer (cum_cost_layer) in all mapsets */
-
-    search_mapset = "";
-    cum_cost_mapset = G_find_cell2(cum_cost_layer, search_mapset);
-
-
-    /*  Check if dtm  layer exists in data base  */
-
-    strcpy(dtm_layer, opt2->answer);
-    dtm_mapset = G_find_cell2(dtm_layer, search_mapset);
-
-    /* Handling new cost layer */
-
-    strcpy(cost_layer, opt12->answer);
-    cost_mapset = G_find_cell2(cost_layer, search_mapset);
-
-    if (dtm_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), dtm_layer);
-
-    if (cost_mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), cost_layer);
+    start_layer = opt14->answer;
+    dtm_layer = opt2->answer;
+    cost_layer = opt12->answer;
+    cum_cost_layer = opt1->answer;
 
     /*  Find number of rows and columns in window    */
 
@@ -546,8 +521,8 @@ int main(int argc, char *argv[])
 
     /*  Open cost cell layer for reading  */
 
-    dtm_fd = G_open_cell_old(dtm_layer, dtm_mapset);
-    cost_fd = G_open_cell_old(cost_layer, cost_mapset);
+    dtm_fd = G_open_cell_old(dtm_layer, "");
+    cost_fd = G_open_cell_old(cost_layer, "");
 
     if (dtm_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dtm_layer);
@@ -555,8 +530,8 @@ int main(int argc, char *argv[])
     if (cost_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), cost_layer);
 
-    dtm_head_ok = G_get_cellhd(dtm_layer, dtm_mapset, &dtm_cellhd) >= 0;
-    cost_head_ok = G_get_cellhd(cost_layer, cost_mapset, &cost_cellhd) >= 0;
+    dtm_head_ok = G_get_cellhd(dtm_layer, "", &dtm_cellhd) >= 0;
+    cost_head_ok = G_get_cellhd(cost_layer, "", &cost_cellhd) >= 0;
 
     /*Reading headers from maps */
 
@@ -851,26 +826,16 @@ int main(int argc, char *argv[])
 
 	int dsize2;
 
-	cum_cost_mapset = G_find_cell2(cum_cost_layer, search_mapset);
-
-	if (cum_cost_mapset == NULL)
-	    G_fatal_error(_("Raster output map <%s> not found (no start_points given)"),
-			  cum_cost_layer);
-
-	cum_fd = G_open_cell_old(cum_cost_layer, cum_cost_mapset);
+	cum_fd = G_open_cell_old(start_layer, "");
 	if (cum_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
-			  cum_cost_layer);
+			  start_layer);
 
 	data_type2 = G_get_raster_map_type(cum_fd);
 
 	dsize2 = G_raster_size(data_type2);
 
 	cell2 = G_allocate_raster_buf(data_type2);
-
-	if (cell2 == NULL)
-	    G_fatal_error(_("Memory allocation error on reading start points from raster map %s"),
-			  cum_cost_layer);
 
 	G_message(_("Reading %s... "), cum_cost_layer);
 	for (row = 0; row < nrows; row++) {
@@ -1535,10 +1500,10 @@ int main(int argc, char *argv[])
     /*  Create colours for output map    */
 
     /*
-     * G_read_range (cum_cost_layer, current_mapset, &range);
+     * G_read_range (cum_cost_layer, "", &range);
      * G_get_range_min_max(&range, &min, &max);
      * G_make_color_wave(&colors,min, max);
-     * G_write_colors (cum_cost_layer,current_mapset,&colors);
+     * G_write_colors (cum_cost_layer,"",&colors);
      */
 
     /* writing history file */

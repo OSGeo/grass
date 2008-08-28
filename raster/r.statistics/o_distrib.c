@@ -10,7 +10,7 @@
 static int o_out(FILE *, long, long);
 
 
-int o_distrib(char *basemap, char *covermap, char *outputmap, int usecats)
+int o_distrib(const char *basemap, const char *covermap, const char *outputmap, int usecats)
 {
     char *me = "o_distrib";
     char command[1024];

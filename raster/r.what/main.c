@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <grass/gis.h>
-#include "local_proto.h"
 #include <grass/glocale.h>
 
 struct order
@@ -37,6 +36,7 @@ struct order
     DCELL dvalue[NFILES];
 };
 
+static int oops(int, const char *, const char *);
 static int by_row(const void *, const void *);
 static int by_point(const void *, const void *);
 
@@ -47,7 +47,6 @@ static int tty = 0;
 /* *************************************************************** */
 int main(int argc, char *argv[])
 {
-    char *mapset;
     int i, j;
     int nfiles;
     int withcats;
@@ -188,26 +187,24 @@ int main(int argc, char *argv[])
 	char name[GNAME_MAX];
 
 	if (nfiles >= NFILES)
-	    G_fatal_error(_("%s: can only do up to %d raster maps, sorry\n"),
-			  G_program_name(), NFILES);
+	    G_fatal_error(_("can only do up to %d raster maps"),
+			  NFILES);
 
 	strcpy(name, *ptr);
-	if (NULL == (mapset = G_find_cell2(name, "")))
-	    die(name, " - not found");
-	if (0 > (fd[nfiles] = G_open_cell_old(name, mapset)))
-	    die("can't open", name);
+	if ((fd[nfiles] = G_open_cell_old(name, "")) < 0)
+	    G_fatal_error(_("Unable to open <%s>"), name);
 
 	out_type[nfiles] = G_get_raster_map_type(fd[nfiles]);
 	if (flag3->answer)
 	    out_type[nfiles] = CELL_TYPE;
 
 	if (flag4->answer) {
-	    G_read_colors(name, mapset, &colors);
+	    G_read_colors(name, "", &colors);
 	    ncolor[nfiles] = colors;
 	}
 
-	if (withcats && G_read_cats(name, mapset, &cats[nfiles]) < 0)
-	    die(name, " - can't read category file");
+	if (withcats && G_read_cats(name, "", &cats[nfiles]) < 0)
+	    G_fatal_error(_("Unable to read category file for <%s>"), name);
 	nfiles++;
     }
 
@@ -330,14 +327,12 @@ int main(int argc, char *argv[])
 		cache_miss++;
 		if (row_in_window)
 		    for (i = 0; i < nfiles; i++) {
-			if (G_get_c_raster_row
-			    (fd[i], cell[i], cache[point].row) < 0)
-			    die(argv[i + 1], " - can't read");
+			if (G_get_c_raster_row(fd[i], cell[i], cache[point].row) < 0)
+			    G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 
 			if (out_type[i] != CELL_TYPE) {
-			    if (G_get_d_raster_row
-				(fd[i], dcell[i], cache[point].row) < 0)
-				die(argv[i + 1], " - can't read");
+			    if (G_get_d_raster_row(fd[i], dcell[i], cache[point].row) < 0)
+				G_fatal_error(_("Error reading <%s>"), argv[i + 1]);
 			}
 		    }
 
@@ -432,18 +427,18 @@ int main(int argc, char *argv[])
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-int oops(int line, char *buf, char *msg)
+static int oops(int line, const char *buf, const char *msg)
 {
     static int first = 1;
 
     if (!tty) {
 	if (first) {
-	    G_warning("%s: ** input errors **\n", G_program_name());
+	    G_warning("Input errors:");
 	    first = 0;
 	}
-	G_warning("line %d: %s\n", line, buf);
+	G_warning("line %d: %s", line, buf);
     }
-    G_warning("** %s **\n", msg);
+    G_warning("%s", msg);
 
     return 0;
 }

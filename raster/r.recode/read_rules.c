@@ -13,9 +13,9 @@ int report_range(void)
     char buff[1024], buff2[300];
     RASTER_MAP_TYPE inp_type;
 
-    inp_type = G_raster_map_type(name, mapset);
+    inp_type = G_raster_map_type(name, "");
     if (inp_type != CELL_TYPE) {
-	if (G_read_fp_range(name, mapset, &drange) <= 0)
+	if (G_read_fp_range(name, "", &drange) <= 0)
 	    G_fatal_error(_("Unable to read f_range for map %s"), name);
 
 	G_get_fp_range_min_max(&drange, &old_dmin, &old_dmax);
@@ -30,7 +30,7 @@ int report_range(void)
 		      buff, buff2);
 	}
     }
-    if (G_read_range(name, mapset, &range) <= 0)
+    if (G_read_range(name, "", &range) <= 0)
 	G_fatal_error(_("Unable to read range for map <%s>"), name);
 
     G_get_range_min_max(&range, &old_min, &old_max);

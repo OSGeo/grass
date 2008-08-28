@@ -12,7 +12,7 @@ static int out(FILE *, long, double, double);
 
 
 int
-o_average(char *basemap, char *covermap, char *outputmap, int usecats,
+o_average(const char *basemap, const char *covermap, const char *outputmap, int usecats,
 	  struct Categories *cats)
 {
     char *me = "o_average";

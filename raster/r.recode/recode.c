@@ -28,7 +28,7 @@ int do_recode(void)
     /* set the window from the header for the input file */
     if (align_wind) {
 	G_get_window(&window);
-	if (G_get_cellhd(name, mapset, &cellhd) >= 0) {
+	if (G_get_cellhd(name, "", &cellhd) >= 0) {
 	    G_align_window(&window, &cellhd);
 	    G_set_window(&window);
 	}
@@ -40,7 +40,7 @@ int do_recode(void)
     ncols = G_window_cols();
 
     /* open the input file for reading */
-    in_fd = G_open_cell_old(name, mapset);
+    in_fd = G_open_cell_old(name, "");
     if (in_fd < 0)
 	G_fatal_error("Can't open input map");
 

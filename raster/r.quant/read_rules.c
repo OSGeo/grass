@@ -17,13 +17,13 @@ int read_range(void)
 
     /* read the fpranges and ranges of all input maps */
     for (i = 0; i < noi; i++) {
-	if (G_read_fp_range(name[i], mapset[i], &drange) <= 0) {
+	if (G_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
 	    sprintf(buff, "Can't read f_range for map %s", name[i]);
 	    G_fatal_error(buff);
 	}
 	G_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
 
-	if (G_read_range(name[i], mapset[i], &range) <= 0) {
+	if (G_read_range(name[i], G_mapset(), &range) <= 0) {
 	    sprintf(buff, "Can't read range for map %s", name[i]);
 	    G_fatal_error(buff);
 	}
@@ -43,7 +43,7 @@ int read_range(void)
 
 int report_range(void)
 {
-    char buff[1024], buff2[300];
+    char buff[300], buff2[300];
 
     if (G_is_d_null_value(&old_dmin) || G_is_d_null_value(&old_dmax))
 	G_message(_("Old data range is empty"));

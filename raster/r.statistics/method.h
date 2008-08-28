@@ -22,51 +22,51 @@ struct stats
 
 struct menu
 {
-    char *name;			/* method name */
+    const char *name;		/* method name */
     int val;			/* number of function */
-    char *text;			/* menu display - full description */
+    const char *text;		/* menu display - full description */
 };
 
 extern struct menu menu[];
 
 /* o_adev.c */
-int o_adev(char *, char *, char *, int, struct Categories *);
+int o_adev(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_average.c */
-int o_average(char *, char *, char *, int, struct Categories *);
+int o_average(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_distrib.c */
-int o_distrib(char *, char *, char *, int);
+int o_distrib(const char *, const char *, const char *, int);
 
 /* o_kurt.c */
-int o_kurt(char *, char *, char *, int, struct Categories *);
+int o_kurt(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_max.c */
-int o_max(char *, char *, char *, int, struct Categories *);
+int o_max(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_median.c */
-int o_median(char *, char *, char *, int, struct Categories *);
+int o_median(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_min.c */
-int o_min(char *, char *, char *, int, struct Categories *);
+int o_min(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_mode.c */
-int o_mode(char *, char *, char *, int, struct Categories *);
+int o_mode(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_sdev.c */
-int o_sdev(char *, char *, char *, int, struct Categories *);
+int o_sdev(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_skew.c */
-int o_skew(char *, char *, char *, int, struct Categories *);
+int o_skew(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_sum.c */
-int o_sum(char *, char *, char *, int, struct Categories *);
+int o_sum(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_var.c */
-int o_var(char *, char *, char *, int, struct Categories *);
+int o_var(const char *, const char *, const char *, int, struct Categories *);
 
 /* o_divr.c */
-int o_divr(char *, char *, char *, int, struct Categories *);
+int o_divr(const char *, const char *, const char *, int, struct Categories *);
 
 /* read_stats.c */
 int read_stats(FILE *, long *, long *, double *);

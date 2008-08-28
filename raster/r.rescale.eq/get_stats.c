@@ -1,14 +1,15 @@
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include "local_proto.h"
 
-int get_stats(char *name, char *mapset, struct Cell_stats *statf)
+int get_stats(const char *name, struct Cell_stats *statf)
 {
     int fd;
     CELL *cell;
     int row, nrows, ncols;
 
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0)
 	exit(1);
     nrows = G_window_rows();

@@ -32,7 +32,6 @@ int main(int argc, char *argv[])
     char **names;
     char **ptr;
     char *name;
-    char *mapset;
 
     /* flags */
     int raw_data;
@@ -254,31 +253,27 @@ int main(int argc, char *argv[])
 
     for (; *ptr != NULL; ptr++) {
 	name = *ptr;
-	mapset = G_find_cell2(name, "");
-	if (!mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
 	fd = (int *)G_realloc(fd, (nfiles + 1) * sizeof(int));
 	is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
 	DMAX = (DCELL *) G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
 	DMIN = (DCELL *) G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
 
-	fd[nfiles] = G_open_cell_old(name, mapset);
+	fd[nfiles] = G_open_cell_old(name, "");
 	if (fd[nfiles] < 0)
 	    exit(1);
 	if (!as_int)
-	    is_fp[nfiles] = G_raster_map_is_fp(name, mapset);
+	    is_fp[nfiles] = G_raster_map_is_fp(name, "");
 	else {
 	    is_fp[nfiles] = 0;
 	    if (cat_ranges || nsteps != 255)
 		G_warning(_("Raster map <%s> is reading as integer map! "
 			    "Flag '-%c' and/or '%s' option will be ignored."),
-			  G_fully_qualified_name(name, mapset), flag.C->key,
-			  option.nsteps->key);
+			  name, flag.C->key, option.nsteps->key);
 	}
 	if (with_labels || (cat_ranges && is_fp[nfiles])) {
 	    labels = (struct Categories *)
 		G_realloc(labels, (nfiles + 1) * sizeof(struct Categories));
-	    if (G_read_cats(name, mapset, &labels[nfiles]) < 0)
+	    if (G_read_cats(name, "", &labels[nfiles]) < 0)
 		G_init_cats((CELL) 0, "", &labels[nfiles]);
 	}
 	if (is_fp[nfiles])
@@ -288,21 +283,19 @@ int main(int argc, char *argv[])
 	    if (cat_ranges) {
 		if (!G_quant_nof_rules(&labels[nfiles].q)) {
 		    G_warning(_("Cats for raster map <%s> are either missing or have no explicit labels. "
-			       "Using %s=%d."), G_fully_qualified_name(name,
-								       mapset),
-			      option.nsteps->key, nsteps);
+			       "Using %s=%d."),
+			      name, option.nsteps->key, nsteps);
 		    cat_ranges = 0;
 		}
 		else if (nsteps != 255)
 		    G_warning(_("Flag '-%c' was given, using cats fp ranges of raster map <%s>, "
-			       "ignoring '%s' option"), flag.C->key,
-			      G_fully_qualified_name(name, mapset),
-			      option.nsteps->key);
+			       "ignoring '%s' option"),
+			      flag.C->key, name, option.nsteps->key);
 	    }
 	    if (!cat_ranges) {	/* DO NOT use else here, cat_ranges can change */
-		if (G_read_fp_range(name, mapset, &fp_range) < 0)
+		if (G_read_fp_range(name, "", &fp_range) < 0)
 		    G_fatal_error(_("Unable to read fp range of raster map <%s>"),
-				  G_fully_qualified_name(name, mapset));
+				  name);
 		G_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
 				       &DMAX[nfiles]);
 		G_quant_add_rule(&q, DMIN[nfiles], DMAX[nfiles], 1, nsteps);
@@ -320,9 +313,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else {
-	    if (G_read_range(name, mapset, &range) < 0)
-		G_fatal_error(_("Unable to read range for map <%s>"),
-			      G_fully_qualified_name(name, mapset));
+	    if (G_read_range(name, "", &range) < 0)
+		G_fatal_error(_("Unable to read range for map <%s>"), name);
 	    G_get_range_min_max(&range, &min, &max);
 	}
 	if (!null_set) {

@@ -21,7 +21,7 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-char *mapset, *iname, *oname;
+char *iname, *oname;
 struct Cell_head window;
 DCELL **cell;
 DCELL **atb, **a;
@@ -58,11 +58,7 @@ int main(int argc, char **argv)
 		      G_program_name());
 
     iname = params.input->answer;
-    mapset = G_find_cell2(iname, "");
     oname = params.output->answer;
-
-    if (check_ready())
-	exit(EXIT_FAILURE);
 
     G_get_window(&window);
 

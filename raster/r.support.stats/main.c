@@ -24,7 +24,6 @@
 
 int main(int argc, char *argv[])
 {
-    char *mapset;
     struct GModule *module;
     struct
     {
@@ -43,11 +42,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    mapset = G_find_cell2(parm.raster->answer, G_mapset());
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), parm.raster->answer);
-
-    check_stats(parm.raster->answer, mapset);
+    check_stats(parm.raster->answer);
 
     G_message(_("Statistics for <%s> updated"), parm.raster->answer);
 

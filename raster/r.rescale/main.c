@@ -21,7 +21,7 @@
 
 int main(int argc, char *argv[])
 {
-    char buf[512];
+    char buf[GPATH_MAX];
     FILE *fd;
     long old_min, old_max;
     long new_min, new_max;
@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
     float divisor;
     char *old_name;
     char *new_name;
-    char *mapset;
     struct GModule *module;
     struct
     {
@@ -89,19 +88,13 @@ int main(int argc, char *argv[])
     old_name = parm.input->answer;
     new_name = parm.output->answer;
 
-    mapset = G_find_cell(old_name, "");
-    if (mapset == NULL) {
-	sprintf(buf, "%s - not found\n", old_name);
-	G_fatal_error(buf);
-    }
-
     if (parm.from->answer) {
 	sscanf(parm.from->answers[0], "%ld", &old_min);
 	sscanf(parm.from->answers[1], "%ld", &old_max);
 
     }
     else
-	get_range(old_name, mapset, &old_min, &old_max);
+	get_range(old_name, &old_min, &old_max);
     if (old_min > old_max) {
 	value = old_min;	/* swap */
 	old_min = old_max;
@@ -119,8 +112,8 @@ int main(int argc, char *argv[])
     G_message(_("Rescale %s[%ld,%ld] to %s[%ld,%ld]"),
 	      old_name, old_min, old_max, new_name, new_min, new_max);
 
-    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"", old_name,
-	    new_name);
+    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"",
+	    old_name, new_name);
     if (parm.title->answer)
 	strcat(buf, parm.title->answer);
     else {

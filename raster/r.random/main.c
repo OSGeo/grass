@@ -101,33 +101,22 @@ int main(int argc, char *argv[])
     }
     else {
 	myState.docover = 0;
-	myState.cmapset = NULL;
 	myState.inrcover = NULL;
     }
     myState.outraster = parm.raster->answer;
     myState.outvector = parm.sites->answer;
     myState.z_geometry = flag.z_geometry->answer;
 
-    myState.mapset = G_find_cell(myState.inraster, "");
-    if (myState.mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), myState.inraster);
-
-    if (myState.docover == 1) {
-	myState.cmapset = G_find_cell(myState.inrcover, "");
-	if (myState.cmapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), myState.inrcover);
-    }
-
     /* If they only want info we ignore the rest */
     get_stats(&myState);
 
     if (flag.info->answer) {
-	G_message("Raster:      %s@%s\n"
-		  "Cover:       %s@%s\n"
+	G_message("Raster:      %s\n"
+		  "Cover:       %s\n"
 		  "Cell Count:  %d\n"
 		  "Null Cells:  %d\n\n",
-		  myState.inraster, myState.mapset, myState.inrcover,
-		  myState.cmapset, (int)myState.nCells, (int)myState.nNulls);
+		  myState.inraster, myState.inrcover,
+		  (int)myState.nCells, (int)myState.nNulls);
 
 	exit(EXIT_SUCCESS);
     }

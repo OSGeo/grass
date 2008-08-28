@@ -12,24 +12,17 @@ int read_cell(char *name)
     struct Cell_head window, cellhd;
     int row, col;
     double z, north;
-    char *mapset;
-
-    mapset = G_find_cell(name, "");
-    if (mapset == NULL) {
-	G_fatal_error(_("Raster map <%s> not found"), name);
-	exit(EXIT_FAILURE);
-    }
 
     G_get_window(&window);
 
     /* Set window to align with input raster map */
-    G_get_cellhd(name, mapset, &cellhd);
+    G_get_cellhd(name, "", &cellhd);
     G_align_window(&window, &cellhd);
     G_set_window(&window);
 
     cell = G_allocate_cell_buf();
 
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
     if (fd < 0) {
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 	exit(EXIT_FAILURE);

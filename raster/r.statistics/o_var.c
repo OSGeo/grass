@@ -13,7 +13,7 @@ static int m_var(double *, int, double *);
 
 
 int
-o_var(char *basemap, char *covermap, char *outputmap, int usecats,
+o_var(const char *basemap, const char *covermap, const char *outputmap, int usecats,
       struct Categories *cats)
 {
     char command[1024];

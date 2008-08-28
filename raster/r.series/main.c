@@ -54,7 +54,7 @@ struct menu
 
 struct input
 {
-    char *name, *mapset;
+    char *name;
     int fd;
     DCELL *buf;
 };
@@ -154,15 +154,11 @@ int main(int argc, char *argv[])
 	struct input *p = &inputs[i];
 
 	p->name = parm.input->answers[i];
-	p->mapset = G_find_cell2(p->name, "");
-	if (!p->mapset)
-	    G_fatal_error(_("Raster map <%s> not found"), p->name);
-	else
-	    G_message(_("Reading raster map <%s>..."), p->name);
-	p->fd = G_open_cell_old(p->name, p->mapset);
+	G_message(_("Reading raster map <%s>..."), p->name);
+	p->fd = G_open_cell_old(p->name, "");
 	if (p->fd < 0)
-	    G_fatal_error(_("Unable to open raster map <%s> in mapset <%s>"),
-			  p->name, p->mapset);
+	    G_fatal_error(_("Unable to open raster map <%s>"),
+			  p->name);
 	p->buf = G_allocate_d_raster_buf();
     }
 

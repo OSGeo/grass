@@ -138,19 +138,12 @@ int main(int argc, char *argv[])
 
 static int open_raster(const char *infile)
 {
-    char *mapset;
     int fd;
 
-    mapset = G_find_cell2(infile, "");
-    if (mapset == NULL) {
-	G_fatal_error(_("Raster map <%s> not found"), infile);
-    }
-
-    fd = G_open_cell_old(infile, mapset);
+    fd = G_open_cell_old(infile, "");
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), infile);
 
-    /* . */
     return fd;
 }
 

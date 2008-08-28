@@ -12,7 +12,7 @@ static void sum_out(FILE *, long, double);
 
 
 int
-o_sum(char *basemap, char *covermap, char *outputmap, int usecats,
+o_sum(const char *basemap, const char *covermap, const char *outputmap, int usecats,
       struct Categories *cats)
 {
     char *me = "o_sum";
