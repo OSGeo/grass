@@ -50,8 +50,7 @@ static double D_ew, D_ns;
 int main(int argc, char **argv)
 {
     DCELL *cell;
-    char *mapset;
-    char full_name[128];
+    char *map_name;
     int fixed_color, grid_color;
     int R, G, B;
     int layer_fd;
@@ -110,7 +109,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    strcpy(full_name, opt1->answer);
+    map_name = opt1->answer;
 
     if (strcmp("none", opt2->answer) == 0)
 	grid_color = -1;
@@ -122,13 +121,9 @@ int main(int argc, char **argv)
     else
 	fixed_color = 1;
 
-    mapset = G_find_cell(full_name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), full_name);
-
-    layer_fd = G_open_cell_old(full_name, mapset);
+    layer_fd = G_open_cell_old(map_name, "");
     if (layer_fd < 0)
-	G_fatal_error(_("Unable to open raster map <%s>"), full_name);
+	G_fatal_error(_("Unable to open raster map <%s>"), map_name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     inmap_type = G_get_raster_map_type(layer_fd);
@@ -192,8 +187,8 @@ int main(int argc, char **argv)
     cell = G_allocate_raster_buf(map_type);
 
     /* read the color table in the color structures of the displayed map */
-    if (G_read_colors(full_name, mapset, &colors) == -1)
-	G_fatal_error(_("Color file for <%s> not available"), full_name);
+    if (G_read_colors(map_name, "", &colors) == -1)
+	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
     /* fixed text color */
     if (fixed_color == 1)

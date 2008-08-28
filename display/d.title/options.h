@@ -1,6 +1,6 @@
 
-extern char map_name[GNAME_MAX];
-extern char color[128];
+extern const char *map_name;
+extern const char *color;
 extern float size;
 extern int type;
 

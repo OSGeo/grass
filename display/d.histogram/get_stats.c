@@ -34,13 +34,12 @@ static char *mk_command(const char *fmt, int nargs, ...)
     return cmd;
 }
 
-int get_stats(char *mapname, char *mapset, struct stat_list *dist_stats,	/* linked list of stats */
+int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list of stats */
 	      int quiet)
 {
     char buf[1024];		/* input buffer for reading stats */
     int done = 0;
     char *tempfile;		/* temp file name */
-    char *fullname;
     char *cmd;
     FILE *fd;			/* temp file pointer */
 
@@ -51,30 +50,29 @@ int get_stats(char *mapname, char *mapset, struct stat_list *dist_stats,	/* link
 
     /* write stats to a temp file */
     tempfile = G_tempfile();
-    fullname = G_fully_qualified_name(mapname, mapset);
-    is_fp = G_raster_map_is_fp(mapname, mapset);
+    is_fp = G_raster_map_is_fp(mapname, "");
     if (is_fp) {
 	if (cat_ranges) {
-	    if (G_read_raster_cats(mapname, mapset, &cats) < 0)
+	    if (G_read_raster_cats(mapname, "", &cats) < 0)
 		G_fatal_error("Can't read category file");
 	    if (G_number_of_raster_cats(&cats) <= 0) {
 		G_warning("There are no labeled cats, using nsteps argument");
 		cat_ranges = 0;
 	    }
 	}
-	if (G_read_fp_range(map_name, mapset, &fp_range) <= 0)
+	if (G_read_fp_range(map_name, "", &fp_range) <= 0)
 	    G_fatal_error("Can't read frange file");
     }
     if (cat_ranges) {
 	cmd = mk_command("r.stats -Cr%s%s \"%s\" > \"%s\"\n", 4,
 			 type == COUNT ? "c" : "a", quiet ? "q" : "",
-			 fullname, tempfile);
+			 mapname, tempfile);
     }
     else {
 	sprintf(buf, "%d", nsteps);
 	cmd = mk_command("r.stats -r%s%s \"%s\" nsteps=%s > \"%s\"\n", 5,
 			 type == COUNT ? "c" : "a", quiet ? "q" : "",
-			 fullname, buf, tempfile);
+			 mapname, buf, tempfile);
     }
 
     if (system(cmd))

@@ -34,7 +34,6 @@ Mask mask;
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     char *name;
     int overlay;
     int invert, fp;
@@ -102,15 +101,10 @@ int main(int argc, char **argv)
     overlay = !flag_n->answer;
     invert = flag_i->answer;
 
-    /* Make sure map is available */
-    mapset = G_find_cell2(name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
-    fp = G_raster_map_is_fp(name, mapset);
+    fp = G_raster_map_is_fp(name, "");
     if (catlist->answer) {
 	if (fp)
 	    G_warning(_("Ignoring catlist: map is floating point (please use 'val=')"));
@@ -127,9 +121,9 @@ int main(int argc, char **argv)
     /* use DCELL even if the map is FCELL */
 
     if (fp)
-	display(name, mapset, overlay, bg->answer, DCELL_TYPE, invert);
+	display(name, overlay, bg->answer, DCELL_TYPE, invert);
     else
-	display(name, mapset, overlay, bg->answer, CELL_TYPE, invert);
+	display(name, overlay, bg->answer, CELL_TYPE, invert);
 
     R_close_driver();
 

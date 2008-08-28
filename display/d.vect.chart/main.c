@@ -29,7 +29,7 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset, *p;
+    char *p;
     int y_center;
     int i, j, ret, type, field, ctype, ncols;
     COLOR ocolor, *colors;
@@ -240,14 +240,9 @@ int main(int argc, char **argv)
     size = atoi(size_opt->answer);
     scale = atof(scale_opt->answer);
 
-    /* Make sure map is available */
-    mapset = G_find_vector2(map_opt->answer, NULL);
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
-
     /* open vector */
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map_opt->answer, mapset);
+    Vect_open_old(&Map, map_opt->answer, "");
 
     ctype = CTYPE_PIE;
     if (ctype_opt->answer[0] == 'b')

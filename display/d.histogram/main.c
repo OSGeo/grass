@@ -60,11 +60,10 @@ int main(int argc, char **argv)
 {
     int text_height;
     int text_width;
-    char *mapset;
     struct Categories cats;
     struct Range range;
     struct Colors pcolors;
-    char title[512];
+    char title[GNAME_MAX];
     double tt, tb, tl, tr;
     double t, b, l, r;
     int quiet;
@@ -169,24 +168,19 @@ int main(int argc, char **argv)
     nodata = flag1->answer;
     quiet = flag2->answer ? YES : NO;
 
-    /* Make sure map is available */
-    mapset = G_find_cell2(map_name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
-
-    if (G_read_colors(map_name, mapset, &pcolors) == -1)
+    if (G_read_colors(map_name, "", &pcolors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    if (G_read_cats(map_name, mapset, &cats) == -1)
+    if (G_read_cats(map_name, "", &cats) == -1)
 	G_fatal_error(_("Category file for <%s> not available"), map_name);
 
-    if (G_read_range(map_name, mapset, &range) == -1)
+    if (G_read_range(map_name, "", &range) == -1)
 	G_fatal_error(_("Range information for <%s> not available"),
 		      map_name);
 
     /* get the distribution statistics */
 
-    get_stats(map_name, mapset, &dist_stats, quiet);
+    get_stats(map_name, &dist_stats, quiet);
 
     /* set up the graphics driver and initialize its color-table */
 
@@ -201,7 +195,7 @@ int main(int argc, char **argv)
 	D_erase(bg_opt->answer);
 
     /* draw a title for */
-    sprintf(title, "%s in mapset %s", map_name, mapset);
+    sprintf(title, "%s", map_name);
     text_height = (b - t) * 0.05;
     text_width = (r - l) * 0.05 * 0.50;
     R_text_size(text_width, text_height);

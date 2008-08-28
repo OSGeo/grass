@@ -17,30 +17,6 @@
 #include <grass/gis.h>
 
 /*!
-   \brief Checks to see if 'name_in' is in the format: <name> in <mapset>
-
-   \param name_in full map name
-   \param[out] name_out map name
-   \param[out] mapset mapset name
-
-   \return 1 name_in is in this format.
-   name_out will contain the simple <name>
-   mapset will contain <mapset>
-   \return 0 name_in is not in this format
-   name_out and mapset are undefined (changed)
- */
-#ifndef COMMENTED_OUT
-int G__name_in_mapset(const char *name_in, char *name_out, char *mapset)
-{
-    char in[1024];
-
-    *in = 0;
-    return (sscanf(name_in, "%s %s %s", name_out, in, mapset) == 3 &&
-	    strcmp(in, "in") == 0);
-}
-#endif
-
-/*!
    \brief Check if map name is fully qualified (map @ mapset)
 
    Note:

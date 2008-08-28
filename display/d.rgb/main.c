@@ -39,7 +39,6 @@ static char *const color_names[3] = { "red", "green", "blue" };
 int main(int argc, char **argv)
 {
     struct band B[3];
-    char *mapset;
     int row;
     int next_row;
     struct Cell_head window;
@@ -89,18 +88,14 @@ int main(int argc, char **argv)
 	/* Get name of layer to be used */
 	char *name = B[i].opt->answer;
 
-	mapset = G_find_cell2(name, "");
-	if (mapset == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), name);
-
 	/* Make sure map is available */
-	if ((B[i].file = G_open_cell_old(name, mapset)) == -1)
+	if ((B[i].file = G_open_cell_old(name, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	B[i].type = G_get_raster_map_type(B[i].file);
 
 	/* Reading color lookup table */
-	if (G_read_colors(name, mapset, &B[i].colors) == -1)
+	if (G_read_colors(name, "", &B[i].colors) == -1)
 	    G_fatal_error(_("Color file for <%s> not available"), name);
 
 	B[i].array = G_allocate_raster_buf(B[i].type);

@@ -16,7 +16,7 @@ char *color_list(void)
     return list;
 }
 
-int get_rgb(char *color, int *r, int *g, int *b)
+int get_rgb(const char *color, int *r, int *g, int *b)
 {
     float fr, fg, fb;
 

@@ -34,8 +34,6 @@ int main(int argc, char **argv)
     int lines;
     int cols;
 
-    char buff[256];
-    char *mapset;
     struct FPRange fp_range;
     struct Colors colors;
     double ratio;
@@ -98,10 +96,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
     map_name = opt1->answer;
-    mapset = G_find_cell2(map_name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
-    fp = G_raster_map_is_fp(map_name, mapset);
+    fp = G_raster_map_is_fp(map_name, "");
 
     if (opt2->answer != NULL) {
 	new_colr = D_translate_color(opt2->answer);
@@ -113,12 +108,9 @@ int main(int argc, char **argv)
     else
 	lines = 0;
     if (opt3->answer != NULL) {
-	if (fp) {
-	    sprintf(buff,
-		    "%s is fp map. Ignoring lines and drawing continuous color ramp",
-		    map_name);
-	    G_warning(buff);
-	}
+	if (fp)
+	    G_warning("<%s> is floating-point; ignoring lines and drawing continuous color ramp",
+		      map_name);
 	else
 	    sscanf(opt3->answer, "%d", &lines);
     }
@@ -127,24 +119,21 @@ int main(int argc, char **argv)
 	cols = 1;
     else
 	cols = 0;
-    if (opt4->answer != NULL) {
-	if (fp) {
-	    sprintf(buff,
-		    "%s is fp map. Ignoring cols and drawing continuous color ramp",
-		    map_name);
-	    G_warning(buff);
-	}
+    if (opt4->answer) {
+	if (fp)
+	    G_warning("<%s> is floating-point; ignoring cols and drawing continuous color ramp",
+		      map_name);
 	else
 	    sscanf(opt4->answer, "%d", &cols);
     }
 
     /* Make sure map is available */
-    if (G_read_colors(map_name, mapset, &colors) == -1)
-	G_fatal_error("R_color file for [%s] not available", map_name);
-    if (G_read_fp_range(map_name, mapset, &fp_range) == -1)
-	G_fatal_error("Range file for [%s] not available", map_name);
+    if (G_read_colors(map_name, "", &colors) == -1)
+	G_fatal_error(_("Color file for <%s> not available"), map_name);
+    if (G_read_fp_range(map_name, "", &fp_range) == -1)
+	G_fatal_error(_("Range file for <%s> not available"), map_name);
     if (R_open_driver() != 0)
-	G_fatal_error("No graphics device selected");
+	G_fatal_error(_("No graphics device selected"));
 
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);

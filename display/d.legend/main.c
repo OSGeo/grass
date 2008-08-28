@@ -37,7 +37,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     char buff[512];
     char *map_name;
     int black;
@@ -244,22 +243,17 @@ int main(int argc, char **argv)
     }
 
 
-    /* Make sure map is available */
-    mapset = G_find_cell2(map_name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
-
-    if (G_read_colors(map_name, mapset, &colors) == -1)
+    if (G_read_colors(map_name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-    fp = G_raster_map_is_fp(map_name, mapset);
+    fp = G_raster_map_is_fp(map_name, "");
     if (fp && !use_catlist) {
 	do_smooth = TRUE;
 	/* fprintf(stderr, "FP map found - switching gradient legend on\n"); */
 	flip = !flip;
     }
 
-    if (G_read_cats(map_name, mapset, &cats) == -1)
+    if (G_read_cats(map_name, "", &cats) == -1)
 	G_warning(_("Category file for <%s> not available"), map_name);
 
     G_set_c_null_value(&null_cell, 1);
@@ -324,7 +318,7 @@ int main(int argc, char **argv)
 
     /* How many categories to show */
     if (!fp) {
-	if (G_read_range(map_name, mapset, &range) == -1)
+	if (G_read_range(map_name, "", &range) == -1)
 	    G_fatal_error(_("Range information for <%s> not available (run r.support)"),
 			  map_name);
 
@@ -486,7 +480,7 @@ int main(int argc, char **argv)
 	}
     }
     else {			/* is fp */
-	if (G_read_fp_range(map_name, mapset, &fprange) == -1)
+	if (G_read_fp_range(map_name, "", &fprange) == -1)
 	    G_fatal_error(_("Range information for <%s> not available"),
 			  map_name);
 
