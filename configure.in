@@ -636,6 +636,11 @@ AC_SUBST(JPEGLIB)
 
 AC_MSG_CHECKING(whether to use GDAL)
 
+GDAL_LIBS=
+GDAL_CFLAGS=
+USE_GDAL=
+USE_OGR=
+
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
 fi
@@ -649,11 +654,6 @@ else
   if test "$GDAL_CONFIG" = "no" ; then
     AC_MSG_ERROR([*** couldn't find gdal-config])
   fi
-
-  GDAL_LIBS=
-  GDAL_CFLAGS=
-  USE_GDAL=
-  USE_OGR=
 
   if test "$GDAL_CONFIG" != "" ; then
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
@@ -680,11 +680,13 @@ else
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-  AC_SUBST(GDAL_LIBS)
-  AC_SUBST(GDAL_CFLAGS)
-  AC_SUBST(USE_GDAL)
-  AC_SUBST(USE_OGR)
+  AC_DEFINE(HAVE_GDAL)
 fi
+
+AC_SUBST(GDAL_LIBS)
+AC_SUBST(GDAL_CFLAGS)
+AC_SUBST(USE_GDAL)
+AC_SUBST(USE_OGR)
 
 # Enable TIFF option
 

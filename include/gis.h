@@ -28,10 +28,6 @@
 #include <grass/config.h>
 #include <grass/datetime.h>
 
-#ifdef GDAL_LINK
-#include <gdal.h>
-#endif
-
 /*=========================== Constants/Defines ============================*/
 
 #if !defined __GNUC__ || __GNUC__ < 2
@@ -627,17 +623,7 @@ struct TimeStamp
     int count;
 };
 
-#ifdef GDAL_LINK
-struct GDAL_link
-{
-    char *filename;
-    int band_num;
-    DCELL null_val;
-    GDALDatasetH data;
-    GDALRasterBandH band;
-    GDALDataType type;
-};
-#endif
+struct GDAL_link;
 
 /*============================== Prototypes ================================*/
 

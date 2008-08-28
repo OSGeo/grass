@@ -1,6 +1,10 @@
+#include <grass/config.h>
 #include <grass/gis.h>
 #include <rpc/types.h>
 #include <rpc/xdr.h>
+#ifdef HAVE_GDAL
+#include <gdal.h>
+#endif
 
 #define XDR_FLOAT_NBYTES 4
 #define XDR_DOUBLE_NBYTES 8
@@ -13,6 +17,18 @@
  *
  */
 typedef int COLUMN_MAPPING;
+
+struct GDAL_link
+{
+    char *filename;
+    int band_num;
+    DCELL null_val;
+#ifdef HAVE_GDAL
+    GDALDatasetH data;
+    GDALRasterBandH band;
+    GDALDataType type;
+#endif
+};
 
 struct fileinfo			/* Information for opened cell files */
 {
@@ -44,9 +60,7 @@ struct fileinfo			/* Information for opened cell files */
     unsigned char *null_work_buf;	/* data buffer for reading null rows    */
     int min_null_row;		/* Minimum row null row number in memory */
     struct Quant quant;
-#ifdef GDAL_LINK
     struct GDAL_link *gdal;
-#endif
 };
 
 struct G__			/*  Structure of library globals */

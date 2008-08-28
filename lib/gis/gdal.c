@@ -1,20 +1,23 @@
+
+#include <stdlib.h>
+#include <string.h>
 #include <grass/config.h>
 #include <grass/gis.h>
-
-#ifdef GDAL_LINK
-
-#include <gdal.h>
+#include "G.h"
 
 struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
 {
+#ifdef HAVE_GDAL
     static int initialized;
-    const char *filename;
-    int band_num;
     GDALDatasetH data;
     GDALRasterBandH band;
     GDALDataType type;
+    RASTER_MAP_TYPE req_type;
+#endif
+    const char *filename;
+    int band_num;
     struct GDAL_link *gdal;
-    RASTER_MAP_TYPE map_type, req_type;
+    RASTER_MAP_TYPE map_type;
     FILE *fp;
     struct Key_Value *key_val;
     const char *p;
@@ -55,11 +58,11 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
     else
 	null_val = atof(p);
 
+#ifdef HAVE_GDAL
     p = G_find_key_value("type", key_val);
     if (!p)
 	return NULL;
     type = atoi(p);
-
 
     switch (type) {
     case GDT_Byte:
@@ -96,24 +99,27 @@ struct GDAL_link *G_get_gdal_link(const char *name, const char *mapset)
 	GDALClose(data);
 	return NULL;
     }
+#endif
 
     gdal = G_calloc(1, sizeof(struct GDAL_link));
 
     gdal->filename = G_store(filename);
     gdal->band_num = band_num;
     gdal->null_val = null_val;
+#ifdef HAVE_GDAL
     gdal->data = data;
     gdal->band = band;
     gdal->type = type;
+#endif
 
     return gdal;
 }
 
 void G_close_gdal_link(struct GDAL_link *gdal)
 {
+#ifdef HAVE_GDAL
     GDALClose(gdal->data);
+#endif
     G_free(gdal->filename);
     G_free(gdal);
 }
-
-#endif
