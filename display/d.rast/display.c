@@ -6,26 +6,17 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-static int cell_draw(char *, char *, struct Colors *, int, int,
-		     RASTER_MAP_TYPE);
+static int cell_draw(const char *, struct Colors *, int, int, RASTER_MAP_TYPE);
 
-int display(char *name,
-	    char *mapset,
+int display(const char *name,
 	    int overlay,
 	    char *bg, RASTER_MAP_TYPE data_type, int invert)
 {
     struct Colors colors;
     int r, g, b;
 
-    if (G_read_colors(name, mapset, &colors) == -1)
+    if (G_read_colors(name, "", &colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), name);
-
-    /***DEBUG ***
-    if (G_write_colors(name, mapset, &colors) == -1)
-        G_fatal_error("can't write colors");
-    if (G_read_colors(name, mapset, &colors) == -1)
-        G_fatal_error("Color file for [%s] not available", name) ;
-    *********/
 
     if (bg) {
 	get_rgb(bg, &r, &g, &b);
@@ -35,7 +26,7 @@ int display(char *name,
     D_setup(0);
 
     /* Go draw the raster map */
-    cell_draw(name, mapset, &colors, overlay, invert, data_type);
+    cell_draw(name, &colors, overlay, invert, data_type);
 
     /* release the colors now */
     G_free_colors(&colors);
@@ -43,8 +34,7 @@ int display(char *name,
     return 0;
 }
 
-static int cell_draw(char *name,
-		     char *mapset,
+static int cell_draw(const char *name,
 		     struct Colors *colors,
 		     int overlay, int invert, RASTER_MAP_TYPE data_type)
 {
@@ -61,7 +51,7 @@ static int cell_draw(char *name,
     D_set_overlay_mode(overlay);
 
     /* Make sure map is available */
-    if ((cellfile = G_open_cell_old(name, mapset)) == -1)
+    if ((cellfile = G_open_cell_old(name, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* Allocate space for cell buffer */

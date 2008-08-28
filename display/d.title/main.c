@@ -26,14 +26,13 @@
 #include "options.h"
 #include "local_proto.h"
 
-char map_name[GNAME_MAX];
-char color[128];
+const char *map_name;
+const char *color;
 float size;
 int type;
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     struct Cell_head window;
     struct Categories cats;
     struct GModule *module;
@@ -89,9 +88,9 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
 
-    strcpy(map_name, opt1->answer);
+    map_name = opt1->answer;
 
-    strcpy(color, opt2->answer);
+    color = opt2->answer;
 
     if (opt3->answer != NULL)
 	sscanf(opt3->answer, "%f", &size);
@@ -104,18 +103,13 @@ int main(int argc, char **argv)
     if (!strlen(map_name))
 	G_fatal_error(_("No map name given"));
 
-    /* Make sure map is available */
-    mapset = G_find_cell(map_name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), map_name);
+    if (G_get_cellhd(map_name, "", &window) == -1)
+	G_fatal_error(_("Unable to read header of raster map <%s>"),
+		      map_name);
 
-    if (G_get_cellhd(map_name, mapset, &window) == -1)
-	G_fatal_error(_("Unable to read header of raster map <%s@%s>"),
-		      map_name, mapset);
-
-    if (G_read_cats(map_name, mapset, &cats) == -1)
-	G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-		      map_name, mapset);
+    if (G_read_cats(map_name, "", &cats) == -1)
+	G_fatal_error(_("Unable to read category file of raster map <%s>"),
+		      map_name);
 
 
     if (draw->answer) {
@@ -128,9 +122,9 @@ int main(int argc, char **argv)
 
 
     if (type == NORMAL)
-	normal(mapset, &window, &cats, simple_mode->answer, fp);
+	normal(&window, &cats, simple_mode->answer, fp);
     else
-	fancy(mapset, &window, &cats, fp);
+	fancy(&window, &cats, fp);
 
 
     if (draw->answer) {

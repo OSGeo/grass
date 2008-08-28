@@ -59,8 +59,7 @@ static void arrow_n(void);
 static void draw_x(void);
 static void unknown_(void);
 
-static char *mapset;
-static char layer_name[128];
+static char *layer_name;
 static int map_type, arrow_color, grid_color, x_color, unknown_color;
 static int row, col;
 
@@ -76,7 +75,7 @@ int main(int argc, char **argv)
 
     double scale;
     int skip, no_arrow;
-    char *mag_map = NULL, *mag_mapset = NULL;
+    char *mag_map = NULL;
     void *mag_raster_row = NULL, *mag_ptr = NULL;
     double length = -1;
     int mag_fd = -1;
@@ -172,9 +171,7 @@ int main(int argc, char **argv)
 	exit(EXIT_FAILURE);
 
 
-    strncpy(layer_name, opt1->answer, sizeof(layer_name) - 1);
-    if ((mapset = G_find_cell2(layer_name, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), layer_name);
+    layer_name = opt1->answer;
 
     arrow_color = D_translate_color(opt3->answer);
     x_color = D_translate_color(opt5->answer);
@@ -210,8 +207,6 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Magnitude is only supported for GRASS and compass aspect maps."));
 
 	mag_map = opt7->answer;
-	if ((mag_mapset = G_find_cell2(mag_map, "")) == NULL)
-	    G_fatal_error(_("Raster map <%s> not found"), mag_map);
     }
     else if (scale != 1.0)
 	G_warning(_("Scale option requires magnitude_map"));
@@ -235,7 +230,7 @@ int main(int argc, char **argv)
     /* figure out arrow scaling if using a magnitude map */
     if (opt7->answer) {
 	G_init_fp_range(&range);	/* really needed? */
-	if (G_read_fp_range(mag_map, mag_mapset, &range) != 1)
+	if (G_read_fp_range(mag_map, "", &range) != 1)
 	    G_fatal_error(_("Problem reading range file"));
 	G_get_fp_range_min_max(&range, &mag_min, &mag_max);
 
@@ -261,7 +256,7 @@ int main(int argc, char **argv)
     }
 
     /* open the raster map */
-    layer_fd = G_open_cell_old(layer_name, mapset);
+    layer_fd = G_open_cell_old(layer_name, "");
     if (layer_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), layer_name);
 
@@ -273,7 +268,7 @@ int main(int argc, char **argv)
 
     if (opt7->answer) {
 	/* open the magnitude raster map */
-	mag_fd = G_open_cell_old(mag_map, mag_mapset);
+	mag_fd = G_open_cell_old(mag_map, "");
 	if (mag_fd < 0)
 	    G_fatal_error("Unable to open raster map <%s>", mag_map);
 

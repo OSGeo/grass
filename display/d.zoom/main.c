@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     double magnify;
     int i, first = 1;
-    char *mapset, *map;
+    char *map;
     double ux1, uy1, ux2, uy2;
     struct Cell_head window, defwin, currwin, tmpwin;
 
@@ -138,11 +138,7 @@ int main(int argc, char **argv)
 	nrasts = i;
 
 	for (i = 0; i < nrasts; i++) {
-	    mapset = G_find_cell2(rast[i], "");
-	    if (mapset == NULL)
-		G_fatal_error(_("Raster map <%s> not found"), rast[i]);
-
-	    if (G_get_cellhd(rast[i], mapset, &window) >= 0) {
+	    if (G_get_cellhd(rast[i], "", &window) >= 0) {
 		if (first) {
 		    first = 0;
 		    U_east = window.east;
@@ -172,11 +168,7 @@ int main(int argc, char **argv)
 	nvects = i;
 
 	for (i = 0; i < nvects; i++) {
-	    mapset = G_find_vector2(vect[i], "");
-	    if (mapset == NULL)
-		G_fatal_error(_("Vector map <%s> not found"), vect[i]);
-
-	    if (Vect_open_old(&Map, vect[i], mapset) >= 2) {
+	    if (Vect_open_old(&Map, vect[i], "") >= 2) {
 		Vect_get_map_box(&Map, &box);
 		if (first) {
 		    first = 0;

@@ -35,7 +35,6 @@ int main(int argc, char **argv)
     unsigned char *sat_n, *sat_r;
     unsigned char *dummy;
     CELL *r_array, *g_array, *b_array;
-    char *mapset;
     char *name_h, *name_i, *name_s;
     int intensity;
     int saturation;
@@ -121,12 +120,8 @@ int main(int argc, char **argv)
     /* Get name of layer to be used for hue */
     name_h = opt_h->answer;
 
-    mapset = G_find_cell2(name_h, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), opt_h->answer);
-
     /* Make sure map is available */
-    if ((hue_file = G_open_cell_old(name_h, mapset)) == -1)
+    if ((hue_file = G_open_cell_old(name_h, "")) == -1)
 	G_fatal_error(_("Unable to open raster map <%s>"), name_h);
 
     hue_r = G_malloc(window.cols);
@@ -137,7 +132,7 @@ int main(int argc, char **argv)
     dummy = G_malloc(window.cols);
 
     /* Reading color lookup table */
-    if (G_read_colors(name_h, mapset, &hue_colors) == -1)
+    if (G_read_colors(name_h, "", &hue_colors) == -1)
 	G_fatal_error(_("Color file for <%s> not available"), name_h);
 
     int_used = 0;
@@ -145,23 +140,18 @@ int main(int argc, char **argv)
     if (opt_i->answer != NULL) {
 	/* Get name of layer to be used for intensity */
 	name_i = opt_i->answer;
-	mapset = G_find_cell2(name_i, "");
-	if (mapset != NULL) {
-	    int_used = 1;
-	    /* Make sure map is available */
-	    if ((int_file = G_open_cell_old(name_i, mapset)) == -1)
-		G_fatal_error(_("Unable to open raster map <%s>"), name_i);
+	int_used = 1;
 
-	    int_r = G_malloc(window.cols);
-	    int_n = G_malloc(window.cols);
+	/* Make sure map is available */
+	if ((int_file = G_open_cell_old(name_i, "")) == -1)
+	    G_fatal_error(_("Unable to open raster map <%s>"), name_i);
 
-	    /* Reading color lookup table */
-	    if (G_read_colors(name_i, mapset, &int_colors) == -1)
-		G_fatal_error(_("Color file for <%s> not available"), name_i);
-	}
-	else
-	    G_fatal_error(_("Raster map <%s> not found"), name_i);
+	int_r = G_malloc(window.cols);
+	int_n = G_malloc(window.cols);
 
+	/* Reading color lookup table */
+	if (G_read_colors(name_i, "", &int_colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), name_i);
     }
 
     sat_used = 0;
@@ -169,23 +159,18 @@ int main(int argc, char **argv)
     if (opt_s->answer != NULL) {
 	/* Get name of layer to be used for saturation */
 	name_s = opt_s->answer;
-	mapset = G_find_cell2(name_s, "");
-	if (mapset != NULL) {
-	    sat_used = 1;
+	sat_used = 1;
 
-	    /* Make sure map is available */
-	    if ((sat_file = G_open_cell_old(name_s, mapset)) == -1)
-		G_fatal_error("Unable to open raster map <%s>", name_s);
+	/* Make sure map is available */
+	if ((sat_file = G_open_cell_old(name_s, "")) == -1)
+	    G_fatal_error("Unable to open raster map <%s>", name_s);
 
-	    sat_r = G_malloc(window.cols);
-	    sat_n = G_malloc(window.cols);
+	sat_r = G_malloc(window.cols);
+	sat_n = G_malloc(window.cols);
 
-	    /* Reading color lookup table */
-	    if (G_read_colors(name_s, mapset, &sat_colors) == -1)
-		G_fatal_error(_("Color file for <%s> not available"), name_s);
-	}
-	else
-	    G_fatal_error(_("Raster map <%s> not found"), name_s);
+	/* Reading color lookup table */
+	if (G_read_colors(name_s, "", &sat_colors) == -1)
+	    G_fatal_error(_("Color file for <%s> not available"), name_s);
     }
 
     r_array = G_allocate_cell_buf();

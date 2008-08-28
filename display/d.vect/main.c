@@ -77,7 +77,6 @@ static char *icon_files(void)
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     int ret, level;
     int i, stat = 0, type, area, display;
     int chcat = 0;
@@ -465,19 +464,13 @@ int main(int argc, char **argv)
     else
 	S_stroke(Symb, size, 0.0, 0);
 
-    /* Make sure map is available */
-    mapset = G_find_vector2(map_name, "");
-
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_name);
-
     /* if where_opt was specified select categories from db 
      * otherwise parse cat_opt */
     Clist = Vect_new_cat_list();
     Clist->field = atoi(field_opt->answer);
 
     /* open vector */
-    level = Vect_open_old(&Map, map_name, mapset);
+    level = Vect_open_old(&Map, map_name, "");
 
     if (where_opt->answer) {
 	if (Clist->field < 1)

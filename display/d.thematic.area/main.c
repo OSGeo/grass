@@ -32,7 +32,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     int ret, level;
     int i, stat = 0;
     int nclass = 0, nbreaks, *frequencies, boxsize, textsize, ypos;
@@ -204,15 +203,8 @@ int main(int argc, char **argv)
 
     strcpy(map_name, map_opt->answer);
 
-
-    /* Make sure map is available */
-    mapset = G_find_vector2(map_name, "");
-
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_name);
-
     /* open vector */
-    level = Vect_open_old(&Map, map_name, mapset);
+    level = Vect_open_old(&Map, map_name, "");
 
     if (level < 2)
 	G_fatal_error(_("%s: You must build topology on vector map. Run v.build."),
