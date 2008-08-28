@@ -31,18 +31,22 @@ int main(int argc, char *argv[])
      *printproj4,		/* Print projection in PROJ.4 format        */
      *datuminfo,		/* Check if datum information is present    */
      *create,			/* Create new projection files              */
+#ifdef HAVE_OGR
      *printwkt,			/* Print projection in WKT format           */
      *esristyle,		/* Use ESRI-style WKT format                */
+#endif
      *dontprettify,		/* Print 'flat' output (no linebreaks)      */
      *forcedatumtrans;		/* Force override of datumtrans parameters  */
 
     struct Option *location,	/* Name of new location to create           */
+#ifdef HAVE_OGR
      *inepsg,			/* EPSG projection code                     */
-     *dtrans,			/* index to datum transform option          */
      *inwkt,			/* Input file with projection in WKT format */
      *inproj4,			/* Projection in PROJ.4 format              */
-     *ingeo;			/* Input geo-referenced file readable by 
+     *ingeo,			/* Input geo-referenced file readable by 
 				 * GDAL or OGR                              */
+#endif
+     *dtrans;			/* index to datum transform option          */
     struct GModule *module;
 
     int formats;
