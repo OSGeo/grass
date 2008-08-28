@@ -198,7 +198,7 @@ static int read_data_uncompressed(int fd, int row, unsigned char *data_buf,
 
 /*--------------------------------------------------------------------------*/
 
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
 static int read_data_gdal(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
@@ -222,7 +222,7 @@ static int read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &G__.fileinfo[fd];
 
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
     if (fcb->gdal)
 	return read_data_gdal(fd, row, data_buf, nbytes);
 #endif
@@ -373,7 +373,7 @@ static void cell_values_double(int fd, const unsigned char *data,
 
 /*--------------------------------------------------------------------------*/
 
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
 
 /*--------------------------------------------------------------------------*/
 
@@ -489,13 +489,13 @@ static void transfer_to_cell_XX(int fd, void *cell)
 {
     static void (*cell_values_type[3]) () = {
     cell_values_int, cell_values_float, cell_values_double};
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
     static void (*gdal_values_type[3]) () = {
     gdal_values_int, gdal_values_float, gdal_values_double};
 #endif
     struct fileinfo *fcb = &G__.fileinfo[fd];
 
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
     if (fcb->gdal)
     (gdal_values_type[fcb->map_type]) (fd, fcb->data, fcb->col_map,
 				       fcb->cur_nbytes, cell,
@@ -1130,7 +1130,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
 /*--------------------------------------------------------------------------*/
 
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
 
 static void get_null_value_row_gdal(int fd, char *flags, int row)
 {
@@ -1177,7 +1177,7 @@ static void embed_mask(char *flags, int row)
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
 {
-#ifdef GDAL_LINK
+#ifdef HAVE_GDAL
     struct fileinfo *fcb = &G__.fileinfo[fd];
     if (fcb->gdal)
 	get_null_value_row_gdal(fd, flags, row);

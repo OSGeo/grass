@@ -513,10 +513,8 @@ void G_fpreclass_perform_if(const struct FPReclass *, const CELL *, FCELL *,
 void G_fpreclass_perform_id(const struct FPReclass *, const CELL *, DCELL *,
 			    int);
 /* gdal.c */
-#ifdef GDAL_LINK
 struct GDAL_link *G_get_gdal_link(const char *, const char *);
 void G_close_gdal_link(struct GDAL_link *);
-#endif
 
 /* geodesic.c */
 int G_begin_geodesic_equation(double, double, double, double);
