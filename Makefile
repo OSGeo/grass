@@ -37,23 +37,23 @@ DIRS = \
 	lib \
 	db \
 	display \
-	doc \
-	gem \
 	general \
-	gui \
-	imagery \
-	misc \
-	ps \
 	raster \
 	raster3d \
-	scripts \
-	sites \
-	tools \
 	vector \
+	misc \
+	imagery \
+	ps \
+	sites \
+	scripts \
+	doc \
+	gui \
 	visualization \
+	tools \
+	gem \
 	man \
-	macosx \
-	locale
+	locale \
+	macosx
 
 SUBDIRS = $(DIRS)
 
