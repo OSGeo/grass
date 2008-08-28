@@ -21,7 +21,7 @@ static double dist, e, n;
 
 int main(int argc, char *argv[])
 {
-    char *name, *outfile, *mapset;
+    char *name, *outfile;
     int fd, projection;
     FILE *fp;
     double res;
@@ -128,14 +128,12 @@ int main(int argc, char *argv[])
 	coords = 1;
 
     /* Open Raster File */
-    if (NULL == (mapset = G_find_cell2(name, "")))
-	G_fatal_error(_("Raster map <%s> not found"), name);
-    if (0 > (fd = G_open_cell_old(name, mapset)))
+    if ((fd = G_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* initialize color structure */
     if (clr)
-	G_read_colors(name, mapset, &colors);
+	G_read_colors(name, "", &colors);
 
     /* Open ASCII file for output or stdout */
     outfile = parm.output->answer;

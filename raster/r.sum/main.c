@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *rast;
-    char *cellmap;
     FILEDESC cellfile = 0;
     FCELL *dbuf, *ibuf;
     int row, col, shh = 0;
@@ -57,13 +56,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    cellmap = G_find_file2("cell", rast->answer, "");
-    if (!cellmap) {
-	G_fatal_error(_("Raster map <%s> not found"), rast->answer);
-    }
-    if ((cellfile = G_open_cell_old(rast->answer, cellmap)) == -1) {
+    if ((cellfile = G_open_cell_old(rast->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast->answer);
-    }
 
 
     G_get_set_window(&w);

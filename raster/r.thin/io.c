@@ -83,7 +83,6 @@ static int write_row(int file, const void *buf, int row, int buf_len)
 
 int open_file(char *name)
 {
-    char *mapset;
     int cell_file, buf_len;
     int i, row, col;
     char cell[100];
@@ -91,11 +90,7 @@ int open_file(char *name)
 
     /* open raster map */
     strcpy(cell, name);
-    if ((mapset = G_find_cell2(cell, "")) == NULL) {
-	unlink(work_file_name);
-	G_fatal_error(_("Raster map <%s> not found"), name);
-    }
-    if ((cell_file = G_open_cell_old(cell, mapset)) < 0) {
+    if ((cell_file = G_open_cell_old(cell, "")) < 0) {
 	unlink(work_file_name);
 	G_fatal_error(_("Unable to open raster map <%s>"), cell);
     }
@@ -128,8 +123,8 @@ int open_file(char *name)
     for (row = 0; row < n_rows; row++) {
 	if (G_get_map_row(cell_file, buf + PAD, row) < 0) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("%s: Error reading from raster map <%s> in mapset <%s>"),
-			  error_prefix, cell, mapset);
+	    G_fatal_error(_("%s: Error reading from raster map <%s>"),
+			  error_prefix, cell);
 	}
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);

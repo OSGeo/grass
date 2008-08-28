@@ -78,8 +78,6 @@ char *beam_rad = NULL;
 char *insol_time = NULL;
 char *diff_rad = NULL;
 char *refl_rad = NULL;
-char *mapset1 = NULL, *mapset2 = NULL, *mapset3 = NULL, *mapset4 = NULL,
-    *mapset5 = NULL, *mapset6 = NULL, *mapset7 = NULL, *mapset8 = NULL;
 char *per;
 char *shade;
 
@@ -518,18 +516,9 @@ int INPUT(void)
 
     }
 
-    if ((mapset1 = G_find_cell(elevin, "")) == NULL)
-	G_fatal_error(_("elevin raster map <%s> not found"), elevin);
-
-    if ((mapset2 = G_find_cell(aspin, "")) == NULL)
-	G_fatal_error(_("aspin raster map <%s> not found"), aspin);
-
-    if ((mapset3 = G_find_cell(slopein, "")) == NULL)
-	G_fatal_error(_("slopein raster map <%s> not found"), slopein);
-
-    fd1 = G_open_cell_old(elevin, mapset1);
-    fd2 = G_open_cell_old(aspin, mapset2);
-    fd3 = G_open_cell_old(slopein, mapset3);
+    fd1 = G_open_cell_old(elevin, "");
+    fd2 = G_open_cell_old(aspin, "");
+    fd3 = G_open_cell_old(slopein, "");
 
     if (linkein != NULL) {
 	cell4 = G_allocate_f_raster_buf();
@@ -537,10 +526,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    li[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset4 = G_find_cell(linkein, "")) == NULL)
-	    G_fatal_error(_("linkein raster map <%s> not found"), linkein);
-
-	fd4 = G_open_cell_old(linkein, mapset4);
+	fd4 = G_open_cell_old(linkein, "");
     }
 
     if (albedo != NULL) {
@@ -549,10 +535,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    a[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset5 = G_find_cell(albedo, "")) == NULL)
-	    G_fatal_error(_("albedo raster map <%s> not found"), albedo);
-
-	fd5 = G_open_cell_old(albedo, mapset5);
+	fd5 = G_open_cell_old(albedo, "");
     }
 
     if (latin != NULL) {
@@ -561,10 +544,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    la[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset6 = G_find_cell(latin, "")) == NULL)
-	    G_fatal_error(_("latin raster map <%s> not found"), latin);
-
-	fd6 = G_open_cell_old(latin, mapset6);
+	fd6 = G_open_cell_old(latin, "");
     }
 
     if (coefbh != NULL) {
@@ -573,10 +553,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    cbhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset7 = G_find_cell(coefbh, "")) == NULL)
-	    G_fatal_error(_("coefbh raster map <%s> not found"), coefbh);
-
-	fr1 = G_open_cell_old(coefbh, mapset7);
+	fr1 = G_open_cell_old(coefbh, "");
     }
 
     if (coefdh != NULL) {
@@ -585,10 +562,7 @@ int INPUT(void)
 	for (l = 0; l < m; l++)
 	    cdhr[l] = (float *)G_malloc(sizeof(float) * (n));
 
-	if ((mapset8 = G_find_cell(coefdh, "")) == NULL)
-	    G_fatal_error(_("coefdh raster map <%s> not found"), coefdh);
-
-	fr2 = G_open_cell_old(coefdh, mapset8);
+	fr2 = G_open_cell_old(coefdh, "");
     }
 
 

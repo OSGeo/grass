@@ -48,7 +48,7 @@ static const char *suffixes[56] = {
 int main(int argc, char *argv[])
 {
     struct Cell_head cellhd;
-    char *name, *result, *mapset, *filename;
+    char *name, *result, *filename;
     unsigned char *outrast;
     int nrows, ncols;
     int row, col, i, j;
@@ -207,18 +207,13 @@ int main(int argc, char *argv[])
 	&& moc2 && mcc)
 	G_fatal_error(_("Nothing to compute. Use at least one of the flags."));
 
-    /* find map in mapset */
-    mapset = G_find_cell2(name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
-    if ((infd = G_open_cell_old(name, mapset)) < 0)
+    if ((infd = G_open_cell_old(name, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);
 
     /* determine the inputmap type (CELL/FCELL/DCELL) */
     data_type = G_get_raster_map_type(infd);
 
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
+    if (G_get_cellhd(name, "", &cellhd) < 0)
 	G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
     out_data_type = FCELL_TYPE;

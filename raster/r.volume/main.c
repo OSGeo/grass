@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     int out_mode, use_MASK, *n, *e;
     long int *count;
     int fd_data, fd_clump;
-    char buf[200], datamap[100], clumpmap[100], site_list[100];
-    char *curr_mapset, *data_mapset, *clump_mapset;
+    char *datamap, *clumpmap, *site_list;
+    char *clump_mapset;
     double avg, vol, total_vol, east, north, *sum;
     struct Cell_head window;
     struct Map_info *fd_sites = NULL;
@@ -99,17 +99,17 @@ int main(int argc, char *argv[])
     mysite = G_site_new_struct(CELL_TYPE, 2, 0, 4);
 
     /* get arguments */
-    strcpy(datamap, opt1->answer);
+    datamap = opt1->answer;
 
-    if (opt2->answer != NULL)
-	strcpy(clumpmap, opt2->answer);
+    if (opt2->answer)
+	clumpmap = opt2->answer;
     else
-	clumpmap[0] = '\0';
+	clumpmap = "";
 
-    if (opt3->answer != NULL)
-	strcpy(site_list, opt3->answer);
+    if (opt3->answer)
+	site_list = opt3->answer;
     else
-	site_list[0] = '\0';
+	site_list = "";
 
     out_mode = (!flag1->answer);
 
@@ -122,23 +122,14 @@ int main(int argc, char *argv[])
      */
     use_MASK = 0;
     if (*clumpmap == '\0') {
-	strcpy(clumpmap, "MASK");
+	clumpmap = "MASK";
 	use_MASK = 1;
-	if (G_find_cell(clumpmap, G_mapset()) == NULL)
-	    G_fatal_error(_("No clump map specified and MASK not set."));
     }
-    curr_mapset = G_mapset();
-    data_mapset = G_find_cell2(datamap, "");
-    if (!data_mapset)
-	G_fatal_error(_("Unable to find data map"));
-
-    fd_data = G_open_cell_old(datamap, data_mapset);
+    fd_data = G_open_cell_old(datamap, "");
     if (use_MASK)
-	clump_mapset = curr_mapset;
+	clump_mapset = G_mapset();
     else
-	clump_mapset = G_find_cell2(clumpmap, "");
-    if (!clump_mapset)
-	G_fatal_error(_("Unable to find clump map"));
+	clump_mapset = "";
 
     fd_clump = G_open_cell_old(clumpmap, clump_mapset);
 
@@ -178,13 +169,11 @@ int main(int argc, char *argv[])
 	G_get_map_row(fd_clump, clump_buf, row);
 	for (col = 0; col < cols; col++) {
 	    i = clump_buf[col];
-	    if (i > max) {
-		sprintf(buf,
-			"Row=%d Col=%d Cat=%d in clump map [%s]; max=%d.\n",
-			row, col, i, clumpmap, max);
-		strcat(buf, "Cat value > max returned by G_number_of_cats.");
-		G_fatal_error(buf);
-	    }
+	    if (i > max)
+		G_fatal_error(
+		    "Row=%d Col=%d Cat=%d in clump map [%s]; max=%d.\n"
+		    "Cat value > max returned by G_number_of_cats.",
+		    row, col, i, clumpmap, max);
 	    if (i < 1)
 		continue;	/* ignore zeros and negs */
 	    count[i]++;

@@ -13,7 +13,7 @@ static int s_dev(double *, int, double *);
 
 
 int
-o_sdev(char *basemap, char *covermap, char *outputmap, int usecats,
+o_sdev(const char *basemap, const char *covermap, const char *outputmap, int usecats,
        struct Categories *cats)
 {
     char command[1024];

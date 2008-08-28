@@ -12,13 +12,12 @@
 #define	ZERO		0.0000001
 
 
-int check_ready(void);
 void getcells(void);
 void putcells(void);
 void initialize(void);
 void atanb(void);
 
-extern char *mapset, *iname, *oname;
+extern char *iname, *oname;
 extern struct Cell_head window;
 extern DCELL **cell;
 extern DCELL **atb, **a;

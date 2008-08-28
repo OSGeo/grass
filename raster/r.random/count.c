@@ -19,13 +19,12 @@ void get_stats(struct rr_state *theState)
 {
     int nrows, ncols, row, col;
 
-    theState->fd_old = G_open_cell_old(theState->inraster, theState->mapset);
+    theState->fd_old = G_open_cell_old(theState->inraster, "");
     if (theState->fd_old < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"),
 		      theState->inraster);
     if (theState->docover == 1) {
-	theState->fd_cold =
-	    G_open_cell_old(theState->inrcover, theState->cmapset);
+	theState->fd_cold = G_open_cell_old(theState->inrcover, "");
 	if (theState->fd_cold < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"),
 			  theState->inrcover);

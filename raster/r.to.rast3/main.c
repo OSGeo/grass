@@ -39,7 +39,7 @@ int globalG3dMapType;
 void fatal_error(void *map, int *fd, int depths, char *errorMsg);	/*Simple Error message */
 void set_params();		/*Fill the paramType structure */
 void raster_to_g3d(void *map, G3D_Region region, int *fd);	/*Write the raster */
-int open_input_raster_map(char *name, char *mapset);	/*opens the outputmap */
+int open_input_raster_map(const char *name);	/*opens the outputmap */
 void close_input_raster_map(int fd);	/*close the map */
 
 
@@ -183,7 +183,6 @@ int main(int argc, char *argv[])
     int *fd = NULL;		/*The filehandler array for the 2D inputmaps */
     int cols, rows, opencells;
     char *name;
-    char *mapset;
     int changemask = 0;
     int maptype_tmp, nofile = 0;
 
@@ -235,7 +234,6 @@ int main(int argc, char *argv[])
     if (fd == NULL)
 	fatal_error(map, NULL, 0, _("Out of memory"));
 
-    mapset = NULL;
     name = NULL;
 
     globalRastMapType = DCELL_TYPE;
@@ -246,24 +244,15 @@ int main(int argc, char *argv[])
     /*Loop over all output maps! open */
     for (i = 0; i < region.depths; i++) {
 	/*Open only existing maps */
-	if (param.input->answers[i] != NULL && nofile == 0) {
-	    mapset = NULL;
-	    name = NULL;
+	if (nofile == 0 && param.input->answers[i])
 	    name = param.input->answers[i];
-	    mapset = G_find_cell2(name, "");
-
-	    if (mapset == NULL) {
-		fatal_error(map, fd, opencells, _("Cell file not found"));
-	    }
-	}
-	else {
+	else
 	    nofile = 1;
-	}
 
 	/*if only one map is given, open it depths - times */
 	G_message(_("Open raster map %s - one time for each depth (%d/%d)"),
 		  name, i + 1, region.depths);
-	fd[i] = open_input_raster_map(name, mapset);
+	fd[i] = open_input_raster_map(name);
 	opencells++;
 
 	maptype_tmp = G_get_raster_map_type(fd[i]);
@@ -348,15 +337,15 @@ int main(int argc, char *argv[])
 /* ************************************************************************* */
 /* Open the raster input map *********************************************** */
 /* ************************************************************************* */
-int open_input_raster_map(char *name, char *mapset)
+int open_input_raster_map(const char *name)
 {
     int fd;
 
-    G_debug(3, "Open Raster file %s in Mapset %s", name, mapset);
+    G_debug(3, "Open Raster file %s", name);
 
 
     /* open raster map */
-    fd = G_open_cell_old(name, mapset);
+    fd = G_open_cell_old(name, "");
 
     if (fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), name);

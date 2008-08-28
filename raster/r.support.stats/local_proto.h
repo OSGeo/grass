@@ -21,10 +21,10 @@
 
 
 /* check.c */
-int check_stats(char *, char *);
+int check_stats(const char *);
 
 /* histo.c */
-int do_histogram(char *, char *);
+int do_histogram(const char *);
 
 
 #endif /* __LOCAL_PROTO_H__ */

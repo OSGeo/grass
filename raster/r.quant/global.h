@@ -3,8 +3,7 @@
 extern struct Quant quant_struct;
 extern CELL old_min, old_max;
 extern DCELL old_dmin, old_dmax;
-extern char *name[GNAME_MAX];	/* input map names */
-extern char *mapset[GMAPSET_MAX];	/* input mapsets */
+extern char **name;	/* input map names */
 extern int noi;
 
 /* read_rules.c */

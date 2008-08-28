@@ -25,14 +25,13 @@ static void reclass(CELL, CELL, CELL);
 
 int main(int argc, char *argv[])
 {
-    char buf[512];
+    char buf[GPATH_MAX];
     CELL old_min, old_max;
     CELL new_min, new_max;
     long cat;
     struct Cell_stats statf;
     char *old_name;
     char *new_name;
-    char *mapset;
     struct
     {
 	struct Option *input, *from, *output, *to, *title;
@@ -93,13 +92,7 @@ int main(int argc, char *argv[])
     old_name = parm.input->answer;
     new_name = parm.output->answer;
 
-    mapset = G_find_cell(old_name, "");
-    if (mapset == NULL) {
-	sprintf(buf, "%s - not found\n", old_name);
-	G_fatal_error(buf);
-    }
-
-    get_stats(old_name, mapset, &statf);
+    get_stats(old_name, &statf);
     if (parm.from->answer) {
 	sscanf(parm.from->answers[0], "%d", &old_min);
 	sscanf(parm.from->answers[1], "%d", &old_max);
@@ -123,8 +116,8 @@ int main(int argc, char *argv[])
     G_message(_("Rescale %s[%d,%d] to %s[%d,%d]"),
 	      old_name, old_min, old_max, new_name, new_min, new_max);
 
-    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"", old_name,
-	    new_name);
+    sprintf(buf, "r.reclass input=\"%s\" output=\"%s\" title=\"",
+	    old_name, new_name);
     if (parm.title->answer)
 	strcat(buf, parm.title->answer);
     else {

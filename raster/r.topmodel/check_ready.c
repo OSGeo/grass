@@ -246,17 +246,17 @@ int check_io(void)
     retval = 0;
 
     if (!flg.input) {
-	if (map.elev && !G_find_file("cell", map.elev, mapset)) {
+	if (map.elev && !G_find_cell(map.elev, mapset)) {
 	    G_warning("%s - not exists", map.elev);
 	    retval = 1;
 	}
 
-	if (map.basin && !G_find_file("cell", map.basin, mapset)) {
+	if (map.basin && !G_find_cell(map.basin, mapset)) {
 	    G_warning("%s - not exists", map.basin);
 	    retval = 1;
 	}
 
-	if (map.fill && G_find_file("cell", map.fill, mapset)) {
+	if (map.fill && G_find_cell(map.fill, mapset)) {
 	    if (flg.overwr) {
 		flg.overwrlist |= FILL;
 	    }
@@ -266,7 +266,7 @@ int check_io(void)
 	    }
 	}
 
-	if (map.dir && G_find_file("cell", map.dir, mapset)) {
+	if (map.dir && G_find_cell(map.dir, mapset)) {
 	    if (flg.overwr) {
 		flg.overwrlist |= DIR;
 	    }
@@ -276,7 +276,7 @@ int check_io(void)
 	    }
 	}
 
-	if (map.belev && G_find_file("cell", map.belev, mapset)) {
+	if (map.belev && G_find_cell(map.belev, mapset)) {
 	    if (flg.overwr) {
 		flg.overwrlist |= BELEV;
 	    }
@@ -286,7 +286,7 @@ int check_io(void)
 	    }
 	}
 
-	if (map.topidx && G_find_file("cell", map.topidx, mapset)) {
+	if (map.topidx && G_find_cell(map.topidx, mapset)) {
 	    if (flg.overwr) {
 		flg.overwrlist |= TOPIDX;
 	    }
@@ -309,12 +309,12 @@ int check_io(void)
     }
     else {
 	if (map.belev) {
-	    if (!G_find_file("cell", map.belev, mapset)) {
+	    if (!G_find_cell(map.belev, mapset)) {
 		G_warning("%s - not exists", map.belev);
 		retval = 1;
 	    }
 	    else {
-		if (map.topidx && G_find_file("cell", map.topidx, mapset)) {
+		if (map.topidx && G_find_cell(map.topidx, mapset)) {
 		    if (flg.overwr) {
 			flg.overwrlist |= TOPIDX;
 		    }
@@ -338,7 +338,7 @@ int check_io(void)
 	    }
 	}
 	else if (map.topidx) {
-	    if (!G_find_file("cell", map.topidx, mapset)) {
+	    if (!G_find_cell(map.topidx, mapset)) {
 		G_warning("%s - not exists", map.topidx);
 		retval = 1;
 	    }

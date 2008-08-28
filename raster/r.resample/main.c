@@ -34,8 +34,8 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
     struct Range range;
     int hist_ok, colr_ok, cats_ok;
-    char name[GNAME_MAX], *mapset;
-    char result[GNAME_MAX];
+    char *name;
+    char *result;
     void *rast;
     int nrows, ncols;
     int row;
@@ -75,24 +75,20 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    strcpy(name, option.input->answer);
-    strcpy(result, option.output->answer);
+    name = option.input->answer;
+    result = option.output->answer;
 
-    mapset = G_find_cell2(name, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), name);
-
-    hist_ok = G_read_history(name, mapset, &hist) >= 0;
-    colr_ok = G_read_colors(name, mapset, &colr) > 0;
-    cats_ok = G_read_cats(name, mapset, &cats) >= 0;
+    hist_ok = G_read_history(name, "", &hist) >= 0;
+    colr_ok = G_read_colors(name, "", &colr) > 0;
+    cats_ok = G_read_cats(name, "", &cats) >= 0;
     if (cats_ok) {
 	G_unmark_raster_cats(&cats);
 	G_init_cats((CELL) 0, G_get_cats_title(&cats), &newcats);
     }
 
-    infd = G_open_cell_old(name, mapset);
+    infd = G_open_cell_old(name, "");
     if (infd < 0)
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to open input map <%s>"), name);
 
     /* determine the map type;
        data_type is the type of data being processed,
@@ -100,31 +96,31 @@ int main(int argc, char *argv[])
     data_type = G_get_raster_map_type(infd);
     out_type = data_type;
 
-    if (G_get_cellhd(name, mapset, &cellhd) < 0)
-	exit(EXIT_FAILURE);
+    if (G_get_cellhd(name, "", &cellhd) < 0)
+	G_fatal_error(_("Unable to read header for <%s>"), name);
 
     /* raster buffer is big enough to hold data */
     rast = G_allocate_raster_buf(data_type);
     nrows = G_window_rows();
     ncols = G_window_cols();
     if (ncols <= 1)
-	rast = (void *)G_realloc((char *)rast, 2 * G_raster_size(data_type));
+	rast = G_realloc(rast, 2 * G_raster_size(data_type));
     /* we need the buffer at least 2 cells large */
 
     outfd = G_open_raster_new(result, out_type);
     G_set_null_value(rast, ncols, out_type);
 
     if (outfd < 0)
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to open output map <%s>"), name);
 
     G_message(_("Percent complete: "));
 
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 2);
 	if (G_get_raster_row(infd, rast, row, data_type) < 0)
-	    exit(EXIT_FAILURE);
+	    G_fatal_error(_("Error reading row %d"), row);
 	if (G_put_raster_row(outfd, rast, out_type) < 0)
-	    exit(EXIT_FAILURE);
+	    G_fatal_error(_("Error writing row %d"), row);
 	G_mark_raster_cats(rast, ncols, &cats, data_type);
     }
 

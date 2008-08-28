@@ -25,20 +25,12 @@ int main(int argc, char *argv[])
     /****** INITIALISE ******/
 
     struct GModule *module;
-    struct Option *out;		/* Structures required for the G_parser()       */
-
-    /* call. These can be filled with the           */
-    struct Option *min;		/* various defaults, mandatory paramters        */
-
-    /* etc. for the GRASS user interface.           */
+    struct Option *out;
+    struct Option *min;
     struct Option *max;
     struct Flag *i_flag;
 
-    G_gisinit(argv[0]);		/* This GRASS library function MUST
-				   be called first to check for valid
-				   database and mapset. As usual argv[0]
-				   is the program name. This can be
-				   recalled using G_program_name(). */
+    G_gisinit(argv[0]);
 
     module = G_define_module();
     module->keywords = _("raster");
@@ -66,12 +58,10 @@ int main(int argc, char *argv[])
     i_flag->description = _("Create an integer map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);	/* Returns a 0 if sucessful */
-
+	exit(EXIT_FAILURE);
 
     randsurf(out->answer, atoi(min->answer), atoi(max->answer),
 	     i_flag->answer);
-
 
     exit(EXIT_SUCCESS);
 }

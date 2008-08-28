@@ -12,7 +12,7 @@ void getcells(void)
     FCELL *fcell = NULL;
 
 
-    if ((fd = G_open_cell_old(iname, mapset)) < 0)
+    if ((fd = G_open_cell_old(iname, "")) < 0)
 	G_fatal_error(_("Cannot open raster map <%s>"), iname);
 
     data_type = G_get_raster_map_type(fd);

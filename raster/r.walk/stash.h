@@ -25,8 +25,6 @@ struct start_pt
     struct start_pt *next;
 };
 
-extern char cum_cost_layer[];
-extern char cost_layer[], dtm_layer[];
 extern struct start_pt *head_start_pt;
 extern struct start_pt *head_end_pt;
 

@@ -25,8 +25,7 @@
 struct Quant quant_struct;
 CELL old_min, old_max;
 DCELL old_dmin, old_dmax;
-char *name[GNAME_MAX];		/* input map names */
-char *mapset[GMAPSET_MAX];	/* input mapsets */
+char **name;		/* input map names */
 int noi;
 
 int main(int argc, char *argv[])
@@ -39,7 +38,7 @@ int main(int argc, char *argv[])
     int i;
     CELL new_min, new_max;
     DCELL new_dmin, new_dmax;
-    char *basename, *basemapset;
+    char *basename;
 
     G_gisinit(argv[0]);
 
@@ -116,14 +115,14 @@ int main(int argc, char *argv[])
     if (i == 1)
 	G_fatal_error(_("fprange= and range= must be used together"));
 
+    for (noi = 0; input->answers[noi]; noi++)
+	;
+    name = G_malloc(noi * sizeof(char *));
     /* read and check inputs */
     for (noi = 0; input->answers[noi]; noi++) {
 	name[noi] = G_store(input->answers[noi]);
-	mapset[noi] = G_find_cell2(name[noi], "");
-	if (!mapset[noi])
-	    G_fatal_error(_("%s - not found"), name[noi]);
 
-	if (G_raster_map_type(name[noi], mapset[noi]) == CELL_TYPE)
+	if (G_raster_map_type(name[noi], G_mapset()) == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be quantized"),
 			  name[noi]);
     }
@@ -144,15 +143,11 @@ int main(int argc, char *argv[])
     else if (basename)
 	/* set the quant to that of basemap */
     {
-	basemapset = G_find_cell2(basename, "");
-	if (!basemapset)
-	    G_fatal_error(_("%s - not found"), basename);
-
-	if (G_raster_map_type(basename, basemapset) == CELL_TYPE)
+	if (G_raster_map_type(basename, "") == CELL_TYPE)
 	    G_fatal_error(_("%s is integer map, it can't be used as basemap"),
 			  basename);
 
-	if (G_read_quant(basename, basemapset, &quant_struct) <= 0)
+	if (G_read_quant(basename, "", &quant_struct) <= 0)
 	    G_fatal_error(_("unable to read quant rules for basemap <%s>"),
 			  basename);
     }
@@ -183,7 +178,7 @@ int main(int argc, char *argv[])
     }				/* use rules */
 
     for (i = 0; i < noi; i++) {
-	if (G_write_quant(name[i], mapset[i], &quant_struct) < 0)
+	if (G_write_quant(name[i], G_mapset(), &quant_struct) < 0)
 	    G_message(_("Quant table not changed for %s"), name[i]);
 	else
 	    G_message(_("New quant table created for %s"), name[i]);

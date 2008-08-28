@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
     struct Option *map, *date;
     struct TimeStamp ts;
     char *name;
-    char *mapset;
     int modify;
 
     G_gisinit(argv[0]);
@@ -51,16 +50,8 @@ int main(int argc, char *argv[])
 
     modify = date->answer != NULL;
 
-    if (modify)
-	mapset = G_find_cell(name, G_mapset());
-    else
-	mapset = G_find_cell(name, "");
-    if (mapset == NULL)
-	G_fatal_error("Map <%s> not found %s", name,
-		      modify ? "in current mapset" : "");
-
     if (!modify) {
-	if (G_read_raster_timestamp(name, mapset, &ts) == 1) {
+	if (G_read_raster_timestamp(name, "", &ts) == 1) {
 	    G__write_timestamp(stdout, &ts);
 	    exit(EXIT_SUCCESS);
 	}

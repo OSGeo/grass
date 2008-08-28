@@ -7,7 +7,7 @@ extern struct FPReclass rcl_struct;
 extern CELL old_min, old_max;
 extern DCELL old_dmin, old_dmax;
 extern int in_fd, out_fd, no_mask, align_wind, make_dcell, nrules, rule_size;
-extern char *name, *mapset, *result, *title;
+extern char *name, *result, *title;
 extern char **rules;
 
 /* read_rules.c */

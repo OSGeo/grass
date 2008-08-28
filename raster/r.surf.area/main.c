@@ -75,7 +75,6 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *surf, *vscale;
-    char *cellmap;
     DCELL *cell_buf[2];
     int row;
     struct Cell_head w;
@@ -115,11 +114,7 @@ int main(int argc, char *argv[])
 
     /* open raster map for reading */
     {
-	cellmap = G_find_file2("cell", surf->answer, "");
-	if (!cellmap)
-	    G_fatal_error(_("Raster map <%s> not found"), surf->answer);
-
-	if ((cellfile = G_open_cell_old(surf->answer, cellmap)) == -1)
+	if ((cellfile = G_open_cell_old(surf->answer, "")) == -1)
 	    G_fatal_error(_("Unable to open raster map <%s>"), surf->answer);
     }
 
