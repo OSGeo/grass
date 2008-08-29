@@ -49,7 +49,7 @@ std::vector<int> Digit::SelectLinesByQuery(double x1, double y1, double z1,
     struct line_pnts *bbox;
 
     if (!display->mapInfo) {
-	DisplayDriver();
+	DisplayMsg();
 	return ids;
     }
 
