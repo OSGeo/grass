@@ -35,7 +35,7 @@ int Digit::InitCats()
     }
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	/* DisplayMsg(); */
 	return -1;
     }
 
@@ -164,10 +164,10 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     }
 
     if (line_id == -1 && display->selected.values->n_values < 1) {
-	GetLineCatsMsg(line_id);
+	/* GetLineCatsMsg(line_id); */
 	return lc;
     }
-
+    
     line = line_id;
     if (line_id == -1) {
 	line = display->selected.values->value[0];
