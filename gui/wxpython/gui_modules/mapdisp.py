@@ -1348,7 +1348,7 @@ class BufferedWindow(MapWindow, wx.Window):
         elif self.mouse["use"] == "queryVector":
             # editable mode for vector map layers
             self.parent.QueryVector(self.mouse['begin'][0],self.mouse['begin'][1])
-
+            
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
             if self.mouse["use"] == "measure":
@@ -3253,7 +3253,7 @@ class MapFrame(wx.Frame):
 
         # change the cursor
         self.MapWindow.SetCursor(self.cursors["cross"])
-
+        
     def QueryMap(self, x, y):
         """
         Query map layer features
@@ -3297,6 +3297,23 @@ class MapFrame(wx.Frame):
                     'east_north=%f,%f' % (float(east), float(north))]
 
         if vectstr != '':
+            # check for vector maps open to be edited
+            digitToolbar = self.toolbars['vdigit']
+            if digitToolbar:
+                map = digitToolbar.GetLayer().GetName()
+                vect = []
+                for vector in vectstr.split(','):
+                    if map == vector:
+                        self.gismanager.goutput.WriteWarning("Vector map <%s> "
+                                                             "opened for editing - skipped." % map)
+                        continue
+                    vect.append(vector)
+                vectstr = ','.join(vect)
+                
+            if len(vectstr) <= 1:
+                self.gismanager.goutput.WriteCmdLog("Nothing to query.")
+                return
+            
             vcmd = ['v.what', '--q',
                     '-a',
                     'map=%s' % vectstr.rstrip(','),
@@ -3396,8 +3413,14 @@ class MapFrame(wx.Frame):
                              kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(modify)
         self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
-        if action == "modifyAttrb":
-            modify.Check(True)
+        digitToolbar = self.toolbars['vdigit']
+        layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
+        if digitToolbar and \
+                digitToolbar.GetLayer() == layer_selected:
+            modify.Enable(False)
+        else:
+            if action == "modifyAttrb":
+                modify.Check(True)
 
         self.PopupMenu(toolsmenu)
         toolsmenu.Destroy()

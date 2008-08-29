@@ -234,7 +234,11 @@ class GMConsole(wx.Panel):
         """Write out line in selected style"""
         if pid:
             line = '(' + str(pid) + ') ' + line
-        self.WriteLog(line, self.cmd_output.StyleCommand)
+        self.WriteLog(line, style=self.cmd_output.StyleCommand)
+
+    def WriteWarning(self, line):
+        """Write out line in warning style"""
+        self.WriteLog(line, style=self.cmd_output.StyleWarning)
 
     def RunCmd(self, command):
         """
