@@ -3168,7 +3168,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
                     except:
                         read = False
 
-                if "line:" in litem: # get line id
+                if "id:" in litem: # get line id
                     line = int(item.split(':')[1].strip())
                 elif "key column:" in litem: # start reading attributes
                     read = True
