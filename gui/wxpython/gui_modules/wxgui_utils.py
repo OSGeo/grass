@@ -949,8 +949,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Change command string"""
         ctrl = event.GetEventObject().GetId()
         cmd = event.GetString()
-        layer = None
-
+        
         layer = self.GetFirstVisibleItem()
 
         while layer and layer.IsOk():
@@ -960,15 +959,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             layer = self.GetNextVisible(layer)
 
         # change parameters for item in layers list in render.Map
-        if layer == False:
-            self.ChangeLayer(layer)
-            self.GetPyData(layer)[0]['cmd'] = cmd.split(' ')
-            maplayer = self.GetPyData(layer)[0]['maplayer']
-            for option in maplayer.GetCmd():
-                if 'map=' in option:
-                    mapname = option.split('=')[1]
-                    self.Map.ChangeLayerName(maplayer, mapname)
-
+        self.ChangeLayer(layer)
+        
         event.Skip()
 
     def OnChangeSel(self, event):

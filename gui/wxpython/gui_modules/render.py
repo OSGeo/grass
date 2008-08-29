@@ -75,8 +75,6 @@ class Layer(object):
         self.active  = active
         self.hidden  = hidden
         self.opacity = opacity
-
-        self._region = None # produced by `d.vect -r`
         
         self.force_render = True
         
@@ -103,19 +101,16 @@ class Layer(object):
         @return rendered image filename
         @return None on error
         """
-        self._region = None # reset region
-
         if len(self.cmdlist) == 0:
             return None
         
         # ignore in 2D
         if self.type == '3d-raster':
             return None
-
+        
         Debug.msg (3, "Layer.Render(): type=%s, name=%s" % \
                        (self.type, self.name))
-
-
+        
         #
         # prepare command for each layer
         #
@@ -124,7 +119,7 @@ class Layer(object):
                       'grid', 'geodesic', 'rhumb', 'labels',
                       'command',
                       'overlay']
-
+        
         if self.type not in layertypes:
             raise gcmd.GStdError(_("<%(name)s>: layer type <%(type)s> is not supported yet.") % \
                                      {'type' : self.type, 'name' : self.name})
@@ -141,7 +136,7 @@ class Layer(object):
         try:
             runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
                                   stderr=None)
-
+            
             if runcmd.returncode != 0:
                 #clean up after probley
                 try:
@@ -152,7 +147,7 @@ class Layer(object):
                     pass
                 self.mapfile = None
                 self.maskfile = None
-
+        
         except gcmd.CmdError, e:
             print >> sys.stderr, e
             # clean up after problems
@@ -164,16 +159,16 @@ class Layer(object):
                 pass
             self.mapfile = None
             self.maskfile = None
-
+        
         #
         # stop monitor
         #
 	os.unsetenv("GRASS_PNGFILE")
-
+        
         self.force_render = False
         
         return self.mapfile
-
+    
     def GetCmd(self, string=False):
         """
         Get GRASS command as list of string.
@@ -263,11 +258,7 @@ class Layer(object):
 
         # for re-rendering
         self.force_render = True
-
-    def GetRegion(self):
-        """Get layer region or None"""
-        return self._region
-    
+        
 class MapLayer(Layer):
     """Represents map layer in the map canvas"""
     def __init__(self, type, cmd, name=None,
