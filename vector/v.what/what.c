@@ -133,7 +133,7 @@ int what(double east, double north, double maxdist, int width,
 		fprintf(stdout, "Looking for features within: %f \n",
 			maxdist);
 		fprintf(stdout,
-			_("Line: %d  \nType: %s  \nLeft: %d  \nRight: %d  \n"),
+			_("Id: %d  \nType: %s  \nLeft: %d  \nRight: %d  \n"),
 			line, buf, left, right);
 		if (type & GV_LINES) {
 		    nnodes = 2;
@@ -161,7 +161,7 @@ int what(double east, double north, double maxdist, int width,
 			    Vect_get_node_line(&(Map[i]), node[n], nli);
 			angle =
 			    Vect_get_node_line_angle(&(Map[i]), node[n], nli);
-			fprintf(stdout, _("Line: %5d  \nAngle: %.8f\n"),
+			fprintf(stdout, _("Id: %5d  \nAngle: %.8f\n"),
 				nodeline, angle);
 		    }
 		}
@@ -169,7 +169,7 @@ int what(double east, double north, double maxdist, int width,
 	    }
 	    else {
 		fprintf(stdout, _("Type: %s"), buf);
-		fprintf(stdout, _("Line: %d\n"), line);
+		fprintf(stdout, _("Id: %d\n"), line);
 		if (type & GV_LINES)
 		    fprintf(stdout, _("Length: %f\n"), l);
 	    }
