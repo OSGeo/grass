@@ -44,8 +44,10 @@ int Digit::MoveVertex(double x, double y, double z,
     struct Map_info **BgMap; /* backgroud vector maps */
     int nbgmaps;             /* number of registrated background maps */
 
-    if (!display->mapInfo)
+    if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
+    }
 
     if (display->selected.values->n_values != 1)
 	return 0;
@@ -55,6 +57,7 @@ int Digit::MoveVertex(double x, double y, double z,
     if (bgmap && strlen(bgmap) > 0) {
 	BgMap = OpenBackgroundVectorMap(bgmap);
 	if (!BgMap) {
+	    BackgroundMapMsg(bgmap);
 	    return -1;
 	}
 	else {
@@ -111,8 +114,10 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
     int ret;
     struct line_pnts *point;
 
-    if (!display->mapInfo)
+    if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
+    }
 
     if (display->selected.values->n_values != 1)
 	return 0;

@@ -20,6 +20,7 @@
 
 #include <wx/dc.h>
 #include <wx/list.h>
+#include <wx/string.h>
 
 #include <Python.h>
 #include <wx/wxPython/pseudodc.h>

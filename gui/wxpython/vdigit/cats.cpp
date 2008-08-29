@@ -35,6 +35,7 @@ int Digit::InitCats()
     }
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -158,10 +159,12 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     struct field_info *fi;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return lc;
     }
 
     if (line_id == -1 && display->selected.values->n_values < 1) {
+	GetLineCatsMsg(line_id);
 	return lc;
     }
 
@@ -171,6 +174,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     }
 
     if (!Vect_line_alive(display->mapInfo, line)) {
+	DeadLineMsg(line);
 	return lc;
     }
 
@@ -178,6 +182,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
 
     if (Vect_read_line(display->mapInfo, NULL, Cats, line) < 0) {
 	Vect_destroy_cats_struct(Cats);
+	ReadLineMsg(line);
 	return lc;
     }
 
@@ -186,6 +191,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     for (int dblink = 0; dblink < n_dblinks; dblink++) {
 	fi = Vect_get_dblink(display->mapInfo, dblink);
 	if (fi == NULL) {
+	    DblinkMsg(dblink+1);
 	    continue;
 	}
 	std::vector<int> cats;
@@ -219,10 +225,12 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     struct line_cats *Cats;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
     if (line_id == -1 && display->selected.values->n_values < 1) {
+	GetLineCatsMsg(line_id);
 	return -1;
     }
     
@@ -232,6 +240,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     }
      
     if (!Vect_line_alive(display->mapInfo, line)) {
+	DeadLineMsg(line);
 	return -1;
     }
 
@@ -241,6 +250,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     if (type < 0) {
 	Vect_destroy_line_struct(Points);
 	Vect_destroy_cats_struct(Cats);
+	ReadLineMsg(line);
 	return -1;
     }
 
@@ -284,15 +294,68 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
 /**
    \brief Copy categories from one vector feature to other
 
-   \param cats  list of layer/category to be copied			       
-   \param ids   list of line ids where to copy categories
+   \param fromId list of 'from' feature ids
+   \param toId   list of 'to' feature ids
 
    \return number of modified features
    \return -1 on error
 */
-int Digit::CopyCats(std::vector<std::vector<int> > cats, std::vector<int> ids)
+int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId)
 {
-  /* TODO */
+    int fline, tline, nlines, type;
+    bool error;
+    
+    struct line_pnts *Points;
+    struct line_cats *Cats_from, *Cats_to;
 
-  return 0;
+    Points = Vect_new_line_struct();
+    Cats_from = Vect_new_cats_struct();
+    Cats_to = Vect_new_cats_struct();
+
+    nlines = 0;
+    error = false;
+    for (std::vector<int>::const_iterator fi = fromId.begin(), fe = fromId.end();
+	 fi != fe && !error; ++fi) {
+	fline = *fi;
+	if (!Vect_line_alive(display->mapInfo, fline))
+	    continue;
+
+	type = Vect_read_line(display->mapInfo, NULL, Cats_from, fline);
+	if (type < 0) {
+	    nlines = -1;
+	    error = true;
+	}
+
+	for(std::vector<int>::const_iterator ti = toId.begin(), te = toId.end();
+	    ti != te && !error; ++ti) {
+	    tline = *ti;
+	    if (!Vect_line_alive(display->mapInfo, tline))
+		continue;
+	    type = Vect_read_line(display->mapInfo, Points, Cats_to, tline);
+	    if (type < 0) {
+		nlines = -1;
+		error = true;
+	    }
+
+	    for (int i = 0; Cats_from->n_cats; i++) {
+		if (Vect_cat_set(Cats_to, Cats_from->field[i], Cats_from->field[i]) < 1) {
+		    nlines = -1;
+		    error = true;
+		}
+	    }
+	    
+	    if (Vect_rewrite_line(display->mapInfo, tline, type, Points, Cats_to) < 0) {
+		nlines = -1;
+		error = true;
+	    }
+		
+	    nlines++;
+	}
+    }
+
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats_from);
+    Vect_destroy_cats_struct(Cats_to);
+
+    return nlines;
 }
