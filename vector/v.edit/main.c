@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct Map_info **BgMap;	/* backgroud vector maps */
     int nbgmaps;		/* number of registrated background maps */
-    char *mapset;
     enum mode action_mode;
     FILE *ascii;
 
@@ -104,17 +103,10 @@ int main(int argc, char *argv[])
 	}
     }
     else {			/* open selected vector file */
-	mapset = G_find_vector2(params.map->answer, G_mapset());
-	if (mapset == NULL) {
-	    G_fatal_error(_("Vector map <%s> not found in the current mapset"),
-			  params.map->answer);
-	}
-	else if (action_mode == MODE_ADD) {	/* write */
-	    ret = Vect_open_update(&Map, params.map->answer, mapset);
-	}
-	else {			/* read-only -- select features */
-	    ret = Vect_open_old(&Map, params.map->answer, mapset);
-	}
+	if (action_mode == MODE_ADD)	/* write */
+	    ret = Vect_open_update(&Map, params.map->answer, G_mapset());
+	else			/* read-only -- select features */
+	    ret = Vect_open_old(&Map, params.map->answer, G_mapset());
 
 	if (ret < 2)
 	    G_fatal_error(_("Unable to open vector map <%s> at topological level %d"),
@@ -126,37 +118,28 @@ int main(int argc, char *argv[])
     /* open backgroud maps */
     if (params.bmaps->answer) {
 	i = 0;
-	char *bmap;
 
 	while (params.bmaps->answers[i]) {
-	    bmap = params.bmaps->answers[i];
-	    mapset = G_find_vector2(bmap, "");
-	    if (mapset == NULL) {
+	    const char *bmap = params.bmaps->answers[i];
+	    const char *mapset = G_find_vector2(bmap, "");
+	    if (!mapset)
 		G_fatal_error(_("Vector map <%s> not found"), bmap);
-	    }
 
-	    if (strcmp
-		(G_fully_qualified_name
-		 ((const char *)params.map->answer, (const char *)G_mapset()),
-		 G_fully_qualified_name((const char *)bmap,
-					(const char *)mapset)) == 0) {
+	    if (strcmp(
+		    G_fully_qualified_name(params.map->answer, G_mapset()),
+		    G_fully_qualified_name(bmap, mapset)) == 0) {
 		G_fatal_error(_("Unable to open vector map <%s> as the backround map. "
 			       "It is given as vector map to be edited."),
 			      bmap);
 	    }
 	    nbgmaps++;
-	    BgMap =
-		(struct Map_info **)G_realloc((void *)BgMap,
-					      nbgmaps *
-					      sizeof(struct Map_info *));
+	    BgMap = (struct Map_info **)G_realloc(
+		BgMap, nbgmaps * sizeof(struct Map_info *));
 	    BgMap[nbgmaps - 1] =
 		(struct Map_info *)G_malloc(sizeof(struct Map_info));
-	    if (Vect_open_old(BgMap[nbgmaps - 1], bmap, mapset) == -1) {
-		G_fatal_error(_("Unable to open vector map <%s>"),
-			      G_fully_qualified_name(bmap, mapset));
-	    }
-	    G_verbose_message(_("Background vector map <%s> registered"),
-			      G_fully_qualified_name(bmap, mapset));
+	    if (Vect_open_old(BgMap[nbgmaps - 1], bmap, "") == -1)
+		G_fatal_error(_("Unable to open vector map <%s>"), bmap);
+	    G_verbose_message(_("Background vector map <%s> registered"), bmap);
 	    i++;
 	}
     }

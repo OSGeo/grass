@@ -30,7 +30,7 @@
 
 int main(int argc, char **argv)
 {
-    char *input, *mapset;
+    char *input;
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt,
 	*dbkey;
@@ -112,24 +112,19 @@ int main(int argc, char **argv)
        }
      */
 
-    /* set input vector map name and mapset */
+    /* set input vector map name */
     input = inopt->answer;
-    mapset = G_find_vector2(input, "");
-    if (!mapset)
-	G_fatal_error(_("Vector map <%s> not found"), input);
 
     if (field_opt->answer)
 	field = atoi(field_opt->answer);
     else
 	field = 1;
 
-    G_debug(3, "Mapset = %s", mapset);
-
     if (print->answer && shell_print->answer)
 	G_fatal_error(_("Please choose only one print style"));
 
     if (print->answer || shell_print->answer || columns->answer)
-	Vect_open_old(&Map, inopt->answer, mapset);
+	Vect_open_old(&Map, inopt->answer, "");
     else {
 	if (Vect_open_update_head(&Map, inopt->answer, G_mapset()) < 1)
 	    G_fatal_error(_("Unable to modify vector map stored in other mapset"));
@@ -140,13 +135,13 @@ int main(int argc, char **argv)
 	num_dblinks = Vect_get_num_dblinks(&Map);
 	if (num_dblinks <= 0)
 	    G_fatal_error(_("Database connection for map <%s> is not defined in DB file"),
-			  G_fully_qualified_name(input, mapset));
+			  input);
 	else {			/* num_dblinks > 0 */
 
 	    if (print->answer || shell_print->answer) {
 		if (!(shell_print->answer)) {
 		    G_message(_("Vector map <%s> is connected by:"),
-			      G_fully_qualified_name(input, mapset));
+			      input);
 		}
 		for (i = 0; i < num_dblinks; i++) {
 		    if ((fi = Vect_get_dblink(&Map, i)) == NULL)

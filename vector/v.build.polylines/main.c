@@ -101,7 +101,6 @@ int main(int argc, char **argv)
     int nlines, type;
     int write_cats;
 
-    char *mapset;
     int start_type;
 
     /*  Initialize the GIS calls */
@@ -137,11 +136,8 @@ int main(int argc, char **argv)
 				 GV_FATAL_EXIT);
 
     /* Open binary vector map at level 2 */
-    mapset = G_find_vector2(input->answer, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), input->answer);
     Vect_set_open_level(2);
-    Vect_open_old(&map, input->answer, mapset);
+    Vect_open_old(&map, input->answer, "");
 
     /* Open new vector */
     G_find_vector2(output->answer, "");
