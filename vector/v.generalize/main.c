@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points;
     struct line_cats *Cats;
     int i, type, iter;
-    char *mapset;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out, *thresh_opt, *method_opt,
 	*look_ahead_opt;
@@ -297,14 +296,10 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(map_in->answer, map_out->answer,
 				 GV_FATAL_EXIT);
 
-    if ((mapset = G_find_vector2(map_in->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_in->answer);
-
     Vect_set_open_level(2);
 
-    if (1 > Vect_open_old(&In, map_in->answer, mapset))
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(map_in->answer, mapset));
+    if (Vect_open_old(&In, map_in->answer, "") < 1)
+	G_fatal_error(_("Unable to open vector map <%s>"), map_in->answer);
 
     with_z = Vect_is_3d(&In);
 

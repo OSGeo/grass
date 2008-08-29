@@ -271,7 +271,6 @@ int main(int argc, char **argv)
     struct Flag *all, *flat;
     struct Cell_head window;
 
-    char *mapset;
     char *sitefile;
 
     struct Map_info Map;
@@ -310,15 +309,11 @@ int main(int argc, char **argv)
 
     sitefile = input->answer;
 
-    mapset = G_find_vector2(sitefile, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), sitefile);
-
     Vect_check_input_output_name(input->answer, output->answer,
 				 GV_FATAL_EXIT);
 
     /* open site file */
-    if (Vect_open_old(&Map, sitefile, mapset) < 0)
+    if (Vect_open_old(&Map, sitefile, "") < 0)
 	G_fatal_error(_("Cannot open vector map <%s>"), sitefile);
 
     /* load site coordinates */

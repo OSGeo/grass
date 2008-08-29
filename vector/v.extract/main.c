@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     int **ocats, *nocats, nfields, *fields;
     int dissolve = 0, x, y, type_only;
     char buffr[1024], text[80];
-    char *input, *output, *mapset;
+    char *input, *output;
     struct GModule *module;
     struct Option *inopt, *outopt, *fileopt, *newopt, *typopt, *listopt,
 	*fieldopt;
@@ -139,12 +139,7 @@ int main(int argc, char **argv)
 
     /* set input vector map name and mapset */
     input = inopt->answer;
-    mapset = G_find_vector2(input, "");
 
-    if (!mapset)
-	G_fatal_error(_("Vector map <%s> not found"), input);
-
-    G_debug(3, "Mapset = %s", mapset);
     /* set output vector map name */
     output = outopt->answer;
 
@@ -162,7 +157,7 @@ int main(int argc, char **argv)
 
     /* Do initial read of input file */
     Vect_set_open_level(2);
-    Vect_open_old(&In, input, mapset);
+    Vect_open_old(&In, input, "");
 
     /* Open output file */
     Vect_open_new(&Out, output, Vect_is_3d(&In));

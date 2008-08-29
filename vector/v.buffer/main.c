@@ -232,7 +232,6 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     struct line_pnts *Points, *BPoints;
     struct line_cats *Cats, *BCats;
-    char *mapset;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *buffer_opt, *tolerance_opt,
 	*bufcol_opt, *scale_opt, *debug_opt, *field_opt;
@@ -362,12 +361,8 @@ int main(int argc, char *argv[])
     BCats = Vect_new_cats_struct();
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     Vect_set_fatal_error(GV_FATAL_PRINT);
     if (0 > Vect_open_new(&Out, out_opt->answer, 0)) {

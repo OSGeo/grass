@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
     int i, j, k;
     int print_as_matrix;	/* only for all */
     int all;			/* calculate from each to each within the threshold */
-    char *mapset;
     struct GModule *module;
     struct Option *from_opt, *to_opt, *from_type_opt, *to_type_opt,
 	*from_field_opt, *to_field_opt;
@@ -294,20 +293,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Not enough column names"));
 
     /* Open 'from' vector */
-    if ((mapset = G_find_vector2(from_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), from_opt->answer);
-
-    if (!print_flag->answer && strcmp(mapset, G_mapset()) != 0)
-	G_fatal_error(_("Vector map <%s> is not in user mapset and cannot be updated"),
-		      from_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&From, from_opt->answer, mapset);
+    Vect_open_old(&From, from_opt->answer, G_mapset());
 
     /* Open 'to' vector */
-    mapset = G_find_vector2(to_opt->answer, "");
     Vect_set_open_level(2);
-    Vect_open_old(&To, to_opt->answer, mapset);
+    Vect_open_old(&To, to_opt->answer, "");
 
     /* Open output vector */
     if (out_opt->answer) {

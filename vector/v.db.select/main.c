@@ -41,7 +41,6 @@ int main(int argc, char **argv)
     struct field_info *Fi;
     int field, ncols, col, more;
     struct Map_info Map;
-    char *mapset;
     char query[1024];
     struct ilist *list_lines;
 
@@ -115,20 +114,14 @@ int main(int argc, char **argv)
     db_init_string(&value_string);
 
     /* open input vector */
-    if ((mapset = G_find_vector2(map_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
-    }
-
-    if (!r_flag->answer) {
-	Vect_open_old_head(&Map, map_opt->answer, mapset);
-    }
+    if (!r_flag->answer)
+	Vect_open_old_head(&Map, map_opt->answer, "");
     else {
-	if (2 > Vect_open_old(&Map, map_opt->answer, mapset)) {
+	if (2 > Vect_open_old(&Map, map_opt->answer, "")) {
 	    Vect_close(&Map);
 	    G_fatal_error(_("Unable to open vector map <%s> at topology level. "
 			   "Flag '%c' requires topology level."),
-			  G_fully_qualified_name(map_opt->answer, mapset),
-			  r_flag->key);
+			  map_opt->answer, r_flag->key);
 	}
     }
 

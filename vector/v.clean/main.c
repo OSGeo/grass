@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 {
     struct Map_info In, Out, Err, *pErr;
     int i, otype, with_z;
-    char *mapset;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *type_opt, *tool_opt, *thresh_opt,
 	*err_opt;
@@ -237,16 +236,11 @@ int main(int argc, char *argv[])
 
     G_message(SEP);
 
-    /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
     /* Input vector may be both on level 1 and 2. Level 2 is necessary for 
      * virtual centroids (shapefile/OGR) and level 1 is better if input is too big 
      * and build in previous module (like v.in.ogr or other call to v.clean) would take 
      * a long time */
-    level = Vect_open_old(&In, in_opt->answer, mapset);
+    level = Vect_open_old(&In, in_opt->answer, "");
 
     with_z = Vect_is_3d(&In);
 

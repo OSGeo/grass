@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *field_opt, *col_opt, *where_opt;
     struct Option *algo_opt, *nbclass_opt;
     struct Flag *shell_flag;
-    char *mapset;
     struct Map_info Map;
     struct field_info *Fi;
     dbDriver *Driver;
@@ -91,11 +90,8 @@ int main(int argc, char *argv[])
     ofield = atoi(field_opt->answer);
 
     /* open input vector */
-    if ((mapset = G_find_vector2(map_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map_opt->answer, mapset);
+    Vect_open_old(&Map, map_opt->answer, "");
 
     /* Read attributes */
     db_CatValArray_init(&Cvarr);

@@ -136,12 +136,7 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
 
-    mapset = G_find_vector2(in_opt->answer, "");
-    if (!mapset) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     /* checks 
        does the elevation raster cover the entire are of the vector map?
