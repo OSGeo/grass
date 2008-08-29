@@ -98,7 +98,11 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None,
                     break
             
         if idx < len(dcmd):
-            mapname = dcmd[idx].split('=')[1]
+            try:
+                mapname = dcmd[idx].split('=')[1]
+            except IndexError:
+                return ''
+            
             if fullyQualified and '@' not in mapname:
                 if layerType in ('raster', 'vector', '3d-raster'):
                     try:

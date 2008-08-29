@@ -37,6 +37,8 @@ import sys
 import string
 import copy
 
+from threading import Thread
+
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
@@ -686,6 +688,7 @@ class VEdit(AbstractDigit):
             return False
 
         # collect cats
+        # FIXME: currently layer is ignored...
         gcmd.Command(['v.edit',
                      '--q',
                      'map=%s' % self.map,
@@ -789,7 +792,8 @@ class VDigit(AbstractDigit):
         AbstractDigit.__init__(self, mapwindow)
 
         try:
-            self.digit = wxvdigit.Digit(self.driver.GetDevice())
+            self.digit = wxvdigit.Digit(self.driver.GetDevice(),
+                                        mapwindow)
         except (ImportError, NameError):
             self.digit = None
 
@@ -823,15 +827,15 @@ class VDigit(AbstractDigit):
 
         if z:
             ret = self.digit.AddLine(type, [x, y, z], layer, cat,
-                                     str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
+                                     str(UserSettings.Get(group='vdigit', key="backgroundMap",
+                                                          subkey='value')), snap, thresh)
         else:
             ret = self.digit.AddLine(type, [x, y], layer, cat,
-                                     str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
-
-        if ret == -1:
-            raise gcmd.DigitError, _("Adding new feature to vector map <%s> failed.") % map
-
+                                     str(UserSettings.Get(group='vdigit', key="backgroundMap",
+                                                          subkey='value')), snap, thresh)
         self.toolbar.EnableUndo()
+
+        return ret
         
     def AddLine (self, map, line, coords):
         """Add line/boundary
@@ -864,12 +868,11 @@ class VDigit(AbstractDigit):
         
         ret = self.digit.AddLine(type, listCoords, layer, cat,
                                  str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
-        
-        if ret == -1:
-            raise gcmd.DigitError, _("Adding new feature to vector map <%s> failed.") % map
-        
+
         self.toolbar.EnableUndo()
         
+        return ret
+    
     def DeleteSelectedLines(self):
         """Delete selected features
 
@@ -1090,19 +1093,19 @@ class VDigit(AbstractDigit):
 
         return ret
 
-    def CopyCats(self, cats, ids):
+    def CopyCats(self, fromId, toId):
         """Copy given categories to objects with id listed in ids
 
-        @param cats list of cats to be copied
-        @param ids  ids of lines to be modified
+        @param cats ids of 'from' feature
+        @param ids  ids of 'to' feature(s)
 
         @return number of modified features
         @return -1 on error
         """
-        if len(cats) == 0 or len(ids) == 0:
+        if len(fromId) == 0 or len(toId) == 0:
             return 0
 
-        ret = self.digit.CopyCats(cats, ids)
+        ret = self.digit.CopyCats(fromId, toId)
 
         if ret > 0:
             self.toolbar.EnableUndo()

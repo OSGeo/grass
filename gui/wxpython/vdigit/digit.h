@@ -13,7 +13,8 @@ private:
     std::map<int, int> cats;
 
     DisplayDriver *display;
-
+    wxWindow *parentWin;
+    
     int SetCategory(int, int);
     struct Map_info** OpenBackgroundVectorMap(const char *);
 
@@ -42,8 +43,22 @@ private:
     void FreeChangeset(int);
     int RemoveActionFromChangeset(int, action_type, int);
 
+    /* message dialogs */
+    wxString msgCaption;
+    void DisplayMsg(void);
+    void Only2DMsg(void);
+    void ReadLineMsg(int);
+    void DeadLineMsg(int);
+    void WriteLineMsg(void);
+    void BackgroundMapMsg(const char *);
+    void DblinkMsg(int);
+    void DbDriverMsg(const char *);
+    void DbDatabaseMsg(const char *, const char *);
+    void DbExecuteMsg(const char *);
+    void GetLineCatsMsg(int);
+
 public:
-    Digit(DisplayDriver *);
+    Digit(DisplayDriver *, void *);
     ~Digit();
 
     int InitCats();
@@ -79,7 +94,7 @@ public:
 					double, double, double, bool,
 					int, int, double);
 
-    int CopyCats(std::vector<std::vector<int> >, std::vector<int>);
+    int CopyCats(std::vector<int>, std::vector<int>);
     int GetCategory(int);
     std::map<int, std::vector<int> > GetLineCats(int);
     int SetLineCats(int, int, std::vector<int>, bool);
@@ -92,4 +107,3 @@ public:
 };
 
 #endif /* WXVDIGIT_DIGIT_H */
-

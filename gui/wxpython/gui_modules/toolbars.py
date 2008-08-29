@@ -436,11 +436,7 @@ class VDigitToolbar(AbstractToolbar):
         
         # toogle to pointer by default
         self.OnTool(None)
-
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
-            self.toolbar[0].EnableTool(self.copyCats, False) # not implemented (TODO)
-            self.toolbar[0].SetToolShortHelp(self.copyCats, _("Not implemented yet"))
-            
+        
     def ToolbarData(self, row=None):
         """
         Toolbar data
@@ -502,7 +498,7 @@ class VDigitToolbar(AbstractToolbar):
                      self.OnDisplayCats),
                     (self.copyCats, "digCopyCats", Icons["digCopyCats"].GetBitmap(),
                      wx.ITEM_CHECK, Icons["digCopyCats"].GetLabel(), Icons["digCopyCats"].GetDesc(),
-                     self.OnCopyCats),
+                     self.OnCopyCA),
                     (self.displayAttr, "digDispAttr", Icons["digDispAttr"].GetBitmap(),
                      wx.ITEM_CHECK, Icons["digDispAttr"].GetLabel(), Icons["digDispAttr"].GetDesc(),
                      self.OnDisplayAttr),
@@ -671,13 +667,60 @@ class VDigitToolbar(AbstractToolbar):
                         'id'   : self.displayAttr }
         self.parent.MapWindow.mouse['box'] = 'point'
 
+    def OnCopyCA(self, event):
+        """Copy categories/attributes menu"""
+        point = wx.GetMousePosition()
+        toolMenu = wx.Menu()
+        # Add items to the menu
+        cats = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                           text=_('Copy categories'),
+                           kind=wx.ITEM_CHECK)
+        toolMenu.AppendItem(cats)
+        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyCats, cats)
+        if self.action['desc'] == "copyCats":
+            cats.Check(True)
+
+        attrb = wx.MenuItem(parentMenu=toolMenu, id=wx.ID_ANY,
+                            text=_('Duplicate attributes'),
+                            kind=wx.ITEM_CHECK)
+        toolMenu.AppendItem(attrb)
+        self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyAttrb, attrb)
+        if self.action['desc'] == "copyAttrs":
+            attrb.Check(True)
+
+        # Popup the menu.  If an item is selected then its handler
+        # will be called before PopupMenu returns.
+        self.parent.MapWindow.PopupMenu(toolMenu)
+        toolMenu.Destroy()
+        
+        if self.action['desc'] == "addPoint":
+            self.toolbar[0].ToggleTool(self.copyCats, False)
+        
     def OnCopyCats(self, event):
         """Copy categories"""
+        if self.action['desc'] == 'copyCats': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.copyCats, False)
+            self.OnAddPoint(event)
+            return
+        
         Debug.msg(2, "Digittoolbar.OnCopyCats():")
         self.action = { 'desc' : "copyCats",
                         'id'   : self.copyCats }
         self.parent.MapWindow.mouse['box'] = 'point'
 
+    def OnCopyAttrb(self, event):
+        if self.action['desc'] == 'copyAttrs': # select previous action
+            self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.copyCats, False)
+            self.OnAddPoint(event)
+            return
+        
+        Debug.msg(2, "Digittoolbar.OnCopyAttrb():")
+        self.action = { 'desc' : "copyAttrs",
+                        'id'   : self.copyCats }
+        self.parent.MapWindow.mouse['box'] = 'point'
+        
     def OnUndo(self, event):
         """Undo previous changes"""
         self.parent.digit.Undo()
@@ -795,12 +838,13 @@ class VDigitToolbar(AbstractToolbar):
         toolMenu.Destroy()
         
         if self.action['desc'] == 'addPoint':
-            self.toolbar[0].ToggleTool(self.additionalTools, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
         
     def OnCopy(self, event):
         """Copy selected features from (background) vector map"""
         if self.action['desc'] == 'copyLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -813,6 +857,7 @@ class VDigitToolbar(AbstractToolbar):
         """Flip selected lines/boundaries"""
         if self.action['desc'] == 'flipLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -825,6 +870,7 @@ class VDigitToolbar(AbstractToolbar):
         """Merge selected lines/boundaries"""
         if self.action['desc'] == 'mergeLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -837,6 +883,7 @@ class VDigitToolbar(AbstractToolbar):
         """Break selected lines/boundaries"""
         if self.action['desc'] == 'breakLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -849,6 +896,7 @@ class VDigitToolbar(AbstractToolbar):
         """Snap selected features"""
         if self.action['desc'] == 'snapLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -861,6 +909,7 @@ class VDigitToolbar(AbstractToolbar):
         """Connect selected lines/boundaries"""
         if self.action['desc'] == 'connectLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -873,6 +922,7 @@ class VDigitToolbar(AbstractToolbar):
         """Query selected lines/boundaries"""
         if self.action['desc'] == 'queryLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -886,6 +936,7 @@ class VDigitToolbar(AbstractToolbar):
         """Z bulk-labeling selected lines/boundaries"""
         if self.action['desc'] == 'zbulkLine': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         
@@ -903,6 +954,7 @@ class VDigitToolbar(AbstractToolbar):
         """
         if self.action['desc'] == 'typeConv': # select previous action
             self.toolbar[0].ToggleTool(self.addPoint, True)
+            self.toolbar[0].ToggleTool(self.additionalTools, False)
             self.OnAddPoint(event)
             return
         

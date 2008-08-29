@@ -1119,7 +1119,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     else:
                         point = False
 
-                    digitClass.AddPoint(map, point, east, north)
+                    if digitClass.AddPoint(map, point, east, north) < 0:
+                        return
 
                     self.UpdateMap(render=False) # redraw map
 
@@ -1741,8 +1742,9 @@ class BufferedWindow(MapWindow, wx.Window):
                     if len(self.polycoords) < 2: # ignore 'one-point' lines
                         return
                     
-                    digitClass.AddLine(map, line, self.polycoords)
-
+                    if digitClass.AddLine(map, line, self.polycoords) < 0:
+                        return
+                    
                     position = self.Cell2Pixel(self.polycoords[-1])
                     self.polycoords = []
                     self.UpdateMap(render=False)

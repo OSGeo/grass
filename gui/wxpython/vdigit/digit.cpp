@@ -21,10 +21,12 @@
    \brief Initialize digit interface used by SWIG
 
    \param driver display driver instance
+   \param window parent window for message dialog
 */
-Digit::Digit(DisplayDriver *ddriver)
+Digit::Digit(DisplayDriver *ddriver, void *window)
 {
     display = ddriver;
+    parentWin = (wxWindow *) window;
 
     if (display->mapInfo) {
 	InitCats();
@@ -33,6 +35,8 @@ Digit::Digit(DisplayDriver *ddriver)
     changesetCurrent = -2; // initial value for undo/redo
     changesetDead = -1;
 
+    msgCaption = _("Digitization error");
+    
     // avoid GUI crash
     // Vect_set_fatal_error(GV_FATAL_PRINT);
 }

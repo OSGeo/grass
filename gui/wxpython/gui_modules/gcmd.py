@@ -443,6 +443,9 @@ class Command:
 
     def GetError(self):
         """Get error message or ''"""
+        if not self.cmdThread.module:
+            return _("Unable to exectute command: '%s'") % ' '.join(self.cmd)
+
         for type, msg in self.__ProcessStdErr():
             if type == 'ERROR':
                 return msg

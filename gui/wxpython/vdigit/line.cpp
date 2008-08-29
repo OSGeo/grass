@@ -50,11 +50,17 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     int nbgmaps;             /* number of registrated background maps */
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
     npoints = coords.size() / (Vect_is_3d(display->mapInfo) ? 3 : 2);
     if (coords.size() != npoints * (Vect_is_3d(display->mapInfo) ? 3 : 2)) {
+	wxString msg;
+	msg.Printf(_("Incorrent number of points (%d)"), coords.size());
+	wxMessageDialog dlg(parentWin, msg,
+			    msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
+	dlg.ShowModal();
 	return -1;
     }
 
@@ -63,6 +69,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 
     /* TODO: 3D */
     if (!(type & (GV_POINTS | GV_LINES))) {
+	Only2DMsg();
 	return -1;
     }
 
@@ -71,6 +78,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     if (bgmap && strlen(bgmap) > 0) {
 	BgMap = OpenBackgroundVectorMap(bgmap);
 	if (!BgMap) {
+	    BackgroundMapMsg(bgmap);
 	    return -1;
 	}
 	else {
@@ -121,6 +129,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 
     newline = Vect_write_line(display->mapInfo, type, Points, Cats);
     if (newline < 0) {
+	WriteLineMsg();
 	return -1;
     }
 
@@ -204,11 +213,13 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
     int nbgmaps;             /* number of registrated background maps */
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
     /* line alive ? */
     if (!Vect_line_alive(display->mapInfo, line)) {
+	WriteLineMsg();
 	return -1;
     }
 
@@ -217,6 +228,7 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
     if (bgmap && strlen(bgmap) > 0) {
 	BgMap = OpenBackgroundVectorMap(bgmap);
 	if (!BgMap) {
+	    BackgroundMapMsg(bgmap);
 	    return -1;
 	}
 	else {
@@ -301,6 +313,7 @@ int Digit::SplitLine(double x, double y, double z,
     struct ilist *list;
 
     if (!display->mapInfo)
+	DisplayMsg();
 	return -1;
 
     point = Vect_new_line_struct();
@@ -344,22 +357,21 @@ int Digit::DeleteLines(bool delete_records)
     // struct ilist *List;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
     n_dblinks = Vect_get_num_dblinks(display->mapInfo);
     Cats_del = NULL;
-    // List = NULL;
-
+    
     /* collect categories if needed */
     if (delete_records) {
 	Cats = Vect_new_cats_struct();
-	// List = Vect_new_list();
 	Cats_del = Vect_new_cats_struct();
 	for (int i = 0; i < display->selected.values->n_values; i++) {
 	    if (Vect_read_line(display->mapInfo, NULL, Cats, display->selected.values->value[i]) < 0) {
 		Vect_destroy_cats_struct(Cats_del);
-		//Vect_destroy_list(List);
+		ReadLineMsg(display->selected.values->value[i]);
 		return -1;
 	    }
 	    for (int j = 0; j < Cats->n_cats; j++) {
@@ -403,17 +415,20 @@ int Digit::DeleteLines(bool delete_records)
 	for (int dblink = 0; dblink < n_dblinks; dblink++) {
 	    fi = Vect_get_dblink(display->mapInfo, dblink);
 	    if (fi == NULL) {
+		DblinkMsg(dblink+1);
 		return -1;
 	    }
 
 	    driver = db_start_driver(fi->driver);
 	    if (driver == NULL) {
+		DbDriverMsg(fi->driver);
 		return -1;
 	    }
 
 	    db_init_handle (&handle);
 	    db_set_handle (&handle, fi->database, NULL);
 	    if (db_open_database(driver, &handle) != DB_OK) {
+		DbDatabaseMsg(fi->driver, fi->database);
 		return -1;
 	    }
 
@@ -437,6 +452,7 @@ int Digit::DeleteLines(bool delete_records)
 
 	    if (n_cats &&
 		db_execute_immediate (driver, &stmt) != DB_OK ) {
+		DbExecuteMsg(db_get_string(&stmt));
 		return -1;
 	    }
 	    
@@ -451,12 +467,7 @@ int Digit::DeleteLines(bool delete_records)
     if (Cats_del) {
 	Vect_destroy_cats_struct(Cats_del);
     }
-
-    /*
-    if(List) {
-	Vect_destroy_list(List);
-    }
-    */
+    
     return ret;
 }
 
@@ -481,6 +492,7 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
     int nbgmaps;             /* number of registrated background maps */
 
     if (!display->mapInfo)
+	DisplayMsg();
 	return -1;
 
     BgMap = NULL;
@@ -488,6 +500,7 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
     if (bgmap && strlen(bgmap) > 0) {
 	BgMap = OpenBackgroundVectorMap(bgmap);
 	if (!BgMap) {
+	    BackgroundMapMsg(bgmap);
 	    return -1;
 	}
 	else {
@@ -535,6 +548,7 @@ int Digit::FlipLines()
     long int nlines;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -570,6 +584,7 @@ int Digit::MergeLines()
     int ret, changeset, line;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -616,6 +631,7 @@ int Digit::BreakLines()
     int ret, changeset, line;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -663,6 +679,7 @@ int Digit::BreakLines()
 int Digit::SnapLines(double thresh)
 {
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -684,6 +701,7 @@ int Digit::ConnectLines(double thresh)
     long int nlines_diff;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -731,6 +749,7 @@ int Digit::ZBulkLabeling(double x1, double y1, double x2, double y2,
     int ret;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -760,6 +779,7 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
     list = NULL;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -873,6 +893,7 @@ int Digit::TypeConvLines()
     int changeset, nlines_diff;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 

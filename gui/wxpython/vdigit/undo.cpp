@@ -163,6 +163,7 @@ int Digit::AddActionToChangeset(int changeset, Digit::action_type type, int line
     struct line_cats *Cats;
 
     if (!display->mapInfo) {
+	DisplayMsg();
 	return -1;
     }
 
@@ -171,6 +172,7 @@ int Digit::AddActionToChangeset(int changeset, Digit::action_type type, int line
 
     /* do copy */
     if (!Vect_line_alive(display->mapInfo, line))
+	DeadLineMsg(line);
 	return -1;
 
     ltype = Vect_read_line(display->mapInfo, Points, Cats, line);
