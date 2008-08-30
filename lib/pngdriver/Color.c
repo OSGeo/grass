@@ -9,20 +9,7 @@
 #include <grass/gis.h>
 #include "pngdriver.h"
 
-void PNG_color(int number)
+void PNG_color_rgb(int r, int g, int b)
 {
-    if (number >= NCOLORS || number < 0) {
-	G_warning("Color: can't set color %d\n", number);
-	return;
-    }
-
-    if (png.true_color) {
-	int r = (number >> 16) & 0xFF;
-	int g = (number >> 8) & 0xFF;
-	int b = (number >> 0) & 0xFF;
-
-	png.current_color = get_color(r, g, b, 0);
-    }
-    else
-	png.current_color = number;
+    png.current_color = get_color(r, g, b, 0);
 }

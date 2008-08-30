@@ -26,8 +26,6 @@ const struct driver *driver;
 
 struct GFONT_CAP *ftcap;
 
-int NCOLORS;
-
 int screen_width;
 int screen_height;
 

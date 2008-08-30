@@ -25,7 +25,7 @@ const struct driver *HTML_Driver(void)
     if (initialized)
 	return &drv;
 
-    drv.Box = NULL;
+    drv.Box = HTML_Box;
     drv.Erase = NULL;
     drv.Graph_set = HTML_Graph_set;
     drv.Graph_close = HTML_Graph_close;
@@ -38,8 +38,7 @@ const struct driver *HTML_Driver(void)
     drv.Scaled_raster = NULL;
     drv.End_scaled_raster = NULL;
     drv.Respond = NULL;
-    drv.lookup_color = NULL;
-    drv.color = NULL;
+    drv.color_rgb = NULL;
     drv.draw_line = NULL;
     drv.draw_point = NULL;
     drv.draw_bitmap = NULL;

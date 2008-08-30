@@ -87,11 +87,6 @@ void R_close_driver(void)
 	system(cmd);
 }
 
-int R_get_num_colors(void)
-{
-    return COM_Number_of_colors();
-}
-
 /*!
  * \brief select standard color
  *

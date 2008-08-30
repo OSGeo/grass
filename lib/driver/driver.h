@@ -4,8 +4,6 @@
 
 #include <grass/freetypecap.h>
 
-extern int NCOLORS;
-
 extern int screen_width;
 extern int screen_height;
 
@@ -22,29 +20,28 @@ extern char *encoding;
 
 struct driver
 {
-    void (*Box) (double, double, double, double);
-    void (*Erase) (void);
-    int (*Graph_set) (void);
-    void (*Graph_close) (void);
-    void (*Line_width) (double);
-    void (*Polydots) (const double *, const double *, int);
-    void (*Polyline) (const double *, const double *, int);
-    void (*Polygon) (const double *, const double *, int);
-    void (*Set_window) (double, double, double, double);
-    void (*Begin_scaled_raster) (int, int[2][2], double[2][2]);
-    int (*Scaled_raster) (int, int,
-			  const unsigned char *,
-			  const unsigned char *,
-			  const unsigned char *, const unsigned char *);
-    void (*End_scaled_raster) (void);
-    void (*Respond) (void);
+    void (*Box)(double, double, double, double);
+    void (*Erase)(void);
+    int (*Graph_set)(void);
+    void (*Graph_close)(void);
+    void (*Line_width)(double);
+    void (*Polydots)(const double *, const double *, int);
+    void (*Polyline)(const double *, const double *, int);
+    void (*Polygon)(const double *, const double *, int);
+    void (*Set_window)(double, double, double, double);
+    void (*Begin_scaled_raster)(int, int[2][2], double[2][2]);
+    int (*Scaled_raster)(int, int,
+			 const unsigned char *,
+			 const unsigned char *,
+			 const unsigned char *, const unsigned char *);
+    void (*End_scaled_raster)(void);
+    void (*Respond)(void);
 
-    int (*lookup_color) (int, int, int);
-    void (*color) (int);
-    void (*draw_line) (double, double, double, double);
-    void (*draw_point) (double, double);
-    void (*draw_bitmap) (int, int, int, const unsigned char *);
-    void (*draw_text) (const char *);
+    void (*color_rgb)(int, int, int);
+    void (*draw_line)(double, double, double, double);
+    void (*draw_point)(double, double);
+    void (*draw_bitmap)(int, int, int, const unsigned char *);
+    void (*draw_text)(const char *);
     void (*text_box)(const char *, double *, double *, double *, double *);
     void (*Set_font)(const char *);
     void (*Font_list)(char ***, int *);
@@ -117,9 +114,6 @@ extern void COM_end_scaled_raster(void);
 
 /* Respond.c */
 extern void COM_Respond(void);
-
-/* Returns.c */
-extern int COM_Number_of_colors(void);
 
 /* Set_window.c */
 extern void COM_Set_window(double, double, double, double);

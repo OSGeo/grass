@@ -28,8 +28,6 @@ int HTML_Graph_set(void)
 
     G_gisinit("HTMLMAP driver");
 
-    NCOLORS = 256;
-
     /*
      * set the minimum bounding box dimensions 
      */

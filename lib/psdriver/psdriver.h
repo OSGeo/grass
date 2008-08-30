@@ -22,6 +22,7 @@ extern struct ps_state ps;
 extern void output(const char *, ...);
 
 extern void init_color_table(void);
+extern int lookup_color(int, int, int);
 
 extern const struct driver *PS_Driver(void);
 
@@ -33,11 +34,10 @@ extern int PS_Graph_set(void);
 extern void PS_Line_width(double);
 extern void PS_Respond(void);
 extern void PS_Set_window(double, double, double, double);
-extern void PS_color(int);
+extern void PS_color_rgb(int, int, int);
 extern void PS_draw_bitmap(int, int, int, const unsigned char *);
 extern void PS_draw_line(double, double, double, double);
 extern void PS_draw_point(double, double);
-extern int PS_lookup_color(int, int, int);
 extern void PS_begin_scaled_raster(int, int[2][2], double[2][2]);
 extern int PS_scaled_raster(int, int, const unsigned char *,
 			    const unsigned char *, const unsigned char *,

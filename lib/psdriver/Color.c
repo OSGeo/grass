@@ -2,20 +2,10 @@
 #include <grass/gis.h>
 #include "psdriver.h"
 
-void PS_color(int number)
+void PS_color_rgb(int r, int g, int b)
 {
-    if (number >= NCOLORS || number < 0) {
-	G_warning("Color: can't set color %d\n", number);
-	return;
-    }
-
-    if (ps.true_color) {
-	int r = (number >> 16) & 0xFF;
-	int g = (number >> 8) & 0xFF;
-	int b = (number >> 0) & 0xFF;
-
+    if (ps.true_color)
 	output("%d %d %d COLOR\n", r, g, b);
-    }
     else
-	output("%d GRAY\n", number);
+	output("%d GRAY\n", (int)(r * 0.299 + g * 0.587 + b * 0.114));
 }
