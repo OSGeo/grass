@@ -14,6 +14,10 @@
    \date 2008 
 */
 
+extern "C" {
+#include <grass/dbmi.h>
+}
+
 #include "driver.h"
 #include "digit.h"
 
@@ -238,7 +242,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     if (line_id == -1) {
 	line = display->selected.values->value[0];
     }
-     
+
     if (!Vect_line_alive(display->mapInfo, line)) {
 	DeadLineMsg(line);
 	return -1;
@@ -272,14 +276,17 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     ret = Vect_rewrite_line(display->mapInfo, line, type,
 			    Points, Cats);
 
-    if (ret > 0) {
-	/* updates feature id (id is changed since line has been rewriten) */
-	changesets[changesets.size()-1][0].line = ret;
-    }
-    else {
-	changesets.erase(changesets.size()-1);
-    }
-
+    /* TODO
+       updates feature id (id is changed since line has been rewriten)
+       if (ret > 0) {
+       
+       changesets[changesets.size()-1][0].line = ret;
+       }
+       else {
+       changesets.erase(changesets.size()-1);
+       }
+    */
+    
     if (line_id == -1) {
 	/* update line id since the line was rewritten */
 	display->selected.values->value[0] = ret;
@@ -296,14 +303,15 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
 
    \param fromId list of 'from' feature ids
    \param toId   list of 'to' feature ids
+   \param copyAttrb duplicate attribures instead of copying categories
 
    \return number of modified features
    \return -1 on error
 */
-int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId)
+int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAttrb)
 {
     int fline, tline, nlines, type;
-    bool error;
+    int cat;
     
     struct line_pnts *Points;
     struct line_cats *Cats_from, *Cats_to;
@@ -313,46 +321,158 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId)
     Cats_to = Vect_new_cats_struct();
 
     nlines = 0;
-    error = false;
+
     for (std::vector<int>::const_iterator fi = fromId.begin(), fe = fromId.end();
-	 fi != fe && !error; ++fi) {
+	 fi != fe; ++fi) {
+
 	fline = *fi;
 	if (!Vect_line_alive(display->mapInfo, fline))
 	    continue;
 
 	type = Vect_read_line(display->mapInfo, NULL, Cats_from, fline);
 	if (type < 0) {
-	    nlines = -1;
-	    error = true;
+	    ReadLineMsg(fline);
+	    return -1;
 	}
 
 	for(std::vector<int>::const_iterator ti = toId.begin(), te = toId.end();
-	    ti != te && !error; ++ti) {
+	    ti != te; ++ti) {
+
 	    tline = *ti;
 	    if (!Vect_line_alive(display->mapInfo, tline))
 		continue;
+
 	    type = Vect_read_line(display->mapInfo, Points, Cats_to, tline);
 	    if (type < 0) {
-		nlines = -1;
-		error = true;
+		ReadLineMsg(tline);
+		return -1;
 	    }
 
-	    for (int i = 0; Cats_from->n_cats; i++) {
-		if (Vect_cat_set(Cats_to, Cats_from->field[i], Cats_from->field[i]) < 1) {
-		    nlines = -1;
-		    error = true;
+	    for (int i = 0; i < Cats_from->n_cats; i++) {
+		if (!copyAttrb) {
+		    cat = Cats_from->cat[i]; /* duplicate category */
+		}
+		else {
+		    /* duplicate attributes */
+		    struct field_info *fi;
+		    char buf[GSQL_MAX];
+		    dbDriver *driver;
+		    dbHandle handle;
+		    dbCursor cursor;
+		    dbTable *table;
+		    dbColumn *column;
+		    dbValue *value;
+		    dbString stmt, value_string;
+		    int col, ncols;
+		    int more, ctype;
+		    		    
+		    cat = ++cats[Cats_from->field[i]];
+
+		    fi = Vect_get_field(display->mapInfo, Cats_from->field[i]);
+
+		    if (fi == NULL) {
+			DblinkMsg(Cats_from->field[i]);
+			return -1;
+		    }
+		    
+		    driver = db_start_driver(fi->driver);
+		    if (driver == NULL) {
+			DbDriverMsg(fi->driver);
+			return -1;
+		    }
+		    
+		    db_init_handle (&handle);
+		    db_set_handle (&handle, fi->database, NULL);
+		    if (db_open_database(driver, &handle) != DB_OK) {
+			db_shutdown_driver(driver);
+			DbDatabaseMsg(fi->driver, fi->database);
+			return -1;
+		    }
+
+		    db_init_string (&stmt);
+		    sprintf (buf, "SELECT * FROM %s WHERE %s=%d",
+			     fi->table, fi->key, Cats_from->cat[i]);
+		    db_set_string(&stmt, buf);
+
+		    if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK) {
+			db_close_database(driver);
+			db_shutdown_driver(driver);
+			DbSelectCursorMsg(db_get_string(&stmt));
+			return -1;
+		    }
+
+
+		    table = db_get_cursor_table(&cursor);
+		    ncols = db_get_table_number_of_columns(table);
+		    
+		    sprintf(buf, "INSERT INTO %s VALUES (", fi->table);
+		    db_set_string(&stmt, buf);
+
+		    /* fetch the data */
+		    while (1) {
+			if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+			    db_close_database(driver);
+			    db_shutdown_driver(driver);
+			    return -1;
+			}
+			if (!more)
+			    break;
+			
+			for (col = 0; col < ncols; col++) {
+			    if (col > 0)
+				db_append_string(&stmt, ",");
+			    
+			    column = db_get_table_column(table, col);
+			    if (strcmp(db_get_column_name(column), fi->key) == 0) {
+				sprintf(buf, "%d", cat);
+				db_append_string(&stmt, buf);
+				continue;
+			    }
+			    
+			    value = db_get_column_value(column);
+			    db_convert_column_value_to_string(column, &value_string);
+			    if (db_test_value_isnull(value))
+				db_append_string(&stmt, "NULL");
+			    else {
+				ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
+				if (ctype != DB_C_TYPE_STRING) 
+				    db_append_string(&stmt, db_get_string(&value_string));
+				else {
+				    sprintf(buf, "'%s'", db_get_string(&value_string));
+				    db_append_string(&stmt, buf);
+				}
+			    }
+			}
+		    }
+		    db_append_string(&stmt, ")");
+		    
+		    if (db_execute_immediate (driver, &stmt) != DB_OK ) {
+			db_close_database(driver);
+			db_shutdown_driver(driver);
+			DbExecuteMsg(db_get_string(&stmt));
+			return -1;
+		    }
+		    
+		    db_close_database(driver);
+		    db_shutdown_driver(driver);
+		}
+		
+		if (Vect_cat_set(Cats_to, Cats_from->field[i], cat) < 1) {
+		    continue;
 		}
 	    }
 	    
 	    if (Vect_rewrite_line(display->mapInfo, tline, type, Points, Cats_to) < 0) {
-		nlines = -1;
-		error = true;
+		WriteLineMsg();
+		return -1;
 	    }
-		
+	
+	    G_debug(1, "Digit::CopyCats(): fline=%d, tline=%d", fline, tline);
+	    
 	    nlines++;
 	}
     }
-
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats_from);
     Vect_destroy_cats_struct(Cats_to);

@@ -91,6 +91,9 @@ class AbstractDigit:
 
         self.driver = CDisplayDriver(self, mapwindow)
 
+    def __del__(self):
+        pass
+    
     def SetCategoryNextToUse(self):
         """Find maximum category number in the map layer
         and update Digit.settings['category']
@@ -678,7 +681,7 @@ class VEdit(AbstractDigit):
                         
         return True
 
-    def CopyCats(self, cats, ids):
+    def CopyCats(self, cats, ids, copyAttrb=False):
         """Copy given categories to objects with id listed in ids
 
         @param cats list of cats to be copied
@@ -1093,7 +1096,7 @@ class VDigit(AbstractDigit):
 
         return ret
 
-    def CopyCats(self, fromId, toId):
+    def CopyCats(self, fromId, toId, copyAttrb=False):
         """Copy given categories to objects with id listed in ids
 
         @param cats ids of 'from' feature
@@ -1104,8 +1107,8 @@ class VDigit(AbstractDigit):
         """
         if len(fromId) == 0 or len(toId) == 0:
             return 0
-
-        ret = self.digit.CopyCats(fromId, toId)
+        
+        ret = self.digit.CopyCats(fromId, toId, copyAttrb)
 
         if ret > 0:
             self.toolbar.EnableUndo()
@@ -2299,25 +2302,23 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         if cats is None:
             if self.__GetCategories(query[0], query[1]) == 0 or not self.line:
                 Debug.msg(3, "VDigitCategoryDialog(): nothing found!")
-                return
         else:
             # self.cats = dict(cats)
             for layer in cats.keys():
                 self.cats[layer] = list(cats[layer]) # TODO: tuple to list
             self.line = line
+            Debug.msg(3, "VDigitCategoryDialog(): line=%d, cats=%s" % \
+                          (self.line, self.cats))
 
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
-
-        Debug.msg(3, "VDigitCategoryDialog(): line=%d, cats=%s" % \
-                      (self.line, self.cats))
-
+        
         wx.Dialog.__init__(self, parent=self.parent, id=wx.ID_ANY, title=title,
                            style=style, pos=pos)
 
         # list of categories
         box = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                           label=" %s " % _("List of categories"))
+                           label=" %s " % _("List of categories - right-click to delete"))
         listSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         self.list = CategoryListCtrl(parent=self, id=wx.ID_ANY,
                                      style=wx.LC_REPORT |
@@ -2366,9 +2367,11 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
         # buttons
         btnApply = wx.Button(self, wx.ID_APPLY)
+        btnApply.SetToolTipString(_("Apply changes"))
         btnCancel = wx.Button(self, wx.ID_CANCEL)
-        #btnReload = wx.Button(self, wx.ID_UNDO, _("&Reload"))
+        btnCancel.SetToolTipString(_("Ignore changes and close dialog"))
         btnOk = wx.Button(self, wx.ID_OK)
+        btnOk.SetToolTipString(_("Apply changes and close dialog"))
         btnOk.SetDefault()
 
         # sizers
@@ -2534,7 +2537,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
         for item in cmdWhat.ReadStdOutput():
             litem = item.lower()
-            if "line:" in litem: # get line id
+            if "id:" in litem: # get line id
                 self.line = int(item.split(':')[1].strip())
             elif "layer:" in litem: # add layer
                 layer = int(item.split(':')[1].strip())

@@ -127,7 +127,8 @@ void Digit::DblinkMsg(int layer)
 void Digit::DbDriverMsg(const char *driver)
 {
     wxString msg;
-    msg.Printf(_("Unable to start driver <%s>"), driver);
+    msg.Printf(_("Unable to start driver <%s>"),
+	       wxString(driver, wxConvUTF8).c_str());
     wxMessageDialog dlg(parentWin, msg,
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
     dlg.ShowModal();
@@ -145,7 +146,8 @@ void Digit::DbDatabaseMsg(const char *driver, const char *database)
 {
     wxString msg;
     msg.Printf(_("Unable to open database <%s> by driver <%s>"),
-	       database, driver);
+	       wxString(database, wxConvUTF8).c_str(),
+	       wxString(driver, wxConvUTF8).c_str());
     wxMessageDialog dlg(parentWin, msg,
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
     dlg.ShowModal();
@@ -161,7 +163,8 @@ void Digit::DbDatabaseMsg(const char *driver, const char *database)
 void Digit::DbExecuteMsg(const char *sql)
 {
     wxString msg;
-    msg.Printf(_("Unable to execute: '%s'"), sql);
+    msg.Printf(_("Unable to execute: '%s'"),
+	       wxString(sql, wxConvUTF8).c_str());
     wxMessageDialog dlg(parentWin, msg,
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
     dlg.ShowModal();
@@ -169,7 +172,23 @@ void Digit::DbExecuteMsg(const char *sql)
     return;
 }
 
-	wxString msg;
+/**
+   \brief Error message - unable to open select cursor
+
+   \param sql sql command
+*/
+void Digit::DbSelectCursorMsg(const char *sql)
+{
+    wxString msg;
+    msg.Printf(_("Unable to open select cursor: '%s'"),
+	       wxString(sql, wxConvUTF8).c_str());
+    wxMessageDialog dlg(parentWin, msg,
+			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
+    dlg.ShowModal();
+    
+    return;
+}
+
 /**
    \brief Error message - unable to get line categories
 
@@ -177,7 +196,8 @@ void Digit::DbExecuteMsg(const char *sql)
 */
 void Digit::GetLineCatsMsg(int line)
 {
-    msg.Printf(_("Unable to get feature categories"), line);
+    wxString msg;
+    msg.Printf(_("Unable to get feature (%d) categories"), line);
     wxMessageDialog dlg(parentWin, msg,
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
     dlg.ShowModal();
