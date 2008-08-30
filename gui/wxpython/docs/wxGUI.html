@@ -1,7 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-To start the wxPython-based GUI automatically with each session run
-GRASS with 'wxpython' switch
+<b>wxGUI</b> is a new generation of the GUI for GRASS GIS. It's a successor
+of the <em><a href="gis.m.html">Tcl/Tk GUI</a></em>.
+
+<p>
+To start the wxGUI automatically for each session run GRASS with
+<tt>wxpython</tt> switch
 
 <div class="code"><pre>
     grass -wxpython
@@ -35,7 +39,7 @@ The GUI is composed by <em>two</em> main components:
 <ul>
   <li><b>Layer Manager</b> which allows users to run different GRASS
   modules from menu, includes map layer management, integrated
-  command-line prompt, and command output window frame.</li>
+  command-line prompt, and command output window tab.</li>
   <li><b>Map Display Window</b> which integrates basic tools for
   zooming, panning, data querying, decorations (north arrows,
   barscale, etc.). The user is allowed to start various map display
@@ -49,7 +53,7 @@ The <em>Layer Manager</em> provides an interactive graphical interface to GRASS
 commands. It includes a set of pull-down menus for all GRASS GIS
 functions (analysis, file I/O, GIS configuration and management), the
 toolbar to manage display map layers, a layer tree frame in which map layers
-to display are organized, command output window frame, and interactive
+to display are organized, command output window tab, and interactive
 command line prompt.
 
 <center>
@@ -58,7 +62,7 @@ command line prompt.
 
 The top left button of the toolbar opens a new <em>Map Display
 Window</em>. Each map display has a unique set of layers to display
-and region setting. Other toolbar buttons add layers of different
+and region settings. Other toolbar buttons add layers of different
 types for display in the selected map display window. There are
 additional buttons for saving or opening workspace file, and others.
 
@@ -68,8 +72,7 @@ include raster and vector maps, text, map decorations (scale and
 north arrow, and grids), and commands (where any GRASS command can be
 written). Layers are displayed in as arranged in the layer tree: the
 bottom layer is displayed first and the top is displayed last, as if
-layers are a series of stacked overlays. Any layer can be renamed by
-double clicking on its name and typing a new name.
+layers are a series of stacked overlays.
 
 <p>
 The check box to the left of each layer makes it active or inactive
