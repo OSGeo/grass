@@ -55,6 +55,7 @@ private:
     void DbDriverMsg(const char *);
     void DbDatabaseMsg(const char *, const char *);
     void DbExecuteMsg(const char *);
+    void DbSelectCursorMsg(const char *);
     void GetLineCatsMsg(int);
 
 public:
@@ -94,7 +95,7 @@ public:
 					double, double, double, bool,
 					int, int, double);
 
-    int CopyCats(std::vector<int>, std::vector<int>);
+    int CopyCats(std::vector<int>, std::vector<int>, bool);
     int GetCategory(int);
     std::map<int, std::vector<int> > GetLineCats(int);
     int SetLineCats(int, int, std::vector<int>, bool);

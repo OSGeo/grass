@@ -684,6 +684,8 @@ class VDigitToolbar(AbstractToolbar):
                             text=_('Duplicate attributes'),
                             kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(attrb)
+        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
+            attrb.Enable(False) # Not implemeneted for vedit
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyAttrb, attrb)
         if self.action['desc'] == "copyAttrs":
             attrb.Check(True)

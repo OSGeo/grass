@@ -1125,7 +1125,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     self.UpdateMap(render=False) # redraw map
 
                     # add new record into atribute table
-                    if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled') is True:
+                    if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled')  is True:
                         # select attributes based on layer and category
                         cats = {}
                         cats[UserSettings.Get(group='vdigit', key="layer", subkey='value')] = \
@@ -1261,7 +1261,7 @@ class BufferedWindow(MapWindow, wx.Window):
                             # upgrade dialog
                             self.parent.dialogs['category'].UpdateDialog(cats=digitClass.GetLineCats(),
                                                                      line=line)
-
+                    
                     if self.parent.dialogs['category']:
                         line = self.parent.dialogs['category'].GetLine()
                         if line:
@@ -1276,7 +1276,7 @@ class BufferedWindow(MapWindow, wx.Window):
 
                 self.UpdateMap(render=False)
 
-            elif digitToolbar.GetAction() == "copyCats":
+            elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                 if not hasattr(self, "copyCatsList"):
                     self.copyCatsList = []
                 else:
@@ -1391,7 +1391,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.mouse['begin'] = self.mouse['end'] 
 
             if digitToolbar.GetAction() in ["deleteLine", "moveLine", "moveVertex",
-                                            "copyCats", "editLine", "flipLine",
+                                            "copyCats", "copyAttrs", "editLine", "flipLine",
                                             "mergeLine", "snapLine",
                                             "queryLine", "breakLine", "typeConv", "connectLine"]:
                 nselected = 0
@@ -1431,26 +1431,29 @@ class BufferedWindow(MapWindow, wx.Window):
 
                             self.UpdateMap(render=False)
 
-                elif digitToolbar.GetAction() == "copyCats":
+                elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                     if not hasattr(self, "copyCatsIds"):
-                        # collect categories
+                        # 'from' -> select by point
                         nselected = digitClass.driver.SelectLineByPoint(pos1, type=VDigit_Lines_Type)
                         if nselected:
-                            qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / \
-                                                self.Map.width)
-                            vWhat = gcmd.Command(['v.what',
-                                                 '--q',
-                                                 'map=%s' % digitClass.map,
-                                                 'east_north=%f,%f' % \
-                                                     (float(pos1[0]), float(pos1[1])),
-                                                 'distance=%f' % qdist])
-
-                            for line in vWhat.ReadStdOutput():
-                                if "Category:" in line:
-                                    cat = int(line.split(':')[1].strip())
-                                    self.copyCatsList.append(cat)
+                            if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
+                                qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / \
+                                                    self.Map.width)
+                                vWhat = gcmd.Command(['v.what',
+                                                      '--q',
+                                                      'map=%s' % digitClass.map,
+                                                      'east_north=%f,%f' % \
+                                                          (float(pos1[0]), float(pos1[1])),
+                                                      'distance=%f' % qdist])
+                                
+                                for line in vWhat.ReadStdOutput():
+                                    if "Category:" in line:
+                                        cat = int(line.split(':')[1].strip())
+                                        self.copyCatsList.append(cat)
+                            else:
+                                self.copyCatsList = digitClass.driver.GetSelected()
                     else:
-                        # collect ids
+                        # -> 'to' -> select by bbox
                         digitClass.driver.SetSelected([])
                         # return number of selected features (by box/point)
                         nselected = digitClass.driver.SelectLinesByBox(pos1, pos2,
@@ -1783,13 +1786,18 @@ class BufferedWindow(MapWindow, wx.Window):
             elif digitToolbar.GetAction() == "removeVertex":
                 # remove vertex
                 digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
-            elif digitToolbar.GetAction() == "copyCats":
+            elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                 try:
-                    digitClass.CopyCats(self.copyCatsList,
-                                        self.copyCatsIds)
+                    if digitToolbar.GetAction() == 'copyCats':
+                        digitClass.CopyCats(self.copyCatsList,
+                                            self.copyCatsIds, copyAttrb=False)
+                    else:
+                        digitClass.CopyCats(self.copyCatsList,
+                                            self.copyCatsIds, copyAttrb=True)
+                    
                     del self.copyCatsList
                     del self.copyCatsIds
-                except:
+                except AttributeError:
                     pass
             elif digitToolbar.GetAction() == "editLine" and hasattr(self, "moveBegin"):
                 line = digitClass.driver.GetSelected()
@@ -1884,8 +1892,9 @@ class BufferedWindow(MapWindow, wx.Window):
                     try:
                         del self.copyCatsList
                         del self.copyCatsIds
-                    except:
+                    except AttributeError:
                         pass
+                
                 elif digitToolbar.GetAction() == "copyLine":
                     del self.copyIds
                     if self.layerTmp:
