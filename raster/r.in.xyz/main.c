@@ -104,7 +104,8 @@ int main(int argc, char *argv[])
     double zrange_min, zrange_max, d_tmp;
     char *fs;			/* field delim */
     off_t filesize;
-    int linesize, estimated_lines;
+    int linesize;
+    long estimated_lines;
     int from_stdin;
     int can_seek;
 
@@ -118,13 +119,15 @@ int main(int argc, char *argv[])
     int rows, cols;		/* scan box size */
     int row, col;		/* counters */
 
-    int pass, npasses, line;
+    int pass, npasses;
+    unsigned long line;
     char buff[BUFFSIZE];
     double x, y, z;
     char **tokens;
     int ntokens;		/* number of tokens */
     double pass_north, pass_south;
-    int arr_row, arr_col, count, count_total;
+    int arr_row, arr_col;
+    unsigned long count, count_total;
 
     double min = 0.0 / 0.0;	/* init as nan */
     double max = 0.0 / 0.0;	/* init as nan */
@@ -504,7 +507,7 @@ int main(int argc, char *argv[])
 	if (linesize < 6)	/* min possible: "0,0,0\n" */
 	    linesize = 6;
 	estimated_lines = filesize / linesize;
-	G_debug(2, "estimated number of lines in file: %d", estimated_lines);
+	G_debug(2, "estimated number of lines in file: %ld", estimated_lines);
     }
     else
 	estimated_lines = -1;
@@ -592,7 +595,7 @@ int main(int argc, char *argv[])
 		if (skipline->answer) {
 		    G_warning(_("Not enough data columns. "
 				"Incorrect delimiter or column number? "
-				"Found the following character(s) in row %d:\n[%s]"),
+				"Found the following character(s) in row %lu:\n[%s]"),
 			      line, buff);
 		    G_warning(_("Line ignored as requested"));
 		    continue;	/* line is garbage */
@@ -600,7 +603,7 @@ int main(int argc, char *argv[])
 		else {
 		    G_fatal_error(_("Not enough data columns. "
 				    "Incorrect delimiter or column number? "
-				    "Found the following character(s) in row %d:\n[%s]"),
+				    "Found the following character(s) in row %lu:\n[%s]"),
 				  line, buff);
 		}
 	    }
@@ -613,21 +616,21 @@ int main(int argc, char *argv[])
 	       else {
 	     */
 	    if (1 != sscanf(tokens[ycol - 1], "%lf", &y))
-		G_fatal_error(_("Bad y-coordinate line %d column %d. <%s>"),
+		G_fatal_error(_("Bad y-coordinate line %lu column %d. <%s>"),
 			      line, ycol, tokens[ycol - 1]);
 	    if (y <= pass_south || y > pass_north) {
 		G_free_tokens(tokens);
 		continue;
 	    }
 	    if (1 != sscanf(tokens[xcol - 1], "%lf", &x))
-		G_fatal_error(_("Bad x-coordinate line %d column %d. <%s>"),
+		G_fatal_error(_("Bad x-coordinate line %lu column %d. <%s>"),
 			      line, xcol, tokens[xcol - 1]);
 	    if (x < region.west || x > region.east) {
 		G_free_tokens(tokens);
 		continue;
 	    }
 	    if (1 != sscanf(tokens[zcol - 1], "%lf", &z))
-		G_fatal_error(_("Bad z-coordinate line %d column %d. <%s>"),
+		G_fatal_error(_("Bad z-coordinate line %lu column %d. <%s>"),
 			      line, zcol, tokens[zcol - 1]);
 
 	    z = z * zscale;
@@ -704,7 +707,7 @@ int main(int argc, char *argv[])
 	}			/* while !EOF */
 
 	G_percent(1, 1, 1);	/* flush */
-	G_debug(2, "pass %d finished, %d coordinates in box", pass, count);
+	G_debug(2, "pass %d finished, %lu coordinates in box", pass, count);
 	count_total += count;
 
 
@@ -1052,9 +1055,9 @@ int main(int argc, char *argv[])
     G_write_history(outmap, &history);
 
 
-    sprintf(buff, _("%d points found in region."), count_total);
+    sprintf(buff, _("%lu points found in region."), count_total);
     G_done_msg(buff);
-    G_debug(1, "Processed %d lines.", line);
+    G_debug(1, "Processed %lu lines.", line);
 
     exit(EXIT_SUCCESS);
 
@@ -1065,7 +1068,8 @@ int main(int argc, char *argv[])
 int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 		int shell_style, int skipline, double zscale)
 {
-    int line, first, max_col;
+    unsigned long line;
+    int first, max_col;
     char buff[BUFFSIZE];
     double min_x, max_x, min_y, max_y, min_z, max_z;
     char **tokens;
@@ -1095,7 +1099,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	    if (skipline) {
 		G_warning(_("Not enough data columns. "
 			    "Incorrect delimiter or column number? "
-			    "Found the following character(s) in row %d:\n[%s]"),
+			    "Found the following character(s) in row %lu:\n[%s]"),
 			  line, buff);
 		G_warning(_("Line ignored as requested"));
 		continue;	/* line is garbage */
@@ -1103,7 +1107,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	    else {
 		G_fatal_error(_("Not enough data columns. "
 				"Incorrect delimiter or column number? "
-				"Found the following character(s) in row %d:\n[%s]"),
+				"Found the following character(s) in row %lu:\n[%s]"),
 			      line, buff);
 	    }
 	}
@@ -1116,7 +1120,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	   else {
 	 */
 	if (1 != sscanf(tokens[xcol - 1], "%lf", &x))
-	    G_fatal_error(_("Bad x-coordinate line %d column %d. <%s>"), line,
+	    G_fatal_error(_("Bad x-coordinate line %lu column %d. <%s>"), line,
 			  xcol, tokens[xcol - 1]);
 
 	if (first) {
@@ -1131,7 +1135,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	}
 
 	if (1 != sscanf(tokens[ycol - 1], "%lf", &y))
-	    G_fatal_error(_("Bad y-coordinate line %d column %d. <%s>"), line,
+	    G_fatal_error(_("Bad y-coordinate line %lu column %d. <%s>"), line,
 			  ycol, tokens[ycol - 1]);
 
 	if (first) {
@@ -1146,7 +1150,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	}
 
 	if (1 != sscanf(tokens[zcol - 1], "%lf", &z))
-	    G_fatal_error(_("Bad z-coordinate line %d column %d. <%s>"), line,
+	    G_fatal_error(_("Bad z-coordinate line %lu column %d. <%s>"), line,
 			  zcol, tokens[zcol - 1]);
 
 	if (first) {
@@ -1175,7 +1179,7 @@ int scan_bounds(FILE * fp, int xcol, int ycol, int zcol, char *fs,
 	fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
 		max_y, min_y, max_x, min_x, min_z * zscale, max_z * zscale);
 
-    G_debug(1, "Processed %d lines.", line);
+    G_debug(1, "Processed %lu lines.", line);
     G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
 	    max_y, min_y, max_x, min_x);
 
