@@ -73,6 +73,46 @@ static char *rules_list(void)
     return list;
 }
 
+static char *rules_descriptions(void)
+{
+    char path[GPATH_MAX];
+    struct Key_Value *kv;
+    int result_len = 0;
+    int result_max = 2000;
+    char *result = G_malloc(result_max);
+    int stat;
+    int i;
+
+    sprintf(path, "%s/etc/colors.desc", G_gisbase());
+    kv = G_read_key_value_file(path, &stat);
+    if (!kv || stat < 0)
+	return NULL;
+
+    for (i = 0; i < nrules; i++) {
+	const char *name = rules[i];
+	const char *desc = G_find_key_value(name, kv);
+	int len;
+
+	if (!desc)
+	    desc = "no description";
+
+	desc = _(desc);
+
+	len = strlen(name) + strlen(desc) + 2;
+	if (result_len + len >= result_max) {
+	    result_max = result_len + len + 1000;
+	    result = G_realloc(result, result_max);
+	}
+
+	sprintf(result + result_len, "%s;%s;", name, desc);
+	result_len += len;
+    }
+
+    G_free_key_value(kv);
+
+    return result;
+}
+
 static void list_rules(void)
 {
     int i;
@@ -152,36 +192,7 @@ int main(int argc, char **argv)
     opt.colr->required = NO;
     opt.colr->options = rules_list();
     opt.colr->description = _("Type of color table");
-    opt.colr->descriptions =
-	_("aspect;aspect oriented grey colors;"
-	  "aspectcolr;aspect oriented rainbow colors;"
-	  "bcyr;blue through cyan through yellow to red;"
-	  "bgyr;blue through green through yellow to red;"
-	  "byg;blue through yellow to green;"
-	  "byr;blue through yellow to red;"
-	  "curvature;for terrain curvatures (from v.surf.rst and r.slope.aspect curvature colors);"
-	  "differences;differences oriented colors;"
-	  "elevation;maps percentage ranges of raster values to elevation color ramp;"
-	  "etopo2;rainbow color ramp for the ETOPO2 2-minute Worldwide Bathymetry/Topography dataset;"
-	  "evi;enhanced vegetative index colors;"
-	  "grey;grey scale;"
-	  "grey1.0;grey scale for raster values between 0.0-1.0;"
-	  "grey255;grey scale for raster values bewtween 0-255;"
-	  "grey.eq;histogram-equalized grey scale;"
-	  "grey.log;histogram logarithmic transformed grey scale;"
-	  "gyr;green through yellow to red;"
-	  "ndvi;Normalized Difference Vegetation Index colors;"
-	  "population;color table covering human population classification breaks;"
-	  "rainbow;rainbow color table;"
-	  "ramp;color ramp;"
-	  "random;random color table;"
-	  "ryb;red through yellow to blue;"
-	  "ryg;red through yellow to green;"
-	  "sepia;yellowish-brown through to white;"
-	  "slope;r.slope.aspect-type slope colors for raster values 0-90;"
-	  "srtm;color palette for Shuttle Radar Topography Mission elevation values;"
-	  "terrain;global elevation color table covering -11000 to +8850m;"
-	  "wave;color wave;");
+    opt.colr->descriptions = rules_descriptions();
     opt.colr->guisection = _("Colors");
 
     flag.r = G_define_flag();
