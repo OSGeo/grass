@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -158,8 +157,8 @@ int main(int argc, char **argv)
 	  "aspectcolr;aspect oriented rainbow colors;"
 	  "bcyr;blue through cyan through yellow to red;"
 	  "bgyr;blue through green through yellow to red;"
-	  "byg;blue through yellow to green colors;"
-	  "byr;blue through yellow to red colors;"
+	  "byg;blue through yellow to green;"
+	  "byr;blue through yellow to red;"
 	  "curvature;for terrain curvatures (from v.surf.rst and r.slope.aspect curvature colors);"
 	  "differences;differences oriented colors;"
 	  "elevation;maps percentage ranges of raster values to elevation color ramp;"
@@ -170,14 +169,15 @@ int main(int argc, char **argv)
 	  "grey255;grey scale for raster values bewtween 0-255;"
 	  "grey.eq;histogram-equalized grey scale;"
 	  "grey.log;histogram logarithmic transformed grey scale;"
-	  "gyr;green through yellow to red colors;"
+	  "gyr;green through yellow to red;"
 	  "ndvi;Normalized Difference Vegetation Index colors;"
 	  "population;color table covering human population classification breaks;"
 	  "rainbow;rainbow color table;"
 	  "ramp;color ramp;"
 	  "random;random color table;"
-	  "ryb;red through yellow to blue colors;"
-	  "ryg;red through yellow to green colors;"
+	  "ryb;red through yellow to blue;"
+	  "ryg;red through yellow to green;"
+	  "sepia;yellowish-brown through to white;"
 	  "slope;r.slope.aspect-type slope colors for raster values 0-90;"
 	  "srtm;color palette for Shuttle Radar Topography Mission elevation values;"
 	  "terrain;global elevation color table covering -11000 to +8850m;"
