@@ -55,10 +55,6 @@ int main(int argc, char *argv[])
     gflag->description =
 	_("Display screen rectangle coordinates and resolution (west, east, north, south, ewres, nsres)");
 
-    cflag = G_define_flag();
-    cflag->key = 'c';
-    cflag->description = _("Display number of colors");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -79,9 +75,6 @@ int main(int argc, char *argv[])
 
     if (dflag->answer)
 	fprintf(stdout, "dimensions: %f %f\n", r - l, b - t);
-
-    if (cflag->answer)
-	fprintf(stdout, "colors: %d\n", R_get_num_colors());
 
     if (fflag->answer) {
 	R_get_window(&t, &b, &l, &r);

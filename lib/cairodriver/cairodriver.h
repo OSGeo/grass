@@ -71,8 +71,7 @@ extern void Cairo_Set_window(double, double, double, double);
 extern void Cairo_draw_line(double, double, double, double);
 extern void Cairo_draw_bitmap(int, int, int, const unsigned char *);
 extern void Cairo_draw_point(double, double);
-extern void Cairo_color(int);
-extern int Cairo_lookup_color(int, int, int);
+extern void Cairo_color_rgb(int, int, int);
 extern void Cairo_Erase(void);
 extern void Cairo_begin_scaled_raster(int, int[2][2], double[2][2]);
 extern int Cairo_scaled_raster(int, int,

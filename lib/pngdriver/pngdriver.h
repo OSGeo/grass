@@ -62,10 +62,9 @@ extern int PNG_scaled_raster(int, int, const unsigned char *,
 			     const unsigned char *);
 extern void PNG_Respond(void);
 extern void PNG_Set_window(double, double, double, double);
-extern void PNG_color(int);
+extern void PNG_color_rgb(int, int, int);
 extern void PNG_draw_bitmap(int, int, int, const unsigned char *);
 extern void PNG_draw_line(double, double, double, double);
 extern void PNG_draw_point(double, double);
-extern int PNG_lookup_color(int, int, int);
 
 #endif /* __PNGDRIVER_H__ */

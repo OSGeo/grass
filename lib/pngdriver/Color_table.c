@@ -19,8 +19,6 @@ static void set_color(int i, int red, int grn, int blu)
 
 static void init_colors_rgb(void)
 {
-    NCOLORS = 1 << 24;
-
     if (G_is_little_endian()) {
 	b_shift = 0;
 	g_shift = 8;
@@ -41,8 +39,6 @@ static void init_colors_indexed(void)
     int r, g, b;
     int i;
 
-    NCOLORS = 256;
-
     n_pixels = 0;
 
     if (png.has_alpha)
@@ -62,7 +58,7 @@ static void init_colors_indexed(void)
 	}
     }
 
-    while (n_pixels < NCOLORS)
+    while (n_pixels < 256)
 	set_color(n_pixels++, 0, 0, 0);
 
     for (i = 0; i < 256; i++) {
@@ -123,12 +119,8 @@ void get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 
 unsigned int get_color(int r, int g, int b, int a)
 {
-    return png.true_color ? get_color_rgb(r, g, b, a)
+    return png.true_color
+	? get_color_rgb(r, g, b, a)
 	: get_color_indexed(r, g, b, a);
 }
 
-int PNG_lookup_color(int r, int g, int b)
-{
-    return png.true_color ? ((r << 16) | (g << 8) | (b << 0))
-	: Red[r] + Grn[g] + Blu[b] + png.has_alpha;
-}

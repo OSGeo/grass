@@ -200,8 +200,6 @@ int PS_Graph_set(void)
 
     get_paper();
 
-    init_color_table();
-
     ps.outfp = fopen(file_name, ps.no_header ? "a" : "w");
 
     if (!ps.outfp)

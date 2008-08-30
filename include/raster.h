@@ -5,7 +5,6 @@ void R_flush(void);
 int R_open_driver(void);
 void R_close_driver(void);
 
-int R_get_num_colors(void);
 void R_set_window(double, double, double, double);
 void R_get_window(double *, double *, double *, double *);
 

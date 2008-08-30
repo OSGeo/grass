@@ -2,23 +2,10 @@
 #include "driver.h"
 #include "driverlib.h"
 
-static int lookup_color(int r, int g, int b)
-{
-    if (driver->lookup_color)
-	return (*driver->lookup_color) (r, g, b);
-    return 0;
-}
-
-static void color(int number)
-{
-    if (driver->color)
-	(*driver->color) (number);
-}
-
-
 void COM_Color_RGB(unsigned char r, unsigned char g, unsigned char b)
 {
-    color(lookup_color(r, g, b));
+    if (driver->color_rgb)
+	(*driver->color_rgb)(r, g, b);
 }
 
 void COM_Standard_color(int number)
