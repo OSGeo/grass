@@ -66,7 +66,14 @@ GIS_LOCK=$$
 export GIS_LOCK
 
 # Set the global grassrc file
-GISRCRC="$HOME/.grassrc7"
+if [ -n "$GRASS_BATCH_JOB" ] ; then
+	GISRCRC="$HOME/.grassrc7.`uname -n`"
+	if [ ! -f "$GISRCRC" ] ; then
+		GISRCRC="$HOME/.grassrc7"
+	fi
+else
+	GISRCRC="$HOME/.grassrc7"
+fi
 
 # Set PATH to GRASS bin, ETC to GRASS etc
 ETC="$GISBASE/etc"
