@@ -820,7 +820,7 @@ class AttributeManager(wx.Frame):
         splitterWin = wx.SplitterWindow(parent=self.manageLayerPage, id=wx.ID_ANY)
         self.manageLayerPage.AddPage(page=splitterWin,
                                      text=_("Layers of vector map")) # dummy page
-
+        
         #
         # list of layers
         #
@@ -864,8 +864,8 @@ class AttributeManager(wx.Frame):
 
         panelManage.SetSizer(manageSizer)
 
-        #splitterWin.SetMinimumPaneSize(20)
         splitterWin.SplitHorizontally(panelList, panelManage, 100) 
+        splitterWin.Fit()
 
     def __createLayerDesc(self, parent):
         """Create list of linked layers"""
