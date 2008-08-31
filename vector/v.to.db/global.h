@@ -21,7 +21,6 @@ extern struct value *Values;
 struct options
 {
     char *name;
-    char *mapset;
     int field;
     char *col[3];
     char *qcol;

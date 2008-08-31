@@ -41,7 +41,6 @@ static int srch_cat(const void *, const void *);
 
 int main(int argc, char *argv[])
 {
-    char *mapset;
     int i, j, nlines, type, field, cat;
     int fd;
 
@@ -115,11 +114,8 @@ int main(int argc, char *argv[])
     Vect_region_box(&window, &box);	/* T and B set to +/- PORT_DOUBLE_MAX */
 
     /* Open vector */
-    if ((mapset = G_find_vector2(vect_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), vect_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, vect_opt->answer, mapset);
+    Vect_open_old(&Map, vect_opt->answer, "");
 
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
@@ -134,17 +130,14 @@ int main(int argc, char *argv[])
     }
 
     /* Open raster */
-    if ((mapset = G_find_cell2(rast_opt->answer, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), rast_opt->answer);
-
-    if ((fd = G_open_cell_old(rast_opt->answer, mapset)) < 0)
+    if ((fd = G_open_cell_old(rast_opt->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), rast_opt->answer);
 
     out_type = G_get_raster_map_type(fd);
 
     /* TODO: Later possibly category labels */
     /* 
-       if ( G_read_cats (name, mapset, &RCats) < 0 )
+       if ( G_read_cats (name, "", &RCats) < 0 )
        G_fatal_error ( "Cannot read category file");
      */
 

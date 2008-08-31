@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
     static struct line_pnts *Points;
     struct line_cats *Cats;
     int type;
-    char *mapset;
     struct GModule *module;
 
 #ifdef FOR_GRASS7
@@ -198,12 +197,8 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
     Vect_set_open_level(1);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     Vect_set_fatal_error(GV_FATAL_PRINT);
     if (0 > Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In))) {

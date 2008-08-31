@@ -50,86 +50,73 @@
 #define SCIK2 1			/*100000 */
 #define SCIK3 1			/*100000 */
 
-double /* pargr */ ns_res, ew_res;
-double dmin, dmax, ertre;
-int KMAX2, KMIN, KMAX, totsegm, deriv, dtens, cv;
-struct Map_info Map;
-struct Map_info TreeMap, OverMap;
-struct Categories cats;
+static double /* pargr */ ns_res, ew_res;
+static double dmin, dmax, ertre;
+static int KMAX2, KMIN, KMAX, totsegm, deriv, dtens, cv;
+static struct Map_info Map;
+static struct Map_info TreeMap, OverMap;
 
-struct interp_params params;
-struct tree_info *info;
+static struct interp_params params;
+static struct tree_info *info;
 
-void clean_fatal_error();
+static void create_temp_files(void);
+static void clean(void);
 
-double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy = NULL,
+static double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy = NULL,
     *adxy = NULL;
-double /* error */ ertot, ertre, zminac, zmaxac, zmult;
+static double /* error */ ertot, ertre, zminac, zmaxac, zmult;
 struct multtree *root;
 
-int total = 0;
-int NPOINT = 0;
-int OUTRANGE = 0;
-int NPT = 0;
+static int NPOINT = 0;
 
-double DETERM;
-int NERROR, cond1, cond2;
-char fncdsm[32];
-char filnam[10];
+static int cond1, cond2;
 
-char *treefile = NULL;
-char *overfile = NULL;
+static char *treefile = NULL;
+static char *overfile = NULL;
 
-FILE *fdinp, *fdredinp, *fdzout, *fddxout, *fddyout, *fdxxout, *fdyyout,
-    *fd4, *fxyout, *fddevi = NULL, *fdcvdev = NULL;
+static FCELL *zero_array_cell;
 
-FCELL *zero_array_cell;
+static char *input;
+static int field;
+static char *zcol;
+static char *scol;
+static char *wheresql;
+static char *elev = NULL;
+static char *slope = NULL;
+static char *aspect = NULL;
+static char *pcurv = NULL;
+static char *tcurv = NULL;
+static char *mcurv = NULL;
+static char *maskmap = NULL;
+static char *devi = NULL;
+static char *cvdev = NULL;
+static int sdisk, disk, ddisk, sddisk;
+static FILE *Tmp_fd_z = NULL;
+static char *Tmp_file_z = NULL;
+static FILE *Tmp_fd_dx = NULL;
+static char *Tmp_file_dx = NULL;
+static FILE *Tmp_fd_dy = NULL;
+static char *Tmp_file_dy = NULL;
+static FILE *Tmp_fd_xx = NULL;
+static char *Tmp_file_xx = NULL;
+static FILE *Tmp_fd_yy = NULL;
+static char *Tmp_file_yy = NULL;
+static FILE *Tmp_fd_xy = NULL;
+static char *Tmp_file_xy = NULL;
 
-char *input;
-int field;
-char *zcol;
-char *scol;
-char *wheresql;
-char *mapset = NULL;
-char *mapset1 = NULL;
-char *elev = NULL;
-char *slope = NULL;
-char *aspect = NULL;
-char *pcurv = NULL;
-char *tcurv = NULL;
-char *mcurv = NULL;
-char *maskmap = NULL;
-char *redinp = NULL;
-char *devi = NULL;
-char *cvdev = NULL;
-int sdisk, disk, ddisk, sddisk;
-FILE *Tmp_fd_z = NULL;
-char *Tmp_file_z = NULL;
-FILE *Tmp_fd_dx = NULL;
-char *Tmp_file_dx = NULL;
-FILE *Tmp_fd_dy = NULL;
-char *Tmp_file_dy = NULL;
-FILE *Tmp_fd_xx = NULL;
-char *Tmp_file_xx = NULL;
-FILE *Tmp_fd_yy = NULL;
-char *Tmp_file_yy = NULL;
-FILE *Tmp_fd_xy = NULL;
-char *Tmp_file_xy = NULL;
+static double gmin, gmax, c1min, c1max, c2min, c2max, fi, rsm;
+static double xmin, xmax, ymin, ymax, zmin, zmax;
+static double theta, scalex;
 
-double gmin, gmax, c1min, c1max, c2min, c2max, fi, rsm;
-double xmin, xmax, ymin, ymax, zmin, zmax;
-double theta, scalex;
+static struct BM *bitmask;
+static struct Cell_head cellhd;
 
-struct BM *bitmask;
-struct Cell_head cellhd;
-
-char msg[1024];
-
+static int n_rows, n_cols;
 
 int main(int argc, char *argv[])
 {
     int per, npmin;
-    int ii, i, n_rows, n_cols;
+    int ii;
     double x_orig, y_orig, dnorm, deltx, delty, xm, ym;
     char dmaxchar[200];
     char dminchar[200];
@@ -514,10 +501,7 @@ int main(int argc, char *argv[])
     if ((info = MT_tree_info_new(root, functions, dmin, KMAX)) == NULL)
 	G_fatal_error(_("Cannot create tree info"));
 
-    if ((mapset = G_find_vector2(input, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), input);
-
-    open_check = Vect_open_old(&Map, input, mapset);
+    open_check = Vect_open_old(&Map, input, "");
     if (open_check < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), input);
     /*    if (open_check < 2)
@@ -572,82 +556,8 @@ int main(int argc, char *argv[])
     ertot = 0.;
     if (per)
 	G_message(_("Percent complete: "));
-    if (elev != NULL)
-	Tmp_file_z = G_tempfile();
-    if (slope != NULL)
-	Tmp_file_dx = G_tempfile();
-    if (aspect != NULL)
-	Tmp_file_dy = G_tempfile();
-    if (pcurv != NULL)
-	Tmp_file_xx = G_tempfile();
-    if (tcurv != NULL)
-	Tmp_file_yy = G_tempfile();
-    if (mcurv != NULL)
-	Tmp_file_xy = G_tempfile();
 
-    zero_array_cell = (FCELL *) G_malloc(sizeof(FCELL) * n_cols);
-    if (!zero_array_cell)
-	G_fatal_error(_("Not enough memory for zero_array_cell"));
-
-    for (i = 0; i < n_cols; i++) {
-	zero_array_cell[i] = (FCELL) 0;
-    }
-
-    if (Tmp_file_z != NULL) {
-	if (NULL == (Tmp_fd_z = fopen(Tmp_file_z, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_z);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_z)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
-    if (Tmp_file_dx != NULL) {
-	if (NULL == (Tmp_fd_dx = fopen(Tmp_file_dx, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_dx);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dx)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
-    if (Tmp_file_dy != NULL) {
-	if (NULL == (Tmp_fd_dy = fopen(Tmp_file_dy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_dy);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_dy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
-
-    if (Tmp_file_xx != NULL) {
-	if (NULL == (Tmp_fd_xx = fopen(Tmp_file_xx, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_xx);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xx)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
-    if (Tmp_file_yy != NULL) {
-	if (NULL == (Tmp_fd_yy = fopen(Tmp_file_yy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_yy);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_yy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
-    if (Tmp_file_xy != NULL) {
-	if (NULL == (Tmp_fd_xy = fopen(Tmp_file_xy, "w+")))
-	    G_fatal_error(_("Unable to open temporary file <%s>"),
-			  Tmp_file_xy);
-	for (i = 0; i < n_rows; i++) {
-	    if (!(fwrite(zero_array_cell, sizeof(FCELL), n_cols, Tmp_fd_xy)))
-		G_fatal_error(_("Not enough disk space -- cannot write files"));
-	}
-    }
+    create_temp_files();
 
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap, n_rows,
 		      n_cols, az, adx, ady, adxx, adyy, adxy, fi, KMAX2,
@@ -665,16 +575,18 @@ int main(int argc, char *argv[])
 	IL_vector_input_data_2d(&params, &Map, field, zcol, scol,
 				info, &xmin, &xmax,
 				&ymin, &ymax, &zmin, &zmax, &NPOINT, &dmax);
-    if (totsegm <= 0)
-	clean_fatal_error(_("Input failed"));
+    if (totsegm <= 0) {
+	clean();
+	G_fatal_error(_("Input failed"));
+    }
 
     /*Vect_set_release_support(&Map); */
     Vect_close(&Map);
 
     if (treefile != NULL) {
 	if (0 > Vect_open_new(&TreeMap, treefile, 0)) {
-	    sprintf(msg, _("Unable to open vector map <%s>"), treefile);
-	    clean_fatal_error(msg);
+	    clean();
+	    G_fatal_error(_("Unable to open vector map <%s>"), treefile);
 	}
 	Vect_hist_command(&TreeMap);
 
@@ -717,8 +629,10 @@ int main(int argc, char *argv[])
     }
 
     bitmask = IL_create_bitmask(&params);
-    if (totsegm <= 0)
-	clean_fatal_error(_("Input failed"));
+    if (totsegm <= 0) {
+	clean();
+	G_fatal_error(_("Input failed"));
+    }
 
     ertot = 0.;
     if (per)
@@ -726,9 +640,10 @@ int main(int argc, char *argv[])
     if (IL_interp_segments_2d(&params, info, info->root, bitmask,
 			      zmin, zmax, &zminac, &zmaxac, &gmin, &gmax,
 			      &c1min, &c1max, &c2min, &c2max, &ertot, totsegm,
-			      n_cols, dnorm) < 0)
-
-	clean_fatal_error(_("Interp_segmets failed"));
+			      n_cols, dnorm) < 0) {
+	clean();
+	G_fatal_error(_("Interp_segmets failed"));
+    }
 
     G_free_vector(az);
     if (cond1) {
@@ -743,9 +658,11 @@ int main(int argc, char *argv[])
     ii = IL_output_2d(&params, &cellhd, zmin, zmax, zminac, zmaxac, c1min,
 		      c1max, c2min, c2max, gmin, gmax, ertot, input, dnorm,
 		      dtens, 1, NPOINT);
-    if (ii < 0)
-	clean_fatal_error
-	    (_("Cannot write raster maps -- try to increase resolution"));
+    if (ii < 0) {
+	clean();
+	G_fatal_error(_("Cannot write raster maps -- try to increase resolution"));
+    }
+
     G_free(zero_array_cell);
     if (elev != NULL)
 	fclose(Tmp_fd_z);
@@ -762,8 +679,8 @@ int main(int argc, char *argv[])
 
     if (overfile != NULL) {
 	if (0 > Vect_open_new(&OverMap, overfile, 0)) {
-	    sprintf(msg, _("Unable to open vector map <%s>"), overfile);
-	    clean_fatal_error(msg);
+	    clean();
+	    G_fatal_error(_("Unable to open vector map <%s>"), overfile);
 	}
 	Vect_hist_command(&OverMap);
 
@@ -835,8 +752,10 @@ int print_tree(struct multtree *tree,
 	xarray[2] = xarray[3];
 	yarray[4] = yarray[0];
 	xarray[4] = xarray[0];
-	if (0 > Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, 5))
-	    clean_fatal_error(_("Out of memory"));
+	if (Vect_copy_xyz_to_pnts(Points, xarray, yarray, zarray, 5) < 0) {
+	    clean();
+	    G_fatal_error(_("Out of memory"));
+	}
 	Vect_write_line(Map, (unsigned int)type, Points, Cats);
 
 	G_free(Points);
@@ -844,33 +763,55 @@ int print_tree(struct multtree *tree,
     return 1;
 }
 
-
-
-void clean_fatal_error(char *str)
+static FILE *create_temp_file(const char *name, char **tmpname)
 {
-    if (Tmp_fd_z) {
-	fclose(Tmp_fd_z);
-	unlink(Tmp_file_z);
+    FILE *fp;
+    char *tmp;
+    int i;
+
+    if (!name)
+	return NULL;
+
+    *tmpname = tmp = G_tempfile();
+    fp = fopen(tmp, "w+");
+    if (!fp)
+	G_fatal_error(_("Unable to open temporary file <%s>"), tmpname);
+
+    for (i = 0; i < n_rows; i++) {
+	if (fwrite(zero_array_cell, sizeof(FCELL), n_cols, fp) != n_cols) {
+	    clean();
+	    G_fatal_error(_("Error writing temporary file <%s>"), tmpname);
+	}
     }
-    if (Tmp_fd_dx) {
-	fclose(Tmp_fd_dx);
-	unlink(Tmp_file_dx);
-    }
-    if (Tmp_fd_dy) {
-	fclose(Tmp_fd_dy);
-	unlink(Tmp_file_dy);
-    }
-    if (Tmp_fd_xx) {
-	fclose(Tmp_fd_xx);
-	unlink(Tmp_file_xx);
-    }
-    if (Tmp_fd_yy) {
-	fclose(Tmp_fd_yy);
-	unlink(Tmp_file_yy);
-    }
-    if (Tmp_fd_xy) {
-	fclose(Tmp_fd_xy);
-	unlink(Tmp_file_xy);
-    }
-    G_fatal_error(str);
+
+    return fp;
+}
+
+static void create_temp_files(void)
+{
+    zero_array_cell = (FCELL *) G_calloc(n_cols, sizeof(FCELL));
+
+    Tmp_fd_z  = create_temp_file(elev,   &Tmp_file_z );
+    Tmp_fd_dx = create_temp_file(slope,  &Tmp_file_dx);
+    Tmp_fd_dy = create_temp_file(aspect, &Tmp_file_dy);
+    Tmp_fd_xx = create_temp_file(pcurv,  &Tmp_file_xx);
+    Tmp_fd_yy = create_temp_file(tcurv,  &Tmp_file_yy);
+    Tmp_fd_xy = create_temp_file(mcurv,  &Tmp_file_xy);
+}
+
+static void clean(void)
+{
+    if (Tmp_fd_z)	fclose(Tmp_fd_z);
+    if (Tmp_fd_dx)	fclose(Tmp_fd_dx);
+    if (Tmp_fd_dy)	fclose(Tmp_fd_dy);
+    if (Tmp_fd_xx)	fclose(Tmp_fd_xx);
+    if (Tmp_fd_yy)	fclose(Tmp_fd_yy);
+    if (Tmp_fd_xy)	fclose(Tmp_fd_xy);
+
+    if (Tmp_file_z)	unlink(Tmp_file_z);
+    if (Tmp_file_dx)	unlink(Tmp_file_dx);
+    if (Tmp_file_dy)	unlink(Tmp_file_dy);
+    if (Tmp_file_xx)	unlink(Tmp_file_xx);
+    if (Tmp_file_yy)	unlink(Tmp_file_yy);
+    if (Tmp_file_xy)	unlink(Tmp_file_xy);
 }

@@ -44,15 +44,15 @@ int set_cat(CELL);
 int set_dcat(DCELL);
 
 /* support.c */
-int update_hist(char *, char *, char *, long);
-int update_colors(char *);
-int update_dbcolors(char *, char *, int, char *, int, char *);
-int update_labels(char *, char *, int, char *, int, int, char *);
-int update_cats(char *);
-int update_fcolors(char *raster_name);
+int update_hist(const char *, const char *, long);
+int update_colors(const char *);
+int update_dbcolors(const char *, const char *, int, const char *, int, const char *);
+int update_labels(const char *, const char *, int, const char *, int, int, const char *);
+int update_cats(const char *);
+int update_fcolors(const char *);
 
 /* vect2rast.c */
-int vect_to_rast(char *, char *, int, char *, int, int, double, int, char *,
-		 char *, int);
+int vect_to_rast(const char *, const char *, int, const char *, int, int,
+		 double, int, const char *, const char *, int);
 
 #endif

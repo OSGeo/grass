@@ -52,7 +52,6 @@ int main(int argc, char **argv)
 	*term_opt, *cost_opt;
     struct Flag *geo_f;
     struct GModule *module;
-    char *mapset;
     struct Map_info Map, Out;
     struct cat_list *catlist;
     CENTER *Centers = NULL;
@@ -181,13 +180,8 @@ int main(int argc, char **argv)
     else
 	geo = 0;
 
-    mapset = G_find_vector2(map->answer, NULL);
-
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map->answer, mapset);
+    Vect_open_old(&Map, map->answer, "");
 
     /* Build graph */
     Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,

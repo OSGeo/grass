@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     /*    struct Flag *d_flag; */
     struct Option *in_opt, *out_opt, *type_opt, *field_opt, *rules_opt,
 	*col_opt;
-    char *mapset, *key, *data, buf[1024];
+    char *key, *data, buf[1024];
     int rclelem, type, field;
     struct Map_info In, Out;
 
@@ -102,11 +102,8 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(in_opt->answer, out_opt->answer,
 				 GV_FATAL_EXIT);
 
-    mapset = G_find_vector2(in_opt->answer, NULL);
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
     Vect_copy_head_data(&In, &Out);

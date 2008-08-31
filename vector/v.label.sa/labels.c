@@ -42,7 +42,6 @@ static double buffer = 0.0;
 label_t *labels_init(struct params *p, int *n_labels)
 {
     label_t *labels;
-    char *mapset;
     int legal_types, layer, i = 0, error, sql_len;
     size_t label_sz;
     struct field_info *fi;
@@ -54,13 +53,8 @@ label_t *labels_init(struct params *p, int *n_labels)
     fprintf(stderr, "Initialising labels...");
     legal_types = Vect_option_to_types(p->type);
 
-    /* open vector */
-    mapset = G_find_vector2(p->map->answer, NULL);
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), p->map->answer);
-
     /* open vector for read only */
-    Vect_open_old(&Map, p->map->answer, mapset);
+    Vect_open_old(&Map, p->map->answer, "");
 
     label_sz = Vect_get_num_primitives(&Map, legal_types);
 

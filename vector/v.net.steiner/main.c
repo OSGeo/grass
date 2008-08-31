@@ -326,7 +326,6 @@ int main(int argc, char **argv)
 	*term_opt, *nsp_opt;
     struct Flag *geo_f;
     struct GModule *module;
-    char *mapset;
     struct Map_info Map, Out;
     int *testnode;		/* array all nodes: 1 - should be tested as Steiner, 
 				 * 0 - no need to test (unreachable or terminal) */
@@ -422,13 +421,8 @@ int main(int argc, char **argv)
 
     Vect_check_input_output_name(map->answer, output->answer, GV_FATAL_EXIT);
 
-    mapset = G_find_vector2(map->answer, NULL);
-
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map->answer, mapset);
+    Vect_open_old(&Map, map->answer, "");
     nnodes = Vect_get_num_nodes(&Map);
 
     /* Create list of terminals based on list of categories */

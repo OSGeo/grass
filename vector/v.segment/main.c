@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     struct Option *in_opt, *out_opt;
     struct Option *lfield_opt, *file_opt;
     struct GModule *module;
-    char *mapset, buf[2000];
+    char buf[2000];
     struct Map_info In, Out;
     struct line_cats *LCats, *SCats;
     struct line_pnts *LPoints, *SPoints, *PlPoints;
@@ -94,11 +94,8 @@ int main(int argc, char **argv)
     }
 
     /* Open input lines */
-    mapset = G_find_vector2(in_opt->answer, NULL);
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     /* Open output segments */
     Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));

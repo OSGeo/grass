@@ -114,10 +114,6 @@ int parse_command_line(int argc, char *argv[])
     options.total = flags.t->answer;
 
     options.name = parms.vect->answer;
-    options.mapset = G_find_vector2(options.name, NULL);
-
-    if (options.mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), options.name);
 
     options.type = Vect_option_to_types(parms.type);
     options.field = atoi(parms.field->answer);

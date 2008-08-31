@@ -14,8 +14,7 @@ static int nlines = 50;
 
 #define WDTH 5
 
-int what(double east, double north, double maxdist, int width,
-	 int mwidth, int topo, int showextra)
+int what(double east, double north, double maxdist, int topo, int showextra)
 {
     int type;
     char east_buf[40], north_buf[40];
@@ -75,11 +74,9 @@ int what(double east, double north, double maxdist, int width,
 	    *str = 0;
 
 	if (line + area > 0 || G_verbose() >= G_verbose_std()) {
-	    /* fprintf(stdout, "Map: %*s \nMapset: %-*s\n", width, Map[i].name, mwidth, Map[i].mapset); */
 	    fprintf(stdout, "\nMap: %s \nMapset: %s\n", Map[i].name,
 		    Map[i].mapset);
 	    if (notty)
-		/* fprintf(stderr, "Map: %*s \nMapset: %-*s\n", width, Map[i].name, mwidth, Map[i].mapset); */
 		fprintf(stderr, "\nMap: %s \nMapset: %s\n", Map[i].name,
 			Map[i].mapset);
 	}

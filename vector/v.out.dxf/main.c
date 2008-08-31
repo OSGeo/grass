@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 {
     int nlines;
     double textsize;
-    char *mapset, *dxf_file;
+    char *dxf_file;
     struct Map_info In;
     struct GModule *module;
     struct Option *input, *output;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     output = G_define_option();
     output->key = "output";
     output->type = TYPE_STRING;
-    output->required = NO;
+    output->required = YES;
     output->multiple = NO;
     output->gisprompt = "new_file,file,output";
     output->description = _("DXF output file");
@@ -67,24 +67,10 @@ int main(int argc, char *argv[])
     overwrite = module->overwrite;
 
     /* open input vector */
-    if ((mapset = G_find_vector2(input->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), input->answer);
-
-    if (output->answer)
-	dxf_file = G_store(output->answer);
-    else {
-	char fname[GNAME_MAX];
-	char fmapset[GMAPSET_MAX];
-
-	dxf_file = G_malloc(strlen(input->answer) + 5);
-	if (G__name_is_fully_qualified(input->answer, fname, fmapset))
-	    sprintf(dxf_file, "%s.dxf", fname);
-	else
-	    sprintf(dxf_file, "%s.dxf", input->answer);
-    }
+    dxf_file = G_store(output->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&In, input->answer, mapset);
+    Vect_open_old(&In, input->answer, "");
 
     dxf_open(dxf_file);		/* open output */
 

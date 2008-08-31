@@ -35,7 +35,6 @@ int main(int argc, char **argv)
     struct Flag *cats_flag;
     struct Map_info In, Out, Points;
 
-    char *mapset;
     int afield, nfield;
     int act;
     double thresh;
@@ -136,12 +135,8 @@ int main(int argc, char **argv)
     }
 
     /* open input map */
-    mapset = G_find_vector2(input->answer, "");
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), input->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, input->answer, mapset);
+    Vect_open_old(&In, input->answer, "");
 
     if (act == TOOL_NODES || act == TOOL_CONNECT) {	/* nodes */
 	int is3d;
@@ -151,13 +146,9 @@ int main(int argc, char **argv)
 
 	if (act == TOOL_CONNECT) {
 	    /* open points map */
-	    mapset = G_find_vector2(points->answer, "");
-	    if (mapset == NULL)
-		G_fatal_error(_("Vector map <%s> not found"), points->answer);
-
 	    Vect_set_open_level(1);
 	    Vect_set_fatal_error(GV_FATAL_PRINT);
-	    if (Vect_open_old(&Points, points->answer, mapset) == -1) {
+	    if (Vect_open_old(&Points, points->answer, "") == -1) {
 		Vect_close(&In);
 		G_fatal_error(_("Unable to open vector map <%s>"),
 			      points->answer);

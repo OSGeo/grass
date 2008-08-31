@@ -29,7 +29,6 @@ int main(int argc, char **argv)
     struct Option *max_dist, *file_opt;
     struct Flag *geo_f, *segments_f;
     struct GModule *module;
-    char *mapset;
     struct Map_info In, Out;
     int type, afield, nfield, geo;
     double maxdist;
@@ -125,13 +124,8 @@ int main(int argc, char **argv)
     Vect_check_input_output_name(input_opt->answer, output_opt->answer,
 				 GV_FATAL_EXIT);
 
-    mapset = G_find_vector2(input_opt->answer, NULL);
-
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), input_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, input_opt->answer, mapset);
+    Vect_open_old(&In, input_opt->answer, "");
 
     Vect_set_fatal_error(GV_FATAL_PRINT);
     if (1 > Vect_open_new(&Out, output_opt->answer, Vect_is_3d(&In))) {

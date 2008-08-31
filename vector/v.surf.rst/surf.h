@@ -33,4 +33,3 @@
 #define ZMULT   "1.0"
 
 int print_tree(struct multtree *, double, double, struct Map_info *);
-void clean_fatal_error(char *);

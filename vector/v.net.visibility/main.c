@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *input, *output;	/* The input map */
     struct Option *coor, *ovis;
-    char *mapset;
 
     struct Point *points;
     struct Line *lines;
@@ -73,14 +72,8 @@ int main(int argc, char *argv[])
 
     Vect_set_open_level(2);
 
-    mapset = G_find_vector2(input->answer, NULL);	/* finds the map */
-
-    if (mapset == NULL)
-	G_fatal_error("Vector map <%s> not found", input->answer);
-
-    if (Vect_open_old(&in, input->answer, mapset) < 1)	/* opens the map */
-	G_fatal_error(_("Unable to open vector map <%s>"),
-		      G_fully_qualified_name(input->answer, mapset));
+    if (Vect_open_old(&in, input->answer, "") < 1)	/* opens the map */
+	G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
 
     if (Vect_open_new(&out, output->answer, WITHOUT_Z) < 0) {
 	Vect_close(&in);
@@ -88,17 +81,13 @@ int main(int argc, char *argv[])
     }
 
     if (ovis->answer != NULL) {
-	mapset = G_find_vector2(ovis->answer, NULL);
-
-	if (Vect_open_old(&vis, ovis->answer, mapset) < 1)
-	    G_fatal_error(_("Unable to open vector map <%s>"),
-			  G_fully_qualified_name(ovis->answer, mapset));
+	if (Vect_open_old(&vis, ovis->answer, "") < 1)
+	    G_fatal_error(_("Unable to open vector map <%s>"), ovis->answer);
 
 	if (Vect_copy_map_lines(&vis, &out) > 0)
 	    G_fatal_error(_("Unable to copy elements from vector map <%s>"),
-			  G_fully_qualified_name(ovis->answer, mapset));
+			  ovis->answer);
     }
-
 
     if (G_projection() == PROJECTION_LL)
 	G_warning(_("Lat-long projection"));

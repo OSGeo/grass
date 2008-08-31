@@ -40,10 +40,8 @@ int main(int argc, char **argv)
     struct Option *opt1, *coords_opt, *maxdistance;
     struct Cell_head window;
     struct GModule *module;
-    char *mapset;
-    char *str;
     char buf[2000];
-    int i, j, level, width = 0, mwidth = 0, ret;
+    int i, level, ret;
     double xval, yval, xres, yres, maxd, x;
     double EW_DIST1, EW_DIST2, NS_DIST1, NS_DIST2;
     char nsres[30], ewres[30];
@@ -132,25 +130,8 @@ int main(int argc, char **argv)
 
 	Map = (struct Map_info *)G_malloc(nvects * sizeof(struct Map_info));
 
-	width = mwidth = 0;
 	for (i = 0; i < nvects; i++) {
-	    str = strchr(vect[i], '@');
-	    if (str)
-		j = str - vect[i];
-	    else
-		j = strlen(vect[i]);
-	    if (j > width)
-		width = j;
-
-	    mapset = G_find_vector2(vect[i], "");
-	    if (!mapset)
-		G_fatal_error(_("Vector map <%s> not found"), vect[i]);
-
-	    j = strlen(mapset);
-	    if (j > mwidth)
-		mwidth = j;
-
-	    level = Vect_open_old(&Map[i], vect[i], mapset);
+	    level = Vect_open_old(&Map[i], vect[i], "");
 	    if (level < 2)
 		G_fatal_error(_("You must build topology on vector map <%s>"),
 			      vect[i]);
@@ -167,7 +148,7 @@ int main(int argc, char **argv)
 	while (fgets(buf, sizeof(buf), stdin) != NULL) {
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
-		what(xval, yval, maxd, width, mwidth, topo_flag->answer,
+		what(xval, yval, maxd, topo_flag->answer,
 		     printattributes->answer);
 	    }
 	    else {
@@ -181,8 +162,7 @@ int main(int argc, char **argv)
 	for (i = 0; coords_opt->answers[i] != NULL; i += 2) {
 	    xval = atof(coords_opt->answers[i]);
 	    yval = atof(coords_opt->answers[i + 1]);
-	    what(xval, yval, maxd, width, mwidth, topo_flag->answer,
-		 printattributes->answer);
+	    what(xval, yval, maxd, topo_flag->answer, printattributes->answer);
 	}
     }
 

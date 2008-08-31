@@ -42,7 +42,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     double p1, p2, numbers[1000], numbers2[1000];
     int (*rng) ();
     int i, verbose;
@@ -150,11 +149,8 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     /* Open input */
-    if ((mapset = G_find_vector2(parm.in->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), parm.in->answer);
-    }
     Vect_set_open_level(2);
-    Vect_open_old(&In, parm.in->answer, mapset);
+    Vect_open_old(&In, parm.in->answer, "");
 
     /* Open output */
     Vect_open_new(&Out, parm.out->answer, 0);	/* TODO add z support ? */

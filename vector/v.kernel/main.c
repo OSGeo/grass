@@ -82,8 +82,6 @@ int main(int argc, char **argv)
     struct Option *stddev_opt, *dsize_opt, *segmax_opt, *netmax_opt,
 	*multip_opt;
     struct Flag *flag_o, *flag_q;
-
-    char *mapset;
     struct Map_info In, Net, Out;
     int fdout = 0, maskfd = 0;
     int row, col;
@@ -197,11 +195,8 @@ int main(int argc, char **argv)
 	      sigma, window.ew_res, window.rows, window.cols);
 
     /* Open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
 
     if (net_opt->answer) {
@@ -213,12 +208,8 @@ int main(int argc, char **argv)
 	net = 1;
 	dimension = 1.;
 	/* Open input network */
-	if ((mapset = G_find_vector2(net_opt->answer, "")) == NULL)
-	    G_fatal_error(_("Network input map <%s> not found"),
-			  net_opt->answer);
-
 	Vect_set_open_level(2);
-	Vect_open_old(&Net, net_opt->answer, mapset);
+	Vect_open_old(&Net, net_opt->answer, "");
 	Vect_net_build_graph(&Net, GV_LINES, 0, 0, NULL, NULL, NULL, 0, 0);
 
 	if (!flag_q->answer) {

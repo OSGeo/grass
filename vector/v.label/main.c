@@ -37,7 +37,6 @@ int main(int argc, char **argv)
     int cat, direction;
     double x, y, linlength, lablength, size, space, ldist;
     double rotate, rot;
-    char *mapset;
     char *txt, buf[2000];
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -265,11 +264,7 @@ int main(int argc, char **argv)
     }
 
     /* open vector */
-    mapset = G_find_vector2(Vectfile->answer, NULL);
-    if (mapset == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), Vectfile->answer);
-
-    Vect_open_old(&Map, Vectfile->answer, mapset);
+    Vect_open_old(&Map, Vectfile->answer, "");
 
     /* open database */
     field = atoi(Fieldopt->answer);
