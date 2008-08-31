@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     int aline, nalines;
     int type[2], field[2];
     int **cats, *ncats, nfields, *fields;
-    char *mapset[2], *pre[2];
+    char *pre[2];
     struct GModule *module;
     struct Option *in_opt[2], *out_opt, *type_opt[2], *field_opt[2],
 	*operator_opt;
@@ -183,14 +183,8 @@ int main(int argc, char *argv[])
 	Vect_check_input_output_name(in_opt[input]->answer, out_opt->answer,
 				     GV_FATAL_EXIT);
 
-	if ((mapset[input] =
-	     G_find_vector2(in_opt[input]->answer, NULL)) == NULL) {
-	    G_fatal_error(_("Vector map <%s> not found"),
-			  in_opt[input]->answer);
-	}
-
 	Vect_set_open_level(2);
-	Vect_open_old(&(In[input]), in_opt[input]->answer, mapset[input]);
+	Vect_open_old(&(In[input]), in_opt[input]->answer, "");
     }
 
     /* Read field info */

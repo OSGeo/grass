@@ -14,8 +14,7 @@
 #include "local.h"
 
 
-int update_hist(char *raster_name, char *vector_name,
-		char *vector_mapset, long scale)
+int update_hist(const char *raster_name, const char *vector_name, long scale)
 {
     struct History hist;
 
@@ -28,8 +27,7 @@ int update_hist(char *raster_name, char *vector_name,
     strcpy(hist.title, raster_name);
 
     /* store information from digit file into history */
-    sprintf(hist.datsrc_1, "Vector Map: %s in mapset %s", vector_name,
-	    vector_mapset);
+    sprintf(hist.datsrc_1, "Vector Map: %s", vector_name);
     sprintf(hist.datsrc_2, "Original scale from vector map: 1:%ld", scale);	/* 4.0 */
 
     /* store command line options */
@@ -39,7 +37,7 @@ int update_hist(char *raster_name, char *vector_name,
 }
 
 
-int update_colors(char *raster_name)
+int update_colors(const char *raster_name)
 {
     struct Range range;
     struct Colors colors;
@@ -54,7 +52,7 @@ int update_colors(char *raster_name)
 }
 
 
-int update_fcolors(char *raster_name)
+int update_fcolors(const char *raster_name)
 {
     struct FPRange range;
     struct Colors colors;
@@ -69,22 +67,21 @@ int update_fcolors(char *raster_name)
 }
 
 
-int update_cats(char *raster_name)
+int update_cats(const char *raster_name)
 {
     /* TODO: maybe attribute transfer from vector map? 
        Use G_set_raster_cat() somewhere */
 
     struct Categories cats;
 
-    G_strip(raster_name);
     G_init_cats((CELL) 0, raster_name, &cats);
     G_write_cats(raster_name, &cats);
 
     return 0;
 }
 
-int update_dbcolors(char *rast_name, char *vector_map, int field,
-		    char *rgb_column, int is_fp, char *attr_column)
+int update_dbcolors(const char *rast_name, const char *vector_map, int field,
+		    const char *rgb_column, int is_fp, const char *attr_column)
 {
     int i;
 
@@ -119,7 +116,7 @@ int update_dbcolors(char *rast_name, char *vector_map, int field,
     G_init_colors(&colors);
 
     /* open vector map and database driver */
-    Vect_open_old(&Map, vector_map, G_find_vector2(vector_map, ""));
+    Vect_open_old(&Map, vector_map, "");
 
     db_CatValArray_init(&cvarr);
     if ((Fi = Vect_get_field(&Map, field)) == NULL)
@@ -231,8 +228,9 @@ int update_dbcolors(char *rast_name, char *vector_map, int field,
 
 
 /* add labels to raster cells */
-int update_labels(char *rast_name, char *vector_map, int field,
-		  char *label_column, int use, int val, char *attr_column)
+int update_labels(const char *rast_name, const char *vector_map, int field,
+		  const char *label_column, int use, int val,
+		  const char *attr_column)
 {
     int i;
     int fd;
@@ -414,15 +412,12 @@ int update_labels(char *rast_name, char *vector_map, int field,
 	    struct Cell_stats stats;
 	    CELL n;
 	    RASTER_MAP_TYPE map_type;
-	    char *mapset;
 	    long count;
 
-	    mapset = G_mapset();
-
-	    if (!(fd = G_open_cell_old(rast_name, mapset)))
+	    if (!(fd = G_open_cell_old(rast_name, G_mapset())))
 		G_fatal_error(_("Unable to open raster map <%s>"), rast_name);
 
-	    map_type = G_raster_map_type(rast_name, mapset);
+	    map_type = G_raster_map_type(rast_name, G_mapset());
 
 	    if (!(rowbuf = G_allocate_raster_buf(map_type)))
 		G_fatal_error(_("Cannot allocate memory for row buffer"));
@@ -456,12 +451,10 @@ int update_labels(char *rast_name, char *vector_map, int field,
 	{
 	    DCELL fmin, fmax;
 	    RASTER_MAP_TYPE map_type;
-	    char *mapset;
 	    int i;
 	    char msg[64];
 
-	    mapset = G_mapset();
-	    map_type = G_raster_map_type(rast_name, mapset);
+	    map_type = G_raster_map_type(rast_name, G_mapset());
 	    G_set_raster_cats_title("Degrees", &rast_cats);
 
 	    for (i = 1; i <= 360; i++) {

@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt;
     struct Option *method_opt, *size_opt;
-    char *mapset;
     struct Map_info In;
     double radius;
     struct ilist *List;
@@ -73,13 +72,8 @@ int main(int argc, char *argv[])
     radius = atof(size_opt->answer) / 2;
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found in the current mapset"),
-		      in_opt->answer);
-    }
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     G_get_set_window(&region);
     nrows = G_window_rows();

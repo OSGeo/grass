@@ -44,7 +44,6 @@ int scan_cats(char *, long *, long *);
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     int i, nsites, verbose, warn_once = 0;
     int all;
     long x, y;
@@ -124,11 +123,8 @@ int main(int argc, char **argv)
     verbose = (flag.q->answer == (char)NULL) ? 1 : 0;
 
     /* Open input */
-    if ((mapset = G_find_vector2(parm.input->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), parm.input->answer);
-    }
     Vect_set_open_level(2);
-    Vect_open_old(&Map, parm.input->answer, mapset);
+    Vect_open_old(&Map, parm.input->answer, "");
 
     /* Read attributes */
     Fi = Vect_get_field(&Map, 1);

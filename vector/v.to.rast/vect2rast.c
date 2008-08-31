@@ -6,14 +6,14 @@
 #include "local.h"
 
 
-int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
-		 int nrows, int use, double value, int value_type,
-		 char *rgbcolumn, char *labelcolumn, int ftype)
+int vect_to_rast(const char *vector_map, const char *raster_map, int field,
+		 const char *column, int nrows, int use, double value,
+		 int value_type, const char *rgbcolumn, const char *labelcolumn,
+		 int ftype)
 {
 #ifdef DEBUG
     int i;
 #endif
-    char *vector_mapset;
     struct Map_info Map;
     struct line_pnts *Points;
     int fd;			/* for raster map */
@@ -33,12 +33,9 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
 
     nareas = 0;
 
-    if ((vector_mapset = G_find_vector2(vector_map, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), vector_map);
-
     G_debug(1, "Loading vector information...");
     Vect_set_open_level(2);
-    Vect_open_old(&Map, vector_map, vector_mapset);
+    Vect_open_old(&Map, vector_map, "");
 
     if ((use == USE_Z) && !(Vect_is_3d(&Map)))
 	G_fatal_error(_("Vector map <%s> is not 3D"),
@@ -201,7 +198,7 @@ int vect_to_rast(char *vector_map, char *raster_map, int field, char *column,
 
     G_debug(1, "Creating support files for raster map...");
     G_close_cell(fd);
-    update_hist(raster_map, vector_map, vector_mapset, Map.head.orig_scale);
+    update_hist(raster_map, vector_map, Map.head.orig_scale);
 
     /* colors */
     if (rgbcolumn) {

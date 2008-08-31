@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     opt.input->description = _("Name of input DXF file");
 
     opt.output = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt.output->required = NO;
+    opt.output->required = YES;
 
     opt.layers = G_define_option();
     opt.layers->key = "layers";
@@ -136,40 +136,9 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Layer number: layer name / GRASS compliant name"));
     }
     else {
-	/* make vector map name SQL compliant */
-	if (opt.output->answer) {
-	    output = G_store(opt.output->answer);
-	}
-	else {
-	    char *p, *p2;
-
-	    if ((p = G_rindex(dxf->name, '/')))
-		p++;
-	    else
-		p = dxf->name;
-	    output = G_store(p);
-	    if ((p2 = G_rindex(p, '.')))
-		output[p2 - p] = 0;
-	}
-	{
-	    char *p;
-
-	    for (p = output; *p; p++)
-		if (*p == '.')
-		    *p = '_';
-	}
+	output = G_store(opt.output->answer);
 
 	layers = opt.layers->answers;
-
-	if (!G_check_overwrite(argc, argv) &&
-	    G_find_vector2(output, G_mapset())) {
-	    G_fatal_error(_("Option <%s>: <%s> exists."), opt.output->key,
-			  output);
-	}
-
-	if (Vect_legal_filename(output) < 0)
-	    G_fatal_error(_("Use '%s' option to change vector map name"),
-			  opt.output->key);
 
 	/* create vector map */
 	Map = (struct Map_info *)G_malloc(sizeof(struct Map_info));

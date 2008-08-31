@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 	*xscale, *yscale, *zscale, *zrot, *columns, *table, *field;
     struct Flag *quiet_flag, *tozero_flag, *shift_flag, *print_mat_flag;
 
-    char *mapset, mon[4], date[40], buf[1000];
+    char mon[4], date[40], buf[1000];
     struct Map_info Old, New;
     int day, yr;
     BOUND_BOX box;
@@ -244,10 +244,7 @@ int main(int argc, char *argv[])
     }
 
     /* open vector maps */
-    if ((mapset = G_find_vector2(vold->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), vold->answer);
-
-    Vect_open_old(&Old, vold->answer, mapset);
+    Vect_open_old(&Old, vold->answer, "");
 
     Vect_open_new(&New, vnew->answer, Vect_is_3d(&Old) || zshift->answer);
 

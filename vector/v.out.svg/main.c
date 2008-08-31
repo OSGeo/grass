@@ -46,7 +46,6 @@ int main(int argc, char *argv[])
     int do_attr = 0, attr_cols[8], attr_size = 0, db_open = 0, cnt = 0;
 
     double width, radius;
-    char *mapset;
     struct Option *in_opt, *out_opt, *prec_opt, *type_opt, *attr_opt,
 	*field_opt;
     struct GModule *module;
@@ -123,12 +122,8 @@ int main(int argc, char *argv[])
     field = atoi(field_opt->answer);
 
     /* open input vector */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     /* open db-driver to attribs */
     db_init_string(&dbstring);

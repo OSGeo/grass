@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
     struct Option *map_opt, *type_opt, *field_opt, *col_opt, *where_opt,
 	*percentile;
     struct Flag *shell_flag, *extended;
-    char *mapset;
     struct Map_info Map;
     struct field_info *Fi;
     dbDriver *Driver;
@@ -112,11 +111,8 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     /* open input vector */
-    if ((mapset = G_find_vector2(map_opt->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), map_opt->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&Map, map_opt->answer, mapset);
+    Vect_open_old(&Map, map_opt->answer, "");
 
     /* Check if types are compatible */
     if ((otype & GV_POINTS) && ((otype & GV_LINES) || (otype & GV_AREA)))

@@ -50,7 +50,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     double scale, predicted, actual;
     INTERP_TYPE method = UNKNOWN;
     int fdrast;			/* file descriptor for raster map is int */
@@ -143,16 +142,10 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     /* Open input */
-    if ((mapset = G_find_vector2(parm.input->answer, "")) == NULL)
-	G_fatal_error(_("Vector map <%s> not found"), parm.input->answer);
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, parm.input->answer, mapset);
+    Vect_open_old(&In, parm.input->answer, "");
 
-    if ((mapset = G_find_cell2(parm.rast->answer, "")) == NULL)
-	G_fatal_error(_("Raster map <%s> not found"), parm.rast->answer);
-
-    if ((fdrast = G_open_cell_old(parm.rast->answer, mapset)) < 0)
+    if ((fdrast = G_open_cell_old(parm.rast->answer, "")) < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), parm.rast->answer);
 
     /* Read attributes */

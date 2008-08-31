@@ -26,7 +26,6 @@
 int main(int argc, char *argv[])
 {
     struct Map_info Map;
-    char *mapset;
     struct GModule *module;
     struct Option *map, *organization, *date, *person, *map_name, *map_date,
 	*scale, *comment, *zone, *thresh, *cmdhist;
@@ -125,13 +124,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if ((mapset = G_find_vector2(map->answer, G_mapset())) == NULL)
-	G_fatal_error(_("Vector map <%s> not found in the current mapset"),
-		      map->answer);
-
     Vect_set_open_level(2);
-
-    if (1 > Vect_open_old(&Map, map->answer, mapset))
+    if (Vect_open_old(&Map, map->answer, "") < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
     /* modify 'head' file */

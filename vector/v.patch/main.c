@@ -295,8 +295,7 @@ int main(int argc, char *argv[])
 	int add_cat;
 
 	in_name = old->answers[i++];
-	G_important_message(_("Patching vector map <%s@%s>..."), in_name,
-			    G_find_vector2(in_name, ""));
+	G_important_message(_("Patching vector map <%s>..."), in_name);
 	if (bbox_name)
 	    Vect_set_open_level(2);	/* needed for Vect_map_box() */
 	else

@@ -31,7 +31,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     struct Flag *reg_flag, *line_flag;
     struct Option *in_opt, *out_opt;
     struct GModule *module;
@@ -72,12 +71,8 @@ int main(int argc, char **argv)
     Cats = Vect_new_cats_struct();
 
     /* open files */
-    if ((mapset = G_find_vector2(in_opt->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), in_opt->answer);
-    }
-
     Vect_set_open_level(2);
-    Vect_open_old(&In, in_opt->answer, mapset);
+    Vect_open_old(&In, in_opt->answer, "");
 
     /* check if we have a 3D input points map */
     mode3d = 0;

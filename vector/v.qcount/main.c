@@ -43,7 +43,6 @@
 
 int main(int argc, char **argv)
 {
-    char *mapset;
     double radius;
     double fisher, david, douglas, lloyd, lloydip, morisita;
     int i, nquads, *counts;
@@ -110,11 +109,8 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     /* Open input */
-    if ((mapset = G_find_vector2(parm.input->answer, "")) == NULL) {
-	G_fatal_error(_("Vector map <%s> not found"), parm.input->answer);
-    }
     Vect_set_open_level(2);
-    Vect_open_old(&Map, parm.input->answer, mapset);
+    Vect_open_old(&Map, parm.input->answer, "");
 
     /* Get the quadrats */
     G_message(_("Finding quadrats..."));
