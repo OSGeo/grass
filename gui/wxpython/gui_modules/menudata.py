@@ -1703,6 +1703,10 @@ class Data:
                                  "i.ifft"),
                                 )
                          ),
+                        (_("Atmospheric correction"),
+                         _("Performs atmospheric correction using the 6S algorithm."),
+                         "self.OnMenuCmd",
+                         "i.atcorr"),
                         ("","","", ""),
                         (_("Report and statistics"), (
 
