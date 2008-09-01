@@ -649,17 +649,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.first = False
 
         if ltype != 'group':
-            if lopacity:
-                opacity = int(lopacity * 100)
-            else:
-                opacity = 100
-            
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
                 render = False
                 name = utils.GetLayerNameFromCmd(lcmd)
             else:
                 cmd = []
+                if ltype == 'command' and lname:
+                    for c in lname.split(';'):
+                        cmd.append(c.split(' '))
+                
                 render = False
                 name = None
 
@@ -695,7 +694,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             maplayer = self.Map.AddLayer(pos=pos,
                                          type=ltype, command=self.GetPyData(layer)[0]['cmd'], name=name,
                                          l_active=checked, l_hidden=False,
-                                         l_opacity=opacity, l_render=render)
+                                         l_opacity=lopacity, l_render=render)
             self.GetPyData(layer)[0]['maplayer'] = maplayer
 
             # run properties dialog if no properties given
@@ -718,13 +717,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if lname:
             if ltype == 'group':
                 self.SetItemText(layer, lname)
-            elif ltype != 'command':
+            elif ltype == 'command':
+                ctrl.SetValue(lname)
+            else:
                 name = lname + ' (opacity: ' + \
                        str(self.GetPyData(layer)[0]['maplayer'].GetOpacity()) + '%)'
                 self.SetItemText(layer, name)
-            else:
-                ctrl.SetValue(lname)
-            
+                
         # updated progress bar range (mapwindow statusbar)
         if checked is True:
             self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))

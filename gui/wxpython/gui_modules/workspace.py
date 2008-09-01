@@ -235,7 +235,7 @@ class ProcessWorkspaceFile(HandlerBase):
                     "type"     : self.layerType,
                     "name"     : self.layerName,
                     "checked"  : int(self.layerChecked),
-                    "opacity"  : None,
+                    "opacity"  : 1.0,
                     "cmd"      : None,
                     "group"    : self.inTag['group'],
                     "display"  : self.displayIndex,
@@ -246,7 +246,7 @@ class ProcessWorkspaceFile(HandlerBase):
                 self.layers[-1]["opacity"] = float(self.layerOpacity)
             if self.cmd:
                 self.layers[-1]["cmd"] = self.cmd
-
+            
             self.layerType = self.layerName = self.Checked = \
                 self.Opacity = self.cmd = None
 
@@ -404,10 +404,10 @@ class WriteWorkspaceFile(object):
                 maplayer = None
 
             checked = int(item.IsChecked())
-            cmd = mapTree.GetPyData(item)[0]['cmd']
             if type == 'command':
+                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=True)
                 self.file.write('%s<layer type="%s" name="%s" checked="%d">\n' % \
-                               (' ' * self.indent, type, ' '.join(cmd), checked));
+                               (' ' * self.indent, type, cmd, checked));
                 self.file.write('%s</layer>\n' % (' ' * self.indent));
             elif type == 'group':
                 name = mapTree.GetItemText(item)
@@ -419,6 +419,7 @@ class WriteWorkspaceFile(object):
                 self.indent -= 4
                 self.file.write('%s</group>\n' % (' ' * self.indent));
             else:
+                cmd = mapTree.GetPyData(item)[0]['maplayer'].GetCmd(string=False)
                 name = mapTree.GetItemText(item)
                 # remove 'opacity' part
                 if '(opacity' in name:
