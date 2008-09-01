@@ -134,8 +134,20 @@ class Layer(object):
         # execute command
         #
         try:
-            runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
-                                  stderr=None)
+            if self.type == 'command':
+                read = False
+                for cmd in self.cmdlist:
+                    runcmd = gcmd.Command(cmd=cmd + ['--q'],
+                                          stderr=None)
+                    if runcmd.returncode != 0:
+                        break
+                    if not read:
+                        os.environ["GRASS_PNG_READ"] = "TRUE"
+                
+                os.environ["GRASS_PNG_READ"] = "FALSE"
+            else:
+                runcmd = gcmd.Command(cmd=self.cmdlist + ['--q'],
+                                      stderr=None)
             
             if runcmd.returncode != 0:
                 #clean up after probley
@@ -178,7 +190,13 @@ class Layer(object):
         @return command list/string
         """
         if string:
-            return ' '.join(self.cmdlist)
+            if self.type == 'command':
+                cmdStr = ''
+                for cmd in self.cmdlist:
+                    cmdStr += ' '.join(cmd) + ';'
+                return cmdStr
+            else:
+                return ' '.join(self.cmdlist)
         else:
             return self.cmdlist
 
@@ -255,7 +273,7 @@ class Layer(object):
         """Set new command for layer"""
         self.cmdlist = cmd
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string=True))
-
+        
         # for re-rendering
         self.force_render = True
         
@@ -848,6 +866,8 @@ class Map(object):
             os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "TRUE"
+
+        os.environ["GRASS_PNG_READ"] = "FALSE"
         
         self._renderLayers(force, mapWindow, maps, masks, opacities)
             
@@ -1005,10 +1025,10 @@ class Map(object):
 
         if kargs.has_key('type'):
             layer.SetType(kargs['type']) # check type
-
+        
         if kargs.has_key('command'):
             layer.SetCmd(kargs['command'])
-            
+        
         if kargs.has_key('name'):
             layer.SetName(kargs['name'])
 

@@ -540,10 +540,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype == 'command':
             # generic command item
             ctrl = wx.TextCtrl(self, id=wx.ID_ANY, value='',
-                               pos=wx.DefaultPosition, size=(250,25),
-                               style=wx.TE_MULTILINE|wx.TE_WORDWRAP)
+                               pos=wx.DefaultPosition, size=(self.GetSize()[0]-100,25),
+                               # style=wx.TE_MULTILINE|wx.TE_WORDWRAP)
+                               style=wx.TE_PROCESS_ENTER | wx.TE_DONTWRAP)
             ctrl.Bind(wx.EVT_TEXT_ENTER, self.OnCmdChanged)
-            ctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
+            # ctrl.Bind(wx.EVT_TEXT,       self.OnCmdChanged)
         elif ltype == 'group':
             # group item
             ctrl = None
@@ -900,9 +901,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     # ignore when map layer is edited
                     self.Map.ChangeLayerActive(mapLayer, checked)
 
+        #
         # update progress bar range (mapwindow statusbar)
+        #
         self.mapdisplay.onRenderGauge.SetRange(len(self.Map.GetListOfLayers(l_active=True)))
 
+        #
+        # nviz
+        #
         if self.mapdisplay.toolbars['nviz'] and \
                 self.GetPyData(item) is not None:
             # nviz - load/unload data layer
@@ -967,6 +973,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Selection changed"""
         oldlayer = event.GetOldItem()
         layer = event.GetItem()
+        if layer == oldlayer:
+            event.Veto()
+            return
+        
         self.layer_selected = layer
         
         try:
@@ -975,13 +985,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         except:
             pass
 
+        #
         # update statusbar -> show command string
+        #
         if self.GetPyData(layer) and self.GetPyData(layer)[0]['maplayer']:
             cmd = self.GetPyData(layer)[0]['maplayer'].GetCmd(string=True)
             if len(cmd) > 0:
                 self.gismgr.SetStatusText(cmd)
         
+        #
         # update nviz tools
+        #
         if self.mapdisplay.toolbars['nviz'] and \
                 self.GetPyData(self.layer_selected) is not None:
 
@@ -1253,13 +1267,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def ChangeLayer(self, item):
         """Change layer"""
-
         type = self.GetPyData(item)[0]['type']
-
+        layerName = None
+        
         if type == 'command':
             win = self.FindWindowById(self.GetPyData(item)[0]['ctrl'])
             if win.GetValue() != None:
-                cmdlist = win.GetValue().split(' ')
+                cmd = win.GetValue().split(';')
+                cmdlist = []
+                for c in cmd:
+                    cmdlist.append(c.split(' '))
                 opac = 1.0
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
@@ -1269,29 +1286,28 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 opac = self.GetPyData(item)[0]['maplayer'].GetOpacity(float=True)
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
-        # determine layer name
-        layerName = utils.GetLayerNameFromCmd(cmdlist, fullyQualified=True)
-        if not layerName:
-            layerName = self.GetItemText(item)
+                # determine layer name
+                layerName = utils.GetLayerNameFromCmd(cmdlist, fullyQualified=True)
+                if not layerName:
+                    layerName = self.GetItemText(item)
+        
         maplayer = self.Map.ChangeLayer(layer=self.GetPyData(item)[0]['maplayer'], type=type,
                                         command=cmdlist, name=layerName,
                                         l_active=chk, l_hidden=hidden, l_opacity=opac, l_render=False)
-
+        
         self.GetPyData(item)[0]['maplayer'] = maplayer
-
+        
         # if digitization tool enabled -> update list of available vector map layers
         if self.mapdisplay.toolbars['vdigit']:
             self.mapdisplay.toolbars['vdigit'].UpdateListOfLayers(updateTool=True)
-
+        
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.reorder = True
         #if self.mapdisplay.autoRender.GetValue():
         #    print "*** Change OnRender *****"
         #    self.mapdisplay.OnRender(None)
-
-        # item.SetHeight(TREE_ITEM_HEIGHT)
-
+        
     def OnCloseWindow(self, event):
         pass
         # self.Map.Clean()
