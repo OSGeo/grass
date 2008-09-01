@@ -415,7 +415,7 @@ std::vector<int> DisplayDriver::GetSelectedVertex(double x, double y, double thr
 */
 std::vector<int> DisplayDriver::GetRegionSelected()
 {
-    int line, area;
+    int line, area, nareas;
     
     std::vector<int> region;
 
@@ -437,7 +437,7 @@ std::vector<int> DisplayDriver::GetRegionSelected()
 	*/
 	int type;
 	bool found;
-	for (int line = 1; line < Vect_get_num_lines(mapInfo); line++) {
+	for (int line = 1; line <= Vect_get_num_lines(mapInfo); line++) {
 	    type = Vect_read_line (mapInfo, NULL, cats, line);
 	    if (!(type & (GV_POINTS | GV_LINES)))
 		continue;
@@ -457,11 +457,12 @@ std::vector<int> DisplayDriver::GetRegionSelected()
 	list = selected.values;
     }
 
+    nareas = Vect_get_num_areas(mapInfo);
     for (int i = 0; i < list->n_values; i++) {
 	line = list->value[i];
 	area = Vect_get_centroid_area(mapInfo, line);
 
-	if (area > 0) {
+	if (area > 0 && area <= nareas) {
 	    if (!Vect_get_area_box(mapInfo, area, &line_box))
 		continue;
 	}
