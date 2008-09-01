@@ -515,7 +515,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.EditLabel(self.layer_selected)
 
     def AddLayer(self, ltype, lname=None, lchecked=None,
-                 lopacity=None, lcmd=None, lgroup=None, lnviz=None):
+                 lopacity=1.0, lcmd=None, lgroup=None, lnviz=None):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
