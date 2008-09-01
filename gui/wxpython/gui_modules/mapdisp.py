@@ -345,6 +345,7 @@ class BufferedWindow(MapWindow, wx.Window):
             bg = wx.WHITE_BRUSH
             # bg = wx.Brush(self.GetBackgroundColour())
             pdc.SetBackground(bg)
+            pdc.RemoveAll()
             pdc.Clear()
             self.Refresh()
             pdc.EndDrawing()
@@ -801,7 +802,12 @@ class BufferedWindow(MapWindow, wx.Window):
         Erase the canvas
         """
         self.Draw(self.pdc, pdctype='clear')
-
+                  
+        if self.pdcVector:
+            self.Draw(self.pdcVector, pdctype='clear')
+        
+        self.Draw(self.pdcVector, pdctype='clear')
+        
     def DragMap(self, moveto):
         """
         Drag the entire map image for panning.
@@ -2837,8 +2843,14 @@ class MapFrame(wx.Frame):
         qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.Map.DeleteLayer(layer)
-        self.MapWindow.UpdateMap(render=True)
 
+        # deselect features in vdigit
+        if self.toolbars['vdigit']:
+            self.digit.driver.SetSelected([])
+            self.MapWindow.UpdateMap(render=True, renderVector=True)
+        else:
+            self.MapWindow.UpdateMap(render=True)
+        
         # update statusbar
         self.StatusbarUpdate()
 
