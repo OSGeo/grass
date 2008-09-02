@@ -1,3 +1,8 @@
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "common.h"
 #include "Iwave.h"
 
@@ -1749,7 +1754,7 @@ void IWave::parse()
 	else if(iwave <= 52)	avhrr(iwave - 36);
 	else if(iwave <= 60)	polder(iwave - 52);
 	else if(iwave <= 67)	etmplus(iwave - 60);
-	else fprintf(stderr, "Unsupported iwave value: %d\n", iwave);
+	else G_warning(_("Unsupported iwave value: %d"), iwave);
     }
 
     iinf = (int)((ffu.wlinf - 0.25f) / 0.0025f + 1.5f) - 1;	/* remember indexing*/

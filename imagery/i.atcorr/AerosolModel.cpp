@@ -1,3 +1,8 @@
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "common.h"
 #include "AerosolModel.h"
 #include "AtmosModel.h"
@@ -857,8 +862,7 @@ void AerosolModel::parse(const float xmud)
 	cin.ignore(numeric_limits<int>::max(),'\n');
 
 	if(mie_in.icp >= 4) {
-	    fprintf(stderr, "mie_in.icp: %ld > 4, will cause internal buffer overflow.\n", mie_in.icp);
-	    exit(-1);
+	    G_fatal_error(_("mie_in.icp: %ld > 4, will cause internal buffer overflow"), mie_in.icp);
 	}
 
 	for(int i = 0; i < mie_in.icp; i++)
@@ -922,8 +926,7 @@ void AerosolModel::parse(const float xmud)
 	cin.ignore(numeric_limits<int>::max(),'\n');
 
 	if(mie_in.irsunph >= 50) {
-	    fprintf(stderr, "mie_in.irsunph: %ld > 50, will cause internal buffer overflow.\n", mie_in.irsunph);
-	    exit(-1);
+	    G_fatal_error(_("mie_in.irsunph: %ld > 50, will cause internal buffer overflow"), mie_in.irsunph);
 	}
 
 	int i;
@@ -953,7 +956,7 @@ void AerosolModel::parse(const float xmud)
 	filename = filename.substr(0, filename.find(" "));
 	break;
     }
-    default: fprintf(stderr, "Unknown aerosol model!\n");
+    default: G_warning(_("Unknown aerosol model!"));
     }
 
     if(iaer >= 8 && iaer <= 11) 

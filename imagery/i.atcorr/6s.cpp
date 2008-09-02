@@ -1,4 +1,10 @@
 #include <cstring>
+
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "6s.h"
 #include "common.h"
 #include "GeomCond.h"
@@ -42,7 +48,7 @@ int init_6S(char* icnd_name)
     ifstream inText;
     inText.open(icnd_name);
     if(!inText.is_open()) {
-        fprintf(stderr, "Unable to open %s\n", icnd_name);
+	G_warning(_("Unable to open file <%s>"), icnd_name);
 	return -1;
     }
 

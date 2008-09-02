@@ -1,4 +1,10 @@
 #include <cstring>
+
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "common.h"
 #include "GeomCond.h"
 #include "AtmosModel.h"
@@ -168,7 +174,7 @@ float discre(const float ta, const float ha, const float tr, const float hr,
 {
     if( ha >= 7 ) 
     {
-	fprintf(stderr, "ERROR: check aerosol measurements or plane altitude\n");
+	G_warning(_("Check aerosol measurements or plane altitude"));
 	return 0;
     }
 
@@ -1097,7 +1103,7 @@ void iso(const float tamoy, const float trmoy, const float pizmoy,
 
     do {
 	/* loop on successive order */
-	ig = ig++;
+	ig++;
 
 	/* successive orders
 	   multiple scattering source function at every level within the laye */

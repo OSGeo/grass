@@ -1,3 +1,8 @@
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "common.h"
 #include "AtmosModel.h"
 
@@ -361,7 +366,7 @@ void AtmosModel::parse()
 	us62();
 	break;
     }
-    default: fprintf(stderr, "Unknown atmospheric model!\n");
+    default: G_warning(_("Unknown atmospheric model!"));
     }
 }
 

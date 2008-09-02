@@ -1,3 +1,8 @@
+extern "C" {
+#include <grass/gis.h>
+#include <grass/glocale.h>
+}
+
 #include "GeomCond.h"
 #include "common.h"
 
@@ -81,7 +86,8 @@ void GeomCond::possol(float tu)
 /*     jday is the number of the day in the month */
     day_number(ia, nojour);
     pos_fft (nojour, tu);
-    if (asol > 90.f) fprintf(stderr, "The sun is not raised\n");
+    if (asol > 90.f)
+	G_warning(_("The sun is not raised"));
 }
 
 void GeomCond::day_number(long int ia, long int& j)
@@ -219,7 +225,7 @@ void GeomCond::posobs(float tu, int nc, int nl)
     double sn, zt, xt, yt, teta, ylat, ylon;
     if((1. / cosx2) > ((yk * yk) / (yk*yk - 1.)))
     {
-	fprintf(stderr, "no possibility to compute lat. and long.\n");
+	G_warning(_("No possibility to compute lat. and long."));
 	return;
     }
     else
@@ -366,7 +372,7 @@ void GeomCond::parse()
 	landsat(tu);
 	break;
     }
-    default: fprintf(stderr, "Unsupported format.\n");
+    default: G_warning(_("Unsupported format"));
     }
 
 
