@@ -1124,8 +1124,11 @@ class AttributeManager(wx.Frame):
             columnName.append(list.GetColumn(i).GetText())
 
         # maximal category number
-        maxCat = max(list.itemCatsMap.values())
-
+        if len(list.itemCatsMap.values()) > 0:
+            maxCat = max(list.itemCatsMap.values())
+        else:
+            maxCat = 0 # starting category '1'
+        
         # key column must be always presented
         if keyColumn not in columnName:
             columnName.insert(0, keyColumn) # insert key column on first position
@@ -1197,7 +1200,11 @@ class AttributeManager(wx.Frame):
                 del values[0]
                 
             # add new item to the list
-            index = max(list.itemIndexMap) + 1
+            if len(list.itemIndexMap) > 0:
+                index = max(list.itemIndexMap) + 1
+            else:
+                index = 0
+            
             list.itemIndexMap.append(index)
             list.itemDataMap[index] = values
             list.itemCatsMap[index] = cat
@@ -2108,7 +2115,7 @@ class LayerBook(wx.Notebook):
                              'key': (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                    label='%s:' % _("Key column")),
                                      wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
-                                                 value='',
+                                                 value='cat',
                                                  style=wx.TE_PROCESS_ENTER))}
         # events
         self.tableWidgets['table'][1].Bind(wx.EVT_TEXT_ENTER, self.OnCreateTable)
@@ -2494,6 +2501,13 @@ class LayerBook(wx.Notebook):
             wx.MessageBox(parent=self,
                           message=_("Unable to create new table. "
                                     "Table name or key column name is missing."),
+                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            return
+
+        if table in self.addLayerWidgets['table'][1].GetItems():
+            wx.MessageBox(parent=self,
+                          message=_("Unable to create new table. "
+                                    "Table <%s> already exists in the database.") % table,
                           caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
             return
         
@@ -2950,81 +2964,85 @@ class DisplayAttributesDialog(wx.Dialog):
                                 self.mapDBInfo.tables[table][name]['values'].append(None)
                 else: # change status 'add' -> 'update'
                     self.action = "update"
-
-            # use scrolled panel instead (and fix initial max height of the window to 480px)
-            ### panel = wx.Panel(parent=self.notebook, id=wx.ID_ANY)
-            panel = scrolled.ScrolledPanel(parent=self.notebook, id=wx.ID_ANY,
-                                           size=(-1, 150))
-            panel.SetupScrolling(scroll_x=False)
             
-            self.notebook.AddPage(page=panel, text=" %s %d " % (_("Layer"), layer))
-            
-            # notebook body
-            border = wx.BoxSizer(wx.VERTICAL)
-
             table   = self.mapDBInfo.layers[layer]["table"]
             key   = self.mapDBInfo.layers[layer]["key"]
             columns = self.mapDBInfo.tables[table]
 
             # value
-            if len(columns[key]['values']) == 0: # no cats
-                sizer  = wx.BoxSizer(wx.VERTICAL)
-                txt = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                    label=_("No database record available."))
-                sizer.Add(txt, proportion=1,
-                          flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.EXPAND)
-                border.Add(item=sizer, proportion=1,
-                           flag=wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
-                           border=10)
-                panel.SetSizer(border)
-                continue
+            #             if len(columns[key]['values']) == 0: # no cats
+            #                 self.notebook.AddPage(page=panel, text=" %s %d / %s %d" % (_("Layer"), layer,
+            #                                                                            _("Category"), cat))
+            
+            #                 sizer  = wx.BoxSizer(wx.VERTICAL)
+            #                 txt = wx.StaticText(parent=panel, id=wx.ID_ANY,
+            #                                     label=_("No database record available."))
+            #                 sizer.Add(txt, proportion=1,
+            #                           flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.EXPAND)
+            #                 border.Add(item=sizer, proportion=1,
+            #                            flag=wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
+            #                            border=10)
+            #                 panel.SetSizer(border)
+            #                 continue
+            
             for idx in range(len(columns[key]['values'])):
+                for name in columns.keys():
+                    if name == key:
+                        cat = int(columns[name]['values'][idx])
+                        break
+
+                # use scrolled panel instead (and fix initial max height of the window to 480px)
+                panel = scrolled.ScrolledPanel(parent=self.notebook, id=wx.ID_ANY,
+                                               size=(-1, 150))
+                panel.SetupScrolling(scroll_x=False)
+                
+                self.notebook.AddPage(page=panel, text=" %s %d / %s %d" % (_("Layer"), layer,
+                                                                           _("Category"), cat))
+           
+                # notebook body
+                border = wx.BoxSizer(wx.VERTICAL)
+
                 flexSizer = wx.FlexGridSizer (cols=4, hgap=3, vgap=3)
                 flexSizer.AddGrowableCol(3)
-                # columns
+                # columns (sorted by index)
+                names = [''] * len(columns.keys())
                 for name in columns.keys():
+                    names[columns[name]['index']] = name
+                
+                for name in names:
+                    if name == key: # skip key column (category)
+                        continue
+                    
                     vtype  = columns[name]['type']
                     if columns[name]['values'][idx] is not None:
                         value = str(columns[name]['values'][idx])
                     else:
                         value = ''
-
-                    if name == key:
-                        box    = wx.StaticBox (parent=panel, id=wx.ID_ANY,
-                                               label=" %s %s " % (_("Category"), value))
-                        boxFont = self.GetFont()
-                        boxFont.SetWeight(wx.FONTWEIGHT_BOLD)
-                        box.SetFont(boxFont)
-                        sizer  = wx.StaticBoxSizer(box, wx.VERTICAL)
-                        colValue = box
-                    else:
-                        colName = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                                label=name)
-                        colType = wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                                label="[" + vtype.lower() + "]")
-                        delimiter = wx.StaticText(parent=panel, id=wx.ID_ANY, label=":")
-
-                        colValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=value) # TODO: validator
-                        colValue.SetName(name)
-                        self.Bind(wx.EVT_TEXT, self.OnSQLStatement, colValue)
-
-                        flexSizer.Add(colName, proportion=0,
-                                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-                        flexSizer.Add(colType, proportion=0,
-                                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-                        flexSizer.Add(delimiter, proportion=0,
-                                      flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
-                        flexSizer.Add(colValue, proportion=1,
-                                      flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+                        
+                    colName = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                            label=name)
+                    colType = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                                            label="[" + vtype.lower() + "]")
+                    delimiter = wx.StaticText(parent=panel, id=wx.ID_ANY, label=":")
+                    
+                    colValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=value) # TODO: validator
+                    colValue.SetName(name)
+                    self.Bind(wx.EVT_TEXT, self.OnSQLStatement, colValue)
+                    
+                    flexSizer.Add(colName, proportion=0,
+                                  flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                    flexSizer.Add(colType, proportion=0,
+                                  flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                    flexSizer.Add(delimiter, proportion=0,
+                                  flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
+                    flexSizer.Add(colValue, proportion=1,
+                                  flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
                     # add widget reference to self.columns
                     columns[name]['ids'].append(colValue.GetId()) # name, type, values, id
-
                 # for each attribute (including category) END
-                sizer.Add(item=flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
-                border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+                border.Add(item=flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+                panel.SetSizer(border)
             # for each category END
-
-            panel.SetSizer(border)
         # for each layer END
 
         self.Layout()
