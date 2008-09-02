@@ -208,7 +208,8 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     /* Read vector head */
     if (Vect__read_head(Map) != GRASS_OK) {
 	sprintf(errmsg,
-		_("Unable to open vector map <%s> on topology level %d"),
+		_("Unable to open vector map <%s> on level %d. "
+		  "Try to rebuild vector topology by v.build."),
 		Vect_get_full_name(Map), level_request);
 	G_warning(_("Unable to read head file"));
     }
@@ -275,7 +276,8 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 #endif
 	if (level_request == 2 && level < 2) {
 	    sprintf(errmsg,
-		    _("Unable to open vector map <%s> on topology level %d"),
+		    _("Unable to open vector map <%s> on level %d. "
+		      "Try to rebuild vector topology by v.build."),
 		    Vect_get_full_name(Map), level_request);
 	    fatal_error(ferror, errmsg);
 	    return -1;
@@ -294,7 +296,8 @@ Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 		dig_cidx_free(&(Map->plus));
 	    }
 	    sprintf(errmsg,
-		    _("Unable to open vector map <%s> on topology level %d"),
+		    _("Unable to open vector map <%s> on level %d. "
+		      "Try to rebuild vector topology by v.build."),
 		    Vect_get_full_name(Map), level_request);
 	    fatal_error(ferror, errmsg);
 	    return -1;
