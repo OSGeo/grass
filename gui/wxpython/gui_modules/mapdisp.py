@@ -2845,7 +2845,7 @@ class MapFrame(wx.Frame):
             self.Map.DeleteLayer(layer)
 
         # deselect features in vdigit
-        if self.toolbars['vdigit']:
+        if self.toolbars['vdigit'] and self.digit:
             self.digit.driver.SetSelected([])
             self.MapWindow.UpdateMap(render=True, renderVector=True)
         else:
