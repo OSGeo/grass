@@ -19,6 +19,7 @@ SUBDIRS = \
 	d.linegraph \
 	d.nviz \
 	d.path \
+	d.profile \
 	d.rast \
 	d.rast.arrow \
 	d.rast.num \
@@ -35,7 +36,6 @@ SUBDIRS = \
 #	d.colors \
 #	d.extract \
 #	d.measure \
-#	d.profile \
 #	d.what.rast \
 #	d.what.vect \
 #	d.zoom \
