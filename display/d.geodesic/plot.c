@@ -3,136 +3,74 @@
 #include <grass/raster.h>
 #include <grass/gis.h>
 #include <stdio.h>
+#include "local_proto.h"
 
 #define METERS_TO_MILES(x) ((x) * 6.213712e-04)
 
-static int min_range[5], max_range[5];
-static int which_range;
-static int change_range;
-
-static int get_text_x(void);
-static int geodesic(int);
-static int move(int, int);
-static int cont(int, int);
-
-int setup_plot(void)
+void plot(double lon1, double lat1, double lon2, double lat2,
+     int line_color, int text_color)
 {
+    double distance;
+    double text_x, text_y;
     double a, e2;
+    int nsteps = 1000;
+    int i;
 
     /* establish the current graphics window */
-    D_setup_unity(0);
-    D_clip_to_map();
-
-    /* setup the G plot to use the D routines */
-    G_setup_plot(D_get_d_north(), D_get_d_south(),
-		 D_get_d_west(), D_get_d_east(),
-		 move, cont);
+    D_setup(0);
 
     G_get_ellipsoid_parameters(&a, &e2);
     G_begin_geodesic_distance(a, e2);
-    R_text_size(10, 10);
 
-    return 0;
-}
-
-int
-plot(double lon1, double lat1, double lon2, double lat2, int line_color,
-     int text_color)
-{
-    double distance;
-    char buf[100];
-    int text_x, text_y;
-
-    which_range = -1;
-    change_range = 1;
     D_use_color(line_color);
+
+    G_shortest_way(&lon1, &lon2);
+
     if (lon1 != lon2) {
-	G_shortest_way(&lon1, &lon2);
 	G_begin_geodesic_equation(lon1, lat1, lon2, lat2);
-	G_plot_fx(G_geodesic_lat_from_lon, lon1, lon2);
-	text_x = get_text_x();
-	if (text_x >= 0)
-	    text_y = geodesic(text_x);
+
+	for (i = 0; i <= nsteps; i++) {
+	    double lon = lon1 + (lon2 - lon1) * i / nsteps;
+	    double lat = G_geodesic_lat_from_lon(lon);
+	    if (i == 0)
+		D_move_abs(lon, lat);
+	    else
+		D_cont_abs(lon, lat);
+	}
+
+	text_x = (lon1 + lon2) / 2;
+	text_y = G_geodesic_lat_from_lon(text_x);
     }
     else {
-	G_plot_where_xy(lon1, (lat1 + lat2) / 2, &text_x, &text_y);
-	G_plot_line(lon1, lat1, lon2, lat2);
+	D_line_abs(lon1, lat1, lon2, lat2);
+	text_x = (lon1 + lon2) / 2;
+	text_y = (lat1 + lat2) / 2;
     }
 
-    distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
-    sprintf(buf, "%.0f miles\n", METERS_TO_MILES(distance));
-    if ((text_x >= 0) && (text_color != -1)) {
-	if (text_y + 10 <= D_get_d_north())
-	    text_y = D_get_d_north() - 10;
-	if (text_x + 10 * strlen(buf) >= D_get_d_east())
-	    text_x = D_get_d_east() - 10 * strlen(buf);
+    if (text_color != -1) {
+	double t, b, l, r;
+	char buf[100];
+
+	R_text_size(10, 10);
+
+	distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
+	sprintf(buf, "%.0f miles", METERS_TO_MILES(distance));
+
 	D_move_abs(text_x, text_y);
+	D_get_text_box(buf, &t, &b, &l, &r);
+
+	if (t - D_get_u_north() > 0)
+	    text_y -= t - D_get_u_north();
+	if (b - D_get_u_south() < 0)
+	    text_y -= b - D_get_u_south();
+	if (r - D_get_u_east() > 0)
+	    text_x -= r - D_get_u_east();
+	if (l - D_get_u_west() < 0)
+	    text_x -= l - D_get_u_west();
+
 	D_use_color(text_color);
+
+	D_move_abs(text_x, text_y);
 	R_text(buf);
     }
-
-    return 0;
-}
-
-static int cont(int x, int y)
-{
-    if (D_cont_abs_clip(x, y)) {	/* clipped */
-	change_range = 1;
-    }
-    else {			/* keep track of left,right x for lines drawn in window */
-
-	if (change_range) {
-	    which_range++;
-	    min_range[which_range] = max_range[which_range] = x;
-	    change_range = 0;
-	}
-	else {
-	    if (x < min_range[which_range])
-		min_range[which_range] = x;
-	    else if (x > max_range[which_range])
-		max_range[which_range] = x;
-	}
-    }
-
-    return 0;
-}
-
-static int move(int x, int y)
-{
-    D_move_abs(x, y);
-
-    return 0;
-}
-
-static int geodesic(int x)
-{
-    double lon, lat;
-
-    lon = D_d_to_u_col((double)x);
-    lat = G_geodesic_lat_from_lon(lon);
-    return (int)D_u_to_d_row(lat);
-
-    return 0;
-}
-
-static int get_text_x(void)
-{
-    int n;
-    int len;
-    int max;
-    int which;
-
-    which = -1;
-    max = 0;
-    for (n = 0; n <= which_range; n++) {
-	len = max_range[n] - min_range[n];
-	if (len >= max) {
-	    max = len;
-	    which = n;
-	}
-    }
-    if (which < 0)
-	return -1;
-
-    return (max_range[which] + min_range[which]) / 2;
 }

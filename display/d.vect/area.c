@@ -358,7 +358,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 	if (fcolor || (z_color_flag && Vect_is_3d(Map))) {
 	    if (!table_colors_flag && !cats_color_flag && !z_color_flag) {
 		D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
-		plot_polygon(Points->x, Points->y, Points->n_points);
+		D_polygon_abs(Points->x, Points->y, Points->n_points);
 	    }
 	    else {
 		if (rgb) {
@@ -369,7 +369,7 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 		    D_RGB_color(fcolor->r, fcolor->g, fcolor->b);
 		}
 		if (cat >= 0) {
-		    plot_polygon(Points->x, Points->y, Points->n_points);
+		    D_polygon_abs(Points->x, Points->y, Points->n_points);
 		}
 	    }
 	}
@@ -387,12 +387,12 @@ int darea(struct Map_info *Map, struct cat_list *Clist,
 		D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    }
 	    /*use different user defined render methods */
-	    plot_polyline(Points->x, Points->y, Points->n_points);
+	    D_polyline_abs(Points->x, Points->y, Points->n_points);
 	    for (i = 0; i < n_isles; i++) {
 		isle = Vect_get_area_isle(Map, area, i);
 		Vect_get_isle_points(Map, isle, Points);
 		/*use different user defined render methods */
-		plot_polyline(Points->x, Points->y, Points->n_points);
+		D_polyline_abs(Points->x, Points->y, Points->n_points);
 	    }
 	}
     }				/* end for */

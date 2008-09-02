@@ -16,7 +16,5 @@ int darea(struct Map_info *, struct cat_list *, const struct color_rgb *,
 int attr(struct Map_info *, int, char *, struct cat_list *, LATTR *, int);
 int zcoor(struct Map_info *, int, LATTR *);
 int test_bg_color(const char *);
-void plot_polygon(double *, double *, int);
-void plot_polyline(double *, double *, int);
 void show_label(double *, double *, LATTR *, const char *);
 void show_label_line(const struct line_pnts *, int, LATTR *, const char *);

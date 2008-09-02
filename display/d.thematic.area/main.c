@@ -53,7 +53,6 @@ int main(int argc, char **argv)
     struct Option *bwidth_opt;
     struct Option *where_opt;
     struct Option *field_opt;
-    struct Option *render_opt;
     struct Option *legend_file_opt;
     struct Flag *legend_flag, *algoinfo_flag, *nodraw_flag;
 
@@ -147,20 +146,6 @@ int main(int argc, char **argv)
     bcolor_opt->guisection = _("Boundaries");
     bcolor_opt->gisprompt = GISPROMPT_COLOR;
 
-    render_opt = G_define_option();
-    render_opt->key = "render";
-    render_opt->type = TYPE_STRING;
-    render_opt->required = NO;
-    render_opt->multiple = NO;
-    render_opt->answer = "l";
-    render_opt->options = "d,c,l";
-    render_opt->description = _("Rendering method for filled polygons");
-    render_opt->descriptions =
-	_("d;use the display library basic functions (features: polylines);"
-	  "c;use the display library clipping functions (features: clipping);"
-	  "l;use the display library culling functions (features: culling, polylines)");
-
-
     legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     legend_file_opt->key = "legendfile";
     legend_file_opt->description =
@@ -184,15 +169,6 @@ int main(int argc, char **argv)
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if (G_strcasecmp(render_opt->answer, "d") == 0)
-	render = RENDER_DP;
-    else if (G_strcasecmp(render_opt->answer, "c") == 0)
-	render = RENDER_DPC;
-    else if (G_strcasecmp(render_opt->answer, "l") == 0)
-	render = RENDER_DPL;
-    else
-	G_fatal_error(_("Invalid rendering method <%s>"), render_opt->answer);
 
     if (G_verbose() > G_verbose_std())
 	verbose = TRUE;

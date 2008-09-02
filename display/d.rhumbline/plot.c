@@ -3,56 +3,39 @@
 #include <grass/gis.h>
 #include <grass/display.h>
 #include <grass/raster.h>
+#include "local_proto.h"
 
-static int move(int, int);
-static int cont(int, int);
-
-#define METERS_TO_MILES(x) ((x) * 6.213712e-04)
-
-int setup_plot(void)
+void plot(double lon1, double lat1, double lon2, double lat2,
+	  int line_color, int text_color)
 {
-    /* establish the current graphics window */
-    D_setup_unity(0);
+    int nsteps = 1000;
+    int i;
 
-    /* setup the G plot to use the D routines */
-    G_setup_plot(D_get_d_north(),
-		 D_get_d_south(), D_get_d_west(), D_get_d_east(), move, cont);
-
-    R_text_size(10, 10);
-
-    return 0;
-}
-
-int
-plot(double lon1, double lat1, double lon2, double lat2, int line_color,
-     int text_color)
-{
-    int text_x, text_y;
+    D_setup(0);
 
     D_use_color(line_color);
-    if (lon1 != lon2) {
-	G_shortest_way(&lon1, &lon2);
-	G_begin_rhumbline_equation(lon1, lat1, lon2, lat2);
-	G_plot_fx(G_rhumbline_lat_from_lon, lon1, lon2);
-    }
-    else {
-	G_plot_where_xy(lon1, (lat1 + lat2) / 2, &text_x, &text_y);
-	G_plot_line(lon1, lat1, lon2, lat2);
+
+    if (lon1 == lon2) {
+	D_line_abs(lon1, lat1, lon2, lat2);
+	return;
     }
 
-    return 0;
-}
+    if (lon1 > lon2) {
+	double tmp = lon1;
+	lon1 = lon2;
+	lon2 = tmp;
+    }
 
-static int cont(int x, int y)
-{
-    D_cont_abs(x, y);
+    G_shortest_way(&lon1, &lon2);
 
-    return 0;
-}
+    G_begin_rhumbline_equation(lon1, lat1, lon2, lat2);
 
-static int move(int x, int y)
-{
-    D_move_abs(x, y);
-
-    return 0;
+    for (i = 0; i <= nsteps; i++) {
+	double lon = lon1 + (lon2 - lon1) * i / nsteps;
+	double lat = G_rhumbline_lat_from_lon(lon);
+	if (i == 0)
+	    D_move_abs(lon, lat);
+	else
+	    D_cont_abs(lon, lat);
+    }
 }

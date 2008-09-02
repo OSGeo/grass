@@ -44,6 +44,29 @@ static int nalloc_i;
 static double *xf, *yf;
 static int nalloc_f;
 
+struct functions {
+    void (*move_abs)(double x, double y);
+    void (*move_rel)(double x, double y);
+    void (*cont_abs)(double x, double y);
+    void (*cont_rel)(double x, double y);
+    void (*line_abs)(double x1, double y1, double x2, double y2);
+    void (*line_rel)(double x1, double y1, double x2, double y2);
+    void (*polydots_abs)(const double *x, const double *y, int n);
+    void (*polydots_rel)(const double *x, const double *y, int n);
+    void (*polyline_abs)(const double *x, const double *y, int n);
+    void (*polyline_rel)(const double *x, const double *y, int n);
+    void (*polygon_abs)(const double *x, const double *y, int n);
+    void (*polygon_rel)(const double *x, const double *y, int n);
+    void (*box_abs)(double x1, double y1, double x2, double y2);
+    void (*box_rel)(double x2, double y2);
+};
+
+static struct functions raw_functions, cull_functions, clip_functions;
+
+static struct functions *fns = &cull_functions;
+
+/******************************************************************************/
+
 static void alloc_dst(int n)
 {
 
@@ -137,74 +160,6 @@ static double dist_plane(double x, double y, const struct plane *p)
     return x * p->x + y * p->y + p->k;
 }
 
-static double interpolate(double a, double b, double ka, double kb)
-{
-    return (a * kb - b * ka) / (kb - ka);
-}
-
-static int clip_plane(struct vector *a, struct vector *b,
-		      const struct plane *p, int *clipped)
-{
-    double ka = dist_plane(a->x, a->y, p);
-    double kb = dist_plane(b->x, b->y, p);
-    double kab;
-
-    /* both outside */
-    if (ka > 0 && kb > 0)
-	return 1;
-
-    /* both inside */
-    if (ka <= 0 && kb <= 0)
-	return 0;
-
-    *clipped = 1;
-
-    /* a outside - swap a and b */
-    if (ka >= 0) {
-	struct vector *t;
-	double kt;
-
-	t = a;
-	a = b;
-	b = t;
-	kt = ka;
-	ka = kb;
-	kb = kt;
-    }
-
-    kab = kb - ka;
-
-    b->x = interpolate(a->x, b->x, ka, kb);
-    b->y = interpolate(a->y, b->y, ka, kb);
-
-    return 0;
-}
-
-static int do_clip(struct vector *a, struct vector *b)
-{
-    int clipped = 0;
-
-    if (a->x < clip.left && b->x < clip.left)
-	return -1;
-    if (a->x > clip.rite && b->x > clip.rite)
-	return -1;
-    if (a->y < clip.bot && b->y < clip.bot)
-	return -1;
-    if (a->y > clip.top && b->y > clip.top)
-	return -1;
-
-    if (clip_plane(a, b, &pl_left, &clipped))
-	return -1;
-    if (clip_plane(a, b, &pl_rite, &clipped))
-	return -1;
-    if (clip_plane(a, b, &pl_bot, &clipped))
-	return -1;
-    if (clip_plane(a, b, &pl_top, &clipped))
-	return -1;
-
-    return clipped;
-}
-
 static int shift_count(double dx)
 {
     return (int)floor(dx / 360);
@@ -275,65 +230,74 @@ static void do_ll_wrap(const double *x, const double *y, int n,
     G_free(xx);
 }
 
-/*!
- * \brief set clipping window
- *
- * Sets the clipping window to the pixel window that corresponds
- * to the current database region. This is the default.
- *
- *  \param top
- *  \param bottom
- *  \param left
- *  \param right
- */
+/******************************************************************************/
 
-void D_set_clip(double t, double b, double l, double r)
+static double interpolate(double a, double b, double ka, double kb)
 {
-    clip.left = min(l, r);
-    clip.rite = max(l, r);
-    clip.bot = min(b, t);
-    clip.top = max(b, t);
-
-    pl_left.k = clip.left;
-    pl_rite.k = -clip.rite;
-    pl_bot.k = clip.bot;
-    pl_top.k = -clip.top;
-
-    window_set = 1;
+    return (a * kb - b * ka) / (kb - ka);
 }
 
-/*!
- * \brief set clipping window to map window
- *
- * Sets the clipping window to the pixel window that corresponds to the
- * current database region. This is the default.
- *
- *  \param ~
- */
-
-void D_clip_to_map(void)
+static int clip_plane(struct vector *a, struct vector *b,
+		      const struct plane *p, int *clipped)
 {
-    double t, b, l, r;
+    double ka = dist_plane(a->x, a->y, p);
+    double kb = dist_plane(b->x, b->y, p);
+    double kab;
 
-    D_get_src(&t, &b, &l, &r);
-    D_set_clip(t, b, l, r);
+    /* both outside */
+    if (ka > 0 && kb > 0)
+	return 1;
+
+    /* both inside */
+    if (ka <= 0 && kb <= 0)
+	return 0;
+
+    *clipped = 1;
+
+    /* a outside - swap a and b */
+    if (ka >= 0) {
+	struct vector *t;
+	double kt;
+
+	t = a;
+	a = b;
+	b = t;
+	kt = ka;
+	ka = kb;
+	kb = kt;
+    }
+
+    kab = kb - ka;
+
+    b->x = interpolate(a->x, b->x, ka, kb);
+    b->y = interpolate(a->y, b->y, ka, kb);
+
+    return 0;
 }
 
-void D_line_width(double d)
+static int do_clip(struct vector *a, struct vector *b)
 {
-    R_line_width(d > 0 ? d : 0);
-}
+    int clipped = 0;
 
-void D_get_text_box(const char *text, double *t, double *b, double *l, double *r)
-{
-    double T, B, L, R;
+    if (a->x < clip.left && b->x < clip.left)
+	return -1;
+    if (a->x > clip.rite && b->x > clip.rite)
+	return -1;
+    if (a->y < clip.bot && b->y < clip.bot)
+	return -1;
+    if (a->y > clip.top && b->y > clip.top)
+	return -1;
 
-    R_get_text_box(text, &T, &B, &L, &R);
+    if (clip_plane(a, b, &pl_left, &clipped))
+	return -1;
+    if (clip_plane(a, b, &pl_rite, &clipped))
+	return -1;
+    if (clip_plane(a, b, &pl_bot, &clipped))
+	return -1;
+    if (clip_plane(a, b, &pl_top, &clipped))
+	return -1;
 
-    *t = D_d_to_u_row(T);
-    *b = D_d_to_u_row(B);
-    *l = D_d_to_u_col(L);
-    *r = D_d_to_u_col(R);
+    return clipped;
 }
 
 static int line_clip(double x1, double y1, double x2, double y2)
@@ -381,10 +345,148 @@ static int line_clip_ll(double ax, double ay, double bx, double by)
     ret = 0;
 
     for (i = lo; i <= hi; i++)
-	ret |= line_clip(ax + i * 360, ay, bx + i * 360, by);
+	ret |= line_clip(ax - i * 360, ay, bx - i * 360, by);
 
     return ret;
 }
+
+static void polyline_clip(const double *x, const double *y, int n)
+{
+    int i;
+
+    for (i = 1; i < n; i++)
+	line_clip(x[i - 1], y[i - 1], x[i], y[i]);
+}
+
+static int clip_polygon_plane(int *pn, const double *x, const double *y,
+			      const struct plane *p)
+{
+    int n = *pn;
+    double x0 = x[n - 1];
+    double y0 = y[n - 1];
+    double d0 = dist_plane(x0, y0, p);
+    int i, j;
+
+    for (i = j = 0; i < n; i++) {
+	double x1 = x[i];
+	double y1 = y[i];
+	double d1 = dist_plane(x1, y1, p);
+	int in0 = d0 <= 0;
+	int in1 = d1 <= 0;
+
+	if (in0 != in1) {	/* edge crossing */
+	    alloc_src(j + 1);
+	    xf[j] = interpolate(x0, x1, d0, d1);
+	    yf[j] = interpolate(y0, y1, d0, d1);
+	    j++;
+	}
+
+	if (in1) {		/* point inside */
+	    alloc_src(j + 1);
+	    xf[j] = x[i];
+	    yf[j] = y[i];
+	    j++;
+	}
+
+	x0 = x1;
+	y0 = y1;
+	d0 = d1;
+    }
+
+    *pn = j;
+
+    return (j == 0);
+}
+
+static void polygon_clip(const double *x, const double *y, int n)
+{
+    alloc_src(n + 10);
+
+    if (clip_polygon_plane(&n, x, y, &pl_left))
+	return;
+
+    dealloc_src(&x, &y, 0);
+
+    if (clip_polygon_plane(&n, x, y, &pl_rite))
+	return;
+
+    dealloc_src(&x, &y, 1);
+
+    if (clip_polygon_plane(&n, x, y, &pl_bot))
+	return;
+
+    dealloc_src(&x, &y, 1);
+
+    if (clip_polygon_plane(&n, x, y, &pl_top))
+	return;
+
+    dealloc_src(&x, &y, 1);
+
+    n = do_convert(x, y, n);
+
+    R_polygon_abs(xi, yi, n);
+}
+
+static void polydots_clip(const double *x, const double *y, int n)
+{
+    double ux0 = clip.left;
+    int i, j;
+
+    alloc_src(n);
+
+    for (i = j = 0; i < n; i++) {
+	double xx = x[i];
+	double yy = y[i];
+
+	if (D_is_lat_lon())
+	    xx -= shift_angle(x[i] - ux0);
+
+	if (xx < clip.left || xx > clip.rite)
+	    continue;
+	if (yy < clip.bot || yy > clip.top)
+	    continue;
+
+	xf[j] = xx;
+	yf[j] = yy;
+	j++;
+    }
+
+    n = do_convert(xf, yf, n);
+
+    R_polydots_abs(xi, yi, j);
+}
+
+static void box_clip(double x1, double y1, double x2, double y2)
+{
+    x1 = max(clip.left, min(clip.rite, x1));
+    x2 = max(clip.left, min(clip.rite, x2));
+    y1 = max(clip.bot, min(clip.top, y1));
+    y2 = max(clip.bot, min(clip.top, y2));
+
+    x1 = D_u_to_d_col(x1);
+    x2 = D_u_to_d_col(x2);
+    y1 = D_u_to_d_row(y1);
+    y2 = D_u_to_d_row(y2);
+
+    R_box_abs(x1, y1, x2, y2);
+}
+
+static void box_clip_ll(double x1, double y1, double x2, double y2)
+{
+    double ux0 = clip.left;
+    double ux1 = clip.rite;
+    int lo, hi, i;
+
+    x2 = x1 + coerce(x2 - x1);
+
+    lo = -shift_count(ux1 - x1);
+    hi = shift_count(x2 - ux0);
+
+    for (i = lo; i <= hi; i++)
+	box_clip(x1 - i * 360, y1, x2 - i * 360, y2);
+}
+
+/******************************************************************************/
 
 static int cull_polyline_plane(int *pn, const double *x, const double *y,
 			       const struct plane *p)
@@ -458,14 +560,6 @@ static void polyline_cull(const double *x, const double *y, int n)
     n = do_convert(x, y, n);
 
     R_polyline_abs(xi, yi, n);
-}
-
-static void polyline_clip(const double *x, const double *y, int n)
-{
-    int i;
-
-    for (i = 1; i < n; i++)
-	line_clip(x[i - 1], y[i - 1], x[i], y[i]);
 }
 
 static int cull_polygon_plane(int *pn, const double *x, const double *y,
@@ -542,114 +636,15 @@ static void polygon_cull(const double *x, const double *y, int n)
     R_polygon_abs(xi, yi, n);
 }
 
-static int clip_polygon_plane(int *pn, const double *x, const double *y,
-			      const struct plane *p)
-{
-    int n = *pn;
-    double x0 = x[n - 1];
-    double y0 = y[n - 1];
-    double d0 = dist_plane(x0, y0, p);
-    int i, j;
-
-    for (i = j = 0; i < n; i++) {
-	double x1 = x[i];
-	double y1 = y[i];
-	double d1 = dist_plane(x1, y1, p);
-	int in0 = d0 <= 0;
-	int in1 = d1 <= 0;
-
-	if (in0 != in1) {	/* edge crossing */
-	    alloc_src(j + 1);
-	    xf[j] = interpolate(x0, x1, d0, d1);
-	    yf[j] = interpolate(y0, y1, d0, d1);
-	    j++;
-	}
-
-	if (in1) {		/* point inside */
-	    alloc_src(j + 1);
-	    xf[j] = x[i];
-	    yf[j] = y[i];
-	    j++;
-	}
-
-	x0 = x1;
-	y0 = y1;
-	d0 = d1;
-    }
-
-    *pn = j;
-
-    return (j == 0);
-}
-
-static void polygon_clip(const double *x, const double *y, int n)
-{
-    alloc_src(n + 10);
-
-    if (clip_polygon_plane(&n, x, y, &pl_left))
-	return;
-
-    dealloc_src(&x, &y, 0);
-
-    if (clip_polygon_plane(&n, x, y, &pl_rite))
-	return;
-
-    dealloc_src(&x, &y, 1);
-
-    if (clip_polygon_plane(&n, x, y, &pl_bot))
-	return;
-
-    dealloc_src(&x, &y, 1);
-
-    if (clip_polygon_plane(&n, x, y, &pl_top))
-	return;
-
-    dealloc_src(&x, &y, 1);
-
-    n = do_convert(x, y, n);
-
-    R_polygon_abs(xi, yi, n);
-}
-
-static void box_clip(double x1, double y1, double x2, double y2)
-{
-    x1 = max(clip.left, min(clip.rite, x1));
-    x2 = max(clip.left, min(clip.rite, x2));
-    y1 = max(clip.top, min(clip.bot, y1));
-    y2 = max(clip.top, min(clip.bot, y2));
-
-    x1 = D_u_to_d_col(x1);
-    x2 = D_u_to_d_col(x2);
-    y1 = D_u_to_d_row(y1);
-    y2 = D_u_to_d_row(y2);
-
-    R_box_abs(x1, y1, x2, y2);
-}
-
-static void box_clip_ll(double x1, double y1, double x2, double y2)
-{
-    double ux0 = clip.left;
-    double ux1 = clip.rite;
-    int lo, hi, i;
-
-    x2 = x1 + coerce(x2 - x1);
-
-    lo = -shift_count(ux1 - x1);
-    hi = shift_count(x2 - ux0);
-
-    for (i = lo; i <= hi; i++)
-	box_clip(x1 + i * 360, y1, x2 + i * 360, y2);
-}
-
 static void box_cull(double x1, double y1, double x2, double y2)
 {
     if (x1 > clip.rite && x2 > clip.rite)
 	return;
     if (x1 < clip.left && x2 < clip.left)
 	return;
-    if (y1 > clip.bot && y2 > clip.bot)
+    if (y1 > clip.top && y2 > clip.top)
 	return;
-    if (y1 < clip.top && y2 < clip.top)
+    if (y1 < clip.bot && y2 < clip.bot)
 	return;
 
     x1 = D_u_to_d_col(x1);
@@ -672,36 +667,7 @@ static void box_cull_ll(double x1, double y1, double x2, double y2)
     hi = shift_count(x2 - ux0);
 
     for (i = lo; i <= hi; i++)
-	box_clip(x1 + i * 360, y1, x2 + i * 360, y2);
-}
-
-static void polydots_cull(const double *x, const double *y, int n)
-{
-    double ux0 = clip.left;
-    int i, j;
-
-    alloc_src(n);
-
-    for (i = j = 0; i < n; i++) {
-	double xx = x[i];
-	double yy = y[i];
-
-	if (D_is_lat_lon())
-	    xx -= shift_angle(x[i] - ux0);
-
-	if (xx < clip.left || xx > clip.rite)
-	    continue;
-	if (yy < clip.bot || yy > clip.top)
-	    continue;
-
-	xf[j] = xx;
-	yf[j] = yy;
-	j++;
-    }
-
-    n = do_convert(xf, yf, n);
-
-    R_polydots_abs(xi, yi, j);
+	box_clip(x1 - i * 360, y1, x2 - i * 360, y2);
 }
 
 static int line_cull(double x1, double y1, double x2, double y2)
@@ -710,9 +676,9 @@ static int line_cull(double x1, double y1, double x2, double y2)
 	return 1;
     if (x1 < clip.left && x2 < clip.left)
 	return 1;
-    if (y1 > clip.bot && y2 > clip.bot)
+    if (y1 > clip.top && y2 > clip.top)
 	return 1;
-    if (y1 < clip.top && y2 < clip.top)
+    if (y1 < clip.bot && y2 < clip.bot)
 	return 1;
 
     x1 = D_u_to_d_col(x1);
@@ -745,12 +711,131 @@ static int line_cull_ll(double ax, double ay, double bx, double by)
     ret = 1;
 
     for (i = lo; i <= hi; i++)
-	ret &= line_cull(ax + i * 360, ay, bx + i * 360, by);
+	ret &= line_cull(ax - i * 360, ay, bx - i * 360, by);
 
     return ret;
 }
 
-int D_cont_abs_cull(double x, double y)
+/******************************************************************************/
+
+static void D_move_abs_raw(double x, double y)
+{
+    cur.x = x;
+    cur.y = y;
+
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
+    R_move_abs(x, y);
+}
+
+static void D_move_rel_raw(double x, double y)
+{
+    D_move_abs_raw(cur.x + x, cur.y + y);
+}
+
+static void D_cont_abs_raw(double x, double y)
+{
+    cur.x = x;
+    cur.y = y;
+
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
+    R_cont_abs(x, y);
+}
+
+static void D_cont_rel_raw(double x, double y)
+{
+    D_cont_abs_raw(cur.x + x, cur.y + y);
+}
+
+static void D_line_abs_raw(double x1, double y1, double x2, double y2)
+{
+    D_move_abs_raw(x1, y1);
+    D_cont_abs_raw(x2, y2);
+}
+
+static void D_line_rel_raw(double x1, double y1, double x2, double y2)
+{
+    D_move_rel_raw(x1, y1);
+    D_cont_rel_raw(x2, y2);
+}
+
+static void D_polydots_abs_raw(const double *x, const double *y, int n)
+{
+    n = do_convert(x, y, n);
+    R_polydots_abs(xi, yi, n);
+}
+
+static void D_polydots_rel_raw(const double *x, const double *y, int n)
+{
+    rel_to_abs(&x, &y, n);
+    D_polydots_abs_raw(x, y, n);
+    dealloc_src(&x, &y, 1);
+}
+
+static void D_polyline_abs_raw(const double *x, const double *y, int n)
+{
+    n = do_convert(x, y, n);
+    R_polyline_abs(xi, yi, n);
+}
+
+static void D_polyline_rel_raw(const double *x, const double *y, int n)
+{
+    rel_to_abs(&x, &y, n);
+    D_polyline_abs_raw(x, y, n);
+    dealloc_src(&x, &y, 1);
+}
+
+static void D_polygon_abs_raw(const double *x, const double *y, int n)
+{
+    n = do_convert(x, y, n);
+    R_polygon_abs(xi, yi, n);
+}
+
+static void D_polygon_rel_raw(const double *x, const double *y, int n)
+{
+    rel_to_abs(&x, &y, n);
+    D_polygon_abs_raw(x, y, n);
+    dealloc_src(&x, &y, 1);
+}
+
+static void D_box_abs_raw(double x1, double y1, double x2, double y2)
+{
+    x1 = D_u_to_d_col(x1);
+    x2 = D_u_to_d_col(x2);
+    y1 = D_u_to_d_row(y1);
+    y2 = D_u_to_d_row(y2);
+
+    R_box_abs(x1, y1, x2, y2);
+}
+
+static void D_box_rel_raw(double x2, double y2)
+{
+    D_box_abs_raw(cur.x, cur.y, x2, y2);
+}
+
+static struct functions raw_functions = {
+    D_move_abs_raw,
+    D_move_rel_raw,
+    D_cont_abs_raw,
+    D_cont_rel_raw,
+    D_line_abs_raw,
+    D_line_rel_raw,
+    D_polydots_abs_raw,
+    D_polydots_rel_raw,
+    D_polyline_abs_raw,
+    D_polyline_rel_raw,
+    D_polygon_abs_raw,
+    D_polygon_rel_raw,
+    D_box_abs_raw,
+    D_box_rel_raw,
+};
+
+/******************************************************************************/
+
+static void D_cont_abs_cull(double x, double y)
 {
     int ret;
 
@@ -764,43 +849,41 @@ int D_cont_abs_cull(double x, double y)
 
     cur.x = x;
     cur.y = y;
-
-    return ret;
 }
 
-int D_cont_rel_cull(double x, double y)
+static void D_cont_rel_cull(double x, double y)
 {
-    return D_cont_abs_cull(cur.x + x, cur.y + y);
+    D_cont_abs_cull(cur.x + x, cur.y + y);
 }
 
-int D_line_abs_cull(double x1, double y1, double x2, double y2)
+static void D_line_abs_cull(double x1, double y1, double x2, double y2)
 {
     D_move_rel(x1, y1);
-    return D_cont_rel_cull(x2, y2);
+    D_cont_rel_cull(x2, y2);
 }
 
-int D_line_rel_cull(double x1, double y1, double x2, double y2)
+static void D_line_rel_cull(double x1, double y1, double x2, double y2)
 {
     D_move_abs(x1, y1);
-    return D_cont_abs_cull(x2, y2);
+    D_cont_abs_cull(x2, y2);
 }
 
-void D_polydots_abs_cull(const double *x, const double *y, int n)
+static void D_polydots_abs_cull(const double *x, const double *y, int n)
 {
     if (!window_set)
 	D_clip_to_map();
 
-    polydots_cull(x, y, n);
+    polydots_clip(x, y, n);
 }
 
-void D_polydots_rel_cull(const double *x, const double *y, int n)
+static void D_polydots_rel_cull(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polydots_abs_cull(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_polyline_abs_cull(const double *x, const double *y, int n)
+static void D_polyline_abs_cull(const double *x, const double *y, int n)
 {
     if (n < 2)
 	return;
@@ -814,14 +897,14 @@ void D_polyline_abs_cull(const double *x, const double *y, int n)
 	polyline_cull(x, y, n);
 }
 
-void D_polyline_rel_cull(const double *x, const double *y, int n)
+static void D_polyline_rel_cull(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polyline_abs_cull(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_polygon_abs_cull(const double *x, const double *y, int n)
+static void D_polygon_abs_cull(const double *x, const double *y, int n)
 {
     if (!window_set)
 	D_clip_to_map();
@@ -832,14 +915,14 @@ void D_polygon_abs_cull(const double *x, const double *y, int n)
 	polygon_cull(x, y, n);
 }
 
-void D_polygon_rel_cull(const double *x, const double *y, int n)
+static void D_polygon_rel_cull(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polygon_abs_cull(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_box_abs_cull(double x1, double y1, double x2, double y2)
+static void D_box_abs_cull(double x1, double y1, double x2, double y2)
 {
     if (!window_set)
 	D_clip_to_map();
@@ -850,12 +933,31 @@ void D_box_abs_cull(double x1, double y1, double x2, double y2)
 	box_cull(x1, y1, x2, y2);
 }
 
-void D_box_rel_cull(double x2, double y2)
+static void D_box_rel_cull(double x2, double y2)
 {
     D_box_abs_cull(cur.x, cur.y, x2, y2);
 }
 
-int D_cont_abs_clip(double x, double y)
+static struct functions cull_functions = {
+    D_move_abs_raw,
+    D_move_rel_raw,
+    D_cont_abs_cull,
+    D_cont_rel_cull,
+    D_line_abs_cull,
+    D_line_rel_cull,
+    D_polydots_abs_cull,
+    D_polydots_rel_cull,
+    D_polyline_abs_cull,
+    D_polyline_rel_cull,
+    D_polygon_abs_cull,
+    D_polygon_rel_cull,
+    D_box_abs_cull,
+    D_box_rel_cull,
+};
+
+/******************************************************************************/
+
+static void D_cont_abs_clip(double x, double y)
 {
     int ret;
 
@@ -869,43 +971,41 @@ int D_cont_abs_clip(double x, double y)
 
     cur.x = x;
     cur.y = y;
-
-    return ret;
 }
 
-int D_cont_rel_clip(double x, double y)
+static void D_cont_rel_clip(double x, double y)
 {
-    return D_cont_abs_clip(cur.x + x, cur.y + y);
+    D_cont_abs_clip(cur.x + x, cur.y + y);
 }
 
-int D_line_abs_clip(double x1, double y1, double x2, double y2)
+static void D_line_abs_clip(double x1, double y1, double x2, double y2)
 {
     D_move_abs(x1, y1);
-    return D_cont_abs_clip(x2, y2);
+    D_cont_abs_clip(x2, y2);
 }
 
-int D_line_rel_clip(double x1, double y1, double x2, double y2)
+static void D_line_rel_clip(double x1, double y1, double x2, double y2)
 {
     D_move_rel(x1, y1);
-    return D_cont_rel_clip(x2, y2);
+    D_cont_rel_clip(x2, y2);
 }
 
-void D_polydots_abs_clip(const double *x, const double *y, int n)
+static void D_polydots_abs_clip(const double *x, const double *y, int n)
 {
     if (!window_set)
 	D_clip_to_map();
 
-    polydots_cull(x, y, n);
+    polydots_clip(x, y, n);
 }
 
-void D_polydots_rel_clip(const double *x, const double *y, int n)
+static void D_polydots_rel_clip(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polydots_abs_clip(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_polyline_abs_clip(const double *x, const double *y, int n)
+static void D_polyline_abs_clip(const double *x, const double *y, int n)
 {
     if (!window_set)
 	D_clip_to_map();
@@ -919,14 +1019,14 @@ void D_polyline_abs_clip(const double *x, const double *y, int n)
 	polyline_clip(x, y, n);
 }
 
-void D_polyline_rel_clip(const double *x, const double *y, int n)
+static void D_polyline_rel_clip(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polyline_abs_clip(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_polygon_abs_clip(const double *x, const double *y, int n)
+static void D_polygon_abs_clip(const double *x, const double *y, int n)
 {
     if (!window_set)
 	D_clip_to_map();
@@ -937,14 +1037,14 @@ void D_polygon_abs_clip(const double *x, const double *y, int n)
 	polygon_clip(x, y, n);
 }
 
-void D_polygon_rel_clip(const double *x, const double *y, int n)
+static void D_polygon_rel_clip(const double *x, const double *y, int n)
 {
     rel_to_abs(&x, &y, n);
     D_polygon_abs_clip(x, y, n);
     dealloc_src(&x, &y, 1);
 }
 
-void D_box_abs_clip(double x1, double y1, double x2, double y2)
+static void D_box_abs_clip(double x1, double y1, double x2, double y2)
 {
     if (!window_set)
 	D_clip_to_map();
@@ -955,106 +1055,181 @@ void D_box_abs_clip(double x1, double y1, double x2, double y2)
 	box_clip(x1, y1, x2, y2);
 }
 
-void D_box_rel_clip(double x2, double y2)
+static void D_box_rel_clip(double x2, double y2)
 {
     D_box_abs_clip(cur.x, cur.y, x2, y2);
 }
 
+static struct functions clip_functions = {
+    D_move_abs_raw,
+    D_move_rel_raw,
+    D_cont_abs_clip,
+    D_cont_rel_clip,
+    D_line_abs_clip,
+    D_line_rel_clip,
+    D_polydots_abs_clip,
+    D_polydots_rel_clip,
+    D_polyline_abs_clip,
+    D_polyline_rel_clip,
+    D_polygon_abs_clip,
+    D_polygon_rel_clip,
+    D_box_abs_clip,
+    D_box_rel_clip,
+};
+
+/******************************************************************************/
+
+/*!
+ * \brief set clipping window
+ *
+ * Sets the clipping window to the pixel window that corresponds
+ * to the current database region. This is the default.
+ *
+ *  \param top
+ *  \param bottom
+ *  \param left
+ *  \param right
+ */
+
+void D_set_clip(double t, double b, double l, double r)
+{
+    clip.left = min(l, r);
+    clip.rite = max(l, r);
+    clip.bot = min(b, t);
+    clip.top = max(b, t);
+
+    pl_left.k = clip.left;
+    pl_rite.k = -clip.rite;
+    pl_bot.k = clip.bot;
+    pl_top.k = -clip.top;
+
+    window_set = 1;
+}
+
+/*!
+ * \brief set clipping window to map window
+ *
+ * Sets the clipping window to the pixel window that corresponds to the
+ * current database region. This is the default.
+ *
+ *  \param ~
+ */
+
+void D_clip_to_map(void)
+{
+    double t, b, l, r;
+
+    D_get_src(&t, &b, &l, &r);
+    D_set_clip(t, b, l, r);
+}
+
+void D_line_width(double d)
+{
+    R_line_width(d > 0 ? d : 0);
+}
+
+void D_get_text_box(const char *text, double *t, double *b, double *l, double *r)
+{
+    double T, B, L, R;
+
+    R_get_text_box(text, &T, &B, &L, &R);
+
+    *t = D_d_to_u_row(T);
+    *b = D_d_to_u_row(B);
+    *l = D_d_to_u_col(L);
+    *r = D_d_to_u_col(R);
+
+    if (*t < *b) {
+	double tmp = *t; *t = *b; *b = tmp;
+    }
+
+    if (*r < *l) {
+	double tmp = *r; *r = *l; *l = tmp;
+    }
+}
+
+/******************************************************************************/
+
 void D_move_abs(double x, double y)
 {
-    cur.x = x;
-    cur.y = y;
-
-    x = D_u_to_d_col(x);
-    y = D_u_to_d_row(y);
-
-    R_move_abs(x, y);
+	(*fns->move_abs)(x, y);
 }
 
 void D_move_rel(double x, double y)
 {
-    D_move_abs(cur.x + x, cur.y + y);
+	(*fns->move_rel)(x, y);
 }
 
 void D_cont_abs(double x, double y)
 {
-    cur.x = x;
-    cur.y = y;
-
-    x = D_u_to_d_col(x);
-    y = D_u_to_d_row(y);
-
-    R_cont_abs(x, y);
+	(*fns->cont_abs)(x, y);
 }
 
 void D_cont_rel(double x, double y)
 {
-    D_cont_abs(cur.x + x, cur.y + y);
+	(*fns->cont_rel)(x, y);
 }
 
 void D_line_abs(double x1, double y1, double x2, double y2)
 {
-    D_move_abs(x1, y1);
-    D_cont_abs(x2, y2);
+	(*fns->line_abs)(x1, y1, x2, y2);
 }
 
 void D_line_rel(double x1, double y1, double x2, double y2)
 {
-    D_move_rel(x1, y1);
-    D_cont_rel(x2, y2);
+	(*fns->line_rel)(x1, y1, x2, y2);
 }
 
 void D_polydots_abs(const double *x, const double *y, int n)
 {
-    n = do_convert(x, y, n);
-    R_polydots_abs(xi, yi, n);
+	(*fns->polydots_abs)(x, y, n);
 }
 
 void D_polydots_rel(const double *x, const double *y, int n)
 {
-    rel_to_abs(&x, &y, n);
-    D_polydots_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
+	(*fns->polydots_rel)(x, y, n);
 }
 
 void D_polyline_abs(const double *x, const double *y, int n)
 {
-    n = do_convert(x, y, n);
-    R_polyline_abs(xi, yi, n);
+	(*fns->polyline_abs)(x, y, n);
 }
 
 void D_polyline_rel(const double *x, const double *y, int n)
 {
-    rel_to_abs(&x, &y, n);
-    D_polyline_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
+	(*fns->polyline_rel)(x, y, n);
 }
 
 void D_polygon_abs(const double *x, const double *y, int n)
 {
-    n = do_convert(x, y, n);
-    R_polygon_abs(xi, yi, n);
+	(*fns->polygon_abs)(x, y, n);
 }
 
 void D_polygon_rel(const double *x, const double *y, int n)
 {
-    rel_to_abs(&x, &y, n);
-    D_polygon_abs(x, y, n);
-    dealloc_src(&x, &y, 1);
+	(*fns->polygon_rel)(x, y, n);
 }
 
 void D_box_abs(double x1, double y1, double x2, double y2)
 {
-    x1 = D_u_to_d_col(x1);
-    x2 = D_u_to_d_col(x2);
-    y1 = D_u_to_d_row(y1);
-    y2 = D_u_to_d_row(y2);
-
-    R_box_abs(x1, y1, x2, y2);
+	(*fns->box_abs)(x1, y1, x2, y2);
 }
 
 void D_box_rel(double x2, double y2)
 {
-    D_box_abs(cur.x, cur.y, x2, y2);
+	(*fns->box_rel)(x2, y2);
 }
+
+/******************************************************************************/
+
+void D_set_clip_mode(int mode)
+{
+    switch (mode) {
+    case D_MODE_NONE: fns = &raw_functions;	break;
+    case D_MODE_CULL: fns = &cull_functions;	break;
+    case D_MODE_CLIP: fns = &clip_functions;	break;
+    }
+}
+
+/******************************************************************************/
 

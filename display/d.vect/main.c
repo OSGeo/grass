@@ -100,8 +100,6 @@ int main(int argc, char **argv)
     struct Option *lsize_opt, *font_opt, *enc_opt, *xref_opt, *yref_opt;
     struct Option *attrcol_opt, *maxreg_opt, *minreg_opt;
     struct Option *width_opt, *wcolumn_opt, *wscale_opt;
-    struct Option *render_opt;
-    struct Flag *verbose_flag;	/* please remove before GRASS 7 released */
     struct Flag *id_flag, *table_acolors_flag, *cats_acolors_flag,
 	*zcol_flag;
     struct cat_list *Clist;
@@ -323,24 +321,6 @@ int main(int argc, char **argv)
 	_("Maximum region size (average from height and width) "
 	  "when map is displayed");
 
-    render_opt = G_define_option();
-    render_opt->key = "render";
-    render_opt->type = TYPE_STRING;
-    render_opt->required = NO;
-    render_opt->multiple = NO;
-    render_opt->answer = "l";
-    render_opt->options = "d,c,l";
-    render_opt->description = _("Rendering method for filled polygons");
-    render_opt->descriptions =
-	_("d;use the display library basic functions (features: polylines);"
-	  "c;use the display library clipping functions (features: clipping);"
-	  "l;use the display library culling functions (features: culling, polylines)");
-
-    /* please remove before GRASS 7 released */
-    verbose_flag = G_define_flag();
-    verbose_flag->key = 'v';
-    verbose_flag->description = _("Run verbosely");
-
     /* Colors */
     table_acolors_flag = G_define_flag();
     table_acolors_flag->key = 'a';
@@ -369,22 +349,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (G_strcasecmp(render_opt->answer, "d") == 0)
-	render = RENDER_DP;
-    else if (G_strcasecmp(render_opt->answer, "c") == 0)
-	render = RENDER_DPC;
-    else if (G_strcasecmp(render_opt->answer, "l") == 0)
-	render = RENDER_DPL;
-    else
-	G_fatal_error(_("Invalid rendering method <%s>"), render_opt->answer);
-
-    /* please remove -v flag before GRASS 7 released */
-    if (verbose_flag->answer) {
-	G_putenv("GRASS_VERBOSE", "3");
-	G_warning(_("The '-v' flag is superseded and will be removed "
-		    "in future. Please use '--verbose' instead."));
-    }
-    /* but keep this */
     if (G_verbose() > G_verbose_std())
 	verbose = TRUE;
 
