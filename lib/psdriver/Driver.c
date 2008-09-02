@@ -39,7 +39,6 @@ const struct driver *PS_Driver(void)
     drv.Begin_scaled_raster = PS_begin_scaled_raster;
     drv.Scaled_raster = PS_scaled_raster;
     drv.End_scaled_raster = PS_end_scaled_raster;
-    drv.Respond = PS_Respond;
     drv.color_rgb = PS_color_rgb;
     drv.draw_line = PS_draw_line;
     drv.draw_point = PS_draw_point;

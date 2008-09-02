@@ -39,7 +39,6 @@ const struct driver *Cairo_Driver(void)
     drv.Begin_scaled_raster = Cairo_begin_scaled_raster;
     drv.Scaled_raster = Cairo_scaled_raster;
     drv.End_scaled_raster = Cairo_end_scaled_raster;
-    drv.Respond = Cairo_Respond;
     drv.color_rgb = Cairo_color_rgb;
     drv.draw_line = Cairo_draw_line;
     drv.draw_point = Cairo_draw_point;

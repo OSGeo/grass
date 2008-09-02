@@ -211,7 +211,6 @@ int main(int argc, char **argv)
     else
 	bar(&dist_stats, &pcolors);
 
-    R_flush();
     R_close_driver();
 
     exit(EXIT_SUCCESS);

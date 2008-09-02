@@ -69,13 +69,6 @@ Several environment variables affect the operation of the Cairo driver:
   <LI><B>GRASS_TRANSPARENT=[TRUE|FALSE]</B><BR>
     sets transparent background on (TRUE) or off (FALSE, default).
   </LI>
-  <LI><B>GRASS_AUTO_WRITE=[TRUE|FALSE]</B><BR>
-    if set to <tt>TRUE</tt>, the image file will be written after each 
-    operation (i.e. whenever a client disconnects), rather than
-    only being written out when the driver terminates.<BR>
-    (Note: This only applies to bitmap formats - vector formats
-    are always written directly to file).
-  </LI>
   <LI><B>GRASS_PNG_READ</B><BR>
      if <tt>TRUE</tt>, the Cairo driver will initialize the image from
     the contents of GRASS_PNGFILE.<BR>

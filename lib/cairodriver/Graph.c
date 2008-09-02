@@ -233,9 +233,6 @@ int Cairo_Graph_set(void)
     else
 	ca.bgcolor_a = 1.0;
 
-    p = getenv("GRASS_PNG_AUTO_WRITE");
-    ca.auto_write = p && strcmp(p, "TRUE") == 0;
-
     antialias = CAIRO_ANTIALIAS_DEFAULT;
     p = getenv("GRASS_ANTIALIAS");
     if (p && G_strcasecmp(p, "default") == 0)

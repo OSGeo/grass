@@ -1,7 +1,6 @@
 #ifndef _GRASS_RASTER_H
 #define _GRASS_RASTER_H
 
-void R_flush(void);
 int R_open_driver(void);
 void R_close_driver(void);
 

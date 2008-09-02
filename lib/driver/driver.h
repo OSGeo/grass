@@ -35,7 +35,6 @@ struct driver
 			 const unsigned char *,
 			 const unsigned char *, const unsigned char *);
     void (*End_scaled_raster)(void);
-    void (*Respond)(void);
 
     void (*color_rgb)(int, int, int);
     void (*draw_line)(double, double, double, double);
@@ -111,9 +110,6 @@ extern int COM_scaled_raster(int, int, const unsigned char *,
 			     const unsigned char *, const unsigned char *,
 			     const unsigned char *);
 extern void COM_end_scaled_raster(void);
-
-/* Respond.c */
-extern void COM_Respond(void);
 
 /* Set_window.c */
 extern void COM_Set_window(double, double, double, double);

@@ -39,7 +39,6 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	G_plot_where_xy(lon1, (lat1 + lat2) / 2, &text_x, &text_y);
 	G_plot_line(lon1, lat1, lon2, lat2);
     }
-    R_flush();
 
     return 0;
 }

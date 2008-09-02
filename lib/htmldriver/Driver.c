@@ -37,7 +37,6 @@ const struct driver *HTML_Driver(void)
     drv.Begin_scaled_raster = NULL;
     drv.Scaled_raster = NULL;
     drv.End_scaled_raster = NULL;
-    drv.Respond = NULL;
     drv.color_rgb = NULL;
     drv.draw_line = NULL;
     drv.draw_point = NULL;

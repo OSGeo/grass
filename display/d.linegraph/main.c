@@ -333,8 +333,8 @@ int main(int argc, char **argv)
 
     for (i = 0; i <= num_y_files; i++) {
 	if ((in[i].fp = fopen(in[i].full_name, "r")) == NULL) {
-	    sprintf(txt, "Could not open input file <%s>.", in[i].full_name);
-	    death(txt);
+	    R_close_driver();
+	    G_fatal_error(_("Unable to open input file <%s>"), in[i].full_name);
 	}
     }
 
@@ -352,8 +352,8 @@ int main(int argc, char **argv)
 
 	/* didn't find a number or hit EOF before our time */
 	if ((err != 1) || (err == EOF)) {
-	    sprintf(txt, _("Problem reading X data file at line %d"), line);
-	    death(txt);
+	    R_close_driver();
+	    G_fatal_error(_("Problem reading X data file at line %d"), line);
 	}
 
 	/* for each Y data file, get a value and compute where to draw it */
@@ -362,10 +362,9 @@ int main(int argc, char **argv)
 	    if (line < in[i].num_pnts) {
 		err = fscanf(in[i].fp, "%f", &in[i].value);
 		if ((in[i].num_pnts >= line) && (err != 1)) {
-		    sprintf(txt,
-			    _("Problem reading <%s> data file at line %d"),
-			    in[i].name, line);
-		    death(txt);
+		    R_close_driver();
+		    G_fatal_error(_("Problem reading <%s> data file at line %d"),
+				  in[i].name, line);
 		}
 
 		/* in case the Y file has fewer lines than the X file, we will skip
@@ -554,7 +553,6 @@ int main(int argc, char **argv)
     D_use_color(title_color);
     D_polyline_abs(x_line, y_line, 3);
 
-    R_flush();
     R_close_driver();
     exit(EXIT_SUCCESS);
 }
@@ -566,11 +564,3 @@ float rem(long int x, long int y)
     return ((float)(x - y * d));
 }
 
-
-/* a function for making an exit after the R_driver is open */
-int death(char *gasp)
-{
-    R_flush();
-    R_close_driver();
-    G_fatal_error("%s", gasp);
-}
