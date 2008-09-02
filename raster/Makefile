@@ -38,7 +38,6 @@ SUBDIRS = \
 	r.in.xyz \
 	r.kappa \
 	r.lake \
-	r.le \
 	r.li \
 	r.los \
 	r.mapcalc \
@@ -109,6 +108,8 @@ SUBDIRS = \
 	r.what \
 	r.what.color \
 	wildfire
+
+#	r.le \
 
 GDALBASED = r.in.gdal r.out.gdal
 
