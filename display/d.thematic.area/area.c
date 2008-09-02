@@ -155,7 +155,7 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 
 	/* plot polygon in class color */
 	D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
-	plot_polygon(Points->x, Points->y, Points->n_points);
+	D_polygon_abs(Points->x, Points->y, Points->n_points);
 
 	/* XXX rewrite boundary */
 	if (bcolor) {
@@ -164,12 +164,12 @@ int dareatheme(struct Map_info *Map, struct cat_list *Clist,
 	    Vect_get_area_points(Map, area, Points);
 	    D_RGB_color(bcolor->r, bcolor->g, bcolor->b);
 	    /*use different user defined render methods */
-	    plot_polyline(Points->x, Points->y, Points->n_points);
+	    D_polyline_abs(Points->x, Points->y, Points->n_points);
 	    for (i = 0; i < n_isles; i++) {
 		isle = Vect_get_area_isle(Map, area, i);
 		Vect_get_isle_points(Map, isle, Points);
 		/*use different user defined render methods */
-		plot_polyline(Points->x, Points->y, Points->n_points);
+		D_polyline_abs(Points->x, Points->y, Points->n_points);
 	    }
 	}
     }				/* end for loop over areas */

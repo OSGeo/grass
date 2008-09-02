@@ -74,32 +74,6 @@ void D_clip_to_map(void);
 void D_line_width(double);
 void D_get_text_box(const char *, double *, double *, double *, double *);
 
-int D_cont_abs_cull(double, double);
-int D_cont_rel_cull(double, double);
-int D_line_abs_cull(double, double, double, double);
-int D_line_rel_cull(double, double, double, double);
-void D_polydots_abs_cull(const double *, const double *, int);
-void D_polydots_rel_cull(const double *, const double *, int);
-void D_polyline_abs_cull(const double *, const double *, int);
-void D_polyline_rel_cull(const double *, const double *, int);
-void D_polygon_abs_cull(const double *, const double *, int);
-void D_polygon_rel_cull(const double *, const double *, int);
-void D_box_abs_cull(double, double, double, double);
-void D_box_rel_cull(double, double);
-
-int D_cont_abs_clip(double, double);
-int D_cont_rel_clip(double, double);
-int D_line_abs_clip(double, double, double, double);
-int D_line_rel_clip(double, double, double, double);
-void D_polydots_abs_clip(const double *, const double *, int);
-void D_polydots_rel_clip(const double *, const double *, int);
-void D_polyline_abs_clip(const double *, const double *, int);
-void D_polyline_rel_clip(const double *, const double *, int);
-void D_polygon_abs_clip(const double *, const double *, int);
-void D_polygon_rel_clip(const double *, const double *, int);
-void D_box_abs_clip(double, double, double, double);
-void D_box_rel_clip(double, double);
-
 void D_move_abs(double, double);
 void D_move_rel(double, double);
 void D_cont_abs(double, double);
@@ -114,6 +88,14 @@ void D_polygon_abs(const double *, const double *, int);
 void D_polygon_rel(const double *, const double *, int);
 void D_box_abs(double, double, double, double);
 void D_box_rel(double, double);
+
+enum clip_mode {
+    D_MODE_NONE,
+    D_MODE_CULL,
+    D_MODE_CLIP,
+};
+
+void D_set_clip_mode(int);
 
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);

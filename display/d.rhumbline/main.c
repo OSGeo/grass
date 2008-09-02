@@ -119,9 +119,9 @@ int main(int argc, char *argv[])
 	text_color = D_translate_color(deftcolor);
 #endif
 
-    setup_plot();
     plot(lon1, lat1, lon2, lat2, line_color, text_color);
 
     R_close_driver();
-    exit(0);
+
+    exit(EXIT_SUCCESS);
 }
