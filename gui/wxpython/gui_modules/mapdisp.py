@@ -1440,7 +1440,7 @@ class BufferedWindow(MapWindow, wx.Window):
                 elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                     if not hasattr(self, "copyCatsIds"):
                         # 'from' -> select by point
-                        nselected = digitClass.driver.SelectLineByPoint(pos1, type=VDigit_Lines_Type)
+                        nselected = digitClass.driver.SelectLineByPoint(pos1, digitClass.GetSelectType())
                         if nselected:
                             if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
                                 qdist = 10.0 * ((self.Map.region['e'] - self.Map.region['w']) / \
