@@ -969,6 +969,12 @@ class cmdPanel(wx.Panel):
         # parameters
         #
         visible_params = [ p for p in self.task.params if not p.get( 'hidden', 'no' ) == 'yes' ]
+        
+        try:
+            first_param = visible_params[0]
+        except IndexError:
+            first_param = None
+        
         for p in visible_params:
             which_sizer = tabsizer[ p['guisection'] ]
             which_panel = tab[ p['guisection'] ]
@@ -1229,6 +1235,9 @@ class cmdPanel(wx.Panel):
                 if tooltip:
                     txt.SetToolTipString(tooltip)
 
+            if p == first_param:
+                self.FindWindowById(p['wxId']).SetFocus()
+        
 	#
 	# determine panel size
 	#
