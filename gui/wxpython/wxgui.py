@@ -1403,9 +1403,18 @@ class GMFrame(wx.Frame):
             return
 
         if UserSettings.Get(group='manager', key='askOnRemoveLayer', subkey='enabled'):
-            layerName = str(self.curr_page.maptree.GetItemText(self.curr_page.maptree.layer_selected))
+            layerName = ''
+            for item in self.curr_page.maptree.GetSelections():
+                name = str(self.curr_page.maptree.GetItemText(item))
+                idx = name.find('(opacity')
+                if idx > -1:
+                    layerName += '<' + name[:idx].strip(' ') + '>, '
+                else:
+                    layerName += '<' + name + '>, '
+            layerName = layerName.rstrip(', ')
+            
             if layerName:
-                message = _("Do you want to remove map layer <%s> "
+                message = _("Do you want to remove map layer %s "
                             "from layer tree?") % layerName
             else:
                 message = _("Do you want to remove selected map layer "
