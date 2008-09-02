@@ -3435,14 +3435,15 @@ class MapFrame(wx.Frame):
         toolsmenu.AppendItem(modify)
         self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
         digitToolbar = self.toolbars['vdigit']
-        layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
-        if digitToolbar and \
-                digitToolbar.GetLayer() == layer_selected:
-            modify.Enable(False)
-        else:
-            if action == "modifyAttrb":
-                modify.Check(True)
-
+        if self.tree.layer_selected:
+            layer_selected = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer']
+            if digitToolbar and \
+                   digitToolbar.GetLayer() == layer_selected:
+                modify.Enable(False)
+            else:
+                if action == "modifyAttrb":
+                    modify.Check(True)
+        
         self.PopupMenu(toolsmenu)
         toolsmenu.Destroy()
 
