@@ -24,8 +24,8 @@
     Testing would be welcomed. :)  
 ***************************************************************************/
 
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 #include <map>
 
 extern "C" {
@@ -77,7 +77,7 @@ static void process_raster (int, InputMask, ScaleRange, int, int, int, bool, Sca
 static void copy_colors (char *, char *, char *);
 static void define_module (void);
 static struct Options define_options (void);
-static void read_scale (Option *, ScaleRange *);
+static void read_scale (Option *, ScaleRange &);
 
 
 /* 
@@ -90,10 +90,11 @@ static void adjust_region (char *name, char *mapset)
     struct Cell_head iimg_head;	/* the input image header file */
 
     if(G_get_cellhd(name, mapset, &iimg_head) < 0) 
-	G_fatal_error ("Unable to retreive header dat for input image");
+	G_fatal_error (_("Unable to read header of raster map <%s>"),
+		       G_fully_qualified_name(name, mapset));
 
     if(G_set_window(&iimg_head) < 0) 
-	G_fatal_error ("Invalid graphics region coordinates");
+	G_fatal_error (_("Invalid graphics region coordinates"));
 }
 
 
@@ -278,7 +279,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
     if(ialt_fd >= 0) alt = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
     if(ivis_fd >= 0) vis = (FCELL*)G_allocate_raster_buf(FCELL_TYPE);
 
-    fprintf(stderr, "Percent complete: ");
+    G_verbose_message(_("Percent complete..."));
 
     for(row = 0; row < G_window_rows(); row++)
     {
@@ -286,17 +287,20 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
 		
         /* read the next row */
 	if(G_get_raster_row(ifd, buf, row, FCELL_TYPE) < 0)
-	    G_fatal_error ("Unable to read from input file");
+	    G_fatal_error (_("Unable to read input raster map row %d"),
+			     row);
 
         /* read the next row of elevation values */
         if(ialt_fd >= 0)
 	    if(G_get_raster_row(ialt_fd, alt, row, FCELL_TYPE) < 0)
-		G_fatal_error ("Unable to read from elevation raster");
+		G_fatal_error (_("Unable to read elevation raster map row %d"),
+			       row);
 
         /* read the next row of elevation values */
         if(ivis_fd >= 0)
 	    if(G_get_raster_row(ivis_fd, vis, row, FCELL_TYPE) < 0)
-		G_fatal_error ("Unable to read from visibility raster");
+		G_fatal_error (_("Unable to read visibility raster map row %d"),
+			       row);
 
         /* loop over all the values in the row */
 	for(col = 0; col < G_window_cols(); col++)
@@ -372,7 +376,7 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
             buf[col] = buf[col] * ((float)oscale.max - (float)oscale.min) + oscale.min;
 
             if(~oflt && (buf[col] > (float)oscale.max))
-		G_warning ("The output data will overflow. Reflectance > 100%%");
+		G_warning (_("The output data will overflow. Reflectance > 100%%"));
 	}
 
         /* write output */
@@ -407,6 +411,8 @@ static void define_module (void)
     module->label = _("Performs atmospheric correction using the 6S algorithm.");
     module->description =
 	_("6S - Second Simulation of Satellite Signal in the Solar Spectrum.");
+    module->keywords = _("imagery, atmospheric correction");
+
     /* 
        " Incorporated into Grass by Christo A. Zietsman, January 2003.\n"
        " Converted from Fortran to C by Christo A. Zietsman, November 2002.\n\n"
@@ -433,73 +439,75 @@ static struct Options define_options (void)
 
     opts.iimg = G_define_standard_option (G_OPT_R_INPUT);
     opts.iimg->key		= "iimg";
-    opts.iimg->description	= "Input imagery map to be corrected";
-/*	opts.iimg->answer	= "ETM4_400x400.raw"; */
 
     opts.iscl = G_define_option();
     opts.iscl->key          = "iscl";
     opts.iscl->type         = TYPE_INTEGER;
-    opts.iscl->key_desc     = "Input scale range";
+    opts.iscl->key_desc     = "range";
     opts.iscl->required     = NO;
     opts.iscl->answer       = "0,255";
-    opts.iscl->description  = "Input imagery range [0,255]";
+    opts.iscl->description  = _("Input imagery range [0,255]");
+    opts.iscl->guisection = _("Input");
 
     opts.ialt = G_define_standard_option (G_OPT_R_INPUT);
     opts.ialt->key		= "ialt";
-    opts.ialt->required	= NO;
-    opts.ialt->answer	= "dem_float";
-    opts.ialt->description	= "Input altitude map in m (optional)";
+    opts.ialt->required	        = NO;
+    opts.ialt->answer	        = "dem_float";
+    opts.ialt->description	= _("Input altitude raster map in m (optional)");
+    opts.ialt->guisection       = _("Input");
 
     opts.ivis = G_define_standard_option (G_OPT_R_INPUT);
     opts.ivis->key		= "ivis";
-    opts.ivis->required	= NO;
-/*	opts.ivis->answer	= "visibility"; */
-    opts.ivis->description	= "Input visibility map in km (optional)";
+    opts.ivis->required	        = NO;
+    opts.ivis->description	= _("Input visibility raster map in km (optional)");
+    opts.ivis->guisection       = _("Input");
 
     opts.icnd = G_define_standard_option (G_OPT_F_INPUT);
     opts.icnd->key		= "icnd";
-    opts.icnd->required	= YES;
-/*	opts.icnd->answer	= "ETM4_atmospheric_input_GRASS.txt"; */
-    opts.icnd->description	= "6S input text file";
+    opts.icnd->required	        = YES;
+    opts.icnd->description	= _("Name of input text file");
 
     opts.oimg = G_define_standard_option (G_OPT_R_OUTPUT);
     opts.oimg->key		= "oimg";
-/*	opts.oimg->answer	= "6s_output_file"; */
-    opts.oimg->description	= "6S output imagery map";
 
     opts.oscl = G_define_option();
     opts.oscl->key          = "oscl";
     opts.oscl->type         = TYPE_INTEGER;
-    opts.oscl->key_desc     = "Output scale range";
-    opts.oscl->required     = YES;
+    opts.oscl->key_desc     = "range";
     opts.oscl->answer       = "0,255";
-    opts.oscl->description  = "Rescale output imagery map [0,255]";
+    opts.oscl->required     = NO;
+    opts.oscl->description  = _("Rescale output raster map [0,255]");
+    opts.oscl->guisection = _("Output");
 
     opts.oflt = G_define_flag();
     opts.oflt->key = 'f';
-    opts.oflt->description = "Output raster is floating point";
+    opts.oflt->description = _("Output raster is floating point");
+    opts.oflt->guisection = _("Output");
 
     opts.irad = G_define_flag();
     opts.irad->key = 'r';
-    opts.irad->description = "Input map converted to reflectance (default is radiance)";
+    opts.irad->description = _("Input map converted to reflectance (default is radiance)");
+    opts.irad->guisection = _("Input");
 
     opts.etmafter = G_define_flag();
     opts.etmafter->key = 'a';
-    opts.etmafter->description = "Input from ETM+ image taken after July 1, 2000";
+    opts.etmafter->description = _("Input from ETM+ image taken after July 1, 2000");
+    opts.etmafter->guisection = _("Input");
 
     opts.etmbefore = G_define_flag();
     opts.etmbefore->key = 'b';
-    opts.etmbefore->description = "Input from ETM+ image taken before July 1, 2000";
+    opts.etmbefore->description = _("Input from ETM+ image taken before July 1, 2000");
+    opts.etmbefore->guisection = _("Input");
 
     opts.optimize = G_define_flag();
     opts.optimize->key = 'o';
-    opts.optimize->description = "Try to increase computation speed when categorized altitude or/and visibility map is used.";
+    opts.optimize->description = _("Try to increase computation speed when categorized altitude or/and visibility map is used");
 
     return opts;
 }
 
 /* Read the min and max values from the iscl and oscl options */
-static void read_scale (Option *scl, ScaleRange &range)
+void read_scale (Option *scl, ScaleRange &range)
 {
     /* set default values */
     range.min = 0;
@@ -512,7 +520,7 @@ static void read_scale (Option *scl, ScaleRange &range)
 
         if(range.min==range.max)
         {
-            G_warning ("Scale range length should be > 0; Using default values: [0,255]");
+            G_warning (_("Scale range length should be > 0; Using default values: [0,255]"));
 
             range.min = 0;
             range.max = 255;
@@ -556,7 +564,8 @@ int main(int argc, char* argv[])
     if ( (iimg_mapset = G_find_cell2 ( opts.iimg->answer, "") ) == NULL )
 	G_fatal_error ( _("Raster map <%s> not found"), opts.iimg->answer);
     if((iimg_fd = G_open_cell_old(opts.iimg->answer, iimg_mapset)) < 0)
-	G_fatal_error ("Unable to open input raster");
+	G_fatal_error (_("Unable to open raster map <%s>"),
+		       G_fully_qualified_name(opts.iimg->answer, iimg_mapset));
 
     adjust_region(opts.iimg->answer, iimg_mapset);
         
@@ -564,26 +573,30 @@ int main(int argc, char* argv[])
 	if ( (ialt_mapset = G_find_cell2 ( opts.ialt->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ialt->answer);
 	if((ialt_fd = G_open_cell_old(opts.ialt->answer, ialt_mapset)) < 0)
-            G_warning ("Unable to open DEM raster");
+            G_fatal_error (_("Unable to open raster map <%s>"),
+			   G_fully_qualified_name(opts.ialt->answer, ialt_mapset));
     }
 
     if(opts.ivis->answer) {
 	if ( (iviz_mapset = G_find_cell2 ( opts.ivis->answer, "") ) == NULL )
 	    G_fatal_error ( _("Raster map <%s> not found"), opts.ivis->answer);
 	if((ivis_fd = G_open_cell_old(opts.ivis->answer, iviz_mapset)) < 0)
-            G_warning ("Unable to open visibility raster");
+            G_fatal_error (_("Unable to open raster map <%s>"),
+			   G_fully_qualified_name(opts.ivis->answer, iviz_mapset));
     }
                 
     /* open a floating point raster or not? */
     if(opts.oflt->answer)
     {
 	if((oimg_fd = G_open_fp_cell_new(opts.oimg->answer)) < 0)
-	    G_fatal_error ("Unable to create output raster");
+	    G_fatal_error (_("Unable to create raster map <%s>"),
+			   opts.oimg->answer);
     }
     else
     {
 	if((oimg_fd = G_open_raster_new(opts.oimg->answer, CELL_TYPE)) < 0)
-	    G_fatal_error ("Unable to create output raster");
+	    G_fatal_error (_("Unable to create raster map <%s>"),
+			   opts.oimg->answer);
     }
 
     /* read the scale parameters */
