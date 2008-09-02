@@ -3,135 +3,135 @@
 
 void EtmDN(int iwave, float asol, bool before, float &lmin, float &lmax)
 {
-	if (before)		/* ETM+ digital numbers taken before July 1, 2000 */
+    if (before)		/* ETM+ digital numbers taken before July 1, 2000 */
+    {
+	switch(iwave)
 	{
-		switch(iwave)
-		{
-		case 61:
-			{
-				lmin = -6.2f;
-				lmax = 194.3f;
-				break;
-			}
-
-		case 62:
-			{
-				lmin = -6.0f;
-				lmax = 202.4f;
-				break;
-			}
-
-		case 63:
-			{
-				lmin = -4.5f;
-				lmax = 158.6f;
-				break;
-			}
-
-		case 64:
-			{
-				if (asol < 45.)
-				{
-					lmin = -4.5f;
-					lmax = 235.0f;
-				}
-				else
-				{
-					lmin = -4.5f;
-					lmax = 157.5f;
-				}
-				break;
-			}
-
-		case 65:
-			{
-				lmin = -1.0f;
-				lmax = 31.76f;
-				break;
-			}
-
-		case 66:
-			{
-				lmin = -0.35f;
-				lmax = 10.932f;
-				break;
-			}
-
-		case 67:
-			{
-				lmin = -5.0f;
-				lmax = 244.00f;
-				break;
-			}
-		}
-	}
-	else		/* ETM+ digital numbers taken after July 1, 2000 */
+	case 61:
 	{
-		switch(iwave)
-		{
-		case 61:
-			{
-				lmin = -6.2f;
-				lmax = 191.6f;
-				break;
-			}
-
-		case 62:
-			{
-				lmin = -6.4f;
-				lmax = 196.5f;
-				break;
-			}
-
-		case 63:
-			{
-				lmin = -5.0f;
-				lmax = 152.9f;
-				break;
-			}
-
-		case 64:
-			{
-				if (asol < 45.)
-				{
-					lmin = -5.1f;
-					lmax = 241.1f;
-				}
-				else
-				{
-					lmin = -5.1f;
-					lmax = 157.4f;
-				}
-				break;
-			}
-
-		case 65:
-			{
-				lmin = -1.0f;
-				lmax = 31.06f;
-				break;
-			}
-
-		case 66:
-			{
-				lmin = -0.35f;
-				lmax = 10.80f;
-				break;
-			}
-
-		case 67:
-			{
-				lmin = -4.7f;
-				lmax = 243.1f;
-				break;
-			}
-		}
+	    lmin = -6.2f;
+	    lmax = 194.3f;
+	    break;
 	}
+
+	case 62:
+	{
+	    lmin = -6.0f;
+	    lmax = 202.4f;
+	    break;
+	}
+
+	case 63:
+	{
+	    lmin = -4.5f;
+	    lmax = 158.6f;
+	    break;
+	}
+
+	case 64:
+	{
+	    if (asol < 45.)
+	    {
+		lmin = -4.5f;
+		lmax = 235.0f;
+	    }
+	    else
+	    {
+		lmin = -4.5f;
+		lmax = 157.5f;
+	    }
+	    break;
+	}
+
+	case 65:
+	{
+	    lmin = -1.0f;
+	    lmax = 31.76f;
+	    break;
+	}
+
+	case 66:
+	{
+	    lmin = -0.35f;
+	    lmax = 10.932f;
+	    break;
+	}
+
+	case 67:
+	{
+	    lmin = -5.0f;
+	    lmax = 244.00f;
+	    break;
+	}
+	}
+    }
+    else		/* ETM+ digital numbers taken after July 1, 2000 */
+    {
+	switch(iwave)
+	{
+	case 61:
+	{
+	    lmin = -6.2f;
+	    lmax = 191.6f;
+	    break;
+	}
+
+	case 62:
+	{
+	    lmin = -6.4f;
+	    lmax = 196.5f;
+	    break;
+	}
+
+	case 63:
+	{
+	    lmin = -5.0f;
+	    lmax = 152.9f;
+	    break;
+	}
+
+	case 64:
+	{
+	    if (asol < 45.)
+	    {
+		lmin = -5.1f;
+		lmax = 241.1f;
+	    }
+	    else
+	    {
+		lmin = -5.1f;
+		lmax = 157.4f;
+	    }
+	    break;
+	}
+
+	case 65:
+	{
+	    lmin = -1.0f;
+	    lmax = 31.06f;
+	    break;
+	}
+
+	case 66:
+	{
+	    lmin = -0.35f;
+	    lmax = 10.80f;
+	    break;
+	}
+
+	case 67:
+	{
+	    lmin = -4.7f;
+	    lmax = 243.1f;
+	    break;
+	}
+	}
+    }
 }
 
 /* Assuming input value between 0 and 1
-if rad is true, idn should first be converted to a reflectance value
-returns adjusted value also between 0 and 1 */
+   if rad is true, idn should first be converted to a reflectance value
+   returns adjusted value also between 0 and 1 */
 float transform(const TransformInput ti, InputMask imask, float idn)
 {
     /* convert from radiance to reflectance */
@@ -148,40 +148,40 @@ float transform(const TransformInput ti, InputMask imask, float idn)
     }
     if(imask & RADIANCE) idn += (float)M_PI * idn * 255.f * ti.sb / ti.xmus / ti.seb;
           
-	float rapp = idn;
+    float rapp = idn;
     float ainrpix = ti.ainr[0][0];
-	float xa = 0.0f;
-	float xb = 0.0f;
-	float xc = 0.0f;
-	float rog = rapp / ti.tgasm;
-	/* The if below was added to avoid ground reflectances lower than
-	 zero when ainr(1,1) greater than rapp/tgasm
-	 In such case either the choice of atmospheric model was not
-	 adequate for that image or the calculated apparent reflectance
-	 was too low. Run the model again for other conditions.
-	 The lines below just decrease ainr(1,1)/tgasm to avoid too
-	 bright pixels in the image. Check the output file to see if that
-	 has happened. */
+    float xa = 0.0f;
+    float xb = 0.0f;
+    float xc = 0.0f;
+    float rog = rapp / ti.tgasm;
+    /* The if below was added to avoid ground reflectances lower than
+       zero when ainr(1,1) greater than rapp/tgasm
+       In such case either the choice of atmospheric model was not
+       adequate for that image or the calculated apparent reflectance
+       was too low. Run the model again for other conditions.
+       The lines below just decrease ainr(1,1)/tgasm to avoid too
+       bright pixels in the image. Check the output file to see if that
+       has happened. */
 
-	float decrfact = 1.0f;
-	if (rog < (ainrpix / ti.tgasm))
+    float decrfact = 1.0f;
+    if (rog < (ainrpix / ti.tgasm))
+    {
+	do
 	{
-		do
-		{
-			decrfact = decrfact - 0.1f;
-			ainrpix = decrfact * ainrpix;
-		}
-		while(rog < (ainrpix / ti.tgasm));
+	    decrfact = decrfact - 0.1f;
+	    ainrpix = decrfact * ainrpix;
 	}
+	while(rog < (ainrpix / ti.tgasm));
+    }
 
-	rog = (rog - ainrpix / ti.tgasm) / ti.sutott / ti.sdtott;
-	rog = rog / (1.f + rog * ti.sast);
-	xa = (float)M_PI * ti.sb / ti.xmus / ti.seb / ti.tgasm / ti.sutott / ti.sdtott;
-	xb = ti.srotot / ti.sutott / ti.sdtott / ti.tgasm;
-	xc = ti.sast;
+    rog = (rog - ainrpix / ti.tgasm) / ti.sutott / ti.sdtott;
+    rog = rog / (1.f + rog * ti.sast);
+    xa = (float)M_PI * ti.sb / ti.xmus / ti.seb / ti.tgasm / ti.sutott / ti.sdtott;
+    xb = ti.srotot / ti.sutott / ti.sdtott / ti.tgasm;
+    xc = ti.sast;
 
-	if (rog > 1) rog = 1;
-	if (rog < 0) rog = 0;
+    if (rog > 1) rog = 1;
+    if (rog < 0) rog = 0;
 
     return rog;
 }
