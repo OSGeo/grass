@@ -1353,7 +1353,10 @@ class BufferedWindow(MapWindow, wx.Window):
 
         elif self.mouse["use"] == "queryVector":
             # editable mode for vector map layers
-            self.parent.QueryVector(self.mouse['begin'][0],self.mouse['begin'][1])
+            self.parent.QueryVector(self.mouse['begin'][0], self.mouse['begin'][1])
+
+            # clear temp canvas
+            self.UpdateMap(render=False, renderVector=False)
             
         elif self.mouse["use"] in ["measure", "profile"]:
             # measure or profile
@@ -3269,7 +3272,8 @@ class MapFrame(wx.Frame):
         self.toolbars['map'].action['desc'] = 'modifyAttrb'
         
         self.MapWindow.mouse['use'] = "queryVector"
-        self.MapWindow.mouse['box'] = "point"
+        self.MapWindow.mouse['box'] = "box"
+        self.MapWindow.pen = wx.Pen(colour='Red', width=2, style=wx.SHORT_DASH)
         self.MapWindow.zoomtype = 0
 
         # change the cursor
@@ -3422,7 +3426,7 @@ class MapFrame(wx.Frame):
         toolsmenu = wx.Menu()
         # Add items to the menu
         display = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                              text=Icons["queryDisplay"].GetLabel(),
+                              text=_("Query raster/vector map(s) (display mode)"),
                               kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(display)
         self.Bind(wx.EVT_MENU, self.OnQueryDisplay, display)
@@ -3430,7 +3434,7 @@ class MapFrame(wx.Frame):
             display.Check(True)
         
         modify = wx.MenuItem(parentMenu=toolsmenu, id=wx.ID_ANY,
-                             text=Icons["queryModify"].GetLabel(),
+                             text=_("Query vector map (edit mode)"),
                              kind=wx.ITEM_CHECK)
         toolsmenu.AppendItem(modify)
         self.Bind(wx.EVT_MENU, self.OnQueryModify, modify)
