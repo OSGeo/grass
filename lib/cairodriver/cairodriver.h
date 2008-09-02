@@ -53,7 +53,6 @@ struct cairo_state {
     int file_type;
     int width, height, stride;
     unsigned char *grid;
-    int auto_write;
     double bgcolor_r, bgcolor_g, bgcolor_b, bgcolor_a;
     int modified;
     int mapped;
@@ -82,7 +81,6 @@ extern void Cairo_Line_width(double);
 extern void Cairo_Polygon(const double *, const double *, int);
 extern void Cairo_Polyline(const double *, const double *, int);
 extern void Cairo_Polydots(const double *, const double *, int);
-extern void Cairo_Respond(void);
 extern void Cairo_draw_text(const char *);
 extern void Cairo_text_box(const char *, double *, double *, double *, double *);
 extern void Cairo_set_font(const char *);

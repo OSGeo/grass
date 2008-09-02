@@ -39,7 +39,6 @@ const struct driver *PNG_Driver(void)
     drv.Begin_scaled_raster = PNG_begin_scaled_raster;
     drv.Scaled_raster = PNG_scaled_raster;
     drv.End_scaled_raster = NULL;
-    drv.Respond = PNG_Respond;
     drv.color_rgb = PNG_color_rgb;
     drv.draw_line = PNG_draw_line;
     drv.draw_point = PNG_draw_point;

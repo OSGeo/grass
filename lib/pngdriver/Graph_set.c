@@ -71,9 +71,6 @@ int PNG_Graph_set(void)
     G_message("PNG: GRASS_TRUECOLOR status: %s",
 	      png.true_color ? "TRUE" : "FALSE");
 
-    p = getenv("GRASS_PNG_AUTO_WRITE");
-    png.auto_write = p && strcmp(p, "TRUE") == 0;
-
     p = getenv("GRASS_PNG_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0;
 

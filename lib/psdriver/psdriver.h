@@ -32,7 +32,6 @@ extern void PS_Erase(void);
 extern void PS_Graph_close(void);
 extern int PS_Graph_set(void);
 extern void PS_Line_width(double);
-extern void PS_Respond(void);
 extern void PS_Set_window(double, double, double, double);
 extern void PS_color_rgb(int, int, int);
 extern void PS_draw_bitmap(int, int, int, const unsigned char *);

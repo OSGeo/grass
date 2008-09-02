@@ -71,16 +71,10 @@ int R_open_driver(void)
     return 0;
 }
 
-void R_flush(void)
-{
-    COM_Respond();
-}
-
 void R_close_driver(void)
 {
     const char *cmd = getenv("GRASS_NOTIFY");
 
-    COM_Respond();
     COM_Graph_close();
 
     if (cmd)

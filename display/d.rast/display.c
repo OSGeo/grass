@@ -71,7 +71,7 @@ static int cell_draw(const char *name,
 
     }
     D_cell_draw_end();
-    R_flush();
+
     G_percent(nrows, nrows, 2);
 
     /* Wrap up and return */

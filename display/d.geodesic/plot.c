@@ -58,7 +58,6 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	G_plot_where_xy(lon1, (lat1 + lat2) / 2, &text_x, &text_y);
 	G_plot_line(lon1, lat1, lon2, lat2);
     }
-    R_flush();
 
     distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
     sprintf(buf, "%.0f miles\n", METERS_TO_MILES(distance));
@@ -70,7 +69,6 @@ plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 	D_move_abs(text_x, text_y);
 	D_use_color(text_color);
 	R_text(buf);
-	R_flush();
     }
 
     return 0;

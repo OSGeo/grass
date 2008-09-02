@@ -15,7 +15,6 @@ struct png_state
     char *file_name;
     int current_color;
     int true_color;
-    int auto_write;
     int has_alpha;
     int mapped;
 
@@ -60,7 +59,6 @@ extern void PNG_begin_scaled_raster(int, int[2][2], double[2][2]);
 extern int PNG_scaled_raster(int, int, const unsigned char *,
 			     const unsigned char *, const unsigned char *,
 			     const unsigned char *);
-extern void PNG_Respond(void);
 extern void PNG_Set_window(double, double, double, double);
 extern void PNG_color_rgb(int, int, int);
 extern void PNG_draw_bitmap(int, int, int, const unsigned char *);
