@@ -133,48 +133,9 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	return -1;
     }
 
-    /* break on intersection */
+    /* break at intersection */
     if (settings.breakLines) {
-	int lineBreak;
-	BOUND_BOX lineBox;
-	struct ilist *list, *listBreak, *listRef;
-	struct line_pnts *points_check;
-
-	list = Vect_new_list();
-	listRef = Vect_new_list();
-	listBreak = Vect_new_list();
-	
-	points_check = Vect_new_line_struct();
-
-	/* find all relevant lines */
-	Vect_get_line_box(display->mapInfo, newline, &lineBox);
-	Vect_select_lines_by_box(display->mapInfo, &lineBox,
-				 GV_LINES, list);
-
-	/* check for intersection */
-	Vect_list_append(listBreak, newline);
-	Vect_list_append(listRef, newline);
-	for (int i = 0; i < list->n_values; i++) {
-	    lineBreak = list->value[i];
-	    if (lineBreak == newline)
-		continue;
-
-	    type = Vect_read_line(display->mapInfo, points_check, NULL, lineBreak);
-	    if (!(type & GV_LINES))
-		continue;
-
-	    if (Vect_line_check_intersection(Points, points_check,
-					     WITHOUT_Z))
-		Vect_list_append(listBreak, lineBreak);
-	}
-
-	Vect_break_lines_list(display->mapInfo, listBreak, listRef,
-			      GV_LINES, NULL, NULL);
-
-	Vect_destroy_line_struct(points_check);
-	Vect_destroy_list(list);
-	Vect_destroy_list(listBreak);
-	Vect_destroy_list(listRef);
+	BreakLineAtIntersection(newline, Points);
     }
     
     /* register changeset */
@@ -205,7 +166,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 int Digit::RewriteLine(int line, std::vector<double> coords,
 		       const char *bgmap, int snap, double threshold)
 {
-    int ret, type, dim;
+    int newline, type, dim;
     struct line_pnts *points;
     struct line_cats *cats;
 
@@ -236,15 +197,22 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
 	}
     }
     
-    ret = 0;
-    points = Vect_new_line_struct();
     cats = Vect_new_cats_struct();
 
     /* read line */
     type = Vect_read_line(display->mapInfo, NULL, cats, line);
     if (type < 0) {
-	ret = -1;
+	Vect_destroy_cats_struct(cats);
+	if (BgMap && BgMap[0]) {
+	    Vect_close(BgMap[0]);
+	}
+	
+	ReadLineMsg(line);
+	
+	return -1;
     }
+
+    points = Vect_new_line_struct();
 
     /* define line geometry */
     if (Vect_is_3d(display->mapInfo)) {
@@ -272,10 +240,14 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
     // AddActionToChangeset(changesets.size(), REWRITE, line);
 
     /* rewrite line */
-    if (ret == 0) {
-	ret = Vect_rewrite_line(display->mapInfo, line, type, points, cats);
+    newline = Vect_rewrite_line(display->mapInfo, line, type, points, cats);
+    if (newline > 0 && settings.breakLines) {
+	BreakLineAtIntersection(newline, points);
     }
 
+    if (newline < 0)
+	WriteLineMsg();
+    
     /* TODO
     if (ret > 0) {
 	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
@@ -287,12 +259,12 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
     
     Vect_destroy_line_struct(points);
     Vect_destroy_cats_struct(cats);
-
+    
     if (BgMap && BgMap[0]) {
 	Vect_close(BgMap[0]);
     }
 
-    return ret;
+    return newline;
 }
 
 /**
@@ -529,6 +501,11 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
 			   display->selected.values,
 			   move_x, move_y, move_z,
 			   snap, thresh);
+
+    if (ret > 0 && settings.breakLines) {
+	for(int i = 1; i <= ret; i++)
+	    BreakLineAtIntersection(nlines+i, NULL);
+    }
 
     /* TODO
     if (ret > 0) {
@@ -821,6 +798,11 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
     ret = Vedit_copy_lines (display->mapInfo, bgMap,
 			    list);
 
+    if (ret > 0 && bgMap && settings.breakLines) {
+	for(int i = 1; i <= ret; i++)
+	    BreakLineAtIntersection(nlines+i, NULL);
+    }
+
     if (ret > 0) {
 	/* register changeset */
 	changeset = changesets.size();
@@ -935,6 +917,73 @@ int Digit::TypeConvLines()
     else {
 	// changesets.erase(changeset);
     }
+
+    return ret;
+}
+
+/*!
+  \brief Break given line at intersection
+
+  \param line line id
+  
+  \return number of modified lines
+*/
+int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line)
+{
+    int ret, type;
+    int lineBreak;
+    BOUND_BOX lineBox;
+    struct ilist *list, *listBreak, *listRef;
+    struct line_pnts *points_check, *points;
+    
+    if (!points_line) {
+	points = Vect_new_line_struct();
+	if (Vect_read_line(display->mapInfo, points, NULL, line) < 0) {
+	    ReadLineMsg(line);
+	    return -1;
+	}
+    }
+    else {
+	points = points_line;
+    }
+
+    list = Vect_new_list();
+    listRef = Vect_new_list();
+    listBreak = Vect_new_list();
+    
+    points_check = Vect_new_line_struct();
+    
+    /* find all relevant lines */
+    Vect_get_line_box(display->mapInfo, line, &lineBox);
+    Vect_select_lines_by_box(display->mapInfo, &lineBox,
+			     GV_LINES, list);
+    
+    /* check for intersection */
+    Vect_list_append(listBreak, line);
+    Vect_list_append(listRef, line);
+    for (int i = 0; i < list->n_values; i++) {
+	lineBreak = list->value[i];
+	if (lineBreak == line)
+		continue;
+	
+	type = Vect_read_line(display->mapInfo, points_check, NULL, lineBreak);
+	if (!(type & GV_LINES))
+	    continue;
+	
+	if (Vect_line_check_intersection(points, points_check,
+					 WITHOUT_Z))
+	    Vect_list_append(listBreak, lineBreak);
+    }
+
+    ret = Vect_break_lines_list(display->mapInfo, listBreak, listRef,
+				GV_LINES, NULL, NULL);
+    
+    Vect_destroy_line_struct(points_check);
+    if (points != points_line)
+	Vect_destroy_line_struct(points);
+    Vect_destroy_list(list);
+    Vect_destroy_list(listBreak);
+    Vect_destroy_list(listRef);
 
     return ret;
 }

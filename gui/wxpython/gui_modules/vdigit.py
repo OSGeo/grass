@@ -1001,8 +1001,12 @@ class VDigit(AbstractDigit):
 
         snap, thresh = self.__getSnapThreshold()
         
-        ret = self.digit.RewriteLine(lineid, listCoords,
-                                     str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
+        try:
+            ret = self.digit.RewriteLine(lineid, listCoords,
+                                         str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')),
+                                         snap, thresh)
+        except SystemExit:
+            pass
 
         if ret > 0:
             self.toolbar.EnableUndo()
@@ -1836,7 +1840,7 @@ class VDigitSettingsDialog(wx.Dialog):
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Digitize line features"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        self.intersect = wx.CheckBox(parent=panel, label=_("Break lines on intersection"))
+        self.intersect = wx.CheckBox(parent=panel, label=_("Break lines at intersection"))
         self.intersect.SetValue(UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
         if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
             self.intersect.Enable(False)

@@ -76,7 +76,11 @@ int Digit::MoveVertex(double x, double y, double z,
 			    display->selected.values,
 			    point, thresh_coords, thresh_snap,
 			    move_x, move_y, move_z,
-			    1, snap); 
+			    1, snap);
+
+    if (settings.breakLines && ret > 0) {
+	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL);
+    }
 
     /* TODO
     if (ret > 0) {
