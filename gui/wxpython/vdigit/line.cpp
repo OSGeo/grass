@@ -312,9 +312,10 @@ int Digit::SplitLine(double x, double y, double z,
     struct line_pnts *point;
     struct ilist *list;
 
-    if (!display->mapInfo)
+    if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
+    }
 
     point = Vect_new_line_struct();
     list  = Vect_new_list();
@@ -491,9 +492,10 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
     struct Map_info **BgMap; /* backgroud vector maps */
     int nbgmaps;             /* number of registrated background maps */
 
-    if (!display->mapInfo)
+    if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
+    }
 
     BgMap = NULL;
     nbgmaps = 0;
