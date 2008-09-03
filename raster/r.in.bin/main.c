@@ -207,14 +207,14 @@ int main(int argc, char *argv[])
 
     parm.rows = G_define_option();
     parm.rows->key = "rows";
-    parm.rows->type = TYPE_DOUBLE;
+    parm.rows->type = TYPE_INTEGER;
     parm.rows->required = NO;
     parm.rows->description = _("Number of rows");
     parm.rows->guisection = _("Bounds");
 
     parm.cols = G_define_option();
     parm.cols->key = "cols";
-    parm.cols->type = TYPE_DOUBLE;
+    parm.cols->type = TYPE_INTEGER;
     parm.cols->required = NO;
     parm.cols->description = _("Number of columns");
     parm.cols->guisection = _("Bounds");
