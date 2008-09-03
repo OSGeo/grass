@@ -17,6 +17,12 @@ private:
     
     int SetCategory(int, int);
     struct Map_info** OpenBackgroundVectorMap(const char *);
+    int BreakLineAtIntersection(int, struct line_pnts*);
+    
+    /* settings */
+    struct _settings {
+	bool breakLines;
+    } settings;
 
     /* undo/redo */
     enum action_type { ADD, DELETE, REWRITE };
@@ -28,11 +34,6 @@ private:
 	struct line_pnts *Points;
 	struct line_cats *Cats;
     };
-
-    /* settings */
-    struct _settings {
-	bool breakLines;
-    } settings;
 
     std::map<int, std::vector<action_meta> > changesets;
     int changesetCurrent;  /* first changeset to apply */
