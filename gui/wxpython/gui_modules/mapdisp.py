@@ -1707,12 +1707,13 @@ class BufferedWindow(MapWindow, wx.Window):
                 
                 if digitToolbar.GetAction() == "moveLine":
                     # move line
-                    digitClass.MoveSelectedLines(move)
+                    if digitClass.MoveSelectedLines(move) < 0:
+                        return
                 elif digitToolbar.GetAction() == "moveVertex":
                     # move vertex
-                    digitClass.MoveSelectedVertex(pFrom,
-                                                  move)
-
+                    if digitClass.MoveSelectedVertex(pFrom, move) < 0:
+                        return
+                
                 del self.moveBegin
                 del self.moveCoords
                 del self.moveIds
@@ -1785,24 +1786,30 @@ class BufferedWindow(MapWindow, wx.Window):
                                                               "input=%s" % sqlfile.name])
             elif digitToolbar.GetAction() == "deleteLine":
                 # -> delete selected vector features
-                digitClass.DeleteSelectedLines()
+                if digitClass.DeleteSelectedLines() < 0:
+                    return
             elif digitToolbar.GetAction() == "splitLine":
                 # split line
-                digitClass.SplitLine(self.Pixel2Cell(self.mouse['begin']))
+                if digitClass.SplitLine(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                    return
             elif digitToolbar.GetAction() == "addVertex":
                 # add vertex
-                digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin']))
+                if digitClass.AddVertex(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                    return
             elif digitToolbar.GetAction() == "removeVertex":
                 # remove vertex
-                digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin']))
+                if digitClass.RemoveVertex(self.Pixel2Cell(self.mouse['begin'])) < 0:
+                    return
             elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
                 try:
                     if digitToolbar.GetAction() == 'copyCats':
-                        digitClass.CopyCats(self.copyCatsList,
-                                            self.copyCatsIds, copyAttrb=False)
+                        if digitClass.CopyCats(self.copyCatsList,
+                                               self.copyCatsIds, copyAttrb=False) < 0:
+                            return
                     else:
-                        digitClass.CopyCats(self.copyCatsList,
-                                            self.copyCatsIds, copyAttrb=True)
+                        if digitClass.CopyCats(self.copyCatsList,
+                                               self.copyCatsIds, copyAttrb=True) < 0:
+                            return
                     
                     del self.copyCatsList
                     del self.copyCatsIds
@@ -1810,24 +1817,31 @@ class BufferedWindow(MapWindow, wx.Window):
                     pass
             elif digitToolbar.GetAction() == "editLine" and hasattr(self, "moveBegin"):
                 line = digitClass.driver.GetSelected()
-                digitClass.EditLine(line, self.polycoords)
+                if digitClass.EditLine(line, self.polycoords) < 0:
+                    return
 
                 del self.moveBegin
                 del self.moveCoords
                 del self.moveIds
             elif digitToolbar.GetAction() == "flipLine":
-                digitClass.FlipLine()
+                if digitClass.FlipLine() < 0:
+                    return
             elif digitToolbar.GetAction() == "mergeLine":
-                digitClass.MergeLine()
+                if digitClass.MergeLine() < 0:
+                    return
             elif digitToolbar.GetAction() == "breakLine":
-                digitClass.BreakLine()
+                if digitClass.BreakLine() < 0:
+                    return
             elif digitToolbar.GetAction() == "snapLine":
-                digitClass.SnapLine()
+                if digitClass.SnapLine() < 0:
+                    return
             elif digitToolbar.GetAction() == "connectLine":
                 if len(digitClass.driver.GetSelected()) > 1:
-                    digitClass.ConnectLine()
+                    if digitClass.ConnectLine() < 0:
+                        return
             elif digitToolbar.GetAction() == "copyLine":
-                digitClass.CopyLine(self.copyIds)
+                if digitClass.CopyLine(self.copyIds) < 0:
+                    return
                 del self.copyIds
                 if self.layerTmp:
                     self.Map.DeleteLayer(self.layerTmp)
@@ -1842,14 +1856,16 @@ class BufferedWindow(MapWindow, wx.Window):
                 dlg = VDigitZBulkDialog(parent=self, title=_("Z bulk-labeling dialog"),
                                         nselected=len(selected))
                 if dlg.ShowModal() == wx.ID_OK:
-                    digitClass.ZBulkLine(pos1, pos2, dlg.value.GetValue(), dlg.step.GetValue())
-
+                    if digitClass.ZBulkLine(pos1, pos2, dlg.value.GetValue(),
+                                            dlg.step.GetValue()) < 0:
+                        return
                 self.UpdateMap(render=False, renderVector=True)
             elif digitToolbar.GetAction() == "typeConv":
                 # -> feature type conversion
                 # - point <-> centroid
                 # - line <-> boundary
-                digitClass.TypeConvForSelectedLines()
+                if digitClass.TypeConvForSelectedLines() < 0:
+                    return
 
             if digitToolbar.GetAction() != "addLine":
                 # unselect and re-render
