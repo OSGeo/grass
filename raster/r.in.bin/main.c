@@ -2,7 +2,7 @@
  *   r.in.bin
  *
  *   Copyright (C) 2000 by the GRASS Development Team
- *   Author: Bob Covill <bcovill@tekmap.ns.ca>
+ *   Author: Bob Covill <bcovill tekmap.ns.ca>
  *
  *   This program is free software under the GPL (>=v2)
  *   Read the file COPYING coming with GRASS for details.
@@ -239,9 +239,9 @@ int main(int argc, char *argv[])
     else if (flag.d->answer)
 	bytes = 8;
     else if (sscanf(parm.bytes->answer, "%d%1s", &bytes, dummy) != 1)
-	return 1;
+	G_fatal_error(_("Parsing bytes per cell"));
     if (bytes <= 0)
-	return 1;
+	G_fatal_error(_("Bad number of bytes per cell"));
     sflag = flag.s->answer;
 
     swap = 0;
@@ -291,20 +291,18 @@ int main(int argc, char *argv[])
 	    if (!parm.north->answer || !parm.south->answer ||
 		!parm.west->answer || !parm.east->answer)
 		G_fatal_error(_("You have to provide all limits of geographic region (n,s,e,w)"));
-	    if (!G_scan_northing
-		(parm.north->answer, &cellhd.north, cellhd.proj))
-		return 1;
-	    if (!G_scan_northing
-		(parm.south->answer, &cellhd.south, cellhd.proj))
-		return 1;
+	    if (!G_scan_northing(parm.north->answer, &cellhd.north, cellhd.proj))
+		G_fatal_error(_("Illegal north coordinate <%s>"), parm.north->answer);
+	    if (!G_scan_northing(parm.south->answer, &cellhd.south, cellhd.proj))
+		G_fatal_error(_("Illegal south coordinate <%s>"), parm.south->answer);
 	    if (!G_scan_easting(parm.east->answer, &cellhd.east, cellhd.proj))
-		return 1;
+		G_fatal_error(_("Illegal east coordinate <%s>"), parm.east->answer);
 	    if (!G_scan_easting(parm.west->answer, &cellhd.west, cellhd.proj))
-		return 1;
+		G_fatal_error(_("Illegal west coordinate <%s>"), parm.west->answer);
 	    if (sscanf(parm.rows->answer, "%d%1s", &cellhd.rows, dummy) != 1)
-		return 1;
+		G_fatal_error(_("Illegal number of rows <%s>"), parm.rows->answer);
 	    if (sscanf(parm.cols->answer, "%d%1s", &cellhd.cols, dummy) != 1)
-		return 1;
+		G_fatal_error(_("Illegal number of columns <%s>"), parm.cols->answer);
 	}
 
 	/* CASE 2 - Get only rows and columns and calculate N S E W */
@@ -312,10 +310,10 @@ int main(int argc, char *argv[])
 	if (no_dim == 0 && no_coord == 1) {	/* Get rows and cols only */
 	    if (sscanf(parm.rows->answer, "%d%1s", &cellhd.rows, dummy) != 1
 		|| cellhd.rows <= 0)
-		return 1;
+		G_fatal_error(_("Illegal number of rows <%s>"), parm.rows->answer);
 	    if (sscanf(parm.cols->answer, "%d%1s", &cellhd.cols, dummy) != 1
 		|| cellhd.cols <= 0)
-		return 1;
+		G_fatal_error(_("Illegal number of columns <%s>"), parm.cols->answer);
 	    cellhd.north = (double)cellhd.rows;
 	    cellhd.south = 0.;
 	    cellhd.east = (double)cellhd.cols;
@@ -331,18 +329,16 @@ int main(int argc, char *argv[])
 	if (no_coord == 0 && no_dim == 1) {	/* Get n, s, e, w */
 	    if (!parm.north->answer || !parm.south->answer ||
 		!parm.west->answer || !parm.east->answer)
-		G_fatal_error
-		    ("You have to provide all limits of geographic region (n,s,e,w)");
-	    if (!G_scan_northing
-		(parm.north->answer, &cellhd.north, cellhd.proj))
-		return 1;
-	    if (!G_scan_northing
-		(parm.south->answer, &cellhd.south, cellhd.proj))
-		return 1;
+		G_fatal_error(
+		    _("You have to provide all limits of geographic region (n,s,e,w)"));
+	    if (!G_scan_northing(parm.north->answer, &cellhd.north, cellhd.proj))
+		G_fatal_error(_("Illegal north coordinate <%s>"), parm.north->answer);
+	    if (!G_scan_northing(parm.south->answer, &cellhd.south, cellhd.proj))
+		G_fatal_error(_("Illegal south coordinate <%s>"), parm.south->answer);
 	    if (!G_scan_easting(parm.east->answer, &cellhd.east, cellhd.proj))
-		return 1;
+		G_fatal_error(_("Illegal east coordinate <%s>"), parm.east->answer);
 	    if (!G_scan_easting(parm.west->answer, &cellhd.west, cellhd.proj))
-		return 1;
+		G_fatal_error(_("Illegal west coordinate <%s>"), parm.west->answer);
 
 	    /* Calculate rows and cols */
 	    cellhd.rows = (int)cellhd.north - cellhd.south;
@@ -498,7 +494,7 @@ int main(int argc, char *argv[])
 
     cf = G_open_raster_new(output, map_type);
     if (cf < 0) {
-	G_fatal_error(_("Unable to create raster map %s"), output);
+	G_fatal_error(_("Unable to create raster map <%s>"), output);
 	exit(EXIT_FAILURE);
     }
 
@@ -510,8 +506,10 @@ int main(int argc, char *argv[])
     x_c = (char *)x_v;
 
     if (cellhd.proj == PROJECTION_LL && cellhd.ew_res / cellhd.ns_res > 10.)	/* TODO: find a reasonable value */
-	G_warning
-	    ("East-West (ewres: %f) and North-South (nwres: %f) resolution differ significantly. Did you assign east= and west= correctly?",
+	G_warning(
+	   _("East-West (ewres: %f) and North-South (nwres: %f) "
+	     "resolution differ significantly. "
+	     "Did you assign east= and west= correctly?"),
 	     cellhd.ew_res, cellhd.ns_res);
 
     for (row = 0; row < grass_nrows; row++) {
