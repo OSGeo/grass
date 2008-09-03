@@ -69,7 +69,7 @@ int Digit::MoveVertex(double x, double y, double z,
     Vect_append_point(point, x, y, z);
 
     /* register changeset */
-    AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
+    // AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
 
     /* move only first found vertex in bbox */
     ret = Vedit_move_vertex(display->mapInfo, BgMap, nbgmaps, 
@@ -78,14 +78,15 @@ int Digit::MoveVertex(double x, double y, double z,
 			    move_x, move_y, move_z,
 			    1, snap); 
 
+    /* TODO
     if (ret > 0) {
-	/* updates feature id (id is changed since line has been rewriten) */
 	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
     }
     else {
 	changesets.erase(changesets.size()-1);
     }
-
+    */
+    
     if (BgMap && BgMap[0]) {
 	Vect_close(BgMap[0]);
     }
@@ -126,7 +127,7 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
     Vect_append_point(point, x, y, z);
 
     /* register changeset */
-    AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
+    // AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
 
     if (add) {
 	ret = Vedit_add_vertex(display->mapInfo, display->selected.values,
@@ -137,14 +138,15 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
 				  point, thresh);
     }
 
+    /* TODO 
     if (ret > 0) {
-	/* updates feature id (id is changed since line has been rewriten) */
 	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
     }
     else {
 	changesets.erase(changesets.size()-1);
     }
-
+    */
+    
     Vect_destroy_line_struct(point);
 
     return ret;

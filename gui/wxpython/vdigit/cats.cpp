@@ -271,7 +271,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     }
 
     /* register changeset */
-    AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
+    // AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
 
     ret = Vect_rewrite_line(display->mapInfo, line, type,
 			    Points, Cats);
