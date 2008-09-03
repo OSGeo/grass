@@ -285,6 +285,9 @@ class VirtualAttributeList(wx.ListCtrl,
 
         self.SendSizeEvent()
 
+        self.log.write(_("Number of loaded records: %d") % \
+                           self.GetItemCount())
+        
         return keyId
     
     def OnItemSelected(self, event):
@@ -502,9 +505,9 @@ class AttributeManager(wx.Frame):
 
         # events
         self.btnQuit.Bind(wx.EVT_BUTTON,            self.OnCloseWindow)
+        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.browsePage)
-        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.manageTablePage)
-
+        
         # do layout
         self.__layout()
 
@@ -1558,6 +1561,18 @@ class AttributeManager(wx.Frame):
         except:
             pass
 
+        event.Skip()
+        
+    def OnPageChanged(self, event):
+        if event.GetSelection() == 0:
+            self.log.write(_("Number of loaded records: %d") % \
+                               self.FindWindowById(self.layerPage[self.layer]['data']).\
+                               GetItemCount())
+        else:
+            self.log.write("")
+        
+        event.Skip()
+        
     def OnLayerRightUp(self, event):
         """Layer description area, context menu"""
         pass
