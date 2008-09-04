@@ -1199,9 +1199,9 @@ class BufferedWindow(MapWindow, wx.Window):
                             if digitClass.driver.SelectLineByPoint(coords,
                                                                    digitClass.GetSelectType()) is not None:
                                 self.parent.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self, map=map,
-                                                                                           cats=digitClass.GetLineCats(),
-                                                                                           line=digitClass.driver.GetSelected()[0],
-                                                                                           action="update")
+                                                                                                cats=digitClass.GetLineCats(),
+                                                                                                line=digitClass.driver.GetSelected()[0],
+                                                                                                action="update")
 
                     else:
                         # update currently open dialog
@@ -1218,13 +1218,13 @@ class BufferedWindow(MapWindow, wx.Window):
                                 line = digitClass.driver.GetSelected()[0]
                             # upgrade dialog
                             self.parent.dialogs['attributes'].UpdateDialog(cats=digitClass.GetLineCats(),
-                                                                      line=line)
+                                                                           line=line)
 
                     if self.parent.dialogs['attributes']:
                         line = self.parent.dialogs['attributes'].GetLine()
                         if self.parent.dialogs['attributes'].mapDBInfo and line:
                             # highlight feature & re-draw map
-                            digitClass.driver.SetSelected([line])
+                            digitClass.driver.SetSelected(line)
                             if not self.parent.dialogs['attributes'].IsShown():
                                 self.parent.dialogs['attributes'].Show()
                         else:
