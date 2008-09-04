@@ -65,8 +65,7 @@ int main(int argc, char **argv)
     dbCatValArray cvarr;
     struct Cell_head window;
     BOUND_BOX box;
-    double overlap, *breakpoints, min = 0, max = 0, *data = NULL, class_info =
-	0.0;
+    double overlap, *breakpoints, *data = NULL, class_info = 0.0;
     struct GASTATS stats;
     FILE *fd;
 
@@ -106,7 +105,7 @@ int main(int argc, char **argv)
 			       "std;standard deviations;"
 			       "qua;quantiles;"
 			       "equ;equiprobable (normal distribution);");
-/*currently disabled because of bugs       "dis;discontinuities");*/
+    /*currently disabled because of bugs       "dis;discontinuities"); */
 
     nbclass_opt = G_define_option();
     nbclass_opt->key = "nbclasses";
@@ -310,17 +309,6 @@ int main(int argc, char **argv)
 		    data[i] = cvarr.value[i].val.d;
 	    }
 
-
-	    /* min and max are needed later for the legend */
-	    if (cvarr.ctype == DB_C_TYPE_INT) {
-		min = cvarr.value[0].val.i;
-		max = cvarr.value[cvarr.n_values - 1].val.i;
-	    }
-	    else {
-		min = cvarr.value[0].val.d;
-		max = cvarr.value[cvarr.n_values - 1].val.d;
-	    }
-
 	    db_CatValArray_sort(&cvarr);
 
 	    nclass = atoi(nbclass_opt->answer);
@@ -424,7 +412,7 @@ int main(int argc, char **argv)
 	frequencies[i] = 0.0;
     class_frequencies(data, nrec, nbreaks, breakpoints, frequencies);
 
-    /*Get basic statistics about the data*/
+    /*Get basic statistics about the data */
     basic_stats(data, nrec, &stats);
 
     if (legend_flag->answer) {
@@ -452,8 +440,8 @@ int main(int argc, char **argv)
 	}
 
 	fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
-		stats.min, breakpoints[0], frequencies[0], colors[0].r, colors[0].g,
-		colors[0].b);
+		stats.min, breakpoints[0], frequencies[0], colors[0].r,
+		colors[0].g, colors[0].b);
 
 	for (i = 1; i < nbreaks; i++) {
 	    fprintf(stdout, "%f|%f|%i|%d:%d:%d\n",
@@ -474,7 +462,7 @@ int main(int argc, char **argv)
 	fprintf(fd, "symbol basic/box %i 5 %i black %d:%d:%d\n", boxsize,
 		ypos, colors[0].r, colors[0].g, colors[0].b);
 	fprintf(fd, "move 8 %f \n", ypos - textsize / 2.5);
-	fprintf(fd, "text %f - %f | %i\n", min, breakpoints[0],
+	fprintf(fd, "text %f - %f | %i\n", stats.min, breakpoints[0],
 		frequencies[0]);
 	for (i = 1; i < nbreaks; i++) {
 	    ypos = 10 + i * 6;
@@ -489,8 +477,8 @@ int main(int argc, char **argv)
 		ypos, colors[nbreaks].r, colors[nbreaks].g,
 		colors[nbreaks].b);
 	fprintf(fd, "move 8 %f\n", ypos - textsize / 2.5);
-	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1], max,
-		frequencies[nbreaks]);
+	fprintf(fd, "text %f - %f | %i\n", breakpoints[nbreaks - 1],
+		stats.max, frequencies[nbreaks]);
 	fclose(fd);
     }
 
