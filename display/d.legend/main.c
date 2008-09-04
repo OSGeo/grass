@@ -692,19 +692,25 @@ int main(int argc, char **argv)
 
 	/* Black box */
 	D_use_color(black);
+	D_begin();
 	D_move_abs(x0 + 1, y0 + 1);
 	D_cont_rel(0, lleg - 2);
 	D_cont_rel(wleg - 2, 0);
 	D_cont_rel(0, 2 - lleg);
-	D_cont_rel(2 - wleg, 0);
+	D_close();
+	D_end();
+	D_stroke();
 
 	/* White box */
 	D_use_color(white);
+	D_begin();
 	D_move_abs(x0, y0);
 	D_cont_rel(0, lleg);
 	D_cont_rel(wleg, 0);
 	D_cont_rel(0, -lleg);
-	D_cont_rel(-wleg, 0);
+	D_close();
+	D_end();
+	D_stroke();
 
     }
     else {			/* non FP, no smoothing */
@@ -789,21 +795,27 @@ int main(int argc, char **argv)
 	    k++;		/* count of actual boxes drawn (hide_nodata option invaidates using j-1) */
 
 	    /* White box */
-	    D_use_color(white);
 	    cur_dot_row += dots_per_line;
+	    D_use_color(white);
+	    D_begin();
 	    D_move_abs(l + 2, (cur_dot_row - 1));
 	    D_cont_rel(0, (2 - dots_per_line));
 	    D_cont_rel((dots_per_line - 2), 0);
 	    D_cont_rel(0, (dots_per_line - 2));
-	    D_cont_rel((2 - dots_per_line), 0);
+	    D_close();
+	    D_end();
+	    D_stroke();
 
 	    /* Black box */
 	    D_use_color(black);
+	    D_begin();
 	    D_move_abs(l + 3, (cur_dot_row - 2));
 	    D_cont_rel(0, (4 - dots_per_line));
 	    D_cont_rel((dots_per_line - 4), 0);
 	    D_cont_rel(0, (dots_per_line - 4));
-	    D_cont_rel((4 - dots_per_line), 0);
+	    D_close();
+	    D_end();
+	    D_stroke();
 
 	    /* Color solid box */
 	    if (!fp) {

@@ -171,16 +171,12 @@ int main(int argc, char **argv)
 	D_use_color(grid_color);
 
 	/* Draw vertical grids */
-	for (col = 0; col <= ncols; col++) {
-	    D_move_abs(col, 0);
-	    D_cont_abs(col, nrows);
-	}
+	for (col = 0; col <= ncols; col++)
+	    D_line_abs(col, 0, col, nrows);
 
 	/* Draw horizontal grids */
-	for (row = 0; row <= nrows; row++) {
-	    D_move_abs(0,     row);
-	    D_cont_abs(ncols, row);
-	}
+	for (row = 0; row <= nrows; row++)
+	    D_line_abs(0, row, ncols, row);
     }
 
     /* allocate the cell array */

@@ -264,7 +264,9 @@ int do_icon(char *buff)
     iy = yper;
     size *= yincr;
 
-    switch (type & 0177) {
+    D_begin();
+
+    switch (type & 0x7F) {
     case 'o':
 	D_move_abs(ix - size, iy - size);
 	D_cont_abs(ix - size, iy + size);
@@ -286,6 +288,10 @@ int do_icon(char *buff)
 	D_cont_abs(ix + size, iy);
 	break;
     }
+
+    D_end();
+    D_stroke();
+
     return (0);
 }
 

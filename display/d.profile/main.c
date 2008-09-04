@@ -89,9 +89,12 @@ static void plot_axes(void)
 
     D_use_color(D_translate_color("red"));
 
+    D_begin();
     D_move_abs(0, 1);
     D_cont_abs(0, 0);
     D_cont_abs(1, 0);
+    D_end();
+    D_stroke();
 
     D_use_color(D_translate_color(DEFAULT_FG_COLOR));
 
@@ -270,6 +273,8 @@ int main(int argc, char **argv)
     l += 0.1 * (r - l);
     r -= 0.1 * (r - l);
 
+    D_begin();
+
     i = 0;
     last = 0;
     for (sx = 0; sx < 1; sx += D_get_d_to_u_xconv()) {
@@ -304,6 +309,9 @@ int main(int argc, char **argv)
 
 	last = 1;
     }
+
+    D_end();
+    D_stroke();
 
     R_close_driver();
 

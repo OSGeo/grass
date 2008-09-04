@@ -217,10 +217,8 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 			G_get_ith_d_raster_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
-			dmin = range_dmin + (double)i *
-			    (range_dmax - range_dmin) / (double)nsteps;
-			dmax = range_dmin + (double)(i + 1) *
-			    (range_dmax - range_dmin) / (double)nsteps;
+			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
+			dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;
 		    }
 		    if (dmin != dmax) {
 			for (j = 0; j < xscale; j++) {
@@ -272,10 +270,8 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 			G_get_ith_d_raster_cat(&cats, bar_color,
 					       &dmin, &dmax);
 		    else {
-			dmin = range_dmin + (double)i *
-			    (range_dmax - range_dmin) / (double)nsteps;
-			dmax = range_dmin + (double)(i + 1) *
-			    (range_dmax - range_dmin) / (double)nsteps;
+			dmin = range_dmin + i * (range_dmax - range_dmin) / nsteps;
+			dmax = range_dmin + (i + 1) * (range_dmax - range_dmin) / nsteps;
 		    }
 		    D_d_color(dmin, colors);
 		}
@@ -285,8 +281,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		    xoffset + (i - dist_stats->mincat) * xscale;
 		y_box[0] = yoffset;
 		y_box[1] = bar_height;
-		D_move_abs(x_box[0], y_box[0]);
-		D_cont_abs(x_box[1], y_box[1]);
+		D_line_abs(x_box[0], y_box[0], x_box[1], y_box[1]);
 	    }
 	}
 
@@ -297,11 +292,16 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 	if (((rem((long int)i, tic_every) == 0L) ||
 	     ((i == dist_stats->mincat) && nodata))
 	    && !(nodata && i == dist_stats->mincat + 1)) {
+
 	    /* draw a numbered tic-mark */
 	    D_use_color(color);
+	    D_begin();
 	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale,
 		       b - ORIGIN_Y * (b - t));
 	    D_cont_rel(0, BIG_TIC * (b - t));
+	    D_end();
+	    D_stroke();
+
 	    if (nodata && i == dist_stats->mincat)
 		sprintf(txt, "null");
 	    else if (is_fp) {
@@ -326,12 +326,15 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		       b - XNUMS_Y * (b - t));
 	    R_text(txt);
 	}
-	else if (rem(i, tic_unit) == (float)0) {
+	else if (rem(i, tic_unit) == 0.0) {
 	    /* draw a tic-mark */
 	    D_use_color(color);
+	    D_begin();
 	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale,
 		       b - ORIGIN_Y * (b - t));
 	    D_cont_rel(0, SMALL_TIC * (b - t));
+	    D_end();
+	    D_stroke();
 	}
     }
 
@@ -377,8 +380,11 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     for (i = stat_start; i <= stat_finis; i += tic_unit) {
 	if (rem(i, tic_every) == (float)0) {
 	    /* draw a tic-mark */
+	    D_begin();
 	    D_move_abs(x_line[0], yoffset - yscale * i);
 	    D_cont_rel((-(r - l) * BIG_TIC), 0);
+	    D_end();
+	    D_stroke();
 
 	    /* draw a tic-mark number */
 	    sprintf(txt, "%d", (int)(i / tic_unit));
@@ -396,10 +402,13 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		       yoffset - (yscale * i + 0.5 * (tt - tb)));
 	    R_text(txt);
 	}
-	else if (rem(i, tic_unit) == (float)0) {
+	else if (rem(i, tic_unit) == 0.0) {
 	    /* draw a tic-mark */
+	    D_begin();
 	    D_move_abs(x_line[0], yoffset - yscale * i);
 	    D_cont_rel(-(r - l) * SMALL_TIC, 0);
+	    D_end();
+	    D_stroke();
 	}
     }
 
