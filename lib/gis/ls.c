@@ -28,6 +28,10 @@
 #  include <sys/ioctl.h>
 #endif
 
+typedef int ls_filter_func(const char * /*filename */ , void * /*closure */ );
+
+static ls_filter_func *ls_filter;
+static void *ls_closure;
 
 static int cmp_names(const void *aa, const void *bb)
 {
@@ -35,6 +39,25 @@ static int cmp_names(const void *aa, const void *bb)
     char *const *b = (char *const *)bb;
 
     return strcmp(*a, *b);
+}
+
+/**
+ * \brief Sets a function and its complementary data for G__ls filtering.
+ *
+ * Defines a filter function and its rule data that allow G__ls to filter out
+ * unwanted file names.  Call this function before G__ls.
+ *
+ * \param func      Filter callback function to compare a file name and closure
+ * 		    pattern (if NULL, no filter will be used).
+ * 		    func(filename, closure) should return 1 on success, 0 on
+ * 		    failure.
+ * \param closure   Data used to determine if a file name matches the rule.
+ **/
+
+void G_set_ls_filter(ls_filter_func *func, void *closure)
+{
+    ls_filter = func;
+    ls_closure = closure;
 }
 
 /**
@@ -64,12 +87,13 @@ char **G__ls(const char *dir, int *num_files)
 	G_fatal_error(_("Unable to open directory %s"), dir);
 
     while ((dp = readdir(dfd)) != NULL) {
-	if (dp->d_name[0] != '.') {	/* Don't list hidden files */
-	    dir_listing = (char **)G_realloc(dir_listing,
-					     (1 + n) * sizeof(char *));
-	    dir_listing[n] = G_store(dp->d_name);
-	    n++;
-	}
+	if (dp->d_name[0] == '.')	/* Don't list hidden files */
+	    continue;
+	if (ls_filter && !(*ls_filter)(dp->d_name, ls_closure))
+	    continue;
+	dir_listing = (char **)G_realloc(dir_listing, (1 + n) * sizeof(char *));
+	dir_listing[n] = G_store(dp->d_name);
+	n++;
     }
 
     /* Sort list of filenames alphabetically */
