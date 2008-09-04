@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-22 18:26+0200\n"
-"PO-Revision-Date: 2008-08-22 17:11+0200\n"
+"PO-Revision-Date: 2008-09-04 16:29+0200\n"
 "Last-Translator: Jan Trochta\n"
 "Language-Team: Czech <grass-translations@lists.osgeo.org>\n"
 "MIME-Version: 1.0\n"
@@ -2464,7 +2464,7 @@ msgstr "v aktuální mapsetu nejsou dostupné ¾ádné soubory %s\n"
 #: ../lib/gis/list.c:119
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr "v mapsetu <%s> nejsou dostupné ¾ádné soubory %s\n"
+msgstr "¾ádné soubory %s v mapsetu <%s>\n"
 
 #: ../lib/gis/list.c:134
 #, c-format
@@ -2474,7 +2474,7 @@ msgstr "stisknìte RETURN pro pokraèování -->"
 #: ../lib/gis/list.c:185
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "v mapsetu <%s> je dostupných souborù %s:\n"
+msgstr "soubory %s v mapsetu <%s>:\n"
 
 #: ../lib/gis/list.c:256
 msgid "G_list: Unknown element type"
