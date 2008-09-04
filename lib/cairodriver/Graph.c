@@ -167,10 +167,10 @@ static void init_file(void)
     if (do_read && access(ca.file_name, 0) != 0)
 	do_read = 0;
 
-    G_message(_("cairo: collecting to file: %s"),
-	      ca.file_name);
-    G_message(_("GRASS_WIDTH=%d, GRASS_HEIGHT=%d"),
-	     ca.width, ca.height);
+    G_verbose_message(_("cairo: collecting to file: %s"),
+		      ca.file_name);
+    G_verbose_message(_("GRASS_WIDTH=%d, GRASS_HEIGHT=%d"),
+		      ca.width, ca.height);
     
     if (do_read && do_map)
 	map_file();
