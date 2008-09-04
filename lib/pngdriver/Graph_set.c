@@ -21,6 +21,7 @@
 #endif
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "pngdriver.h"
 
 struct png_state png;
@@ -68,8 +69,8 @@ int PNG_Graph_set(void)
     p = getenv("GRASS_TRUECOLOR");
     png.true_color = !p || strcmp(p, "FALSE") != 0;
 
-    G_message("PNG: GRASS_TRUECOLOR status: %s",
-	      png.true_color ? "TRUE" : "FALSE");
+    G_verbose_message(_("PNG: GRASS_TRUECOLOR status: %s"),
+		      png.true_color ? "TRUE" : "FALSE");
 
     p = getenv("GRASS_PNG_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0;
@@ -113,9 +114,9 @@ int PNG_Graph_set(void)
 	    png.background = get_color(255, 255, 255, png.has_alpha ? 255 : 0);
     }
 
-    G_message
-	("PNG: collecting to file: %s,\n     GRASS_WIDTH=%d, GRASS_HEIGHT=%d",
-	 png.file_name, png.width, png.height);
+    G_verbose_message(_("PNG: collecting to file <%s>"), png.file_name);
+    G_verbose_message(_("GRASS_WIDTH=%d, GRASS_HEIGHT=%d"),
+		      png.file_name, png.width, png.height);
 
     if (do_read && do_map)
 	map_file();
