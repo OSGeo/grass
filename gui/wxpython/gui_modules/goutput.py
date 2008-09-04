@@ -83,12 +83,15 @@ class CmdThread(threading.Thread):
 
             self.resultQ.put((requestId, self.requestCmd.run()))
 
-            event = wxCmdDone(aborted=self.requestCmd.aborted,
+            try:
+                aborted = self.requestCmd.aborted
+            except AttributeError:
+                aborted = False
+            
+            event = wxCmdDone(aborted=aborted,
                               time=requestTime,
                               pid=requestId)
-
-            time.sleep(.1)
-
+            
             wx.PostEvent(self.parent, event)
 
     def abort(self):
