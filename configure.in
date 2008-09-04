@@ -195,6 +195,7 @@ LOC_ARG_WITH(freetype, FreeType, no)
 LOC_ARG_WITH(nls, NLS, no)
 LOC_ARG_WITH(readline, Readline, no)
 LOC_ARG_WITH(opendwg, openDWG, no)
+LOC_ARG_WITH(regex, regex)
 AC_ARG_WITH(python,
 [  --with-python[=path/python-config] enable support for Python SWIG bindings (python-config with path, \
 e.g. '--with-python=/usr/bin/python2.5-config', default: no)],, with_python="no")
@@ -276,6 +277,9 @@ LOC_ARG_WITH_SHARE(proj, External PROJ.4)
 
 LOC_ARG_WITH_INC(opendwg, openDWG)
 LOC_ARG_WITH_LIB(opendwg, openDWG)
+
+LOC_ARG_WITH_INC(regex, regex)
+LOC_ARG_WITH_LIB(regex, regex)
 
 # Put this early on so CPPFLAGS and LDFLAGS have any additional dirs
 
@@ -567,6 +571,39 @@ if test "$NAD2BIN" = "no"; then
 fi
 
 # Done checking PROJ
+
+# Enable regex option
+
+LOC_CHECK_USE(regex,regex,USE_REGEX)
+
+REGEXINCPATH=
+REGEXLIBPATH=
+REGEXLIB=
+
+if test -n "$USE_REGEX"; then
+
+# With regex includes directory
+
+LOC_CHECK_INC_PATH(regex,regex,REGEXINCPATH)
+
+LOC_CHECK_INCLUDES(regex.h,regex,$REGEXINCPATH)
+
+# With regex library directory
+
+LOC_CHECK_LIB_PATH(regex,regex,REGEXLIBPATH)
+
+LOC_CHECK_FUNC(regcomp,regex functions,REGEXLIB,,,,,[
+LOC_CHECK_LIBS(regex,regcomp,regex,$REGEXLIBPATH,REGEXLIB,,,)
+])
+
+fi # $USE_REGEX
+
+AC_SUBST(REGEXINCPATH)
+AC_SUBST(REGEXLIBPATH)
+AC_SUBST(REGEXLIB)
+AC_SUBST(USE_REGEX)
+
+# Done checking regex
 
 # Enable Readline option
 

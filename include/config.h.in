@@ -233,6 +233,9 @@
 /* define if OpenGL uses Windows */
 #undef OPENGL_WINDOWS
 
+/* define if regex.h exists */
+#undef HAVE_REGEX_H
+
 /*
  * configuration information solely dependent on the above
  * nothing below this point should need changing
