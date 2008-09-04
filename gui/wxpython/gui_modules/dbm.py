@@ -2122,6 +2122,7 @@ class LayerBook(wx.Notebook):
         #
         # list of table widgets
         #
+        keyCol = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
         self.tableWidgets = {'table': (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                      label='%s:' % _("Table name")),
                                        wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
@@ -2130,7 +2131,7 @@ class LayerBook(wx.Notebook):
                              'key': (wx.StaticText(parent=self.addPanel, id=wx.ID_ANY,
                                                    label='%s:' % _("Key column")),
                                      wx.TextCtrl(parent=self.addPanel, id=wx.ID_ANY,
-                                                 value='cat',
+                                                 value=keyCol,
                                                  style=wx.TE_PROCESS_ENTER))}
         # events
         self.tableWidgets['table'][1].Bind(wx.EVT_TEXT_ENTER, self.OnCreateTable)

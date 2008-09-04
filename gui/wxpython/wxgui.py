@@ -465,8 +465,16 @@ class GMFrame(wx.Frame):
 
     def OnNewVector(self, event):
         """Create new vector map layer"""
-        name = gdialogs.CreateNewVector(self, log=self.goutput,
-                                        cmdDef=(['v.edit', 'tool=create'], "map"))
+        name, add = gdialogs.CreateNewVector(self, log=self.goutput,
+                                             cmdDef=(['v.edit', 'tool=create'], "map"))
+
+        if name and add:
+            # add layer to map layer tree
+            self.curr_page.maptree.AddLayer(ltype='vector',
+                                            lname=name,
+                                            lchecked=True,
+                                            lopacity=1.0,
+                                            lcmd=['d.vect', 'map=%s' % name])
             
     def OnAboutGRASS(self, event):
         """Display 'About GRASS' dialog"""
