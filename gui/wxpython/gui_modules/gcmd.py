@@ -448,7 +448,7 @@ class Command:
 
         for type, msg in self.__ProcessStdErr():
             if type == 'ERROR':
-                return msg
+                return unicode(msg, "utf-8")
 
         return ''
     
