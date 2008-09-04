@@ -1666,7 +1666,7 @@ class AttributeManager(wx.Frame):
                 win.SetValue("SELECT * FROM %s" % self.mapDBInfo.layers[self.layer]['table'])
                 cols = None
                 where = None
-            print cols, where
+            
             if cols or where:
                 try:
                     keyColumn = listWin.LoadData(self.layer, columns=cols,
@@ -2721,17 +2721,18 @@ class DisplayAttributesDialog(wx.Dialog):
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  pos=wx.DefaultPosition,
                  action="add"):
-
         self.parent = parent # mapdisplay.BufferedWindow
         self.map    = map
         self.action = action
 
-        # id of selected line
-        self.line = None
+        # ids/cats of selected features
+        self.line = {}
+        self.line['id'] = None
+        self.line['cats'] = None
 
         # get layer/table/column information
         self.mapDBInfo = VectorDBInfo(self.map)
-
+        
         layers = self.mapDBInfo.layers.keys() # get available layers
 
         # check if db connection / layer exists
@@ -2762,7 +2763,7 @@ class DisplayAttributesDialog(wx.Dialog):
                                        label=_("Close dialog on submit"))
         self.closeDialog.SetValue(True)
 
-        self.UpdateDialog(query, cats, line)
+        self.UpdateDialog(query=query, cats=cats, line=line)
 
         # set title
         if self.action == "update":
@@ -2898,8 +2899,12 @@ class DisplayAttributesDialog(wx.Dialog):
                 for name in columns.keys():
                     type  = columns[name]['type']
                     value = columns[name]['values'][idx]
-                    id    = columns[name]['ids'][idx]
-                    if name != key:
+                    try:
+                        id = columns[name]['ids'][idx]
+                    except IndexError:
+                        id = wx.NOT_FOUND
+                    
+                    if name != key and id != wx.NOT_FOUND:
                         self.FindWindowById(id).SetValue(str(value))
 
     def OnCancel(self, event):
@@ -2928,16 +2933,29 @@ class DisplayAttributesDialog(wx.Dialog):
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
 
-    def GetLine(self):
-        """Get id of selected vector object or 'None' if nothing selected"""
-        return self.line
+    def GetLine(self, id=True):
+        """Get id of selected vector object or 'None' if nothing selected
 
-    def UpdateDialog(self, query=None, cats=None, line=None):
+        @param id if true return ids otherwise cats
+        """
+        if id:
+            return self.line['id']
+
+        return self.line['cats']
+
+    def UpdateDialog(self, map=None, query=None, cats=None, line=None):
         """Update dialog
 
         Return True if updated otherwise False
         """
-        self.line = line
+        if map:
+            self.map = map
+            # get layer/table/column information
+            self.mapDBInfo = VectorDBInfo(self.map)
+            
+        self.line['id'] = (line, )
+        self.line['cats'] = None
+        
         if not self.mapDBInfo:
             return False
 
@@ -2947,8 +2965,27 @@ class DisplayAttributesDialog(wx.Dialog):
 
         # id of selected line
         if query: # select by position
-            self.line, nselected = self.mapDBInfo.SelectByPoint(query[0],
-                                                                query[1])
+            data = self.mapDBInfo.SelectByPoint(query[0],
+                                                query[1])
+            if data and data.has_key('Layer'):
+                self.line['id'] = (-1,)
+                self.line['cats'] = {}
+                idx = 0
+                for l in data['Layer']:
+                    layer = int(l)
+                    if not self.line['cats'].has_key(layer):
+                        self.line['cats'][layer] = []
+                        
+                    self.line['cats'][layer].append(int(data['Category'][idx]))
+                    idx += 1
+                
+                nselected = len(self.line['cats'].keys())
+                
+            else:
+                self.line['id'] = None
+                self.line['cats'] = None
+                nselected = 0
+        
         # reset notebook
         self.notebook.DeleteAllPages()
 
@@ -3092,33 +3129,37 @@ class VectorDBInfo(gselect.VectorDBInfo):
                                         (float(queryCoords[0]), float(queryCoords[1])),
                                     'distance=%f' % qdist], stderr=None)
 
+        data = {}
         if cmdWhat.returncode == 0:
-            read = False
+            readAttrb = False
             for item in cmdWhat.ReadStdOutput():
-                litem = item.lower()
-                if read:
+                if len(item) < 1:
+                    continue
+                
+                key, value = item.split(':')
+                
+                if key == 'Layer' and readAttrb:
+                    readAttrb = False
+                
+                if readAttrb:
                     name, value = item.split(':')
                     name = name.strip()
                     # append value to the column
-                    try:
-                        # casting ...
-                        value = self.tables[table][name]['ctype'] (value.strip())
-                        self.tables[table][name]['values'].append(value)
-                    except:
-                        read = False
-
-                if "id:" in litem: # get line id
-                    line = int(item.split(':')[1].strip())
-                elif "key column:" in litem: # start reading attributes
-                    read = True
-                    nselected = nselected + 1
-                elif "layer:" in litem: # get layer id
-                    layer = int(item.split(':')[1].strip())
-                    table = self.layers[layer]["table"] # get table desc
-                    read = False
-
-        return (line, nselected)
-
+                    value = self.tables[table][name]['ctype'] (value.strip())
+                    self.tables[table][name]['values'].append(value)
+                else:
+                    if not data.has_key(key):
+                        data[key] = []
+                    data[key].append(value.strip())
+                    
+                    if key == 'Table':
+                        table = value.strip()
+                        
+                    if key == 'Key column': # skip attributes
+                        readAttrb = True
+        
+        return data
+    
     def SelectFromTable(self, layer, cols='*', where=None):
         """Select records from the table
 
