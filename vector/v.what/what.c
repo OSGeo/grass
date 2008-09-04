@@ -54,7 +54,7 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 	    getz = Vect_tin_get_z(&Map[i], east, north, &z, NULL, NULL);
 	}
 
-	G_debug(2, "line = %d \narea = %d", line, area);
+	G_debug(2, "line = %d area = %d", line, area);
 
 	if (!i) {
 	    G_format_easting(east, east_buf, G_projection());
@@ -93,7 +93,6 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 	}
 
 	if (line > 0) {
-	    sprintf(buf, "Object type: ");
 	    type = Vect_read_line(&Map[i], Points, Cats, line);
 	    switch (type) {
 	    case GV_POINT:
@@ -127,10 +126,10 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 		float angle;
 
 		Vect_get_line_areas(&(Map[i]), line, &left, &right);
-		fprintf(stdout, "Looking for features within: %f \n",
+		fprintf(stdout, "Looking for features within: %f\n",
 			maxdist);
 		fprintf(stdout,
-			_("Id: %d  \nType: %s  \nLeft: %d  \nRight: %d  \n"),
+			_("Id: %d\nType: %s\nLeft: %d\nRight: %d\n"),
 			line, buf, left, right);
 		if (type & GV_LINES) {
 		    nnodes = 2;
@@ -150,7 +149,7 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 
 		    Vect_get_node_coor(&(Map[i]), node[n], &nx, &ny, &nz);
 		    fprintf(stdout,
-			    _("Node[%d]: %d  \nNumber of lines: %d  \nCoordinates: %.6f, %.6f, %.6f\n"),
+			    _("Node[%d]: %d\nNumber of lines: %d\nCoordinates: %.6f, %.6f, %.6f\n"),
 			    n, node[n], nnlines, nx, ny, nz);
 
 		    for (nli = 0; nli < nnlines; nli++) {
@@ -158,7 +157,7 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 			    Vect_get_node_line(&(Map[i]), node[n], nli);
 			angle =
 			    Vect_get_node_line_angle(&(Map[i]), node[n], nli);
-			fprintf(stdout, _("Id: %5d  \nAngle: %.8f\n"),
+			fprintf(stdout, _("Id: %5d\nAngle: %.8f\n"),
 				nodeline, angle);
 		    }
 		}
@@ -192,7 +191,7 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 		    }
 		    else {
 			fprintf(stdout,
-				_("Line height min: %f \nLine height max: %f\n"),
+				_("Line height min: %f\nLine height max: %f\n"),
 				min, max);
 		    }
 		}
@@ -201,18 +200,18 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 
 	if (area > 0) {
 	    if (Map[i].head.with_z && getz) {
-		fprintf(stdout, _("Object type: Area \nArea height: %f\n"),
+		fprintf(stdout, _("Type: Area\nArea height: %f\n"),
 			z);
 	    }
 	    else {
-		fprintf(stdout, _("Object type: Area\n"));
+		fprintf(stdout, _("Type: Area\n"));
 	    }
 	    sq_meters = Vect_get_area_area(&Map[i], area);
 	    if (topo) {
 		int nisles, isleidx, isle, isle_area;
 
 		nisles = Vect_get_area_num_isles(&Map[i], area);
-		fprintf(stdout, _("Area: %d  \nNumber of isles: %d\n"), area,
+		fprintf(stdout, _("Area: %d\nNumber of isles: %d\n"), area,
 			nisles);
 
 		for (isleidx = 0; isleidx < nisles; isleidx++) {
@@ -229,17 +228,17 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 		}
 	    }
 	    else {
-		fprintf(stdout, _("Sq Meters: %.3f \nHectares: %.3f\n"),
+		fprintf(stdout, _("Sq Meters: %.3f\nHectares: %.3f\n"),
 			sq_meters, (sq_meters / 10000.));
-		fprintf(stdout, _("Acres: %.3f \nSq Miles: %.4f\n"),
+		fprintf(stdout, _("Acres: %.3f\nSq Miles: %.4f\n"),
 			((sq_meters * 10.763649) / 43560.),
 			((sq_meters * 10.763649) / 43560.) / 640.);
 		if (notty) {
 		    fprintf(stderr,
-			    _("Sq Meters: %.3f \nHectares: %.3f\n"),
+			    _("Sq Meters: %.3f\nHectares: %.3f\n"),
 			    sq_meters, (sq_meters / 10000.));
 		    fprintf(stderr,
-			    _("Acres: %.3f \nSq Miles: %.4f\n"),
+			    _("Acres: %.3f\nSq Miles: %.4f\n"),
 			    ((sq_meters * 10.763649) / 43560.),
 			    ((sq_meters * 10.763649) / 43560.) / 640.);
 		}
@@ -255,9 +254,9 @@ int what(double east, double north, double maxdist, int topo, int showextra)
 	    int j;
 
 	    for (j = 0; j < Cats->n_cats; j++) {
-		G_debug(2, "field = %d \ncategory = %d\n", Cats->field[j],
+		G_debug(2, "field = %d  category = %d\n", Cats->field[j],
 			Cats->cat[j]);
-		fprintf(stdout, _("Layer: %d\nCategory: %d \n"),
+		fprintf(stdout, _("Layer: %d\nCategory: %d\n"),
 			Cats->field[j], Cats->cat[j]);
 		Fi = Vect_get_field(&(Map[i]), Cats->field[j]);
 		if (Fi != NULL && showextra) {
