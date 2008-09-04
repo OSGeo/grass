@@ -128,6 +128,9 @@ class Settings:
                 'askOnDeleteRec' : {
                     'enabled' : True
                     },
+                'keycolumn' : {
+                    'value' : 'cat'
+                    },
             },
             #
             # Command
@@ -1246,6 +1249,36 @@ class PreferencesDialog(wx.Dialog):
                       flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
                       border=3)
 
+        #
+        # create table
+        #
+        createTableBox = wx.StaticBox(parent=panel, id=wx.ID_ANY,
+                                    label=" %s " % _("Create table"))
+        createTableSizer = wx.StaticBoxSizer(createTableBox, wx.VERTICAL)
+
+        flexSizer = wx.FlexGridSizer (cols=2, hgap=5, vgap=5)
+        flexSizer.AddGrowableCol(0)
+
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("Key column"))
+        keyColumn = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                                size=(250, -1))
+        keyColumn.SetValue(self.settings.Get(group='atm', key='keycolumn', subkey='value'))
+        self.winId['atm:keycolumn:value'] = keyColumn.GetId()
+        
+        flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(keyColumn, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
+
+        createTableSizer.Add(item=flexSizer,
+                             proportion=0,
+                             flag=wx.ALL | wx.EXPAND,
+                             border=5)
+
+        pageSizer.Add(item=createTableSizer,
+                      proportion=0,
+                      flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+                      border=3)
+        
         panel.SetSizer(pageSizer)
 
         return panel
@@ -1431,15 +1464,15 @@ class PreferencesDialog(wx.Dialog):
 
     def OnSave(self, event):
         """Button 'Save' pressed"""
-        self.__UpdateSettings()
-        file = self.settings.SaveToFile()
-        self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
-        self.Close()
+        if self.__UpdateSettings():
+            file = self.settings.SaveToFile()
+            self.parent.goutput.WriteLog(_('Settings saved to file \'%s\'.') % file)
+            self.Close()
 
     def OnApply(self, event):
         """Button 'Apply' pressed"""
-        self.__UpdateSettings()
-        self.Close()
+        if self.__UpdateSettings():
+            self.Close()
 
     def OnCancel(self, event):
         """Button 'Cancel' pressed"""
@@ -1467,7 +1500,6 @@ class PreferencesDialog(wx.Dialog):
             else:
                 value = win.SetValue(value)
 
-
     def __UpdateSettings(self):
         """Update user settings"""
         for item in self.winId.keys():
@@ -1491,7 +1523,14 @@ class PreferencesDialog(wx.Dialog):
                 value = tuple(win.GetValue())
             else:
                 value = win.GetValue()
-            
+
+            if key == 'keycolumn' and value == '':
+                wx.MessageBox(parent=self,
+                              message=_("Key column cannot be empty string."),
+                              caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
+                win.SetValue(self.settings.Get(group='atm', key='keycolumn', subkey='value'))
+                return False
+
             if subkey1:
                 self.settings.Set(group, value, key, [subkey, subkey1])
             else:
@@ -1516,6 +1555,8 @@ class PreferencesDialog(wx.Dialog):
             self.settings.Set(group='general', key='defWindowPos', subkey='dim', value=dim)
         else:
             self.settings.Set(group='general', key='defWindowPos', subkey='dim', value='')
+
+        return True
 
 class SetDefaultFont(wx.Dialog):
     """

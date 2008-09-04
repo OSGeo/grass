@@ -42,7 +42,7 @@ from preferences import globalSettings as UserSettings
 
 class NewVectorDialog(wx.Dialog):
     """Create new vector map layer"""
-    def __init__(self, parent, id, title, 
+    def __init__(self, parent, id, title, disableAdd=False, 
                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
 
         wx.Dialog.__init__(self, parent, id, title, style=style)
@@ -58,7 +58,18 @@ class NewVectorDialog(wx.Dialog):
                                    label=_("Name for new vector map:"))
         self.mapName = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
                                       type='vector', mapsets=[grassenv.GetGRASSVariable('MAPSET'),])
+        self.table = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
+                                 label=_("Create attribute table"))
+        self.table.SetValue(True)
 
+        self.addbox = wx.CheckBox(parent=self.panel,
+                                  label=_('Add created map into layer tree'), style = wx.NO_BORDER)
+        if disableAdd:
+            self.addbox.SetValue(True)
+            self.addbox.Enable(False)
+        else:
+            self.addbox.SetValue(UserSettings.Get(group='cmd', key='addNewLayer', subkey='enabled'))
+        
         self.mapName.Bind(wx.EVT_TEXT, self.OnMapName)
         
         self.__Layout()
@@ -82,6 +93,14 @@ class NewVectorDialog(wx.Dialog):
         dataSizer.Add(self.mapName, proportion=0,
                       flag=wx.EXPAND | wx.ALL, border=1)
         
+        dataSizer.Add(self.table, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+
+        dataSizer.AddSpacer(5)
+        
+        dataSizer.Add(item=self.addbox, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=1)
+                
         # buttons
         btnSizer = wx.StdDialogButtonSizer()
         btnSizer.AddButton(self.btnCancel)
@@ -104,16 +123,17 @@ class NewVectorDialog(wx.Dialog):
         return mapName
     
 def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
-                    exceptMap=None, log=None):
+                    exceptMap=None, log=None, disableAdd=False):
     """Create new vector map layer
 
     @cmdList tuple/list (cmd list, output paramater)
     
-    @return name of create vector map
+    @return tuple (name of create vector map, add to layer tree)
     @return None of failure
     """
     cmd = cmdDef[0]
-    dlg = NewVectorDialog(parent=parent, id=wx.ID_ANY, title=title)
+    dlg = NewVectorDialog(parent, wx.ID_ANY, title,
+                          disableAdd)
     if dlg.ShowModal() == wx.ID_OK:
         outmap = dlg.GetName()
         if outmap == exceptMap:
@@ -155,6 +175,24 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
             print >> sys.stderr, e
             return None
 
+        #
+        # create attribute table
+        #
+        if dlg.table.IsChecked():
+            key = UserSettings.Get(group='atm', key='keycolumn', subkey='value')
+            sql = 'CREATE TABLE %s (%s INTEGER)' % (outmap, key)
+            
+            gcmd.Command(['db.execute',
+                          '--q'],
+                         stdin=sql)
+
+            gcmd.Command(['v.db.connect',
+                          '--q',
+                          'map=%s' % outmap,
+                          'table=%s' % outmap,
+                          'key=%s' % key,
+                          'layer=1'])
+
         # return fully qualified map name
         if '@' not in outmap:
             outmap += '@' + grassenv.GetGRASSVariable('MAPSET')
@@ -162,9 +200,9 @@ def CreateNewVector(parent, cmdDef, title=_('Create new vector map'),
         if log:
             log.WriteLog(_("New vector map <%s> created") % outmap)
 
-        return outmap
+        return (outmap, dlg.addbox.IsChecked())
 
-    return None
+    return (None, dlg.addbox.IsChecked())
 
 class SavedRegion(wx.Dialog):
     def __init__(self, parent, id, title="", pos=wx.DefaultPosition, size=wx.DefaultSize,
