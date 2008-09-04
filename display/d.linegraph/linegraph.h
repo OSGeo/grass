@@ -86,6 +86,3 @@ struct units tics[] = {
     {"in billions", 1000000000, 1000000000}
 };
 
-
-float rem(long int, long int);
-int death(char *);

@@ -49,6 +49,13 @@ int default_y_colors[] = {
     GRAY, BROWN, MAGENTA, WHITE, INDIGO
 };
 
+static double rem(long int x, long int y)
+{
+    long int d = x / y;
+
+    return ((double)(x - y * d));
+}
+
 int main(int argc, char **argv)
 {
     double xoffset;		/* offset for x-axis */
@@ -399,8 +406,7 @@ int main(int argc, char **argv)
 		    prev_x = xoffset;
 		    prev_y[i] = yoffset;
 		}
-		D_move_abs(prev_x, prev_y[i]);
-		D_cont_abs(new_x, new_y[i]);
+		D_line_abs(prev_x, prev_y[i], new_x, new_y[i]);
 		prev_y[i] = new_y[i];
 	    }
 	}
@@ -408,14 +414,17 @@ int main(int argc, char **argv)
 
 	/* draw x-axis tic-marks and numbers */
 
-	if (rem((long int)in[0].value, tic_every) == (float)0) {
+	if (rem((long int)in[0].value, tic_every) == 0.0) {
 
 	    /* draw a numbered tic-mark */
 
 	    D_use_color(title_color);
-	    D_move_abs((xoffset + line * xscale),
-		       (b - ORIGIN_Y * (b - t)));
-	    D_cont_rel(0, (BIG_TIC * (b - t)));
+	    D_begin();
+	    D_move_abs(xoffset + line * xscale, b - ORIGIN_Y * (b - t));
+	    D_cont_rel(0, BIG_TIC * (b - t));
+	    D_end();
+	    D_stroke();
+
 	    if ((in[0].value >= 1) || (in[0].value <= -1) ||
 		(in[0].value == 0))
 		sprintf(txt, "%.0f", (in[0].value / tic_unit));
@@ -435,14 +444,17 @@ int main(int argc, char **argv)
 		       (b - XNUMS_Y * (b - t)));
 	    R_text(txt);
 	}
-	else if (rem(line, tic_unit) == (float)0) {
+	else if (rem(line, tic_unit) == 0.0) {
 
 	    /* draw a tic-mark */
 
 	    D_use_color(title_color);
-	    D_move_abs((xoffset + line * xscale),
-		       (b - ORIGIN_Y * (b - t)));
-	    D_cont_rel(0, (SMALL_TIC * (b - t)));
+	    D_begin();
+	    D_move_abs(xoffset + line * xscale,
+		       b - ORIGIN_Y * (b - t));
+	    D_cont_rel(0, SMALL_TIC * (b - t));
+	    D_end();
+	    D_stroke();
 	}
     }
 
@@ -488,11 +500,14 @@ int main(int argc, char **argv)
     /* Y-AXIS LOOP */
 
     for (i = (int)min_y; i <= (int)max_y; i += tic_unit) {
-	if (rem(i, tic_every) == (float)0) {
+	if (rem(i, tic_every) == 0.0) {
 	    /* draw a tic-mark */
 
-	    D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
-	    D_cont_rel((-(r - l) * BIG_TIC), 0);
+	    D_begin();
+	    D_move_abs(x_line[0], yoffset - yscale * (i - min_y));
+	    D_cont_rel(-(r - l) * BIG_TIC, 0);
+	    D_end();
+	    D_stroke();
 
 	    /* draw a tic-mark number */
 
@@ -512,11 +527,13 @@ int main(int argc, char **argv)
 			     (yscale * (i - min_y) + 0.5 * (tt - tb))));
 	    R_text(txt);
 	}
-	else if (rem(i, tic_unit) == (float)0) {
+	else if (rem(i, tic_unit) == 0.0) {
 	    /* draw a tic-mark */
-
+	    D_begin();
 	    D_move_abs(x_line[0], (yoffset - yscale * (i - min_y)));
-	    D_cont_rel((-(r - l) * SMALL_TIC), 0);
+	    D_cont_rel(-(r - l) * SMALL_TIC, 0);
+	    D_end();
+	    D_stroke();
 	}
     }
 
@@ -529,8 +546,8 @@ int main(int argc, char **argv)
     text_width = (r - l) * TEXT_WIDTH * 1.5;
     R_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
-    D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
-	       (b - LABEL_2 * (b - t)));
+    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
+	       b - LABEL_2 * (b - t));
     D_use_color(title_color);
     R_text(xlabel);
 
@@ -544,8 +561,8 @@ int main(int argc, char **argv)
        R_move_abs((int)(((r-l)/2)-(tr-tl)/2),
        (int) (t+ (b-t)*.07) );
      */
-    D_move_abs((l + (r - l) / 2 - (tr - tl) / 2),
-	       (t + (b - t) * .07));
+    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
+	       t + (b - t) * .07);
     D_use_color(title_color);
     R_text(xlabel);
 
@@ -555,12 +572,5 @@ int main(int argc, char **argv)
 
     R_close_driver();
     exit(EXIT_SUCCESS);
-}
-
-float rem(long int x, long int y)
-{
-    long int d = x / y;
-
-    return ((float)(x - y * d));
 }
 

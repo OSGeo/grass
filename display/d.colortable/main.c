@@ -183,18 +183,24 @@ int main(int argc, char **argv)
 		cur_dot_row += dots_per_line;
 		/* Draw white box */
 		D_use_color(color);
+		D_begin();
 		D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
 		D_cont_rel(0, (2 - dots_per_line));
 		D_cont_rel((dots_per_col - 2), 0);
 		D_cont_rel(0, (dots_per_line - 2));
 		D_cont_rel((2 - dots_per_col), 0);
+		D_end();
+		D_stroke();
 		/* Draw black box */
 		D_use_color(black);
+		D_begin();
 		D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
 		D_cont_rel(0, (4 - dots_per_line));
 		D_cont_rel((dots_per_col - 4), 0);
 		D_cont_rel(0, (dots_per_line - 4));
 		D_cont_rel((4 - dots_per_col), 0);
+		D_end();
+		D_stroke();
 		/* Color box */
 		D_color((CELL) atcat, &colors);
 		D_move_abs(cur_dot_col + 4, (cur_dot_row - 3));
@@ -217,18 +223,24 @@ int main(int argc, char **argv)
 	cur_dot_col = l;
 	/* Draw white box */
 	D_use_color(color);
+	D_begin();
 	D_move_abs(cur_dot_col + 2, (cur_dot_row - 1));
 	D_cont_rel(0, (2 - dots_per_line));
 	D_cont_rel((dots_per_col - 2), 0);
 	D_cont_rel(0, (dots_per_line - 2));
 	D_cont_rel((2 - dots_per_col), 0);
+	D_end();
+	D_stroke();
 	/* Draw black box */
 	D_use_color(black);
+	D_begin();
 	D_move_abs(cur_dot_col + 3, (cur_dot_row - 2));
 	D_cont_rel(0, (4 - dots_per_line));
 	D_cont_rel((dots_per_col - 4), 0);
 	D_cont_rel(0, (dots_per_line - 4));
 	D_cont_rel((4 - dots_per_col), 0);
+	D_end();
+	D_stroke();
 	/* Color ramp box */
 
 	/* get separate color for each pixel */

@@ -21,42 +21,41 @@ static const struct scale
 } all_scales[2][NUMSCALES] = {
     {
 	/* meters */
-	{
-	"", 0., 2., 10}, {
-	"1 meter", 1., 7., 10}, {
-	"5 meters", 5., 20., 5}, {
-	"10 meters", 10., 70., 10}, {
-	"50 meters", 50., 200., 5}, {
-	"100 meters", 100., 700., 10}, {
-	"500 meters", 500., 2000., 5}, {
-	"1 km", 1000., 7000., 10}, {
-	"5 km", 5000., 20000., 5}, {
-	"10 km", 10000., 70000., 10}, {
-	"50 km", 50000., 200000., 5}, {
-	"100 km", 100000., 700000., 10}, {
-	"500 km", 500000., 2000000., 5}, {
-	"1000 km", 1000000., 7000000., 10}, {
-	"5000 km", 5000000., 20000000., 5}, {
-	"10000 km", 10000000., 70000000., 10}
-    }, {
-	/* feet/miles */
-	{
-	"", 0.000, 1., 10}, {
-	"1 foot", 0.305, 2., 10}, {
-	"5 feet", 1.524, 10., 5}, {
-	"10 feet", 3.048, 20., 10}, {
-	"50 feet", 15.240, 100., 5}, {
-	"100 feet", 30.480, 200., 10}, {
-	"500 feet", 152.400, 1000., 5}, {
-	"1000 feet", 304.800, 2000., 10}, {
-	"1 mile", 1609.344, 10000., 5}, {
-	"5 miles", 8046.720, 20000., 5}, {
-	"10 miles", 16093.440, 100000., 10}, {
-	"50 miles", 80467.200, 200000., 5}, {
-	"100 miles", 160934.400, 1000000., 10}, {
-	"500 miles", 804672.000, 2000000., 5}, {
-	"1000 miles", 1609344.000, 10000000., 10}, {
-    "5000 miles", 8046720.000, 20000000., 5},}
+	{"", 0., 2., 10},
+	{"1 meter", 1., 7., 10},
+	{"5 meters", 5., 20., 5},
+	{"10 meters", 10., 70., 10},
+	{"50 meters", 50., 200., 5},
+	{"100 meters", 100., 700., 10},
+	{"500 meters", 500., 2000., 5},
+	{"1 km", 1000., 7000., 10},
+	{"5 km", 5000., 20000., 5},
+	{"10 km", 10000., 70000., 10},
+	{"50 km", 50000., 200000., 5},
+	{"100 km", 100000., 700000., 10},
+	{"500 km", 500000., 2000000., 5},
+	{"1000 km", 1000000., 7000000., 10},
+	{"5000 km", 5000000., 20000000., 5},
+	{"10000 km", 10000000., 70000000., 10}
+    },
+    {/* feet/miles */
+	{"", 0.000, 1., 10},
+	{"1 foot", 0.305, 2., 10},
+	{"5 feet", 1.524, 10., 5},
+	{"10 feet", 3.048, 20., 10},
+	{"50 feet", 15.240, 100., 5},
+	{"100 feet", 30.480, 200., 10},
+	{"500 feet", 152.400, 1000., 5},
+	{"1000 feet", 304.800, 2000., 10},
+	{"1 mile", 1609.344, 10000., 5},
+	{"5 miles", 8046.720, 20000., 5},
+	{"10 miles", 16093.440, 100000., 10},
+	{"50 miles", 80467.200, 200000., 5},
+	{"100 miles", 160934.400, 1000000., 10},
+	{"500 miles", 804672.000, 2000000., 5},
+	{"1000 miles", 1609344.000, 10000000., 10},
+	{"5000 miles", 8046720.000, 20000000., 5},
+    }
 };
 
 int draw_scale(int toptext)
@@ -101,15 +100,20 @@ int draw_scale(int toptext)
 	/* Draw legend */
 	D_use_color(color2);
 
+	D_begin();
+
 	D_move_abs(pl + w / 2 + 1, pt + 17 + 1);
 	D_cont_rel(-0.5 * w,  2.0 * w);
 	D_cont_rel( 0.5 * w, -0.5 * w);
-	D_cont_rel( 0      , -1.5 * w);
+	D_close();
 
 	D_move_abs(pl + w / 2 + 1, pt + 17 + 1);
 	D_cont_rel( 0.5 * w,  2.0 * w);
 	D_cont_rel(-0.5 * w, -0.5 * w);
-	D_cont_rel( 0      , -1.5 * w);
+	D_close();
+
+	D_end();
+	D_stroke();
 
 	/* actual text width is 81% of size? from d.legend */
 	D_move_abs(pl + w / 2 - 7 * .81, pt + 14);
@@ -117,6 +121,8 @@ int draw_scale(int toptext)
 
 	return 0;
     }
+
+    D_setup(0);
 
     meters = D_get_u_east() - D_get_u_west();
     meters *= G_database_units_to_meters_factor();
@@ -135,6 +141,8 @@ int draw_scale(int toptext)
     seg_len = line_len / scales[incr].seg;
     /* work around round off */
     line_len = ((int)seg_len) * scales[incr].seg;
+
+    D_setup_unity(0);
 
     /* Blank out area with background color */
     if (toptext) {
@@ -168,6 +176,7 @@ int draw_scale(int toptext)
     D_use_color(color2);
 
     if (draw != 2) {
+	D_begin();
 	D_move_abs(x_pos + 5, y_pos + 20);
 	D_cont_rel(0, -10);
 	D_cont_rel(10, 10);
@@ -178,15 +187,21 @@ int draw_scale(int toptext)
 	D_cont_rel(2, -2);
 	D_cont_rel(2, 2);
 	D_cont_rel(-2, -0);
+	D_end();
+	D_stroke();
     }
 
     if (draw == 2) {
+	D_begin();
 	D_move_abs(x_pos + 25 - draw * 10, y_pos + 17);
 	/* actual width is line_len-1+1=line_len and height is 7+1=8 */
 	D_cont_rel(line_len - 1, 0);
 	D_cont_rel(0, -7);
 	D_cont_rel(line_len * -1 + 1, 0);
 	D_cont_rel(0, 7);
+	D_end();
+	D_stroke();
+
 	D_move_rel(0, 1 - 4);
 	for (i = 1; i <= scales[incr].seg; i++) {
 	    xarr[0] = 0;	    yarr[0] = 0;
@@ -200,12 +215,16 @@ int draw_scale(int toptext)
 	}
     }
     else if (do_bar) {
+	D_begin();
 	D_move_abs(x_pos + 25, y_pos + 17);
 	/* actual width is line_len-1+1=line_len and height is 4+1=5 */
 	D_cont_rel((int)line_len - 1, 0);
 	D_cont_rel(0, -4);
 	D_cont_rel((int)(line_len * -1 + 1), 0);
 	D_cont_rel(0, 4);
+	D_end();
+	D_stroke();
+
 	D_move_rel(0, 1);
 	for (i = 1; i <= scales[incr].seg; i += 2) {
 	    /* width is seg_len and height is 5 */
@@ -214,12 +233,15 @@ int draw_scale(int toptext)
 	}
     }
     else {			/* draw simple line scale */
+	D_begin();
 	D_move_abs(x_pos + 25, y_pos + 5);
 	D_cont_abs(x_pos + 25, y_pos + 25);
 	D_move_abs(x_pos + 25, y_pos + 15);
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 15);
 	D_move_abs(x_pos + 25 + line_len, y_pos + 5);
 	D_cont_abs(x_pos + 25 + line_len, y_pos + 25);
+	D_end();
+	D_stroke();
     }
 
     if (toptext) {

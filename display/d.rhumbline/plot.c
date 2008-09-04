@@ -30,6 +30,8 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 
     G_begin_rhumbline_equation(lon1, lat1, lon2, lat2);
 
+    D_begin();
+
     for (i = 0; i <= nsteps; i++) {
 	double lon = lon1 + (lon2 - lon1) * i / nsteps;
 	double lat = G_rhumbline_lat_from_lon(lon);
@@ -38,4 +40,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	else
 	    D_cont_abs(lon, lat);
     }
+
+    D_end();
+    D_stroke();
 }

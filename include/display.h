@@ -68,6 +68,13 @@ double D_u_to_a_row(double);
 double D_u_to_a_col(double);
 
 /* draw2.c */
+enum clip_mode {
+    D_MODE_NONE,
+    D_MODE_CULL,
+    D_MODE_CLIP,
+};
+
+void D_set_clip_mode(int);
 void D_set_clip(double, double, double, double);
 void D_clip_to_map(void);
 
@@ -89,13 +96,11 @@ void D_polygon_rel(const double *, const double *, int);
 void D_box_abs(double, double, double, double);
 void D_box_rel(double, double);
 
-enum clip_mode {
-    D_MODE_NONE,
-    D_MODE_CULL,
-    D_MODE_CLIP,
-};
-
-void D_set_clip_mode(int);
+void D_begin(void);
+void D_end(void);
+void D_close(void);
+void D_stroke(void);
+void D_fill(void);
 
 /* icon.c */
 void D_plot_icon(double, double, int, double, double);

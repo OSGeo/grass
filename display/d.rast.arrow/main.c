@@ -243,16 +243,12 @@ int main(int argc, char **argv)
 	D_use_color(grid_color);
 
 	/* Draw vertical grids */
-	for (col = 0; col < ncols; col++) {
-	    D_move_abs(col, 0);
-	    D_cont_abs(col, nrows);
-	}
+	for (col = 0; col < ncols; col++)
+	    D_line_abs(col, 0, col, nrows);
 
 	/* Draw horizontal grids */
-	for (row = 0; row < nrows; row++) {
-	    D_move_abs(0,     row);
-	    D_cont_abs(ncols, row);
-	}
+	for (row = 0; row < nrows; row++)
+	    D_line_abs(0, row, ncols, row);
     }
 
     /* open the raster map */
@@ -492,6 +488,8 @@ static void arrow_mag(double theta, double length)
     mid_x = col + (.5);
     mid_y = row + (.5);
 
+    D_begin();
+
     /* tail */
     D_move_abs(mid_x, mid_y);
 
@@ -512,6 +510,9 @@ static void arrow_mag(double theta, double length)
     dx = mid_x + (0.6 * length * cos(D2R(theta_offset)));
     dy = mid_y + (0.6 * length * sin(D2R(theta_offset)));
     D_cont_abs(dx, dy);
+
+    D_end();
+    D_stroke();
 }
 
 
@@ -526,6 +527,8 @@ static void arrow_360(double theta)
     /* find the display coordinates of the middle of the cell */
     mid_x = col + (0.5);
     mid_y = row + (0.5);
+
+    D_begin();
 
     /* head */
     x = mid_x + (max_radius * cos(D2R(theta)));
@@ -551,122 +554,150 @@ static void arrow_360(double theta)
     dy = mid_y + (0.5 * max_radius * sin(D2R(theta_offset)));
     D_cont_abs(dx, dy);
 
+    D_end();
+    D_stroke();
 }
 
 static void arrow_se(void)
 {
     double x = col + (.8);
     double y = row + (.8);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((-.6)), (((-.6))));
     D_move_abs(x, y);
     D_cont_rel(0, ((-.4)));
     D_move_abs(x, y);
     D_cont_rel(((-.4)), 0);
-
+    D_end();
+    D_stroke();
 }
 
 static void arrow_ne(void)
 {
     double x = col + (.8);
     double y = row + (.2);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((-.6)), (((.6))));
     D_move_abs(x, y);
     D_cont_rel(0, ((.4)));
     D_move_abs(x, y);
     D_cont_rel(((-.4)), 0);
-
+    D_end();
+    D_stroke();
 }
 
 static void arrow_nw(void)
 {
     double x = col + (.2);
     double y = row + (.2);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((.6)), (((.6))));
     D_move_abs(x, y);
     D_cont_rel(0, ((.4)));
     D_move_abs(x, y);
     D_cont_rel(((.4)), 0);
-
+    D_end();
+    D_stroke();
 }
 
 static void arrow_sw(void)
 {
     double x = col + (.2);
     double y = row + (.8);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((.6)), (((-.6))));
     D_move_abs(x, y);
     D_cont_rel(0, ((-.4)));
     D_move_abs(x, y);
     D_cont_rel(((.4)), 0);
-
+    D_end();
+    D_stroke();
 }
+
 static void arrow_e(void)
 {
     double x = col + (.9);
     double y = row + (.5);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((-.8)), 0);
     D_move_abs(x, y);
     D_cont_rel(((-.3)), ((-.3)));
     D_move_abs(x, y);
     D_cont_rel(((-.3)), ((.3)));
-
+    D_end();
+    D_stroke();
 }
+
 static void arrow_w(void)
 {
     double x = col + (.1);
     double y = row + (.5);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(((.8)), 0);
     D_move_abs(x, y);
     D_cont_rel(((.3)), ((-.3)));
     D_move_abs(x, y);
     D_cont_rel(((.3)), ((.3)));
-
+    D_end();
+    D_stroke();
 }
+
 static void arrow_s(void)
 {
     double x = col + (.5);
     double y = row + (.9);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(0, ((-.8)));
     D_move_abs(x, y);
     D_cont_rel(((.3)), ((-.3)));
     D_move_abs(x, y);
     D_cont_rel(((-.3)), ((-.3)));
-
+    D_end();
+    D_stroke();
 }
+
 static void arrow_n(void)
 {
     double x = col + (.5);
     double y = row + (.1);
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(0, ((.8)));
     D_move_abs(x, y);
     D_cont_rel(((.3)), ((.3)));
     D_move_abs(x, y);
     D_cont_rel(((-.3)), ((.3)));
-
+    D_end();
+    D_stroke();
 }
+
 static void draw_x(void)
 {
     double x = col;
     double y = row;
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(1, 1);
     y = row + 1;
     D_move_abs(x, y);
     D_cont_rel(1, (-1));
+    D_end();
+    D_stroke();
 }
+
 static void unknown_(void)
 {
     double x = col + (.3);
     double y = row + (.4);
 
+    D_begin();
     D_move_abs(x, y);
     D_cont_rel(0, ((-.15)));
     D_cont_rel(((.1)), ((-.1)));
@@ -678,4 +709,6 @@ static void unknown_(void)
     D_cont_rel(0, ((.25)));
     D_move_rel(0, ((.1)));
     D_cont_rel(0, ((.1)));
+    D_end();
+    D_stroke();
 }
