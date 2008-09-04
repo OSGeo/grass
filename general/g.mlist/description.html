@@ -1,0 +1,65 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.xlist</em> searches for data files matching a pattern given by wildcards or POSIX Extended Regular Expressions.
+
+<h2>EXAMPLES</h2>
+
+List all available GRASS data base files:
+<div class="code"><pre>
+  g.xlist type=all
+</pre></div>
+
+List all raster and vector maps:
+<div class="code"><pre>
+  g.xlist type=rast,vect
+</pre></div>
+
+<h3>Wildcards:</h3>
+
+List all vector maps starting with letter "r":
+<div class="code"><pre>
+  g.xlist type=vect pattern="r*"
+</pre></div>
+
+List certain raster maps with one variable character/number:
+<div class="code"><pre>
+  g.xlist type=rast pattern="N45E00?.meters"
+</pre></div>
+
+<h3>Regular expressions:</h3>
+
+Print out all soils map with "soils" in their name:
+<div class="code"><pre>
+  g.xlist -r type=rast pattern='^soils'
+</pre></div>
+
+Print out "tmp" if "tmp" raster map exists:
+<div class="code"><pre>
+  g.xlist -r pattern='^tmp$'
+</pre></div>
+
+Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name linewise):
+<div class="code"><pre>
+  g.xlist -r type=vect pattern='^tmp[0-9]$'
+</pre></div>
+
+Print out "tmp0" ..."tmp9" if corresponding vector map exists (each map name comma separated):
+<div class="code"><pre>
+  g.xlist -r type=vect separator=, pattern='^tmp[0-9]$'
+</pre></div>
+
+This may be useful for other programs' parameter input 
+(e.g. <em><a href="r.series.html">r.series</a></em>).
+
+<h2>SEE ALSO</h2>
+
+<em><a href="g.list.html">g.list</a></em>
+<p>
+<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expression</a> (from Wikipedia, the free encyclopedia)
+
+<h2>AUTHOR</h2>
+
+Huidae Cho<br>
+grass4u@gmail.com
+
+<p><i>Last changed: $Date: 2008-06-28 04:37:22 -0500 (Sat, 28 Jun 2008) $</i>
