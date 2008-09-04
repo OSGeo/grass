@@ -702,6 +702,7 @@ char *G_location(void);
 char *G__location_path(void);
 
 /* ls.c */
+void G_set_ls_filter(int (*)(const char *, void *), void *);
 char **G__ls(const char *, int *);
 void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
