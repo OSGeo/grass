@@ -31,6 +31,7 @@ import time
 import glob
 import math
 import tempfile
+import copy
 
 import wx
 import wx.aui
@@ -3396,31 +3397,35 @@ class MapFrame(wx.Frame):
         east, north = self.MapWindow.Pixel2Cell((x, y))
 
         mapName = self.tree.GetPyData(self.tree.layer_selected)[0]['maplayer'].name
-
+        
         if self.dialogs['attributes'] is None:
             self.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self.MapWindow,
-                                                                map=mapName,
-                                                                query=((east, north), qdist),
-                                                                pos=posWindow,
-                                                                action="update")
+                                                                     map=mapName,
+                                                                     query=((east, north), qdist),
+                                                                     pos=posWindow,
+                                                                     action="update")
         else:
-            # update currently open dialog
-            self.dialogs['attributes'].UpdateDialog(query=((east, north), qdist))
+            # selection changed?
+            if not self.dialogs['attributes'].mapDBInfo or \
+                   self.dialogs['attributes'].mapDBInfo.map != mapName:
+                self.dialogs['attributes'].UpdateDialog(map=mapName, query=((east, north), qdist))
+            else:
+                self.dialogs['attributes'].UpdateDialog(query=((east, north), qdist))
 
-        line = self.dialogs['attributes'].GetLine()
+        cats = self.dialogs['attributes'].GetLine(id=False)
         try:
             qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)[0]
         except IndexError:
             qlayer = None
-            
-        if self.dialogs['attributes'].mapDBInfo and line:
+        
+        if self.dialogs['attributes'].mapDBInfo and cats:
             # highlight feature & re-draw map
             if qlayer:
-                qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, line,
-                                                        useId=True,
+                qlayer.SetCmd(self.AddTmpVectorMapLayer(mapName, cats,
+                                                        useId=False,
                                                         addLayer=False))
             else:
-                self.AddTmpVectorMapLayer(mapName, line, useId=True)
+                self.AddTmpVectorMapLayer(mapName, cats, useId=False)
 
             self.MapWindow.UpdateMap(render=False, renderVector=False)
             # digitClass.driver.SetSelected([line])
@@ -3480,26 +3485,36 @@ class MapFrame(wx.Frame):
         str(color[1]) + ":" + \
         str(color[2])
 
-        cmd = ["d.vect",
-               "map=%s" % name,
-               "color=%s" % colorStr,
-               "fcolor=%s" % colorStr,
-               "width=%d"  % UserSettings.Get(group='atm', key='highlight', subkey='width')]
+        pattern = ["d.vect",
+                   "map=%s" % name,
+                   "color=%s" % colorStr,
+                   "fcolor=%s" % colorStr,
+                   "width=%d"  % UserSettings.Get(group='atm', key='highlight', subkey='width')]
         
         if useId:
+            cmd = pattern
             cmd.append('-i')
             cmd.append('cats=%s' % str(cats))
         else:
-            cmd.append("cats=%s" % utils.ListOfCatsToRange(cats))
-
+            cmd = []
+            for layer in cats.keys():
+                cmd.append(copy.copy(pattern))
+                lcats = cats[layer]
+                cmd[-1].append("layer=%d" % layer)
+                cmd[-1].append("cats=%s" % utils.ListOfCatsToRange(lcats))
+        
         #     if self.icon:
         #         cmd.append("icon=%s" % (self.icon))
         #     if self.pointsize:
         #         cmd.append("size=%s" % (self.pointsize))
 
         if addLayer:
-            return self.Map.AddLayer(type='vector', name=globalvar.QUERYLAYER, command=cmd,
-                                     l_active=True, l_hidden=True, l_opacity=1.0)
+            if useId:
+                return self.Map.AddLayer(type='vector', name=globalvar.QUERYLAYER, command=cmd,
+                                         l_active=True, l_hidden=True, l_opacity=1.0)
+            else:
+                return self.Map.AddLayer(type='command', name=globalvar.QUERYLAYER, command=cmd,
+                                         l_active=True, l_hidden=True, l_opacity=1.0)
         else:
             return cmd
 
