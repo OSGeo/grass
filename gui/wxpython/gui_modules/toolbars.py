@@ -592,13 +592,7 @@ class VDigitToolbar(AbstractToolbar):
         # close dialogs if still open
         if self.settingsDialog:
             self.settingsDialog.OnCancel(None)
-
-        if self.parent.dialogs['category']:
-            self.parent.dialogs['category'].OnCancel(None)
-
-        if self.parent.dialogs['attributes']:
-            self.parent.dialogs['attributes'].OnCancel(None)
-
+        
         # disable the toolbar
         self.parent.RemoveToolbar ("vdigit")
 
@@ -1097,6 +1091,12 @@ class VDigitToolbar(AbstractToolbar):
         # disable pseudodc for vector map layer
         self.parent.MapWindow.pdcVector = None
         self.parent.digit.driver.SetDevice(None)
+
+        # close dialogs
+        for dialog in ('attributes', 'category'):
+            if self.parent.dialogs[dialog]:
+                self.parent.dialogs[dialog].Close()
+                self.parent.dialogs[dialog] = None
         
         self.parent.digit.__del__() # FIXME: destructor is not called here (del)
         self.parent.digit = None
