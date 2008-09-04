@@ -1,0 +1,26 @@
+<h2>DESCRIPTION</h2>
+
+<em>g.xremove</em> removes data files matching a pattern given by wildcards or POSIX Extended Regular Expressions.
+If the <b>-f</b> force flag is not given then nothing is removed, instead
+the list of selected file names is printed to <tt>stdout</tt>
+as a preview of the files to be deleted.
+
+<h2>EXAMPLE</h2>
+
+Delete all raster maps starting with "<tt>tmp_</tt>" in the current mapset:
+<div class="code"><pre>
+  g.xremove -f "tmp_*"
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em><a HREF="g.remove.html">g.remove</a></em>
+<p>
+<a href="http://en.wikipedia.org/wiki/Regular_expression">Regular expression</a> (from Wikipedia, the free encyclopedia)
+
+<h2>AUTHOR</h2>
+
+Huidae Cho<br>
+grass4u@gmail.com
+
+<p><i>Last changed: $Date: 2008-06-28 03:23:07 -0500 (Sat, 28 Jun 2008) $</i>
