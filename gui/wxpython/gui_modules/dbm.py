@@ -2805,11 +2805,15 @@ class DisplayAttributesDialog(wx.Dialog):
         mainSizer.Fit(self)
 
         # set min size for dialog
-        self.SetMinSize(self.GetBestSize())
+        w, h = self.GetBestSize()
+        if h < 200:
+            self.SetMinSize((w, 200))
+        else:
+            self.SetMinSize(self.GetBestSize())
 
         if self.notebook.GetPageCount() == 0:
             Debug.msg(2, "DisplayAttributesDialog(): Nothing found!")
-            self.mapDBInfo = None
+            ### self.mapDBInfo = None
 
     def __SelectAttributes(self, layer):
         """Select attributes"""
@@ -2958,7 +2962,7 @@ class DisplayAttributesDialog(wx.Dialog):
             self.mapDBInfo = VectorDBInfo(self.map)
             
         self.line['id'] = (line, )
-        self.line['cats'] = None
+        self.line['cats'] = cats
         
         if not self.mapDBInfo:
             return False
@@ -3103,9 +3107,16 @@ class DisplayAttributesDialog(wx.Dialog):
         # for each layer END
 
         self.Layout()
-
+        
         return True
 
+    def IsFound(self):
+        """Check if attributes found"""
+        if self.notebook.GetPageCount() > 0:
+            return True
+        
+        return False
+        
 class VectorDBInfo(gselect.VectorDBInfo):
     """Class providing information about attribute tables
     linked to the vector map"""

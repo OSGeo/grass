@@ -1223,9 +1223,9 @@ class BufferedWindow(MapWindow, wx.Window):
                                                                            line=line)
 
                     if self.parent.dialogs['attributes']:
-                        line = self.parent.dialogs['attributes'].GetLine()
-                        if self.parent.dialogs['attributes'].mapDBInfo and line:
+                        if self.parent.dialogs['attributes'].IsFound():
                             # highlight feature & re-draw map
+                            line = self.parent.dialogs['attributes'].GetLine()
                             digitClass.driver.SetSelected(line)
                             if not self.parent.dialogs['attributes'].IsShown():
                                 self.parent.dialogs['attributes'].Show()

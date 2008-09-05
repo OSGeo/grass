@@ -158,9 +158,8 @@ std::vector<int> Digit::GetLayers()
 std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
 {
     std::map<int, std::vector<int> > lc;
-    int line, n_dblinks;
+    int line;
     struct line_cats *Cats;
-    struct field_info *fi;
 
     if (!display->mapInfo) {
 	DisplayMsg();
@@ -189,20 +188,12 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
 	ReadLineMsg(line);
 	return lc;
     }
-
-    n_dblinks = Vect_get_num_dblinks(display->mapInfo);
-
-    for (int dblink = 0; dblink < n_dblinks; dblink++) {
-	fi = Vect_get_dblink(display->mapInfo, dblink);
-	if (fi == NULL) {
-	    DblinkMsg(dblink+1);
-	    continue;
-	}
-	std::vector<int> cats;
-	lc[fi->number] = cats;
-    }
-
+    
     for (int i = 0; i < Cats->n_cats; i++) {
+	if (lc.find(Cats->field[i]) == lc.end()) {
+	    std::vector<int> cats;
+	    lc[Cats->field[i]] = cats;
+	}
 	lc[Cats->field[i]].push_back(Cats->cat[i]);
     }
 

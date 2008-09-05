@@ -1151,7 +1151,7 @@ class VDigit(AbstractDigit):
         
         @param line feature id (-1 for first selected line)
         """
-        return self.digit.GetLineCats(line)
+        return dict(self.digit.GetLineCats(line))
 
     def SetLineCats(self, line, layer, cats, add=True):
         """Set categories for given line and layer
