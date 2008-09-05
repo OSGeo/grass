@@ -38,7 +38,7 @@ static void set_text_box(FT_Bitmap *, FT_Int, FT_Int);
 #endif
 
 static int fdont_draw = 0;
-static int ft, fb, fl, fr;
+static double ft, fb, fl, fr;
 
 static const char *font_get_encoding(void)
 {
@@ -47,7 +47,7 @@ static const char *font_get_encoding(void)
     return encoding;
 }
 
-static void draw_main(int x, int y,
+static void draw_main(double x, double y,
 		      double text_size_x, double text_size_y,
 		      double text_rotation, const char *string)
 {
@@ -246,10 +246,10 @@ static void draw_bitmap(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
     int offset, i, j;
     double x1, y1, x2, y2;
 
-    x1 = (double)x;
-    y1 = (double)y;
-    x2 = x1 + (double)bw;
-    y2 = y1 + (double)bh;
+    x1 = x;
+    y1 = y;
+    x2 = x1 + bw;
+    y2 = y1 + bh;
 
     w = x2 - x1;
     h = y2 - y1;
@@ -267,12 +267,12 @@ static void draw_bitmap(FT_Bitmap * bitmap, FT_Int x, FT_Int y)
 	for (i = 0; i < w; i++)
 	    buf[j * w + i] = sbuf[offset + j * bw + i];
 
-    COM_Move_abs(x1, y1);
+    COM_Pos_abs(x1, y1);
     DRV_draw_bitmap(w, h, 128, buf);
 }
 #endif
 
-void soft_text_freetype(int x, int y,
+void soft_text_freetype(double x, double y,
 			double text_size_x, double text_size_y,
 			double text_rotation, const char *string)
 {
@@ -281,7 +281,7 @@ void soft_text_freetype(int x, int y,
     draw_main(x, y, text_size_x, text_size_y, text_rotation, string);
 }
 
-void soft_text_ext_freetype(int x, int y,
+void soft_text_ext_freetype(double x, double y,
 			    double text_size_x, double text_size_y,
 			    double text_rotation, const char *string)
 {

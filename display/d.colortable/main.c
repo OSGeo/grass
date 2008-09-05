@@ -203,7 +203,7 @@ int main(int argc, char **argv)
 		D_stroke();
 		/* Color box */
 		D_color((CELL) atcat, &colors);
-		D_move_abs(cur_dot_col + 4, (cur_dot_row - 3));
+		D_pos_abs(cur_dot_col + 4, (cur_dot_row - 3));
 		D_polygon_rel(x_box, y_box, 5);
 
 		count++;
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
 		dval =
 		    dmin + (r - 1) * (dmax - dmin) / (dots_per_line - 6 - 5);
 	    D_d_color(dval, &colors);
-	    D_move_abs(cur_dot_col + 4, (cur_dot_row - 3) - r);
+	    D_pos_abs(cur_dot_col + 4, (cur_dot_row - 3) - r);
 	    D_polygon_rel(x_box, y_box, 5);
 	}
     }

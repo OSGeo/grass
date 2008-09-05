@@ -24,6 +24,8 @@ static RGBA_Color last_color;
 
 static double t, b, l, r;
 
+static double cur_x, cur_y;
+
 int set_graph_stuff(void)
 {
     D_get_dst(&t, &b, &l, &r);
@@ -54,40 +56,44 @@ int set_text_size(void)
     return (0);
 }
 
-int do_draw(char *buff)
+int do_draw(const char *str)
 {
     float xper, yper;
 
-    if (2 != sscanf(buff, "%*s %f %f", &xper, &yper)) {
-	G_warning(_("Problem parsing coordinates [%s]"), buff);
+    if (2 != sscanf(str, "%*s %f %f", &xper, &yper)) {
+	G_warning(_("Problem parsing coordinates [%s]"), str);
 	return (-1);
     }
 
-    D_cont_abs(xper, yper);
+    D_line_abs(cur_x, cur_y, xper, yper);
+    cur_x = xper;
+    cur_y = yper;
 
     return (0);
 }
 
-int do_move(char *buff)
+int do_move(const char *str)
 {
     float xper, yper;
 
-    if (2 != sscanf(buff, "%*s %f %f", &xper, &yper)) {
-	G_warning(_("Problem parsing coordinates [%s]"), buff);
+    if (2 != sscanf(str, "%*s %f %f", &xper, &yper)) {
+	G_warning(_("Problem parsing coordinates [%s]"), str);
 	return (-1);
     }
 
-    D_move_abs(xper, yper);
+    D_pos_abs(xper, yper);
+    cur_x = xper;
+    cur_y = yper;
 
     return (0);
 }
 
-int do_color(char *buff)
+int do_color(const char *str)
 {
     char in_color[64];
     int R, G, B, color = 0;
 
-    if (1 != sscanf(buff, "%*s %s", in_color)) {
+    if (1 != sscanf(str, "%*s %s", in_color)) {
 	G_warning(_("Unable to read color"));
 	return (-1);
     }
@@ -114,12 +120,12 @@ int do_color(char *buff)
     return (0);
 }
 
-int do_linewidth(char *buff)
+int do_linewidth(const char *str)
 {
     double width;
 
-    if (1 != sscanf(buff, "%*s %lf", &width)) {
-	G_warning(_("Problem parsing command [%s]"), buff);
+    if (1 != sscanf(str, "%*s %lf", &width)) {
+	G_warning(_("Problem parsing command [%s]"), str);
 	return (-1);
     }
 
@@ -130,30 +136,32 @@ int do_linewidth(char *buff)
 }
 
 
-int do_poly(char *buff, FILE * infile)
+int do_poly(const char *str, FILE * infile)
 {
     int num;
     char origcmd[64];
     float xper, yper;
     int to_return;
 
-    sscanf(buff, "%s", origcmd);
+    sscanf(str, "%s", origcmd);
 
     num = 0;
 
     for (;;) {
-	if ((to_return = G_getl2(buff, 128, infile)) != 1)
+	char buf[128];
+
+	if ((to_return = G_getl2(buf, sizeof(buf), infile)) != 1)
 	    break;
 
-	if (2 != sscanf(buff, "%f %f", &xper, &yper)) {
+	if (2 != sscanf(buf, "%f %f", &xper, &yper)) {
 
-	    if ('#' == buff[0]) {
-		G_debug(3, " skipping comment line [%s]", buff);
+	    if ('#' == buf[0]) {
+		G_debug(3, " skipping comment line [%s]", buf);
 		continue;
 	    }
 
 	    G_debug(3, "coordinate pair not found. ending polygon. [%s]",
-		    buff);
+		    buf);
 	    break;
 	}
 
@@ -177,15 +185,15 @@ int do_poly(char *buff, FILE * infile)
     return (to_return);
 }
 
-int do_size(char *buff)
+int do_size(const char *str)
 {
     float xper, yper;
     int ret;
 
-    ret = sscanf(buff, "%*s %f %f", &xper, &yper);
+    ret = sscanf(str, "%*s %f %f", &xper, &yper);
 
     if (ret != 2 && ret != 1) {
-	G_warning(_("Problem parsing command [%s]"), buff);
+	G_warning(_("Problem parsing command [%s]"), str);
 	return (-1);
     }
 
@@ -203,10 +211,10 @@ int do_size(char *buff)
     return (0);
 }
 
-int do_rotate(char *buff)
+int do_rotate(const char *str)
 {
-    if (1 != sscanf(buff, "%*s %lf", &rotation)) {
-	G_warning(_("Problem parsing command [%s]"), buff);
+    if (1 != sscanf(str, "%*s %lf", &rotation)) {
+	G_warning(_("Problem parsing command [%s]"), str);
 	return (-1);
     }
 
@@ -216,14 +224,15 @@ int do_rotate(char *buff)
     return (0);
 }
 
-int do_text(char *buff)
+int do_text(const char *str)
 {
-    char *ptr;
+    const char *ptr = str;
 
-    ptr = buff;
     /* skip to beginning of actual text */
-    for (; *ptr != ' '; ptr++) ;
-    for (; *ptr == ' '; ptr++) ;
+    for (; *ptr != ' '; ptr++)
+	;
+    for (; *ptr == ' '; ptr++)
+	;
     R_text(ptr);
 
     return 0;
@@ -248,15 +257,15 @@ int check_alloc(int num)
     return 0;
 }
 
-int do_icon(char *buff)
+int do_icon(const char *str)
 {
     double xper, yper;
     char type;
     double size;
     double ix, iy;
 
-    if (4 != sscanf(buff, "%*s %c %lf %lf %lf", &type, &size, &xper, &yper)) {
-	G_warning(_("Problem parsing command [%s]"), buff);
+    if (4 != sscanf(str, "%*s %c %lf %lf %lf", &type, &size, &xper, &yper)) {
+	G_warning(_("Problem parsing command [%s]"), str);
 	return (-1);
     }
 
@@ -295,7 +304,7 @@ int do_icon(char *buff)
     return (0);
 }
 
-int do_symbol(char *buff)
+int do_symbol(const char *str)
 {
     double xper, yper;
     double size;
@@ -310,20 +319,20 @@ int do_symbol(char *buff)
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
 
-    symb_name = G_malloc(sizeof(char) * strlen(buff) + 1);	/* well, it won't be any bigger than this */
-    line_color_str = G_malloc(sizeof(char) * strlen(buff) + 1);
-    fill_color_str = G_malloc(sizeof(char) * strlen(buff) + 1);
+    symb_name = G_malloc(strlen(str) + 1);	/* well, it won't be any bigger than this */
+    line_color_str = G_malloc(strlen(str) + 1);
+    fill_color_str = G_malloc(strlen(str) + 1);
 
-    G_debug(3, "do_symbol() [%s]", buff);
+    G_debug(3, "do_symbol() [%s]", str);
 
     /* set default colors so colors are optional */
     strcpy(line_color_str, DEFAULT_FG_COLOR);
     strcpy(fill_color_str, "grey");
 
     if (sscanf
-	(buff, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
+	(str, "%*s %s %lf %lf %lf %s %s", symb_name, &size, &xper, &yper,
 	 line_color_str, fill_color_str) < 4) {
-	G_warning(_("Problem parsing command [%s]"), buff);
+	G_warning(_("Problem parsing command [%s]"), str);
 	return (-1);
     }
 

@@ -52,7 +52,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	       y: End of text is 7 pixels up from bottom of screen, +.5 rounding.
 	       fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
 	     */
-	    D_move_abs(x + 4.5 * D_get_d_to_u_xconv(),
+	    D_pos_abs(x + 4.5 * D_get_d_to_u_xconv(),
 		       D_get_u_south()
 		       - D_get_d_to_u_yconv() * (strlen(text) * fontsize * 0.81) - 7.5);
 
@@ -95,7 +95,7 @@ int plot_grid(double grid_size, double east, double north, int do_text,
 	       fontsize*.81 = actual text width FOR DEFAULT FONT (NOT FreeType)
 	       y: 4 pixels above each grid line, +.5 rounding.
 	     */
-	    D_move_abs(
+	    D_pos_abs(
 		D_get_u_east()
 		- D_get_d_to_u_xconv() * (strlen(text) * fontsize * 0.81 - 7.5),
 		y + D_get_d_to_u_yconv() * 4.5);
@@ -210,8 +210,8 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    G_format_northing(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);
 	    R_text_size(fontsize, fontsize);
-	    D_move_abs(D_get_u_west() + D_get_d_to_u_xconv() * border_off,
-		       start_coord - D_get_d_to_u_yconv() * grid_off);
+	    D_pos_abs(D_get_u_west() + D_get_d_to_u_xconv() * border_off,
+		      start_coord - D_get_d_to_u_yconv() * grid_off);
 	    R_text(text);
 	}
     }
@@ -262,8 +262,8 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 	    G_format_easting(g, text, PROJECTION_LL);
 	    R_text_rotation(font_angle);
 	    R_text_size(fontsize, fontsize);
-	    D_move_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
-		       D_get_u_north() + D_get_d_to_u_yconv() * border_off);
+	    D_pos_abs(start_coord + D_get_d_to_u_xconv() * (grid_off + 1.5),
+		      D_get_u_north() + D_get_d_to_u_yconv() * border_off);
 	    R_text(text);
 	}
     }

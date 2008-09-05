@@ -662,23 +662,23 @@ int main(int argc, char **argv)
 
 	    if (!horiz) {
 		if (!k)		/* first  */
-		    D_move_abs(x1 + 4, y0 + txsiz);
+		    D_pos_abs(x1 + 4, y0 + txsiz);
 		else if (k == steps - 1)	/* last */
-		    D_move_abs(x1 + 4, y1);
+		    D_pos_abs(x1 + 4, y1);
 		else
-		    D_move_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
+		    D_pos_abs(x1 + 4, y0 + ppl * k + txsiz / 2);
 	    }
 	    else {
 		/* text width is 0.81 of text height? so even though we set width 
 		   to txsiz with R_text_size(), we still have to reduce.. hmmm */
 		if (!k)		/* first  */
-		    D_move_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
+		    D_pos_abs(x0 - (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 		else if (k == steps - 1)	/* last */
-		    D_move_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
+		    D_pos_abs(x1 - (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 		else
-		    D_move_abs(x0 + ppl * k -
+		    D_pos_abs(x0 + ppl * k -
 			       (strlen(buff) * txsiz * .81 / 2),
 			       y1 + 4 + txsiz);
 	    }
@@ -726,7 +726,7 @@ int main(int argc, char **argv)
 	r = x1;
 	b = y1;
 
-	D_move_abs(x0, y0);
+	D_pos_abs(x0, y0);
 
 	/* figure out box height  */
 	if (do_cats == cats_num)
@@ -832,7 +832,7 @@ int main(int argc, char **argv)
 		    D_d_color(catlist[catlistCount - i - 1], &colors);
 	    }
 
-	    D_move_abs(l + 4, (cur_dot_row - 2));
+	    D_pos_abs(l + 4, (cur_dot_row - 2));
 	    D_polygon_rel(x_box, y_box, 5);
 
 	    /* Draw text */
@@ -861,7 +861,7 @@ int main(int argc, char **argv)
 		    sprintf(buff, DispFormat, catlist[catlistCount - i - 1]);
 	    }
 
-	    D_move_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
+	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row) - 3);
 	    R_text(buff);
 	}
 
@@ -883,7 +883,7 @@ int main(int argc, char **argv)
 		R_text_size(txsiz, txsiz);
 	    }
 	    D_use_color(white);
-	    D_move_abs((l + 3 + dots_per_line), (cur_dot_row));
+	    D_pos_abs((l + 3 + dots_per_line), (cur_dot_row));
 	    R_text(buff);
 	}
     }

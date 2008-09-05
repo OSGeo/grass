@@ -156,29 +156,9 @@ void R_erase(void)
  *  \return void
  */
 
-void R_move_abs(double x, double y)
+void R_pos_abs(double x, double y)
 {
-    COM_Move_abs(x, y);
-}
-
-/*!
- * \brief move current location
- *
- * Shift the current screen location by the values in <b>dx</b> and <b>dy</b>:
- \code
- Newx = Oldx + dx;
- Newy = Oldy + dy;
- \endcode
- * Nothing is drawn on the screen.
- *
- *  \param x dx
- *  \param y dy
- *  \return void
- */
-
-void R_move_rel(double x, double y)
-{
-    COM_Move_rel(x, y);
+    COM_Pos_abs(x, y);
 }
 
 /*!
@@ -193,31 +173,9 @@ void R_move_rel(double x, double y)
  *  \return void
  */
 
-void R_cont_abs(double x, double y)
+void R_line_abs(double x1, double y1, double x2, double y2)
 {
-    COM_Cont_abs(x, y);
-}
-
-/*!
- * \brief draw line
- *
- * Draw a line using the
- * current color, selected via <i>R_color</i>, from the current location to
- * the relative location specified by <b>x</b> and <b>y.</b> The current
- * location is updated:
- \code
- Newx = Oldx + x;
- Newy = Oldy + y;
- \endcode
- *
- *  \param x
- *  \param y
- *  \return void
- */
-
-void R_cont_rel(double x, double y)
-{
-    COM_Cont_rel(x, y);
+    COM_Line_abs(x1, y1, x2, y2);
 }
 
 /*!
@@ -236,26 +194,6 @@ void R_cont_rel(double x, double y)
 void R_polydots_abs(const double *xarray, const double *yarray, int number)
 {
     COM_Polydots_abs(xarray, yarray, number);
-}
-
-/*!
- * \brief draw a series of dots
- *
- * Pixels at the <b>number</b> relative positions in the <b>x</b> and
- * <b>y</b> arrays are turned to the current color. The first position is
- * relative to the starting current location; the succeeding positions are then
- * relative to the previous position. The current location is updated to the
- * position of the last dot.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polydots_rel(const double *xarray, const double *yarray, int number)
-{
-    COM_Polydots_rel(xarray, yarray, number);
 }
 
 /*!
@@ -280,28 +218,6 @@ void R_polyline_abs(const double *xarray, const double *yarray, int number)
 }
 
 /*!
- * \brief draw an open polygon
- *
- * The <b>number</b> relative positions in the <b>x</b> and <b>y</b>
- * arrays are used to generate a multisegment line (often curved). The first
- * position is relative to the starting current location; the succeeding
- * positions are then relative to the previous position. The current location is
- * updated to the position of the last point. This line is drawn with the current
- * color.
- * <b>Note.</b> No line is drawn between the last point and the first point.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polyline_rel(const double *xarray, const double *yarray, int number)
-{
-    COM_Polyline_rel(xarray, yarray, number);
-}
-
-/*!
  * \brief draw a closed polygon
  *
  * The <b>number</b> absolute positions in the <b>x</b> and <b>y</b> arrays
@@ -317,26 +233,6 @@ void R_polyline_rel(const double *xarray, const double *yarray, int number)
 void R_polygon_abs(const double *xarray, const double *yarray, int number)
 {
     COM_Polygon_abs(xarray, yarray, number);
-}
-
-/*!
- * \brief draw a closed polygon
- *
- * The <b>number</b> relative positions in the <b>x</b> and <b>y</b>
- * arrays outline a closed polygon which is filled with the current color. The
- * first position is relative to the starting current location; the succeeding
- * positions are then relative to the previous position. The current location is
- * undefined afterwards.
- *
- *  \param xarray x
- *  \param yarray y
- *  \param number
- *  \return void
- */
-
-void R_polygon_rel(const double *xarray, const double *yarray, int number)
-{
-    COM_Polygon_rel(xarray, yarray, number);
 }
 
 /*!
@@ -356,24 +252,6 @@ void R_polygon_rel(const double *xarray, const double *yarray, int number)
 void R_box_abs(double x1, double y1, double x2, double y2)
 {
     COM_Box_abs(x1, y1, x2, y2);
-}
-
-
-/*!
- * \brief fill a box
- *
- * A box is drawn in the current color using the current location as one corner 
- * and the current location plus <b>x</b> and <b>y</b> as the opposite corner 
- * of the box. The current location is undefined afterwards.
- *
- *  \param x
- *  \param y
- *  \return void
- */
-
-void R_box_rel(double x, double y)
-{
-    COM_Box_rel(x, y);
 }
 
 /*!

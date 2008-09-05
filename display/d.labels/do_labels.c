@@ -236,7 +236,7 @@ int show_it(void)
 	G_debug(3, "line %d ='%s'", n_lines, line);
 
 	Y = north - (line_size * 1.2) - ((n_lines - 1) * line_size);
-	D_move_abs(X, Y);
+	D_pos_abs(X, Y);
 	R_text_rotation(0.0);	/* reset */
 	D_get_text_box(line, &t, &b, &l, &r);
 
@@ -371,22 +371,22 @@ int show_it(void)
 
 	    for (j = 1; j <= highlight_width; j++) {
 		/* smear it around. probably a better way (knight's move? rand?) */
-		D_move_abs(text_x + Xoffset, text_y + Yoffset + j);
+		D_pos_abs(text_x + Xoffset, text_y + Yoffset + j);
 		R_text(line);
-		D_move_abs(text_x + Xoffset, text_y + Yoffset - j);
+		D_pos_abs(text_x + Xoffset, text_y + Yoffset - j);
 		R_text(line);
-		D_move_abs(text_x + Xoffset + j, text_y + Yoffset);
+		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset);
 		R_text(line);
-		D_move_abs(text_x + Xoffset - j, text_y + Yoffset);
+		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset);
 		R_text(line);
 
-		D_move_abs(text_x + Xoffset + j, text_y + Yoffset + j);
+		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset + j);
 		R_text(line);
-		D_move_abs(text_x + Xoffset - j, text_y + Yoffset - j);
+		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset - j);
 		R_text(line);
-		D_move_abs(text_x + Xoffset + j, text_y + Yoffset - j);
+		D_pos_abs(text_x + Xoffset + j, text_y + Yoffset - j);
 		R_text(line);
-		D_move_abs(text_x + Xoffset - j, text_y + Yoffset + j);
+		D_pos_abs(text_x + Xoffset - j, text_y + Yoffset + j);
 		R_text(line);
 	    }
 
@@ -425,7 +425,7 @@ int show_it(void)
 	text_y = Y + Y_just_offset;
 	G_rotate_around_point(X, Y0, &text_x, &text_y, -1 * rotation);
 
-	D_move_abs(text_x + Xoffset, text_y + Yoffset);
+	D_pos_abs(text_x + Xoffset, text_y + Yoffset);
 	R_text(line);
 
 	if ((*tptr == '\0') || (*tptr == NL))

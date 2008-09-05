@@ -10,18 +10,7 @@ void COM_Polydots_abs(const double *xarray, const double *yarray, int number)
 	return;
     }
 
-    for (i = 0; i < number; i++) {
-	COM_Move_abs(xarray[i], yarray[i]);
-	COM_Cont_rel(0, 0);
-    }
+    for (i = 0; i < number; i++)
+	COM_Line_abs(xarray[i], yarray[i], xarray[i], yarray[i]);
 }
 
-void COM_Polydots_rel(const double *xarray, const double *yarray, int number)
-{
-    int i;
-
-    for (i = 0; i < number; i++) {
-	COM_Move_rel(xarray[i], yarray[i]);
-	COM_Cont_rel(0, 0);
-    }
-}

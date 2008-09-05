@@ -388,14 +388,13 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	    if (!(color || fcolor || custom_rgb))
 		continue;
 
-	    x0 = D_u_to_d_col(x[0]);
-	    y0 = D_u_to_d_row(y[0]);
+	    x0 = x[0];
+	    y0 = y[0];
 
 	    /* skip if the point is outside of the display window */
 	    /*      xy<0 tests make it go ever-so-slightly faster */
-	    if (x0 < 0 || y0 < 0 ||
-		x0 > D_get_d_east() || x0 < D_get_d_west() ||
-		y0 > D_get_d_south() || y0 < D_get_d_north())
+	    if (x0 > D_get_u_east() || x0 < D_get_u_west() ||
+		y0 < D_get_u_south() || y0 > D_get_u_north())
 		continue;
 
 	    /* use random or RGB column color if given, otherwise reset */

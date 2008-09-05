@@ -81,6 +81,8 @@ void D_clip_to_map(void);
 void D_line_width(double);
 void D_get_text_box(const char *, double *, double *, double *, double *);
 
+void D_pos_abs(double, double);
+void D_pos_rel(double, double);
 void D_move_abs(double, double);
 void D_move_rel(double, double);
 void D_cont_abs(double, double);

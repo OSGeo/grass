@@ -200,8 +200,8 @@ int main(int argc, char **argv)
     text_width = (r - l) * 0.05 * 0.50;
     R_text_size(text_width, text_height);
     D_get_text_box(title, &tt, &tb, &tl, &tr);
-    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
-	       t + (b - t) * 0.07);
+    D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2,
+	      t + (b - t) * 0.07);
     D_use_color(color);
     R_text(title);
 
