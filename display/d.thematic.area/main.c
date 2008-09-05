@@ -230,6 +230,28 @@ int main(int argc, char **argv)
 		 val.d));
     }
 
+    /*Get the sorted data */
+    ret = db_CatValArray_sort_by_value(&cvarr);
+    if (ret == DB_FAILED)
+	G_fatal_error("Could not sort array of values..");
+
+
+    data = (double *)G_malloc((nrec) * sizeof(double));
+    for (i = 0; i < nrec; i++)
+	data[i] = 0.0;
+
+    ctype = cvarr.ctype;
+    if (ctype == DB_C_TYPE_INT) {
+	for (i = 0; i < nrec; i++)
+	    data[i] = cvarr.value[i].val.i;
+    }
+    else {
+	for (i = 0; i < nrec; i++)
+	    data[i] = cvarr.value[i].val.d;
+    }
+    db_CatValArray_sort(&cvarr);
+
+
     /*Get the list of relevant cats if where option is given */
     if (where_opt->answer) {
 	ncat = db_select_int(driver, fi->table, fi->key, where_opt->answer,
@@ -290,26 +312,6 @@ int main(int argc, char **argv)
 
 	if (algo_opt->answer && nbclass_opt->answer) {
 
-	    ret = db_CatValArray_sort_by_value(&cvarr);
-	    if (ret == DB_FAILED)
-		G_fatal_error("Could not sort array of values..");
-
-
-	    data = (double *)G_malloc((nrec) * sizeof(double));
-	    for (i = 0; i < nrec; i++)
-		data[i] = 0.0;
-
-	    ctype = cvarr.ctype;
-	    if (ctype == DB_C_TYPE_INT) {
-		for (i = 0; i < nrec; i++)
-		    data[i] = cvarr.value[i].val.i;
-	    }
-	    else {
-		for (i = 0; i < nrec; i++)
-		    data[i] = cvarr.value[i].val.d;
-	    }
-
-	    db_CatValArray_sort(&cvarr);
 
 	    nclass = atoi(nbclass_opt->answer);
 	    nbreaks = nclass - 1;	/* we need one less classbreaks (min and 
