@@ -116,7 +116,7 @@ int draw_scale(int toptext)
 	D_stroke();
 
 	/* actual text width is 81% of size? from d.legend */
-	D_move_abs(pl + w / 2 - 7 * .81, pt + 14);
+	D_pos_abs(pl + w / 2 - 7 * .81, pt + 14);
 	R_text("N");
 
 	return 0;
@@ -202,7 +202,7 @@ int draw_scale(int toptext)
 	D_end();
 	D_stroke();
 
-	D_move_rel(0, 1 - 4);
+	D_pos_rel(0, 1 - 4);
 	for (i = 1; i <= scales[incr].seg; i++) {
 	    xarr[0] = 0;	    yarr[0] = 0;
 	    xarr[1] = seg_len;	    yarr[1] = 0;
@@ -211,7 +211,7 @@ int draw_scale(int toptext)
 	    xarr[4] = 0;	    yarr[4] = (i % 2 ? 4 : -4);
 	    /* width is seg_len and height is 4 */
 	    D_polygon_rel(xarr, yarr, 4);
-	    D_move_rel(seg_len, 0);
+	    D_pos_rel(seg_len, 0);
 	}
     }
     else if (do_bar) {
@@ -225,11 +225,11 @@ int draw_scale(int toptext)
 	D_end();
 	D_stroke();
 
-	D_move_rel(0, 1);
+	D_pos_rel(0, 1);
 	for (i = 1; i <= scales[incr].seg; i += 2) {
 	    /* width is seg_len and height is 5 */
 	    D_box_rel(seg_len, -5);
-	    D_move_rel(seg_len * 2, 0);
+	    D_pos_rel(seg_len * 2, 0);
 	}
     }
     else {			/* draw simple line scale */
@@ -245,13 +245,13 @@ int draw_scale(int toptext)
     }
 
     if (toptext) {
-	D_move_abs(x_pos + 25 - draw * 10 + line_len / 2.
-		   - strlen(scales[incr].name) * size * 0.81 / 2,
-		   y_pos);
+	D_pos_abs(x_pos + 25 - draw * 10 + line_len / 2.
+		  - strlen(scales[incr].name) * size * 0.81 / 2,
+		  y_pos);
 	R_text(scales[incr].name);
     }
     else {
-	D_move_abs(x_pos + 35 - draw * 10 + line_len, y_pos + 20);
+	D_pos_abs(x_pos + 35 - draw * 10 + line_len, y_pos + 20);
 	R_text(scales[incr].name);
     }
 

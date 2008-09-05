@@ -322,8 +322,8 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		R_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
-	    D_move_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale - (tr - tl) / 2,
-		       b - XNUMS_Y * (b - t));
+	    D_pos_abs(xoffset + (i - dist_stats->mincat) * xscale - 0.5 * xscale - (tr - tl) / 2,
+		      b - XNUMS_Y * (b - t));
 	    R_text(txt);
 	}
 	else if (rem(i, tic_unit) == 0.0) {
@@ -347,7 +347,7 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_width = (r - l) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
-    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
+    D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2,
 	       b - LABEL_1 * (b - t));
     D_use_color(color);
     R_text(xlabel);
@@ -398,8 +398,8 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
 		R_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
-	    D_move_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
-		       yoffset - (yscale * i + 0.5 * (tt - tb)));
+	    D_pos_abs(l + (r - l) * YNUMS_X - (tr - tl) / 2,
+		      yoffset - (yscale * i + 0.5 * (tt - tb)));
 	    R_text(txt);
 	}
 	else if (rem(i, tic_unit) == 0.0) {
@@ -430,8 +430,8 @@ int bar(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_width = (r - l) * TEXT_WIDTH;
     R_text_size(text_width, text_height);
     D_get_text_box(ylabel, &tt, &tb, &tl, &tr);
-    D_move_abs(l + (r - l) / 2 - (tr - tl) / 2,
-	       b - LABEL_2 * (b - t));
+    D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2,
+	      b - LABEL_2 * (b - t));
     D_use_color(color);
     R_text(ylabel);
 

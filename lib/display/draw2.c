@@ -311,8 +311,7 @@ static int line_clip(double x1, double y1, double x2, double y2)
 	double x2 = D_u_to_d_col(b.x);
 	double y2 = D_u_to_d_row(b.y);
 
-	R_move_abs(x1, y1);
-	R_cont_abs(x2, y2);
+	R_line_abs(x1, y1, x2, y2);
     }
 
     return clipped;
@@ -678,8 +677,7 @@ static int line_cull(double x1, double y1, double x2, double y2)
     x2 = D_u_to_d_col(x2);
     y2 = D_u_to_d_row(y2);
 
-    R_move_abs(x1, y1);
-    R_cont_abs(x2, y2);
+    R_line_abs(x1, y1, x2, y2);
 
     return 0;
 }
@@ -715,12 +713,10 @@ static void D_line_raw(double x1, double y1, double x2, double y2)
     x1 = D_u_to_d_col(x1);
     y1 = D_u_to_d_row(y1);
 
-    R_move_abs(x1, y1);
-
     x2 = D_u_to_d_col(x2);
     y2 = D_u_to_d_row(y2);
 
-    R_cont_abs(x2, y2);
+    R_line_abs(x1, y1, x2, y2);
 }
 
 static void D_polydots_raw(const double *x, const double *y, int n)
@@ -1091,20 +1087,34 @@ static void new_segment(void)
 
 /******************************************************************************/
 
-void D_move_abs(double x, double y)
+void D_pos_abs(double x, double y)
 {
     cur.x = x;
     cur.y = y;
 
-    if (in_path) {
-	new_segment();
-	new_point(x, y);
+    x = D_u_to_d_col(x);
+    y = D_u_to_d_row(y);
+
+    R_pos_abs(x, y);
+}
+
+void D_pos_rel(double x, double y)
+{
+    D_pos_abs(cur.x + x, cur.y + y);
+}
+
+void D_move_abs(double x, double y)
+{
+    if (!in_path) {
+	G_warning(_("D_move_abs() called while path not active"));
+	return;
     }
-    else {
-	x = D_u_to_d_col(x);
-	y = D_u_to_d_row(y);
-	R_move_abs(x, y);
-    }
+
+    new_segment();
+    new_point(x, y);
+
+    cur.x = x;
+    cur.y = y;
 }
 
 void D_move_rel(double x, double y)
@@ -1114,10 +1124,12 @@ void D_move_rel(double x, double y)
 
 void D_cont_abs(double x, double y)
 {
-    if (in_path)
-	new_point(x, y);
-    else
-	(*fns->line)(cur.x, cur.y, x, y);
+    if (!in_path) {
+	G_warning(_("D_cont_abs() called while path not active"));
+	return;
+    }
+
+    new_point(x, y);
 
     cur.x = x;
     cur.y = y;

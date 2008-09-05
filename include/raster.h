@@ -13,18 +13,12 @@ void R_RGB_color(int, int, int);
 void R_line_width(double);
 void R_erase(void);
 
-void R_move_abs(double, double);
-void R_move_rel(double, double);
-void R_cont_abs(double, double);
-void R_cont_rel(double, double);
+void R_pos_abs(double, double);
+void R_line_abs(double, double, double, double);
 void R_polydots_abs(const double *, const double *, int);
-void R_polydots_rel(const double *, const double *, int);
 void R_polyline_abs(const double *, const double *, int);
-void R_polyline_rel(const double *, const double *, int);
 void R_polygon_abs(const double *, const double *, int);
-void R_polygon_rel(const double *, const double *, int);
 void R_box_abs(double, double, double, double);
-void R_box_rel(double, double);
 
 void R_text_size(double, double);
 void R_text_rotation(double);

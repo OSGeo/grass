@@ -648,13 +648,13 @@ static void draw_text(char *text, double *x, double *y, double size, char *align
 	}
     }
 
-    D_move_abs(*x, *y);
+    D_pos_abs(*x, *y);
     R_text(text);
 
     if (bold) {
-	D_move_abs(*x, *y + 1);
+	D_pos_abs(*x, *y + 1);
 	R_text(text);
-	D_move_abs(*x + 1, *y);
+	D_pos_abs(*x + 1, *y);
 	R_text(text);
     }
 

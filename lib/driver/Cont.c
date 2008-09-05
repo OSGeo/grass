@@ -1,14 +1,8 @@
 #include "driver.h"
 #include "driverlib.h"
 
-void COM_Cont_abs(double x, double y)
+void COM_Line_abs(double x1, double y1, double x2, double y2)
 {
-    DRV_draw_line(cur_x, cur_y, x, y);
-    cur_x = x;
-    cur_y = y;
+    DRV_draw_line(x1, y1, x2, y2);
 }
 
-void COM_Cont_rel(double x, double y)
-{
-    COM_Cont_abs(cur_x + x, cur_y + y);
-}

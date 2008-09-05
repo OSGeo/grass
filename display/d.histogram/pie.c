@@ -351,11 +351,11 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
 		R_text_size(text_width, text_height);
 		D_get_text_box(txt, &tt, &tb, &tl, &tr);
 	    }
-	    D_move_abs(xoffset
-		       + (i - dist_stats->mincat) * xscale
-		       - 0.5 * xscale
-		       - (tr - tl) / 2,
-		       b - XNUMS_Y * height);
+	    D_pos_abs(xoffset
+		      + (i - dist_stats->mincat) * xscale
+		      - 0.5 * xscale
+		      - (tr - tl) / 2,
+		      b - XNUMS_Y * height);
 	    R_text(txt);
 	}
 	else if (rem(i, tic_unit) == 0.0) {
@@ -389,8 +389,8 @@ int pie(struct stat_list *dist_stats,	/* list of distribution statistics */
     text_width = width * TEXT_WIDTH;
     R_text_size(text_width, text_height);
     D_get_text_box(xlabel, &tt, &tb, &tl, &tr);
-    D_move_abs(l + width / 2 - (tr - tl) / 2,
-	       b - LABEL * height);
+    D_pos_abs(l + width / 2 - (tr - tl) / 2,
+	      b - LABEL * height);
     D_use_color(color);
     R_text(xlabel);
 

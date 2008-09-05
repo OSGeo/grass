@@ -253,11 +253,11 @@ int draw_number(int row, int col, double number, int prec, RASTER_MAP_TYPE map_t
 
     R_text_size(text_size, text_size);
 
-    D_move_abs(col, row + 0.7);
+    D_pos_abs(col, row + 0.7);
     D_get_text_box(no, &tt, &tb, &tl, &tr);
 
     dx = (tr + tl) / 2 - (col + 0.5);
-    D_move_abs(col - dx, row + 0.7);
+    D_pos_abs(col - dx, row + 0.7);
     R_text(no);
 
     return 0;

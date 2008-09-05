@@ -16,7 +16,7 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
     X = X + D_get_d_to_u_xconv() * 0.5 * lattr->size;
     Y = Y + D_get_d_to_u_yconv() * 1.5 * lattr->size;
 
-    D_move_abs(X, Y);
+    D_pos_abs(X, Y);
     D_get_text_box(text, &T, &B, &L, &R);
 
     /* Expand border 1/2 of text size */
@@ -56,7 +56,7 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
 	D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     }
 
-    D_move_abs(X + Xoffset, Y + Yoffset);
+    D_pos_abs(X + Xoffset, Y + Yoffset);
     R_text(text);
 }
 

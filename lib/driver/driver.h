@@ -59,15 +59,13 @@ extern void COM_Bitmap(int, int, int, const unsigned char *);
 
 /* Box.c */
 extern void COM_Box_abs(double, double, double, double);
-extern void COM_Box_rel(double, double);
 
 /* Color.c */
 extern void COM_Color_RGB(unsigned char, unsigned char, unsigned char);
 extern void COM_Standard_color(int);
 
 /* Cont.c */
-extern void COM_Cont_abs(double, double);
-extern void COM_Cont_rel(double, double);
+extern void COM_Line_abs(double, double, double, double);
 
 /* Erase.c */
 extern void COM_Erase(void);
@@ -89,20 +87,16 @@ extern void COM_Graph_close(void);
 extern void COM_Line_width(double);
 
 /* Move.c */
-extern void COM_Move_abs(double, double);
-extern void COM_Move_rel(double, double);
+extern void COM_Pos_abs(double, double);
 
 /* Polydots.c */
 extern void COM_Polydots_abs(const double *, const double *, int);
-extern void COM_Polydots_rel(const double *, const double *, int);
 
 /* Polygon.c */
 extern void COM_Polygon_abs(const double *, const double *, int);
-extern void COM_Polygon_rel(const double *, const double *, int);
 
 /* Polyline.c */
 extern void COM_Polyline_abs(const double *, const double *, int);
-extern void COM_Polyline_rel(const double *, const double *, int);
 
 /* Raster.c */
 extern void COM_begin_scaled_raster(int, int[2][2], double[2][2]);

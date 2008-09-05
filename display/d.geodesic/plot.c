@@ -61,7 +61,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
 	sprintf(buf, "%.0f miles", METERS_TO_MILES(distance));
 
-	D_move_abs(text_x, text_y);
+	D_pos_abs(text_x, text_y);
 	D_get_text_box(buf, &t, &b, &l, &r);
 
 	if (t - D_get_u_north() > 0)
@@ -75,7 +75,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 
 	D_use_color(text_color);
 
-	D_move_abs(text_x, text_y);
+	D_pos_abs(text_x, text_y);
 	R_text(buf);
     }
 }
