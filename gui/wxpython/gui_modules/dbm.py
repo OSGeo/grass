@@ -1564,10 +1564,14 @@ class AttributeManager(wx.Frame):
         event.Skip()
         
     def OnPageChanged(self, event):
-        if event.GetSelection() == 0:
-            self.log.write(_("Number of loaded records: %d") % \
-                               self.FindWindowById(self.layerPage[self.layer]['data']).\
-                               GetItemCount())
+        try:
+            id = self.layerPage[self.layer]['data']
+        except KeyError:
+            id = None
+        
+        if event.GetSelection() == 0 and id:
+            win = self.FindWindowById(id)
+            self.log.write(_("Number of loaded records: %d") % win.GetItemCount())
         else:
             self.log.write("")
         
