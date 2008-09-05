@@ -68,6 +68,8 @@ class AbstractToolbar(object):
         bmpDisabled=wx.NullBitmap
 
         if label:
+            Debug.msg(3, "CreateTool(): tool=%d, label=%s bitmap=%s" % \
+                  (tool, label, bitmap))
             toolWin = toolbar.AddLabelTool(tool, label, bitmap,
                                            bmpDisabled, kind,
                                            shortHelp, longHelp)
