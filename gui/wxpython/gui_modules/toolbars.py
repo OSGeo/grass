@@ -1050,8 +1050,14 @@ class VDigitToolbar(AbstractToolbar):
         self.parent.MapWindow.pdcVector = wx.PseudoDC()
         self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
         # self.parent.MapWindow.UpdateMap()
+
         if not self.parent.MapWindow.resize:
             self.parent.MapWindow.UpdateMap(render=True)
+
+        opacity = mapLayer.GetOpacity(float=True)
+        if opacity < 1.0:
+            alpha = int(opacity * 255)
+            self.parent.digit.driver.UpdateSettings(alpha)
         
         return True
 

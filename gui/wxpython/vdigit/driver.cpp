@@ -293,7 +293,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
 				   bool eVertex,      unsigned long cVertex,
 				   bool eArea,        unsigned long cArea,
 				   bool eDirection,   unsigned long cDirection,
-				   int lineWidth)
+				   int lineWidth, int alpha)
 {
     settings.highlight.Set(highlight);
 
@@ -334,7 +334,7 @@ void DisplayDriver::UpdateSettings(unsigned long highlight,
     settings.area.color.Set(settings.area.color.Red(),
 			    settings.area.color.Green(),
 			    settings.area.color.Blue(),
-			    100); /* transparency */
+			    alpha);
     
     settings.direction.enabled = eDirection;
     settings.direction.color.Set(cDirection);

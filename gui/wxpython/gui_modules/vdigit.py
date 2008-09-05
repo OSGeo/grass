@@ -1531,7 +1531,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         """Show/hide selected features"""
         self.__display.DrawSelected(draw)
         
-    def UpdateSettings(self):
+    def UpdateSettings(self, alpha=255):
         """Update display driver settings"""
         # TODO map units
 
@@ -1559,9 +1559,8 @@ class CDisplayDriver(AbstractDisplayDriver):
                                      UserSettings.Get(group='vdigit', key='symbol',
                                                       subkey=[symbol, 'color'])[1],
                                      UserSettings.Get(group='vdigit', key='symbol',
-                                                      subkey=[symbol, 'color'])[2],
-                                     255).GetRGB()
-        
+                                                      subkey=[symbol, 'color'])[2]).GetRGB()
+
         self.__display.UpdateSettings (color['highlight'],
                                        UserSettings.Get(group='vdigit', key='checkForDupl',
                                                         subkey='enabled'),
@@ -1606,7 +1605,8 @@ class CDisplayDriver(AbstractDisplayDriver):
                                                         subkey=['direction', 'enabled']),
                                        color['direction'],
                                        UserSettings.Get(group='vdigit', key='lineWidth',
-                                                        subkey='value'))
+                                                        subkey='value'),
+                                       alpha)
 
 class VDigitSettingsDialog(wx.Dialog):
     """

@@ -210,7 +210,7 @@ public:
 			bool, unsigned long,
 			bool, unsigned long,
 			bool, unsigned long,
-			int);
+			int, int);
 };
 
 int print_error(const char *, int);

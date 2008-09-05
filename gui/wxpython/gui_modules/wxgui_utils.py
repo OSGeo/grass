@@ -484,7 +484,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         dlg.CentreOnParent()
 
         if dlg.ShowModal() == wx.ID_OK:
-            new_opacity = dlg.GetOpacity() # string            
+            new_opacity = dlg.GetOpacity() # string
             self.Map.ChangeOpacity(maplayer, new_opacity)
             maplayer.SetOpacity(new_opacity)
             opacity_pct = int(new_opacity * 100)
@@ -493,6 +493,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemText(self.layer_selected,
                              layerbase + ' (opacity: ' + str(opacity_pct) + '%)')
             
+            # vector layer currently edited
+            if self.mapdisplay.toolbars['vdigit'] and \
+                    self.mapdisplay.toolbars['vdigit'].GetLayer() == maplayer:   
+                alpha = int(new_opacity * 255)
+                self.mapdisplay.digit.driver.UpdateSettings(alpha)
+                
             # redraw map if auto-rendering is enabled
             self.rerender = True
             self.reorder = True
