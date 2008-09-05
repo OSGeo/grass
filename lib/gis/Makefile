@@ -23,7 +23,7 @@ EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
 EXTRA_LIBS += $(GDALLIBS)
 endif
 
-default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc
+default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list
 
 $(FMODE_OBJ): fmode.dat
 	@test -d $(OBJDIR) || mkdir $(OBJDIR)
