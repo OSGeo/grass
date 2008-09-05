@@ -2280,7 +2280,8 @@ class BufferedWindow(MapWindow, wx.Window):
         match display extents
         """
         tmpreg = os.getenv("GRASS_REGION")
-        os.unsetenv("GRASS_REGION")
+        if tmpreg:
+            del os.environ["GRASS_REGION"]
 
         # We ONLY want to set extents here. Don't mess with resolution. Leave that
         # for user to set explicitly with g.region
@@ -2384,8 +2385,9 @@ class BufferedWindow(MapWindow, wx.Window):
                      "--o"]
 
         tmpreg = os.getenv("GRASS_REGION")
-        os.unsetenv("GRASS_REGION")
-
+        if tmpreg:
+            del os.environ["GRASS_REGION"]
+        
         p = gcmd.Command(cmdRegion)
 
         if tmpreg:
@@ -3331,6 +3333,10 @@ class MapFrame(wx.Frame):
             elif type in ('vector', 'thememap', 'themechart'):
                 vectstr += "%s," % name
 
+        # use display region settings instead of computation region settings
+        tmpreg = os.getenv("GRASS_REGION")
+        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
+        
         # build query commands for any selected rasters and vectors
         if raststr != '':
             rcmd = ['r.what', '--q',
@@ -3365,7 +3371,7 @@ class MapFrame(wx.Frame):
         # parse query command(s)
         if self.gismanager:
             if rcmd:
-                self.gismanager.goutput.RunCmd(rcmd)
+                self.gismanager.goutput.RunCmd(rcmd, compReg=False)
             if vcmd:
                 self.gismanager.goutput.RunCmd(vcmd)
         else:
@@ -3374,6 +3380,10 @@ class MapFrame(wx.Frame):
             if vcmd:
                 gcmd.Command(vcmd)
 
+        # restore GRASS_REGION
+        if tmpreg:
+            os.environ["GRASS_REGION"] = tmpreg
+        
     def QueryVector(self, x, y):
         """
         Query vector map layer features

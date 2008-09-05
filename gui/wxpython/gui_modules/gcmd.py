@@ -369,9 +369,9 @@ class Command:
 
         if verbose_orig:
             os.environ["GRASS_VERBOSE"] = verbose_orig
-        else:
-            os.unsetenv("GRASS_VERBOSE")
-
+        elif os.environ.has_key("GRASS_VERBOSE"):
+            del os.environ["GRASS_VERBOSE"]
+            
     def __ReadOutput(self, stream):
         """Read stream and return list of lines
 
@@ -508,7 +508,7 @@ class CommandThread(Thread):
         if self.message_format:
             os.environ["GRASS_MESSAGE_FORMAT"] = self.message_format
         else:
-            os.unsetenv("GRASS_MESSAGE_FORMAT")
+            del os.environ["GRASS_MESSAGE_FORMAT"]
         
     def run(self):
         if len(self.cmd) == 0:
