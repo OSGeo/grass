@@ -243,7 +243,7 @@ class GMConsole(wx.Panel):
         """Write out line in warning style"""
         self.WriteLog(line, style=self.cmd_output.StyleWarning)
 
-    def RunCmd(self, command):
+    def RunCmd(self, command, compReg=True):
         """
         Run in GUI GRASS (or other) commands typed into
         console command text widget, and send stdout output to output
@@ -255,6 +255,9 @@ class GMConsole(wx.Panel):
         processed separately by mapdisp.py. Display commands are
         rendered in map display widget that currently has
         the focus (as indicted by mdidx).
+
+        @param command command (list)
+        @param compReg if true use computation region
         """
         
         # map display window available ?
@@ -304,10 +307,13 @@ class GMConsole(wx.Panel):
                 #
                 # other GRASS commands (r|v|g|...)
                 #
+                
                 # activate computational region (set with g.region)
                 # for all non-display commands.
-                tmpreg = os.getenv("GRASS_REGION")
-                os.unsetenv("GRASS_REGION")
+                if compReg:
+                    tmpreg = os.getenv("GRASS_REGION")
+                    del os.environ["GRASS_REGION"]
+                    
                 if len(cmdlist) == 1:
                     import menuform
                     # process GRASS command without argument
@@ -321,8 +327,9 @@ class GMConsole(wx.Panel):
                     self.cmd_output_timer.Start(50)
 
                     return None
+                
                 # deactivate computational region and return to display settings
-                if tmpreg:
+                if compReg and tmpreg:
                     os.environ["GRASS_REGION"] = tmpreg
         else:
             # Send any other command to the shell. Send output to
