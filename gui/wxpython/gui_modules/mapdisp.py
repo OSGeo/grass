@@ -476,10 +476,8 @@ class BufferedWindow(MapWindow, wx.Window):
         Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
 
         dc = wx.BufferedPaintDC(self, self.buffer)
-
-        # we need to clear the dc BEFORE calling PrepareDC
-        #bg = wx.Brush(self.GetBackgroundColour())
-        dc.SetBackground(wx.Brush("White"))
+        
+        ### dc.SetBackground(wx.Brush("White"))
         dc.Clear()
 
         # use PrepareDC to set position correctly
@@ -496,7 +494,9 @@ class BufferedWindow(MapWindow, wx.Window):
 
             # draw vector map layer
             if self.pdcVector:
-                self.pdcVector.DrawToDCClipped(dc, rgn)
+                # decorate with GDDC (transparency)
+                gcdc = wx.GCDC(dc)
+                self.pdcVector.DrawToDCClipped(gcdc, rgn)
 
             self.bufferLast = None
         else: # do not redraw pdc and pdcVector
@@ -505,8 +505,10 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.pdc.DrawToDC(dc)
 
                 if self.pdcVector:
-                    self.pdcVector.DrawToDC(dc)
-
+                    # decorate with GDDC (transparency)
+                    gcdc = wx.GCDC(dc)
+                    self.pdcVector.DrawToDC(gcdc)
+                    
                 # store buffered image
                 # self.bufferLast = wx.BitmapFromImage(self.buffer.ConvertToImage())
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
@@ -518,7 +520,7 @@ class BufferedWindow(MapWindow, wx.Window):
         # draw temporary object on the foreground
         # self.pdcTmp.DrawToDCClipped(dc, rgn)
         self.pdcTmp.DrawToDC(dc)
-
+        
     def OnSize(self, event):
         """
         Scale map image so that it is

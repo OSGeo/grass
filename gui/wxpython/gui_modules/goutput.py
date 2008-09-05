@@ -312,7 +312,8 @@ class GMConsole(wx.Panel):
                 # for all non-display commands.
                 if compReg:
                     tmpreg = os.getenv("GRASS_REGION")
-                    del os.environ["GRASS_REGION"]
+                    if os.environ.has_key("GRASS_REGION"):
+                        del os.environ["GRASS_REGION"]
                     
                 if len(cmdlist) == 1:
                     import menuform

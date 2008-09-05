@@ -680,13 +680,11 @@ class Settings:
                     except ValueError:
                         pass
         else: # -> write settings
-            if type(value) == type(wx.Colour(0, 0, 0, 0)):
-                print value, type(value)
             if type(value) == type(()): # -> color
                 value = str(value[0]) + ':' +\
                     str(value[1]) + ':' + \
                     str(value[2])
-
+                
         return value
 
     def Get(self, group, key=None, subkey=None, internal=False):
