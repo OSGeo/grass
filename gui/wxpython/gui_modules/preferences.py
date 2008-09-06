@@ -7,7 +7,7 @@ Sets default display font, etc.
 
 Classes:
  - PreferencesDialog
- - SetDefaultFont
+ - DefaultFontDialog
  - MapsetAccess
 
 (C) 2007-2008 by the GRASS Development Team
@@ -84,8 +84,9 @@ class Settings:
             # display
             #
             'display': {
-                'displayFont' : {
-                    'value' : ''
+                'font' : {
+                    'type' : '',
+                    'encoding': 'ISO-8859-1',
                     },
                 'driver': {
                     'type': 'cairo'
@@ -563,6 +564,12 @@ class Settings:
         
         if self.filePath:
             self.__ReadFile(self.filePath, settings)
+        
+        # set environment variables
+        os.environ["GRASS_FONT"] = self.Get(group='display',
+                                            key='font', subkey='type')
+        os.environ["GRASS_ENCODING"] = self.Get(group='display',
+                                                key='font', subkey='encoding')
         
     def __ReadFile(self, filename, settings=None):
         """Read settings from file to dict"""
@@ -1436,30 +1443,27 @@ class PreferencesDialog(wx.Dialog):
 
     def OnSetFont(self, event):
         """'Set font' button pressed"""
-        dlg = SetDefaultFont(parent=self, id=wx.ID_ANY,
-                             title=_('Select default display font'),
-                             pos=wx.DefaultPosition, size=wx.DefaultSize,
-                             style=wx.DEFAULT_DIALOG_STYLE,
-                             encoding=self.parent.encoding)
-        if dlg.ShowModal() == wx.ID_CANCEL:
-            dlg.Destroy()
-            return
+        dlg = DefaultFontDialog(parent=self, id=wx.ID_ANY,
+                                title=_('Select default display font'),
+                                style=wx.DEFAULT_DIALOG_STYLE)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            # set default font and encoding environmental variables
+            if dlg.font:
+                os.environ["GRASS_FONT"] = dlg.font
+                self.settings.Set(group='display', value=dlg.font,
+                                  key='font', subkey='type')
 
-        # set default font type, font, and encoding to whatever selected in dialog
-        if dlg.font != None:
-            self.font = dlg.font
-        if dlg.encoding != None:
-            self.encoding = dlg.encoding
-
+            if dlg.encoding and \
+                    dlg.encoding != "ISO-8859-1":
+                os.environ["GRASS_ENCODING"] = dlg.encoding
+                self.settings.Set(group='display', value=dlg.encoding,
+                                  key='font', subkey='encoding')
+                
         dlg.Destroy()
-
-        # set default font and encoding environmental variables
-        os.environ["GRASS_FONT"] = self.font
-        if self.encoding != None and self.encoding != "ISO-8859-1":
-            os.environ["GRASS_ENCODING"] = self.encoding
-
+        
         event.Skip()
-
+        
     def OnSave(self, event):
         """Button 'Save' pressed"""
         if self.__UpdateSettings():
@@ -1556,66 +1560,96 @@ class PreferencesDialog(wx.Dialog):
 
         return True
 
-class SetDefaultFont(wx.Dialog):
+class DefaultFontDialog(wx.Dialog):
     """
     Opens a file selection dialog to select default font
     to use in all GRASS displays
     """
-    def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize,
-            style=wx.DEFAULT_DIALOG_STYLE, encoding='ISO-8859-1'):
+    def __init__(self, parent, id, title,
+                 pos=wx.DefaultPosition, size=wx.DefaultSize,
+                 style=wx.DEFAULT_DIALOG_STYLE,
+                 settings=globalSettings):
+        
+        self.settings = settings
+        
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
+        panel = wx.Panel(parent=self, id=wx.ID_ANY)
+        
         if "GRASS_FONT" in os.environ:
             self.font = os.environ["GRASS_FONT"]
         else:
-            self.font = None
+            self.font = self.settings.Get(group='display',
+                                          key='font', subkey='type')
 
         self.fontlist = self.GetFonts()
 
-        self.encoding = encoding
+        self.encoding = self.settings.Get(group='display',
+                                          key='font', subkey='encoding')
+        
+        border = wx.BoxSizer(wx.VERTICAL)
+        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
+        gridSizer = wx.GridBagSizer (hgap=5, vgap=5)
+        gridSizer.AddGrowableCol(0)
 
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(self, -1, "Select Font:", (15, 50))
-        box.Add(label, 0, wx.EXPAND|wx.GROW|wx.ALIGN_TOP|wx.RIGHT, 5)
-        self.fontlb = wx.ListBox(self, wx.ID_ANY, pos=wx.DefaultPosition,
-                                 size=(280,150), choices=self.fontlist,
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=_("Select font:"))
+        gridSizer.Add(item=label,
+                      flag=wx.ALIGN_TOP,
+                      pos=(0,0))
+        
+        self.fontlb = wx.ListBox(parent=panel, id=wx.ID_ANY, pos=wx.DefaultPosition,
+                                 choices=self.fontlist,
                                  style=wx.LB_SINGLE|wx.LB_SORT)
         self.Bind(wx.EVT_LISTBOX, self.EvtListBox, self.fontlb)
         self.Bind(wx.EVT_LISTBOX_DCLICK, self.EvtListBoxDClick, self.fontlb)
         if self.font:
             self.fontlb.SetStringSelection(self.font, True)
-        box.Add(self.fontlb, 0, wx.EXPAND|wx.GROW|wx.ALIGN_RIGHT)
-        sizer.Add(box, 0, wx.EXPAND|wx.GROW|wx.ALIGN_RIGHT|wx.ALL, 8)
 
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        label = wx.StaticText(self, -1, "Character encoding:")
-        box.Add(label, 0, wx.ALIGN_RIGHT|wx.RIGHT, 5)
-        self.textentry = wx.TextCtrl(self, -1, "", size=(200,-1))
-        self.textentry.SetValue(self.encoding)
-        box.Add(self.textentry, 0, wx.ALIGN_LEFT)
+        gridSizer.Add(item=self.fontlb,
+                flag=wx.EXPAND, pos=(0, 1))
+
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY,
+                              label=("Character encoding:"))
+        gridSizer.Add(item=label,
+                      flag=wx.ALIGN_CENTER_VERTICAL,
+                      pos=(1, 0))
+
+        self.textentry = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                                     value=self.encoding)
+        gridSizer.Add(item=self.textentry,
+                flag=wx.EXPAND, pos=(1, 1))
+
         self.textentry.Bind(wx.EVT_TEXT, self.OnEncoding)
-        sizer.Add(box, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 8)
 
-        line = wx.StaticLine(self, -1, size=(20,-1), style=wx.LI_HORIZONTAL)
-        sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 10)
+        sizer.Add(item=gridSizer, proportion=1,
+                  flag=wx.EXPAND | wx.ALL,
+                  border=5)
 
+        border.Add(item=sizer, proportion=1,
+                   flag=wx.ALL | wx.EXPAND, border=3)
+        
         btnsizer = wx.StdDialogButtonSizer()
 
-        btn = wx.Button(self, wx.ID_OK)
+        btn = wx.Button(parent=panel, id=wx.ID_OK)
         btn.SetDefault()
         btnsizer.AddButton(btn)
 
-        btn = wx.Button(self, wx.ID_CANCEL)
+        btn = wx.Button(parent=panel, id=wx.ID_CANCEL)
         btnsizer.AddButton(btn)
         btnsizer.Realize()
 
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
-
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-
+        border.Add(item=btnsizer, proportion=0,
+                   flag=wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        
+        panel.SetAutoLayout(True)
+        panel.SetSizer(border)
+        border.Fit(self)
+        
+        self.Layout()
+        
     def EvtRadioBox(self, event):
         if event.GetInt() == 0:
             self.fonttype = 'grassfont'

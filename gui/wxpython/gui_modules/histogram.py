@@ -36,7 +36,7 @@ import render
 import menuform
 import disp_print
 import utils
-from gui_modules.preferences import SetDefaultFont as SetDefaultFont
+from gui_modules.preferences import DefaultFontDialog as DefaultFontDialog
 from debug import Debug as Debug
 from icon import Icons as Icons
 
@@ -413,11 +413,12 @@ class HistFrame(wx.Frame):
         set, font will be default display font.
         """
 
-        dlg = SetDefaultFont(self, wx.ID_ANY, 'Select font for histogram text',
-                             pos=wx.DefaultPosition, size=wx.DefaultSize,
-                             style=wx.DEFAULT_DIALOG_STYLE,
-                             encoding=self.encoding)
+        dlg = DefaultFontDialog(parent=self, id=wx.ID_ANY,
+                                title=_('Select font for histogram text'),
+                                encoding=self.encoding)
+        
         dlg.fontlb.SetStringSelection(self.font, True)
+        
         if dlg.ShowModal() == wx.ID_CANCEL:
             dlg.Destroy()
             return
