@@ -662,10 +662,11 @@ class BufferedWindow(MapWindow, wx.Window):
         if render:
             # update display size
             self.Map.ChangeMapSize(self.GetClientSize())
-            windres = False
-            if self.parent.compResolution.GetValue():
+            if self.parent.compResolution.IsChecked():
                 # use computation region resolution for rendering
                 windres = True
+            else:
+                windres = False
             self.mapfile = self.Map.Render(force=True, mapWindow=self.parent,
                                            windres=windres)
         else:

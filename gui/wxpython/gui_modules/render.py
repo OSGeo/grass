@@ -24,6 +24,8 @@ import os
 import sys
 import glob
 import math
+import copy
+
 try:
     import subprocess
 except:
@@ -653,44 +655,50 @@ class Map(object):
         """
         grass_region = ""
 
-        # adjust region settings to match monitor
-        if not windres:
-            self.region = self.AdjustRegion()
+        if windres:
+            compRegion = self.GetRegion()
+            region = copy.copy(self.region)
+            for key in ('nsres', 'ewres',
+                        'rows', 'cols', 'cells'):
+                region[key] = compRegion[key]
+        else:
+            # adjust region settings to match monitor
+            region = self.AdjustRegion()
         
         # read values from wind file
         try:
             for key in self.wind.keys():
                 if key == 'north':
                     grass_region += "north: %s; " % \
-                        (self.region['n'])
+                        (region['n'])
                     continue
                 elif key == "south":
                     grass_region += "south: %s; " % \
-                        (self.region['s'])
+                        (region['s'])
                     continue
                 elif key == "east":
                     grass_region += "east: %s; " % \
-                        (self.region['e'])
+                        (region['e'])
                     continue
                 elif key == "west":
                     grass_region += "west: %s; " % \
-                        (self.region['w'])
+                        (region['w'])
                     continue
                 elif key == "e-w resol":
                     grass_region += "e-w resol: %f; " % \
-                        (self.region['ewres'])
+                        (region['ewres'])
                     continue
                 elif key == "n-s resol":
                     grass_region += "n-s resol: %f; " % \
-                        (self.region['nsres'])
+                        (region['nsres'])
                     continue
                 elif key == "cols":
                     grass_region += 'cols: %d; ' % \
-                        self.region['cols']
+                        region['cols']
                     continue
                 elif key == "rows":
                     grass_region += 'rows: %d; ' % \
-                        self.region['rows']
+                        region['rows']
                     continue
                 else:
                     grass_region += key + ": "  + self.wind[key] + "; "
