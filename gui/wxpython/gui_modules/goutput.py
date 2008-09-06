@@ -88,6 +88,8 @@ class CmdThread(threading.Thread):
             except AttributeError:
                 aborted = False
             
+            time.sleep(.1)
+            
             event = wxCmdDone(aborted=aborted,
                               time=requestTime,
                               pid=requestId)
@@ -572,6 +574,9 @@ class GMStderr:
         self.printMessage = False
         
     def write(self, s):
+        if "GtkPizza" in s:
+            return
+        
         s = s.replace('\n', os.linesep)
         # remove/replace escape sequences '\b' or '\r' from stream
         progressValue = -1
