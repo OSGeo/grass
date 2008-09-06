@@ -24,7 +24,7 @@
 
 trap "echo 'User break!' ; exit" 2 3 15
 
-source "$GISBASE/etc/functions.sh"
+. "$GISBASE/etc/functions.sh"
 
 # Set default GUI
 DEFAULT_GUI="wxpython"
