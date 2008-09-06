@@ -175,7 +175,8 @@ class Layer(object):
         #
         # stop monitor
         #
-        del os.environ["GRASS_PNGFILE"]
+        if os.environ.has_key("GRASS_PNGFILE"):
+            del os.environ["GRASS_PNGFILE"]
         
         self.force_render = False
         
