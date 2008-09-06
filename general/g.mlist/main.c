@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Flag *regex;
+	struct Flag *extended;
 	struct Flag *type;
 	struct Flag *mapset;
 	struct Flag *pretty;
@@ -115,6 +116,11 @@ int main(int argc, char *argv[])
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
+	_("Use basic regular expressions instead of wildcards");
+
+    flag.extended = G_define_flag();
+    flag.extended->key = 'e';
+    flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
 
     flag.type = G_define_flag();
@@ -138,12 +144,15 @@ int main(int argc, char *argv[])
 
     G_free(buf);
 
-    if (flag.regex->answer)
+    if (flag.regex->answer && flag.extended->answer)
+	G_fatal_error(_("-r and -e are mutually exclusive"));
+
+    if (flag.regex->answer || flag.extended->answer)
 	pattern = opt.pattern->answer;
     else
 	pattern = wc2regex(opt.pattern->answer);
 
-    if (regcomp(&regex, pattern, REG_EXTENDED | REG_NOSUB))
+    if (regcomp(&regex, pattern, (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
 	G_fatal_error(_("Unable to compile regular expression %s"), pattern);
     G_set_ls_filter(ls_filter, &regex);
 

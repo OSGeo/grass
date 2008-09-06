@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Flag *regex;
+	struct Flag *extended;
 	struct Flag *force;
 	struct Flag *basemap;
     } flag;
@@ -62,6 +63,11 @@ int main(int argc, char *argv[])
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
+	_("Use basic regular expressions instead of wildcards");
+
+    flag.extended = G_define_flag();
+    flag.extended->key = 'e';
+    flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
 
     flag.force = G_define_flag();
@@ -94,6 +100,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (flag.regex->answer && flag.extended->answer)
+	G_fatal_error(_("-r and -e are mutually exclusive"));
+
     for (n = 0; n < nlist; n++) {
 	o = opt[n];
 	G_free((char *)o->gisprompt);
@@ -110,13 +119,14 @@ int main(int argc, char *argv[])
 		continue;
 	    rast = !G_strcasecmp(list[n].alias, "rast");
 	    for (i = 0; (name = opt[n]->answers[i]); i++) {
-		if (!flag.regex->answer)
+		if (!flag.regex->answer && !flag.extended->answer)
 		    name = wc2regex(name);
-		if (regcomp(&regex, name, REG_EXTENDED | REG_NOSUB))
+		if (regcomp(&regex, name,
+			    (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
 		    G_fatal_error(_
 				  ("Unable to compile regular expression %s"),
 				  name);
-		if (!flag.regex->answer)
+		if (!flag.regex->answer && !flag.extended->answer)
 		    G_free(name);
 
 		G_set_ls_filter(ls_filter, &regex);
