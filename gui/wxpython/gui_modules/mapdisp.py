@@ -1393,12 +1393,14 @@ class BufferedWindow(MapWindow, wx.Window):
 
             if hasattr(self, "moveBegin"):
                 if len(digitClass.driver.GetSelected()) == 0:
-                    self.moveCoords = pos2
+                    self.moveCoords = pos1 # left down
+                    self.moveBegin = pos2 # left up
                 else:
-                    dx = pos2[0] - pos1[0]
+                    dx = pos2[0] - pos1[0] ### ???
                     dy = pos2[1] - pos1[1]
                     self.moveCoords = (self.moveCoords[0] + dx,
                                        self.moveCoords[1] + dy)
+                
                 # eliminate initial mouse moving efect
                 self.mouse['begin'] = self.mouse['end'] 
 
@@ -1704,9 +1706,12 @@ class BufferedWindow(MapWindow, wx.Window):
             if digitToolbar.GetAction() in ["moveLine", "moveVertex"] and \
                     hasattr(self, "moveBegin"):
 
-                pTo = self.Pixel2Cell(event.GetPositionTuple())
                 pFrom = self.moveCoords
-                move = (pTo[0]-pFrom[0], pTo[1]-pFrom[1])
+                pBegin = self.moveBegin
+                pTo = self.Pixel2Cell(event.GetPositionTuple())
+                
+                move = (pTo[0]-pFrom[0]-(pBegin[0]-pFrom[0]),
+                        pTo[1]-pFrom[1]-(pBegin[1]-pFrom[1]))
                 
                 if digitToolbar.GetAction() == "moveLine":
                     # move line
@@ -1956,8 +1961,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     and hasattr(self, "moveBegin"):
                 dx = self.mouse['end'][0] - self.mouse['begin'][0]
                 dy = self.mouse['end'][1] - self.mouse['begin'][1]
-                self.moveBegin[0] += dx
-                self.moveBegin[1] += dy
+                ### self.moveBegin[0] += dx
+                ### self.moveBegin[1] += dy
                 if len(self.moveIds) > 0:
                     # draw lines on new position
                     if digitToolbar.GetAction() == "moveLine":
