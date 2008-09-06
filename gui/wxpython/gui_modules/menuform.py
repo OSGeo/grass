@@ -1236,8 +1236,9 @@ class cmdPanel(wx.Panel):
                     txt.SetToolTipString(tooltip)
 
             if p == first_param:
-                self.FindWindowById(p['wxId']).SetFocus()
-        
+                if type(p['wxId']) == type(1):
+                    self.FindWindowById(p['wxId']).SetFocus()
+            
 	#
 	# determine panel size
 	#
