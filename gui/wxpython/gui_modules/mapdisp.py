@@ -294,6 +294,8 @@ class BufferedWindow(MapWindow, wx.Window):
         self.pdc = wx.PseudoDC()
         # used for digitization tool
         self.pdcVector = None
+        # decorations (region box, etc.)
+        self.pdcDec = wx.PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
         self.pdcTmp = wx.PseudoDC()
         # redraw all pdc's, pdcTmp layer is redrawn always (speed issue)
@@ -517,8 +519,12 @@ class BufferedWindow(MapWindow, wx.Window):
             pdcLast.DrawBitmap(bmp=self.bufferLast, x=0, y=0)
             pdcLast.DrawToDC(dc)
 
+        # draw decorations (e.g. region box)
+        gcdc = wx.GCDC(dc)
+        self.pdcDec.DrawToDC(gcdc)
+
         # draw temporary object on the foreground
-        # self.pdcTmp.DrawToDCClipped(dc, rgn)
+        ### self.pdcTmp.DrawToDCClipped(dc, rgn)
         self.pdcTmp.DrawToDC(dc)
         
     def OnSize(self, event):
@@ -670,11 +676,12 @@ class BufferedWindow(MapWindow, wx.Window):
         #
         # clear pseudoDcs
         #
-        self.pdc.Clear()
-        self.pdc.RemoveAll()
-        self.pdcTmp.Clear()
-        self.pdcTmp.RemoveAll()
-
+        for pdc in (self.pdc,
+                    self.pdcDec,
+                    self.pdcTmp):
+            pdc.Clear()
+            pdc.RemoveAll()
+        
         #
         # draw background map image to PseudoDC
         #
@@ -768,10 +775,11 @@ class BufferedWindow(MapWindow, wx.Window):
             dispReg = self.Map.GetCurrentRegion()
             reg = None
             if self.IsInRegion(dispReg, compReg):
-                self.polypen = wx.Pen(colour='blue', width=3, style=wx.SOLID)
+                self.polypen = wx.Pen(colour=wx.Colour(0, 0, 255, 128), width=3, style=wx.SOLID)
                 reg = dispReg
             else:
-                self.polypen = wx.Pen(colour='red', width=3, style=wx.SOLID)
+                self.polypen = wx.Pen(colour=wx.Colour(255, 0, 0, 128),
+                                      width=3, style=wx.SOLID)
                 reg = compReg
             
             self.regionCoords = []
@@ -781,7 +789,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.regionCoords.append((reg['w'], reg['s']))
             self.regionCoords.append((reg['w'], reg['n']))
             # draw region extent
-            self.DrawLines(pdc=self.pdcTmp, polycoords=self.regionCoords)
+            self.DrawLines(pdc=self.pdcDec, polycoords=self.regionCoords)
 
     def IsInRegion(self, region, refRegion):
         """Test if 'region' is inside of 'refRegion'
