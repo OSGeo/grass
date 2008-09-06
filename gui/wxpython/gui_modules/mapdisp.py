@@ -817,7 +817,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if self.pdcVector:
             self.Draw(self.pdcVector, pdctype='clear')
         
-        self.Draw(self.pdcVector, pdctype='clear')
+        self.Draw(self.pdcDec, pdctype='clear')
+        self.Draw(self.pdcTmp, pdctype='clear')
         
     def DragMap(self, moveto):
         """
