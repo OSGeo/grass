@@ -279,6 +279,17 @@ void args_surface(struct GParams *params)
     params->shade->answer = "gouraud";
     params->shade->guisection = _("Draw");
 
+    /* position */
+    params->surface_pos = G_define_option();
+    params->surface_pos->key = "position";
+    params->surface_pos->key_desc = "x,y,z";
+    params->surface_pos->type = TYPE_INTEGER;
+    params->surface_pos->required = YES;
+    params->surface_pos->multiple = YES;
+    params->surface_pos->description = _("Position");
+    params->surface_pos->guisection = _("Draw");
+    params->surface_pos->answer = "0,0,0";
+    
     return;
 }
 
@@ -335,6 +346,17 @@ void args_vline(struct GParams *params)
     params->vline_height->guisection = _("Vector lines");
     params->vline_height->options = "0-1000";
     params->vline_height->answer = "0";
+
+    /* position */
+    params->vline_pos = G_define_option();
+    params->vline_pos->key = "vline_position";
+    params->vline_pos->key_desc = "x,y,z";
+    params->vline_pos->type = TYPE_INTEGER;
+    params->vline_pos->required = YES;
+    params->vline_pos->multiple = YES;
+    params->vline_pos->description = _("Position");
+    params->vline_pos->guisection = _("Vector lines");
+    params->vline_pos->answer = "0,0,0";
 
     return;
 }
@@ -394,6 +416,17 @@ void args_vpoint(struct GParams *params)
     params->vpoint_marker->answer = "sphere";
     params->vpoint_marker->guisection = _("Vector points");
 
+    /* position */
+    params->vpoint_pos = G_define_option();
+    params->vpoint_pos->key = "vpoint_position";
+    params->vpoint_pos->key_desc = "x,y,z";
+    params->vpoint_pos->type = TYPE_INTEGER;
+    params->vpoint_pos->required = YES;
+    params->vpoint_pos->multiple = YES;
+    params->vpoint_pos->description = _("Position");
+    params->vpoint_pos->guisection = _("Vector points");
+    params->vpoint_pos->answer = "0,0,0";
+    
     return;
 }
 

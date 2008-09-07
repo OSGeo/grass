@@ -22,7 +22,7 @@
 #include "local_proto.h"
 
 static int load_vectors(const struct Option *, const struct Option *,
-			const struct Option *, int, nv_data *);
+			const struct Option *, const struct Option *, int, nv_data *);
 
 /*!
    \brief Load vector maps (lines)
@@ -35,7 +35,8 @@ static int load_vectors(const struct Option *, const struct Option *,
 int load_vlines(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
-			params->vlines, MAP_OBJ_VECT, data);
+			params->vlines, params->vline_pos,
+			MAP_OBJ_VECT, data);
 }
 
 /*!
@@ -49,18 +50,22 @@ int load_vlines(const struct GParams *params, nv_data * data)
 int load_vpoints(const struct GParams *params, nv_data * data)
 {
     return load_vectors(params->elev_map, params->elev_const,
-			params->vpoints, MAP_OBJ_SITE, data);
+			params->vpoints, params->vpoint_pos,
+			MAP_OBJ_SITE, data);
 }
 
 int load_vectors(const struct Option *elev_map,
 		 const struct Option *elev_const, const struct Option *vect,
+		 const struct Option *position,
 		 int map_obj_type, nv_data * data)
 {
-    int i;
+    int i, id;
     int nvects;
 
     char *mapset;
 
+    double x, y, z;
+    
     if ((!elev_map->answer || elev_const->answer) && GS_num_surfs() == 0) {	/* load base surface if no loaded */
 	int *surf_list, nsurf;
 
@@ -77,9 +82,19 @@ int load_vectors(const struct Option *elev_map,
 	if (mapset == NULL) {
 	    G_fatal_error(_("Vector map <%s> not found"), vect->answers[i]);
 	}
-	Nviz_new_map_obj(map_obj_type,
-			 G_fully_qualified_name(vect->answers[i], mapset),
-			 0.0, data);
+	id = Nviz_new_map_obj(map_obj_type,
+			      G_fully_qualified_name(vect->answers[i], mapset),
+			      0.0, data);
+
+	/* set position */
+	x = atof(position->answers[i]);
+	y = atof(position->answers[i+1]);
+	z = atof(position->answers[i+2]);
+
+	if (map_obj_type == MAP_OBJ_VECT)
+	    GV_set_trans(id, x, y, z);
+	else
+	    GP_set_trans(id, x, y, z);
 
 	nvects++;
     }
