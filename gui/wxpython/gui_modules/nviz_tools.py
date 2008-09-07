@@ -2478,11 +2478,12 @@ class NvizToolWindow(wx.Frame):
                 else:
                     display.SetSelection(0)
 
-            if data[vtype]['mode']['type'] == 'surface' and \
-                    len(self.mapWindow.layers['raster']['name']) > 0:
+            if data[vtype]['mode']['type'] == 'surface':
+                rasters = self.mapWindow.GetLayerNames('raster')
                 surface = self.FindWindowById(self.win['vector'][vtype]['surface'])
-                surface.SetItems(self.mapWindow.layers['raster']['name'])
-                surface.SetStringSelection(data[vtype]['mode']['surface'])
+                surface.SetItems(rasters)
+                if len(rasters) > 0:
+                    surface.SetStringSelection(data[vtype]['mode']['surface'])
                 
         for type in ('slider', 'spin'):
             win = self.FindWindowById(self.win['vector']['lines']['height'][type])
