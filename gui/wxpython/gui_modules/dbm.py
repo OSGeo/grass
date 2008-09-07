@@ -1838,8 +1838,10 @@ class AttributeManager(wx.Frame):
         Return True if map has been redrawn, False if no map is given
         """
         list = self.FindWindowById(self.layerPage[self.layer]['data'])
-        cats = list.GetSelectedItems() # FIXME: category can be hiden in list
-
+        cats = { 
+            self.layer : list.GetSelectedItems()
+            }
+        
         if self.mapdisplay.Map.GetLayerIndex(self.qlayer) < 0:
             self.qlayer = None
             

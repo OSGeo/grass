@@ -315,24 +315,33 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         return 1
 
+    def _GetDataLayers(self, item, litems):
+        """Return get list of enabled map layers"""
+        # load raster & vector maps
+        while item and item.IsOk():
+            type = self.tree.GetPyData(item)[0]['type']
+            if type == 'group':
+                subItem = self.tree.GetFirstChild(item)[0]
+                self._GetDataLayers(subItem, litems)
+                item = self.tree.GetNextSibling(item)
+                
+            if not item.IsChecked() or \
+                    type not in ('raster', 'vector', '3d-raster'):
+                item = self.tree.GetNextSibling(item)
+                continue
+
+            litems.append(item)
+
+            item = self.tree.GetNextSibling(item)
+        
     def LoadDataLayers(self):
         """Load raster/vector from current layer tree
 
         @todo volumes
         """
         listOfItems = []
-        # load raster & vector maps
         item = self.tree.GetFirstChild(self.tree.root)[0]
-        while item and item.IsOk():
-            type = self.tree.GetPyData(item)[0]['type']
-            if not item.IsChecked() or \
-                    type not in ('raster', 'vector', '3d-raster'):
-                item = self.tree.GetNextSibling(item)
-                continue
-
-            listOfItems.append(item)
-
-            item = self.tree.GetNextSibling(item)
+        self._GetDataLayers(item, listOfItems)
 
         start = time.time()
 
