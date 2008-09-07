@@ -5,9 +5,9 @@
 
 extern "C" {
 #include <grass/gis.h>
+#include <grass/nviz.h>
 #include <grass/gsurf.h>
 #include <grass/gstypes.h>
-#include <grass/nviz.h>
 }
 
 // For compilers that support precompilation, includes "wx.h".

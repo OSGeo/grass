@@ -128,9 +128,9 @@ struct render_window
     GLXPixmap windowId;
     Pixmap pixmap;
 #elif defined(OPENGL_AQUA)
-    AGLPixelFmtID pixelFmtId;
+    AGLPixelFormat pixelFmtId;
     AGLContext contextId;
-    AGLPixmap windowId;
+    AGLPbuffer windowId;
     GWorldPtr pixmap;
 #elif defined(OPENGL_WINDOWS)
     HDC displayId;		/* display context */
