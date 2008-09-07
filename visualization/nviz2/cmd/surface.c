@@ -37,6 +37,8 @@ int load_rasters(const struct GParams *params, nv_data * data)
     int *surf_list, nsurfs;
     int id;
 
+    double x, y, z;
+
     nelev_map = opt_get_num_answers(params->elev_map);
     nelev_const = opt_get_num_answers(params->elev_const);
 
@@ -72,6 +74,13 @@ int load_rasters(const struct GParams *params, nv_data * data)
 			      i + 1);
 	    }
 	}
+
+	/* set position */
+	x = atof(params->surface_pos->answers[i]);
+	y = atof(params->surface_pos->answers[i+1]);
+	z = atof(params->surface_pos->answers[i+2]);
+
+	GS_set_trans(id, x, y, z);
     }
 
     /* set surface attributes */

@@ -14,11 +14,11 @@ struct GParams
       *mask_map, *transp_map, *transp_const, *shine_map, *shine_const,
       *emit_map, *emit_const,
     /* surface draw mode */
-      *mode, *res_fine, *res_coarse, *style, *shade, *wire_color,
+      *mode, *res_fine, *res_coarse, *style, *shade, *wire_color, *surface_pos,
     /* vector lines */
-      *vlines, *vline_width, *vline_color, *vline_mode, *vline_height,
+      *vlines, *vline_width, *vline_color, *vline_mode, *vline_height, *vline_pos,
     /* vector points */
-      *vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width,
+      *vpoints, *vpoint_size, *vpoint_marker, *vpoint_color, *vpoint_width, *vpoint_pos,
     /* volumes */
       *volume, *volume_mode, *volume_shade, *volume_pos, *volume_res, *isosurf_level,
     /* misc */
