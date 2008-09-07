@@ -451,13 +451,18 @@ class TextLayerDialog(wx.Dialog):
         self.ovlId = ovlId
         self.parent = parent
 
-        if self.ovlId in self.parent.MapWindow.textdict:
-            self.currText, self.currFont, self.currClr, self.currRot = self.parent.MapWindow.textdict[drawid]
+        if self.ovlId in self.parent.MapWindow.textdict.keys():
+            self.currText = self.parent.MapWindow.textdict[self.ovlId]['text']
+            self.currFont = self.parent.MapWindow.textdict[self.ovlId]['font']
+            self.currClr  = self.parent.MapWindow.textdict[self.ovlId]['color']
+            self.currRot  = self.parent.MapWindow.textdict[self.ovlId]['rotation']
+            self.currCoords = self.parent.MapWindow.textdict[self.ovlId]['coords']
         else:
             self.currClr = wx.BLACK
             self.currText = ''
             self.currFont = self.GetFont()
             self.currRot = 0.0
+            self.currCoords = [10, 10, 10, 10]
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
@@ -566,8 +571,11 @@ class TextLayerDialog(wx.Dialog):
 
     def GetValues(self):
         """Get text properties"""
-        return (self.currText, self.currFont,
-                self.currClr, self.currRot)
+        return { 'text' : self.currText,
+                 'font' : self.currFont,
+                 'color' : self.currClr,
+                 'rotation' : self.currRot,
+                 'coords' : self.currCoords }
 
 class LoadMapLayersDialog(wx.Dialog):
     """Load selected map layers (raster, vector) into layer tree"""

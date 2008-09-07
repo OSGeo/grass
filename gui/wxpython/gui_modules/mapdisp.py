@@ -416,42 +416,41 @@ class BufferedWindow(MapWindow, wx.Window):
                 # self.ovlcoords[drawid] = coords
 
         elif pdctype == 'text': # draw text on top of map
-            text = img[0]
-            rotation = float(img[3])
-            w, h = self.GetFullTextExtent(img[0])[0:2]
-            pdc.SetFont(img[1])
-            pdc.SetTextForeground(img[2])
-            coords, w, h = self.TextBounds(img, coords)
+            rotation = float(img['rotation'])
+            w, h = self.GetFullTextExtent(img['text'])[0:2]
+            pdc.SetFont(img['font'])
+            pdc.SetTextForeground(img['color'])
+            coords, w, h = self.TextBounds(img)
             if rotation == 0:
-                pdc.DrawText(img[0], coords[0], coords[1])
+                pdc.DrawText(img['text'], coords[0], coords[1])
             else:
-                pdc.DrawRotatedText(img[0], coords[0], coords[1], rotation)
+                pdc.DrawRotatedText(img['text'], coords[0], coords[1], rotation)
             pdc.SetIdBounds(drawid, (coords[0], coords[1], w, h))
-            # self.ovlcoords[drawid] = coords
-
+            
         pdc.EndDrawing()
         self.Refresh()
 
         return drawid
 
-    def TextBounds(self, textinfo, coords):
+    def TextBounds(self, textinfo):
         """
         Return text boundary data
 
         @param textinfo text metadata (text, font, color, rotation)
         @param coords reference point
         """
-        rotation = float(textinfo[3])
-
+        rotation = float(textinfo['rotation'])
+        coords = textinfo['coords']
+        
         Debug.msg (4, "BufferedWindow.TextBounds(): text=%s, rotation=%f" % \
-                   (textinfo[0], rotation))
+                   (textinfo['text'], rotation))
 
         self.Update()
         self.Refresh()
 
-        self.SetFont(textinfo[1])
+        self.SetFont(textinfo['font'])
 
-        w, h = self.GetTextExtent(textinfo[0])
+        w, h = self.GetTextExtent(textinfo['text'])
 
         if rotation == 0:
             coords[2], coords[3] = coords[0] + w, coords[1] + h
@@ -864,7 +863,10 @@ class BufferedWindow(MapWindow, wx.Window):
         self.Update()
         self.RefreshRect(r, False)
         self.lastpos = (event.GetX(), event.GetY())
-
+        
+        if id > 100: # text
+            self.textdict[id]['coords'] = r2
+        
     def MouseDraw(self, pdc=None, begin=None, end=None):
         """
         Mouse box or line from 'begin' to 'end'
@@ -3807,50 +3809,43 @@ class MapFrame(wx.Frame):
         """
         Handler for text decoration menu selection.
         """
-
-        id = 2 # index for overlay layer in render
-
-        # default values
-        text = ''
-        font = self.GetFont()
-        color = wx.BLACK
-        coords = [10, 10, 10, 10]
-        rotation = 0.0
-
-        # if self.MapWindow.currtxtid == None: # text doesn't already exist
-        #    id = wx.NewId() + 100
-        # else: # text already exists
-        #    id = self.MapWindow.currtxtid
-            # textcoords = self.ovlcoords[id]
+        if self.MapWindow.dragid > -1:
+            id = self.MapWindow.dragid
+        else:
+            # index for overlay layer in render
+            if len(self.MapWindow.textdict.keys()) > 0:
+                id = self.MapWindow.textdict.keys()[-1] + 1
+            else:
+                id = 101
 
         dlg = gdialogs.TextLayerDialog(parent=self, ovlId=id, title=_('Add text layer'),
                                        size=(400, 200))
 
-        dlg.CenterOnScreen()
+        dlg.CenterOnParent()
 
         # If OK button pressed in decoration control dialog
         if dlg.ShowModal() == wx.ID_OK:
-            text = dlg.GetValues()[0]
-            coords, w, h = self.MapWindow.TextBounds(dlg.GetValues(),
-                                                     coords)
-        # delete object if it has no text
-        if text == '':
-            try:
-                self.MapWindow.pdc.ClearId(id)
-                self.MapWindow.pdc.RemoveId(id)
-                del self.MapWindow.textdict[id]
-                # del self.ovlcoords[id]
-            except:
-                pass
-            return
+            text = dlg.GetValues()['text']
+            coords, w, h = self.MapWindow.TextBounds(dlg.GetValues())
+        
+            # delete object if it has no text
+            if text == '':
+                try:
+                    self.MapWindow.pdc.ClearId(id)
+                    self.MapWindow.pdc.RemoveId(id)
+                    del self.MapWindow.textdict[id]
+                except:
+                    pass
+                return
 
-        self.MapWindow.pdc.ClearId(id)
-        self.MapWindow.pdc.SetId(id)
-        self.MapWindow.textdict[id] = (text, font, color, rotation)
-        self.MapWindow.Draw(self.MapWindow.pdc, img=self.MapWindow.textdict[id],
-                            drawid=id, pdctype='text', coords=coords)
-
-        self.MapWindow.UpdateMap(render=False, renderVector=False)
+            self.MapWindow.pdc.ClearId(id)
+            self.MapWindow.pdc.SetId(id)
+            self.MapWindow.textdict[id] = dlg.GetValues()
+            
+            self.MapWindow.Draw(self.MapWindow.pdcDec, img=self.MapWindow.textdict[id],
+                                drawid=id, pdctype='text', coords=coords)
+            
+            self.MapWindow.UpdateMap(render=False, renderVector=False)
 
     def GetOptData(self, dcmd, type, params, propwin):
         """
