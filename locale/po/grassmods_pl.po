@@ -25880,7 +25880,7 @@ msgstr "Rysuj tylko podziałkę liniową"
 #: ../display/d.barscale/main.c:89
 msgid ""
 "Background color, either a standard GRASS color, R:G:B triplet, or \"none\""
-msgstr "Kolor tła, standardowe kolory GRASS, triplet R:G:B lub \"bez koloru\""
+msgstr "Kolor tła, standardowe kolory GRASS, triplet R:G:B lub \"none\""
 
 #: ../display/d.barscale/main.c:108
 msgid ""
