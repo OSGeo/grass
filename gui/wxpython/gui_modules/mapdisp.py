@@ -2309,9 +2309,9 @@ class BufferedWindow(MapWindow, wx.Window):
                      "s=%f"    % new['s'],
                      "e=%f"    % new['e'],
                      "w=%f"    % new['w'],
-                     "rows=%f" % new['rows'],
-                     "cols=%f" % new['cols']]
-
+                     "rows=%d" % int(new['rows']),
+                     "cols=%d" % int(new['cols'])]
+        
         p = gcmd.Command(cmdRegion)
 
         if tmpreg:
