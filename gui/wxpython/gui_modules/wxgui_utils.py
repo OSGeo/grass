@@ -1326,9 +1326,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Enable/disable items in layer tree"""
         item = self.GetFirstChild(self.root)[0]
         while item and item.IsOk():
-            ltype = self.GetPyData(item)[0]['maplayer'].type
-            if type == ltype:
+            mapLayer = self.GetPyData(item)[0]['maplayer']
+            if mapLayer and type == mapLayer.type:
                 self.EnableItem(item, enable)
+            
             item = self.GetNextSibling(item)
         
     def __FindSubItemByData(self, item, key, value):

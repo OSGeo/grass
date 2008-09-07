@@ -1895,9 +1895,9 @@ class NvizToolWindow(wx.Frame):
         data = self.mapWindow.GetSelectedLayer(type='nviz')
         for attrb in ('width', 'color', 'mode'):
             data['vector']['lines'][attrb]['update'] = None
-        data['vector']['lines']['width'] = width
-        data['vector']['lines']['color'] = color
-        data['vector']['lines']['mode'] = mode
+        data['vector']['lines']['width']['value'] = width
+        data['vector']['lines']['color']['value'] = color
+        data['vector']['lines']['mode']['value'] = mode
         
         # update properties
         event = wxUpdateProperties(data=data)
@@ -2313,7 +2313,7 @@ class NvizToolWindow(wx.Frame):
                                          page=panel,
                                          text=" %s " % _("Layer properties"),
                                          select=True)
-                
+            
             self.UpdateVectorPage(layer, data['vector'])
             
         elif pageId == 'volume':
