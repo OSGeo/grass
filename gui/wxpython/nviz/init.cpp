@@ -112,24 +112,6 @@ void Nviz::InitView()
     return;
 }
 
-/*!
-  \brief Reset session
-
-  Unload all data layers
-
-  @todo vector, volume
-*/
-void Nviz::Reset()
-{
-    int i;
-    int *surf_list, nsurfs;
-
-    surf_list = GS_get_surf_list(&nsurfs);
-    for (i = 0; i < nsurfs; i++) {
-	GS_delete_surface(surf_list[i]);
-    }
-}
-
 void swap_gl()
 {
     return;

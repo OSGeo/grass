@@ -78,18 +78,21 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         self.parent = parent # MapFrame
         
         self.init = False
+        self.initView = False
+        
         # render mode 
         self.render = { 'quick' : False,
                         # do not render vector lines in quick mode
                         'vlines' : False,
                         'vpoints' : False }
 
-        # list of loaded map layers
-        self.layers = {}
-        for type in ('raster', 'vlines', 'vpoints', '3d-raster'):
-            self.layers[type] = {}
-            self.layers[type]['name'] = []
-            self.layers[type]['id'] = []
+        # list of loaded map layers (layer tree items)
+        self.layers = []
+        
+        #
+        # use display region instead of computational
+        #
+        os.environ['GRASS_REGION'] = self.Map.SetRegion()
 
         #
         # create nviz instance
@@ -101,17 +104,14 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         time.sleep(.1)
         self.nvizClass =  self.nvizThread.nvizClass
 
+        # GRASS_REGION needed only for initialization
+        del os.environ['GRASS_REGION']
+
         #
         # set current display
         #
         self.nvizClass.SetDisplay(self)
-
-        #
-        # initialize mouse position
-        #
-        self.lastX = self.x = 30
-        self.lastY = self.y = 30
-
+        
         #
         # default values
         #
@@ -150,9 +150,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         dc = wx.PaintDC(self)
         self.SetCurrent()
         
-        if not self.init:
+        if not self.initView:
             self.nvizClass.InitView()
+            self.initView = True
 
+        if not self.init:
             self.LoadDataLayers()
 
             self.ResetView()
@@ -171,10 +173,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
                 # update widgets
                 win = self.parent.nvizToolWin.FindWindowById( \
                     self.parent.nvizToolWin.win['vector']['lines']['surface'])
-                win.SetItems(self.layers['raster']['name'])
+                win.SetItems(self.GetLayerNames('raster'))
 
             self.init = True
-
+            
         self.UpdateMap()
 
     def OnMouseAction(self, event):
@@ -421,7 +423,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             for sec in data.keys():
                 for sec1 in data[sec].keys():
                     for sec2 in data[sec][sec1].keys():
-                        if sec2 not in ('object', 'all'):
+                        if sec2 != 'all':
                             data[sec][sec1][sec2]['update'] = None
 
             event = wxUpdateProperties(data=data)
@@ -479,12 +481,11 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             else:
                 print >> sys.stderr, "Nviz:" + _("Unsupported layer type '%s'") % layer.type
         
-        self.layers[layer.type]['name'].append(layer.name)
-        self.layers[layer.type]['id'].append(id)
-
+        self.layers.append(item)
+        
         # set default/workspace layer properties
         data = self.SetMapObjProperties(item, id, nvizType)
-
+        
         # update properties
         event = wxUpdateProperties(data=data)
         wx.PostEvent(self, event)
@@ -496,7 +497,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             if layer.type == 'raster':
                 win = toolWin.FindWindowById( \
                     toolWin.win['vector']['lines']['surface'])
-                win.SetItems(self.layers[layer.type]['name'])
+                win.SetItems(self.GetLayerNames(layer.type))
 
             toolWin.UpdatePage(nvizType)
             toolWin.SetPage(nvizType)
@@ -549,17 +550,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
 
         data[nvizType].pop('object')
 
-        idx = self.layers[layer.type]['id'].index(id)
-        del self.layers[layer.type]['name'][idx]
-        del self.layers[layer.type]['id'][idx]
-
+        self.layers.remove(item)
+        
         # update tools window
         if hasattr(self.parent, "nvizToolWin") and \
                 layer.type == 'raster':
             toolWin = self.parent.nvizToolWin
             win = toolWin.FindWindowById( \
                 toolWin.win['vector']['lines']['surface'])
-            win.SetItems(self.layers[layer.type]['name'])
+            win.SetItems(self.GetLayerNames(layer.type))
 
             # remove surface page
             if toolWin.notebook.GetSelection() == toolWin.page[nvizType]['id']:
@@ -605,8 +604,7 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             # update layer properties
             self.SetMapObjProperties(item, id, type)
         
-            self.layers['v' + type]['name'].append(layer.name)
-            self.layers['v'  + type]['id'].append(id)
+        self.layers.append(item)
         
         # update properties
         data = self.tree.GetPyData(item)[0]['nviz']
@@ -659,10 +657,8 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             
             data[vtype].pop('object')
 
-            idx = self.layers['v' + vtype]['id'].index(id)
-            del self.layers['v' + vtype]['name'][idx]
-            del self.layers['v' + vtype]['id'][idx]
-
+            self.layers.remove(id)
+            
         # update tools window
         if hasattr(self.parent, "nvizToolWin") and \
                 vecType is None:
@@ -839,9 +835,10 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
             type = 'flat'
             map  = None
         else:
-            if len(self.layers['raster']['name']) > 0:
+            rasters = self.GetLayerNames('raster')
+            if len(rasters) > 0:
                 type = 'surface'
-                map  = self.layers['raster']['name'][0]
+                map  = rasters[0]
             else:
                 type = 'flat'
                 map = None
@@ -883,8 +880,9 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # mode
         data['mode'] = { 'type' : 'surface',
                          'surface' : '', }
-        if len(self.layers['raster']['name']) > 0:
-            data['mode']['surface'] = self.layers['raster']['name'][0]
+        rasters = self.GetLayerNames('raster')
+        if len(rasters) > 0:
+            data['mode']['surface'] = rasters[0]
         
         # height
         data['height'] = { 'value' : UserSettings.Get(group='nviz', key='vector',
@@ -897,7 +895,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
     def Reset(self):
         """Reset (unload data)"""
-        self.nvizClass.Reset()
+        for item in self.layers:
+            type = self.tree.GetPyData(item)[0]['maplayer'].type
+            if type == 'raster':
+                self.UnloadRaster(item)
+            elif type == '3d-raster':
+                self.UnloadRaster3d(item)
+            elif type == 'vector':
+                self.UnloadVector(item)
+            
         self.init = False
 
     def OnZoomToMap(self, event):
@@ -1122,19 +1128,18 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         if data['color'].has_key('update') or \
                 data['width'].has_key('update') or \
                 data['mode'].has_key('update'):
-            width = data['width']
-            color = data['color']
+            width = data['width']['value']
+            color = data['color']['value']
             if data['mode']['type'] == 'flat':
                 flat = True
                 if data.has_key('surface'):
                     data.pop('surface')
             else:
                 flat = False
-                if not 'vector:lines:surface' in update:
-                    update.append('vector:lines:surface')
-
+                
             self.nvizClass.SetVectorLineMode(id, color,
                                              width, flat)
+            
             if data['color'].has_key('update'):
                 data['color'].pop('update')
             if data['width'].has_key('update'):
@@ -1145,15 +1150,15 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         # height
         if data['height'].has_key('update'):
             self.nvizClass.SetVectorLineHeight(id,
-                                               data['height'])
+                                               data['height']['value'])
             data['height'].pop('update')
         
         # surface
         if data['mode'].has_key('update'):
-            idx = self.layers['raster']['name'].index(data['mode']['surface'])
-            if idx > -1:
-                self.nvizClass.SetVectorLineSurface(id,
-                                                    self.layers['raster']['id'][idx])
+            sid = self.GetLayerId(type='raster', name=data['mode']['surface'])
+            if sid > -1:
+                self.nvizClass.SetVectorLineSurface(id, sid)
+            
             data['mode'].pop('update')
         
     def UpdateVectorPointsProperties(self, id, data):
@@ -1188,8 +1193,34 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         
         # surface
         if data['mode'].has_key('update'):
-            idx = self.layers['raster']['name'].index(data['mode']['surface'])
-            if idx > -1:
-                self.nvizClass.SetVectorPointSurface(id,
-                                                     self.layers['raster']['id'][idx])
+            sid = self.GetLayerId(type='raster', name=data['mode']['surface'])
+            if sid > -1:
+                self.nvizClass.SetVectorPointSurface(id, sid)
+            
             data['mode'].pop('update')
+
+    def GetLayerNames(self, type):
+        """Return list of map layer names of given type"""
+        layerName = []
+        
+        for item in self.layers:
+            layerName.append(self.tree.GetPyData(item)[0]['maplayer'].GetName())
+        
+        return layerName
+    
+    def GetLayerId(self, type, name):
+        """Get layer object id or -1"""
+        for item in self.layers:
+            mapName = self.tree.GetPyData(item)[0]['maplayer'].GetName()
+            data = self.tree.GetPyData(item)[0]['nviz']
+            if type == 'raster':
+                return data['surface']['object']['id']
+            elif type == 'vpoint':
+                return data['vector']['points']['object']['id']
+            elif type == 'vline':
+                return data['vector']['lines']['object']['id']
+            elif type == '3d-raster':
+                return data['volume']['object']['id']
+
+        return -1
+            

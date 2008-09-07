@@ -57,7 +57,6 @@ public:
     /* init.cpp */
     int SetDisplay(void *);
     void InitView();
-    void Reset();
     void SetBgColor(const char *);
 
     /* lights.cpp */
