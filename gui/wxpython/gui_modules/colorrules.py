@@ -378,7 +378,7 @@ class ColorTable(wx.Frame):
         else:
             return
         
-        self.layer = self.Map.AddLayer(type="command", name='raster', command=cmdlist,
+        self.layer = self.Map.AddLayer(type="command", name='raster', command=[cmdlist],
                                        l_active=True, l_hidden=False, l_opacity=1, l_render=False)        
         
         # apply new color table and display preview
