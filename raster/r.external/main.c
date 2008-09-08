@@ -431,6 +431,7 @@ static void write_fp_quant(const char *output)
 {
     struct Quant quant;
 
+    G_quant_init(&quant);
     G_quant_round(&quant);
 
     if (G_write_quant(output, G_mapset(), &quant) < 0)
