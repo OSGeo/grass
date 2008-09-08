@@ -70,7 +70,7 @@ void driver_plot_icon(double x, double y, const char *icon)
     yi = (int) floor(D_u_to_d_row(y));
 
     sprintf(buf,
-	    ".screen.canvas create bitmap %d %d -bitmap @$vdpath/%s.xbm -foreground %s -anchor center",
+	    ".screen.canvas create bitmap %d %d -bitmap @$iconpath/%s.xbm -foreground %s -anchor center",
 	    xi, yi, icon, color);
     if (Tcl_Eval(Toolbox, buf) != TCL_OK)
 	G_warning("driver_plot_icon: %s", Toolbox->result);

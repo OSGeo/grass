@@ -40,7 +40,7 @@ else:
     iconpath = None
 
 iconpath_default = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass")
-iconpath_vdigit  = os.path.join(globalvar.ETCDIR, "v.digit")
+iconpath_vdigit  = os.path.join(globalvar.ETCDIR, "gui", "icons", "grass", "vdigit")
 
 icons_default = {
     # map display

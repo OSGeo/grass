@@ -8,6 +8,7 @@ source $env(GISBASE)/etc/gtcltk/select.tcl
 DynamicHelp::configure -font balloon-help -fg black -bg "#FFFF77"
 
 set vdpath $env(GISBASE)/etc/v.digit/
+set iconpath $env(GISBASE)/etc/gui/icons/grass/vdigit/
 source $vdpath/settings.tcl
 source $vdpath/cats.tcl
 source $vdpath/form.tcl
@@ -35,7 +36,7 @@ proc get_update_box {ox oy x y} {
 }
 
 proc create_screen {} {
-    global vdpath map_name map_mapset
+    global vdpath iconpath map_name map_mapset
     if {[winfo exists .screen]} return
 
     toplevel .screen
@@ -48,9 +49,9 @@ proc create_screen {} {
     wm deiconify .screen
     update
 
-    image create bitmap cross -file "$vdpath/cross.xbm"
-    image create bitmap cross45 -file "$vdpath/cross45.xbm"
-    image create bitmap box -file "$vdpath/box.xbm"
+    image create bitmap cross -file "$iconpath/cross.xbm"
+    image create bitmap cross45 -file "$iconpath/cross45.xbm"
+    image create bitmap box -file "$iconpath/box.xbm"
 }
 
 # GVariable stores variables by key, this variables are (should be) synchronized with
@@ -106,58 +107,58 @@ proc new_line_options { create } {
 set bbox2 [ButtonBox .bbox2 -spacing 1 -padx 1 -pady 1]
 
 # --- Draw new ---
-$bbox2 add -image [image create photo -file "$vdpath/new.point.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/new.point.gif"] \
         -command "c_next_tool new_point" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Digitize new point"]
 
-$bbox2 add -image [image create photo -file "$vdpath/new.line.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/new.line.gif"] \
         -command "c_next_tool new_line" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Digitize new line"]
 
-$bbox2 add -image [image create photo -file "$vdpath/new.boundary.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/new.boundary.gif"] \
         -command "c_next_tool new_boundary" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Digitize new boundary"]
 
-$bbox2 add -image [image create photo -file "$vdpath/new.centroid.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/new.centroid.gif"] \
         -command "c_next_tool new_centroid" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Digitize new centroid"]
 
 # --- Edit old ---
-$bbox2 add -image [image create photo -file "$vdpath/move.vertex.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/move.vertex.gif"] \
         -command "c_next_tool move_vertex" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Move vertex"]
 
-$bbox2 add -image [image create photo -file "$vdpath/add.vertex.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/add.vertex.gif"] \
         -command "c_next_tool add_vertex" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Add vertex"]
 
-$bbox2 add -image [image create photo -file "$vdpath/rm.vertex.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/rm.vertex.gif"] \
         -command "c_next_tool rm_vertex" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Remove vertex"]
 
-$bbox2 add -image [image create photo -file "$vdpath/split.line.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/split.line.gif"] \
         -command "c_next_tool split_line" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Split line"]
 
-$bbox2 add -image [image create photo -file "$vdpath/edit.line.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/edit.line.gif"] \
         -command "c_next_tool edit_line" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Edit line/boundary"]
 
-$bbox2 add -image [image create photo -file "$vdpath/move.line.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/move.line.gif"] \
         -command "c_next_tool move_line" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Move point, line, boundary, or centroid"]
 
-$bbox2 add -image [image create photo -file "$vdpath/delete.line.gif"] \
+$bbox2 add -image [image create photo -file "$iconpath/delete.line.gif"] \
         -command "c_next_tool delete_line" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Delete point, line, boundary, or centroid"]
@@ -168,27 +169,27 @@ set bbox1 [ButtonBox .bbox1 -spacing 1 -padx 1 -pady 1]
 
 # --- Zoom / Display ---
 
-$bbox1 add -image [image create photo -file "$vdpath/redraw.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/redraw.gif"] \
         -command "c_next_tool redraw" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Redraw"]
 
-$bbox1 add -image [image create photo -file "$vdpath/zoom.window.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/zoom.window.gif"] \
         -command "c_next_tool zoom_window" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Zoom in by window"]
 
-$bbox1 add -image [image create photo -file "$vdpath/zoom.out.centre.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/zoom.out.centre.gif"] \
         -command "c_next_tool zoom_out_centre" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Zoom out"]
 
-$bbox1 add -image [image create photo -file "$vdpath/zoom.pan.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/zoom.pan.gif"] \
         -command "c_next_tool zoom_pan" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Pan"]
 
-$bbox1 add -image [image create photo -file "$vdpath/zoom.default.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/zoom.default.gif"] \
         -command "c_next_tool zoom_default" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Zoom to default region"]
@@ -201,40 +202,40 @@ proc zoom_region { } {
     }
 }
 
-$bbox1 add -image [image create photo -file "$vdpath/zoom.region.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/zoom.region.gif"] \
         -command "zoom_region" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Zoom to saved region"]
 
 # --- Attributes ---
-$bbox1 add -image [image create photo -file "$vdpath/display.cats.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/display.cats.gif"] \
         -command "c_next_tool display_cats" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Display categories"]
 
-$bbox1 add -image [image create photo -file "$vdpath/copy.cats.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/copy.cats.gif"] \
         -command "c_next_tool copy_cats" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Copy categories"]
 
-$bbox1 add -image [image create photo -file "$vdpath/display.attributes.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/display.attributes.gif"] \
         -command "c_next_tool display_attributes" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Display attributes"]
 
 # --- Stop ---
-#$bbox1 add -image [image create photo -file "$vdpath/stop.gif"] \
+#$bbox1 add -image [image create photo -file "$iconpath/stop.gif"] \
 #        -command "c_cancel" \
 #        -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
 #        -helptext "Quit running tool"
 
 # --- Others ---
-$bbox1 add -image [image create photo -file "$vdpath/settings.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/settings.gif"] \
         -command "c_next_tool settings" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -helptext [G_msg "Open settings"]
 
-$bbox1 add -image [image create photo -file "$vdpath/exit.gif"] \
+$bbox1 add -image [image create photo -file "$iconpath/exit.gif"] \
         -command "c_next_tool exit" \
         -highlightthickness 0 -takefocus 0 -relief raised -borderwidth 1 \
         -bg white \
