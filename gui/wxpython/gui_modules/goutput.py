@@ -390,8 +390,14 @@ class GMConsole(wx.Panel):
         type  = event.type
         
         # switch to 'Command output'
+        ### if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
+        ### self.parent.notebook.SetSelection(self.parent.goutput.pageid)
         if self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
-            self.parent.notebook.SetSelection(self.parent.goutput.pageid)
+            textP = self.parent.notebook.GetPageText(self.parent.goutput.pageid)
+            if textP[-1] != ')':
+                textP += ' (...)'
+            self.parent.notebook.SetPageText(self.parent.goutput.pageid,
+                                             textP)
         
         # message prefix
         if type == 'warning':
