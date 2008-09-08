@@ -310,8 +310,9 @@ class GMFrame(wx.Frame):
         self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output"))
 
         # bingings
-        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.onCBPageChanged, self.gm_cb)
-        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.onCBPageClosed,  self.gm_cb)
+        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
+        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.gm_cb.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosed)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(item=self.goutput, proportion=1,
@@ -375,23 +376,32 @@ class GMFrame(wx.Frame):
         """
         pass
 
-    # choicebook methods
-    def onCBPageChanged(self, event):
-        """Page in notebook changed"""
-
+    def OnCBPageChanged(self, event):
+        """Page in notebook (display) changed"""
         old_pgnum = event.GetOldSelection()
         new_pgnum = event.GetSelection()
+        
         self.curr_page   = self.gm_cb.GetCurrentPage()
         self.curr_pagenum = self.gm_cb.GetSelection()
+        
         try:
             self.curr_page.maptree.mapdisplay.SetFocus()
             self.curr_page.maptree.mapdisplay.Raise()
         except:
             pass
-
+        
         event.Skip()
 
-    def onCBPageClosed(self, event):
+    def OnPageChanged(self, event):
+        """Page in notebook changed"""
+        page = event.GetSelection()
+        if page == self.goutput.pageid:
+            # remove '(...)'
+            self.notebook.SetPageText(page, _("Command output"))
+        
+        event.Skip()
+
+    def OnCBPageClosed(self, event):
         """
         Page of notebook closed
         Also close associated map display
@@ -406,6 +416,10 @@ class GMFrame(wx.Frame):
 
         cmd = event.GetString()
 
+        # switch to 'Command output'
+        if self.notebook.GetSelection() != self.goutput.pageid:
+            self.notebook.SetSelection(self.goutput.pageid)
+        
         self.goutput.RunCmd(cmd)
 
         self.OnUpdateStatusBar(None)

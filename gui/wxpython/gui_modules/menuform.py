@@ -788,6 +788,10 @@ class mainFrame(wx.Frame):
         if cmd[0][0:2] != "d.":
             # Send any non-display command to parent window (probably wxgui.py)
             # put to parents
+            # switch to 'Command output'
+            if self.notebookpanel.notebook.GetSelection() != self.notebookpanel.goutputId:
+                self.notebookpanel.notebook.SetSelection(self.notebookpanel.goutputId)
+            
             try:
                 self.goutput.RunCmd(cmd)
             except AttributeError,e:
@@ -915,10 +919,12 @@ class cmdPanel(wx.Panel):
         if self.parent.get_dcmd is None:
             self.goutput = goutput.GMConsole(parent=self, margin=False,
                                              pageid=self.notebook.GetPageCount())
+            self.goutputId = self.notebook.GetPageCount()
             self.outpage = self.notebook.AddPage(self.goutput, text=_("Command output") )
         else:
             self.goutput = None
-
+            self.goutputId = -1
+            
         self.manual_tab = helpPanel(parent = self.notebook, grass_command = self.task.name)
         self.manual_tabsizer = wx.BoxSizer(wx.VERTICAL)
         self.notebook.AddPage(self.manual_tab, text=_("Manual"))
