@@ -51,7 +51,7 @@ int G__gisinit(const char *version, const char *pgm)
     G_set_program_name(pgm);
 
     if (strcmp(version, GIS_H_VERSION) != 0)
-	G_fatal_error(_("Incompatible library version for module"));
+	G_fatal_error(_("Incompatible library version for module: recompilation needed."));
 
     /* Make sure location and mapset are set */
     G_location_path();
@@ -86,7 +86,7 @@ int G__no_gisinit(const char *version)
 	return 0;
 
     if (strcmp(version, GIS_H_VERSION) != 0)
-	G_fatal_error(_("Incompatible library version for module"));
+	G_fatal_error(_("Incompatible library version for module: recompilation needed."));
 
     gisinit();
 
