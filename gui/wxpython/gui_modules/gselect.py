@@ -299,19 +299,18 @@ class VectorDBInfo:
     def __init__(self, map):
         self.map = map
 
-        self.layers = {} # dictionary of layer number and associated table
-        self.tables = {} # dictionary of table and associated columns
+        # dictionary of layer number and associated (driver, database, table)
+        self.layers = {}
+         # dictionary of table and associated columns (type, length, values, ids)
+        self.tables = {}
         
-        ## {table : {column name : type, length, values, ids}}
-        #self.tables = {}
-
-        if not self.__GetLayers():  # -> self.layers
+        if not self.__CheckDBConnection(): # -> self.layers
             return
-        self.__GetColumns() # -> self.tables
 
-    def __GetLayers(self):
-        """Create layers dictionary"""
-        
+        self.__DescribeTables() # -> self.tables
+
+    def __CheckDBConnection(self):
+        """Check DB connection"""
         layerCommand = gcmd.Command(cmd=["v.db.connect",
                                          "-g", "--q",
                                          "map=%s" % self.map],
@@ -319,39 +318,91 @@ class VectorDBInfo:
         if layerCommand.returncode != 0:
             return False
 
-        # create dictionary of layers (as strings) and associated table names for vector
+        # list of available layers & (table, database, driver)
         for line in layerCommand.ReadStdOutput():
             lineList = line.split(' ')
             layer = lineList[0]
             if '/' in layer:
-                layer = layer.split('/')[0]
-            table = lineList[1]
-            self.layers[layer] = table
-                        
+                layer, layer_name = lineList[0].split('/')
+            else:
+                layer_name = None
+            # database can contain ' ' in it's path
+            if len(lineList) > 5:
+                database = ''.join(lineList[3:-1])
+            else:
+                database = lineList[3]
+            self.layers[int(layer)] = {
+                "name"     : layer_name,
+                "table"    : lineList[1],
+                "key"      : lineList[2],
+                "database" : database,
+                "driver"   : lineList[-1]
+                }
+            
         if (len(self.layers.keys()) == 0):
             return False
 
         return True
 
-    def __GetColumns(self):
-        """Create dictionary of tables and associated columns"""
+    def __DescribeTables(self):
+        """Describe linked tables"""
         for layer in self.layers.keys():
-            columns = []
             # determine column names and types
-            table = self.layers[layer]
-            cmd = ['v.info', '-c', 'map=%s' % table, 'layer=%s' % layer]
-            try:
-                info = gcmd.Command(cmd).ReadStdOutput()
-                for line in info:
-                    col = line.split('|')[1]
-                    columns.append(col)
-            except gcmd.CmdError:
-                columns = []
+            table = self.layers[layer]["table"]
+            columnsCommand = gcmd.Command (cmd=["db.describe",
+                                                "-c", "--q",
+                                                "table=%s" % self.layers[layer]["table"],
+                                                "driver=%s" % self.layers[layer]["driver"],
+                                                "database=%s" % self.layers[layer]["database"]])
+
+
+            columns = {} # {name: {type, length, [values], [ids]}}
+
+            if columnsCommand.returncode == 0:
+                # skip nrows and ncols
+                i = 0
+                for line in columnsCommand.ReadStdOutput()[2:]:
+                    num, name, type, length = line.strip().split(':')
+                    # FIXME: support more datatypes
+                    if type.lower() == "integer":
+                        ctype = int
+                    elif type.lower() == "double precision":
+                        ctype = float
+                    else:
+                        ctype = str
+
+                    columns[name.strip()] = { 'index'  : i,
+                                              'type'   : type.lower(),
+                                              'ctype'  : ctype,
+                                              'length' : int(length),
+                                              'values' : [],
+                                              'ids'    : []}
+                    i += 1
+            else:
+                return False
+
+            # check for key column
+            # v.db.connect -g/p returns always key column name lowercase
+            if self.layers[layer]["key"] not in columns.keys():
+                for col in columns.keys():
+                    if col.lower() == self.layers[layer]["key"]:
+                        self.layers[layer]["key"] = col.upper()
+                        break
             
             self.tables[table] = columns
-        
+            #print 'self tables =', self.tables[table]
+
         return True
     
+    def Reset(self):
+        """Reset"""
+        for layer in self.layers:
+            table = self.layers[layer]["table"] # get table desc
+            columns = self.tables[table]
+            for name in self.tables[table].keys():
+                self.tables[table][name]['values'] = []
+                self.tables[table][name]['ids']    = []
+
 class LayerSelect(wx.ComboBox):
     """
     Creates combo box for selecting data layers defined for vector.
