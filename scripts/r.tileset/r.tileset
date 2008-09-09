@@ -243,12 +243,19 @@ project() {
 	calculate p_x1 "$1 * $p_source_units"
 	calculate p_y1 "$2 * $p_source_units"
 
-	message 3 "echo \"$p_x1 $p_y1\" | $CS2CS -f \"%f\" $p_source_proj +to $p_dest_proj"
+	message 3 "echo \"$p_x1 $p_y1\" | $CS2CS -f \"%.8f\" $p_source_proj +to $p_dest_proj"
 
-	answer=`echo "$p_x1 $p_y1" | $CS2CS -f "%f" $p_source_proj +to $p_dest_proj`
+	answer=`echo "$p_x1 $p_y1" | $CS2CS -f "%.8f" $p_source_proj +to $p_dest_proj`
+
+	if [ $? -ne 0 ] ; then
+	    g.message -e message="Problem running $CS2CS. <$answer>"
+	    exit 1
+	fi
+
 	message 3 "$answer"
-	eval `echo $answer | $SED "s/^/p_x2=/" | $SED "s/ /;p_y2=/" | $SED "s/ /;p_z2=/"`
-	
+	# do not quote $answer in the following line
+	eval `echo $answer | $SED -e "s/^/p_x2=/"  -e "s/ /;p_y2=/"  -e "s/ /;p_z2=/"`
+
 	calculate p_x2 "$p_x2 / $p_dest_units"
 	calculate p_y2 "$p_y2 / $p_dest_units"
 	
