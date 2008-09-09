@@ -58,6 +58,8 @@ class NewVectorDialog(wx.Dialog):
                                    label=_("Name for new vector map:"))
         self.mapName = gselect.Select(parent=self.panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
                                       type='vector', mapsets=[grassenv.GetGRASSVariable('MAPSET'),])
+        self.mapName.SetFocus()
+        
         self.table = wx.CheckBox(parent=self.panel, id=wx.ID_ANY,
                                  label=_("Create attribute table"))
         self.table.SetValue(True)
