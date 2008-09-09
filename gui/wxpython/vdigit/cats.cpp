@@ -229,9 +229,11 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
 	return -1;
     }
     
-    line = -1;
     if (line_id == -1) {
 	line = display->selected.values->value[0];
+    }
+    else {
+	line = line_id;
     }
 
     if (!Vect_line_alive(display->mapInfo, line)) {

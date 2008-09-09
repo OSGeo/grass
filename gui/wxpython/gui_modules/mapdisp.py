@@ -1251,21 +1251,31 @@ class BufferedWindow(MapWindow, wx.Window):
                     if self.parent.dialogs['category'] is None:
                         # open new dialog
                         if digitClass.type == 'vedit':
-                            self.parent.dialogs['category'] = VDigitCategoryDialog(parent=self,
-                                                                                   map=map,
-                                                                                   query=(coords, qdist),
-                                                                                   pos=posWindow,
-                                                                                   title=_("Update categories"))
+                            dlg = VDigitCategoryDialog(parent=self,
+                                                        map=map,
+                                                        query=(coords, qdist),
+                                                        pos=posWindow,
+                                                        title=_("Update categories"))
+                            self.parent.dialogs['category'] = dlg
                         else:
                             if digitClass.driver.SelectLineByPoint(coords,
                                                                    digitClass.GetSelectType()) is not None:
-                                self.parent.dialogs['category'] = VDigitCategoryDialog(parent=self,
-                                                                                       map=map,
-                                                                                       cats=digitClass.GetLineCats(),
-                                                                                       line=digitClass.driver.GetSelected()[0],
-                                                                                       pos=posWindow,
-                                                                                       title=_("Update categories"))
-                            
+                                if UserSettings.Get(group='vdigit', key='checkForDupl',
+                                                    subkey='enabled'):
+                                    lines = digitClass.driver.GetSelected()
+                                else:
+                                    lines = (digitClass.driver.GetSelected()[0],) # only first found
+                                
+                                cats = {}
+                                for line in lines:
+                                    cats[line] = digitClass.GetLineCats(line)
+                                
+                                dlg = VDigitCategoryDialog(parent=self,
+                                                           map=map,
+                                                           cats=cats,
+                                                           pos=posWindow,
+                                                           title=_("Update categories"))
+                                self.parent.dialogs['category'] = dlg
                     else:
                         # update currently open dialog
                         if digitClass.type == 'vedit':
@@ -1275,19 +1285,27 @@ class BufferedWindow(MapWindow, wx.Window):
                             digitClass.driver.SetSelected([])
                             # select new feature
                             if digitClass.driver.SelectLineByPoint(coords,
-                                                                   digitClass.GetSelectType()) is None:
-                                line = None
+                                                                   digitClass.GetSelectType()):
+                                if UserSettings.Get(group='vdigit', key='checkForDupl',
+                                                    subkey='enabled'):
+                                    lines = digitClass.driver.GetSelected()
+                                else:
+                                    lines = (digitClass.driver.GetSelected()[0],) # only first found
+                                
+                                cats = {}
+                                for line in lines:
+                                    cats[line] = digitClass.GetLineCats(line)
+                                
+                                # upgrade dialog
+                                self.parent.dialogs['category'].UpdateDialog(cats=cats)
                             else:
-                                line = digitClass.driver.GetSelected()[0]
-                            # upgrade dialog
-                            self.parent.dialogs['category'].UpdateDialog(cats=digitClass.GetLineCats(),
-                                                                     line=line)
-                    
+                                line = None
+                            
                     if self.parent.dialogs['category']:
                         line = self.parent.dialogs['category'].GetLine()
                         if line:
                             # highlight feature & re-draw map
-                            digitClass.driver.SetSelected([line])
+                            ### digitClass.driver.SetSelected(line)
                             if not self.parent.dialogs['category'].IsShown():
                                 self.parent.dialogs['category'].Show()
                         else:

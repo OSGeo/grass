@@ -1486,7 +1486,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         @param cats if True expect categories instead of feature ids
         """
         Debug.msg(4, "CDisplayDriver.SetSelected(): id=%s" % \
-                  ",".join(["%d" % v for v in id]))
+                      id)
 
         self.__display.SetSelected(id, cats)
 
@@ -2279,14 +2279,13 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     
     @param parent
     @param title dialog title
-    @param query {coordinates, qdist}    - v.edit/v.what
-    @param cats  directory of categories - vdigit
-    @param line  line id                 - vdigit
+    @param query {coordinates, qdist} - used by v.edit/v.what
+    @param cats  directory of lines (layer/categories) - used by vdigit
     @param pos
     @param style
     """
     def __init__(self, parent, title,
-                 map, query=None, cats=None, line=None,
+                 map, query=None, cats=None,
                  pos=wx.DefaultPosition,
                  style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
 
@@ -2296,30 +2295,29 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         # map name
         self.map = map
 
-        # line id (if not found remains 'None')
-        self.line = None
-
-        # {layer: [categories]}
+        # line : {layer: [categories]}
         self.cats = {}
-
+        
         # do not display dialog if no line is found (-> self.cats)
         if cats is None:
             if self.__GetCategories(query[0], query[1]) == 0 or not self.line:
                 Debug.msg(3, "VDigitCategoryDialog(): nothing found!")
         else:
-            # self.cats = dict(cats)
-            for layer in cats.keys():
-                self.cats[layer] = list(cats[layer]) # TODO: tuple to list
-            self.line = line
-            Debug.msg(3, "VDigitCategoryDialog(): line=%d, cats=%s" % \
-                          (self.line, self.cats))
-
+            self.cats = cats
+            for line in cats.keys():
+                for layer in cats[line].keys():
+                    self.cats[line][layer] = list(cats[line][layer])
+            
+            layers = []
+            for layer in self.parent.parent.digit.GetLayers():
+                layers.append(str(layer))
+        
         # make copy of cats (used for 'reload')
         self.cats_orig = copy.deepcopy(self.cats)
         
         wx.Dialog.__init__(self, parent=self.parent, id=wx.ID_ANY, title=title,
-                           style=style, pos=pos)
-
+                          style=style, pos=pos)
+        
         # list of categories
         box = wx.StaticBox(parent=self, id=wx.ID_ANY,
                            label=" %s " % _("List of categories - right-click to delete"))
@@ -2331,9 +2329,24 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                                      wx.LC_HRULES |
                                      wx.LC_VRULES)
         # sorter
-        self.itemDataMap = self.list.Populate()
+        self.fid = self.cats.keys()[0]
+        self.itemDataMap = self.list.Populate(self.cats[self.fid])
         listmix.ColumnSorterMixin.__init__(self, 2)
-
+        self.fidMulti = wx.Choice(parent=self, id=wx.ID_ANY,
+                                  size=(150, -1))
+        self.fidMulti.Bind(wx.EVT_CHOICE, self.OnFeature)
+        self.fidText = wx.StaticText(parent=self, id=wx.ID_ANY)
+        if len(self.cats.keys()) == 1:
+            self.fidMulti.Show(False)
+            self.fidText.SetLabel(str(self.fid))
+        else:
+            self.fidText.Show(False)
+            choices = []
+            for fid in self.cats.keys():
+                choices.append(str(fid))
+            self.fidMulti.SetItems(choices)
+            self.fidMulti.SetSelection(0)
+        
         listSizer.Add(item=self.list, proportion=1, flag=wx.EXPAND)
 
         # add new category
@@ -2345,16 +2358,20 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
         layerNewTxt = wx.StaticText(parent=self, id=wx.ID_ANY,
                                  label="%s:" % _("Layer"))
-        self.layerNew = wx.SpinCtrl(parent=self, id=wx.ID_ANY, size=(50, -1),
-                                    initial=1, min=1, max=1e9)
+        self.layerNew = wx.Choice(parent=self, id=wx.ID_ANY, size=(75, -1),
+                                  choices=layers)
+        if len(layers) > 0:
+            self.layerNew.SetSelection(0)
+        
         catNewTxt = wx.StaticText(parent=self, id=wx.ID_ANY,
                                label="%s:" % _("Category"))
+
         try:
-            newCat = max(self.cats[1]) + 1
-        except:
+            newCat = max(self.cats[self.fid][1]) + 1
+        except KeyError:
             newCat = 1
         self.catNew = wx.SpinCtrl(parent=self, id=wx.ID_ANY, size=(75, -1),
-                                  initial=newCat, min=-1e9, max=1e9)
+                                  initial=newCat, min=0, max=1e9)
         btnAddCat = wx.Button(self, wx.ID_ADD)
         flexSizer.Add(item=layerNewTxt, proportion=0,
                       flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL)
@@ -2393,9 +2410,20 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         mainSizer.Add(item=addSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALIGN_CENTER |
                       wx.LEFT | wx.RIGHT | wx.BOTTOM, border=5)
+        fidSizer = wx.BoxSizer(wx.HORIZONTAL)
+        fidSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
+                                        label=_("Feature id:")),
+                     proportion=0, border=5,
+                     flag=wx.ALIGN_CENTER_VERTICAL)
+        fidSizer.Add(item=self.fidMulti, proportion=0,
+                     flag=wx.EXPAND | wx.ALL,  border=5)
+        fidSizer.Add(item=self.fidText, proportion=0,
+                     flag=wx.EXPAND | wx.ALL,  border=5)
+        mainSizer.Add(item=fidSizer, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=5)
         mainSizer.Add(item=btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
-
+        
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
         self.SetAutoLayout(True)
@@ -2410,7 +2438,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
         btnAddCat.Bind(wx.EVT_BUTTON, self.OnAddCat)
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
-
+                                     
         # list
         # self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
         # self.list.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
@@ -2510,7 +2538,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             layer = int (self.list.GetItem(item, 0).GetText())
             cat = int (self.list.GetItem(item, 1).GetText())
             self.list.DeleteItem(item)
-            self.cats[layer].remove(cat)
+            self.cats[self.fid][layer].remove(cat)
 
             item = self.list.GetFirstSelected()
             
@@ -2519,10 +2547,26 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def OnItemDeleteAll(self, event):
         """Delete all items from the list"""
         self.list.DeleteAllItems()
-        self.cats = {}
+        self.cats[self.fid] = {}
 
         event.Skip()
 
+    def OnFeature(self, event):
+        """Feature id changed (on duplicates)"""
+        self.fid = int(event.GetString())
+        
+        self.itemDataMap = self.list.Populate(self.cats[self.fid],
+                                              update=True)
+
+        try:
+            newCat = max(self.cats[self.fid][1]) + 1
+        except KeyError:
+            newCat = 1
+            
+        self.catNew.SetValue(newCat)
+        
+        event.Skip()
+        
     def __GetCategories(self, coords, qdist):
         """Get layer/category pairs for all available
         layers
@@ -2558,7 +2602,8 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats = copy.deepcopy(self.cats_orig)
 
         # polulate list
-        self.itemDataMap = self.list.Populate(update=True)
+        self.itemDataMap = self.list.Populate(self.cats[self.fid],
+                                              update=True)
 
         event.Skip()
 
@@ -2575,18 +2620,28 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
     def OnApply(self, event):
         """Apply button pressed"""
+        for fid in self.cats.keys():
+            newfid = self.ApplyChanges(fid)
+            if fid == self.fid:
+                self.fid = newfid
+            
+    def ApplyChanges(self, fid):
+        cats = self.cats[fid]
+        cats_orig = self.cats_orig[fid]
 
         # action : (catsFrom, catsTo)
-        check = {'catadd': (self.cats,      self.cats_orig),
-                 'catdel': (self.cats_orig, self.cats)}
+        check = {'catadd': (cats,      cats_orig),
+                 'catdel': (cats_orig, cats)}
 
+        newfid = -1
+        
         # add/delete new category
-        for action, cats in check.iteritems():
-            for layer in cats[0].keys():
+        for action, catsCurr in check.iteritems():
+            for layer in catsCurr[0].keys():
                 catList = []
-                for cat in cats[0][layer]:
-                    if layer not in cats[1].keys() or \
-                            cat not in cats[1][layer]:
+                for cat in catsCurr[0][layer]:
+                    if layer not in catsCurr[1].keys() or \
+                            cat not in catsCurr[1][layer]:
                         catList.append(cat)
                 if catList != []:
                     if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
@@ -2603,18 +2658,31 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                             add = True
                         else:
                             add = False
-                        self.line = self.parent.parent.digit.SetLineCats(-1, layer,
-                                                                          catList, add)
-                        if self.line < 0:
+                        
+                        newfid = self.parent.parent.digit.SetLineCats(fid, layer,
+                                                                      catList, add)
+                        if len(self.cats.keys()) == 1:
+                            self.fidText.SetLabel("%d" % newfid)
+                        else:
+                            choices = self.fidMulti.GetItems()
+                            choices[choices.index(str(fid))] = str(newfid)
+                            self.fidMulti.SetItems(choices)
+                            self.fidMulti.SetStringSelection(str(newfid))
+                            
+                        self.cats[newfid] = self.cats[fid]
+                        del self.cats[fid]
+                        
+                        fid = newfid
+                        if self.fid < 0:
                             wx.MessageBox(parent=self, message=_("Unable to update vector map."),
                                           caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
         if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':           
             # reload map (needed for v.edit)
             self.parent.parent.digit.driver.ReloadMap()
 
-        self.cats_orig = copy.deepcopy(self.cats)
-
-        event.Skip()
+        self.cats_orig[fid] = copy.deepcopy(cats)
+        
+        return newfid
 
     def OnOK(self, event):
         """OK button pressed"""
@@ -2624,7 +2692,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
     def OnAddCat(self, event):
         """Button 'Add' new category pressed"""
         try:
-            layer = int(self.layerNew.GetValue())
+            layer = int(self.layerNew.GetStringSelection())
             cat   = int(self.catNew.GetValue())
             if layer <= 0:
                 raise ValueError
@@ -2639,13 +2707,14 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             dlg.Destroy()
             return False
 
-        if layer not in self.cats.keys():
-            self.cats[layer] = []
+        if layer not in self.cats[self.fid].keys():
+            self.cats[self.fid][layer] = []
 
-        self.cats[layer].append(cat)
+        self.cats[self.fid][layer].append(cat)
 
         # reload list
-        self.itemDataMap = self.list.Populate(update=True)
+        self.itemDataMap = self.list.Populate(self.cats[self.fid],
+                                              update=True)
 
         # update category number for add
         self.catNew.SetValue(cat + 1)
@@ -2656,32 +2725,27 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
 
     def GetLine(self):
         """Get id of selected line of 'None' if no line is selected"""
-        return self.line
+        return self.cats.keys()
 
-    def UpdateDialog(self, query=None, cats=None, line=None):
+    def UpdateDialog(self, query=None, cats=None):
         """Update dialog
         
         @param query {coordinates, distance} - v.edit/v.what
         @param cats  directory layer/cats    - vdigit
         Return True if updated otherwise False
         """
-
-        # line id (if not found remains 'None')
-        self.line = None
-
-        # {layer: [categories]}
+        # line: {layer: [categories]}
         self.cats = {}
-
         # do not display dialog if no line is found (-> self.cats)
         if cats is None:
             ret = self.__GetCategories(query[0], query[1])
         else:
-            # self.cats = dict(cats)
-            for layer in cats.keys():
-                self.cats[layer] = list(cats[layer]) # TODO: tuple to list
-            self.line = line
+            self.cats = cats
+            for line in cats.keys():
+                for layer in cats[line].keys():
+                    self.cats[line][layer] = list(cats[line][layer])
             ret = 1
-        if ret == 0 or not self.line:
+        if ret == 0 or len(self.cats.keys()) < 1:
             Debug.msg(3, "VDigitCategoryDialog(): nothing found!")
             return False
         
@@ -2689,14 +2753,31 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         self.cats_orig = copy.deepcopy(self.cats)
 
         # polulate list
-        self.itemDataMap = self.list.Populate(update=True)
+        self.fid = self.cats.keys()[0]
+        self.itemDataMap = self.list.Populate(self.cats[self.fid],
+                                              update=True)
 
         try:
-            newCat = max(self.cats[1]) + 1
-        except:
+            newCat = max(self.cats[self.fid][1]) + 1
+        except KeyError:
             newCat = 1
         self.catNew.SetValue(newCat)
+        
+        if len(self.cats.keys()) == 1:
+            self.fidText.Show(True)
+            self.fidMulti.Show(False)
+            self.fidText.SetLabel("%d" % self.fid)
+        else:
+            self.fidText.Show(False)
+            self.fidMulti.Show(True)
+            choices = []
+            for fid in self.cats.keys():
+                choices.append(str(fid))
+            self.fidMulti.SetItems(choices)
+            self.fidMulti.SetSelection(0)
 
+        self.Layout()
+        
         return True
 
 class CategoryListCtrl(wx.ListCtrl,
@@ -2714,7 +2795,7 @@ class CategoryListCtrl(wx.ListCtrl,
         listmix.ListCtrlAutoWidthMixin.__init__(self)
         listmix.TextEditMixin.__init__(self)
 
-    def Populate(self, update=False):
+    def Populate(self, cats, update=False):
         """Populate the list"""
 
         itemData = {} # requested by sorter
@@ -2726,8 +2807,8 @@ class CategoryListCtrl(wx.ListCtrl,
             self.DeleteAllItems()
 
         i = 1
-        for layer in self.parent.cats.keys():
-            catsList = self.parent.cats[layer]
+        for layer in cats.keys():
+            catsList = cats[layer]
             for cat in catsList:
                 index = self.InsertStringItem(sys.maxint, str(catsList[0]))
                 self.SetStringItem(index, 0, str(layer))
