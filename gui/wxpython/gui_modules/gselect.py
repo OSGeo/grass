@@ -390,8 +390,7 @@ class VectorDBInfo:
                         break
             
             self.tables[table] = columns
-            #print 'self tables =', self.tables[table]
-
+            
         return True
     
     def Reset(self):
@@ -402,32 +401,31 @@ class VectorDBInfo:
             for name in self.tables[table].keys():
                 self.tables[table][name]['values'] = []
                 self.tables[table][name]['ids']    = []
-
+        
 class LayerSelect(wx.ComboBox):
     """
     Creates combo box for selecting data layers defined for vector.
     The 'layer' terminology is likely to change for GRASS 7
     """
     def __init__(self, parent,
-                 id=wx.ID_ANY, value='1', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, choices=['1'], **kargs):
+                 id=wx.ID_ANY, pos=wx.DefaultPosition,
+                 size=wx.DefaultSize, vector=None, choices=[]):
 
-        super(LayerSelect, self).__init__(parent, id, value, pos, size, choices)
+        super(LayerSelect, self).__init__(parent, id, pos=pos, size=size,
+                                          choices=choices)
 
-        lsvector = kargs['vector'] # vector map to check for attribute tables
-
-        if lsvector == '':
+        if not vector:
             return
-        else:
-            self.InsertLayers(lsvector)
+
+        self.InsertLayers(vector)
         
     def InsertLayers(self, vector):
-        """insert layers for a vector into the layer combobox"""
+        """Insert layers for a vector into the layer combobox"""
         layerchoices = VectorDBInfo(vector).layers.keys()
-        self.SetItems(layerchoices)
-        self.SetSelection(0)
-        self.SetValue('1') # all vectors have a layer 1 by default
 
+        self.SetItems(map(str, layerchoices))
+        self.SetStringSelection('1')
+        
 class ColumnSelect(wx.ComboBox):
     """
     Creates combo box for selecting columns in the attribute table for a vector.
@@ -435,25 +433,22 @@ class ColumnSelect(wx.ComboBox):
     """
     def __init__(self, parent,
                  id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, choices=[''], **kargs):
+                 size=wx.DefaultSize, vector=None, layer=1, choices=[]):
 
         super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices)
 
-        csvector = kargs['vector'] # vector map to check for attribute tables
-        cslayer = kargs['layer'] # data layer connected to attribute table
-
-        if csvector == '' or cslayer == '':
+        if not vector:
             return
-        else:
-            self.InsertColumns(csvector, cslayer)
+
+        self.InsertColumns(vector, layer)
                 
     def InsertColumns(self, vector, layer):
-        """insert columns for a vector attribute table into the columns combobox"""
-        if vector == '' or layer == '': return
-        table = VectorDBInfo(vector).layers[str(layer)]
-        columnchoices = VectorDBInfo(vector).tables[table]
+        """Insert columns for a vector attribute table into the columns combobox"""
+        dbInfo = VectorDBInfo(vector)
+        table = dbInfo.layers[int(layer)]['table']
+        columnchoices = dbInfo.tables[table]
         #columnchoices.sort()
-        self.SetItems(columnchoices)
+        self.SetItems(columnchoices.keys())
 
 class DbColumnSelect(wx.ComboBox):
     """
@@ -478,14 +473,19 @@ class DbColumnSelect(wx.ComboBox):
         """insert columns for a table into the columns combobox"""
         if table == '' : return
         
-        cmd = ['db.columns','table=%s' % table]
-        if dbdriver != '': cmd.append('driver=%s' % dbdriver)
-        if dbdatabase != '': cmd.append('database=%s' % dbdatabase)
+        cmd = ['db.columns',
+               'table=%s' % table]
+        
+        if dbdriver:
+            cmd.append('driver=%s' % dbdriver)
+        if dbdatabase:
+            cmd.append('database=%s' % dbdatabase)
         
         try:
             columnchoices = gcmd.Command(cmd).ReadStdOutput()
         except gcmd.CmdError:
             columnchoices = []
 
-        #columnchoices.sort()
+        # columnchoices.sort()
         self.SetItems(columnchoices)
+    
