@@ -281,15 +281,12 @@ class ColorTable(wx.Frame):
             except:
                 pass
         elif self.cmd == 'vcolors':
-            self.cb_vlayer.InsertLayers(self.inmap)
-            #self.mapDBInfo = dbm.VectorDBInfo(self.inmap)
-            #self.layerchoices = self.mapDBInfo.layers.keys()
-            #for n in range(len(self.layerchoices)):
-            #    self.cb_vlayer.Insert(str(self.layerchoices[n]), n)
-
-            # initialize column selection combox boxes for layer 1
-
             try:
+                # initialize layer selection combobox
+                self.cb_vlayer.InsertLayers(self.inmap)
+                # initialize attribute table for layer=1
+                self.vtable = gselect.VectorDBInfo(self.inmap).layers[str(self.vlayer)]
+                # initialize column selection comboboxes 
                 self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
                 self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
                 self.Update()
@@ -299,6 +296,7 @@ class ColorTable(wx.Frame):
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         self.vlayer = int(event.GetString())
+        self.vtable = gselect.VectorDBInfo(self.inmap).layers[str(self.vlayer)]
         self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
         self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
         self.Update()
@@ -403,13 +401,13 @@ class ColorTable(wx.Frame):
     def CreateColorTable(self):
         rulestxt = ''
         
-        for num in self.ruleslines:
+        for num in range(len(self.ruleslines)):
             if self.ruleslines[num][0] != "":
                 if self.cmd == 'r.colors':
                     rulestxt += self.ruleslines[num][0] + ' ' + self.ruleslines[num][1] + '\n'
                 elif self.cmd == 'vcolors':
                     rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.vtable,
-                        self.vrgb,self.ruleslines[num][1], self.ruleslines[num][0])
+                        self.vrgb, self.ruleslines[num][1], self.ruleslines[num][0])
                 
         if rulestxt == '': return
 
