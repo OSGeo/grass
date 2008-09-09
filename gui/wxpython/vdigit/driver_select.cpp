@@ -112,27 +112,31 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
 std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double z,
 						     double thresh, int type, int with_z)
 {
-    long int line;
+  long int line, line_nearest;
     double px, py, pz;
 
     std::vector<double> p;
 
-    drawSelected = true;
+    struct ilist *found;
 
+    found = Vect_new_list();
+
+    drawSelected = true;
     selected.isId = true;
 
-    line = Vect_find_line(mapInfo, x, y, z,
-			  type, thresh, with_z, 0);
+    line_nearest = Vect_find_line_list(mapInfo, x, y, z,
+				       type, thresh, with_z,
+				       NULL, found);
 
-    if (line > 0) {
-	if (!IsSelected(line)) {
-	    Vect_list_append(selected.values, line);
+    if (line_nearest > 0) {
+	if (!IsSelected(line_nearest)) {
+	    Vect_list_append(selected.values, line_nearest);
 	}
 	else {
-	    Vect_list_delete(selected.values, line);
+	    Vect_list_delete(selected.values, line_nearest);
 	}
-
-	type = Vect_read_line (mapInfo, points, cats, line);
+	
+	type = Vect_read_line (mapInfo, points, cats, line_nearest);
 	Vect_line_distance (points, x, y, z, with_z,
 			    &px, &py, &pz,
 			    NULL, NULL, NULL);
@@ -141,8 +145,29 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
 	if (with_z) {
 	    p.push_back(pz);
 	}
+	
+	/* check for duplicates */
+	if (settings.highlightDupl.enabled) {
+	    for (int i = 0; i < found->n_values; i++) {
+		line = found->value[i];
+		if (line != line_nearest) {
+		    Vect_list_append(selected.values, found->value[i]);
+		}
+	    }
+	    
+	    GetDuplicates();
+	    
+	    for (int i = 0; i < found->n_values; i++) {
+		line = found->value[i];
+		if (line != line_nearest && !IsDuplicated(line)) {
+		    Vect_list_delete(selected.values, line);
+		}
+	    }
+	}
     }
-
+	
+    Vect_destroy_list(found);
+    
     drawSegments = true;
 
     return p;
@@ -413,11 +438,11 @@ std::vector<int> DisplayDriver::GetSelectedVertex(double x, double y, double thr
 
   \return n,s,w,e
 */
-std::vector<int> DisplayDriver::GetRegionSelected()
+std::vector<double> DisplayDriver::GetRegionSelected()
 {
     int line, area, nareas;
     
-    std::vector<int> region;
+    std::vector<double> region;
 
     BOUND_BOX region_box, line_box;
     struct ilist *list, *list_tmp;

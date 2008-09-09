@@ -174,7 +174,7 @@ public:
 
     std::vector<int> GetSelected(bool);
     std::map<int, std::vector <int> > GetDuplicates();
-    std::vector<int> GetRegionSelected();
+    std::vector<double> GetRegionSelected();
     int SetSelected(std::vector<int>, bool);
     int UnSelect(std::vector<int>);
     std::vector<int> GetSelectedVertex(double, double, double);

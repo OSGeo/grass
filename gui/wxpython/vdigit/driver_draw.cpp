@@ -64,7 +64,8 @@ int DisplayDriver::DrawMap(bool force)
 
 	wxBrush *fillArea, *fillAreaSelected, *fillIsle;
 
-	fillArea = new wxBrush(settings.area.color);
+	// fillArea = new wxBrush(settings.area.color);
+	fillArea = new wxBrush(wxColour(100,100,100,0));
 	fillAreaSelected = new wxBrush(settings.highlight);
 	fillIsle = new wxBrush(*wxWHITE_BRUSH);
 	
