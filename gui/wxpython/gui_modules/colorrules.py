@@ -106,7 +106,7 @@ class ColorTable(wx.Frame):
                                    label='Attribute column:')
             self.cb_vrgb_label = wx.StaticText(parent=self, id=wx.ID_ANY,
                                    label='RGB color column:')
-            self.cb_vlayer = gselect.LayerSelect(self, vector='')
+            self.cb_vlayer = gselect.LayerSelect(self)
             self.cb_vcol = gselect.ColumnSelect(self, vector='', layer='')
             self.cb_vrgb = gselect.ColumnSelect(self, vector='', layer='')
 
@@ -281,18 +281,15 @@ class ColorTable(wx.Frame):
             except:
                 pass
         elif self.cmd == 'vcolors':
-            try:
-                # initialize layer selection combobox
-                self.cb_vlayer.InsertLayers(self.inmap)
-                # initialize attribute table for layer=1
-                self.vtable = gselect.VectorDBInfo(self.inmap).layers[str(self.vlayer)]
-                # initialize column selection comboboxes 
-                self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
-                self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
-                self.Update()
-            except:
-                pass
-                
+            # initialize layer selection combobox
+            self.cb_vlayer.InsertLayers(self.inmap)
+            # initialize attribute table for layer=1
+            self.vtable = gselect.VectorDBInfo(self.inmap).layers[int(self.vlayer)]['table']
+            # initialize column selection comboboxes 
+            self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
+            self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
+            self.Update()
+            
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         self.vlayer = int(event.GetString())
