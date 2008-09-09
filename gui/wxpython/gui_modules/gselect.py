@@ -1,18 +1,21 @@
 """
-MODULE: gselect
+@package gselect
 
-CLASSES:
- * Select
- * TreeCrtlComboPopup
+@brief Custom control that selects elements
 
-PURPOSE: Custon control that selects GRASS GIS elements
+Classes:
+ - Select
+ - TreeCrtlComboPopup
+ - VectorDBInfo
+ - LayerSelect
+ - ColumnSelect
 
-AUTHORS: The GRASS Development Team. Michael Barton & Martin Landa
+(C) 2007-2008 by the GRASS Development Team This program is free
+software under the GNU General Public License (>=v2). Read the file
+COPYING that comes with GRASS for details.
 
-COPYRIGHT: (C) 2007 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+@author Michael Barton
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import os
