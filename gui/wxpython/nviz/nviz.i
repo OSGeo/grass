@@ -7,6 +7,8 @@
 #include <grass/gstypes.h>
 %}
 
+#undef check
+
 %include "std_vector.i"
 namespace std { 
    %template(IntVector) vector<int>;
