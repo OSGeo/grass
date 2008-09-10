@@ -114,7 +114,7 @@ C Code debugging Software:
         Python debugger. )
 
     See mini tutorial here:
-    http://grass.gdf-hannover.de/wiki/GRASS_Debugging
+    http://grass.osgeo.org/wiki/GRASS_Debugging
 
 2b) Graphical front-end for command-line debugger: kdbg
       Use the menus
