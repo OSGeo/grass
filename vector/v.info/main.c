@@ -272,8 +272,8 @@ int main(int argc, char *argv[])
 			(long)Vect_get_num_primitives(&Map, GV_KERNEL));
 		printline(line);
 		printline("");
-		sprintf(line, _("  Map is 3D:              %d"),
-			Vect_is_3d(&Map));
+		sprintf(line, _("  Map is 3D:              %s"),
+			Vect_is_3d(&Map) ? "Yes" : "No");
 		printline(line);
 		sprintf(line, _("  Number of dblinks:      %-9ld"),
 			(long)Vect_get_num_dblinks(&Map));
