@@ -7,8 +7,8 @@
 #include "ps_info.h"
 #include "decorate.h"
 #include "local_proto.h"
+#include "distance.h"
 
-#define METERS_TO_INCHES ((double)39.37)
 #define LEFT 0
 #define RIGHT 1
 #define LOWER 0
@@ -28,12 +28,24 @@ int do_scalebar(void)
 
     /* get scale size */
     scale_size =
-	METERS_TO_INCHES * distance(PS.w.east,
-				    PS.w.west) / scale(PS.scaletext);
+	METERS_TO_INCHES * distance(PS.w.east, PS.w.west) / scale(PS.scaletext);
 
     /* convert scale size to map inches */
     length = (sb.length / scale_size) *
 	G_database_units_to_meters_factor() * METERS_TO_INCHES;
+
+    /* if(sb.units == SB_UNITS_AUTO) { do nothing } */
+    if(sb.units == SB_UNITS_METERS)
+	    length /= G_database_units_to_meters_factor();
+    else if(sb.units == SB_UNITS_KM)
+	    length *= KILOMETERS_TO_METERS / G_database_units_to_meters_factor();
+    else if(sb.units == SB_UNITS_FEET)
+	    length *= FEET_TO_METERS / G_database_units_to_meters_factor();
+    else if(sb.units == SB_UNITS_MILES)
+	    length *= MILES_TO_METERS / G_database_units_to_meters_factor();
+    else if(sb.units == SB_UNITS_NMILES)
+	    length *= NAUT_MILES_TO_METERS / G_database_units_to_meters_factor();
+
     width = sb.height;
     seg = sb.segment;
     j = 0;
@@ -176,6 +188,31 @@ int do_scalebar(void)
 
 	}
     }
+
+
+    /* draw units label */
+    if (sb.units == SB_UNITS_AUTO)
+	strcpy(num, G_database_unit_name(TRUE));
+    else if(sb.units == SB_UNITS_METERS)
+	strcpy(num, "meters");
+    else if(sb.units == SB_UNITS_KM)
+	strcpy(num, "kilometers");
+    else if(sb.units == SB_UNITS_FEET)
+	strcpy(num, "feet");
+    else if(sb.units == SB_UNITS_MILES)
+	strcpy(num, "miles");
+    else if(sb.units == SB_UNITS_NMILES)
+	strcpy(num, "nautical miles");
+    
+    text_box_path(72.0 * (x + length/2), 72.0 * (PS.page_height - (sb.y + 0.075)),
+	CENTER, UPPER, num, sb.fontsize, 0);
+
+    if (sb.bgcolor) {
+	set_rgb_color(WHITE);
+	fprintf(PS.fp, "F ");
+    }
+    set_rgb_color(BLACK);
+    fprintf(PS.fp, "TIB\n");
 
 
     return 0;

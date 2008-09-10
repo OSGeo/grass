@@ -14,6 +14,7 @@
 static char *help[] = {
     "where      x y",
     "length	length",
+    "units	auto|meters|kilometers|feet|miles|nautmiles",
     "height	height",
     "segment	no_segemnts",
     "numbers	no_labels",
@@ -38,6 +39,7 @@ int read_scalebar(void)
     sb.x = PS.page_width / 2.;
     sb.y = 2.;
     sb.bgcolor = 1;		/* default is "on" [white|none] (TODO: multi-color) */
+    sb.units = SB_UNITS_AUTO;   /* default to automatic based on value in PROJ_UNITS */
 
 
     while (input(2, buf, help)) {
@@ -66,6 +68,36 @@ int read_scalebar(void)
 	    }
 	    else
 		continue;
+	}
+
+	if (KEY("units")) {
+	    G_strip(data);
+	    if (strcmp(data, "auto") == 0) {
+		sb.units = SB_UNITS_AUTO;
+		continue;
+	    }
+	    else if (strcmp(data, "meters") == 0) {
+		sb.units = SB_UNITS_METERS;
+		continue;
+	    }
+	    else if (strcmp(data, "kilometers") == 0 || strcmp(data, "km") == 0) {
+		sb.units = SB_UNITS_KM;
+		continue;
+	    }
+	    else if (strcmp(data, "feet") == 0) {
+		sb.units = SB_UNITS_FEET;
+		continue;
+	    }
+	    else if (strcmp(data, "miles") == 0) {
+		sb.units = SB_UNITS_MILES;
+		continue;
+	    }
+	    else if (strcmp(data, "nautmiles") == 0 || strcmp(data, "nm") == 0) {
+		sb.units = SB_UNITS_NMILES;
+		continue;
+	    }
+	    else
+		error(key, data, "illegal units request");
 	}
 
 	if (KEY("segment")) {

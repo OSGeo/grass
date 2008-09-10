@@ -154,7 +154,8 @@ The default is 10.
 </DD>
 
 
-<DT><a name="NAMED_COLORS"></a><B>color</B> <EM>name</EM>
+<a name="NAMED_COLORS"></a>
+<DT><B>color</B> <EM>name</EM>
 
 <DD>The following colors names are accepted by <EM>ps.map</EM>:
 <tt>
@@ -1024,9 +1025,10 @@ Draws a scalebar on the map.
 <PRE>
 USAGE:	<B>scalebar</B> [f|s]
 	<B>where</B> x y
-	<B>length</B> scale length
-	<B>height</B> scale height
-	<B>segment</B> no. segments
+	<B>length</B> overall distance in map units
+	<B>units</B> [auto|meters|kilometers|feet|miles|nautmiles]
+	<B>height</B> scale height in inches
+	<B>segment</B> number of segments
 	<B>numbers</B> #
 	<B>fontsize</B> font size
 	<B>background</B> [Y|n]
@@ -1035,11 +1037,16 @@ USAGE:	<B>scalebar</B> [f|s]
 Draw one of two types of scale bar.
 Fancy (f) draws alternating black and white scale boxes.
 Simple (s) draws a plain line scale. The default type is fancy.
+
 The subsection instructions allow the user to set <B>where</B> the scalebar
 is placed, the <B>length</B> of the scalebar (in geographic coordinate
-system units), the <B>height</B> of the scalebar in inches, and the number of
+system units, or those given by <B>units</B>),
+<!-- bonus prize for code explorers: you can use km and nm abbreviations
+     for kilometers and nautmiles units -->
+the <B>height</B> of the scalebar in inches, and the number of
 <B>segments</B> (or tics for simple). The <B>number</B> of annotations
 numbers every n-th segment.
+
 The <B>background</B> command can turn off the background box for the text.
 <P>
 The scalebar <B>length</B> is the only required argument. The defaults are a
@@ -1049,8 +1056,10 @@ halfway across.
 <P>
 NOTE: The scalebar is centered on the location given.
 <P>
-This example draws a simple scalebar 1000 meters (for a metered database, like UTM) long,
-with tics every 200 meters, labeled every second tic. The scalebar is drawn 5 inches from the top and 4 inches from the left and is 0.25 inches high.
+This example draws a simple scalebar 1000 meters (for a metered database,
+like UTM) long, with tics every 200 meters, labeled every second tic.
+The scalebar is drawn 5 inches from the top and 4 inches from the left
+and is 0.25 inches high.
 <PRE>
 EXAMPLE:
 	<B>scalebar</B> s
@@ -1252,7 +1261,7 @@ in the pattern file.
 Pattern may be scaled with the <b>scale</b> command. Several standard hatching
 patterns are provided in <tt>$GISBASE/etc/paint/patterns/</tt>.
 Demonstrative images can be found on the
-<a href="http://grass.gdf-hannover.de/wiki/AreaFillPatterns">GRASS Wiki site</a>.
+<a href="http://grass.osgeo.org/wiki/AreaFillPatterns">GRASS Wiki site</a>.
 
 You can also create your own custom pattern files in a text editor. 
 Example of pattern file:
