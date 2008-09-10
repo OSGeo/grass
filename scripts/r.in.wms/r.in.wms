@@ -368,13 +368,13 @@ listLayers() {
 	if  [ "$GIS_FLAG_G" -eq 1 ] ; then
 	    g.message -v message=""
 	    if [ "$USE_WGET" ] ; then
-		wget $GIS_OPT_WGETOPTIONS "${GIS_OPT_MAPSERVER}${STRING}" \
+		wget $GIS_OPT_WGETOPTIONS "${GIS_OPT_MAPSERVER}?${STRING}" \
 		  -O "$CAPABILITIES_FILE";
-		message 1 "wget $GIS_OPT_WGETOPTIONS \"${GIS_OPT_MAPSERVER}${STRING}\" -O \"$CAPABILITIES_FILE\";"
+		message 1 "wget $GIS_OPT_WGETOPTIONS \"${GIS_OPT_MAPSERVER}?${STRING}\" -O \"$CAPABILITIES_FILE\";"
 	    else
 		curl $GIS_OPT_CURLOPTIONS -o "$CAPABILITIES_FILE" \
-		  "${GIS_OPT_MAPSERVER}${STRING}"
-		message 1 "curl $GIS_OPT_CURLOPTIONS -o \"$CAPABILITIES_FILE\" \"${GIS_OPT_MAPSERVER}${STRING}\""
+		  "${GIS_OPT_MAPSERVER}?${STRING}"
+		message 1 "curl $GIS_OPT_CURLOPTIONS -o \"$CAPABILITIES_FILE\" \"${GIS_OPT_MAPSERVER}?${STRING}\""
 	    fi
 	    g.message -v message=""
 	fi
@@ -560,6 +560,9 @@ fi
 
 message 1 "r.in.gdalwarp $GDALWARP"
 eval "r.in.gdalwarp $GDALWARP"
+if [ $? -ne 0 ] ; then
+   exit 1
+fi
 
 r.support map="$GIS_OPT_OUTPUT" title="WMS Download" history="" \
   source1=`echo "$GIS_OPT_MAPSERVER" | cut -c-70` \
