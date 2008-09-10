@@ -1201,48 +1201,49 @@ class BufferedWindow(MapWindow, wx.Window):
             elif digitToolbar.GetAction() in ["displayAttrs", "displayCats"]:
                 qdist = digitClass.driver.GetThreshold(type='selectThresh')
                 coords = (east, north)
+                if digitClass.type == 'vdigit':
+                    # unselect
+                    digitClass.driver.SetSelected([])
+
+                    # select feature by point
+                    cats = {}
+                    if digitClass.driver.SelectLineByPoint(coords,
+                                                        digitClass.GetSelectType()) is not None:
+                        if UserSettings.Get(group='vdigit', key='checkForDupl',
+                                            subkey='enabled'):
+                            lines = digitClass.driver.GetSelected()
+                        else:
+                            lines = (digitClass.driver.GetSelected()[0],) # only first found
+                        
+                        for line in lines:
+                            cats[line] = digitClass.GetLineCats(line)
+                    
                 if digitToolbar.GetAction() == "displayAttrs":
                     # select attributes based on coordinates (all layers)
                     if self.parent.dialogs['attributes'] is None:
                         if digitClass.type == 'vedit':
                             self.parent.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self, map=map,
-                                                                                       query=(coords, qdist),
-                                                                                       pos=posWindow,
-                                                                                       action="update")
+                                                                                            query=(coords, qdist),
+                                                                                            pos=posWindow,
+                                                                                            action="update")
                         else:
-                            if digitClass.driver.SelectLineByPoint(coords,
-                                                                   digitClass.GetSelectType()) is not None:
-                                self.parent.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self, map=map,
-                                                                                                cats=digitClass.GetLineCats(),
-                                                                                                line=digitClass.driver.GetSelected()[0],
-                                                                                                action="update")
-
+                            self.parent.dialogs['attributes'] = dbm.DisplayAttributesDialog(parent=self, map=map,
+                                                                                            cats=cats,
+                                                                                            action="update")
                     else:
                         # update currently open dialog
                         if digitClass.type == 'vedit':
                             self.parent.dialogs['attributes'].UpdateDialog(query=(coords, qdist))
                         else:
-                            # unselect
-                            digitClass.driver.SetSelected([])
-                            # select new feature
-                            if digitClass.driver.SelectLineByPoint(coords,
-                                                                   digitClass.GetSelectType()) is None:
-                                line = None
-                            else:
-                                line = digitClass.driver.GetSelected()[0]
                             # upgrade dialog
-                            self.parent.dialogs['attributes'].UpdateDialog(cats=digitClass.GetLineCats(),
-                                                                           line=line)
+                            self.parent.dialogs['attributes'].UpdateDialog(cats=cats)
 
                     if self.parent.dialogs['attributes']:
-                        if self.parent.dialogs['attributes'].IsFound():
+                        if len(cats.keys()) > 0:
                             # highlight feature & re-draw map
-                            line = self.parent.dialogs['attributes'].GetLine()
-                            digitClass.driver.SetSelected(line)
                             if not self.parent.dialogs['attributes'].IsShown():
                                 self.parent.dialogs['attributes'].Show()
                         else:
-                            digitClass.driver.SetSelected([])
                             if self.parent.dialogs['attributes'] and \
                                    self.parent.dialogs['attributes'].IsShown():
                                 self.parent.dialogs['attributes'].Hide()
@@ -1258,61 +1259,30 @@ class BufferedWindow(MapWindow, wx.Window):
                                                         title=_("Update categories"))
                             self.parent.dialogs['category'] = dlg
                         else:
-                            if digitClass.driver.SelectLineByPoint(coords,
-                                                                   digitClass.GetSelectType()) is not None:
-                                if UserSettings.Get(group='vdigit', key='checkForDupl',
-                                                    subkey='enabled'):
-                                    lines = digitClass.driver.GetSelected()
-                                else:
-                                    lines = (digitClass.driver.GetSelected()[0],) # only first found
-                                
-                                cats = {}
-                                for line in lines:
-                                    cats[line] = digitClass.GetLineCats(line)
-                                
-                                dlg = VDigitCategoryDialog(parent=self,
-                                                           map=map,
-                                                           cats=cats,
-                                                           pos=posWindow,
-                                                           title=_("Update categories"))
-                                self.parent.dialogs['category'] = dlg
+                            dlg = VDigitCategoryDialog(parent=self,
+                                                       map=map,
+                                                       cats=cats,
+                                                       pos=posWindow,
+                                                       title=_("Update categories"))
+                            self.parent.dialogs['category'] = dlg
                     else:
                         # update currently open dialog
                         if digitClass.type == 'vedit':
                             self.parent.dialogs['category'].UpdateDialog(query=(coords, qdist))
                         else:
-                            # unselect
-                            digitClass.driver.SetSelected([])
-                            # select new feature
-                            if digitClass.driver.SelectLineByPoint(coords,
-                                                                   digitClass.GetSelectType()):
-                                if UserSettings.Get(group='vdigit', key='checkForDupl',
-                                                    subkey='enabled'):
-                                    lines = digitClass.driver.GetSelected()
-                                else:
-                                    lines = (digitClass.driver.GetSelected()[0],) # only first found
-                                
-                                cats = {}
-                                for line in lines:
-                                    cats[line] = digitClass.GetLineCats(line)
-                                
-                                # upgrade dialog
-                                self.parent.dialogs['category'].UpdateDialog(cats=cats)
-                            else:
-                                line = None
+                            # upgrade dialog
+                            self.parent.dialogs['category'].UpdateDialog(cats=cats)
                             
                     if self.parent.dialogs['category']:
-                        line = self.parent.dialogs['category'].GetLine()
-                        if line:
+                        if len(cats.keys()) > 0:
                             # highlight feature & re-draw map
                             ### digitClass.driver.SetSelected(line)
                             if not self.parent.dialogs['category'].IsShown():
                                 self.parent.dialogs['category'].Show()
                         else:
-                            digitClass.driver.SetSelected([])
                             if self.parent.dialogs['category'].IsShown():
                                 self.parent.dialogs['category'].Hide()
-
+                
                 self.UpdateMap(render=False)
 
             elif digitToolbar.GetAction() in ("copyCats", "copyAttrs"):
@@ -3459,7 +3429,7 @@ class MapFrame(wx.Frame):
             else:
                 self.dialogs['attributes'].UpdateDialog(query=((east, north), qdist))
 
-        cats = self.dialogs['attributes'].GetLine(id=False)
+        cats = self.dialogs['attributes'].GetCats()
         try:
             qlayer = self.Map.GetListOfLayers(l_name=globalvar.QUERYLAYER)[0]
         except IndexError:
@@ -3475,7 +3445,6 @@ class MapFrame(wx.Frame):
                 self.AddTmpVectorMapLayer(mapName, cats, useId=False)
 
             self.MapWindow.UpdateMap(render=False, renderVector=False)
-            # digitClass.driver.SetSelected([line])
             if not self.dialogs['attributes'].IsShown():
                 self.dialogs['attributes'].Show()
         else:

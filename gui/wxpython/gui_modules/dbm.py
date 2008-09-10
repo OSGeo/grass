@@ -2732,10 +2732,10 @@ class DisplayAttributesDialog(wx.Dialog):
         self.action = action
 
         # ids/cats of selected features
-        self.line = {}
-        self.line['id'] = None
-        self.line['cats'] = None
-
+        # fid : {layer : cats}
+        self.cats = {}
+        self.fid = -1 # feature id
+        
         # get layer/table/column information
         self.mapDBInfo = VectorDBInfo(self.map)
         
@@ -2769,7 +2769,16 @@ class DisplayAttributesDialog(wx.Dialog):
                                        label=_("Close dialog on submit"))
         self.closeDialog.SetValue(True)
 
-        self.UpdateDialog(query=query, cats=cats, line=line)
+        # feature id (text/choice for duplicates)
+        self.fidMulti = wx.Choice(parent=self, id=wx.ID_ANY,
+                                  size=(150, -1))
+        self.fidMulti.Bind(wx.EVT_CHOICE, self.OnFeature)
+        self.fidText = wx.StaticText(parent=self, id=wx.ID_ANY)
+
+        self.noFoundMsg = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                        label=_("No attributes found"))
+        
+        self.UpdateDialog(query=query, cats=cats)
 
         # set title
         if self.action == "update":
@@ -2792,7 +2801,21 @@ class DisplayAttributesDialog(wx.Dialog):
         btnSizer.AddButton(btnSubmit)
         btnSizer.Realize()
 
-        mainSizer.Add(item=self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=self.noFoundMsg, proportion=0,
+                      flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(item=self.notebook, proportion=1,
+                      flag=wx.EXPAND | wx.ALL, border=5)
+        fidSizer = wx.BoxSizer(wx.HORIZONTAL)
+        fidSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
+                                        label=_("Feature id:")),
+                     proportion=0, border=5,
+                     flag=wx.ALIGN_CENTER_VERTICAL)
+        fidSizer.Add(item=self.fidMulti, proportion=0,
+                     flag=wx.EXPAND | wx.ALL,  border=5)
+        fidSizer.Add(item=self.fidText, proportion=0,
+                     flag=wx.EXPAND | wx.ALL,  border=5)
+        mainSizer.Add(item=fidSizer, proportion=0,
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5)
         mainSizer.Add(item=self.closeDialog, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                       border=5)
         mainSizer.Add(item=btnSizer, proportion=0,
@@ -2943,17 +2966,25 @@ class DisplayAttributesDialog(wx.Dialog):
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
 
-    def GetLine(self, id=True):
+    def OnFeature(self, event):
+        self.fid = int(event.GetString())
+        self.UpdateDialog(cats=self.cats, fid=self.fid)
+        
+    def GetCats(self):
         """Get id of selected vector object or 'None' if nothing selected
 
         @param id if true return ids otherwise cats
         """
-        if id:
-            return self.line['id']
+        if self.fid < 0:
+            return None
+        
+        return self.cats[self.fid]
 
-        return self.line['cats']
-
-    def UpdateDialog(self, map=None, query=None, cats=None, line=None):
+    def GetFid(self):
+        """Get selected feature id"""
+        return self.fid
+    
+    def UpdateDialog(self, map=None, query=None, cats=None, fid=-1):
         """Update dialog
 
         Return True if updated otherwise False
@@ -2962,9 +2993,6 @@ class DisplayAttributesDialog(wx.Dialog):
             self.map = map
             # get layer/table/column information
             self.mapDBInfo = VectorDBInfo(self.map)
-            
-        self.line['id'] = (line, )
-        self.line['cats'] = cats
         
         if not self.mapDBInfo:
             return False
@@ -2977,36 +3005,53 @@ class DisplayAttributesDialog(wx.Dialog):
         if query: # select by position
             data = self.mapDBInfo.SelectByPoint(query[0],
                                                 query[1])
+            self.cats = {}
             if data and data.has_key('Layer'):
-                self.line['id'] = (-1,)
-                self.line['cats'] = {}
                 idx = 0
-                for l in data['Layer']:
-                    layer = int(l)
-                    if not self.line['cats'].has_key(layer):
-                        self.line['cats'][layer] = []
-                        
-                    self.line['cats'][layer].append(int(data['Category'][idx]))
+                for layer in data['Layer']:
+                    layer = int(layer)
+                    tfid = int(data['Id'][idx])
+                    if not self.cats.has_key(tfid):
+                        self.cats[tfid] = {}
+                    if not self.cats[tfid].has_key(layer):
+                        self.cats[tfid][layer] = []
+                    cat = int(data['Category'][idx])
+                    self.cats[tfid][layer].append(cat)
                     idx += 1
-                
-                nselected = len(self.line['cats'].keys())
-                
-            else:
-                self.line['id'] = None
-                self.line['cats'] = None
-                nselected = 0
+        else:
+            self.cats = cats
+
+        if fid > 0:
+            self.fid = fid
+        elif len(self.cats.keys()) > 0:
+            self.fid = self.cats.keys()[0]
+        else:
+            self.fid = -1
+        
+        if len(self.cats.keys()) == 1:
+            self.fidMulti.Show(False)
+            self.fidText.Show(True)
+            self.fidText.SetLabel("%d" % self.fid)
+        else:
+            self.fidMulti.Show(True)
+            self.fidText.Show(False)
+            choices = []
+            for tfid in self.cats.keys():
+                choices.append(str(tfid))
+            self.fidMulti.SetItems(choices)
+            self.fidMulti.SetStringSelection(str(self.fid))
         
         # reset notebook
         self.notebook.DeleteAllPages()
 
         for layer in layers: # for each layer
             if not query: # select by layer/cat
-                if cats.has_key(layer): 
-                    for cat in cats[layer]:
+                if self.fid > 0 and self.cats[self.fid].has_key(layer): 
+                    for cat in self.cats[self.fid][layer]:
                         nselected = self.mapDBInfo.SelectFromTable(layer,
                                                                    where="%s=%d" % \
-                                                                       (self.mapDBInfo.layers[layer]['key'],
-                                                                        cat))
+                                                                   (self.mapDBInfo.layers[layer]['key'],
+                                                                    cat))
                 else:
                     nselected = 0
 
@@ -3015,13 +3060,13 @@ class DisplayAttributesDialog(wx.Dialog):
 
             if self.action == "add":
                 if nselected <= 0:
-                    if cats.has_key(layer):
+                    if self.cats[self.fid].has_key(layer):
                         table = self.mapDBInfo.layers[layer]["table"]
                         key = self.mapDBInfo.layers[layer]["key"]
                         columns = self.mapDBInfo.tables[table]
                         for name in columns.keys():
                             if name == key:
-                                for cat in cats[layer]:
+                                for cat in self.cats[self.fid][layer]:
                                     self.mapDBInfo.tables[table][name]['values'].append(cat)
                             else:
                                 self.mapDBInfo.tables[table][name]['values'].append(None)
@@ -3031,22 +3076,6 @@ class DisplayAttributesDialog(wx.Dialog):
             table   = self.mapDBInfo.layers[layer]["table"]
             key   = self.mapDBInfo.layers[layer]["key"]
             columns = self.mapDBInfo.tables[table]
-
-            # value
-            #             if len(columns[key]['values']) == 0: # no cats
-            #                 self.notebook.AddPage(page=panel, text=" %s %d / %s %d" % (_("Layer"), layer,
-            #                                                                            _("Category"), cat))
-            
-            #                 sizer  = wx.BoxSizer(wx.VERTICAL)
-            #                 txt = wx.StaticText(parent=panel, id=wx.ID_ANY,
-            #                                     label=_("No database record available."))
-            #                 sizer.Add(txt, proportion=1,
-            #                           flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER | wx.EXPAND)
-            #                 border.Add(item=sizer, proportion=1,
-            #                            flag=wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_CENTER,
-            #                            border=10)
-            #                 panel.SetSizer(border)
-            #                 continue
             
             for idx in range(len(columns[key]['values'])):
                 for name in columns.keys():
@@ -3108,16 +3137,14 @@ class DisplayAttributesDialog(wx.Dialog):
             # for each category END
         # for each layer END
 
+        if self.notebook.GetPageCount() == 0:
+            self.noFoundMsg.Show(True)
+        else:
+            self.noFoundMsg.Show(False)
+        
         self.Layout()
         
         return True
-
-    def IsFound(self):
-        """Check if attributes found"""
-        if self.notebook.GetPageCount() > 0:
-            return True
-        
-        return False
         
 class VectorDBInfo(gselect.VectorDBInfo):
     """Class providing information about attribute tables
