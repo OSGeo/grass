@@ -54,7 +54,6 @@
 #endif
 
 #define DATA(map, r, c)		(map)[(r) * ncols + (c)]
-/*#define DEBUG */
 
 void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
 {
@@ -77,10 +76,10 @@ void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
     /* Find the (cell) location spotting might reach */
 
     land_dist = pick_dist(DATA(map_spotdist, pres_cell->row, pres_cell->col));
-#ifdef DEBUG
-    printf("pres_cell(%d, %d): land_dist=%d\n", pres_cell->row,
+
+    G_debug(1, "pres_cell(%d, %d): land_dist=%d", pres_cell->row,
 	   pres_cell->col, land_dist);
-#endif
+
     land_distc = land_dist / (window.ns_res / 100);	/* 100 fac due to cm */
 
     if (land_distc < 2)		/* no need for adjacent cells */
@@ -98,17 +97,17 @@ void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
 
     if (DATA(map_mois, row, col) > 17)	/* too wet */
 	return;
-#ifdef DEBUG
-    printf
-	("	pre pick_ignite(): land_distc(%d, %d)=%d dir=%d PI=%.2f (dir\%360)*PI/180=%.2f\n",
-	 row, col, land_distc, dir, PI, (dir % 360) * PI / 180);
-#endif
+
+    G_debug(1,
+      "	pre pick_ignite(): land_distc(%d, %d)=%d dir=%d PI=%.2f (dir%%360)*PI/180=%.2f",
+	  row, col, land_distc, dir, PI, (dir % 360) * PI / 180);
+
     if (pick_ignite(DATA(map_mois, row, col)) == 0)	/* not success */
 	return;
-#ifdef DEBUG
-    printf("	post pick_ignite(): land_distc(%d, %d)=%d \n", row, col,
-	   land_distc);
-#endif
+
+    G_debug(1, "	post pick_ignite(): land_distc(%d, %d)=%d ",
+	   row, col, land_distc);
+
     /* travel time by spotting */
 
     U = 0.305 * DATA(map_velocity, pres_cell->row, pres_cell->col);
@@ -124,10 +123,8 @@ void spot(struct costHa *pres_cell, int dir /* direction of forward ROS */ )
     min_cost = pres_cell->min_cost + spot_cost + Te;
 
     /* update it to the to_cell */
-#ifdef DEBUG
-    printf("		min_cost=%.2f: pres=%.2f spot=%.2f Te=%.2f\n",
+    G_debug(1, "		min_cost=%.2f: pres=%.2f spot=%.2f Te=%.2f",
 	   min_cost, pres_cell->min_cost, spot_cost, Te);
-#endif
 
     update(pres_cell, row, col, (double)dir, min_cost);
 }
