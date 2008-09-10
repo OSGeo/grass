@@ -11,9 +11,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include "ps_info.h"
+#include "distance.h"
 
-#define METERS_TO_INCHES ((double)39.37)
-#define MILES_TO_INCHES  ((double)5280*12)
 #define PWIDTH	(PS.page_width-PS.left_marg-PS.right_marg)
 static double do_scale(char *);
 

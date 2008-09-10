@@ -8,8 +8,8 @@
 #include "ps_info.h"
 #include "group.h"
 #include "local_proto.h"
+#include "distance.h"
 
-#define METERS_TO_INCHES ((double)39.37)
 
 int map_setup(void)
 {
