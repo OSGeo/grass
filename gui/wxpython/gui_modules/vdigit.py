@@ -2474,7 +2474,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             catNew = int(event.GetLabel())
 
         try:
-            if layerNew not in self.cats.keys():
+            if layerNew not in self.cats[self.fid].keys():
                 self.cats[layerNew] = []
             self.cats[layerNew].append(catNew)
             self.cats[layerOld].remove(catOld)
@@ -2485,7 +2485,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
             dlg = wx.MessageDialog(self, _("Unable to add new layer/category <%(layer)s/%(category)s>.\n"
                                            "Layer and category number must be integer.\n"
                                            "Layer number must be greater then zero.") %
-                                   { 'layer': str(self.layerNew.GetValue()),
+                                   { 'layer': self.layerNew.GetStringSelection(),
                                      'category' : str(self.catNew.GetValue()) },
                                    _("Error"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
