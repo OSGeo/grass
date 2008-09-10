@@ -806,7 +806,7 @@ int G_parser(int argc, char **argv)
 			j++;
 		    }
 		    if (!found) {
-			G_warning(_("BUG in descriptions, option %s in %s does not exist"),
+			G_warning(_("BUG in descriptions, option '%s' in <%s> does not exist"),
 				  tokens[i], opt->key);
 		    }
 		    else {
