@@ -118,70 +118,52 @@ void select_linksB(struct costHa *pres_cell, int least, float comp_dens)
 	    continue;
 
 	for (col = pres_cell->col - w; col <= pres_cell->col + e; col++) {
-#ifdef DEBUG
-	    printf
-		("(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d\n",
+
+	    G_debug(4,
+		"(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d",
 		 row, col, ros_max, ros_base, dir, least, n, s, e, w,
 		 DATA(map_base, row, col), BARRIER);
-#endif
 
 	    if (col < 0 || col >= ncols)	/*outside e,w */
 		continue;
-#ifdef DEBUG
-	    printf
-		("(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d\n",
+
+	    G_debug(4,
+		"(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d",
 		 row, col, ros_max, ros_base, dir, least, n, s, e, w,
 		 DATA(map_base, row, col), BARRIER);
-#endif
 
 	    if (row == pres_cell->row && col == pres_cell->col)
 		continue;	/*spread cell */
-#ifdef DEBUG
-	    printf
-		("(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d\n",
+
+	    G_debug(4,
+		"(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d",
 		 row, col, ros_max, ros_base, dir, least, n, s, e, w,
 		 DATA(map_base, row, col), BARRIER);
-#endif
 
 	    if (DATA(map_visit, row, col))	/*visited? */
 		continue;
-#ifdef DEBUG
-	    printf
-		("(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d\n",
+
+	    G_debug(4,
+		"(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d base=%d BARRIER=%d",
 		 row, col, ros_max, ros_base, dir, least, n, s, e, w,
 		 DATA(map_base, row, col), BARRIER);
-#endif
 
 	    if (DATA(map_base, row, col) == BARRIER)	/*barriers */
 		continue;
 
-#ifdef DEBUG
-	    printf
-		("(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d\n",
+	     G_debug(4,
+		"(%d, %d) max=%d base=%d dir=%d least=%d n=%d s=%d e=%d w=%d",
 		 row, col, ros_max, ros_base, dir, least, n, s, e, w);
-#endif
 	    angle =
 		atan2((double)(col - pres_cell->col),
 		      (double)(pres_cell->row - row));
 
 	    /*the polar (square) distance of enlarged ellipse */
 	    polar_len =
-		(1 /
-		 (1 -
-		  (1 - ros_base / (float)ros_max) * cos(angle -
-							dir_angle))) * (1 /
-									(1 -
-									 (1 -
-									  ros_base
-									  /
-									  (float)
-									  ros_max)
-									 *
-									 cos
-									 (angle
-									  -
-									  dir_angle)))
-		+ 2 * least * least;
+		(1 / (1 - (1 - ros_base / (float)ros_max)
+			* cos(angle - dir_angle))) *
+			(1 / (1 - (1 - ros_base / (float)ros_max) *
+			cos(angle - dir_angle))) + 2 * least * least;
 
 	    /*the (square) distance to this cell */
 	    distance =

@@ -39,8 +39,6 @@
 
 #define DATA(map, r, c)		(map)[(r) * ncols + (c)]
 
-/*#define DEBUG */
-
 CELL range_min, range_max;
 CELL *cell;
 CELL *x_cell;
@@ -505,23 +503,15 @@ int main(int argc, char *argv[])
     heap_len = 0;
 
     G_message(_("Reading %s..."), start_layer);
-#ifdef DEBUG
-    printf("Collecting origins...");
-#endif
+    G_debug(1, "Collecting origins...");
     collect_ori(start_fd);
-#ifdef DEBUG
-    printf("Done\n");
-#endif
+    G_debug(1, "Done");
 
 
     /* Major computation of spread time */
-#ifdef DEBUG
-    printf("Spreading...");
-#endif
+    G_debug(1, "Spreading...");
     spread();
-#ifdef DEBUG
-    printf("Done\n");
-#endif
+    G_debug(1, "Done");
 
 
     /*  Open cumulative cost layer (and x, y direction layers) for writing */

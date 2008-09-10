@@ -80,7 +80,7 @@ void collect_ori(int start_fd)
 		    DATA(map_x_out, row, col) = col;
 		if (y_out)
 		    DATA(map_y_out, row, col) = row;
-		/*DEBUG printf("\norigin: row=%d col=%d\n", row, col); */
+		G_debug(4, "origin: row=%d col=%d", row, col);
 #if 0
 		if (display)
 		    draw_a_burning_cell(row, col);
