@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     struct
     {
 	/* please, remove before GRASS 7 released */
-	struct Flag *display, *spotting, *verbose;
+	struct Flag *display, *spotting;
     } flag;
     struct GModule *module;
 
@@ -229,11 +229,6 @@ int main(int argc, char *argv[])
     parm.y_out->description =
 	_("Name of raster map to contain Y_BACK coordiates");
 
-    /* please, remove before GRASS 7 released */
-    flag.verbose = G_define_flag();
-    flag.verbose->key = 'v';
-    flag.verbose->description = _("Run VERBOSELY");
-
     flag.display = G_define_flag();
     flag.display->key = 'd';
 #if 0
@@ -252,13 +247,6 @@ int main(int argc, char *argv[])
 
 
     srand(getpid());
-
-    /* please, remove before GRASS 7 released */
-    if (flag.verbose->answer) {
-	putenv("GRASS_VERBOSE=0");
-	G_warning(_("The '-v' flag is superseded and will be removed "
-		    "in future. Please use '--verbose' instead."));
-    }
 
     display = flag.display->answer;
 #if 1
@@ -341,9 +329,8 @@ int main(int argc, char *argv[])
 
     /*  Get database window parameters  */
 
-    if (G_get_window(&window) < 0) {
+    if (G_get_window(&window) < 0)
 	G_fatal_error("can't read current window parameters");
-    }
 
     /*  find number of rows and columns in window    */
 
@@ -363,66 +350,57 @@ int main(int argc, char *argv[])
 
     /*  Check if input layers exists in data base  */
 
-    if (G_find_cell2(max_layer, "") == NULL) {
+    if (G_find_cell2(max_layer, "") == NULL)
 	G_fatal_error("Raster map <%s> not found", max_layer);
-    }
 
-    if (G_find_cell2(dir_layer, "") == NULL) {
+    if (G_find_cell2(dir_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), dir_layer);
-    }
 
-    if (G_find_cell2(base_layer, "") == NULL) {
+    if (G_find_cell2(base_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), base_layer);
-    }
 
-    if (G_find_cell2(start_layer, "") == NULL) {
+    if (G_find_cell2(start_layer, "") == NULL)
 	G_fatal_error(_("Raster map <%s> not found"), start_layer);
-    }
 
     if (spotting) {
-	if (G_find_cell2(spotdist_layer, "") == NULL) {
+	if (G_find_cell2(spotdist_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), spotdist_layer);
-	}
-	if (G_find_cell2(velocity_layer, "") == NULL) {
+
+	if (G_find_cell2(velocity_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), velocity_layer);
-	}
-	if (G_find_cell2(mois_layer, "") == NULL) {
+
+	if (G_find_cell2(mois_layer, "") == NULL)
 	    G_fatal_error(_("Raster map <%s> not found"), mois_layer);
-	}
     }
 
     /*  Open input cell layers for reading  */
 
     max_fd = G_open_cell_old(max_layer, G_find_cell2(max_layer, ""));
-    if (max_fd < 0) {
+    if (max_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), max_layer);
-    }
 
     dir_fd = G_open_cell_old(dir_layer, G_find_cell2(dir_layer, ""));
-    if (dir_fd < 0) {
+    if (dir_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), dir_layer);
-    }
 
     base_fd = G_open_cell_old(base_layer, G_find_cell2(base_layer, ""));
-    if (base_fd < 0) {
+    if (base_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), base_layer);
-    }
 
     if (spotting) {
 	spotdist_fd =
 	    G_open_cell_old(spotdist_layer, G_find_cell2(spotdist_layer, ""));
-	if (spotdist_fd < 0) {
+	if (spotdist_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), spotdist_layer);
-	}
+
 	velocity_fd =
 	    G_open_cell_old(velocity_layer, G_find_cell2(velocity_layer, ""));
-	if (velocity_fd < 0) {
+	if (velocity_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), velocity_layer);
-	}
+
 	mois_fd = G_open_cell_old(mois_layer, G_find_cell2(mois_layer, ""));
-	if (mois_fd < 0) {
+	if (mois_fd < 0)
 	    G_fatal_error(_("Unable to open raster map <%s>"), mois_layer);
-	}
     }
 
     /*  Allocate memories for a row  */
@@ -490,9 +468,8 @@ int main(int argc, char *argv[])
      */
 
     start_fd = G_open_cell_old(start_layer, G_find_cell2(start_layer, ""));
-    if (start_fd < 0) {
+    if (start_fd < 0)
 	G_fatal_error(_("Unable to open raster map <%s>"), start_layer);
-    }
 
     G_read_range(start_layer, G_find_file("cell", start_layer, ""), &range);
     G_get_range_min_max(&range, &range_min, &range_max);
