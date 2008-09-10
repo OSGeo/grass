@@ -4,7 +4,7 @@ written by M. Neteler, $Date$
 
 
 Related Wiki documents:
-* http://grass.gdf-hannover.de/wiki/GRASS_Migration_to_OSGeo
+* http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo
 
 == GRASS Web server ==
 
@@ -140,14 +140,12 @@ Notes:
 
 Maintainer: Markus Neteler
 
-* http://grass.gdf-hannover.de
-* Mediawiki, sponsored by GDF Hannover, Germany
+* http://grass.osgeo.org
+* Mediawiki, sponsored by Telascience.org (San Diego)
 * requires registration to keep spammers out
 
 Summary: The system should run almost autonomous. An eye must be
          be kept on people trying to spam the site
-
-TODO: migrate to OSGeo
 
 == GRASS IRC ==
 
