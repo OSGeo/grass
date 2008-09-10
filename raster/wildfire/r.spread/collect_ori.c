@@ -39,7 +39,6 @@ int init_time;
 int least;
 int spotting;
 int time_lag;
-int verbose;
 int x_out;
 int y_out;
 
@@ -57,18 +56,17 @@ void collect_ori(int start_fd)
     int row, col;
 
     for (row = 0; row < nrows; row++) {
-	if (verbose)
-	    G_percent(row, nrows, 2);
+	G_percent(row, nrows, 2);
+
 	if (G_get_map_row(start_fd, cell, row) < 0)
 	    exit(1);
+
 	for (col = 0; col < ncols; col++) {
 	    if (*(cell + col) > 0) {
 		/*Check if starting sources legally ? */
 		if (DATA(map_base, row, col) <= 0) {
-		    sprintf(buf,
-			    "can't start from a BARRIER at cell (%d,%d), request ignored\n",
+		    G_warning("Can't start from a BARRIER at cell (%d,%d), request ignored",
 			    col, row);
-		    G_warning(buf);
 		    continue;
 		}
 
@@ -76,6 +74,7 @@ void collect_ori(int start_fd)
 		insertHa((float)init_time, zero, row, col, heap, &heap_len);
 		/*mark it to avoid redundant computing */
 		DATA(map_visit, row, col) = 1;
+
 		if (x_out)
 		    DATA(map_x_out, row, col) = col;
 		if (y_out)
@@ -92,8 +91,9 @@ void collect_ori(int start_fd)
 	    }
 	}
     }
-    if (verbose)
-	G_percent(row, nrows, 2);
+
+    G_percent(row, nrows, 2);
+
 #ifdef DEBUG
     {
 	int i;

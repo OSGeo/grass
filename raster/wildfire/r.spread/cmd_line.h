@@ -28,7 +28,6 @@ extern int init_time;
 extern int least;
 extern int spotting;
 extern int time_lag;
-extern int verbose;
 extern int x_out;
 extern int y_out;
 #endif /* CMD_LINE_H */
