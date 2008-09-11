@@ -32,7 +32,7 @@ extern "C" {
    \param snap   snapping mode (see vedit.h)
    \param thresh threshold value for snapping
 
-   \return 0 on success
+   \return fid on success
    \return -1 on failure
 */
 int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
@@ -148,7 +148,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	Vect_close(BgMap[0]);
     }
 
-    return 0;
+    return newline;
 }
 
 /**

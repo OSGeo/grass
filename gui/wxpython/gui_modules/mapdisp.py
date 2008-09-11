@@ -1140,7 +1140,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     else:
                         point = False
 
-                    if digitClass.AddPoint(map, point, east, north) < 0:
+                    fid = digitClass.AddPoint(map, point, east, north)
+                    if fid < 0:
                         return
 
                     self.UpdateMap(render=False) # redraw map
@@ -1148,9 +1149,10 @@ class BufferedWindow(MapWindow, wx.Window):
                     # add new record into atribute table
                     if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled')  is True:
                         # select attributes based on layer and category
-                        cats = {}
-                        cats[UserSettings.Get(group='vdigit', key="layer", subkey='value')] = \
-                                                              (UserSettings.Get(group='vdigit', key="category", subkey='value'), )
+                        cats = { fid : {
+                                UserSettings.Get(group='vdigit', key="layer", subkey='value') :
+                                    (UserSettings.Get(group='vdigit', key="category", subkey='value'), )
+                                }}
                         addRecordDlg = dbm.DisplayAttributesDialog(parent=self, map=map,
                                                                    cats=cats,
                                                                    pos=posWindow,
@@ -1763,7 +1765,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     if len(self.polycoords) < 2: # ignore 'one-point' lines
                         return
                     
-                    if digitClass.AddLine(map, line, self.polycoords) < 0:
+                    fid = digitClass.AddLine(map, line, self.polycoords)
+                    if fid < 0:
                         return
                     
                     position = self.Cell2Pixel(self.polycoords[-1])
@@ -1776,9 +1779,11 @@ class BufferedWindow(MapWindow, wx.Window):
                                                          position[1] + self.dialogOffset))
 
                         # select attributes based on layer and category
-                        cats = {}
-                        cats[UserSettings.Get(group='vdigit', key="layer", subkey='value')] = \
-                                                              (UserSettings.Get(group='vdigit', key="category", subkey='value'), )
+                        cats = { fid : {
+                                UserSettings.Get(group='vdigit', key="layer", subkey='value') :
+                                    (UserSettings.Get(group='vdigit', key="category", subkey='value'), )
+                                }}
+
                         addRecordDlg = dbm.DisplayAttributesDialog(parent=self, map=map,
                                                                    cats=cats,
                                                                    pos=posWindow,
