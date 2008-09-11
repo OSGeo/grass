@@ -124,8 +124,9 @@ class AbstractDigit:
                         return True
             else:
                 cat = self.digit.GetCategory(UserSettings.Get(group='vdigit', key='layer', subkey='value'))
+                cat += 1
                 UserSettings.Set(group='vdigit', key='category', subkey='value',
-                                  value=cat + 1)
+                                 value=cat)
     
     def SetCategory(self):
         """Return category number to use (according Settings)"""
@@ -820,7 +821,7 @@ class VDigit(AbstractDigit):
         else:
             layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
             cat   = self.SetCategory()
-
+            
         if point:
             type = wxvdigit.GV_POINT 
         else:
@@ -1281,9 +1282,12 @@ class AbstractDisplayDriver:
         if units is None:
             units = UserSettings.Get(group='vdigit', key=type, subkey='units')
 
+        reg = self.mapwindow.Map.region
+        if value < 0:
+            value = (reg['nsres'] + reg['ewres']) / 2.
+        
         if units == "screen pixels":
             # pixel -> cell
-            reg = self.mapwindow.Map.region
             if reg['nsres'] > reg['ewres']:
                 res = reg['nsres']
             else:
@@ -1740,6 +1744,7 @@ class VDigitSettingsDialog(wx.Dialog):
                                          initial=UserSettings.Get(group='vdigit', key="snapping", subkey='value'),
                                          min=-1, max=1e6)
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
+        self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
         self.snappingUnit = wx.Choice(parent=panel, id=wx.ID_ANY, size=(125, -1),
                                       choices=["screen pixels", "map units"])
         self.snappingUnit.SetStringSelection(UserSettings.Get(group='vdigit', key="snapping", subkey='units'))
@@ -2103,7 +2108,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.snappingInfo.SetLabel(_("Snapping disabled"))
         elif value < 0:
             self.snappingInfo.SetLabel(_("Snapping threshold is %(value).1f %(units)s "
-                                         "(based on computation resolution)") % 
+                                         "(based on comp. resolution)") % 
                                        {'value' : threshold,
                                         'units' : self.mapUnits.lower()})
         else:

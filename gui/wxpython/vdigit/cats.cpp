@@ -75,7 +75,7 @@ int Digit::InitCats()
     for(std::map<int, int>::const_iterator b = cats.begin(), e = cats.end();
 	b != e; ++b ) {
 	if (b->second == PORT_INT_MIN) {
-	    cats[b->first] = 0;
+	    cats[b->first] = 0; /* first category 1 */
 	    G_debug(3, "wxDigit.InitCats(): layer=%d, cat=%d", b->first, cats[b->first]);
 	}
 
@@ -89,7 +89,7 @@ int Digit::InitCats()
 
    \param layer layer number
 
-   \return category number (1 if no category found)
+   \return category number (0 if no category found)
    \return -1 on error
 */
 int Digit::GetCategory(int layer)
@@ -99,7 +99,7 @@ int Digit::GetCategory(int layer)
 	return cats[layer];
     }
 
-    return -1;
+    return 0;
 }
 
 /**

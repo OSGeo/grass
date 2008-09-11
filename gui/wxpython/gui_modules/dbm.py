@@ -3189,7 +3189,10 @@ class VectorDBInfo(gselect.VectorDBInfo):
                     name, value = item.split(':')
                     name = name.strip()
                     # append value to the column
-                    value = self.tables[table][name]['ctype'] (value.strip())
+                    if len(value) < 1:
+                        value = None
+                    else:
+                        value = self.tables[table][name]['ctype'] (value.strip())
                     self.tables[table][name]['values'].append(value)
                 else:
                     if not data.has_key(key):
