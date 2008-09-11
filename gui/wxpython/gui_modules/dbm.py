@@ -507,6 +507,7 @@ class AttributeManager(wx.Frame):
         self.btnQuit.Bind(wx.EVT_BUTTON,            self.OnCloseWindow)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.browsePage)
+        self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged, self.manageTablePage)
         
         # do layout
         self.__layout()
