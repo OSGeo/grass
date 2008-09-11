@@ -1057,7 +1057,7 @@ class AttributeManager(wx.Frame):
         cats = map(int, list.GetSelectedItems())
 
         digitToolbar = self.mapdisplay.toolbars['vdigit']
-        if digitToolbar and \
+        if digitToolbar and digitToolbar.GetLayer() and \
                 digitToolbar.GetLayer().GetName() == self.vectmap:
 
             self.mapdisplay.digit.driver.SetSelected(cats, cats=True)
