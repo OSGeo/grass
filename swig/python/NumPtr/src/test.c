@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 void test1(double *a, int n)
 {
     int i;
