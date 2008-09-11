@@ -711,24 +711,6 @@ void G_ls_format(char **, int, int, FILE *);
 int G_ludcmp(double **, int, int *, double *);
 void G_lubksb(double **, int, int *, double[]);
 
-/* lzw.c */
-unsigned char *lzw_decode(unsigned char *, unsigned int);
-int lzw_expand(int (*)(), int (*)());
-int G_lzw_nof_read_bytes(void);
-int G_lzw_max_used_bits(void);
-void G_lzw_set_bits(int);
-int G_lzw_compress(unsigned char *, unsigned char *, int);
-int G_lzw_expand(unsigned char *, unsigned char *, int);
-int G_lzw_compress_count_only_array(unsigned char *, int);
-int G_lzw_compress_count_only_file(int);
-int G_lzw_write(int, unsigned char *, int);
-int G_lzw_write_noCompress(int, unsigned char *, int);
-int G_lzw_test_status(int);
-int G_lzw_read2(int, unsigned char *, int, int);
-int G_lzw_read(int, unsigned char *, int);
-int G_lzw_transfer_compress(int, int, int);
-int G_lzw_transfer_expand(int, int, int);
-
 /* mach_name.c */
 char *G__machine_name(void);
 
