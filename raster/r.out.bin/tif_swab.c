@@ -38,18 +38,13 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#ifdef __MINGW32__
-typedef unsigned char u_char;
-typedef unsigned long u_long;
-#endif
-
 /* Local header pulled from tiff.h and tiffio.h */
 #include "./swab.h"
 
 #ifndef TIFFSwabShort
 void TIFFSwabShort(uint16 * wp)
 {
-    register u_char *cp = (u_char *) wp;
+    uint8 *cp = (uint8 *) wp;
     int t;
 
     t = cp[1];
@@ -61,7 +56,7 @@ void TIFFSwabShort(uint16 * wp)
 #ifndef TIFFSwabLong
 void TIFFSwabLong(uint32 * lp)
 {
-    register u_char *cp = (u_char *) lp;
+    uint8 *cp = (uint8 *) lp;
     int t;
 
     t = cp[3];
@@ -74,14 +69,14 @@ void TIFFSwabLong(uint32 * lp)
 #endif
 
 #ifndef TIFFSwabArrayOfShort
-void TIFFSwabArrayOfShort(uint16 * wp, register u_long n)
+void TIFFSwabArrayOfShort(uint16 * wp, unsigned long n)
 {
-    register u_char *cp;
-    register int t;
+    uint8 *cp;
+    int t;
 
     /* XXX unroll loop some */
     while (n-- > 0) {
-	cp = (u_char *) wp;
+	cp = (uint8 *) wp;
 	t = cp[1];
 	cp[1] = cp[0];
 	cp[0] = t;
@@ -91,10 +86,10 @@ void TIFFSwabArrayOfShort(uint16 * wp, register u_long n)
 #endif
 
 #ifndef TIFFSwabArrayOfLong
-void TIFFSwabArrayOfLong(register uint32 * lp, register u_long n)
+void TIFFSwabArrayOfLong(uint32 * lp, unsigned long n)
 {
-    register unsigned char *cp;
-    register int t;
+    unsigned char *cp;
+    int t;
 
     /* XXX unroll loop some */
     while (n-- > 0) {
@@ -113,7 +108,7 @@ void TIFFSwabArrayOfLong(register uint32 * lp, register u_long n)
 #ifndef TIFFSwabDouble
 void TIFFSwabDouble(double *dp)
 {
-    register uint32 *lp = (uint32 *) dp;
+    uint32 *lp = (uint32 *) dp;
     int t;
 
     TIFFSwabArrayOfLong(lp, 2);
@@ -124,10 +119,10 @@ void TIFFSwabDouble(double *dp)
 #endif
 
 #ifndef TIFFSwabArrayOfDouble
-void TIFFSwabArrayOfDouble(double *dp, register u_long n)
+void TIFFSwabArrayOfDouble(double *dp, unsigned long n)
 {
-    register uint32 *lp = (uint32 *) dp;
-    register uint32 t;
+    uint32 *lp = (uint32 *) dp;
+    uint32 t;
 
     TIFFSwabArrayOfLong(lp, n + n);
     while (n-- > 0) {
@@ -222,7 +217,7 @@ const unsigned char *TIFFGetBitRevTable(int reversed)
     return (reversed ? TIFFBitRevTable : TIFFNoBitRevTable);
 }
 
-void TIFFReverseBits(register u_char * cp, register u_long n)
+void TIFFReverseBits(uint8 * cp, unsigned long n)
 {
     for (; n > 8; n -= 8) {
 	cp[0] = TIFFBitRevTable[cp[0]];

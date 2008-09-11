@@ -48,34 +48,28 @@
 #include <string.h>
 #include <float.h>
 #include <sys/types.h>
+#include <tiffio.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "rasterfile.h"
-#include "tiffio.h"
-
 
 /* global variables */
-#ifdef __MINGW32__
-typedef unsigned char u_char;
-typedef unsigned short u_short;
-typedef unsigned long u_long;
-#endif
 
 #define MAX_TILE_LENGTH 512
 
 #define	howmany(x, y)	(((x)+((y)-1))/(y))
 #define	streq(a,b)	(strcmp(a,b) == 0)
 
-u_short config = PLANARCONFIG_CONTIG;
-u_short compression = -1;
-u_short rowsperstrip = 0;
+unsigned short config = PLANARCONFIG_CONTIG;
+unsigned short compression = -1;
+unsigned short rowsperstrip = 0;
 
 /* global functions */
 static int write_tfw(const char *, const struct Cell_head *);
 
 int main(int argc, char *argv[])
 {
-    u_char *buf, *tmpptr;
+    unsigned char *buf, *tmpptr;
     int row, linebytes;
     TIFF *out;
     int in;
@@ -191,13 +185,13 @@ int main(int argc, char *argv[])
     mapsize = 1 << h.ras_depth;
 
     if (palette) {
-	register u_short *redp, *grnp, *blup, *mapptr;
-	register int i;
+	unsigned short *redp, *grnp, *blup, *mapptr;
+	int i;
 
 	G_debug(1, "max %f min %f mapsize %d",
 		colors.cmax, colors.cmin, mapsize);
 
-	mapptr = (u_short *) G_calloc(mapsize * 3, sizeof(u_short));
+	mapptr = (unsigned short *) G_calloc(mapsize * 3, sizeof(unsigned short));
 	redp = mapptr;
 	grnp = redp + mapsize;
 	blup = redp + mapsize * 2;
@@ -207,9 +201,9 @@ int main(int argc, char *argv[])
 
 	for (i = colors.cmin; i <= colors.cmax; i++, redp++, grnp++, blup++) {
 	    G_get_color(i, &red, &grn, &blu, &colors);
-	    *redp = (u_short) (SCALE(red));
-	    *grnp = (u_short) (SCALE(grn));
-	    *blup = (u_short) (SCALE(blu));
+	    *redp = (unsigned short) (SCALE(red));
+	    *grnp = (unsigned short) (SCALE(grn));
+	    *blup = (unsigned short) (SCALE(blu));
 
 	    G_debug(1, " %d : %d %d %d   %d %d %d",
 		    i, red, grn, blu, *redp, *grnp, *blup);
@@ -289,7 +283,7 @@ int main(int argc, char *argv[])
 		    if (palette) {
 			cellptr += col;
 			for (j = 0; j < width; j++)
-			    *tptr++ = (u_char) * cellptr++;
+			    *tptr++ = (unsigned char) * cellptr++;
 
 			tptr += oskew;
 		    }
@@ -297,9 +291,9 @@ int main(int argc, char *argv[])
 			for (j = 0; j < width; j++) {
 			    G_get_color(cellptr[col + j], &red, &grn, &blu,
 					&colors);
-			    *tptr++ = (u_char) red;
-			    *tptr++ = (u_char) grn;
-			    *tptr++ = (u_char) blu;
+			    *tptr++ = (unsigned char) red;
+			    *tptr++ = (unsigned char) grn;
+			    *tptr++ = (unsigned char) blu;
 			}
 
 			tptr += oskew * 3;
@@ -328,12 +322,12 @@ int main(int argc, char *argv[])
 		TIFFScanlineSize(out));
 
 	if (TIFFScanlineSize(out) > linebytes)
-	    buf = (u_char *) G_malloc(linebytes);
+	    buf = (unsigned char *) G_malloc(linebytes);
 	else
-	    buf = (u_char *) G_malloc(TIFFScanlineSize(out));
+	    buf = (unsigned char *) G_malloc(TIFFScanlineSize(out));
 
-	if (rowsperstrip != (u_short) - 1)
-	    rowsperstrip = (u_short) (8 * 1024 / linebytes);
+	if (rowsperstrip != (unsigned short) - 1)
+	    rowsperstrip = (unsigned short) (8 * 1024 / linebytes);
 
 	G_debug(1, "rowsperstrip = %d", rowsperstrip);
 
@@ -351,14 +345,14 @@ int main(int argc, char *argv[])
 	    cellptr = cell;
 	    if (palette) {
 		for (col = 0; col < h.ras_width; col++)
-		    *tmpptr++ = (u_char) (*cellptr++ - colors.cmin);
+		    *tmpptr++ = (unsigned char) (*cellptr++ - colors.cmin);
 	    }
 	    else {
 		for (col = 0; col < h.ras_width; col++) {
 		    G_get_color(cell[col], &red, &grn, &blu, &colors);
-		    *tmpptr++ = (u_char) red;
-		    *tmpptr++ = (u_char) grn;
-		    *tmpptr++ = (u_char) blu;
+		    *tmpptr++ = (unsigned char) red;
+		    *tmpptr++ = (unsigned char) grn;
+		    *tmpptr++ = (unsigned char) blu;
 		}
 	    }
 
