@@ -55,7 +55,7 @@ int check_stats(const char *name)
     G_message(_("Updating histogram range..."));
     i = histo_num = G_get_histogram_num(&histogram);
     while (i >= 0) {
-	G_percent(i, histo_num, 10);
+	G_percent(i, histo_num, 2);
 
 	if (data_type == CELL_TYPE)
 	    G_update_range(G_get_histogram_cat(i--, &histogram), &range);

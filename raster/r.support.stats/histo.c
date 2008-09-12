@@ -48,7 +48,7 @@ int do_histogram(const char *name)
 
     /* Update statistics for each row */
     for (row = 0; row < nrows; row++) {
-	G_percent(row, nrows, 10);
+	G_percent(row, nrows, 2);
 
 	if (G_get_map_row_nomask(fd, cell, row) < 0)
 	    break;
