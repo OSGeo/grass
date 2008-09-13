@@ -454,12 +454,14 @@ static void create_map(const char *input, int band, const char *output,
 	struct Range range;
 	range.min = (CELL)info->range[0];
 	range.max = (CELL)info->range[1];
+	range.first_time = 0;
 	G_write_range(output, &range);
     }
     else {
 	struct FPRange fprange;
 	fprange.min = info->range[0];
 	fprange.max = info->range[1];
+	fprange.first_time = 0;
 	G_write_fp_range(output, &fprange);
 	write_fp_format(output, info);
 	write_fp_quant(output);
