@@ -10,13 +10,18 @@
 #include "colortable.h"
 #include "local_proto.h"
 
+#define LEFT 0
+#define RIGHT 1
+#define LOWER 0
+#define UPPER 1
+#define CENTER 2
 
 #define NSTEPS 3
 #define NNSTEP 4		/* number of nice steps */
 
 int PS_fcolortable(void)
 {
-    char buf[512], *ch;
+    char buf[512], *ch, units[GNAME_MAX];
     int i, k;
     int R, G, B;
     DCELL dmin, dmax, val;
@@ -34,7 +39,8 @@ int PS_fcolortable(void)
     struct FPRange range;
     double ex, cur_d, cur_ex;
     int do_color;
-    double grey_color_val;
+    double grey_color_val, margin;
+    int max_label_length = 0;
 
     /* let user know what's happenning */
     G_message(_("Creating color table for <%s in %s>..."),
@@ -122,6 +128,7 @@ int PS_fcolortable(void)
     x1 = l;
     x2 = x1 + width;
     fprintf(PS.fp, "%.8f W\n", cwidth);
+
     for (i = 0; i < ncols; i++) {
 	/*      val = dmin + i * step;   flip */
 	val = dmax - i * step;
@@ -233,7 +240,30 @@ int PS_fcolortable(void)
 	    fprintf(PS.fp, "(%s) %f %f MS\n", buf, x2 + 0.2 * fontsize,
 		    y - 0.35 * fontsize);
 
+	if(strlen(buf) > max_label_length)
+	    max_label_length = strlen(buf);
+
 	val += step;
+    }
+
+
+    /* print units label, if present */
+    if (G_read_raster_units(ct.name, ct.mapset, units) != 0)
+        units[0] = '\0';
+
+    /* TODO: nicer placement as label length changes; realign for tickbar mode */
+    if(strlen(units)) {
+	margin = 0.2 * fontsize;
+	if (margin < 2)
+	    margin = 2;
+	fprintf(PS.fp, "/mg %.1f def\n", margin);
+
+	text_box_path( x2 + max_label_length*(fontsize*.7),
+		t - height/2,
+	        LEFT, CENTER, units, fontsize, 0);
+
+	set_rgb_color(BLACK); 
+	fprintf(PS.fp, "TIB\n");
     }
 
     G_free_colors(&colors);
