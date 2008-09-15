@@ -98,10 +98,11 @@ int G__create_window_mapping(int fd)
 	}
     }
 
-    G_debug(3, "create window mapping (%d cols)", G__.window.cols);
-    for (i = 0; i < G__.window.cols; i++)
-	G_debug(3, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
+    G_debug(3, "create window mapping (%d columns)", G__.window.cols);
+/*  for (i = 0; i < G__.window.cols; i++)
+	fprintf(stderr, "%s%ld", i % 15 ? " " : "\n", (long)fcb->col_map[i]);
     fprintf(stderr, "\n");
+*/
 
     /* compute C1,C2 for row window mapping */
     fcb->C1 = G__.window.ns_res / fcb->cellhd.ns_res;
