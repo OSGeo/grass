@@ -257,6 +257,13 @@ int PS_fcolortable(void)
 	    margin = 2;
 	fprintf(PS.fp, "/mg %.1f def\n", margin);
 
+	/* Hint from Glynn:
+	   You can use the `stringwidth` operator to obtain the width of a string
+	   (the distance that the current point will move if you `show` the string).
+	   If the string is short, you can obtain the bounding box with a combination
+	   of the `charpath` and `pathbbox` operators (if the string is long,
+	   `charpath` may overflow the maximum path length). */
+
 	/* select label position */
 	label_posn = 3;
 	/*  1 2
