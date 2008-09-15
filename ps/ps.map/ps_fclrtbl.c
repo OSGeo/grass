@@ -26,7 +26,7 @@ int PS_fcolortable(void)
     int R, G, B;
     DCELL dmin, dmax, val;
     double t, l, r;		/* legend top, left, right */
-    double x1, x2, y, dy, fontsize;
+    double x1, x2, y, dy, fontsize, xu, yu;
     double col_width;
     double width;		/* width of legend in map units */
     double height;		/* width of legend in map units */
@@ -40,7 +40,7 @@ int PS_fcolortable(void)
     double ex, cur_d, cur_ex;
     int do_color;
     double grey_color_val, margin;
-    int max_label_length = 0;
+    int max_label_length = 0, label_posn, label_xref, label_yref;
 
     /* let user know what's happenning */
     G_message(_("Creating color table for <%s in %s>..."),
@@ -251,17 +251,66 @@ int PS_fcolortable(void)
     if (G_read_raster_units(ct.name, ct.mapset, units) != 0)
         units[0] = '\0';
 
-    /* TODO: nicer placement as label length changes; realign for tickbar mode */
     if(strlen(units)) {
 	margin = 0.2 * fontsize;
 	if (margin < 2)
 	    margin = 2;
 	fprintf(PS.fp, "/mg %.1f def\n", margin);
 
-	text_box_path( x2 + max_label_length*(fontsize*.7),
-		t - height/2,
-	        LEFT, CENTER, units, fontsize, 0);
+	/* select label position */
+	label_posn = 3;
+	/*  1 2
+	       3
+	     5 4 */
+	switch (label_posn) {
+	case 1:
+	    /* above the tick numbers */
+	    xu = x1;
+	    yu = t + 0.05*72;
+	    label_xref = LEFT;
+	    label_yref = LOWER;
+	    break;
+	case 2:
+	    /* directly above the tick numbers */
+	    if (ct.tickbar)
+		xu += x1 + 0.2 * fontsize;
+	    else
+		xu += x2 + 0.2 * fontsize;
+	    yu = t + 0.05*72;
+	    label_xref = LEFT;
+	    label_yref = LOWER;
+	    break;
+	case 3:
+	    /* to the right of the tick numbers */
+	    xu = 0.15*72 + max_label_length*fontsize*0.5;
+	    if (ct.tickbar)
+		xu += x1;
+	    else
+		xu += x2;
+	    yu = t - height/2;
+	    label_xref = LEFT;
+	    label_yref = CENTER;
+	    break;
+	case 4:
+	    /* directly below the tick numbers */
+	    if (ct.tickbar)
+		xu += x1 + 0.2 * fontsize;
+	    else
+		xu += x2 + 0.2 * fontsize;
+	    yu = t - height - 0.05*72;
+	    label_xref = LEFT;
+	    label_yref = UPPER;
+	    break;
+	case 5:
+	    /* below the tick numbers */
+	    xu = x1;
+	    yu = t - height - 0.05*72;
+	    label_xref = LEFT;
+	    label_yref = UPPER;
+	    break;
+	}
 
+	text_box_path( xu, yu, label_xref, label_yref, units, fontsize, 0);
 	set_rgb_color(BLACK); 
 	fprintf(PS.fp, "TIB\n");
     }
