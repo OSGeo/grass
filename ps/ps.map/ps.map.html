@@ -239,38 +239,42 @@ USAGE:	<B>colortable</B> [y|n]
 </PRE>
 The color table will display the colors for each raster map layer
 category value and the category label.
-If <B>raster</B> is omitted, the colortable defaults to a previously registered raster layer.
+If <B>raster</B> is omitted, the colortable defaults to a previously
+registered raster layer.
 The legend's <B>range</B> can be adjusted for floating point rasters, but if 
 set beyond the extent of the map's range be sure that you have set up color 
 rules with <em>r.colors</em> which cover this range.
 The default location for the colortable is immediately below any other
 map legend information, starting at the left margin.
 The default text color is black.
+
 Omitting the <B>colortable</B> instruction would result in
 no color table. For floating point legends <B>width</B> is width of color
 band only. <B>height</B> is used only for floating point legend.
 Adding the <B>nodata n</B> instruction will prevent the "no data" box 
 from being drawn (category based legends only).
+
 Adding the <B>tickbar y</B> instruction will change the tick mark style
 so that ticks are drawn across the color table instead of protruding out 
 to the right (floating point legends only).
+
+If the map has been given a data units label with r.support then this
+label will be displayed.
+<!-- bonus prize for code explorers: you can switch the label placement by
+    editing the label_posn variable in ps.map/ps_fclrtbl.c -->
 <P> 
-<B>Note</B>:  Be careful about asking for color tables for
+<B>Note</B>:  Be careful about asking for color tables for integer
 raster map layers which have many categories, such as elevation.
 This could result in the printing of an extremely long color table!
 <P>
 Another issue is that the color table only includes categories which
-have a label. If there are only a few categories, you can use
-r.support to manually add labels. If there are too many categories to
-do this, you could write a script to add dummy labels to the cats file<br>
-(&lt;gisdbase&gt;/&lt;location&gt;/&lt;mapset&gt;/cats/&lt;mapname&gt;).
+have a label. You can use the r.category module to add labels.
 <P>
 If the colortable is turned off with a &quot;<tt>colortable&nbsp;n</tt>&quot;
 instruction the <B>end</B> command should not be given as the  
 main command will be treated as a single line instruction.
 
 <P>
-
 This example would print a color table immediately below any other map legend
 information, starting at the left margin, with 4 columns:
 <PRE>
@@ -1157,7 +1161,8 @@ the text box <B>border</B> color;
 This reference point specifies the text handle - what
 part of the text should be placed on the location specified by the map
 coordinates.  Reference points can refer to:
-[lower|upper|center] [left|right|center] of the text to be printed; The default is center center, i.e the text is centered on the reference point.
+[lower|upper|center] [left|right|center] of the text to be printed;
+The default is center center, i.e the text is centered on the reference point.
 <P>
 <B>rotate</B>
 sets the text rotation angle, measured in degrees counter-clockwise.
@@ -1256,8 +1261,8 @@ first vector is used.
 simple PostScript commands. It is similar to EPS but more limited, meaning that
 while each pattern file is a true EPS file, most EPS files are not useful as pattern
 files because they contain restricted commands. Color and width of patterns are set
-by <B>fcolor</B> (red, green, ..., none, R:G:B) and <B>width</B> until overwritten
-in the pattern file.
+by <B>fcolor</B> (red, green, ..., none, R:G:B) and <B>width</B> until
+overwritten in the pattern file.
 Pattern may be scaled with the <b>scale</b> command. Several standard hatching
 patterns are provided in <tt>$GISBASE/etc/paint/patterns/</tt>.
 Demonstrative images can be found on the
