@@ -149,10 +149,10 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define GRASS_DIRSEP '/'
 #ifdef __MINGW32__
 #  define HOST_DIRSEP '\\'
-#  define G_DEV_NULL 'NUL:'
+#  define G_DEV_NULL "NUL:"
 #else
 #  define HOST_DIRSEP '/'
-#  define G_DEV_NULL '/dev/null'
+#  define G_DEV_NULL "/dev/null"
 #endif
 
  /**/ typedef enum
@@ -278,16 +278,17 @@ struct Cell_head
     double bottom;
 };
 
+struct _Color_Value_
+{
+    DCELL value;
+    unsigned char red;
+    unsigned char grn;
+    unsigned char blu;
+};
+
 struct _Color_Rule_
 {
-    struct
-    {
-	DCELL value;
-	unsigned char red;
-	unsigned char grn;
-	unsigned char blu;
-    } low, high;
-
+    struct _Color_Value_ low, high;
     struct _Color_Rule_ *next;
     struct _Color_Rule_ *prev;
 };
