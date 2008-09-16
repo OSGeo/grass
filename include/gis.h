@@ -247,7 +247,6 @@ enum
 typedef int CELL;
 typedef double DCELL;
 typedef float FCELL;
-extern CELL CELL_NODATA;
 
 typedef int RASTER_MAP_TYPE;
 
