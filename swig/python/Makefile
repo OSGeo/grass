@@ -9,8 +9,6 @@ CFLAGS=-c -fpic -I. $(ARCH_INC) $(GDALCFLAGS) $(PYTHONCFLAGS)
 
 LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) $(VECTLIB) $(IMAGERYLIB) $(GMATHLIB) $(GISLIB)
 
-# TODO: build the NumPtr module. See NumPtr/README.GRASS
-#SUBDIRS = NumPtr
 #include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 default: _$(LIB_NAME).so numptr
