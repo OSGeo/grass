@@ -3,9 +3,9 @@ MODULE_TOPDIR = ../..
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
-CFLAGS=-c -fpic -I./ -I$(ARCH_DISTDIR)/include $(GDALCFLAGS) $(PYTHONCFLAGS)
+CFLAGS=-c -fpic -I. $(ARCH_INC) $(GDALCFLAGS) $(PYTHONCFLAGS)
 
-LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) -lgrass_I -lgrass_Iortho -lgrass_bitmap -lgrass_btree -lgrass_cdhc -lgrass_datetime -lgrass_dbmibase -lgrass_dbmiclient -lgrass_dbmidriver -lgrass_dbstubs -lgrass_dgl -lgrass_display -lgrass_dspf -lgrass_edit -lgrass_form -lgrass_g3d -lgrass_gis -lgrass_gmath -lgrass_gproj -lgrass_interpdata -lgrass_interpfl -lgrass_linkm -lgrass_qtree -lgrass_raster -lgrass_rowio -lgrass_rtree -lgrass_segment -lgrass_shape -lgrass_sites -lgrass_symb -lgrass_trans -lgrass_vask -lgrass_vect -lgrass_psdriver
+LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) $(VECTLIB) $(IMAGERYLIB) $(GISLIB)
 
 # TODO: build the NumPtr module. See NumPtr/README.GRASS
 #SUBDIRS = NumPtr
@@ -17,8 +17,7 @@ clean:
 	-rm -f *.o *.so python_grass7_wrap.c python_grass7.pyc python_grass7.py
 
 python_grass7_wrap.c: python_grass7.i
-	$(MAKE) -C interfaces
-	$(SWIG) -python -shadow $<
+	$(SWIG) $(ARCH_INC) -python -shadow $<
 
 
 python_grass7_wrap.o: python_grass7_wrap.c
