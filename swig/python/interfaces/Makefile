@@ -20,7 +20,7 @@ gis:
 	echo >> gis.i
 	cat ../../../include/gis.h | \
 		sed -e 'N;N;N;N;N;N;N;N;N; s/_Color_Rule_[ \t\n]*{[ \t\n]*\(.*}\) low.*/_Color_Rule_\n{\n    \1 low;\n    \1 high;\n/' \
-		>> gis.i
+		| grep -v 'CELL_NODATA' >> gis.i
 
 vector:
 	echo $(HEADER_LINE1) >  dig_structs.i
