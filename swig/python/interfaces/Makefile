@@ -15,7 +15,12 @@ gis:
 	cat ../../../include/gisdefs.h | \
 		sed -e '/\.\.\..*;/d' -e '/\.\.\./,/;/d' \
 		-e '/^#/d' >> gisdefs.i
-#	gis.h  (gis.i based on gis.h c.12/17/04 (r16393)
+	echo $(HEADER_LINE1) >  gis.i
+	echo $(HEADER_LINE2) >> gis.i
+	echo >> gis.i
+	cat ../../../include/gis.h | \
+		sed -e 'N;N;N;N;N;N;N;N;N; s/_Color_Rule_[ \t\n]*{[ \t\n]*\(.*}\) low.*/_Color_Rule_\n{\n    \1 low;\n    \1 high;\n/' \
+		>> gis.i
 
 vector:
 	echo $(HEADER_LINE1) >  dig_structs.i
@@ -37,5 +42,5 @@ vector:
 #	imagery.h
 
 distclean:
-	-rm -f gisdefs.i dig_structs.i vect.i
-	# gis.i dig_types.i imagedefs.h imagery.h
+	-rm -f gisdefs.i gis.i dig_structs.i vect.i
+	# dig_types.i imagedefs.h imagery.h
