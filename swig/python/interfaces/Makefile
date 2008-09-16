@@ -16,7 +16,6 @@ gis:
 		sed -e '/\.\.\..*;/d' -e '/\.\.\./,/;/d' \
 		-e '/^#/d' >> gisdefs.i
 	echo $(HEADER_LINE1) >  gis.i
-	echo $(HEADER_LINE2) >> gis.i
 	echo >> gis.i
 	cat ../../../include/gis.h | \
 		sed -e 'N;N;N;N;N;N;N;N;N; s/_Color_Rule_[ \t\n]*{[ \t\n]*\(.*}\) low.*/_Color_Rule_\n{\n    \1 low;\n    \1 high;\n/' \
@@ -35,12 +34,16 @@ vector:
 	cat ../../../include/Vect.h | \
 		sed -e '/V[12]_.*;/d' -e '/V[12]_/,/;/d' \
 		-e '/^#/d' >> vect.i
-#	generate dig_types.i from include/vect/dig_defines.h
+	echo $(HEADER_LINE1) >  dig_types.i
+	echo "/* extracted from include/vect/dig_defines.h */" >> dig_types.i
+	echo >> dig_types.i
+	cat ../../../include/vect/dig_defines.h | \
+		sed -n -e '/GV_POINT/,/GV_LINES/p' >> dig_types.i
 #
 #imagery:
 #	imagedefs.h
 #	imagery.h
 
 distclean:
-	-rm -f gisdefs.i gis.i dig_structs.i vect.i
-	# dig_types.i imagedefs.h imagery.h
+	-rm -f gisdefs.i gis.i dig_structs.i dig_types.i vect.i
+	# imagedefs.h imagery.h
