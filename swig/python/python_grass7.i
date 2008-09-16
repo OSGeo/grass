@@ -32,3 +32,8 @@
 %include "grass/vect/dig_structs.h"
 %include "grass/vect/dig_defines.h"
 
+%pythoncode %{
+def G_gisinit(pgm):
+    G__gisinit(GIS_H_VERSION, pgm)
+
+%}
