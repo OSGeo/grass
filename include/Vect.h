@@ -323,6 +323,10 @@ int Vect_overlay_str_to_operator(const char *);
 int Vect_overlay(struct Map_info *, int, struct ilist *, struct ilist *,
 		 struct Map_info *, int, struct ilist *, struct ilist *,
 		 int, struct Map_info *);
+int Vect_overlay_and(struct Map_info *, int, struct ilist *,
+		     struct ilist *, struct Map_info *, int,
+		     struct ilist *, struct ilist *,
+		     struct Map_info *);
 
     /* Graph */
 void Vect_graph_init(GRAPH *, int);
@@ -403,8 +407,6 @@ int V2_close_ogr(struct Map_info *);
     /* Read/write lines */
 int V1_read_line_nat(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, long);
-int V1_read_next_line(struct Map_info *, struct line_pnts *,
-		      struct line_cats *);
 int V1_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V1_read_next_line_ogr(struct Map_info *, struct line_pnts *,
@@ -413,30 +415,28 @@ int V2_read_line_nat(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
 int V2_read_line_ogr(struct Map_info *, struct line_pnts *,
 		     struct line_cats *, int);
-int V2_read_next_line(struct Map_info *, struct line_pnts *,
-		      struct line_cats *);
 int V2_read_next_line_nat(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
 int V2_read_next_line_ogr(struct Map_info *, struct line_pnts *,
 			  struct line_cats *);
-int V1_delete_line(struct Map_info *, long);
-int V2_delete_line(struct Map_info *, int);
 int V1_delete_line_nat(struct Map_info *, long);
 int V2_delete_line_nat(struct Map_info *, int);
 long V1_write_line_nat(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
 long V2_write_line_nat(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
+#if 0
 long V1_write_line_ogr(struct Map_info *, int type, struct line_pnts *,
 		       struct line_cats *);
-long V1_rewrite_line(struct Map_info *, long offset, int type,
-		     struct line_pnts *, struct line_cats *);
+#endif
 long V1_rewrite_line_nat(struct Map_info *, long offset, int type,
 			 struct line_pnts *, struct line_cats *);
 int V2_rewrite_line_nat(struct Map_info *, int line, int type,
 			struct line_pnts *, struct line_cats *);
+#if 0
 long V1_rewrite_line_ogr(struct Map_info *, long offset, int type,
 			 struct line_pnts *, struct line_cats *);
+#endif
 
     /* Miscellaneous */
 int Vect_build_nat(struct Map_info *, int, FILE *);
