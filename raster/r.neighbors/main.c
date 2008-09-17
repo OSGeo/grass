@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 
     parm.title = G_define_option();
     parm.title->key = "title";
-    parm.title->key_desc = "\"phrase\"";
+    parm.title->key_desc = "phrase";
     parm.title->type = TYPE_STRING;
     parm.title->required = NO;
     parm.title->description = _("Title of the output raster map");

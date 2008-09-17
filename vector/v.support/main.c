@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
     organization = G_define_option();
     organization->key = "organization";
-    organization->key_desc = "\"phrase\"";
+    organization->key_desc = "phrase";
     organization->type = TYPE_STRING;
     organization->required = NO;
     organization->description =
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     /* don't predefine answers to not overwrite existing information */
     date = G_define_option();
     date->key = "date";
-    date->key_desc = "\"datestring\"";
+    date->key_desc = "datestring";
     date->type = TYPE_STRING;
     date->required = NO;
     date->description =
@@ -61,21 +61,21 @@ int main(int argc, char *argv[])
 
     person = G_define_option();
     person->key = "person";
-    person->key_desc = "\"phrase\"";
+    person->key_desc = "phrase";
     person->type = TYPE_STRING;
     person->required = NO;
     person->description = _("Person who created vector map");
 
     map_name = G_define_option();
     map_name->key = "map_name";
-    map_name->key_desc = "\"phrase\"";
+    map_name->key_desc = "phrase";
     map_name->type = TYPE_STRING;
     map_name->required = NO;
     map_name->description = _("Vector map title");
 
     map_date = G_define_option();
     map_date->key = "map_date";
-    map_date->key_desc = "\"datestring\"";
+    map_date->key_desc = "datestring";
     map_date->type = TYPE_STRING;
     map_date->required = NO;
     map_date->description =
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 
     comment = G_define_option();
     comment->key = "comment";
-    comment->key_desc = "\"phrase\"";
+    comment->key_desc = "phrase";
     comment->type = TYPE_STRING;
     comment->required = NO;
     comment->description =
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 
     cmdhist = G_define_option();
     cmdhist->key = "cmdhist";
-    cmdhist->key_desc = "\"command\"";
+    cmdhist->key_desc = "command";
     cmdhist->type = TYPE_STRING;
     cmdhist->required = NO;
     cmdhist->description =
