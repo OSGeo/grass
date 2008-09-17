@@ -60,14 +60,14 @@ int main(int argc, char *argv[])
 
     title_opt = G_define_option();
     title_opt->key = "title";
-    title_opt->key_desc = "\"phrase\"";
+    title_opt->key_desc = "phrase";
     title_opt->type = TYPE_STRING;
     title_opt->required = NO;
     title_opt->description = _("Text to use for map title");
 
     history_opt = G_define_option();
     history_opt->key = "history";
-    history_opt->key_desc = "\"phrase\"";
+    history_opt->key_desc = "phrase";
     history_opt->type = TYPE_STRING;
     history_opt->required = NO;
     history_opt->description =
@@ -87,21 +87,21 @@ int main(int argc, char *argv[])
 
     datasrc1_opt = G_define_option();
     datasrc1_opt->key = "source1";
-    datasrc1_opt->key_desc = "\"phrase\"";
+    datasrc1_opt->key_desc = "phrase";
     datasrc1_opt->type = TYPE_STRING;
     datasrc1_opt->required = NO;
     datasrc1_opt->description = _("Text to use for data source, line 1");
 
     datasrc2_opt = G_define_option();
     datasrc2_opt->key = "source2";
-    datasrc2_opt->key_desc = "\"phrase\"";
+    datasrc2_opt->key_desc = "phrase";
     datasrc2_opt->type = TYPE_STRING;
     datasrc2_opt->required = NO;
     datasrc2_opt->description = _("Text to use for data source, line 2");
 
     datadesc_opt = G_define_option();
     datadesc_opt->key = "description";
-    datadesc_opt->key_desc = "\"phrase\"";
+    datadesc_opt->key_desc = "phrase";
     datadesc_opt->type = TYPE_STRING;
     datadesc_opt->required = NO;
     datadesc_opt->description =

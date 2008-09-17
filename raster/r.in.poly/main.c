@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
     title = G_define_option();
     title->key = "title";
-    title->key_desc = "\"phrase\"";
+    title->key_desc = "phrase";
     title->type = TYPE_STRING;
     title->required = NO;
     title->description = _("Title for resultant raster map");
