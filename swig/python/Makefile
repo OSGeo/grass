@@ -11,10 +11,10 @@ LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) $(VECTLIB) $(IMAGE
 
 #include $(MODULE_TOPDIR)/include/Make/Dir.make
 
-default: _$(LIB_NAME).so numptr
+EXTRA_CLEAN_FILES = $(LIB_NAME)_wrap.o _$(LIB_NAME).so $(LIB_NAME)_wrap.c $(LIB_NAME).pyc $(LIB_NAME).py
+CLEAN_SUBDIRS = NumPtr
 
-clean:
-	-rm -f *.o *.so $(LIB_NAME)_wrap.c $(LIB_NAME).pyc $(LIB_NAME).py
+default: _$(LIB_NAME).so numptr
 
 $(LIB_NAME)_wrap.c: $(LIB_NAME).i
 	$(SWIG) $(ARCH_INC) -python -shadow $<

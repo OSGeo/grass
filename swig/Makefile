@@ -1,5 +1,7 @@
 MODULE_TOPDIR = ..
 
+include $(MODULE_TOPDIR)/include/Make/Vars.make
+
 #compile if PYTHON present:
 ifneq ($(USE_PYTHON),)
     SUBDIRS += python

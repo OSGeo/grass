@@ -8,3 +8,4 @@ numptr:
 
 clean:
 	-rm -rf build/
+	-rm setup.pyc src/NumPtr_wrap.c src/NumPtr.py
