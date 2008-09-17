@@ -48,13 +48,13 @@ GRASS SWIG script example:
 Modifications from the upstream tarball:
  * updated setup.py with current version number, upstream URL
  * removed old backup versions of a few files
- * removed binary lib/NumPtr.pyc. It will be automaticall regenerated (??)
+ * removed binary lib/NumPtr.pyc. It will be automatically regenerated
+ * update and GNUify src/Makefile (mostly unused)
  * added this file, VERSION file
 
 
 TODO:
- * incorporate the build into swig/python/Makefile, including byte-
-   compiling the .pyc file (by running build/lib.../test.py) and setting
+ * incorporate the build into swig/python/Makefile, including setting
    an appropriate install destination. (use "setup.py install" to do the
    install or use the common Makefile method for that?)
 

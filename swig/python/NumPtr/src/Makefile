@@ -48,7 +48,7 @@ $(name)_wrap.o: $(name).i
 	$(CC) -c -I$(PYTHONINC) -o $(name)_wrap.o $(name)_wrap.c
 
 clean:
-	rm -f $(OBJ) *.so *_wrap.* *.pyc *_lib.*
+	rm -f $(OBJ) *.so *_wrap.* *.pyc *_lib.* $(name).py
 
 test:
 	python test.py

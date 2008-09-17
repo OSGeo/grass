@@ -3,9 +3,11 @@
 all: numptr
 
 numptr:
-	python setup.py build
-	#python build/lib.linux-i686-2.4/test.py
+	python setup.py build --build-lib build/lib
+	# build bytecode .pyc file
+	python build/lib/test.py
 
 clean:
 	-rm -rf build/
-	-rm setup.pyc src/NumPtr_wrap.c src/NumPtr.py
+	-rm -f setup.pyc
+	$(MAKE) -C src clean
