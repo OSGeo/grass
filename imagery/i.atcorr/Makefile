@@ -5,7 +5,7 @@ PGM = i.atcorr
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 LIBES = $(GISLIB) 
-DEPENDENCIES = $(DEPGISLIB)
+DEPENDENCIES = $(GISDEP)
 
 LINK = $(CXX)
 

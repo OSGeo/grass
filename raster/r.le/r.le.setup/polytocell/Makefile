@@ -10,7 +10,7 @@ OBJS = \
 	$(OBJDIR)/yadjust.o
 
 LIBES = $(GISLIB)
-DEPENDENCIES= $(DEPGISLIB)
+DEPENDENCIES= $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
