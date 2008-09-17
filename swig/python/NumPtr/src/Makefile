@@ -7,15 +7,15 @@
 name := NumPtr
 
 ifeq ($(MAKELEVEL),0)
-  CC := pgcc
-  F90 := pgf90
-  PYTHONINC := /usr/include/python2.2 
-#  PYTHONINC := /sw/include/python2.3 
+  CC := gcc
+  F90 := gfortran
+  PYTHONINC := /usr/include/python2.4 
+#  PYTHONINC := /sw/include/python2.5 
   CCFLAGS :=
   F90FLAGS := -r8
-  LDFLAGS := -Mnomain -shared
-  SWIG := /home/rca/bin/swig
-#  SWIG := swig
+#  LDFLAGS := -Mnomain -shared
+  LDFLAGS := -shared
+  SWIG := swig
 endif
 
 OS = $(shell uname -s)
