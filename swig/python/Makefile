@@ -6,10 +6,8 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 LIB_NAME = python_grass7
 
 CFLAGS=-c -fpic -I. $(ARCH_INC) $(GDALCFLAGS) $(PYTHONCFLAGS)
-
 LDFLAGS=-shared -L$(ARCH_LIBDIR) $(GDALLIBS) $(PYTHONLDFLAGS) $(VECTLIB) $(IMAGERYLIB) $(GMATHLIB) $(GISLIB)
 
-#include $(MODULE_TOPDIR)/include/Make/Dir.make
 
 EXTRA_CLEAN_FILES = $(LIB_NAME)_wrap.o _$(LIB_NAME).so $(LIB_NAME)_wrap.c $(LIB_NAME).pyc $(LIB_NAME).py
 CLEAN_SUBDIRS = NumPtr
@@ -19,12 +17,13 @@ default: _$(LIB_NAME).so numptr
 $(LIB_NAME)_wrap.c: $(LIB_NAME).i
 	$(SWIG) $(ARCH_INC) -python -shadow $<
 
-
 $(LIB_NAME)_wrap.o: $(LIB_NAME)_wrap.c
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $<
 
 _$(LIB_NAME).so: $(LIB_NAME)_wrap.o
 	$(LD) $(LDFLAGS) $< -o _$(LIB_NAME).so
+	# build bytecode .pyc file; ignore undefined symbol error
+	echo "import $(LIB_NAME)" | python; true
 
 numptr:
 	$(MAKE) -C NumPtr
