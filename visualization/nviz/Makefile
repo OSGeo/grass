@@ -7,7 +7,7 @@ include $(MODULE_TOPDIR)/include/Make/Other.make
 
 VER=2.2
 NV_VER=nviz$(VER)
-INSTALL_DIR=$(GISBASE)/etc/$(NV_VER)
+INSTALL_DIR=$(ETC)/$(NV_VER)
 CLEAN_SUBDIRS = src
 
 SCRIPTS := \
@@ -30,9 +30,9 @@ default:
 install:
 	-$(MKDIR) $(INSTALL_DIR)
 	$(INSTALL) src/nvwish$(EXE) $(INSTALL_DIR)/$(PGM)$(EXE)
-	$(INSTALL) scripts/$(PGM) $(GISBASE)/bin
+	$(INSTALL) scripts/$(PGM) $(BIN)
 ifneq ($(strip $(MINGW)),)
-	$(INSTALL) scripts/nviz.bat $(GISBASE)/bin
+	$(INSTALL) scripts/nviz.bat $(BIN)
 endif
 	-$(MKDIR) $(INSTALL_DIR)/scripts
 	for file in $(SCRIPTS) ; do $(INSTALL) $$file $(INSTALL_DIR)/scripts ; done

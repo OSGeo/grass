@@ -4,6 +4,12 @@ PGM=i.oif
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
+SRCFILES = i.oifcalc m.cutmatrix
+DSTFILES := $(patsubst %,$(ETC)/i.oif/%,$(SRCFILES))
+
 default: script
-	$(MKDIR) $(GISBASE)/etc/i.oif/
-	$(INSTALL) i.oifcalc m.cutmatrix $(GISBASE)/etc/i.oif/
+	$(MKDIR) $(ETC)/i.oif/
+	$(MAKE) $(DSTFILES)
+
+$(ETC)/i.oif/%: %
+	$(INSTALL) $< $@

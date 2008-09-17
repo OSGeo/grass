@@ -11,7 +11,7 @@ include $(MODULE_TOPDIR)/include/Make/Lib.make
 EXTRA_LIBS=$(GISLIB) $(DBMILIB)
 EXTRA_CFLAGS = $(XCFLAGS) $(TCLINCDIR) $(TKINCDIR)
 
-FORMDIR=$(GISBASE)/etc/form
+FORMDIR=$(ARCH_DISTDIR)/etc/form
 FORM=$(FORMDIR)/form.tcl
 FORMPROG=$(FORMDIR)/form
 HTMLLIB=$(FORMDIR)/html_library.tcl

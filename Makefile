@@ -30,7 +30,7 @@ MAKE_DIR_CMD=		mkdir -p -m 755
 
 # Extra commands
 HTML2PDF=		htmldoc --footer d.1
-GRASS_PDFDIR=		$(GISBASE)/docs/pdf
+GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 
 DIRS = \

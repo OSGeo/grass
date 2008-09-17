@@ -2,7 +2,13 @@ MODULE_TOPDIR = ../..
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
+SRCFILES := $(wildcard *.*)
+DSTFILES := $(patsubst %,$(ETC)/gui/scripts/%,$(SRCFILES))
+
 default:
-	if [ ! -d $(GISBASE)/etc/gui ] ; then $(MKDIR) $(GISBASE)/etc/gui ; fi
-	if [ ! -d $(GISBASE)/etc/gui/scripts ] ; then $(MKDIR) $(GISBASE)/etc/gui/scripts ; fi
-	for file in *.* ; do $(INSTALL) $$file $(GISBASE)/etc/gui/scripts/ ; done
+	if [ ! -d $(ETC)/gui ] ; then $(MKDIR) $(ETC)/gui ; fi
+	if [ ! -d $(ETC)/gui/scripts ] ; then $(MKDIR) $(ETC)/gui/scripts ; fi
+	$(MAKE) $(DSTFILES)
+
+$(ETC)/gui/scripts/%: %
+	$(INSTALL) $< $@

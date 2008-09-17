@@ -10,8 +10,6 @@ EXTRA_CFLAGS = $(FTINC)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-*.o: local_proto.h
-
 default: cmd $(CAPFILE)
 
 $(CAPFILE): $(BIN)/$(PGM)$(EXE)

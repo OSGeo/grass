@@ -4,8 +4,12 @@ PGM=r.in.wms
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
+SRCFILES = r.in.gdalwarp wms.request wms.download
+DSTFILES := $(patsubst %,$(ETC)/r.in.wms/%,$(SRCFILES))
+
 default: script
-	$(MKDIR) $(GISBASE)/etc/r.in.wms/
-	for file in r.in.gdalwarp wms.request wms.download ; do \
-		$(INSTALL) $$file $(GISBASE)/etc/r.in.wms/ ; \
-	done
+	$(MKDIR) $(ETC)/r.in.wms/
+	$(MAKE) $(DSTFILES)
+
+$(ETC)/r.in.wms/%: %
+	$(INSTALL) $< $@

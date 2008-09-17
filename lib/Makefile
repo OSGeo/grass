@@ -53,16 +53,26 @@ DOXNAME=grass
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
+SRCH := $(wildcard ../include/*.h ../include/vect/*.h ../include/iostream/*.h)
+DSTH := $(patsubst ../include/%.h,$(ARCH_INCDIR)/%.h,$(SRCH))
+
+SRCMAKE := $(wildcard ../include/Make/*.make)
+DSTMAKE := $(patsubst ../include/Make/%.make,$(ARCH_DISTDIR)/include/Make/%.make,$(SRCMAKE))
+
 default: headers
 	$(MAKE) subdirs
 
 headers: 
-	if [ ! -d $(GISBASE)/include ]; then $(MKDIR) $(GISBASE)/include; fi
-	if [ ! -d $(GISBASE)/include/grass ]; then $(MKDIR) $(GISBASE)/include/grass; fi
-	if [ ! -d $(GISBASE)/include/grass/vect ]; then $(MKDIR) $(GISBASE)/include/grass/vect; fi
-	if [ ! -d $(GISBASE)/include/grass/iostream ]; then $(MKDIR) $(GISBASE)/include/grass/iostream; fi
-	if [ ! -d $(GISBASE)/include/Make ]; then $(MKDIR) $(GISBASE)/include/Make; fi
-	for file in ../include/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/ ; done
-	for file in ../include/vect/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/vect/ ; done
-	for file in ../include/iostream/*.h ; do $(INSTALL_DATA) $$file $(GISBASE)/include/grass/iostream/ ; done
-	for file in ../include/Make/*.make ; do $(INSTALL_DATA) $$file $(GISBASE)/include/Make/ ; done
+	if [ ! -d $(ARCH_DISTDIR)/include ]; then $(MKDIR) $(ARCH_DISTDIR)/include; fi
+	if [ ! -d $(ARCH_INCDIR) ]; then $(MKDIR) $(ARCH_INCDIR); fi
+	if [ ! -d $(ARCH_INCDIR)/vect ]; then $(MKDIR) $(ARCH_INCDIR)/vect; fi
+	if [ ! -d $(ARCH_INCDIR)/iostream ]; then $(MKDIR) $(ARCH_INCDIR)/iostream; fi
+	$(MAKE) $(DSTH)
+	if [ ! -d $(ARCH_DISTDIR)/include/Make ]; then $(MKDIR) $(ARCH_DISTDIR)/include/Make; fi
+	$(MAKE) $(DSTMAKE)
+
+$(ARCH_INCDIR)/%.h: ../include/%.h
+	$(INSTALL_DATA) $< $@
+
+$(ARCH_DISTDIR)/include/Make/%.make: ../include/Make/%.make
+	$(INSTALL_DATA) $< $@
