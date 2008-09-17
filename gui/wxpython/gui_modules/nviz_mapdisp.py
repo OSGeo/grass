@@ -37,7 +37,7 @@ from mapdisp import MapWindow as MapWindow
 from goutput import wxCmdOutput as wxCmdOutput
 
 sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-import grass6_wxnviz as wxnviz
+import grass7_wxnviz as wxnviz
 
 wxUpdateProperties, EVT_UPDATE_PROP = NewEvent()
 wxUpdateView,       EVT_UPDATE_VIEW = NewEvent()

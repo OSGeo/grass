@@ -2677,11 +2677,6 @@ class MapFrame(wx.Frame):
                         "included with this build "
                         "of wxPython! Switching back to "
                         "2D display mode.\n\nDetails: %s" % nviz.errorMsg)
-            if not nviz.haveOpenGL:
-                msg = _("Unable to start Nviz. The OpenGL package "
-                        "was not found. You can get it "
-                        "at http://PyOpenGL.sourceforge.net. "
-                        "Switching back to 2D display mode.\n\nDetails: %s" % nviz.errorMsg)
             if not nviz.haveNviz:
                 msg = _("Unable to start Nviz. Python extension "
                         "for Nviz was not found or loaded properly. "
