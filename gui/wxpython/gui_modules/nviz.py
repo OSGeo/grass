@@ -29,18 +29,11 @@ try:
 except ImportError, e:
     haveGLCanvas = False
     errorMsg = e
-try:
-    from OpenGL.GL import *
-    from OpenGL.GLUT import *
-    haveOpenGL = True
-except ImportError, e:
-    haveOpenGL = False
-    errorMsg = e
 
 import globalvar
 try:
     sys.path.append(os.path.join(globalvar.ETCWXDIR, "nviz"))
-    import grass6_wxnviz as wxnviz
+    import grass7_wxnviz as wxnviz
     haveNviz = True
 except ImportError, e:
     haveNviz = False

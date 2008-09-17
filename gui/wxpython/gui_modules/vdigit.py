@@ -1303,7 +1303,7 @@ class AbstractDisplayDriver:
 
 class CDisplayDriver(AbstractDisplayDriver):
     """
-    Display driver using grass6_wxdriver module
+    Display driver using grass7_wxdriver module
     """
     def __init__(self, parent, mapwindow):
         """Initialization
