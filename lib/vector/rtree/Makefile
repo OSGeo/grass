@@ -10,8 +10,10 @@ RTLINC = $(ARCH_INCDIR)/rtree
 HEADERS := $(RTLINC)/card.h $(RTLINC)/index.h $(RTLINC)/split_q.h \
 	$(ARCH_INCDIR)/rtree.h
 
-default: $(HEADERS)
+default: headers
 	$(MAKE) lib
+
+headers: $(HEADERS)
 
 $(RTLINC):
 	$(MKDIR) $@

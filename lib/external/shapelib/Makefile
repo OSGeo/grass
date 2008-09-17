@@ -4,8 +4,10 @@ LIB_NAME = $(SHAPE_LIBNAME)
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: $(ARCH_INCDIR)/shapefil.h
+default: headers
 	$(MAKE) lib
 
-$(ARCH_INCDIR)/shapefil.h: shapefil.h
-	$(INSTALL_DATA) shapefil.h $(ARCH_INCDIR)/shapefil.h
+headers: $(ARCH_INCDIR)/shapefil.h
+
+$(ARCH_INCDIR)/%.h: %.h
+	$(INSTALL_DATA) $< $@
