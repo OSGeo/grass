@@ -7,5 +7,7 @@ DEPENDENCIES= $(SYMBDEP) $(DISPLAYDEP) $(RASTERDEP) $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-default: cmd
-	$(INSTALL_DATA) grass_logo.txt $(GISBASE)/docs/html
+default: cmd $(HTMLDIR)/grass_logo.txt
+
+$(HTMLDIR)/%: %
+	$(INSTALL_DATA) $< $@

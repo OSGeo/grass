@@ -5,6 +5,9 @@ PGM = d.polar
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
 default: script
-	$(MKDIR) $(GISBASE)/etc/d.polar/
-	$(INSTALL_DATA) ps_defs.eps $(GISBASE)/etc/d.polar/
+	$(MKDIR) $(ETC)/d.polar/
+	$(MAKE) $(ETC)/d.polar/ps_defs.eps
+
+$(ETC)/d.polar/%: %
+	$(INSTALL_DATA) $< $@
 

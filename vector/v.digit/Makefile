@@ -11,7 +11,7 @@ EXTRA_CFLAGS = $(XCFLAGS) $(TCLINCDIR) $(TKINCDIR) $(VECT_CFLAGS)
 EXTRA_LDFLAGS = $(DFLAGS) 
 EXTRA_INC = $(VECT_INC)
 
-AUXDIR := $(GISBASE)/etc/v.digit
+AUXDIR := $(ARCH_DISTDIR)/etc/v.digit
 TCLFILES := $(patsubst %,$(AUXDIR)/%,$(wildcard *.tcl))
 
 pre: $(AUXDIR)

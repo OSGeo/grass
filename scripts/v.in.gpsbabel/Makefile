@@ -5,4 +5,7 @@ PGM = v.in.gpsbabel
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
 default: script
-	$(INSTALL_DATA) grass_write_ascii.style $(GISBASE)/etc/
+	$(MAKE) $(ETC)/grass_write_ascii.style
+
+$(ETC)/%: %
+	$(INSTALL_DATA) $< $@

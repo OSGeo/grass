@@ -2,10 +2,16 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
+BWIDGETDIR = $(ARCH_DISTDIR)/bwidget
+
+SRCFILES := $(wildcard images/*.* lang/*.* *.tcl *.txt) README.grass
+DSTFILES := $(patsubst %,$(BWIDGETDIR)/%,$(SRCFILES))
+
 default:
-	if [ ! -d $(GISBASE)/bwidget ]; then $(MKDIR) $(GISBASE)/bwidget; fi
-	if [ ! -d $(GISBASE)/bwidget/images ]; then $(MKDIR) $(GISBASE)/bwidget/images; fi
-	if [ ! -d $(GISBASE)/bwidget/lang ]; then $(MKDIR) $(GISBASE)/bwidget/lang; fi
-	for file in images/*.* ; do $(INSTALL_DATA) $$file $(GISBASE)/bwidget/images/ ; done
-	for file in lang/*.* ; do $(INSTALL_DATA) $$file $(GISBASE)/bwidget/lang/ ; done
-	for file in *.tcl *.txt README.grass ; do $(INSTALL_DATA) $$file $(GISBASE)/bwidget/ ; done
+	if [ ! -d $(BWIDGETDIR) ]; then $(MKDIR) $(BWIDGETDIR); fi
+	if [ ! -d $(BWIDGETDIR)/images ]; then $(MKDIR) $(BWIDGETDIR)/images; fi
+	if [ ! -d $(BWIDGETDIR)/lang ]; then $(MKDIR) $(BWIDGETDIR)/lang; fi
+	$(MAKE) $(DSTFILES)
+
+$(BWIDGETDIR)/%: %
+	$(INSTALL_DATA) $< $@
