@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     /* set up the options and flags for the command line parser */
 
     mapopt = G_define_standard_option(G_OPT_V_INPUT);
-    mapopt->gisprompt = "";
+    mapopt->gisprompt = NULL;
     mapopt->required = NO;
 
     ilocopt = G_define_option();
