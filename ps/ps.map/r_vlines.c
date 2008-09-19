@@ -8,8 +8,8 @@
  */
 #include <stdlib.h>
 #include <string.h>
-#include "vector.h"
 #include <grass/Vect.h>
+#include "vector.h"
 #include "ps_info.h"
 #include "local_proto.h"
 
@@ -24,7 +24,8 @@ static char *help[] = {
     "offset      #",
     "coffset     #",
     "masked      [y|n]",
-    "style       solid|[0|1]...",
+    "style       solid|dashed|dotted|dashdotted|[0|1]...",
+    "linecap     butt|round|extended_butt"
     "line_cat    #",
     "acolor      r g b",
     "label       label",
@@ -38,7 +39,7 @@ static char *help[] = {
 
 int read_vlines(char *name, char *mapset)
 {
-    char fullname[100];
+    char fullname[GNAME_MAX];
     char buf[1024];
     char *key, *data, *dp;
     double width;
@@ -79,6 +80,7 @@ int read_vlines(char *name, char *mapset)
     set_color(&(vector.layer[vec].color), 0, 0, 0);
     vector.layer[vec].rgbcol = NULL;
     vector.layer[vec].linestyle = NULL;
+    vector.layer[vec].linecap = LINECAP_BUTT;
     vector.layer[vec].ref = LINE_REF_CENTER;
     vector.layer[vec].hwidth = 0.;
     unset_color(&(vector.layer[vec].hcolor));
@@ -132,8 +134,19 @@ int read_vlines(char *name, char *mapset)
 	if (KEY("style")) {
 	    G_strip(data);
 	    if (strcmp(data, "solid") == 0) {
-/* TODO: add "dotted" and "dashed" preset line patterns */
 		vector.layer[vec].linestyle = NULL;
+		continue;
+	    }
+	    else if (strcmp(data, "dashed") == 0) {
+		vector.layer[vec].linestyle = G_store("000000111");
+		continue;
+	    }
+	    else if (strcmp(data, "dotted") == 0) {
+		vector.layer[vec].linestyle = G_store("100000");
+		continue;
+	    }
+	    else if (strcmp(data, "dashdotted") == 0) {
+		vector.layer[vec].linestyle = G_store("000000111011111");
 		continue;
 	    }
 	    for (dp = data; *dp; dp++)
@@ -144,6 +157,25 @@ int read_vlines(char *name, char *mapset)
 		continue;
 	    }
 	    vector.layer[vec].linestyle = G_store(data);
+	    continue;
+	}
+
+	if (KEY("linecap")) {
+	    G_strip(data);
+	    if (strcmp(data, "butt") == 0) {
+		vector.layer[vec].linecap = LINECAP_BUTT;
+		continue;
+	    }
+	    else if (strcmp(data, "round") == 0) {
+		vector.layer[vec].linecap = LINECAP_ROUND;
+		continue;
+	    }
+	    else if (strcmp(data, "extended_butt") == 0) {
+		vector.layer[vec].linecap = LINECAP_EXTBUTT;
+		continue;
+	    }
+	    else
+		error(key, data, "illegal line cap (vlines)");		
 	    continue;
 	}
 

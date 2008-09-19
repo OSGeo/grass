@@ -30,6 +30,12 @@
 #define CLOSE_PATH  2
 #define WHOLE_PATH  3
 
+/* line end style */
+#define LINECAP_BUTT 0
+#define LINECAP_ROUND 1
+#define LINECAP_EXTBUTT 2
+
+
 typedef struct
 {
     /* All types */
@@ -54,7 +60,8 @@ typedef struct
     double coffset;		/* category offset */
     int ref;			/* justification */
     char *linestyle;		/* line or boundary style */
-    char *setdash;		/* ? */
+    char *setdash;		/* line style converted to PS setdash format */
+    int linecap;		/* line end style */
     double hwidth;		/* line or boundary highlight line width */
     PSCOLOR hcolor;
 
