@@ -51,8 +51,8 @@ The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster formats. Additionally, it also
 offers options such as on-the-fly location creation or extension of
 the default region to match the extent of the imported raster map.
-For special cases, other import modules are available. Always the full
-map is imported.
+For special cases, other import modules are available. The full map
+is always imported.
 <P>
 For importing scanned maps, the user will need to create a
 x,y-location, scan the map in the desired resolution and save it into
@@ -91,12 +91,86 @@ resolution are mangaged with <a href="r.region.html">r.region</a>.
 
 <h3>Raster map operations</h3>
 
+<h4>Resampling methods and interpolation methods</h4> 
 GRASS raster map processing is always performed in the current region
 settings (see <a href="g.region.html">g.region</a>), i.e. the current
 region extent and current raster resolution is used. If the resolution
 differs from that of the input raster map(s), on-the-fly resampling is
 performed (nearest neighbor resampling). If this is not desired, the
 input map(s) has/have to be resampled beforehand with one of the dedicated
+modules.
+<p>
+
+The built-in nearest-neighbour resampling of raster data calculates
+the centre of each region cell, and takes the value of the raster cell
+in which that point falls.
+<p>
+
+If the point falls exactly upon a grid line, the exact result will be
+determined by the direction of any rounding error. One consequence of 
+this is that downsampling by a factor which is an even integer will 
+always sample exactly on the boundary between cells, meaning that the 
+result is ill-defined.
+<p>
+
+The following modules are available for reinterpolation of "filled" 
+raster maps (continuous data) to a different resolution:
+<ul>
+<li><a href="r.resample.html">r.resample</a> uses the built-in resampling, 
+so it should produce identical results as the on-the-fly resampling done
+via the raster import modules.</li>
+<li><a href="r.resamp.interp.html">r.resamp.interp</a> Resampling with 
+nearest neighbor, bilinear, and bicubic method: <b>method=nearest</b> uses the 
+same algorithm as <a href="r.resample.html">r.resample</a>, but not the same 
+code, so it may not produce identical results in cases which are decided 
+by the rounding of floating-point numbers.
+<p>
+
+For <a href="r.resamp.interp.html">r.resamp.interp</a> <b>method=bilinear</b>
+and <b>method=bicubic</b>, the raster values are treated as samples at each
+raster cell's centre, defining a piecewise-continuous surface. The resulting 
+raster values are obtained by sampling the surface at each region cell's centre.
+As the algorithm only interpolates, and doesn't extrapolate, a margin of 0.5 
+(for bilinear) or 1.5 (for bicubic) cells is lost from the extent of the original 
+raster. Any samples taken within this margin will be null.</li>
+<li><a href="r.resamp.rst.html">r.resamp.rst</a> Regularized Spline with Tension 
+(RST) interpolation 2D: Behaves similarly, i.e. it computes a surface assuming 
+that the values are samples at each raster cell's centre, and samples the surface
+at each region cell's centre.
+<p>
+
+<li>For <a href="r.resamp.stats.html">r.resamp.stats</a> without <b>-w</b>, the value of 
+each region cell is the chosen aggregate of the values from all of the raster
+cells whose centres fall within the bounds of the region cell.
+<p>
+
+With <b>-w</b>, the samples are weighted according to the proportion of the
+raster cell which falls within the bounds of the region cell, so the
+result is normally unaffected by rounding error (a miniscule difference 
+in the position of the boundary results in the addition or subtraction of
+a sample weighted by a miniscule factor; also, The min and max aggregates 
+can't use weights, so <b>-w</b> has no effect for those).</li>
+
+<li> <a href="r.fillnulls.html">r.fillnulls</a> for Regularized Spline with Tension (RST) 
+interpolation 2D for hole filling (e.g., SRTM DEM)</li>
+</ul>
+<p>
+
+Furthermore, there are modules available for reinterpolation of "sparse"
+(scattered points or lines) maps:
+
+<ul>
+<li> Inverse distance weighted average (IDW) interpolation
+ (<a href="r.surf.idw.html">r.surf.idw</a> and <a href="r.surf.idw2.html">r.surf.idw2</a>)</li>
+<li> Interpolating from contour lines (<a href="r.contour.html">r.contour</a>)</li>
+</ul>
+
+For Lidar and similar data, <a href="r.in.xyz.html">r.in.xyz</a> supports loading
+and binning of ungridded x,y,z ASCII data into a new raster map. The user may choose from
+a variety of statistical methods in creating the new raster.
+<p>
+
+Otherwise, for interpolation of scattered data, use the <EM>v.surf.*</EM> set of
 modules.
 
 <h4>Raster MASKs</h4>
@@ -105,7 +179,7 @@ only on data falling inside the masked area, and treat any data falling
 outside of the mask as if its value were NULL. The mask is only applied
 when <em>reading</em> an existing GRASS raster map, for example when used
 in a module as an input map.
-<P>
+<p>
 The mask is read as an integer map. If MASK is actually a
 floating-point map, the values will be converted to integers using the
 map's quantisation rules (this defaults to round-to-nearest, but can
@@ -136,41 +210,6 @@ The <a href="r.resamp.stats.html">r.resamp.stats</a> command resamples raster
 map layers using various aggregation methods, the <a href="r.average.html">r.average</a>
 command aggregates one map based on a second map. 
 <a href="r.resamp.interp.html">r.resamp.interp</a> resamples raster map layers using interpolation.
-
-
-
-<h3>Raster map resampling and interpolation methods</h3>
-
-GRASS offers various raster resampling and interpolation methods. There are
-available modules for reinterpolation of "filled" raster maps (continuous data)
-to a different resolution:
-
-<ul>
-<li> Resampling with nearest neighbor, bilinear, and bicubic method
- (<a href="r.resamp.interp.html">r.resamp.interp</a>)</li>
-<li> Regularized spline with tension (RST) interpolation 2D
- (<a href="r.resamp.rst.html">r.resamp.rst</a>)</li>
-<li> Regularized spline with tension (RST) interpolation 2D for hole filling (e.g., SRTM DEM)
- (<a href="r.fillnulls.html">r.fillnulls</a>)</li>
-</ul>
-
-Furthermore, there are modules available for reinterpolation of "sparse"
-(scattered points or lines) maps:
-
-<ul>
-<li> Inverse distance weighted average (IDW) interpolation
- (<a href="r.surf.idw.html">r.surf.idw</a> and <a href="r.surf.idw2.html">r.surf.idw2</a>)</li>
-<li> Interpolating from contour lines (<a href="r.contour.html">r.contour</a>)</li>
-</ul>
-
-For Lidar and similar data, <a href="r.in.xyz.html">r.in.xyz</a> supports loading
-and binning of ungridded x,y,z ASCII data into a new raster map. The user may choose from
-a variety of statistical methods in creating the new raster.
-<P>
-
-Otherwise, for interpolation of scattered data, use the <EM>v.surf.*</EM> set of
-modules.
-
 
 <h3>Hydrologic modeling toolbox</h3>
 
