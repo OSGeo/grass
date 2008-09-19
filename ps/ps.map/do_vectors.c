@@ -63,6 +63,12 @@ int do_vectors(int after_masking)
 
 	    fprintf(PS.fp, "%.8f W\n", vector.layer[n].width);
 	    set_ps_color(&(vector.layer[n].color));
+
+	    if (vector.layer[n].linecap >= 0) {
+		G_debug(1, "Line cap: '%d'", vector.layer[n].linecap);
+		fprintf(PS.fp, "%d setlinecap\n",vector.layer[n].linecap);		 
+	    }
+
 	    dashes[0] = '[';
 	    dashes[1] = 0;
 	    lz = 0;

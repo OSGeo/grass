@@ -1321,6 +1321,7 @@ USAGE:	<B>vlines</B> vectormap
 	<B>coffset</B> #
 	<B>ref</B> left|right
 	<B>style</B> 00001111
+	<B>linecap</B> style
 	<B>label</B> label
 	<B>lpos</B> #
 	<B>end</B>
@@ -1331,7 +1332,8 @@ The user can specify:
 <P>
 <B>color</B> - color of the vector lines or area boundaries;
 <P>
-<B>rgbcolumn</B> - name of color definition column used for the vector lines or area boundaries;
+<B>rgbcolumn</B> - name of color definition column used for the vector lines
+or area boundaries;
 <P>
 <B>width</B> - width of the vectors lines or area boundaries in pixels
 (accepts decimal points [floating points] as well as integers);
@@ -1344,13 +1346,13 @@ used in legend;
 <P>
 <B>hwidth</B> - the width of the highlight color in pixels;
 <P>
-<B>offset</B> (experimental) - offset for the vectors lines in pixels for plotting
-parallel lines in distance equal to offset (accepts positive or 
+<B>offset</B> (experimental) - offset for the vectors lines in pixels for
+plotting parallel lines in distance equal to offset (accepts positive or 
 negative decimal points). Useful to print streets with several parallel lanes;
 <P>
-<B>coffset</B> (experimental) - offset for the vectors lines. If coffset is used then 
-offset of line is equal to coffset * category value and offset is 
-used in legend;
+<B>coffset</B> (experimental) - offset for the vectors lines. If coffset
+is used then  offset of line is equal to coffset * category value and offset
+is used in legend;
 <P>
 <B>ref</B> (experimental) - line justification. 
 <P>
@@ -1359,14 +1361,21 @@ by the current mask;
 (see manual entry <EM><A HREF="r.mask.html">r.mask</A></EM>
 for more information on the mask);
 <P>
-<B>style</B> - the line style allows the vectors
-to be dashed in different patterns.  This is done by typing a
-series of numbers (0's and 1's) in a desired sequence or pattern.
+<B>style</B> - the line style allows the vectors to be dashed in different
+patterns.  This is done by either typing "solid", "dashed", "dotted", or
+"dashdotted", or as a series of 0's and 1's in a desired sequence or pattern.
 The first block of repeated zeros or ones represents "draw", the second
 block represents "blank".
 An even number of blocks will repeat the pattern, an odd number of blocks
 will alternate the pattern.
 The default is "solid";
+<P>
+<B>linecap</B> - the linecap specifies the look of the ends of the line,
+or the end of the dashes in a dashed line. The parameters are:
+'butt' for butt caps (default), 'round' for round caps and 'extended_butt'
+for extended butt caps. The shape of the round and the extended butt caps
+is related to the line thickness: for round butts the radius is half the
+linewidth, while for extended butt the line will extend for half the linewidth.  
 <P>
 <B>cats</B> - which categories should be plotted (default is all);
 <P>
