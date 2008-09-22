@@ -488,12 +488,13 @@ To change all values below 5 to NULL:
 <div class="code"><pre>
 newmap = if(map&lt;5, null(), 5)
 </pre></div>
-The graph function allows users to specify a x-y conversion using 
+The graph() function allows users to specify a x-y conversion using 
 pairs of x,y coordinates.
 In some situations a transformation from one value to another is not
 easily established mathematically, but can be represented by a 2-D
-graph.  The graph() function provides the opportunity to accomplish
-this.  An x-axis value is provided to the graph function along with
+graph and then linearly interpolated. The graph() function provides
+the opportunity to accomplish this.
+An x-axis value is provided to the graph function along with
 the associated graph represented by a series of x,y pairs.  The x
 values must be monotonically increasing (each larger than or equal to
 the previous).  The graph function linearly interpolates between
@@ -507,8 +508,8 @@ newmap = graph(map, 1,10, 2,25, 3,50)
 X (map) values supplied and y (newmap) values returned:
 <div class="code"><pre>
 0, 10
-1, 10,
-1.5, 16.5
+1, 10
+1.5, 17.5
 2.9, 47.5
 4, 50
 100, 50
