@@ -5,61 +5,69 @@
 #include "func_proto.h"
 
 /****************************************************************
-add(a,b) = a + b
+add(a,b,c,...) = a + b + c + ...
 ****************************************************************/
 
 int f_add(int argc, const int *argt, void **args)
 {
-    int i;
+    int i, j;
 
-    if (argc < 2)
+    if (argc < 1)
 	return E_ARG_LO;
-    if (argc > 2)
-	return E_ARG_HI;
 
-    if (argt[1] != argt[0] || argt[2] != argt[0])
-	return E_ARG_TYPE;
+    for (i = 1; i <= argc; i++)
+	if (argt[i] != argt[0])
+	    return E_ARG_TYPE;
 
     switch (argt[0]) {
     case CELL_TYPE:
 	{
 	    CELL *res = args[0];
-	    CELL *arg1 = args[1];
-	    CELL *arg2 = args[2];
+	    CELL **argz = (CELL **) args;
 
 	    for (i = 0; i < columns; i++) {
-		if (IS_NULL_C(&arg1[i]) || IS_NULL_C(&arg2[i]))
-		    SET_NULL_C(&res[i]);
-		else
-		    res[i] = arg1[i] + arg2[i];
+		res[i] = 0;
+		for (j = 1; j <= argc; j++) {
+		    if (IS_NULL_C(&argz[j][i])) {
+			SET_NULL_C(&res[i]);
+			break;
+		    }
+		    res[i] += argz[j][i];
+		}
 	    }
 	    return 0;
 	}
     case FCELL_TYPE:
 	{
 	    FCELL *res = args[0];
-	    FCELL *arg1 = args[1];
-	    FCELL *arg2 = args[2];
+	    FCELL **argz = (FCELL **) args;
 
 	    for (i = 0; i < columns; i++) {
-		if (IS_NULL_F(&arg1[i]) || IS_NULL_F(&arg2[i]))
-		    SET_NULL_F(&res[i]);
-		else
-		    res[i] = arg1[i] + arg2[i];
+		res[i] = 0;
+		for (j = 1; j <= argc; j++) {
+		    if (IS_NULL_F(&argz[j][i])) {
+			SET_NULL_F(&res[i]);
+			break;
+		    }
+		    res[i] += argz[j][i];
+		}
 	    }
 	    return 0;
 	}
     case DCELL_TYPE:
 	{
 	    DCELL *res = args[0];
-	    DCELL *arg1 = args[1];
-	    DCELL *arg2 = args[2];
+	    DCELL **argz = (DCELL **) args;
 
 	    for (i = 0; i < columns; i++) {
-		if (IS_NULL_D(&arg1[i]) || IS_NULL_D(&arg2[i]))
-		    SET_NULL_D(&res[i]);
-		else
-		    res[i] = arg1[i] + arg2[i];
+		res[i] = 0;
+		for (j = 1; j <= argc; j++) {
+		    if (IS_NULL_D(&argz[j][i])) {
+			SET_NULL_D(&res[i]);
+			break;
+		    }
+		    res[i] += argz[j][i];
+		}
 	    }
 	    return 0;
 	}

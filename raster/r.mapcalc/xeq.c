@@ -18,6 +18,13 @@ int f_eq(int argc, const int *argt, void **args)
     if (argc > 2)
 	return E_ARG_HI;
 
+    if (argt[0] != CELL_TYPE)
+	return E_RES_TYPE;
+
+    for (i = 2; i <= argc; i++)
+	if (argt[i] != argt[1])
+	    return E_ARG_TYPE;
+
     switch (argt[1]) {
     case CELL_TYPE:
 	{

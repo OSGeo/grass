@@ -50,16 +50,23 @@ int f_median(int argc, const int *argt, void **args)
     int size = argc * G_raster_size(argt[0]);
     int i, j;
 
+    if (argc < 1)
+	return E_ARG_LO;
+
+    for (i = 1; i <= argc; i++)
+	if (argt[i] != argt[0])
+	    return E_ARG_TYPE;
+
     if (size > alloc) {
 	alloc = size;
 	array = G_realloc(array, size);
     }
 
-    switch (argt[argc]) {
+    switch (argt[0]) {
     case CELL_TYPE:
 	{
 	    CELL *res = args[0];
-	    CELL **argv = (CELL **) & args[1];
+	    CELL **argv = (CELL **) &args[1];
 	    CELL *a = array;
 	    CELL *a1 = &a[(argc - 1) / 2];
 	    CELL *a2 = &a[argc / 2];
@@ -87,7 +94,7 @@ int f_median(int argc, const int *argt, void **args)
     case FCELL_TYPE:
 	{
 	    FCELL *res = args[0];
-	    FCELL **argv = (FCELL **) & args[1];
+	    FCELL **argv = (FCELL **) &args[1];
 	    FCELL *a = array;
 	    FCELL *a1 = &a[(argc - 1) / 2];
 	    FCELL *a2 = &a[argc / 2];
@@ -115,7 +122,7 @@ int f_median(int argc, const int *argt, void **args)
     case DCELL_TYPE:
 	{
 	    DCELL *res = args[0];
-	    DCELL **argv = (DCELL **) & args[1];
+	    DCELL **argv = (DCELL **) &args[1];
 	    DCELL *a = array;
 	    DCELL *a1 = &a[(argc - 1) / 2];
 	    DCELL *a2 = &a[argc / 2];

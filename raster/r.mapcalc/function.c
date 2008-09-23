@@ -8,9 +8,9 @@
 #include "func_proto.h"
 
 func_desc func_descs[] = {
-    {"add", c_binop, f_add},
+    {"add", c_varop, f_add},
     {"sub", c_binop, f_sub},
-    {"mul", c_binop, f_mul},
+    {"mul", c_varop, f_mul},
     {"div", c_binop, f_div},
     {"mod", c_binop, f_mod},
     {"pow", c_binop, f_pow},
@@ -36,9 +36,10 @@ func_desc func_descs[] = {
     {"bitand", c_logop, f_bitand},
     {"bitor", c_logop, f_bitor},
     {"xor", c_logop, f_bitxor},
-    {"shiftl", c_logop, f_shiftl},
-    {"shiftr", c_logop, f_shiftr},
-    {"shiftru", c_logop, f_shiftru},
+
+    {"shiftl", c_shiftop, f_shiftl},
+    {"shiftr", c_shiftop, f_shiftr},
+    {"shiftru", c_shiftop, f_shiftru},
 
     {"bitnot", c_not, f_bitnot},
 

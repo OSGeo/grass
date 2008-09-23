@@ -17,6 +17,10 @@ int f_max(int argc, const int *argt, void **args)
     if (argc < 1)
 	return E_ARG_LO;
 
+    for (i = 1; i <= argc; i++)
+	if (argt[i] != argt[0])
+	    return E_ARG_TYPE;
+
     switch (argt[0]) {
     case CELL_TYPE:
 	{
