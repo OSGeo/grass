@@ -130,6 +130,22 @@ int c_cmpop(int argc, int *argt)
 
 int c_logop(int argc, int *argt)
 {
+    int i;
+
+    if (argc < 1)
+	return E_ARG_LO;
+
+    for (i = 1; i <= argc; i++)
+	if (argt[i] != CELL_TYPE)
+	    return E_ARG_TYPE;
+
+    argt[0] = CELL_TYPE;
+
+    return 0;
+}
+
+int c_shiftop(int argc, int *argt)
+{
     if (argc < 2)
 	return E_ARG_LO;
     if (argc > 2)

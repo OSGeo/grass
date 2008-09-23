@@ -58,6 +58,13 @@ int f_mode(int argc, const int *argt, void **args)
     int size = argc * sizeof(double);
     int i, j;
 
+    if (argc < 1)
+	return E_ARG_LO;
+
+    for (i = 1; i <= argc; i++)
+	if (argt[i] != argt[0])
+	    return E_ARG_TYPE;
+
     if (size > value_size) {
 	value_size = size;
 	value = G_realloc(value, value_size);

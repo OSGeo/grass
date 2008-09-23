@@ -28,10 +28,12 @@ extern func_t f_or2;
 extern func_t f_bitand;
 extern func_t f_bitor;
 extern func_t f_bitxor;
+extern args_t c_logop;
+
 extern func_t f_shiftl;
 extern func_t f_shiftr;
 extern func_t f_shiftru;
-extern args_t c_logop;
+extern args_t c_shiftop;
 
 extern func_t f_not;
 extern func_t f_bitnot;
