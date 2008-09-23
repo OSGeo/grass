@@ -58,7 +58,7 @@ replaceHa(float new_min_cost, float angle, int row, int col,
     G_debug(4, "in replaceHa() before second while. smaller_child=%ld",
 	smaller_child);
 
-    while ( (smaller_child <= *heap_len) &&
+    while ( (smaller_child <= *heap_len) && (smaller_child > 0) &&
 	   (new_min_cost > heap[smaller_child].min_cost)) {
 
 	heap[i].min_cost = heap[smaller_child].min_cost;
