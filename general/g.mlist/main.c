@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     opt.separator->multiple = NO;
     opt.separator->answer = "newline";
     opt.separator->description =
-	_("One-character output separator, newline, space, or tab");
+	_("One-character output separator, newline, comma, space, or tab");
 
     opt.mapset = G_define_option();
     opt.mapset->key = "mapset";
@@ -158,6 +158,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(opt.separator->answer, "newline") == 0)
 	separator[0] = '\n';
+    else if (strcmp(opt.separator->answer, "comma") == 0)
+	separator[0] = ',';
     else if (strcmp(opt.separator->answer, "space") == 0)
 	separator[0] = ' ';
     else if (strcmp(opt.separator->answer, "tab") == 0)
