@@ -135,7 +135,7 @@ static int find_rule(const char *name)
 int main(int argc, char **argv)
 {
     int overwrite;
-    int interactive;
+    int is_from_stdin;
     int remove;
     int have_colors;
     struct Colors colors, colors_tmp;
@@ -235,7 +235,6 @@ int main(int argc, char **argv)
     remove = flag.r->answer;
 
     name = opt.map->answer;
-
     style = opt.colr->answer;
     cmap = opt.rast->answer;
     rules = opt.rules->answer;
@@ -244,13 +243,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("No map specified"));
 
     if (!cmap && !style && !rules && !remove)
-	G_fatal_error(_("One of \"-r\" or options \"color\", \"rast\" or \"rules\" must be specified!"));
+	G_fatal_error(_("One of \"-r\" or options \"color\", \"raster\" or \"rules\" must be specified!"));
 
     if (!!style + !!cmap + !!rules > 1)
 	G_fatal_error(_("\"color\", \"rules\", and \"raster\" options are mutually exclusive"));
 
-    interactive = rules && strcmp(rules, "-") == 0;
-    if (interactive)
+    is_from_stdin = rules && strcmp(rules, "-") == 0;
+    if (is_from_stdin)
 	rules = NULL;
 
     mapset = G_find_cell2(name, "");
@@ -281,7 +280,7 @@ int main(int argc, char **argv)
     G_read_fp_range(name, mapset, &range);
     G_get_fp_range_min_max(&range, &min, &max);
 
-    if (interactive) {
+    if (is_from_stdin) {
 	if (!read_color_rules(stdin, &colors, min, max, fp))
 	    exit(EXIT_FAILURE);
     }
@@ -359,7 +358,7 @@ int main(int argc, char **argv)
 
     if (G_write_colors(name, mapset, &colors) >= 0)
 	G_message(_("Color table for <%s> set to %s"), name,
-		  interactive ? "rules" : style ? style : rules ? rules :
+		  is_from_stdin ? "rules" : style ? style : rules ? rules :
 		  cmap);
 
     exit(EXIT_SUCCESS);
