@@ -32,7 +32,8 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     if flags:
 	args.append("-%s" % flags)
     for opt, val in options.iteritems():
-	args.append("%s=%s" % (opt, _make_val(val)))
+	if val != None:
+	    args.append("%s=%s" % (opt, _make_val(val)))
     return args
 
 def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **kwargs):
@@ -155,9 +156,16 @@ def del_temp_region():
 
 # interface to g.findfile
 
-def find_file(name, element = 'cell'):
-    lines = read_command("g.findfile", element = element, file = name).splitlines()
-    return dict([_kv_regex.match(line).groups() for line in lines])
+def find_file(name, element = 'cell', mapset = None):
+    lines = read_command("g.findfile", element = element, file = name, mapset = mapset).splitlines()
+    result = []
+    for line in lines:
+	m = _kv_regex.match(line)
+	if m != None:
+	    result.append(m.groups())
+	else:
+	    result.append(line.split('='))
+    return dict(result)
 
 # interface to g.list
 
