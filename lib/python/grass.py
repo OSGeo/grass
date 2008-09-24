@@ -127,19 +127,45 @@ def parser():
 def tempfile():
     return read_command("g.tempfile", pid = os.getpid()).strip()
 
+# key-value parsers
+
+def parse_key_val(s, sep = '=', dflt = None):
+    result = {}
+    for line in s.splitlines():
+	kv = line.split(sep, 1)
+	k = kv[0].strip()
+	if len(kv) > 1:
+	    v = kv[1]
+	else:
+	    v = dflt
+	result[k] = v
+    return result
+
+_kv_regex = None
+
+def parse_key_val2(s):
+    global _kv_regex
+    if _kv_regex == None:
+	_kv_regex = re.compile("([^=]+)='(.*)';?")
+    result = []
+    for line in s.splitlines():
+	m = _kv_regex.match(line)
+	if m != None:
+	    result.append(m.groups())
+	else:
+	    result.append(line.split('=', 1))
+    return dict(result)
+
 # interface to g.gisenv
 
-_kv_regex = re.compile("([^=]+)='(.*)';?")
-
 def gisenv():
-    lines = read_command("g.gisenv").splitlines()
-    return dict([_kv_regex.match(line).groups() for line in lines])
+    return parse_key_val2(read_command("g.gisenv"))
 
 # interface to g.region
 
 def region():
-    lines = read_command("g.region", flags='g').splitlines()
-    return dict([line.split('=',1) for line in lines])
+    s = read_command("g.region", flags='g')
+    return parse_key_val(s)
 
 def use_temp_region():
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
@@ -157,15 +183,8 @@ def del_temp_region():
 # interface to g.findfile
 
 def find_file(name, element = 'cell', mapset = None):
-    lines = read_command("g.findfile", element = element, file = name, mapset = mapset).splitlines()
-    result = []
-    for line in lines:
-	m = _kv_regex.match(line)
-	if m != None:
-	    result.append(m.groups())
-	else:
-	    result.append(line.split('='))
-    return dict(result)
+    s = read_command("g.findfile", element = element, file = name, mapset = mapset)
+    return parse_key_val2(s)
 
 # interface to g.list
 

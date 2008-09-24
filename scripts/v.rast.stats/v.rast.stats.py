@@ -137,12 +137,9 @@ def main():
     #get RASTER resolution of map which we want to query:
     #fetch separated to permit for non-square cells (latlong etc)
     s = grass.read_command('r.info', flags = 's', map = raster)
-    d = {}
-    for l in s.splitlines():
-	kv = l.split('=')
-	d[kv[0]] = float(kv[1])
-    nsres = d['nsres']
-    ewres = d['ewres']
+    kv = grass.parse_key_val(s)
+    nsres = float(kv['nsres'])
+    ewres = float(kv['ewres'])
 
     #save current settings:
     grass.use_temp_region()
@@ -171,9 +168,10 @@ def main():
     #check if DBF driver used, in this case cut to 10 chars col names:
     s = grass.read_command('v.db.connect', flags = 'g', map = vector, layer = layer)
     # we need this for non-DBF driver:
-    table = s.split()[1]
-    db_database = s.split()[3]
-    db_sqldriver = s.split()[4]
+    f = s.split()
+    table = f[1]
+    db_database = f[3]
+    db_sqldriver = f[4]
     dbfdriver = db_sqldriver == 'dbf'
 
     #Find out which table is linked to the vector map on the given layer
@@ -247,16 +245,7 @@ def main():
         #n, min, max, range, mean, stddev, variance, coeff_var, sum
 	# How to test r.univar $? exit status? using -e creates the real possibility of out-of-memory errors
 	s = grass.read_command('r.univar', flags = 'g' + extstat, map = raster, percentile = percentile)
-	vars = {}
-	for l in s.splitlines():
-	    kv = l.split('=')
-	    if len(kv) != 2:
-		continue
-	    var = kv[0]
-	    val = kv[1]
-	    if val.lower() == 'nan':
-		val = 'NULL'
-	    vars[var] = val
+	vars = grass.parse_key_val(s)
 
 	vars['cf_var'] = vars['coeff_var']
 
@@ -266,6 +255,8 @@ def main():
 
 	for var in basecols + extracols:
 	    value = vars[var]
+	    if value.lower() == 'nan':
+		value = 'NULL'
 	    colname = '%s_%s' % (colprefix, var)
 	    if dbfdriver:
 		colname = colname[:10]
