@@ -51,13 +51,20 @@
 #% key: map
 #% type: string
 #% gisprompt: old,cell,raster
-#% description: raster input map
+#% description: Name of raster map
 #% required : yes
 #%end
 #%option
 #% key: num_of_lines
 #% type: integer
 #% description: Number of lines to appear in the legend
+#% required : no
+#%end
+#%option
+#% key: rast
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Name of raster map to generate legend from
 #% required : no
 #%end
 
@@ -87,6 +94,15 @@ fi
 filemapset="${mapset}"
 HISTFILEDIR=$GISDBASE/$LOCATION_NAME/$filemapset/cell_misc/
 
+# for rast=
+if [ ! -z $GIS_OPT_RAST ] ; then 
+	eval `g.findfile el=cell file=$GIS_OPT_RAST`
+	if [ ! "$file" ] ; then
+	   g.message -e "Raster map '$GIS_OPT_RAST' not found in mapset search path"
+	   exit 1
+	fi
+fi
+
 # save defined font setting
 FONTCMD=`d.frame -l | grep d.font | sed 's+"++1'| sed 's+"++1'`
 d.frame -e
@@ -110,11 +126,19 @@ then
 
        #draw legend
     	d.frame -s at=0,90,65,100 frame=right
-        if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
-    	     d.legend $FLIP -n map=$GIS_OPT_MAP
-        else
-             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
-        fi
+	if [ -z $GIS_OPT_RAST ] ; then
+		if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
+	  	     d.legend $FLIP -n map=$GIS_OPT_MAP
+        	else
+	             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
+        	fi
+	else
+		if test -f $HISTFILEDIR/$GIS_OPT_RAST/histogram ; then
+		     d.legend $FLIP -n map=$GIS_OPT_RAST
+		else
+		     d.legend $FLIP $OMIT map=$GIS_OPT_RAST
+		fi
+	fi
 
        #draw map
 	d.frame -s at=0,100,0,65 frame=left
@@ -133,11 +157,19 @@ else
 
        #draw legend
     	d.frame -s at=0,90,65,100 frame=right
-        if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
-             d.legend $FLIP -n map=$GIS_OPT_MAP lines=$GIS_OPT_NUM_OF_LINES
-        else
-             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
-        fi
+	if [ -z $GIS_OPT_RAST ] ; then
+		if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
+	             d.legend $FLIP -n map=$GIS_OPT_MAP lines=$GIS_OPT_NUM_OF_LINES
+        	else
+	             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
+        	fi
+	else
+		if test -f $HISTFILEDIR/$GIS_OPT_RAST/histogram ; then
+		     d.legend $FLIP -n map=$GIS_OPT_RAST lines=$GIS_OPT_NUM_OF_LINES
+		else
+		     d.legend $FLIP $OMIT map=$GIS_OPT_RAST
+		fi
+	fi
 
        #draw map
 	d.frame -s at=0,100,0,65 frame=left
