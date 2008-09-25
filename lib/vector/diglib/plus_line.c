@@ -17,34 +17,13 @@
 #include <stdlib.h>
 #include <grass/Vect.h>
 
-/*!
- * \brief Add new line to Plus_head structure.
- *
- * \param[in,out] plus pointer to Plus_head structure
- * \param[in] type feature type
- * \param[in] Points line geometry
- * \param[in] offset line offset
- *
- * \return -1 on error      
- * \return line id
- */
-int
-dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
-	     long offset)
+static int add_line(struct Plus_head *plus, int lineid, int type, struct line_pnts *Points,
+		    long offset)
 {
-    int lineid, node, lp;
+    int node, lp;
     P_LINE *line;
     BOUND_BOX box;
 
-    /* First look if we have space in array of pointers to lines
-     *  and reallocate if necessary */
-    if (plus->n_lines >= plus->alloc_lines) {	/* array is full */
-	if (dig_alloc_lines(plus, 1000) == -1)
-	    return -1;
-    }
-
-    /* allocate line structure */
-    lineid = plus->n_lines + 1;
     plus->Line[lineid] = dig_alloc_line();
     line = plus->Line[lineid];
 
@@ -98,6 +77,45 @@ dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
     line->S = 0;
     line->E = 0;
     line->W = 0;
+
+    dig_line_box(Points, &box);
+    dig_line_set_box(plus, lineid, &box);
+    dig_spidx_add_line(plus, lineid, &box);
+    if (plus->do_uplist)
+	dig_line_add_updated(plus, lineid);
+
+    return (lineid);
+}
+
+/*!
+ * \brief Add new line to Plus_head structure.
+ *
+ * \param[in,out] plus pointer to Plus_head structure
+ * \param[in] type feature type
+ * \param[in] Points line geometry
+ * \param[in] offset line offset
+ *
+ * \return -1 on error      
+ * \return line id
+ */
+int
+dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
+	     long offset)
+{
+    int ret;
+    
+    /* First look if we have space in array of pointers to lines
+     *  and reallocate if necessary */
+    if (plus->n_lines >= plus->alloc_lines) {	/* array is full */
+	if (dig_alloc_lines(plus, 1000) == -1)
+	    return -1;
+    }
+
+    ret = add_line(plus, plus->n_lines + 1, type, Points, offset);
+
+    if (ret == -1)
+	return ret;
+
     plus->n_lines++;
 
     switch (type) {
@@ -121,13 +139,30 @@ dig_add_line(struct Plus_head *plus, int type, struct line_pnts *Points,
 	break;
     }
 
-    dig_line_box(Points, &box);
-    dig_line_set_box(plus, lineid, &box);
-    dig_spidx_add_line(plus, lineid, &box);
-    if (plus->do_uplist)
-	dig_line_add_updated(plus, lineid);
+    return ret;
+}
 
-    return (lineid);
+/*!
+ * \brief Restore line in Plus_head structure.
+ *
+ * \param[in,out] plus pointer to Plus_head structure
+ * \param[in] type feature type
+ * \param[in] Points line geometry
+ * \param[in] offset line offset
+ *
+ * \return -1 on error      
+ * \return line id
+ */
+int
+dig_restore_line(struct Plus_head *plus, int lineid,
+		 int type, struct line_pnts *Points,
+		 long offset)
+{
+    if (lineid < 1 || lineid > plus->n_lines) {
+	return -1;
+    }
+
+    return add_line(plus, lineid, type, Points, offset);    
 }
 
 /*!
