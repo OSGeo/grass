@@ -124,8 +124,10 @@ int dig_spindex_init(struct Plus_head *);
 
 int dig_add_node(struct Plus_head *, double, double, double);
 int dig_which_node(struct Plus_head *, double, double, double);
-int dig_add_line(struct Plus_head *plus, int type, struct line_pnts *points,
-		 long offset);
+int dig_add_line(struct Plus_head *, int, struct line_pnts *,
+		 long);
+int dig_restore_line(struct Plus_head *, int, int, struct line_pnts *,
+		     long);
 int dig_del_line(struct Plus_head *, int);
 int dig_node_add_line(struct Plus_head *, int, int, struct line_pnts *, int);
 float dig_node_line_angle(struct Plus_head *, int, int);

@@ -1,7 +1,7 @@
 /*!
    \file write.c
 
-   \brief Vector library - write data
+   \brief Vector library - write vector features
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -36,6 +36,13 @@ static int rewrite_dummy()
 static int delete_dummy()
 {
     G_warning("Vect_delete_line() %s",
+	      _("for this format/level not supported"));
+    return -1;
+}
+
+static int restore_dummy()
+{
+    G_warning("Vect_restore_line() %s",
 	      _("for this format/level not supported"));
     return -1;
 }
@@ -91,17 +98,29 @@ static int (*Vect_delete_line_array[][3]) () = {
 #endif
 };
 
+static int (*Vect_restore_line_array[][3]) () = {
+    {
+    restore_dummy, restore_dummy, V2_restore_line_nat}
+#ifdef HAVE_OGR
+    , {
+    restore_dummy, restore_dummy, restore_dummy}
+#else
+    , {
+    restore_dummy, format, format}
+#endif
+};
+
 /*!
-   \brief Writes new line to the end of file (table)
+   \brief Writes new feature to the end of file (table)
 
    The function calls G_fatal_error() on error.
 
    \param Map pointer to vector map
-   \param type vector type
-   \param points line geometry
-   \param cats line categories
+   \param type feature type
+   \param points feature geometry
+   \param cats feature categories
 
-   \return offset into file where the line starts
+   \return offset into file where the feature starts
  */
 long
 Vect_write_line(struct Map_info *Map,
@@ -113,7 +132,7 @@ Vect_write_line(struct Map_info *Map,
 	    Map->name, Map->format, Map->level);
 
     if (!VECT_OPEN(Map))
-	G_fatal_error(_("Unable to write line, vector map is not opened"));
+	G_fatal_error(_("Unable to write feature, vector map is not opened"));
 
     dig_line_reset_updated(&(Map->plus));
     dig_node_reset_updated(&(Map->plus));
@@ -126,27 +145,27 @@ Vect_write_line(struct Map_info *Map,
 						      cats);
 
     if (offset == -1)
-	G_fatal_error(_("Unable to write line (negative offset)"));
+	G_fatal_error(_("Unable to write feature (negative offset)"));
 
     return offset;
 }
 
 
 /*!
-   \brief Rewrites line info at the given offset.
+   \brief Rewrites feature info at the given offset.
 
    The number of points or cats or type may change. If necessary, the
-   old line is deleted and new is written.
+   old feature is deleted and new is written.
 
    This function calls G_fatal_error() on error.
 
    \param Map pointer to vector map
-   \param line line id
-   \param type vector type
-   \param points line geometry
-   \param cats line categories
+   \param line feature id
+   \param type feature type
+   \param points feature geometry
+   \param cats feature categories
 
-   \return number of new line
+   \return new feature id
    \return -1 on error
  */
 int
@@ -159,7 +178,7 @@ Vect_rewrite_line(struct Map_info *Map,
     G_debug(3, "Vect_rewrite_line(): name = %s, line = %d", Map->name, line);
 
     if (!VECT_OPEN(Map))
-	G_fatal_error(_("Unable to rewrite line, vector map is not opened"));
+	G_fatal_error(_("Unable to rewrite feature, vector map is not opened"));
 
     dig_line_reset_updated(&(Map->plus));
     dig_node_reset_updated(&(Map->plus));
@@ -172,39 +191,20 @@ Vect_rewrite_line(struct Map_info *Map,
 							     points, cats);
 
     if (ret == -1)
-	G_fatal_error(_("Unable to rewrite line %d"), line);
+	G_fatal_error(_("Unable to rewrite feature %d"), line);
 
     return ret;
 }
 
-/*
- *  Deletes line at the given offset. Map must be opened on level 2.
- *  
- *  Returns: 0 ok
- *          -1 on error 
- */
-/*
-   int
-   V1_delete_line (
-   struct Map_info *Map,
-   long offset)
-   {
-   #ifdef GDEBUG
-   G_debug (3, "V1_delete_line(): name = %s", Map->name);
-   #endif
-   return (*V1_delete_line_array[Map->format][Map->level]) (Map, offset);
-   }
- */
-
 /*!
-   \brief Deletes line of given number.
+   \brief Delete feature
 
    Vector map must be opened on topo level 2.
 
    This function calls G_fatal_error() on error.
 
    \param Map pointer to vector map
-   \param line line id
+   \param line feature id
 
    \return 0 on success
    \return -1 on error
@@ -216,13 +216,13 @@ int Vect_delete_line(struct Map_info *Map, int line)
     G_debug(3, "Vect_delete_line(): name = %s, line = %d", Map->name, line);
 
     if (Map->level < 2) {
-	G_fatal_error(_("Unable to delete line %d, "
-			"vector map <%s> is not opened on topo level 2"),
+	G_fatal_error(_("Unable to delete feature %d, "
+			"vector map <%s> is not opened on topology level"),
 		      line, Map->name);
     }
 
     if (Map->mode != GV_MODE_RW && Map->mode != GV_MODE_WRITE) {
-	G_fatal_error(_("Unable to delete line %d, "
+	G_fatal_error(_("Unable to delete feature %d, "
 			"vector map <%s> is not opened in 'write' mode"),
 		      line, Map->name);
     }
@@ -236,8 +236,54 @@ int Vect_delete_line(struct Map_info *Map, int line)
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
 
     if (ret == -1)
-	G_fatal_error(_("Unable to delete line %d from vector map <%s>"),
+	G_fatal_error(_("Unable to feature %d from vector map <%s>"),
 		      line, Map->name);
 
+    return ret;
+}
+
+/*!
+   \brief Restore previously deleted feature
+
+   Vector map must be opened on topo level 2.
+
+   This function calls G_fatal_error() on error.
+
+   \param Map pointer to vector map
+   \param line feature id to be deleted
+
+   \return 0 on success
+   \return -1 on error
+ */
+int Vect_restore_line(struct Map_info *Map, int line, long offset)
+{
+    int ret;
+
+    G_debug(3, "Vect_restore_line(): name = %s, line = %d", Map->name, line);
+
+    if (Map->level < 2) {
+	G_fatal_error(_("Unable to restore feature %d, "
+			"vector map <%s> is not opened on topology level"),
+		      line, Map->name);
+    }
+
+    if (Map->mode != GV_MODE_RW && Map->mode != GV_MODE_WRITE) {
+	G_fatal_error(_("Unable to restore feature %d, "
+			"vector map <%s> is not opened in 'write' mode"),
+		      line, Map->name);
+    }
+
+    dig_line_reset_updated(&(Map->plus));
+    dig_node_reset_updated(&(Map->plus));
+    if (!(Map->plus.update_cidx)) {
+	Map->plus.cidx_up_to_date = 0;
+    }
+
+    ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line, offset);
+
+    if (ret == -1)
+	G_fatal_error(_("Unable to restore feature %d from vector map <%s>"),
+		      line, Map->name);
+    
     return ret;
 }
