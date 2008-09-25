@@ -1,19 +1,24 @@
 /*!
    \file write_nat.c
 
-   \brief Vector library - write data
+   \brief Vector library - write vector feature (native format)
 
    Higher level functions for reading/writing/manipulating vectors.
 
+   Operations:
+    - Add feature
+    - Rewrite feature
+    - Delete feature
+    - Restore feature
+
    (C) 2001-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author V*_restore_line() by Martin Landa <landa.martin gmail.com> (2008)
 
    \date 2001
  */
@@ -26,6 +31,12 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 
+/*!
+  \brief Deletes area (i.e. centroid) categories from category index
+
+  \param Map pointer to vector map
+  \param area area id
+*/
 static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
 {
     int i;
@@ -36,10 +47,10 @@ static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
 
     Area = Map->plus.Area[area];
     if (!Area)
-	G_fatal_error(_("BUG (delete_area_cats_from_cidx): Area %d does not exist"),
-		      area);
-
-    if (Area->centroid == 0)
+	G_fatal_error(_("%s: Area %d does not exist"),
+		      "delete_area_cats_from_cidx()", area);
+    
+    if (Area->centroid == 0) /* no centroid found */
 	return;
 
     if (!Cats)
@@ -53,6 +64,12 @@ static void delete_area_cats_from_cidx(struct Map_info *Map, int area)
     }
 }
 
+/*!
+  \brief Adds area (i.e. centroid) categories from category index
+
+  \param Map pointer to vector map
+  \param area area id
+*/
 static void add_area_cats_to_cidx(struct Map_info *Map, int area)
 {
     int i;
@@ -63,10 +80,10 @@ static void add_area_cats_to_cidx(struct Map_info *Map, int area)
 
     Area = Map->plus.Area[area];
     if (!Area)
-	G_fatal_error(_("BUG (add_area_cats_to_cidx): Area %d does not exist"),
-		      area);
+	G_fatal_error(_("%s: Area %d does not exist"),
+		      "add_area_cats_to_cidx():", area);
 
-    if (Area->centroid == 0)
+    if (Area->centroid == 0) /* no centroid found */
 	return;
 
     if (!Cats)
@@ -80,105 +97,56 @@ static void add_area_cats_to_cidx(struct Map_info *Map, int area)
     }
 }
 
-long V1__rewrite_line_nat(struct Map_info *Map, long offset, int type,
-			  struct line_pnts *points, struct line_cats *cats);
+/*!
+  \brief Add line to topo file
 
-/**
-   \brief Writes line to 'coor' file
+  Update areas. Areas are modified if: 
+   
+  1) first or/and last point are existing nodes ->
+   - drop areas/islands whose boundaries are neighbour to this boundary at these nodes
+   - try build areas and islands for this boundary and neighbour boundaries going through these nodes
 
-   \param Map pointer to vector map
-   \param type feature type
-   \param points line geometry
-   \param cats line cats
+   Question: may be by adding line created new area/isle which doesn't go through nodes of this line
 
-   \return offset into file
-   \return -1 on error
+   <pre>
+             old         new line 
+         +----+----+                    +----+----+                 +----+----+ 
+         | A1 | A2 |  +      /      ->  | A1 |   /|   or +   \   -> | A1 | A2 | \
+         |    |    |                    |    |    |                 |    |    |
+         +----+----+                    +----+----+                 +----+----+
+           I1   I1                        I1   I1                      
+   </pre>        
+ 
+   - reattache all centroids/isles inside new area(s)
+   - attach new isle to area outside
+
+  2) line is closed ring (node at the end is new, so it is not case above)
+    - build new area/isle
+    - check if it is island or contains island(s)
+    - re-attach all centroids/isles inside new area(s)
+    - attach new isle to area outside
+    
+    Note that 1) and 2) is done by the same code.
 */
-long
-V1_write_line_nat(struct Map_info *Map,
-		  int type, struct line_pnts *points, struct line_cats *cats)
+static void add_line_to_topo(struct Map_info *Map, int line,
+			     struct line_pnts *points, struct line_cats *cats)
 {
-    long offset;
+    int first, s, n, i;
+    int type, node, next_line, area, side, sel_area, new_area[2];
 
-    if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to  end of file */
-	return -1;
-
-    offset = dig_ftell(&(Map->dig_fp));
-    if (offset == -1)
-	return -1;
-
-    return V1__rewrite_line_nat(Map, offset, type, points, cats);
-}
-
-/**
-   \brief Writes line to 'coor' file.
-
-   \param Map pointer to vector map
-   \param type feature type
-   \param points line geometry
-   \param cats line cats
-
-   \return  number of new line
-   \return -1 on error
-*/
-long
-V2_write_line_nat(struct Map_info *Map,
-		  int type, struct line_pnts *points, struct line_cats *cats)
-{
-    int i, s, n, line = 0, next_line, area = 0, node, side, first, sel_area;
-    int new_area[2];
-    long offset;
     struct Plus_head *plus;
-    BOUND_BOX box, abox;
     P_LINE *Line, *NLine;
-    P_AREA *Area;
     P_NODE *Node;
-
-    G_debug(3, "V2_write_line_nat()");
-    offset = V1_write_line_nat(Map, type, points, cats);
-    if (offset < 0)
-	return -1;
-
-    /* Update topology */
+    P_AREA *Area;
+    
+    BOUND_BOX box, abox;
+    
     plus = &(Map->plus);
-    /* Add line */
-    if (plus->built >= GV_BUILD_BASE) {
-	line = dig_add_line(plus, type, points, offset);
-	G_debug(3, "  line added to topo with id = %d", line);
-	dig_line_box(points, &box);
-	dig_line_set_box(plus, line, &box);
-	if (line == 1)
-	    Vect_box_copy(&(plus->box), &box);
-	else
-	    Vect_box_extend(&(plus->box), &box);
-    }
-
-    /* Update areas. Areas are modified if: 
-     *  1) first or/and last point are existing nodes ->
-     *     - drop areas/islands whose boundaries are neighbour to this boundary at these nodes
-     *     - try build areas and islands for this boundary and neighbour boundaries going through these nodes
-     *       Question: may be by adding line created new area/isle which doesn't go through nodes of this line
-     *            old         new line 
-     *        +----+----+                    +----+----+                 +----+----+ 
-     *        | A1 | A2 |  +      /      ->  | A1 |   /|   or +   \   -> | A1 | A2 |\
-     *        |    |    |                    |    |    |                 |    |    |
-     *        +----+----+                    +----+----+                 +----+----+
-     *          I1   I1                        I1   I1                      
-     *        
-     *     - reattache all centroids/isles inside new area(s)
-     *     - attach new isle to area outside
-     *  2) line is closed ring (node at the end is new, so it is not case above)
-     *     - build new area/isle
-     *     - check if it is island or contains island(s)
-     *     - reattache all centroids/isles inside new area(s)
-     *     - attach new isle to area outside
-     *
-     *  Note that 1) and 2) is done by the same code.
-     */
+    Line = plus->Line[line];
+    type = Line->type;
 
     if (plus->built >= GV_BUILD_AREAS) {
 	if (type == GV_BOUNDARY) {
-	    Line = plus->Line[line];
 	    /* Delete neighbour areas/isles */
 	    first = 1;
 	    for (s = 1; s < 3; s++) {	/* for each node */
@@ -326,42 +294,116 @@ V2_write_line_nat(struct Map_info *Map,
 				type);
     }
 
+    return;
+}
+
+long V1__rewrite_line_nat(struct Map_info *Map, long offset, int type,
+			  struct line_pnts *points, struct line_cats *cats);
+
+/*!
+  \brief Writes feature to 'coor' file
+  
+  \param Map pointer to vector map
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset into file
+  \return -1 on error
+*/
+long V1_write_line_nat(struct Map_info *Map,
+		       int type, struct line_pnts *points, struct line_cats *cats)
+{
+    long offset;
+
+    if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to  end of file */
+	return -1;
+
+    offset = dig_ftell(&(Map->dig_fp));
+    if (offset == -1)
+	return -1;
+
+    return V1__rewrite_line_nat(Map, offset, type, points, cats);
+}
+
+/*!
+  \brief Writes feature to 'coor' file (topology level)
+  
+  \param Map pointer to vector map
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return new feature id
+  \return -1 on error
+*/
+long V2_write_line_nat(struct Map_info *Map,
+		       int type, struct line_pnts *points, struct line_cats *cats)
+{
+    int line;
+    long offset;
+    struct Plus_head *plus;
+    BOUND_BOX box;
+
+    line = 0;
+    
+    G_debug(3, "V2_write_line_nat()");
+    offset = V1_write_line_nat(Map, type, points, cats);
+    if (offset < 0)
+	return -1;
+
+    /* Update topology */
+    plus = &(Map->plus);
+    /* Add line */
+    if (plus->built >= GV_BUILD_BASE) {
+	line = dig_add_line(plus, type, points, offset);
+	G_debug(3, "  line added to topo with id = %d", line);
+	dig_line_box(points, &box);
+	dig_line_set_box(plus, line, &box);
+	if (line == 1)
+	    Vect_box_copy(&(plus->box), &box);
+	else
+	    Vect_box_extend(&(plus->box), &box);
+    }
+
+    add_line_to_topo(Map,
+		     line, points, cats);
+
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
 	    plus->n_upnodes);
+    
     return line;
 }
 
-/**
-   \brief Rewrites line at the given offset.
-   
-   If the number of points or cats differs from
-   the original one or the type is changed:
-   GV_POINTS -> GV_LINES or GV_LINES -> GV_POINTS,
-   the old one is deleted and the
-   new is appended to the end of the file.
-
-   Old line is deleted (marked as dead), new line written.
-
-   \param Map pointer to vector map
-   \param offset line offset
-   \param type feature type
-   \param points line geometry
-   \param cats line cats
-
-   \return line offset (rewriten line)
-   \return -1 on error
+/*!
+  \brief Rewrites feature at the given offset.
+  
+  If the number of points or cats differs from the original one or
+  the type is changed: GV_POINTS -> GV_LINES or GV_LINES ->
+  GV_POINTS, the old one is deleted and the new is appended to the
+  end of the file.
+  
+  Old feature is deleted (marked as dead), new feature written.
+  
+  \param Map pointer to vector map
+  \param offset feature offset
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset (rewriten feature)
+  \return -1 on error
 */
-long
-V1_rewrite_line_nat(struct Map_info *Map,
-		    long offset,
-		    int type,
-		    struct line_pnts *points, struct line_cats *cats)
+long V1_rewrite_line_nat(struct Map_info *Map,
+			 long offset,
+			 int type,
+			 struct line_pnts *points, struct line_cats *cats)
 {
     int old_type;
     struct line_pnts *old_points;
     struct line_cats *old_cats;
     long new_offset;
-
+    
     /* TODO: enable points and cats == NULL  */
 
     /* First compare numbers of points and cats with tha old one */
@@ -398,25 +440,24 @@ V1_rewrite_line_nat(struct Map_info *Map,
     }
 }
 
-/**
-   \brief Rewrites line of given number.
-
-   Old line is deleted (marked as dead), new line written.
-
-   \param Map pointer to vector map
-   \param line line id
-   \param type feature type
-   \param points line geometry
-   \param cats line cats
-
-   \return number of new line
-   \return -1 on error
+/*!
+  \brief Rewrites feature (topology level)
+   
+  Old feature is deleted (marked as dead), new feature written.
+  
+  \param Map pointer to vector map
+  \param line feature id
+  \param type feature type
+  \param points feature geometry
+  \param cats feature category
+  
+  \return new feature id
+  \return -1 on error
 */
-int
-V2_rewrite_line_nat(struct Map_info *Map,
-		    int line,
-		    int type,
-		    struct line_pnts *points, struct line_cats *cats)
+int V2_rewrite_line_nat(struct Map_info *Map,
+			int line,
+			int type,
+			struct line_pnts *points, struct line_cats *cats)
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
      *        and V2_write_nat() this function first deletes old line
@@ -429,23 +470,22 @@ V2_rewrite_line_nat(struct Map_info *Map,
     return (V2_write_line_nat(Map, type, points, cats));
 }
 
-/**
-   \brief Rewrites line at the given offset.
-
-   \param Map pointer to vector map
-   \param offset line offset
-   \param type feature type
-   \param points line geometry
-   \param cats line cats
-
-   \return line offset
-   \return -1 on error
+/*!
+  \brief Rewrites feature at the given offset.
+  
+  \param Map pointer to vector map
+  \param offset feature offset
+  \param type feature type
+  \param points feature geometry
+  \param cats feature categories
+  
+  \return feature offset
+  \return -1 on error
 */
-long
-V1__rewrite_line_nat(struct Map_info *Map,
-		     long offset,
-		     int type,
-		     struct line_pnts *points, struct line_cats *cats)
+long V1__rewrite_line_nat(struct Map_info *Map,
+			  long offset,
+			  int type,
+			  struct line_pnts *points, struct line_cats *cats)
 {
     int i, n_points;
     char rhead, nc;
@@ -530,14 +570,14 @@ V1__rewrite_line_nat(struct Map_info *Map,
     return offset;
 }
 
-/**
-   \brief Deletes line at the given offset.
-
-   \param Map pointer to vector map
-   \param offset line offset
-
-   \return  0 ok
-   \return -1 on error
+/*!
+  \brief Deletes feature at the given offset.
+  
+  \param Map pointer to vector map
+  \param offset feature offset
+  
+  \return  0 on success
+  \return -1 on error
 */
 int V1_delete_line_nat(struct Map_info *Map, long offset)
 {
@@ -570,14 +610,14 @@ int V1_delete_line_nat(struct Map_info *Map, long offset)
     return 0;
 }
 
-/**
-   \brief Deletes line of given number.
-
-   \param pointer to vector map
-   \param line line id
-
-   \return 0 ok
-   \return -1 on error
+/*!
+  \brief Deletes feature (topology level).
+  
+  \param pointer to vector map
+  \param line feature id
+  
+  \return 0 on success
+  \return -1 on error
 */
 int V2_delete_line_nat(struct Map_info *Map, int line)
 {
@@ -597,7 +637,7 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 	Line = Map->plus.Line[line];
 
 	if (Line == NULL)
-	    G_fatal_error(_("Attempt to delete dead line"));
+	    G_fatal_error(_("Attempt to delete dead feature"));
 	type = Line->type;
     }
 
@@ -766,5 +806,128 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
 
     G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
 	    plus->n_upnodes);
+    return ret;
+}
+
+/*!
+  \brief Restores feature at the given offset.
+  
+  \param Map pointer to vector map
+  \param offset feature offset
+  
+  \return  0 on success
+  \return -1 on error
+*/
+int V1_restore_line_nat(struct Map_info *Map, long offset)
+{
+    char rhead;
+    GVFILE *dig_fp;
+    
+    G_debug(3, "V1_restore_line_nat(), offset = %ld", offset);
+    
+    dig_set_cur_port(&(Map->head.port));
+    dig_fp = &(Map->dig_fp);
+    
+    if (dig_fseek(dig_fp, offset, 0) == -1)
+	return -1;
+    
+    /* read old */
+    if (0 >= dig__fread_port_C(&rhead, 1, dig_fp))
+	return (-1);
+
+    /* mark as alive */
+    rhead |= 1;
+    
+    /* write new */
+    if (dig_fseek(dig_fp, offset, 0) == -1)
+	return -1;
+
+    if (0 >= dig__fwrite_port_C(&rhead, 1, dig_fp))
+	return -1;
+    
+    if (0 != dig_fflush(dig_fp))
+	return -1;
+    
+    return 0;
+}
+
+/*!
+  \brief Restores feature (topology level)
+  
+  \param Map pointer to vector map
+  \param line feature id
+  \param offset feature offset
+  
+  \return 0 on success
+  \return -1 on error
+*/
+int V2_restore_line_nat(struct Map_info *Map, int line, long offset)
+{
+    int i, ret, type;
+    P_LINE *Line;
+    struct Plus_head *plus;
+    BOUND_BOX box;
+    
+    static struct line_pnts *points = NULL;
+    static struct line_cats *cats = NULL;
+    
+    Line = NULL;
+    type = 0;
+    
+    G_debug(3, "V2_restore_line_nat(), line = %d", line);
+
+    plus = &(Map->plus);
+
+    if (plus->built >= GV_BUILD_BASE) {
+	Line = Map->plus.Line[line];
+
+	if (Line != NULL)
+	    G_fatal_error(_("Attempt to restore alive feature"));
+    }
+
+    if (!points) {
+	points = Vect_new_line_struct();
+    }
+
+    if (!cats) {
+	cats = Vect_new_cats_struct();
+    }
+
+    /* restore the line in coor */
+    ret = V1_restore_line_nat(Map, offset);
+
+    if (ret == -1) {
+	return ret;
+    }
+    
+    /* read feature geometry */
+    type = V1_read_line_nat(Map, points, cats, offset);
+    if (type < 0) {
+	return -1;
+    }
+
+    /* update category index */
+    if (plus->update_cidx) {
+	for (i = 0; i < cats->n_cats; i++) {
+	    dig_cidx_add_cat(plus, cats->field[i], cats->cat[i], line, type);
+	}
+    }
+    
+    /* restore the line from topo */		   
+    if (plus->built >= GV_BUILD_BASE) {
+	dig_restore_line(plus, line, type, points, offset);
+	G_debug(3, "  line restored in topo with id = %d", line);
+	dig_line_box(points, &box);
+	dig_line_set_box(plus, line, &box);
+	Vect_box_extend(&(plus->box), &box);
+    }
+    
+    add_line_to_topo(Map,
+		     line, points, cats);
+
+    G_debug(3, "updated lines : %d , updated nodes : %d", plus->n_uplines,
+	    plus->n_upnodes);
+    
+
     return ret;
 }

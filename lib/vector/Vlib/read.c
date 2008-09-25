@@ -1,21 +1,19 @@
 /*!
    \file read.c
 
-   \brief Vector library - reading data
+   \brief Vector library - read vector features
 
    Higher level functions for reading/writing/manipulating vectors.
 
    (C) 2001-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
-   Read the file COPYING that comes with GRASS
-   for details.
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
-   Update to GRASS 5.7 Radim Blazek and David D. Gray.
+   \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
 
-   \date 2001
+   \date 2001-2008
  */
 
 #include <grass/Vect.h>
@@ -56,20 +54,18 @@ static int (*V2_read_line_array[]) () = {
 };
 
 /*!
-   \brief Get next vector line
+   \brief Read next vector feature (level 1 and 2)
 
-   \param Map vector map
-   \param[out] line_p line geometry
-   \param[out] line_c line categories
+   \param Map pointer vector map
+   \param[out] line_p feature geometry
+   \param[out] line_c feature categories
 
-   \return line type,
-   \return -1 on Out of memory,
-   \return -2 on EOF   
-
+   \return feature type,
+   \return -1 out of memory
+   \return -2 EOF   
  */
-int
-Vect_read_next_line(struct Map_info *Map,
-		    struct line_pnts *line_p, struct line_cats *line_c)
+int Vect_read_next_line(struct Map_info *Map,
+			struct line_pnts *line_p, struct line_cats *line_c)
 {
 
     G_debug(3, "Vect_read_next_line()");
@@ -82,19 +78,19 @@ Vect_read_next_line(struct Map_info *Map,
 }
 
 /*!
-   \brief Get vector line
+   \brief Read vector feature
 
-   \param Map vector map
-   \param[out] line_p line geometry
-   \param[out] line_c line categories
-   \param line line id 
-   \return line type,
-   \return -1 on Out of memory,
-   \return -2 on EOF   
+   \param Map pointer to vector map
+   \param[out] line_p feature geometry
+   \param[out] line_c feature categories
+   \param line feature id 
+   
+   \return feature type
+   \return -1 out of memory,
+   \return -2 EOF   
  */
-int
-Vect_read_line(struct Map_info *Map,
-	       struct line_pnts *line_p, struct line_cats *line_c, int line)
+int Vect_read_line(struct Map_info *Map,
+		   struct line_pnts *line_p, struct line_cats *line_c, int line)
 {
 
     G_debug(3, "Vect_read_line()");
@@ -103,33 +99,34 @@ Vect_read_line(struct Map_info *Map,
 	G_fatal_error("Vect_read_line(): %s", _("vector map is not opened"));
 
     if (line < 1 || line > Map->plus.n_lines)
-	G_fatal_error(_("Vect_read_line(): line %d is not reasonable (max line in vector map: %d)"),
-		      line, Map->plus.n_lines);
+	G_fatal_error(_("Vect_read_line(): feature id %d is not reasonable "
+			"(max features in vector map <%s>: %d)"),
+		      line, Vect_get_full_name(Map), Map->plus.n_lines);
 
     return (*V2_read_line_array[Map->format]) (Map, line_p, line_c, line);
 }
 
 /*!
-   \brief Check if line is alive or dead
+   \brief Check if feature is alive or dead
 
-   \param Map vector map
-   \param line line id
+   \param Map pointer to vector map
+   \param line feature id
 
-   \return 1 if line alive
-   \return 0 if line is dead
+   \return 1 if feature alive
+   \return 0 if feature is dead
  */
 int Vect_line_alive(struct Map_info *Map, int line)
 {
     if (Map->plus.Line[line] != NULL)
 	return 1;
-
+    
     return 0;
 }
 
 /*!
    \brief Check if node is alive or dead
 
-   \param Map vector map
+   \param Map pointer to vector map
    \param node node id
 
    \return 1 if node alive
@@ -146,7 +143,7 @@ int Vect_node_alive(struct Map_info *Map, int node)
 /*!
    \brief Check if area is alive or dead
 
-   \param Map vector map
+   \param Map pointer to vector map
    \param area area id
 
    \return 1 if area alive
@@ -163,7 +160,7 @@ int Vect_area_alive(struct Map_info *Map, int area)
 /*!
    \brief Check if isle is alive or dead
 
-   \param Map vector map
+   \param Map pointer to vector map
    \param isle isle id
 
    \return 1 if isle alive
@@ -175,4 +172,27 @@ int Vect_isle_alive(struct Map_info *Map, int isle)
 	return 1;
 
     return 0;
+}
+
+/*!
+  \brief Get feature offset
+
+  Can be used for Vect_restore_line().
+
+  \param Map pointer to vector map
+  \param line feature id
+
+  \return feature offset
+  \return -1 on error
+*/
+long Vect_get_line_offset(const struct Map_info *Map, int line)
+{
+    if (line < 1 || line > Map->plus.n_lines)
+	return -1;
+    
+    if (Map->plus.Line[line] != NULL) {
+	return Map->plus.Line[line]->offset;
+    }
+    
+    return -1;
 }
