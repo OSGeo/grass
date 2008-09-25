@@ -18,6 +18,7 @@ grey.log: histogram logarithmic transformed grey scale
 gyr: green through yellow to red
 ndvi: Normalized Difference Vegetation Index colors
 population: color table covering human population classification breaks
+precipitation: precipitation color table (0..2000mm)
 rainbow: rainbow color table
 ramp: color ramp
 random: random color table
