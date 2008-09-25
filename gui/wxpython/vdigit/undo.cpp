@@ -3,8 +3,6 @@
 
    \brief Undo/Redo functionality
 
-   \todo Implement Vect_restore_line() in Vlib
-
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
    for details.
@@ -48,16 +46,16 @@ int Digit::Undo(int level)
 
     if (level == 0) {
 	/* 0 -> undo all */
-	level = changesetDead - changesetCurrent;
+	level = -changesetLast;
     }
 
-    G_debug(2, "Digit.Undo(): changeset_last=%d changeset_dead=%d, changeset_current=%d, level=%d",
-	    changesetLast, changesetDead, changesetCurrent, level);
+    G_debug(2, "Digit.Undo(): changeset_last=%d, changeset_current=%d, level=%d",
+	    changesetLast, changesetCurrent, level);
     
     if (level < 0) { /* undo */
 	if (changesetCurrent + level < -1)
 	    return changesetCurrent;
-	for (int changeset = changesetCurrent; changeset > changesetCurrent + level; --changeset) {
+	for (int changeset = changesetCurrent; changeset >= changesetCurrent + level; --changeset) {
 	    ApplyChangeset(changeset, true);
 	}
     }
@@ -71,10 +69,10 @@ int Digit::Undo(int level)
 
     changesetCurrent += level;
 
-    G_debug(2, "Digit.Undo(): changeset_dead=%d, changeset_current=%d",
-	    changesetDead, changesetCurrent);
+    G_debug(2, "Digit.Undo(): changeset_current=%d",
+	    changesetCurrent);
 
-    return (changesetDead >= changesetCurrent) ? -1 : changesetCurrent;
+    return changesetCurrent;
 }
 
 /**
@@ -89,21 +87,24 @@ int Digit::Undo(int level)
 */
 int Digit::ApplyChangeset(int changeset, bool undo)
 { 
-    int ret;
+    int ret, line, type;
 
     if (changeset < 0 || changeset > (int) changesets.size())
 	return -1;
 
     ret = 0;
     std::vector<action_meta> action = changesets[changeset];
-    for (std::vector<action_meta>::const_iterator i = action.begin(), e = action.end();
+    for (std::vector<action_meta>::const_reverse_iterator i = action.rbegin(), e = action.rend();
 	 i != e; ++i) {
-	if ((undo && (*i).type == ADD) ||
-	    (!undo && (*i).type == DELETE)) {
-	    if (Vect_line_alive(display->mapInfo, (*i).line)) {
+	type = (*i).type;
+	line = (*i).line;
+
+	if ((undo && type == ADD) ||
+	    (!undo && type == DEL)) {
+	    if (Vect_line_alive(display->mapInfo, line)) {
 		G_debug(3, "Digit.ApplyChangeset(): changeset=%d, action=add, line=%d -> deleted",
-			changeset, (*i).line);
-		Vect_delete_line(display->mapInfo, (*i).line);
+			changeset, line);
+		Vect_delete_line(display->mapInfo, line);
 		if (!ret)
 		    ret = 1;
 	    }
@@ -112,79 +113,58 @@ int Digit::ApplyChangeset(int changeset, bool undo)
 			changeset, (*i).line);
 	    }
 	}
-	else if ((*i).type == REWRITE) {
-	    if (Vect_line_alive(display->mapInfo, (*i).line)) {
-		G_debug(3, "Digit.ApplyChangeset(): changeset=%d, action=rewrite, line=%d",
-			changeset, (*i).line);
-		if (Vect_rewrite_line (display->mapInfo, (*i).line, (*i).ltype, (*i).Points, (*i).Cats) < 0)
-		    return -1;
-	    }
-	    else {
-		G_debug(3, "Digit.ApplyChangeset(): changeset=%d, action=rewrite, line=%d -> dead",
-			changeset, (*i).line);
-	    }
-	}
 	else { /* DELETE */
-	    if (!Vect_line_alive(display->mapInfo, (*i).line)) {
+	    long offset = (*i).offset;
+	    if (!Vect_line_alive(display->mapInfo, line)) {
 		G_debug(3, "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d -> added",
-			changeset, (*i).line);
-		if (Vect_write_line(display->mapInfo, (*i).ltype, (*i).Points, (*i).Cats) < 0)
+			changeset, line);
+		if (Vect_restore_line(display->mapInfo, line, offset) < 0)
 		    return -1;
 		if (!ret)
 		    ret = 1;
 	    }
 	    else {
 		G_debug(3, "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d alive",
-			changeset, (*i).line);
+			changeset, line);
 	    }
 	}
     }
     
-    if (changeset < (int) changesets.size() - 1)
-	changesetDead = changeset;
-
     return ret;
 }
 
 /**
    \brief Add action to changeset
 
-   \todo Use Vect_restore_line() (TODO) instead!
-
-   \param type action type (ADD, DELETE)
+   \param type action type (ADD, DEL)
 
    \return 0 on success
    \return -1 on error
 */
 int Digit::AddActionToChangeset(int changeset, Digit::action_type type, int line)
 {
-    int ltype;
-    struct line_pnts *Points;
-    struct line_cats *Cats;
+    long offset;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
-    Points = Vect_new_line_struct();
-    Cats = Vect_new_cats_struct(); 
-
-    /* do copy */
-    if (!Vect_line_alive(display->mapInfo, line))
-	DeadLineMsg(line);
+    if (!Vect_line_alive(display->mapInfo, line)) {
+	// DeadLineMsg(line);
 	return -1;
+    }
 
-    ltype = Vect_read_line(display->mapInfo, Points, Cats, line);
+    offset = Vect_get_line_offset(display->mapInfo, line);
 
-    action_meta data = { type, line, ltype, Points, Cats };
+    action_meta data = { type, line, offset };
     if (changesets.find(changeset) == changesets.end()) {
 	changesets[changeset] = std::vector<action_meta>();
 	changesetCurrent = changeset;
     }
     changesets[changeset].push_back(data);
-    G_debug (3, "Digit.AddActionToChangeset(): changeset=%d, type=%d, line=%d",
-	     changeset, type, line);
+    G_debug (3, "Digit.AddActionToChangeset(): changeset=%d, type=%d, line=%d, offset=%ld",
+	     changeset, type, line, offset);
 
     return 0;
 }
@@ -202,10 +182,7 @@ void Digit::FreeChangeset(int changeset)
     std::vector<action_meta> action = changesets[changeset];
     for (std::vector<action_meta>::iterator i = action.begin(), e = action.end();
 	 i != e; ++i) {
-	Vect_destroy_line_struct((*i).Points);
-	Vect_destroy_cats_struct((*i).Cats);
-	(*i).Points = NULL;
-	(*i).Cats = NULL;
+	;
     }
 
     return;
@@ -215,7 +192,7 @@ void Digit::FreeChangeset(int changeset)
    \brief Remove action from changeset
 
    \param changeset changeset id
-   \param type action type (ADD, DELETE, REWRITE)
+   \param type action type (ADD, DEL)
    \param line line id
 
    \return number of actions in changeset
@@ -245,5 +222,5 @@ int Digit::RemoveActionFromChangeset(int changeset, Digit::action_type type, int
 */
 int Digit::GetUndoLevel()
 {
-    return changesetCurrent - changesetDead;
+    return changesetCurrent;
 }

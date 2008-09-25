@@ -896,8 +896,12 @@ class VDigit(AbstractDigit):
         """
         snap, thresh = self.__getSnapThreshold()
         
-        nlines = self.digit.MoveLines(move[0], move[1], 0.0, # TODO 3D
-                                      str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
+        bgmap = UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')
+        try:
+            nlines = self.digit.MoveLines(move[0], move[1], 0.0, # TODO 3D
+                                          str(bgmap), snap, thresh)
+        except SystemExit:
+            pass
         
         if nlines > 0:
             self.toolbar.EnableUndo()
@@ -1317,7 +1321,8 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         # initialize wx display driver
         try:
-            self.__display = wxvdigit.DisplayDriver(mapwindow.pdcVector)
+            self.__display = wxvdigit.DisplayDriver(mapwindow.pdcVector,
+                                                    mapwindow.pdcTmp)
         except:
             self.__display = None
             
@@ -1373,6 +1378,7 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         @return wx.Image instance
         """
+        print 'd'
         nlines = self.__display.DrawMap(True) # force
         Debug.msg(3, "CDisplayDriver.DrawMap(): nlines=%d" % nlines)
 

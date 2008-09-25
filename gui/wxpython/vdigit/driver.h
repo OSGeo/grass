@@ -34,7 +34,7 @@ class DisplayDriver
 {
 private:
     friend class Digit;
-    wxPseudoDC *dc;  // device content
+    wxPseudoDC *dc, *dcTmp;  // device content
 
     /* disabled due to expensive calling dc->SetId()
      *
@@ -134,7 +134,7 @@ private:
 		     double *, double *, double *);
     double DistanceInPixels(double);
 
-    int DrawCross(int, const wxPoint *, int size=5);
+    int DrawCross(wxPseudoDC *, int, const wxPoint *, int size=5);
     int DrawArrow(double, double, double, double, double,
 		   int);
 
@@ -159,7 +159,7 @@ private:
 
 public:
     /* constructor */
-    DisplayDriver(void *);
+    DisplayDriver(void *, void *);
     /* destructor */
     ~DisplayDriver();
 

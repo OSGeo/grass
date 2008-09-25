@@ -1,24 +1,24 @@
 """
-MODULE: toolbar
+@package toolbar
 
-CLASSES:
-    * AbstractToolbar
-    * MapToolbar
-    * GRToolbar
-    * GCPToolbar
-    * VDigitToolbar
-    * ProfileToolbar
-    * NvizToolbar
+@brief Toolbars for Map Display window
 
-PURPOSE: Toolbars for Map Display window
+Classes:
+ - AbstractToolbar
+ - MapToolbar
+ - GRToolbar
+ - GCPToolbar
+ - VDigitToolbar
+ - ProfileToolbar
+ - NvizToolbar
 
-AUTHORS: The GRASS Development Team
-         Michael Barton, Martin Landa, Jachym Cepicky
+(C) 2007-2008 by the GRASS Development Team This program is free
+software under the GNU General Public License (>=v2). Read the file
+COPYING that comes with GRASS for details.
 
-COPYRIGHT: (C) 2007-2008 by the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+@author Michael Barton
+@author Jachym Cepicky
+@author Martin Landa <landa.martin gmail.com>
 """
 
 import wx
@@ -531,11 +531,13 @@ class VDigitToolbar(AbstractToolbar):
         return data
 
     def OnTool(self, event):
-        """Tool selected -> toggle tool to pointer"""
-        id = self.parent.toolbars['map'].pointer
-        self.parent.toolbars['map'].toolbar.ToggleTool(id, True)
-        self.parent.toolbars['map'].mapdisplay.OnPointer(event)
-
+        """Tool selected -> disable selected tool in map toolbar"""
+        id = self.parent.toolbars['map'].GetAction(type='id')
+        # update map toolbar
+        self.parent.toolbars['map'].toolbar.ToggleTool(id, False)
+        # set cursor
+        cursor = self.parent.cursors["cross"]
+        self.parent.MapWindow.SetCursor(cursor)
         
         if event:
             # deselect previously selected tool
@@ -730,16 +732,13 @@ class VDigitToolbar(AbstractToolbar):
 
         @param enable False for disable
         """
-        ### fix undo first...
-
-        #         if enable:
-        #             if self.toolbar[0].GetToolEnabled(self.undo) is False:
-        #                 self.toolbar[0].EnableTool(self.undo, True)
-        #         else:
-        #             if self.toolbar[0].GetToolEnabled(self.undo) is True:
-        #                 self.toolbar[0].EnableTool(self.undo, False)
-        pass
-
+        if enable:
+            if self.toolbar[0].GetToolEnabled(self.undo) is False:
+                self.toolbar[0].EnableTool(self.undo, True)
+        else:
+            if self.toolbar[0].GetToolEnabled(self.undo) is True:
+                self.toolbar[0].EnableTool(self.undo, False)
+        
     def OnSettings(self, event):
         """Show settings dialog"""
 

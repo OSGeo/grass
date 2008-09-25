@@ -2419,7 +2419,11 @@ class NvizToolWindow(wx.Frame):
         npoints = nprimitives = 0
         for line in vInfo.ReadStdOutput():
             if 'Map is 3D' in line:
-                mapIs3D = int(line.replace('|', '').split(':')[1].strip())
+                mapIs3D = line.replace('|', '').split(':')[1].strip()
+                if mapIs3D == 'Yes':
+                    mapIs3D = 1
+                else:
+                    mapIs3D = 0
             elif 'Number of points' in line:
                 npoints = int(line.replace('|', '').split(':')[1].strip().split(' ')[0])
                 nprimitives = npoints

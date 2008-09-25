@@ -326,7 +326,7 @@ class Settings:
                     },
                 # exit
                 'saveOnExit' : {
-                    'enabled' : True
+                    'enabled' : False,
                     },
                 # break lines on intersection
                 'breakLines' : {
