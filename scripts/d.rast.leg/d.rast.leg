@@ -29,8 +29,8 @@
 #
 # See also:	d.rast, d.legend.
 #
-# Markus Neteler 8/2002: added simple d.legend logic
 # Jianping Xu and Scott Madry, Rutgers University. October 19, 1993
+# Markus Neteler 8/2002: added simple d.legend logic
 # Markus Neteler 10/2003: added g.parser
 # Michael Barton 12/2004: remove reference to (null)
 ##############################################################################
@@ -40,9 +40,13 @@
 #%  keywords: display
 #%End
 #%flag
+#%  key: f
+#%  description: Flip legend
+#%end
+#%flag
 #%  key: n
-#%  description: omit entries with missing label
-#%END
+#%  description: Omit entries with missing label
+#%end
 #%option
 #% key: map
 #% type: string
@@ -68,6 +72,10 @@ fi
 
 if [ $GIS_FLAG_N -eq 1 ] ; then
   OMIT="-n"
+fi
+
+if [ $GIS_FLAG_F -eq 1 ] ; then
+  FLIP="-f"
 fi
 
 #for -n flag of d.legend
@@ -103,9 +111,9 @@ then
        #draw legend
     	d.frame -s at=0,90,65,100 frame=right
         if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
-    	     d.legend -n map=$GIS_OPT_MAP
+    	     d.legend $FLIP -n map=$GIS_OPT_MAP
         else
-             d.legend $OMIT map=$GIS_OPT_MAP
+             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
         fi
 
        #draw map
@@ -126,9 +134,9 @@ else
        #draw legend
     	d.frame -s at=0,90,65,100 frame=right
         if test -f $HISTFILEDIR/$GIS_OPT_MAP/histogram ; then
-             d.legend -n map=$GIS_OPT_MAP lines=$GIS_OPT_NUM_OF_LINES
+             d.legend $FLIP -n map=$GIS_OPT_MAP lines=$GIS_OPT_NUM_OF_LINES
         else
-             d.legend $OMIT map=$GIS_OPT_MAP
+             d.legend $FLIP $OMIT map=$GIS_OPT_MAP
         fi
 
        #draw map
