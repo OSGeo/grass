@@ -26,16 +26,18 @@
    Allocate given structures.
    
    \param[in,out] PseudoDC device where to draw vector objects
+   \param[in,out] PseudoDC device where to draw vector objects (tmp, selected)
    
    \return
 */
-DisplayDriver::DisplayDriver(void *device)
+DisplayDriver::DisplayDriver(void *device, void *deviceTmp)
 {
     G_gisinit(""); /* GRASS functions */
 
     mapInfo = NULL;
 
     dc = (wxPseudoDC *) device;
+    dcTmp = (wxPseudoDC *) deviceTmp;
 
     points = Vect_new_line_struct();
     pointsScreen = new wxList();

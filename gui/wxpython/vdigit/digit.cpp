@@ -32,8 +32,7 @@ Digit::Digit(DisplayDriver *ddriver, void *window)
 	InitCats();
     }
 
-    changesetCurrent = -2; // initial value for undo/redo
-    changesetDead = -1;
+    changesetCurrent = -1; // initial value for undo/redo
 
     msgCaption = _("Digitization error");
     
@@ -62,5 +61,46 @@ void Digit::UpdateSettings(bool breakLines)
 {
     settings.breakLines = breakLines;
 
+    return;
+}
+
+/*!
+  \brief Register action before operation
+  
+  \return changeset id
+*/
+int Digit::AddActionsBefore(void)
+{
+    int changeset;
+
+    /* register changeset */
+    changeset = changesets.size();
+    for (int i = 0; i < display->selected.values->n_values; i++) {
+	int line = display->selected.values->value[i];
+	if (Vect_line_alive(display->mapInfo, line))
+	    AddActionToChangeset(changeset, DEL, line);
+    }
+    
+    return changeset;
+}
+
+/*!
+  \brief Register action after operation
+*/
+void Digit::AddActionsAfter(int changeset, int nlines)
+{
+    for (int i = 0; i < display->selected.values->n_values; i++) {
+	int line = display->selected.values->value[i];
+	if (Vect_line_alive(display->mapInfo, line)) {
+	    RemoveActionFromChangeset(changeset, DEL, line);
+	}
+    }
+
+    for (int line = nlines + 1; line <= Vect_get_num_lines(display->mapInfo); line++) {
+	if (Vect_line_alive(display->mapInfo, line)) {
+	    AddActionToChangeset(changeset, ADD, line);
+	}
+    }
+    
     return;
 }

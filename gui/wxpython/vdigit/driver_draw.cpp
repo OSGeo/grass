@@ -28,7 +28,7 @@
  */
 int DisplayDriver::DrawMap(bool force)
 {
-    if (!mapInfo || !dc)
+    if (!mapInfo || !dc || !dcTmp)
 	return -1;
 
     int nlines;
@@ -53,6 +53,7 @@ int DisplayDriver::DrawMap(bool force)
 	    region.box.W, region.box.E, region.box.S, region.box.N);
 
     dc->BeginDrawing();
+    dcTmp->BeginDrawing();
 
     if (settings.area.enabled) {
 	/* draw area fills first */
@@ -165,8 +166,10 @@ int DisplayDriver::DrawMap(bool force)
     for (int i = 0; i < listLines->n_values; i++) {
 	DrawLine(listLines->value[i]);
     }
-    dc->EndDrawing();
 
+    dcTmp->EndDrawing();
+    dc->EndDrawing();
+    
     // PrintIds();
     
     Vect_destroy_list(listLines);
@@ -216,11 +219,12 @@ int DisplayDriver::DrawLine(int line)
     double x, y, z; // screen coordinates
     bool draw;      // draw object ?
     wxPen *pen;
-    
+    wxPseudoDC *pdc;
+
     pen = NULL;
     draw = false;
 
-    if (!dc || !Vect_line_alive (mapInfo, line))
+    if (!dc || !dcTmp || !Vect_line_alive (mapInfo, line))
 	return -1;
 
     // read line
@@ -233,7 +237,11 @@ int DisplayDriver::DrawLine(int line)
     // update id for next line
     // dcId += points->n_points * 2 - 1;
 
+    pdc = NULL;
+
     if (IsSelected(line)) { // line selected ?
+	pdc = dcTmp;
+
 	if (settings.highlightDupl.enabled && IsDuplicated(line)) {
 	    pen = new wxPen(settings.highlightDupl.color, settings.lineWidth, wxSOLID);
 	}
@@ -250,6 +258,8 @@ int DisplayDriver::DrawLine(int line)
 	topology.highlight++;
     }
     else {
+	pdc = dc;
+	
 	dcId = 0;
 	if (type & GV_LINES) {
 	    switch (type) {
@@ -318,12 +328,12 @@ int DisplayDriver::DrawLine(int line)
 	pointsScreen->Append((wxObject*) new wxPoint((int) x, (int) y)); /* TODO: 3D */
     }
     
-    dc->SetId(dcId); /* 0 | 1 (selected) */
+    pdc->SetId(dcId); /* 0 | 1 (selected) */
    
     if (draw) {
-	dc->SetPen(*pen);
+	pdc->SetPen(*pen);
 	if (type & GV_POINTS) {
-	    DrawCross(line, (const wxPoint *) pointsScreen->GetFirst()->GetData());
+	    DrawCross(pdc, line, (const wxPoint *) pointsScreen->GetFirst()->GetData());
 	}
 	else {
 	    // long int startId = ids[line].startId + 1;
@@ -337,12 +347,12 @@ int DisplayDriver::DrawLine(int line)
 		    // wxRect rect (*point_beg, *point_end);
 		    // dc->SetIdBounds(startId, rect);
 		    
-		    dc->SetId(dcId); // set unique id & set bbox for each segment
-		    dc->SetPen(*pen);
+		    pdc->SetId(dcId); // set unique id & set bbox for each segment
+		    pdc->SetPen(*pen);
 		    wxRect rect (*point_beg, *point_end);
-		    dc->SetIdBounds(dcId, rect);
-		    dc->DrawLine(point_beg->x, point_beg->y,
-				 point_end->x, point_end->y);
+		    pdc->SetIdBounds(dcId, rect);
+		    pdc->DrawLine(point_beg->x, point_beg->y,
+				  point_end->x, point_end->y);
 		}
 	    }
 	    else {
@@ -352,12 +362,12 @@ int DisplayDriver::DrawLine(int line)
 		    wxPoints[i] = *point_beg;
 		}
 		
-		dc->DrawLines(pointsScreen->GetCount(), wxPoints);
+		pdc->DrawLines(pointsScreen->GetCount(), wxPoints);
 
 		if (!IsSelected(line) && settings.direction.enabled) {
 		    DrawDirectionArrow();
 		    // restore pen
-		    dc->SetPen(*pen);
+		    pdc->SetPen(*pen);
 		}
 	    }
 	}
@@ -388,16 +398,23 @@ int DisplayDriver::DrawLineVerteces(int line)
     int dcId;
     wxPoint *point;
     wxPen *pen;
+    wxPseudoDC *pdc;
 
     if (!IsSelected(line) && !settings.vertex.enabled)
 	return -1;
 
+    pdc = NULL;
+
     // determine color
     if (!IsSelected(line)) {
+	pdc = dc;
+
 	pen = new wxPen(settings.vertex.color, settings.lineWidth, wxSOLID);
 	dcId = 0;
     }
     else {
+	pdc = dcTmp;
+	
 	if (!drawSelected) {
 	    return -1;
 	}
@@ -415,21 +432,21 @@ int DisplayDriver::DrawLineVerteces(int line)
 	}
     }
 
-    dc->SetId(dcId); /* 0 | 1 (selected) */
-    dc->SetPen(*pen);
+    pdc->SetId(dcId); /* 0 | 1 (selected) */
+    pdc->SetPen(*pen);
 
     for (size_t i = 1; i < pointsScreen->GetCount() - 1; i++, dcId += 2) {
 	point = (wxPoint*) pointsScreen->Item(i)->GetData();
 
 	if (IsSelected(line) && drawSegments) {
-	    dc->SetId(dcId);
-	    dc->SetPen(*pen);
+	    pdc->SetId(dcId);
+	    pdc->SetPen(*pen);
 	    wxRect rect (*point, *point);
-	    dc->SetIdBounds(dcId, rect);
+	    pdc->SetIdBounds(dcId, rect);
 	}
 	
 	if (settings.vertex.enabled) {
-	    DrawCross(line, (const wxPoint*) pointsScreen->Item(i)->GetData());
+	    DrawCross(pdc, line, (const wxPoint*) pointsScreen->Item(i)->GetData());
 	    topology.vertex++;
 	}
     }
@@ -457,6 +474,9 @@ int DisplayDriver::DrawLineNodes(int line)
     bool draw;
 
     wxPen *pen;
+    wxPseudoDC *pdc;
+
+    pdc = NULL;
 
     // draw nodes??
     if (!settings.nodeOne.enabled && !settings.nodeTwo.enabled)
@@ -477,6 +497,8 @@ int DisplayDriver::DrawLineNodes(int line)
 
 	// determine color
 	if (IsSelected(line)) {
+	    pdc = dcTmp;
+	    
 	    if (!drawSelected) {
 		return -1;
 	    }
@@ -499,6 +521,8 @@ int DisplayDriver::DrawLineNodes(int line)
 	    }
 	}
 	else {
+	    pdc = dc;
+	    
 	    dcId = 0;
 	    if (Vect_get_node_n_lines(mapInfo, node) == 1) {
 		pen = new wxPen(settings.nodeOne.color, settings.lineWidth, wxSOLID);
@@ -515,14 +539,14 @@ int DisplayDriver::DrawLineNodes(int line)
 	wxPoint point((int) x, (int) y);
 	if (IsSelected(line) && drawSegments) {
 	    wxRect rect (point, point);
-	    dc->SetIdBounds(dcId, rect);
+	    pdc->SetIdBounds(dcId, rect);
 	}
 
 	// draw node if needed
 	if (draw) {
-	    dc->SetId(dcId);
-	    dc->SetPen(*pen);
-	    DrawCross(line, &point);
+	    pdc->SetId(dcId);
+	    pdc->SetPen(*pen);
+	    DrawCross(pdc, line, &point);
 	}
     }
     
@@ -535,19 +559,21 @@ int DisplayDriver::DrawLineNodes(int line)
    
    Used for points, nodes, vertices
 
+   \param[in,out] PseudoDC where to draw
    \param[in] point coordinates of center
    \param[in] size size of the cross symbol
    
    \return 1 on success
    \return -1 on failure
 */
-int DisplayDriver::DrawCross(int line, const wxPoint* point, int size)
+int DisplayDriver::DrawCross(wxPseudoDC *pdc, int line, const wxPoint* point, int size)
 {
-    if (!dc || !point)
+    if (!pdc || !point)
 	return -1;
 
-    dc->DrawLine(point->x - size, point->y, point->x + size, point->y);
-    dc->DrawLine(point->x, point->y - size, point->x, point->y + size);
+    pdc->DrawLine(point->x - size, point->y, point->x + size, point->y);
+    pdc->DrawLine(point->x, point->y - size, point->x, point->y + size);
+    
     return 1;
 }
 

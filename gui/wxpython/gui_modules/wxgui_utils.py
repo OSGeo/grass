@@ -203,8 +203,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.mapdisplay.MapWindow.UpdateMap(render=True)
 
         event.Skip()
-
-
+        
     def OnKeyUp(self, event):
         """Key pressed"""
         key = event.GetKeyCode()

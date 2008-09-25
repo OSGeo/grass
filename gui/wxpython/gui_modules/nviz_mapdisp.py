@@ -1213,15 +1213,27 @@ class GLWindow(MapWindow, glcanvas.GLCanvas):
         layerName = []
         
         for item in self.layers:
-            layerName.append(self.tree.GetPyData(item)[0]['maplayer'].GetName())
+            mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+            if type != mapLayer.GetType():
+                continue
+            
+            layerName.append(mapLayer.GetName())
         
         return layerName
     
     def GetLayerId(self, type, name):
         """Get layer object id or -1"""
+        if len(name) < 1:
+            return -1
+        
         for item in self.layers:
-            mapName = self.tree.GetPyData(item)[0]['maplayer'].GetName()
+            mapLayer = self.tree.GetPyData(item)[0]['maplayer']
+            if type != mapLayer.GetType() or \
+                    name != mapLayer.GetName():
+                continue
+
             data = self.tree.GetPyData(item)[0]['nviz']
+            
             if type == 'raster':
                 return data['surface']['object']['id']
             elif type == 'vpoint':

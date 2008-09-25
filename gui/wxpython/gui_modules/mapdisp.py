@@ -235,7 +235,7 @@ class BufferedWindow(MapWindow, wx.Window):
         self.lineid = None
         # ID of poly line resulting from cumulative rubber band lines (e.g. measurement)
         self.plineid = None
-
+        
         #
         # Event bindings
         #
@@ -334,8 +334,7 @@ class BufferedWindow(MapWindow, wx.Window):
             bg = wx.Brush(self.GetBackgroundColour())
 
         pdc.SetBackground(bg)
-        #pdc.Clear()
-        self.Refresh()
+        ### pdc.Clear()
 
         Debug.msg (5, "BufferedWindow.Draw(): id=%s, pdctype=%s, coord=%s" % \
                        (drawid, pdctype, coords))
@@ -350,8 +349,9 @@ class BufferedWindow(MapWindow, wx.Window):
             pdc.SetBackground(bg)
             pdc.RemoveAll()
             pdc.Clear()
-            self.Refresh()
             pdc.EndDrawing()
+            
+            self.Refresh()
             return
 
         if pdctype == 'image': # draw selected image
@@ -428,8 +428,9 @@ class BufferedWindow(MapWindow, wx.Window):
             pdc.SetIdBounds(drawid, (coords[0], coords[1], w, h))
             
         pdc.EndDrawing()
+        
         self.Refresh()
-
+        
         return drawid
 
     def TextBounds(self, textinfo):
@@ -446,7 +447,7 @@ class BufferedWindow(MapWindow, wx.Window):
                    (textinfo['text'], rotation))
 
         self.Update()
-        self.Refresh()
+        ### self.Refresh()
 
         self.SetFont(textinfo['font'])
 
@@ -473,7 +474,6 @@ class BufferedWindow(MapWindow, wx.Window):
 
         If self.redrawAll is False on self.pdcTmp content is re-drawn
         """
-
         Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
 
         dc = wx.BufferedPaintDC(self, self.buffer)
@@ -488,6 +488,11 @@ class BufferedWindow(MapWindow, wx.Window):
         # and update region
         rgn = self.GetUpdateRegion().GetBox()
         dc.SetClippingRect(rgn)
+
+        switchDraw = False
+        if self.redrawAll is None:
+            self.redrawAll = True
+            switchDraw = True
 
         if self.redrawAll: # redraw pdc and pdcVector
             # draw to the dc using the calculated clipping rect
@@ -525,13 +530,18 @@ class BufferedWindow(MapWindow, wx.Window):
         # draw temporary object on the foreground
         ### self.pdcTmp.DrawToDCClipped(dc, rgn)
         self.pdcTmp.DrawToDC(dc)
+
+        if switchDraw:
+            self.redrawAll = False
+        
+        print self.redrawAll
         
     def OnSize(self, event):
         """
         Scale map image so that it is
         the same size as the Window
         """
-
+        print 's'
         Debug.msg(3, "BufferedWindow.OnSize():")
 
         # set size of the input image
@@ -995,8 +1005,8 @@ class BufferedWindow(MapWindow, wx.Window):
         if not self.processMouse:
             return
         
-        if self.redrawAll is False:
-            self.redrawAll = True
+        ### if self.redrawAll is False:
+        ###    self.redrawAll = True
         
         wheel = event.GetWheelRotation()
         # zoom with mouse wheel
@@ -1021,15 +1031,18 @@ class BufferedWindow(MapWindow, wx.Window):
             # redraw map
             self.UpdateMap()
 
-            self.OnPaint(None)
-            
+            ### self.OnPaint(None)
+           
             # update statusbar
             self.parent.StatusbarUpdate()
 
+            self.Refresh()
+            
             self.processMouse = True
             
         # left mouse button pressed
         elif event.LeftDown():
+            print 'l'
             self.OnLeftDown(event)
 
         # left mouse button released
@@ -1619,7 +1632,11 @@ class BufferedWindow(MapWindow, wx.Window):
             elif digitToolbar.GetAction() == "connectLine":
                 if len(digitClass.driver.GetSelected()) > 0:
                     self.UpdateMap(render=False)
-
+                    
+            if len(digitClass.driver.GetSelected()) > 0:
+                self.redrawAll = None
+                ### self.OnPaint(None)
+            
         elif self.dragid != None:
             # end drag of overlay decoration
             if self.overlays.has_key(self.dragid):
@@ -1644,7 +1661,7 @@ class BufferedWindow(MapWindow, wx.Window):
             self.mouse['use'] = 'pointer'
             self.mouse['box'] = 'point'
             self.mouse['end'] = [0, 0]
-            self.Refresh()
+            ### self.Refresh()
             self.SetCursor(self.parent.cursors["default"])
         elif self.mouse["use"] == "profile":
             # profile
@@ -1772,7 +1789,8 @@ class BufferedWindow(MapWindow, wx.Window):
                     position = self.Cell2Pixel(self.polycoords[-1])
                     self.polycoords = []
                     self.UpdateMap(render=False)
-
+                    self.redrawAll = True
+                    
                     # add new record into atribute table
                     if UserSettings.Get(group='vdigit', key="addRecord", subkey='enabled') is True:
                         posWindow = self.ClientToScreen((position[0] + self.dialogOffset,
@@ -1886,6 +1904,8 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.polycoords = []
                 self.UpdateMap(render=False)
 
+            self.redrawAll = True
+            
         event.Skip()
 
     def OnMiddleDown(self, event):
@@ -1948,11 +1968,11 @@ class BufferedWindow(MapWindow, wx.Window):
                 self.polycoords = []
                 digitClass.driver.SetSelected([])
                 self.UpdateMap(render=False)
-
-
+            
+            self.redrawAll = True
+            
     def OnMouseMoving(self, event):
         """Motion event and no mouse buttons were pressed"""
-
         digitToolbar = self.parent.toolbars['vdigit']
         if self.mouse["use"] == "pointer" and digitToolbar:
             digitClass = self.parent.digit
@@ -1973,7 +1993,7 @@ class BufferedWindow(MapWindow, wx.Window):
                     if digitToolbar.GetAction() == "moveLine":
                         # move line
                         for id in self.moveIds:
-                            self.pdcVector.TranslateId(id, dx, dy)
+                            self.pdcTmp.TranslateId(id, dx, dy)
                     elif digitToolbar.GetAction() in ["moveVertex", "editLine"]:
                         # move vertex ->
                         # (vertex, left vertex, left line,
@@ -1982,7 +2002,7 @@ class BufferedWindow(MapWindow, wx.Window):
                         # do not draw static lines
                         if digitToolbar.GetAction() == "moveVertex":
                             self.polycoords = []
-                            self.pdcVector.TranslateId(self.moveIds[0], dx, dy)
+                            self.pdcTmp.TranslateId(self.moveIds[0], dx, dy)
                             if self.moveIds[1] > 0: # previous vertex
                                 x, y = self.Pixel2Cell(self.pdcVector.GetIdBounds(self.moveIds[1])[0:2])
                                 self.pdcVector.RemoveId(self.moveIds[1]+1)
@@ -2041,7 +2061,7 @@ class BufferedWindow(MapWindow, wx.Window):
         Debug.msg(4, "BufferedWindow.ClearLines(): lineid=%s, plineid=%s" %
                   (self.lineid, self.plineid))
 
-        self.Refresh()
+        ### self.Refresh()
 
         return exit
 
@@ -2885,12 +2905,13 @@ class MapFrame(wx.Frame):
 
     def OnPointer(self, event):
         """Pointer button clicked"""
-        self.toolbars['map'].OnTool(event)
+        if event:
+            self.toolbars['map'].OnTool(event)
         self.toolbars['map'].action['desc'] = ''
         
         self.MapWindow.mouse['use'] = "pointer"
         self.MapWindow.mouse['box'] = "point"
-        
+
         # change the cursor
         if self.toolbars['vdigit']:
             # digitization tool activated
@@ -2908,8 +2929,10 @@ class MapFrame(wx.Frame):
                 self.MapWindow.mouse['box'] = 'point'
             else: # moveLine, deleteLine
                 self.MapWindow.mouse['box'] = 'box'
+        
         elif self.gismanager.georectifying:
             self.MapWindow.SetCursor(self.cursors["cross"])
+        
         else:
             self.MapWindow.SetCursor(self.cursors["default"])
 

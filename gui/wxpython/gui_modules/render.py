@@ -203,6 +203,10 @@ class Layer(object):
         else:
             return self.cmdlist
 
+    def GetType(self):
+        """Get map layer type"""
+        return self.type
+    
     def GetOpacity(self, float=False):
         """
         Get layer opacity level

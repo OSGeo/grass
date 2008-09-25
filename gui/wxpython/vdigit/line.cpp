@@ -1,7 +1,7 @@
 /**
    \file line.cpp
 
-   \brief Line manipulation
+   \brief Feature manipulation (add, delete, move)
 
    This program is free software under the GNU General Public
    License (>=v2). Read the file COPYING that comes with GRASS
@@ -42,6 +42,7 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
     size_t npoints;
 
     int newline;
+    int changeset;
 
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -133,13 +134,14 @@ int Digit::AddLine(int type, std::vector<double> coords, int layer, int cat,
 	return -1;
     }
 
+    /* register changeset */
+    changeset = changesets.size();
+    AddActionToChangeset(changeset, ADD, newline);
+
     /* break at intersection */
     if (settings.breakLines) {
-	BreakLineAtIntersection(newline, Points);
+	BreakLineAtIntersection(newline, Points, changeset);
     }
-    
-    /* register changeset */
-    // AddActionToChangeset(changesets.size(), ADD, newline);
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
@@ -167,6 +169,8 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
 		       const char *bgmap, int snap, double threshold)
 {
     int newline, type, dim;
+    int nlines, changeset;
+
     struct line_pnts *points;
     struct line_cats *cats;
 
@@ -236,26 +240,23 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
 			threshold, (snap == SNAP) ? 0 : 1); 
     }
 
+    nlines = Vect_get_num_lines(display->mapInfo);
+
     /* register changeset */
-    // AddActionToChangeset(changesets.size(), REWRITE, line);
+    changeset = changesets.size();
+    AddActionToChangeset(changeset, DEL, line);
 
     /* rewrite line */
     newline = Vect_rewrite_line(display->mapInfo, line, type, points, cats);
+
+    AddActionToChangeset(changeset, ADD, newline);
+
     if (newline > 0 && settings.breakLines) {
-	BreakLineAtIntersection(newline, points);
+	BreakLineAtIntersection(newline, points, changeset);
     }
 
     if (newline < 0)
 	WriteLineMsg();
-    
-    /* TODO
-    if (ret > 0) {
-	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
-    }
-    else {
-	changesets.erase(changesets.size()-1);
-    }
-    */
     
     Vect_destroy_line_struct(points);
     Vect_destroy_cats_struct(cats);
@@ -281,7 +282,9 @@ int Digit::RewriteLine(int line, std::vector<double> coords,
 int Digit::SplitLine(double x, double y, double z,
 		     double thresh)
 {
-    int ret, changeset;
+    int ret;
+    int nlines, changeset;
+
     struct line_pnts *point;
     struct ilist *list;
 
@@ -295,22 +298,19 @@ int Digit::SplitLine(double x, double y, double z,
 
     Vect_append_point(point, x, y, z);
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
+    nlines = Vect_get_num_lines(display->mapInfo);
+
+    changeset = AddActionsBefore();
     
     ret = Vedit_split_lines(display->mapInfo, display->selected.values,
 			    point, thresh, list);
 
-    /*
-    for (int i = 0; i < list->n_values; i++) {
-	AddActionToChangeset(changeset, ADD, list->value[i]);
+    if (ret > 0) {
+	AddActionsAfter(changeset, nlines);
     }
-    */
+    else {
+	changesets.erase(changeset);
+    }
     
     Vect_destroy_list(list);
     Vect_destroy_line_struct(point);
@@ -331,8 +331,8 @@ int Digit::DeleteLines(bool delete_records)
     int ret;
     int n_dblinks;
     int changeset;
+
     struct line_cats *Cats, *Cats_del;
-    // struct ilist *List;
 
     if (!display->mapInfo) {
 	DisplayMsg();
@@ -376,14 +376,10 @@ int Digit::DeleteLines(bool delete_records)
     }
 
     /* register changeset */
-    changeset = changesets.size();
-    /* 
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
-    ret = Vedit_delete_lines(display->mapInfo, display->selected.values);
+    changeset = AddActionsBefore();
 
+    ret = Vedit_delete_lines(display->mapInfo, display->selected.values);
+    
     if (ret > 0 && delete_records) {
 	struct field_info *fi;
 	char buf[GSQL_MAX];
@@ -465,8 +461,8 @@ int Digit::DeleteLines(bool delete_records)
 int Digit::MoveLines(double move_x, double move_y, double move_z,
 		     const char *bgmap, int snap, double thresh)
 {
-    int ret, changeset;
-    long int nlines;
+    int ret;
+    int nlines, changeset;
     struct Map_info **BgMap; /* backgroud vector maps */
     int nbgmaps;             /* number of registrated background maps */
 
@@ -488,35 +484,28 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
 	}
     }
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, REWRITE, display->selected.values->value[i]);
-    }
-    */
     nlines = Vect_get_num_lines(display->mapInfo);
 
+    /* register changeset */
+    changeset = AddActionsBefore();
+    
     ret = Vedit_move_lines(display->mapInfo, BgMap, nbgmaps,
 			   display->selected.values,
 			   move_x, move_y, move_z,
 			   snap, thresh);
 
-    if (ret > 0 && settings.breakLines) {
-	for(int i = 1; i <= ret; i++)
-	    BreakLineAtIntersection(nlines+i, NULL);
-    }
-
-    /* TODO
     if (ret > 0) {
-	for (int i = 0; i < display->selected.values->n_values; i++) {
-	    changesets[changeset][i].line = nlines + i + 1;
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
 	changesets.erase(changeset);
     }
-    */
+    
+    if (ret > 0 && settings.breakLines) {
+	for(int i = 1; i <= ret; i++) {
+	    BreakLineAtIntersection(nlines + i, NULL, changeset);
+	}
+    }
     
     if (BgMap && BgMap[0]) {
 	Vect_close(BgMap[0]);
@@ -533,35 +522,28 @@ int Digit::MoveLines(double move_x, double move_y, double move_z,
 */
 int Digit::FlipLines()
 {
-    int ret, changeset;
-    long int nlines;
+    int ret;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, REWRITE, display->selected.values->value[i]);
-    }
-    */
+
     nlines = Vect_get_num_lines(display->mapInfo);
 
+    /* register changeset */
+    changeset = AddActionsBefore();
+    
     ret = Vedit_flip_lines(display->mapInfo, display->selected.values);
 
-    /*
     if (ret > 0) {
-	for (int i = 0; i < display->selected.values->n_values; i++) {
-	    changesets[changeset][i].line = nlines + i + 1;
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
 	changesets.erase(changeset);
     }
-    */
     
     return ret;
 }
@@ -574,37 +556,25 @@ int Digit::FlipLines()
 */
 int Digit::MergeLines()
 {
-    int ret, changeset, line;
+    int ret;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
+    nlines = Vect_get_num_lines(display->mapInfo);
+    
+    changeset = AddActionsBefore();
+
     ret = Vedit_merge_lines(display->mapInfo, display->selected.values);
 
     if (ret > 0) {
-	/* update changeset */
-	for (int i = 0; i < display->selected.values->n_values; i++) {
-	    line = display->selected.values->value[i];
-	    if (Vect_line_alive(display->mapInfo, line)) {
-		// RemoveActionFromChangeset(changeset, DELETE, line);
-	    }
-	}
-	for(int i = 0; i < Vect_get_num_updated_lines(display->mapInfo); i++) {
-	    line = Vect_get_updated_line(display->mapInfo, i);
-	    // AddActionToChangeset(changeset, ADD, line);
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	// changesets.erase(changeset);
+	changesets.erase(changeset);
     }
 
     return ret;
@@ -620,38 +590,26 @@ int Digit::MergeLines()
 */
 int Digit::BreakLines()
 {
-    int ret, changeset, line;
+    int ret;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
+    nlines = Vect_get_num_lines(display->mapInfo);
+    
+    changeset = AddActionsBefore();
+    
     ret = Vect_break_lines_list(display->mapInfo, display->selected.values, NULL,
 				GV_LINES, NULL, NULL);
 
     if (ret > 0) {
-	/* update changeset */
-	for (int i = 0; i < display->selected.values->n_values; i++) {
-	    line = display->selected.values->value[i];
-	    if (Vect_line_alive(display->mapInfo, line)) {
-		// RemoveActionFromChangeset(changeset, DELETE, line);
-	    }
-	}
-	for(int i = 0; i < Vect_get_num_updated_lines(display->mapInfo); i++) {
-	    line = Vect_get_updated_line(display->mapInfo, i);
-	    // AddActionToChangeset(changeset, ADD, line);
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	// changesets.erase(changeset);
+	changesets.erase(changeset);
     }
 
     return ret;
@@ -669,13 +627,26 @@ int Digit::BreakLines()
 */
 int Digit::SnapLines(double thresh)
 {
+    int changeset, nlines;
+    
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
+    nlines = Vect_get_num_lines(display->mapInfo);
+    
+    changeset = AddActionsBefore();
+    
     Vect_snap_lines_list (display->mapInfo, display->selected.values,
 			  thresh, NULL, NULL);
+
+    if (nlines < Vect_get_num_lines(display->mapInfo)) {
+	AddActionsAfter(changeset, nlines);
+    }
+    else {
+	changesets.erase(changeset);
+    }
 
     return 0;
 }
@@ -688,36 +659,29 @@ int Digit::SnapLines(double thresh)
 */
 int Digit::ConnectLines(double thresh)
 {
-    int ret, changeset;
-    long int nlines_diff;
+    int ret;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
+    nlines = Vect_get_num_lines(display->mapInfo);
+
     /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
-    nlines_diff = Vect_get_num_lines(display->mapInfo);
+    changeset = AddActionsBefore();
 
     ret = Vedit_connect_lines(display->mapInfo, display->selected.values,
 			      thresh);
 
     if (ret > 0) {
-	nlines_diff = Vect_get_num_lines(display->mapInfo) - nlines_diff;
-	for(int i = Vect_get_num_lines(display->mapInfo); i > nlines_diff; i--) {
-	    // AddActionToChangeset(changeset, ADD, i);
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	// changesets.erase(changeset);
+	changesets.erase(changeset);
     }
-
+    
     return ret;
 }
 
@@ -739,14 +703,27 @@ int Digit::ZBulkLabeling(double x1, double y1, double x2, double y2,
 			 double start, double step)
 {
     int ret;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
+    nlines = Vect_get_num_lines(display->mapInfo);
+
+    /* register changeset */
+    changeset = AddActionsBefore();
+
     ret = Vedit_bulk_labeling (display->mapInfo, display->selected.values,
 			       x1, y1, x2, y2, start, step);
+
+    if (ret > 0) {
+	AddActionsAfter(changeset, nlines);
+    }
+    else {
+	changesets.erase(changeset);
+    }
 
     return ret;
 }
@@ -762,8 +739,8 @@ int Digit::ZBulkLabeling(double x1, double y1, double x2, double y2,
 */
 int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
 {
-    int ret, changeset;
-    long int nlines;
+    int ret;
+    int changeset, nlines;
     struct Map_info *bgMap;
     struct ilist *list;
 
@@ -798,19 +775,19 @@ int Digit::CopyLines(std::vector<int> ids, const char* bgmap_name)
     ret = Vedit_copy_lines (display->mapInfo, bgMap,
 			    list);
 
-    if (ret > 0 && bgMap && settings.breakLines) {
-	for(int i = 1; i <= ret; i++)
-	    BreakLineAtIntersection(nlines+i, NULL);
+    if (ret > 0) {
+	changeset = changesets.size();
+	for (int line = nlines + 1; line <= Vect_get_num_lines(display->mapInfo); line++) {
+	    AddActionToChangeset(changeset, ADD, line);
+	}
+    }
+    else {
+	changesets.erase(changeset);
     }
 
-    if (ret > 0) {
-	/* register changeset */
-	changeset = changesets.size();
-	/*
-	for (int i = 0; i < list->n_values; i++) {
-	    AddActionToChangeset(changeset, ADD, nlines + i + 1);
-	}
-	*/
+    if (ret > 0 && bgMap && settings.breakLines) {
+	for(int i = 1; i <= ret; i++)
+	    BreakLineAtIntersection(nlines + i, NULL, changeset);
     }
 
     if (list != display->selected.values) {
@@ -888,34 +865,28 @@ struct Map_info** Digit::OpenBackgroundVectorMap(const char *bgmap)
 int Digit::TypeConvLines()
 {
     int ret;
-    int npoints, nlines, ncentroids, nboundaries;
-    int changeset, nlines_diff;
+    int npoints, ncentroids, nboundaries;
+    int changeset, nlines;
 
     if (!display->mapInfo) {
 	DisplayMsg();
 	return -1;
     }
 
-    /* register changeset */
-    changeset = changesets.size();
-    /*
-    for (int i = 0; i < display->selected.values->n_values; i++) {
-	AddActionToChangeset(changeset, DELETE, display->selected.values->value[i]);
-    }
-    */
-    nlines_diff = Vect_get_num_lines(display->mapInfo);
+    nlines = Vect_get_num_lines(display->mapInfo);
 
+    /* register changeset */
+    changeset = AddActionsBefore();
+    
     ret = Vedit_chtype_lines (display->mapInfo, display->selected.values,
 			       &npoints, &ncentroids,
 			       &nlines, &nboundaries);
 
     if(ret > 0) {
-	for(int i = Vect_get_num_lines(display->mapInfo); i > nlines_diff; i--) {
-	    // AddActionToChangeset(changeset, ADD, i);
-	}
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	// changesets.erase(changeset);
+	changesets.erase(changeset);
     }
 
     return ret;
@@ -928,13 +899,17 @@ int Digit::TypeConvLines()
   
   \return number of modified lines
 */
-int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line)
+int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line,
+				   int changeset)
 {
-    int ret, type;
+    int ret, type, nlines;
     int lineBreak;
     BOUND_BOX lineBox;
     struct ilist *list, *listBreak, *listRef;
     struct line_pnts *points_check, *points;
+
+    if (!Vect_line_alive(display->mapInfo, line))
+	return 0;
     
     if (!points_line) {
 	points = Vect_new_line_struct();
@@ -974,13 +949,30 @@ int Digit::BreakLineAtIntersection(int line, struct line_pnts* points_line)
 					 WITHOUT_Z))
 	    Vect_list_append(listBreak, lineBreak);
     }
+    
+    nlines = Vect_get_num_lines(display->mapInfo);
+
+    for (int i = 0; i < listBreak->n_values; i++) {	
+	AddActionToChangeset(changeset, DEL, listBreak->value[i]);
+    }
 
     ret = Vect_break_lines_list(display->mapInfo, listBreak, listRef,
 				GV_LINES, NULL, NULL);
+
+    for (int i = 0; i < listBreak->n_values; i++) {	
+	if (Vect_line_alive(display->mapInfo, listBreak->value[i]))
+	    RemoveActionFromChangeset(changeset, DEL, listBreak->value[i]);
+    }
+
+    for (int line = nlines + 1; line <= Vect_get_num_lines(display->mapInfo); line++) {
+	AddActionToChangeset(changeset, ADD, line);
+    }
     
     Vect_destroy_line_struct(points_check);
+
     if (points != points_line)
 	Vect_destroy_line_struct(points);
+
     Vect_destroy_list(list);
     Vect_destroy_list(listBreak);
     Vect_destroy_list(listRef);

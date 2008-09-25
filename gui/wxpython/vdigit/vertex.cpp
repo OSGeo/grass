@@ -79,7 +79,7 @@ int Digit::MoveVertex(double x, double y, double z,
 			    1, snap);
 
     if (settings.breakLines && ret > 0) {
-	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL);
+	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL, 1);
     }
 
     /* TODO
