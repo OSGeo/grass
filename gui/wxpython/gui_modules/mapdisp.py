@@ -533,15 +533,12 @@ class BufferedWindow(MapWindow, wx.Window):
 
         if switchDraw:
             self.redrawAll = False
-        
-        print self.redrawAll
-        
+                
     def OnSize(self, event):
         """
         Scale map image so that it is
         the same size as the Window
         """
-        print 's'
         Debug.msg(3, "BufferedWindow.OnSize():")
 
         # set size of the input image
@@ -1042,7 +1039,6 @@ class BufferedWindow(MapWindow, wx.Window):
             
         # left mouse button pressed
         elif event.LeftDown():
-            print 'l'
             self.OnLeftDown(event)
 
         # left mouse button released
