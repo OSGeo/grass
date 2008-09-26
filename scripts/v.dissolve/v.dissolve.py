@@ -66,15 +66,6 @@ def main():
     layer = options['layer']
     column = options['column']
 
-    # save command line
-    cmdline = grass.basename(sys.argv[0])
-    cmdline += ' input=' + input
-    cmdline += ' output=' + output
-    if layer:
-	cmdline += ' layer=' + layer
-    if column:
-	cmdline += ' column=' + column
-
     #### setup temporary file
     tmp = str(os.getpid())
 
@@ -110,7 +101,7 @@ def main():
 			  output = output, type = 'area', layer = layer)
 
     # write cmd history:
-    grass.run_command('v.support', map = output, cmdhist = cmdline)
+    grass.run_command('v.support', map = output, cmdhist = os.environ['CMDLINE'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()

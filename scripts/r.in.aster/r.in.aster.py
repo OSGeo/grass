@@ -164,9 +164,6 @@ def main():
         srcfile=options['input']
         import_aster(proj, srcfile, tempfile, "DEM")
 
-    # write cmd history: Not sure how to replicate this in Python yet
-    #r.support "$GIS_OPT_OUTPUT" history="${CMDLINE}"
-
     #cleanup
     message("Cleaning up ...")
     grass.try_remove(tempfile)
@@ -196,7 +193,9 @@ def import_aster(proj, srcfile, tempfile, band):
     outfile = options['output'].strip()+'.'+band
     grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
 
-    return
+    # write cmd history
+    grass.run_command('r.support', map = outfile, history = os.environ['CMDLINE'])
+    #r.support "$GIS_OPT_OUTPUT" history="${CMDLINE}"
 
 if __name__ == "__main__":
     options, flags = grass.parser()

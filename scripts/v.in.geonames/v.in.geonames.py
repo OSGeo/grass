@@ -51,12 +51,6 @@ def main():
     infile  = options['input']
     outfile = options['output']
     
-    # save command line
-    cmdline = grass.basename(sys.argv[0])
-    if infile:
-	cmdline += ' input=' + infile
-    if outfile:
-	cmdline += ' output=' + outfile
 
     #### setup temporary file
     tmpfile = grass.tempfile()
@@ -151,7 +145,7 @@ def main():
     grass.try_remove(tmpfile)
 
     # write cmd history:
-    grass.run_command('v.support', map = outfile, cmdhist = cmdline)
+    grass.run_command('v.support', map = outfile, cmdhist = os.environ['CMDLINE'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
