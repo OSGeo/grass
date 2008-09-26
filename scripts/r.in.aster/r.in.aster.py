@@ -169,7 +169,7 @@ def main():
 
     #cleanup
     message("Cleaning up ...")
-    os.remove(tempfile)
+    grass.try_remove(tempfile)
     message("Done.")
 
     return

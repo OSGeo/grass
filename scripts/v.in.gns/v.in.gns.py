@@ -52,17 +52,14 @@ def main():
     filevect = options['vect']
     
     # save command line
-    cmdline = os.path.basename(sys.argv[0])
+    cmdline = grass.basename(sys.argv[0])
     if fileorig:
 	cmdline += ' file=' + fileorig
     if filevect:
 	cmdline += ' vect=' + filevect
 
     if not filevect:
-	filevect = os.path.basename(fileorig)
-	fs = os.path.splitext(filevect)
-	if fs[1].lower() == '.txt':
-	    filevect = fs[0]
+	filevect = grass.basename(fileorig, 'txt')
 
     #are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
@@ -154,7 +151,7 @@ def main():
 		      input = tmpfile, output = filevect,
 		      columns = columns)
 
-    os.remove(tmpfile)
+    grass.try_remove(tmpfile)
 
     # write cmd history:
     grass.run_command('v.support', map = filevect, cmdhist = cmdline)

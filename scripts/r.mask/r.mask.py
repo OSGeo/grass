@@ -70,9 +70,7 @@ def main():
  	else:
 	    grass.warning("No existing MASK to remove")
     else:
-	owstr = 'GRASS_OVERWRITE'
-	overwrite = owstr in os.environ and os.environ[owstr] != '0'
-	if exists and not overwrite:
+	if exists and not grass.overwrite():
 	    grass.fatal("MASK already found in current mapset. Delete first or overwrite")
 
 	p = grass.start_command('r.reclass', input = input, output = 'MASK', overwrite = True,
