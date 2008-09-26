@@ -53,9 +53,10 @@
 
 import sys
 import os
-import grass
 import shutil
 import subprocess
+import glob
+import grass
 
 def find_program(pgm):
     nuldev = file(os.devnull, 'w+')
@@ -126,7 +127,8 @@ def main():
 	pass
     os.mkdir(tmpdir)
 
-    for f in glob(e00name + '.e*') + glob(e00name + '.E*'):
+    files = glob.glob(e00name + '.e[0-9][0-9]') + glob.glob(e00name + '.E[0-9][0-9]')
+    for f in files:
 	shutil.copy(f, tmpdir)
 
     #change to temporary directory to later avoid removal problems (rm -r ...)
@@ -136,7 +138,6 @@ def main():
     #avcimport doesn't set exist status :-(
 
     if merging:
-	files = glob(e00name + '.e*') + glob(e00name + '.E*')
 	files.sort()
 	filename = "%s.cat.%s.e00" % (e00name, e00tmp)
 	outf = file(filename, 'wb')
@@ -172,7 +173,7 @@ def main():
     itype = dict(point = 'point', line = 'line', area = 'centroid')
 
     if grass.run_command('v.in.ogr', flags = 'o', dsn = e00shortname,
-			 layer = layer[type], type = intype[type],
+			 layer = layer[type], type = itype[type],
 			 output = name) != 0:
 	grass.fatal("An error occurred while running v.in.ogr")
 
