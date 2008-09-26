@@ -110,6 +110,10 @@ def parser():
     if len(sys.argv) > 1 and sys.argv[1] == "@ARGS_PARSED@":
 	return _parse_env()
 
+    cmdline = [basename(sys.argv[0])]
+    cmdline += ['"' + arg + '"' for arg in sys.argv[1:]]
+    os.environ['CMDLINE'] = ' '.join(cmdline)
+
     argv = sys.argv[:]
     name = argv[0]
     if not os.path.isabs(name):

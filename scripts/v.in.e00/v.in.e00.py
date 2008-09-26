@@ -63,13 +63,6 @@ def main():
     type = options['type']
     vect = options['vect']
 
-    # save command line
-    cmdline = grass.basename(sys.argv[0])
-    cmdline += ' file=' + filename
-    cmdline += ' type=' + type
-    if vect:
-	cmdline += ' vect=' + vect
-
     e00tmp = str(os.getpid())
 
     #### check for avcimport
@@ -175,7 +168,7 @@ def main():
     grass.message("Done.")
 
     # write cmd history:
-    grass.run_command('v.support', map = name, cmdhist = cmdline)
+    grass.run_command('v.support', map = name, cmdhist = os.environ['CMDLINE'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()

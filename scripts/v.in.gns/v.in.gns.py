@@ -51,13 +51,6 @@ def main():
     fileorig = options['file']
     filevect = options['vect']
     
-    # save command line
-    cmdline = grass.basename(sys.argv[0])
-    if fileorig:
-	cmdline += ' file=' + fileorig
-    if filevect:
-	cmdline += ' vect=' + filevect
-
     if not filevect:
 	filevect = grass.basename(fileorig, 'txt')
 
@@ -154,7 +147,7 @@ def main():
     grass.try_remove(tmpfile)
 
     # write cmd history:
-    grass.run_command('v.support', map = filevect, cmdhist = cmdline)
+    grass.run_command('v.support', map = filevect, cmdhist = os.environ['CMDLINE'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
