@@ -12,6 +12,7 @@ cell in the output map as follows:
 <li>bilinear (4 cells)</li>
 <li>bicubic (16 cells)</li>
 </ul>
+
 <p>
 This module is intended for reinterpolation of continuous data
 to a different resolution rather than for interpolation from scattered data
@@ -19,6 +20,13 @@ to a different resolution rather than for interpolation from scattered data
 </p>
 
 
+<h2>NOTES</h2>
+
+<p>
+Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
+r.resamp.rst</em>) resample the map to match the current region settings.
+</p>
+ 
 <p>
 Note that for bilinear and bicubic interpolation,
 cells of the output raster that cannot be bounded by the appropriate number
@@ -26,10 +34,8 @@ of input cell centers are set to NULL (NULL propagation). This could occur
 due to the input cells being outside the current region, being NULL or MASKed.
 </p>
 
-<h2>NOTES</h2>
-
 <p>
-For longitude-latitude databases, the interpolation algorithm is based on
+For longitude-latitude locations, the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
@@ -47,4 +53,5 @@ interpolation method.
 
 Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
