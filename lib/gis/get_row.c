@@ -206,7 +206,7 @@ static int read_data_gdal(int fd, int row, unsigned char *data_buf, int *nbytes)
 
     *nbytes = fcb->nbytes;
 
-    err = GDALRasterIO(
+    err = G_gdal_raster_IO(
 	fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols, 1, data_buf,
 	fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
 

@@ -1,5 +1,8 @@
 MODULE_TOPDIR = ../..
 
+GDAL_LINK = $(USE_GDAL)
+GDAL_DYNAMIC = 1
+
 LIB_NAME = $(GIS_LIBNAME)
 EXTRA_LIBS = $(XDRLIB) $(SOCKLIB) $(DATETIMELIB) $(INTLLIB) $(MATHLIB)
 DATASRC = ellipse.table datum.table datumtransform.table FIPS.code state27 state83 projections gui.tcl
@@ -17,10 +20,21 @@ ifneq ($(USE_LARGEFILES),)
 	EXTRA_CFLAGS = -D_FILE_OFFSET_BITS=64
 endif
 
-ifneq ($(USE_GDAL),)
-EXTRA_CFLAGS += -DGDAL_LINK
+ifneq ($(GDAL_LINK),)
+EXTRA_CFLAGS += -DGDAL_LINK=1
 EXTRA_INC += $(PROJINC) $(GDALCFLAGS)
+
+ifneq ($(GDAL_DYNAMIC),)
+EXTRA_CFLAGS += -DGDAL_DYNAMIC=1
+ifneq ($(MINGW),)
+EXTRA_LIBS += -lkernel32
+else
+EXTRA_LIBS += $(DLLIB)
+endif
+else
 EXTRA_LIBS += $(GDALLIBS)
+endif
+
 endif
 
 default: lib $(FMODE_OBJ) $(DATAFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/element_list

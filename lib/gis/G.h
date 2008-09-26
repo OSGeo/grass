@@ -30,6 +30,14 @@ struct GDAL_link
 #endif
 };
 
+#ifdef HAVE_GDAL
+extern CPLErr G_gdal_raster_IO(
+    GDALRasterBandH, GDALRWFlag,
+    int, int, int, int,
+    void *, int, int, GDALDataType,
+    int, int);
+#endif
+
 struct fileinfo			/* Information for opened cell files */
 {
     int open_mode;		/* see defines below            */
