@@ -87,10 +87,7 @@ def cleanup():
 	grass.message("Restoring previous MASK...")
 	grass.run_command('g.rename', rast = (tmpname + "_origmask", 'MASK'), quiet = True)
     for f in [tmp, tmpname, sqltmp]:
-	try:
-	    os.remove(f)
-	except:
-	    pass
+	grass.try_remove(f)
 
 def main():
     global tmp, sqltmp, tmpname, nuldev, vector, mask_found
@@ -98,7 +95,7 @@ def main():
     tmp = grass.tempfile()
     sqltmp = tmp + ".sql"
     # we need a random name
-    tmpname = os.path.basename(tmp)
+    tmpname = grass.basename(tmp)
 
     nuldev = file(os.devnull, 'w')
 
@@ -222,10 +219,7 @@ def main():
     grass.verbose("Processing data ...")
 
     # get rid of any earlier attempts
-    try:
-	os.remove(sqltmp)
-    except:
-	pass
+    grass.try_remove(sqltmp)
 
     # do extended stats?
     if flags['e']:

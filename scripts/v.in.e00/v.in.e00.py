@@ -58,24 +58,13 @@ import subprocess
 import glob
 import grass
 
-def find_program(pgm):
-    nuldev = file(os.devnull, 'w+')
-    try:
-	subprocess.call([pgm], stdin = nuldev, stdout = nuldev, stderr = nuldev)
-	found = True
-    except:
-	found = False
-    nuldev.close()
-    return found
-
 def main():
-
     filename = options['file']
     type = options['type']
     vect = options['vect']
 
     # save command line
-    cmdline = os.path.basename(sys.argv[0])
+    cmdline = grass.basename(sys.argv[0])
     cmdline += ' file=' + filename
     cmdline += ' type=' + type
     if vect:
@@ -84,13 +73,13 @@ def main():
     e00tmp = str(os.getpid())
 
     #### check for avcimport
-    if not find_program('avcimport'):
+    if not grass.find_program('avcimport'):
 	grass.fatal("'avcimport' program not found, install it first" +
 		    "\n" +
 		    "http://avce00.maptools.org")
 
     #### check for e00conv
-    if not find_program('e00conv'):
+    if not grass.find_program('e00conv'):
 	grass.fatal("'e00conv' program not found, install it first" +
 		    "\n" +
 		    "http://avce00.maptools.org")
@@ -99,10 +88,7 @@ def main():
     if type not in ['point','line','area']:
 	grass.fatal('Must specify one of "point", "line", or "area".')
 
-    e00name = os.path.basename(filename)
-    fs = os.path.splitext(e00name)
-    if fs[1].lower() == '.e00':
-	e00name = fs[0]
+    e00name = grass.basename(filename, 'e00')
     # avcimport only accepts 13 chars:
     e00shortname = e00name[:13]
 
@@ -121,10 +107,7 @@ def main():
 
     #make a temporary directory
     tmpdir = grass.tempfile()
-    try:
-	os.remove(tmpdir)
-    except:
-	pass
+    grass.try_remove(tmpdir)
     os.mkdir(tmpdir)
 
     files = glob.glob(e00name + '.e[0-9][0-9]') + glob.glob(e00name + '.E[0-9][0-9]')
@@ -154,11 +137,8 @@ def main():
 	grass.message("E00 ASCII found and converted to Arc Coverage in current directory")
     else:
 	grass.message("E00 Compressed ASCII found. Will uncompress first...")
-	try:
-	    os.remove(e00shortname)
-	    os.remove(info)
-	except:
-	    pass
+	grass.try_remove(e00shortname)
+	grass.try_remove(info)
 	subprocess.call(['e00conv', filename, e00tmp + '.e00'])
 	grass.message("...converted to Arc Coverage in current directory")
 	subprocess.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
@@ -183,16 +163,10 @@ def main():
     for root, dirs, files in os.walk('.', False):
 	for f in files:
 	    path = os.path.join(root, f)
-	    try:
-		os.remove(path)
-	    except:
-		pass
+	    grass.try_remove(path)
 	for d in dirs:
 	    path = os.path.join(root, d)
-	    try:
-		os.rmdir(path)
-	    except:
-		pass
+	    grass.try_rmdir(path)
 
     os.chdir('..')
     os.rmdir(tmpdir)

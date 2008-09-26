@@ -52,7 +52,7 @@ def main():
     outfile = options['output']
     
     # save command line
-    cmdline = os.path.basename(sys.argv[0])
+    cmdline = grass.basename(sys.argv[0])
     if infile:
 	cmdline += ' input=' + infile
     if outfile:
@@ -148,7 +148,7 @@ def main():
 		      input = tmpfile, output = outfile,
 		      columns = columns)
 
-    os.remove(tmpfile)
+    grass.try_remove(tmpfile)
 
     # write cmd history:
     grass.run_command('v.support', map = outfile, cmdhist = cmdline)

@@ -56,7 +56,7 @@ def main():
     outf.close()
 
     grass.run_command('v.in.ogr', flags = 'o', dsn = tmpxml, out = out)
-    os.remove(tmpxml)
+    grass.try_remove(tmpxml)
 
     grass.message("Vector points map <%s> imported from WFS." % out)
 

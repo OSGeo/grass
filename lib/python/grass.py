@@ -1,5 +1,4 @@
 import os
-import os.path
 import sys
 import types
 import subprocess
@@ -249,3 +248,51 @@ def parse_color(val, dflt = None):
         return tuple(float(v) / 255 for v in vals)
 
     return dflt
+
+# check GRASS_OVERWRITE
+
+def overwrite():
+    owstr = 'GRASS_OVERWRITE'
+    return owstr in os.environ and os.environ[owstr] != '0'
+
+## various utilities, not specific to GRASS
+
+# basename inc. extension stripping
+
+def basename(path, ext = None):
+    name = os.path.basename(path)
+    if not ext:
+	return name
+    fs = name.rsplit('.', 1)
+    if len(fs) > 1 and fs[1].lower() == ext:
+	name = fs[0]
+    return name
+
+# find a program (replacement for "which")
+
+def find_program(pgm):
+    nuldev = file(os.devnull, 'w+')
+    try:
+	subprocess.call([pgm], stdin = nuldev, stdout = nuldev, stderr = nuldev)
+	found = True
+    except:
+	found = False
+    nuldev.close()
+    return found
+
+# try to remove a file, without complaints
+
+def try_remove(path):
+    try:
+	os.remove(path)
+    except:
+	pass
+
+# try to remove a directory, without complaints
+
+def try_rmdir(path):
+    try:
+	os.rmdir(path)
+    except:
+	pass
+

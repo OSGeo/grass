@@ -67,7 +67,7 @@ def main():
     column = options['column']
 
     # save command line
-    cmdline = os.path.basename(sys.argv[0])
+    cmdline = grass.basename(sys.argv[0])
     cmdline += ' input=' + input
     cmdline += ' output=' + output
     if layer:
