@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     opt3->guisection = _("Input_options");
 
     opt4 = G_define_option();
-    opt4->key = "disturbed.land";
+    opt4->key = "disturbed_land";
     opt4->description =
 	_("Input map or value: percent of disturbed land, for USLE");
     opt4->required = NO;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     opt6->guisection = _("Input_options");
 
     opt7 = G_define_option();
-    opt7->key = "max.slope.length";
+    opt7->key = "max_slope_length";
     opt7->description =
 	_("Input value: maximum length of surface flow, for USLE");
     opt7->required = NO;
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     opt11->guisection = _("Output_options");
 
     opt12 = G_define_option();
-    opt12->key = "half.basin";
+    opt12->key = "half_basin";
     opt12->description =
 	_("Output map: each half-basin is given a unique value");
     opt12->required = NO;
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     opt13->guisection = _("Output_options");
 
     opt14 = G_define_option();
-    opt14->key = "length.slope";
+    opt14->key = "length_slope";
     opt14->description =
 	_("Output map: slope length and steepness (LS) factor for USLE");
     opt14->required = NO;
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     opt14->guisection = _("Output_options");
 
     opt15 = G_define_option();
-    opt15->key = "slope.steepness";
+    opt15->key = "slope_steepness";
     opt15->description = _("Output map: slope steepness (S) factor for USLE");
     opt15->required = NO;
     opt15->type = TYPE_STRING;

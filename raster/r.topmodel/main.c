@@ -144,7 +144,7 @@ int main(int argc, char **argv)
     param.output->required = YES;
 
     param.Qobs = G_define_option();
-    param.Qobs->key = "Qobs";
+    param.Qobs->key = "qobs";
     param.Qobs->description = _("(i)   OPTIONAL Observed flow file");
     param.Qobs->type = TYPE_STRING;
     param.Qobs->required = NO;
