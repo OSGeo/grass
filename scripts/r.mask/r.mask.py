@@ -45,7 +45,6 @@ import sys
 import os
 import grass
 import atexit
-import subprocess
 
 def cleanup():
     if tmp:
@@ -73,8 +72,7 @@ def main():
 	if exists and not grass.overwrite():
 	    grass.fatal("MASK already found in current mapset. Delete first or overwrite")
 
-	p = grass.start_command('r.reclass', input = input, output = 'MASK', overwrite = True,
-				stdin = subprocess.PIPE)
+	p = grass.feed_command('r.reclass', input = input, output = 'MASK', overwrite = True)
 	p.stdin.write("%s = 1" % maskcats)
 	p.stdin.close()
 	p.wait()

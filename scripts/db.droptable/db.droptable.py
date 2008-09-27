@@ -37,7 +37,6 @@
 import sys
 import os
 import grass
-import subprocess
 
 def main():
     table = options['table']
@@ -84,8 +83,7 @@ def main():
 	grass.message("You must use the force flag to actually remove it. Exiting.")
 	sys.exit(0)
 
-    p = grass.start_command('db.execute', database = database, driver = driver,
-			    stdin = subprocess.PIPE)
+    p = grass.feed_command('db.execute', database = database, driver = driver)
     p.stdin.write("DROP TABLE " + table)
     p.stdin.close()
     p.wait()
