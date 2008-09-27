@@ -8,6 +8,3 @@ DEPENDENCIES= $(SYMBDEP) $(DISPLAYDEP) $(RASTERDEP) $(GISDEP)
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd $(HTMLDIR)/grass_logo.txt
-
-$(HTMLDIR)/%: %
-	$(INSTALL_DATA) $< $@
