@@ -60,6 +60,7 @@
 import sys
 import os
 import subprocess
+import string
 import grass
 
 def main():
@@ -95,7 +96,7 @@ def main():
     cols = [l.split(':') for l in s.splitlines() if l.startswith('Column ')]
 
     select = "SELECT $colname FROM $otable WHERE $otable.$ocolumn=$table.$column"
-    template = Template("UPDATE $table SET $colname=(%s);" % select)
+    template = string.Template("UPDATE $table SET $colname=(%s);" % select)
 
     for col in cols:
 	colname = col[0]
