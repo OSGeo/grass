@@ -2126,17 +2126,9 @@ static int contains(const char *s, int c)
 
 static int is_option(const char *string)
 {
-    const char *p = strchr(string, '=');
+    int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
-    if (!p)
-	return 0;
-    if (p == string)
-	return 0;
-    p--;
-    if (!strchr("abcdefghijklmnopqrstuvwxyz0123456789", *p))
-	return 0;
-
-    return 1;
+    return n > 0 && string[n] == '=' && string[n-1] != '_';
 }
 
 static int set_option(char *string)
