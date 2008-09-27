@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 
 SUBDIRS = \
+	i.albedo \
 	i.atcorr \
 	i.cluster \
 	i.find \
@@ -11,6 +12,7 @@ SUBDIRS = \
 	i.group \
 	i.his.rgb \
 	i.maxlik \
+	i.qc.modis \
 	i.rectify \
 	i.rgb.his \
 	i.smap \
