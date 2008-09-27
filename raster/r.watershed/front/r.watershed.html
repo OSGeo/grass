@@ -68,7 +68,7 @@ watershed basin model.  Overland flow units represent the amount of
 overland flow each cell contributes to surface flow.  If omitted, a
 value of one (1) is assumed. The algorithm is D8 flow accumulation.
 
-<dt><em>disturbed.land</em> 
+<dt><em>disturbed_land</em> 
 
 <dd>Raster map input layer or value containing the percent of disturbed
 land (i.e., croplands, and construction sites) where the raster or input
@@ -86,11 +86,11 @@ for the RUSLE.  Any non-zero values indicate blocking terrain.
 <dd>The minimum size of an exterior watershed basin in cells, if no flow
 map is input, or overland flow units when a flow map is given.
 Warning: low threshold values will dramactically increase run time and
-generate difficult too read basin and half.basin results.
+generate difficult too read basin and half_basin results.
 This parameter also controls the level of detail in the <em>stream</em>
 segments map.
 
-<dt><em>max.slope.length</em> 
+<dt><em>max_slope_length</em> 
 
 <dd>Input value indicating the maximum length of overland surface flow
 in meters.  If overland flow travels greater than the maximum length,
@@ -134,7 +134,7 @@ in the current geographic region.
 <dd>Output map: stream segments.  Values correspond to the watershed
 basin values.
 
-<dt><em>half.basin</em> 
+<dt><em>half_basin</em> 
 
 <dd>Output map: each half-basin is given a unique value.  Watershed
 basins are divided into left and right sides.  The right-hand side
@@ -151,7 +151,7 @@ modified to provide for easy display.  All negative accumulation values
 are changed to zero.  All positive values above the basin threshold
 are given the value of the <em>threshold</em> parameter.
 
-<dt><em>length.slope</em> 
+<dt><em>length_slope</em> 
 
 <dd>Output map: slope length and steepness (LS) factor.  Contains the LS
 factor for the Revised Universal Soil Loss Equation.  Equations taken
@@ -160,7 +160,7 @@ from <em>Revised Universal Soil Loss Equation for Western Rangelands</em>
 Since the LS factor is a small number, it is multiplied by 100 for the
 GRASS output map.
 
-<dt><em>slope.steepness</em> 
+<dt><em>slope_steepness</em> 
 
 <dd>Output map: slope steepness (S) factor for RUSLE.
 Contains the revised S factor for the Universal Soil
@@ -185,7 +185,7 @@ Kinner et al. (2005), for example, used SRTM and IFSAR DEMs to compare
 valleys while  <em>r.watershed</em> performed much better. Thus, if forest
 canopy exists in valleys, SRTM, IFSAR, and similar data products will cause
 major errors in <em>r.terraflow</em> stream output. Under similar conditions,
-<em>r.watershed</em> will generate better <b>stream</b> and <b>half.basin</b>
+<em>r.watershed</em> will generate better <b>stream</b> and <b>half_basin</b>
 results. If watershed divides contain flat to low slope, <em>r.watershed</em>
 will generate better basin results than <em>r.terraflow</em>.
 (<em>r.terraflow</em> uses the same type of algorithm as ESRI's ArcGIS
