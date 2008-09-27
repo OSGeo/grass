@@ -544,6 +544,12 @@ set descmenu [subst  {
 		term i.ortho.photo 
 		set env(GRASS_RENDER_IMMEDIATE) "TRUE"}}
 	{separator}
+	{cascad {[G_msg "Basic RS processing"]} {} "" $tmenu {			
+				{command {[G_msg "MODIS Quality flags"]} {} "i.qc.modis: Extracts Modis Quality flags as raster values." {} -command {execute i.qc.modis }}
+				{separator}
+				{command {[G_msg "Albedo"]} {} "i.albedo: Calculates Albedo from Modis, Aster, Landsat or AVHRR" {} -command {execute i.albedo }}
+				{separator}
+	}}
 	{command {[G_msg "Brovey sharpening"]} {} "i.fusion.brovey: Brovey transformation and pan sharpening" {} -command {execute i.fusion.brovey }}
 	{cascad {[G_msg "Classify image"]} {} "" $tmenu {			
 		{command {[G_msg "Clustering input for unsupervised classification"]} {} "i.cluster: Clustering input for unsupervised classification" {} -command {execute i.cluster }}

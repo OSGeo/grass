@@ -1613,6 +1613,21 @@ class Data:
                          "i.ortho.photo"),
                         ("","","", ""),
 
+                        (_("Basic RS processing"), (
+
+                                (_("MODIS Quality Flags"),
+                                 _("Extract Modis Quality flags as raster values."),
+                                 "self.OnMenuCmd",
+                                 "i.qc.modis"),
+
+                                (_("Albedo"),
+                                 _("Albedo from Modis, Aster, Landsat, AVHRR."),
+                                 "self.OnMenuCmd",
+                                 "i.albedo"),
+				)
+                         ),
+                        ("","","", ""),
+
                         (_("Brovey sharpening"),
                          _("Brovey transform to merge multispectral and high-res panchromatic channels"),
                          "self.OnMenuCmd",
