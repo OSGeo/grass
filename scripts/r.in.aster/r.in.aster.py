@@ -101,37 +101,15 @@ bands = {
     }
 }
 
-def _message(msg, *args):
-    subprocess.call(["g.message", "message=%s" % msg] + list(args))
-
-def debug(msg):
-    _message(msg, '-d')
-
-def message(msg):
-    _message(msg)
-
-def error(msg):
-    _message(msg, '-e')
-    sys.exit(1)
-
 def main():
+    input = options['input']
+    proctype = options['proctype']
+    output = options['output']
+    band = options['band']
 
     #check whether gdalwarp is in path and executable
-    p = None
-    try:
-        p = subprocess.call(['gdalwarp', '--version'])
-    except:
-        pass
-    if p == None or p != 0:
-        error("gdalwarp is not in the path and executable")
-
-    #initialize variables
-    dataset = ''
-    srcfile = ''
-    proj = ''
-    band = ''
-    outfile = ''
-    bandlist = []
+    if not grass.find_command('gdalwarp', ['--version']):
+        grass.fatal("gdalwarp is not in the path and executable")
 
     #create temporary file to hold gdalwarp output before importing to GRASS
     tempfile = grass.read_command("g.tempfile", pid = os.getpid()).strip() + '.tif'
@@ -141,41 +119,41 @@ def main():
 
     #currently only runs in projected location
     if "XY location" in proj:
-      error ("This module needs to be run in a projected location (found: %s)" % proj)
+      grass.fatal("This module needs to be run in a projected location (found: %s)" % proj)
 
 
     #process list of bands
     allbands = ['1','2','3n','3b','4','5','6','7','8','9','10','11','12','13','14']
-    if options['band'].strip() == 'all':
+    if band == 'all':
         bandlist = allbands
     else:
-        bandlist = options['band'].split(',')
+        bandlist = band.split(',')
 
     #initialize datasets for L1A and L1B
-    if options['proctype'] in ["L1A", "L1B"]:
+    if proctype in ["L1A", "L1B"]:
         for band in bandlist:
             if band in allbands:
-                dataset = bands[options['proctype']][band]
-                srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (options['input'], dataset)
+                dataset = bands[proctype][band]
+                srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (input, dataset)
                 import_aster(proj, srcfile, tempfile, band)
             else:
-                error('band %s is not an available Terra/ASTER band' % band)
-    elif options['proctype'] == "DEM": 
-        srcfile=options['input']
+                grass.fatal('band %s is not an available Terra/ASTER band' % band)
+    elif proctype == "DEM": 
+        srcfile = input
         import_aster(proj, srcfile, tempfile, "DEM")
 
     #cleanup
-    message("Cleaning up ...")
+    grass.message("Cleaning up ...")
     grass.try_remove(tempfile)
-    message("Done.")
+    grass.message("Done.")
 
     return
 
 def import_aster(proj, srcfile, tempfile, band):
     #run gdalwarp with selected options (must be in $PATH)
     #to translate aster image to geotiff
-    message("Georeferencing aster image ...")
-    debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
+    grass.message("Georeferencing aster image ...")
+    grass.debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
     if platform.system() == "Darwin":
         cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile ]
@@ -189,8 +167,8 @@ def import_aster(proj, srcfile, tempfile, band):
     #p = subprocess.call(["gdal_translate", srcfile, tempfile])
 
     #import geotiff to GRASS
-    message("Importing into GRASS ...")
-    outfile = options['output'].strip()+'.'+band
+    grass.message("Importing into GRASS ...")
+    outfile = "%s.%s" % (output, band)
     grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
 
     # write cmd history

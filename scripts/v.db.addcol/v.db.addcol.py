@@ -48,7 +48,6 @@
 import sys
 import os
 import grass
-import subprocess
 
 def main():
     map = options['map']
@@ -77,7 +76,7 @@ def main():
 	if not col:
 	    grass.fatal("There is an empty column. Did you leave a trailing comma?")
 
-	p = grass.start_command('db.execute', database = database, driver = driver, stdin = subprocess.PIPE)
+	p = grass.feed_command('db.execute', database = database, driver = driver)
 	p.stdin.write("ALTER TABLE %s ADD COLUMN %s" % (table, col))
 	p.stdin.close()
 	if p.wait() != 0:

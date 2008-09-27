@@ -59,7 +59,6 @@
 
 import sys
 import os
-import subprocess
 import string
 import grass
 
@@ -112,7 +111,7 @@ def main():
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
-	p = grass.start_command('db.execute', stdin = subprocess.PIPE)
+	p = grass.feed_command('db.execute')
 	p.stdin.write(stmt)
 	p.stdin.close()
 	p.wait()

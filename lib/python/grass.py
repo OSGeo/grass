@@ -54,9 +54,21 @@ def pipe_command(*args, **kwargs):
     kwargs['stdout'] = subprocess.PIPE
     return start_command(*args, **kwargs)
 
+def feed_command(*args, **kwargs):
+    kwargs['stdin'] = subprocess.PIPE
+    return start_command(*args, **kwargs)
+
 def read_command(*args, **kwargs):
     ps = pipe_command(*args, **kwargs)
     return ps.communicate()[0]
+
+def write_command(*args, **kwargs):
+    stdin = kwargs['stdin']
+    kwargs['stdin'] = subprocess.PIPE
+    p = start_command(*args, **kwargs)
+    p.stdin.write(stdin)
+    p.stdin.close()
+    return p.wait()
 
 def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
@@ -274,10 +286,10 @@ def basename(path, ext = None):
 
 # find a program (replacement for "which")
 
-def find_program(pgm):
+def find_program(pgm, args = []):
     nuldev = file(os.devnull, 'w+')
     try:
-	subprocess.call([pgm], stdin = nuldev, stdout = nuldev, stderr = nuldev)
+	subprocess.call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
 	found = True
     except:
 	found = False
