@@ -100,11 +100,11 @@ def main():
 
     # ... and immediately drop the empty geometry
     vectfile = grass.find_file(output, element = 'vector', mapset = mapset)['file']
-    if not file:
+    if not vectfile:
 	grass.fatal("Something went wrong. Should not happen")
     else:
 	# remove the vector part
-	grass.try_remove(file)
+	grass.try_remove(vectfile)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
     grass.run_command('db.dropcol', quiet = True, flags = 'f', table = output,
