@@ -32,6 +32,8 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
 	args.append("-%s" % flags)
     for opt, val in options.iteritems():
 	if val != None:
+	    if opt[0] == '_':
+		opt = opt[1:]
 	    args.append("%s=%s" % (opt, _make_val(val)))
     return args
 
