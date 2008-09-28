@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 
     for (; *ptr != NULL; ptr++) {
 	if (nfiles >= MAXFILES)
-	    G_fatal_error(_("too many ETa files. Only %d allowed"), MAXFILES);
+	    G_fatal_error(_("too many input files. Only %d allowed"), MAXFILES);
 	name = *ptr;
 
 	infd[nfiles] = G_open_cell_old(name, "");

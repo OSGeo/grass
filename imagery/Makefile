@@ -5,6 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Vars.make
 SUBDIRS = \
 	i.albedo \
 	i.atcorr \
+	i.cca \
 	i.cluster \
 	i.find \
 	i.gensig \
@@ -18,7 +19,7 @@ SUBDIRS = \
 	i.smap \
 	i.target \
 	i.pca \
-	i.cca
+	i.vi 
 
 FFTWBASED = i.fft i.ifft i.zc
 
