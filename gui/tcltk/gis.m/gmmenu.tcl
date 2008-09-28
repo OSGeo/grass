@@ -549,6 +549,7 @@ set descmenu [subst  {
 				{separator}
 				{command {[G_msg "Albedo"]} {} "i.albedo: Calculates Albedo from Modis, Aster, Landsat or AVHRR" {} -command {execute i.albedo }}
 				{separator}
+				{command {[G_msg "Vegetation Indices"]} {} "i.vi: Calculates 14 types of Vegetation Indices" {} -command {execute i.vi }}
 	}}
 	{command {[G_msg "Brovey sharpening"]} {} "i.fusion.brovey: Brovey transformation and pan sharpening" {} -command {execute i.fusion.brovey }}
 	{cascad {[G_msg "Classify image"]} {} "" $tmenu {			

@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     G_free(outrast);
     G_close_cell(outfd);
 
-    /* Color from -1.0 to +1.0 in grey */ 
+    /* Color from 0 to 10 in grey */ 
     G_init_colors(&colors);
     G_add_color_rule(0, 0, 0, 0, 10, 255, 255, 255, &colors);
     G_short_history(result, "raster", &history);

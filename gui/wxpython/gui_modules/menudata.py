@@ -12,7 +12,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Michael Barton (Arizona State University)
-@author Yann Chemin
+@author Yann Chemin <yann.chemin gmail.com>
 @author Martin Landa <landa.martin gmail.com>
 """
 
@@ -1619,11 +1619,18 @@ class Data:
                                  _("Extract Modis Quality flags as raster values."),
                                  "self.OnMenuCmd",
                                  "i.qc.modis"),
+	                        ("","","", ""),
 
                                 (_("Albedo"),
                                  _("Albedo from Modis, Aster, Landsat, AVHRR."),
                                  "self.OnMenuCmd",
                                  "i.albedo"),
+				)
+
+                                (_("Vegetation Indices"),
+                                 _("14 types of vegetation Indices."),
+                                 "self.OnMenuCmd",
+                                 "i.vi"),
 				)
                          ),
                         ("","","", ""),
