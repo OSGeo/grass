@@ -2128,7 +2128,7 @@ static int is_option(const char *string)
 {
     int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
-    return n > 0 && string[n] == '=' && string[n-1] != '_';
+    return n > 0 && string[n] == '=' && string[0] != '_' && string[n-1] != '_';
 }
 
 static int set_option(char *string)
