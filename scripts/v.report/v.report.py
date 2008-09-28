@@ -112,11 +112,11 @@ def main():
 	extracolnames = [option]
 
     if units in ['p','percent']:
-	unitsp = {'units': 'meters'}
+	unitsp = 'meters'
     elif units:
-	unitsp = {'units': 'meters'}
+	unitsp = units
     else:
-	unitsp = {}
+	unitsp = None
 
     # NOTE: we suppress -1 cat and 0 cat
 
@@ -140,7 +140,7 @@ def main():
 	#fetch the requested attribute sorted by cat:
 	p = grass.pipe_command('v.to.db', flags = 'p',
 			       map = mapname, option = option, columns = columns,
-			       layer = layer, **unitsp)
+			       layer = layer, units = unitsp)
 	records2 = []
 	for line in p.stdout:
 	    fields = line.rstrip('\r\n').split('|')
@@ -166,7 +166,7 @@ def main():
         #make pre-table
 	p = grass.pipe_command('v.to.db', flags = 'p',
 			       map = mapname, option = option, columns = columns,
-			       layer = layer, **unitsp)
+			       layer = layer, units = unitsp)
 	records3 = []
 	for line in p.stdout:
 	    fields = line.split('|')

@@ -80,12 +80,13 @@ def main():
 	grass.write_command('db.execute', stdin = "DROP TABLE %s" % output)
 
     # treat DB as real vector map...
-    layer_opt = {}
     if db_table:
-	layer_opt['layer'] = db_table
+	layer = db_table
+    else:
+	layer = None
 
     if grass.run_command('v.in.ogr', flags = 'o', dsn = dsn, output = output,
-			 quiet = True, **layer_opt) != 0:
+			 layer = layer, quiet = True) != 0:
 	if db_table:
 	    grass.fatal("Input table <%s> not found or not readable" % input)
 	else:

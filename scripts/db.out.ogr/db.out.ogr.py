@@ -66,9 +66,10 @@ def main():
     if format.lower() == 'dbf':
 	format = "ESRI_Shapefile"
 
-    olayer = {}
     if format.lower() == 'csv':
-	olayer['olayer'] = grass.basename(dsn, 'csv')
+	olayer = grass.basename(dsn, 'csv')
+    else:
+	olayer = None
 
     #is there a simpler way of testing for --overwrite?
     dbffile = input + '.dbf'
@@ -76,7 +77,7 @@ def main():
 	grass.fatal("File <%s> already exists" % dbffile)
 
     if grass.run_command('v.out.ogr', quiet = True, input = input, dsn = dsn,
-			 format = format, type = 'point', **olayer) != 0:
+			 format = format, type = 'point', olayer = olayer) != 0:
 	sys.exit(1)
 
     if format == "ESRI_Shapefile":
