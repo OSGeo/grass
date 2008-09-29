@@ -256,7 +256,7 @@ static FILE *open_env(const char *mode, int loc)
 }
 
 /**
-   \brief Get enviroment variable
+   \brief Get environment variable
 
    Calls G_fatal_error() if name not set.
 

@@ -93,7 +93,7 @@ int Vect_get_built(struct Map_info *Map)
 
    Should only be used in special cases of vector processing.
 
-   This functions optionaly builds only some parts of topology. Highest level is specified by build
+   This functions optionally builds only some parts of topology. Highest level is specified by build
    parameter which may be:
    - GV_BUILD_NONE - nothing is build;
    - GV_BUILD_BASE - basic topology, nodes, spatial index;

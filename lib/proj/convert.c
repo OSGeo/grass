@@ -437,7 +437,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 				   "You may want to look into this."), datum);
 		    else if (datumtrans > paramsets) {
 
-			G_warning(_("Invalid tranformation number %d; valid range is 1 to %d. "
+			G_warning(_("Invalid transformation number %d; valid range is 1 to %d. "
 				   "Leaving datum transform parameters unspecified."),
 				  datumtrans, paramsets);
 			datumtrans = 0;

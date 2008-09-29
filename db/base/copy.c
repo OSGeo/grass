@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     module->keywords = _("database, attribute table, SQL");
     module->label = _("Copy a table.");
     module->description =
-	_("Either 'from_table' (optionaly with 'where') can be used "
+	_("Either 'from_table' (optionally with 'where') can be used "
 	  "or 'select' option, but not 'from_table' and 'select' at the same time.");
     
     from_driver = G_define_standard_option(G_OPT_DB_DRIVER);

@@ -17,7 +17,7 @@
 
 
 #%Module
-#%  description: Displays thematic vectormap
+#%  description: Displays thematic vector map
 #%  keywords: display, legend
 #%End
 #%option

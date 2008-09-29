@@ -14,7 +14,7 @@ test_config = """
 </qgisgrass>
 """
 test_modules = {"g.gisenv":"""
-<qgisgrassmodule label="GRASS enviroment variables" module="g.gisenv">
+<qgisgrassmodule label="GRASS environment variables" module="g.gisenv">
 </qgisgrassmodule>
 ""","r.to.vect.area":"""
 <qgisgrassmodule label="Convert a raster to vector areas" module="r.to.vect">

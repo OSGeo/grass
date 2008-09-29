@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
 	Vect_build(&Map, stderr);
 
 
-    /* insert cats and optionaly labels if raster cats were used */
+    /* insert cats and optionally labels if raster cats were used */
     if (driver && value_flag) {
 	char buf[1000];
 	int c, i, cat, fidx, ncats, lastcat, tp, id;

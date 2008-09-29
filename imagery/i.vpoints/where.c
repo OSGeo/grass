@@ -54,7 +54,7 @@ static int where_am_i(View * view, int x, int y, Window * w1,
     sprintf(buf, "N = %10.2f", n1);
     Curses_write_window(INFO_WINDOW, 18, 3, buf);
 
-    /* if tranformation equation is useable, determine point via equation */
+    /* if transformation equation is useable, determine point via equation */
     if (group.equation_stat <= 0 || windnum == 2) {
 	Curses_write_window(INFO_WINDOW, 15, 18, "           ");
 	Curses_write_window(INFO_WINDOW, 17, 18, "                 ");

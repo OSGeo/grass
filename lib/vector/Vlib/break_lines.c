@@ -46,7 +46,7 @@ Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err,
    \brief Break selected lines in vector map at each intersection.
 
    Breaks selected lines specified by type in vector map. Points at
-   intersections may be optionaly written to error map. Input vector map
+   intersections may be optionally written to error map. Input vector map
    must be opened on level 2 for update at least on GV_BUILD_BASE.
 
    The function also breaks lines forming collapsed loop, for example

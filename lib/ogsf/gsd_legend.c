@@ -520,7 +520,7 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
 		    G_get_color((CELL) tdcell, &red, &green, &blue, &colors);
 
 		RGB_TO_INT(red, green, blue, colr);
-		if (discrete) {	/* draw black-white-black seperator */
+		if (discrete) {	/* draw black-white-black separator */
 		    if (k > 0) {
 			*dv1 -= 2. * incr;
 			*dv2 -= 2. * incr;

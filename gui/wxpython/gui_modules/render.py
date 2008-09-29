@@ -360,7 +360,7 @@ class Map(object):
         #
         # environment settings
         #
-        # enviroment variables, like MAPSET, LOCATION_NAME, etc.
+        # environment variables, like MAPSET, LOCATION_NAME, etc.
         self.env         = {}
         # path to external gisrc
         self.gisrc = gisrc
@@ -560,7 +560,7 @@ class Map(object):
         """
         Get region settings (g.region -upgc)
 
-        Optionaly extent, raster or vector map layer can be given.
+        Optionally extent, raster or vector map layer can be given.
 
         @param rast raster name or None
         @param vect vector name or None

@@ -44,7 +44,7 @@ void srch(int id, int *arg)
 /*!
    \brief Break polygons in vector map.
 
-   Breaks lines specified by type in vector map. Points at intersections may be optionaly 
+   Breaks lines specified by type in vector map. Points at intersections may be optionally 
    written to error map. Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
 
    Function is optimized for closed polygons rigs (e.g. imported from OGR) but with clean geometry -

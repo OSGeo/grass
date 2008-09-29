@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 	    G_warning(msg);
 	}
 
-    /* get target info and enviroment */
+    /* get target info and environment */
     G_suppress_warnings(1);
     get_target();
     find_target_files();
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     }
     G_suppress_warnings(0);
 
-    /* determine tranformation equation */
+    /* determine transformation equation */
     Compute_ref_equation();
 
     /* read group control points, format: image x,y,cfl; target E,N,Z */
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
 			 &group.control_points, group.E12, group.N12);
     ********/
 
-    /* determine tranformation equation */
+    /* determine transformation equation */
     fprintf(stderr, "Computing equations ...\n");
     if (group.control_points.count > 0)
 	Compute_ortho_equation();

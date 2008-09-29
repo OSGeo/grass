@@ -135,7 +135,7 @@ static int gisinit(void)
     /* Set masking flag unknown */
     G__.auto_mask = -1;
 
-    /* set architecture dependant bit patterns for embeded null vals */
+    /* set architecture dependent bit patterns for embeded null vals */
     G__init_null_patterns();
 
     initialized = 1;

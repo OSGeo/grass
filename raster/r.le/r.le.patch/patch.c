@@ -1594,7 +1594,7 @@ int in_group(double att, float *group, int r)
 
     /*Variables
        EXTERNAL
-       recl_count = an array containg the number of elements in each
+       recl_count = an array containing the number of elements in each
        row of the reclass table
        IN
        att     = the attribute value

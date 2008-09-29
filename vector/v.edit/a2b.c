@@ -274,7 +274,7 @@ int read_head(FILE * dascii, struct Map_info *Map)
 }
 
 /**
-   \brief Close lines (boudaries)
+   \brief Close lines (boundaries)
    
    Using threshold distance (-1 for no limit)
    

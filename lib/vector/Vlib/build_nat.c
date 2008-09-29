@@ -148,7 +148,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     plus = &(Map->plus);
 
     if (plus->Isle[isle] == NULL) {
-	G_warning(_("Request to find area outside nonexisting isle"));
+	G_warning(_("Request to find area outside nonexistent isle"));
 	return 0;
     }
 

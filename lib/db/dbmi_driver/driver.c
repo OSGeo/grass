@@ -44,7 +44,7 @@ int db_driver(int argc, char *argv[])
     FILE *send, *recv;
     char *modestr;
 
-    /* Read and set enviroment variables, see dbmi_client/start.c */
+    /* Read and set environment variables, see dbmi_client/start.c */
     if ((modestr = getenv("GRASS_DB_DRIVER_GISRC_MODE"))) {
 	int mode;
 

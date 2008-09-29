@@ -52,7 +52,7 @@
  *       a blank line for the fmt will effectively suppress automatic
  *       label generation
  *
- * Note: quant rules of Categories structures are heavily dependant
+ * Note: quant rules of Categories structures are heavily dependent
  * on the fact that rules are stored in the same order they are entered.
  * since i-th rule and i-th label are entered at the same time, we
  * know that i-th rule maps fp range to i, thus we know for sure

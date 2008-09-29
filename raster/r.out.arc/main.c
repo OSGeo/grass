@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
     flag.noheader->key = 'h';
     flag.noheader->description = _("Suppress printing of header information");
 
-    /* Added to optionaly produce a single line output.     -- emes -- 12.10.92 */
+    /* Added to optionally produce a single line output.     -- emes -- 12.10.92 */
     flag.singleline = G_define_flag();
     flag.singleline->key = '1';
     flag.singleline->description =

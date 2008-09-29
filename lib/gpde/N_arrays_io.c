@@ -224,17 +224,17 @@ void N_write_array_2d_to_rast(N_array_2d * array, char *name)
 	if (type == CELL_TYPE)
 	    if (!G_put_c_raster_row(map, rast)) {
 		G_unopen_cell(map);	/*unopen the new raster map */
-		G_fatal_error(_("Unable to write rast row %i"), y);
+		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == FCELL_TYPE)
 	    if (!G_put_f_raster_row(map, frast)) {
 		G_unopen_cell(map);	/*unopen the new raster map */
-		G_fatal_error(_("Unable to write rast row %i"), y);
+		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
 	if (type == DCELL_TYPE)
 	    if (!G_put_d_raster_row(map, drast)) {
 		G_unopen_cell(map);	/*unopen the new raster map */
-		G_fatal_error(_("Unable to write rast row %i"), y);
+		G_fatal_error(_("Unable to write raster row %i"), y);
 	    }
     }
 

@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
 		     && (fctype == DB_C_TYPE_STRING ||
 			 fctype == DB_C_TYPE_DATETIME))
 		    ) {
-		    G_fatal_error(_("Incomatible column types"));
+		    G_fatal_error(_("Incompatible column types"));
 		}
 	    }
 	}

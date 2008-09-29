@@ -46,7 +46,7 @@ int warpvect(double E[], double N[], int trans_order)
 
 static int drawvect(int zoomit,	/* -1 = refresh, 0 = new image, 1 = zoom, 2 = warp */
 		    View * zoom_view, double E[], double N[], int trans_order)
-{				/* order of tranformation if warping vectors */
+{				/* order of transformation if warping vectors */
     int stat = 0;
     int i;
     char name[GNAME_MAX], mapset[GMAPSET_MAX];

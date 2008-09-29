@@ -578,9 +578,9 @@ class NvizToolWindow(wx.Frame):
         gridSizer.Add(item=display, flag=wx.ALIGN_CENTER_VERTICAL,
                       pos=(0, 7))
 
-        # hight
+        # height
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Hight above surface:")),
+                                         label=_("Height above surface:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL,
                       span=(1, 2))
         
@@ -685,7 +685,7 @@ class NvizToolWindow(wx.Frame):
 
         # high
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Hight above surface:")),
+                                         label=_("Height above surface:")),
                       pos=(1, 0), flag=wx.ALIGN_CENTER_VERTICAL,
                       span=(1, 2))
         
@@ -1211,7 +1211,7 @@ class NvizToolWindow(wx.Frame):
 
         # icon width
         gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Witdh:")),
+                                         label=_("Width:")),
                       pos=(row, 2), flag=wx.ALIGN_CENTER_VERTICAL)
         
         iwidth = wx.SpinCtrl(parent=panel, id=wx.ID_ANY, size=(65, -1),

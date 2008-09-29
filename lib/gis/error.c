@@ -67,7 +67,7 @@ static int vfprint_error(int type, const char *template, va_list ap)
 /*!
  * \brief Print a message to stderr
  *
- * The output format depends on enviroment variable GRASS_MESSAGE_FORMAT
+ * The output format depends on environment variable GRASS_MESSAGE_FORMAT
  *
  * \param msg string (cannot be NULL)
  */
@@ -87,7 +87,7 @@ void G_message(const char *msg, ...)
 /*!
  * \brief Print a message to stderr but only if module is in verbose mode
  *
- * The output format depends on enviroment variables
+ * The output format depends on environment variables
  *  GRASS_MESSAGE_FORMAT and GRASS_VERBOSE
  *
  * \param msg string (cannot be NULL)
@@ -111,7 +111,7 @@ void G_verbose_message(const char *msg, ...)
  * Ususally just G_percent()/G_clicker() would be shown at this level.
  * This allows important non-error/warning messages to display as well.
  *
- * The output format depends on enviroment variables
+ * The output format depends on environment variables
  *  GRASS_MESSAGE_FORMAT and GRASS_VERBOSE
  *
  * \param msg string (cannot be NULL)
@@ -132,7 +132,7 @@ void G_important_message(const char *msg, ...)
 /*!
  * \brief Print a fatal error message to stderr
  * 
- * The output format depends on enviroment variable
+ * The output format depends on environment variable
  * GRASS_MESSAGE_FORMAT
  *
  * By default, the message is handled by an internal routine which
@@ -161,7 +161,7 @@ int G_fatal_error(const char *msg, ...)
 /*!
  * \brief Print a warning message to stderr
  * 
- * The output format depends on enviroment variable
+ * The output format depends on environment variable
  * GRASS_MESSAGE_FORMAT
  *
  * A warning message can be suppressed by G_suppress_warnings()
@@ -246,7 +246,7 @@ int G_unset_error_routine(void)
     return 0;
 }
 
-/* Print info to stderr and optionaly to log file and optionaly send mail */
+/* Print info to stderr and optionally to log file and optionally send mail */
 static int print_error(const char *msg, const int type)
 {
     static char *prefix_std[3];
