@@ -825,7 +825,7 @@ class Map(object):
             
             if mapWindow:
                 # update progress bar
-                wx.SafeYield(mapWindow)
+                ### wx.SafeYield(mapWindow)
                 event = wxUpdateProgressBar(value=ilayer)
                 wx.PostEvent(mapWindow, event)
             
@@ -904,8 +904,7 @@ class Map(object):
                     "width=%s" % str(self.width),
                     "height=%s" % str(self.height),
                     "output=%s" % self.mapfile]
-
-
+        
         # render overlays
         if tmp_region:
             os.environ["GRASS_REGION"] = tmp_region

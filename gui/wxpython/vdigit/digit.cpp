@@ -26,7 +26,7 @@
 Digit::Digit(DisplayDriver *ddriver, void *window)
 {
     display = ddriver;
-    parentWin = (wxWindow *) window;
+    display->parentWin = (wxWindow *) window;
 
     if (display->mapInfo) {
 	InitCats();
@@ -34,7 +34,7 @@ Digit::Digit(DisplayDriver *ddriver, void *window)
 
     changesetCurrent = -1; // initial value for undo/redo
 
-    msgCaption = _("Digitization error");
+    display->msgCaption = _("Digitization error");
     
     // avoid GUI crash
     // Vect_set_fatal_error(GV_FATAL_PRINT);

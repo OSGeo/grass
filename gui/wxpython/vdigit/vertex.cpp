@@ -40,12 +40,13 @@ int Digit::MoveVertex(double x, double y, double z,
 		      double thresh_coords, double thresh_snap) {
 
     int ret;
+    int changeset, nlines;
     struct line_pnts *point;
     struct Map_info **BgMap; /* backgroud vector maps */
     int nbgmaps;             /* number of registrated background maps */
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	display->DisplayMsg();
 	return -1;
     }
 
@@ -57,7 +58,7 @@ int Digit::MoveVertex(double x, double y, double z,
     if (bgmap && strlen(bgmap) > 0) {
 	BgMap = OpenBackgroundVectorMap(bgmap);
 	if (!BgMap) {
-	    BackgroundMapMsg(bgmap);
+	    display->BackgroundMapMsg(bgmap);
 	    return -1;
 	}
 	else {
@@ -68,8 +69,9 @@ int Digit::MoveVertex(double x, double y, double z,
     point = Vect_new_line_struct();
     Vect_append_point(point, x, y, z);
 
-    /* register changeset */
-    // AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
+    nlines = Vect_get_num_lines(display->mapInfo);
+
+    changeset = AddActionsBefore();
 
     /* move only first found vertex in bbox */
     ret = Vedit_move_vertex(display->mapInfo, BgMap, nbgmaps, 
@@ -78,19 +80,17 @@ int Digit::MoveVertex(double x, double y, double z,
 			    move_x, move_y, move_z,
 			    1, snap);
 
-    if (settings.breakLines && ret > 0) {
-	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL, 1);
-    }
-
-    /* TODO
     if (ret > 0) {
-	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	changesets.erase(changesets.size()-1);
+	changesets.erase(changeset);
     }
-    */
     
+    if (ret > 0 && settings.breakLines) {
+	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL, changeset);
+    }
+
     if (BgMap && BgMap[0]) {
 	Vect_close(BgMap[0]);
     }
@@ -117,10 +117,11 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
 			    double thresh)
 {
     int ret;
+    int changeset, nlines;
     struct line_pnts *point;
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	display->DisplayMsg();
 	return -1;
     }
 
@@ -130,8 +131,9 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
     point = Vect_new_line_struct();
     Vect_append_point(point, x, y, z);
 
-    /* register changeset */
-    // AddActionToChangeset(changesets.size(), REWRITE, display->selected.values->value[0]);
+    nlines = Vect_get_num_lines(display->mapInfo);
+
+    changeset = AddActionsBefore();
 
     if (add) {
 	ret = Vedit_add_vertex(display->mapInfo, display->selected.values,
@@ -142,15 +144,17 @@ int Digit::ModifyLineVertex(int add, double x, double y, double z,
 				  point, thresh);
     }
 
-    /* TODO 
     if (ret > 0) {
-	changesets[changesets.size()-1][0].line = Vect_get_num_lines(display->mapInfo);
+	AddActionsAfter(changeset, nlines);
     }
     else {
-	changesets.erase(changesets.size()-1);
+	changesets.erase(changeset);
     }
-    */
     
+    if (!add && ret > 0 && settings.breakLines) {
+	BreakLineAtIntersection(Vect_get_num_lines(display->mapInfo), NULL, changeset);
+    }
+
     Vect_destroy_line_struct(point);
 
     return ret;

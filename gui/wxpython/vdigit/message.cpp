@@ -20,7 +20,7 @@
 /**
    \brief Error message - no display driver available
 */
-void Digit::DisplayMsg(void)
+void DisplayDriver::DisplayMsg(void)
 {
     wxMessageDialog dlg(parentWin, _("Display driver not available."),
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
@@ -32,7 +32,7 @@ void Digit::DisplayMsg(void)
 /**
    \brief Error message - cannot edit 3d features
 */
-void Digit::Only2DMsg(void)
+void DisplayDriver::Only2DMsg(void)
 {
     wxMessageDialog dlg(parentWin, _("3D vector features are not currently supported."),
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
@@ -44,7 +44,7 @@ void Digit::Only2DMsg(void)
 /**
    \brief Error message - unable to write line
 */
-void Digit::WriteLineMsg(void)
+void DisplayDriver::WriteLineMsg(void)
 {
     wxMessageDialog dlg(parentWin, _("Unable to write new line"),
 			msgCaption, wxOK | wxICON_ERROR | wxCENTRE);
@@ -58,7 +58,7 @@ void Digit::WriteLineMsg(void)
 
    \param line line id
 */
-void Digit::ReadLineMsg(int line)
+void DisplayDriver::ReadLineMsg(int line)
 {
     wxString msg;
     msg.Printf(_("Unable to read line %d"), line);
@@ -74,7 +74,7 @@ void Digit::ReadLineMsg(int line)
 
    \param line line id
 */
-void Digit::DeadLineMsg(int line)
+void DisplayDriver::DeadLineMsg(int line)
 {
     wxString msg;
     msg.Printf(_("Unable to read line %d, line is dead"), line);
@@ -90,7 +90,7 @@ void Digit::DeadLineMsg(int line)
 
    \param bgmap map name
 */
-void Digit::BackgroundMapMsg(const char *bgmap)
+void DisplayDriver::BackgroundMapMsg(const char *bgmap)
 {
     wxString msg;
     msg.Printf(_("Unable to open background vector map <%s>. "
@@ -108,7 +108,7 @@ void Digit::BackgroundMapMsg(const char *bgmap)
 
    \param layer layer id
 */
-void Digit::DblinkMsg(int layer)
+void DisplayDriver::DblinkMsg(int layer)
 {
     wxString msg;
     msg.Printf(_("Database connection not defined for layer %d"), layer);
@@ -124,7 +124,7 @@ void Digit::DblinkMsg(int layer)
 
    \param driver driver name
 */
-void Digit::DbDriverMsg(const char *driver)
+void DisplayDriver::DbDriverMsg(const char *driver)
 {
     wxString msg;
     msg.Printf(_("Unable to start driver <%s>"),
@@ -142,7 +142,7 @@ void Digit::DbDriverMsg(const char *driver)
    \param driver driver name
    \param database database name
 */
-void Digit::DbDatabaseMsg(const char *driver, const char *database)
+void DisplayDriver::DbDatabaseMsg(const char *driver, const char *database)
 {
     wxString msg;
     msg.Printf(_("Unable to open database <%s> by driver <%s>"),
@@ -160,7 +160,7 @@ void Digit::DbDatabaseMsg(const char *driver, const char *database)
 
    \param sql sql command
 */
-void Digit::DbExecuteMsg(const char *sql)
+void DisplayDriver::DbExecuteMsg(const char *sql)
 {
     wxString msg;
     msg.Printf(_("Unable to execute: '%s'"),
@@ -177,7 +177,7 @@ void Digit::DbExecuteMsg(const char *sql)
 
    \param sql sql command
 */
-void Digit::DbSelectCursorMsg(const char *sql)
+void DisplayDriver::DbSelectCursorMsg(const char *sql)
 {
     wxString msg;
     msg.Printf(_("Unable to open select cursor: '%s'"),
@@ -194,7 +194,7 @@ void Digit::DbSelectCursorMsg(const char *sql)
 
    \param line line id
 */
-void Digit::GetLineCatsMsg(int line)
+void DisplayDriver::GetLineCatsMsg(int line)
 {
     wxString msg;
     msg.Printf(_("Unable to get feature (%d) categories"), line);

@@ -162,7 +162,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     struct line_cats *Cats;
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	display->DisplayMsg();
 	return lc;
     }
 
@@ -177,7 +177,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
     }
 
     if (!Vect_line_alive(display->mapInfo, line)) {
-	DeadLineMsg(line);
+	display->DeadLineMsg(line);
 	return lc;
     }
 
@@ -185,7 +185,7 @@ std::map<int, std::vector<int> > Digit::GetLineCats(int line_id)
 
     if (Vect_read_line(display->mapInfo, NULL, Cats, line) < 0) {
 	Vect_destroy_cats_struct(Cats);
-	ReadLineMsg(line);
+	display->ReadLineMsg(line);
 	return lc;
     }
     
@@ -220,12 +220,12 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     struct line_cats *Cats;
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	display->DisplayMsg();
 	return -1;
     }
 
     if (line_id == -1 && display->selected.values->n_values < 1) {
-	GetLineCatsMsg(line_id);
+	display->GetLineCatsMsg(line_id);
 	return -1;
     }
     
@@ -237,7 +237,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     }
 
     if (!Vect_line_alive(display->mapInfo, line)) {
-	DeadLineMsg(line);
+	display->DeadLineMsg(line);
 	return -1;
     }
 
@@ -247,7 +247,7 @@ int Digit::SetLineCats(int line_id, int layer, std::vector<int> cats, bool add)
     if (type < 0) {
 	Vect_destroy_line_struct(Points);
 	Vect_destroy_cats_struct(Cats);
-	ReadLineMsg(line);
+	display->ReadLineMsg(line);
 	return -1;
     }
 
@@ -324,7 +324,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 
 	type = Vect_read_line(display->mapInfo, NULL, Cats_from, fline);
 	if (type < 0) {
-	    ReadLineMsg(fline);
+	    display->ReadLineMsg(fline);
 	    return -1;
 	}
 
@@ -337,7 +337,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 
 	    type = Vect_read_line(display->mapInfo, Points, Cats_to, tline);
 	    if (type < 0) {
-		ReadLineMsg(tline);
+		display->ReadLineMsg(tline);
 		return -1;
 	    }
 
@@ -364,13 +364,13 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 		    fi = Vect_get_field(display->mapInfo, Cats_from->field[i]);
 
 		    if (fi == NULL) {
-			DblinkMsg(Cats_from->field[i]);
+			display->DblinkMsg(Cats_from->field[i]);
 			return -1;
 		    }
 		    
 		    driver = db_start_driver(fi->driver);
 		    if (driver == NULL) {
-			DbDriverMsg(fi->driver);
+			display->DbDriverMsg(fi->driver);
 			return -1;
 		    }
 		    
@@ -378,7 +378,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 		    db_set_handle (&handle, fi->database, NULL);
 		    if (db_open_database(driver, &handle) != DB_OK) {
 			db_shutdown_driver(driver);
-			DbDatabaseMsg(fi->driver, fi->database);
+			display->DbDatabaseMsg(fi->driver, fi->database);
 			return -1;
 		    }
 
@@ -390,7 +390,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 		    if (db_open_select_cursor(driver, &stmt, &cursor, DB_SEQUENTIAL) != DB_OK) {
 			db_close_database(driver);
 			db_shutdown_driver(driver);
-			DbSelectCursorMsg(db_get_string(&stmt));
+			display->DbSelectCursorMsg(db_get_string(&stmt));
 			return -1;
 		    }
 
@@ -442,7 +442,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 		    if (db_execute_immediate (driver, &stmt) != DB_OK ) {
 			db_close_database(driver);
 			db_shutdown_driver(driver);
-			DbExecuteMsg(db_get_string(&stmt));
+			display->DbExecuteMsg(db_get_string(&stmt));
 			return -1;
 		    }
 		    
@@ -456,7 +456,7 @@ int Digit::CopyCats(std::vector<int> fromId, std::vector<int> toId, bool copyAtt
 	    }
 	    
 	    if (Vect_rewrite_line(display->mapInfo, tline, type, Points, Cats_to) < 0) {
-		WriteLineMsg();
+		display->WriteLineMsg();
 		return -1;
 	    }
 	

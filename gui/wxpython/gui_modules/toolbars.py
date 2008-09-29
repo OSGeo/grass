@@ -54,6 +54,8 @@ class AbstractToolbar(object):
         self._toolbar = toolbar
         self._data = toolData
         
+        self.parent = parent
+        
     def ToolbarData(self):
         """Toolbar data"""
         return None
@@ -99,6 +101,11 @@ class AbstractToolbar(object):
 
     def OnTool(self, event):
         """Tool selected"""
+        if self.parent.toolbars['vdigit']:
+            # update vdigit toolbar (unselect currently selected tool)
+            id = self.parent.toolbars['vdigit'].GetAction(type='id')
+            self.parent.toolbars['vdigit'].GetToolbar().ToggleTool(id, False)
+        
         if event:
             # deselect previously selected tool
             id = self.action.get('id', -1)
@@ -532,13 +539,17 @@ class VDigitToolbar(AbstractToolbar):
 
     def OnTool(self, event):
         """Tool selected -> disable selected tool in map toolbar"""
+        # update map toolbar (unselect currently selected tool)
         id = self.parent.toolbars['map'].GetAction(type='id')
-        # update map toolbar
         self.parent.toolbars['map'].toolbar.ToggleTool(id, False)
+
         # set cursor
         cursor = self.parent.cursors["cross"]
         self.parent.MapWindow.SetCursor(cursor)
-        
+
+        # pointer
+        self.parent.OnPointer(None)
+
         if event:
             # deselect previously selected tool
             id = self.action.get('id', -1)
@@ -682,8 +693,6 @@ class VDigitToolbar(AbstractToolbar):
                             text=_('Duplicate attributes'),
                             kind=wx.ITEM_CHECK)
         toolMenu.AppendItem(attrb)
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-            attrb.Enable(False) # Not implemeneted for vedit
         self.parent.MapWindow.Bind(wx.EVT_MENU, self.OnCopyAttrb, attrb)
         if self.action['desc'] == "copyAttrs":
             attrb.Check(True)
@@ -1017,6 +1026,23 @@ class VDigitToolbar(AbstractToolbar):
 
         @param mapLayer reference to MapLayer instance
         """
+        # deactive layer
+        self.mapcontent.ChangeLayerActive(mapLayer, False)
+
+        # clean map canvas
+        ### self.parent.MapWindow.EraseMap()
+
+        # unset background map if needed
+        if UserSettings.Get(group='vdigit', key='bgmap',
+                            subkey='value', internal=True) == mapLayer.GetName():
+            UserSettings.Set(group='vdigit', key='bgmap',
+                             subkey='value', value='', internal=True)
+        
+        self.parent.statusbar.SetStatusText(_("Please wait, "
+                                              "opening vector map <%s> for editing...") % \
+                                                mapLayer.GetName(),
+                                            0)
+        
         # reload vdigit module
         reload(vdigit)
         from vdigit import Digit as Digit
@@ -1034,13 +1060,10 @@ class VDigitToolbar(AbstractToolbar):
         
         # update toolbar
         self.combo.SetValue(mapLayer.GetName())
-        self.parent.toolbars['map'].combo.SetValue ('Digitize')
+        self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
         
         Debug.msg (4, "VDigitToolbar.StartEditing(): layer=%s" % mapLayer.GetName())
         
-        # deactive layer
-        self.mapcontent.ChangeLayerActive(mapLayer, False)
-
         # change cursor
         if self.parent.MapWindow.mouse['use'] == 'pointer':
             self.parent.MapWindow.SetCursor(self.parent.cursors["cross"])
@@ -1048,7 +1071,6 @@ class VDigitToolbar(AbstractToolbar):
         # create pseudoDC for drawing the map
         self.parent.MapWindow.pdcVector = wx.PseudoDC()
         self.parent.digit.driver.SetDevice(self.parent.MapWindow.pdcVector)
-        # self.parent.MapWindow.UpdateMap()
 
         if not self.parent.MapWindow.resize:
             self.parent.MapWindow.UpdateMap(render=True)
@@ -1072,18 +1094,23 @@ class VDigitToolbar(AbstractToolbar):
         Debug.msg (4, "VDigitToolbar.StopEditing(): layer=%s" % self.mapLayer.GetName())
         self.combo.SetValue (_('Select vector map'))
         
-        # save changes (only for vdigit)
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vdigit':
-            if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
-                if self.parent.digit.GetUndoLevel() > 0:
-                    dlg = wx.MessageDialog(parent=self.parent, message=_("Do you want to save changes "
-                                                                         "in vector map <%s>?") % self.mapLayer.GetName(),
-                                           caption=_("Save changes?"),
-                                           style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
-                    if dlg.ShowModal() == wx.ID_NO:
-                        # revert changes
-                        self.parent.digit.Undo(0)
-                    dlg.Destroy()
+        # save changes
+        if UserSettings.Get(group='vdigit', key='saveOnExit', subkey='enabled') is False:
+            if self.parent.digit.GetUndoLevel() > 0:
+                dlg = wx.MessageDialog(parent=self.parent,
+                                       message=_("Do you want to save changes "
+                                                 "in vector map <%s>?") % self.mapLayer.GetName(),
+                                       caption=_("Save changes?"),
+                                       style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                if dlg.ShowModal() == wx.ID_NO:
+                    # revert changes
+                    self.parent.digit.Undo(0)
+                dlg.Destroy()
+        
+        self.parent.statusbar.SetStatusText(_("Please wait, "
+                                              "closing and rebuilding topology of "
+                                              "vector map <%s>...") % self.mapLayer.GetName(),
+                                            0)
         
         self.parent.digit.SetMapName(None) # -> close map
         

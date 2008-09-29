@@ -37,7 +37,7 @@
 */
 int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1, 
 				    double x2, double y2, double z2,
-				    int type, bool onlyInside)
+				    int type, bool onlyInside, bool drawSeg)
 {
     if (!mapInfo)
 	return -1;
@@ -47,7 +47,7 @@ int DisplayDriver::SelectLinesByBox(double x1, double y1, double z1,
     struct ilist *list;
     struct line_pnts *bbox;
 
-    drawSegments = false;
+    drawSegments = drawSeg;
     drawSelected = true;
 
     selected.isId = true;
@@ -167,7 +167,9 @@ std::vector<double> DisplayDriver::SelectLineByPoint(double x, double y, double 
     }
 	
     Vect_destroy_list(found);
-    
+
+    // drawing segments can be very expensive
+    // only one features selected
     drawSegments = true;
 
     return p;
@@ -217,9 +219,11 @@ std::vector<int> DisplayDriver::GetSelected(bool grassId)
 	dc_ids.push_back(1);
     }
     else {
+	// only first selected feature !
 	int npoints;
 	Vect_read_line(mapInfo, points, NULL, selected.values->value[0]);
 	npoints = points->n_points;
+	// node - segment - vertex - segment - node
 	for (int i = 1; i < 2 * npoints; i++) {
 	  dc_ids.push_back(i);
 	}
@@ -227,6 +231,34 @@ std::vector<int> DisplayDriver::GetSelected(bool grassId)
 
     return dc_ids;
 }
+
+std::map<int, std::vector<double> > DisplayDriver::GetSelectedCoord()
+{
+  std::map<int, std::vector<double> > ret;
+  int id, npoints;
+
+  id = 1;
+  
+  for (int is = 0; is < selected.values->n_values; is++) {
+      if (Vect_read_line(mapInfo, points, NULL, selected.values->value[is]) < 0) {
+	  ReadLineMsg(selected.values->value[is]);
+	  return ret;
+      }
+      
+      npoints = points->n_points;
+      for (int i = 0; i < points->n_points; i++, id += 2) {
+	  std::vector<double> c;
+	  c.push_back(points->x[i]);
+	  c.push_back(points->y[i]);
+	  c.push_back(points->z[i]);
+	  ret[id] = c;
+      }
+      id--;
+  }
+  
+  return ret;
+}
+
 
 /**
    \brief Get feature (grass) ids of duplicated objects
