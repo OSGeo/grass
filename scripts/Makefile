@@ -4,7 +4,6 @@ SUBDIRS = \
 	d.correlate \
 	d.polar \
 	d.rast.edit \
-	d.rast.leg \
 	d.shadedmap \
 	d.vect.thematic \
 	db.dropcol \
@@ -61,6 +60,7 @@ SUBDIRS = \
 	v.what.vect
 
 #	d.out.gpsdrive \
+#	d.rast.leg \
 #	i.spectral \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
