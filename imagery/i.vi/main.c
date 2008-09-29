@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
 	    else {
 		/* calculate simple_ratio        */ 
 		if (!strcmp(viflag, "sr"))
-		    d = s_r(d_redchan, d_nirchan);
+		    outrast[col] = s_r(d_redchan, d_nirchan);
 
 		/* calculate ndvi                    */ 
 		if (!strcmp(viflag, "ndvi")) {
