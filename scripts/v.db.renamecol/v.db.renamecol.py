@@ -62,10 +62,9 @@ def main():
     if not grass.find_file(map, element = 'vector', mapset = mapset):
 	grass.fatal("Vector map <%s> not found in current mapset" % map)
 
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer);
-    if not s:
+    f = grass.vector_db(map, layer)
+    if not f:
 	grass.fatal("An error occured while running v.db.connect")
-    f = s.split()
     table = f[1]
     keycol = f[2]
     database = f[3]
@@ -87,15 +86,11 @@ def main():
 
     # describe old col
     oldcoltype = None
-    s = grass.read_command('db.describe', flags = 'c', table = table)
-    for l in s.splitlines():
-	if not l.startswith('Column '):
+    for f in grass.db_describe(table):
+	if f[0] != oldcol:
 	    continue
-	f = l.split(':')
-	if f[1].lstrip() != oldcol:
-	    continue
-	oldcoltype = f[2]
-	oldcollength = f[3]
+	oldcoltype = f[1]
+	oldcollength = f[2]
 
     # old col there?
     if not oldcol:
@@ -117,7 +112,7 @@ def main():
 	grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

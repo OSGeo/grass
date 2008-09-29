@@ -168,7 +168,7 @@ def main():
     grass.message("Done.")
 
     # write cmd history:
-    grass.run_command('v.support', map = name, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

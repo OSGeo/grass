@@ -147,7 +147,7 @@ def main():
     grass.try_remove(tmpfile)
 
     # write cmd history:
-    grass.run_command('v.support', map = filevect, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(filevect)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

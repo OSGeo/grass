@@ -71,26 +71,25 @@ def main():
 
     # does map exist?
     if not grass.find_file(input, element = 'vector')['file']:
-	grass.fatal("Vector map '$GIS_OPT_INPUT' not found in mapset search path")
+	grass.fatal("Vector map <%s> not found in mapset search path", input)
 
     if not column:
 	grass.run_command('v.extract', flags = 'd', input = input,
 			  output = output, type = 'area', layer = layer)
     else:
 	coltype = ''
-	s = grass.read_command('v.info', flags = 'c', map = input, quiet = True)
-	for line in s.splitlines():
-	    f = line.split('|')
-	    if len(f) > 1 and f[1] == column:
+	for f in grass.vector_columns(map, layer):
+	    if f[1] == column:
 		coltype = f[0]
 
 	if coltype not in ['INTEGER', 'CHARACTER']:
 	    grass.fatal("Key column must be of type integer or string")
 
-	s = grass.read_command('v.db.connect', flags = 'g', map = input, layer = layer)
-	table = s.split()[1]
-	if not table:
+	f = grass.vector_db(input, layer)
+	if not f:
 	    grass.fatal("There is no table connected to this map")
+
+	table = f[1]
 
 	tmpfile = '%s_%s' % (output, tmp)
 
@@ -101,7 +100,7 @@ def main():
 			  output = output, type = 'area', layer = layer)
 
     # write cmd history:
-    grass.run_command('v.support', map = output, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(output)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

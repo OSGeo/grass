@@ -111,9 +111,7 @@ def main():
     grass.run_command('db.dropcol', quiet = True, flags = 'f', table = output,
 		      colum = 'cat', stdout = nuldev, stderr = nuldev)
 
-    s = grass.read_command('db.describe', flags = 'c', table = output)
-    kv = grass.parse_key_val(s, sep = ':')
-    records = int(kv['nrows'].strip())
+    records = grass.db_describe(output)['nrows']
     grass.message("Imported table <%s> with %d rows" % (output, records))
 
 if __name__ == "__main__":

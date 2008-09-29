@@ -62,10 +62,9 @@ def main():
     if not exists:
 	grass.fatal("Vector map <%s> not found in current mapset" % map)
 
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer)
-    if not s:
+    f = grass.vector_db(map, layer)
+    if not f:
 	grass.fatal("There is no table connected to this map. Run v.db.connect or v.db.addtable first.")
-    f = s.split()
     table = f[1]
     database = f[3]
     driver = f[4]
@@ -83,7 +82,7 @@ def main():
 	    grass.fatal("Unable to add column <%s>." % col)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

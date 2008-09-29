@@ -63,10 +63,9 @@ def main():
     if not grass.find_file(map, element = 'vector', mapset = mapset):
 	grass.fatal("Vector map <%s> not found in current mapset" % map)
 
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer);
-    if not s:
+    f = grass.vector_db(map, layer)
+    if not f:
 	grass.fatal("An error occured while running v.db.connect")
-    f = s.split()
     table = f[1]
     keycol = f[2]
     database = f[3]
@@ -78,8 +77,7 @@ def main():
     if column == keycol:
 	grass.fatal("Cannot delete <$col> column as it is needed to keep table <%s> connected to the input vector map <%s>" % (table, map))
 
-    s = grass.read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True)
-    if column not in [l.split('|')[1].lstrip() for l in s.splitlines()]:
+    if column not in [f[1] for f in grass.vector_columns(map, layer)]:
 	grass.fatal("Column <%s> not found in table <%s>" % (column, table))
 
     if driver == "sqlite":
@@ -87,16 +85,11 @@ def main():
 	# http://www.sqlite.org/faq.html#q13
 	colnames = []
 	coltypes = []
-	s = grass.read_command('db.describe', flags = 'c', table = table)
-	for l in s.splitlines():
-	    if not l.startswith('Column '):
+	for f in grass.db_describe(table):
+	    if f[0] == column:
 		continue
-	    f = l.split(':')
-	    f[1] = f[1].lstrip()
-	    if f[1] == column:
-		continue
-	    colnames.append(f[1])
-	    coltypes.append("%s %s" % (f[1], f[2]))
+	    colnames.append(f[0])
+	    coltypes.append("%s %s" % (f[0], f[1]))
 
 	colnames = ", ".join(colnames)
 	coltypes = ", ".join(coltypes)
@@ -121,7 +114,7 @@ def main():
 	grass.fatal("Cannot continue (problem deleting column).")
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
