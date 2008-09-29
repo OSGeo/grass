@@ -86,12 +86,13 @@ def main():
 	#echo "Using special trick for SQLite"
 	# http://www.sqlite.org/faq.html#q13
 	colnames = []
-	coldef = []
+	coltypes = []
 	s = grass.read_command('db.describe', flags = 'c', table = table)
 	for l in s.splitlines():
 	    if not l.startswith('Column '):
 		continue
 	    f = l.split(':')
+	    f[1] = f[1].lstrip()
 	    if f[1] == column:
 		continue
 	    colnames.append(f[1])

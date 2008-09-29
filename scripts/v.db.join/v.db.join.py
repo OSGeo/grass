@@ -98,12 +98,13 @@ def main():
     template = string.Template("UPDATE $table SET $colname=(%s);" % select)
 
     for col in cols:
-	colname = col[0]
-	if len(col) > 2:
-	    coltype = "%s(%s)" % col[1:3]
+	colname = col[1].lstrip()
+	if len(col) > 3:
+	    coltype = "%s(%s)" % (col[2], col[3])
 	else:
-	    coltype = "%s" % col[1]
+	    coltype = "%s" % col[2]
 	colspec = "%s %s" % (colname, coltype)
+
 	if grass.run_command('v.db.addcol', map = map, col = colspec) != 0:
 	    grass.fatal("Error creating column <%s>." % colname)
 
@@ -111,15 +112,11 @@ def main():
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
 
-	p = grass.feed_command('db.execute')
-	p.stdin.write(stmt)
-	p.stdin.close()
-	p.wait()
-	if p.returncode != 0:
+	if grass.write_command('db.execute', stdin = stmt) != 0:
 	    grass.fatal("Error filling column <%s>." % colname)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = cmdline)
+    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
 if __name__ == "__main__":
     options, flags = grass.parser()
