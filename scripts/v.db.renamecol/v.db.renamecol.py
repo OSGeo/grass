@@ -52,8 +52,6 @@ import sys
 import os
 import grass
 
-def error():
-
 def main():
     map = options['map']
     layer = options['layer']
@@ -80,7 +78,7 @@ def main():
     oldcol = cols[0]
     newcol = cols[1]
 
-    if $driver == "dbf":
+    if driver == "dbf":
 	if len(newcol) > 10:
 	    grass.fatal("Column name <%s> too long. The DBF driver supports column names not longer than 10 characters" % newcol)
 
