@@ -108,7 +108,7 @@ def main():
     band = options['band']
 
     #check whether gdalwarp is in path and executable
-    if not grass.find_command('gdalwarp', ['--version']):
+    if not grass.find_program('gdalwarp', ['--version']):
         grass.fatal("gdalwarp is not in the path and executable")
 
     #create temporary file to hold gdalwarp output before importing to GRASS
