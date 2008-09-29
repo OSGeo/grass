@@ -74,7 +74,7 @@ import grass
 def main():
     grass.exec_command(
 	"v.distance",
-	fro = options['vector'],
+	_from = options['vector'],
 	to = options['qvector'],
 	column = options['column'],
 	to_column = options['qcolumn'],
