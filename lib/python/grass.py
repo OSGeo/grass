@@ -273,6 +273,15 @@ def overwrite():
     owstr = 'GRASS_OVERWRITE'
     return owstr in os.environ and os.environ[owstr] != '0'
 
+# check GRASS_VERBOSE
+
+def verbosity():
+    vbstr = 'GRASS_VERBOSE'
+    if vbstr:
+	return int(vbstr)
+    else:
+	return 0
+
 ## various utilities, not specific to GRASS
 
 # basename inc. extension stripping
@@ -313,4 +322,68 @@ def try_rmdir(path):
 	os.rmdir(path)
     except:
 	pass
+
+# run "v.db.connect -g ..." and parse output
+
+def vector_db(map, layer = None, **args):
+    s = read_command('v.db.connect', flags = 'g', map = map, layer = layer, **args)
+    result = []
+    for l in s.splitlines():
+	f = l.split(' ')
+	if len(f) != 5:
+	    continue
+	if layer and int(layer) == int(f[0]):
+	    return f
+	result.append(f)
+    if not layer:
+	return result
+
+# run "db.describe -c ..." and parse output
+
+def db_describe(table, **args):
+    s = read_command('db.describe', flags = 'c', table = table, **args)
+    if not s:
+	return None
+    cols = []
+    result = {}
+    for l in s.splitlines():
+	f = l.split(':')
+	key = f[0]
+	f[1] = f[1].lstrip(' ')
+	if key.startswith('Column '):
+	    n = int(key.split(' ')[1])
+	    cols.insert(n, f[1:])
+	elif key in ['ncols', 'nrows']:
+	    result[key] = int(f[1])
+	else:
+	    result[key] = f[1:]
+    result['cols'] = cols
+    return result
+
+# run "db.connect -p" and parse output
+
+def db_connection():
+    s = read_command('db.connect', flags = 'p')
+    return parse_key_val(s, sep = ':')
+
+# run "v.info -c ..." and parse output
+
+def vector_columns(map, layer = None, **args):
+    s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
+    result = []
+    for line in s.splitlines():
+	f = line.split('|')
+	if len(f) == 2:
+	    result.append(f)
+    return result
+
+# add vector history
+
+def vector_history(map):
+    run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+
+# add raster history
+
+def raster_history(map):
+    run_command('r.support', map = map, history = os.environ['CMDLINE'])
 

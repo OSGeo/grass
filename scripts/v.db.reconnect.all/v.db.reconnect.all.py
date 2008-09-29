@@ -60,9 +60,7 @@ def main():
     for vect in grass.list_grouped('vect')[mapset]:
 	vect = "%s@%s" % (vect, mapset)
 	grass.message("Reconnecting vector <%s>" % vect)
-	s = grass.read_command('v.db.connect', flags = 'g', map = vect, stderr = nuldev)
-	for link in s.splitlines():
-	    f = link.split()
+	for f in grass.vector_db(map, stderr = nuldev):
 	    layer = f[0]
 	    schema_table = f[1]
 	    key = f[2]

@@ -58,14 +58,6 @@ import sys
 import os
 import grass
 
-def find_key(map, layer):
-    s = grass.read_command('v.db.connect', flags = 'g', map = map);
-    for line in s.splitlines():
-	fields = line.split()
-	if fields[0] == layer:
-	    return fields[3]
-    return '<unknown>'
-
 def uniq(l):
     result = []
     last = None
@@ -89,18 +81,10 @@ def main():
     if not grass.find_file(mapname, 'vector')['file']:
 	grass.fatal("Vector map '%s' not found in mapset search path." % mapname)
 
-    table_exists = grass.run_command('v.info', flags = 'c', map = mapname,
-				     layer = layer, stdout = nuldev,
-				     stderr = nuldev) == 0
+    table_exists = grass.vector_columns(mapname, layer, stderr = nuldev)
 
     if table_exists:
-	p = grass.pipe_command('v.info', flags = 'c', map = mapname, layer = layer, stderr = nuldev)
-	colnames = []
-	for line in p.stdout:
-	    if '|' not in line:
-		continue
-	    colnames.append(line.rstrip('\r\n').split('|')[1])
-	p.wait()
+	colnames = [f[1] for f in grass.vector_columns(mapname, layer, stderr = nuldev)]
     else:
 	colnames = ['cat']
 
@@ -132,7 +116,8 @@ def main():
 	records1.sort()
 
 	if len(records1) == 0:
-	    key = find_key(mapname, layer)
+	    f = grass.vector_db(mapname, layer)
+	    key = f[2]
 	    grass.fatal("There is a table connected to input vector map '%s', but" +
 			"there are no categories present in the key column '%s'. Consider using" +
 			"v.to.db to correct this." % (mapname, key))

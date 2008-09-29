@@ -57,8 +57,7 @@ def main():
     # check if DB parameters are set, and if not set them.
     grass.run_command('db.connect', flags = 'c')
 
-    s = grass.read_command('db.connect', flags = 'p')
-    kv = grass.parse_key_val(s, sep = ':')
+    kv = grass.db_connection()
     database = kv['database']
     driver = kv['driver']
     # schema needed for PG?
@@ -69,8 +68,7 @@ def main():
     if column == "cat":
 	grass.warning("Deleting <%s> column which may be needed to keep table connected to a vector map" % column)
 
-    s = grass.read_command('db.describe', flags = 'c', table = table)
-    cols = [l.split(':')[1].lstrip() for l in s.splitlines() if l.startswith('Column ')]
+    cols = [f[0] for f in grass.db_describe()['cols']]
     if column not in cols:
 	grass.fatal("Column <%s> not found in table" % column)
 
@@ -85,16 +83,11 @@ def main():
 	# http://www.sqlite.org/faq.html#q13
 	colnames = []
 	coltypes = []
-	s = grass.read_command('db.describe', flags = 'c', table = table)
-	for l in s.splitlines():
-	    if not l.startswith('Column '):
+	for f in grass.db_describe()['cols']:
+	    if f[0] == column:
 		continue
-	    f = l.split(':')
-	    f[1] = f[1].lstrip()
-	    if f[1] == column:
-		continue
-	    colnames.append(f[1])
-	    coltypes.append("%s %s" % (f[1], f[2]))
+	    colnames.append(f[0])
+	    coltypes.append("%s %s" % (f[0], f[1]))
 
 	colnames = ", ".join(colnames)
 	coltypes = ", ".join(coltypes)

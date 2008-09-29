@@ -66,8 +66,7 @@ def main():
 	grass.fatal("File <%s> not found" % infile)
 
     # DBF doesn't support lengthy text fields
-    s = grass.read_command('db.connect', flags = 'p')
-    kv = grass.parse_key_val(s, ':')
+    kv = grass.db_connection()
     dbfdriver = kv['driver'] == 'dbf'
     if dbfdriver:
 	grass.warning("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content")
@@ -145,7 +144,7 @@ def main():
     grass.try_remove(tmpfile)
 
     # write cmd history:
-    grass.run_command('v.support', map = outfile, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(outfile)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

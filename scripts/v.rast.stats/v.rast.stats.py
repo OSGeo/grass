@@ -71,14 +71,7 @@ import atexit
 import grass
 
 def has_column(vector, col):
-    s = grass.read_command('v.info', flags = 'c', map = vector, quiet = True)
-    for l in s.splitlines():
-	f = l.split('|')
-	if len(f) < 2:
-	    continue
-	if f[1] == col:
-	    return True
-    return False
+    return 
 
 def cleanup():
     grass.run_command('g.remove', rast = '%s_%s' % (vector, tmpname), quiet = True)
@@ -163,9 +156,10 @@ def main():
 	grass.fatal("No categories found in raster map")
 
     #check if DBF driver used, in this case cut to 10 chars col names:
-    s = grass.read_command('v.db.connect', flags = 'g', map = vector, layer = layer)
+    f = grass.vector_db(vector, layer)
+    if not f:
+	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
     # we need this for non-DBF driver:
-    f = s.split()
     table = f[1]
     db_database = f[3]
     db_sqldriver = f[4]
@@ -173,7 +167,7 @@ def main():
 
     #Find out which table is linked to the vector map on the given layer
     if not table:
-	grass.fatal('There is no table connected to this map! Run v.db.connect or v.db.addtable first.')
+	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
 
     basecols = ['n', 'min', 'max', 'range', 'mean', 'stddev', 'variance', 'cf_var', 'sum']
 
@@ -200,7 +194,7 @@ def main():
 	if dbfdriver:
 	    currcolumn = currcolumn[:10]
 
-	if has_column(vector, currcolumn):
+	if currcolumn in [f[1] for f in grass.vector_columns(vector, layer)]:
 	    if not flags['c']:
 		grass.fatal(("Cannot create column <%s> (already present)." % currcolumn) +
 			    "Use -c flag to update values in this column.")

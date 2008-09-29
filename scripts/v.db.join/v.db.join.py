@@ -69,8 +69,9 @@ def main():
     otable = options['otable']
     ocolumn = options['ocolumn']
 
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer)
-    f = s.split()
+    f = grass.vector_db(map, layer)
+    if not f:
+	grass.fatal("An error occured while running v.db.connect")
     maptable = f[1]
     database = f[3]
     driver = f[4]
@@ -81,31 +82,23 @@ def main():
     if not maptable:
 	grass.fatal("There is no table connected to this map. Cannot join any column.")
 
-    found = False
-    s = grass.read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True)
-    for line in s.splitlines():
-	f = line.split('|')
-	if len(f) > 1 and f[1] == column:
-	    found = True
-    if not found:
+    if column not in [f[1] for f in grass.vector_columns(map, layer)]:
 	grass.fatal("Column <%> not found in table <%s> at layer <%s>" % (column, map, layer))
 
-    s = grass.read_command('db.describe', flags = 'c', driver = driver,
-			   database = database, table = otable)
-    cols = [l.split(':') for l in s.splitlines() if l.startswith('Column ')]
+    cols = grass.db_describe(otable, driver = driver, database = database)['cols']
 
     select = "SELECT $colname FROM $otable WHERE $otable.$ocolumn=$table.$column"
     template = string.Template("UPDATE $table SET $colname=(%s);" % select)
 
     for col in cols:
-	colname = col[1].lstrip()
-	if len(col) > 3:
-	    coltype = "%s(%s)" % (col[2], col[3])
+	colname = col[0]
+	if len(col) > 2:
+	    coltype = "%s(%s)" % (col[1], col[2])
 	else:
-	    coltype = "%s" % col[2]
+	    coltype = "%s" % col[1]
 	colspec = "%s %s" % (colname, coltype)
 
-	if grass.run_command('v.db.addcol', map = map, col = colspec) != 0:
+	if grass.run_command('v.db.addcol', map = map, columns = colspec) != 0:
 	    grass.fatal("Error creating column <%s>." % colname)
 
 	stmt = template.substitute(table = maptable, column = column,
@@ -116,7 +109,7 @@ def main():
 	    grass.fatal("Error filling column <%s>." % colname)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

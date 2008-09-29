@@ -172,8 +172,7 @@ def import_aster(proj, srcfile, tempfile, band):
     grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
 
     # write cmd history
-    grass.run_command('r.support', map = outfile, history = os.environ['CMDLINE'])
-    #r.support "$GIS_OPT_OUTPUT" history="${CMDLINE}"
+    raster_history(outfile)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

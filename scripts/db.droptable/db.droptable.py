@@ -45,8 +45,7 @@ def main():
     # check if DB parameters are set, and if not set them.
     grass.run_command('db.connect', flags = 'c')
 
-    s = grass.read_command('db.connect', flags = 'p')
-    kv = grass.parse_key_val(s, sep = ':')
+    kv = grass.db_connection()
     database = kv['database']
     driver = kv['driver']
     # schema needed for PG?
@@ -56,19 +55,16 @@ def main():
 
     # check if table exists
     nuldev = file(os.devnull, 'w')
-    if grass.run_command('db.describe', flags = 'c', table = table,
-			 stdout = nuldev, stderr = nuldev):
+    if not grass.db_describe(table, stdout = nuldev, stderr = nuldev):
 	grass.fatal("Table <%s> not found in current mapset" % table)
 
     # check if table is used somewhere (connected to vector map)
     used = []
     vects = grass.list_strings('vect')
     for vect in vects:
-	s = grass.read_command('v.db.connect', flags = 'g', map = vect, stderr = nuldev)
-	if not s:
-	    continue
-	for l in s.splitlines():
-	    f = l.split()
+	for f in vector_db(vect, stderr = nuldev):
+	    if not f:
+		continue
 	    if f[1] == table:
 		used.append(vect)
 		break

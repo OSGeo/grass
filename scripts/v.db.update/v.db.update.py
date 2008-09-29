@@ -76,9 +76,8 @@ def main():
     if not grass.find_file(map, element = 'vector', mapset = mapset)['file']:
 	grass.fatal("Vector map '$GIS_OPT_MAP' not found in current mapset")
 
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer)
-    f = s.rstrip('\r\n').split(' ')
-    if len(s) < 2:
+    f = grass.vector_db(map, layer)
+    if not f:
 	grass.fatal('There is no table connected to this map. Run v.db.connect or v.db.addtable first.')
 
     table = f[1]
@@ -87,11 +86,7 @@ def main():
 
     # checking column types
     coltype = None
-    s = grass.read_command('v.info', flags = 'c', map = map, quiet = True)
-    for l in s.splitlines():
-	f = l.split('|')
-	if len(f) < 2:
-	    continue
+    for f in grass.vector_columns(map, layer):
 	if f[1] == column:
 	    coltype = f[0]
 
@@ -117,7 +112,7 @@ def main():
     grass.write_command('db.execute', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

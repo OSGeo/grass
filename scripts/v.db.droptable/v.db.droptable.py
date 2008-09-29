@@ -55,10 +55,10 @@ def main():
     layer = options['layer']
 
     # do some paranoia tests as well:
-    s = grass.read_command('v.db.connect', flags = 'g', map = map, layer = layer);
-    if not s:
+    f = grass.vector_db(map, layer)
+    if not f:
 	grass.fatal("An error occured while running v.db.connect")
-    f = s.split()
+
     if not table:
 	# Removing table name connected to selected layer
 	table = f[1]
@@ -100,7 +100,7 @@ def main():
 	grass.run_command('v.db.connect', flags ='p', map = map)
 
     # write cmd history:
-    grass.run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    grass.vector_history(map)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
