@@ -97,19 +97,34 @@ int main(int argc, char **argv)
 	    G_fatal_error(_("Unable to open output file <%s>"), file);
     }
 
-    count = G_colors_count(&colors);
+    if (colors.version < 0) {
+	/* 3.0 format */
+	CELL lo, hi;
 
-    for (i = 0; i < count; i++) {
-	DCELL val1, val2;
-	unsigned char r1, g1, b1, r2, g2, b2;
+	G_get_color_range(&lo, &hi, &colors);
 
-	G_get_f_color_rule(
-	    &val1, &r1, &g1, &b1,
-	    &val2, &r2, &g2, &b2,
-	    &colors, count - 1 - i);
+	for (i = lo; i <= hi; i++) {
+	    unsigned char r, g, b, set;
+	    DCELL val = (DCELL) i;
+	    G_lookup_colors(&i, &r, &g, &b, &set, 1, &colors);
+	    write_rule(&val, r, g, b);
+	}
+    }
+    else {
+	count = G_colors_count(&colors);
 
-	write_rule(&val1, r1, g1, b1);
-	write_rule(&val2, r2, g2, b2);
+	for (i = 0; i < count; i++) {
+	    DCELL val1, val2;
+	    unsigned char r1, g1, b1, r2, g2, b2;
+
+	    G_get_f_color_rule(
+		&val1, &r1, &g1, &b1,
+		&val2, &r2, &g2, &b2,
+		&colors, count - 1 - i);
+
+	    write_rule(&val1, r1, g1, b1);
+	    write_rule(&val2, r2, g2, b2);
+	}
     }
 
     {
