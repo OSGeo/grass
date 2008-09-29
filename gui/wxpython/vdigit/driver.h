@@ -35,7 +35,8 @@ class DisplayDriver
 private:
     friend class Digit;
     wxPseudoDC *dc, *dcTmp;  // device content
-
+    wxWindow *parentWin;
+    
     /* disabled due to expensive calling dc->SetId()
      *
      * currently all objects are drawn without id
@@ -56,7 +57,7 @@ private:
     bool drawSelected;
 
     bool drawSegments;         // draw segments of selected line
-
+    
     struct Map_info  *mapInfo;
     struct line_pnts *points;       // east, north, depth
     wxList           *pointsScreen; // x, y, z
@@ -157,6 +158,21 @@ private:
 
     void ResetTopology();
 
+    /* message dialogs */
+    wxString msgCaption;
+    void DisplayMsg(void);
+    void Only2DMsg(void);
+    void ReadLineMsg(int);
+    void DeadLineMsg(int);
+    void WriteLineMsg(void);
+    void BackgroundMapMsg(const char *);
+    void DblinkMsg(int);
+    void DbDriverMsg(const char *);
+    void DbDatabaseMsg(const char *, const char *);
+    void DbExecuteMsg(const char *);
+    void DbSelectCursorMsg(const char *);
+    void GetLineCatsMsg(int);
+    
 public:
     /* constructor */
     DisplayDriver(void *, void *);
@@ -168,11 +184,12 @@ public:
 
     /* select */
     int SelectLinesByBox(double, double, double, double,
-			 double, double, int, bool);
+			 double, double, int, bool, bool);
     std::vector<double> SelectLineByPoint(double, double, double,
 					  double, int, int);
 
     std::vector<int> GetSelected(bool);
+    std::map<int, std::vector<double> > GetSelectedCoord();
     std::map<int, std::vector <int> > GetDuplicates();
     std::vector<double> GetRegionSelected();
     int SetSelected(std::vector<int>, bool);

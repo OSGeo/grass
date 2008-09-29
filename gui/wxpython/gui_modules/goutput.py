@@ -198,7 +198,7 @@ class GMConsole(wx.Panel):
         """
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
-            sys.stdout = self.cmd_stdout
+            # sys.stdout = self.cmd_stdout
             sys.stderr = self.cmd_stderr
             
             return True

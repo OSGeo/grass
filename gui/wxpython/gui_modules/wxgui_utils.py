@@ -244,7 +244,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID11 = wx.NewId() # nviz
             self.popupID12 = wx.NewId()
             self.popupID13 = wx.NewId()
-            
+            self.popupID14 = wx.NewId()
+
         self.popupMenu = wx.Menu()
         # general item
         self.popupMenu.Append(self.popupID1, text=_("Remove"))
@@ -294,14 +295,34 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.Enable (self.popupID5, False)
                 self.popupMenu.Enable (self.popupID6, False)
             elif digitToolbar and digitToolbar.GetLayer():
+                # background vector map
+                self.popupMenu.Append(self.popupID14,
+                                      text=_("Use as background vector map"),
+                                      kind=wx.ITEM_CHECK)
+                self.Bind(wx.EVT_MENU, self.OnSetBgMap, id=self.popupID14)
+
                 # vector map already edited
-                if digitToolbar.GetLayer() is layer:
+                vdigitLayer = digitToolbar.GetLayer()
+                if vdigitLayer is layer:
+                    # disable 'start editing'
                     self.popupMenu.Enable (self.popupID5, False)
+                    # enable 'stop editing'
                     self.popupMenu.Enable(self.popupID6, True)
+                    # disable 'remove'
                     self.popupMenu.Enable(self.popupID1, False)
+                    # disable 'bgmap'
+                    self.popupMenu.Enable(self.popupID14, False)
                 else:
+                    # disable 'start editing'
                     self.popupMenu.Enable(self.popupID5, False)
+                    # disable 'stop editing'
                     self.popupMenu.Enable(self.popupID6, False)
+                    # enable 'bgmap'
+                    self.popupMenu.Enable(self.popupID14, True)
+                    if UserSettings.Get(group='vdigit', key='bgmap', subkey='value',
+                                        internal=True) == layer.GetName():
+                        self.popupMenu.Check(self.popupID14, True)
+                
             self.popupMenu.Append(self.popupID7, _("Metadata"))
             self.Bind (wx.EVT_MENU, self.OnMetadata, id=self.popupID7)
 
@@ -431,7 +452,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return True
 
-    def OnStartEditing (self, event):
+    def OnStartEditing(self, event):
         """
         Start editing vector map layer requested by the user
         """
@@ -449,7 +470,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # mark layer as 'edited'
         self.mapdisplay.toolbars['vdigit'].StartEditing (maplayer)
 
-    def OnStopEditing (self, event):
+    def OnStopEditing(self, event):
         """
         Stop editing the current vector map layer
         """
@@ -462,6 +483,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.mapdisplay.toolbars['vdigit'].OnExit()
         self.mapdisplay.imgVectorMap = None
 
+    def OnSetBgMap(self, event):
+        """Set background vector map for editing sesstion"""
+        if event.IsChecked():
+            mapName = self.GetPyData(self.layer_selected)[0]['maplayer'].GetName()
+            UserSettings.Set(group='vdigit', key='bgmap', subkey='value',
+                             value=str(mapName), internal=True)
+        else:
+            UserSettings.Set(group='vdigit', key='bgmap', subkey='value',
+                             value='', internal=True)
+        
     def OnPopupProperties (self, event):
         """Popup properties dialog"""
         self.PropertiesDialog(self.layer_selected)

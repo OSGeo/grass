@@ -3011,7 +3011,10 @@ class DisplayAttributesDialog(wx.Dialog):
                 idx = 0
                 for layer in data['Layer']:
                     layer = int(layer)
-                    tfid = int(data['Id'][idx])
+                    if data.has_key('Id'):
+                        tfid = int(data['Id'][idx])
+                    else:
+                        tfid = 0 # Area / Volume
                     if not self.cats.has_key(tfid):
                         self.cats[tfid] = {}
                     if not self.cats[tfid].has_key(layer):
@@ -3032,7 +3035,10 @@ class DisplayAttributesDialog(wx.Dialog):
         if len(self.cats.keys()) == 1:
             self.fidMulti.Show(False)
             self.fidText.Show(True)
-            self.fidText.SetLabel("%d" % self.fid)
+            if self.fid > 0:
+                self.fidText.SetLabel("%d" % self.fid)
+            else:
+                self.fidText.SetLabel(_("Unknown"))
         else:
             self.fidMulti.Show(True)
             self.fidText.Show(False)

@@ -23,7 +23,7 @@
 /**
    \brief Draw content of the vector map to device
    
-   \return number of lines which were drawn
+   \return number of drawn features
    \return -1 on error
  */
 int DisplayDriver::DrawMap(bool force)

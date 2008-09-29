@@ -4,7 +4,7 @@
 @brief Vector digitizer extension
 
 Progress:
- (1) v.edit called on the background (class VEdit)
+ (1) v.edit called on the background (class VEdit) (removed in r?)
  (2) Reimplentation of v.digit (VDigit)
 
 Import:
@@ -13,7 +13,6 @@ Import:
 
 Classes:
  - AbstractDigit 
- - VEdit
  - VDigit
  - AbstractDisplayDriver
  - CDisplayDriver
@@ -62,15 +61,6 @@ except ImportError, err:
     #          "Detailed information in README file." % \
     #          (os.linesep, err)
 
-# which interface to use?
-if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit' and GV_LINES is not None:
-    print >> sys.stderr, "%sWARNING: Digitization tool uses v.edit interface. " \
-        "This can significantly slow down some operations especially for " \
-        "middle-large vector maps. "\
-        "You can change the digitization interface in 'User preferences' " \
-        "(menu 'Config'->'Preferences')." % \
-          os.linesep
-
 class AbstractDigit:
     """
     Abstract digitization class
@@ -104,30 +94,11 @@ class AbstractDigit:
         UserSettings.Set(group='vdigit', key='category', subkey='value', value=1)
 
         if self.map:
-            if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-                categoryCmd = gcmd.Command(cmd=["v.category", "-g", "--q",
-                                                "input=%s" % self.map, 
-                                                "option=report"])
-
-                if categoryCmd.returncode != 0:
-                    return False
+            cat = self.digit.GetCategory(UserSettings.Get(group='vdigit', key='layer', subkey='value'))
+            cat += 1
+            UserSettings.Set(group='vdigit', key='category', subkey='value',
+                             value=cat)
         
-                for line in categoryCmd.ReadStdOutput():
-                    if "all" in line:
-                        if UserSettings.Get(group='vdigit', key='layer', subkey='value') != int(line.split(' ')[0]):
-                            continue
-                        try:
-                            maxCat = int(line.split(' ')[-1]) + 1
-                            UserSettings.Set(group='vdigit', key='category', subkey='value', value=maxCat)
-                        except:
-                            return False
-                        return True
-            else:
-                cat = self.digit.GetCategory(UserSettings.Get(group='vdigit', key='layer', subkey='value'))
-                cat += 1
-                UserSettings.Set(group='vdigit', key='category', subkey='value',
-                                 value=cat)
-    
     def SetCategory(self):
         """Return category number to use (according Settings)"""
         if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 0:
@@ -166,16 +137,8 @@ class AbstractDigit:
                                             'the topology (Vector->Develop vector map->'
                                             'Create/rebuild topology).') % map)
             
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') != 'v.edit':
-            try:
-                self.digit.InitCats()
-            except:
-                pass
-
-        # avoid using current vector map as background map
-        if self.map == UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'):
-            UserSettings.Set(group='vdigit', key='backgroundMap', subkey='value', value='')
-
+        self.digit.InitCats()
+        
     def SelectLinesByQueryThresh(self):
         """Generic method used for SelectLinesByQuery()
         -- to get threshold value"""
@@ -212,8 +175,10 @@ class AbstractDigit:
 
         @param pos1,pos2 bounding box defifinition
         """
-
-        if UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value') == '':
+        bgmap = str(UserSettings.Get(group='vdigit', key='bgmap', subkey='value',
+                                     internal=True))
+        
+        if bgmap == '':
             Debug.msg(4, "VEdit.SelectLinesFromBackgroundMap(): []")
             return []
 
@@ -222,565 +187,21 @@ class AbstractDigit:
 
         vEditCmd = gcmd.Command(['v.edit',
                                  '--q',
-                                 'map=%s' % UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'),
+                                 'map=%s' % bgmap,
                                  'tool=select',
                                  'bbox=%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1])])
                                  #'polygon=%f,%f,%f,%f,%f,%f,%f,%f,%f,%f' % \
                                  #    (x1, y1, x2, y1, x2, y2, x1, y2, x1, y1)])
                                              
-        try:
-            output = vEditCmd.ReadStdOutput()[0] # first line
-            ids = output.split(',') 
-            ids = map(int, ids) # str -> int
-        except:
-            return []
-
+        output = vEditCmd.ReadStdOutput()[0] # first line
+        ids = output.split(',') 
+        ids = map(int, ids) # str -> int
+        
         Debug.msg(4, "VEdit.SelectLinesFromBackgroundMap(): %s" % \
                       ",".join(["%d" % v for v in ids]))
         
         return ids
 
-class VEdit(AbstractDigit):
-    """
-    Prototype of digitization class based on v.edit command
-
-    Note: This should be replaced by VDigit class.
-    """
-    def __init__(self, mapwindow):
-        """Initialization
-
-        @param mapwindow reference to mapwindow (MapFrame) instance
-        @param settings  initial settings of digitization tool
-        """
-        AbstractDigit.__init__(self, mapwindow)
-
-    def AddPoint (self, map, point, x, y, z=None):
-        """Add point/centroid
-
-        @param map   map name
-        @param point feature type (True for point, otherwise centroid)
-        @param x,y,z coordinates
-        """
-        if point:
-            key = "P"
-        else:
-            key = "C"
-
-        if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 2:
-            layer = -1 # -> no category
-            cat   = -1
-        else:
-            layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
-            cat   = self.SetCategory()
-
-        if layer > 0 and cat != "None":
-            addstring =  "%s 1 1\n" % (key)
-        else:
-            addstring =  "%s 1\n" % (key)
-
-        addstring += "%f %f\n" % (x, y)
-
-        if layer > 0 and cat != "None":
-            addstring += "%d %d\n" % (layer, cat)
-            Debug.msg (3, "VEdit.AddPoint(): map=%s, type=%s, layer=%d, cat=%d, x=%f, y=%f" % \
-                           (map, type, layer, cat, x, y))
-        else:
-            Debug.msg (3, "VEdit.AddPoint(): map=%s, type=%s, x=%f, y=%f" % \
-                           (map, type, x, y))
-
-        Debug.msg (4, "Vline.AddPoint(): input=%s" % addstring)
-                
-        self.__AddFeature (map=map, input=addstring)
-
-    def AddLine (self, map, line, coords):
-        """Add line/boundary
-
-        @param map  map name
-        @param line feature type (True for line, otherwise boundary)
-        @param list of coordinates
-        """
-        if len(coords) < 2:
-            return
-
-        if UserSettings.Get(group='vdigit', key="categoryMode", subkey='selection') == 2:
-            layer = -1 # -> no category
-            cat   = -1
-        else:
-            layer = UserSettings.Get(group='vdigit', key="layer", subkey='value')
-            cat   = self.SetCategory()
-
-        if line:
-            key = "L"
-            flags = []
-        else:
-            key = "B"
-            flags = ['-c'] # close boundaries
-            
-        if layer > 0 and cat != "None":
-            addstring = "%s %d 1\n" % (key, len(coords))
-        else:
-            addstring = "%s %d\n" % (key, len(coords))
-
-        for point in coords:
-            addstring += "%f %f\n" % \
-                (float(point[0]), float(point [1]))
-
-        if layer > 0 and cat != "None":
-            addstring += "%d %d\n" % (layer, cat)
-            Debug.msg (3, "Vline.AddLine(): type=%s, layer=%d, cat=%d coords=%s" % \
-                           (key, layer, cat, coords))
-        else:
-            Debug.msg (3, "Vline.AddLine(): type=%s, coords=%s" % \
-                           (key, coords))
-
-        Debug.msg (4, "VEdit.AddLine(): input=%s" % addstring)
-
-        self.__AddFeature (map=map, input=addstring, flags=flags)
-
-    def __AddFeature (self, map, input, flags=[]):
-        """Generic method to add new vector feature
-
-        @param map   map name
-        @param input feature definition in GRASS ASCII format
-        @param flags additional flags
-        """
-        if UserSettings.Get(group='vdigit', key='snapping', subkey='value') <= 0.0:
-            snap = "no"
-        else:
-            if UserSettings.Get(group='vdigit', key='snapToVertex', subkey='enabled') is True:
-                snap = "vertex"
-            else:
-                snap = "node"
-
-        command = ["v.edit", "-n", "--q", 
-                   "map=%s" % map,
-                   "tool=add",
-                   "thresh=%f,%f" % (self.driver.GetThreshold(type='selectThresh'), self.driver.GetThreshold(type='snapping')),
-                   "snap=%s" % snap]
-
-        if UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value') != '':
-            command.append("bgmap=%s" % UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'))
-
-        # additional flags
-        for flag in flags:
-            command.append(flag)
-
-        # run the command
-        Debug.msg(4, "VEdit.AddFeature(): input=%s" % input)
-        vedit = gcmd.Command(cmd=command, stdin=input, stderr=None)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-        
-    def DeleteSelectedLines(self):
-        """Delete selected features"""
-        selected = self.driver.GetSelected() # grassId
-
-        if len(selected) <= 0:
-            return False
-
-        ids = ",".join(["%d" % v for v in selected])
-
-        Debug.msg(4, "Digit.DeleteSelectedLines(): ids=%s" % \
-                      ids)
-
-        # delete also attributes if requested
-        if UserSettings.Get(group='vdigit', key='delRecord', subkey='enabled') is True:
-            layerCommand = gcmd.Command(cmd=["v.db.connect",
-                                             "-g", "--q",
-                                             "map=%s" % self.map],
-                                        rerr=None, stderr=None)
-            if layerCommand.returncode == 0:
-                layers = {}
-                for line in layerCommand.ReadStdOutput():
-                    lineList = line.split(' ')
-                    layers[int(lineList[0])] = { "table"    : lineList[1],
-                                                 "key"      : lineList[2],
-                                                 "database" : lineList[3],
-                                                 "driver"   : lineList[4] }
-                for layer in layers.keys():
-                    printCats = gcmd.Command(['v.category',
-                                              '--q',
-                                              'input=%s' % self.map,
-                                              'layer=%d' % layer,
-                                              'option=print',
-                                              'id=%s' % ids])
-                    sql = 'DELETE FROM %s WHERE' % layers[layer]['table']
-                    n_cats = 0
-                    for cat in printCats.ReadStdOutput():
-                        for c in cat.split('/'):
-                            sql += ' cat = %d or' % int(c)
-                            n_cats += 1
-                    sql = sql.rstrip(' or')
-                    if n_cats > 0:
-                        gcmd.Command(['db.execute',
-                                      '--q',
-                                      'driver=%s' % layers[layer]['driver'],
-                                      'database=%s' % layers[layer]['database']],
-                                     stdin=sql,
-                                     rerr=None, stderr=None)
-
-        command = [ "v.edit",
-                    "map=%s" % self.map,
-                    "tool=delete",
-                    "ids=%s" % ids]
-
-        # run the command
-        vedit = gcmd.Command(cmd=command, stderr=None)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-
-        return True
-
-    def MoveSelectedLines(self, move):
-        """Move selected features
-
-        @param move X,Y direction
-        """
-        return self.__MoveFeature("move", None, move)
-
-    def MoveSelectedVertex(self, coords, move):
-        """Move selected vertex
-
-        Feature geometry is changed.
-
-        @param coords click coordinates
-        @param move   X,Y direction
-        """
-        return self.__MoveFeature("vertexmove", coords, move)
-
-    def __MoveFeature(self, tool, coords, move):
-        """Move selected vector feature (line, vertex)
-
-        @param tool   tool for v.edit
-        @param coords click coordinates
-        @param move   direction (x, y)
-        """
-        selected = self.driver.GetSelected()
-
-        if len(selected) <= 0:
-            return False
-
-        ids = ",".join(["%d" % v for v in selected])
-
-        Debug.msg(4, "Digit.MoveSelectedLines(): ids=%s, move=%s" % \
-                      (ids, move))
-
-        if UserSettings.Get(group='vdigit', key='snapping', subkey='value') <= 0.0:
-            snap = "no"
-        else:
-            if UserSettings.Get(group='vdigit', key='snapToVertex', subkey='enabled') is True:
-                snap = "vertex"
-            else:
-                snap = "node"
-
-
-        command = ["v.edit", "--q", 
-                   "map=%s" % self.map,
-                   "tool=%s" % tool,
-                   "ids=%s" % ids,
-                   "move=%f,%f" % (float(move[0]),float(move[1])),
-                   "thresh=%f,%f" % (self.driver.GetThreshold(type='selectThresh'), self.driver.GetThreshold(type='snapping')),
-                   "snap=%s" % snap]
-
-        if tool == "vertexmove":
-            command.append("coords=%f,%f" % (float(coords[0]), float(coords[1])))
-            command.append("-1") # modify only first selected
-                         
-        if UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value') != '':
-            command.append("bgmap=%s" % UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'))
-                    
-        # run the command
-        vedit = gcmd.Command(cmd=command, stderr=None)
-        
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-
-        return True
-
-    def AddVertex(self, coords):
-        """Add new vertex to the selected line/boundary on position 'coords'
-
-        @param coords coordinates to add vertex
-        """
-        return self.__ModifyVertex(coords, "vertexadd")
-
-    def RemoveVertex(self, coords):
-        """Remove vertex from the selected line/boundary on position 'coords'
-
-        @param coords coordinates to remove vertex
-        """
-        return self.__ModifyVertex(coords, "vertexdel")
-    
-    def __ModifyVertex(self, coords, action):
-        """Generic method for vertex manipulation
-
-        @param coords coordinates
-        @param action operation to perform
-        """
-        try:
-            line = self.driver.GetSelected()[0]
-        except:
-            return False
-
-        command = ["v.edit", "--q",
-                   "map=%s" % self.map,
-                   "tool=%s" % action,
-                   "ids=%s" % line,
-                   "coords=%f,%f" % (float(coords[0]),float(coords[1])),
-                   "thresh=%f,%f" % (self.driver.GetThreshold(type='selectThresh'), self.driver.GetThreshold(type='snapping'))]
-
-        # run the command
-        vedit = gcmd.Command(cmd=command, stderr=None)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-        
-        return True
-
-    def SplitLine(self, coords):
-        """Split selected line/boundary on position 'coords'
-
-        @param coords coordinates to split line
-        """
-        try:
-            line = self.driver.GetSelected()[0]
-        except:
-            return False
-
-        command = ["v.edit", "--q",
-                   "map=%s" % self.map,
-                   "tool=break",
-                   "ids=%s" % line,
-                   "coords=%f,%f" % (float(coords[0]),float(coords[1])),
-                   "thresh=%f" % self.driver.GetThreshold(type='selectThresh')]
-
-        # run the command
-        vedit = gcmd.Command(cmd=command, stderr=None)
-
-        # redraw map
-        self.driver.ReloadMap()
-        
-        return True
-
-    def EditLine(self, line, coords):
-        """Edit existing line/boundary
-
-        @param line id of line to be modified
-        @param coords list of coordinates of modified line
-        """
-        # remove line
-        vEditDelete = gcmd.Command(['v.edit',
-                                   '--q',
-                                   'map=%s' % self.map,
-                                   'tool=delete',
-                                   'ids=%s' % line], stderr=None)
-
-        # add line
-        if len(coords) > 0:
-            self.AddLine(self.map, "line", coords)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-
-    def __ModifyLines(self, tool):
-        """Generic method to modify selected lines/boundaries
-
-        @param tool operation to be performed by v.edit
-        """
-        ids = self.driver.GetSelected()
-
-        if len(ids) <= 0:
-            return False
-
-        vEdit = ['v.edit',
-                 '--q',
-                 'map=%s' % self.map,
-                 'tool=%s' % tool,
-                 'ids=%s' % ",".join(["%d" % v for v in ids])]
-
-        if tool in ['snap', 'connect']:
-            vEdit.append("thresh=%f,%f" % (self.driver.GetThreshold(type='selectThresh'), self.driver.GetThreshold(type='snapping')))
-
-        runCmd = gcmd.Command(vEdit)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-                        
-        return True
-
-    def FlipLine(self):
-        """Flip selected lines/boundaries"""
-        return self.__ModifyLines('flip')
-
-    def MergeLine(self):
-        """Merge selected lines/boundaries"""
-        return self.__ModifyLines('merge')
-
-    def BreakLine(self):
-        """Break selected lines/boundaries"""
-        return self.__ModifyLines('break')
-
-    def SnapLine(self):
-        """Snap selected lines/boundaries"""
-        return self.__ModifyLines('snap')
-
-    def ConnectLine(self):
-        """Connect selected lines/boundaries"""
-        return self.__ModifyLines('connect')
-
-    def TypeConvForSelectedLines(self):
-        """Feature type conversion for selected objects.
-
-        Supported conversions:
-         - point <-> centroid
-         - line <-> boundary
-        """
-        return self.__ModifyLines('chtype')
-
-    def ZBulkLine(self, pos1, pos2, value, step):
-        """Provide z bulk-labeling (automated assigment of z coordinate
-        to 3d lines
-
-        @param pos1,pos2 bounding box definition for selecting lines to be labeled
-        @param value starting value
-        @param step  step value
-        """
-        gcmd.Command(['v.edit',
-                      '--q',
-                      'map=%s' % self.map,
-                      'tool=zbulk',
-                      'bbox=%f,%f,%f,%f' % (pos1[0], pos1[1], pos2[0], pos2[1]),
-                      'zbulk=%f,%f' % (value, step)])
-
-
-    def CopyLine(self, ids=None):
-        """Copy features from (background) vector map
-
-        @param ids list of line ids to be copied
-        """
-        if not ids:
-            ids = self.driver.GetSelected()
-
-        if len(ids) <= 0:
-            return False
-
-        vEdit = ['v.edit',
-                 '--q',
-                 'map=%s' % self.map,
-                 'tool=copy',
-                 'ids=%s' % ",".join(["%d" % v for v in ids])]
-
-        if UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value') != '':
-            vEdit.append('bgmap=%s' % UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'))
-
-        runCmd = gcmd.Command(vEdit)
-
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-                        
-        return True
-
-    def CopyCats(self, cats, ids, copyAttrb=False):
-        """Copy given categories to objects with id listed in ids
-
-        @param cats list of cats to be copied
-        @param ids  ids of lines to be modified
-        """
-        if len(cats) == 0 or len(ids) == 0:
-            return False
-
-        # collect cats
-        # FIXME: currently layer is ignored...
-        gcmd.Command(['v.edit',
-                     '--q',
-                     'map=%s' % self.map,
-                     'tool=catadd',
-                     'cats=%s' % ",".join(["%d" % v for v in cats]),
-                     'ids=%s' % ",".join(["%d" % v for v in ids])])
-        
-        # reload map (needed for v.edit)
-        self.driver.ReloadMap()
-
-        return True
-
-    def SelectLinesByQuery(self, pos1, pos2):
-        """Select features by query
-
-        @param pos1, pos2 bounding box definition
-        """
-        thresh = self.SelectLinesByQueryThresh()
-        
-        w, n = pos1
-        e, s = pos2
-
-        if UserSettings.Get(group='vdigit', key='query', subkey='box') == False: # select globaly
-            vInfo = gcmd.Command(['v.info',
-                                  'map=%s' % self.map,
-                                  '-g'])
-            for item in vInfo.ReadStdOutput():
-                if 'north' in item:
-                    n = float(item.split('=')[1])
-                elif 'south' in item:
-                    s = float(item.split('=')[1])
-                elif 'east' in item:
-                    e = float(item.split('=')[1])
-                elif 'west' in item:
-                    w = float(item.split('=')[1])
-
-        if UserSettings.Get(group='vdigit', key='query', subkey='selection') == 0:
-            qtype = 'length'
-        else:
-            qtype = 'dangle'
-
-        vEdit = (['v.edit',
-                  '--q',
-                  'map=%s' % self.map,
-                  'tool=select',
-                  'bbox=%f,%f,%f,%f' % (w, n, e, s),
-                  'query=%s' % qtype,
-                  'thresh=0,0,%f' % thresh])
-
-        vEditCmd = gcmd.Command(vEdit)
-        
-        try:
-            output = vEditCmd.ReadStdOutput()[0] # first line
-            ids = output.split(',') 
-            ids = map(int, ids) # str -> int
-        except:
-            return []
-
-        Debug.msg(4, "VEdit.SelectLinesByQuery(): %s" % \
-                      ",".join(["%d" % v for v in ids]))
-        
-        return ids
-
-    def GetLayers(self):
-        """Return list of layers"""
-        layerCommand = gcmd.Command(cmd=["v.db.connect",
-                                         "-g", "--q",
-                                         "map=%s" % self.map],
-                                    rerr=None, stderr=None)
-        if layerCommand.returncode == 0:
-            layers = []
-            for line in layerCommand.ReadStdOutput():
-                lineList = line.split(' ')
-                layers.append(int(lineList[0]))
-            return layers
-
-        return [1,]
-
-    def Undo(self, level=-1):
-        """Undo not implemented here"""
-        wx.MessageBox(parent=self.mapWindow, message=_("Undo is not implemented in vedit component. "
-                                                    "Use vdigit instead."),
-                      caption=_("Message"), style=wx.ID_OK | wx.ICON_INFORMATION | wx.CENTRE)
-
-    def UpdateSettings(self):
-        """Update digit settigs"""
-        pass
-    
 class VDigit(AbstractDigit):
     """
     Prototype of digitization class based on v.digit reimplementation
@@ -829,14 +250,14 @@ class VDigit(AbstractDigit):
 
         snap, thresh = self.__getSnapThreshold()
 
+        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
+                                     subkey='value', internal=True))
         if z:
             ret = self.digit.AddLine(type, [x, y, z], layer, cat,
-                                     str(UserSettings.Get(group='vdigit', key="backgroundMap",
-                                                          subkey='value')), snap, thresh)
+                                     bgmap, snap, thresh)
         else:
             ret = self.digit.AddLine(type, [x, y], layer, cat,
-                                     str(UserSettings.Get(group='vdigit', key="backgroundMap",
-                                                          subkey='value')), snap, thresh)
+                                     bgmap, snap, thresh)
         self.toolbar.EnableUndo()
 
         return ret
@@ -870,8 +291,11 @@ class VDigit(AbstractDigit):
         
         snap, thresh = self.__getSnapThreshold()
         
+        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
+                                     subkey='value', internal=True))
+        
         ret = self.digit.AddLine(type, listCoords, layer, cat,
-                                 str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap, thresh)
+                                 bgmap, snap, thresh)
 
         self.toolbar.EnableUndo()
         
@@ -896,10 +320,12 @@ class VDigit(AbstractDigit):
         """
         snap, thresh = self.__getSnapThreshold()
         
-        bgmap = UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')
+        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
+                                     subkey='value', internal=True))
+        
         try:
             nlines = self.digit.MoveLines(move[0], move[1], 0.0, # TODO 3D
-                                          str(bgmap), snap, thresh)
+                                          bgmap, snap, thresh)
         except SystemExit:
             pass
         
@@ -919,9 +345,12 @@ class VDigit(AbstractDigit):
         """
         snap, thresh = self.__getSnapThreshold()
 
+        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
+                                     subkey='value', internal=True))
+        
         moved = self.digit.MoveVertex(coords[0], coords[1], 0.0, # TODO 3D
                                       move[0], move[1], 0.0,
-                                      str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')), snap,
+                                      bgmap, snap,
                                       self.driver.GetThreshold(type='selectThresh'), thresh)
 
         if moved:
@@ -1006,10 +435,12 @@ class VDigit(AbstractDigit):
 
         snap, thresh = self.__getSnapThreshold()
         
+        bgmap = str(UserSettings.Get(group='vdigit', key="bgmap",
+                                     subkey='value', internal=True))
+        
         try:
             ret = self.digit.RewriteLine(lineid, listCoords,
-                                         str(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value')),
-                                         snap, thresh)
+                                         bgmap, snap, thresh)
         except SystemExit:
             pass
 
@@ -1094,7 +525,9 @@ class VDigit(AbstractDigit):
         @return number of copied features
         @return -1 on error
         """
-        bgmap = str(UserSettings.Get(group='vdigit', key='backgroundMap', subkey='value'))
+        bgmap = str(UserSettings.Get(group='vdigit', key='bgmap',
+                                     subkey='value', internal=True))
+        
         if len(bgmap) > 0:
             ret = self.digit.CopyLines(ids, bgmap)
         else:
@@ -1244,22 +677,15 @@ class VDigit(AbstractDigit):
 
         return (snap, thresh)
 
-if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-    class Digit(VEdit):
-        """Default digit class"""
-        def __init__(self, mapwindow):
-            VEdit.__init__(self, mapwindow)
-            self.type = 'vedit'
-else:
-    class Digit(VDigit):
-        """Default digit class"""
-        def __init__(self, mapwindow):
-            VDigit.__init__(self, mapwindow)
-            self.type = 'vdigit'
-            
-        def __del__(self):
-            VDigit.__del__(self)
-            
+class Digit(VDigit):
+    """Default digit class"""
+    def __init__(self, mapwindow):
+        VDigit.__init__(self, mapwindow)
+        self.type = 'vdigit'
+        
+    def __del__(self):
+        VDigit.__del__(self)
+        
 class AbstractDisplayDriver:
     """Abstract classs for display driver"""
     def __init__(self, parent, mapwindow):
@@ -1354,10 +780,7 @@ class CDisplayDriver(AbstractDisplayDriver):
         if map:
             name, mapset = map.split('@')
             try:
-                if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-                    ret = self.__display.OpenMap(str(name), str(mapset), False)
-                else:
-                    ret = self.__display.OpenMap(str(name), str(mapset), True)
+                ret = self.__display.OpenMap(str(name), str(mapset), True)
             except SystemExit:
                 ret = -1
         else:
@@ -1378,13 +801,12 @@ class CDisplayDriver(AbstractDisplayDriver):
 
         @return wx.Image instance
         """
-        print 'd'
         nlines = self.__display.DrawMap(True) # force
         Debug.msg(3, "CDisplayDriver.DrawMap(): nlines=%d" % nlines)
 
         return nlines
 
-    def SelectLinesByBox(self, begin, end, type=0):
+    def SelectLinesByBox(self, begin, end, type=0, drawSeg=False):
         """Select vector features by given bounding box.
 
         If type is given, only vector features of given type are selected.
@@ -1395,9 +817,11 @@ class CDisplayDriver(AbstractDisplayDriver):
         x1, y1 = begin
         x2, y2 = end
 
+        inBox = UserSettings.Get(group='vdigit', key='selectInside', subkey='enabled')
+        
         nselected = self.__display.SelectLinesByBox(x1, y1, -1.0 * wxvdigit.PORT_DOUBLE_MAX,
                                                     x2, y2, wxvdigit.PORT_DOUBLE_MAX,
-                                                    type, UserSettings.Get(group='vdigit', key='selectInside', subkey='enabled'))
+                                                    type, inBox, drawSeg)
         
         Debug.msg(4, "CDisplayDriver.SelectLinesByBox(): selected=%d" % \
                       nselected)
@@ -1439,6 +863,10 @@ class CDisplayDriver(AbstractDisplayDriver):
             
         return selected
 
+    def GetSelectedCoord(self):
+        """Return ids of selected vector features and their coordinates"""
+        return dict(self.__display.GetSelectedCoord())
+        
     def GetRegionSelected(self):
         """Get minimal region extent of selected features (ids/cats)"""
         return self.__display.GetRegionSelected()
@@ -1449,27 +877,23 @@ class CDisplayDriver(AbstractDisplayDriver):
         # -> id : (list of ids)
         dupl = dict(self.__display.GetDuplicates())
 
-        vdigitComp = UserSettings.Get(group='advanced', key='digitInterface', subkey='type')
-
         # -> id : ((id, cat), ...)
         dupl_full = {}
         for key in dupl.keys():
             dupl_full[key] = []
             for id in dupl[key]:
                 catStr = ''
-
-                # categories not supported for v.edit !
-                if vdigitComp == 'vdigit':
-                    cats = self.parent.GetLineCats(line=id)
-
-                    for layer in cats.keys():
-                        if len(cats[layer]) > 0:
-                            catStr = "%d: (" % layer
-                            for cat in cats[layer]:
-                                catStr += "%d," % cat
-                            catStr = catStr.rstrip(',')
-                            catStr += ')'
-
+                
+                cats = self.parent.GetLineCats(line=id)
+                
+                for layer in cats.keys():
+                    if len(cats[layer]) > 0:
+                        catStr = "%d: (" % layer
+                        for cat in cats[layer]:
+                            catStr += "%d," % cat
+                        catStr = catStr.rstrip(',')
+                        catStr += ')'
+                
                 dupl_full[key].append([id, catStr])
 
         return dupl_full
@@ -1777,28 +1201,6 @@ class VDigitSettingsDialog(wx.Dialog):
         border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
 
         #
-        # background vector map
-        #
-        box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Background vector map"))
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-
-        boxSizer = wx.BoxSizer(wx.VERTICAL)
-
-        self.backgroundMap = gselect.Select(parent=panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                           type="vector", exceptOf=[self.parent.digit.map])
-        self.backgroundMap.SetValue(UserSettings.Get(group='vdigit', key="backgroundMap", subkey='value'))
-        self.backgroundMap.Bind(wx.EVT_TEXT, self.OnChangeBackgroundMap)
-        boxSizer.Add(item=self.backgroundMap, proportion=0,
-                     flag=wx.EXPAND | wx.ALL, border=5)
-        boxSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                        label=_("This vector map is used for snapping and copying features.")),
-                     proportion=0,
-                     flag=wx.EXPAND | wx.ALL, border=5)
-
-        sizer.Add(item=boxSizer, proportion=1, flag=wx.TOP | wx.LEFT | wx.EXPAND, border=1)
-        border.Add(item=sizer, proportion=0, flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border=5)
-        
-        #
         # select box
         #
         box   = wx.StaticBox (parent=panel, id=wx.ID_ANY, label=" %s " % _("Select vector features"))
@@ -1853,8 +1255,6 @@ class VDigitSettingsDialog(wx.Dialog):
 
         self.intersect = wx.CheckBox(parent=panel, label=_("Break lines at intersection"))
         self.intersect.SetValue(UserSettings.Get(group='vdigit', key='breakLines', subkey='enabled'))
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-            self.intersect.Enable(False)
         
         sizer.Add(item=self.intersect, proportion=0, flag=wx.ALL | wx.EXPAND, border=1)
 
@@ -2141,12 +1541,6 @@ class VDigitSettingsDialog(wx.Dialog):
             
         event.Skip()
 
-    def OnChangeBackgroundMap(self, event):
-        """Change background map"""
-        map = self.backgroundMap.GetValue()
-        
-        UserSettings.Set(group='vdigit', key='backgroundMap', subkey='value', value=map)
-        
     def OnChangeQuery(self, event):
         """Change query"""
         if self.queryLength.GetValue():
@@ -2655,42 +2049,29 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                             cat not in catsCurr[1][layer]:
                         catList.append(cat)
                 if catList != []:
-                    if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':
-                        vEditCmd = ['v.edit', '--q',
-                                    'map=%s' % self.map,
-                                    'layer=%d' % layer,
-                                    'tool=%s' % action,
-                                    'cats=%s' % ",".join(["%d" % v for v in catList]),
-                                    'id=%d' % self.line]
-            
-                        gcmd.Command(vEditCmd)
+                    if action == 'catadd':
+                        add = True
                     else:
-                        if action == 'catadd':
-                            add = True
-                        else:
-                            add = False
+                        add = False
                         
-                        newfid = self.parent.parent.digit.SetLineCats(fid, layer,
+                    newfid = self.parent.parent.digit.SetLineCats(fid, layer,
                                                                       catList, add)
-                        if len(self.cats.keys()) == 1:
-                            self.fidText.SetLabel("%d" % newfid)
-                        else:
-                            choices = self.fidMulti.GetItems()
-                            choices[choices.index(str(fid))] = str(newfid)
-                            self.fidMulti.SetItems(choices)
-                            self.fidMulti.SetStringSelection(str(newfid))
-                            
-                        self.cats[newfid] = self.cats[fid]
-                        del self.cats[fid]
-                        
-                        fid = newfid
-                        if self.fid < 0:
-                            wx.MessageBox(parent=self, message=_("Unable to update vector map."),
-                                          caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
-        if UserSettings.Get(group='advanced', key='digitInterface', subkey='type') == 'vedit':           
-            # reload map (needed for v.edit)
-            self.parent.parent.digit.driver.ReloadMap()
-
+                    if len(self.cats.keys()) == 1:
+                        self.fidText.SetLabel("%d" % newfid)
+                    else:
+                        choices = self.fidMulti.GetItems()
+                        choices[choices.index(str(fid))] = str(newfid)
+                        self.fidMulti.SetItems(choices)
+                        self.fidMulti.SetStringSelection(str(newfid))
+                    
+                    self.cats[newfid] = self.cats[fid]
+                    del self.cats[fid]
+                    
+                    fid = newfid
+                    if self.fid < 0:
+                        wx.MessageBox(parent=self, message=_("Unable to update vector map."),
+                                      caption=_("Error"), style=wx.OK | wx.ICON_ERROR)
+        
         self.cats_orig[fid] = copy.deepcopy(cats)
         
         return newfid

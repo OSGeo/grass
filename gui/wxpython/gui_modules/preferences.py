@@ -108,9 +108,6 @@ class Settings:
                 'settingsFile' : {
                     'type' : 'home'
                     }, # home, gisdbase, location, mapset
-                'digitInterface' : {
-                    'type' : 'vdigit'
-                    }, # vedit, vdigit
                 'iconTheme' : {
                     'type' : 'grass'
                     }, # grass, silk
@@ -265,9 +262,6 @@ class Settings:
                     },
                 'snapToVertex' : {
                     'enabled' : False
-                    },
-                'backgroundMap' : {
-                    'value' : ''
                     },
                 # digitize new record
                 'addRecord' : {
@@ -486,8 +480,6 @@ class Settings:
         #
         self.internalSettings = {}
         for group in self.userSettings.keys():
-            if group == 'vdigit':
-                continue # skip digitization settings (separate window frame)
             self.internalSettings[group] = {}
             for key in self.userSettings[group].keys():
                 self.internalSettings[group][key] = {}
@@ -505,8 +497,6 @@ class Settings:
                                                                         'mapset')
         self.internalSettings['advanced']['iconTheme']['choices'] = ('grass',
                                                                      'silk')
-        self.internalSettings['advanced']['digitInterface']['choices'] = ('vedit',
-                                                                          'vdigit')
         self.internalSettings['cmd']['verbosity']['choices'] = ('grassenv',
                                                                 'verbose',
                                                                 'quiet')
@@ -534,6 +524,8 @@ class Settings:
                                                                        _("aster"),
                                                                        _("gyro"),
                                                                        _("histogram"))
+        self.internalSettings['vdigit']['bgmap'] = {}
+        self.internalSettings['vdigit']['bgmap']['value'] = ''
         
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
@@ -1398,42 +1390,6 @@ class PreferencesDialog(wx.Dialog):
                       pos=(row, 0), span=(1, 2))
         row += 1
         
-        #
-        # digitization interface
-        #
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=_("Vector digitizer interface:")),
-                       flag=wx.ALIGN_LEFT |
-                       wx.ALIGN_CENTER_VERTICAL,
-                       pos=(row, 0))
-        digitInterface = wx.Choice(parent=panel, id=wx.ID_ANY, size=(125, -1),
-                                   choices=self.settings.Get(group='advanced', key='digitInterface',
-                                                             subkey='choices', internal=True),
-                                   name="GetStringSelection")
-        digitInterface.SetStringSelection(self.settings.Get(group='advanced', key='digitInterface',
-                                                            subkey='type'))
-        self.winId['advanced:digitInterface:type'] = digitInterface.GetId()
-
-        gridSizer.Add(item=digitInterface,
-                      flag=wx.ALIGN_RIGHT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 1))
-        row += 1
-
-        digitNote = wordwrap(_("Note: User can choose from two interfaces for digitization. "
-                               "The simple one uses v.edit command on the background. "
-                               "Map topology is rebuild on each operation which can "
-                               "significantly slow-down response. The vdigit is a native "
-                               "interface which uses v.edit functionality, but doesn't "
-                               "call the module itself."),
-                             self.GetSize()[0]-50, wx.ClientDC(self))
-
-        gridSizer.Add(item=wx.StaticText(parent=panel, id=wx.ID_ANY,
-                                         label=digitNote),
-                      flag=wx.ALIGN_LEFT |
-                      wx.ALIGN_CENTER_VERTICAL,
-                      pos=(row, 0), span=(1, 2))
-
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
         border.Add(item=sizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
 

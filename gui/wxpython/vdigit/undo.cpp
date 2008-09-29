@@ -146,12 +146,12 @@ int Digit::AddActionToChangeset(int changeset, Digit::action_type type, int line
     long offset;
 
     if (!display->mapInfo) {
-	DisplayMsg();
+	display->DisplayMsg();
 	return -1;
     }
 
     if (!Vect_line_alive(display->mapInfo, line)) {
-	// DeadLineMsg(line);
+	// display->DeadLineMsg(line);
 	return -1;
     }
 
