@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     /* Check if the mapset is in use */
     gis_lock = getenv("GIS_LOCK");
     if (!gis_lock)
-	G_fatal_error(_("Unable to read GIS_LOCK enviroment variable"));
+	G_fatal_error(_("Unable to read GIS_LOCK environment variable"));
 
     G_asprintf(&lock_prog, "%s/etc/lock", G_gisbase());
 

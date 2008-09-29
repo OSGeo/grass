@@ -32,7 +32,7 @@ remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
    Remove bridges (type boundary) connecting areas to islands or 2 islands.
    Islands and areas must be already clean, i.e. without dangles.
    Bridge may be formed by more lines.
-   Optionaly deleted bridges are written to error map. 
+   Optionally deleted bridges are written to error map. 
    Input map must be opened on level 2 for update at least on level GV_BUILD_BASE
 
    \param Map input map where bridges are deleted
@@ -54,7 +54,7 @@ Vect_remove_bridges(struct Map_info *Map, struct Map_info *Err, FILE * msgout)
    Change the type of bridges (type boundary) connecting areas to islands or 2 islands.
    Islands and areas must be already clean, i.e. without dangles.
    Bridge may be formed by more lines.
-   Optionaly changed bridges are written to error map. 
+   Optionally changed bridges are written to error map. 
    Input map must be opened on level 2 for update at least on level GV_BUILD_BASE.
 
    \param Map input map where bridges are changed

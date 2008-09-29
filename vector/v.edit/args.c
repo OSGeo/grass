@@ -170,7 +170,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 	_("For 'shorter' use negative threshold value, "
 	  "positive value for 'longer'");
     params->query->descriptions =
-	_("length;Select only lines or boudaries shorter"
+	_("length;Select only lines or boundaries shorter"
 	  "/longer than threshold distance;"
 	  "dangle;Select dangles shorter/longer than " "threshold distance");
     params->query->guisection = _("Query");

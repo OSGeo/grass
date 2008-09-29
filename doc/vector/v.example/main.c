@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 	    /* Now execute query */
 	    if (db_open_select_cursor(driver, &dbsql, &cursor, DB_SEQUENTIAL)
 		!= DB_OK)
-		G_warning(_("Unabale to get attribute data for cat %d"), cat);
+		G_warning(_("Unable to get attribute data for cat %d"), cat);
 	    else {
 		/* Result count */
 		nrows = db_get_num_rows(&cursor);

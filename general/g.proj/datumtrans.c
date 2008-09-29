@@ -86,7 +86,7 @@ int set_datumtrans(int datumtrans, int force)
 
 	    if (datumtrans > paramsets)
 		G_fatal_error
-		    ("Invalid tranformation number %d; valid range is 1 to %d",
+		    ("Invalid transformation number %d; valid range is 1 to %d",
 		     datumtrans, paramsets);
 
 	    list = GPJ_get_datum_transform_by_name(datum);

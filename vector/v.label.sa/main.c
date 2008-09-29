@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 
     p.hlcolor = G_define_option();
     p.hlcolor->key = "hcolor";
-    p.hlcolor->description = _("Hilight color for text");
+    p.hlcolor->description = _("Highlight color for text");
     p.hlcolor->type = TYPE_STRING;
     p.hlcolor->answer = "none";
     p.hlcolor->options =

@@ -147,7 +147,7 @@ void set_params(void)
     param.river_bed->type = TYPE_STRING;
     param.river_bed->required = NO;
     param.river_bed->gisprompt = "old,raster,raster";
-    param.river_bed->description = _("The hight of the river bed in [m]");
+    param.river_bed->description = _("The height of the river bed in [m]");
 
     param.river_head = G_define_option();
     param.river_head->key = "river_head";
@@ -170,7 +170,7 @@ void set_params(void)
     param.drain_bed->type = TYPE_STRING;
     param.drain_bed->required = NO;
     param.drain_bed->gisprompt = "old,raster,raster";
-    param.drain_bed->description = _("The hight of the drainage bed in [m]");
+    param.drain_bed->description = _("The height of the drainage bed in [m]");
 
     param.drain_leak = G_define_option();
     param.drain_leak->key = "drain_leak";

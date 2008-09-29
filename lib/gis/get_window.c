@@ -50,7 +50,7 @@ int G_get_window(struct Cell_head *window)
     static struct Cell_head dbwindow;
     char *regvar;
 
-    /* Optionaly read the region from enviroment variable */
+    /* Optionally read the region from environment variable */
     regvar = getenv("GRASS_REGION");
 
     if (regvar) {

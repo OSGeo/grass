@@ -1835,7 +1835,7 @@ class Data:
                                 ("","","", ""),
 
                                 (_("Copy table"),
-                                 _("Copy a table. Either 'from_table' (optionaly with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."),
+                                 _("Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."),
                                  "self.OnMenuCmd",
                                  "db.copy"),
 

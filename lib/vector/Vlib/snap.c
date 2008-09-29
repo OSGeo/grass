@@ -55,7 +55,7 @@ int add_item(int id, struct ilist *list)
  * 
  * \warning Lines are not necessarily snapped to nearest vertex, but to vertex in threshold! 
  *
- * Lines showing how vertices were snapped may be optionaly written to error map. 
+ * Lines showing how vertices were snapped may be optionally written to error map. 
  * Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
  *
  * \param[in] Map input map where vertices will be snapped

@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	group.photo_points.count = 0;
     G_suppress_warnings(0);
 
-    /* determine tranformation equation */
+    /* determine transformation equation */
     Compute_equation();
 
     signal(SIGINT, SIG_IGN);

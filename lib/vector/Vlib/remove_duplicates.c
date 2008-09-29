@@ -25,7 +25,7 @@
 /*!
    \brief Remove duplicate lines from vector map.
 
-   Remove duplicate lines of given types from vector map. Duplicate lines may be optionaly 
+   Remove duplicate lines of given types from vector map. Duplicate lines may be optionally 
    written to error map. Input map must be opened on level 2 for update. Categories are merged.
 
    \param Map vector map where duplicate lines will be deleted

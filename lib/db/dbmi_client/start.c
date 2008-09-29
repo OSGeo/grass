@@ -56,7 +56,7 @@ dbDriver *db_start_driver(const char *name)
     int stdin_fd, stdout_fd;
 #endif
 
-    /* Set some enviroment variables which are later read by driver.
+    /* Set some environment variables which are later read by driver.
      * This is necessary when application is running without GISRC file and all
      * gis variables are set by application. 
      * Even if GISRC is set, application may change some variables during runtime,
@@ -82,7 +82,7 @@ dbDriver *db_start_driver(const char *name)
     }
     else {
 	/* Warning: GISRC_MODE_MEMORY _must_ be set to G_GISRC_MODE_FILE, because the module can be 
-	 *          run from an application which previously set enviroment variable to G_GISRC_MODE_MEMORY */
+	 *          run from an application which previously set environment variable to G_GISRC_MODE_MEMORY */
 	sprintf(ebuf, "%d", G_GISRC_MODE_FILE);
 	G_putenv("GRASS_DB_DRIVER_GISRC_MODE", ebuf);
     }

@@ -1041,7 +1041,7 @@ FILE *G_oldsites_open_new(const char *name)
 /*********************************************/
 
 char *G_site_format(const Site * s, const char *fs, int id)
-/* sprintf analog to G_site_put with the addition of a field seperator fs 
+/* sprintf analog to G_site_put with the addition of a field separator fs 
    and option of printing site attribute identifiers
  */
 {

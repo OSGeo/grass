@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 
     mark_type = MARK_GRID;
     if (cross->answer && fiducial->answer)
-	G_fatal_error(_("Chose a single mark style"));
+	G_fatal_error(_("Choose a single mark style"));
     if (cross->answer)
 	mark_type = MARK_CROSS;
     if (fiducial->answer)

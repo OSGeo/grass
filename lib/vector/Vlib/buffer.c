@@ -117,7 +117,7 @@ static int point_in_buf(struct line_pnts *Points, double px, double py,
 /* clean_parallel - clean parallel line created by parallel_line:
  ** - looking for loops and if loop doesn't contain any other loop
  **   and centroid of loop is in buffer removes this loop (repeated)
- ** - optionaly removes all end points in buffer
+ ** - optionally removes all end points in buffer
  *    parameters:
  *      Points - parallel line
  *      origPoints - original line

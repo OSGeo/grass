@@ -413,7 +413,7 @@ class VDigitToolbar(AbstractToolbar):
         # only one dialog can be open
         self.settingsDialog   = None
 
-        # create toolbars (two rows optionaly)
+        # create toolbars (two rows optionally)
         self.toolbar = []
         self.numOfRows = 1 # number of rows for toolbar
         for row in range(0, self.numOfRows):
@@ -1144,7 +1144,7 @@ class VDigitToolbar(AbstractToolbar):
         Update list of available vector map layers.
         This list consists only editable layers (in the current mapset)
 
-        Optionaly also update toolbar
+        Optionally also update toolbar
         """
 
         Debug.msg (4, "VDigitToolbar.UpdateListOfLayers(): updateTool=%d" % \

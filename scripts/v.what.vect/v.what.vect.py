@@ -50,7 +50,7 @@
 #%option
 #% key: qlayer
 #% type: integer
-#% description: Layer of the query vector containg data
+#% description: Layer of the query vector containing data
 #% answer: 1
 #% required : no
 #%end

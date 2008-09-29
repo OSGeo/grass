@@ -39,7 +39,7 @@ static void dangles(struct Map_info *, int, int, double,
    such string of lines is taken as one dangle and either deleted are
    all parts or nothing.
 
-   Optionaly deleted dangles are written to error map. 
+   Optionally deleted dangles are written to error map. 
 
    Input map must be opened on level 2 for update.
 
@@ -67,7 +67,7 @@ Vect_remove_dangles(struct Map_info *Map, int type, double maxlength,
    no other boundary.  If a dangle is formed by more boundaries, such
    string of boundaries is taken as one dangle.
 
-   Optionaly deleted dangles are written to error map. 
+   Optionally deleted dangles are written to error map. 
 
    Input map must be opened on level 2 for update at least on GV_BUILD_BASE.
 
@@ -114,9 +114,9 @@ Vect_select_dangles(struct Map_info *Map, int type, double maxlength,
    Line is considered to be a dangle if on at least one end node is no
    other line of given type(s). If a dangle is formed by more lines,
    such string of lines is taken as one dangle and either deleted are
-   all parts or nothing.  Optionaly, if chtype is set to 1, only
+   all parts or nothing.  Optionally, if chtype is set to 1, only
    GV_BOUNDARY are checked for dangles, and if dangle is found lines
-   are not deleted but rewritten with type GVLINE.  Optionaly deleted
+   are not deleted but rewritten with type GVLINE.  Optionally deleted
    dangles are written to error map.  Input map must be opened on level
    2 for update at least on GV_BUILD_BASE.
 

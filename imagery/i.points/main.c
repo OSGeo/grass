@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     /* write group files to group list file */
     prepare_group_list();
 
-    /* get target info and enviroment */
+    /* get target info and environment */
     get_target();
     find_target_files();
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
 	group.points.count = 0;
     G_suppress_warnings(0);
 
-    /* determine tranformation equation */
+    /* determine transformation equation */
     Compute_equation();
 
 

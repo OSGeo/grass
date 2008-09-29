@@ -50,7 +50,7 @@ Vect_get_area_points(struct Map_info *Map,
     Area = Plus->Area[area];
 
     if (Area == NULL) {		/* dead area */
-	G_warning(_("Attempt to read points of nonexisting area"));
+	G_warning(_("Attempt to read points of nonexistent area"));
 	return -1;		/* error , because we should not read dead areas */
     }
 

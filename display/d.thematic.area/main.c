@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     module->keywords = _("display");
     module->description =
-	_("Displays a thematic vector area map in the active"
+	_("Displays a thematic vector area map in the active "
 	  "frame on the graphics monitor.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
