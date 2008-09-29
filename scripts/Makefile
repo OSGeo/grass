@@ -24,7 +24,6 @@ SUBDIRS = \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
-	r.mapcalculator \
 	r.mask \
 	r.out.gdal \
 	r.out.xyz \
@@ -33,7 +32,6 @@ SUBDIRS = \
 	r.regression.line \
 	r.shaded.relief \
 	r.tileset \
-	r3.mapcalculator \
 	v.build.all \
 	v.centroids \
 	v.convert.all \
@@ -62,6 +60,8 @@ SUBDIRS = \
 #	d.out.gpsdrive \
 #	d.rast.leg \
 #	i.spectral \
+#	r.mapcalculator \
+#	r3.mapcalculator \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
