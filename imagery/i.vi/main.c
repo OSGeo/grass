@@ -72,56 +72,75 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("vegetation index, biophysical parameters");
-    module->description =
-	_("14 types of vegetation indices from red and nir, and only some requiring additional bands");
-
+    module->keywords = _("imagery, vegetation index, biophysical parameters");
+    module->label =
+	_("Calculates different types of vegetation indices.");
+    module->description = _("Uses red and nir, "
+			    "and only some requiring additional bands.");
+    
     /* Define the different options */ 
     input1 = G_define_option();
     input1->key = _("viname");
     input1->type = TYPE_STRING;
     input1->required = YES;
-    input1->gisprompt = _("Name of VI");
-    input1->description =
-	_("Name of VI: sr,ndvi,ipvi,dvi,evi,pvi,wdvi,savi,msavi,msavi2,gemi,arvi,gvi,gari.");
+    input1->description = _("Name of vegetation index");
+    input1->descriptions =_("sr;???"
+			    "ndvi;Normalized Difference Vegetation Index;"
+			    "ipvi;Infrared Percentage Vegetation Index;"
+			    "dvi;Difference Vegetation Index;"
+			    "evi;???"
+			    "pvi;Perpendicular Vegetation Index;"
+			    "wdvi;Weighted Difference Vegetation Index;"
+			    "savi;Soil Adjusted Vegetation Index;"
+			    "msavi;Modified Soil Adjusted Vegetation Index;"
+			    "msavi2;second Modified Soil Adjusted Vegetation Index;"
+			    "gemi;Global Environmental Monitoring Index;"
+			    "arvi;Atmospherically Resistant Vegetation Indices;"
+			    "gvi;Green Vegetation Index;"
+			    "gari;Green atmospherically resistant vegetation index;");
+    input1->answer = "ndvi";
 
-    input1->answer = _("ndvi");
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = _("red");
-    input2->description =
-	_("Name of the RED Channel surface reflectance map [0.0;1.0]");
+    input2->key = "red";
+    input2->label =
+	_("Name of the red channel surface reflectance map");
+    input2->description = _("Range: [0.0;1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = _("nir");
-    input3->description =
-	_("Name of the NIR Channel surface reflectance map [0.0;1.0]");
+    input3->key = "nir";
+    input3->label =
+	_("Name of the nir channel surface reflectance map");
+    input3->description = _("Range: [0.0;1.0]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = _("green");
+    input4->key = "green";
     input4->required = NO;
-    input4->description =
-	_("Name of the GREEN Channel surface reflectance map [0.0;1.0]");
-
+    input4->label =
+	_("Name of the green channel surface reflectance map");
+    input4->description = _("Range: [0.0;1.0]");
+    
     input5 = G_define_standard_option(G_OPT_R_INPUT);
-    input5->key = _("blue");
+    input5->key = "blue";
     input5->required = NO;
-    input5->description =
-	_("Name of the BLUE Channel surface reflectance map [0.0;1.0]");
+    input5->label =
+	_("Name of the blue channel surface reflectance map");
+    input5->description = _("Range: [0.0;1.0]");
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
-    input6->key = _("chan5");
+    input6->key = "chan5";
     input6->required = NO;
-    input6->description =
-	_("Name of the CHAN5 Channel surface reflectance map [0.0;1.0]");
+    input6->label =
+	_("Name of the chan5 channel surface reflectance map");
+    input6->description = _("Range: [0.0;1.0]");
 
     input7 = G_define_standard_option(G_OPT_R_INPUT);
-    input7->key = _("chan7");
+    input7->key = "chan7";
     input7->required = NO;
-    input7->description =
-	_("Name of the CHAN7 Channel surface reflectance map [0.0;1.0]");
+    input7->label = 
+	_("Name of the chan7 channel surface reflectance map");
+    input7->description = _("Range: [0.0;1.0]");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name of the output vi layer");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -136,34 +155,34 @@ int main(int argc, char *argv[])
     result = output->answer;
 
     if ((infd_redchan = G_open_cell_old(redchan, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), redchan);
+	G_fatal_error(_("Unable to open raster map <%s>"), redchan);
     inrast_redchan = G_allocate_d_raster_buf();
 
     if ((infd_nirchan = G_open_cell_old(nirchan, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), nirchan);
+	G_fatal_error(_("Unable to open raster map <%s>"), nirchan);
     inrast_nirchan = G_allocate_d_raster_buf();
 
     if (greenchan) {
 	if ((infd_greenchan = G_open_cell_old(greenchan, "")) < 0)
-	    G_fatal_error(_("Cannot open cell file [%s]"), greenchan);
+	    G_fatal_error(_("Unable to open raster map <%s>"), greenchan);
 	inrast_greenchan = G_allocate_d_raster_buf();
     }
 
     if (bluechan) {
 	if ((infd_bluechan = G_open_cell_old(bluechan, "")) < 0)
-	    G_fatal_error(_("Cannot open cell file [%s]"), bluechan);
+	    G_fatal_error(_("Unable to open raster map <%s>"), bluechan);
 	inrast_bluechan = G_allocate_d_raster_buf();
     }
 
     if (chan5chan) {
 	if ((infd_chan5chan = G_open_cell_old(chan5chan, "")) < 0)
-	    G_fatal_error(_("Cannot open cell file [%s]"), chan5chan);
+	    G_fatal_error(_("Unable to open raster map <%s>"), chan5chan);
 	inrast_chan5chan = G_allocate_d_raster_buf();
     }
 
     if (chan7chan) {
 	if ((infd_chan7chan = G_open_cell_old(chan7chan, "")) < 0)
-	    G_fatal_error(_("Cannot open cell file [%s]"), chan7chan);
+	    G_fatal_error(_("Unable to open raster map <%s>"), chan7chan);
 	inrast_chan7chan = G_allocate_d_raster_buf();
     }
 
@@ -173,12 +192,11 @@ int main(int argc, char *argv[])
 
     /* Create New raster files */ 
     if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
     {
-	DCELL d;
 	DCELL d_bluechan;
 	DCELL d_greenchan;
 	DCELL d_redchan;
@@ -189,24 +207,30 @@ int main(int argc, char *argv[])
 	G_percent(row, nrows, 2);
 
 	if (G_get_d_raster_row(infd_redchan, inrast_redchan, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), redchan);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  redchan, row);
 	if (G_get_d_raster_row(infd_nirchan, inrast_nirchan, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), nirchan);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  nirchan, row);
 	if (greenchan) {
 	    if (G_get_d_raster_row(infd_greenchan, inrast_greenchan, row) < 0)
-		G_fatal_error(_("Could not read from <%s>"), greenchan);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      greenchan, row);
 	}
 	if (bluechan) {
 	    if (G_get_d_raster_row(infd_bluechan, inrast_bluechan, row) < 0)
-		G_fatal_error(_("Could not read from <%s>"), bluechan);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      bluechan, row);
 	}
 	if (chan5chan) {
 	    if (G_get_d_raster_row(infd_chan5chan, inrast_chan5chan, row) < 0)
-		G_fatal_error(_("Could not read from <%s>"), chan5chan);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      chan5chan, row);
 	}
 	if (chan7chan) {
 	    if (G_get_d_raster_row(infd_chan7chan, inrast_chan7chan, row) < 0)
-		G_fatal_error(_("Could not read from <%s>"), chan7chan);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      chan7chan, row);
 	}
 
 	/* process the data */ 
@@ -279,7 +303,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Cannot write to output raster file"));
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  result, row);
     }
 
     G_free(inrast_redchan);
@@ -312,6 +337,7 @@ int main(int argc, char *argv[])
     G_short_history(result, "raster", &history);
     G_command_history(&history);
     G_write_history(result, &history);
+    
     exit(EXIT_SUCCESS);
 }
 
