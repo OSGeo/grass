@@ -1625,7 +1625,6 @@ class Data:
                                  _("Albedo from Modis, Aster, Landsat, AVHRR."),
                                  "self.OnMenuCmd",
                                  "i.albedo"),
-				)
 
                                 (_("Vegetation Indices"),
                                  _("14 types of vegetation Indices."),
