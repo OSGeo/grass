@@ -89,17 +89,17 @@ if [ -z "$maptable" ] ; then
 fi
 
 v.info --quiet -c "$GIS_OPT_MAP" layer="$GIS_OPT_LAYER" | \
-   cut -d'|' -f1,2 | grep "|${GIS_OPT_column}$" 2>&1 >/dev/null
+   cut -d'|' -f1,2 | grep "|${GIS_OPT_COLUMN}$" 2>&1 >/dev/null
 
 if [ $? -ne 0 ] ; then
-    g.message -e "Column <$GIS_OPT_column> not found in table <$GIS_OPT_MAP> at layer $GIS_OPT_LAYER"
+    g.message -e "Column <$GIS_OPT_COLUMN> not found in table <$GIS_OPT_MAP> at layer $GIS_OPT_LAYER"
     exit 1
 fi
 
 # we use map DBMI settings
-COLLIST=`db.describe  -c driver="$driver" database="$database" table="$GIS_OPT_otable" | grep '^Column ' | cut -d':' -f2`
+COLLIST=`db.describe  -c driver="$driver" database="$database" table="$GIS_OPT_OTABLE" | grep '^Column ' | cut -d':' -f2`
 # heck, types may have white space
-COLTYPES=`db.describe -c driver="$driver" database="$database" table="$GIS_OPT_otable" | grep '^Column ' | cut -d':' -f3 | tr -s ' ' '_'`
+COLTYPES=`db.describe -c driver="$driver" database="$database" table="$GIS_OPT_OTABLE" | grep '^Column ' | cut -d':' -f3 | tr -s ' ' '_'`
 
 i=1
 for col in $COLLIST ; do
@@ -109,7 +109,7 @@ for col in $COLLIST ; do
 	exit 1
   fi
   echo "UPDATE $maptable SET $col=(SELECT $col
-        FROM $GIS_OPT_otable WHERE $GIS_OPT_otable.$GIS_OPT_ocolumn=$maptable.$GIS_OPT_column);" | db.execute
+        FROM $GIS_OPT_OTABLE WHERE $GIS_OPT_OTABLE.$GIS_OPT_OCOLUMN=$maptable.$GIS_OPT_COLUMN);" | db.execute
   i=`expr $i + 1`
 done
 
