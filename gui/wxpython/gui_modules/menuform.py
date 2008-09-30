@@ -638,7 +638,7 @@ class mainFrame(wx.Frame):
         # buttons
         btnsizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         # cancel
-        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CANCEL)
+        self.btn_cancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btn_cancel.SetToolTipString(_("Cancel the command settings and ignore changes"))
         btnsizer.Add(item=self.btn_cancel, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=10)
         self.btn_cancel.Bind(wx.EVT_BUTTON, self.OnCancel)
