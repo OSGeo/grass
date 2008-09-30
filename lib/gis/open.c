@@ -66,7 +66,7 @@ static int G__open(const char *element,
 	    name = xname;
 	    mapset = xmapset;
 	}
-	else if (!*mapset)
+	else if (!mapset || !*mapset)
 	    mapset = G_find_file2(element, name, mapset);
 
 	if (!mapset)
