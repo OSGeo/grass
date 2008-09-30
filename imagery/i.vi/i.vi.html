@@ -4,23 +4,100 @@
 parameters.
 
 <ul>
-  <li>RVI: ratio vegetation index</li>
-  <li>NDVI: Normalized Difference Vegetation Index</li>
-  <li>IPVI: Infrared Percentage Vegetation Index</li>
-  <li>DVI: Difference Vegetation Index</li>
-  <li>PVI: Perpendicular Vegetation Index</li>
-  <li>WDVI: Weighted Difference Vegetation Index</li>
-  <li>SAVI: Soil Adjusted Vegetation Index</li>
-  <li>GARI: Green atmospherically resistant vegetation index</li>
-  <li>MSAVI: Modified Soil Adjusted Vegetation Index</li>
-  <li>MSAVI2: second Modified Soil Adjusted Vegetation Index</li>
-  <li>GEMI: Global Environmental Monitoring Index</li>
   <li>ARVI: atmospherically resistant vegetation indices</li>
+  <li>DVI: Difference Vegetation Index</li>
+  <li>EVI: Enhanced Vegetation Index</li>
+  <li>GARI: Green atmospherically resistant vegetation index</li>
+  <li>GEMI: Global Environmental Monitoring Index</li>
   <li>GVI: Green Vegetation Index</li>
+  <li>IPVI: Infrared Percentage Vegetation Index</li>
+  <li>MSAVI2: second Modified Soil Adjusted Vegetation Index</li>
+  <li>MSAVI: Modified Soil Adjusted Vegetation Index</li>
+  <li>NDVI: Normalized Difference Vegetation Index</li>
+  <li>PVI: Perpendicular Vegetation Index</li>
+  <li>RVI: ratio vegetation index</li>
+  <li>SAVI: Soil Adjusted Vegetation Index</li>
+  <li>SR: Simple Vegetation ratio</li>
+  <li>WDVI: Weighted Difference Vegetation Index</li>
 </ul>
 
 <pre>
-NDVI 
+ARVI: Atmospheric Resistant Vegetation Index 
+ARVI is resistant to atmospheric effects (in comparison to 
+the NDVI) and is accomplished by a self correcting process 
+for the atmospheric effect in the red channel, using the 
+difference in the radiance between the blue and the red 
+channels.(Kaufman and Tanre 1996).
+ARVI = (nirchan - (2.0*redchan - bluechan)) / 
+( nirchan + (2.0*redchan - bluechan))
+arvi( redchan, nirchan, bluechan )
+</pre>
+
+<pre>
+DVI: Difference Vegetation Index
+DVI = ( nirchan - redchan )
+dvi( redchan, nirchan )
+</pre>
+
+<pre>
+EVI: Enhanced Vegetation Index
+Huete A.R., Liu H.Q., Batchily K., vanLeeuwen W. (1997). 
+A comparison of vegetation indices global set of TM images for 
+EOS-MODIS. Remote Sensing of Environment, 59:440-451.
+EVI = 2.5 * ( nirchan - redchan ) / 
+( nirchan + 6.0 * redchan - 7.5 * bluechan + 1.0 )
+evi( bluechan, redchan, nirchan )
+</pre>
+
+<pre>
+GARI: green atmospherically resistant vegetation index
+GARI = ( nirchan - (greenchan-(bluechan - redchan))) / 
+( nirchan- (greenchan-(bluechan - redchan)))
+gari( redchan, nirchan, bluechan, greenchan )
+</pre>
+
+<pre>
+GEMI: Global Environmental Monitoring Index
+GEMI = (( (2*((nirchan * nirchan)-(redchan * redchan))+
+1.5*nirchan+0.5*redchan) / (nirchan + redchan + 0.5)) * 
+(1 - 0.25 * (2*((nirchan * nirchan)-(redchan * redchan))
++1.5*nirchan+0.5*redchan) /(nirchan + redchan + 0.5)))-
+( (redchan - 0.125) / (1 - redchan))
+gemi( redchan, nirchan )
+</pre>
+
+<pre>
+GVI: Green Vegetation Index
+GVI = ( -0.2848 * bluechan - 0.2435 * greenchan - 
+0.5436 * redchan + 0.7243 * nirchan + 0.0840 * chan5chan-
+0.1800 * chan7chan)
+gvi( bluechan, greenchan, redchan, nirchan, chan5chan, chan7chan)
+</pre>
+
+<pre>
+IPVI: Infrared Percentage Vegetation Index 
+IPVI = nirchan/(nirchan+redchan)
+ipvi( redchan, nirchan )
+</pre>
+
+<pre>
+MSAVI2: second Modified Soil Adjusted Vegetation Index
+MSAVI2 = (1/2)*(2(NIR+1)-sqrt((2*NIR+1)^2-8(NIR-red)))
+msavi2( redchan, nirchan )
+</pre>
+
+<pre>
+MSAVI: Modified Soil Adjusted Vegetation Index
+MSAVI = s(NIR-s*red-a) / (a*NIR+red-a*s+X*(1+s*s))	
+where a is the soil line intercept, s is the
+soil line slope, and X 	is an adjustment factor
+which is set to minimize soil noise (0.08 in 
+original papers).			
+msavi( redchan, nirchan )
+</pre>
+
+<pre>
+NDVI: Normalized Difference Vegetation Index 
 Data Type Band Numbers ([IR, Red]) 
 TM Bands= [4,3] 
 MSS Bands = [7, 5] 
@@ -30,6 +107,34 @@ AVIRIS Bands = [51, 29]
 
 
 (AVHRR) NDVI = (channel 2 - channel 1) / (channel 2 + channel 1)
+</pre>
+
+<pre>
+PVI: Perpendicular Vegetation Index
+PVI = sin(a)NIR-cos(a)red 
+for a isovegetation lines (lines of equal vegetation)
+would all be parallel to the soil line therefore a=1
+pvi( redchan, nirchan )
+</pre>
+
+<pre>
+SAVI: Soil Adjusted Vegetation Index
+SAVI = ((1.0+0.5)*(nirchan - redchan)) / (nirchan + redchan +0.5)
+savi( redchan, nirchan )
+</pre>
+
+<pre>
+SR: Simple Vegetation ratio
+SR = (nirchan/redchan)
+sr( redchan, nirchan )
+</pre>
+
+<pre>
+WDVI: Weighted Difference Vegetation Index
+WDVI = nirchan - a * redchan
+if(soil_weight_line == None):
+a = 1.0 #slope of soil line
+wdvi( redchan, nirchan, soil_line_weight )
 </pre>
 
 <H2>NOTES</H2>
