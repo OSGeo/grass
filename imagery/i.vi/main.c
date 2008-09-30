@@ -84,11 +84,11 @@ int main(int argc, char *argv[])
     input1->type = TYPE_STRING;
     input1->required = YES;
     input1->description = _("Name of vegetation index");
-    input1->descriptions =_("sr;???"
+    input1->descriptions =_("sr;Simple Ratio;"
 			    "ndvi;Normalized Difference Vegetation Index;"
 			    "ipvi;Infrared Percentage Vegetation Index;"
 			    "dvi;Difference Vegetation Index;"
-			    "evi;???"
+			    "evi;Enhanced Vegetation Index;"
 			    "pvi;Perpendicular Vegetation Index;"
 			    "wdvi;Weighted Difference Vegetation Index;"
 			    "savi;Soil Adjusted Vegetation Index;"
