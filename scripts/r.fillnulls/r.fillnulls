@@ -140,7 +140,7 @@ TMP1=r_fillnulls_$$
 
 g.message "Locating and isolating NULL areas..."
 #creating 0/1 map:
-r.mapcalc $TMP1="if(isnull($GIS_OPT_INPUT),1,null())"
+r.mapcalc "$TMP1 = if(isnull($GIS_OPT_INPUT),1,null())"
 
 #generate a ring:
 # the buffer is set to three times the map resolution so you get nominally
@@ -161,7 +161,7 @@ if [ $? -ne 0 ] ; then
     exit 1
 fi
 
-r.mapcalc "MASK=if($TMP1.buf==2,1,null())"
+r.mapcalc "MASK = if($TMP1.buf==2,1,null())"
 
 # now we only see the outlines of the NULL areas if looking at INPUT.
 # Use this outline (raster border) for interpolating the fill data:
