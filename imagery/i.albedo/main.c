@@ -53,11 +53,11 @@ int main(int argc, char *argv[])
     int outfd;
     char **names;
     char **ptr;
-    int i = 0, j = 0;
+    int i = 0;
     int modis = 0, aster = 0, avhrr = 0, landsat = 0;
     void *inrast[MAXFILES];
     unsigned char *outrast;
-    int data_format;		/* 0=double  1=float  2=32bit signed int  5=8bit unsigned int (ie text) */
+
     RASTER_MAP_TYPE in_data_type[MAXFILES];	/* 0=numbers  1=text */
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;
 
@@ -83,18 +83,15 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("Albedo,surface reflectance,r.sun");
-    module->description =
-	_("Broad Band Albedo from Surface Reflectance.\n NOAA AVHRR(n), Modis(m), Landsat(l), Aster(a)\n");
+    module->keywords = _("imagery, albedo, surface reflectance");
+    module->description = _("Broad Band Albedo from Surface Reflectance.");
 
     /* Define the different options */
 
     input = G_define_standard_option(G_OPT_R_INPUT);
     input->multiple = YES;
-    input->description = _("Names of surface reflectance layers");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name of the BB_Albedo layer");
 
     /* Define the different flags */
 
@@ -116,19 +113,23 @@ int main(int argc, char *argv[])
 
     flag5 = G_define_flag();
     flag5->key = 'c';
+    flag5->label = _("Agressive mode (Landsat)");
     flag5->description =
-	_("Albedo dry run to calculate some water to beach/sand/desert stretching, a kind of simple atmospheric correction. Agressive mode (Landsat).");
+	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
+	  "a kind of simple atmospheric correction");
 
     flag6 = G_define_flag();
     flag6->key = 'd';
+    flag6->label = _("Soft mode (Modis)");
     flag6->description =
-	_("Albedo dry run to calculate some water to beach/sand/desert stretching, a kind of simple atmospheric correction. Soft mode (Modis).");
+	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
+	  "a kind of simple atmospheric correction");
 
     /* FMEO init nfiles */
     nfiles = 1;
 
     if (G_parser(argc, argv))
-	exit(-1);
+	exit(EXIT_FAILURE);
 
     names = input->answers;
     ptr = input->answers;
@@ -140,14 +141,11 @@ int main(int argc, char *argv[])
     landsat = (flag3->answer);
     aster = (flag4->answer);
 
-    if (G_legal_filename(result) < 0)
-	G_fatal_error(_("[%s] is an illegal name"), result);
-
     for (; *ptr != NULL; ptr++) {
 	if (nfiles >= MAXFILES)
-	    G_fatal_error(_("Too many input files. Only %d allowed"), MAXFILES);
+	    G_fatal_error(_("Too many input maps. Only %d allowed."), MAXFILES);
 	name = *ptr;
-
+	
 	infd[nfiles] = G_open_cell_old(name, "");
 	if (infd[nfiles] < 0)
 	    continue;
@@ -155,17 +153,17 @@ int main(int argc, char *argv[])
 	/* Allocate input buffer */
 	in_data_type[nfiles] = G_raster_map_type(name, "");
 	if ((infd[nfiles] = G_open_cell_old(name, "")) < 0)
-	    G_fatal_error(_("Cannot open cell file [%s]"), name);
+	    G_fatal_error(_("Unable to open raster map <%s>"), name);
 
 	if ((G_get_cellhd(name, "", &cellhd)) < 0)
-	    G_fatal_error(_("Cannot read file header of [%s]"), name);
+	    G_fatal_error(_("Unable to read header of raster map <%s>"), name);
 
 	inrast[nfiles] = G_allocate_raster_buf(in_data_type[nfiles]);
 	nfiles++;
     }
     nfiles--;
     if (nfiles <= 1)
-	G_fatal_error(_("The min specified input map is two (that is NOAA AVHRR)"));
+	G_fatal_error(_("At least two raster maps are required"));
 
     /* Allocate output buffer, use input map data_type */
     nrows = G_window_rows();
@@ -174,7 +172,7 @@ int main(int argc, char *argv[])
 
     /* Create New raster files */
     if ((outfd = G_open_raster_new(result, 1)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
 
     /*START ALBEDO HISTOGRAM STRETCH */
     /*This is correcting contrast for water/sand */
@@ -193,7 +191,8 @@ int main(int argc, char *argv[])
 	    for (i = 1; i <= nfiles; i++) {
 		if ((G_get_raster_row(
 			 infd[i], inrast[i], row, in_data_type[i])) < 0)
-		    G_fatal_error(_("Could not read from <%s>"), name);
+		    G_fatal_error(_("Unable to read raster map <%s> row %d >"),
+				  name, row);
 	    }
 	    /*process the data */
 	    for (col = 0; col < ncols; col++) {
@@ -236,7 +235,8 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
-	G_message("Histogram of Albedo\n");
+
+	G_message("Calculating histogram of albedo");
 
 	peak1 = 0;
 	peak2 = 0;
@@ -323,18 +323,18 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (flag5->answer) {
-	    G_message("peak1 %d %d\n", peak1, i_peak1);
-	    G_message("bottom2b= %d %d\n", bottom2b, i_bottom2b);
+	    G_message("peak1 %d %d", peak1, i_peak1);
+	    G_message("bottom2b= %d %d", bottom2b, i_bottom2b);
 	    a = (0.36 - 0.05) / (i_bottom2b / 100.0 - i_peak1 / 100.0);
 	    b = 0.05 - a * (i_peak1 / 100.0);
-	    G_message("a= %f\tb= %f\n", a, b);
+	    G_message("a= %f\tb= %f", a, b);
 	}
 	if (flag6->answer) {
-	    G_message("bottom1a %d %d\n", bottom1a, i_bottom1a);
-	    G_message("bottom2b= %d %d\n", bottom2b, i_bottom2b);
+	    G_message("bottom1a %d %d", bottom1a, i_bottom1a);
+	    G_message("bottom2b= %d %d", bottom2b, i_bottom2b);
 	    a = (0.36 - 0.05) / (i_bottom2b / 100.0 - i_bottom1a / 100.0);
 	    b = 0.05 - a * (i_bottom1a / 100.0);
-	    G_message("a= %f\tb= %f\n", a, b);
+	    G_message("a= %f\tb= %f", a, b);
 	}
     }				/*END OF FLAG1 */
     /* End of processing histogram */
@@ -349,7 +349,8 @@ int main(int argc, char *argv[])
 	for (i = 1; i <= nfiles; i++) {
 	    if ((G_get_raster_row(
 		     infd[i], inrast[i], row, in_data_type[i])) < 0)
-		G_fatal_error(_("Could not read from <%s>"), name);
+		G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			      name, row);
 	}
 	/*process the data */
 	for (col = 0; col < ncols; col++) {
@@ -385,7 +386,8 @@ int main(int argc, char *argv[])
 	    ((DCELL *) outrast)[col] = de;
 	}
 	if (G_put_raster_row(outfd, outrast, out_data_type) < 0)
-	    G_fatal_error(_("Cannot write to <%s>"), result);
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  result, row);
     }
     for (i = 1; i <= nfiles; i++) {
 	G_free(inrast[i]);
