@@ -503,8 +503,12 @@ class BufferedWindow(MapWindow, wx.Window):
             # draw vector map layer
             if self.pdcVector:
                 # decorate with GDDC (transparency)
-                gcdc = wx.GCDC(dc)
-                self.pdcVector.DrawToDCClipped(gcdc, rgn)
+                try:
+                    gcdc = wx.GCDC(dc)
+                    self.pdcVector.DrawToDCClipped(gcdc, rgn)
+                except NotImplementedError, e:
+                    print >> sys.stderr, e
+                    self.pdcVector.DrawToDCClipped(dc, rgn)
 
             self.bufferLast = None
         else: # do not redraw pdc and pdcVector
@@ -514,9 +518,13 @@ class BufferedWindow(MapWindow, wx.Window):
 
                 if self.pdcVector:
                     # decorate with GDDC (transparency)
-                    gcdc = wx.GCDC(dc)
-                    self.pdcVector.DrawToDC(gcdc)
-                    
+                    try:
+                        gcdc = wx.GCDC(dc)
+                        self.pdcVector.DrawToDC(gcdc)
+                    except NotImplementedError, e:
+                        print >> sys.stderr, e
+                        self.pdcVector.DrawToDC(dc)
+                        
                 # store buffered image
                 # self.bufferLast = wx.BitmapFromImage(self.buffer.ConvertToImage())
                 self.bufferLast = dc.GetAsBitmap(wx.Rect(0, 0, self.Map.width, self.Map.height))
@@ -526,8 +534,12 @@ class BufferedWindow(MapWindow, wx.Window):
             pdcLast.DrawToDC(dc)
 
         # draw decorations (e.g. region box)
-        gcdc = wx.GCDC(dc)
-        self.pdcDec.DrawToDC(gcdc)
+        try:
+            gcdc = wx.GCDC(dc)
+            self.pdcDec.DrawToDC(gcdc)
+        except NotImplementedError, e:
+            print >> sys.stderr, e
+            self.pdcDec.DrawToDC(dc)
 
         # draw temporary object on the foreground
         ### self.pdcTmp.DrawToDCClipped(dc, rgn)
