@@ -44,8 +44,9 @@ int get_stats(void)
 	}
 	strcat(buf, "\"");
 
-	strcat(buf, " > ");
+	strcat(buf, " > \"");
 	strcat(buf, stats_file);
+	strcat(buf, "\"");
 	/*      G_fatal_error(buf); */
 	if (system(buf)) {
 	    if (stats_flag == EVERYTHING)
