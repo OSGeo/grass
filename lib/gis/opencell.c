@@ -42,8 +42,10 @@ static struct fileinfo *new_fileinfo(int fd)
     G__.fileinfo = G_realloc(G__.fileinfo, newsize * sizeof(struct fileinfo));
 
     /* Mark all cell files as closed */
-    for (i = oldsize; i < newsize; i++)
+    for (i = oldsize; i < newsize; i++) {
+	memset(&G__.fileinfo[i], 0, sizeof(struct fileinfo));
 	G__.fileinfo[i].open_mode = -1;
+    }
 
     G__.fileinfo_count = newsize;
 
