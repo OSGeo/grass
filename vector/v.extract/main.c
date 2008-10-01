@@ -25,9 +25,13 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <search.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/Vect.h>
 #include <grass/dbmi.h>
+#include <grass/gmath.h>
 #include <grass/glocale.h>
 
 static int *cat_array, cat_count, cat_size;
@@ -47,26 +51,38 @@ static void add_cat(int x)
     cat_array[cat_count++] = x;
 }
 
+/* Comparison function for *search */
+static int cmp(const void *pa, const void *pb)
+{
+    int *p1 = (int *)pa;
+    int *p2 = (int *)pb;
+
+    if (*p1 < *p2)
+	return -1;
+    if (*p1 > *p2)
+	return 1;
+    return 0;
+}
+
 int main(int argc, char **argv)
 {
-    int i, new_cat, type, ncats, *cats, field;
+    int i, new_cat, type, ncats, *cats, field, c;
     int **ocats, *nocats, nfields, *fields;
     int dissolve = 0, x, y, type_only;
     char buffr[1024], text[80];
     char *input, *output;
     struct GModule *module;
     struct Option *inopt, *outopt, *fileopt, *newopt, *typopt, *listopt,
-	*fieldopt;
-    struct Option *whereopt;
-    struct Flag *t_flag;
-    struct Flag *d_flag, *r_flag;
-    struct Map_info In;
-    struct Map_info Out;
+	*fieldopt, *whereopt, *nrandopt;
+    struct Flag *t_flag, *d_flag, *r_flag;
+    struct Map_info In, Out;
     struct field_info *Fi;
     FILE *in;
     dbDriver *driver;
     dbHandle handle;
     struct line_cats *Cats;
+    struct Cat_index *ci;
+    int ucat_count, *ucat_array = NULL, prnd, seed, nrandom, nfeatures;
 
     G_gisinit(argv[0]);
 
@@ -121,16 +137,40 @@ int main(int argc, char **argv)
 	_("Input text file with category numbers/number ranges to be extracted");
     fileopt->description = _("If '-' given reads from standard input");
 
-    whereopt = G_define_standard_option(G_OPT_DB_WHERE);
+    nrandopt = G_define_option();
+    nrandopt->key = "random";
+    nrandopt->type = TYPE_INTEGER;
+    nrandopt->required = NO;
+    nrandopt->label =
+	_("Number of random categories matching vector objects to extract");
+    nrandopt->description =
+	_("Number must be smaller than unique Cat count in layer");
 
+    whereopt = G_define_standard_option(G_OPT_DB_WHERE);
+    
     /* heeeerrrrrre's the   PARSER */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
 
     /* start checking options and flags */
+    c = 0;
+    if (fileopt->answer != NULL)
+	c++;
+    if (listopt->answers != NULL)
+	c++;
+    if (whereopt->answer != NULL)
+	c++;
+    if (nrandopt->answer != NULL)
+	c++;
+    if (c > 1)
+	G_fatal_error(_("List, file, where and random options are exclusive. "
+			"Please specify only one of them"));
+    c = 0;
+
     type_only = 0;
-    if (!listopt->answers && !fileopt->answer && !whereopt->answer) {
+    if (!listopt->answers && !fileopt->answer && !whereopt->answer &&
+	!nrandopt->answer) {
 	type_only = 1;
     }
 
@@ -159,13 +199,10 @@ int main(int argc, char **argv)
     Vect_set_open_level(2);
     Vect_open_old(&In, input, "");
 
-    /* Open output file */
-    Vect_open_new(&Out, output, Vect_is_3d(&In));
-    Vect_hist_copy(&In, &Out);
-    Vect_hist_command(&Out);
-
-    /* Read and write header info */
-    Vect_copy_head_data(&In, &Out);
+    type = Vect_option_to_types(typopt);
+    if (type & GV_AREA) {
+	type |= GV_CENTROID;
+    }
 
     /* Read categoy list */
     cat_count = 0;
@@ -255,11 +292,79 @@ int main(int argc, char **argv)
 	if (ncats >= 0)
 	    G_free(cats);
     }
+    else if (nrandopt->answer != NULL) {	/* Generate random category list */
 
-    type = Vect_option_to_types(typopt);
-    if (type & GV_AREA) {
-	type |= GV_CENTROID;
+	/* We operate on layer's CAT's and thus valid layer is required */
+	if (Vect_cidx_get_field_index(&In, field) < 0)
+	    G_fatal_error(_("This map has no categories attached. "
+			    "Use v.category to attach categories to this vector map."));
+
+	/* Don't do any processing, if user input is wrong */
+	nrandom = atoi(nrandopt->answer);
+	if (nrandom < 1)
+	    G_fatal_error(_("Please specify random number larger than 0"));
+
+	nfeatures = Vect_cidx_get_type_count(&In, field, type);
+	if (nrandom >= nfeatures)
+	    G_fatal_error(_("Random category count must be smaller than feature count. "
+			   "There are only %d features of type(s): %s"),
+			  nfeatures, typopt->answer);
+
+	/* Let's create an array of uniq CAT values
+	   According to Vlib/build.c, cidx should be allready sorted by dig_cidx_sort() */
+	ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, field)]);
+	ucat_count = 0;
+	for (c = 0; c < ci->n_cats; c++) {
+	    /* Bitwise AND compares ci feature type with user's requested types */
+	    if (ci->cat[c][1] & type) {
+		/* Don't do anything if such value allready exists */
+		if (ucat_count > 0 &&
+		    ucat_array[ucat_count - 1] == ci->cat[c][0])
+		    continue;
+		ucat_array =
+		    G_realloc(ucat_array, (ucat_count + 1) * sizeof(int));
+		ucat_array[ucat_count] = ci->cat[c][0];
+		ucat_count++;
+	    }
+	}
+
+	if (nrandom >= ucat_count)
+	    G_fatal_error(_("Random category count is larger or equal to uniq \"%s\" feature category count %d"),
+			  typopt->answer, ucat_count);
+
+	if (ucat_count >= RAND_MAX)
+	    G_fatal_error
+		("There are more categories than random number generator can reach. "
+		 "Report this as a GRASS bug.");
+
+	seed = getpid();
+	/* Initialise random number generator */
+	G_math_rand(-1 * seed);
+
+	/* Fill cat_array with list of valid random numbers */
+	while (cat_count < nrandom) {
+	    /* Random number in range from 0 to largest CAT value */
+	    prnd =
+		(int)floor(G_math_rand(seed) *
+			   (ucat_array[ucat_count - 1] + 1));
+	    qsort(cat_array, cat_count, sizeof(int), cmp);
+	    /* Check if generated number isn't already in final list and is in list of existing CATs */
+	    if (bsearch(&prnd, cat_array, cat_count, sizeof(int), cmp) == NULL
+		&& bsearch(&prnd, ucat_array, ucat_count, sizeof(int),
+			   cmp) != NULL)
+		add_cat(prnd);
+	}
+	G_free(ucat_array);
+	qsort(cat_array, cat_count, sizeof(int), cmp);
     }
+
+    /* Open output file only when it's required */
+    Vect_open_new(&Out, output, Vect_is_3d(&In));
+    Vect_hist_copy(&In, &Out);
+    Vect_hist_command(&Out);
+
+    /* Read and write header info */
+    Vect_copy_head_data(&In, &Out);
 
     xtract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
 		field, type_only, r_flag->answer ? 1 : 0);

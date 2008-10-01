@@ -8,7 +8,7 @@ Dissolving (optional) is based on the output categories. If 2 adjacent
 areas have the same output category, the boundary is removed.
 
 <p>
-If <b>list</b>, <b>file</b> and <b>where</b> options are not
+If <b>list</b>, <b>file</b>, <b>random</b> or <b>where</b> options are not
 specified, all features of given type and layer are
 extracted. Categories are not changed in that case.
 
@@ -110,6 +110,15 @@ v.extract in=map_with_islands out=maps_without_islands list=1-99999
 # and/or
 v.extract -d in=map_with_islands out=maps_without_islands
 </pre></div>
+
+<h3>Extract 3 random areas from geology map</h3>
+<p>
+<div class="code"><pre>
+v.extract input=geology@PERMANENT output=random_geology type=area random=3
+</pre></div>
+will create new map with three random categories matching areas. Notice, that
+there may be more tan one feature with same category.
+</p>
 
 <h2>SEE ALSO</h2>
 
