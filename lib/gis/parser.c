@@ -84,9 +84,11 @@
 #include <grass/spawn.h>
 
 
-#define BAD_SYNTAX  1
-#define OUT_OF_RANGE    2
-#define MISSING_VALUE   3
+#define BAD_SYNTAX    1
+#define OUT_OF_RANGE  2
+#define MISSING_VALUE 3
+#define AMBIGUOUS     4
+#define REPLACED      5
 #define KEYLENGTH 64
 
 static int interactive_ok = 1;
@@ -123,10 +125,10 @@ static int contains(const char *, int);
 static int is_option(const char *);
 static int set_option(char *);
 static int check_opts();
-static int check_an_opt(const char *, int, const char *, const char *);
-static int check_int(const char *, const char *);
-static int check_double(const char *, const char *);
-static int check_string(const char *, const char *);
+static int check_an_opt(const char *, int, const char *, const char **, char **);
+static int check_int(const char *, const char **);
+static int check_double(const char *, const char **);
+static int check_string(const char *, const char **, int *);
 static int check_required(void);
 static int split_opts(void);
 static int check_multiple_opts(void);
@@ -2206,11 +2208,11 @@ static int check_opts(void)
 	if (opt->options && opt->answer) {
 	    if (opt->multiple == 0)
 		error += check_an_opt(opt->key, opt->type,
-				      opt->options, opt->answer);
+				      opt->options, opt->opts, &opt->answer);
 	    else {
 		for (ans = 0; opt->answers[ans] != '\0'; ans++)
 		    error += check_an_opt(opt->key, opt->type,
-					  opt->options, opt->answers[ans]);
+					  opt->options, opt->opts, &opt->answers[ans]);
 	    }
 	}
 
@@ -2225,27 +2227,24 @@ static int check_opts(void)
 }
 
 static int check_an_opt(const char *key, int type, const char *options,
-			const char *answer)
+			const char **opts, char **answerp)
 {
+    const char *answer = *answerp;
     int error;
+    int found;
 
     error = 0;
 
     switch (type) {
     case TYPE_INTEGER:
-	error = check_int(answer, options);
+	error = check_int(answer, opts);
 	break;
     case TYPE_DOUBLE:
-	error = check_double(answer, options);
+	error = check_double(answer, opts);
 	break;
     case TYPE_STRING:
-	error = check_string(answer, options);
+	error = check_string(answer, opts, &found);
 	break;
-	/*
-	   case TYPE_COORDINATE:
-	   error = check_coor(answer,options) ;
-	   break ;
-	 */
     }
     switch (error) {
     case 0:
@@ -2264,135 +2263,121 @@ static int check_an_opt(const char *key, int type, const char *options,
     case MISSING_VALUE:
 	fprintf(stderr, _("\nERROR: Missing value for parameter <%s>\n"),
 		key);
+	break;
+    case AMBIGUOUS:
+	fprintf(stderr, _("\nERROR: value <%s> ambiguous for parameter <%s>\n"),
+		answer, key);
+	fprintf(stderr, _("       valid options: %s\n"), options);
+	break;
+    case REPLACED:
+	*answerp = G_store(opts[found]);
+	error = 0;
+	break;
     }
-    return (error);
+
+    return error;
 }
 
-static int check_int(const char *ans, const char *opts)
+static int check_int(const char *ans, const char **opts)
 {
-    int d, lo, hi;
+    int d, i;
 
-    if (1 != sscanf(ans, "%d", &d))
-	return (MISSING_VALUE);
+    if (sscanf(ans, "%d", &d) != 1)
+	return MISSING_VALUE;
 
-    if (contains(opts, '-')) {
-	if (2 != sscanf(opts, "%d-%d", &lo, &hi))
-	    return (BAD_SYNTAX);
-	if (d < lo || d > hi)
-	    return (OUT_OF_RANGE);
-	else
-	    return (0);
-    }
-    else if (contains(opts, ',')) {
-	for (;;) {
-	    if (1 != sscanf(opts, "%d", &lo))
-		return (BAD_SYNTAX);
-	    if (d == lo)
-		return (0);
-	    while (*opts != '\0' && *opts != ',')
-		opts++;
-	    if (*opts == '\0')
-		return (OUT_OF_RANGE);
-	    if (*(++opts) == '\0')
-		return (OUT_OF_RANGE);
+    for (i = 0; opts[i]; i++) {
+	const char *opt = opts[i];
+	int lo, hi;
+
+	if (contains(opt, '-')) {
+	    if (sscanf(opt, "%d-%d", &lo, &hi) == 2) {
+		if (d >= lo && d <= hi)
+		    return 0;
+	    }
+	    else if (sscanf(opt, "-%d", &hi) == 1) {
+		if (d <= hi)
+		    return 0;
+	    }
+	    else if (sscanf(opt, "%d-", &lo) == 1) {
+		if (d >= lo)
+		    return 0;
+	    }
+	    else
+		return BAD_SYNTAX;
+	}
+	else {
+	    if (sscanf(opt, "%d", &lo) == 1) {
+		if (d == lo)
+		    return 0;
+	    }
+	    else
+		return BAD_SYNTAX;
 	}
     }
-    else {
-	if (1 != sscanf(opts, "%d", &lo))
-	    return (BAD_SYNTAX);
-	if (d == lo)
-	    return (0);
-	return (OUT_OF_RANGE);
-    }
+
+    return OUT_OF_RANGE;
 }
 
-/*
-   static int
-   check_coor(ans, opts)
-   char *ans ;
-   char *opts ;
-   {
-   double xd, xlo, xhi;
-   double yd, ylo, yhi;
-
-   if (1 != sscanf(ans,"%lf,%lf", &xd, &yd))
-   return(MISSING_VALUE) ;
-
-   if (contains(opts, '-'))
-   {
-   if (2 != sscanf(opts,"%lf-%lf,%lf-%lf",&xlo, &xhi, &ylo, &yhi))
-   return(BAD_SYNTAX) ;
-   if (xd < xlo || xd > xhi)
-   return(OUT_OF_RANGE) ;
-   if (yd < ylo || yd > yhi)
-   return(OUT_OF_RANGE) ;
-   return(0) ;
-   }
-   return(BAD_SYNTAX) ;
-   }
- */
-
-static int check_double(const char *ans, const char *opts)
+static int check_double(const char *ans, const char **opts)
 {
-    double d, lo, hi;
+    double d;
+    int i;
 
-    if (1 != sscanf(ans, "%lf", &d))
-	return (MISSING_VALUE);
+    if (sscanf(ans, "%lf", &d) != 1)
+	return MISSING_VALUE;
 
-    if (contains(opts, '-')) {
-	if (2 != sscanf(opts, "%lf-%lf", &lo, &hi))
-	    return (BAD_SYNTAX);
-	if (d < lo || d > hi)
-	    return (OUT_OF_RANGE);
-	else
-	    return (0);
-    }
-    else if (contains(opts, ',')) {
-	for (;;) {
-	    if (1 != sscanf(opts, "%lf", &lo))
-		return (BAD_SYNTAX);
-	    if (d == lo)
-		return (0);
-	    while (*opts != '\0' && *opts != ',')
-		opts++;
-	    if (*opts == '\0')
-		return (OUT_OF_RANGE);
-	    if (*(++opts) == '\0')
-		return (OUT_OF_RANGE);
+    for (i = 0; opts[i]; i++) {
+	const char *opt = opts[i];
+	double lo, hi;
+
+	if (contains(opt, '-')) {
+	    if (sscanf(opt, "%lf-%lf", &lo, &hi) == 2) {
+		if (d >= lo && d <= hi)
+		    return 0;
+	    }
+	    else if (sscanf(opt, "-%lf", &hi) == 1) {
+		if (d <= hi)
+		    return 0;
+	    }
+	    else if (sscanf(opt, "%lf-", &lo) == 1) {
+		if (d >= lo)
+		    return 0;
+	    }
+	    else
+		return BAD_SYNTAX;
+	}
+	else {
+	    if (sscanf(opt, "%lf", &lo) == 1) {
+		if (d == lo)
+		    return 0;
+	    }
+	    else
+		return BAD_SYNTAX;
 	}
     }
-    else {
-	if (1 != sscanf(opts, "%lf", &lo))
-	    return (BAD_SYNTAX);
-	if (d == lo)
-	    return (0);
-	return (OUT_OF_RANGE);
-    }
+
+    return OUT_OF_RANGE;
 }
 
-static int check_string(const char *ans, const char *opts)
+static int check_string(const char *ans, const char **opts, int *result)
 {
-    if (*opts == '\0')
-	return (0);
+    int len = strlen(ans);
+    int found = 0;
+    int i;
 
-    if (contains(opts, ',')) {
-	for (;;) {
-	    if ((!strncmp(ans, opts, strlen(ans)))
-		&& (*(opts + strlen(ans)) == ','
-		    || *(opts + strlen(ans)) == '\0'))
-		return (0);
-	    while (*opts != '\0' && *opts != ',')
-		opts++;
-	    if (*opts == '\0')
-		return (OUT_OF_RANGE);
-	    if (*(++opts) == '\0')
-		return (OUT_OF_RANGE);
+    for (i = 0; opts[i]; i++) {
+	if (strcmp(ans, opts[i]) == 0)
+	    return 0;
+	if (strncmp(ans, opts[i], len) == 0) {
+	    *result = i;
+	    found++;
 	}
     }
-    else {
-	if (!strcmp(ans, opts))
-	    return (0);
-	return (OUT_OF_RANGE);
+
+    switch (found) {
+    case 0: return OUT_OF_RANGE;
+    case 1: return REPLACED;
+    default: return AMBIGUOUS;
     }
 }
 
