@@ -172,7 +172,7 @@ def import_aster(proj, srcfile, tempfile, band):
     grass.run_command("r.in.gdal", overwrite = flags['o'], input = tempfile, output = outfile)
 
     # write cmd history
-    raster_history(outfile)
+    grass.raster_history(outfile)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

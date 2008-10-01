@@ -132,7 +132,7 @@ def main():
 
     # write cmd history:
     for i in [red, green, blue]:
-	raster_history(i)
+	grass.raster_history(i)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
