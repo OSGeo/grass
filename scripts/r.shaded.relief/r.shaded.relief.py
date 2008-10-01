@@ -117,8 +117,9 @@ def main():
     azimuth = options['azimuth']
     zmult = options['zmult']
     scale = options['scale']
+    units = options['units']
 
-    if not grass.findfile(elev)['file']:
+    if not grass.find_file(input)['file']:
 	grass.fatal("Map <%s> not found." % elev)
 
     if input == output:
@@ -147,22 +148,22 @@ def main():
 	scale *= 6076.12 * 60
 
     #correct azimuth to East (GRASS convention):
-    az = azimuth - 90
+    az = float(azimuth) - 90
 
     grass.message("Calculating shading, please stand by.")
 
-    t = string.Template(r'$elev_out = eval(
+    t = string.Template(r'''$elev_out = eval( \
 x=($zmult*$elev[-1,-1] + 2*$zmult*$elev[0,-1] + $zmult*$elev[1,-1] - \
- $zmult*$elev[-1,1] - 2*$zmult*$elev[0,1] - $zmult*$elev[1,1])/(8.*ewres()*$scale),
+ $zmult*$elev[-1,1] - 2*$zmult*$elev[0,1] - $zmult*$elev[1,1])/(8.*ewres()*$scale), \
 y=($zmult*$elev[-1,-1] + 2*$zmult*$elev[-1,0] + $zmult*$elev[-1,1] - \
- $zmult*$elev[1,-1] - 2*$zmult*$elev[1,0] - $zmult*$elev[1,1])/(8.*nsres()*$scale),
-slope=90.-atan(sqrt(x*x + y*y)),
-a=round(atan(x,y)),
-a=if(isnull(a),1,a),
-aspect=if(x!=0||y!=0,if(a,a,360.)),
-cang = sin($alt)*sin(slope) + cos($alt)*cos(slope) * cos($az-aspect),
-if(cang < 0.,0.,100.*cang),
-if(isnull(cang), null(), 100.*cang))')
+ $zmult*$elev[1,-1] - 2*$zmult*$elev[1,0] - $zmult*$elev[1,1])/(8.*nsres()*$scale), \
+slope=90.-atan(sqrt(x*x + y*y)), \
+a=round(atan(x,y)), \
+a=if(isnull(a),1,a), \
+aspect=if(x!=0||y!=0,if(a,a,360.)), \
+cang = sin($alt)*sin(slope) + cos($alt)*cos(slope) * cos($az-aspect), \
+if(cang < 0.,0.,100.*cang), \
+if(isnull(cang), null(), 100.*cang))''')
     expr = t.substitute(alt = alt, az = az, elev = elev, elev_out = elev_out, scale = scale, zmult = zmult)
     p = grass.feed_command('r.mapcalc')
     p.stdin.write(expr)
@@ -188,7 +189,7 @@ if(isnull(cang), null(), 100.*cang))')
 	grass.message("Shaded relief map created and named <%s>. Consider renaming." % elevshade)
 
     # write cmd history:
-    raster_history(elevshade)
+    grass.raster_history(elevshade)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

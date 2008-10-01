@@ -108,7 +108,7 @@ def main():
     grass.message("Ready. File %s created." % output)
 
     # write cmd history:
-    raster_history(output)
+    grass.raster_history(output)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
