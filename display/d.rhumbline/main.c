@@ -43,8 +43,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("display");
     module->description =
-	_("Displays the rhumbline joining two user-specified "
-	"points, in the active frame on the user's graphics monitor.");
+	_("Displays the rhumbline joining two longitude/latitude coordinates.");
 
     parm.coor = G_define_option();
     parm.coor->key = "coor";
@@ -78,7 +77,7 @@ int main(int argc, char *argv[])
 		      G__projection_name(PROJECTION_LL));
 
     if (parm.coor->answers[0] == NULL)
-	G_fatal_error(_("No coordinates given");
+	G_fatal_error(_("No coordinates given"));
 
     if (!G_scan_easting(parm.coor->answers[0], &lon1, G_projection()))
 	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[0]);
