@@ -5,7 +5,6 @@ SUBDIRS = \
 	d.polar \
 	d.rast.edit \
 	d.shadedmap \
-	d.vect.thematic \
 	db.dropcol \
 	db.droptable \
 	db.in.ogr \
@@ -57,6 +56,7 @@ SUBDIRS = \
 	v.report \
 	v.what.vect
 
+#	d.vect.thematic \
 #	d.out.gpsdrive \
 #	d.rast.leg \
 #	i.spectral \
