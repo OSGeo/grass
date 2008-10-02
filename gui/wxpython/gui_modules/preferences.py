@@ -129,7 +129,10 @@ class Settings:
                 'keycolumn' : {
                     'value' : 'cat'
                     },
-            },
+                'encoding' : {
+                    'value' : '',
+                    }
+                },
             #
             # Command
             #
@@ -1226,6 +1229,16 @@ class PreferencesDialog(wx.Dialog):
 
         flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(leftDbClick, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
+
+        # encoding
+        label = wx.StaticText(parent=panel, id=wx.ID_ANY, label=_("Encoding"))
+        encoding = wx.TextCtrl(parent=panel, id=wx.ID_ANY,
+                               value=self.settings.Get(group='atm', key='encoding', subkey='value'),
+                               name="GetValue", size=(200, -1))
+        self.winId['atm:encoding:value'] = encoding.GetId()
+
+        flexSizer.Add(label, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
+        flexSizer.Add(encoding, proportion=0, flag=wx.ALIGN_RIGHT | wx.FIXED_MINSIZE)
 
         # ask on delete record
         askOnDeleteRec = wx.CheckBox(parent=panel, id=wx.ID_ANY,
