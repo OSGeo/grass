@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	D_setup(0);
     }
     else {
-	D_setup2(0, 0, 0, 100, 0, 100);
+	D_setup2(0, 0, 100, 0, 0, 100);
 	mapunits = FALSE;
     }
 
