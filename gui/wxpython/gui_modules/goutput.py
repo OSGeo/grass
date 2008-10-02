@@ -33,6 +33,7 @@ import globalvar
 import gcmd
 import utils
 from debug import Debug as Debug
+from preferences import globalSettings as UserSettings
 
 wxCmdOutput,   EVT_CMD_OUTPUT   = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
@@ -198,7 +199,7 @@ class GMConsole(wx.Panel):
         """
         if Debug.get_level() == 0:
             # don't redirect when debugging is enabled
-            # sys.stdout = self.cmd_stdout
+            sys.stdout = self.cmd_stdout
             sys.stderr = self.cmd_stderr
             
             return True
@@ -735,4 +736,16 @@ class GMStc(wx.stc.StyledTextCtrl):
                     self.AddText(seg)
         else:
             self.parent.linePos = self.GetCurrentPos()
-            self.AddText(txt)
+            try:
+                self.AddText(txt)
+            except UnicodeDecodeError:
+                enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+                if enc:
+                    txt = unicode(txt, enc)
+                elif os.environ.has_key('GRASS_DB_ENCODING'):
+                    txt = unicode(txt, os.environ['GRASS_DB_ENCODING'])
+                else:
+                    txt = _('Unable to encode text. Please set encoding in GUI preferences.') + os.linesep
+                    
+                self.AddText(txt) 
+    

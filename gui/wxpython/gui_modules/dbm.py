@@ -58,6 +58,21 @@ import gselect
 from debug import Debug as Debug
 from preferences import globalSettings as UserSettings
 
+def unicodeValue(value):
+    """Encode value"""
+    enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+    if enc:
+        value = unicode(value, enc)
+    elif os.environ.has_key('GRASS_DB_ENCODING'):
+        value = unicode(value, os.environ['GRASS_DB_ENCODING'])
+    else:
+        try:
+            value = unicode(value, 'ascii')
+        except UnicodeDecodeError:
+            value = _("Unable to decode value. Set encoding in GUI preferences ('Attributes').")
+    
+    return value
+
 class Log:
     """
     The log output is redirected to the status bar of the containing frame.
@@ -234,11 +249,14 @@ class VirtualAttributeList(wx.ListCtrl,
             
             for value in record.split('|'):
                 # casting ...
-                try:
-                    self.itemDataMap[i].append(self.columns[columns[j]]['ctype'] (value))
-                except:
-                    self.itemDataMap[i].append('')
-
+                if self.columns[columns[j]]['ctype'] != type(''):
+                    try:
+                        self.itemDataMap[i].append(self.columns[columns[j]]['ctype'] (value))
+                    except ValueError:
+                        self.itemDataMap[i].append('')
+                else:
+                    self.itemDataMap[i].append(unicodeValue(value))
+                
                 if keyId > -1 and keyId == j:
                     try:
                         cat = self.columns[columns[j]]['ctype'] (value)
@@ -330,7 +348,7 @@ class VirtualAttributeList(wx.ListCtrl,
     def OnGetItemText(self, item, col):
         """Get item text"""
         index = self.itemIndexMap[item]
-        s = str(self.itemDataMap[index][col])
+        s = self.itemDataMap[index][col]
         return s
 
     def OnGetItemAttr(self, item):
@@ -1273,16 +1291,18 @@ class AttributeManager(wx.Frame):
                 for i in range(len(values)): 
                     if i == keyId: # skip key column
                         continue
-
-                    if str(list.GetItem(item, i).GetText()) != str(values[i]):
+                    if list.GetItem(item, i).GetText() != values[i]:
                         if len(values[i]) > 0:
                             try:
                                 if missingKey is True:
                                     idx = i - 1
                                 else:
                                     idx = i
-                                list.itemDataMap[item][idx] = \
-                                    list.columns[columnName[i]]['ctype'] (values[i])
+                                if list.columns[columnName[i]]['ctype'] != type(''):
+                                    list.itemDataMap[item][idx] = \
+                                        list.columns[columnName[i]]['ctype'] (values[i])
+                                else:
+                                    list.itemDataMap[item][idx] = values[i]
                             except:
                                 raise ValueError(_("Casting value '%(value)s' to %(type)s failed.") % \
                                                      {'value' : str(values[i]),
@@ -1294,14 +1314,13 @@ class AttributeManager(wx.Frame):
                                 updateString += "%s=%s," % (columnName[i], values[i])
                         else: # NULL
                             updateString += "%s=NULL," % (columnName[i])
-
             except ValueError, err:
                 wx.MessageBox(parent=self,
                               message="%s%s%s" % (_("Unable to update existing record."),
                                                   os.linesep, err),
                               caption=_("Error"), style=wx.OK | wx.ICON_ERROR | wx.CENTRE)
                 return
-
+            
             if len(updateString) > 0:
                 self.listOfSQLStatements.append('UPDATE %s SET %s WHERE %s=%d' % \
                                                     (table, updateString.strip(','),
@@ -1620,9 +1639,17 @@ class AttributeManager(wx.Frame):
 
         # perform SQL non-select statements (e.g. 'delete from table where cat=1')
         if len(self.listOfSQLStatements) > 0:
-            sqlFile = tempfile.NamedTemporaryFile(mode="w")
+            sqlFile = tempfile.NamedTemporaryFile(mode="wt")
             for sql in self.listOfSQLStatements:
-                sqlFile.file.write(sql + ";\n")
+                enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+                if not enc and \
+                        os.environ.has_key('GRASS_DB_ENCODING'):
+                    enc = os.environ['GRASS_DB_ENCODING']
+                if enc:
+                    sqlFile.file.write(sql.encode(enc))
+                else:
+                    sqlFile.file.write(sql)
+                sqlFile.file.write(os.linesep)
                 sqlFile.file.flush()
 
             driver   = self.mapDBInfo.layers[self.layer]["driver"]
@@ -2878,7 +2905,7 @@ class DisplayAttributesDialog(wx.Dialog):
 
                     if newvalue == '':
                         newvalue = None
-                        
+                    
                     if newvalue != value:
                         updatedColumns.append(name)
                         if newvalue is None:
@@ -2956,13 +2983,21 @@ class DisplayAttributesDialog(wx.Dialog):
         """Submit records"""
         sqlCommands = self.GetSQLString(updateValues=True)
         if len(sqlCommands) > 0:
-            sqlfile = tempfile.NamedTemporaryFile(mode="w")
+            sqlFile = tempfile.NamedTemporaryFile(mode="w")
             for sql in sqlCommands:
-                sqlfile.file.write(sql + ";\n")
-                sqlfile.file.flush()
+                enc = UserSettings.Get(group='atm', key='encoding', subkey='value')
+                if not enc and \
+                        os.environ.has_key('GRASS_DB_ENCODING'):
+                    enc = os.environ['GRASS_DB_ENCODING']
+                if enc:
+                    sqlFile.file.write(sql.encode(enc))
+                else:
+                    sqlFile.file.write(sql)
+                sqlFile.file.write(os.linesep)
+                sqlFile.file.flush()
                 gcmd.Command(cmd=["db.execute",
                                   "--q",
-                                  "input=%s" % sqlfile.name])
+                                  "input=%s" % sqlFile.name])
 
         if self.closeDialog.IsChecked():
             self.OnCancel(event)
@@ -3113,8 +3148,12 @@ class DisplayAttributesDialog(wx.Dialog):
                         continue
                     
                     vtype  = columns[name]['type']
+                    
                     if columns[name]['values'][idx] is not None:
-                        value = str(columns[name]['values'][idx])
+                        if columns[name]['ctype'] != type(''):
+                            value = str(columns[name]['values'][idx])
+                        else:
+                            value = columns[name]['values'][idx]
                     else:
                         value = ''
                         
@@ -3124,7 +3163,8 @@ class DisplayAttributesDialog(wx.Dialog):
                                             label="[" + vtype.lower() + "]")
                     delimiter = wx.StaticText(parent=panel, id=wx.ID_ANY, label=":")
                     
-                    colValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=value) # TODO: validator
+                    colValue = wx.TextCtrl(parent=panel, id=wx.ID_ANY, value=value)
+                    
                     colValue.SetName(name)
                     self.Bind(wx.EVT_TEXT, self.OnSQLStatement, colValue)
                     
@@ -3199,7 +3239,10 @@ class VectorDBInfo(gselect.VectorDBInfo):
                     if len(value) < 1:
                         value = None
                     else:
-                        value = self.tables[table][name]['ctype'] (value.strip())
+                        if self.tables[table][name]['ctype'] != type(''):
+                            value = self.tables[table][name]['ctype'] (value.strip())
+                        else:
+                            value = unicodeValue(value.strip())
                     self.tables[table][name]['values'].append(value)
                 else:
                     if not data.has_key(key):
@@ -3211,7 +3254,7 @@ class VectorDBInfo(gselect.VectorDBInfo):
                         
                     if key == 'Key column': # skip attributes
                         readAttrb = True
-        
+
         return data
     
     def SelectFromTable(self, layer, cols='*', where=None):
@@ -3242,7 +3285,10 @@ class VectorDBInfo(gselect.VectorDBInfo):
                 name, value = line.split('|')
                 # casting ...
                 if value:
-                    value = self.tables[table][name]['ctype'] (value)
+                    if self.tables[table][name]['ctype'] != type(''):
+                        value = self.tables[table][name]['ctype'] (value)
+                    else:
+                        value = unicodeValue(value)
                 else:
                     value = None
                 self.tables[table][name]['values'].append(value)
@@ -3391,7 +3437,7 @@ class ModifyTableRecord(wx.Dialog):
         for labelId, valueId in self.widgets:
             column = self.FindWindowById(labelId).GetLabel().replace(':', '')
             if columns is None or column in columns:
-                value = str(self.FindWindowById(valueId).GetValue()) # -> string
+                value = self.FindWindowById(valueId).GetValue()
                 valueList.append(value)
 
         # add key value
