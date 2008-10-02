@@ -56,8 +56,8 @@ void driver_move(double x, double y)
 
     convert(x, y, &xi, &yi);
 
-    curx = x;
-    cury = y;
+    curx = xi;
+    cury = yi;
     lastx = x;
 }
 
