@@ -136,32 +136,30 @@ int do_linewidth(const char *str)
 }
 
 
-int do_poly(const char *str, FILE * infile)
+int do_poly(char *buff, FILE * infile)
 {
     int num;
     char origcmd[64];
     float xper, yper;
     int to_return;
 
-    sscanf(str, "%s", origcmd);
+    sscanf(buff, "%s", origcmd);
 
     num = 0;
 
     for (;;) {
-	char buf[128];
-
-	if ((to_return = G_getl2(buf, sizeof(buf), infile)) != 1)
+	if ((to_return = G_getl2(buff, 128, infile)) != 1)
 	    break;
 
-	if (2 != sscanf(buf, "%f %f", &xper, &yper)) {
+	if (2 != sscanf(buff, "%f %f", &xper, &yper)) {
 
-	    if ('#' == buf[0]) {
-		G_debug(3, " skipping comment line [%s]", buf);
+	    if ('#' == buff[0]) {
+		G_debug(3, " skipping comment line [%s]", buff);
 		continue;
 	    }
 
 	    G_debug(3, "coordinate pair not found. ending polygon. [%s]",
-		    buf);
+		    buff);
 	    break;
 	}
 
