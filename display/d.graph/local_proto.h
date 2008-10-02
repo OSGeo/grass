@@ -9,7 +9,7 @@ int do_draw(const char *);
 int do_move(const char *);
 int do_linewidth(const char *);
 int do_color(const char *);
-int do_poly(const char *, FILE *);
+int do_poly(char *, FILE *);
 int do_size(const char *);
 int do_rotate(const char *);
 int do_text(const char *);

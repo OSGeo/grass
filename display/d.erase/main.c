@@ -50,6 +50,8 @@ int main(int argc, char *argv[])
     if (R_open_driver() != 0)
 	G_fatal_error(_("No graphics device selected"));
 
+    D_setup_unity(0);
+
     D_erase(color->answer);
 
     if (eraseframe->answer)
