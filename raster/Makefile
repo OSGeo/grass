@@ -79,6 +79,7 @@ SUBDIRS = \
 	r.series \
 	r.slope.aspect \
 	r.statistics \
+	r.statistics2 \
 	r.stats \
 	r.sum \
 	r.sun \
