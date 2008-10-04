@@ -54,9 +54,17 @@ struct menu
 
 struct input
 {
-    char *name;
+    const char *name;
     int fd;
     DCELL *buf;
+};
+
+struct output
+{
+    const char *name;
+    int fd;
+    DCELL *buf;
+    stat_func *method_fn;
 };
 
 static char *build_method_list(void)
@@ -78,6 +86,19 @@ static char *build_method_list(void)
     return buf;
 }
 
+static int find_method(const char *method_name)
+{
+    int i;
+
+    for (i = 0; menu[i].name; i++)
+	if (strcmp(menu[i].name, method_name) == 0)
+	    return i;
+
+    G_fatal_error(_("Unknown method <%s>"), method_name);
+
+    return -1;
+}
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -89,16 +110,13 @@ int main(int argc, char *argv[])
     {
 	struct Flag *nulls;
     } flag;
-    int method;
-    stat_func *method_fn;
     int i;
     int num_inputs;
     struct input *inputs;
-    char *out_name;
-    int out_fd;
+    int num_outputs;
+    struct output *outputs;
     struct History history;
-    DCELL *out_buf;
-    DCELL *values;
+    DCELL *values, *values_tmp;
     int nrows, ncols;
     int row, col;
 
@@ -114,6 +132,7 @@ int main(int argc, char *argv[])
     parm.input = G_define_standard_option(G_OPT_R_INPUTS);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.output->multiple = YES;
 
     parm.method = G_define_option();
     parm.method->key = "method";
@@ -121,6 +140,7 @@ int main(int argc, char *argv[])
     parm.method->required = YES;
     parm.method->options = build_method_list();
     parm.method->description = _("Aggregate operation");
+    parm.method->multiple = YES;
 
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
@@ -129,20 +149,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    /* get the method */
-    method = -1;
-    for (i = 0; menu[i].name; i++)
-	if (strcmp(menu[i].name, parm.method->answer) == 0) {
-	    method = i;
-	    break;
-	}
-    if (method < 0)
-	G_fatal_error(_("Unknown method <%s>"), parm.method->answer);
-
-    method_fn = menu[method].method;
-
     /* process the input maps */
-    for (i = 0; parm.input->answers[i]; i++) ;
+    for (i = 0; parm.input->answers[i]; i++)
+	;
     num_inputs = i;
 
     if (num_inputs < 1)
@@ -162,19 +171,36 @@ int main(int argc, char *argv[])
 	p->buf = G_allocate_d_raster_buf();
     }
 
-    /* process the output map */
-    out_name = parm.output->answer;
+    /* process the output maps */
+    for (i = 0; parm.output->answers[i]; i++)
+	;
+    num_outputs = i;
 
-    out_fd =
-	G_open_raster_new(out_name,
-			  menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
-    if (out_fd < 0)
-	G_fatal_error(_("Unable to create raster map <%s>"), out_name);
+    for (i = 0; parm.method->answers[i]; i++)
+	;
+    if (num_outputs != i)
+	G_fatal_error(_("output= and method= must have the same number of values"));
 
-    out_buf = G_allocate_d_raster_buf();
+    outputs = G_calloc(num_outputs, sizeof(struct output));
+
+    for (i = 0; i < num_outputs; i++) {
+	struct output *out = &outputs[i];
+	const char *output_name = parm.output->answers[i];
+	const char *method_name = parm.method->answers[i];
+	int method = find_method(method_name);
+
+	out->name = output_name;
+	out->method_fn = menu[method].method;
+	out->buf = G_allocate_d_raster_buf();
+	out->fd = G_open_raster_new(
+	    output_name, menu[method].is_int ? CELL_TYPE : DCELL_TYPE);
+	if (out->fd < 0)
+	    G_fatal_error(_("Unable to create raster map <%s>"), out->name);
+    }
 
     /* initialise variables */
     values = G_malloc(num_inputs * sizeof(DCELL));
+    values_tmp = G_malloc(num_inputs * sizeof(DCELL));
 
     nrows = G_window_rows();
     ncols = G_window_cols();
@@ -200,23 +226,34 @@ int main(int argc, char *argv[])
 		values[i] = v;
 	    }
 
-	    if (null && flag.nulls->answer)
-		G_set_d_null_value(&out_buf[col], 1);
-	    else
-		(*method_fn) (&out_buf[col], values, num_inputs);
+	    for (i = 0; i < num_outputs; i++) {
+		struct output *out = &outputs[i];
+
+		if (null && flag.nulls->answer)
+		    G_set_d_null_value(&out->buf[col], 1);
+		else {
+		    memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
+		    (*out->method_fn)(&out->buf[col], values_tmp, num_inputs);
+		}
+	    }
 	}
 
-	G_put_d_raster_row(out_fd, out_buf);
+	for (i = 0; i < num_outputs; i++)
+	    G_put_d_raster_row(outputs[i].fd, outputs[i].buf);
     }
 
     G_percent(row, nrows, 2);
 
     /* close maps */
-    G_close_cell(out_fd);
+    for (i = 0; i < num_outputs; i++) {
+	struct output *out = &outputs[i];
 
-    G_short_history(out_name, "raster", &history);
-    G_command_history(&history);
-    G_write_history(out_name, &history);
+	G_close_cell(out->fd);
+
+	G_short_history(out->name, "raster", &history);
+	G_command_history(&history);
+	G_write_history(out->name, &history);
+    }
 
     for (i = 0; i < num_inputs; i++)
 	G_close_cell(inputs[i].fd);
