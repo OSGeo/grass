@@ -103,6 +103,9 @@ int main(int argc, char *argv[])
     if (flag.regex->answer && flag.extended->answer)
 	G_fatal_error(_("-r and -e are mutually exclusive"));
 
+    if (!flag.force->answer)
+	G_message(_("The following files would be deleted:"));
+
     for (n = 0; n < nlist; n++) {
 	o = opt[n];
 	G_free((char *)o->gisprompt);
@@ -123,8 +126,8 @@ int main(int argc, char *argv[])
 		    name = wc2regex(name);
 		if (regcomp(&regex, name,
 			    (flag.regex->answer ? 0 : REG_EXTENDED) | REG_NOSUB))
-		    G_fatal_error(_
-				  ("Unable to compile regular expression %s"),
+		    G_fatal_error(
+				  _("Unable to compile regular expression %s"),
 				  name);
 		if (!flag.regex->answer && !flag.extended->answer)
 		    G_free(name);
@@ -148,6 +151,11 @@ int main(int argc, char *argv[])
 		}
 	    }
 	}
+    }
+
+    if (!flag.force->answer) {
+	G_message(" ");
+	G_message(_("You must use the force flag to actually remove them. Exiting."));
     }
 
     exit(result);
