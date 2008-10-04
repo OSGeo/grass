@@ -2544,22 +2544,25 @@ static int check_overwrite(void)
 	    split_gisprompt(opt->gisprompt, age, element, desc);
 
 	    if (strcmp(age, "new") == 0) {
-		if (G_find_file(element, opt->answer, G_mapset())) {	/* found */
-		    if (!overwrite && !over) {
-			if (G_info_format() != G_INFO_FORMAT_GUI) {
-			    fprintf(stderr,
-				    _("ERROR: option <%s>: <%s> exists.\n"),
-				    opt->key, opt->answer);
-			}
-			else {
-			    fprintf(stderr,
-				    "GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
-				    getpid(), opt->key, opt->answer);
-			    fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
-				    getpid());
-			}
+		int i;
+		for (i = 0; opt->answers[i]; i++) {
+		    if (G_find_file(element, opt->answers[i], G_mapset())) {	/* found */
+			if (!overwrite && !over) {
+			    if (G_info_format() != G_INFO_FORMAT_GUI) {
+				fprintf(stderr,
+					_("ERROR: option <%s>: <%s> exists.\n"),
+					opt->key, opt->answers[i]);
+			    }
+			    else {
+				fprintf(stderr,
+					"GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
+					getpid(), opt->key, opt->answers[i]);
+				fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
+					getpid());
+			    }
 
-			error = 1;
+			    error = 1;
+			}
 		    }
 		}
 	    }
