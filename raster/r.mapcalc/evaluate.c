@@ -271,9 +271,12 @@ void execute(expr_list * ee)
 	expression *e = l->exp;
 	const char *var;
 
-	if (e->type != expr_type_binding)
+	if (e->type != expr_type_binding && e->type != expr_type_function)
 	    G_fatal_error("internal error: execute: invalid type: %d",
 			  e->type);
+
+	if (e->type != expr_type_binding)
+	    continue;
 
 	var = e->data.bind.var;
 
@@ -286,11 +289,10 @@ void execute(expr_list * ee)
 	const char *var;
 	expression *val;
 
-	if (e->type != expr_type_binding)
-	    G_fatal_error("internal error: execute: invalid type: %d",
-			  e->type);
-
 	initialize(e);
+
+	if (e->type != expr_type_binding)
+	    continue;
 
 	var = e->data.bind.var;
 	val = e->data.bind.val;
@@ -308,9 +310,14 @@ void execute(expr_list * ee)
 
 	    for (l = ee; l; l = l->next) {
 		expression *e = l->exp;
-		int fd = e->data.bind.fd;
+		int fd;
 
 		evaluate(e);
+
+		if (e->type != expr_type_binding)
+		    continue;
+
+		fd = e->data.bind.fd;
 		put_map_row(fd, e->buf, e->res_type);
 	    }
 
@@ -322,9 +329,16 @@ void execute(expr_list * ee)
 
     for (l = ee; l; l = l->next) {
 	expression *e = l->exp;
-	const char *var = e->data.bind.var;
-	expression *val = e->data.bind.val;
-	int fd = e->data.bind.fd;
+	const char *var;
+	expression *val;
+	int fd;
+
+	if (e->type != expr_type_binding)
+	    continue;
+
+	var = e->data.bind.var;
+	val = e->data.bind.val;
+	fd = e->data.bind.fd;
 
 	close_output_map(fd);
 	e->data.bind.fd = -1;
