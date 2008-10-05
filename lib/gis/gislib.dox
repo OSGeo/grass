@@ -2763,32 +2763,6 @@ This section describes some routines which perform string manipulation.
 Strings have the usual C meaning: a NULL terminated array of characters.
 
 <P>
-These next 3 routines copy characters from one string to another.
-
-<P>
-char * G_strcpy(char *dst, char *src)copy strings
-
-Copies the <B>src</B> string to <B>dst</B> up to and including the
-NULL which terminates the <B>src</B> string. Returns <B>dst.</B>
-
-<P>
-char * G_strncpy(char *dst, char *src, int n) copy strings
-
-Copies at most <B>n</B> characters from the <B>src</B> string to
-<B>dst.</B> If <B>src</B> contains less than <B>n</B> characters, then
-only those characters are copied. A NULL byte is added at the end of
-<B>dst.</B> This implies that <B>dst</B> should be at least <B>n</B>+1
-bytes long. Returns <B>dst. Note.</B> This routine varies from the
-UNIX strncpy() in that G_strncpy() ensures that <B>dst</B> is NULL
-terminated, while strncpy() does not.
-
-<P>
-char * G_strcat(char *dst, char *src) concatenate strings 
-
-Appends the <B>src</B> string to the end of the <B>dst</B> string,
-which is then NULL terminated. Returns <B>dst.</B>
-
-<P>
 These next 3 routines remove unwanted white space from a single string.
 
 <P>
