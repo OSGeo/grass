@@ -92,6 +92,7 @@ defs		: def			{ $$ = list($1,NULL);		}
 
 def		: STRING '=' exp	{ $$ = binding($1,$3); define_variable($$);	}
 		| NAME '=' exp		{ $$ = binding($1,$3); define_variable($$);	}
+		| atom_func
 		;
 
 map		: STRING

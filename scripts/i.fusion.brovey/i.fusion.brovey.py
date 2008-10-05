@@ -132,9 +132,10 @@ def main():
 
     grass.message("Calculating %s.{red,green,blue}: ..." % out)
     t = string.Template(
-	'''"$out.red"   = eval(k = "$pan" / ("$ms1" + "$ms2" + "$ms3"), 1. * "$ms3" * k)
-	   "$out.green" = 1. * "$ms2" * k
-	   "$out.blue"  = 1. * "$ms1" * k''')
+	'''eval(k = float("$pan") / ("$ms1" + "$ms2" + "$ms3"))
+	   "$out.red"   = "$ms3" * k
+	   "$out.green" = "$ms2" * k
+	   "$out.blue"  = "$ms1" * k''')
     e = t.substitute(out = out, pan = pan, ms1 = ms1, ms2 = ms2, ms3 = ms3)
     if grass.run_command('r.mapcalc', expression = e) != 0:
 	grass.fatal("An error occurred while running r.mapcalc")
