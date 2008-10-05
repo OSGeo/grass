@@ -1,6 +1,3 @@
-#!/bin/sh
-# the next line restarts using wish \
-# exec $GRASS_WISH "$0" "$@"
 ##########################################################################
 #
 # animate.tcl
