@@ -81,9 +81,14 @@ def main():
 			    first = first, second = second,
 			    frac1 = frac1, frac2 = frac2)
     template = string.Template(s)
+    cmd = []
     for ch in ['r','g','b']:
 	map = "%s.%s" % (output, ch)
-	grass.run_command('r.mapcalc', expr = template.substitute(ch = ch))
+	cmd.append(template.substitute(ch = ch))
+    grass.run_command('r.mapcalc', expression = ';'.join(cmd))
+
+    for ch in ['r','g','b']:
+	map = "%s.%s" % (output, ch)
 	grass.run_command('r.colors', map = map, color = 'grey255')
 	grass.run_command('r.support', map = map,
 			  title = "Color blend of %s and %s" % (first, second), history="")
