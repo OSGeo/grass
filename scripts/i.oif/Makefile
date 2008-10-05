@@ -8,8 +8,10 @@ SRCFILES = i.oifcalc m.cutmatrix
 DSTFILES := $(patsubst %,$(ETC)/i.oif/%,$(SRCFILES))
 
 default: script
-	$(MKDIR) $(ETC)/i.oif/
-	$(MAKE) $(DSTFILES)
+
+#default: script
+#	$(MKDIR) $(ETC)/i.oif/
+#	$(MAKE) $(DSTFILES)
 
 $(ETC)/i.oif/%: %
 	$(INSTALL) $< $@
