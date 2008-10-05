@@ -96,7 +96,9 @@ following rules:
 
 
 7.  Always specify the return type for ALL functions including those that
-    return type "void", and insert return statements for ALL functions.
+    return type "void", and insert return statements for any function
+    which returns a value.
+
     Also, use ANSI C prototypes to declare your functions. 
     For module return values, see "Exit status" below.
 
@@ -108,15 +110,13 @@ following rules:
     void G_something(void)
     {
     	/* Snipped out code */
-	
-	return;
     }
     
     int G_something_else(int x, int y)
     {
     	/* Snipped out code */
 	
-	return(0);
+	return 0;
     }
 
 
