@@ -105,6 +105,7 @@ int main(int argc, char **argv)
     } flag;
     struct Colors colr;
     struct Categories cats;
+    struct History history;
     int verbose;
     int colrfile;
     char *in_name;
@@ -297,6 +298,10 @@ int main(int argc, char **argv)
     if (colrfile)
 	if (G_write_colors(out_name, G_mapset(), &colr) == -1)
 	    G_warning(_("Error writing color file for <%s>"), out_name);
+
+    G_short_history(out_name, "raster", &history);
+    G_command_history(&history);
+    G_write_history(out_name, &history);
 
     return EXIT_SUCCESS;
 }
