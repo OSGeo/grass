@@ -2,7 +2,8 @@ MODULE_TOPDIR = ../..
 
 PGM = g.mlist
 
-LIBES = $(GISLIB)
+EXTRA_INC = $(REGEXINCPATH)
+LIBES = $(GISLIB) $(REGEXLIBPATH) $(REGEXLIB)
 DEPENDENCIES = $(GISDEP)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
