@@ -303,9 +303,8 @@ int G__open_cell_old(const char *name, const char *mapset)
     if ((fcb->reclass_flag = reclass_flag))
 	G_copy(&fcb->reclass, &reclass, sizeof(reclass));
 
-    if (gdal)
-	fcb->gdal = gdal;
-    else
+    fcb->gdal = gdal;
+    if (!gdal)
 	/* check for compressed data format, making initial reads if necessary */
 	if (G__check_format(fd) < 0) {
 	    close(fd);		/* warning issued by check_format() */
