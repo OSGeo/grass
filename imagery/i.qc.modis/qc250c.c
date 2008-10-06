@@ -1,103 +1,26 @@
 /* Band-wise Data Quality 250m Unsigned Int bits[0-1]
- * 0000 -> class 1: highest quality
- * 0111 -> class 2: noisy detector
- * 1000 -> class 3: dead detector; data interpolated in L1B
- * 1001 -> class 4: solar zenith >= 86 degrees
- * 1010 -> class 5: solar zenith >= 85 and < 86 degrees
- * 1011 -> class 6: missing input
- * 1100 -> class 7: internal constant used in place of climatological data for at least one atmospheric constant
- * 1101 -> class 8: correction out of bounds, pixel constrained to extreme allowable value
- * 1110 -> class 9: L1B data faulty
- * 1111 -> class 10: not processed due to deep ocean or cloud
- * Class 11: Combination of bits unused
- */  
-int qc250c(unsigned int pixel, int bandno) 
+ * 0000 -> class 0: highest quality
+ * 0111 -> class 1: noisy detector
+ * 1000 -> class 2: dead detector; data interpolated in L1B
+ * 1001 -> class 3: solar zenith >= 86 degrees
+ * 1010 -> class 4: solar zenith >= 85 and < 86 degrees
+ * 1011 -> class 5: missing input
+ * 1100 -> class 6: internal constant used in place of climatological data for at least one atmospheric constant
+ * 1101 -> class 7: correction out of bounds, pixel constrained to extreme allowable value
+ * 1110 -> class 8: L1B data faulty
+ * 1111 -> class 9: not processed due to deep ocean or cloud
+ * Class 11-15: Combination of bits unused
+ */
+#include "grass/gis.h"
+  
+CELL qc250c(CELL pixel, int bandno) 
 {
-    unsigned int swabfrom, swabto, qctemp;
+    CELL qctemp;
 
-    int class;
+    qctemp >> 4 + (4 * (bandno - 1));	/* bitshift [4-7] or [8-11] to [0-3] */
+    qctemp = pixel & 0x0F;
 
-    swabfrom = pixel;
-    swabfrom >> 4 * bandno;	/* bitshift [4-7] or [8-11] to [0-3] */
-    swab(&swabfrom, &swabto, 4);
-    qctemp = swabto;
-    if (qctemp & 0x08) {	/* 1??? */
-	if (qctemp & 0x04) {	/* 11?? */
-	    if (qctemp & 0x02) {	/* 111? */
-		if (qctemp & 0x01) {	/* 1111 */
-		    class = 10;	/*Not proc.ocean/cloud */
-		}
-		else {		/* 1110 */
-		    class = 9;	/*L1B faulty data */
-		}
-	    }
-	    else {		/* 110? */
-		if (qctemp & 0x01) {	/* 1101 */
-		    class = 8;	/*corr. out of bounds */
-		}
-		else {		/* 1100 */
-		    class = 7;	/*internal constant used */
-		}
-	    }
-	}
-	else {
-	    if (qctemp & 0x02) {	/* 101? */
-		if (qctemp & 0x01) {	/* 1011 */
-		    class = 6;	/*missing input */
-		}
-		else {		/* 1010 */
-		    class = 5;	/*solarzen>=85&&<86 */
-		}
-	    }
-	    else {		/* 100? */
-		if (qctemp & 0x01) {	/* 1001 */
-		    class = 4;	/*solar zenith angle>=86 */
-		}
-		else {		/* 1000 */
-		    class = 3;	/*Dead detector */
-		}
-	    }
-	}
-    }
-    else {			/* 0??? */
-	if (qctemp & 0x04) {	/* 01?? */
-	    if (qctemp & 0x02) {	/* 011? */
-		if (qctemp & 0x01) {	/* 0111 */
-		    class = 2;	/*Noisy detector */
-		}
-		else {		/* 0110 */
-		    class = 11;	/*Unused */
-		}
-	    }
-	    else {		/* 010? */
-		if (qctemp & 0x01) {	/* 0101 */
-		    class = 11;	/*Unused */
-		}
-		else {		/* 0100 */
-		    class = 11;	/*Unused */
-		}
-	    }
-	}
-	else {			/* 00?? */
-	    if (qctemp & 0x02) {	/* 001? */
-		if (qctemp & 0x01) {	/* 0011 */
-		    class = 11;	/*Unused */
-		}
-		else {		/* 0010 */
-		    class = 11;	/*Unused */
-		}
-	    }
-	    else {		/* 000? */
-		if (qctemp & 0x01) {	/* 0001 */
-		    class = 11;	/*Unused */
-		}
-		else {		/* 0000 */
-		    class = 1;	/*Highest quality */
-		}
-	    }
-	}
-    }
-    return class;
+    return qctemp;
 }
 
 

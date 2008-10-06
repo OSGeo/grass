@@ -1,54 +1,88 @@
 <H2>DESCRIPTION</H2>
 
-<EM>i.qc.modis</EM> Extracts Requested Quality Assessment flags from Modis 09 A and Q products.
+<EM>i.qc.modis</EM> Extracts Requested Quality Assessment flags from Modis 09 A and Q products 
+(Surface_reflectance_250/500m_quality_control_flags).
+This does not yet include QA_state_500m layer (see Notes and TODO).
 
+<pre>
 <EM>MODLAND QA Bits 250m/500m bits[0-1]</EM>
-[00]= class 1: Corrected product produced at ideal quality -- all bands
-[01]= class 2: Corrected product produced at less than idel quality -- some or all bands
-[10]= class 3: Corrected product NOT produced due to cloud effect -- all bands
-[11]= class 4: Corrected product NOT produced due to other reasons -- some or all bands maybe be fill value (Note that a value of [11] overrides a value of [01])
+</pre>
+<ul>
+ <li>[00]= class 0: Corrected product produced at ideal quality -- all bands</li>
+ <li>[01]= class 1: Corrected product produced at less than ideal quality -- some or all bands</li>
+ <li>[10]= class 2: Corrected product NOT produced due to cloud effect -- all bands</li>
+ <li>[11]= class 3: Corrected product NOT produced due to other reasons -- some or all bands maybe be fill value (Note that a value of [11] overrides a value of [01])</li>
+</ul>
 
-<EM> Cloud State 250m Unsigned Int bits[2-3] </EM>
-[00]= class 1: Clear -- No clouds
-[01]= class 2: Cloudy
-[10]= class 3: Mixed
-[11]= class 4: Not Set ; Assumed Clear
+<pre>
+<EM>Cloud State 250m Unsigned Int bits[2-3] </EM>
+</pre>
+<ul>
+ <li>[00]= class 0: Clear -- No clouds</li>
+ <li>[01]= class 1: Cloudy</li>
+ <li>[10]= class 2: Mixed</li>
+ <li>[11]= class 3: Not Set ; Assumed Clear</li>
+</ul>
 
-<EM> Band-wise Data Quality 250m Unsigned Int bits[4-7][8-11]</EM>
-<EM> Band-wise Data Quality 500m long Int bits[2-5][6-9][10-13][14-17][18-21][22-25][26-29]</EM>
-[0000]= class 1: highest quality
-[0111]= class 2: noisy detector
-[1000]= class 3: dead detector; data interpolated in L1B
-[1001]= class 4: solar zenith ge 86 degrees
-[1010]= class 5: solar zenith ge 85 and lt 86 degrees
-[1011]= class 6: missing input
-[1100] class 7: internal constant used in place of climatological data for at least one atmospheric constant
-[1101]= class 8: correction out of bounds, pixel constrained to extreme allowable value
-[1110]= class 9: L1B data faulty
-[1111]= class 10: not processed due to deep ocean or cloud
-Class 11: Combination of bits unused
+<pre>
+<EM>Band-wise Data Quality 250m Unsigned Int bits[4-7][8-11]</EM>
+<EM>Band-wise Data Quality 500m long Int bits[2-5][6-9][10-13][14-17][18-21][22-25][26-29]</EM>
+</pre>
+<ul>
+ <li>[0000]= class 0: highest quality</li>
+ <li>[0111]= class 1: noisy detector</li>
+ <li>[1000]= class 2: dead detector; data interpolated in L1B</li>
+ <li>[1001]= class 3: solar zenith ge 86 degrees</li>
+ <li>[1010]= class 4: solar zenith ge 85 and lt 86 degrees</li>
+ <li>[1011]= class 5: missing input</li>
+ <li>[1100]= class 6: internal constant used in place of climatological data for at least one atmospheric constant</li>
+ <li>[1101]= class 7: correction out of bounds, pixel constrained to extreme allowable value</li>
+ <li>[1110]= class 8: L1B data faulty</li>
+ <li>[1111]= class 9: not processed due to deep ocean or cloud</li>
+ <li>Class 10-15: Combination of bits unused</li>
+</ul>
 
+<pre>
 <EM>Atmospheric correction 250m/500m bit[12]/[30]</EM>
-[00]= class 1: Not Corrected product
-[01]= class 2: Corrected product
+</pre>
+<ul>
+ <li>[0]= class 0: Not Corrected product</li>
+ <li>[1]= class 1: Corrected product</li>
+</ul>
 
+<pre>
 <EM>Adjacency correction 250m/500m bit[13][31]</EM>
-[00]= class 1: Not Corrected product
-[01]= class 2: Corrected product
+</pre>
+<ul>
+ <li>[0]= class 0: Not Corrected product</li>
+ <li>[1]= class 1: Corrected product</li>
+</ul>
 
+<pre>
 <EM>Different orbit from 500m product, 250m Unsigned Int bit[14]</EM>
-[00]= class 1: same orbit as 500m
-[01]= class 2: different orbit from 500m
-
+</pre>
+<ul>
+ <li>[0]= class 0: same orbit as 500m</li>
+ <li>[1]= class 1: different orbit from 500m</li>
+</ul>
 
 
 <H2>NOTES</H2>
-
+It seems that cloud related info is not filled properly since version 3.
+State-QA 500m images should be used (see Vermote et al., 2008).
 
 <H2>TODO</H2>
-Testing is required.
+STATE-QA500m flag Processing should be included for detailed cloud status. 
+More testing is required.
 
 <H2>SEE ALSO</H2>
+
+Vermote E.F., Kotchenova S.Y., Ray J.P.
+MODIS Surface Reflectance User's Guide.
+Version 1.2. June 2008.
+MODIS Land Surface Reflectance Science Computing Facility.
+<A HREF="http://modis-sr.ltdri.org">Homepage</A><br>
+
 
 <em>
 <A HREF="i.vi.html">i.vi</A><br>
