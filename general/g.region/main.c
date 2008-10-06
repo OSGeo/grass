@@ -20,7 +20,6 @@
 #include <grass/Vect.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-#include "projects.h"
 
 static int nsew(char *, char *, char *, char *);
 static void die(struct Option *);
