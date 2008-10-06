@@ -52,6 +52,8 @@
 #include <iostream>
 using namespace std;
 
+#include <grass/config.h>
+
 #define MAX_STREAMS_OPEN 200
 
 #include "mm.h" // Get the memory manager.
@@ -429,7 +431,11 @@ AMI_err AMI_STREAM<T>::seek(off_t offset) {
     seek_offset = offset * sizeof(T);
   }
 
+#ifdef HAVE_LARGEFILES
   if (fseeko(fp, seek_offset, SEEK_SET) == -1) {
+#else
+  if (fseek(fp, seek_offset, SEEK_SET) == -1) {
+#endif
     cerr << "AMI_STREAM::seek offset=" << seek_offset << " failed.\n";
     assert(0);
     exit(1);
