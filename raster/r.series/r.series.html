@@ -43,16 +43,24 @@ first and the last raster listed in <em>input=</em>, respectively.
 
 
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 Using <em>r.series</em> with wildcards:
 <br>
-<tt>r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
+<div class="code"><pre>
+r.series input="`g.mlist pattern='insitu_data.*' sep=,`"
     output=insitu_data.stddev method=stddev</tt>
+</pre></div>
 <p>
 
 Note the <em>g.mlist</em> script also supports regular expressions for 
 selecting map names.
+
+<p>
+Example for multiple aggregates to be computed in one run (3 resulting aggregates from two input maps):
+<div class="code"><pre>
+r.series in=one,two out=result_avg,res_slope,result_count meth=sum,slope,count
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
