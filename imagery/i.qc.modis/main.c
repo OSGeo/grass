@@ -23,19 +23,19 @@
 #include <grass/glocale.h>
 
     /* 250m Products (MOD09Q) */ 
-int qc250a(unsigned int pixel);
-int qc250b(unsigned int pixel);
-int qc250c(unsigned int pixel, int bandno);
-int qc250d(unsigned int pixel);
-int qc250e(unsigned int pixel);
-int qc250f(unsigned int pixel);
+CELL qc250a(CELL pixel);
+CELL qc250b(CELL pixel);
+CELL qc250c(CELL pixel, int bandno);
+CELL qc250d(CELL pixel);
+CELL qc250e(CELL pixel);
+CELL qc250f(CELL pixel);
 
 
     /* 500m Products (MOD09A) */ 
-int qc500a(long int pixel);
-int qc500c(long int pixel, int bandno);
-int qc500d(long int pixel);
-int qc500e(long int pixel);
+CELL qc500a(CELL pixel);
+CELL qc500c(CELL pixel, int bandno);
+CELL qc500d(CELL pixel);
+CELL qc500e(CELL pixel);
 
 int main(int argc, char *argv[]) 
 {
@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
     /* FMEO Declarations**************** */ 
     char *result;		/*output raster name */
 
-
     /*File Descriptors */ 
     int infd;
     int outfd;
@@ -64,7 +63,6 @@ int main(int argc, char *argv[])
     CELL *inrast;
     CELL *outrast;
     RASTER_MAP_TYPE data_type_output = CELL_TYPE;
-
 
     /************************************/ 
     G_gisinit(argv[0]);
@@ -105,7 +103,6 @@ int main(int argc, char *argv[])
     flag1->key = 'A';
     flag1->description =
 	_("QC for MOD09A product @ 500m instead of default MOD09Q@250m");
-
 
     /********************/ 
     if (G_parser(argc, argv))
@@ -150,7 +147,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++)
     {
 	CELL c;
-	unsigned int qc250chan;
+	CELL qc250chan;
 	CELL qc500chan;
 	G_percent(row, nrows, 2);
 	if (G_get_c_raster_row(infd, inrast, row) < 0)
@@ -166,7 +163,7 @@ int main(int argc, char *argv[])
 		qc500chan = c;
 	    else
 		/* This is a MOD09A@250m product, QC layer is 16-bit */ 
-		qc250chan = (unsigned int) c;
+		qc250chan =  c;
 
 	    if (G_is_c_null_value(&c))
 		G_set_c_null_value(&outrast[col], 1);

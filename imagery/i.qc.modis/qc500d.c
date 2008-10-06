@@ -1,24 +1,18 @@
 /* Atmospheric correction 500m long Int bit[30]
- * 00 -> class 1: Not Corrected product
- * 01 -> class 2: Corrected product
+ * 0 -> class 0: Not Corrected product
+ * 1 -> class 1: Corrected product
  */  
-int qc500d(long int pixel) 
+
+#include "grass/gis.h"
+
+CELL qc500d(CELL pixel) 
 {
-    long int swabfrom, swabto, qctemp;
+    CELL qctemp;
 
-    int class;
+    pixel >> 30;		/* bit no 30 becomes 0 */
+    qctemp = pixel & 0x01;    
 
-    swabfrom = pixel;
-    swabfrom >> 30;		/* bit no 30 becomes 0 */
-    swab(&swabfrom, &swabto, 1);
-    qctemp = swabto;
-    if (qctemp & 0x01) {
-	class = 2;		/*Corrected */
-    }
-    else {
-	class = 1;		/*Not corrected */
-    }
-    return class;
+    return qctemp;
 }
 
 

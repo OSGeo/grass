@@ -1,24 +1,18 @@
 /* Adjacency correction 500m long Int bit[31]
- * 00 -> class 1: Not Corrected product
- * 01 -> class 2: Corrected product
+ * 0 -> class 0: Not Corrected product
+ * 1 -> class 1: Corrected product
  */  
-int qc500e(long int pixel) 
+
+#include "grass/gis.h"
+
+CELL qc500e(CELL pixel) 
 {
-    long int swabfrom, swabto, qctemp;
+    CELL qctemp;
 
-    int class;
-
-    swabfrom = pixel;
-    swabfrom >> 31;		/* bit no 31 becomes 0 */
-    swab(&swabfrom, &swabto, 1);
-    qctemp = swabto;
-    if (qctemp & 0x01) {
-	class = 2;		/*Corrected */
-    }
-    else {
-	class = 1;		/*Not corrected */
-    }
-    return class;
+    pixel >> 31;		/* bit no 31 becomes 0 */
+    qctemp = pixel & 0x01; 
+    
+    return qctemp;
 }
 
 

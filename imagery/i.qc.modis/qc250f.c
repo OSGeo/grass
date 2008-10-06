@@ -1,24 +1,18 @@
 /* Different orbit from 500m product, 250m Unsigned Int bit[14]
- * 00 -> class 1: same orbit as 500m
- * 01 -> class 2: different orbit from 500m
+ * 0 -> class 0: same orbit as 500m
+ * 1 -> class 1: different orbit from 500m
  */  
-int qc250f(unsigned int pixel) 
+
+#include "grass/gis.h"
+
+CELL qc250f(CELL pixel) 
 {
-    unsigned int swabfrom, swabto, qctemp;
+    CELL qctemp;
 
-    int class;
-
-    swabfrom = pixel;
-    swabfrom >> 14;		/* bit no 14 becomes 0 */
-    swab(&swabfrom, &swabto, 4);
-    qctemp = swabto;
-    if (qctemp & 0x01) {
-	class = 2;		/*different orbit */
-    }
-    else {
-	class = 1;		/*same orbit */
-    }
-    return class;
+    qctemp >> 14;		/* bit no 14 becomes 0 */
+    qctemp = pixel & 0x01;
+    
+    return qctemp;
 }
 
 
