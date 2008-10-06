@@ -24,7 +24,6 @@ SUBDIRS = \
 	r.in.srtm \
 	r.in.wms \
 	r.mask \
-	r.out.gdal \
 	r.out.xyz \
 	r.plane \
 	r.reclass.area \
