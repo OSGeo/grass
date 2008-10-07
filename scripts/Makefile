@@ -16,6 +16,7 @@ SUBDIRS = \
 	i.in.spotvgt \
 	i.landsat.rgb \
 	i.oif \
+	i.spectral \
 	i.tasscap \
 	m.proj \
 	r.blend \
@@ -58,7 +59,6 @@ SUBDIRS = \
 #	d.vect.thematic \
 #	d.out.gpsdrive \
 #	d.rast.leg \
-#	i.spectral \
 #	r.mapcalculator \
 #	r3.mapcalculator \
 
