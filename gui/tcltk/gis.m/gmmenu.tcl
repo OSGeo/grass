@@ -545,7 +545,7 @@ set descmenu [subst  {
 		set env(GRASS_RENDER_IMMEDIATE) "TRUE"}}
 	{separator}
 	{cascad {[G_msg "Basic RS processing"]} {} "" $tmenu {			
-				{command {[G_msg "MODIS Quality flags"]} {} "i.qc.modis: Extracts Modis Quality flags as raster values." {} -command {execute i.qc.modis }}
+				{command {[G_msg "MODIS Quality flags"]} {} "i.modis.qc: Extracts Modis Quality flags as raster values." {} -command {execute i.modis.qc }}
 				{separator}
 				{command {[G_msg "Albedo"]} {} "i.albedo: Calculates Albedo from Modis, Aster, Landsat or AVHRR" {} -command {execute i.albedo }}
 				{separator}

@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = i.qc.modis
+PGM = i.modis.qc
 
 LIBES = $(GISLIB)
 DEPENDENCIES = $(GISDEP)

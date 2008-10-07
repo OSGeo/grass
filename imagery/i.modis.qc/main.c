@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       i.qc.modis
+ * MODULE:       i.modis.qc
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Converts Quality Control indicators into human readable classes
  * 		 for Modis surface reflectance products 250m/500m
