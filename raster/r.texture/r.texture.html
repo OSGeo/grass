@@ -5,9 +5,11 @@ user-specified raster map layer. The module calculates textural features
 based on spatial dependence matrices at 0, 45, 90, and 135 
 degrees for a <em>distance</em> (default = 1).
 <p>
-<!--
-<em>r.texture</em> uses the algorithms of <a href="i.texture.html">i.texture</a>.
--->
+In general, several variables constitute texture: differences in grey level values,
+coarseness as scale of grey level differences, presence or lack of directionality
+and regular patterns.
+
+<p>
 <em>r.texture</em> reads a GRASS raster map as input and calculates textural 
 features based on spatial
 dependence matrices for north-south, east-west, northwest, and southwest
@@ -28,24 +30,50 @@ matrix.
 The following are brief explanations of texture measures:
 <p>
 <ul>
-<li> Angular Second Moment:
-This is a measure of local homogeneity and the opposite of Entropy. 
-It is high when the local window a few pixels with high values; low,
-when the pixels are almost equal.
+<li> Angular Second Moment (ASM, also called Uniformity):
+ This is a measure of local homogeneity and the opposite of Entropy.
+ High values of ASM occur when the pixels in the moving window are
+ very similar.
+ <br>
+ Note: The square root of the ASM is sometimes used as a texture measure,
+ and is called Energy.</li>
 
-<li> Contrast:
-This measure considers the amount of local variation and is the opposite of Homogeneity 
-(when high pixel values concentrate along the diagonal).
+<li> Inverse Difference Moment (IDM, also called Homogeneity):
+ This measure relates inversely to the contrast measure. It is a direct measure of the
+ local homogeneity of a digital image. Low values are associated with low homogeneity
+ and vice versa.</li>
 
-<li> Correlation:
-This measure  analyses the linear dependency of grey levels of neighboring
-pixels. Typically high, when the scale of local texture is larger than the
-<em>distance</em>.
+<li> Contrast (Contr):
+ This measure analyses the image contrast (locally gray-level variations) as
+ the linear dependency of grey levels of neighboring pixels (similarity). Typically high,
+ when the scale of local texture is larger than the <em>distance</em>.</li>
 
-<li> Entropy:
-This measure is high when the values of the local window have similar values.
-It is low when the values are close to either 0 or 1 (i.e. when the
-pixels in the local window are uniform).
+<li> Correlation (Corr):
+ This measure  analyses the linear dependency of grey levels of neighboring
+ pixels. Typically high, when the scale of local texture is larger than the
+ <em>distance</em>.</li>
+
+<li> Variance (Var): A measure of gray tone variance within the moving
+  window (second-order moment about the mean)</li>
+
+<li> Difference Variance (DV): ...</li>
+
+<li> Sum Variance (SV): ... </li>
+
+<li> Sum Average (SA): ...</li>
+
+<li> Entropy (Entr):
+ This measure analyses the randomness. It is high when the values of the moving
+ window have similar values. It is low when the values are close to either 0 or 1 (i.e. when the
+ pixels in the local window are uniform).</li>
+
+<li> Difference Entropy (DE): ...</li>
+
+<li> Sum Entropy (SE): ...</li>
+
+<li> Information Measures of Correlation (MOC): ...</li>
+
+<li> Maximal Correlation Coefficient (MCC): ...</li>
 </ul>
    
 <h2>NOTES</h2>
@@ -72,14 +100,15 @@ Haralick, R.M., K. Shanmugam, and I. Dinstein. 1973. Textural features for
     image classification. <em>IEEE Transactions on Systems, Man, and
     Cybernetics</em>, SMC-3(6):610-621.
 <p>
-<b>Bouman C. A., Shapiro M.</b>,(March
+<b>Bouman, C. A., Shapiro, M.</b>,(March
     1994).A Multiscale Random Field Model for Bayesian Image
     Segmentation, IEEE Trans. on Image Processing, vol. 3, no.2.
-
 <p>
-<b>Haralick R.</b>, (May 1979). <i>Statistical and structural approaches to texture</i>,
+<b>Haralick, R.</b>, (May 1979). <i>Statistical and structural approaches to texture</i>,
    Proceedings of the IEEE, vol. 67, No.5, pp. 786-804</p>
- 
+<p>
+<b>Hall-Beyer, M.</b> (2007). <a href="http://www.fp.ucalgary.ca/mhallbey/tutorial.htm">The GLCM Tutorial Home Page</a>
+  (Grey-Level Co-occurrence Matrix texture measurements). University of Calgary, Canada
      
 <h2>SEE ALSO</h2>
 
@@ -88,7 +117,6 @@ Haralick, R.M., K. Shanmugam, and I. Dinstein. 1973. Textural features for
 <em><a href="i.pca.html">i.pca</a></em>,
 <em><a href="r.digit.html">r.digit</a></em>,
 <em><a href="i.group.html">i.group</a></em>
-<!-- <em><a href="i.texture.html">i.texture</a></em> -->
 
 <h2>AUTHOR</h2>
 <a href="mailto:antoniol@ieee.org">G. Antoniol</a> - RCOST (Research Centre on Software Technology - Viale Traiano - 82100 Benevento)<br>
