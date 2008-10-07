@@ -101,7 +101,8 @@ class ProcessWorkspaceFile(HandlerBase):
                 "showCompExtent" : bool(int(attrs.get('showCompExtent', "0"))),
                 "pos"            : pos,
                 "size"           : size,
-                "extent"         : extent})
+                "extent"         : extent,
+                "constrainRes"   : bool(int(attrs.get('constrainRes', "0")))})
             
         elif name == 'group':
             self.groupName    = attrs.get('name', None)
@@ -370,11 +371,13 @@ class WriteWorkspaceFile(object):
             
             file.write('%s<display render="%d" '
                        'mode="%d" showCompExtent="%d" '
+                       'constrainRes="%d" '
                        'dim="%d,%d,%d,%d" '
                        'extent="%f,%f,%f,%f">\n' % (' ' * self.indent,
                                                     int(mapTree.mapdisplay.autoRender.IsChecked()),
                                                     mapTree.mapdisplay.toggleStatus.GetSelection(),
                                                     int(mapTree.mapdisplay.showRegion.IsChecked()),
+                                                    int(mapTree.mapdisplay.compResolution.IsChecked()),
                                                     displayPos[0],
                                                     displayPos[1],
                                                     displaySize[0],
