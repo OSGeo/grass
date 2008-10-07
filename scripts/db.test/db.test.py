@@ -27,7 +27,6 @@
 
 import sys
 import os
-import subprocess
 import grass
 
 def main():
@@ -71,7 +70,7 @@ def main():
 	expf.close()
 
 	if type == 'S':
-	    if subprocess.call(['diff', result, expected]) != 0:
+	    if grass.call(['diff', result, expected]) != 0:
 		grass.error("RESULT: ******** ERROR ********")
 	    else:
 		grass.message("RESULT: OK")

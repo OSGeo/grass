@@ -54,7 +54,6 @@
 
 import sys
 import os
-import subprocess
 import atexit
 import grass
 
@@ -143,7 +142,7 @@ def main():
 	grass.fatal("Please extract %s before import." % infile)
 
     try:
-	p = subprocess.Popen(['file', '-ib', infile], stdout = subprocess.PIPE)
+	p = grass.Popen(['file', '-ib', infile], stdout = grass.PIPE)
 	s = p.communicate()[0]
 	if s == "application/x-zip":
 	    grass.fatal("Please extract %s before import." % infile)

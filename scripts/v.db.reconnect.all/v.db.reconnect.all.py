@@ -45,7 +45,6 @@
 import sys
 import os
 import grass
-import subprocess
 
 def main():
     old_database = options['old_database']

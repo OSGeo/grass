@@ -5,6 +5,30 @@ import subprocess
 import re
 import atexit
 
+# subprocess wrapper that uses shell on Windows
+
+class Popen(subprocess.Popen):
+    def __init__(self, args, bufsize=0, executable=None,
+                 stdin=None, stdout=None, stderr=None,
+                 preexec_fn=None, close_fds=False, shell=None,
+                 cwd=None, env=None, universal_newlines=False,
+                 startupinfo=None, creationflags=0):
+
+	if shell == None:
+	    shell = (sys.platform == "win32")
+
+	subprocess.Popen.__init__(self, args, bufsize, executable,
+                 stdin, stdout, stderr,
+                 preexec_fn, close_fds, shell,
+                 cwd, env, universal_newlines,
+                 startupinfo, creationflags)
+
+PIPE = subprocess.PIPE
+STDOUT = subprocess.STDOUT
+
+def call(*args, **kwargs):
+    return Popen(*args, **kwargs).wait()
+
 # GRASS-oriented interface to subprocess module
 
 _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
@@ -46,18 +70,18 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
 	else:
 	    options[opt] = val
     args = make_command(prog, flags, overwrite, quiet, verbose, **options)
-    return subprocess.Popen(args, **popts)
+    return Popen(args, **popts)
 
 def run_command(*args, **kwargs):
     ps = start_command(*args, **kwargs)
     return ps.wait()
 
 def pipe_command(*args, **kwargs):
-    kwargs['stdout'] = subprocess.PIPE
+    kwargs['stdout'] = PIPE
     return start_command(*args, **kwargs)
 
 def feed_command(*args, **kwargs):
-    kwargs['stdin'] = subprocess.PIPE
+    kwargs['stdin'] = PIPE
     return start_command(*args, **kwargs)
 
 def read_command(*args, **kwargs):
@@ -66,7 +90,7 @@ def read_command(*args, **kwargs):
 
 def write_command(*args, **kwargs):
     stdin = kwargs['stdin']
-    kwargs['stdin'] = subprocess.PIPE
+    kwargs['stdin'] = PIPE
     p = start_command(*args, **kwargs)
     p.stdin.write(stdin)
     p.stdin.close()
@@ -300,7 +324,7 @@ def basename(path, ext = None):
 def find_program(pgm, args = []):
     nuldev = file(os.devnull, 'w+')
     try:
-	subprocess.call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
+	call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
 	found = True
     except:
 	found = False

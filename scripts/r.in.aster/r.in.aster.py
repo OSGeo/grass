@@ -60,7 +60,6 @@
 
 import sys
 import os
-import subprocess
 import platform
 import grass
 
@@ -159,12 +158,10 @@ def import_aster(proj, srcfile, tempfile, band):
         cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile ]
     else:
         cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile ]
-    p = subprocess.call(cmd)
+    p = grass.call(cmd)
     if p != 0:
         #check to see if gdalwarp executed properly
         return
-
-    #p = subprocess.call(["gdal_translate", srcfile, tempfile])
 
     #import geotiff to GRASS
     grass.message("Importing into GRASS ...")
