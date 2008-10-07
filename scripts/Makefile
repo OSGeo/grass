@@ -4,6 +4,7 @@ SUBDIRS = \
 	d.correlate \
 	d.polar \
 	d.rast.edit \
+	d.rast.leg \
 	d.shadedmap \
 	db.dropcol \
 	db.droptable \
@@ -58,7 +59,6 @@ SUBDIRS = \
 
 #	d.vect.thematic \
 #	d.out.gpsdrive \
-#	d.rast.leg \
 #	r.mapcalculator \
 #	r3.mapcalculator \
 
