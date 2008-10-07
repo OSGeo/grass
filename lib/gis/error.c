@@ -51,7 +51,7 @@ static int print_word(FILE *, char **, int *, const int);
 static void print_sentence(FILE *, const int, const char *);
 static int print_error(const char *, const int);
 static int mail_msg(const char *, int);
-static int write_error(const char *, int, const char *, time_t, const char *);
+static int write_error(const char *, int, time_t, const char *);
 static int log_error(const char *, int);
 
 static int vfprint_error(int type, const char *template, va_list ap)
@@ -304,49 +304,38 @@ static int print_error(const char *msg, const int type)
 
 static int log_error(const char *msg, int fatal)
 {
-    FILE *pwd;
-    char cwd[1024];
+    char cwd[GPATH_MAX];
     time_t clock;
-    char *home;
     char *gisbase;
 
     /* get time */
     clock = time(NULL);
 
     /* get current working directory */
-    sprintf(cwd, "?");
-    if ((pwd = G_popen("pwd", "r"))) {
-	if (fgets(cwd, sizeof(cwd), pwd)) {
-	    char *c;
+    getcwd(cwd, sizeof(cwd));
 
-	    for (c = cwd; *c; c++)
-		if (*c == '\n')
-		    *c = 0;
-	}
-	G_pclose(pwd);
-    }
-
-    /* write the 2 possible error log files */
+    /* write the error log file */
     if ((gisbase = G_gisbase()))
-	write_error(msg, fatal, gisbase, clock, cwd);
-
-    home = G__home();
-    if (home && gisbase && strcmp(home, gisbase))
-	write_error(msg, fatal, home, clock, cwd);
+	write_error(msg, fatal, clock, cwd);
 
     return 0;
 }
 
 /* Write a message to the log file */
 static int write_error(const char *msg, int fatal,
-		       const char *dir, time_t clock, const char *cwd)
+		       time_t clock, const char *cwd)
 {
-    char logfile[GNAME_MAX];
+    static char *logfile;
     FILE *log;
 
-    if (dir == 0 || *dir == 0)
-	return 1;
-    sprintf(logfile, "%s/GIS_ERROR_LOG", dir);
+    if (!logfile) {
+	logfile = getenv("GIS_ERROR_LOG");
+	if (!logfile) {
+	    char buf[GPATH_MAX];
+	    sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+	    logfile = G_store(buf);
+	}
+    }
 
     log = fopen(logfile, "r");
     if (!log)
