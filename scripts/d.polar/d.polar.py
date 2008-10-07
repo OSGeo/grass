@@ -54,7 +54,6 @@ import string
 import types
 import math
 import atexit
-import subprocess
 import glob
 import shutil
 import grass
@@ -66,7 +65,7 @@ def cleanup():
 
 def plot_xgraph():
     newline = ['\n']
-    p = subprocess.Popen(['xgraph'], stdin = subprocess.PIPE)
+    p = grass.Popen(['xgraph'], stdin = grass.PIPE)
     for point in sine_cosine_replic + newline + outercircle + newline + vector:
 	if isinstance(point, types.TupleType):
 	    p.stdin.write("%f %f\n" % point)

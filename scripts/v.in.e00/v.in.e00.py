@@ -54,7 +54,6 @@
 import sys
 import os
 import shutil
-import subprocess
 import glob
 import grass
 
@@ -126,15 +125,15 @@ def main():
     nuldev = file(os.devnull, 'w+')
 
     grass.message("An error may appear next which will be ignored...")
-    if subprocess.call(['avcimport', filename, e00shortname], stdout = nuldev, stderr = nuldev) == 1:
+    if grass.call(['avcimport', filename, e00shortname], stdout = nuldev, stderr = nuldev) == 1:
 	grass.message("E00 ASCII found and converted to Arc Coverage in current directory")
     else:
 	grass.message("E00 Compressed ASCII found. Will uncompress first...")
 	grass.try_remove(e00shortname)
 	grass.try_remove(info)
-	subprocess.call(['e00conv', filename, e00tmp + '.e00'])
+	grass.call(['e00conv', filename, e00tmp + '.e00'])
 	grass.message("...converted to Arc Coverage in current directory")
-	subprocess.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
+	grass.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
 
     #SQL name fix:
     name = name.replace('-', '_')

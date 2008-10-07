@@ -63,7 +63,6 @@
 
 import sys
 import os
-import subprocess
 import atexit
 import glob
 import grass
@@ -182,9 +181,9 @@ def main():
     plotf.close()
 
     if output:
-	subprocess.call(['gnuplot', plotfile])
+	grass.call(['gnuplot', plotfile])
     else:
-	subprocess.call(['gnuplot', '-persist', plotfile])
+	grass.call(['gnuplot', '-persist', plotfile])
 
 if __name__ == "__main__":
     options, flags = grass.parser()

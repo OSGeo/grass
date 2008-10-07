@@ -110,7 +110,6 @@ proj = ''.join([
 
 import sys
 import os
-import subprocess
 import shutil
 import atexit
 import grass
@@ -160,7 +159,7 @@ def main():
 	# make it quiet in a safe way (just in case -qq isn't portable)
 	tenv = os.environ.copy()
 	tenv['UNZIP'] = '-qq'
-	if subprocess.call(['unzip', '-t', zipfile], env = tenv) != 0:
+	if grass.call(['unzip', '-t', zipfile], env = tenv) != 0:
 	    grass.fatal("'%s' does not appear to be a valid zip file." % zipfile)
 
 	is_zip = True
@@ -191,7 +190,7 @@ def main():
     if is_zip:
         #unzip & rename data file:
 	grass.message("Extracting '%s'..." % infile)
-	if subprocess.call(['unzip', zipfile], env = tenv) != 0:
+	if grass.call(['unzip', zipfile], env = tenv) != 0:
 	    grass.fatal("Unable to unzip file.")
 
     grass.message("Converting input file to BIL...")

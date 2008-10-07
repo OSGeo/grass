@@ -74,7 +74,6 @@
 
 import sys
 import os
-import subprocess
 import grass
 
 def main():
@@ -180,7 +179,7 @@ def main():
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
     cmd = ['cs2cs'] + outfmt + in_proj.split() + ['+to'] + out_proj.split()
-    p = subprocess.Popen(cmd, stdin = subprocess.PIPE, stdout = outf)
+    p = grass.Popen(cmd, stdin = grass.PIPE, stdout = outf)
 
     while True:
 	line = inf.readline()
