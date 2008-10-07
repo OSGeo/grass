@@ -25,7 +25,6 @@
 ***************************************************************************/
 
 #include <cstdlib>
-#include <cmath>
 #include <map>
 
 extern "C" {
@@ -305,8 +304,13 @@ static void process_raster (int ifd, InputMask imask, ScaleRange iscale,
         /* loop over all the values in the row */
 	for(col = 0; col < G_window_cols(); col++)
 	{
-/* TODO: use G_set_f_null_value()?? */
-	    if(vis && isnan(vis[col]) || alt && isnan(alt[col]) || isnan(buf[col])) {buf[col] = FP_NAN; continue;}
+	    if(vis && G_is_f_null_value(&vis[col]) || 
+	       alt && G_is_f_null_value(&alt[col]) || 
+	              G_is_f_null_value(&buf[col]))
+	    {
+	        G_set_f_null_value(&buf[col], 1);
+	        continue;
+	    }
 	    alt[col] /= 1000.0f; /* converting to km from input which should be in meter */
 
             /* check if both maps are active and if whether any value has changed */
