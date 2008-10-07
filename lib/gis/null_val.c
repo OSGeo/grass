@@ -427,22 +427,7 @@ int G_is_c_null_value(const CELL * cellVal)
 
 int G_is_f_null_value(const FCELL * fcellVal)
 {
-    int i;			/* counter */
-
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
-
-    /* Check if the FCELL value matches the null pattern */
-    for (i = 0; i < sizeof(FCELL); i++) {
-	if (((unsigned char *)fcellVal)[i] !=
-	    ((unsigned char *)&fcellNullPattern)[i]) {
-	    return FALSE;
-	}
-    }
-
-    return TRUE;
+    return *fcellVal != *fcellVal;
 }
 
 /****************************************************************************
@@ -467,22 +452,7 @@ int G_is_f_null_value(const FCELL * fcellVal)
 
 int G_is_d_null_value(const DCELL * dcellVal)
 {
-    int i;			/* counter */
-
-    /* Check if the null patterns have been initialized */
-    if (!initialized) {
-	InitError();
-    }
-
-    /* Check if the DCELL value matches the null pattern */
-    for (i = 0; i < sizeof(DCELL); i++) {
-	if (((unsigned char *)dcellVal)[i] !=
-	    ((unsigned char *)&dcellNullPattern)[i]) {
-	    return FALSE;
-	}
-    }
-
-    return TRUE;
+    return *dcellVal != *dcellVal;
 }
 
 /****************************************************************************
