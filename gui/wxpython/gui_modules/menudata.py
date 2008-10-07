@@ -1618,7 +1618,7 @@ class Data:
                                 (_("MODIS Quality Flags"),
                                  _("Extract Modis Quality flags as raster values."),
                                  "self.OnMenuCmd",
-                                 "i.qc.modis"),
+                                 "i.modis.qc"),
 	                        ("","","", ""),
 
                                 (_("Albedo"),
