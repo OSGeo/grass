@@ -405,14 +405,15 @@ class VectorDBInfo:
                 self.tables[table][name]['values'] = []
                 self.tables[table][name]['ids']    = []
         
-class LayerSelect(wx.ComboBox):
+class LayerSelect(wx.Choice):
     """
     Creates combo box for selecting data layers defined for vector.
     The 'layer' terminology is likely to change for GRASS 7
     """
     def __init__(self, parent,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
-                 size=wx.DefaultSize, vector=None, choices=[]):
+                 size=globalvar.DIALOG_LAYER_SIZE,
+                 vector=None, choices=[]):
 
         super(LayerSelect, self).__init__(parent, id, pos=pos, size=size,
                                           choices=choices)
@@ -438,7 +439,8 @@ class ColumnSelect(wx.ComboBox):
                  id=wx.ID_ANY, value='', pos=wx.DefaultPosition,
                  size=wx.DefaultSize, vector=None, layer=1, choices=[]):
 
-        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices)
+        super(ColumnSelect, self).__init__(parent, id, value, pos, size, choices,
+                                           style=wx.CB_READONLY)
 
         if not vector:
             return

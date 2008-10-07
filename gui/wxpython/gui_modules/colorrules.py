@@ -1,31 +1,30 @@
 """
-MODULE:      colorrules.py
+@package colorrules.py
 
-CLASSES:
-    * ColorTable
-    * BuferedWindow
+@brief Dialog for interactive management of raster color tables and vector
+rgb_column
 
-PURPOSE:    Dialog for interactive management of raster color tables and vector
-            rgb_column
+Classes:
+ - ColorTable
+ - BuferedWindow
 
-AUTHORS:    The GRASS Development Team
-            Michael Barton (Arizona State University)
+(C) 2008 by the GRASS Development Team
+This program is free software under the GNU General Public License
+(>=v2). Read the file COPYING that comes with GRASS for details.
 
-COPYRIGHT:  (C) 2008 by the GRASS Development Team
-            This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
-
+@author Michael Barton (Arizona State University)
+@author Martin Landa <landa.martin gmail.com> (various updates)
 """
 
 import os
 import sys
 import shutil
-from debug import Debug as Debug
 
 import wx
-import wx.lib.colourselect as  csel
+import wx.lib.colourselect as csel
 import wx.lib.scrolledpanel as scrolled
+
+import grass
 
 import dbm
 import gcmd
@@ -33,115 +32,135 @@ import globalvar
 import gselect
 import render
 import utils
+from debug import Debug as Debug
+from preferences import globalSettings as UserSettings
 
 class ColorTable(wx.Frame):
     def __init__(self, parent, id=wx.ID_ANY, title='',
                  pos=wx.DefaultPosition, size=(-1, -1),
-                 style=wx.DEFAULT_FRAME_STYLE|wx.RESIZE_BORDER,
+                 style=wx.DEFAULT_FRAME_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
         wx.Frame.__init__(self, parent, id, title, pos, size, style)
-
         """
-        Dialog for interactively entering rules
-        for map management commands
+        Dialog for interactively entering rules for map management
+        commands
 
         @param cmd command (given as list)
         """
+        self.parent = parent # GMFrame
         
-        self.CentreOnParent()
-        self.parent = parent
-        self.cmd = kwargs['cmd'] # grass command
-        self.inmap = '' # input map to change
-        self.rastmin = '' # min cat in raster map
-        self.rastmax = '' # max cat in raster map
-        self.layerchoices = ['1'] # list of database layers for vector (minimum of 1)
-        self.columnchoices = [] # list of database columns for vector
-        self.vlayer = 1 # vector layer for attribute table to use for setting color
-        self.vtable = '' # vector attribute table used for setting color
-        self.vcolumn = '' # vector attribute column for assigning colors
-        self.vrgb = '' # vector attribute column to use for storing colors
-        self.old_colrtable = '' # existing color table of raster map
-        self.vals = '' # raster category or vector attribute values for assigning colors
-        self.rgb_string = '' # r:g:b color string for assigning colors to cats
-        self.ruleslines = {} # rules for creating colortable
-        self.overwrite = True
-        self.Map   = render.Map()  # instance of render.Map to be associated with display
-        self.layer = None          # reference to layer with preview
-        self.mapname = ''
-                
+        # grass command
+        self.cmd = kwargs['cmd']
+        
+        # input map to change
+        self.inmap = ''
+        
+        # raster properties
+        self.rast = {
+            # min cat in raster map
+            'min' : None,
+            # max cat in raster map
+            'max' : None,
+            }
+        
+        # vector properties
+        self.vect = {
+            # list of database layers for vector (minimum of 1)
+            'layers' : ['1'],
+            # list of database columns for vector
+            'columns' : [],
+            # vector layer for attribute table to use for setting color
+            'layer' : 1, 
+            # vector attribute table used for setting color         
+            'table' : '',
+            # vector attribute column for assigning colors
+            'column' : '', 
+            # vector attribute column to use for storing colors
+            'rgb' : '',
+            }
+
+        # rules for creating colortable
+        self.ruleslines = {}
+
+        # instance of render.Map to be associated with display
+        self.Map   = render.Map()  
+
+        # reference to layer with preview
+        self.layer = None          
+        
         if self.cmd == 'r.colors':
-            title = 'Create new color table for raster map'
-            maplabel = 'Select raster map:'
-            elem = 'cell'
-            crlabel = 'Enter raster cat values or percents'
+            self.SetTitle(_('Create new color table for raster map'))
+            self.elem = 'cell'
+            crlabel = _('Enter raster cat values or percents')
         elif self.cmd == 'vcolors':
-            title = 'Create new color table for vector map'
-            maplabel = 'Select vector map:'
-            elem = 'vector'
-            crlabel = 'Enter vector attribute values or ranges (n or n1 to n2)'
+            self.SetTitle(_('Create new color table for vector map'))
+            self.elem = 'vector'
+            crlabel = _('Enter vector attribute values or ranges (n or n1 to n2)')
 
         #
         # Set the size & cursor
         #
         self.SetClientSize(size)
 
-        # set window frame title
-        self.SetTitle(title)
-        
+        ### self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
+
         # top controls
-        self.map_label = wx.StaticText(parent=self, id=wx.ID_ANY, label=maplabel)
         self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY,
                                              size=globalvar.DIALOG_GSELECT_SIZE,
-                                             type=elem)
+                                             type=self.elem)
         
         self.ovrwrtcheck = wx.CheckBox(parent=self, id=wx.ID_ANY,
-                                   label=_('replace existing color table'))
-        self.ovrwrtcheck.SetValue(self.overwrite)
+                                       label=_('replace existing color table'))
+        self.ovrwrtcheck.SetValue(UserSettings.Get(group='cmd', key='overwrite', subkey='enabled'))
         self.helpbtn = wx.Button(parent=self, id=wx.ID_HELP)
 
-        if self.cmd == 'vcolors':
+        if self.elem == 'vector':
             self.cb_vl_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                   label='Layer:')
+                                             label=_('Layer:'))
             self.cb_vc_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                   label='Attribute column:')
+                                             label=_('Attribute column:'))
             self.cb_vrgb_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                   label='RGB color column:')
+                                               label=_('RGB color column:'))
             self.cb_vlayer = gselect.LayerSelect(self)
-            self.cb_vcol = gselect.ColumnSelect(self, vector='', layer='')
-            self.cb_vrgb = gselect.ColumnSelect(self, vector='', layer='')
-
+            self.cb_vcol = gselect.ColumnSelect(self)
+            self.cb_vrgb = gselect.ColumnSelect(self)
+        
         # color table and preview window
         self.cr_label = wx.StaticText(parent=self, id=wx.ID_ANY,
-                    label=crlabel)
+                                      label=crlabel)
         self.cr_panel = self.__colorrulesPanel()
-        self.InitDisplay() # initialize preview display
-        self.preview = BufferedWindow(self, id = wx.ID_ANY, size=(400,300), Map=self.Map)
+        # add two rules as default
+        self.AddRules(2)
         
-        # bottom controls        
-        self.line = wx.StaticLine(parent=self, id=wx.ID_ANY, size=(-1,-1),
-                                  style=wx.LI_HORIZONTAL)
+        self.numRules = wx.SpinCtrl(parent=self, id=wx.ID_ANY,
+                                    min=1, max=1e6)
+        
+        # initialize preview display
+        self.InitDisplay()
+        self.preview = BufferedWindow(self, id=wx.ID_ANY, size=(400, 300),
+                                      Map=self.Map)
+        self.preview.EraseMap()
+        
+        self.btnCancel = wx.Button(parent=self, id=wx.ID_CANCEL)
+        self.btnApply = wx.Button(parent=self, id=wx.ID_APPLY) 
+        self.btnOK = wx.Button(parent=self, id=wx.ID_OK)
+        self.btnOK.SetDefault()
+        self.btnOK.Enable(False)
+        self.btnApply.Enable(False)
 
-        cancel_btn = wx.Button(self, wx.ID_CANCEL)
-        apply_btn = wx.Button(self, wx.ID_APPLY) 
-        ok_btn = wx.Button(self, wx.ID_OK)
-        ok_btn.SetDefault()
-        
-        self.btnsizer = wx.StdDialogButtonSizer()
-        self.btnsizer.Add(cancel_btn, flag=wx.ALL, border=5)
-        self.btnsizer.Add(apply_btn, flag=wx.ALL, border=5)
-        self.btnsizer.Add(ok_btn, flag=wx.ALL, border=5)
-        self.btnsizer.Realize()
-        
-        self.preview_btn = wx.Button(self, wx.ID_ANY, _("Preview"))
+        self.btnPreview = wx.Button(parent=self, id=wx.ID_ANY,
+                                    label=_("Preview"))
+        self.btnPreview.Enable(False)
+        self.btnAdd = wx.Button(parent=self, id=wx.ID_ADD)
         
         # bindings
         self.Bind(wx.EVT_BUTTON, self.OnHelp, self.helpbtn)
-        self.Bind(wx.EVT_CHECKBOX, self.OnOverwrite,   self.ovrwrtcheck)
         self.selectionInput.Bind(wx.EVT_TEXT, self.OnSelectionInput)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel, cancel_btn)
-        self.Bind(wx.EVT_BUTTON, self.OnApply, apply_btn)
-        self.Bind(wx.EVT_BUTTON, self.OnOK, ok_btn)
-        self.Bind(wx.EVT_BUTTON, self.OnPreview, self.preview_btn)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
+        self.Bind(wx.EVT_BUTTON, self.OnApply, self.btnApply)
+        self.Bind(wx.EVT_BUTTON, self.OnOK, self.btnOK)
+        self.Bind(wx.EVT_BUTTON, self.OnPreview, self.btnPreview)
+        self.Bind(wx.EVT_BUTTON, self.OnAddRules, self.btnAdd)
         self.Bind(wx.EVT_CLOSE,  self.OnCloseWindow)
 
         # additional bindings for vector color management
@@ -150,88 +169,165 @@ class ColorTable(wx.Frame):
             self.Bind(wx.EVT_COMBOBOX, self.OnColumnSelection, self.cb_vcol)
             self.Bind(wx.EVT_COMBOBOX, self.OnRGBColSelection, self.cb_vrgb)
 
-
+        # set map layer from layer tree
+        try:
+            layer = self.parent.curr_page.maptree.layer_selected
+        except:
+            layer = None
+        if layer:
+            mapLayer = self.parent.curr_page.maptree.GetPyData(layer)[0]['maplayer']
+            name = mapLayer.GetName()
+            type = mapLayer.GetType()
+            if (type == 'raster' and self.elem == 'cell') or \
+                    (type == 'vector' and self.elem == 'vector'):
+                self.selectionInput.SetValue(name)
+                self.inmap = name
+                self.OnSelectionInput(None)
+        
         # layout
         self.__doLayout()
+
+        self.CentreOnScreen()
         self.Show()
         
     def __doLayout(self):
-        sizer =  wx.GridBagSizer(hgap=5, vgap=5)
-        sizer.AddGrowableCol(2)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        #
+        # input
+        #
+        if self.cmd == 'r.colors':
+            maplabel = _('Select raster map:')
+        elif self.cmd == 'vcolors':
+            maplabel = _('Select vector map:')
+        
+        inputBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % maplabel)
+        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
+        inputSizer.Add(item=self.selectionInput,
+                       flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=5)
+        replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
+        replaceSizer.Add(item=self.ovrwrtcheck, proportion=1,
+                         flag=wx.ALL | wx.EXPAND, border=1)
+        replaceSizer.Add(item=self.helpbtn, proportion=0,
+                         flag=wx.ALIGN_RIGHT | wx.ALL, border=1)
+
+        inputSizer.Add(item=replaceSizer, proportion=1,
+                       flag=wx.ALL | wx.EXPAND, border=1)
+
+        #
+        # body & preview
+        #
+        bodySizer =  wx.GridBagSizer(hgap=5, vgap=5)
 
         row = 0
-        sizer.Add(self.map_label, pos=(row,0),
-                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.ALL, border=5)
-        row += 1 # row 1
-        sizer.Add(item=self.selectionInput, pos=(row,0), span=(1,3),
-                  flag=wx.ALIGN_CENTER_VERTICAL|wx.EXPAND | wx.ALL, border=5)
-        row += 1 # row 2
-        sizer.Add(item=self.ovrwrtcheck, pos=(row, 0), span=(1,2),
-                  flag=wx.ALL, border=5)        
-        sizer.Add(item=self.helpbtn, pos=(row,2), flag=wx.ALIGN_RIGHT|wx.ALL, border=5)
+        bodySizer.Add(item=self.cr_label, pos=(row, 0), span=(1, 3),
+                      flag=wx.ALL, border=5)
+
         if self.cmd == 'vcolors':
+            vSizer = wx.GridBagSizer(hgap=5, vgap=5)
+            vSizer.Add(self.cb_vl_label, pos=(0, 0),
+                       flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vlayer,  pos=(0, 1),
+                       flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vc_label, pos=(0, 2),
+                       flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vcol, pos=(0, 3),
+                       flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vrgb_label, pos=(1, 2),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+            vSizer.Add(self.cb_vrgb, pos=(1, 3),
+                       flag=wx.ALIGN_CENTER_VERTICAL)
             row += 1
-            sizer.Add(self.cb_vl_label, pos=(row,0),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
-            sizer.Add(self.cb_vc_label, pos=(row,1),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
-            sizer.Add(self.cb_vrgb_label, pos=(row,2),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=10)
-            row += 1            
-            sizer.Add(self.cb_vlayer, pos=(row,0),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
-            sizer.Add(self.cb_vcol, pos=(row,1),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
-            sizer.Add(self.cb_vrgb, pos=(row,2),
-                      flag=wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border=5)
+            bodySizer.Add(item=vSizer, pos=(row, 0), span=(1, 3))
+        
+        row += 1
+        bodySizer.Add(item=self.cr_panel, pos=(row, 0), span=(1, 2))
+        
+        bodySizer.Add(item=self.preview, pos=(row, 2),
+                      flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
+        bodySizer.AddGrowableCol(2)
+        
+        row += 1
+        bodySizer.Add(item=self.numRules, pos=(row, 0),
+                      flag=wx.ALIGN_CENTER_VERTICAL)
+        
+        bodySizer.Add(item=self.btnAdd, pos=(row, 1))
+        bodySizer.Add(item=self.btnPreview, pos=(row, 2),
+                      flag=wx.ALIGN_RIGHT)
+        
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(self.btnCancel,
+                     flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btnApply,
+                     flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(self.btnOK,
+                     flag=wx.LEFT | wx.RIGHT, border=5)
+        
+        sizer.Add(item=inputSizer, proportion=0,
+                  flag=wx.ALL | wx.EXPAND, border=5)
+        
+        sizer.Add(item=bodySizer, proportion=1,
+                  flag=wx.ALL | wx.EXPAND, border=5)
 
-        row += 1 # row 3
-        sizer.Add(item=self.cr_label, pos=(row,0), span=(1,2), flag=wx.ALL, border=5)
-        row += 1 # row 4
-        sizer.AddGrowableRow(row)
-        sizer.Add(item=self.cr_panel, pos=(row,0),
-                  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)        
-        sizer.Add(item=self.preview, pos=(row,1), span=(1,2),
-                  flag=wx.ALIGN_LEFT|wx.EXPAND|wx.LEFT|wx.RIGHT, border=10)
-        row += 1 # row 5
-        sizer.Add(item=self.line, pos=(row,0), span=(1,3),
-                  flag=wx.GROW|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|
-                  wx.TOP|wx.BOTTOM, border=5)
-        row += 1 # row 6
-        sizer.Add(self.btnsizer, pos=(row,0), span=(1,2),
-                  flag=wx.ALIGN_CENTER|wx.FIXED_MINSIZE)
-        sizer.Add(self.preview_btn, pos=(row,2),
-                  flag=wx.ALIGN_BOTTOM|wx.ALIGN_CENTER|wx.FIXED_MINSIZE|wx.ALL, border=5)
-
+        sizer.Add(item=wx.StaticLine(parent=self, id=wx.ID_ANY,
+                                     style=wx.LI_HORIZONTAL),
+                  proportion=0,
+                  flag=wx.EXPAND | wx.ALL, border=5) 
+        
+        sizer.Add(item=btnSizer, proportion=0,
+                  flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
+        
         self.SetSizer(sizer)
         sizer.Fit(self)
-                    
+        self.Layout()
+        
     def __colorrulesPanel(self):
-        cr_panel = scrolled.ScrolledPanel(self, -1, size=(180,300),
-                                          style=wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER,
-                                          name="cr_panel" )
-        cr_sizer = wx.GridBagSizer(vgap=2, hgap=4)
-
-        for num in range(100):
-            txt_ctrl = wx.TextCtrl(parent=cr_panel, id=num, value='',
-                                   pos=wx.DefaultPosition, size=(100,-1),
-                                   style=wx.TE_NOHIDESEL)
-            self.Bind(wx.EVT_TEXT, self.OnVals, txt_ctrl)
-            color_ctrl = csel.ColourSelect(cr_panel, id=num)
-            self.Bind(csel.EVT_COLOURSELECT, self.OnSelectColor, color_ctrl)
-            self.ruleslines[num] = ["","0:0:0"]
-
-            cr_sizer.Add(item=txt_ctrl, pos=(num,0),
-                         flag=wx.ALIGN_CENTER|wx.LEFT, border=10)
-            cr_sizer.Add(item=color_ctrl, pos=(num,1),
-                         flag=wx.ALIGN_CENTER|wx.RIGHT, border=10)
-
-        cr_panel.SetSizer(cr_sizer)
-        cr_panel.SetAutoLayout(1)
-        cr_panel.SetupScrolling()
+        cr_panel = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY,
+                                          size=(180, 300),
+                                          style=wx.TAB_TRAVERSAL | wx.SUNKEN_BORDER)
+        
+        self.cr_sizer = wx.GridBagSizer(vgap=2, hgap=4)
+        
+        cr_panel.SetSizer(self.cr_sizer)
+        cr_panel.SetAutoLayout(True)
         
         return cr_panel        
 
+    def OnAddRules(self, event):
+        """Add rules button pressed"""
+        nrules = self.numRules.GetValue()
+        self.AddRules(nrules)
+        
+    def AddRules(self, nrules):
+        """Add rules"""
+        snum = len(self.ruleslines.keys())
+        for num in range(snum, snum+nrules):
+            # enable
+            enable = wx.CheckBox(parent=self.cr_panel, id=num)
+            enable.SetValue(True)
+            self.Bind(wx.EVT_CHECKBOX, self.OnRuleEnable, enable)
+            # value
+            txt_ctrl = wx.TextCtrl(parent=self.cr_panel, id=1000+num, value='',
+                                   size=(100,-1),
+                                   style=wx.TE_NOHIDESEL)
+            self.Bind(wx.EVT_TEXT, self.OnRuleValue, txt_ctrl)
+            # color
+            color_ctrl = csel.ColourSelect(self.cr_panel, id=2000+num)
+            self.Bind(csel.EVT_COLOURSELECT, self.OnRuleColor, color_ctrl)
+            self.ruleslines[enable.GetId()] = { 'value' : '',
+                                                'color': "0:0:0" }
+            
+            self.cr_sizer.Add(item=enable, pos=(num, 0),
+                              flag=wx.ALIGN_CENTER_VERTICAL)
+            self.cr_sizer.Add(item=txt_ctrl, pos=(num, 1),
+                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
+            self.cr_sizer.Add(item=color_ctrl, pos=(num, 2),
+                              flag=wx.ALIGN_CENTER | wx.RIGHT, border=5)
+        
+        self.cr_panel.Layout()
+        self.cr_panel.SetupScrolling()
+        
     def InitDisplay(self):
         """
         Initialize preview display, set dimensions and region
@@ -260,36 +356,55 @@ class ColorTable(wx.Frame):
         self.Destroy()
         
     def OnSelectionInput(self, event):
-        self.inmap = event.GetString()
-        if self.inmap == '': return
+        if event:
+            self.inmap = event.GetString()
         
-        if self.cmd == 'r.colors':
+        if self.inmap == '':
+            self.btnPreview.Enable(False)
+            self.btnOK.Enable(False)
+            self.btnApply.Enable(False)
+            return
+        
+        if self.elem == 'cell':
+            cmdlist = ['r.info',
+                       '-r',
+                       'map=%s' % self.inmap]
+
             try:
-                cmdlist = ['r.info', 'map=%s' % self.inmap, '-r']
-                
                 p = gcmd.Command(cmdlist)
-                output = p.ReadStdOutput()
-                for line in output:
-                    line = line.strip('\n ')
+
+                for line in p.ReadStdOutput():
                     if 'min' in line:
-                        self.rastmin = line.split('=')[1].strip('\n ')
-                    if 'max' in line:
-                        self.rastmax = line.split('=')[1].strip('\n ')
-                
-                self.cr_label.SetLabel('Enter raster cat values or percents (range = %s-%s)' %
-                                         (self.rastmin,self.rastmax))
-            except:
-                pass
-        elif self.cmd == 'vcolors':
+                        self.rast['min'] = float(line.split('=')[1])
+                    elif 'max' in line:
+                        self.rast['max'] = float(line.split('=')[1])
+            except gcmd.CmdError:
+                self.inmap = ''
+                self.rast['min'] = self.rast['max'] = None
+                self.btnPreview.Enable(False)
+                self.btnOK.Enable(False)
+                self.btnApply.Enable(False)
+                self.preview.EraseMap()
+                self.cr_label.SetLabel(_('Enter raster cat values or percents'))
+                return
+            
+            self.cr_label.SetLabel(_('Enter raster cat values or percents (range = %d-%d)' %
+                                     (self.rast['min'], self.rast['max'])))
+        elif self.elem == 'vector':
             # initialize layer selection combobox
             self.cb_vlayer.InsertLayers(self.inmap)
             # initialize attribute table for layer=1
-            self.vtable = gselect.VectorDBInfo(self.inmap).layers[int(self.vlayer)]['table']
+            layer = int(self.vect['layer'])
+            self.vect['table'] = gselect.VectorDBInfo(self.inmap).layers[layer]['table']
             # initialize column selection comboboxes 
-            self.cb_vcol.InsertColumns(vector=self.inmap, layer=self.vlayer)
-            self.cb_vrgb.InsertColumns(vector=self.inmap, layer=self.vlayer)
+            self.cb_vcol.InsertColumns(vector=self.inmap, layer=layer)
+            self.cb_vrgb.InsertColumns(vector=self.inmap, layer=layer)
             self.Update()
-            
+    
+        self.btnPreview.Enable(True)
+        self.btnOK.Enable(True)
+        self.btnApply.Enable(True)
+        
     def OnLayerSelection(self, event):
         # reset choices in column selection comboboxes if layer changes
         self.vlayer = int(event.GetString())
@@ -299,44 +414,85 @@ class ColorTable(wx.Frame):
         self.Update()
         
     def OnColumnSelection(self, event):
-        self.vcolumn = event.GetString()
+        self.vect['column'] = event.GetString()
     
     def OnRGBColSelection(self, event):
-        self.vrgb = event.GetString()
-                        
-    def OnVals(self, event):
+        self.vect['rgb'] = event.GetString()
+        
+    def OnRuleEnable(self, event):
+        """Rule enabled/disabled"""
+        id = event.GetId()
+        
+        if event.IsChecked():
+            value = self.FindWindowById(id+1000).GetValue()
+            color = self.FindWindowById(id+2000).GetValue()
+            color_str = str(color[0]) + ':' \
+                + str(color[1]) + ':' + \
+                str(color[2])
+            
+            self.ruleslines[id] = {
+                'value' : value,
+                'color' : color_str }
+        else:
+            del self.ruleslines[id]
+        
+    def OnRuleValue(self, event):
+        """Rule value changed"""
         num = event.GetId()
-        tc = self.FindWindowById(num)
         vals = event.GetString().strip()
-        if vals == '': return
-        if self.cmd == 'r.colors':
-            self.ruleslines[num][0] = vals
-        elif self.cmd == 'vcolors':
-            if self.vcolumn == '' or self.vrgb == '':
-                tc.SetValue('')
-                wx.MessageBox("Please select attribute column and RGB color column first")
-            else:
-                self.ruleslines[num][0] = self.SQLConvert(vals)
 
-    def OnSelectColor(self, event):
+        if vals == '':
+            return
+
+        tc = self.FindWindowById(num)
+        
+        if self.elem == 'cell':
+            try:
+                float(vals)
+            except ValueError:
+                tc.SetValue('')
+                self.ruleslines[num-1000]['value'] = ''
+                return
+            
+            self.ruleslines[num-1000]['value'] = vals
+            
+        elif self.elem == 'vector':
+            if self.vect['column'] == '' or self.vect['rgb'] == '':
+                tc.SetValue('')
+                wx.MessageBox(parent=self,
+                              message=_("Please select attribute column "
+                                        "and RGB color column first"),
+                              style=wx.CENTRE)
+            else:
+                try:
+                    self.ruleslines[num-1000]['value'] = self.SQLConvert(vals)
+                except ValueError:
+                    tc.SetValue('')
+                    self.ruleslines[num-1000]['value'] = ''
+                    return
+        
+    def OnRuleColor(self, event):
+        """Rule color changed"""
         num = event.GetId()
+        
         rgba_color = event.GetValue()
-        rgb_string = str(rgba_color[0]) + ':' + str(rgba_color[1]) + ':' + str(rgba_color[2])
-        self.ruleslines[num][1] = rgb_string
+        
+        rgb_string = str(rgba_color[0]) + ':' \
+            + str(rgba_color[1]) + ':' + \
+            str(rgba_color[2])
+        
+        self.ruleslines[num-2000]['color'] = rgb_string
         
     def SQLConvert(self, vals):
         valslist = []
         valslist = vals.split('to')
-        try:
-            if len(valslist) == 1:
-                sqlrule = '%s=%s' % (self.vcolumn, float(valslist[0]))
-            elif len(valslist) > 1:
-                sqlrule = '%s>=%s AND %s<=%s' % (self.vcolumn, float(valslist[0]),
-                                                 self.vcolumn, float(valslist[1]))
-            else:
-                return ""
-        except:
-            return ""
+        if len(valslist) == 1:
+            sqlrule = '%s=%s' % (self.vect['column'], valslist[0])
+        elif len(valslist) > 1:
+            sqlrule = '%s>=%s AND %s<=%s' % (self.vect['column'], valslist[0],
+                                             self.vect['column'], valslist[1])
+        else:
+            return None
         
         return sqlrule
         
@@ -344,70 +500,84 @@ class ColorTable(wx.Frame):
         self.CreateColorTable()
     
     def OnOK(self, event):
-        self.CreateColorTable()
+        self.OnApply(event)
         self.Destroy()
     
     def OnCancel(self, event):
         self.Destroy()
         
     def OnPreview(self, event):
-        # Add layer to the map for preview
-        #
-        
-        if self.cmd == 'r.colors':
-            cmdlist = ['d.rast', 'map=%s' % self.inmap]
-            # Find existing color table and copy to temp file
-            p = gcmd.Command(['g.findfile', 'element=colr', 'file=%s' % self.inmap])
-            output = p.ReadStdOutput()
-            for line in output:
-                if 'file=' in line:
-                    old_colrtable = line.split('=')[1].strip("'")
+        """Update preview"""
+        # raster
+        if self.elem == 'cell':
+            cmdlist = ['d.rast',
+                       'map=%s' % self.inmap]
+            
+            # find existing color table and copy to temp file
             try:
+                old_colrtable = grass.find_file(name=self.inmap, element='colr2')['file']
+            except TypeError:
+                old_colrtable = None
+            
+            if old_colrtable:
                 colrtemp = utils.GetTempfile()
-                shutil.copyfile(old_colrtable,colrtemp)
-            except:
-                return
-        elif self.cmd == 'vcolors':
-            cmdlist = ['d.vect', '-a', 'map=%s' % self.inmap, 'rgb_column=%s' % self.vrgb,
+                shutil.copyfile(old_colrtable, colrtemp)
+        # vector
+        elif self.elem == 'vector':
+            cmdlist = ['d.vect',
+                       '-a',
+                       '--q',
+                       'map=%s' % self.inmap,
+                       'rgb_column=%s' % self.vect['rgb'],
                        'type=point,line,boundary,area,face']
         else:
             return
         
-        self.layer = self.Map.AddLayer(type="command", name='raster', command=[cmdlist],
-                                       l_active=True, l_hidden=False, l_opacity=1, l_render=False)        
+        if not self.layer:
+            self.layer = self.Map.AddLayer(type="command", name='preview', command=[cmdlist],
+                                           l_active=True, l_hidden=False, l_opacity=1.0,
+                                           l_render=False) 
+        else:
+            self.layer.SetCmd([cmdlist])
         
         # apply new color table and display preview
-        self.CreateColorTable()
+        self.CreateColorTable(force=True)
         self.preview.UpdatePreview()
         
-        if self.cmd == 'r.colors':
-            shutil.copyfile(colrtemp, old_colrtable)
-            try:
+        # restore previous color table
+        if self.elem == 'cell':
+            if old_colrtable:
+                shutil.copyfile(colrtemp, old_colrtable)
                 os.remove(colrtemp)
-            except:
-                pass
-
+            else:
+                gcmd.Command(['r.colors',
+                              '-r',
+                              'map=%s' % self.inmap])
+        
     def OnHelp(self, event):
+        """Show GRASS manual page"""
         gcmd.Command(['g.manual',
                       '--quiet', 
-                      '%s' % self.cmd[0]])
-
-    def OnOverwrite(self, event):
-        self.overwrite = event.IsChecked()
-        
-    def CreateColorTable(self):
+                      '%s' % self.cmd])
+    
+    def CreateColorTable(self, force=False):
+        """Creates color table"""
         rulestxt = ''
         
-        for num in range(len(self.ruleslines)):
-            if self.ruleslines[num][0] != "":
-                if self.cmd == 'r.colors':
-                    rulestxt += self.ruleslines[num][0] + ' ' + self.ruleslines[num][1] + '\n'
-                elif self.cmd == 'vcolors':
-                    rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.vtable,
-                        self.vrgb, self.ruleslines[num][1], self.ruleslines[num][0])
-                
-        if rulestxt == '': return
-
+        for rule in self.ruleslines.itervalues():
+            if not rule['value']: # skip empty rules
+                continue
+            
+            if self.elem == 'cell':
+                rulestxt += rule['value'] + ' ' + rule['color'] + '\n'
+            elif self.elem == 'vector':
+                rulestxt += "UPDATE %s SET %s='%s' WHERE %s ;\n" % (self.vect['table'],
+                                                                    self.vect['rgb'],
+                                                                    rule['color'],
+                                                                    rule['value'])
+        if rulestxt == '':
+            return
+        
         gtemp = utils.GetTempfile()
         output = open(gtemp, "w")
         try:
@@ -415,31 +585,23 @@ class ColorTable(wx.Frame):
         finally:
             output.close()
         
-        if self.cmd == 'r.colors':        
-            cmdlist = ['r.colors', 'map=%s' % self.inmap, 'rules=%s' % gtemp]
+        if self.elem == 'cell': 
+            cmdlist = ['r.colors',
+                       'map=%s' % self.inmap,
+                       'rules=%s' % gtemp]
             
-            if self.overwrite == False:
+            if not force and \
+                    not self.ovrwrtcheck.IsChecked():
                 cmdlist.append('-w')
-        elif self.cmd == 'vcolors':
-            cmdlist = ['db.execute', 'input=%s' % gtemp]
-                
-        try:
-            p = gcmd.Command(cmdlist)
-            output = p.ReadStdOutput()
-            error = p.ReadErrOutput()
-        except:
-            pass
+        
+        elif self.elem == 'vector':
+            cmdlist = ['db.execute',
+                       'input=%s' % gtemp]
+        
+        p = gcmd.Command(cmdlist)
         
 class BufferedWindow(wx.Window):
-    """
-    A Buffered window class.
-
-    When the drawing needs to change, you app needs to call the
-    UpdateHist() method. Since the drawing is stored in a bitmap, you
-    can also save the drawing to file by calling the
-    SaveToFile(self,file_name,file_type) method.
-    """
-
+    """A Buffered window class"""
     def __init__(self, parent, id,
                  pos = wx.DefaultPosition,
                  size = wx.DefaultSize,
@@ -450,58 +612,40 @@ class BufferedWindow(wx.Window):
 
         self.parent = parent
         self.Map = Map
-        self.mapname = self.parent.mapname
+        
+        # re-render the map from GRASS or just redraw image
+        self.render = True
+        # indicates whether or not a resize event has taken place
+        self.resize = False 
 
         #
-        # Flags
-        #
-        self.render = True  # re-render the map from GRASS or just redraw image
-        self.resize = False # indicates whether or not a resize event has taken place
-        self.dragimg = None # initialize variable for map panning
-        self.pen = None     # pen for drawing zoom boxes, etc.
-
-        #
-        # Event bindings
+        # event bindings
         #
         self.Bind(wx.EVT_PAINT,        self.OnPaint)
-        #self.Bind(wx.EVT_SIZE,         self.OnSize)
         self.Bind(wx.EVT_IDLE,         self.OnIdle)
+        self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x: None)
 
         #
-        # Render output objects
+        # render output objects
         #
-        self.mapfile = None # image file to be rendered
-        self.img = ""       # wx.Image object (self.mapfile)
-
-        self.imagedict = {} # images and their PseudoDC ID's for painting and dragging
+        # image file to be rendered
+        self.mapfile = None 
+        # wx.Image object (self.mapfile)
+        self.img = None
 
         self.pdc = wx.PseudoDC()
-        self._Buffer = '' # will store an off screen empty bitmap for saving to file
+        # will store an off screen empty bitmap for saving to file
+        self._Buffer = None 
 
         # make sure that extents are updated at init
         self.Map.region = self.Map.GetRegion()
-        self.Map.SetRegion() 
+        self.Map.SetRegion()
 
-        self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
-
-    def Draw(self, pdc, img=None, drawid=None, pdctype='image', coords=[0,0,0,0]):
-        """
-        Draws histogram or clears window
-        """
-
-        if drawid == None:
-            if pdctype == 'image' :
-                drawid = imagedict[img]
-            elif pdctype == 'clear':
-                drawid == None
-            else:
-                drawid = wx.NewId()
-        else:
-            pdc.SetId(drawid)
-
+    def Draw(self, pdc, img=None, pdctype='image'):
+        """Draws preview or clears window"""
         pdc.BeginDrawing()
 
-        Debug.msg (3, "BufferedWindow.Draw(): id=%s, pdctype=%s, coord=%s" % (drawid, pdctype, coords))
+        Debug.msg (3, "BufferedWindow.Draw(): pdctype=%s" % (pdctype))
 
         if pdctype == 'clear': # erase the display
             bg = wx.WHITE_BRUSH
@@ -511,46 +655,40 @@ class BufferedWindow(wx.Window):
             pdc.EndDrawing()
             return
 
-        if pdctype == 'image':
+        if pdctype == 'image' and img:
             bg = wx.TRANSPARENT_BRUSH
             pdc.SetBackground(bg)
             bitmap = wx.BitmapFromImage(img)
-            w,h = bitmap.GetSize()
-            pdc.DrawBitmap(bitmap, coords[0], coords[1], True) # draw the composite map
-            pdc.SetIdBounds(drawid, (coords[0],coords[1],w,h))
-
+            w, h = bitmap.GetSize()
+            pdc.DrawBitmap(bitmap, 0, 0, True) # draw the composite map
+            
         pdc.EndDrawing()
         self.Refresh()
 
     def OnPaint(self, event):
-        """
-        Draw psuedo DC to buffer
-        """
-    
+        """Draw pseudo DC to buffer"""
         self._Buffer = wx.EmptyBitmap(self.Map.width, self.Map.height)
         dc = wx.BufferedPaintDC(self, self._Buffer)
-
+        
         # use PrepareDC to set position correctly
         self.PrepareDC(dc)
+        
         # we need to clear the dc BEFORE calling PrepareDC
         bg = wx.Brush(self.GetBackgroundColour())
         dc.SetBackground(bg)
         dc.Clear()
+        
         # create a clipping rect from our position and size
         # and the Update Region
         rgn = self.GetUpdateRegion()
         r = rgn.GetBox()
+        
         # draw to the dc using the calculated clipping rect
-        self.pdc.DrawToDCClipped(dc,r)
-
-        #self.pdc.DrawToDC(dc)
-
+        self.pdc.DrawToDCClipped(dc, r)
+        
     def OnSize(self, event):
-        """
-         Init image size to match window size
-        """
-
-            # set size of the input image
+        """Init image size to match window size"""
+        # set size of the input image
         self.Map.width, self.Map.height = self.GetClientSize()
 
         # Make new off screen bitmap: this bitmap will always have the
@@ -571,65 +709,52 @@ class BufferedWindow(wx.Window):
         self.resize = True
 
     def OnIdle(self, event):
-        """
-        Only re-render a histogram image from GRASS during
+        """Only re-render a preview image from GRASS during
         idle time instead of multiple times during resizing.
-            """
-
+        """
         if self.resize:
             self.render = True
             self.UpdatePreview()
         event.Skip()
 
     def GetImage(self):
-        """
-        Converts files to wx.Image
-        """
+        """Converts files to wx.Image"""
         if self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
                 os.path.getsize(self.Map.mapfile):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
             img = None
-
-        self.imagedict[img] = 99 # set image PeudoDC ID
+        
         return img
-
-
+    
     def UpdatePreview(self, img=None):
-        """
-        Update canvas if window changes geometry
-        """
-
+        """Update canvas if window changes geometry"""
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
         oldfont = ""
         oldencoding = ""
 
         if self.render:
+            # make sure that extents are updated
+            self.Map.region = self.Map.GetRegion()
+            self.Map.SetRegion()
+            
             # render new map images
             self.mapfile = self.Map.Render(force=self.render)
             self.img = self.GetImage()
             self.resize = False
 
-        if not self.img: return
-        try:
-            id = self.imagedict[self.img]
-        except:
+        if not self.img:
             return
-
+        
         # paint images to PseudoDC
         self.pdc.Clear()
         self.pdc.RemoveAll()
-        self.Draw(self.pdc, self.img, drawid=id) # draw map image background
+        # draw map image background
+        self.Draw(self.pdc, self.img, pdctype='image')
 
         self.resize = False
-
-        # update statusbar
-        # Debug.msg (3, "BufferedWindow.UpdateHist(%s): region=%s" % self.Map.region)
-        self.Map.SetRegion()
-
+        
     def EraseMap(self):
-        """
-        Erase the map display
-        """
+        """Erase preview"""
         self.Draw(self.pdc, pdctype='clear')
-
+    

@@ -669,8 +669,9 @@ class GMFrame(wx.Frame):
 
                 # set windows properties
                 mapdisplay[-1].SetProperties(render=display['render'],
-                                         mode=display['mode'],
-                                         showCompExtent=display['showCompExtent'])
+                                             mode=display['mode'],
+                                             showCompExtent=display['showCompExtent'],
+                                             constrainRes=display['constrainRes'])
 
                 # set position and size of map display
                 if UserSettings.Get(group='workspace', key='posDisplay', subkey='enabled') is False:
@@ -1240,10 +1241,10 @@ class GMFrame(wx.Frame):
         rastmenu.AppendItem(addrastarrow)
         self.Bind(wx.EVT_MENU, self.AddRastarrow, addrastarrow)
 
-        #        addrastnums = wx.MenuItem(rastmenu, -1, Icons ["addrnum"].GetLabel())
-        #        addrastnums.SetBitmap(Icons["addrnum"].GetBitmap (self.iconsize))
-        #        rastmenu.AppendItem(addrastnums)
-        #        self.Bind(wx.EVT_MENU, self.AddRastnum, addrastnums)
+        addrastnums = wx.MenuItem(rastmenu, -1, Icons ["addrnum"].GetLabel())
+        addrastnums.SetBitmap(Icons["addrnum"].GetBitmap (self.iconsize))
+        rastmenu.AppendItem(addrastnums)
+        self.Bind(wx.EVT_MENU, self.AddRastnum, addrastnums)
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.

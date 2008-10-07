@@ -3060,23 +3060,24 @@ class MapFrame(wx.Frame):
                 raise ValueError
             value = int(scale[2:])
         except ValueError:
-            self.mapScale.SetValue('1:' + str(int(self.mapScaleValue)))
+            self.mapScale.SetValue('1:%ld' % int(self.mapScaleValue))
             return
 
         dEW = value * (self.Map.region['cols'] / self.ppm[0])
         dNS = value * (self.Map.region['rows'] / self.ppm[1])
-        self.Map.region['n'] = self.Map.region['center_northing'] + dNS / 2
-        self.Map.region['s'] = self.Map.region['center_northing'] - dNS / 2
-        self.Map.region['w'] = self.Map.region['center_easting']  - dEW / 2
-        self.Map.region['e'] = self.Map.region['center_easting']  + dEW / 2
-
+        self.Map.region['n'] = self.Map.region['center_northing'] + dNS / 2.
+        self.Map.region['s'] = self.Map.region['center_northing'] - dNS / 2.
+        self.Map.region['w'] = self.Map.region['center_easting']  - dEW / 2.
+        self.Map.region['e'] = self.Map.region['center_easting']  + dEW / 2.
+        
         # add to zoom history
         self.MapWindow.ZoomHistory(self.Map.region['n'], self.Map.region['s'],
                                    self.Map.region['e'], self.Map.region['w'])
-
+        
         # redraw a map
         self.MapWindow.UpdateMap()
-
+        self.mapScale.SetFocus()
+        
     def StatusbarUpdate(self):
         """Update statusbar content"""
 
@@ -3158,12 +3159,16 @@ class MapFrame(wx.Frame):
 
             xscale = (region['e'] - region['w']) / (region['cols'] / self.ppm[0])
             yscale = (region['n'] - region['s']) / (region['rows'] / self.ppm[1])
-            scale = (xscale + yscale) / 2
+            scale = (xscale + yscale) / 2.
+            
             Debug.msg(3, "MapFrame.StatusbarUpdate(mapscale): xscale=%f, yscale=%f -> scale=%f" % \
                           (xscale, yscale, scale))
 
             self.statusbar.SetStatusText("")
-            self.mapScale.SetValue("1:%ld" % scale)
+            try:
+                self.mapScale.SetValue("1:%ld" % (scale + 0.5))
+            except TypeError:
+                pass
             self.mapScaleValue = scale
             self.mapScale.Show()
 
@@ -3915,12 +3920,14 @@ class MapFrame(wx.Frame):
         self.PopupMenu(zoommenu)
         zoommenu.Destroy()
 
-    def SetProperties(self, render=False, mode=0, showCompExtent=False):
+    def SetProperties(self, render=False, mode=0, showCompExtent=False,
+                      constrainRes=False):
         """Set properies of map display window"""
         self.autoRender.SetValue(render)
         self.toggleStatus.SetSelection(mode)
         self.StatusbarUpdate()
         self.showRegion.SetValue(showCompExtent)
+        self.compResolution.SetValue(constrainRes)
         if showCompExtent:
             self.MapWindow.regionCoords = []
         
