@@ -391,19 +391,22 @@ class HistFrame(wx.Frame):
         dialog created in menuform.py
         """
         if dcmd:
-            self.SetHistLayer(dcmd)
+            name = utils.GetLayerNameFromCmd(dcmd, fullyQualified=True)
+            self.SetHistLayer(name)
         self.params = params
         self.propwin = propwin
 
         self.HistWindow.UpdateHist()
 
-    def SetHistLayer(self, cmd):
+    def SetHistLayer(self, name):
         """
         Set histogram layer
         """
-        self.mapname = utils.GetLayerNameFromCmd(cmd)
+        self.mapname = name
 
-        self.layer = self.Map.ChangeLayer(layer=self.layer, command=cmd, active=True)
+        self.layer = self.Map.ChangeLayer(layer=self.layer,
+                                          command=[['d.histogram', 'map=%s' % self.mapname],],
+                                          active=True)
 
         return self.layer
 
@@ -414,9 +417,7 @@ class HistFrame(wx.Frame):
         """
 
         dlg = DefaultFontDialog(parent=self, id=wx.ID_ANY,
-                                title=_('Select font for histogram text'),
-                                encoding=self.encoding)
-        
+                                title=_('Select font for histogram text'))        
         dlg.fontlb.SetStringSelection(self.font, True)
         
         if dlg.ShowModal() == wx.ID_CANCEL:

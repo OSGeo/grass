@@ -445,7 +445,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # show new display
             self.histogramFrame.Show()
 
-        self.histogramFrame.SetHistLayer(['d.histogram', 'map=%s' % mapLayer.name])
+        self.histogramFrame.SetHistLayer(mapLayer.name)
         self.histogramFrame.HistWindow.UpdateHist()
         self.histogramFrame.Refresh()
         self.histogramFrame.Update()
