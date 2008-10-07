@@ -13,7 +13,7 @@ SUBDIRS = \
 	i.group \
 	i.his.rgb \
 	i.maxlik \
-	i.qc.modis \
+	i.modis.qc \
 	i.rectify \
 	i.rgb.his \
 	i.smap \
