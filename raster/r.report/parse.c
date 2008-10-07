@@ -41,8 +41,10 @@ int parse_command_line(int argc, char *argv[])
     parms.units->type = TYPE_STRING;
     parms.units->required = NO;
     parms.units->multiple = YES;
-    parms.units->description =
-	_("mi(les),me(ters),k(ilometers),a(cres),h(ectares),c(ell_counts),p(ercent_cover)");
+    parms.units->description = _("Units");
+    parms.units->descriptions =
+	_("mi;miles;me;meters;k;kilometers;a;acres;"
+	  "h;hectares;c;cell counts;p;percent cover");
     parms.units->options = "mi,me,k,a,h,c,p";
 
     parms.nv = G_define_option();
