@@ -110,14 +110,14 @@ int print_stats(univar_stat * stats)
     if (param.shell_style->answer) {
 	fprintf(stdout, "n=%d\n", stats->n);
 	fprintf(stdout, "null_cells=%d\n", stats->size - stats->n);
-	fprintf(stdout, "min=%g\n", stats->min);
-	fprintf(stdout, "max=%g\n", stats->max);
-	fprintf(stdout, "range=%g\n", stats->max - stats->min);
-	fprintf(stdout, "mean=%g\n", mean);
-	fprintf(stdout, "mean_of_abs=%g\n", stats->sum_abs / stats->n);
-	fprintf(stdout, "stddev=%g\n", stdev);
-	fprintf(stdout, "variance=%g\n", variance);
-	fprintf(stdout, "coeff_var=%g\n", var_coef);
+	fprintf(stdout, "min=%.15g\n", stats->min);
+	fprintf(stdout, "max=%.15g\n", stats->max);
+	fprintf(stdout, "range=%.15g\n", stats->max - stats->min);
+	fprintf(stdout, "mean=%.15g\n", mean);
+	fprintf(stdout, "mean_of_abs=%.15g\n", stats->sum_abs / stats->n);
+	fprintf(stdout, "stddev=%.15g\n", stdev);
+	fprintf(stdout, "variance=%.15g\n", variance);
+	fprintf(stdout, "coeff_var=%.15g\n", var_coef);
 	fprintf(stdout, "sum=%s\n", sum_str);
     }
     else {
