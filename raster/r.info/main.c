@@ -330,8 +330,8 @@ int main(int argc, char **argv)
 		}
 	    }
 	    else {
-		fprintf(out, "min=%f\n", zmin);
-		fprintf(out, "max=%f\n", zmax);
+		fprintf(out, "min=%.15g\n", zmin);
+		fprintf(out, "max=%.15g\n", zmax);
 	    }
 	}
 
