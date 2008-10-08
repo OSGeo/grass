@@ -1077,7 +1077,7 @@ class cmdPanel(wx.Panel):
                                         flag=wx.ADJUST_MINSIZE | wx.TOP | wx.RIGHT | wx.LEFT, border=5)
                         cb = wx.ComboBox(parent=which_panel, id=wx.ID_ANY, value=p.get('default',''),
                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                         choices=valuelist, style=wx.CB_DROPDOWN)
+                                         choices=valuelist, style=wx.CB_DROPDOWN | wx.CB_READONLY)
                         if p.get('value','') != '':
                             cb.SetValue(p['value']) # parameter previously set
                         which_sizer.Add( item=cb, proportion=0,
