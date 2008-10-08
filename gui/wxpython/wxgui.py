@@ -415,13 +415,9 @@ class GMFrame(wx.Frame):
         """Run command"""
 
         cmd = event.GetString()
-
-        # switch to 'Command output'
-        if self.notebook.GetSelection() != self.goutput.pageid:
-            self.notebook.SetSelection(self.goutput.pageid)
         
-        self.goutput.RunCmd(cmd)
-
+        self.goutput.RunCmd(cmd, switchPage=True)
+        
         self.OnUpdateStatusBar(None)
 
     def GetLogWindow(self):
