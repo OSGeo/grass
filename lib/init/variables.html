@@ -121,7 +121,14 @@ text
   
   <dt>GRASS_BATCH_JOB</dt>
   <dd>defines the name (path) of a shell script to be processed as batch job.</dd>
-  
+
+  <dt>GRASS_ERROR_LOG</dt>
+  <dd>If set, $GIS_ERROR_LOG should be the absolute path to the log file (a
+   relative path will be interpreted relative to the process' cwd, not
+   the cwd at the point the user set the variable). If not set,
+   $HOME/GIS_ERROR_LOG is used instead. The file will only be used if
+   it already exists.</dd>
+
   <dt>GRASS_ERROR_MAIL</dt>
   <dd>set to any value to send user mail on an error or warning that 
     happens while stderr is being redirected.</dd>
@@ -529,7 +536,8 @@ detailed list of the variables.
   <dt>$HOME/GIS_ERROR_LOG</dt>
   <dd>if this file exists then all GRASS error and warning messages are 
     logged here. Applies to current user. To generate the file, use:
-    <tt>touch $HOME/GIS_ERROR_LOG</tt></dd>
+    <tt>touch $HOME/GIS_ERROR_LOG</tt><br>
+   See also GIS_ERROR_LOG variable.</dd>
   
   <dt>$GISBASE/GIS_ERROR_LOG</dt>
   <dd>if this file exists then all GRASS error and warning messages are 
