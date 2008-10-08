@@ -246,7 +246,7 @@ class GMConsole(wx.Panel):
         """Write out line in warning style"""
         self.WriteLog(line, style=self.cmd_output.StyleWarning)
 
-    def RunCmd(self, command, compReg=True):
+    def RunCmd(self, command, compReg=True, switchPage=False):
         """
         Run in GUI GRASS (or other) commands typed into
         console command text widget, and send stdout output to output
@@ -261,6 +261,7 @@ class GMConsole(wx.Panel):
 
         @param command command (list)
         @param compReg if true use computation region
+        @param switchPage switch to output page
         """
         
         # map display window available ?
@@ -311,6 +312,11 @@ class GMConsole(wx.Panel):
                 # other GRASS commands (r|v|g|...)
                 #
                 
+                # switch to 'Command output'
+                if switchPage and \
+                        self.parent.notebook.GetSelection() != self.parent.goutput.pageid:
+                    self.parent.notebook.SetSelection(self.parent.goutput.pageid)
+
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:

@@ -363,7 +363,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         cmd.append('map=%s' % mapLayer.name)
 
         # print output to command log area
-        self.gismgr.goutput.RunCmd(cmd)
+        self.gismgr.goutput.RunCmd(cmd, switchPage=True)
 
     def OnSetCompRegFromRaster(self, event):
         """Set computational region from selected raster map (ignore NULLs)"""
