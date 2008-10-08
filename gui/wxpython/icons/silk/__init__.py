@@ -67,6 +67,7 @@ IconsSilk = {
     "addrast3d"  : 'bricks.png',
     "addshaded"  : 'picture_empty.png',
     "addrarrow"  : 'arrow_inout.png',
+    "addrnum"    : 'color_swatch.png',
     "addvect"    : 'map_add.png',
     "addcmd"     : 'cog_add.png',
     "addgrp"     : 'folder_add.png',
