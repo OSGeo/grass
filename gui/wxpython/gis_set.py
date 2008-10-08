@@ -24,6 +24,7 @@ import os
 import sys
 import glob
 import shutil
+import copy
 
 ### i18N
 import gettext
@@ -566,7 +567,7 @@ class GRASSStartup(wx.Frame):
                                     'location=%s' % locationName,
                                     'gisdbase=%s' % self.gisdbase],
                                    stderr=None)
-
+            
             for line in mapsets.ReadStdOutput():
                 self.listOfMapsetsSelectable += line.split(' ')
         except gcmd.CmdError:
@@ -576,7 +577,9 @@ class GRASSStartup(wx.Frame):
                           "set=LOCATION_NAME=%s" % locationName])
             gcmd.Command(["g.gisenv",
                           "set=MAPSET=PERMANENT"])
-
+            # first run only
+            self.listOfMapsetsSelectable = copy.copy(self.listOfMapsets)
+        
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
