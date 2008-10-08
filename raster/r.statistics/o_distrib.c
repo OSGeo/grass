@@ -42,7 +42,9 @@ int o_distrib(const char *basemap, const char *covermap, const char *outputmap, 
 
     catb = 0;
     csum = 0;
-    /*    fprintf(stderr,"***** Stage 1 - Calculating sums ****\n"); */
+
+    G_debug(1, "***** Stage 1 - Calculating sums ****");
+
     while (fscanf(fd1, "%ld %ld %ld", &basecat, &covercat, &area) == 3) {
 	if (catb != basecat) {
 	    o_out(fd2, catb, csum);
@@ -56,7 +58,7 @@ int o_distrib(const char *basemap, const char *covermap, const char *outputmap, 
     rewind(fd1);
     freopen(tempfile2, "r", fd2);
 
-    /*    fprintf(stderr,"***** Stage 2 - Calculating percents of values in cover  ****\n"); */
+    G_debug(1, "***** Stage 2 - Calculating percents of values in cover  ****");
 
     catb = 0;
     tot = 0;
@@ -73,7 +75,7 @@ int o_distrib(const char *basemap, const char *covermap, const char *outputmap, 
 
 	if (basecat) {
 	    sum = (double)(100.0 * area) / total_count;
-	    fprintf(stderr, "%8ld %8ld %f\n", basecat, covercat, sum);
+	    fprintf(stdout, "%8ld %8ld %f\n", basecat, covercat, sum);
 	    /*tot+=sum;
 	       fprintf(stderr,"Area: %ld   Tot: %ld  totsum: %lf\n",area,total_count,tot); */
 	}
