@@ -1,6 +1,22 @@
+/*!
+   \file find_file.c
+
+   \brief GIS library - find GRASS data base files
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Original author CERL
+ */
+
 #include <string.h>
 #include <unistd.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 static char *find_file(int misc,
 		       const char *dir,
@@ -55,16 +71,17 @@ static char *find_file(int misc,
 		if (!pselmapset)
 		    pselmapset = pmapset;
 		else
-		    G_warning
-			("'%s/%s' was found in more mapsets (also found in %s).",
-			 element, pname, pmapset);
+		    G_warning(_("'%s/%s' was found in more mapsets (also found in <%s>)"),
+			      element, pname, pmapset);
 		cnt++;
 	    }
 	}
 	if (cnt > 0) {
 	    /* If the same name exists in more mapsets and print a warning */
 	    if (cnt > 1)
-		G_warning("using '%s@%s'.", pname, pselmapset);
+		G_warning(_("Using <%s@%s>"),
+			  pname, pselmapset);
+	    
 	    return (char *)pselmapset;
 	}
     }
@@ -79,9 +96,11 @@ static char *find_file(int misc,
 	    G__file_name_misc(path, dir, element, pname, pmapset);
 	else
 	    G__file_name(path, element, pname, pmapset);
+	    
 	if (access(path, 0) == 0)
 	    return G_store(pmapset);
     }
+    
     return NULL;
 }
 
