@@ -103,10 +103,9 @@ def main():
 	grass.fatal("Please select a flag to specify the satellite sensor")
 
     #get PAN resolution:
-    s = grass.read_command('r.info', flags = 's', map = pan)
-    kv = grass.parse_key_val(s)
-    nsres = float(kv['nsres'])
-    ewres = float(kv['ewres'])
+    kv = grass.raster_info(map = pan)
+    nsres = kv['nsres']
+    ewres = kv['ewres']
     panres = (nsres + ewres) / 2
 
     # clone current region

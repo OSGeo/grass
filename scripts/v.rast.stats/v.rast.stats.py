@@ -79,11 +79,12 @@ def cleanup():
     if mask_found:
 	grass.message("Restoring previous MASK...")
 	grass.run_command('g.rename', rast = (tmpname + "_origmask", 'MASK'), quiet = True)
-    for f in [tmp, tmpname, sqltmp]:
-	grass.try_remove(f)
+#    for f in [tmp, tmpname, sqltmp]:
+#	grass.try_remove(f)
 
 def main():
     global tmp, sqltmp, tmpname, nuldev, vector, mask_found
+    mask_found = False
     #### setup temporary files
     tmp = grass.tempfile()
     sqltmp = tmp + ".sql"
@@ -126,10 +127,9 @@ def main():
 
     #get RASTER resolution of map which we want to query:
     #fetch separated to permit for non-square cells (latlong etc)
-    s = grass.read_command('r.info', flags = 's', map = raster)
-    kv = grass.parse_key_val(s)
-    nsres = float(kv['nsres'])
-    ewres = float(kv['ewres'])
+    kv = grass.raster_info(map = raster)
+    nsres = kv['nsres']
+    ewres = kv['ewres']
 
     #save current settings:
     grass.use_temp_region()
@@ -205,9 +205,10 @@ def main():
 		coltype = "DOUBLE PRECISION"
 	    addcols.append(currcolumn + ' ' + coltype)
 
-    grass.verbose("Adding columns <%s>" % addcols)
-    if grass.run_command('v.db.addcol', map = vector, columns = addcols) != 0:
-	grass.fatal("Cannot continue (problem adding columns).")
+    if addcols:
+	grass.verbose("Adding columns <%s>" % addcols)
+	if grass.run_command('v.db.addcol', map = vector, columns = addcols) != 0:
+	    grass.fatal("Cannot continue (problem adding columns).")
 
     #loop over cats and calculate statistics:
     grass.verbose("Processing data ...")
