@@ -1294,7 +1294,7 @@ class NvizToolWindow(wx.Frame):
             sizeW = (size, -1)
         else:
             style = wx.SL_VERTICAL | wx.SL_AUTOTICKS | \
-                wx.SL_BOTTOM | wx.SL_INVERSE
+                wx.SL_INVERSE
             sizeW = (-1, size)
         try:
             val = self.mapWindow.view[name]['value']
