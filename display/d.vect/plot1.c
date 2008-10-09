@@ -56,7 +56,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     dbCatValArray cvarr_rgb, cvarr_width;
     dbCatVal *cv_rgb = NULL, *cv_width = NULL;
     int nrec_rgb = 0, nrec_width = 0;
-
+    int nerror_rgb;
+    
     int open_db;
     int custom_rgb = FALSE;
     char colorstring[12];	/* RRR:GGG:BBB */
@@ -65,6 +66,8 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
     unsigned char which;
     int width;
 
+    nerror_rgb = 0;
+    
     line_color = G_malloc(sizeof(RGBA_Color));
     fill_color = G_malloc(sizeof(RGBA_Color));
     primary_color = G_malloc(sizeof(RGBA_Color));
@@ -113,7 +116,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	/* for reading RRR:GGG:BBB color strings from table */
 
 	if (rgb_column == NULL || *rgb_column == '\0')
-	    G_fatal_error(_("Color definition column not specified."));
+	    G_fatal_error(_("Color definition column not specified"));
 
 	db_CatValArray_init(&cvarr_rgb);
 
@@ -188,7 +191,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	if (Vect_level(Map) >= 2) {
 	    line++;
 	    if (line > nlines)
-		return 0;
+		break;
 	    if (!Vect_line_alive(Map, line))
 		continue;
 	    ltype = Vect_read_line(Map, Points, Cats, line);
@@ -200,7 +203,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 		G_warning(_("Unable to read vector map"));
 		return -1;
 	    case -2:		/* EOF */
-		return 0;
+		break;
 	    }
 	}
 
@@ -290,15 +293,18 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 			}
 			else {
 			    custom_rgb = FALSE;
-			    G_warning(_("Error in color definition column (%s), element %d "
-				       "with cat %d: colorstring [%s]"),
-				      rgb_column, line, cat, colorstring);
+			    G_important_message(_("Error in color definition column '%s', feature id %d "
+						  "with cat %d: colorstring '%s'"),
+						rgb_column, line, cat, colorstring);
+			    nerror_rgb++;
 			}
 		    }
 		    else {
 			custom_rgb = FALSE;
-			G_warning(_("Error in color definition column (%s), element %d with cat %d"),
-				  rgb_column, line, cat);
+			G_important_message(_("Error in color definition column '%s', feature id %d "
+					      "with cat %d"),
+					    rgb_column, line, cat);
+			nerror_rgb++;
 		    }
 		}
 	    }			/* end if cat */
@@ -429,6 +435,11 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	}
     }
 
+    if (nerror_rgb > 0) {
+	G_warning(_("Error in color definition column '%s': %d features affected"),
+		  rgb_column, nerror_rgb);
+    }
+    
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
 
