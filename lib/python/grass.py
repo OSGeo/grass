@@ -442,10 +442,10 @@ def vector_db(map, layer = None, **args):
     """Return the database connection details for a vector map
     (interface to `v.db.connect -g').
     """
-    s = read_command('v.db.connect', flags = 'g', map = map, layer = layer, **args)
+    s = read_command('v.db.connect', flags = 'g', map = map, layer = layer, fs = '|', **args)
     result = []
     for l in s.splitlines():
-	f = l.split(' ')
+	f = l.split('|')
 	if len(f) != 5:
 	    continue
 	if layer and int(layer) == int(f[0]):

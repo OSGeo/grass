@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     char *input;
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt,
-	*dbkey;
+	*dbkey, *sep_opt;
     struct Flag *overwrite, *print, *columns, *delete, *shell_print;
     dbDriver *driver;
     dbString table_name;
@@ -71,6 +71,9 @@ int main(int argc, char **argv)
     dbkey->description = _("Must refer to an integer column");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
+
+    sep_opt = G_define_standard_option(G_OPT_F_SEP);
+    sep_opt->answer = " ";
 
     print = G_define_flag();
     print->key = 'p';
@@ -148,15 +151,18 @@ int main(int argc, char **argv)
 			G_fatal_error(_("Database connection not defined"));
 
 		    if (shell_print->answer) {
+			const char *sep = sep_opt->answer;
 			if (fi->name) {
-			    fprintf(stdout, "%d/%s %s %s %s %s\n", fi->number,
-				    fi->name, fi->table, fi->key,
-				    fi->database, fi->driver);
+			    fprintf(stdout, "%d/%s%s%s%s%s%s%s%s%s\n",
+				    fi->number, fi->name, sep,
+				    fi->table, sep, fi->key, sep,
+				    fi->database, sep, fi->driver);
 			}
 			else {
-			    fprintf(stdout, "%d %s %s %s %s\n", fi->number,
-				    fi->table, fi->key, fi->database,
-				    fi->driver);
+			    fprintf(stdout, "%d%s%s%s%s%s%s%s%s\n",
+				    fi->number, sep,
+				    fi->table, sep, fi->key, sep,
+				    fi->database, sep, fi->driver);
 			}
 		    }
 		    else {
