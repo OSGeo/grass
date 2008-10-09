@@ -79,6 +79,7 @@ int main(int argc, char **argv)
     bg = G_define_option();
     bg->key = "bg";
     bg->key_desc = "color";
+    bg->type = TYPE_STRING;
     bg->gisprompt = GISPROMPT_COLOR;
     bg->required = NO;
     bg->description = _("Background color (for null)");
