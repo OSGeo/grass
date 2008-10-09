@@ -1,3 +1,10 @@
+GRASS scripting tasks for Python provided by "grass.py".
+
+Usage: "import grass"
+
+
+
+
 def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **options):
 
 Return a list of strings suitable for use as the args parameter to
@@ -5,6 +12,9 @@ Popen() or call(). Example:
 
 >>> grass.make_command("g.message", flags = 'w', message = 'this is a warning')
 ['g.message', '-w', 'message=this is a warning']
+
+
+
 
 def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **kwargs):
 
@@ -23,6 +33,9 @@ GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
 MONITOR='x0';
 
+
+
+
 def pipe_command(*args, **kwargs):
 
 Passes all arguments to start_command, but also adds
@@ -39,16 +52,25 @@ GRASS_DB_ENCODING='ascii';
 GRASS_GUI='text';
 MONITOR='x0';
 
+
+
+
 def run_command(*args, **kwargs):
 
 Passes all arguments to start_command, then waits for the process to
 complete, returning its exit code. Similar to subprocess.call(), but
 with the make_command() interface.
 
+
+
+
 def read_command(*args, **kwargs):
 
 Passes all arguments to start_command, then waits for the process to
 complete, returning its stdout (i.e. similar to shell "backticks").
+
+
+
 
 def message(msg, flag = None):
 def debug(msg):
@@ -59,9 +81,15 @@ def error(msg):
 
 These all run g.message, differing only in which flag (if any) is used.
 
+
+
+
 def fatal(msg):
 
 Like error(), but also calls sys.exit(1).
+
+
+
 
 def parser():
 
@@ -76,9 +104,15 @@ dictionaries containing option/flag values, keyed by lower-case
 option/flag names. The values in "options" are strings, those in
 "flags" are Python booleans.
 
+
+
+
 def tempfile():
 
 Returns the name of a temporary file, created with g.tempfile.
+
+
+
 
 def gisenv():
 
@@ -88,6 +122,9 @@ dictionary. Example:
 >>> env = grass.gisenv()
 >>> print env['GISDBASE']
 /opt/grass-data
+
+
+
 
 def region():
 
@@ -100,15 +137,24 @@ Example:
 >>> (region['nsres'], region['ewres'])
 ('30', '30')
 
+
+
+
 def use_temp_region():
 
 Copies the current region to a temporary region with "g.region save=",
 then sets WIND_OVERRIDE to refer to that region. Installs an atexit
 handler to delete the temporary region upon termination.
 
+
+
+
 def del_temp_region():
 
 Unsets WIND_OVERRIDE and removes any region named by it.
+
+
+
 
 def find_file(name, element = 'cell'):
 
@@ -120,6 +166,9 @@ fields@PERMANENT
 >>> print result['file']
 /opt/grass-data/spearfish57/PERMANENT/vector/fields
 
+
+
+
 def list_grouped(type):
 
 Returns the output from running g.list, as a dictionary where the keys
@@ -129,6 +178,9 @@ Example:
 >>> grass.list_grouped('rast')['PERMANENT']
 ['aspect', 'erosion1', 'quads', 'soils', 'strm.dist', ...
 
+
+
+
 def list_pairs(type):
 
 Returns the output from running g.list, as a list of (map, mapset)
@@ -137,6 +189,9 @@ pairs. Example:
 >>> grass.list_pairs('rast')
 [('aspect', 'PERMANENT'), ('erosion1', 'PERMANENT'), ('quads', 'PERMANENT'), ...
 
+
+
+
 def list_strings(type):
 
 Returns the output from running g.list, as a list of qualified names. 
@@ -144,6 +199,9 @@ Example:
 
 >>> grass.list_strings('rast')
 ['aspect@PERMANENT', 'erosion1@PERMANENT', 'quads@PERMANENT', 'soils@PERMANENT', ...
+
+
+
 
 def parse_color(val, dflt = None):
 
