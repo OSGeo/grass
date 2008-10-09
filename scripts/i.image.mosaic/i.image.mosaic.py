@@ -59,9 +59,7 @@ def copy_colors(fh, map, offset):
     p.wait()
 
 def get_limit(map):
-    s = grass.read_command('r.info', flags = 'r', map = map)
-    kv = grass.parse_key_val(s)
-    return float(kv['max'])
+    return grass.raster_info(map)['max']
 
 def make_expression(i, count):
     if i > count:

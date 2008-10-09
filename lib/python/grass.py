@@ -518,3 +518,12 @@ def raster_history(map):
     """
     run_command('r.support', map = map, history = os.environ['CMDLINE'])
 
+# run "r.info -rgstmpud ..." and parse output
+
+def raster_info(map):
+    """Return information about a raster map (interface to `r.info')."""
+    s = read_command('r.info', flags = 'rgstmpud', map = map)
+    kv = parse_key_val(s)
+    for k in ['min', 'max', 'north', 'south', 'east', 'west', 'nsres', 'ewres']:
+	kv[k] = float(kv[k])
+    return kv
