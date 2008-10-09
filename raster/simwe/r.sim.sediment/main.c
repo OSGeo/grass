@@ -349,7 +349,7 @@ int main(int argc, char *argv[])
 
     if ((tc == NULL) && (et == NULL) && (conc == NULL) && (flux == NULL) &&
 	(erdep == NULL))
-	G_warning(_("You are not outputing any raster or site files"));
+	G_warning(_("You are not outputting any raster or site files"));
     ret_val = input_data();
     if (ret_val != 1)
 	G_fatal_error(_("Input failed"));

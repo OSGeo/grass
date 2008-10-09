@@ -53,9 +53,6 @@ int del2g(double *img[2], int size, double w)
     g[0] = (double *)G_malloc(size * size * sizeof(double));
     g[1] = (double *)G_malloc(size * size * sizeof(double));
 
-    if (g[0] == NULL || g[1] == NULL)
-	G_fatal_error(_("Insufficent memory for allocation of gaussian"));
-
     G_message(_("    computing del**2 g..."));
     getg(w, g, size);
 

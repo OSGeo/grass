@@ -50,7 +50,7 @@ struct Parms
     struct Map map1, map2;	/* two raster maps to analyze */
     int labels;			/* boolean: report includes cat labels */
     char *fs;			/* report field separator     */
-    int overlap;		/* checking for overlaping, than distance is 0 */
+    int overlap;		/* checking for overlapping, than distance is 0 */
 };
 
 /* distance.c */

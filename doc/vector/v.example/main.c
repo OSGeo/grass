@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 	    printf("No:%d\tX:%f\tY:%f\tZ:%f\tCAT:%d\n", i, *Points->x,
 		   *Points->y, *Points->z, cat);
 
-	    /* Prepeare SQL query to get point atribute data */
+	    /* Prepeare SQL query to get point attribute data */
 	    sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
 		    cat);
 	    G_debug(1, "SQL: \"%s\"", sql);
@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
 		/* Let's output every columns name and value */
 		while (1) {
 		    if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-			G_warning(_("Error while retreiving database record for cat %d"),
+			G_warning(_("Error while retrieving database record for cat %d"),
 				  cat);
 			break;
 		    }
@@ -202,11 +202,11 @@ int main(int argc, char *argv[])
 	    Fin->number, Fin->name, Fin->driver, Fin->database, Fin->table,
 	    Fin->key);
 
-    /* Let's copy atribute table data */
+    /* Let's copy attribute table data */
     if (db_copy_table(Fi->driver, Fi->database, Fi->table,
 		      Fin->driver, Vect_subst_var(Fin->database, &Out),
 		      Fin->table) == DB_FAILED)
-	G_warning(_("Unable to copy atribute table to vector map <%s>"),
+	G_warning(_("Unable to copy attribute table to vector map <%s>"),
 		  new->answer);
     else
 	Vect_map_add_dblink(&Out, Fin->number, Fin->name, Fin->table, Fi->key,

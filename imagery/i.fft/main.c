@@ -147,8 +147,6 @@ int main(int argc, char *argv[])
      */
     data[0] = (double *)G_malloc((rows * cols) * sizeof(double));
     data[1] = (double *)G_malloc((rows * cols) * sizeof(double));
-    if (data[0] == NULL || data[1] == NULL)
-	G_fatal_error(_("Insufficent memory for allocation of data structure"));
 
     /* Initialize real & complex components to zero */
     G_message(_("Initializing data...\n"));

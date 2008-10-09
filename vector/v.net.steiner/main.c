@@ -385,7 +385,7 @@ int main(int argc, char **argv)
     nsp_opt->required = NO;
     nsp_opt->multiple = NO;
     nsp_opt->answer = "-1";
-    nsp_opt->description = _("Number of steiner poins (-1 for all possible)");
+    nsp_opt->description = _("Number of steiner points (-1 for all possible)");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
@@ -525,7 +525,7 @@ int main(int argc, char **argv)
     ret = mst(&Map, terms, nterms, &cost, PORT_DOUBLE_MAX, NULL, NULL, 0, 1);	/* no StP, rebuild */
     G_message(_("MST costs = %f"), cost);
 
-    /* Go through all nodes and try to use as steiner poins -> find that which saves most costs */
+    /* Go through all nodes and try to use as steiner points -> find that which saves most costs */
     nspused = 0;
     for (j = 0; j < nsp; j++) {
 	sp = 0;

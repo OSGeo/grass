@@ -113,7 +113,7 @@ Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
     /* Go through all lines in vector, for each select lines which overlap MBR of
      * this line exclude those connected by one endpoint (see above)
      * and try to intersect, if lines intersect write new lines at the end of 
-     * the file, and process next line (remainining lines overlaping box are skipped)
+     * the file, and process next line (remaining lines overlapping box are skipped)
      */
     nbreaks = 0;
     printed = 0;

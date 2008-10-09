@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
       | Subdividing and working with tiles: 									
       | Each original_region will be divided into several subregions. 
       | Each one will be overlaped by its neibourgh subregions. 
-      | The overlaping was calculated as a fixed OVERLAP_SIZE times the east-west resolution
+      | The overlapping was calculated as a fixed OVERLAP_SIZE times the east-west resolution
       ------------------------------------------------------------------------------------------*/
 
     elaboration_reg.south = original_reg.north;
@@ -674,7 +674,7 @@ int main(int argc, char *argv[])
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    /* Writing into the output vector map the points from the overlaping zones */
+    /* Writing into the output vector map the points from the overlapping zones */
     if (flag_auxiliar == TRUE) {
 	if (grid == FALSE) {
 	    if (ext == FALSE)

@@ -143,7 +143,7 @@ Vect_net_build_graph(struct Map_info *Map,
     Map->edge_fcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
     Map->edge_bcosts = (double *)G_malloc((nlines + 1) * sizeof(double));
     Map->node_costs = (double *)G_malloc((nnodes + 1) * sizeof(double));
-    /* Set to -1 initialy */
+    /* Set to -1 initially */
     for (i = 1; i <= nlines; i++) {
 	Map->edge_fcosts[i] = -1;	/* forward */
 	Map->edge_bcosts[i] = -1;	/* backward */

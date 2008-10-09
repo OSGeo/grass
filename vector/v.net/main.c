@@ -114,7 +114,7 @@ int main(int argc, char **argv)
     else if (strcmp(action->answer, "nreport") == 0)
 	act = TOOL_NREPORT;
     else
-	G_fatal_error(_("Unknow operation"));
+	G_fatal_error(_("Unknown operation"));
 
     if (act == TOOL_NODES || act == TOOL_CONNECT) {
 	if (output->answer == NULL)

@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 	map = G_find_file("windows", "previous_zoom", "");
 
 	if (!map)
-	    G_fatal_error(_("No previous zoom availible"));
+	    G_fatal_error(_("No previous zoom available"));
 
 	G__get_window(&tmpwin, "windows", "previous_zoom", map);
 

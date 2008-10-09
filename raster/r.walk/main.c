@@ -44,9 +44,9 @@
  *     1) Cost of traversing each grid cell as given by an elevation map and
  *        a cost map cell (inputcost).
  *     2) If starting points are not specified on the command line
- *        then the ouput map must exist and contain the starting locations
+ *        then the output map must exist and contain the starting locations
  *     
- *        Otherwise the ouput map need not exist and the coor points
+ *        Otherwise the output map need not exist and the coor points
  *        from the command line are used.
  *
  *********************************************************************/

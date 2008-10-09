@@ -134,7 +134,7 @@ void G_ls(const char *dir, FILE * stream)
  * \brief Prints a listing of items to a stream, in prettified column format
  * 
  * Lists the contents of the array passed to the given stream, e.g. stderr.
- * Prints the number of items specifed by "perline" to each line, unless
+ * Prints the number of items specified by "perline" to each line, unless
  * perline is given as 0 in which case the function tries to determine an 
  * appropriate column width to keep the number of lines used to a minimum
  * and look pretty on the screen.

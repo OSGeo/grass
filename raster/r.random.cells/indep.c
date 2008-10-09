@@ -129,7 +129,7 @@ void Indep(void)
 	}
     }
 
-    FUNCTION(outputing);
+    FUNCTION(outputting);
     OutFD = G_open_cell_new(Output->answer);
     if (OutFD < 0)
 	G_fatal_error("%s: unable to open new raster map [%s]",

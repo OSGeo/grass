@@ -34,7 +34,7 @@ static void DatumNameMassage(char **);
 /**
  * \brief Converts a GRASS co-ordinate system representation to WKT style.
  * 
- * Takes a GRASS co-ordinate system as specifed by two sets of key/value
+ * Takes a GRASS co-ordinate system as specified by two sets of key/value
  * pairs derived from the PROJ_INFO and PROJ_UNITS files, and converts it
  * to the 'Well Known Text' format popularised by proprietary GIS
  * 

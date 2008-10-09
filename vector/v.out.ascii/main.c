@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     /*The precision of the output */
     if (dp_opt->answer) {
 	if (sscanf(dp_opt->answer, "%d", &dp) != 1)
-	    G_fatal_error(_("Failed to interprete 'dp' parameter as an integer"));
+	    G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
     }
 
 

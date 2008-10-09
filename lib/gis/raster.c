@@ -230,7 +230,7 @@ int G_set_raster_value_d(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
  * converts it to CELL type and returns the result.
  * If null value is stored in p, returns CELL null value.
  *
- * Used for retreiving CELL values from raster cells of any type.
+ * Used for retrieving CELL values from raster cells of any type.
  *
  * NOTE: when data_type != CELL_TYPE, no quantization is used, only
  * type conversion.
@@ -268,7 +268,7 @@ CELL G_get_raster_value_c(const void *rast, RASTER_MAP_TYPE data_type)
  * converts it to FCELL type and returns the result.
  * If null value is stored in p, returns FCELL null value.
  *
- * Used for retreiving FCELL values from raster cells of any type.
+ * Used for retrieving FCELL values from raster cells of any type.
  *
  *  \param p
  *  \param data_type
@@ -303,7 +303,7 @@ FCELL G_get_raster_value_f(const void *rast, RASTER_MAP_TYPE data_type)
  * converts it to DCELL type and returns the result.
  * If null value is stored in p, returns DCELL null value.
 
- * Used for retreiving DCELL values from raster cells of any type.
+ * Used for retrieving DCELL values from raster cells of any type.
  *
  *  \param p
  *  \param data_type

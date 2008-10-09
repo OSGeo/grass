@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
 		      fi->table);
 
     /* Convert */
-    G_verbose_message(_("Transfering sites to vector point map..."));
+    G_verbose_message(_("Transferring sites to vector point map..."));
 
     count = 0;
     rewind(site);

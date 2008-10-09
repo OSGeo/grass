@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     opt2->required = YES;
     opt2->gisprompt = "old,cell,raster";
     opt2->description =
-	_("Name of raster map containing back-path norhting information");
+	_("Name of raster map containing back-path northing information");
 
     opt3 = G_define_option();
     opt3->key = "coordinate";
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 
     flag1 = G_define_flag();
     flag1->key = 'v';
-    flag1->description = _("Run verbosly");
+    flag1->description = _("Run verbosely");
 
     /*   Do command line parsing    */
     if (G_parser(argc, argv))
