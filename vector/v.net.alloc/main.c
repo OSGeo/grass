@@ -31,8 +31,8 @@ typedef struct
 
 typedef struct
 {
-    int centre;			/* neares centre, initialy -1 */
-    double cost;		/* costs from this centre, initialy not undefined */
+    int centre;			/* neares centre, initially -1 */
+    double cost;		/* costs from this centre, initially not undefined */
 } NODE;
 
 int main(int argc, char **argv)

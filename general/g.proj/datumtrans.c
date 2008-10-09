@@ -49,7 +49,7 @@ int set_datumtrans(int datumtrans, int force)
 
     status = GPJ__get_datum_params(projinfo, &datum, &params);
     if (datum) {
-	/* A datum name is specifed; need to determine if
+	/* A datum name is specified; need to determine if
 	 * there are parameters to choose from for this datum */
 
 	if (GPJ_get_datum_by_name(datum, &dstruct) > 0) {

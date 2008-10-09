@@ -31,8 +31,8 @@ typedef struct
 
 typedef struct
 {
-    int centre;			/* neares centre, initialy -1 *//* currently not used */
-    double cost;		/* costs from this centre, initialy not undefined */
+    int centre;			/* neares centre, initially -1 *//* currently not used */
+    double cost;		/* costs from this centre, initially not undefined */
 } NODE;
 
 typedef struct
@@ -443,7 +443,7 @@ int main(int argc, char **argv)
 	    }
 	    G_debug(3, "  npnts2 cut = %d", npnts2);
 
-	    /* Biggest cost shoud be equal if exist (npnts > 0). Cut out overlaping segments,
+	    /* Biggest cost shoud be equal if exist (npnts > 0). Cut out overlapping segments,
 	     *  this can cut only points on line but not first points */
 	    if (npnts1 > 1 && npnts2 > 1) {
 		while (npnts1 > 1 && npnts2 > 1) {

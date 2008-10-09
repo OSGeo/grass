@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
 
     /* Fixxing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
-     *  subregion will be overlaped by its neibourgh subregions. This overlaping
+     *  subregion will be overlaped by its neibourgh subregions. This overlapping
      *  is calculated as OVERLAP_PASS times the east-west resolution. */
 
     nrows = G_window_rows();

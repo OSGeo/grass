@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
 	&& (mcurv == NULL)
 	&& (slope == NULL) && (aspect == NULL) && (devi == NULL)
 	&& (cvdev == NULL))
-	G_warning(_("You are not outputing any raster or vector maps"));
+	G_warning(_("You are not outputting any raster or vector maps"));
 
     if (parm.wheresql->answer != NULL) {
 	if (field < 1)

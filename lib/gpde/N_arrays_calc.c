@@ -284,7 +284,7 @@ void N_calc_array_2d_stats(N_array_2d * a, double *min, double *max,
  * If a division with zero is detected, the resulting arrays 
  * value will set to null and not to NaN.
  * <br><br>
- * The result array is optional, if the result arrays poins to NULL,
+ * The result array is optional, if the result arrays points to NULL,
  * a new array will be allocated with the largest arrays data type
  * (CELL, FCELL or DCELL) used by the input arrays.
  * <br><br>
@@ -714,7 +714,7 @@ void N_calc_array_3d_stats(N_array_3d * a, double *min, double *max,
  * value will set to null and not to NaN.
  * <br><br>
  *
- * The result array is optional, if the result arrays poins to NULL,
+ * The result array is optional, if the result arrays points to NULL,
  * a new array will be allocated with the largest arrays data type
  * (FCELL_TYPE or DCELL_TYPE) used by the input arrays.
  * <br><br>

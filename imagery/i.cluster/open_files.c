@@ -58,17 +58,17 @@ int open_files(void)
     if (insigfile) {
 	fd = I_fopen_signature_file_old(group, subgroup, insigfile);
 	if (fd == NULL)
-	    G_fatal_error(_("** Can't open seed singature file <%s> **"),
+	    G_fatal_error(_("Can't open seed signature file <%s>"),
 			  insigfile);
 
 	n = I_read_signatures(fd, &in_sig);
 	fclose(fd);
 	if (n < 0)
-	    G_fatal_error(_("** Can't read signature file <%s> **"),
+	    G_fatal_error(_("Can't read signature file <%s>"),
 			  insigfile);
 
 	if (in_sig.nsigs > 255)
-	    G_fatal_error(_("** <%s> has too many signatures (limit is 255)"),
+	    G_fatal_error(_("<%s> has too many signatures (limit is 255)"),
 			  insigfile);
 
 	maxclass = in_sig.nsigs;

@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 
     /* get the current permissions */
     if (get_perms(path, &perms, &group, &other) < 0)
-	G_fatal_error(_("Unable to determine mapset permssions"));
+	G_fatal_error(_("Unable to determine mapset permissions"));
 
     if (group_opt->answer) {
 	if (group_opt->answer[0] == 'g')

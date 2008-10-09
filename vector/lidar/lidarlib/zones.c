@@ -26,7 +26,7 @@ int
 P_set_regions(struct Cell_head *Elaboration, BOUND_BOX * General,
 	      BOUND_BOX * Overlap, struct Reg_dimens dim, int type)
 {
-    /* Set the Elaborationoration region limits-> Also set the limits of the orlo and overlaping regions->
+    /* Set the Elaborationoration region limits-> Also set the limits of the orlo and overlapping regions->
      * Returns 0 on success; -1 on failure*/
     struct Cell_head orig;
 

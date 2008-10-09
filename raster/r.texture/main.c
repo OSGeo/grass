@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     output->type = TYPE_STRING;
     output->required = YES;
     output->gisprompt = "new,cell,raster";
-    output->description = _("Prefix for ouput raster map(s)");
+    output->description = _("Prefix for output raster map(s)");
 
     size_O = G_define_option();
     size_O->key = "size";

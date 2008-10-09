@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     /*The precision of the output */
     if (dp_opt->answer) {
 	if (sscanf(dp_opt->answer, "%d", &dp) != 1)
-	    G_fatal_error(_("Failed to interprete 'dp' parameter as an integer"));
+	    G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
 	if (dp > 8 || dp < 0)
 	    G_fatal_error(_("dp has to be from 0 to 8"));
     }
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     /*The Layer */
     if (layer_opt->answer) {
 	if (sscanf(layer_opt->answer, "%d", &layer) != 1)
-	    G_fatal_error(_("Failed to interprete 'layer' parameter as an integer"));
+	    G_fatal_error(_("Failed to interpret 'layer' parameter as an integer"));
     }
     else {
 	layer = 1;

@@ -178,7 +178,7 @@ int vpoints_set_attrb(const struct GParams *params)
 	else if (strcmp(marker_str, "histogram") == 0)
 	    marker = ST_HISTOGRAM;
 	else
-	    G_fatal_error(_("Unknow icon marker"));
+	    G_fatal_error(_("Unknown icon marker"));
 
 	GP_set_sitemode(site_list[i], ST_ATT_NONE,
 			color, width, size, marker);

@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 	    if (strcmp(
 		    G_fully_qualified_name(params.map->answer, G_mapset()),
 		    G_fully_qualified_name(bmap, mapset)) == 0) {
-		G_fatal_error(_("Unable to open vector map <%s> as the backround map. "
+		G_fatal_error(_("Unable to open vector map <%s> as the background map. "
 			       "It is given as vector map to be edited."),
 			      bmap);
 	    }

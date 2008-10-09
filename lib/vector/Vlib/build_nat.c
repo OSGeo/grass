@@ -193,7 +193,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	/* Check box */
 	/* Note: If build is run on large files of areas imported from nontopo format (shapefile)
 	 * attaching of isles takes very  long time because each area is also isle and select by
-	 * box all overlaping areas selects all areas with box overlaping first node. 
+	 * box all overlapping areas selects all areas with box overlapping first node. 
 	 * Then reading coordinates for all those areas would take a long time -> check first 
 	 * if isle's box is completely within area box */
 	Vect_get_area_box(Map, area, &abox);

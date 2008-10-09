@@ -108,7 +108,7 @@ int Digit::GetCategory(int layer)
    \param layer layer number
    \param cats  category number to be set
 
-   \return previosly set category
+   \return previously set category
    \return -1 if layer not available
 */
 int Digit::SetCategory(int layer, int cat)

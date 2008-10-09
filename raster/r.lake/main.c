@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (smap_opt->answer && sdxy_opt->answer)
-	G_fatal_error(_("Both seed map and coordinates cannot be specifed"));
+	G_fatal_error(_("Both seed map and coordinates cannot be specified"));
 
     if (!smap_opt->answer && !sdxy_opt->answer)
 	G_fatal_error(_("Seed map or seed coordinates must be set!"));
@@ -200,7 +200,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Seed coordinates and output map lake= must be set!"));
 
     if (lake_opt->answer && overwrite_flag->answer)
-	G_fatal_error(_("Both lake and overwrite cannot be specifed"));
+	G_fatal_error(_("Both lake and overwrite cannot be specified"));
 
     if (!lake_opt->answer && !overwrite_flag->answer)
 	G_fatal_error(_("Output lake map or overwrite flag must be set!"));

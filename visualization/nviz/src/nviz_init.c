@@ -127,7 +127,7 @@ static int parse_command(Nv_data * data, Tcl_Interp * interp,	/* Current interpr
     state->key = "state";
     state->type = TYPE_STRING;
     state->required = NO;
-    state->description = _("Load previosly saved state file");
+    state->description = _("Load previously saved state file");
 
     jj = 0;
     /*

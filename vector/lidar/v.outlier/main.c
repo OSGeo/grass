@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 
     /* Fixxing parameters of the elaboration region */
     /*! Each original_region will be divided into several subregions. These
-     *  subregion will be overlaped by its neibourgh subregions. This overlaping
+     *  subregion will be overlapped by its neibourgh subregions. This overlapping
      *  is calculated as OVERLAP_PASS times the east-west resolution. */
 
     ew_resol = original_reg.ew_res;
@@ -313,7 +313,7 @@ int main(int argc, char *argv[])
 
 		if (flag_auxiliar == FALSE) {
 		    G_debug(1,
-			    "Creating auxiliar table for archiving overlaping zones");
+			    "Creating auxiliar table for archiving overlapping zones");
 		    if ((flag_auxiliar =
 			 P_Create_Aux_Table(driver, table_name)) == FALSE)
 			G_fatal_error(_("It was impossible to create <Auxiliar_outlier_table>."));

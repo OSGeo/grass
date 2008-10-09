@@ -32,7 +32,7 @@
 
 #define NSPLX_MAX 		200	/* Maximum number of splines along East direction used in the subregions interpolation */
 #define NSPLY_MAX		200	/* Maximum number of splines along North direction used in the subregions interpolation */
-#define OVERLAP_SIZE 		20	/* Subregions overlaping size. */
+#define OVERLAP_SIZE 		20	/* Subregions overlapping size. */
 #define LATO 			2000	/* Side's size for v.to.qrast command. */
 #define CONTOUR		15 /**/
 #define GENERAL_ROW 		0
@@ -71,7 +71,7 @@
 {
     double orlo_h;		/*Horizontal tile edge */
     double orlo_v;		/*Vertical tile edge */
-    double overlap;		/*Tile's overlaping size */
+    double overlap;		/*Tile's overlapping size */
     double latoN;		/*South-North side size */
     double latoE;		/*East-West side size */
 };
