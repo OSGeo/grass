@@ -45,6 +45,12 @@ def _make_val(val):
     return str(val)
 
 def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **options):
+    """Return a list of strings suitable for use as the args parameter to
+    Popen() or call(). Example:
+
+    >>> grass.make_command("g.message", flags = 'w', message = 'this is a warning')
+    ['g.message', '-w', 'message=this is a warning']
+    """
     args = [prog]
     if overwrite:
 	args.append("--o")
@@ -62,6 +68,10 @@ def make_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
     return args
 
 def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, **kwargs):
+    """Returns a Popen object with the command created by make_command.
+    Accepts any of the arguments which Popen() accepts apart from "args"
+    and "shell".
+    """
     options = {}
     popts = {}
     for opt, val in kwargs.iteritems():
@@ -73,30 +83,46 @@ def start_command(prog, flags = "", overwrite = False, quiet = False, verbose = 
     return Popen(args, **popts)
 
 def run_command(*args, **kwargs):
+    """Passes all arguments to start_command, then waits for the process to
+    complete, returning its exit code. Similar to subprocess.call(), but
+    with the make_command() interface.
+    """
     ps = start_command(*args, **kwargs)
     return ps.wait()
 
 def pipe_command(*args, **kwargs):
+    """Passes all arguments to start_command, but also adds
+    "stdout = PIPE". Returns the Popen object.
+    """
     kwargs['stdout'] = PIPE
     return start_command(*args, **kwargs)
 
 def feed_command(*args, **kwargs):
+    """Passes all arguments to start_command, but also adds
+    "stdin = PIPE". Returns the Popen object.
+    """
     kwargs['stdin'] = PIPE
     return start_command(*args, **kwargs)
 
 def read_command(*args, **kwargs):
+    """Passes all arguments to pipe_command, then waits for the process to
+    complete, returning its stdout (i.e. similar to shell `backticks`).
+    """
     ps = pipe_command(*args, **kwargs)
     return ps.communicate()[0]
 
 def write_command(*args, **kwargs):
+    """Passes all arguments to feed_command, with the string specified
+    by the 'stdin' argument fed to the process' stdin.
+    """
     stdin = kwargs['stdin']
-    kwargs['stdin'] = PIPE
-    p = start_command(*args, **kwargs)
+    p = feed_command(*args, **kwargs)
     p.stdin.write(stdin)
     p.stdin.close()
     return p.wait()
 
 def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = False, env = None, **kwargs):
+    """Interface to os.execvpe(), but with the make_command() interface."""
     args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     if env == None:
 	env = os.environ
@@ -105,24 +131,31 @@ def exec_command(prog, flags = "", overwrite = False, quiet = False, verbose = F
 # interface to g.message
 
 def message(msg, flag = None):
+    """Display a message using g.message"""
     run_command("g.message", flags = flag, message = msg)
 
 def debug(msg):
+    """Display a debugging message using g.message -d"""
     message(msg, flag = 'd')
 
 def verbose(msg):
+    """Display a verbose message using g.message -v"""
     message(msg, flag = 'v')
 
 def info(msg):
+    """Display an informational message using g.message -i"""
     message(msg, flag = 'i')
 
 def warning(msg):
+    """Display a warning message using g.message -w"""
     message(msg, flag = 'w')
 
 def error(msg):
+    """Display an error message using g.message -e"""
     message(msg, flag = 'e')
 
 def fatal(msg):
+    """Display an error message using g.message -e, then abort"""
     error(msg)
     sys.exit(1)
 
@@ -141,6 +174,17 @@ def _parse_env():
     return (options, flags)
 
 def parser():
+    """Interface to g.parser, intended to be run from the top-level, e.g.:
+
+	if __name__ == "__main__":
+	    options, flags = grass.parser()
+	    main()
+
+    Thereafter, the global variables "options" and "flags" will be
+    dictionaries containing option/flag values, keyed by lower-case
+    option/flag names. The values in "options" are strings, those in
+    "flags" are Python booleans.
+    """
     if not os.getenv("GISBASE"):
         print >> sys.stderr, "You must be in GRASS GIS to run this program."
         sys.exit(1)
@@ -166,11 +210,15 @@ def parser():
 # interface to g.tempfile
 
 def tempfile():
+    """Returns the name of a temporary file, created with g.tempfile."""
     return read_command("g.tempfile", pid = os.getpid()).strip()
 
 # key-value parsers
 
 def parse_key_val(s, sep = '=', dflt = None):
+    """Parse a string into a dictionary, where entries are separated
+    by newlines and the key and value are separated by `sep' (default: `=')
+    """
     result = {}
     for line in s.splitlines():
 	kv = line.split(sep, 1)
@@ -185,6 +233,11 @@ def parse_key_val(s, sep = '=', dflt = None):
 _kv_regex = None
 
 def parse_key_val2(s):
+    """Parse a string into a dictionary, where entries are separated
+    by newlines and the key and value are separated by `=', and the
+    value is enclosed in single quotes.
+    Suitable for parsing the output from g.findfile and g.gisenv.
+    """
     global _kv_regex
     if _kv_regex == None:
 	_kv_regex = re.compile("([^=]+)='(.*)';?")
@@ -200,21 +253,30 @@ def parse_key_val2(s):
 # interface to g.gisenv
 
 def gisenv():
+    """Returns the output from running g.gisenv (with no arguments), as a
+    dictionary.
+    """
     return parse_key_val2(read_command("g.gisenv"))
 
 # interface to g.region
 
 def region():
+    """Returns the output from running "g.region -g", as a dictionary."""
     s = read_command("g.region", flags='g')
     return parse_key_val(s)
 
 def use_temp_region():
+    """Copies the current region to a temporary region with "g.region save=",
+    then sets WIND_OVERRIDE to refer to that region. Installs an atexit
+    handler to delete the temporary region upon termination.
+    """
     name = "tmp.%s.%d" % (os.path.basename(sys.argv[0]), os.getpid())
     run_command("g.region", save = name)
     os.environ['WIND_OVERRIDE'] = name
     atexit.register(del_temp_region)
 
 def del_temp_region():
+    """Unsets WIND_OVERRIDE and removes any region named by it."""
     try:
 	name = os.environ.pop('WIND_OVERRIDE')
 	run_command("g.remove", quiet = True, region = name)
@@ -224,12 +286,16 @@ def del_temp_region():
 # interface to g.findfile
 
 def find_file(name, element = 'cell', mapset = None):
+    """Returns the output from running g.findfile as a dictionary."""
     s = read_command("g.findfile", element = element, file = name, mapset = mapset)
     return parse_key_val2(s)
 
 # interface to g.list
 
 def list_grouped(type):
+    """Returns the output from running g.list, as a dictionary where the keys
+    are mapset names and the values are lists of maps in that mapset. 
+    """
     dashes_re = re.compile("^----+$")
     mapset_re = re.compile("<(.*)>:$")
     result = {}
@@ -255,10 +321,14 @@ def _concat(xs):
     return result
 
 def list_pairs(type):
+    """Returns the output from running g.list, as a list of (map, mapset)
+    pairs.
+    """
     return _concat([[(map, mapset) for map in maps]
 		    for mapset, maps in list_grouped(type).iteritems()])
 
 def list_strings(type):
+    """Returns the output from running g.list, as a list of qualified names."""
     return ["%s@%s" % pair for pair in list_pairs(type)]
 
 # color parsing
@@ -282,6 +352,11 @@ named_colors = {
     "indigo":  (0.00, 0.50, 1.00)}
 
 def parse_color(val, dflt = None):
+    """Parses the string "val" as a GRASS colour, which can be either one of
+    the named colours or an R:G:B tuple e.g. 255:255:255. Returns an
+    (r,g,b) triple whose components are floating point values between 0
+    and 1.
+    """
     if val in named_colors:
         return named_colors[val]
 
@@ -294,12 +369,14 @@ def parse_color(val, dflt = None):
 # check GRASS_OVERWRITE
 
 def overwrite():
+    """Return True if existing files may be overwritten"""
     owstr = 'GRASS_OVERWRITE'
     return owstr in os.environ and os.environ[owstr] != '0'
 
 # check GRASS_VERBOSE
 
 def verbosity():
+    """Return the verbosity level selected by GRASS_VERBOSE"""
     vbstr = 'GRASS_VERBOSE'
     if vbstr:
 	return int(vbstr)
@@ -311,6 +388,9 @@ def verbosity():
 # basename inc. extension stripping
 
 def basename(path, ext = None):
+    """Remove leading directory components and an optional extension
+    from the specified path
+    """
     name = os.path.basename(path)
     if not ext:
 	return name
@@ -322,6 +402,9 @@ def basename(path, ext = None):
 # find a program (replacement for "which")
 
 def find_program(pgm, args = []):
+    """Attempt to run a program, with optional arguments. Return False
+    if the attempt failed due to a missing executable, True otherwise
+    """
     nuldev = file(os.devnull, 'w+')
     try:
 	call([pgm] + args, stdin = nuldev, stdout = nuldev, stderr = nuldev)
@@ -334,6 +417,9 @@ def find_program(pgm, args = []):
 # try to remove a file, without complaints
 
 def try_remove(path):
+    """Attempt to remove a file; no exception is generated if the
+    attempt fails.
+    """
     try:
 	os.remove(path)
     except:
@@ -342,6 +428,9 @@ def try_remove(path):
 # try to remove a directory, without complaints
 
 def try_rmdir(path):
+    """Attempt to remove a directory; no exception is generated if the
+    attempt fails.
+    """
     try:
 	os.rmdir(path)
     except:
@@ -350,6 +439,9 @@ def try_rmdir(path):
 # run "v.db.connect -g ..." and parse output
 
 def vector_db(map, layer = None, **args):
+    """Return the database connection details for a vector map
+    (interface to `v.db.connect -g').
+    """
     s = read_command('v.db.connect', flags = 'g', map = map, layer = layer, **args)
     result = []
     for l in s.splitlines():
@@ -365,6 +457,9 @@ def vector_db(map, layer = None, **args):
 # run "db.describe -c ..." and parse output
 
 def db_describe(table, **args):
+    """Return the list of columns for a database table
+    (interface to `db.describe -c').
+    """
     s = read_command('db.describe', flags = 'c', table = table, **args)
     if not s:
 	return None
@@ -387,12 +482,18 @@ def db_describe(table, **args):
 # run "db.connect -p" and parse output
 
 def db_connection():
+    """Return the current database connection parameters
+    (interface to `db.connect -p').
+    """
     s = read_command('db.connect', flags = 'p')
     return parse_key_val(s, sep = ':')
 
 # run "v.info -c ..." and parse output
 
 def vector_columns(map, layer = None, **args):
+    """Return the list of columns for the database table connected to
+    a vector map (interface to `v.info -c').
+    """
     s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
     result = []
     for line in s.splitlines():
@@ -404,10 +505,16 @@ def vector_columns(map, layer = None, **args):
 # add vector history
 
 def vector_history(map):
+    """Set the command history for a vector map to the command used to
+    invoke the script (interface to `v.support').
+    """
     run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
 
 # add raster history
 
 def raster_history(map):
+    """Set the command history for a raster map to the command used to
+    invoke the script (interface to `r.support').
+    """
     run_command('r.support', map = map, history = os.environ['CMDLINE'])
 
