@@ -439,6 +439,10 @@ class VDigitToolbar(AbstractToolbar):
         # realize toolbar
         for row in range(0, self.numOfRows):
             self.toolbar[row].Realize()
+            # workaround for Mac bug. May be fixed by 2.8.8, but not before then.
+            self.combo.Hide()
+            self.combo.Show()
+
 
         # disable undo/redo
         self.toolbar[0].EnableTool(self.undo, False)
