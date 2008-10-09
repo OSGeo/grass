@@ -5,9 +5,8 @@
 #include "nviz.h"
 #include <grass/gsurf.h>
 #include <grass/gstypes.h>
-%}
-
 #undef check
+%}
 
 %include "std_vector.i"
 namespace std { 
