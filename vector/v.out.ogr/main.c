@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
 	    type = Vect_read_line(&In, Points, Cats, i);
 	    G_debug(2, "line = %d type = %d", i, type);
 	    if (!(otype & type)) {
-		G_debug(2, "type %d not specified -> skip", type);
+		G_debug(2, "type %d not specified -> skipping", type);
 		fskip++;
 		continue;
 	    }
@@ -635,13 +635,15 @@ int main(int argc, char *argv[])
     /* Summary */
     G_message(_("%d features written"), fout);
     if (nocat > 0)
-	G_warning(_("%d features without category written"), nocat);
+	G_warning(_("%d features without category were written"), nocat);
     if (noatt > 0)
-	G_warning(_("%d features without attributes written"), noatt);
+	G_warning(_("%d features without attributes were written"), noatt);
     if (nocatskip > 0)
-	G_warning(_("%d features found without category skip"), nocatskip);
+	G_warning(_("%d features found without category were skipped"),
+		nocatskip);
 
-    /* Enable this? May be confusing that for area type are not reported all boundaries/centroids.
+    /* Enable this? May be confusing that for area type are not reported
+     *    all boundaries/centroids.
      *  OTOH why should be reported? */
     /*
        if ( ((otype & GV_POINTS) || (otype & GV_LINES)) && fskip > 0 ) 
