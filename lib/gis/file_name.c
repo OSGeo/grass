@@ -1,26 +1,35 @@
+/*!
+   \file file_name.c
 
-/**********************************************************************
- *  char *
- *  G__file_name (path, element, name, maps)
- *      char path[]          buffer to hold resultant full path to file.
- *      const char *element  database element (eg, "cell", "cellhd", etc)
- *      const char *name     name of file to build path to
- *      const char *mapset   mapset name
- *   
- *      builds full path names to GIS data files
- *
- *  returns:
- *         pointer to 'path'
- *
- *   note:
- *      if name is of the form nnn@ppp then path is set
- *      as if name had been nnn and mapset had been ppp
- *      (mapset parameter itself is ignored in this case)
- *********************************************************************/
+   \brief GIS library - Determice GRASS data base file name
+
+   (C) 2001-2008 by the GRASS Development Team
+
+   This program is free software under the 
+   GNU General Public License (>=v2). 
+   Read the file COPYING that comes with GRASS
+   for details.
+
+   \author Original author CERL
+ */
 
 #include <string.h>
 #include <grass/gis.h>
 
+/*!
+  \brief Builds full path names to GIS data files
+
+  If name is of the form nnn@ppp then path is set
+  as if name had been nnn and mapset had been ppp
+  (mapset parameter itself is ignored in this case)
+  
+  \param[out] path buffer to hold resultant full path to file
+  \param element database element (eg, "cell", "cellhd", etc)
+  \param name name of file to build path to (fully qualified names allowed)
+  \param mapset mapset name
+
+  \return pointer to <i>path</i>
+*/
 char *G__file_name(char *path,
 		   const char *element, const char *name, const char *mapset)
 {

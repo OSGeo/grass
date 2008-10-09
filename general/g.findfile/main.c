@@ -6,9 +6,9 @@
  *               Markus Neteler <neteler itc.it>,
  *               Bernhard Reiter <bernhard intevation.de>, 
  *               Glynn Clements <glynn gclements.plus.com>,
- *                Jan-Oliver Wagner <jan intevation.de>
+ *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     module->keywords = _("general");
     module->description =
-	"Searches for GRASS data base files "
-	"and sets variables for the shell.";
+	_("Searches for GRASS data base files "
+	  "and sets variables for the shell.");
 
     G_gisinit(argv[0]);
 
@@ -44,20 +44,20 @@ int main(int argc, char *argv[])
     opt1->key = "element";
     opt1->type = TYPE_STRING;
     opt1->required = YES;
-    opt1->description = "Name of an element";
+    opt1->description = _("Name of an element");
 
     opt2 = G_define_option();
     opt2->key = "mapset";
     opt2->type = TYPE_STRING;
     opt2->required = NO;
-    opt2->description = "Name of a mapset";
+    opt2->description = _("Name of a mapset");
     opt2->answer = "";
 
     opt3 = G_define_option();
     opt3->key = "file";
     opt3->type = TYPE_STRING;
     opt3->required = YES;
-    opt3->description = "Name of an existing map";
+    opt3->description = _("Name of an existing map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -65,13 +65,14 @@ int main(int argc, char *argv[])
     search_mapset = opt2->answer;
     if (strcmp(".", search_mapset) == 0)
 	search_mapset = G_mapset();
-
+    
     if (opt2->answer && strlen(opt2->answer) > 0) {
 	char **map_mapset = G_tokenize(opt3->answer, "@");
 
 	if (G_number_of_tokens(map_mapset) > 1) {
 	    if (strcmp(map_mapset[1], opt2->answer))
-		G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, but mapset parameter <%s> does not correspond"),
+		G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, "
+				"but mapset parameter <%s> does not correspond"),
 			      map_mapset[1], opt2->answer);
 	    else
 		strcpy(name, opt3->answer);
@@ -98,5 +99,6 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "fullname=\n");
 	fprintf(stdout, "file=\n");
     }
+    
     exit(mapset == NULL);
 }
