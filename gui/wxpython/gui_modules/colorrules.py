@@ -515,8 +515,9 @@ class ColorTable(wx.Frame):
             
             # find existing color table and copy to temp file
             try:
-                old_colrtable = grass.find_file(name=self.inmap, element='colr2')['file']
-            except TypeError:
+                name, mapset = self.inmap.split('@')
+                old_colrtable = grass.find_file(name=name, element='colr2/' + mapset)['file']
+            except (TypeError, ValueError):
                 old_colrtable = None
             
             if old_colrtable:
