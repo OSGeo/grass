@@ -102,6 +102,7 @@ SUBDIRS = \
 	r.topmodel \
 	r.transect \
 	r.univar \
+	r.uslek \
 	r.volume \
 	r.walk \
 	r.water.outlet \
