@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     int infd_psand, infd_psilt, infd_pclay, infd_pomat;
     int outfd;
     char *psand, *psilt, *pclay, *pomat;
-    int i = 0;
     void *inrast_psand, *inrast_psilt, *inrast_pclay, *inrast_pomat;
     DCELL *outrast;
     
@@ -55,23 +54,23 @@ int main(int argc, char *argv[])
     
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
-    input1->key = _("psand");
+    input1->key = "psand";
     input1->description = _("Name of the Soil sand fraction map [0.0-1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
-    input2->key = _("pclay");
+    input2->key = "pclay";
     input2->description = _("Name of the Soil clay fraction map [0.0-1.0]");
 
     input3 = G_define_standard_option(G_OPT_R_INPUT);
-    input3->key = _("psilt");
+    input3->key = "psilt";
     input3->description = _("Name of the Soil silt fraction map [0.0-1.0]");
 
     input4 = G_define_standard_option(G_OPT_R_INPUT);
-    input4->key = _("pomat");
+    input4->key = "pomat";
     input4->description = _("Name of the Soil Organic Matter map [0.0-1.0]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
-    output1->key = _("usle_k");
+    output1->key = "usle_k";
     output1->description = _("Name of the output USLE K factor layer");
 
     /********************/ 
@@ -86,19 +85,19 @@ int main(int argc, char *argv[])
     
     /***************************************************/ 
     if ((infd_psand = G_open_cell_old(psand, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), psand);
+	G_fatal_error(_("Unable to open raster map <%s>"), psand);
     inrast_psand = G_allocate_d_raster_buf();
     
     if ((infd_psilt = G_open_cell_old(psilt, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), psilt);
+	G_fatal_error(_("Unable to open raster map <%s>"), psilt);
     inrast_psilt = G_allocate_d_raster_buf();
     
     if ((infd_pclay = G_open_cell_old(pclay, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), pclay);
+	G_fatal_error(_("Unable to open raster map <%s>"), pclay);
     inrast_pclay = G_allocate_d_raster_buf();
     
     if ((infd_pomat = G_open_cell_old(pomat, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), pomat);
+	G_fatal_error(_("Unable to open raster map <%s>"), pomat);
     inrast_pomat = G_allocate_d_raster_buf();
     /***************************************************/ 
     nrows = G_window_rows();
@@ -107,7 +106,7 @@ int main(int argc, char *argv[])
     
     /* Create New raster files */ 
     if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
     
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
@@ -121,13 +120,17 @@ int main(int argc, char *argv[])
 	
 	/* read soil input maps */ 
 	if (G_get_d_raster_row(infd_psand, inrast_psand, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), psand);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  psand, row);
 	if (G_get_d_raster_row(infd_psilt, inrast_psilt, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), psilt);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  psilt, row);
 	if (G_get_d_raster_row(infd_pclay, inrast_pclay, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), pclay);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  pclay, row);
 	if (G_get_d_raster_row(infd_pomat, inrast_pomat, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), pomat);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  pomat, row);
 	
         /*process the data */ 
 	for (col = 0; col < ncols; col++)
@@ -158,7 +161,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 	if (G_put_d_raster_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Unable to write output raster file"));
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  result, row);
     }
     G_free(inrast_psand);
     G_free(inrast_psilt);
@@ -177,5 +181,3 @@ int main(int argc, char *argv[])
     
     exit(EXIT_SUCCESS);
 }
-
-
