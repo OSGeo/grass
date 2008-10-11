@@ -101,9 +101,7 @@ double point_in_triangle(double point_x, double point_y, double point_z,
 int prct2tex(double sand_input, double clay_input, double silt_input)
 {
     /*G_message("%5.3f||%5.3f||%5.3f",sand_input,clay_input,silt_input); */
-    int i;
-    double temp;
-
+    
     /* set up index for soil texture classes */
     int index = 20;
 
