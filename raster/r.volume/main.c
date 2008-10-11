@@ -60,27 +60,19 @@ int main(int argc, char *argv[])
 	  "and (optionally) produces a GRASS vector points map "
 	  "containing the calculated centroids of these clumps.");
 
-    opt1 = G_define_option();
-    opt1->key = "data";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->gisprompt = "old,cell,raster";
+    opt1 = G_define_standard_option(G_OPT_R_INPUT);
     opt1->description =
 	_("Existing raster map representing data that will be summed within clumps");
 
-    opt2 = G_define_option();
+    opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->key = "clump";
-    opt2->type = TYPE_STRING;
     opt2->required = NO;
-    opt2->gisprompt = "old,cell,raster";
     opt2->description =
 	_("Existing raster map, preferably the output of r.clump");
 
-    opt3 = G_define_option();
+    opt3 = G_define_standard_option(G_OPT_V_OUTPUT);
     opt3->key = "centroids";
-    opt3->type = TYPE_STRING;
     opt3->required = NO;
-    opt3->gisprompt = "new,vector,vector";
     opt3->description = _("Vector points map to contain clump centroids");
 
     flag1 = G_define_flag();
