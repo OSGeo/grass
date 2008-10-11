@@ -1062,7 +1062,7 @@ msgstr "Vektor:"
 #: ../gui/wxpython/gui_modules/gdialogs.py:64
 #, fuzzy
 msgid "Create attribute table"
-msgstr "Attribute verändern"
+msgstr "Abfragen Vektor Daten"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:127
 #: ../gui/wxpython/gui_modules/menudata.py:1201
@@ -1206,8 +1206,9 @@ msgid "Choose input directory"
 msgstr "Wählen Sie das GRASS Datenverzeichnis "
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:814
+#, fuzzy
 msgid "Select file extension:"
-msgstr ""
+msgstr "Wählen Sie bitte eine Projektion"
 
 #: ../gui/wxpython/gui_modules/gdialogs.py:831
 #, fuzzy
@@ -2290,8 +2291,9 @@ msgid "Please wait, opening vector map <%s> for editing..."
 msgstr "Keine Vektorkarte zum bearbeiten ausgewählt."
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1067
+#, fuzzy
 msgid "Digitize"
-msgstr ""
+msgstr "Digitalisieren"
 
 #: ../gui/wxpython/gui_modules/toolbars.py:1105
 #, fuzzy, python-format
@@ -6812,8 +6814,9 @@ msgstr ""
 
 #: ../gui/wxpython/gui_modules/dbm.py:2838
 #: ../gui/wxpython/gui_modules/vdigit.py:1820
+#, fuzzy
 msgid "Feature id:"
-msgstr ""
+msgstr "Erzeuge Punkte"
 
 #: ../gui/wxpython/gui_modules/dbm.py:3076
 #, fuzzy
@@ -7530,8 +7533,9 @@ msgstr "Kostenoberfläche"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:583
 #: ../gui/wxpython/gui_modules/nviz_tools.py:688
+#, fuzzy
 msgid "Height above surface:"
-msgstr ""
+msgstr "Karten auflisten"
 
 #: ../gui/wxpython/gui_modules/nviz_tools.py:618
 #, fuzzy
@@ -7984,51 +7988,50 @@ msgstr ""
 msgid "No map layer selected. Operation cancelled."
 msgstr ""
 
-#~ msgid "Cancel the command settings and ignore changes"
-#~ msgstr ""
-#~ "Brechen Sie die Kommandoeinstellungen ab, Änderungen werden ignoriert"
+msgid "Cancel the command settings and ignore changes"
+msgstr "Brechen Sie die Kommandoeinstellungen ab, Änderungen werden ignoriert"
 
-#~ msgid ""
-#~ "This is a sample program for\n"
-#~ "GRASS command interface parsing\n"
-#~ "and automatic GUI building.\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Dies ist eine Beispielprogramm für \n"
-#~ "das Parsen von GRASS-Kommandos\n"
-#~ "und das Erstellen von GUIs\n"
-#~ "%s"
+msgid ""
+"This is a sample program for\n"
+"GRASS command interface parsing\n"
+"and automatic GUI building.\n"
+"%s"
+msgstr ""
+"Dies ist eine Beispielprogramm für \n"
+"das Parsen von GRASS-Kommandos\n"
+"und das Erstellen von GUIs\n"
+"%s"
 
-#~ msgid "About wxPython GRASS GUI"
-#~ msgstr "Über die wxPython GRASS GUI"
+msgid "About wxPython GRASS GUI"
+msgstr "Über die wxPython GRASS GUI"
 
-#~ msgid "Measuring distance ("
-#~ msgstr "Gemessene Strecke ("
+msgid "Measuring distance ("
+msgstr "Gemessene Strecke ("
 
-#~ msgid "Multiple import formats using GDAL"
-#~ msgstr "Import von Rasterformaten über GDAL"
-
-#, fuzzy
-#~ msgid "Overlay raster maps"
-#~ msgstr "Raster"
+msgid "Multiple import formats using GDAL"
+msgstr "Import von Rasterformaten über GDAL"
 
 #, fuzzy
-#~ msgid ""
-#~ "Note: User can choose from two interfaces for digitization. The simple "
-#~ "one uses v.edit command on the background. Map topology is rebuild on "
-#~ "each operation which can significantly slow-down response. The vdigit is "
-#~ "a native interface which uses v.edit functionality, but doesn't call the "
-#~ "module itself."
-#~ msgstr "Topologie."
+msgid "Overlay raster maps"
+msgstr "Raster"
 
 #, fuzzy
-#~ msgid "Adding new feature to vector map <%s> failed."
-#~ msgstr "Vektor."
+msgid ""
+"Note: User can choose from two interfaces for digitization. The simple one "
+"uses v.edit command on the background. Map topology is rebuild on each "
+"operation which can significantly slow-down response. The vdigit is a native "
+"interface which uses v.edit functionality, but doesn't call the module "
+"itself."
+msgstr "Topologie."
 
 #, fuzzy
-#~ msgid "List of categories"
-#~ msgstr "Karten auflisten Kategorien"
+msgid "Adding new feature to vector map <%s> failed."
+msgstr "Vektor."
 
 #, fuzzy
-#~ msgid "Error in Attribute Table Manager"
-#~ msgstr "Tabelle"
+msgid "List of categories"
+msgstr "Karten auflisten Kategorien"
+
+#, fuzzy
+msgid "Error in Attribute Table Manager"
+msgstr "Tabelle"
