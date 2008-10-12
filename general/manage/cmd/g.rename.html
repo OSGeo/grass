@@ -52,11 +52,23 @@ state that no rename is needed.  However, <em>g.rename</em>
 will allow the user to overwrite other existing files in
 the current mapset by making the <em>new</em> file name
 that of an already existing file.
+<p>
+For portability reasons, <em>g.rename</em> is ignoring case of
+names. To change the case of a map name, first rename the map
+to a name which differs by more than case, then rename it to
+the intended name.
 
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-g.rename rast=oldrast,newrast vect=oldvect51,newvect51 oldvect=oldvect50,newvect50
+# rename raster map
+g.rename rast=oldrast,newrast
+
+# rename vector map
+g.rename vect=oldvect,newvect
+
+# combined renaming
+g.rename rast=oldrast,newrast vect=oldvect,newvect
 </pre></div>
 <h2>SEE ALSO</h2>
 
