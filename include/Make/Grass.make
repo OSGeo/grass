@@ -80,6 +80,11 @@ LFLAGS      = -s
 # parser generator and default options
 YFLAGS      = -d -v
 
+MANSECT = 1
+MANBASEDIR = $(ARCH_DISTDIR)/man
+MANDIR = $(MANBASEDIR)/man$(MANSECT)
+HTML2MAN = VERSION_NUMBER=${GRASS_VERSION_NUMBER} $(GRASS_HOME)/tools/g.html2man/g.html2man.py
+
 ##################### library names #####################################
 
 ARRAYSTATS_LIBNAME        = grass_arraystats
