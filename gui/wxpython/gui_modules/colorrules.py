@@ -388,8 +388,9 @@ class ColorTable(wx.Frame):
                 self.cr_label.SetLabel(_('Enter raster cat values or percents'))
                 return
             
-            self.cr_label.SetLabel(_('Enter raster cat values or percents (range = %d-%d)' %
-                                     (self.rast['min'], self.rast['max'])))
+            self.cr_label.SetLabel(_('Enter raster cat values or percents (range = %(min)d-%(max)d)') %
+                                     { 'min' : self.rast['min'],
+                                       'max' : self.rast['max'] })
         elif self.elem == 'vector':
             # initialize layer selection combobox
             self.cb_vlayer.InsertLayers(self.inmap)
