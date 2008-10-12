@@ -47,25 +47,27 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->keywords = _("rainfall, erosion, USLE");
-    module->description = _("raster, USLE R factor, Rainfall erosivity index.");
+    module->keywords = _("raster, rainfall, erosion, USLE");
+    module->description = _("Computes USLE R factor, Rainfall erosivity index.");
     
-    /* Define the different options */ 
-    input1 = G_define_option();
-    input1->key = _("method");
-    input1->type = TYPE_STRING;
-    input1->required = YES;
-    input1->gisprompt = _("Name of method to use");
-    input1->description =
-	_("Name of USLE R equation: roose, morgan, foster, elswaify.");
-    input1->answer = _("morgan");
-
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->description = _("Name of the annual precipitation map");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);
-    output->description = _("Name of the output usler layer");
-    
+
+    /* Define the different options */ 
+    input1 = G_define_option();
+    input1->key = "method";
+    input1->type = TYPE_STRING;
+    input1->required = YES;
+    input1->description = _("Name of USLE R equation");
+    input1->options = "roose, morgan, foster, elswaify";
+    input1->descriptions = _("roose;Roosle (1975);"
+			     "morgan;Morgan (1974);"
+			     "foster;Foster(1981);"
+			     "elswaify;El-Swaify (1985)");
+    input1->answer = "morgan";
+
     /********************/ 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
     
     /***************************************************/ 
     if ((infd_annual_pmm = G_open_cell_old(annual_pmm, "")) < 0)
-	G_fatal_error(_("Cannot open cell file [%s]"), annual_pmm);
+	G_fatal_error(_("Unable to open raster map <%s>"), annual_pmm);
     inrast_annual_pmm = G_allocate_d_raster_buf();
     
     /***************************************************/ 
@@ -86,7 +88,7 @@ int main(int argc, char *argv[])
     
     /* Create New raster files */ 
     if ((outfd = G_open_raster_new(result, DCELL_TYPE)) < 0)
-	G_fatal_error(_("Could not open <%s>"), result);
+	G_fatal_error(_("Unable to create raster map <%s>"), result);
     
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
@@ -97,7 +99,8 @@ int main(int argc, char *argv[])
 	
 	/* read input map */ 
 	if (G_get_d_raster_row(infd_annual_pmm, inrast_annual_pmm, row) < 0)
-	    G_fatal_error(_("Could not read from <%s>"), annual_pmm);
+	    G_fatal_error(_("Unable to read raster map <%s> row %d"),
+			  annual_pmm, row);
 	
 	/*process the data */ 
 	for (col = 0; col < ncols; col++)
@@ -121,7 +124,8 @@ int main(int argc, char *argv[])
 		    d = elswaify_1985(d_annual_pmm);
 	    }
 	if (G_put_d_raster_row(outfd, outrast) < 0)
-	    G_fatal_error(_("Cannot write to output raster file"));
+	    G_fatal_error(_("Failed writing raster map <%s> row %d"),
+			  result, row);
 	}
     }
     G_free(inrast_annual_pmm);
@@ -135,5 +139,3 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 }
-
-
