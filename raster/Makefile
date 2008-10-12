@@ -103,6 +103,7 @@ SUBDIRS = \
 	r.transect \
 	r.univar \
 	r.uslek \
+	r.usler \
 	r.volume \
 	r.walk \
 	r.water.outlet \

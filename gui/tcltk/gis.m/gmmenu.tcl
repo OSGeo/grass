@@ -310,6 +310,9 @@ set descmenu [subst  {
 		{command {[G_msg "Topographic index map"]} {} "r.topidx: Topographic index map" {} -command {execute r.topidx }}
 		{command {[G_msg "TOPMODEL simulation"]} {} "r.topmodel: TOPMODEL simulation" {} -command {execute r.topmodel }}
 		{separator}
+		{command {[G_msg "USLE K Factor"]} {} "r.uslek: Soil Erodibility" {} -command {execute r.uslek }}
+		{command {[G_msg "USLE R Factor"]} {} "r.usler: Rainfall Erosivity" {} -command {execute r.usler }}
+		{separator}
 		{command {[G_msg "Watershed subbasins"]} {} "r.basins.fill: Watershed subbasins" {} -command {execute r.basins.fill }}
 		{command {[G_msg "Watershed analysis"]} {} "r.watershed: Watershed analysis" {} -command {execute r.watershed }}
 		{command {[G_msg "Watershed basin creation"]} {} "r.water.outlet: Watershed basin creation" {} -command {execute r.water.outlet }}

@@ -833,6 +833,17 @@ class Data:
                                  "r.topmodel"),
                                 ("","","", ""),
 
+                                (_("USLE K Factor"),
+                                 _("USLE K Factor: Soil Erodibility."),
+                                 "self.OnMenuCmd",
+                                 "r.uslek"),
+
+                                (_("USLE R Factor"),
+                                 _("USLE R Factor: Rainfall Erosivity."),
+                                 "self.OnMenuCmd",
+                                 "r.usler"),
+                                ("","","", ""),
+
                                 (_("Watershed subbasins"),
                                  _("Generates a raster map layer showing watershed subbasins."),
                                  "self.OnMenuCmd",
