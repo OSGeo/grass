@@ -5,7 +5,8 @@ first: pre default
 # create platform dirs 
 ARCH_DIRS = $(ARCH_DISTDIR) $(ARCH_BINDIR) $(ARCH_INCDIR) $(ARCH_LIBDIR) \
 	$(BIN) $(ETC) \
-	$(DRIVERDIR) $(DBDRIVERDIR) $(FONTDIR) $(DOCSDIR) $(HTMLDIR)
+	$(DRIVERDIR) $(DBDRIVERDIR) $(FONTDIR) $(DOCSDIR) $(HTMLDIR) \
+	$(MANBASEDIR) $(MANDIR)
 
 pre: $(ARCH_DIRS)
 

@@ -26,10 +26,13 @@ $(HTMLDIR)/%.html: %.html %.tmp.html $(HTMLSRC)
 		fi \
 		done 2> /dev/null ; true
 
+$(MANDIR)/%.$(MANSECT): $(HTMLDIR)/%.html
+	$(HTML2MAN) $< $@
+
 %.tmp.html: $(HTMLSRC)
 	if [ "$(HTMLSRC)" != "" ] ; then $(call htmldesc,$<,$@) ; fi
 
-html: $(HTMLDIR)/$(PGM).html
+html: $(HTMLDIR)/$(PGM).html $(MANDIR)/$(PGM).$(MANSECT)
 
 endif
 

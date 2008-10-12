@@ -49,16 +49,16 @@ DIRS = \
 	doc \
 	gui \
 	visualization \
+	locale \
 	tools \
 	gem \
-	man \
-	locale \
 	macosx
 
 SUBDIRS = $(DIRS)
 
 FILES = AUTHORS COPYING CHANGES REQUIREMENTS.html GPL.TXT
 
+# why no locale directory?
 BIN_DIST_FILES = $(FILES) \
 	grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.tmp \
 	bin \
