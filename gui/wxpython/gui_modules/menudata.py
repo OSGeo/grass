@@ -1630,6 +1630,11 @@ class Data:
                                  _("Extract Modis Quality flags as raster values."),
                                  "self.OnMenuCmd",
                                  "i.modis.qc"),
+
+                                (_("Latitude/longitude maps"),
+                                 _("Creates Latitude or Longitude map."),
+                                 "self.OnMenuCmd",
+                                 "i.latlong"),
 	                        ("","","", ""),
 
                                 (_("Albedo"),

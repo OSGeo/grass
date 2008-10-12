@@ -549,6 +549,7 @@ set descmenu [subst  {
 	{separator}
 	{cascad {[G_msg "Basic RS processing"]} {} "" $tmenu {			
 				{command {[G_msg "MODIS Quality flags"]} {} "i.modis.qc: Extracts Modis Quality flags as raster values." {} -command {execute i.modis.qc }}
+				{command {[G_msg "Latitude/longitude maps"]} {} "i.latlong: Latitude or Longitude maps." {} -command {execute i.latlong }}
 				{separator}
 				{command {[G_msg "Albedo"]} {} "i.albedo: Calculates Albedo from Modis, Aster, Landsat or AVHRR" {} -command {execute i.albedo }}
 				{separator}
