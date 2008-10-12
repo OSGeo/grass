@@ -12,6 +12,7 @@ SUBDIRS = \
 	i.gensigset \
 	i.group \
 	i.his.rgb \
+	i.latlong \
 	i.maxlik \
 	i.modis.qc \
 	i.rectify \
