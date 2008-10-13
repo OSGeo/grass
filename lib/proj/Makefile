@@ -6,7 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Lib.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 EXTRA_LIBS=$(GISLIB) $(PROJLIB) $(GDALLIBS)
-EXTRA_CFLAGS = $(GETHOSTNAME) $(ZLIBINCPATH) $(PICFLAGS) $(GDALCFLAGS) $(DEFS)
+EXTRA_CFLAGS = $(ZLIBINCPATH) $(GDALCFLAGS)
 EXTRA_INC = $(PROJINC)
 
 NAD_TABLES := $(wildcard *.lla)
