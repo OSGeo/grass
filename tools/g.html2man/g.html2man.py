@@ -226,7 +226,17 @@ class Formatter:
 	self.pop()
 
     def fmt(self, format, content, var = None):
-	(pre,sep,post) = format.partition("@")
+#	String.format is only in 2.5+
+#	(pre,sep,post) = format.partition("@")
+	f = format.split('@', 1)
+	pre = f[0]
+	if len(f) > 1:
+	    sep = '@'
+	    post = f[1]
+	else:
+	    sep = ''
+	    post = ''
+
 	if pre != "":
 	    self.show(pre)
 	if sep != "":
