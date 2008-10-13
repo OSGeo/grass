@@ -4,7 +4,7 @@ import sys
 import types
 import os
 import re
-from HTMLParser import HTMLParser
+from HTMLParser import HTMLParser, HTMLParseError
 from htmlentitydefs import entitydefs
 from StringIO import StringIO
 
@@ -188,7 +188,7 @@ def clean(content):
     return [item for item in content if not is_blank(item)]
 
 class Formatter:
-    def __init__(self, stream = sys.stdout):
+    def __init__(self, filename, stream = sys.stdout):
 	self.stream = stream
 	self.style = dict(preformat = False,
 			  in_ul = False,
@@ -198,6 +198,7 @@ class Formatter:
 			  index = [])
 	self.stack = []
 	self.strip_re = re.compile("\n[ \t]+")
+	self.filename = filename
 
     def warning(self, msg):
 	sys.stderr.write(msg + '\n')
@@ -253,7 +254,7 @@ class Formatter:
 
     def pp_title(self):
 	self.show("\n.TH " +
-		  os.path.basename(sys.argv[1]).replace(".html","") +
+		  os.path.basename(self.filename).replace(".html","") +
 		  " 1 \"\" \"GRASS " +
 		  version +
 		  "\" \"Grass User's Manual\"")
@@ -434,15 +435,24 @@ class MyHTMLParser(HTMLParser):
 
 def main():
     # parse HTML
-    inf = file(sys.argv[1])
+    infile = sys.argv[1]
+    inf = file(infile)
     p = MyHTMLParser()
-    p.feed(inf.read())
+    for n, line in enumerate(inf):
+	try:
+	    p.feed(line)
+	except HTMLParseError, err:
+	    sys.stderr.write('%s:%d:%d: Parse error: %s\n' % (infile, err.lineno, err.offset, err.msg))
+	    sys.exit(1)
+	except Exception, err:
+	    sys.stderr.write('%s:%d:0: Error (%s): %s\n' % (infile, n + 1, err.__dict__, line))
+	    sys.exit(1)
     p.close()
     inf.close()
 
     # generate groff
     sf = StringIO()
-    f = Formatter(sf)
+    f = Formatter(infile, sf)
     f.pp(p.data)
     s = sf.getvalue()
     sf.close()
@@ -458,7 +468,4 @@ def main():
     outf.close()
 
 if __name__ == "__main__":
-    try:
-	main()
-    except:
-	sys.exit(1)
+    main()
