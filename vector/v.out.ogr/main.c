@@ -712,25 +712,29 @@ mk_att(int cat, struct field_info *Fi, dbDriver * Driver, int ncol,
 			colsqltype = db_get_column_sqltype(Column);
 			colctype = db_sqltype_to_Ctype(colsqltype);
 			G_debug(2, "  colctype = %d", colctype);
-			switch (colctype) {
-			case DB_C_TYPE_INT:
-			    OGR_F_SetFieldInteger(Ogr_feature, j,
-						  db_get_value_int(Value));
-			    break;
-			case DB_C_TYPE_DOUBLE:
-			    OGR_F_SetFieldDouble(Ogr_feature, j,
-						 db_get_value_double(Value));
-			    break;
-			case DB_C_TYPE_STRING:
-			    OGR_F_SetFieldString(Ogr_feature, j,
-						 db_get_value_string(Value));
-			    break;
-			case DB_C_TYPE_DATETIME:
-			    db_convert_column_value_to_string(Column,
-							      &dbstring);
-			    OGR_F_SetFieldString(Ogr_feature, j,
-						 db_get_string(&dbstring));
-			    break;
+			
+			/* prevent writing NULL values */
+			if (!db_test_value_isnull(Value)) {
+				switch (colctype) {
+				case DB_C_TYPE_INT:
+					OGR_F_SetFieldInteger(Ogr_feature, j,
+							db_get_value_int(Value));
+					break;
+				case DB_C_TYPE_DOUBLE:
+					OGR_F_SetFieldDouble(Ogr_feature, j,
+							db_get_value_double(Value));
+					break;
+				case DB_C_TYPE_STRING:
+					OGR_F_SetFieldString(Ogr_feature, j,
+							db_get_value_string(Value));
+					break;
+				case DB_C_TYPE_DATETIME:
+					db_convert_column_value_to_string(Column,
+									&dbstring);
+					OGR_F_SetFieldString(Ogr_feature, j,
+							db_get_string(&dbstring));
+					break;
+				}
 			}
 		    }
 		}
