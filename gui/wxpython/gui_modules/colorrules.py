@@ -448,8 +448,10 @@ class ColorTable(wx.Frame):
         tc = self.FindWindowById(num)
         
         if self.elem == 'cell':
+
             try:
-                float(vals)
+                if '%' not in vals:
+                    float(vals)
             except ValueError:
                 tc.SetValue('')
                 self.ruleslines[num-1000]['value'] = ''
