@@ -103,9 +103,6 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define TYPE_STRING   3
 #define YES           1
 #define NO            0
-#define GISPROMPT_COLOR    "old,color,color"
-#define GISPROMPT_DBCOLUMN "old,dbcolumn,dbcolumn"
-#define GISPROMPT_DBTABLE  "old,dbtable,dbtable"
 
 /* File/directory name lengths */
 #define GNAME_MAX 256

@@ -192,15 +192,14 @@ class grassTask:
         if grassModule is not None:
             xml.sax.parseString( getInterfaceDescription( grassModule ) , processTask( self ) )
 
-    def get_param(self, aParam, raiseError=True):
+    def get_param(self, value, element='name', raiseError=True):
         """Find and return a param by name."""
         for p in self.params:
-            lparam = len(aParam)
-            if p['name'] == aParam or \
-                    p['name'][:lparam] == aParam:
+            if p[element] == value:
                 return p
         if raiseError:
-            raise ValueError, _("Parameter not found: %s") % aParam
+            raise ValueError, _("Parameter not found: %s") % \
+                value
         else:
             return None
 
@@ -1123,25 +1122,34 @@ class cmdPanel(wx.Panel):
                                 flag=style, border=5)
                 p['wxId'] = txt3.GetId()
 
-            if p.get('type','string') == 'string' and p.get('gisprompt',False) == True:
+            #
+            # element selection tree combobox (maps, icons, regions, etc.)
+            #
+            if p.get('gisprompt', False) == True:
                 txt = wx.StaticText(parent=which_panel, label = title + ':')
                 self.label_id.append(txt.GetId())
                 which_sizer.Add(item=txt, proportion=0,
                                 flag=wx.ADJUST_MINSIZE | wx.RIGHT | wx.LEFT | wx.TOP, border=5)
-                # element selection tree combobox (maps, icons, regions, etc.)
-                if p.get('prompt','') not in ('color', 'dbcolumn', 'dbtable') and \
+                # GIS element entry
+                if p.get('prompt','') not in ('color',
+                                              'color_none',
+                                              'dbcolumn',
+                                              'dbtable',
+                                              'layer') and \
                        p.get('element', '') != 'file':
-                    if p.get('multiple','no') == 'yes':
+                    if p.get('multiple', 'no') == 'yes':
                         multiple = True
                     else:
                         multiple = False
-                    if p.get('age','') == 'new':
+                    if p.get('age', '') == 'new':
                         mapsets = [grassenv.GetGRASSVariable('MAPSET'),]
                     else:
                         mapsets = None
-
-                    selection = gselect.Select(parent=which_panel, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE,
-                                               type=p.get('element',''), multiple=multiple, mapsets=mapsets)
+                        
+                    selection = gselect.Select(parent=which_panel, id=wx.ID_ANY,
+                                               size=globalvar.DIALOG_GSELECT_SIZE,
+                                               type=p.get('element', ''),
+                                               multiple=multiple, mapsets=mapsets)
                     if p.get('value','') != '':
                         selection.SetValue(p['value']) # parameter previously set
 
@@ -1151,37 +1159,41 @@ class cmdPanel(wx.Panel):
                     # we target the textctl here
                     p['wxId'] = selection.GetChildren()[0].GetId()
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
-                # dbcolumn entry
-                elif p.get('prompt','') in ('dbcolumn', 'dbtable'):
-                    if p.get('age', 'old') == 'old' and \
-                            p.get('multiple', 'no') == 'no':
-                        style = wx.CB_SIMPLE | wx.CB_READONLY
+                    if p.get('prompt', '') == 'vector':
+                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                    
+                # layer, dbcolumn, dbtable entry
+                elif p.get('prompt', '') in ('dbcolumn',
+                                             'dbtable',
+                                             'layer'):
+                    if p.get('prompt', '') == 'layer':
+                        win = gselect.LayerSelect(parent=which_panel)
+                        p['wxGetValue'] = win.GetStringSelection
+                        win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                    elif p.get('prompt', '') == 'dbtable':
+                        win = gselect.TableSelect(parent=which_panel)
+                        p['wxGetValue'] = win.GetStringSelection
+                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     else:
-                        style = wx.CB_SIMPLE
-                    columns = wx.ComboBox(parent=which_panel, id=wx.ID_ANY,
-                                          size=globalvar.DIALOG_COMBOBOX_SIZE,
-                                          style=style,
-                                          choices=[])
-                    p['wxId'] = columns.GetId()
-                    p['wxGetValue'] = columns.GetStringSelection
-                    if p.get('prompt', '') == 'dbcolumn':
-                        columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbColumn)
-                    else:
-                        columns.Bind(wx.EVT_ENTER_WINDOW, self.OnDbTable)
-                    columns.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
-                    which_sizer.Add(item=columns, proportion=0,
+                        win = gselect.ColumnSelect(parent=which_panel)
+                        p['wxGetValue'] = win.GetStringSelection
+                        win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    
+                    p['wxId'] = win.GetId()
+                    
+                    which_sizer.Add(item=win, proportion=0,
                                     flag=wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT, border=5)
                 # color entry
-                elif p.get('prompt','') == 'color':
-                    # Heuristic way of finding whether transparent is allowed
-                    handle_transparency =  'none' in p.get('description', '')
+                elif p.get('prompt', '') in ('color',
+                                             'color_none'):
                     default_color = (200,200,200)
                     label_color = _("Select Color")
                     if p.get('default','') != '':
                         default_color, label_color = color_resolve( p['default'] )
                     if p.get('value','') != '': # parameter previously set
                         default_color, label_color = color_resolve( p['value'] )
-                    if handle_transparency:
+                    if p.get('prompt', '') == 'color_none':
                         this_sizer = wx.BoxSizer(orient=wx.HORIZONTAL )
                     else:
                         this_sizer = which_sizer
@@ -1194,7 +1206,7 @@ class cmdPanel(wx.Panel):
                     # the selector proper and either a "transparent" button or None
                     p['wxId'] = [btn_colour.GetId(),]
                     btn_colour.Bind(csel.EVT_COLOURSELECT,  self.OnColorChange )
-                    if handle_transparency:
+                    if p.get('prompt', '') == 'color_none':
                         none_check = wx.CheckBox(which_panel, wx.ID_ANY, _("Transparent") )
                         if p.get('value','') != '' and p.get('value',[''])[0] == "none":
                             none_check.SetValue(True)
@@ -1244,7 +1256,33 @@ class cmdPanel(wx.Panel):
             if p == first_param:
                 if type(p['wxId']) == type(1):
                     self.FindWindowById(p['wxId']).SetFocus()
+        
+        #
+        # set widget relations for OnUpdateSelection
+        #
+        pMap = None
+        pLayer = None
+        pColumn = []
+        for p in self.task.params:
+            if p.get('gisprompt', False) == False:
+                continue
             
+            prompt = p.get('prompt', '')
+            
+            if prompt == 'vector':
+                name = p.get('name', '')
+                if name in ('map', 'input'):
+                    pMap = p
+            elif prompt == 'layer':
+                pLayer = p
+            elif prompt == 'dbcolumn':
+                pColumn.append(p['wxId'])
+        
+        if pMap:
+            pMap['wxId-bind'] = [pLayer['wxId'], ] + pColumn
+        if pLayer:
+            pLayer['wxId-bind'] = pColumn
+        
 	#
 	# determine panel size
 	#
@@ -1376,6 +1414,7 @@ class cmdPanel(wx.Panel):
         """
         myId = event.GetId()
         me = wx.FindWindowById( myId )
+        
         for porf in self.task.params + self.task.flags:
             if 'wxId' in porf and type( porf[ 'wxId' ] ) == type( 1 ) and porf['wxId'] == myId:
                 if porf.has_key('wxGetValue') and porf['wxGetValue']:
@@ -1384,83 +1423,54 @@ class cmdPanel(wx.Panel):
                     porf['value'] = me.GetValue()
         
         self.OnUpdateValues()
-
+        
         event.Skip()
         
-    def OnDbColumn(self, event):
-        """Get list of table columns"""
-        choices = []
+    def OnUpdateSelection(self, event):
+        """Update list of available layers, tables, columns for
+        vector map layer"""
+        id = event.GetId()
         
-        p = self.task.get_param('table', raiseError=False)
-        if p and p.get('prompt', '') == 'dbtable':
-            cmd = ['db.columns',
-                   'table=%s' % p.get('value')]
-            try:
-                choices = gcmd.Command(cmd).ReadStdOutput()
-            except gcmd.CmdError:
-                choices = []
-        if not p:
-            p = self.task.get_param('map', raiseError=False)
-            if not p:
-                p = self.task.get_param('input', raiseError=False)
-            if p:
-                mapName = utils.GetLayerNameFromCmd(self.task.getCmd(ignoreErrors=True))
-                if mapName !=  _('<required>'):
+        p = self.task.get_param(id, element='wxId', raiseError=False)
+        if not p or \
+                not p.has_key('wxId-bind'):
+            return
+        
+        pMap = self.task.get_param('map', raiseError=False)
+        if not pMap:
+            pMap = self.task.get_param('input', raiseError=False)
+
+        if not pMap or \
+                pMap.get('prompt', '') != 'vector':
+            return
+
+        if p == pMap:
+            map = event.GetString()
+        else:
+            map = pMap.get('value', '')
+        if not map:
+            return
+
+        for uid in p['wxId-bind']:
+            win = self.FindWindowById(uid)
+            name = win.GetName()
+            if name == 'LayerSelect':
+                win.InsertLayers(map)
+            elif name == 'ColumnSelect':
+                pLayer = self.task.get_param('layer', element='name', raiseError=False)
+                if pLayer and \
+                        pLayer.get('prompt', '') == 'layer':
+                    if pLayer.get('value', '') != '':
+                        layer = int(pLayer.get('value', 1))
+                    else:
+                        layer = int(pLayer.get('default', 1))
+                else:
                     layer = 1
-                    p = self.task.get_param('layer')
-                    if p:
-                        value = p.get('value', '1')
-                        if value:
-                            layer = int(value)
-                    
-                    cmd = ['v.info',
-                           'map=%s' % mapName,
-                           'layer=%d' % layer,
-                           '-c', '--q']
-                    
-                    try:
-                        for line in gcmd.Command(cmd).ReadStdOutput():
-                            type, name = line.split('|')
-                            choices.append(name.strip())
-                    except gcmd.CmdError:
-                        choices = []
-            
-        win = self.FindWindowById(event.GetId())
-
-        win.SetItems(choices)
-
-        if len(choices) < 1:
-            win.SetValue('')
+                
+                win.InsertColumns(map, layer)
         
         event.Skip()
         
-    def OnDbTable(self, event):
-        """Get list of tables"""
-        # TODO: add driver/database
-        cmd = ['db.tables',
-               '-p', '--q']
-
-        for p in self.task.params:
-            if p.get('name', '') == 'driver' and \
-               len(p.get('value', '')) > 0:
-                cmd.append('driver=%s' % p.get('value'))
-            elif p.get('name', '') == 'database' and \
-                 len(p.get('value', '')) > 0:
-                cmd.append('database=%s' % p.get('value'))
-        
-        try:
-            choices = gcmd.Command(cmd).ReadStdOutput()
-        except gcmd.CmdError:
-            choices = []
-            
-        win = self.FindWindowById(event.GetId())
-        win.SetItems(choices)
-
-        if len(choices) < 1:
-            win.SetValue('')
-        
-        event.Skip()
-
     def createCmd( self, ignoreErrors = False ):
         """
         Produce a command line string (list) or feeding into GRASS.
