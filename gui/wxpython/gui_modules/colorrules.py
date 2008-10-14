@@ -105,6 +105,13 @@ class ColorTable(wx.Frame):
         ### self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
         # top controls
+        if self.cmd == 'r.colors':
+            maplabel = _('Select raster map:')
+        elif self.cmd == 'vcolors':
+            maplabel = _('Select vector map:')
+        inputBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
+                                label=" %s " % maplabel)
+        self.inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
         self.selectionInput = gselect.Select(parent=self, id=wx.ID_ANY,
                                              size=globalvar.DIALOG_GSELECT_SIZE,
                                              type=self.elem)
@@ -196,15 +203,7 @@ class ColorTable(wx.Frame):
         #
         # input
         #
-        if self.cmd == 'r.colors':
-            maplabel = _('Select raster map:')
-        elif self.cmd == 'vcolors':
-            maplabel = _('Select vector map:')
-        
-        inputBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                label=" %s " % maplabel)
-        inputSizer = wx.StaticBoxSizer(inputBox, wx.VERTICAL)
-        inputSizer.Add(item=self.selectionInput,
+        self.inputSizer.Add(item=self.selectionInput,
                        flag=wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND, border=5)
         replaceSizer = wx.BoxSizer(wx.HORIZONTAL)
         replaceSizer.Add(item=self.ovrwrtcheck, proportion=1,
@@ -212,7 +211,7 @@ class ColorTable(wx.Frame):
         replaceSizer.Add(item=self.helpbtn, proportion=0,
                          flag=wx.ALIGN_RIGHT | wx.ALL, border=1)
 
-        inputSizer.Add(item=replaceSizer, proportion=1,
+        self.inputSizer.Add(item=replaceSizer, proportion=1,
                        flag=wx.ALL | wx.EXPAND, border=1)
 
         #
@@ -264,7 +263,7 @@ class ColorTable(wx.Frame):
         btnSizer.Add(self.btnOK,
                      flag=wx.LEFT | wx.RIGHT, border=5)
         
-        sizer.Add(item=inputSizer, proportion=0,
+        sizer.Add(item=self.inputSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
         
         sizer.Add(item=bodySizer, proportion=1,
