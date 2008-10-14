@@ -1155,10 +1155,11 @@ class cmdPanel(wx.Panel):
 
                     which_sizer.Add(item=selection, proportion=0,
                                     flag=wx.ADJUST_MINSIZE| wx.BOTTOM | wx.LEFT | wx.RIGHT, border=5)
+
                     # A select.Select is a combobox with two children: a textctl and a popupwindow;
                     # we target the textctl here
                     p['wxId'] = selection.GetChildren()[0].GetId()
-                    selection.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    selection.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('prompt', '') == 'vector':
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                     
