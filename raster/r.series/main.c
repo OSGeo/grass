@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *method;
+	struct Option *input, *output, *method, *range;
     } parm;
     struct
     {
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
     DCELL *values, *values_tmp;
     int nrows, ncols;
     int row, col;
+    double lo, hi;
 
     G_gisinit(argv[0]);
 
@@ -142,12 +143,23 @@ int main(int argc, char *argv[])
     parm.method->description = _("Aggregate operation");
     parm.method->multiple = YES;
 
+    parm.range = G_define_option();
+    parm.range->key = "range";
+    parm.range->type = TYPE_DOUBLE;
+    parm.range->key_desc = "lo,hi";
+    parm.range->description = _("Ignore values outside this range");
+
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
     flag.nulls->description = _("Propagate NULLs");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if (parm.range->answer) {
+	lo = atof(parm.range->answers[0]);
+	hi = atof(parm.range->answers[1]);
+    }
 
     /* process the input maps */
     for (i = 0; parm.input->answers[i]; i++)
@@ -222,6 +234,10 @@ int main(int argc, char *argv[])
 
 		if (G_is_d_null_value(&v))
 		    null = 1;
+		else if (parm.range->answer && (v < lo || v > hi)) {
+		    G_set_d_null_value(&v, 1);
+		    null = 1;
+		}
 
 		values[i] = v;
 	    }
