@@ -23,7 +23,12 @@ is slower, but produces a more accurate result.
 Resampling modules (<em>r.resample, r.resamp.stats, r.resamp.interp,
 r.resamp.rst</em>) resample the map to match the current region settings.
 </p>
-
+<p>
+The notion of weighting doesn't make any sense for the min and max
+aggregates. However, the <em>-w</em> flag still has significance in
+that, when multiple destination cells overlap a source cell, the
+source cell is included in the calculation of all of the destination
+cells.
 
 <h2>SEE ALSO</h2>
 
