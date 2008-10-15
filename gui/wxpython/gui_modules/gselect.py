@@ -421,10 +421,13 @@ class LayerSelect(wx.Choice):
     def __init__(self, parent,
                  id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=globalvar.DIALOG_LAYER_SIZE,
-                 vector=None, choices=[]):
+                 vector=None, choices=[], all=False):
 
         super(LayerSelect, self).__init__(parent, id, pos=pos, size=size,
                                           choices=choices)
+
+        self.all = all
+        
         self.SetName("LayerSelect")
 
         if len(choices) > 1:
@@ -433,19 +436,24 @@ class LayerSelect(wx.Choice):
         if vector:
             self.InsertLayers(vector)
         else:
-            self.SetItems(['1'])
-            self.SetSelection(0)
+            if all:
+                self.SetItems(['-1', '1'])
+            else:
+                self.SetItems(['1'])
+            self.SetStringSelection('1')
         
     def InsertLayers(self, vector):
         """Insert layers for a vector into the layer combobox"""
         layerchoices = VectorDBInfo(vector).layers.keys()
         
+        if self.all:
+            layerchoices.insert(0, '-1')
         if len(layerchoices) > 1:
             self.SetItems(map(str, layerchoices))
             self.SetStringSelection('1')
         else:
             self.SetItems(['1'])
-            self.SetSelection(0)
+            self.SetStringSelection('1')
 
 class TableSelect(wx.ComboBox):
     """

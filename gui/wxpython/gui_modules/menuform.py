@@ -1135,7 +1135,8 @@ class cmdPanel(wx.Panel):
                                               'color_none',
                                               'dbcolumn',
                                               'dbtable',
-                                              'layer') and \
+                                              'layer',
+                                              'layer_all') and \
                        p.get('element', '') != 'file':
                     if p.get('multiple', 'no') == 'yes':
                         multiple = True
@@ -1166,9 +1167,16 @@ class cmdPanel(wx.Panel):
                 # layer, dbcolumn, dbtable entry
                 elif p.get('prompt', '') in ('dbcolumn',
                                              'dbtable',
-                                             'layer'):
-                    if p.get('prompt', '') == 'layer':
-                        win = gselect.LayerSelect(parent=which_panel)
+                                             'layer',
+                                             'layer_all'):
+                    if p.get('prompt', '') in ('layer',
+                                               'layer_all'):
+                        if p.get('prompt', '') == 'layer_all':
+                            all = True
+                        else:
+                            all = False
+                        win = gselect.LayerSelect(parent=which_panel,
+                                                  all=all)
                         p['wxGetValue'] = win.GetStringSelection
                         win.Bind(wx.EVT_CHOICE, self.OnUpdateSelection)
                         win.Bind(wx.EVT_CHOICE, self.OnSetValue)
