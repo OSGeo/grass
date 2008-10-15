@@ -350,6 +350,8 @@ int G__write_colors(FILE *, struct Colors *);
 /* color_xform.c */
 int G_histogram_eq_colors(struct Colors *, struct Colors *,
 			  struct Cell_stats *);
+void G_histogram_eq_colors_fp(struct Colors *,
+			      struct Colors *, struct FP_stats *);
 int G_log_colors(struct Colors *, struct Colors *, int);
 
 /* commas.c */
