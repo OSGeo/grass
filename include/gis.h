@@ -530,6 +530,15 @@ struct FPRange
     int first_time;		/* whether or not range was updated */
 };
 
+struct FP_stats {
+    int geometric;
+    int flip;
+    int count;
+    DCELL min, max;
+    unsigned long *stats;
+    unsigned long total;
+};
+
 /*
  ** Structure for I/O of 3dview files  (view.c)
  */

@@ -89,8 +89,6 @@ int G_histogram_eq_colors(struct Colors *dst,
     prev = 0;
     first = 1;
 
-    G_get_d_raster_color(&min, &red, &grn, &blu, src);
-
     G_rewind_cell_stats(statf);
     while (G_next_cell_stat(&cat, &count, statf)) {
 	int red2, grn2, blu2;
@@ -115,6 +113,75 @@ int G_histogram_eq_colors(struct Colors *dst,
     }
 
     return 0;
+}
+
+/*!
+ * \brief make histogram-stretched version of existing color table (FP version)
+ *
+ * Generates a histogram
+ * contrast-stretched color table that goes from the histogram
+ * information in the FP_stats structure <b>statf.</b>  (See
+ * Raster_Histograms).
+ *
+ *  \param dst
+ *  \param src
+ *  \param statf
+ *  \return void
+ */
+
+void G_histogram_eq_colors_fp(struct Colors *dst,
+			      struct Colors *src, struct FP_stats *statf)
+{
+    DCELL min, max;
+    int red, grn, blu;
+    unsigned long sum;
+    DCELL val;
+    int first;
+    int i;
+
+    G_init_colors(dst);
+
+    G_get_d_color_range(&min, &max, src);
+
+    G_get_default_color(&red, &grn, &blu, src);
+    G_set_default_color(red, grn, blu, dst);
+
+    G_get_null_value_color(&red, &grn, &blu, src);
+    G_set_null_value_color(red, grn, blu, dst);
+
+    if (!statf->total)
+	return;
+
+    sum = 0;
+    first = 1;
+
+    for (i = 0; i <= statf->count; i++) {
+	int red2, grn2, blu2;
+	DCELL val2, x;
+
+	val2 = statf->min + (statf->max - statf->min) * i / statf->count;
+	if (statf->geometric)
+	    val2 = exp(val2);
+	if (statf->flip)
+	    val2 = -val2;
+
+	x = min + (max - min) * sum / statf->total;
+	G_get_d_raster_color(&x, &red2, &grn2, &blu2, src);
+
+	if (!first)
+	    G_add_d_raster_color_rule(&val, red, grn, blu, &val2, red2, grn2, blu2, dst);
+	first = 0;
+
+	if (i == statf->count)
+	    break;
+
+	sum += statf->stats[i];
+
+	val = val2;
+	red = red2;
+	grn = grn2;
+	blu = blu2;
+    }
 }
 
 /*!

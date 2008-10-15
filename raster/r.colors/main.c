@@ -342,9 +342,16 @@ int main(int argc, char **argv)
 	G_invert_colors(&colors);
 
     if (flag.e->answer) {
-	if (!have_stats)
-	    have_stats = get_stats(name, mapset, &statf);
-	G_histogram_eq_colors(&colors_tmp, &colors, &statf);
+	if (fp) {
+	    struct FP_stats fpstats;
+	    get_fp_stats(name, mapset, &fpstats, min, max, flag.g->answer);
+	    G_histogram_eq_colors_fp(&colors_tmp, &colors, &fpstats);
+	}
+	else {
+	    if (!have_stats) 
+		have_stats = get_stats(name, mapset, &statf);
+	    G_histogram_eq_colors(&colors_tmp, &colors, &statf);
+	}
 	colors = colors_tmp;
     }
 

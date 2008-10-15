@@ -23,7 +23,10 @@
 #include <grass/gis.h>
 
 /* stats.c */
-int get_stats(char *, char *, struct Cell_stats *);
+int get_stats(const char *, const char *, struct Cell_stats *);
+void get_fp_stats(const char *name, const char *mapset,
+		  struct FP_stats *statf,
+		  DCELL min, DCELL max, int geometric);
 
 /* main.c */
 int main(int, char *[]);
