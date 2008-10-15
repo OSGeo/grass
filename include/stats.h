@@ -33,6 +33,8 @@ extern stat_func c_kurt;
 extern stat_func_w w_ave;
 extern stat_func_w w_count;
 extern stat_func_w w_median;
+extern stat_func_w w_min;
+extern stat_func_w w_max;
 extern stat_func_w w_mode;
 extern stat_func_w w_quart1;
 extern stat_func_w w_quart3;
