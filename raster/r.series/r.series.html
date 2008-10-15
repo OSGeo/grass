@@ -40,8 +40,9 @@ The <em>min_raster</em> and <em>max_raster</em> methods generate a map with the
 number of the raster map that holds the minimum/maximum value of the
 time-series. The numbering starts at <em>0</em> up to <em>n</em> for the
 first and the last raster listed in <em>input=</em>, respectively. 
-
-
+<p>
+If the <em>range=</em> option is given, any values which fall outside
+that range will be treated as if they were NULL.
 
 <h2>EXAMPLES</h2>
 
