@@ -1280,7 +1280,10 @@ class cmdPanel(wx.Panel):
                 pColumn.append(p['wxId'])
         
         if pMap:
-            pMap['wxId-bind'] = [pLayer['wxId'], ] + pColumn
+            pMap['wxId-bind'] = pColumn
+            if pLayer:
+                pMap['wxId-bind'].append(pLayer['wxId'])
+        
         if pLayer:
             pLayer['wxId-bind'] = pColumn
         
